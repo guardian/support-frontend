@@ -1,10 +1,8 @@
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'react';
-import 'helpers/productPrice/productPrices';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
 import { DropdownArrowUp } from 'components/svgs/dropDownArrowUp';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
-import 'components/gridImage/gridImage';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';

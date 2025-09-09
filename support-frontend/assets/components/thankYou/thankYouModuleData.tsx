@@ -5,14 +5,17 @@ import {
 	textEgyptian15,
 	textEgyptian17,
 } from '@guardian/source/foundations';
+import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { useState } from 'react';
 import {
 	BenefitsCheckList,
 	type BenefitsCheckListData,
 } from 'components/checkoutBenefits/benefitsCheckList';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import {
 	setThankYouFeedbackSurveyHasBeenCompleted,
@@ -29,7 +32,7 @@ import {
 } from 'helpers/thankYouPages/utils/ophan';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
-import { isGuardianWeeklyProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import { isPrintProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import AppDownloadBadges, {
 	AppDownloadBadgesEditions,
 } from './appDownload/AppDownloadBadges';
@@ -50,9 +53,6 @@ import {
 	FeedbackCTA,
 	getFeedbackHeader,
 } from './feedback/FeedbackItems';
-import { ActivateSubscriptionReminder } from './guardianAdLite/activateSubscriptionReminder';
-import { AddressCta } from './guardianAdLite/addressCta';
-import { WhatNext } from './guardianAdLite/whatNext';
 import { SignInBodyCopy, SignInCTA, signInHeader } from './signIn/signInItems';
 import { SignUpBodyCopy, signUpHeader } from './signUp/signUpItems';
 import {
@@ -72,6 +72,9 @@ import {
 } from './supportReminder/supportReminderItems';
 import type { ThankYouModuleType } from './thankYouModule';
 import { getThankYouModuleIcon } from './thankYouModuleIcons';
+import { ActivateSubscriptionReminder } from './whatNext/activateSubscriptionReminder';
+import { WhatNext } from './whatNext/whatNext';
+import { AddressCta } from './whatNext/whatNextCta';
 
 export interface ThankYouModuleData {
 	header: string;
@@ -110,6 +113,7 @@ const defaultFeedbackSurveyHasBeenCompleted = false;
 
 export const getThankYouModuleData = (
 	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
 	countryGroupId: CountryGroupId,
 	countryId: IsoCountry,
 	csrf: CsrfState,
@@ -135,13 +139,12 @@ export const getThankYouModuleData = (
 		useState<ThankYouSupportReminderState>(
 			supportReminder ?? defaultSupportReminder,
 		);
-	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
 
-	const getFeedbackSurveyLink = (countryId: IsoCountry) => {
+	const isGuardianPrint = isPrintProduct(productKey) && !observerPrint;
+
+	const getFeedbackSurveyLink = () => {
 		const surveyBasePath = 'https://guardiannewsandmedia.formstack.com/forms/';
-		if (countryId === 'AU') {
-			return `${surveyBasePath}guardian_australia_message`;
-		}
+
 		if (isOneOff) {
 			return `${surveyBasePath}guardian_supporter_single`;
 		}
@@ -202,7 +205,7 @@ export const getThankYouModuleData = (
 			),
 			ctas: feedbackSurveyCompleted ? null : (
 				<FeedbackCTA
-					feedbackSurveyLink={getFeedbackSurveyLink(countryId)}
+					feedbackSurveyLink={getFeedbackSurveyLink()}
 					onClick={() => {
 						setFeedbackSurveyCompleted(true);
 						if (feedbackSurveyHasBeenCompleted) {
@@ -252,12 +255,12 @@ export const getThankYouModuleData = (
 		},
 		signIn: {
 			icon: getThankYouModuleIcon('signIn'),
-			header: signInHeader(isTierThree, observerPrint, isGuardianWeekly),
+			header: signInHeader(isTierThree, observerPrint, isGuardianPrint),
 			bodyCopy: (
 				<SignInBodyCopy
 					isTierThree={isTierThree}
 					observerPrint={observerPrint}
-					isGuardianWeekly={isGuardianWeekly}
+					isGuardianPrint={isGuardianPrint}
 				/>
 			),
 			ctas: (
@@ -265,7 +268,7 @@ export const getThankYouModuleData = (
 					email={email}
 					csrf={csrf}
 					buttonLabel={
-						observerPrint ?? (isTierThree || isGuardianWeekly)
+						observerPrint ?? (isTierThree || isGuardianPrint)
 							? 'Sign in'
 							: 'Continue'
 					}
@@ -280,7 +283,7 @@ export const getThankYouModuleData = (
 				<SignUpBodyCopy
 					isTierThree={isTierThree}
 					observerPrint={observerPrint}
-					isGuardianWeekly={isGuardianWeekly}
+					isGuardianPrint={isGuardianPrint}
 				/>
 			),
 			ctas: null,
@@ -347,11 +350,12 @@ export const getThankYouModuleData = (
 			header: 'What happens next?',
 			bodyCopy: (
 				<WhatNext
+					productKey={productKey}
+					ratePlanKey={ratePlanKey}
 					amount={(finalAmount ?? '').toString()}
 					startDate={startDate}
 					isSignedIn={isSignedIn}
 					observerPrint={observerPrint}
-					isGuardianWeekly={isGuardianWeekly}
 				/>
 			),
 			ctas: null,

@@ -1,0 +1,93 @@
+{
+  "requestId": "a81f0dee-1aa5-efbf-0000-00000001315e",
+  "user": {
+    "id": "9999999999999",
+    "primaryEmailAddress": "test@test.com",
+    "title": null,
+    "firstName": "Test",
+    "lastName": "User",
+    "billingAddress": {
+      "lineOne": null,
+      "lineTwo": null,
+      "city": null,
+      "state": "NJ",
+      "postCode": "07071",
+      "country": "US"
+    },
+    "deliveryAddress": null,
+    "telephoneNumber": null,
+    "isTestUser": false,
+    "deliveryInstructions": null
+  },
+  "giftRecipient": null,
+  "product": {
+    "amount": 5,
+    "currency": "USD",
+    "billingPeriod": "Monthly",
+    "productType": "Contribution"
+  },
+  "analyticsInfo": {
+    "isGiftPurchase": false,
+    "paymentProvider": "Stripe"
+  },
+  "paymentFields": {
+    "paymentType": "Stripe",
+    "paymentMethod": "pm_9999999999999",
+    "stripePaymentType": "StripePaymentRequestButton",
+    "stripePublicKey": "pk_live_2O6zPMHXNs2AGea4bAmq5R7Z"
+  },
+  "firstDeliveryDate": null,
+  "appliedPromotion": null,
+  "csrUsername": null,
+  "salesforceCaseId": null,
+  "acquisitionData": {
+    "ophanIds": {
+      "pageviewId": "9999999999999",
+      "browserId": "9999999999999"
+    },
+    "referrerAcquisitionData": {
+      "campaignCode": null,
+      "referrerPageviewId": "",
+      "referrerUrl": "https://www.theguardian.com/us-news/2024/oct/08/salmonella-egg-recall-fda",
+      "componentId": "AMP__2024_07_18_AMP_BETSY__US__V1_RECURRING",
+      "componentType": "ACQUISITIONS_EPIC",
+      "source": "GOOGLE_AMP",
+      "abTests": [
+        {
+          "name": "2024_07_18_AMP_BETSY__US",
+          "variant": "V1_RECURRING"
+        }
+      ],
+      "queryParameters": [
+        {
+          "name": "selected-contribution-type",
+          "value": "MONTHLY"
+        },
+        {
+          "name": "selected-amount",
+          "value": "5"
+        }
+      ],
+      "hostname": "support.theguardian.com",
+      "gaClientId": null,
+      "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Mobile Safari/537.36",
+      "ipAddress": "127.0.0.1",
+      "labels": [
+        "generic-checkout"
+      ]
+    },
+    "supportAbTests": [
+      {
+        "name": "abandonedBasket",
+        "variant": "control"
+      },
+      {
+        "name": "auPartnerBenefit",
+        "variant": "variant"
+      }
+    ]
+  },
+  "ipAddress": "127.0.0.1",
+  "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Mobile Safari/537.36",
+  "similarProductsConsent": null
+}

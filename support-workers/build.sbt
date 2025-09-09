@@ -61,14 +61,11 @@ deployToCode := {
   log.info(s"generated jar $assemblyJar, about to upload to S3...")
   log.info((s"aws s3 cp $assemblyJar s3://" + s3Bucket + "/" + s3Path + " --profile membership --region eu-west-1").!!)
   List(
-    "-CreatePaymentMethodLambda-",
-    "-CreateSalesforceContactLambda-",
     "-CreateZuoraSubscriptionLambda-",
     "-SendThankYouEmailLambda-",
     "-UpdateSupporterProductDataLambda-",
     "-FailureHandlerLambda-",
     "-SendAcquisitionEventLambda-",
-    "-PreparePaymentMethodForReuseLambda-",
   ).foreach { functionPartial =>
     log.info("updating " + functionPartial + "...")
     s"aws lambda update-function-code --function-name support${functionPartial}CODE --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!

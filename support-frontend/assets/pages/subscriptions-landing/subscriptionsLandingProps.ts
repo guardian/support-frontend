@@ -1,8 +1,8 @@
 // ----- Imports ----- //
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { Participations } from 'helpers/abTests/models';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { getReferrerAcquisitionData } from 'helpers/tracking/acquisitions';

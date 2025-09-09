@@ -22,35 +22,15 @@ jobs:
           JSON: ${{ toJSON(github) }}
 
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - run: npm install --global corepack@0.31.0
+      - name: Setup Node and Install Dependencies
+        uses: ./.github/actions/setup-node-and-install
 
-      - run: corepack enable
-        shell: bash
-        working-directory: support-frontend
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-
-      - name: Install - support-frontend
-        run: pnpm install
-        working-directory: support-frontend
-
-      - name: Test - support-frontend
+      - name: Test all workspaces
         run: pnpm test
-        working-directory: support-frontend
 
       - name: Install & test - CDK
         run: ./script/ci
         working-directory: cdk
 
-      - name: Install - bigquery-acquisitions-publisher
-        run: yarn install
-        working-directory: support-lambdas/bigquery-acquisitions-publisher
-
-      - name: Test - bigquery-acquisitions-publisher
-        run: yarn test
-        working-directory: support-lambdas/bigquery-acquisitions-publisher

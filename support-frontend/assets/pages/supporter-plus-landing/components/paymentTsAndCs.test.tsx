@@ -1,11 +1,18 @@
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { render } from '@testing-library/react';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { PaymentTsAndCs } from './paymentTsAndCs';
+
+const oneYearStudentDiscount = {
+	amount: 9,
+	periodNoun: 'year',
+	discountPriceWithCurrency: '£9',
+	fullPriceWithCurrency: '£120',
+};
 
 describe('Payment Ts&Cs Snapshot comparison', () => {
 	const promotionTierThreeUnitedStatesMonthly: Promotion = {
@@ -35,6 +42,7 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 		['DigitalSubscription', 'Monthly', 'GBPCountries', 0],
 		['Contribution', 'Annual', 'AUDCountries', 0],
 		['SupporterPlus', 'Monthly', 'GBPCountries', 12],
+		['SupporterPlus', 'OneYearStudent', 'GBPCountries', 9],
 		['TierThree', 'RestOfWorldMonthly', 'UnitedStates', 45],
 		['HomeDelivery', 'Monthly', 'GBPCountries', 0],
 		['NationalDelivery', 'Monthly', 'GBPCountries', 0],
@@ -61,6 +69,12 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 					ratePlanKey={ratePlanKey}
 					countryGroupId={countryGroupId}
 					thresholdAmount={amount}
+					studentDiscount={
+						paymentProductKey === 'SupporterPlus' &&
+						ratePlanKey === 'OneYearStudent'
+							? oneYearStudentDiscount
+							: undefined
+					}
 					promotion={promo}
 				/>,
 			);

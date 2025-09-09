@@ -1,0 +1,22 @@
+{
+  "name": "modules",
+  "version": "1.0.0",
+  "scripts": {
+    "lint:check": "eslint **/*.ts",
+    "lint:fix": "eslint --fix **/*.ts",
+    "check-formatting": "prettier --check **.ts",
+    "fix-formatting": "prettier --write **.ts"
+  },
+  "dependencies": {
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "eslint": "catalog:",
+    "@guardian/support-service-lambdas": "catalog:",
+    "@guardian/eslint-config-typescript": "catalog:",
+    "@guardian/prettier": "catalog:",
+    "@types/node": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
+  }
+}

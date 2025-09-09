@@ -12,6 +12,7 @@ import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper, SupporterPlus
 import com.gu.support.config.Stages.PROD
 import com.gu.support.config._
 import com.gu.support.encoding.InternationalisationCodecs
+import com.gu.support.zuora.api.ReaderType.Gift
 import com.typesafe.scalalogging.StrictLogging
 import config.{RecaptchaConfigProvider, StringsConfig}
 import controllers.AppConfig.CsrfToken
@@ -196,6 +197,7 @@ case class AllProductPrices(
     TierThree: ProductPrices,
     Paper: ProductPrices,
     GuardianWeekly: ProductPrices,
+    GuardianWeeklyGift: ProductPrices,
     DigitalPack: ProductPrices,
 )
 
@@ -237,6 +239,7 @@ class Application(
       TierThree = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos),
       Paper = priceSummaryServiceProvider.forUser(isTestUser).getPrices(Paper, queryPromos),
       GuardianWeekly = priceSummaryServiceProvider.forUser(isTestUser).getPrices(GuardianWeekly, queryPromos),
+      GuardianWeeklyGift = priceSummaryServiceProvider.forUser(isTestUser).getPrices(GuardianWeekly, queryPromos, Gift),
       DigitalPack = priceSummaryServiceProvider.forUser(isTestUser).getPrices(DigitalPack, queryPromos),
     )
   }
@@ -272,6 +275,11 @@ class Application(
 
   def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val url = getGeoPath(request, campaignCode, "contribute")
+    RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
+  }
+
+  def studentGeoRedirect(): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    val url = getGeoPath(request, "", "student")
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
@@ -316,7 +324,31 @@ class Application(
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(
-      contributionsHtml(countryCode, campaignCodeOption),
+      contributionsPlusStudentHtml(
+        countryCode,
+        campaignCodeOption,
+        "contributions",
+        "https://support.theguardian.com/contribute",
+        stage != PROD,
+      ),
+    ).withSettingsSurrogateKey
+  }
+
+  def studentLanding(
+      countryCode: String,
+      campaignCode: String,
+  ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
+    val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
+
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    Ok(
+      contributionsPlusStudentHtml(
+        countryCode,
+        campaignCodeOption,
+        "student",
+        "https://support.theguardian.com/student",
+        true,
+      ),
     ).withSettingsSurrogateKey
   }
 
@@ -337,9 +369,12 @@ class Application(
     "https://i.guim.co.uk/img/media/5366cacfd2081e5a4af259318238b3f82610d32e/0_0_1000_525/1000.png?quality=85&s=966978166c0983aef68828559ede40d8"
   }
 
-  private def contributionsHtml(
+  private def contributionsPlusStudentHtml(
       countryCode: String,
       campaignCode: Option[String],
+      pageName: String,
+      canonicalUrl: String,
+      noIndexing: Boolean,
   )(implicit request: OptionalAuthRequest[AnyContent], settings: AllSettings) = {
     val geoData = request.geoData
     val idUser = request.user
@@ -347,11 +382,13 @@ class Application(
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
-    val classes = "gu-content--contribution-form--placeholder" +
+    val classes = s"gu-content--$pageName-form--placeholder" +
       campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")
 
+    val ssrCachePageName = if (pageName == "contributions") "supporter-plus" else pageName
+
     val mainElement = assets.getSsrCacheContentsAsHtml(
-      divId = s"supporter-plus-landing-page-$countryCode",
+      divId = s"$ssrCachePageName-landing-page-$countryCode",
       file = "ssr-holding-content.html",
       classes = Some(classes),
     )
@@ -369,13 +406,15 @@ class Application(
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
     // We want the canonical link to point to the geo-redirect page so that users arriving from
     // search will be redirected to the correct version of the page
-    val canonicalLink = s"https://support.theguardian.com/contribute"
+    val canonicalLink = s"$canonicalUrl"
 
     views.html.contributions(
-      id = s"contributions-landing-page-$countryCode",
+      id = s"$pageName-landing-page-$countryCode",
       mainElement = mainElement,
       js = RefPath("[countryGroupId]/router.js"),
-      description = stringsConfig.contributionsLandingDescription,
+      description =
+        if (pageName.startsWith("student")) stringsConfig.studentLandingDescription
+        else stringsConfig.contributionsLandingDescription,
       paymentMethodConfigs = PaymentMethodConfigs(
         oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
         oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
@@ -395,7 +434,7 @@ class Application(
       serversideTests = serversideTests,
       allProductPrices = allProductPrices,
       productCatalog = productCatalog,
-      noIndex = stage != PROD,
+      noIndex = noIndexing,
       canonicalLink = canonicalLink,
     )
   }

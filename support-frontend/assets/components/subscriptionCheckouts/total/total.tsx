@@ -1,5 +1,5 @@
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { extendedGlyph } from 'helpers/internationalisation/currency';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { displayPrice } from 'helpers/productPrice/priceDescriptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import * as styles from './totalStyles';

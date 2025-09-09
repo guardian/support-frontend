@@ -1,4 +1,4 @@
-import type { IsoCountry } from './country';
+import type { IsoCountry } from '@modules/internationalisation/country';
 
 const sepaEligibleCountries: Partial<Record<IsoCountry, string>> = {
 	// EUR countries

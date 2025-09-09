@@ -1,4 +1,4 @@
-import type { CountryGroupId } from '../internationalisation/countryGroup';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 
 enum TickerName {
 	US = 'US',
@@ -51,7 +51,7 @@ export const parseCountdownSettings = (
 	};
 };
 
-interface ProductBenefit {
+export interface ProductBenefit {
 	copy: string;
 	tooltip?: string;
 	label?: {

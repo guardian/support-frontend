@@ -14,26 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - run: npm install --global corepack@0.31.0
-
-      - run: corepack enable
-        shell: bash
-        working-directory: support-frontend
-
-      - name: Install Node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-      # Cache npm dependencies using https://github.com/bahmutov/npm-install
-#      - name: Cache dependencies
-#        uses: bahmutov/npm-install@v1
-#        with:
-#          working-directory: support-frontend
-
-      - name: Install
-        run: pnpm install
+      - name: Setup Node and Install Dependencies
+        uses: ./.github/actions/setup-node-and-install
 
       - name: Generate production build for github action
         run: pnpm build-github-action

@@ -4,13 +4,13 @@ import {
 	textSans17,
 	visuallyHidden,
 } from '@guardian/source/foundations';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { countryGroups } from '@modules/internationalisation/countryGroup';
 import { useRef, useState } from 'react';
 import Dialog from 'components/dialog/dialog';
 import Menu, { LinkItem } from 'components/menu/menu';
 import SvgDropdownArrow from 'components/svgs/dropdownArrow';
 import { clearParticipationsFromSession } from 'helpers/abTests/sessionStorage';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';

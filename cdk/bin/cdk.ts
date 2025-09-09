@@ -120,6 +120,9 @@ new SupportWorkers(app, "SupportWorkers-CODE", {
   eventBusArns: [
     "arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-CODE",
   ],
+  parameterStorePaths: [
+    `arn:aws:ssm:eu-west-1:865473395570:parameter/CODE/support/support-workers/*`,
+  ],
 });
 
 new SupportWorkers(app, "SupportWorkers-PROD", {
@@ -141,5 +144,9 @@ new SupportWorkers(app, "SupportWorkers-PROD", {
   eventBusArns: [
     "arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-CODE",
     "arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-PROD",
+  ],
+  parameterStorePaths: [
+    `arn:aws:ssm:eu-west-1:865473395570:parameter/CODE/support/support-workers/*`,
+    `arn:aws:ssm:eu-west-1:865473395570:parameter/PROD/support/support-workers/*`,
   ],
 });

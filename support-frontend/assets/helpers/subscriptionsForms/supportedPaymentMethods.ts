@@ -1,7 +1,7 @@
+import type { IsoCountry } from '@modules/internationalisation/country';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 type SubscriptionsPaymentMethod =
 	| typeof DirectDebit

@@ -273,6 +273,7 @@ export const IsoCountrySchema = z.enum([
 	'IM',
 	'JE',
 	'SH',
+	'IC',
 ]);
 export type IsoCountry = z.infer<typeof IsoCountrySchema>;
 
@@ -301,6 +302,9 @@ const PrintProductSchema = z.enum([
 	'NATIONAL_DELIVERY_EVERYDAY',
 	'NATIONAL_DELIVERY_SIXDAY',
 	'NATIONAL_DELIVERY_WEEKEND',
+	'NATIONAL_DELIVERY_EVERYDAY_PLUS',
+	'NATIONAL_DELIVERY_SIXDAY_PLUS',
+	'NATIONAL_DELIVERY_WEEKEND_PLUS',
 	'VOUCHER_EVERYDAY',
 	'VOUCHER_EVERYDAY_PLUS',
 	'VOUCHER_SIXDAY',

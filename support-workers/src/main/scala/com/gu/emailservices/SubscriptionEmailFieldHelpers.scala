@@ -13,7 +13,7 @@ object SubscriptionEmailFieldHelpers {
 
   implicit def localDateOrdering: Ordering[LocalDate] = Ordering.fromLessThan(_ isBefore _)
 
-  val formatter = new DecimalFormat("#.00")
+  val formatter = new DecimalFormat("0.00")
 
   def formatPrice(price: Double): String = formatter.format(price)
 

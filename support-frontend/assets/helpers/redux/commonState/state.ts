@@ -1,3 +1,6 @@
+import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getFallbackAmounts } from 'helpers/abTests/helpers';
 import type { Participations } from 'helpers/abTests/models';
 import type { SelectedAmountsVariant } from 'helpers/contributions';
@@ -5,9 +8,6 @@ import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import type {
 	Campaign,

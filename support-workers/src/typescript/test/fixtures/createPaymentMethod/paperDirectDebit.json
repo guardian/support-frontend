@@ -1,0 +1,107 @@
+{
+  "requestId": "ef47f2da-7c19-56cf-0000-000000017334",
+  "user": {
+    "id": "9999999999999",
+    "primaryEmailAddress": "test@test.com",
+    "title": "Dr",
+    "firstName": "Test",
+    "lastName": "User",
+    "billingAddress": {
+      "lineOne": "123 Test Street",
+      "lineTwo": null,
+      "city": "Sheffield",
+      "state": "",
+      "postCode": "S10 4XX",
+      "country": "GB"
+    },
+    "deliveryAddress": {
+      "lineOne": "123 Test Street",
+      "lineTwo": null,
+      "city": "Sheffield",
+      "state": "",
+      "postCode": "S10 4XX",
+      "country": "GB"
+    },
+    "telephoneNumber": "+4478000000000",
+    "isTestUser": false,
+    "deliveryInstructions": null
+  },
+  "giftRecipient": null,
+  "product": {
+    "currency": "GBP",
+    "billingPeriod": "Monthly",
+    "fulfilmentOptions": "Collection",
+    "productOptions": "Everyday",
+    "deliveryAgent": null,
+    "productType": "Paper"
+  },
+  "analyticsInfo": {
+    "isGiftPurchase": false,
+    "paymentProvider": "DirectDebit"
+  },
+  "paymentFields": {
+    "paymentType": "DirectDebit",
+    "accountHolderName": "Dr T User",
+    "sortCode": "999999",
+    "accountNumber": "00000000",
+    "recaptchaToken": "03AFcWeA6PSQ69CpfMMsXkqWWo7GE9tfK5L1lOCi7WIvk1aYXvmJay-3DbsAJmEwm2EYJquGNHJjXTbq9WvrdCtqqeLAPOIl0eCoBsojxDN_gfB8FDCWrX4bPwl_7If2EVmVf1wRT35F2rqsYMC_u2zM-cw0VTCNO8J_ojsrwInUepmGwZ7ePrZ8dWQy4M5guQKWQZVaKwNXTfsf7Y1NOf6O3gTzv7qneprLIRYpS98LJ0PqyB9mLGpL81y5PX8dWv1x2-cWvQ9uf2Rsym9ZvvU2xBtsV0FD8EsjmDNZrNt6VeE7fgLAqi2k27kftHA9YxRuGrwhW9Yu3uYBicVAjSQsuhges1ho4CJQp-Kx9rCc_f43tnfAuqiA0YUcybNaPXi25KRPCXcPIQuoXXNtVWe79q7EDGu4qhkxWTsakZ61z5O1C35nA2pHDtbUcU04aKH_xAncoEpcSfnZN_KErzmq-l859pcQ1n3sB3P0Y2k_bsilk0f-TEzRDLpC8D4upXF29VuGG_jiBCGe-hQHy64UO7KN_DtuemUUU_cVbfKrI4LaI3QfDu_uAQ4G6zWq8CTK1XTt0ntCtsrZY6nbqgpY0dApOrU190AIc1yeWQqHoWrBwOSkMjCO2kEV6iaA1U80X-iqczTTU90_yZxhb700QiBh-EYOQanU05j5NOGkZkcpC0UqsgP8TT2bGISWvpFfjdpnXWdCl8Q1my8Szxyg8ScEXg14MOYf-6vwoor-4OPM0-hZz6wFWfbVl1l3laNNOSGy_yPKS9p3TCqDeuCsoBadgMpuToac3xDNS0V82w4dUE-wcbVVDwHIYNM2liWv1IAiHloF2zTBpfucYGTwIyoBFglZi7r2j8To9Zw11dgxJMv2oZMSii0XzZUCmru2kSFNqvDlP4yUf_QLlfaxxRmfHwmqywShu5G8kjTERvteFGZYYh-qGUXfKKMrYw02QaRKsFQstt4Vwq9qS2WmeZau1HA0-9-xZsEqWkQyVZLDEE2x9QF6Obm-8pmh9UsWAdlWMoOJkSOUhuh888lF-R4M50mt6AfGBQfVsIZ-k7KKg3rhxALAojKKsi1Lji3cjmNeLXO7wD1J2fcTmYPa3shTvI0widYwPiaZ5qms_y05k7IKT134-p-A43k3_Epgygo0Ci68E6OnOEI82tUbcYYMctjefNVug63KWECz6FLsCH0YvdcpQW-qNsBb2QwzWibO34Xi0Rm3_tXZI4WZuX1YX-aYh5sTX3U7GIe9z4fZ80ysesW9Q0vpyCLzGXDrvtoFklkTJt5iVdfvXgsGPfco7RPhpwTLway1F_5rFIm4P_Pz9Cp4QKeMKl6pD06lPi1wgUQn8zPV9cOC5SC0ww17W1CfK8suoNGFSxEF1HiMKBCcNubtWWugEQGx3mrRqH8ZOY__FISpQIDy8X85vdoLet6CaeDNHevZfPuICBMTh4t94PBBXdykpQTMrECUMnV7GU_d1EX3mS1PYJ1uT3VKRPHK2BJq-IKo3JUoyjXVeKyzHVFAi05rU_4UrpsVSbgMkGCyENsyfb26n42zxdIYJ3--Ii-ID-_3XJRKO2luSFmCqK6wXfAdnR_qZY163JREVQsp2P9YLm3K7ikXkOrhOzNvjvmyh899t-phwePb69TuwPv2fEEMFuMjnpyJDhLxw3fEjR5en9bkylnlyI9BysGPUdgOwha1DXsQgbLBKyF_Vkun54y1ATnFzP7hGm3flvl-NfoPirQ5yQh5aMU2rnAlAoVxaXW9DjQmfz-Tcn6GqKRAX3Jn0qO10XJSMRixgDKWwMMf7pezPVZm-SJ39EbD8W-mClw4wBO2Bxcpgu51LryE_box7ltYcrdWY7cKbR-7M74eNjvv3cbD_FsfgZCC1EwegrODOgNakxFAmcOwVXw00iYTmhElIkxrg5h8euTkbF"
+  },
+  "firstDeliveryDate": "2024-10-17",
+  "appliedPromotion": {
+    "promoCode": "PRINT_EVERYDAY",
+    "countryGroupId": "uk"
+  },
+  "csrUsername": null,
+  "salesforceCaseId": null,
+  "acquisitionData": {
+    "ophanIds": {
+      "pageviewId": "9999999999999",
+      "browserId": "9999999999999"
+    },
+    "referrerAcquisitionData": {
+      "campaignCode": null,
+      "referrerPageviewId": "",
+      "referrerUrl": null,
+      "componentId": null,
+      "componentType": null,
+      "source": null,
+      "abTests": null,
+      "queryParameters": [
+        {
+          "name": "promoCode",
+          "value": "PRINT_EVERYDAY"
+        },
+        {
+          "name": "fulfilment",
+          "value": "Collection"
+        },
+        {
+          "name": "product",
+          "value": "Everyday"
+        },
+        {
+          "name": "pre-auth-ref",
+          "value": "https%3A%2F%2Fsupport.theguardian.com%2Fuk%2Fsubscribe%2Fpaper%3FREFPVID%3Dm21v52dov2kj7cpl1619%26INTCMP%3Dundefined%26acquisitionData%3D%257B%2522source%2522%253A%2522GUARDIAN_WEB%2522%252C%2522componentId%2522%253A%2522PrintSubscriptionsHeaderLink%2522%252C%2522componentType%2522%253A%2522ACQUISITIONS_HEADER%2522%252C%2522referrerPageviewId%2522%253A%2522m21v52dov2kj7cpl1619%2522%252C%2522referrerUrl%2522%253A%2522https%253A%252F%252Fwww.theguardian.com%252Fuk%2522%257D"
+        }
+      ],
+      "hostname": "support.theguardian.com",
+      "gaClientId": null,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+      "ipAddress": "127.0.0.1",
+      "labels": null
+    },
+    "supportAbTests": [
+      {
+        "name": "abandonedBasket",
+        "variant": "variant"
+      },
+      {
+        "name": "auPartnerBenefit",
+        "variant": "control"
+      }
+    ]
+  },
+  "ipAddress": "127.0.0.1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+  "similarProductsConsent": true
+}

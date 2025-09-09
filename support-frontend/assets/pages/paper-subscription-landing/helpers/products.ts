@@ -1,16 +1,15 @@
 import type {
 	PaperProductOptions,
 	ProductOptions,
-} from 'helpers/productPrice/productOptions';
+} from '@modules/product/productOptions';
 import {
 	Everyday,
 	EverydayPlus,
 	SaturdayPlus,
 	Sixday,
 	SixdayPlus,
-	SundayPlus,
 	WeekendPlus,
-} from 'helpers/productPrice/productOptions';
+} from '@modules/product/productOptions';
 
 export const getTitle = (productOption: ProductOptions) => {
 	switch (productOption) {
@@ -21,19 +20,16 @@ export const getTitle = (productOption: ProductOptions) => {
 			return 'Every day';
 
 		case EverydayPlus:
-			return 'Every day package and digital subscription';
+			return 'Every day';
 
 		case SixdayPlus:
-			return 'Six day package and digital subscription';
+			return 'Six day';
 
 		case WeekendPlus:
-			return 'Weekend package and digital subscription';
+			return 'Weekend';
 
 		case SaturdayPlus:
-			return 'Saturday package and digital subscription';
-
-		case SundayPlus:
-			return 'Sunday package and digital subscription';
+			return 'Saturday';
 
 		default:
 			return productOption;
@@ -63,7 +59,9 @@ export const getProductLabel = (
 				text: 'The Observer',
 				channel: Channel.Observer,
 			};
+		case 'WeekendPlus':
 		case 'Weekend':
+		case 'EverydayPlus':
 		case 'Everyday':
 			return {
 				text: 'The Guardian + the Observer',

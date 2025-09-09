@@ -6,8 +6,7 @@ packageSummary := "Support Play APP"
 
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.4.2",
-  "com.gu" %% "simple-configuration-ssm" % "1.7.0",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
+  "com.gu" %% "simple-configuration-ssm" % "7.0.0",
   "org.mockito" % "mockito-core" % "2.28.2" % Test,
   "io.sentry" % "sentry-logback" % "6.29.0",
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
@@ -30,7 +29,6 @@ libraryDependencies ++= Seq(
   "com.google.guava" % "guava" % "32.1.1-jre",
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
   "com.gu.play-googleauth" %% "play-v30" % "8.0.1",
-  "io.github.bonigarcia" % "webdrivermanager" % "5.9.2" % "test",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
   "com.squareup.okhttp3" % "okhttp" % "4.11.0",
   "com.gocardless" % "gocardless-pro" % "2.10.0",
@@ -50,6 +48,7 @@ excludeDependencies ++= Seq(
   // it. The vulnerability is fixed in v3 onwards, but the lib was renamed so I don't think we can force a newer version
   // by specifying is in the dependencies.
   ExclusionRule("net.sourceforge.htmlunit", "htmlunit"),
+  ExclusionRule("commons-beanutils", "commons-beanutils"), // Also exclude commons-beanutils due to a vulnerability
 )
 
 ThisBuild / libraryDependencySchemes ++= Seq(

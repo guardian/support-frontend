@@ -1,5 +1,5 @@
-import type { IsoCountry } from '../internationalisation/country';
-import type { CountryGroupId } from '../internationalisation/countryGroup';
+import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 
 export const breakpoints = {
 	mobile: 320,

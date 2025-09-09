@@ -1,58 +1,48 @@
 import { storage } from '@guardian/libs';
-import type { InferInput } from 'valibot';
-import {
-	boolean,
-	nullish,
-	number,
-	object,
-	optional,
-	picklist,
-	safeParse,
-	string,
-} from 'valibot';
-import { isoCountries } from 'helpers/internationalisation/country';
+import { isoCountries } from '@modules/internationalisation/country';
+import { z } from 'zod';
 
-const formDetailsSchema = object({
-	personalData: object({
-		firstName: string(),
-		lastName: string(),
-		email: string(),
+const formDetailsSchema = z.object({
+	personalData: z.object({
+		firstName: z.string(),
+		lastName: z.string(),
+		email: z.string(),
 	}),
-	addressFields: object({
-		billingAddress: object({
-			lineOne: nullish(string()),
-			lineTwo: nullish(string()),
-			city: nullish(string()),
-			state: nullish(string()),
-			postCode: nullish(string()),
-			country: picklist(isoCountries),
+	addressFields: z.object({
+		billingAddress: z.object({
+			lineOne: z.string().nullish(),
+			lineTwo: z.string().nullish(),
+			city: z.string().nullish(),
+			state: z.string().nullish(),
+			postCode: z.string().nullish(),
+			country: z.enum(isoCountries),
 		}),
-		deliveryAddress: optional(
-			object({
-				lineOne: nullish(string()),
-				lineTwo: nullish(string()),
-				city: nullish(string()),
-				state: nullish(string()),
-				postCode: nullish(string()),
-				country: picklist(isoCountries),
-			}),
-		),
+		deliveryAddress: z
+			.object({
+				lineOne: z.string().nullish(),
+				lineTwo: z.string().nullish(),
+				city: z.string().nullish(),
+				state: z.string().nullish(),
+				postCode: z.string().nullish(),
+				country: z.enum(isoCountries),
+			})
+			.optional(),
 	}),
-	deliveryInstructions: nullish(string()),
-	billingAddressMatchesDelivery: optional(boolean()),
+	deliveryInstructions: z.string().nullish(),
+	billingAddressMatchesDelivery: z.oboolean(),
 });
 
-export type PersistableFormFields = InferInput<typeof formDetailsSchema>;
+export type PersistableFormFields = z.infer<typeof formDetailsSchema>;
 
 export type CheckoutSession = {
 	checkoutSessionId: string;
 	formFields: PersistableFormFields;
 };
 
-const schema = object({
+const schema = z.object({
 	formDetails: formDetailsSchema,
-	version: number(),
-	checkoutSessionId: string(),
+	version: z.number(),
+	checkoutSessionId: z.string(),
 });
 
 const oneDayInMillis = 24 * 60 * 60 * 1000;
@@ -83,15 +73,15 @@ export const getFormDetails = (
 ): CheckoutSession | undefined => {
 	const persistedData = storage.session.get(KEY);
 
-	const parsed = safeParse(schema, persistedData);
+	const parsed = schema.safeParse(persistedData);
 
 	if (!parsed.success) {
 		return undefined;
 	}
 
-	if (parsed.output.checkoutSessionId != checkoutSessionId) {
+	if (parsed.data.checkoutSessionId != checkoutSessionId) {
 		return undefined;
 	}
 
-	return { checkoutSessionId, formFields: parsed.output.formDetails };
+	return { checkoutSessionId, formFields: parsed.data.formDetails };
 };

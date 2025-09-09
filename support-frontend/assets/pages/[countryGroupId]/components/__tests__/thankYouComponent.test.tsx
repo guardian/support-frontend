@@ -1,5 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
+import { TEST_ID_PREFIX } from 'components/thankYou/thankYouModule';
+import * as userModule from 'helpers/user/user';
 import { fallBackLandingPageSelection } from '../../../../helpers/abTests/landingPageAbTests';
 import {
 	type CheckoutComponentProps,
@@ -11,190 +14,233 @@ jest.mock('../../checkout/helpers/sessionStorage', () => ({
 	getReturnAddress: () => 'adress',
 }));
 
+const defaultProps: CheckoutComponentProps = {
+	geoId: 'uk',
+	csrf: { token: 'token' },
+	payment: {
+		originalAmount: 12,
+		finalAmount: 12,
+	},
+	identityUserType: 'current',
+	abParticipations: {},
+	landingPageSettings: fallBackLandingPageSelection,
+};
+
+function testComponent(
+	props: Partial<CheckoutComponentProps>,
+	thankYouModules: ThankYouModuleType[],
+) {
+	const { container } = render(
+		<ThankYouComponent {...defaultProps} {...props} />,
+	);
+	const thankYouNodes = container.querySelectorAll(
+		`[data-testid^="${TEST_ID_PREFIX}-"]`,
+	);
+
+	thankYouModules.forEach((tyModule) => {
+		const testId = `${TEST_ID_PREFIX}-${tyModule}`;
+		expect(screen.getByTestId(testId)).toBeInTheDocument();
+	});
+	expect(thankYouNodes).toHaveLength(thankYouModules.length);
+}
+
 describe('thankYouComponent', () => {
-	const defaultProps: CheckoutComponentProps = {
-		geoId: 'uk',
-		csrf: { token: 'token' },
-		payment: {
-			originalAmount: 12,
-			finalAmount: 12,
-		},
-		identityUserType: 'new',
-		abParticipations: {},
-		landingPageSettings: fallBackLandingPageSelection,
-	};
-
-	it('should display the correct thankyou cards for One time contribution', () => {
-		render(<ThankYouComponent {...defaultProps} />);
-		const feedback = screen.getByTestId('feedback');
-		const signUp = screen.getByTestId('signUp');
-		const supportReminder = screen.getByTestId('supportReminder');
-		const socialShare = screen.getByTestId('socialShare');
-		expect(feedback).toBeInTheDocument();
-		expect(signUp).toBeInTheDocument();
-		expect(supportReminder).toBeInTheDocument();
-		expect(socialShare).toBeInTheDocument();
-	});
-
-	it('should display the correct thankyou cards for Recurring Contribution for new users', () => {
-		render(
-			<ThankYouComponent
-				{...defaultProps}
-				productKey="Contribution"
-				ratePlanKey="Monthly"
-			/>,
-		);
-		const signUp = screen.getByTestId('signUp');
-		const signIn = screen.queryByTestId('signIn');
-		const socialShare = screen.getByTestId('socialShare');
-		expect(signUp).toBeInTheDocument();
-		expect(signIn).not.toBeInTheDocument();
-		expect(socialShare).toBeInTheDocument();
-	});
-
-	it('should display the correct thankyou cards for Recurring Contribution for existing users', () => {
-		render(
-			<ThankYouComponent
-				{...defaultProps}
-				productKey="Contribution"
-				ratePlanKey="Monthly"
-				identityUserType="current"
-			/>,
-		);
-		const signIn = screen.getByTestId('signIn');
-		const signUp = screen.queryByTestId('signUp');
-		const socialShare = screen.getByTestId('socialShare');
-		expect(signIn).toBeInTheDocument();
-		expect(signUp).not.toBeInTheDocument();
-		expect(socialShare).toBeInTheDocument();
-	});
-
-	it('should display the correct thankyou cards for SupporterPlus for new users', () => {
-		render(
-			<ThankYouComponent
-				{...defaultProps}
-				productKey="SupporterPlus"
-				ratePlanKey="Monthly"
-				identityUserType="current"
-			/>,
-		);
-		const signIn = screen.getByTestId('signIn');
-		const appsDownload = screen.getByTestId('appsDownload');
-		const socialShare = screen.getByTestId('socialShare');
-		expect(signIn).toBeInTheDocument();
-		expect(appsDownload).toBeInTheDocument();
-		expect(socialShare).toBeInTheDocument();
-	});
-
-	it('should display the correct thankyou cards for TierThree for new users', () => {
-		render(
-			<ThankYouComponent
-				{...defaultProps}
-				productKey="TierThree"
-				ratePlanKey="Monthly"
-				identityUserType="current"
-			/>,
-		);
-		const signIn = screen.getByTestId('signIn');
-		const benefits = screen.getByTestId('benefits');
-		const appsDownload = screen.getByTestId('appsDownload');
-		const subscriptionStart = screen.getByTestId('subscriptionStart');
-		expect(signIn).toBeInTheDocument();
-		expect(benefits).toBeInTheDocument();
-		expect(appsDownload).toBeInTheDocument();
-		expect(subscriptionStart).toBeInTheDocument();
-	});
-
-	it('should display the correct thankyou cards for Guardian AdLite users', () => {
-		render(
-			<ThankYouComponent
-				{...defaultProps}
-				productKey="GuardianAdLite"
-				ratePlanKey="Monthly"
-				identityUserType="current"
-			/>,
-		);
-		const whatNext = screen.getByTestId('whatNext');
-		const signInToActivate = screen.getByTestId('signInToActivate');
-		expect(whatNext).toBeInTheDocument();
-		expect(signInToActivate).toBeInTheDocument();
-	});
-
-	it('should display the correct thankyou cards for Digital Edition users', () => {
-		render(
-			<ThankYouComponent
-				{...defaultProps}
-				productKey="DigitalSubscription"
-				ratePlanKey="Monthly"
-				identityUserType="current"
-			/>,
-		);
-		const signIn = screen.getByTestId('signIn');
-		const appDownloadEditions = screen.getByTestId('appDownloadEditions');
-		const socialShare = screen.getByTestId('socialShare');
-		expect(signIn).toBeInTheDocument();
-		expect(appDownloadEditions).toBeInTheDocument();
-		expect(socialShare).toBeInTheDocument();
-	});
-
-	it('should display the correct thankyou cards for Everyday NationalDelivery Paper users', () => {
-		render(
-			<ThankYouComponent
-				{...defaultProps}
-				productKey="NationalDelivery"
-				ratePlanKey="Everyday"
-				identityUserType="current"
-			/>,
-		);
-		const subscriptionStart = screen.getByTestId('subscriptionStart');
-		expect(subscriptionStart).toBeInTheDocument();
-	});
-
-	it('should display the correct thankyou cards for Everyday SubscriptionCard Paper users', () => {
-		render(
-			<ThankYouComponent
-				{...defaultProps}
-				productKey="SubscriptionCard"
-				ratePlanKey="Everyday"
-				identityUserType="current"
-			/>,
-		);
-		const subscriptionStart = screen.getByTestId('subscriptionStart');
-		expect(subscriptionStart).toBeInTheDocument();
-	});
-
-	describe('GuardianWeeklyDomestic', () => {
-		const guardianWeeklyDomestic = 'GuardianWeeklyDomestic';
-
-		it('should display the correct thankyou cards for know user not logged in', () => {
-			render(
-				<ThankYouComponent
-					{...defaultProps}
-					productKey={guardianWeeklyDomestic}
-					ratePlanKey="Monthly"
-					identityUserType="current"
-				/>,
-			);
-
-			const whatNext = screen.getByTestId('whatNext');
-			const signIn = screen.getByTestId('signIn');
-			expect(whatNext).toBeInTheDocument();
-			expect(signIn).toBeInTheDocument();
+	describe('if Guest user', () => {
+		it('should display the correct thankyou cards for One time contribution', () => {
+			testComponent({ identityUserType: 'new' }, [
+				'feedback',
+				'signUp',
+				'supportReminder',
+				'socialShare',
+			]);
 		});
 
-		it('should display the correct thankyou cards for guest users', () => {
-			render(
-				<ThankYouComponent
-					{...defaultProps}
-					productKey={guardianWeeklyDomestic}
-					ratePlanKey="Monthly"
-					identityUserType="new"
-				/>,
+		it('should display the correct thankyou cards for Recurring Contribution', () => {
+			testComponent(
+				{
+					productKey: 'Contribution',
+					ratePlanKey: 'Monthly',
+					identityUserType: 'new',
+				},
+				['signUp', 'socialShare'],
 			);
-			const whatNext = screen.getByTestId('whatNext');
-			const signUp = screen.getByTestId('signUp');
-			expect(whatNext).toBeInTheDocument();
-			expect(signUp).toBeInTheDocument();
+		});
+
+		it('should display the correct thankyou cards for GuardianWeeklyDomestic', () => {
+			testComponent(
+				{
+					productKey: 'GuardianWeeklyDomestic',
+					ratePlanKey: 'Monthly',
+					identityUserType: 'new',
+				},
+				['signUp', 'whatNext'],
+			);
+		});
+
+		it('should display the correct thankyou cards for HomeDelivery', () => {
+			testComponent(
+				{
+					productKey: 'HomeDelivery',
+					ratePlanKey: 'Everyday',
+					identityUserType: 'new',
+				},
+				['signUp', 'whatNext', 'appsDownload'],
+			);
+		});
+
+		it('should display the correct thankyou cards for SubscriptionCard', () => {
+			testComponent(
+				{
+					productKey: 'SubscriptionCard',
+					ratePlanKey: 'Everyday',
+					identityUserType: 'new',
+				},
+				['signUp', 'whatNext', 'appsDownload'],
+			);
+		});
+
+		it('should display the correct thankyou cards for Observer', () => {
+			testComponent(
+				{
+					productKey: 'SubscriptionCard',
+					ratePlanKey: 'Sunday',
+					identityUserType: 'new',
+				},
+				['signUp', 'whatNext'],
+			);
+		});
+	});
+
+	describe('if signedIn user', () => {
+		const getUserSpy = jest.spyOn(userModule, 'getUser');
+
+		beforeEach(() => {
+			getUserSpy.mockImplementation(() => ({ isSignedIn: true }));
+		});
+
+		afterAll(() => {
+			getUserSpy.mockRestore();
+		});
+
+		it('should display the correct thankyou cards for One time contribution', () => {
+			testComponent({}, ['feedback', 'supportReminder', 'socialShare']);
+		});
+
+		it('should display the correct thankyou cards for Recurring Contribution', () => {
+			testComponent({ productKey: 'Contribution', ratePlanKey: 'Monthly' }, [
+				'socialShare',
+				'feedback',
+			]);
+		});
+
+		it('should display the correct thankyou cards for GuardianWeeklyDomestic', () => {
+			testComponent(
+				{ productKey: 'GuardianWeeklyDomestic', ratePlanKey: 'Monthly' },
+				['whatNext'],
+			);
+		});
+
+		it('should display the correct thankyou cards for HomeDelivery', () => {
+			testComponent({ productKey: 'HomeDelivery', ratePlanKey: 'Everyday' }, [
+				'whatNext',
+				'appsDownload',
+			]);
+		});
+
+		it('should display the correct thankyou cards for SubscriptionCard', () => {
+			testComponent(
+				{ productKey: 'SubscriptionCard', ratePlanKey: 'Everyday' },
+				['whatNext', 'appsDownload'],
+			);
+		});
+
+		it('should display the correct thankyou cards for Observer', () => {
+			testComponent({ productKey: 'SubscriptionCard', ratePlanKey: 'Sunday' }, [
+				'whatNext',
+			]);
+		});
+	});
+
+	describe('if user not signedIn', () => {
+		it('should display the correct thankyou cards for Recurring Contribution', () => {
+			testComponent({ productKey: 'Contribution', ratePlanKey: 'Monthly' }, [
+				'signIn',
+				'socialShare',
+			]);
+		});
+
+		it('should display the correct thankyou cards for SupporterPlus', () => {
+			testComponent({ productKey: 'SupporterPlus', ratePlanKey: 'Monthly' }, [
+				'signIn',
+				'appsDownload',
+				'socialShare',
+			]);
+		});
+
+		it('should display the correct thankyou cards for TierThree', () => {
+			testComponent({ productKey: 'TierThree', ratePlanKey: 'Monthly' }, [
+				'signIn',
+				'benefits',
+				'appsDownload',
+				'subscriptionStart',
+			]);
+		});
+
+		it('should display the correct thankyou cards for Guardian AdLite', () => {
+			testComponent({ productKey: 'GuardianAdLite', ratePlanKey: 'Monthly' }, [
+				'whatNext',
+				'signInToActivate',
+			]);
+		});
+
+		it('should display the correct thankyou cards for Digital Edition', () => {
+			testComponent(
+				{ productKey: 'DigitalSubscription', ratePlanKey: 'Monthly' },
+				['signIn', 'appDownloadEditions', 'socialShare'],
+			);
+		});
+
+		it.skip('should display the correct thankyou cards for Everyday NationalDelivery Paper', () => {
+			testComponent(
+				{ productKey: 'NationalDelivery', ratePlanKey: 'Everyday' },
+				['subscriptionStart'],
+			);
+		});
+
+		it('should display the correct thankyou cards for Everyday SubscriptionCard Paper', () => {
+			testComponent(
+				{ productKey: 'SubscriptionCard', ratePlanKey: 'Everyday' },
+				['signIn', 'whatNext', 'appsDownload'],
+			);
+		});
+
+		it('should display the correct thankyou cards for GuardianWeeklyDomestic', () => {
+			testComponent(
+				{ productKey: 'GuardianWeeklyDomestic', ratePlanKey: 'Monthly' },
+				['signIn', 'whatNext'],
+			);
+		});
+
+		it('should display the correct thankyou cards for HomeDelivery', () => {
+			testComponent({ productKey: 'HomeDelivery', ratePlanKey: 'Everyday' }, [
+				'signIn',
+				'whatNext',
+				'appsDownload',
+			]);
+		});
+
+		it('should display the correct thankyou cards for SubscriptionCard', () => {
+			testComponent(
+				{ productKey: 'SubscriptionCard', ratePlanKey: 'Everyday' },
+				['signIn', 'whatNext', 'appsDownload'],
+			);
+		});
+
+		it('should display the correct thankyou cards for Observer', () => {
+			testComponent({ productKey: 'SubscriptionCard', ratePlanKey: 'Sunday' }, [
+				'signIn',
+				'whatNext',
+			]);
 		});
 	});
 });

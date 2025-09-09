@@ -2,9 +2,11 @@ import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 
-const paymentMethodRadioWithImage = css`
+export const radioPadding = css`
 	padding: ${space[2]}px ${space[3]}px;
+`;
 
+const paymentMethodRadioWithImage = css`
 	div label {
 		width: 100%;
 	}
@@ -25,21 +27,21 @@ const paymentMethodRadioWithImageSelected = css`
 	);
 `;
 
-const paymentMethodSelected = css`
-	box-shadow: inset 0 0 0 2px ${palette.brand[500]};
-	margin-top: ${space[2]}px;
-	border-radius: 4px;
+export const paymentMethodBody = css`
+	padding: ${space[5]}px ${space[3]}px ${space[6]}px;
 `;
 
-const paymentMethodNotSelected = css`
+export const defaultRadioBox = css`
 	/* Using box shadows prevents layout shift when the rows are expanded */
 	box-shadow: inset 0 0 0 1px ${palette.neutral[46]};
 	margin-top: ${space[2]}px;
 	border-radius: 4px;
 `;
 
-export const paymentMethodBody = css`
-	padding: ${space[5]}px ${space[3]}px ${space[6]}px;
+export const checkedRadioBox = css`
+	box-shadow: inset 0 0 0 2px ${palette.brand[500]};
+	margin-top: ${space[2]}px;
+	border-radius: 4px;
 `;
 
 export const defaultRadioLabelColour = css`
@@ -68,6 +70,7 @@ export function PaymentMethodRadio({
 	return (
 		<div
 			css={[
+				radioPadding,
 				paymentMethodRadioWithImage,
 				selected ? paymentMethodRadioWithImageSelected : undefined,
 			]}
@@ -87,8 +90,6 @@ export function PaymentMethodSelector({
 	children,
 }: PaymentMethodSelectorProps) {
 	return (
-		<div css={selected ? paymentMethodSelected : paymentMethodNotSelected}>
-			{children}
-		</div>
+		<div css={selected ? checkedRadioBox : defaultRadioBox}>{children}</div>
 	);
 }

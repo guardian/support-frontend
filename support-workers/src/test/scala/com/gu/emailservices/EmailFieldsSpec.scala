@@ -96,6 +96,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
       SendThankYouEmailDigitalSubscriptionState(
         User("1234", "test@theguardian.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
         DigitalPack(GBP, Annual),
+        Some(ProductInformation("DigitalSubscription", "Annual", None, None, None, None, None)),
         directDebitPaymentMethod,
         PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90))),
         None,
@@ -135,6 +136,7 @@ class SupporterPlusEmailFieldsSpec extends AsyncFlatSpec with Matchers with Insi
                            |        "billing_period" : "monthly",
                            |        "account number" : "******11",
                            |        "created" : "$created",
+                           |        "is_fixed_term" : "false",
                            |        "product" : "monthly-supporter-plus"
                            |      }
                            |    }
@@ -154,6 +156,7 @@ class SupporterPlusEmailFieldsSpec extends AsyncFlatSpec with Matchers with Insi
         deliveryAddress = Some(officeAddress),
       ),
       SupporterPlus(12, GBP, Monthly),
+      Some(ProductInformation("SupporterPlus", "Monthly", Some(12), None, None, None, None)),
       directDebitPaymentMethod,
       PaymentSchedule(List(Payment(today, 10), Payment(today.plusMonths(1), 12))),
       None,
@@ -173,6 +176,69 @@ class SupporterPlusEmailFieldsSpec extends AsyncFlatSpec with Matchers with Insi
       actualJson should be(expected)
     })
 
+  }
+
+  it should "generate the right json for SupporterPlus when the rate plan is fixed term" in {
+    val today = new LocalDate(2019, 1, 14)
+    val created = new DateTime(2019, 1, 14, 0, 0)
+    val expected = parse(s"""
+                            |{
+                            |  "To" : {
+                            |    "Address" : "test@theguardian.com",
+                            |    "ContactAttributes" : {
+                            |      "SubscriberAttributes" : {
+                            |        "first_name" : "Mickey",
+                            |        "email_address" : "test@theguardian.com",
+                            |        "account name" : "Mickey Mouse",
+                            |        "Mandate ID" : "65HK26E",
+                            |        "sort code" : "20-20-20",
+                            |        "payment method" : "Direct Debit",
+                            |        "first payment date" : "Thursday, 24 January 2019",
+                            |        "subscription_details" : "£9.00 for 12 months",
+                            |        "zuorasubscriberid" : "A-S00045679",
+                            |        "last_name" : "Mouse",
+                            |        "currency" : "GBP",
+                            |        "billing_period" : "annual",
+                            |        "account number" : "******11",
+                            |        "created" : "$created",
+                            |        "is_fixed_term" : "true",
+                            |        "product" : "annual-supporter-plus"
+                            |      }
+                            |    }
+                            |  },
+                            |  "DataExtensionName" : "supporter-plus",
+                            |  "IdentityUserId" : "1234"
+                            |}""".stripMargin)
+    val state = SendThankYouEmailSupporterPlusState(
+      User(
+        "1234",
+        "test@theguardian.com",
+        None,
+        "Mickey",
+        "Mouse",
+        billingAddress = officeAddress,
+        deliveryAddress = Some(officeAddress),
+      ),
+      SupporterPlus(12, GBP, Annual),
+      Some(ProductInformation("SupporterPlus", "OneYearStudent", Some(9), None, None, None, None)),
+      directDebitPaymentMethod,
+      PaymentSchedule(List(Payment(today, 9))),
+      None,
+      "acno",
+      "A-S00045679",
+      similarProductsConsent = None,
+    )
+
+    val actual = new SupporterPlusEmailFields(
+      new PaperFieldsGenerator(TestData.getMandate),
+      TestData.getMandate,
+      CODE,
+      created,
+    ).build(state).map(fields => parse(fields.payload))
+
+    actual.map(inside(_) { case actualJson =>
+      actualJson should be(expected)
+    })
   }
 }
 
@@ -225,6 +291,29 @@ class TierThreeEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside {
         deliveryAddress = Some(officeAddress),
       ),
       TierThree(GBP, Annual, Domestic),
+      Some(
+        ProductInformation(
+          "TierThree",
+          "Annual",
+          None,
+          deliveryAgent = None,
+          deliveryInstructions = None,
+          deliveryContact = Some(
+            DeliveryContact(
+              "bob",
+              "builder",
+              "test@test.com",
+              "GB",
+              None,
+              "London",
+              "test street",
+              None,
+              "test postcode",
+            ),
+          ),
+          firstDeliveryDate = Some("2020-06-16"),
+        ),
+      ),
       directDebitPaymentMethod,
       PaymentSchedule(List(Payment(today, 119.90))),
       None,

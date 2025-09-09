@@ -1,4 +1,5 @@
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCountry } from '@modules/internationalisation/country';
+import type { GiftRecipientType } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 
 export type FormPersonalFields = {
 	firstName: string;
@@ -14,23 +15,33 @@ export const extractPersonalDataFromForm = (
 	email: formData.get('email') as string,
 });
 
+export const extractGiftRecipientDataFromForm = (
+	formData: FormData,
+): GiftRecipientType | undefined => {
+	const recipientFirstName = formData.get('recipientFirstName');
+	const recipientLastName = formData.get('recipientLastName');
+	if (recipientFirstName && recipientLastName) {
+		return {
+			firstName: recipientFirstName as string,
+			lastName: recipientLastName as string,
+			email: formData.get('recipientEmail') as string | undefined,
+		};
+	}
+	return undefined;
+};
+
+export type FormAddress = {
+	lineOne?: string | null;
+	lineTwo?: string | null;
+	city?: string | null;
+	state?: string | null;
+	postCode?: string | null;
+	country: IsoCountry;
+};
+
 type FormAddressFields = {
-	billingAddress: {
-		lineOne?: string | null;
-		lineTwo?: string | null;
-		city?: string | null;
-		state?: string | null;
-		postCode?: string | null;
-		country: IsoCountry;
-	};
-	deliveryAddress?: {
-		lineOne?: string | null;
-		lineTwo?: string | null;
-		city?: string | null;
-		state?: string | null;
-		postCode?: string | null;
-		country: IsoCountry;
-	};
+	billingAddress: FormAddress;
+	deliveryAddress?: FormAddress;
 };
 
 export const extractDeliverableAddressDataFromForm = (

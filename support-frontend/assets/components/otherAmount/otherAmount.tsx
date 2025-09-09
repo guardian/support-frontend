@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { NumericInput } from '@guardian/source-development-kitchen/react-components';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { HTMLAttributes } from 'react';
 import { currencies } from 'helpers/internationalisation/currency';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 const topSpacing = css`
 	margin-top: ${space[2]}px;

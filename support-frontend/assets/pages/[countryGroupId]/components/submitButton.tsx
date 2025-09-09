@@ -1,14 +1,7 @@
+import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
-import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import type {
-	Currency,
-	IsoCurrency,
-} from 'helpers/internationalisation/currency';
-import {
-	type BillingPeriod,
-	getBillingPeriodNoun,
-} from 'helpers/productPrice/billingPeriods';
 import { isProd } from 'helpers/urls/url';
 import {
 	paypalOneClickCheckout,
@@ -17,6 +10,7 @@ import {
 import type { PaymentMethod } from './paymentFields';
 
 type SubmitButtonProps = {
+	buttonText: string;
 	paymentMethod: PaymentMethod | undefined;
 	payPalLoaded: boolean;
 	payPalBAID: string;
@@ -26,11 +20,11 @@ type SubmitButtonProps = {
 	currencyKey: IsoCurrency;
 	billingPeriod: BillingPeriod;
 	csrf: string;
-	currency: Currency;
 	formRef: React.RefObject<HTMLFormElement>;
 };
 
 export function SubmitButton({
+	buttonText,
 	paymentMethod,
 	payPalLoaded,
 	payPalBAID,
@@ -41,7 +35,6 @@ export function SubmitButton({
 	currencyKey,
 	billingPeriod,
 	csrf,
-	currency,
 }: SubmitButtonProps) {
 	switch (paymentMethod) {
 		case 'PayPal':
@@ -90,6 +83,16 @@ export function SubmitButton({
 						}}
 						onClick={() => {
 							// TODO - add tracking
+
+							// The button won't actually submit if the form
+							// isn't valid but we can check here and if invalid
+							// the browser will scroll the user to the first
+							// error if necessary
+							const valid = formRef.current?.checkValidity();
+							if (!valid) {
+								/** We run this so the form validation happens and focus on errors */
+								formRef.current?.requestSubmit();
+							}
 						}}
 						/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
 						payment={(resolve, reject) => {
@@ -128,10 +131,7 @@ export function SubmitButton({
 		default:
 			return (
 				<DefaultPaymentButton
-					buttonText={`Pay ${simpleFormatAmount(
-						currency,
-						finalAmount,
-					)} per ${getBillingPeriodNoun(billingPeriod)}`}
+					buttonText={buttonText}
 					onClick={() => {
 						// no-op
 						// This isn't needed because we are now using the formOnSubmit handler

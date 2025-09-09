@@ -1,14 +1,14 @@
-import type { RegularPaymentRequest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
+import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { ProductFields } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 	ProductDescription,
 } from 'helpers/productCatalog';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { getFulfilmentOptionFromProductKey } from 'helpers/productPrice/fulfilmentOptions';
-import { getProductOptionFromProductAndRatePlan } from 'helpers/productPrice/productOptions';
 import { logException } from 'helpers/utilities/logger';
+import { getFulfilmentOptionFromProductKey } from '../../../../helpers/productCatalogToFulfilmentOption';
+import { getProductOptionFromProductAndRatePlan } from '../../../../helpers/productCatalogToProductOption';
 
 type GetProductFieldsParams = {
 	product: {
@@ -28,7 +28,7 @@ type GetProductFieldsParams = {
 export const getProductFields = ({
 	product,
 	financial,
-}: GetProductFieldsParams): RegularPaymentRequest['product'] => {
+}: GetProductFieldsParams): ProductFields => {
 	const { productKey, ratePlanKey, productDescription, deliveryAgent } =
 		product;
 	const { currencyKey, finalAmount, originalAmount, contributionAmount } =
@@ -80,7 +80,7 @@ export const getProductFields = ({
 			return {
 				productType: 'SupporterPlus',
 				currency: currencyKey,
-				billingPeriod: billingPeriod,
+				billingPeriod,
 				/**
 				 * We shouldn't have to calculate these amounts here.
 				 *

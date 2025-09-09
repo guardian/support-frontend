@@ -1,4 +1,4 @@
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCountry } from '@modules/internationalisation/country';
 
 const INTCMP_FACEBOOK = 'component-share-facebook';
 const INTCMP_TWITTER = 'component-share-twitter';

@@ -1,3 +1,6 @@
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { GBPCountries } from '@modules/internationalisation/countryGroup';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import * as React from 'react';
 // constants
 import DigitalPackshotHero from 'components/packshots/digital-packshot-hero';
@@ -5,15 +8,12 @@ import GuardianWeeklyPackShotHero from 'components/packshots/guardian-weekly-pac
 import PaperPackshot from 'components/packshots/paper-packshot';
 // images
 import type { Participations } from 'helpers/abTests/models';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { ProductBenefit } from 'helpers/productCatalog';
 import {
 	productCatalog,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	DigitalPack,
 	fixDecimals,
@@ -37,6 +37,7 @@ export type ProductButton = {
 	hierarchy?: string;
 	modifierClasses?: string;
 	primary?: boolean;
+	ariaLabel?: string;
 };
 
 type ProductCopy = {
@@ -118,6 +119,7 @@ function digitalCheckout(
 					componentType: 'ACQUISITIONS_BUTTON',
 				}),
 				modifierClasses: 'digital',
+				ariaLabel: `${BillingPeriod.Monthly} DigitalEdition`,
 			},
 			{
 				ctaButtonText: getDigitalEditionPrice(
@@ -131,6 +133,7 @@ function digitalCheckout(
 					componentType: 'ACQUISITIONS_BUTTON',
 				}),
 				modifierClasses: 'digital',
+				ariaLabel: `${BillingPeriod.Annual} DigitalEdition`,
 			},
 		],
 		benefits: productCatalogDescription['DigitalSubscription'].benefits,

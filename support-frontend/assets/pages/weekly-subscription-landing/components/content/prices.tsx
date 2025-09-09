@@ -1,8 +1,9 @@
-import { css, ThemeProvider } from '@emotion/react';
+import { css } from '@emotion/react';
 import {
 	from,
 	headlineBold24,
 	neutral,
+	palette,
 	space,
 	textEgyptian17,
 	textSans12,
@@ -84,6 +85,7 @@ const pricesInfo = css`
 
 const termsLink = css`
 	${textSans12};
+	color: ${palette.brand[500]};
 	margin-left: ${space[9]}px;
 	margin-top: -12px;
 `;
@@ -102,7 +104,7 @@ function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
 				{products.map((product) => (
 					<ProductOption
 						cssOverrides={
-							product.label ? productOverrideWithLabel : productOverride
+							product.showLabel ? productOverrideWithLabel : productOverride
 						}
 						title={product.title}
 						price={product.price}
@@ -112,7 +114,7 @@ function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
 						href={product.href}
 						onClick={product.onClick}
 						onView={product.onView}
-						label={product.label}
+						showLabel={product.showLabel}
 						isSpecialOffer={product.isSpecialOffer}
 					/>
 				))}
@@ -128,11 +130,13 @@ function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
 					{!orderIsAGift && 'You can cancel your subscription at any time'}
 				</ProductInfoChip>
 				<ProductInfoChip>
-					<ThemeProvider theme={themeLinkBrand}>
-						<Link href={termsConditionsLink} cssOverrides={termsLink}>
-							Click here to see full Terms and Conditions
-						</Link>
-					</ThemeProvider>
+					<Link
+						href={termsConditionsLink}
+						cssOverrides={termsLink}
+						theme={themeLinkBrand}
+					>
+						Click here to see full Terms and Conditions
+					</Link>
 				</ProductInfoChip>
 			</div>
 		</section>

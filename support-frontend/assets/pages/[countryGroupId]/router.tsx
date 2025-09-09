@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { HoldingContent } from 'components/serverSideRendered/holdingContent';
+import { WithCoreWebVitals } from 'helpers/coreWebVitals/withCoreWebVitals';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	getAbParticipations,
@@ -42,6 +43,7 @@ const GuardianAdLiteLanding = lazy(() => {
 		return { default: mod.GuardianAdLiteLanding };
 	});
 });
+
 const LandingPage = lazy(() => {
 	return import(/* webpackChunkName: "LandingPage" */ './landingPage').then(
 		(mod) => {
@@ -49,9 +51,23 @@ const LandingPage = lazy(() => {
 		},
 	);
 });
+const StudentLandingPageUTSContainer = lazy(() => {
+	return import(
+		/* webpackChunkName: "StudentLandingPageUTSContainer" */ './student/StudentLandingPageUTSContainer'
+	).then((mod) => {
+		return { default: mod.StudentLandingPageUTSContainer };
+	});
+});
+const StudentLandingPageGlobalContainer = lazy(() => {
+	return import(
+		/* webpackChunkName: "StudentLandingPageGlobalContainer" */ './student/StudentLandingPageGlobalContainer'
+	).then((mod) => {
+		return { default: mod.StudentLandingPageGlobalContainer };
+	});
+});
 
-const router = createBrowserRouter(
-	geoIds.flatMap((geoId) => [
+const router = createBrowserRouter([
+	...geoIds.flatMap((geoId) => [
 		{
 			path: `/${geoId}/contribute/:campaignCode?`,
 			element: (
@@ -110,11 +126,36 @@ const router = createBrowserRouter(
 				</Suspense>
 			),
 		},
+		{
+			path: `/${geoId}/student`,
+			element: (
+				<Suspense fallback={<HoldingContent />}>
+					<StudentLandingPageGlobalContainer
+						geoId={geoId}
+						landingPageVariant={landingPageParticipations.variant}
+					/>
+				</Suspense>
+			),
+		},
 	]),
-);
+	{
+		path: '/au/student/UTS',
+		element: (
+			<Suspense fallback={<HoldingContent />}>
+				<StudentLandingPageUTSContainer
+					landingPageVariant={landingPageParticipations.variant}
+				/>
+			</Suspense>
+		),
+	},
+]);
 
 function Router() {
-	return <RouterProvider router={router} />;
+	return (
+		<WithCoreWebVitals>
+			<RouterProvider router={router} />
+		</WithCoreWebVitals>
+	);
 }
 
 export default renderPage(<Router />);

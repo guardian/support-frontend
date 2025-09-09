@@ -1,0 +1,107 @@
+{
+  "requestId": "cfceab33-140f-7d60-0000-0000000000ab",
+  "user": {
+    "id": "999999999",
+    "primaryEmailAddress": "test@test.com",
+    "title": null,
+    "firstName": "Test",
+    "lastName": "User",
+    "billingAddress": {
+      "lineOne": null,
+      "lineTwo": null,
+      "city": null,
+      "state": null,
+      "postCode": null,
+      "country": "GB"
+    },
+    "deliveryAddress": null,
+    "telephoneNumber": null,
+    "isTestUser": false,
+    "deliveryInstructions": null
+  },
+  "giftRecipient": null,
+  "product": {
+    "amount": 4,
+    "currency": "GBP",
+    "billingPeriod": "Monthly",
+    "productType": "Contribution"
+  },
+  "analyticsInfo": {
+    "isGiftPurchase": false,
+    "paymentProvider": "PayPal"
+  },
+  "paymentFields": {
+    "baid": "BA-1234",
+    "paymentType": "PayPal"
+  },
+  "firstDeliveryDate": null,
+  "appliedPromotion": null,
+  "csrUsername": null,
+  "salesforceCaseId": null,
+  "acquisitionData": {
+    "ophanIds": {
+      "pageviewId": "m3eccffvkqki319rfwll",
+      "browserId": "idFromPV_Uy-mxKZ8465-SIRsB4wYgg"
+    },
+    "referrerAcquisitionData": {
+      "campaignCode": null,
+      "referrerPageviewId": "",
+      "referrerUrl": null,
+      "componentId": null,
+      "componentType": "email_marketing",
+      "source": "EMAIL",
+      "abTests": [
+        {
+          "name": "Email_SimilarGuardianConsentASOISinglesUKROWTest",
+          "variant": "Email_SimilarGuardianConsentASOISinglesUKROWTest"
+        }
+      ],
+      "queryParameters": [
+        {
+          "name": "lid",
+          "value": "ho3cjt7q4fjs"
+        },
+        {
+          "name": "utm_content",
+          "value": "Email_SimilarGuardianConsentASOISinglesUKROWTest"
+        },
+        {
+          "name": "utm_term",
+          "value": "Email_SimilarGuardianConsentASOISinglesUKROWTest"
+        },
+        {
+          "name": "utm_campaign",
+          "value": "MK_CN_AcqUSElectionEmail5_UKROW111124"
+        },
+        {
+          "name": "utm_medium",
+          "value": "email_marketing"
+        },
+        {
+          "name": "utm_source",
+          "value": "EMAIL"
+        }
+      ],
+      "hostname": "support.theguardian.com",
+      "gaClientId": null,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0.1 Safari/605.1.15",
+      "ipAddress": "10.248.135.109",
+      "labels": [
+        "generic-checkout"
+      ]
+    },
+    "supportAbTests": [
+      {
+        "name": "abandonedBasket",
+        "variant": "control"
+      },
+      {
+        "name": "auPartnerBenefit",
+        "variant": "control"
+      }
+    ]
+  },
+  "ipAddress": "109.153.215.21",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0.1 Safari/605.1.15",
+  "similarProductsConsent": false
+}

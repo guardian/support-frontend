@@ -1,41 +1,43 @@
+import type { IsoCountry } from '@modules/internationalisation/country';
+import { BillingPeriod } from '@modules/product/billingPeriod';
+import { type ProductOptions } from '@modules/product/productOptions';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	getStripeKeyForCountry,
 	getStripeKeyForProduct,
 } from 'helpers/forms/stripe';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import {
 	type ActiveProductKey,
 	type ActiveRatePlanKey,
 	isProductKey,
 	productCatalog,
 } from 'helpers/productCatalog';
-import {
-	BillingPeriod,
-	toRegularBillingPeriod,
-} from 'helpers/productPrice/billingPeriods';
-import { getFulfilmentOptionFromProductKey } from 'helpers/productPrice/fulfilmentOptions';
-import {
-	getProductOptionFromProductAndRatePlan,
-	type ProductOptions,
-} from 'helpers/productPrice/productOptions';
+import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import * as cookie from 'helpers/storage/cookie';
+import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
+import { inPaperProductTest } from 'pages/paper-subscription-landing/helpers/inPaperProductTest';
+import { getWeeklyDeliveryDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import type { LegacyProductType } from '../../helpers/legacyTypeConversions';
 import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
-import type { CheckoutSession } from './checkout/helpers/stripeCheckoutSession';
-import { getFormDetails } from './checkout/helpers/stripeCheckoutSession';
-import { CheckoutComponent } from './components/checkoutComponent';
+import { getFulfilmentOptionFromProductKey } from '../../helpers/productCatalogToFulfilmentOption';
+import { getProductOptionFromProductAndRatePlan } from '../../helpers/productCatalogToProductOption';
+import { useStripeHostedCheckoutSession } from './checkout/hooks/useStripeHostedCheckoutSession';
+import CheckoutForm from './components/checkoutForm';
+import { CheckoutLayout } from './components/checkoutLayout';
+import CheckoutSummary from './components/checkoutSummary';
+import { getStudentDiscount } from './student/helpers/discountDetails';
 
 type Props = {
 	geoId: GeoId;
@@ -57,7 +59,10 @@ const getPromotionFromProductPrices = (
 	 * Get any promotions.
 	 * These come from the productPrices object for the particular product on window.guardian.
 	 */
-	const productPriceKey: LegacyProductType = getLegacyProductType(productKey);
+	const productPriceKey: LegacyProductType = getLegacyProductType(
+		productKey,
+		ratePlanKey,
+	);
 
 	const productPrices = appConfig.allProductPrices[productPriceKey];
 
@@ -78,28 +83,6 @@ const getPromotionFromProductPrices = (
 		fulfilmentOption,
 		productOptions,
 	);
-};
-
-const attemptToRetrievePersistedFormData = (
-	urlSearchParams: URLSearchParams,
-): CheckoutSession | undefined => {
-	const checkoutSessionIdUrlParam = 'checkoutSessionId';
-	const maybeCheckoutSessionId = urlSearchParams.get(checkoutSessionIdUrlParam);
-
-	if (maybeCheckoutSessionId) {
-		const persistedFormData = getFormDetails(maybeCheckoutSessionId);
-
-		if (persistedFormData) {
-			return persistedFormData;
-		}
-
-		// If there's no persisted data, remove the checkoutSessionId from the URL
-		const url = new URL(window.location.href);
-		url.searchParams.delete(checkoutSessionIdUrlParam);
-		window.location.href = url.toString();
-	}
-
-	return undefined;
 };
 
 export function Checkout({
@@ -276,29 +259,90 @@ export function Checkout({
 		);
 	}, []);
 
-	const checkoutSession = attemptToRetrievePersistedFormData(urlSearchParams);
+	const checkoutSessionIdUrlParam = 'checkoutSessionId';
+	const maybeCheckoutSessionId = urlSearchParams.get(checkoutSessionIdUrlParam);
+
+	const [checkoutSession, clearCheckoutSession] =
+		useStripeHostedCheckoutSession(maybeCheckoutSessionId);
+
+	const [weeklyDeliveryDate, setWeeklyDeliveryDate] = useState<Date>(
+		getWeeklyDeliveryDate(productKey),
+	);
+
+	/**
+	 * Passed down because minimum product prices are unavailable in the paymentTsAndCs story
+	 * and shared across summary and form checkout sub-components
+	 */
+	const { countryGroupId } = getGeoIdConfig(geoId);
+	const thresholdAmount = getLowerProductBenefitThreshold(
+		billingPeriod,
+		fromCountryGroupId(countryGroupId),
+		countryGroupId,
+		productKey,
+		ratePlanKey,
+	);
+
+	/**
+	 * Non-AU Students have ratePlanKey as OneYearStudent
+	 * AU Students have ratePlanKey as Monthly, productKey as SupporterPlus
+	 * and required promoCode UTS_STUDENT
+	 */
+	const studentDiscount = getStudentDiscount(
+		geoId,
+		ratePlanKey,
+		productKey,
+		promotion,
+		true,
+	);
+
+	const isPaperProductTest = inPaperProductTest();
 
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
-			<CheckoutComponent
-				geoId={geoId}
-				appConfig={appConfig}
-				stripePublicKey={stripePublicKey}
-				isTestUser={isTestUser}
-				productKey={productKey}
-				ratePlanKey={ratePlanKey}
-				promotion={promotion}
-				originalAmount={payment.originalAmount}
-				discountedAmount={payment.discountedAmount}
-				contributionAmount={payment.contributionAmount}
-				finalAmount={payment.finalAmount}
-				useStripeExpressCheckout={useStripeExpressCheckout}
-				countryId={countryId}
-				forcedCountry={forcedCountry}
-				abParticipations={abParticipations}
-				landingPageSettings={landingPageSettings}
-				checkoutSession={checkoutSession}
-			/>
+			<CheckoutLayout>
+				<CheckoutSummary
+					geoId={geoId}
+					appConfig={appConfig}
+					productKey={productKey}
+					ratePlanKey={ratePlanKey}
+					promotion={promotion}
+					originalAmount={payment.originalAmount}
+					countryId={countryId}
+					forcedCountry={forcedCountry}
+					abParticipations={abParticipations}
+					landingPageSettings={landingPageSettings}
+					weeklyDeliveryDate={weeklyDeliveryDate}
+					thresholdAmount={thresholdAmount}
+					studentDiscount={studentDiscount}
+					isPaperProductTest={isPaperProductTest}
+				/>
+
+				<CheckoutForm
+					geoId={geoId}
+					appConfig={appConfig}
+					stripePublicKey={stripePublicKey}
+					isTestUser={isTestUser}
+					productKey={productKey}
+					ratePlanKey={ratePlanKey}
+					promotion={promotion}
+					originalAmount={payment.originalAmount}
+					discountedAmount={payment.discountedAmount}
+					contributionAmount={payment.contributionAmount}
+					finalAmount={payment.finalAmount}
+					useStripeExpressCheckout={useStripeExpressCheckout}
+					countryId={countryId}
+					forcedCountry={forcedCountry}
+					abParticipations={abParticipations}
+					landingPageSettings={landingPageSettings}
+					checkoutSession={checkoutSession}
+					clearCheckoutSession={clearCheckoutSession}
+					weeklyDeliveryDate={weeklyDeliveryDate}
+					setWeeklyDeliveryDate={setWeeklyDeliveryDate}
+					thresholdAmount={thresholdAmount}
+					studentDiscount={studentDiscount}
+					isPaperProductTest={isPaperProductTest}
+				/>
+			</CheckoutLayout>
 		</Elements>
 	);
 }

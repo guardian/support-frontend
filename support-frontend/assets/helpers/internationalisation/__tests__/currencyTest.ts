@@ -4,8 +4,8 @@ import {
 	EURCountries,
 	GBPCountries,
 	UnitedStates,
-} from '../countryGroup';
-import type { IsoCurrency } from '../currency';
+} from '@modules/internationalisation/countryGroup';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { detect } from '../currency';
 
 let mockCurrency: IsoCurrency | null | undefined = null;

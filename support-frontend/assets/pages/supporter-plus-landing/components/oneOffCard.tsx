@@ -1,4 +1,4 @@
-import { css, ThemeProvider } from '@emotion/react';
+import { css } from '@emotion/react';
 import {
 	from,
 	headlineBold24,
@@ -8,17 +8,17 @@ import {
 	until,
 } from '@guardian/source/foundations';
 import {
-	buttonThemeReaderRevenueBrand,
 	LinkButton,
+	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { countryGroups } from '@modules/internationalisation/countryGroup';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'react';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { OtherAmount } from '../../../components/otherAmount/otherAmount';
 import { PriceCards } from '../../../components/priceCards/priceCards';
 import type { SelectedAmountsVariant } from '../../../helpers/contributions';
-import type { CountryGroupId } from '../../../helpers/internationalisation/countryGroup';
-import { countryGroups } from '../../../helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from '../../../helpers/internationalisation/currency';
 import { trackComponentClick } from '../../../helpers/tracking/behaviour';
 import { PaymentCards } from './PaymentIcons';
 
@@ -123,23 +123,22 @@ export function OneOffCard({
 				/>
 			</div>
 			<div css={buttonContainer}>
-				<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
-					<LinkButton
-						href={`/${
-							countryGroups[countryGroupId].supportInternationalisationId
-						}/contribute/checkout?selected-contribution-type=one_off&selected-amount=${
-							selectedAmount === 'other' ? otherAmount : selectedAmount
-						}`}
-						cssOverrides={btnStyleOverrides}
-						onClick={() => {
-							trackComponentClick(
-								`npf-contribution-amount-toggle-${countryGroupId}-ONE_OFF`,
-							);
-						}}
-					>
-						Continue to checkout
-					</LinkButton>
-				</ThemeProvider>
+				<LinkButton
+					href={`/${
+						countryGroups[countryGroupId].supportInternationalisationId
+					}/contribute/checkout?selected-contribution-type=one_off&selected-amount=${
+						selectedAmount === 'other' ? otherAmount : selectedAmount
+					}`}
+					cssOverrides={btnStyleOverrides}
+					onClick={() => {
+						trackComponentClick(
+							`npf-contribution-amount-toggle-${countryGroupId}-ONE_OFF`,
+						);
+					}}
+					theme={themeButtonReaderRevenueBrand}
+				>
+					Continue to checkout
+				</LinkButton>
 				<PaymentCards />
 			</div>
 		</section>

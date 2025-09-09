@@ -1,9 +1,11 @@
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { ReactNode } from 'react';
-import { tabButton, tabList, tabPanel } from './tabsStyles';
+import paperTabStyles from './paperTabsStyles';
+import legacyTabStyles from './tabsStyles';
 
 type TabElement = 'a' | 'button';
 export type TabProps = {
-	id: string;
+	id: PaperFulfilmentOptions;
 	text: string;
 	href?: string;
 	selected: boolean;
@@ -13,7 +15,8 @@ type PropTypes = {
 	tabsLabel: string;
 	tabElement: TabElement;
 	tabs: TabProps[];
-	onTabChange: (tabName: string) => void;
+	onTabChange: (tabId: PaperFulfilmentOptions) => void;
+	theme?: 'legacyTabs' | 'paperTabs';
 };
 
 function Tabs({
@@ -21,16 +24,18 @@ function Tabs({
 	tabElement,
 	tabs,
 	onTabChange,
+	theme = 'legacyTabs',
 }: PropTypes): JSX.Element {
+	const styles = theme === 'legacyTabs' ? legacyTabStyles : paperTabStyles;
 	const TabControllerElement = tabElement;
 	return (
 		<div>
-			<div css={tabList} role="tablist" aria-label={tabsLabel}>
+			<div css={styles.tabList} role="tablist" aria-label={tabsLabel}>
 				{tabs.map((tab: TabProps) => {
 					const selected = tab.selected ? 'true' : 'false';
 					return (
 						<TabControllerElement
-							css={tabButton}
+							css={styles.tabButton}
 							role="tab"
 							id={tab.id}
 							href={tab.href}
@@ -48,7 +53,7 @@ function Tabs({
 			</div>
 			{tabs.map((tab: TabProps) => (
 				<div
-					css={tabPanel}
+					css={styles.tabPanel}
 					role="tabpanel"
 					id={`${tab.id}-tab`}
 					aria-labelledby={tab.id}

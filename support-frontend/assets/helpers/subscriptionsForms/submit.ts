@@ -1,3 +1,14 @@
+import type { SupportInternationalisationId } from '@modules/internationalisation/countryGroup';
+import { countryGroups } from '@modules/internationalisation/countryGroup';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
+import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import {
+	HomeDelivery,
+	NationalDelivery,
+} from '@modules/product/fulfilmentOptions';
+import type { ProductOptions } from '@modules/product/productOptions';
+import { NoProductOptions } from '@modules/product/productOptions';
 import type { PaymentMethod as StripePaymentMethod } from '@stripe/stripe-js';
 import type { Dispatch } from 'redux';
 import type {
@@ -13,15 +24,6 @@ import {
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import {
-	HomeDelivery,
-	NationalDelivery,
-} from 'helpers/productPrice/fulfilmentOptions';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import {
 	getCurrency,
 	getProductPrice,
@@ -54,8 +56,6 @@ import { successfulSubscriptionConversion } from 'helpers/tracking/googleTagMana
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
-import type { SupportInternationalisationId } from '../internationalisation/countryGroup';
-import { countryGroups } from '../internationalisation/countryGroup';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 
 type Addresses = {

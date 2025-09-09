@@ -57,6 +57,8 @@ case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError])
     case List(ZuoraError("SERVER_UNAVAILABLE", _)) => toRetryUnlimited
     case List(ZuoraError("UNKNOWN_ERROR", _)) => toRetryUnlimited
     case List(ZuoraError("TEMPORARY_ERROR", _)) => toRetryLimited
+    case List(ZuoraError("TRANSACTION_FAILED", "Your card was declined")) => toRetryNone
+    case List(ZuoraError("TRANSACTION_FAILED", _)) => toRetryLimited
     case _ => toRetryNone
   }
 }

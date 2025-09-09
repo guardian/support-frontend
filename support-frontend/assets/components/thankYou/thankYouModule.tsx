@@ -225,6 +225,8 @@ const ctaBottom = css`
 	padding-bottom: ${space[4]}px;
 `;
 
+export const TEST_ID_PREFIX = 'tyModule';
+
 export type ThankYouModuleType =
 	| 'appDownload'
 	| 'appsDownload'
@@ -301,7 +303,7 @@ function ThankYouModule({
 	return (
 		<section
 			css={[container, maybePaddingRight, hasImagery && imageryPadding]}
-			data-testid={moduleType}
+			data-testid={`${TEST_ID_PREFIX}-${moduleType}`}
 		>
 			<div css={gridContainer}>
 				<div css={iconContainer}>{icon}</div>

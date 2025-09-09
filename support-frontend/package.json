@@ -6,9 +6,10 @@
 		"start": "./devrun.sh",
 		"clean": "echo 'Cleaning Public Folder' && rimraf public/compiled-assets",
 		"validate": "echo 'Validating TS' && npm-run-all 'lint:fix' && pnpm tsc && pnpm knip",
+		"typecheck": "tsc --noEmit",
 		"lint:nibble": "eslint-nibble ./assets --ext .ts,.tsx",
-		"lint:check": "eslint ./assets --ext .ts --ext .tsx",
-		"lint:fix": "pnpm lint:check --fix",
+    "lint:check": "NODE_OPTIONS=\"--max-old-space-size=28192\" eslint ./assets --ext .ts --ext .tsx",
+		"lint:fix": "eslint --fix ./assets --ext .ts --ext .tsx",
 		"build-dev": "webpack --config webpack.dev.js",
 		"build-ssr": "tsx ./scripts/build-ssr-content.tsx",
 		"build-prod-no-test": "npm-run-all clean 'webpack --config webpack.prod.js'",
@@ -42,7 +43,7 @@
 			".+\\.(js|jsx|ts|tsx)$": "./node_modules/babel-jest"
 		},
 		"transformIgnorePatterns": [
-			"/node_modules/\\.pnpm/(?!@guardian|valibot)",
+			"/node_modules/\\.pnpm/(?!@guardian)",
 			"^.+\\.module\\.(css|sass|scss)$"
 		],
 		"moduleFileExtensions": [
@@ -63,8 +64,10 @@
 		"moduleNameMapper": {
 			"ophan(.*)": "<rootDir>/node_modules/ophan-tracker-js/build/ophan.support",
 			"\\.(css|less|sass|scss)$": "<rootDir>/assets/__mocks__/styleMock.ts",
-			"\\.(svg|png|jpg)$": "<rootDir>/assets/__mocks__/imageMock.ts"
-		},
+			"\\.(svg|png|jpg)$": "<rootDir>/assets/__mocks__/imageMock.ts",
+      "@modules/product-catalog/(.*)$": "@guardian/support-service-lambdas/modules/product-catalog/src/$1",
+      "@modules/(.*)$": "<rootDir>/../modules/$1"
+    },
 		"setupFilesAfterEnv": [
 			"./jestSetup"
 		],
@@ -82,17 +85,17 @@
 		"@emotion/react": "^11.14.0",
 		"@emotion/utils": "^1.1.0",
 		"@floating-ui/react": "^0.27.6",
-		"@guardian/libs": "^22.0.0",
+		"@guardian/core-web-vitals": "^11.1.0",
+		"@guardian/libs": "^25.3.0",
 		"@guardian/pasteup": "1.0.0-alpha.7",
-		"@guardian/source": "8.0.0",
-		"@guardian/source-development-kitchen": "18.1.0",
-		"@guardian/support-service-lambdas": "guardian/support-service-lambdas#7c47d02f232c455163f12ab9fab25722d29af7ff",
+		"@guardian/source": "10.2.0",
+		"@guardian/source-development-kitchen": "18.1.1",
+		"@guardian/support-service-lambdas": "catalog:",
 		"@guardian/tsconfig": "^0.2.0",
 		"@reduxjs/toolkit": "^1.9.4",
 		"@sentry/browser": "^8.33.1",
 		"@stripe/react-stripe-js": "^2.7.3",
 		"@stripe/stripe-js": "^4.1.0",
-		"@types/dompurify": "^3.0.5",
 		"@types/seedrandom": "^3.0.8",
 		"@types/uuid": "^9.0.2",
 		"classnames": "^2.5.1",
@@ -105,13 +108,12 @@
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"react-redux": "^8.1.0",
-		"react-router-dom": "^6.23.0",
+		"react-router-dom": "^7.6.2",
 		"redux": "^4.0.0",
 		"seedrandom": "^3.0.5",
 		"snarkdown": "^2.0.0",
 		"tsx": "^4.19.2",
 		"uuid": "^9.0.0",
-		"valibot": "^0.31.0",
 		"zod": "^3.22.4"
 	},
 	"devDependencies": {
@@ -126,9 +128,8 @@
 		"@babel/runtime": "7.26.10",
 		"@emotion/eslint-plugin": "^11.11.0",
 		"@guardian/browserslist-config": "^6.1.2",
-		"@guardian/eslint-config": "8.0.1",
-		"@guardian/eslint-config-typescript": "11.0.0",
 		"@guardian/prettier": "^2.1.5",
+    "@guardian/eslint-config-typescript": "10.0.1",
 		"@storybook/addon-a11y": "^8.4.2",
 		"@storybook/addon-essentials": "^8.4.5",
 		"@storybook/addon-interactions": "^8.4.2",
@@ -146,13 +147,12 @@
 		"@types/node": "^22.10.1",
 		"@types/react": "18.2.0",
 		"@types/react-dom": "18.2.0",
-		"@types/react-router-dom": "^5.3.3",
 		"autoprefixer": "^10.4.21",
 		"babel-jest": "^29.7.0",
 		"babel-loader": "^9.1.3",
 		"babel-plugin-add-react-displayname": "^0.0.5",
 		"babel-plugin-dynamic-import-node": "^2.3.3",
-		"chromatic": "^10.9.6",
+		"chromatic": "^13.0.1",
 		"concurrently": "^9.1.0",
 		"css-loader": "^6.7.1",
 		"css-minimizer-webpack-plugin": "^7.0.2",
@@ -196,6 +196,5 @@
 	},
 	"lint-staged": {
 		"./assets/**/**/*.{js,jsx,ts,tsx}": "eslint"
-	},
-	"packageManager": "pnpm@10.9.0+sha256.ea53ab747ac8b7921de63b42eab1adf021e1fe6ded05f62f00885cc33a46118d"
+	}
 }

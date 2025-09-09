@@ -1,8 +1,8 @@
 #!/bin/sh
 
-cd ../../cdk
+cd ../..
 
-yarn synth # If this fails check you are using the correct node version
+pnpm --filter cdk synth # If this fails check you are using the correct node version
 
 # Exit if any of these commands fail, print commands to console
 set -ex

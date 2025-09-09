@@ -9,29 +9,14 @@ jobs:
         working-directory: support-frontend
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
-      - run: npm install --global corepack@0.31.0
+      - name: Setup Node and Install Dependencies
+        uses: ./.github/actions/setup-node-and-install
 
-      - run: corepack enable
-        shell: bash
-
-      - name: Install Node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-
-      # Cache npm dependencies using https://github.com/bahmutov/npm-install
-      # - name: Cache dependencies
-      #   uses: bahmutov/npm-install@v1
-      #   with:
-      #     working-directory: support-frontend
-
-      - name: Install
-        run: pnpm install
-      - uses: chromaui/action@v11.28.2
+      - uses: chromaui/action@v13.1.4
         with:
           workingDir: support-frontend
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}

@@ -216,7 +216,6 @@ case object Paper extends Product {
     List(
       collection("2c92a00870ec598001710740ce702ff0", SaturdayPlus, "Voucher Saturday+"),
       collection("2c92a00870ec598001710740cdd02fbd", Saturday, "Voucher Saturday"),
-      collection("2c92a00870ec598001710740cf9e3004", SundayPlus, "Voucher Sunday+"),
       collection("2c92a00870ec598001710740d0d83017", Sunday, "Voucher Sunday"),
       collection("2c92a00870ec598001710740c6672ee7", WeekendPlus, "Voucher Weekend+"),
       collection("2c92a00870ec598001710740d24b3022", Weekend, "Voucher Weekend"),
@@ -229,7 +228,6 @@ case object Paper extends Product {
   private val codeCollection: List[ProductRatePlan[Paper.type]] = List(
     collection("2c92c0f86fa49142016fa49eb1732a39", SaturdayPlus, "Voucher Saturday paper+"),
     collection("2c92c0f86fa49142016fa49ea442291b", Saturday, "Voucher Saturday paper"),
-    collection("2c92c0f86fa49142016fa49ea90e2976", SundayPlus, "Voucher Sunday paper+"),
     collection("2c92c0f86fa49142016fa49eb0a42a01", Sunday, "Voucher Sunday paper"),
     collection("2c92c0f86fa49142016fa49eaecb29dd", WeekendPlus, "Voucher Weekend+"),
     collection("2c92c0f86fa49142016fa49ea0d028b6", Weekend, "Voucher Weekend"),
@@ -260,7 +258,6 @@ case object Paper extends Product {
   private val codeHomeDelivery: List[ProductRatePlan[Paper.type]] = List(
     homeDelivery("2c92c0f961f9cf300161fc4f71473a34", SaturdayPlus, "Home Delivery Saturday+"),
     homeDelivery("2c92c0f961f9cf300161fc4d2e3e3664", Saturday, "Home Delivery Saturday"),
-    homeDelivery("2c92c0f955c3cf0f0155c5d9e83a3cb7", SundayPlus, "Home Delivery Sunday+"),
     homeDelivery("2c92c0f85aff3453015b1041dfd2317f", Sunday, "Home Delivery Sunday"),
     homeDelivery("2c92c0f95aff3b56015b104aa9a13ea5", WeekendPlus, "Home Delivery Weekend+"),
     homeDelivery("2c92c0f955c3cf0f0155c5d9df433bf7", Weekend, "Home Delivery Weekend"),
@@ -273,7 +270,6 @@ case object Paper extends Product {
   private val prodHomeDelivery: List[ProductRatePlan[Paper.type]] = List(
     homeDelivery("2c92a0ff6205708e01622484bb2c4613", SaturdayPlus, "Home Delivery Saturday+"),
     homeDelivery("2c92a0fd5e1dcf0d015e3cb39d0a7ddb", Saturday, "Home Delivery Saturday"),
-    homeDelivery("2c92a0fd560d13880156136b8e490f8b", SundayPlus, "Home Delivery Sunday+"),
     homeDelivery("2c92a0ff5af9b657015b0fea5b653f81", Sunday, "Home Delivery Sunday"),
     homeDelivery("2c92a0ff560d311b0156136b9f5c3968", WeekendPlus, "Home Delivery Weekend+"),
     homeDelivery("2c92a0fd5614305c01561dc88f3275be", Weekend, "Home Delivery Weekend"),

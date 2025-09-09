@@ -28,34 +28,16 @@ jobs:
         run: env
 
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - run: npm install --global corepack@0.31.0
-
-      - run: corepack enable
-        shell: bash
-        working-directory: support-frontend
-
-      # (Respects .nvmrc)
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-          # cache: "pnpm"
-          # cache-dependency-path: |
-          #   support-frontend/pnpm-lock.yaml
-
-      - name: Install
-        run: pnpm install
-        working-directory: support-frontend
+      - name: Setup Node and Install Dependencies
+        uses: ./.github/actions/setup-node-and-install
 
       - name: Build the html used for SSR pages
-        run: pnpm build-ssr
-        working-directory: support-frontend
+        run: pnpm --filter support-frontend build-ssr
 
       - name: Build assets
-        run: pnpm build-prod
-        working-directory: support-frontend
+        run: pnpm --filter support-frontend build-prod
 
       - name: Build CFN from CDK
         run: ./script/ci

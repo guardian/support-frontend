@@ -1,9 +1,9 @@
 #!/bin/sh
 
 
-cd ../../cdk
+cd ../..
 
-yarn synth
+pnpm --filter cdk synth
 
 # Exit if any of these commands fail, print commands to console
 set -ex

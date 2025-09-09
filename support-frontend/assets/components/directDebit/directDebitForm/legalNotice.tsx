@@ -1,5 +1,5 @@
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { contributionsEmail, MediaGroup } from 'helpers/legal';
 import * as styles from './legalNoticeStyles';
 

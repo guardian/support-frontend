@@ -45,6 +45,7 @@ case class AcquisitionDataRow(
     state: Option[String],
     email: Option[String],
     similarProductsConsent: Option[Boolean],
+    paypalTransactionId: Option[String],
 )
 
 object AcquisitionDataRow {
@@ -162,13 +163,17 @@ object PrintProduct {
 
   case object HomeDeliverySunday extends PrintProduct("HOME_DELIVERY_SUNDAY")
 
-  case object HomeDeliverySundayPlus extends PrintProduct("HOME_DELIVERY_SUNDAY_PLUS")
-
   case object NationalDeliveryEveryday extends PrintProduct("NATIONAL_DELIVERY_EVERYDAY")
+
+  case object NationalDeliveryEverydayPlus extends PrintProduct("NATIONAL_DELIVERY_EVERYDAY_PLUS")
 
   case object NationalDeliverySixday extends PrintProduct("NATIONAL_DELIVERY_SIXDAY")
 
+  case object NationalDeliverySixdayPlus extends PrintProduct("NATIONAL_DELIVERY_SIXDAY_PLUS")
+
   case object NationalDeliveryWeekend extends PrintProduct("NATIONAL_DELIVERY_WEEKEND")
+
+  case object NationalDeliveryWeekendPlus extends PrintProduct("NATIONAL_DELIVERY_WEEKEND_PLUS")
 
   case object VoucherEveryday extends PrintProduct("VOUCHER_EVERYDAY")
 
@@ -188,8 +193,6 @@ object PrintProduct {
 
   case object VoucherSunday extends PrintProduct("VOUCHER_SUNDAY")
 
-  case object VoucherSundayPlus extends PrintProduct("VOUCHER_SUNDAY_PLUS")
-
   case object GuardianWeekly extends PrintProduct("GUARDIAN_WEEKLY")
 
   def fromString(code: String): Option[PrintProduct] = {
@@ -203,7 +206,6 @@ object PrintProduct {
       HomeDeliverySaturday,
       HomeDeliverySaturdayPlus,
       HomeDeliverySunday,
-      HomeDeliverySundayPlus,
       NationalDeliveryEveryday,
       NationalDeliverySixday,
       NationalDeliveryWeekend,
@@ -216,7 +218,6 @@ object PrintProduct {
       VoucherSaturday,
       VoucherSaturdayPlus,
       VoucherSunday,
-      VoucherSundayPlus,
       GuardianWeekly,
     ).find(_.value == code)
   }

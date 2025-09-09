@@ -1,13 +1,14 @@
 import { loadScript } from '@guardian/libs';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import { viewId } from 'ophan';
 import type { Participations } from 'helpers/abTests/models';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { logException } from 'helpers/utilities/logger';
+import { getMvtId } from '../abTests/mvt';
 import type { ReferrerAcquisitionData } from './acquisitions';
 import {
 	canRunQuantumMetric,
@@ -94,10 +95,19 @@ const cartValueEventIds: SendEventId[] = [
 	RecurringContribution,
 ];
 
+// We only want to send a sample percentage of our user traffic to Quantum Metric.
+function userIsInSampledCohort(): boolean {
+	const percentageOfUsersToSample = 10;
+	const divisor = 100 / percentageOfUsersToSample;
+
+	const mvtId = getMvtId();
+	return mvtId % divisor === 0;
+}
+
 async function ifQmPermitted(callback: () => void) {
 	const canRun = await canRunQuantumMetric();
 
-	if (canRun) {
+	if (canRun && userIsInSampledCohort()) {
 		callback();
 	}
 }

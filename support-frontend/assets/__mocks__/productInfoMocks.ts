@@ -6,19 +6,8 @@ export const paperProducts: ProductPrices = {
 			SixdayPlus: {
 				Monthly: {
 					GBP: {
-						price: 27.36,
+						price: 41.12,
 						savingVsRetail: 35,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [],
-					},
-				},
-			},
-			SundayPlus: {
-				Monthly: {
-					GBP: {
-						price: 22.06,
-						savingVsRetail: 15,
 						currency: 'GBP',
 						fixedTerm: false,
 						promotions: [],
@@ -28,7 +17,7 @@ export const paperProducts: ProductPrices = {
 			SaturdayPlus: {
 				Monthly: {
 					GBP: {
-						price: 21.99,
+						price: 10.36,
 						savingVsRetail: 16,
 						currency: 'GBP',
 						fixedTerm: false,
@@ -79,7 +68,7 @@ export const paperProducts: ProductPrices = {
 			WeekendPlus: {
 				Monthly: {
 					GBP: {
-						price: 12.56,
+						price: 20.76,
 						savingVsRetail: 26,
 						currency: 'GBP',
 						fixedTerm: false,
@@ -100,7 +89,7 @@ export const paperProducts: ProductPrices = {
 			EverydayPlus: {
 				Monthly: {
 					GBP: {
-						price: 29.2,
+						price: 55.69,
 						savingVsRetail: 41,
 						currency: 'GBP',
 						fixedTerm: false,
@@ -113,17 +102,8 @@ export const paperProducts: ProductPrices = {
 			SixdayPlus: {
 				Monthly: {
 					GBP: {
-						price: 30.36,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [],
-					},
-				},
-			},
-			SundayPlus: {
-				Monthly: {
-					GBP: {
-						price: 26.39,
+						price: 54.12,
+						savingVsRetail: 5,
 						currency: 'GBP',
 						fixedTerm: false,
 						promotions: [],
@@ -133,7 +113,7 @@ export const paperProducts: ProductPrices = {
 			SaturdayPlus: {
 				Monthly: {
 					GBP: {
-						price: 25.96,
+						price: 14.69,
 						currency: 'GBP',
 						fixedTerm: false,
 						promotions: [],
@@ -185,7 +165,8 @@ export const paperProducts: ProductPrices = {
 			WeekendPlus: {
 				Monthly: {
 					GBP: {
-						price: 12.57,
+						price: 25.09,
+						savingVsRetail: 2,
 						currency: 'GBP',
 						fixedTerm: false,
 						promotions: [],
@@ -206,7 +187,8 @@ export const paperProducts: ProductPrices = {
 			EverydayPlus: {
 				Monthly: {
 					GBP: {
-						price: 29.19,
+						price: 67.79,
+						savingVsRetail: 9,
 						currency: 'GBP',
 						fixedTerm: false,
 						promotions: [],

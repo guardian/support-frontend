@@ -1,5 +1,4 @@
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
 import {
 	getDeliveryDays,
 	getNextDeliveryDay,
@@ -8,11 +7,22 @@ import {
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
 import { getPaymentStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
-import { getVoucherDays } from 'pages/paper-subscription-checkout/helpers/voucherDeliveryDays';
+import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 
 const extraDelayCutoffWeekday = 3;
 const normalDelayWeeks = 1;
 const extraDelayWeeks = 2;
+
+function getWeeklyDeliveryDate(productKey: ActiveProductKey): Date {
+	const weeklyDate =
+		productKey === 'TierThree'
+			? getTierThreeDeliveryDate()
+			: getWeeklyDays()[0];
+	if (!weeklyDate) {
+		throw new Error('We could not find a valid weekly delivery date');
+	}
+	return weeklyDate;
+}
 
 const getWeeklyDays = (today?: number): Date[] => {
 	const now = new Date(today ?? new Date().getTime());
@@ -76,18 +86,15 @@ const productDeliveryOrStartDate = (
 			return getTierThreeDeliveryDate();
 		case 'NationalDelivery':
 		case 'HomeDelivery':
-		case 'SubscriptionCard': {
-			// paper productOption undefined check
 			if (paperProductOptions === undefined) {
 				return undefined;
 			}
-			const paperDeliveryDate =
-				productKey === 'SubscriptionCard'
-					? getPaymentStartDate(Date.now(), paperProductOptions)
-					: productKey === 'HomeDelivery'
-					? getHomeDeliveryDays(Date.now(), paperProductOptions)[0]
-					: getVoucherDays(Date.now(), paperProductOptions)[0];
-			return paperDeliveryDate;
+			return getHomeDeliveryDays(Date.now(), paperProductOptions)[0];
+		case 'SubscriptionCard': {
+			if (paperProductOptions === undefined) {
+				return undefined;
+			}
+			return getPaymentStartDate(Date.now(), paperProductOptions);
 		}
 		case 'GuardianWeeklyDomestic':
 		case 'GuardianWeeklyRestOfWorld': {
@@ -111,4 +118,5 @@ export {
 	addDays,
 	getTierThreeDeliveryDate,
 	productDeliveryOrStartDate,
+	getWeeklyDeliveryDate,
 };

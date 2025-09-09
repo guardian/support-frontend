@@ -247,7 +247,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = DigitalPack(
         GBP,
         Monthly,
-        Direct,
       ),
       paymentFields = DirectDebitPaymentFields("", "", "", ""),
       switches = TestData.buildSwitches(
@@ -276,7 +275,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = DigitalPack(
         GBP,
         Monthly,
-        Direct,
       ),
       paymentFields = StripePaymentFields(
         paymentMethod = PaymentMethodId("testId").get,
@@ -520,7 +518,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = DigitalPack(
         GBP,
         Monthly,
-        Direct,
       ),
       paymentFields = DirectDebitPaymentFields("", "", "", ""),
       switches = TestData.buildSwitches(
@@ -549,7 +546,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = DigitalPack(
         GBP,
         Monthly,
-        Direct,
       ),
       paymentFields = StripePaymentFields(
         paymentMethod = PaymentMethodId("testId").get,
@@ -1017,6 +1013,7 @@ object TestData {
     firstName = "grace",
     lastName = "hopper",
     product = monthlyDirectUSDProduct,
+    productInformation = None,
     firstDeliveryDate = None,
     paymentFields = stripePaymentFields,
     ophanIds = OphanIds(None, None),
@@ -1060,6 +1057,7 @@ object TestData {
     firstName = "grace",
     lastName = "hopper",
     product = Paper(Currency.GBP, Monthly, HomeDelivery, Everyday, Some(AgentId(134789))),
+    productInformation = None,
     firstDeliveryDate = Some(someDateNextMonth),
     paymentFields = stripePaymentFields,
     ophanIds = OphanIds(None, None),
@@ -1084,6 +1082,7 @@ object TestData {
     firstName = "grace",
     lastName = "hopper",
     product = GuardianWeekly(Currency.GBP, Monthly, Domestic),
+    productInformation = None,
     firstDeliveryDate = Some(someDateNextMonth),
     paymentFields = stripePaymentFields,
     ophanIds = OphanIds(None, None),

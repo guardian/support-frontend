@@ -1,74 +1,65 @@
-import type { InferOutput } from 'valibot';
+import { isoCountries } from '@modules/internationalisation/country';
+import { isoCurrencySchema } from '@modules/internationalisation/schemas';
 import {
-	array,
-	boolean,
-	intersect,
-	literal,
-	looseObject,
-	number,
-	object,
-	optional,
-	picklist,
-	record,
-	safeParse,
-	string,
-	union,
-} from 'valibot';
-import { isoCountries } from 'helpers/internationalisation/country';
+	billingPeriodSchema,
+	fulfilmentOptionsSchema,
+	productOptionsSchema,
+} from '@modules/product/schemas';
+import { optional, z } from 'zod';
 import type { LegacyProductType } from 'helpers/legacyTypeConversions';
 import { legacyProductTypes } from 'helpers/legacyTypeConversions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 
 /**
- * This file is used to validate data that get's injected from
+ * This file is used to validate data that gets injected from
  * the Play controllers onto the `window.guardian` object of the page.
  *
  * It will only error in NODE_ENV === 'development'.
  */
-const PaymentConfigSchema = object({
-	geoip: optional(
-		object({
-			countryCode: string(),
-			stateCode: optional(string()),
+const PaymentConfigSchema = z.object({
+	geoip: z.optional(
+		z.object({
+			countryCode: z.string(),
+			stateCode: z.optional(z.string()),
 		}),
 	),
-	stripeKeyDefaultCurrencies: object({
-		ONE_OFF: object({ default: string(), test: string() }),
-		REGULAR: object({ default: string(), test: string() }),
+	stripeKeyDefaultCurrencies: z.object({
+		ONE_OFF: z.object({ default: z.string(), test: z.string() }),
+		REGULAR: z.object({ default: z.string(), test: z.string() }),
 	}),
-	stripeKeyAustralia: object({
-		ONE_OFF: object({ default: string(), test: string() }),
-		REGULAR: object({ default: string(), test: string() }),
+	stripeKeyAustralia: z.object({
+		ONE_OFF: z.object({ default: z.string(), test: z.string() }),
+		REGULAR: z.object({ default: z.string(), test: z.string() }),
 	}),
-	stripeKeyUnitedStates: object({
-		ONE_OFF: object({ default: string(), test: string() }),
-		REGULAR: object({ default: string(), test: string() }),
+	stripeKeyUnitedStates: z.object({
+		ONE_OFF: z.object({ default: z.string(), test: z.string() }),
+		REGULAR: z.object({ default: z.string(), test: z.string() }),
 	}),
-	stripeKeyTortoiseMedia: object({
-		ONE_OFF: object({ default: string(), test: string() }),
-		REGULAR: object({ default: string(), test: string() }),
+	stripeKeyTortoiseMedia: z.object({
+		ONE_OFF: z.object({ default: z.string(), test: z.string() }),
+		REGULAR: z.object({ default: z.string(), test: z.string() }),
 	}),
-	payPalEnvironment: object({
-		default: string(),
-		test: string(),
+	payPalEnvironment: z.object({
+		default: z.string(),
+		test: z.string(),
 	}),
-	mdapiUrl: string(),
-	paymentApiPayPalEndpoint: string(),
-	paymentApiUrl: string(),
-	csrf: object({ token: string() }),
-	guestAccountCreationToken: optional(string()),
-	recaptchaEnabled: boolean(),
-	v2recaptchaPublicKey: string(),
-	user: optional(
-		object({
-			id: string(),
-			email: optional(string()),
-			firstName: optional(string()),
-			lastName: optional(string()),
+	mdapiUrl: z.string(),
+	paymentApiPayPalEndpoint: z.string(),
+	paymentApiUrl: z.string(),
+	csrf: z.object({ token: z.string() }),
+	guestAccountCreationToken: z.optional(z.string()),
+	recaptchaEnabled: z.boolean(),
+	v2recaptchaPublicKey: z.string(),
+	user: z.optional(
+		z.object({
+			id: z.string(),
+			email: z.optional(z.string()),
+			firstName: z.optional(z.string()),
+			lastName: z.optional(z.string()),
 		}),
 	),
-	serversideTests: optional(object({})),
-	settings: object({
+	serversideTests: z.optional(z.object({})),
+	settings: z.object({
 		/**
 		 * These keys are generated in Switches.scala
 		 * @see {@link file://./../../../app/admin/settings/Switches.scala}
@@ -76,35 +67,41 @@ const PaymentConfigSchema = object({
 		 * And added to the `window.guardian` object in settingsScript.scala.html
 		 * @see {@link file://./../../../app/views/settingsScript.scala.html}
 		 */
-		switches: object({
-			oneOffPaymentMethods: record(string(), optional(picklist(['On', 'Off']))),
-			recurringPaymentMethods: record(
-				string(),
-				optional(picklist(['On', 'Off'])),
+		switches: z.object({
+			oneOffPaymentMethods: z.record(
+				z.string(),
+				z.optional(z.enum(['On', 'Off'])),
 			),
-			subscriptionsPaymentMethods: record(
-				string(),
-				optional(picklist(['On', 'Off'])),
+			recurringPaymentMethods: z.record(
+				z.string(),
+				z.optional(z.enum(['On', 'Off'])),
 			),
-			subscriptionsSwitches: record(
-				string(),
-				optional(picklist(['On', 'Off'])),
+			subscriptionsPaymentMethods: z.record(
+				z.string(),
+				z.optional(z.enum(['On', 'Off'])),
 			),
-			featureSwitches: record(string(), optional(picklist(['On', 'Off']))),
-			campaignSwitches: record(string(), optional(picklist(['On', 'Off']))),
-			recaptchaSwitches: record(string(), optional(picklist(['On', 'Off']))),
+			subscriptionsSwitches: z.record(
+				z.string(),
+				z.optional(z.enum(['On', 'Off'])),
+			),
+			featureSwitches: z.record(z.string(), z.optional(z.enum(['On', 'Off']))),
+			campaignSwitches: z.record(z.string(), z.optional(z.enum(['On', 'Off']))),
+			recaptchaSwitches: z.record(
+				z.string(),
+				z.optional(z.enum(['On', 'Off'])),
+			),
 		}),
-		amounts: array(
-			object({
-				testName: string(),
-				liveTestName: optional(string()),
-				isLive: boolean(),
-				order: number(),
-				seed: number(),
-				targeting: union([
-					object({
-						targetingType: literal('Region'),
-						region: picklist([
+		amounts: z.array(
+			z.object({
+				testName: z.string(),
+				liveTestName: z.optional(z.string()),
+				isLive: z.boolean(),
+				order: z.number(),
+				seed: z.number(),
+				targeting: z.union([
+					z.object({
+						targetingType: z.literal('Region'),
+						region: z.enum([
 							'GBPCountries',
 							'UnitedStates',
 							'AUDCountries',
@@ -114,104 +111,104 @@ const PaymentConfigSchema = object({
 							'International',
 						]),
 					}),
-					object({
-						targetingType: literal('Country'),
-						countries: array(picklist(isoCountries)),
+					z.object({
+						targetingType: z.literal('Country'),
+						countries: z.array(z.enum(isoCountries)),
 					}),
 				]),
-				variants: array(
-					object({
-						amountsCardData: object({
-							ANNUAL: object({
-								amounts: array(number()),
-								defaultAmount: number(),
-								hideChooseYourAmount: boolean(),
+				variants: z.array(
+					z.object({
+						amountsCardData: z.object({
+							ANNUAL: z.object({
+								amounts: z.array(z.number()),
+								defaultAmount: z.number(),
+								hideChooseYourAmount: z.boolean(),
 							}),
-							MONTHLY: object({
-								amounts: array(number()),
-								defaultAmount: number(),
-								hideChooseYourAmount: boolean(),
+							MONTHLY: z.object({
+								amounts: z.array(z.number()),
+								defaultAmount: z.number(),
+								hideChooseYourAmount: z.boolean(),
 							}),
-							ONE_OFF: object({
-								amounts: array(number()),
-								defaultAmount: number(),
-								hideChooseYourAmount: boolean(),
+							ONE_OFF: z.object({
+								amounts: z.array(z.number()),
+								defaultAmount: z.number(),
+								hideChooseYourAmount: z.boolean(),
 							}),
 						}),
-						defaultContributionType: picklist(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
-						displayContributionType: array(
-							picklist(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
+						defaultContributionType: z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
+						displayContributionType: z.array(
+							z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
 						),
-						variantName: string(),
+						variantName: z.string(),
 					}),
 				),
 			}),
 		),
-		contributionTypes: object({
-			AUDCountries: array(
-				object({
-					contributionType: picklist(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
-					isDefault: optional(boolean()),
+		contributionTypes: z.object({
+			AUDCountries: z.array(
+				z.object({
+					contributionType: z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
+					isDefault: z.optional(z.boolean()),
 				}),
 			),
-			Canada: array(
-				object({
-					contributionType: picklist(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
-					isDefault: optional(boolean()),
+			Canada: z.array(
+				z.object({
+					contributionType: z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
+					isDefault: z.optional(z.boolean()),
 				}),
 			),
-			EURCountries: array(
-				object({
-					contributionType: picklist(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
-					isDefault: optional(boolean()),
+			EURCountries: z.array(
+				z.object({
+					contributionType: z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
+					isDefault: z.optional(z.boolean()),
 				}),
 			),
-			GBPCountries: array(
-				object({
-					contributionType: picklist(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
-					isDefault: optional(boolean()),
+			GBPCountries: z.array(
+				z.object({
+					contributionType: z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
+					isDefault: z.optional(z.boolean()),
 				}),
 			),
-			International: array(
-				object({
-					contributionType: picklist(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
-					isDefault: optional(boolean()),
+			International: z.array(
+				z.object({
+					contributionType: z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
+					isDefault: z.optional(z.boolean()),
 				}),
 			),
-			NZDCountries: array(
-				object({
-					contributionType: picklist(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
-					isDefault: optional(boolean()),
+			NZDCountries: z.array(
+				z.object({
+					contributionType: z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
+					isDefault: z.optional(z.boolean()),
 				}),
 			),
-			UnitedStates: array(
-				object({
-					contributionType: picklist(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
-					isDefault: optional(boolean()),
+			UnitedStates: z.array(
+				z.object({
+					contributionType: z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
+					isDefault: z.optional(z.boolean()),
 				}),
 			),
 		}),
-		metricUrl: string(),
+		metricUrl: z.string(),
 	}),
 });
 
-const ProductCatalogSchema = object({
-	productCatalog: record(
-		string(),
-		object({
-			ratePlans: record(
-				string(),
-				object({
-					id: string(),
-					pricing: record(string(), number()),
-					charges: record(
-						string(),
-						object({
-							id: string(),
+const ProductCatalogSchema = z.object({
+	productCatalog: z.record(
+		z.string(),
+		z.object({
+			ratePlans: z.record(
+				z.string(),
+				z.object({
+					id: z.string(),
+					pricing: z.record(z.string(), z.number()),
+					charges: z.record(
+						z.string(),
+						z.object({
+							id: z.string(),
 						}),
 					),
-					billingPeriod: optional(
-						picklist(['Quarter', 'Month', 'Annual', 'OneTime']),
+					billingPeriod: z.optional(
+						z.enum(['Quarter', 'Month', 'Annual', 'OneTime']),
 					),
 				}),
 			),
@@ -219,49 +216,92 @@ const ProductCatalogSchema = object({
 	),
 });
 
-/**
- * We parse productPrices through as a looseObject (no validation)
- * and then type it on the InferOutput using the existing types.
- *
- * This is partly because it is a model that needs refactoring now
- * we're moving into a more product focussed world, but also because
- * when creating the valibot schema we get this error
- * `Type instantiation is excessively deep and possibly infinite.`
- */
-export const ProductPricesSchema = object({
-	allProductPrices: record(
-		picklist(legacyProductTypes),
-		optional(looseObject({})),
+const countryKeySchema = z.enum([
+	'United Kingdom',
+	'Europe',
+	'Australia',
+	'New Zealand',
+	'United States',
+	'Canada',
+	'International',
+]);
+
+const dateTimeSchema = z.preprocess(
+	(val) => (typeof val === 'string' ? new Date(val) : val),
+	z.date(),
+);
+const promotionSchema = z.object({
+	name: z.string(),
+	description: z.string(),
+	promoCode: z.string(),
+	discountedPrice: optional(z.number()),
+	numberOfDiscountedPeriods: optional(z.number()),
+	discount: optional(
+		z.object({
+			amount: z.number(),
+			durationMonths: z.number().optional(),
+		}),
+	),
+	starts: dateTimeSchema,
+	expires: dateTimeSchema.optional(),
+});
+
+export const ProductPricesSchema = z.object({
+	allProductPrices: z.record(
+		z.enum([...legacyProductTypes, 'GuardianWeeklyGift']),
+		optional(
+			z.record(
+				countryKeySchema,
+				z.record(
+					fulfilmentOptionsSchema,
+					z.record(
+						productOptionsSchema,
+						z.record(
+							billingPeriodSchema,
+							z.record(
+								isoCurrencySchema,
+								z.object({
+									price: z.number(),
+									savingVsRetail: z.number().optional(),
+									currency: isoCurrencySchema,
+									fixedTerm: z.boolean(),
+									promotions: z.array(promotionSchema),
+								}),
+							),
+						),
+					),
+				),
+			),
+		),
 	),
 });
 
-const AppConfigSchema = intersect([
-	PaymentConfigSchema,
-	ProductCatalogSchema,
-	ProductPricesSchema,
-]);
+const AppConfigSchema =
+	PaymentConfigSchema.merge(ProductCatalogSchema).merge(ProductPricesSchema);
 
-export type AppConfig = InferOutput<typeof AppConfigSchema> & {
-	allProductPrices: Partial<Record<LegacyProductType, ProductPrices>>;
+export type AppConfig = z.infer<typeof AppConfigSchema> & {
+	allProductPrices: Partial<
+		Record<LegacyProductType | 'GuardianWeeklyGift', ProductPrices>
+	>;
 };
 
 export const parseAppConfig = (obj: unknown): AppConfig => {
-	const appConfig = safeParse(AppConfigSchema, obj);
+	const appConfig = AppConfigSchema.safeParse(obj);
 	if (appConfig.success) {
-		return appConfig.output as AppConfig;
+		return appConfig.data as AppConfig;
 	} else {
 		// We allow parsing errors through on PROD as they might not be breaking changes
 		// but we should be aware of them.
 		if (process.env.NODE_ENV === 'development') {
-			console.error(appConfig.issues);
+			console.error(appConfig.error);
 			throw new SyntaxError(
 				'Failed to parse window.guardian value with issues: ',
-				{ cause: appConfig.issues },
+				{ cause: appConfig.error },
 			);
 		} else {
 			console.error(
 				'Failed to parse window.guardian value with issues: ',
-				appConfig.issues,
+				appConfig.error,
 			);
 		}
 	}

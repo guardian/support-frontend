@@ -12,19 +12,17 @@ jobs:
       PAYPAL_TEST_PASSWORD: ${{ secrets.PAYPAL_TEST_PASSWORD }}
       GOOGLE_CHAT_WEB_HOOK: ${{ secrets.GOOGLE_CHAT_WEB_HOOK }}
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 20.11.0
-    - name: Install dependencies
-      working-directory: ./support-e2e
-      run: yarn install
+    - uses: actions/checkout@v5
+
+    - name: Setup Node and Install Dependencies
+      uses: ./.github/actions/setup-node-and-install
+
     - name: Install Playwright Browsers
-      working-directory: ./support-e2e
-      run: yarn playwright install --with-deps
+      run: pnpm --filter support-e2e exec playwright install --with-deps
+
     - name: Run Playwright tests
-      working-directory: ./support-e2e
-      run: yarn test-cron
+      run: pnpm --filter support-e2e test-cron
+
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:

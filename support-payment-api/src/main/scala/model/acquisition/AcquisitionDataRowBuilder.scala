@@ -17,6 +17,7 @@ import model.Currency.{
 import model.db.ContributionData
 import model.stripe.StripePaymentMethod
 import org.joda.time.{DateTime, DateTimeZone}
+import scala.jdk.CollectionConverters._
 
 object AcquisitionDataRowBuilder {
   def buildFromStripe(
@@ -61,6 +62,7 @@ object AcquisitionDataRowBuilder {
       state = contributionData.countrySubdivisionCode,
       email = Some(contributionData.email),
       similarProductsConsent = acquisition.stripeChargeData.similarProductsConsent,
+      paypalTransactionId = None,
     )
   }
 
@@ -73,6 +75,14 @@ object AcquisitionDataRowBuilder {
     val transaction = acquisition.payment.getTransactions.get(0)
     val country =
       CountryGroup.countryByCode(acquisition.payment.getPayer.getPayerInfo.getCountryCode).getOrElse(Country.UK)
+
+    // This identifier can be used to look up the PayPal transaction in the PayPal dashboard, so
+    // is useful to CSRs (among others).
+    val maybeTransactionId = for {
+      transaction <- acquisition.payment.getTransactions.asScala.headOption
+      relatedResource <- transaction.getRelatedResources.asScala.headOption
+      sale = relatedResource.getSale
+    } yield sale.getId
 
     AcquisitionDataRow(
       eventTimeStamp = DateTime.now(DateTimeZone.UTC),
@@ -107,6 +117,7 @@ object AcquisitionDataRowBuilder {
       state = contributionData.countrySubdivisionCode,
       email = Some(contributionData.email),
       similarProductsConsent = similarProductsConsent,
+      paypalTransactionId = maybeTransactionId,
     )
   }
 

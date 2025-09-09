@@ -1,8 +1,12 @@
 // ----- Imports ----- //
+import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import {
+	GBPCountries,
+	UnitedStates,
+} from '@modules/internationalisation/countryGroup';
 import { pageUrlRegexes } from 'helpers/abTests/abtestDefinitions';
 import { contributionsOnlyAmountsTestName } from 'helpers/contributions';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { AcquisitionABTest } from 'helpers/tracking/acquisitions';
 import type {
 	AmountsTest,
@@ -13,10 +17,6 @@ import type {
 } from '../../contributions';
 import { emptySwitches, getSettings } from '../../globalsAndSwitches/globals';
 import type { Settings } from '../../globalsAndSwitches/settings';
-import {
-	GBPCountries,
-	UnitedStates,
-} from '../../internationalisation/countryGroup';
 import { _, init as abInit, getAmountsTestVariant } from '../abtest';
 import type { Audience, Participations, Test, Variant } from '../models';
 

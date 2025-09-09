@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/require-await -- To simplify mocking of functions that return promises */
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { fireEvent, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { mockFetch } from '__mocks__/fetchMock';
 import { weeklyProducts } from '__mocks__/productInfoMocks';
 import { renderWithStore } from '__test-utils__/render';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setRecaptchaToken } from 'helpers/redux/checkout/recaptcha/actions';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
@@ -30,7 +30,7 @@ async function fillOutForm(
 	{ name, sortCode, accountNumber }: Record<string, string> = {},
 	confirm = true,
 ) {
-	const nameField = await screen.findByLabelText('Bank account holder name');
+	const nameField = await screen.findByLabelText('Account name');
 	const sortCodeField = await screen.findByLabelText('Sort code');
 	const accountNumberField = await screen.findByLabelText('Account number');
 	const confirmationField = await screen.findByLabelText(

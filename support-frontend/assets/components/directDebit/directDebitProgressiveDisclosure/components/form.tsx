@@ -1,11 +1,11 @@
 // ----- Imports ----- //
-import { css, ThemeProvider } from '@emotion/react';
+import { css } from '@emotion/react';
 import {
 	Button,
-	buttonThemeReaderRevenueBrand,
 	Checkbox,
 	SvgArrowRightStraight,
 	TextInput,
+	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import * as React from 'react';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
@@ -72,7 +72,7 @@ function Form(props: PropTypes): JSX.Element {
 						)
 					}
 					maxLength={40}
-					label="Bank account holder name"
+					label="Account name"
 					error={props.accountHolderNameError}
 				/>
 			</div>
@@ -136,17 +136,16 @@ function Form(props: PropTypes): JSX.Element {
 				/>
 			</div>
 
-			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
-				<Button
-					id="qa-direct-debit-submit"
-					onClick={props.onSubmit}
-					priority="primary"
-					icon={<SvgArrowRightStraight />}
-					iconSide="right"
-				>
-					Confirm
-				</Button>
-			</ThemeProvider>
+			<Button
+				id="qa-direct-debit-submit"
+				onClick={props.onSubmit}
+				priority="primary"
+				icon={<SvgArrowRightStraight />}
+				iconSide="right"
+				theme={themeButtonReaderRevenueBrand}
+			>
+				Confirm
+			</Button>
 			{props.accountErrorsLength > 0 && (
 				<ErrorSummary errors={[...props.accountErrors]} />
 			)}

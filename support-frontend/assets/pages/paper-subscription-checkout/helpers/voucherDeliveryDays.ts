@@ -1,4 +1,4 @@
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import type { ProductOptions } from '@modules/product/productOptions';
 import {
 	Everyday,
 	EverydayPlus,
@@ -7,10 +7,9 @@ import {
 	Sixday,
 	SixdayPlus,
 	Sunday,
-	SundayPlus,
 	Weekend,
 	WeekendPlus,
-} from 'helpers/productPrice/productOptions';
+} from '@modules/product/productOptions';
 import type { Day } from 'helpers/subscriptionsForms/deliveryDays';
 import {
 	getDeliveryDays,
@@ -29,11 +28,8 @@ const getDeliveryDayForProduct = (product: ProductOptions): Day => {
 		case Weekend:
 		case WeekendPlus:
 			return 6;
-
-		case SundayPlus:
 		case Sunday:
 			return 0;
-
 		case Sixday:
 		case SixdayPlus:
 		case Everyday:

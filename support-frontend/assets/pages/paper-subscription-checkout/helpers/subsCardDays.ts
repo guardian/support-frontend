@@ -1,5 +1,5 @@
-import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
+import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import type { DayOfWeekIndex } from './homeDeliveryDays';
 
 const additionalDays = [
@@ -12,7 +12,6 @@ const additionalDays = [
 		EverydayPlus: 8,
 		SixdayPlus: 8,
 		WeekendPlus: 13,
-		SundayPlus: 14,
 		SaturdayPlus: 13,
 	},
 	{
@@ -24,7 +23,6 @@ const additionalDays = [
 		EverydayPlus: 10,
 		SixdayPlus: 10,
 		WeekendPlus: 12,
-		SundayPlus: 13,
 		SaturdayPlus: 12,
 	},
 	{
@@ -36,7 +34,6 @@ const additionalDays = [
 		EverydayPlus: 9,
 		SixdayPlus: 9,
 		WeekendPlus: 11,
-		SundayPlus: 12,
 		SaturdayPlus: 11,
 	},
 	{
@@ -48,7 +45,6 @@ const additionalDays = [
 		EverydayPlus: 8,
 		SixdayPlus: 8,
 		WeekendPlus: 10,
-		SundayPlus: 11,
 		SaturdayPlus: 10,
 	},
 	{
@@ -60,7 +56,6 @@ const additionalDays = [
 		EverydayPlus: 11,
 		SixdayPlus: 11,
 		WeekendPlus: 16,
-		SundayPlus: 17,
 		SaturdayPlus: 16,
 	},
 	{
@@ -72,7 +67,6 @@ const additionalDays = [
 		EverydayPlus: 10,
 		SixdayPlus: 10,
 		WeekendPlus: 15,
-		SundayPlus: 16,
 		SaturdayPlus: 15,
 	},
 	{
@@ -84,7 +78,6 @@ const additionalDays = [
 		EverydayPlus: 9,
 		SixdayPlus: 9,
 		WeekendPlus: 14,
-		SundayPlus: 15,
 		SaturdayPlus: 14,
 	},
 ] as const;

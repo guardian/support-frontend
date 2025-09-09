@@ -1,11 +1,8 @@
 // ----- Imports ----- //
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import { Collection, HomeDelivery } from '@modules/product/fulfilmentOptions';
 import { Outset } from 'components/content/content';
 import Tabs from 'components/tabs/tabs';
-import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import {
-	Collection,
-	HomeDelivery,
-} from 'helpers/productPrice/fulfilmentOptions';
 import { ContentDeliveryFaqBlock } from './content/deliveryTab';
 import { SubsCardFaqBlock } from './content/subsCardTab';
 // ----- Tabs ----- //
@@ -21,7 +18,7 @@ const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
 		content: ContentDeliveryFaqBlock,
 	},
 	Collection: {
-		name: 'Subscription Card',
+		name: 'Collect in store',
 		href: `#${Collection}`,
 		content: SubsCardFaqBlock,
 	},
@@ -53,8 +50,7 @@ function PaperTabs({ selectedTab, setTabAction }: PropTypes): JSX.Element {
 				tabElement="a"
 				tabs={tabItems}
 				onTabChange={(tabId) => {
-					const newActiveTab = tabId as PaperFulfilmentOptions;
-					setTabAction(newActiveTab);
+					setTabAction(tabId);
 				}}
 			/>
 		</Outset>

@@ -77,9 +77,9 @@ object AcquisitionDataRowBuilder {
       identityId = Some(commonState.user.id),
       pageViewId = state.acquisitionData.flatMap(_.ophanIds.pageviewId),
       referrerPageViewId = state.acquisitionData.flatMap(_.referrerAcquisitionData.referrerPageviewId),
-      labels = buildLabels(state, requestInfo.accountExists),
+      labels = buildLabels(state),
       promoCode = acquisitionTypeDetails.promoCode,
-      reusedExistingPaymentMethod = requestInfo.accountExists,
+      reusedExistingPaymentMethod = false,
       readerType = acquisitionTypeDetails.readerType,
       acquisitionType = acquisitionTypeDetails.acquisitionType,
       zuoraSubscriptionNumber = acquisitionTypeDetails.zuoraSubscriptionNumber,
@@ -91,6 +91,10 @@ object AcquisitionDataRowBuilder {
       state = commonState.user.billingAddress.state,
       email = Some(commonState.user.primaryEmailAddress),
       similarProductsConsent = commonState.similarProductsConsent,
+      // For now always pass None here, even though this may be a PayPal transaction. We do set this for single PayPal
+      // contributions. In future we can figure out whether it's worth finding the equivalent for a recurring PayPal
+      // payment and wire this in, but it's currently not needed.
+      paypalTransactionId = None,
     )
   }
 
@@ -141,10 +145,12 @@ object AcquisitionDataRowBuilder {
         case (HomeDelivery, Saturday) => HomeDeliverySaturday
         case (HomeDelivery, SaturdayPlus) => HomeDeliverySaturdayPlus
         case (HomeDelivery, Sunday) => HomeDeliverySunday
-        case (HomeDelivery, SundayPlus) => HomeDeliverySundayPlus
         case (NationalDelivery, Everyday) => NationalDeliveryEveryday
+        case (NationalDelivery, EverydayPlus) => NationalDeliveryEverydayPlus
         case (NationalDelivery, Sixday) => NationalDeliverySixday
+        case (NationalDelivery, SixdayPlus) => NationalDeliverySixdayPlus
         case (NationalDelivery, Weekend) => NationalDeliveryWeekend
+        case (NationalDelivery, WeekendPlus) => NationalDeliveryWeekendPlus
         case (Collection, Everyday) => VoucherEveryday
         case (Collection, EverydayPlus) => VoucherEverydayPlus
         case (Collection, Sixday) => VoucherSixday
@@ -154,11 +160,10 @@ object AcquisitionDataRowBuilder {
         case (Collection, Saturday) => VoucherSaturday
         case (Collection, SaturdayPlus) => VoucherSaturdayPlus
         case (Collection, Sunday) => VoucherSunday
-        case (Collection, SundayPlus) => VoucherSundayPlus
         case (NoFulfilmentOptions, _) | (_, NoProductOptions) | (Domestic, _) | (RestOfWorld, _) |
             (_, NewspaperArchive) | (NationalDelivery, Saturday) | (NationalDelivery, Sunday) |
             (NationalDelivery, EverydayPlus) | (NationalDelivery, SixdayPlus) | (NationalDelivery, WeekendPlus) |
-            (NationalDelivery, SaturdayPlus) | (NationalDelivery, SundayPlus) =>
+            (NationalDelivery, SaturdayPlus) =>
           throw new RuntimeException(
             s"Invalid combination of fulfilmentOptions ($fulfilmentOptions) and productOptions ($productOptions)",
           )
@@ -250,11 +255,10 @@ object AcquisitionDataRowBuilder {
         )
     }
 
-  private def buildLabels(state: SendAcquisitionEventState, accountExists: Boolean) = {
+  private def buildLabels(state: SendAcquisitionEventState) = {
     val referrerLabels = state.acquisitionData.flatMap(_.referrerAcquisitionData.labels).getOrElse(Set())
 
     Set(
-      if (accountExists) Some("REUSED_EXISTING_PAYMENT_METHOD") else None,
       if (state.analyticsInfo.isGiftPurchase) Some("GIFT_SUBSCRIPTION") else None,
     ).flatten.union(referrerLabels).toList
   }

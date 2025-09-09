@@ -1,0 +1,24 @@
+packages:
+  - 'support-frontend'
+  - 'cdk'
+  - 'support-lambdas/bigquery-acquisitions-publisher'
+  - 'support-e2e'
+  - 'support-workers'
+  - 'modules'
+catalog:
+  typescript: ^5.2.2
+  zod: ^3.23.8
+  eslint: ^8.57.0
+  prettier: ^2.8.8
+  jest: ^29.2.4
+  jest-runner-groups: ^2.2.0
+  ts-jest: ^29.2.4
+  esbuild: ^0.25.5
+  "@types/jest": ^29.5.12
+  "@types/node": ^20.11.27
+  "@aws-sdk/client-ssm": ^3.679.0
+  "@aws-sdk/client-secrets-manager": ^3.848.0
+  "@aws-sdk/credential-provider-node": 3.699.0
+  "@guardian/eslint-config-typescript": 12.0.0
+  "@guardian/prettier": ^2.1.5
+  "@guardian/support-service-lambdas": "guardian/support-service-lambdas#2067f9fc02887209d53fe7a4efbda9b2e817a274"

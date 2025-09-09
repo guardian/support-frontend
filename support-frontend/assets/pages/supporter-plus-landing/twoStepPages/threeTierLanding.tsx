@@ -13,21 +13,6 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
-import { useState } from 'preact/hooks';
-import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
-import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
-import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
-import { Header } from 'components/headers/simpleHeader/simpleHeader';
-import { PageScaffold } from 'components/page/pageScaffold';
-import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
-import { getAmountsTestVariant } from 'helpers/abTests/abtest';
-import type { Participations } from 'helpers/abTests/models';
-import {
-	countdownSwitchOn,
-	getCampaignSettings,
-} from 'helpers/campaigns/campaigns';
-import type { ContributionType } from 'helpers/contributions';
-import { Country } from 'helpers/internationalisation/classes/country';
 import {
 	AUDCountries,
 	Canada,
@@ -36,13 +21,27 @@ import {
 	International,
 	NZDCountries,
 	UnitedStates,
-} from 'helpers/internationalisation/countryGroup';
+} from '@modules/internationalisation/countryGroup';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
+import { useState } from 'preact/hooks';
+import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
+import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
+import { Header } from 'components/headers/simpleHeader/simpleHeader';
+import { PageScaffold } from 'components/page/pageScaffold';
+import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
+import {
+	countdownSwitchOn,
+	getCampaignSettings,
+} from 'helpers/campaigns/campaigns';
+import type { ContributionType } from 'helpers/contributions';
+import { Country } from 'helpers/internationalisation/classes/country';
 import { currencies } from 'helpers/internationalisation/currency';
 import { productCatalog } from 'helpers/productCatalog';
-import {
-	type BillingPeriod,
-	contributionTypeToBillingPeriod,
-} from 'helpers/productPrice/billingPeriods';
+import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { allProductPrices } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { GeoId } from 'pages/geoIdConfig';
@@ -52,6 +51,7 @@ import { getSanitisedHtml } from '../../../helpers/utilities/utilities';
 import Countdown from '../components/countdown';
 import { LandingPageBanners } from '../components/landingPageBanners';
 import { OneOffCard } from '../components/oneOffCard';
+import { StudentOffer } from '../components/studentOffer';
 import { SupportOnce } from '../components/supportOnce';
 import type { CardContent } from '../components/threeTierCard';
 import { ThreeTierCards } from '../components/threeTierCards';
@@ -82,11 +82,15 @@ const recurringContainer = css`
 	}
 `;
 
-const oneTimeContainer = css`
+const lightContainer = css`
 	display: flex;
 	background-color: ${palette.neutral[97]};
 	> div {
-		padding: ${space[5]}px 72px;
+		padding: ${space[5]}px;
+
+		${from.tablet} {
+			padding: ${space[5]}px 72px;
+		}
 	}
 `;
 
@@ -293,6 +297,10 @@ export function ThreeTierLanding({
 		campaignSettings?.enableSingleContributions ??
 		urlSearchParams.has('enableOneTime');
 
+	const enableStudentOffer =
+		['uk', 'us', 'ca'].includes(geoId) &&
+		urlSearchParams.has('enableStudentOffer');
+
 	const getInitialContributionType = () => {
 		if (enableSingleContributionsTab && urlSearchParamsOneTime) {
 			return 'ONE_OFF';
@@ -319,19 +327,22 @@ export function ThreeTierLanding({
 	const selectedContributionRatePlan =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 
-	/**
-	 * Tier 1: Contributions
-	 * We use the amounts from RRCP to populate the Contribution tier
-	 */
+	// We use the RRCP amounts tool for the one-off amounts only
 	const { selectedAmountsVariant: amounts } = getAmountsTestVariant(
 		countryId,
 		countryGroupId,
 		window.guardian.settings,
 	);
-	const monthlyRecurringAmount = amounts.amountsCardData.MONTHLY
-		.amounts[0] as number;
-	const annualRecurringAmount = amounts.amountsCardData.ANNUAL
-		.amounts[0] as number;
+
+	/**
+	 * Tier 1: Contributions
+	 * We use the product catalog for the recurring Contribution tier amount
+	 */
+	const monthlyRecurringAmount = productCatalog.Contribution?.ratePlans.Monthly
+		?.pricing[currencyId] as number;
+	const annualRecurringAmount = productCatalog.Contribution?.ratePlans.Annual
+		?.pricing[currencyId] as number;
+
 	const recurringAmount =
 		contributionType === 'MONTHLY'
 			? monthlyRecurringAmount
@@ -367,7 +378,7 @@ export function ThreeTierLanding({
 	});
 
 	const tier2Promotion = getPromotion(
-		window.guardian.allProductPrices.SupporterPlus,
+		allProductPrices.SupporterPlus,
 		countryId,
 		billingPeriod,
 	);
@@ -427,7 +438,7 @@ export function ThreeTierLanding({
 		ratePlan: tier3RatePlan,
 	});
 	const tier3Promotion = getPromotion(
-		window.guardian.allProductPrices.TierThree,
+		allProductPrices.TierThree,
 		countryId,
 		billingPeriod,
 		countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
@@ -575,14 +586,15 @@ export function ThreeTierLanding({
 					{settings.tickerSettings && (
 						<TickerContainer tickerSettings={settings.tickerSettings} />
 					)}
-					<PaymentFrequencyButtons
-						paymentFrequencies={paymentFrequencies.map(
-							(paymentFrequency, index) => ({
-								billingPeriod:
-									contributionTypeToBillingPeriod(paymentFrequency),
-								isPreSelected: paymentFrequencies[index] === contributionType,
-							}),
+					<BillingPeriodButtons
+						billingPeriods={paymentFrequencies.map((paymentFrequency) =>
+							contributionTypeToBillingPeriod(paymentFrequency),
 						)}
+						preselectedBillingPeriod={
+							paymentFrequencies
+								.filter((pf) => pf === contributionType)
+								.map((pf) => contributionTypeToBillingPeriod(pf))[0]
+						}
 						buttonClickHandler={handlePaymentFrequencyBtnClick}
 						additionalStyles={paymentFrequencyButtonsCss}
 					/>
@@ -609,10 +621,22 @@ export function ThreeTierLanding({
 				<Container
 					sideBorders
 					borderColor="rgba(170, 170, 180, 0.5)"
-					cssOverrides={oneTimeContainer}
+					cssOverrides={lightContainer}
 				>
 					<SupportOnce
 						currency={currencies[currencyId].glyph}
+						countryGroupId={countryGroupId}
+					/>
+				</Container>
+			)}
+			{enableStudentOffer && (
+				<Container
+					sideBorders
+					borderColor="rgba(170, 170, 180, 0.5)"
+					cssOverrides={lightContainer}
+				>
+					<StudentOffer
+						currencyKey={currencyId}
 						countryGroupId={countryGroupId}
 					/>
 				</Container>

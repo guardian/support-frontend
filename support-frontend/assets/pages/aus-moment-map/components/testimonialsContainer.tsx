@@ -1,14 +1,12 @@
-import { ThemeProvider } from '@emotion/react';
 import {
 	Button,
-	buttonThemeBrandAlt,
 	LinkButton,
+	themeButtonBrandAlt,
 } from '@guardian/source/react-components';
-import type { RefObject } from 'preact';
-import * as React from 'preact/compat';
-import type { ReactNode } from 'react';
-import type { AuState } from 'helpers/internationalisation/country';
-import { auStates } from 'helpers/internationalisation/country';
+import type { AuState } from '@modules/internationalisation/country';
+import { auStates } from '@modules/internationalisation/country';
+import * as React from 'react';
+import type { ReactNode, RefObject } from 'react';
 import type {
 	Testimonial,
 	TestimonialsCollection,
@@ -29,18 +27,17 @@ function TestimonialCtaPrimary() {
 				we&apos;ll only publish your message if you give us permission to.
 			</p>
 
-			<ThemeProvider theme={buttonThemeBrandAlt}>
-				<LinkButton
-					className="testimonial-cta-primary-link-button"
-					priority="primary"
-					size="small"
-					href="https://guardiannewsandmedia.formstack.com/forms/australia_2022"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					Send a message
-				</LinkButton>
-			</ThemeProvider>
+			<LinkButton
+				className="testimonial-cta-primary-link-button"
+				priority="primary"
+				size="small"
+				href="https://guardiannewsandmedia.formstack.com/forms/australia_2022"
+				target="_blank"
+				rel="noopener noreferrer"
+				theme={themeButtonBrandAlt}
+			>
+				Send a message
+			</LinkButton>
 		</div>
 	);
 }
@@ -54,18 +51,17 @@ function TestimonialCtaSecondary() {
 				</span>
 			</h3>
 
-			<ThemeProvider theme={buttonThemeBrandAlt}>
-				<LinkButton
-					className="testimonial-cta-primary-link-button"
-					priority="primary"
-					size="small"
-					href={contributeUrl('Aus_Moment_2021_map_inline')}
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					Support the Guardian
-				</LinkButton>
-			</ThemeProvider>
+			<LinkButton
+				className="testimonial-cta-primary-link-button"
+				priority="primary"
+				size="small"
+				href={contributeUrl('Aus_Moment_2021_map_inline')}
+				target="_blank"
+				rel="noopener noreferrer"
+				theme={themeButtonBrandAlt}
+			>
+				Support the Guardian
+			</LinkButton>
 		</div>
 	);
 }

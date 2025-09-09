@@ -1,16 +1,14 @@
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import { HomeDelivery } from '@modules/product/fulfilmentOptions';
+import type { ProductOptions } from '@modules/product/productOptions';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
-import 'helpers/productPrice/productPrices';
 
 const productOptionDisplayNames = {
 	Saturday: 'Saturday',
 	SaturdayPlus: 'Saturday',
 	Sunday: 'Sunday',
-	SundayPlus: 'Sunday',
 	Weekend: 'Weekend',
 	WeekendPlus: 'Weekend',
 	Sixday: 'Six day',

@@ -7,7 +7,7 @@ import {
 	SvgLinkedIn,
 	SvgTwitter,
 } from '@guardian/source/react-components';
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCountry } from '@modules/internationalisation/country';
 import {
 	OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
 	OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK,

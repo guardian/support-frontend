@@ -1,4 +1,4 @@
-import { css, ThemeProvider } from '@emotion/react';
+import { css } from '@emotion/react';
 import {
 	from,
 	palette,
@@ -9,20 +9,16 @@ import {
 	until,
 } from '@guardian/source/foundations';
 import {
-	buttonThemeReaderRevenueBrand,
 	LinkButton,
+	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import type {
-	Currency,
-	IsoCurrency,
-} from 'helpers/internationalisation/currency';
+import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
-import {
-	BillingPeriod,
-	getBillingPeriodNoun,
-} from 'helpers/productPrice/billingPeriods';
+import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { ThreeTierCardPill } from './threeTierCardPill';
@@ -244,16 +240,15 @@ export function ThreeTierCard({
 				)}
 				{!promotion && `${formattedPrice}/${periodNoun}`}
 			</p>
-			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
-				<LinkButton
-					href={link}
-					cssOverrides={btnStyleOverrides}
-					data-qm-trackable={quantumMetricButtonRef}
-					aria-label={title}
-				>
-					{cta.copy}
-				</LinkButton>
-			</ThemeProvider>
+			<LinkButton
+				href={link}
+				cssOverrides={btnStyleOverrides}
+				data-qm-trackable={quantumMetricButtonRef}
+				aria-label={title}
+				theme={themeButtonReaderRevenueBrand}
+			>
+				{cta.copy}
+			</LinkButton>
 
 			{product === 'TierThree' && (
 				<div css={benefitsPrefixCss}>

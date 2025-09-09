@@ -15,6 +15,8 @@ class SupporterPlusEmailFields(
     created: DateTime,
 ) {
 
+  private val fixedTermRatePlans = Set("OneYearStudent")
+
   def build(
       state: SendThankYouEmailSupporterPlusState,
   )(implicit ec: ExecutionContext): Future[EmailFields] =
@@ -23,8 +25,18 @@ class SupporterPlusEmailFields(
       state.accountNumber,
       created,
     ).map { paymentFields =>
+      // When this lambda is migrated to TypeScript we should use the product catalog (which has term type) instead of
+      // using a hard coded list of fixed term rate plans. We're not doing that now because we think the effort required
+      // to work with the product catalog in Scala is too great.
+      val isFixedTerm = state.productInformation.exists(p => fixedTermRatePlans.contains(p.ratePlan))
+
       val subscription_details = SubscriptionEmailFieldHelpers
-        .describe(state.paymentSchedule, state.product.billingPeriod, state.product.currency)
+        .describe(
+          paymentSchedule = state.paymentSchedule,
+          billingPeriod = state.product.billingPeriod,
+          currency = state.product.currency,
+          fixedTerm = isFixedTerm,
+        )
       val fields = List(
         "email_address" -> state.user.primaryEmailAddress,
         "created" -> created.toString,
@@ -35,6 +47,7 @@ class SupporterPlusEmailFields(
         "product" -> s"${state.product.billingPeriod.toString.toLowerCase}-supporter-plus",
         "zuorasubscriberid" -> state.subscriptionNumber,
         "subscription_details" -> subscription_details,
+        "is_fixed_term" -> isFixedTerm.toString,
       ) ++ paymentFields
 
       EmailFields(fields, state.user, "supporter-plus")

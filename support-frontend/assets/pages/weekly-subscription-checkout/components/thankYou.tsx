@@ -1,3 +1,4 @@
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import Asyncronously from 'components/asyncronously/asyncronously';
@@ -10,7 +11,6 @@ import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscripti
 import moduleStyles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
 import Text, { LargeParagraph, SansParagraph } from 'components/text/text';
 import { useScrollToTop } from 'helpers/customHooks/useScrollToTop';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';

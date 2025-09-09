@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 
-import { css, ThemeProvider } from '@emotion/react';
+import { css } from '@emotion/react';
 import {
 	brandAlt,
 	from,
@@ -11,18 +11,18 @@ import {
 	textEgyptian17,
 } from '@guardian/source/foundations';
 import {
-	buttonThemeDefault,
 	LinkButton,
 	SvgArrowDownStraight,
+	themeButton,
 } from '@guardian/source/react-components';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
 import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
@@ -72,6 +72,10 @@ const styles = {
 	`,
 	priceCardsHeroContainer: css`
 		background-color: ${palette.brand[400]};
+	`,
+
+	yellowBackground: css`
+		background-color: ${brandAlt[400]};
 	`,
 };
 
@@ -149,12 +153,12 @@ export function WeeklyHero({
 			theme="weekly"
 		>
 			<CentredContainer>
-				<OfferStrapline
-					fgCol={palette.neutral[7]}
-					bgCol={brandAlt[400]}
-					copy={roundelText}
-					orderIsAGift={orderIsAGift}
-				/>
+				{!orderIsAGift && (
+					<OfferStrapline
+						copy={roundelText}
+						cssOverrides={styles.yellowBackground}
+					/>
+				)}
 				<Hero
 					image={
 						<GridImage
@@ -171,22 +175,21 @@ export function WeeklyHero({
 					<section css={styles.weeklyHeroCopy}>
 						<h2 css={styles.weeklyHeroTitle}>{title}</h2>
 						<p css={styles.weeklyHeroParagraph}>{copy}</p>
-						<ThemeProvider theme={buttonThemeDefault}>
-							<LinkButton
-								onClick={sendTrackingEventsOnClick({
-									id: 'options_cta_click',
-									product: 'GuardianWeekly',
-									componentType: 'ACQUISITIONS_BUTTON',
-								})}
-								priority="tertiary"
-								iconSide="right"
-								icon={<SvgArrowDownStraight />}
-								cssOverrides={linkButtonColour}
-								href="#subscribe"
-							>
-								See pricing options
-							</LinkButton>
-						</ThemeProvider>
+						<LinkButton
+							onClick={sendTrackingEventsOnClick({
+								id: 'options_cta_click',
+								product: 'GuardianWeekly',
+								componentType: 'ACQUISITIONS_BUTTON',
+							})}
+							priority="tertiary"
+							iconSide="right"
+							icon={<SvgArrowDownStraight />}
+							cssOverrides={linkButtonColour}
+							href="#subscribe"
+							theme={themeButton}
+						>
+							See pricing options
+						</LinkButton>
 					</section>
 				</Hero>
 			</CentredContainer>

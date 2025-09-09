@@ -1,28 +1,53 @@
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
+import { BillingPeriod } from '@modules/product/billingPeriod';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import { productCatalog } from 'helpers/productCatalog';
-import {
-	BillingPeriod,
-	getBillingPeriodTitle,
-} from 'helpers/productPrice/billingPeriods';
+import { getBillingPeriodTitle } from 'helpers/productPrice/billingPeriods';
 
 export function getLowerProductBenefitThreshold(
 	billingPeriod: BillingPeriod,
 	currencyId: IsoCurrency,
 	countryGroupId: CountryGroupId,
 	product: ActiveProductKey,
+	ratePlan: ActiveRatePlanKey,
 ): number {
-	const ratePlanTier3 =
-		countryGroupId === 'International'
-			? billingPeriod === BillingPeriod.Annual
-				? 'RestOfWorldAnnual'
-				: 'RestOfWorldMonthly'
-			: billingPeriod === BillingPeriod.Annual
-			? 'DomesticAnnual'
-			: 'DomesticMonthly';
+	if (product === 'TierThree') {
+		const ratePlanTier3 =
+			countryGroupId === 'International'
+				? billingPeriod === BillingPeriod.Annual
+					? 'RestOfWorldAnnual'
+					: 'RestOfWorldMonthly'
+				: billingPeriod === BillingPeriod.Annual
+				? 'DomesticAnnual'
+				: 'DomesticMonthly';
+
+		return (
+			productCatalog[product]?.ratePlans[ratePlanTier3]?.pricing[currencyId] ??
+			0
+		);
+	}
+
+	if (
+		[
+			'HomeDelivery',
+			'SubscriptionCard',
+			'GuardianWeeklyDomestic',
+			'GuardianWeeklyRestOfWorld',
+		].includes(product)
+	) {
+		return (
+			productCatalog[product]?.ratePlans[ratePlan]?.pricing[currencyId] ?? 0
+		);
+	}
+
 	const ratePlanRegularContribution = getBillingPeriodTitle(billingPeriod);
-	const ratePlan =
-		product === 'TierThree' ? ratePlanTier3 : ratePlanRegularContribution;
-	return productCatalog[product]?.ratePlans[ratePlan]?.pricing[currencyId] ?? 0;
+	return (
+		productCatalog[product]?.ratePlans[ratePlanRegularContribution]?.pricing[
+			currencyId
+		] ?? 0
+	);
 }

@@ -1,35 +1,24 @@
 import { storage } from '@guardian/libs';
-import type { InferInput } from 'valibot';
-import { is, object, picklist, safeParse, string } from 'valibot';
-
-function fromSessionStorage(
-	key: string,
-	schema: typeof OrderSchema | typeof ReturnAddressSchema,
-) {
-	const sessionStorage = storage.session.get(key);
-	const parsed = safeParse(schema, sessionStorage);
-	return parsed.success ? parsed.output : undefined;
-}
+import { z } from 'zod';
 
 /**
  * The Guardian Ad-Lite Landing Page sets the returnLink in sessionStorage
  * And the thank-you page reads it.
  */
 const returnAddressKey = 'returnAddress';
-const ReturnAddressSchema = object({
-	link: string(),
+const ReturnAddressSchema = z.object({
+	link: z.string(),
 });
-type ReturnAddressSchemaType = InferInput<typeof ReturnAddressSchema>;
+type ReturnAddressSchemaType = z.infer<typeof ReturnAddressSchema>;
 export function setReturnAddress(link: ReturnAddressSchemaType) {
 	storage.session.set(returnAddressKey, link);
 }
 export function getReturnAddress(): string {
-	const parsedReturnAddress = fromSessionStorage(
-		returnAddressKey,
-		ReturnAddressSchema,
+	const parsedReturnAddress = ReturnAddressSchema.safeParse(
+		storage.session.get(returnAddressKey),
 	);
-	return is(ReturnAddressSchema, parsedReturnAddress)
-		? parsedReturnAddress.link
+	return parsedReturnAddress.success
+		? parsedReturnAddress.data.link
 		: 'https://www.theguardian.com';
 }
 
@@ -38,10 +27,10 @@ export function getReturnAddress(): string {
  * And the thank-you page reads it.
  */
 const orderKey = 'thankYouOrder';
-const OrderSchema = object({
-	firstName: string(),
-	email: string(),
-	paymentMethod: picklist([
+const OrderSchema = z.object({
+	firstName: z.string(),
+	email: z.string(),
+	paymentMethod: z.enum([
 		'Stripe',
 		'StripeExpressCheckoutElement',
 		'StripeHostedCheckout',
@@ -50,13 +39,13 @@ const OrderSchema = object({
 		'Sepa',
 		'None',
 	]),
-	status: picklist(['success', 'pending']),
+	status: z.enum(['success', 'pending']),
 });
-type OrderSchemaType = InferInput<typeof OrderSchema>;
+type OrderSchemaType = z.infer<typeof OrderSchema>;
 export function setThankYouOrder(order: OrderSchemaType) {
 	storage.session.set(orderKey, order);
 }
 export function getThankYouOrder(): OrderSchemaType | undefined {
-	const parsedOrder = fromSessionStorage(orderKey, OrderSchema);
-	return is(OrderSchema, parsedOrder) ? parsedOrder : undefined;
+	const parsedOrder = OrderSchema.safeParse(storage.session.get(orderKey));
+	return parsedOrder.success ? parsedOrder.data : undefined;
 }

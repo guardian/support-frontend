@@ -9,7 +9,7 @@ import {
   Metric,
   TreatMissingData,
 } from "aws-cdk-lib/aws-cloudwatch";
-import { PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
 import {
   Choice,
@@ -50,6 +50,7 @@ interface SupportWorkersProps extends GuStackProps {
   s3Files: string[];
   supporterProductDataTables: string[];
   eventBusArns: string[];
+  parameterStorePaths: string[];
 }
 
 export class SupportWorkers extends GuStack {
@@ -97,8 +98,13 @@ export class SupportWorkers extends GuStack {
     });
     const parameterStorePolicy = new PolicyStatement({
       actions: ["ssm:GetParameter"],
+      resources: props.parameterStorePaths,
+    });
+    const secretsManagerPolicy = new PolicyStatement({
+      effect: Effect.ALLOW,
+      actions: ["secretsmanager:GetSecretValue"],
       resources: [
-        `arn:aws:ssm:${this.region}:${this.account}:parameter/${this.stage}/${this.stack}/support-workers/*`,
+        `arn:aws:secretsmanager:${this.region}:${this.account}:secret:${this.stage}/Zuora-OAuth/SupportServiceLambdas-*`,
       ],
     });
 
@@ -180,7 +186,7 @@ export class SupportWorkers extends GuStack {
         app: "support-workers-typescript",
         fileName: `support-workers.zip`,
         runtime: Runtime.NODEJS_22_X,
-        handler: `lambdas/${lambdaTSFile}.handler`,
+        handler: `${lambdaTSFile}.handler`,
         functionName: `${this.stack}-${lambdaName}Lambda-${this.stage}`,
         initialPolicy: [
           s3Policy,
@@ -242,21 +248,22 @@ export class SupportWorkers extends GuStack {
       errors: ["States.TaskFailed"],
     };
 
-    const preparePaymentMethodForReuse = createScalaLambda(
-      "PreparePaymentMethodForReuse"
-    ).addCatch(failureHandler, catchProps);
-
-    const createPaymentMethodLambda = createScalaLambda(
+    const createPaymentMethodLambda = createTypescriptLambda(
       "CreatePaymentMethod"
     ).addCatch(failureHandler, catchProps);
 
-    const createSalesforceContactLambda = createScalaLambda(
+    const createSalesforceContactLambda = createTypescriptLambda(
       "CreateSalesforceContact"
     ).addCatch(failureHandler, catchProps);
 
-    const createZuoraSubscription = createScalaLambda(
+    const createZuoraSubscriptionScala = createScalaLambda(
       "CreateZuoraSubscription",
       [promotionsDynamoTablePolicy]
+    ).addCatch(failureHandler, catchProps);
+
+    const createZuoraSubscriptionTS = createTypescriptLambda(
+      "CreateZuoraSubscriptionTS",
+      [promotionsDynamoTablePolicy, secretsManagerPolicy]
     ).addCatch(failureHandler, catchProps);
 
     const sendThankYouEmail = createScalaLambda("SendThankYouEmail", [
@@ -270,17 +277,6 @@ export class SupportWorkers extends GuStack {
       eventBusPolicy,
     ]);
 
-    // Just to check that we can create a typescript lambda
-    createTypescriptLambda("DummyTypescript");
-
-    const shouldClonePaymentMethodChoice = new Choice(
-      this,
-      "ShouldClonePaymentMethodChoice"
-    );
-    const accountExists = Condition.booleanEquals(
-      "$.requestInfo.accountExists",
-      true
-    );
     const checkoutSuccess = new Succeed(this, "CheckoutSuccess");
 
     const parallelSteps = new Parallel(this, "Parallel")
@@ -289,23 +285,33 @@ export class SupportWorkers extends GuStack {
       .branch(sendAcquisitionEvent)
       .branch(checkoutSuccess);
 
-    const commonSteps = createZuoraSubscription.next(parallelSteps);
+    const createZuoraSubscriptionChoice = new Choice(
+      this,
+      "CreateZuoraSubscriptionChoice"
+    )
+      .when(
+        Condition.and(
+          Condition.stringEquals(
+            "$.state.productInformation.product",
+            "SupporterPlus"
+          ),
+          Condition.stringEquals(
+            "$.state.productInformation.ratePlan",
+            "OneYearStudent"
+          )
+        ),
+        createZuoraSubscriptionTS.next(parallelSteps)
+      )
+      .otherwise(createZuoraSubscriptionScala.next(parallelSteps));
 
-    const stepsWithExistingAccount =
-      preparePaymentMethodForReuse.next(commonSteps);
-
-    const stepsForNewAccount = createPaymentMethodLambda
+    const allSteps = createPaymentMethodLambda
       .next(createSalesforceContactLambda)
-      .next(commonSteps);
-
-    const initialState = shouldClonePaymentMethodChoice
-      .when(accountExists, stepsWithExistingAccount)
-      .otherwise(stepsForNewAccount);
+      .next(createZuoraSubscriptionChoice);
 
     const stateMachine = new StateMachine(this, "SupportWorkers", {
       stateMachineName: `${app}-${this.stage}`, // Used by support-frontend to find the state machine
       timeout: Duration.hours(24),
-      definitionBody: DefinitionBody.fromChainable(initialState),
+      definitionBody: DefinitionBody.fromChainable(allSteps),
     });
 
     this.overrideLogicalId(stateMachine, {

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { headlineBold17, space } from '@guardian/source/foundations';
 import { Link } from '@guardian/source/react-components';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { getPatronsLink } from 'helpers/urls/externalLinks';
 import { CheckoutDivider } from './checkoutDivider';
 import type { FinePrintTheme } from './finePrint';

@@ -1,16 +1,13 @@
 // ----- Imports ----- //
 import { FocusStyleManager } from '@guardian/source/foundations';
+import { BillingPeriod } from '@modules/product/billingPeriod';
+import { NoProductOptions } from '@modules/product/productOptions';
 import { Provider } from 'react-redux';
 import Page from 'components/page/page';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
-import {
-	BillingPeriod,
-	toRegularBillingPeriod,
-} from 'helpers/productPrice/billingPeriods';
-import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
-import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
 import { renderPage } from 'helpers/rendering/render';
@@ -18,10 +15,10 @@ import { getQueryParameter } from 'helpers/urls/url';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { GuardianWeeklyFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
+import { getWeeklyFulfilmentOption } from '../../helpers/productCatalogToFulfilmentOption';
 import ThankYouContent from './components/thankYou';
 import WeeklyCheckoutForm from './components/weeklyCheckoutForm';
 import WeeklyCheckoutFormGifting from './components/weeklyCheckoutFormGifting';
-import 'stylesheets/skeleton/skeleton.scss';
 
 // ----- Redux Store ----- //
 const initialBillingPeriod =

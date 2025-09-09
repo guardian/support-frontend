@@ -1,6 +1,9 @@
+import type {
+	IsoCountry,
+	UsState,
+} from '@modules/internationalisation/country';
 import { useEffect } from 'react';
 import { Country } from 'helpers/internationalisation/classes/country';
-import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
 
 // ---- Example JSON ----
 // {

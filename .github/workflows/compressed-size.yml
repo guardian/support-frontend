@@ -9,38 +9,27 @@ jobs:
   compressed_size:
     if: ${{ github.actor != 'gu-scala-steward-public-repos[bot]' }}
     name: Compressed Size
-    defaults:
-      run:
-        working-directory: support-frontend
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - run: npm install --global corepack@0.31.0
+        shell: bash
 
       - run: corepack enable
         shell: bash
 
-      - name: Install Node
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
 
-      # Cache npm dependencies using https://github.com/bahmutov/npm-install
-      # - name: Cache dependencies
-      #   uses: bahmutov/npm-install@v1
-      #   with:
-      #     working-directory: support-frontend
-
-      - name: Print package.json
-        run: cat /home/runner/work/support-frontend/support-frontend/support-frontend/package.json
-
       - name: Check compressed size of JS
         uses: preactjs/compressed-size-action@v2
         with:
+          install-script: "pnpm install"
+          build-script: "--filter support-frontend build-github-action"
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          cwd: "./support-frontend"
-          pattern: "./public/compiled-assets/{javascripts,webpack}/**/*.js"
-          build-script: "build-github-action"
+          pattern: "./support-frontend/public/compiled-assets/{javascripts,webpack}/**/*.js"
           minimum-change-threshold: 500

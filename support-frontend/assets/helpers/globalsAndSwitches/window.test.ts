@@ -1,5 +1,4 @@
 import { expect } from '@storybook/test';
-import { safeParse } from 'valibot';
 import { ProductPricesSchema } from './window';
 
 test('ProductPricesSchema', () => {
@@ -1080,38 +1079,6 @@ test('ProductPricesSchema', () => {
 								},
 							},
 						},
-						SundayPlus: {
-							Monthly: {
-								GBP: {
-									price: 25.99,
-									savingVsRetail: 4,
-									currency: 'GBP',
-									fixedTerm: false,
-									promotions: [
-										{
-											name: '2023 April Test',
-											description:
-												'Spring Discount - Get half price off for 12 months',
-											promoCode: 'TEST2023',
-											discountedPrice: 19.75,
-											numberOfDiscountedPeriods: 12,
-											discount: {
-												amount: 24,
-												durationMonths: 12,
-											},
-											landingPage: {
-												title: 'Get half price off a newspaper subscription',
-												description:
-													"If you're waiting for our biggest sale of the year - this is it. You'll find plenty to talk about, whichever side of the fence you're on, in every copy of the Guardian and Observer. From news to reviews, climate to culture, your conversations will sparkle. From just £1.53 per issue, you've investing in the future of independent journalism while staying armed with the facts you need for an informed debate.",
-												roundel:
-													'Spring Discount - Get half price off for 12 months',
-											},
-											starts: '2023-04-19T00:00:00.000+01:00',
-										},
-									],
-								},
-							},
-						},
 						SaturdayPlus: {
 							Monthly: {
 								GBP: {
@@ -1384,38 +1351,6 @@ test('ProductPricesSchema', () => {
 												'Spring Discount - Get half price off for 12 months',
 											promoCode: 'TEST2023',
 											discountedPrice: 53.95,
-											numberOfDiscountedPeriods: 12,
-											discount: {
-												amount: 24,
-												durationMonths: 12,
-											},
-											landingPage: {
-												title: 'Get half price off a newspaper subscription',
-												description:
-													"If you're waiting for our biggest sale of the year - this is it. You'll find plenty to talk about, whichever side of the fence you're on, in every copy of the Guardian and Observer. From news to reviews, climate to culture, your conversations will sparkle. From just £1.53 per issue, you've investing in the future of independent journalism while staying armed with the facts you need for an informed debate.",
-												roundel:
-													'Spring Discount - Get half price off for 12 months',
-											},
-											starts: '2023-04-19T00:00:00.000+01:00',
-										},
-									],
-								},
-							},
-						},
-						SundayPlus: {
-							Monthly: {
-								GBP: {
-									price: 30.99,
-									savingVsRetail: -14,
-									currency: 'GBP',
-									fixedTerm: false,
-									promotions: [
-										{
-											name: '2023 April Test',
-											description:
-												'Spring Discount - Get half price off for 12 months',
-											promoCode: 'TEST2023',
-											discountedPrice: 23.55,
 											numberOfDiscountedPeriods: 12,
 											discount: {
 												amount: 24,
@@ -1793,9 +1728,9 @@ test('ProductPricesSchema', () => {
 			},
 		},
 	};
-	const result = safeParse(ProductPricesSchema, allProductPrices);
+	const result = ProductPricesSchema.safeParse(allProductPrices);
 	if (result.success) {
-		const allProductPrices = result.output.allProductPrices;
+		const allProductPrices = result.data.allProductPrices;
 		expect(allProductPrices.Contribution).toBeUndefined;
 		expect(allProductPrices.SupporterPlus).toBeDefined;
 	}

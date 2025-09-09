@@ -21,9 +21,11 @@ import { getFirstDeliveryDateForProduct } from '../checkout/helpers/deliveryDate
 import type { FormPersonalFields } from '../checkout/helpers/formDataExtractors';
 import {
 	extractDeliverableAddressDataFromForm,
+	extractGiftRecipientDataFromForm,
 	extractNonDeliverableAddressDataFromForm,
 	extractPersonalDataFromForm,
 } from '../checkout/helpers/formDataExtractors';
+import { buildProductInformation } from '../checkout/helpers/productInformation';
 import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
 import { stripeCreateCheckoutSession } from '../checkout/helpers/stripe';
 import {
@@ -62,6 +64,7 @@ export const submitForm = async ({
 	contributionAmount: number | undefined;
 }): Promise<string> => {
 	const personalData = extractPersonalDataFromForm(formData);
+	const giftRecipient = extractGiftRecipientDataFromForm(formData);
 	const { billingAddress, deliveryAddress } = hasDeliveryAddress
 		? extractDeliverableAddressDataFromForm(formData)
 		: extractNonDeliverableAddressDataFromForm(formData);
@@ -89,6 +92,17 @@ export const submitForm = async ({
 	const deliveryInstructions = formData.get('deliveryInstructions') as string;
 	const similarProductsConsent = getConsentValue(formData, CONSENT_ID);
 
+	const productInformation = buildProductInformation({
+		productFields: productFields,
+		productKey: productKey,
+		ratePlanKey: ratePlanKey,
+		personalData: personalData,
+		deliveryAddress: deliveryAddress,
+		firstDeliveryDate: firstDeliveryDate ?? undefined,
+		deliveryInstructions: deliveryInstructions,
+		giftRecipient: giftRecipient,
+	});
+
 	const paymentRequest: RegularPaymentRequest = {
 		...personalData,
 		billingAddress,
@@ -99,10 +113,12 @@ export const submitForm = async ({
 		ophanIds,
 		referrerAcquisitionData,
 		product: productFields,
+		productInformation,
 		supportAbTests,
 		deliveryInstructions,
 		debugInfo: '',
 		similarProductsConsent,
+		giftRecipient,
 	};
 
 	if (

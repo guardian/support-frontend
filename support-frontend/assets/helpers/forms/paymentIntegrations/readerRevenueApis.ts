@@ -1,3 +1,12 @@
+import type { ProductPurchase } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
+import type {
+	IsoCountry,
+	UsState,
+} from '@modules/internationalisation/country';
+import type { SupportInternationalisationId } from '@modules/internationalisation/countryGroup';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import type { ProductOptions } from '@modules/product/productOptions';
 import type { PaymentIntentResult, PaymentMethod } from '@stripe/stripe-js';
 import {
 	fetchJson,
@@ -13,11 +22,6 @@ import {
 	Sepa,
 	Stripe,
 } from 'helpers/forms/paymentMethods';
-import type { Country } from 'helpers/internationalisation/countries';
-import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { ReaderType } from 'helpers/productPrice/readerType';
 import type {
 	DigitalPack,
@@ -34,7 +38,6 @@ import type {
 import type { Option } from 'helpers/types/option';
 import type { Title } from 'helpers/user/details';
 import { logException } from 'helpers/utilities/logger';
-import type { SupportInternationalisationId } from '../../internationalisation/countryGroup';
 
 // ----- Types ----- //
 export type StripePaymentMethod =
@@ -126,7 +129,7 @@ type RegularSepaPaymentFields = {
 	paymentType: typeof Sepa;
 	accountHolderName: string;
 	iban: string;
-	country?: Option<Country>;
+	country?: Option<string>;
 	streetName?: Option<string>;
 };
 type RegularStripeHostedCheckoutPaymentFields = {
@@ -148,7 +151,7 @@ export type RegularPaymentRequestAddress = {
 	postCode?: Option<string>;
 	city?: Option<string>;
 };
-type GiftRecipientType = {
+export type GiftRecipientType = {
 	title?: Title;
 	firstName: string;
 	lastName: string;
@@ -170,6 +173,7 @@ export type RegularPaymentRequest = {
 	email: string;
 	giftRecipient?: GiftRecipientType;
 	product: ProductFields;
+	productInformation?: ProductPurchase;
 	firstDeliveryDate: Option<string>;
 	paymentFields: RegularPaymentFields;
 	ophanIds: OphanIds;
@@ -204,7 +208,7 @@ type SepaAuthorisation = {
 	paymentMethod: typeof Sepa;
 	accountHolderName: string;
 	iban: string;
-	country?: Country;
+	country?: string;
 	streetName?: string;
 };
 // Represents an authorisation to execute payments with a given payment method.

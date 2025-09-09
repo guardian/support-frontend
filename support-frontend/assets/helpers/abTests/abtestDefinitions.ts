@@ -27,8 +27,9 @@ export const pageUrlRegexes = {
 			paperLandingPage: /^\/uk\/subscribe\/paper?(\?.*)?$/,
 			weeklyLandingPage: /\/subscribe\/weekly\/checkout?(\?.*)?$/,
 		},
-		subsWeeklyPages:
-			'(/??/subscribe(\\?.*)?$|/??/subscribe/weekly(\\/checkout)?(\\?.*)?$)',
+		// Includes landing, original & generic checkout/thankyou pages
+		subsWeeklyGiftPages:
+			'(/subscribe/weekly/gift).*?|/(subscribe/weekly/checkout/gift).*?|((?:/(uk|us|ca|eu|nz|int))(?:/(checkout|thank-you))).*?(OneYearGift|ThreeMonthGift).*?',
 	},
 };
 
@@ -97,7 +98,7 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeContributionsOnlyCountries: true,
 	},
-	guardianWeeklyGenericCheckout: {
+	guardianWeeklyGiftGenericCheckout: {
 		variants: [
 			{
 				id: 'control',
@@ -115,58 +116,10 @@ export const tests: Tests = {
 		isActive: false,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 9,
-		targetPage: pageUrlRegexes.subscriptions.paper.weeklyLandingPage,
+		targetPage: pageUrlRegexes.subscriptions.subsWeeklyGiftPages,
 		persistPage:
 			// match generic checkout & thank you page
 			'^/uk/(checkout|thank-you)',
 		excludeContributionsOnlyCountries: true,
-	},
-	similarProductsConsent: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'VariantA',
-			},
-			{
-				id: 'VariantB',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false,
-		seed: 99,
-		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
-		excludeContributionsOnlyCountries: false,
-	},
-	oneTimeContributionConsent: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'VariantA',
-			},
-			{
-				id: 'VariantB',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false,
-		seed: 99,
-		targetPage: pageUrlRegexes.contributions.oneTimeCheckoutOnly,
-		excludeContributionsOnlyCountries: false,
 	},
 };

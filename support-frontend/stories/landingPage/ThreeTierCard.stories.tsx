@@ -1,14 +1,12 @@
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
-import {
-	currencies,
-	type IsoCurrency,
-} from 'helpers/internationalisation/currency';
+import { currencies } from 'helpers/internationalisation/currency';
 import type { ThreeTierCardProps } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { ThreeTierCard } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 import { fallBackLandingPageSelection } from '../../assets/helpers/abTests/landingPageAbTests';
+import { IsoCurrency } from '@modules/internationalisation/currency';
 
 const promotionEURCountries = {
 	name: 'SupportPlusAndGuardianWeekly',

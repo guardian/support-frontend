@@ -15,6 +15,9 @@ import {
 	Divider,
 	ErrorSummary,
 } from '@guardian/source-development-kitchen/react-components';
+import type { IsoCountry } from '@modules/internationalisation/country';
+import { countryGroups } from '@modules/internationalisation/countryGroup';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import {
 	CardNumberElement,
 	ExpressCheckoutElement,
@@ -58,8 +61,6 @@ import {
 } from 'helpers/forms/paymentMethods';
 import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import * as cookie from 'helpers/storage/cookie';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import {
@@ -73,7 +74,10 @@ import {
 } from 'helpers/tracking/quantumMetric';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
-import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
+import {
+	parseCustomAmounts,
+	roundToDecimalPlaces,
+} from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
@@ -81,7 +85,6 @@ import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/co
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
-import { countryGroups } from '../../../helpers/internationalisation/countryGroup';
 import {
 	updateAbandonedBasketCookie,
 	useAbandonedBasketCookie,
@@ -263,9 +266,20 @@ export function OneTimeCheckoutComponent({
 		settings,
 	);
 
+	let customAmountsData;
+	const customAmountsParam = urlSearchParams.get('amounts');
+	if (customAmountsParam) {
+		const amounts = parseCustomAmounts(customAmountsParam);
+		customAmountsData = {
+			amounts,
+			defaultAmount: amounts[1] ?? 0,
+			hideChooseYourAmount: false,
+		};
+	}
+
 	const { amountsCardData } = selectedAmountsVariant;
 	const { amounts, defaultAmount, hideChooseYourAmount } =
-		amountsCardData['ONE_OFF'];
+		customAmountsData ?? amountsCardData['ONE_OFF'];
 
 	const { preSelectedPriceCard, preSelectedOtherAmount } = getPreSelectedAmount(
 		preSelectedAmountParam,
@@ -364,8 +378,14 @@ export function OneTimeCheckoutComponent({
 
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('None');
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
+	useEffect(() => {
+		if (paymentMethodError) {
+			paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
+		}
+	}, [paymentMethodError]);
 
 	const formRef = useRef<HTMLFormElement>(null);
+	const paymentMethodRef = useRef<HTMLFieldSetElement>(null);
 
 	const validate = (
 		event: React.FormEvent<HTMLInputElement>,
@@ -614,12 +634,14 @@ export function OneTimeCheckoutComponent({
 									maxAmount={maxAmount}
 									selectedAmount={selectedPriceCard}
 									otherAmount={otherAmount}
-									onBlur={(event) => {
+									onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
 										event.target.checkValidity(); // loose focus, onInvalid check fired
 									}}
-									onOtherAmountChange={setOtherAmount}
+									onOtherAmountChange={
+										setOtherAmount as (value: string) => void
+									}
 									errors={[otherAmountError ?? '']}
-									onInvalid={(event) => {
+									onInvalid={(event: React.FormEvent<HTMLInputElement>) => {
 										validate(
 											event,
 											setOtherAmountError,
@@ -757,9 +779,6 @@ export function OneTimeCheckoutComponent({
 								isEmailAddressReadOnly={isSignedIn}
 								isSignedIn={isSignedIn}
 							/>
-							{abParticipations.oneTimeContributionConsent === 'VariantA' && (
-								<SimilarProductsConsent />
-							)}
 
 							{countryId === 'US' && (
 								<div>
@@ -790,7 +809,7 @@ export function OneTimeCheckoutComponent({
 							)}
 						</FormSection>
 						<CheckoutDivider spacing="loose" />
-						<FormSection>
+						<FormSection ref={paymentMethodRef}>
 							<Legend>
 								2. Payment method
 								<SecureTransactionIndicator hideText={true} />
@@ -879,11 +898,11 @@ export function OneTimeCheckoutComponent({
 								finalAmount ? finalAmount : 0,
 							)}
 						/>
-						{abParticipations.oneTimeContributionConsent === 'VariantB' && (
-							<div css={similarProductsConsentCheckboxContainer}>
-								<SimilarProductsConsent />
-							</div>
-						)}
+
+						<div css={similarProductsConsentCheckboxContainer}>
+							<SimilarProductsConsent />
+						</div>
+
 						<div
 							css={css`
 								margin: ${space[8]}px 0 ${space[6]}px;

@@ -7,16 +7,13 @@ import {
 	space,
 } from '@guardian/source/foundations';
 import { SvgInfoRound } from '@guardian/source/react-components';
+import { Collection, HomeDelivery } from '@modules/product/fulfilmentOptions';
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import FlexContainer from 'components/containers/flexContainer';
 import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';
 import ProductOption from 'components/product/productOption';
 import { observerLinks } from 'helpers/legal';
-import {
-	Collection,
-	HomeDelivery,
-} from 'helpers/productPrice/fulfilmentOptions';
-import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import LinkTo from './linkTo';
 
 type PaperPricesPropTypes = {
@@ -146,7 +143,7 @@ export function PaperPrices({
 				{products.map((product) => (
 					<ProductOption
 						cssOverrides={
-							product.label ? productOverrideWithLabel : productOverride
+							product.showLabel ? productOverrideWithLabel : productOverride
 						}
 						title={product.title}
 						price={product.price}
@@ -156,7 +153,7 @@ export function PaperPrices({
 						href={product.href}
 						onClick={product.onClick}
 						onView={product.onView}
-						label={product.label}
+						showLabel={product.showLabel}
 						productLabel={product.productLabel}
 						unavailableOutsideLondon={product.unavailableOutsideLondon}
 					/>

@@ -12,15 +12,15 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
+import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import {
-	BillingPeriod,
 	billingPeriodToContributionType,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
@@ -160,14 +160,14 @@ export function ContributionsOnlyLanding({
 		getInitialBillingPeriod(),
 	);
 
-	const paymentFrequencies: BillingPeriod[] = [
+	const billingPeriods: BillingPeriod[] = [
 		BillingPeriod.OneTime,
 		BillingPeriod.Monthly,
 		BillingPeriod.Annual,
 	];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
-		const billingPeriod = paymentFrequencies[buttonIndex];
+		const billingPeriod = billingPeriods[buttonIndex];
 		if (billingPeriod) {
 			setBillingPeriod(billingPeriod);
 		}
@@ -208,13 +208,9 @@ export function ContributionsOnlyLanding({
 						support us. Choose to join with one of the options below.{' '}
 						<strong>Cancel anytime.</strong>
 					</p>
-					<PaymentFrequencyButtons
-						paymentFrequencies={paymentFrequencies.map(
-							(paymentFrequency, index) => ({
-								billingPeriod: paymentFrequency,
-								isPreSelected: paymentFrequencies[index] === billingPeriod,
-							}),
-						)}
+					<BillingPeriodButtons
+						billingPeriods={billingPeriods}
+						preselectedBillingPeriod={billingPeriod}
 						buttonClickHandler={handlePaymentFrequencyBtnClick}
 						additionalStyles={paymentFrequencyButtons}
 					/>

@@ -6,18 +6,18 @@ import {
 	Select,
 	TextInput,
 } from '@guardian/source/react-components';
-import React from 'react';
-import { sortedOptions } from 'components/forms/customFields/sortedOptions';
-import { PostcodeFinder } from 'components/subscriptionCheckouts/address/postcodeFinder';
-import { Country } from 'helpers/internationalisation/classes/country';
 import {
 	auStates,
 	caStates,
 	usStates,
-} from 'helpers/internationalisation/country';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
+} from '@modules/internationalisation/country';
+import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { countryGroups } from '@modules/internationalisation/countryGroup';
+import React from 'react';
+import { sortedOptions } from 'components/forms/customFields/sortedOptions';
+import { PostcodeFinder } from 'components/subscriptionCheckouts/address/postcodeFinder';
+import { Country } from 'helpers/internationalisation/classes/country';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,

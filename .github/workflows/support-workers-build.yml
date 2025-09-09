@@ -28,25 +28,17 @@ jobs:
         run: env
 
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      # (Respects .nvmrc)
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-          cache: "yarn"
-          cache-dependency-path: '**/yarn.lock'
+      - name: Setup Node and Install Dependencies
+        uses: ./.github/actions/setup-node-and-install
 
       - name: Build CFN from CDK
         run: ./script/ci
         working-directory: cdk
 
       - name: Build TypeScript lambdas
-        run: |
-          yarn install --frozen-lockfile
-          yarn package
-        working-directory: support-workers
+        run: pnpm --filter support-workers package
 
       - uses: sbt/setup-sbt@v1
 
@@ -93,21 +85,20 @@ jobs:
                 type: aws-lambda
                 parameters:
                   functionNames:
-                    - "-CreatePaymentMethodLambda-"
-                    - "-CreateSalesforceContactLambda-"
                     - "-CreateZuoraSubscriptionLambda-"
                     - "-SendThankYouEmailLambda-"
                     - "-UpdateSupporterProductDataLambda-"
                     - "-FailureHandlerLambda-"
                     - "-SendAcquisitionEventLambda-"
-                    - "-PreparePaymentMethodForReuseLambda-"
                   fileName: support-workers.jar
                 dependencies: [cfn]
               support-workers-typescript:
                 type: aws-lambda
                 parameters:
                   functionNames:
-                    - "-DummyTypescriptLambda-"
+                    - "-CreateSalesforceContactLambda-"
+                    - "-CreatePaymentMethodLambda-"
+                    - "-CreateZuoraSubscriptionTSLambda-"
                   fileName: support-workers.zip
                 dependencies: [cfn]
               it-tests:

@@ -2,10 +2,10 @@ import type { ComponentType, React } from 'react';
 import type { Participations } from 'helpers/abTests/models';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { SendEventId } from 'helpers/tracking/quantumMetric';
 import type { User } from 'helpers/user/user';
+import { IsoCurrency } from '@modules/internationalisation/currency';
 
 declare global {
 	/* ~ Here, declare things that go in the global namespace, or augment

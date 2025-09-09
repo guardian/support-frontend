@@ -1,14 +1,5 @@
 import { useEffect } from 'react';
-import type { InferInput } from 'valibot';
-import {
-	flatten,
-	literal,
-	number,
-	object,
-	safeParse,
-	string,
-	union,
-} from 'valibot';
+import { z } from 'zod';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import * as cookie from 'helpers/storage/cookie';
 import { logException } from 'helpers/utilities/logger';
@@ -16,14 +7,14 @@ import { logException } from 'helpers/utilities/logger';
 const COOKIE_EXPIRY_DAYS = 3;
 const ABANDONED_BASKET_COOKIE_NAME = 'GU_CO_INCOMPLETE';
 
-const abandonedBasketSchema = object({
-	product: string(),
-	amount: union([number(), literal('other')]),
-	billingPeriod: string(),
-	region: string(),
+const abandonedBasketSchema = z.object({
+	product: z.string(),
+	amount: z.union([z.number(), z.literal('other')]),
+	billingPeriod: z.string(),
+	region: z.string(),
 });
 
-type AbandonedBasket = InferInput<typeof abandonedBasketSchema>;
+type AbandonedBasket = z.infer<typeof abandonedBasketSchema>;
 
 export function useAbandonedBasketCookie(
 	product: ActiveProductKey,
@@ -67,14 +58,13 @@ export function updateAbandonedBasketCookie(amount: string) {
 		return;
 	}
 
-	const parsedCookie = safeParse(
-		abandonedBasketSchema,
+	const parsedCookie = abandonedBasketSchema.safeParse(
 		JSON.parse(abandonedBasketCookie),
 	);
 
 	if (parsedCookie.success) {
 		const newCookie: AbandonedBasket = {
-			...parsedCookie.output,
+			...parsedCookie.data,
 			amount: parseAmount(Number.parseFloat(amount)),
 		};
 
@@ -86,7 +76,7 @@ export function updateAbandonedBasketCookie(amount: string) {
 	} else {
 		logException(
 			`Failed to parse abandoned basket cookie. Error:
-			${JSON.stringify(flatten(parsedCookie.issues))}`,
+			${JSON.stringify(parsedCookie.error)}`,
 		);
 	}
 }

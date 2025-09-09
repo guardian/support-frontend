@@ -6,38 +6,49 @@
   "scripts": {
     "test": "jest --group=-integration",
     "it-test": "jest --group=integration",
-    "lint": "eslint src/typescript/**/*.ts",
+    "lint:check": "eslint src/typescript/**/*.ts",
+    "lint:fix": "eslint --fix src/typescript/**/*.ts",
     "check-formatting": "prettier --check **.ts",
+    "fix-formatting": "prettier --write **.ts",
+    "fix": "pnpm fix-formatting && pnpm lint:fix",
     "build": "tsc",
+    "bundle": "node esbuild.config.mjs",
     "clean-target": "rm -rf target && mkdir -p target",
-    "install-runtime-dependencies": "yarn install --modules-folder target/typescript/node_modules --production",
-    "build-and-zip": "yarn clean-target && yarn install-runtime-dependencies && yarn build && cd target/typescript && zip -r support-workers.zip ./* -x \".*\" -x \"__MACOSX\"",
-    "package": "yarn check-formatting && yarn lint && yarn test && yarn build-and-zip"
+    "zip": "cd target/typescript && zip -r support-workers.zip ./* -x \".*\" -x \"__MACOSX\"",
+    "bundle-and-zip": "pnpm clean-target && pnpm bundle && pnpm zip",
+    "check-modules": "pnpm --filter modules check-formatting && pnpm --filter modules lint:check",
+    "package": "pnpm check-modules && pnpm check-formatting && pnpm lint:check && pnpm build && pnpm test && pnpm bundle-and-zip",
+    "deploy-to-code": "node deployToCode.mjs",
+    "package-and-deploy": "pnpm package && pnpm deploy-to-code"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/guardian/support-frontend.git"
   },
-  "packageManager": "yarn@1.22.22",
   "private": true,
   "dependencies": {
-    "@aws-sdk/client-ssm": "^3.679.0",
-    "@aws-sdk/credential-provider-node": "3.699.0",
+    "@aws-sdk/client-secrets-manager": "catalog:",
+    "@aws-sdk/client-ssm": "catalog:",
+    "@aws-sdk/credential-provider-node": "catalog:",
+    "@guardian/support-service-lambdas": "catalog:",
+    "dayjs": "^1.11.13",
+    "esbuild-ts-paths": "^1.1.3",
     "stripe": "^17.4.0",
-    "zod": "^3.23.8"
+    "zod": "catalog:"
   },
   "devDependencies": {
-    "@guardian/eslint-config-typescript": "12.0.0",
-    "@guardian/prettier": "^2.1.5",
-    "@types/jest": "^29.5.12",
-    "@types/node": "^20.11.27",
-    "eslint": "^8.57.0",
-    "jest": "^29.7.0",
-    "jest-runner-groups": "^2.2.0",
-    "prettier": "^2.8.8",
-    "prettier-eslint": "^16.3.0",
-    "pretty-format": "^29.7.0",
-    "ts-jest": "^29.2.4",
-    "typescript": "^5.2.2"
+    "@aws-sdk/client-lambda": "^3.876.0",
+    "@aws-sdk/client-s3": "^3.876.0",
+    "@guardian/eslint-config-typescript": "catalog:",
+    "@guardian/prettier": "catalog:",
+    "@types/jest": "catalog:",
+    "@types/node": "catalog:",
+    "esbuild": "catalog:",
+    "eslint": "catalog:",
+    "jest": "catalog:",
+    "jest-runner-groups": "catalog:",
+    "prettier": "catalog:",
+    "ts-jest": "catalog:",
+    "typescript": "catalog:"
   }
 }

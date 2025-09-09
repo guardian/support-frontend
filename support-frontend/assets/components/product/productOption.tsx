@@ -1,19 +1,20 @@
 import type { SerializedStyles } from '@emotion/react';
-import { css, ThemeProvider } from '@emotion/react';
+import { css } from '@emotion/react';
 import { until } from '@guardian/source/foundations';
 import {
-	buttonThemeReaderRevenue,
 	LinkButton,
 	SvgInfoRound,
+	themeButtonReaderRevenue,
 } from '@guardian/source/react-components';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	Channel,
 	type ProductLabelProps,
 } from 'pages/paper-subscription-landing/helpers/products';
+import type { PlanData } from 'pages/paper-subscription-landing/planData';
 import {
 	button,
 	buttonDiv,
@@ -45,12 +46,13 @@ export type Product = {
 	href: string;
 	onClick: () => void;
 	onView: () => void;
+	showLabel?: boolean;
 	productLabel?: ProductLabelProps;
-	label?: string;
 	cssOverrides?: SerializedStyles;
 	billingPeriod?: BillingPeriod;
 	isSpecialOffer?: boolean;
 	unavailableOutsideLondon?: boolean;
+	planData?: PlanData;
 };
 
 function ProductOption(props: Product): JSX.Element {
@@ -74,7 +76,7 @@ function ProductOption(props: Product): JSX.Element {
 
 	const isObserverChannel = props.productLabel?.channel === Channel.Observer;
 	const productOptionMargin =
-		props.label &&
+		props.showLabel &&
 		css`
 			${until.tablet} {
 				/* calculation belows are based on productOptionHighlight text size, line height and padding */
@@ -99,14 +101,14 @@ function ProductOption(props: Product): JSX.Element {
 				props.productLabel ? productOptionWithLabel : css``,
 			]}
 		>
-			{props.label && (
+			{props.showLabel && (
 				<span
 					css={[
 						productOptionHighlight,
 						props.isSpecialOffer ? specialOfferHighlight : css``,
 					]}
 				>
-					{props.label}
+					Best deal
 				</span>
 			)}
 			<div
@@ -148,16 +150,15 @@ function ProductOption(props: Product): JSX.Element {
 				</p>
 			</div>
 			<div css={buttonDiv}>
-				<ThemeProvider theme={buttonThemeReaderRevenue}>
-					<LinkButton
-						cssOverrides={button}
-						href={props.href}
-						onClick={props.onClick}
-						aria-label={`${props.title}- ${props.buttonCopy}`}
-					>
-						{props.buttonCopy}
-					</LinkButton>
-				</ThemeProvider>
+				<LinkButton
+					cssOverrides={button}
+					href={props.href}
+					onClick={props.onClick}
+					aria-label={`${props.title}- ${props.buttonCopy}`}
+					theme={themeButtonReaderRevenue}
+				>
+					{props.buttonCopy}
+				</LinkButton>
 			</div>
 		</div>
 	);

@@ -55,7 +55,7 @@ export const fillInPayPalDetails = async (page: Page) => {
 		await loginButton.click();
 	}
 
-	const submitButton = page.locator('#payment-submit-btn');
+	const submitButton = page.locator('[data-id=payment-submit-btn]');
 
 	await submitButton.click();
 };

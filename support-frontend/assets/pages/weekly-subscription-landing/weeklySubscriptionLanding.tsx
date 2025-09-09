@@ -1,13 +1,7 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
 import { from } from '@guardian/source/foundations';
-import CentredContainer from 'components/containers/centredContainer';
-import FullWidthContainer from 'components/containers/fullWidthContainer';
-import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
-import Block from 'components/page/block';
-import Page from 'components/page/page';
-import GiftNonGiftCta from 'components/product/giftNonGiftCta';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
@@ -16,7 +10,13 @@ import {
 	International,
 	NZDCountries,
 	UnitedStates,
-} from 'helpers/internationalisation/countryGroup';
+} from '@modules/internationalisation/countryGroup';
+import CentredContainer from 'components/containers/centredContainer';
+import FullWidthContainer from 'components/containers/fullWidthContainer';
+import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
+import Block from 'components/page/block';
+import Page from 'components/page/page';
+import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import {
 	getAbParticipations,
 	setUpTrackingAndConsents,

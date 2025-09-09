@@ -8,19 +8,8 @@ const productPrices = {
 			SixdayPlus: {
 				Monthly: {
 					GBP: {
-						price: 27.36,
-						savingVsRetail: 35,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [],
-					},
-				},
-			},
-			SundayPlus: {
-				Monthly: {
-					GBP: {
-						price: 22.06,
-						savingVsRetail: 15,
+						price: 41.12,
+						savingVsRetail: 26,
 						currency: 'GBP',
 						fixedTerm: false,
 						promotions: [],
@@ -30,8 +19,8 @@ const productPrices = {
 			SaturdayPlus: {
 				Monthly: {
 					GBP: {
-						price: 21.62,
-						savingVsRetail: 16,
+						price: 10.36,
+						savingVsRetail: 13,
 						currency: 'GBP',
 						fixedTerm: false,
 						promotions: [],
@@ -85,8 +74,8 @@ const productPrices = {
 			WeekendPlus: {
 				Monthly: {
 					GBP: {
-						price: 12.56,
-						savingVsRetail: 26,
+						price: 20.76,
+						savingVsRetail: 20,
 						currency: 'GBP',
 						fixedTerm: false,
 						promotions: [],
@@ -107,8 +96,8 @@ const productPrices = {
 			EverydayPlus: {
 				Monthly: {
 					GBP: {
-						price: 29.2,
-						savingVsRetail: 41,
+						price: 47.62,
+						savingVsRetail: 29,
 						currency: 'GBP',
 						fixedTerm: false,
 						promotions: [],
@@ -120,17 +109,8 @@ const productPrices = {
 			SixdayPlus: {
 				Monthly: {
 					GBP: {
-						price: 30.36,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [],
-					},
-				},
-			},
-			SundayPlus: {
-				Monthly: {
-					GBP: {
-						price: 26.39,
+						price: 54.12,
+						savingVsRetail: 5,
 						currency: 'GBP',
 						fixedTerm: false,
 						promotions: [],
@@ -140,7 +120,7 @@ const productPrices = {
 			SaturdayPlus: {
 				Monthly: {
 					GBP: {
-						price: 25.96,
+						price: 14.69,
 						currency: 'GBP',
 						fixedTerm: false,
 						promotions: [],
@@ -203,7 +183,8 @@ const productPrices = {
 			WeekendPlus: {
 				Monthly: {
 					GBP: {
-						price: 12.57,
+						price: 25.09,
+						savingVsRetail: 2,
 						currency: 'GBP',
 						fixedTerm: false,
 						promotions: [],
@@ -224,7 +205,8 @@ const productPrices = {
 			EverydayPlus: {
 				Monthly: {
 					GBP: {
-						price: 29.19,
+						price: 62.79,
+						savingVsRetail: 9,
 						currency: 'GBP',
 						fixedTerm: false,
 						promotions: [],
@@ -240,6 +222,6 @@ jest.mock('ophan', () => () => ({}));
 
 describe('getMaxSavingVsRetail', () => {
 	it('should return the maximum savings for a fulfilment option vs retail', () => {
-		expect(getMaxSavingVsRetail(productPrices)).toEqual(41);
+		expect(getMaxSavingVsRetail(productPrices)).toEqual(29);
 	});
 });

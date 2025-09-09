@@ -1,7 +1,6 @@
 package com.gu.support.workers.states
 
 import com.gu.i18n.Country
-import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.acquisitions.AcquisitionData
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.encoding.{Codec, DiscriminatedType}
@@ -37,6 +36,7 @@ object CreateZuoraSubscriptionProductState {
 
   case class ContributionState(
       product: Contribution,
+      productInformation: Option[ProductInformation],
       paymentMethod: PaymentMethod,
       salesForceContact: SalesforceContactRecord,
       similarProductsConsent: Option[Boolean],
@@ -45,6 +45,7 @@ object CreateZuoraSubscriptionProductState {
   case class SupporterPlusState(
       billingCountry: Country,
       product: SupporterPlus,
+      productInformation: Option[ProductInformation],
       paymentMethod: PaymentMethod,
       appliedPromotion: Option[AppliedPromotion],
       salesForceContact: SalesforceContactRecord,
@@ -54,6 +55,7 @@ object CreateZuoraSubscriptionProductState {
   case class TierThreeState(
       user: User,
       product: TierThree,
+      productInformation: Option[ProductInformation],
       paymentMethod: PaymentMethod,
       firstDeliveryDate: LocalDate,
       appliedPromotion: Option[AppliedPromotion],
@@ -63,6 +65,7 @@ object CreateZuoraSubscriptionProductState {
 
   case class GuardianAdLiteState(
       product: GuardianAdLite,
+      productInformation: Option[ProductInformation],
       paymentMethod: PaymentMethod,
       salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionProductState
@@ -70,6 +73,7 @@ object CreateZuoraSubscriptionProductState {
   case class DigitalSubscriptionState(
       billingCountry: Country,
       product: DigitalPack,
+      productInformation: Option[ProductInformation],
       paymentMethod: PaymentMethod,
       appliedPromotion: Option[AppliedPromotion],
       salesForceContact: SalesforceContactRecord,
@@ -79,6 +83,7 @@ object CreateZuoraSubscriptionProductState {
   case class PaperState(
       user: User,
       product: Paper,
+      productInformation: Option[ProductInformation],
       paymentMethod: PaymentMethod,
       firstDeliveryDate: LocalDate,
       appliedPromotion: Option[AppliedPromotion],
@@ -90,10 +95,11 @@ object CreateZuoraSubscriptionProductState {
       user: User,
       giftRecipient: Option[GiftRecipient],
       product: GuardianWeekly,
+      productInformation: Option[ProductInformation],
       paymentMethod: PaymentMethod,
       firstDeliveryDate: LocalDate,
       appliedPromotion: Option[AppliedPromotion],
-      salesforceContacts: SalesforceContactRecords,
+      salesForceContact: SalesforceContactRecord,
       similarProductsConsent: Option[Boolean],
   ) extends CreateZuoraSubscriptionProductState
 

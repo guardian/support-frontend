@@ -26,14 +26,10 @@ jobs:
         run: env
 
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Setup Node for CDK
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: "yarn"
-          cache-dependency-path: cdk/yarn.lock
+      - name: Setup Node and Install Dependencies
+        uses: ./.github/actions/setup-node-and-install
 
       - name: Build CFN from CDK
         run: ./script/ci
@@ -76,31 +72,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: "support-lambdas/bigquery-acquisitions-publisher/.nvmrc"
+      - name: Setup Node and Install Dependencies
+        uses: ./.github/actions/setup-node-and-install
 
       - name: Build CFN from CDK
         run: ./script/ci
         working-directory: cdk
 
-      - run: yarn install
-        working-directory: support-lambdas/bigquery-acquisitions-publisher
+      - run: pnpm --filter bigquery-acquisitions-publisher tsc --noEmit
 
-      - run: yarn tsc --noEmit
-        working-directory: support-lambdas/bigquery-acquisitions-publisher
+      - run: pnpm --filter bigquery-acquisitions-publisher prettier -c typescript/*.ts
 
-      - run: yarn prettier -c typescript/*.ts
-        working-directory: support-lambdas/bigquery-acquisitions-publisher
+      - run: pnpm --filter bigquery-acquisitions-publisher test
 
-      - run: yarn test
-        working-directory: support-lambdas/bigquery-acquisitions-publisher
-
-      - run: yarn build
-        working-directory: support-lambdas/bigquery-acquisitions-publisher
+      - run: pnpm --filter bigquery-acquisitions-publisher build
 
       - run: zip -qr index.zip ./*.js
         working-directory: support-lambdas/bigquery-acquisitions-publisher/target/typescript

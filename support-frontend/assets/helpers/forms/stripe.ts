@@ -1,9 +1,9 @@
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCountry } from '@modules/internationalisation/country';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import type { IsoCurrency } from '../internationalisation/currency';
 
 export type StripeAccountType = 'ONE_OFF' | 'REGULAR';
 

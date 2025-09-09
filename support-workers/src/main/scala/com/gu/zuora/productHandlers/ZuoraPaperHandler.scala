@@ -32,6 +32,7 @@ class ZuoraPaperHandler(
     } yield SendThankYouEmailPaperState(
       state.user,
       state.product,
+      state.productInformation,
       state.paymentMethod,
       paymentSchedule,
       state.appliedPromotion.map(_.promoCode),

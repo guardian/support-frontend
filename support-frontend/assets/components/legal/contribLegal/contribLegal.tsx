@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { contributionsEmail } from 'helpers/legal';
 import {
 	ContactPageLink,

@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 import { motion } from 'framer-motion';
 import * as ophan from 'ophan';
-import * as React from 'preact/compat';
+import * as React from 'react';
 import { renderPage } from 'helpers/rendering/render';
 import './ausMomentMap.scss';
 import { Blurb } from 'pages/aus-moment-map/components/blurb';

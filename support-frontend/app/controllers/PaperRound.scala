@@ -6,6 +6,7 @@ import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
 import com.gu.aws.AwsCloudWatchMetricSetup.{getDeliveryAgentsFailure, getDeliveryAgentsSuccess}
 import com.gu.monitoring.SafeLogging
 import com.gu.support.config.Stage
+import com.gu.support.config.Stages.CODE
 import com.gu.support.paperround.CoverageEndpoint._
 import com.gu.support.paperround.{AgentId, CoverageEndpoint, PaperRound, PaperRoundServiceProvider}
 import io.circe._
@@ -29,6 +30,7 @@ class PaperRound(
   import actionRefiners._
 
   def getAgents(postcode: String): Action[AnyContent] = NoCacheAction().async { implicit request =>
+    val userStage = if (testUserService.isTestUser(request)) CODE else stage
     serviceProvider
       .forUser(testUserService.isTestUser(request))
       .coverage(CoverageEndpoint.RequestBody(postcode = postcode))
@@ -45,8 +47,8 @@ class PaperRound(
               InternalServerError(toJson(PaperRoundError(errorMessage)))
           }
           result.data.status match {
-            case IE => AwsCloudWatchMetricPut(cloudwatchClient)(getDeliveryAgentsFailure(stage))
-            case _ => AwsCloudWatchMetricPut(cloudwatchClient)(getDeliveryAgentsSuccess(stage))
+            case IE => AwsCloudWatchMetricPut(cloudwatchClient)(getDeliveryAgentsFailure(userStage))
+            case _ => AwsCloudWatchMetricPut(cloudwatchClient)(getDeliveryAgentsSuccess(userStage))
           }
           response
         }
@@ -54,11 +56,11 @@ class PaperRound(
       case PaperRound.Error(statusCode, message, errorCode) =>
         val responseBody = s"$errorCode – Got $statusCode reponse with message $message"
         logger.error(scrub"Error calling PaperRound, returning $responseBody")
-        AwsCloudWatchMetricPut(cloudwatchClient)(getDeliveryAgentsFailure(stage))
+        AwsCloudWatchMetricPut(cloudwatchClient)(getDeliveryAgentsFailure(userStage))
         InternalServerError(responseBody)
       case error =>
         logger.error(scrub"Failed to get agents from PaperRound due to: $error")
-        AwsCloudWatchMetricPut(cloudwatchClient)(getDeliveryAgentsFailure(stage))
+        AwsCloudWatchMetricPut(cloudwatchClient)(getDeliveryAgentsFailure(userStage))
         InternalServerError(s"Unknown error: $error")
     }
   }

@@ -4,7 +4,6 @@ import com.gu.helpers.DateGenerator
 import com.gu.i18n.Country
 import com.gu.i18n.CountryGroup.UK
 import com.gu.i18n.Currency.GBP
-import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.catalog.Domestic
 import com.gu.support.config.TouchPointEnvironments.CODE
 import com.gu.support.promotions.{Promotion, PromotionService, PromotionWithCode}
@@ -133,6 +132,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
   }
 
   lazy val weekly = GuardianWeekly(GBP, Quarterly, Domestic)
+  lazy val weeklyProductInformation = None
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2019, 10, 24)
   lazy val firstDeliveryDate = saleDate.plusDays(3)
@@ -170,10 +170,11 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       ),
       Some(GiftRecipient(None, "bob", "smith", None)),
       weekly,
+      weeklyProductInformation,
       PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
       firstDeliveryDate,
       None,
-      SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
+      SalesforceContactRecord("", ""),
       similarProductsConsent = None,
     ),
     None,
@@ -194,10 +195,11 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     ),
     None,
     weekly,
+    None,
     PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
     firstDeliveryDate,
     None,
-    SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
+    SalesforceContactRecord("", ""),
     similarProductsConsent = None,
   );
 
@@ -232,10 +234,11 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       ),
       None,
       weekly,
+      weeklyProductInformation,
       PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
       firstDeliveryDate,
       None,
-      SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
+      SalesforceContactRecord("", ""),
       similarProductsConsent = None,
     ),
     Some("Dan Csr"),

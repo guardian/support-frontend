@@ -28,7 +28,7 @@ export function AppDownloadEditionsBodyCopy(): JSX.Element {
 	);
 }
 
-export const appsDownloadHeader = 'Explore your subscriber’s app';
+export const appsDownloadHeader = 'Explore Guardian Apps';
 
 export const appNewsDownloadHeader = 'The Guardian News app';
 

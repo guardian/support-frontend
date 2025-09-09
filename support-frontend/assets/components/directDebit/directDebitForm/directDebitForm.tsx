@@ -3,9 +3,9 @@ import {
 	InlineError,
 	TextInput,
 } from '@guardian/source/react-components';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { ReactNode } from 'react';
 import { ElementDecorator } from 'components/stripeCardForm/elementDecorator';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as styles from './directDebitFormStyles';
 import LegalNotice from './legalNotice';
 import type { DirectDebitFormDisplayErrors } from './selectors';

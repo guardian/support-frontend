@@ -37,11 +37,6 @@ object StripePaymentType {
 case class CreditCardReferenceTransaction(
     TokenId: String, // Stripe Card id
     SecondTokenId: String, // Stripe Customer Id
-    CreditCardNumber: String,
-    CreditCardCountry: Option[Country],
-    CreditCardExpirationMonth: Int,
-    CreditCardExpirationYear: Int,
-    CreditCardType: Option[String] /*TODO: strip spaces?*/,
     PaymentGateway: PaymentGateway,
     Type: String = "CreditCardReferenceTransaction",
     StripePaymentType: Option[StripePaymentType],

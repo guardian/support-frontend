@@ -108,6 +108,7 @@ export class PaymentApi extends GuStack {
         domainName: props.domainName,
         hostedZoneId: "Z1E4V12LQGXFEC",
       },
+      instanceMetricGranularity: "5Minute",
       monitoringConfiguration: { noMonitoring: true },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.SMALL),
       scaling: props.scaling,
@@ -277,14 +278,19 @@ export class PaymentApi extends GuStack {
       snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
-    new GuAlarm(this, "NoPaypalPaymentsInTwoHours247Alarm", {
+    const paypalMetricDuration = Duration.minutes(5);
+    const paypalEvaluationPeriods = 18; // The number of 5 minute periods in 90 minutes
+    const paypalAlarmPeriod = Duration.minutes(
+      paypalMetricDuration.toMinutes() * paypalEvaluationPeriods
+    );
+    new GuAlarm(this, "NoPaypalPaymentsInPeriodAlarm", {
       app,
-      alarmName: `[CDK] ${app} ${this.stage} CP One-off contributions with PayPal might be down`,
-      alarmDescription:
-        "There have been no one-off contributions using paypal in the last 2 hours",
+      alarmName: `[CDK] ${app} ${
+        this.stage
+      } No successful paypal payments via payment-api for ${paypalAlarmPeriod.toHumanString()}`,
       actionsEnabled: props.stage === "PROD",
       threshold: 0,
-      evaluationPeriods: 12,
+      evaluationPeriods: paypalEvaluationPeriods,
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
       metric: new Metric({
         metricName: "payment-success",
@@ -293,49 +299,7 @@ export class PaymentApi extends GuStack {
           "payment-provider": "Paypal",
         },
         statistic: "Sum",
-        period: Duration.seconds(600),
-      }),
-      treatMissingData: TreatMissingData.BREACHING,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-    });
-
-    new GuAlarm(this, "NoStripePaymentsInThreeHours247Alarm", {
-      app,
-      alarmName: `[CDK] ${app} ${this.stage} CP One-off contributions with Card might be down`,
-      alarmDescription:
-        "There have been no one-off contributions using card payment in the last 3 hours",
-      actionsEnabled: props.stage === "PROD",
-      threshold: 0,
-      evaluationPeriods: 12,
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      metric: new Metric({
-        metricName: "payment-success",
-        namespace: `support-payment-api-${this.stage}`,
-        dimensionsMap: {
-          "payment-provider": "Stripe",
-        },
-        statistic: "Sum",
-        period: Duration.seconds(900),
-      }),
-      treatMissingData: TreatMissingData.BREACHING,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-    });
-
-    new GuAlarm(this, "NoPaypalPaymentsInOneHourAlarm", {
-      app,
-      alarmName: `[CDK] ${app} ${this.stage} No successful paypal payments via payment-api for an hour`,
-      actionsEnabled: props.stage === "PROD",
-      threshold: 0,
-      evaluationPeriods: 12,
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      metric: new Metric({
-        metricName: "payment-success",
-        namespace: `support-payment-api-${this.stage}`,
-        dimensionsMap: {
-          "payment-provider": "Paypal",
-        },
-        statistic: "Sum",
-        period: Duration.seconds(300),
+        period: paypalMetricDuration,
       }),
       treatMissingData: TreatMissingData.BREACHING,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
@@ -361,6 +325,11 @@ export class PaymentApi extends GuStack {
       snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
+    const stripeExpressMetricDuration = Duration.minutes(5);
+    const stripeExpressEvaluationPeriods = 18; // The number of 5 minute periods in 90 minutes
+    const stripeExpressAlarmPeriod = Duration.minutes(
+      stripeExpressMetricDuration.toMinutes() * stripeExpressEvaluationPeriods
+    );
     const [applePaySuccessMetric, paymentRequestButtonSuccessMetric] = [
       "StripeApplePay",
       "StripePaymentRequestButton",
@@ -373,13 +342,13 @@ export class PaymentApi extends GuStack {
             "payment-provider": paymentProvider,
           },
           statistic: "Sum",
-          period: Duration.seconds(300),
+          period: stripeExpressMetricDuration,
         })
     );
     const combinedApplePayAndPaymentRequestButtonSuccessMetric =
       new MathExpression({
         expression: "SUM(METRICS())",
-        period: Duration.seconds(300),
+        period: stripeExpressMetricDuration,
         usingMetrics: {
           m1: applePaySuccessMetric,
           m2: paymentRequestButtonSuccessMetric,
@@ -387,10 +356,12 @@ export class PaymentApi extends GuStack {
       });
     new GuAlarm(this, "NoStripeExpressPaymentsInOneHourAlarm", {
       app,
-      alarmName: `[CDK] ${app} ${this.stage} No successful stripe express payments via payment-api for an hour`,
+      alarmName: `[CDK] ${app} ${
+        this.stage
+      } No successful stripe express payments via payment-api for ${stripeExpressAlarmPeriod.toHumanString()}`,
       actionsEnabled: props.stage === "PROD",
       threshold: 0,
-      evaluationPeriods: 12,
+      evaluationPeriods: stripeExpressEvaluationPeriods,
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
       metric: combinedApplePayAndPaymentRequestButtonSuccessMetric,
       treatMissingData: TreatMissingData.BREACHING,

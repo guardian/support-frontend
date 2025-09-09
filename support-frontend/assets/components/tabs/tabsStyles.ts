@@ -9,12 +9,12 @@ import {
 	space,
 } from '@guardian/source/foundations';
 
-export const tabList = css`
+const tabList = css`
 	display: flex;
 	align-items: flex-end;
 	justify-content: flex-start;
 `;
-export const tabButton = css`
+const tabButton = css`
 	background-color: ${neutral[100]};
 	${headlineBold17};
 	position: relative;
@@ -57,8 +57,10 @@ export const tabButton = css`
 		content: '';
 	}
 `;
-export const tabPanel = css`
+const tabPanel = css`
 	position: relative;
 	padding: ${space[2]}px;
 	border: 1px solid ${palette.neutral[86]};
 `;
+
+export default { tabList, tabButton, tabPanel };

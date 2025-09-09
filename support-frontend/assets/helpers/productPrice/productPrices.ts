@@ -1,20 +1,20 @@
-import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCountry } from '@modules/internationalisation/country';
 import type {
 	CountryGroupName,
 	CountryGroup as CountryGroupType,
-} from 'helpers/internationalisation/countryGroup';
+} from '@modules/internationalisation/countryGroup';
 import {
 	countryGroups,
 	GBPCountries,
-} from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
+} from '@modules/internationalisation/countryGroup';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import { NoFulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import type { ProductOptions } from '@modules/product/productOptions';
+import { NoProductOptions } from '@modules/product/productOptions';
+import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { extendedGlyph, glyph } from 'helpers/internationalisation/currency';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { fixDecimals } from 'helpers/productPrice/subscriptions';
 
@@ -104,6 +104,8 @@ const getDiscountVsRetail = (
 	return Math.floor(totalSavingVsRetail);
 };
 
+const allProductPrices = window.guardian.allProductPrices;
+
 export {
 	getProductPrice,
 	getFirstValidPrice,
@@ -112,4 +114,5 @@ export {
 	showPrice,
 	isNumeric,
 	getDiscountVsRetail,
+	allProductPrices,
 };

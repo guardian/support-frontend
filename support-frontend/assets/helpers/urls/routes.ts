@@ -1,20 +1,19 @@
 // ----- Routes ----- //
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { countryGroups } from '@modules/internationalisation/countryGroup';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type {
 	FulfilmentOptions,
 	PaperFulfilmentOptions,
-} from 'helpers/productPrice/fulfilmentOptions';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
+} from '@modules/product/fulfilmentOptions';
+import type { ProductOptions } from '@modules/product/productOptions';
 import type { Option } from 'helpers/types/option';
-import type { CountryGroupId } from '../internationalisation/countryGroup';
-import { countryGroups } from '../internationalisation/countryGroup';
 import {
 	addQueryParamsToURL,
 	getAllQueryParams,
 	getOrigin,
 	isProd,
 } from './url';
-import 'helpers/types/option';
 
 const routes = {
 	recurringContribCheckout: '/contribute/recurring',
@@ -109,14 +108,30 @@ function paperCheckoutUrl(
 	fulfilmentOption: FulfilmentOptions,
 	productOptions: ProductOptions,
 	promoCode?: Option<string>,
+	abTestName?: string,
 ) {
 	const url = `${getOrigin()}/uk/checkout`;
-	return addQueryParamsToURL(url, {
-		promoCode,
-		product:
-			fulfilmentOption === 'Collection' ? 'SubscriptionCard' : fulfilmentOption,
-		ratePlan: productOptions,
-	});
+
+	const params = abTestName
+		? {
+				[abTestName]: 'true',
+				promoCode,
+				product:
+					fulfilmentOption === 'Collection'
+						? 'SubscriptionCard'
+						: fulfilmentOption,
+				ratePlan: productOptions,
+		  }
+		: {
+				promoCode,
+				product:
+					fulfilmentOption === 'Collection'
+						? 'SubscriptionCard'
+						: fulfilmentOption,
+				ratePlan: productOptions,
+		  };
+
+	return addQueryParamsToURL(url, params);
 }
 
 // If the user cancels before completing the payment flow, send them back to the contribute page.
