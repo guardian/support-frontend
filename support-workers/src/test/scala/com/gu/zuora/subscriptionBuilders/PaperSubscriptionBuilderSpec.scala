@@ -4,7 +4,12 @@ import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog.{EverydayPlus, HomeDelivery, NationalDelivery, Sunday}
 import com.gu.support.config.TouchPointEnvironments.CODE
 import com.gu.support.promotions.PromotionService
-import com.gu.support.workers.JsonFixtures.{salesforceContact, stripePaymentMethodObj, userJsonWithDeliveryAddress, userJsonWithDeliveryAddressOutsideLondon}
+import com.gu.support.workers.JsonFixtures.{
+  salesforceContact,
+  stripePaymentMethodObj,
+  userJsonWithDeliveryAddress,
+  userJsonWithDeliveryAddressOutsideLondon,
+}
 import com.gu.support.workers.{Paper, ProductInformation}
 import com.gu.support.workers.exceptions.BadRequestException
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.PaperState
@@ -18,6 +23,7 @@ import org.scalatestplus.mockito.MockitoSugar.mock
 import java.util.UUID
 
 class PaperSubscriptionBuilderSpec extends AnyFlatSpec with Matchers {
+  val date = new LocalDate(2020, 6, 15)
   "National Delivery subscriptions" must "have a delivery agent" in {
     val product = Paper(
       fulfilmentOptions = NationalDelivery,
@@ -38,7 +44,7 @@ class PaperSubscriptionBuilderSpec extends AnyFlatSpec with Matchers {
     val builder = new PaperSubscriptionBuilder(
       mock[PromotionService],
       CODE,
-      new SubscribeItemBuilder(UUID.randomUUID(), userObject, GBP),
+      new SubscribeItemBuilder(UUID.randomUUID(), userObject, GBP, date),
     )
 
     assertThrows[BadRequestException] {
@@ -53,7 +59,7 @@ class PaperSubscriptionBuilderSpec extends AnyFlatSpec with Matchers {
   private val builder = new PaperSubscriptionBuilder(
     mock[PromotionService],
     CODE,
-    new SubscribeItemBuilder(UUID.randomUUID(), userObject, GBP),
+    new SubscribeItemBuilder(UUID.randomUUID(), userObject, GBP, date),
   )
 
   "Sunday subscriptions" must "use the Tortoise payment gateways" in {

@@ -116,6 +116,7 @@ class CreateZuoraSubscriptionSupporterPlusStepsSpec extends AsyncFlatSpec with M
       }
     }
 
+    val date = new LocalDate(2020, 6, 15)
     val subscriptionCreator = new ZuoraSupporterPlusHandler(
       new ZuoraSubscriptionCreator(
         zuora,
@@ -127,7 +128,7 @@ class CreateZuoraSubscriptionSupporterPlusStepsSpec extends AsyncFlatSpec with M
         config = ZuoraSupporterPlusConfig("monChId", "anChId", V2("monConChId", "anConChId")), // FIXME
         promotionService = supporterPlusPromotionService,
         CatalogServiceSpec.serviceWithFixtures,
-        DateGenerator(new LocalDate(2020, 6, 15)),
+        DateGenerator(date),
         TouchPointEnvironments.PROD,
         new SubscribeItemBuilder(
           requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
@@ -140,6 +141,7 @@ class CreateZuoraSubscriptionSupporterPlusStepsSpec extends AsyncFlatSpec with M
             Address(None, None, None, None, None, Country.UK),
           ),
           Currency.GBP,
+          date,
         ),
       ),
       user =
