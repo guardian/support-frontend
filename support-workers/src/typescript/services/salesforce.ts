@@ -87,6 +87,8 @@ export class SalesforceService {
 		user: User,
 		giftRecipient: GiftRecipient | null,
 	): Promise<SalesforceContactRecord> => {
+		console.log('XXX giftRecipient:', giftRecipient);
+		console.log('XXX user.deliveryAddress:', user.deliveryAddress);
 		const buyerResponse = await this.upsert(
 			createContactRecordRequest(user, giftRecipient),
 		);
@@ -181,8 +183,6 @@ export const createContactRecordRequest = (
 		MailingPostalCode: null,
 		MailingCountry: null,
 	};
-	console.log('giftRecipient:', giftRecipient);
-	console.log('user.deliveryAddress:', user.deliveryAddress);
 	if (giftRecipient ?? !user.deliveryAddress) {
 		// If there is a gift recipient then we don't want to update the
 		// delivery address. This is because the user may already have another
