@@ -217,7 +217,7 @@ export function CheckoutNudgeThankYou({
 	const getNudgeCopy =
 		abTestVariant === 'v1'
 			? 'You are helping to support the future of independent journalism.'
-			: 'Your support makes a huge difference in keeping our journalism free from outside influence';
+			: 'Your support makes a huge difference in keeping our journalism free from outside influence.';
 
 	return (
 		<Box cssOverrides={thankYouBoxOverrides}>
