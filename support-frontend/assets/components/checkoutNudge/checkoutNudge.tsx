@@ -211,7 +211,7 @@ export function CheckoutNudgeThankYou({
 }: CheckoutNudgeThankYouProps) {
 	const getNudgeHeadline =
 		abTestVariant === 'v1'
-			? 'Thank you for choosing to Support us monthly'
+			? 'Thank you for choosing to support us monthly'
 			: 'Thank you for choosing to support us monthly';
 
 	const getNudgeCopy =
