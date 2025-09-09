@@ -11,17 +11,17 @@ export type ContactRecordRequest = {
 	Salutation?: Title | null;
 	FirstName: string;
 	LastName: string;
-	OtherStreet?: string | null;
-	OtherCity?: string | null;
-	OtherState?: string | null;
-	OtherPostalCode?: string | null;
-	OtherCountry?: string | null;
+	OtherStreet?: string;
+	OtherCity?: string;
+	OtherState?: string;
+	OtherPostalCode?: string;
+	OtherCountry?: string;
 	Phone?: string | null;
-	MailingStreet?: string | null;
-	MailingCity?: string | null;
-	MailingState?: string | null;
-	MailingPostalCode?: string | null;
-	MailingCountry?: string | null;
+	MailingStreet?: string;
+	MailingCity?: string;
+	MailingState?: string;
+	MailingPostalCode?: string;
+	MailingCountry?: string;
 };
 export type DeliveryContactRecordRequest = {
 	AccountId: string;
@@ -182,14 +182,14 @@ export const createContactRecordRequest = (
 		return contact;
 	}
 
-	const otherAddressFields = {
+	const billingAddressFields = {
 		OtherStreet: getAddressLine(user.billingAddress),
 		OtherCity: user.billingAddress.city,
 		OtherState: user.billingAddress.state,
 		OtherPostalCode: user.billingAddress.postCode,
 		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
 	};
-	const mailingAddressFields = {
+	const deliveryAddressFields = {
 		MailingStreet: getAddressLine(user.deliveryAddress),
 		MailingCity: user.deliveryAddress.city,
 		MailingState: user.deliveryAddress.state,
@@ -199,7 +199,7 @@ export const createContactRecordRequest = (
 
 	return {
 		...contact,
-		...otherAddressFields,
-		...mailingAddressFields,
+		...billingAddressFields,
+		...deliveryAddressFields,
 	};
 };
