@@ -11,17 +11,17 @@ export type ContactRecordRequest = {
 	Salutation?: Title | null;
 	FirstName: string;
 	LastName: string;
-	OtherStreet: string | null;
-	OtherCity: string | null;
-	OtherState: string | null;
-	OtherPostalCode: string | null;
-	OtherCountry: string | null;
+	OtherStreet?: string | null;
+	OtherCity?: string | null;
+	OtherState?: string | null;
+	OtherPostalCode?: string | null;
+	OtherCountry?: string | null;
 	Phone?: string | null;
-	MailingStreet: string | null;
-	MailingCity: string | null;
-	MailingState: string | null;
-	MailingPostalCode: string | null;
-	MailingCountry: string | null;
+	MailingStreet?: string | null;
+	MailingCity?: string | null;
+	MailingState?: string | null;
+	MailingPostalCode?: string | null;
+	MailingCountry?: string | null;
 };
 export type DeliveryContactRecordRequest = {
 	AccountId: string;
@@ -87,11 +87,8 @@ export class SalesforceService {
 		user: User,
 		giftRecipient: GiftRecipient | null,
 	): Promise<SalesforceContactRecord> => {
-		console.log('XXX giftRecipient:', giftRecipient);
-		console.log('XXX user.deliveryAddress:', user.deliveryAddress);
-		const buyerResponse = await this.upsert(
-			createContactRecordRequest(user, giftRecipient),
-		);
+		const contact = createContactRecordRequest(user, giftRecipient);
+		const buyerResponse = await this.upsert(contact);
 		const giftRecipientResponse = await this.maybeAddGiftRecipient(
 			buyerResponse.ContactRecord,
 			giftRecipient,
@@ -171,31 +168,38 @@ export const createContactRecordRequest = (
 		Salutation: user.title,
 		FirstName: user.firstName,
 		LastName: user.lastName,
-		OtherStreet: getAddressLine(user.billingAddress),
-		OtherCity: user.billingAddress.city,
-		OtherState: user.billingAddress.state,
-		OtherPostalCode: user.billingAddress.postCode,
-		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
 		Phone: user.telephoneNumber,
-		MailingStreet: null,
-		MailingCity: null,
-		MailingState: null,
-		MailingPostalCode: null,
-		MailingCountry: null,
 	};
-	if (giftRecipient ?? !user.deliveryAddress) {
+
+	if (giftRecipient) {
 		// If there is a gift recipient then we don't want to update the
 		// delivery address. This is because the user may already have another
 		// non-gift delivery product which must still be delivered to their
 		// original delivery address.
 		return contact;
 	}
-	return {
-		...contact,
+	if (!user.deliveryAddress) {
+		return contact;
+	}
+
+	const otherAddressFields = {
+		OtherStreet: getAddressLine(user.billingAddress),
+		OtherCity: user.billingAddress.city,
+		OtherState: user.billingAddress.state,
+		OtherPostalCode: user.billingAddress.postCode,
+		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
+	};
+	const mailingAddressFields = {
 		MailingStreet: getAddressLine(user.deliveryAddress),
 		MailingCity: user.deliveryAddress.city,
 		MailingState: user.deliveryAddress.state,
 		MailingPostalCode: user.deliveryAddress.postCode,
 		MailingCountry: getCountryNameByIsoCode(user.deliveryAddress.country),
+	};
+
+	return {
+		...contact,
+		...otherAddressFields,
+		...mailingAddressFields,
 	};
 };
