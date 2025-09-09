@@ -181,6 +181,8 @@ export const createContactRecordRequest = (
 		MailingPostalCode: null,
 		MailingCountry: null,
 	};
+	console.log('giftRecipient:', giftRecipient);
+	console.log('user.deliveryAddress:', user.deliveryAddress);
 	if (giftRecipient ?? !user.deliveryAddress) {
 		// If there is a gift recipient then we don't want to update the
 		// delivery address. This is because the user may already have another
