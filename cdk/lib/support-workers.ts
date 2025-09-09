@@ -291,6 +291,7 @@ export class SupportWorkers extends GuStack {
     )
       .when(
         Condition.and(
+          Condition.isNotNull("$.state.productInformation"),
           Condition.stringEquals(
             "$.state.productInformation.product",
             "SupporterPlus"
