@@ -6,8 +6,8 @@ import type { SalesforceConfig } from './salesforceClient';
 import { SalesforceClient } from './salesforceClient';
 
 export type ContactRecordRequest = {
-	IdentityID__c: string;
-	Email: string;
+	IdentityID__c?: string;
+	Email: string | null;
 	Salutation?: Title | null;
 	FirstName: string;
 	LastName: string;
@@ -23,17 +23,8 @@ export type ContactRecordRequest = {
 	MailingPostalCode?: string | null;
 	MailingCountry?: string | null;
 };
-export type DeliveryContactRecordRequest = {
+export type DeliveryContactRecordRequest = ContactRecordRequest & {
 	AccountId: string;
-	Email: string | null;
-	Salutation?: Title | null;
-	FirstName: string;
-	LastName: string;
-	MailingStreet?: string | null;
-	MailingCity?: string | null;
-	MailingState?: string | null;
-	MailingPostalCode?: string | null;
-	MailingCountry?: string | null;
 	RecordTypeId: '01220000000VB50AAG';
 };
 export const salesforceContactRecordSchema = z.object({
@@ -159,41 +150,58 @@ export class SalesforceService {
 	}
 }
 
-export const createContactRecordRequest = (
-	user: User,
-	giftRecipient: GiftRecipient | null,
-): ContactRecordRequest => {
-	const contact = {
-		IdentityID__c: user.id,
-		Email: user.primaryEmailAddress,
-		Salutation: user.title,
-		FirstName: user.firstName,
-		LastName: user.lastName,
-		OtherStreet: getAddressLine(user.billingAddress),
-		OtherCity: user.billingAddress.city,
-		OtherState: user.billingAddress.state,
-		OtherPostalCode: user.billingAddress.postCode,
-		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
-		Phone: user.telephoneNumber,
-		// MailingStreet: null,
-		// MailingCity: null,
-		// MailingState: null,
-		// MailingPostalCode: null,
-		// MailingCountry: null,
-	};
-	if (giftRecipient ?? !user.deliveryAddress) {
-		// If there is a gift recipient then we don't want to update the
-		// delivery address. This is because the user may already have another
-		// non-gift delivery product which must still be delivered to their
-		// original delivery address.
-		return contact;
+const createBillingAddressFields = (user: User) => ({
+	OtherStreet: getAddressLine(user.billingAddress),
+	OtherCity: user.billingAddress.city,
+	OtherState: user.billingAddress.state,
+	OtherPostalCode: user.billingAddress.postCode,
+	OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
+});
+
+const createMailingAddressFields = (user: User) => {
+	if (!user.deliveryAddress) {
+		throw new Error('Delivery address is required for mailing address fields');
 	}
 	return {
-		...contact,
 		MailingStreet: getAddressLine(user.deliveryAddress),
 		MailingCity: user.deliveryAddress.city,
 		MailingState: user.deliveryAddress.state,
 		MailingPostalCode: user.deliveryAddress.postCode,
 		MailingCountry: getCountryNameByIsoCode(user.deliveryAddress.country),
+	};
+};
+
+const shouldIncludeDeliveryAddress = (
+	giftRecipient: GiftRecipient | null,
+	user: User,
+): boolean => {
+	return !giftRecipient && !!user.deliveryAddress;
+};
+
+export const createContactRecordRequest = (
+	user: User,
+	giftRecipient: GiftRecipient | null,
+): ContactRecordRequest => {
+	const baseContact = {
+		IdentityID__c: user.id,
+		Email: user.primaryEmailAddress,
+		Salutation: user.title,
+		FirstName: user.firstName,
+		LastName: user.lastName,
+		Phone: user.telephoneNumber,
+	};
+
+	if (!shouldIncludeDeliveryAddress(giftRecipient, user)) {
+		// If there is a gift recipient then we don't want to update the
+		// delivery address. This is because the user may already have another
+		// non-gift delivery product which must still be delivered to their
+		// original delivery address.
+		return baseContact;
+	}
+
+	return {
+		...baseContact,
+		...createBillingAddressFields(user),
+		...createMailingAddressFields(user),
 	};
 };
