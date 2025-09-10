@@ -17,6 +17,7 @@ class SubscribeItemBuilder(
     requestId: UUID,
     user: User,
     currency: Currency,
+    today: LocalDate,
 ) {
 
   def build(
@@ -93,6 +94,7 @@ class SubscribeItemBuilder(
         acquisitionSource = csrUsername.map(_ => CSR),
         acquisitionCase = salesforceCaseId,
         deliveryAgent = deliveryAgent,
+        lastPlanAddedDate = today,
       ),
     )
 }
