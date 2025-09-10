@@ -10,7 +10,7 @@ import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar.mock
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, stubControllerComponents}
-import services.AsyncAuthenticationService
+import services.{AsyncAuthenticationService, TestUserService}
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -31,6 +31,7 @@ class SiteMapTest extends AnyWordSpec with Matchers with TestCSRFComponents {
     csrfConfig = csrfConfig,
     stage = stage,
     featureSwitches = FeatureSwitches(Some(On), Some(On), Some(On), Some(On)),
+    testUsersService = TestUserService("secret"),
   )
 
   "GET /sitemap.xml" should {
