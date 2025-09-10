@@ -1,41 +1,76 @@
 import { getCountryNameByIsoCode } from '@modules/internationalisation/country';
 import { z } from 'zod';
 import { getAddressLine } from '../model/address';
-import type { GiftRecipient, Title, User } from '../model/stateSchemas';
+import {
+	type GiftRecipient,
+	// type Title,
+	titleSchema,
+	type User,
+} from '../model/stateSchemas';
 import type { SalesforceConfig } from './salesforceClient';
 import { SalesforceClient } from './salesforceClient';
 
-export type ContactRecordRequest = {
-	IdentityID__c: string;
-	Email: string;
-	Salutation?: Title | null;
-	FirstName: string;
-	LastName: string;
-	OtherStreet?: string;
-	OtherCity?: string;
-	OtherState?: string;
-	OtherPostalCode?: string;
-	OtherCountry?: string;
-	Phone?: string | null;
-	MailingStreet?: string;
-	MailingCity?: string;
-	MailingState?: string;
-	MailingPostalCode?: string;
-	MailingCountry?: string;
-};
-export type DeliveryContactRecordRequest = {
-	AccountId: string;
-	Email: string | null;
-	Salutation?: Title | null;
-	FirstName: string;
-	LastName: string;
-	MailingStreet: string | null;
-	MailingCity: string | null;
-	MailingState: string | null;
-	MailingPostalCode: string | null;
-	MailingCountry: string | null;
-	RecordTypeId: '01220000000VB50AAG';
-};
+export const BaseContactRecordRequest1 = z.object({
+	FirstName: z.string(),
+	LastName: z.string(),
+	Email: z.string().nullable(),
+	Salutation: titleSchema.optional().nullable(),
+	MailingStreet: z.string().optional().nullable(),
+	MailingCity: z.string().optional().nullable(),
+	MailingState: z.string().optional().nullable(),
+	MailingPostalCode: z.string().optional().nullable(),
+	MailingCountry: z.string().optional().nullable(),
+});
+
+export const ContactRecordRequest1 = BaseContactRecordRequest1.extend({
+	IdentityID__c: z.string(),
+	OtherStreet: z.string().optional(),
+	OtherCity: z.string().optional().nullable(),
+	OtherState: z.string().optional().nullable(),
+	OtherPostalCode: z.string().optional().nullable(),
+	OtherCountry: z.string().optional().nullable(),
+	Phone: z.string().optional().nullable(),
+});
+
+export const DeliveryContactRecordRequest1 = BaseContactRecordRequest1.extend({
+	AccountId: z.string(),
+	RecordTypeId: z.literal('01220000000VB50AAG'),
+});
+export type ContactRecordRequest = z.infer<typeof ContactRecordRequest1>;
+export type DeliveryContactRecordRequest = z.infer<
+	typeof DeliveryContactRecordRequest1
+>;
+// export type ContactRecordRequest = {
+// 	IdentityID__c: string;
+// 	Email: string;
+// 	Salutation?: Title | null;
+// 	FirstName: string;
+// 	LastName: string;
+// 	OtherStreet?: string;
+// 	OtherCity?: string;
+// 	OtherState?: string;
+// 	OtherPostalCode?: string;
+// 	OtherCountry?: string;
+// 	Phone?: string | null;
+// 	MailingStreet?: string;
+// 	MailingCity?: string;
+// 	MailingState?: string;
+// 	MailingPostalCode?: string;
+// 	MailingCountry?: string;
+// };
+// export type DeliveryContactRecordRequest = {
+// 	AccountId: string;
+// 	Email: string | null;
+// 	Salutation?: Title | null;
+// 	FirstName: string;
+// 	LastName: string;
+// 	MailingStreet: string | null;
+// 	MailingCity: string | null;
+// 	MailingState: string | null;
+// 	MailingPostalCode: string | null;
+// 	MailingCountry: string | null;
+// 	RecordTypeId: '01220000000VB50AAG';
+// };
 export const salesforceContactRecordSchema = z.object({
 	Id: z.string(),
 	AccountId: z.string(),
@@ -161,7 +196,7 @@ export class SalesforceService {
 export const createContactRecordRequest = (
 	user: User,
 	giftRecipient: GiftRecipient | null,
-): ContactRecordRequest => {
+): ContactRecordRequest | DeliveryContactRecordRequest => {
 	const contact = {
 		IdentityID__c: user.id,
 		Email: user.primaryEmailAddress,
