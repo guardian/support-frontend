@@ -17,6 +17,10 @@
       "paymentMethod": {
         "TokenId": "pm_0S1SrNItVxyc3Q6ntB3yRwJ9",
         "SecondTokenId": "cus_SxNccaDzSlgCsG",
+        "CreditCardNumber": "4242",
+        "CreditCardType": "Visa",
+        "CreditCardExpirationMonth": 2,
+        "CreditCardExpirationYear": 2026,
         "PaymentGateway": "Stripe PaymentIntents GNM Membership",
         "Type": "CreditCardReferenceTransaction",
         "StripePaymentType": "StripeCheckout"

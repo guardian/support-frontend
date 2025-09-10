@@ -136,6 +136,10 @@ export const getZuoraPaymentMethod = (
 				type: 'CreditCardReferenceTransaction',
 				tokenId: paymentMethod.TokenId,
 				secondTokenId: paymentMethod.SecondTokenId,
+				cardNumber: paymentMethod.CreditCardNumber,
+				expirationMonth: paymentMethod.CreditCardExpirationMonth,
+				expirationYear: paymentMethod.CreditCardExpirationYear,
+				cardType: paymentMethod.CreditCardType,
 			};
 		case 'PayPal':
 			return {

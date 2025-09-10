@@ -31,6 +31,7 @@ export const stripePaymentTypeSchema = z.union([
 	stripeApplePayPaymentProviderSchema,
 	z.literal('StripeCheckout'),
 ]);
+export type StripePaymentType = z.infer<typeof stripePaymentTypeSchema>;
 const stripePaymentFieldsSchema = z.object({
 	paymentType: stripePaymentProviderSchema,
 	paymentMethod: z.string(),
