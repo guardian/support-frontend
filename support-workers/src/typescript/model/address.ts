@@ -84,7 +84,7 @@ export function combinedAddressLine(
 	return undefined;
 }
 
-export function getAddressLine(address: Address): string | null {
+export function getAddressLine(address: Address): string | undefined {
 	const combinedAddressLineResult = combinedAddressLine(
 		address.lineOne,
 		address.lineTwo,
@@ -92,7 +92,7 @@ export function getAddressLine(address: Address): string | null {
 	if (combinedAddressLineResult) {
 		return asFormattedString(combinedAddressLineResult);
 	}
-	return null;
+	return undefined;
 }
 
 export function truncateForZuoraStreetNameLimit(
