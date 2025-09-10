@@ -42,28 +42,28 @@ export default function NewspaperHero({
 						<GridPicture
 							sources={[
 								{
-									gridId: 'newspapperLandingHeroMobile',
+									gridId: 'newspaperLandingHeroMobile',
 									srcSizes: [2000, 1000, 500],
 									sizes: '414px',
 									imgType: 'png',
 									media: '(max-width: 739px)',
 								},
 								{
-									gridId: 'newspapperLandingHeroTablet',
+									gridId: 'newspaperLandingHeroTablet',
 									srcSizes: [1000, 500],
 									sizes: '320px',
 									imgType: 'png',
 									media: '(max-width: 979px)',
 								},
 								{
-									gridId: 'newspapperLandingHeroDesktop',
+									gridId: 'newspaperLandingHeroDesktop',
 									srcSizes: [2000, 1000, 500],
 									sizes: '422px',
 									imgType: 'png',
 									media: '(min-width: 980px)',
 								},
 							]}
-							fallback="newspapperLandingHeroDesktop"
+							fallback="newspaperLandingHeroDesktop"
 							fallbackSize={422}
 							altText=""
 						/>
