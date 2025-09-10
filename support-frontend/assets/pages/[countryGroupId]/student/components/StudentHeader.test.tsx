@@ -46,6 +46,7 @@ describe('<StudentHeader />', () => {
 				studentDiscount={oneYearStudentDiscount}
 				headingCopy="Example heading"
 				subheadingCopy="Example subheading"
+				heroImagePrefix="globalStudentLandingHero"
 			/>,
 		);
 		expect(screen.getByTestId('cta-button')).toHaveTextContent('Subscribe');
@@ -61,6 +62,7 @@ describe('<StudentHeader />', () => {
 				studentDiscount={utsStudentDiscount}
 				headingCopy="Example heading"
 				subheadingCopy="Example subheading"
+				heroImagePrefix="globalStudentLandingHero"
 			/>,
 		);
 		expect(screen.getByTestId('cta-button')).toHaveTextContent(
@@ -78,6 +80,7 @@ describe('<StudentHeader />', () => {
 				studentDiscount={utsStudentDiscount}
 				headingCopy="Example heading"
 				subheadingCopy="Example subheading"
+				heroImagePrefix="globalStudentLandingHero"
 			/>,
 		);
 		expect(

@@ -52,6 +52,7 @@ export function StudentLandingPageUTS({
 							<LogoUTS /> <span>Special offer for UTS students</span>
 						</p>
 					}
+					heroImagePrefix="AuStudentLandingHero"
 				/>
 			}
 		/>
