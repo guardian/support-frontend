@@ -5,24 +5,6 @@ import type { GiftRecipient, Title, User } from '../model/stateSchemas';
 import type { SalesforceConfig } from './salesforceClient';
 import { SalesforceClient } from './salesforceClient';
 
-// export type ContactRecordRequest = {
-// 	IdentityID__c: string;
-// 	Email: string;
-// 	Salutation?: Title | null;
-// 	FirstName: string;
-// 	LastName: string;
-// 	OtherStreet: string | null;
-// 	OtherCity: string | null;
-// 	OtherState: string | null;
-// 	OtherPostalCode: string | null;
-// 	OtherCountry: string | null;
-// 	Phone?: string | null;
-// 	MailingStreet: string | null;
-// 	MailingCity: string | null;
-// 	MailingState: string | null;
-// 	MailingPostalCode: string | null;
-// 	MailingCountry: string | null;
-// };
 export type ContactRecordRequest = {
 	IdentityID__c: string;
 	Email: string;
