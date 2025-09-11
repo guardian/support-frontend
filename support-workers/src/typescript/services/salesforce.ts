@@ -87,6 +87,7 @@ export class SalesforceService {
 		user: User,
 		giftRecipient: GiftRecipient | null,
 	): Promise<SalesforceContactRecord> => {
+		console.log('XXX Creating Contact record... from user:', user);
 		const contact = createContactRecordRequest(user, giftRecipient);
 		console.log('XXX Contact record to be sent to Salesforce:', contact);
 		const buyerResponse = await this.upsert(contact);
@@ -225,9 +226,9 @@ const createDeliveryContactRecordRequest = (
 	baseContact: BaseContactRecordRequest,
 	user: User,
 ): DeliveryContactRecordRequest => {
-	if (!user.deliveryAddress) {
-		throw new Error('Delivery address is required for delivery contact record');
-	}
+	// if (!user.deliveryAddress) {
+	// 	throw new Error('Delivery address is required for delivery contact record');
+	// }
 	return {
 		...baseContact,
 		RecordTypeId: '01220000000VB50AAG',
