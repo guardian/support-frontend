@@ -1,4 +1,4 @@
-import { ContactRecordRequest } from '../../services/salesforce';
+import { StandardContactRecordRequest } from '../../services/salesforce';
 import { Title } from '../../model/stateSchemas';
 import { IsoCountry } from '@modules/internationalisation/country';
 
@@ -14,7 +14,7 @@ export const city = 'London';
 export const postCode = 'n1 9gu';
 export const uk: IsoCountry = 'GB';
 export const state = 'CA';
-export const customer: ContactRecordRequest = {
+export const customer: StandardContactRecordRequest = {
 	IdentityID__c: idId,
 	Email: emailAddress,
 	Salutation: title,
