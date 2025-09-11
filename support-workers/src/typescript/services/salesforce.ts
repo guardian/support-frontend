@@ -172,6 +172,10 @@ const createMailingAddressFields = (user: User) => {
 };
 
 const shouldIncludeDeliveryAddress = (
+	// If there is a gift recipient then we don't want to update the
+	// delivery address. This is because the user may already have another
+	// non-gift delivery product which must still be delivered to their
+	// original delivery address.
 	giftRecipient: GiftRecipient | null,
 	user: User,
 ): boolean => {
@@ -192,10 +196,6 @@ export const createContactRecordRequest = (
 	};
 
 	if (!shouldIncludeDeliveryAddress(giftRecipient, user)) {
-		// If there is a gift recipient then we don't want to update the
-		// delivery address. This is because the user may already have another
-		// non-gift delivery product which must still be delivered to their
-		// original delivery address.
 		return baseContact;
 	}
 
