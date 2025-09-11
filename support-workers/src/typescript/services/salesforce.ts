@@ -168,27 +168,22 @@ const createBillingAddressFields = (user: User) => ({
 });
 
 const createMailingAddressFields = (user: User) => {
-	if (!user.deliveryAddress) {
-		throw new Error('Delivery address is required for mailing address fields');
-	}
+	// if (!user.deliveryAddress) {
+	// 	return {};
+	// }
 	return {
-		MailingStreet: getAddressLine(user.deliveryAddress),
-		MailingCity: user.deliveryAddress.city,
-		MailingState: user.deliveryAddress.state,
-		MailingPostalCode: user.deliveryAddress.postCode,
-		MailingCountry: getCountryNameByIsoCode(user.deliveryAddress.country),
+		MailingStreet: user.deliveryAddress
+			? getAddressLine(user.deliveryAddress)
+			: undefined,
+		MailingCity: user.deliveryAddress ? user.deliveryAddress.city : null,
+		MailingState: user.deliveryAddress ? user.deliveryAddress.state : null,
+		MailingPostalCode: user.deliveryAddress
+			? user.deliveryAddress.postCode
+			: null,
+		MailingCountry: user.deliveryAddress
+			? getCountryNameByIsoCode(user.deliveryAddress.country)
+			: null,
 	};
-};
-
-const shouldIncludeAddressFields = (
-	// If there is a gift recipient then we don't want to update the
-	// delivery address. This is because the user may already have another
-	// non-gift delivery product which must still be delivered to their
-	// original delivery address.
-	giftRecipient: GiftRecipient | null,
-	user: User,
-): boolean => {
-	return !giftRecipient && !!user.deliveryAddress;
 };
 
 export const createContactRecordRequest = (
@@ -203,7 +198,7 @@ export const createContactRecordRequest = (
 		Phone: user.telephoneNumber,
 	};
 
-	if (!shouldIncludeAddressFields(giftRecipient, user)) {
+	if (giftRecipient ?? !user.deliveryAddress) {
 		return createDeliveryContactRecordRequest(baseContact, user);
 	}
 
@@ -226,9 +221,16 @@ const createDeliveryContactRecordRequest = (
 	baseContact: BaseContactRecordRequest,
 	user: User,
 ): DeliveryContactRecordRequest => {
-	return {
-		...baseContact,
-		RecordTypeId: '01220000000VB50AAG',
-		...createMailingAddressFields(user),
-	};
+	if (user.deliveryAddress) {
+		return {
+			...baseContact,
+			RecordTypeId: '01220000000VB50AAG',
+			...createMailingAddressFields(user),
+		};
+	} else {
+		return {
+			...baseContact,
+			RecordTypeId: '01220000000VB50AAG',
+		};
+	}
 };
