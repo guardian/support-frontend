@@ -188,6 +188,8 @@ export function PaymentTsAndCs({
 	);
 	const paperHomeDeliveryTsAndCs = (
 		<>
+			Your first payment will be taken the day you receive your first newspaper
+			delivery (this date is shown above).
 			{isPaperProductTest && paperProductProductTsAndCs}
 			<div>
 				We will share your contact and subscription details with our fulfilment
@@ -203,6 +205,8 @@ export function PaymentTsAndCs({
 	);
 	const paperSubscriptionCardTsAndCs = (
 		<>
+			Your first payment will be taken on the expected delivery date of the
+			subscription card.
 			{isPaperProductTest && paperProductProductTsAndCs}
 			{paperNationalDeliveryTsAndCs}
 		</>
