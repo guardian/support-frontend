@@ -226,9 +226,6 @@ const createDeliveryContactRecordRequest = (
 	baseContact: BaseContactRecordRequest,
 	user: User,
 ): DeliveryContactRecordRequest => {
-	// if (!user.deliveryAddress) {
-	// 	throw new Error('Delivery address is required for delivery contact record');
-	// }
 	return {
 		...baseContact,
 		RecordTypeId: '01220000000VB50AAG',
