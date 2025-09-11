@@ -118,7 +118,9 @@ export function OrderSummaryTsAndCs({
 	const homeDeliveryStartDate = homeDeliveryDate
 		? formatUserDate(homeDeliveryDate)
 		: '';
-	const rateDescriptor = ratePlanDescription ?? ratePlanKey;
+	const rateDescriptor = ratePlanDescription
+		? ratePlanDescription.replace('The', '').replace('package', '').trim()
+		: ratePlanKey;
 
 	const tierThreeSupporterPlusTsAndCs = (
 		<div css={containerSummaryTsCs}>
@@ -183,7 +185,6 @@ export function OrderSummaryTsAndCs({
 			</p>
 		),
 	};
-	const sundayPaperCopy = paperPlusCopy['HomeDelivery'];
 	const paperPlusTsAndCs = (
 		<>
 			<div css={containerSummaryTsCs}>
@@ -191,11 +192,10 @@ export function OrderSummaryTsAndCs({
 				<p>Auto renews every {periodNoun} until you cancel. Cancel anytime.</p>
 			</div>
 			<div css={containerSummaryTsCs}>
-				{isPaperSunday && sundayPaperCopy}
-				{isPaperPlus && (
+				{(isPaperPlus || isPaperSunday) && (
 					<>
 						{paperPlusCopy[productKey]}
-						<p>Your digital benefits will start today.</p>
+						{isPaperPlus && <p>Your digital benefits will start today.</p>}
 					</>
 				)}
 			</div>
