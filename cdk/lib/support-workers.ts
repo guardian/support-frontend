@@ -51,6 +51,7 @@ interface SupportWorkersProps extends GuStackProps {
   supporterProductDataTables: string[];
   eventBusArns: string[];
   parameterStorePaths: string[];
+  secretsManagerPaths: string[];
 }
 
 export class SupportWorkers extends GuStack {
@@ -103,9 +104,7 @@ export class SupportWorkers extends GuStack {
     const secretsManagerPolicy = new PolicyStatement({
       effect: Effect.ALLOW,
       actions: ["secretsmanager:GetSecretValue"],
-      resources: [
-        `arn:aws:secretsmanager:${this.region}:${this.account}:secret:${this.stage}/Zuora-OAuth/SupportServiceLambdas-*`,
-      ],
+      resources: props.secretsManagerPaths,
     });
 
     // Lambdas
