@@ -38,13 +38,16 @@
 	"supporterPlusLandingUnitedStates": "527b59919012a7666ccd067a3c82ad63682d2418/0_0_420_165",
 	"weeklyCampaignBenefitsImg": "a9fb03da0efd8e4bc19c48cdcbacc659d887ae4a/0_0_900_600",
 	"weeklyCampaignHeroImg": "c7d642f416d735403c2aab9083eafe4cbd4bd3da/0_0_500_333",
-	"newspapperLandingHeroDesktop": "8063ab98aa49fdecd63b4a4f5b2f9f74f6f1a285/0_0_2092_1568",
-	"newspapperLandingHeroTablet": "fcf7097b20976049923712aa29f35b30272f5a6e/0_0_1100_1100",
-	"newspapperLandingHeroMobile": "a240c02230eb5d0b623b7d1216c3aeac36dc25fe/0_0_1954_1100",
+	"newspaperLandingHeroDesktop": "8063ab98aa49fdecd63b4a4f5b2f9f74f6f1a285/0_0_2092_1568",
+	"newspaperLandingHeroTablet": "fcf7097b20976049923712aa29f35b30272f5a6e/0_0_1100_1100",
+	"newspaperLandingHeroMobile": "a240c02230eb5d0b623b7d1216c3aeac36dc25fe/0_0_1954_1100",
 	"weeklyLandingHero": "e4ce5980efc3d43b00c2cbb6f193d4070d12a543/0_0_900_600",
 	"AuStudentLandingHeroDesktop": "f58d5cf9b591f4ddb4ad7a4b9c7bd12ae80dd333/0_0_2295_1632",
 	"AuStudentLandingHeroTablet": "14e65d1ade49300434e31603dd5b43e25e98e6c2/0_0_1396_1632",
 	"AuStudentLandingHeroMobile": "811f456e9786d119d766e55f2df821c056d415b0/0_0_2588_1276",
 	"globalStudentLandingBrand": "537be33f8613e9f504bb83db6f3678c5e99fe13a/0_0_3000_3000",
-	"globalStudentLandingBrandTitle": "c46a25f3bc0188c28acf6aa5e0c392b8b5b34e8d/0_0_1125_264"
+	"globalStudentLandingBrandTitle": "c46a25f3bc0188c28acf6aa5e0c392b8b5b34e8d/0_0_1125_264",
+	"globalStudentLandingHeroDesktop": "8a97688738e90fe782c48dc21017724d6a4e73d3/0_0_2296_1704",
+	"globalStudentLandingHeroTablet": "b17a7e529170ebb31ecdac30db36259c906dd090/0_0_1408_1704",
+	"globalStudentLandingHeroMobile": "774d7a32920e9988c0d698f0bed8bf8d4b304d07/0_0_7764_3831"
 }

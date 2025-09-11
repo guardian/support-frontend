@@ -17,5 +17,6 @@ trait ActionBuilders {
     csrfConfig = csrfConfig,
     stage = appConfig.stage,
     featureSwitches = allSettingsProvider.getAllSettings().switches.featureSwitches,
+    testUsersService = testUsers,
   )
 }

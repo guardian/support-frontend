@@ -166,7 +166,7 @@ object Fixtures {
   val productRatePlanId = "12345"
   val productRatePlanChargeId = "67890"
 
-  val subscription = Subscription(date, date, date, "id123", promoCode = Some(promoCode))
+  val subscription = Subscription(date, date, date, "id123", promoCode = Some(promoCode), lastPlanAddedDate = date)
   val monthlySubscriptionData = SubscriptionData(
     List(
       RatePlanData(
@@ -182,18 +182,20 @@ object Fixtures {
     subscription,
   )
 
+  private val testDate = new LocalDate(2020, 12, 1)
   val dsSubscriptionData = SubscriptionData(
     List(RatePlanData(RatePlan(productRatePlanId), Nil, Nil)),
     Subscription(
-      contractEffectiveDate = new LocalDate(2020, 12, 1),
-      contractAcceptanceDate = new LocalDate(2020, 12, 1),
-      termStartDate = new LocalDate(2020, 12, 1),
+      contractEffectiveDate = testDate,
+      contractAcceptanceDate = testDate,
+      termStartDate = testDate,
       createdRequestId = "requestId",
       readerType = ReaderType.Direct,
       autoRenew = true,
       initialTerm = 12,
       initialTermPeriodType = Month,
       giftNotificationEmailDate = None,
+      lastPlanAddedDate = testDate,
     ),
   )
 
@@ -325,7 +327,7 @@ object Fixtures {
         Nil,
       ),
     ),
-    Subscription(date, date, date, "id123", termType = "Invalid term type"),
+    Subscription(date, date, date, "id123", termType = "Invalid term type", lastPlanAddedDate = date),
   )
   val invalidSubscriptionRequest = SubscribeRequest(
     List(

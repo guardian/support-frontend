@@ -100,7 +100,7 @@ object Fixtures {
         Nil,
       ),
     ),
-    Subscription(date, date, date, "id123"),
+    Subscription(date, date, date, "id123", lastPlanAddedDate = date),
   )
   val blankReferrerAcquisitionData =
     ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None)
@@ -119,7 +119,7 @@ object Fixtures {
         Nil,
       ),
     ),
-    Subscription(date, date, date, "id123"),
+    Subscription(date, date, date, "id123", lastPlanAddedDate = date),
   )
 
   val everydayNationalDeliveryPaperSubscriptionData = SubscriptionData(
@@ -130,7 +130,7 @@ object Fixtures {
         Nil,
       ),
     ),
-    Subscription(date, date, date, "id123", deliveryAgent = Some(AgentId(deliveryAgentId))),
+    Subscription(date, date, date, "id123", deliveryAgent = Some(AgentId(deliveryAgentId)), lastPlanAddedDate = date),
   )
 
   def creditCardSubscriptionRequest(
@@ -204,7 +204,7 @@ object Fixtures {
         Nil,
       ),
     ),
-    Subscription(date, date, date, "id123", termType = "Invalid term type"),
+    Subscription(date, date, date, "id123", termType = "Invalid term type", lastPlanAddedDate = date),
   )
   val invalidSubscriptionRequest = SubscribeRequest(
     List(

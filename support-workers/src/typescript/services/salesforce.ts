@@ -1,76 +1,32 @@
 import { getCountryNameByIsoCode } from '@modules/internationalisation/country';
 import { z } from 'zod';
 import { getAddressLine } from '../model/address';
-import {
-	type GiftRecipient,
-	// type Title,
-	titleSchema,
-	type User,
-} from '../model/stateSchemas';
+import type { GiftRecipient, Title, User } from '../model/stateSchemas';
 import type { SalesforceConfig } from './salesforceClient';
 import { SalesforceClient } from './salesforceClient';
 
-export const BaseContactRecordRequest1 = z.object({
-	FirstName: z.string(),
-	LastName: z.string(),
-	Email: z.string().nullable(),
-	Salutation: titleSchema.optional().nullable(),
-	MailingStreet: z.string().optional().nullable(),
-	MailingCity: z.string().optional().nullable(),
-	MailingState: z.string().optional().nullable(),
-	MailingPostalCode: z.string().optional().nullable(),
-	MailingCountry: z.string().optional().nullable(),
-});
-
-export const ContactRecordRequest1 = BaseContactRecordRequest1.extend({
-	IdentityID__c: z.string(),
-	OtherStreet: z.string().optional(),
-	OtherCity: z.string().optional().nullable(),
-	OtherState: z.string().optional().nullable(),
-	OtherPostalCode: z.string().optional().nullable(),
-	OtherCountry: z.string().optional().nullable(),
-	Phone: z.string().optional().nullable(),
-});
-
-export const DeliveryContactRecordRequest1 = BaseContactRecordRequest1.extend({
-	AccountId: z.string(),
-	RecordTypeId: z.literal('01220000000VB50AAG'),
-});
-export type ContactRecordRequest = z.infer<typeof ContactRecordRequest1>;
-export type DeliveryContactRecordRequest = z.infer<
-	typeof DeliveryContactRecordRequest1
->;
-// export type ContactRecordRequest = {
-// 	IdentityID__c: string;
-// 	Email: string;
-// 	Salutation?: Title | null;
-// 	FirstName: string;
-// 	LastName: string;
-// 	OtherStreet?: string;
-// 	OtherCity?: string;
-// 	OtherState?: string;
-// 	OtherPostalCode?: string;
-// 	OtherCountry?: string;
-// 	Phone?: string | null;
-// 	MailingStreet?: string;
-// 	MailingCity?: string;
-// 	MailingState?: string;
-// 	MailingPostalCode?: string;
-// 	MailingCountry?: string;
-// };
-// export type DeliveryContactRecordRequest = {
-// 	AccountId: string;
-// 	Email: string | null;
-// 	Salutation?: Title | null;
-// 	FirstName: string;
-// 	LastName: string;
-// 	MailingStreet: string | null;
-// 	MailingCity: string | null;
-// 	MailingState: string | null;
-// 	MailingPostalCode: string | null;
-// 	MailingCountry: string | null;
-// 	RecordTypeId: '01220000000VB50AAG';
-// };
+export type ContactRecordRequest = {
+	IdentityID__c?: string;
+	Email: string | null;
+	Salutation?: Title | null;
+	FirstName: string;
+	LastName: string;
+	OtherStreet?: string | null;
+	OtherCity?: string | null;
+	OtherState?: string | null;
+	OtherPostalCode?: string | null;
+	OtherCountry?: string | null;
+	Phone?: string | null;
+	MailingStreet?: string | null;
+	MailingCity?: string | null;
+	MailingState?: string | null;
+	MailingPostalCode?: string | null;
+	MailingCountry?: string | null;
+};
+export type DeliveryContactRecordRequest = ContactRecordRequest & {
+	AccountId: string;
+	RecordTypeId: '01220000000VB50AAG';
+};
 export const salesforceContactRecordSchema = z.object({
 	Id: z.string(),
 	AccountId: z.string(),
@@ -192,12 +148,43 @@ export class SalesforceService {
 		return null;
 	}
 }
+const createBillingAddressFields = (user: User) => ({
+	OtherStreet: getAddressLine(user.billingAddress),
+	OtherCity: user.billingAddress.city,
+	OtherState: user.billingAddress.state,
+	OtherPostalCode: user.billingAddress.postCode,
+	OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
+});
+
+const createMailingAddressFields = (user: User) => {
+	if (!user.deliveryAddress) {
+		throw new Error('Delivery address is required for mailing address fields');
+	}
+	return {
+		MailingStreet: getAddressLine(user.deliveryAddress),
+		MailingCity: user.deliveryAddress.city,
+		MailingState: user.deliveryAddress.state,
+		MailingPostalCode: user.deliveryAddress.postCode,
+		MailingCountry: getCountryNameByIsoCode(user.deliveryAddress.country),
+	};
+};
+
+const shouldIncludeDeliveryAddress = (
+	// If there is a gift recipient then we don't want to update the
+	// delivery address. This is because the user may already have another
+	// non-gift delivery product which must still be delivered to their
+	// original delivery address.
+	giftRecipient: GiftRecipient | null,
+	user: User,
+): boolean => {
+	return !giftRecipient && !!user.deliveryAddress;
+};
 
 export const createContactRecordRequest = (
 	user: User,
 	giftRecipient: GiftRecipient | null,
-): ContactRecordRequest | DeliveryContactRecordRequest => {
-	const contact = {
+): ContactRecordRequest => {
+	const baseContact = {
 		IdentityID__c: user.id,
 		Email: user.primaryEmailAddress,
 		Salutation: user.title,
@@ -206,31 +193,13 @@ export const createContactRecordRequest = (
 		Phone: user.telephoneNumber,
 	};
 
-	if (giftRecipient ?? !user.deliveryAddress) {
-		// If there is a gift recipient then we don't want to update the
-		// delivery address. This is because the user may already have another
-		// non-gift delivery product which must still be delivered to their
-		// original delivery address.
-		return contact;
+	if (!shouldIncludeDeliveryAddress(giftRecipient, user)) {
+		return baseContact;
 	}
-	const billingAddressFields = {
-		OtherStreet: getAddressLine(user.billingAddress),
-		OtherCity: user.billingAddress.city,
-		OtherState: user.billingAddress.state,
-		OtherPostalCode: user.billingAddress.postCode,
-		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
-	};
-	const deliveryAddressFields = {
-		MailingStreet: getAddressLine(user.deliveryAddress),
-		MailingCity: user.deliveryAddress.city,
-		MailingState: user.deliveryAddress.state,
-		MailingPostalCode: user.deliveryAddress.postCode,
-		MailingCountry: getCountryNameByIsoCode(user.deliveryAddress.country),
-	};
 
 	return {
-		...contact,
-		...billingAddressFields,
-		...deliveryAddressFields,
+		...baseContact,
+		...createBillingAddressFields(user),
+		...createMailingAddressFields(user),
 	};
 };
