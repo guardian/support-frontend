@@ -4,9 +4,9 @@ exports[`orderSummaryTs&Cs Snapshot comparison orderSummaryTs&Cs render product 
 
 exports[`orderSummaryTs&Cs Snapshot comparison orderSummaryTs&Cs render product GuardianAdLite for region GBPCountries for ratePlan Monthly correctly 1`] = `"Auto renews every month until you cancel.Cancel anytime."`;
 
-exports[`orderSummaryTs&Cs Snapshot comparison orderSummaryTs&Cs render product HomeDelivery for region GBPCountries for ratePlan SixdayPlus correctly 1`] = `"Auto renews every month until you cancel. Cancel anytime.You will receive your first newspaper delivery on Wednesday, September 3, 2025 as part of your Six day package subscription.Your digital benefits will start today."`;
+exports[`orderSummaryTs&Cs Snapshot comparison orderSummaryTs&Cs render product HomeDelivery for region GBPCountries for ratePlan SixdayPlus correctly 1`] = `"Auto renews every month until you cancel. Cancel anytime.You will receive your first newspaper delivery on Wednesday, September 3, 2025 as part of your Six day subscription.Your digital benefits will start today."`;
 
-exports[`orderSummaryTs&Cs Snapshot comparison orderSummaryTs&Cs render product HomeDelivery for region GBPCountries for ratePlan Sunday correctly 1`] = `"Auto renews every month until you cancel. Cancel anytime.You will receive your first newspaper delivery on Sunday, September 7, 2025 as part of your The Observer subscription."`;
+exports[`orderSummaryTs&Cs Snapshot comparison orderSummaryTs&Cs render product HomeDelivery for region GBPCountries for ratePlan Sunday correctly 1`] = `"Auto renews every month until you cancel. Cancel anytime.You will receive your first newspaper delivery on Sunday, September 7, 2025 as part of your Observer subscription."`;
 
 exports[`orderSummaryTs&Cs Snapshot comparison orderSummaryTs&Cs render product SubscriptionCard for region GBPCountries for ratePlan Sunday correctly 1`] = `"Auto renews every month until you cancel.Cancel anytime."`;
 
