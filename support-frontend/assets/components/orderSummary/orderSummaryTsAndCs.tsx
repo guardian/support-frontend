@@ -120,7 +120,10 @@ export function OrderSummaryTsAndCs({
 		? formatUserDate(homeDeliveryDate)
 		: '';
 	const rateDescriptor = ratePlanDescription
-		? ratePlanDescription.replace('The', '').replace('package', '').trim()
+		? ratePlanDescription
+				.replace(/^The\s+/i, '') // Remove "The" at the start, case-insensitive, with following space
+				.replace(/\s*package$/i, '') // Remove "package" at the end, case-insensitive, with preceding space
+				.trim()
 		: ratePlanKey;
 
 	const tierThreeSupporterPlusTsAndCs = (
