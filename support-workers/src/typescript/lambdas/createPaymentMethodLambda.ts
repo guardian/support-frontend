@@ -6,6 +6,7 @@ import type {
 	PayPalPaymentFields,
 	StripeHostedPaymentFields,
 	StripePaymentFields,
+	StripePaymentType,
 } from '../model/paymentFields';
 import {
 	guardianDirectDebitGateway,
@@ -72,7 +73,10 @@ export function createPaymentMethod(
 ): Promise<PaymentMethod> {
 	switch (paymentFields.paymentType) {
 		case 'Stripe':
-			return createStripePaymentMethod(user.isTestUser, paymentFields);
+			return createStripePaymentMethodFromPaymentFields(
+				user.isTestUser,
+				paymentFields,
+			);
 		case 'StripeHostedCheckout':
 			return createStripeHostedPaymentMethod(user.isTestUser, paymentFields);
 		case 'PayPal':
@@ -105,26 +109,41 @@ export function createSalesforceContactState(
 	};
 }
 
-export async function createStripePaymentMethod(
+const zuoraCardTypeFromStripe = (
+	stripeCardType: string,
+): string | undefined => {
+	switch (stripeCardType) {
+		case 'visa':
+			return 'Visa';
+		case 'mastercard':
+			return 'MasterCard';
+		case 'amex':
+			return 'AmericanExpress';
+		case 'discover':
+			return 'Discover';
+		case 'jcb':
+			return 'JCB';
+		case 'diners':
+			return 'Diners';
+		default:
+			console.log(`Unknown card type ${stripeCardType}`);
+			return undefined;
+	}
+};
+
+export async function createStripePaymentMethodFromPaymentFields(
 	isTestUser: boolean,
 	paymentFields: StripePaymentFields,
 ): Promise<StripePaymentMethod> {
 	const stripeService = await stripeServiceProvider.getServiceForUser(
 		isTestUser,
 	);
-	const customer = await stripeService.createCustomer(
+	return createStripePaymentMethod(
+		stripeService,
 		paymentFields.stripePublicKey,
 		paymentFields.paymentMethod,
+		paymentFields.stripePaymentType,
 	);
-	return {
-		TokenId: paymentFields.paymentMethod,
-		SecondTokenId: customer.id,
-		PaymentGateway: stripeService.getPaymentGateway(
-			paymentFields.stripePublicKey,
-		),
-		Type: 'CreditCardReferenceTransaction',
-		StripePaymentType: paymentFields.stripePaymentType,
-	};
 }
 
 async function createStripeHostedPaymentMethod(
@@ -146,19 +165,44 @@ async function createStripeHostedPaymentMethod(
 		),
 		"Couldn't retrieve payment method ID from Stripe",
 	);
+	return createStripePaymentMethod(
+		stripeService,
+		stripePublicKey,
+		paymentMethodId,
+		undefined,
+	);
+}
+
+async function createStripePaymentMethod(
+	stripeService: StripeService,
+	stripePublicKey: string,
+	paymentMethodId: string,
+	stripePaymentType: StripePaymentType | undefined,
+): Promise<StripePaymentMethod> {
 	const customer = await stripeService.createCustomer(
 		stripePublicKey,
 		paymentMethodId,
 	);
-
+	const stripePaymentMethod = await stripeService.getPaymentMethod(
+		stripePublicKey,
+		paymentMethodId,
+	);
+	const card = getIfDefined(
+		stripePaymentMethod.card,
+		'Card details not found on Stripe payment method',
+	);
 	return {
 		TokenId: paymentMethodId,
 		SecondTokenId: customer.id,
+		CreditCardNumber: card.last4,
+		CreditCardExpirationMonth: card.exp_month,
+		CreditCardExpirationYear: card.exp_year,
+		CreditCardType: zuoraCardTypeFromStripe(card.brand),
 		PaymentGateway: stripeService.getPaymentGateway(stripePublicKey),
 		Type: 'CreditCardReferenceTransaction',
+		StripePaymentType: stripePaymentType,
 	};
 }
-
 async function createPayPalPaymentMethod(
 	isTestUser: boolean,
 	payPal: PayPalPaymentFields,
