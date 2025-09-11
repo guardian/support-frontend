@@ -5,27 +5,36 @@ import type { GiftRecipient, Title, User } from '../model/stateSchemas';
 import type { SalesforceConfig } from './salesforceClient';
 import { SalesforceClient } from './salesforceClient';
 
-export type ContactRecordRequest = {
-	IdentityID__c?: string;
-	Email: string | null;
+export type BaseContactRecordRequest = {
 	Salutation?: Title | null;
 	FirstName: string;
 	LastName: string;
-	OtherStreet?: string | null;
-	OtherCity?: string | null;
-	OtherState?: string | null;
-	OtherPostalCode?: string | null;
-	OtherCountry?: string | null;
+	Email: string | null;
 	Phone?: string | null;
+};
+
+export type ContactRecordRequest = BaseContactRecordRequest & {
+	IdentityID__c: string;
+	OtherStreet: string | undefined;
+	OtherCity: string | null;
+	OtherState: string | null;
+	OtherPostalCode: string | null;
+	OtherCountry: string | null;
+	MailingStreet: string | undefined;
+	MailingCity: string | null;
+	MailingState: string | null;
+	MailingPostalCode: string | null;
+	MailingCountry: string | null;
+};
+
+export type DeliveryContactRecordRequest = BaseContactRecordRequest & {
+	AccountId: string;
+	RecordTypeId: '01220000000VB50AAG';
 	MailingStreet?: string | null;
 	MailingCity?: string | null;
 	MailingState?: string | null;
 	MailingPostalCode?: string | null;
 	MailingCountry?: string | null;
-};
-export type DeliveryContactRecordRequest = ContactRecordRequest & {
-	AccountId: string;
-	RecordTypeId: '01220000000VB50AAG';
 };
 export const salesforceContactRecordSchema = z.object({
 	Id: z.string(),
@@ -184,9 +193,9 @@ const shouldIncludeAddressFields = (
 export const createContactRecordRequest = (
 	user: User,
 	giftRecipient: GiftRecipient | null,
-): ContactRecordRequest => {
+): // | BaseContactRecordRequest
+ContactRecordRequest | DeliveryContactRecordRequest => {
 	const baseContact = {
-		IdentityID__c: user.id,
 		Email: user.primaryEmailAddress,
 		Salutation: user.title,
 		FirstName: user.firstName,
@@ -195,11 +204,18 @@ export const createContactRecordRequest = (
 	};
 
 	if (!shouldIncludeAddressFields(giftRecipient, user)) {
-		return baseContact;
+		const deliveryContactRecordRequest: DeliveryContactRecordRequest = {
+			...baseContact,
+			AccountId: '',
+			RecordTypeId: '01220000000VB50AAG',
+			...createMailingAddressFields(user),
+		};
+		return deliveryContactRecordRequest;
 	}
 
 	return {
 		...baseContact,
+		IdentityID__c: user.id,
 		...createBillingAddressFields(user),
 		...createMailingAddressFields(user),
 	};
