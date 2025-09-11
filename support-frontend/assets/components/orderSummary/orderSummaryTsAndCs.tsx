@@ -177,10 +177,9 @@ export function OrderSummaryTsAndCs({
 		),
 		SubscriptionCard: (
 			<p>
-				Your virtual subscription card barcode will be emailed to you shortly,
-				and activated from tomorrow to pick up the first newspaper edition you
-				are entitled to in your {rateDescriptor} subscription. Your physical
-				subscription card will be delivered to your door in 1-2 weeks.
+				Your physical subscription card will be delivered to your door in 1-2
+				weeks, for you to collect in store the first newspaper edition you are
+				entitled to in your {rateDescriptor} subscription.
 			</p>
 		),
 	};
