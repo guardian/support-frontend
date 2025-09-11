@@ -58,9 +58,11 @@ function PaperLandingPage({
 
 	const fulfilment =
 		window.location.hash === `#${Collection}` ? Collection : HomeDelivery;
+	console.log('*** fulfilment', fulfilment);
 
 	const [selectedTab, setSelectedTab] =
 		useState<PaperFulfilmentOptions>(fulfilment);
+	console.log('*** selectedTab', selectedTab);
 
 	if (!productPrices) {
 		return null;
