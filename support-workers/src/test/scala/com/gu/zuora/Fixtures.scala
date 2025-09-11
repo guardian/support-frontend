@@ -68,6 +68,10 @@ object Fixtures {
   val creditCardPaymentMethod = CreditCardReferenceTransaction(
     tokenId,
     secondTokenId,
+    "4242",
+    12,
+    2025,
+    Some("Visa"),
     _: PaymentGateway,
     StripePaymentType = Some(StripePaymentType.StripeCheckout),
   )

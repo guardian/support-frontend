@@ -91,7 +91,9 @@ export const handler = async (
 			collectPayment: true,
 		};
 
-		const zuoraClient = await zuoraServiceProvider.getServiceForUser(false);
+		const zuoraClient = await zuoraServiceProvider.getServiceForUser(
+			createZuoraSubscriptionState.user.isTestUser,
+		);
 		const productCatalog = await productCatalogProvider.getServiceForUser(
 			createZuoraSubscriptionState.user.isTestUser,
 		);
@@ -136,6 +138,10 @@ export const getZuoraPaymentMethod = (
 				type: 'CreditCardReferenceTransaction',
 				tokenId: paymentMethod.TokenId,
 				secondTokenId: paymentMethod.SecondTokenId,
+				cardNumber: paymentMethod.CreditCardNumber,
+				expirationMonth: paymentMethod.CreditCardExpirationMonth,
+				expirationYear: paymentMethod.CreditCardExpirationYear,
+				cardType: paymentMethod.CreditCardType,
 			};
 		case 'PayPal':
 			return {

@@ -67,9 +67,10 @@ const getUnavailableOutsideLondon = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productOption: PaperProductOptions,
 ) =>
-	(fulfilmentOption === 'HomeDelivery' && productOption === 'Saturday') ||
-	productOption === 'Sunday' ||
-	productOption === 'SaturdayPlus';
+	fulfilmentOption === 'HomeDelivery' &&
+	(productOption === 'Saturday' ||
+		productOption === 'Sunday' ||
+		productOption === 'SaturdayPlus');
 
 // ---- Plans ----- //
 const copy: Record<
