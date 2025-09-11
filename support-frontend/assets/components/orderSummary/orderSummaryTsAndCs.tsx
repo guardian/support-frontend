@@ -103,7 +103,8 @@ export function OrderSummaryTsAndCs({
 	// Display for AUS Students who are on a subscription basis
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
 	const isPaperPlus = isPaperPlusSub(productKey, ratePlanKey);
-	const isPaperSunday = isSundayOnlyNewspaperSub(productKey, ratePlanKey);
+	const isPaperSundayOrPlus =
+		isPaperPlus || isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const promoMessage = productLegal(
 		countryGroupId,
 		billingPeriod,
@@ -170,21 +171,22 @@ export function OrderSummaryTsAndCs({
 			</p>
 		</div>
 	);
-	const paperPlusCopy: Partial<Record<ActiveProductKey, JSX.Element>> = {
-		HomeDelivery: (
-			<p>
-				You will receive your first newspaper delivery on{' '}
-				{homeDeliveryStartDate} as part of your {rateDescriptor} subscription.
-			</p>
-		),
-		SubscriptionCard: (
-			<p>
-				Your physical subscription card will be delivered to your door in 1-2
-				weeks, for you to collect in store the first newspaper edition you are
-				entitled to in your {rateDescriptor} subscription.
-			</p>
-		),
-	};
+	const paperSundayOrPlusCopy: Partial<Record<ActiveProductKey, JSX.Element>> =
+		{
+			HomeDelivery: (
+				<p>
+					You will receive your first newspaper delivery on{' '}
+					{homeDeliveryStartDate} as part of your {rateDescriptor} subscription.
+				</p>
+			),
+			SubscriptionCard: (
+				<p>
+					Your physical subscription card will be delivered to your door in 1-2
+					weeks, for you to collect in store the first newspaper edition you are
+					entitled to in your {rateDescriptor} subscription.
+				</p>
+			),
+		};
 	const paperPlusTsAndCs = (
 		<>
 			<div css={containerSummaryTsCs}>
@@ -192,9 +194,9 @@ export function OrderSummaryTsAndCs({
 				<p>Auto renews every {periodNoun} until you cancel. Cancel anytime.</p>
 			</div>
 			<div css={containerSummaryTsCs}>
-				{(isPaperPlus || isPaperSunday) && (
+				{isPaperSundayOrPlus && (
 					<>
-						{paperPlusCopy[productKey]}
+						{paperSundayOrPlusCopy[productKey]}
 						{isPaperPlus && <p>Your digital benefits will start today.</p>}
 					</>
 				)}
