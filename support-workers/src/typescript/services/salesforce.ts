@@ -13,7 +13,7 @@ export type BaseContactRecordRequest = {
 	Phone?: string | null;
 };
 
-export type ContactRecordRequest = BaseContactRecordRequest & {
+export type StandardContactRecordRequest = BaseContactRecordRequest & {
 	IdentityID__c: string;
 	OtherStreet: string | undefined;
 	OtherCity: string | null;
@@ -28,7 +28,7 @@ export type ContactRecordRequest = BaseContactRecordRequest & {
 };
 
 export type DeliveryContactRecordRequest = BaseContactRecordRequest & {
-	AccountId: string;
+	AccountId?: string;
 	RecordTypeId: '01220000000VB50AAG';
 	MailingStreet?: string | null;
 	MailingCity?: string | null;
@@ -99,7 +99,7 @@ export class SalesforceService {
 	};
 
 	upsert = async (
-		contact: ContactRecordRequest | DeliveryContactRecordRequest,
+		contact: StandardContactRecordRequest | DeliveryContactRecordRequest,
 	): Promise<SuccessfulUpsertResponse> => {
 		const response: UpsertResponse = await this.client.post(
 			this.upsertEndpoint,
@@ -193,8 +193,7 @@ const shouldIncludeAddressFields = (
 export const createContactRecordRequest = (
 	user: User,
 	giftRecipient: GiftRecipient | null,
-): // | BaseContactRecordRequest
-ContactRecordRequest | DeliveryContactRecordRequest => {
+): StandardContactRecordRequest | DeliveryContactRecordRequest => {
 	const baseContact = {
 		Email: user.primaryEmailAddress,
 		Salutation: user.title,
@@ -204,19 +203,34 @@ ContactRecordRequest | DeliveryContactRecordRequest => {
 	};
 
 	if (!shouldIncludeAddressFields(giftRecipient, user)) {
-		const deliveryContactRecordRequest: DeliveryContactRecordRequest = {
-			...baseContact,
-			AccountId: '',
-			RecordTypeId: '01220000000VB50AAG',
-			...createMailingAddressFields(user),
-		};
-		return deliveryContactRecordRequest;
+		return createDeliveryContactRecordRequest(baseContact, user);
 	}
 
+	return createStandardContactRecordRequest(baseContact, user);
+};
+
+const createStandardContactRecordRequest = (
+	baseContact: BaseContactRecordRequest,
+	user: User,
+): StandardContactRecordRequest => {
 	return {
 		...baseContact,
 		IdentityID__c: user.id,
 		...createBillingAddressFields(user),
+		...createMailingAddressFields(user),
+	};
+};
+
+const createDeliveryContactRecordRequest = (
+	baseContact: BaseContactRecordRequest,
+	user: User,
+): DeliveryContactRecordRequest => {
+	if (!user.deliveryAddress) {
+		throw new Error('Delivery address is required for delivery contact record');
+	}
+	return {
+		...baseContact,
+		RecordTypeId: '01220000000VB50AAG',
 		...createMailingAddressFields(user),
 	};
 };
