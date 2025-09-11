@@ -18,6 +18,8 @@ import {
 	BenefitsCheckList,
 	type BenefitsCheckListData,
 } from 'components/checkoutBenefits/benefitsCheckList';
+import { CheckoutNudgeThankYou } from 'components/checkoutNudge/checkoutNudge';
+import type { Participations } from 'helpers/abTests/models';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
@@ -153,6 +155,7 @@ export type ContributionsOrderSummaryProps = {
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
 	tsAndCsTier3?: React.ReactNode;
+	abParticipations?: Participations;
 	studentDiscount?: StudentDiscount;
 	isPaperProductTest?: boolean;
 };
@@ -172,6 +175,7 @@ export function ContributionsOrderSummary({
 	tsAndCs,
 	startDate,
 	enableCheckList,
+	abParticipations,
 	studentDiscount,
 	isPaperProductTest = false,
 }: ContributionsOrderSummaryProps): JSX.Element {
@@ -180,7 +184,6 @@ export function ContributionsOrderSummary({
 		productKey,
 		ratePlanKey,
 	);
-
 	const hasCheckList = enableCheckList && checkListData.length > 0;
 	const checkList = hasCheckList && (
 		<BenefitsCheckList
@@ -199,6 +202,37 @@ export function ContributionsOrderSummary({
 	const discountPrice =
 		studentDiscount?.discountPriceWithCurrency ?? promoDiscountPrice;
 	const period = studentDiscount?.periodNoun ?? paymentFrequency;
+
+	/* nudge AB test */
+	// get nudge url param
+	const urlSearchParams = new URLSearchParams(window.location.search);
+	// check value is one of the set of expected values
+
+	const verifyNudgeTypeInput = (input: string | null) => {
+		if (input === null || !['toRegular'].includes(input.trim())) {
+			return '';
+		}
+
+		return input.trim();
+	};
+
+	// parameter only passed from nudge CTA so used to determine if should show thanks box
+	const nudgeType = verifyNudgeTypeInput(urlSearchParams.get('nudge'));
+
+	// from one time checkout to low regular - show thanks box
+	const showLowRegularNudgeThanks = () => {
+		const isInNudgeToLowRegular =
+			productKey === 'Contribution' &&
+			['v1', 'v2'].some((a) => a === abParticipations?.abNudgeToLowRegular);
+
+		return isInNudgeToLowRegular && nudgeType.trim() === 'toRegular';
+	};
+
+	const nudgeLowRegularThanks = showLowRegularNudgeThanks() && (
+		<CheckoutNudgeThankYou
+			abTestVariant={abParticipations?.abNudgeToLowRegular}
+		/>
+	);
 
 	return (
 		<div css={componentStyles}>
@@ -256,6 +290,7 @@ export function ContributionsOrderSummary({
 					discountPrice={discountPrice}
 				/>
 			</div>
+			{nudgeLowRegularThanks}
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
 		</div>
 	);
