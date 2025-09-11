@@ -45,7 +45,7 @@ const baseDigitalRewards = [
 		Unlimited access to the Guardian Editions app so you can enjoy newspapers on
 		your mobile and tablet
 	</>,
-	<>Ad-free reading on all your devices</>,
+	<>Ad-free reading on the Guardian app and website</>,
 	<>
 		Exclusive newsletter for supporters, sent every week from the Guardian
 		newsroom
