@@ -29,6 +29,10 @@ describe("The support-workers stack", () => {
         `arn:aws:ssm:eu-west-1:865473395570:parameter/CODE/support/support-workers/*`,
         `arn:aws:ssm:eu-west-1:865473395570:parameter/PROD/support/support-workers/*`,
       ],
+      secretsManagerPaths: [
+        "arn:aws:secretsmanager:eu-west-1:865473395570:secret:CODE/Zuora-OAuth/SupportServiceLambdas-*",
+        "arn:aws:secretsmanager:eu-west-1:865473395570:secret:PROD/Zuora-OAuth/SupportServiceLambdas-*",
+      ],
     });
 
     const template = Template.fromStack(stack);

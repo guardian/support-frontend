@@ -123,6 +123,9 @@ new SupportWorkers(app, "SupportWorkers-CODE", {
   parameterStorePaths: [
     `arn:aws:ssm:eu-west-1:865473395570:parameter/CODE/support/support-workers/*`,
   ],
+  secretsManagerPaths: [
+    "arn:aws:secretsmanager:eu-west-1:865473395570:secret:CODE/Zuora-OAuth/SupportServiceLambdas-*",
+  ],
 });
 
 new SupportWorkers(app, "SupportWorkers-PROD", {
@@ -148,5 +151,9 @@ new SupportWorkers(app, "SupportWorkers-PROD", {
   parameterStorePaths: [
     `arn:aws:ssm:eu-west-1:865473395570:parameter/CODE/support/support-workers/*`,
     `arn:aws:ssm:eu-west-1:865473395570:parameter/PROD/support/support-workers/*`,
+  ],
+  secretsManagerPaths: [
+    "arn:aws:secretsmanager:eu-west-1:865473395570:secret:CODE/Zuora-OAuth/SupportServiceLambdas-*",
+    "arn:aws:secretsmanager:eu-west-1:865473395570:secret:PROD/Zuora-OAuth/SupportServiceLambdas-*",
   ],
 });
