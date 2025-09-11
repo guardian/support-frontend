@@ -91,7 +91,9 @@ export const handler = async (
 			collectPayment: true,
 		};
 
-		const zuoraClient = await zuoraServiceProvider.getServiceForUser(false);
+		const zuoraClient = await zuoraServiceProvider.getServiceForUser(
+			createZuoraSubscriptionState.user.isTestUser,
+		);
 		const productCatalog = await productCatalogProvider.getServiceForUser(
 			createZuoraSubscriptionState.user.isTestUser,
 		);
