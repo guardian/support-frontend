@@ -166,9 +166,6 @@ const createBillingAddressFields = (user: User) => ({
 });
 
 const createMailingAddressFields = (user: User) => {
-	// if (!user.deliveryAddress) {
-	// 	return {};
-	// }
 	return {
 		MailingStreet: user.deliveryAddress
 			? getAddressLine(user.deliveryAddress)
