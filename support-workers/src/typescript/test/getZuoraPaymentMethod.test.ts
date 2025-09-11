@@ -7,11 +7,19 @@ describe('getZuoraPaymentMethod', () => {
 			Type: 'CreditCardReferenceTransaction',
 			TokenId: 'tok_123',
 			SecondTokenId: 'tok_456',
+			CreditCardNumber: '4242',
+			CreditCardType: 'Visa',
+			CreditCardExpirationMonth: 2,
+			CreditCardExpirationYear: 2026,
 		} as PaymentMethod;
 		expect(getZuoraPaymentMethod(paymentMethod)).toEqual({
 			type: 'CreditCardReferenceTransaction',
 			tokenId: 'tok_123',
 			secondTokenId: 'tok_456',
+			cardNumber: '4242',
+			cardType: 'Visa',
+			expirationMonth: 2,
+			expirationYear: 2026,
 		});
 	});
 
