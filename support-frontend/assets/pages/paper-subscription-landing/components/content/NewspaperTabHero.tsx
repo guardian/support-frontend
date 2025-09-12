@@ -40,7 +40,7 @@ export default function NewspaperTabHero({
 			</div>
 			<div css={imageHeightStyle}>
 				<GridImage
-					gridId={'guardianWeeklyTabHero'}
+					gridId={`paperLandingTab${tab}`}
 					srcSizes={[1000, 500]}
 					sizes="(max-width: 1139px) 244px, (min-width: 1140px) 300px"
 					imgType="png"
