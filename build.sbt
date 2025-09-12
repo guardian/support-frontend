@@ -4,7 +4,7 @@ import LibraryVersions._
 
 import scala.sys.process._
 
-val scalatest = "org.scalatest" %% "scalatest" % "3.2.16"
+val scalatest = "org.scalatest" %% "scalatest" % "3.2.19"
 
 lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
   IntegrationTest / scalaSource := baseDirectory.value / "src" / "test" / "scala",
@@ -40,7 +40,7 @@ lazy val release = Seq[ReleaseStep](
 inThisBuild(
   Seq(
     organization := "com.gu",
-    scalaVersion := "2.13.13",
+    scalaVersion := "2.13.16",
     // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
     updateOptions := updateOptions.value.withCachedResolution(true),
     resolvers ++= Resolver.sonatypeOssRepos("releases"), // libraries that haven't yet synced to maven central
@@ -84,10 +84,10 @@ lazy val releaseSettings = Seq(
 )
 
 lazy val commonDependencies = Seq(
-  "com.typesafe" % "config" % "1.4.2",
+  "com.typesafe" % "config" % "1.4.4",
   scalatest % "test",
   "com.typesafe.scala-logging" % "scala-logging_2.13" % "3.9.5",
-  "ch.qos.logback" % "logback-classic" % "1.4.14",
+  "ch.qos.logback" % "logback-classic" % "1.5.18",
 )
 
 lazy val root = (project in file("."))
