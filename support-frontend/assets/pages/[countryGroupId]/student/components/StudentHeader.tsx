@@ -40,6 +40,8 @@ const ukSpecificAdditionalBenefit: ProductBenefit = {
 	label: {
 		copy: 'Limited series',
 	},
+	tooltip:
+		'Each week, hear from our journalists about topics that matter to you — including AI, politics, climate and more.',
 };
 
 export default function StudentHeader({
