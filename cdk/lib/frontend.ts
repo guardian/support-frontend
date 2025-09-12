@@ -31,6 +31,7 @@ interface FrontendProps extends GuStackProps {
   domainName: string;
   scaling: GuAsgCapacity;
   shouldCreateAlarms: boolean;
+  shouldEnableAlbAccessLogs: boolean;
 }
 
 export class Frontend extends GuStack {
@@ -40,6 +41,7 @@ export class Frontend extends GuStack {
       domainName,
       scaling,
       shouldCreateAlarms,
+      shouldEnableAlbAccessLogs,
     } = props;
 
     super(scope, id, props);
@@ -153,6 +155,10 @@ export class Frontend extends GuStack {
       },
       scaling,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.SMALL),
+      accessLogging: {
+        enabled: shouldEnableAlbAccessLogs,
+        prefix: `application-load-balancer/${this.stage}/${this.stack}/${app}`,
+      },
     });
 
     (ec2App.listener.node.defaultChild as CfnListener).sslPolicy =
