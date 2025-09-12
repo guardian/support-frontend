@@ -1,4 +1,6 @@
 import { palette } from '@guardian/source/foundations';
+import type { IsoCurrency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
+import { getCurrencyGlyph } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import OrderedList from 'components/list/orderedList';
 import type {
 	ActiveProductKey,
@@ -16,6 +18,7 @@ import { helpCenterCta, myAccountCta } from './whatNextCta';
 export function WhatNext({
 	productKey,
 	ratePlanKey,
+	currency,
 	amount,
 	observerPrint,
 	startDate,
@@ -23,6 +26,7 @@ export function WhatNext({
 }: {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
+	currency: IsoCurrency;
 	amount: string;
 	startDate?: string;
 	isSignedIn?: boolean;
@@ -95,7 +99,9 @@ export function WhatNext({
 		const guardianAdLiteItems = [
 			'You will receive an email confirming the details of your subscription',
 			startDate
-				? `Your payment of £${amount}/month will be taken on ${startDate}`
+				? `Your payment of ${getCurrencyGlyph(
+						currency,
+				  )}${amount}/month will be taken on ${startDate}`
 				: '',
 			isSignedIn
 				? 'You can now start reading the Guardian website on all your devices without personalised advertising'
