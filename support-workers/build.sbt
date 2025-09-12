@@ -10,7 +10,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
-  "com.amazonaws" % "aws-lambda-java-core" % "1.2.3",
+  "com.amazonaws" % "aws-lambda-java-core" % "1.3.0",
   "software.amazon.awssdk" % "sqs" % awsClientVersion2,
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
