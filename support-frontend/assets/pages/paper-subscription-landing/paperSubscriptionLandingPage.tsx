@@ -26,6 +26,7 @@ import PaperProductPrices from './components/paperProductPrices';
 import PaperTabs from './components/paperTabs';
 import { inPaperProductTest } from './helpers/inPaperProductTest';
 import { getPaperItems, getPaperPlusItems } from './helpers/PaperHeroCopy';
+import { windowHistoryUpdate } from './helpers/windowHistoryUpdate';
 import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
 import 'stylesheets/skeleton/skeleton.scss';
@@ -61,6 +62,7 @@ function PaperLandingPage({
 
 	const [selectedTab, setSelectedTab] =
 		useState<PaperFulfilmentOptions>(fulfilment);
+	windowHistoryUpdate(selectedTab); // set tab in url hash param upon page open
 
 	if (!productPrices) {
 		return null;
@@ -75,7 +77,7 @@ function PaperLandingPage({
 			componentType: 'ACQUISITIONS_BUTTON',
 		})();
 
-		window.history.replaceState({}, '', `#${newTab}`);
+		windowHistoryUpdate(newTab);
 	}
 
 	return (

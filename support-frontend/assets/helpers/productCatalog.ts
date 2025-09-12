@@ -433,7 +433,7 @@ export const productCatalogDescription: Record<
 	SubscriptionCard: {
 		label: 'Collect in store with a subscription card',
 		thankyouMessage: paperThankyouMessage,
-		landingPagePath: '/subscribe/paper#Collection',
+		landingPagePath: '/subscribe/paper',
 		benefits: [],
 		deliverableTo: newspaperCountries,
 		ratePlans: paperPlusRatePlans,
