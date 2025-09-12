@@ -62,6 +62,7 @@ function PaperLandingPage({
 
 	const [selectedTab, setSelectedTab] =
 		useState<PaperFulfilmentOptions>(fulfilment);
+	windowHistoryUpdate(selectedTab); // set tab in url hash param upon page open
 
 	if (!productPrices) {
 		return null;
