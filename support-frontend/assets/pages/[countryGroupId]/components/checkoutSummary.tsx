@@ -3,6 +3,7 @@ import { space } from '@guardian/source/foundations';
 import { InfoSummary } from '@guardian/source-development-kitchen/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import {
@@ -22,6 +23,7 @@ import {
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { paperLandingUrl } from 'helpers/urls/routes';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -123,6 +125,28 @@ export default function CheckoutSummary({
 			countryGroupId,
 			abParticipations,
 		);
+
+	const getPaperFulfilmentOption = (
+		productKey: ActiveProductKey,
+	): PaperFulfilmentOptions | undefined => {
+		switch (productKey) {
+			case 'HomeDelivery':
+				return productKey;
+			case 'SubscriptionCard':
+				return 'Collection';
+			default:
+				return undefined;
+		}
+	};
+	console.log('*** productDescription', productDescription);
+	const paperFulfilmentOption = getPaperFulfilmentOption(productKey);
+	const backUrl = paperFulfilmentOption
+		? paperLandingUrl(
+				paperFulfilmentOption,
+				promotion?.promoCode,
+				isPaperProductTest ? 'paperProductTabs' : undefined,
+		  )
+		: `/${geoId}${productDescription.landingPagePath}`;
 	return (
 		<Box cssOverrides={shorterBoxMargin}>
 			<BoxContents>
@@ -174,10 +198,7 @@ export default function CheckoutSummary({
 					}
 					headerButton={
 						showBackButton && (
-							<BackButton
-								path={`/${geoId}${productDescription.landingPagePath}`}
-								buttonText={'Change'}
-							/>
+							<BackButton path={backUrl} buttonText={'Change'} />
 						)
 					}
 					abParticipations={abParticipations}

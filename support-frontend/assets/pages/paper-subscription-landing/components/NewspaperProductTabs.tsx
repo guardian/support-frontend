@@ -71,6 +71,7 @@ function NewspaperProductTabs({
 				isPaperProductTest,
 			),
 		);
+		window.history.replaceState({}, '', `#${selectedTab}`);
 	}, [selectedTab]);
 
 	const tabItems = Object.entries(tabs).map(([fulfilment, tab]) => {
