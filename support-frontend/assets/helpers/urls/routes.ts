@@ -148,7 +148,7 @@ function parameteriseUrl(
 		: {
 				promoCode,
 		  };
-	const urlWithParams = addQueryParamsToURL(url, params).replace(/([?])$/g, ''); // removes ? when no params
+	const urlWithParams = addQueryParamsToURL(url, params).replace(/\?$/, ''); // removes ? when no params
 	const validFulfilmentOption =
 		url.includes('subscribe/paper') && fulfilmentOption; // limit to paper subs landing page
 	return validFulfilmentOption
