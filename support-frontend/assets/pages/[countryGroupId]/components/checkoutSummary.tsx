@@ -23,7 +23,7 @@ import {
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { paperLandingUrl } from 'helpers/urls/routes';
+import { parameteriseUrl } from 'helpers/urls/routes';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -131,22 +131,21 @@ export default function CheckoutSummary({
 	): PaperFulfilmentOptions | undefined => {
 		switch (productKey) {
 			case 'HomeDelivery':
-				return productKey;
+			case 'NationalDelivery':
+				return 'HomeDelivery';
 			case 'SubscriptionCard':
 				return 'Collection';
 			default:
 				return undefined;
 		}
 	};
-	console.log('*** productDescription', productDescription);
-	const paperFulfilmentOption = getPaperFulfilmentOption(productKey);
-	const backUrl = paperFulfilmentOption
-		? paperLandingUrl(
-				paperFulfilmentOption,
-				promotion?.promoCode,
-				isPaperProductTest ? 'paperProductTabs' : undefined,
-		  )
-		: `/${geoId}${productDescription.landingPagePath}`;
+	const backUrl = parameteriseUrl(
+		`/${geoId}${productDescription.landingPagePath}`,
+		promotion?.promoCode,
+		isPaperProductTest ? 'paperProductTabs' : undefined,
+		getPaperFulfilmentOption(productKey),
+	);
+
 	return (
 		<Box cssOverrides={shorterBoxMargin}>
 			<BoxContents>

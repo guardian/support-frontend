@@ -134,12 +134,12 @@ function paperCheckoutUrl(
 	return addQueryParamsToURL(url, params);
 }
 
-function paperLandingUrl(
-	fulfilmentOption: PaperFulfilmentOptions,
+function parameteriseUrl(
+	url: string,
 	promoCode?: Option<string>,
 	abTestName?: string,
+	fulfilmentOption?: PaperFulfilmentOptions,
 ) {
-	const url = `${getOrigin()}/uk/subscribe/paper`;
 	const params = abTestName
 		? {
 				[abTestName]: 'true',
@@ -148,12 +148,12 @@ function paperLandingUrl(
 		: {
 				promoCode,
 		  };
-	const paperLandingWithSelectedTab = `${addQueryParamsToURL(
-		url,
-		params,
-	)}#${fulfilmentOption}`;
-
-	return paperLandingWithSelectedTab;
+	const urlWithParams = addQueryParamsToURL(url, params);
+	const validFulfilmentOption =
+		url.includes('subscribe/paper') && fulfilmentOption; // limit to paper subs landing page
+	return validFulfilmentOption
+		? `${urlWithParams}#${fulfilmentOption}`
+		: urlWithParams;
 }
 
 // If the user cancels before completing the payment flow, send them back to the contribute page.
@@ -181,7 +181,7 @@ export {
 	payPalReturnUrl,
 	paperSubsUrl,
 	paperCheckoutUrl,
-	paperLandingUrl,
+	parameteriseUrl,
 	digitalSubscriptionLanding,
 	guardianWeeklyLanding,
 	promotionTermsUrl,
