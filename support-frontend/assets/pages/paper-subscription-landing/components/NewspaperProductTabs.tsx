@@ -14,6 +14,7 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import NewspaperRatePlanCard from 'pages/paper-subscription-landing/components/NewspaperRatePlanCard';
 import { getPlans } from '../helpers/getPlans';
+import { windowHistoryUpdate } from '../helpers/windowHistoryUpdate';
 import NewspaperTabHero from './content/NewspaperTabHero';
 import {
 	cardsContainer,
@@ -71,7 +72,7 @@ function NewspaperProductTabs({
 				isPaperProductTest,
 			),
 		);
-		window.history.replaceState({}, '', `#${selectedTab}`);
+		windowHistoryUpdate(selectedTab);
 	}, [selectedTab]);
 
 	const tabItems = Object.entries(tabs).map(([fulfilment, tab]) => {
