@@ -1,3 +1,4 @@
+import type { ProductPurchase } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
 import type { SupportInternationalisationId } from '@modules/internationalisation/countryGroup';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
@@ -123,6 +124,58 @@ const getProduct = (
 	};
 };
 
+const getProductInformation = (
+	state: SubscriptionsState,
+): ProductPurchase | undefined => {
+	const { billingPeriod, fulfilmentOption, orderIsAGift } =
+		state.page.checkoutForm.product;
+	const product = getSubscriptionType(state);
+	if (product === GuardianWeekly && orderIsAGift) {
+		const productKey =
+			fulfilmentOption === 'Domestic'
+				? 'GuardianWeeklyDomestic'
+				: 'GuardianWeeklyRestOfWorld';
+		const ratePlan =
+			billingPeriod === BillingPeriod.Annual ? 'OneYearGift' : 'ThreeMonthGift';
+		const firstDeliveryDate = new Date(
+			state.page.checkoutForm.product.startDate,
+		);
+		const deliveryAddress = getAddresses(state).deliveryAddress;
+		if (
+			deliveryAddress === undefined ||
+			deliveryAddress.lineOne === undefined ||
+			deliveryAddress.city === undefined ||
+			deliveryAddress.postCode === undefined ||
+			deliveryAddress.lineOne === null ||
+			deliveryAddress.city === null ||
+			deliveryAddress.postCode === null
+		) {
+			// this should never happen because the form is validated before submission
+			console.error('Delivery address is missing for gift Guardian Weekly');
+			return;
+		}
+		const deliveryContact = {
+			address1: deliveryAddress.lineOne,
+			address2: deliveryAddress.lineTwo,
+			city: deliveryAddress.city,
+			postalCode: deliveryAddress.postCode,
+			country: deliveryAddress.country,
+			state: deliveryAddress.state,
+			title: state.page.checkoutForm.gifting.title,
+			firstName: state.page.checkoutForm.gifting.firstName,
+			lastName: state.page.checkoutForm.gifting.lastName,
+			workEmail: state.page.checkoutForm.gifting.email,
+		};
+		return {
+			product: productKey,
+			ratePlan,
+			firstDeliveryDate,
+			deliveryContact,
+		};
+	}
+	return;
+};
+
 const getPaperFulfilmentOption = (
 	fulfilmentOption: FulfilmentOptions,
 	state: SubscriptionsState,
@@ -196,6 +249,7 @@ function buildRegularPaymentRequest(
 	} = state.page.checkoutForm.addressMeta;
 	const { csrUsername, salesforceCaseId } = state.page.checkout;
 	const product = getProduct(state, currencyId, chosenDeliveryAgent);
+	const productInformation = getProductInformation(state);
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
 	const paymentFields = regularPaymentFieldsFromAuthorisation(
 		paymentAuthorisation,
@@ -218,6 +272,7 @@ function buildRegularPaymentRequest(
 		...giftRecipient,
 		telephoneNumber: telephone,
 		product,
+		productInformation,
 		firstDeliveryDate: state.page.checkoutForm.product.startDate,
 		paymentFields,
 		ophanIds: getOphanIds(),
