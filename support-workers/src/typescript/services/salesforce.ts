@@ -16,26 +16,31 @@ export type BaseContactRecordRequest = {
 export type StandardContactRecordRequest = BaseContactRecordRequest & {
 	IdentityID__c: string;
 	OtherStreet: string | undefined;
-	OtherCity: string | null;
-	OtherState: string | null;
-	OtherPostalCode: string | null;
+	OtherCity: string | undefined;
+	OtherState: string | undefined;
+	OtherPostalCode: string | undefined;
 	OtherCountry: string | null;
 	MailingStreet: string | undefined;
-	MailingCity: string | null;
-	MailingState: string | null;
-	MailingPostalCode: string | null;
+	MailingCity: string | undefined;
+	MailingState: string | undefined;
+	MailingPostalCode: string | undefined;
 	MailingCountry: string | null;
 };
 
-export type RecipientContactRecordRequest = BaseContactRecordRequest & {
+export type GiftRecipientContactRecordRequest = BaseContactRecordRequest & {
 	AccountId?: string;
 	RecordTypeId: '01220000000VB50AAG';
-	MailingStreet?: string;
-	MailingCity?: string | null;
-	MailingState?: string | null;
-	MailingPostalCode?: string | null;
-	MailingCountry?: string | null;
+	MailingStreet: string | undefined;
+	MailingCity: string | undefined;
+	MailingState: string | undefined;
+	MailingPostalCode: string | undefined;
+	MailingCountry: string | null;
 };
+
+export type DigitalContactRecordRequest = BaseContactRecordRequest & {
+	RecordTypeId: '01220000000VB50AAG';
+};
+
 export const salesforceContactRecordSchema = z.object({
 	Id: z.string(),
 	AccountId: z.string(),
@@ -101,7 +106,10 @@ export class SalesforceService {
 	};
 
 	upsert = async (
-		contact: StandardContactRecordRequest | RecipientContactRecordRequest,
+		contact:
+			| StandardContactRecordRequest
+			| GiftRecipientContactRecordRequest
+			| DigitalContactRecordRequest,
 	): Promise<SuccessfulUpsertResponse> => {
 		const response: UpsertResponse = await this.client.post(
 			this.upsertEndpoint,
@@ -138,7 +146,7 @@ export class SalesforceService {
 		user: User,
 	): Promise<SuccessfulUpsertResponse> | null {
 		if (giftRecipient?.firstName && giftRecipient.lastName) {
-			const giftRecipientContact: RecipientContactRecordRequest = {
+			const giftRecipientContact: GiftRecipientContactRecordRequest = {
 				AccountId: contactRecord.AccountId,
 				Email: giftRecipient.email,
 				Salutation: giftRecipient.title,
@@ -154,10 +162,10 @@ export class SalesforceService {
 }
 const createBillingAddressFields = (user: User) => ({
 	OtherStreet: getAddressLine(user.billingAddress),
-	OtherCity: user.billingAddress.city,
-	OtherState: user.billingAddress.state,
-	OtherPostalCode: user.billingAddress.postCode,
-	OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
+	OtherCity: user.billingAddress.city ?? undefined,
+	OtherState: user.billingAddress.state ?? undefined,
+	OtherPostalCode: user.billingAddress.postCode ?? undefined,
+	OtherCountry: getCountryNameByIsoCode(user.billingAddress.country) ?? null,
 });
 
 const createMailingAddressFields = (user: User) => {
@@ -165,32 +173,26 @@ const createMailingAddressFields = (user: User) => {
 		MailingStreet: user.deliveryAddress
 			? getAddressLine(user.deliveryAddress)
 			: undefined,
-		MailingCity: user.deliveryAddress?.city ?? null,
-		MailingState: user.deliveryAddress?.state ?? null,
-		MailingPostalCode: user.deliveryAddress?.postCode ?? null,
+		MailingCity: user.deliveryAddress?.city ?? undefined,
+		MailingState: user.deliveryAddress?.state ?? undefined,
+		MailingPostalCode: user.deliveryAddress?.postCode ?? undefined,
 		MailingCountry: user.deliveryAddress
 			? getCountryNameByIsoCode(user.deliveryAddress.country)
 			: null,
 	};
 };
 
-export const createContactRecordRequest = (
-	user: User,
+const getContactType = (
 	giftRecipient: GiftRecipient | null,
-): StandardContactRecordRequest | RecipientContactRecordRequest => {
-	const baseContact = {
-		Email: user.primaryEmailAddress,
-		Salutation: user.title,
-		FirstName: user.firstName,
-		LastName: user.lastName,
-		Phone: user.telephoneNumber,
-	};
-
-	if (giftRecipient ?? !user.deliveryAddress) {
-		return createDeliveryContactRecordRequest(baseContact, user);
+	user: User,
+): 'GiftRecipient' | 'Standard' | 'Digital' => {
+	if (giftRecipient) {
+		return 'GiftRecipient';
 	}
-
-	return createStandardContactRecordRequest(baseContact, user);
+	if (user.deliveryAddress) {
+		return 'Standard';
+	}
+	return 'Digital';
 };
 
 const createStandardContactRecordRequest = (
@@ -205,13 +207,48 @@ const createStandardContactRecordRequest = (
 	};
 };
 
-const createDeliveryContactRecordRequest = (
+const createGiftRecipientContactRecordRequest = (
 	baseContact: BaseContactRecordRequest,
 	user: User,
-): RecipientContactRecordRequest => {
+): GiftRecipientContactRecordRequest => {
 	return {
 		...baseContact,
 		RecordTypeId: '01220000000VB50AAG',
-		...(user.deliveryAddress && createMailingAddressFields(user)),
+		...createMailingAddressFields(user),
 	};
+};
+
+const createDigitalContactRecordRequest = (
+	baseContact: BaseContactRecordRequest,
+): DigitalContactRecordRequest => {
+	return {
+		...baseContact,
+		RecordTypeId: '01220000000VB50AAG',
+	};
+};
+
+export const createContactRecordRequest = (
+	user: User,
+	giftRecipient: GiftRecipient | null,
+):
+	| StandardContactRecordRequest
+	| GiftRecipientContactRecordRequest
+	| DigitalContactRecordRequest => {
+	const baseContact = {
+		Email: user.primaryEmailAddress,
+		Salutation: user.title,
+		FirstName: user.firstName,
+		LastName: user.lastName,
+		Phone: user.telephoneNumber,
+	};
+	const contactType = getContactType(giftRecipient, user);
+
+	switch (contactType) {
+		case 'Standard':
+			return createStandardContactRecordRequest(baseContact, user);
+		case 'GiftRecipient':
+			return createGiftRecipientContactRecordRequest(baseContact, user);
+		case 'Digital':
+			return createDigitalContactRecordRequest(baseContact);
+	}
 };
