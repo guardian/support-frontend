@@ -87,6 +87,9 @@ export class SalesforceService {
 		user: User,
 		giftRecipient: GiftRecipient | null,
 	): Promise<SalesforceContactRecord> => {
+		console.log(`XXX Creating Salesforce contact record...`);
+		console.log(`XXX user: ${JSON.stringify(user)}`);
+		console.log(`XXX giftRecipient: ${JSON.stringify(giftRecipient)}`);
 		const contact = createContactRecordRequest(user, giftRecipient);
 		const buyerResponse = await this.upsert(contact);
 		const giftRecipientResponse = await this.maybeAddGiftRecipient(
@@ -216,16 +219,9 @@ const createDeliveryContactRecordRequest = (
 	baseContact: BaseContactRecordRequest,
 	user: User,
 ): DeliveryContactRecordRequest => {
-	if (user.deliveryAddress) {
-		return {
-			...baseContact,
-			RecordTypeId: '01220000000VB50AAG',
-			...createMailingAddressFields(user),
-		};
-	} else {
-		return {
-			...baseContact,
-			RecordTypeId: '01220000000VB50AAG',
-		};
-	}
+	return {
+		...baseContact,
+		RecordTypeId: '01220000000VB50AAG',
+		...(user.deliveryAddress && createMailingAddressFields(user)),
+	};
 };
