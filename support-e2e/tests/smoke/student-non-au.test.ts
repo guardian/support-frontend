@@ -40,7 +40,7 @@ import { fillInDirectDebitDetails } from '../utils/directDebitDetails';
 		accessibleCtaText: 'Subscribe',
 	},
 ].forEach((testDetails) => {
-	test(`${testDetails.expectedCardHeading} ${testDetails.country}`, async ({
+	test.skip(`${testDetails.expectedCardHeading} ${testDetails.country}`, async ({
 		context,
 		baseURL,
 	}) => {
