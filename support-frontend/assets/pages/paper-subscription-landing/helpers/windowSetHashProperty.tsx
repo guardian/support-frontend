@@ -1,4 +1,4 @@
-export function windowHistoryUpdate(replace: string) {
+export function windowSetHashProperty(replace: string) {
 	if (
 		typeof window !== 'undefined' &&
 		typeof window.history.replaceState === 'function'
