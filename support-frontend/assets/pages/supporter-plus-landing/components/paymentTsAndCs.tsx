@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { neutral, space, textSans12 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import {
 	contributionsTermsLinks,
@@ -123,6 +124,45 @@ function getStudentPrice(
 		: studentPricePeriod;
 }
 
+const paperShareTsAndCs =
+	'We will share your contact and subscription details with our fulfilment partners';
+const paperNationalDeliveryTsAndCs = (
+	<div>{paperShareTsAndCs} to provide you with your subscription card.</div>
+);
+const paperProductProductTsAndCs = (
+	<>
+		You can cancel your subscription at any time before your next renewal date.
+		Cancellation will take effect at the end of your current payment period. To
+		cancel, use the contact details listed on our{' '}
+		{termsLink('Help Centre', helpCentreUrl)}.
+	</>
+);
+function paperTsAndCs(
+	isPaperProductTest: boolean,
+	deliveryStartDate: string,
+	paperFulfilmentOption: PaperFulfilmentOptions,
+): JSX.Element {
+	return (
+		<>
+			<div
+				css={css`
+					margin-bottom: ${space[1]}px;
+				`}
+			>
+				Your first payment will be taken on {deliveryStartDate}
+				{paperFulfilmentOption === 'HomeDelivery'
+					? ' when your first newspaper is delivered. '
+					: '. '}
+				{isPaperProductTest && paperProductProductTsAndCs}
+			</div>
+			{paperFulfilmentOption === 'HomeDelivery' ? (
+				<div>{paperShareTsAndCs}.</div>
+			) : (
+				paperNationalDeliveryTsAndCs
+			)}
+		</>
+	);
+}
 export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
@@ -182,46 +222,6 @@ export function PaymentTsAndCs({
 				promotion,
 		  );
 
-	const paperProductProductTsAndCs = (
-		<>
-			You can cancel your subscription at any time before your next renewal
-			date. Cancellation will take effect at the end of your current payment
-			period. To cancel, use the contact details listed on our{' '}
-			{termsLink('Help Centre', helpCentreUrl)}.
-		</>
-	);
-	const paperShareTsAndCs =
-		'We will share your contact and subscription details with our fulfilment partners';
-	const paperNationalDeliveryTsAndCs = (
-		<div>{paperShareTsAndCs} to provide you with your subscription card.</div>
-	);
-	const paperHomeDeliveryTsAndCs = (
-		<>
-			<div
-				css={css`
-					margin-bottom: ${space[1]}px;
-				`}
-			>
-				Your first payment will be taken on {deliveryStartDate} when your first
-				newspaper is delivered.{' '}
-				{isPaperProductTest && paperProductProductTsAndCs}
-			</div>
-			<div>{paperShareTsAndCs}.</div>
-		</>
-	);
-	const paperSubscriptionCardTsAndCs = (
-		<>
-			<div
-				css={css`
-					margin-bottom: ${space[1]}px;
-				`}
-			>
-				Your first payment will be taken on {deliveryStartDate}.{' '}
-				{isPaperProductTest && paperProductProductTsAndCs}
-			</div>
-			<div>{paperShareTsAndCs} to provide you with your subscription card.</div>
-		</>
-	);
 	const guardianWeeklyPromo = (
 		<div>
 			Offer subject to availability. Guardian News and Media Ltd ("GNM")
@@ -329,8 +329,16 @@ export function PaymentTsAndCs({
 				</p>
 			</div>
 		),
-		HomeDelivery: paperHomeDeliveryTsAndCs,
-		SubscriptionCard: paperSubscriptionCardTsAndCs,
+		HomeDelivery: paperTsAndCs(
+			isPaperProductTest,
+			deliveryStartDate,
+			'HomeDelivery',
+		),
+		SubscriptionCard: paperTsAndCs(
+			isPaperProductTest,
+			deliveryStartDate,
+			'Collection',
+		),
 		NationalDelivery: paperNationalDeliveryTsAndCs,
 		GuardianWeeklyDomestic: <> {promotion && guardianWeeklyPromo}</>,
 		GuardianWeeklyRestOfWorld: <> {promotion && guardianWeeklyPromo}</>,
