@@ -40,7 +40,7 @@ const titlePaper = (
 function titlePaperPlus(productPrices: ProductPrices): string {
 	return `Save up to ${
 		getMaxSavingVsRetail(productPrices) ?? 0
-	}% on your Guardian print subscription`;
+	}% with a Guardian print subscription`;
 }
 function roundelPaper(productPrices: ProductPrices): string | undefined {
 	const maxSavingVsRetail = getMaxSavingVsRetail(productPrices) ?? 0;
@@ -53,8 +53,7 @@ const bodyPaper = `Whether you’re looking to keep up to date with the headline
 		our irresistible recipes, you can enjoy our award-winning journalism for
 		less.`;
 const bodyPaperPlus = `From political insight to the perfect pasta, there’s something for everyone
-		with a Guardian print subscription. Plus, enjoy free digital access when you
-		subscribe, so you can stay informed on your mobile or tablet, wherever you
+		with a Guardian print subscription. Plus, unlock the full digital experience when you subscribe, so you can stay informed on your mobile or tablet, wherever you
 		are, whenever you like.`;
 
 const getDiscountCopy = (discountPercentage: number): DiscountCopy =>
