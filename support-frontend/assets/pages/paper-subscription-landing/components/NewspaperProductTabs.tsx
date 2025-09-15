@@ -19,6 +19,7 @@ import {
 	cardsContainer,
 	productInfoWrapper,
 } from './NewspapperProductTabsStyles';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 type TabOptions = {
 	text: string;
@@ -73,6 +74,15 @@ function NewspaperProductTabs({
 		);
 	}, [selectedTab]);
 
+	const handleTabChange = (tabId: PaperFulfilmentOptions) => {
+		setSelectedTab(tabId);
+		sendTrackingEventsOnClick({
+			id: `Paper_${tabId}-tab`,
+			product: 'Paper',
+			componentType: 'ACQUISITIONS_BUTTON',
+		})();
+	};
+
 	const tabItems = Object.entries(tabs).map(([fulfilment, tab]) => {
 		const { href, text, content: ContentComponent } = tab;
 		return {
@@ -94,9 +104,7 @@ function NewspaperProductTabs({
 					tabsLabel="Paper subscription options"
 					tabElement="a"
 					tabs={tabItems}
-					onTabChange={(tabId) => {
-						setSelectedTab(tabId);
-					}}
+					onTabChange={handleTabChange}
 					theme="paperTabs"
 				/>
 				<section css={cardsContainer}>
