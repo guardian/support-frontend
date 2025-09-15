@@ -51,5 +51,15 @@ describe('buildCheckoutUrl', () => {
 				expect(url).toBe(routes.supporterPlusStudentBeansCa);
 			});
 		});
+
+		describe('and the geoId is not one we have a Studen Beans link for', () => {
+			it('returns the checkout URL', () => {
+				const url = buildCheckoutUrl('eu', 'SupporterPlus', 'OneYearStudent');
+
+				expect(url).toBe(
+					'/eu/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false',
+				);
+			});
+		});
 	});
 });

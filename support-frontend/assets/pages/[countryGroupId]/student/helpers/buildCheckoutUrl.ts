@@ -13,6 +13,8 @@ export default function buildCheckoutUrl(
 ): string {
 	// For this product/rate plan we direct the user to Student Beans for verification
 	if (productKey == 'SupporterPlus' && ratePlanKey === 'OneYearStudent') {
+		// If the geoId isn't one of these we'll fall through to linking to the
+		// normal checkout page
 		switch (geoId) {
 			case 'uk':
 				return routes.supporterPlusStudentBeansUk;
