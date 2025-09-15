@@ -92,10 +92,9 @@ export class SalesforceService {
 		user: User,
 		giftRecipient: GiftRecipient | null,
 	): Promise<SalesforceContactRecord> => {
-		console.log(`XXX Creating Salesforce contact record...`);
-		console.log(`XXX user: ${JSON.stringify(user)}`);
-		console.log(`XXX Creating Salesforce contact record...`);
-		const contact = createContactRecordRequest(user, giftRecipient);
+		console.log('Creating Salesforce contact record from user:', user);
+		const contactType = getContactType(giftRecipient, user);
+		const contact = createContactRecordRequest(user, contactType);
 		const buyerResponse = await this.upsert(contact);
 		const giftRecipientResponse = await this.maybeAddGiftRecipient(
 			buyerResponse.ContactRecord,
@@ -228,7 +227,7 @@ const createDigitalContactRecordRequest = (
 
 export const createContactRecordRequest = (
 	user: User,
-	giftRecipient: GiftRecipient | null,
+	contactType: 'Standard' | 'Digital',
 ): StandardContactRecordRequest | DigitalContactRecordRequest => {
 	const baseContact = {
 		Email: user.primaryEmailAddress,
@@ -237,8 +236,6 @@ export const createContactRecordRequest = (
 		LastName: user.lastName,
 		Phone: user.telephoneNumber,
 	};
-	const contactType = getContactType(giftRecipient, user);
-
 	switch (contactType) {
 		case 'Standard':
 			return createStandardContactRecordRequest(baseContact, user);
