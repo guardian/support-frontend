@@ -35,7 +35,7 @@ interface StudentHeaderProps {
 	heroImagePrefix: string;
 }
 
-const ukSpecificAdditionalBenefit: ProductBenefit = {
+export const ukSpecificAdditionalBenefit: ProductBenefit = {
 	copy: 'Student-focused newsletter, curated by our journalists',
 	label: {
 		copy: 'Limited series',

@@ -31,6 +31,7 @@ import {
 	getBenefitsChecklistFromProductDescription,
 	getPaperPlusDigitalBenefits,
 } from '../checkout/helpers/benefitsChecklist';
+import { ukSpecificAdditionalBenefit } from '../student/components/StudentHeader';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { BackButton } from './backButton';
 import { shorterBoxMargin } from './form';
@@ -123,6 +124,14 @@ export default function CheckoutSummary({
 			countryGroupId,
 			abParticipations,
 		);
+
+	if (ratePlanKey === 'OneYearStudent') {
+		benefitsCheckListData.unshift({
+			isChecked: true,
+			text: ukSpecificAdditionalBenefit.copy,
+		});
+	}
+
 	return (
 		<Box cssOverrides={shorterBoxMargin}>
 			<BoxContents>
