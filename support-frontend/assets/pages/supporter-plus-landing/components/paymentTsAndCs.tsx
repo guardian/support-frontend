@@ -190,11 +190,10 @@ export function PaymentTsAndCs({
 			{termsLink('Help Centre', helpCentreUrl)}.
 		</>
 	);
+	const paperShareTsAndCs =
+		'We will share your contact and subscription details with our fulfilment partners';
 	const paperNationalDeliveryTsAndCs = (
-		<>
-			We will share your contact and subscription details with our fulfilment
-			partners
-		</>
+		<div>{paperShareTsAndCs} to provide you with your subscription card.</div>
 	);
 	const paperHomeDeliveryTsAndCs = (
 		<>
@@ -207,7 +206,7 @@ export function PaymentTsAndCs({
 				newspaper is delivered.{' '}
 				{isPaperProductTest && paperProductProductTsAndCs}
 			</div>
-			<div>{paperNationalDeliveryTsAndCs}.</div>
+			<div>{paperShareTsAndCs}.</div>
 		</>
 	);
 	const paperSubscriptionCardTsAndCs = (
@@ -220,10 +219,7 @@ export function PaymentTsAndCs({
 				Your first payment will be taken on {deliveryStartDate}.{' '}
 				{isPaperProductTest && paperProductProductTsAndCs}
 			</div>
-			<div>
-				{paperNationalDeliveryTsAndCs} to provide you with your subscription
-				card.
-			</div>
+			<div>{paperShareTsAndCs} to provide you with your subscription card.</div>
 		</>
 	);
 	const guardianWeeklyPromo = (
