@@ -1,35 +1,61 @@
-// import { render, screen } from '@testing-library/react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import * as subscriptionsModule from 'helpers/productPrice/subscriptions';
+import { getPlans } from '../helpers/getPlans';
 import NewspaperProductTabs from './NewspaperProductTabs';
 
-// import { getPlans } from '../helpers/getPlans';
-import { ProductPrices } from 'helpers/productPrice/productPrices';
-// import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-
-// jest.mock(
-// 	'pages/paper-subscription-landing/components/NewspaperRatePlanCard',
-// 	() => <div>Newspaper RatePlan Card</div>,
-// );
-// jest.mock('../helpers/getPlans');
+jest.mock('../helpers/getPlans');
+jest.mock('pages/aus-moment-map/hooks/useWindowWidth', () => ({
+	useWindowWidth: () => ({ windowWidthIsGreaterThan: jest.fn() }),
+}));
+jest.mock(
+	'pages/paper-subscription-landing/components/NewspaperRatePlanCard',
+	() =>
+		function () {
+			return <div>Newspaper RatePlan Card</div>;
+		},
+);
 
 describe('NewspaperProductTabs', () => {
-	const productPrices = { someData: 'fooBar' } as ProductPrices;
-
-	it('should dispactch ophan event on tab change with the correct payload', () => {
-		// (getPlans as jest.Mock).mockReturnValue(productPrices);
-
-		render(
-			<NewspaperProductTabs
-				productPrices={productPrices}
-				isPaperProductTest={true}
-			/>,
-		);
-
-		// const tabButton = screen.getByRole('tab', { selected: false });
-
-		// tabButton.click();
-
-		// expect(sendTrackingEventsOnClick).toHaveBeenCalled();
-		expect(true).toBeTruthy();
+	const productPrices = [{ someData: 'fooBar' }] as ProductPrices;
+	beforeEach(() => {
+		jest.clearAllMocks();
+		(getPlans as jest.Mock).mockReturnValue([]);
 	});
+
+	it.each`
+		fullfilmentOption | tabText
+		${'HomeDelivery'} | ${'Home delivery'}
+		${'Collection'}   | ${'Collect in store'}
+	`(
+		'should send a ophan event on tab click with the correct payload for $fullfilmentOption} ',
+		({ fullfilmentOption, tabText }) => {
+			// Arrange
+			const sendTrackingSpy = jest.spyOn(
+				subscriptionsModule,
+				'sendTrackingEventsOnClick',
+			);
+
+			// Act
+			render(
+				<NewspaperProductTabs
+					productPrices={productPrices}
+					isPaperProductTest={true}
+				/>,
+			);
+
+			screen
+				.getByRole('tab', {
+					name: tabText as string,
+				})
+				.click();
+
+			// Assert
+			expect(sendTrackingSpy).toHaveBeenCalledWith({
+				componentType: 'ACQUISITIONS_BUTTON',
+				id: `Paper_${fullfilmentOption}-tab`,
+				product: 'Paper',
+			});
+		},
+	);
 });

@@ -11,6 +11,7 @@ import Tabs, { type TabProps } from 'components/tabs/tabs';
 import { observerLinks } from 'helpers/legal';
 import { ActivePaperProductTypes } from 'helpers/productCatalogToProductOption';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import NewspaperRatePlanCard from 'pages/paper-subscription-landing/components/NewspaperRatePlanCard';
 import { getPlans } from '../helpers/getPlans';
@@ -19,7 +20,6 @@ import {
 	cardsContainer,
 	productInfoWrapper,
 } from './NewspapperProductTabsStyles';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 type TabOptions = {
 	text: string;
