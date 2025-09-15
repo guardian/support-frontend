@@ -28,7 +28,7 @@ export type StandardContactRecordRequest = BaseContactRecordRequest & {
 };
 
 export type GiftRecipientContactRecordRequest = BaseContactRecordRequest & {
-	AccountId?: string;
+	AccountId: string;
 	RecordTypeId: '01220000000VB50AAG';
 	MailingStreet: string | undefined;
 	MailingCity: string | undefined;
