@@ -27,7 +27,7 @@ export type StandardContactRecordRequest = BaseContactRecordRequest & {
 	MailingCountry: string | null;
 };
 
-export type DeliveryContactRecordRequest = BaseContactRecordRequest & {
+export type RecipientContactRecordRequest = BaseContactRecordRequest & {
 	AccountId?: string;
 	RecordTypeId: '01220000000VB50AAG';
 	MailingStreet?: string | null;
@@ -89,7 +89,7 @@ export class SalesforceService {
 	): Promise<SalesforceContactRecord> => {
 		console.log(`XXX Creating Salesforce contact record...`);
 		console.log(`XXX user: ${JSON.stringify(user)}`);
-		console.log(`XXX giftRecipient: ${JSON.stringify(giftRecipient)}`);
+		console.log(`XXX Creating Salesforce contact record...`);
 		const contact = createContactRecordRequest(user, giftRecipient);
 		const buyerResponse = await this.upsert(contact);
 		const giftRecipientResponse = await this.maybeAddGiftRecipient(
@@ -101,7 +101,7 @@ export class SalesforceService {
 	};
 
 	upsert = async (
-		contact: StandardContactRecordRequest | DeliveryContactRecordRequest,
+		contact: StandardContactRecordRequest | RecipientContactRecordRequest,
 	): Promise<SuccessfulUpsertResponse> => {
 		const response: UpsertResponse = await this.client.post(
 			this.upsertEndpoint,
@@ -138,7 +138,7 @@ export class SalesforceService {
 		user: User,
 	): Promise<SuccessfulUpsertResponse> | null {
 		if (giftRecipient?.firstName && giftRecipient.lastName) {
-			const giftRecipientContact: DeliveryContactRecordRequest = {
+			const giftRecipientContact: RecipientContactRecordRequest = {
 				AccountId: contactRecord.AccountId,
 				Email: giftRecipient.email,
 				Salutation: giftRecipient.title,
@@ -187,7 +187,7 @@ const createMailingAddressFields = (user: User) => {
 export const createContactRecordRequest = (
 	user: User,
 	giftRecipient: GiftRecipient | null,
-): StandardContactRecordRequest | DeliveryContactRecordRequest => {
+): StandardContactRecordRequest | RecipientContactRecordRequest => {
 	const baseContact = {
 		Email: user.primaryEmailAddress,
 		Salutation: user.title,
@@ -218,7 +218,7 @@ const createStandardContactRecordRequest = (
 const createDeliveryContactRecordRequest = (
 	baseContact: BaseContactRecordRequest,
 	user: User,
-): DeliveryContactRecordRequest => {
+): RecipientContactRecordRequest => {
 	return {
 		...baseContact,
 		RecordTypeId: '01220000000VB50AAG',

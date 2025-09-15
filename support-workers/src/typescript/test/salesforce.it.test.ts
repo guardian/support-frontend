@@ -12,7 +12,7 @@ import {
 	wrapperSchemaForState,
 	wrapState,
 } from '../model/stateSchemas';
-import type { DeliveryContactRecordRequest } from '../services/salesforce';
+import type { RecipientContactRecordRequest } from '../services/salesforce';
 import { SalesforceService } from '../services/salesforce';
 import type { SalesforceConfig } from '../services/salesforceClient';
 import { AuthService, getSalesforceConfig } from '../services/salesforceClient';
@@ -91,7 +91,7 @@ describe('SalesforceService', () => {
 
 	test('it should be able to add a related contact record', async () => {
 		const name = 'integration-test-recipient';
-		const upsertData: DeliveryContactRecordRequest = {
+		const upsertData: RecipientContactRecordRequest = {
 			AccountId: salesforceAccountId,
 			Email: emailAddress,
 			Salutation: title,
