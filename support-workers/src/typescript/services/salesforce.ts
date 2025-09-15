@@ -93,7 +93,7 @@ export class SalesforceService {
 		giftRecipient: GiftRecipient | null,
 	): Promise<SalesforceContactRecord> => {
 		console.log('Creating Salesforce contact record from user:', user);
-		const contactType = getContactType(giftRecipient, user);
+		const contactType = getContactType(user);
 		const contact = createContactRecordRequest(user, contactType);
 		const buyerResponse = await this.upsert(contact);
 		const giftRecipientResponse = await this.maybeAddGiftRecipient(
