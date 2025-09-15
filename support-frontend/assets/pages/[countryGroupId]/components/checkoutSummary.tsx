@@ -33,6 +33,7 @@ import {
 	getBenefitsChecklistFromProductDescription,
 	getPaperPlusDigitalBenefits,
 } from '../checkout/helpers/benefitsChecklist';
+import { ukSpecificAdditionalBenefit } from '../student/components/StudentHeader';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { BackButton } from './backButton';
 import { shorterBoxMargin } from './form';
@@ -126,6 +127,13 @@ export default function CheckoutSummary({
 			abParticipations,
 		);
 
+  if (ratePlanKey === 'OneYearStudent' && geoId === 'uk') {
+		benefitsCheckListData.unshift({
+			isChecked: true,
+			text: ukSpecificAdditionalBenefit.copy,
+		});
+	}
+  
 	const getPaperFulfilmentOption = (
 		productKey: ActiveProductKey,
 	): PaperFulfilmentOptions | undefined => {
