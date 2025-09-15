@@ -127,13 +127,13 @@ export default function CheckoutSummary({
 			abParticipations,
 		);
 
-  if (ratePlanKey === 'OneYearStudent' && geoId === 'uk') {
+	if (ratePlanKey === 'OneYearStudent' && geoId === 'uk') {
 		benefitsCheckListData.unshift({
 			isChecked: true,
 			text: ukSpecificAdditionalBenefit.copy,
 		});
 	}
-  
+
 	const getPaperFulfilmentOption = (
 		productKey: ActiveProductKey,
 	): PaperFulfilmentOptions | undefined => {
