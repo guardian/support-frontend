@@ -16,14 +16,14 @@ export type BaseContactRecordRequest = {
 export type StandardContactRecordRequest = BaseContactRecordRequest & {
 	IdentityID__c: string;
 	OtherStreet: string | undefined;
-	OtherCity: string | undefined;
-	OtherState: string | undefined;
-	OtherPostalCode: string | undefined;
+	OtherCity: string | null;
+	OtherState: string | null;
+	OtherPostalCode: string | null;
 	OtherCountry: string | null;
 	MailingStreet: string | undefined;
-	MailingCity: string | undefined;
-	MailingState: string | undefined;
-	MailingPostalCode: string | undefined;
+	MailingCity: string | null;
+	MailingState: string | null;
+	MailingPostalCode: string | null;
 	MailingCountry: string | null;
 };
 
@@ -158,7 +158,7 @@ export class SalesforceService {
 }
 const createBillingAddressFields = (user: User) => ({
 	OtherStreet: getAddressLine(user.billingAddress),
-	OtherCity: user.billingAddress.city ?? undefined,
+	OtherCity: user.billingAddress.city ?? null,
 	OtherState: user.billingAddress.state ?? undefined,
 	OtherPostalCode: user.billingAddress.postCode ?? undefined,
 	OtherCountry: getCountryNameByIsoCode(user.billingAddress.country) ?? null,
