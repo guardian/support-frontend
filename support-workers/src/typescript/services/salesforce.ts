@@ -178,10 +178,7 @@ const createMailingAddressFields = (user: User) => {
 	};
 };
 
-const getContactType = (
-	giftRecipient: GiftRecipient | null,
-	user: User,
-): 'Standard' | 'Digital' => {
+const getContactType = (user: User): 'Standard' | 'Digital' => {
 	if (!user.deliveryAddress) {
 		return 'Digital';
 	}
