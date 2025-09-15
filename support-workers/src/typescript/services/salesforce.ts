@@ -182,10 +182,10 @@ const getContactType = (
 	giftRecipient: GiftRecipient | null,
 	user: User,
 ): 'Standard' | 'Digital' => {
-	if (giftRecipient ?? !user.deliveryAddress) {
-		return 'Standard';
+	if (!user.deliveryAddress) {
+		return 'Digital';
 	}
-	return 'Digital';
+	return 'Standard';
 };
 
 const createStandardContactRecordRequest = (
@@ -236,6 +236,7 @@ export const createContactRecordRequest = (
 	user: User,
 	contactType: 'Standard' | 'Digital',
 ): StandardContactRecordRequest | DigitalContactRecordRequest => {
+	console.log('Creating contact record of type:', contactType);
 	switch (contactType) {
 		case 'Standard':
 			return createStandardContactRecordRequest(user);
