@@ -31,9 +31,9 @@ export type GiftRecipientContactRecordRequest = BaseContactRecordRequest & {
 	AccountId: string;
 	RecordTypeId: '01220000000VB50AAG';
 	MailingStreet: string | undefined;
-	MailingCity: string | undefined;
-	MailingState: string | undefined;
-	MailingPostalCode: string | undefined;
+	MailingCity: string | null;
+	MailingState: string | null;
+	MailingPostalCode: string | null;
 	MailingCountry: string | null;
 };
 
@@ -159,8 +159,8 @@ export class SalesforceService {
 const createBillingAddressFields = (user: User) => ({
 	OtherStreet: getAddressLine(user.billingAddress),
 	OtherCity: user.billingAddress.city ?? null,
-	OtherState: user.billingAddress.state ?? undefined,
-	OtherPostalCode: user.billingAddress.postCode ?? undefined,
+	OtherState: user.billingAddress.state ?? null,
+	OtherPostalCode: user.billingAddress.postCode ?? null,
 	OtherCountry: getCountryNameByIsoCode(user.billingAddress.country) ?? null,
 });
 
@@ -169,9 +169,9 @@ const createMailingAddressFields = (user: User) => {
 		MailingStreet: user.deliveryAddress
 			? getAddressLine(user.deliveryAddress)
 			: undefined,
-		MailingCity: user.deliveryAddress?.city ?? undefined,
-		MailingState: user.deliveryAddress?.state ?? undefined,
-		MailingPostalCode: user.deliveryAddress?.postCode ?? undefined,
+		MailingCity: user.deliveryAddress?.city ?? null,
+		MailingState: user.deliveryAddress?.state ?? null,
+		MailingPostalCode: user.deliveryAddress?.postCode ?? null,
 		MailingCountry: user.deliveryAddress
 			? getCountryNameByIsoCode(user.deliveryAddress.country)
 			: null,
