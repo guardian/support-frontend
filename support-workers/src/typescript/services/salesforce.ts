@@ -189,11 +189,14 @@ const getContactType = (
 };
 
 const createStandardContactRecordRequest = (
-	baseContact: BaseContactRecordRequest,
 	user: User,
 ): StandardContactRecordRequest => {
 	return {
-		...baseContact,
+		Email: user.primaryEmailAddress,
+		Salutation: user.title,
+		FirstName: user.firstName,
+		LastName: user.lastName,
+		Phone: user.telephoneNumber,
 		IdentityID__c: user.id,
 		...createBillingAddressFields(user),
 		...createMailingAddressFields(user),
@@ -217,10 +220,14 @@ const createGiftRecipientContactRecordRequest = (
 };
 
 const createDigitalContactRecordRequest = (
-	baseContact: BaseContactRecordRequest,
+	user: User,
 ): DigitalContactRecordRequest => {
 	return {
-		...baseContact,
+		Email: user.primaryEmailAddress,
+		Salutation: user.title,
+		FirstName: user.firstName,
+		LastName: user.lastName,
+		Phone: user.telephoneNumber,
 		RecordTypeId: '01220000000VB50AAG',
 	};
 };
@@ -229,17 +236,10 @@ export const createContactRecordRequest = (
 	user: User,
 	contactType: 'Standard' | 'Digital',
 ): StandardContactRecordRequest | DigitalContactRecordRequest => {
-	const baseContact = {
-		Email: user.primaryEmailAddress,
-		Salutation: user.title,
-		FirstName: user.firstName,
-		LastName: user.lastName,
-		Phone: user.telephoneNumber,
-	};
 	switch (contactType) {
 		case 'Standard':
-			return createStandardContactRecordRequest(baseContact, user);
+			return createStandardContactRecordRequest(user);
 		case 'Digital':
-			return createDigitalContactRecordRequest(baseContact);
+			return createDigitalContactRecordRequest(user);
 	}
 };
