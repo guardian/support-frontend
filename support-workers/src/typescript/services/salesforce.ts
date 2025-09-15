@@ -182,7 +182,7 @@ const createMailingAddressFields = (user: User) => {
 const getContactType = (
 	giftRecipient: GiftRecipient | null,
 	user: User,
-): 'GiftRecipient' | 'Standard' | 'Digital' => {
+): 'Standard' | 'Digital' => {
 	if (giftRecipient ?? !user.deliveryAddress) {
 		return 'Standard';
 	}
@@ -229,10 +229,7 @@ const createDigitalContactRecordRequest = (
 export const createContactRecordRequest = (
 	user: User,
 	giftRecipient: GiftRecipient | null,
-):
-	| StandardContactRecordRequest
-	| GiftRecipientContactRecordRequest
-	| DigitalContactRecordRequest => {
+): StandardContactRecordRequest | DigitalContactRecordRequest => {
 	const baseContact = {
 		Email: user.primaryEmailAddress,
 		Salutation: user.title,
@@ -245,8 +242,6 @@ export const createContactRecordRequest = (
 	switch (contactType) {
 		case 'Standard':
 			return createStandardContactRecordRequest(baseContact, user);
-		case 'GiftRecipient':
-			return createGiftRecipientContactRecordRequest(baseContact, user);
 		case 'Digital':
 			return createDigitalContactRecordRequest(baseContact);
 	}
