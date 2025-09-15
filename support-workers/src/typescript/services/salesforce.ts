@@ -146,15 +146,12 @@ export class SalesforceService {
 		user: User,
 	): Promise<SuccessfulUpsertResponse> | null {
 		if (giftRecipient?.firstName && giftRecipient.lastName) {
-			const giftRecipientContact: GiftRecipientContactRecordRequest = {
-				AccountId: contactRecord.AccountId,
-				Email: giftRecipient.email,
-				Salutation: giftRecipient.title,
-				FirstName: giftRecipient.firstName,
-				LastName: giftRecipient.lastName,
-				...createMailingAddressFields(user),
-				RecordTypeId: '01220000000VB50AAG',
-			};
+			const giftRecipientContact: GiftRecipientContactRecordRequest =
+				createGiftRecipientContactRecordRequest(
+					contactRecord,
+					giftRecipient,
+					user,
+				);
 			return this.upsert(giftRecipientContact);
 		}
 		return null;
@@ -186,10 +183,7 @@ const getContactType = (
 	giftRecipient: GiftRecipient | null,
 	user: User,
 ): 'GiftRecipient' | 'Standard' | 'Digital' => {
-	if (giftRecipient) {
-		return 'GiftRecipient';
-	}
-	if (user.deliveryAddress) {
+	if (giftRecipient ?? !user.deliveryAddress) {
 		return 'Standard';
 	}
 	return 'Digital';
@@ -208,13 +202,18 @@ const createStandardContactRecordRequest = (
 };
 
 const createGiftRecipientContactRecordRequest = (
-	baseContact: BaseContactRecordRequest,
+	contactRecord: SalesforceContactRecord,
+	giftRecipient: GiftRecipient,
 	user: User,
 ): GiftRecipientContactRecordRequest => {
 	return {
-		...baseContact,
-		RecordTypeId: '01220000000VB50AAG',
+		AccountId: contactRecord.AccountId,
+		Email: giftRecipient.email,
+		Salutation: giftRecipient.title,
+		FirstName: giftRecipient.firstName,
+		LastName: giftRecipient.lastName,
 		...createMailingAddressFields(user),
+		RecordTypeId: '01220000000VB50AAG',
 	};
 };
 
