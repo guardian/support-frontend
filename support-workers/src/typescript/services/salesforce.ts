@@ -27,7 +27,7 @@ export type StandardContactRecordRequest = BaseContactRecordRequest & {
 	MailingCountry: string | null;
 };
 
-export type GiftRecipientContactRecordRequest = BaseContactRecordRequest & {
+export type DeliveryContactRecordRequest = BaseContactRecordRequest & {
 	AccountId: string;
 	RecordTypeId: '01220000000VB50AAG';
 	MailingStreet: string | undefined;
@@ -37,7 +37,7 @@ export type GiftRecipientContactRecordRequest = BaseContactRecordRequest & {
 	MailingCountry: string | null;
 };
 
-export type DigitalContactRecordRequest = BaseContactRecordRequest & {
+export type RecipientContactRecordRequest = BaseContactRecordRequest & {
 	RecordTypeId: '01220000000VB50AAG';
 };
 
@@ -107,8 +107,8 @@ export class SalesforceService {
 	upsert = async (
 		contact:
 			| StandardContactRecordRequest
-			| GiftRecipientContactRecordRequest
-			| DigitalContactRecordRequest,
+			| DeliveryContactRecordRequest
+			| RecipientContactRecordRequest,
 	): Promise<SuccessfulUpsertResponse> => {
 		const response: UpsertResponse = await this.client.post(
 			this.upsertEndpoint,
@@ -145,12 +145,8 @@ export class SalesforceService {
 		user: User,
 	): Promise<SuccessfulUpsertResponse> | null {
 		if (giftRecipient?.firstName && giftRecipient.lastName) {
-			const giftRecipientContact: GiftRecipientContactRecordRequest =
-				createGiftRecipientContactRecordRequest(
-					contactRecord,
-					giftRecipient,
-					user,
-				);
+			const giftRecipientContact: DeliveryContactRecordRequest =
+				createDeliveryContactRecordRequest(contactRecord, giftRecipient, user);
 			return this.upsert(giftRecipientContact);
 		}
 		return null;
@@ -178,9 +174,9 @@ const createMailingAddressFields = (user: User) => {
 	};
 };
 
-const getContactType = (user: User): 'Standard' | 'Digital' => {
+const getContactType = (user: User): 'Standard' | 'DeliveryOrRecipient' => {
 	if (!user.deliveryAddress) {
-		return 'Digital';
+		return 'DeliveryOrRecipient';
 	}
 	return 'Standard';
 };
@@ -200,11 +196,11 @@ const createStandardContactRecordRequest = (
 	};
 };
 
-const createGiftRecipientContactRecordRequest = (
+const createDeliveryContactRecordRequest = (
 	contactRecord: SalesforceContactRecord,
 	giftRecipient: GiftRecipient,
 	user: User,
-): GiftRecipientContactRecordRequest => {
+): DeliveryContactRecordRequest => {
 	return {
 		AccountId: contactRecord.AccountId,
 		Email: giftRecipient.email,
@@ -216,9 +212,9 @@ const createGiftRecipientContactRecordRequest = (
 	};
 };
 
-const createDigitalContactRecordRequest = (
+const createRecipientContactRecordRequest = (
 	user: User,
-): DigitalContactRecordRequest => {
+): RecipientContactRecordRequest => {
 	return {
 		Email: user.primaryEmailAddress,
 		Salutation: user.title,
@@ -231,13 +227,13 @@ const createDigitalContactRecordRequest = (
 
 export const createContactRecordRequest = (
 	user: User,
-	contactType: 'Standard' | 'Digital',
-): StandardContactRecordRequest | DigitalContactRecordRequest => {
+	contactType: 'Standard' | 'DeliveryOrRecipient',
+): StandardContactRecordRequest | RecipientContactRecordRequest => {
 	console.log('Creating contact record of type:', contactType);
 	switch (contactType) {
 		case 'Standard':
 			return createStandardContactRecordRequest(user);
-		case 'Digital':
-			return createDigitalContactRecordRequest(user);
+		case 'DeliveryOrRecipient':
+			return createRecipientContactRecordRequest(user);
 	}
 };
