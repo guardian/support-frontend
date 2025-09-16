@@ -3,6 +3,7 @@ import { space } from '@guardian/source/foundations';
 import { InfoSummary } from '@guardian/source-development-kitchen/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import {
@@ -22,6 +23,7 @@ import {
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { parameteriseUrl } from 'helpers/urls/routes';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -132,6 +134,26 @@ export default function CheckoutSummary({
 		});
 	}
 
+	const getPaperFulfilmentOption = (
+		productKey: ActiveProductKey,
+	): PaperFulfilmentOptions | undefined => {
+		switch (productKey) {
+			case 'HomeDelivery':
+			case 'NationalDelivery':
+				return 'HomeDelivery';
+			case 'SubscriptionCard':
+				return 'Collection';
+			default:
+				return undefined;
+		}
+	};
+	const backUrl = parameteriseUrl(
+		`/${geoId}${productDescription.landingPagePath}`,
+		promotion?.promoCode,
+		isPaperProductTest ? 'paperProductTabs' : undefined,
+		getPaperFulfilmentOption(productKey),
+	);
+
 	return (
 		<Box cssOverrides={shorterBoxMargin}>
 			<BoxContents>
@@ -183,10 +205,7 @@ export default function CheckoutSummary({
 					}
 					headerButton={
 						showBackButton && (
-							<BackButton
-								path={`/${geoId}${productDescription.landingPagePath}`}
-								buttonText={'Change'}
-							/>
+							<BackButton path={backUrl} buttonText={'Change'} />
 						)
 					}
 					abParticipations={abParticipations}

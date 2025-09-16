@@ -140,6 +140,26 @@ function paperCheckoutUrl(
 	return addQueryParamsToURL(url, params);
 }
 
+function parameteriseUrl(
+	url: string,
+	promoCode?: Option<string>,
+	abTestName?: string,
+	fulfilmentOption?: PaperFulfilmentOptions,
+) {
+	const params = abTestName
+		? {
+				[abTestName]: 'true',
+				promoCode,
+		  }
+		: {
+				promoCode,
+		  };
+	const urlWithParams = addQueryParamsToURL(url, params).replace(/\?$/, ''); // removes ? when no params
+	return fulfilmentOption
+		? `${urlWithParams}#${fulfilmentOption}`
+		: urlWithParams;
+}
+
 // If the user cancels before completing the payment flow, send them back to the contribute page.
 function payPalCancelUrl(cgId: CountryGroupId): string {
 	return `${getOrigin()}/${countryPath(cgId)}/contribute`;
@@ -165,6 +185,7 @@ export {
 	payPalReturnUrl,
 	paperSubsUrl,
 	paperCheckoutUrl,
+	parameteriseUrl,
 	digitalSubscriptionLanding,
 	guardianWeeklyLanding,
 	promotionTermsUrl,

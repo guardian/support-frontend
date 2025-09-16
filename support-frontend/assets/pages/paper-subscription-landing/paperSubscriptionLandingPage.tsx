@@ -26,6 +26,7 @@ import PaperProductPrices from './components/paperProductPrices';
 import PaperTabs from './components/paperTabs';
 import { inPaperProductTest } from './helpers/inPaperProductTest';
 import { getPaperItems, getPaperPlusItems } from './helpers/PaperHeroCopy';
+import { windowSetHashProperty } from './helpers/windowSetHashProperty';
 import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
 import 'stylesheets/skeleton/skeleton.scss';
@@ -75,7 +76,7 @@ function PaperLandingPage({
 			componentType: 'ACQUISITIONS_BUTTON',
 		})();
 
-		window.history.replaceState({}, '', `#${newTab}`);
+		windowSetHashProperty(newTab);
 	}
 
 	return (
