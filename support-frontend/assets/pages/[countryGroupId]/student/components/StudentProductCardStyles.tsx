@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import {
 	from,
 	neutral,
-	news,
 	palette,
 	space,
 	textSans12,
@@ -77,7 +76,7 @@ export const pill = css`
 	white-space: nowrap;
 	padding: ${space[1]}px ${space[4]}px;
 	border-radius: ${space[1]}px;
-	background-color: ${news[400]};
+	background-color: ${palette.brand[500]};
 	color: ${palette.neutral[100]};
 	${textSansBold15};
 `;

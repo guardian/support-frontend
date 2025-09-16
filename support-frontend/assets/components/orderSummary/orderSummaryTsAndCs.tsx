@@ -112,13 +112,11 @@ export function OrderSummaryTsAndCs({
 		thresholdAmount,
 		promotion,
 	); // promoMessage expected to be a string like: "£10.49/month for the first 6 months, then £20.99/month"
-	const homeDeliveryDate = productDeliveryOrStartDate(
-		'HomeDelivery',
+	const deliveryDate = productDeliveryOrStartDate(
+		productKey,
 		ratePlanKey as ActivePaperProductOptions,
 	);
-	const homeDeliveryStartDate = homeDeliveryDate
-		? formatUserDate(homeDeliveryDate)
-		: '';
+	const deliveryStartDate = deliveryDate ? formatUserDate(deliveryDate) : '';
 	const rateDescriptor = ratePlanDescription
 		? ratePlanDescription
 				.replace(/^The\s+/i, '') // Remove "The" at the start, case-insensitive, with following space
@@ -178,15 +176,15 @@ export function OrderSummaryTsAndCs({
 		{
 			HomeDelivery: (
 				<p>
-					You will receive your first newspaper delivery on{' '}
-					{homeDeliveryStartDate} as part of your {rateDescriptor} subscription.
+					You will receive your first newspaper delivery on {deliveryStartDate}{' '}
+					as part of your {rateDescriptor} subscription.
 				</p>
 			),
 			SubscriptionCard: (
 				<p>
-					Your physical subscription card will be delivered to your door in 1-2
-					weeks, for you to collect in store the first newspaper edition you are
-					entitled to in your {rateDescriptor} subscription.
+					Your physical subscription card will be delivered to your door by{' '}
+					{deliveryStartDate}, for you to collect in store the first newspaper
+					edition you are entitled to in your {rateDescriptor} subscription.
 				</p>
 			),
 		};

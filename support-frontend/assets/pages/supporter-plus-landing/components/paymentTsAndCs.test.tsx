@@ -7,6 +7,11 @@ import type {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { PaymentTsAndCs } from './paymentTsAndCs';
 
+// Mocking product deliveryDate
+jest.mock('pages/weekly-subscription-checkout/helpers/deliveryDays', () => ({
+	productDeliveryOrStartDate: () => 'Sunday, September 21, 2025',
+}));
+
 const oneYearStudentDiscount = {
 	amount: 9,
 	periodNoun: 'year',
