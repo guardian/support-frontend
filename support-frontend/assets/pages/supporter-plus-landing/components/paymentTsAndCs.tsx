@@ -142,19 +142,24 @@ function paperTsAndCs(
 	deliveryStartDate: string,
 	paperFulfilmentOption: PaperFulfilmentOptions,
 ): JSX.Element {
+	const paymentDateTsAndCs = `Your first payment will be taken on ${deliveryStartDate}
+				${
+					paperFulfilmentOption === 'HomeDelivery'
+						? ' when your first newspaper is delivered. '
+						: '. '
+				}`;
 	return (
 		<>
-			<div
-				css={css`
-					margin-bottom: ${space[1]}px;
-				`}
-			>
-				Your first payment will be taken on {deliveryStartDate}
-				{paperFulfilmentOption === 'HomeDelivery'
-					? ' when your first newspaper is delivered. '
-					: '. '}
-				{isPaperProductTest && paperProductProductTsAndCs}
-			</div>
+			{(isPaperProductTest || deliveryStartDate) && (
+				<div
+					css={css`
+						margin-bottom: ${space[1]}px;
+					`}
+				>
+					{deliveryStartDate && paymentDateTsAndCs}
+					{isPaperProductTest && paperProductProductTsAndCs}
+				</div>
+			)}
 			{paperFulfilmentOption === 'HomeDelivery' ? (
 				<div>{paperShareTsAndCs}.</div>
 			) : (
