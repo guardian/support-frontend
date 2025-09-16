@@ -73,7 +73,6 @@ function NewspaperProductTabs({
 				isPaperProductTest,
 			),
 		);
-		windowSetHashProperty(selectedTab);
 	}, [selectedTab]);
 
 	const handleTabChange = (tabId: PaperFulfilmentOptions) => {
@@ -83,6 +82,7 @@ function NewspaperProductTabs({
 			product: 'Paper',
 			componentType: 'ACQUISITIONS_BUTTON',
 		})();
+		windowSetHashProperty(tabId);
 	};
 
 	const tabItems = Object.entries(tabs).map(([fulfilment, tab]) => {
