@@ -126,9 +126,6 @@ function getStudentPrice(
 
 const paperShareTsAndCs =
 	'We will share your contact and subscription details with our fulfilment partners';
-const paperNationalDeliveryTsAndCs = (
-	<div>{paperShareTsAndCs} to provide you with your subscription card.</div>
-);
 function paperTsAndCs(
 	paperFulfilmentOption: PaperFulfilmentOptions,
 	deliveryDate?: Date,
@@ -158,11 +155,13 @@ function paperTsAndCs(
 				current payment period. To cancel, use the contact details listed on our{' '}
 				{termsLink('Help Centre', helpCentreUrl)}.{' '}
 			</div>
-			{paperFulfilmentOption === 'HomeDelivery' ? (
-				<div>{paperShareTsAndCs}.</div>
-			) : (
-				paperNationalDeliveryTsAndCs
-			)}
+			<div>
+				{paperShareTsAndCs}
+				{paperFulfilmentOption === 'Collection'
+					? ' to provide you with your subscription card'
+					: ''}
+				.
+			</div>
 		</>
 	);
 }
@@ -328,9 +327,9 @@ export function PaymentTsAndCs({
 				</p>
 			</div>
 		),
+		NationalDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
 		HomeDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
 		SubscriptionCard: paperTsAndCs('Collection', deliveryDate),
-		NationalDelivery: paperNationalDeliveryTsAndCs,
 		GuardianWeeklyDomestic: <> {promotion && guardianWeeklyPromo}</>,
 		GuardianWeeklyRestOfWorld: <> {promotion && guardianWeeklyPromo}</>,
 	};
