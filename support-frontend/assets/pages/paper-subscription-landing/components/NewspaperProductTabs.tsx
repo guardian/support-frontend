@@ -11,6 +11,7 @@ import Tabs, { type TabProps } from 'components/tabs/tabs';
 import { observerLinks } from 'helpers/legal';
 import { ActivePaperProductTypes } from 'helpers/productCatalogToProductOption';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import NewspaperRatePlanCard from 'pages/paper-subscription-landing/components/NewspaperRatePlanCard';
 import { getPlans } from '../helpers/getPlans';
@@ -73,6 +74,15 @@ function NewspaperProductTabs({
 		);
 	}, [selectedTab]);
 
+	const handleTabChange = (tabId: PaperFulfilmentOptions) => {
+		setSelectedTab(tabId);
+		sendTrackingEventsOnClick({
+			id: `Paper_${tabId}-tab`,
+			product: 'Paper',
+			componentType: 'ACQUISITIONS_BUTTON',
+		})();
+	};
+
 	const tabItems = Object.entries(tabs).map(([fulfilment, tab]) => {
 		const { href, text, content: ContentComponent } = tab;
 		return {
@@ -94,9 +104,7 @@ function NewspaperProductTabs({
 					tabsLabel="Paper subscription options"
 					tabElement="a"
 					tabs={tabItems}
-					onTabChange={(tabId) => {
-						setSelectedTab(tabId);
-					}}
+					onTabChange={handleTabChange}
 					theme="paperTabs"
 				/>
 				<section css={cardsContainer}>
