@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { neutral, space, textSans12 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import {
 	contributionsTermsLinks,
@@ -20,6 +21,7 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
+import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import {
 	getBillingPeriodNoun,
 	getBillingPeriodTitle,
@@ -27,8 +29,10 @@ import {
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { helpCentreUrl } from 'helpers/urls/externalLinks';
+import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { FinePrint } from './finePrint';
 import { ManageMyAccountLink } from './manageMyAccountLink';
 
@@ -120,6 +124,52 @@ function getStudentPrice(
 		: studentPricePeriod;
 }
 
+const paperShareTsAndCs =
+	'We will share your contact and subscription details with our fulfilment partners';
+const paperNationalDeliveryTsAndCs = (
+	<div>{paperShareTsAndCs} to provide you with your subscription card.</div>
+);
+const paperProductProductTsAndCs = (
+	<>
+		You can cancel your subscription at any time before your next renewal date.
+		Cancellation will take effect at the end of your current payment period. To
+		cancel, use the contact details listed on our{' '}
+		{termsLink('Help Centre', helpCentreUrl)}.
+	</>
+);
+function paperTsAndCs(
+	isPaperProductTest: boolean,
+	deliveryStartDate: string,
+	paperFulfilmentOption: PaperFulfilmentOptions,
+): JSX.Element {
+	const paymentDateTsAndCs = `Your first payment will be taken on ${deliveryStartDate}${
+		paperFulfilmentOption === 'HomeDelivery'
+			? ' when your first newspaper is delivered. '
+			: '. '
+	}`;
+	const noPaymentDateTsAndCs = `Your first payment will be taken on the ${
+		paperFulfilmentOption === 'HomeDelivery'
+			? 'day you receive your first newspaper. '
+			: 'expected delivery date of the subscription card.'
+	}`;
+	return (
+		<>
+			<div
+				css={css`
+					margin-bottom: ${space[1]}px;
+				`}
+			>
+				{deliveryStartDate ? paymentDateTsAndCs : noPaymentDateTsAndCs}
+				{isPaperProductTest && paperProductProductTsAndCs}
+			</div>
+			{paperFulfilmentOption === 'HomeDelivery' ? (
+				<div>{paperShareTsAndCs}.</div>
+			) : (
+				paperNationalDeliveryTsAndCs
+			)}
+		</>
+	);
+}
 export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
@@ -148,6 +198,11 @@ export function PaymentTsAndCs({
 		productKey,
 		ratePlanKey,
 	);
+	const deliveryDate = productDeliveryOrStartDate(
+		productKey,
+		ratePlanKey as ActivePaperProductOptions,
+	);
+	const deliveryStartDate = deliveryDate ? formatUserDate(deliveryDate) : '';
 
 	if (isSundayOnlyNewsletterSubscription) {
 		return (
@@ -174,43 +229,6 @@ export function PaymentTsAndCs({
 				promotion,
 		  );
 
-	const paperProductProductTsAndCs = (
-		<div
-			css={css`
-				margin-bottom: ${space[1]}px;
-			`}
-		>
-			You can cancel your subscription at any time before your next renewal
-			date. Cancellation will take effect at the end of your current payment
-			period. To cancel, use the contact details listed on our{' '}
-			{termsLink('Help Centre', helpCentreUrl)}.
-		</div>
-	);
-	const paperHomeDeliveryTsAndCs = (
-		<>
-			Your first payment will be taken the day you receive your first newspaper
-			delivery (this date is shown above).
-			{isPaperProductTest && paperProductProductTsAndCs}
-			<div>
-				We will share your contact and subscription details with our fulfilment
-				partners.
-			</div>
-		</>
-	);
-	const paperNationalDeliveryTsAndCs = (
-		<div>
-			We will share your contact and subscription details with our fulfilment
-			partners to provide you with your subscription card.
-		</div>
-	);
-	const paperSubscriptionCardTsAndCs = (
-		<>
-			Your first payment will be taken on the expected delivery date of the
-			subscription card.
-			{isPaperProductTest && paperProductProductTsAndCs}
-			{paperNationalDeliveryTsAndCs}
-		</>
-	);
 	const guardianWeeklyPromo = (
 		<div>
 			Offer subject to availability. Guardian News and Media Ltd ("GNM")
@@ -318,8 +336,16 @@ export function PaymentTsAndCs({
 				</p>
 			</div>
 		),
-		HomeDelivery: paperHomeDeliveryTsAndCs,
-		SubscriptionCard: paperSubscriptionCardTsAndCs,
+		HomeDelivery: paperTsAndCs(
+			isPaperProductTest,
+			deliveryStartDate,
+			'HomeDelivery',
+		),
+		SubscriptionCard: paperTsAndCs(
+			isPaperProductTest,
+			deliveryStartDate,
+			'Collection',
+		),
 		NationalDelivery: paperNationalDeliveryTsAndCs,
 		GuardianWeeklyDomestic: <> {promotion && guardianWeeklyPromo}</>,
 		GuardianWeeklyRestOfWorld: <> {promotion && guardianWeeklyPromo}</>,
