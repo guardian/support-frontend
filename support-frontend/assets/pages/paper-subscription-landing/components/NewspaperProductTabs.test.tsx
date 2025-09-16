@@ -23,6 +23,19 @@ describe('NewspaperProductTabs', () => {
 		(getPlans as jest.Mock).mockReturnValue([]);
 	});
 
+	it('should set the collect in store as the initial active tab', () => {
+		render(
+			<NewspaperProductTabs
+				productPrices={productPrices}
+				isPaperProductTest={true}
+			/>,
+		);
+
+		const tab = screen.getByRole('tab', { selected: true });
+
+		expect(tab).toHaveTextContent('Collect in store');
+	});
+
 	it.each`
 		fullfilmentOption | tabText
 		${'HomeDelivery'} | ${'Home delivery'}
