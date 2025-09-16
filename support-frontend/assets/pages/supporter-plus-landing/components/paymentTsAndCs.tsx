@@ -147,18 +147,21 @@ function paperTsAndCs(
 			? ' when your first newspaper is delivered. '
 			: '. '
 	}`;
+	const noPaymentDateTsAndCs = `Your first payment will be taken on the ${
+		paperFulfilmentOption === 'HomeDelivery'
+			? 'day you receive your first newspaper. '
+			: 'expected delivery date of the subscription card.'
+	}`;
 	return (
 		<>
-			{(isPaperProductTest || deliveryStartDate) && (
-				<div
-					css={css`
-						margin-bottom: ${space[1]}px;
-					`}
-				>
-					{deliveryStartDate && paymentDateTsAndCs}
-					{isPaperProductTest && paperProductProductTsAndCs}
-				</div>
-			)}
+			<div
+				css={css`
+					margin-bottom: ${space[1]}px;
+				`}
+			>
+				{deliveryStartDate ? paymentDateTsAndCs : noPaymentDateTsAndCs}
+				{isPaperProductTest && paperProductProductTsAndCs}
+			</div>
 			{paperFulfilmentOption === 'HomeDelivery' ? (
 				<div>{paperShareTsAndCs}.</div>
 			) : (
