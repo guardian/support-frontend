@@ -1,3 +1,7 @@
+import { isCode } from 'helpers/urls/url';
+
 export const inPaperProductTest = () => {
-	return true;
+	const searchParams = new URLSearchParams(window.location.search);
+	const inPaperProductTabs = searchParams.get('paperProductTabs') === 'true';
+	return inPaperProductTabs || isCode();
 };
