@@ -55,7 +55,6 @@ HomeDeliverySunday.args = {
 	ratePlanDescription: 'The Observer',
 	currency: 'GBP',
 	amount: 27.99,
-	isPaperProductTest: true,
 };
 
 export const SubscriptionCardWeekendPaperProduct = Template.bind({});
@@ -65,7 +64,6 @@ SubscriptionCardWeekendPaperProduct.args = {
 	ratePlanDescription: 'Weekend package',
 	currency: 'GBP',
 	amount: 27.99,
-	isPaperProductTest: true,
 };
 
 export const HomeDeliverySixdayPaperProduct = Template.bind({});
@@ -75,5 +73,4 @@ HomeDeliverySixdayPaperProduct.args = {
 	ratePlanDescription: 'Six day package',
 	currency: 'GBP',
 	amount: 73.99,
-	isPaperProductTest: true,
 };

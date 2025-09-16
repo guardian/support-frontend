@@ -52,7 +52,6 @@ type CheckoutSummaryProps = {
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
-	isPaperProductTest: boolean;
 };
 
 export default function CheckoutSummary({
@@ -69,7 +68,6 @@ export default function CheckoutSummary({
 	weeklyDeliveryDate,
 	thresholdAmount,
 	studentDiscount,
-	isPaperProductTest,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
@@ -119,7 +117,7 @@ export default function CheckoutSummary({
 	}
 
 	const benefitsCheckListData =
-		getPaperPlusDigitalBenefits(isPaperProductTest, ratePlanKey, productKey) ??
+		getPaperPlusDigitalBenefits(ratePlanKey, productKey) ??
 		getBenefitsChecklistFromLandingPageTool(productKey, landingPageSettings) ??
 		getBenefitsChecklistFromProductDescription(
 			productDescription,
@@ -150,7 +148,6 @@ export default function CheckoutSummary({
 	const backUrl = parameteriseUrl(
 		`/${geoId}${productDescription.landingPagePath}`,
 		promotion?.promoCode,
-		isPaperProductTest ? 'paperProductTabs' : undefined,
 		getPaperFulfilmentOption(productKey),
 	);
 
@@ -200,7 +197,6 @@ export default function CheckoutSummary({
 							countryGroupId={countryGroupId}
 							thresholdAmount={thresholdAmount}
 							promotion={promotion}
-							isPaperProductTest={isPaperProductTest}
 						/>
 					}
 					headerButton={
@@ -210,7 +206,6 @@ export default function CheckoutSummary({
 					}
 					abParticipations={abParticipations}
 					studentDiscount={studentDiscount}
-					isPaperProductTest={isPaperProductTest}
 				/>
 			</BoxContents>
 		</Box>

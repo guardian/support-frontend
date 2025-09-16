@@ -143,17 +143,11 @@ function paperCheckoutUrl(
 function parameteriseUrl(
 	url: string,
 	promoCode?: Option<string>,
-	abTestName?: string,
 	fulfilmentOption?: PaperFulfilmentOptions,
 ) {
-	const params = abTestName
-		? {
-				[abTestName]: 'true',
-				promoCode,
-		  }
-		: {
-				promoCode,
-		  };
+	const params = {
+		promoCode,
+	};
 	const urlWithParams = addQueryParamsToURL(url, params).replace(/\?$/, ''); // removes ? when no params
 	return fulfilmentOption
 		? `${urlWithParams}#${fulfilmentOption}`
