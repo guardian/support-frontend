@@ -17,18 +17,12 @@ function PaperProductPrices({
 	productPrices,
 	tab,
 	setTabAction,
-	isPaperProductTest,
 }: PaperProductPricesProps): JSX.Element | null {
 	if (!productPrices) {
 		return null;
 	}
 
-	const products = getPlans(
-		tab,
-		productPrices,
-		ActivePaperProductNoTestTypes,
-		isPaperProductTest,
-	);
+	const products = getPlans(tab, productPrices, ActivePaperProductNoTestTypes);
 
 	return (
 		<PaperPrices

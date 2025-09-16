@@ -96,14 +96,6 @@ Divider.defaultProps = {
 };
 
 /*
-Cancels out the horizontal padding
-Wrap full bleed children in this.
-*/
-export function Outset({ children }: { children: ReactNode }): JSX.Element {
-	return <div className="component-content__outset">{children}</div>;
-}
-
-/*
 A vertical block with max width
 */
 export function NarrowContent({
