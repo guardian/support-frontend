@@ -3,42 +3,50 @@ import { parameteriseUrl } from 'helpers/urls/routes';
 
 const tests = [
 	{
-		url: '/uk/subscribe/paper',
+		input: { url: '/uk/subscribe/paper' },
+		expectedResult: '/uk/subscribe/paper',
 	},
 	{
-		url: '/uk/subscribe/paper',
-		promoCode: 'NEWSPAPER10',
+		input: { url: '/uk/subscribe/paper', promoCode: 'NEWSPAPER10' },
+		expectedResult: '/uk/subscribe/paper?promoCode=NEWSPAPER10',
 	},
 	{
-		url: '/uk/subscribe/paper',
-		promoCode: 'NEWSPAPER10',
-		abTestName: 'abPaperSubscription',
+		input: {
+			url: '/uk/subscribe/paper',
+			promoCode: 'NEWSPAPER10',
+			abTestName: 'abPaperSubscription',
+		},
+		expectedResult:
+			'/uk/subscribe/paper?abPaperSubscription=true&promoCode=NEWSPAPER10',
 	},
 	{
-		url: '/uk/subscribe/paper',
-		promoCode: 'NEWSPAPER10',
-		abTestName: 'abPaperSubscription',
-		fulfilmentOption: 'HomeDelivery' as PaperFulfilmentOptions,
+		input: {
+			url: '/uk/subscribe/paper',
+			promoCode: 'NEWSPAPER10',
+			abTestName: 'abPaperSubscription',
+			fulfilmentOption: 'HomeDelivery' as PaperFulfilmentOptions,
+		},
+		expectedResult:
+			'/uk/subscribe/paper?abPaperSubscription=true&promoCode=NEWSPAPER10#HomeDelivery',
 	},
 	{
-		url: '/uk/subscribe/paper',
-		promoCode: 'NEWSPAPER10',
-		abTestName: 'abPaperSubscription',
-		fulfilmentOption: 'Collection' as PaperFulfilmentOptions,
+		input: {
+			url: '/uk/subscribe/paper',
+			promoCode: 'NEWSPAPER10',
+			abTestName: 'abPaperSubscription',
+			fulfilmentOption: 'Collection' as PaperFulfilmentOptions,
+		},
+		expectedResult:
+			'/uk/subscribe/paper?abPaperSubscription=true&promoCode=NEWSPAPER10#Collection',
 	},
-];
-
-const results = [
-	'/uk/subscribe/paper',
-	'/uk/subscribe/paper?promoCode=NEWSPAPER10',
-	'/uk/subscribe/paper?abPaperSubscription=true&promoCode=NEWSPAPER10',
-	'/uk/subscribe/paper?abPaperSubscription=true&promoCode=NEWSPAPER10#HomeDelivery',
-	'/uk/subscribe/paper?abPaperSubscription=true&promoCode=NEWSPAPER10#Collection',
 ];
 
 describe('Parameterise Url', () => {
 	tests.forEach((testDetails) => {
-		const { url, promoCode, abTestName, fulfilmentOption } = testDetails;
+		const {
+			input: { url, promoCode, abTestName, fulfilmentOption },
+			expectedResult,
+		} = testDetails;
 		const testName = `Url - ${url}${
 			promoCode ? ` promoCode:${promoCode}` : ''
 		}${abTestName ? ` abTest:${abTestName}` : ''}${
@@ -48,7 +56,7 @@ describe('Parameterise Url', () => {
 		it(testName, () => {
 			expect(
 				parameteriseUrl(url, promoCode, abTestName, fulfilmentOption),
-			).toEqual(results[tests.indexOf(testDetails)]);
+			).toEqual(expectedResult);
 		});
 	});
 });
