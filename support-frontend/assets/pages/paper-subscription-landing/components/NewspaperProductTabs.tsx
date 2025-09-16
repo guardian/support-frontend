@@ -15,6 +15,7 @@ import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import NewspaperRatePlanCard from 'pages/paper-subscription-landing/components/NewspaperRatePlanCard';
 import { getPlans } from '../helpers/getPlans';
+import { windowSetHashProperty } from '../helpers/windowSetHashProperty';
 import NewspaperTabHero from './content/NewspaperTabHero';
 import {
 	cardsContainer,
@@ -81,6 +82,7 @@ function NewspaperProductTabs({
 			product: 'Paper',
 			componentType: 'ACQUISITIONS_BUTTON',
 		})();
+		windowSetHashProperty(tabId);
 	};
 
 	const tabItems = Object.entries(tabs).map(([fulfilment, tab]) => {
