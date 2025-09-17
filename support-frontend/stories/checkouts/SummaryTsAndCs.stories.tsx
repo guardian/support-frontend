@@ -35,9 +35,9 @@ Contribution.args = {
 export const SupporterPlus = Template.bind({});
 SupporterPlus.args = {
 	productKey: 'SupporterPlus',
-	ratePlanKey: 'Monthly',
+	ratePlanKey: 'Annual',
 	currency: 'GBP',
-	amount: 12,
+	amount: 120,
 };
 
 export const TierThree = Template.bind({});
