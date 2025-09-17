@@ -23,6 +23,7 @@ export type ContactRecordRequest = {
 	MailingPostalCode: string | null;
 	MailingCountry: string | null;
 };
+
 export type DeliveryContactRecordRequest = {
 	AccountId: string;
 	Email: string | null;
