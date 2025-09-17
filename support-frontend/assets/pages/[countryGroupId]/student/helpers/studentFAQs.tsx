@@ -16,14 +16,14 @@ const supporterPlusBodyManage: JSX.Element = (
 	<p>
 		To manage your subscription, go to Manage my account, and for further
 		information on your All-access digital subscription, see our{' '}
-		<a href={supporterPlusTermsLink}>Terms & Conditions</a>
+		<a href={supporterPlusTermsLink}>Terms & Conditions</a>.
 	</p>
 );
 
 const supporterPlusBodyContact: JSX.Element = (
 	<p>
 		For any queries, including subscription-related queries, visit our{' '}
-		<a href={helpCentreUrl}>Help centre</a>
+		<a href={helpCentreUrl}>Help centre</a>.
 	</p>
 );
 
