@@ -125,7 +125,7 @@ export function OneOffCard({
 			<div css={buttonContainer}>
 				<LinkButton
 					href={`/${
-						countryGroups[countryGroupId].supportInternationalisationId
+						countryGroups[countryGroupId].supportRegionId
 					}/contribute/checkout?selected-contribution-type=one_off&selected-amount=${
 						selectedAmount === 'other' ? otherAmount : selectedAmount
 					}`}

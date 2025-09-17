@@ -35,7 +35,7 @@ function getPatronsLink(
 function convertCountryGroupIdToAppStoreCountryCode(cgId: CountryGroupId) {
 	const groupFromId = countryGroups[cgId];
 
-	switch (groupFromId.supportInternationalisationId.toLowerCase()) {
+	switch (groupFromId.supportRegionId.toLowerCase()) {
 		case 'uk':
 			return 'gb';
 
@@ -46,7 +46,7 @@ function convertCountryGroupIdToAppStoreCountryCode(cgId: CountryGroupId) {
 			return 'us';
 
 		default:
-			return groupFromId.supportInternationalisationId.toLowerCase();
+			return groupFromId.supportRegionId.toLowerCase();
 	}
 }
 

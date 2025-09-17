@@ -1,7 +1,7 @@
 import { newspaperCountries } from '@modules/internationalisation/country';
-import type {
-	CountryGroupId,
-	SupportInternationalisationId,
+import {
+	type CountryGroupId,
+	SupportRegionId,
 } from '@modules/internationalisation/countryGroup';
 import { gwDeliverableCountries } from '@modules/internationalisation/gwDeliverableCountries';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
@@ -538,7 +538,7 @@ export function productCatalogGuardianAdLite(): Record<
  * @see: https://knowledgecenter.zuora.com/Zuora_Billing/Build_products_and_prices/Attribute-based_pricing/AA_Overview_of_Attribute-based_Pricing
  * */
 export function internationaliseProductAndRatePlan(
-	supportInternationalisationId: SupportInternationalisationId,
+	supportRegionId: SupportRegionId,
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): {
@@ -546,12 +546,9 @@ export function internationaliseProductAndRatePlan(
 	ratePlanKey: ActiveRatePlanKey;
 } {
 	return {
-		productKey: internationaliseProduct(
-			supportInternationalisationId,
-			productKey,
-		),
+		productKey: internationaliseProduct(supportRegionId, productKey),
 		ratePlanKey: internationaliseRatePlan(
-			supportInternationalisationId,
+			supportRegionId,
 			productKey,
 			ratePlanKey,
 		),
@@ -559,14 +556,14 @@ export function internationaliseProductAndRatePlan(
 }
 
 export function internationaliseProduct(
-	supportInternationalisationId: SupportInternationalisationId,
+	supportRegionId: SupportRegionId,
 	productKey: ActiveProductKey,
 ): ActiveProductKey {
 	if (
 		productKey === 'GuardianWeeklyDomestic' ||
 		productKey === 'GuardianWeeklyRestOfWorld'
 	) {
-		if (supportInternationalisationId === 'int') {
+		if (supportRegionId === SupportRegionId.INT) {
 			return 'GuardianWeeklyRestOfWorld';
 		} else {
 			return 'GuardianWeeklyDomestic';
@@ -576,12 +573,12 @@ export function internationaliseProduct(
 }
 
 function internationaliseRatePlan(
-	supportInternationalisationId: SupportInternationalisationId,
+	supportRegionId: SupportRegionId,
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): ActiveRatePlanKey {
 	if (productKey === 'TierThree') {
-		if (supportInternationalisationId === 'int') {
+		if (supportRegionId === SupportRegionId.INT) {
 			if (ratePlanKey === 'DomesticAnnual') {
 				return 'RestOfWorldAnnual';
 			}

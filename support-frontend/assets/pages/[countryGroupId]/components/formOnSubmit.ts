@@ -1,3 +1,4 @@
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { GeoId } from 'pages/geoIdConfig';
 import type { Participations } from '../../../helpers/abTests/models';
@@ -85,7 +86,7 @@ export const submitForm = async ({
 		promoCode !== undefined
 			? {
 					promoCode,
-					countryGroupId: geoId,
+					countryGroupId: geoId as SupportRegionId, // TODO: remove GeoId type as it is a duplicate of SupportRegionId
 			  }
 			: undefined;
 	const supportAbTests = getSupportAbTests(abParticipations);
