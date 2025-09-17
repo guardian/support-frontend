@@ -17,11 +17,11 @@ export type ContactRecordRequest = {
 	OtherPostalCode: string | null;
 	OtherCountry: string | null;
 	Phone?: string | null;
-	MailingStreet: string | null;
-	MailingCity: string | null;
-	MailingState: string | null;
-	MailingPostalCode: string | null;
-	MailingCountry: string | null;
+	MailingStreet?: string | null;
+	MailingCity?: string | null;
+	MailingState?: string | null;
+	MailingPostalCode?: string | null;
+	MailingCountry?: string | null;
 };
 
 export type DeliveryContactRecordRequest = {
@@ -176,11 +176,6 @@ export const createContactRecordRequest = (
 		OtherPostalCode: user.billingAddress.postCode,
 		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
 		Phone: user.telephoneNumber,
-		MailingStreet: null,
-		MailingCity: null,
-		MailingState: null,
-		MailingPostalCode: null,
-		MailingCountry: null,
 	};
 	if (giftRecipient ?? !user.deliveryAddress) {
 		// If there is a gift recipient then we don't want to update the
