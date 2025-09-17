@@ -8,8 +8,7 @@ module.exports = {
 	setupFilesAfterEnv: ['<rootDir>/src/typescript/test/test-setup.ts'],
 	moduleNameMapper: {
 		// Modules directory in support-frontend
-		'@modules/(product|internationalisation)/(.*)$':
-			'<rootDir>/../modules/$1/$2',
+		'@modules/product/(.*)$': '<rootDir>/../modules/product/$1',
 		// Modules directory in support-service-lambdas
 		'@modules/(.*)/(.*)/(.*)$':
 			'@guardian/support-service-lambdas/modules/$1/src/$2/$3',

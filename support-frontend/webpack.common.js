@@ -102,6 +102,10 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 			react: 'preact/compat',
 			'react-dom': 'preact/compat',
 			ophan: 'ophan-tracker-js/build/ophan.support',
+			'@modules/internationalisation': path.resolve(
+				__dirname,
+				'./node_modules/@guardian/support-service-lambdas/modules/internationalisation/src',
+			),
 			'@modules': path.resolve(__dirname, '../modules'),
 		},
 		modules: [
