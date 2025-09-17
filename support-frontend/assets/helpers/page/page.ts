@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import { getLocale } from '@guardian/libs';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import * as abTest from 'helpers/abTests/abtest';
@@ -19,7 +20,17 @@ function setUpTrackingAndConsents(participations: Participations): void {
 	const countryId: IsoCountry = Country.detect();
 	const acquisitionData = getReferrerAcquisitionData();
 
-	void consentInitialisation(countryId);
+	getLocale()
+		.then((localeCode) => {
+			const country = localeCode ?? countryId;
+			// Initialise the consent management platform using the getLocale result
+			// If getLocale fails to determine a location, fall back to the country detected by the country module
+			consentInitialisation(country);
+		})
+		.catch((e) => {
+			console.log(`An exception was thrown getting the localeCode: ${e}`);
+		});
+
 	analyticsInitialisation(participations, acquisitionData);
 	sendConsentToOphan();
 }
