@@ -24,10 +24,10 @@ describe('SalesforceService', () => {
 		expect('MailingCountry' in newContactWithGift).toBe(false);
 	});
 
-	test('createContactRecordRequest should not include delivery fields for purchases when user delivery address is undefined', () => {
+	test('createContactRecordRequest should not include delivery fields for purchases when user delivery address is null', () => {
 		const userWithoutDeliveryAddress = {
 			...user,
-			deliveryAddress: undefined,
+			deliveryAddress: null,
 		};
 		const newContact = createContactRecordRequest(
 			userWithoutDeliveryAddress,
