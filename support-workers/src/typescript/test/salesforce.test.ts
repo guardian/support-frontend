@@ -7,7 +7,7 @@ import {
 import { emailAddress, street, user } from './fixtures/salesforceFixtures';
 
 describe('SalesforceService', () => {
-	test('getNewContact should only include delivery fields for purchases without a gift recipient', () => {
+	test('createContactRecordRequest should only include delivery fields for purchases without a gift recipient', () => {
 		const newContactNoGift = createContactRecordRequest(user, null);
 		expect(newContactNoGift.MailingStreet).toBe(street);
 
@@ -17,7 +17,7 @@ describe('SalesforceService', () => {
 			firstName: 'Jane',
 			lastName: 'Doe',
 		});
-		expect(newContactWithGift.MailingStreet).toBeNull();
+		expect('MailingStreet' in newContactWithGift).toBe(false);
 	});
 	test('it should throw an INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE error when appropriate', () => {
 		const errorString =
