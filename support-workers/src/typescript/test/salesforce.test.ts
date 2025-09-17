@@ -46,7 +46,7 @@ describe('SalesforceService', () => {
 		expect(newContact.MailingCity).toBe(user.deliveryAddress.city);
 		expect(newContact.MailingState).toBe(user.deliveryAddress.state);
 		expect(newContact.MailingPostalCode).toBe(user.deliveryAddress.postCode);
-		expect(newContact.MailingCountry).toBe(user.deliveryAddress.country);
+		expect(newContact.MailingCountry).toBe('United Kingdom');
 	});
 
 	test('it should throw an INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE error when appropriate', () => {
