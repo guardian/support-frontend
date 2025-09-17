@@ -30,7 +30,7 @@ describe('SalesforceService', () => {
 		expect('OtherCountry' in newContactWithGift).toBe(false);
 	});
 
-	test('createContactRecordRequest should not include delivery fields for purchases when user delivery address is null', () => {
+	test('createContactRecordRequest should not include address fields for purchases when user delivery address is null', () => {
 		const userWithoutDeliveryAddress = {
 			...user,
 			deliveryAddress: null,
@@ -51,7 +51,7 @@ describe('SalesforceService', () => {
 		expect('OtherCountry' in newContact).toBe(false);
 	});
 
-	test('createContactRecordRequest should include delivery fields for purchases when user delivery address is populated and there is no giftRecipient', () => {
+	test('createContactRecordRequest should include address fields for purchases when user delivery address is populated and there is no giftRecipient', () => {
 		const newContact = createContactRecordRequest(user, null);
 		expect(newContact.MailingStreet).toBe(street);
 		expect(newContact.MailingCity).toBe(user.deliveryAddress.city);
