@@ -25,6 +25,11 @@ import {
 import { SslPolicy } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { CfnListener } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { FilterPattern, LogGroup, MetricFilter } from "aws-cdk-lib/aws-logs";
+import {
+  ParameterDataType,
+  ParameterTier,
+  StringParameter,
+} from "aws-cdk-lib/aws-ssm";
 
 interface FrontendProps extends GuStackProps {
   membershipSubPromotionsTables: string[];
@@ -157,6 +162,16 @@ export class Frontend extends GuStack {
 
     (ec2App.listener.node.defaultChild as CfnListener).sslPolicy =
       SslPolicy.TLS13_RES;
+
+    // This parameter is used by https://github.com/guardian/waf
+    new StringParameter(this, "AlbSsmParam", {
+      parameterName: `/infosec/waf/services/${this.stage}/frontend-alb-arn`,
+      description: `The ARN of the ALB for support-${this.stage}-frontend. This parameter is created via CDK.`,
+      simpleName: false,
+      stringValue: ec2App.loadBalancer.loadBalancerArn,
+      tier: ParameterTier.STANDARD,
+      dataType: ParameterDataType.TEXT,
+    });
 
     // ---- Alarms ---- //
     if (shouldCreateAlarms) {

@@ -91,6 +91,25 @@ exports[`The Frontend stack matches the snapshot 1`] = `
     },
   },
   "Resources": {
+    "AlbSsmParam485C1D52": {
+      "Properties": {
+        "DataType": "text",
+        "Description": "The ARN of the ALB for support-PROD-frontend. This parameter is created via CDK.",
+        "Name": "/infosec/waf/services/PROD/frontend-alb-arn",
+        "Tags": {
+          "Stack": "support",
+          "Stage": "PROD",
+          "gu:cdk:version": "TEST",
+          "gu:repo": "guardian/support-frontend",
+        },
+        "Tier": "Standard",
+        "Type": "String",
+        "Value": {
+          "Ref": "LoadBalancerFrontendD42F8E66",
+        },
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
     "AutoScalingGroupFrontendASG567FDA1B": {
       "Properties": {
         "HealthCheckGracePeriod": 120,
