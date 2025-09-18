@@ -1,3 +1,4 @@
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
@@ -13,27 +14,28 @@ import { getPromotion } from 'helpers/productPrice/promotions';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
-import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { setHideSupportMessaginCookie } from '../../helpers/storage/contributionsCookies';
+import { getSupportRegionIdConfig } from '../supportRegionConfig';
 import { ThankYouComponent } from './components/thankYouComponent';
 
 type ThankYouProps = {
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 	appConfig: AppConfig;
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 };
 
 export function ThankYou({
-	geoId,
+	supportRegionId,
 	appConfig,
 	abParticipations,
 	landingPageSettings,
 }: ThankYouProps) {
 	const countryId = Country.detect();
-	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
+	const { currencyKey, countryGroupId } =
+		getSupportRegionIdConfig(supportRegionId);
 
 	const searchParams = new URLSearchParams(window.location.search);
 	const csrf = { token: window.guardian.csrf.token };
@@ -157,7 +159,7 @@ export function ThankYou({
 
 	return (
 		<ThankYouComponent
-			geoId={geoId}
+			supportRegionId={supportRegionId}
 			csrf={csrf}
 			payment={payment}
 			productKey={productKey}

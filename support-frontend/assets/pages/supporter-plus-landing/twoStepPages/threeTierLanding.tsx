@@ -22,6 +22,7 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
@@ -44,10 +45,9 @@ import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPer
 import { allProductPrices } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import type { GeoId } from 'pages/geoIdConfig';
-import { getGeoIdConfig } from 'pages/geoIdConfig';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { getSanitisedHtml } from '../../../helpers/utilities/utilities';
+import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import Countdown from '../components/countdown';
 import { LandingPageBanners } from '../components/landingPageBanners';
 import { OneOffCard } from '../components/oneOffCard';
@@ -250,12 +250,12 @@ function getPlanCost(
 }
 
 type ThreeTierLandingProps = {
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 	settings: LandingPageVariant;
 	abParticipations: Participations;
 };
 export function ThreeTierLanding({
-	geoId,
+	supportRegionId,
 	settings,
 	abParticipations,
 }: ThreeTierLandingProps): JSX.Element {
@@ -265,7 +265,8 @@ export function ThreeTierLanding({
 	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
 	const urlSearchParamsPromoCode = urlSearchParams.get('promoCode');
 
-	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
+	const { currencyKey: currencyId, countryGroupId } =
+		getSupportRegionIdConfig(supportRegionId);
 	const countryId = Country.detect();
 
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
@@ -298,7 +299,7 @@ export function ThreeTierLanding({
 		urlSearchParams.has('enableOneTime');
 
 	const enableStudentOffer =
-		['uk', 'us', 'ca'].includes(geoId) &&
+		['uk', 'us', 'ca'].includes(supportRegionId) &&
 		urlSearchParams.has('enableStudentOffer');
 
 	const getInitialContributionType = () => {

@@ -1,3 +1,4 @@
+import { SupportRegionId } from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
@@ -15,7 +16,7 @@ jest.mock('../../checkout/helpers/sessionStorage', () => ({
 }));
 
 const defaultProps: CheckoutComponentProps = {
-	geoId: 'uk',
+	supportRegionId: SupportRegionId.UK,
 	csrf: { token: 'token' },
 	payment: {
 		originalAmount: 12,

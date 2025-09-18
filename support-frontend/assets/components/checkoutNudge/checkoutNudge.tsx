@@ -14,6 +14,7 @@ import {
 	LinkButton,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { useEffect } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { type ActiveRatePlanKey } from 'helpers/productCatalog';
@@ -21,11 +22,10 @@ import {
 	trackComponentClick,
 	trackComponentLoad,
 } from 'helpers/tracking/behaviour';
-import type { GeoId } from 'pages/geoIdConfig';
-import { getGeoIdConfig } from 'pages/geoIdConfig';
+import { getSupportRegionIdConfig } from '../../pages/supportRegionConfig';
 
 export interface CheckoutNudgeProps {
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 	ratePlanKey: ActiveRatePlanKey;
 	recurringAmount: number;
 	abTestName: string;
@@ -73,7 +73,7 @@ const nudgeButtonOverrides = css`
 `;
 
 export function CheckoutNudge({
-	geoId,
+	supportRegionId,
 	ratePlanKey,
 	recurringAmount,
 	abTestName,
@@ -83,7 +83,7 @@ export function CheckoutNudge({
 		trackComponentLoad(`checkoutNudge-${abTestName}--${abTestVariant}`);
 	}, []);
 
-	const { currency } = getGeoIdConfig(geoId);
+	const { currency } = getSupportRegionIdConfig(supportRegionId);
 
 	if (!['Monthly', 'Annual'].includes(ratePlanKey)) {
 		ratePlanKey = 'Monthly';

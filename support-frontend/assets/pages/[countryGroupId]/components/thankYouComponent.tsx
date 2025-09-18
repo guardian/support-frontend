@@ -9,6 +9,7 @@ import {
 } from '@guardian/source/foundations';
 import { Container, LinkButton } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
@@ -41,7 +42,6 @@ import {
 } from 'helpers/tracking/quantumMetric';
 import { getUser } from 'helpers/user/user';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
-import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
@@ -54,6 +54,7 @@ import type { BenefitsCheckListData } from '../../../components/checkoutBenefits
 import ThankYouModules from '../../../components/thankYou/thankyouModules';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
+import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import {
 	getReturnAddress,
 	getThankYouOrder,
@@ -90,7 +91,7 @@ const buttonColor = css`
 `;
 
 export type CheckoutComponentProps = {
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 	csrf: CsrfState;
 	payment: {
 		originalAmount: number;
@@ -107,7 +108,7 @@ export type CheckoutComponentProps = {
 };
 
 export function ThankYouComponent({
-	geoId,
+	supportRegionId,
 	csrf,
 	payment,
 	productKey = 'Contribution',
@@ -120,7 +121,8 @@ export function ThankYouComponent({
 	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
 	const { isSignedIn } = getUser();
 
-	const { countryGroupId, currencyKey } = getGeoIdConfig(geoId);
+	const { countryGroupId, currencyKey } =
+		getSupportRegionIdConfig(supportRegionId);
 	// Session storage order (from Checkout)
 	const order = getThankYouOrder();
 	if (!order) {
