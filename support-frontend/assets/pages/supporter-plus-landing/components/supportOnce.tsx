@@ -75,7 +75,7 @@ export function SupportOnce({
 				{currency}1 or more.
 			</p>
 			<LinkButton
-				href={`/${countryGroups[countryGroupId].supportInternationalisationId}/one-time-checkout`}
+				href={`/${countryGroups[countryGroupId].supportRegionId}/one-time-checkout`}
 				iconSide="left"
 				priority="primary"
 				size="default"
