@@ -118,15 +118,6 @@ const detailsSection = css`
 	}
 `;
 
-const orderSummarySundayDetails = css`
-	${textSans14};
-	color: ${neutral[38]};
-	background-color: ${neutral[97]};
-	margin-top: ${space[6]}px;
-	padding: ${space[3]}px;
-	border-radius: ${space[3]}px;
-`;
-
 const termsAndConditions = css`
 	${textSans17};
 	color: ${neutral[0]};
@@ -157,7 +148,6 @@ export type ContributionsOrderSummaryProps = {
 	tsAndCsTier3?: React.ReactNode;
 	abParticipations?: Participations;
 	studentDiscount?: StudentDiscount;
-	isPaperProductTest?: boolean;
 };
 
 export function ContributionsOrderSummary({
@@ -177,7 +167,6 @@ export function ContributionsOrderSummary({
 	enableCheckList,
 	abParticipations,
 	studentDiscount,
-	isPaperProductTest = false,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -270,15 +259,6 @@ export function ContributionsOrderSummary({
 						{startDate}
 					</>
 				)}
-				{isSundayOnlyNewspaperSubscription &&
-					showCheckList &&
-					!isPaperProductTest && (
-						<div css={orderSummarySundayDetails}>
-							{productKey === 'HomeDelivery'
-								? 'Print edition, delivered every Sunday. All Observer readers also gain free access to the Observer digital newsletters and thought-provoking podcasts, and book tickets to Observer events.'
-								: 'Print edition every Sunday. All readers can also gain free access to the Observer digital newsletters and thought-provoking podcasts, and book tickets to Observer events.'}
-						</div>
-					)}
 			</div>
 
 			<hr css={hrCss} />

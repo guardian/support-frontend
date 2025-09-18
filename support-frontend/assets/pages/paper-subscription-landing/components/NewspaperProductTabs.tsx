@@ -43,10 +43,8 @@ const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
 
 function NewspaperProductTabs({
 	productPrices,
-	isPaperProductTest,
 }: {
 	productPrices: ProductPrices;
-	isPaperProductTest: boolean;
 }) {
 	const fulfilment =
 		window.location.hash === `#${HomeDelivery}` ? HomeDelivery : Collection;
@@ -56,22 +54,12 @@ function NewspaperProductTabs({
 
 	const { windowWidthIsGreaterThan } = useWindowWidth();
 	const [productRatePlans, setProductRatePlans] = useState<Product[]>(
-		getPlans(
-			selectedTab,
-			productPrices,
-			ActivePaperProductTypes,
-			isPaperProductTest,
-		),
+		getPlans(selectedTab, productPrices, ActivePaperProductTypes),
 	);
 
 	useEffect(() => {
 		setProductRatePlans(
-			getPlans(
-				selectedTab,
-				productPrices,
-				ActivePaperProductTypes,
-				isPaperProductTest,
-			),
+			getPlans(selectedTab, productPrices, ActivePaperProductTypes),
 		);
 	}, [selectedTab]);
 

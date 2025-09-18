@@ -104,7 +104,7 @@ HomeDelivery.args = {
 export const NationalDelivery = Template.bind({});
 NationalDelivery.args = {
 	productKey: 'NationalDelivery',
-	ratePlanKey: 'Monthly',
+	ratePlanKey: 'EverydayPlus',
 	countryGroupId: 'GBPCountries',
 };
 

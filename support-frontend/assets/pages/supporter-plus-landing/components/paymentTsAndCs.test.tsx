@@ -49,9 +49,9 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 		['SupporterPlus', 'Monthly', 'GBPCountries', 12],
 		['SupporterPlus', 'OneYearStudent', 'GBPCountries', 9],
 		['TierThree', 'RestOfWorldMonthly', 'UnitedStates', 45],
-		['HomeDelivery', 'Monthly', 'GBPCountries', 0],
-		['NationalDelivery', 'Monthly', 'GBPCountries', 0],
-		['SubscriptionCard', 'Monthly', 'GBPCountries', 0],
+		['HomeDelivery', 'EverydayPlus', 'GBPCountries', 0],
+		['NationalDelivery', 'EverydayPlus', 'GBPCountries', 0],
+		['SubscriptionCard', 'EverydayPlus', 'GBPCountries', 0],
 		['GuardianWeeklyDomestic', 'Monthly', 'GBPCountries', 0],
 		['GuardianWeeklyRestOfWorld', 'Annual', 'International', 0],
 	];

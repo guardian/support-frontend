@@ -27,7 +27,6 @@ import {
 	guardianWeeklyLanding,
 	paperSubsUrl,
 } from 'helpers/urls/routes';
-import { inPaperProductTest } from 'pages/paper-subscription-landing/helpers/inPaperProductTest';
 import type { PriceCopy, PricingCopy } from '../subscriptionsLandingProps';
 
 // types
@@ -185,13 +184,11 @@ const paper = (
 	countryGroupId: CountryGroupId,
 	priceCopy: PriceCopy,
 ): ProductCopy => {
-	const isPaperProductTest = inPaperProductTest();
 	return {
 		title: 'Newspaper',
 		subtitle: `from ${getDisplayPrice(countryGroupId, priceCopy.price)}`,
-		description: isPaperProductTest
-			? 'Save on the Guardian newspaper retail price and enjoy free digital access'
-			: "Save on the Guardian and the Observer's newspaper retail price all year round",
+		description:
+			'Save on the Guardian newspaper retail price and enjoy free digital access',
 		buttons: [
 			{
 				ctaButtonText: 'Find out more',

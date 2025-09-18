@@ -19,14 +19,9 @@ import type {
 } from '../../../../helpers/productCatalog';
 
 export const getPaperPlusDigitalBenefits = (
-	isPaperProductTest: boolean,
 	ratePlanKey: ActiveRatePlanKey,
 	productKey: ActiveProductKey,
 ): BenefitsCheckListData[] | undefined => {
-	if (!isPaperProductTest) {
-		return undefined;
-	}
-
 	switch (productKey) {
 		case 'HomeDelivery':
 			return getPlanBenefitData(
