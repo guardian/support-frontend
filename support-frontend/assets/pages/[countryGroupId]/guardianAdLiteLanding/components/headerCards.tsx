@@ -8,6 +8,7 @@ import {
 	textSans15,
 	textSans17,
 } from '@guardian/source/foundations';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { Container } from 'components/layout/container';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
@@ -16,8 +17,7 @@ import {
 	productCatalogGuardianAdLite,
 } from 'helpers/productCatalog';
 import { isCode } from 'helpers/urls/url';
-import type { GeoId } from 'pages/geoIdConfig';
-import { getGeoIdConfig } from 'pages/geoIdConfig';
+import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 import { GuardianAdLiteCards } from './guardianAdLiteCards';
 
 const containerCardsAndSignIn = css`
@@ -84,18 +84,18 @@ const SignInUrl = `https://manage.${codeOrProd}.com`;
 const SignInLink = <a href={SignInUrl}>sign in</a>;
 
 type HeaderCardsProps = {
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 	isSignedIn: boolean;
 	returnLink: string;
 };
 
 export function HeaderCards({
-	geoId,
+	supportRegionId,
 	isSignedIn,
 	returnLink,
 }: HeaderCardsProps): JSX.Element {
 	const contributionType = 'Monthly';
-	const { currencyKey } = getGeoIdConfig(geoId);
+	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
 	const currency = currencies[currencyKey];
 	const price =
 		productCatalog.GuardianAdLite?.ratePlans[contributionType]?.pricing[

@@ -1,10 +1,13 @@
 import { Column, Columns } from '@guardian/source/react-components';
-import { Box, BoxContents } from "components/checkoutBox/checkoutBox";
-import { CheckoutNudge, CheckoutNudgeProps } from "components/checkoutNudge/checkoutNudge";
-import { withCenterAlignment } from "../../.storybook/decorators/withCenterAlignment";
-import { withSourceReset } from "../../.storybook/decorators/withSourceReset";
-import { css } from "@emotion/react";
-
+import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
+import {
+	CheckoutNudge,
+	CheckoutNudgeProps,
+} from 'components/checkoutNudge/checkoutNudge';
+import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
+import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
+import { css } from '@emotion/react';
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 
 export default {
 	title: 'Checkouts/Checkout Nudge',
@@ -33,25 +36,25 @@ export default {
 };
 
 function Template(props: CheckoutNudgeProps) {
-    return <CheckoutNudge {...props} />
+	return <CheckoutNudge {...props} />;
 }
 
-Template.args= {} as CheckoutNudgeProps;
+Template.args = {} as CheckoutNudgeProps;
 
 export const Default = Template.bind({});
 
 Default.args = {
-        geoId: 'uk',
-        ratePlanKey: 'Monthly',
-        recurringAmount: 5,
-        abTestName: 'abNudgeToLowRegular',
-        abTestVariant: 'v1',
-}
+	supportRegionId: SupportRegionId.UK,
+	ratePlanKey: 'Monthly',
+	recurringAmount: 5,
+	abTestName: 'abNudgeToLowRegular',
+	abTestVariant: 'v1',
+};
 
 export const US_V1 = Template.bind({});
 
 US_V1.args = {
-	geoId: 'us',
+	supportRegionId: SupportRegionId.US,
 	ratePlanKey: 'Monthly',
 	recurringAmount: 5,
 	abTestName: 'abNudgeToLowRegular',
@@ -61,7 +64,7 @@ US_V1.args = {
 export const AU_v1 = Template.bind({});
 
 AU_v1.args = {
-	geoId: 'us',
+	supportRegionId: SupportRegionId.US,
 	ratePlanKey: 'Monthly',
 	recurringAmount: 10,
 	abTestName: 'abNudgeToLowRegular',
@@ -70,7 +73,7 @@ AU_v1.args = {
 
 export const EU_v1 = Template.bind({});
 EU_v1.args = {
-	geoId: 'eu',
+	supportRegionId: SupportRegionId.EU,
 	ratePlanKey: 'Monthly',
 	recurringAmount: 5,
 	abTestName: 'abNudgeToLowRegular',
@@ -79,7 +82,7 @@ EU_v1.args = {
 
 export const UK_v2 = Template.bind({});
 UK_v2.args = {
-	geoId: 'uk',
+	supportRegionId: SupportRegionId.UK,
 	ratePlanKey: 'Monthly',
 	recurringAmount: 5,
 	abTestName: 'abNudgeToLowRegular',
@@ -89,7 +92,7 @@ UK_v2.args = {
 export const US_V2 = Template.bind({});
 
 US_V2.args = {
-	geoId: 'us',
+	supportRegionId: SupportRegionId.US,
 	ratePlanKey: 'Monthly',
 	recurringAmount: 5,
 	abTestName: 'abNudgeToLowRegular',
@@ -99,7 +102,7 @@ US_V2.args = {
 export const AU_v2 = Template.bind({});
 
 AU_v2.args = {
-	geoId: 'us',
+	supportRegionId: SupportRegionId.US,
 	ratePlanKey: 'Monthly',
 	recurringAmount: 10,
 	abTestName: 'abNudgeToLowRegular',
@@ -108,10 +111,9 @@ AU_v2.args = {
 
 export const EU_v2 = Template.bind({});
 EU_v2.args = {
-	geoId: 'eu',
+	supportRegionId: SupportRegionId.EU,
 	ratePlanKey: 'Monthly',
 	recurringAmount: 5,
 	abTestName: 'abNudgeToLowRegular',
 	abTestVariant: 'v2',
 };
-

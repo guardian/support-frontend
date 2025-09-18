@@ -1,9 +1,11 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type {
+	CountryGroupId,
+	SupportRegionId,
+} from '@modules/internationalisation/countryGroup';
 import { privacyLink, supporterPlusTermsLink } from 'helpers/legal';
 import { helpCentreUrl } from 'helpers/urls/externalLinks';
 import type { FAQItem } from 'pages/[countryGroupId]/components/accordionFAQ';
-import type { GeoId } from 'pages/geoIdConfig';
-import { getGeoIdConfig } from 'pages/geoIdConfig';
+import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 
 const supporterPlusBodyAccess: JSX.Element = (
 	<p>
@@ -126,8 +128,10 @@ const studentFAQsConfig: Partial<Record<CountryGroupId, StudentFAQsConfig>> = {
 	},
 };
 
-export function getStudentFAQs(geoId: GeoId): FAQItem[] | undefined {
-	const { countryGroupId } = getGeoIdConfig(geoId);
+export function getStudentFAQs(
+	supportRegionId: SupportRegionId,
+): FAQItem[] | undefined {
+	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 	const faqConfig = studentFAQsConfig[countryGroupId];
 
 	if (faqConfig) {

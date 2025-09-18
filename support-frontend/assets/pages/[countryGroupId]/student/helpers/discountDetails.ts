@@ -1,3 +1,4 @@
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
@@ -11,8 +12,7 @@ import {
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import type { GeoId } from 'pages/geoIdConfig';
-import { getGeoIdConfig } from 'pages/geoIdConfig';
+import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 
 export function getDiscountDuration({
 	durationInMonths,
@@ -69,15 +69,16 @@ export type StudentDiscount = {
 };
 
 function isStudent(
-	geoId: GeoId,
+	supportRegionId: SupportRegionId,
 	ratePlanKey: ActiveRatePlanKey,
 	productKey: ActiveProductKey,
 	promotion?: Promotion,
 	requirePromotion?: boolean,
 ): boolean {
-	const isOneYearStudent = ratePlanKey === 'OneYearStudent' && geoId !== 'au';
+	const isOneYearStudent =
+		ratePlanKey === 'OneYearStudent' && supportRegionId !== SupportRegionId.AU;
 	const isUTSStudent =
-		geoId === 'au' &&
+		supportRegionId === SupportRegionId.AU &&
 		productKey === 'SupporterPlus' &&
 		ratePlanKey === 'Monthly';
 	const isUTSStudentWithPromoCode =
@@ -89,16 +90,24 @@ function isStudent(
 }
 
 export function getStudentDiscount(
-	geoId: GeoId,
+	supportRegionId: SupportRegionId,
 	ratePlanKey: ActiveRatePlanKey,
 	productKey: ActiveProductKey,
 	promotion?: Promotion,
 	requirePromotion?: boolean,
 ): StudentDiscount | undefined {
-	if (!isStudent(geoId, ratePlanKey, productKey, promotion, requirePromotion)) {
+	if (
+		!isStudent(
+			supportRegionId,
+			ratePlanKey,
+			productKey,
+			promotion,
+			requirePromotion,
+		)
+	) {
 		return undefined;
 	}
-	const { currencyKey } = getGeoIdConfig(geoId);
+	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
 	const currency = currencies[currencyKey];
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
