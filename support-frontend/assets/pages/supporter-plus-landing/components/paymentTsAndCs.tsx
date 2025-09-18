@@ -181,12 +181,14 @@ export interface PaymentTsAndCsProps {
 }
 
 function GuardianWeeklyPromoTerms({ promotion }: { promotion: Promotion }) {
-  return <div>
-		Offer subject to availability. Guardian News and Media Ltd ("GNM") reserves
-		the right to withdraw this promotion at any time. Full promotion terms and
-		conditions for our{' '}
-		{termsLink('offer', buildPromotionalTermsLink(promotion))}.
-	</div>
+	return (
+		<div>
+			Offer subject to availability. Guardian News and Media Ltd ("GNM")
+			reserves the right to withdraw this promotion at any time. Full promotion
+			terms and conditions for our{' '}
+			{termsLink('offer', buildPromotionalTermsLink(promotion))}.
+		</div>
+	);
 }
 
 export function PaymentTsAndCs({
