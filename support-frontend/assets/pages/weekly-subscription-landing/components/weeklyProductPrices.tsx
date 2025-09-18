@@ -47,7 +47,7 @@ import { getWeeklyFulfilmentOption } from '../../../helpers/productCatalogToFulf
 import Prices from './content/prices';
 
 const countryPath = (countryGroupId: CountryGroupId) =>
-	countryGroups[countryGroupId].supportInternationalisationId;
+	countryGroups[countryGroupId].supportRegionId;
 
 const getCheckoutUrl = (
 	countryId: IsoCountry,
@@ -62,7 +62,7 @@ const getCheckoutUrl = (
 	) {
 		const countryGroupId = CountryGroup.fromCountry(countryId) ?? GBPCountries;
 		const productGuardianWeekly = internationaliseProduct(
-			countryGroups[countryGroupId].supportInternationalisationId,
+			countryGroups[countryGroupId].supportRegionId,
 			'GuardianWeeklyDomestic',
 		);
 		const url = `${getOrigin()}/${countryPath(countryGroupId)}/checkout`;
