@@ -253,7 +253,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     DateGenerator(saleDate),
     subscribeItemBuilder,
   ).build(
-    nonGiftState.copy(appliedPromotion = Some(AppliedPromotion("FOOPATRON", "uk"))),
+    nonGiftState.copy(appliedPromotion = Some(AppliedPromotion("FOOPATRON", "uk", Some("uk")))),
     None,
     None,
   ).toOption
@@ -266,7 +266,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     DateGenerator(saleDate),
     subscribeItemBuilder,
   ).build(
-    nonGiftState.copy(appliedPromotion = Some(AppliedPromotion("NOTAPATRONPROMO", "uk"))),
+    nonGiftState.copy(appliedPromotion = Some(AppliedPromotion("NOTAPATRONPROMO", "uk", Some("uk")))),
     None,
     None,
   ).toOption
