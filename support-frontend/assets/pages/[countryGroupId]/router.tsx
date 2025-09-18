@@ -1,3 +1,4 @@
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { HoldingContent } from 'components/serverSideRendered/holdingContent';
@@ -8,7 +9,6 @@ import {
 	setUpTrackingAndConsents,
 } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
-import { geoIds } from 'pages/geoIdConfig';
 import { getLandingPageParticipations } from '../../helpers/abTests/landingPageAbTests';
 
 const landingPageParticipations = getLandingPageParticipations();
@@ -67,13 +67,13 @@ const StudentLandingPageGlobalContainer = lazy(() => {
 });
 
 const router = createBrowserRouter([
-	...geoIds.flatMap((geoId) => [
+	...Object.values(SupportRegionId).flatMap((supportRegionId) => [
 		{
-			path: `/${geoId}/contribute/:campaignCode?`,
+			path: `/${supportRegionId}/contribute/:campaignCode?`,
 			element: (
 				<Suspense fallback={<HoldingContent />}>
 					<LandingPage
-						geoId={geoId}
+						supportRegionId={supportRegionId}
 						abParticipations={abParticipations}
 						landingPageSettings={landingPageParticipations.variant}
 					/>
@@ -81,11 +81,11 @@ const router = createBrowserRouter([
 			),
 		},
 		{
-			path: `/${geoId}/checkout`,
+			path: `/${supportRegionId}/checkout`,
 			element: (
 				<Suspense fallback={<HoldingContent />}>
 					<Checkout
-						geoId={geoId}
+						supportRegionId={supportRegionId}
 						appConfig={appConfig}
 						abParticipations={abParticipations}
 						landingPageSettings={landingPageParticipations.variant}
@@ -94,11 +94,11 @@ const router = createBrowserRouter([
 			),
 		},
 		{
-			path: `/${geoId}/one-time-checkout`,
+			path: `/${supportRegionId}/one-time-checkout`,
 			element: (
 				<Suspense fallback={<HoldingContent />}>
 					<OneTimeCheckout
-						geoId={geoId}
+						supportRegionId={supportRegionId}
 						appConfig={appConfig}
 						abParticipations={abParticipations}
 					/>
@@ -106,11 +106,11 @@ const router = createBrowserRouter([
 			),
 		},
 		{
-			path: `/${geoId}/thank-you`,
+			path: `/${supportRegionId}/thank-you`,
 			element: (
 				<Suspense fallback={<HoldingContent />}>
 					<ThankYou
-						geoId={geoId}
+						supportRegionId={supportRegionId}
 						appConfig={appConfig}
 						abParticipations={abParticipations}
 						landingPageSettings={landingPageParticipations.variant}
@@ -119,19 +119,19 @@ const router = createBrowserRouter([
 			),
 		},
 		{
-			path: `/${geoId}/guardian-ad-lite`,
+			path: `/${supportRegionId}/guardian-ad-lite`,
 			element: (
 				<Suspense fallback={<HoldingContent />}>
-					<GuardianAdLiteLanding geoId={geoId} />
+					<GuardianAdLiteLanding supportRegionId={supportRegionId} />
 				</Suspense>
 			),
 		},
 		{
-			path: `/${geoId}/student`,
+			path: `/${supportRegionId}/student`,
 			element: (
 				<Suspense fallback={<HoldingContent />}>
 					<StudentLandingPageGlobalContainer
-						geoId={geoId}
+						supportRegionId={supportRegionId}
 						landingPageVariant={landingPageParticipations.variant}
 					/>
 				</Suspense>

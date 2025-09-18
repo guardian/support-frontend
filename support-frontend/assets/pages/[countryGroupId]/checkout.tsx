@@ -1,4 +1,5 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { type ProductOptions } from '@modules/product/productOptions';
 import { Elements } from '@stripe/react-stripe-js';
@@ -23,8 +24,6 @@ import * as cookie from 'helpers/storage/cookie';
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
-import type { GeoId } from 'pages/geoIdConfig';
-import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { inPaperProductTest } from 'pages/paper-subscription-landing/helpers/inPaperProductTest';
 import { getWeeklyDeliveryDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { Participations } from '../../helpers/abTests/models';
@@ -33,6 +32,7 @@ import type { LegacyProductType } from '../../helpers/legacyTypeConversions';
 import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
 import { getFulfilmentOptionFromProductKey } from '../../helpers/productCatalogToFulfilmentOption';
 import { getProductOptionFromProductAndRatePlan } from '../../helpers/productCatalogToProductOption';
+import { getSupportRegionIdConfig } from '../supportRegionConfig';
 import { useStripeHostedCheckoutSession } from './checkout/hooks/useStripeHostedCheckoutSession';
 import CheckoutForm from './components/checkoutForm';
 import { CheckoutLayout } from './components/checkoutLayout';
@@ -40,7 +40,7 @@ import CheckoutSummary from './components/checkoutSummary';
 import { getStudentDiscount } from './student/helpers/discountDetails';
 
 type Props = {
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 	appConfig: AppConfig;
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
@@ -86,12 +86,12 @@ const getPromotionFromProductPrices = (
 };
 
 export function Checkout({
-	geoId,
+	supportRegionId,
 	appConfig,
 	abParticipations,
 	landingPageSettings,
 }: Props) {
-	const { currencyKey } = getGeoIdConfig(geoId);
+	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
 
 	/** 👇 a lot of this is copy/pasted into the thank you page */
@@ -273,7 +273,7 @@ export function Checkout({
 	 * Passed down because minimum product prices are unavailable in the paymentTsAndCs story
 	 * and shared across summary and form checkout sub-components
 	 */
-	const { countryGroupId } = getGeoIdConfig(geoId);
+	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 	const thresholdAmount = getLowerProductBenefitThreshold(
 		billingPeriod,
 		fromCountryGroupId(countryGroupId),
@@ -288,7 +288,7 @@ export function Checkout({
 	 * and required promoCode UTS_STUDENT
 	 */
 	const studentDiscount = getStudentDiscount(
-		geoId,
+		supportRegionId,
 		ratePlanKey,
 		productKey,
 		promotion,
@@ -301,7 +301,7 @@ export function Checkout({
 		<Elements stripe={stripePromise} options={elementsOptions}>
 			<CheckoutLayout>
 				<CheckoutSummary
-					geoId={geoId}
+					supportRegionId={supportRegionId}
 					appConfig={appConfig}
 					productKey={productKey}
 					ratePlanKey={ratePlanKey}
@@ -318,7 +318,7 @@ export function Checkout({
 				/>
 
 				<CheckoutForm
-					geoId={geoId}
+					supportRegionId={supportRegionId}
 					appConfig={appConfig}
 					stripePublicKey={stripePublicKey}
 					isTestUser={isTestUser}

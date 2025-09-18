@@ -9,6 +9,7 @@ import {
 } from '@guardian/source/foundations';
 import { Column, Columns, Container } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { useParams } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
@@ -18,7 +19,6 @@ import { guardianLiveTermsLink, privacyLink } from 'helpers/legal';
 import * as cookie from 'helpers/storage/cookie';
 import { getPageViewId } from 'helpers/tracking/trackingOphan';
 import { isProd } from 'helpers/urls/url';
-import type { GeoId } from 'pages/geoIdConfig';
 
 const darkBackgroundContainerMobile = css`
 	background-color: ${palette.neutral[97]};
@@ -83,9 +83,9 @@ const footerWiden = css`
 `;
 
 type Props = {
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 };
-export function Events({ geoId }: Props) {
+export function Events({ supportRegionId }: Props) {
 	const isTestUser = !!cookie.get('_test_username');
 	const shouldUseCode = isTestUser || !isProd();
 	const ticketTailorUrl = shouldUseCode
@@ -105,7 +105,7 @@ export function Events({ geoId }: Props) {
 
 	const hashUrlSearchParams = new URLSearchParams({
 		'p[meta_page_view_id]': pageviewId,
-		'p[meta_region_id]': geoId,
+		'p[meta_region_id]': supportRegionId,
 	});
 	const user = window.guardian.user;
 	if (user) {

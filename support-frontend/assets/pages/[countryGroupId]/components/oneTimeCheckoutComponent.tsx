@@ -16,7 +16,7 @@ import {
 	ErrorSummary,
 } from '@guardian/source-development-kitchen/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
-import { countryGroups } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import {
 	CardNumberElement,
@@ -40,13 +40,13 @@ import type { Participations } from 'helpers/abTests/models';
 import { config } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
-import {
-	postOneOffPayPalCreatePaymentRequest,
-	processStripePaymentIntentRequest,
-} from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import type {
 	CreatePayPalPaymentResponse,
 	CreateStripePaymentIntentRequest,
+} from 'helpers/forms/paymentIntegrations/oneOffContributions';
+import {
+	postOneOffPayPalCreatePaymentRequest,
+	processStripePaymentIntentRequest,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import type {
 	PaymentResult,
@@ -79,7 +79,6 @@ import {
 	parseCustomAmounts,
 	roundToDecimalPlaces,
 } from 'helpers/utilities/utilities';
-import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
 import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/coverTransactionCost';
@@ -91,6 +90,7 @@ import {
 	updateAbandonedBasketCookie,
 	useAbandonedBasketCookie,
 } from '../../../helpers/storage/abandonedBasketCookies';
+import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import { PersonalEmailFields } from '../checkout/components/PersonalEmailFields';
 import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
 import getConsentValue from '../helpers/getConsentValue';
@@ -162,7 +162,7 @@ const similarProductsConsentCheckboxContainer = css`
 `;
 
 type OneTimeCheckoutComponentProps = {
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 	appConfig: AppConfig;
 	stripePublicKey: string;
 	countryId: IsoCountry;
@@ -246,14 +246,15 @@ function getAcquisitionData(
 }
 
 export function OneTimeCheckoutComponent({
-	geoId,
+	supportRegionId,
 	appConfig,
 	stripePublicKey,
 	countryId,
 	abParticipations,
 	useStripeExpressCheckout,
 }: OneTimeCheckoutComponentProps) {
-	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
+	const { currency, currencyKey, countryGroupId } =
+		getSupportRegionIdConfig(supportRegionId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
 
 	const preSelectedAmountParam = urlSearchParams.get('contribution');
@@ -547,7 +548,7 @@ export function OneTimeCheckoutComponent({
 					thankYouUrlSearchParams.set('userType', paymentResult.userType);
 				const nextStepRoute = paymentResultThankyouRoute(
 					paymentResult,
-					geoId,
+					supportRegionId,
 					thankYouUrlSearchParams,
 				);
 				if (nextStepRoute) {
@@ -570,7 +571,7 @@ export function OneTimeCheckoutComponent({
 
 	function paymentResultThankyouRoute(
 		paymentResult: PaymentResult | CreatePayPalPaymentResponse | undefined,
-		geoId: GeoId,
+		supportRegionId: SupportRegionId,
 		thankYouUrlSearchParams: URLSearchParams,
 	): string | undefined {
 		if (paymentResult) {
@@ -580,14 +581,12 @@ export function OneTimeCheckoutComponent({
 				'paymentStatus' in paymentResult &&
 				paymentResult.paymentStatus === 'success'
 			) {
-				return `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
+				return `/${supportRegionId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 			}
 		}
 
 		return;
 	}
-
-	const { supportRegionId } = countryGroups[countryGroupId];
 
 	useAbandonedBasketCookie(
 		'OneTimeContribution',
@@ -620,7 +619,10 @@ export function OneTimeCheckoutComponent({
 					>
 						<div css={titleAndButtonContainer}>
 							<h2 css={title}>Support just once</h2>
-							<BackButton path={`/${geoId}/contribute`} buttonText="back" />
+							<BackButton
+								path={`/${supportRegionId}/contribute`}
+								buttonText="back"
+							/>
 						</div>
 						<p css={standFirst}>Support us with the amount of your choice.</p>
 						<PriceCards
@@ -663,7 +665,7 @@ export function OneTimeCheckoutComponent({
 					</div>
 					{isAnAbNudgeToLowRegularVariant && (
 						<CheckoutNudge
-							geoId={geoId}
+							supportRegionId={supportRegionId}
 							ratePlanKey="Monthly"
 							recurringAmount={nudgeRecurringAmount}
 							abTestName="abNudgeToLowRegular"

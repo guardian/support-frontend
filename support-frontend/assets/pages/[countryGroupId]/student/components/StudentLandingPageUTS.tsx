@@ -1,9 +1,9 @@
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import { type GeoId } from 'pages/geoIdConfig';
 import type { StudentDiscount } from '../helpers/discountDetails';
 import LogoUTS from '../logos/uts';
 import StudentHeader from './StudentHeader';
@@ -12,23 +12,23 @@ import { StudentLandingPage } from './StudentLandingPage';
 
 export function StudentLandingPageUTS({
 	landingPageVariant,
-	geoId,
+	supportRegionId,
 	productKey,
 	ratePlanKey,
 	studentDiscount,
 }: {
 	landingPageVariant: LandingPageVariant;
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	studentDiscount: StudentDiscount;
 }) {
 	return (
 		<StudentLandingPage
-			geoId={geoId}
+			supportRegionId={supportRegionId}
 			header={
 				<StudentHeader
-					geoId={geoId}
+					supportRegionId={supportRegionId}
 					productKey={productKey}
 					ratePlanKey={ratePlanKey}
 					landingPageVariant={landingPageVariant}

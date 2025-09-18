@@ -1,6 +1,5 @@
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import type { GeoId } from 'pages/geoIdConfig';
 import type { Participations } from '../../../helpers/abTests/models';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import type {
@@ -40,7 +39,7 @@ import { FormSubmissionError } from './paymentFields';
 import { CONSENT_ID } from './SimilarProductsConsent';
 
 export const submitForm = async ({
-	geoId,
+	supportRegionId,
 	productKey,
 	ratePlanKey,
 	formData,
@@ -52,7 +51,7 @@ export const submitForm = async ({
 	promotion,
 	contributionAmount,
 }: {
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	formData: FormData;
@@ -86,7 +85,7 @@ export const submitForm = async ({
 		promoCode !== undefined
 			? {
 					promoCode,
-					countryGroupId: geoId as SupportRegionId, // TODO: remove GeoId type as it is a duplicate of SupportRegionId
+					countryGroupId: supportRegionId,
 			  }
 			: undefined;
 	const supportAbTests = getSupportAbTests(abParticipations);
@@ -133,7 +132,7 @@ export const submitForm = async ({
 			ratePlanKey,
 			contributionAmount,
 			paymentMethod,
-			geoId,
+			supportRegionId,
 			paymentRequest,
 		});
 
@@ -155,7 +154,7 @@ export const submitForm = async ({
 			ratePlanKey,
 			contributionAmount,
 			paymentMethod,
-			geoId,
+			supportRegionId,
 			paymentRequest,
 		});
 
@@ -172,12 +171,12 @@ const createStripeCheckoutSession = async ({
 	paymentRequest,
 }: {
 	personalData: FormPersonalFields;
-	appliedPromotion?: { promoCode: string; countryGroupId: GeoId };
+	appliedPromotion?: { promoCode: string; countryGroupId: SupportRegionId };
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	contributionAmount: number | undefined;
 	paymentMethod: PaymentMethod;
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 	paymentRequest: RegularPaymentRequest;
 }) => {
 	const createCheckoutSessionResult = await stripeCreateCheckoutSession(
@@ -193,16 +192,16 @@ const processSubscription = async ({
 	ratePlanKey,
 	contributionAmount,
 	paymentMethod,
-	geoId,
+	supportRegionId,
 	paymentRequest,
 }: {
 	personalData: FormPersonalFields;
-	appliedPromotion?: { promoCode: string; countryGroupId: GeoId };
+	appliedPromotion?: { promoCode: string; countryGroupId: SupportRegionId };
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	contributionAmount: number | undefined;
 	paymentMethod: PaymentMethod;
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 	paymentRequest: RegularPaymentRequest;
 }) => {
 	const createSubscriptionResult = await createSubscription(paymentRequest);
@@ -220,7 +219,7 @@ const processSubscription = async ({
 			personalData,
 			paymentMethod,
 			createSubscriptionResult.status,
-			geoId,
+			supportRegionId,
 		);
 	} else {
 		console.error(
@@ -245,7 +244,7 @@ const buildThankYouPageUrl = (
 	personalData: FormPersonalFields,
 	paymentMethod: PaymentMethod,
 	status: 'success' | 'pending',
-	geoId: GeoId,
+	supportRegionId: SupportRegionId,
 ) => {
 	const order = {
 		firstName: personalData.firstName,
@@ -261,5 +260,5 @@ const buildThankYouPageUrl = (
 	userType && thankYouUrlSearchParams.set('userType', userType);
 	contributionAmount &&
 		thankYouUrlSearchParams.set('contribution', contributionAmount.toString());
-	return `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
+	return `/${supportRegionId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 };

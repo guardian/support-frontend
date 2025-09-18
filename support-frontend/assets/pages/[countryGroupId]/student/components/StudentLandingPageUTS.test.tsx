@@ -1,10 +1,10 @@
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { render, screen } from '@testing-library/react';
 import { type LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import type { GeoId } from 'pages/geoIdConfig';
 import { StudentLandingPageUTS } from './StudentLandingPageUTS';
 
 const utsStudentDiscount = {
@@ -18,7 +18,7 @@ const utsStudentDiscount = {
 };
 
 describe('<StudentLandingPageUTS />', () => {
-	const geoId: GeoId = 'au';
+	const supportRegionId = SupportRegionId.AU;
 	const productKey: ActiveProductKey = 'SupporterPlus';
 	const ratePlanKey: ActiveRatePlanKey = 'Monthly';
 	const landingPageVariant = {
@@ -32,7 +32,7 @@ describe('<StudentLandingPageUTS />', () => {
 	it('shows promo duration in the subheading when provided', () => {
 		render(
 			<StudentLandingPageUTS
-				geoId={geoId}
+				supportRegionId={supportRegionId}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
