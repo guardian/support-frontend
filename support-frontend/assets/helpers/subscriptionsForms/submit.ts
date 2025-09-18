@@ -142,6 +142,7 @@ const getAppliedPromotion = (
 		? {
 				promoCode: promotion.promoCode,
 				countryGroupId: supportRegionId,
+				supportRegionId: supportRegionId,
 		  }
 		: undefined;
 };
