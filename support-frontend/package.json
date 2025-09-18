@@ -66,6 +66,7 @@
 			"\\.(css|less|sass|scss)$": "<rootDir>/assets/__mocks__/styleMock.ts",
 			"\\.(svg|png|jpg)$": "<rootDir>/assets/__mocks__/imageMock.ts",
       "@modules/product-catalog/(.*)$": "@guardian/support-service-lambdas/modules/product-catalog/src/$1",
+      "@modules/internationalisation/(.*)$": "@guardian/support-service-lambdas/modules/internationalisation/src/$1",
       "@modules/(.*)$": "<rootDir>/../modules/$1"
     },
 		"setupFilesAfterEnv": [

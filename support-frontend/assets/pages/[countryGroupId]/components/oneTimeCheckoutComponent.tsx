@@ -587,13 +587,13 @@ export function OneTimeCheckoutComponent({
 		return;
 	}
 
-	const { supportInternationalisationId } = countryGroups[countryGroupId];
+	const { supportRegionId } = countryGroups[countryGroupId];
 
 	useAbandonedBasketCookie(
 		'OneTimeContribution',
 		finalAmount ?? 0,
 		'ONE_OFF',
-		supportInternationalisationId,
+		supportRegionId,
 		abParticipations.abandonedBasket === 'variant',
 	);
 

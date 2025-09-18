@@ -59,7 +59,7 @@ const createRecurringReminderEndpoint = isProd()
 	: 'https://support.code.dev-theguardian.com/reminders/create/recurring';
 
 const countryPath = (countryGroupId: CountryGroupId) =>
-	countryGroups[countryGroupId].supportInternationalisationId;
+	countryGroups[countryGroupId].supportRegionId;
 
 function postcodeLookupUrl(postcode: string): string {
 	return `${getOrigin() + routes.postcodeLookup}/${postcode}`;

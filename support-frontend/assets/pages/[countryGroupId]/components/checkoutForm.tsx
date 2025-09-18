@@ -527,7 +527,7 @@ export default function CheckoutForm({
 		}
 	}, [errorMessage]);
 
-	const { supportInternationalisationId } = countryGroups[countryGroupId];
+	const { supportRegionId } = countryGroups[countryGroupId];
 
 	const onFormSubmit = async (formData: FormData) => {
 		if (paymentMethod === undefined) {
@@ -648,7 +648,7 @@ export default function CheckoutForm({
 		productKey,
 		originalAmount,
 		ratePlanDescription.billingPeriod,
-		supportInternationalisationId,
+		supportRegionId,
 		abParticipations.abandonedBasket === 'variant',
 	);
 
@@ -1110,7 +1110,6 @@ export default function CheckoutForm({
 							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}
-							isPaperProductTest={isPaperProductTest}
 						/>
 						<div
 							css={css`

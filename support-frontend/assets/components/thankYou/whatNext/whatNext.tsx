@@ -1,6 +1,6 @@
 import { palette } from '@guardian/source/foundations';
-import type { IsoCurrency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
-import { getCurrencyGlyph } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
+import { getCurrencyGlyph } from '@modules/internationalisation/currency';
 import OrderedList from 'components/list/orderedList';
 import type {
 	ActiveProductKey,

@@ -11,18 +11,19 @@ export type ContactRecordRequest = {
 	Salutation?: Title | null;
 	FirstName: string;
 	LastName: string;
-	OtherStreet: string | null;
-	OtherCity: string | null;
-	OtherState: string | null;
-	OtherPostalCode: string | null;
-	OtherCountry: string | null;
+	OtherStreet?: string | null;
+	OtherCity?: string | null;
+	OtherState?: string | null;
+	OtherPostalCode?: string | null;
+	OtherCountry?: string | null;
 	Phone?: string | null;
-	MailingStreet: string | null;
-	MailingCity: string | null;
-	MailingState: string | null;
-	MailingPostalCode: string | null;
-	MailingCountry: string | null;
+	MailingStreet?: string | null;
+	MailingCity?: string | null;
+	MailingState?: string | null;
+	MailingPostalCode?: string | null;
+	MailingCountry?: string | null;
 };
+
 export type DeliveryContactRecordRequest = {
 	AccountId: string;
 	Email: string | null;
@@ -169,17 +170,7 @@ export const createContactRecordRequest = (
 		Salutation: user.title,
 		FirstName: user.firstName,
 		LastName: user.lastName,
-		OtherStreet: getAddressLine(user.billingAddress),
-		OtherCity: user.billingAddress.city,
-		OtherState: user.billingAddress.state,
-		OtherPostalCode: user.billingAddress.postCode,
-		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
 		Phone: user.telephoneNumber,
-		MailingStreet: null,
-		MailingCity: null,
-		MailingState: null,
-		MailingPostalCode: null,
-		MailingCountry: null,
 	};
 	if (giftRecipient ?? !user.deliveryAddress) {
 		// If there is a gift recipient then we don't want to update the
@@ -190,6 +181,11 @@ export const createContactRecordRequest = (
 	}
 	return {
 		...contact,
+		OtherStreet: getAddressLine(user.billingAddress),
+		OtherCity: user.billingAddress.city,
+		OtherState: user.billingAddress.state,
+		OtherPostalCode: user.billingAddress.postCode,
+		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
 		MailingStreet: getAddressLine(user.deliveryAddress),
 		MailingCity: user.deliveryAddress.city,
 		MailingState: user.deliveryAddress.state,
