@@ -5,37 +5,42 @@ import type { GiftRecipient, Title, User } from '../model/stateSchemas';
 import type { SalesforceConfig } from './salesforceClient';
 import { SalesforceClient } from './salesforceClient';
 
-export type ContactRecordRequest = {
-	IdentityID__c: string;
-	Email: string;
+export type BaseContactRecordRequest = {
 	Salutation?: Title | null;
 	FirstName: string;
 	LastName: string;
-	OtherStreet: string | null;
+	Email: string | null;
+	Phone?: string | null;
+};
+
+export type StandardContactRecordRequest = BaseContactRecordRequest & {
+	IdentityID__c: string;
+	OtherStreet: string | undefined;
 	OtherCity: string | null;
 	OtherState: string | null;
 	OtherPostalCode: string | null;
 	OtherCountry: string | null;
-	Phone?: string | null;
-	MailingStreet: string | null;
+	MailingStreet: string | undefined;
 	MailingCity: string | null;
 	MailingState: string | null;
 	MailingPostalCode: string | null;
 	MailingCountry: string | null;
 };
-export type DeliveryContactRecordRequest = {
+
+export type DeliveryContactRecordRequest = BaseContactRecordRequest & {
 	AccountId: string;
-	Email: string | null;
-	Salutation?: Title | null;
-	FirstName: string;
-	LastName: string;
-	MailingStreet: string | null;
+	RecordTypeId: '01220000000VB50AAG';
+	MailingStreet: string | undefined;
 	MailingCity: string | null;
 	MailingState: string | null;
 	MailingPostalCode: string | null;
 	MailingCountry: string | null;
+};
+
+export type RecipientContactRecordRequest = BaseContactRecordRequest & {
 	RecordTypeId: '01220000000VB50AAG';
 };
+
 export const salesforceContactRecordSchema = z.object({
 	Id: z.string(),
 	AccountId: z.string(),
@@ -87,9 +92,10 @@ export class SalesforceService {
 		user: User,
 		giftRecipient: GiftRecipient | null,
 	): Promise<SalesforceContactRecord> => {
-		const buyerResponse = await this.upsert(
-			createContactRecordRequest(user, giftRecipient),
-		);
+		console.log('Creating Salesforce contact record from user:', user);
+		const contactType = getContactType(user);
+		const contact = createContactRecordRequest(user, contactType);
+		const buyerResponse = await this.upsert(contact);
 		const giftRecipientResponse = await this.maybeAddGiftRecipient(
 			buyerResponse.ContactRecord,
 			giftRecipient,
@@ -99,7 +105,10 @@ export class SalesforceService {
 	};
 
 	upsert = async (
-		contact: ContactRecordRequest | DeliveryContactRecordRequest,
+		contact:
+			| StandardContactRecordRequest
+			| DeliveryContactRecordRequest
+			| RecipientContactRecordRequest,
 	): Promise<SuccessfulUpsertResponse> => {
 		const response: UpsertResponse = await this.client.post(
 			this.upsertEndpoint,
@@ -136,64 +145,95 @@ export class SalesforceService {
 		user: User,
 	): Promise<SuccessfulUpsertResponse> | null {
 		if (giftRecipient?.firstName && giftRecipient.lastName) {
-			const giftRecipientContact: DeliveryContactRecordRequest = {
-				AccountId: contactRecord.AccountId,
-				Email: giftRecipient.email,
-				Salutation: giftRecipient.title,
-				FirstName: giftRecipient.firstName,
-				LastName: giftRecipient.lastName,
-				MailingStreet: user.deliveryAddress
-					? getAddressLine(user.deliveryAddress)
-					: null,
-				MailingCity: user.deliveryAddress?.city ?? null,
-				MailingState: user.deliveryAddress?.state ?? null,
-				MailingPostalCode: user.deliveryAddress?.postCode ?? null,
-				MailingCountry: user.deliveryAddress
-					? getCountryNameByIsoCode(user.deliveryAddress.country)
-					: null,
-				RecordTypeId: '01220000000VB50AAG',
-			};
+			const giftRecipientContact: DeliveryContactRecordRequest =
+				createDeliveryContactRecordRequest(contactRecord, giftRecipient, user);
 			return this.upsert(giftRecipientContact);
 		}
 		return null;
 	}
 }
+const createBillingAddressFields = (user: User) => ({
+	OtherStreet: getAddressLine(user.billingAddress),
+	OtherCity: user.billingAddress.city ?? null,
+	OtherState: user.billingAddress.state ?? null,
+	OtherPostalCode: user.billingAddress.postCode ?? null,
+	OtherCountry: getCountryNameByIsoCode(user.billingAddress.country) ?? null,
+});
 
-export const createContactRecordRequest = (
+const createMailingAddressFields = (user: User) => {
+	return {
+		MailingStreet: user.deliveryAddress
+			? getAddressLine(user.deliveryAddress)
+			: undefined,
+		MailingCity: user.deliveryAddress?.city ?? null,
+		MailingState: user.deliveryAddress?.state ?? null,
+		MailingPostalCode: user.deliveryAddress?.postCode ?? null,
+		MailingCountry: user.deliveryAddress
+			? getCountryNameByIsoCode(user.deliveryAddress.country)
+			: null,
+	};
+};
+
+const getContactType = (user: User): 'Standard' | 'DeliveryOrRecipient' => {
+	if (!user.deliveryAddress) {
+		return 'DeliveryOrRecipient';
+	}
+	return 'Standard';
+};
+
+const createStandardContactRecordRequest = (
 	user: User,
-	giftRecipient: GiftRecipient | null,
-): ContactRecordRequest => {
-	const contact = {
-		IdentityID__c: user.id,
+): StandardContactRecordRequest => {
+	return {
 		Email: user.primaryEmailAddress,
 		Salutation: user.title,
 		FirstName: user.firstName,
 		LastName: user.lastName,
-		OtherStreet: getAddressLine(user.billingAddress),
-		OtherCity: user.billingAddress.city,
-		OtherState: user.billingAddress.state,
-		OtherPostalCode: user.billingAddress.postCode,
-		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
 		Phone: user.telephoneNumber,
-		MailingStreet: null,
-		MailingCity: null,
-		MailingState: null,
-		MailingPostalCode: null,
-		MailingCountry: null,
+		IdentityID__c: user.id,
+		...createBillingAddressFields(user),
+		...createMailingAddressFields(user),
 	};
-	if (giftRecipient ?? !user.deliveryAddress) {
-		// If there is a gift recipient then we don't want to update the
-		// delivery address. This is because the user may already have another
-		// non-gift delivery product which must still be delivered to their
-		// original delivery address.
-		return contact;
-	}
+};
+
+const createDeliveryContactRecordRequest = (
+	contactRecord: SalesforceContactRecord,
+	giftRecipient: GiftRecipient,
+	user: User,
+): DeliveryContactRecordRequest => {
 	return {
-		...contact,
-		MailingStreet: getAddressLine(user.deliveryAddress),
-		MailingCity: user.deliveryAddress.city,
-		MailingState: user.deliveryAddress.state,
-		MailingPostalCode: user.deliveryAddress.postCode,
-		MailingCountry: getCountryNameByIsoCode(user.deliveryAddress.country),
+		AccountId: contactRecord.AccountId,
+		Email: giftRecipient.email,
+		Salutation: giftRecipient.title,
+		FirstName: giftRecipient.firstName,
+		LastName: giftRecipient.lastName,
+		...createMailingAddressFields(user),
+		RecordTypeId: '01220000000VB50AAG',
 	};
+};
+
+const createRecipientContactRecordRequest = (
+	user: User,
+): RecipientContactRecordRequest => {
+	return {
+		Email: user.primaryEmailAddress,
+		Salutation: user.title,
+		FirstName: user.firstName,
+		LastName: user.lastName,
+		Phone: user.telephoneNumber,
+		RecordTypeId: '01220000000VB50AAG',
+	};
+};
+
+export const createContactRecordRequest = (
+	user: User,
+	contactType: 'Standard' | 'DeliveryOrRecipient',
+): StandardContactRecordRequest | RecipientContactRecordRequest => {
+	console.log('Creating contact record of type:', contactType);
+	switch (contactType) {
+		case 'Standard':
+			return createStandardContactRecordRequest(user);
+		case 'DeliveryOrRecipient':
+			return createRecipientContactRecordRequest(user);
+	}
 };
