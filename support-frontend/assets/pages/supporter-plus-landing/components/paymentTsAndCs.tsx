@@ -4,10 +4,10 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import {
+	buildPromotionalTermsLink,
 	contributionsTermsLinks,
 	digitalSubscriptionTermsLink,
 	guardianAdLiteTermsLink,
-	guardianWeeklyPromoTermsLink,
 	guardianWeeklyTermsLink,
 	observerLinks,
 	paperTermsLink,
@@ -173,6 +173,18 @@ export interface PaymentTsAndCsProps {
 	promotion?: Promotion;
 	thresholdAmount?: number;
 }
+
+function GuardianWeeklyPromoTerms({ promotion }: { promotion: Promotion }) {
+	return (
+		<div>
+			Offer subject to availability. Guardian News and Media Ltd ("GNM")
+			reserves the right to withdraw this promotion at any time. Full promotion
+			terms and conditions for our{' '}
+			{termsLink('offer', buildPromotionalTermsLink(promotion))}.
+		</div>
+	);
+}
+
 export function PaymentTsAndCs({
 	productKey,
 	ratePlanKey,
@@ -220,15 +232,6 @@ export function PaymentTsAndCs({
 				promotion,
 		  );
 
-	const guardianWeeklyPromo = (
-		<div>
-			Offer subject to availability. Guardian News and Media Ltd ("GNM")
-			reserves the right to withdraw this promotion at any time. Full promotion
-			terms and conditions for our{' '}
-			{termsLink('monthly', guardianWeeklyPromoTermsLink)} and{' '}
-			{termsLink('annual', guardianWeeklyPromoTermsLink)} offers.
-		</div>
-	);
 	const productLabel = productCatalogDescription[productKey].label;
 	const subscriptionBasis = !isStudentOneYearRatePlan
 		? 'on a subscription basis'
@@ -330,8 +333,12 @@ export function PaymentTsAndCs({
 		NationalDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
 		HomeDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
 		SubscriptionCard: paperTsAndCs('Collection', deliveryDate),
-		GuardianWeeklyDomestic: <> {promotion && guardianWeeklyPromo}</>,
-		GuardianWeeklyRestOfWorld: <> {promotion && guardianWeeklyPromo}</>,
+		GuardianWeeklyDomestic: promotion && (
+			<GuardianWeeklyPromoTerms promotion={promotion} />
+		),
+		GuardianWeeklyRestOfWorld: promotion && (
+			<GuardianWeeklyPromoTerms promotion={promotion} />
+		),
 	};
 	return (
 		<div css={container}>
