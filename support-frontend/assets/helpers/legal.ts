@@ -1,5 +1,6 @@
 // ----- Imports ----- //
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { Promotion } from './productPrice/promotions';
 // ----- Terms & Conditions ----- //
 const privacyLink = 'https://www.theguardian.com/help/privacy-policy';
 const defaultContributionEmail = 'mailto:contribution.support@theguardian.com';
@@ -40,8 +41,6 @@ const digitalSubscriptionTermsLink =
 	'https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions';
 const guardianWeeklyTermsLink =
 	'https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions';
-const guardianWeeklyPromoTermsLink =
-	'https://support.theguardian.com/p/10ANNUAL/terms';
 const observerLinks = {
 	TERMS: 'https://observer.co.uk/policy/terms',
 	PRIVACY: 'https://observer.co.uk/policy/privacy',
@@ -50,6 +49,10 @@ enum MediaGroup {
 	GUARDIAN = 'Guardian News & Media Ltd',
 	TORTOISE = 'GC re Tortoise Media Ltd t/a The Observer',
 }
+
+const buildPromotionalTermsLink = (promotion: Promotion): string =>
+	`https://support.theguardian.com/p/${promotion.promoCode}/terms`;
+
 // ----- Exports ----- //
 export {
 	contributionsTermsLinks,
@@ -63,7 +66,7 @@ export {
 	paperTermsLink,
 	digitalSubscriptionTermsLink,
 	guardianWeeklyTermsLink,
-	guardianWeeklyPromoTermsLink,
 	observerLinks,
 	MediaGroup,
+	buildPromotionalTermsLink,
 };
