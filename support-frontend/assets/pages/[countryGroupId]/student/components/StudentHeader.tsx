@@ -100,6 +100,13 @@ export default function StudentHeader({
 						{
 							gridId: `${heroImagePrefix}Mobile`,
 							srcSizes: [2000, 1000, 500],
+							sizes: '460px',
+							imgType: 'jpg',
+							media: '(max-width: 479px)',
+						},
+						{
+							gridId: `${heroImagePrefix}Mobile`,
+							srcSizes: [2000, 1000, 500],
 							sizes: '350px',
 							imgType: 'jpg',
 							media: '(max-width: 739px)',
