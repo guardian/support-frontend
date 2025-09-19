@@ -29,6 +29,7 @@ function setUpTrackingAndConsents(participations: Participations): void {
 		})
 		.catch((e) => {
 			console.log(`An exception was thrown getting the localeCode: ${e}`);
+			consentInitialisation(countryId);
 		});
 
 	analyticsInitialisation(participations, acquisitionData);
