@@ -159,9 +159,8 @@ export type GiftRecipientType = {
 	message?: string;
 	deliveryDate?: string;
 };
-type AppliedPromotion = {
+export type AppliedPromotion = {
 	promoCode: string;
-	countryGroupId: SupportRegionId; // There is a bit of naming mismatch between the front and back end
 	supportRegionId: SupportRegionId;
 };
 // The model that is sent to support-workers

@@ -3,6 +3,7 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import type { Participations } from '../../../helpers/abTests/models';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import type {
+	AppliedPromotion,
 	ProductFields,
 	RegularPaymentFields,
 	RegularPaymentRequest,
@@ -85,7 +86,6 @@ export const submitForm = async ({
 		promoCode !== undefined
 			? {
 					promoCode,
-					countryGroupId: supportRegionId,
 					supportRegionId: supportRegionId,
 			  }
 			: undefined;
@@ -172,7 +172,7 @@ const createStripeCheckoutSession = async ({
 	paymentRequest,
 }: {
 	personalData: FormPersonalFields;
-	appliedPromotion?: { promoCode: string; countryGroupId: SupportRegionId };
+	appliedPromotion?: AppliedPromotion;
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	contributionAmount: number | undefined;
@@ -197,7 +197,7 @@ const processSubscription = async ({
 	paymentRequest,
 }: {
 	personalData: FormPersonalFields;
-	appliedPromotion?: { promoCode: string; countryGroupId: SupportRegionId };
+	appliedPromotion?: AppliedPromotion;
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	contributionAmount: number | undefined;
