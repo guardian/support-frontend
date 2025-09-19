@@ -19,9 +19,6 @@ export const container = css`
 	padding: ${space[6]}px ${space[4]}px ${space[5]}px;
 	position: relative;
 
-	${from.mobileLandscape} {
-		width: 350px;
-	}
 	${from.tablet} {
 		width: 366px;
 		border-radius: ${space[2]}px 0 0 ${space[2]}px;
