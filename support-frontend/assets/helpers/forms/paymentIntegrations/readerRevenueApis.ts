@@ -162,6 +162,7 @@ export type GiftRecipientType = {
 type AppliedPromotion = {
 	promoCode: string;
 	countryGroupId: SupportRegionId; // There is a bit of naming mismatch between the front and back end
+	supportRegionId: SupportRegionId;
 };
 // The model that is sent to support-workers
 export type RegularPaymentRequest = {

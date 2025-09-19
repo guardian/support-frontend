@@ -86,6 +86,7 @@ export const submitForm = async ({
 			? {
 					promoCode,
 					countryGroupId: supportRegionId,
+					supportRegionId: supportRegionId,
 			  }
 			: undefined;
 	const supportAbTests = getSupportAbTests(abParticipations);
