@@ -298,9 +298,7 @@ export function ThreeTierLanding({
 		campaignSettings?.enableSingleContributions ??
 		urlSearchParams.has('enableOneTime');
 
-	const enableStudentOffer =
-		['uk', 'us', 'ca'].includes(supportRegionId) &&
-		urlSearchParams.has('enableStudentOffer');
+	const enableStudentOffer = ['uk', 'us', 'ca'].includes(supportRegionId);
 
 	const getInitialContributionType = () => {
 		if (enableSingleContributionsTab && urlSearchParamsOneTime) {
