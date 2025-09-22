@@ -169,6 +169,51 @@ export class SalesforceService {
 	}
 }
 
+const createStandardContactRecordRequest = (
+	user: User,
+): StandardContactRecordRequest => {
+	return {
+		Email: user.primaryEmailAddress,
+		Salutation: user.title,
+		FirstName: user.firstName,
+		LastName: user.lastName,
+		Phone: user.telephoneNumber,
+		IdentityID__c: user.id,
+		...createBillingAddressFields(user),
+		...createMailingAddressFields(user),
+	};
+};
+
+const createDeliveryContactRecordRequest = (
+	contactRecord: SalesforceContactRecord,
+	giftRecipient: GiftRecipient,
+	user: User,
+): DeliveryContactRecordRequest => {
+	return {
+		AccountId: contactRecord.AccountId,
+		Email: giftRecipient.email,
+		Salutation: giftRecipient.title,
+		FirstName: giftRecipient.firstName,
+		LastName: giftRecipient.lastName,
+		...createMailingAddressFields(user),
+		RecordTypeId: '01220000000VB50AAG',
+	};
+};
+
+const createDigitalOnlyContactRecordRequest = (
+	user: User,
+): DigitalOnlyContactRecordRequest => {
+	//optional address fields?
+	return {
+		Email: user.primaryEmailAddress,
+		Salutation: user.title,
+		FirstName: user.firstName,
+		LastName: user.lastName,
+		Phone: user.telephoneNumber,
+		RecordTypeId: '01220000000VB50AAG',
+	};
+};
+
 export const createContactRecordRequest = (
 	user: User,
 	giftRecipient: GiftRecipient | null,
