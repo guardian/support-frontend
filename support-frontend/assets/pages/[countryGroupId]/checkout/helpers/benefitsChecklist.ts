@@ -66,6 +66,8 @@ const benefitsAsChecklist = ({
 export const getBenefitsChecklistFromLandingPageTool = (
 	productKey: ProductKey,
 	landingPageSettings: LandingPageVariant,
+	countryGroupId: CountryGroupId,
+	showNewspaperArchiveBenefit?: boolean,
 ): BenefitsCheckListData[] | undefined => {
 	// Three Tier products get their config from the Landing Page tool
 	if (productKey === 'Contribution') {
@@ -80,12 +82,25 @@ export const getBenefitsChecklistFromLandingPageTool = (
 			unchecked: [],
 		});
 	} else if (productKey === 'TierThree') {
+		const checkedBenefits = showNewspaperArchiveBenefit
+			? [
+					...landingPageSettings.products.TierThree.benefits,
+					{
+						copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
+						tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed${
+							countryGroupId !== 'GBPCountries' ? ' in the UK' : ''
+						}, since 1821.`,
+					},
+					...landingPageSettings.products.SupporterPlus.benefits,
+			  ]
+			: [
+					...landingPageSettings.products.TierThree.benefits,
+					...landingPageSettings.products.SupporterPlus.benefits,
+			  ];
+
 		// Also show SupporterPlus benefits
 		return benefitsAsChecklist({
-			checked: [
-				...landingPageSettings.products.TierThree.benefits,
-				...landingPageSettings.products.SupporterPlus.benefits,
-			],
+			checked: checkedBenefits,
 			unchecked: [],
 		});
 	}

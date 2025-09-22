@@ -54,7 +54,11 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 	};
 	it('should return the correct benefits checklist for TierThree', () => {
 		expect(
-			getBenefitsChecklistFromLandingPageTool('TierThree', landingPageSettings),
+			getBenefitsChecklistFromLandingPageTool(
+				'TierThree',
+				landingPageSettings,
+				'GBPCountries',
+			),
 		).toEqual([
 			{
 				isChecked: true,
@@ -79,6 +83,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 			getBenefitsChecklistFromLandingPageTool(
 				'Contribution',
 				landingPageSettings,
+				'GBPCountries',
 			),
 		).toMatchObject([
 			{
@@ -112,6 +117,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 			getBenefitsChecklistFromLandingPageTool(
 				'SupporterPlus',
 				landingPageSettings,
+				'GBPCountries',
 			),
 		).toEqual([
 			{
@@ -129,6 +135,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 			getBenefitsChecklistFromLandingPageTool(
 				'GuardianAdLite',
 				landingPageSettings,
+				'GBPCountries',
 			),
 		).toBeUndefined();
 	});
