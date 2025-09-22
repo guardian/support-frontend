@@ -12,7 +12,7 @@
 	"devDependencies": {
 		"@guardian/prettier": "^8.0.1",
 		"@types/aws-lambda": "^8.10.147",
-		"@types/node": "^22.13.4",
+		"@types/node": "^24.5.2",
 		"esbuild": "^0.25.0",
 		"prettier": "^3.5.1",
 		"tslib": "^2.6.2",
