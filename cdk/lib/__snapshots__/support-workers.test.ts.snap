@@ -1535,6 +1535,24 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "ReturnData": false,
           },
         ],
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Tags": [
           {
             "Key": "gu:cdk:version",
@@ -1750,6 +1768,24 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "ReturnData": false,
           },
         ],
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Tags": [
           {
             "Key": "gu:cdk:version",
@@ -1818,6 +1854,24 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "EvaluationPeriods": 18,
         "MetricName": "PaymentSuccess",
         "Namespace": "support-frontend",
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Period": 3600,
         "Statistic": "Sum",
         "Tags": [
@@ -1888,6 +1942,24 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "EvaluationPeriods": 18,
         "MetricName": "PaymentSuccess",
         "Namespace": "support-frontend",
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Period": 3600,
         "Statistic": "Sum",
         "Tags": [
@@ -2105,6 +2177,24 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "ReturnData": false,
           },
         ],
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Tags": [
           {
             "Key": "gu:cdk:version",
@@ -2242,6 +2332,24 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "ReturnData": false,
           },
         ],
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Tags": [
           {
             "Key": "gu:cdk:version",
@@ -2310,6 +2418,24 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "EvaluationPeriods": 4,
         "MetricName": "PaymentSuccess",
         "Namespace": "support-frontend",
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Period": 3600,
         "Statistic": "Sum",
         "Tags": [
@@ -2380,6 +2506,24 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "EvaluationPeriods": 6,
         "MetricName": "PaymentSuccess",
         "Namespace": "support-frontend",
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Period": 3600,
         "Statistic": "Sum",
         "Tags": [
@@ -2450,6 +2594,24 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "EvaluationPeriods": 8,
         "MetricName": "PaymentSuccess",
         "Namespace": "support-frontend",
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Period": 3600,
         "Statistic": "Sum",
         "Tags": [
@@ -2520,6 +2682,24 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "EvaluationPeriods": 12,
         "MetricName": "PaymentSuccess",
         "Namespace": "support-frontend",
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Period": 3600,
         "Statistic": "Sum",
         "Tags": [
@@ -2590,6 +2770,24 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "EvaluationPeriods": 3,
         "MetricName": "PaymentSuccess",
         "Namespace": "support-frontend",
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Period": 3600,
         "Statistic": "Sum",
         "Tags": [
@@ -2660,6 +2858,24 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "EvaluationPeriods": 24,
         "MetricName": "PaymentSuccess",
         "Namespace": "support-frontend",
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Period": 3600,
         "Statistic": "Sum",
         "Tags": [
@@ -2730,6 +2946,24 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "EvaluationPeriods": 24,
         "MetricName": "PaymentSuccess",
         "Namespace": "support-frontend",
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Period": 3600,
         "Statistic": "Sum",
         "Tags": [
@@ -2800,6 +3034,24 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "EvaluationPeriods": 3,
         "MetricName": "PaymentSuccess",
         "Namespace": "support-frontend",
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Period": 3600,
         "Statistic": "Sum",
         "Tags": [
@@ -2939,6 +3191,24 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "ReturnData": false,
           },
         ],
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Tags": [
           {
             "Key": "gu:cdk:version",
@@ -3074,6 +3344,24 @@ exports[`The support-workers stack matches the snapshot 1`] = `
               "Stat": "Sum",
             },
             "ReturnData": false,
+          },
+        ],
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
           },
         ],
         "Tags": [
