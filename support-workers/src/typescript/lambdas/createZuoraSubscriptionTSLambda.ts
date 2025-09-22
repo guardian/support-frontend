@@ -30,7 +30,6 @@ import type { WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
 import { getIfDefined } from '../util/nullAndUndefined';
 import { zuoraDateReplacer } from '../util/zuoraDateReplacer';
-import { getPromotions } from '@modules/promotions/getPromotions';
 
 const stage = stageFromEnvironment();
 
