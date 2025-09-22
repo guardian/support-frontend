@@ -24,12 +24,7 @@ describe('NewspaperProductTabs', () => {
 	});
 
 	it('should set the collect in store as the initial active tab', () => {
-		render(
-			<NewspaperProductTabs
-				productPrices={productPrices}
-				isPaperProductTest={true}
-			/>,
-		);
+		render(<NewspaperProductTabs productPrices={productPrices} />);
 
 		const tab = screen.getByRole('tab', { selected: true });
 
@@ -50,12 +45,7 @@ describe('NewspaperProductTabs', () => {
 			);
 
 			// Act
-			render(
-				<NewspaperProductTabs
-					productPrices={productPrices}
-					isPaperProductTest={true}
-				/>,
-			);
+			render(<NewspaperProductTabs productPrices={productPrices} />);
 
 			screen
 				.getByRole('tab', {
