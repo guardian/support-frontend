@@ -8,8 +8,8 @@ import {
 } from 'pages/[countryGroupId]/validation';
 
 type PersonalPhoneFieldProps = {
-	phoneNumber?: string;
-	setPhoneNumber?: (value: string) => void;
+	phoneNumber: string;
+	setPhoneNumber: (value: string) => void;
 };
 
 const phoneStyle = css`
@@ -26,35 +26,33 @@ export function PersonalPhoneField({
 	const [telephoneError, setTelephoneError] = useState<string>();
 	return (
 		<>
-			{setPhoneNumber && (
-				<fieldset css={phoneStyle}>
-					<TextInput
-						id="telephone"
-						data-qm-masking="blocklist"
-						label="Telephone"
-						name="telephone"
-						value={phoneNumber}
-						onChange={(event) => {
-							setPhoneNumber(event.target.value);
-						}}
-						onBlur={(event) => {
-							event.target.checkValidity();
-						}}
-						optional
-						error={telephoneError}
-						pattern={doesNotContainExtendedEmojiOrLeadingSpace} // We intentionally use a minimally restrictive pattern here to allow users to enter additional details beyond digits. This matches the original checkout's behavior.
-						onInvalid={(event) => {
-							preventDefaultValidityMessage(event.currentTarget);
-							const validityState = event.currentTarget.validity;
-							if (validityState.valid) {
-								setTelephoneError(undefined);
-							} else {
-								setTelephoneError('Please enter valid telephone details.');
-							}
-						}}
-					/>
-				</fieldset>
-			)}
+			<fieldset css={phoneStyle}>
+				<TextInput
+					id="telephone"
+					data-qm-masking="blocklist"
+					label="Telephone"
+					name="telephone"
+					value={phoneNumber}
+					onChange={(event) => {
+						setPhoneNumber(event.target.value);
+					}}
+					onBlur={(event) => {
+						event.target.checkValidity();
+					}}
+					optional
+					error={telephoneError}
+					pattern={doesNotContainExtendedEmojiOrLeadingSpace} // We intentionally use a minimally restrictive pattern here to allow users to enter additional details beyond digits. This matches the original checkout's behavior.
+					onInvalid={(event) => {
+						preventDefaultValidityMessage(event.currentTarget);
+						const validityState = event.currentTarget.validity;
+						if (validityState.valid) {
+							setTelephoneError(undefined);
+						} else {
+							setTelephoneError('Please enter valid telephone details.');
+						}
+					}}
+				/>
+			</fieldset>
 		</>
 	);
 }

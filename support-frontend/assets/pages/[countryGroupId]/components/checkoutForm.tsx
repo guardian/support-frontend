@@ -877,8 +877,8 @@ export default function CheckoutForm({
 							setEmail={setEmail}
 							confirmedEmail={confirmedEmail}
 							setConfirmedEmail={setConfirmedEmail}
-							phoneNumber={isWeeklyGift ? phoneNumber : undefined}
-							setPhoneNumber={isWeeklyGift ? setPhoneNumber : undefined}
+							phoneNumber={phoneNumber}
+							setPhoneNumber={setPhoneNumber}
 							billingStatePostcode={billingStatePostcode}
 							hasDeliveryAddress={hasDeliveryAddress}
 							isEmailAddressReadOnly={isSignedIn}
