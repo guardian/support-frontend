@@ -33,6 +33,7 @@ export function PersonalPhoneField({
 					label="Telephone"
 					name="telephone"
 					value={phoneNumber}
+					maxLength={40}
 					onChange={(event) => {
 						setPhoneNumber(event.target.value);
 					}}
