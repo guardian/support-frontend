@@ -5,38 +5,44 @@ import type { GiftRecipient, Title, User } from '../model/stateSchemas';
 import type { SalesforceConfig } from './salesforceClient';
 import { SalesforceClient } from './salesforceClient';
 
-export type ContactRecordRequest = {
-	IdentityID__c: string;
-	Email: string;
+export type BaseContactRecordRequest = {
 	Salutation?: Title | null;
 	FirstName: string;
 	LastName: string;
-	OtherStreet?: string | null;
-	OtherCity?: string | null;
-	OtherState?: string | null;
-	OtherPostalCode?: string | null;
-	OtherCountry?: string | null;
+	Email: string | null;
 	Phone?: string | null;
-	MailingStreet?: string | null;
-	MailingCity?: string | null;
-	MailingState?: string | null;
-	MailingPostalCode?: string | null;
-	MailingCountry?: string | null;
 };
 
-export type DeliveryContactRecordRequest = {
-	AccountId: string;
-	Email: string | null;
-	Salutation?: Title | null;
-	FirstName: string;
-	LastName: string;
-	MailingStreet: string | null;
+export type StandardContactRecordRequest = BaseContactRecordRequest & {
+	IdentityID__c: string;
+	OtherStreet: string | undefined;
+	OtherCity: string | null;
+	OtherState: string | null;
+	OtherPostalCode: string | null;
+	OtherCountry: string | null;
+	MailingStreet: string | undefined;
 	MailingCity: string | null;
 	MailingState: string | null;
 	MailingPostalCode: string | null;
 	MailingCountry: string | null;
-	RecordTypeId: '01220000000VB50AAG';
 };
+
+export type DeliveryContactRecordRequest = BaseContactRecordRequest & {
+	AccountId: string;
+	RecordTypeId: '01220000000VB50AAG';
+	MailingStreet: string | undefined;
+	MailingCity: string | null;
+	MailingState: string | null;
+	MailingPostalCode: string | null;
+	MailingCountry: string | null;
+};
+
+export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest & {
+	RecordTypeId: '01220000000VB50AAG';
+	MailingState?: string | null;
+	MailingCountry?: string | null;
+};
+
 export const salesforceContactRecordSchema = z.object({
 	Id: z.string(),
 	AccountId: z.string(),
@@ -100,7 +106,10 @@ export class SalesforceService {
 	};
 
 	upsert = async (
-		contact: ContactRecordRequest | DeliveryContactRecordRequest,
+		contact:
+			| StandardContactRecordRequest
+			| DeliveryContactRecordRequest
+			| DigitalOnlyContactRecordRequest,
 	): Promise<SuccessfulUpsertResponse> => {
 		const response: UpsertResponse = await this.client.post(
 			this.upsertEndpoint,
