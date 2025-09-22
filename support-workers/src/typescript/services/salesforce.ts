@@ -247,3 +247,18 @@ export const createContactRecordRequest = (
 		MailingCountry: getCountryNameByIsoCode(user.deliveryAddress.country),
 	};
 };
+
+//todo refine this
+const getContactType = (
+	user: User,
+): 'Standard' | 'DeliveryOrRecipient' | 'DigitalOnly' => {
+	if (!user.deliveryAddress) {
+		//todo refine this
+		return 'DeliveryOrRecipient';
+	}
+	if (!user.billingAddress) {
+		//todo refine this
+		return 'DigitalOnly';
+	}
+	return 'Standard';
+};
