@@ -188,7 +188,7 @@ const paper = (
 		title: 'Newspaper',
 		subtitle: `from ${getDisplayPrice(countryGroupId, priceCopy.price)}`,
 		description:
-			'Save on the Guardian newspaper retail price and enjoy free digital access',
+			'Save on the Guardian newspaper retail price and enjoy full digital access',
 		buttons: [
 			{
 				ctaButtonText: 'Find out more',
