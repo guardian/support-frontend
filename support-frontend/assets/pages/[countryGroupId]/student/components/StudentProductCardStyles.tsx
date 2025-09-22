@@ -18,7 +18,7 @@ export const container = css`
 	border-radius: 0 0 ${space[2]}px ${space[2]}px;
 	padding: ${space[6]}px ${space[4]}px ${space[5]}px;
 	position: relative;
-	width: 350px;
+
 	${from.tablet} {
 		width: 366px;
 		border-radius: ${space[2]}px 0 0 ${space[2]}px;

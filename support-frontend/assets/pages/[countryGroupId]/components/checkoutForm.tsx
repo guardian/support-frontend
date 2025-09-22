@@ -6,7 +6,7 @@ import {
 	ErrorSummary,
 } from '@guardian/source-development-kitchen/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
-import { countryGroups } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import {
@@ -58,8 +58,6 @@ import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
-import type { GeoId } from 'pages/geoIdConfig';
-import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
@@ -70,6 +68,7 @@ import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryChe
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
+import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import { PersonalAddressFields } from '../checkout/components/PersonalAddressFields';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
 import { WeeklyDeliveryDates } from '../checkout/components/WeeklyDeliveryDates';
@@ -113,7 +112,7 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 }
 
 type CheckoutFormProps = {
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 	appConfig: AppConfig;
 	stripePublicKey: string;
 	isTestUser: boolean;
@@ -169,7 +168,7 @@ const getPaymentLegendPrefix = (
 };
 
 export default function CheckoutForm({
-	geoId,
+	supportRegionId,
 	appConfig,
 	stripePublicKey,
 	isTestUser,
@@ -194,7 +193,8 @@ export default function CheckoutForm({
 	const isSignedIn = !!user?.email;
 
 	const productCatalog = appConfig.productCatalog;
-	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
+	const { currency, currencyKey, countryGroupId } =
+		getSupportRegionIdConfig(supportRegionId);
 
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
@@ -525,8 +525,6 @@ export default function CheckoutForm({
 		}
 	}, [errorMessage]);
 
-	const { supportInternationalisationId } = countryGroups[countryGroupId];
-
 	const onFormSubmit = async (formData: FormData) => {
 		if (paymentMethod === undefined) {
 			setPaymentMethodError('Please select a payment method');
@@ -606,7 +604,7 @@ export default function CheckoutForm({
 			// For StripeHostedCheckout successUrl is a hosted Stripe checkout page
 			// for other payment methods it's the thank you page.
 			const successUrl = await submitForm({
-				geoId,
+				supportRegionId,
 				productKey: finalProductKey,
 				ratePlanKey,
 				formData,
@@ -646,7 +644,7 @@ export default function CheckoutForm({
 		productKey,
 		originalAmount,
 		ratePlanDescription.billingPeriod,
-		supportInternationalisationId,
+		supportRegionId,
 		abParticipations.abandonedBasket === 'variant',
 	);
 
@@ -755,7 +753,7 @@ export default function CheckoutForm({
 										) {
 											logException(
 												"Could not find state from Stripe's billingDetails",
-												{ geoId, countryGroupId, countryId },
+												{ supportRegionId, countryGroupId, countryId },
 											);
 										}
 										event.billingDetails?.address.state &&

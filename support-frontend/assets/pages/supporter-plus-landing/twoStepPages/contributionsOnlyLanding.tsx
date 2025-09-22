@@ -12,6 +12,7 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
@@ -24,8 +25,7 @@ import {
 	billingPeriodToContributionType,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
-import type { GeoId } from 'pages/geoIdConfig';
-import { getGeoIdConfig } from 'pages/geoIdConfig';
+import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import { AmountsCard } from '../components/amountsCard';
 
 const recurringContainer = css`
@@ -135,15 +135,16 @@ const links = [
 ];
 
 type ContributionsOnlyLandingProps = {
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 };
 export function ContributionsOnlyLanding({
-	geoId,
+	supportRegionId,
 }: ContributionsOnlyLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const ratePlanParam = urlSearchParams.get('ratePlan') ?? '';
 
-	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
+	const { currencyKey: currencyId, countryGroupId } =
+		getSupportRegionIdConfig(supportRegionId);
 	const countryId = Country.detect();
 
 	const getInitialBillingPeriod = () => {

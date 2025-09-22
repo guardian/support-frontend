@@ -1,8 +1,8 @@
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { getUser } from 'helpers/user/user';
-import type { GeoId } from 'pages/geoIdConfig';
-import { getGeoIdConfig } from 'pages/geoIdConfig';
+import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import {
 	getReturnAddress,
 	setReturnAddress,
@@ -14,14 +14,14 @@ import { PosterComponent } from './components/posterComponent';
 import { adLiteFAQs } from './helpers/adLiteFAQs';
 
 type GuardianAdLiteLandingProps = {
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 };
 
 export function GuardianAdLiteLanding({
-	geoId,
+	supportRegionId,
 }: GuardianAdLiteLandingProps): JSX.Element {
 	const user = getUser();
-	const { countryGroupId } = getGeoIdConfig(geoId);
+	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [GBPCountries],
 		selectedCountryGroup: countryGroupId,
@@ -41,7 +41,7 @@ export function GuardianAdLiteLanding({
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
 			<HeaderCards
-				geoId={geoId}
+				supportRegionId={supportRegionId}
 				returnLink={getReturnAddress()} // defaults to urlSearchParamsReturn if available
 				isSignedIn={user.isSignedIn}
 			/>

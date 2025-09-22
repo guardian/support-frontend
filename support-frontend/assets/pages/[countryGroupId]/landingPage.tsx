@@ -1,15 +1,16 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { Country } from 'helpers/internationalisation/classes/country';
-import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import { ContributionsOnlyLanding } from 'pages/supporter-plus-landing/twoStepPages/contributionsOnlyLanding';
 import { ThreeTierLanding } from 'pages/supporter-plus-landing/twoStepPages/threeTierLanding';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
+import { getSupportRegionIdConfig } from '../supportRegionConfig';
 
 type Props = {
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 };
@@ -17,11 +18,11 @@ type Props = {
 const countryId: IsoCountry = Country.detect();
 
 export function LandingPage({
-	geoId,
+	supportRegionId,
 	abParticipations,
 	landingPageSettings,
 }: Props) {
-	const { countryGroupId } = getGeoIdConfig(geoId);
+	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 
 	const { selectedAmountsVariant: amounts } = getAmountsTestVariant(
 		countryId,
@@ -34,12 +35,12 @@ export function LandingPage({
 	if (inThreeTier) {
 		return (
 			<ThreeTierLanding
-				geoId={geoId}
+				supportRegionId={supportRegionId}
 				abParticipations={abParticipations}
 				settings={landingPageSettings}
 			/>
 		);
 	} else {
-		return <ContributionsOnlyLanding geoId={geoId} />;
+		return <ContributionsOnlyLanding supportRegionId={supportRegionId} />;
 	}
 }

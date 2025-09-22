@@ -29,7 +29,7 @@ object ProductSubscriptionBuilders {
     val maybePromoWithCountryGroup: Option[PromoWithCountryGroup] = maybeAppliedPromotion
       .flatMap(appliedPromotion =>
         for {
-          countryGroup <- CountryGroup.byId(appliedPromotion.countryGroupId)
+          countryGroup <- CountryGroup.byId(appliedPromotion.supportRegionId)
           promoCode <- Some(appliedPromotion.promoCode)
         } yield PromoWithCountryGroup(promoCode, countryGroup),
       )

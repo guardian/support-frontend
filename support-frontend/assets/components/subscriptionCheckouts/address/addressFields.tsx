@@ -221,7 +221,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 								pathname.split('/')[1] ?? '';
 							const selectedInternationalisationId =
 								countryGroups[selectedCountryGroup as CountryGroupId]
-									.supportInternationalisationId;
+									.supportRegionId;
 							const redirectPathname = pathname.replace(
 								currentInternationalisationId,
 								selectedInternationalisationId,

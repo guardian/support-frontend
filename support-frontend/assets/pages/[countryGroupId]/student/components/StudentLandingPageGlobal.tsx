@@ -1,22 +1,22 @@
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import {
 	type ActiveProductKey,
 	type ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import { type GeoId } from 'pages/geoIdConfig';
 import type { StudentDiscount } from '../helpers/discountDetails';
 import { StudentBrandAwareness } from './StudentBrandAwareness';
 import StudentHeader from './StudentHeader';
 import { StudentLandingPage } from './StudentLandingPage';
 
 export function StudentLandingPageGlobal({
-	geoId,
+	supportRegionId,
 	landingPageVariant,
 	productKey,
 	ratePlanKey,
 	studentDiscount,
 }: {
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 	landingPageVariant: LandingPageVariant;
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
@@ -24,10 +24,10 @@ export function StudentLandingPageGlobal({
 }) {
 	return (
 		<StudentLandingPage
-			geoId={geoId}
+			supportRegionId={supportRegionId}
 			header={
 				<StudentHeader
-					geoId={geoId}
+					supportRegionId={supportRegionId}
 					productKey={productKey}
 					ratePlanKey={ratePlanKey}
 					landingPageVariant={landingPageVariant}
