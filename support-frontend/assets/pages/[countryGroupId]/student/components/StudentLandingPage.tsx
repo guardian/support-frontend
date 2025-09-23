@@ -5,6 +5,7 @@ import {
 import {
 	Canada,
 	GBPCountries,
+	SupportRegionId,
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -13,7 +14,7 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
+import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 import { AccordionFAQ } from '../../components/accordionFAQ';
 import { getStudentFAQs } from '../helpers/studentFAQs';
 import { getStudentTsAndCs } from '../helpers/studentTsAndCsCopy';
@@ -24,27 +25,28 @@ import {
 import { StudentTsAndCs } from './studentTsAndCs';
 
 type StudentLandingPageProps = {
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 	header: JSX.Element;
 	brandAwareness?: JSX.Element;
 };
 
 export function StudentLandingPage({
-	geoId,
+	supportRegionId,
 	header,
 	brandAwareness,
 }: StudentLandingPageProps) {
-	const faqItems = getStudentFAQs(geoId);
-	const tsAndCsItem = getStudentTsAndCs(geoId);
+	const faqItems = getStudentFAQs(supportRegionId);
+	const tsAndCsItem = getStudentTsAndCs(supportRegionId);
 
-	const { countryGroupId } = getGeoIdConfig(geoId);
+	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [GBPCountries, UnitedStates, Canada],
 		selectedCountryGroup: countryGroupId,
 		subPath: '/student',
 	};
 	const showCountrySwitcher =
-		geoId !== 'au' && countrySwitcherProps.countryGroupIds.length > 1;
+		supportRegionId !== SupportRegionId.AU &&
+		countrySwitcherProps.countryGroupIds.length > 1;
 
 	return (
 		<PageScaffold

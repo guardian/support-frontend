@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { InfoSummary } from '@guardian/source-development-kitchen/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
@@ -24,10 +25,9 @@ import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { parameteriseUrl } from 'helpers/urls/routes';
-import type { GeoId } from 'pages/geoIdConfig';
-import { getGeoIdConfig } from 'pages/geoIdConfig';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
+import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
@@ -39,7 +39,7 @@ import { BackButton } from './backButton';
 import { shorterBoxMargin } from './form';
 
 type CheckoutSummaryProps = {
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 	appConfig: AppConfig;
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
@@ -52,11 +52,10 @@ type CheckoutSummaryProps = {
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
-	isPaperProductTest: boolean;
 };
 
 export default function CheckoutSummary({
-	geoId,
+	supportRegionId,
 	appConfig,
 	productKey,
 	ratePlanKey,
@@ -69,12 +68,12 @@ export default function CheckoutSummary({
 	weeklyDeliveryDate,
 	thresholdAmount,
 	studentDiscount,
-	isPaperProductTest,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
 	const productCatalog = appConfig.productCatalog;
-	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
+	const { currency, currencyKey, countryGroupId } =
+		getSupportRegionIdConfig(supportRegionId);
 
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
@@ -119,7 +118,7 @@ export default function CheckoutSummary({
 	}
 
 	const benefitsCheckListData =
-		getPaperPlusDigitalBenefits(isPaperProductTest, ratePlanKey, productKey) ??
+		getPaperPlusDigitalBenefits(ratePlanKey, productKey) ??
 		getBenefitsChecklistFromLandingPageTool(productKey, landingPageSettings) ??
 		getBenefitsChecklistFromProductDescription(
 			productDescription,
@@ -127,7 +126,10 @@ export default function CheckoutSummary({
 			abParticipations,
 		);
 
-	if (ratePlanKey === 'OneYearStudent' && geoId === 'uk') {
+	if (
+		ratePlanKey === 'OneYearStudent' &&
+		supportRegionId === SupportRegionId.UK
+	) {
 		benefitsCheckListData.unshift({
 			isChecked: true,
 			text: ukSpecificAdditionalBenefit.copy,
@@ -148,9 +150,8 @@ export default function CheckoutSummary({
 		}
 	};
 	const backUrl = parameteriseUrl(
-		`/${geoId}${productDescription.landingPagePath}`,
+		`/${supportRegionId}${productDescription.landingPagePath}`,
 		promotion?.promoCode,
-		isPaperProductTest ? 'paperProductTabs' : undefined,
 		getPaperFulfilmentOption(productKey),
 	);
 
@@ -200,7 +201,6 @@ export default function CheckoutSummary({
 							countryGroupId={countryGroupId}
 							thresholdAmount={thresholdAmount}
 							promotion={promotion}
-							isPaperProductTest={isPaperProductTest}
 						/>
 					}
 					headerButton={
@@ -210,7 +210,6 @@ export default function CheckoutSummary({
 					}
 					abParticipations={abParticipations}
 					studentDiscount={studentDiscount}
-					isPaperProductTest={isPaperProductTest}
 				/>
 			</BoxContents>
 		</Box>

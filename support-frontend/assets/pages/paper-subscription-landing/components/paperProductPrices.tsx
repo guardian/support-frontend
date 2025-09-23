@@ -10,25 +10,18 @@ export type PaperProductPricesProps = {
 	productPrices: ProductPrices | null | undefined;
 	tab: PaperFulfilmentOptions;
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
-	isPaperProductTest: boolean;
 };
 
 function PaperProductPrices({
 	productPrices,
 	tab,
 	setTabAction,
-	isPaperProductTest,
 }: PaperProductPricesProps): JSX.Element | null {
 	if (!productPrices) {
 		return null;
 	}
 
-	const products = getPlans(
-		tab,
-		productPrices,
-		ActivePaperProductNoTestTypes,
-		isPaperProductTest,
-	);
+	const products = getPlans(tab, productPrices, ActivePaperProductNoTestTypes);
 
 	return (
 		<PaperPrices

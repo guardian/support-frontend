@@ -59,7 +59,7 @@ const createRecurringReminderEndpoint = isProd()
 	: 'https://support.code.dev-theguardian.com/reminders/create/recurring';
 
 const countryPath = (countryGroupId: CountryGroupId) =>
-	countryGroups[countryGroupId].supportInternationalisationId;
+	countryGroups[countryGroupId].supportRegionId;
 
 function postcodeLookupUrl(postcode: string): string {
 	return `${getOrigin() + routes.postcodeLookup}/${postcode}`;
@@ -143,17 +143,11 @@ function paperCheckoutUrl(
 function parameteriseUrl(
 	url: string,
 	promoCode?: Option<string>,
-	abTestName?: string,
 	fulfilmentOption?: PaperFulfilmentOptions,
 ) {
-	const params = abTestName
-		? {
-				[abTestName]: 'true',
-				promoCode,
-		  }
-		: {
-				promoCode,
-		  };
+	const params = {
+		promoCode,
+	};
 	const urlWithParams = addQueryParamsToURL(url, params).replace(/\?$/, ''); // removes ? when no params
 	return fulfilmentOption
 		? `${urlWithParams}#${fulfilmentOption}`

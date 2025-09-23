@@ -426,6 +426,7 @@ export class SupportWorkers extends GuStack {
         new GuAlarm(this, `No${paymentProvider}ContributionsAlarm`, {
           app,
           actionsEnabled: isProd,
+          okAction: true,
           snsTopicName: `alarms-handler-topic-${this.stage}`,
           alarmName: `support-workers ${this.stage} No successful recurring ${paymentProvider} contributions recently.`,
           metric: this.buildPaymentSuccessMetric(
@@ -480,6 +481,7 @@ export class SupportWorkers extends GuStack {
         new GuAlarm(this, `No${paymentProvider}SupporterPlusAlarm`, {
           app,
           actionsEnabled: isProd,
+          okAction: true,
           snsTopicName: `alarms-handler-topic-${this.stage}`,
           alarmName: `support-workers ${this.stage} No successful ${paymentProvider} supporter plus subscriptions recently.`,
           metric: this.buildPaymentSuccessMetric(
@@ -519,6 +521,7 @@ export class SupportWorkers extends GuStack {
     new GuAlarm(this, "NoApplePayRecurringAlarm", {
       app,
       actionsEnabled: isProd,
+      okAction: true,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `support-workers ${
         this.stage
@@ -557,6 +560,7 @@ export class SupportWorkers extends GuStack {
     new GuAlarm(this, "NoGooglePayRecurringAlarm", {
       app,
       actionsEnabled: isProd,
+      okAction: true,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `support-workers ${
         this.stage
@@ -578,6 +582,7 @@ export class SupportWorkers extends GuStack {
     new GuAlarm(this, "NoPaperAcquisitionInOneDayAlarm", {
       app,
       actionsEnabled: isProd,
+      okAction: true,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful paper checkouts in 24h.`,
       metric: new MathExpression({
@@ -610,6 +615,7 @@ export class SupportWorkers extends GuStack {
     new GuAlarm(this, "NoWeeklyAcquisitionInOneDayAlarm", {
       app,
       actionsEnabled: isProd,
+      okAction: true,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful guardian weekly checkouts in 8h.`,
       metric: new MathExpression({
@@ -647,6 +653,7 @@ export class SupportWorkers extends GuStack {
     new GuAlarm(this, `NoTierThreeAcquisitionInPeriodAlarm`, {
       app,
       actionsEnabled: isProd,
+      okAction: true,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `URGENT 9-5 - ${
         this.stage
@@ -700,6 +707,7 @@ export class SupportWorkers extends GuStack {
     new GuAlarm(this, `NoAdLiteAcquisitionInPeriodAlarm`, {
       app,
       actionsEnabled: isProd,
+      okAction: true,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `URGENT 9-5 - ${
         this.stage

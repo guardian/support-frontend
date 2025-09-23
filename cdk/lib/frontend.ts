@@ -52,9 +52,8 @@ export class Frontend extends GuStack {
     super(scope, id, {
       ...props,
       // Required for ALB logging
-      env: { region: 'eu-west-1' },
-    }
-    );
+      env: { region: "eu-west-1" },
+    });
 
     const app = "frontend";
 

@@ -1,7 +1,9 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type {
+	CountryGroupId,
+	SupportRegionId,
+} from '@modules/internationalisation/countryGroup';
 import { privacyLink } from 'helpers/legal';
-import type { GeoId } from 'pages/geoIdConfig';
-import { getGeoIdConfig } from 'pages/geoIdConfig';
+import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 
 const studentTsAndCs: Partial<Record<CountryGroupId, JSX.Element>> = {
 	AUDCountries: (
@@ -44,7 +46,9 @@ const studentTsAndCs: Partial<Record<CountryGroupId, JSX.Element>> = {
 	),
 };
 
-export function getStudentTsAndCs(geoId: GeoId): JSX.Element | undefined {
-	const { countryGroupId } = getGeoIdConfig(geoId);
+export function getStudentTsAndCs(
+	supportRegionId: SupportRegionId,
+): JSX.Element | undefined {
+	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 	return studentTsAndCs[countryGroupId];
 }

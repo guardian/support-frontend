@@ -1,10 +1,10 @@
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { render, screen } from '@testing-library/react';
 import { type LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import type { GeoId } from 'pages/geoIdConfig';
 import StudentHeader from './StudentHeader';
 
 const oneYearStudentDiscount = {
@@ -25,7 +25,7 @@ const utsStudentDiscount = {
 };
 
 describe('<StudentHeader />', () => {
-	const geoId: GeoId = 'us';
+	const supportRegionId = SupportRegionId.US;
 	const productKey: ActiveProductKey = 'SupporterPlus';
 	const ratePlanKey: ActiveRatePlanKey = 'Monthly';
 	const landingPageVariant = {
@@ -39,7 +39,7 @@ describe('<StudentHeader />', () => {
 	it("uses 'Subscribe' as CTA label when amount is greater than 0", () => {
 		render(
 			<StudentHeader
-				geoId={geoId}
+				supportRegionId={supportRegionId}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
@@ -55,7 +55,7 @@ describe('<StudentHeader />', () => {
 	it("uses 'Sign up for free' as CTA label when amount is 0", () => {
 		render(
 			<StudentHeader
-				geoId={geoId}
+				supportRegionId={supportRegionId}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
@@ -73,7 +73,7 @@ describe('<StudentHeader />', () => {
 	it('renders discountSummary when provided', () => {
 		render(
 			<StudentHeader
-				geoId={geoId}
+				supportRegionId={supportRegionId}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}

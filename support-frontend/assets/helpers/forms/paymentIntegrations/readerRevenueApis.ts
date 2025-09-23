@@ -3,7 +3,7 @@ import type {
 	IsoCountry,
 	UsState,
 } from '@modules/internationalisation/country';
-import type { SupportInternationalisationId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { ProductOptions } from '@modules/product/productOptions';
@@ -159,9 +159,9 @@ export type GiftRecipientType = {
 	message?: string;
 	deliveryDate?: string;
 };
-type AppliedPromotion = {
+export type AppliedPromotion = {
 	promoCode: string;
-	countryGroupId: SupportInternationalisationId; // There is a bit of naming mismatch between the front and back end
+	supportRegionId: SupportRegionId;
 };
 // The model that is sent to support-workers
 export type RegularPaymentRequest = {

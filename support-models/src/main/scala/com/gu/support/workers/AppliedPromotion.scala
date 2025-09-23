@@ -3,7 +3,7 @@ package com.gu.support.workers
 import com.gu.support.promotions.PromoCode
 import io.circe.Codec
 
-case class AppliedPromotion(promoCode: PromoCode, countryGroupId: String)
+case class AppliedPromotion(promoCode: PromoCode, supportRegionId: String)
 
 object AppliedPromotion {
   import io.circe.generic.semiauto._

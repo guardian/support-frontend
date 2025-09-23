@@ -129,7 +129,7 @@ export function StudentOffer({
 					{price}&nbsp;a&nbsp;year.
 				</p>
 				<LinkButton
-					href={`/${countryGroups[countryGroupId].supportInternationalisationId}/student`}
+					href={`/${countryGroups[countryGroupId].supportRegionId}/student`}
 					priority="tertiary"
 					size="default"
 					cssOverrides={btnStyleOverrides}

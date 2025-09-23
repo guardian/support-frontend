@@ -1,3 +1,4 @@
+import { SupportRegionId } from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import {
 	getDiscountDuration,
@@ -116,7 +117,7 @@ describe('Discount Details', () => {
 
 		it('returns discount data from ratePlan comparison no promotion exists', () => {
 			const result = getStudentDiscount(
-				'us',
+				SupportRegionId.US,
 				'OneYearStudent',
 				'SupporterPlus',
 			);
@@ -139,7 +140,7 @@ describe('Discount Details', () => {
 			};
 
 			const result = getStudentDiscount(
-				'au',
+				SupportRegionId.AU,
 				'Monthly',
 				'SupporterPlus',
 				promotion,

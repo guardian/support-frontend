@@ -1,4 +1,5 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type {
@@ -8,7 +9,6 @@ import type {
 import { ratePlanToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { allProductPrices } from 'helpers/productPrice/productPrices';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import { type GeoId } from 'pages/geoIdConfig';
 import { StudentLandingPageUTS } from './components/StudentLandingPageUTS';
 import { getStudentDiscount } from './helpers/discountDetails';
 
@@ -17,7 +17,7 @@ export function StudentLandingPageUTSContainer({
 }: {
 	landingPageVariant: LandingPageVariant;
 }) {
-	const geoId: GeoId = 'au';
+	const supportRegionId = SupportRegionId.AU;
 	const productKey: ActiveProductKey = 'SupporterPlus';
 	const ratePlanKey: ActiveRatePlanKey = 'Monthly';
 
@@ -28,7 +28,7 @@ export function StudentLandingPageUTSContainer({
 		ratePlanToBillingPeriod(ratePlanKey),
 	);
 	const studentDiscount = getStudentDiscount(
-		geoId,
+		supportRegionId,
 		ratePlanKey,
 		productKey,
 		maybePromo,
@@ -38,7 +38,7 @@ export function StudentLandingPageUTSContainer({
 		<>
 			{studentDiscount && (
 				<StudentLandingPageUTS
-					geoId={geoId}
+					supportRegionId={supportRegionId}
 					landingPageVariant={landingPageVariant}
 					productKey={productKey}
 					ratePlanKey={ratePlanKey}

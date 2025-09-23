@@ -1,4 +1,4 @@
-import type { SupportInternationalisationId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
@@ -134,14 +134,14 @@ const getPaperFulfilmentOption = (
 };
 
 const getAppliedPromotion = (
-	supportInternationalisationId: SupportInternationalisationId,
+	supportRegionId: SupportRegionId,
 	promotions?: Promotion[],
 ) => {
 	const promotion = getAppliedPromo(promotions);
 	return promotion?.promoCode !== undefined
 		? {
 				promoCode: promotion.promoCode,
-				countryGroupId: supportInternationalisationId,
+				supportRegionId: supportRegionId,
 		  }
 		: undefined;
 };
@@ -205,7 +205,7 @@ function buildRegularPaymentRequest(
 	const giftRecipient = getGiftRecipient(state.page.checkoutForm.gifting);
 	const appliedPromotion = getAppliedPromotion(
 		countryGroups[state.common.internationalisation.countryGroupId]
-			.supportInternationalisationId,
+			.supportRegionId,
 		promotions,
 	);
 

@@ -1,22 +1,16 @@
-# Internationalisation Helper
+# Internationalisation Helper Functions
 
-The internationalisation helper is formed by:
+The internationalisation helper functions uses three main types:
 
 - CountryGroup
 - Country
 - Currency
-
-These three values are stored in the common state.
+  The base types are defined in the [`internationalisation`](https://github.com/guardian/support-service-lambdas/tree/main/modules/internationalisation) module in support-service-lambdas.
 
 ## Country Group
 
-The `CountryGroup` is the data structure which is defined to apply business requirements to the country and currency.
-We would like to group countries according different requirements and assign to all the countries of that group the
-same currency. Additionally, this structure should match the `CountryGroup` case class defined in
-[`support-internationalisation`](https://github.com/guardian/support-internationalisation) project.
-
-For example the decision of having a landing page for a certain country or group of country should be modeled using
-country groups.
+The `CountryGroup` defines a grouping of countries with a single currency.
+This is used throughout the site to provide region specific versions of pages such as the three tier landing page or the checkout.
 
 `CountryGroup` is defined as follows:
 
@@ -27,14 +21,14 @@ type CountryGroup = {
   name: string,
   currency: IsoCurrency,
   countries: IsoCountry[],
-  supportInternationalizationId: SupportInternationalizationId,
+  supportRegionId: SupportRegionId,
 };
 ```
 
 - **name**: Business name for a certain group of countries.
 - **currency**: The currency shared by all the countries of a certain group.
 - **countries**: The countries which shape a group.
-- **supportInternationalizationId**: The id of support-internationalization that match with this group.
+- **supportRegionId**: The id of the support region that matches with this group.
 
 ## Country
 
