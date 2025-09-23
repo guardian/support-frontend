@@ -9,12 +9,13 @@ export type BaseContactRecordRequest = {
 	Salutation?: Title | null;
 	FirstName: string;
 	LastName: string;
-	Email: string | null;
-	Phone?: string | null;
+	Email: string | null; //wouldn't collect for giftee
+	Phone?: string | null; //wouldn't collect for digital, and potentially not for giftee
 };
-
+//buyer always has a billing address. Billing fields on buyer might be optional (e.g. street, city city, postcode)
 export type StandardContactRecordRequest = BaseContactRecordRequest & {
 	IdentityID__c: string;
+	//should have email sitting with Identity Id
 	OtherStreet: string | undefined;
 	OtherCity: string | null;
 	OtherState: string | null;
