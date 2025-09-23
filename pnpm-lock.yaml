@@ -190,9 +190,6 @@ importers:
       '@guardian/libs':
         specifier: 0.0.0-canary-20250923112454
         version: 0.0.0-canary-20250923112454(@guardian/ophan-tracker-js@2.5.0)(tslib@2.8.1)(typescript@5.5.4)
-      '@guardian/pasteup':
-        specifier: 1.0.0-alpha.7
-        version: 1.0.0-alpha.7
       '@guardian/source':
         specifier: 10.2.0
         version: 10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
@@ -2051,9 +2048,6 @@ packages:
   '@guardian/ophan-tracker-js@2.5.0':
     resolution: {integrity: sha512-SPXjzQ6wpLLcv02Gv1mNcjXIdNxzIV1h/kpkdLdxR6w4TovVoJyXI4/JJpG4MuXxap9fqbTJeDA6kwHhVFo3Lw==}
     engines: {node: '>=16'}
-
-  '@guardian/pasteup@1.0.0-alpha.7':
-    resolution: {integrity: sha512-WSa3gnRYxciFas3QYhtTk8unvj5N9K5IB61LL1CP3bVCJ2euXR13xRRHafI/Vy1dnrDwPa80SaE+apTcwipvpA==}
 
   '@guardian/prettier@2.1.5':
     resolution: {integrity: sha512-4fehERf5HHS9Nkaw+4u5EZ1OrFEHL4lYhLUWkpwEx4VmHI+RgcMezfDfosb3TD8cPFCKakrpdQEJUwNP283SJw==}
@@ -11488,8 +11482,6 @@ snapshots:
   '@guardian/ophan-tracker-js@2.5.0':
     dependencies:
       '@guardian/tsconfig': 1.0.0
-
-  '@guardian/pasteup@1.0.0-alpha.7': {}
 
   '@guardian/prettier@2.1.5(prettier@2.8.8)':
     dependencies:
