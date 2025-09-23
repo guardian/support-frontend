@@ -51,6 +51,7 @@ type CheckoutSummaryProps = {
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
+	showNewspaperArchiveBenefit?: boolean;
 };
 
 export default function CheckoutSummary({
@@ -67,6 +68,7 @@ export default function CheckoutSummary({
 	weeklyDeliveryDate,
 	thresholdAmount,
 	studentDiscount,
+	showNewspaperArchiveBenefit,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
@@ -75,11 +77,9 @@ export default function CheckoutSummary({
 		getSupportRegionIdConfig(supportRegionId);
 
 	const productDescription = productCatalogDescription[productKey];
-	console.log('*** productDescription', productDescription);
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
 	};
-	console.log('*** ratePlanDescription/billingPeriod', ratePlanDescription);
 	const isRecurringContribution = productKey === 'Contribution';
 
 	/**
@@ -111,43 +111,6 @@ export default function CheckoutSummary({
 	if (isInvalidAmount) {
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
-
-	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
-		abParticipations.newspaperArchiveBenefit ?? '',
-	);
-
-	// const paperplusbenefits = getPaperPlusDigitalBenefits(
-	// 	ratePlanKey,
-	// 	productKey,
-	// );
-	// console.log('*** paperplusbenefits', paperplusbenefits);
-	// const productBenefits = getBenefitsChecklistFromLandingPageTool(
-	// 	productKey,
-	// 	abParticipations.newspaperArchiveBenefit ?? '',
-	// );
-
-	// const paperplusbenefits = getPaperPlusDigitalBenefits(
-	// 	ratePlanKey,
-	// 	productKey,
-	// );
-	// console.log('*** paperplusbenefits', paperplusbenefits);
-	// const productBenefits = getBenefitsChecklistFromLandingPageTool(
-	// 	productKey,
-	// 	landingPageSettings,
-	// 	abParticipations,
-	// 	countryGroupId,
-	// );
-	// console.log('*** productBenefits', productBenefits);
-	// const productBenefitsFromDescription =
-	// 	getBenefitsChecklistFromProductDescription(
-	// 		productDescription,
-	// 		countryGroupId,
-	// 		abParticipations,
-	// 	);
-	// console.log(
-	// 	'*** productBenefitsFromDescription',
-	// 	productBenefitsFromDescription,
-	// );
 
 	const benefitsCheckListData =
 		getPaperPlusDigitalBenefits(ratePlanKey, productKey) ??
