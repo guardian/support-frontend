@@ -216,36 +216,20 @@ const createDigitalOnlyContactRecordRequest = (
 
 export const createContactRecordRequest = (
 	user: User,
-	giftRecipient: GiftRecipient | null,
-): ContactRecordRequest => {
-	const contact = {
-		IdentityID__c: user.id,
-		Email: user.primaryEmailAddress,
-		Salutation: user.title,
-		FirstName: user.firstName,
-		LastName: user.lastName,
-		Phone: user.telephoneNumber,
-	};
-	if (giftRecipient ?? !user.deliveryAddress) {
-		// If there is a gift recipient then we don't want to update the
-		// delivery address. This is because the user may already have another
-		// non-gift delivery product which must still be delivered to their
-		// original delivery address.
-		return contact;
+	contactType: 'Standard' | 'DeliveryOrRecipient',
+):
+	| StandardContactRecordRequest
+	| DeliveryContactRecordRequest
+	| DigitalOnlyContactRecordRequest => {
+	console.log('Creating contact record of type:', contactType);
+	switch (contactType) {
+		case 'Standard':
+			return createStandardContactRecordRequest(user);
+		case 'DeliveryOrRecipient':
+			return createDeliveryContactRecordRequest(user);
+		case 'DigitalOnly':
+			return createDigitalOnlyContactRecordRequest(user);
 	}
-	return {
-		...contact,
-		OtherStreet: getAddressLine(user.billingAddress),
-		OtherCity: user.billingAddress.city,
-		OtherState: user.billingAddress.state,
-		OtherPostalCode: user.billingAddress.postCode,
-		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
-		MailingStreet: getAddressLine(user.deliveryAddress),
-		MailingCity: user.deliveryAddress.city,
-		MailingState: user.deliveryAddress.state,
-		MailingPostalCode: user.deliveryAddress.postCode,
-		MailingCountry: getCountryNameByIsoCode(user.deliveryAddress.country),
-	};
 };
 
 //todo refine this
