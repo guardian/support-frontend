@@ -184,6 +184,12 @@ export const createContactRecordRequest = (
 		...(user.billingAddress.postCode
 			? { OtherPostalCode: user.billingAddress.postCode }
 			: {}),
+		...(user.billingAddress.city
+			? { OtherCity: user.billingAddress.city }
+			: {}),
+		...(user.billingAddress.lineOne
+			? { OtherStreet: getAddressLine(user.billingAddress) }
+			: {}),
 	};
 	if (giftRecipient ?? !user.deliveryAddress) {
 		// If there is a gift recipient then we don't want to update the
@@ -194,8 +200,6 @@ export const createContactRecordRequest = (
 	}
 	return {
 		...contact,
-		OtherStreet: getAddressLine(user.billingAddress),
-		OtherCity: user.billingAddress.city,
 		MailingStreet: getAddressLine(user.deliveryAddress),
 		MailingCity: user.deliveryAddress.city,
 		MailingState: user.deliveryAddress.state,
