@@ -1,5 +1,5 @@
 import { getCountryNameByIsoCode } from '@modules/internationalisation/country';
-import { getAddressLine } from 'src/typescript/model/address';
+import { getAddressLine } from '../../model/address';
 import type { GiftRecipient, User } from '../../model/stateSchemas';
 import type { SalesforceContactRecord } from '../salesforce';
 import type { BaseContactRecordRequest } from './base';
@@ -20,14 +20,26 @@ export const createGiftRecipientContactRecordRequest = (
 	user: User,
 ): GiftRecipientContactRecordRequest => {
 	return {
+		//	Email??
 		AccountId: contactRecord.AccountId,
 		Salutation: giftRecipient.title,
 		FirstName: giftRecipient.firstName,
 		LastName: giftRecipient.lastName,
-		MailingStreet: getAddressLine(user.deliveryAddress),
-		MailingCity: user.deliveryAddress.city,
-		MailingState: user.deliveryAddress.state,
-		MailingPostalCode: user.deliveryAddress.postCode,
-		MailingCountry: getCountryNameByIsoCode(user.deliveryAddress.country),
+		RecordTypeId: '01220000000VB50AAG',
+		...createMailingAddressFields(user),
+	};
+};
+
+export const createMailingAddressFields = (user: User) => {
+	return {
+		MailingStreet: user.deliveryAddress
+			? getAddressLine(user.deliveryAddress)
+			: null,
+		MailingCity: user.deliveryAddress?.city ?? null,
+		MailingState: user.deliveryAddress?.state ?? null,
+		MailingPostalCode: user.deliveryAddress?.postCode ?? null,
+		MailingCountry: user.deliveryAddress?.country
+			? getCountryNameByIsoCode(user.deliveryAddress.country)
+			: null,
 	};
 };
