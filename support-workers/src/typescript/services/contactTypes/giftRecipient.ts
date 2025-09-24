@@ -24,7 +24,7 @@ export const createGiftRecipientContactRecordRequest = (
 		Salutation: giftRecipient.title,
 		FirstName: giftRecipient.firstName,
 		LastName: giftRecipient.lastName,
-		MailingStreet: getAddressLine(user.deliveryAddress), //Is this correct?
+		MailingStreet: getAddressLine(user.deliveryAddress),
 		MailingCity: user.deliveryAddress.city,
 		MailingState: user.deliveryAddress.state,
 		MailingPostalCode: user.deliveryAddress.postCode,

@@ -167,6 +167,7 @@ export const createContactRecordRequest = (
 	}
 };
 
+//This has issues because I've assumed user is always the buyer, but it can also be the gift recipient.
 const getContactType = (
 	user: User,
 	giftRecipientExists: boolean,
