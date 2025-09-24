@@ -1,59 +1,17 @@
 import { getCountryNameByIsoCode } from '@modules/internationalisation/country';
 import { z } from 'zod';
 import { getAddressLine } from '../model/address';
-import type { GiftRecipient, Title, User } from '../model/stateSchemas';
+import type { GiftRecipient, User } from '../model/stateSchemas';
+import { createDigitalOnlyContactRecordRequest } from './contactTypes/digitalOnly';
+import type { DigitalOnlyContactRecordRequest } from './contactTypes/digitalOnly';
+import { createGiftBuyerContactRecordRequest } from './contactTypes/giftBuyer';
+import type { GiftBuyerContactRecordRequest } from './contactTypes/giftBuyer';
+import { createGiftRecipientContactRecordRequest } from './contactTypes/giftRecipient';
+import type { GiftRecipientContactRecordRequest } from './contactTypes/giftRecipient';
+import { createPrintContactRecordRequest } from './contactTypes/print';
+import type { PrintContactRecordRequest } from './contactTypes/print';
 import type { SalesforceConfig } from './salesforceClient';
 import { SalesforceClient } from './salesforceClient';
-
-export type BaseContactRecordRequest = {
-	Salutation?: Title | null;
-	FirstName: string;
-	LastName: string;
-	Phone?: string | null;
-};
-
-export type PrintContactRecordRequest = BaseContactRecordRequest & {
-	IdentityID__c: string;
-	Email: string | null;
-	OtherStreet: string | undefined;
-	OtherCity: string | null;
-	OtherState?: string | null;
-	OtherPostalCode: string | null;
-	OtherCountry: string | null;
-	MailingStreet: string | undefined;
-	MailingCity: string | null;
-	MailingState: string | null;
-	MailingPostalCode: string | null;
-	MailingCountry: string | null;
-};
-
-export type GiftBuyerContactRecordRequest = BaseContactRecordRequest & {
-	IdentityID__c: string;
-	Email: string | null;
-	OtherStreet: string | undefined;
-	OtherCity: string | null;
-	OtherState?: string | null;
-	OtherPostalCode: string | null;
-	OtherCountry: string | null;
-};
-
-export type GiftReceiverContactRecordRequest = BaseContactRecordRequest & {
-	AccountId: string;
-	RecordTypeId: '01220000000VB50AAG';
-	MailingStreet: string | undefined;
-	MailingCity: string | null;
-	MailingState: string | null;
-	MailingPostalCode: string | null;
-	MailingCountry: string | null;
-};
-
-export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest & {
-	RecordTypeId: '01220000000VB50AAG';
-	Email: string | null;
-	OtherState?: string | null;
-	OtherPostalCode?: string | null;
-	OtherCountry: string | null;
-};
 
 export const salesforceContactRecordSchema = z.object({
 	Id: z.string(),
@@ -106,9 +64,10 @@ export class SalesforceService {
 		user: User,
 		giftRecipient: GiftRecipient | null,
 	): Promise<SalesforceContactRecord> => {
-		const buyerResponse = await this.upsert(
-			createContactRecordRequest(user, giftRecipient),
-		);
+		const giftRecipientExists = !!giftRecipient;
+		const contactType = getContactType(user, giftRecipientExists);
+		const contact = createContactRecordRequest(user, contactType);
+		const buyerResponse = await this.upsert(contact);
 		const giftRecipientResponse = await this.maybeAddGiftRecipient(
 			buyerResponse.ContactRecord,
 			giftRecipient,
@@ -121,7 +80,7 @@ export class SalesforceService {
 		contact:
 			| PrintContactRecordRequest
 			| GiftBuyerContactRecordRequest
-			| GiftReceiverContactRecordRequest
+			| GiftRecipientContactRecordRequest
 			| DigitalOnlyContactRecordRequest,
 	): Promise<SuccessfulUpsertResponse> => {
 		const response: UpsertResponse = await this.client.post(
@@ -159,7 +118,7 @@ export class SalesforceService {
 		user: User,
 	): Promise<SuccessfulUpsertResponse> | null {
 		if (giftRecipient?.firstName && giftRecipient.lastName) {
-			const giftRecipientContact: GiftReceiverContactRecordRequest = {
+			const giftRecipientContact: GiftRecipientContactRecordRequest = {
 				AccountId: contactRecord.AccountId,
 				Email: giftRecipient.email,
 				Salutation: giftRecipient.title,
@@ -181,89 +140,46 @@ export class SalesforceService {
 	}
 }
 
-const createPrintContactRecordRequest = (
-	user: User,
-): PrintContactRecordRequest => {
-	return {
-		Salutation: user.title,
-		FirstName: user.firstName,
-		LastName: user.lastName,
-		Phone: user.telephoneNumber,
-		IdentityID__c: user.id,
-		OtherStreet: getAddressLine(user.billingAddress),
-		OtherCity: user.billingAddress.city,
-		OtherState: user.billingAddress.state,
-		OtherPostalCode: user.billingAddress.postCode,
-		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
-		MailingStreet: getAddressLine(user.deliveryAddress),
-		MailingCity: user.deliveryAddress.city,
-		MailingState: user.deliveryAddress.state,
-		MailingPostalCode: user.deliveryAddress.postCode,
-		MailingCountry: getCountryNameByIsoCode(user.deliveryAddress.country),
-	};
-};
-
-const createGiftReceiverContactRecordRequest = (
-	contactRecord: SalesforceContactRecord,
-	giftRecipient: GiftRecipient,
-	user: User,
-): GiftReceiverContactRecordRequest => {
-	return {
-		AccountId: contactRecord.AccountId,
-		Email: giftRecipient.email,
-		Salutation: giftRecipient.title,
-		FirstName: giftRecipient.firstName,
-		LastName: giftRecipient.lastName,
-		MailingStreet: getAddressLine(user.deliveryAddress),
-		MailingCity: user.deliveryAddress.city,
-		MailingState: user.deliveryAddress.state,
-		MailingPostalCode: user.deliveryAddress.postCode,
-		MailingCountry: getCountryNameByIsoCode(user.deliveryAddress.country),
-	};
-};
-
-const createDigitalOnlyContactRecordRequest = (
-	user: User,
-): DigitalOnlyContactRecordRequest => {
-	//optional address fields?
-	return {
-		Email: user.primaryEmailAddress,
-		Salutation: user.title,
-		FirstName: user.firstName,
-		LastName: user.lastName,
-		Phone: user.telephoneNumber,
-	};
-};
-
 export const createContactRecordRequest = (
 	user: User,
-	contactType: 'Standard' | 'GiftReceiver',
+	contactType: 'Print' | 'GiftRecipient' | 'GiftBuyer' | 'DigitalOnly',
+	contactRecord: SalesforceContactRecord,
+	giftRecipient: GiftRecipient,
 ):
 	| PrintContactRecordRequest
-	| GiftReceiverContactRecordRequest
+	| GiftRecipientContactRecordRequest
+	| GiftBuyerContactRecordRequest
 	| DigitalOnlyContactRecordRequest => {
 	console.log('Creating contact record of type:', contactType);
 	switch (contactType) {
-		case 'Standard':
+		case 'Print':
 			return createPrintContactRecordRequest(user);
-		case 'GiftReceiver':
-			return createGiftReceiverContactRecordRequest(user);
+		case 'GiftRecipient':
+			return createGiftRecipientContactRecordRequest(
+				contactRecord,
+				giftRecipient,
+				user,
+			);
+		case 'GiftBuyer':
+			return createGiftBuyerContactRecordRequest(user);
 		case 'DigitalOnly':
 			return createDigitalOnlyContactRecordRequest(user);
 	}
 };
 
-//todo refine this
 const getContactType = (
 	user: User,
-): 'Standard' | 'GiftBuyer' | 'GiftReceiver' | 'DigitalOnly' => {
+	giftRecipientExists: boolean,
+): 'Print' | 'GiftBuyer' | 'GiftRecipient' | 'DigitalOnly' => {
+	if (giftRecipientExists) {
+		if (user.deliveryAddress) {
+			return 'GiftRecipient';
+		}
+		return 'GiftBuyer';
+	}
 	if (user.deliveryAddress) {
-		//is standard customer or gift recipient
-		return 'Standard';
+		return 'Print';
 	}
-	if (!user.deliveryAddress) {
-		// is digital only or gift buyer
-		return 'GiftReceiver';
-	}
-	return 'Standard';
+
+	return 'DigitalOnly';
 };
