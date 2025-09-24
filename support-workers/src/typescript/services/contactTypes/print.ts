@@ -1,4 +1,5 @@
-import { getAddressLine } from 'src/typescript/model/address';
+import { getCountryNameByIsoCode } from '@modules/internationalisation/country';
+import { getAddressLine } from '../../model/address';
 import type { User } from '../../model/stateSchemas';
 import type { BaseContactRecordRequest } from './base';
 
@@ -25,16 +26,23 @@ export const createPrintContactRecordRequest = (
 		FirstName: user.firstName,
 		LastName: user.lastName,
 		Phone: user.telephoneNumber,
+		Email: user.primaryEmailAddress,
 		IdentityID__c: user.id,
 		OtherStreet: getAddressLine(user.billingAddress),
-		OtherCity: user.billingAddress.city,
-		OtherState: user.billingAddress.state,
-		OtherPostalCode: user.billingAddress.postCode,
-		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
-		MailingStreet: getAddressLine(user.deliveryAddress),
-		MailingCity: user.deliveryAddress.city,
-		MailingState: user.deliveryAddress.state,
-		MailingPostalCode: user.deliveryAddress.postCode,
-		MailingCountry: getCountryNameByIsoCode(user.deliveryAddress.country),
+		OtherCity: user.billingAddress.city ?? null,
+		OtherState: user.billingAddress.state ?? null,
+		OtherPostalCode: user.billingAddress.postCode ?? null,
+		OtherCountry: user.billingAddress.country
+			? getCountryNameByIsoCode(user.billingAddress.country)
+			: null,
+		MailingStreet: user.deliveryAddress
+			? getAddressLine(user.deliveryAddress)
+			: null,
+		MailingCity: user.deliveryAddress?.city ?? null,
+		MailingState: user.deliveryAddress?.state ?? null,
+		MailingPostalCode: user.deliveryAddress?.postCode ?? null,
+		MailingCountry: user.deliveryAddress?.country
+			? getCountryNameByIsoCode(user.deliveryAddress.country)
+			: null,
 	};
 };
