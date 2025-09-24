@@ -178,6 +178,12 @@ export const createContactRecordRequest = (
 		LastName: user.lastName,
 		Phone: user.telephoneNumber,
 		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
+		...(user.billingAddress.state
+			? { OtherState: user.billingAddress.state }
+			: {}),
+		...(user.billingAddress.postCode
+			? { OtherPostalCode: user.billingAddress.postCode }
+			: {}),
 	};
 	if (giftRecipient ?? !user.deliveryAddress) {
 		// If there is a gift recipient then we don't want to update the
@@ -190,8 +196,6 @@ export const createContactRecordRequest = (
 		...contact,
 		OtherStreet: getAddressLine(user.billingAddress),
 		OtherCity: user.billingAddress.city,
-		OtherState: user.billingAddress.state,
-		OtherPostalCode: user.billingAddress.postCode,
 		MailingStreet: getAddressLine(user.deliveryAddress),
 		MailingCity: user.deliveryAddress.city,
 		MailingState: user.deliveryAddress.state,
