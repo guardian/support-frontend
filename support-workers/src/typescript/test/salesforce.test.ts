@@ -50,6 +50,62 @@ describe('SalesforceService', () => {
 		expect(newContact.MailingCountry).toBe('United Kingdom');
 	});
 
+	test('createContactRecordRequest should include billingCountry', () => {
+		const newContact = createContactRecordRequest(user, null);
+		expect(newContact.OtherCountry).toBe('United Kingdom');
+	});
+
+	test('createContactRecordRequest should include billingState and billingPostalCode when provided', () => {
+		const newContact = createContactRecordRequest(user, null);
+		expect(newContact.OtherState).toBe(user.billingAddress.state);
+		expect(newContact.OtherPostalCode).toBe(user.billingAddress.postCode);
+	});
+
+	test('createContactRecordRequest should not include billingState when state is null', () => {
+		const userWithoutBillingState = {
+			...user,
+			billingAddress: {
+				...user.billingAddress,
+				state: null,
+			},
+		};
+		const newContact = createContactRecordRequest(
+			userWithoutBillingState,
+			null,
+		);
+		expect('OtherState' in newContact).toBe(false);
+	});
+
+	test('createContactRecordRequest should not include billingPostalCode when postCode is null', () => {
+		const userWithoutBillingPostalCode = {
+			...user,
+			billingAddress: {
+				...user.billingAddress,
+				postCode: null,
+			},
+		};
+		const newContact = createContactRecordRequest(
+			userWithoutBillingPostalCode,
+			null,
+		);
+		expect('OtherPostalCode' in newContact).toBe(false);
+	});
+
+	test('createContactRecordRequest should not include billingPostalCode when postCode is empty string', () => {
+		const userWithoutBillingPostalCode = {
+			...user,
+			billingAddress: {
+				...user.billingAddress,
+				postCode: '',
+			},
+		};
+		const newContact = createContactRecordRequest(
+			userWithoutBillingPostalCode,
+			null,
+		);
+		expect('OtherPostalCode' in newContact).toBe(false);
+	});
+
 	test('it should throw an INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE error when appropriate', () => {
 		const errorString =
 			'Failed Upsert of new Contact: Upsert failed. First exception on row 0; first error: INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE, Updates can’t be made during maintenance. Try again when maintenance is complete: []';
