@@ -1,13 +1,13 @@
 import { getCountryNameByIsoCode } from '@modules/internationalisation/country';
 import { getAddressLine } from 'src/typescript/model/address';
-import type { GiftRecipient, User } from 'src/typescript/model/stateSchemas';
+import type { GiftRecipient, User } from '../../model/stateSchemas';
 import type { SalesforceContactRecord } from '../salesforce';
 import type { BaseContactRecordRequest } from './base';
 
 export type GiftRecipientContactRecordRequest = BaseContactRecordRequest & {
 	AccountId: string;
 	RecordTypeId: '01220000000VB50AAG';
-	MailingStreet: string | undefined;
+	MailingStreet: string | null;
 	MailingCity: string | null;
 	MailingState: string | null;
 	MailingPostalCode: string | null;
@@ -21,11 +21,10 @@ export const createGiftRecipientContactRecordRequest = (
 ): GiftRecipientContactRecordRequest => {
 	return {
 		AccountId: contactRecord.AccountId,
-		Email: giftRecipient.email,
 		Salutation: giftRecipient.title,
 		FirstName: giftRecipient.firstName,
 		LastName: giftRecipient.lastName,
-		MailingStreet: getAddressLine(user.deliveryAddress),
+		MailingStreet: getAddressLine(user.deliveryAddress), //Is this correct?
 		MailingCity: user.deliveryAddress.city,
 		MailingState: user.deliveryAddress.state,
 		MailingPostalCode: user.deliveryAddress.postCode,

@@ -1,5 +1,5 @@
 import { getCountryNameByIsoCode } from '@modules/internationalisation/country';
-import type { User } from 'src/typescript/model/stateSchemas';
+import type { User } from '../../model/stateSchemas';
 import type { BaseContactRecordRequest } from './base';
 
 export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest & {
@@ -19,6 +19,7 @@ export const createDigitalOnlyContactRecordRequest = (
 		FirstName: user.firstName,
 		LastName: user.lastName,
 		Phone: user.telephoneNumber,
+		RecordTypeId: '01220000000VB50AAG',
 		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
 		...(user.billingAddress.state
 			? { OtherState: user.billingAddress.state }

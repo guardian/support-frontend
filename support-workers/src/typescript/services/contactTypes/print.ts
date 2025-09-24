@@ -1,16 +1,16 @@
 import { getAddressLine } from 'src/typescript/model/address';
-import type { User } from 'src/typescript/model/stateSchemas';
+import type { User } from '../../model/stateSchemas';
 import type { BaseContactRecordRequest } from './base';
 
 export type PrintContactRecordRequest = BaseContactRecordRequest & {
 	IdentityID__c: string;
 	Email: string | null;
-	OtherStreet: string | undefined;
+	OtherStreet: string | null;
 	OtherCity: string | null;
 	OtherState?: string | null;
 	OtherPostalCode: string | null;
 	OtherCountry: string | null;
-	MailingStreet: string | undefined;
+	MailingStreet: string | null;
 	MailingCity: string | null;
 	MailingState: string | null;
 	MailingPostalCode: string | null;
