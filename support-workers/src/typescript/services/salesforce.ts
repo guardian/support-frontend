@@ -15,7 +15,7 @@ export type ContactRecordRequest = {
 	OtherCity?: string | null;
 	OtherState?: string | null;
 	OtherPostalCode?: string | null;
-	OtherCountry?: string | null;
+	OtherCountry: string | null;
 	Phone?: string | null;
 	MailingStreet?: string | null;
 	MailingCity?: string | null;
@@ -88,9 +88,15 @@ export class SalesforceService {
 		user: User,
 		giftRecipient: GiftRecipient | null,
 	): Promise<SalesforceContactRecord> => {
-		const buyerResponse = await this.upsert(
-			createContactRecordRequest(user, giftRecipient),
+		console.log('UUU SalesforceService: Creating contact records');
+		console.log('UUU user:', user);
+		const contactRecordRequest = createContactRecordRequest(
+			user,
+			giftRecipient,
 		);
+		console.log('UUU contactRecordRequest:', contactRecordRequest);
+		// First upsert the buyer contact record
+		const buyerResponse = await this.upsert(contactRecordRequest);
 		const giftRecipientResponse = await this.maybeAddGiftRecipient(
 			buyerResponse.ContactRecord,
 			giftRecipient,
@@ -171,6 +177,7 @@ export const createContactRecordRequest = (
 		FirstName: user.firstName,
 		LastName: user.lastName,
 		Phone: user.telephoneNumber,
+		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
 	};
 	if (giftRecipient ?? !user.deliveryAddress) {
 		// If there is a gift recipient then we don't want to update the
@@ -185,7 +192,6 @@ export const createContactRecordRequest = (
 		OtherCity: user.billingAddress.city,
 		OtherState: user.billingAddress.state,
 		OtherPostalCode: user.billingAddress.postCode,
-		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
 		MailingStreet: getAddressLine(user.deliveryAddress),
 		MailingCity: user.deliveryAddress.city,
 		MailingState: user.deliveryAddress.state,
