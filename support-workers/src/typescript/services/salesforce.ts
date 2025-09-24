@@ -1,6 +1,4 @@
-import { getCountryNameByIsoCode } from '@modules/internationalisation/country';
 import { z } from 'zod';
-import { getAddressLine } from '../model/address';
 import type { GiftRecipient, User } from '../model/stateSchemas';
 import { createDigitalOnlyContactRecordRequest } from './contactTypes/digitalOnly';
 import type { DigitalOnlyContactRecordRequest } from './contactTypes/digitalOnly';
@@ -64,9 +62,10 @@ export class SalesforceService {
 		user: User,
 		giftRecipient: GiftRecipient | null,
 	): Promise<SalesforceContactRecord> => {
-		const contactType = getContactType(user, giftRecipient);
-		const contact = createContactRecordRequest(user, contactType);
-		const buyerResponse = await this.upsert(contact);
+		const hasGiftRecipient = !!giftRecipient;
+		const buyerType = getBuyerType(user, hasGiftRecipient);
+		const buyerContact = createBuyerRecordRequest(user, buyerType);
+		const buyerResponse = await this.upsert(buyerContact);
 		const giftRecipientResponse = await this.maybeAddGiftRecipient(
 			buyerResponse.ContactRecord,
 			giftRecipient,
@@ -116,49 +115,34 @@ export class SalesforceService {
 		giftRecipient: GiftRecipient | null,
 		user: User,
 	): Promise<SuccessfulUpsertResponse> | null {
-		if (giftRecipient?.firstName && giftRecipient.lastName) {
-			const giftRecipientContact: GiftRecipientContactRecordRequest = {
-				AccountId: contactRecord.AccountId,
-				Email: giftRecipient.email,
-				Salutation: giftRecipient.title,
-				FirstName: giftRecipient.firstName,
-				LastName: giftRecipient.lastName,
-				MailingStreet: user.deliveryAddress
-					? getAddressLine(user.deliveryAddress)
-					: null,
-				MailingCity: user.deliveryAddress?.city ?? null,
-				MailingState: user.deliveryAddress?.state ?? null,
-				MailingPostalCode: user.deliveryAddress?.postCode ?? null,
-				MailingCountry: user.deliveryAddress
-					? getCountryNameByIsoCode(user.deliveryAddress.country)
-					: null,
-			};
+		if (giftRecipient && validGiftRecipientFields(giftRecipient)) {
+			const giftRecipientContact = createGiftRecipientContactRecordRequest(
+				contactRecord,
+				giftRecipient,
+				user,
+			);
 			return this.upsert(giftRecipientContact);
 		}
 		return null;
 	}
 }
 
-export const createContactRecordRequest = (
+const validGiftRecipientFields = (giftRecipient: GiftRecipient) => {
+	return giftRecipient.firstName && giftRecipient.lastName;
+};
+
+export const createBuyerRecordRequest = (
 	user: User,
-	contactType: 'Print' | 'GiftRecipient' | 'GiftBuyer' | 'DigitalOnly',
-	contactRecord: SalesforceContactRecord,
-	giftRecipient: GiftRecipient,
+	buyerType: 'Print' | 'GiftBuyer' | 'DigitalOnly',
 ):
 	| PrintContactRecordRequest
-	| GiftRecipientContactRecordRequest
 	| GiftBuyerContactRecordRequest
 	| DigitalOnlyContactRecordRequest => {
-	console.log('Creating contact record of type:', contactType);
-	switch (contactType) {
+	console.log('Creating buyer record of type:', buyerType);
+
+	switch (buyerType) {
 		case 'Print':
 			return createPrintContactRecordRequest(user);
-		case 'GiftRecipient':
-			return createGiftRecipientContactRecordRequest(
-				contactRecord,
-				giftRecipient,
-				user,
-			);
 		case 'GiftBuyer':
 			return createGiftBuyerContactRecordRequest(user);
 		case 'DigitalOnly':
@@ -166,15 +150,23 @@ export const createContactRecordRequest = (
 	}
 };
 
-//This has issues because I've assumed user is always the buyer, but it can also be the gift recipient.
-const getContactType = (
+export const createGiftRecipientContactRecordRequestWrapper = (
 	user: User,
-	giftRecipient: GiftRecipient | null,
-): 'Print' | 'GiftBuyer' | 'GiftRecipient' | 'DigitalOnly' => {
-	if (giftRecipient?.firstName && giftRecipient.lastName) {
-		if (user.deliveryAddress) {
-			return 'GiftRecipient';
-		}
+	contactRecord: SalesforceContactRecord,
+	giftRecipient: GiftRecipient,
+): GiftRecipientContactRecordRequest => {
+	return createGiftRecipientContactRecordRequest(
+		contactRecord,
+		giftRecipient,
+		user,
+	);
+};
+
+const getBuyerType = (
+	user: User,
+	hasGiftRecipient: boolean,
+): 'Print' | 'GiftBuyer' | 'DigitalOnly' => {
+	if (hasGiftRecipient) {
 		return 'GiftBuyer';
 	}
 	if (user.deliveryAddress) {
