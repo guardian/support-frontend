@@ -186,16 +186,16 @@ importers:
         version: 0.27.9(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@guardian/core-web-vitals':
         specifier: ^11.1.0
-        version: 11.1.0(@guardian/libs@25.3.0(@guardian/ophan-tracker-js@2.5.0)(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)(web-vitals@4.2.4)
+        version: 11.1.0(@guardian/libs@26.0.0(@guardian/ophan-tracker-js@2.5.0)(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)(web-vitals@4.2.4)
       '@guardian/libs':
-        specifier: ^25.3.0
-        version: 25.3.0(@guardian/ophan-tracker-js@2.5.0)(tslib@2.8.1)(typescript@5.5.4)
+        specifier: ^26.0.0
+        version: 26.0.0(@guardian/ophan-tracker-js@2.5.0)(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/source':
         specifier: 10.2.0
         version: 10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/source-development-kitchen':
         specifier: 18.1.1
-        version: 18.1.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@25.3.0(@guardian/ophan-tracker-js@2.5.0)(tslib@2.8.1)(typescript@5.5.4))(@guardian/source@10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
+        version: 18.1.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@26.0.0(@guardian/ophan-tracker-js@2.5.0)(tslib@2.8.1)(typescript@5.5.4))(@guardian/source@10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/support-service-lambdas':
         specifier: 'catalog:'
         version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/6b5fec3ae8337c9786aca65a09398a07e69aa99a
@@ -2035,8 +2035,8 @@ packages:
       eslint: ^8.57.0
       tslib: ^2.6.2
 
-  '@guardian/libs@25.3.0':
-    resolution: {integrity: sha512-PbbUvgv+wACMq0FlbgsOdwrDApoblSD1Md55YZaEq9YooolWt3p0jhaGlIKOfGovT52o2XVSRfCcLJqlGpRENQ==}
+  '@guardian/libs@26.0.0':
+    resolution: {integrity: sha512-H5b2vgUws0IUpQesJbVK1CXQKrOff853GyWo/yApUonvU0y7Db/OhwMN0Lf67oGnnrTksgl7AQEZIUQB+WR8Eg==}
     peerDependencies:
       '@guardian/ophan-tracker-js': ^2.2.10
       tslib: ^2.6.2
@@ -11470,9 +11470,9 @@ snapshots:
       read-pkg-up: 7.0.1
       yargs: 17.7.2
 
-  '@guardian/core-web-vitals@11.1.0(@guardian/libs@25.3.0(@guardian/ophan-tracker-js@2.5.0)(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)(web-vitals@4.2.4)':
+  '@guardian/core-web-vitals@11.1.0(@guardian/libs@26.0.0(@guardian/ophan-tracker-js@2.5.0)(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)(web-vitals@4.2.4)':
     dependencies:
-      '@guardian/libs': 25.3.0(@guardian/ophan-tracker-js@2.5.0)(tslib@2.8.1)(typescript@5.5.4)
+      '@guardian/libs': 26.0.0(@guardian/ophan-tracker-js@2.5.0)(tslib@2.8.1)(typescript@5.5.4)
       tslib: 2.8.1
       web-vitals: 4.2.4
     optionalDependencies:
@@ -11564,7 +11564,7 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  '@guardian/libs@25.3.0(@guardian/ophan-tracker-js@2.5.0)(tslib@2.8.1)(typescript@5.5.4)':
+  '@guardian/libs@26.0.0(@guardian/ophan-tracker-js@2.5.0)(tslib@2.8.1)(typescript@5.5.4)':
     dependencies:
       '@guardian/ophan-tracker-js': 2.5.0
       tslib: 2.8.1
@@ -11589,9 +11589,9 @@ snapshots:
       prettier: 3.5.3
       tslib: 2.8.1
 
-  '@guardian/source-development-kitchen@18.1.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@25.3.0(@guardian/ophan-tracker-js@2.5.0)(tslib@2.8.1)(typescript@5.5.4))(@guardian/source@10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)':
+  '@guardian/source-development-kitchen@18.1.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@26.0.0(@guardian/ophan-tracker-js@2.5.0)(tslib@2.8.1)(typescript@5.5.4))(@guardian/source@10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)':
     dependencies:
-      '@guardian/libs': 25.3.0(@guardian/ophan-tracker-js@2.5.0)(tslib@2.8.1)(typescript@5.5.4)
+      '@guardian/libs': 26.0.0(@guardian/ophan-tracker-js@2.5.0)(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/source': 10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
       tslib: 2.8.1
     optionalDependencies:
