@@ -191,7 +191,11 @@ const createPrintContactRecordRequest = (
 		Phone: user.telephoneNumber,
 		IdentityID__c: user.id,
 		...createBillingAddressFields(user),
-		...createMailingAddressFields(user),
+		MailingStreet: getAddressLine(user.deliveryAddress),
+		MailingCity: user.deliveryAddress.city,
+		MailingState: user.deliveryAddress.state,
+		MailingPostalCode: user.deliveryAddress.postCode,
+		MailingCountry: getCountryNameByIsoCode(user.deliveryAddress.country),
 	};
 };
 
@@ -206,8 +210,11 @@ const createGiftReceiverContactRecordRequest = (
 		Salutation: giftRecipient.title,
 		FirstName: giftRecipient.firstName,
 		LastName: giftRecipient.lastName,
-		...createMailingAddressFields(user),
-		RecordTypeId: '01220000000VB50AAG',
+		MailingStreet: getAddressLine(user.deliveryAddress),
+		MailingCity: user.deliveryAddress.city,
+		MailingState: user.deliveryAddress.state,
+		MailingPostalCode: user.deliveryAddress.postCode,
+		MailingCountry: getCountryNameByIsoCode(user.deliveryAddress.country),
 	};
 };
 
