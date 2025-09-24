@@ -9,16 +9,15 @@ export type BaseContactRecordRequest = {
 	Salutation?: Title | null;
 	FirstName: string;
 	LastName: string;
-	Email: string | null; //wouldn't collect for giftee
-	Phone?: string | null; //wouldn't collect for digital, and potentially not for giftee
+	Phone?: string | null;
 };
-//buyer always has a billing address. Billing fields on buyer might be optional (e.g. street, city city, postcode)
-export type StandardContactRecordRequest = BaseContactRecordRequest & {
+
+export type PrintContactRecordRequest = BaseContactRecordRequest & {
 	IdentityID__c: string;
-	//should have email sitting with Identity Id
+	Email: string | null;
 	OtherStreet: string | undefined;
 	OtherCity: string | null;
-	OtherState: string | null;
+	OtherState?: string | null;
 	OtherPostalCode: string | null;
 	OtherCountry: string | null;
 	MailingStreet: string | undefined;
@@ -28,7 +27,17 @@ export type StandardContactRecordRequest = BaseContactRecordRequest & {
 	MailingCountry: string | null;
 };
 
-export type DeliveryContactRecordRequest = BaseContactRecordRequest & {
+export type GiftBuyerContactRecordRequest = BaseContactRecordRequest & {
+	IdentityID__c: string;
+	Email: string | null;
+	OtherStreet: string | undefined;
+	OtherCity: string | null;
+	OtherState?: string | null;
+	OtherPostalCode: string | null;
+	OtherCountry: string | null;
+};
+
+export type GiftReceiverContactRecordRequest = BaseContactRecordRequest & {
 	AccountId: string;
 	RecordTypeId: '01220000000VB50AAG';
 	MailingStreet: string | undefined;
@@ -40,6 +49,7 @@ export type DeliveryContactRecordRequest = BaseContactRecordRequest & {
 
 export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest & {
 	RecordTypeId: '01220000000VB50AAG';
+	Email: string | null;
 	OtherState?: string | null;
 	OtherPostalCode?: string | null;
 	OtherCountry: string | null;
@@ -109,8 +119,9 @@ export class SalesforceService {
 
 	upsert = async (
 		contact:
-			| StandardContactRecordRequest
-			| DeliveryContactRecordRequest
+			| PrintContactRecordRequest
+			| GiftBuyerContactRecordRequest
+			| GiftReceiverContactRecordRequest
 			| DigitalOnlyContactRecordRequest,
 	): Promise<SuccessfulUpsertResponse> => {
 		const response: UpsertResponse = await this.client.post(
@@ -148,7 +159,7 @@ export class SalesforceService {
 		user: User,
 	): Promise<SuccessfulUpsertResponse> | null {
 		if (giftRecipient?.firstName && giftRecipient.lastName) {
-			const giftRecipientContact: DeliveryContactRecordRequest = {
+			const giftRecipientContact: GiftReceiverContactRecordRequest = {
 				AccountId: contactRecord.AccountId,
 				Email: giftRecipient.email,
 				Salutation: giftRecipient.title,
@@ -163,7 +174,6 @@ export class SalesforceService {
 				MailingCountry: user.deliveryAddress
 					? getCountryNameByIsoCode(user.deliveryAddress.country)
 					: null,
-				RecordTypeId: '01220000000VB50AAG',
 			};
 			return this.upsert(giftRecipientContact);
 		}
@@ -171,11 +181,10 @@ export class SalesforceService {
 	}
 }
 
-const createStandardContactRecordRequest = (
+const createPrintContactRecordRequest = (
 	user: User,
-): StandardContactRecordRequest => {
+): PrintContactRecordRequest => {
 	return {
-		Email: user.primaryEmailAddress,
 		Salutation: user.title,
 		FirstName: user.firstName,
 		LastName: user.lastName,
@@ -186,11 +195,11 @@ const createStandardContactRecordRequest = (
 	};
 };
 
-const createDeliveryContactRecordRequest = (
+const createGiftReceiverContactRecordRequest = (
 	contactRecord: SalesforceContactRecord,
 	giftRecipient: GiftRecipient,
 	user: User,
-): DeliveryContactRecordRequest => {
+): GiftReceiverContactRecordRequest => {
 	return {
 		AccountId: contactRecord.AccountId,
 		Email: giftRecipient.email,
@@ -212,23 +221,22 @@ const createDigitalOnlyContactRecordRequest = (
 		FirstName: user.firstName,
 		LastName: user.lastName,
 		Phone: user.telephoneNumber,
-		RecordTypeId: '01220000000VB50AAG',
 	};
 };
 
 export const createContactRecordRequest = (
 	user: User,
-	contactType: 'Standard' | 'DeliveryOrRecipient',
+	contactType: 'Standard' | 'GiftReceiver',
 ):
-	| StandardContactRecordRequest
-	| DeliveryContactRecordRequest
+	| PrintContactRecordRequest
+	| GiftReceiverContactRecordRequest
 	| DigitalOnlyContactRecordRequest => {
 	console.log('Creating contact record of type:', contactType);
 	switch (contactType) {
 		case 'Standard':
-			return createStandardContactRecordRequest(user);
-		case 'DeliveryOrRecipient':
-			return createDeliveryContactRecordRequest(user);
+			return createPrintContactRecordRequest(user);
+		case 'GiftReceiver':
+			return createGiftReceiverContactRecordRequest(user);
 		case 'DigitalOnly':
 			return createDigitalOnlyContactRecordRequest(user);
 	}
@@ -237,14 +245,14 @@ export const createContactRecordRequest = (
 //todo refine this
 const getContactType = (
 	user: User,
-): 'Standard' | 'DeliveryOrRecipient' | 'DigitalOnly' => {
-	if (!user.deliveryAddress) {
-		//todo refine this
-		return 'DeliveryOrRecipient';
+): 'Standard' | 'GiftBuyer' | 'GiftReceiver' | 'DigitalOnly' => {
+	if (user.deliveryAddress) {
+		//is standard customer or gift recipient
+		return 'Standard';
 	}
-	if (!user.billingAddress) {
-		//todo refine this
-		return 'DigitalOnly';
+	if (!user.deliveryAddress) {
+		// is digital only or gift buyer
+		return 'GiftReceiver';
 	}
 	return 'Standard';
 };
