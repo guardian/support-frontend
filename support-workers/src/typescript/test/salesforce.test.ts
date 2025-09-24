@@ -7,7 +7,7 @@ import {
 import { emailAddress, street, user } from './fixtures/salesforceFixtures';
 
 describe('SalesforceService', () => {
-	test('createContactRecordRequest should only include address fields for purchases without a gift recipient', () => {
+	test('createContactRecordRequest should only include mailing address fields for purchases without a gift recipient', () => {
 		const newContactNoGift = createContactRecordRequest(user, null);
 		expect(newContactNoGift.MailingStreet).toBe(street);
 		expect(newContactNoGift.OtherStreet).toBe(street);
@@ -23,14 +23,9 @@ describe('SalesforceService', () => {
 		expect('MailingState' in newContactWithGift).toBe(false);
 		expect('MailingPostalCode' in newContactWithGift).toBe(false);
 		expect('MailingCountry' in newContactWithGift).toBe(false);
-		expect('OtherStreet' in newContactWithGift).toBe(false);
-		expect('OtherCity' in newContactWithGift).toBe(false);
-		expect('OtherState' in newContactWithGift).toBe(false);
-		expect('OtherPostalCode' in newContactWithGift).toBe(false);
-		expect('OtherCountry' in newContactWithGift).toBe(false);
 	});
 
-	test('createContactRecordRequest should not include address fields for purchases when user delivery address is null', () => {
+	test('createContactRecordRequest should not include mailing address fields for purchases when user delivery address is null', () => {
 		const userWithoutDeliveryAddress = {
 			...user,
 			deliveryAddress: null,
@@ -44,25 +39,71 @@ describe('SalesforceService', () => {
 		expect('MailingState' in newContact).toBe(false);
 		expect('MailingPostalCode' in newContact).toBe(false);
 		expect('MailingCountry' in newContact).toBe(false);
-		expect('OtherStreet' in newContact).toBe(false);
-		expect('OtherCity' in newContact).toBe(false);
-		expect('OtherState' in newContact).toBe(false);
-		expect('OtherPostalCode' in newContact).toBe(false);
-		expect('OtherCountry' in newContact).toBe(false);
 	});
 
-	test('createContactRecordRequest should include address fields for purchases when user delivery address is populated and there is no giftRecipient', () => {
+	test('createContactRecordRequest should include mailing address fields for purchases when user delivery address is populated and there is no giftRecipient', () => {
 		const newContact = createContactRecordRequest(user, null);
 		expect(newContact.MailingStreet).toBe(street);
 		expect(newContact.MailingCity).toBe(user.deliveryAddress.city);
 		expect(newContact.MailingState).toBe(user.deliveryAddress.state);
 		expect(newContact.MailingPostalCode).toBe(user.deliveryAddress.postCode);
 		expect(newContact.MailingCountry).toBe('United Kingdom');
-		expect(newContact.OtherStreet).toBe(street);
-		expect(newContact.OtherCity).toBe(user.deliveryAddress.city);
-		expect(newContact.OtherState).toBe(user.deliveryAddress.state);
-		expect(newContact.OtherPostalCode).toBe(user.deliveryAddress.postCode);
+	});
+
+	test('createContactRecordRequest should include billingCountry', () => {
+		const newContact = createContactRecordRequest(user, null);
 		expect(newContact.OtherCountry).toBe('United Kingdom');
+	});
+
+	test('createContactRecordRequest should include billingState and billingPostalCode when provided', () => {
+		const newContact = createContactRecordRequest(user, null);
+		expect(newContact.OtherState).toBe(user.billingAddress.state);
+		expect(newContact.OtherPostalCode).toBe(user.billingAddress.postCode);
+	});
+
+	test('createContactRecordRequest should not include billingState when state is null', () => {
+		const userWithoutBillingState = {
+			...user,
+			billingAddress: {
+				...user.billingAddress,
+				state: null,
+			},
+		};
+		const newContact = createContactRecordRequest(
+			userWithoutBillingState,
+			null,
+		);
+		expect('OtherState' in newContact).toBe(false);
+	});
+
+	test('createContactRecordRequest should not include billingPostalCode when postCode is null', () => {
+		const userWithoutBillingPostalCode = {
+			...user,
+			billingAddress: {
+				...user.billingAddress,
+				postCode: null,
+			},
+		};
+		const newContact = createContactRecordRequest(
+			userWithoutBillingPostalCode,
+			null,
+		);
+		expect('OtherPostalCode' in newContact).toBe(false);
+	});
+
+	test('createContactRecordRequest should not include billingPostalCode when postCode is empty string', () => {
+		const userWithoutBillingPostalCode = {
+			...user,
+			billingAddress: {
+				...user.billingAddress,
+				postCode: '',
+			},
+		};
+		const newContact = createContactRecordRequest(
+			userWithoutBillingPostalCode,
+			null,
+		);
+		expect('OtherPostalCode' in newContact).toBe(false);
 	});
 
 	test('it should throw an INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE error when appropriate', () => {
