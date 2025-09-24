@@ -64,8 +64,7 @@ export class SalesforceService {
 		user: User,
 		giftRecipient: GiftRecipient | null,
 	): Promise<SalesforceContactRecord> => {
-		const giftRecipientExists = !!giftRecipient;
-		const contactType = getContactType(user, giftRecipientExists);
+		const contactType = getContactType(user, giftRecipient);
 		const contact = createContactRecordRequest(user, contactType);
 		const buyerResponse = await this.upsert(contact);
 		const giftRecipientResponse = await this.maybeAddGiftRecipient(
@@ -170,9 +169,9 @@ export const createContactRecordRequest = (
 //This has issues because I've assumed user is always the buyer, but it can also be the gift recipient.
 const getContactType = (
 	user: User,
-	giftRecipientExists: boolean,
+	giftRecipient: GiftRecipient | null,
 ): 'Print' | 'GiftBuyer' | 'GiftRecipient' | 'DigitalOnly' => {
-	if (giftRecipientExists) {
+	if (giftRecipient?.firstName && giftRecipient.lastName) {
 		if (user.deliveryAddress) {
 			return 'GiftRecipient';
 		}
