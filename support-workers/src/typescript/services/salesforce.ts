@@ -40,8 +40,9 @@ export type DeliveryContactRecordRequest = BaseContactRecordRequest & {
 
 export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest & {
 	RecordTypeId: '01220000000VB50AAG';
-	MailingState?: string | null;
-	MailingCountry?: string | null;
+	OtherState?: string | null;
+	OtherPostalCode?: string | null;
+	OtherCountry: string | null;
 };
 
 export const salesforceContactRecordSchema = z.object({
