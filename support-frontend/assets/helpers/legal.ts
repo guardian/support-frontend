@@ -51,7 +51,7 @@ enum MediaGroup {
 }
 
 const buildPromotionalTermsLink = (promotion: Promotion): string =>
-	`https://support.theguardian.com/p/${promotion.promoCode}/terms`;
+	`/p/${promotion.promoCode}/terms`;
 
 // ----- Exports ----- //
 export {
