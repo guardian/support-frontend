@@ -135,6 +135,7 @@ report() {
 main () {
   check_encryption
   create_aws_config
+  install_node
   install_homebrew_if_mac
   install_brew_deps
   setup_nginx
