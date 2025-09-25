@@ -13,9 +13,27 @@ import { init as initLogger } from 'helpers/utilities/logger';
 import {
 	setReferrerDataInLocalStorage,
 	trackAbTests,
+	trackBFCacheLoad,
 } from '../tracking/trackingOphan';
 
 // ----- Functions ----- //
+
+let hasRegisteredBFCacheTracking = false;
+
+const registerBFCacheTracking = (): void => {
+	if (hasRegisteredBFCacheTracking || typeof window === 'undefined') {
+		return;
+	}
+
+	const handlePageShow = (event: PageTransitionEvent): void => {
+		if (event.persisted) {
+			trackBFCacheLoad();
+		}
+	};
+
+	window.addEventListener('pageshow', handlePageShow);
+	hasRegisteredBFCacheTracking = true;
+};
 
 // Sets up GA and logging.
 function analyticsInitialisation(
@@ -25,6 +43,7 @@ function analyticsInitialisation(
 	setReferrerDataInLocalStorage(acquisitionData);
 	void googleTagManager.init();
 	init();
+	registerBFCacheTracking();
 	initQuantumMetric(participations, acquisitionData);
 	trackAbTests(participations);
 	// Sentry logging.

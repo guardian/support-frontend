@@ -23,6 +23,14 @@ const trackComponentEvents = (componentEvent: ComponentEvent): void =>
 		componentEvent,
 	});
 
+const trackBFCacheLoad = (): void =>
+	trackComponentEvents({
+		component: {
+			componentType: 'BF_CACHE',
+		},
+		action: 'VIEW',
+	});
+
 export const buildOphanPayload = (participations: Participations): AbTest[] => {
 	const activeTests: Array<[string, string]> =
 		Object.entries(participations).filter(testIsActive);
@@ -66,6 +74,7 @@ const getPageViewId = (): string => viewId;
 
 export {
 	trackComponentEvents,
+	trackBFCacheLoad,
 	trackAbTests,
 	setReferrerDataInLocalStorage,
 	getPageViewId,
