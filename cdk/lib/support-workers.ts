@@ -51,6 +51,7 @@ interface SupportWorkersProps extends GuStackProps {
   supporterProductDataTables: string[];
   eventBusArns: string[];
   parameterStorePaths: string[];
+  secretsManagerPaths: string[];
 }
 
 export class SupportWorkers extends GuStack {
@@ -103,9 +104,7 @@ export class SupportWorkers extends GuStack {
     const secretsManagerPolicy = new PolicyStatement({
       effect: Effect.ALLOW,
       actions: ["secretsmanager:GetSecretValue"],
-      resources: [
-        `arn:aws:secretsmanager:${this.region}:${this.account}:secret:${this.stage}/Zuora-OAuth/SupportServiceLambdas-*`,
-      ],
+      resources: props.secretsManagerPaths,
     });
 
     // Lambdas
@@ -290,7 +289,17 @@ export class SupportWorkers extends GuStack {
       "CreateZuoraSubscriptionChoice"
     )
       .when(
-        Condition.isNull("$.state"), // We don't want to use the TS lambda yet
+        Condition.and(
+          Condition.isNotNull("$.state.productInformation"),
+          Condition.stringEquals(
+            "$.state.productInformation.product",
+            "SupporterPlus"
+          ),
+          Condition.stringEquals(
+            "$.state.productInformation.ratePlan",
+            "OneYearStudent"
+          )
+        ),
         createZuoraSubscriptionTS.next(parallelSteps)
       )
       .otherwise(createZuoraSubscriptionScala.next(parallelSteps));
@@ -417,6 +426,7 @@ export class SupportWorkers extends GuStack {
         new GuAlarm(this, `No${paymentProvider}ContributionsAlarm`, {
           app,
           actionsEnabled: isProd,
+          okAction: true,
           snsTopicName: `alarms-handler-topic-${this.stage}`,
           alarmName: `support-workers ${this.stage} No successful recurring ${paymentProvider} contributions recently.`,
           metric: this.buildPaymentSuccessMetric(
@@ -471,6 +481,7 @@ export class SupportWorkers extends GuStack {
         new GuAlarm(this, `No${paymentProvider}SupporterPlusAlarm`, {
           app,
           actionsEnabled: isProd,
+          okAction: true,
           snsTopicName: `alarms-handler-topic-${this.stage}`,
           alarmName: `support-workers ${this.stage} No successful ${paymentProvider} supporter plus subscriptions recently.`,
           metric: this.buildPaymentSuccessMetric(
@@ -510,6 +521,7 @@ export class SupportWorkers extends GuStack {
     new GuAlarm(this, "NoApplePayRecurringAlarm", {
       app,
       actionsEnabled: isProd,
+      okAction: true,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `support-workers ${
         this.stage
@@ -548,6 +560,7 @@ export class SupportWorkers extends GuStack {
     new GuAlarm(this, "NoGooglePayRecurringAlarm", {
       app,
       actionsEnabled: isProd,
+      okAction: true,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `support-workers ${
         this.stage
@@ -569,6 +582,7 @@ export class SupportWorkers extends GuStack {
     new GuAlarm(this, "NoPaperAcquisitionInOneDayAlarm", {
       app,
       actionsEnabled: isProd,
+      okAction: true,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful paper checkouts in 24h.`,
       metric: new MathExpression({
@@ -601,6 +615,7 @@ export class SupportWorkers extends GuStack {
     new GuAlarm(this, "NoWeeklyAcquisitionInOneDayAlarm", {
       app,
       actionsEnabled: isProd,
+      okAction: true,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful guardian weekly checkouts in 8h.`,
       metric: new MathExpression({
@@ -638,6 +653,7 @@ export class SupportWorkers extends GuStack {
     new GuAlarm(this, `NoTierThreeAcquisitionInPeriodAlarm`, {
       app,
       actionsEnabled: isProd,
+      okAction: true,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `URGENT 9-5 - ${
         this.stage
@@ -691,6 +707,7 @@ export class SupportWorkers extends GuStack {
     new GuAlarm(this, `NoAdLiteAcquisitionInPeriodAlarm`, {
       app,
       actionsEnabled: isProd,
+      okAction: true,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `URGENT 9-5 - ${
         this.stage

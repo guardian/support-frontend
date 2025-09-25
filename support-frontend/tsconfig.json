@@ -13,7 +13,8 @@
 		"noImplicitAny": true, // Enable error reporting for expressions and declarations with an implied any type
 		"baseUrl": "./assets", // The baseUrl to be used when resolving absolute module paths
 		"paths": {
-      "@modules/internationalisation/currency": ["../node_modules/@guardian/support-service-lambdas/modules/internationalisation/src/currency"],
+			"ophan": ["../node_modules/ophan-tracker-js/build/ophan.support"],
+      "@modules/internationalisation/*": ["../node_modules/@guardian/support-service-lambdas/modules/internationalisation/src/*"],
       "@modules/product-catalog/*": ["../node_modules/@guardian/support-service-lambdas/modules/product-catalog/src/*"],
       "@modules/*": ["../../modules/*"]
 		},

@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import {
-	between,
 	from,
 	neutral,
 	palette,
@@ -40,9 +39,7 @@ export const copyWidthStyle = css`
 	}
 `;
 export const imageHeightStyle = css`
-	${between.tablet.and.desktop} {
-		padding-top: ${space[4]}px;
-	}
+	padding: ${space[4]}px;
 `;
 export const paragraphStyle = css`
 	line-height: 130%;

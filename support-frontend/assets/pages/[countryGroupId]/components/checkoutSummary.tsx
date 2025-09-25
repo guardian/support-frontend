@@ -2,8 +2,9 @@ import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { InfoSummary } from '@guardian/source-development-kitchen/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import type { PaperProductOptions } from '@modules/product/productOptions';
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import {
@@ -23,21 +24,22 @@ import {
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import type { GeoId } from 'pages/geoIdConfig';
-import { getGeoIdConfig } from 'pages/geoIdConfig';
-import { getPlanBenefitData } from 'pages/paper-subscription-landing/planData';
+import { parameteriseUrl } from 'helpers/urls/routes';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
+import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
+	getPaperPlusDigitalBenefits,
 } from '../checkout/helpers/benefitsChecklist';
+import { ukSpecificAdditionalBenefit } from '../student/components/StudentHeader';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { BackButton } from './backButton';
 import { shorterBoxMargin } from './form';
 
 type CheckoutSummaryProps = {
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 	appConfig: AppConfig;
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
@@ -50,11 +52,10 @@ type CheckoutSummaryProps = {
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
-	isPaperProductTest: boolean;
 };
 
 export default function CheckoutSummary({
-	geoId,
+	supportRegionId,
 	appConfig,
 	productKey,
 	ratePlanKey,
@@ -67,12 +68,12 @@ export default function CheckoutSummary({
 	weeklyDeliveryDate,
 	thresholdAmount,
 	studentDiscount,
-	isPaperProductTest,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
 	const productCatalog = appConfig.productCatalog;
-	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
+	const { currency, currencyKey, countryGroupId } =
+		getSupportRegionIdConfig(supportRegionId);
 
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
@@ -116,17 +117,44 @@ export default function CheckoutSummary({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
-	const paperPlusDigitalBenefits = isPaperProductTest
-		? getPlanBenefitData(ratePlanKey as PaperProductOptions)
-		: undefined;
 	const benefitsCheckListData =
-		paperPlusDigitalBenefits ??
+		getPaperPlusDigitalBenefits(ratePlanKey, productKey) ??
 		getBenefitsChecklistFromLandingPageTool(productKey, landingPageSettings) ??
 		getBenefitsChecklistFromProductDescription(
 			productDescription,
 			countryGroupId,
 			abParticipations,
 		);
+
+	if (
+		ratePlanKey === 'OneYearStudent' &&
+		supportRegionId === SupportRegionId.UK
+	) {
+		benefitsCheckListData.unshift({
+			isChecked: true,
+			text: ukSpecificAdditionalBenefit.copy,
+		});
+	}
+
+	const getPaperFulfilmentOption = (
+		productKey: ActiveProductKey,
+	): PaperFulfilmentOptions | undefined => {
+		switch (productKey) {
+			case 'HomeDelivery':
+			case 'NationalDelivery':
+				return 'HomeDelivery';
+			case 'SubscriptionCard':
+				return 'Collection';
+			default:
+				return undefined;
+		}
+	};
+	const backUrl = parameteriseUrl(
+		`/${supportRegionId}${productDescription.landingPagePath}`,
+		promotion?.promoCode,
+		getPaperFulfilmentOption(productKey),
+	);
+
 	return (
 		<Box cssOverrides={shorterBoxMargin}>
 			<BoxContents>
@@ -173,19 +201,15 @@ export default function CheckoutSummary({
 							countryGroupId={countryGroupId}
 							thresholdAmount={thresholdAmount}
 							promotion={promotion}
-							isPaperProductTest={isPaperProductTest}
 						/>
 					}
 					headerButton={
 						showBackButton && (
-							<BackButton
-								path={`/${geoId}${productDescription.landingPagePath}`}
-								buttonText={'Change'}
-							/>
+							<BackButton path={backUrl} buttonText={'Change'} />
 						)
 					}
+					abParticipations={abParticipations}
 					studentDiscount={studentDiscount}
-					isPaperProductTest={isPaperProductTest}
 				/>
 			</BoxContents>
 		</Box>

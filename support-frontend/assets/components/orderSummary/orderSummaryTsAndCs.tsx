@@ -87,7 +87,6 @@ export interface OrderSummaryTsAndCsProps {
 	countryGroupId: CountryGroupId;
 	promotion?: Promotion;
 	thresholdAmount?: number;
-	isPaperProductTest?: boolean;
 }
 export function OrderSummaryTsAndCs({
 	productKey,
@@ -96,14 +95,14 @@ export function OrderSummaryTsAndCs({
 	countryGroupId,
 	promotion,
 	thresholdAmount = 0,
-	isPaperProductTest = false,
 }: OrderSummaryTsAndCsProps): JSX.Element | null {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	// Display for AUS Students who are on a subscription basis
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
 	const isPaperPlus = isPaperPlusSub(productKey, ratePlanKey);
-	const isPaperSunday = isSundayOnlyNewspaperSub(productKey, ratePlanKey);
+	const isPaperSundayOrPlus =
+		isPaperPlus || isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const promoMessage = productLegal(
 		countryGroupId,
 		billingPeriod,
@@ -111,14 +110,17 @@ export function OrderSummaryTsAndCs({
 		thresholdAmount,
 		promotion,
 	); // promoMessage expected to be a string like: "£10.49/month for the first 6 months, then £20.99/month"
-	const homeDeliveryDate = productDeliveryOrStartDate(
-		'HomeDelivery',
+	const deliveryDate = productDeliveryOrStartDate(
+		productKey,
 		ratePlanKey as ActivePaperProductOptions,
 	);
-	const homeDeliveryStartDate = homeDeliveryDate
-		? formatUserDate(homeDeliveryDate)
-		: '';
-	const rateDescriptor = ratePlanDescription ?? ratePlanKey;
+	const deliveryStartDate = deliveryDate ? formatUserDate(deliveryDate) : '';
+	const rateDescriptor = ratePlanDescription
+		? ratePlanDescription
+				.replace(/^The\s+/i, '') // Remove "The" at the start, case-insensitive, with following space
+				.replace(/\s*package$/i, '') // Remove "package" at the end, case-insensitive, with preceding space
+				.trim()
+		: ratePlanKey;
 
 	const tierThreeSupporterPlusTsAndCs = (
 		<div css={containerSummaryTsCs}>
@@ -168,23 +170,22 @@ export function OrderSummaryTsAndCs({
 			</p>
 		</div>
 	);
-	const paperPlusCopy: Partial<Record<ActiveProductKey, JSX.Element>> = {
-		HomeDelivery: (
-			<p>
-				You will receive your first newspaper delivery on{' '}
-				{homeDeliveryStartDate} as part of your {rateDescriptor} subscription.
-			</p>
-		),
-		SubscriptionCard: (
-			<p>
-				Your virtual subscription card barcode will be emailed to you shortly,
-				and activated from tomorrow to pick up the first newspaper edition you
-				are entitled to in your {rateDescriptor} subscription. Your physical
-				subscription card will be delivered to your door in 1-2 weeks.
-			</p>
-		),
-	};
-	const sundayPaperCopy = paperPlusCopy['HomeDelivery'];
+	const paperSundayOrPlusCopy: Partial<Record<ActiveProductKey, JSX.Element>> =
+		{
+			HomeDelivery: (
+				<p>
+					You will receive your first newspaper delivery on {deliveryStartDate}{' '}
+					as part of your {rateDescriptor} subscription.
+				</p>
+			),
+			SubscriptionCard: (
+				<p>
+					Your physical subscription card will be delivered to your door by{' '}
+					{deliveryStartDate}, for you to collect in store the first newspaper
+					edition you are entitled to in your {rateDescriptor} subscription.
+				</p>
+			),
+		};
 	const paperPlusTsAndCs = (
 		<>
 			<div css={containerSummaryTsCs}>
@@ -192,11 +193,10 @@ export function OrderSummaryTsAndCs({
 				<p>Auto renews every {periodNoun} until you cancel. Cancel anytime.</p>
 			</div>
 			<div css={containerSummaryTsCs}>
-				{isPaperSunday && sundayPaperCopy}
-				{isPaperPlus && (
+				{isPaperSundayOrPlus && (
 					<>
-						{paperPlusCopy[productKey]}
-						<p>Your digital benefits will start today.</p>
+						{paperSundayOrPlusCopy[productKey]}
+						{isPaperPlus && <p>Your digital benefits will start today.</p>}
 					</>
 				)}
 			</div>
@@ -207,9 +207,7 @@ export function OrderSummaryTsAndCs({
 		TierThree: tierThreeSupporterPlusTsAndCs,
 		GuardianWeeklyDomestic: tierThreeSupporterPlusTsAndCs,
 		GuardianWeeklyRestOfWorld: tierThreeSupporterPlusTsAndCs,
-		SubscriptionCard: isPaperProductTest
-			? paperPlusTsAndCs
-			: defaultOrderSummaryTsAndCs,
+		SubscriptionCard: paperPlusTsAndCs,
 		HomeDelivery: paperPlusTsAndCs,
 	};
 	return orderSummaryTsAndCs[productKey] ?? defaultOrderSummaryTsAndCs;

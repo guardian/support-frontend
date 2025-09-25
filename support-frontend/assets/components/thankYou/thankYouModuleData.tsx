@@ -33,6 +33,7 @@ import {
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import { isPrintProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import { getCurrency } from '../../helpers/productPrice/productPrices';
 import AppDownloadBadges, {
 	AppDownloadBadgesEditions,
 } from './appDownload/AppDownloadBadges';
@@ -351,6 +352,7 @@ export const getThankYouModuleData = (
 			bodyCopy: (
 				<WhatNext
 					productKey={productKey}
+					currency={getCurrency(countryId)}
 					ratePlanKey={ratePlanKey}
 					amount={(finalAmount ?? '').toString()}
 					startDate={startDate}

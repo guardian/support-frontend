@@ -183,25 +183,27 @@ const guardianWeekly = (
 const paper = (
 	countryGroupId: CountryGroupId,
 	priceCopy: PriceCopy,
-): ProductCopy => ({
-	title: 'Newspaper',
-	subtitle: `from ${getDisplayPrice(countryGroupId, priceCopy.price)}`,
-	description:
-		"Save on the Guardian and the Observer's newspaper retail price all year round",
-	buttons: [
-		{
-			ctaButtonText: 'Find out more',
-			link: paperSubsUrl(),
-			analyticsTracking: sendTrackingEventsOnClick({
-				id: 'paper_cta',
-				product: Paper,
-				componentType: 'ACQUISITIONS_BUTTON',
-			}),
-		},
-	],
-	productImage: <PaperPackshot />,
-	offer: priceCopy.discountCopy,
-});
+): ProductCopy => {
+	return {
+		title: 'Newspaper',
+		subtitle: `from ${getDisplayPrice(countryGroupId, priceCopy.price)}`,
+		description:
+			'Save on the Guardian newspaper retail price and enjoy full digital access',
+		buttons: [
+			{
+				ctaButtonText: 'Find out more',
+				link: paperSubsUrl(),
+				analyticsTracking: sendTrackingEventsOnClick({
+					id: 'paper_cta',
+					product: Paper,
+					componentType: 'ACQUISITIONS_BUTTON',
+				}),
+			},
+		],
+		productImage: <PaperPackshot />,
+		offer: priceCopy.discountCopy,
+	};
+};
 
 const getSubscriptionCopy = (
 	countryGroupId: CountryGroupId,

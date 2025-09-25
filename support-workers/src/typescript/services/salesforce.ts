@@ -11,18 +11,19 @@ export type ContactRecordRequest = {
 	Salutation?: Title | null;
 	FirstName: string;
 	LastName: string;
-	OtherStreet: string | null;
-	OtherCity: string | null;
-	OtherState: string | null;
-	OtherPostalCode: string | null;
+	OtherStreet?: string | null;
+	OtherCity?: string | null;
+	OtherState?: string | null;
+	OtherPostalCode?: string | null;
 	OtherCountry: string | null;
 	Phone?: string | null;
-	MailingStreet: string | null;
-	MailingCity: string | null;
-	MailingState: string | null;
-	MailingPostalCode: string | null;
-	MailingCountry: string | null;
+	MailingStreet?: string | null;
+	MailingCity?: string | null;
+	MailingState?: string | null;
+	MailingPostalCode?: string | null;
+	MailingCountry?: string | null;
 };
+
 export type DeliveryContactRecordRequest = {
 	AccountId: string;
 	Email: string | null;
@@ -87,9 +88,13 @@ export class SalesforceService {
 		user: User,
 		giftRecipient: GiftRecipient | null,
 	): Promise<SalesforceContactRecord> => {
-		const buyerResponse = await this.upsert(
-			createContactRecordRequest(user, giftRecipient),
+		console.log('SalesforceService: Creating contact records');
+		const contactRecordRequest = createContactRecordRequest(
+			user,
+			giftRecipient,
 		);
+		// First upsert the buyer contact record
+		const buyerResponse = await this.upsert(contactRecordRequest);
 		const giftRecipientResponse = await this.maybeAddGiftRecipient(
 			buyerResponse.ContactRecord,
 			giftRecipient,
@@ -169,17 +174,20 @@ export const createContactRecordRequest = (
 		Salutation: user.title,
 		FirstName: user.firstName,
 		LastName: user.lastName,
-		OtherStreet: getAddressLine(user.billingAddress),
-		OtherCity: user.billingAddress.city,
-		OtherState: user.billingAddress.state,
-		OtherPostalCode: user.billingAddress.postCode,
-		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
 		Phone: user.telephoneNumber,
-		MailingStreet: null,
-		MailingCity: null,
-		MailingState: null,
-		MailingPostalCode: null,
-		MailingCountry: null,
+		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
+		...(user.billingAddress.state
+			? { OtherState: user.billingAddress.state }
+			: {}),
+		...(user.billingAddress.postCode
+			? { OtherPostalCode: user.billingAddress.postCode }
+			: {}),
+		...(user.billingAddress.city
+			? { OtherCity: user.billingAddress.city }
+			: {}),
+		...(user.billingAddress.lineOne
+			? { OtherStreet: getAddressLine(user.billingAddress) }
+			: {}),
 	};
 	if (giftRecipient ?? !user.deliveryAddress) {
 		// If there is a gift recipient then we don't want to update the

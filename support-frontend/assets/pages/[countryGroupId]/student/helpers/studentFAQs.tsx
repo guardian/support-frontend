@@ -1,9 +1,11 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type {
+	CountryGroupId,
+	SupportRegionId,
+} from '@modules/internationalisation/countryGroup';
 import { privacyLink, supporterPlusTermsLink } from 'helpers/legal';
 import { helpCentreUrl } from 'helpers/urls/externalLinks';
 import type { FAQItem } from 'pages/[countryGroupId]/components/accordionFAQ';
-import type { GeoId } from 'pages/geoIdConfig';
-import { getGeoIdConfig } from 'pages/geoIdConfig';
+import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 
 const supporterPlusBodyAccess: JSX.Element = (
 	<p>
@@ -16,14 +18,14 @@ const supporterPlusBodyManage: JSX.Element = (
 	<p>
 		To manage your subscription, go to Manage my account, and for further
 		information on your All-access digital subscription, see our{' '}
-		<a href={supporterPlusTermsLink}>Terms & Conditions</a>
+		<a href={supporterPlusTermsLink}>Terms & Conditions</a>.
 	</p>
 );
 
 const supporterPlusBodyContact: JSX.Element = (
 	<p>
 		For any queries, including subscription-related queries, visit our{' '}
-		<a href={helpCentreUrl}>Help centre</a>
+		<a href={helpCentreUrl}>Help centre</a>.
 	</p>
 );
 
@@ -126,8 +128,10 @@ const studentFAQsConfig: Partial<Record<CountryGroupId, StudentFAQsConfig>> = {
 	},
 };
 
-export function getStudentFAQs(geoId: GeoId): FAQItem[] | undefined {
-	const { countryGroupId } = getGeoIdConfig(geoId);
+export function getStudentFAQs(
+	supportRegionId: SupportRegionId,
+): FAQItem[] | undefined {
+	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 	const faqConfig = studentFAQsConfig[countryGroupId];
 
 	if (faqConfig) {

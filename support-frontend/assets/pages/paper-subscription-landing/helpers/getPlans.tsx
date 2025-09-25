@@ -67,9 +67,10 @@ const getUnavailableOutsideLondon = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productOption: PaperProductOptions,
 ) =>
-	(fulfilmentOption === 'HomeDelivery' && productOption === 'Saturday') ||
-	productOption === 'Sunday' ||
-	productOption === 'SaturdayPlus';
+	fulfilmentOption === 'HomeDelivery' &&
+	(productOption === 'Saturday' ||
+		productOption === 'Sunday' ||
+		productOption === 'SaturdayPlus');
 
 // ---- Plans ----- //
 const copy: Record<
@@ -198,7 +199,6 @@ export const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
 	activePaperProductTypes: ActivePaperProductOptions[],
-	isPaperProductTest: boolean,
 ): Product[] =>
 	activePaperProductTypes
 		.filter(
@@ -227,22 +227,13 @@ export const getPlans = (
 				fulfilmentOption,
 				productOption,
 			);
-
-			const showLabel = isPaperProductTest
-				? productOption === 'Sixday' || productOption === 'SixdayPlus'
-				: productOption === 'Everyday' || productOption === 'EverydayPlus';
-
+			const showLabel = productOption === 'SixdayPlus';
 			const productLabel = getProductLabel(productOption);
 
 			return {
 				title: getTitle(productOption),
 				price: showPrice(priceAfterPromosApplied),
-				href: paperCheckoutUrl(
-					fulfilmentOption,
-					productOption,
-					promoCode,
-					isPaperProductTest ? 'paperProductTabs' : undefined,
-				),
+				href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
 				onClick: sendTrackingEventsOnClick(trackingProperties),
 				onView: sendTrackingEventsOnView(trackingProperties),
 				buttonCopy: 'Subscribe',

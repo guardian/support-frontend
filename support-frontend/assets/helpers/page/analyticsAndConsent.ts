@@ -1,9 +1,8 @@
 // ----- Imports ----- //
 
-import type { ConsentState } from '@guardian/libs';
+import type { ConsentState, CountryCode } from '@guardian/libs';
 import { cmp, getCookie, onConsent } from '@guardian/libs';
 import { init, record, viewId } from '@guardian/ophan-tracker-js/support';
-import type { IsoCountry } from '@modules/internationalisation/country';
 import type { Participations } from 'helpers/abTests/models';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
@@ -52,7 +51,7 @@ function analyticsInitialisation(
 	});
 }
 
-function consentInitialisation(country: IsoCountry): void {
+function consentInitialisation(country: CountryCode): void {
 	if (shouldInitCmp()) {
 		try {
 			const browserId = getCookie({ name: 'bwid', shouldMemoize: true });

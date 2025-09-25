@@ -16,7 +16,7 @@ import {
 	ErrorSummary,
 } from '@guardian/source-development-kitchen/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
-import { countryGroups } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import {
 	CardNumberElement,
@@ -40,13 +40,13 @@ import type { Participations } from 'helpers/abTests/models';
 import { config } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
-import {
-	postOneOffPayPalCreatePaymentRequest,
-	processStripePaymentIntentRequest,
-} from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import type {
 	CreatePayPalPaymentResponse,
 	CreateStripePaymentIntentRequest,
+} from 'helpers/forms/paymentIntegrations/oneOffContributions';
+import {
+	postOneOffPayPalCreatePaymentRequest,
+	processStripePaymentIntentRequest,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import type {
 	PaymentResult,
@@ -61,6 +61,7 @@ import {
 } from 'helpers/forms/paymentMethods';
 import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
+import { productCatalog } from 'helpers/productCatalog';
 import * as cookie from 'helpers/storage/cookie';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import {
@@ -74,18 +75,22 @@ import {
 } from 'helpers/tracking/quantumMetric';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
-import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
-import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
+import {
+	parseCustomAmounts,
+	roundToDecimalPlaces,
+} from 'helpers/utilities/utilities';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
 import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/coverTransactionCost';
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { CheckoutNudge } from '../../../components/checkoutNudge/checkoutNudge';
 import {
 	updateAbandonedBasketCookie,
 	useAbandonedBasketCookie,
 } from '../../../helpers/storage/abandonedBasketCookies';
+import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import { PersonalEmailFields } from '../checkout/components/PersonalEmailFields';
 import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
 import getConsentValue from '../helpers/getConsentValue';
@@ -157,7 +162,7 @@ const similarProductsConsentCheckboxContainer = css`
 `;
 
 type OneTimeCheckoutComponentProps = {
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 	appConfig: AppConfig;
 	stripePublicKey: string;
 	countryId: IsoCountry;
@@ -241,14 +246,15 @@ function getAcquisitionData(
 }
 
 export function OneTimeCheckoutComponent({
-	geoId,
+	supportRegionId,
 	appConfig,
 	stripePublicKey,
 	countryId,
 	abParticipations,
 	useStripeExpressCheckout,
 }: OneTimeCheckoutComponentProps) {
-	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
+	const { currency, currencyKey, countryGroupId } =
+		getSupportRegionIdConfig(supportRegionId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
 
 	const preSelectedAmountParam = urlSearchParams.get('contribution');
@@ -263,9 +269,20 @@ export function OneTimeCheckoutComponent({
 		settings,
 	);
 
+	let customAmountsData;
+	const customAmountsParam = urlSearchParams.get('amounts');
+	if (customAmountsParam) {
+		const amounts = parseCustomAmounts(customAmountsParam);
+		customAmountsData = {
+			amounts,
+			defaultAmount: amounts[1] ?? 0,
+			hideChooseYourAmount: false,
+		};
+	}
+
 	const { amountsCardData } = selectedAmountsVariant;
 	const { amounts, defaultAmount, hideChooseYourAmount } =
-		amountsCardData['ONE_OFF'];
+		customAmountsData ?? amountsCardData['ONE_OFF'];
 
 	const { preSelectedPriceCard, preSelectedOtherAmount } = getPreSelectedAmount(
 		preSelectedAmountParam,
@@ -531,7 +548,7 @@ export function OneTimeCheckoutComponent({
 					thankYouUrlSearchParams.set('userType', paymentResult.userType);
 				const nextStepRoute = paymentResultThankyouRoute(
 					paymentResult,
-					geoId,
+					supportRegionId,
 					thankYouUrlSearchParams,
 				);
 				if (nextStepRoute) {
@@ -554,7 +571,7 @@ export function OneTimeCheckoutComponent({
 
 	function paymentResultThankyouRoute(
 		paymentResult: PaymentResult | CreatePayPalPaymentResponse | undefined,
-		geoId: GeoId,
+		supportRegionId: SupportRegionId,
 		thankYouUrlSearchParams: URLSearchParams,
 	): string | undefined {
 		if (paymentResult) {
@@ -564,22 +581,26 @@ export function OneTimeCheckoutComponent({
 				'paymentStatus' in paymentResult &&
 				paymentResult.paymentStatus === 'success'
 			) {
-				return `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
+				return `/${supportRegionId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 			}
 		}
 
 		return;
 	}
 
-	const { supportInternationalisationId } = countryGroups[countryGroupId];
-
 	useAbandonedBasketCookie(
 		'OneTimeContribution',
 		finalAmount ?? 0,
 		'ONE_OFF',
-		supportInternationalisationId,
+		supportRegionId,
 		abParticipations.abandonedBasket === 'variant',
 	);
+
+	const isAnAbNudgeToLowRegularVariant = ['v1', 'v2'].some(
+		(a) => a === abParticipations.abNudgeToLowRegular,
+	);
+	const nudgeRecurringAmount = productCatalog.Contribution?.ratePlans['Monthly']
+		?.pricing[currencyKey] as number;
 
 	const paymentButtonText = finalAmount
 		? paymentMethod === 'PayPal'
@@ -598,7 +619,10 @@ export function OneTimeCheckoutComponent({
 					>
 						<div css={titleAndButtonContainer}>
 							<h2 css={title}>Support just once</h2>
-							<BackButton path={`/${geoId}/contribute`} buttonText="back" />
+							<BackButton
+								path={`/${supportRegionId}/contribute`}
+								buttonText="back"
+							/>
 						</div>
 						<p css={standFirst}>Support us with the amount of your choice.</p>
 						<PriceCards
@@ -620,12 +644,14 @@ export function OneTimeCheckoutComponent({
 									maxAmount={maxAmount}
 									selectedAmount={selectedPriceCard}
 									otherAmount={otherAmount}
-									onBlur={(event) => {
+									onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
 										event.target.checkValidity(); // loose focus, onInvalid check fired
 									}}
-									onOtherAmountChange={setOtherAmount}
+									onOtherAmountChange={
+										setOtherAmount as (value: string) => void
+									}
 									errors={[otherAmountError ?? '']}
-									onInvalid={(event) => {
+									onInvalid={(event: React.FormEvent<HTMLInputElement>) => {
 										validate(
 											event,
 											setOtherAmountError,
@@ -637,6 +663,15 @@ export function OneTimeCheckoutComponent({
 							}
 						/>
 					</div>
+					{isAnAbNudgeToLowRegularVariant && (
+						<CheckoutNudge
+							supportRegionId={supportRegionId}
+							ratePlanKey="Monthly"
+							recurringAmount={nudgeRecurringAmount}
+							abTestName="abNudgeToLowRegular"
+							abTestVariant={abParticipations.abNudgeToLowRegular}
+						/>
+					)}
 				</BoxContents>
 			</Box>
 			<form

@@ -1,5 +1,4 @@
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
-import type { GridPictureProp } from 'components/gridPicture/gridPicture';
 
 type HeroDelivery = {
 	deliveryTitle: string;
@@ -7,7 +6,6 @@ type HeroDelivery = {
 };
 type HeroContent = {
 	productInfo: string;
-	gridPictureImages: GridPictureProp;
 	deliveries: HeroDelivery[];
 };
 
@@ -25,48 +23,10 @@ function collectionMapUrl(name: string): JSX.Element {
 	);
 }
 
-const gridPictureNewspaperHeroTabImages: GridPictureProp = {
-	sources: [
-		{
-			gridId: 'guardianWeeklyTabHeroMobile',
-			srcSizes: [271, 542],
-			sizes: '271px',
-			imgType: 'jpg',
-			media: '(max-width: 659px)',
-		},
-		{
-			gridId: 'guardianWeeklyTabHeroPhablet',
-			srcSizes: [331, 662],
-			sizes: '331px',
-			imgType: 'jpg',
-			media: '(max-width: 739px)',
-		},
-		{
-			gridId: 'guardianWeeklyTabHeroMobile',
-			srcSizes: [271, 542],
-			sizes: '271px',
-			imgType: 'jpg',
-			media: '(max-width: 979px)',
-		},
-		{
-			gridId: 'guardianWeeklyTabHeroDesktop',
-			srcSizes: [342, 684],
-			sizes: '342px',
-			imgType: 'jpg',
-			media: '(min-width: 980px)',
-		},
-	],
-	fallback: 'guardianWeeklyTabHeroDesktop',
-	fallbackSize: 342,
-	altText: 'Guardian Weekly Tab Hero',
-	fallbackImgType: 'jpg',
-};
-
 const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 	HomeDelivery: {
 		productInfo:
 			'Use the Guardian’s home delivery service to get your newspaper direct to your door.',
-		gridPictureImages: gridPictureNewspaperHeroTabImages,
 		deliveries: [
 			{
 				deliveryTitle: 'How our delivery service works',
@@ -89,7 +49,6 @@ const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 	},
 	Collection: {
 		productInfo: `Use your Guardian subscription card to pick up your paper in over 40,000 UK shops with news kiosks, including Co-op, McColl's, One Stop, and select SPAR stores. Or use your card to arrange your own delivery through a local newsagent.`,
-		gridPictureImages: gridPictureNewspaperHeroTabImages,
 		deliveries: [
 			{
 				deliveryTitle: 'How to collect in store',

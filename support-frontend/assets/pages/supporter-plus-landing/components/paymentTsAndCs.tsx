@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { neutral, space, textSans12 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import {
 	contributionsTermsLinks,
@@ -20,6 +21,7 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
+import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import {
 	getBillingPeriodNoun,
 	getBillingPeriodTitle,
@@ -27,8 +29,10 @@ import {
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { helpCentreUrl } from 'helpers/urls/externalLinks';
+import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { FinePrint } from './finePrint';
 import { ManageMyAccountLink } from './manageMyAccountLink';
 
@@ -120,6 +124,47 @@ function getStudentPrice(
 		: studentPricePeriod;
 }
 
+const paperShareTsAndCs =
+	'We will share your contact and subscription details with our fulfilment partners';
+function paperTsAndCs(
+	paperFulfilmentOption: PaperFulfilmentOptions,
+	deliveryDate?: Date,
+): JSX.Element {
+	const noDateTsAndCs = `Your first payment will be taken on the ${
+		paperFulfilmentOption === 'HomeDelivery'
+			? 'day you receive your first newspaper'
+			: 'expected delivery date of the subscription card'
+	}.`;
+	const deliveryTsAndCs = deliveryDate
+		? `Your first payment will be taken on ${formatUserDate(deliveryDate)}${
+				paperFulfilmentOption === 'HomeDelivery'
+					? ' when your first newspaper is delivered'
+					: ''
+		  }.`
+		: noDateTsAndCs;
+
+	return (
+		<>
+			<div
+				css={css`
+					margin-bottom: ${space[1]}px;
+				`}
+			>
+				{deliveryTsAndCs} You can cancel your subscription at any time before
+				your next renewal date. Cancellation will take effect at the end of your
+				current payment period. To cancel, use the contact details listed on our{' '}
+				{termsLink('Help Centre', helpCentreUrl)}.{' '}
+			</div>
+			<div>
+				{paperShareTsAndCs}
+				{paperFulfilmentOption === 'Collection'
+					? ' to provide you with your subscription card'
+					: ''}
+				.
+			</div>
+		</>
+	);
+}
 export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
@@ -127,7 +172,6 @@ export interface PaymentTsAndCsProps {
 	studentDiscount?: StudentDiscount;
 	promotion?: Promotion;
 	thresholdAmount?: number;
-	isPaperProductTest?: boolean;
 }
 export function PaymentTsAndCs({
 	productKey,
@@ -136,7 +180,6 @@ export function PaymentTsAndCs({
 	studentDiscount,
 	promotion,
 	thresholdAmount = 0,
-	isPaperProductTest = false,
 }: PaymentTsAndCsProps): JSX.Element {
 	// Display for AUS Students who are on a subscription basis
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
@@ -148,17 +191,20 @@ export function PaymentTsAndCs({
 		productKey,
 		ratePlanKey,
 	);
+	const deliveryDate = productDeliveryOrStartDate(
+		productKey,
+		ratePlanKey as ActivePaperProductOptions,
+	);
 
 	if (isSundayOnlyNewsletterSubscription) {
 		return (
 			<div css={container}>
-				{isPaperProductTest ? 'The Observer is owned by Tortoise Media. ' : ''}
-				By proceeding, you agree to Tortoise Media’s{' '}
-				{termsLink('Terms & Conditions', observerLinks.TERMS)}. We will share
-				your contact and subscription details with our fulfilment partners to
-				provide you with your subscription card. To find out more about what
-				personal data Tortoise Media will collect and how it will be used,
-				please visit Tortoise Media’s{' '}
+				The Observer is owned by Tortoise Media. By proceeding, you agree to
+				Tortoise Media’s {termsLink('Terms & Conditions', observerLinks.TERMS)}.
+				We will share your contact and subscription details with our fulfilment
+				partners to provide you with your subscription card. To find out more
+				about what personal data Tortoise Media will collect and how it will be
+				used, please visit Tortoise Media’s{' '}
 				{termsLink('Privacy Policy', observerLinks.PRIVACY)}.
 			</div>
 		);
@@ -174,39 +220,6 @@ export function PaymentTsAndCs({
 				promotion,
 		  );
 
-	const paperProductProductTsAndCs = (
-		<div
-			css={css`
-				margin-bottom: ${space[1]}px;
-			`}
-		>
-			You can cancel your subscription at any time before your next renewal
-			date. Cancellation will take effect at the end of your current payment
-			period. To cancel, use the contact details listed on our{' '}
-			{termsLink('Help Centre', helpCentreUrl)}.
-		</div>
-	);
-	const paperHomeDeliveryTsAndCs = (
-		<>
-			{isPaperProductTest && paperProductProductTsAndCs}
-			<div>
-				We will share your contact and subscription details with our fulfilment
-				partners.
-			</div>
-		</>
-	);
-	const paperNationalDeliveryTsAndCs = (
-		<div>
-			We will share your contact and subscription details with our fulfilment
-			partners to provide you with your subscription card.
-		</div>
-	);
-	const paperSubscriptionCardTsAndCs = (
-		<>
-			{isPaperProductTest && paperProductProductTsAndCs}
-			{paperNationalDeliveryTsAndCs}
-		</>
-	);
 	const guardianWeeklyPromo = (
 		<div>
 			Offer subject to availability. Guardian News and Media Ltd ("GNM")
@@ -314,9 +327,9 @@ export function PaymentTsAndCs({
 				</p>
 			</div>
 		),
-		HomeDelivery: paperHomeDeliveryTsAndCs,
-		SubscriptionCard: paperSubscriptionCardTsAndCs,
-		NationalDelivery: paperNationalDeliveryTsAndCs,
+		NationalDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
+		HomeDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
+		SubscriptionCard: paperTsAndCs('Collection', deliveryDate),
 		GuardianWeeklyDomestic: <> {promotion && guardianWeeklyPromo}</>,
 		GuardianWeeklyRestOfWorld: <> {promotion && guardianWeeklyPromo}</>,
 	};

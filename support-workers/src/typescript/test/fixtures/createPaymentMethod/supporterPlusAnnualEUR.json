@@ -39,7 +39,7 @@
   "firstDeliveryDate": null,
   "appliedPromotion": {
     "promoCode": "OCT_DISCOUNT_50_3_MONTHS",
-    "countryGroupId": "eu"
+    "supportRegionId": "eu"
   },
   "csrUsername": null,
   "salesforceCaseId": null,

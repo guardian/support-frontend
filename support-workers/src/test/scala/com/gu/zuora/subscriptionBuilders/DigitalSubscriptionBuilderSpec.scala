@@ -41,6 +41,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         termType = "TERMED",
         readerType = ReaderType.Direct,
         promoCode = None,
+        lastPlanAddedDate = saleDate,
       ),
     )
   }
@@ -87,6 +88,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         termType = "TERMED",
         readerType = ReaderType.Direct,
         promoCode = Some("NOTAPATRONPROMO"),
+        lastPlanAddedDate = saleDate,
       ),
     )
   }
@@ -103,6 +105,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
       GBP,
+      saleDate,
     ),
   )
 

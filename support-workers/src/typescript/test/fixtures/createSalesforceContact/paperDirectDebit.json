@@ -58,7 +58,7 @@
   "firstDeliveryDate": "2024-10-17",
   "appliedPromotion": {
     "promoCode": "PRINT_EVERYDAY",
-    "countryGroupId": "uk"
+    "supportRegionId": "uk"
   },
   "csrUsername": null,
   "salesforceCaseId": null,

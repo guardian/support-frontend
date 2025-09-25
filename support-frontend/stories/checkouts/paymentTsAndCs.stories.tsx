@@ -97,21 +97,21 @@ TierThree.args = {
 export const HomeDelivery = Template.bind({});
 HomeDelivery.args = {
 	productKey: 'HomeDelivery',
-	ratePlanKey: 'Monthly',
+	ratePlanKey: 'EverydayPlus',
 	countryGroupId: 'GBPCountries',
 };
 
 export const NationalDelivery = Template.bind({});
 NationalDelivery.args = {
 	productKey: 'NationalDelivery',
-	ratePlanKey: 'Monthly',
+	ratePlanKey: 'EverydayPlus',
 	countryGroupId: 'GBPCountries',
 };
 
 export const SubscriptionCard = Template.bind({});
 SubscriptionCard.args = {
 	productKey: 'SubscriptionCard',
-	ratePlanKey: 'Monthly',
+	ratePlanKey: 'EverydayPlus',
 	countryGroupId: 'GBPCountries',
 };
 

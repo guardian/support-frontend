@@ -41,6 +41,12 @@ const routes = {
 		'https://connect.studentbeans.com/v4/hosted/the-guardian-weekly/uk',
 	guardianWeeklyStudentAU:
 		'https://connect.studentbeans.com/v4/hosted/the-guardian-weekly/au',
+	supporterPlusStudentBeansUk:
+		'https://www.studentbeans.com/en-gb/uk/beansid-connect/hosted/the-guardian-digital/student/0be53297-b848-4729-9a08-4133f85b3404',
+	supporterPlusStudentBeansUs:
+		'https://www.studentbeans.com/en-us/us/beansid-connect/hosted/the-guardian-digital/student/e15f676f-99cb-492d-9d95-ff17af36f274',
+	supporterPlusStudentBeansCa:
+		'https://www.studentbeans.com/en-ca/ca/beansid-connect/hosted/the-guardian-digital/student/362bcbd6-b491-4adf-8ca1-9f0c9f69c3b7',
 	postcodeLookup: '/postcode-lookup',
 	createSignInUrl: '/identity/signin-url',
 	stripeSetupIntentRecaptcha: '/stripe/create-setup-intent/recaptcha',
@@ -53,7 +59,7 @@ const createRecurringReminderEndpoint = isProd()
 	: 'https://support.code.dev-theguardian.com/reminders/create/recurring';
 
 const countryPath = (countryGroupId: CountryGroupId) =>
-	countryGroups[countryGroupId].supportInternationalisationId;
+	countryGroups[countryGroupId].supportRegionId;
 
 function postcodeLookupUrl(postcode: string): string {
 	return `${getOrigin() + routes.postcodeLookup}/${postcode}`;
@@ -134,6 +140,20 @@ function paperCheckoutUrl(
 	return addQueryParamsToURL(url, params);
 }
 
+function parameteriseUrl(
+	url: string,
+	promoCode?: Option<string>,
+	fulfilmentOption?: PaperFulfilmentOptions,
+) {
+	const params = {
+		promoCode,
+	};
+	const urlWithParams = addQueryParamsToURL(url, params).replace(/\?$/, ''); // removes ? when no params
+	return fulfilmentOption
+		? `${urlWithParams}#${fulfilmentOption}`
+		: urlWithParams;
+}
+
 // If the user cancels before completing the payment flow, send them back to the contribute page.
 function payPalCancelUrl(cgId: CountryGroupId): string {
 	return `${getOrigin()}/${countryPath(cgId)}/contribute`;
@@ -159,6 +179,7 @@ export {
 	payPalReturnUrl,
 	paperSubsUrl,
 	paperCheckoutUrl,
+	parameteriseUrl,
 	digitalSubscriptionLanding,
 	guardianWeeklyLanding,
 	promotionTermsUrl,

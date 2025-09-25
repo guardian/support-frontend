@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import {
 	from,
 	neutral,
-	news,
 	palette,
 	space,
 	textSans12,
@@ -19,7 +18,7 @@ export const container = css`
 	border-radius: 0 0 ${space[2]}px ${space[2]}px;
 	padding: ${space[6]}px ${space[4]}px ${space[5]}px;
 	position: relative;
-	width: 350px;
+
 	${from.tablet} {
 		width: 366px;
 		border-radius: ${space[2]}px 0 0 ${space[2]}px;
@@ -77,7 +76,7 @@ export const pill = css`
 	white-space: nowrap;
 	padding: ${space[1]}px ${space[4]}px;
 	border-radius: ${space[1]}px;
-	background-color: ${news[400]};
+	background-color: ${palette.brand[500]};
 	color: ${palette.neutral[100]};
 	${textSansBold15};
 `;

@@ -1,4 +1,5 @@
 import type { Tests } from './models';
+
 // ----- Tests ----- //
 // Note: When setting up a test to run on the contributions thank you page
 // you should always target both the landing page *and* the thank you page.
@@ -121,5 +122,30 @@ export const tests: Tests = {
 			// match generic checkout & thank you page
 			'^/uk/(checkout|thank-you)',
 		excludeContributionsOnlyCountries: true,
+	},
+	abNudgeToLowRegular: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'v1',
+			},
+			{
+				id: 'v2',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: true, // until we need to switch it on
+		referrerControlled: false, // requires a URL param to trigger
+		seed: 7, // needs to be different to other tests
+		targetPage: pageUrlRegexes.contributions.oneTimeCheckoutOnly,
+		persistPage: pageUrlRegexes.contributions.genericCheckoutOnly,
+		excludeContributionsOnlyCountries: true, // for countries we can't sell recurring products to
 	},
 };

@@ -53,6 +53,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     csrfConfig = csrfConfig,
     stage = stage,
     featureSwitches = FeatureSwitches(Some(On), Some(On), Some(On), Some(On)),
+    testUsersService = TestUserService("secret"),
   )
 
   val priceSummaryServiceProvider = {

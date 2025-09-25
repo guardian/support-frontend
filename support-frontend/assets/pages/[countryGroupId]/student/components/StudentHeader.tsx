@@ -1,3 +1,4 @@
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import GridPicture from 'components/gridPicture/gridPicture';
 import { Container } from 'components/layout/container';
 import type {
@@ -8,7 +9,6 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import type { GeoId } from 'pages/geoIdConfig';
 import buildCheckoutUrl from '../helpers/buildCheckoutUrl';
 import type { StudentDiscount } from '../helpers/discountDetails';
 import {
@@ -23,7 +23,7 @@ import StudentPrice from './StudentPrice';
 import StudentProductCard from './StudentProductCard';
 
 interface StudentHeaderProps {
-	geoId: GeoId;
+	supportRegionId: SupportRegionId;
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	landingPageVariant: LandingPageVariant;
@@ -32,17 +32,20 @@ interface StudentHeaderProps {
 	subheadingCopy: React.ReactNode;
 	universityBadge?: JSX.Element;
 	includeThreeTierLink?: boolean;
+	heroImagePrefix: string;
 }
 
-const ukSpecificAdditionalBenefit: ProductBenefit = {
+export const ukSpecificAdditionalBenefit: ProductBenefit = {
 	copy: 'Student-focused newsletter, curated by our journalists',
 	label: {
 		copy: 'Limited series',
 	},
+	tooltip:
+		'Each week, hear from our journalists about topics that matter to you — including AI, politics, climate and more.',
 };
 
 export default function StudentHeader({
-	geoId,
+	supportRegionId,
 	productKey,
 	ratePlanKey,
 	landingPageVariant,
@@ -51,10 +54,11 @@ export default function StudentHeader({
 	subheadingCopy,
 	universityBadge,
 	includeThreeTierLink = false,
+	heroImagePrefix,
 }: StudentHeaderProps) {
 	const { amount, promoCode, discountSummary } = studentDiscount;
 	const checkoutUrl = buildCheckoutUrl(
-		geoId,
+		supportRegionId,
 		productKey,
 		ratePlanKey,
 		promoCode,
@@ -65,7 +69,7 @@ export default function StudentHeader({
 		landingPageVariant.products.SupporterPlus;
 
 	const benefits =
-		geoId === 'uk'
+		supportRegionId === SupportRegionId.UK
 			? [ukSpecificAdditionalBenefit, ...configuredBenefits]
 			: configuredBenefits;
 
@@ -94,28 +98,28 @@ export default function StudentHeader({
 				<GridPicture
 					sources={[
 						{
-							gridId: 'AuStudentLandingHeroMobile',
+							gridId: `${heroImagePrefix}Mobile`,
 							srcSizes: [2000, 1000, 500],
-							sizes: '350px',
+							sizes: '719px',
 							imgType: 'jpg',
 							media: '(max-width: 739px)',
 						},
 						{
-							gridId: 'AuStudentLandingHeroTablet',
+							gridId: `${heroImagePrefix}Tablet`,
 							srcSizes: [1396, 855, 428],
 							sizes: '350px',
 							imgType: 'jpg',
 							media: '(max-width: 979px)',
 						},
 						{
-							gridId: 'AuStudentLandingHeroDesktop',
+							gridId: `${heroImagePrefix}Desktop`,
 							srcSizes: [2000, 1000, 500],
 							sizes: '574px',
 							imgType: 'jpg',
 							media: '(min-width: 980px)',
 						},
 					]}
-					fallback="AuStudentLandingHeroDesktop"
+					fallback={`${heroImagePrefix}Desktop`}
 					fallbackSize={574}
 					altText=""
 				/>
@@ -126,7 +130,7 @@ export default function StudentHeader({
 						<span>Not a student?</span>{' '}
 						<span>
 							Explore our other{' '}
-							<a href={`/${geoId}/contribute`}>support options</a>
+							<a href={`/${supportRegionId}/contribute`}>support options</a>
 						</span>
 					</p>
 				</div>
