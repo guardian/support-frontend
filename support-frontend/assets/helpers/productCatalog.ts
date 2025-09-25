@@ -85,6 +85,7 @@ type RatePlanDetails = Record<
 		billingPeriod: RecurringBillingPeriod;
 		label?: string;
 		hideSimilarProductsConsent?: boolean;
+		fixedTerm?: boolean;
 	}
 >;
 
@@ -376,6 +377,10 @@ export const productCatalogDescription: Record<
 			},
 			Annual: {
 				billingPeriod: BillingPeriod.Annual,
+			},
+			OneYearStudent: {
+				billingPeriod: BillingPeriod.Annual,
+				fixedTerm: true,
 			},
 		},
 	},

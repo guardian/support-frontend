@@ -10,7 +10,7 @@ export const carouselContainer = css`
 	overflow-x: auto;
 	scroll-snap-type: x mandatory;
 	scroll-padding-left: 56px;
-	padding: ${space[8]}px ${space[2]}px ${space[5]}px;
+	padding: ${space[8]}px 0 ${space[5]}px;
 	gap: ${space[5]}px;
 	-webkit-overflow-scrolling: touch;
 

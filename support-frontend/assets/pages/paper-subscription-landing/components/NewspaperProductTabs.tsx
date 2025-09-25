@@ -47,7 +47,7 @@ function NewspaperProductTabs({
 	isPaperProductTest: boolean;
 }) {
 	const fulfilment =
-		window.location.hash === `#${Collection}` ? Collection : HomeDelivery;
+		window.location.hash === `#${HomeDelivery}` ? HomeDelivery : Collection;
 
 	const [selectedTab, setSelectedTab] =
 		useState<PaperFulfilmentOptions>(fulfilment);

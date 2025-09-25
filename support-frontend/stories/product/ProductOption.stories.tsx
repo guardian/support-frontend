@@ -12,7 +12,7 @@ export default {
 		offerCopy: { type: 'text' },
 		priceCopy: { type: 'text' },
 		buttonCopy: { type: 'text' },
-		label: { type: 'text' },
+		showLabel: { type: 'boolean' },
 		onClick: {
 			table: {
 				disable: true,
@@ -50,7 +50,7 @@ function Template(args: Product) {
 			offerCopy={args.offerCopy}
 			priceCopy={args.priceCopy}
 			buttonCopy={args.buttonCopy}
-			label={args.label}
+			showLabel={args.showLabel}
 			productLabel={args.productLabel}
 			isSpecialOffer={args.isSpecialOffer}
 			onClick={() => undefined}
