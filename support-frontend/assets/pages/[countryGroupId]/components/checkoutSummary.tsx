@@ -52,6 +52,7 @@ type CheckoutSummaryProps = {
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
+	isWeeklyGift?: boolean;
 };
 
 export default function CheckoutSummary({
@@ -68,6 +69,7 @@ export default function CheckoutSummary({
 	weeklyDeliveryDate,
 	thresholdAmount,
 	studentDiscount,
+	isWeeklyGift,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
@@ -171,9 +173,9 @@ export default function CheckoutSummary({
 				)}
 				<ContributionsOrderSummary
 					productKey={productKey}
-					productDescription={productDescription.label}
+					productLabel={productDescription.label}
 					ratePlanKey={ratePlanKey}
-					ratePlanDescription={ratePlanDescription.label}
+					ratePlanLabel={ratePlanDescription.label}
 					paymentFrequency={getBillingPeriodNoun(
 						ratePlanDescription.billingPeriod,
 					)}
@@ -190,8 +192,8 @@ export default function CheckoutSummary({
 					startDate={
 						<OrderSummaryStartDate
 							productKey={productKey}
-							ratePlanKey={ratePlanKey}
 							startDate={formatUserDate(weeklyDeliveryDate)}
+							isWeeklyGift={isWeeklyGift}
 						/>
 					}
 					tsAndCs={
@@ -211,6 +213,7 @@ export default function CheckoutSummary({
 					}
 					abParticipations={abParticipations}
 					studentDiscount={studentDiscount}
+					isWeeklyGift={isWeeklyGift}
 				/>
 			</BoxContents>
 		</Box>

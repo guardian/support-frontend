@@ -132,9 +132,9 @@ const termsAndConditions = css`
 
 export type ContributionsOrderSummaryProps = {
 	productKey: ProductKey;
-	productDescription: string;
+	productLabel: string;
 	ratePlanKey: ActiveRatePlanKey;
-	ratePlanDescription?: string;
+	ratePlanLabel?: string;
 	amount: number;
 	promotion?: Promotion;
 	currency: Currency;
@@ -148,13 +148,14 @@ export type ContributionsOrderSummaryProps = {
 	tsAndCsTier3?: React.ReactNode;
 	abParticipations?: Participations;
 	studentDiscount?: StudentDiscount;
+	isWeeklyGift?: boolean;
 };
 
 export function ContributionsOrderSummary({
 	productKey,
-	productDescription,
+	productLabel,
 	ratePlanKey,
-	ratePlanDescription,
+	ratePlanLabel,
 	amount,
 	promotion,
 	currency,
@@ -167,6 +168,7 @@ export function ContributionsOrderSummary({
 	enableCheckList,
 	abParticipations,
 	studentDiscount,
+	isWeeklyGift,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -223,6 +225,10 @@ export function ContributionsOrderSummary({
 		/>
 	);
 
+	const productLabelGift = `${
+		isWeeklyGift ? 'Guardian Weekly Gift Subscription' : productLabel
+	}`;
+
 	return (
 		<div css={componentStyles}>
 			<div css={[summaryRow, rowSpacing, headingRow]}>
@@ -233,8 +239,8 @@ export function ContributionsOrderSummary({
 			<div css={detailsSection}>
 				<div css={summaryRow}>
 					<div>
-						{ratePlanDescription && <p>{ratePlanDescription}</p>}
-						<p>{productDescription}</p>
+						{ratePlanLabel && <p>{ratePlanLabel}</p>}
+						<p>{productLabelGift}</p>
 					</div>
 					{(hasCheckList || isSundayOnlyNewspaperSubscription) && (
 						<Button

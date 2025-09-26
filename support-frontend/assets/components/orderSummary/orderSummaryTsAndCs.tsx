@@ -23,7 +23,10 @@ import {
 	isPaperPlusSub,
 	isSundayOnlyNewspaperSub,
 } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
-import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import {
+	isGuardianWeeklyGiftProduct,
+	isGuardianWeeklyOrTierThreeProduct,
+} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 
 const containerSummaryTsCs = css`
@@ -47,28 +50,17 @@ const productStartDate = css`
 	}
 `;
 
-const guardianWeeklyOrTierThreeProduct = (productKey: ActiveProductKey) => {
-	return [
-		'GuardianWeeklyDomestic',
-		'GuardianWeeklyRestOfWorld',
-		'TierThree',
-	].includes(productKey);
-};
-
 interface OrderSummaryStartDateProps {
 	startDate: string;
 	productKey: ActiveProductKey;
-	ratePlanKey: ActiveRatePlanKey;
+	isWeeklyGift?: boolean;
 }
 export function OrderSummaryStartDate({
 	startDate,
 	productKey,
-	ratePlanKey,
+	isWeeklyGift,
 }: OrderSummaryStartDateProps): JSX.Element | null {
-	if (
-		guardianWeeklyOrTierThreeProduct(productKey) &&
-		!isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
-	) {
+	if (isGuardianWeeklyOrTierThreeProduct(productKey) && !isWeeklyGift) {
 		return (
 			<ul css={productStartDate}>
 				{productKey === 'TierThree' && (
@@ -154,7 +146,7 @@ export function OrderSummaryTsAndCs({
 					)}
 				</>
 			)}
-			{guardianWeeklyOrTierThreeProduct(productKey) && (
+			{isGuardianWeeklyOrTierThreeProduct(productKey) && (
 				<p>
 					{isGuardianWeeklyGiftProduct(productKey, ratePlanKey) ? (
 						<>

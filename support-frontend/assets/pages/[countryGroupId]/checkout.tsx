@@ -24,6 +24,7 @@ import * as cookie from 'helpers/storage/cookie';
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
+import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { getWeeklyDeliveryDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
@@ -294,6 +295,8 @@ export function Checkout({
 		true,
 	);
 
+	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
+
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
 			<CheckoutLayout>
@@ -311,6 +314,7 @@ export function Checkout({
 					weeklyDeliveryDate={weeklyDeliveryDate}
 					thresholdAmount={thresholdAmount}
 					studentDiscount={studentDiscount}
+					isWeeklyGift={isWeeklyGift}
 				/>
 
 				<CheckoutForm
@@ -336,6 +340,7 @@ export function Checkout({
 					setWeeklyDeliveryDate={setWeeklyDeliveryDate}
 					thresholdAmount={thresholdAmount}
 					studentDiscount={studentDiscount}
+					isWeeklyGift={isWeeklyGift}
 				/>
 			</CheckoutLayout>
 		</Elements>
