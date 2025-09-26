@@ -159,7 +159,7 @@ export function OrderSummaryTsAndCs({
 							post services.
 						</>
 					) : (
-						<>Auto renews every ${periodNoun}. Cancel anytime.</>
+						<>Auto renews every {periodNoun}. Cancel anytime.</>
 					)}
 				</p>
 			)}
