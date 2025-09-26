@@ -244,6 +244,7 @@ TierThree.args = {
 		<OrderSummaryStartDate
 			startDate={'Friday, April 11, 2025'}
 			productKey="TierThree"
+			ratePlanKey="Monthly"
 		/>
 	),
 	headerButton: (

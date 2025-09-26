@@ -58,12 +58,17 @@ const guardianWeeklyOrTierThreeProduct = (productKey: ActiveProductKey) => {
 interface OrderSummaryStartDateProps {
 	startDate: string;
 	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
 }
 export function OrderSummaryStartDate({
 	startDate,
 	productKey,
+	ratePlanKey,
 }: OrderSummaryStartDateProps): JSX.Element | null {
-	if (guardianWeeklyOrTierThreeProduct(productKey)) {
+	if (
+		guardianWeeklyOrTierThreeProduct(productKey) &&
+		!isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+	) {
 		return (
 			<ul css={productStartDate}>
 				{productKey === 'TierThree' && (

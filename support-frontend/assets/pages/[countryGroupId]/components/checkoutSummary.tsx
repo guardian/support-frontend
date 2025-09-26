@@ -190,6 +190,7 @@ export default function CheckoutSummary({
 					startDate={
 						<OrderSummaryStartDate
 							productKey={productKey}
+							ratePlanKey={ratePlanKey}
 							startDate={formatUserDate(weeklyDeliveryDate)}
 						/>
 					}
