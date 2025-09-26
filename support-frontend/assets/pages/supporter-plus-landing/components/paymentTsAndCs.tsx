@@ -60,9 +60,11 @@ const termsLink = (linkText: string, url: string) => (
 export function FooterTsAndCs({
 	productKey,
 	countryGroupId,
+	isWeeklyGift,
 }: {
 	productKey: ActiveProductKey;
 	countryGroupId: CountryGroupId;
+	isWeeklyGift?: boolean;
 }) {
 	const privacy = <a href={privacyLink}>Privacy Policy</a>;
 	const getProductNameSummary = (): string => {
@@ -99,10 +101,13 @@ export function FooterTsAndCs({
 				);
 		}
 	};
+	const weeklyGiftTerms = isWeeklyGift
+		? ' To cancel, go to Manage My Account or see our Terms. This subscription does not auto-renew.'
+		: '';
 	return (
 		<div css={marginTop}>
 			By proceeding, you are agreeing to {getProductNameSummary()}{' '}
-			{getProductTerms()}.{' '}
+			{getProductTerms()}. {weeklyGiftTerms}
 			<p css={marginTop}>
 				To find out what personal data we collect and how we use it, please
 				visit our {privacy}.
@@ -165,6 +170,22 @@ function paperTsAndCs(
 		</>
 	);
 }
+function weeklyTsAndCs(isWeeklyGift?: boolean, promotion?: Promotion) {
+	const rightReservation = `Offer subject to availability. Guardian News and Media Ltd ("GNM") reserves the right to withdraw this promotion at any time. `;
+	return (
+		<>
+			{isWeeklyGift && <div>{rightReservation}</div>}
+			{promotion && (
+				<div>
+					{rightReservation} Full promotion terms and conditions for our{' '}
+					{termsLink('monthly', guardianWeeklyPromoTermsLink)} and{' '}
+					{termsLink('annual', guardianWeeklyPromoTermsLink)} offers.
+				</div>
+			)}
+		</>
+	);
+}
+
 export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
@@ -172,6 +193,7 @@ export interface PaymentTsAndCsProps {
 	studentDiscount?: StudentDiscount;
 	promotion?: Promotion;
 	thresholdAmount?: number;
+	isWeeklyGift?: boolean;
 }
 export function PaymentTsAndCs({
 	productKey,
@@ -180,6 +202,7 @@ export function PaymentTsAndCs({
 	studentDiscount,
 	promotion,
 	thresholdAmount = 0,
+	isWeeklyGift,
 }: PaymentTsAndCsProps): JSX.Element {
 	// Display for AUS Students who are on a subscription basis
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
@@ -219,16 +242,6 @@ export function PaymentTsAndCs({
 				thresholdAmount,
 				promotion,
 		  );
-
-	const guardianWeeklyPromo = (
-		<div>
-			Offer subject to availability. Guardian News and Media Ltd ("GNM")
-			reserves the right to withdraw this promotion at any time. Full promotion
-			terms and conditions for our{' '}
-			{termsLink('monthly', guardianWeeklyPromoTermsLink)} and{' '}
-			{termsLink('annual', guardianWeeklyPromoTermsLink)} offers.
-		</div>
-	);
 	const productLabel = productCatalogDescription[productKey].label;
 	const subscriptionBasis = !isStudentOneYearRatePlan
 		? 'on a subscription basis'
@@ -330,8 +343,8 @@ export function PaymentTsAndCs({
 		NationalDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
 		HomeDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
 		SubscriptionCard: paperTsAndCs('Collection', deliveryDate),
-		GuardianWeeklyDomestic: <> {promotion && guardianWeeklyPromo}</>,
-		GuardianWeeklyRestOfWorld: <> {promotion && guardianWeeklyPromo}</>,
+		GuardianWeeklyDomestic: weeklyTsAndCs(isWeeklyGift, promotion),
+		GuardianWeeklyRestOfWorld: weeklyTsAndCs(isWeeklyGift, promotion),
 	};
 	return (
 		<div css={container}>
@@ -340,6 +353,7 @@ export function PaymentTsAndCs({
 				<FooterTsAndCs
 					productKey={productKey}
 					countryGroupId={countryGroupId}
+					isWeeklyGift={isWeeklyGift}
 				/>
 			</FinePrint>
 		</div>
