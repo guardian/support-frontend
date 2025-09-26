@@ -62,7 +62,6 @@
 			"assets copy"
 		],
 		"moduleNameMapper": {
-			"ophan(.*)": "<rootDir>/node_modules/ophan-tracker-js/build/ophan.support",
 			"\\.(css|less|sass|scss)$": "<rootDir>/assets/__mocks__/styleMock.ts",
 			"\\.(svg|png|jpg)$": "<rootDir>/assets/__mocks__/imageMock.ts",
       "@modules/product-catalog/(.*)$": "@guardian/support-service-lambdas/modules/product-catalog/src/$1",
@@ -104,7 +103,7 @@
 		"framer-motion": "^1.11.1",
 		"lodash.debounce": "^4.0.6",
 		"mockdate": "^3.0.5",
-		"ophan-tracker-js": "^1.4.3",
+		"@guardian/ophan-tracker-js": "2.6.1",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"react-redux": "^8.1.0",

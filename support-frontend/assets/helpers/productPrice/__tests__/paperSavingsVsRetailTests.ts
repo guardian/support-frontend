@@ -218,7 +218,7 @@ const productPrices = {
 } as unknown as ProductPrices;
 
 // ----- Tests ----- //
-jest.mock('ophan', () => () => ({}));
+jest.mock('@guardian/ophan-tracker-js', () => () => ({}));
 
 describe('getMaxSavingVsRetail', () => {
 	it('should return the maximum savings for a fulfilment option vs retail', () => {
