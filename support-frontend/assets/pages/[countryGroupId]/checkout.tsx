@@ -294,6 +294,10 @@ export function Checkout({
 		true,
 	);
 
+	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
+		abParticipations.newspaperArchiveBenefit ?? '',
+	);
+
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
 			<CheckoutLayout>
@@ -311,6 +315,7 @@ export function Checkout({
 					weeklyDeliveryDate={weeklyDeliveryDate}
 					thresholdAmount={thresholdAmount}
 					studentDiscount={studentDiscount}
+					showNewspaperArchiveBenefit={showNewspaperArchiveBenefit}
 				/>
 
 				<CheckoutForm
