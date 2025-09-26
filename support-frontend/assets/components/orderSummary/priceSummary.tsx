@@ -10,22 +10,29 @@ const visuallyHiddenCss = css`
 	${visuallyHidden};
 `;
 
-function displayPeriod(price: string, period: string | undefined): string {
-	return `${price}${period ? `/${period}` : ''}`;
+function displayPeriod(
+	price: string,
+	divider: string,
+	period?: string,
+): string {
+	return `${price}${period ? `${divider}${period}` : ''}`;
 }
 
 type PriceSummaryProps = {
 	fullPrice: string;
 	period?: string;
 	discountPrice?: string;
+	isWeeklyGift?: boolean;
 };
 
 export function PriceSummary({
 	fullPrice,
 	period,
 	discountPrice,
+	isWeeklyGift,
 }: PriceSummaryProps): JSX.Element {
 	const displayPricePeriod = () => {
+		const divider = isWeeklyGift ? ' for ' : '/';
 		if (discountPrice) {
 			return (
 				<>
@@ -34,11 +41,11 @@ export function PriceSummary({
 						{fullPrice}
 						<span css={visuallyHiddenCss}>, now</span>
 					</span>{' '}
-					{displayPeriod(discountPrice, period)}
+					{displayPeriod(discountPrice, divider, period)}
 				</>
 			);
 		}
-		return displayPeriod(fullPrice, period);
+		return displayPeriod(fullPrice, divider, period);
 	};
 
 	return <p>{displayPricePeriod()}</p>;

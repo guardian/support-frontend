@@ -274,6 +274,7 @@ export function ContributionsOrderSummary({
 					fullPrice={fullPrice}
 					period={period}
 					discountPrice={discountPrice}
+					isWeeklyGift={isWeeklyGift}
 				/>
 			</div>
 			{nudgeLowRegularThanks}

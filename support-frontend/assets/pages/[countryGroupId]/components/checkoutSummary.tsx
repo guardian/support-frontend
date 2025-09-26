@@ -178,6 +178,7 @@ export default function CheckoutSummary({
 					ratePlanLabel={ratePlanDescription.label}
 					paymentFrequency={getBillingPeriodNoun(
 						ratePlanDescription.billingPeriod,
+						isWeeklyGift,
 					)}
 					amount={originalAmount}
 					promotion={promotion}
