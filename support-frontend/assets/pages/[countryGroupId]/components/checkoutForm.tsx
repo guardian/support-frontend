@@ -839,7 +839,7 @@ export default function CheckoutForm({
 									setRecipientEmail={setRecipientEmail}
 								/>
 								<WeeklyDeliveryDates
-									legend={`2. Gift delivery date`}
+									legend={`2. Gift subscription start date`}
 									weeklyDeliveryDates={getWeeklyDays()}
 									weeklyDeliveryDate={weeklyDeliveryDate}
 									setWeeklyDeliveryDate={setWeeklyDeliveryDate}
