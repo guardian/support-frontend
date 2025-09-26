@@ -1,5 +1,6 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getProductCatalogFromApi } from '@modules/product-catalog/api';
+import { getPromotions } from '@modules/promotions/getPromotions';
 import type {
 	CreateSubscriptionInputFields,
 	CreateSubscriptionResponse,
@@ -40,6 +41,10 @@ const productCatalogProvider = new ServiceProvider(stage, async (stage) => {
 	return getProductCatalogFromApi(stage);
 });
 
+const promotionsProvider = new ServiceProvider(stage, async (stage) => {
+	return getPromotions(stage);
+});
+
 export const handler = async (
 	state: WrappedState<CreateZuoraSubscriptionState>,
 ) => {
@@ -77,6 +82,7 @@ export const handler = async (
 		//  CSR mode is NOT needed
 
 		const inputFields: CreateSubscriptionInputFields<ZuoraPaymentMethod> = {
+			stage: stage,
 			accountName: salesforceContact.AccountId, // We store the Salesforce Account id in the name field
 			createdRequestId: createZuoraSubscriptionState.requestId,
 			salesforceAccountId: salesforceContact.AccountId,
@@ -97,13 +103,18 @@ export const handler = async (
 		const productCatalog = await productCatalogProvider.getServiceForUser(
 			createZuoraSubscriptionState.user.isTestUser,
 		);
+		const promotions = await promotionsProvider.getServiceForUser(
+			createZuoraSubscriptionState.user.isTestUser,
+		);
 		const createSubscriptionResult = await createSubscription(
 			zuoraClient,
 			productCatalog,
+			promotions,
 			inputFields,
 		);
 
 		const previewInputFields: PreviewCreateSubscriptionInputFields = {
+			stage,
 			accountNumber: createSubscriptionResult.accountNumber,
 			currency: currency,
 			productPurchase: productInformation,
@@ -112,6 +123,7 @@ export const handler = async (
 		const previewInvoices = await previewCreateSubscription(
 			zuoraClient,
 			productCatalog,
+			promotions,
 			previewInputFields,
 		);
 
