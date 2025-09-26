@@ -20,6 +20,7 @@ import {
 	type ActiveRatePlanKey,
 	productCatalogDescription,
 	productCatalogDescriptionNewBenefits,
+	productCatalogGuardianWeeklyGift,
 } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -52,6 +53,7 @@ type CheckoutSummaryProps = {
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
+	isWeeklyGift?: boolean;
 };
 
 export default function CheckoutSummary({
@@ -68,6 +70,7 @@ export default function CheckoutSummary({
 	weeklyDeliveryDate,
 	thresholdAmount,
 	studentDiscount,
+	isWeeklyGift,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
@@ -78,10 +81,17 @@ export default function CheckoutSummary({
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);
+	const getProductDescription = () => {
+		if (showNewspaperArchiveBenefit) {
+			return productCatalogDescriptionNewBenefits(countryGroupId)[productKey];
+		}
+		if (isWeeklyGift) {
+			return productCatalogGuardianWeeklyGift()[productKey];
+		}
+		return productCatalogDescription[productKey];
+	};
+	const productDescription = getProductDescription();
 
-	const productDescription = showNewspaperArchiveBenefit
-		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
-		: productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
 	};
@@ -171,11 +181,12 @@ export default function CheckoutSummary({
 				)}
 				<ContributionsOrderSummary
 					productKey={productKey}
-					productDescription={productDescription.label}
+					productLabel={productDescription.label}
 					ratePlanKey={ratePlanKey}
-					ratePlanDescription={ratePlanDescription.label}
+					ratePlanLabel={ratePlanDescription.label}
 					paymentFrequency={getBillingPeriodNoun(
 						ratePlanDescription.billingPeriod,
+						isWeeklyGift,
 					)}
 					amount={originalAmount}
 					promotion={promotion}
@@ -191,6 +202,7 @@ export default function CheckoutSummary({
 						<OrderSummaryStartDate
 							productKey={productKey}
 							startDate={formatUserDate(weeklyDeliveryDate)}
+							isWeeklyGift={isWeeklyGift}
 						/>
 					}
 					tsAndCs={
@@ -210,6 +222,7 @@ export default function CheckoutSummary({
 					}
 					abParticipations={abParticipations}
 					studentDiscount={studentDiscount}
+					isWeeklyGift={isWeeklyGift}
 				/>
 			</BoxContents>
 		</Box>

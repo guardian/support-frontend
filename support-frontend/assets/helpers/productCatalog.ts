@@ -203,9 +203,14 @@ const partnerOffersBenefit = {
 		'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
 	specificToRegions: ['AUDCountries'],
 };
+const guardianWeeklyToolTip = `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`;
 const guardianWeeklyBenefit = {
 	copy: 'Guardian Weekly print magazine delivered to your door every week',
-	tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
+	tooltip: guardianWeeklyToolTip,
+};
+const guardianWeeklyGiftBenefit = {
+	copy: `Guardian Weekly print magazine delivered to your recipient's door`,
+	tooltip: guardianWeeklyToolTip,
 };
 
 const feastBenefit = {
@@ -395,6 +400,8 @@ export const productCatalogDescription: Record<
 			},
 			OneYearGift: {
 				billingPeriod: BillingPeriod.Annual,
+				hideSimilarProductsConsent: true,
+				fixedTerm: true,
 			},
 			Annual: {
 				billingPeriod: BillingPeriod.Annual,
@@ -404,6 +411,8 @@ export const productCatalogDescription: Record<
 			},
 			ThreeMonthGift: {
 				billingPeriod: BillingPeriod.Quarterly,
+				hideSimilarProductsConsent: true,
+				fixedTerm: true,
 			},
 		},
 	},
@@ -418,6 +427,8 @@ export const productCatalogDescription: Record<
 			},
 			OneYearGift: {
 				billingPeriod: BillingPeriod.Annual,
+				hideSimilarProductsConsent: true,
+				fixedTerm: true,
 			},
 			Annual: {
 				billingPeriod: BillingPeriod.Annual,
@@ -427,6 +438,8 @@ export const productCatalogDescription: Record<
 			},
 			ThreeMonthGift: {
 				billingPeriod: BillingPeriod.Quarterly,
+				hideSimilarProductsConsent: true,
+				fixedTerm: true,
 			},
 		},
 	},
@@ -517,6 +530,23 @@ export function productCatalogGuardianAdLite(): Record<
 					hideBullet: true,
 				},
 			],
+		},
+	};
+}
+
+export function productCatalogGuardianWeeklyGift(): Record<
+	ActiveProductKey,
+	ProductDescription
+> {
+	return {
+		...productCatalogDescription,
+		GuardianWeeklyDomestic: {
+			...productCatalogDescription.GuardianWeeklyDomestic,
+			benefits: [guardianWeeklyGiftBenefit],
+		},
+		GuardianWeeklyRestOfWorld: {
+			...productCatalogDescription.GuardianWeeklyRestOfWorld,
+			benefits: [guardianWeeklyGiftBenefit],
 		},
 	};
 }
