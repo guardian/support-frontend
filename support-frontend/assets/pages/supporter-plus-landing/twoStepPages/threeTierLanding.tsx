@@ -50,7 +50,6 @@ import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/lan
 import { getSanitisedHtml } from '../../../helpers/utilities/utilities';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import Countdown from '../components/countdown';
-import { LandingPageBanners } from '../components/landingPageBanners';
 import { OneOffCard } from '../components/oneOffCard';
 import { StudentOffer } from '../components/studentOffer';
 import { SupportOnce } from '../components/supportOnce';
@@ -265,10 +264,6 @@ export function ThreeTierLanding({
 	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
 	const urlSearchParamsPromoCode = urlSearchParams.get('promoCode');
 	const { enablePremiumDigital } = getFeatureFlags();
-	console.log(
-		'🚀 ~ ThreeTierLanding ~ enablePremiumDigital:',
-		enablePremiumDigital,
-	);
 
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -610,7 +605,6 @@ export function ThreeTierLanding({
 							billingPeriod={billingPeriod}
 						/>
 					)}
-					{enablePremiumDigital && <LandingPageBanners />}
 				</div>
 			</Container>
 			{!enableSingleContributionsTab && (
