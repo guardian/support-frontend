@@ -43,10 +43,10 @@ const getPriceCopyString = (
 };
 
 const getOfferText = (price: ProductPrice, promo?: Promotion) => {
-	if (promo && price.savingVsRetail && promo.discount?.amount) {
+	if (promo?.discount?.amount) {
 		const discount = getDiscountVsRetail(
 			price.price,
-			price.savingVsRetail,
+			price.savingVsRetail ?? 0,
 			promo.discount.amount,
 		);
 		if (discount > 0) {
