@@ -658,13 +658,16 @@ export default function CheckoutForm({
 
 	const billingPreposition = productDescription.ratePlans[ratePlanKey]
 		?.fixedTerm
-		? 'for a'
+		? `for${isWeeklyGift ? '' : ' a'}`
 		: 'per';
 
 	const buttonText = `Pay ${simpleFormatAmount(
 		currency,
 		finalAmount,
-	)} ${billingPreposition} ${getBillingPeriodNoun(billingPeriod)}`;
+	)} ${billingPreposition} ${getBillingPeriodNoun(
+		billingPeriod,
+		isWeeklyGift,
+	)}`;
 
 	return (
 		<>
