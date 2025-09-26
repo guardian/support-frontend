@@ -7,13 +7,9 @@ import react from '@vitejs/plugin-react';
 module.exports = {
 	stories: ['../stories/**/*.stories.@(js|jsx|ts|tsx)'],
 	addons: [
+		'@storybook/addon-docs',
 		'@storybook/addon-a11y',
-		'@storybook/addon-links',
-		'@storybook/addon-essentials',
-		'@storybook/addon-storysource',
-		'@storybook/addon-viewport',
-		'@storybook/addon-interactions',
-		'@storybook/addon-webpack5-compiler-babel',
+		'@storybook/addon-vitest',
 	],
 	framework: {
 		name: '@storybook/preact-vite',
