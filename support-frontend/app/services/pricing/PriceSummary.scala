@@ -6,7 +6,7 @@ import org.joda.time.DateTime
 
 case class PriceSummary(
     price: BigDecimal,
-    savingVsRetail: Option[Int],
+    savingVsRetail: Option[Float],
     currency: Currency,
     fixedTerm: Boolean,
     promotions: List[PromotionSummary],
