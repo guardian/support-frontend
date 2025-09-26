@@ -1,12 +1,19 @@
 import '@testing-library/jest-dom';
 
-// General-purpose mock; any and all functions called off the 'ophan' object
-// will be proxied to a mock Jest function
-// Ophan is a RequireJS module and Jest hates it
-jest.mock('ophan', () => new Proxy({}, {
-  get() {
-    return jest.fn();
-  },
+// Mock for ophan support module
+const mockOphanSupport = {
+  record: jest.fn(),
+  viewId: 'mock-view-id',
+  init: jest.fn(),
+  sendInitialEvent: jest.fn(),
+};
+jest.mock('@guardian/ophan-tracker-js', () => ({
+  ...mockOphanSupport,
+  record: mockOphanSupport.record,
+  viewId: mockOphanSupport.viewId,
+  init: mockOphanSupport.init,
+  sendInitialEvent: mockOphanSupport.sendInitialEvent,
+  default: mockOphanSupport,
 }));
 
 // window.guardian mock

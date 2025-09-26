@@ -8,18 +8,20 @@ describe('Ophan AB Payload', () => {
 			test1: 'control',
 			test2: 'variant',
 		};
-		const expected: OphanABPayload = {
-			test1: {
-				variantName: 'control',
+		const expected: OphanABPayload = [
+			{
+				name: 'test1',
+				variant: 'control',
 				complete: false,
 				campaignCodes: [],
 			},
-			test2: {
-				variantName: 'variant',
+			{
+				name: 'test2',
+				variant: 'variant',
 				complete: false,
 				campaignCodes: [],
 			},
-		};
+		];
 		const payload = buildOphanPayload(input);
 		expect(payload).toEqual(expected);
 	});
