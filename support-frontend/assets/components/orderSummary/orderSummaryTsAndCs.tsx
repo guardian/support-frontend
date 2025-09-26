@@ -151,10 +151,16 @@ export function OrderSummaryTsAndCs({
 			)}
 			{guardianWeeklyOrTierThreeProduct(productKey) && (
 				<p>
-					{!isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
-						? `Auto renews every ${periodNoun}. `
-						: ``}
-					Cancel anytime.
+					{isGuardianWeeklyGiftProduct(productKey, ratePlanKey) ? (
+						<>
+							Your Guardian Weekly gift subscription will start on{' '}
+							{deliveryStartDate}. The recipient should receive their first
+							magazine 1 - 7 days after this issue date, depending on national
+							post services.
+						</>
+					) : (
+						<>Auto renews every ${periodNoun}. Cancel anytime.</>
+					)}
 				</p>
 			)}
 		</div>
