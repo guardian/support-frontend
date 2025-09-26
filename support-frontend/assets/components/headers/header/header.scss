@@ -1,8 +1,8 @@
 @use 'sass:math';
 
-@import '~stylesheets/gu-sass/gu-sass';
-@import '~components/headers/veggieBurgerButton/veggieBurgerButton.scss';
-@import '~components/headers/mobileMenu/mobileMenu.scss';
+@import '../../../stylesheets/gu-sass/gu-sass.scss';
+@import '../veggieBurgerButton/veggieBurgerButton.scss';
+@import '../mobileMenu/mobileMenu.scss';
 
 $header-links-min-width: gu-span(12);
 

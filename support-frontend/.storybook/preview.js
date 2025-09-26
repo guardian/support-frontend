@@ -1,5 +1,5 @@
 import { viewports } from './viewports';
-import { withFocusStyleManager } from './decorators/withFocusStyleManager';
+// import { withFocusStyleManager } from './decorators/withFocusStyleManager';
 import '../assets/stylesheets/skeleton/skeleton.scss';
 import MockDate from 'mockdate';
 
@@ -17,7 +17,7 @@ export const parameters = {
 	layout: 'fullscreen',
 };
 
-export const decorators = [withFocusStyleManager];
+// export const decorators = [withFocusStyleManager];
 
 export const argTypes = {
 	cssOverrides: {

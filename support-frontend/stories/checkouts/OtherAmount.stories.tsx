@@ -1,7 +1,7 @@
 import type { OtherAmountProps } from 'components/otherAmount/otherAmount';
 import { OtherAmount } from 'components/otherAmount/otherAmount';
-import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
-import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
+// import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
+// import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
 export default {
 	title: 'Checkouts/Other Amount',
@@ -9,7 +9,7 @@ export default {
 	argTypes: {
 		onOtherAmountChange: { action: 'value changed' },
 	},
-	decorators: [withCenterAlignment, withSourceReset],
+	// decorators: [withCenterAlignment, withSourceReset],
 	parameters: {
 		docs: {
 			description: {
