@@ -16,6 +16,7 @@ import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { Participations } from 'helpers/abTests/models';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type {
 	ActiveProductKey,
@@ -59,7 +60,6 @@ import {
 	getReturnAddress,
 	getThankYouOrder,
 } from '../checkout/helpers/sessionStorage';
-import { getFeatureFlags } from 'helpers/featureFlags';
 
 const thankYouContainer = css`
 	position: relative;

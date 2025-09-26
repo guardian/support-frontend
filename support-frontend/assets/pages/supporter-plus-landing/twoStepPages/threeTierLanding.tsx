@@ -38,6 +38,7 @@ import {
 	getCampaignSettings,
 } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { currencies } from 'helpers/internationalisation/currency';
 import { productCatalog } from 'helpers/productCatalog';
@@ -257,13 +258,17 @@ type ThreeTierLandingProps = {
 export function ThreeTierLanding({
 	supportRegionId,
 	settings,
-	abParticipations,
 }: ThreeTierLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsProduct = urlSearchParams.get('product');
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
 	const urlSearchParamsPromoCode = urlSearchParams.get('promoCode');
+	const { enablePremiumDigital } = getFeatureFlags();
+	console.log(
+		'🚀 ~ ThreeTierLanding ~ enablePremiumDigital:',
+		enablePremiumDigital,
+	);
 
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -423,9 +428,7 @@ export function ThreeTierLanding({
 				? 'DomesticAnnual'
 				: 'DomesticMonthly';
 
-		return abParticipations.newspaperArchiveBenefit === undefined
-			? ratePlanKey
-			: `${ratePlanKey}V2`;
+		return enablePremiumDigital ? `${ratePlanKey}V2` : ratePlanKey;
 	};
 
 	const tier3RatePlan = getTier3RatePlan();
@@ -441,10 +444,7 @@ export function ThreeTierLanding({
 		countryId,
 		billingPeriod,
 		countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
-
-		abParticipations.newspaperArchiveBenefit === undefined
-			? 'NoProductOptions'
-			: 'NewspaperArchive',
+		enablePremiumDigital ? 'NewspaperArchive' : 'NoProductOptions',
 	);
 	if (tier3Promotion) {
 		tier3UrlParams.set('promoCode', tier3Promotion.promoCode);
@@ -459,9 +459,6 @@ export function ThreeTierLanding({
 			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount),
 		...settings.products.TierThree,
 	};
-
-	const showNewspaperArchiveBanner =
-		abParticipations.newspaperArchiveBenefit === 'v2';
 
 	const sanitisedHeading = getSanitisedHtml(settings.copy.heading);
 	const sanitisedSubheading = getSanitisedHtml(settings.copy.subheading);
@@ -613,7 +610,7 @@ export function ThreeTierLanding({
 							billingPeriod={billingPeriod}
 						/>
 					)}
-					{showNewspaperArchiveBanner && <LandingPageBanners />}
+					{enablePremiumDigital && <LandingPageBanners />}
 				</div>
 			</Container>
 			{!enableSingleContributionsTab && (

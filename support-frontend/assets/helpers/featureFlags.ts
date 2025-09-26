@@ -6,6 +6,6 @@ export function getFeatureFlags(): FeatureFlag {
 	const urlParams = new URLSearchParams(window.location.search);
 
 	return {
-		enablePremiumDigital: urlParams.has('premiumDigital'),
+		enablePremiumDigital: urlParams.has('enablePremiumDigital'),
 	};
 }
