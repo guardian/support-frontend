@@ -395,6 +395,7 @@ export const productCatalogDescription: Record<
 			},
 			OneYearGift: {
 				billingPeriod: BillingPeriod.Annual,
+				hideSimilarProductsConsent: true,
 			},
 			Annual: {
 				billingPeriod: BillingPeriod.Annual,
@@ -404,6 +405,7 @@ export const productCatalogDescription: Record<
 			},
 			ThreeMonthGift: {
 				billingPeriod: BillingPeriod.Quarterly,
+				hideSimilarProductsConsent: true,
 			},
 		},
 	},
@@ -418,6 +420,7 @@ export const productCatalogDescription: Record<
 			},
 			OneYearGift: {
 				billingPeriod: BillingPeriod.Annual,
+				hideSimilarProductsConsent: true,
 			},
 			Annual: {
 				billingPeriod: BillingPeriod.Annual,
@@ -427,6 +430,7 @@ export const productCatalogDescription: Record<
 			},
 			ThreeMonthGift: {
 				billingPeriod: BillingPeriod.Quarterly,
+				hideSimilarProductsConsent: true,
 			},
 		},
 	},
