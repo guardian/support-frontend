@@ -1,5 +1,4 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -19,12 +18,11 @@ import YellowHighlightText from './YellowHighlightText';
 type HeadingProps = {
 	name: string | null;
 	productKey: ActiveProductKey;
-	isOneOffPayPal: boolean;
 	amount: number;
 	currency: IsoCurrency;
 	isObserverPrint: boolean;
 	ratePlanKey: ActiveRatePlanKey;
-	paymentStatus?: PaymentStatus;
+	isWeeklyGift: boolean;
 	promotion?: Promotion;
 };
 function Heading({
@@ -34,6 +32,7 @@ function Heading({
 	currency,
 	isObserverPrint,
 	ratePlanKey,
+	isWeeklyGift,
 	promotion,
 }: HeadingProps) {
 	const isDigitalEdition = productKey === 'DigitalSubscription';
@@ -51,7 +50,11 @@ function Heading({
 
 	if (isGuardianPrint) {
 		return (
-			<GuardianPrintHeading productKey={productKey} ratePlanKey={ratePlanKey} />
+			<GuardianPrintHeading
+				productKey={productKey}
+				isWeeklyGift={isWeeklyGift}
+				ratePlanKey={ratePlanKey}
+			/>
 		);
 	}
 

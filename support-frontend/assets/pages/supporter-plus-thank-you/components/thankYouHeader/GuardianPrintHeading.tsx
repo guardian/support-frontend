@@ -8,14 +8,15 @@ import {
 	longHeaderTitleText,
 	weeklyGiftLineBreak,
 } from './headingStyles';
-import { isGuardianWeeklyGiftProduct } from './utils/productMatchers';
 import YellowHighlightText from './YellowHighlightText';
 
 export default function GuardianPrintHeading({
 	productKey,
+	isWeeklyGift,
 	ratePlanKey,
 }: {
 	productKey: ActiveProductKey;
+	isWeeklyGift: boolean;
 	ratePlanKey: ActiveRatePlanKey;
 }) {
 	const thankYouText = 'Thank you for supporting our journalism!';
@@ -33,11 +34,7 @@ export default function GuardianPrintHeading({
 		);
 	}
 
-	const guardianWeeklyGifting = isGuardianWeeklyGiftProduct(
-		productKey,
-		ratePlanKey,
-	);
-	if (guardianWeeklyGifting) {
+	if (isWeeklyGift) {
 		return (
 			<h1 css={longHeaderTitleText}>
 				{thankYouText}

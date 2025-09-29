@@ -215,7 +215,6 @@ export function ThankYouComponent({
 	const isGuardianPrint = isPrint && !observerPrint;
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
-	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = productKey === 'SupporterPlus';
 	const isTierThree = productKey === 'TierThree';
 	const isNationalDelivery = productKey === 'NationalDelivery';
@@ -356,12 +355,11 @@ export function ThankYouComponent({
 							ratePlanKey={ratePlanKey}
 							name={order.firstName}
 							amount={payment.originalAmount}
-							isOneOffPayPal={isOneOffPayPal}
 							isDirectDebitPayment={order.paymentMethod === 'DirectDebit'}
 							currency={currencyKey}
 							promotion={promotion}
+							isWeeklyGift={isWeeklyGift}
 							observerPrint={observerPrint}
-							paymentStatus={order.status}
 							startDate={startDate}
 						/>
 					</div>

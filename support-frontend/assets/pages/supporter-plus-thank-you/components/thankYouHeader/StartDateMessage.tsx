@@ -1,27 +1,21 @@
-import type {
-	ActiveProductKey,
-	ActiveRatePlanKey,
-} from 'helpers/productCatalog';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 import { messageBold, messageMargin } from './MessageStyles';
-import {
-	isGuardianWeeklyGiftProduct,
-	isGuardianWeeklyProduct,
-} from './utils/productMatchers';
+import { isGuardianWeeklyProduct } from './utils/productMatchers';
 
 export default function StartDateMessage({
 	productKey,
-	ratePlanKey,
+	isWeeklyGift,
 	startDate,
 }: {
-	startDate?: string;
-	ratePlanKey: ActiveRatePlanKey;
 	productKey: ActiveProductKey;
+	isWeeklyGift: boolean;
+	startDate?: string;
 }) {
 	if (!startDate) {
 		return null;
 	}
 
-	const weeklyMessage = isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+	const weeklyMessage = isWeeklyGift
 		? `The gift recipient's first issue will be published on`
 		: 'Your first issue will be published on';
 	const deliveryMessage = isGuardianWeeklyProduct(productKey)
