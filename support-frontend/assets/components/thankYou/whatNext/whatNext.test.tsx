@@ -18,6 +18,7 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 			const { container } = render(
 				<WhatNext
 					productKey={productKey}
+					ratePlanKey={'Monthly'}
 					currency={'GBP'}
 					amount={'12'}
 					startDate={'Friday, March 28, 2025'}

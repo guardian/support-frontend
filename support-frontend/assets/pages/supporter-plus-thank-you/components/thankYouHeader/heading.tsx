@@ -18,27 +18,24 @@ import YellowHighlightText from './YellowHighlightText';
 type HeadingProps = {
 	name: string | null;
 	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
 	amount: number;
 	currency: IsoCurrency;
 	isObserverPrint: boolean;
-	ratePlanKey: ActiveRatePlanKey;
-	isWeeklyGift: boolean;
 	promotion?: Promotion;
 };
 function Heading({
 	name,
 	productKey,
+	ratePlanKey,
 	amount,
 	currency,
 	isObserverPrint,
-	ratePlanKey,
-	isWeeklyGift,
 	promotion,
 }: HeadingProps) {
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isTier3 = productKey === 'TierThree';
-
 	const contributionProduct = isContributionProduct(productKey);
 	const isGuardianPrint = isPrintProduct(productKey) && !isObserverPrint;
 
@@ -50,11 +47,7 @@ function Heading({
 
 	if (isGuardianPrint) {
 		return (
-			<GuardianPrintHeading
-				productKey={productKey}
-				isWeeklyGift={isWeeklyGift}
-				ratePlanKey={ratePlanKey}
-			/>
+			<GuardianPrintHeading productKey={productKey} ratePlanKey={ratePlanKey} />
 		);
 	}
 

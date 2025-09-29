@@ -2,9 +2,13 @@ import { palette } from '@guardian/source/foundations';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getCurrencyGlyph } from '@modules/internationalisation/currency';
 import OrderedList from 'components/list/orderedList';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import {
+	isGuardianWeeklyGiftProduct,
 	isGuardianWeeklyProduct,
 	isPrintProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
@@ -13,20 +17,20 @@ import { helpCenterCta, myAccountCta } from './whatNextCta';
 
 export function WhatNext({
 	productKey,
+	ratePlanKey,
 	currency,
 	amount,
 	observerPrint,
 	startDate,
 	isSignedIn = false,
-	isWeeklyGift = false,
 }: {
 	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
 	currency: IsoCurrency;
 	amount: string;
 	startDate?: string;
 	isSignedIn?: boolean;
 	observerPrint?: ObserverPrint;
-	isWeeklyGift?: boolean;
 }) {
 	const isSubscriptionCard = productKey === 'SubscriptionCard';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
@@ -59,7 +63,11 @@ export function WhatNext({
 
 		return (
 			<OrderedList
-				items={isWeeklyGift ? guardianWeeklyGiftItems : guardianWeeklyItems}
+				items={
+					isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+						? guardianWeeklyGiftItems
+						: guardianWeeklyItems
+				}
 			/>
 		);
 	}

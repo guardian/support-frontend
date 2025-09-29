@@ -41,7 +41,6 @@ type ThankYouHeaderProps = {
 	isDirectDebitPayment: boolean;
 	amount: number;
 	currency: IsoCurrency;
-	isWeeklyGift: boolean;
 	observerPrint?: ObserverPrint;
 	startDate?: string;
 	promotion?: Promotion;
@@ -54,7 +53,6 @@ function ThankYouHeader({
 	isDirectDebitPayment,
 	amount,
 	currency,
-	isWeeklyGift,
 	observerPrint,
 	startDate,
 	promotion,
@@ -76,14 +74,13 @@ function ThankYouHeader({
 				currency={currency}
 				isObserverPrint={!!observerPrint}
 				promotion={promotion}
-				isWeeklyGift={isWeeklyGift}
 			/>
 
 			<div css={headerSupportingText}>
 				{showStartDateMessage && (
 					<StartDateMessage
 						productKey={productKey}
-						isWeeklyGift={isWeeklyGift}
+						ratePlanKey={ratePlanKey}
 						startDate={startDate}
 					/>
 				)}

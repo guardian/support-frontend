@@ -47,7 +47,6 @@ import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import {
-	isGuardianWeeklyGiftProduct,
 	isGuardianWeeklyProduct,
 	isPrintProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
@@ -256,16 +255,15 @@ export function ThankYouComponent({
 		ratePlanKey as ActivePaperProductOptions,
 	);
 	const startDate = deliveryDate ? formatUserDate(deliveryDate) : undefined;
-	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 	const thankYouModuleData = getThankYouModuleData(
 		productKey,
+		ratePlanKey,
 		countryGroupId,
 		countryId,
 		csrf,
 		isOneOff,
 		isSupporterPlus,
 		isTierThree,
-		isWeeklyGift,
 		startDate,
 		undefined,
 		undefined,
@@ -356,7 +354,6 @@ export function ThankYouComponent({
 							isDirectDebitPayment={order.paymentMethod === 'DirectDebit'}
 							currency={currencyKey}
 							promotion={promotion}
-							isWeeklyGift={isWeeklyGift}
 							observerPrint={observerPrint}
 							startDate={startDate}
 						/>
