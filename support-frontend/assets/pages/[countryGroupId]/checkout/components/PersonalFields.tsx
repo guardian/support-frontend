@@ -44,7 +44,7 @@ export function PersonalFields({
 						event.target.checkValidity();
 					}}
 					required
-					maxLength={40}
+					maxLength={30}
 					error={firstNameError}
 					pattern={doesNotContainExtendedEmojiOrLeadingSpace}
 					onInvalid={(event) => {
