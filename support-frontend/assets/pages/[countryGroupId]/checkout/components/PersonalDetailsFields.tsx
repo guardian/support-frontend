@@ -31,8 +31,8 @@ type PersonalDetailsFieldsProps = {
 	setLastName: (value: string) => void;
 	email: string;
 	setEmail: (value: string) => void;
-	confirmedEmail?: string;
-	setConfirmedEmail?: (value: string) => void;
+	confirmedEmail: string;
+	setConfirmedEmail: (value: string) => void;
 	phoneNumber: string;
 	setPhoneNumber: (value: string) => void;
 	billingStatePostcode?: BillingStatePostcode;
