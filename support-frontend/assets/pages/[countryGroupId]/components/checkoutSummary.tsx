@@ -14,6 +14,7 @@ import {
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	type ActiveProductKey,
@@ -78,11 +79,9 @@ export default function CheckoutSummary({
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 
-	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
-		abParticipations.newspaperArchiveBenefit ?? '',
-	);
+	const { enablePremiumDigital } = getFeatureFlags();
 	const getProductDescription = () => {
-		if (showNewspaperArchiveBenefit) {
+		if (enablePremiumDigital) {
 			return productCatalogDescriptionNewBenefits(countryGroupId)[productKey];
 		}
 		if (isWeeklyGift) {
@@ -91,7 +90,6 @@ export default function CheckoutSummary({
 		return productCatalogDescription[productKey];
 	};
 	const productDescription = getProductDescription();
-
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
 	};
