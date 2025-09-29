@@ -107,7 +107,8 @@ export function FooterTsAndCs({
 	return (
 		<div css={marginTop}>
 			By proceeding, you are agreeing to {getProductNameSummary()}{' '}
-			{getProductTerms()}. {weeklyGiftTerms}
+			{getProductTerms()}.
+			{weeklyGiftTerms && ` ${weeklyGiftTerms}`}
 			<p css={marginTop}>
 				To find out what personal data we collect and how we use it, please
 				visit our {privacy}.
