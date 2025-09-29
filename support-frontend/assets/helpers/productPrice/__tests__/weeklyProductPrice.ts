@@ -5,7 +5,7 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
 import { getWeeklyFulfilmentOption } from '../../productCatalogToFulfilmentOption';
 
-jest.mock('ophan', () => () => ({}));
+jest.mock('@guardian/ophan-tracker-js', () => () => ({}));
 
 // ----- Tests ----- //
 const productPrices = {

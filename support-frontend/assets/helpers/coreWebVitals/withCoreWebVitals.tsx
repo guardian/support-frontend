@@ -1,6 +1,6 @@
 import { initCoreWebVitals } from '@guardian/core-web-vitals';
 import { getCookie } from '@guardian/libs';
-import { viewId } from 'ophan';
+import { viewId } from '@guardian/ophan-tracker-js/support';
 import { useEffect } from 'react';
 import { isProd } from 'helpers/urls/url';
 

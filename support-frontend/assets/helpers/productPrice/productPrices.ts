@@ -83,6 +83,17 @@ function getCurrency(country: IsoCountry): IsoCurrency {
 	return currency;
 }
 
+function hackRemoveMeDiscount(discountPercentage: number) {
+	// We have had a misunderstanding around how to get the correct
+	// rounding for discount percentages. This is a temporary fix
+	if (discountPercentage === 49) {
+		return 50;
+	} else if (discountPercentage === 34) {
+		return 35;
+	}
+	return discountPercentage;
+}
+
 /**
  * @param discountedPrice - price after promo discount applied to online price
  * @param onlineVsRetailPerc - % discount of normal online price vs retail price
@@ -101,7 +112,7 @@ const getDiscountVsRetail = (
 	 * even by a fraction of a %. Therefore
 	 * we always round down to the nearest whole number.
 	 */
-	return Math.floor(totalSavingVsRetail);
+	return hackRemoveMeDiscount(Math.floor(totalSavingVsRetail));
 };
 
 const allProductPrices = window.guardian.allProductPrices;

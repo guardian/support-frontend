@@ -34,6 +34,7 @@ function ThankYouModules({
 		<div css={mansory} data-testid="thankyou-modules">
 			{thankYouModules.map((moduleType) => (
 				<ThankYouModule
+					key={moduleType}
 					moduleType={moduleType}
 					isSignedIn={isSignedIn}
 					{...thankYouModulesData[moduleType]}

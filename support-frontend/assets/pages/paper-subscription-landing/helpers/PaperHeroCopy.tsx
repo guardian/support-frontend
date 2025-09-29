@@ -13,9 +13,9 @@ const bodyPaperPlus = `From political insight to the perfect pasta, there’s so
 		are, whenever you like.`;
 
 function titlePaperPlus(productPrices: ProductPrices): string {
-	return `Save up to ${
-		getMaxSavingVsRetail(productPrices) ?? 0
-	}% with a Guardian print subscription`;
+	return `Save up to ${Math.floor(
+		getMaxSavingVsRetail(productPrices) ?? 0,
+	)}% with a Guardian print subscription`;
 }
 
 export function getPaperPlusItems(
