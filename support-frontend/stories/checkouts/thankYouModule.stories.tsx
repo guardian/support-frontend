@@ -317,12 +317,7 @@ WhatNextGuardianAdLiteNoStartDate.args = {
 	icon: getThankYouModuleIcon('whatNext'),
 	header: 'What happens next?',
 	bodyCopy: (
-		<WhatNext
-			productKey="GuardianAdLite"
-			ratePlanKey="Monthly"
-			currency={'GBP'}
-			amount={'5'}
-		/>
+		<WhatNext productKey="GuardianAdLite" currency={'GBP'} amount={'5'} />
 	),
 };
 
@@ -334,7 +329,6 @@ WhatNextGuardianAdLiteSignedIn.args = {
 	bodyCopy: (
 		<WhatNext
 			productKey="GuardianAdLite"
-			ratePlanKey="Monthly"
 			currency={'GBP'}
 			amount={'5'}
 			startDate={'Friday, March 28, 2025'}
@@ -351,7 +345,6 @@ WhatNextGuardianAdLiteSignedOut.args = {
 	bodyCopy: (
 		<WhatNext
 			productKey="GuardianAdLite"
-			ratePlanKey="Monthly"
 			currency={'GBP'}
 			amount={'5'}
 			startDate={'Friday, March 28, 2025'}
@@ -368,7 +361,6 @@ WhatNextObserverPaper.args = {
 	ctas: (
 		<WhatNext
 			productKey="HomeDelivery"
-			ratePlanKey="Monthly"
 			currency={'GBP'}
 			amount={'20.99'}
 			startDate={'Friday, March 28, 2025'}
@@ -386,7 +378,6 @@ WhatNextObserverSubsCard.args = {
 	ctas: (
 		<WhatNext
 			productKey="SubscriptionCard"
-			ratePlanKey="Monthly"
 			currency={'GBP'}
 			amount={'20.99'}
 			startDate={'Friday, March 28, 2025'}
@@ -404,7 +395,6 @@ WhatNextGuardianWeekly.args = {
 	ctas: (
 		<WhatNext
 			productKey="GuardianWeeklyDomestic"
-			ratePlanKey="Monthly"
 			currency={'GBP'}
 			amount={'16.50'}
 			startDate={'Friday, March 28, 2025'}
@@ -421,11 +411,11 @@ WhatNextGuardianWeeklyGift.args = {
 	ctas: (
 		<WhatNext
 			productKey="GuardianWeeklyDomestic"
-			ratePlanKey="OneYearGift"
 			currency={'GBP'}
 			amount={'198'}
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}
+			isWeeklyGift={true}
 		/>
 	),
 };

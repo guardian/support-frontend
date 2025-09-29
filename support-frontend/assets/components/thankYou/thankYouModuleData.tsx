@@ -12,10 +12,7 @@ import {
 	BenefitsCheckList,
 	type BenefitsCheckListData,
 } from 'components/checkoutBenefits/benefitsCheckList';
-import type {
-	ActiveProductKey,
-	ActiveRatePlanKey,
-} from 'helpers/productCatalog';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import {
 	setThankYouFeedbackSurveyHasBeenCompleted,
@@ -114,13 +111,13 @@ const defaultFeedbackSurveyHasBeenCompleted = false;
 
 export const getThankYouModuleData = (
 	productKey: ActiveProductKey,
-	ratePlanKey: ActiveRatePlanKey,
 	countryGroupId: CountryGroupId,
 	countryId: IsoCountry,
 	csrf: CsrfState,
 	isOneOff: boolean,
 	amountIsAboveThreshold: boolean,
 	isTierThree: boolean,
+	isWeeklyGift: boolean,
 	startDate?: string,
 	email?: string,
 	campaignCode?: string,
@@ -353,11 +350,11 @@ export const getThankYouModuleData = (
 				<WhatNext
 					productKey={productKey}
 					currency={getCurrency(countryId)}
-					ratePlanKey={ratePlanKey}
 					amount={(finalAmount ?? '').toString()}
 					startDate={startDate}
 					isSignedIn={isSignedIn}
 					observerPrint={observerPrint}
+					isWeeklyGift={isWeeklyGift}
 				/>
 			),
 			ctas: null,
