@@ -19,7 +19,6 @@ import {
 	type ActiveProductKey,
 	type ActiveRatePlanKey,
 	productCatalogDescription,
-	productCatalogDescriptionNewBenefits,
 } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -52,6 +51,7 @@ type CheckoutSummaryProps = {
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
+	showNewspaperArchiveBenefit?: boolean;
 };
 
 export default function CheckoutSummary({
@@ -68,6 +68,7 @@ export default function CheckoutSummary({
 	weeklyDeliveryDate,
 	thresholdAmount,
 	studentDiscount,
+	showNewspaperArchiveBenefit,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
@@ -75,13 +76,7 @@ export default function CheckoutSummary({
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 
-	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
-		abParticipations.newspaperArchiveBenefit ?? '',
-	);
-
-	const productDescription = showNewspaperArchiveBenefit
-		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
-		: productCatalogDescription[productKey];
+	const productDescription = productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
 	};
@@ -119,7 +114,12 @@ export default function CheckoutSummary({
 
 	const benefitsCheckListData =
 		getPaperPlusDigitalBenefits(ratePlanKey, productKey) ??
-		getBenefitsChecklistFromLandingPageTool(productKey, landingPageSettings) ??
+		getBenefitsChecklistFromLandingPageTool(
+			productKey,
+			landingPageSettings,
+			countryGroupId,
+			showNewspaperArchiveBenefit,
+		) ??
 		getBenefitsChecklistFromProductDescription(
 			productDescription,
 			countryGroupId,

@@ -48,7 +48,6 @@ import {
 	type ActiveProductKey,
 	type ActiveRatePlanKey,
 	productCatalogDescription,
-	productCatalogDescriptionNewBenefits,
 	showSimilarProductsConsentForRatePlan,
 } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
@@ -196,13 +195,8 @@ export default function CheckoutForm({
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 
-	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
-		abParticipations.newspaperArchiveBenefit ?? '',
-	);
+	const productDescription = productCatalogDescription[productKey];
 
-	const productDescription = showNewspaperArchiveBenefit
-		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
-		: productCatalogDescription[productKey];
 	const hasDeliveryAddress = !!productDescription.deliverableTo;
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
