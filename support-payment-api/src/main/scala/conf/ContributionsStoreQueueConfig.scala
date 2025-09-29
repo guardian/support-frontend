@@ -2,10 +2,9 @@ package conf
 
 import cats.data.Validated
 import cats.syntax.apply._
-import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
-
 import conf.ConfigLoader._
 import model.{Environment, InitializationError}
+import software.amazon.awssdk.services.ssm.model.GetParametersByPathRequest
 
 case class ContributionsStoreQueueConfig(queueUrl: String, keyId: String)
 
@@ -16,10 +15,12 @@ object ContributionsStoreQueueConfig {
     new ParameterStoreLoadable[Environment, ContributionsStoreQueueConfig] {
 
       override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
-        new GetParametersByPathRequest()
-          .withPath(s"/payment-api/contributions-store-queue/${environment.entryName}/")
-          .withRecursive(false)
-          .withWithDecryption(true)
+        GetParametersByPathRequest
+          .builder()
+          .path(s"/payment-api/contributions-store-queue/${environment.entryName}/")
+          .recursive(false)
+          .withDecryption(true)
+          .build()
 
       override def decode(
           environment: Environment,

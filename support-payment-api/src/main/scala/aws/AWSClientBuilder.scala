@@ -5,11 +5,10 @@ import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentia
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.cloudwatch.{AmazonCloudWatchAsync, AmazonCloudWatchAsyncClientBuilder}
 import com.amazonaws.services.s3.{AmazonS3, AmazonS3ClientBuilder}
-import com.amazonaws.services.simplesystemsmanagement.{
-  AWSSimpleSystemsManagement,
-  AWSSimpleSystemsManagementClientBuilder,
-}
 import com.amazonaws.services.sqs.{AmazonSQSAsync, AmazonSQSAsyncClientBuilder}
+import software.amazon.awssdk.regions.Region
+import software.amazon.awssdk.services.ssm.SsmClient
+import com.gu.aws.CredentialsProvider
 
 object AWSClientBuilder {
 
@@ -18,14 +17,14 @@ object AWSClientBuilder {
     new InstanceProfileCredentialsProvider(false),
   )
 
-  def buildAWSSimpleSystemsManagementClient(): AWSSimpleSystemsManagement =
-    AWSSimpleSystemsManagementClientBuilder
-      .standard()
+  def buildSsmClient(): SsmClient =
+    SsmClient
+      .builder()
       // I don't understand why I need to supply this explicitly here,
       // whereas I can run support-frontend locally fine without supplying this
       // or having it set in my environment
-      .withRegion(Regions.EU_WEST_1)
-      .withCredentials(credentialsProvider)
+      .region(Region.EU_WEST_1)
+      .credentialsProvider(CredentialsProvider)
       .build()
 
   def buildAmazonSQSAsyncClient(): AmazonSQSAsync =

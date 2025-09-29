@@ -2,10 +2,9 @@ package conf
 
 import cats.data.Validated
 import cats.syntax.apply._
-import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
-
 import conf.ConfigLoader._
 import model.{Environment, InitializationError}
+import software.amazon.awssdk.services.ssm.model.GetParametersByPathRequest
 
 case class IdentityConfig(endpoint: String, accessToken: String)
 
@@ -15,10 +14,12 @@ object IdentityConfig {
     new ParameterStoreLoadable[Environment, IdentityConfig] {
 
       override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
-        new GetParametersByPathRequest()
-          .withPath(s"/payment-api/identity-config/${environment.entryName}/")
-          .withWithDecryption(true)
-          .withRecursive(false)
+        GetParametersByPathRequest
+          .builder()
+          .path(s"/payment-api/identity-config/${environment.entryName}/")
+          .withDecryption(true)
+          .recursive(false)
+          .build()
 
       override def decode(
           environment: Environment,

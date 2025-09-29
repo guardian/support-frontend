@@ -6,7 +6,6 @@ import com.amazon.pay.impl.ipn.NotificationFactory
 import com.amazon.pay.response.ipn.model.Notification
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
-import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
 import com.typesafe.scalalogging.StrictLogging
 import conf.{ConfigLoader, PlayConfigUpdater}
 import model.{AppThreadPools, AppThreadPoolsProvider, RequestEnvironments}
@@ -17,6 +16,7 @@ import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSComponents
 import router.Routes
 import services.CloudWatchService
+import software.amazon.awssdk.services.ssm.SsmClient
 import util.RequestBasedProvider
 
 import scala.jdk.CollectionConverters._
@@ -51,7 +51,7 @@ class MyComponents(context: Context)
   // This will determine, later on, whether passing the "?mode=test" param has any effect
   val requestEnvironments: RequestEnvironments = RequestEnvironments.fromAppStage
 
-  val ssm: AWSSimpleSystemsManagement = AWSClientBuilder.buildAWSSimpleSystemsManagementClient()
+  val ssm: SsmClient = AWSClientBuilder.buildSsmClient()
 
   val configLoader: ConfigLoader = new ConfigLoader(ssm)
   val playConfigUpdater = new PlayConfigUpdater(configLoader)

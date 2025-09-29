@@ -1,10 +1,9 @@
 package conf
 
 import cats.data.Validated
-import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
-
 import conf.ConfigLoader._
 import model.{Environment, InitializationError}
+import software.amazon.awssdk.services.ssm.model.GetParametersByPathRequest
 
 case class EmailConfig(queueName: String)
 
@@ -14,10 +13,12 @@ object EmailConfig {
     new ParameterStoreLoadable[Environment, EmailConfig] {
 
       override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
-        new GetParametersByPathRequest()
-          .withPath(s"/payment-api/email-config/${environment.entryName}/")
-          .withRecursive(false)
-          .withWithDecryption(true)
+        GetParametersByPathRequest
+          .builder()
+          .path(s"/payment-api/email-config/${environment.entryName}/")
+          .recursive(false)
+          .withDecryption(true)
+          .build()
 
       override def decode(
           environment: Environment,

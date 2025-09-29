@@ -5,17 +5,17 @@ import cats.data.Validated
 import cats.syntax.either._
 import cats.syntax.validated._
 import cats.syntax.show._
-import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
-import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
 
 import scala.annotation.tailrec
 import scala.jdk.CollectionConverters._
 import scala.reflect._
 import model.{Environment, InitializationError, InitializationResult}
 import play.api.Mode
+import software.amazon.awssdk.services.ssm.SsmClient
+import software.amazon.awssdk.services.ssm.model.GetParametersByPathRequest
 
 // Load config from AWS parameter store.
-class ConfigLoader(ssm: AWSSimpleSystemsManagement) {
+class ConfigLoader(ssm: SsmClient) {
   import ConfigLoader._
 
   @tailrec private def executePathRequestImpl(
@@ -23,13 +23,16 @@ class ConfigLoader(ssm: AWSSimpleSystemsManagement) {
       data: Map[String, String],
   ): Map[String, String] = {
     val result = ssm.getParametersByPath(request)
-    val updatedData = data ++ result.getParameters.asScala.map { param =>
+    val updatedData = data ++ result.parameters().asScala.map { param =>
       // e.g. /hello/world/password => password
-      param.getName.stripPrefix(request.getPath) -> param.getValue
+      param.name().stripPrefix(request.path()) -> param.value()
     }
-    // Cleaner to wrap in an option and fold, but then the function wouldn't be tail recursive.
-    if (result.getNextToken == null) updatedData
-    else executePathRequestImpl(request.withNextToken(result.getNextToken), updatedData)
+    val token = result.nextToken()
+    if (token == null || token.isEmpty) updatedData
+    else {
+      val nextReq = request.toBuilder.nextToken(token).build()
+      executePathRequestImpl(nextReq, updatedData)
+    }
   }
 
   private def executePathRequest[EnvType: Show, A: ClassTag](
