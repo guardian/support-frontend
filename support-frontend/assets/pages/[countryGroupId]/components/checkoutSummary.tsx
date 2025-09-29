@@ -27,6 +27,7 @@ import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { parameteriseUrl } from 'helpers/urls/routes';
+import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
@@ -54,7 +55,6 @@ type CheckoutSummaryProps = {
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
-	isWeeklyGift?: boolean;
 };
 
 export default function CheckoutSummary({
@@ -71,14 +71,13 @@ export default function CheckoutSummary({
 	weeklyDeliveryDate,
 	thresholdAmount,
 	studentDiscount,
-	isWeeklyGift,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
-
+	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 	const { enablePremiumDigital } = getFeatureFlags();
 	const getProductDescription = () => {
 		if (enablePremiumDigital) {
@@ -199,8 +198,8 @@ export default function CheckoutSummary({
 					startDate={
 						<OrderSummaryStartDate
 							productKey={productKey}
+							ratePlanKey={ratePlanKey}
 							startDate={formatUserDate(weeklyDeliveryDate)}
-							isWeeklyGift={isWeeklyGift}
 						/>
 					}
 					tsAndCs={

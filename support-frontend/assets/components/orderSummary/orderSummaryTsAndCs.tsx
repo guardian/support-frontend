@@ -51,16 +51,19 @@ const productStartDate = css`
 `;
 
 interface OrderSummaryStartDateProps {
-	startDate: string;
 	productKey: ActiveProductKey;
-	isWeeklyGift?: boolean;
+	ratePlanKey: ActiveRatePlanKey;
+	startDate: string;
 }
 export function OrderSummaryStartDate({
-	startDate,
 	productKey,
-	isWeeklyGift,
+	ratePlanKey,
+	startDate,
 }: OrderSummaryStartDateProps): JSX.Element | null {
-	if (isGuardianWeeklyOrTierThreeProduct(productKey) && !isWeeklyGift) {
+	if (
+		isGuardianWeeklyOrTierThreeProduct(productKey) &&
+		!isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+	) {
 		return (
 			<ul css={productStartDate}>
 				{productKey === 'TierThree' && (

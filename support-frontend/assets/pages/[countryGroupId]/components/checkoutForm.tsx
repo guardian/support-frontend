@@ -63,6 +63,7 @@ import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/comp
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
+import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
@@ -134,7 +135,6 @@ type CheckoutFormProps = {
 	setWeeklyDeliveryDate: (value: Date) => void;
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
-	isWeeklyGift?: boolean;
 };
 
 const getPaymentMethods = (
@@ -188,7 +188,6 @@ export default function CheckoutForm({
 	setWeeklyDeliveryDate,
 	thresholdAmount,
 	studentDiscount,
-	isWeeklyGift = false,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
@@ -242,6 +241,7 @@ export default function CheckoutForm({
 		},
 	});
 
+	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 	const legendPrefix = isWeeklyGift
 		? LEGEND_PREFIX_WEEKLY_GIFT
 		: LEGEND_PREFIX_DEFAULT;
@@ -1146,7 +1146,6 @@ export default function CheckoutForm({
 							studentDiscount={studentDiscount}
 							promotion={promotion}
 							thresholdAmount={thresholdAmount}
-							isWeeklyGift={isWeeklyGift}
 						/>
 					</BoxContents>
 				</Box>

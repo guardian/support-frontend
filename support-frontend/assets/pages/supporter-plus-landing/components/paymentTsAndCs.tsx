@@ -32,6 +32,7 @@ import { helpCentreUrl } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { FinePrint } from './finePrint';
 import { ManageMyAccountLink } from './manageMyAccountLink';
@@ -60,11 +61,11 @@ const termsLink = (linkText: string, url: string) => (
 export function FooterTsAndCs({
 	productKey,
 	countryGroupId,
-	isWeeklyGift,
+	ratePlanKey,
 }: {
 	productKey: ActiveProductKey;
 	countryGroupId: CountryGroupId;
-	isWeeklyGift?: boolean;
+	ratePlanKey?: ActiveRatePlanKey;
 }) {
 	const privacy = <a href={privacyLink}>Privacy Policy</a>;
 	const getProductNameSummary = (): string => {
@@ -101,7 +102,7 @@ export function FooterTsAndCs({
 				);
 		}
 	};
-	const weeklyGiftTerms = isWeeklyGift
+	const weeklyGiftTerms = isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
 		? ' To cancel, go to Manage My Account or see our Terms. This subscription does not auto-renew.'
 		: '';
 	return (
@@ -193,7 +194,6 @@ export interface PaymentTsAndCsProps {
 	studentDiscount?: StudentDiscount;
 	promotion?: Promotion;
 	thresholdAmount?: number;
-	isWeeklyGift?: boolean;
 }
 export function PaymentTsAndCs({
 	productKey,
@@ -202,7 +202,6 @@ export function PaymentTsAndCs({
 	studentDiscount,
 	promotion,
 	thresholdAmount = 0,
-	isWeeklyGift,
 }: PaymentTsAndCsProps): JSX.Element {
 	// Display for AUS Students who are on a subscription basis
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
@@ -218,6 +217,7 @@ export function PaymentTsAndCs({
 		productKey,
 		ratePlanKey as ActivePaperProductOptions,
 	);
+	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 
 	if (isSundayOnlyNewsletterSubscription) {
 		return (
@@ -352,8 +352,8 @@ export function PaymentTsAndCs({
 				{paymentTsAndCs[productKey]}
 				<FooterTsAndCs
 					productKey={productKey}
+					ratePlanKey={ratePlanKey}
 					countryGroupId={countryGroupId}
-					isWeeklyGift={isWeeklyGift}
 				/>
 			</FinePrint>
 		</div>
