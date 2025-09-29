@@ -423,7 +423,7 @@ export function ThreeTierLanding({
 				? 'DomesticAnnual'
 				: 'DomesticMonthly';
 
-		return enablePremiumDigital ? `${ratePlanKey}V2` : ratePlanKey;
+		return ratePlanKey;
 	};
 
 	const tier3RatePlan = getTier3RatePlan();
