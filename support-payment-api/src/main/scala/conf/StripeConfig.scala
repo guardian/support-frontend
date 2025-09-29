@@ -31,12 +31,7 @@ object StripeConfig {
     new ParameterStoreLoadable[Environment, StripeConfig] {
 
       override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
-        GetParametersByPathRequest
-          .builder()
-          .path(s"/payment-api/stripe-config/${environment.entryName}/")
-          .withDecryption(true)
-          .recursive(false)
-          .build()
+        buildPathRequest(s"/payment-api/stripe-config/${environment.entryName}/")
 
       override def decode(
           environment: Environment,

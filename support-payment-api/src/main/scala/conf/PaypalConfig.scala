@@ -15,12 +15,7 @@ object PaypalConfig {
     new ParameterStoreLoadable[Environment, PaypalConfig] {
 
       override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
-        GetParametersByPathRequest
-          .builder()
-          .path(s"/payment-api/paypal-config/${environment.entryName}/")
-          .recursive(false)
-          .withDecryption(true)
-          .build()
+        buildPathRequest(s"/payment-api/paypal-config/${environment.entryName}/")
 
       override def decode(
           environment: Environment,

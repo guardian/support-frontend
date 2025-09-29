@@ -68,6 +68,13 @@ object ConfigLoader {
     // Parameters should be organised such that they can be obtained using a single path request.
     def parametersByPathRequest(environment: EnvType): GetParametersByPathRequest
 
+    protected def buildPathRequest(path: String): GetParametersByPathRequest = GetParametersByPathRequest
+      .builder()
+      .path(path)
+      .recursive(false)
+      .withDecryption(true)
+      .build()
+
     // The config loader takes care of executing the request and deserializing it to a Map[String, String]
     // The typeclass instance should then be able to transform this to an instance of A.
     def decode(environment: EnvType, data: Map[String, String]): Validated[InitializationError, A]

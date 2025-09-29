@@ -15,12 +15,7 @@ object ContributionsStoreQueueConfig {
     new ParameterStoreLoadable[Environment, ContributionsStoreQueueConfig] {
 
       override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
-        GetParametersByPathRequest
-          .builder()
-          .path(s"/payment-api/contributions-store-queue/${environment.entryName}/")
-          .recursive(false)
-          .withDecryption(true)
-          .build()
+        buildPathRequest(s"/payment-api/contributions-store-queue/${environment.entryName}/")
 
       override def decode(
           environment: Environment,

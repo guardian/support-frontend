@@ -14,12 +14,7 @@ object AppConfig {
     new ParameterStoreLoadable[Mode, AppConfig] {
 
       override def parametersByPathRequest(mode: Mode): GetParametersByPathRequest =
-        GetParametersByPathRequest
-          .builder()
-          .path(s"/payment-api/app-config/${mode.asJava.toString.toLowerCase}/")
-          .recursive(false)
-          .withDecryption(true)
-          .build()
+        buildPathRequest(s"/payment-api/app-config/${mode.asJava.toString.toLowerCase}/")
 
       override def decode(mode: Mode, data: Map[String, String]): Validated[InitializationError, AppConfig] = {
         val validator = new ParameterStoreValidator[AppConfig, Mode](mode, data); import validator._

@@ -14,12 +14,7 @@ object IdentityConfig {
     new ParameterStoreLoadable[Environment, IdentityConfig] {
 
       override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
-        GetParametersByPathRequest
-          .builder()
-          .path(s"/payment-api/identity-config/${environment.entryName}/")
-          .withDecryption(true)
-          .recursive(false)
-          .build()
+        buildPathRequest(s"/payment-api/identity-config/${environment.entryName}/")
 
       override def decode(
           environment: Environment,

@@ -16,12 +16,7 @@ object GoCardlessConfig {
     new ParameterStoreLoadable[Environment, GoCardlessConfig] {
 
       override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
-        GetParametersByPathRequest
-          .builder()
-          .path(s"/payment-api/gocardless-config/${environment.entryName}/")
-          .recursive(false)
-          .withDecryption(true)
-          .build()
+        buildPathRequest(s"/payment-api/gocardless-config/${environment.entryName}/")
 
       override def decode(
           paymentApiEnvironment: Environment,
