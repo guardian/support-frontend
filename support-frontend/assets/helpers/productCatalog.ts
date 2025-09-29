@@ -203,14 +203,14 @@ const partnerOffersBenefit = {
 		'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
 	specificToRegions: ['AUDCountries'],
 };
-const guardianWeeklyToolTip = `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`;
+const guardianWeeklyTooltip = `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`;
 const guardianWeeklyBenefit = {
 	copy: 'Guardian Weekly print magazine delivered to your door every week',
-	tooltip: guardianWeeklyToolTip,
+	tooltip: guardianWeeklyTooltip,
 };
 const guardianWeeklyGiftBenefit = {
 	copy: `Guardian Weekly print magazine delivered to your recipient's door`,
-	tooltip: guardianWeeklyToolTip,
+	tooltip: guardianWeeklyTooltip,
 };
 
 const feastBenefit = {
