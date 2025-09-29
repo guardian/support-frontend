@@ -12,7 +12,6 @@ import {
 	Button,
 	SvgChevronDownSingle,
 } from '@guardian/source/react-components';
-import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { useState } from 'react';
 import {
 	BenefitsCheckList,
@@ -22,10 +21,14 @@ import { CheckoutNudgeThankYou } from 'components/checkoutNudge/checkoutNudge';
 import type { Participations } from 'helpers/abTests/models';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
-import type { ActiveRatePlanKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { PriceSummary } from './priceSummary';
 
 const componentStyles = css`
@@ -131,7 +134,7 @@ const termsAndConditions = css`
 `;
 
 export type ContributionsOrderSummaryProps = {
-	productKey: ProductKey;
+	productKey: ActiveProductKey;
 	productLabel: string;
 	ratePlanKey: ActiveRatePlanKey;
 	ratePlanLabel?: string;
@@ -148,7 +151,6 @@ export type ContributionsOrderSummaryProps = {
 	tsAndCsTier3?: React.ReactNode;
 	abParticipations?: Participations;
 	studentDiscount?: StudentDiscount;
-	isWeeklyGift?: boolean;
 };
 
 export function ContributionsOrderSummary({
@@ -168,7 +170,6 @@ export function ContributionsOrderSummary({
 	enableCheckList,
 	abParticipations,
 	studentDiscount,
-	isWeeklyGift,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -225,6 +226,7 @@ export function ContributionsOrderSummary({
 		/>
 	);
 
+	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 	const productLabelGift = `${
 		isWeeklyGift ? 'Guardian Weekly Gift Subscription' : productLabel
 	}`;

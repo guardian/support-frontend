@@ -219,7 +219,6 @@ export default function CheckoutSummary({
 					}
 					abParticipations={abParticipations}
 					studentDiscount={studentDiscount}
-					isWeeklyGift={isWeeklyGift}
 				/>
 			</BoxContents>
 		</Box>

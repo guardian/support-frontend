@@ -87,7 +87,7 @@ Template.args = {} as ContributionsOrderSummaryProps;
 
 export const Default = Template.bind({});
 Default.args = {
-	productKey: 'SupporterMembership',
+	productKey: 'SupporterPlus',
 	ratePlanKey: 'Monthly',
 	productLabel: 'Monthly support',
 	paymentFrequency: 'month',
@@ -142,7 +142,7 @@ SingleContribution.args = {
 
 export const RecurringContribution = Template.bind({});
 RecurringContribution.args = {
-	productKey: 'SupporterMembership',
+	productKey: 'SupporterPlus',
 	ratePlanKey: 'Monthly',
 	productLabel: 'Support',
 	enableCheckList: true,
