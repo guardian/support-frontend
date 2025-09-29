@@ -67,8 +67,6 @@ export function ratePlanToBillingPeriod(
 		case 'Annual':
 		case 'RestOfWorldAnnual':
 		case 'DomesticAnnual':
-		case 'RestOfWorldAnnualV2':
-		case 'DomesticAnnualV2':
 		case 'OneYearGift':
 		case 'OneYearStudent':
 		case 'V1DeprecatedAnnual':
@@ -79,8 +77,6 @@ export function ratePlanToBillingPeriod(
 		case 'Monthly':
 		case 'RestOfWorldMonthly':
 		case 'DomesticMonthly':
-		case 'RestOfWorldMonthlyV2':
-		case 'DomesticMonthlyV2':
 		case 'Everyday':
 		case 'Sixday':
 		case 'Weekend':
