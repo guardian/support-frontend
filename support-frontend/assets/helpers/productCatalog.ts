@@ -465,22 +465,48 @@ export const productCatalogDescription: Record<
 	},
 };
 
-export function productCatalogDescriptionNewBenefits(
+const paperArchiveDigitalBenefit = (countryGroupId: CountryGroupId) => {
+	return {
+		copy: `Access the Guardian's 200-year print archive`,
+		isNew: true,
+		tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed${
+			countryGroupId !== 'GBPCountries' ? ' in the UK' : ''
+		}, since 1821.`,
+	};
+};
+const weeklyDigitalBenefit = () => {
+	return {
+		copy: `Guardian Weekly digital sit amet, consec tetur adipiscing elit`,
+		isNew: true,
+		tooltip: `Guardian Weekly digital sit amet, consec tetur adipiscing elit`,
+	};
+};
+const editionsDigitalBenefit = () => {
+	return {
+		copy: `Daily editions sit amet, consec tetur adipiscing elit`,
+		isNew: true,
+		tooltip: `Daily editions sit amet, consec tetur adipiscing elit`,
+	};
+};
+
+export function productCatalogDescriptionPremiumDigital(
 	countryGroupId: CountryGroupId,
-) {
+): Record<ActiveProductKey, ProductDescription> {
 	return {
 		...productCatalogDescription,
+		DigitalSubscription: {
+			...productCatalogDescription.DigitalSubscription,
+			benefits: [
+				weeklyDigitalBenefit(),
+				editionsDigitalBenefit(),
+				paperArchiveDigitalBenefit(countryGroupId),
+			],
+		},
 		TierThree: {
 			...productCatalogDescription.TierThree,
 			benefits: [
 				...productCatalogDescription.TierThree.benefits,
-				{
-					copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
-					isNew: true,
-					tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed${
-						countryGroupId !== 'GBPCountries' ? ' in the UK' : ''
-					}, since 1821.`,
-				},
+				paperArchiveDigitalBenefit(countryGroupId),
 			],
 		},
 	};

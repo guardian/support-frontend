@@ -20,7 +20,7 @@ import {
 	type ActiveProductKey,
 	type ActiveRatePlanKey,
 	productCatalogDescription,
-	productCatalogDescriptionNewBenefits,
+	productCatalogDescriptionPremiumDigital,
 } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -79,7 +79,7 @@ export default function CheckoutSummary({
 	const { enablePremiumDigital } = getFeatureFlags();
 
 	const productDescription = enablePremiumDigital
-		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
+		? productCatalogDescriptionPremiumDigital(countryGroupId)[productKey]
 		: productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
