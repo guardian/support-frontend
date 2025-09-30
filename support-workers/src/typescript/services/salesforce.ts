@@ -246,9 +246,7 @@ export const createPrintContactRecordRequest = (
 		OtherCity: user.billingAddress.city ?? null,
 		OtherState: user.billingAddress.state ?? null,
 		OtherPostalCode: user.billingAddress.postCode ?? null,
-		OtherCountry: user.billingAddress.country
-			? getCountryNameByIsoCode(user.billingAddress.country)
-			: null,
+		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
 		MailingStreet: user.deliveryAddress
 			? getAddressLine(user.deliveryAddress)
 			: null,
