@@ -50,7 +50,7 @@ object Catalog {
       val ratePlanCharges = productRatePlan.productRatePlanCharges.flatMap(_.pricing)
       val priceListSum = sumPriceLists(ratePlanCharges)
       val id = productRatePlan.id
-      val saving = productRatePlan.Saving__c.map(_.toInt)
+      val saving = productRatePlan.Saving__c.map(_.toFloat)
       Pricelist(id, saving, priceListSum)
     }
 

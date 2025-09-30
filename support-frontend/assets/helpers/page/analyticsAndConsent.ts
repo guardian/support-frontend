@@ -1,9 +1,8 @@
 // ----- Imports ----- //
 
-import type { ConsentState } from '@guardian/libs';
+import type { ConsentState, CountryCode } from '@guardian/libs';
 import { cmp, getCookie, onConsent } from '@guardian/libs';
-import type { IsoCountry } from '@modules/internationalisation/country';
-import ophan from 'ophan';
+import { init, record, viewId } from '@guardian/ophan-tracker-js/support';
 import type { Participations } from 'helpers/abTests/models';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
@@ -13,9 +12,27 @@ import { init as initLogger } from 'helpers/utilities/logger';
 import {
 	setReferrerDataInLocalStorage,
 	trackAbTests,
+	trackBFCacheLoad,
 } from '../tracking/trackingOphan';
 
 // ----- Functions ----- //
+
+let hasRegisteredBFCacheTracking = false;
+
+const registerBFCacheTracking = (): void => {
+	if (hasRegisteredBFCacheTracking || typeof window === 'undefined') {
+		return;
+	}
+
+	const handlePageShow = (event: PageTransitionEvent): void => {
+		if (event.persisted) {
+			trackBFCacheLoad();
+		}
+	};
+
+	window.addEventListener('pageshow', handlePageShow);
+	hasRegisteredBFCacheTracking = true;
+};
 
 // Sets up GA and logging.
 function analyticsInitialisation(
@@ -24,7 +41,8 @@ function analyticsInitialisation(
 ): void {
 	setReferrerDataInLocalStorage(acquisitionData);
 	void googleTagManager.init();
-	ophan.init();
+	init();
+	registerBFCacheTracking();
 	initQuantumMetric(participations, acquisitionData);
 	trackAbTests(participations);
 	// Sentry logging.
@@ -33,13 +51,13 @@ function analyticsInitialisation(
 	});
 }
 
-function consentInitialisation(country: IsoCountry): void {
+function consentInitialisation(country: CountryCode): void {
 	if (shouldInitCmp()) {
 		try {
 			const browserId = getCookie({ name: 'bwid', shouldMemoize: true });
 			cmp.init({
 				pubData: {
-					pageViewId: ophan.viewId,
+					pageViewId: viewId,
 					browserId: browserId ?? undefined,
 					platform: 'support',
 				},
@@ -61,7 +79,7 @@ function consentInitialisation(country: IsoCountry): void {
 function sendConsentToOphan(): void {
 	onConsent()
 		.then((consentState) => {
-			return ophan.record(getOphanConsentDetails(consentState));
+			return record(getOphanConsentDetails(consentState));
 		})
 		.catch((error) => {
 			console.error(error);

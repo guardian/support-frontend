@@ -19,6 +19,8 @@ catalog:
   "@aws-sdk/client-ssm": ^3.679.0
   "@aws-sdk/client-secrets-manager": ^3.848.0
   "@aws-sdk/credential-provider-node": 3.699.0
+  "@aws-sdk/client-dynamodb": ^3.879.0
+  "@aws-sdk/util-dynamodb": ^3.879.0
   "@guardian/eslint-config-typescript": 12.0.0
   "@guardian/prettier": ^2.1.5
-  "@guardian/support-service-lambdas": "guardian/support-service-lambdas#6b5fec3ae8337c9786aca65a09398a07e69aa99a"
+  "@guardian/support-service-lambdas": "guardian/support-service-lambdas#636099117497726333a25573b2258e3ef5997855"

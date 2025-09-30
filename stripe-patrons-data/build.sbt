@@ -1,4 +1,4 @@
-import LibraryVersions.{awsClientVersion, awsClientVersion2, circeVersion}
+import LibraryVersions.{awsClientVersion2, circeVersion}
 import com.gu.riffraff.artifact.RiffRaffArtifact.autoImport.riffRaffManifestProjectName
 import sbt.Keys.libraryDependencies
 

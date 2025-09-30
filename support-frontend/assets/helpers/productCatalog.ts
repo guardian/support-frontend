@@ -322,18 +322,6 @@ export const productCatalogDescription: Record<
 			RestOfWorldAnnual: {
 				billingPeriod: BillingPeriod.Annual,
 			},
-			DomesticMonthlyV2: {
-				billingPeriod: BillingPeriod.Monthly,
-			},
-			DomesticAnnualV2: {
-				billingPeriod: BillingPeriod.Annual,
-			},
-			RestOfWorldMonthlyV2: {
-				billingPeriod: BillingPeriod.Monthly,
-			},
-			RestOfWorldAnnualV2: {
-				billingPeriod: BillingPeriod.Annual,
-			},
 		},
 	},
 	DigitalSubscription: {

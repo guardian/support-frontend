@@ -24,7 +24,6 @@ import * as cookie from 'helpers/storage/cookie';
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
-import { inPaperProductTest } from 'pages/paper-subscription-landing/helpers/inPaperProductTest';
 import { getWeeklyDeliveryDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
@@ -295,8 +294,6 @@ export function Checkout({
 		true,
 	);
 
-	const isPaperProductTest = inPaperProductTest();
-
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
 			<CheckoutLayout>
@@ -314,7 +311,6 @@ export function Checkout({
 					weeklyDeliveryDate={weeklyDeliveryDate}
 					thresholdAmount={thresholdAmount}
 					studentDiscount={studentDiscount}
-					isPaperProductTest={isPaperProductTest}
 				/>
 
 				<CheckoutForm
@@ -340,7 +336,6 @@ export function Checkout({
 					setWeeklyDeliveryDate={setWeeklyDeliveryDate}
 					thresholdAmount={thresholdAmount}
 					studentDiscount={studentDiscount}
-					isPaperProductTest={isPaperProductTest}
 				/>
 			</CheckoutLayout>
 		</Elements>

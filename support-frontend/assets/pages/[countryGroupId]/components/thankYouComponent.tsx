@@ -16,6 +16,7 @@ import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { Participations } from 'helpers/abTests/models';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type {
 	ActiveProductKey,
@@ -115,7 +116,6 @@ export function ThankYouComponent({
 	ratePlanKey = 'OneTime',
 	promotion,
 	identityUserType,
-	abParticipations,
 	landingPageSettings,
 }: CheckoutComponentProps) {
 	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
@@ -218,10 +218,9 @@ export function ThankYouComponent({
 	const isSupporterPlus = productKey === 'SupporterPlus';
 	const isTierThree = productKey === 'TierThree';
 	const isNationalDelivery = productKey === 'NationalDelivery';
-	const validEmail = order.email !== '';
-	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
-		abParticipations.newspaperArchiveBenefit ?? '',
-	);
+	const { email } = order;
+	const validEmail = email !== '';
+	const { enablePremiumDigital } = getFeatureFlags();
 
 	// Clarify Guardian Ad-lite thankyou page states
 	const signedInUser = isSignedIn;
@@ -269,7 +268,7 @@ export function ThankYouComponent({
 		isSupporterPlus,
 		isTierThree,
 		startDate,
-		undefined,
+		email,
 		undefined,
 		benefitsChecklist,
 		undefined,
@@ -292,7 +291,7 @@ export function ThankYouComponent({
 		...maybeThankYouModule(userNotSignedIn && !isGuardianAdLite, 'signIn'), // Sign in to access your benefits
 		...maybeThankYouModule(isTierThree, 'benefits'),
 		...maybeThankYouModule(
-			isTierThree && showNewspaperArchiveBenefit,
+			isTierThree && enablePremiumDigital,
 			'newspaperArchiveBenefit',
 		),
 		...maybeThankYouModule(
@@ -307,7 +306,7 @@ export function ThankYouComponent({
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
 			isOneOff ||
-				(!(isTierThree && showNewspaperArchiveBenefit) &&
+				(!(isTierThree && enablePremiumDigital) &&
 					isSignedIn &&
 					!isGuardianAdLite &&
 					!observerPrint &&

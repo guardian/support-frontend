@@ -27,7 +27,7 @@ const {
 	oneTimeCheckoutOnly,
 } = pageUrlRegexes.contributions;
 
-jest.mock('ophan', () => ({
+jest.mock('@guardian/ophan-tracker-js', () => ({
 	record: () => null,
 }));
 

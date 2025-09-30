@@ -72,7 +72,7 @@ class PriceSummaryService(
       countryGroup: CountryGroup,
       productRatePlan: ProductRatePlan[Product],
       price: Price,
-      saving: Option[Int],
+      saving: Option[Float],
   ): (Currency, PriceSummary) = {
 
     val promotionSummaries: List[PromotionSummary] = for {

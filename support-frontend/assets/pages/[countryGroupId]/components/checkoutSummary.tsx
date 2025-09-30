@@ -14,6 +14,7 @@ import {
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	type ActiveProductKey,
@@ -52,7 +53,6 @@ type CheckoutSummaryProps = {
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
-	isPaperProductTest: boolean;
 };
 
 export default function CheckoutSummary({
@@ -69,7 +69,6 @@ export default function CheckoutSummary({
 	weeklyDeliveryDate,
 	thresholdAmount,
 	studentDiscount,
-	isPaperProductTest,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
@@ -77,11 +76,9 @@ export default function CheckoutSummary({
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 
-	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
-		abParticipations.newspaperArchiveBenefit ?? '',
-	);
+	const { enablePremiumDigital } = getFeatureFlags();
 
-	const productDescription = showNewspaperArchiveBenefit
+	const productDescription = enablePremiumDigital
 		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
 		: productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
@@ -120,7 +117,7 @@ export default function CheckoutSummary({
 	}
 
 	const benefitsCheckListData =
-		getPaperPlusDigitalBenefits(isPaperProductTest, ratePlanKey, productKey) ??
+		getPaperPlusDigitalBenefits(ratePlanKey, productKey) ??
 		getBenefitsChecklistFromLandingPageTool(productKey, landingPageSettings) ??
 		getBenefitsChecklistFromProductDescription(
 			productDescription,
@@ -154,7 +151,6 @@ export default function CheckoutSummary({
 	const backUrl = parameteriseUrl(
 		`/${supportRegionId}${productDescription.landingPagePath}`,
 		promotion?.promoCode,
-		isPaperProductTest ? 'paperProductTabs' : undefined,
 		getPaperFulfilmentOption(productKey),
 	);
 
@@ -204,7 +200,6 @@ export default function CheckoutSummary({
 							countryGroupId={countryGroupId}
 							thresholdAmount={thresholdAmount}
 							promotion={promotion}
-							isPaperProductTest={isPaperProductTest}
 						/>
 					}
 					headerButton={
@@ -214,7 +209,6 @@ export default function CheckoutSummary({
 					}
 					abParticipations={abParticipations}
 					studentDiscount={studentDiscount}
-					isPaperProductTest={isPaperProductTest}
 				/>
 			</BoxContents>
 		</Box>

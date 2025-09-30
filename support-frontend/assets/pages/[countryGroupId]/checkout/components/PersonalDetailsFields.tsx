@@ -31,10 +31,10 @@ type PersonalDetailsFieldsProps = {
 	setLastName: (value: string) => void;
 	email: string;
 	setEmail: (value: string) => void;
-	confirmedEmail?: string;
-	setConfirmedEmail?: (value: string) => void;
-	phoneNumber?: string;
-	setPhoneNumber?: (value: string) => void;
+	confirmedEmail: string;
+	setConfirmedEmail: (value: string) => void;
+	phoneNumber: string;
+	setPhoneNumber: (value: string) => void;
 	billingStatePostcode?: BillingStatePostcode;
 	hasDeliveryAddress?: boolean;
 	isEmailAddressReadOnly?: boolean;
@@ -86,10 +86,12 @@ export function PersonalDetailsFields({
 					setLastName={setLastName}
 				/>
 				{isWeeklyGift && personalEmailFields}
-				<PersonalPhoneField
-					phoneNumber={phoneNumber}
-					setPhoneNumber={setPhoneNumber}
-				/>
+				{isWeeklyGift && (
+					<PersonalPhoneField
+						phoneNumber={phoneNumber}
+						setPhoneNumber={setPhoneNumber}
+					/>
+				)}
 				{/**
 				 * We require state for non-deliverable products as we use different taxes
 				 * within those regions upstream For deliverable products we take the

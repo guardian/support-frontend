@@ -2,7 +2,6 @@ package services
 
 import org.apache.pekko.actor.{ActorSystem, Cancellable}
 import cats.data.EitherT
-import com.amazonaws.services.s3.AmazonS3
 import com.github.blemale.scaffeine.{AsyncLoadingCache, Scaffeine}
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
@@ -11,6 +10,8 @@ import io.circe.parser._
 import io.circe.{Decoder, Encoder}
 import model.Environment
 import model.Environment.{Live, Test}
+import software.amazon.awssdk.services.s3.S3Client
+import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
@@ -71,7 +72,7 @@ object Switches {
   implicit val switchDetailsCodec: Codec[SwitchDetails] = deriveCodec
 }
 
-class SwitchService(env: Environment)(implicit s3: AmazonS3, system: ActorSystem, ec: ExecutionContext)
+class SwitchService(env: Environment)(implicit s3: S3Client, system: ActorSystem, ec: ExecutionContext)
     extends StrictLogging {
 
   import cats.implicits._
@@ -104,7 +105,8 @@ class SwitchService(env: Environment)(implicit s3: AmazonS3, system: ActorSystem
 
     for {
       buf <- Either.catchNonFatal {
-        val inputStream = s3.getObject("support-admin-console", path).getObjectContent
+        val request = GetObjectRequest.builder().bucket("support-admin-console").key(path).build()
+        val inputStream = s3.getObject(request)
         Source.fromInputStream(inputStream)
       }
       switches <- fromBufferedSource(buf)

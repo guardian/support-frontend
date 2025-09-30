@@ -4,10 +4,10 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import {
+	buildPromotionalTermsLink,
 	contributionsTermsLinks,
 	digitalSubscriptionTermsLink,
 	guardianAdLiteTermsLink,
-	guardianWeeklyPromoTermsLink,
 	guardianWeeklyTermsLink,
 	observerLinks,
 	paperTermsLink,
@@ -126,32 +126,23 @@ function getStudentPrice(
 
 const paperShareTsAndCs =
 	'We will share your contact and subscription details with our fulfilment partners';
-const paperNationalDeliveryTsAndCs = (
-	<div>{paperShareTsAndCs} to provide you with your subscription card.</div>
-);
-const paperProductProductTsAndCs = (
-	<>
-		You can cancel your subscription at any time before your next renewal date.
-		Cancellation will take effect at the end of your current payment period. To
-		cancel, use the contact details listed on our{' '}
-		{termsLink('Help Centre', helpCentreUrl)}.
-	</>
-);
 function paperTsAndCs(
-	isPaperProductTest: boolean,
-	deliveryStartDate: string,
 	paperFulfilmentOption: PaperFulfilmentOptions,
+	deliveryDate?: Date,
 ): JSX.Element {
-	const paymentDateTsAndCs = `Your first payment will be taken on ${deliveryStartDate}${
+	const noDateTsAndCs = `Your first payment will be taken on the ${
 		paperFulfilmentOption === 'HomeDelivery'
-			? ' when your first newspaper is delivered. '
-			: '. '
-	}`;
-	const noPaymentDateTsAndCs = `Your first payment will be taken on the ${
-		paperFulfilmentOption === 'HomeDelivery'
-			? 'day you receive your first newspaper. '
-			: 'expected delivery date of the subscription card.'
-	}`;
+			? 'day you receive your first newspaper'
+			: 'expected delivery date of the subscription card'
+	}.`;
+	const deliveryTsAndCs = deliveryDate
+		? `Your first payment will be taken on ${formatUserDate(deliveryDate)}${
+				paperFulfilmentOption === 'HomeDelivery'
+					? ' when your first newspaper is delivered'
+					: ''
+		  }.`
+		: noDateTsAndCs;
+
 	return (
 		<>
 			<div
@@ -159,14 +150,18 @@ function paperTsAndCs(
 					margin-bottom: ${space[1]}px;
 				`}
 			>
-				{deliveryStartDate ? paymentDateTsAndCs : noPaymentDateTsAndCs}
-				{isPaperProductTest && paperProductProductTsAndCs}
+				{deliveryTsAndCs} You can cancel your subscription at any time before
+				your next renewal date. Cancellation will take effect at the end of your
+				current payment period. To cancel, use the contact details listed on our{' '}
+				{termsLink('Help Centre', helpCentreUrl)}.{' '}
 			</div>
-			{paperFulfilmentOption === 'HomeDelivery' ? (
-				<div>{paperShareTsAndCs}.</div>
-			) : (
-				paperNationalDeliveryTsAndCs
-			)}
+			<div>
+				{paperShareTsAndCs}
+				{paperFulfilmentOption === 'Collection'
+					? ' to provide you with your subscription card'
+					: ''}
+				.
+			</div>
 		</>
 	);
 }
@@ -177,8 +172,19 @@ export interface PaymentTsAndCsProps {
 	studentDiscount?: StudentDiscount;
 	promotion?: Promotion;
 	thresholdAmount?: number;
-	isPaperProductTest?: boolean;
 }
+
+function GuardianWeeklyPromoTerms({ promotion }: { promotion: Promotion }) {
+	return (
+		<div>
+			Offer subject to availability. Guardian News and Media Ltd ("GNM")
+			reserves the right to withdraw this promotion at any time. Full promotion
+			terms and conditions for our{' '}
+			{termsLink('offer', buildPromotionalTermsLink(promotion))}.
+		</div>
+	);
+}
+
 export function PaymentTsAndCs({
 	productKey,
 	ratePlanKey,
@@ -186,7 +192,6 @@ export function PaymentTsAndCs({
 	studentDiscount,
 	promotion,
 	thresholdAmount = 0,
-	isPaperProductTest = false,
 }: PaymentTsAndCsProps): JSX.Element {
 	// Display for AUS Students who are on a subscription basis
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
@@ -202,18 +207,16 @@ export function PaymentTsAndCs({
 		productKey,
 		ratePlanKey as ActivePaperProductOptions,
 	);
-	const deliveryStartDate = deliveryDate ? formatUserDate(deliveryDate) : '';
 
 	if (isSundayOnlyNewsletterSubscription) {
 		return (
 			<div css={container}>
-				{isPaperProductTest ? 'The Observer is owned by Tortoise Media. ' : ''}
-				By proceeding, you agree to Tortoise Media’s{' '}
-				{termsLink('Terms & Conditions', observerLinks.TERMS)}. We will share
-				your contact and subscription details with our fulfilment partners to
-				provide you with your subscription card. To find out more about what
-				personal data Tortoise Media will collect and how it will be used,
-				please visit Tortoise Media’s{' '}
+				The Observer is owned by Tortoise Media. By proceeding, you agree to
+				Tortoise Media’s {termsLink('Terms & Conditions', observerLinks.TERMS)}.
+				We will share your contact and subscription details with our fulfilment
+				partners to provide you with your subscription card. To find out more
+				about what personal data Tortoise Media will collect and how it will be
+				used, please visit Tortoise Media’s{' '}
 				{termsLink('Privacy Policy', observerLinks.PRIVACY)}.
 			</div>
 		);
@@ -229,15 +232,6 @@ export function PaymentTsAndCs({
 				promotion,
 		  );
 
-	const guardianWeeklyPromo = (
-		<div>
-			Offer subject to availability. Guardian News and Media Ltd ("GNM")
-			reserves the right to withdraw this promotion at any time. Full promotion
-			terms and conditions for our{' '}
-			{termsLink('monthly', guardianWeeklyPromoTermsLink)} and{' '}
-			{termsLink('annual', guardianWeeklyPromoTermsLink)} offers.
-		</div>
-	);
 	const productLabel = productCatalogDescription[productKey].label;
 	const subscriptionBasis = !isStudentOneYearRatePlan
 		? 'on a subscription basis'
@@ -336,19 +330,15 @@ export function PaymentTsAndCs({
 				</p>
 			</div>
 		),
-		HomeDelivery: paperTsAndCs(
-			isPaperProductTest,
-			deliveryStartDate,
-			'HomeDelivery',
+		NationalDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
+		HomeDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
+		SubscriptionCard: paperTsAndCs('Collection', deliveryDate),
+		GuardianWeeklyDomestic: promotion && (
+			<GuardianWeeklyPromoTerms promotion={promotion} />
 		),
-		SubscriptionCard: paperTsAndCs(
-			isPaperProductTest,
-			deliveryStartDate,
-			'Collection',
+		GuardianWeeklyRestOfWorld: promotion && (
+			<GuardianWeeklyPromoTerms promotion={promotion} />
 		),
-		NationalDelivery: paperNationalDeliveryTsAndCs,
-		GuardianWeeklyDomestic: <> {promotion && guardianWeeklyPromo}</>,
-		GuardianWeeklyRestOfWorld: <> {promotion && guardianWeeklyPromo}</>,
 	};
 	return (
 		<div css={container}>

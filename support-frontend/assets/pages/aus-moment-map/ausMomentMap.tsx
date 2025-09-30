@@ -1,6 +1,6 @@
 // ----- Imports ----- //
+import { init } from '@guardian/ophan-tracker-js/support';
 import { motion } from 'framer-motion';
-import * as ophan from 'ophan';
 import * as React from 'react';
 import { renderPage } from 'helpers/rendering/render';
 import './ausMomentMap.scss';
@@ -48,7 +48,7 @@ function AusMomentMap(): JSX.Element {
 	const testimonials = useTestimonials();
 	const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
 
-	ophan.init();
+	init();
 
 	React.useEffect(() => {
 		if (windowWidthIsLessThan('desktop')) {

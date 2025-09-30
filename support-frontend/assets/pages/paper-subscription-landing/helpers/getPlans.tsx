@@ -43,10 +43,10 @@ const getPriceCopyString = (
 };
 
 const getOfferText = (price: ProductPrice, promo?: Promotion) => {
-	if (promo && price.savingVsRetail && promo.discount?.amount) {
+	if (promo?.discount?.amount) {
 		const discount = getDiscountVsRetail(
 			price.price,
-			price.savingVsRetail,
+			price.savingVsRetail ?? 0,
 			promo.discount.amount,
 		);
 		if (discount > 0) {
@@ -57,7 +57,7 @@ const getOfferText = (price: ProductPrice, promo?: Promotion) => {
 	}
 
 	if (price.savingVsRetail && price.savingVsRetail > 0) {
-		return `Save ${price.savingVsRetail}% on retail price`;
+		return `Save ${Math.floor(price.savingVsRetail)}% on retail price`;
 	}
 
 	return '';
@@ -199,7 +199,6 @@ export const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
 	activePaperProductTypes: ActivePaperProductOptions[],
-	isPaperProductTest: boolean,
 ): Product[] =>
 	activePaperProductTypes
 		.filter(
@@ -228,22 +227,13 @@ export const getPlans = (
 				fulfilmentOption,
 				productOption,
 			);
-
-			const showLabel = isPaperProductTest
-				? productOption === 'Sixday' || productOption === 'SixdayPlus'
-				: productOption === 'Everyday' || productOption === 'EverydayPlus';
-
+			const showLabel = productOption === 'SixdayPlus';
 			const productLabel = getProductLabel(productOption);
 
 			return {
 				title: getTitle(productOption),
 				price: showPrice(priceAfterPromosApplied),
-				href: paperCheckoutUrl(
-					fulfilmentOption,
-					productOption,
-					promoCode,
-					isPaperProductTest ? 'paperProductTabs' : undefined,
-				),
+				href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
 				onClick: sendTrackingEventsOnClick(trackingProperties),
 				onView: sendTrackingEventsOnView(trackingProperties),
 				buttonCopy: 'Subscribe',

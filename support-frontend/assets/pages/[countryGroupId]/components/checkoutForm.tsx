@@ -31,6 +31,7 @@ import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
@@ -134,7 +135,6 @@ type CheckoutFormProps = {
 	setWeeklyDeliveryDate: (value: Date) => void;
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
-	isPaperProductTest: boolean;
 };
 
 const getPaymentMethods = (
@@ -188,7 +188,6 @@ export default function CheckoutForm({
 	setWeeklyDeliveryDate,
 	thresholdAmount,
 	studentDiscount,
-	isPaperProductTest,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
@@ -198,11 +197,9 @@ export default function CheckoutForm({
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 
-	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
-		abParticipations.newspaperArchiveBenefit ?? '',
-	);
+	const { enablePremiumDigital } = getFeatureFlags();
 
-	const productDescription = showNewspaperArchiveBenefit
+	const productDescription = enablePremiumDigital
 		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
 		: productCatalogDescription[productKey];
 	const hasDeliveryAddress = !!productDescription.deliverableTo;
@@ -877,8 +874,8 @@ export default function CheckoutForm({
 							setEmail={setEmail}
 							confirmedEmail={confirmedEmail}
 							setConfirmedEmail={setConfirmedEmail}
-							phoneNumber={isWeeklyGift ? phoneNumber : undefined}
-							setPhoneNumber={isWeeklyGift ? setPhoneNumber : undefined}
+							phoneNumber={phoneNumber}
+							setPhoneNumber={setPhoneNumber}
 							billingStatePostcode={billingStatePostcode}
 							hasDeliveryAddress={hasDeliveryAddress}
 							isEmailAddressReadOnly={isSignedIn}
@@ -1146,7 +1143,6 @@ export default function CheckoutForm({
 							studentDiscount={studentDiscount}
 							promotion={promotion}
 							thresholdAmount={thresholdAmount}
-							isPaperProductTest={isPaperProductTest}
 						/>
 					</BoxContents>
 				</Box>

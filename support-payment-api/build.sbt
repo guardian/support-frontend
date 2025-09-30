@@ -11,12 +11,10 @@ scalacOptions ++= Seq(
 addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.13.2")
 
 libraryDependencies ++= Seq(
-  "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
-  "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
-  "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
-  "com.amazonaws" % "aws-java-sdk-ec2" % awsClientVersion,
+  "software.amazon.awssdk" % "ssm" % awsClientVersion2,
+  "software.amazon.awssdk" % "s3" % awsClientVersion2,
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsClientVersion,
-  "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
+  "software.amazon.awssdk" % "sqs" % awsClientVersion2,
   "com.amazon.pay" % "amazon-pay-java-sdk" % "3.6.2",
   "com.beachape" %% "enumeratum" % "1.7.3",
   "com.beachape" %% "enumeratum-circe" % "1.7.3",

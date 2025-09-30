@@ -5,8 +5,6 @@ import backend._
 import com.amazon.pay.impl.ipn.NotificationFactory
 import com.amazon.pay.response.ipn.model.Notification
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
-import com.amazonaws.services.s3.AmazonS3
-import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
 import com.typesafe.scalalogging.StrictLogging
 import conf.{ConfigLoader, PlayConfigUpdater}
 import model.{AppThreadPools, AppThreadPoolsProvider, RequestEnvironments}
@@ -17,6 +15,8 @@ import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSComponents
 import router.Routes
 import services.CloudWatchService
+import software.amazon.awssdk.services.s3.S3Client
+import software.amazon.awssdk.services.ssm.SsmClient
 import util.RequestBasedProvider
 
 import scala.jdk.CollectionConverters._
@@ -51,7 +51,7 @@ class MyComponents(context: Context)
   // This will determine, later on, whether passing the "?mode=test" param has any effect
   val requestEnvironments: RequestEnvironments = RequestEnvironments.fromAppStage
 
-  val ssm: AWSSimpleSystemsManagement = AWSClientBuilder.buildAWSSimpleSystemsManagementClient()
+  val ssm: SsmClient = AWSClientBuilder.buildSsmClient()
 
   val configLoader: ConfigLoader = new ConfigLoader(ssm)
   val playConfigUpdater = new PlayConfigUpdater(configLoader)
@@ -65,7 +65,7 @@ class MyComponents(context: Context)
   override val threadPools: AppThreadPools = AppThreadPools.load(executionContext, actorSystem).valueOr(throw _)
 
   implicit val _wsClient: WSClient = wsClient
-  implicit val s3Client: AmazonS3 = AWSClientBuilder.buildS3Client()
+  implicit val s3Client: S3Client = AWSClientBuilder.buildS3Client()
   private implicit val system: ActorSystem = ActorSystem()
 
   override lazy val httpErrorHandler = new ErrorHandler(environment, configuration, sourceMapper, Some(router))

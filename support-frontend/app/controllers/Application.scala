@@ -339,6 +339,7 @@ class Application(
       campaignCode: String,
   ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
+    val noIndexing = countryCode == "au"
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(
@@ -347,7 +348,7 @@ class Application(
         campaignCodeOption,
         "student",
         "https://support.theguardian.com/student",
-        true,
+        noIndexing,
       ),
     ).withSettingsSurrogateKey
   }

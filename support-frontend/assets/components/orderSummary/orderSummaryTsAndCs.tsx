@@ -87,7 +87,6 @@ export interface OrderSummaryTsAndCsProps {
 	countryGroupId: CountryGroupId;
 	promotion?: Promotion;
 	thresholdAmount?: number;
-	isPaperProductTest?: boolean;
 }
 export function OrderSummaryTsAndCs({
 	productKey,
@@ -96,7 +95,6 @@ export function OrderSummaryTsAndCs({
 	countryGroupId,
 	promotion,
 	thresholdAmount = 0,
-	isPaperProductTest = false,
 }: OrderSummaryTsAndCsProps): JSX.Element | null {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -209,9 +207,7 @@ export function OrderSummaryTsAndCs({
 		TierThree: tierThreeSupporterPlusTsAndCs,
 		GuardianWeeklyDomestic: tierThreeSupporterPlusTsAndCs,
 		GuardianWeeklyRestOfWorld: tierThreeSupporterPlusTsAndCs,
-		SubscriptionCard: isPaperProductTest
-			? paperPlusTsAndCs
-			: defaultOrderSummaryTsAndCs,
+		SubscriptionCard: paperPlusTsAndCs,
 		HomeDelivery: paperPlusTsAndCs,
 	};
 	return orderSummaryTsAndCs[productKey] ?? defaultOrderSummaryTsAndCs;

@@ -11,6 +11,7 @@
       "@modules/zuora/*": ["./node_modules/@guardian/support-service-lambdas/modules/zuora/src/*"],
       "@modules/product-catalog/*": ["./node_modules/@guardian/support-service-lambdas/modules/product-catalog/src/*"],
       "@modules/routing/*": ["./node_modules/@guardian/support-service-lambdas/modules/routing/src/*"],
+      "@modules/promotions/*": ["./node_modules/@guardian/support-service-lambdas/modules/promotions/src/*"],
       "@modules/product/*": ["../modules/product/*"],
       "@modules/*": ["./node_modules/@guardian/support-service-lambdas/modules/*"]
     }
