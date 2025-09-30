@@ -2,10 +2,9 @@ package conf
 
 import cats.data.Validated
 import cats.syntax.apply._
-import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
-
 import conf.ConfigLoader._
 import model.{Environment, InitializationError}
+import software.amazon.awssdk.services.ssm.model.GetParametersByPathRequest
 
 sealed trait StripeAccountConfig {
   def publicKey: String
@@ -32,10 +31,7 @@ object StripeConfig {
     new ParameterStoreLoadable[Environment, StripeConfig] {
 
       override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
-        new GetParametersByPathRequest()
-          .withPath(s"/payment-api/stripe-config/${environment.entryName}/")
-          .withWithDecryption(true)
-          .withRecursive(false)
+        buildPathRequest(s"/payment-api/stripe-config/${environment.entryName}/")
 
       override def decode(
           environment: Environment,
