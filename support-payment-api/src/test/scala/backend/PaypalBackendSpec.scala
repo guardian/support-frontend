@@ -3,7 +3,6 @@ package backend
 import backend.BackendError.SoftOptInsServiceError
 import cats.data.EitherT
 import cats.implicits._
-import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import com.paypal.api.payments.{Amount, Payer, PayerInfo, Payment}
 import model.UserType.Current
@@ -18,6 +17,7 @@ import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
 import services.SwitchState.{Off, On}
 import services._
+import software.amazon.awssdk.services.sqs.model.SendMessageResponse
 import util.FutureEitherValues
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -110,7 +110,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(IdentityUserDetails("1", Current)))
   val identityResponseError: EitherT[Future, IdentityClient.ContextualError, IdentityUserDetails] =
     EitherT.left(Future.successful(identityError))
-  val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
+  val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResponse] =
     EitherT.left(Future.successful(emailError))
   val switchServiceOnResponse: EitherT[Future, Nothing, Switches] =
     EitherT.right(

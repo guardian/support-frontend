@@ -4,11 +4,11 @@ import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentialsProvider}
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.cloudwatch.{AmazonCloudWatchAsync, AmazonCloudWatchAsyncClientBuilder}
-import com.amazonaws.services.sqs.{AmazonSQSAsync, AmazonSQSAsyncClientBuilder}
-import software.amazon.awssdk.regions.Region
-import software.amazon.awssdk.services.ssm.SsmClient
 import com.gu.aws.CredentialsProvider
+import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.s3.S3Client
+import software.amazon.awssdk.services.sqs.SqsAsyncClient
+import software.amazon.awssdk.services.ssm.SsmClient
 
 object AWSClientBuilder {
 
@@ -27,11 +27,11 @@ object AWSClientBuilder {
       .credentialsProvider(CredentialsProvider)
       .build()
 
-  def buildAmazonSQSAsyncClient(): AmazonSQSAsync =
-    AmazonSQSAsyncClientBuilder
-      .standard()
-      .withCredentials(credentialsProvider)
-      .withRegion(Regions.EU_WEST_1)
+  def buildAmazonSQSAsyncClient(): SqsAsyncClient =
+    SqsAsyncClient
+      .builder()
+      .credentialsProvider(CredentialsProvider)
+      .region(Region.EU_WEST_1)
       .build()
 
   def buildCloudWatchAsyncClient(): AmazonCloudWatchAsync =
