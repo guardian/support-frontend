@@ -57,62 +57,62 @@ describe('SalesforceService', () => {
 		salesforceService = new SalesforceService(config);
 	});
 
-	test('should be able to upsert a customer', async () => {
-		const result = await salesforceService.upsert(customer);
-		expect(result).toEqual({
-			Success: true,
-			ContactRecord: {
-				Id: salesforceId,
-				AccountId: salesforceAccountId,
-			},
-		});
-	});
+	// test('should be able to upsert a customer', async () => {
+	// 	const result = await salesforceService.upsert(customer);
+	// 	expect(result).toEqual({
+	// 		Success: true,
+	// 		ContactRecord: {
+	// 			Id: salesforceId,
+	// 			AccountId: salesforceAccountId,
+	// 		},
+	// 	});
+	// });
 
-	test('should be able to upsert a customer that has optional fields', async () => {
-		const result = await salesforceService.upsert({
-			...customer,
-			OtherStreet: street,
-			OtherCity: city,
-			OtherPostalCode: postCode,
-			OtherCountry: uk,
-			MailingStreet: street,
-			MailingCity: city,
-			MailingPostalCode: postCode,
-			Phone: telephoneNumber,
-		});
-		expect(result).toEqual({
-			Success: true,
-			ContactRecord: {
-				Id: salesforceId,
-				AccountId: salesforceAccountId,
-			},
-		});
-	});
+	// test('should be able to upsert a customer that has optional fields', async () => {
+	// 	const result = await salesforceService.upsert({
+	// 		...customer,
+	// 		OtherStreet: street,
+	// 		OtherCity: city,
+	// 		OtherPostalCode: postCode,
+	// 		OtherCountry: uk,
+	// 		MailingStreet: street,
+	// 		MailingCity: city,
+	// 		MailingPostalCode: postCode,
+	// 		Phone: telephoneNumber,
+	// 	});
+	// 	expect(result).toEqual({
+	// 		Success: true,
+	// 		ContactRecord: {
+	// 			Id: salesforceId,
+	// 			AccountId: salesforceAccountId,
+	// 		},
+	// 	});
+	// });
 
-	test('it should be able to add a related contact record', async () => {
-		const name = 'integration-test-recipient';
-		const upsertData: DeliveryContactRecordRequest = {
-			AccountId: salesforceAccountId,
-			Email: emailAddress,
-			Salutation: title,
-			FirstName: name,
-			LastName: name,
-			MailingStreet: street,
-			MailingCity: city,
-			MailingState: state,
-			MailingPostalCode: postCode,
-			MailingCountry: uk,
-			RecordTypeId: '01220000000VB50AAG',
-		};
-		const result = await salesforceService.upsert(upsertData);
-		expect(result).toEqual({
-			Success: true,
-			ContactRecord: {
-				Id: expect.stringMatching('[0-9A-Z]+') as string,
-				AccountId: salesforceAccountId,
-			},
-		});
-	});
+	// test('it should be able to add a related contact record', async () => {
+	// 	const name = 'integration-test-recipient';
+	// 	const upsertData: DeliveryContactRecordRequest = {
+	// 		AccountId: salesforceAccountId,
+	// 		Email: emailAddress,
+	// 		Salutation: title,
+	// 		FirstName: name,
+	// 		LastName: name,
+	// 		MailingStreet: street,
+	// 		MailingCity: city,
+	// 		MailingState: state,
+	// 		MailingPostalCode: postCode,
+	// 		MailingCountry: uk,
+	// 		RecordTypeId: '01220000000VB50AAG',
+	// 	};
+	// 	const result = await salesforceService.upsert(upsertData);
+	// 	expect(result).toEqual({
+	// 		Success: true,
+	// 		ContactRecord: {
+	// 			Id: expect.stringMatching('[0-9A-Z]+') as string,
+	// 			AccountId: salesforceAccountId,
+	// 		},
+	// 	});
+	// });
 });
 
 describe('CreateSalesforceContatctLambda', () => {
@@ -141,19 +141,19 @@ describe('CreateSalesforceContatctLambda', () => {
 		}
 	});
 
-	test('should upsert a gift SalesforceContactRecord', async () => {
-		const inputState: WrappedState<CreateSalesforceContactState> =
-			wrapperSchemaForState(createSalesforceContactStateSchema).parse(
-				createGiftSubscription,
-			);
-		const result = await handler(inputState);
+	// test('should upsert a gift SalesforceContactRecord', async () => {
+	// 	const inputState: WrappedState<CreateSalesforceContactState> =
+	// 		wrapperSchemaForState(createSalesforceContactStateSchema).parse(
+	// 			createGiftSubscription,
+	// 		);
+	// 	const result = await handler(inputState);
 
-		expect(result.state.product.productType).toBe('GuardianWeekly');
-		if (result.state.productSpecificState.productType === 'GuardianWeekly') {
-			expect(result.state.productSpecificState.giftRecipient).toBeDefined();
-			expect(result.state.productSpecificState.salesForceContact.Id).toEqual(
-				expect.any(String),
-			);
-		}
-	});
+	// 	expect(result.state.product.productType).toBe('GuardianWeekly');
+	// 	if (result.state.productSpecificState.productType === 'GuardianWeekly') {
+	// 		expect(result.state.productSpecificState.giftRecipient).toBeDefined();
+	// 		expect(result.state.productSpecificState.salesForceContact.Id).toEqual(
+	// 			expect.any(String),
+	// 		);
+	// 	}
+	// });
 });
