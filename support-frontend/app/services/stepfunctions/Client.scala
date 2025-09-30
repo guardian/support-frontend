@@ -2,29 +2,40 @@ package services.stepfunctions
 
 import cats.data.EitherT
 import cats.implicits._
-import com.amazonaws.regions.Regions
-import com.amazonaws.services.stepfunctions.model.{ExecutionStatus => _, _}
-import com.amazonaws.services.stepfunctions.{AWSStepFunctionsAsync, AWSStepFunctionsAsyncClientBuilder}
+import com.gu.aws.CredentialsProvider
 import com.gu.monitoring.SafeLogging
 import io.circe.Encoder
 import org.apache.pekko.actor.ActorSystem
-import services.aws.{AwsAsync, CredentialsProvider}
+import services.aws.AwsAsync
 import services.stepfunctions.StateMachineContainer.{Response, convertErrors}
 import services.stepfunctions.StateMachineErrors.Fail
+import software.amazon.awssdk.regions.Region
+import software.amazon.awssdk.services.sfn.SfnAsyncClient
+import software.amazon.awssdk.services.sfn.model.{
+  DescribeStateMachineRequest,
+  DescribeStateMachineResponse,
+  GetExecutionHistoryRequest,
+  HistoryEvent,
+  SfnException,
+  StartExecutionRequest,
+  StartExecutionResponse,
+}
 
 import java.nio.ByteBuffer
 import java.util.Base64
 import scala.concurrent.{ExecutionContext, Future}
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.ListHasAsScala
 
 object Client {
 
   def apply(arn: StateMachineArn)(implicit system: ActorSystem): Client = {
     implicit val ec = system.dispatcher
 
-    val client = AWSStepFunctionsAsyncClientBuilder.standard
-      .withCredentials(CredentialsProvider)
-      .withRegion(Regions.EU_WEST_1)
+    val client = SfnAsyncClient
+      .builder()
+      .credentialsProvider(CredentialsProvider)
+      .credentialsProvider(CredentialsProvider)
+      .region(Region.EU_WEST_1)
       .build()
 
     new Client(client, arn)
@@ -49,21 +60,26 @@ object Client {
 
 }
 
-class Client(client: AWSStepFunctionsAsync, arn: StateMachineArn) extends SafeLogging {
+class Client(client: SfnAsyncClient, arn: StateMachineArn) extends SafeLogging {
 
   private def startExecution(arn: String, input: String, name: String)(implicit
       ec: ExecutionContext,
-  ): Response[StartExecutionResult] = convertErrors {
+  ): Response[StartExecutionResponse] = convertErrors {
     val startExecutionRequest =
-      new StartExecutionRequest()
-        .withStateMachineArn(arn)
-        .withInput(input)
-        .withName(Client.generateExecutionName(name))
-    AwsAsync(client.startExecutionAsync, startExecutionRequest)
-      .transform { theTry =>
-        logger.info(s"state machine result: $theTry")
-        theTry
-      }
+      StartExecutionRequest
+        .builder()
+        .stateMachineArn(arn)
+        .input(input)
+        .name(Client.generateExecutionName(name))
+        .build()
+
+    AwsAsync(
+      (req: StartExecutionRequest) => client.startExecution(req),
+      startExecutionRequest,
+    ).transform { theTry =>
+      logger.info(s"state machine result: $theTry")
+      theTry
+    }
   }
 
   def triggerExecution[T](input: T, isTestUser: Boolean, name: String)(implicit
@@ -94,27 +110,34 @@ class Client(client: AWSStepFunctionsAsync, arn: StateMachineArn) extends SafeLo
     case _ => legacyJobId
   }
 
-  def statusFromEvents(events: List[HistoryEvent]): Option[ExecutionStatus] =
-    events.view.map(_.getType).collectFirst(ExecutionStatus.all)
-
   def history(
       jobId: String,
   )(implicit ec: ExecutionContext, stateWrapper: StateWrapper): Response[List[HistoryEvent]] = {
     toEither(
       AwsAsync(
-        client.getExecutionHistoryAsync,
-        new GetExecutionHistoryRequest().withExecutionArn(arnFromJobId(jobId)).withReverseOrder(true),
+        (req: GetExecutionHistoryRequest) => client.getExecutionHistory(req),
+        GetExecutionHistoryRequest
+          .builder()
+          .executionArn(arnFromJobId(jobId))
+          .reverseOrder(true)
+          .build(),
       ),
-    ).map(_.getEvents.asScala.toList)
+    ).map(_.events().asScala.toList)
   }
 
   private def toEither[T](result: Future[T])(implicit ec: ExecutionContext): Response[T] = EitherT {
-    result.map(_.asRight[StateMachineError]).recover { case _: AWSStepFunctionsException =>
+    result.map(_.asRight[StateMachineError]).recover { case _: SfnException =>
       Fail.asLeft
     }
   }
 
-  def status()(implicit ec: ExecutionContext): Response[DescribeStateMachineResult] = convertErrors {
-    AwsAsync(client.describeStateMachineAsync, new DescribeStateMachineRequest().withStateMachineArn(arn.asString))
+  def status()(implicit ec: ExecutionContext): Response[DescribeStateMachineResponse] = convertErrors {
+    AwsAsync(
+      (req: DescribeStateMachineRequest) => client.describeStateMachine(req),
+      DescribeStateMachineRequest
+        .builder()
+        .stateMachineArn(arn.asString)
+        .build(),
+    )
   }
 }

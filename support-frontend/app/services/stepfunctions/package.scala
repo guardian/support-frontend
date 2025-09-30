@@ -1,7 +1,7 @@
 package services
 
-import com.amazonaws.services.stepfunctions.model.{StartExecutionResult, StateMachineListItem}
 import org.joda.time.DateTime
+import software.amazon.awssdk.services.sfn.model.{StartExecutionResponse, StateMachineListItem}
 
 package object stepfunctions {
 
@@ -20,15 +20,15 @@ package object stepfunctions {
   case class StateMachine(arn: String, creationDate: DateTime)
   object StateMachine {
     def fromStateMachineListItem(item: StateMachineListItem): StateMachine = {
-      StateMachine(item.getStateMachineArn, new DateTime(item.getCreationDate))
+      StateMachine(item.stateMachineArn(), new DateTime(item.creationDate()))
     }
   }
 
   case class StateMachineExecution(arn: String, startTime: DateTime)
 
   object StateMachineExecution {
-    def fromStartExecution(result: StartExecutionResult): StateMachineExecution =
-      StateMachineExecution(result.getExecutionArn, new DateTime(result.getStartDate))
+    def fromStartExecution(result: StartExecutionResponse): StateMachineExecution =
+      StateMachineExecution(result.executionArn(), new DateTime(result.startDate()))
   }
 
   case class StateMachineExecutionStatus(

@@ -1,33 +1,58 @@
 package services.aws
 
-import com.amazonaws.AmazonWebServiceRequest
-import com.amazonaws.handlers.AsyncHandler
-import java.util.concurrent.{Future => JFuture}
+import com.typesafe.scalalogging.LazyLogging
+import software.amazon.awssdk.awscore.AwsRequest
+import software.amazon.awssdk.awscore.exception.AwsServiceException
 
+import java.util.concurrent.CompletableFuture
 import scala.concurrent.{Future, Promise}
 
-class AwsAsyncHandler[Request <: AmazonWebServiceRequest, Response] extends AsyncHandler[Request, Response] {
-  private val promise = Promise[Response]()
+class AwsAsyncHandler[Request <: AwsRequest, Response](
+    f: (Request) => CompletableFuture[Response],
+    request: Request,
+    promise: Promise[Response] = Promise[Response](),
+) extends LazyLogging {
+  val result: CompletableFuture[Response] = f(request)
 
-  override def onError(exception: Exception): Unit = promise.failure(exception)
+  result
+    .thenAccept((response: Response) => {
+      logger.debug(s"Successful result from AwsAsyncHandler")
 
-  override def onSuccess(request: Request, result: Response): Unit = promise.success(result)
+      promise.success(response)
+    })
+    .exceptionally((exception: Throwable) => {
+      logger.warn("Failure from AwsAsyncHandler", exception)
+
+      exception match {
+        case e: AwsServiceException =>
+          if (e.awsErrorDetails.errorCode == "ThrottlingException") {
+            logger.warn(
+              "A rate limiting exception was thrown, we may need to adjust the rate limiting in ClientWrapper.scala",
+            )
+            Thread.sleep(1000) // Wait for a second and retry
+            // Pass the promise from this instance down, so that it can be completed/failed later
+            new AwsAsyncHandler(f, request, promise)
+          } else {
+            promise.failure(exception)
+          }
+        case _ => promise.failure(exception)
+      }
+
+      promise.failure(exception)
+
+      null
+    })
 
   def future: Future[Response] = promise.future
 }
 
 object AwsAsync {
 
-  def apply[Request <: AmazonWebServiceRequest, Response](
-      f: (Request, AsyncHandler[Request, Response]) => JFuture[Response],
+  def apply[Request <: AwsRequest, Response](
+      f: (Request) => CompletableFuture[Response],
       request: Request,
   ): Future[Response] = {
-    val handler = new AwsAsyncHandler[Request, Response]
-    try {
-      f(request, handler)
-      handler.future
-    } catch {
-      case e: Throwable => Future.failed(e)
-    }
+    val handler = new AwsAsyncHandler[Request, Response](f, request)
+    handler.future
   }
 }
