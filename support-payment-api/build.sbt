@@ -12,8 +12,7 @@ addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.13.2")
 
 libraryDependencies ++= Seq(
   "software.amazon.awssdk" % "ssm" % awsClientVersion2,
-  "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
-  "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
+  "software.amazon.awssdk" % "s3" % awsClientVersion2,
   "com.amazonaws" % "aws-java-sdk-ec2" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,

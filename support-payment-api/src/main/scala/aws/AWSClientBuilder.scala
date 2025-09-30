@@ -4,11 +4,11 @@ import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentialsProvider}
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.cloudwatch.{AmazonCloudWatchAsync, AmazonCloudWatchAsyncClientBuilder}
-import com.amazonaws.services.s3.{AmazonS3, AmazonS3ClientBuilder}
 import com.amazonaws.services.sqs.{AmazonSQSAsync, AmazonSQSAsyncClientBuilder}
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.ssm.SsmClient
 import com.gu.aws.CredentialsProvider
+import software.amazon.awssdk.services.s3.S3Client
 
 object AWSClientBuilder {
 
@@ -41,9 +41,10 @@ object AWSClientBuilder {
       .withRegion(Regions.EU_WEST_1)
       .build()
 
-  def buildS3Client(): AmazonS3 = AmazonS3ClientBuilder
-    .standard()
-    .withRegion(Regions.EU_WEST_1)
-    .withCredentials(credentialsProvider)
-    .build()
+  def buildS3Client(): S3Client =
+    S3Client
+      .builder()
+      .region(Region.EU_WEST_1)
+      .credentialsProvider(CredentialsProvider)
+      .build()
 }
