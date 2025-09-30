@@ -1,6 +1,5 @@
 package services
 
-import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import model.Environment
 import model.paypal.PaypalApiError
 import model.stripe.StripeApiError
@@ -8,12 +7,13 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
+import software.amazon.awssdk.services.cloudwatch.CloudWatchAsyncClient
 
 class CloudWatchServiceSpec extends AnyWordSpec with Matchers with MockitoSugar with ScalaFutures {
 
   "CloudWatchService" when {
     val env = Environment.Live
-    val async = mock[AmazonCloudWatchAsync]
+    val async = mock[CloudWatchAsyncClient]
     val cloudWatch = new CloudWatchService(async, env)
     "a PayPalAPIError is given" should {
       "Register as Payment Error in CloudWatch if paypal error is not card related" in {

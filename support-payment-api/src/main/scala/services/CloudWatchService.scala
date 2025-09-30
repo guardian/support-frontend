@@ -1,15 +1,14 @@
 package services
 
 import backend.BackendError
-import com.amazonaws.handlers.AsyncHandler
-import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
-import com.amazonaws.services.cloudwatch.model.{Dimension, MetricDatum, PutMetricDataRequest, PutMetricDataResult}
 import com.typesafe.scalalogging.StrictLogging
 import model.paypal.PaypalApiError
 import model.stripe.StripeApiError
 import model.{Environment, PaymentProvider}
+import software.amazon.awssdk.services.cloudwatch.CloudWatchAsyncClient
+import software.amazon.awssdk.services.cloudwatch.model.{Dimension, MetricDatum, PutMetricDataRequest}
 
-class CloudWatchService(cloudWatchAsyncClient: AmazonCloudWatchAsync, environment: Environment) extends StrictLogging {
+class CloudWatchService(cloudWatchAsyncClient: CloudWatchAsyncClient, environment: Environment) extends StrictLogging {
 
   private val namespace = {
     val qualifier = if (environment == Environment.Live) "PROD" else "CODE"
@@ -17,21 +16,27 @@ class CloudWatchService(cloudWatchAsyncClient: AmazonCloudWatchAsync, environmen
   }
 
   def put(metricName: String, paymentProvider: PaymentProvider): Unit = {
-    val paymentProviderDimension = new Dimension()
-      .withName("payment-provider")
-      .withValue(paymentProvider.entryName)
+    val paymentProviderDimension = Dimension
+      .builder()
+      .name("payment-provider")
+      .value(paymentProvider.entryName)
+      .build()
 
-    val metric = new MetricDatum()
-      .withValue(1d)
-      .withMetricName(metricName)
-      .withUnit("Count")
-      .withDimensions(paymentProviderDimension)
+    val metric = MetricDatum
+      .builder()
+      .value(1d)
+      .metricName(metricName)
+      .unit("Count")
+      .dimensions(paymentProviderDimension)
+      .build()
 
-    val request = new PutMetricDataRequest()
-      .withNamespace(namespace)
-      .withMetricData(metric)
+    val request = PutMetricDataRequest
+      .builder()
+      .namespace(namespace)
+      .metricData(metric)
+      .build()
 
-    cloudWatchAsyncClient.putMetricDataAsync(request, CloudWatchService.LoggingAsyncHandler)
+    cloudWatchAsyncClient.putMetricData(request)
   }
 
   def recordPaymentSuccess(paymentProvider: PaymentProvider): Unit = put("payment-success", paymentProvider)
@@ -83,18 +88,4 @@ class CloudWatchService(cloudWatchAsyncClient: AmazonCloudWatchAsync, environmen
   def recordTrackingRefundFailure(paymentProvider: PaymentProvider): Unit =
     put("tracking-refund-failure", paymentProvider)
 
-}
-
-object CloudWatchService {
-
-  private object LoggingAsyncHandler
-      extends AsyncHandler[PutMetricDataRequest, PutMetricDataResult]
-      with StrictLogging {
-
-    def onError(exception: Exception): Unit = {
-      logger.error("cloud watch service error", exception)
-    }
-
-    def onSuccess(request: PutMetricDataRequest, result: PutMetricDataResult): Unit = ()
-  }
 }
