@@ -3,6 +3,7 @@ import { palette } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { PaperProductOptions } from '@modules/product/productOptions';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import { getPlanBenefitData } from 'pages/paper-subscription-landing/planData';
 import type { BenefitsCheckListData } from '../../../../components/checkoutBenefits/benefitsCheckList';
 import type { Participations } from '../../../../helpers/abTests/models';
@@ -10,6 +11,7 @@ import type { LandingPageVariant } from '../../../../helpers/globalsAndSwitches/
 import {
 	filterBenefitByABTest,
 	filterBenefitByRegion,
+	productCatalogDescriptionPremiumDigital,
 } from '../../../../helpers/productCatalog';
 import type {
 	ActiveProductKey,
@@ -18,9 +20,31 @@ import type {
 	ProductDescription,
 } from '../../../../helpers/productCatalog';
 
-export const getPaperPlusDigitalBenefits = (
-	ratePlanKey: ActiveRatePlanKey,
+export const getDigitalPremiumAllBenefits = (
 	productKey: ActiveProductKey,
+	countryGroupId: CountryGroupId,
+): BenefitsCheckListData[] | undefined => {
+	const { enablePremiumDigital } = getFeatureFlags();
+	if (productKey === 'DigitalSubscription' && enablePremiumDigital) {
+		const benefitsPremiumDigital =
+			productCatalogDescriptionPremiumDigital(countryGroupId)
+				.DigitalSubscription.benefits;
+		// Append SupporterPlus benefits
+		return benefitsAsChecklist({
+			checked: [
+				...benefitsPremiumDigital,
+				...productCatalogDescriptionPremiumDigital(countryGroupId).SupporterPlus
+					.benefits,
+			],
+			unchecked: [],
+		});
+	}
+	return undefined;
+};
+
+export const getPaperPlusDigitalBenefits = (
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
 ): BenefitsCheckListData[] | undefined => {
 	switch (productKey) {
 		case 'HomeDelivery':
