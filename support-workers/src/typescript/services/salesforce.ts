@@ -1,12 +1,10 @@
+import { getCountryNameByIsoCode } from '@modules/internationalisation/country';
 import { z } from 'zod';
+import { getAddressLine } from '../model/address';
 import type { GiftRecipient, User } from '../model/stateSchemas';
-import { createDigitalOnlyContactRecordRequest } from './contactTypes/digitalOnly';
 import type { DigitalOnlyContactRecordRequest } from './contactTypes/digitalOnly';
-import { createGiftBuyerContactRecordRequest } from './contactTypes/giftBuyer';
 import type { GiftBuyerContactRecordRequest } from './contactTypes/giftBuyer';
-import { createGiftRecipientContactRecordRequest } from './contactTypes/giftRecipient';
 import type { GiftRecipientContactRecordRequest } from './contactTypes/giftRecipient';
-import { createPrintContactRecordRequest } from './contactTypes/print';
 import type { PrintContactRecordRequest } from './contactTypes/print';
 import type { SalesforceConfig } from './salesforceClient';
 import { SalesforceClient } from './salesforceClient';
@@ -152,18 +150,6 @@ export const createBuyerRecordRequest = (
 	}
 };
 
-export const createGiftRecipientContactRecordRequestWrapper = (
-	user: User,
-	contactRecord: SalesforceContactRecord,
-	giftRecipient: GiftRecipient,
-): GiftRecipientContactRecordRequest => {
-	return createGiftRecipientContactRecordRequest(
-		contactRecord,
-		giftRecipient,
-		user,
-	);
-};
-
 const getBuyerType = (
 	user: User,
 	hasGiftRecipient: boolean,
@@ -176,4 +162,101 @@ const getBuyerType = (
 	}
 
 	return 'DigitalOnly';
+};
+
+export const createDigitalOnlyContactRecordRequest = (
+	user: User,
+): DigitalOnlyContactRecordRequest => {
+	return {
+		Email: user.primaryEmailAddress,
+		Salutation: user.title,
+		FirstName: user.firstName,
+		LastName: user.lastName,
+		Phone: user.telephoneNumber,
+		RecordTypeId: '01220000000VB50AAG',
+		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
+		...(user.billingAddress.state
+			? { OtherState: user.billingAddress.state }
+			: {}),
+		...(user.billingAddress.postCode
+			? { OtherPostalCode: user.billingAddress.postCode }
+			: {}),
+	};
+};
+
+export const createGiftBuyerContactRecordRequest = (
+	user: User,
+): GiftBuyerContactRecordRequest => {
+	return {
+		IdentityID__c: user.id,
+		Email: user.primaryEmailAddress,
+		Salutation: user.title,
+		FirstName: user.firstName,
+		LastName: user.lastName,
+		Phone: user.telephoneNumber,
+		OtherStreet: getAddressLine(user.billingAddress),
+		OtherCity: user.billingAddress.city,
+		OtherState: user.billingAddress.state,
+		OtherPostalCode: user.billingAddress.postCode,
+		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
+	};
+};
+
+export const createGiftRecipientContactRecordRequest = (
+	contactRecord: SalesforceContactRecord,
+	giftRecipient: GiftRecipient,
+	user: User,
+): GiftRecipientContactRecordRequest => {
+	return {
+		//	Email??
+		AccountId: contactRecord.AccountId,
+		Salutation: giftRecipient.title,
+		FirstName: giftRecipient.firstName,
+		LastName: giftRecipient.lastName,
+		RecordTypeId: '01220000000VB50AAG',
+		...createMailingAddressFields(user),
+	};
+};
+
+export const createMailingAddressFields = (user: User) => {
+	return {
+		MailingStreet: user.deliveryAddress
+			? getAddressLine(user.deliveryAddress)
+			: null,
+		MailingCity: user.deliveryAddress?.city ?? null,
+		MailingState: user.deliveryAddress?.state ?? null,
+		MailingPostalCode: user.deliveryAddress?.postCode ?? null,
+		MailingCountry: user.deliveryAddress?.country
+			? getCountryNameByIsoCode(user.deliveryAddress.country)
+			: null,
+	};
+};
+
+export const createPrintContactRecordRequest = (
+	user: User,
+): PrintContactRecordRequest => {
+	return {
+		Salutation: user.title,
+		FirstName: user.firstName,
+		LastName: user.lastName,
+		Phone: user.telephoneNumber,
+		Email: user.primaryEmailAddress,
+		IdentityID__c: user.id,
+		OtherStreet: getAddressLine(user.billingAddress),
+		OtherCity: user.billingAddress.city ?? null,
+		OtherState: user.billingAddress.state ?? null,
+		OtherPostalCode: user.billingAddress.postCode ?? null,
+		OtherCountry: user.billingAddress.country
+			? getCountryNameByIsoCode(user.billingAddress.country)
+			: null,
+		MailingStreet: user.deliveryAddress
+			? getAddressLine(user.deliveryAddress)
+			: null,
+		MailingCity: user.deliveryAddress?.city ?? null,
+		MailingState: user.deliveryAddress?.state ?? null,
+		MailingPostalCode: user.deliveryAddress?.postCode ?? null,
+		MailingCountry: user.deliveryAddress?.country
+			? getCountryNameByIsoCode(user.deliveryAddress.country)
+			: null,
+	};
 };
