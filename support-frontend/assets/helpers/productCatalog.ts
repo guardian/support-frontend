@@ -10,6 +10,7 @@ import type {
 	ProductKey,
 	ProductRatePlanKey,
 } from '@modules/product-catalog/productCatalog';
+import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { Participations } from './abTests/models';
 
 const activeProductKeys = [
@@ -520,7 +521,7 @@ export function productCatalogGuardianAdLite(): Record<
 	};
 }
 
-export function productCatalogGuardianWeeklyGift(): Record<
+function productCatalogGuardianWeeklyGift(): Record<
 	ActiveProductKey,
 	ProductDescription
 > {
@@ -536,6 +537,21 @@ export function productCatalogGuardianWeeklyGift(): Record<
 		},
 	};
 }
+
+export const getProductDescription = (
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
+	countryGroupId: CountryGroupId,
+	enablePremiumDigital: boolean,
+): ProductDescription => {
+	if (enablePremiumDigital) {
+		return productCatalogDescriptionNewBenefits(countryGroupId)[productKey];
+	}
+	if (isGuardianWeeklyGiftProduct(productKey, ratePlanKey)) {
+		return productCatalogGuardianWeeklyGift()[productKey];
+	}
+	return productCatalogDescription[productKey];
+};
 
 /**
  * This method is to help us determine which product and rateplan to

@@ -16,12 +16,10 @@ import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { getFeatureFlags } from 'helpers/featureFlags';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import {
-	type ActiveProductKey,
-	type ActiveRatePlanKey,
-	productCatalogDescription,
-	productCatalogDescriptionNewBenefits,
-	productCatalogGuardianWeeklyGift,
+import { getProductDescription } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -77,18 +75,14 @@ export default function CheckoutSummary({
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
-	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 	const { enablePremiumDigital } = getFeatureFlags();
-	const getProductDescription = () => {
-		if (enablePremiumDigital) {
-			return productCatalogDescriptionNewBenefits(countryGroupId)[productKey];
-		}
-		if (isWeeklyGift) {
-			return productCatalogGuardianWeeklyGift()[productKey];
-		}
-		return productCatalogDescription[productKey];
-	};
-	const productDescription = getProductDescription();
+	const productDescription = getProductDescription(
+		productKey,
+		ratePlanKey,
+		countryGroupId,
+		enablePremiumDigital,
+	);
+
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
 	};
@@ -183,7 +177,7 @@ export default function CheckoutSummary({
 					ratePlanLabel={ratePlanDescription.label}
 					paymentFrequency={getBillingPeriodNoun(
 						ratePlanDescription.billingPeriod,
-						isWeeklyGift,
+						isGuardianWeeklyGiftProduct(productKey, ratePlanKey),
 					)}
 					amount={originalAmount}
 					promotion={promotion}
