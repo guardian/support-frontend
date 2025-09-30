@@ -4,7 +4,6 @@ import org.apache.pekko.actor.ActorSystem
 import backend.BackendError.SoftOptInsServiceError
 import cats.data.EitherT
 import cats.implicits._
-import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import com.stripe.model.Charge.PaymentMethodDetails
@@ -27,6 +26,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.WSClient
 import services.SwitchState.{Off, On}
 import services._
+import software.amazon.awssdk.services.s3.S3Client
 import util.FutureEitherValues
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -187,7 +187,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockSwitchService: SwitchService = mock[SwitchService]
   implicit val mockWsClient: WSClient = mock[WSClient]
   implicit val mockActorSystem: ActorSystem = mock[ActorSystem]
-  implicit val mockS3Client: AmazonS3 = mock[AmazonS3]
+  implicit val mockS3Client: S3Client = mock[S3Client]
 
   // happens on instantiation of StripeBackend
   when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)

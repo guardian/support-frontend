@@ -6,7 +6,6 @@ import cats.instances.future._
 import cats.syntax.apply._
 import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
-import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService.Sources
@@ -25,6 +24,7 @@ import model.stripe.StripePaymentMethod.{StripeApplePay, StripeCheckout, StripeP
 import model.stripe._
 import play.api.libs.ws.WSClient
 import services._
+import software.amazon.awssdk.services.s3.S3Client
 import util.EnvironmentBasedBuilder
 
 import scala.concurrent.Future
@@ -325,7 +325,7 @@ object StripeBackend {
       supporterProductDataService: SupporterProductDataService,
       switchService: SwitchService,
       environment: Environment,
-  )(implicit pool: DefaultThreadPool, WSClient: WSClient, awsClient: AmazonS3): StripeBackend = {
+  )(implicit pool: DefaultThreadPool, WSClient: WSClient, awsClient: S3Client): StripeBackend = {
     new StripeBackend(
       stripeService,
       databaseService,
@@ -345,7 +345,7 @@ object StripeBackend {
       stripeThreadPool: StripeThreadPool,
       sqsThreadPool: SQSThreadPool,
       wsClient: WSClient,
-      awsClient: AmazonS3,
+      s3Client: S3Client,
       system: ActorSystem,
   ) extends EnvironmentBasedBuilder[StripeBackend] {
 
@@ -370,7 +370,7 @@ object StripeBackend {
         .andThen(RecaptchaService.fromRecaptchaConfig): InitializationResult[RecaptchaService],
       new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService],
       new SupporterProductDataService(env).valid: InitializationResult[SupporterProductDataService],
-      new SwitchService(env)(awsClient, system, stripeThreadPool).valid: InitializationResult[SwitchService],
+      new SwitchService(env)(s3Client, system, stripeThreadPool).valid: InitializationResult[SwitchService],
       env.valid: InitializationResult[Environment],
     ).mapN(StripeBackend.apply)
   }

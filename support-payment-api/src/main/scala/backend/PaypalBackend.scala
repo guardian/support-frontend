@@ -7,7 +7,6 @@ import cats.syntax.apply._
 import cats.syntax.either._
 import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
-import com.amazonaws.services.s3.AmazonS3
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService.Sources
 import com.gu.support.config.Stages.{CODE, PROD}
@@ -25,6 +24,7 @@ import model.paypal._
 import org.apache.pekko.http.scaladsl.model.Uri
 import play.api.libs.ws.WSClient
 import services._
+import software.amazon.awssdk.services.s3.S3Client
 import util.EnvironmentBasedBuilder
 
 import scala.concurrent.Future
@@ -270,7 +270,7 @@ object PaypalBackend {
       paypalThreadPool: PaypalThreadPool,
       sqsThreadPool: SQSThreadPool,
       wsClient: WSClient,
-      awsClient: AmazonS3,
+      s3Client: S3Client,
       system: ActorSystem,
   ) extends EnvironmentBasedBuilder[PaypalBackend] {
 
@@ -292,7 +292,7 @@ object PaypalBackend {
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],
       new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService],
       new SupporterProductDataService(env).valid: InitializationResult[SupporterProductDataService],
-      new SwitchService(env)(awsClient, system, paypalThreadPool).valid: InitializationResult[SwitchService],
+      new SwitchService(env)(s3Client, system, paypalThreadPool).valid: InitializationResult[SwitchService],
     ).mapN(PaypalBackend.apply)
   }
 }
