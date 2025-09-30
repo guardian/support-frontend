@@ -1,4 +1,4 @@
-import { ContactRecordRequest } from '../../services/salesforce';
+// import { ContactRecordRequest } from '../../services/salesforce';
 import { Title } from '../../model/stateSchemas';
 import { IsoCountry } from '@modules/internationalisation/country';
 
@@ -14,24 +14,24 @@ export const city = 'London';
 export const postCode = 'n1 9gu';
 export const uk: IsoCountry = 'GB';
 export const state = 'CA';
-export const customer: ContactRecordRequest = {
-	IdentityID__c: idId,
-	Email: emailAddress,
-	Salutation: title,
-	FirstName: name,
-	LastName: name,
-	OtherStreet: null,
-	OtherCity: null,
-	OtherState: null,
-	OtherPostalCode: null,
-	OtherCountry: uk,
-	MailingStreet: null,
-	MailingCity: null,
-	MailingState: null,
-	MailingPostalCode: null,
-	MailingCountry: null,
-	Phone: null,
-};
+// export const customer: ContactRecordRequest = {
+// 	IdentityID__c: idId,
+// 	Email: emailAddress,
+// 	Salutation: title,
+// 	FirstName: name,
+// 	LastName: name,
+// 	OtherStreet: null,
+// 	OtherCity: null,
+// 	OtherState: null,
+// 	OtherPostalCode: null,
+// 	OtherCountry: uk,
+// 	MailingStreet: null,
+// 	MailingCity: null,
+// 	MailingState: null,
+// 	MailingPostalCode: null,
+// 	MailingCountry: null,
+// 	Phone: null,
+// };
 
 const address = {
 	lineOne: street,
