@@ -218,7 +218,8 @@ export function ThankYouComponent({
 	const isSupporterPlus = productKey === 'SupporterPlus';
 	const isTierThree = productKey === 'TierThree';
 	const isNationalDelivery = productKey === 'NationalDelivery';
-	const validEmail = order.email !== '';
+	const { email } = order;
+	const validEmail = email !== '';
 	const { enablePremiumDigital } = getFeatureFlags();
 
 	// Clarify Guardian Ad-lite thankyou page states
@@ -267,7 +268,7 @@ export function ThankYouComponent({
 		isSupporterPlus,
 		isTierThree,
 		startDate,
-		undefined,
+		email,
 		undefined,
 		benefitsChecklist,
 		undefined,
