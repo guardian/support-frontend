@@ -216,11 +216,11 @@ const feastBenefit = {
 };
 
 const supporterPlusBenefits = [
-	appBenefit,
+	fewerAsksBenefit,
 	addFreeBenefit,
+	appBenefit,
 	newsletterBenefit,
 	newsletterBenefitUS,
-	fewerAsksBenefit,
 	partnerOffersBenefit,
 	feastBenefit,
 ];

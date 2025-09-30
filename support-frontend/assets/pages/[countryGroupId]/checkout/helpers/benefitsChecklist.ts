@@ -26,16 +26,19 @@ export const getDigitalPremiumAllBenefits = (
 ): BenefitsCheckListData[] | undefined => {
 	const { enablePremiumDigital } = getFeatureFlags();
 	if (productKey === 'DigitalSubscription' && enablePremiumDigital) {
-		const benefitsPremiumDigital =
-			productCatalogDescriptionPremiumDigital(countryGroupId)
-				.DigitalSubscription.benefits;
+		const productDescription =
+			productCatalogDescriptionPremiumDigital(countryGroupId);
+		const digitalPremiumBenefits = filterProductDescriptionBenefits(
+			productDescription.DigitalSubscription,
+			countryGroupId,
+		);
+		const supporterPlusBenefits = filterProductDescriptionBenefits(
+			productDescription.SupporterPlus,
+			countryGroupId,
+		);
 		// Append SupporterPlus benefits
 		return benefitsAsChecklist({
-			checked: [
-				...benefitsPremiumDigital,
-				...productCatalogDescriptionPremiumDigital(countryGroupId).SupporterPlus
-					.benefits,
-			],
+			checked: [...digitalPremiumBenefits, ...supporterPlusBenefits],
 			unchecked: [],
 		});
 	}
@@ -128,4 +131,14 @@ export const getBenefitsChecklistFromProductDescription = (
 			isChecked: true,
 			text: `${benefit.copyBoldStart ?? ''}${benefit.copy}`,
 		}));
+};
+
+const filterProductDescriptionBenefits = (
+	productDescription: ProductDescription,
+	countryGroupId: CountryGroupId,
+	abParticipations?: Participations,
+): ProductBenefit[] => {
+	return productDescription.benefits
+		.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
+		.filter((benefit) => filterBenefitByABTest(benefit, abParticipations));
 };
