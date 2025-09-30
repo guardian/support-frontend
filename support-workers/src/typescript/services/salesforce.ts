@@ -69,9 +69,10 @@ export class SalesforceService {
 			giftRecipient,
 			user,
 		);
-		console.log('buyerResponse:', buyerResponse);
-		console.log('giftRecipientResponse:', giftRecipientResponse);
-		return giftRecipientResponse?.ContactRecord ?? buyerResponse.ContactRecord;
+		const recipientContactRecord =
+			giftRecipientResponse?.ContactRecord ?? buyerResponse.ContactRecord;
+
+		return recipientContactRecord;
 	};
 
 	upsert = async (
