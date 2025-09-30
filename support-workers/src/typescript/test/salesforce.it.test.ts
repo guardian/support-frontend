@@ -5,32 +5,32 @@
 import { handler } from '../lambdas/createSalesforceContactLambda';
 import type {
 	CreateSalesforceContactState,
-	WrappedState,
+	// WrappedState,
 } from '../model/stateSchemas';
 import {
 	createSalesforceContactStateSchema,
-	wrapperSchemaForState,
+	// wrapperSchemaForState,
 	wrapState,
 } from '../model/stateSchemas';
-import type { DeliveryContactRecordRequest } from '../services/salesforce';
+// import type { DeliveryContactRecordRequest } from '../services/salesforce';
 import { SalesforceService } from '../services/salesforce';
 import type { SalesforceConfig } from '../services/salesforceClient';
 import { AuthService, getSalesforceConfig } from '../services/salesforceClient';
 import createSalesforceContactContribution from './fixtures/createSalesforceContact/contributionMonthlyUSD.json';
-import createGiftSubscription from './fixtures/createSalesforceContact/gwGiftDirectDebit.json';
-import {
-	city,
-	customer,
-	emailAddress,
-	postCode,
-	salesforceAccountId,
-	salesforceId,
-	state,
-	street,
-	telephoneNumber,
-	title,
-	uk,
-} from './fixtures/salesforceFixtures';
+// import createGiftSubscription from './fixtures/createSalesforceContact/gwGiftDirectDebit.json';
+// import {
+// 	city,
+// 	customer,
+// 	emailAddress,
+// 	postCode,
+// 	salesforceAccountId,
+// 	salesforceId,
+// 	state,
+// 	street,
+// 	telephoneNumber,
+// 	title,
+// 	uk,
+// } from './fixtures/salesforceFixtures';
 
 describe('AuthService', () => {
 	test('should be able to retrieve an auth token', async () => {
