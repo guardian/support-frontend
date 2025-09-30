@@ -2,11 +2,10 @@ package conf
 
 import cats.data.Validated
 import cats.syntax.apply._
-import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
-
 import conf.ConfigLoader._
 import model.paypal.PaypalMode
 import model.{Environment, InitializationError}
+import software.amazon.awssdk.services.ssm.model.GetParametersByPathRequest
 
 case class PaypalConfig(clientId: String, clientSecret: String, hookId: String, paypalMode: PaypalMode)
 
@@ -16,10 +15,7 @@ object PaypalConfig {
     new ParameterStoreLoadable[Environment, PaypalConfig] {
 
       override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
-        new GetParametersByPathRequest()
-          .withPath(s"/payment-api/paypal-config/${environment.entryName}/")
-          .withRecursive(false)
-          .withWithDecryption(true)
+        buildPathRequest(s"/payment-api/paypal-config/${environment.entryName}/")
 
       override def decode(
           environment: Environment,

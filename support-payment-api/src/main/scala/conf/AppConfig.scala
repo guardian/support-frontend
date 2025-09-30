@@ -1,11 +1,10 @@
 package conf
 
 import cats.data.Validated
-import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
 import play.api.{Configuration, Mode}
-
 import conf.ConfigLoader._
 import model.InitializationError
+import software.amazon.awssdk.services.ssm.model.GetParametersByPathRequest
 
 case class AppConfig(secret: String)
 
@@ -15,10 +14,7 @@ object AppConfig {
     new ParameterStoreLoadable[Mode, AppConfig] {
 
       override def parametersByPathRequest(mode: Mode): GetParametersByPathRequest =
-        new GetParametersByPathRequest()
-          .withPath(s"/payment-api/app-config/${mode.asJava.toString.toLowerCase}/")
-          .withRecursive(false)
-          .withWithDecryption(true)
+        buildPathRequest(s"/payment-api/app-config/${mode.asJava.toString.toLowerCase}/")
 
       override def decode(mode: Mode, data: Map[String, String]): Validated[InitializationError, AppConfig] = {
         val validator = new ParameterStoreValidator[AppConfig, Mode](mode, data); import validator._

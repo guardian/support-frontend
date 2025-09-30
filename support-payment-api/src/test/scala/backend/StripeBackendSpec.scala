@@ -4,8 +4,6 @@ import org.apache.pekko.actor.ActorSystem
 import backend.BackendError.SoftOptInsServiceError
 import cats.data.EitherT
 import cats.implicits._
-import com.amazonaws.services.s3.AmazonS3
-import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import com.stripe.model.Charge.PaymentMethodDetails
 import com.stripe.model.{Charge, ChargeCollection, Event, PaymentIntent}
@@ -27,6 +25,8 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.WSClient
 import services.SwitchState.{Off, On}
 import services._
+import software.amazon.awssdk.services.s3.S3Client
+import software.amazon.awssdk.services.sqs.model.SendMessageResponse
 import util.FutureEitherValues
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -128,9 +128,9 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val acquisitionsEventBusErrorMessage = "an event bus error"
   val acquisitionsEventBusResponseError: Future[Either[String, Unit]] =
     Future.successful(Left(acquisitionsEventBusErrorMessage))
-  val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
+  val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResponse] =
     EitherT.left(Future.successful(emailError))
-  val emailServiceErrorResponse: EitherT[Future, EmailService.Error, SendMessageResult] =
+  val emailServiceErrorResponse: EitherT[Future, EmailService.Error, SendMessageResponse] =
     EitherT.left(Future.successful(EmailService.Error(new Exception("email service failure"))))
   val recaptchaServiceErrorResponse: EitherT[Future, StripeApiError, RecaptchaResponse] =
     EitherT.left(Future.successful(stripeApiError))
@@ -187,7 +187,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockSwitchService: SwitchService = mock[SwitchService]
   implicit val mockWsClient: WSClient = mock[WSClient]
   implicit val mockActorSystem: ActorSystem = mock[ActorSystem]
-  implicit val mockS3Client: AmazonS3 = mock[AmazonS3]
+  implicit val mockS3Client: S3Client = mock[S3Client]
 
   // happens on instantiation of StripeBackend
   when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)

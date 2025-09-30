@@ -4,10 +4,10 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import {
+	buildPromotionalTermsLink,
 	contributionsTermsLinks,
 	digitalSubscriptionTermsLink,
 	guardianAdLiteTermsLink,
-	guardianWeeklyPromoTermsLink,
 	guardianWeeklyTermsLink,
 	observerLinks,
 	paperTermsLink,
@@ -173,21 +173,21 @@ function paperTsAndCs(
 		</>
 	);
 }
-function weeklyTsAndCs(isWeeklyGift?: boolean, promotion?: Promotion) {
-	const rightReservation = `Offer subject to availability. Guardian News and Media Ltd ("GNM") reserves the right to withdraw this promotion at any time. `;
-	return (
-		<>
-			{isWeeklyGift && <div>{rightReservation}</div>}
-			{promotion && (
-				<div>
-					{rightReservation} Full promotion terms and conditions for our{' '}
-					{termsLink('monthly', guardianWeeklyPromoTermsLink)} and{' '}
-					{termsLink('annual', guardianWeeklyPromoTermsLink)} offers.
-				</div>
-			)}
-		</>
-	);
-}
+// function weeklyTsAndCs(isWeeklyGift?: boolean, promotion?: Promotion) {
+// 	const rightReservation = `Offer subject to availability. Guardian News and Media Ltd ("GNM") reserves the right to withdraw this promotion at any time. `;
+// 	return (
+// 		<>
+// 			{isWeeklyGift && <div>{rightReservation}</div>}
+// 			{promotion && (
+// 				<div>
+// 					{rightReservation} Full promotion terms and conditions for our{' '}
+// 					{termsLink('monthly', guardianWeeklyPromoTermsLink)} and{' '}
+// 					{termsLink('annual', guardianWeeklyPromoTermsLink)} offers.
+// 				</div>
+// 			)}
+// 		</>
+// 	);
+// }
 
 export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
@@ -197,6 +197,18 @@ export interface PaymentTsAndCsProps {
 	promotion?: Promotion;
 	thresholdAmount?: number;
 }
+
+function GuardianWeeklyPromoTerms({ promotion }: { promotion: Promotion }) {
+	return (
+		<div>
+			Offer subject to availability. Guardian News and Media Ltd ("GNM")
+			reserves the right to withdraw this promotion at any time. Full promotion
+			terms and conditions for our{' '}
+			{termsLink('offer', buildPromotionalTermsLink(promotion))}.
+		</div>
+	);
+}
+
 export function PaymentTsAndCs({
 	productKey,
 	ratePlanKey,
@@ -244,6 +256,7 @@ export function PaymentTsAndCs({
 				thresholdAmount,
 				promotion,
 		  );
+
 	const productLabel = productCatalogDescription[productKey].label;
 	const subscriptionBasis = !isStudentOneYearRatePlan
 		? 'on a subscription basis'
@@ -345,8 +358,14 @@ export function PaymentTsAndCs({
 		NationalDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
 		HomeDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
 		SubscriptionCard: paperTsAndCs('Collection', deliveryDate),
-		GuardianWeeklyDomestic: weeklyTsAndCs(isWeeklyGift, promotion),
-		GuardianWeeklyRestOfWorld: weeklyTsAndCs(isWeeklyGift, promotion),
+// 		GuardianWeeklyDomestic: weeklyTsAndCs(isWeeklyGift, promotion),
+// 		GuardianWeeklyRestOfWorld: weeklyTsAndCs(isWeeklyGift, promotion),
+		GuardianWeeklyDomestic: promotion && (
+			<GuardianWeeklyPromoTerms promotion={promotion} />
+		),
+		GuardianWeeklyRestOfWorld: promotion && (
+			<GuardianWeeklyPromoTerms promotion={promotion} />
+		),
 	};
 	return (
 		<div css={container}>

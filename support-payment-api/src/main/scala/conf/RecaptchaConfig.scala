@@ -1,9 +1,9 @@
 package conf
 
 import cats.data.Validated
-import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
 import conf.ConfigLoader.{ParameterStoreLoadable, _}
 import model.{Environment, InitializationError}
+import software.amazon.awssdk.services.ssm.model.GetParametersByPathRequest
 
 case class RecaptchaConfig(secretKey: String)
 
@@ -13,10 +13,7 @@ object RecaptchaConfig {
     new ParameterStoreLoadable[Environment, RecaptchaConfig] {
 
       override def parametersByPathRequest(environment: Environment): GetParametersByPathRequest =
-        new GetParametersByPathRequest()
-          .withPath(s"/payment-api/recaptcha-config/${environment.entryName}/")
-          .withWithDecryption(true)
-          .withRecursive(false)
+        buildPathRequest(s"/payment-api/recaptcha-config/${environment.entryName}/")
 
       override def decode(
           environment: Environment,

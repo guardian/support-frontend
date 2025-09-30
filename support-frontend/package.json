@@ -86,7 +86,7 @@
 		"@emotion/utils": "^1.1.0",
 		"@floating-ui/react": "^0.27.6",
 		"@guardian/core-web-vitals": "^11.1.0",
-		"@guardian/libs": "^25.3.0",
+		"@guardian/libs": "^26.0.0",
 		"@guardian/source": "10.2.0",
 		"@guardian/source-development-kitchen": "18.1.1",
 		"@guardian/support-service-lambdas": "catalog:",

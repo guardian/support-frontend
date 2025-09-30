@@ -12,7 +12,7 @@ import WeeklyTerms from 'pages/promotion-terms/weeklyTerms';
 const getTermsForProduct = (props: PromotionTermsPropTypes) => {
 	switch (props.promotionTerms.product) {
 		case GuardianWeekly:
-			return <WeeklyTerms {...props} />;
+			return <WeeklyTerms />;
 
 		case DigitalPack:
 			return (
