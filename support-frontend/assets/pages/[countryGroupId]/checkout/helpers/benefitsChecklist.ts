@@ -136,9 +136,8 @@ export const getBenefitsChecklistFromProductDescription = (
 const filterProductDescriptionBenefits = (
 	productDescription: ProductDescription,
 	countryGroupId: CountryGroupId,
-	abParticipations?: Participations,
 ): ProductBenefit[] => {
-	return productDescription.benefits
-		.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
-		.filter((benefit) => filterBenefitByABTest(benefit, abParticipations));
+	return productDescription.benefits.filter((benefit) =>
+		filterBenefitByRegion(benefit, countryGroupId),
+	);
 };
