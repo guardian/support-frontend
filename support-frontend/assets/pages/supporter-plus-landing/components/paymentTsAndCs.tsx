@@ -231,7 +231,7 @@ export function PaymentTsAndCs({
 		productKey,
 		ratePlanKey as ActivePaperProductOptions,
 	);
-	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
+	// const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 
 	if (isSundayOnlyNewsletterSubscription) {
 		return (
@@ -358,8 +358,8 @@ export function PaymentTsAndCs({
 		NationalDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
 		HomeDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
 		SubscriptionCard: paperTsAndCs('Collection', deliveryDate),
-// 		GuardianWeeklyDomestic: weeklyTsAndCs(isWeeklyGift, promotion),
-// 		GuardianWeeklyRestOfWorld: weeklyTsAndCs(isWeeklyGift, promotion),
+		// GuardianWeeklyDomestic: weeklyTsAndCs(isWeeklyGift, promotion),
+		// GuardianWeeklyRestOfWorld: weeklyTsAndCs(isWeeklyGift, promotion),
 		GuardianWeeklyDomestic: promotion && (
 			<GuardianWeeklyPromoTerms promotion={promotion} />
 		),
