@@ -13,8 +13,8 @@ import {
 	wrapState,
 } from '../model/stateSchemas';
 // import type { DeliveryContactRecordRequest } from '../services/salesforce';
-import { SalesforceService } from '../services/salesforce';
-import type { SalesforceConfig } from '../services/salesforceClient';
+// import { SalesforceService } from '../services/salesforce';
+// import type { SalesforceConfig } from '../services/salesforceClient';
 import { AuthService, getSalesforceConfig } from '../services/salesforceClient';
 import createSalesforceContactContribution from './fixtures/createSalesforceContact/contributionMonthlyUSD.json';
 // import createGiftSubscription from './fixtures/createSalesforceContact/gwGiftDirectDebit.json';
