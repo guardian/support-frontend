@@ -28,6 +28,7 @@ const desktopImg = css`
 	margin-left: auto;
 	margin-top: -${space[2]}px; // padding-top over-run
 	margin-bottom: -${space[5]}px; // padding-bottom over-run
+	overflow: hidden;
 
 	& img {
 		width: 100%;

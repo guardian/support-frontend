@@ -290,10 +290,6 @@ export function ThankYouComponent({
 		...maybeThankYouModule(userNotSignedIn && !isGuardianAdLite, 'signIn'), // Sign in to access your benefits
 		...maybeThankYouModule(isTierThree, 'benefits'),
 		...maybeThankYouModule(
-			isTierThree && enablePremiumDigital,
-			'newspaperArchiveBenefit',
-		),
-		...maybeThankYouModule(
 			isTierThree || isNationalDelivery,
 			'subscriptionStart',
 		),
@@ -313,6 +309,10 @@ export function ThankYouComponent({
 			'feedback',
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
+		...maybeThankYouModule(
+			isTierThree && enablePremiumDigital,
+			'newspaperArchiveBenefit',
+		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(
 			!isTierThree && !isGuardianAdLite && !isPrint,
