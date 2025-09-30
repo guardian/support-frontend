@@ -236,7 +236,7 @@ const guardianAdLiteBenefits = [
 ];
 
 const paperThankyouMessage = `Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future. As well as future communications on how to make the most of your subscription and weekly newsletters written by the editors. `;
-
+const digitalThankyouMessage = `You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`;
 const nationalPaperPlusRatePlans: RatePlanDetails = {
 	Everyday: {
 		billingPeriod: BillingPeriod.Monthly,
@@ -304,7 +304,7 @@ export const productCatalogDescription: Record<
 	},
 	TierThree: {
 		label: 'Digital + print',
-		thankyouMessage: `You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`,
+		thankyouMessage: digitalThankyouMessage,
 		landingPagePath: '/contribute',
 		benefits: [guardianWeeklyBenefit],
 		/** These are just the SupporterPlus benefits */
@@ -496,6 +496,9 @@ export function productCatalogDescriptionPremiumDigital(
 		...productCatalogDescription,
 		DigitalSubscription: {
 			...productCatalogDescription.DigitalSubscription,
+			label: 'Premium Digital',
+			thankyouMessage: digitalThankyouMessage,
+			landingPagePath: '/contribute',
 			benefits: [
 				weeklyDigitalBenefit(),
 				editionsDigitalBenefit(),
