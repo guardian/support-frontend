@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node and Install Dependencies
         uses: ./.github/actions/setup-node-and-install
 
-      - uses: chromaui/action@v13.1.4
+      - uses: chromaui/action@v13.2.1
         with:
           workingDir: support-frontend
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
