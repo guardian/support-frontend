@@ -39,11 +39,8 @@ export function isGuardianWeeklyProduct(productKey: ActiveProductKey): boolean {
 
 export function isGuardianWeeklyGiftProduct(
 	productKey: ActiveProductKey,
-	ratePlanKey?: ActiveRatePlanKey,
+	ratePlanKey: ActiveRatePlanKey,
 ): boolean {
-	if (!ratePlanKey) {
-		return false;
-	}
 	return (
 		isGuardianWeeklyProduct(productKey) &&
 		['ThreeMonthGift', 'OneYearGift'].includes(ratePlanKey)

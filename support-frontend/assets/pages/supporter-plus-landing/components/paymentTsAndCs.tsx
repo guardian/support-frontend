@@ -102,9 +102,11 @@ export function FooterTsAndCs({
 				);
 		}
 	};
-	const weeklyGiftTerms = isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
-		? ' To cancel, go to Manage My Account or see our Terms. This subscription does not auto-renew.'
-		: '';
+
+	const weeklyGiftTerms =
+		ratePlanKey && isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+			? ' To cancel, go to Manage My Account or see our Terms. This subscription does not auto-renew.'
+			: '';
 	return (
 		<div css={marginTop}>
 			By proceeding, you are agreeing to {getProductNameSummary()}{' '}
