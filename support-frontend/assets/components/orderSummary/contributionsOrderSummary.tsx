@@ -225,11 +225,7 @@ export function ContributionsOrderSummary({
 			abTestVariant={abParticipations?.abNudgeToLowRegular}
 		/>
 	);
-
 	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
-	const productLabelGift = `${
-		isWeeklyGift ? 'Guardian Weekly Gift Subscription' : productLabel
-	}`;
 
 	return (
 		<div css={componentStyles}>
@@ -242,7 +238,11 @@ export function ContributionsOrderSummary({
 				<div css={summaryRow}>
 					<div>
 						{ratePlanLabel && <p>{ratePlanLabel}</p>}
-						<p>{productLabelGift}</p>
+						<p>
+							{isWeeklyGift
+								? 'Guardian Weekly Gift Subscription'
+								: productLabel}
+						</p>
 					</div>
 					{(hasCheckList || isSundayOnlyNewspaperSubscription) && (
 						<Button
