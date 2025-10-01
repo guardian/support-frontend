@@ -13,7 +13,7 @@ import { ServiceProvider } from '../services/config';
 import type { SalesforceContactRecord } from '../services/salesforce';
 import { SalesforceService } from '../services/salesforce';
 import { getSalesforceConfig } from '../services/salesforceClient';
-import { user } from '../test/fixtures/salesforceFixtures';
+import { user } from '../test/fixtures/salesforce/salesforceFixtures';
 import { getIfDefined } from '../util/nullAndUndefined';
 
 const stage = stageFromEnvironment();
