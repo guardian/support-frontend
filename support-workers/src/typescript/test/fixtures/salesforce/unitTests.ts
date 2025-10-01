@@ -1,4 +1,4 @@
-import { IsoCountry } from '@modules/internationalisation/country';
+import type { IsoCountry } from '@modules/internationalisation/country';
 import type { Title } from '../../../model/stateSchemas';
 
 export const identityId = '9999999';

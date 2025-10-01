@@ -13,7 +13,7 @@
 // 	wrapState,
 // } from '../model/stateSchemas';
 // import type { DeliveryContactRecordRequest } from '../services/salesforce';
-import { GiftRecipientContactRecordRequest } from '../services/contactTypes/giftRecipient';
+import type { GiftRecipientContactRecordRequest } from '../services/contactTypes/giftRecipient';
 import { SalesforceService } from '../services/salesforce';
 import type { SalesforceConfig } from '../services/salesforceClient';
 import { AuthService, getSalesforceConfig } from '../services/salesforceClient';

@@ -1,6 +1,6 @@
+import type { IsoCountry } from '@modules/internationalisation/country';
 import type { PrintContactRecordRequest } from 'src/typescript/services/contactTypes/print';
 import type { Title } from '../../../model/stateSchemas';
-import { IsoCountry } from '@modules/internationalisation/country';
 
 export const idId = '9999999';
 export const salesforceId = '003UD00000VZnteYAD';
