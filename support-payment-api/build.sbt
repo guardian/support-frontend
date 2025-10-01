@@ -8,7 +8,7 @@ scalacOptions ++= Seq(
   "-Ymacro-annotations",
 )
 
-addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.13.2")
+addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.13.4")
 
 libraryDependencies ++= Seq(
   "software.amazon.awssdk" % "ssm" % awsClientVersion2,
