@@ -1,5 +1,6 @@
 import {
 	createGiftBuyerContactRecordRequest,
+	createGiftRecipientContactRecordRequest,
 	createPrintContactRecordRequest,
 	SalesforceError,
 	salesforceErrorCodes,
@@ -7,6 +8,7 @@ import {
 } from '../services/salesforce';
 import {
 	giftBuyer,
+	giftRecipient,
 	printSubscriber,
 	street,
 } from './fixtures/salesforceFixtures';
@@ -58,6 +60,39 @@ describe('SalesforceService', () => {
 		expect(newContact.LastName).toBe(giftBuyer.lastName);
 		expect(newContact.Salutation).toBe(giftBuyer.title);
 		expect(newContact.Phone).toBe(giftBuyer.telephoneNumber);
+	});
+
+	test('createGiftRecipientContactRecordRequest should have properties populated correctly', () => {
+		const buyerContactRecord = {
+			Id: '003UD00000kdJ6kYAE',
+			AccountId: '001UD00000NP6BTYA1',
+		};
+
+		const recipientContact = createGiftRecipientContactRecordRequest(
+			buyerContactRecord,
+			giftRecipient,
+			giftBuyer,
+		);
+
+		expect('OtherStreet' in recipientContact).toBe(false);
+		expect('OtherCity' in recipientContact).toBe(false);
+		expect('OtherState' in recipientContact).toBe(false);
+		expect('OtherPostalCode' in recipientContact).toBe(false);
+		expect('OtherCountry' in recipientContact).toBe(false);
+
+		expect(recipientContact.MailingStreet).toBe(street);
+		expect(recipientContact.MailingCity).toBe(giftBuyer.deliveryAddress.city);
+		expect(recipientContact.MailingState).toBe(giftBuyer.deliveryAddress.state);
+		expect(recipientContact.MailingPostalCode).toBe(
+			giftBuyer.deliveryAddress.postCode,
+		);
+		expect(recipientContact.MailingCountry).toBe('United Kingdom');
+
+		expect(recipientContact.Email).toBe(giftRecipient.email);
+		expect(recipientContact.FirstName).toBe(giftRecipient.firstName);
+		expect(recipientContact.LastName).toBe(giftRecipient.lastName);
+		expect(recipientContact.Salutation).toBe(giftRecipient.title);
+		expect(recipientContact.AccountId).toBe(buyerContactRecord.AccountId);
 	});
 
 	test('it should throw an INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE error when appropriate', () => {

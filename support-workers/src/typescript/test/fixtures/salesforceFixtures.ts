@@ -65,6 +65,7 @@ export const printSubscriber = {
 	isTestUser: false,
 };
 
+//for gift buyer, the billing address is that of the buyer, and the delivery address is that of the recipient
 export const giftBuyer = {
 	id: idId,
 	firstName: name,
@@ -73,6 +74,22 @@ export const giftBuyer = {
 	primaryEmailAddress: emailAddress,
 	telephoneNumber,
 	billingAddress: address,
-	deliveryAddress: null,
+	deliveryAddress: address,
 	isTestUser: false,
+};
+
+export const giftRecipient = {
+	firstName: 'Gift',
+	lastName: 'Recipient',
+	title: 'Ms' as
+		| 'Mr'
+		| 'Mrs'
+		| 'Ms'
+		| 'Miss'
+		| 'Mx'
+		| 'Dr'
+		| 'Prof'
+		| 'Rev'
+		| null,
+	email: 'gift.recipient@example.com',
 };
