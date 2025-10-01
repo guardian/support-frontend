@@ -34,7 +34,6 @@ object Client {
     val client = SfnAsyncClient
       .builder()
       .credentialsProvider(CredentialsProvider)
-      .credentialsProvider(CredentialsProvider)
       .region(Region.EU_WEST_1)
       .build()
 
