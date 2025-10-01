@@ -36,7 +36,12 @@ class CloudWatchService(cloudWatchAsyncClient: CloudWatchAsyncClient, environmen
       .metricData(metric)
       .build()
 
-    cloudWatchAsyncClient.putMetricData(request)
+    cloudWatchAsyncClient
+      .putMetricData(request)
+      .exceptionally((t: Throwable) => {
+        logger.error(s"Failed to put metric $metricName to CloudWatch", t)
+        null
+      })
   }
 
   def recordPaymentSuccess(paymentProvider: PaymentProvider): Unit = put("payment-success", paymentProvider)
