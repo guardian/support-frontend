@@ -5,7 +5,7 @@ export type GiftRecipientContactRecordRequest = BaseContactRecordRequest & {
 	RecordTypeId: '01220000000VB50AAG';
 	MailingStreet: string | null;
 	MailingCity: string | null;
-	MailingState: string | null;
+	MailingState?: string | null;
 	MailingPostalCode: string | null;
 	MailingCountry: string | null;
 };
