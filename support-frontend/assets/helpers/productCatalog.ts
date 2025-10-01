@@ -474,19 +474,16 @@ const getPaperArchiveDigitalBenefit = (countryGroupId: CountryGroupId) => {
 		}, since 1821.`,
 	};
 };
-const weeklyDigitalBenefit = () => {
-	return {
-		copy: `Guardian Weekly digital sit amet, consec tetur adipiscing elit`,
-		isNew: true,
-		tooltip: `Guardian Weekly digital sit amet, consec tetur adipiscing elit`,
-	};
+const weeklyDigitalBenefit = {
+	copy: `Guardian Weekly digital sit amet, consec tetur adipiscing elit`,
+	isNew: true,
+	tooltip: `Guardian Weekly digital sit amet, consec tetur adipiscing elit`,
 };
-const editionsDigitalBenefit = () => {
-	return {
-		copy: `Daily editions sit amet, consec tetur adipiscing elit`,
-		isNew: true,
-		tooltip: `Daily editions sit amet, consec tetur adipiscing elit`,
-	};
+
+const editionsDigitalBenefit = {
+	copy: `Daily editions sit amet, consec tetur adipiscing elit`,
+	isNew: true,
+	tooltip: `Daily editions sit amet, consec tetur adipiscing elit`,
 };
 
 export function productCatalogDescriptionPremiumDigital(
@@ -500,8 +497,8 @@ export function productCatalogDescriptionPremiumDigital(
 			thankyouMessage: digitalThankyouMessage,
 			landingPagePath: '/contribute',
 			benefits: [
-				weeklyDigitalBenefit(),
-				editionsDigitalBenefit(),
+				weeklyDigitalBenefit,
+				editionsDigitalBenefit,
 				getPaperArchiveDigitalBenefit(countryGroupId),
 			],
 		},
