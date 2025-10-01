@@ -173,21 +173,6 @@ function paperTsAndCs(
 		</>
 	);
 }
-// function weeklyTsAndCs(isWeeklyGift?: boolean, promotion?: Promotion) {
-// 	const rightReservation = `Offer subject to availability. Guardian News and Media Ltd ("GNM") reserves the right to withdraw this promotion at any time. `;
-// 	return (
-// 		<>
-// 			{isWeeklyGift && <div>{rightReservation}</div>}
-// 			{promotion && (
-// 				<div>
-// 					{rightReservation} Full promotion terms and conditions for our{' '}
-// 					{termsLink('monthly', guardianWeeklyPromoTermsLink)} and{' '}
-// 					{termsLink('annual', guardianWeeklyPromoTermsLink)} offers.
-// 				</div>
-// 			)}
-// 		</>
-// 	);
-// }
 
 export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
@@ -198,12 +183,19 @@ export interface PaymentTsAndCsProps {
 	thresholdAmount?: number;
 }
 
+const rightReservation = `Offer subject to availability. Guardian News and Media Ltd ("GNM") reserves the right to withdraw this promotion at any time. `;
+function weeklyTsAndCs(isWeeklyGift?: boolean, promotion?: Promotion) {
+	return (
+		<>
+			{isWeeklyGift && !promotion && <div>{rightReservation}</div>}
+			{promotion && <GuardianWeeklyPromoTerms promotion={promotion} />}
+		</>
+	);
+}
 function GuardianWeeklyPromoTerms({ promotion }: { promotion: Promotion }) {
 	return (
 		<div>
-			Offer subject to availability. Guardian News and Media Ltd ("GNM")
-			reserves the right to withdraw this promotion at any time. Full promotion
-			terms and conditions for our{' '}
+			{rightReservation}Full promotion terms and conditions for our{' '}
 			{termsLink('offer', buildPromotionalTermsLink(promotion))}.
 		</div>
 	);
@@ -231,7 +223,7 @@ export function PaymentTsAndCs({
 		productKey,
 		ratePlanKey as ActivePaperProductOptions,
 	);
-	// const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
+	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 
 	if (isSundayOnlyNewsletterSubscription) {
 		return (
@@ -358,14 +350,8 @@ export function PaymentTsAndCs({
 		NationalDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
 		HomeDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
 		SubscriptionCard: paperTsAndCs('Collection', deliveryDate),
-		// GuardianWeeklyDomestic: weeklyTsAndCs(isWeeklyGift, promotion),
-		// GuardianWeeklyRestOfWorld: weeklyTsAndCs(isWeeklyGift, promotion),
-		GuardianWeeklyDomestic: promotion && (
-			<GuardianWeeklyPromoTerms promotion={promotion} />
-		),
-		GuardianWeeklyRestOfWorld: promotion && (
-			<GuardianWeeklyPromoTerms promotion={promotion} />
-		),
+		GuardianWeeklyDomestic: weeklyTsAndCs(isWeeklyGift, promotion),
+		GuardianWeeklyRestOfWorld: weeklyTsAndCs(isWeeklyGift, promotion),
 	};
 	return (
 		<div css={container}>
