@@ -2,7 +2,6 @@ package services.stepfunctions
 
 import cats.data.EitherT
 import cats.implicits._
-import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.i18n.{CountryGroup, Title}
 import com.gu.monitoring.SafeLogging
 import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds, ReferrerAcquisitionData}
@@ -17,6 +16,7 @@ import org.joda.time.LocalDate
 import play.api.mvc.{Call, Request}
 import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
 import services.stepfunctions.SupportWorkersClient._
+import software.amazon.awssdk.services.sfn.model.{StateExitedEventDetails, StateMachineStatus}
 
 import java.util.UUID
 import scala.concurrent.{ExecutionContextExecutor, Future}
@@ -217,7 +217,7 @@ class SupportWorkersClient(
         },
         { events =>
           val trackingUri = supportUrl + statusCall(jobId).url
-          val detailedHistory = events.map(event => Try(event.getStateExitedEventDetails))
+          val detailedHistory = events.map(event => Try(event.stateExitedEventDetails()))
           respondToClient(StepFunctionExecutionStatus.checkoutStatus(detailedHistory, stateWrapper, trackingUri))
         },
       )
@@ -225,7 +225,7 @@ class SupportWorkersClient(
   }
 
   def healthy(): Future[Boolean] =
-    underlying.status().map(_.getStatus == "ACTIVE").getOrElse(false)
+    underlying.status().map(_.status() == StateMachineStatus.ACTIVE).getOrElse(false)
 
 }
 
@@ -238,9 +238,9 @@ object StepFunctionExecutionStatus extends SafeLogging {
   ): StatusResponse = {
 
     val searchForFinishedCheckout: Option[StatusResponse] = detailedHistory.collectFirst {
-      case detailsAttempt if detailsAttempt.map(_.getName) == Success("CheckoutSuccess") =>
+      case detailsAttempt if detailsAttempt.map(_.name()) == Success("CheckoutSuccess") =>
         StatusResponse(Status.Success, trackingUri, None)
-      case detailsAttempt if detailsAttempt.map(_.getName) == Success("SucceedOrFailChoice") =>
+      case detailsAttempt if detailsAttempt.map(_.name()) == Success("SucceedOrFailChoice") =>
         StatusResponse(Status.Failure, trackingUri, getFailureDetails(stateWrapper, detailsAttempt.get))
     }
 
@@ -253,7 +253,7 @@ object StepFunctionExecutionStatus extends SafeLogging {
       eventDetails: StateExitedEventDetails,
   ): Option[CheckoutFailureReason] = {
     logger.info(s"Event details are: $eventDetails")
-    stateWrapper.unWrap[CheckoutFailureState](eventDetails.getOutput) match {
+    stateWrapper.unWrap[CheckoutFailureState](eventDetails.output()) match {
       case Success(checkoutFailureState) =>
         Some(checkoutFailureState.checkoutFailureReason)
       case Failure(error) =>
