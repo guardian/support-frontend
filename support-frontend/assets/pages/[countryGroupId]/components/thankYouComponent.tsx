@@ -310,7 +310,7 @@ export function ThankYouComponent({
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
 		...maybeThankYouModule(
-			isTierThree && enablePremiumDigital,
+			isDigitalEdition && enablePremiumDigital,
 			'newspaperArchiveBenefit',
 		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
