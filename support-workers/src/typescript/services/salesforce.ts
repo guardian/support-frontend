@@ -1,17 +1,60 @@
 import { getCountryNameByIsoCode } from '@modules/internationalisation/country';
 import { z } from 'zod';
 import { getAddressLine } from '../model/address';
-import type { GiftRecipient, User } from '../model/stateSchemas';
-import type { DigitalOnlyContactRecordRequest } from './contactTypes/digitalOnly';
-import type { GiftBuyerContactRecordRequest } from './contactTypes/giftBuyer';
-import type { GiftRecipientContactRecordRequest } from './contactTypes/giftRecipient';
-import type { PrintContactRecordRequest } from './contactTypes/print';
+import type { GiftRecipient, Title, User } from '../model/stateSchemas';
 import type { SalesforceConfig } from './salesforceClient';
 import { SalesforceClient } from './salesforceClient';
 
 //RecordType field in salesforce to distinguish buyer contacts from recipient contacts.
 //e.g. for contacts with more than print subscription, sent to different addresses. Has evolved to include gift recipient contacts.
 const salesforceDeliveryOrRecipientRecordTypeId = '01220000000VB50AAG';
+
+export type BaseContactRecordRequest = {
+	Salutation?: Title | null;
+	FirstName: string;
+	LastName: string;
+	Phone?: string | null;
+};
+export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest & {
+	RecordTypeId: typeof salesforceDeliveryOrRecipientRecordTypeId;
+	Email: string | null;
+	OtherState?: string | null;
+	OtherPostalCode?: string | null;
+	OtherCountry: string | null;
+};
+export type GiftBuyerContactRecordRequest = BaseContactRecordRequest & {
+	IdentityID__c: string;
+	Email: string | null;
+	OtherStreet: string | null;
+	OtherCity: string | null;
+	OtherState?: string | null;
+	OtherPostalCode: string | null;
+	OtherCountry: string | null;
+};
+export type GiftRecipientContactRecordRequest = BaseContactRecordRequest & {
+	AccountId: string;
+	Email?: string | null;
+	RecordTypeId: typeof salesforceDeliveryOrRecipientRecordTypeId;
+	MailingStreet: string | null;
+	MailingCity: string | null;
+	MailingState?: string | null;
+	MailingPostalCode: string | null;
+	MailingCountry: string | null;
+};
+export type PrintContactRecordRequest = BaseContactRecordRequest & {
+	IdentityID__c: string;
+	Email: string | null;
+	OtherStreet: string | null;
+	OtherCity: string | null;
+	OtherState?: string | null;
+	OtherPostalCode: string | null;
+	OtherCountry: string | null;
+	MailingStreet: string | null;
+	MailingCity: string | null;
+	MailingState: string | null;
+	MailingPostalCode: string | null;
+	MailingCountry: string | null;
+};
 
 export const salesforceContactRecordSchema = z.object({
 	Id: z.string(),
@@ -115,6 +158,7 @@ export class SalesforceService {
 		}
 	}
 
+	//todo check phone is coming through correctly
 	private maybeAddGiftRecipient(
 		contactRecord: SalesforceContactRecord,
 		giftRecipient: GiftRecipient | null,
