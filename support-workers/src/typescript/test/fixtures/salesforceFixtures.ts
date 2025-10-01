@@ -52,3 +52,15 @@ export const user = {
 	isTestUser: false,
 	deliveryInstructions: null,
 };
+
+export const printSubscriber = {
+	id: idId,
+	firstName: name,
+	lastName: name,
+	title,
+	primaryEmailAddress: emailAddress,
+	telephoneNumber,
+	billingAddress: address,
+	deliveryAddress: address,
+	isTestUser: false,
+};
