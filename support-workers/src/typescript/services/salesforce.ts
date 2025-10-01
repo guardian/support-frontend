@@ -9,6 +9,10 @@ import type { PrintContactRecordRequest } from './contactTypes/print';
 import type { SalesforceConfig } from './salesforceClient';
 import { SalesforceClient } from './salesforceClient';
 
+//RecordType field in salesforce to distinguish buyer contacts from recipient contacts.
+//e.g. for contacts with more than print subscription, sent to different addresses. Has evolved to include gift recipient contacts.
+const salesforceDeliveryOrRecipientRecordTypeId = '01220000000VB50AAG';
+
 export const salesforceContactRecordSchema = z.object({
 	Id: z.string(),
 	AccountId: z.string(),
@@ -174,7 +178,7 @@ export const createDigitalOnlyContactRecordRequest = (
 		FirstName: user.firstName,
 		LastName: user.lastName,
 		Phone: user.telephoneNumber,
-		RecordTypeId: '01220000000VB50AAG',
+		RecordTypeId: salesforceDeliveryOrRecipientRecordTypeId,
 		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
 		...(user.billingAddress.state
 			? { OtherState: user.billingAddress.state }
@@ -210,7 +214,7 @@ export const createGiftRecipientContactRecordRequest = (
 		FirstName: giftRecipient.firstName,
 		LastName: giftRecipient.lastName,
 		Email: giftRecipient.email ?? null,
-		RecordTypeId: '01220000000VB50AAG',
+		RecordTypeId: salesforceDeliveryOrRecipientRecordTypeId,
 		...createMailingAddressFields(user),
 	};
 };
