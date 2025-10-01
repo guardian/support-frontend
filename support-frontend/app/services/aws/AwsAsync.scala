@@ -1,33 +1,40 @@
 package services.aws
 
-import com.amazonaws.AmazonWebServiceRequest
-import com.amazonaws.handlers.AsyncHandler
-import java.util.concurrent.{Future => JFuture}
+import com.typesafe.scalalogging.LazyLogging
+import software.amazon.awssdk.awscore.AwsRequest
+import software.amazon.awssdk.awscore.exception.AwsServiceException
 
+import java.util.concurrent.CompletableFuture
 import scala.concurrent.{Future, Promise}
 
-class AwsAsyncHandler[Request <: AmazonWebServiceRequest, Response] extends AsyncHandler[Request, Response] {
-  private val promise = Promise[Response]()
+class AwsAsyncHandler[Request <: AwsRequest, Response](
+    f: Request => CompletableFuture[Response],
+    request: Request,
+    promise: Promise[Response] = Promise[Response](),
+) extends LazyLogging {
+  val result: CompletableFuture[Response] = f(request)
 
-  override def onError(exception: Exception): Unit = promise.failure(exception)
-
-  override def onSuccess(request: Request, result: Response): Unit = promise.success(result)
+  result
+    .thenAccept((response: Response) => {
+      logger.debug(s"Successful result from AwsAsyncHandler")
+      promise.success(response)
+    })
+    .exceptionally((exception: Throwable) => {
+      logger.warn("Failure from AwsAsyncHandler", exception)
+      promise.failure(exception)
+      null
+    })
 
   def future: Future[Response] = promise.future
 }
 
 object AwsAsync {
 
-  def apply[Request <: AmazonWebServiceRequest, Response](
-      f: (Request, AsyncHandler[Request, Response]) => JFuture[Response],
+  def apply[Request <: AwsRequest, Response](
+      f: Request => CompletableFuture[Response],
       request: Request,
   ): Future[Response] = {
-    val handler = new AwsAsyncHandler[Request, Response]
-    try {
-      f(request, handler)
-      handler.future
-    } catch {
-      case e: Throwable => Future.failed(e)
-    }
+    val handler = new AwsAsyncHandler[Request, Response](f, request)
+    handler.future
   }
 }

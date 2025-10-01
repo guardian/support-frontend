@@ -5,9 +5,6 @@ name := "acquisition-events-api"
 description := "A lambda for acquisitions events api"
 
 libraryDependencies ++= Seq(
-  "com.amazonaws" % "aws-lambda-java-core" % "1.2.0",
-  "com.amazonaws" % "aws-lambda-java-events" % "3.11.5",
-  "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
 )
