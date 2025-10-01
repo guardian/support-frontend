@@ -8,7 +8,7 @@ scalacOptions ++= Seq(
   "-Ymacro-annotations",
 )
 
-addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.13.2")
+addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.13.4")
 
 libraryDependencies ++= Seq(
   "software.amazon.awssdk" % "ssm" % awsClientVersion2,
@@ -16,8 +16,8 @@ libraryDependencies ++= Seq(
   "software.amazon.awssdk" % "cloudwatch" % awsClientVersion2,
   "software.amazon.awssdk" % "sqs" % awsClientVersion2,
   "com.amazon.pay" % "amazon-pay-java-sdk" % "3.6.2",
-  "com.beachape" %% "enumeratum" % "1.7.3",
-  "com.beachape" %% "enumeratum-circe" % "1.7.3",
+  "com.beachape" %% "enumeratum" % "1.7.6",
+  "com.beachape" %% "enumeratum-circe" % "1.7.5",
   "com.dripower" %% "play-circe" % playCirceVersion,
   "org.typelevel" %% "simulacrum" % "1.0.1",
   "com.stripe" % "stripe-java" % stripeVersion,
@@ -25,7 +25,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
-  "org.playframework.anorm" %% "anorm" % "2.7.0",
+  "org.playframework.anorm" %% "anorm" % "2.8.1",
   "org.scalatest" %% "scalatest" % "3.0.9" % "test",
   "org.scalatestplus" %% "mockito-3-4" % "3.2.10.0" % "test",
   "org.mockito" % "mockito-core" % "4.11.0",
@@ -45,7 +45,7 @@ libraryDependencies ++= Seq(
   logback, // add Play logging support
   jdbc,
   ws,
-  "com.lihaoyi" %% "pprint" % "0.8.1",
+  "com.lihaoyi" %% "pprint" % "0.9.4",
   "com.github.blemale" %% "scaffeine" % "3.1.0",
 
   /** This is to satisfy `amazon-pay-java-sdk` dependencies as jaxb has been removed from Java 8 => Java 11.
@@ -59,9 +59,9 @@ libraryDependencies ++= Seq(
     *
     * But annoyingly we still get this error: `java.lang.NoClassDefFoundError: javax/xml/bind/JAXBException`
     */
-  "com.sun.xml.bind" % "jaxb-core" % "2.3.0.1",
+  "com.sun.xml.bind" % "jaxb-core" % "4.0.6",
   "javax.xml.bind" % "jaxb-api" % "2.3.1",
-  "com.sun.xml.bind" % "jaxb-impl" % "2.3.1",
+  "com.sun.xml.bind" % "jaxb-impl" % "2.3.9",
 )
 
 excludeDependencies ++= Seq(
@@ -73,7 +73,7 @@ excludeDependencies ++= Seq(
 )
 
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
-dependencyOverrides += "commons-io" % "commons-io" % "2.14.0" % Test
+dependencyOverrides += "commons-io" % "commons-io" % "2.20.0" % Test
 dependencyOverrides += "commons-beanutils" % "commons-beanutils" % "1.11.0" % Test
 
 resolvers ++= Resolver.sonatypeOssRepos("releases")
