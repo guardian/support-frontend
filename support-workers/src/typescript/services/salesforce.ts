@@ -195,11 +195,7 @@ export const createGiftBuyerContactRecordRequest = (
 		FirstName: user.firstName,
 		LastName: user.lastName,
 		Phone: user.telephoneNumber,
-		OtherStreet: getAddressLine(user.billingAddress),
-		OtherCity: user.billingAddress.city,
-		OtherState: user.billingAddress.state,
-		OtherPostalCode: user.billingAddress.postCode,
-		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
+		...createBillingAddressFields(user),
 	};
 };
 
@@ -233,6 +229,16 @@ export const createMailingAddressFields = (user: User) => {
 	};
 };
 
+export const createBillingAddressFields = (user: User) => {
+	return {
+		OtherStreet: getAddressLine(user.billingAddress),
+		OtherCity: user.billingAddress.city,
+		OtherState: user.billingAddress.state ?? null,
+		OtherPostalCode: user.billingAddress.postCode ?? null,
+		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
+	};
+};
+
 export const createPrintContactRecordRequest = (
 	user: User,
 ): PrintContactRecordRequest => {
@@ -243,19 +249,7 @@ export const createPrintContactRecordRequest = (
 		Phone: user.telephoneNumber,
 		Email: user.primaryEmailAddress,
 		IdentityID__c: user.id,
-		OtherStreet: getAddressLine(user.billingAddress),
-		OtherCity: user.billingAddress.city ?? null,
-		OtherState: user.billingAddress.state ?? null,
-		OtherPostalCode: user.billingAddress.postCode ?? null,
-		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
-		MailingStreet: user.deliveryAddress
-			? getAddressLine(user.deliveryAddress)
-			: null,
-		MailingCity: user.deliveryAddress?.city ?? null,
-		MailingState: user.deliveryAddress?.state ?? null,
-		MailingPostalCode: user.deliveryAddress?.postCode ?? null,
-		MailingCountry: user.deliveryAddress?.country
-			? getCountryNameByIsoCode(user.deliveryAddress.country)
-			: null,
+		...createBillingAddressFields(user),
+		...createMailingAddressFields(user),
 	};
 };
