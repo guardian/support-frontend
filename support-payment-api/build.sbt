@@ -73,7 +73,7 @@ excludeDependencies ++= Seq(
 )
 
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
-dependencyOverrides += "commons-io" % "commons-io" % "2.14.0" % Test
+dependencyOverrides += "commons-io" % "commons-io" % "2.20.0" % Test
 dependencyOverrides += "commons-beanutils" % "commons-beanutils" % "1.11.0" % Test
 
 resolvers ++= Resolver.sonatypeOssRepos("releases")
