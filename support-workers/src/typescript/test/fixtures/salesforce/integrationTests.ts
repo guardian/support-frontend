@@ -1,4 +1,5 @@
-import { Title } from '../../../model/stateSchemas';
+import type { PrintContactRecordRequest } from 'src/typescript/services/contactTypes/print';
+import type { Title } from '../../../model/stateSchemas';
 import { IsoCountry } from '@modules/internationalisation/country';
 
 export const idId = '9999999';
@@ -14,24 +15,24 @@ export const postCode = 'n1 9gu';
 export const uk: IsoCountry = 'GB';
 export const state = 'CA';
 
-// export const customer: ContactRecordRequest = {
-// 	IdentityID__c: idId,
-// 	Email: emailAddress,
-// 	Salutation: title,
-// 	FirstName: name,
-// 	LastName: name,
-// 	OtherStreet: null,
-// 	OtherCity: null,
-// 	OtherState: null,
-// 	OtherPostalCode: null,
-// 	OtherCountry: uk,
-// 	MailingStreet: null,
-// 	MailingCity: null,
-// 	MailingState: null,
-// 	MailingPostalCode: null,
-// 	MailingCountry: null,
-// 	Phone: null,
-// };
+export const customer: PrintContactRecordRequest = {
+	IdentityID__c: idId,
+	Email: emailAddress,
+	Salutation: title,
+	FirstName: name,
+	LastName: name,
+	OtherStreet: null,
+	OtherCity: null,
+	OtherState: null,
+	OtherPostalCode: null,
+	OtherCountry: uk,
+	MailingStreet: null,
+	MailingCity: null,
+	MailingState: null,
+	MailingPostalCode: null,
+	MailingCountry: null,
+	Phone: null,
+};
 
 const address = {
 	lineOne: street,
