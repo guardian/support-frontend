@@ -285,31 +285,28 @@ export class SupportWorkers extends GuStack {
       .branch(checkoutSuccess);
 
     // Choice state to choose between the Scala and Typescript S+ lambdas
+    const isProductType = (product: string) =>
+      Condition.stringEquals("$.state.productInformation.product", product);
     const isOneYearStudent = Condition.and(
-      Condition.isNotNull("$.state.productInformation"),
-      Condition.stringEquals(
-        "$.state.productInformation.product",
-        "SupporterPlus"
-      ),
+      isProductType("SupporterPlus"),
       Condition.stringEquals(
         "$.state.productInformation.ratePlan",
         "OneYearStudent"
       )
     );
-    const isGuardianAdLite = Condition.and(
-      Condition.isNotNull("$.state.productInformation"),
-      Condition.stringEquals(
-        "$.state.productInformation.product",
-        "GuardianAdLite"
-      )
-    );
+    const isGuardianAdLite = isProductType("GuardianAdLite");
+    const isContribution = isProductType("Contribution");
 
     const createZuoraSubscriptionChoice = new Choice(
       this,
       "CreateZuoraSubscriptionChoice"
     )
       .when(
-        Condition.or(isOneYearStudent, isGuardianAdLite),
+        Condition.and(
+          Condition.isNotNull("$.state.productInformation"),
+          Condition.or(isOneYearStudent, isGuardianAdLite, isContribution)
+        ),
+
         createZuoraSubscriptionTS.next(parallelSteps)
       )
       .otherwise(createZuoraSubscriptionScala.next(parallelSteps));
