@@ -1,7 +1,5 @@
 package services.stepfunctions
 
-import com.amazonaws.AmazonServiceException
-import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.states.CheckoutFailureState
 import com.gu.support.workers.{CheckoutFailureReasons, Status, User}
@@ -10,6 +8,8 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import services.stepfunctions.StepFunctionExecutionStatus._
+import software.amazon.awssdk.awscore.exception.AwsServiceException
+import software.amazon.awssdk.services.sfn.model.StateExitedEventDetails
 
 import scala.util.{Failure, Success}
 
@@ -24,13 +24,17 @@ class SupportWorkersClientTest extends AnyFlatSpec with Matchers with MockitoSug
 
   val mockStateWrapper: StateWrapper = mock[StateWrapper]
 
-  val fillerState = new StateExitedEventDetails
-  fillerState.setName("CreatePaymentMethodLambda")
-  val failure = Failure(new AmazonServiceException("test"))
+  val fillerState = StateExitedEventDetails
+    .builder()
+    .name("CreatePaymentMethodLambda")
+    .build()
+  val failure = Failure(new Exception("test"))
 
   "checkoutStatus" should "detect a successful execution correctly" in {
-    val checkoutSuccessState = new StateExitedEventDetails
-    checkoutSuccessState.setName("CheckoutSuccess")
+    val checkoutSuccessState = StateExitedEventDetails
+      .builder()
+      .name("CheckoutSuccess")
+      .build()
     val actual =
       checkoutStatus(
         List(failure, Success(fillerState), Success(checkoutSuccessState), failure),
@@ -46,9 +50,11 @@ class SupportWorkersClientTest extends AnyFlatSpec with Matchers with MockitoSug
   }
 
   "checkoutStatus" should "detect a failed execution correctly" in {
-    val failedCheckoutState = new StateExitedEventDetails
-    failedCheckoutState.setName("SucceedOrFailChoice")
-    failedCheckoutState.setOutput("test")
+    val failedCheckoutState = StateExitedEventDetails
+      .builder()
+      .name("SucceedOrFailChoice")
+      .output("test")
+      .build()
     when(mockStateWrapper.unWrap[CheckoutFailureState]("test"))
       .thenReturn(Success(CheckoutFailureState(mock[User], CheckoutFailureReasons.Unknown)))
     val actual =

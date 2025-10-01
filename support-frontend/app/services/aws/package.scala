@@ -1,21 +1,19 @@
 package services
 
-import com.amazonaws.auth.profile.ProfileCredentialsProvider
-import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentialsProvider}
-import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClientBuilder
-import com.amazonaws.services.securitytoken.model.GetCallerIdentityRequest
+import com.gu.aws.CredentialsProvider
+import software.amazon.awssdk.services.sts.StsClient
+import software.amazon.awssdk.services.sts.model.GetCallerIdentityRequest
 
 package object aws {
   val ProfileName = "membership"
 
-  lazy val CredentialsProvider = new AWSCredentialsProviderChain(
-    new ProfileCredentialsProvider(ProfileName),
-    new InstanceProfileCredentialsProvider(false),
-  )
-
   lazy val AccountId: String = {
-    val stsService = AWSSecurityTokenServiceClientBuilder.standard.withCredentials(CredentialsProvider).build
-    val callerIdentity = stsService.getCallerIdentity(new GetCallerIdentityRequest())
-    callerIdentity.getAccount
+    val stsClient = StsClient
+      .builder()
+      .credentialsProvider(CredentialsProvider)
+      .build()
+    val request = GetCallerIdentityRequest.builder().build()
+    val response = stsClient.getCallerIdentity(request)
+    response.account()
   }
 }
