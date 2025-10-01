@@ -13,6 +13,7 @@ export const city = 'London';
 export const postCode = 'n1 9gu';
 export const uk: IsoCountry = 'GB';
 export const state = 'CA';
+
 // export const customer: ContactRecordRequest = {
 // 	IdentityID__c: idId,
 // 	Email: emailAddress,
@@ -39,6 +40,7 @@ const address = {
 	postCode,
 	country: uk,
 };
+
 export const user = {
 	id: idId,
 	firstName: name,
@@ -48,67 +50,6 @@ export const user = {
 	telephoneNumber,
 	billingAddress: address,
 	deliveryAddress: address,
-	isTestUser: false,
-	deliveryInstructions: null,
-};
-
-export const printSubscriber = {
-	id: idId,
-	firstName: name,
-	lastName: name,
-	title,
-	primaryEmailAddress: emailAddress,
-	telephoneNumber,
-	billingAddress: address,
-	deliveryAddress: address,
-	isTestUser: false,
-};
-
-//for gift buyer, the billing address is that of the buyer, and the delivery address is that of the recipient
-export const giftBuyer = {
-	id: idId,
-	firstName: name,
-	lastName: name,
-	title,
-	primaryEmailAddress: emailAddress,
-	telephoneNumber,
-	billingAddress: address,
-	deliveryAddress: address,
-	isTestUser: false,
-};
-
-export const giftRecipient = {
-	firstName: 'Gift',
-	lastName: 'Recipient',
-	title: 'Ms' as
-		| 'Mr'
-		| 'Mrs'
-		| 'Ms'
-		| 'Miss'
-		| 'Mx'
-		| 'Dr'
-		| 'Prof'
-		| 'Rev'
-		| null,
-	email: 'gift.recipient@example.com',
-};
-
-export const digitalOnlySubscriber = {
-	id: idId,
-	primaryEmailAddress: emailAddress,
-	title: title,
-	firstName: name,
-	lastName: name,
-	billingAddress: {
-		lineOne: null,
-		lineTwo: null,
-		city: null,
-		state: null,
-		postCode: null,
-		country: uk,
-	},
-	deliveryAddress: null,
-	telephoneNumber: null,
 	isTestUser: false,
 	deliveryInstructions: null,
 };

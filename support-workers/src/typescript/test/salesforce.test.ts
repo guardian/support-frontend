@@ -8,18 +8,19 @@ import {
 	SalesforceService,
 } from '../services/salesforce';
 import {
+	buyerStreet,
 	digitalOnlySubscriber,
 	giftBuyer,
 	giftRecipient,
 	printSubscriber,
-	street,
-} from './fixtures/salesforceFixtures';
+	recipientStreet,
+} from './fixtures/salesforce/unitTests';
 
 describe('SalesforceService', () => {
 	test('createPrintContactRecordRequest should have properties populated correctly', () => {
 		const newContact = createPrintContactRecordRequest(printSubscriber);
 
-		expect(newContact.MailingStreet).toBe(street);
+		expect(newContact.MailingStreet).toBe(buyerStreet);
 		expect(newContact.MailingCity).toBe(printSubscriber.deliveryAddress.city);
 		expect(newContact.MailingState).toBe(printSubscriber.deliveryAddress.state);
 		expect(newContact.MailingPostalCode).toBe(
@@ -27,7 +28,7 @@ describe('SalesforceService', () => {
 		);
 		expect(newContact.MailingCountry).toBe('United Kingdom');
 
-		expect(newContact.OtherStreet).toBe(street);
+		expect(newContact.OtherStreet).toBe(buyerStreet);
 		expect(newContact.OtherCity).toBe(printSubscriber.billingAddress.city);
 		expect(newContact.OtherState).toBe(printSubscriber.billingAddress.state);
 		expect(newContact.OtherPostalCode).toBe(
@@ -51,7 +52,7 @@ describe('SalesforceService', () => {
 		expect('MailingPostalCode' in newContact).toBe(false);
 		expect('MailingCountry' in newContact).toBe(false);
 
-		expect(newContact.OtherStreet).toBe(street);
+		expect(newContact.OtherStreet).toBe(buyerStreet);
 		expect(newContact.OtherCity).toBe(giftBuyer.billingAddress.city);
 		expect(newContact.OtherState).toBe(giftBuyer.billingAddress.state);
 		expect(newContact.OtherPostalCode).toBe(giftBuyer.billingAddress.postCode);
@@ -82,7 +83,7 @@ describe('SalesforceService', () => {
 		expect('OtherPostalCode' in recipientContact).toBe(false);
 		expect('OtherCountry' in recipientContact).toBe(false);
 
-		expect(recipientContact.MailingStreet).toBe(street);
+		expect(recipientContact.MailingStreet).toBe(recipientStreet);
 		expect(recipientContact.MailingCity).toBe(giftBuyer.deliveryAddress.city);
 		expect(recipientContact.MailingState).toBe(giftBuyer.deliveryAddress.state);
 		expect(recipientContact.MailingPostalCode).toBe(
