@@ -2,13 +2,13 @@ package backend
 
 import cats.data.EitherT
 import cats.implicits._
-import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.typesafe.scalalogging.StrictLogging
 import conf.ConfigLoader._
 import conf._
 import model._
 import model.directdebit.{CheckDirectDebitDetailsData, CheckDirectDebitDetailsResponse}
 import services._
+import software.amazon.awssdk.services.cloudwatch.CloudWatchAsyncClient
 import util.EnvironmentBasedBuilder
 
 import scala.concurrent.Future
@@ -35,7 +35,7 @@ object GoCardlessBackend {
     new GoCardlessBackend(goCardlessService, cloudWatchService)
   }
 
-  class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(implicit
+  class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: CloudWatchAsyncClient)(implicit
       defaultThreadPool: DefaultThreadPool,
       goCardlessThreadPool: GoCardlessThreadPool,
   ) extends EnvironmentBasedBuilder[GoCardlessBackend] {

@@ -4,7 +4,6 @@ import cats.data.EitherT
 import cats.instances.future._
 import cats.syntax.apply._
 import cats.syntax.validated._
-import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService.Sources
 import com.gu.support.config.Stages.{CODE, PROD}
@@ -23,6 +22,7 @@ import model.stripe._
 import org.apache.pekko.actor.ActorSystem
 import play.api.libs.ws.WSClient
 import services._
+import software.amazon.awssdk.services.cloudwatch.CloudWatchAsyncClient
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.sqs.model.SendMessageResponse
 import util.EnvironmentBasedBuilder
@@ -340,7 +340,7 @@ object StripeBackend {
     )
   }
 
-  class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(implicit
+  class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: CloudWatchAsyncClient)(implicit
       defaultThreadPool: DefaultThreadPool,
       stripeThreadPool: StripeThreadPool,
       sqsThreadPool: SQSThreadPool,
