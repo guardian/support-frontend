@@ -465,7 +465,7 @@ export const productCatalogDescription: Record<
 	},
 };
 
-const paperArchiveDigitalBenefit = (countryGroupId: CountryGroupId) => {
+const getPaperArchiveDigitalBenefit = (countryGroupId: CountryGroupId) => {
 	return {
 		copy: `Access the Guardian's 200-year print archive`,
 		isNew: true,
@@ -502,14 +502,14 @@ export function productCatalogDescriptionPremiumDigital(
 			benefits: [
 				weeklyDigitalBenefit(),
 				editionsDigitalBenefit(),
-				paperArchiveDigitalBenefit(countryGroupId),
+				getPaperArchiveDigitalBenefit(countryGroupId),
 			],
 		},
 		TierThree: {
 			...productCatalogDescription.TierThree,
 			benefits: [
 				...productCatalogDescription.TierThree.benefits,
-				paperArchiveDigitalBenefit(countryGroupId),
+				getPaperArchiveDigitalBenefit(countryGroupId),
 			],
 		},
 	};
