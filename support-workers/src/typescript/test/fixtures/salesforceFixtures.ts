@@ -73,5 +73,6 @@ export const giftBuyer = {
 	primaryEmailAddress: emailAddress,
 	telephoneNumber,
 	billingAddress: address,
+	deliveryAddress: null,
 	isTestUser: false,
 };
