@@ -502,13 +502,6 @@ export function productCatalogDescriptionPremiumDigital(
 				getPaperArchiveDigitalBenefit(countryGroupId),
 			],
 		},
-		TierThree: {
-			...productCatalogDescription.TierThree,
-			benefits: [
-				...productCatalogDescription.TierThree.benefits,
-				getPaperArchiveDigitalBenefit(countryGroupId),
-			],
-		},
 	};
 }
 
