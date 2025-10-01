@@ -64,3 +64,14 @@ export const printSubscriber = {
 	deliveryAddress: address,
 	isTestUser: false,
 };
+
+export const giftBuyer = {
+	id: idId,
+	firstName: name,
+	lastName: name,
+	title,
+	primaryEmailAddress: emailAddress,
+	telephoneNumber,
+	billingAddress: address,
+	isTestUser: false,
+};

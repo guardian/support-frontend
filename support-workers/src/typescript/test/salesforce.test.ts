@@ -1,10 +1,15 @@
 import {
+	createGiftBuyerContactRecordRequest,
 	createPrintContactRecordRequest,
 	SalesforceError,
 	salesforceErrorCodes,
 	SalesforceService,
 } from '../services/salesforce';
-import { printSubscriber, street } from './fixtures/salesforceFixtures';
+import {
+	giftBuyer,
+	printSubscriber,
+	street,
+} from './fixtures/salesforceFixtures';
 
 describe('SalesforceService', () => {
 	test('createPrintContactRecordRequest should have properties populated correctly', () => {
@@ -31,6 +36,28 @@ describe('SalesforceService', () => {
 		expect(newContact.LastName).toBe(printSubscriber.lastName);
 		expect(newContact.Salutation).toBe(printSubscriber.title);
 		expect(newContact.Phone).toBe(printSubscriber.telephoneNumber);
+	});
+
+	test('createGiftBuyerContactRecordRequest should have properties populated correctly', () => {
+		const newContact = createGiftBuyerContactRecordRequest(giftBuyer);
+
+		expect('MailingStreet' in newContact).toBe(false);
+		expect('MailingCity' in newContact).toBe(false);
+		expect('MailingState' in newContact).toBe(false);
+		expect('MailingPostalCode' in newContact).toBe(false);
+		expect('MailingCountry' in newContact).toBe(false);
+
+		expect(newContact.OtherStreet).toBe(street);
+		expect(newContact.OtherCity).toBe(giftBuyer.billingAddress.city);
+		expect(newContact.OtherState).toBe(giftBuyer.billingAddress.state);
+		expect(newContact.OtherPostalCode).toBe(giftBuyer.billingAddress.postCode);
+		expect(newContact.OtherCountry).toBe('United Kingdom');
+
+		expect(newContact.Email).toBe(giftBuyer.primaryEmailAddress);
+		expect(newContact.FirstName).toBe(giftBuyer.firstName);
+		expect(newContact.LastName).toBe(giftBuyer.lastName);
+		expect(newContact.Salutation).toBe(giftBuyer.title);
+		expect(newContact.Phone).toBe(giftBuyer.telephoneNumber);
 	});
 
 	test('it should throw an INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE error when appropriate', () => {
