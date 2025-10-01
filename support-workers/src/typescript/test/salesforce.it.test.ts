@@ -2,23 +2,22 @@
  * @group integration
  */
 
-// import { handler } from '../lambdas/createSalesforceContactLambda';
-// import type {
-// 	CreateSalesforceContactState,
-// 	WrappedState,
-// } from '../model/stateSchemas';
-// import {
-// 	createSalesforceContactStateSchema,
-// 	wrapperSchemaForState,
-// 	wrapState,
-// } from '../model/stateSchemas';
-// import type { DeliveryContactRecordRequest } from '../services/salesforce';
+import { handler } from '../lambdas/createSalesforceContactLambda';
+import type {
+	CreateSalesforceContactState,
+	WrappedState,
+} from '../model/stateSchemas';
+import {
+	createSalesforceContactStateSchema,
+	wrapperSchemaForState,
+	wrapState,
+} from '../model/stateSchemas';
 import type { GiftRecipientContactRecordRequest } from '../services/contactTypes/giftRecipient';
 import { SalesforceService } from '../services/salesforce';
 import type { SalesforceConfig } from '../services/salesforceClient';
 import { AuthService, getSalesforceConfig } from '../services/salesforceClient';
-// import createSalesforceContactContribution from './fixtures/createSalesforceContact/contributionMonthlyUSD.json';
-// import createGiftSubscription from './fixtures/createSalesforceContact/gwGiftDirectDebit.json';
+import createSalesforceContactContribution from './fixtures/createSalesforceContact/contributionMonthlyUSD.json';
+import createGiftSubscription from './fixtures/createSalesforceContact/gwGiftDirectDebit.json';
 import {
 	city,
 	customer,
@@ -116,45 +115,45 @@ describe('SalesforceService', () => {
 	});
 });
 
-// describe('CreateSalesforceContatctLambda', () => {
-// 	test('CreateSalesforceContact lambda should upsert a SalesforceContactRecord', async () => {
-// 		const inputState: CreateSalesforceContactState =
-// 			createSalesforceContactStateSchema.parse(
-// 				createSalesforceContactContribution,
-// 			);
-// 		const result = await handler(
-// 			wrapState(inputState, null, {
-// 				testUser: false,
-// 				failed: false,
-// 				messages: [],
-// 			}),
-// 		);
+describe('CreateSalesforceContatctLambda', () => {
+	test('CreateSalesforceContact lambda should upsert a SalesforceContactRecord', async () => {
+		const inputState: CreateSalesforceContactState =
+			createSalesforceContactStateSchema.parse(
+				createSalesforceContactContribution,
+			);
+		const result = await handler(
+			wrapState(inputState, null, {
+				testUser: false,
+				failed: false,
+				messages: [],
+			}),
+		);
 
-// 		expect(result.state.product.productType).toBe('Contribution');
-// 		// Need to check type here because Typescript can't infer it from the preceding check
-// 		if (result.state.productSpecificState.productType === 'Contribution') {
-// 			expect(result.state.productSpecificState.salesForceContact.Id).toBe(
-// 				'003UD00000bt0YfYAI',
-// 			);
-// 			expect(
-// 				result.state.productSpecificState.salesForceContact.AccountId,
-// 			).toBe('001UD00000KErfYYAT');
-// 		}
-// 	});
+		expect(result.state.product.productType).toBe('Contribution');
+		// Need to check type here because Typescript can't infer it from the preceding check
+		if (result.state.productSpecificState.productType === 'Contribution') {
+			expect(result.state.productSpecificState.salesForceContact.Id).toBe(
+				'003UD00000bt0YfYAI',
+			);
+			expect(
+				result.state.productSpecificState.salesForceContact.AccountId,
+			).toBe('001UD00000KErfYYAT');
+		}
+	});
 
-// 	test('should upsert a gift SalesforceContactRecord', async () => {
-// 		const inputState: WrappedState<CreateSalesforceContactState> =
-// 			wrapperSchemaForState(createSalesforceContactStateSchema).parse(
-// 				createGiftSubscription,
-// 			);
-// 		const result = await handler(inputState);
+	test('should upsert a gift SalesforceContactRecord', async () => {
+		const inputState: WrappedState<CreateSalesforceContactState> =
+			wrapperSchemaForState(createSalesforceContactStateSchema).parse(
+				createGiftSubscription,
+			);
+		const result = await handler(inputState);
 
-// 		expect(result.state.product.productType).toBe('GuardianWeekly');
-// 		if (result.state.productSpecificState.productType === 'GuardianWeekly') {
-// 			expect(result.state.productSpecificState.giftRecipient).toBeDefined();
-// 			expect(result.state.productSpecificState.salesForceContact.Id).toEqual(
-// 				expect.any(String),
-// 			);
-// 		}
-// 	});
-// });
+		expect(result.state.product.productType).toBe('GuardianWeekly');
+		if (result.state.productSpecificState.productType === 'GuardianWeekly') {
+			expect(result.state.productSpecificState.giftRecipient).toBeDefined();
+			expect(result.state.productSpecificState.salesForceContact.Id).toEqual(
+				expect.any(String),
+			);
+		}
+	});
+});
