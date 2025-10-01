@@ -117,8 +117,12 @@ export default function CheckoutSummary({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
+	const premiumDigitalBenefits =
+		enablePremiumDigital && productKey === 'DigitalSubscription'
+			? getPremiumDigitalAllBenefits(countryGroupId)
+			: undefined;
 	const benefitsCheckListData =
-		getPremiumDigitalAllBenefits(productKey, countryGroupId) ??
+		premiumDigitalBenefits ??
 		getPaperPlusDigitalBenefits(productKey, ratePlanKey) ??
 		getBenefitsChecklistFromLandingPageTool(productKey, landingPageSettings) ??
 		getBenefitsChecklistFromProductDescription(

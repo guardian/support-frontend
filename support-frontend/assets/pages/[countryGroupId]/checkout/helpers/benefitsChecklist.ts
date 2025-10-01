@@ -3,7 +3,6 @@ import { palette } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { PaperProductOptions } from '@modules/product/productOptions';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import { getPlanBenefitData } from 'pages/paper-subscription-landing/planData';
 import type { BenefitsCheckListData } from '../../../../components/checkoutBenefits/benefitsCheckList';
 import type { Participations } from '../../../../helpers/abTests/models';
@@ -21,28 +20,23 @@ import type {
 } from '../../../../helpers/productCatalog';
 
 export const getPremiumDigitalAllBenefits = (
-	productKey: ActiveProductKey,
 	countryGroupId: CountryGroupId,
 ): BenefitsCheckListData[] | undefined => {
-	const { enablePremiumDigital } = getFeatureFlags();
-	if (productKey === 'DigitalSubscription' && enablePremiumDigital) {
-		const productDescription =
-			productCatalogDescriptionPremiumDigital(countryGroupId);
-		const digitalPremiumBenefits = filterProductDescriptionBenefits(
-			productDescription.DigitalSubscription,
-			countryGroupId,
-		);
-		const supporterPlusBenefits = filterProductDescriptionBenefits(
-			productDescription.SupporterPlus,
-			countryGroupId,
-		);
-		// Append SupporterPlus benefits
-		return benefitsAsChecklist({
-			checked: [...digitalPremiumBenefits, ...supporterPlusBenefits],
-			unchecked: [],
-		});
-	}
-	return undefined;
+	const productDescription =
+		productCatalogDescriptionPremiumDigital(countryGroupId);
+	const digitalPremiumBenefits = filterProductDescriptionBenefits(
+		productDescription.DigitalSubscription,
+		countryGroupId,
+	);
+	const supporterPlusBenefits = filterProductDescriptionBenefits(
+		productDescription.SupporterPlus,
+		countryGroupId,
+	);
+	// Append SupporterPlus benefits
+	return benefitsAsChecklist({
+		checked: [...digitalPremiumBenefits, ...supporterPlusBenefits],
+		unchecked: [],
+	});
 };
 
 export const getPaperPlusDigitalBenefits = (
