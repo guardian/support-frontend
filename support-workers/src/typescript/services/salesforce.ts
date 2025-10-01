@@ -205,11 +205,11 @@ export const createGiftRecipientContactRecordRequest = (
 	user: User,
 ): GiftRecipientContactRecordRequest => {
 	return {
-		//	Email??
 		AccountId: contactRecord.AccountId,
 		Salutation: giftRecipient.title,
 		FirstName: giftRecipient.firstName,
 		LastName: giftRecipient.lastName,
+		Email: giftRecipient.email ?? null,
 		RecordTypeId: '01220000000VB50AAG',
 		...createMailingAddressFields(user),
 	};
