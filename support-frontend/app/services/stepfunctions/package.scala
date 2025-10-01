@@ -28,7 +28,7 @@ package object stepfunctions {
 
   object StateMachineExecution {
     def fromStartExecution(result: StartExecutionResponse): StateMachineExecution =
-      StateMachineExecution(result.executionArn(), new DateTime(result.startDate()))
+      StateMachineExecution(result.executionArn(), new DateTime(result.startDate().toEpochMilli))
   }
 
   case class StateMachineExecutionStatus(
