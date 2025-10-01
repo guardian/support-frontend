@@ -1,4 +1,3 @@
-// import { ContactRecordRequest } from '../../services/salesforce';
 import { Title } from '../../model/stateSchemas';
 import { IsoCountry } from '@modules/internationalisation/country';
 
@@ -92,4 +91,24 @@ export const giftRecipient = {
 		| 'Rev'
 		| null,
 	email: 'gift.recipient@example.com',
+};
+
+export const digitalOnlySubscriber = {
+	id: idId,
+	primaryEmailAddress: emailAddress,
+	title: title,
+	firstName: name,
+	lastName: name,
+	billingAddress: {
+		lineOne: null,
+		lineTwo: null,
+		city: null,
+		state: null,
+		postCode: null,
+		country: uk,
+	},
+	deliveryAddress: null,
+	telephoneNumber: null,
+	isTestUser: false,
+	deliveryInstructions: null,
 };

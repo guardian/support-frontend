@@ -1,4 +1,5 @@
 import {
+	createDigitalOnlyContactRecordRequest,
 	createGiftBuyerContactRecordRequest,
 	createGiftRecipientContactRecordRequest,
 	createPrintContactRecordRequest,
@@ -7,6 +8,7 @@ import {
 	SalesforceService,
 } from '../services/salesforce';
 import {
+	digitalOnlySubscriber,
 	giftBuyer,
 	giftRecipient,
 	printSubscriber,
@@ -93,6 +95,30 @@ describe('SalesforceService', () => {
 		expect(recipientContact.LastName).toBe(giftRecipient.lastName);
 		expect(recipientContact.Salutation).toBe(giftRecipient.title);
 		expect(recipientContact.AccountId).toBe(buyerContactRecord.AccountId);
+	});
+
+	test('createDigitalOnlyContactRecordRequest should have properties populated correctly', () => {
+		const newContact = createDigitalOnlyContactRecordRequest(
+			digitalOnlySubscriber,
+		);
+
+		expect('MailingStreet' in newContact).toBe(false);
+		expect('MailingCity' in newContact).toBe(false);
+		expect('MailingState' in newContact).toBe(false);
+		expect('MailingPostalCode' in newContact).toBe(false);
+		expect('MailingCountry' in newContact).toBe(false);
+
+		expect('OtherStreet' in newContact).toBe(false);
+		expect('OtherCity' in newContact).toBe(false);
+		expect('OtherPostalCode' in newContact).toBe(false);
+
+		expect(newContact.OtherCountry).toBe('United Kingdom');
+
+		expect(newContact.Email).toBe(digitalOnlySubscriber.primaryEmailAddress);
+		expect(newContact.FirstName).toBe(digitalOnlySubscriber.firstName);
+		expect(newContact.LastName).toBe(digitalOnlySubscriber.lastName);
+		expect(newContact.Salutation).toBe(digitalOnlySubscriber.title);
+		expect(newContact.Phone).toBe(digitalOnlySubscriber.telephoneNumber);
 	});
 
 	test('it should throw an INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE error when appropriate', () => {
