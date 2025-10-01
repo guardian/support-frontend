@@ -20,7 +20,7 @@ import type {
 	ProductDescription,
 } from '../../../../helpers/productCatalog';
 
-export const getDigitalPremiumAllBenefits = (
+export const getPremiumDigitalAllBenefits = (
 	productKey: ActiveProductKey,
 	countryGroupId: CountryGroupId,
 ): BenefitsCheckListData[] | undefined => {

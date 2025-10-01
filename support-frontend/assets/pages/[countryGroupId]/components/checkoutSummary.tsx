@@ -32,8 +32,8 @@ import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
-	getDigitalPremiumAllBenefits,
 	getPaperPlusDigitalBenefits,
+	getPremiumDigitalAllBenefits,
 } from '../checkout/helpers/benefitsChecklist';
 import { ukSpecificAdditionalBenefit } from '../student/components/StudentHeader';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
@@ -118,7 +118,7 @@ export default function CheckoutSummary({
 	}
 
 	const benefitsCheckListData =
-		getDigitalPremiumAllBenefits(productKey, countryGroupId) ??
+		getPremiumDigitalAllBenefits(productKey, countryGroupId) ??
 		getPaperPlusDigitalBenefits(productKey, ratePlanKey) ??
 		getBenefitsChecklistFromLandingPageTool(productKey, landingPageSettings) ??
 		getBenefitsChecklistFromProductDescription(
