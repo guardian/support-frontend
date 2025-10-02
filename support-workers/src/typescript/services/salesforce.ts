@@ -14,11 +14,12 @@ export type BaseContactRecordRequest = {
 	FirstName: string;
 	LastName: string;
 };
+//OtherState and MailingState properties are optional because they are mandatory for US/CAN/AUS but not UK/NZ
 export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest & {
 	IdentityID__c: string;
 	Email: string;
 	OtherState?: string | null;
-	OtherPostalCode?: string | null;
+	OtherPostalCode?: string | null; //collected (optionally) for some countries, but not all
 	OtherCountry: string | null;
 };
 export type GiftBuyerContactRecordRequest = BaseContactRecordRequest & {
@@ -46,7 +47,7 @@ export type PrintContactRecordRequest = BaseContactRecordRequest & {
 	Email: string;
 	OtherStreet: string | null;
 	OtherCity: string | null;
-	OtherState?: string | null;
+	OtherState?: string | null; //optional because mandatory for US/CAN/AUS but not UK/NZ
 	OtherPostalCode: string | null;
 	OtherCountry: string | null;
 	MailingStreet: string | null;
