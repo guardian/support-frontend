@@ -1,6 +1,6 @@
-import { ContactRecordRequest } from '../../services/salesforce';
-import { Title } from '../../model/stateSchemas';
-import { IsoCountry } from '@modules/internationalisation/country';
+import type { IsoCountry } from '@modules/internationalisation/country';
+import type { PrintContactRecordRequest } from 'src/typescript/services/salesforce';
+import type { Title } from '../../../model/stateSchemas';
 
 export const idId = '9999999';
 export const salesforceId = '003UD00000VZnteYAD';
@@ -14,7 +14,8 @@ export const city = 'London';
 export const postCode = 'n1 9gu';
 export const uk: IsoCountry = 'GB';
 export const state = 'CA';
-export const customer: ContactRecordRequest = {
+
+export const customer: PrintContactRecordRequest = {
 	IdentityID__c: idId,
 	Email: emailAddress,
 	Salutation: title,
@@ -30,7 +31,6 @@ export const customer: ContactRecordRequest = {
 	MailingState: null,
 	MailingPostalCode: null,
 	MailingCountry: null,
-	Phone: null,
 };
 
 const address = {
@@ -40,6 +40,7 @@ const address = {
 	postCode,
 	country: uk,
 };
+
 export const user = {
 	id: idId,
 	firstName: name,
