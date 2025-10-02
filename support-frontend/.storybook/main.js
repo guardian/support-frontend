@@ -1,6 +1,8 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const devConfig = require('../webpack.dev.js');
+const vite = require('vite');
+const preact = require('@preact/preset-vite');
 module.exports = {
 	stories: ['../stories/**/*.stories.@(js|jsx|ts|tsx)'],
 	addons: [
@@ -10,16 +12,78 @@ module.exports = {
 		'@storybook/addon-storysource',
 		'@storybook/addon-viewport',
 		'@storybook/addon-interactions',
-		'@storybook/addon-webpack5-compiler-babel',
 	],
+	core: {
+		builder: '@storybook/builder-vite',
+	},
 	framework: {
-		name: '@storybook/preact-webpack5',
+		name: '@storybook/preact-vite',
 		options: {},
 	},
 	features: {
 		interactionsDebugger: true,
 	},
 	staticDirs: ['./static'],
+	viteFinal: async (config, { configType }) => {
+		return vite.mergeConfig(config, {
+			plugins: [preact.preact({ reactAliasesEnabled: true })],
+			resolve: {
+				alias: [
+					{
+						find: 'components',
+						replacement: path.resolve(__dirname, '../assets/components'),
+					},
+					{
+						find: 'helpers',
+						replacement: path.resolve(__dirname, '../assets/helpers'),
+					},
+					{
+						find: 'images',
+						replacement: path.resolve(__dirname, '../assets/images'),
+					},
+					{
+						find: 'pages',
+						replacement: path.resolve(__dirname, '../assets/pages'),
+					},
+					{
+						find: 'stylesheets',
+						replacement: path.resolve(__dirname, '../assets/stylesheets'),
+					},
+					{
+						find: '~stylesheets',
+						replacement: path.resolve(__dirname, '../assets/stylesheets'),
+					},
+					{
+						find: '__test-utils__',
+						replacement: path.resolve(__dirname, '../assets/__test-utils__'),
+					},
+					{
+						find: '__mocks__',
+						replacement: path.resolve(__dirname, '../assets/__mocks__'),
+					},
+					{
+						find: '@modules/internationalisation',
+						replacement: path.resolve(
+							__dirname,
+							'../node_modules/@guardian/support-service-lambdas/modules/internationalisation/src',
+						),
+					},
+					{
+						find: '@modules',
+						replacement: path.resolve(__dirname, '../../modules'),
+					},
+					{
+						find: 'react',
+						replacement: 'preact/compat',
+					},
+					{
+						find: 'react-dom',
+						replacement: 'preact/compat',
+					},
+				],
+			},
+		});
+	},
 	webpackFinal: async (config) => {
 		return {
 			...config,
