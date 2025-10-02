@@ -266,10 +266,18 @@ export const createGiftRecipientContactRecordRequest = (
 		Salutation: giftRecipient.title,
 		FirstName: giftRecipient.firstName,
 		LastName: giftRecipient.lastName,
-		...(giftRecipient.email ? { Email: giftRecipient.email } : {}),
+		// ...(giftRecipient.email ? { Email: giftRecipient.email } : {}),
+		...addPropertyIfValueExistsOnSourceObject('Email', giftRecipient.email),
 		RecordTypeId: salesforceDeliveryOrRecipientRecordTypeId,
 		...createMailingAddressFields(user),
 	};
+};
+
+export const addPropertyIfValueExistsOnSourceObject = (
+	propertyName: string,
+	sourceProperty: string | null,
+): object => {
+	return sourceProperty ? { [propertyName]: sourceProperty } : {};
 };
 
 export const createMailingAddressFields = (user: User) => {
