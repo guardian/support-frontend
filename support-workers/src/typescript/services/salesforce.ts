@@ -192,7 +192,7 @@ export const createBuyerRecordRequest = (
 			return createPrintContactRecordRequest(user);
 		case 'GiftBuyer':
 			return createGiftBuyerContactRecordRequest(user);
-		case 'DigitalOnly':
+		case 'DigitalOnly': //todo see how tier three operates here
 			return createDigitalOnlyContactRecordRequest(user);
 	}
 };
