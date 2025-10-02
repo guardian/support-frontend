@@ -193,6 +193,9 @@ export class SupportWorkers extends GuStack {
           parameterStorePolicy,
           ...additionalPolicies,
         ],
+        environment: {
+          AWS_LAMBDA_LOG_FORMAT: "Unstructured",
+        },
       });
       this.overrideLogicalId(lambda, {
         logicalId: lambdaId,

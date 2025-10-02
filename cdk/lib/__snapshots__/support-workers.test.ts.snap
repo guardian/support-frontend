@@ -60,12 +60,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Environment": {
           "Variables": {
             "APP": "support-workers-typescript",
-            "EMAIL_QUEUE_NAME": {
-              "Fn::ImportValue": "comms-PROD-EmailQueueName",
-            },
-            "GU_SUPPORT_WORKERS_STAGE": "PROD",
-            "SENTRY_DSN": "https://55945d73ad654abd856d1523de4f9d56:cf9b33aaff3c483899dfa986abce55df@sentry.io/1212214",
-            "SENTRY_ENVIRONMENT": "PROD",
+            "AWS_LAMBDA_LOG_FORMAT": "Unstructured",
             "STACK": "support",
             "STAGE": "PROD",
           },
@@ -307,12 +302,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Environment": {
           "Variables": {
             "APP": "support-workers-typescript",
-            "EMAIL_QUEUE_NAME": {
-              "Fn::ImportValue": "comms-PROD-EmailQueueName",
-            },
-            "GU_SUPPORT_WORKERS_STAGE": "PROD",
-            "SENTRY_DSN": "https://55945d73ad654abd856d1523de4f9d56:cf9b33aaff3c483899dfa986abce55df@sentry.io/1212214",
-            "SENTRY_ENVIRONMENT": "PROD",
+            "AWS_LAMBDA_LOG_FORMAT": "Unstructured",
             "STACK": "support",
             "STAGE": "PROD",
           },
@@ -806,12 +796,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Environment": {
           "Variables": {
             "APP": "support-workers-typescript",
-            "EMAIL_QUEUE_NAME": {
-              "Fn::ImportValue": "comms-PROD-EmailQueueName",
-            },
-            "GU_SUPPORT_WORKERS_STAGE": "PROD",
-            "SENTRY_DSN": "https://55945d73ad654abd856d1523de4f9d56:cf9b33aaff3c483899dfa986abce55df@sentry.io/1212214",
-            "SENTRY_ENVIRONMENT": "PROD",
+            "AWS_LAMBDA_LOG_FORMAT": "Unstructured",
             "STACK": "support",
             "STAGE": "PROD",
           },
