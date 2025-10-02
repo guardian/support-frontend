@@ -296,19 +296,23 @@ export class SupportWorkers extends GuStack {
     );
     const isGuardianAdLite = isProductType("GuardianAdLite");
     const isContribution = isProductType("Contribution");
+    const isSupporterPLus = isProductType("SupporterPlus");
+
+    const shouldUseTSLambda = Condition.and(
+      Condition.isNotNull("$.state.productInformation"),
+      Condition.or(
+        isOneYearStudent,
+        isGuardianAdLite,
+        isContribution,
+        isSupporterPLus
+      )
+    );
 
     const createZuoraSubscriptionChoice = new Choice(
       this,
       "CreateZuoraSubscriptionChoice"
     )
-      .when(
-        Condition.and(
-          Condition.isNotNull("$.state.productInformation"),
-          Condition.or(isOneYearStudent, isGuardianAdLite, isContribution)
-        ),
-
-        createZuoraSubscriptionTS.next(parallelSteps)
-      )
+      .when(shouldUseTSLambda, createZuoraSubscriptionTS.next(parallelSteps))
       .otherwise(createZuoraSubscriptionScala.next(parallelSteps));
 
     const allSteps = createPaymentMethodLambda
