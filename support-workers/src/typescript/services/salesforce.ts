@@ -278,7 +278,7 @@ export const createGiftRecipientContactRecordRequest = (
 		LastName: giftRecipient.lastName,
 		...(giftRecipient.email ? { Email: giftRecipient.email } : {}),
 		RecordTypeId: salesforceDeliveryOrRecipientRecordTypeId,
-		...createMailingAddressFields(user),
+		...createMailingAddressFields(user), //gift recipient address is the deliveryAddress on the user object
 	};
 };
 
@@ -313,7 +313,6 @@ export const createPrintContactRecordRequest = (
 		Salutation: user.title,
 		FirstName: user.firstName,
 		LastName: user.lastName,
-		Phone: user.telephoneNumber,
 		Email: user.primaryEmailAddress,
 		IdentityID__c: user.id,
 		...createBillingAddressFields(user),
