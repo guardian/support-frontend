@@ -213,7 +213,7 @@ const getBuyerType = (
 	user: User,
 	hasGiftRecipient: boolean,
 ): 'Print' | 'GiftBuyer' | 'DigitalOnly' => {
-	if (buyerTypeIsGiftBuyer(hasGiftRecipient)) {
+	if (hasGiftRecipient) {
 		return 'GiftBuyer';
 	}
 
@@ -222,10 +222,6 @@ const getBuyerType = (
 	}
 
 	return 'DigitalOnly';
-};
-
-const buyerTypeIsGiftBuyer = (hasGiftRecipient: boolean | null): boolean => {
-	return hasGiftRecipient === true;
 };
 
 const buyerTypeIsPrint = (
