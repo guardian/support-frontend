@@ -13,7 +13,6 @@ export type BaseContactRecordRequest = {
 	Salutation?: Title | null;
 	FirstName: string;
 	LastName: string;
-	Phone?: string | null;
 };
 export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest & {
 	Email: string;
@@ -24,6 +23,7 @@ export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest & {
 export type GiftBuyerContactRecordRequest = BaseContactRecordRequest & {
 	IdentityID__c: string;
 	Email: string;
+	Phone?: string | null;
 	OtherStreet: string | null;
 	OtherCity: string | null;
 	OtherState?: string | null;
