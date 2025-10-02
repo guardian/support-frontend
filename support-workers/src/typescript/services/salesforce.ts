@@ -224,7 +224,7 @@ const getBuyerType = (
 	return 'DigitalOnly';
 };
 
-const buyerTypeIsPrint = (
+export const buyerTypeIsPrint = (
 	hasGiftRecipient: boolean | null,
 	user: User,
 ): boolean => {

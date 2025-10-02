@@ -1,8 +1,10 @@
 import type { Title } from '../model/stateSchemas';
 import {
+	buyerTypeIsPrint,
 	createDigitalOnlyContactRecordRequest,
 	createGiftBuyerContactRecordRequest,
 	createGiftRecipientContactRecordRequest,
+	createMailingAddressFields,
 	createPrintContactRecordRequest,
 	SalesforceError,
 	salesforceErrorCodes,
@@ -200,5 +202,40 @@ describe('validGiftRecipientFields', () => {
 		};
 
 		expect(validGiftRecipientFields(invalidGiftRecipient)).toBe(false);
+	});
+});
+
+describe('buyerTypeIsPrint', () => {
+	test('should return true when hasGiftRecipient is false and user.deliveryAddress is not null', () => {
+		const hasGiftRecipient = false;
+		expect(buyerTypeIsPrint(hasGiftRecipient, printSubscriber)).toBe(true);
+	});
+
+	test('should return false when hasGiftRecipient is true', () => {
+		const hasGiftRecipient = true;
+		expect(buyerTypeIsPrint(hasGiftRecipient, giftBuyer)).toBe(false);
+	});
+
+	test('should return false when no delivery address on user is true', () => {
+		const hasGiftRecipient = false;
+		expect(buyerTypeIsPrint(hasGiftRecipient, digitalOnlySubscriber)).toBe(
+			false,
+		);
+	});
+});
+
+describe('createMailingAddressFields', () => {
+	test('should create mailing address fields and set values correctly', () => {
+		const expected = {
+			MailingStreet: buyerStreet,
+			MailingCity: printSubscriber.deliveryAddress.city,
+			MailingState: printSubscriber.deliveryAddress.state,
+			MailingPostalCode: printSubscriber.deliveryAddress.postCode,
+			MailingCountry: 'United Kingdom',
+		};
+
+		const actual = createMailingAddressFields(printSubscriber);
+
+		expect(actual).toEqual(expected);
 	});
 });
