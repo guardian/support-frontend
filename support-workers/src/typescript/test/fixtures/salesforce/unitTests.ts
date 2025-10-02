@@ -46,7 +46,6 @@ export const printSubscriber = {
 	lastName: buyerLastName,
 	title: buyerTitle,
 	primaryEmailAddress: buyerEmailAddress,
-	telephoneNumber: buyerTelephoneNumber,
 	billingAddress: buyerAddress,
 	deliveryAddress: buyerAddress,
 	isTestUser: false,

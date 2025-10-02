@@ -45,7 +45,6 @@ describe('SalesforceService', () => {
 		expect(newContact.FirstName).toBe(printSubscriber.firstName);
 		expect(newContact.LastName).toBe(printSubscriber.lastName);
 		expect(newContact.Salutation).toBe(printSubscriber.title);
-		expect(newContact.Phone).toBe(printSubscriber.telephoneNumber);
 	});
 
 	test('createGiftBuyerContactRecordRequest should have properties populated correctly', () => {
@@ -124,7 +123,6 @@ describe('SalesforceService', () => {
 		expect(newContact.FirstName).toBe(digitalOnlySubscriber.firstName);
 		expect(newContact.LastName).toBe(digitalOnlySubscriber.lastName);
 		expect(newContact.Salutation).toBe(digitalOnlySubscriber.title);
-		expect(newContact.Phone).toBe(digitalOnlySubscriber.telephoneNumber);
 	});
 
 	test('it should throw an INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE error when appropriate', () => {

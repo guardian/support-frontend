@@ -1,6 +1,6 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
+import type { PrintContactRecordRequest } from 'src/typescript/services/salesforce';
 import type { Title } from '../../../model/stateSchemas';
-import { PrintContactRecordRequest } from 'src/typescript/services/salesforce';
 
 export const idId = '9999999';
 export const salesforceId = '003UD00000VZnteYAD';
@@ -31,7 +31,6 @@ export const customer: PrintContactRecordRequest = {
 	MailingState: null,
 	MailingPostalCode: null,
 	MailingCountry: null,
-	Phone: null,
 };
 
 const address = {
