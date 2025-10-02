@@ -51,7 +51,7 @@ export type PrintContactRecordRequest = BaseContactRecordRequest & {
 	OtherCountry: string | null;
 	MailingStreet: string | null;
 	MailingCity: string | null;
-	MailingState: string | null;
+	MailingState?: string | null;
 	MailingPostalCode: string | null;
 	MailingCountry: string | null;
 };
