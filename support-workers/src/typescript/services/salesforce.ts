@@ -16,14 +16,14 @@ export type BaseContactRecordRequest = {
 	Phone?: string | null;
 };
 export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest & {
-	Email: string | null;
+	Email: string;
 	OtherState?: string | null;
 	OtherPostalCode?: string | null;
 	OtherCountry: string | null;
 };
 export type GiftBuyerContactRecordRequest = BaseContactRecordRequest & {
 	IdentityID__c: string;
-	Email: string | null;
+	Email: string;
 	OtherStreet: string | null;
 	OtherCity: string | null;
 	OtherState?: string | null;
@@ -32,7 +32,7 @@ export type GiftBuyerContactRecordRequest = BaseContactRecordRequest & {
 };
 export type GiftRecipientContactRecordRequest = BaseContactRecordRequest & {
 	AccountId: string;
-	Email?: string | null;
+	Email?: string;
 	RecordTypeId: typeof salesforceDeliveryOrRecipientRecordTypeId;
 	MailingStreet: string | null;
 	MailingCity: string | null;
@@ -42,7 +42,7 @@ export type GiftRecipientContactRecordRequest = BaseContactRecordRequest & {
 };
 export type PrintContactRecordRequest = BaseContactRecordRequest & {
 	IdentityID__c: string;
-	Email: string | null;
+	Email: string;
 	OtherStreet: string | null;
 	OtherCity: string | null;
 	OtherState?: string | null;
