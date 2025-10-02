@@ -267,7 +267,7 @@ export const createGiftRecipientContactRecordRequest = (
 		Salutation: giftRecipient.title,
 		FirstName: giftRecipient.firstName,
 		LastName: giftRecipient.lastName,
-		Email: giftRecipient.email ?? null,
+		...(giftRecipient.email ? { Email: giftRecipient.email } : {}),
 		RecordTypeId: salesforceDeliveryOrRecipientRecordTypeId,
 		...createMailingAddressFields(user),
 	};
