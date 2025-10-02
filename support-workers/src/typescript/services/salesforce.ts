@@ -157,7 +157,6 @@ export class SalesforceService {
 		}
 	}
 
-	//todo check phone is coming through correctly
 	private maybeAddGiftRecipient(
 		contactRecord: SalesforceContactRecord,
 		giftRecipient: GiftRecipient | null,
