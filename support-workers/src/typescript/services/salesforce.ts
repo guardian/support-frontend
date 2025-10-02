@@ -7,7 +7,7 @@ import { SalesforceClient } from './salesforceClient';
 
 //RecordType field in salesforce to distinguish buyer contacts from recipient contacts.
 //e.g. for contacts with more than print subscription, sent to different addresses. Has evolved to include gift recipient contacts.
-const salesforceDeliveryOrRecipientRecordTypeId = '01220000000VB50AAG';
+export const salesforceDeliveryOrRecipientRecordTypeId = '01220000000VB50AAG';
 
 export type BaseContactRecordRequest = {
 	Salutation?: Title | null;

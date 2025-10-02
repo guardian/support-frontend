@@ -7,6 +7,7 @@ import {
 	createGiftRecipientContactRecordRequest,
 	createMailingAddressFields,
 	createPrintContactRecordRequest,
+	salesforceDeliveryOrRecipientRecordTypeId,
 	SalesforceError,
 	salesforceErrorCodes,
 	SalesforceService,
@@ -100,6 +101,9 @@ describe('SalesforceService', () => {
 		expect(recipientContact.LastName).toBe(giftRecipient.lastName);
 		expect(recipientContact.Salutation).toBe(giftRecipient.title);
 		expect(recipientContact.AccountId).toBe(buyerContactRecord.AccountId);
+		expect(recipientContact.RecordTypeId).toBe(
+			salesforceDeliveryOrRecipientRecordTypeId,
+		);
 	});
 
 	test('createDigitalOnlyContactRecordRequest should have properties populated correctly', () => {
