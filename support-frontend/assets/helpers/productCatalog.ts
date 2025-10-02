@@ -220,11 +220,11 @@ const feastBenefit = {
 };
 
 const supporterPlusBenefits = [
-	appBenefit,
+	fewerAsksBenefit,
 	addFreeBenefit,
+	appBenefit,
 	newsletterBenefit,
 	newsletterBenefitUS,
-	fewerAsksBenefit,
 	partnerOffersBenefit,
 	feastBenefit,
 ];
@@ -240,7 +240,7 @@ const guardianAdLiteBenefits = [
 ];
 
 const paperThankyouMessage = `Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future. As well as future communications on how to make the most of your subscription and weekly newsletters written by the editors. `;
-
+const digitalThankyouMessage = `You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`;
 const nationalPaperPlusRatePlans: RatePlanDetails = {
 	Everyday: {
 		billingPeriod: BillingPeriod.Monthly,
@@ -308,7 +308,7 @@ export const productCatalogDescription: Record<
 	},
 	TierThree: {
 		label: 'Digital + print',
-		thankyouMessage: `You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`,
+		thankyouMessage: digitalThankyouMessage,
 		landingPagePath: '/contribute',
 		benefits: [guardianWeeklyBenefit],
 		/** These are just the SupporterPlus benefits */
@@ -477,22 +477,41 @@ export const productCatalogDescription: Record<
 	},
 };
 
-export function productCatalogDescriptionNewBenefits(
+const getPaperArchiveDigitalBenefit = (countryGroupId: CountryGroupId) => {
+	return {
+		copy: `Access the Guardian's 200-year print archive`,
+		isNew: true,
+		tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed${
+			countryGroupId !== 'GBPCountries' ? ' in the UK' : ''
+		}, since 1821.`,
+	};
+};
+const weeklyDigitalBenefit = {
+	copy: `Guardian Weekly e-magazine`,
+	isNew: true,
+	tooltip: `Powered through Guardian Editions app, the Guardian Weekly e-magazine features a handpicked and carefully curated selection of in-depth articles, global news, opinion and more. Enjoy wherever you are, on your favourite device.`,
+};
+
+const editionsDigitalBenefit = {
+	copy: `The Long Read e-magazine`,
+	isNew: true,
+	tooltip: `Powered through Guardian Editions app, the Long Read e-magazine is a selection of some of the Guardian’s finest longform journalism.Through first person accounts, narrative storytelling and investigative reporting, the Long Read seeks to dive deep, debunk myths and uncover hidden histories.`,
+};
+
+export function productCatalogDescriptionPremiumDigital(
 	countryGroupId: CountryGroupId,
-) {
+): Record<ActiveProductKey, ProductDescription> {
 	return {
 		...productCatalogDescription,
-		TierThree: {
-			...productCatalogDescription.TierThree,
+		DigitalSubscription: {
+			...productCatalogDescription.DigitalSubscription,
+			label: 'Premium Digital',
+			thankyouMessage: digitalThankyouMessage,
+			landingPagePath: '/contribute',
 			benefits: [
-				...productCatalogDescription.TierThree.benefits,
-				{
-					copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
-					isNew: true,
-					tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed${
-						countryGroupId !== 'GBPCountries' ? ' in the UK' : ''
-					}, since 1821.`,
-				},
+				weeklyDigitalBenefit,
+				editionsDigitalBenefit,
+				getPaperArchiveDigitalBenefit(countryGroupId),
 			],
 		},
 	};
@@ -544,8 +563,8 @@ export const getProductDescription = (
 	countryGroupId: CountryGroupId,
 	enablePremiumDigital: boolean,
 ): ProductDescription => {
-	if (enablePremiumDigital) {
-		return productCatalogDescriptionNewBenefits(countryGroupId)[productKey];
+	if (enablePremiumDigital && productKey === 'DigitalSubscription') {
+		return productCatalogDescriptionPremiumDigital(countryGroupId)[productKey];
 	}
 	if (isGuardianWeeklyGiftProduct(productKey, ratePlanKey)) {
 		return productCatalogGuardianWeeklyGift()[productKey];
