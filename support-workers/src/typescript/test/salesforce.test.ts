@@ -170,10 +170,10 @@ describe('validGiftRecipientFields', () => {
 		expect(validGiftRecipientFields(validGiftRecipient)).toBe(true);
 	});
 
-	test('should return false when firstName is missing', () => {
+	test('should return false when firstName is empty string', () => {
 		const invalidGiftRecipient = {
 			title: 'Ms' as Title,
-			firstName: null,
+			firstName: '',
 			lastName: 'Johnson',
 			email: 'johnson@example.com',
 		};
@@ -181,22 +181,22 @@ describe('validGiftRecipientFields', () => {
 		expect(validGiftRecipientFields(invalidGiftRecipient)).toBe(false);
 	});
 
-	test('should return false when lastName is missing', () => {
+	test('should return false when lastName is empty string', () => {
 		const invalidGiftRecipient = {
 			title: 'Dr' as Title,
 			firstName: 'Robert',
-			lastName: null,
+			lastName: '',
 			email: 'robert@example.com',
 		};
 
 		expect(validGiftRecipientFields(invalidGiftRecipient)).toBe(false);
 	});
 
-	test('should return false when both firstName and lastName are missing', () => {
+	test('should return false when both firstName and lastName are empty strings', () => {
 		const invalidGiftRecipient = {
 			title: 'Mrs' as Title,
-			firstName: null,
-			lastName: null,
+			firstName: '',
+			lastName: '',
 			email: 'empty@example.com',
 		};
 
