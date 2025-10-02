@@ -15,6 +15,7 @@ export type BaseContactRecordRequest = {
 	LastName: string;
 };
 export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest & {
+	IdentityID__c: string;
 	Email: string;
 	OtherState?: string | null;
 	OtherPostalCode?: string | null;
@@ -235,11 +236,11 @@ export const createDigitalOnlyContactRecordRequest = (
 	user: User,
 ): DigitalOnlyContactRecordRequest => {
 	return {
+		IdentityID__c: user.id,
 		Email: user.primaryEmailAddress,
 		Salutation: user.title,
 		FirstName: user.firstName,
 		LastName: user.lastName,
-		Phone: user.telephoneNumber,
 		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
 		...(user.billingAddress.state
 			? { OtherState: user.billingAddress.state }
