@@ -239,9 +239,10 @@ export const getThankYouModuleData = (
 			header: 'The Guardian newspaper archive',
 			bodyCopy: (
 				<>
-					Sign in to start exploring more than 200 years of world history with
-					our newspaper archive. View digital reproductions of every front page,
-					article and advertisement as it was printed in the Guardian from 1821.
+					Sign in and start exploring more than 200 years of world history with
+					our newspapers archive. View digital reproductions of every front
+					page, article and advertisement printed in the Guardian from 1821 and
+					in the Observer from 1791.
 				</>
 			),
 			ctas: null,

@@ -167,6 +167,7 @@ const imgContainer = css`
 	grid-area: img;
 	align-self: flex-end;
 `;
+
 const sizeImgContainer = css`
 	margin-top: ${space[2]}px;
 	${until.tablet} {
@@ -195,7 +196,9 @@ const paddingRightApps = css`
 	}
 `;
 
-const imageryPadding = css`
+const imageryStyle = css`
+	overflow: hidden;
+
 	${until.tablet} {
 		padding-bottom: 0;
 	}
@@ -302,7 +305,7 @@ function ThankYouModule({
 
 	return (
 		<section
-			css={[container, maybePaddingRight, hasImagery && imageryPadding]}
+			css={[container, maybePaddingRight, hasImagery && imageryStyle]}
 			data-testid={`${TEST_ID_PREFIX}-${moduleType}`}
 		>
 			<div css={gridContainer}>
