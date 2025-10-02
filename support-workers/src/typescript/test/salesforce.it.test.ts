@@ -12,7 +12,7 @@ import {
 	wrapperSchemaForState,
 	wrapState,
 } from '../model/stateSchemas';
-import type { GiftRecipientContactRecordRequest } from '../services/contactTypes/giftRecipient';
+import type { GiftRecipientContactRecordRequest } from '../services/salesforce';
 import { SalesforceService } from '../services/salesforce';
 import type { SalesforceConfig } from '../services/salesforceClient';
 import { AuthService, getSalesforceConfig } from '../services/salesforceClient';
