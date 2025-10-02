@@ -16,7 +16,6 @@ export type BaseContactRecordRequest = {
 	Phone?: string | null;
 };
 export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest & {
-	RecordTypeId: typeof salesforceDeliveryOrRecipientRecordTypeId;
 	Email: string | null;
 	OtherState?: string | null;
 	OtherPostalCode?: string | null;
@@ -234,7 +233,6 @@ export const createDigitalOnlyContactRecordRequest = (
 		FirstName: user.firstName,
 		LastName: user.lastName,
 		Phone: user.telephoneNumber,
-		RecordTypeId: salesforceDeliveryOrRecipientRecordTypeId,
 		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
 		...(user.billingAddress.state
 			? { OtherState: user.billingAddress.state }
