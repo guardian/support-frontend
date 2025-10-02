@@ -106,15 +106,25 @@ export class SalesforceService {
 		user: User,
 		giftRecipient: GiftRecipient | null,
 	): Promise<SalesforceContactRecord> => {
+		console.log('XXX user:', user);
+		console.log('XXX giftRecipient:', giftRecipient);
+
 		const hasGiftRecipient = !!giftRecipient;
 		const buyerType = getBuyerType(user, hasGiftRecipient);
+		console.log('XXX buyerType:', buyerType);
 		const buyerContact = createBuyerRecordRequest(user, buyerType);
+		console.log('XXX buyerContact:', buyerContact);
+
 		const buyerResponse = await this.upsert(buyerContact);
+		console.log('XXX buyerResponse:', buyerResponse);
+
 		const giftRecipientResponse = await this.maybeAddGiftRecipient(
 			buyerResponse.ContactRecord,
 			giftRecipient,
 			user,
 		);
+		console.log('XXX giftRecipientResponse:', giftRecipientResponse);
+
 		const recipientContactRecord =
 			giftRecipientResponse?.ContactRecord ?? buyerResponse.ContactRecord;
 
