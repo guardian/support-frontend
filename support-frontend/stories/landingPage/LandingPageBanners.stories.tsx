@@ -1,4 +1,4 @@
-import { LandingPageBanners } from 'pages/supporter-plus-landing/components/landingPageBanners';
+import { LandingPageBanners } from '../../assets/pages/supporter-plus-landing/components/landingPageBanners';
 
 export default {
 	title: 'LandingPage/Banners',
