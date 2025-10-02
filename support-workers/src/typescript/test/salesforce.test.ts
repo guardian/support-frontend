@@ -1,6 +1,7 @@
 import type { Title } from '../model/stateSchemas';
 import {
 	buyerTypeIsPrint,
+	createBillingAddressFields,
 	createDigitalOnlyContactRecordRequest,
 	createGiftBuyerContactRecordRequest,
 	createGiftRecipientContactRecordRequest,
@@ -235,6 +236,22 @@ describe('createMailingAddressFields', () => {
 		};
 
 		const actual = createMailingAddressFields(printSubscriber);
+
+		expect(actual).toEqual(expected);
+	});
+});
+
+describe('createBillingAddressFields', () => {
+	test('should create billing address fields and set values correctly', () => {
+		const expected = {
+			OtherStreet: buyerStreet,
+			OtherCity: printSubscriber.billingAddress.city,
+			OtherState: printSubscriber.billingAddress.state,
+			OtherPostalCode: printSubscriber.billingAddress.postCode,
+			OtherCountry: 'United Kingdom',
+		};
+
+		const actual = createBillingAddressFields(printSubscriber);
 
 		expect(actual).toEqual(expected);
 	});
