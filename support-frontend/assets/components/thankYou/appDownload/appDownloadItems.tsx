@@ -1,5 +1,15 @@
 import { css } from '@emotion/react';
 import { between } from '@guardian/source/foundations';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import AppImageGuardianEditions from 'components/svgs/appGuardianEditions';
+import AppImageGuardianNews from 'components/svgs/appGuardianNews';
+import AppImageFeast from 'components/svgs/appImageFeast';
+import {
+	androidAppUrl,
+	feastAppUrl,
+	getDailyEditionUrl,
+	getIosAppUrl,
+} from 'helpers/urls/externalLinks';
 
 const downloadCopy = css`
 	${between.desktop.and.leftCol} {
@@ -48,4 +58,49 @@ export function AppFeastDownloadBodyCopy(): JSX.Element {
 			Make a feast out of anything with the Guardian’s new recipe app : Feast.
 		</span>
 	);
+}
+
+/* Data for rendering Download apps */
+
+export type AppDownload = {
+	header: string;
+	description: string;
+	appIcon: JSX.Element;
+	getAppStoreUrl: (arg: CountryGroupId) => string;
+	playStoreUrl: string;
+};
+
+type AppDownloadKey = 'GuardianNews' | 'guardianFeast' | 'guardianEditions';
+
+const downloadApps: Record<AppDownloadKey, AppDownload> = {
+	GuardianNews: {
+		header: 'The Guardian News app',
+		description:
+			'Unlock limitless Guardian journalism in our quality news app today.',
+		appIcon: <AppImageGuardianNews />,
+		playStoreUrl: androidAppUrl,
+		getAppStoreUrl: (countryGroupId: CountryGroupId) =>
+			getIosAppUrl(countryGroupId),
+	},
+	guardianFeast: {
+		header: 'The Guardian Feast app',
+		description:
+			'Make a feast out of anything with the Guardian’s new recipe app : Feast.',
+		appIcon: <AppImageFeast />,
+		playStoreUrl: feastAppUrl,
+		getAppStoreUrl: () => feastAppUrl,
+	},
+	guardianEditions: {
+		header: 'Download the Guardian Editions app',
+		description: 'Unlock full access to our quality news app today.',
+		appIcon: <AppImageGuardianEditions />,
+		playStoreUrl:
+			'https://play.google.com/store/apps/details?id=com.guardian.editions&hl=en_GB&gl=US',
+		getAppStoreUrl: (countryGroupId: CountryGroupId) =>
+			getDailyEditionUrl(countryGroupId),
+	},
+};
+
+export function getDownloadApps(appKeys: AppDownloadKey[]): AppDownload[] {
+	return appKeys.map((appKey) => downloadApps[appKey]);
 }
