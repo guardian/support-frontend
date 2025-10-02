@@ -1,3 +1,4 @@
+import type { Title } from '../model/stateSchemas';
 import {
 	createDigitalOnlyContactRecordRequest,
 	createGiftBuyerContactRecordRequest,
@@ -6,6 +7,7 @@ import {
 	SalesforceError,
 	salesforceErrorCodes,
 	SalesforceService,
+	validGiftRecipientFields,
 } from '../services/salesforce';
 import {
 	buyerStreet,
@@ -152,5 +154,51 @@ describe('SalesforceService', () => {
 				message: errorString,
 			}),
 		);
+	});
+});
+
+describe('validGiftRecipientFields', () => {
+	test('should return true when both firstName and lastName are present', () => {
+		const validGiftRecipient = {
+			title: 'Mr' as const,
+			firstName: 'John',
+			lastName: 'Doe',
+			email: 'john.doe@example.com',
+		};
+
+		expect(validGiftRecipientFields(validGiftRecipient)).toBe(true);
+	});
+
+	test('should return false when firstName is missing', () => {
+		const invalidGiftRecipient = {
+			title: 'Ms' as Title,
+			firstName: null,
+			lastName: 'Johnson',
+			email: 'johnson@example.com',
+		};
+
+		expect(validGiftRecipientFields(invalidGiftRecipient)).toBe(false);
+	});
+
+	test('should return false when lastName is missing', () => {
+		const invalidGiftRecipient = {
+			title: 'Dr' as Title,
+			firstName: 'Robert',
+			lastName: null,
+			email: 'robert@example.com',
+		};
+
+		expect(validGiftRecipientFields(invalidGiftRecipient)).toBe(false);
+	});
+
+	test('should return false when both firstName and lastName are missing', () => {
+		const invalidGiftRecipient = {
+			title: 'Mrs' as Title,
+			firstName: null,
+			lastName: null,
+			email: 'empty@example.com',
+		};
+
+		expect(validGiftRecipientFields(invalidGiftRecipient)).toBe(false);
 	});
 });

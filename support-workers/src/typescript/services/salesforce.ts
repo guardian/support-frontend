@@ -184,8 +184,10 @@ export class SalesforceService {
 	}
 }
 
-const validGiftRecipientFields = (giftRecipient: GiftRecipient) => {
-	return giftRecipient.firstName && giftRecipient.lastName;
+export const validGiftRecipientFields = (
+	giftRecipient: GiftRecipient,
+): boolean => {
+	return !!giftRecipient.firstName && !!giftRecipient.lastName;
 };
 
 export const createBuyerRecordRequest = (
