@@ -8,9 +8,6 @@ const StripeHostedCheckout = 'StripeHostedCheckout';
 const Sepa = 'Sepa';
 const None = 'None';
 
-const Success = 'success';
-const Pending = 'pending';
-
 export type PaymentMethod =
 	| typeof Stripe
 	| typeof PayPal
@@ -18,8 +15,6 @@ export type PaymentMethod =
 	| typeof StripeHostedCheckout
 	| typeof Sepa
 	| typeof None;
-
-export type PaymentStatus = typeof Success | typeof Pending;
 
 export type FullPaymentMethod = {
 	paymentMethod: PaymentMethod;

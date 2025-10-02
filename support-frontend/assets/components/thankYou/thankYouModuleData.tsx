@@ -353,8 +353,8 @@ export const getThankYouModuleData = (
 			bodyCopy: (
 				<WhatNext
 					productKey={productKey}
-					currency={getCurrency(countryId)}
 					ratePlanKey={ratePlanKey}
+					currency={getCurrency(countryId)}
 					amount={(finalAmount ?? '').toString()}
 					startDate={startDate}
 					isSignedIn={isSignedIn}

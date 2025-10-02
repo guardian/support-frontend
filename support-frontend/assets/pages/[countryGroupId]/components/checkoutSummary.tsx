@@ -16,16 +16,16 @@ import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { getFeatureFlags } from 'helpers/featureFlags';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import {
-	type ActiveProductKey,
-	type ActiveRatePlanKey,
-	productCatalogDescription,
-	productCatalogDescriptionNewBenefits,
+import { getProductDescription } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { parameteriseUrl } from 'helpers/urls/routes';
+import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
@@ -75,12 +75,14 @@ export default function CheckoutSummary({
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
-
 	const { enablePremiumDigital } = getFeatureFlags();
+	const productDescription = getProductDescription(
+		productKey,
+		ratePlanKey,
+		countryGroupId,
+		enablePremiumDigital,
+	);
 
-	const productDescription = enablePremiumDigital
-		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
-		: productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
 	};
@@ -170,11 +172,12 @@ export default function CheckoutSummary({
 				)}
 				<ContributionsOrderSummary
 					productKey={productKey}
-					productDescription={productDescription.label}
+					productLabel={productDescription.label}
 					ratePlanKey={ratePlanKey}
-					ratePlanDescription={ratePlanDescription.label}
+					ratePlanLabel={ratePlanDescription.label}
 					paymentFrequency={getBillingPeriodNoun(
 						ratePlanDescription.billingPeriod,
+						isGuardianWeeklyGiftProduct(productKey, ratePlanKey),
 					)}
 					amount={originalAmount}
 					promotion={promotion}
@@ -189,6 +192,7 @@ export default function CheckoutSummary({
 					startDate={
 						<OrderSummaryStartDate
 							productKey={productKey}
+							ratePlanKey={ratePlanKey}
 							startDate={formatUserDate(weeklyDeliveryDate)}
 						/>
 					}

@@ -33,11 +33,7 @@ export default function GuardianPrintHeading({
 		);
 	}
 
-	const guardianWeeklyGifting = isGuardianWeeklyGiftProduct(
-		productKey,
-		ratePlanKey,
-	);
-	if (guardianWeeklyGifting) {
+	if (isGuardianWeeklyGiftProduct(productKey, ratePlanKey)) {
 		return (
 			<h1 css={longHeaderTitleText}>
 				{thankYouText}
