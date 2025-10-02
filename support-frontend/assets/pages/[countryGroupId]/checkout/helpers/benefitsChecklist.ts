@@ -127,7 +127,7 @@ export const getBenefitsChecklistFromProductDescription = (
 		}));
 };
 
-const filterProductDescriptionBenefits = (
+export const filterProductDescriptionBenefits = (
 	productDescription: ProductDescription,
 	countryGroupId: CountryGroupId,
 ): ProductBenefit[] => {

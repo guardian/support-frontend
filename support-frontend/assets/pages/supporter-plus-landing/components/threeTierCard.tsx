@@ -28,7 +28,11 @@ export type CardContent = LandingPageProductDescription & {
 	link: string;
 	price: number;
 	promotion?: Promotion;
-	product: 'TierThree' | 'SupporterPlus' | 'Contribution';
+	product:
+		| 'TierThree'
+		| 'SupporterPlus'
+		| 'Contribution'
+		| 'DigitalSubscription';
 };
 
 export type ThreeTierCardProps = {
