@@ -12,7 +12,6 @@ import {
 	Button,
 	SvgChevronDownSingle,
 } from '@guardian/source/react-components';
-import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { useState } from 'react';
 import {
 	BenefitsCheckList,
@@ -22,10 +21,14 @@ import { CheckoutNudgeThankYou } from 'components/checkoutNudge/checkoutNudge';
 import type { Participations } from 'helpers/abTests/models';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
-import type { ActiveRatePlanKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { PriceSummary } from './priceSummary';
 
 const componentStyles = css`
@@ -131,10 +134,10 @@ const termsAndConditions = css`
 `;
 
 export type ContributionsOrderSummaryProps = {
-	productKey: ProductKey;
-	productDescription: string;
+	productKey: ActiveProductKey;
+	productLabel: string;
 	ratePlanKey: ActiveRatePlanKey;
-	ratePlanDescription?: string;
+	ratePlanLabel?: string;
 	amount: number;
 	promotion?: Promotion;
 	currency: Currency;
@@ -152,9 +155,9 @@ export type ContributionsOrderSummaryProps = {
 
 export function ContributionsOrderSummary({
 	productKey,
-	productDescription,
+	productLabel,
 	ratePlanKey,
-	ratePlanDescription,
+	ratePlanLabel,
 	amount,
 	promotion,
 	currency,
@@ -222,6 +225,7 @@ export function ContributionsOrderSummary({
 			abTestVariant={abParticipations?.abNudgeToLowRegular}
 		/>
 	);
+	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 
 	return (
 		<div css={componentStyles}>
@@ -233,8 +237,12 @@ export function ContributionsOrderSummary({
 			<div css={detailsSection}>
 				<div css={summaryRow}>
 					<div>
-						{ratePlanDescription && <p>{ratePlanDescription}</p>}
-						<p>{productDescription}</p>
+						{ratePlanLabel && <p>{ratePlanLabel}</p>}
+						<p>
+							{isWeeklyGift
+								? 'Guardian Weekly Gift Subscription'
+								: productLabel}
+						</p>
 					</div>
 					{(hasCheckList || isSundayOnlyNewspaperSubscription) && (
 						<Button
@@ -268,6 +276,7 @@ export function ContributionsOrderSummary({
 					fullPrice={fullPrice}
 					period={period}
 					discountPrice={discountPrice}
+					isWeeklyGift={isWeeklyGift}
 				/>
 			</div>
 			{nudgeLowRegularThanks}

@@ -32,6 +32,7 @@ import { helpCentreUrl } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { FinePrint } from './finePrint';
 import { ManageMyAccountLink } from './manageMyAccountLink';
@@ -60,9 +61,11 @@ const termsLink = (linkText: string, url: string) => (
 export function FooterTsAndCs({
 	productKey,
 	countryGroupId,
+	ratePlanKey,
 }: {
 	productKey: ActiveProductKey;
 	countryGroupId: CountryGroupId;
+	ratePlanKey?: ActiveRatePlanKey;
 }) {
 	const privacy = <a href={privacyLink}>Privacy Policy</a>;
 	const getProductNameSummary = (): string => {
@@ -99,10 +102,15 @@ export function FooterTsAndCs({
 				);
 		}
 	};
+
+	const weeklyGiftTerms =
+		ratePlanKey && isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+			? ' To cancel, go to Manage My Account or see our Terms. This subscription does not auto-renew.'
+			: '';
 	return (
 		<div css={marginTop}>
 			By proceeding, you are agreeing to {getProductNameSummary()}{' '}
-			{getProductTerms()}.{' '}
+			{getProductTerms()}. {weeklyGiftTerms}
 			<p css={marginTop}>
 				To find out what personal data we collect and how we use it, please
 				visit our {privacy}.
@@ -165,6 +173,7 @@ function paperTsAndCs(
 		</>
 	);
 }
+
 export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
@@ -174,12 +183,19 @@ export interface PaymentTsAndCsProps {
 	thresholdAmount?: number;
 }
 
+const rightReservation = `Offer subject to availability. Guardian News and Media Ltd ("GNM") reserves the right to withdraw this promotion at any time. `;
+function weeklyTsAndCs(isWeeklyGift?: boolean, promotion?: Promotion) {
+	return (
+		<>
+			{isWeeklyGift && !promotion && <div>{rightReservation}</div>}
+			{promotion && <GuardianWeeklyPromoTerms promotion={promotion} />}
+		</>
+	);
+}
 function GuardianWeeklyPromoTerms({ promotion }: { promotion: Promotion }) {
 	return (
 		<div>
-			Offer subject to availability. Guardian News and Media Ltd ("GNM")
-			reserves the right to withdraw this promotion at any time. Full promotion
-			terms and conditions for our{' '}
+			{rightReservation}Full promotion terms and conditions for our{' '}
 			{termsLink('offer', buildPromotionalTermsLink(promotion))}.
 		</div>
 	);
@@ -207,6 +223,7 @@ export function PaymentTsAndCs({
 		productKey,
 		ratePlanKey as ActivePaperProductOptions,
 	);
+	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 
 	if (isSundayOnlyNewsletterSubscription) {
 		return (
@@ -333,12 +350,8 @@ export function PaymentTsAndCs({
 		NationalDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
 		HomeDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
 		SubscriptionCard: paperTsAndCs('Collection', deliveryDate),
-		GuardianWeeklyDomestic: promotion && (
-			<GuardianWeeklyPromoTerms promotion={promotion} />
-		),
-		GuardianWeeklyRestOfWorld: promotion && (
-			<GuardianWeeklyPromoTerms promotion={promotion} />
-		),
+		GuardianWeeklyDomestic: weeklyTsAndCs(isWeeklyGift, promotion),
+		GuardianWeeklyRestOfWorld: weeklyTsAndCs(isWeeklyGift, promotion),
 	};
 	return (
 		<div css={container}>
@@ -346,6 +359,7 @@ export function PaymentTsAndCs({
 				{paymentTsAndCs[productKey]}
 				<FooterTsAndCs
 					productKey={productKey}
+					ratePlanKey={ratePlanKey}
 					countryGroupId={countryGroupId}
 				/>
 			</FinePrint>

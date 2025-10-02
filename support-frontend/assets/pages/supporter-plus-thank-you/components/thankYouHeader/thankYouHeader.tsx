@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { from, space, textEgyptian15 } from '@guardian/source/foundations';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -40,12 +39,10 @@ type ThankYouHeaderProps = {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	isDirectDebitPayment: boolean;
-	isOneOffPayPal: boolean;
 	amount: number;
 	currency: IsoCurrency;
 	observerPrint?: ObserverPrint;
 	startDate?: string;
-	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
 };
 
@@ -54,12 +51,10 @@ function ThankYouHeader({
 	productKey,
 	ratePlanKey,
 	isDirectDebitPayment,
-	isOneOffPayPal,
 	amount,
 	currency,
 	observerPrint,
 	startDate,
-	paymentStatus,
 	promotion,
 }: ThankYouHeaderProps): JSX.Element {
 	const isPrint = isPrintProduct(productKey);
@@ -75,11 +70,9 @@ function ThankYouHeader({
 				name={name}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
-				isOneOffPayPal={isOneOffPayPal}
 				amount={amount}
 				currency={currency}
 				isObserverPrint={!!observerPrint}
-				paymentStatus={paymentStatus}
 				promotion={promotion}
 			/>
 

@@ -87,9 +87,9 @@ Template.args = {} as ContributionsOrderSummaryProps;
 
 export const Default = Template.bind({});
 Default.args = {
-	productKey: 'SupporterMembership',
+	productKey: 'SupporterPlus',
 	ratePlanKey: 'Monthly',
-	productDescription: 'Monthly support',
+	productLabel: 'Monthly support',
 	paymentFrequency: 'month',
 	enableCheckList: true,
 	amount: 10,
@@ -121,7 +121,7 @@ export const SingleContribution = Template.bind({});
 SingleContribution.args = {
 	productKey: 'Contribution',
 	ratePlanKey: 'OneTime',
-	productDescription: 'One-off contribution',
+	productLabel: 'One-off contribution',
 	enableCheckList: false,
 	amount: 25,
 	currency: {
@@ -142,9 +142,9 @@ SingleContribution.args = {
 
 export const RecurringContribution = Template.bind({});
 RecurringContribution.args = {
-	productKey: 'SupporterMembership',
+	productKey: 'SupporterPlus',
 	ratePlanKey: 'Monthly',
-	productDescription: 'Support',
+	productLabel: 'Support',
 	enableCheckList: true,
 	amount: 3,
 	currency: {
@@ -178,7 +178,7 @@ export const SupporterPlus = Template.bind({});
 SupporterPlus.args = {
 	productKey: 'SupporterPlus',
 	ratePlanKey: 'Monthly',
-	productDescription: 'All-access Digital',
+	productLabel: 'All-access Digital',
 	enableCheckList: true,
 	amount: 12,
 	currency: {
@@ -213,7 +213,7 @@ export const TierThree = Template.bind({});
 TierThree.args = {
 	productKey: 'TierThree',
 	ratePlanKey: 'Monthly',
-	productDescription: 'Digital + print',
+	productLabel: 'Digital + print',
 	enableCheckList: true,
 	amount: 27,
 	currency: {
@@ -242,8 +242,9 @@ TierThree.args = {
 	),
 	startDate: (
 		<OrderSummaryStartDate
-			startDate={'Friday, April 11, 2025'}
 			productKey="TierThree"
+			ratePlanKey={'Monthly'}
+			startDate={'Friday, April 11, 2025'}
 		/>
 	),
 	headerButton: (
@@ -257,7 +258,7 @@ export const StudentOneYear = Template.bind({});
 StudentOneYear.args = {
 	productKey: 'SupporterPlus',
 	ratePlanKey: 'OneYearStudent',
-	productDescription: 'All-access Digital',
+	productLabel: 'All-access Digital',
 	paymentFrequency: 'year',
 	enableCheckList: true,
 	amount: 120,

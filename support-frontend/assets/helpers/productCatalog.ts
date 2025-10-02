@@ -10,6 +10,7 @@ import type {
 	ProductKey,
 	ProductRatePlanKey,
 } from '@modules/product-catalog/productCatalog';
+import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { Participations } from './abTests/models';
 
 const activeProductKeys = [
@@ -207,6 +208,9 @@ const guardianWeeklyBenefit = {
 	copy: 'Guardian Weekly print magazine delivered to your door every week',
 	tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
 };
+const guardianWeeklyGiftBenefit = {
+	copy: `Guardian Weekly print magazine delivered to your recipient's door`,
+};
 
 const feastBenefit = {
 	copy: 'Unlimited access to the Guardian Feast app',
@@ -383,6 +387,8 @@ export const productCatalogDescription: Record<
 			},
 			OneYearGift: {
 				billingPeriod: BillingPeriod.Annual,
+				hideSimilarProductsConsent: true,
+				fixedTerm: true,
 			},
 			Annual: {
 				billingPeriod: BillingPeriod.Annual,
@@ -392,6 +398,8 @@ export const productCatalogDescription: Record<
 			},
 			ThreeMonthGift: {
 				billingPeriod: BillingPeriod.Quarterly,
+				hideSimilarProductsConsent: true,
+				fixedTerm: true,
 			},
 		},
 	},
@@ -406,6 +414,8 @@ export const productCatalogDescription: Record<
 			},
 			OneYearGift: {
 				billingPeriod: BillingPeriod.Annual,
+				hideSimilarProductsConsent: true,
+				fixedTerm: true,
 			},
 			Annual: {
 				billingPeriod: BillingPeriod.Annual,
@@ -415,6 +425,8 @@ export const productCatalogDescription: Record<
 			},
 			ThreeMonthGift: {
 				billingPeriod: BillingPeriod.Quarterly,
+				hideSimilarProductsConsent: true,
+				fixedTerm: true,
 			},
 		},
 	},
@@ -527,6 +539,38 @@ export function productCatalogGuardianAdLite(): Record<
 		},
 	};
 }
+
+function productCatalogGuardianWeeklyGift(): Record<
+	ActiveProductKey,
+	ProductDescription
+> {
+	return {
+		...productCatalogDescription,
+		GuardianWeeklyDomestic: {
+			...productCatalogDescription.GuardianWeeklyDomestic,
+			benefits: [guardianWeeklyGiftBenefit],
+		},
+		GuardianWeeklyRestOfWorld: {
+			...productCatalogDescription.GuardianWeeklyRestOfWorld,
+			benefits: [guardianWeeklyGiftBenefit],
+		},
+	};
+}
+
+export const getProductDescription = (
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
+	countryGroupId: CountryGroupId,
+	enablePremiumDigital: boolean,
+): ProductDescription => {
+	if (enablePremiumDigital) {
+		return productCatalogDescriptionNewBenefits(countryGroupId)[productKey];
+	}
+	if (isGuardianWeeklyGiftProduct(productKey, ratePlanKey)) {
+		return productCatalogGuardianWeeklyGift()[productKey];
+	}
+	return productCatalogDescription[productKey];
+};
 
 /**
  * This method is to help us determine which product and rateplan to

@@ -208,7 +208,6 @@ export default function CheckoutForm({
 	};
 	const isSundayOnly = isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const isRecurringContribution = productKey === 'Contribution';
-	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 
 	const [deliveryAddressErrors, setDeliveryAddressErrors] = useState<
 		AddressFormFieldError[]
@@ -242,6 +241,7 @@ export default function CheckoutForm({
 		},
 	});
 
+	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 	const legendPrefix = isWeeklyGift
 		? LEGEND_PREFIX_WEEKLY_GIFT
 		: LEGEND_PREFIX_DEFAULT;
@@ -657,13 +657,16 @@ export default function CheckoutForm({
 
 	const billingPreposition = productDescription.ratePlans[ratePlanKey]
 		?.fixedTerm
-		? 'for a'
+		? `for${isWeeklyGift ? '' : ' a'}`
 		: 'per';
 
 	const buttonText = `Pay ${simpleFormatAmount(
 		currency,
 		finalAmount,
-	)} ${billingPreposition} ${getBillingPeriodNoun(billingPeriod)}`;
+	)} ${billingPreposition} ${getBillingPeriodNoun(
+		billingPeriod,
+		isWeeklyGift,
+	)}`;
 
 	return (
 		<>
@@ -838,7 +841,7 @@ export default function CheckoutForm({
 									setRecipientEmail={setRecipientEmail}
 								/>
 								<WeeklyDeliveryDates
-									legend={`2. Gift delivery date`}
+									legend={`2. Gift subscription start date`}
 									weeklyDeliveryDates={getWeeklyDays()}
 									weeklyDeliveryDate={weeklyDeliveryDate}
 									setWeeklyDeliveryDate={setWeeklyDeliveryDate}
