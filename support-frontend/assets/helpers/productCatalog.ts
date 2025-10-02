@@ -563,8 +563,8 @@ export const getProductDescription = (
 	countryGroupId: CountryGroupId,
 	enablePremiumDigital: boolean,
 ): ProductDescription => {
-	if (enablePremiumDigital) {
-		return productCatalogDescriptionNewBenefits(countryGroupId)[productKey];
+	if (enablePremiumDigital && productKey === 'DigitalSubscription') {
+		return productCatalogDescriptionPremiumDigital(countryGroupId)[productKey];
 	}
 	if (isGuardianWeeklyGiftProduct(productKey, ratePlanKey)) {
 		return productCatalogGuardianWeeklyGift()[productKey];
