@@ -218,7 +218,8 @@ export function ThankYouComponent({
 	const isSupporterPlus = productKey === 'SupporterPlus';
 	const isTierThree = productKey === 'TierThree';
 	const isNationalDelivery = productKey === 'NationalDelivery';
-	const validEmail = order.email !== '';
+	const { email } = order;
+	const validEmail = email !== '';
 	const { enablePremiumDigital } = getFeatureFlags();
 
 	// Clarify Guardian Ad-lite thankyou page states
@@ -267,7 +268,7 @@ export function ThankYouComponent({
 		isSupporterPlus,
 		isTierThree,
 		startDate,
-		undefined,
+		email,
 		undefined,
 		benefitsChecklist,
 		undefined,
@@ -290,10 +291,6 @@ export function ThankYouComponent({
 		...maybeThankYouModule(userNotSignedIn && !isGuardianAdLite, 'signIn'), // Sign in to access your benefits
 		...maybeThankYouModule(isTierThree, 'benefits'),
 		...maybeThankYouModule(
-			isTierThree && enablePremiumDigital,
-			'newspaperArchiveBenefit',
-		),
-		...maybeThankYouModule(
 			isTierThree || isNationalDelivery,
 			'subscriptionStart',
 		),
@@ -313,6 +310,10 @@ export function ThankYouComponent({
 			'feedback',
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
+		...maybeThankYouModule(
+			isDigitalEdition && enablePremiumDigital,
+			'newspaperArchiveBenefit',
+		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(
 			!isTierThree && !isGuardianAdLite && !isPrint,

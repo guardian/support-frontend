@@ -1,12 +1,9 @@
 package backend
 
-import org.apache.pekko.actor.ActorSystem
 import cats.data.EitherT
 import cats.instances.future._
 import cats.syntax.apply._
 import cats.syntax.validated._
-import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
-import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService.Sources
 import com.gu.support.config.Stages.{CODE, PROD}
@@ -22,9 +19,12 @@ import model.email.ContributorRow
 import model.stripe.StripeApiError.{recaptchaErrorText, stripeDisabledErrorText}
 import model.stripe.StripePaymentMethod.{StripeApplePay, StripeCheckout, StripePaymentRequestButton}
 import model.stripe._
+import org.apache.pekko.actor.ActorSystem
 import play.api.libs.ws.WSClient
 import services._
+import software.amazon.awssdk.services.cloudwatch.CloudWatchAsyncClient
 import software.amazon.awssdk.services.s3.S3Client
+import software.amazon.awssdk.services.sqs.model.SendMessageResponse
 import util.EnvironmentBasedBuilder
 
 import scala.concurrent.Future
@@ -298,7 +298,7 @@ class StripeBackend(
       email: String,
       data: StripeRequest,
       identityId: String,
-  ): EitherT[Future, BackendError, SendMessageResult] = {
+  ): EitherT[Future, BackendError, SendMessageResponse] = {
     val contributorRow = ContributorRow(
       email,
       data.paymentData.currency.toString,
@@ -340,7 +340,7 @@ object StripeBackend {
     )
   }
 
-  class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(implicit
+  class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: CloudWatchAsyncClient)(implicit
       defaultThreadPool: DefaultThreadPool,
       stripeThreadPool: StripeThreadPool,
       sqsThreadPool: SQSThreadPool,

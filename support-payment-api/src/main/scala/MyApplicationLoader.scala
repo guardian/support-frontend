@@ -4,7 +4,6 @@ import aws.AWSClientBuilder
 import backend._
 import com.amazon.pay.impl.ipn.NotificationFactory
 import com.amazon.pay.response.ipn.model.Notification
-import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.typesafe.scalalogging.StrictLogging
 import conf.{ConfigLoader, PlayConfigUpdater}
 import model.{AppThreadPools, AppThreadPoolsProvider, RequestEnvironments}
@@ -15,6 +14,7 @@ import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSComponents
 import router.Routes
 import services.CloudWatchService
+import software.amazon.awssdk.services.cloudwatch.CloudWatchAsyncClient
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.ssm.SsmClient
 import util.RequestBasedProvider
@@ -70,7 +70,7 @@ class MyComponents(context: Context)
 
   override lazy val httpErrorHandler = new ErrorHandler(environment, configuration, sourceMapper, Some(router))
 
-  val cloudWatchClient: AmazonCloudWatchAsync = AWSClientBuilder.buildCloudWatchAsyncClient()
+  val cloudWatchClient: CloudWatchAsyncClient = AWSClientBuilder.buildCloudWatchAsyncClient()
 
   val stripeBackendProvider: RequestBasedProvider[StripeBackend] =
     new StripeBackend.Builder(configLoader, cloudWatchClient)

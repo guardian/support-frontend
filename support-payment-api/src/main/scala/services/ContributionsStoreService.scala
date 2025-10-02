@@ -2,8 +2,6 @@ package services
 
 import aws.AWSClientBuilder
 import cats.data.{EitherT, Validated}
-import com.amazonaws.services.sqs.AmazonSQSAsync
-import com.amazonaws.services.sqs.model.{MessageAttributeValue, SendMessageRequest}
 import com.typesafe.scalalogging.StrictLogging
 import conf.ContributionsStoreQueueConfig
 import io.circe.syntax._
@@ -11,8 +9,9 @@ import io.circe.{Encoder, Json}
 import model.db.ContributionData
 import model.{InitializationError, InitializationResult, SQSThreadPool}
 import services.ContributionsStoreQueueService.Message
+import software.amazon.awssdk.services.sqs.SqsAsyncClient
+import software.amazon.awssdk.services.sqs.model.{MessageAttributeValue, SendMessageRequest}
 
-import java.time.LocalDateTime
 import scala.collection.JavaConverters._
 import scala.concurrent.Future
 import scala.util.control.NonFatal
@@ -88,19 +87,21 @@ class ContributionsStoreQueueService(queueUrl: String, keyId: String, region: St
 
   private object SqsService {
 
-    private val sqsClient: AmazonSQSAsync = AWSClientBuilder
+    private val sqsClient: SqsAsyncClient = AWSClientBuilder
       .buildAmazonSQSAsyncClient()
 
     private val messageAttributes = Map(
-      "keyId" -> new MessageAttributeValue().withStringValue(keyId).withDataType("String"),
+      "keyId" -> MessageAttributeValue.builder().stringValue(keyId).dataType("String").build(),
     )
 
     def publish(message: String): EitherT[Future, ContributionsStoreService.Error, Unit] = EitherT {
       Future {
-        val request = new SendMessageRequest()
-          .withQueueUrl(queueUrl)
-          .withMessageBody(message)
-          .withMessageAttributes(messageAttributes.asJava)
+        val request = SendMessageRequest
+          .builder()
+          .queueUrl(queueUrl)
+          .messageBody(message)
+          .messageAttributes(messageAttributes.asJava)
+          .build()
 
         sqsClient.sendMessage(request) // Sync API of Async client
       }
