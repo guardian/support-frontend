@@ -487,15 +487,15 @@ const getPaperArchiveDigitalBenefit = (countryGroupId: CountryGroupId) => {
 	};
 };
 const weeklyDigitalBenefit = {
-	copy: `Guardian Weekly digital sit amet, consec tetur adipiscing elit`,
+	copy: `Guardian Weekly e-magazine`,
 	isNew: true,
-	tooltip: `Guardian Weekly digital sit amet, consec tetur adipiscing elit`,
+	tooltip: `Powered through Guardian Editions app, the Guardian Weekly e-magazine features a handpicked and carefully curated selection of in-depth articles, global news, opinion and more. Enjoy wherever you are, on your favourite device.`,
 };
 
 const editionsDigitalBenefit = {
-	copy: `Daily editions sit amet, consec tetur adipiscing elit`,
+	copy: `The Long Read e-magazine`,
 	isNew: true,
-	tooltip: `Daily editions sit amet, consec tetur adipiscing elit`,
+	tooltip: `Powered through Guardian Editions app, the Long Read e-magazine is a selection of some of the Guardian’s finest longform journalism.Through first person accounts, narrative storytelling and investigative reporting, the Long Read seeks to dive deep, debunk myths and uncover hidden histories.`,
 };
 
 export function productCatalogDescriptionPremiumDigital(
