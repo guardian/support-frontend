@@ -231,7 +231,7 @@ const supporterPlusBenefits = [
 
 const guardianAdLiteBenefits = [
 	{
-		copy: 'A Guardian Ad-Lite subscription enables you to read the Guardian website without personalised advertising.',
+		copy: 'A Guardian Ad-Lite subscription enables you to read the Guardian website without personalised advertising (except for when we host third party content, like videos).',
 	},
 	{
 		copy: 'You will still see non-personalised advertising.',
