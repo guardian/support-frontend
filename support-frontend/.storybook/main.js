@@ -26,7 +26,12 @@ module.exports = {
 	staticDirs: ['./static'],
 	viteFinal: async (config, { configType }) => {
 		return vite.mergeConfig(config, {
-			plugins: [preact.preact({ reactAliasesEnabled: true })],
+			plugins: [
+				preact.preact({
+					reactAliasesEnabled: true,
+					jsxImportSource: '@emotion/react',
+				}),
+			],
 			resolve: {
 				alias: [
 					{
