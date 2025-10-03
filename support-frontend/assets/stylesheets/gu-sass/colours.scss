@@ -1,13 +1,39 @@
-/*
-This imports the Guardian colour pallette from pasteup as a sass map.
- You can see the palette at support-ui.gutools.co.uk
-*/
-
-// @import './palette.pasteupimport';
+$palette: (
+  news-dark: #ab0613,
+  news-main: #c70000,
+  news-bright: #ff4e36,
+  news-pastel: #ffbac8,
+  news-faded: #fff4f2,
+  news-neutral-border: #dcdcdc,
+  sport-dark: #005689,
+  sport-main: #0084c6,
+  sport-bright: #00b2ff,
+  sport-pastel: #90dcff,
+  sport-faded: #f1f8fc,
+  sport-neutral-border: #dcdcdc,
+  highlight-main: #ffe500,
+  highlight-dark: #ffbb50,
+  neutral-7: #121212,
+  neutral-20: #333333,
+  neutral-46: #767676,
+  neutral-60: #999999,
+  neutral-85: #d9d9d9,
+  neutral-86: #dcdcdc,
+  neutral-93: #ededed,
+  neutral-97: #f6f6f6,
+  neutral-100: #ffffff,
+  green-dark: #185E36,
+  green-main: #22874D,
+  brand-dark: #041f4a,
+  brand-main: #052962,
+  brand-pastel: #506991,
+  state-success: #22874D,
+  state-error: #c70000
+);
 
 // Given the name of the colour this returns the hex value.
 // It is essentially just a wrapper around map-get.
+
 @function gu-colour($name) {
-  @return #FF0000;
-	// @return map-get($palette, $name);
+	@return map-get($palette, $name);
 }
