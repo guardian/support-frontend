@@ -34,6 +34,10 @@ module.exports = {
 						replacement: path.resolve(__dirname, '../assets/components'),
 					},
 					{
+						find: '~components',
+						replacement: path.resolve(__dirname, '../assets/components'),
+					},
+					{
 						find: 'helpers',
 						replacement: path.resolve(__dirname, '../assets/helpers'),
 					},
