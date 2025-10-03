@@ -32,6 +32,8 @@ module.exports = {
 		'sass', // peer dependency of fast-sass-loader
 		'sass-mq', // imported from breakpoints.scss
 		'@babel/runtime', // required by the build (errors without it)
+		// This is needed by storybook (specifically by @storybook/builder-vite)
+		'@storybook/preact',
 	],
 	webpack: {
 		entry: ['webpack.*.js'],
