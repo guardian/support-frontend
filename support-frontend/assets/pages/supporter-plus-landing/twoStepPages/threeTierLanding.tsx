@@ -465,22 +465,24 @@ export function ThreeTierLanding({
 		? premiumDigitalProductDescription
 		: settings.products.TierThree;
 
-	const premiumDigitalProductPrice = allProductPrices.DigitalPack; // TODO: Handle undefined?
+	const premiumDigitalProductPrice = allProductPrices.DigitalPack;
 	const threeTierProductPrice = allProductPrices.TierThree;
-	const tier3ProductPrice =
-		enablePremiumDigital && !!premiumDigitalProductPrice
-			? premiumDigitalProductPrice
-			: threeTierProductPrice;
-	const tier3Promotion = getPromotion(
-		tier3ProductPrice,
-		countryId,
-		billingPeriod,
-		countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
-		enablePremiumDigital ? 'NewspaperArchive' : 'NoProductOptions',
-	);
+	const tier3ProductPrice = enablePremiumDigital
+		? premiumDigitalProductPrice
+		: threeTierProductPrice;
+	const tier3Promotion = tier3ProductPrice
+		? getPromotion(
+				tier3ProductPrice,
+				countryId,
+				billingPeriod,
+				countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
+				enablePremiumDigital ? 'NewspaperArchive' : 'NoProductOptions',
+		  )
+		: undefined;
 	if (tier3Promotion) {
 		tier3UrlParams.set('promoCode', tier3Promotion.promoCode);
 	}
+
 	const tier3Card: CardContent = {
 		product: 'DigitalSubscription',
 		price: tier3Pricing,
