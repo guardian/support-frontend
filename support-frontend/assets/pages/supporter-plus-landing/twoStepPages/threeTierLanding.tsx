@@ -428,21 +428,16 @@ export function ThreeTierLanding({
 	 *
 	 * This should only exist as long as the Tier three hack is in place.
 	 */
-
-	const tier3RatePlanKey = getThreeTierRatePlanKey(
-		contributionType,
-		countryGroupId,
-	);
-	const threeTierPricing = productCatalog.TierThree?.ratePlans[tier3RatePlanKey]
+	const tier3Product = enablePremiumDigital
+		? 'DigitalSubscription'
+		: 'TierThree';
+	const tier3RatePlanKey = enablePremiumDigital
+		? ratePlanKey
+		: getThreeTierRatePlanKey(contributionType, countryGroupId);
+	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[tier3RatePlanKey]
 		?.pricing[currencyId] as number;
-	const premiumDigitalPricing = productCatalog.DigitalSubscription?.ratePlans[
-		ratePlanKey
-	]?.pricing[currencyId] as number;
-	const tier3Pricing = enablePremiumDigital
-		? premiumDigitalPricing
-		: threeTierPricing;
 	const tier3UrlParams = new URLSearchParams({
-		product: 'TierThree',
+		product: tier3Product,
 		ratePlan: tier3RatePlanKey,
 	});
 	const premiumDigitalProductCatalog =
@@ -464,7 +459,6 @@ export function ThreeTierLanding({
 	const tier3ProductDescription = enablePremiumDigital
 		? premiumDigitalProductDescription
 		: settings.products.TierThree;
-
 	const premiumDigitalProductPrice = allProductPrices.DigitalPack;
 	const threeTierProductPrice = allProductPrices.TierThree;
 	const tier3ProductPrice = enablePremiumDigital
@@ -482,14 +476,14 @@ export function ThreeTierLanding({
 	if (tier3Promotion) {
 		tier3UrlParams.set('promoCode', tier3Promotion.promoCode);
 	}
-
+	const featureFlag = enablePremiumDigital ? `enablePremiumDigital&` : '';
 	const tier3Card: CardContent = {
-		product: 'DigitalSubscription',
+		product: tier3Product,
 		price: tier3Pricing,
-		link: `checkout?${tier3UrlParams.toString()}`,
+		link: `checkout?${featureFlag}${tier3UrlParams.toString()}`,
 		promotion: tier3Promotion,
 		isUserSelected:
-			urlSearchParamsProduct === 'TierThree' ||
+			urlSearchParamsProduct === tier3Product ||
 			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount),
 		enablePremiumDigital,
 		...tier3ProductDescription,
