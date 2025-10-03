@@ -29,7 +29,7 @@ $mq-breakpoints: (
 );
 
 // The mq mixin.
-@import 'sass-mq/_mq';
+@import 'node_modules/sass-mq/mq';
 
 // Given a breakpoint name, retrieves the width in pixels.
 @function gu-breakpoint($name) {

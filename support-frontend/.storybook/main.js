@@ -81,6 +81,13 @@ module.exports = {
 						find: '@modules',
 						replacement: path.resolve(__dirname, '../../modules'),
 					},
+					// This is needed because the build needs the node_modules in the path
+					// when sass-mq/mq is imported but storybook errors with it there, so
+					// fix the storybook side with an alias.
+					{
+						find: 'node_modules/sass-mq/mq',
+						replacement: path.resolve(__dirname, '../node_modules/sass-mq/mq'),
+					},
 				],
 			},
 		});
