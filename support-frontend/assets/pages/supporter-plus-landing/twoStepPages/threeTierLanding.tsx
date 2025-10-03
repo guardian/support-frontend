@@ -440,10 +440,8 @@ export function ThreeTierLanding({
 		product: tier3Product,
 		ratePlan: tier3RatePlanKey,
 	});
-	const premiumDigitalProductCatalog =
-		productCatalogDescriptionPremiumDigital(countryGroupId).DigitalSubscription;
 	const premiumDigitalBenefits = filterProductDescriptionBenefits(
-		premiumDigitalProductCatalog,
+		productCatalogDescriptionPremiumDigital(countryGroupId).DigitalSubscription,
 		countryGroupId,
 	);
 	const premiumDigitalProductDescription = {
@@ -459,11 +457,9 @@ export function ThreeTierLanding({
 	const tier3ProductDescription = enablePremiumDigital
 		? premiumDigitalProductDescription
 		: settings.products.TierThree;
-	const premiumDigitalProductPrice = allProductPrices.DigitalPack;
-	const threeTierProductPrice = allProductPrices.TierThree;
 	const tier3ProductPrice = enablePremiumDigital
-		? premiumDigitalProductPrice
-		: threeTierProductPrice;
+		? allProductPrices.DigitalPack
+		: allProductPrices.TierThree;
 	const tier3Promotion = tier3ProductPrice
 		? getPromotion(
 				tier3ProductPrice,
