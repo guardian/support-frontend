@@ -1,6 +1,4 @@
 const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const devConfig = require('../webpack.dev.js');
 const vite = require('vite');
 const preact = require('@preact/preset-vite');
 module.exports = {
@@ -91,29 +89,6 @@ module.exports = {
 				],
 			},
 		});
-	},
-	webpackFinal: async (config) => {
-		return {
-			...config,
-			plugins: [
-				...config.plugins,
-				new MiniCssExtractPlugin({
-					filename: path.join('stylesheets', 'style.css'),
-				}),
-			],
-			module: {
-				...config.module,
-				rules: devConfig.module.rules,
-			},
-			resolve: {
-				...config.resolve,
-				alias: {
-					...devConfig.resolve.alias,
-					'@modules': path.resolve(__dirname, '../../modules'),
-				},
-				modules: devConfig.resolve.modules,
-			},
-		};
 	},
 	docs: {},
 };
