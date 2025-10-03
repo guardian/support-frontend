@@ -465,9 +465,14 @@ export function ThreeTierLanding({
 		? premiumDigitalProductDescription
 		: settings.products.TierThree;
 
-	// TODO: Will Promotions labelled under TIER3 (product threeTier) now be applied to product DigitalSubscription?
+	const premiumDigitalProductPrice = allProductPrices.DigitalPack; // TODO: Handle undefined?
+	const threeTierProductPrice = allProductPrices.TierThree;
+	const tier3ProductPrice =
+		enablePremiumDigital && !!premiumDigitalProductPrice
+			? premiumDigitalProductPrice
+			: threeTierProductPrice;
 	const tier3Promotion = getPromotion(
-		allProductPrices.TierThree,
+		tier3ProductPrice,
 		countryId,
 		billingPeriod,
 		countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
