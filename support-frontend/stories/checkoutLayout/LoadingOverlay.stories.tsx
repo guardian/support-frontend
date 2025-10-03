@@ -1,5 +1,5 @@
-import type { LoadingOverlayProps } from '../../assets/components/loadingOverlay/loadingOverlay';
-import { LoadingOverlay } from '../../assets/components/loadingOverlay/loadingOverlay';
+import type { LoadingOverlayProps } from 'components/loadingOverlay/loadingOverlay';
+import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
