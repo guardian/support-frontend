@@ -14,11 +14,14 @@ import { type AppDownload } from './appDownloadItems';
 const bodyApps = css`
 	display: flex;
 	justify-content: space-between;
-	margin-top: ${space[6]}px;
+	padding-top: ${space[6]}px;
+	&:not(:last-child) {
+		padding-bottom: ${space[8]}px;
+	}
 
 	${from.tablet} {
-		&:not(:last-child) {
-			border-bottom: 1px solid ${neutral[86]};
+		&:not(:first-child) {
+			border-top: 1px solid ${neutral[86]};
 		}
 	}
 `;
@@ -43,25 +46,19 @@ const descriptionStyle = css`
 	}
 `;
 
-const ctaContainerApps = css`
+const appStoreBadges = css`
 	margin-top: ${space[4]}px;
-	padding-bottom: 32px;
-
-	// appDownload ctas require margin-top but appsDownload does not
-	> div {
-		margin-top: 0;
-	}
 `;
 
-const appContainer = css`
+const headingstyle = css`
+	font-weight: 700;
+`;
+
+const appIconContainer = css`
 	width: 55px;
 	${from.mobileLandscape} {
 		width: 75px;
 	}
-`;
-
-const headingCss = css`
-	font-weight: 700;
 `;
 
 export default function AppDownload({
@@ -75,21 +72,21 @@ export default function AppDownload({
 		<>
 			{apps.map(
 				(
-					{ header, description, appIcon, playStoreUrl, getAppStoreUrl },
+					{ name, description, appIcon, playStoreUrl, getAppStoreUrl },
 					index,
 				) => (
 					<div css={bodyApps} key={index}>
 						<div css={bodyStyle}>
-							<h2 css={headingCss}>{header}</h2>
+							<h2 css={headingstyle}>{name}</h2>
 							<p css={descriptionStyle}>{description}</p>
-							<div css={[ctaContainerApps]}>
+							<div css={[appStoreBadges]}>
 								<AppStoreBadges
 									playStoreUrl={playStoreUrl}
 									appStoreUrl={getAppStoreUrl(countryGroupId)}
 								/>
 							</div>
 						</div>
-						<span css={appContainer}>{appIcon}</span>
+						<div css={appIconContainer}>{appIcon}</div>
 					</div>
 				),
 			)}

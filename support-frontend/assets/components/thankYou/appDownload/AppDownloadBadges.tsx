@@ -12,8 +12,8 @@ import {
 	getDailyEditionUrl,
 	getIosAppUrl,
 } from 'helpers/urls/externalLinks';
-import AppleAppStoreBadge from './bagdes/AppleAppStoreBadge';
-import GooglePlayStoreBadge from './bagdes/GooglePlayStoreBadge';
+import AppleAppStoreBadge from './badges/AppleAppStoreBadge';
+import GooglePlayStoreBadge from './badges/GooglePlayStoreBadge';
 
 const container = css`
 	display: flex;

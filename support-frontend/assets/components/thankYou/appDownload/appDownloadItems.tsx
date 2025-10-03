@@ -63,18 +63,18 @@ export function AppFeastDownloadBodyCopy(): JSX.Element {
 /* Data for rendering Download apps */
 
 export type AppDownload = {
-	header: string;
+	name: string;
 	description: string;
 	appIcon: JSX.Element;
-	getAppStoreUrl: (arg: CountryGroupId) => string;
 	playStoreUrl: string;
+	getAppStoreUrl: (arg: CountryGroupId) => string;
 };
 
 type AppDownloadKey = 'GuardianNews' | 'guardianFeast' | 'guardianEditions';
 
 const downloadApps: Record<AppDownloadKey, AppDownload> = {
 	GuardianNews: {
-		header: 'The Guardian News app',
+		name: 'The Guardian News app',
 		description:
 			'Unlock limitless Guardian journalism in our quality news app today.',
 		appIcon: <AppImageGuardianNews />,
@@ -83,7 +83,7 @@ const downloadApps: Record<AppDownloadKey, AppDownload> = {
 			getIosAppUrl(countryGroupId),
 	},
 	guardianFeast: {
-		header: 'The Guardian Feast app',
+		name: 'The Guardian Feast app',
 		description:
 			'Make a feast out of anything with the Guardian’s new recipe app : Feast.',
 		appIcon: <AppImageFeast />,
@@ -91,7 +91,7 @@ const downloadApps: Record<AppDownloadKey, AppDownload> = {
 		getAppStoreUrl: () => feastAppUrl,
 	},
 	guardianEditions: {
-		header: 'Download the Guardian Editions app',
+		name: 'The Guardian Editions app',
 		description: 'Unlock full access to our quality news app today.',
 		appIcon: <AppImageGuardianEditions />,
 		playStoreUrl:
