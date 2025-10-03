@@ -446,9 +446,6 @@ export function ThreeTierLanding({
 	);
 	const premiumDigitalProductDescription = {
 		title: 'Premium digital',
-		label: {
-			copy: 'New',
-		},
 		benefits: premiumDigitalBenefits,
 		cta: {
 			copy: 'Subscribe',
