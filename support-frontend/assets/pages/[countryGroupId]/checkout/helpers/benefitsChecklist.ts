@@ -10,6 +10,7 @@ import type { LandingPageVariant } from '../../../../helpers/globalsAndSwitches/
 import {
 	filterBenefitByABTest,
 	filterBenefitByRegion,
+	productCatalogDescription,
 	productCatalogDescriptionPremiumDigital,
 } from '../../../../helpers/productCatalog';
 import type {
@@ -22,14 +23,12 @@ import type {
 export const getPremiumDigitalAllBenefits = (
 	countryGroupId: CountryGroupId,
 ): BenefitsCheckListData[] | undefined => {
-	const productDescription =
-		productCatalogDescriptionPremiumDigital(countryGroupId);
 	const digitalPremiumBenefits = filterProductDescriptionBenefits(
-		productDescription.DigitalSubscription,
+		productCatalogDescriptionPremiumDigital,
 		countryGroupId,
 	);
 	const supporterPlusBenefits = filterProductDescriptionBenefits(
-		productDescription.SupporterPlus,
+		productCatalogDescription.SupporterPlus,
 		countryGroupId,
 	);
 	// Append SupporterPlus benefits

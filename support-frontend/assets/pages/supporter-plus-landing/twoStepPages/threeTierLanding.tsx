@@ -440,13 +440,12 @@ export function ThreeTierLanding({
 		product: tier3Product,
 		ratePlan: tier3RatePlanKey,
 	});
-	const premiumDigitalBenefits = filterProductDescriptionBenefits(
-		productCatalogDescriptionPremiumDigital(countryGroupId).DigitalSubscription,
-		countryGroupId,
-	);
 	const premiumDigitalProductDescription = {
 		title: 'Premium digital',
-		benefits: premiumDigitalBenefits,
+		benefits: filterProductDescriptionBenefits(
+			productCatalogDescriptionPremiumDigital,
+			countryGroupId,
+		),
 		cta: {
 			copy: 'Subscribe',
 		},
