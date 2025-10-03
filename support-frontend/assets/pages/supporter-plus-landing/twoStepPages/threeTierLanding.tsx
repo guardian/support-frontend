@@ -366,7 +366,7 @@ export function ThreeTierLanding({
 	 * Tier 1: Contributions
 	 * We use the product catalog for the recurring Contribution tier amount
 	 */
-	const tier1Pricing = productCatalog.SupporterPlus?.ratePlans[ratePlanKey]
+	const tier1Pricing = productCatalog.Contribution?.ratePlans[ratePlanKey]
 		?.pricing[currencyId] as number;
 	const tier1UrlParams = new URLSearchParams({
 		product: 'Contribution',
