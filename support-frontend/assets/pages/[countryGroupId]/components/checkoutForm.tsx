@@ -200,7 +200,7 @@ export default function CheckoutForm({
 	const { enablePremiumDigital } = getFeatureFlags();
 
 	const productDescription = enablePremiumDigital
-		? productCatalogDescriptionPremiumDigital(countryGroupId)[productKey]
+		? productCatalogDescriptionPremiumDigital
 		: productCatalogDescription[productKey];
 	const hasDeliveryAddress = !!productDescription.deliverableTo;
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {

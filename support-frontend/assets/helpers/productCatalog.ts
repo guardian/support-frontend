@@ -477,14 +477,9 @@ export const productCatalogDescription: Record<
 	},
 };
 
-const getPaperArchiveDigitalBenefit = (countryGroupId: CountryGroupId) => {
-	return {
-		copy: `Access the Guardian's 200-year print archive`,
-		isNew: true,
-		tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed${
-			countryGroupId !== 'GBPCountries' ? ' in the UK' : ''
-		}, since 1821.`,
-	};
+const paperArchiveDigitalBenefit = {
+	copy: `Access the Guardian's 200-year print archive`,
+	isNew: true,
 };
 const weeklyDigitalBenefit = {
 	copy: `Guardian Weekly e-magazine`,
@@ -498,24 +493,17 @@ const editionsDigitalBenefit = {
 	tooltip: `Powered through Guardian Editions app, the Long Read e-magazine is a selection of some of the Guardian’s finest longform journalism.Through first person accounts, narrative storytelling and investigative reporting, the Long Read seeks to dive deep, debunk myths and uncover hidden histories.`,
 };
 
-export function productCatalogDescriptionPremiumDigital(
-	countryGroupId: CountryGroupId,
-): Record<ActiveProductKey, ProductDescription> {
-	return {
-		...productCatalogDescription,
-		DigitalSubscription: {
-			...productCatalogDescription.DigitalSubscription,
-			label: 'Premium Digital',
-			thankyouMessage: digitalThankyouMessage,
-			landingPagePath: '/contribute',
-			benefits: [
-				weeklyDigitalBenefit,
-				editionsDigitalBenefit,
-				getPaperArchiveDigitalBenefit(countryGroupId),
-			],
-		},
-	};
-}
+export const productCatalogDescriptionPremiumDigital = {
+	...productCatalogDescription.DigitalSubscription,
+	label: 'Premium Digital',
+	thankyouMessage: digitalThankyouMessage,
+	landingPagePath: '/contribute',
+	benefits: [
+		weeklyDigitalBenefit,
+		editionsDigitalBenefit,
+		paperArchiveDigitalBenefit,
+	],
+};
 
 export function productCatalogGuardianAdLite(): Record<
 	ActiveProductKey | 'GuardianAdLiteGoBack',
@@ -540,34 +528,28 @@ export function productCatalogGuardianAdLite(): Record<
 	};
 }
 
-function productCatalogGuardianWeeklyGift(): Record<
-	ActiveProductKey,
-	ProductDescription
-> {
-	return {
-		...productCatalogDescription,
-		GuardianWeeklyDomestic: {
-			...productCatalogDescription.GuardianWeeklyDomestic,
-			benefits: [guardianWeeklyGiftBenefit],
-		},
-		GuardianWeeklyRestOfWorld: {
-			...productCatalogDescription.GuardianWeeklyRestOfWorld,
-			benefits: [guardianWeeklyGiftBenefit],
-		},
-	};
-}
+const productCatalogGuardianWeeklyGift = {
+	...productCatalogDescription,
+	GuardianWeeklyDomestic: {
+		...productCatalogDescription.GuardianWeeklyDomestic,
+		benefits: [guardianWeeklyGiftBenefit],
+	},
+	GuardianWeeklyRestOfWorld: {
+		...productCatalogDescription.GuardianWeeklyRestOfWorld,
+		benefits: [guardianWeeklyGiftBenefit],
+	},
+};
 
 export const getProductDescription = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	countryGroupId: CountryGroupId,
 	enablePremiumDigital: boolean,
 ): ProductDescription => {
 	if (enablePremiumDigital && productKey === 'DigitalSubscription') {
-		return productCatalogDescriptionPremiumDigital(countryGroupId)[productKey];
+		return productCatalogDescriptionPremiumDigital;
 	}
 	if (isGuardianWeeklyGiftProduct(productKey, ratePlanKey)) {
-		return productCatalogGuardianWeeklyGift()[productKey];
+		return productCatalogGuardianWeeklyGift[productKey];
 	}
 	return productCatalogDescription[productKey];
 };
