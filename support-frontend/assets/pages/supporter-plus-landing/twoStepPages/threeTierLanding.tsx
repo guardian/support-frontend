@@ -484,6 +484,7 @@ export function ThreeTierLanding({
 		isUserSelected:
 			urlSearchParamsProduct === 'TierThree' ||
 			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount),
+		enablePremiumDigital,
 		...tier3ProductDescription,
 	};
 
