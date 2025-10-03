@@ -81,14 +81,6 @@ module.exports = {
 						find: '@modules',
 						replacement: path.resolve(__dirname, '../../modules'),
 					},
-					{
-						find: 'react',
-						replacement: 'preact/compat',
-					},
-					{
-						find: 'react-dom',
-						replacement: 'preact/compat',
-					},
 				],
 			},
 		});
