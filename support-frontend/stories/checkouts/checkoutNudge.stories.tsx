@@ -64,7 +64,7 @@ US.args = {
 export const AU = Template.bind({});
 
 AU.args = {
-	supportRegionId: SupportRegionId.US,
+	supportRegionId: SupportRegionId.AU,
 	ratePlanKey: 'Monthly',
 	recurringAmount: 10,
 	abTestName: 'nudgeToLowRegular',
