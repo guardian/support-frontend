@@ -14,14 +14,14 @@ import {
 	LinkButton,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { useEffect } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
-import { type ActiveRatePlanKey } from 'helpers/productCatalog';
 import {
 	trackComponentClick,
 	trackComponentLoad,
 } from 'helpers/tracking/behaviour';
+import type { ActiveRatePlanKey } from '../../helpers/productCatalog';
 import { getSupportRegionIdConfig } from '../../pages/supportRegionConfig';
 
 export interface CheckoutNudgeProps {
@@ -105,12 +105,12 @@ export function CheckoutNudge({
 	const buildCtaUrl = `checkout?${tier1UrlParams.toString()}`;
 
 	const getNudgeHeadline =
-		abTestVariant === 'v1'
+		supportRegionId !== SupportRegionId.US
 			? 'Make a bigger impact'
 			: 'Can I make a bigger impact?';
 
 	const getNudgeCopy =
-		abTestVariant === 'v1'
+		supportRegionId !== SupportRegionId.US
 			? 'The reliability of recurring support powers our journalism in perpetuity. Could you make a small monthly contribution instead? Cancel anytime.'
 			: 'Yes! We’re grateful for any amount you can spare, but supporting us on a monthly basis helps to power Guardian journalism in perpetuity. Cancel anytime.';
 
@@ -141,7 +141,7 @@ export function CheckoutNudge({
 }
 
 export interface CheckoutNudgeThankYouProps {
-	abTestVariant: string | undefined;
+	supportRegionId: SupportRegionId;
 }
 
 const thankYouBoxOverrides = css`
@@ -207,12 +207,12 @@ const imageOverride = css`
 `;
 
 export function CheckoutNudgeThankYou({
-	abTestVariant,
+	supportRegionId,
 }: CheckoutNudgeThankYouProps) {
 	const getNudgeHeadline = 'Thank you for choosing to support us monthly';
 
 	const getNudgeCopy =
-		abTestVariant === 'v1'
+		supportRegionId !== SupportRegionId.US
 			? 'You are helping to support the future of independent journalism.'
 			: 'Your support makes a huge difference in keeping our journalism free from outside influence.';
 

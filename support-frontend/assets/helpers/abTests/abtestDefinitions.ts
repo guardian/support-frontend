@@ -99,16 +99,11 @@ export const tests: Tests = {
 			'^/uk/(checkout|thank-you)',
 		excludeContributionsOnlyCountries: true,
 	},
-	abNudgeToLowRegular: {
+	// All users who view the one-time checkout will be in this "test", which only has a control
+	nudgeToLowRegular: {
 		variants: [
 			{
 				id: 'control',
-			},
-			{
-				id: 'v1',
-			},
-			{
-				id: 'v2',
 			},
 		],
 		audiences: {
