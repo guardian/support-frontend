@@ -596,9 +596,6 @@ export function OneTimeCheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	const isAnAbNudgeToLowRegularVariant = ['v1', 'v2'].some(
-		(a) => a === abParticipations.abNudgeToLowRegular,
-	);
 	const nudgeRecurringAmount = productCatalog.Contribution?.ratePlans['Monthly']
 		?.pricing[currencyKey] as number;
 
@@ -663,15 +660,13 @@ export function OneTimeCheckoutComponent({
 							}
 						/>
 					</div>
-					{isAnAbNudgeToLowRegularVariant && (
-						<CheckoutNudge
-							supportRegionId={supportRegionId}
-							ratePlanKey="Monthly"
-							recurringAmount={nudgeRecurringAmount}
-							abTestName="abNudgeToLowRegular"
-							abTestVariant={abParticipations.abNudgeToLowRegular}
-						/>
-					)}
+					<CheckoutNudge
+						supportRegionId={supportRegionId}
+						ratePlanKey="Monthly"
+						recurringAmount={nudgeRecurringAmount}
+						abTestName="nudgeToLowRegularRollout"
+						abTestVariant="control"
+					/>
 				</BoxContents>
 			</Box>
 			<form
