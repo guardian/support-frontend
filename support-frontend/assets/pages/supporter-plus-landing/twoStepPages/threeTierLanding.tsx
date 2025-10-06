@@ -264,7 +264,7 @@ function getRatePlanKey(contributionType: ContributionType) {
 			return 'Monthly';
 	}
 }
-const getThreeTierRatePlanKey = (
+const getTierThreeRatePlanKey = (
 	contributionType: ContributionType,
 	countryGroupId: CountryGroupId,
 ) => {
@@ -433,7 +433,7 @@ export function ThreeTierLanding({
 		: 'TierThree';
 	const tier3RatePlanKey = enablePremiumDigital
 		? ratePlanKey
-		: getThreeTierRatePlanKey(contributionType, countryGroupId);
+		: getTierThreeRatePlanKey(contributionType, countryGroupId);
 	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[tier3RatePlanKey]
 		?.pricing[currencyId] as number;
 	const tier3UrlParams = new URLSearchParams({
