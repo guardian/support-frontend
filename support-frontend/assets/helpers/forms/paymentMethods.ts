@@ -31,6 +31,7 @@ export const recaptchaRequiredPaymentMethods: PaymentMethod[] = [
 const paymentMethods = [
 	Stripe,
 	PayPal,
+	PayPalCompletePayments,
 	DirectDebit,
 	StripeHostedCheckout,
 	Sepa,
@@ -72,4 +73,11 @@ export function toPaymentMethodSwitchNaming(
 	}
 }
 
-export { Stripe, PayPal, DirectDebit, StripeHostedCheckout, Sepa };
+export {
+	Stripe,
+	PayPal,
+	PayPalCompletePayments,
+	DirectDebit,
+	StripeHostedCheckout,
+	Sepa,
+};
