@@ -14,7 +14,11 @@ import {
 } from '@guardian/source/react-components';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
+import { BenefitPill } from 'components/checkoutBenefits/benefitPill';
+import {
+	BenefitsCheckList,
+	checkListTextItemCss,
+} from 'components/checkoutBenefits/benefitsCheckList';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
@@ -226,7 +230,9 @@ export function ThreeTierCard({
 					title={promotion?.landingPage?.roundel ?? pillCopy}
 				/>
 			)}
-			<h2 css={titleCss}>{title}</h2>
+			<h2 css={[titleCss, checkListTextItemCss]}>
+				{enablePremiumDigital && <BenefitPill copy={'New'} />} {title}
+			</h2>
 			<p css={priceCss(!!promotion)}>
 				{promotion && (
 					<>
