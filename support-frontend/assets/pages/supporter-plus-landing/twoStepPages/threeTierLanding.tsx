@@ -468,11 +468,13 @@ export function ThreeTierLanding({
 	if (tier3Promotion) {
 		tier3UrlParams.set('promoCode', tier3Promotion.promoCode);
 	}
-	const featureFlag = enablePremiumDigital ? `enablePremiumDigital&` : '';
+	if (enablePremiumDigital) {
+		tier3UrlParams.set('enablePremiumDigital', 'true');
+	}
 	const tier3Card: CardContent = {
 		product: tier3Product,
 		price: tier3Pricing,
-		link: `checkout?${featureFlag}${tier3UrlParams.toString()}`,
+		link: `checkout?${tier3UrlParams.toString()}`,
 		promotion: tier3Promotion,
 		isUserSelected:
 			urlSearchParamsProduct === tier3Product ||
