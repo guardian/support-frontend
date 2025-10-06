@@ -12,6 +12,7 @@ import {
 	Button,
 	SvgChevronDownSingle,
 } from '@guardian/source/react-components';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { useState } from 'react';
 import {
 	BenefitsCheckList,
@@ -151,6 +152,7 @@ export type ContributionsOrderSummaryProps = {
 	tsAndCsTier3?: React.ReactNode;
 	abParticipations?: Participations;
 	studentDiscount?: StudentDiscount;
+	supportRegionId: SupportRegionId;
 };
 
 export function ContributionsOrderSummary({
@@ -170,6 +172,7 @@ export function ContributionsOrderSummary({
 	enableCheckList,
 	abParticipations,
 	studentDiscount,
+	supportRegionId,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -215,15 +218,13 @@ export function ContributionsOrderSummary({
 	const showLowRegularNudgeThanks = () => {
 		const isInNudgeToLowRegular =
 			productKey === 'Contribution' &&
-			['v1', 'v2'].some((a) => a === abParticipations?.abNudgeToLowRegular);
+			abParticipations?.nudgeToLowRegularRollout;
 
 		return isInNudgeToLowRegular && nudgeType.trim() === 'toRegular';
 	};
 
 	const nudgeLowRegularThanks = showLowRegularNudgeThanks() && (
-		<CheckoutNudgeThankYou
-			abTestVariant={abParticipations?.abNudgeToLowRegular}
-		/>
+		<CheckoutNudgeThankYou supportRegionId={supportRegionId} />
 	);
 	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 
