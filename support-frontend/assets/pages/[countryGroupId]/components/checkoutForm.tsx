@@ -39,6 +39,7 @@ import {
 	isPaymentMethod,
 	type PaymentMethod as LegacyPaymentMethod,
 	PayPal,
+	PayPalCompletePayments,
 	Stripe,
 	StripeHostedCheckout,
 	toPaymentMethodSwitchNaming,
@@ -107,6 +108,9 @@ import SimilarProductsConsent from './SimilarProductsConsent';
 import { SubmitButton } from './submitButton';
 
 function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
+	// TODO fix to properly reflect switches
+	if (paymentMethod === PayPalCompletePayments) return true;
+
 	return isSwitchOn(
 		`recurringPaymentMethods.${toPaymentMethodSwitchNaming(paymentMethod)}`,
 	);
@@ -148,7 +152,7 @@ const getPaymentMethods = (
 		return [maybeDirectDebit, StripeHostedCheckout];
 	}
 
-	return [maybeDirectDebit, Stripe, PayPal];
+	return [maybeDirectDebit, Stripe, PayPal, PayPalCompletePayments];
 };
 
 const LEGEND_PREFIX_WEEKLY_GIFT = 4;

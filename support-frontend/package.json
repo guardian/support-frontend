@@ -51,6 +51,7 @@
 		"@guardian/source-development-kitchen": "18.1.1",
 		"@guardian/support-service-lambdas": "catalog:",
 		"@guardian/tsconfig": "^0.2.0",
+		"@paypal/react-paypal-js": "^8.9.2",
 		"@preact/preset-vite": "^2.10.2",
 		"@reduxjs/toolkit": "^1.9.4",
 		"@sentry/browser": "^8.33.1",
