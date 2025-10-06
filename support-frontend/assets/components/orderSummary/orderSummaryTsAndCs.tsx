@@ -23,7 +23,10 @@ import {
 	isPaperPlusSub,
 	isSundayOnlyNewspaperSub,
 } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
-import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import {
+	isGuardianWeeklyGiftProduct,
+	isGuardianWeeklyOrTierThreeProduct,
+} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 
 const containerSummaryTsCs = css`
@@ -47,23 +50,20 @@ const productStartDate = css`
 	}
 `;
 
-const guardianWeeklyOrTierThreeProduct = (productKey: ActiveProductKey) => {
-	return [
-		'GuardianWeeklyDomestic',
-		'GuardianWeeklyRestOfWorld',
-		'TierThree',
-	].includes(productKey);
-};
-
 interface OrderSummaryStartDateProps {
-	startDate: string;
 	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
+	startDate: string;
 }
 export function OrderSummaryStartDate({
-	startDate,
 	productKey,
+	ratePlanKey,
+	startDate,
 }: OrderSummaryStartDateProps): JSX.Element | null {
-	if (guardianWeeklyOrTierThreeProduct(productKey)) {
+	if (
+		isGuardianWeeklyOrTierThreeProduct(productKey) &&
+		!isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+	) {
 		return (
 			<ul css={productStartDate}>
 				{productKey === 'TierThree' && (
@@ -149,12 +149,18 @@ export function OrderSummaryTsAndCs({
 					)}
 				</>
 			)}
-			{guardianWeeklyOrTierThreeProduct(productKey) && (
+			{isGuardianWeeklyOrTierThreeProduct(productKey) && (
 				<p>
-					{!isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
-						? `Auto renews every ${periodNoun}. `
-						: ``}
-					Cancel anytime.
+					{isGuardianWeeklyGiftProduct(productKey, ratePlanKey) ? (
+						<>
+							Your Guardian Weekly gift subscription will start on{' '}
+							{deliveryStartDate}. The recipient should receive their first
+							magazine 1 - 7 days after this issue date, depending on national
+							post services.
+						</>
+					) : (
+						<>Auto renews every {periodNoun}. Cancel anytime.</>
+					)}
 				</p>
 			)}
 		</div>

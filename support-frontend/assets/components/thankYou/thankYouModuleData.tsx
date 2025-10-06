@@ -12,6 +12,7 @@ import {
 	BenefitsCheckList,
 	type BenefitsCheckListData,
 } from 'components/checkoutBenefits/benefitsCheckList';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -34,6 +35,7 @@ import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import { isPrintProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { getCurrency } from '../../helpers/productPrice/productPrices';
+import AppDownload from './appDownload/AppDownload';
 import AppDownloadBadges, {
 	AppDownloadBadgesEditions,
 } from './appDownload/AppDownloadBadges';
@@ -47,6 +49,7 @@ import {
 	AppNewsDownloadBodyCopy,
 	appNewsDownloadHeader,
 	appsDownloadHeader,
+	getDownloadApps,
 } from './appDownload/appDownloadItems';
 import { ausMapBodyCopy, AusMapCTA, ausMapHeader } from './ausMap/ausMapItems';
 import {
@@ -155,7 +158,7 @@ export const getThankYouModuleData = (
 				: 'guardian_supporter_below'
 		}`;
 	};
-
+	const { enablePremiumDigital } = getFeatureFlags();
 	const thankYouModuleData: Record<ThankYouModuleType, ThankYouModuleData> = {
 		appsDownload: {
 			icon: getThankYouModuleIcon('appsDownload'),
@@ -183,12 +186,28 @@ export const getThankYouModuleData = (
 			bodyCopy: <AppDownloadBodyCopy />,
 			ctas: <AppDownloadBadges countryGroupId={countryGroupId} />,
 		},
-		appDownloadEditions: {
-			icon: getThankYouModuleIcon('appDownload'),
-			header: appDownloadEditionsHeader,
-			bodyCopy: <AppDownloadEditionsBodyCopy />,
-			ctas: <AppDownloadBadgesEditions countryGroupId={countryGroupId} />,
-		},
+		appDownloadEditions: enablePremiumDigital
+			? {
+					icon: getThankYouModuleIcon('appsDownload'),
+					header: 'Explore your subscriber’s App',
+					bodyCopy: (
+						<AppDownload
+							apps={getDownloadApps([
+								'GuardianNews',
+								'guardianFeast',
+								'guardianEditions',
+							])}
+							countryGroupId={countryGroupId}
+						/>
+					),
+					ctas: null,
+			  }
+			: {
+					icon: getThankYouModuleIcon('appDownload'),
+					header: appDownloadEditionsHeader,
+					bodyCopy: <AppDownloadEditionsBodyCopy />,
+					ctas: <AppDownloadBadgesEditions countryGroupId={countryGroupId} />,
+			  },
 		ausMap: {
 			icon: getThankYouModuleIcon('ausMap'),
 			header: ausMapHeader,
@@ -239,9 +258,10 @@ export const getThankYouModuleData = (
 			header: 'The Guardian newspaper archive',
 			bodyCopy: (
 				<>
-					Sign in to start exploring more than 200 years of world history with
-					our newspaper archive. View digital reproductions of every front page,
-					article and advertisement as it was printed in the Guardian from 1821.
+					Sign in and start exploring more than 200 years of world history with
+					our newspapers archive. View digital reproductions of every front
+					page, article and advertisement printed in the Guardian from 1821 and
+					in the Observer from 1791.
 				</>
 			),
 			ctas: null,
@@ -352,8 +372,8 @@ export const getThankYouModuleData = (
 			bodyCopy: (
 				<WhatNext
 					productKey={productKey}
-					currency={getCurrency(countryId)}
 					ratePlanKey={ratePlanKey}
+					currency={getCurrency(countryId)}
 					amount={(finalAmount ?? '').toString()}
 					startDate={startDate}
 					isSignedIn={isSignedIn}

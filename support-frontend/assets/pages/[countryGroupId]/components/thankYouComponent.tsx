@@ -214,7 +214,6 @@ export function ThankYouComponent({
 	const isGuardianPrint = isPrint && !observerPrint;
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
-	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = productKey === 'SupporterPlus';
 	const isTierThree = productKey === 'TierThree';
 	const isNationalDelivery = productKey === 'NationalDelivery';
@@ -257,7 +256,6 @@ export function ThankYouComponent({
 		ratePlanKey as ActivePaperProductOptions,
 	);
 	const startDate = deliveryDate ? formatUserDate(deliveryDate) : undefined;
-
 	const thankYouModuleData = getThankYouModuleData(
 		productKey,
 		ratePlanKey,
@@ -291,10 +289,6 @@ export function ThankYouComponent({
 		...maybeThankYouModule(userNotSignedIn && !isGuardianAdLite, 'signIn'), // Sign in to access your benefits
 		...maybeThankYouModule(isTierThree, 'benefits'),
 		...maybeThankYouModule(
-			isTierThree && enablePremiumDigital,
-			'newspaperArchiveBenefit',
-		),
-		...maybeThankYouModule(
 			isTierThree || isNationalDelivery,
 			'subscriptionStart',
 		),
@@ -314,6 +308,10 @@ export function ThankYouComponent({
 			'feedback',
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
+		...maybeThankYouModule(
+			isDigitalEdition && enablePremiumDigital,
+			'newspaperArchiveBenefit',
+		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(
 			!isTierThree && !isGuardianAdLite && !isPrint,
@@ -354,12 +352,10 @@ export function ThankYouComponent({
 							ratePlanKey={ratePlanKey}
 							name={order.firstName}
 							amount={payment.originalAmount}
-							isOneOffPayPal={isOneOffPayPal}
 							isDirectDebitPayment={order.paymentMethod === 'DirectDebit'}
 							currency={currencyKey}
 							promotion={promotion}
 							observerPrint={observerPrint}
-							paymentStatus={order.status}
 							startDate={startDate}
 						/>
 					</div>

@@ -35,10 +35,6 @@ export function WhatNext({
 	const isSubscriptionCard = productKey === 'SubscriptionCard';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
-	const isGuardianWeeklyGift = isGuardianWeeklyGiftProduct(
-		productKey,
-		ratePlanKey,
-	);
 	const isGuardianPrint = isPrintProduct(productKey) && !observerPrint;
 
 	if (isGuardianWeekly) {
@@ -68,7 +64,9 @@ export function WhatNext({
 		return (
 			<OrderedList
 				items={
-					isGuardianWeeklyGift ? guardianWeeklyGiftItems : guardianWeeklyItems
+					isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+						? guardianWeeklyGiftItems
+						: guardianWeeklyItems
 				}
 			/>
 		);

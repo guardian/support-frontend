@@ -9,9 +9,10 @@ export const adLiteFAQs: FAQItem[] = [
 			<>
 				<p>
 					A Guardian Ad-Lite subscription enables you to read the Guardian
-					website without personalised advertising. You will still see
-					advertising but it will be delivered without the use of personalised
-					advertising cookies or similar technologies.
+					website without personalised advertising (except for when we host
+					third party content, like videos). You will still see advertising but
+					it will be delivered without the use of personalised advertising
+					cookies or similar technologies.
 				</p>
 				<p>
 					A Guardian Ad-Lite subscription does not entitle you to the additional

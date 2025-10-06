@@ -19,13 +19,13 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	type ActiveProductKey,
 	type ActiveRatePlanKey,
-	productCatalogDescription,
-	productCatalogDescriptionNewBenefits,
+	getProductDescription,
 } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { parameteriseUrl } from 'helpers/urls/routes';
+import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
@@ -33,6 +33,7 @@ import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
 	getPaperPlusDigitalBenefits,
+	getPremiumDigitalAllBenefits,
 } from '../checkout/helpers/benefitsChecklist';
 import { ukSpecificAdditionalBenefit } from '../student/components/StudentHeader';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
@@ -75,12 +76,13 @@ export default function CheckoutSummary({
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
-
 	const { enablePremiumDigital } = getFeatureFlags();
-
-	const productDescription = enablePremiumDigital
-		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
-		: productCatalogDescription[productKey];
+	const productDescription = getProductDescription(
+		productKey,
+		ratePlanKey,
+		countryGroupId,
+		enablePremiumDigital,
+	);
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
 	};
@@ -116,8 +118,13 @@ export default function CheckoutSummary({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
+	const premiumDigitalBenefits =
+		enablePremiumDigital && productKey === 'DigitalSubscription'
+			? getPremiumDigitalAllBenefits(countryGroupId)
+			: undefined;
 	const benefitsCheckListData =
-		getPaperPlusDigitalBenefits(ratePlanKey, productKey) ??
+		premiumDigitalBenefits ??
+		getPaperPlusDigitalBenefits(productKey, ratePlanKey) ??
 		getBenefitsChecklistFromLandingPageTool(productKey, landingPageSettings) ??
 		getBenefitsChecklistFromProductDescription(
 			productDescription,
@@ -170,11 +177,12 @@ export default function CheckoutSummary({
 				)}
 				<ContributionsOrderSummary
 					productKey={productKey}
-					productDescription={productDescription.label}
+					productLabel={productDescription.label}
 					ratePlanKey={ratePlanKey}
-					ratePlanDescription={ratePlanDescription.label}
+					ratePlanLabel={ratePlanDescription.label}
 					paymentFrequency={getBillingPeriodNoun(
 						ratePlanDescription.billingPeriod,
+						isGuardianWeeklyGiftProduct(productKey, ratePlanKey),
 					)}
 					amount={originalAmount}
 					promotion={promotion}
@@ -189,6 +197,7 @@ export default function CheckoutSummary({
 					startDate={
 						<OrderSummaryStartDate
 							productKey={productKey}
+							ratePlanKey={ratePlanKey}
 							startDate={formatUserDate(weeklyDeliveryDate)}
 						/>
 					}

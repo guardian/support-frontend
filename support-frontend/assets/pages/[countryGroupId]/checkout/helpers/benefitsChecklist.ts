@@ -10,6 +10,7 @@ import type { LandingPageVariant } from '../../../../helpers/globalsAndSwitches/
 import {
 	filterBenefitByABTest,
 	filterBenefitByRegion,
+	productCatalogDescriptionPremiumDigital,
 } from '../../../../helpers/productCatalog';
 import type {
 	ActiveProductKey,
@@ -18,9 +19,29 @@ import type {
 	ProductDescription,
 } from '../../../../helpers/productCatalog';
 
+export const getPremiumDigitalAllBenefits = (
+	countryGroupId: CountryGroupId,
+): BenefitsCheckListData[] | undefined => {
+	const productDescription =
+		productCatalogDescriptionPremiumDigital(countryGroupId);
+	const digitalPremiumBenefits = filterProductDescriptionBenefits(
+		productDescription.DigitalSubscription,
+		countryGroupId,
+	);
+	const supporterPlusBenefits = filterProductDescriptionBenefits(
+		productDescription.SupporterPlus,
+		countryGroupId,
+	);
+	// Append SupporterPlus benefits
+	return benefitsAsChecklist({
+		checked: [...digitalPremiumBenefits, ...supporterPlusBenefits],
+		unchecked: [],
+	});
+};
+
 export const getPaperPlusDigitalBenefits = (
-	ratePlanKey: ActiveRatePlanKey,
 	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
 ): BenefitsCheckListData[] | undefined => {
 	switch (productKey) {
 		case 'HomeDelivery':
@@ -104,4 +125,13 @@ export const getBenefitsChecklistFromProductDescription = (
 			isChecked: true,
 			text: `${benefit.copyBoldStart ?? ''}${benefit.copy}`,
 		}));
+};
+
+const filterProductDescriptionBenefits = (
+	productDescription: ProductDescription,
+	countryGroupId: CountryGroupId,
+): ProductBenefit[] => {
+	return productDescription.benefits.filter((benefit) =>
+		filterBenefitByRegion(benefit, countryGroupId),
+	);
 };

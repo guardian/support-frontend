@@ -13,9 +13,9 @@ export default function StartDateMessage({
 	ratePlanKey,
 	startDate,
 }: {
-	startDate?: string;
-	ratePlanKey: ActiveRatePlanKey;
 	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
+	startDate?: string;
 }) {
 	if (!startDate) {
 		return null;
