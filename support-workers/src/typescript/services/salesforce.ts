@@ -10,7 +10,7 @@ import { SalesforceClient } from './salesforceClient';
 export const salesforceDeliveryOrRecipientRecordTypeId = '01220000000VB50AAG';
 
 export type BaseContactRecordRequest = {
-	Salutation?: Title | null;
+	Salutation?: Title | null; //I think that only Guardian Patrons are populated with title, so perhaps we can remove this?
 	FirstName: string;
 	LastName: string;
 };
