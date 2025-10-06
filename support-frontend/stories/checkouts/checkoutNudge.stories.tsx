@@ -47,73 +47,35 @@ Default.args = {
 	supportRegionId: SupportRegionId.UK,
 	ratePlanKey: 'Monthly',
 	recurringAmount: 5,
-	abTestName: 'abNudgeToLowRegular',
-	abTestVariant: 'v1',
+	abTestName: 'nudgeToLowRegular',
+	abTestVariant: 'control',
 };
 
-export const US_V1 = Template.bind({});
+export const US = Template.bind({});
 
-US_V1.args = {
+US.args = {
 	supportRegionId: SupportRegionId.US,
 	ratePlanKey: 'Monthly',
 	recurringAmount: 5,
-	abTestName: 'abNudgeToLowRegular',
-	abTestVariant: 'v1',
+	abTestName: 'nudgeToLowRegular',
+	abTestVariant: 'control',
 };
 
-export const AU_v1 = Template.bind({});
+export const AU = Template.bind({});
 
-AU_v1.args = {
-	supportRegionId: SupportRegionId.US,
+AU.args = {
+	supportRegionId: SupportRegionId.AU,
 	ratePlanKey: 'Monthly',
 	recurringAmount: 10,
-	abTestName: 'abNudgeToLowRegular',
-	abTestVariant: 'v1',
+	abTestName: 'nudgeToLowRegular',
+	abTestVariant: 'control',
 };
 
-export const EU_v1 = Template.bind({});
-EU_v1.args = {
+export const EU = Template.bind({});
+EU.args = {
 	supportRegionId: SupportRegionId.EU,
 	ratePlanKey: 'Monthly',
 	recurringAmount: 5,
-	abTestName: 'abNudgeToLowRegular',
-	abTestVariant: 'v1',
-};
-
-export const UK_v2 = Template.bind({});
-UK_v2.args = {
-	supportRegionId: SupportRegionId.UK,
-	ratePlanKey: 'Monthly',
-	recurringAmount: 5,
-	abTestName: 'abNudgeToLowRegular',
-	abTestVariant: 'v2',
-};
-
-export const US_V2 = Template.bind({});
-
-US_V2.args = {
-	supportRegionId: SupportRegionId.US,
-	ratePlanKey: 'Monthly',
-	recurringAmount: 5,
-	abTestName: 'abNudgeToLowRegular',
-	abTestVariant: 'v2',
-};
-
-export const AU_v2 = Template.bind({});
-
-AU_v2.args = {
-	supportRegionId: SupportRegionId.US,
-	ratePlanKey: 'Monthly',
-	recurringAmount: 10,
-	abTestName: 'abNudgeToLowRegular',
-	abTestVariant: 'v2',
-};
-
-export const EU_v2 = Template.bind({});
-EU_v2.args = {
-	supportRegionId: SupportRegionId.EU,
-	ratePlanKey: 'Monthly',
-	recurringAmount: 5,
-	abTestName: 'abNudgeToLowRegular',
-	abTestVariant: 'v2',
+	abTestName: 'nudgeToLowRegular',
+	abTestVariant: 'control',
 };

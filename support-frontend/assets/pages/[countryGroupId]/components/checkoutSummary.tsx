@@ -218,6 +218,7 @@ export default function CheckoutSummary({
 					}
 					abParticipations={abParticipations}
 					studentDiscount={studentDiscount}
+					supportRegionId={supportRegionId}
 				/>
 			</BoxContents>
 		</Box>
