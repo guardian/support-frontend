@@ -664,7 +664,7 @@ export function OneTimeCheckoutComponent({
 						supportRegionId={supportRegionId}
 						ratePlanKey="Monthly"
 						recurringAmount={nudgeRecurringAmount}
-						abTestName="nudgeToLowRegular"
+						abTestName="nudgeToLowRegularRollout"
 						abTestVariant="control"
 					/>
 				</BoxContents>

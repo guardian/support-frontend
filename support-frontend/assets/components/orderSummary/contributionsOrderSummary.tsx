@@ -217,7 +217,8 @@ export function ContributionsOrderSummary({
 	// from one time checkout to low regular - show thanks box
 	const showLowRegularNudgeThanks = () => {
 		const isInNudgeToLowRegular =
-			productKey === 'Contribution' && abParticipations?.nudgeToLowRegular;
+			productKey === 'Contribution' &&
+			abParticipations?.nudgeToLowRegularRollout;
 
 		return isInNudgeToLowRegular && nudgeType.trim() === 'toRegular';
 	};

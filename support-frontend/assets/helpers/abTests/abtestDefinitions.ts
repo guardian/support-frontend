@@ -100,7 +100,7 @@ export const tests: Tests = {
 		excludeContributionsOnlyCountries: true,
 	},
 	// All users who view the one-time checkout will be in this "test", which only has a control
-	nudgeToLowRegular: {
+	nudgeToLowRegularRollout: {
 		variants: [
 			{
 				id: 'control',
