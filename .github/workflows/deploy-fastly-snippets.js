@@ -42,6 +42,17 @@ const snippets = [
     name: "support-frontend - Frontline redirect deliver",
     type: "deliver",
   },
+  // Observerarchive redirect
+  {
+    file: "./support-frontend/conf/fastly-snippets/observerarchive-redirect-recv.vcl",
+    name: "support-frontend - Observer Archive redirect recv",
+    type: "recv",
+  },
+  {
+    file: "./support-frontend/conf/fastly-snippets/observerarchive-redirect-error.vcl",
+    name: "support-frontend - Observer Archive redirect error",
+    type: "error",
+  },
   // Books redirect
   {
     file: "./support-frontend/conf/fastly-snippets/books-redirect-recv.vcl",
