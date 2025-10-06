@@ -7,6 +7,7 @@ import {
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 import { css } from '@emotion/react';
+import { SupportRegionId } from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
 
 export default {
 	title: 'Checkouts/Checkout Nudge Thank You',
@@ -43,11 +44,11 @@ Template.args = {} as CheckoutNudgeThankYouProps;
 export const Default = Template.bind({});
 
 Default.args = {
-	abTestVariant: 'v1',
+	supportRegionId: SupportRegionId.UK,
 };
 
-export const V2 = Template.bind({});
+export const US = Template.bind({});
 
-V2.args = {
-	abTestVariant: 'v2',
+US.args = {
+	supportRegionId: SupportRegionId.US,
 };
