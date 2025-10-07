@@ -240,7 +240,6 @@ export const createDigitalOnlyContactRecordRequest = (
 	return {
 		IdentityID__c: user.id,
 		Email: user.primaryEmailAddress,
-		Salutation: user.title,
 		FirstName: user.firstName,
 		LastName: user.lastName,
 		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
@@ -311,7 +310,6 @@ export const createPrintContactRecordRequest = (
 	user: User,
 ): PrintContactRecordRequest => {
 	return {
-		Salutation: user.title,
 		FirstName: user.firstName,
 		LastName: user.lastName,
 		Email: user.primaryEmailAddress,
