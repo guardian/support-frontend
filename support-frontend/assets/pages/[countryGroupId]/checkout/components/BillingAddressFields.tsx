@@ -28,7 +28,7 @@ export function BillingAddressFields({
 			true,
 		);
 	const billingLabel = `Billing address same as ${
-		isWeeklyGift ? `recipients's` : 'delivery'
+		isWeeklyGift ? `recipient's` : 'delivery'
 	} address`;
 	return (
 		<>
