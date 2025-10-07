@@ -109,25 +109,15 @@ export class SalesforceService {
 		user: User,
 		giftRecipient: GiftRecipient | null,
 	): Promise<SalesforceContactRecord> => {
-		console.log('XXX user:', user);
-		console.log('XXX giftRecipient:', giftRecipient);
-
 		const hasGiftRecipient = !!giftRecipient;
 		const buyerType = getBuyerType(user, hasGiftRecipient);
-		console.log('XXX buyerType:', buyerType);
 		const buyerContact = createBuyerRecordRequest(user, buyerType);
-		console.log('XXX buyerContact:', buyerContact);
-
 		const buyerResponse = await this.upsert(buyerContact);
-		console.log('XXX buyerResponse:', buyerResponse);
-
 		const giftRecipientResponse = await this.maybeAddGiftRecipient(
 			buyerResponse.ContactRecord,
 			giftRecipient,
 			user,
 		);
-		console.log('XXX giftRecipientResponse:', giftRecipientResponse);
-
 		const recipientContactRecord =
 			giftRecipientResponse?.ContactRecord ?? buyerResponse.ContactRecord;
 
@@ -200,14 +190,12 @@ export const createBuyerRecordRequest = (
 	| PrintContactRecordRequest
 	| GiftBuyerContactRecordRequest
 	| DigitalOnlyContactRecordRequest => {
-	console.log('Creating buyer record of type:', buyerType);
-
 	switch (buyerType) {
 		case 'Print':
 			return createPrintContactRecordRequest(user);
 		case 'GiftBuyer':
 			return createGiftBuyerContactRecordRequest(user);
-		case 'DigitalOnly': //todo see how tier three operates here
+		case 'DigitalOnly':
 			return createDigitalOnlyContactRecordRequest(user);
 	}
 };
