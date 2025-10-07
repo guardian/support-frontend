@@ -22,7 +22,7 @@ import type {
 
 export const getPremiumDigitalAllBenefits = (
 	countryGroupId: CountryGroupId,
-): BenefitsCheckListData[] | undefined => {
+): BenefitsCheckListData[] => {
 	const digitalPremiumBenefits = filterProductDescriptionBenefits(
 		productCatalogDescriptionPremiumDigital,
 		countryGroupId,
