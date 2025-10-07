@@ -10,7 +10,6 @@ import { SalesforceClient } from './salesforceClient';
 export const salesforceDeliveryOrRecipientRecordTypeId = '01220000000VB50AAG';
 
 export type BaseContactRecordRequest = {
-	Salutation?: Title | null; //I think that only Guardian Patrons are populated with title, so perhaps we can remove this?
 	FirstName: string;
 	LastName: string;
 };
@@ -23,6 +22,7 @@ export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest & {
 	OtherCountry: string | null;
 };
 export type GiftBuyerContactRecordRequest = BaseContactRecordRequest & {
+	Salutation?: Title | null;
 	IdentityID__c: string;
 	Email: string;
 	Phone?: string | null;
@@ -33,6 +33,7 @@ export type GiftBuyerContactRecordRequest = BaseContactRecordRequest & {
 	OtherCountry: string | null;
 };
 export type GiftRecipientContactRecordRequest = BaseContactRecordRequest & {
+	Salutation?: Title | null;
 	AccountId: string;
 	Email?: string;
 	RecordTypeId: typeof salesforceDeliveryOrRecipientRecordTypeId;
