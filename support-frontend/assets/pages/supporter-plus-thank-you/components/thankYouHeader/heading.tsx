@@ -1,8 +1,9 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getFeatureFlags } from 'helpers/featureFlags';
-import type {
-	ActiveProductKey,
-	ActiveRatePlanKey,
+import {
+	type ActiveProductKey,
+	type ActiveRatePlanKey,
+	getProductDescription,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import ContributionHeading from './ContributionHeading';
@@ -42,22 +43,6 @@ function Heading({
 	const { enablePremiumDigital } = getFeatureFlags();
 	const isPremiumDigital = isDigitalEdition && enablePremiumDigital;
 
-	function getProductName(productKey: string) {
-		switch (productKey) {
-			case 'DigitalSubscription':
-				return 'Premium Digital';
-
-			case 'GuardianAdLite':
-				return 'Guardian Ad-Lite.';
-
-			case 'TierThree':
-				return 'Digital + print.';
-
-			default:
-				return;
-		}
-	}
-
 	const contributorName = name && name.length < 10 ? name : '';
 
 	if (!amount) {
@@ -93,11 +78,16 @@ function Heading({
 	}
 
 	if (isTier3 || isGuardianAdLite || isPremiumDigital) {
+		const { label: productName } = getProductDescription(
+			productKey,
+			ratePlanKey,
+			isPremiumDigital,
+		);
+
 		return (
 			<h1 css={longHeaderTitleText}>
 				Thank you <span data-qm-masking="blocklist">{contributorName}</span> for
-				subscribing to{' '}
-				<YellowHighlightText>{getProductName(productKey)}</YellowHighlightText>
+				subscribing to <YellowHighlightText>{productName}</YellowHighlightText>
 				{(isTier3 || isPremiumDigital) && (
 					<>
 						<br css={tier3LineBreak} />
