@@ -18,7 +18,6 @@ export const state = 'CA';
 export const customer: PrintContactRecordRequest = {
 	IdentityID__c: idId,
 	Email: emailAddress,
-	Salutation: title,
 	FirstName: name,
 	LastName: name,
 	OtherStreet: null,

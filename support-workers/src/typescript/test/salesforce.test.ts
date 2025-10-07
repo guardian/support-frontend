@@ -40,12 +40,12 @@ describe('SalesforceService', () => {
 		expect(newContact.OtherPostalCode).toBe(
 			printSubscriber.billingAddress.postCode,
 		);
+		expect('Salutation' in newContact).toBe(false);
 		expect(newContact.OtherCountry).toBe('United Kingdom');
 
 		expect(newContact.Email).toBe(printSubscriber.primaryEmailAddress);
 		expect(newContact.FirstName).toBe(printSubscriber.firstName);
 		expect(newContact.LastName).toBe(printSubscriber.lastName);
-		expect(newContact.Salutation).toBe(printSubscriber.title);
 	});
 
 	test('createGiftBuyerContactRecordRequest should have properties populated correctly', () => {
@@ -121,12 +121,13 @@ describe('SalesforceService', () => {
 		expect('OtherCity' in newContact).toBe(false);
 		expect('OtherPostalCode' in newContact).toBe(false);
 
+		expect('Salutation' in newContact).toBe(false);
+
 		expect(newContact.OtherCountry).toBe('United Kingdom');
 
 		expect(newContact.Email).toBe(digitalOnlySubscriber.primaryEmailAddress);
 		expect(newContact.FirstName).toBe(digitalOnlySubscriber.firstName);
 		expect(newContact.LastName).toBe(digitalOnlySubscriber.lastName);
-		expect(newContact.Salutation).toBe(digitalOnlySubscriber.title);
 	});
 
 	test('it should throw an INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE error when appropriate', () => {

@@ -44,7 +44,7 @@ export const printSubscriber = {
 	id: identityId,
 	firstName: buyerFirstName,
 	lastName: buyerLastName,
-	title: buyerTitle,
+	title: null,
 	primaryEmailAddress: buyerEmailAddress,
 	billingAddress: buyerAddress,
 	deliveryAddress: buyerAddress,
@@ -74,7 +74,7 @@ export const giftRecipient = {
 export const digitalOnlySubscriber = {
 	id: identityId,
 	primaryEmailAddress: buyerEmailAddress,
-	title: buyerTitle,
+	title: null,
 	firstName: buyerFirstName,
 	lastName: buyerLastName,
 	billingAddress: {
