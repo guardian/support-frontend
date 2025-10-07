@@ -80,7 +80,6 @@ export default function CheckoutSummary({
 	const productDescription = getProductDescription(
 		productKey,
 		ratePlanKey,
-		countryGroupId,
 		enablePremiumDigital,
 	);
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {

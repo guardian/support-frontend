@@ -28,7 +28,12 @@ export type CardContent = LandingPageProductDescription & {
 	link: string;
 	price: number;
 	promotion?: Promotion;
-	product: 'TierThree' | 'SupporterPlus' | 'Contribution';
+	product:
+		| 'TierThree'
+		| 'SupporterPlus'
+		| 'Contribution'
+		| 'DigitalSubscription';
+	enablePremiumDigital?: boolean;
 };
 
 export type ThreeTierCardProps = {
@@ -202,13 +207,16 @@ export function ThreeTierCard({
 		link,
 		cta,
 		product,
+		enablePremiumDigital,
 	} = cardContent;
 	const currency = currencies[currencyId];
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const formattedPrice = simpleFormatAmount(currency, price);
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	const pillCopy = promotion?.landingPage?.roundel ?? cardContent.label?.copy;
-
+	const inAdditionToAllAccessDigital =
+		(enablePremiumDigital && product === 'DigitalSubscription') ??
+		product === 'TierThree';
 	return (
 		<section css={container(!!pillCopy, isUserSelected, isSubdued)}>
 			{isUserSelected && <ThreeTierCardPill title="Your selection" />}
@@ -250,7 +258,7 @@ export function ThreeTierCard({
 				{cta.copy}
 			</LinkButton>
 
-			{product === 'TierThree' && (
+			{inAdditionToAllAccessDigital && (
 				<div css={benefitsPrefixCss}>
 					<span>
 						The rewards from <strong>All-access digital</strong>
