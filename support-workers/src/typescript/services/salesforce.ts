@@ -14,7 +14,7 @@ export type BaseContactRecordRequest = {
 	FirstName: string;
 	LastName: string;
 };
-//OtherState and MailingState properties are optional because they are mandatory for US/CAN/AUS but not UK/NZ
+//OtherState and MailingState properties are optional because they are mandatory for US/CAN/AUS but not collected for UK/NZ
 export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest & {
 	IdentityID__c: string;
 	Email: string;
