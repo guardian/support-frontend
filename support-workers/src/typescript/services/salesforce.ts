@@ -57,6 +57,7 @@ export type PrintContactRecordRequest = BaseContactRecordRequest & {
 	MailingPostalCode: string | null;
 	MailingCountry: string | null;
 };
+type BuyerType = 'Print' | 'GiftBuyer' | 'DigitalOnly';
 
 export const salesforceContactRecordSchema = z.object({
 	Id: z.string(),
@@ -185,7 +186,7 @@ export const validGiftRecipientFields = (
 
 export const createBuyerRecordRequest = (
 	user: User,
-	buyerType: 'Print' | 'GiftBuyer' | 'DigitalOnly',
+	buyerType: BuyerType,
 ):
 	| PrintContactRecordRequest
 	| GiftBuyerContactRecordRequest
@@ -200,10 +201,7 @@ export const createBuyerRecordRequest = (
 	}
 };
 
-const getBuyerType = (
-	user: User,
-	hasGiftRecipient: boolean,
-): 'Print' | 'GiftBuyer' | 'DigitalOnly' => {
+const getBuyerType = (user: User, hasGiftRecipient: boolean): BuyerType => {
 	if (hasGiftRecipient) {
 		return 'GiftBuyer';
 	}
