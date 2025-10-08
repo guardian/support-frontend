@@ -62,6 +62,9 @@ type BuyerTypeRecordRequest =
 	| PrintContactRecordRequest
 	| GiftBuyerContactRecordRequest
 	| DigitalOnlyContactRecordRequest;
+type ContactRecordRequest =
+	| BuyerTypeRecordRequest
+	| GiftRecipientContactRecordRequest;
 
 export const salesforceContactRecordSchema = z.object({
 	Id: z.string(),
@@ -130,7 +133,7 @@ export class SalesforceService {
 	};
 
 	upsert = async (
-		contact: BuyerTypeRecordRequest | GiftRecipientContactRecordRequest,
+		contact: ContactRecordRequest,
 	): Promise<SuccessfulUpsertResponse> => {
 		const response: UpsertResponse = await this.client.post(
 			this.upsertEndpoint,
