@@ -49,7 +49,7 @@ export type PrintContactRecordRequest = BaseContactRecordRequest & {
 	OtherStreet: string | null;
 	OtherCity: string | null;
 	OtherState?: string | null; // optional because mandatory for US/CAN/AUS but not collected for UK/NZ
-	OtherPostalCode: string | null;
+	OtherPostalCode?: string | null; // optional because mandatory for US/CAN/AUS/UK but optional for rest of world
 	OtherCountry: string | null;
 	MailingStreet: string | null;
 	MailingCity: string | null;
