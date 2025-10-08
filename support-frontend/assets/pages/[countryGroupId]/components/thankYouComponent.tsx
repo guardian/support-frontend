@@ -338,7 +338,6 @@ export function ThankYouComponent({
 			'headlineReturn',
 		),
 	];
-	console.log('*** ThankYouComponent.startDate', startDate);
 	return (
 		<PageScaffold
 			header={<Header />}
