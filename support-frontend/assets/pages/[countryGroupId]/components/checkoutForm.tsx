@@ -63,7 +63,10 @@ import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/comp
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
-import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import {
+	isGuardianWeeklyGiftProduct,
+	isGuardianWeeklyOrTierThreeProduct,
+} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
@@ -614,6 +617,9 @@ export default function CheckoutForm({
 				abParticipations,
 				promotion,
 				contributionAmount,
+				deliveryDate: isGuardianWeeklyOrTierThreeProduct(productKey)
+					? weeklyDeliveryDate
+					: undefined,
 			});
 			window.location.href = successUrl;
 		} catch (error) {

@@ -256,11 +256,13 @@ export function ThankYouComponent({
 	};
 	const benefitsChecklist = getBenefits();
 
-	const deliveryDate = productDeliveryOrStartDate(
-		productKey,
-		ratePlanKey as ActivePaperProductOptions,
-	);
-	const startDate = deliveryDate ? formatUserDate(deliveryDate) : undefined;
+	const deliveryStart =
+		order.deliveryDate ??
+		productDeliveryOrStartDate(
+			productKey,
+			ratePlanKey as ActivePaperProductOptions,
+		);
+	const startDate = deliveryStart ? formatUserDate(deliveryStart) : undefined;
 	const thankYouModuleData = getThankYouModuleData(
 		productKey,
 		ratePlanKey,
@@ -336,7 +338,7 @@ export function ThankYouComponent({
 			'headlineReturn',
 		),
 	];
-
+	console.log('*** ThankYouComponent.startDate', startDate);
 	return (
 		<PageScaffold
 			header={<Header />}
