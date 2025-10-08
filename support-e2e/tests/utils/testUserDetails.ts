@@ -111,12 +111,14 @@ export const setTestUserDetails = async (
 			.getByLabel(stateLabel)
 			.selectOption({ label: testFields.addresses[0].state });
 	}
-
+	const checkboxLabel = isWeeklyGift
+		? "Billing address same as recipient's address"
+		: 'Billing address same as delivery address';
 	if (requireAddress(product, internationalisationId) && testFields.addresses) {
 		if (testFields.addresses.length > 1) {
 			await page
 				.getByRole('checkbox', {
-					name: `Billing address same as ${isWeeklyGift ? `recipient's` : 'delivery'} address`,
+					name: checkboxLabel,
 				})
 				.uncheck();
 		}
