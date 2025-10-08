@@ -122,7 +122,7 @@ export class SalesforceService {
 		const buyerContact = createBuyerRecordRequest(user, buyerType);
 		const buyerResponse = await this.upsert(buyerContact);
 		const giftRecipientResponse = await this.maybeAddGiftRecipient(
-			buyerResponse.ContactRecord,
+			buyerResponse.ContactRecord.AccountId,
 			giftRecipient,
 			user,
 		);
@@ -165,13 +165,13 @@ export class SalesforceService {
 	}
 
 	private maybeAddGiftRecipient(
-		contactRecord: SalesforceContactRecord,
+		accountId: string,
 		giftRecipient: GiftRecipient | null,
 		user: User,
 	): Promise<SuccessfulUpsertResponse> | null {
 		if (giftRecipient && validGiftRecipientFields(giftRecipient)) {
 			const giftRecipientContact = createGiftRecipientContactRecordRequest(
-				contactRecord,
+				accountId,
 				giftRecipient,
 				user,
 			);
@@ -253,12 +253,12 @@ export const createGiftBuyerContactRecordRequest = (
 };
 
 export const createGiftRecipientContactRecordRequest = (
-	contactRecord: SalesforceContactRecord,
+	accountId: string,
 	giftRecipient: GiftRecipient,
 	user: User,
 ): GiftRecipientContactRecordRequest => {
 	return {
-		AccountId: contactRecord.AccountId,
+		AccountId: accountId,
 		Salutation: giftRecipient.title,
 		FirstName: giftRecipient.firstName,
 		LastName: giftRecipient.lastName,
