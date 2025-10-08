@@ -14,7 +14,7 @@ export type BuyerIdentifierProps = {
 	IdentityID__c: string;
 	Email: string;
 };
-export type PrintRecipientMailingAddress = {
+export type MailingAddress = {
 	MailingStreet: string | null;
 	MailingCity: string | null;
 	MailingState?: string | null; // optional because mandatory for US/CAN/AUS but not collected for UK/NZ
@@ -26,7 +26,7 @@ export type BaseBillingAddress = {
 	OtherPostalCode?: string | null; //collected (optionally) for some countries, but not all
 	OtherCountry: string | null;
 };
-export type BuyerBillingAddress = BaseBillingAddress & {
+export type BillingAddress = BaseBillingAddress & {
 	OtherStreet: string | null;
 	OtherCity: string | null;
 };
@@ -49,18 +49,18 @@ export type BaseContactRecordRequest = {
 	LastName: string;
 };
 export type PrintContactRecordRequest = BaseContactRecordRequest &
-	BuyerBillingAddress &
-	PrintRecipientMailingAddress &
+	BillingAddress &
+	MailingAddress &
 	BuyerIdentifierProps;
 
 export type PrintGiftBuyerContactRecordRequest = BaseContactRecordRequest &
-	BuyerBillingAddress &
+	BillingAddress &
 	BuyerIdentifierProps &
 	GiftOnlyProps &
 	GiftBuyerOnlyProps;
 
 export type PrintGiftRecipientContactRecordRequest = BaseContactRecordRequest &
-	PrintRecipientMailingAddress &
+	MailingAddress &
 	GiftOnlyProps &
 	GiftRecipientOnlyProps;
 
@@ -70,8 +70,8 @@ export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest &
 
 export type PrintAndDigitalBuyerContactRecordRequest =
 	BaseContactRecordRequest &
-		PrintRecipientMailingAddress &
-		BuyerBillingAddress &
+		MailingAddress &
+		BillingAddress &
 		BuyerIdentifierProps;
 
 type BuyerContactRecordRequest =
