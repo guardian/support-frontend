@@ -221,7 +221,7 @@ export function ThreeTierCard({
 	const isPremiumDigitalProduct =
 		product === 'DigitalSubscription' && enablePremiumDigital;
 	const inAdditionToAllAccessDigital =
-		isPremiumDigitalProduct ?? product === 'TierThree';
+		product === 'TierThree' || isPremiumDigitalProduct;
 	return (
 		<section css={container(!!pillCopy, isUserSelected, isSubdued)}>
 			{isUserSelected && <ThreeTierCardPill title="Your selection" />}
