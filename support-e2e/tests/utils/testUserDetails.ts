@@ -87,7 +87,8 @@ export const setTestUserDetails = async (
 	ratePlan: string,
 ) => {
 	const stateLabel = internationalisationId === 'CA' ? 'Province' : 'State';
-	if (['3MonthGift', 'OneYearGift'].includes(ratePlan)) {
+	const isWeeklyGift = ['3MonthGift', 'OneYearGift'].includes(ratePlan);
+	if (isWeeklyGift) {
 		await setGiftingCoreDetails(
 			page,
 			testFields.email,
@@ -115,7 +116,7 @@ export const setTestUserDetails = async (
 		if (testFields.addresses.length > 1) {
 			await page
 				.getByRole('checkbox', {
-					name: 'Billing address same as delivery address',
+					name: `Billing address same as ${isWeeklyGift ? `recipient's` : 'delivery'} address`,
 				})
 				.uncheck();
 		}
