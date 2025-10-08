@@ -28,6 +28,7 @@ type PersonalAddressFieldsProps = {
 		React.SetStateAction<AddressFormFieldError[]>
 	>;
 	billingStatePostcode?: BillingStatePostcode;
+	isWeeklyGift?: boolean;
 };
 
 export function PersonalAddressFields({
@@ -46,6 +47,7 @@ export function PersonalAddressFields({
 	deliveryAddressErrors,
 	setDeliveryAddressErrors,
 	billingStatePostcode,
+	isWeeklyGift = false,
 }: PersonalAddressFieldsProps) {
 	const legendDelivery = billingStatePostcode
 		? `2. Delivery address`
@@ -71,6 +73,7 @@ export function PersonalAddressFields({
 					countries={countries}
 					checkoutSession={checkoutSession}
 					billingStatePostcode={billingStatePostcode}
+					isWeeklyGift={isWeeklyGift}
 				/>
 			)}
 			{deliveryPostcodeIsOutsideM25 && (

@@ -84,8 +84,8 @@ export function WeeklyDeliveryDates({
 				</Rows>
 				<div css={weeklyInfo}>
 					<p>
-						We will take payment on the date the recipient receives the first
-						Guardian Weekly.
+						We will take payment on the first issue date of the Guardian Weekly
+						that the recipient is due to receive.
 					</p>
 					<p>
 						Subscription start dates are automatically selected to be the
