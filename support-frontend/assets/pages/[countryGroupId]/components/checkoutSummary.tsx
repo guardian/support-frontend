@@ -25,10 +25,7 @@ import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { parameteriseUrl } from 'helpers/urls/routes';
-import {
-	isGuardianWeeklyGiftProduct,
-	isGuardianWeeklyOrTierThreeProduct,
-} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
@@ -212,7 +209,7 @@ export default function CheckoutSummary({
 							thresholdAmount={thresholdAmount}
 							promotion={promotion}
 							deliveryDate={
-								isGuardianWeeklyOrTierThreeProduct(productKey)
+								isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
 									? weeklyDeliveryDate
 									: undefined
 							}
