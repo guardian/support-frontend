@@ -9,54 +9,60 @@ import { SalesforceClient } from './salesforceClient';
 //e.g. for contacts with more than print subscription, sent to different addresses. Has evolved to include gift recipient contacts.
 export const salesforceDeliveryOrRecipientRecordTypeId = '01220000000VB50AAG';
 
-export type RecipientMailingAddress = {
+//grouped properties for re-use in different contact record types
+export type BuyerIdentifierProps = {
+	IdentityID__c: string;
+	Email: string;
+};
+export type PrintRecipientMailingAddress = {
 	MailingStreet: string | null;
 	MailingCity: string | null;
 	MailingState?: string | null; // optional because mandatory for US/CAN/AUS but not collected for UK/NZ
 	MailingPostalCode?: string | null; // optional because mandatory for US/CAN/AUS/UK but optional for rest of world
 	MailingCountry: string | null;
 };
-export type BuyerBillingAddress = BaseBillingAddress & {
-	OtherStreet: string | null;
-	OtherCity: string | null;
-};
-
-export type BaseContactRecordRequest = {
-	FirstName: string;
-	LastName: string;
-};
 export type BaseBillingAddress = {
 	OtherState?: string | null; // optional because mandatory for US/CAN/AUS but not collected for UK/NZ
 	OtherPostalCode?: string | null; //collected (optionally) for some countries, but not all
 	OtherCountry: string | null;
 };
-
-export type BuyerIdentifierProps = {
-	IdentityID__c: string;
-	Email: string;
+export type BuyerBillingAddress = BaseBillingAddress & {
+	OtherStreet: string | null;
+	OtherCity: string | null;
 };
-//how to differentiate between printGiftBuyer and printAndDigitalBuyer
-export type PrintContactRecordRequest = BaseContactRecordRequest &
-	RecipientMailingAddress &
-	BuyerBillingAddress &
-	BuyerIdentifierProps;
 
 export type GiftOnlyProps = {
 	Salutation?: Title | null;
 };
+export type GiftRecipientOnlyProps = {
+	AccountId: string;
+	Email?: string;
+	RecordTypeId: typeof salesforceDeliveryOrRecipientRecordTypeId;
+};
+export type GiftBuyerOnlyProps = {
+	Phone?: string | null;
+};
+
+//ContactRecordRequest types
+export type BaseContactRecordRequest = {
+	FirstName: string;
+	LastName: string;
+};
+export type PrintContactRecordRequest = BaseContactRecordRequest &
+	BuyerBillingAddress &
+	PrintRecipientMailingAddress &
+	BuyerIdentifierProps;
+
 export type PrintGiftBuyerContactRecordRequest = BaseContactRecordRequest &
 	BuyerBillingAddress &
 	BuyerIdentifierProps &
-	GiftOnlyProps & {
-		Phone?: string | null;
-	};
+	GiftOnlyProps &
+	GiftBuyerOnlyProps;
+
 export type PrintGiftRecipientContactRecordRequest = BaseContactRecordRequest &
-	RecipientMailingAddress &
-	GiftOnlyProps & {
-		AccountId: string;
-		Email?: string;
-		RecordTypeId: typeof salesforceDeliveryOrRecipientRecordTypeId;
-	};
+	PrintRecipientMailingAddress &
+	GiftOnlyProps &
+	GiftRecipientOnlyProps;
 
 export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest &
 	BuyerIdentifierProps &
@@ -64,18 +70,20 @@ export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest &
 
 export type PrintAndDigitalBuyerContactRecordRequest =
 	BaseContactRecordRequest &
-		RecipientMailingAddress &
+		PrintRecipientMailingAddress &
 		BuyerBillingAddress &
 		BuyerIdentifierProps;
 
-type BuyerType = 'Print' | 'GiftBuyer' | 'DigitalOnly';
-type BuyerTypeRecordRequest =
+type BuyerContactRecordRequest =
 	| PrintContactRecordRequest
 	| PrintGiftBuyerContactRecordRequest
 	| DigitalOnlyContactRecordRequest;
+
 type ContactRecordRequest =
-	| BuyerTypeRecordRequest
+	| BuyerContactRecordRequest
 	| PrintGiftRecipientContactRecordRequest;
+
+type BuyerType = 'Print' | 'GiftBuyer' | 'DigitalOnly';
 
 export const salesforceContactRecordSchema = z.object({
 	Id: z.string(),
@@ -200,7 +208,7 @@ export const validGiftRecipientFields = (
 export const createBuyerRecordRequest = (
 	user: User,
 	buyerType: BuyerType,
-): BuyerTypeRecordRequest => {
+): BuyerContactRecordRequest => {
 	switch (buyerType) {
 		case 'Print':
 			return createPrintContactRecordRequest(user);
