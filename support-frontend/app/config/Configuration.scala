@@ -26,6 +26,8 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val supportUrl = config.getString("support.url")
 
+  lazy val observerUrl = config.getString("observer.url")
+
   lazy val paymentApiUrl = config.getString("paymentApi.url")
 
   lazy val userBenefitsApiConfigProvider = new UserBenefitsApiConfigProvider(config, stage)
