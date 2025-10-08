@@ -204,6 +204,7 @@ export function ThreeTierCard({
 }: ThreeTierCardProps): JSX.Element {
 	const {
 		title,
+		titlePill,
 		benefits,
 		isUserSelected,
 		promotion,
@@ -232,7 +233,7 @@ export function ThreeTierCard({
 				/>
 			)}
 			<h2 css={[titleCss, checkListTextItemCss]}>
-				{isPremiumDigitalProduct && <BenefitPill copy={'New'} />} {title}
+				{titlePill && <BenefitPill copy={titlePill} />} {title}
 			</h2>
 			<p css={priceCss(!!promotion)}>
 				{promotion && (
