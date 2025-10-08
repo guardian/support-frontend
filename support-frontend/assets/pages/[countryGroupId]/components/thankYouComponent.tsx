@@ -50,7 +50,7 @@ import {
 	isGuardianWeeklyProduct,
 	isPrintProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
-import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import { getProductFirstDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import ThankYouModules from '../../../components/thankYou/thankyouModules';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -258,7 +258,7 @@ export function ThankYouComponent({
 
 	const deliveryStart =
 		order.deliveryDate ??
-		productDeliveryOrStartDate(
+		getProductFirstDeliveryOrStartDate(
 			productKey,
 			ratePlanKey as ActivePaperProductOptions,
 		);
