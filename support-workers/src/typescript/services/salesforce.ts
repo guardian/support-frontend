@@ -201,7 +201,7 @@ export const createBuyerRecordRequest = (
 };
 
 const getBuyerType = (user: User, hasGiftRecipient: boolean): BuyerType => {
-	if (hasGiftRecipient) {
+	if (buyerTypeIsGiftBuyer(user, hasGiftRecipient)) {
 		return 'GiftBuyer';
 	}
 
@@ -209,14 +209,29 @@ const getBuyerType = (user: User, hasGiftRecipient: boolean): BuyerType => {
 		return 'Print';
 	}
 
+	if (buyerTypeIsDigitalOnly(user)) {
+		return 'DigitalOnly';
+	}
+
 	return 'DigitalOnly';
+};
+
+export const buyerTypeIsGiftBuyer = (
+	user: User,
+	hasGiftRecipient: boolean,
+): boolean => {
+	return hasGiftRecipient && !!user.deliveryAddress && !!user.billingAddress;
+};
+
+export const buyerTypeIsDigitalOnly = (user: User): boolean => {
+	return !user.deliveryAddress && !!user.billingAddress;
 };
 
 export const buyerTypeIsPrint = (
 	hasGiftRecipient: boolean | null,
 	user: User,
 ): boolean => {
-	return !hasGiftRecipient && !!user.deliveryAddress;
+	return !hasGiftRecipient && !!user.deliveryAddress && !!user.billingAddress;
 };
 
 export const createDigitalOnlyContactRecordRequest = (
