@@ -77,7 +77,7 @@ describe('SalesforceService', () => {
 		};
 
 		const recipientContact = createGiftRecipientContactRecordRequest(
-			buyerContactRecord,
+			buyerContactRecord.AccountId,
 			giftRecipient,
 			giftBuyer,
 		);
