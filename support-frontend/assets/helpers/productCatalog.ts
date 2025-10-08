@@ -495,7 +495,7 @@ const editionsDigitalBenefit = {
 
 export const productCatalogDescriptionPremiumDigital = {
 	...productCatalogDescription.DigitalSubscription,
-	label: 'Premium Digital',
+	label: 'Premium digital',
 	thankyouMessage: digitalThankyouMessage,
 	landingPagePath: '/contribute',
 	benefits: [
