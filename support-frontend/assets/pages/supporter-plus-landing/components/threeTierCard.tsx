@@ -233,7 +233,7 @@ export function ThreeTierCard({
 				/>
 			)}
 			<h2 css={[titleCss, checkListTextItemCss]}>
-				{titlePill && <BenefitPill copy={titlePill} />} {title}
+				{titlePill && <BenefitPill copy={titlePill} />} <>{title}</>
 			</h2>
 			<p css={priceCss(!!promotion)}>
 				{promotion && (
