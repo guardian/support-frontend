@@ -218,9 +218,10 @@ export function ThreeTierCard({
 	const formattedPrice = simpleFormatAmount(currency, price);
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	const pillCopy = promotion?.landingPage?.roundel ?? cardContent.label?.copy;
+	const isPremiumDigitalProduct =
+		product === 'DigitalSubscription' && enablePremiumDigital;
 	const inAdditionToAllAccessDigital =
-		(enablePremiumDigital && product === 'DigitalSubscription') ??
-		product === 'TierThree';
+		isPremiumDigitalProduct ?? product === 'TierThree';
 	return (
 		<section css={container(!!pillCopy, isUserSelected, isSubdued)}>
 			{isUserSelected && <ThreeTierCardPill title="Your selection" />}
@@ -231,7 +232,7 @@ export function ThreeTierCard({
 				/>
 			)}
 			<h2 css={[titleCss, checkListTextItemCss]}>
-				{enablePremiumDigital && <BenefitPill copy={'New'} />} {title}
+				{isPremiumDigitalProduct && <BenefitPill copy={'New'} />} {title}
 			</h2>
 			<p css={priceCss(!!promotion)}>
 				{promotion && (
