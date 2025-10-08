@@ -121,15 +121,17 @@ export class SalesforceService {
 		const buyerType = getBuyerType(user, hasGiftRecipient);
 		const buyerContact = createBuyerRecordRequest(user, buyerType);
 		const buyerResponse = await this.upsert(buyerContact);
-		const giftRecipientResponse = await this.maybeAddGiftRecipient(
-			buyerResponse.ContactRecord.AccountId,
-			giftRecipient,
-			user,
-		);
-		const recipientContactRecord =
-			giftRecipientResponse?.ContactRecord ?? buyerResponse.ContactRecord;
 
-		return recipientContactRecord;
+		if (hasGiftRecipient && validGiftRecipientFields(giftRecipient)) {
+			const giftRecipientResponse = await this.addGiftRecipient(
+				buyerResponse.ContactRecord.AccountId,
+				giftRecipient,
+				user,
+			);
+			return giftRecipientResponse.ContactRecord;
+		}
+
+		return buyerResponse.ContactRecord;
 	};
 
 	upsert = async (
@@ -164,20 +166,17 @@ export class SalesforceService {
 		}
 	}
 
-	private maybeAddGiftRecipient(
+	private addGiftRecipient(
 		accountId: string,
-		giftRecipient: GiftRecipient | null,
+		giftRecipient: GiftRecipient,
 		user: User,
-	): Promise<SuccessfulUpsertResponse> | null {
-		if (giftRecipient && validGiftRecipientFields(giftRecipient)) {
-			const giftRecipientContact = createGiftRecipientContactRecordRequest(
-				accountId,
-				giftRecipient,
-				user,
-			);
-			return this.upsert(giftRecipientContact);
-		}
-		return null;
+	): Promise<SuccessfulUpsertResponse> {
+		const giftRecipientContact = createGiftRecipientContactRecordRequest(
+			accountId,
+			giftRecipient,
+			user,
+		);
+		return this.upsert(giftRecipientContact);
 	}
 }
 
