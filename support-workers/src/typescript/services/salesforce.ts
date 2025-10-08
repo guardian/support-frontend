@@ -58,6 +58,10 @@ export type PrintContactRecordRequest = BaseContactRecordRequest & {
 	MailingCountry: string | null;
 };
 type BuyerType = 'Print' | 'GiftBuyer' | 'DigitalOnly';
+type BuyerTypeRecordRequest =
+	| PrintContactRecordRequest
+	| GiftBuyerContactRecordRequest
+	| DigitalOnlyContactRecordRequest;
 
 export const salesforceContactRecordSchema = z.object({
 	Id: z.string(),
@@ -126,11 +130,7 @@ export class SalesforceService {
 	};
 
 	upsert = async (
-		contact:
-			| PrintContactRecordRequest
-			| GiftBuyerContactRecordRequest
-			| GiftRecipientContactRecordRequest
-			| DigitalOnlyContactRecordRequest,
+		contact: BuyerTypeRecordRequest | GiftRecipientContactRecordRequest,
 	): Promise<SuccessfulUpsertResponse> => {
 		const response: UpsertResponse = await this.client.post(
 			this.upsertEndpoint,
@@ -187,10 +187,7 @@ export const validGiftRecipientFields = (
 export const createBuyerRecordRequest = (
 	user: User,
 	buyerType: BuyerType,
-):
-	| PrintContactRecordRequest
-	| GiftBuyerContactRecordRequest
-	| DigitalOnlyContactRecordRequest => {
+): BuyerTypeRecordRequest => {
 	switch (buyerType) {
 		case 'Print':
 			return createPrintContactRecordRequest(user);
