@@ -113,7 +113,7 @@ export const setTestUserDetails = async (
 	}
 	const checkboxLabel = isWeeklyGift
 		? "Billing address same as recipient's address"
-		: 'Billing address same as delivery address';
+		: 'Billing address same as delivery address'; // WeeklyGift has different text
 	if (requireAddress(product, internationalisationId) && testFields.addresses) {
 		if (testFields.addresses.length > 1) {
 			await page
