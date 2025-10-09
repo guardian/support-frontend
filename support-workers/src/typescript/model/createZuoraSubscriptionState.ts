@@ -1,4 +1,5 @@
 import { productPurchaseSchema } from '@modules/product-catalog/productPurchaseSchema';
+import { appliedPromotionSchema } from '@modules/promotions/schema';
 import { z } from 'zod';
 import { salesforceContactRecordSchema } from '../services/salesforce';
 import { countrySchema } from './address';
@@ -13,7 +14,6 @@ import {
 	tierThreeProductSchema,
 } from './productType';
 import {
-	appliedPromotionSchema,
 	baseStateSchema,
 	giftRecipientSchema,
 	userSchema,
