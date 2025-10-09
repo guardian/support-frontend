@@ -92,6 +92,7 @@ type RatePlanDetails = Record<
 
 export type ProductDescription = {
 	label: string;
+	labelPill?: string;
 	thankyouMessage?: string;
 	benefits: ProductBenefit[];
 	landingPagePath: string;
@@ -495,7 +496,8 @@ const editionsDigitalBenefit = {
 
 export const productCatalogDescriptionPremiumDigital = {
 	...productCatalogDescription.DigitalSubscription,
-	label: 'Premium Digital',
+	label: 'Premium digital',
+	labelPill: 'New',
 	thankyouMessage: digitalThankyouMessage,
 	landingPagePath: '/contribute',
 	benefits: [
