@@ -45,6 +45,7 @@ import { getFeatureFlags } from 'helpers/featureFlags';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
+	getProductDescription,
 	productCatalog,
 	productCatalogDescriptionPremiumDigital,
 } from 'helpers/productCatalog';
@@ -440,8 +441,14 @@ export function ThreeTierLanding({
 		product: tier3Product,
 		ratePlan: tier3RatePlanKey,
 	});
+	const { label: title, labelPill: titlePill } = getProductDescription(
+		'DigitalSubscription',
+		ratePlanKey,
+		enablePremiumDigital,
+	);
 	const premiumDigitalProductDescription = {
-		title: 'Premium digital',
+		title,
+		titlePill,
 		benefits: filterProductDescriptionBenefits(
 			productCatalogDescriptionPremiumDigital,
 			countryGroupId,
