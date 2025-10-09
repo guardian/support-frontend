@@ -1,16 +1,11 @@
-import { GuAlarm } from "@guardian/cdk/lib/constructs/cloudwatch";
-import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
-import { GuStack } from "@guardian/cdk/lib/constructs/core";
-import { GuLambdaFunction } from "@guardian/cdk/lib/constructs/lambda";
-import { type App, Duration, Fn } from "aws-cdk-lib";
-import {
-  ComparisonOperator,
-  MathExpression,
-  Metric,
-  TreatMissingData,
-} from "aws-cdk-lib/aws-cloudwatch";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
+import {GuAlarm} from "@guardian/cdk/lib/constructs/cloudwatch";
+import type {GuStackProps} from "@guardian/cdk/lib/constructs/core";
+import {GuStack} from "@guardian/cdk/lib/constructs/core";
+import {GuLambdaFunction} from "@guardian/cdk/lib/constructs/lambda";
+import {type App, Duration, Fn} from "aws-cdk-lib";
+import {ComparisonOperator, MathExpression, Metric, TreatMissingData,} from "aws-cdk-lib/aws-cloudwatch";
+import {Effect, PolicyStatement} from "aws-cdk-lib/aws-iam";
+import {Architecture, LoggingFormat, Runtime} from "aws-cdk-lib/aws-lambda";
 import {
   Choice,
   Condition,
@@ -22,7 +17,7 @@ import {
   StateMachine,
   Succeed,
 } from "aws-cdk-lib/aws-stepfunctions";
-import { LambdaInvoke } from "aws-cdk-lib/aws-stepfunctions-tasks";
+import {LambdaInvoke} from "aws-cdk-lib/aws-stepfunctions-tasks";
 
 const ProductTypes = {
   Contribution: "Contribution",
@@ -193,9 +188,7 @@ export class SupportWorkers extends GuStack {
           parameterStorePolicy,
           ...additionalPolicies,
         ],
-        environment: {
-          AWS_LAMBDA_LOG_FORMAT: "Unstructured",
-        },
+        loggingFormat: LoggingFormat.TEXT,
       });
       this.overrideLogicalId(lambda, {
         logicalId: lambdaId,
