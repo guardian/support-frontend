@@ -3,7 +3,11 @@ const vite = require('vite');
 const preact = require('@preact/preset-vite');
 module.exports = {
 	stories: ['../stories/**/*.stories.@(js|jsx|ts|tsx)'],
-	addons: ['@storybook/addon-a11y', '@storybook/addon-links', '@storybook/addon-docs'],
+	addons: [
+		'@storybook/addon-a11y',
+		'@storybook/addon-links',
+		'@storybook/addon-docs',
+	],
 	core: {
 		builder: '@storybook/builder-vite',
 	},
