@@ -222,7 +222,7 @@ describe('buyerTypeIsPrint', () => {
 
 	test('should return false when no delivery address on user is true', () => {
 		const hasGiftRecipient = false;
-		expect(buyerTypeIsPrint(hasGiftRecipient, digitalOnlySubscriber)).toBe(
+		expect(buyerTypeIsPrint(digitalOnlySubscriber, hasGiftRecipient)).toBe(
 			false,
 		);
 	});
