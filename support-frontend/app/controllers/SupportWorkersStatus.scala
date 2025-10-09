@@ -22,7 +22,7 @@ class SupportWorkersStatus(
   import actionRefiners._
   def status(jobId: String): Action[AnyContent] = MaybeAuthenticatedActionOnFormSubmission.async { implicit request =>
     client
-      .status(jobId, request.uuid)
+      .status(request, jobId, request.uuid)
       .fold(
         { error =>
           logger.error(scrub"Failed to get status of step function execution for job ${jobId} due to $error")

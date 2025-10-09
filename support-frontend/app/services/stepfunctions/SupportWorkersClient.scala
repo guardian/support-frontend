@@ -72,9 +72,10 @@ object SupportWorkersClient {
       arn: StateMachineArn,
       stateWrapper: StateWrapper,
       supportUrl: String,
+      observerUrl: String,
       call: String => Call,
   )(implicit system: ActorSystem): SupportWorkersClient =
-    new SupportWorkersClient(arn, stateWrapper, supportUrl, call)
+    new SupportWorkersClient(arn, stateWrapper, supportUrl, observerUrl, call)
 }
 
 case class StatusResponse(
@@ -91,6 +92,7 @@ class SupportWorkersClient(
     arn: StateMachineArn,
     stateWrapper: StateWrapper,
     supportUrl: String,
+    observerUrl: String,
     statusCall: String => Call,
 )(implicit system: ActorSystem)
     extends SafeLogging {
@@ -180,7 +182,10 @@ class SupportWorkersClient(
             underlying.jobIdFromArn(success.arn).map { jobId =>
               StatusResponse(
                 status = Status.Pending,
-                trackingUri = supportUrl + statusCall(jobId).url,
+                trackingUri = {
+                  val baseUrl = if (observerUrl.contains(request.host)) observerUrl else supportUrl
+                  baseUrl + statusCall(jobId).url
+                },
               )
             } getOrElse {
               logger.error(
@@ -199,7 +204,11 @@ class SupportWorkersClient(
 
   }
 
-  def status(jobId: String, requestId: UUID): EitherT[Future, SupportWorkersError, StatusResponse] = {
+  def status(
+      request: Request[_],
+      jobId: String,
+      requestId: UUID,
+  ): EitherT[Future, SupportWorkersError, StatusResponse] = {
 
     def respondToClient(statusResponse: StatusResponse): StatusResponse = {
       logger.info(
@@ -216,7 +225,10 @@ class SupportWorkersClient(
           StateMachineFailure: SupportWorkersError
         },
         { events =>
-          val trackingUri = supportUrl + statusCall(jobId).url
+          val trackingUri = {
+            val baseUrl = if (observerUrl.contains(request.host)) observerUrl else supportUrl
+            baseUrl + statusCall(jobId).url
+          }
           val detailedHistory = events.map(event => Try(event.stateExitedEventDetails()))
           respondToClient(StepFunctionExecutionStatus.checkoutStatus(detailedHistory, stateWrapper, trackingUri))
         },
