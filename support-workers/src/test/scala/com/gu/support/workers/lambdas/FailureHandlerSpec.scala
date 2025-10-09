@@ -54,6 +54,24 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
 
   }
 
+  it should "return a non failed JsonWrapper and an appropriate failure reason for a payment error from the TS Zuora lambda" in {
+    val failureHandler = new FailureHandler(new EmailService(emailQueueName))
+
+    val outStream = new ByteArrayOutputStream()
+
+    failureHandler.handleRequestFuture(cardDeclinedJsonTypescript.asInputStream, outStream, context).map { _ =>
+      val outState = Encoding.in[CheckoutFailureState](outStream.toInputStream)
+      val requestInfo = outState.get._3
+      val checkoutFailureState = outState.get._1
+
+      withClue(requestInfo.messages.head) {
+        requestInfo.failed should be(false)
+        checkoutFailureState.checkoutFailureReason should be(Unknown)
+      }
+    }
+
+  }
+
   it should "return a non failed JsonWrapper and an appropriate failure reason for Stripe payment errors" in {
     val failureHandler = new FailureHandler(new EmailService(emailQueueName))
 
@@ -144,7 +162,7 @@ class FailureHandlerSpec extends AsyncLambdaSpec with MockContext {
 
   it should "convert a transaction declined error from Zuora to an appropriate CheckoutFailureReason" in {
     val reason = FailureHandler.toCheckoutFailureReason(
-      ZuoraError("TRANSACTION_FAILED", "Transaction declined.do_not_honor - Your card was declined."),
+      "Transaction declined.do_not_honor - Your card was declined.",
       Stripe,
     )
     reason should be(PaymentMethodUnacceptable)
