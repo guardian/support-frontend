@@ -24,9 +24,7 @@ const transactionDeclinedMessages = [
 ];
 
 const isTransactionDeclinedError = (error: ZuoraError) =>
-	error.zuoraErrorDetails.find((detail) =>
-		transactionDeclinedMessages.includes(detail.message),
-	);
+	transactionDeclinedMessages.includes(error.message);
 
 export function mapZuoraError(error: ZuoraError) {
 	if (isTransactionDeclinedError(error)) {
