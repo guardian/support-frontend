@@ -12,7 +12,7 @@ const parameters = {
 		},
 	},
 	viewport: {
-		viewports,
+		options: viewports,
 	},
 	layout: 'fullscreen',
 };

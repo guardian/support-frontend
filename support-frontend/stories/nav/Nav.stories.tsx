@@ -1,5 +1,5 @@
-import { expect } from '@storybook/test';
-import { userEvent, waitFor, within } from '@storybook/test';
+import { expect } from 'storybook/test';
+import { userEvent, waitFor, within } from 'storybook/test';
 import NavComponent from 'components/nav/nav';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
