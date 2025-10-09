@@ -864,6 +864,7 @@ export default function CheckoutForm({
 									setDeliveryAgentError={setDeliveryAgentError}
 									deliveryAddressErrors={deliveryAddressErrors}
 									setDeliveryAddressErrors={setDeliveryAddressErrors}
+									isWeeklyGift={isWeeklyGift}
 								/>
 							</>
 						)}

@@ -12,6 +12,7 @@ type BillingAddressFieldsProps = {
 	countries?: Record<string, string>;
 	checkoutSession?: CheckoutSession;
 	billingStatePostcode: BillingStatePostcode;
+	isWeeklyGift: boolean;
 };
 
 export function BillingAddressFields({
@@ -19,12 +20,16 @@ export function BillingAddressFields({
 	countries,
 	checkoutSession,
 	billingStatePostcode,
+	isWeeklyGift,
 }: BillingAddressFieldsProps) {
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
 		useStateWithCheckoutSession<boolean>(
 			checkoutSession?.formFields.billingAddressMatchesDelivery,
 			true,
 		);
+	const billingLabel = `Billing address same as ${
+		isWeeklyGift ? `recipient's` : 'delivery'
+	} address`;
 	return (
 		<>
 			<fieldset
@@ -41,7 +46,7 @@ export function BillingAddressFields({
 					}}
 					id="billingAddressMatchesDelivery"
 					name="billingAddressMatchesDelivery"
-					label="Billing address same as delivery address"
+					label={billingLabel}
 				/>
 			</fieldset>
 			{!billingAddressMatchesDelivery && (

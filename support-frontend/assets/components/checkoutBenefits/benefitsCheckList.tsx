@@ -42,7 +42,7 @@ const checkListTextCss = css`
 	}
 `;
 
-const checkListTextItemCss = css`
+export const checkListTextItemCss = css`
 	& div {
 		display: none;
 
