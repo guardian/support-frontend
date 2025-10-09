@@ -1,5 +1,4 @@
-import { expect } from 'storybook/test';
-import { userEvent, waitFor, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import React from 'react';
 import CountryGroupSwitcherComponent from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
