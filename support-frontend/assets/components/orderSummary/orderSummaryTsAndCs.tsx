@@ -27,7 +27,7 @@ import {
 	isGuardianWeeklyGiftProduct,
 	isGuardianWeeklyOrTierThreeProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
-import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import { getProductFirstDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 
 const containerSummaryTsCs = css`
 	border-radius: ${space[2]}px;
@@ -87,6 +87,7 @@ export interface OrderSummaryTsAndCsProps {
 	countryGroupId: CountryGroupId;
 	promotion?: Promotion;
 	thresholdAmount?: number;
+	deliveryDate?: Date;
 }
 export function OrderSummaryTsAndCs({
 	productKey,
@@ -95,6 +96,7 @@ export function OrderSummaryTsAndCs({
 	countryGroupId,
 	promotion,
 	thresholdAmount = 0,
+	deliveryDate,
 }: OrderSummaryTsAndCsProps): JSX.Element | null {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -110,11 +112,13 @@ export function OrderSummaryTsAndCs({
 		thresholdAmount,
 		promotion,
 	); // promoMessage expected to be a string like: "£10.49/month for the first 6 months, then £20.99/month"
-	const deliveryDate = productDeliveryOrStartDate(
-		productKey,
-		ratePlanKey as ActivePaperProductOptions,
-	);
-	const deliveryStartDate = deliveryDate ? formatUserDate(deliveryDate) : '';
+	const deliveryStart =
+		deliveryDate ??
+		getProductFirstDeliveryOrStartDate(
+			productKey,
+			ratePlanKey as ActivePaperProductOptions,
+		);
+	const deliveryStartDate = deliveryStart ? formatUserDate(deliveryStart) : '';
 	const rateDescriptor = ratePlanDescription
 		? ratePlanDescription
 				.replace(/^The\s+/i, '') // Remove "The" at the start, case-insensitive, with following space

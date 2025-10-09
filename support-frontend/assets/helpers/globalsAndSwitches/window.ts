@@ -226,7 +226,7 @@ const countryKeySchema = z.enum([
 	'International',
 ]);
 
-const dateTimeSchema = z.preprocess(
+export const dateTimeSchema = z.preprocess(
 	(val) => (typeof val === 'string' ? new Date(val) : val),
 	z.date(),
 );

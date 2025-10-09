@@ -33,7 +33,7 @@ import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
-import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import { getProductFirstDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { FinePrint } from './finePrint';
 import { ManageMyAccountLink } from './manageMyAccountLink';
 
@@ -226,7 +226,7 @@ export function PaymentTsAndCs({
 		productKey,
 		ratePlanKey,
 	);
-	const deliveryDate = productDeliveryOrStartDate(
+	const deliveryDate = getProductFirstDeliveryOrStartDate(
 		productKey,
 		ratePlanKey as ActivePaperProductOptions,
 	);

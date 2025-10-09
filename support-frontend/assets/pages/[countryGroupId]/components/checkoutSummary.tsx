@@ -208,6 +208,11 @@ export default function CheckoutSummary({
 							countryGroupId={countryGroupId}
 							thresholdAmount={thresholdAmount}
 							promotion={promotion}
+							deliveryDate={
+								isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+									? weeklyDeliveryDate
+									: undefined
+							}
 						/>
 					}
 					headerButton={
