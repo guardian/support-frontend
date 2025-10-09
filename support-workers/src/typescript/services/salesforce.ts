@@ -48,6 +48,7 @@ export type BaseContactRecordRequest = {
 	FirstName: string;
 	LastName: string;
 };
+
 export type PrintContactRecordRequest = BaseContactRecordRequest &
 	BillingAddress &
 	MailingAddress &
@@ -67,12 +68,6 @@ export type PrintGiftRecipientContactRecordRequest = BaseContactRecordRequest &
 export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest &
 	BuyerIdentifierProps &
 	BaseBillingAddress;
-
-export type PrintAndDigitalBuyerContactRecordRequest =
-	BaseContactRecordRequest &
-		MailingAddress &
-		BillingAddress &
-		BuyerIdentifierProps;
 
 type BuyerContactRecordRequest =
 	| PrintContactRecordRequest
