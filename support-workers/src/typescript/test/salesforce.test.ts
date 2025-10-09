@@ -212,12 +212,12 @@ describe('validGiftRecipientFields', () => {
 describe('buyerTypeIsPrint', () => {
 	test('should return true when hasGiftRecipient is false and user.deliveryAddress is not null', () => {
 		const hasGiftRecipient = false;
-		expect(buyerTypeIsPrint(hasGiftRecipient, printSubscriber)).toBe(true);
+		expect(buyerTypeIsPrint(printSubscriber, hasGiftRecipient)).toBe(true);
 	});
 
 	test('should return false when hasGiftRecipient is true', () => {
 		const hasGiftRecipient = true;
-		expect(buyerTypeIsPrint(hasGiftRecipient, giftBuyer)).toBe(false);
+		expect(buyerTypeIsPrint(giftBuyer, hasGiftRecipient)).toBe(false);
 	});
 
 	test('should return false when no delivery address on user is true', () => {
