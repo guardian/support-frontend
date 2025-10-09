@@ -15,6 +15,9 @@ const parameters = {
 		options: viewports,
 	},
 	layout: 'fullscreen',
+	docs: {
+		codePanel: true,
+	},
 };
 
 const decorators = [withFocusStyleManager];
