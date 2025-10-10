@@ -40,6 +40,10 @@ import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { BackButton } from './backButton';
 import { shorterBoxMargin } from './form';
 
+const alertStyles = css`
+	margin-bottom: ${space[6]}px;
+`;
+
 type CheckoutSummaryProps = {
 	supportRegionId: SupportRegionId;
 	appConfig: AppConfig;
@@ -164,16 +168,22 @@ export default function CheckoutSummary({
 		<Box cssOverrides={shorterBoxMargin}>
 			<BoxContents>
 				{forcedCountry && productDescription.deliverableTo?.[forcedCountry] && (
-					<div role="alert">
+					<div role="alert" css={alertStyles}>
 						<InfoSummary
-							cssOverrides={css`
-								margin-bottom: ${space[6]}px;
-							`}
 							message={`You've changed your delivery country to ${productDescription.deliverableTo[forcedCountry]}.`}
 							context={`Your subscription price has been updated to reflect the rates in your new location.`}
 						/>
 					</div>
 				)}
+				{supportRegionId === SupportRegionId.CA &&
+					productKey === 'GuardianWeeklyDomestic' && (
+						<div role="alert" css={alertStyles}>
+							<InfoSummary
+								message="For Canadian residents only"
+								context="Please note that Canada Post is currently on strike. If you start a Guardian Weekly subscription today, we will not be able to deliver your copies until postal services resume. We apologise for any inconvenience this may cause."
+							/>
+						</div>
+					)}
 				<ContributionsOrderSummary
 					productKey={productKey}
 					productLabel={productDescription.label}
