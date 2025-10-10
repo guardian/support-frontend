@@ -42,7 +42,7 @@ class AppComponents(context: Context)
   override lazy val errorController = new ErrorController(actionBuilders, customHandler)
 
   final override lazy val corsConfig: CORSConfig =
-    CORSConfig().withOriginsAllowed(_ == appConfig.supportUrl).withOriginsAllowed(_ == appConfig.observerUrl)
+    CORSConfig().withOriginsAllowed(Set(appConfig.supportUrl, appConfig.observerUrl).contains)
 
   override lazy val httpFilters: Seq[EssentialFilter] = Seq(
     // This filter needs to be before the `securityHeadersFilter` as it removes a header set by that filter
