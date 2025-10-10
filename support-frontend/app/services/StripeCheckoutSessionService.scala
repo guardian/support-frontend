@@ -97,6 +97,9 @@ object StripeCheckoutSessionService {
     "support.theguardian.com",
     "support.code.dev-theguardian.com",
     "support.thegulocal.com",
+    "observer.theguardian.com",
+    "observer.code.dev-theguardian.com",
+    "observer.thegulocal.com",
   )
 
   def buildSuccessUrl(refererUrl: String): Option[String] = {
