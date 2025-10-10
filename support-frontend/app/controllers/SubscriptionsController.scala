@@ -8,6 +8,7 @@ import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog._
 import com.gu.support.config.Stage
 import com.gu.support.config.Stages.PROD
+import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.workers.Monthly
 import config.StringsConfig
@@ -60,11 +61,10 @@ class SubscriptionsController(
       priceSummary.promotions.headOption.map(_.description).getOrElse(""),
     )
 
-  def getLandingPrices(countryGroup: CountryGroup): Map[String, PriceCopy] = {
+  def getLandingPrices(countryGroup: CountryGroup, queryPromos: List[String]): Map[String, PriceCopy] = {
     val service = priceSummaryServiceProvider.forUser(false)
-
     val paperMap = if (countryGroup == CountryGroup.UK) {
-      val paper = service.getPrices(Paper, Nil)(CountryGroup.UK)(Collection)(
+      val paper = service.getPrices(Paper, queryPromos)(CountryGroup.UK)(Collection)(
         Saturday,
       )(Monthly)(GBP)
       Map(Paper.toString -> pricingCopy(paper))
@@ -98,10 +98,17 @@ class SubscriptionsController(
     val title = "Support the Guardian | Get a Subscription"
     val mainElement = EmptyDiv("subscriptions-landing-page")
     val js = "subscriptionsLandingPage.js"
-    val pricingCopy = CountryGroup.byId(countryCode).map(getLandingPrices)
+    val queryPromos =
+      request.queryString
+        .getOrElse("promoCode", Nil)
+        .toList
+    val defaultPromos = priceSummaryServiceProvider.forUser(isTestUser = false).getDefaultPromoCodes(Paper)
+    val countryGroup = CountryGroup.byId(countryCode).get
+    val pricingCopy = getLandingPrices(countryGroup, defaultPromos)
     // TestUser remains un-used, page caching preferred
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, false).get()
-
+    val productPrices =
+      priceSummaryServiceProvider.forUser(false).getPrices(Paper, queryPromos)
     Ok(
       views.html.main(
         title,
@@ -112,6 +119,7 @@ class SubscriptionsController(
         noindex = stage != PROD,
       ) {
         Html(s"""<script type="text/javascript">
+              window.guardian.productPrices = ${outputJson(productPrices)};
               window.guardian.pricingCopy = ${outputJson(pricingCopy)};
               window.guardian.productCatalog = ${outputJson(productCatalog)}
             </script>""")
