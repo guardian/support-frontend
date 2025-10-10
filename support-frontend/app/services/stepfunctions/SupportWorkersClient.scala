@@ -199,11 +199,7 @@ class SupportWorkersClient(
 
   }
 
-  def status(
-      request: Request[_],
-      jobId: String,
-      requestId: UUID,
-  ): EitherT[Future, SupportWorkersError, StatusResponse] = {
+  def status(jobId: String, requestId: UUID): EitherT[Future, SupportWorkersError, StatusResponse] = {
 
     def respondToClient(statusResponse: StatusResponse): StatusResponse = {
       logger.info(
