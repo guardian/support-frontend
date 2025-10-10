@@ -28,7 +28,7 @@ const isTransactionDeclinedError = (error: ZuoraError) =>
 
 export function mapZuoraError(error: ZuoraError) {
 	if (isTransactionDeclinedError(error)) {
-		return retryNone('Transaction declined');
+		return retryNone(error.message);
 	}
 	return retryLimited(`${error.message}`);
 }
