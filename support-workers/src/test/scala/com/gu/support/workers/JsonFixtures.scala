@@ -932,7 +932,7 @@ object JsonFixtures {
          |      "PaymentGateway": "Stripe PaymentIntents GNM Membership",
          |      "Type": "CreditCardReferenceTransaction",
          |      "StripePaymentType": "StripeCheckout"
-         |    },
+         |    }
          |  },
          |  "error": {
          |    "Error": "RetryLimited",

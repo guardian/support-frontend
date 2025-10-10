@@ -15,15 +15,13 @@ describe('errorHandler', () => {
 		expect(retryError.message).toEqual(errorMessage);
 	});
 	test('should throw a retry none error for transaction failed errors', () => {
-		const error = new ZuoraError(
-			'Transaction declined.402 - [card_error/card_declined/generic_decline] Your card was declined.',
-			58560099,
-			[],
-		);
+		const errorMessage =
+			'Transaction declined.402 - [card_error/card_declined/generic_decline] Your card was declined.';
+		const error = new ZuoraError(errorMessage, 58560099, []);
 
 		const retryError = asRetryError(error);
 		expect(retryError.name).toEqual('RetryNone');
-		expect(retryError.message).toEqual('Transaction declined');
+		expect(retryError.message).toEqual(errorMessage);
 	});
 	test('should throw a retry none error for generic errors', () => {
 		const errorMessage = 'Something went wrong';
