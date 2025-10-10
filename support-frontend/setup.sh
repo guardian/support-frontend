@@ -96,18 +96,21 @@ install_node() {
 
 setup_nginx() {
   DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  SITE_CONFIG=${DIR}/nginx/support.conf
 
   DOMAINS=(
     "support.thegulocal.com"
     "support-ui.thegulocal.com"
+    "observer.thegulocal.com"
+    "live.thegulocal.com"
   )
 
   for domain in ${DOMAINS[@]}; do
     sudo dev-nginx setup-cert $domain
   done
 
-  dev-nginx link-config ${SITE_CONFIG}
+  dev-nginx link-config ${DIR}/nginx/support.conf
+  dev-nginx link-config ${DIR}/nginx/observer.conf
+  dev-nginx link-config ${DIR}/nginx/live.conf
   dev-nginx restart-nginx
 }
 
