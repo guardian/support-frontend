@@ -38,7 +38,6 @@ trait Services {
       appConfig.stepFunctionArn,
       stateWrapper,
       appConfig.supportUrl,
-      appConfig.observerUrl,
       controllers.routes.SupportWorkersStatus.status,
     )
   }
