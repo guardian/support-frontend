@@ -8,6 +8,8 @@ import {
 	setupPayPalPayment,
 } from '../checkout/helpers/paypal';
 import type { PaymentMethod } from './paymentFields';
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
+import { createSetupToken } from '../checkout/helpers/paypalCompletePayments';
 
 type SubmitButtonProps = {
 	buttonText: string;
@@ -128,6 +130,25 @@ export function SubmitButton({
 					type="submit"
 				/>
 			);
+		case 'PayPalCompletePayments':
+			return (
+				<PayPalScriptProvider options={{ clientId: 'test', vault: true }}>
+					<PayPalButtons
+						style={{ layout: 'horizontal' }}
+						// createVaultSetupToken={() => {
+						// 	return Promise.resolve('TEST_VAULT_SETUP_TOKEN');
+						// }}
+						createBillingAgreement={() => {
+							return createSetupToken(csrf);
+						}}
+						onApprove={(data, actions) => {
+							// Set the state here to submit the form with the BAID/Vault token
+							return Promise.resolve();
+						}}
+					/>
+				</PayPalScriptProvider>
+			);
+
 		default:
 			return (
 				<DefaultPaymentButton
