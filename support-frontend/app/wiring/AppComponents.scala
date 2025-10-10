@@ -1,6 +1,5 @@
 package wiring
 
-import com.gu.monitoring.SafeLogger
 import controllers.AssetsComponents
 import filters.{CacheHeadersCheck, RelaxReferrerPolicyFromRedirectFilter, SetCookiesCheck}
 import lib.{CustomHttpErrorHandler, ErrorController}
@@ -11,7 +10,7 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.EssentialFilter
 import play.api.routing.Router
 import play.filters.HttpFiltersComponents
-import play.filters.cors.{CORSComponents, CORSConfig}
+import play.filters.cors.CORSComponents
 import play.filters.csp.CSPComponents
 import play.filters.gzip.GzipFilter
 
@@ -40,9 +39,6 @@ class AppComponents(context: Context)
   )
   override lazy val httpErrorHandler = customHandler
   override lazy val errorController = new ErrorController(actionBuilders, customHandler)
-
-  final override lazy val corsConfig: CORSConfig =
-    CORSConfig().withOriginsAllowed(Set(appConfig.supportUrl, appConfig.observerUrl).contains)
 
   override lazy val httpFilters: Seq[EssentialFilter] = Seq(
     // This filter needs to be before the `securityHeadersFilter` as it removes a header set by that filter
