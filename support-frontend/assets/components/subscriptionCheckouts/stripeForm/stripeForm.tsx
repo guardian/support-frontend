@@ -435,7 +435,7 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 								void fetchPaymentIntent(token);
 							}}
 							onRecaptchaExpired={() => dispatch(expireRecaptchaToken())}
-							label="Security check foo"
+							label="Security check"
 							// TODO: Remove type assertion when we can fix field error types
 							error={recaptchaError?.message as string}
 						/>
