@@ -205,10 +205,20 @@ export const validGuardianWeeklyGiftRecipientFields = (
 	return !!giftRecipient.firstName && !!giftRecipient.lastName;
 };
 
+//potentially we could use something here that is more tightly bound to the product types in productType.ts
+type ProductType =
+	| 'Paper'
+	| 'TierThree'
+	| 'GuardianWeekly'
+	| 'Contribution'
+	| 'SupporterPlus'
+	| 'DigitalPack'
+	| 'GuardianAdLite';
+
 export const createBuyerRecordRequest = (
 	user: User,
 	giftRecipient: GiftRecipient | null,
-	productType: string,
+	productType: ProductType,
 ): BuyerContactRecordRequest => {
 	switch (productType) {
 		case 'Paper':
@@ -224,7 +234,6 @@ export const createBuyerRecordRequest = (
 		case 'GuardianAdLite':
 			return createDigitalOnlyContactRecordRequest(user);
 	}
-	throw new Error('Could not determine buyer type');
 };
 
 export const validDigitalOnlyContactFields = (user: User): boolean => {
