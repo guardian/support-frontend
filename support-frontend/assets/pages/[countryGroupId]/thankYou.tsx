@@ -1,9 +1,11 @@
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import {
+	type ActiveProductKey,
 	type ActiveRatePlanKey,
 	isProductKey,
 	productCatalog,
@@ -19,6 +21,11 @@ import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landin
 import { setHideSupportMessaginCookie } from '../../helpers/storage/contributionsCookies';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
 import { ThankYouComponent } from './components/thankYouComponent';
+import ThankYouOnboardingComponent from './components/thankYouOnboardingComponent';
+
+const PRODUCTS_WITH_THANK_YOU_ONBOARDING: Array<ActiveProductKey | undefined> = [
+	'SupporterPlus',
+];
 
 type ThankYouProps = {
 	supportRegionId: SupportRegionId;
@@ -155,6 +162,24 @@ export function ThankYou({
 				};
 			}
 		}
+	}
+
+	if (
+		isSwitchOn('featureSwitches.enableThankYouOnboarding') &&
+		PRODUCTS_WITH_THANK_YOU_ONBOARDING.includes(productKey)
+	) {
+		return (
+			<ThankYouOnboardingComponent
+				supportRegionId={supportRegionId}
+				csrf={csrf}
+				payment={payment}
+				productKey={productKey}
+				ratePlanKey={ratePlanKey}
+				promotion={promotion}
+				identityUserType={userType}
+				landingPageSettings={landingPageSettings}
+			/>
+		);
 	}
 
 	return (

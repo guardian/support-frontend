@@ -80,6 +80,7 @@ class AppComponents(context: Context)
     directDebitController,
     promotionsController,
     pricesController,
+    analyticsController,
     newspaperArchiveController,
     assetController,
     faviconController,

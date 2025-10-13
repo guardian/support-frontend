@@ -24,6 +24,7 @@ case class FeatureSwitches(
     usStripeAccountForSingle: Option[SwitchState],
     authenticateWithOkta: Option[SwitchState],
     enableCampaignCountdown: Option[SwitchState],
+    enableThankYouOnboarding: Option[SwitchState],
 )
 
 object FeatureSwitches {
