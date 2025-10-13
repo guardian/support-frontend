@@ -200,20 +200,6 @@ export const validGiftRecipientFields = (
 	return !!giftRecipient.firstName && !!giftRecipient.lastName;
 };
 
-// export const createBuyerRecordRequest = (
-// 	user: User,
-// 	buyerType: BuyerType,
-// ): BuyerContactRecordRequest => {
-// 	switch (buyerType) {
-// 		case 'Print':
-// 			return createPrintContactRecordRequest(user);
-// 		case 'GuardianWeeklyGiftBuyer':
-// 			return createGuardianWeeklyGiftBuyerContactRecordRequest(user);
-// 		case 'DigitalOnly':
-// 			return createDigitalOnlyContactRecordRequest(user);
-// 	}
-// };
-
 export const createBuyerRecordRequest = (
 	user: User,
 	giftRecipient: GiftRecipient | null,
