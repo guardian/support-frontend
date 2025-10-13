@@ -65,10 +65,10 @@ class SubscriptionsController(
     )
   }
 
-  def getLandingPrices(countryGroup: CountryGroup, queryPromos: List[String]): Map[String, PriceCopy] = {
+  def getLandingPrices(countryGroup: CountryGroup): Map[String, PriceCopy] = {
     val service = priceSummaryServiceProvider.forUser(false)
     val paperMap = if (countryGroup == CountryGroup.UK) {
-      val paper = service.getPrices(Paper, queryPromos)(CountryGroup.UK)(Collection)(
+      val paper = service.getPrices(Paper, Nil)(CountryGroup.UK)(Collection)(
         SaturdayPlus,
       )(Monthly)(GBP)
       Map(Paper.toString -> pricingCopy(paper))
