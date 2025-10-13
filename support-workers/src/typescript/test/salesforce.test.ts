@@ -10,7 +10,7 @@ import {
 	SalesforceError,
 	salesforceErrorCodes,
 	SalesforceService,
-	validGiftRecipientFields,
+	validGuardianWeeklyGiftRecipientFields,
 } from '../services/salesforce';
 import {
 	buyerStreet,
@@ -173,7 +173,9 @@ describe('validGiftRecipientFields', () => {
 			email: 'john.doe@example.com',
 		};
 
-		expect(validGiftRecipientFields(validGiftRecipient)).toBe(true);
+		expect(validGuardianWeeklyGiftRecipientFields(validGiftRecipient)).toBe(
+			true,
+		);
 	});
 
 	test('should return false when firstName is empty string', () => {
@@ -184,7 +186,9 @@ describe('validGiftRecipientFields', () => {
 			email: 'johnson@example.com',
 		};
 
-		expect(validGiftRecipientFields(invalidGiftRecipient)).toBe(false);
+		expect(validGuardianWeeklyGiftRecipientFields(invalidGiftRecipient)).toBe(
+			false,
+		);
 	});
 
 	test('should return false when lastName is empty string', () => {
@@ -195,7 +199,9 @@ describe('validGiftRecipientFields', () => {
 			email: 'robert@example.com',
 		};
 
-		expect(validGiftRecipientFields(invalidGiftRecipient)).toBe(false);
+		expect(validGuardianWeeklyGiftRecipientFields(invalidGiftRecipient)).toBe(
+			false,
+		);
 	});
 
 	test('should return false when both firstName and lastName are empty strings', () => {
@@ -206,7 +212,9 @@ describe('validGiftRecipientFields', () => {
 			email: 'empty@example.com',
 		};
 
-		expect(validGiftRecipientFields(invalidGiftRecipient)).toBe(false);
+		expect(validGuardianWeeklyGiftRecipientFields(invalidGiftRecipient)).toBe(
+			false,
+		);
 	});
 });
 

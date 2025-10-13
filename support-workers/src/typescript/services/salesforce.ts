@@ -136,7 +136,10 @@ export class SalesforceService {
 		);
 		const buyerResponse = await this.upsert(buyerContact);
 
-		if (hasGiftRecipient && validGiftRecipientFields(giftRecipient)) {
+		if (
+			hasGiftRecipient &&
+			validGuardianWeeklyGiftRecipientFields(giftRecipient)
+		) {
 			const giftRecipientResponse =
 				await this.createGuardianWeeklyGiftRecipientContact(
 					buyerResponse.ContactRecord.AccountId,
@@ -196,7 +199,7 @@ export class SalesforceService {
 	}
 }
 
-export const validGiftRecipientFields = (
+export const validGuardianWeeklyGiftRecipientFields = (
 	giftRecipient: GiftRecipient,
 ): boolean => {
 	return !!giftRecipient.firstName && !!giftRecipient.lastName;
