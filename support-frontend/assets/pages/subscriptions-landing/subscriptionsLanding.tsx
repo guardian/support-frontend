@@ -16,12 +16,9 @@ import { subscriptionsLandingProps } from './subscriptionsLandingProps';
 function SubscriptionsLandingPage({
 	countryGroupId,
 	participations,
-	productPrices,
 	pricingCopy,
 	referrerAcquisitions,
 }: SubscriptionsLandingPropTypes) {
-	console.log('*** SubscriptionsLandingPage.pricingCopy', pricingCopy);
-	console.log('*** SubscriptionsLandingPage.productPrices', productPrices);
 	return (
 		<Page
 			header={<Header countryGroupId={countryGroupId} />}
@@ -30,7 +27,6 @@ function SubscriptionsLandingPage({
 			<SubscriptionLandingContent
 				countryGroupId={countryGroupId}
 				participations={participations}
-				productPrices={productPrices}
 				pricingCopy={pricingCopy}
 				referrerAcquisitions={referrerAcquisitions}
 			/>

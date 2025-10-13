@@ -30,8 +30,6 @@ function PaperLandingPage({
 		return null;
 	}
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
-	console.log('*** promotionCopy', promotionCopy);
-	console.log('*** productPrices', productPrices);
 	return (
 		<Page
 			id={pageQaId}

@@ -103,17 +103,10 @@ class SubscriptionsController(
     val title = "Support the Guardian | Get a Subscription"
     val mainElement = EmptyDiv("subscriptions-landing-page")
     val js = "subscriptionsLandingPage.js"
-    val queryPromos =
-      request.queryString
-        .getOrElse("promoCode", Nil)
-        .toList
-    val defaultPromos = priceSummaryServiceProvider.forUser(isTestUser = false).getDefaultPromoCodes(Paper)
     val countryGroup = CountryGroup.byId(countryCode).get
-    val pricingCopy = getLandingPrices(countryGroup, defaultPromos)
+    val pricingCopy = CountryGroup.byId(countryCode).map(getLandingPrices)
     // TestUser remains un-used, page caching preferred
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, false).get()
-    val productPrices =
-      priceSummaryServiceProvider.forUser(false).getPrices(Paper, queryPromos)
     Ok(
       views.html.main(
         title,
@@ -124,7 +117,6 @@ class SubscriptionsController(
         noindex = stage != PROD,
       ) {
         Html(s"""<script type="text/javascript">
-              window.guardian.productPrices = ${outputJson(productPrices)};
               window.guardian.pricingCopy = ${outputJson(pricingCopy)};
               window.guardian.productCatalog = ${outputJson(productCatalog)}
             </script>""")
