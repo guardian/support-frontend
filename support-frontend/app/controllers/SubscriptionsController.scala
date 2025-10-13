@@ -8,7 +8,6 @@ import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog._
 import com.gu.support.config.Stage
 import com.gu.support.config.Stages.PROD
-import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.workers.Monthly
 import config.StringsConfig
@@ -103,7 +102,6 @@ class SubscriptionsController(
     val title = "Support the Guardian | Get a Subscription"
     val mainElement = EmptyDiv("subscriptions-landing-page")
     val js = "subscriptionsLandingPage.js"
-    val countryGroup = CountryGroup.byId(countryCode).get
     val pricingCopy = CountryGroup.byId(countryCode).map(getLandingPrices)
     // TestUser remains un-used, page caching preferred
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, false).get()
