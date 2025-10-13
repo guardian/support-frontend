@@ -86,7 +86,7 @@ lazy val releaseSettings = Seq(
 lazy val commonDependencies = Seq(
   "com.typesafe" % "config" % "1.4.5",
   scalatest % "test",
-  "com.typesafe.scala-logging" % "scala-logging_2.13" % "3.9.5",
+  "com.typesafe.scala-logging" % "scala-logging_2.13" % "3.9.6",
   "ch.qos.logback" % "logback-classic" % "1.5.19",
 )
 
