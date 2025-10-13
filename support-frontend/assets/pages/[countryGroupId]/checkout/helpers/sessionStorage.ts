@@ -1,5 +1,6 @@
 import { storage } from '@guardian/libs';
 import { z } from 'zod';
+import { dateTimeSchema } from 'helpers/globalsAndSwitches/window';
 
 /**
  * The Guardian Ad-Lite Landing Page sets the returnLink in sessionStorage
@@ -40,6 +41,7 @@ const OrderSchema = z.object({
 		'None',
 	]),
 	status: z.enum(['success', 'pending']),
+	deliveryDate: dateTimeSchema.optional(),
 });
 type OrderSchemaType = z.infer<typeof OrderSchema>;
 export function setThankYouOrder(order: OrderSchemaType) {

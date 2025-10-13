@@ -3,7 +3,7 @@ import { withFocusStyleManager } from './decorators/withFocusStyleManager';
 import '../assets/stylesheets/skeleton/skeleton.scss';
 import MockDate from 'mockdate';
 
-export const parameters = {
+const parameters = {
 	actions: { argTypesRegex: '^on[A-Z].*' },
 	controls: {
 		matchers: {
@@ -12,14 +12,17 @@ export const parameters = {
 		},
 	},
 	viewport: {
-		viewports,
+		options: viewports,
 	},
 	layout: 'fullscreen',
+	docs: {
+		codePanel: true,
+	},
 };
 
-export const decorators = [withFocusStyleManager];
+const decorators = [withFocusStyleManager];
 
-export const argTypes = {
+const argTypes = {
 	cssOverrides: {
 		table: {
 			disable: true,
@@ -34,4 +37,8 @@ export const argTypes = {
 
 /** This avoids having false positives when the date changes */
 MockDate.set('Sat Jan 1 2024 12:00:00 GMT+0000 (Greenwich Mean Time)');
-export const tags = ['autodocs'];
+
+const tags = ['autodocs'];
+
+const preview = { parameters, decorators, argTypes, tags };
+export default preview;

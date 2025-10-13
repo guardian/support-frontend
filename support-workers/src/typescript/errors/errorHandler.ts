@@ -1,22 +1,31 @@
-import { ZuoraError } from '@modules/zuora/errors/zuoraError';
+import type { ZuoraError } from '@modules/zuora/errors/zuoraError';
 import Stripe from 'stripe';
 import { SalesforceError, salesforceErrorCodes } from '../services/salesforce';
 import { retryLimited, retryNone, retryUnlimited } from './retryError';
 import { mapZuoraError } from './zuoraErrors';
 
+function isZuoraError(error: unknown): error is ZuoraError {
+	return error instanceof Error && error.name === 'ZuoraError';
+}
+
 export const asRetryError = (error: unknown) => {
 	if (error instanceof Stripe.errors.StripeError) {
+		console.log('Mapping StripeError:', error);
 		return mapStripeError(error);
 	}
 	if (error instanceof SalesforceError) {
+		console.log('Mapping SalesforceError:', error);
 		return mapSalesforceError(error);
 	}
-	if (error instanceof ZuoraError) {
+	if (isZuoraError(error)) {
+		console.log('Mapping ZuoraError:', error);
 		return mapZuoraError(error);
 	}
 	if (error instanceof Error) {
+		console.log('Generic Error:', error);
 		return retryLimited(error.message);
 	}
+	console.log('Unknown error type:', error);
 	return retryLimited(`Unknown error type: ${JSON.stringify(error)}`);
 };
 

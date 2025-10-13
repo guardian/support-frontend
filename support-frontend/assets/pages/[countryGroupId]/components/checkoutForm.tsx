@@ -614,6 +614,9 @@ export default function CheckoutForm({
 				abParticipations,
 				promotion,
 				contributionAmount,
+				deliveryDate: isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+					? weeklyDeliveryDate
+					: undefined,
 			});
 			window.location.href = successUrl;
 		} catch (error) {

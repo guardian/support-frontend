@@ -50,7 +50,7 @@ import {
 	isGuardianWeeklyProduct,
 	isPrintProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
-import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import { getProductFirstDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import ThankYouModules from '../../../components/thankYou/thankyouModules';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -256,11 +256,13 @@ export function ThankYouComponent({
 	};
 	const benefitsChecklist = getBenefits();
 
-	const deliveryDate = productDeliveryOrStartDate(
-		productKey,
-		ratePlanKey as ActivePaperProductOptions,
-	);
-	const startDate = deliveryDate ? formatUserDate(deliveryDate) : undefined;
+	const deliveryStart =
+		order.deliveryDate ??
+		getProductFirstDeliveryOrStartDate(
+			productKey,
+			ratePlanKey as ActivePaperProductOptions,
+		);
+	const startDate = deliveryStart ? formatUserDate(deliveryStart) : undefined;
 	const thankYouModuleData = getThankYouModuleData(
 		productKey,
 		ratePlanKey,
@@ -336,7 +338,6 @@ export function ThankYouComponent({
 			'headlineReturn',
 		),
 	];
-
 	return (
 		<PageScaffold
 			header={<Header />}
