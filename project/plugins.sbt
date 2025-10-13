@@ -18,7 +18,7 @@ addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.1.5")
 
 libraryDependencies += "org.vafer" % "jdeb" % "1.10" artifacts (Artifact("jdeb", "jar", "jar"))
 
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.2")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.5")
 
 addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.14.4")
 
