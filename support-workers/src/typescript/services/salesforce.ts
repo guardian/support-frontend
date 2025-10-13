@@ -34,12 +34,12 @@ export type BillingAddress = BaseBillingAddress & {
 export type GiftOnlyProps = {
 	Salutation?: Title | null;
 };
-export type GiftRecipientOnlyProps = {
+export type GuardianWeeklyGiftRecipientOnlyProps = {
 	AccountId: string;
 	Email?: string;
 	RecordTypeId: typeof salesforceDeliveryOrRecipientRecordTypeId;
 };
-export type GiftBuyerOnlyProps = {
+export type GuardianWeeklyGiftBuyerOnlyProps = {
 	Phone?: string | null;
 };
 
@@ -54,16 +54,18 @@ export type PrintContactRecordRequest = BaseContactRecordRequest &
 	MailingAddress &
 	BuyerIdentifierProps;
 
-export type PrintGiftBuyerContactRecordRequest = BaseContactRecordRequest &
-	BillingAddress &
-	BuyerIdentifierProps &
-	GiftOnlyProps &
-	GiftBuyerOnlyProps;
+export type GuardianWeeklyGiftBuyerContactRecordRequest =
+	BaseContactRecordRequest &
+		BillingAddress &
+		BuyerIdentifierProps &
+		GiftOnlyProps &
+		GuardianWeeklyGiftBuyerOnlyProps;
 
-export type PrintGiftRecipientContactRecordRequest = BaseContactRecordRequest &
-	MailingAddress &
-	GiftOnlyProps &
-	GiftRecipientOnlyProps;
+export type GuardianWeeklyGiftRecipientContactRecordRequest =
+	BaseContactRecordRequest &
+		MailingAddress &
+		GiftOnlyProps &
+		GuardianWeeklyGiftRecipientOnlyProps;
 
 export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest &
 	BuyerIdentifierProps &
@@ -71,14 +73,14 @@ export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest &
 
 type BuyerContactRecordRequest =
 	| PrintContactRecordRequest
-	| PrintGiftBuyerContactRecordRequest
+	| GuardianWeeklyGiftBuyerContactRecordRequest
 	| DigitalOnlyContactRecordRequest;
 
 type ContactRecordRequest =
 	| BuyerContactRecordRequest
-	| PrintGiftRecipientContactRecordRequest;
+	| GuardianWeeklyGiftRecipientContactRecordRequest;
 
-type BuyerType = 'Print' | 'GiftBuyer' | 'DigitalOnly';
+type BuyerType = 'Print' | 'GuardianWeeklyGiftBuyer' | 'DigitalOnly';
 
 export const salesforceContactRecordSchema = z.object({
 	Id: z.string(),
@@ -207,8 +209,8 @@ export const createBuyerRecordRequest = (
 	switch (buyerType) {
 		case 'Print':
 			return createPrintContactRecordRequest(user);
-		case 'GiftBuyer':
-			return createGiftBuyerContactRecordRequest(user);
+		case 'GuardianWeeklyGiftBuyer':
+			return createGuardianWeeklyGiftBuyerContactRecordRequest(user);
 		case 'DigitalOnly':
 			return createDigitalOnlyContactRecordRequest(user);
 	}
@@ -216,7 +218,7 @@ export const createBuyerRecordRequest = (
 
 const getBuyerType = (user: User, hasGiftRecipient: boolean): BuyerType => {
 	if (buyerTypeIsGiftBuyer(user, hasGiftRecipient)) {
-		return 'GiftBuyer';
+		return 'GuardianWeeklyGiftBuyer';
 	}
 
 	if (buyerTypeIsPrint(user, hasGiftRecipient)) {
@@ -266,9 +268,9 @@ export const createDigitalOnlyContactRecordRequest = (
 	};
 };
 
-export const createGiftBuyerContactRecordRequest = (
+export const createGuardianWeeklyGiftBuyerContactRecordRequest = (
 	user: User,
-): PrintGiftBuyerContactRecordRequest => {
+): GuardianWeeklyGiftBuyerContactRecordRequest => {
 	return {
 		IdentityID__c: user.id,
 		Email: user.primaryEmailAddress,
@@ -284,7 +286,7 @@ export const createGiftRecipientContactRecordRequest = (
 	accountId: string,
 	giftRecipient: GiftRecipient,
 	user: User,
-): PrintGiftRecipientContactRecordRequest => {
+): GuardianWeeklyGiftRecipientContactRecordRequest => {
 	return {
 		AccountId: accountId,
 		Salutation: giftRecipient.title,

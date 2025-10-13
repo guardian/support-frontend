@@ -3,7 +3,7 @@ import {
 	buyerTypeIsPrint,
 	createBillingAddressFields,
 	createDigitalOnlyContactRecordRequest,
-	createGiftBuyerContactRecordRequest,
+	createGuardianWeeklyGiftBuyerContactRecordRequest,
 	createGiftRecipientContactRecordRequest,
 	createMailingAddressFields,
 	createPrintContactRecordRequest,
@@ -49,7 +49,8 @@ describe('SalesforceService', () => {
 	});
 
 	test('createGiftBuyerContactRecordRequest should have properties populated correctly', () => {
-		const newContact = createGiftBuyerContactRecordRequest(giftBuyer);
+		const newContact =
+			createGuardianWeeklyGiftBuyerContactRecordRequest(giftBuyer);
 
 		expect('MailingStreet' in newContact).toBe(false);
 		expect('MailingCity' in newContact).toBe(false);
