@@ -225,7 +225,7 @@ const getBuyerType = (user: User, hasGiftRecipient: boolean): BuyerType => {
 		return 'DigitalOnly';
 	}
 
-	return 'DigitalOnly';
+	throw new Error('Could not determine buyer type');
 };
 
 export const buyerTypeIsGiftBuyer = (
