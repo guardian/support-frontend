@@ -2,7 +2,7 @@ import type { Title } from '../model/stateSchemas';
 import {
 	createBillingAddressFields,
 	createDigitalOnlyContactRecordRequest,
-	createGiftRecipientContactRecordRequest,
+	createGuardianWeeklyGiftRecipientContactRecordRequest,
 	createGuardianWeeklyGiftBuyerContactRecordRequest,
 	createMailingAddressFields,
 	createPrintContactRecordRequest,
@@ -76,11 +76,12 @@ describe('SalesforceService', () => {
 			AccountId: '001UD00000NP6BTYA1',
 		};
 
-		const recipientContact = createGiftRecipientContactRecordRequest(
-			buyerContactRecord.AccountId,
-			giftRecipient,
-			giftBuyer,
-		);
+		const recipientContact =
+			createGuardianWeeklyGiftRecipientContactRecordRequest(
+				buyerContactRecord.AccountId,
+				giftRecipient,
+				giftBuyer,
+			);
 
 		expect('OtherStreet' in recipientContact).toBe(false);
 		expect('OtherCity' in recipientContact).toBe(false);

@@ -137,11 +137,12 @@ export class SalesforceService {
 		const buyerResponse = await this.upsert(buyerContact);
 
 		if (hasGiftRecipient && validGiftRecipientFields(giftRecipient)) {
-			const giftRecipientResponse = await this.addGiftRecipient(
-				buyerResponse.ContactRecord.AccountId,
-				giftRecipient,
-				user,
-			);
+			const giftRecipientResponse =
+				await this.createGuardianWeeklyGiftRecipientContact(
+					buyerResponse.ContactRecord.AccountId,
+					giftRecipient,
+					user,
+				);
 			return giftRecipientResponse.ContactRecord;
 		}
 
@@ -180,16 +181,17 @@ export class SalesforceService {
 		}
 	}
 
-	private addGiftRecipient(
+	private createGuardianWeeklyGiftRecipientContact(
 		accountId: string,
 		giftRecipient: GiftRecipient,
 		user: User,
 	): Promise<SuccessfulUpsertResponse> {
-		const giftRecipientContact = createGiftRecipientContactRecordRequest(
-			accountId,
-			giftRecipient,
-			user,
-		);
+		const giftRecipientContact =
+			createGuardianWeeklyGiftRecipientContactRecordRequest(
+				accountId,
+				giftRecipient,
+				user,
+			);
 		return this.upsert(giftRecipientContact);
 	}
 }
@@ -266,7 +268,7 @@ export const createGuardianWeeklyGiftBuyerContactRecordRequest = (
 	};
 };
 
-export const createGiftRecipientContactRecordRequest = (
+export const createGuardianWeeklyGiftRecipientContactRecordRequest = (
 	accountId: string,
 	giftRecipient: GiftRecipient,
 	user: User,
