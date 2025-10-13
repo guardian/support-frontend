@@ -61,7 +61,7 @@ libraryDependencies ++= Seq(
     */
   "com.sun.xml.bind" % "jaxb-core" % "4.0.6",
   "javax.xml.bind" % "jaxb-api" % "2.3.1",
-  "com.sun.xml.bind" % "jaxb-impl" % "2.3.1",
+  "com.sun.xml.bind" % "jaxb-impl" % "2.3.9",
 )
 
 excludeDependencies ++= Seq(
