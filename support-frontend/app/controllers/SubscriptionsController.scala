@@ -5,7 +5,6 @@ import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyn
 import assets.{AssetsResolver, RefPath}
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.Currency.GBP
-import com.gu.monitoring.SafeLogging
 import com.gu.support.catalog._
 import com.gu.support.config.Stage
 import com.gu.support.config.Stages.PROD
@@ -36,7 +35,6 @@ class SubscriptionsController(
     extends AbstractController(components)
     with GeoRedirect
     with RegionalisedLinks
-    with SafeLogging
     with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -69,7 +67,6 @@ class SubscriptionsController(
 
   def getLandingPrices(countryGroup: CountryGroup, queryPromos: List[String]): Map[String, PriceCopy] = {
     val service = priceSummaryServiceProvider.forUser(false)
-    logger.info("*** getLandingPrices.queryPromos ***" ++ queryPromos.toString())
     val paperMap = if (countryGroup == CountryGroup.UK) {
       val paper = service.getPrices(Paper, queryPromos)(CountryGroup.UK)(Collection)(
         SaturdayPlus,
