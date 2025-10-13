@@ -31,15 +31,14 @@ export type BillingAddress = BaseBillingAddress & {
 	OtherCity: string | null;
 };
 
-export type GiftOnlyProps = {
-	Salutation?: Title | null;
-};
 export type GuardianWeeklyGiftRecipientOnlyProps = {
+	Salutation?: Title | null;
 	AccountId: string;
 	Email?: string;
 	RecordTypeId: typeof salesforceDeliveryOrRecipientRecordTypeId;
 };
 export type GuardianWeeklyGiftBuyerOnlyProps = {
+	Salutation?: Title | null;
 	Phone?: string | null;
 };
 
@@ -58,13 +57,11 @@ export type GuardianWeeklyGiftBuyerContactRecordRequest =
 	BaseContactRecordRequest &
 		BillingAddress &
 		BuyerIdentifierProps &
-		GiftOnlyProps &
 		GuardianWeeklyGiftBuyerOnlyProps;
 
 export type GuardianWeeklyGiftRecipientContactRecordRequest =
 	BaseContactRecordRequest &
 		MailingAddress &
-		GiftOnlyProps &
 		GuardianWeeklyGiftRecipientOnlyProps;
 
 export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest &
