@@ -24,7 +24,7 @@ addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.14.4")
 
 addSbtPlugin("com.gu" % "sbt-riffraff-artifact" % "1.1.18")
 
-addSbtPlugin("com.github.sbt" % "sbt-native-packager" % "1.9.16")
+addSbtPlugin("com.github.sbt" % "sbt-native-packager" % "1.11.4")
 //Fix for sbt-native-packager 1.9.11 upgrade errors
 ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
 
