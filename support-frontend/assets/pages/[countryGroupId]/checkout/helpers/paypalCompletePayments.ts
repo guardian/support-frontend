@@ -1,7 +1,7 @@
 export const createSetupToken = async (csrfToken: string): Promise<string> => {
 	const body = JSON.stringify({});
 
-	const response = await fetch('/paypal-complete-payments/create-setup-token', {
+	const response = await fetch('/paypal-complete-payments/setup-token', {
 		credentials: 'include',
 		method: 'POST',
 		headers: {
