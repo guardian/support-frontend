@@ -10,40 +10,40 @@ import { SalesforceClient } from './salesforceClient';
 export const salesforceDeliveryOrRecipientRecordTypeId = '01220000000VB50AAG';
 
 //grouped properties for re-use in different contact record types
-export type BuyerIdentifierProps = {
+type BuyerIdentifierProps = {
 	IdentityID__c: string;
 	Email: string;
 };
-export type MailingAddress = {
+type MailingAddress = {
 	MailingStreet: string | null;
 	MailingCity: string | null;
 	MailingState?: string | null; // optional because mandatory for US/CAN/AUS but not collected for UK/NZ
 	MailingPostalCode?: string | null; // optional because mandatory for US/CAN/AUS/UK but optional for rest of world
 	MailingCountry: string | null;
 };
-export type BaseBillingAddress = {
+type BaseBillingAddress = {
 	OtherState?: string | null; // optional because mandatory for US/CAN/AUS but not collected for UK/NZ
 	OtherPostalCode?: string | null; //collected (optionally) for some countries, but not all
 	OtherCountry: string | null;
 };
-export type BillingAddress = BaseBillingAddress & {
+type BillingAddress = BaseBillingAddress & {
 	OtherStreet: string | null;
 	OtherCity: string | null;
 };
 
-export type GuardianWeeklyGiftRecipientOnlyProps = {
+type GuardianWeeklyGiftRecipientOnlyProps = {
 	Salutation?: Title | null;
 	AccountId: string;
 	Email?: string;
 	RecordTypeId: typeof salesforceDeliveryOrRecipientRecordTypeId;
 };
-export type GuardianWeeklyGiftBuyerOnlyProps = {
+type GuardianWeeklyGiftBuyerOnlyProps = {
 	Salutation?: Title | null;
 	Phone?: string | null;
 };
 
 //ContactRecordRequest types
-export type BaseContactRecordRequest = {
+type BaseContactRecordRequest = {
 	FirstName: string;
 	LastName: string;
 };
@@ -53,18 +53,17 @@ export type PrintContactRecordRequest = BaseContactRecordRequest &
 	MailingAddress &
 	BuyerIdentifierProps;
 
-export type GuardianWeeklyGiftBuyerContactRecordRequest =
-	BaseContactRecordRequest &
-		BillingAddress &
-		BuyerIdentifierProps &
-		GuardianWeeklyGiftBuyerOnlyProps;
+type GuardianWeeklyGiftBuyerContactRecordRequest = BaseContactRecordRequest &
+	BillingAddress &
+	BuyerIdentifierProps &
+	GuardianWeeklyGiftBuyerOnlyProps;
 
 export type GuardianWeeklyGiftRecipientContactRecordRequest =
 	BaseContactRecordRequest &
 		MailingAddress &
 		GuardianWeeklyGiftRecipientOnlyProps;
 
-export type DigitalOnlyContactRecordRequest = BaseContactRecordRequest &
+type DigitalOnlyContactRecordRequest = BaseContactRecordRequest &
 	BuyerIdentifierProps &
 	BaseBillingAddress;
 
