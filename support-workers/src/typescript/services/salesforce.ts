@@ -129,8 +129,6 @@ export class SalesforceService {
 		productType: string,
 	): Promise<SalesforceContactRecord> => {
 		const hasGiftRecipient = !!giftRecipient;
-		// const buyerType = getBuyerType(user, hasGiftRecipient);
-		// const buyerContact = createBuyerRecordRequest(user, buyerType);
 		const buyerContact = createBuyerRecordRequest(
 			user,
 			giftRecipient,
