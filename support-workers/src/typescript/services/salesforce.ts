@@ -76,8 +76,6 @@ type ContactRecordRequest =
 	| BuyerContactRecordRequest
 	| GuardianWeeklyGiftRecipientContactRecordRequest;
 
-type BuyerType = 'Print' | 'GuardianWeeklyGiftBuyer' | 'DigitalOnly';
-
 export const salesforceContactRecordSchema = z.object({
 	Id: z.string(),
 	AccountId: z.string(),
@@ -128,10 +126,16 @@ export class SalesforceService {
 	createContactRecords = async (
 		user: User,
 		giftRecipient: GiftRecipient | null,
+		productType: string,
 	): Promise<SalesforceContactRecord> => {
 		const hasGiftRecipient = !!giftRecipient;
-		const buyerType = getBuyerType(user, hasGiftRecipient);
-		const buyerContact = createBuyerRecordRequest(user, buyerType);
+		// const buyerType = getBuyerType(user, hasGiftRecipient);
+		// const buyerContact = createBuyerRecordRequest(user, buyerType);
+		const buyerContact = createBuyerRecordRequest(
+			user,
+			giftRecipient,
+			productType,
+		);
 		const buyerResponse = await this.upsert(buyerContact);
 
 		if (hasGiftRecipient && validGiftRecipientFields(giftRecipient)) {
@@ -198,57 +202,51 @@ export const validGiftRecipientFields = (
 	return !!giftRecipient.firstName && !!giftRecipient.lastName;
 };
 
+// export const createBuyerRecordRequest = (
+// 	user: User,
+// 	buyerType: BuyerType,
+// ): BuyerContactRecordRequest => {
+// 	switch (buyerType) {
+// 		case 'Print':
+// 			return createPrintContactRecordRequest(user);
+// 		case 'GuardianWeeklyGiftBuyer':
+// 			return createGuardianWeeklyGiftBuyerContactRecordRequest(user);
+// 		case 'DigitalOnly':
+// 			return createDigitalOnlyContactRecordRequest(user);
+// 	}
+// };
+
 export const createBuyerRecordRequest = (
 	user: User,
-	buyerType: BuyerType,
+	giftRecipient: GiftRecipient | null,
+	productType: string,
 ): BuyerContactRecordRequest => {
-	switch (buyerType) {
-		case 'Print':
+	switch (productType) {
+		case 'Paper':
+		case 'TierThree':
+		case 'GuardianWeekly':
+			if (giftRecipient) {
+				return createGuardianWeeklyGiftBuyerContactRecordRequest(user);
+			}
 			return createPrintContactRecordRequest(user);
-		case 'GuardianWeeklyGiftBuyer':
-			return createGuardianWeeklyGiftBuyerContactRecordRequest(user);
-		case 'DigitalOnly':
+		case 'Contribution':
+		case 'SupporterPlus':
+		case 'DigitalPack':
+		case 'GuardianAdLite':
 			return createDigitalOnlyContactRecordRequest(user);
 	}
-};
-
-const getBuyerType = (user: User, hasGiftRecipient: boolean): BuyerType => {
-	if (buyerTypeIsGuardianWeeklyGiftBuyer(user, hasGiftRecipient)) {
-		return 'GuardianWeeklyGiftBuyer';
-	}
-
-	if (buyerTypeIsPrint(user, hasGiftRecipient)) {
-		return 'Print';
-	}
-
-	if (buyerTypeIsDigitalOnly(user)) {
-		return 'DigitalOnly';
-	}
-
 	throw new Error('Could not determine buyer type');
 };
 
-export const buyerTypeIsGuardianWeeklyGiftBuyer = (
-	user: User,
-	hasGiftRecipient: boolean,
-): boolean => {
-	return hasGiftRecipient && !!user.deliveryAddress && !!user.billingAddress;
+export const validDigitalOnlyContactFields = (user: User): boolean => {
+	return !!user.billingAddress;
 };
-
-export const buyerTypeIsDigitalOnly = (user: User): boolean => {
-	return !user.deliveryAddress && !!user.billingAddress;
-};
-
-export const buyerTypeIsPrint = (
-	user: User,
-	hasGiftRecipient: boolean | null,
-): boolean => {
-	return !hasGiftRecipient && !!user.deliveryAddress && !!user.billingAddress;
-};
-
 export const createDigitalOnlyContactRecordRequest = (
 	user: User,
 ): DigitalOnlyContactRecordRequest => {
+	if (!validDigitalOnlyContactFields(user)) {
+		throw new Error('User must have a valid digital-only contact');
+	}
 	return {
 		IdentityID__c: user.id,
 		Email: user.primaryEmailAddress,
@@ -264,9 +262,15 @@ export const createDigitalOnlyContactRecordRequest = (
 	};
 };
 
+export const validGiftBuyerFields = (user: User): boolean => {
+	return !!user.deliveryAddress && !!user.billingAddress;
+};
 export const createGuardianWeeklyGiftBuyerContactRecordRequest = (
 	user: User,
 ): GuardianWeeklyGiftBuyerContactRecordRequest => {
+	if (!validGiftBuyerFields(user)) {
+		throw new Error('Gift buyer must have both billing and delivery addresses');
+	}
 	return {
 		IdentityID__c: user.id,
 		Email: user.primaryEmailAddress,
@@ -318,9 +322,17 @@ export const createBillingAddressFields = (user: User) => {
 	};
 };
 
+export const validPrintContactFields = (user: User): boolean => {
+	return !!user.deliveryAddress && !!user.billingAddress;
+};
 export const createPrintContactRecordRequest = (
 	user: User,
 ): PrintContactRecordRequest => {
+	if (!validPrintContactFields(user)) {
+		throw new Error(
+			'Print contact must have both billing and delivery addresses',
+		);
+	}
 	return {
 		FirstName: user.firstName,
 		LastName: user.lastName,
