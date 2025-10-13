@@ -8,5 +8,5 @@ object LibraryVersions {
   val scalaUriVersion = "4.0.3"
   val playCirceVersion = "3014.1"
   val stripeVersion = "21.15.0" // Supports API version 2019-05-16
-  val oktaJwtVerifierVersion = "0.5.7"
+  val oktaJwtVerifierVersion = "0.5.12"
 }
