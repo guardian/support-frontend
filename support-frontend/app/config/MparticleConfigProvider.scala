@@ -17,7 +17,6 @@ case class MparticleConfig(
 class MparticleConfigProvider(config: Config, stage: Stage)
     extends TouchpointConfigProvider[MparticleConfig](config, stage) {
 
-  // Override to get clientSecret from main config (includes private config)
   override def get(isTestUser: Boolean): MparticleConfig = {
     val touchpointConfig = super.get(isTestUser)
     touchpointConfig.copy(
