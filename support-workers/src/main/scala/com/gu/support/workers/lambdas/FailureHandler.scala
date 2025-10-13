@@ -8,8 +8,8 @@ import com.gu.stripe.StripeError
 import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.CheckoutFailureReasons._
 import com.gu.support.workers._
-import com.gu.support.workers.exceptions.CardDeclinedMessages.{errorMessages, alarmShouldBeSuppressedForErrorMessage}
-import com.gu.support.workers.lambdas.FailureHandler.{extractUnderlyingError, toCheckoutFailureReason}
+import com.gu.support.workers.exceptions.CardDeclinedMessages.{alarmShouldBeSuppressedForErrorMessage, errorMessages}
+import com.gu.support.workers.lambdas.FailureHandler.{ZuoraTSError, extractUnderlyingError, toCheckoutFailureReason}
 import com.gu.support.workers.states.{CheckoutFailureState, FailureHandlerState}
 import com.gu.support.zuora.api.response.{ZuoraError, ZuoraErrorResponse}
 import io.circe.Decoder
@@ -62,14 +62,27 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
     val pattern =
       "No such token: (.*); a similar object exists in test mode, but a live mode key was used to make this request.".r
 
-    error.flatMap(extractUnderlyingError) match {
+    val underlyingError = error.flatMap(extractUnderlyingError)
+    underlyingError match {
       case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", message)))) =>
-        val checkoutFailureReason = toCheckoutFailureReason(ze, state.analyticsInfo.paymentProvider)
+        val checkoutFailureReason = toCheckoutFailureReason(ze.Message, state.analyticsInfo.paymentProvider)
         val updatedRequestInfo = requestInfo.appendMessage(s"Zuora reported a payment failure: $ze")
         exitHandler(
           state,
           checkoutFailureReason,
           if (alarmShouldBeSuppressedForErrorMessage(message))
+            updatedRequestInfo
+          else
+            updatedRequestInfo.copy(failed = true),
+        )
+      case Some(ze @ ZuoraTSError(_)) =>
+        val checkoutFailureReason =
+          toCheckoutFailureReason(ze.errorJson.errorMessage, state.analyticsInfo.paymentProvider)
+        val updatedRequestInfo = requestInfo.appendMessage(s"Zuora reported a payment failure: $ze")
+        exitHandler(
+          state,
+          checkoutFailureReason,
+          if (alarmShouldBeSuppressedForErrorMessage(ze.errorJson.errorMessage))
             updatedRequestInfo
           else
             updatedRequestInfo.copy(failed = true),
@@ -109,17 +122,21 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
 
 object FailureHandler {
 
+  case class ZuoraTSError(errorJson: ErrorJson) extends Throwable(errorJson.errorMessage)
+
   private def extractUnderlyingError(executionError: ExecutionError): Option[Throwable] = for {
     errorJson <- decode[ErrorJson](executionError.Cause).toOption
-    result <- tryToDecode[ZuoraErrorResponse](errorJson) orElse tryToDecode[StripeError](errorJson)
+    result <- tryToDecode[ZuoraErrorResponse](errorJson) orElse
+      tryToDecode[StripeError](errorJson) orElse
+      Some(ZuoraTSError(errorJson))
   } yield result
 
   private def tryToDecode[T](errorJson: ErrorJson)(implicit decoder: Decoder[T]): Option[T] =
     decode[T](errorJson.errorMessage).toOption
 
-  def toCheckoutFailureReason(zuoraError: ZuoraError, paymentProvider: PaymentProvider): CheckoutFailureReason = {
+  def toCheckoutFailureReason(errorMessage: String, paymentProvider: PaymentProvider): CheckoutFailureReason = {
     // Just get the decline code (example message from Zuora: "Transaction declined.do_not_honor - Your card was declined.")
-    val trimmedError = zuoraError.Message.stripPrefix("Transaction declined.").split(" ")(0)
+    val trimmedError = errorMessage.stripPrefix("Transaction declined.").split(" ")(0)
     paymentProvider match {
       case _ => convertStripeDeclineCode(trimmedError).getOrElse(Unknown)
     }

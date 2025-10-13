@@ -11,6 +11,7 @@ export default {
 	component: StudentTsAndCs,
 	argTypes: {
 		countryGroupId: 'AUDCountries',
+		tsAndCsItem: { table: { disable: true } },
 	},
 };
 

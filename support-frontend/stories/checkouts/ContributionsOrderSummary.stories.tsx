@@ -57,7 +57,11 @@ const oneYearStudentDiscount = {
 export default {
 	title: 'Checkouts/Contributions Order Summary',
 	component: ContributionsOrderSummary,
-	argTypes: { onCheckListToggle: { action: 'accordion clicked' } },
+	argTypes: {
+		onCheckListToggle: { action: 'accordion clicked' },
+		tsAndCs: { table: { disable: true } },
+		headerButton: { table: { disable: true } },
+	},
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<Columns

@@ -1,3 +1,4 @@
+import { ZuoraError } from '@modules/zuora/errors/zuoraError';
 import { asRetryError } from '../errors/errorHandler';
 import { SalesforceError, salesforceErrorCodes } from '../services/salesforce';
 
@@ -11,6 +12,15 @@ describe('errorHandler', () => {
 		});
 		const retryError = asRetryError(salesforceError);
 		expect(retryError.name).toEqual('RetryUnlimited');
+		expect(retryError.message).toEqual(errorMessage);
+	});
+	test('should throw a retry none error for transaction failed errors', () => {
+		const errorMessage =
+			'Transaction declined.402 - [card_error/card_declined/generic_decline] Your card was declined.';
+		const error = new ZuoraError(errorMessage, 58560099, []);
+
+		const retryError = asRetryError(error);
+		expect(retryError.name).toEqual('RetryNone');
 		expect(retryError.message).toEqual(errorMessage);
 	});
 	test('should throw a retry none error for generic errors', () => {

@@ -1,7 +1,9 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import type {
-	ActiveProductKey,
-	ActiveRatePlanKey,
+import { getFeatureFlags } from 'helpers/featureFlags';
+import {
+	type ActiveProductKey,
+	type ActiveRatePlanKey,
+	getProductDescription,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import ContributionHeading from './ContributionHeading';
@@ -38,6 +40,8 @@ function Heading({
 	const isTier3 = productKey === 'TierThree';
 	const contributionProduct = isContributionProduct(productKey);
 	const isGuardianPrint = isPrintProduct(productKey) && !isObserverPrint;
+	const { enablePremiumDigital } = getFeatureFlags();
+	const isPremiumDigital = isDigitalEdition && enablePremiumDigital;
 
 	const contributorName = name && name.length < 10 ? name : '';
 
@@ -63,7 +67,7 @@ function Heading({
 		);
 	}
 
-	if (isDigitalEdition) {
+	if (isDigitalEdition && !isPremiumDigital) {
 		return (
 			<h1 css={headerTitleText}>
 				Thank you <span data-qm-masking="blocklist">{contributorName}</span> for
@@ -73,15 +77,18 @@ function Heading({
 		);
 	}
 
-	if (isTier3 || isGuardianAdLite) {
+	if (isTier3 || isGuardianAdLite || isPremiumDigital) {
+		const { label: productName } = getProductDescription(
+			productKey,
+			ratePlanKey,
+			isPremiumDigital,
+		);
+
 		return (
 			<h1 css={longHeaderTitleText}>
 				Thank you <span data-qm-masking="blocklist">{contributorName}</span> for
-				subscribing to{' '}
-				<YellowHighlightText>
-					{isTier3 ? 'Digital + print.' : 'Guardian Ad-Lite.'}
-				</YellowHighlightText>
-				{isTier3 && (
+				subscribing to <YellowHighlightText>{productName}</YellowHighlightText>
+				{(isTier3 || isPremiumDigital) && (
 					<>
 						<br css={tier3LineBreak} />
 						Your valued support powers our journalism.

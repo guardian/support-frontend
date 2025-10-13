@@ -14,7 +14,11 @@ import {
 } from '@guardian/source/react-components';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
+import { BenefitPill } from 'components/checkoutBenefits/benefitPill';
+import {
+	BenefitsCheckList,
+	checkListTextItemCss,
+} from 'components/checkoutBenefits/benefitsCheckList';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
@@ -200,6 +204,7 @@ export function ThreeTierCard({
 }: ThreeTierCardProps): JSX.Element {
 	const {
 		title,
+		titlePill,
 		benefits,
 		isUserSelected,
 		promotion,
@@ -214,9 +219,10 @@ export function ThreeTierCard({
 	const formattedPrice = simpleFormatAmount(currency, price);
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	const pillCopy = promotion?.landingPage?.roundel ?? cardContent.label?.copy;
+	const isPremiumDigitalProduct =
+		product === 'DigitalSubscription' && enablePremiumDigital;
 	const inAdditionToAllAccessDigital =
-		(enablePremiumDigital && product === 'DigitalSubscription') ??
-		product === 'TierThree';
+		product === 'TierThree' || isPremiumDigitalProduct;
 	return (
 		<section css={container(!!pillCopy, isUserSelected, isSubdued)}>
 			{isUserSelected && <ThreeTierCardPill title="Your selection" />}
@@ -226,7 +232,9 @@ export function ThreeTierCard({
 					title={promotion?.landingPage?.roundel ?? pillCopy}
 				/>
 			)}
-			<h2 css={titleCss}>{title}</h2>
+			<h2 css={[titleCss, checkListTextItemCss]}>
+				{titlePill && <BenefitPill copy={titlePill} />} <>{title}</>
+			</h2>
 			<p css={priceCss(!!promotion)}>
 				{promotion && (
 					<>

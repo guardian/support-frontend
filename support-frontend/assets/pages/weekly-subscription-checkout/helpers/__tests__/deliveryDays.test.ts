@@ -1,6 +1,9 @@
 // ----- Imports ----- //
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
-import { getWeeklyDays, productDeliveryOrStartDate } from '../deliveryDays';
+import {
+	getProductFirstDeliveryOrStartDate,
+	getWeeklyDays,
+} from '../deliveryDays';
 
 // 2019-02-26T10:09:12.198Z
 const tuesday = 1551175752198;
@@ -45,7 +48,7 @@ describe('productDeliveryOrStartDate', () => {
 		const orderDate = new Date('2025-08-19T15:55:00');
 		jest.useFakeTimers().setSystemTime(orderDate);
 
-		const firstDeliveryDate = productDeliveryOrStartDate(
+		const firstDeliveryDate = getProductFirstDeliveryOrStartDate(
 			'NationalDelivery',
 			'EverydayPlus',
 		);

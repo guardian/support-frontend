@@ -1,4 +1,4 @@
-import { expect } from '@storybook/test';
+import { expect } from 'storybook/test';
 import { ProductPricesSchema } from './window';
 
 test('ProductPricesSchema', () => {

@@ -614,6 +614,9 @@ export default function CheckoutForm({
 				abParticipations,
 				promotion,
 				contributionAmount,
+				deliveryDate: isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+					? weeklyDeliveryDate
+					: undefined,
 			});
 			window.location.href = successUrl;
 		} catch (error) {
@@ -861,6 +864,7 @@ export default function CheckoutForm({
 									setDeliveryAgentError={setDeliveryAgentError}
 									deliveryAddressErrors={deliveryAddressErrors}
 									setDeliveryAddressErrors={setDeliveryAddressErrors}
+									isWeeklyGift={isWeeklyGift}
 								/>
 							</>
 						)}

@@ -26,21 +26,21 @@ const studentTsAndCs: Partial<Record<CountryGroupId, JSX.Element>> = {
 	UnitedStates: (
 		<>
 			Access to this offer is strictly limited to verified full time students
-			16+ in the USA. You must have a Student Beans account to access this
+			18+ in the USA. You must have a Student Beans account to access this
 			offer. Subscription is for 1 year and does not auto renew.
 		</>
 	),
 	GBPCountries: (
 		<>
 			Access to this offer is strictly limited to verified full time students
-			16+ in the UK. You must have a Student Beans account to access this offer.
+			18+ in the UK. You must have a Student Beans account to access this offer.
 			Subscription is for 1 year and does not auto renew.
 		</>
 	),
 	Canada: (
 		<>
 			Access to this offer is strictly limited to verified full time students
-			16+ in Canada. You must have a Student Beans account to access this offer.
+			18+ in Canada. You must have a Student Beans account to access this offer.
 			Subscription is for 1 year and does not auto renew.
 		</>
 	),
