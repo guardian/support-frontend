@@ -55,17 +55,22 @@ class SubscriptionsController(
     implicit val codec: com.gu.support.encoding.Codec[PriceCopy] = deriveCodec
   }
 
-  def pricingCopy(priceSummary: PriceSummary): PriceCopy =
+  def pricingCopy(priceSummary: PriceSummary): PriceCopy = {
+    val price = for {
+      promo <- priceSummary.promotions.headOption
+      discountedPrice <- promo.discountedPrice
+    } yield discountedPrice
     PriceCopy(
-      priceSummary.price,
+      price.getOrElse(priceSummary.price),
       priceSummary.promotions.headOption.map(_.description).getOrElse(""),
     )
+  }
 
   def getLandingPrices(countryGroup: CountryGroup, queryPromos: List[String]): Map[String, PriceCopy] = {
     val service = priceSummaryServiceProvider.forUser(false)
     val paperMap = if (countryGroup == CountryGroup.UK) {
       val paper = service.getPrices(Paper, queryPromos)(CountryGroup.UK)(Collection)(
-        Saturday,
+        SaturdayPlus,
       )(Monthly)(GBP)
       Map(Paper.toString -> pricingCopy(paper))
     } else
