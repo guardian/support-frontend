@@ -229,7 +229,7 @@ export const createDigitalOnlyContactRecordRequest = (
 	user: User,
 ): DigitalOnlyContactRecordRequest => {
 	if (!validDigitalOnlyContactFields(user)) {
-		throw new Error('User must have a valid digital-only contact');
+		throw new Error('User must have a billing address');
 	}
 	return {
 		IdentityID__c: user.id,
