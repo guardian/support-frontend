@@ -33,7 +33,7 @@ import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
-import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import { getProductFirstDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { FinePrint } from './finePrint';
 import { ManageMyAccountLink } from './manageMyAccountLink';
 
@@ -57,6 +57,8 @@ const termsLink = (linkText: string, url: string) => (
 		{linkText}
 	</a>
 );
+const manageMyAccountLink = () =>
+	termsLink('Manage My Account', 'http://manage.theguardian.com/');
 
 export function FooterTsAndCs({
 	productKey,
@@ -103,14 +105,19 @@ export function FooterTsAndCs({
 		}
 	};
 
-	const weeklyGiftTerms =
-		ratePlanKey && isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
-			? ' To cancel, go to Manage My Account or see our Terms. This subscription does not auto-renew.'
-			: '';
+	const weeklyGiftTerms = (
+		<>
+			To cancel, go to {manageMyAccountLink()} or see our{' '}
+			{termsLink('Terms', guardianWeeklyTermsLink)}. This subscription does not
+			auto-renew.
+		</>
+	);
+	const isWeeklyGift =
+		ratePlanKey && isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 	return (
 		<div css={marginTop}>
 			By proceeding, you are agreeing to {getProductNameSummary()}{' '}
-			{getProductTerms()}. {weeklyGiftTerms}
+			{getProductTerms()}. {isWeeklyGift && weeklyGiftTerms}
 			<p css={marginTop}>
 				To find out what personal data we collect and how we use it, please
 				visit our {privacy}.
@@ -219,7 +226,7 @@ export function PaymentTsAndCs({
 		productKey,
 		ratePlanKey,
 	);
-	const deliveryDate = productDeliveryOrStartDate(
+	const deliveryDate = getProductFirstDeliveryOrStartDate(
 		productKey,
 		ratePlanKey as ActivePaperProductOptions,
 	);
@@ -297,9 +304,8 @@ export function PaymentTsAndCs({
 				each month at the full price of £14.99 per month or £149 per year unless
 				you cancel. You can cancel at any time before your next renewal date.
 				Cancellation will take effect at the end of your current subscription
-				month. To cancel, go to{' '}
-				<a href={'http://manage.theguardian.com/'}>Manage My Account</a> or see
-				our {termsLink('Terms', digitalSubscriptionTermsLink)}.
+				month. To cancel, go to {manageMyAccountLink()} or see our{' '}
+				{termsLink('Terms', digitalSubscriptionTermsLink)}.
 			</div>
 		),
 		GuardianAdLite: (

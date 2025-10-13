@@ -23,17 +23,6 @@ const cssLoaders = [
 	{
 		loader: 'fast-sass-loader',
 		options: {
-			transformers: [
-				{
-					extensions: ['.pasteupimport'],
-					transform: (rawFile) => {
-						if (rawFile.includes('use palette')) {
-							return paletteAsSass();
-						}
-						throw new Error(`Invalid .pasteupimport – ${rawFile}`);
-					},
-				},
-			],
 			includePaths: [
 				path.resolve(__dirname, 'assets'),
 				path.resolve(__dirname),

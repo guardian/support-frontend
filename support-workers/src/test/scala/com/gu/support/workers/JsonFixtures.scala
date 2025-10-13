@@ -822,6 +822,129 @@ object JsonFixtures {
         }
       }
      """
+  val cardDeclinedJsonTypescript =
+    """
+         |{
+         |  "state": {
+         |    "productSpecificState": {
+         |      "productType": "Contribution",
+         |      "product": {
+         |        "amount": 5,
+         |        "currency": "USD",
+         |        "billingPeriod": "Monthly",
+         |        "productType": "Contribution"
+         |      },
+         |      "productInformation": {
+         |        "product": "Contribution",
+         |        "ratePlan": "Monthly",
+         |        "amount": 5
+         |      },
+         |      "paymentMethod": {
+         |        "TokenId": "pm_xxxxxxxxxxxxxxxxx",
+         |        "SecondTokenId": "cus_xxxxxxxxxx",
+         |        "CreditCardNumber": "9999",
+         |        "CreditCardExpirationMonth": 9,
+         |        "CreditCardExpirationYear": 2026,
+         |        "CreditCardType": "MasterCard",
+         |        "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+         |        "Type": "CreditCardReferenceTransaction",
+         |        "StripePaymentType": "StripeCheckout"
+         |      },
+         |      "salesForceContact": {
+         |        "Id": "99999999999",
+         |        "AccountId": "99999999999"
+         |      },
+         |      "similarProductsConsent": false
+         |    },
+         |    "requestId": "87fa4486-4846-5f0f-0000-0000000810c7",
+         |    "user": {
+         |      "id": "99999999",
+         |      "primaryEmailAddress": "test@thegulocal.com",
+         |      "title": null,
+         |      "firstName": "test",
+         |      "lastName": "user",
+         |      "billingAddress": {
+         |        "lineOne": null,
+         |        "lineTwo": null,
+         |        "city": null,
+         |        "state": "TX",
+         |        "postCode": "99999",
+         |        "country": "US"
+         |      },
+         |      "deliveryAddress": null,
+         |      "telephoneNumber": null,
+         |      "isTestUser": false,
+         |      "deliveryInstructions": null
+         |    },
+         |    "giftRecipient": null,
+         |    "product": {
+         |      "amount": 5,
+         |      "currency": "USD",
+         |      "billingPeriod": "Monthly",
+         |      "productType": "Contribution"
+         |    },
+         |    "productInformation": {
+         |      "product": "Contribution",
+         |      "ratePlan": "Monthly",
+         |      "amount": 5
+         |    },
+         |    "analyticsInfo": {
+         |      "isGiftPurchase": false,
+         |      "paymentProvider": "Stripe"
+         |    },
+         |    "firstDeliveryDate": null,
+         |    "appliedPromotion": null,
+         |    "csrUsername": null,
+         |    "salesforceCaseId": null,
+         |    "acquisitionData": {
+         |      "ophanIds": {
+         |        "pageviewId": "xxxxxxxxxxxxxxxxxx",
+         |        "browserId": "xxxxxxxxxxxxxxxxxx"
+         |      },
+         |      "referrerAcquisitionData": {
+           |      "campaignCode": null,
+           |      "referrerPageviewId": null,
+           |      "referrerUrl": null,
+           |      "componentId": null,
+           |      "componentType": null,
+           |      "source": null,
+           |      "abTest": null
+           |    },
+         |      "supportAbTests": [
+         |        {
+         |          "name": "abandonedBasket",
+         |          "variant": "variant"
+         |        },
+         |        {
+         |          "name": "LP_DEFAULT_US",
+         |          "variant": "CONTROL"
+         |        }
+         |      ]
+         |    },
+         |    "similarProductsConsent": false,
+         |    "paymentMethod": {
+         |      "TokenId": "pm_xxxxxxxxxxxxxxxxx",
+         |      "SecondTokenId": "cus_xxxxxxxxxx",
+         |      "CreditCardNumber": "9999",
+         |      "CreditCardExpirationMonth": 9,
+         |      "CreditCardExpirationYear": 2026,
+         |      "CreditCardType": "MasterCard",
+         |      "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+         |      "Type": "CreditCardReferenceTransaction",
+         |      "StripePaymentType": "StripeCheckout"
+         |    },
+         |  },
+         |  "error": {
+         |    "Error": "RetryLimited",
+         |    "Cause": "{\"errorType\":\"RetryLimited\",\"errorMessage\":\"Transaction declined.402 - [card_error/card_declined/transaction_not_allowed] Your card does not support this type of purchase.\",\"trace\":[\"RetryLimited: OK: 58560099: Transaction declined.402 - [card_error/card_declined/transaction_not_allowed] Your card does not support this type of purchase.\",\"    at retryLimited (/var/task/createZuoraSubscriptionTSLambda.js:101886:33)\",\"    at asRetryError (/var/task/createZuoraSubscriptionTSLambda.js:101933:12)\",\"    at Runtime.handler (/var/task/createZuoraSubscriptionTSLambda.js:102730:11)\",\"    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\"]}"
+         |  },
+         |  "requestInfo": {
+         |    "testUser": false,
+         |    "failed": false,
+         |    "messages": []
+         |  }
+         |}
+         |""".stripMargin
   val cardDeclinedJsonStripe =
     """
       {

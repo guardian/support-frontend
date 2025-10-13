@@ -80,7 +80,6 @@ export default function CheckoutSummary({
 	const productDescription = getProductDescription(
 		productKey,
 		ratePlanKey,
-		countryGroupId,
 		enablePremiumDigital,
 	);
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
@@ -209,6 +208,11 @@ export default function CheckoutSummary({
 							countryGroupId={countryGroupId}
 							thresholdAmount={thresholdAmount}
 							promotion={promotion}
+							deliveryDate={
+								isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+									? weeklyDeliveryDate
+									: undefined
+							}
 						/>
 					}
 					headerButton={
@@ -218,6 +222,7 @@ export default function CheckoutSummary({
 					}
 					abParticipations={abParticipations}
 					studentDiscount={studentDiscount}
+					supportRegionId={supportRegionId}
 				/>
 			</BoxContents>
 		</Box>

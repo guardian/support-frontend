@@ -9,7 +9,7 @@ import { PaymentTsAndCs } from './paymentTsAndCs';
 
 // Mocking product deliveryDate
 jest.mock('pages/weekly-subscription-checkout/helpers/deliveryDays', () => ({
-	productDeliveryOrStartDate: () => 'Sunday, September 21, 2025',
+	getProductFirstDeliveryOrStartDate: () => 'Sunday, September 21, 2025',
 }));
 
 const oneYearStudentDiscount = {

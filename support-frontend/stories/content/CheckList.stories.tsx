@@ -63,6 +63,9 @@ export default {
 		withCenterAlignment,
 		withSourceReset,
 	],
+	argTypes: {
+		benefitsCheckListData: { table: { disable: true } },
+	},
 };
 
 function Template(args: BenefitsCheckListProps) {

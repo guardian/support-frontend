@@ -44,6 +44,7 @@ export default {
 	component: CheckoutBenefitsList,
 	argTypes: {
 		handleButtonClick: { action: 'button clicked' },
+		checkListData: { table: { disable: true } },
 	},
 	decorators: [
 		(Story: React.FC): JSX.Element => (

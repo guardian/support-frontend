@@ -11,6 +11,7 @@ import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { productCatalogDescription } from 'helpers/productCatalog';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
+import { SupportRegionId } from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
 
 const boldText = css`
 	font-weight: bold;
@@ -56,7 +57,11 @@ const oneYearStudentDiscount = {
 export default {
 	title: 'Checkouts/Contributions Order Summary',
 	component: ContributionsOrderSummary,
-	argTypes: { onCheckListToggle: { action: 'accordion clicked' } },
+	argTypes: {
+		onCheckListToggle: { action: 'accordion clicked' },
+		tsAndCs: { table: { disable: true } },
+		headerButton: { table: { disable: true } },
+	},
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<Columns
@@ -115,6 +120,7 @@ Default.args = {
 			Change
 		</Button>
 	),
+	supportRegionId: SupportRegionId.UK,
 };
 
 export const SingleContribution = Template.bind({});
@@ -138,6 +144,7 @@ SingleContribution.args = {
 			Change
 		</Button>
 	),
+	supportRegionId: SupportRegionId.US,
 };
 
 export const RecurringContribution = Template.bind({});
@@ -172,6 +179,7 @@ RecurringContribution.args = {
 			Change
 		</Button>
 	),
+	supportRegionId: SupportRegionId.UK,
 };
 
 export const SupporterPlus = Template.bind({});
@@ -207,6 +215,7 @@ SupporterPlus.args = {
 			Change
 		</Button>
 	),
+	supportRegionId: SupportRegionId.UK,
 };
 
 export const TierThree = Template.bind({});
@@ -252,6 +261,7 @@ TierThree.args = {
 			Change
 		</Button>
 	),
+	supportRegionId: SupportRegionId.UK,
 };
 
 export const StudentOneYear = Template.bind({});
@@ -289,4 +299,5 @@ StudentOneYear.args = {
 		</Button>
 	),
 	studentDiscount: oneYearStudentDiscount,
+	supportRegionId: SupportRegionId.UK,
 };

@@ -50,12 +50,13 @@ import {
 	isGuardianWeeklyProduct,
 	isPrintProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
-import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import { getProductFirstDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import ThankYouModules from '../../../components/thankYou/thankyouModules';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
+import { getPremiumDigitalAllBenefits } from '../checkout/helpers/benefitsChecklist';
 import {
 	getReturnAddress,
 	getThankYouOrder,
@@ -210,6 +211,7 @@ export function ThankYouComponent({
 		return undefined;
 	};
 	const observerPrint = getObserver();
+	const { enablePremiumDigital } = getFeatureFlags();
 
 	const isGuardianPrint = isPrint && !observerPrint;
 	const isDigitalEdition = productKey === 'DigitalSubscription';
@@ -217,9 +219,9 @@ export function ThankYouComponent({
 	const isSupporterPlus = productKey === 'SupporterPlus';
 	const isTierThree = productKey === 'TierThree';
 	const isNationalDelivery = productKey === 'NationalDelivery';
+	const isPremiumDigital = isDigitalEdition && enablePremiumDigital;
 	const { email } = order;
 	const validEmail = email !== '';
-	const { enablePremiumDigital } = getFeatureFlags();
 
 	// Clarify Guardian Ad-lite thankyou page states
 	const signedInUser = isSignedIn;
@@ -247,15 +249,20 @@ export function ThankYouComponent({
 				...tierThreeAdditionalBenefits,
 			];
 		}
+		if (isPremiumDigital) {
+			return getPremiumDigitalAllBenefits(countryGroupId);
+		}
 		return [];
 	};
 	const benefitsChecklist = getBenefits();
 
-	const deliveryDate = productDeliveryOrStartDate(
-		productKey,
-		ratePlanKey as ActivePaperProductOptions,
-	);
-	const startDate = deliveryDate ? formatUserDate(deliveryDate) : undefined;
+	const deliveryStart =
+		order.deliveryDate ??
+		getProductFirstDeliveryOrStartDate(
+			productKey,
+			ratePlanKey as ActivePaperProductOptions,
+		);
+	const startDate = deliveryStart ? formatUserDate(deliveryStart) : undefined;
 	const thankYouModuleData = getThankYouModuleData(
 		productKey,
 		ratePlanKey,
@@ -287,7 +294,7 @@ export function ThankYouComponent({
 			'signUp',
 		), // Complete your Guardian account
 		...maybeThankYouModule(userNotSignedIn && !isGuardianAdLite, 'signIn'), // Sign in to access your benefits
-		...maybeThankYouModule(isTierThree, 'benefits'),
+		...maybeThankYouModule(isTierThree || isPremiumDigital, 'benefits'),
 		...maybeThankYouModule(
 			isTierThree || isNationalDelivery,
 			'subscriptionStart',
@@ -308,10 +315,7 @@ export function ThankYouComponent({
 			'feedback',
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
-		...maybeThankYouModule(
-			isDigitalEdition && enablePremiumDigital,
-			'newspaperArchiveBenefit',
-		),
+		...maybeThankYouModule(isPremiumDigital, 'newspaperArchiveBenefit'),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(
 			!isTierThree && !isGuardianAdLite && !isPrint,
@@ -334,7 +338,6 @@ export function ThankYouComponent({
 			'headlineReturn',
 		),
 	];
-
 	return (
 		<PageScaffold
 			header={<Header />}

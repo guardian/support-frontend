@@ -62,6 +62,7 @@ export interface ProductBenefit {
 // Pricing comes from the product catalog - not configurable here
 export interface LandingPageProductDescription {
 	title: string;
+	titlePill?: string;
 	label?: {
 		copy: string;
 	};

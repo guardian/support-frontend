@@ -22,7 +22,10 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type {
+	CountryGroupId,
+	SupportRegionId,
+} from '@modules/internationalisation/countryGroup';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
@@ -41,11 +44,16 @@ import type { ContributionType } from 'helpers/contributions';
 import { getFeatureFlags } from 'helpers/featureFlags';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { currencies } from 'helpers/internationalisation/currency';
-import { productCatalog } from 'helpers/productCatalog';
+import {
+	getProductDescription,
+	productCatalog,
+	productCatalogDescriptionPremiumDigital,
+} from 'helpers/productCatalog';
 import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { allProductPrices } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
+import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { getSanitisedHtml } from '../../../helpers/utilities/utilities';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
@@ -249,6 +257,29 @@ function getPlanCost(
 	};
 }
 
+function getRatePlanKey(contributionType: ContributionType) {
+	switch (contributionType) {
+		case 'ANNUAL':
+			return 'Annual';
+		default:
+			return 'Monthly';
+	}
+}
+const getTierThreeRatePlanKey = (
+	contributionType: ContributionType,
+	countryGroupId: CountryGroupId,
+) => {
+	const ratePlanKey =
+		countryGroupId === 'International'
+			? contributionType === 'ANNUAL'
+				? 'RestOfWorldAnnual'
+				: 'RestOfWorldMonthly'
+			: contributionType === 'ANNUAL'
+			? 'DomesticAnnual'
+			: 'DomesticMonthly';
+	return ratePlanKey;
+};
+
 type ThreeTierLandingProps = {
 	supportRegionId: SupportRegionId;
 	settings: LandingPageVariant;
@@ -323,9 +354,6 @@ export function ThreeTierLanding({
 		setContributionType(paymentFrequencies[buttonIndex] as ContributionType);
 	};
 
-	const selectedContributionRatePlan =
-		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
-
 	// We use the RRCP amounts tool for the one-off amounts only
 	const { selectedAmountsVariant: amounts } = getAmountsTestVariant(
 		countryId,
@@ -333,49 +361,37 @@ export function ThreeTierLanding({
 		window.guardian.settings,
 	);
 
+	const ratePlanKey = getRatePlanKey(contributionType);
+
 	/**
 	 * Tier 1: Contributions
 	 * We use the product catalog for the recurring Contribution tier amount
 	 */
-	const monthlyRecurringAmount = productCatalog.Contribution?.ratePlans.Monthly
+	const tier1Pricing = productCatalog.Contribution?.ratePlans[ratePlanKey]
 		?.pricing[currencyId] as number;
-	const annualRecurringAmount = productCatalog.Contribution?.ratePlans.Annual
-		?.pricing[currencyId] as number;
-
-	const recurringAmount =
-		contributionType === 'MONTHLY'
-			? monthlyRecurringAmount
-			: annualRecurringAmount;
-
 	const tier1UrlParams = new URLSearchParams({
 		product: 'Contribution',
-		ratePlan: selectedContributionRatePlan,
-		contribution: recurringAmount.toString(),
+		ratePlan: getRatePlanKey(contributionType),
+		contribution: tier1Pricing.toString(),
 	});
-	const tier1Link = `checkout?${tier1UrlParams.toString()}`;
-
+	const tier1Url = `checkout?${tier1UrlParams.toString()}`;
 	const tier1Card: CardContent = {
 		product: 'Contribution',
-		price: recurringAmount,
-		link: tier1Link,
+		price: tier1Pricing,
+		link: tier1Url,
 		isUserSelected:
 			urlSearchParamsProduct === 'Contribution' ||
-			isCardUserSelected(recurringAmount),
+			isCardUserSelected(tier1Pricing),
 		...settings.products.Contribution,
 	};
 
 	/** Tier 2: SupporterPlus */
-	const supporterPlusRatePlan =
-		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
-	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[
-		supporterPlusRatePlan
-	]?.pricing[currencyId] as number;
-
+	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[ratePlanKey]
+		?.pricing[currencyId] as number;
 	const tier2UrlParams = new URLSearchParams({
 		product: 'SupporterPlus',
-		ratePlan: supporterPlusRatePlan,
+		ratePlan: ratePlanKey,
 	});
-
 	const tier2Promotion = getPromotion(
 		allProductPrices.SupporterPlus,
 		countryId,
@@ -413,46 +429,65 @@ export function ThreeTierLanding({
 	 *
 	 * This should only exist as long as the Tier three hack is in place.
 	 */
-	const getTier3RatePlan = () => {
-		const ratePlanKey =
-			countryGroupId === 'International'
-				? contributionType === 'ANNUAL'
-					? 'RestOfWorldAnnual'
-					: 'RestOfWorldMonthly'
-				: contributionType === 'ANNUAL'
-				? 'DomesticAnnual'
-				: 'DomesticMonthly';
-
-		return ratePlanKey;
-	};
-
-	const tier3RatePlan = getTier3RatePlan();
-	const tier3Pricing = productCatalog.TierThree?.ratePlans[tier3RatePlan]
+	const tier3Product = enablePremiumDigital
+		? 'DigitalSubscription'
+		: 'TierThree';
+	const tier3RatePlanKey = enablePremiumDigital
+		? ratePlanKey
+		: getTierThreeRatePlanKey(contributionType, countryGroupId);
+	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[tier3RatePlanKey]
 		?.pricing[currencyId] as number;
-
 	const tier3UrlParams = new URLSearchParams({
-		product: 'TierThree',
-		ratePlan: tier3RatePlan,
+		product: tier3Product,
+		ratePlan: tier3RatePlanKey,
 	});
-	const tier3Promotion = getPromotion(
-		allProductPrices.TierThree,
-		countryId,
-		billingPeriod,
-		countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
-		enablePremiumDigital ? 'NewspaperArchive' : 'NoProductOptions',
+	const { label: title, labelPill: titlePill } = getProductDescription(
+		'DigitalSubscription',
+		ratePlanKey,
+		enablePremiumDigital,
 	);
+	const premiumDigitalProductDescription = {
+		title,
+		titlePill,
+		benefits: filterProductDescriptionBenefits(
+			productCatalogDescriptionPremiumDigital,
+			countryGroupId,
+		),
+		cta: {
+			copy: 'Subscribe',
+		},
+	};
+	const tier3ProductDescription = enablePremiumDigital
+		? premiumDigitalProductDescription
+		: settings.products.TierThree;
+	const tier3ProductPrice = enablePremiumDigital
+		? allProductPrices.DigitalPack
+		: allProductPrices.TierThree;
+	const tier3Promotion = tier3ProductPrice
+		? getPromotion(
+				tier3ProductPrice,
+				countryId,
+				billingPeriod,
+				countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
+				enablePremiumDigital ? 'NewspaperArchive' : 'NoProductOptions',
+		  )
+		: undefined;
 	if (tier3Promotion) {
 		tier3UrlParams.set('promoCode', tier3Promotion.promoCode);
 	}
+	if (enablePremiumDigital) {
+		tier3UrlParams.set('enablePremiumDigital', 'true');
+	}
 	const tier3Card: CardContent = {
-		product: 'TierThree',
+		product: tier3Product,
 		price: tier3Pricing,
 		link: `checkout?${tier3UrlParams.toString()}`,
 		promotion: tier3Promotion,
 		isUserSelected:
-			urlSearchParamsProduct === 'TierThree' ||
+			urlSearchParamsProduct === tier3Product ||
 			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount),
-		...settings.products.TierThree,
+		enablePremiumDigital,
+		...tier3ProductDescription,
 	};
 
 	const sanitisedHeading = getSanitisedHtml(settings.copy.heading);

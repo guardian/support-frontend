@@ -36,7 +36,7 @@ const otherSupporterPlusFAQ: (regionName: string) => FAQItem[] = (
 		title: 'Who is eligible for this discount?',
 		body: (
 			<p>
-				You must be 16+ and a verified fulltime student in {regionName}. You
+				You must be 18+ and a verified fulltime student in {regionName}. You
 				will need a valid Student Beans account to complete the verification and
 				access this offer.
 			</p>

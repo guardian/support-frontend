@@ -51,6 +51,7 @@ export const submitForm = async ({
 	abParticipations,
 	promotion,
 	contributionAmount,
+	deliveryDate,
 }: {
 	supportRegionId: SupportRegionId;
 	productKey: ActiveProductKey;
@@ -63,6 +64,7 @@ export const submitForm = async ({
 	abParticipations: Participations;
 	promotion: Promotion | undefined;
 	contributionAmount: number | undefined;
+	deliveryDate?: Date;
 }): Promise<string> => {
 	const personalData = extractPersonalDataFromForm(formData);
 	const giftRecipient = extractGiftRecipientDataFromForm(formData);
@@ -157,6 +159,7 @@ export const submitForm = async ({
 			paymentMethod,
 			supportRegionId,
 			paymentRequest,
+			deliveryDate,
 		});
 
 		// If Stripe hosted checkout, delete previously persisted form details
@@ -195,6 +198,7 @@ const processSubscription = async ({
 	paymentMethod,
 	supportRegionId,
 	paymentRequest,
+	deliveryDate,
 }: {
 	personalData: FormPersonalFields;
 	appliedPromotion?: AppliedPromotion;
@@ -204,6 +208,7 @@ const processSubscription = async ({
 	paymentMethod: PaymentMethod;
 	supportRegionId: SupportRegionId;
 	paymentRequest: RegularPaymentRequest;
+	deliveryDate?: Date;
 }) => {
 	const createSubscriptionResult = await createSubscription(paymentRequest);
 
@@ -221,6 +226,7 @@ const processSubscription = async ({
 			paymentMethod,
 			createSubscriptionResult.status,
 			supportRegionId,
+			deliveryDate,
 		);
 	} else {
 		console.error(
@@ -246,12 +252,14 @@ const buildThankYouPageUrl = (
 	paymentMethod: PaymentMethod,
 	status: 'success' | 'pending',
 	supportRegionId: SupportRegionId,
+	deliveryDate?: Date,
 ) => {
 	const order = {
 		firstName: personalData.firstName,
 		email: personalData.email,
 		paymentMethod: paymentMethod,
 		status: status,
+		deliveryDate: deliveryDate,
 	};
 	setThankYouOrder(order);
 	const thankYouUrlSearchParams = new URLSearchParams();

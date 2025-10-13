@@ -146,19 +146,14 @@ export function Checkout({
 
 	let promotion;
 	if (productKey === 'Contribution') {
-		/**
-		 * Contributions are dynamic amounts, often selected from the `amounts` from RRCP
-		 * @see https://support.gutools.co.uk/amounts
-		 */
-		if (!contributionAmount) {
-			logException('Contribution not specified');
-			return <div>Contribution not specified</div>;
-		}
+		// Use the amount from the url if provided, otherwise use the product catalog amount
+		const amount =
+			contributionAmount ?? (ratePlan.pricing[currencyKey] as number);
 
 		payment = {
-			contributionAmount,
-			originalAmount: contributionAmount,
-			finalAmount: contributionAmount,
+			contributionAmount: amount,
+			originalAmount: amount,
+			finalAmount: amount,
 		};
 	} else {
 		const productPrice =

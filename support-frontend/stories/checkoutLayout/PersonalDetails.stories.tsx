@@ -12,6 +12,11 @@ export default {
 	component: PersonalDetails,
 	argTypes: {
 		handleButtonClick: { action: 'button clicked' },
+		signOutLink: {
+			table: {
+				disable: true,
+			},
+		},
 	},
 	decorators: [
 		(Story: React.FC): JSX.Element => (
