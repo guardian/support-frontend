@@ -213,7 +213,7 @@ export const createBuyerRecordRequest = (
 };
 
 const getBuyerType = (user: User, hasGiftRecipient: boolean): BuyerType => {
-	if (buyerTypeIsGiftBuyer(user, hasGiftRecipient)) {
+	if (buyerTypeIsGuardianWeeklyGiftBuyer(user, hasGiftRecipient)) {
 		return 'GuardianWeeklyGiftBuyer';
 	}
 
@@ -228,7 +228,7 @@ const getBuyerType = (user: User, hasGiftRecipient: boolean): BuyerType => {
 	throw new Error('Could not determine buyer type');
 };
 
-export const buyerTypeIsGiftBuyer = (
+export const buyerTypeIsGuardianWeeklyGiftBuyer = (
 	user: User,
 	hasGiftRecipient: boolean,
 ): boolean => {
