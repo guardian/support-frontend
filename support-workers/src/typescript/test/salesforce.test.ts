@@ -2,8 +2,8 @@ import type { Title } from '../model/stateSchemas';
 import {
 	createBillingAddressFields,
 	createDigitalOnlyContactRecordRequest,
-	createGuardianWeeklyGiftRecipientContactRecordRequest,
 	createGuardianWeeklyGiftBuyerContactRecordRequest,
+	createGuardianWeeklyGiftRecipientContactRecordRequest,
 	createMailingAddressFields,
 	createPrintContactRecordRequest,
 	salesforceDeliveryOrRecipientRecordTypeId,
