@@ -127,7 +127,7 @@ export class SalesforceService {
 	createContactRecords = async (
 		user: User,
 		giftRecipient: GiftRecipient | null,
-		productType: string,
+		productType: ProductTypeName,
 	): Promise<SalesforceContactRecord> => {
 		const hasGiftRecipient = !!giftRecipient;
 		const buyerContact = createBuyerRecordRequest(
@@ -205,16 +205,6 @@ export const validGuardianWeeklyGiftRecipientFields = (
 ): boolean => {
 	return !!giftRecipient.firstName && !!giftRecipient.lastName;
 };
-
-//potentially we could use something here that is more tightly bound to the product types in productType.ts
-type ProductType =
-	| 'Paper'
-	| 'TierThree'
-	| 'GuardianWeekly'
-	| 'Contribution'
-	| 'SupporterPlus'
-	| 'DigitalPack'
-	| 'GuardianAdLite';
 
 export const createBuyerRecordRequest = (
 	user: User,
