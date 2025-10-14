@@ -17,7 +17,7 @@ import {
 	setSessionParticipations,
 } from './sessionStorage';
 
-export const checkoutNudgeAbTests: CheckoutNudgeTest[] = [
+const checkoutNudgeAbTests: CheckoutNudgeTest[] = [
 	{
 		name: 'nudgeToLowRegularRollout__US',
 		status: 'Live',
@@ -191,7 +191,7 @@ export function getCheckoutNudgeParticipations(
 }
 
 // Use the AB test participations to find the specific variant configuration for this page
-export function getCheckoutTestVariant(
+function getCheckoutTestVariant(
 	participations: Participations,
 	checkoutNudgeTests: CheckoutNudgeTest[] = [],
 ): CheckoutNudgeVariant | undefined {
