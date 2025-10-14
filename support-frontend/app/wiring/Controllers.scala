@@ -236,8 +236,7 @@ trait Controllers {
   lazy val analyticsController = new AnalyticsController(
     controllerComponents,
     actionBuilders,
-    implicitWs,
-    appConfig.mparticleConfigProvider,
+    mparticleClient,
   )
 
 }
