@@ -47,7 +47,7 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 		({ productKey, activeRatePlanKey }) => {
 			// Arrange
 			(getFeatureFlags as jest.Mock).mockReturnValue({
-				enablePriumDigital: false,
+				enablePremiumDigital: false,
 			});
 
 			// Act
