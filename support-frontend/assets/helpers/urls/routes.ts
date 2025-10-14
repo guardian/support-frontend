@@ -42,7 +42,7 @@ const routes = {
 	guardianWeeklyStudentAU:
 		'https://connect.studentbeans.com/v4/hosted/the-guardian-weekly/au',
 	supporterPlusStudentBeansUk:
-		'https://www.studentbeans.com/en-gb/uk/beansid-connect/hosted/the-guardian-digital/student/0be53297-b848-4729-9a08-4133f85b3404',
+		'https://www.studentbeans.com/en-gb/uk/beansid-connect/hosted/the-guardiandigital',
 	supporterPlusStudentBeansUs:
 		'https://www.studentbeans.com/en-us/us/beansid-connect/hosted/the-guardian-digital/student/e15f676f-99cb-492d-9d95-ff17af36f274',
 	supporterPlusStudentBeansCa:
