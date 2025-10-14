@@ -4,6 +4,7 @@ import type {
 	AmountsVariant,
 	SelectedAmountsVariant,
 } from 'helpers/contributions';
+import type { Participations } from './models';
 
 type AmountsTestWithVariants = AmountsTest & {
 	variants: [AmountsVariant, ...AmountsVariant[]];
@@ -283,3 +284,30 @@ export function getFallbackAmounts(
 		};
 	}
 }
+
+export function getParticipationFromQueryString(
+	queryString: string,
+	param: string,
+): Participations | undefined {
+	const params = new URLSearchParams(queryString);
+	const value = params.get(param);
+	if (value) {
+		const [testName, variantName] = value.split(':');
+		if (testName && variantName) {
+			return { [testName]: variantName };
+		}
+	}
+	return;
+}
+
+export const countryGroupMatches = (
+	targetedCountryGroups: CountryGroupId[] = [],
+	countryGroupId: CountryGroupId,
+): boolean => {
+	if (targetedCountryGroups.length === 0) {
+		return true;
+	} // no targeting
+	else {
+		return targetedCountryGroups.includes(countryGroupId);
+	}
+};

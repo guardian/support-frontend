@@ -6,6 +6,10 @@ import type {
 	LandingPageVariant,
 } from '../globalsAndSwitches/landingPageSettings';
 import { CountryGroup } from '../internationalisation/classes/countryGroup';
+import {
+	countryGroupMatches,
+	getParticipationFromQueryString,
+} from './helpers';
 import type { Participations } from './models';
 import { getMvtId } from './mvt';
 import {
@@ -87,20 +91,6 @@ function isLandingPage(path: string) {
 	return !!path && !!path.match(landingPageRegex);
 }
 
-function getParticipationFromQueryString(
-	queryString: string,
-): Participations | undefined {
-	const params = new URLSearchParams(queryString);
-	const value = params.get(`force-landing-page`);
-	if (value) {
-		const [testName, variantName] = value.split(':');
-		if (testName && variantName) {
-			return { [testName]: variantName };
-		}
-	}
-	return;
-}
-
 /**
  * getLandingPageParticipations will always return a landing page variant, regardless of which
  * page the user is on. We sometimes need these settings on other pages as well.
@@ -122,7 +112,10 @@ export function getLandingPageParticipations(
 	queryString: string = window.location.search,
 ): LandingPageParticipationsResult {
 	// Is the participation forced in the url querystring?
-	const urlParticipations = getParticipationFromQueryString(queryString);
+	const urlParticipations = getParticipationFromQueryString(
+		queryString,
+		'force-landing-page',
+	);
 	if (urlParticipations) {
 		const variant = getLandingPageVariant(urlParticipations, tests);
 		return {
@@ -149,14 +142,10 @@ export function getLandingPageParticipations(
 		const test = tests
 			.filter((test) => test.status == 'Live')
 			.find((test) => {
-				const targetedCountryGroups =
-					test.regionTargeting?.targetedCountryGroups ?? [];
-				if (targetedCountryGroups.length === 0) {
-					return true;
-				} // no targeting
-				else {
-					return targetedCountryGroups.includes(countryGroupId);
-				}
+				return countryGroupMatches(
+					test.regionTargeting?.targetedCountryGroups,
+					countryGroupId,
+				);
 			});
 
 		// Only track participation if user is on the landing page
