@@ -23,9 +23,8 @@ import { getSupportRegionIdConfig } from '../supportRegionConfig';
 import { ThankYouComponent } from './components/thankYouComponent';
 import ThankYouOnboardingComponent from './components/thankYouOnboardingComponent';
 
-const PRODUCTS_WITH_THANK_YOU_ONBOARDING: Array<ActiveProductKey | undefined> = [
-	'SupporterPlus',
-];
+const PRODUCTS_WITH_THANK_YOU_ONBOARDING: Array<ActiveProductKey | undefined> =
+	['SupporterPlus'];
 
 type ThankYouProps = {
 	supportRegionId: SupportRegionId;

@@ -8,13 +8,15 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { fetchJson } from 'helpers/async/fetch';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
-import type { ActiveProductKey, ActiveRatePlanKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import * as cookie from 'helpers/storage/cookie';
 import { getUser } from 'helpers/user/user';
-
 
 const onboardingContainer = css`
 	background-color: ${neutral[97]};
@@ -72,7 +74,7 @@ function ThankYouOnboardingComponent({
 }: ThankYouOnboardingProps) {
 	const user = getUser();
 
-    // TODO: Dynamically generated based on Products and User profile
+	// TODO: Dynamically generated based on Products and User profile
 	const onboardingSteps = useMemo(() => {
 		return [
 			{
@@ -96,9 +98,10 @@ function ThankYouOnboardingComponent({
 
 	const [currentStep, setCurrentStep] = useState<OnboardingSteps>();
 	const [hasMobileAppDownloaded, setHasMobileAppDownloaded] = useState(false);
-	const [hasFeastMobileAppDownloaded, setHasFeastMobileAppDownloaded] = useState(false);
+	const [hasFeastMobileAppDownloaded, setHasFeastMobileAppDownloaded] =
+		useState(false);
 
-    // User: New or Current? Signed In or not?
+	// User: New or Current? Signed In or not?
 	console.debug('identityUserType', identityUserType);
 	console.debug('user', user, user.isSignedIn);
 
@@ -109,8 +112,8 @@ function ThankYouOnboardingComponent({
 	console.debug('promotion', promotion);
 	console.debug('landingPageSettings', landingPageSettings);
 
-    // Analytics data
-    console.debug('hasMobileAppDownloaded', hasMobileAppDownloaded);
+	// Analytics data
+	console.debug('hasMobileAppDownloaded', hasMobileAppDownloaded);
 	console.debug('hasFeastMobileAppDownloaded', hasFeastMobileAppDownloaded);
 
 	const handleStepNavigation = (currentStep: OnboardingSteps) => {
@@ -125,7 +128,7 @@ function ThankYouOnboardingComponent({
 			window.history.pushState({}, '', `?${newParams.toString()}`);
 			setCurrentStep(nextStep.step);
 		} else {
-            window.history.pushState({}, '', 'https://www.theguardian.com');
+			window.history.pushState({}, '', 'https://www.theguardian.com');
 		}
 	};
 
@@ -152,21 +155,23 @@ function ThankYouOnboardingComponent({
 				return;
 			}
 
-            const cachedData = cookie.get(COOKIE_NAME);
-			
+			const cachedData = cookie.get(COOKIE_NAME);
+
 			if (cachedData) {
 				try {
 					const parsedData = JSON.parse(cachedData) as {
 						hasMobileAppDownloaded?: boolean;
 						hasFeastMobileAppDownloaded?: boolean;
 					};
-					
+
 					setHasMobileAppDownloaded(parsedData.hasMobileAppDownloaded ?? false);
-					setHasFeastMobileAppDownloaded(parsedData.hasFeastMobileAppDownloaded ?? false);
+					setHasFeastMobileAppDownloaded(
+						parsedData.hasFeastMobileAppDownloaded ?? false,
+					);
 					return;
 				} catch (error) {
 					console.error('Error parsing cached analytics data:', error);
-				    cookie.set(COOKIE_NAME, '', -1);
+					cookie.set(COOKIE_NAME, '', -1);
 				}
 			}
 
@@ -181,19 +186,19 @@ function ThankYouOnboardingComponent({
 					mode: 'cors',
 					credentials: 'include',
 				});
-				
+
 				setHasMobileAppDownloaded(response.hasMobileAppDownloaded);
 				setHasFeastMobileAppDownloaded(response.hasFeastMobileAppDownloaded);
-				
+
 				const dataToCache = {
 					hasMobileAppDownloaded: response.hasMobileAppDownloaded,
 					hasFeastMobileAppDownloaded: response.hasFeastMobileAppDownloaded,
-					timestamp: Date.now()
+					timestamp: Date.now(),
 				};
-				
+
 				try {
-                    const cookieValue = JSON.stringify(dataToCache);
-                    cookie.set(COOKIE_NAME, cookieValue, COOKIE_TTL_DAYS);
+					const cookieValue = JSON.stringify(dataToCache);
+					cookie.set(COOKIE_NAME, cookieValue, COOKIE_TTL_DAYS);
 				} catch (cookieError) {
 					console.error('Error setting cookie:', cookieError);
 				}
@@ -225,7 +230,7 @@ function ThankYouOnboardingComponent({
 							flow for region: <strong>{supportRegionId}</strong>
 						</p>
 
-                        {/* TODO: Improve on this placeholder navigation */}
+						{/* TODO: Improve on this placeholder navigation */}
 						{currentStep === OnboardingSteps.Summary && (
 							<>
 								<p>Summary</p>
@@ -260,6 +265,6 @@ function ThankYouOnboardingComponent({
 			</div>
 		</PageScaffold>
 	);
-};
+}
 
 export default ThankYouOnboardingComponent;
