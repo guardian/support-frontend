@@ -1,6 +1,7 @@
 import { getCountryNameByIsoCode } from '@modules/internationalisation/country';
 import { z } from 'zod';
 import { getAddressLine } from '../model/address';
+import type { ProductTypeName } from '../model/productType';
 import type { GiftRecipient, Title, User } from '../model/stateSchemas';
 import type { SalesforceConfig } from './salesforceClient';
 import { SalesforceClient } from './salesforceClient';
@@ -218,7 +219,7 @@ type ProductType =
 export const createBuyerRecordRequest = (
 	user: User,
 	giftRecipient: GiftRecipient | null,
-	productType: ProductType,
+	productType: ProductTypeName,
 ): BuyerContactRecordRequest => {
 	switch (productType) {
 		case 'Paper':
