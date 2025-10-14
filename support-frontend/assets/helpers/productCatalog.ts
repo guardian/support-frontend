@@ -481,7 +481,26 @@ export const productCatalogDescription: Record<
 const paperArchiveDigitalBenefit = {
 	copy: `Access the Guardian's 200-year print archive`,
 	isNew: true,
+	tooltip:
+		'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was, since 1821.',
+	specificToRegions: [
+		'UnitedStates',
+		'EURCountries',
+		'AUDCountries',
+		'NZDCountries',
+		'Canada',
+		'International',
+	] as CountryGroupId[],
 };
+
+const paperArchiveDigitalBenefitUK = {
+	copy: `Access the Guardian's 200-year print archive`,
+	isNew: true,
+	tooltip:
+		'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was in the UK, since 1821.',
+	specificToRegions: ['GBPCountries'] as CountryGroupId[],
+};
+
 const weeklyDigitalBenefit = {
 	copy: `Guardian Weekly e-magazine`,
 	isNew: true,
@@ -504,6 +523,7 @@ export const productCatalogDescriptionPremiumDigital = {
 		weeklyDigitalBenefit,
 		editionsDigitalBenefit,
 		paperArchiveDigitalBenefit,
+		paperArchiveDigitalBenefitUK,
 	],
 };
 
