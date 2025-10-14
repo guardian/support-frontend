@@ -1,5 +1,4 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import seedrandom from 'seedrandom';
 import { getSettings } from '../globalsAndSwitches/globals';
 import type {
 	LandingPageTest,
@@ -9,6 +8,7 @@ import { CountryGroup } from '../internationalisation/classes/countryGroup';
 import {
 	countryGroupMatches,
 	getParticipationFromQueryString,
+	randomNumber,
 } from './helpers';
 import type { Participations } from './models';
 import { getMvtId } from './mvt';
@@ -80,11 +80,6 @@ export const fallBackLandingPageSelection: LandingPageVariant = {
 		},
 	},
 };
-
-function randomNumber(mvtId: number, seed: string): number {
-	const rng = seedrandom(mvtId + seed);
-	return Math.abs(rng.int32());
-}
 
 const landingPageRegex = '^/.*/contribute(/.*)?$';
 function isLandingPage(path: string) {

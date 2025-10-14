@@ -1,4 +1,5 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import seedrandom from 'seedrandom';
 import type {
 	AmountsTest,
 	AmountsVariant,
@@ -311,3 +312,8 @@ export const countryGroupMatches = (
 		return targetedCountryGroups.includes(countryGroupId);
 	}
 };
+
+export function randomNumber(mvtId: number, seed: string): number {
+	const rng = seedrandom(mvtId + seed);
+	return Math.abs(rng.int32());
+}
