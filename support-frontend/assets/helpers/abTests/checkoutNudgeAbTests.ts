@@ -90,9 +90,7 @@ const productMatches = (
 	path: string,
 	queryString: string,
 ): boolean => {
-	console.log('checking productMatches');
 	if (test.nudgeFromProduct.product === 'OneTimeContribution') {
-		console.log('endsWith', path.endsWith('/one-time-checkout'));
 		return path.endsWith('/one-time-checkout');
 	} else {
 		const params = new URLSearchParams(queryString);
