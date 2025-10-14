@@ -385,7 +385,7 @@ class CreateSubscriptionController(
         request.body.deliveryAddress match {
           case Some(Address(_, _, _, _, Some(postcode), _)) =>
             PaperValidation.deliveryAgentChosenWhichCoversPostcode(
-              paperRoundServiceProvider.forUser(testUsers.isTestUser(request)),
+              paperRoundServiceProvider.forUser(false),
               deliveryAgent,
               postcode,
             )
