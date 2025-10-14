@@ -18,13 +18,13 @@ type BuyerIdentifierProps = {
 type MailingAddress = {
 	MailingStreet: string | null;
 	MailingCity: string | null;
-	MailingState?: string | null; // optional because mandatory for US/CAN/AUS but not collected for UK/NZ
-	MailingPostalCode?: string | null; // optional because mandatory for US/CAN/AUS/UK but optional for rest of world
+	MailingState?: string; // optional because mandatory for US/CAN/AUS but not collected for UK/NZ
+	MailingPostalCode?: string; // optional because mandatory for US/CAN/AUS/UK but optional for rest of world
 	MailingCountry: string | null;
 };
 type BaseBillingAddress = {
-	OtherState?: string | null; // optional because mandatory for US/CAN/AUS but not collected for UK/NZ
-	OtherPostalCode?: string | null; //collected (optionally) for some countries, but not all
+	OtherState?: string; // optional because mandatory for US/CAN/AUS but not collected for UK/NZ
+	OtherPostalCode?: string; //collected (optionally) for some countries, but not all
 	OtherCountry: string | null;
 };
 type BillingAddress = BaseBillingAddress & {
@@ -33,13 +33,13 @@ type BillingAddress = BaseBillingAddress & {
 };
 
 type GuardianWeeklyGiftRecipientOnlyProps = {
-	Salutation?: Title | null;
+	Salutation?: Title;
 	AccountId: string;
 	Email?: string;
 	RecordTypeId: typeof salesforceDeliveryOrRecipientRecordTypeId;
 };
 type GuardianWeeklyGiftBuyerOnlyProps = {
-	Salutation?: Title | null;
+	Salutation?: Title;
 	Phone?: string | null;
 };
 
@@ -273,10 +273,10 @@ export const createGuardianWeeklyGiftBuyerContactRecordRequest = (
 	return {
 		IdentityID__c: user.id,
 		Email: user.primaryEmailAddress,
-		Salutation: user.title,
+		Salutation: user.title ?? undefined,
 		FirstName: user.firstName,
 		LastName: user.lastName,
-		Phone: user.telephoneNumber,
+		Phone: user.telephoneNumber ?? undefined,
 		...createBillingAddressFields(user),
 	};
 };
@@ -288,7 +288,7 @@ export const createGuardianWeeklyGiftRecipientContactRecordRequest = (
 ): GuardianWeeklyGiftRecipientContactRecordRequest => {
 	return {
 		AccountId: accountId,
-		Salutation: giftRecipient.title,
+		Salutation: giftRecipient.title ?? undefined,
 		FirstName: giftRecipient.firstName,
 		LastName: giftRecipient.lastName,
 		...(giftRecipient.email ? { Email: giftRecipient.email } : {}),
@@ -303,8 +303,8 @@ export const createMailingAddressFields = (user: User) => {
 			? getAddressLine(user.deliveryAddress)
 			: null,
 		MailingCity: user.deliveryAddress?.city ?? null,
-		MailingState: user.deliveryAddress?.state ?? null,
-		MailingPostalCode: user.deliveryAddress?.postCode ?? null,
+		MailingState: user.deliveryAddress?.state ?? undefined,
+		MailingPostalCode: user.deliveryAddress?.postCode ?? undefined,
 		MailingCountry: user.deliveryAddress?.country
 			? getCountryNameByIsoCode(user.deliveryAddress.country)
 			: null,
@@ -315,8 +315,8 @@ export const createBillingAddressFields = (user: User) => {
 	return {
 		OtherStreet: getAddressLine(user.billingAddress),
 		OtherCity: user.billingAddress.city,
-		OtherState: user.billingAddress.state ?? null,
-		OtherPostalCode: user.billingAddress.postCode ?? null,
+		OtherState: user.billingAddress.state ?? undefined,
+		OtherPostalCode: user.billingAddress.postCode ?? undefined,
 		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
 	};
 };
