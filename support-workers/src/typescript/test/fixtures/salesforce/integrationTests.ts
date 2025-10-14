@@ -22,13 +22,13 @@ export const customer: PrintContactRecordRequest = {
 	LastName: name,
 	OtherStreet: null,
 	OtherCity: null,
-	OtherState: null,
-	OtherPostalCode: null,
+	OtherState: undefined,
+	OtherPostalCode: undefined,
 	OtherCountry: uk,
 	MailingStreet: null,
 	MailingCity: null,
-	MailingState: null,
-	MailingPostalCode: null,
+	MailingState: undefined,
+	MailingPostalCode: undefined,
 	MailingCountry: null,
 };
 
