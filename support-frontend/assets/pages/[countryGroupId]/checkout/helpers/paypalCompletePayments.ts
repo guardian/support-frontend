@@ -11,7 +11,7 @@ export const createSetupToken = async (csrfToken: string): Promise<string> => {
 		body,
 	});
 
-	const json = (await response.json()) as { id: string };
+	const json = (await response.json()) as { token: string };
 
-	return json.id;
+	return json.token;
 };
