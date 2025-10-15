@@ -148,7 +148,7 @@ export function getCheckoutNudgeParticipations(
 	} else {
 		// No participation in session storage, assign user to a test + variant
 		const test = tests
-			.filter((test) => test.status == 'Live')
+			.filter((test) => test.status === 'Live')
 			.find((test) => {
 				return (
 					countryGroupMatches(
