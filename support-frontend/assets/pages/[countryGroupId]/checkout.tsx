@@ -34,8 +34,9 @@ import { getProductOptionFromProductAndRatePlan } from '../../helpers/productCat
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
 import { useStripeHostedCheckoutSession } from './checkout/hooks/useStripeHostedCheckoutSession';
 import CheckoutForm from './components/checkoutForm';
-import { CheckoutLayout } from './components/checkoutLayout';
+import GuardianLayout from './components/checkoutLayout';
 import CheckoutSummary from './components/checkoutSummary';
+import { ObserverLayout } from './components/observer-layout/ObserverLayout';
 import { getStudentDiscount } from './student/helpers/discountDetails';
 
 type Props = {
@@ -288,6 +289,11 @@ export function Checkout({
 		promotion,
 		true,
 	);
+
+	// this will be done in the server using the request object and passed to the frontend
+	const [subdomain] = window.location.host.split('.');
+	const isObserver = subdomain === 'observer';
+	const CheckoutLayout = isObserver ? ObserverLayout : GuardianLayout;
 
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
