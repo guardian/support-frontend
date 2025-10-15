@@ -5,5 +5,8 @@ mappings:
     prefix: support
     websocket: /ws
   - port: 9211
+    prefix: observer
+    websocket: /ws
+  - port: 9211
     prefix: live
     websocket: /ws
