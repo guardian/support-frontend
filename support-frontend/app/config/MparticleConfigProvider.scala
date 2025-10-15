@@ -18,8 +18,7 @@ class MparticleConfigProvider(config: Config, stage: Stage)
     extends TouchpointConfigProvider[MparticleConfig](config, stage) {
 
   override def get(isTestUser: Boolean): MparticleConfig = {
-    // Change to !=
-    if (isTestUser || stage == Stages.PROD) {
+    if (isTestUser || stage != Stages.PROD) {
       MparticleConfig(
         apiUrl = "https://api.mparticle.com",
         tokenUrl = "https://sso.auth.mparticle.com/oauth/token",
