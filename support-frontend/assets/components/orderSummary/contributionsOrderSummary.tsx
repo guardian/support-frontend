@@ -1,4 +1,5 @@
-import { css } from '@emotion/react';
+import type { Theme } from '@emotion/react';
+import { css, useTheme } from '@emotion/react';
 import {
 	from,
 	headlineBold24,
@@ -32,7 +33,10 @@ import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/dis
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { PriceSummary } from './priceSummary';
 
-const componentStyles = css`
+const componentStyles = (theme: Theme) => css`
+	background-color: ${theme.organisation === 'guardian'
+		? palette.brand[400]
+		: palette.error[400]};
 	${textSans17}
 `;
 
@@ -228,8 +232,9 @@ export function ContributionsOrderSummary({
 	);
 	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 
+	const theme = useTheme();
 	return (
-		<div css={componentStyles}>
+		<div css={componentStyles(theme)}>
 			<div css={[summaryRow, rowSpacing, headingRow]}>
 				<h2 css={headingCss}>Your subscription</h2>
 				{headerButton}

@@ -1,3 +1,5 @@
+import type { Theme } from '@emotion/react';
+import { ThemeProvider } from '@emotion/react';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
@@ -44,6 +46,13 @@ type Props = {
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 };
+
+type Organisation = 'guardian' | 'observer';
+type OrganisationTheme = {
+	organisation: Organisation;
+};
+const org: OrganisationTheme = { organisation: 'observer' };
+const theme: Theme = org;
 
 const countryId: IsoCountry = Country.detect();
 
@@ -290,49 +299,51 @@ export function Checkout({
 	);
 
 	return (
-		<Elements stripe={stripePromise} options={elementsOptions}>
-			<CheckoutLayout>
-				<CheckoutSummary
-					supportRegionId={supportRegionId}
-					appConfig={appConfig}
-					productKey={productKey}
-					ratePlanKey={ratePlanKey}
-					promotion={promotion}
-					originalAmount={payment.originalAmount}
-					countryId={countryId}
-					forcedCountry={forcedCountry}
-					abParticipations={abParticipations}
-					landingPageSettings={landingPageSettings}
-					weeklyDeliveryDate={weeklyDeliveryDate}
-					thresholdAmount={thresholdAmount}
-					studentDiscount={studentDiscount}
-				/>
+		<ThemeProvider theme={theme}>
+			<Elements stripe={stripePromise} options={elementsOptions}>
+				<CheckoutLayout>
+					<CheckoutSummary
+						supportRegionId={supportRegionId}
+						appConfig={appConfig}
+						productKey={productKey}
+						ratePlanKey={ratePlanKey}
+						promotion={promotion}
+						originalAmount={payment.originalAmount}
+						countryId={countryId}
+						forcedCountry={forcedCountry}
+						abParticipations={abParticipations}
+						landingPageSettings={landingPageSettings}
+						weeklyDeliveryDate={weeklyDeliveryDate}
+						thresholdAmount={thresholdAmount}
+						studentDiscount={studentDiscount}
+					/>
 
-				<CheckoutForm
-					supportRegionId={supportRegionId}
-					appConfig={appConfig}
-					stripePublicKey={stripePublicKey}
-					isTestUser={isTestUser}
-					productKey={productKey}
-					ratePlanKey={ratePlanKey}
-					promotion={promotion}
-					originalAmount={payment.originalAmount}
-					discountedAmount={payment.discountedAmount}
-					contributionAmount={payment.contributionAmount}
-					finalAmount={payment.finalAmount}
-					useStripeExpressCheckout={useStripeExpressCheckout}
-					countryId={countryId}
-					forcedCountry={forcedCountry}
-					abParticipations={abParticipations}
-					landingPageSettings={landingPageSettings}
-					checkoutSession={checkoutSession}
-					clearCheckoutSession={clearCheckoutSession}
-					weeklyDeliveryDate={weeklyDeliveryDate}
-					setWeeklyDeliveryDate={setWeeklyDeliveryDate}
-					thresholdAmount={thresholdAmount}
-					studentDiscount={studentDiscount}
-				/>
-			</CheckoutLayout>
-		</Elements>
+					<CheckoutForm
+						supportRegionId={supportRegionId}
+						appConfig={appConfig}
+						stripePublicKey={stripePublicKey}
+						isTestUser={isTestUser}
+						productKey={productKey}
+						ratePlanKey={ratePlanKey}
+						promotion={promotion}
+						originalAmount={payment.originalAmount}
+						discountedAmount={payment.discountedAmount}
+						contributionAmount={payment.contributionAmount}
+						finalAmount={payment.finalAmount}
+						useStripeExpressCheckout={useStripeExpressCheckout}
+						countryId={countryId}
+						forcedCountry={forcedCountry}
+						abParticipations={abParticipations}
+						landingPageSettings={landingPageSettings}
+						checkoutSession={checkoutSession}
+						clearCheckoutSession={clearCheckoutSession}
+						weeklyDeliveryDate={weeklyDeliveryDate}
+						setWeeklyDeliveryDate={setWeeklyDeliveryDate}
+						thresholdAmount={thresholdAmount}
+						studentDiscount={studentDiscount}
+					/>
+				</CheckoutLayout>
+			</Elements>
+		</ThemeProvider>
 	);
 }
