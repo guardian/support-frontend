@@ -479,7 +479,7 @@ export const productCatalogDescription: Record<
 };
 
 const paperArchiveDigitalBenefit = {
-	copy: `Digital access to the Guardian’s 200 year  newspaper archive`,
+	copy: `Digital access to the Guardian’s 200 year newspaper archive`,
 	isNew: true,
 	tooltip:
 		'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was, since 1821.',
@@ -494,7 +494,7 @@ const paperArchiveDigitalBenefit = {
 };
 
 const paperArchiveDigitalBenefitUK = {
-	copy: `Digital access to the Guardian’s 200 year  newspaper archive`,
+	copy: `Digital access to the Guardian’s 200 year newspaper archive`,
 	isNew: true,
 	tooltip:
 		'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was in the UK, since 1821.',
