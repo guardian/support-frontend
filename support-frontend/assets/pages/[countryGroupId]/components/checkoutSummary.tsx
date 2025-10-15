@@ -180,7 +180,7 @@ export default function CheckoutSummary({
 						<div role="alert" css={alertStyles}>
 							<InfoSummary
 								message="For Canadian residents only"
-								context="Please note that Canada Post is currently on strike. If you start a Guardian Weekly subscription today, we will not be able to deliver your copies until postal services resume. We apologise for any inconvenience this may cause."
+								context="Please note that Canada Post is currently undergoing a period of industrial action. If you start a Guardian Weekly subscription today, the delivery of your copies may be subject to delays. We apologise for any inconvenience this may cause."
 							/>
 						</div>
 					)}

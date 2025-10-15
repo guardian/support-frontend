@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { neutral, space, textSans17 } from '@guardian/source/foundations';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import { formatAmount } from 'helpers/forms/checkouts';
 import {
 	currencies,
@@ -11,7 +12,7 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import { productCatalogDescription } from 'helpers/productCatalog';
+import { getProductDescription } from 'helpers/productCatalog';
 import {
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
@@ -67,6 +68,13 @@ export function SummaryTsAndCs({
 	const isPaperSundayOrPlus =
 		isSundayOnlyNewsletterSubscription ||
 		isPaperPlusSub(productKey, ratePlanKey);
+	const { enablePremiumDigital } = getFeatureFlags();
+
+	const { label: productName } = getProductDescription(
+		productKey,
+		ratePlanKey,
+		enablePremiumDigital,
+	);
 
 	const rateDescriptor = ratePlanDescription ?? ratePlanKey;
 
@@ -87,9 +95,10 @@ export function SummaryTsAndCs({
 		amount,
 		false,
 	);
+
 	const summaryTsAndCsTierThreeGuardianAdLite = (
 		<div css={containerSummaryTsCs}>
-			The {productCatalogDescription[productKey].label} subscription
+			The {productName} subscription
 			{productKey === 'TierThree' ? 's' : ''} will auto-renew each {periodNoun}.
 			You will be charged the subscription amount using your chosen payment
 			method at each renewal, at the rate then in effect, unless you cancel.
@@ -108,16 +117,18 @@ export function SummaryTsAndCs({
 			<>
 				{!isStudentOneYearRatePlan && (
 					<div css={containerSummaryTsCs}>
-						The {productCatalogDescription[productKey].label} subscription and
-						any contribution will auto-renew each {periodNoun}. You will be
-						charged the subscription and contribution amounts using your chosen
-						payment method at each renewal, at the rate then in effect, unless
-						you cancel.
+						The {productName} subscription and any contribution will auto-renew
+						each {periodNoun}. You will be charged the subscription and
+						contribution amounts using your chosen payment method at each
+						renewal, at the rate then in effect, unless you cancel.
 					</div>
 				)}
 			</>
 		),
 		TierThree: summaryTsAndCsTierThreeGuardianAdLite,
+		DigitalSubscription: (
+			<>{enablePremiumDigital && summaryTsAndCsTierThreeGuardianAdLite}</>
+		),
 		GuardianAdLite: summaryTsAndCsTierThreeGuardianAdLite,
 	};
 	return summaryTsAndCs[productKey] ?? null;

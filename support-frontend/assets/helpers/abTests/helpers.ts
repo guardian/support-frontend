@@ -1,9 +1,11 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import seedrandom from 'seedrandom';
 import type {
 	AmountsTest,
 	AmountsVariant,
 	SelectedAmountsVariant,
 } from 'helpers/contributions';
+import type { Participations } from './models';
 
 type AmountsTestWithVariants = AmountsTest & {
 	variants: [AmountsVariant, ...AmountsVariant[]];
@@ -282,4 +284,36 @@ export function getFallbackAmounts(
 			testName: FALLBACK_AMOUNTS[0].testName,
 		};
 	}
+}
+
+export function getParticipationFromQueryString(
+	queryString: string,
+	param: string,
+): Participations | undefined {
+	const params = new URLSearchParams(queryString);
+	const value = params.get(param);
+	if (value) {
+		const [testName, variantName] = value.split(':');
+		if (testName && variantName) {
+			return { [testName]: variantName };
+		}
+	}
+	return;
+}
+
+export const countryGroupMatches = (
+	targetedCountryGroups: CountryGroupId[] = [],
+	countryGroupId: CountryGroupId,
+): boolean => {
+	if (targetedCountryGroups.length === 0) {
+		return true;
+	} // no targeting
+	else {
+		return targetedCountryGroups.includes(countryGroupId);
+	}
+};
+
+export function randomNumber(mvtId: number, seed: string): number {
+	const rng = seedrandom(mvtId + seed);
+	return Math.abs(rng.int32());
 }
