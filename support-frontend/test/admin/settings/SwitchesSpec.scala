@@ -105,6 +105,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |  "featureSwitches" : {
           |    "description" : "Feature switches",
           |    "switches" : {
+          |      "enableQuantumMetric" : {
+          |        "description" : "Enable quantum metric",
+          |        "state" : "On"
+          |      },
           |      "usStripeAccountForSingle" : {
           |        "description" : "US Stripe account for single contributions",
           |        "state" : "On"
@@ -116,6 +120,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "enableCampaignCountdown" : {
           |        "description" : "Enable Campaign Countdown",
           |        "state" : "On"
+          |      },
+          |      "enableThankYouOnboarding" : {
+          |        "description" : "Enables the new Thank You Onboarding flow",
+          |        "state" : "Off"
           |      }
           |    }
           |  },
@@ -163,7 +171,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           ),
           subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(Off)),
           subscriptionsSwitches = SubscriptionsSwitches(Some(On), Some(On)),
-          featureSwitches = FeatureSwitches(None, Some(On), Some(Off), Some(On), Some(On)),
+          featureSwitches = FeatureSwitches(Some(On), Some(On), Some(Off), Some(On), Some(Off)),
           campaignSwitches = CampaignSwitches(Some(Off), Some(Off)),
           recaptchaSwitches = RecaptchaSwitches(Some(On), Some(On)),
         ),
