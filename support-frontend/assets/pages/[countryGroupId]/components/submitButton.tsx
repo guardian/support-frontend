@@ -132,16 +132,21 @@ export function SubmitButton({
 			);
 		case 'PayPalCompletePayments':
 			return (
-				<PayPalScriptProvider options={{ clientId: 'test', vault: true }}>
+				<PayPalScriptProvider
+					options={{ clientId: 'test', vault: true, intent: 'tokenize' }}
+				>
 					<PayPalButtons
 						style={{ layout: 'horizontal' }}
 						// createVaultSetupToken={() => {
 						// 	return Promise.resolve('TEST_VAULT_SETUP_TOKEN');
 						// }}
-						createBillingAgreement={() => {
-							return createSetupToken(csrf);
+						createBillingAgreement={async () => {
+							const setupToken = await createSetupToken(csrf);
+							console.log({ setupToken });
+							return setupToken;
 						}}
 						onApprove={(data, actions) => {
+							console.log({ data });
 							// Set the state here to submit the form with the BAID/Vault token
 							return Promise.resolve();
 						}}

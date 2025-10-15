@@ -28,7 +28,10 @@ trait Services {
   lazy val payPalNvpServiceProvider = new PayPalNvpServiceProvider(appConfig.regularPayPalConfigProvider, wsClient)
 
   lazy val payPalCompletePaymentsServiceProvider =
-    new PayPalCompletePaymentsServiceProvider(appConfig.payPalCompletePaymentsConfigProvider, wsClient)
+    new PayPalCompletePaymentsServiceProvider(
+      appConfig.payPalCompletePaymentsConfigProvider,
+      RequestRunners.futureRunner,
+    )
 
   lazy val identityService = IdentityService(appConfig.identity)
 
