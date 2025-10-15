@@ -1,109 +1,134 @@
+import type { Title } from '../model/stateSchemas';
 import {
-	createContactRecordRequest,
+	createBillingAddressFields,
+	createDigitalOnlyContactRecordRequest,
+	createGuardianWeeklyGiftBuyerContactRecordRequest,
+	createGuardianWeeklyGiftRecipientContactRecordRequest,
+	createMailingAddressFields,
+	createPrintContactRecordRequest,
+	salesforceDeliveryOrRecipientRecordTypeId,
 	SalesforceError,
 	salesforceErrorCodes,
 	SalesforceService,
+	validGuardianWeeklyGiftRecipientFields,
 } from '../services/salesforce';
-import { emailAddress, street, user } from './fixtures/salesforceFixtures';
+import {
+	buyerStreet,
+	digitalOnlySubscriber,
+	giftBuyer,
+	giftRecipient,
+	printSubscriber,
+	recipientStreet,
+} from './fixtures/salesforce/unitTests';
 
 describe('SalesforceService', () => {
-	test('createContactRecordRequest should only include mailing address fields for purchases without a gift recipient', () => {
-		const newContactNoGift = createContactRecordRequest(user, null);
-		expect(newContactNoGift.MailingStreet).toBe(street);
-		expect(newContactNoGift.OtherStreet).toBe(street);
+	test('createPrintContactRecordRequest should have properties populated correctly', () => {
+		const newContact = createPrintContactRecordRequest(printSubscriber);
 
-		const newContactWithGift = createContactRecordRequest(user, {
-			email: emailAddress,
-			title: 'Ms',
-			firstName: 'Jane',
-			lastName: 'Doe',
-		});
-		expect('MailingStreet' in newContactWithGift).toBe(false);
-		expect('MailingCity' in newContactWithGift).toBe(false);
-		expect('MailingState' in newContactWithGift).toBe(false);
-		expect('MailingPostalCode' in newContactWithGift).toBe(false);
-		expect('MailingCountry' in newContactWithGift).toBe(false);
+		expect(newContact.MailingStreet).toBe(buyerStreet);
+		expect(newContact.MailingCity).toBe(printSubscriber.deliveryAddress.city);
+		expect(newContact.MailingState).toBe(printSubscriber.deliveryAddress.state);
+		expect(newContact.MailingPostalCode).toBe(
+			printSubscriber.deliveryAddress.postCode,
+		);
+		expect(newContact.MailingCountry).toBe('United Kingdom');
+
+		expect(newContact.OtherStreet).toBe(buyerStreet);
+		expect(newContact.OtherCity).toBe(printSubscriber.billingAddress.city);
+		expect(newContact.OtherState).toBe(printSubscriber.billingAddress.state);
+		expect(newContact.OtherPostalCode).toBe(
+			printSubscriber.billingAddress.postCode,
+		);
+		expect('Salutation' in newContact).toBe(false);
+		expect(newContact.OtherCountry).toBe('United Kingdom');
+
+		expect(newContact.Email).toBe(printSubscriber.primaryEmailAddress);
+		expect(newContact.FirstName).toBe(printSubscriber.firstName);
+		expect(newContact.LastName).toBe(printSubscriber.lastName);
 	});
 
-	test('createContactRecordRequest should not include mailing address fields for purchases when user delivery address is null', () => {
-		const userWithoutDeliveryAddress = {
-			...user,
-			deliveryAddress: null,
-		};
-		const newContact = createContactRecordRequest(
-			userWithoutDeliveryAddress,
-			null,
-		);
+	test('createGiftBuyerContactRecordRequest should have properties populated correctly', () => {
+		const newContact =
+			createGuardianWeeklyGiftBuyerContactRecordRequest(giftBuyer);
+
 		expect('MailingStreet' in newContact).toBe(false);
 		expect('MailingCity' in newContact).toBe(false);
 		expect('MailingState' in newContact).toBe(false);
 		expect('MailingPostalCode' in newContact).toBe(false);
 		expect('MailingCountry' in newContact).toBe(false);
-	});
 
-	test('createContactRecordRequest should include mailing address fields for purchases when user delivery address is populated and there is no giftRecipient', () => {
-		const newContact = createContactRecordRequest(user, null);
-		expect(newContact.MailingStreet).toBe(street);
-		expect(newContact.MailingCity).toBe(user.deliveryAddress.city);
-		expect(newContact.MailingState).toBe(user.deliveryAddress.state);
-		expect(newContact.MailingPostalCode).toBe(user.deliveryAddress.postCode);
-		expect(newContact.MailingCountry).toBe('United Kingdom');
-	});
-
-	test('createContactRecordRequest should include billingCountry', () => {
-		const newContact = createContactRecordRequest(user, null);
+		expect(newContact.OtherStreet).toBe(buyerStreet);
+		expect(newContact.OtherCity).toBe(giftBuyer.billingAddress.city);
+		expect(newContact.OtherState).toBe(giftBuyer.billingAddress.state);
+		expect(newContact.OtherPostalCode).toBe(giftBuyer.billingAddress.postCode);
 		expect(newContact.OtherCountry).toBe('United Kingdom');
+
+		expect(newContact.Email).toBe(giftBuyer.primaryEmailAddress);
+		expect(newContact.FirstName).toBe(giftBuyer.firstName);
+		expect(newContact.LastName).toBe(giftBuyer.lastName);
+		expect(newContact.Salutation).toBe(giftBuyer.title);
+		expect(newContact.Phone).toBe(giftBuyer.telephoneNumber);
 	});
 
-	test('createContactRecordRequest should include billingState and billingPostalCode when provided', () => {
-		const newContact = createContactRecordRequest(user, null);
-		expect(newContact.OtherState).toBe(user.billingAddress.state);
-		expect(newContact.OtherPostalCode).toBe(user.billingAddress.postCode);
-	});
-
-	test('createContactRecordRequest should not include billingState when state is null', () => {
-		const userWithoutBillingState = {
-			...user,
-			billingAddress: {
-				...user.billingAddress,
-				state: null,
-			},
+	test('createGiftRecipientContactRecordRequest should have properties populated correctly', () => {
+		const buyerContactRecord = {
+			Id: '003UD00000kdJ6kYAE',
+			AccountId: '001UD00000NP6BTYA1',
 		};
-		const newContact = createContactRecordRequest(
-			userWithoutBillingState,
-			null,
+
+		const recipientContact =
+			createGuardianWeeklyGiftRecipientContactRecordRequest(
+				buyerContactRecord.AccountId,
+				giftRecipient,
+				giftBuyer,
+			);
+
+		expect('OtherStreet' in recipientContact).toBe(false);
+		expect('OtherCity' in recipientContact).toBe(false);
+		expect('OtherState' in recipientContact).toBe(false);
+		expect('OtherPostalCode' in recipientContact).toBe(false);
+		expect('OtherCountry' in recipientContact).toBe(false);
+
+		expect(recipientContact.MailingStreet).toBe(recipientStreet);
+		expect(recipientContact.MailingCity).toBe(giftBuyer.deliveryAddress.city);
+		expect(recipientContact.MailingState).toBe(giftBuyer.deliveryAddress.state);
+		expect(recipientContact.MailingPostalCode).toBe(
+			giftBuyer.deliveryAddress.postCode,
 		);
-		expect('OtherState' in newContact).toBe(false);
+		expect(recipientContact.MailingCountry).toBe('United Kingdom');
+
+		expect(recipientContact.Email).toBe(giftRecipient.email);
+		expect(recipientContact.FirstName).toBe(giftRecipient.firstName);
+		expect(recipientContact.LastName).toBe(giftRecipient.lastName);
+		expect(recipientContact.Salutation).toBe(giftRecipient.title);
+		expect(recipientContact.AccountId).toBe(buyerContactRecord.AccountId);
+		expect(recipientContact.RecordTypeId).toBe(
+			salesforceDeliveryOrRecipientRecordTypeId,
+		);
 	});
 
-	test('createContactRecordRequest should not include billingPostalCode when postCode is null', () => {
-		const userWithoutBillingPostalCode = {
-			...user,
-			billingAddress: {
-				...user.billingAddress,
-				postCode: null,
-			},
-		};
-		const newContact = createContactRecordRequest(
-			userWithoutBillingPostalCode,
-			null,
+	test('createDigitalOnlyContactRecordRequest should have properties populated correctly', () => {
+		const newContact = createDigitalOnlyContactRecordRequest(
+			digitalOnlySubscriber,
 		);
+
+		expect('MailingStreet' in newContact).toBe(false);
+		expect('MailingCity' in newContact).toBe(false);
+		expect('MailingState' in newContact).toBe(false);
+		expect('MailingPostalCode' in newContact).toBe(false);
+		expect('MailingCountry' in newContact).toBe(false);
+
+		expect('OtherStreet' in newContact).toBe(false);
+		expect('OtherCity' in newContact).toBe(false);
 		expect('OtherPostalCode' in newContact).toBe(false);
-	});
 
-	test('createContactRecordRequest should not include billingPostalCode when postCode is empty string', () => {
-		const userWithoutBillingPostalCode = {
-			...user,
-			billingAddress: {
-				...user.billingAddress,
-				postCode: '',
-			},
-		};
-		const newContact = createContactRecordRequest(
-			userWithoutBillingPostalCode,
-			null,
-		);
-		expect('OtherPostalCode' in newContact).toBe(false);
+		expect('Salutation' in newContact).toBe(false);
+
+		expect(newContact.OtherCountry).toBe('United Kingdom');
+
+		expect(newContact.Email).toBe(digitalOnlySubscriber.primaryEmailAddress);
+		expect(newContact.FirstName).toBe(digitalOnlySubscriber.firstName);
+		expect(newContact.LastName).toBe(digitalOnlySubscriber.lastName);
 	});
 
 	test('it should throw an INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE error when appropriate', () => {
@@ -136,5 +161,91 @@ describe('SalesforceService', () => {
 				message: errorString,
 			}),
 		);
+	});
+});
+
+describe('validGiftRecipientFields', () => {
+	test('should return true when both firstName and lastName are present', () => {
+		const validGiftRecipient = {
+			title: 'Mr' as const,
+			firstName: 'John',
+			lastName: 'Doe',
+			email: 'john.doe@example.com',
+		};
+
+		expect(validGuardianWeeklyGiftRecipientFields(validGiftRecipient)).toBe(
+			true,
+		);
+	});
+
+	test('should return false when firstName is empty string', () => {
+		const invalidGiftRecipient = {
+			title: 'Ms' as Title,
+			firstName: '',
+			lastName: 'Johnson',
+			email: 'johnson@example.com',
+		};
+
+		expect(validGuardianWeeklyGiftRecipientFields(invalidGiftRecipient)).toBe(
+			false,
+		);
+	});
+
+	test('should return false when lastName is empty string', () => {
+		const invalidGiftRecipient = {
+			title: 'Dr' as Title,
+			firstName: 'Robert',
+			lastName: '',
+			email: 'robert@example.com',
+		};
+
+		expect(validGuardianWeeklyGiftRecipientFields(invalidGiftRecipient)).toBe(
+			false,
+		);
+	});
+
+	test('should return false when both firstName and lastName are empty strings', () => {
+		const invalidGiftRecipient = {
+			title: 'Mrs' as Title,
+			firstName: '',
+			lastName: '',
+			email: 'empty@example.com',
+		};
+
+		expect(validGuardianWeeklyGiftRecipientFields(invalidGiftRecipient)).toBe(
+			false,
+		);
+	});
+});
+
+describe('createMailingAddressFields', () => {
+	test('should create mailing address fields and set values correctly', () => {
+		const expected = {
+			MailingStreet: buyerStreet,
+			MailingCity: printSubscriber.deliveryAddress.city,
+			MailingState: printSubscriber.deliveryAddress.state,
+			MailingPostalCode: printSubscriber.deliveryAddress.postCode,
+			MailingCountry: 'United Kingdom',
+		};
+
+		const actual = createMailingAddressFields(printSubscriber);
+
+		expect(actual).toEqual(expected);
+	});
+});
+
+describe('createBillingAddressFields', () => {
+	test('should create billing address fields and set values correctly', () => {
+		const expected = {
+			OtherStreet: buyerStreet,
+			OtherCity: printSubscriber.billingAddress.city,
+			OtherState: printSubscriber.billingAddress.state,
+			OtherPostalCode: printSubscriber.billingAddress.postCode,
+			OtherCountry: 'United Kingdom',
+		};
+
+		const actual = createBillingAddressFields(printSubscriber);
+
+		expect(actual).toEqual(expected);
 	});
 });
