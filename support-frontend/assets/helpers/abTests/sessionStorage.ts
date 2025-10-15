@@ -5,7 +5,11 @@ import type { Participations } from './models';
 const PARTICIPATIONS_KEY = 'abParticipations';
 // For participation in landing page tests, which are passed through from the server
 const LANDING_PAGE_PARTICIPATIONS_KEY = 'landingPageParticipations';
-type Key = typeof PARTICIPATIONS_KEY | typeof LANDING_PAGE_PARTICIPATIONS_KEY;
+const CHECKOUT_NUDGE_PARTICIPATIONS_KEY = 'checkoutNudgeParticipations';
+type Key =
+	| typeof PARTICIPATIONS_KEY
+	| typeof LANDING_PAGE_PARTICIPATIONS_KEY
+	| typeof CHECKOUT_NUDGE_PARTICIPATIONS_KEY;
 
 function getSessionParticipations(key: Key): Participations | undefined {
 	const participations = storage.getSession(key);
@@ -35,4 +39,5 @@ export {
 	setSessionParticipations,
 	PARTICIPATIONS_KEY,
 	LANDING_PAGE_PARTICIPATIONS_KEY,
+	CHECKOUT_NUDGE_PARTICIPATIONS_KEY,
 };

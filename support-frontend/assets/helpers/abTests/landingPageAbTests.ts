@@ -1,11 +1,15 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import seedrandom from 'seedrandom';
 import { getSettings } from '../globalsAndSwitches/globals';
 import type {
 	LandingPageTest,
 	LandingPageVariant,
 } from '../globalsAndSwitches/landingPageSettings';
 import { CountryGroup } from '../internationalisation/classes/countryGroup';
+import {
+	countryGroupMatches,
+	getParticipationFromQueryString,
+	randomNumber,
+} from './helpers';
 import type { Participations } from './models';
 import { getMvtId } from './mvt';
 import {
@@ -77,28 +81,9 @@ export const fallBackLandingPageSelection: LandingPageVariant = {
 	},
 };
 
-function randomNumber(mvtId: number, seed: string): number {
-	const rng = seedrandom(mvtId + seed);
-	return Math.abs(rng.int32());
-}
-
 const landingPageRegex = '^/.*/contribute(/.*)?$';
 function isLandingPage(path: string) {
 	return !!path && !!path.match(landingPageRegex);
-}
-
-function getParticipationFromQueryString(
-	queryString: string,
-): Participations | undefined {
-	const params = new URLSearchParams(queryString);
-	const value = params.get(`force-landing-page`);
-	if (value) {
-		const [testName, variantName] = value.split(':');
-		if (testName && variantName) {
-			return { [testName]: variantName };
-		}
-	}
-	return;
 }
 
 /**
@@ -122,7 +107,10 @@ export function getLandingPageParticipations(
 	queryString: string = window.location.search,
 ): LandingPageParticipationsResult {
 	// Is the participation forced in the url querystring?
-	const urlParticipations = getParticipationFromQueryString(queryString);
+	const urlParticipations = getParticipationFromQueryString(
+		queryString,
+		'force-landing-page',
+	);
 	if (urlParticipations) {
 		const variant = getLandingPageVariant(urlParticipations, tests);
 		return {
@@ -149,14 +137,10 @@ export function getLandingPageParticipations(
 		const test = tests
 			.filter((test) => test.status == 'Live')
 			.find((test) => {
-				const targetedCountryGroups =
-					test.regionTargeting?.targetedCountryGroups ?? [];
-				if (targetedCountryGroups.length === 0) {
-					return true;
-				} // no targeting
-				else {
-					return targetedCountryGroups.includes(countryGroupId);
-				}
+				return countryGroupMatches(
+					test.regionTargeting?.targetedCountryGroups,
+					countryGroupId,
+				);
 			});
 
 		// Only track participation if user is on the landing page
