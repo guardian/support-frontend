@@ -58,3 +58,4 @@ export const productTypeSchema = z.discriminatedUnion('productType', [
 	guardianAdLiteProductSchema,
 ]);
 export type ProductType = z.infer<typeof productTypeSchema>;
+export type ProductTypeName = ProductType['productType'];
