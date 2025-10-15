@@ -8,20 +8,20 @@ import {
 } from '@guardian/source/foundations';
 import { BackToTop, Container } from '@guardian/source/react-components';
 
-export const footer = css`
+const footer = css`
 	background-color: #000;
 	color: ${neutral[100]};
 	padding-bottom: ${space[1]}px;
 	${textSans17};
 `;
 
-export const contentWrapperStyles = css`
+const contentWrapperStyles = css`
 	display: flex;
 	position: relative;
 	height: 60px;
 `;
 
-export const copyrightStyles = css`
+const copyrightStyles = css`
 	display: block;
 	${textSans12};
 	padding-top: ${space[6]}px;
@@ -31,7 +31,7 @@ export const copyrightStyles = css`
 	}
 `;
 
-export const backToTopStyles = css`
+const backToTopStyles = css`
 	background-color: #000;
 	padding: 0 ${space[2]}px;
 	position: absolute;
