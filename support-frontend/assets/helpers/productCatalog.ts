@@ -510,7 +510,7 @@ const weeklyDigitalBenefit = {
 const editionsDigitalBenefit = {
 	copy: `The Long Read e-magazine`,
 	isNew: true,
-	tooltip: `Accessed through the  Guardian Editions app, the Long Read e-magazine is a selection of some of the Guardian’s finest longform journalism. Through first person accounts, narrative storytelling and investigative reporting, the Long Read seeks to dive deep, debunk myths and uncover hidden histories.`,
+	tooltip: `Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.`,
 };
 
 export const productCatalogDescriptionPremiumDigital = {
