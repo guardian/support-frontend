@@ -47,11 +47,7 @@ class PayPalCompletePayments(
     MaybeAuthenticatedActionOnFormSubmission.async(circe.json[CreateSetupToken]) { implicit request =>
       val payPalCPService = getPayPalCPServiceForRequest(request)
       payPalCPService.createSetupToken
-        .map { maybeString =>
-          maybeString
-            .map(s => Ok(SetupToken(s).asJson))
-            .getOrElse(BadRequest("There was a problem creating a PayPal setup token"))
-        }
+        .map { token => Ok(SetupToken(token).asJson) }
     }
 
   private def getPayPalCPServiceForRequest[T](request: OptionalAuthRequest[_]) = {
