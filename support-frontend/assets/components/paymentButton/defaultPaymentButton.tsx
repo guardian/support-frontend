@@ -10,10 +10,17 @@ import {
 const buttonOverrides = (theme: Theme) => css`
 	width: 100%;
 	justify-content: center;
-	color: ${neutral[7]};
+	color: ${theme.organisation === 'guardian' ? neutral[7] : neutral[100]};
 	background-color: ${theme.organisation === 'guardian'
 		? brandAlt[400]
 		: opinion[400]};
+
+	:hover {
+		background-color: ${theme.organisation === 'guardian'
+			? brandAlt[200]
+			: opinion[200]};
+		transition: 0.7s;
+	}
 `;
 
 export type DefaultPaymentButtonProps = ButtonProps & {
