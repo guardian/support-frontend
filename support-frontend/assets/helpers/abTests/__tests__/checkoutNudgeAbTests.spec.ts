@@ -104,6 +104,7 @@ describe('getCheckoutNudgeParticipations', () => {
 		);
 		expect(result).toEqual({
 			variant: oneTimeToRecurring__NON_US.variants[0],
+			fromProduct: oneTimeToRecurring__NON_US.nudgeFromProduct,
 			participations: { [oneTimeToRecurring__NON_US.name]: 'control' },
 		});
 	});
@@ -118,6 +119,7 @@ describe('getCheckoutNudgeParticipations', () => {
 		);
 		expect(result).toEqual({
 			variant: oneTimeToRecurring__US.variants[0],
+			fromProduct: oneTimeToRecurring__US.nudgeFromProduct,
 			participations: { [oneTimeToRecurring__US.name]: 'control' },
 		});
 	});
@@ -148,6 +150,7 @@ describe('getCheckoutNudgeParticipations', () => {
 		);
 		expect(result).toEqual({
 			variant: oneTimeToRecurring__NON_US.variants[0],
+			fromProduct: oneTimeToRecurring__NON_US.nudgeFromProduct,
 			participations: { [oneTimeToRecurring__NON_US.name]: 'control' },
 		});
 	});
@@ -162,6 +165,7 @@ describe('getCheckoutNudgeParticipations', () => {
 		);
 		expect(result).toEqual({
 			variant: oneTimeToRecurring__US.variants[0],
+			fromProduct: oneTimeToRecurring__US.nudgeFromProduct,
 			participations: { [oneTimeToRecurring__US.name]: 'control' },
 		});
 	});
@@ -187,6 +191,7 @@ describe('getCheckoutNudgeParticipations', () => {
 		);
 		expect(result).toEqual({
 			variant: annualRecurringToSupporterPlus.variants[0],
+			fromProduct: annualRecurringToSupporterPlus.nudgeFromProduct,
 			participations: { [annualRecurringToSupporterPlus.name]: 'control' },
 		});
 	});
