@@ -84,7 +84,7 @@ import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/co
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
-import { CheckoutNudge } from '../../../components/checkoutNudge/checkoutNudge';
+import { CheckoutNudgeSelector } from '../../../components/checkoutNudge/checkoutNudge';
 import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
 import {
 	updateAbandonedBasketCookie,
@@ -660,7 +660,7 @@ export function OneTimeCheckoutComponent({
 						/>
 					</div>
 					{nudgeSettings && (
-						<CheckoutNudge
+						<CheckoutNudgeSelector
 							nudgeSettings={nudgeSettings}
 							currentProduct={'OneTimeContribution'}
 							currentRatePlan={'OneTime'}

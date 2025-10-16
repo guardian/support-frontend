@@ -18,7 +18,7 @@ import {
 	BenefitsCheckList,
 	type BenefitsCheckListData,
 } from 'components/checkoutBenefits/benefitsCheckList';
-import { CheckoutNudge } from 'components/checkoutNudge/checkoutNudge';
+import { CheckoutNudgeSelector } from 'components/checkoutNudge/checkoutNudge';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type {
@@ -30,7 +30,6 @@ import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSunda
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
-import type { AppConfig } from '../../helpers/globalsAndSwitches/window';
 import { PriceSummary } from './priceSummary';
 
 const componentStyles = css`
@@ -153,7 +152,6 @@ export type ContributionsOrderSummaryProps = {
 	tsAndCsTier3?: React.ReactNode;
 	studentDiscount?: StudentDiscount;
 	supportRegionId: SupportRegionId;
-	productCatalog: AppConfig['productCatalog'];
 	nudgeSettings?: CheckoutNudgeSettings;
 };
 
@@ -255,7 +253,7 @@ export function ContributionsOrderSummary({
 				/>
 			</div>
 			{nudgeSettings && (
-				<CheckoutNudge
+				<CheckoutNudgeSelector
 					nudgeSettings={nudgeSettings}
 					currentProduct={productKey}
 					currentRatePlan={ratePlanKey}

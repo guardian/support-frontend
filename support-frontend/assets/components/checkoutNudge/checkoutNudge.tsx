@@ -70,14 +70,7 @@ const nudgeButtonOverrides = css`
 	width: 100%;
 `;
 
-function Nudge({
-	supportRegionId,
-	heading,
-	body,
-	product,
-	ratePlan,
-	amount,
-}: {
+export interface CheckoutNudgeProps {
 	supportRegionId: SupportRegionId;
 	heading: string;
 	body?: string;
@@ -85,7 +78,16 @@ function Nudge({
 	product: ActiveProductKey;
 	ratePlan: ActiveRatePlanKey;
 	amount: number;
-}) {
+}
+
+export function CheckoutNudge({
+	supportRegionId,
+	heading,
+	body,
+	product,
+	ratePlan,
+	amount,
+}: CheckoutNudgeProps) {
 	useEffect(() => {
 		trackComponentLoad('checkoutNudge');
 	}, []);
@@ -136,11 +138,6 @@ function Nudge({
 			</BoxContents>
 		</Box>
 	);
-}
-
-export interface CheckoutNudgeThankYouProps {
-	heading: string;
-	body?: string;
 }
 
 const thankYouBoxOverrides = css`
@@ -205,7 +202,15 @@ const imageOverride = css`
 	margin-top: ${space[2]}px;
 `;
 
-function NudgeThankYou({ heading, body }: CheckoutNudgeThankYouProps) {
+export interface CheckoutNudgeThankYouProps {
+	heading: string;
+	body?: string;
+}
+
+export function CheckoutNudgeThankYou({
+	heading,
+	body,
+}: CheckoutNudgeThankYouProps) {
 	return (
 		<Box cssOverrides={thankYouBoxOverrides}>
 			<BoxContents cssOverrides={innerThankYouBoxOverrides}>
@@ -231,19 +236,19 @@ function NudgeThankYou({ heading, body }: CheckoutNudgeThankYouProps) {
  * If the current product+ratePlan matches the nudge's `toProduct` and the 'fromNudge' query param is present then the nudge thankyou is displayed.
  */
 
-interface CheckoutNudgeProps {
+interface CheckoutNudgeSelectorProps {
 	nudgeSettings: CheckoutNudgeSettings;
 	currentProduct: ActiveProductKey;
 	currentRatePlan: ActiveRatePlanKey;
 	supportRegionId: SupportRegionId;
 }
 
-export function CheckoutNudge({
+export function CheckoutNudgeSelector({
 	nudgeSettings,
 	currentProduct,
 	currentRatePlan,
 	supportRegionId,
-}: CheckoutNudgeProps) {
+}: CheckoutNudgeSelectorProps) {
 	if (
 		nudgeSettings.fromProduct.product === currentProduct &&
 		nudgeSettings.fromProduct.ratePlan === currentRatePlan
@@ -264,7 +269,7 @@ export function CheckoutNudge({
 				heading: nudgeSettings.variant.nudgeCopy.heading,
 				body: nudgeSettings.variant.nudgeCopy.body,
 			};
-			return <Nudge {...props} />;
+			return <CheckoutNudge {...props} />;
 		}
 	} else if (
 		new URLSearchParams(window.location.search).get('fromNudge') &&
@@ -273,7 +278,7 @@ export function CheckoutNudge({
 	) {
 		// Show the thankyou
 		const { heading, body } = nudgeSettings.variant.thankyouCopy;
-		return <NudgeThankYou heading={heading} body={body} />;
+		return <CheckoutNudgeThankYou heading={heading} body={body} />;
 	}
 
 	// Nothing to show

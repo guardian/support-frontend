@@ -235,7 +235,6 @@ export default function CheckoutSummary({
 					}
 					studentDiscount={studentDiscount}
 					supportRegionId={supportRegionId}
-					productCatalog={productCatalog}
 					nudgeSettings={nudgeSettings}
 				/>
 			</BoxContents>
