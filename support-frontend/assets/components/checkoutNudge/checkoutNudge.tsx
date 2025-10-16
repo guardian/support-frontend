@@ -25,7 +25,6 @@ import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeA
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
-	ProductBenefit,
 } from '../../helpers/productCatalog';
 import { productCatalog } from '../../helpers/productCatalog';
 import { getSupportRegionIdConfig } from '../../pages/supportRegionConfig';
@@ -74,7 +73,6 @@ export interface CheckoutNudgeProps {
 	supportRegionId: SupportRegionId;
 	heading: string;
 	body?: string;
-	benefits?: ProductBenefit[];
 	product: ActiveProductKey;
 	ratePlan: ActiveRatePlanKey;
 	amount: number;
