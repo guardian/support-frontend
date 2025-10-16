@@ -1,4 +1,4 @@
-import type { Theme} from '@emotion/react';
+import type { Theme } from '@emotion/react';
 import { css, useTheme } from '@emotion/react';
 import { brandAlt, neutral, opinion } from '@guardian/source/foundations';
 import type { ButtonProps } from '@guardian/source/react-components';
