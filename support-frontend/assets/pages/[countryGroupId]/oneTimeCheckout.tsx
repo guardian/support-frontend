@@ -6,6 +6,7 @@ import { getStripeKeyForCountry } from 'helpers/forms/stripe';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import * as cookie from 'helpers/storage/cookie';
+import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { Participations } from '../../helpers/abTests/models';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
 import { OneTimeCheckoutComponent } from './components/oneTimeCheckoutComponent';
@@ -16,6 +17,7 @@ type OneTimeCheckoutProps = {
 	supportRegionId: SupportRegionId;
 	appConfig: AppConfig;
 	abParticipations: Participations;
+	nudgeSettings?: CheckoutNudgeSettings;
 };
 
 const stripeExpressCheckoutSwitch =
@@ -25,6 +27,7 @@ export function OneTimeCheckout({
 	supportRegionId,
 	appConfig,
 	abParticipations,
+	nudgeSettings,
 }: OneTimeCheckoutProps) {
 	const { currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -61,6 +64,7 @@ export function OneTimeCheckout({
 				countryId={countryId}
 				abParticipations={abParticipations}
 				useStripeExpressCheckout={stripeExpressCheckoutSwitch === 'On'}
+				nudgeSettings={nudgeSettings}
 			/>
 		</Elements>
 	);

@@ -61,7 +61,6 @@ import {
 } from 'helpers/forms/paymentMethods';
 import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import { productCatalog } from 'helpers/productCatalog';
 import * as cookie from 'helpers/storage/cookie';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import {
@@ -85,7 +84,8 @@ import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/co
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
-import { CheckoutNudge } from '../../../components/checkoutNudge/checkoutNudge';
+import { CheckoutNudgeSelector } from '../../../components/checkoutNudge/checkoutNudge';
+import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
 import {
 	updateAbandonedBasketCookie,
 	useAbandonedBasketCookie,
@@ -168,6 +168,7 @@ type OneTimeCheckoutComponentProps = {
 	countryId: IsoCountry;
 	abParticipations: Participations;
 	useStripeExpressCheckout: boolean;
+	nudgeSettings?: CheckoutNudgeSettings;
 };
 
 function paymentMethodIsActive(paymentMethod: PaymentMethod) {
@@ -252,6 +253,7 @@ export function OneTimeCheckoutComponent({
 	countryId,
 	abParticipations,
 	useStripeExpressCheckout,
+	nudgeSettings,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -596,9 +598,6 @@ export function OneTimeCheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	const nudgeRecurringAmount = productCatalog.Contribution?.ratePlans['Monthly']
-		?.pricing[currencyKey] as number;
-
 	const paymentButtonText = finalAmount
 		? paymentMethod === 'PayPal'
 			? `Pay ${simpleFormatAmount(currency, finalAmount)} with PayPal`
@@ -660,13 +659,14 @@ export function OneTimeCheckoutComponent({
 							}
 						/>
 					</div>
-					<CheckoutNudge
-						supportRegionId={supportRegionId}
-						ratePlanKey="Monthly"
-						recurringAmount={nudgeRecurringAmount}
-						abTestName="nudgeToLowRegularRollout"
-						abTestVariant="control"
-					/>
+					{nudgeSettings && (
+						<CheckoutNudgeSelector
+							nudgeSettings={nudgeSettings}
+							currentProduct={'OneTimeContribution'}
+							currentRatePlan={'OneTime'}
+							supportRegionId={supportRegionId}
+						/>
+					)}
 				</BoxContents>
 			</Box>
 			<form
