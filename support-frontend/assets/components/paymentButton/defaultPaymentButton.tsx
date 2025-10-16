@@ -10,15 +10,15 @@ import {
 const buttonOverrides = (theme: Theme) => css`
 	width: 100%;
 	justify-content: center;
-	color: ${theme.organisation === 'guardian' ? neutral[7] : neutral[100]};
-	background-color: ${theme.organisation === 'guardian'
-		? brandAlt[400]
-		: opinion[400]};
+	color: ${theme.organisation === 'observer' ? neutral[100] : neutral[7]};
+	background-color: ${theme.organisation === 'observer'
+		? opinion[400]
+		: brandAlt[400]};
 
 	:hover {
-		background-color: ${theme.organisation === 'guardian'
-			? brandAlt[200]
-			: opinion[200]};
+		background-color: ${theme.organisation === 'observer'
+			? opinion[200]
+			: brandAlt[200]};
 		transition: 0.7s;
 	}
 `;
