@@ -12,7 +12,6 @@ const patronsUrl = 'https://patrons.theguardian.com';
 const patronsUrlUS =
 	'https://manage.theguardian.com/help-centre/article/contribute-another-way';
 const manageUrl = `https://manage.${getBaseDomain()}`;
-const homeDeliveryUrl = `https://www.${getBaseDomain()}/help/2017/dec/11/help-with-delivery#nav1`;
 const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
 const androidAppUrl =
 	'https://play.google.com/store/apps/details?id=com.guardian';
@@ -85,7 +84,6 @@ export {
 	getSignoutUrl,
 	getReauthenticateUrl,
 	manageSubsUrl,
-	homeDeliveryUrl,
 	helpCentreUrl,
 	feastAppUrl,
 };

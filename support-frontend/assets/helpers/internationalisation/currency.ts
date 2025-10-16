@@ -1,11 +1,9 @@
 // ----- Imports ----- //
 
-import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getQueryParameter } from 'helpers/urls/url';
-import { CountryGroup } from './classes/countryGroup';
 
 // ----- Types ----- //
 
@@ -119,13 +117,6 @@ function fromString(s: string): IsoCurrency | null | undefined {
 	}
 }
 
-function currencyFromCountryCode(
-	countryCode: IsoCountry,
-): IsoCurrency | null | undefined {
-	const countryGroupId = CountryGroup.fromCountry(countryCode);
-	return countryGroupId ? fromCountryGroupId(countryGroupId) : null;
-}
-
 function fromQueryParameter(): IsoCurrency | null | undefined {
 	const currency = getQueryParameter('currency');
 
@@ -149,7 +140,6 @@ export {
 	detect,
 	spokenCurrencies,
 	fromCountryGroupId,
-	currencyFromCountryCode,
 	currencies,
 	glyph,
 	extendedGlyph,

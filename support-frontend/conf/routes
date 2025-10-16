@@ -128,8 +128,6 @@ GET  /subscribe/digital/checkout                                         control
 GET  /weekly                                                       controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)
 GET  /subscribe/weekly                                             controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)
 GET  /subscribe/weekly/gift                                        controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = true)
-GET  /subscribe/weekly/checkout                                    controllers.WeeklySubscriptionFormController.displayForm(orderIsAGift: Boolean = false)
-GET  /subscribe/weekly/checkout/gift                               controllers.WeeklySubscriptionFormController.displayForm(orderIsAGift: Boolean = true)
 GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly           controllers.WeeklySubscriptionController.weekly(country: String, orderIsAGift: Boolean = false)
 GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly/gift      controllers.WeeklySubscriptionController.weekly(country: String, orderIsAGift: Boolean = true)
 
