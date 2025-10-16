@@ -188,7 +188,7 @@ GET /p/:promoCode                                                 controllers.Pr
 # ----- Prices API ----- #
 GET /prices                                                       controllers.PricesController.getPrices()
 
-# ----- Analytics API ----- #
+# ----- Analytics API (mParticle) ----- #
 GET /analytics-user-profile                                       controllers.AnalyticsController.getAnalyticsUserProfile()
 
 # ----- Newspaper Archive ----- #

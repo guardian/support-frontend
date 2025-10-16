@@ -28,7 +28,7 @@ case class OAuthTokenRequest(
 )
 
 case class OAuthTokenResponse(
-    access_token: String,
+    access_token: MParticleAccessToken,
     token_type: String,
     expires_in: Int,
 )
@@ -55,6 +55,8 @@ case class MParticleError(message: String) extends Throwable(message)
 
 object MParticleClient {
   implicit val oauthTokenRequestEncoder: Encoder[OAuthTokenRequest] = deriveEncoder
+  implicit val mParticleAccessTokenDecoder: Decoder[MParticleAccessToken] =
+    Decoder[String].map(MParticleAccessToken.apply)
   implicit val oauthTokenResponseDecoder: Decoder[OAuthTokenResponse] = deriveDecoder
   implicit val identityEncoder: Encoder[Identity] = deriveEncoder
   implicit val profileRequestEncoder: Encoder[ProfileRequest] = deriveEncoder
@@ -63,53 +65,42 @@ object MParticleClient {
   implicit val mparticleErrorDecoder: Decoder[MParticleError] = deriveDecoder
 }
 
-class MParticleClient(
+class MParticleAuthClient(
     val httpClient: FutureHttpClient,
-    mparticleConfigProvider: MparticleConfigProvider,
+    config: MparticleConfig,
 )(implicit ec: ExecutionContext)
-    extends WebServiceHelper[MParticleError]
-    with SafeLogging {
+    extends SafeLogging {
 
   import MParticleClient._
-
-  private lazy val mparticleConfig: MparticleConfig = mparticleConfigProvider.get()
-
-  override val wsUrl: String = mparticleConfig.apiUrl
-  override val verboseLogging: Boolean = false
 
   private case class CachedToken(token: String, expiresAt: DateTime)
   private val tokenCache = new AtomicReference[Option[CachedToken]](None)
   private val safetyMargin = 2.minutes
 
-  def getUserProfile(identityId: String): Future[MParticleUserProfile] = for {
-    accessToken <- getCachedAccessToken()
-    response <- callProfileAPI(identityId, accessToken.token)
-  } yield parseUserProfile(response)
-
-  private def getCachedAccessToken(): Future[MParticleAccessToken] = {
+  def getCachedAccessToken(): Future[MParticleAccessToken] = {
     val now = DateTime.now()
 
     tokenCache.get() match {
       case Some(cachedToken) if cachedToken.expiresAt.isAfter(now) =>
         Future.successful(MParticleAccessToken(cachedToken.token))
       case _ =>
-        getAccessToken().map { case (token, expiresInSeconds) =>
+        getAccessToken().map { case (accessToken, expiresInSeconds) =>
           val actualExpiryTime = now.plusSeconds(expiresInSeconds)
           val safeExpiryTime = actualExpiryTime.minus(safetyMargin.toMillis)
-          tokenCache.set(Some(CachedToken(token, safeExpiryTime)))
+          tokenCache.set(Some(CachedToken(accessToken.token, safeExpiryTime)))
           logger.info(
             s"Cached new mParticle access token, expires at: $safeExpiryTime (${safetyMargin.toSeconds}s safety margin)",
           )
-          MParticleAccessToken(token)
+          accessToken
         }
     }
   }
 
-  private def getAccessToken(): Future[(String, Int)] = {
+  private def getAccessToken(): Future[(MParticleAccessToken, Int)] = {
     val request = OAuthTokenRequest(
-      client_id = mparticleConfig.clientId,
-      client_secret = mparticleConfig.clientSecret,
-      audience = mparticleConfig.apiUrl,
+      client_id = config.clientId,
+      client_secret = config.clientSecret,
+      audience = config.apiUrl,
       grant_type = "client_credentials",
     )
 
@@ -123,7 +114,7 @@ class MParticleClient(
     )
 
     val oauthRequest = new Request.Builder()
-      .url(mparticleConfig.tokenUrl)
+      .url(config.tokenUrl)
       .post(body)
       .build()
 
@@ -142,8 +133,29 @@ class MParticleClient(
       }
     }
   }
+}
 
-  private def callProfileAPI(identityId: String, accessToken: String): Future[ProfileResponse] = {
+class MParticleClient(
+    val httpClient: FutureHttpClient,
+    mparticleConfigProvider: MparticleConfigProvider,
+)(implicit ec: ExecutionContext)
+    extends WebServiceHelper[MParticleError]
+    with SafeLogging {
+
+  import MParticleClient._
+
+  private lazy val mparticleConfig: MparticleConfig = mparticleConfigProvider.get()
+  private lazy val authClient = new MParticleAuthClient(httpClient, mparticleConfig)
+
+  override val wsUrl: String = mparticleConfig.apiUrl
+  override val verboseLogging: Boolean = false
+
+  def getUserProfile(identityId: String): Future[MParticleUserProfile] = for {
+    accessToken <- authClient.getCachedAccessToken()
+    response <- callProfileAPI(identityId, accessToken)
+  } yield parseUserProfile(response)
+
+  private def callProfileAPI(identityId: String, accessToken: MParticleAccessToken): Future[ProfileResponse] = {
     val fields = "audience_memberships"
     val endpoint =
       s"userprofile/v1/resolve/${mparticleConfig.orgId}/${mparticleConfig.accountId}/${mparticleConfig.workspaceId}"
@@ -156,7 +168,7 @@ class MParticleClient(
     postJson[ProfileResponse](
       endpoint = endpoint,
       data = request.asJson,
-      headers = Map("Authorization" -> s"Bearer $accessToken"),
+      headers = Map("Authorization" -> s"Bearer ${accessToken.token}"),
       params = Map("fields" -> fields),
     )
   }
