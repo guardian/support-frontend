@@ -1,15 +1,19 @@
-import { css } from '@emotion/react';
-import { neutral } from '@guardian/source/foundations';
+import type { Theme} from '@emotion/react';
+import { css, useTheme } from '@emotion/react';
+import { brandAlt, neutral, opinion } from '@guardian/source/foundations';
 import type { ButtonProps } from '@guardian/source/react-components';
 import {
 	Button,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 
-const buttonOverrides = css`
+const buttonOverrides = (theme: Theme) => css`
 	width: 100%;
 	justify-content: center;
 	color: ${neutral[7]};
+	background-color: ${theme.organisation === 'guardian'
+		? brandAlt[400]
+		: opinion[400]};
 `;
 
 export type DefaultPaymentButtonProps = ButtonProps & {
@@ -25,10 +29,11 @@ export function DefaultPaymentButton({
 	buttonText,
 	...buttonProps
 }: DefaultPaymentButtonProps): JSX.Element {
+	const theme = useTheme();
 	return (
 		<Button
 			id={id}
-			cssOverrides={buttonOverrides}
+			cssOverrides={buttonOverrides(theme)}
 			isLoading={false}
 			{...buttonProps}
 			theme={themeButtonReaderRevenueBrand}
