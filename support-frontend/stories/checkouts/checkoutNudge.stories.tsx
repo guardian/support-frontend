@@ -45,37 +45,20 @@ export const Default = Template.bind({});
 
 Default.args = {
 	supportRegionId: SupportRegionId.UK,
-	ratePlanKey: 'Monthly',
-	recurringAmount: 5,
-	abTestName: 'nudgeToLowRegular',
-	abTestVariant: 'control',
+	heading: 'Make a bigger impact',
+	body: 'The reliability of recurring support powers our journalism in perpetuity. Could you make a small monthly contribution instead? Cancel anytime.',
+	product: 'Contribution',
+	ratePlan: 'Monthly',
+	amount: 5,
 };
 
-export const US = Template.bind({});
+export const Annual = Template.bind({});
 
-US.args = {
-	supportRegionId: SupportRegionId.US,
-	ratePlanKey: 'Monthly',
-	recurringAmount: 5,
-	abTestName: 'nudgeToLowRegular',
-	abTestVariant: 'control',
-};
-
-export const AU = Template.bind({});
-
-AU.args = {
-	supportRegionId: SupportRegionId.AU,
-	ratePlanKey: 'Monthly',
-	recurringAmount: 10,
-	abTestName: 'nudgeToLowRegular',
-	abTestVariant: 'control',
-};
-
-export const EU = Template.bind({});
-EU.args = {
-	supportRegionId: SupportRegionId.EU,
-	ratePlanKey: 'Monthly',
-	recurringAmount: 5,
-	abTestName: 'nudgeToLowRegular',
-	abTestVariant: 'control',
+Annual.args = {
+	supportRegionId: SupportRegionId.UK,
+	heading: 'Make a bigger impact',
+	body: 'The reliability of recurring support powers our journalism in perpetuity. Could you make an annual contribution instead? Cancel anytime.',
+	product: 'Contribution',
+	ratePlan: 'Annual',
+	amount: 5,
 };

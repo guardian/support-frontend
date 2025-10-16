@@ -72,12 +72,12 @@ const checkoutNudgeAbTests: CheckoutNudgeTest[] = [
 					ratePlan: 'Monthly',
 				},
 				nudgeCopy: {
-					heading: 'Can I make a bigger impact?',
-					body: 'Yes! We’re grateful for any amount you can spare, but supporting us on a monthly basis helps to power Guardian journalism in perpetuity. Cancel anytime.',
+					heading: 'Make a bigger impact',
+					body: 'The reliability of recurring support powers our journalism in perpetuity. Could you make a small monthly contribution instead? Cancel anytime.',
 				},
 				thankyouCopy: {
 					heading: 'Thank you for choosing to support us monthly',
-					body: 'Your support makes a huge difference in keeping our journalism free from outside influence.',
+					body: 'You are helping to support the future of independent journalism.',
 				},
 				showBenefits: false,
 			},
@@ -104,8 +104,9 @@ const productMatches = (
 	}
 };
 
-interface CheckoutNudgeParticipationsResult {
+export interface CheckoutNudgeSettings {
 	variant: CheckoutNudgeVariant;
+	fromProduct: CheckoutNudgeTest['nudgeFromProduct'];
 	participations: Participations;
 }
 export function getCheckoutNudgeParticipations(
@@ -114,18 +115,19 @@ export function getCheckoutNudgeParticipations(
 	tests: CheckoutNudgeTest[] = checkoutNudgeAbTests,
 	mvtId: number = getMvtId(),
 	queryString: string = window.location.search,
-): CheckoutNudgeParticipationsResult | undefined {
+): CheckoutNudgeSettings | undefined {
 	// Is the participation forced in the url querystring?
 	const urlParticipations = getParticipationFromQueryString(
 		queryString,
 		'force-checkout-nudge',
 	);
 	if (urlParticipations) {
-		const variant = getCheckoutTestVariant(urlParticipations, tests);
-		if (variant) {
+		const variantData = getCheckoutTestVariant(urlParticipations, tests);
+		if (variantData) {
 			return {
 				participations: urlParticipations,
-				variant,
+				fromProduct: variantData.test.nudgeFromProduct,
+				variant: variantData.variant,
 			};
 		}
 	}
@@ -138,11 +140,12 @@ export function getCheckoutNudgeParticipations(
 		sessionParticipations &&
 		Object.entries(sessionParticipations).length > 0
 	) {
-		const variant = getCheckoutTestVariant(sessionParticipations, tests);
-		if (variant) {
+		const variantData = getCheckoutTestVariant(sessionParticipations, tests);
+		if (variantData) {
 			return {
 				participations: sessionParticipations,
-				variant,
+				fromProduct: variantData.test.nudgeFromProduct,
+				variant: variantData.variant,
 			};
 		}
 	} else {
@@ -174,6 +177,7 @@ export function getCheckoutNudgeParticipations(
 
 				return {
 					participations,
+					fromProduct: test.nudgeFromProduct,
 					variant,
 				};
 			}
@@ -187,7 +191,7 @@ export function getCheckoutNudgeParticipations(
 function getCheckoutTestVariant(
 	participations: Participations,
 	checkoutNudgeTests: CheckoutNudgeTest[] = [],
-): CheckoutNudgeVariant | undefined {
+): { variant: CheckoutNudgeVariant; test: CheckoutNudgeTest } | undefined {
 	for (const test of checkoutNudgeTests) {
 		// Is the user in this test?
 		const variantName = participations[test.name];
@@ -196,7 +200,10 @@ function getCheckoutTestVariant(
 				(variant) => variant.name === variantName,
 			);
 			if (variant) {
-				return variant;
+				return {
+					test,
+					variant,
+				};
 			}
 		}
 	}
