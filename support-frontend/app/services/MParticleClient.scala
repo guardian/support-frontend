@@ -1,12 +1,13 @@
 package services
 
 import com.gu.monitoring.SafeLogging
+import com.gu.okhttp.RequestRunners.FutureHttpClient
+import com.gu.rest.WebServiceHelper
 import config.{MparticleConfig, MparticleConfigProvider}
-import io.circe.{Decoder, Encoder, Json}
+import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
 import org.joda.time.DateTime
-import play.api.libs.ws.WSClient
 
 import java.util.concurrent.atomic.AtomicReference
 import scala.concurrent.duration._
@@ -50,6 +51,8 @@ case class ProfileResponse(
     audience_memberships: List[AudienceMembership],
 )
 
+case class MParticleError(message: String) extends Throwable(message)
+
 object MParticleClient {
   implicit val oauthTokenRequestEncoder: Encoder[OAuthTokenRequest] = deriveEncoder
   implicit val oauthTokenResponseDecoder: Decoder[OAuthTokenResponse] = deriveDecoder
@@ -57,35 +60,31 @@ object MParticleClient {
   implicit val profileRequestEncoder: Encoder[ProfileRequest] = deriveEncoder
   implicit val audienceMembershipDecoder: Decoder[AudienceMembership] = deriveDecoder
   implicit val profileResponseDecoder: Decoder[ProfileResponse] = deriveDecoder
+  implicit val mparticleErrorDecoder: Decoder[MParticleError] = deriveDecoder
 }
 
 class MParticleClient(
-    wsClient: WSClient,
+    val httpClient: FutureHttpClient,
     mparticleConfigProvider: MparticleConfigProvider,
 )(implicit ec: ExecutionContext)
-    extends SafeLogging {
+    extends WebServiceHelper[MParticleError]
+    with SafeLogging {
+
+  import MParticleClient._
 
   private lazy val mparticleConfig: MparticleConfig = mparticleConfigProvider.get()
+
+  override val wsUrl: String = mparticleConfig.apiUrl
+  override val verboseLogging: Boolean = false
 
   private case class CachedToken(token: String, expiresAt: DateTime)
   private val tokenCache = new AtomicReference[Option[CachedToken]](None)
   private val safetyMargin = 2.minutes
 
-  def getUserProfile(identityId: String): Future[Option[MParticleUserProfile]] = {
-    getCachedAccessToken()
-      .flatMap { accessToken =>
-        callProfileAPI(identityId, accessToken.token).map(responseBody => Some(parseUserProfile(responseBody)))
-      }
-      .recover { case ex =>
-        logger.error(scrub"Failed to get mParticle user profile: ${ex.getMessage}", ex)
-        None
-      }
-  }
-
-  private def safeBodyHash(body: String): String = {
-    val hash = body.hashCode.abs
-    s"hash=$hash"
-  }
+  def getUserProfile(identityId: String): Future[MParticleUserProfile] = for {
+    accessToken <- getCachedAccessToken()
+    response <- callProfileAPI(identityId, accessToken.token)
+  } yield parseUserProfile(response)
 
   private def getCachedAccessToken(): Future[MParticleAccessToken] = {
     val now = DateTime.now()
@@ -107,8 +106,6 @@ class MParticleClient(
   }
 
   private def getAccessToken(): Future[(String, Int)] = {
-    import MParticleClient._
-
     val request = OAuthTokenRequest(
       client_id = mparticleConfig.clientId,
       client_secret = mparticleConfig.clientSecret,
@@ -116,73 +113,57 @@ class MParticleClient(
       grant_type = "client_credentials",
     )
 
-    wsClient
+    // OAuth token endpoint is on a different domain, so we need to use a custom HTTP client call
+    import com.gu.okhttp.RichOkHttpClient
+    import okhttp3._
+
+    val body = RequestBody.create(
+      MediaType.parse("application/json; charset=utf-8"),
+      request.asJson.noSpaces,
+    )
+
+    val oauthRequest = new Request.Builder()
       .url(mparticleConfig.tokenUrl)
-      .withHttpHeaders("Content-Type" -> "application/json")
-      .post(request.asJson.noSpaces)
-      .flatMap { response =>
-        if (response.status >= 200 && response.status < 300) {
-          io.circe.parser.decode[OAuthTokenResponse](response.body) match {
-            case Right(tokenResponse) =>
-              Future.successful((tokenResponse.access_token, tokenResponse.expires_in))
-            case Left(error) =>
-              val errorMsg = s"Error parsing access token response: ${error.getMessage}"
-              logger.error(scrub"Error parsing access token response: ${error.getMessage}")
-              Future.failed(new RuntimeException(errorMsg))
-          }
-        } else {
-          val errorMsg = s"mParticle OAuth returned error: status=${response.status}"
-          logger.warn(
-            s"mParticle OAuth returned error: status=${response.status}, body_length=${response.body.length}, ${safeBodyHash(response.body)}",
-          )
-          Future.failed(new RuntimeException(errorMsg))
+      .post(body)
+      .build()
+
+    httpClient(oauthRequest).flatMap { response =>
+      if (response.code() == 200) {
+        io.circe.parser.decode[OAuthTokenResponse](response.body().string()) match {
+          case Right(tokenResponse) =>
+            Future.successful((tokenResponse.access_token, tokenResponse.expires_in))
+          case Left(error) =>
+            val errorMsg = s"Error parsing access token response: ${error.getMessage}"
+            Future.failed(new RuntimeException(errorMsg))
         }
+      } else {
+        val errorMsg = s"mParticle OAuth returned error: status=${response.code()} body=${response.body().string()}"
+        Future.failed(new RuntimeException(errorMsg))
       }
+    }
   }
 
-  private def callProfileAPI(identityId: String, accessToken: String): Future[String] = {
-    import MParticleClient._
-
+  private def callProfileAPI(identityId: String, accessToken: String): Future[ProfileResponse] = {
     val fields = "audience_memberships"
-    val url =
-      s"${mparticleConfig.apiUrl}/userprofile/v1/resolve/${mparticleConfig.orgId}/${mparticleConfig.accountId}/${mparticleConfig.workspaceId}?fields=$fields"
+    val endpoint =
+      s"userprofile/v1/resolve/${mparticleConfig.orgId}/${mparticleConfig.accountId}/${mparticleConfig.workspaceId}"
 
     val request = ProfileRequest(
       environment_type = mparticleConfig.apiEnv,
       identity = Identity(`type` = "customer_id", value = identityId),
     )
 
-    wsClient
-      .url(url)
-      .withHttpHeaders(
-        "Authorization" -> s"Bearer $accessToken",
-        "Content-Type" -> "application/json",
-      )
-      .post(request.asJson.noSpaces)
-      .flatMap { response =>
-        if (response.status >= 200 && response.status < 300) {
-          Future.successful(response.body)
-        } else {
-          val errorMsg = s"mParticle Profile API returned error: status=${response.status}"
-          logger.warn(
-            s"mParticle Profile API returned error: status=${response.status}, body_length=${response.body.length}, ${safeBodyHash(response.body)}",
-          )
-          Future.failed(new RuntimeException(errorMsg))
-        }
-      }
+    postJson[ProfileResponse](
+      endpoint = endpoint,
+      data = request.asJson,
+      headers = Map("Authorization" -> s"Bearer $accessToken"),
+      params = Map("fields" -> fields),
+    )
   }
 
-  private def parseUserProfile(responseBody: String): MParticleUserProfile = {
-    import MParticleClient._
-
-    io.circe.parser.decode[ProfileResponse](responseBody) match {
-      case Right(profileResponse) =>
-        val hasMobileAppDownloaded = profileResponse.audience_memberships.exists(_.audience_id == 22581)
-        val hasFeastMobileAppDownloaded = profileResponse.audience_memberships.exists(_.audience_id == 22582)
-        MParticleUserProfile(hasMobileAppDownloaded, hasFeastMobileAppDownloaded)
-      case Left(error) =>
-        logger.error(scrub"Error parsing mParticle response: ${error.getMessage}")
-        MParticleUserProfile(hasMobileAppDownloaded = false, hasFeastMobileAppDownloaded = false)
-    }
+  private def parseUserProfile(profileResponse: ProfileResponse): MParticleUserProfile = {
+    val hasMobileAppDownloaded = profileResponse.audience_memberships.exists(_.audience_id == 22581)
+    val hasFeastMobileAppDownloaded = profileResponse.audience_memberships.exists(_.audience_id == 22582)
+    MParticleUserProfile(hasMobileAppDownloaded, hasFeastMobileAppDownloaded)
   }
 }

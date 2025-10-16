@@ -175,20 +175,18 @@ function ThankYouOnboardingComponent({
 				}
 			}
 
-			try {
-				const response = await fetchJson<{
-					identityId: string;
-					status: string;
-					message: string;
-					hasMobileAppDownloaded: boolean;
-					hasFeastMobileAppDownloaded: boolean;
-				}>('/analytics-user-profile', {
-					mode: 'cors',
-					credentials: 'include',
-				});
+		try {
+			const response = await fetchJson<{
+				identityId: string;
+				hasMobileAppDownloaded: boolean;
+				hasFeastMobileAppDownloaded: boolean;
+			}>('/analytics-user-profile', {
+				mode: 'cors',
+				credentials: 'include',
+			});
 
-				setHasMobileAppDownloaded(response.hasMobileAppDownloaded);
-				setHasFeastMobileAppDownloaded(response.hasFeastMobileAppDownloaded);
+			setHasMobileAppDownloaded(response.hasMobileAppDownloaded);
+			setHasFeastMobileAppDownloaded(response.hasFeastMobileAppDownloaded);
 
 				const dataToCache = {
 					hasMobileAppDownloaded: response.hasMobileAppDownloaded,
