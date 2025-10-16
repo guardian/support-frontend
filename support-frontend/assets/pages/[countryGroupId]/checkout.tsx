@@ -47,13 +47,6 @@ type Props = {
 	landingPageSettings: LandingPageVariant;
 };
 
-type Organisation = 'guardian' | 'observer';
-type OrganisationTheme = {
-	organisation: Organisation;
-};
-const org: OrganisationTheme = { organisation: 'observer' };
-const theme: Theme = org;
-
 const countryId: IsoCountry = Country.detect();
 
 const getPromotionFromProductPrices = (
@@ -297,6 +290,20 @@ export function Checkout({
 		promotion,
 		true,
 	);
+
+	// Only this product and ratePlan are Observer products
+	const isObserver =
+		ratePlanKey === 'Sunday' || productKey === 'SubscriptionCard';
+
+	// set theme based on organisation
+	type Organisation = 'guardian' | 'observer';
+	type OrganisationTheme = {
+		organisation: Organisation;
+	};
+	const orgTheme: OrganisationTheme = {
+		organisation: isObserver ? 'observer' : 'guardian',
+	};
+	const theme: Theme = orgTheme;
 
 	return (
 		<ThemeProvider theme={theme}>
