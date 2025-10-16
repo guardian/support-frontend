@@ -21,22 +21,14 @@ import {
 	trackComponentClick,
 	trackComponentLoad,
 } from 'helpers/tracking/behaviour';
+import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 	ProductBenefit,
 } from '../../helpers/productCatalog';
+import { productCatalog } from '../../helpers/productCatalog';
 import { getSupportRegionIdConfig } from '../../pages/supportRegionConfig';
-
-export interface CheckoutNudgeProps {
-	supportRegionId: SupportRegionId;
-	heading: string;
-	body?: string;
-	benefits?: ProductBenefit[];
-	product: ActiveProductKey;
-	ratePlan: ActiveRatePlanKey;
-	amount: number;
-}
 
 const nudgeBoxOverrides = css`
 	background-color: ${neutral[97]};
@@ -78,14 +70,22 @@ const nudgeButtonOverrides = css`
 	width: 100%;
 `;
 
-export function CheckoutNudge({
+function Nudge({
 	supportRegionId,
 	heading,
 	body,
 	product,
 	ratePlan,
 	amount,
-}: CheckoutNudgeProps) {
+}: {
+	supportRegionId: SupportRegionId;
+	heading: string;
+	body?: string;
+	benefits?: ProductBenefit[];
+	product: ActiveProductKey;
+	ratePlan: ActiveRatePlanKey;
+	amount: number;
+}) {
 	useEffect(() => {
 		trackComponentLoad('checkoutNudge');
 	}, []);
@@ -93,6 +93,7 @@ export function CheckoutNudge({
 	const { currency } = getSupportRegionIdConfig(supportRegionId);
 
 	if (!(ratePlan === 'Monthly' || ratePlan === 'Annual')) {
+		// Only these rate plans are currently supported
 		return null;
 	}
 	const ratePlanDescription = ratePlan === 'Monthly' ? 'month' : 'year';
@@ -204,10 +205,7 @@ const imageOverride = css`
 	margin-top: ${space[2]}px;
 `;
 
-export function CheckoutNudgeThankYou({
-	heading,
-	body,
-}: CheckoutNudgeThankYouProps) {
+function NudgeThankYou({ heading, body }: CheckoutNudgeThankYouProps) {
 	return (
 		<Box cssOverrides={thankYouBoxOverrides}>
 			<BoxContents cssOverrides={innerThankYouBoxOverrides}>
@@ -225,4 +223,59 @@ export function CheckoutNudgeThankYou({
 			</BoxContents>
 		</Box>
 	);
+}
+
+/**
+ * The CheckoutNudge component is used on the checkout components.
+ * If the current product+ratePlan matches the nudge's `fromProduct` then the nudge is displayed.
+ * If the current product+ratePlan matches the nudge's `toProduct` and the 'fromNudge' query param is present then the nudge thankyou is displayed.
+ */
+
+interface CheckoutNudgeProps {
+	nudgeSettings: CheckoutNudgeSettings;
+	currentProduct: ActiveProductKey;
+	currentRatePlan: ActiveRatePlanKey;
+	supportRegionId: SupportRegionId;
+}
+
+export function CheckoutNudge({
+	nudgeSettings,
+	currentProduct,
+	currentRatePlan,
+	supportRegionId,
+}: CheckoutNudgeProps) {
+	if (
+		nudgeSettings.fromProduct.product === currentProduct &&
+		nudgeSettings.fromProduct.ratePlan === currentRatePlan
+	) {
+		// Show the nudge
+		const { nudgeToProduct } = nudgeSettings.variant;
+		const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
+		const amount =
+			productCatalog[nudgeToProduct.product]?.ratePlans[nudgeToProduct.ratePlan]
+				?.pricing[currencyKey];
+
+		if (amount) {
+			const props = {
+				supportRegionId,
+				product: nudgeToProduct.product,
+				ratePlan: nudgeToProduct.ratePlan,
+				amount,
+				heading: nudgeSettings.variant.nudgeCopy.heading,
+				body: nudgeSettings.variant.nudgeCopy.body,
+			};
+			return <Nudge {...props} />;
+		}
+	} else if (
+		new URLSearchParams(window.location.search).get('fromNudge') &&
+		nudgeSettings.variant.nudgeToProduct.product === currentProduct &&
+		nudgeSettings.variant.nudgeToProduct.ratePlan === currentRatePlan
+	) {
+		// Show the thankyou
+		const { heading, body } = nudgeSettings.variant.thankyouCopy;
+		return <NudgeThankYou heading={heading} body={body} />;
+	}
+
+	// Nothing to show
+	return null;
 }

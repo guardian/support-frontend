@@ -61,7 +61,6 @@ import {
 } from 'helpers/forms/paymentMethods';
 import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import { productCatalog } from 'helpers/productCatalog';
 import * as cookie from 'helpers/storage/cookie';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import {
@@ -85,7 +84,6 @@ import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/co
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
-import type { CheckoutNudgeProps } from '../../../components/checkoutNudge/checkoutNudge';
 import { CheckoutNudge } from '../../../components/checkoutNudge/checkoutNudge';
 import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
 import {
@@ -600,28 +598,6 @@ export function OneTimeCheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	// TODO - handle from/to product?
-	const buildNudgeProps = (
-		settings: CheckoutNudgeSettings,
-	): CheckoutNudgeProps | undefined => {
-		const { product, ratePlan } = settings.variant.nudgeToProduct;
-		const amount =
-			productCatalog[product]?.ratePlans[ratePlan]?.pricing[currencyKey];
-		if (amount) {
-			return {
-				supportRegionId,
-				product,
-				ratePlan,
-				amount,
-				heading: settings.variant.nudgeCopy.heading,
-				body: settings.variant.nudgeCopy.body,
-			};
-		}
-		return undefined;
-	};
-
-	const nudgeProps = nudgeSettings && buildNudgeProps(nudgeSettings);
-
 	const paymentButtonText = finalAmount
 		? paymentMethod === 'PayPal'
 			? `Pay ${simpleFormatAmount(currency, finalAmount)} with PayPal`
@@ -683,7 +659,14 @@ export function OneTimeCheckoutComponent({
 							}
 						/>
 					</div>
-					{nudgeProps && <CheckoutNudge {...nudgeProps} />}
+					{nudgeSettings && (
+						<CheckoutNudge
+							nudgeSettings={nudgeSettings}
+							currentProduct={'OneTimeContribution'}
+							currentRatePlan={'OneTime'}
+							supportRegionId={supportRegionId}
+						/>
+					)}
 				</BoxContents>
 			</Box>
 			<form

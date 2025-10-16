@@ -18,24 +18,19 @@ import {
 	BenefitsCheckList,
 	type BenefitsCheckListData,
 } from 'components/checkoutBenefits/benefitsCheckList';
-import {
-	CheckoutNudge,
-	CheckoutNudgeThankYou,
-} from 'components/checkoutNudge/checkoutNudge';
+import { CheckoutNudge } from 'components/checkoutNudge/checkoutNudge';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import { productCatalog } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { AppConfig } from '../../helpers/globalsAndSwitches/window';
-import { getSupportRegionIdConfig } from '../../pages/supportRegionConfig';
 import { PriceSummary } from './priceSummary';
 
 const componentStyles = css`
@@ -205,43 +200,6 @@ export function ContributionsOrderSummary({
 		studentDiscount?.discountPriceWithCurrency ?? promoDiscountPrice;
 	const period = studentDiscount?.periodNoun ?? paymentFrequency;
 
-	function Nudge() {
-		if (nudgeSettings) {
-			// Show the nudge?
-			if (
-				nudgeSettings.fromProduct.product === productKey &&
-				nudgeSettings.fromProduct.ratePlan === ratePlanKey
-			) {
-				const { nudgeToProduct } = nudgeSettings.variant;
-				const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
-				const amount =
-					productCatalog[nudgeToProduct.product]?.ratePlans[
-						nudgeToProduct.ratePlan
-					]?.pricing[currencyKey];
-				if (amount) {
-					const props = {
-						supportRegionId,
-						product: nudgeToProduct.product,
-						ratePlan: nudgeToProduct.ratePlan,
-						amount,
-						heading: nudgeSettings.variant.nudgeCopy.heading,
-						body: nudgeSettings.variant.nudgeCopy.body,
-					};
-					return <CheckoutNudge {...props} />;
-				}
-			} // show the thankyou?
-			else if (
-				new URLSearchParams(window.location.search).get('fromNudge') &&
-				nudgeSettings.variant.nudgeToProduct.product === productKey &&
-				nudgeSettings.variant.nudgeToProduct.ratePlan === ratePlanKey
-			) {
-				const { heading, body } = nudgeSettings.variant.thankyouCopy;
-				return <CheckoutNudgeThankYou heading={heading} body={body} />;
-			}
-		}
-		return null;
-	}
-
 	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 
 	return (
@@ -296,7 +254,14 @@ export function ContributionsOrderSummary({
 					isWeeklyGift={isWeeklyGift}
 				/>
 			</div>
-			<Nudge />
+			{nudgeSettings && (
+				<CheckoutNudge
+					nudgeSettings={nudgeSettings}
+					currentProduct={productKey}
+					currentRatePlan={ratePlanKey}
+					supportRegionId={supportRegionId}
+				/>
+			)}
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
 		</div>
 	);
