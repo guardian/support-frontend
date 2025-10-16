@@ -16,14 +16,44 @@ object GetAccessTokenResponse {
   implicit val codec: Codec[GetAccessTokenResponse] = deriveCodec
 }
 
-case class CreateSetupTokenRequest()
+case class PayPalPaymentSource()
+object PayPalPaymentSource {
+  implicit val codec: Codec[PayPalPaymentSource] = deriveCodec
+}
+
+case class PayPalTokenSource(id: String, `type`: String = "SETUP_TOKEN")
+object PayPalTokenSource {
+  implicit val codec: Codec[PayPalTokenSource] = deriveCodec
+}
+
+case class SetupPaymentSource(paypal: PayPalPaymentSource = PayPalPaymentSource())
+object SetupPaymentSource {
+  implicit val codec: Codec[SetupPaymentSource] = deriveCodec
+}
+
+case class CreateSetupTokenRequest(payment_source: SetupPaymentSource = SetupPaymentSource())
 object CreateSetupTokenRequest {
   implicit val codec: Codec[CreateSetupTokenRequest] = deriveCodec
 }
 
-case class CreateSetupTokenResponse()
+case class CreateSetupTokenResponse(id: String)
 object CreateSetupTokenResponse {
   implicit val codec: Codec[CreateSetupTokenResponse] = deriveCodec
+}
+
+case class CreatePaymentTokenResponse(id: String)
+object CreatePaymentTokenResponse {
+  implicit val codec: Codec[CreatePaymentTokenResponse] = deriveCodec
+}
+
+case class PaymentSource(token: PayPalTokenSource)
+object PaymentSource {
+  implicit val codec: Codec[PaymentSource] = deriveCodec
+}
+
+case class CreatePaymentTokenRequest(payment_source: PaymentSource)
+object CreatePaymentTokenRequest {
+  implicit val codec: Codec[CreatePaymentTokenRequest] = deriveCodec
 }
 
 case class PayPalCompletePaymentsError(Message: String) extends Throwable(s"$Message")
@@ -46,22 +76,28 @@ class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client
     )
   }
 
-  def createSetupToken: Future[CreateSetupTokenResponse] = {
+  def createSetupToken: Future[String] = {
     val payload = CreateSetupTokenRequest()
     for {
       getAccessTokenResponse <- postForm[GetAccessTokenResponse](
         endpoint = "/v1/oauth2/token",
         data = Map("grant_type" -> List("client_credentials")),
         headers = Map(
-          "Authorization" -> ("Basic " + java.util.Base64.getEncoder.encodeToString("CLIENT_ID:CLIENT_SECRET".getBytes)),
+          "Authorization" -> ("Basic " + java.util.Base64.getEncoder
+            .encodeToString(s"${config.clientId}:${config.clientSecret}".getBytes)),
         ),
       )
-      tokenResponse <- postJson[CreateSetupTokenResponse](
+      setupTokenResponse <- postJson[CreateSetupTokenResponse](
         endpoint = "/v3/vault/setup-tokens",
         data = payload.asJson,
         headers = buildAuthorization(getAccessTokenResponse.access_token),
       )
-    } yield tokenResponse
+      vaultTokenResponse <- postJson[CreatePaymentTokenResponse](
+        endpoint = "/v3/vault/payment-tokens",
+        data = CreatePaymentTokenRequest(PaymentSource(PayPalTokenSource(setupTokenResponse.id))).asJson,
+        headers = buildAuthorization(getAccessTokenResponse.access_token),
+      )
+    } yield vaultTokenResponse.id
 
   }
 }

@@ -1,5 +1,5 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import type { BillingPeriod } from '@modules/product/billingPeriod';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
 import { isProd } from 'helpers/urls/url';
@@ -133,7 +133,14 @@ export function SubmitButton({
 		case 'PayPalCompletePayments':
 			return (
 				<PayPalScriptProvider
-					options={{ clientId: 'test', vault: true, intent: 'tokenize' }}
+					options={{
+						clientId: 'sb',
+						vault: true,
+						intent: 'tokenize',
+						environment: 'sandbox',
+						currency: 'GBP',
+						debug: false,
+					}}
 				>
 					<PayPalButtons
 						style={{ layout: 'horizontal' }}
@@ -141,6 +148,13 @@ export function SubmitButton({
 						// 	return Promise.resolve('TEST_VAULT_SETUP_TOKEN');
 						// }}
 						createBillingAgreement={async () => {
+							// OLD CODE BELOW
+							// const setupToken = await setupPayPalPayment(
+							// 	10,
+							// 	'GBP',
+							// 	BillingPeriod.Monthly,
+							// 	csrf,
+							// );
 							const setupToken = await createSetupToken(csrf);
 							console.log({ setupToken });
 							return setupToken;
