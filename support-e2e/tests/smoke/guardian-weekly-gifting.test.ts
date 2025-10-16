@@ -38,7 +38,7 @@ test.describe('Guardian Weekly Gift Checkout', () =>
 			baseURL,
 		}) => {
 			await visitLandingPageAndCompleteCheckout(
-				`/${internationalisationId.toLowerCase()}/subscribe/weekly/gift#ab-guardianWeeklyGiftGenericCheckout=variant`,
+				`/${internationalisationId.toLowerCase()}/subscribe/weekly/gift`,
 				{
 					context,
 					baseURL,
