@@ -31,6 +31,7 @@ import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSunda
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
+import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { PriceSummary } from './priceSummary';
 
 const componentStyles = css`
@@ -155,6 +156,7 @@ export type ContributionsOrderSummaryProps = {
 	studentDiscount?: StudentDiscount;
 	supportRegionId: SupportRegionId;
 	nudgeSettings?: CheckoutNudgeSettings;
+	landingPageSettings: LandingPageVariant;
 };
 
 export function ContributionsOrderSummary({
@@ -175,6 +177,7 @@ export function ContributionsOrderSummary({
 	studentDiscount,
 	supportRegionId,
 	nudgeSettings,
+	landingPageSettings,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -260,6 +263,7 @@ export function ContributionsOrderSummary({
 					currentProduct={productKey}
 					currentRatePlan={ratePlanKey}
 					supportRegionId={supportRegionId}
+					landingPageSettings={landingPageSettings}
 				/>
 			)}
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}

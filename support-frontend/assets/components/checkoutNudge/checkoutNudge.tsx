@@ -22,12 +22,16 @@ import {
 	trackComponentLoad,
 } from 'helpers/tracking/behaviour';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
+import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from '../../helpers/productCatalog';
 import { productCatalog } from '../../helpers/productCatalog';
+import { getBenefitsChecklistFromLandingPageTool } from '../../pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { getSupportRegionIdConfig } from '../../pages/supportRegionConfig';
+import type { BenefitsCheckListData } from '../checkoutBenefits/benefitsCheckList';
+import { BenefitsCheckList } from '../checkoutBenefits/benefitsCheckList';
 
 const nudgeBoxOverrides = css`
 	border: none;
@@ -69,6 +73,15 @@ const nudgeButtonOverrides = css`
 	width: 100%;
 `;
 
+const benefitsContainer = css`
+	margin-top: ${space[2]}px;
+`;
+const benefitsLabel = css`
+	${textSans15};
+	font-weight: 700;
+	margin-bottom: ${space[2]}px;
+`;
+
 export interface CheckoutNudgeProps {
 	supportRegionId: SupportRegionId;
 	heading: string;
@@ -76,6 +89,10 @@ export interface CheckoutNudgeProps {
 	product: ActiveProductKey;
 	ratePlan: ActiveRatePlanKey;
 	amount: number;
+	benefits?: {
+		label: string;
+		checkListData: BenefitsCheckListData[];
+	};
 }
 
 export function CheckoutNudge({
@@ -85,6 +102,7 @@ export function CheckoutNudge({
 	product,
 	ratePlan,
 	amount,
+	benefits,
 }: CheckoutNudgeProps) {
 	useEffect(() => {
 		trackComponentLoad('checkoutNudge');
@@ -133,6 +151,16 @@ export function CheckoutNudge({
 				>
 					{getButtonCopy}
 				</LinkButton>
+				{benefits && (
+					<div css={benefitsContainer}>
+						<div css={benefitsLabel}>{benefits.label}</div>
+						<BenefitsCheckList
+							benefitsCheckListData={benefits.checkListData}
+							style="compact"
+							iconColor={palette.brand[500]}
+						/>
+					</div>
+				)}
 			</BoxContents>
 		</Box>
 	);
@@ -239,6 +267,7 @@ interface CheckoutNudgeSelectorProps {
 	currentProduct: ActiveProductKey;
 	currentRatePlan: ActiveRatePlanKey;
 	supportRegionId: SupportRegionId;
+	landingPageSettings: LandingPageVariant;
 }
 
 export function CheckoutNudgeSelector({
@@ -246,6 +275,7 @@ export function CheckoutNudgeSelector({
 	currentProduct,
 	currentRatePlan,
 	supportRegionId,
+	landingPageSettings,
 }: CheckoutNudgeSelectorProps) {
 	const { nudge } = nudgeSettings.variant;
 	if (!nudge) {
@@ -267,6 +297,11 @@ export function CheckoutNudgeSelector({
 			];
 
 		if (amount) {
+			const checkListData =
+				getBenefitsChecklistFromLandingPageTool(
+					nudgeToProduct.product,
+					landingPageSettings,
+				) ?? [];
 			const props = {
 				supportRegionId,
 				product: nudgeToProduct.product,
@@ -274,6 +309,9 @@ export function CheckoutNudgeSelector({
 				amount,
 				heading: nudge.nudgeCopy.heading,
 				body: nudge.nudgeCopy.body,
+				benefits: nudge.benefits
+					? { checkListData, label: nudge.benefits.label }
+					: undefined,
 			};
 			return <CheckoutNudge {...props} />;
 		}
