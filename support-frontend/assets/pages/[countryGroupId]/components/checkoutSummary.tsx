@@ -26,6 +26,7 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { parameteriseUrl } from 'helpers/urls/routes';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
@@ -58,6 +59,7 @@ type CheckoutSummaryProps = {
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
+	nudgeSettings?: CheckoutNudgeSettings;
 };
 
 export default function CheckoutSummary({
@@ -74,6 +76,7 @@ export default function CheckoutSummary({
 	weeklyDeliveryDate,
 	thresholdAmount,
 	studentDiscount,
+	nudgeSettings,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
@@ -230,9 +233,10 @@ export default function CheckoutSummary({
 							<BackButton path={backUrl} buttonText={'Change'} />
 						)
 					}
-					abParticipations={abParticipations}
 					studentDiscount={studentDiscount}
 					supportRegionId={supportRegionId}
+					productCatalog={productCatalog}
+					nudgeSettings={nudgeSettings}
 				/>
 			</BoxContents>
 		</Box>

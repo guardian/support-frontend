@@ -85,7 +85,9 @@ import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/co
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import type { CheckoutNudgeProps } from '../../../components/checkoutNudge/checkoutNudge';
 import { CheckoutNudge } from '../../../components/checkoutNudge/checkoutNudge';
+import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
 import {
 	updateAbandonedBasketCookie,
 	useAbandonedBasketCookie,
@@ -168,6 +170,7 @@ type OneTimeCheckoutComponentProps = {
 	countryId: IsoCountry;
 	abParticipations: Participations;
 	useStripeExpressCheckout: boolean;
+	nudgeSettings?: CheckoutNudgeSettings;
 };
 
 function paymentMethodIsActive(paymentMethod: PaymentMethod) {
@@ -252,6 +255,7 @@ export function OneTimeCheckoutComponent({
 	countryId,
 	abParticipations,
 	useStripeExpressCheckout,
+	nudgeSettings,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -596,8 +600,27 @@ export function OneTimeCheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	const nudgeRecurringAmount = productCatalog.Contribution?.ratePlans['Monthly']
-		?.pricing[currencyKey] as number;
+	// TODO - handle from/to product?
+	const buildNudgeProps = (
+		settings: CheckoutNudgeSettings,
+	): CheckoutNudgeProps | undefined => {
+		const { product, ratePlan } = settings.variant.nudgeToProduct;
+		const amount =
+			productCatalog[product]?.ratePlans[ratePlan]?.pricing[currencyKey];
+		if (amount) {
+			return {
+				supportRegionId,
+				product,
+				ratePlan,
+				amount,
+				heading: settings.variant.nudgeCopy.heading,
+				body: settings.variant.nudgeCopy.body,
+			};
+		}
+		return undefined;
+	};
+
+	const nudgeProps = nudgeSettings && buildNudgeProps(nudgeSettings);
 
 	const paymentButtonText = finalAmount
 		? paymentMethod === 'PayPal'
@@ -660,13 +683,7 @@ export function OneTimeCheckoutComponent({
 							}
 						/>
 					</div>
-					<CheckoutNudge
-						supportRegionId={supportRegionId}
-						ratePlanKey="Monthly"
-						recurringAmount={nudgeRecurringAmount}
-						abTestName="nudgeToLowRegularRollout"
-						abTestVariant="control"
-					/>
+					{nudgeProps && <CheckoutNudge {...nudgeProps} />}
 				</BoxContents>
 			</Box>
 			<form

@@ -14,22 +14,28 @@ import {
 	LinkButton,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { useEffect } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import {
 	trackComponentClick,
 	trackComponentLoad,
 } from 'helpers/tracking/behaviour';
-import type { ActiveRatePlanKey } from '../../helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+	ProductBenefit,
+} from '../../helpers/productCatalog';
 import { getSupportRegionIdConfig } from '../../pages/supportRegionConfig';
 
 export interface CheckoutNudgeProps {
 	supportRegionId: SupportRegionId;
-	ratePlanKey: ActiveRatePlanKey;
-	recurringAmount: number;
-	abTestName: string;
-	abTestVariant: string | undefined;
+	heading: string;
+	body?: string;
+	benefits?: ProductBenefit[];
+	product: ActiveProductKey;
+	ratePlan: ActiveRatePlanKey;
+	amount: number;
 }
 
 const nudgeBoxOverrides = css`
@@ -61,66 +67,59 @@ const headlineOverrides = css`
 
 const bodyCopyOverrides = css`
 	margin-top: ${space[2]}px;
-	${textSans15}
+	${textSans15};
 	font-weight: 700;
 `;
 
 const nudgeButtonOverrides = css`
 	margin-top: ${space[2]}px;
-	${textSans17}
+	${textSans17};
 	font-weight: 700;
 	width: 100%;
 `;
 
 export function CheckoutNudge({
 	supportRegionId,
-	ratePlanKey,
-	recurringAmount,
-	abTestName,
-	abTestVariant,
+	heading,
+	body,
+	product,
+	ratePlan,
+	amount,
 }: CheckoutNudgeProps) {
 	useEffect(() => {
-		trackComponentLoad(`checkoutNudge-${abTestName}--${abTestVariant}`);
+		trackComponentLoad('checkoutNudge');
 	}, []);
 
 	const { currency } = getSupportRegionIdConfig(supportRegionId);
 
-	if (!['Monthly', 'Annual'].includes(ratePlanKey)) {
-		ratePlanKey = 'Monthly';
+	if (!(ratePlan === 'Monthly' || ratePlan === 'Annual')) {
+		return null;
 	}
+	const ratePlanDescription = ratePlan === 'Monthly' ? 'month' : 'year';
 
-	const ratePlanDescription = ratePlanKey === 'Monthly' ? 'month' : 'year';
-
+	// TODO - different copy?
 	const getButtonCopy = `Support us for ${
 		currency.glyph
-	}${recurringAmount.toString()}/${ratePlanDescription}`;
+	}${amount.toString()}/${ratePlanDescription}`;
 
-	const tier1UrlParams = new URLSearchParams({
-		product: 'Contribution',
-		ratePlan: ratePlanKey,
-		contribution: recurringAmount.toString(),
-		nudge: 'toRegular',
+	const urlParams = new URLSearchParams({
+		product,
+		ratePlan,
+		...(product === 'Contribution' ? { contribution: amount.toString() } : {}),
+		fromNudge: 'true',
 	});
 
-	const buildCtaUrl = `checkout?${tier1UrlParams.toString()}`;
-
-	const getNudgeHeadline =
-		supportRegionId !== SupportRegionId.US
-			? 'Make a bigger impact'
-			: 'Can I make a bigger impact?';
-
-	const getNudgeCopy =
-		supportRegionId !== SupportRegionId.US
-			? 'The reliability of recurring support powers our journalism in perpetuity. Could you make a small monthly contribution instead? Cancel anytime.'
-			: 'Yes! We’re grateful for any amount you can spare, but supporting us on a monthly basis helps to power Guardian journalism in perpetuity. Cancel anytime.';
+	const buildCtaUrl = `checkout?${urlParams.toString()}`;
 
 	return (
 		<Box cssOverrides={nudgeBoxOverrides}>
 			<BoxContents cssOverrides={innerBoxOverrides}>
-				<h3 css={headlineOverrides}>{getNudgeHeadline}</h3>
-				<div css={bodyCopyOverrides}>
-					<p>{getNudgeCopy}</p>
-				</div>
+				<h3 css={headlineOverrides}>{heading}</h3>
+				{body && (
+					<div css={bodyCopyOverrides}>
+						<p>{body}</p>
+					</div>
+				)}
 				<LinkButton
 					id="id_checkoutNudge"
 					cssOverrides={nudgeButtonOverrides}
@@ -128,9 +127,7 @@ export function CheckoutNudge({
 					theme={themeButtonReaderRevenueBrand}
 					href={buildCtaUrl}
 					onClick={() => {
-						trackComponentClick(
-							`checkoutNudge-${abTestName}--${abTestVariant}`,
-						);
+						trackComponentClick('checkoutNudge');
 					}}
 				>
 					{getButtonCopy}
@@ -141,7 +138,8 @@ export function CheckoutNudge({
 }
 
 export interface CheckoutNudgeThankYouProps {
-	supportRegionId: SupportRegionId;
+	heading: string;
+	body?: string;
 }
 
 const thankYouBoxOverrides = css`
@@ -193,7 +191,7 @@ const headingOverride = css`
 const copyOverride = css`
 	grid-area: copy;
 	margin-top: ${space[2]}px;
-	${textSans15}
+	${textSans15};
 	font-weight: 700;
 	padding-bottom: ${space[3]}px;
 `;
@@ -207,21 +205,15 @@ const imageOverride = css`
 `;
 
 export function CheckoutNudgeThankYou({
-	supportRegionId,
+	heading,
+	body,
 }: CheckoutNudgeThankYouProps) {
-	const getNudgeHeadline = 'Thank you for choosing to support us monthly';
-
-	const getNudgeCopy =
-		supportRegionId !== SupportRegionId.US
-			? 'You are helping to support the future of independent journalism.'
-			: 'Your support makes a huge difference in keeping our journalism free from outside influence.';
-
 	return (
 		<Box cssOverrides={thankYouBoxOverrides}>
 			<BoxContents cssOverrides={innerThankYouBoxOverrides}>
 				<div css={nudgeThankYouBox}>
-					<h3 css={headingOverride}>{getNudgeHeadline}</h3>
-					<p css={copyOverride}>{getNudgeCopy}</p>
+					<h3 css={headingOverride}>{heading}</h3>
+					{body && <p css={copyOverride}>{body}</p>}
 					<img
 						css={imageOverride}
 						width="116px"

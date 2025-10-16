@@ -18,18 +18,24 @@ import {
 	BenefitsCheckList,
 	type BenefitsCheckListData,
 } from 'components/checkoutBenefits/benefitsCheckList';
-import { CheckoutNudgeThankYou } from 'components/checkoutNudge/checkoutNudge';
-import type { Participations } from 'helpers/abTests/models';
+import {
+	CheckoutNudge,
+	CheckoutNudgeThankYou,
+} from 'components/checkoutNudge/checkoutNudge';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
+import { productCatalog } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
+import type { AppConfig } from '../../helpers/globalsAndSwitches/window';
+import { getSupportRegionIdConfig } from '../../pages/supportRegionConfig';
 import { PriceSummary } from './priceSummary';
 
 const componentStyles = css`
@@ -150,9 +156,10 @@ export type ContributionsOrderSummaryProps = {
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
 	tsAndCsTier3?: React.ReactNode;
-	abParticipations?: Participations;
 	studentDiscount?: StudentDiscount;
 	supportRegionId: SupportRegionId;
+	productCatalog: AppConfig['productCatalog'];
+	nudgeSettings?: CheckoutNudgeSettings;
 };
 
 export function ContributionsOrderSummary({
@@ -170,9 +177,9 @@ export function ContributionsOrderSummary({
 	tsAndCs,
 	startDate,
 	enableCheckList,
-	abParticipations,
 	studentDiscount,
 	supportRegionId,
+	nudgeSettings,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -198,34 +205,43 @@ export function ContributionsOrderSummary({
 		studentDiscount?.discountPriceWithCurrency ?? promoDiscountPrice;
 	const period = studentDiscount?.periodNoun ?? paymentFrequency;
 
-	/* nudge AB test */
-	// get nudge url param
-	const urlSearchParams = new URLSearchParams(window.location.search);
-	// check value is one of the set of expected values
-
-	const verifyNudgeTypeInput = (input: string | null) => {
-		if (input === null || !['toRegular'].includes(input.trim())) {
-			return '';
+	function Nudge() {
+		if (nudgeSettings) {
+			// Show the nudge?
+			if (
+				nudgeSettings.fromProduct.product === productKey &&
+				nudgeSettings.fromProduct.ratePlan === ratePlanKey
+			) {
+				const { nudgeToProduct } = nudgeSettings.variant;
+				const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
+				const amount =
+					productCatalog[nudgeToProduct.product]?.ratePlans[
+						nudgeToProduct.ratePlan
+					]?.pricing[currencyKey];
+				if (amount) {
+					const props = {
+						supportRegionId,
+						product: nudgeToProduct.product,
+						ratePlan: nudgeToProduct.ratePlan,
+						amount,
+						heading: nudgeSettings.variant.nudgeCopy.heading,
+						body: nudgeSettings.variant.nudgeCopy.body,
+					};
+					return <CheckoutNudge {...props} />;
+				}
+			} // show the thankyou?
+			else if (
+				new URLSearchParams(window.location.search).get('fromNudge') &&
+				nudgeSettings.variant.nudgeToProduct.product === productKey &&
+				nudgeSettings.variant.nudgeToProduct.ratePlan === ratePlanKey
+			) {
+				const { heading, body } = nudgeSettings.variant.thankyouCopy;
+				return <CheckoutNudgeThankYou heading={heading} body={body} />;
+			}
 		}
+		return null;
+	}
 
-		return input.trim();
-	};
-
-	// parameter only passed from nudge CTA so used to determine if should show thanks box
-	const nudgeType = verifyNudgeTypeInput(urlSearchParams.get('nudge'));
-
-	// from one time checkout to low regular - show thanks box
-	const showLowRegularNudgeThanks = () => {
-		const isInNudgeToLowRegular =
-			productKey === 'Contribution' &&
-			abParticipations?.nudgeToLowRegularRollout;
-
-		return isInNudgeToLowRegular && nudgeType.trim() === 'toRegular';
-	};
-
-	const nudgeLowRegularThanks = showLowRegularNudgeThanks() && (
-		<CheckoutNudgeThankYou supportRegionId={supportRegionId} />
-	);
 	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 
 	return (
@@ -280,7 +296,7 @@ export function ContributionsOrderSummary({
 					isWeeklyGift={isWeeklyGift}
 				/>
 			</div>
-			{nudgeLowRegularThanks}
+			<Nudge />
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
 		</div>
 	);
