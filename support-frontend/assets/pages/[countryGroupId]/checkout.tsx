@@ -1,4 +1,3 @@
-import type { Theme } from '@emotion/react';
 import { ThemeProvider } from '@emotion/react';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
@@ -303,10 +302,9 @@ export function Checkout({
 	const orgTheme: OrganisationTheme = {
 		organisation: isObserver ? 'observer' : 'guardian',
 	};
-	const theme: Theme = orgTheme;
 
 	return (
-		<ThemeProvider theme={theme}>
+		<ThemeProvider theme={orgTheme}>
 			<Elements stripe={stripePromise} options={elementsOptions}>
 				<CheckoutLayout>
 					<CheckoutSummary
