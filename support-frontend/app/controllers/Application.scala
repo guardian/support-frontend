@@ -278,6 +278,11 @@ class Application(
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
+  def checkoutGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    val url = getGeoPath(request, campaignCode, "checkout")
+    RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
+  }
+
   def studentGeoRedirect(): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val url = getGeoPath(request, "", "student")
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
@@ -474,6 +479,7 @@ class Application(
   }
 
   private def getGeoRedirectUrl(fastlyCountry: Option[CountryGroup], path: String): String = {
+    printf("fastly country is: %s", fastlyCountry)
     fastlyCountry match {
       case Some(UK) => s"/uk/$path"
       case Some(US) => s"/us/$path"
