@@ -229,7 +229,7 @@ export function CheckoutNudgeThankYou({
 }
 
 /**
- * The CheckoutNudge component is used on the checkout components.
+ * The CheckoutNudgeSelector component is used on the checkout components.
  * If the current product+ratePlan matches the nudge's `fromProduct` then the nudge is displayed.
  * If the current product+ratePlan matches the nudge's `toProduct` and the 'fromNudge' query param is present then the nudge thankyou is displayed.
  */
