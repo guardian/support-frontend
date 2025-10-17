@@ -97,7 +97,11 @@ const checkoutNudgeAbTests: CheckoutNudgeTest[] = [
 		},
 		variants: [
 			{
+				// No nudge
 				name: 'control',
+			},
+			{
+				name: 'v1',
 				nudge: {
 					nudgeToProduct: {
 						product: 'SupporterPlus',
