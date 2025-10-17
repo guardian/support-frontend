@@ -106,6 +106,7 @@ const router = createBrowserRouter([
 						appConfig={appConfig}
 						abParticipations={abParticipations}
 						nudgeSettings={checkoutNudgeSettings}
+						landingPageSettings={landingPageParticipations.variant}
 					/>
 				</Suspense>
 			),
