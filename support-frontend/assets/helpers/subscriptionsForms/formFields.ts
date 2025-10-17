@@ -7,7 +7,6 @@ import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import { getSubscriptionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
-import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { DateYMDString } from 'helpers/types/DateString';
 import type { Option } from 'helpers/types/option';
@@ -89,8 +88,4 @@ function getFormFields(state: SubscriptionsState): FormFields {
 	};
 }
 
-function getEmail(state: CheckoutState): string {
-	return state.page.checkoutForm.personalDetails.email;
-}
-
-export { getFormFields, getEmail };
+export { getFormFields };

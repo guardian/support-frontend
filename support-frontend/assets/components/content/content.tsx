@@ -95,15 +95,4 @@ Divider.defaultProps = {
 	small: false,
 };
 
-/*
-A vertical block with max width
-*/
-export function NarrowContent({
-	children,
-}: {
-	children: ReactNode;
-}): JSX.Element {
-	return <div className="component-content__narrowContent">{children}</div>;
-}
-
 export default Content;

@@ -108,20 +108,6 @@ trait Controllers {
     appConfig.stage,
   )
 
-  lazy val weeklyFormController = new WeeklySubscriptionFormController(
-    priceSummaryServiceProvider,
-    assetsResolver,
-    actionBuilders,
-    testUsers,
-    appConfig.regularStripeConfigProvider,
-    appConfig.regularPayPalConfigProvider,
-    controllerComponents,
-    allSettingsProvider,
-    appConfig.recaptchaConfigProvider,
-    cachedProductCatalogServiceProvider,
-    appConfig.stage,
-  )
-
   lazy val createSubscriptionController = new CreateSubscriptionController(
     supportWorkersClient,
     actionBuilders,
