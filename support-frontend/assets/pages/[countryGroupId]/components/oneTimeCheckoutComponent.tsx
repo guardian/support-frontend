@@ -99,7 +99,7 @@ import {
 	preventDefaultValidityMessage,
 } from '../validation';
 import { BackButton } from './backButton';
-import { CheckoutLayout } from './checkoutLayout';
+import CheckoutLayout from './checkoutLayout';
 import { FormSection, Legend, shorterBoxMargin } from './form';
 import {
 	checkedRadioLabelColour,
