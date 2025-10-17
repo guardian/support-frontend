@@ -55,12 +55,12 @@ class SubscriptionsController(
   }
 
   def pricingCopy(priceSummary: PriceSummary): PriceCopy = {
-    val price = for {
+    val maybeDiscountPrice = for {
       promo <- priceSummary.promotions.headOption
       discountedPrice <- promo.discountedPrice
     } yield discountedPrice
     PriceCopy(
-      price.getOrElse(priceSummary.price),
+      maybeDiscountPrice.getOrElse(priceSummary.price),
       priceSummary.promotions.headOption.map(_.description).getOrElse(""),
     )
   }
@@ -70,7 +70,7 @@ class SubscriptionsController(
     val paperMap = if (countryGroup == CountryGroup.UK) {
       val paper = service.getPrices(Paper, Nil)(CountryGroup.UK)(Collection)(
         SaturdayPlus,
-      )(Monthly)(GBP)
+      )(Monthly)(GBP) // SaturdayPlus is the cheapest paper product
       Map(Paper.toString -> pricingCopy(paper))
     } else
       Map.empty
