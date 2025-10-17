@@ -30,9 +30,8 @@ class PaperRound(
   import actionRefiners._
 
   def getAgents(postcode: String): Action[AnyContent] = NoCacheAction().async { implicit request =>
-    val userStage = if (testUserService.isTestUser(request)) CODE else stage
     serviceProvider
-      .forUser(testUserService.isTestUser(request))
+      .forUser(false)
       .coverage(CoverageEndpoint.RequestBody(postcode = postcode))
       .map { result =>
         {
@@ -47,8 +46,8 @@ class PaperRound(
               InternalServerError(toJson(PaperRoundError(errorMessage)))
           }
           result.data.status match {
-            case IE => AwsCloudWatchMetricPut(cloudwatchClient)(getDeliveryAgentsFailure(userStage))
-            case _ => AwsCloudWatchMetricPut(cloudwatchClient)(getDeliveryAgentsSuccess(userStage))
+            case IE => AwsCloudWatchMetricPut(cloudwatchClient)(getDeliveryAgentsFailure(stage))
+            case _ => AwsCloudWatchMetricPut(cloudwatchClient)(getDeliveryAgentsSuccess(stage))
           }
           response
         }
@@ -56,11 +55,11 @@ class PaperRound(
       case PaperRound.Error(statusCode, message, errorCode) =>
         val responseBody = s"$errorCode – Got $statusCode reponse with message $message"
         logger.error(scrub"Error calling PaperRound, returning $responseBody")
-        AwsCloudWatchMetricPut(cloudwatchClient)(getDeliveryAgentsFailure(userStage))
+        AwsCloudWatchMetricPut(cloudwatchClient)(getDeliveryAgentsFailure(stage))
         InternalServerError(responseBody)
       case error =>
         logger.error(scrub"Failed to get agents from PaperRound due to: $error")
-        AwsCloudWatchMetricPut(cloudwatchClient)(getDeliveryAgentsFailure(userStage))
+        AwsCloudWatchMetricPut(cloudwatchClient)(getDeliveryAgentsFailure(stage))
         InternalServerError(s"Unknown error: $error")
     }
   }

@@ -13,10 +13,12 @@ interface Copy {
 
 export interface CheckoutNudgeVariant {
 	name: string;
-	nudgeCopy: Copy;
-	thankyouCopy: Copy;
-	showBenefits: boolean;
-	nudgeToProduct: Product;
+	nudge?: {
+		nudgeCopy: Copy;
+		thankyouCopy: Copy;
+		showBenefits: boolean;
+		nudgeToProduct: Product;
+	};
 }
 
 interface RegionTargeting {
