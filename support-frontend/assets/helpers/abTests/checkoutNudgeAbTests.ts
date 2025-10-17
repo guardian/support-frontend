@@ -44,7 +44,6 @@ const checkoutNudgeAbTests: CheckoutNudgeTest[] = [
 						heading: 'Thank you for choosing to support us monthly',
 						body: 'Your support makes a huge difference in keeping our journalism free from outside influence.',
 					},
-					showBenefits: false,
 				},
 			},
 		],
@@ -82,7 +81,42 @@ const checkoutNudgeAbTests: CheckoutNudgeTest[] = [
 						heading: 'Thank you for choosing to support us monthly',
 						body: 'You are helping to support the future of independent journalism.',
 					},
-					showBenefits: false,
+				},
+			},
+		],
+	},
+	{
+		name: '2025-10-20_nudgeToSupporterPlus',
+		status: 'Live',
+		regionTargeting: {
+			targetedCountryGroups: [],
+		},
+		nudgeFromProduct: {
+			product: 'Contribution',
+			ratePlan: 'Monthly',
+		},
+		variants: [
+			{
+				// No nudge
+				name: 'control',
+			},
+			{
+				name: 'v1',
+				nudge: {
+					nudgeToProduct: {
+						product: 'SupporterPlus',
+						ratePlan: 'Monthly',
+					},
+					nudgeCopy: {
+						heading: 'Make a bigger impact',
+					},
+					thankyouCopy: {
+						heading: 'Thank you for choosing to upgrade',
+						body: 'Alongside your extra benefits you are also helping ensure the future of the Guardian.',
+					},
+					benefits: {
+						label: 'Your all-access benefits',
+					},
 				},
 			},
 		],
