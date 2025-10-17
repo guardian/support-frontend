@@ -20,13 +20,15 @@ const oneTimeToRecurring__US: CheckoutNudgeTest = {
 	variants: [
 		{
 			name: 'control',
-			nudgeToProduct: {
-				product: 'Contribution',
-				ratePlan: 'Monthly',
+			nudge: {
+				nudgeToProduct: {
+					product: 'Contribution',
+					ratePlan: 'Monthly',
+				},
+				nudgeCopy: copy,
+				thankyouCopy: copy,
+				showBenefits: false,
 			},
-			nudgeCopy: copy,
-			thankyouCopy: copy,
-			showBenefits: false,
 		},
 	],
 };
@@ -50,13 +52,15 @@ const oneTimeToRecurring__NON_US: CheckoutNudgeTest = {
 	variants: [
 		{
 			name: 'control',
-			nudgeToProduct: {
-				product: 'Contribution',
-				ratePlan: 'Monthly',
+			nudge: {
+				nudgeToProduct: {
+					product: 'Contribution',
+					ratePlan: 'Monthly',
+				},
+				nudgeCopy: copy,
+				thankyouCopy: copy,
+				showBenefits: false,
 			},
-			nudgeCopy: copy,
-			thankyouCopy: copy,
-			showBenefits: false,
 		},
 	],
 };
@@ -73,13 +77,15 @@ const annualRecurringToSupporterPlus: CheckoutNudgeTest = {
 	variants: [
 		{
 			name: 'control',
-			nudgeToProduct: {
-				product: 'SupporterPlus',
-				ratePlan: 'Annual',
+			nudge: {
+				nudgeToProduct: {
+					product: 'SupporterPlus',
+					ratePlan: 'Annual',
+				},
+				nudgeCopy: copy,
+				thankyouCopy: copy,
+				showBenefits: false,
 			},
-			nudgeCopy: copy,
-			thankyouCopy: copy,
-			showBenefits: false,
 		},
 	],
 };
