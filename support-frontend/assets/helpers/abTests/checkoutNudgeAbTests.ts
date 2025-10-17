@@ -31,19 +31,21 @@ const checkoutNudgeAbTests: CheckoutNudgeTest[] = [
 		variants: [
 			{
 				name: 'control',
-				nudgeToProduct: {
-					product: 'Contribution',
-					ratePlan: 'Monthly',
+				nudge: {
+					nudgeToProduct: {
+						product: 'Contribution',
+						ratePlan: 'Monthly',
+					},
+					nudgeCopy: {
+						heading: 'Can I make a bigger impact?',
+						body: 'Yes! We’re grateful for any amount you can spare, but supporting us on a monthly basis helps to power Guardian journalism in perpetuity. Cancel anytime.',
+					},
+					thankyouCopy: {
+						heading: 'Thank you for choosing to support us monthly',
+						body: 'Your support makes a huge difference in keeping our journalism free from outside influence.',
+					},
+					showBenefits: false,
 				},
-				nudgeCopy: {
-					heading: 'Can I make a bigger impact?',
-					body: 'Yes! We’re grateful for any amount you can spare, but supporting us on a monthly basis helps to power Guardian journalism in perpetuity. Cancel anytime.',
-				},
-				thankyouCopy: {
-					heading: 'Thank you for choosing to support us monthly',
-					body: 'Your support makes a huge difference in keeping our journalism free from outside influence.',
-				},
-				showBenefits: false,
 			},
 		],
 	},
@@ -67,19 +69,21 @@ const checkoutNudgeAbTests: CheckoutNudgeTest[] = [
 		variants: [
 			{
 				name: 'control',
-				nudgeToProduct: {
-					product: 'Contribution',
-					ratePlan: 'Monthly',
+				nudge: {
+					nudgeToProduct: {
+						product: 'Contribution',
+						ratePlan: 'Monthly',
+					},
+					nudgeCopy: {
+						heading: 'Make a bigger impact',
+						body: 'The reliability of recurring support powers our journalism in perpetuity. Could you make a small monthly contribution instead? Cancel anytime.',
+					},
+					thankyouCopy: {
+						heading: 'Thank you for choosing to support us monthly',
+						body: 'You are helping to support the future of independent journalism.',
+					},
+					showBenefits: false,
 				},
-				nudgeCopy: {
-					heading: 'Make a bigger impact',
-					body: 'The reliability of recurring support powers our journalism in perpetuity. Could you make a small monthly contribution instead? Cancel anytime.',
-				},
-				thankyouCopy: {
-					heading: 'Thank you for choosing to support us monthly',
-					body: 'You are helping to support the future of independent journalism.',
-				},
-				showBenefits: false,
 			},
 		],
 	},
