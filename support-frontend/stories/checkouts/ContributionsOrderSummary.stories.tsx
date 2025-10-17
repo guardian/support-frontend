@@ -12,10 +12,13 @@ import { productCatalogDescription } from 'helpers/productCatalog';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 import { SupportRegionId } from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
+import { fallBackLandingPageSelection } from '../../assets/helpers/abTests/landingPageAbTests';
 
 const boldText = css`
 	font-weight: bold;
 `;
+
+const landingPageSettings = fallBackLandingPageSelection;
 
 const checkListData = [
 	{
@@ -121,6 +124,7 @@ Default.args = {
 		</Button>
 	),
 	supportRegionId: SupportRegionId.UK,
+	landingPageSettings,
 };
 
 export const SingleContribution = Template.bind({});
@@ -145,6 +149,7 @@ SingleContribution.args = {
 		</Button>
 	),
 	supportRegionId: SupportRegionId.US,
+	landingPageSettings,
 };
 
 export const RecurringContribution = Template.bind({});
@@ -180,6 +185,7 @@ RecurringContribution.args = {
 		</Button>
 	),
 	supportRegionId: SupportRegionId.UK,
+	landingPageSettings,
 };
 
 export const SupporterPlus = Template.bind({});
@@ -216,6 +222,7 @@ SupporterPlus.args = {
 		</Button>
 	),
 	supportRegionId: SupportRegionId.UK,
+	landingPageSettings,
 };
 
 export const TierThree = Template.bind({});
@@ -262,6 +269,7 @@ TierThree.args = {
 		</Button>
 	),
 	supportRegionId: SupportRegionId.UK,
+	landingPageSettings,
 };
 
 export const StudentOneYear = Template.bind({});
@@ -300,4 +308,5 @@ StudentOneYear.args = {
 	),
 	studentDiscount: oneYearStudentDiscount,
 	supportRegionId: SupportRegionId.UK,
+	landingPageSettings,
 };
