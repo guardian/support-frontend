@@ -157,7 +157,7 @@ export const getZuoraPaymentMethod = (
 			};
 		case 'PayPal':
 			return {
-				type: 'PayPalNativeEC',
+				type: 'PayPalCP',
 				BAID: paymentMethod.PaypalBaid,
 				email: paymentMethod.PaypalEmail,
 			};
