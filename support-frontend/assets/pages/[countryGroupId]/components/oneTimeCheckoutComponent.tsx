@@ -86,6 +86,7 @@ import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsM
 import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { CheckoutNudgeSelector } from '../../../components/checkoutNudge/checkoutNudge';
 import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
+import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
 	updateAbandonedBasketCookie,
 	useAbandonedBasketCookie,
@@ -169,6 +170,7 @@ type OneTimeCheckoutComponentProps = {
 	abParticipations: Participations;
 	useStripeExpressCheckout: boolean;
 	nudgeSettings?: CheckoutNudgeSettings;
+	landingPageSettings: LandingPageVariant;
 };
 
 function paymentMethodIsActive(paymentMethod: PaymentMethod) {
@@ -254,6 +256,7 @@ export function OneTimeCheckoutComponent({
 	abParticipations,
 	useStripeExpressCheckout,
 	nudgeSettings,
+	landingPageSettings,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -665,6 +668,7 @@ export function OneTimeCheckoutComponent({
 							currentProduct={'OneTimeContribution'}
 							currentRatePlan={'OneTime'}
 							supportRegionId={supportRegionId}
+							landingPageSettings={landingPageSettings}
 						/>
 					)}
 				</BoxContents>
