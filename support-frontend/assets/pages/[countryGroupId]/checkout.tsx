@@ -25,6 +25,7 @@ import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsT
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
 import { getWeeklyDeliveryDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import type { LegacyProductType } from '../../helpers/legacyTypeConversions';
@@ -43,6 +44,7 @@ type Props = {
 	appConfig: AppConfig;
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
+	nudgeSettings?: CheckoutNudgeSettings;
 };
 
 const countryId: IsoCountry = Country.detect();
@@ -89,6 +91,7 @@ export function Checkout({
 	appConfig,
 	abParticipations,
 	landingPageSettings,
+	nudgeSettings,
 }: Props) {
 	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
@@ -306,6 +309,7 @@ export function Checkout({
 					weeklyDeliveryDate={weeklyDeliveryDate}
 					thresholdAmount={thresholdAmount}
 					studentDiscount={studentDiscount}
+					nudgeSettings={nudgeSettings}
 				/>
 
 				<CheckoutForm

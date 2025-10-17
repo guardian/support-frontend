@@ -8,11 +8,11 @@ import { Container } from 'components/layout/container';
 export default {
 	title: 'Checkout Layout/Box',
 	component: Box,
-	subcomponents: { BoxContents },
 	argTypes: {
 		tag: {
 			control: { type: 'select', options: ['div', 'section', 'fieldset'] },
 		},
+		children: { table: { disable: true } },
 	},
 	parameters: {
 		docs: {

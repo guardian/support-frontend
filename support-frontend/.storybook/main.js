@@ -6,10 +6,7 @@ module.exports = {
 	addons: [
 		'@storybook/addon-a11y',
 		'@storybook/addon-links',
-		'@storybook/addon-essentials',
-		'@storybook/addon-storysource',
-		'@storybook/addon-viewport',
-		'@storybook/addon-interactions',
+		'@storybook/addon-docs',
 	],
 	core: {
 		builder: '@storybook/builder-vite',
