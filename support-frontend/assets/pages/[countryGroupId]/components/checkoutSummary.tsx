@@ -26,6 +26,7 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { parameteriseUrl } from 'helpers/urls/routes';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
@@ -39,6 +40,10 @@ import { ukSpecificAdditionalBenefit } from '../student/components/StudentHeader
 import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { BackButton } from './backButton';
 import { shorterBoxMargin } from './form';
+
+const alertStyles = css`
+	margin-bottom: ${space[6]}px;
+`;
 
 type CheckoutSummaryProps = {
 	supportRegionId: SupportRegionId;
@@ -54,6 +59,7 @@ type CheckoutSummaryProps = {
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
+	nudgeSettings?: CheckoutNudgeSettings;
 };
 
 export default function CheckoutSummary({
@@ -70,6 +76,7 @@ export default function CheckoutSummary({
 	weeklyDeliveryDate,
 	thresholdAmount,
 	studentDiscount,
+	nudgeSettings,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
@@ -164,16 +171,22 @@ export default function CheckoutSummary({
 		<Box cssOverrides={shorterBoxMargin}>
 			<BoxContents>
 				{forcedCountry && productDescription.deliverableTo?.[forcedCountry] && (
-					<div role="alert">
+					<div role="alert" css={alertStyles}>
 						<InfoSummary
-							cssOverrides={css`
-								margin-bottom: ${space[6]}px;
-							`}
 							message={`You've changed your delivery country to ${productDescription.deliverableTo[forcedCountry]}.`}
 							context={`Your subscription price has been updated to reflect the rates in your new location.`}
 						/>
 					</div>
 				)}
+				{supportRegionId === SupportRegionId.CA &&
+					productKey === 'GuardianWeeklyDomestic' && (
+						<div role="alert" css={alertStyles}>
+							<InfoSummary
+								message="For Canadian residents only"
+								context="Please note that Canada Post is currently undergoing a period of industrial action. If you start a Guardian Weekly subscription today, the delivery of your copies may be subject to delays. We apologise for any inconvenience this may cause."
+							/>
+						</div>
+					)}
 				<ContributionsOrderSummary
 					productKey={productKey}
 					productLabel={productDescription.label}
@@ -220,9 +233,9 @@ export default function CheckoutSummary({
 							<BackButton path={backUrl} buttonText={'Change'} />
 						)
 					}
-					abParticipations={abParticipations}
 					studentDiscount={studentDiscount}
 					supportRegionId={supportRegionId}
+					nudgeSettings={nudgeSettings}
 				/>
 			</BoxContents>
 		</Box>

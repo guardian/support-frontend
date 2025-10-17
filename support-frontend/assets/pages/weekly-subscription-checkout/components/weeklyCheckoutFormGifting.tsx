@@ -7,6 +7,7 @@ import {
 	RadioGroup,
 	Select,
 } from '@guardian/source/react-components';
+import { InfoSummary } from '@guardian/source-development-kitchen/react-components';
 import { gwCountries } from '@modules/internationalisation/gwCountries';
 import { gwDeliverableCountries } from '@modules/internationalisation/gwDeliverableCountries';
 import { NoProductOptions } from '@modules/product/productOptions';
@@ -211,6 +212,14 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 						props.submitForm();
 					}}
 				>
+					{props.deliveryCountry === 'CA' && (
+						<div role="alert">
+							<InfoSummary
+								message="For Canadian residents only"
+								context="Please note that Canada Post is currently on strike. If you start a Guardian Weekly subscription today, we will not be able to deliver your copies until postal services resume. We apologise for any inconvenience this may cause."
+							/>
+						</div>
+					)}
 					<FormSection border="none" id="weekly-checkout__heading-form-section">
 						<Heading
 							size={1}

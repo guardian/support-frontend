@@ -13,7 +13,7 @@ import { ServiceProvider } from '../services/config';
 import type { SalesforceContactRecord } from '../services/salesforce';
 import { SalesforceService } from '../services/salesforce';
 import { getSalesforceConfig } from '../services/salesforceClient';
-import { user } from '../test/fixtures/salesforceFixtures';
+import { user } from '../test/fixtures/salesforce/integrationTests';
 import { getIfDefined } from '../util/nullAndUndefined';
 
 const stage = stageFromEnvironment();
@@ -36,6 +36,7 @@ export const handler = async (
 		const contactRecords = await serviceForUser.createContactRecords(
 			createSalesforceContactState.user,
 			createSalesforceContactState.giftRecipient,
+			createSalesforceContactState.product.productType,
 		);
 		return {
 			...state,

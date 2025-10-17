@@ -90,7 +90,7 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
-		isActive: false,
+		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 9,
 		targetPage: pageUrlRegexes.subscriptions.subsWeeklyGiftPages,
@@ -98,25 +98,5 @@ export const tests: Tests = {
 			// match generic checkout & thank you page
 			'^/uk/(checkout|thank-you)',
 		excludeContributionsOnlyCountries: true,
-	},
-	// All users who view the one-time checkout will be in this "test", which only has a control
-	nudgeToLowRegularRollout: {
-		variants: [
-			{
-				id: 'control',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true, // until we need to switch it on
-		referrerControlled: false, // requires a URL param to trigger
-		seed: 7, // needs to be different to other tests
-		targetPage: pageUrlRegexes.contributions.oneTimeCheckoutOnly,
-		persistPage: pageUrlRegexes.contributions.genericCheckoutOnly,
-		excludeContributionsOnlyCountries: true, // for countries we can't sell recurring products to
 	},
 };

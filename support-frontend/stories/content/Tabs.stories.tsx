@@ -1,4 +1,4 @@
-import { expect, fn, userEvent, waitFor, within } from '@storybook/test';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import type { TabProps } from 'components/tabs/tabs';
 import TabsComponent from 'components/tabs/tabs';
 

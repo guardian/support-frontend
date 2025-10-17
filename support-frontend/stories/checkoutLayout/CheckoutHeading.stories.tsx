@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import {palette} from '@guardian/source/foundations';
+import { palette } from '@guardian/source/foundations';
 import { Column, Columns } from '@guardian/source/react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { CheckoutHeadingProps } from 'components/checkoutHeading/checkoutHeading';
@@ -14,6 +14,11 @@ export default {
 	component: CheckoutHeading,
 	argTypes: {
 		image: {
+			table: {
+				disable: true,
+			},
+		},
+		heading: {
 			table: {
 				disable: true,
 			},
