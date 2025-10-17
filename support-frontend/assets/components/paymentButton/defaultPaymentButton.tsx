@@ -4,6 +4,7 @@ import {
 	Button,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
+import { observerButtonProps } from 'pages/[countryGroupId]/components/observer-layout/observerButtonProps';
 
 const buttonOverrides = css`
 	width: 100%;
@@ -23,14 +24,19 @@ export function DefaultPaymentButton({
 	buttonText,
 	...buttonProps
 }: DefaultPaymentButtonProps): JSX.Element {
-	const themeOverride = useTheme();
+	const { observerThemeButton } = useTheme();
+
 	return (
 		<Button
 			id={id}
 			cssOverrides={buttonOverrides}
 			isLoading={false}
 			{...buttonProps}
-			theme={{ ...themeButtonReaderRevenueBrand, ...themeOverride }}
+			theme={{
+				...themeButtonReaderRevenueBrand,
+				...observerThemeButton,
+			}}
+			{...(observerThemeButton && observerButtonProps)}
 		>
 			{buttonText}
 		</Button>

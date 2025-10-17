@@ -299,7 +299,9 @@ export function Checkout({
 	const [subdomain] = window.location.host.split('.');
 	const isObserver = subdomain === 'observer';
 	const CheckoutLayout = isObserver ? ObserverLayout : GuardianLayout;
-	const theme = isObserver ? observerThemeButton : {};
+	const theme = {
+		...(isObserver && { observerThemeButton }),
+	};
 
 	return (
 		<ThemeProvider theme={theme}>
