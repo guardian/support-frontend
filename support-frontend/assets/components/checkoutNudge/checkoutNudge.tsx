@@ -36,6 +36,7 @@ import { BenefitsCheckList } from '../checkoutBenefits/benefitsCheckList';
 const nudgeBoxOverrides = css`
 	background-color: ${neutral[97]};
 	border: none;
+	margin-top: ${space[4]}px;
 `;
 
 const innerBoxOverrides = css`
@@ -310,7 +311,7 @@ export function CheckoutNudgeSelector({
 				heading: nudge.nudgeCopy.heading,
 				body: nudge.nudgeCopy.body,
 				benefits: nudge.benefits
-					? { checkListData, label: nudge.benefits.label }
+					? { checkListData: checkListData.slice(0,2), label: nudge.benefits.label }
 					: undefined,
 			};
 			return <CheckoutNudge {...props} />;

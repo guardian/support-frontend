@@ -108,7 +108,8 @@ const checkoutNudgeAbTests: CheckoutNudgeTest[] = [
 						ratePlan: 'Monthly',
 					},
 					nudgeCopy: {
-						heading: 'Make a bigger impact',
+						heading: 'Make the biggest impact',
+						// body: 'Upgrading to our All-access digital subscription and get great benefits in return.',
 					},
 					thankyouCopy: {
 						heading: 'Thank you for choosing to upgrade',
@@ -117,6 +118,26 @@ const checkoutNudgeAbTests: CheckoutNudgeTest[] = [
 					benefits: {
 						label: 'Your all-access benefits',
 					},
+				},
+			},
+			{
+				name: 'v2',
+				nudge: {
+					nudgeToProduct: {
+						product: 'SupporterPlus',
+						ratePlan: 'Monthly',
+					},
+					nudgeCopy: {
+						heading: 'Make the biggest impact',
+						body: 'Upgrading to our All-access digital subscription and get great benefits in return.',
+					},
+					thankyouCopy: {
+						heading: 'Thank you for choosing to upgrade',
+						body: 'Alongside your extra benefits you are also helping ensure the future of the Guardian.',
+					},
+					// benefits: {
+					// 	label: 'Your all-access benefits',
+					// },
 				},
 			},
 		],
