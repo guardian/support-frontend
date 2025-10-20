@@ -479,7 +479,6 @@ class Application(
   }
 
   private def getGeoRedirectUrl(fastlyCountry: Option[CountryGroup], path: String): String = {
-    printf("fastly country is: %s", fastlyCountry)
     fastlyCountry match {
       case Some(UK) => s"/uk/$path"
       case Some(US) => s"/us/$path"
