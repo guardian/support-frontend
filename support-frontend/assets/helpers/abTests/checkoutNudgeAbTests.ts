@@ -93,7 +93,6 @@ const checkoutNudgeAbTests: CheckoutNudgeTest[] = [
 		},
 		nudgeFromProduct: {
 			product: 'Contribution',
-			ratePlan: 'Monthly',
 		},
 		variants: [
 			{
@@ -105,18 +104,14 @@ const checkoutNudgeAbTests: CheckoutNudgeTest[] = [
 				nudge: {
 					nudgeToProduct: {
 						product: 'SupporterPlus',
-						ratePlan: 'Monthly',
 					},
 					nudgeCopy: {
 						heading: 'Make the biggest impact',
-						// body: 'Upgrading to our All-access digital subscription and get great benefits in return.',
+						body: 'Support independent journalism with an All-access digital subscription and get great benefits.',
 					},
 					thankyouCopy: {
 						heading: 'Thank you for choosing to upgrade',
 						body: 'Alongside your extra benefits you are also helping ensure the future of the Guardian.',
-					},
-					benefits: {
-						label: 'Your all-access benefits',
 					},
 				},
 			},
@@ -125,19 +120,17 @@ const checkoutNudgeAbTests: CheckoutNudgeTest[] = [
 				nudge: {
 					nudgeToProduct: {
 						product: 'SupporterPlus',
-						ratePlan: 'Monthly',
 					},
 					nudgeCopy: {
 						heading: 'Make the biggest impact',
-						body: 'Upgrading to our All-access digital subscription and get great benefits in return.',
 					},
 					thankyouCopy: {
 						heading: 'Thank you for choosing to upgrade',
 						body: 'Alongside your extra benefits you are also helping ensure the future of the Guardian.',
 					},
-					// benefits: {
-					// 	label: 'Your all-access benefits',
-					// },
+					benefits: {
+						label: 'Your all-access benefits:',
+					},
 				},
 			},
 		],
