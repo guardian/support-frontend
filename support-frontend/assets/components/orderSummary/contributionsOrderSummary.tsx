@@ -257,6 +257,7 @@ export function ContributionsOrderSummary({
 					isWeeklyGift={isWeeklyGift}
 				/>
 			</div>
+			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
 			{nudgeSettings && (
 				<CheckoutNudgeSelector
 					nudgeSettings={nudgeSettings}
@@ -266,7 +267,7 @@ export function ContributionsOrderSummary({
 					landingPageSettings={landingPageSettings}
 				/>
 			)}
-			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
+
 		</div>
 	);
 }
