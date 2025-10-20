@@ -18,6 +18,7 @@
   allProductPrices: AllProductPrices,
   productCatalog: JsonObject,
   user: Option[User],
+  isObserverSubdomain: Boolean,
   homeDeliveryPostcodes: Option[List[String]] = None,
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
@@ -38,6 +39,7 @@
   <script type="text/javascript">
     window.guardian = window.guardian || {};
     window.guardian.allProductPrices = @Html(outputJson(allProductPrices))
+    window.guardian.isObserverSubdomain = @Html(outputJson(isObserverSubdomain))
   </script>
 
   @homeDeliveryPostcodes.map { postcodes =>
