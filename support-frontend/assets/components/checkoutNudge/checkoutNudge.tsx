@@ -116,7 +116,6 @@ export function CheckoutNudge({
 	}
 	const ratePlanDescription = ratePlan === 'Monthly' ? 'month' : 'year';
 
-	// TODO - different copy?
 	const getButtonCopy = `Support us for ${
 		currency.glyph
 	}${amount.toString()}/${ratePlanDescription}`;
@@ -169,6 +168,7 @@ export function CheckoutNudge({
 const thankYouBoxOverrides = css`
 	background-color: ${neutral[97]};
 	border: none;
+	margin-top: ${space[3]}px;
 `;
 const innerThankYouBoxOverrides = css`
 	margin-bottom: 0px;
