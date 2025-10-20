@@ -247,35 +247,44 @@ export function CheckoutNudgeSelector({
 	currentRatePlan,
 	supportRegionId,
 }: CheckoutNudgeSelectorProps) {
-	if (
+	const { nudge } = nudgeSettings.variant;
+	if (!nudge) {
+		// No nudge configured for this variant
+		return null;
+	} else if (
 		nudgeSettings.fromProduct.product === currentProduct &&
-		nudgeSettings.fromProduct.ratePlan === currentRatePlan
+		(nudgeSettings.fromProduct.ratePlan === undefined ||
+			nudgeSettings.fromProduct.ratePlan === currentRatePlan)
 	) {
 		// Show the nudge
-		const { nudgeToProduct } = nudgeSettings.variant;
+		const { nudgeToProduct } = nudge;
 		const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
+		// If nudgeToProduct doesn't define a ratePlan then attempt to use whatever the current selected ratePlan is
+		const ratePlan = nudgeToProduct.ratePlan ?? currentRatePlan;
 		const amount =
-			productCatalog[nudgeToProduct.product]?.ratePlans[nudgeToProduct.ratePlan]
-				?.pricing[currencyKey];
+			productCatalog[nudgeToProduct.product]?.ratePlans[ratePlan]?.pricing[
+				currencyKey
+			];
 
 		if (amount) {
 			const props = {
 				supportRegionId,
 				product: nudgeToProduct.product,
-				ratePlan: nudgeToProduct.ratePlan,
+				ratePlan,
 				amount,
-				heading: nudgeSettings.variant.nudgeCopy.heading,
-				body: nudgeSettings.variant.nudgeCopy.body,
+				heading: nudge.nudgeCopy.heading,
+				body: nudge.nudgeCopy.body,
 			};
 			return <CheckoutNudge {...props} />;
 		}
 	} else if (
 		new URLSearchParams(window.location.search).get('fromNudge') &&
-		nudgeSettings.variant.nudgeToProduct.product === currentProduct &&
-		nudgeSettings.variant.nudgeToProduct.ratePlan === currentRatePlan
+		nudge.nudgeToProduct.product === currentProduct &&
+		(nudge.nudgeToProduct.ratePlan === undefined ||
+			nudge.nudgeToProduct.ratePlan === currentRatePlan)
 	) {
 		// Show the thankyou
-		const { heading, body } = nudgeSettings.variant.thankyouCopy;
+		const { heading, body } = nudge.thankyouCopy;
 		return <CheckoutNudgeThankYou heading={heading} body={body} />;
 	}
 
