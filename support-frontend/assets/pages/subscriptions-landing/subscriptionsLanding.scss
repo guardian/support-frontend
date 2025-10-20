@@ -15,15 +15,6 @@
 // ----- Page-Specific Styles ----- //
 
 #subscriptions-landing-page {
-	.component-cta-link--android {
-		margin-top: $gu-v-spacing;
-	}
-
-	.component-subscriptions-by-country-group--us
-		.component-double-heading__subheading {
-		font-size: 24px;
-	}
-
 	strong {
 		font-weight: bold;
 	}
@@ -41,14 +32,6 @@
 	padding: 50px 0 55px;
 	width: 100%;
 	background-color: gu-colour('highlight-main');
-
-	@include mq($until: tablet) {
-		padding: 30px 0 30px 20px;
-	}
-
-	@include mq($until: mobileLandscape) {
-		padding: 30px 0 30px 10px;
-	}
 }
 
 .subscriptions__feature-container {
@@ -78,17 +61,6 @@
 		max-width: 700px;
 		line-height: 45px;
 	}
-
-	@include mq($from: desktop) {
-		max-width: 800px;
-		padding-left: 70px;
-		font-size: 50px;
-		line-height: 55px;
-	}
-
-	@media (min-width: 1299px) {
-		padding-left: 50px;
-	}
 }
 
 /****************** subscriptions product-container ********************/
@@ -97,10 +69,6 @@
 	position: relative;
 	padding: 0 0 40px;
 	background-color: gu-colour(neutral-93);
-
-	@include mq($from: desktop) {
-		padding: 0 20px 40px;
-	}
 }
 
 .subscriptions__product-container::after {
@@ -130,20 +98,6 @@
 	margin-top: 40px;
 	z-index: 1;
 	padding-top: 0.625rem;
-
-	@include mq($until: desktop) {
-		min-height: 250px;
-	}
-
-	@include mq($until: desktop) {
-		margin: 20px auto;
-		width: calc(100% - 40px);
-		min-height: 0;
-	}
-
-	@include mq($until: mobileLandscape) {
-		width: calc(100% - 20px);
-	}
 }
 .subscriptions__product:first-child {
 	margin-top: 0;
@@ -162,22 +116,8 @@
 		width: 200%;
 		right: 0;
 	}
-
-	.subscriptions__listitem {
-		display: flex;
-	}
-
-	.subscriptions__listitem__bullet {
-		vertical-align: top;
-		padding-right: 4px;
-	}
 }
 
-.subscriptions__product--reverse {
-	@include mq($until: tablet) {
-		padding-bottom: 30px;
-	}
-}
 /****************** subscriptions product--feature ********************/
 
 .subscriptions__product.subscriptions__product--feature {
@@ -186,10 +126,6 @@
 	padding-top: 10px;
 	background-color: gu-colour('brand-main');
 	overflow: hidden;
-
-	@include mq($until: tablet) {
-		padding-top: 0;
-	}
 }
 
 .subscriptions__product.subscriptions__product--feature::before {
@@ -206,15 +142,6 @@
 .subscriptions__copy-container {
 	position: relative;
 	width: 70%;
-
-	@include mq($until: tablet) {
-		z-index: 1;
-	}
-
-	@include mq($until: mobileMedium) {
-		width: 65%;
-	}
-
 	overflow: hidden;
 }
 
@@ -222,11 +149,6 @@
 	position: relative;
 	overflow: hidden;
 	width: 30%;
-	//width: 100%;
-
-	@include mq($until: mobileMedium) {
-		width: 35%;
-	}
 }
 
 .subscriptions__copy-container,
@@ -262,15 +184,6 @@
 		@include mq($from: tablet) {
 			padding: 0 20px 20px 20px;
 		}
-
-		@include mq($from: desktop) {
-			padding-left: 50px;
-		}
-	}
-
-	@include mq($until: tablet) {
-		position: relative;
-		width: 100%;
 	}
 }
 
@@ -287,30 +200,11 @@
 	@include mq($until: leftCol) {
 		padding: 0 50px;
 	}
-
-	@include mq($until: desktop) {
-		padding: 6px 20px 20px;
-		top: 0;
-		transform: translateY(0);
-	}
-
-	@include mq($until: phablet) {
-		padding: 6px 0 30px 10px;
-		position: static;
-		transform: none;
-	}
 }
 
 .subscriptions__copy-container.subscriptions__product--feature
 	.subscriptions__product-title {
 	line-height: 115%;
-	@include mq($until: desktop) {
-		font-size: 28px;
-	}
-	@include mq($until: tablet) {
-		font-size: 24px;
-		padding-top: 15px;
-	}
 }
 
 .subscriptions__product-title {
@@ -321,25 +215,6 @@
 	margin: 0;
 	line-height: 1.2;
 	vertical-align: middle;
-
-	@include mq($until: desktop) {
-		font-size: 32px;
-	}
-
-	@include mq($until: tablet) {
-		font-size: 34px;
-		line-height: 34px;
-	}
-
-	@include mq($until: mobileLandscape) {
-		font-size: 24px;
-		line-height: 28px;
-	}
-
-	@include mq($until: mobileMedium) {
-		font-size: 22px;
-		line-height: 22px;
-	}
 }
 
 .subscriptions__sales {
@@ -352,32 +227,6 @@
 	vertical-align: middle;
 	padding: 0px 7px 3px;
 	margin: 6px 0px;
-
-	@include mq($until: desktop) {
-		font-size: 24px;
-	}
-
-	@include mq($until: tablet) {
-		font-size: 24px;
-		line-height: 30px;
-	}
-
-	@include mq($until: mobileLandscape) {
-		font-size: 20px;
-		line-height: 24px;
-	}
-}
-
-.subscriptions__copy-container.subscriptions__product--feature
-	.subscriptions__product-subtitle--large {
-	line-height: 115%;
-	font-size: 24px;
-	@include mq($until: desktop) {
-		font-size: 20px;
-	}
-	@include mq($until: tablet) {
-		font-size: 17px;
-	}
 }
 
 .subscriptions__product-subtitle--large {
@@ -385,20 +234,6 @@
 	line-height: 30px;
 	font-weight: 300;
 	font-family: $gu-headline;
-
-	@include mq($until: desktop) {
-		font-size: 24px;
-	}
-
-	@include mq($until: tablet) {
-		font-size: 24px;
-		line-height: 30px;
-	}
-
-	@include mq($until: mobileLandscape) {
-		font-size: 20px;
-		line-height: 24px;
-	}
 }
 
 .subscriptions__product-subtitle--small {
@@ -406,59 +241,6 @@
 	line-height: 27px;
 	font-weight: 300;
 	font-family: $gu-headline;
-
-	@include mq($until: desktop) {
-		font-size: 20px;
-	}
-
-	@include mq($until: mobileLandscape) {
-		font-size: 18px;
-		line-height: 24px;
-	}
-
-	@include mq($until: mobileMedium) {
-		font-size: 16px;
-		line-height: 20px;
-	}
-}
-
-.subscriptions__list::before {
-	content: '';
-	position: absolute;
-	border-top: 1px solid gu-colour(neutral-86);
-	width: 100%;
-	margin-top: -6px;
-	margin-left: -52px;
-	@include mq($until: tablet) {
-		border-top: none;
-	}
-}
-
-.subscriptions__list {
-	display: block;
-	margin: 45px 20px 25px 0;
-	font-size: 20px;
-	line-height: 28px;
-
-	@include mq($until: desktop) {
-		margin: 27px 20px 25px 0;
-		font-size: 16px;
-		line-height: 18px;
-	}
-
-	@include mq($until: mobileLandscape) {
-		margin: 16px 20px 18px 0;
-		font-size: 14px;
-		line-height: 16px;
-	}
-}
-
-.subscriptions__listitem {
-	@include mq($until: mobileLandscape) {
-		padding-top: 4px;
-	}
-
-	padding-top: 6px;
 }
 
 .subscriptions__description {
@@ -466,26 +248,6 @@
 	margin: 45px 20px 25px 0;
 	font-size: 20px;
 	line-height: 28px;
-
-	@include mq($until: desktop) {
-		margin: 27px 20px 25px 0;
-		font-size: 16px;
-		line-height: 18px;
-	}
-
-	@include mq($until: tablet) {
-		max-width: 100%;
-	}
-
-	@include mq($until: mobileLandscape) {
-		font-size: 14px;
-		line-height: 16px;
-		margin: 16px 20px 18px 0;
-	}
-
-	@include mq($until: mobileMedium) {
-		margin: 16px 10px 18px 0;
-	}
 }
 
 .subscriptions__description::before {
@@ -497,10 +259,6 @@
 }
 .subscriptions__product--feature .subscriptions__description::before {
 	border-top: solid #9aa4ad 1px;
-
-	@include mq($until: tablet) {
-		border-top: none;
-	}
 }
 
 .subscriptions__product--feature .subscriptions__sales {
@@ -511,17 +269,6 @@
 .subscriptions-packshot {
 	width: 100%;
 	padding: 6px;
-	.subscriptions-int-daily-packshot {
-		width: 100%;
-
-		@include mq($from: tablet) {
-			width: 90%;
-		}
-
-		@include mq($from: leftCol) {
-			width: 85%;
-		}
-	}
 }
 
 /****************** subscriptions__product-button ********************/
@@ -553,19 +300,11 @@
 			margin-top: 0;
 			margin-left: 5px;
 		}
-
-		@include mq($from: leftCol) {
-			margin-left: 10px;
-		}
 	}
 }
 
 .subscriptions__button-container--feature,
 .subscriptions__button-container--feature--benefits {
-	@include mq($until: phablet) {
-		padding-bottom: 10px;
-	}
-
 	.component-button:nth-of-type(2) {
 		@include mq($from: mobileLandscape) {
 			margin-left: 10px;
@@ -580,20 +319,6 @@
 		@include mq($from: desktop) {
 			margin: 0 0 0 10px;
 		}
-	}
-}
-
-.subscriptions__button-container--feature--benefits {
-	.component-button {
-		@include mq($from: desktop) {
-			padding: 0 ($gu-cta-height * 0.3);
-		}
-	}
-}
-
-.component-button--subscriptions__product-button {
-	@include mq($until: mobileMedium) {
-		font-size: 12px;
 	}
 }
 
@@ -653,11 +378,6 @@
 		background-color: #333333;
 	}
 
-	.component-button--primary.component-button--guardian-weekly:hover,
-	.component-button--primary.component-button--guardian-weekly:focus {
-		background-color: #121212;
-	}
-
 	.component-button--tertiaryFeature.component-button--guardian-weekly,
 	.component-button--tertiaryFeature.component-button--guardian-weekly:hover,
 	.component-button--tertiaryFeature.component-button--guardian-weekly:focus {
@@ -673,11 +393,6 @@
 		background-color: #ffe500;
 	}
 
-	.component-button--primary.component-button--digital:hover,
-	.component-button--primary.component-button--digital:focus {
-		background-color: gu-colour(highlight-dark);
-	}
-
 	.component-button--tertiaryFeature.component-button--digital,
 	.component-button--tertiaryFeature.component-button--digital:hover,
 	.component-button--tertiaryFeature.component-button--digital:focus {
@@ -686,53 +401,15 @@
 		background-color: transparent;
 	}
 }
-/****************** premium app ********************/
 
-.subscriptions__premuim-app {
-	display: none;
-
-	@include mq($until: tablet) {
-		display: flex;
-	}
-}
-
-.component-grid-image--subscriptions-premium-image {
-	position: relative;
-	width: 100%;
-	max-width: 130px;
-	top: 0;
-	left: 50%;
-	transform: translate(-50%);
-}
-
-.subscriptions-print-feature--packshot {
-	@include mq($from: tablet) {
-		margin-top: 45px;
-	}
-
-	@include mq($from: leftCol) {
-		margin-top: 20px;
-	}
-}
-
-.component-grid-image--subscriptions-print-feature-image {
-	width: 100%;
-
-	@include mq($from: tablet) {
-		width: 566px;
-	}
-}
 /****************** packshots ********************/
+
 .subscriptions-feature-packshot {
 	width: 140%;
 
 	@include mq($from: tablet) {
 		width: 600px;
 		margin-top: 45px;
-	}
-
-	@include mq($from: leftCol) {
-		margin-top: 20px;
 	}
 
 	img {
@@ -742,43 +419,11 @@
 			width: 700px;
 			right: -50px;
 		}
-
-		@include mq($from: leftCol) {
-			right: -80px;
-		}
-
-		@include mq($from: wide) {
-			width: 800px;
-		}
-	}
-}
-
-.subscriptions__guardian-weekly-packshot {
-	position: relative;
-	width: 100%;
-
-	@include mq($from: tablet) {
-		position: absolute;
-		bottom: 0;
-	}
-
-	img {
-		width: 100%;
-		vertical-align: bottom;
 	}
 }
 
 .subscriptions__paper-packshot {
 	width: 382px;
-
-	@include mq($until: desktop) {
-		width: 357px;
-	}
-
-	@include mq($until: tablet) {
-		position: static;
-		width: 100%;
-	}
 
 	img:nth-child(1) {
 		z-index: 2;
@@ -789,195 +434,6 @@
 		@include mq($until: leftCol) {
 			left: 50px;
 			width: 90%;
-		}
-
-		@include mq($until: desktop) {
-			left: 20px;
-		}
-
-		@include mq($until: tablet) {
-			width: 100%;
-			position: inherit;
-		}
-	}
-
-	img:nth-child(2) {
-		z-index: 1;
-		left: 50%;
-		transform: translateX(-50%);
-		bottom: -150px;
-
-		@include mq($until: leftCol) {
-			bottom: -120px;
-		}
-
-		@include mq($until: desktop) {
-			bottom: -80px;
-		}
-
-		@include mq($until: tablet) {
-			position: static;
-			width: 100%;
-			left: 0;
-			transform: none;
-		}
-	}
-
-	img:nth-child(3) {
-		right: 80px;
-
-		@include mq($until: leftCol) {
-			right: 50px;
-		}
-
-		@include mq($until: desktop) {
-			right: 20px;
-		}
-
-		@include mq($until: tablet) {
-			display: none;
-		}
-	}
-}
-
-.paper-and-digital-packshot {
-	width: 370px;
-
-	@include mq($until: desktop) {
-		width: 357px;
-	}
-
-	@include mq($until: tablet) {
-		position: static;
-		width: 100%;
-	}
-
-	img {
-		position: absolute;
-		bottom: 0;
-	}
-
-	img:nth-child(1) {
-		bottom: -37px;
-		left: 80px;
-
-		@include mq($until: leftCol) {
-			left: 50px;
-		}
-
-		@include mq($until: desktop) {
-			left: 20px;
-		}
-
-		@include mq($until: tablet) {
-			display: none;
-		}
-	}
-
-	img:nth-child(2) {
-		bottom: -120px;
-		left: 50%;
-		transform: translateX(-50%);
-
-		@include mq($until: tablet) {
-			position: static;
-			width: 100%;
-			display: none;
-		}
-	}
-
-	img:nth-child(3) {
-		bottom: -72px;
-		right: 80px;
-
-		@include mq($until: leftCol) {
-			bottom: -86px;
-			right: 50px;
-		}
-
-		@include mq($until: desktop) {
-			right: 20px;
-			bottom: -56px;
-		}
-
-		@include mq($until: tablet) {
-			display: none;
-		}
-	}
-
-	img:nth-child(4) {
-		position: relative;
-		width: 100%;
-
-		@include mq($from: tablet) {
-			display: none;
-		}
-	}
-}
-
-.subscriptions-int-feature-packshot {
-	position: absolute;
-	bottom: -30px;
-	left: 50%;
-	transform: translateX(-50%);
-	width: 450px;
-
-	@include mq($until: desktop) {
-		width: 377px;
-		left: 45%;
-		transform: translateX(-45%);
-	}
-
-	@include mq($until: tablet) {
-		position: static;
-		bottom: 0;
-		width: 100%;
-		left: 0;
-		transform: translateX(0);
-	}
-
-	img {
-		width: 450px;
-
-		@include mq($until: desktop) {
-			width: 90%;
-		}
-
-		@include mq($until: tablet) {
-			width: 100%;
-		}
-	}
-}
-
-.subscriptions-int-daily-packshot {
-	position: relative;
-	width: 100%;
-
-	img {
-		position: absolute;
-		width: 100%;
-	}
-
-	@include mq($from: tablet) {
-		position: absolute;
-		padding: 0px;
-
-		img {
-			width: 110%;
-		}
-	}
-
-	@include mq($from: leftCol) {
-		left: 50px;
-		img {
-			width: 100%;
-		}
-	}
-
-	@include mq($from: wide) {
-		left: 80px;
-		img {
-			width: 85%;
 		}
 	}
 }
@@ -992,9 +448,5 @@
 	.component-left-margin-section__content {
 		margin: 0 auto;
 		max-width: 1290px;
-	}
-
-	.component-footer {
-		background-color: gu-colour('brand-main');
 	}
 }
