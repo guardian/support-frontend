@@ -253,20 +253,24 @@ export function CheckoutNudgeSelector({
 		return null;
 	} else if (
 		nudgeSettings.fromProduct.product === currentProduct &&
-		nudgeSettings.fromProduct.ratePlan === currentRatePlan
+		(nudgeSettings.fromProduct.ratePlan === undefined ||
+			nudgeSettings.fromProduct.ratePlan === currentRatePlan)
 	) {
 		// Show the nudge
 		const { nudgeToProduct } = nudge;
 		const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
+		// If nudgeToProduct doesn't define a ratePlan then attempt to use whatever the current selected ratePlan is
+		const ratePlan = nudgeToProduct.ratePlan ?? currentRatePlan;
 		const amount =
-			productCatalog[nudgeToProduct.product]?.ratePlans[nudgeToProduct.ratePlan]
-				?.pricing[currencyKey];
+			productCatalog[nudgeToProduct.product]?.ratePlans[ratePlan]?.pricing[
+				currencyKey
+			];
 
 		if (amount) {
 			const props = {
 				supportRegionId,
 				product: nudgeToProduct.product,
-				ratePlan: nudgeToProduct.ratePlan,
+				ratePlan,
 				amount,
 				heading: nudge.nudgeCopy.heading,
 				body: nudge.nudgeCopy.body,
@@ -276,7 +280,8 @@ export function CheckoutNudgeSelector({
 	} else if (
 		new URLSearchParams(window.location.search).get('fromNudge') &&
 		nudge.nudgeToProduct.product === currentProduct &&
-		nudge.nudgeToProduct.ratePlan === currentRatePlan
+		(nudge.nudgeToProduct.ratePlan === undefined ||
+			nudge.nudgeToProduct.ratePlan === currentRatePlan)
 	) {
 		// Show the thankyou
 		const { heading, body } = nudge.thankyouCopy;

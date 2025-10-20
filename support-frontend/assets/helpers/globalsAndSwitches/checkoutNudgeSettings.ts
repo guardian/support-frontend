@@ -3,7 +3,7 @@ import type { ActiveProductKey, ActiveRatePlanKey } from '../productCatalog';
 
 interface Product {
 	product: ActiveProductKey;
-	ratePlan: ActiveRatePlanKey;
+	ratePlan?: ActiveRatePlanKey;
 }
 
 interface Copy {
