@@ -267,7 +267,6 @@ export function ContributionsOrderSummary({
 					landingPageSettings={landingPageSettings}
 				/>
 			)}
-
 		</div>
 	);
 }

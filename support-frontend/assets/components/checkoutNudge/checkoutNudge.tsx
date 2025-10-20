@@ -310,7 +310,10 @@ export function CheckoutNudgeSelector({
 				heading: nudge.nudgeCopy.heading,
 				body: nudge.nudgeCopy.body,
 				benefits: nudge.benefits
-					? { checkListData: checkListData.slice(0,2), label: nudge.benefits.label }
+					? {
+							checkListData: checkListData.slice(0, 2),
+							label: nudge.benefits.label,
+					  }
 					: undefined,
 			};
 			return <CheckoutNudge {...props} />;
