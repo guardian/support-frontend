@@ -103,7 +103,8 @@ const productMatches = (
 
 		return (
 			product === test.nudgeFromProduct.product &&
-			ratePlan === test.nudgeFromProduct.ratePlan
+			(test.nudgeFromProduct.ratePlan === undefined ||
+				ratePlan === test.nudgeFromProduct.ratePlan)
 		);
 	}
 };

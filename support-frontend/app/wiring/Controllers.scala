@@ -219,4 +219,10 @@ trait Controllers {
     controllerComponents,
   )
 
+  lazy val analyticsController = new AnalyticsController(
+    controllerComponents,
+    actionBuilders,
+    mparticleClient,
+  )
+
 }
