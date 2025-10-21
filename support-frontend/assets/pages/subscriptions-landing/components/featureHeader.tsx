@@ -9,9 +9,13 @@ import {
 type PropTypes = { featureHeaderMsg: string };
 
 const subscriptions__feature = css`
-	padding: 50px 0 55px;
+	padding: 30px 0 30px 20px;
 	width: 100%;
 	background-color: ${brandAlt[400]};
+
+	${from.tablet} {
+		padding: 50px 0 55px;
+	}
 `;
 
 const subscriptions__feature_container = css`
