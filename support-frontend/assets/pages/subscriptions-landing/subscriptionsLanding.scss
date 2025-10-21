@@ -85,16 +85,6 @@
 	display: block;
 	top: 0;
 	left: 0;
-
-	@include mq($until: desktop) {
-		margin: 20px auto;
-		width: calc(100% - 40px);
-		min-height: 0;
-	}
-
-	@include mq($until: mobileLandscape) {
-		width: calc(100% - 20px);
-	}
 }
 
 /****************** subscriptions product ********************/
@@ -112,6 +102,16 @@
 	margin-top: 40px;
 	z-index: 1;
 	padding-top: 0.625rem;
+
+	@include mq($until: desktop) {
+		margin: 20px auto;
+		width: calc(100% - 40px);
+		min-height: 0;
+	}
+
+	@include mq($until: mobileLandscape) {
+		width: calc(100% - 20px);
+	}
 }
 .subscriptions__product:first-child {
 	margin-top: 0;
@@ -228,7 +228,6 @@
 	font-family: $gu-headline;
 	margin: 0;
 	line-height: 1.2;
-	vertical-align: middle;
 }
 
 .subscriptions__sales {
