@@ -61,6 +61,17 @@
 		max-width: 700px;
 		line-height: 45px;
 	}
+
+	@include mq($from: desktop) {
+		max-width: 800px;
+		padding-left: 70px;
+		font-size: 50px;
+		line-height: 55px;
+	}
+
+	@media (min-width: 1299px) {
+		padding-left: 50px;
+	}
 }
 
 /****************** subscriptions product-container ********************/
