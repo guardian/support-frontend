@@ -87,10 +87,6 @@
 	left: 0;
 
 	@include mq($until: desktop) {
-		min-height: 250px;
-	}
-
-	@include mq($until: desktop) {
 		margin: 20px auto;
 		width: calc(100% - 40px);
 		min-height: 0;
