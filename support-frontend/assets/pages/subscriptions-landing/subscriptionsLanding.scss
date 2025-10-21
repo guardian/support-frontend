@@ -219,6 +219,13 @@
 .subscriptions__copy-container.subscriptions__product--feature
 	.subscriptions__product-title {
 	line-height: 115%;
+	@include mq($until: desktop) {
+		font-size: 28px;
+	}
+	@include mq($until: tablet) {
+		font-size: 24px;
+		padding-top: 15px;
+	}
 }
 
 .subscriptions__product-title {
@@ -228,6 +235,25 @@
 	font-family: $gu-headline;
 	margin: 0;
 	line-height: 1.2;
+
+	@include mq($until: desktop) {
+		font-size: 32px;
+	}
+
+	@include mq($until: tablet) {
+		font-size: 34px;
+		line-height: 34px;
+	}
+
+	@include mq($until: mobileLandscape) {
+		font-size: 24px;
+		line-height: 28px;
+	}
+
+	@include mq($until: mobileMedium) {
+		font-size: 22px;
+		line-height: 22px;
+	}
 }
 
 .subscriptions__sales {
@@ -240,6 +266,32 @@
 	vertical-align: middle;
 	padding: 0px 7px 3px;
 	margin: 6px 0px;
+
+	@include mq($until: desktop) {
+		font-size: 24px;
+	}
+
+	@include mq($until: tablet) {
+		font-size: 24px;
+		line-height: 30px;
+	}
+
+	@include mq($until: mobileLandscape) {
+		font-size: 20px;
+		line-height: 24px;
+	}
+}
+
+.subscriptions__copy-container.subscriptions__product--feature
+	.subscriptions__product-subtitle--large {
+	line-height: 115%;
+	font-size: 24px;
+	@include mq($until: desktop) {
+		font-size: 20px;
+	}
+	@include mq($until: tablet) {
+		font-size: 17px;
+	}
 }
 
 .subscriptions__product-subtitle--large {
@@ -247,6 +299,20 @@
 	line-height: 30px;
 	font-weight: 300;
 	font-family: $gu-headline;
+
+	@include mq($until: desktop) {
+		font-size: 24px;
+	}
+
+	@include mq($until: tablet) {
+		font-size: 24px;
+		line-height: 30px;
+	}
+
+	@include mq($until: mobileLandscape) {
+		font-size: 20px;
+		line-height: 24px;
+	}
 }
 
 .subscriptions__product-subtitle--small {
@@ -254,6 +320,20 @@
 	line-height: 27px;
 	font-weight: 300;
 	font-family: $gu-headline;
+
+	@include mq($until: desktop) {
+		font-size: 20px;
+	}
+
+	@include mq($until: mobileLandscape) {
+		font-size: 18px;
+		line-height: 24px;
+	}
+
+	@include mq($until: mobileMedium) {
+		font-size: 16px;
+		line-height: 20px;
+	}
 }
 
 .subscriptions__description {
@@ -261,6 +341,26 @@
 	margin: 45px 20px 25px 0;
 	font-size: 20px;
 	line-height: 28px;
+
+	@include mq($until: desktop) {
+		margin: 27px 20px 25px 0;
+		font-size: 16px;
+		line-height: 18px;
+	}
+
+	@include mq($until: tablet) {
+		max-width: 100%;
+	}
+
+	@include mq($until: mobileLandscape) {
+		font-size: 14px;
+		line-height: 16px;
+		margin: 16px 20px 18px 0;
+	}
+
+	@include mq($until: mobileMedium) {
+		margin: 16px 10px 18px 0;
+	}
 }
 
 .subscriptions__description::before {
