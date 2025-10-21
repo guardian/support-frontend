@@ -214,6 +214,16 @@
 	@include mq($until: leftCol) {
 		padding: 0 50px;
 	}
+	@include mq($until: desktop) {
+		padding: 6px 20px 20px;
+		top: 0;
+		transform: translateY(0);
+	}
+	@include mq($until: phablet) {
+		padding: 6px 0 30px 10px;
+		position: static;
+		transform: none;
+	}
 }
 
 .subscriptions__copy-container.subscriptions__product--feature
@@ -543,6 +553,11 @@
 .subscriptions__paper-packshot {
 	width: 382px;
 
+	@include mq($until: tablet) {
+		//position: static;
+		width: 100%;
+	}
+
 	img:nth-child(1) {
 		z-index: 2;
 		left: 80px;
@@ -552,6 +567,15 @@
 		@include mq($until: leftCol) {
 			left: 50px;
 			width: 90%;
+		}
+
+		@include mq($until: desktop) {
+			left: 20px;
+		}
+
+		@include mq($until: tablet) {
+			width: 100%;
+			position: inherit;
 		}
 	}
 }
