@@ -56,8 +56,8 @@ class TickerService(
   private def fetch(name: String): Try[TickerData] =
     for {
       raw <- client.fetchAsString(buildS3Uri(name))
-      defaultPromos <- decode[TickerData](raw).toTry
-    } yield defaultPromos
+      tickerData <- decode[TickerData](raw).toTry
+    } yield tickerData
 
   private def fetchTickers(): Try[Tickers] =
     for {
