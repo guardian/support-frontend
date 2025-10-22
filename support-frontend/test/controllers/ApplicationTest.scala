@@ -90,6 +90,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     priceSummaryServiceProvider,
     productCatalog,
     "support.thegulocal.com",
+    mock[TickerService],
   )(mock[ExecutionContext])
 
   "/healthcheck" should {
