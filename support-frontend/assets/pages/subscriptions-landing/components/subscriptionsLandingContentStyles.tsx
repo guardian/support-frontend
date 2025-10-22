@@ -86,7 +86,7 @@ export const subscriptions__digital_subscriptions__product__feature = css`
 
 	.component-button--primary.component-button--digital:hover,
 	.component-button--primary.component-button--digital:focus {
-		background-color: gu-colour(highlight-dark);
+		background-color: ${brandAlt[200]};
 	}
 
 	.component-button--tertiaryFeature.component-button--digital,
