@@ -41,6 +41,7 @@ trait Controllers {
     priceSummaryServiceProvider,
     cachedProductCatalogServiceProvider,
     appConfig.supportUrl,
+    tickerService,
   )
 
   lazy val diagnosticsController = new DiagnosticsController(

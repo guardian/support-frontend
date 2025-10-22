@@ -9,6 +9,7 @@
 @import controllers.AllProductPrices
 @import views.ViewHelpers.outputJson
 @import io.circe.JsonObject
+@import services.Tickers
 @(
   id: String,
   mainElement: ReactDiv,
@@ -27,7 +28,8 @@
   allProductPrices: AllProductPrices,
   productCatalog: JsonObject,
   noIndex: Boolean,
-  canonicalLink: String
+  canonicalLink: String,
+  tickerData: Option[Tickers]
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 @main(
@@ -65,6 +67,7 @@
     }
 
     window.guardian.allProductPrices = @Html(outputJson(allProductPrices))
+    window.guardian.tickerData = @Html(outputJson(tickerData))
   </script>
 
   @windowGuardianPaymentConfig(
