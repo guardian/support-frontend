@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import { brandAlt } from '@guardian/source/foundations';
 import AnchorButton from 'components/button/anchorButton';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
@@ -5,6 +6,8 @@ import type { ProductBenefit } from 'helpers/productCatalog';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
 import {
 	checkmarkBenefitList,
+	subscriptions__button_container,
+	subscriptions__button_container__feature,
 	subscriptions__description,
 	subscriptions__product_subtitle__large,
 	subscriptions__product_subtitle_small,
@@ -96,13 +99,10 @@ function SubscriptionsProductDescription({
 				</p>
 			)}
 			<div
-				className={
-					isFeature
-						? benefits
-							? 'subscriptions__button-container--feature--benefits'
-							: 'subscriptions__button-container--feature'
-						: 'subscriptions__button-container'
-				}
+				css={[
+					subscriptions__button_container,
+					isFeature ? subscriptions__button_container__feature : css``,
+				]}
 			>
 				{buttons.map((button, index) => (
 					<AnchorButton

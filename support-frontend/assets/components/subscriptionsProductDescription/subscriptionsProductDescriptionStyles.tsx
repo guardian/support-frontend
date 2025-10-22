@@ -158,3 +158,49 @@ export const subscriptions__product_subtitle__large = css`
 		line-height: 24px;
 	}
 `;
+
+export const subscriptions__button_container = css`
+	display: block;
+
+	${from.phablet} {
+		width: 80%;
+		padding-bottom: 20px;
+	}
+
+	${from.tablet} {
+		display: inline-block;
+		padding-bottom: 0;
+	}
+
+	${from.desktop} {
+		width: 100%;
+		padding-bottom: 20px;
+	}
+
+	.component-button:nth-of-type(2) {
+		margin-top: 10px;
+
+		${from.desktop} {
+			margin-top: 0;
+			margin-left: 5px;
+		}
+	}
+`;
+
+export const subscriptions__button_container__feature = css`
+	.component-button:nth-of-type(2) {
+		${from.mobileLandscape} {
+			margin-left: 10px;
+			margin-top: 0;
+		}
+
+		${from.tablet} {
+			margin-left: 0;
+			margin-top: 10px;
+		}
+
+		${from.desktop} {
+			margin: 0 0 0 10px;
+		}
+	}
+`;
