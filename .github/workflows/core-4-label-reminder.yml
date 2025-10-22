@@ -8,7 +8,6 @@ permissions:
 
 jobs:
   core_4_label_reminder:
-    if:
     if: >-
       contains(github.event.pull_request.labels.*.name, 'maintenance') == false &&
       contains(github.event.pull_request.labels.*.name, 'feature') == false &&
