@@ -1,13 +1,11 @@
 // -----  gu-sass ----- //
 @import '~stylesheets/skeleton/skeleton';
-@import '~stylesheets/gu-sass/gu-sass';
 
-// ----- Shared Components ----- //
-
-@import '~components/ctaLink/ctaLink';
-@import '~components/footer/footer';
-@import '~components/headers/header/header';
-@import '~components/highlights/highlights';
-@import '~components/introduction/introduction';
-@import '~components/pageSection/pageSection';
-@import '~components/svgs/svg';
+/**** FOOTER HACK ****/
+#subscriptions-landing-page {
+	.component-content.component-content--feature,
+	.component-left-margin-section__content {
+		margin: 0 auto;
+		max-width: 1290px;
+	}
+}
