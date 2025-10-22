@@ -7,7 +7,7 @@ permissions:
 
 jobs:
   core_4_label_reminder:
-    if: !contains(github.event.pull_request.labels.*.name, 'maintenance')
+    if: contains(github.event.pull_request.labels.*.name, 'maintenance') == false
     name: Core 4 Label Reminder
     runs-on: ubuntu-latest
     steps:
