@@ -103,38 +103,6 @@
 	}
 }
 
-/****************** packshots ********************/
-
-.subscriptions__paper-packshot {
-	width: 382px;
-
-	@include mq($until: tablet) {
-		//position: static;
-		width: 100%;
-	}
-
-	img:nth-child(1) {
-		z-index: 2;
-		left: 80px;
-		position: absolute;
-		bottom: 0;
-
-		@include mq($until: leftCol) {
-			left: 50px;
-			width: 90%;
-		}
-
-		@include mq($until: desktop) {
-			left: 20px;
-		}
-
-		@include mq($until: tablet) {
-			width: 100%;
-			position: inherit;
-		}
-	}
-}
-
 /**** FOOTER HACK ****/
 #subscriptions-landing-page {
 	.component-left-margin-section:before {
