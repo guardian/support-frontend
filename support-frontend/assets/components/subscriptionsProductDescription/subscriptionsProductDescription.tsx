@@ -6,6 +6,10 @@ import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptio
 import {
 	checkmarkBenefitList,
 	subscriptions__description,
+	subscriptions__product_subtitle__large,
+	subscriptions__product_subtitle_small,
+	subscriptions__product_title,
+	subscriptions__sales,
 } from './subscriptionsProductDescriptionStyles';
 
 type PropTypes = {
@@ -49,13 +53,20 @@ function SubscriptionsProductDescription({
 }: PropTypes): JSX.Element {
 	return (
 		<div>
-			<h2 className="subscriptions__product-title">{title}</h2>
-			{offer && <h3 className="subscriptions__sales">{offer}</h3>}
+			<h2
+				className={'subscriptions__product-title'}
+				css={subscriptions__product_title}
+			>
+				{title}
+			</h2>
 			{offer && (
-				<h3 className="subscriptions__product-subtitle--small">{subtitle}</h3>
+				<h3 className={'subscriptions__sales'} css={subscriptions__sales}>
+					{offer}
+				</h3>
 			)}
+			{offer && <h3 css={subscriptions__product_subtitle_small}>{subtitle}</h3>}
 			{!offer && (
-				<h3 className="subscriptions__product-subtitle--large">{subtitle}</h3>
+				<h3 css={subscriptions__product_subtitle__large}>{subtitle}</h3>
 			)}
 			{benefits ? (
 				<BenefitsCheckList
