@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { brandAlt, from, neutral } from '@guardian/source/foundations';
+import { brand, brandAlt, from, neutral } from '@guardian/source/foundations';
 
 export const subscriptions__product_container = css`
 	position: relative;
@@ -62,6 +62,23 @@ export const subscriptions__guardian_weekly_subscriptions__product__feature = cs
 `;
 
 export const subscriptions__digital_subscriptions__product__feature = css`
+	color: ${neutral[100]};
+	background-color: ${brand[400]};
+
+	.subscriptions__digital-feature-packshot {
+		width: 100%;
+
+		${from.tablet} {
+			position: absolute;
+			bottom: 0;
+		}
+
+		img {
+			width: 100%;
+			vertical-align: bottom;
+		}
+	}
+
 	.component-button--primary.component-button--digital {
 		color: ${neutral[7]};
 		background-color: ${brandAlt[400]};
