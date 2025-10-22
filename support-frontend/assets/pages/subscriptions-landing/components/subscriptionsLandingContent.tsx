@@ -1,32 +1,10 @@
 // components
 import { css } from '@emotion/react';
-import { brandAlt, from, neutral } from '@guardian/source/foundations';
 import { getSubscriptionCopy } from '../copy/subscriptionCopy';
 import type { SubscriptionsLandingPropTypes } from '../subscriptionsLandingProps';
 import FeatureHeader from './featureHeader';
+import { subscriptions__product_container } from './subscriptionsLandingContentStyles';
 import SubscriptionsProduct from './subscriptionsProduct';
-
-const subscriptions__product_container = css`
-	position: relative;
-	padding: 0 0 40px;
-	background-color: ${neutral[93]};
-
-	${from.desktop} {
-		padding: 0 20px 40px;
-	}
-
-	&:after {
-		content: '';
-		position: absolute;
-		width: 100%;
-		height: 100px;
-		border-bottom: 1px solid ${neutral[86]};
-		background-color: ${brandAlt[400]};
-		display: block;
-		top: 0;
-		left: 0;
-	}
-`;
 
 const isFeature = (index: number) => index === 0 || index === 2; // make the first and third card a feature
 
@@ -81,7 +59,7 @@ function SubscriptionsLandingContent({
 								: product.offer
 						}
 						isFeature={isFeature(index)}
-						classModifier={product.classModifier ?? []}
+						cssOverrides={product.cssOverrides ?? css``}
 						benefits={product.benefits}
 					/>
 				))}

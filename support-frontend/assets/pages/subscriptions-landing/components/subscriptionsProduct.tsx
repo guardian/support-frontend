@@ -1,9 +1,20 @@
-import cx from 'classnames';
+import type { SerializedStyles } from '@emotion/react';
 import type { ReactNode } from 'react';
 import SubscriptionsProductDescription from 'components/subscriptionsProductDescription/subscriptionsProductDescription';
 import 'helpers/types/option';
 import type { ProductBenefit } from 'helpers/productCatalog';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
+import {
+	subscriptions__copy_container,
+	subscriptions__copy_container_subscriptions__product__feature,
+	subscriptions__copy_wrapper,
+	subscriptions__feature_image_wrapper,
+	subscriptions__image_container,
+	subscriptions__image_container_subscriptions__product__feature,
+	subscriptions__packshot,
+	subscriptions__product,
+	subscriptions__product__feature,
+} from './subscriptionsProductStyles';
 
 type PropTypes = {
 	title: string;
@@ -13,49 +24,56 @@ type PropTypes = {
 	productImage: ReactNode;
 	offer?: string;
 	isFeature?: boolean;
-	classModifier: string[];
 	benefits?: ProductBenefit[];
+	cssOverrides?: SerializedStyles;
 };
 
 function SubscriptionsProduct({
-	classModifier,
 	productImage,
 	isFeature,
 	benefits,
+	cssOverrides,
 	...props
 }: PropTypes): JSX.Element {
 	return (
 		<div
-			className={cx(
-				'subscriptions__product',
-				{
-					'subscriptions__product--feature': isFeature,
-				},
-				classModifier,
-			)}
+			css={[
+				subscriptions__product,
+				isFeature ? subscriptions__product__feature : '',
+				cssOverrides,
+			]}
 		>
 			<div
-				className={cx('subscriptions__image-container', {
-					'subscriptions__product--feature': isFeature,
-				})}
+				className={'subscriptions__image-container '}
+				css={[
+					subscriptions__image_container,
+					isFeature
+						? subscriptions__image_container_subscriptions__product__feature
+						: '',
+				]}
 			>
 				<div
-					className={
+					css={
 						isFeature
-							? 'subscriptions__feature-image-wrapper'
-							: 'subscriptions-packshot'
+							? subscriptions__feature_image_wrapper
+							: subscriptions__packshot
 					}
 				>
 					{productImage}
 				</div>
 			</div>
-
 			<div
-				className={cx('subscriptions__copy-container', {
-					'subscriptions__product--feature': isFeature,
-				})}
+				css={[
+					subscriptions__copy_container,
+					isFeature
+						? subscriptions__copy_container_subscriptions__product__feature
+						: '',
+				]}
 			>
-				<div className="subscriptions__copy-wrapper">
+				<div
+					className={'subscriptions__copy-wrapper'}
+					css={subscriptions__copy_wrapper}
+				>
 					<SubscriptionsProductDescription
 						{...props}
 						isFeature={isFeature}

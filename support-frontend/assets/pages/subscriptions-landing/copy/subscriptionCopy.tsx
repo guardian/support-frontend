@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/utils';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
@@ -27,6 +28,10 @@ import {
 	guardianWeeklyLanding,
 	paperSubsUrl,
 } from 'helpers/urls/routes';
+import {
+	subscriptions__digital_subscriptions__product__feature,
+	subscriptions__guardian_weekly_subscriptions__product__feature,
+} from '../components/subscriptionsLandingContentStyles';
 import type { PriceCopy, PricingCopy } from '../subscriptionsLandingProps';
 
 // types
@@ -47,7 +52,7 @@ type ProductCopy = {
 	productImage: React.ReactNode;
 	offer?: string;
 	buttons: ProductButton[];
-	classModifier?: string[];
+	cssOverrides?: SerializedStyles;
 	participations?: Participations;
 	benefits?: ProductBenefit[];
 };
@@ -138,7 +143,7 @@ function digitalCheckout(
 		],
 		benefits: productCatalogDescription['DigitalSubscription'].benefits,
 		productImage: <DigitalPackshotHero />,
-		classModifier: ['subscriptions__digital'],
+		cssOverrides: subscriptions__digital_subscriptions__product__feature,
 		offer: priceCopy.discountCopy,
 	};
 }
@@ -177,7 +182,7 @@ const guardianWeekly = (
 	],
 	productImage: <GuardianWeeklyPackShotHero />,
 	participations: participations,
-	classModifier: ['subscriptions__guardian-weekly'],
+	cssOverrides: subscriptions__guardian_weekly_subscriptions__product__feature,
 });
 
 const paper = (

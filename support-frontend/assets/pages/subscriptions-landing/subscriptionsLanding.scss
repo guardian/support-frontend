@@ -12,171 +12,10 @@
 @import '~components/pageSection/pageSection';
 @import '~components/svgs/svg';
 
-// ----- Page-Specific Styles ----- //
-
-// #subscriptions-landing-page {
-// 	strong {
-// 		font-weight: bold;
-// 	}
-// }
-
-// [class^='subscriptions'] {
-// 	box-sizing: border-box;
-// }
-
-// .subscriptions-landing-page {
-// 	width: 100%;
-// }
-
-/****************** subscriptions product ********************/
-.subscriptions__product {
-	position: relative;
-	display: flex;
-	align-items: stretch;
-	width: 100%;
-	margin: 0 auto;
-	flex-wrap: wrap;
-	max-width: 1290px;
-	border: 1px solid gu-colour(neutral-86);
-	min-height: 320px;
-	background-color: gu-colour(neutral-97);
-	margin-top: 40px;
-	z-index: 1;
-	padding-top: 0.625rem;
-
-	@include mq($until: desktop) {
-		margin: 20px auto;
-		width: calc(100% - 40px);
-		min-height: 0;
-	}
-
-	@include mq($until: mobileLandscape) {
-		width: calc(100% - 20px);
-	}
-}
-.subscriptions__product:first-child {
-	margin-top: 0;
-}
-
-.subscriptions__product:nth-child(odd) {
-	@include mq($from: tablet) {
-		flex-direction: row-reverse;
-	}
-
-	.subscriptions__description {
-		position: relative;
-	}
-
-	.subscriptions__description::before {
-		width: 200%;
-		right: 0;
-	}
-}
-
-/****************** subscriptions product--feature ********************/
-
-.subscriptions__product.subscriptions__product--feature {
-	color: gu-colour('neutral-100');
-	border: none;
-	padding-top: 10px;
-	background-color: gu-colour('brand-main');
-	overflow: hidden;
-}
-
-.subscriptions__product.subscriptions__product--feature::before {
-	content: none;
-}
-
-.subscriptions__feature-image-wrapper {
-	overflow: hidden;
-	display: initial;
-}
-
-/****************** subscriptions copy-container / image-container ********************/
-
-.subscriptions__copy-container {
-	position: relative;
-	width: 70%;
-	overflow: hidden;
-}
-
-.subscriptions__image-container {
-	position: relative;
-	overflow: hidden;
-	width: 30%;
-}
-
-.subscriptions__copy-container,
-.subscriptions__image-container {
-	@include mq($from: tablet) {
-		width: 50%;
-	}
-}
-
-.subscriptions__image-container.subscriptions__product--feature {
-	padding: 10px 10px 0 10px;
-	width: 100%;
-	margin-bottom: 0;
-
-	@include mq($from: tablet) {
-		position: relative;
-		width: 50%;
-		padding: 0;
-	}
-}
-
-.subscriptions__copy-container.subscriptions__product--feature {
-	position: relative;
-	width: 100%;
-	background-color: #052962;
-
-	@include mq($from: tablet) {
-		width: 50%;
-	}
-
-	.subscriptions__copy-wrapper {
-		padding: 0 10px 10px;
-		@include mq($from: tablet) {
-			padding: 0 20px 20px 20px;
-		}
-	}
-}
-
 /****************** Copy ********************/
 .subscriptions__product--feature .subscriptions__copy-wrapper {
 	top: 0;
 	transform: none;
-}
-
-.subscriptions__copy-wrapper {
-	position: relative;
-	padding: 0 80px;
-
-	@include mq($until: leftCol) {
-		padding: 0 50px;
-	}
-	@include mq($until: desktop) {
-		padding: 6px 20px 20px;
-		top: 0;
-		transform: translateY(0);
-	}
-	@include mq($until: phablet) {
-		padding: 6px 0 30px 10px;
-		position: static;
-		transform: none;
-	}
-}
-
-.subscriptions__copy-container.subscriptions__product--feature
-	.subscriptions__product-title {
-	line-height: 115%;
-	@include mq($until: desktop) {
-		font-size: 28px;
-	}
-	@include mq($until: tablet) {
-		font-size: 24px;
-		padding-top: 15px;
-	}
 }
 
 .subscriptions__product-title {
@@ -233,18 +72,6 @@
 	}
 }
 
-.subscriptions__copy-container.subscriptions__product--feature
-	.subscriptions__product-subtitle--large {
-	line-height: 115%;
-	font-size: 24px;
-	@include mq($until: desktop) {
-		font-size: 20px;
-	}
-	@include mq($until: tablet) {
-		font-size: 17px;
-	}
-}
-
 .subscriptions__product-subtitle--large {
 	font-size: 28px;
 	line-height: 30px;
@@ -287,52 +114,8 @@
 	}
 }
 
-.subscriptions__description {
-	font-weight: 400;
-	margin: 45px 20px 25px 0;
-	font-size: 20px;
-	line-height: 28px;
-
-	@include mq($until: desktop) {
-		margin: 27px 20px 25px 0;
-		font-size: 16px;
-		line-height: 18px;
-	}
-
-	@include mq($until: tablet) {
-		max-width: 100%;
-	}
-
-	@include mq($until: mobileLandscape) {
-		font-size: 14px;
-		line-height: 16px;
-		margin: 16px 20px 18px 0;
-	}
-
-	@include mq($until: mobileMedium) {
-		margin: 16px 10px 18px 0;
-	}
-}
-
-.subscriptions__description::before {
-	content: '';
-	position: absolute;
-	border-top: 1px solid gu-colour(neutral-86);
-	width: 100%;
-	margin-top: -6px;
-}
-.subscriptions__product--feature .subscriptions__description::before {
-	border-top: solid #9aa4ad 1px;
-}
-
 .subscriptions__product--feature .subscriptions__sales {
 	color: gu-colour(neutral-7);
-}
-/****************** product-image ********************/
-
-.subscriptions-packshot {
-	width: 100%;
-	padding: 6px;
 }
 
 /****************** subscriptions__product-button ********************/
@@ -472,24 +255,6 @@
 }
 
 /****************** packshots ********************/
-
-.subscriptions-feature-packshot {
-	width: 140%;
-
-	@include mq($from: tablet) {
-		width: 600px;
-		margin-top: 45px;
-	}
-
-	img {
-		width: 100%;
-
-		@include mq($from: desktop) {
-			width: 700px;
-			right: -50px;
-		}
-	}
-}
 
 .subscriptions__paper-packshot {
 	width: 382px;
