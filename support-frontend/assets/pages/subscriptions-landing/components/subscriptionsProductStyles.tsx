@@ -139,6 +139,8 @@ export const subscriptions__copy_container_subscriptions__product__feature = css
 `;
 
 export const subscriptions__copy_wrapper = css`
+	top: 0;
+	transform: none;
 	position: relative;
 	padding: 0 80px;
 

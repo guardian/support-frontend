@@ -12,33 +12,6 @@
 @import '~components/pageSection/pageSection';
 @import '~components/svgs/svg';
 
-/****************** Copy ********************/
-.subscriptions__product--feature .subscriptions__copy-wrapper {
-	top: 0;
-	transform: none;
-}
-
-/****************** digital ********************/
-
-.subscriptions__digital.subscriptions__product {
-	color: gu-colour(neutral-100);
-	background-color: #052962;
-
-	.subscriptions__digital-feature-packshot {
-		width: 100%;
-
-		@include mq($from: tablet) {
-			position: absolute;
-			bottom: 0;
-		}
-
-		img {
-			width: 100%;
-			vertical-align: bottom;
-		}
-	}
-}
-
 /**** FOOTER HACK ****/
 #subscriptions-landing-page {
 	.component-left-margin-section:before {
