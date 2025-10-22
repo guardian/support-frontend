@@ -1,8 +1,10 @@
 @import admin.settings.AllSettings
 @import admin.ServersideAbTest.{Participation, asJsonString}
-@import assets.{AssetsResolver, RefPath, StyleContent}
-@import views.{EmptyDiv, Preload, ReactDiv, SSRContent}
-@import scala.util.Random
+@import assets.{AssetsResolver, RefPath}
+@import views.{EmptyDiv, ReactDiv, SSRContent}
+@import views.ViewHelpers.outputJson
+@import _root_.utils.ObserverUtils
+
 @(
   title: String,
   mainElement: ReactDiv,
@@ -70,7 +72,10 @@
 
     @settingsScript(settings)
 
-    <script>window.guardian.serversideTests = @Html(asJsonString(serversideTests))</script>
+    <script>
+      window.guardian.serversideTests = @Html(asJsonString(serversideTests));
+      window.guardian.isObserverSubdomain = @Html(outputJson(ObserverUtils.isObserverSubdomain(request.host)))
+    </script>
 
     <title>@title</title>
     <meta property="og:title" content="@title"/>
