@@ -45,6 +45,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
       "GuAlarm",
       "GuAlarm",
       "GuAlarm",
+      "GuAlarm",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -537,6 +538,60 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         ],
         "EvaluationPeriods": 1,
         "MetricName": "GetLandingPageTestsError",
+        "Namespace": "support-frontend",
+        "Period": 60,
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "GetTickerDataErrorD7188BAD": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:eu-west-1:",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "Impact - support-frontend failed to fetch ticker data from S3. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
+        "AlarmName": "Support-frontend GetTickerDataError",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "GetTickerDataError",
         "Namespace": "support-frontend",
         "Period": 60,
         "Statistic": "Sum",
