@@ -1,7 +1,7 @@
 name: Core 4 Label Reminder
 
 on: [pull_request]
-  # types: [opened]
+  types: [opened]
 
 permissions:
   pull-requests: write
