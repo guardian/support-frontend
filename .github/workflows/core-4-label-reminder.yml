@@ -1,0 +1,22 @@
+name: Core 4 Label Reminder
+
+on: [pull_request]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  core_4_label_reminder:
+    if: !contains(github.event.pull_request.labels.*.name, 'maintenance')
+    name: Core 4 Label Reminder
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v8
+        with:
+          script: |
+            github.rest.pr.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "Don't forget to label!"
+            })
