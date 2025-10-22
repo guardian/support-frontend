@@ -23,5 +23,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: `> [!IMPORTANT]
-              > Don't forget to label your PR with one of the following labels: maintenance, feature, fix.`
+              > Don't forget to label your PR with one of the following labels: \`maintenance\`, \`feature\`, \`fix\`.`
             })
