@@ -1,9 +1,7 @@
-// components
-import { css } from '@emotion/react';
 import { getSubscriptionCopy } from '../copy/subscriptionCopy';
 import type { SubscriptionsLandingPropTypes } from '../subscriptionsLandingProps';
 import FeatureHeader from './featureHeader';
-import { subscriptions__product_container } from './subscriptionsLandingContentStyles';
+import { subscriptionsProductContainerStyle } from './subscriptionsLandingContentStyles';
 import SubscriptionsProduct from './subscriptionsProduct';
 
 const isFeature = (index: number) => index === 0 || index === 2; // make the first and third card a feature
@@ -41,7 +39,7 @@ function SubscriptionsLandingContent({
 			id="qa-subscriptions-landing-page"
 		>
 			<FeatureHeader featureHeaderMsg={supportMsg} />
-			<div css={subscriptions__product_container}>
+			<div css={subscriptionsProductContainerStyle}>
 				{subscriptionCopy.map((product, index) => (
 					<SubscriptionsProduct
 						title={product.title}
@@ -59,7 +57,7 @@ function SubscriptionsLandingContent({
 								: product.offer
 						}
 						isFeature={isFeature(index)}
-						cssOverrides={product.cssOverrides ?? css``}
+						cssOverrides={product.cssOverrides}
 						benefits={product.benefits}
 					/>
 				))}

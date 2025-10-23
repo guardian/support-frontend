@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/utils';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
@@ -28,11 +29,11 @@ import {
 	guardianWeeklyLanding,
 	paperSubsUrl,
 } from 'helpers/urls/routes';
-import {
-	subscriptions__digital_subscriptions__product__feature,
-	subscriptions__guardian_weekly_subscriptions__product__feature,
-} from '../components/subscriptionsLandingContentStyles';
 import type { PriceCopy, PricingCopy } from '../subscriptionsLandingProps';
+import {
+	digitalSubscriptionProductCardStyle,
+	weeklySubscriptionsProductCardStyle,
+} from './subscriptionCopyStyles';
 
 // types
 export type ProductButton = {
@@ -50,9 +51,9 @@ type ProductCopy = {
 	subtitle: Option<string>;
 	description: string;
 	productImage: React.ReactNode;
-	offer?: string;
 	buttons: ProductButton[];
-	cssOverrides?: SerializedStyles;
+	cssOverrides: SerializedStyles;
+	offer?: string;
 	participations?: Participations;
 	benefits?: ProductBenefit[];
 };
@@ -143,7 +144,7 @@ function digitalCheckout(
 		],
 		benefits: productCatalogDescription['DigitalSubscription'].benefits,
 		productImage: <DigitalPackshotHero />,
-		cssOverrides: subscriptions__digital_subscriptions__product__feature,
+		cssOverrides: digitalSubscriptionProductCardStyle,
 		offer: priceCopy.discountCopy,
 	};
 }
@@ -182,7 +183,7 @@ const guardianWeekly = (
 	],
 	productImage: <GuardianWeeklyPackShotHero />,
 	participations: participations,
-	cssOverrides: subscriptions__guardian_weekly_subscriptions__product__feature,
+	cssOverrides: weeklySubscriptionsProductCardStyle,
 });
 
 const paper = (
@@ -207,6 +208,7 @@ const paper = (
 		],
 		productImage: <PaperPackshot />,
 		offer: priceCopy.discountCopy,
+		cssOverrides: css``,
 	};
 };
 
