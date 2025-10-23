@@ -135,8 +135,8 @@ export function SubmitButton({
 				<PayPalScriptProvider
 					options={{
 						clientId: 'sb',
-						vault: true,
-						intent: 'tokenize',
+						// vault: true,
+						// intent: 'tokenize',
 						environment: 'sandbox',
 						currency: 'GBP',
 						debug: false,
@@ -144,24 +144,15 @@ export function SubmitButton({
 				>
 					<PayPalButtons
 						style={{ layout: 'horizontal' }}
-						// createVaultSetupToken={() => {
-						// 	return Promise.resolve('TEST_VAULT_SETUP_TOKEN');
-						// }}
-						createBillingAgreement={async () => {
-							// OLD CODE BELOW
-							// const setupToken = await setupPayPalPayment(
-							// 	10,
-							// 	'GBP',
-							// 	BillingPeriod.Monthly,
-							// 	csrf,
-							// );
+						createVaultSetupToken={async () => {
 							const setupToken = await createSetupToken(csrf);
 							console.log({ setupToken });
 							return setupToken;
 						}}
 						onApprove={(data, actions) => {
 							console.log({ data });
-							// Set the state here to submit the form with the BAID/Vault token
+							// TODO: exchange the setup token for a payment token and set in the state
+							// which should trigger the form submission
 							return Promise.resolve();
 						}}
 					/>

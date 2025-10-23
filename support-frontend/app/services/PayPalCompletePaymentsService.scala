@@ -16,7 +16,20 @@ object GetAccessTokenResponse {
   implicit val codec: Codec[GetAccessTokenResponse] = deriveCodec
 }
 
-case class PayPalPaymentSource()
+case class ExperienceContext(
+    return_url: String = "https://support.thegulocal.com",
+    cancel_url: String = "https://support.thegulocal.com",
+    shipping_preference: String = "NO_SHIPPING",
+)
+object ExperienceContext {
+  implicit val codec: Codec[ExperienceContext] = deriveCodec
+}
+
+case class PayPalPaymentSource(
+    usage_type: String = "MERCHANT",
+    customer_type: String = "CONSUMER",
+    experience_context: ExperienceContext = ExperienceContext(),
+)
 object PayPalPaymentSource {
   implicit val codec: Codec[PayPalPaymentSource] = deriveCodec
 }
@@ -92,12 +105,12 @@ class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client
         data = payload.asJson,
         headers = buildAuthorization(getAccessTokenResponse.access_token),
       )
-      vaultTokenResponse <- postJson[CreatePaymentTokenResponse](
-        endpoint = "/v3/vault/payment-tokens",
-        data = CreatePaymentTokenRequest(PaymentSource(PayPalTokenSource(setupTokenResponse.id))).asJson,
-        headers = buildAuthorization(getAccessTokenResponse.access_token),
-      )
-    } yield vaultTokenResponse.id
+//      vaultTokenResponse <- postJson[CreatePaymentTokenResponse](
+//        endpoint = "/v3/vault/payment-tokens",
+//        data = CreatePaymentTokenRequest(PaymentSource(PayPalTokenSource(setupTokenResponse.id))).asJson,
+//        headers = buildAuthorization(getAccessTokenResponse.access_token),
+//      )
+    } yield setupTokenResponse.id
 
   }
 }

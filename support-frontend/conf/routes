@@ -178,6 +178,7 @@ GET  /paypal/rest/error                                            controllers.P
 
 # ----- PayPal (Complete Payments) ----- #
 POST /paypal-complete-payments/setup-token                         controllers.PayPalCompletePayments.createSetupToken()
+#POST /paypal-complete-payments/payment-token                       controllers.PayPalCompletePayments.createPaymentToken()
 
 # ----- Direct Debit ----- #
 
