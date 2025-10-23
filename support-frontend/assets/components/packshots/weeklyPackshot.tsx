@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { from } from '@guardian/source/foundations';
 import GridPicture from 'components/gridPicture/gridPicture';
 
-const subscriptions_feature_packshot = css`
+const weeklyPackShotContainer = css`
 	.subscriptions-feature-packshot {
 		width: 140%;
 
@@ -22,12 +22,9 @@ const subscriptions_feature_packshot = css`
 	}
 `;
 
-function GuardianWeeklyPackShotHero(): JSX.Element {
+function WeeklyPackShot(): JSX.Element {
 	return (
-		<div
-			className="subscriptions-feature-packshot"
-			css={subscriptions_feature_packshot}
-		>
+		<div css={weeklyPackShotContainer}>
 			<GridPicture
 				sources={[
 					{
@@ -54,4 +51,4 @@ function GuardianWeeklyPackShotHero(): JSX.Element {
 	);
 }
 
-export default GuardianWeeklyPackShotHero;
+export default WeeklyPackShot;

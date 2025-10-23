@@ -11,20 +11,6 @@ export const weeklySubscriptionsProductCardStyle = css`
 		position: relative;
 	}
 
-	.subscriptions-feature-packshot {
-		width: 100%;
-
-		img {
-			width: 100%;
-			vertical-align: bottom;
-		}
-
-		${from.tablet} {
-			position: absolute;
-			bottom: 0;
-		}
-	}
-
 	.component-button--primary.component-button--guardian-weekly {
 		color: ${neutral[100]};
 		background-color: ${neutral[20]};

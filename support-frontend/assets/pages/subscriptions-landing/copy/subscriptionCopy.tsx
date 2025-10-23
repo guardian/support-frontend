@@ -5,7 +5,7 @@ import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import * as React from 'react';
 import DigitalPackShot from 'components/packshots/digitalPackShot';
-import GuardianWeeklyPackShotHero from 'components/packshots/guardian-weekly-packshot-hero';
+import WeeklyPackShot from 'components/packshots/weeklyPackshot';
 import type { Participations } from 'helpers/abTests/models';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { ProductBenefit } from 'helpers/productCatalog';
@@ -178,7 +178,7 @@ const guardianWeekly = (
 			modifierClasses: 'guardian-weekly',
 		},
 	],
-	productImage: <GuardianWeeklyPackShotHero />,
+	productImage: <WeeklyPackShot />,
 	participations: participations,
 	cssOverrides: weeklySubscriptionsProductCardStyle,
 });
