@@ -1,8 +1,7 @@
 import { css } from '@emotion/react';
 import { until } from '@guardian/source/foundations';
-import GridImage from 'components/gridImage/gridImage';
 
-const subscriptions__paper_packshot = css`
+export const paperPackshotContainer = css`
 	width: 382px;
 
 	${until.tablet} {
@@ -30,18 +29,3 @@ const subscriptions__paper_packshot = css`
 		}
 	}
 `;
-
-function PaperPackshot() {
-	return (
-		<div css={subscriptions__paper_packshot}>
-			<GridImage
-				gridId="newspaperLandingHeroDesktop"
-				srcSizes={[2000, 1000, 500]}
-				sizes="(max-width: 739px) 140px, 422px"
-				imgType="png"
-			/>
-		</div>
-	);
-}
-
-export default PaperPackshot;

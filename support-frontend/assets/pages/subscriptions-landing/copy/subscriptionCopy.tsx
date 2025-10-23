@@ -7,8 +7,8 @@ import * as React from 'react';
 // constants
 import DigitalPackshotHero from 'components/packshots/digital-packshot-hero';
 import GuardianWeeklyPackShotHero from 'components/packshots/guardian-weekly-packshot-hero';
-import PaperPackshot from 'components/packshots/paper-packshot';
 // images
+import PaperPackshot from 'components/packshots/paperPackshot';
 import type { Participations } from 'helpers/abTests/models';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { ProductBenefit } from 'helpers/productCatalog';
