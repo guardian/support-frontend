@@ -1,21 +1,17 @@
 // -----  gu-sass ----- //
 @import '~stylesheets/skeleton/skeleton';
-@import '~stylesheets/gu-sass/gu-sass';
 
 // ----- Shared Components ----- //
-
 @import '~components/headers/header/header';
 @import '~components/footer/footer';
 @import '~components/introduction/introduction';
 @import '~components/introduction/squaresIntroduction';
 @import '~components/highlights/highlights';
 @import '~components/pageSection/pageSection';
-@import '~components/ctaLink/ctaLink';
 @import '~components/leftMarginSection/leftMarginSection';
 @import '~components/content/content';
 
 // ----- Page ----- //
-
 #error-404-page,
 #error-500-page,
 #down-for-maintenance-page {
