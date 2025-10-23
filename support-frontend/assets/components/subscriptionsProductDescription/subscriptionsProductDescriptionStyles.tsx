@@ -10,7 +10,7 @@ import {
 	until,
 } from '@guardian/source/foundations';
 
-export const subscriptions__description = css`
+export const subscriptionDescription = css`
 	position: relative;
 	&:before {
 		width: 200%;
@@ -49,7 +49,7 @@ export const subscriptions__description = css`
 	}
 `;
 
-export const checkmarkBenefitList = css`
+export const subscriptionBenefit = css`
 	display: block;
 	${textEgyptian17}
 	margin: 16px 20px 18px 0;
@@ -73,7 +73,7 @@ export const checkmarkBenefitList = css`
 	}
 `;
 
-export const subscriptions__product_title = css`
+export const subscriptionTitle = css`
 	${headlineBold34};
 	margin: 0;
 
@@ -97,7 +97,7 @@ export const subscriptions__product_title = css`
 	}
 `;
 
-export const subscriptions__sales = css`
+export const subscriptionOffer = css`
 	font-size: 28px;
 	line-height: 30px;
 	font-weight: 300;
@@ -123,7 +123,7 @@ export const subscriptions__sales = css`
 	}
 `;
 
-export const subscriptions__product_subtitle_small = css`
+export const subscriptionSubtitleSmall = css`
 	${headlineLight24};
 
 	${until.desktop} {
@@ -141,7 +141,7 @@ export const subscriptions__product_subtitle_small = css`
 	}
 `;
 
-export const subscriptions__product_subtitle__large = css`
+export const subscriptionSubtitleLarge = css`
 	${headlineLight28};
 
 	${until.desktop} {
@@ -159,7 +159,7 @@ export const subscriptions__product_subtitle__large = css`
 	}
 `;
 
-export const subscriptions__button_container = css`
+export const subscriptionButtonsContainer = css`
 	display: block;
 
 	${from.phablet} {
@@ -187,7 +187,7 @@ export const subscriptions__button_container = css`
 	}
 `;
 
-export const subscriptions__button_container__feature = css`
+export const subscriptionButtonsContainerFeature = css`
 	.component-button:nth-of-type(2) {
 		${from.mobileLandscape} {
 			margin-left: 10px;

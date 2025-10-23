@@ -5,14 +5,14 @@ import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList
 import type { ProductBenefit } from 'helpers/productCatalog';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
 import {
-	checkmarkBenefitList,
-	subscriptions__button_container,
-	subscriptions__button_container__feature,
-	subscriptions__description,
-	subscriptions__product_subtitle__large,
-	subscriptions__product_subtitle_small,
-	subscriptions__product_title,
-	subscriptions__sales,
+	subscriptionBenefit,
+	subscriptionButtonsContainer,
+	subscriptionButtonsContainerFeature,
+	subscriptionDescription,
+	subscriptionOffer,
+	subscriptionSubtitleLarge,
+	subscriptionSubtitleSmall,
+	subscriptionTitle,
 } from './subscriptionsProductDescriptionStyles';
 
 type PropTypes = {
@@ -56,21 +56,17 @@ function SubscriptionsProductDescription({
 }: PropTypes): JSX.Element {
 	return (
 		<div>
-			<h2
-				className={'subscriptions__product-title'}
-				css={subscriptions__product_title}
-			>
+			<h2 className={'subscriptions__product-title'} css={subscriptionTitle}>
 				{title}
 			</h2>
 			{offer && (
-				<h3 className={'subscriptions__sales'} css={subscriptions__sales}>
+				<h3 className={'subscriptions__sales'} css={subscriptionOffer}>
 					{offer}
 				</h3>
 			)}
-			{offer && <h3 css={subscriptions__product_subtitle_small}>{subtitle}</h3>}
-			{!offer && (
-				<h3 css={subscriptions__product_subtitle__large}>{subtitle}</h3>
-			)}
+			<h3 css={offer ? subscriptionSubtitleSmall : subscriptionSubtitleLarge}>
+				{subtitle}
+			</h3>
 			{benefits ? (
 				<BenefitsCheckList
 					benefitsCheckListData={benefits.map((benefit) => {
@@ -88,20 +84,17 @@ function SubscriptionsProductDescription({
 					})}
 					benefitsHeading="Subscribe below to unlock the following benefits:"
 					iconColor={brandAlt[400]}
-					cssOverrides={checkmarkBenefitList}
+					cssOverrides={subscriptionBenefit}
 				/>
 			) : (
-				<p
-					className="subscriptions__description"
-					css={subscriptions__description}
-				>
+				<p className="subscriptions__description" css={subscriptionDescription}>
 					{description}
 				</p>
 			)}
 			<div
 				css={[
-					subscriptions__button_container,
-					isFeature ? subscriptions__button_container__feature : css``,
+					subscriptionButtonsContainer,
+					isFeature ? subscriptionButtonsContainerFeature : css``,
 				]}
 			>
 				{buttons.map((button, index) => (
