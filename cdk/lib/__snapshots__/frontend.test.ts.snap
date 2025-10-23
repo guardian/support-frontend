@@ -8,6 +8,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
       "GuGetS3ObjectsPolicy",
       "GuGetS3ObjectsPolicy",
       "GuGetS3ObjectsPolicy",
+      "GuGetS3ObjectsPolicy",
       "GuPutCloudwatchMetricsPolicy",
       "GuAllowPolicy",
       "GuAllowPolicy",
@@ -35,6 +36,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
       "GuHttpsApplicationListener",
       "GuAlb5xxPercentageAlarm",
       "GuUnhealthyInstancesAlarm",
+      "GuAlarm",
       "GuAlarm",
       "GuAlarm",
       "GuAlarm",
@@ -537,6 +539,60 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         ],
         "EvaluationPeriods": 1,
         "MetricName": "GetLandingPageTestsError",
+        "Namespace": "support-frontend",
+        "Period": 60,
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "GetTickerDataErrorD7188BAD": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:eu-west-1:",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "Impact - support-frontend failed to fetch ticker data from S3. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
+        "AlarmName": "Support-frontend GetTickerDataError",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "GetTickerDataError",
         "Namespace": "support-frontend",
         "Period": 60,
         "Statistic": "Sum",
@@ -1647,6 +1703,27 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         },
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "TickerBucketD2F9F605": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::contributions-ticker/PROD/*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "TickerBucketD2F9F605",
+        "Roles": [
+          {
+            "Ref": "InstanceRoleFrontend9A970131",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "UnhealthyInstancesAlarmFrontend3D40A304": {
       "Properties": {
