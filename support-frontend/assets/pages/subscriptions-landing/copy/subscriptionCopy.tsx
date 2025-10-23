@@ -5,6 +5,7 @@ import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import * as React from 'react';
 import DigitalPackShot from 'components/packshots/digitalPackShot';
+import PaperPackShot from 'components/packshots/paperPackshot';
 import WeeklyPackShot from 'components/packshots/weeklyPackshot';
 import type { Participations } from 'helpers/abTests/models';
 import { currencies, detect } from 'helpers/internationalisation/currency';
@@ -203,7 +204,7 @@ const paper = (
 				}),
 			},
 		],
-		productImage: <></>,
+		productImage: <PaperPackShot />,
 		offer: priceCopy.discountCopy,
 		cssOverrides: css``,
 	};
