@@ -351,8 +351,8 @@ importers:
         specifier: ^4.0.9
         version: 4.0.9
       '@types/node':
-        specifier: ^22.10.1
-        version: 22.15.29
+        specifier: 'catalog:'
+        version: 20.19.0
       '@types/react':
         specifier: 18.2.0
         version: 18.2.0
@@ -421,7 +421,7 @@ importers:
         version: 9.0.21
       jest:
         specifier: ^29.7.0
-        version: 29.7.0(@types/node@22.15.29)(babel-plugin-macros@3.1.0)
+        version: 29.7.0(@types/node@20.19.0)(babel-plugin-macros@3.1.0)
       jest-environment-jsdom:
         specifier: ^29.7.0
         version: 29.7.0
@@ -433,7 +433,7 @@ importers:
         version: 3.1.0
       knip:
         specifier: ^5.40.0
-        version: 5.58.1(@types/node@22.15.29)(typescript@5.5.4)
+        version: 5.58.1(@types/node@20.19.0)(typescript@5.5.4)
       lint-staged:
         specifier: ^15.3.0
         version: 15.5.2
@@ -17283,25 +17283,6 @@ snapshots:
       - supports-color
       - ts-node
 
-  jest-cli@29.7.0(@types/node@22.15.29)(babel-plugin-macros@3.1.0):
-    dependencies:
-      '@jest/core': 29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.15.29)(typescript@5.3.3))
-      '@jest/test-result': 29.7.0
-      '@jest/types': 29.6.3
-      chalk: 4.1.2
-      create-jest: 29.7.0(@types/node@22.15.29)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.15.29)(typescript@5.3.3))
-      exit: 0.1.2
-      import-local: 3.2.0
-      jest-config: 29.7.0(@types/node@22.15.29)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.15.29)(typescript@5.3.3))
-      jest-util: 29.7.0
-      jest-validate: 29.7.0
-      yargs: 17.7.2
-    transitivePeerDependencies:
-      - '@types/node'
-      - babel-plugin-macros
-      - supports-color
-      - ts-node
-
   jest-cli@29.7.0(@types/node@22.15.29)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.15.29)(typescript@5.3.3)):
     dependencies:
       '@jest/core': 29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.15.29)(typescript@5.3.3))
@@ -17639,18 +17620,6 @@ snapshots:
       - supports-color
       - ts-node
 
-  jest@29.7.0(@types/node@22.15.29)(babel-plugin-macros@3.1.0):
-    dependencies:
-      '@jest/core': 29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.15.29)(typescript@5.3.3))
-      '@jest/types': 29.6.3
-      import-local: 3.2.0
-      jest-cli: 29.7.0(@types/node@22.15.29)(babel-plugin-macros@3.1.0)
-    transitivePeerDependencies:
-      - '@types/node'
-      - babel-plugin-macros
-      - supports-color
-      - ts-node
-
   jest@29.7.0(@types/node@22.15.29)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.15.29)(typescript@5.3.3)):
     dependencies:
       '@jest/core': 29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.15.29)(typescript@5.3.3))
@@ -17783,10 +17752,10 @@ snapshots:
 
   kleur@3.0.3: {}
 
-  knip@5.58.1(@types/node@22.15.29)(typescript@5.5.4):
+  knip@5.58.1(@types/node@20.19.0)(typescript@5.5.4):
     dependencies:
       '@nodelib/fs.walk': 1.2.8
-      '@types/node': 22.15.29
+      '@types/node': 20.19.0
       fast-glob: 3.3.3
       formatly: 0.2.3
       jiti: 2.4.2
