@@ -6,7 +6,6 @@ import { BillingPeriod } from '@modules/product/billingPeriod';
 import * as React from 'react';
 import DigitalPackShot from 'components/packshots/digitalPackShot';
 import GuardianWeeklyPackShotHero from 'components/packshots/guardian-weekly-packshot-hero';
-import PaperPackShot from 'components/packshots/paperPackShot';
 import type { Participations } from 'helpers/abTests/models';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { ProductBenefit } from 'helpers/productCatalog';
@@ -204,7 +203,7 @@ const paper = (
 				}),
 			},
 		],
-		productImage: <PaperPackShot />,
+		productImage: <></>,
 		offer: priceCopy.discountCopy,
 		cssOverrides: css``,
 	};
