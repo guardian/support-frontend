@@ -25,9 +25,9 @@ import models.GeoData
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
-import services.{CachedProductCatalogServiceProvider, PaymentAPIService, TestUserService}
+import services.{CachedProductCatalogServiceProvider, PaymentAPIService, TestUserService, TickerService}
 import utils.FastlyGEOIP._
-import utils.PaperValidation
+import utils.{ObserverUtils, PaperValidation}
 import views.EmptyDiv
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -222,6 +222,7 @@ class Application(
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
     cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
     val supportUrl: String,
+    tickerService: TickerService,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with SettingsSurrogateKeySyntax
@@ -275,6 +276,11 @@ class Application(
 
   def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val url = getGeoPath(request, campaignCode, "contribute")
+    RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
+  }
+
+  def checkoutGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    val url = getGeoPath(request, campaignCode, "checkout")
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
@@ -437,6 +443,7 @@ class Application(
       productCatalog = productCatalog,
       noIndex = noIndexing,
       canonicalLink = canonicalLink,
+      tickerData = tickerService.getTickers(),
     )
   }
 
@@ -618,6 +625,7 @@ class Application(
         productCatalog = productCatalog,
         allProductPrices = allProductPrices,
         user = request.user,
+        isObserverSubdomain = ObserverUtils.isObserverSubdomain(request.host),
         homeDeliveryPostcodes = Some(PaperValidation.M25_POSTCODE_PREFIXES),
       ),
     ).withSettingsSurrogateKey

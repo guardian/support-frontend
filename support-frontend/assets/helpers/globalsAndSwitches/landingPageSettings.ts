@@ -1,10 +1,6 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 
-enum TickerName {
-	US = 'US',
-	AU = 'AU',
-	GLOBAL = 'global',
-}
+export type TickerName = 'US' | 'AU' | 'global';
 
 interface TickerCopy {
 	countLabel: string;
