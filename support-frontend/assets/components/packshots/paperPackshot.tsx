@@ -1,9 +1,9 @@
 import GridImage from 'components/gridImage/gridImage';
-import { paperPackshotContainer } from './paperPackshotStyle';
+import { paperPackShotContainer } from './paperPackShotStyle';
 
-function PaperPackshot() {
+function PaperPackShot() {
 	return (
-		<div css={paperPackshotContainer}>
+		<div css={paperPackShotContainer}>
 			<GridImage
 				gridId="newspaperLandingHeroDesktop"
 				srcSizes={[2000, 1000, 500]}
@@ -14,4 +14,4 @@ function PaperPackshot() {
 	);
 }
 
-export default PaperPackshot;
+export default PaperPackShot;

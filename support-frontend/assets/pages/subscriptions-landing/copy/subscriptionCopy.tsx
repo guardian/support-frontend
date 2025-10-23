@@ -8,7 +8,7 @@ import * as React from 'react';
 import DigitalPackshotHero from 'components/packshots/digital-packshot-hero';
 import GuardianWeeklyPackShotHero from 'components/packshots/guardian-weekly-packshot-hero';
 // images
-import PaperPackshot from 'components/packshots/paperPackshot';
+import PaperPackShot from 'components/packshots/paperPackShot';
 import type { Participations } from 'helpers/abTests/models';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { ProductBenefit } from 'helpers/productCatalog';
@@ -206,7 +206,7 @@ const paper = (
 				}),
 			},
 		],
-		productImage: <PaperPackshot />,
+		productImage: <PaperPackShot />,
 		offer: priceCopy.discountCopy,
 		cssOverrides: css``,
 	};
