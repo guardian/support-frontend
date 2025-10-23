@@ -7,6 +7,7 @@ import com.gu.aws.AwsS3Client.S3Location
 import com.gu.support.config.Stages.CODE
 import com.gu.support.config.{Stage, Stages}
 import com.typesafe.scalalogging.StrictLogging
+import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.parser.decode
 import org.apache.pekko.actor.ActorSystem
@@ -26,8 +27,8 @@ case class TickerData(
     goal: Double,
 )
 object TickerData {
-  implicit val decoder = deriveDecoder[TickerData]
-  implicit val encoder = deriveEncoder[TickerData]
+  implicit val decoder: Decoder[TickerData] = deriveDecoder[TickerData]
+  implicit val encoder: Encoder[TickerData] = deriveEncoder[TickerData]
 }
 case class Tickers(
     global: TickerData,
@@ -35,8 +36,8 @@ case class Tickers(
     AU: TickerData,
 )
 object Tickers {
-  implicit val decoder = deriveDecoder[Tickers]
-  implicit val encoder = deriveEncoder[Tickers]
+  implicit val decoder: Decoder[Tickers] = deriveDecoder[Tickers]
+  implicit val encoder: Encoder[Tickers] = deriveEncoder[Tickers]
 }
 
 class TickerService(
