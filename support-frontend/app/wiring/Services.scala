@@ -89,6 +89,8 @@ trait Services {
 
   lazy val defaultPromotionService = new DefaultPromotionServiceS3(s3Client, appConfig.stage, actorSystem)
 
+  lazy val tickerService = new TickerService(appConfig.stage, s3Client)
+
   lazy val priceSummaryServiceProvider: PriceSummaryServiceProvider =
     new PriceSummaryServiceProvider(appConfig.priceSummaryConfigProvider, defaultPromotionService)
 

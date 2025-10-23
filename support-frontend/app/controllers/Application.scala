@@ -25,7 +25,7 @@ import models.GeoData
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
-import services.{CachedProductCatalogServiceProvider, PaymentAPIService, TestUserService}
+import services.{CachedProductCatalogServiceProvider, PaymentAPIService, TestUserService, TickerService}
 import utils.FastlyGEOIP._
 import utils.{ObserverUtils, PaperValidation}
 import views.EmptyDiv
@@ -222,6 +222,7 @@ class Application(
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
     cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
     val supportUrl: String,
+    tickerService: TickerService,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with SettingsSurrogateKeySyntax
@@ -442,6 +443,7 @@ class Application(
       productCatalog = productCatalog,
       noIndex = noIndexing,
       canonicalLink = canonicalLink,
+      tickerData = tickerService.getTickers(),
     )
   }
 
