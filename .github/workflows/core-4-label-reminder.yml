@@ -2,10 +2,11 @@ name: Core 4 Label Reminder
 
 # Run when a PR is opened or marked ready for review, but not for drafts (see
 # condition in job below)
-on: [pull_request]
-  types:
-    - opened
-    - ready_for_review
+on:
+  pull_request:
+    types:
+      - opened
+      - ready_for_review
 
 permissions:
   pull-requests: write
