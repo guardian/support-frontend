@@ -4,10 +4,8 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import * as React from 'react';
-// constants
-import DigitalPackshotHero from 'components/packshots/digital-packshot-hero';
+import DigitalPackShot from 'components/packshots/digitalPackShot';
 import GuardianWeeklyPackShotHero from 'components/packshots/guardian-weekly-packshot-hero';
-// images
 import PaperPackShot from 'components/packshots/paperPackShot';
 import type { Participations } from 'helpers/abTests/models';
 import { currencies, detect } from 'helpers/internationalisation/currency';
@@ -143,7 +141,7 @@ function digitalCheckout(
 			},
 		],
 		benefits: productCatalogDescription['DigitalSubscription'].benefits,
-		productImage: <DigitalPackshotHero />,
+		productImage: <DigitalPackShot />,
 		cssOverrides: digitalSubscriptionProductCardStyle,
 		offer: priceCopy.discountCopy,
 	};
