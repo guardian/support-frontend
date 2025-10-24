@@ -15,7 +15,10 @@ import {
 } from 'helpers/async/fetch';
 import { logPromise, pollUntilPromise } from 'helpers/async/promise';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type { StripeHostedCheckout } from 'helpers/forms/paymentMethods';
+import type {
+	PayPalCompletePayments,
+	StripeHostedCheckout,
+} from 'helpers/forms/paymentMethods';
 import {
 	DirectDebit,
 	PayPal,
@@ -111,6 +114,10 @@ type RegularPayPalPaymentFields = {
 	paymentType: typeof PayPal;
 	baid: string;
 };
+type RegularPayPalCompletePaymentsPaymentFields = {
+	paymentType: typeof PayPalCompletePayments;
+	paymentToken: string;
+};
 type RegularStripePaymentIntentFields = {
 	paymentType: typeof Stripe;
 	paymentMethod: string | PaymentMethod;
@@ -139,6 +146,7 @@ type RegularStripeHostedCheckoutPaymentFields = {
 };
 export type RegularPaymentFields =
 	| RegularPayPalPaymentFields
+	| RegularPayPalCompletePaymentsPaymentFields
 	| RegularStripePaymentIntentFields
 	| RegularDirectDebitPaymentFields
 	| RegularSepaPaymentFields

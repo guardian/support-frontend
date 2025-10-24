@@ -105,12 +105,24 @@ class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client
         data = payload.asJson,
         headers = buildAuthorization(getAccessTokenResponse.access_token),
       )
-//      vaultTokenResponse <- postJson[CreatePaymentTokenResponse](
-//        endpoint = "/v3/vault/payment-tokens",
-//        data = CreatePaymentTokenRequest(PaymentSource(PayPalTokenSource(setupTokenResponse.id))).asJson,
-//        headers = buildAuthorization(getAccessTokenResponse.access_token),
-//      )
     } yield setupTokenResponse.id
+  }
 
+  def createPaymentToken(setupToken: String): Future[String] = {
+    for {
+      getAccessTokenResponse <- postForm[GetAccessTokenResponse](
+        endpoint = "/v1/oauth2/token",
+        data = Map("grant_type" -> List("client_credentials")),
+        headers = Map(
+          "Authorization" -> ("Basic " + java.util.Base64.getEncoder
+            .encodeToString(s"${config.clientId}:${config.clientSecret}".getBytes)),
+        ),
+      )
+      paymentTokenResponse <- postJson[CreatePaymentTokenResponse](
+        endpoint = "/v3/vault/payment-tokens",
+        data = CreatePaymentTokenRequest(PaymentSource(PayPalTokenSource(setupToken))).asJson,
+        headers = buildAuthorization(getAccessTokenResponse.access_token),
+      )
+    } yield paymentTokenResponse.id
   }
 }
