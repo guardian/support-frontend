@@ -1,8 +1,9 @@
 import GridPicture from 'components/gridPicture/gridPicture';
+import { digitalPackShotContainer } from './digitalPackShotStyle';
 
-function DigitalPackshotShotHero(): JSX.Element {
+function DigitalPackShot(): JSX.Element {
 	return (
-		<div className="subscriptions__digital-feature-packshot">
+		<div css={digitalPackShotContainer}>
 			<GridPicture
 				sources={[
 					{
@@ -22,4 +23,4 @@ function DigitalPackshotShotHero(): JSX.Element {
 	);
 }
 
-export default DigitalPackshotShotHero;
+export default DigitalPackShot;

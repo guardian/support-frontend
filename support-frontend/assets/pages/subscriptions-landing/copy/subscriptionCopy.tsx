@@ -1,12 +1,12 @@
+import { css } from '@emotion/react';
+import type { SerializedStyles } from '@emotion/utils';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import * as React from 'react';
-// constants
-import DigitalPackshotHero from 'components/packshots/digital-packshot-hero';
-import GuardianWeeklyPackShotHero from 'components/packshots/guardian-weekly-packshot-hero';
-import PaperPackshot from 'components/packshots/paper-packshot';
-// images
+import DigitalPackShot from 'components/packshots/digitalPackShot';
+import PaperPackShot from 'components/packshots/paperPackshot';
+import WeeklyPackShot from 'components/packshots/weeklyPackshot';
 import type { Participations } from 'helpers/abTests/models';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { ProductBenefit } from 'helpers/productCatalog';
@@ -28,6 +28,10 @@ import {
 	paperSubsUrl,
 } from 'helpers/urls/routes';
 import type { PriceCopy, PricingCopy } from '../subscriptionsLandingProps';
+import {
+	digitalSubscriptionProductCardStyle,
+	weeklySubscriptionsProductCardStyle,
+} from './subscriptionCopyStyles';
 
 // types
 export type ProductButton = {
@@ -45,9 +49,9 @@ type ProductCopy = {
 	subtitle: Option<string>;
 	description: string;
 	productImage: React.ReactNode;
-	offer?: string;
 	buttons: ProductButton[];
-	classModifier?: string[];
+	cssOverrides: SerializedStyles;
+	offer?: string;
 	participations?: Participations;
 	benefits?: ProductBenefit[];
 };
@@ -137,8 +141,8 @@ function digitalCheckout(
 			},
 		],
 		benefits: productCatalogDescription['DigitalSubscription'].benefits,
-		productImage: <DigitalPackshotHero />,
-		classModifier: ['subscriptions__digital'],
+		productImage: <DigitalPackShot />,
+		cssOverrides: digitalSubscriptionProductCardStyle,
 		offer: priceCopy.discountCopy,
 	};
 }
@@ -175,9 +179,9 @@ const guardianWeekly = (
 			modifierClasses: 'guardian-weekly',
 		},
 	],
-	productImage: <GuardianWeeklyPackShotHero />,
+	productImage: <WeeklyPackShot />,
 	participations: participations,
-	classModifier: ['subscriptions__guardian-weekly'],
+	cssOverrides: weeklySubscriptionsProductCardStyle,
 });
 
 const paper = (
@@ -200,8 +204,9 @@ const paper = (
 				}),
 			},
 		],
-		productImage: <PaperPackshot />,
+		productImage: <PaperPackShot />,
 		offer: priceCopy.discountCopy,
+		cssOverrides: css``,
 	};
 };
 

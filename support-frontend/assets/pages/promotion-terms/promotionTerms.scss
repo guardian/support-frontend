@@ -1,12 +1,8 @@
 // -----  gu-sass ----- //
-@import '~stylesheets/gu-sass/gu-sass';
+@import '~stylesheets/skeleton/skeleton';
 
 // ----- Shared Components ----- //
 @import '~components/footer/footer';
-
-@import '~stylesheets/skeleton/skeleton.scss';
-
-@import '~stylesheets/skeleton/skeleton.scss';
 
 .component-text__heading {
 	margin-top: $gu-v-spacing;
