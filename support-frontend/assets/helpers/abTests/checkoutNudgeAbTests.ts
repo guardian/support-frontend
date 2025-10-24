@@ -121,6 +121,11 @@ export function getCheckoutNudgeParticipations(
 	mvtId: number = getMvtId(),
 	queryString: string = window.location.search,
 ): CheckoutNudgeSettings | undefined {
+	// Are nudges disabled?
+	if (queryString.includes('disable-nudge')) {
+		return undefined;
+	}
+
 	// Is the participation forced in the url querystring?
 	const urlParticipations = getParticipationFromQueryString(
 		queryString,
