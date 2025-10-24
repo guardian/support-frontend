@@ -1,5 +1,6 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
+import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
 import { isProd } from 'helpers/urls/url';
@@ -7,12 +8,11 @@ import {
 	paypalOneClickCheckout,
 	setupPayPalPayment,
 } from '../checkout/helpers/paypal';
-import type { PaymentMethod } from './paymentFields';
-import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import {
 	createSetupToken,
 	exchangeSetupTokenForPaymentToken,
 } from '../checkout/helpers/paypalCompletePayments';
+import type { PaymentMethod } from './paymentFields';
 
 type ApprovedSetupToken = {
 	vaultSetupToken: string;

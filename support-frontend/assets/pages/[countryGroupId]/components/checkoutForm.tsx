@@ -109,7 +109,9 @@ import { SubmitButton } from './submitButton';
 
 function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 	// TODO fix to properly reflect switches
-	if (paymentMethod === PayPalCompletePayments) return true;
+	if (paymentMethod === PayPalCompletePayments) {
+		return true;
+	}
 
 	return isSwitchOn(
 		`recurringPaymentMethods.${toPaymentMethodSwitchNaming(paymentMethod)}`,
