@@ -1,10 +1,9 @@
 import { css } from '@emotion/react';
 import { between, space } from '@guardian/source/foundations';
 import { getFeatureFlags } from 'helpers/featureFlags';
-import {
-	getProductDescription} from 'helpers/productCatalog';
+import { getProductDescription } from 'helpers/productCatalog';
 import type {
-	type ActiveProductKey,
+	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 
