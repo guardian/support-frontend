@@ -1,0 +1,33 @@
+name: Core 4 Label Reminder
+
+# Run when a PR is opened or marked ready for review, but not for drafts (see
+# condition in job below)
+on:
+  pull_request:
+    types:
+      - opened
+      - ready_for_review
+
+permissions:
+  pull-requests: write
+
+jobs:
+  core_4_label_reminder:
+    if: >-
+      github.event.pull_request.draft == false &&
+      contains(github.event.pull_request.labels.*.name, 'maintenance') == false &&
+      contains(github.event.pull_request.labels.*.name, 'feature') == false &&
+      contains(github.event.pull_request.labels.*.name, 'fix') == false
+    name: Core 4 Label Reminder
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v8
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `> [!IMPORTANT]
+              > Don't forget to label your PR with one of the following labels: \`maintenance\`, \`feature\`, \`fix\`.`
+            })
