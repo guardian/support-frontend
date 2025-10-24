@@ -9,7 +9,14 @@ import {
 } from '../checkout/helpers/paypal';
 import type { PaymentMethod } from './paymentFields';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
-import { createSetupToken } from '../checkout/helpers/paypalCompletePayments';
+import {
+	createSetupToken,
+	exchangeSetupTokenForPaymentToken,
+} from '../checkout/helpers/paypalCompletePayments';
+
+type ApprovedSetupToken = {
+	vaultSetupToken: string;
+};
 
 type SubmitButtonProps = {
 	buttonText: string;
@@ -17,6 +24,8 @@ type SubmitButtonProps = {
 	payPalLoaded: boolean;
 	payPalBAID: string;
 	setPayPalBAID: (baid: string) => void;
+	payPalPaymentToken: string;
+	setPayPalPaymentToken: (paymentToken: string) => void;
 	isTestUser: boolean;
 	finalAmount: number;
 	currencyKey: IsoCurrency;
@@ -31,6 +40,8 @@ export function SubmitButton({
 	payPalLoaded,
 	payPalBAID,
 	setPayPalBAID,
+	payPalPaymentToken,
+	setPayPalPaymentToken,
 	formRef,
 	isTestUser,
 	finalAmount,
@@ -130,33 +141,46 @@ export function SubmitButton({
 					type="submit"
 				/>
 			);
+
 		case 'PayPalCompletePayments':
 			return (
-				<PayPalScriptProvider
-					options={{
-						clientId: 'sb',
-						// vault: true,
-						// intent: 'tokenize',
-						environment: 'sandbox',
-						currency: 'GBP',
-						debug: false,
-					}}
-				>
-					<PayPalButtons
-						style={{ layout: 'horizontal' }}
-						createVaultSetupToken={async () => {
-							const setupToken = await createSetupToken(csrf);
-							console.log({ setupToken });
-							return setupToken;
-						}}
-						onApprove={(data, actions) => {
-							console.log({ data });
-							// TODO: exchange the setup token for a payment token and set in the state
-							// which should trigger the form submission
-							return Promise.resolve();
-						}}
+				<>
+					<input
+						type="hidden"
+						name="payPalPaymentToken"
+						value={payPalPaymentToken}
 					/>
-				</PayPalScriptProvider>
+					<PayPalScriptProvider
+						options={{
+							clientId: 'sb',
+							environment: 'sandbox',
+							currency: 'GBP',
+							debug: false,
+						}}
+					>
+						<PayPalButtons
+							style={{ layout: 'horizontal' }}
+							createVaultSetupToken={async () => {
+								const setupToken = await createSetupToken(csrf);
+								console.log({ setupToken });
+								return setupToken;
+							}}
+							onApprove={async (data) => {
+								const approvedSetupToken = (
+									data as unknown as ApprovedSetupToken
+								).vaultSetupToken;
+
+								const paymentToken = await exchangeSetupTokenForPaymentToken(
+									csrf,
+									approvedSetupToken,
+								);
+
+								// This will trigger a form submission
+								setPayPalPaymentToken(paymentToken);
+							}}
+						/>
+					</PayPalScriptProvider>
+				</>
 			);
 
 		default:

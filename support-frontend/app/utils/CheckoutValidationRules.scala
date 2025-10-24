@@ -62,6 +62,7 @@ object CheckoutValidationRules {
   ) = paymentFields match {
     case _: PayPalPaymentFields =>
       if (switches.payPal.contains(On)) Valid else Invalid("Invalid Payment Method")
+    case _: PayPalCompletePaymentsPaymentFields => Valid // TODO: add switch
     case _: DirectDebitPaymentFields =>
       if (switches.directDebit.contains(On)) Valid else Invalid("Invalid Payment Method")
     case _: SepaPaymentFields =>

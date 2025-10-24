@@ -17,15 +17,23 @@ import views.EmptyDiv
 import scala.concurrent.ExecutionContext
 
 case class CreateSetupToken()
-
 object CreateSetupToken {
   implicit val codec: Codec[CreateSetupToken] = deriveCodec
 }
 
-case class SetupToken(token: String)
+case class CreatePaymentToken(setup_token: String)
+object CreatePaymentToken {
+  implicit val codec: Codec[CreatePaymentToken] = deriveCodec
+}
 
+case class SetupToken(token: String)
 object SetupToken {
   implicit val codec: Codec[SetupToken] = deriveCodec
+}
+
+case class PaymentToken(token: String)
+object PaymentToken {
+  implicit val codec: Codec[PaymentToken] = deriveCodec
 }
 
 class PayPalCompletePayments(
@@ -48,6 +56,14 @@ class PayPalCompletePayments(
       val payPalCPService = getPayPalCPServiceForRequest(request)
       payPalCPService.createSetupToken
         .map { token => Ok(SetupToken(token).asJson) }
+    }
+
+  def createPaymentToken: Action[CreatePaymentToken] =
+    MaybeAuthenticatedActionOnFormSubmission.async(circe.json[CreatePaymentToken]) { implicit request =>
+      val payPalCPService = getPayPalCPServiceForRequest(request)
+      payPalCPService
+        .createPaymentToken(request.body.setup_token)
+        .map { token => Ok(PaymentToken(token).asJson) }
     }
 
   private def getPayPalCPServiceForRequest[T](request: OptionalAuthRequest[_]) = {
