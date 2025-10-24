@@ -39,6 +39,7 @@ import {
 	isPaymentMethod,
 	type PaymentMethod as LegacyPaymentMethod,
 	PayPal,
+	PayPalCompletePayments,
 	Stripe,
 	StripeHostedCheckout,
 	toPaymentMethodSwitchNaming,
@@ -107,6 +108,11 @@ import SimilarProductsConsent from './SimilarProductsConsent';
 import { SubmitButton } from './submitButton';
 
 function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
+	// TODO fix to properly reflect switches
+	if (paymentMethod === PayPalCompletePayments) {
+		return true;
+	}
+
 	return isSwitchOn(
 		`recurringPaymentMethods.${toPaymentMethodSwitchNaming(paymentMethod)}`,
 	);
@@ -148,7 +154,7 @@ const getPaymentMethods = (
 		return [maybeDirectDebit, StripeHostedCheckout];
 	}
 
-	return [maybeDirectDebit, Stripe, PayPal];
+	return [maybeDirectDebit, Stripe, PayPal, PayPalCompletePayments];
 };
 
 const LEGEND_PREFIX_WEEKLY_GIFT = 4;
@@ -351,6 +357,21 @@ export default function CheckoutForm({
 			formRef.current?.requestSubmit();
 		}
 	}, [payPalBAID]);
+	/**
+	 * Payment method: PayPal Complete Payments
+	 * Payment Token = the new equivalent of a BAID
+	 */
+	const [payPalPaymentToken, setPayPalPaymentToken] = useState('');
+	/**
+	 * PayPalBAID forces formOnSubmit
+	 */
+	useEffect(() => {
+		if (payPalPaymentToken !== '') {
+			// TODO - this might not meet our browser compatibility requirements (Safari)
+			// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
+			formRef.current?.requestSubmit();
+		}
+	}, [payPalPaymentToken]);
 	/**
 	 * Checkout session ID forces formOnSubmit
 	 * This happens when the user returns from the Stripe hosted checkout with a checkout session ID in the URL
@@ -1124,6 +1145,8 @@ export default function CheckoutForm({
 								payPalLoaded={payPalLoaded}
 								payPalBAID={payPalBAID}
 								setPayPalBAID={setPayPalBAID}
+								payPalPaymentToken={payPalPaymentToken}
+								setPayPalPaymentToken={setPayPalPaymentToken}
 								formRef={formRef}
 								isTestUser={isTestUser}
 								finalAmount={finalAmount}
