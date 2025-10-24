@@ -5,26 +5,14 @@ const giftTests = [
 	{
 		product: 'GuardianWeeklyDomestic',
 		ratePlan: '3MonthGift',
-		paymentType: 'Credit/Debit card',
+		paymentType: 'PayPal',
 		internationalisationId: 'UK',
 	},
 	{
 		product: 'GuardianWeeklyDomestic',
-		ratePlan: '3MonthGift',
-		paymentType: 'Credit/Debit card',
+		ratePlan: 'OneYearGift',
+		paymentType: 'PayPal',
 		internationalisationId: 'US',
-	},
-	{
-		product: 'GuardianWeeklyRestOfWorld',
-		ratePlan: 'OneYearGift',
-		paymentType: 'Credit/Debit card',
-		internationalisationId: 'INT',
-	},
-	{
-		product: 'GuardianWeeklyDomestic',
-		ratePlan: 'OneYearGift',
-		paymentType: 'Direct debit',
-		internationalisationId: 'UK',
 	},
 ];
 

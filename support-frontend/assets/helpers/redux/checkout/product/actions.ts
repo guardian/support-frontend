@@ -6,7 +6,6 @@ export const {
 	setAddDigital,
 	setFulfilmentOption,
 	setBillingPeriod,
-	setProductPrices,
 	setAllAmounts,
 	setSelectedAmount,
 	setCurrency,

@@ -7,7 +7,6 @@ import {
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type { Product } from 'components/product/productOption';
-import type { Participations } from 'helpers/abTests/models';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import { internationaliseProduct } from 'helpers/productCatalog';
@@ -27,10 +26,7 @@ import type {
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import {
-	getAppliedPromo,
-	promoQueryParam,
-} from 'helpers/productPrice/promotions';
+import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
 	fixDecimals,
@@ -38,11 +34,7 @@ import {
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
 import type { OphanComponentType } from 'helpers/tracking/trackingOphan';
-import {
-	addQueryParamsToURL,
-	getOrigin,
-	getQueryParameter,
-} from 'helpers/urls/url';
+import { addQueryParamsToURL, getOrigin } from 'helpers/urls/url';
 import { getWeeklyFulfilmentOption } from '../../../helpers/productCatalogToFulfilmentOption';
 import Prices from './content/prices';
 
@@ -52,30 +44,20 @@ const countryPath = (countryGroupId: CountryGroupId) =>
 const getCheckoutUrl = (
 	countryId: IsoCountry,
 	billingPeriod: RecurringBillingPeriod,
-	abParticipations: Participations,
 	orderIsGift: boolean,
 	promotion?: Promotion,
 ): string => {
-	if (
-		abParticipations.guardianWeeklyGiftGenericCheckout === 'variant' ||
-		!orderIsGift
-	) {
-		const countryGroupId = CountryGroup.fromCountry(countryId) ?? GBPCountries;
-		const productGuardianWeekly = internationaliseProduct(
-			countryGroups[countryGroupId].supportRegionId,
-			'GuardianWeeklyDomestic',
-		);
-		const url = `${getOrigin()}/${countryPath(countryGroupId)}/checkout`;
-		return addQueryParamsToURL(url, {
-			promoCode: promotion?.promoCode,
-			product: productGuardianWeekly,
-			ratePlan: billingPeriodToRatePlan(billingPeriod, orderIsGift),
-		});
-	}
-
-	const promoCode = getQueryParameter(promoQueryParam);
-	const promoQuery = promoCode ? `&${promoQueryParam}=${promoCode}` : '';
-	return `${getOrigin()}/subscribe/weekly/checkout/gift?period=${billingPeriod.toString()}${promoQuery}`;
+	const countryGroupId = CountryGroup.fromCountry(countryId) ?? GBPCountries;
+	const productGuardianWeekly = internationaliseProduct(
+		countryGroups[countryGroupId].supportRegionId,
+		'GuardianWeeklyDomestic',
+	);
+	const url = `${getOrigin()}/${countryPath(countryGroupId)}/checkout`;
+	return addQueryParamsToURL(url, {
+		promoCode: promotion?.promoCode,
+		product: productGuardianWeekly,
+		ratePlan: billingPeriodToRatePlan(billingPeriod, orderIsGift),
+	});
 };
 
 const getCurrencySymbol = (currencyId: IsoCurrency): string =>
@@ -118,7 +100,6 @@ const weeklyProductProps = (
 	countryId: IsoCountry,
 	billingPeriod: RecurringBillingPeriod,
 	productPrice: ProductPrice,
-	abParticipations: Participations,
 	orderIsAGift = false,
 ) => {
 	const promotion = getAppliedPromo(productPrice.promotions);
@@ -144,13 +125,7 @@ const weeklyProductProps = (
 			<span>{getSimplifiedPriceDescription(productPrice, billingPeriod)}</span>
 		),
 		buttonCopy: 'Subscribe now',
-		href: getCheckoutUrl(
-			countryId,
-			billingPeriod,
-			abParticipations,
-			orderIsAGift,
-			promotion,
-		),
+		href: getCheckoutUrl(countryId, billingPeriod, orderIsAGift, promotion),
 		label,
 		onClick: sendTrackingEventsOnClick(trackingProperties),
 		onView: sendTrackingEventsOnView(trackingProperties),
@@ -161,14 +136,12 @@ const weeklyProductProps = (
 type WeeklyProductPricesProps = {
 	countryId: IsoCountry;
 	productPrices: ProductPrices | null | undefined;
-	abParticipations: Participations;
 	orderIsAGift: boolean;
 };
 
 const getProducts = ({
 	countryId,
 	productPrices,
-	abParticipations,
 	orderIsAGift,
 }: WeeklyProductPricesProps): Product[] => {
 	const billingPeriodsToUse = orderIsAGift
@@ -193,7 +166,6 @@ const getProducts = ({
 			countryId,
 			billingPeriod,
 			productPrice,
-			abParticipations,
 			orderIsAGift,
 		);
 	});
@@ -202,7 +174,6 @@ const getProducts = ({
 function WeeklyProductPrices({
 	countryId,
 	productPrices,
-	abParticipations,
 	orderIsAGift,
 }: WeeklyProductPricesProps): JSX.Element | null {
 	if (!productPrices) {
@@ -212,7 +183,6 @@ function WeeklyProductPrices({
 	const products = getProducts({
 		countryId,
 		productPrices,
-		abParticipations,
 		orderIsAGift,
 	});
 

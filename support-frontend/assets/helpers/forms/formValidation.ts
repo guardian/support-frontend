@@ -9,9 +9,6 @@ export const emailRegexPattern =
 export const isEmpty: (arg0?: string | null) => boolean = (input) =>
 	typeof input === 'undefined' || input == null || input.trim().length === 0;
 
-const isNotEmpty: (arg0?: string | null) => boolean = (input) =>
-	!isEmpty(input);
-
 export const isValidEmail: (arg0: string | null) => boolean = (input) =>
 	!!input && new RegExp(emailRegexPattern).test(input);
 
@@ -27,9 +24,6 @@ export const notLongerThan = (
 	}
 	return value.length < maxLength;
 };
-
-export const checkEmail: (arg0: string | null) => boolean = (input) =>
-	isNotEmpty(input) && isValidEmail(input) && notLongerThan(input, 80);
 
 export const emailAddressesMatch: (
 	isSignedIn: boolean,

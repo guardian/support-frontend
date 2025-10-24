@@ -137,4 +137,4 @@ function getSimplifiedPriceDescription(
 	)}${hasDiscount(promotion) ? promoRateCopy : ''}`;
 }
 
-export { displayPrice, getPriceDescription, getSimplifiedPriceDescription };
+export { getPriceDescription, getSimplifiedPriceDescription };
