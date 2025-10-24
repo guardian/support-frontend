@@ -242,7 +242,7 @@ export const getThankYouModuleData = (
 			header: benefitsHeader,
 			bodyCopy: (
 				<>
-					<BenefitsBodyCopy />
+					<BenefitsBodyCopy productKey={productKey} ratePlanKey={ratePlanKey} />
 					{checklistData && (
 						<BenefitsCheckList
 							benefitsCheckListData={checklistData}
