@@ -8,7 +8,7 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { PaymentTsAndCs } from './paymentTsAndCs';
 
 // Mocking product deliveryDate
-jest.mock('pages/weekly-subscription-checkout/helpers/deliveryDays', () => ({
+jest.mock('pages/[countryGroupId]/checkout/helpers/deliveryDays', () => ({
 	getProductFirstDeliveryOrStartDate: () => 'Sunday, September 21, 2025',
 }));
 

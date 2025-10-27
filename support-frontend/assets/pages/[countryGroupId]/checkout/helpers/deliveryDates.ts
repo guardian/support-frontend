@@ -4,7 +4,7 @@ import { isActivePaperProductOption } from '../../../../helpers/productCatalogTo
 import { formatMachineDate } from '../../../../helpers/utilities/dateConversions';
 import { getHomeDeliveryDays } from '../../../paper-subscription-checkout/helpers/homeDeliveryDays';
 import { getPaymentStartDate } from '../../../paper-subscription-checkout/helpers/subsCardDays';
-import { getTierThreeDeliveryDate } from '../../../weekly-subscription-checkout/helpers/deliveryDays';
+import { getTierThreeDeliveryDate } from './deliveryDays';
 
 export const getFirstDeliveryDateForProduct = (
 	productKey: ActiveProductKey,
