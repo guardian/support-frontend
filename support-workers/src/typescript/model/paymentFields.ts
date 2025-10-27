@@ -21,6 +21,7 @@ export const paymentProviderSchema = z.union([
 	stripeApplePayPaymentProviderSchema,
 	stripePaymentRequestButtonProviderSchema,
 	payPalPaymentProviderSchema,
+	payPalCompletePaymentsPaymentProviderSchema,
 	directDebitPaymentProviderSchema,
 	existingPaymentProviderSchema,
 ]);
