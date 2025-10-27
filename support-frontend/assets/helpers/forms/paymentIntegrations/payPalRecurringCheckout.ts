@@ -184,7 +184,9 @@ const getPayPalOptions = (
 		},
 
 		funding: {
-			disallowed: [window.paypal.FUNDING.CREDIT],
+			disallowed: [
+				(window.paypal as unknown as PayPalLegacyWindow).FUNDING.CREDIT,
+			],
 		},
 		onClick,
 		// This function is called when user clicks the PayPal button.

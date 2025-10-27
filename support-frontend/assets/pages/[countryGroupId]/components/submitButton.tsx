@@ -92,7 +92,9 @@ export function SubmitButton({
 							});
 						}}
 						funding={{
-							disallowed: [window.paypal.FUNDING.CREDIT],
+							disallowed: [
+								(window.paypal as unknown as PayPalLegacyWindow).FUNDING.CREDIT,
+							],
 						}}
 						onClick={() => {
 							// TODO - add tracking
