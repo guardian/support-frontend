@@ -224,15 +224,15 @@ async function createPayPalPaymentMethod(
 	};
 }
 
-async function createPayPalCompletePaymentsPaymentMethod(
+function createPayPalCompletePaymentsPaymentMethod(
 	payPal: PayPalCompletePaymentsPaymentFields,
 ): Promise<PayPalCompletePaymentsPaymentMethod> {
-	return {
+	return Promise.resolve({
 		PaypalPaymentToken: payPal.paymentToken,
 		PaypalEmail: payPal.email,
 		Type: 'PayPalCompletePayments',
 		PaymentGateway: 'PayPal Complete Payments',
-	};
+	});
 }
 export function createDirectDebitPaymentMethod(
 	user: User,
