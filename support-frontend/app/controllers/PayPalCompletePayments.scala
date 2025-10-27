@@ -31,7 +31,7 @@ object SetupToken {
   implicit val codec: Codec[SetupToken] = deriveCodec
 }
 
-case class PaymentToken(token: String)
+case class PaymentToken(token: String, email: String)
 object PaymentToken {
   implicit val codec: Codec[PaymentToken] = deriveCodec
 }
@@ -63,7 +63,7 @@ class PayPalCompletePayments(
       val payPalCPService = getPayPalCPServiceForRequest(request)
       payPalCPService
         .createPaymentToken(request.body.setup_token)
-        .map { token => Ok(PaymentToken(token).asJson) }
+        .map { token => Ok(PaymentToken(token.id, token.email).asJson) }
     }
 
   private def getPayPalCPServiceForRequest[T](request: OptionalAuthRequest[_]) = {

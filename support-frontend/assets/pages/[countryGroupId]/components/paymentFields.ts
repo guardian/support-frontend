@@ -190,6 +190,7 @@ export const getPaymentFieldsForPaymentMethod = async (
 		return {
 			paymentType: PayPalCompletePayments,
 			paymentToken: formData.get('payPalPaymentToken') as string,
+			email: formData.get('payPalEmail') as string,
 		};
 	}
 

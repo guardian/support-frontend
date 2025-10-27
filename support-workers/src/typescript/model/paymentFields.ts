@@ -34,6 +34,7 @@ export type PayPalPaymentFields = z.infer<typeof payPalPaymentFieldsSchema>;
 const payPalCompletePaymentsPaymentFieldsSchema = z.object({
 	paymentType: payPalCompletePaymentsPaymentProviderSchema,
 	paymentToken: z.string(),
+	email: z.string(),
 });
 export type PayPalCompletePaymentsPaymentFields = z.infer<
 	typeof payPalCompletePaymentsPaymentFieldsSchema

@@ -53,8 +53,15 @@ case class CreateSetupTokenResponse(id: String)
 object CreateSetupTokenResponse {
   implicit val codec: Codec[CreateSetupTokenResponse] = deriveCodec
 }
-
-case class CreatePaymentTokenResponse(id: String)
+case class CreateTokenPayPalSource(email_address: String)
+object CreateTokenPayPalSource {
+  implicit val codec: Codec[CreateTokenPayPalSource] = deriveCodec
+}
+case class CreateTokenSource(paypal: CreateTokenPayPalSource)
+object CreateTokenSource {
+  implicit val codec: Codec[CreateTokenSource] = deriveCodec
+}
+case class CreatePaymentTokenResponse(id: String, payment_source: CreateTokenSource)
 object CreatePaymentTokenResponse {
   implicit val codec: Codec[CreatePaymentTokenResponse] = deriveCodec
 }
@@ -72,6 +79,11 @@ object CreatePaymentTokenRequest {
 case class PayPalCompletePaymentsError(Message: String) extends Throwable(s"$Message")
 object PayPalCompletePaymentsError {
   implicit val codec: Codec[PayPalCompletePaymentsError] = deriveCodec
+}
+
+case class PaymentToken(id: String, email: String)
+object PaymentToken {
+  implicit val codec: Codec[PaymentToken] = deriveCodec
 }
 
 class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client: FutureHttpClient)(implicit
@@ -108,7 +120,7 @@ class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client
     } yield setupTokenResponse.id
   }
 
-  def createPaymentToken(setupToken: String): Future[String] = {
+  def createPaymentToken(setupToken: String): Future[PaymentToken] = {
     for {
       getAccessTokenResponse <- postForm[GetAccessTokenResponse](
         endpoint = "/v1/oauth2/token",
@@ -123,6 +135,6 @@ class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client
         data = CreatePaymentTokenRequest(PaymentSource(PayPalTokenSource(setupToken))).asJson,
         headers = buildAuthorization(getAccessTokenResponse.access_token),
       )
-    } yield paymentTokenResponse.id
+    } yield PaymentToken(paymentTokenResponse.id, paymentTokenResponse.payment_source.paypal.email_address)
   }
 }

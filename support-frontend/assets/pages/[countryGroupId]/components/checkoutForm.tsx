@@ -78,6 +78,7 @@ import { WeeklyGiftPersonalFields } from '../checkout/components/WeeklyGiftPerso
 import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgents';
 import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
 import { getProductFields } from '../checkout/helpers/getProductFields';
+import type { PaymentToken } from '../checkout/helpers/paypalCompletePayments';
 import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheckoutSession';
 import { countriesRequiringBillingState } from '../helpers/countriesRequiringBillingState';
@@ -363,12 +364,12 @@ export default function CheckoutForm({
 	 * Payment method: PayPal Complete Payments
 	 * Payment Token = the new equivalent of a BAID
 	 */
-	const [payPalPaymentToken, setPayPalPaymentToken] = useState('');
+	const [payPalPaymentToken, setPayPalPaymentToken] = useState<PaymentToken>();
 	/**
-	 * PayPalBAID forces formOnSubmit
+	 * payPalPaymentToken forces formOnSubmit
 	 */
 	useEffect(() => {
-		if (payPalPaymentToken !== '') {
+		if (payPalPaymentToken !== undefined) {
 			// TODO - this might not meet our browser compatibility requirements (Safari)
 			// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
 			formRef.current?.requestSubmit();
