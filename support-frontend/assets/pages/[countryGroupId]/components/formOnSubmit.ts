@@ -1,5 +1,7 @@
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import type { Participations } from '../../../helpers/abTests/models';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import type {
@@ -18,7 +20,7 @@ import {
 	getReferrerAcquisitionData,
 	getSupportAbTests,
 } from '../../../helpers/tracking/acquisitions';
-import { getFirstDeliveryDateForProduct } from '../checkout/helpers/deliveryDates';
+import { getProductFirstDeliveryOrStartDate } from '../checkout/helpers/deliveryDays';
 import type { FormPersonalFields } from '../checkout/helpers/formDataExtractors';
 import {
 	extractDeliverableAddressDataFromForm,
@@ -78,10 +80,13 @@ export const submitForm = async ({
 		labels: ['generic-checkout'], // Shall we get rid of this now?
 	};
 
-	const firstDeliveryDate = getFirstDeliveryDateForProduct(
+	const firstDelivery = getProductFirstDeliveryOrStartDate(
 		productKey,
-		productFields,
+		ratePlanKey as ActivePaperProductOptions,
 	);
+	const firstDeliveryDate = firstDelivery
+		? formatMachineDate(firstDelivery)
+		: null;
 
 	const promoCode = promotion?.promoCode;
 	const appliedPromotion =

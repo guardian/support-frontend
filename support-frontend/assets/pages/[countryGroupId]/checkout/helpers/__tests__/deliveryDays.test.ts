@@ -1,6 +1,8 @@
 // ----- Imports ----- //
+import type { PaperProductOptions } from '@modules/product/productOptions';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import {
 	addDays,
@@ -56,26 +58,68 @@ describe('getWeeklyDays', () => {
 	});
 });
 
+const deliveryTests = [
+	{
+		product: 'NationalDelivery',
+		paperProductOption: 'EverydayPlus',
+		startDate: `2025-08-19`,
+		firstDeliveryDate: '2025-08-22',
+	},
+	{
+		product: 'GuardianWeeklyDomestic',
+		startDate: `2025-10-27`,
+		firstDeliveryDate: '2025-11-07',
+	},
+	{
+		product: 'TierThree',
+		startDate: `2025-10-27`,
+		firstDeliveryDate: '2025-11-14',
+	},
+	{
+		product: 'GuardianAdLite',
+		startDate: `2025-10-27`,
+		firstDeliveryDate: '2025-11-11',
+	},
+	{
+		product: 'SupporterPlus',
+		startDate: `2025-10-27`,
+		firstDeliveryDate: undefined,
+	},
+];
+
 describe('productDeliveryOrStartDate', () => {
-	it('returns the correct first date for NationalDelivery EverydayPlus', () => {
-		// Mock the current date/time
-		const orderDate = new Date('2025-08-19T15:55:00');
-		jest.useFakeTimers().setSystemTime(orderDate);
+	deliveryTests.map((deliveryTest) => {
+		it(`for product ${deliveryTest.product} ${
+			deliveryTest.paperProductOption ?? ''
+		}, returns first delivery date ${
+			deliveryTest.firstDeliveryDate
+		} using start date ${deliveryTest.startDate} `, () => {
+			// Mock the current date/time
+			const orderDate = new Date(deliveryTest.startDate);
+			jest.useFakeTimers().setSystemTime(orderDate);
 
-		const firstDeliveryDate = getProductFirstDeliveryOrStartDate(
-			'NationalDelivery',
-			'EverydayPlus',
-		);
+			const firstDeliveryDate = getProductFirstDeliveryOrStartDate(
+				deliveryTest.product as ActiveProductKey,
+				deliveryTest.paperProductOption as PaperProductOptions | undefined,
+			);
 
-		expect(firstDeliveryDate).not.toBeUndefined();
-		if (firstDeliveryDate) {
-			expect(formatMachineDate(firstDeliveryDate)).toEqual('2025-08-22');
-		}
+			if (!deliveryTest.firstDeliveryDate) {
+				expect(expect(firstDeliveryDate).toBeUndefined());
+			} else {
+				expect(firstDeliveryDate).not.toBeUndefined();
+				if (firstDeliveryDate) {
+					expect(formatMachineDate(firstDeliveryDate)).toEqual(
+						deliveryTest.firstDeliveryDate,
+					);
+				}
+			}
 
-		// Restore the original date/time
-		jest.useRealTimers();
+			// Restore the original date/time
+			jest.useRealTimers();
+		});
 	});
 });
+
 describe('getTierThreeDeliveryDate', () => {
 	it('will always find a delivery date at least 15 days from today', () => {
 		const startDate = dayjs('2024-01-01');
@@ -94,6 +138,7 @@ describe('getTierThreeDeliveryDate', () => {
 		});
 	});
 });
+
 describe('addDays', () => {
 	// The addDays function was written to avoid adding a dependency to support-frontend
 	// this test checks its outputs against the Dayjs library to ensure correctness
