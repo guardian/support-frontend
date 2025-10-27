@@ -103,6 +103,14 @@ object AwsCloudWatchMetricSetup {
       ),
     )
 
+  def getTickerDataError(stage: Stage): MetricRequest =
+    getMetricRequest(
+      MetricName("GetTickerDataError"),
+      Map(
+        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
+      ),
+    )
+
   private def getMetricRequest(
       name: MetricName,
       dimensions: Map[MetricDimensionName, MetricDimensionValue],

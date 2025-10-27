@@ -1,6 +1,11 @@
 import { css } from '@emotion/react';
 import { between, space } from '@guardian/source/foundations';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import { getFeatureFlags } from 'helpers/featureFlags';
+import { getProductDescription } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 
 const downloadCopy = css`
 	${between.desktop.and.leftCol} {
@@ -21,9 +26,23 @@ const paragraphSpacing = css`
 `;
 
 export const benefitsHeader = 'What’s included?';
-export function BenefitsBodyCopy(): JSX.Element {
+export function BenefitsBodyCopy({
+	productKey,
+	ratePlanKey,
+}: {
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
+}): JSX.Element {
+	const { enablePremiumDigital } = getFeatureFlags();
+
+	const { label: productName } = getProductDescription(
+		productKey,
+		ratePlanKey,
+		enablePremiumDigital,
+	);
+
 	return (
-		<span css={downloadCopy}>Your Digital + print subscription includes:</span>
+		<span css={downloadCopy}>Your {productName} subscription includes:</span>
 	);
 }
 export const subscriptionStartHeader = 'When will your subscription start?';
