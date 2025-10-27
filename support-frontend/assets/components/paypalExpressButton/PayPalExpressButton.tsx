@@ -55,7 +55,7 @@ function PayPalExpressButtonComponent(props: PropTypes) {
 	);
 	// This element contains an iframe which contains the actual button
 	return React.createElement(
-		window.paypal.Button.driver('react', {
+		(window.paypal as unknown as PayPalLegacyWindow).Button.driver('react', {
 			React,
 			ReactDOM,
 		}),
