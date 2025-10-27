@@ -11,6 +11,8 @@ import { fillInDirectDebitDetails } from '../utils/directDebitDetails';
 		country: 'uk',
 		state: undefined,
 		paymentMethod: 'DirectDebit',
+		product: 'SupporterPlus',
+		ratePlan: 'OneYearStudent',
 		amountDescription: '£9',
 		expectedCardHeading: 'All-access digital',
 		expectedCheckoutText:
@@ -22,6 +24,8 @@ import { fillInDirectDebitDetails } from '../utils/directDebitDetails';
 		state: 'California',
 		stateLabel: 'State',
 		paymentMethod: 'Card',
+		product: 'SupporterPlus',
+		ratePlan: 'OneYearStudent',
 		amountDescription: '$10',
 		expectedCardHeading: 'All-access digital',
 		expectedCheckoutText:
@@ -33,6 +37,8 @@ import { fillInDirectDebitDetails } from '../utils/directDebitDetails';
 		state: 'Ontario',
 		stateLabel: 'Province',
 		paymentMethod: 'Card',
+		product: 'SupporterPlus',
+		ratePlan: 'OneYearStudent',
 		amountDescription: '$10',
 		expectedCardHeading: 'All-access digital',
 		expectedCheckoutText:
@@ -40,7 +46,7 @@ import { fillInDirectDebitDetails } from '../utils/directDebitDetails';
 		accessibleCtaText: 'Subscribe',
 	},
 ].forEach((testDetails) => {
-	test.skip(`${testDetails.expectedCardHeading} ${testDetails.country}`, async ({
+	test(`${testDetails.expectedCardHeading} Landing Page for ${testDetails.country}`, async ({
 		context,
 		baseURL,
 	}) => {
@@ -60,6 +66,27 @@ import { fillInDirectDebitDetails } from '../utils/directDebitDetails';
 		// Click through to the checkout
 		const purchaseButton = await page.getByText(testDetails.accessibleCtaText);
 		await purchaseButton.click();
+
+		await page.waitForURL('https://www.studentbeans.com/**');
+		const studentBeansCardHeader = page.getByText(
+			`${testDetails.expectedCardHeading} subscription - ${testDetails.amountDescription}/year`,
+		);
+		expect(studentBeansCardHeader).toBeVisible();
+	});
+
+	test(`${testDetails.expectedCardHeading} checkout for ${testDetails.country}`, async ({
+		context,
+		baseURL,
+	}) => {
+		// Landing
+		const page = await context.newPage();
+
+		await setupPage(
+			page,
+			context,
+			baseURL,
+			`/${testDetails.country}/checkout?product=${testDetails.product}&ratePlan=${testDetails.ratePlan}`,
+		);
 
 		// Checkout
 		const testFirstName = firstName();
