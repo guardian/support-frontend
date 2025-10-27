@@ -117,6 +117,7 @@ type RegularPayPalPaymentFields = {
 type RegularPayPalCompletePaymentsPaymentFields = {
 	paymentType: typeof PayPalCompletePayments;
 	paymentToken: string;
+	email: string;
 };
 type RegularStripePaymentIntentFields = {
 	paymentType: typeof Stripe;

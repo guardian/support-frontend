@@ -8,6 +8,7 @@ import {
 	paypalOneClickCheckout,
 	setupPayPalPayment,
 } from '../checkout/helpers/paypal';
+import type { PaymentToken } from '../checkout/helpers/paypalCompletePayments';
 import {
 	createSetupToken,
 	exchangeSetupTokenForPaymentToken,
@@ -24,8 +25,8 @@ type SubmitButtonProps = {
 	payPalLoaded: boolean;
 	payPalBAID: string;
 	setPayPalBAID: (baid: string) => void;
-	payPalPaymentToken: string;
-	setPayPalPaymentToken: (paymentToken: string) => void;
+	payPalPaymentToken: PaymentToken | undefined;
+	setPayPalPaymentToken: (paymentToken: PaymentToken) => void;
 	isTestUser: boolean;
 	finalAmount: number;
 	currencyKey: IsoCurrency;
@@ -147,11 +148,20 @@ export function SubmitButton({
 		case 'PayPalCompletePayments':
 			return (
 				<>
-					<input
-						type="hidden"
-						name="payPalPaymentToken"
-						value={payPalPaymentToken}
-					/>
+					{payPalPaymentToken && (
+						<>
+							<input
+								type="hidden"
+								name="payPalPaymentToken"
+								value={payPalPaymentToken.token}
+							/>
+							<input
+								type="hidden"
+								name="payPalEmail"
+								value={payPalPaymentToken.email}
+							/>
+						</>
+					)}
 					<PayPalScriptProvider
 						options={{
 							clientId: 'sb',
