@@ -33,7 +33,7 @@ export type PayPalPaymentFields = z.infer<typeof payPalPaymentFieldsSchema>;
 
 const payPalCompletePaymentsPaymentFieldsSchema = z.object({
 	paymentType: payPalCompletePaymentsPaymentProviderSchema,
-	baid: z.string(),
+	paymentToken: z.string(),
 });
 export type PayPalCompletePaymentsPaymentFields = z.infer<
 	typeof payPalCompletePaymentsPaymentFieldsSchema
