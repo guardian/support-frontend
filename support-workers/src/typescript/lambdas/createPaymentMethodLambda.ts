@@ -2,7 +2,8 @@ import { asRetryError } from '../errors/errorHandler';
 import { combinedAddressLine } from '../model/address';
 import type {
 	DirectDebitPaymentFields,
-	PaymentFields, PayPalCompletePaymentsPaymentFields,
+	PaymentFields,
+	PayPalCompletePaymentsPaymentFields,
 	PayPalPaymentFields,
 	StripeHostedPaymentFields,
 	StripePaymentFields,
@@ -14,7 +15,8 @@ import {
 } from '../model/paymentGateway';
 import type {
 	DirectDebitPaymentMethod,
-	PaymentMethod, PayPalCompletePaymentsPaymentMethod,
+	PaymentMethod,
+	PayPalCompletePaymentsPaymentMethod,
 	PayPalPaymentMethod,
 	StripePaymentMethod,
 } from '../model/paymentMethod';
