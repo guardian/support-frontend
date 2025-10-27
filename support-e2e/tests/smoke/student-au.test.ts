@@ -4,6 +4,7 @@ import { checkRecaptcha } from '../utils/recaptcha';
 import { fillInCardDetails } from '../utils/cardDetails';
 import { setupPage } from '../utils/page';
 import { setTestUserCoreDetails } from '../utils/testUserDetails';
+import { forceSkipNewOnboardingExperience } from '../utils/forceSkipNewOnboardingExperience';
 
 [
 	{
@@ -30,6 +31,8 @@ import { setTestUserCoreDetails } from '../utils/testUserDetails';
 			baseURL,
 			`/au/student/UTS?promoCode=${testDetails.promoCode}`,
 		);
+
+		await forceSkipNewOnboardingExperience(page);
 
 		const cardHeading = page.getByRole('heading', {
 			name: testDetails.expectedCardHeading,

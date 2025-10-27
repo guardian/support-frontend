@@ -5,6 +5,7 @@ import { fillInCardDetails } from '../utils/cardDetails';
 import { setupPage } from '../utils/page';
 import { setTestUserCoreDetails } from '../utils/testUserDetails';
 import { fillInDirectDebitDetails } from '../utils/directDebitDetails';
+import { forceSkipNewOnboardingExperience } from '../utils/forceSkipNewOnboardingExperience';
 
 [
 	{
@@ -87,6 +88,8 @@ import { fillInDirectDebitDetails } from '../utils/directDebitDetails';
 			baseURL,
 			`/${testDetails.country}/checkout?product=${testDetails.product}&ratePlan=${testDetails.ratePlan}`,
 		);
+
+		await forceSkipNewOnboardingExperience(page);
 
 		// Checkout
 		const testFirstName = firstName();

@@ -1,5 +1,6 @@
 import test from '@playwright/test';
 import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAndCompleteCheckout';
+import { forceSkipNewOnboardingExperience } from '../utils/forceSkipNewOnboardingExperience';
 
 const tests = [
 	{
@@ -51,6 +52,8 @@ test.describe('Three Tier Checkout', () =>
 				{ context, baseURL, product, paymentType, internationalisationId },
 				async (page) => {
 					// Transition from landing page to checkout:
+
+					await forceSkipNewOnboardingExperience(page);
 
 					// 1. Select the billing frequency
 					await page.getByRole('tab', { name: billingFrequency }).click();
