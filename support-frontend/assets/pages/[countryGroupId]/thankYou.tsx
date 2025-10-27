@@ -1,3 +1,4 @@
+import { storage } from '@guardian/libs';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
@@ -22,6 +23,8 @@ import { setHideSupportMessaginCookie } from '../../helpers/storage/contribution
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
 import { ThankYouComponent } from './components/thankYouComponent';
 import ThankYouOnboardingComponent from './components/thankYouOnboardingComponent';
+
+const SKIP_NEW_ONBOARDING_EXPERIENCE_KEY = 'gu.skipNewOnboardingExperience';
 
 const PRODUCTS_WITH_THANK_YOU_ONBOARDING: Array<ActiveProductKey | undefined> =
 	['SupporterPlus'];
@@ -165,7 +168,8 @@ export function ThankYou({
 
 	if (
 		isSwitchOn('featureSwitches.enableThankYouOnboarding') &&
-		PRODUCTS_WITH_THANK_YOU_ONBOARDING.includes(productKey)
+		PRODUCTS_WITH_THANK_YOU_ONBOARDING.includes(productKey) &&
+		storage.session.get(SKIP_NEW_ONBOARDING_EXPERIENCE_KEY) !== 'true'
 	) {
 		return (
 			<ThankYouOnboardingComponent
