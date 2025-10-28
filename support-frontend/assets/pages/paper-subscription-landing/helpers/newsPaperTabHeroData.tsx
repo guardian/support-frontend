@@ -71,8 +71,9 @@ const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 							If you prefer to arrange your own delivery with your local
 							retailer, simply share the barcode from your Home Delivery Letter
 							with your chosen newsagent. Your retailer will charge you
-							separately for delivery. You will receive your Home Delivery
-							Letter along with your Guardian subscription card.
+							separately for delivery, and you can manage your deliveries with
+							them directly. You will receive your Home Delivery Letter along
+							with your Guardian subscription card.
 						</p>
 					</>
 				),
