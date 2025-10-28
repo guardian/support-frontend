@@ -1,8 +1,10 @@
 @import admin.settings.AllSettings
 @import admin.ServersideAbTest.{Participation, asJsonString}
-@import assets.{AssetsResolver, RefPath, StyleContent}
-@import views.{EmptyDiv, Preload, ReactDiv, SSRContent}
-@import scala.util.Random
+@import assets.{AssetsResolver, RefPath}
+@import views.{EmptyDiv, ReactDiv, SSRContent}
+@import views.ViewHelpers.outputJson
+@import _root_.utils.ObserverUtils
+
 @(
   title: String,
   mainElement: ReactDiv,
@@ -70,7 +72,10 @@
 
     @settingsScript(settings)
 
-    <script>window.guardian.serversideTests = @Html(asJsonString(serversideTests))</script>
+    <script>
+      window.guardian.serversideTests = @Html(asJsonString(serversideTests));
+      window.guardian.isObserverSubdomain = @Html(outputJson(ObserverUtils.isObserverSubdomain(request.host)))
+    </script>
 
     <title>@title</title>
     <meta property="og:title" content="@title"/>
@@ -78,7 +83,11 @@
       <link rel="stylesheet" href="@assets(bundle)" />
     }
 
-    <link rel="shortcut icon" type="image/png" href="@routes.Favicon.get()">
+    @if(ObserverUtils.isObserverSubdomain(request.host)) {
+      <link rel="shortcut icon" type="image/png" href="https://observer.co.uk/favicon-32x32.png">
+    } else {
+      <link rel="shortcut icon" type="image/png" href="@routes.Favicon.get()">
+    }
     <link rel="apple-touch-icon" sizes="152x152" href="@assets("images/favicons/152x152.png")">
     <link rel="apple-touch-icon" sizes="144x144" href="@assets("images/favicons/144x144.png")">
     <link rel="apple-touch-icon" sizes="120x120" href="@assets("images/favicons/120x120.png")">
