@@ -3,6 +3,7 @@ import type { StripePaymentMethod } from './paymentIntegrations/readerRevenueApi
 
 const Stripe = 'Stripe';
 const PayPal = 'PayPal';
+const PayPalCompletePayments = 'PayPalCompletePayments';
 const DirectDebit = 'DirectDebit';
 const StripeHostedCheckout = 'StripeHostedCheckout';
 const Sepa = 'Sepa';
@@ -11,6 +12,7 @@ const None = 'None';
 export type PaymentMethod =
 	| typeof Stripe
 	| typeof PayPal
+	| typeof PayPalCompletePayments
 	| typeof DirectDebit
 	| typeof StripeHostedCheckout
 	| typeof Sepa
@@ -29,6 +31,7 @@ export const recaptchaRequiredPaymentMethods: PaymentMethod[] = [
 const paymentMethods = [
 	Stripe,
 	PayPal,
+	PayPalCompletePayments,
 	DirectDebit,
 	StripeHostedCheckout,
 	Sepa,
@@ -50,6 +53,9 @@ export function toPaymentMethodSwitchNaming(
 		case PayPal:
 			return 'payPal';
 
+		case PayPalCompletePayments:
+			return 'payPalCompletePayments';
+
 		case Stripe:
 			return 'stripe';
 
@@ -67,4 +73,11 @@ export function toPaymentMethodSwitchNaming(
 	}
 }
 
-export { Stripe, PayPal, DirectDebit, StripeHostedCheckout, Sepa };
+export {
+	Stripe,
+	PayPal,
+	PayPalCompletePayments,
+	DirectDebit,
+	StripeHostedCheckout,
+	Sepa,
+};

@@ -60,17 +60,6 @@ declare global {
 			reset: (id: number | undefined) => void;
 		};
 		gtag_enable_tcf_support?: boolean;
-		paypal: {
-			FUNDING: {
-				CREDIT: unknown;
-			};
-			Button: {
-				driver: (
-					name: 'react',
-					{ React, ReactDOM }: { React: React; ReactDOM: typeof ReactDOM },
-				) => ComponentType<PayPalButtonProps>;
-			};
-		};
 		QuantumMetricAPI?: {
 			isOn: () => boolean;
 			sendEvent: (
@@ -89,6 +78,19 @@ declare global {
 		__REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: <R>(a: R) => R;
 		__REDUX_DEVTOOLS_EXTENSION__?: () => undefined;
 	}
+
+	type PayPalLegacyWindow = {
+		FUNDING: {
+			CREDIT: unknown;
+		};
+		Button: {
+			driver: (
+				name: 'react',
+				{ React, ReactDOM }: { React: React; ReactDOM: typeof ReactDOM },
+			) => ComponentType<PayPalButtonProps>;
+		};
+	};
 }
+
 /* ~ this line is required as per TypeScript's global-modifying-module.d.ts instructions */
 export {};
