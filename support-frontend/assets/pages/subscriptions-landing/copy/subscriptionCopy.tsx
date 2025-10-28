@@ -18,10 +18,7 @@ import {
 import type { Option } from 'helpers/types/option';
 import { guardianWeeklyLanding, paperSubsUrl } from 'helpers/urls/routes';
 import type { PriceCopy, PricingCopy } from '../subscriptionsLandingProps';
-import {
-	digitalSubscriptionProductCardStyle,
-	weeklySubscriptionsProductCardStyle,
-} from './subscriptionCopyStyles';
+import { weeklySubscriptionsProductCardStyle } from './subscriptionCopyStyles';
 
 // types
 export type ProductButton = {
