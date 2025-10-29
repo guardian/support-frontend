@@ -8,7 +8,7 @@ import {
 
 type PropTypes = { featureHeaderMsg: string };
 
-const subscriptions__feature = css`
+const featureContainer = css`
 	padding: 30px 0 30px 20px;
 	width: 100%;
 	background-color: ${brandAlt[400]};
@@ -17,14 +17,11 @@ const subscriptions__feature = css`
 		padding: 50px 0 55px;
 	}
 `;
-
-const subscriptions__feature_container = css`
+const featureHeaderContainer = css`
 	max-width: 1290px;
 	margin: 0 auto;
-	width: 100%;
 `;
-
-const subscriptions__feature_text = css`
+const featureHeader = css`
 	max-width: 400px;
 	${titlepiece50};
 	font-size: 28px;
@@ -60,11 +57,9 @@ const subscriptions__feature_text = css`
 
 function FeatureHeader(featureHeaderProps: PropTypes): JSX.Element {
 	return (
-		<div css={subscriptions__feature}>
-			<div css={subscriptions__feature_container}>
-				<h2 css={subscriptions__feature_text}>
-					{featureHeaderProps.featureHeaderMsg}
-				</h2>
+		<div css={featureContainer}>
+			<div css={featureHeaderContainer}>
+				<h2 css={featureHeader}>{featureHeaderProps.featureHeaderMsg}</h2>
 			</div>
 		</div>
 	);
