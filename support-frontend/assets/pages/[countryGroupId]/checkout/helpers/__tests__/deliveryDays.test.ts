@@ -11,7 +11,7 @@ import {
 	getWeeklyDays,
 } from '../deliveryDays';
 
-export function getDaysBetween(start: Dayjs, end: Dayjs) {
+function getDaysBetween(start: Dayjs, end: Dayjs) {
 	const range = [];
 	let current = start;
 	while (!current.isAfter(end)) {
