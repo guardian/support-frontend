@@ -134,6 +134,10 @@ export const subscriptionOffer = css`
 	}
 `;
 
+export const subscriptionOfferFeature = css`
+	color: ${neutral[7]};
+`;
+
 export const subscriptionSubtitleSmall = css`
 	${headlineLight24};
 

@@ -53,9 +53,6 @@ export const subscriptions__product__feature = css`
 			border-top: solid #9aa4ad 1px;
 		}
 	}
-	.subscriptions__sales {
-		color: ${neutral[7]};
-	}
 `;
 
 export const subscriptions__image_container = css`

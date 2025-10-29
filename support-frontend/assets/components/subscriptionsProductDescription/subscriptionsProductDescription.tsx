@@ -10,6 +10,7 @@ import {
 	subscriptionButtonsContainerFeature,
 	subscriptionDescription,
 	subscriptionOffer,
+	subscriptionOfferFeature,
 	subscriptionSubtitleLarge,
 	subscriptionSubtitleSmall,
 	subscriptionTitle,
@@ -63,7 +64,12 @@ function SubscriptionsProductDescription({
 				{title}
 			</h2>
 			{offer && (
-				<h3 className={'subscriptions__sales'} css={subscriptionOffer}>
+				<h3
+					css={[
+						subscriptionOffer,
+						isFeature ? subscriptionOfferFeature : css``,
+					]}
+				>
 					{offer}
 				</h3>
 			)}
