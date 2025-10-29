@@ -1,35 +1,32 @@
-import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { getProductCatalogFromApi } from '@modules/product-catalog/api';
-import { getPromotions } from '@modules/promotions/getPromotions';
+import type {IsoCurrency} from '@modules/internationalisation/currency';
+import {getProductCatalogFromApi} from '@modules/product-catalog/api';
+import {getPromotions} from '@modules/promotions/getPromotions';
 import type {
-	CreateSubscriptionInputFields,
-	CreateSubscriptionResponse,
+  CreateSubscriptionInputFields,
+  CreateSubscriptionResponse,
 } from '@modules/zuora/createSubscription/createSubscription';
-import { createSubscription } from '@modules/zuora/createSubscription/createSubscription';
+import {createSubscription} from '@modules/zuora/createSubscription/createSubscription';
 import type {
-	PreviewCreateSubscriptionInputFields,
-	PreviewCreateSubscriptionResponse,
+  PreviewCreateSubscriptionInputFields,
+  PreviewCreateSubscriptionResponse,
 } from '@modules/zuora/createSubscription/previewCreateSubscription';
-import { previewCreateSubscription } from '@modules/zuora/createSubscription/previewCreateSubscription';
-import type { Contact } from '@modules/zuora/orders/newAccount';
-import type { PaymentMethod as ZuoraPaymentMethod } from '@modules/zuora/orders/paymentMethods';
-import { ZuoraClient } from '@modules/zuora/zuoraClient';
-import { asRetryError } from '../errors/errorHandler';
-import type { Address } from '../model/address';
-import type { CreateZuoraSubscriptionState } from '../model/createZuoraSubscriptionState';
-import type { PaymentMethod } from '../model/paymentMethod';
-import type { PaymentSchedule } from '../model/paymentSchedule';
-import { buildPaymentSchedule } from '../model/paymentSchedule';
-import type {
-	SendAcquisitionEventState,
-	SendThankYouEmailState,
-} from '../model/sendAcquisitionEventState';
-import { sendThankYouEmailStateSchema } from '../model/sendAcquisitionEventState';
-import { stageFromEnvironment } from '../model/stage';
-import type { WrappedState } from '../model/stateSchemas';
-import { ServiceProvider } from '../services/config';
-import { getIfDefined } from '../util/nullAndUndefined';
-import { zuoraDateReplacer } from '../util/zuoraDateReplacer';
+import {previewCreateSubscription} from '@modules/zuora/createSubscription/previewCreateSubscription';
+import type {Contact} from '@modules/zuora/orders/newAccount';
+import type {PaymentMethod as ZuoraPaymentMethod} from '@modules/zuora/orders/paymentMethods';
+import {ZuoraClient} from '@modules/zuora/zuoraClient';
+import {asRetryError} from '../errors/errorHandler';
+import type {Address} from '../model/address';
+import type {CreateZuoraSubscriptionState} from '../model/createZuoraSubscriptionState';
+import type {PaymentMethod} from '../model/paymentMethod';
+import type {PaymentSchedule} from '../model/paymentSchedule';
+import {buildPaymentSchedule} from '../model/paymentSchedule';
+import type {SendAcquisitionEventState, SendThankYouEmailState,} from '../model/sendAcquisitionEventState';
+import {sendThankYouEmailStateSchema} from '../model/sendAcquisitionEventState';
+import {stageFromEnvironment} from '../model/stage';
+import type {WrappedState} from '../model/stateSchemas';
+import {ServiceProvider} from '../services/config';
+import {getIfDefined} from '../util/nullAndUndefined';
+import {zuoraDateReplacer} from '../util/zuoraDateReplacer';
 
 const stage = stageFromEnvironment();
 
@@ -79,7 +76,6 @@ export const handler = async (
 		//  Validate paper payment gateway? Might be done already by schema
 
 		const inputFields: CreateSubscriptionInputFields<ZuoraPaymentMethod> = {
-			stage: stage,
 			accountName: salesforceContact.AccountId, // We store the Salesforce Account id in the name field
 			createdRequestId: createZuoraSubscriptionState.requestId,
 			salesforceAccountId: salesforceContact.AccountId,
