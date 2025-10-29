@@ -69,9 +69,10 @@ export const subscriptionsImageContainerFeature = css`
 	padding: 10px 10px 0 10px;
 	width: 100%;
 	margin-bottom: 0;
+	right: 0;
+	position: relative;
 
 	${from.tablet} {
-		position: relative;
 		width: 50%;
 		padding: 0;
 	}

@@ -44,7 +44,6 @@ function SubscriptionsProduct({
 			]}
 		>
 			<div
-				className={'subscriptions__image-container '}
 				css={[
 					subscriptionsImageContainer,
 					isFeature ? subscriptionsImageContainerFeature : css``,

@@ -5,12 +5,6 @@ export const weeklySubscriptionProductCardStyle = css`
 	color: ${neutral[0]};
 	background-color: #cadbe8;
 
-	.subscriptions__image-container {
-		right: 0;
-		margin-bottom: 0;
-		position: relative;
-	}
-
 	.component-button--primary.component-button--guardian-weekly {
 		color: ${neutral[100]};
 		background-color: ${neutral[20]};
