@@ -105,17 +105,6 @@ export const subscriptionsDescriptionContainerFeature = css`
 	${from.tablet} {
 		width: 50%;
 	}
-
-	.subscriptions__product-subtitle--large {
-		line-height: 115%;
-		font-size: 24px;
-		${until.desktop} {
-			font-size: 20px;
-		}
-		${until.tablet} {
-			font-size: 17px;
-		}
-	}
 `;
 
 export const subscriptionsDescription = css`
