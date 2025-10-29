@@ -14,9 +14,13 @@
 		"baseUrl": "./assets", // The baseUrl to be used when resolving absolute module paths
 		"paths": {
 			"ophan": ["../node_modules/ophan-tracker-js/build/ophan.support"],
-      "@modules/internationalisation/*": ["../node_modules/@guardian/support-service-lambdas/modules/internationalisation/src/*"],
-      "@modules/product-catalog/*": ["../node_modules/@guardian/support-service-lambdas/modules/product-catalog/src/*"],
-      "@modules/*": ["../../modules/*"]
+			"@modules/internationalisation/*": [
+				"../node_modules/@guardian/support-service-lambdas/modules/internationalisation/src/*"
+			],
+			"@modules/product-catalog/*": [
+				"../node_modules/@guardian/support-service-lambdas/modules/product-catalog/src/*"
+			],
+			"@modules/*": ["../../modules/*"]
 		},
 		"types": ["@testing-library/jest-dom"]
 	},
@@ -25,9 +29,10 @@
 		"./stories",
 		"./declaration.d.ts",
 		"./window.d.ts",
+		"./emotion.d.ts",
 		"./node_modules/@guardian/support-service-lambdas/modules/product-catalog/src",
 		"./node_modules/@guardian/support-service-lambdas/modules/internationalisation/src",
-		"./scripts/build-ssr-content.tsx",
+		"./scripts/build-ssr-content.tsx"
 	], // The files to type check,
 	"exclude": ["node_modules"] // The files to not type check
 }
