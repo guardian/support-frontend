@@ -1,4 +1,5 @@
 import type { ActiveProductKey } from 'helpers/productCatalog';
+import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import {
 	getDeliveryDays,
 	getNextDeliveryDay,
@@ -7,7 +8,6 @@ import {
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
 import { getPaymentStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
-import type { ActivePaperProductOptions } from '../../../../helpers/productCatalogToProductOption';
 
 const extraDelayCutoffWeekday = 3;
 const normalDelayWeeks = 1;
