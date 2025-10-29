@@ -115,17 +115,6 @@ export const subscriptions__copy_container_subscriptions__product__feature = css
 		}
 	}
 
-	.subscriptions__product-title {
-		line-height: 115%;
-		${until.desktop} {
-			font-size: 28px;
-		}
-		${until.tablet} {
-			font-size: 24px;
-			padding-top: 15px;
-		}
-	}
-
 	.subscriptions__product-subtitle--large {
 		line-height: 115%;
 		font-size: 24px;

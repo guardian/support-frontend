@@ -13,6 +13,7 @@ import {
 	subscriptionSubtitleLarge,
 	subscriptionSubtitleSmall,
 	subscriptionTitle,
+	subscriptionTitleFeature,
 } from './subscriptionsProductDescriptionStyles';
 
 type PropTypes = {
@@ -56,7 +57,9 @@ function SubscriptionsProductDescription({
 }: PropTypes): JSX.Element {
 	return (
 		<div>
-			<h2 className={'subscriptions__product-title'} css={subscriptionTitle}>
+			<h2
+				css={[subscriptionTitle, isFeature ? subscriptionTitleFeature : css``]}
+			>
 				{title}
 			</h2>
 			{offer && (

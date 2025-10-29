@@ -97,6 +97,17 @@ export const subscriptionTitle = css`
 	}
 `;
 
+export const subscriptionTitleFeature = css`
+	line-height: 115%;
+	${until.desktop} {
+		font-size: 28px;
+	}
+	${until.tablet} {
+		font-size: 24px;
+		padding-top: 15px;
+	}
+`;
+
 export const subscriptionOffer = css`
 	font-size: 28px;
 	line-height: 30px;
