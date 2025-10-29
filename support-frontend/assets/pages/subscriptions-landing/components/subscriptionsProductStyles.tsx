@@ -106,13 +106,6 @@ export const subscriptionsDescriptionContainerFeature = css`
 		width: 50%;
 	}
 
-	.subscriptions__copy-wrapper {
-		padding: 0 10px 10px;
-		${from.tablet} {
-			padding: 0 20px 20px 50px;
-		}
-	}
-
 	.subscriptions__product-subtitle--large {
 		line-height: 115%;
 		font-size: 24px;
@@ -143,5 +136,12 @@ export const subscriptionsDescription = css`
 		padding: 6px 0 30px 10px;
 		position: static;
 		transform: none;
+	}
+`;
+
+export const subscriptionsDescriptionFeature = css`
+	padding: 0 10px 10px;
+	${from.tablet} {
+		padding: 0 20px 20px 50px;
 	}
 `;

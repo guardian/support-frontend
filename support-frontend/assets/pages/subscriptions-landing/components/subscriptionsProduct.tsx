@@ -8,6 +8,7 @@ import {
 	subscriptionsDescription,
 	subscriptionsDescriptionContainer,
 	subscriptionsDescriptionContainerFeature,
+	subscriptionsDescriptionFeature,
 	subscriptionsImage,
 	subscriptionsImageContainer,
 	subscriptionsImageContainerFeature,
@@ -60,8 +61,10 @@ function SubscriptionsProduct({
 				]}
 			>
 				<div
-					className={'subscriptions__copy-wrapper'}
-					css={subscriptionsDescription}
+					css={[
+						subscriptionsDescription,
+						isFeature ? subscriptionsDescriptionFeature : css``,
+					]}
 				>
 					<SubscriptionsProductDescription
 						{...props}
