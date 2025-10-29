@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { brand, from, neutral, until } from '@guardian/source/foundations';
 
-export const subscriptions__product = css`
+export const subscriptionsProductContainer = css`
 	position: relative;
 	display: flex;
 	align-items: stretch;
@@ -37,7 +37,7 @@ export const subscriptions__product = css`
 	}
 `;
 
-export const subscriptions__product__feature = css`
+export const subscriptionsProductContainerFeature = css`
 	color: ${neutral[100]};
 	border: none;
 	padding-top: 10px;
@@ -55,7 +55,7 @@ export const subscriptions__product__feature = css`
 	}
 `;
 
-export const subscriptions__image_container = css`
+export const subscriptionsImageContainer = css`
 	position: relative;
 	overflow: hidden;
 	width: 30%;
@@ -65,7 +65,7 @@ export const subscriptions__image_container = css`
 	}
 `;
 
-export const subscriptions__image_container_subscriptions__product__feature = css`
+export const subscriptionsImageContainerFeature = css`
 	padding: 10px 10px 0 10px;
 	width: 100%;
 	margin-bottom: 0;
@@ -77,17 +77,17 @@ export const subscriptions__image_container_subscriptions__product__feature = cs
 	}
 `;
 
-export const subscriptions__feature_image_wrapper = css`
+export const subscriptionsImageFeature = css`
 	overflow: hidden;
 	display: initial;
 `;
 
-export const subscriptions__packshot = css`
+export const subscriptionsImage = css`
 	width: 100%;
 	padding: 6px;
 `;
 
-export const subscriptions__copy_container = css`
+export const subscriptionsDescriptionContainer = css`
 	position: relative;
 	width: 70%;
 	overflow: hidden;
@@ -97,7 +97,7 @@ export const subscriptions__copy_container = css`
 	}
 `;
 
-export const subscriptions__copy_container_subscriptions__product__feature = css`
+export const subscriptionsDescriptionContainerFeature = css`
 	position: relative;
 	width: 100%;
 
@@ -124,7 +124,7 @@ export const subscriptions__copy_container_subscriptions__product__feature = css
 	}
 `;
 
-export const subscriptions__copy_wrapper = css`
+export const subscriptionsDescription = css`
 	top: 0;
 	transform: none;
 	position: relative;

@@ -18,7 +18,7 @@ import {
 import type { Option } from 'helpers/types/option';
 import { guardianWeeklyLanding, paperSubsUrl } from 'helpers/urls/routes';
 import type { PriceCopy, PricingCopy } from '../subscriptionsLandingProps';
-import { weeklySubscriptionsProductCardStyle } from './subscriptionCopyStyles';
+import { weeklySubscriptionProductCardStyle } from './subscriptionCopyStyles';
 
 // types
 export type ProductButton = {
@@ -94,7 +94,7 @@ const guardianWeekly = (
 	],
 	productImage: <WeeklyPackShot />,
 	participations: participations,
-	cssOverrides: weeklySubscriptionsProductCardStyle,
+	cssOverrides: weeklySubscriptionProductCardStyle,
 });
 
 const paper = (
