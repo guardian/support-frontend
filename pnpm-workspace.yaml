@@ -23,4 +23,4 @@ catalog:
   "@aws-sdk/util-dynamodb": ^3.879.0
   "@guardian/eslint-config-typescript": 12.0.0
   "@guardian/prettier": ^2.1.5
-  "@guardian/support-service-lambdas": "guardian/support-service-lambdas#8c7fe501a795256a7948ce7db080beeb74ac6c6e"
+  "@guardian/support-service-lambdas": "guardian/support-service-lambdas#c86cc9cab9b8349bcbf43b64841568f3312a0868"
