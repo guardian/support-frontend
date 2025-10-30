@@ -517,6 +517,11 @@ const editionsDigitalBenefit = {
 	tooltip: `Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.`,
 };
 
+const productCatalogDescriptionDigitalAccess = {
+	...productCatalogDescription.SupporterPlus,
+	label: 'Digital access',
+};
+
 export const productCatalogDescriptionPremiumDigital = {
 	...productCatalogDescription.DigitalSubscription,
 	label: 'Digital plus',
@@ -570,11 +575,13 @@ export const getProductLabel = (
 	productKey: ActiveProductKey,
 	enablePremiumDigital?: boolean,
 ): string => {
-	if (enablePremiumDigital && productKey === 'DigitalSubscription') {
+	if (productKey === 'DigitalSubscription' && enablePremiumDigital) {
 		return productCatalogDescriptionPremiumDigital.label;
-	} else {
-		return productCatalogDescription[productKey].label;
 	}
+	if (productKey === 'SupporterPlus' && enablePremiumDigital) {
+		return productCatalogDescriptionDigitalAccess.label;
+	}
+	return productCatalogDescription[productKey].label;
 };
 
 export const getProductDescription = (
