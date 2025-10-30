@@ -55,7 +55,7 @@ export const buildProductInformation = ({
 			deliveryAddress,
 			'Delivery products require a delivery address',
 		);
-		const recipient = giftRecipient ? giftRecipient : personalData;
+		const recipient = giftRecipient ?? personalData;
 
 		basicProductInformation = {
 			...basicProductInformation,

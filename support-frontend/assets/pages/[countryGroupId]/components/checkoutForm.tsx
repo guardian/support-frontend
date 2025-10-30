@@ -296,13 +296,9 @@ export default function CheckoutForm({
 	>(checkoutSession ? StripeHostedCheckout : undefined, undefined);
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
 	type StripeOnlyField = 'cardNumber' | 'expiry' | 'cvc';
-	const [stripeFieldsAreEmpty, setStripeFieldsAreEmpty] = useState<{
-		[key in StripeOnlyField]: boolean;
-	}>({ cardNumber: true, expiry: true, cvc: true });
+	const [stripeFieldsAreEmpty, setStripeFieldsAreEmpty] = useState<Record<StripeOnlyField, boolean>>({ cardNumber: true, expiry: true, cvc: true });
 	type StripeField = StripeOnlyField | 'recaptcha';
-	const [stripeFieldError, setStripeFieldError] = useState<{
-		[key in StripeField]?: string;
-	}>({});
+	const [stripeFieldError, setStripeFieldError] = useState<Partial<Record<StripeField, string>>>({});
 	const [directDebitFieldError, setDirectDebitFieldError] = useState<{
 		recaptcha?: string;
 	}>({});

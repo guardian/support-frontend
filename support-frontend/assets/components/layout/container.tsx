@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { from, neutral } from '@guardian/source/foundations';
 import { Container as SourceContainer } from '@guardian/source/react-components';
 import type { HTMLAttributes } from 'react';
-import React from 'react';
+import type React from 'react';
 
 type ContainerElement =
 	| 'div'

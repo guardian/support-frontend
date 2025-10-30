@@ -27,9 +27,7 @@ type Audience = {
 
 type AudienceType = IsoCountry | CountryGroupId | 'ALL' | 'CONTRIBUTIONS_ONLY';
 
-type Audiences = {
-	[key in AudienceType]?: Audience;
-};
+type Audiences = Partial<Record<AudienceType, Audience>>;
 
 type AcquisitionABTest = {
 	name: string;

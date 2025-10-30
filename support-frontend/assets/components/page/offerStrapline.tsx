@@ -10,9 +10,7 @@ import {
 
 type Size = 'small' | 'medium';
 
-const fontSizes: {
-	[K in Size]: SerializedStyles;
-} = {
+const fontSizes: Record<Size, SerializedStyles> = {
 	medium: css`
 		${textSansBold17};
 		padding: ${space[1]}px ${space[3]}px;

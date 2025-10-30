@@ -1,4 +1,4 @@
-/* eslint-disable eslint-comments/require-description -- This is a mocks file, it is not intended to be good code! */
+/* eslint-disable @eslint-community/eslint-comments/require-description -- This is a mocks file, it is not intended to be good code! */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */

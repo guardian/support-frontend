@@ -171,8 +171,9 @@ function sendEventAcquisitionDataFromQueryParamEvent(
 				isRemote: SendEventAcquisitionDataFromQueryParam.IsRemote,
 			};
 			Object.keys(acquisitionDataKeysToLog).forEach((key) => {
-				const acquisitionDataValueToLog =
-					acquisitionData[key as keyof ReferrerAcquisitionData]?.toString();
+				const acquisitionDataValueToLog = JSON.stringify(
+					acquisitionData[key as keyof ReferrerAcquisitionData],
+				);
 				if (acquisitionDataValueToLog && acquisitionDataKeysToLog[key]) {
 					sendEvent(
 						acquisitionDataKeysToLog[key] ?? 0,
