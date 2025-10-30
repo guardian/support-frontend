@@ -1,4 +1,5 @@
 import { productPurchaseSchema } from '@modules/product-catalog/productPurchaseSchema';
+import { appliedPromotionSchema } from '@modules/promotions/schema';
 import { boolean, z } from 'zod';
 import { addressSchema } from './address';
 import { paymentFieldsSchema, paymentProviderSchema } from './paymentFields';
@@ -82,11 +83,6 @@ export const giftRecipientSchema = z.object({
 });
 
 export type GiftRecipient = z.infer<typeof giftRecipientSchema>;
-
-export const appliedPromotionSchema = z.object({
-	promoCode: z.string(),
-	supportRegionId: z.string(),
-});
 
 export const baseStateSchema = z.object({
 	requestId: z.string(),

@@ -76,13 +76,9 @@ export const handler = async (
 		);
 
 		// TODO:
-		//  Prevent duplicates (Idempotency key?)
-		//  Apply promotion if present
 		//  Validate paper payment gateway? Might be done already by schema
-		//  CSR mode is NOT needed
 
 		const inputFields: CreateSubscriptionInputFields<ZuoraPaymentMethod> = {
-			stage: stage,
 			accountName: salesforceContact.AccountId, // We store the Salesforce Account id in the name field
 			createdRequestId: createZuoraSubscriptionState.requestId,
 			salesforceAccountId: salesforceContact.AccountId,
@@ -93,6 +89,8 @@ export const handler = async (
 			paymentMethod: zuoraPaymentMethod,
 			billToContact: billToContact,
 			productPurchase: productInformation,
+			giftRecipient: state.state.giftRecipient ?? undefined,
+			appliedPromotion: state.state.appliedPromotion ?? undefined,
 			runBilling: true,
 			collectPayment: true,
 		};

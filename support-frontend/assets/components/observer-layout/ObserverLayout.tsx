@@ -7,13 +7,7 @@ import {
 	until,
 } from '@guardian/source/foundations';
 import { Column, Columns, Container } from '@guardian/source/react-components';
-import {
-	FooterLinks,
-	FooterWithContents,
-} from '@guardian/source-development-kitchen/react-components';
 import type { ReactNode } from 'react';
-import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
-import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 
@@ -28,7 +22,7 @@ const darkBackgroundContainerMobile = css`
 	display: flex;
 	background-color: ${palette.neutral[97]};
 	${until.tablet} {
-		background-color: ${palette.brand[400]};
+		background-color: #fff;
 		border-bottom: 1px solid ${palette.brand[600]};
 	}
 `;
@@ -44,24 +38,20 @@ type CheckoutLayoutProps = {
 	children: ReactNode;
 };
 
-export default function GuardianLayout({ children }: CheckoutLayoutProps) {
+export default function ObserverLayout({ children }: CheckoutLayoutProps) {
 	return (
-		<PageScaffold
-			header={<Header></Header>}
-			footer={
-				<FooterWithContents>
-					<FooterLinks></FooterLinks>
-				</FooterWithContents>
-			}
-		>
-			<CheckoutHeading withTopBorder={true} />
-			<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
+		<PageScaffold header={<></>} footer={<></>}>
+			<Container
+				sideBorders
+				topBorder
+				cssOverrides={darkBackgroundContainerMobile}
+			>
 				<Columns cssOverrides={columns} collapseUntil="tablet">
 					<Column span={[0, 2, 2, 3, 4]}></Column>
 					<Column span={[1, 8, 8, 8, 8]}>
 						<SecureTransactionIndicator
 							align="center"
-							theme="light"
+							theme="dark"
 							cssOverrides={secureTransactionIndicator}
 						/>
 						{children}

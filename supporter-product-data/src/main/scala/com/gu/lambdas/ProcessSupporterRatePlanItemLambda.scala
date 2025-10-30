@@ -31,8 +31,7 @@ class ProcessSupporterRatePlanItemLambda extends Handler[SqsEvent, Unit] {
         subscription match {
           case Right(item) => ProcessSupporterRatePlanItemLambda.processItem(item)
           case _ =>
-            logger.warn(s"Couldn't decode a SupporterRatePlanItem with body: ${record.body}")
-            Future.successful(()) // This should never happen so I don't think it's worth alerting on
+            Future.failed(new Exception(s"Couldn't decode a SupporterRatePlanItem with body: ${record.body}"))
         }
       })
       .map(_ => ())

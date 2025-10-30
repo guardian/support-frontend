@@ -5,6 +5,7 @@ import { type ProductOptions } from '@modules/product/productOptions';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
+import ObserverLayout from 'components/observer-layout/ObserverLayout';
 import {
 	getStripeKeyForCountry,
 	getStripeKeyForProduct,
@@ -35,7 +36,7 @@ import { getProductOptionFromProductAndRatePlan } from '../../helpers/productCat
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
 import { useStripeHostedCheckoutSession } from './checkout/hooks/useStripeHostedCheckoutSession';
 import CheckoutForm from './components/checkoutForm';
-import { CheckoutLayout } from './components/checkoutLayout';
+import GuardianLayout from './components/checkoutLayout';
 import CheckoutSummary from './components/checkoutSummary';
 import { getStudentDiscount } from './student/helpers/discountDetails';
 
@@ -291,6 +292,10 @@ export function Checkout({
 		promotion,
 		true,
 	);
+
+	const CheckoutLayout = window.guardian.isObserverSubdomain
+		? ObserverLayout
+		: GuardianLayout;
 
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
