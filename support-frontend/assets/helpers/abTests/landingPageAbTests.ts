@@ -1,8 +1,8 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
-	tierOneProductLabel,
-	tierThreeProductLabel,
-	tierTwoProductLabel,
+	contributionLabel,
+	supporterPlusLabel,
+	tierThreeLabel,
 } from 'helpers/productCatalog';
 import { getSettings } from '../globalsAndSwitches/globals';
 import type {
@@ -33,7 +33,7 @@ export const fallBackLandingPageSelection: LandingPageVariant = {
 	},
 	products: {
 		Contribution: {
-			title: tierOneProductLabel,
+			title: contributionLabel,
 			benefits: [
 				{
 					copy: 'Give to the Guardian every month with Support',
@@ -42,7 +42,7 @@ export const fallBackLandingPageSelection: LandingPageVariant = {
 			cta: { copy: 'Support' },
 		},
 		SupporterPlus: {
-			title: tierTwoProductLabel,
+			title: supporterPlusLabel,
 			benefits: [
 				{
 					copy: 'Unlimited access to the Guardian app',
@@ -73,7 +73,7 @@ export const fallBackLandingPageSelection: LandingPageVariant = {
 			label: { copy: 'Recommended' },
 		},
 		TierThree: {
-			title: tierThreeProductLabel,
+			title: tierThreeLabel,
 			benefits: [
 				{
 					copy: 'Guardian Weekly print magazine delivered to your door every week',
