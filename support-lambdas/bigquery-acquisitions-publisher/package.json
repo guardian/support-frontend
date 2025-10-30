@@ -7,8 +7,9 @@
 		"tsc": "tsc --noEmit",
 		"test": "vitest --run",
 		"test-watch": "vitest",
-		"build": "esbuild --bundle --platform=node --target=node20 --outfile=target/typescript/index.js typescript/index.ts"
-	},
+		"build": "esbuild --bundle --platform=node --target=node20 --outfile=target/typescript/index.js typescript/index.ts",
+    "lint": "eslint **/*.ts"
+  },
 	"devDependencies": {
 		"@guardian/prettier": "^8.0.1",
 		"@types/aws-lambda": "^8.10.147",

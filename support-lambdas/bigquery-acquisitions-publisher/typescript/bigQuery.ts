@@ -4,7 +4,7 @@ import type {
 	ExternalAccountClientOptions,
 } from 'google-auth-library';
 import { ExternalAccountClient } from 'google-auth-library';
-import { Stage } from './stage';
+import type { Stage } from './stage';
 
 export const buildAuthClient = (
 	clientConfig: string,
@@ -17,7 +17,7 @@ export const buildAuthClient = (
 		if (authClient) {
 			resolve(authClient);
 		} else {
-			reject('Failed to create Google Auth Client');
+			reject(new Error('Failed to create Google Auth Client'));
 		}
 	});
 
