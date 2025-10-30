@@ -5,16 +5,19 @@ export const weeklySubscriptionProductCardStyle = css`
 	color: ${neutral[0]};
 	background-color: #cadbe8;
 
-	.component-button--primary.component-button--guardian-weekly {
+	// weekly
+	& a {
 		color: ${neutral[100]};
 		background-color: ${neutral[20]};
+		:hover {
+			background-color: ${neutral[20]};
+		}
 	}
 
-	.component-button--tertiaryFeature.component-button--guardian-weekly,
-	.component-button--tertiaryFeature.component-button--guardian-weekly:hover,
-	.component-button--tertiaryFeature.component-button--guardian-weekly:focus {
+	// weekly gift
+	& a:nth-of-type(2) {
 		color: ${neutral[20]};
-		border: solid 1px ${neutral[20]};
 		background-color: transparent;
+		border: solid 1px ${neutral[20]};
 	}
 `;
