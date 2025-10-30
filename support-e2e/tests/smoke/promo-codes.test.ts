@@ -4,6 +4,7 @@ import { checkRecaptcha } from '../utils/recaptcha';
 import { fillInCardDetails } from '../utils/cardDetails';
 import { setupPage } from '../utils/page';
 import { setTestUserCoreDetails } from '../utils/testUserDetails';
+import { tierTwoProductLabel } from '../utils/products';
 
 /**
  * These tests are here to test that the promoCode values and associated copy
@@ -14,25 +15,25 @@ import { setTestUserCoreDetails } from '../utils/testUserDetails';
 		tier: 2,
 		frequency: 'Monthly',
 		promoCode: 'E2E_TEST_SPLUS_MONTHLY',
-		expectedCardHeading: 'All-access digital',
+		expectedCardHeading: tierTwoProductLabel,
 		expectedPromoText:
 			/£(\d|\.)+\/month for (\d|\.) months, then £(\d|\.)+\/month/,
 		expectedCheckoutTotalText: 'Was £12, now £9.60/month',
 		expectedThankYouText:
 			/You'll pay £(\d|\.)+\/month for the first (\d|\.)+ months, then £(\d|\.)+\/month afterwards unless you cancel\./,
-		accessibleCtaText: 'All-access digital',
+		accessibleCtaText: tierTwoProductLabel,
 	},
 	{
 		tier: 2,
 		frequency: 'Annual',
 		promoCode: 'E2E_TEST_SPLUS_ANNUAL',
-		expectedCardHeading: 'All-access digital',
+		expectedCardHeading: tierTwoProductLabel,
 		expectedPromoText:
 			/£(\d|\.)+\/year for the first year, then £(\d|\.)+\/year/i,
 		expectedCheckoutTotalText: /Was £(\d|\.)+, now £(\d|\.)+\/year/i,
 		expectedThankYouText:
 			/You'll pay £(\d|\.)+\/year for the first year, then £(\d|\.)+\/year afterwards unless you cancel\./i,
-		accessibleCtaText: 'All-access digital',
+		accessibleCtaText: tierTwoProductLabel,
 	},
 ].forEach((testDetails) => {
 	test(`${testDetails.expectedCardHeading} ${testDetails.frequency} ${testDetails.promoCode}`, async ({

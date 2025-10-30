@@ -13,6 +13,10 @@ import type {
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { Participations } from './abTests/models';
 
+export const tierOneProductLabel = 'Support';
+export const tierTwoProductLabel = 'All-access digital';
+export const tierThreeProductLabel = 'Digital + print';
+
 const activeProductKeys = [
 	'GuardianWeeklyDomestic',
 	'GuardianWeeklyRestOfWorld',
@@ -308,7 +312,7 @@ export const productCatalogDescription: Record<
 		benefits: guardianAdLiteBenefits,
 	},
 	TierThree: {
-		label: 'Digital + print',
+		label: tierThreeProductLabel,
 		thankyouMessage: digitalThankyouMessage,
 		landingPagePath: '/contribute',
 		benefits: [guardianWeeklyBenefit],
@@ -361,7 +365,7 @@ export const productCatalogDescription: Record<
 		},
 	},
 	SupporterPlus: {
-		label: 'All-access digital',
+		label: tierTwoProductLabel,
 		landingPagePath: '/contribute',
 		benefits: supporterPlusBenefits,
 		ratePlans: {
@@ -456,7 +460,7 @@ export const productCatalogDescription: Record<
 		ratePlans: nationalPaperPlusRatePlans,
 	},
 	Contribution: {
-		label: 'Support',
+		label: tierOneProductLabel,
 		landingPagePath: '/contribute',
 		benefits: [supportBenefit, newsletterBenefitUS],
 		ratePlans: {
@@ -560,6 +564,17 @@ const productCatalogGuardianWeeklyGift = {
 		...productCatalogDescription.GuardianWeeklyRestOfWorld,
 		benefits: [guardianWeeklyGiftBenefit],
 	},
+};
+
+export const getProductLabel = (
+	productKey: ActiveProductKey,
+	enablePremiumDigital?: boolean,
+): string => {
+	if (enablePremiumDigital && productKey === 'DigitalSubscription') {
+		return productCatalogDescriptionPremiumDigital.label;
+	} else {
+		return productCatalogDescription[productKey].label;
+	}
 };
 
 export const getProductDescription = (

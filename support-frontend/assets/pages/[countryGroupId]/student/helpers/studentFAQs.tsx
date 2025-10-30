@@ -3,13 +3,15 @@ import type {
 	SupportRegionId,
 } from '@modules/internationalisation/countryGroup';
 import { privacyLink, supporterPlusTermsLink } from 'helpers/legal';
+import { getProductLabel } from 'helpers/productCatalog';
 import { helpCentreUrl } from 'helpers/urls/externalLinks';
 import type { FAQItem } from 'pages/[countryGroupId]/components/accordionFAQ';
 import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 
+const supporterPlusLabel = getProductLabel('SupporterPlus');
 const supporterPlusBodyAccess: JSX.Element = (
 	<p>
-		You can access your All- access digital subscription across all devices by
+		You can access your {supporterPlusLabel} subscription across all devices by
 		logging into your Guardian account.
 	</p>
 );
@@ -17,7 +19,7 @@ const supporterPlusBodyAccess: JSX.Element = (
 const supporterPlusBodyManage: JSX.Element = (
 	<p>
 		To manage your subscription, go to Manage my account, and for further
-		information on your All-access digital subscription, see our{' '}
+		information on your {supporterPlusLabel} subscription, see our{' '}
 		<a href={supporterPlusTermsLink}>Terms & Conditions</a>.
 	</p>
 );
@@ -43,11 +45,11 @@ const otherSupporterPlusFAQ: (regionName: string) => FAQItem[] = (
 		),
 	},
 	{
-		title: 'Will my All-access subscription work across all devices?',
+		title: `Will my ${supporterPlusLabel} subscription work across all devices?`,
 		body: supporterPlusBodyAccess,
 	},
 	{
-		title: 'How can I manage my All-access subscription?',
+		title: `How can I manage my ${supporterPlusLabel} subscription?`,
 		body: supporterPlusBodyManage,
 	},
 	{
@@ -61,7 +63,7 @@ const auSupporterPlusFAQ: (regionName: string) => FAQItem[] = () => [
 		title: 'Who is eligible for this discount?',
 		body: (
 			<p>
-				Access to the All-access digital subscription offered under this
+				Access to the {supporterPlusLabel} subscription offered under this
 				agreement is strictly limited to currently enrolled students of the
 				University of Technology Sydney (UTS). Redemption of the offer is
 				conditional upon registration using a valid and active UTS email
@@ -76,25 +78,25 @@ const auSupporterPlusFAQ: (regionName: string) => FAQItem[] = () => [
 		),
 	},
 	{
-		title: 'What is included in my All-access subscription?',
+		title: `What is included in my ${supporterPlusLabel} subscription?`,
 		body: (
 			<p>
-				Your All-access digital subscription entitles you to all the benefits
+				Your {supporterPlusLabel} subscription entitles you to all the benefits
 				listed above, including: unlimited access to the Guardian news app and
 				Guardian Feast app, ad-free reading on all your devices, exclusive
 				newsletter for supporters and far fewer asks for support. Currently,
-				this offer provides you with a free All-access digital subscription for
-				a period of 24 months after redemption. We will be in touch during this
-				period if there are opportunities to extend beyond this timeframe.
+				this offer provides you with a free {supporterPlusLabel} subscription
+				for a period of 24 months after redemption. We will be in touch during
+				this period if there are opportunities to extend beyond this timeframe.
 			</p>
 		),
 	},
 	{
-		title: 'Will my All-access subscription work across all devices?',
+		title: `Will my ${supporterPlusLabel} subscription work across all devices?`,
 		body: supporterPlusBodyAccess,
 	},
 	{
-		title: 'How can I manage my All-access subscription?',
+		title: `How can I manage my ${supporterPlusLabel} subscription?`,
 		body: supporterPlusBodyManage,
 	},
 	{

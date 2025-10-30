@@ -22,6 +22,7 @@ import {
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
+import { getProductLabel } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -269,7 +270,8 @@ export function ThreeTierCard({
 			{inAdditionToAllAccessDigital && (
 				<div css={benefitsPrefixCss}>
 					<span>
-						The rewards from <strong>All-access digital</strong>
+						The rewards from{' '}
+						<strong> {getProductLabel('SupporterPlus')}</strong>
 					</span>
 					{benefits.length > 0 && <span css={benefitsPrefixPlus}>plus</span>}
 				</div>

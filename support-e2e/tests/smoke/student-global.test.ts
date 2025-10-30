@@ -6,6 +6,7 @@ import { setupPage } from '../utils/page';
 import { setTestUserCoreDetails } from '../utils/testUserDetails';
 import { fillInDirectDebitDetails } from '../utils/directDebitDetails';
 import { forceSkipNewOnboardingExperience } from '../utils/forceSkipNewOnboardingExperience';
+import { tierTwoProductLabel } from '../utils/products';
 
 [
 	{
@@ -15,7 +16,7 @@ import { forceSkipNewOnboardingExperience } from '../utils/forceSkipNewOnboardin
 		product: 'SupporterPlus',
 		ratePlan: 'OneYearStudent',
 		amountDescription: '£9',
-		expectedCardHeading: 'All-access digital',
+		expectedCardHeading: tierTwoProductLabel,
 		expectedCheckoutText:
 			'If you cancel within the first 14 days, you will receive a full refund.',
 		accessibleCtaText: 'Subscribe',
@@ -28,7 +29,7 @@ import { forceSkipNewOnboardingExperience } from '../utils/forceSkipNewOnboardin
 		product: 'SupporterPlus',
 		ratePlan: 'OneYearStudent',
 		amountDescription: '$10',
-		expectedCardHeading: 'All-access digital',
+		expectedCardHeading: tierTwoProductLabel,
 		expectedCheckoutText:
 			'If you cancel within the first 14 days, you will receive a full refund.',
 		accessibleCtaText: 'Subscribe',
@@ -41,7 +42,7 @@ import { forceSkipNewOnboardingExperience } from '../utils/forceSkipNewOnboardin
 		product: 'SupporterPlus',
 		ratePlan: 'OneYearStudent',
 		amountDescription: '$10',
-		expectedCardHeading: 'All-access digital',
+		expectedCardHeading: tierTwoProductLabel,
 		expectedCheckoutText:
 			'If you cancel within the first 14 days, you will receive a full refund.',
 		accessibleCtaText: 'Subscribe',
