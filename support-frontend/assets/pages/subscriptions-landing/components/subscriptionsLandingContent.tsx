@@ -1,5 +1,5 @@
 import { getSubscriptionCopy } from '../copy/subscriptionCopy';
-import type { SubscriptionsLandingPropTypes } from '../subscriptionsLandingProps';
+import type { SubscriptionsLandingProps } from '../subscriptionsLandingProps';
 import FeatureHeader from './featureHeader';
 import { subscriptionsProductContainerStyle } from './subscriptionsLandingContentStyles';
 import SubscriptionsProduct from './subscriptionsProduct';
@@ -10,7 +10,7 @@ function SubscriptionsLandingContent({
 	countryGroupId,
 	pricingCopy,
 	participations,
-}: SubscriptionsLandingPropTypes): JSX.Element | null {
+}: SubscriptionsLandingProps): JSX.Element | null {
 	if (!pricingCopy) {
 		return null;
 	}

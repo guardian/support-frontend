@@ -9,7 +9,7 @@ import {
 import { renderPage } from 'helpers/rendering/render';
 import './subscriptionsLanding.scss';
 import SubscriptionLandingContent from './components/subscriptionsLandingContent';
-import type { SubscriptionsLandingPropTypes } from './subscriptionsLandingProps';
+import type { SubscriptionsLandingProps } from './subscriptionsLandingProps';
 import { subscriptionsLandingProps } from './subscriptionsLandingProps';
 
 // ----- Render ----- //
@@ -18,7 +18,7 @@ function SubscriptionsLandingPage({
 	participations,
 	pricingCopy,
 	referrerAcquisitions,
-}: SubscriptionsLandingPropTypes) {
+}: SubscriptionsLandingProps) {
 	return (
 		<Page
 			header={<Header countryGroupId={countryGroupId} />}

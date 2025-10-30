@@ -17,7 +17,7 @@ import {
 	subscriptionsProductContainerFeature,
 } from './subscriptionsProductStyles';
 
-type PropTypes = {
+type SubscriptionsProductProps = {
 	title: string;
 	subtitle: string;
 	description: string;
@@ -35,7 +35,7 @@ function SubscriptionsProduct({
 	benefits,
 	cssOverrides,
 	...props
-}: PropTypes): JSX.Element {
+}: SubscriptionsProductProps): JSX.Element {
 	return (
 		<div
 			css={[
