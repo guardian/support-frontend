@@ -192,7 +192,7 @@ export const subscriptionButtonsContainer = css`
 		padding-bottom: 20px;
 	}
 
-	.component-button:nth-of-type(2) {
+	& a:nth-of-type(2) {
 		margin-top: 10px;
 
 		${from.desktop} {
@@ -203,7 +203,7 @@ export const subscriptionButtonsContainer = css`
 `;
 
 export const subscriptionButtonsContainerFeature = css`
-	.component-button:nth-of-type(2) {
+	& a:nth-of-type(2) {
 		${from.mobileLandscape} {
 			margin-left: 10px;
 			margin-top: 0;
