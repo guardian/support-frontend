@@ -1,21 +1,17 @@
 // -----  gu-sass ----- //
 @import '~stylesheets/skeleton/skeleton';
-@import '~stylesheets/gu-sass/gu-sass';
 
 // ----- Shared Components ----- //
-
 @import '~components/headers/header/header';
 @import '~components/footer/footer';
 @import '~components/introduction/introduction';
 @import '~components/introduction/squaresIntroduction';
 @import '~components/highlights/highlights';
 @import '~components/pageSection/pageSection';
-@import '~components/ctaLink/ctaLink';
 @import '~components/leftMarginSection/leftMarginSection';
 @import '~components/content/content';
 
 // ----- Page ----- //
-
 #error-404-page,
 #error-500-page,
 #down-for-maintenance-page {
@@ -50,34 +46,5 @@
 
 	.error-copy__link {
 		color: inherit;
-	}
-
-	.component-cta-link--support-the-guardian {
-		background-color: gu-colour(highlight-main);
-		color: gu-colour(neutral-7);
-
-		&:hover {
-			background-color: darken(gu-colour(highlight-main), 5%);
-		}
-
-		@include mq($from: phablet) {
-			width: 252px;
-		}
-	}
-
-	.component-cta-link--guardian-home-page {
-		background-color: #fff;
-		margin-top: $gu-v-spacing;
-		color: gu-colour(neutral-7);
-		border-color: gu-colour(neutral-7);
-
-		&:hover {
-			color: darken(gu-colour(neutral-7), 5%);
-			border-color: darken(gu-colour(neutral-7), 5%);
-		}
-
-		@include mq($from: phablet) {
-			width: 250px;
-		}
 	}
 }

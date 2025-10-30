@@ -1,12 +1,16 @@
-type PropTypes = { featureHeaderMsg: string };
+import {
+	featureContainer,
+	featureHeader,
+	featureHeaderContainer,
+} from './featureHeaderStyles';
 
-function FeatureHeader(featureHeaderProps: PropTypes): JSX.Element {
+type FeatureHeaderProp = { featureHeaderMsg: string };
+
+function FeatureHeader(featureHeaderProp: FeatureHeaderProp): JSX.Element {
 	return (
-		<div className="subscriptions__feature">
-			<div className="subscriptions__feature-container">
-				<h2 className="subscriptions__feature-text">
-					{featureHeaderProps.featureHeaderMsg}
-				</h2>
+		<div css={featureContainer}>
+			<div css={featureHeaderContainer}>
+				<h2 css={featureHeader}>{featureHeaderProp.featureHeaderMsg}</h2>
 			</div>
 		</div>
 	);

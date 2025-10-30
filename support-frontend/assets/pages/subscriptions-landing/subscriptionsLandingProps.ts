@@ -12,7 +12,7 @@ export type PriceCopy = {
 	discountCopy: string;
 };
 export type PricingCopy = Record<SubscriptionProduct, PriceCopy>;
-export type SubscriptionsLandingPropTypes = {
+export type SubscriptionsLandingProps = {
 	countryGroupId: CountryGroupId;
 	participations: Participations;
 	pricingCopy: PricingCopy | null | undefined;
@@ -22,7 +22,7 @@ const countryGroupId = CountryGroup.detect();
 
 export const subscriptionsLandingProps = (
 	participations: Participations,
-): SubscriptionsLandingPropTypes => ({
+): SubscriptionsLandingProps => ({
 	countryGroupId,
 	participations,
 	pricingCopy: getGlobal('pricingCopy'),
