@@ -100,7 +100,7 @@ import {
 } from '../validation';
 import { BackButton } from './backButton';
 import { FormSection, Legend, shorterBoxMargin } from './form';
-import CheckoutLayout from './GuardianPageLayout';
+import PageLayout from './GuardianPageLayout';
 import {
 	checkedRadioLabelColour,
 	defaultRadioLabelColour,
@@ -605,7 +605,7 @@ export function OneTimeCheckoutComponent({
 		: 'Pay now';
 
 	return (
-		<CheckoutLayout>
+		<PageLayout>
 			<Box>
 				<BoxContents>
 					<div
@@ -961,6 +961,6 @@ export function OneTimeCheckoutComponent({
 					<p>Please wait</p>
 				</LoadingOverlay>
 			)}
-		</CheckoutLayout>
+		</PageLayout>
 	);
 }
