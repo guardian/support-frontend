@@ -13,7 +13,7 @@ import {
 	themeButtonReaderRevenueBrandAlt,
 } from '@guardian/source/react-components';
 import { useEffect, useRef } from 'react';
-import * as React from 'react';
+import type * as React from 'react';
 import { RecaptchaField } from 'components/recaptcha/recaptchaField';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
 

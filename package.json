@@ -5,7 +5,14 @@
     "test": "pnpm --stream -r run test"
   },
   "devDependencies": {
-    "husky": "^9.0.11"
+    "husky": "^9.0.11",
+    "eslint": "^9.38.0",
+    "@guardian/eslint-config": "^11.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@typescript-eslint/typescript-estree": "^8.46.2"
+    }
   },
   "packageManager": "pnpm@10.9.0+sha256.ea53ab747ac8b7921de63b42eab1adf021e1fe6ded05f62f00885cc33a46118d"
 }

@@ -7,7 +7,7 @@ import {
 	TextInput,
 	themeButtonReaderRevenueBrandAlt,
 } from '@guardian/source/react-components';
-import React from 'react';
+import type React from 'react';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 
 // ---- Component ---- //

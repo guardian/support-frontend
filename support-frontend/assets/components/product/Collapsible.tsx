@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 import { palette, space, textSansBold14 } from '@guardian/source/foundations';
 import { SvgChevronDownSingle } from '@guardian/source/react-components';
-import React, { useEffect, useRef, useState } from 'react';
+import type React from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const toggleButton = css`
 	${textSansBold14}

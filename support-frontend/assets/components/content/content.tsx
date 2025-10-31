@@ -6,15 +6,7 @@ import 'helpers/types/option';
 import './content.scss';
 
 // ---- Types ----- //
-const Appearances = {
-	white: 'white',
-	grey: 'grey',
-	highlight: 'highlight',
-	feature: 'feature',
-	dark: 'dark',
-};
-
-export type Appearance = keyof typeof Appearances;
+export type Appearance = 'white' | 'grey' | 'highlight' | 'feature' | 'dark';
 
 type PropTypes = {
 	appearance: Appearance;

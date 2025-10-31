@@ -1,13 +1,13 @@
-import { getStage } from './stage';
+import type { SQSEvent } from 'aws-lambda';
+import { transformAcquisitionProductForBigQuery } from './acquisitions';
 import {
 	buildAuthClient,
 	createBigQueryClient,
 	writeRowToBigQuery,
 } from './bigQuery';
-import { getGCPCredentialsFromSSM } from './ssm';
-import type { SQSEvent } from 'aws-lambda';
-import { transformAcquisitionProductForBigQuery } from './acquisitions';
 import { AcquisitionProductEventSchema } from './schemas';
+import { getGCPCredentialsFromSSM } from './ssm';
+import { getStage } from './stage';
 
 type Result =
 	| {
@@ -32,7 +32,7 @@ export const handler = async (event: SQSEvent) => {
 			// JSON parse record body
 			let payload;
 			try {
-				payload = JSON.parse(record.body);
+				payload = JSON.parse(record.body) as unknown;
 			} catch (jsonError) {
 				if (jsonError instanceof Error) {
 					console.error('Failed to JSON parse payload:', jsonError.message);

@@ -909,7 +909,7 @@ export function OneTimeCheckoutComponent({
 							}}
 							transactionCostTotal={simpleFormatAmount(
 								currency,
-								finalAmount ? finalAmount : 0,
+								finalAmount ?? 0,
 							)}
 						/>
 

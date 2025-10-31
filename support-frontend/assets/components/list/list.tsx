@@ -7,7 +7,7 @@ import {
 	space,
 	textEgyptian17,
 } from '@guardian/source/foundations';
-import * as React from 'react';
+import type * as React from 'react';
 
 export type ListItemText = {
 	content: string;

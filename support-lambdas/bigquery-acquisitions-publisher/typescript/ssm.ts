@@ -1,6 +1,6 @@
-import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm';
+import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 import { awsConfig } from './config';
-import { Stage } from './stage';
+import type { Stage } from './stage';
 
 // Retrieve Google Cloud Parameters from AWS Systems Manager -> Parameter Store
 export const getGCPCredentialsFromSSM = async (stage: Stage) => {

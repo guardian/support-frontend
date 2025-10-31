@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import { useEffect, useState } from 'react';
-import * as React from 'react';
+import type * as React from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
@@ -59,7 +59,7 @@ type PropTypes = ConnectedProps<typeof connector> & {
 	submitForm: () => void;
 };
 
-const fieldErrorMessages: { [key in DirectDebitFieldName]: string } = {
+const fieldErrorMessages: Record<DirectDebitFieldName, string> = {
 	accountHolderName: 'Please enter a valid account name',
 	sortCode: 'Please enter a valid sort code',
 	accountNumber: 'Please enter a valid account number',
@@ -68,9 +68,7 @@ const fieldErrorMessages: { [key in DirectDebitFieldName]: string } = {
 
 const recaptchaErrorMessage = "Please check the 'I'm not a robot' checkbox";
 
-const fieldValidationFunctions: {
-	[key in DirectDebitFieldName]: (fieldValue: string) => boolean;
-} = {
+const fieldValidationFunctions: Record<DirectDebitFieldName, (fieldValue: string) => boolean> = {
 	accountHolderName: (fieldValue) =>
 		!!/^\D+$/.exec(fieldValue) && zuoraCompatibleString(fieldValue),
 	sortCode: (fieldValue) => !!/^\d{6}$/.exec(fieldValue),
