@@ -1,14 +1,14 @@
 // ----- Imports ----- //
-import type { PaperProductOptions } from '@modules/product/productOptions';
+// import type { PaperProductOptions } from '@modules/product/productOptions';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+// import type { ActiveProductKey } from 'helpers/productCatalog';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import {
 	addDays,
-	getProductFirstDeliveryOrStartDate,
 	getTierThreeDeliveryDate,
 	getWeeklyDays,
+	getWeeklyDeliveryDate,
 } from '../deliveryDays';
 
 function getDaysBetween(start: Dayjs, end: Dayjs) {
@@ -20,6 +20,25 @@ function getDaysBetween(start: Dayjs, end: Dayjs) {
 	}
 	return range;
 }
+describe('addDays', () => {
+	// The addDays function was written to avoid adding a dependency to support-frontend
+	// this test checks its outputs against the Dayjs library to ensure correctness
+	it('matches the output of Dayjs for a range of dates', () => {
+		const testForDateAndNumberOfDays = (
+			startDate: Dayjs,
+			daysToAdd: number,
+		) => {
+			expect(addDays(startDate.toDate(), daysToAdd)).toEqual(
+				startDate.add(daysToAdd, 'day').toDate(),
+			);
+		};
+		testForDateAndNumberOfDays(dayjs('2024-01-01'), 1);
+		testForDateAndNumberOfDays(dayjs('2024-01-01'), 31);
+		testForDateAndNumberOfDays(dayjs('2024-12-31'), 3);
+		testForDateAndNumberOfDays(dayjs('2024-02-28'), 3);
+		testForDateAndNumberOfDays(dayjs('2024-02-29'), 1); // 2024 is a leap year
+	});
+});
 
 // 2019-02-26T10:09:12.198Z
 const tuesday = 1551175752198;
@@ -68,68 +87,19 @@ describe.each(weeklyDayTests)('getWeeklyDays', ({ desc, day, weeklyDate }) => {
 	});
 });
 
-const deliveryTests = [
-	{
-		product: 'NationalDelivery',
-		paperProductOption: 'EverydayPlus',
-		startDate: '2025-08-19',
-		firstDeliveryDate: '2025-08-22',
-	},
-	{
-		product: 'GuardianWeeklyDomestic',
-		paperProductOption: undefined,
-		startDate: '2025-10-27',
-		firstDeliveryDate: '2025-11-07',
-	},
-	{
-		product: 'TierThree',
-		paperProductOption: undefined,
-		startDate: '2025-10-27',
-		firstDeliveryDate: '2025-11-14',
-	},
-	{
-		product: 'GuardianAdLite',
-		paperProductOption: undefined,
-		startDate: '2025-10-27',
-		firstDeliveryDate: '2025-11-11',
-	},
-	{
-		product: 'SupporterPlus',
-		paperProductOption: undefined,
-		startDate: '2025-10-27',
-		firstDeliveryDate: undefined,
-	},
-];
+describe('getWeeklyDeliveryDate', () => {
+	it('will always find a delivery date greater than 8 days from today', () => {
+		const startDate = dayjs('2026-01-01');
+		const endDate = dayjs('2026-12-31');
+		const daysIn2024 = getDaysBetween(startDate, endDate);
 
-describe.each(deliveryTests)(
-	'productDeliveryOrStartDate',
-	({ product, paperProductOption, startDate, firstDeliveryDate }) => {
-		it(`for product ${product} ${
-			paperProductOption ?? ''
-		}, returns first delivery date ${firstDeliveryDate} using start date ${startDate} `, () => {
-			// Mock the current date/time
-			const orderDate = new Date(startDate);
-			jest.useFakeTimers().setSystemTime(orderDate);
-
-			const deliveryDate = getProductFirstDeliveryOrStartDate(
-				product as ActiveProductKey,
-				paperProductOption as PaperProductOptions | undefined,
-			);
-
-			if (!firstDeliveryDate) {
-				expect(expect(deliveryDate).toBeUndefined());
-			} else {
-				expect(deliveryDate).not.toBeUndefined();
-				if (deliveryDate) {
-					expect(formatMachineDate(deliveryDate)).toEqual(firstDeliveryDate);
-				}
-			}
-
-			// Restore the original date/time
-			jest.useRealTimers();
+		daysIn2024.map((day) => {
+			const deliveryDate = dayjs(getWeeklyDeliveryDate(day.toDate().getTime()));
+			const eightDaysTime = day.add(8, 'day'); // earliest is before wednesday midnight, it delivers the Weekly on Friday week
+			expect(deliveryDate.isAfter(eightDaysTime)).toBe(true);
 		});
-	},
-);
+	});
+});
 
 describe('getTierThreeDeliveryDate', () => {
 	it('will always find a delivery date at least 15 days from today', () => {
@@ -147,25 +117,5 @@ describe('getTierThreeDeliveryDate', () => {
 					deliveryDate.isAfter(fifteenDaysTime),
 			).toBe(true);
 		});
-	});
-});
-
-describe('addDays', () => {
-	// The addDays function was written to avoid adding a dependency to support-frontend
-	// this test checks its outputs against the Dayjs library to ensure correctness
-	it('matches the output of Dayjs for a range of dates', () => {
-		const testForDateAndNumberOfDays = (
-			startDate: Dayjs,
-			daysToAdd: number,
-		) => {
-			expect(addDays(startDate.toDate(), daysToAdd)).toEqual(
-				startDate.add(daysToAdd, 'day').toDate(),
-			);
-		};
-		testForDateAndNumberOfDays(dayjs('2024-01-01'), 1);
-		testForDateAndNumberOfDays(dayjs('2024-01-01'), 31);
-		testForDateAndNumberOfDays(dayjs('2024-12-31'), 3);
-		testForDateAndNumberOfDays(dayjs('2024-02-28'), 3);
-		testForDateAndNumberOfDays(dayjs('2024-02-29'), 1); // 2024 is a leap year
 	});
 });

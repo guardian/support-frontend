@@ -20,7 +20,7 @@ import {
 	getReferrerAcquisitionData,
 	getSupportAbTests,
 } from '../../../helpers/tracking/acquisitions';
-import { getProductFirstDeliveryOrStartDate } from '../checkout/helpers/deliveryDays';
+import { getProductFirstDeliveryDate } from '../checkout/helpers/deliveryDays';
 import type { FormPersonalFields } from '../checkout/helpers/formDataExtractors';
 import {
 	extractDeliverableAddressDataFromForm,
@@ -80,7 +80,7 @@ export const submitForm = async ({
 		labels: ['generic-checkout'], // Shall we get rid of this now?
 	};
 
-	const firstDelivery = getProductFirstDeliveryOrStartDate(
+	const firstDelivery = getProductFirstDeliveryDate(
 		productKey,
 		ratePlanKey as ActivePaperProductOptions,
 	);
