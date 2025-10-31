@@ -88,12 +88,14 @@ type HeaderCardsProps = {
 	supportRegionId: SupportRegionId;
 	isSignedIn: boolean;
 	returnLink: string;
+	enablePremiumDigital: boolean;
 };
 
 export function HeaderCards({
 	supportRegionId,
 	isSignedIn,
 	returnLink,
+	enablePremiumDigital,
 }: HeaderCardsProps): JSX.Element {
 	const contributionType = 'Monthly';
 	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
@@ -138,7 +140,8 @@ export function HeaderCards({
 						<p css={paragraph}>
 							If you already have Guardian Ad-Lite or another Guardian
 							subscription that offers ad-free reading, such as{' '}
-							{getProductLabel('SupporterPlus')}, you should, {SignInLink}
+							{getProductLabel('SupporterPlus', enablePremiumDigital)}, you
+							should, {SignInLink}
 						</p>
 					</div>
 				)}

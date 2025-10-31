@@ -4,6 +4,7 @@ import {
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import type { ProductBenefit } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { getProductLabel } from 'helpers/productCatalog';
 import {
@@ -30,7 +31,11 @@ export default function StudentProductCard({
 	ctaLabel: string;
 	discountSummary?: string;
 }) {
-	const supporterPlusLabel = getProductLabel('SupporterPlus');
+	const { enablePremiumDigital } = getFeatureFlags();
+	const supporterPlusLabel = getProductLabel(
+		'SupporterPlus',
+		enablePremiumDigital,
+	);
 	return (
 		<section css={container}>
 			<div css={pill}>Student offer</div>

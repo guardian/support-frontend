@@ -271,7 +271,10 @@ export function ThreeTierCard({
 				<div css={benefitsPrefixCss}>
 					<span>
 						The rewards from{' '}
-						<strong> {getProductLabel('SupporterPlus')}</strong>
+						<strong>
+							{' '}
+							{getProductLabel('SupporterPlus', enablePremiumDigital)}
+						</strong>
 					</span>
 					{benefits.length > 0 && <span css={benefitsPrefixPlus}>plus</span>}
 				</div>

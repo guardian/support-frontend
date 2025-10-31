@@ -12,8 +12,9 @@ import { LinkButton } from '@guardian/source/react-components';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import { currencies } from 'helpers/internationalisation/currency';
-import { productCatalog } from 'helpers/productCatalog';
+import { getProductLabel, productCatalog } from 'helpers/productCatalog';
 
 const container = css`
 	text-align: center;
@@ -114,7 +115,8 @@ export function StudentOffer({
 	if (!price) {
 		return <></>;
 	}
-
+	const { enablePremiumDigital } = getFeatureFlags();
+	const productLabel = getProductLabel('SupporterPlus', enablePremiumDigital);
 	return (
 		<>
 			<div css={dividerContainer}>
@@ -123,9 +125,10 @@ export function StudentOffer({
 			<div css={container}>
 				<h2 css={heading}>Student subscription</h2>
 				<p css={standFirst}>
-					Keep up to date on the latest news with an{' '}
-					<span css={boldCopy}>All&#x2011;access&nbsp;digital</span>{' '}
-					subscription for just {currencyGlyph}
+					Keep up to date on the latest news with
+					{enablePremiumDigital ? ' a ' : ' an '}
+					<span css={boldCopy}>{productLabel}</span> subscription for just{' '}
+					{currencyGlyph}
 					{price}&nbsp;a&nbsp;year.
 				</p>
 				<LinkButton

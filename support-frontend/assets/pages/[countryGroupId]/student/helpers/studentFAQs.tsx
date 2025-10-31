@@ -2,13 +2,18 @@ import type {
 	CountryGroupId,
 	SupportRegionId,
 } from '@modules/internationalisation/countryGroup';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import { privacyLink, supporterPlusTermsLink } from 'helpers/legal';
 import { getProductLabel } from 'helpers/productCatalog';
 import { helpCentreUrl } from 'helpers/urls/externalLinks';
 import type { FAQItem } from 'pages/[countryGroupId]/components/accordionFAQ';
 import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 
-const supporterPlusLabel = getProductLabel('SupporterPlus');
+const { enablePremiumDigital } = getFeatureFlags();
+const supporterPlusLabel = getProductLabel(
+	'SupporterPlus',
+	enablePremiumDigital,
+);
 const supporterPlusBodyAccess: JSX.Element = (
 	<p>
 		You can access your {supporterPlusLabel} subscription across all devices by

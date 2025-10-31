@@ -19,7 +19,8 @@ export const adLiteFAQs: FAQItem[] = [
 				</p>
 				<p>
 					A Guardian Ad-Lite subscription does not entitle you to the additional
-					benefits on offer via our {getProductLabel('SupporterPlus')} and
+					benefits on offer via our{' '}
+					{getProductLabel('SupporterPlus', enablePremiumDigital)} and
 					{getProductLabel(
 						enablePremiumDigital ? 'DigitalSubscription' : 'TierThree',
 						enablePremiumDigital,

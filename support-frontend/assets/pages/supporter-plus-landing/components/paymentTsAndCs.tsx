@@ -3,6 +3,7 @@ import { neutral, space, textSans12 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import {
 	buildPromotionalTermsLink,
 	contributionsTermsLinks,
@@ -292,11 +293,13 @@ export function PaymentTsAndCs({
 			{accountAndTermsLCopyAndLinks}.
 		</>
 	);
+	const { enablePremiumDigital } = getFeatureFlags();
 	const studentSupporterPlusTsAndCs: JSX.Element = (
 		<>
-			You may cancel your {getProductLabel('SupporterPlus')} subscription within
-			14 days of taking out the subscription. If you do, you'll receive a full
-			refund and your subscription will stop immediately.{' '}
+			You may cancel your{' '}
+			{getProductLabel('SupporterPlus', enablePremiumDigital)} subscription
+			within 14 days of taking out the subscription. If you do, you'll receive a
+			full refund and your subscription will stop immediately.{' '}
 			{accountAndTermsLCopyAndLinks}. This subscription does not auto-renew.
 		</>
 	);
