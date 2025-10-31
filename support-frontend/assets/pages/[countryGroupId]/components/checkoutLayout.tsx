@@ -16,6 +16,7 @@ import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
+import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 
 const secureTransactionIndicator = css`
 	margin-bottom: ${space[3]}px;
@@ -40,12 +41,6 @@ const columns = css`
 	padding-top: ${space[2]}px;
 `;
 
-const footerWiden = css`
-	${from.tablet} {
-		margin-top: ${space[8]}px;
-	}
-`;
-
 type CheckoutLayoutProps = {
 	children: ReactNode;
 	noBorders?: boolean;
@@ -62,7 +57,7 @@ export default function GuardianLayout({
 			header={<Header />}
 			footer={
 				<FooterWithContents>
-					{noFooterLinks ? <span css={footerWiden} /> : <FooterLinks />}
+					{noFooterLinks ? <ThankYouFooter /> : <FooterLinks />}
 				</FooterWithContents>
 			}
 		>

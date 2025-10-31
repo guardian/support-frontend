@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { from, space, textSans15 } from '@guardian/source/foundations';
-import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
 const footer = css`
 	${textSans15};
@@ -13,16 +12,11 @@ const footer = css`
 	}
 `;
 
-function ThankYouFooter({
-	observerPrint,
-}: {
-	observerPrint?: ObserverPrint;
-}): JSX.Element {
+function ThankYouFooter() {
 	return (
 		<div css={footer}>
-			{!observerPrint
-				? 'If you have any questions about supporting the Guardian, please contact	our customer service team.'
-				: ''}
+			If you have any questions about supporting the Guardian, please contact
+			our customer service team.
 		</div>
 	);
 }
