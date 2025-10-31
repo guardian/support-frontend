@@ -40,34 +40,54 @@ const columns = css`
 	padding-top: ${space[2]}px;
 `;
 
+const footerWiden = css`
+	${from.tablet} {
+		margin-top: ${space[8]}px;
+	}
+`;
+
 type CheckoutLayoutProps = {
 	children: ReactNode;
+	noBorders?: boolean;
+	noFooterLinks?: boolean;
 };
 
-export default function GuardianLayout({ children }: CheckoutLayoutProps) {
+export default function GuardianLayout({
+	children,
+	noBorders = false,
+	noFooterLinks = false,
+}: CheckoutLayoutProps) {
 	return (
 		<PageScaffold
-			header={<Header></Header>}
+			header={<Header />}
 			footer={
 				<FooterWithContents>
-					<FooterLinks></FooterLinks>
+					{noFooterLinks ? <span css={footerWiden} /> : <FooterLinks />}
 				</FooterWithContents>
 			}
 		>
-			<CheckoutHeading withTopBorder={true} />
-			<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
-				<Columns cssOverrides={columns} collapseUntil="tablet">
-					<Column span={[0, 2, 2, 3, 4]}></Column>
-					<Column span={[1, 8, 8, 8, 8]}>
-						<SecureTransactionIndicator
-							align="center"
-							theme="light"
-							cssOverrides={secureTransactionIndicator}
-						/>
-						{children}
-					</Column>
-				</Columns>
-			</Container>
+			{noBorders ? (
+				<Container cssOverrides={darkBackgroundContainerMobile}>
+					{children}
+				</Container>
+			) : (
+				<>
+					<CheckoutHeading withTopBorder={true} />
+					<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
+						<Columns cssOverrides={columns} collapseUntil="tablet">
+							<Column span={[0, 2, 2, 3, 4]}></Column>
+							<Column span={[1, 8, 8, 8, 8]}>
+								<SecureTransactionIndicator
+									align="center"
+									theme="light"
+									cssOverrides={secureTransactionIndicator}
+								/>
+								{children}
+							</Column>
+						</Columns>
+					</Container>
+				</>
+			)}
 		</PageScaffold>
 	);
 }

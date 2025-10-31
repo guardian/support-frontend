@@ -1,18 +1,10 @@
 import { css } from '@emotion/react';
 import { storage } from '@guardian/libs';
-import {
-	from,
-	neutral,
-	space,
-	sport,
-	until,
-} from '@guardian/source/foundations';
-import { Container, LinkButton } from '@guardian/source/react-components';
-import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
+import { from, space, until } from '@guardian/source/foundations';
+import { LinkButton } from '@guardian/source/react-components';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import { Header } from 'components/headers/simpleHeader/simpleHeader';
-import { PageScaffold } from 'components/page/pageScaffold';
+import ObserverLayout from 'components/observer-layout/ObserverLayout';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { Participations } from 'helpers/abTests/models';
@@ -44,7 +36,6 @@ import {
 import { getUser } from 'helpers/user/user';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
-import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import {
 	isGuardianWeeklyProduct,
@@ -61,13 +52,13 @@ import {
 	getReturnAddress,
 	getThankYouOrder,
 } from '../checkout/helpers/sessionStorage';
+import GuardianLayout from './checkoutLayout';
 
 const thankYouContainer = css`
 	position: relative;
-	${from.tablet} {
-		background-color: ${sport[800]};
-	}
+	height: 100%;
 `;
+
 const headerContainer = css`
 	${from.desktop} {
 		width: 860px;
@@ -83,12 +74,6 @@ const buttonContainer = css`
 		& > a {
 			margin-bottom: ${space[4]}px;
 		}
-	}
-`;
-const buttonColor = css`
-	background-color: ${neutral[100]};
-	${from.tablet} {
-		background-color: ${sport[800]};
 	}
 `;
 
@@ -338,65 +323,59 @@ export function ThankYouComponent({
 			'headlineReturn',
 		),
 	];
+
+	const CheckoutLayout = window.guardian.isObserverSubdomain
+		? ObserverLayout
+		: GuardianLayout;
+
 	return (
-		<PageScaffold
-			header={<Header />}
-			footer={
-				<FooterWithContents>
-					{<ThankYouFooter observerPrint={observerPrint} />}
-				</FooterWithContents>
-			}
-		>
+		<CheckoutLayout noBorders noFooterLinks>
 			<div css={thankYouContainer}>
-				<Container>
-					<div css={headerContainer}>
-						<ThankYouHeader
-							productKey={productKey}
-							ratePlanKey={ratePlanKey}
-							name={order.firstName}
-							amount={payment.originalAmount}
-							isDirectDebitPayment={order.paymentMethod === 'DirectDebit'}
-							currency={currencyKey}
-							promotion={promotion}
-							observerPrint={observerPrint}
-							startDate={startDate}
-						/>
-					</div>
-
-					<ThankYouModules
-						isSignedIn={isSignedIn}
-						thankYouModules={thankYouModules}
-						thankYouModulesData={thankYouModuleData}
+				<div css={headerContainer}>
+					<ThankYouHeader
+						productKey={productKey}
+						ratePlanKey={ratePlanKey}
+						name={order.firstName}
+						amount={payment.originalAmount}
+						isDirectDebitPayment={order.paymentMethod === 'DirectDebit'}
+						currency={currencyKey}
+						promotion={promotion}
+						observerPrint={observerPrint}
+						startDate={startDate}
 					/>
+				</div>
 
-					<div css={buttonContainer}>
-						{!!observerPrint && (
-							<LinkButton
-								href="https://www.observer.co.uk/welcome"
-								priority="tertiary"
-								onClick={() =>
-									trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_OBSERVER)
-								}
-								cssOverrides={buttonColor}
-							>
-								Return to the Observer
-							</LinkButton>
-						)}
-						{!isGuardianAdLite && (
-							<LinkButton
-								href="https://www.theguardian.com"
-								priority="tertiary"
-								onClick={() =>
-									trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)
-								}
-								cssOverrides={buttonColor}
-							>
-								Return to the Guardian
-							</LinkButton>
-						)}
-					</div>
-				</Container>
+				<ThankYouModules
+					isSignedIn={isSignedIn}
+					thankYouModules={thankYouModules}
+					thankYouModulesData={thankYouModuleData}
+				/>
+
+				<div css={buttonContainer}>
+					{!!observerPrint && (
+						<LinkButton
+							href="https://www.observer.co.uk/welcome"
+							priority="tertiary"
+							onClick={() =>
+								trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_OBSERVER)
+							}
+						>
+							Return to the Observer
+						</LinkButton>
+					)}
+					{!isGuardianAdLite && (
+						<LinkButton
+							href="https://www.theguardian.com"
+							priority="tertiary"
+							onClick={() =>
+								trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)
+							}
+						>
+							Return to the Guardian
+						</LinkButton>
+					)}
+				</div>
 			</div>
-		</PageScaffold>
+		</CheckoutLayout>
 	);
 }
