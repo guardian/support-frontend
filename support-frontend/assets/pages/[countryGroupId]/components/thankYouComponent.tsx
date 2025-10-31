@@ -43,6 +43,7 @@ import {
 } from 'helpers/tracking/quantumMetric';
 import { getUser } from 'helpers/user/user';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
+import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
@@ -50,7 +51,6 @@ import {
 	isGuardianWeeklyProduct,
 	isPrintProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
-import { getProductFirstDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import ThankYouModules from '../../../components/thankYou/thankyouModules';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -258,7 +258,7 @@ export function ThankYouComponent({
 
 	const deliveryStart =
 		order.deliveryDate ??
-		getProductFirstDeliveryOrStartDate(
+		getProductFirstDeliveryDate(
 			productKey,
 			ratePlanKey as ActivePaperProductOptions,
 		);

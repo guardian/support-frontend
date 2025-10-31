@@ -25,7 +25,7 @@ import * as cookie from 'helpers/storage/cookie';
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
-import { getWeeklyDeliveryDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import { getProductWeeklyDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
@@ -264,7 +264,7 @@ export function Checkout({
 		useStripeHostedCheckoutSession(maybeCheckoutSessionId);
 
 	const [weeklyDeliveryDate, setWeeklyDeliveryDate] = useState<Date>(
-		getWeeklyDeliveryDate(productKey),
+		getProductWeeklyDeliveryDate(productKey),
 	);
 
 	/**
