@@ -1,16 +1,17 @@
 import test from '@playwright/test';
 import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAndCompleteCheckout';
+import { tierThreeProductLabel, tierTwoProductLabel } from '../utils/products';
 
 const tests = [
 	{
-		productLabel: 'All-access digital',
+		productLabel: tierTwoProductLabel,
 		product: 'SupporterPlus',
 		billingFrequency: 'Monthly',
 		paymentType: 'PayPal',
 		internationalisationId: 'AU',
 	},
 	{
-		productLabel: 'Digital + print',
+		productLabel: tierThreeProductLabel,
 		product: 'TierThree',
 		billingFrequency: 'Monthly',
 		paymentType: 'PayPal',

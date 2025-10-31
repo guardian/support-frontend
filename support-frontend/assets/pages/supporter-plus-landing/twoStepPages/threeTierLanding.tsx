@@ -46,6 +46,7 @@ import { Country } from 'helpers/internationalisation/classes/country';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
 	getProductDescription,
+	getProductLabel,
 	productCatalog,
 	productCatalogDescriptionPremiumDigital,
 } from 'helpers/productCatalog';
@@ -400,17 +401,24 @@ export function ThreeTierLanding({
 	if (tier2Promotion) {
 		tier2UrlParams.set('promoCode', tier2Promotion.promoCode);
 	}
-	const tier2Url = `checkout?${tier2UrlParams.toString()}`;
+	if (enablePremiumDigital) {
+		tier2UrlParams.set('enablePremiumDigital', 'true');
+	}
+	const tier2ProductDescription = {
+		...settings.products.SupporterPlus,
+		title: getProductLabel('SupporterPlus', enablePremiumDigital),
+	};
+
 	const tier2Card: CardContent = {
 		product: 'SupporterPlus',
 		price: tier2Pricing,
-		link: tier2Url,
+		link: `checkout?${tier2UrlParams.toString()}`,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion: tier2Promotion,
 		isUserSelected:
 			urlSearchParamsProduct === 'SupporterPlus' ||
 			isCardUserSelected(tier2Pricing, tier2Promotion?.discount?.amount),
-		...settings.products.SupporterPlus,
+		...tier2ProductDescription,
 	};
 
 	/**

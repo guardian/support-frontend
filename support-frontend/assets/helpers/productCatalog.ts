@@ -13,6 +13,10 @@ import type {
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { Participations } from './abTests/models';
 
+export const contributionLabel = 'Support';
+export const supporterPlusLabel = 'All-access digital';
+export const tierThreeLabel = 'Digital + print';
+
 const activeProductKeys = [
 	'GuardianWeeklyDomestic',
 	'GuardianWeeklyRestOfWorld',
@@ -308,7 +312,7 @@ export const productCatalogDescription: Record<
 		benefits: guardianAdLiteBenefits,
 	},
 	TierThree: {
-		label: 'Digital + print',
+		label: tierThreeLabel,
 		thankyouMessage: digitalThankyouMessage,
 		landingPagePath: '/contribute',
 		benefits: [guardianWeeklyBenefit],
@@ -361,7 +365,7 @@ export const productCatalogDescription: Record<
 		},
 	},
 	SupporterPlus: {
-		label: 'All-access digital',
+		label: supporterPlusLabel,
 		landingPagePath: '/contribute',
 		benefits: supporterPlusBenefits,
 		ratePlans: {
@@ -456,7 +460,7 @@ export const productCatalogDescription: Record<
 		ratePlans: nationalPaperPlusRatePlans,
 	},
 	Contribution: {
-		label: 'Support',
+		label: contributionLabel,
 		landingPagePath: '/contribute',
 		benefits: [supportBenefit, newsletterBenefitUS],
 		ratePlans: {
@@ -513,6 +517,11 @@ const editionsDigitalBenefit = {
 	tooltip: `Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.`,
 };
 
+const productCatalogDescriptionDigitalAccess = {
+	...productCatalogDescription.SupporterPlus,
+	label: 'Digital access',
+};
+
 export const productCatalogDescriptionPremiumDigital = {
 	...productCatalogDescription.DigitalSubscription,
 	label: 'Digital plus',
@@ -560,6 +569,19 @@ const productCatalogGuardianWeeklyGift = {
 		...productCatalogDescription.GuardianWeeklyRestOfWorld,
 		benefits: [guardianWeeklyGiftBenefit],
 	},
+};
+
+export const getProductLabel = (
+	productKey: ActiveProductKey,
+	enablePremiumDigital?: boolean,
+): string => {
+	if (productKey === 'DigitalSubscription' && enablePremiumDigital) {
+		return productCatalogDescriptionPremiumDigital.label;
+	}
+	if (productKey === 'SupporterPlus' && enablePremiumDigital) {
+		return productCatalogDescriptionDigitalAccess.label;
+	}
+	return productCatalogDescription[productKey].label;
 };
 
 export const getProductDescription = (

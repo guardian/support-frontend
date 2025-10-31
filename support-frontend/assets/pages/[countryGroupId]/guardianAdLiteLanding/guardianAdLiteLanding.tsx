@@ -1,6 +1,7 @@
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import { getUser } from 'helpers/user/user';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import {
@@ -27,6 +28,7 @@ export function GuardianAdLiteLanding({
 		selectedCountryGroup: countryGroupId,
 		subPath: '/guardian-ad-lite',
 	}; // hidden initially, will display with more regions
+	const { enablePremiumDigital } = getFeatureFlags();
 
 	/* Return Address loading order:-
 	 * 1. URLSearchParams (SessionStorage write)
@@ -44,6 +46,7 @@ export function GuardianAdLiteLanding({
 				supportRegionId={supportRegionId}
 				returnLink={getReturnAddress()} // defaults to urlSearchParamsReturn if available
 				isSignedIn={user.isSignedIn}
+				enablePremiumDigital={enablePremiumDigital}
 			/>
 			<PosterComponent />
 			<AccordionFAQ faqItems={adLiteFAQs} />

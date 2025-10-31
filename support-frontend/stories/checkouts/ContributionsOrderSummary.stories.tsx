@@ -8,7 +8,10 @@ import {
 	OrderSummaryTsAndCs,
 } from 'components/orderSummary/orderSummaryTsAndCs';
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
-import { productCatalogDescription } from 'helpers/productCatalog';
+import {
+	getProductLabel,
+	productCatalogDescription,
+} from 'helpers/productCatalog';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 import { SupportRegionId } from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
@@ -53,6 +56,10 @@ const oneYearStudentDiscount = {
 	discountPriceWithCurrency: '£9',
 	fullPriceWithCurrency: '£120',
 };
+
+const contributionKey = 'Contribution';
+const supporterPlusKey = 'SupporterPlus';
+const tierThreeKey = 'TierThree';
 
 export default {
 	title: 'Checkouts/Contributions Order Summary',
@@ -125,7 +132,7 @@ Default.args = {
 
 export const SingleContribution = Template.bind({});
 SingleContribution.args = {
-	productKey: 'Contribution',
+	productKey: contributionKey,
 	ratePlanKey: 'OneTime',
 	productLabel: 'One-off contribution',
 	enableCheckList: false,
@@ -149,9 +156,9 @@ SingleContribution.args = {
 
 export const RecurringContribution = Template.bind({});
 RecurringContribution.args = {
-	productKey: 'SupporterPlus',
+	productKey: contributionKey,
 	ratePlanKey: 'Monthly',
-	productLabel: 'Support',
+	productLabel: getProductLabel(contributionKey),
 	enableCheckList: true,
 	amount: 3,
 	currency: {
@@ -184,9 +191,9 @@ RecurringContribution.args = {
 
 export const SupporterPlus = Template.bind({});
 SupporterPlus.args = {
-	productKey: 'SupporterPlus',
+	productKey: supporterPlusKey,
 	ratePlanKey: 'Monthly',
-	productLabel: 'All-access Digital',
+	productLabel: getProductLabel(supporterPlusKey),
 	enableCheckList: true,
 	amount: 12,
 	currency: {
@@ -220,9 +227,9 @@ SupporterPlus.args = {
 
 export const TierThree = Template.bind({});
 TierThree.args = {
-	productKey: 'TierThree',
+	productKey: tierThreeKey,
 	ratePlanKey: 'Monthly',
-	productLabel: 'Digital + print',
+	productLabel: getProductLabel(tierThreeKey),
 	enableCheckList: true,
 	amount: 27,
 	currency: {
@@ -266,9 +273,9 @@ TierThree.args = {
 
 export const StudentOneYear = Template.bind({});
 StudentOneYear.args = {
-	productKey: 'SupporterPlus',
+	productKey: supporterPlusKey,
 	ratePlanKey: 'OneYearStudent',
-	productLabel: 'All-access Digital',
+	productLabel: getProductLabel(supporterPlusKey),
 	paymentFrequency: 'year',
 	enableCheckList: true,
 	amount: 120,

@@ -5,12 +5,13 @@ import { fillInCardDetails } from '../utils/cardDetails';
 import { setupPage } from '../utils/page';
 import { setTestUserCoreDetails } from '../utils/testUserDetails';
 import { forceSkipNewOnboardingExperience } from '../utils/forceSkipNewOnboardingExperience';
+import { tierTwoProductLabel } from '../utils/products';
 
 [
 	{
 		frequency: 'Monthly',
 		promoCode: 'UTS_STUDENT',
-		expectedCardHeading: 'All-access digital',
+		expectedCardHeading: tierTwoProductLabel,
 		expectedPromoText: '$0/month for two years, then $20/month',
 		expectedCheckoutTotalText: 'Was $20, now $0/month',
 		accessibleCtaText: 'Sign up for free',
