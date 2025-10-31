@@ -16,6 +16,8 @@ import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
+import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
+import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 
 const secureTransactionIndicator = css`
 	margin-bottom: ${space[3]}px;
@@ -40,34 +42,52 @@ const columns = css`
 	padding-top: ${space[2]}px;
 `;
 
-type CheckoutLayoutProps = {
+export default function GuardianPageLayout({
+	children,
+	observerPrint,
+	noBorders = false,
+	noFooterLinks = false,
+}: {
 	children: ReactNode;
-};
-
-export default function GuardianLayout({ children }: CheckoutLayoutProps) {
+	observerPrint?: ObserverPrint;
+	noBorders?: boolean;
+	noFooterLinks?: boolean;
+}) {
 	return (
 		<PageScaffold
-			header={<Header></Header>}
+			header={<Header />}
 			footer={
 				<FooterWithContents>
-					<FooterLinks></FooterLinks>
+					{noFooterLinks ? (
+						<ThankYouFooter observerPrint={observerPrint} />
+					) : (
+						<FooterLinks />
+					)}
 				</FooterWithContents>
 			}
 		>
-			<CheckoutHeading withTopBorder={true} />
-			<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
-				<Columns cssOverrides={columns} collapseUntil="tablet">
-					<Column span={[0, 2, 2, 3, 4]}></Column>
-					<Column span={[1, 8, 8, 8, 8]}>
-						<SecureTransactionIndicator
-							align="center"
-							theme="light"
-							cssOverrides={secureTransactionIndicator}
-						/>
-						{children}
-					</Column>
-				</Columns>
-			</Container>
+			{noBorders ? (
+				<Container cssOverrides={darkBackgroundContainerMobile}>
+					{children}
+				</Container>
+			) : (
+				<>
+					<CheckoutHeading withTopBorder={true} />
+					<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
+						<Columns cssOverrides={columns} collapseUntil="tablet">
+							<Column span={[0, 2, 2, 3, 4]}></Column>
+							<Column span={[1, 8, 8, 8, 8]}>
+								<SecureTransactionIndicator
+									align="center"
+									theme="light"
+									cssOverrides={secureTransactionIndicator}
+								/>
+								{children}
+							</Column>
+						</Columns>
+					</Container>
+				</>
+			)}
 		</PageScaffold>
 	);
 }
