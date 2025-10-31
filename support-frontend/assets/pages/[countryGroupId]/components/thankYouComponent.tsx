@@ -4,7 +4,7 @@ import { from, space, until } from '@guardian/source/foundations';
 import { LinkButton } from '@guardian/source/react-components';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import ObserverLayout from 'components/observer-layout/ObserverLayout';
+import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { Participations } from 'helpers/abTests/models';
@@ -52,7 +52,7 @@ import {
 	getReturnAddress,
 	getThankYouOrder,
 } from '../checkout/helpers/sessionStorage';
-import GuardianLayout from './checkoutLayout';
+import GuardianPageLayout from './GuardianPageLayout';
 
 const thankYouContainer = css`
 	position: relative;
@@ -324,12 +324,12 @@ export function ThankYouComponent({
 		),
 	];
 
-	const CheckoutLayout = window.guardian.isObserverSubdomain
-		? ObserverLayout
-		: GuardianLayout;
+	const PageLayout = window.guardian.isObserverSubdomain
+		? ObserverPageLayout
+		: GuardianPageLayout;
 
 	return (
-		<CheckoutLayout noBorders noFooterLinks>
+		<PageLayout observerPrint={observerPrint} noBorders noFooterLinks>
 			<div css={thankYouContainer}>
 				<div css={headerContainer}>
 					<ThankYouHeader
@@ -376,6 +376,6 @@ export function ThankYouComponent({
 					)}
 				</div>
 			</div>
-		</CheckoutLayout>
+		</PageLayout>
 	);
 }

@@ -5,7 +5,7 @@ import { type ProductOptions } from '@modules/product/productOptions';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
-import ObserverLayout from 'components/observer-layout/ObserverLayout';
+import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import {
 	getStripeKeyForCountry,
 	getStripeKeyForProduct,
@@ -36,8 +36,8 @@ import { getProductOptionFromProductAndRatePlan } from '../../helpers/productCat
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
 import { useStripeHostedCheckoutSession } from './checkout/hooks/useStripeHostedCheckoutSession';
 import CheckoutForm from './components/checkoutForm';
-import GuardianLayout from './components/checkoutLayout';
 import CheckoutSummary from './components/checkoutSummary';
+import GuardianPageLayout from './components/GuardianPageLayout';
 import { getStudentDiscount } from './student/helpers/discountDetails';
 
 type Props = {
@@ -293,13 +293,13 @@ export function Checkout({
 		true,
 	);
 
-	const CheckoutLayout = window.guardian.isObserverSubdomain
-		? ObserverLayout
-		: GuardianLayout;
+	const PageLayout = window.guardian.isObserverSubdomain
+		? ObserverPageLayout
+		: GuardianPageLayout;
 
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
-			<CheckoutLayout>
+			<PageLayout>
 				<CheckoutSummary
 					supportRegionId={supportRegionId}
 					appConfig={appConfig}
@@ -341,7 +341,7 @@ export function Checkout({
 					thresholdAmount={thresholdAmount}
 					studentDiscount={studentDiscount}
 				/>
-			</CheckoutLayout>
+			</PageLayout>
 		</Elements>
 	);
 }
