@@ -43,7 +43,6 @@ const getWeeklyDays = (testDate?: number): Date[] => {
 		}
 	}
 
-	// Remove Christmas weekly delivery dates
 	const publicationDays = nonChrismassy.splice(weeksToAdd);
 	const publicationStartDays = publicationDays.filter((day) => {
 		const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
