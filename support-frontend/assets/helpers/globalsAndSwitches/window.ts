@@ -190,6 +190,7 @@ const PaymentConfigSchema = z.object({
 		}),
 		metricUrl: z.string(),
 	}),
+	isObserverSubdomain: z.boolean(),
 });
 
 const ProductCatalogSchema = z.object({
