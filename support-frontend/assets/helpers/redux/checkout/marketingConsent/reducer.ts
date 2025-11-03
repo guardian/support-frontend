@@ -2,7 +2,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { initialMarketingConsentState } from './state';
 
-export const marketingConsentSlice = createSlice({
+const marketingConsentSlice = createSlice({
 	name: 'marketingConsent',
 	initialState: initialMarketingConsentState,
 	reducers: {

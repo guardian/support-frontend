@@ -625,7 +625,6 @@ class Application(
         productCatalog = productCatalog,
         allProductPrices = allProductPrices,
         user = request.user,
-        isObserverSubdomain = ObserverUtils.isObserverSubdomain(request.host),
         homeDeliveryPostcodes = Some(PaperValidation.M25_POSTCODE_PREFIXES),
       ),
     ).withSettingsSurrogateKey

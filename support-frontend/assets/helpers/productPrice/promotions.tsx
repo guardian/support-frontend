@@ -44,7 +44,6 @@ export type Promotion = {
 	starts?: string;
 	expires?: string;
 };
-const promoQueryParam = 'promoCode';
 
 const hasDiscount = (
 	promotion?: Promotion,
@@ -62,7 +61,7 @@ function applyDiscount(
 }
 
 const matchesQueryParam = (promotion: Promotion) =>
-	getQueryParameter(promoQueryParam) === promotion.promoCode;
+	getQueryParameter('promoCode') === promotion.promoCode;
 
 function getAppliedPromo(promotions?: Promotion[]): Promotion | undefined {
 	if (promotions && promotions.length > 0) {
@@ -172,7 +171,6 @@ export {
 	getAppliedPromo,
 	applyDiscount,
 	hasDiscount,
-	promoQueryParam,
 	getPromotionCopy,
 	promotionHTML,
 	finalPrice,
