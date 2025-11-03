@@ -51,6 +51,7 @@ export function PostcodeFinder({
 			<div css={styles.inputAndButtonContainer}>
 				<div>
 					<TextInput
+						id="postcode"
 						label="Postcode"
 						value={postcode}
 						error={error}
@@ -71,6 +72,7 @@ export function PostcodeFinder({
 				{!isLoading && (
 					<div css={styles.buttonContainer}>
 						<Button
+							id="button"
 							priority="tertiary"
 							type="button"
 							onClick={handleSubmit}
@@ -112,6 +114,7 @@ function AddressSelector({ results, onAddressSelected }: AddressSelectorProps) {
 
 	return (
 		<Select
+			id="addressSelector"
 			onChange={handleAddressSelected}
 			label={`${results.length} ${pluralisedAddress(results.length)} found`}
 		>
