@@ -14,6 +14,7 @@ libraryDependencies ++= Seq(
   "software.amazon.awssdk" % "s3" % awsClientVersion2,
   "software.amazon.awssdk" % "lambda" % awsClientVersion2,
   "software.amazon.awssdk" % "dynamodb" % awsClientVersion2,
+  "software.amazon.awssdk" % "location" % awsClientVersion2,
   "org.typelevel" %% "cats-core" % catsVersion,
   "com.dripower" %% "play-circe" % playCirceVersion,
   "io.circe" %% "circe-core" % circeVersion,
