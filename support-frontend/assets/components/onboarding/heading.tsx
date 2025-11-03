@@ -42,8 +42,6 @@ const heroContainer = css`
 	align-items: center;
 	justify-content: center;
 	color: white;
-	font-size: 20px;
-	font-weight: bold;
 
 	img {
 		height: 100%;
