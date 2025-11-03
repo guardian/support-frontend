@@ -1,5 +1,6 @@
-type FeatureFlag = {
+export type FeatureFlag = {
 	enablePremiumDigital: boolean;
+	enableDigitalAccess: boolean;
 };
 
 export function getFeatureFlags(): FeatureFlag {
@@ -7,5 +8,6 @@ export function getFeatureFlags(): FeatureFlag {
 
 	return {
 		enablePremiumDigital: urlParams.has('enablePremiumDigital'),
+		enableDigitalAccess: urlParams.has('enableDigitalAccess'),
 	};
 }

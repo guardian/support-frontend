@@ -115,8 +115,8 @@ export function StudentOffer({
 	if (!price) {
 		return <></>;
 	}
-	const { enablePremiumDigital } = getFeatureFlags();
-	const productLabel = getProductLabel('SupporterPlus', enablePremiumDigital);
+	const featureFlags = getFeatureFlags();
+	const productLabel = getProductLabel('SupporterPlus', featureFlags);
 	return (
 		<>
 			<div css={dividerContainer}>
@@ -126,7 +126,7 @@ export function StudentOffer({
 				<h2 css={heading}>Student subscription</h2>
 				<p css={standFirst}>
 					Keep up to date on the latest news with
-					{enablePremiumDigital ? ' a ' : ' an '}
+					{featureFlags.enableDigitalAccess ? ' a ' : ' an '}
 					<span css={boldCopy}>{productLabel}</span> subscription for just{' '}
 					{currencyGlyph}
 					{price}&nbsp;a&nbsp;year.

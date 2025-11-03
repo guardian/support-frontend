@@ -9,11 +9,7 @@ import { helpCentreUrl } from 'helpers/urls/externalLinks';
 import type { FAQItem } from 'pages/[countryGroupId]/components/accordionFAQ';
 import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 
-const { enablePremiumDigital } = getFeatureFlags();
-const supporterPlusLabel = getProductLabel(
-	'SupporterPlus',
-	enablePremiumDigital,
-);
+const supporterPlusLabel = getProductLabel('SupporterPlus', getFeatureFlags());
 const supporterPlusBodyAccess: JSX.Element = (
 	<p>
 		You can access your {supporterPlusLabel} subscription across all devices by

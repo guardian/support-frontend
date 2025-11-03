@@ -295,7 +295,8 @@ export function ThreeTierLanding({
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
 	const urlSearchParamsPromoCode = urlSearchParams.get('promoCode');
-	const { enablePremiumDigital } = getFeatureFlags();
+	const featureFlags = getFeatureFlags();
+	const { enablePremiumDigital, enableDigitalAccess } = featureFlags;
 
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -401,12 +402,12 @@ export function ThreeTierLanding({
 	if (tier2Promotion) {
 		tier2UrlParams.set('promoCode', tier2Promotion.promoCode);
 	}
-	if (enablePremiumDigital) {
-		tier2UrlParams.set('enablePremiumDigital', 'true');
+	if (enableDigitalAccess) {
+		tier2UrlParams.set('enableDigitalAccess', 'true');
 	}
 	const tier2ProductDescription = {
 		...settings.products.SupporterPlus,
-		title: getProductLabel('SupporterPlus', enablePremiumDigital),
+		title: getProductLabel('SupporterPlus', featureFlags),
 	};
 
 	const tier2Card: CardContent = {
@@ -415,6 +416,7 @@ export function ThreeTierLanding({
 		link: `checkout?${tier2UrlParams.toString()}`,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion: tier2Promotion,
+		featureFlags,
 		isUserSelected:
 			urlSearchParamsProduct === 'SupporterPlus' ||
 			isCardUserSelected(tier2Pricing, tier2Promotion?.discount?.amount),
@@ -452,7 +454,7 @@ export function ThreeTierLanding({
 	const { label: title, labelPill: titlePill } = getProductDescription(
 		'DigitalSubscription',
 		ratePlanKey,
-		enablePremiumDigital,
+		featureFlags,
 	);
 	const premiumDigitalProductDescription = {
 		title,
@@ -494,7 +496,7 @@ export function ThreeTierLanding({
 		isUserSelected:
 			urlSearchParamsProduct === tier3Product ||
 			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount),
-		enablePremiumDigital,
+		featureFlags,
 		...tier3ProductDescription,
 	};
 

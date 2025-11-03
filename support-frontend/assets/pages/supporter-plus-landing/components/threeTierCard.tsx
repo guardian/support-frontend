@@ -19,6 +19,7 @@ import {
 	BenefitsCheckList,
 	checkListTextItemCss,
 } from 'components/checkoutBenefits/benefitsCheckList';
+import type { FeatureFlag } from 'helpers/featureFlags';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
@@ -38,7 +39,7 @@ export type CardContent = LandingPageProductDescription & {
 		| 'SupporterPlus'
 		| 'Contribution'
 		| 'DigitalSubscription';
-	enablePremiumDigital?: boolean;
+	featureFlags?: FeatureFlag;
 };
 
 export type ThreeTierCardProps = {
@@ -213,7 +214,7 @@ export function ThreeTierCard({
 		link,
 		cta,
 		product,
-		enablePremiumDigital,
+		featureFlags,
 	} = cardContent;
 	const currency = currencies[currencyId];
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -221,7 +222,7 @@ export function ThreeTierCard({
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	const pillCopy = promotion?.landingPage?.roundel ?? cardContent.label?.copy;
 	const isPremiumDigitalProduct =
-		product === 'DigitalSubscription' && enablePremiumDigital;
+		product === 'DigitalSubscription' && featureFlags?.enablePremiumDigital;
 	const inAdditionToAllAccessDigital =
 		product === 'TierThree' || isPremiumDigitalProduct;
 	return (
@@ -271,10 +272,7 @@ export function ThreeTierCard({
 				<div css={benefitsPrefixCss}>
 					<span>
 						The rewards from{' '}
-						<strong>
-							{' '}
-							{getProductLabel('SupporterPlus', enablePremiumDigital)}
-						</strong>
+						<strong> {getProductLabel('SupporterPlus', featureFlags)}</strong>
 					</span>
 					{benefits.length > 0 && <span css={benefitsPrefixPlus}>plus</span>}
 				</div>

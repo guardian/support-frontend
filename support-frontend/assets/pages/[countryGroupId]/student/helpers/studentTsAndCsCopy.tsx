@@ -7,12 +7,10 @@ import { privacyLink } from 'helpers/legal';
 import { getProductLabel } from 'helpers/productCatalog';
 import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 
-const { enablePremiumDigital } = getFeatureFlags();
-
 const studentTsAndCs: Partial<Record<CountryGroupId, JSX.Element>> = {
 	AUDCountries: (
 		<div>
-			Access to the {getProductLabel('SupporterPlus', enablePremiumDigital)}{' '}
+			Access to the {getProductLabel('SupporterPlus', getFeatureFlags())}{' '}
 			subscription offered under this agreement is strictly limited to currently
 			enrolled students of the University of Technology Sydney (UTS). Redemption
 			of the offer is conditional upon registration using a valid and active UTS

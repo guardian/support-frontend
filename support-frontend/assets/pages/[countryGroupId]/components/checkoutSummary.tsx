@@ -83,11 +83,11 @@ export default function CheckoutSummary({
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
-	const { enablePremiumDigital } = getFeatureFlags();
+	const featureFlags = getFeatureFlags();
 	const productDescription = getProductDescription(
 		productKey,
 		ratePlanKey,
-		enablePremiumDigital,
+		featureFlags,
 	);
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
@@ -125,7 +125,7 @@ export default function CheckoutSummary({
 	}
 
 	const premiumDigitalBenefits =
-		enablePremiumDigital && productKey === 'DigitalSubscription'
+		productKey === 'DigitalSubscription' && featureFlags.enablePremiumDigital
 			? getPremiumDigitalAllBenefits(countryGroupId)
 			: undefined;
 	const benefitsCheckListData =

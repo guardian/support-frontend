@@ -12,6 +12,7 @@ import type {
 } from '@modules/product-catalog/productCatalog';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { Participations } from './abTests/models';
+import type { FeatureFlag } from './featureFlags';
 
 export const contributionLabel = 'Support';
 export const supporterPlusLabel = 'All-access digital';
@@ -573,13 +574,16 @@ const productCatalogGuardianWeeklyGift = {
 
 export const getProductLabel = (
 	productKey: ActiveProductKey,
-	enablePremiumDigital?: boolean,
+	featureFlags?: FeatureFlag,
 ): string => {
-	if (productKey === 'DigitalSubscription' && enablePremiumDigital) {
-		return productCatalogDescriptionPremiumDigital.label;
-	}
-	if (productKey === 'SupporterPlus' && enablePremiumDigital) {
-		return productCatalogDescriptionDigitalAccess.label;
+	if (featureFlags) {
+		const { enablePremiumDigital, enableDigitalAccess } = featureFlags;
+		if (productKey === 'DigitalSubscription' && enablePremiumDigital) {
+			return productCatalogDescriptionPremiumDigital.label;
+		}
+		if (productKey === 'SupporterPlus' && enableDigitalAccess) {
+			return productCatalogDescriptionDigitalAccess.label;
+		}
 	}
 	return productCatalogDescription[productKey].label;
 };
@@ -587,10 +591,16 @@ export const getProductLabel = (
 export const getProductDescription = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	enablePremiumDigital: boolean,
+	featureFlags?: FeatureFlag,
 ): ProductDescription => {
-	if (enablePremiumDigital && productKey === 'DigitalSubscription') {
-		return productCatalogDescriptionPremiumDigital;
+	if (featureFlags) {
+		const { enablePremiumDigital, enableDigitalAccess } = featureFlags;
+		if (productKey === 'DigitalSubscription' && enablePremiumDigital) {
+			return productCatalogDescriptionPremiumDigital;
+		}
+		if (productKey === 'SupporterPlus' && enableDigitalAccess) {
+			return productCatalogDescriptionDigitalAccess;
+		}
 	}
 	if (isGuardianWeeklyGiftProduct(productKey, ratePlanKey)) {
 		return productCatalogGuardianWeeklyGift[productKey];

@@ -31,10 +31,9 @@ export default function StudentProductCard({
 	ctaLabel: string;
 	discountSummary?: string;
 }) {
-	const { enablePremiumDigital } = getFeatureFlags();
 	const supporterPlusLabel = getProductLabel(
 		'SupporterPlus',
-		enablePremiumDigital,
+		getFeatureFlags(),
 	);
 	return (
 		<section css={container}>

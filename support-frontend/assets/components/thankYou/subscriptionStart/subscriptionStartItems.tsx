@@ -33,12 +33,10 @@ export function BenefitsBodyCopy({
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 }): JSX.Element {
-	const { enablePremiumDigital } = getFeatureFlags();
-
 	const { label: productName } = getProductDescription(
 		productKey,
 		ratePlanKey,
-		enablePremiumDigital,
+		getFeatureFlags(),
 	);
 
 	return (

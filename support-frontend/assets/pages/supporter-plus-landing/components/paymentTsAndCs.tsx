@@ -17,10 +17,7 @@ import {
 	tierThreeTermsLink,
 } from 'helpers/legal';
 import { productLegal } from 'helpers/legalCopy';
-import {
-	getProductLabel,
-	productCatalogDescription,
-} from 'helpers/productCatalog';
+import { getProductLabel } from 'helpers/productCatalog';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -41,7 +38,8 @@ import { getProductFirstDeliveryOrStartDate } from 'pages/weekly-subscription-ch
 import { FinePrint } from './finePrint';
 import { ManageMyAccountLink } from './manageMyAccountLink';
 
-const tierThreeLabel = getProductLabel('TierThree');
+const featureFlags = getFeatureFlags();
+const tierThreeLabel = getProductLabel('TierThree', featureFlags);
 
 const marginTop = css`
 	margin-top: 4px;
@@ -79,7 +77,7 @@ export function FooterTsAndCs({
 	const getProductNameSummary = (): string => {
 		switch (productKey) {
 			case 'GuardianAdLite':
-				return `the ${getProductLabel('GuardianAdLite')}`;
+				return `the ${getProductLabel('GuardianAdLite', featureFlags)}`;
 			case 'TierThree':
 				return tierThreeLabel;
 			default:
@@ -262,7 +260,7 @@ export function PaymentTsAndCs({
 				promotion,
 		  );
 
-	const productLabel = productCatalogDescription[productKey].label;
+	const productLabel = getProductLabel(productKey, featureFlags);
 	const subscriptionBasis = !isStudentOneYearRatePlan
 		? 'on a subscription basis'
 		: '';
@@ -293,13 +291,12 @@ export function PaymentTsAndCs({
 			{accountAndTermsLCopyAndLinks}.
 		</>
 	);
-	const { enablePremiumDigital } = getFeatureFlags();
+
 	const studentSupporterPlusTsAndCs: JSX.Element = (
 		<>
-			You may cancel your{' '}
-			{getProductLabel('SupporterPlus', enablePremiumDigital)} subscription
-			within 14 days of taking out the subscription. If you do, you'll receive a
-			full refund and your subscription will stop immediately.{' '}
+			You may cancel your {getProductLabel('SupporterPlus', featureFlags)}{' '}
+			subscription within 14 days of taking out the subscription. If you do,
+			you'll receive a full refund and your subscription will stop immediately.{' '}
 			{accountAndTermsLCopyAndLinks}. This subscription does not auto-renew.
 		</>
 	);

@@ -48,6 +48,7 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 			// Arrange
 			(getFeatureFlags as jest.Mock).mockReturnValue({
 				enablePremiumDigital: false,
+				enableDigitalAccess: false,
 			});
 
 			// Act

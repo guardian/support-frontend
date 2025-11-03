@@ -40,8 +40,9 @@ function Heading({
 	const isTier3 = productKey === 'TierThree';
 	const contributionProduct = isContributionProduct(productKey);
 	const isGuardianPrint = isPrintProduct(productKey) && !isObserverPrint;
-	const { enablePremiumDigital } = getFeatureFlags();
-	const isPremiumDigital = isDigitalEdition && enablePremiumDigital;
+	const featureFlags = getFeatureFlags();
+	const isPremiumDigital =
+		featureFlags.enablePremiumDigital && isDigitalEdition;
 
 	const contributorName = name && name.length < 10 ? name : '';
 
@@ -81,7 +82,7 @@ function Heading({
 		const { label: productName } = getProductDescription(
 			productKey,
 			ratePlanKey,
-			isPremiumDigital,
+			featureFlags,
 		);
 
 		return (

@@ -28,13 +28,13 @@ export function GuardianAdLiteLanding({
 		selectedCountryGroup: countryGroupId,
 		subPath: '/guardian-ad-lite',
 	}; // hidden initially, will display with more regions
-	const { enablePremiumDigital } = getFeatureFlags();
 
 	/* Return Address loading order:-
 	 * 1. URLSearchParams (SessionStorage write)
 	 * 2. SessionStorage load
 	 * 3. Default https://www.theguardian.com
 	 */
+	const featureFlags = getFeatureFlags();
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsReturn = urlSearchParams.get('returnAddress');
 	if (urlSearchParamsReturn) {
@@ -46,7 +46,7 @@ export function GuardianAdLiteLanding({
 				supportRegionId={supportRegionId}
 				returnLink={getReturnAddress()} // defaults to urlSearchParamsReturn if available
 				isSignedIn={user.isSignedIn}
-				enablePremiumDigital={enablePremiumDigital}
+				featureFlags={featureFlags}
 			/>
 			<PosterComponent />
 			<AccordionFAQ faqItems={adLiteFAQs} />
