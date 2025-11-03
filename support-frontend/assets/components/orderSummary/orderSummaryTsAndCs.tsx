@@ -19,6 +19,7 @@ import {
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
+import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import {
 	isPaperPlusSub,
 	isSundayOnlyNewspaperSub,
@@ -27,7 +28,6 @@ import {
 	isGuardianWeeklyGiftProduct,
 	isGuardianWeeklyOrTierThreeProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
-import { getProductFirstDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 
 const containerSummaryTsCs = css`
 	border-radius: ${space[2]}px;
@@ -114,7 +114,7 @@ export function OrderSummaryTsAndCs({
 	); // promoMessage expected to be a string like: "£10.49/month for the first 6 months, then £20.99/month"
 	const deliveryStart =
 		deliveryDate ??
-		getProductFirstDeliveryOrStartDate(
+		getProductFirstDeliveryDate(
 			productKey,
 			ratePlanKey as ActivePaperProductOptions,
 		);
