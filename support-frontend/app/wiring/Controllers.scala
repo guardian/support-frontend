@@ -192,6 +192,7 @@ trait Controllers {
   lazy val getAddressController = new GetAddress(
     controllerComponents,
     getAddressIOService,
+    addressLookupService,
     actionBuilders,
   )
 

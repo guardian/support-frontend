@@ -2,6 +2,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import com.gu.monitoring.SafeLogging
+import com.gu.support.addressLookup.AddressLookupService
 import com.gu.support.getaddressio.{FindAddressResultError, GetAddressIOService}
 import io.circe.syntax._
 import play.api.libs.circe.Circe
@@ -13,6 +14,7 @@ import scala.concurrent.Future
 class GetAddress(
     components: ControllerComponents,
     getAddressService: GetAddressIOService,
+    addressLookupService: AddressLookupService,
     actionRefiners: CustomActionBuilders,
 ) extends AbstractController(components)
     with Circe
@@ -35,5 +37,9 @@ class GetAddress(
           InternalServerError
       }
     }
+  }
+  def addressLookup(searchTerm: String): Action[AnyContent] = NoCacheAction().async { implicit request =>
+    val suggestions = addressLookupService.lookupAddress(searchTerm)
+    Future.successful(Ok(suggestions.asJson))
   }
 }

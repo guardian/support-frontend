@@ -7,4 +7,6 @@ description := "Scala library to provide shared services to Guardian Support pro
 libraryDependencies ++= Seq(
   "software.amazon.awssdk" % "dynamodb-enhanced" % awsClientVersion2,
   "org.scala-stm" %% "scala-stm" % "0.11.1", // only for promotions
+  "software.amazon.awssdk" % "location" % awsClientVersion2,
+  "software.amazon.awssdk" % "geoplaces" % awsClientVersion2,
 )

@@ -136,6 +136,7 @@ GET  /uk/subscribe/paper                                           controllers.P
 GET  /subscribe/paper/checkout                                     controllers.Application.redirectCheckoutPaper(fulfilment: String, product: String)
 
 GET /postcode-lookup/:postcode                                     controllers.GetAddress.findAddress(postcode: String)
+GET /address-lookup/:searchTerm                                    controllers.GetAddress.addressLookup(searchTerm: String)
 GET /delivery-agents/:postcode                                     controllers.PaperRound.getAgents(postcode: String)
 
 POST /subscribe/create                                             controllers.CreateSubscriptionController.create()

@@ -16,7 +16,10 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import { countryGroups } from '@modules/internationalisation/countryGroup';
 import React from 'react';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
-import { PostcodeFinder } from 'components/subscriptionCheckouts/address/postcodeFinder';
+import {
+	AddressLookupResult,
+	PostcodeFinder,
+} from 'components/subscriptionCheckouts/address/postcodeFinder';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type {
 	ActiveProductKey,
@@ -285,6 +288,13 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 						props.setLineOne(lineOne ?? '');
 						props.setLineTwo(lineTwo ?? '');
 						props.setTownCity(city ?? '');
+					}}
+					onLookupResultSelected={(
+						addressLookupResult: AddressLookupResult,
+					) => {
+						props.setLineOne(addressLookupResult.address.lineOne ?? '');
+						props.setLineTwo(addressLookupResult.address.lineTwo ?? '');
+						props.setTownCity(addressLookupResult.address.city ?? '');
 					}}
 				/>
 			) : null}
