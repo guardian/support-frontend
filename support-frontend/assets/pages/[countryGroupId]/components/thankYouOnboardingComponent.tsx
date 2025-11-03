@@ -3,6 +3,7 @@ import { neutral, space } from '@guardian/source/foundations';
 import { Container } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { useRef } from 'preact/hooks';
 import { useEffect, useMemo, useState } from 'react';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
@@ -40,6 +41,11 @@ const textStyle = css`
 	margin-bottom: ${space[3]}px;
 `;
 
+const identityFrameStyles = css`
+	overflow: hidden;
+	border-radius: ${space[2]}px;
+`;
+
 type ThankYouOnboardingProps = {
 	supportRegionId: SupportRegionId;
 	csrf: CsrfState;
@@ -55,6 +61,12 @@ type ThankYouOnboardingProps = {
 	landingPageSettings: LandingPageVariant;
 	identityUserType: UserType;
 };
+
+interface MessageEventData {
+	type: string;
+	context: string;
+	height: number;
+}
 
 enum OnboardingSteps {
 	Summary = 'summary',
@@ -72,7 +84,7 @@ function ThankYouOnboardingComponent({
 	landingPageSettings,
 	identityUserType,
 }: ThankYouOnboardingProps) {
-	const user = getUser();
+	const { isSignedIn } = getUser();
 
 	// TODO: Dynamically generated based on Products and User profile
 	const onboardingSteps = useMemo(() => {
@@ -101,9 +113,19 @@ function ThankYouOnboardingComponent({
 	const [hasFeastMobileAppDownloaded, setHasFeastMobileAppDownloaded] =
 		useState(false);
 
+	const userNotSignedIn = !isSignedIn && identityUserType === 'current';
+	const guestUser = !isSignedIn && identityUserType === 'new';
+	const showIdentityIframe = userNotSignedIn || guestUser;
+	const documentLocation = document.location;
+	const iframeOrigin = `${
+		documentLocation.protocol
+	}//${documentLocation.hostname.replace('support', 'profile')}`;
+	const iframeTarget = `${iframeOrigin}${
+		guestUser ? '/onboarding/register' : '/onboarding/signin'
+	}`;
 	// User: New or Current? Signed In or not?
 	console.debug('identityUserType', identityUserType);
-	console.debug('user', user, user.isSignedIn);
+	console.debug('user isSignedIn', isSignedIn);
 
 	// Product information
 	console.debug('payment', payment);
@@ -132,6 +154,30 @@ function ThankYouOnboardingComponent({
 		}
 	};
 
+	const identityIframeRef = useRef<HTMLIFrameElement>(null);
+
+	useEffect(() => {
+		const receiveIframeMessage = (event: MessageEvent) => {
+			const origin = event.origin || '';
+			if (origin !== iframeOrigin) {
+				return;
+			}
+			const data = event.data as MessageEventData;
+
+			if (data.context === 'supporterOnboarding' && data.type === 'setHeight') {
+				const iframeEl = identityIframeRef.current;
+				if (iframeEl) {
+					iframeEl.style.height = `${data.height}px`;
+				}
+			}
+		};
+		window.addEventListener('message', receiveIframeMessage, false);
+
+		return () => {
+			window.removeEventListener('message', receiveIframeMessage);
+		};
+	}, []);
+
 	useEffect(() => {
 		const urlParams = new URLSearchParams(window.location.search);
 
@@ -151,7 +197,7 @@ function ThankYouOnboardingComponent({
 		const COOKIE_TTL_DAYS = 1;
 
 		const loadAnalyticsData = async () => {
-			if (!user.isSignedIn) {
+			if (!isSignedIn) {
 				return;
 			}
 
@@ -208,7 +254,7 @@ function ThankYouOnboardingComponent({
 		};
 
 		void loadAnalyticsData();
-	}, [user.isSignedIn]);
+	}, [isSignedIn]);
 
 	return (
 		<PageScaffold
@@ -229,6 +275,14 @@ function ThankYouOnboardingComponent({
 							Thank you for supporting The Guardian. This is a new onboarding
 							flow for region: <strong>{supportRegionId}</strong>
 						</p>
+						{showIdentityIframe && (
+							<iframe
+								ref={identityIframeRef}
+								src={iframeTarget}
+								width="100%"
+								css={identityFrameStyles}
+							></iframe>
+						)}
 
 						{/* TODO: Improve on this placeholder navigation */}
 						{currentStep === OnboardingSteps.Summary && (
