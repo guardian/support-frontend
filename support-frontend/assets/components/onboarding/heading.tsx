@@ -108,7 +108,7 @@ const thankYouSubtext = css`
 	}
 `;
 
-export interface OnboardingHeadingProps extends CSSOverridable {
+interface OnboardingHeadingProps extends CSSOverridable {
 	onboardingStep: OnboardingSteps;
 }
 
