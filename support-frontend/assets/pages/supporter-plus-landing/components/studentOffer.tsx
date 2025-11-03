@@ -117,6 +117,9 @@ export function StudentOffer({
 	}
 	const featureFlags = getFeatureFlags();
 	const productLabel = getProductLabel('SupporterPlus', featureFlags);
+	const url = `/${countryGroups[countryGroupId].supportRegionId}/student${
+		featureFlags.enableDigitalAccess ? '?enableDigitalAccess' : ''
+	}`;
 	return (
 		<>
 			<div css={dividerContainer}>
@@ -132,7 +135,7 @@ export function StudentOffer({
 					{price}&nbsp;a&nbsp;year.
 				</p>
 				<LinkButton
-					href={`/${countryGroups[countryGroupId].supportRegionId}/student`}
+					href={url}
 					priority="tertiary"
 					size="default"
 					cssOverrides={btnStyleOverrides}
