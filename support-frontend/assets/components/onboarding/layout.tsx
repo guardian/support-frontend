@@ -25,10 +25,7 @@ interface OnboardingLayoutProps {
 	onboardingStep: OnboardingSteps;
 }
 
-function OnboardingLayout({
-	children,
-	onboardingStep,
-}: OnboardingLayoutProps) {
+function OnboardingLayout({ children, onboardingStep }: OnboardingLayoutProps) {
 	return (
 		<PageScaffold
 			header={<Header />}
@@ -48,6 +45,6 @@ function OnboardingLayout({
 			</Container>
 		</PageScaffold>
 	);
-};
+}
 
 export default OnboardingLayout;
