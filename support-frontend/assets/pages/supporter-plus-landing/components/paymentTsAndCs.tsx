@@ -30,10 +30,10 @@ import {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { helpCentreUrl } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
+import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
-import { getProductFirstDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { FinePrint } from './finePrint';
 import { ManageMyAccountLink } from './manageMyAccountLink';
 
@@ -226,7 +226,7 @@ export function PaymentTsAndCs({
 		productKey,
 		ratePlanKey,
 	);
-	const deliveryDate = getProductFirstDeliveryOrStartDate(
+	const deliveryDate = getProductFirstDeliveryDate(
 		productKey,
 		ratePlanKey as ActivePaperProductOptions,
 	);
