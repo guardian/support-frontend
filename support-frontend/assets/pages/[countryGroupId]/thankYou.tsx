@@ -20,8 +20,8 @@ import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { setHideSupportMessaginCookie } from '../../helpers/storage/contributionsCookies';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
+import OnboardingComponent from './components/onboardingComponent';
 import { ThankYouComponent } from './components/thankYouComponent';
-import ThankYouOnboardingComponent from './components/thankYouOnboardingComponent';
 
 const PRODUCTS_WITH_THANK_YOU_ONBOARDING: Array<ActiveProductKey | undefined> =
 	['SupporterPlus'];
@@ -168,7 +168,7 @@ export function ThankYou({
 		PRODUCTS_WITH_THANK_YOU_ONBOARDING.includes(productKey)
 	) {
 		return (
-			<ThankYouOnboardingComponent
+			<OnboardingComponent
 				supportRegionId={supportRegionId}
 				csrf={csrf}
 				payment={payment}
