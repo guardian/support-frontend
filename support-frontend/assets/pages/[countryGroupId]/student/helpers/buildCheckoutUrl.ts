@@ -1,4 +1,5 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -33,6 +34,9 @@ export default function buildCheckoutUrl(
 
 	if (promoCode) {
 		urlSearchParams.set('promoCode', promoCode);
+	}
+	if (getFeatureFlags().enableDigitalAccess) {
+		urlSearchParams.set('enableDigitalAccess', 'true');
 	}
 	return `/${supportRegionId}/checkout?${urlSearchParams.toString()}`;
 }
