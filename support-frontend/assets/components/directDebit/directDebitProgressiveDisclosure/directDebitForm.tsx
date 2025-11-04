@@ -68,7 +68,10 @@ const fieldErrorMessages: Record<DirectDebitFieldName, string> = {
 
 const recaptchaErrorMessage = "Please check the 'I'm not a robot' checkbox";
 
-const fieldValidationFunctions: Record<DirectDebitFieldName, (fieldValue: string) => boolean> = {
+const fieldValidationFunctions: Record<
+	DirectDebitFieldName,
+	(fieldValue: string) => boolean
+> = {
 	accountHolderName: (fieldValue) =>
 		!!/^\D+$/.exec(fieldValue) && zuoraCompatibleString(fieldValue),
 	sortCode: (fieldValue) => !!/^\d{6}$/.exec(fieldValue),
