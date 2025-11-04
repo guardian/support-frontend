@@ -32,7 +32,6 @@ export default function GridPicture(props: GridPictureProp) {
 		<picture className="component-grid-picture">
 			{sources}
 			<img
-				className="component-grid-picture__image"
 				src={gridUrl(props.fallback, props.fallbackSize, props.fallbackImgType)}
 				alt={props.altText}
 			/>
