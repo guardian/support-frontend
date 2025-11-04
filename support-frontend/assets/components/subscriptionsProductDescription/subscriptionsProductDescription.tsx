@@ -1,4 +1,3 @@
-import { css } from '@emotion/react';
 import { brandAlt } from '@guardian/source/foundations';
 import AnchorButton from 'components/button/anchorButton';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
@@ -58,18 +57,11 @@ function SubscriptionsProductDescription({
 }: PropTypes): JSX.Element {
 	return (
 		<div>
-			<h2
-				css={[subscriptionTitle, isFeature ? subscriptionTitleFeature : css``]}
-			>
+			<h2 css={[subscriptionTitle, isFeature && subscriptionTitleFeature]}>
 				{title}
 			</h2>
 			{offer && (
-				<h3
-					css={[
-						subscriptionOffer,
-						isFeature ? subscriptionOfferFeature : css``,
-					]}
-				>
+				<h3 css={[subscriptionOffer, isFeature && subscriptionOfferFeature]}>
 					{offer}
 				</h3>
 			)}
@@ -103,7 +95,7 @@ function SubscriptionsProductDescription({
 			<div
 				css={[
 					subscriptionButtonsContainer,
-					isFeature ? subscriptionButtonsContainerFeature : css``,
+					isFeature && subscriptionButtonsContainerFeature,
 				]}
 			>
 				{buttons.map((button, index) => (

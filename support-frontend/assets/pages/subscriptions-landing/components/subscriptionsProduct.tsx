@@ -1,4 +1,4 @@
-import { css, type SerializedStyles } from '@emotion/react';
+import type { SerializedStyles } from '@emotion/react';
 import type { ReactNode } from 'react';
 import SubscriptionsProductDescription from 'components/subscriptionsProductDescription/subscriptionsProductDescription';
 import 'helpers/types/option';
@@ -40,14 +40,14 @@ function SubscriptionsProduct({
 		<div
 			css={[
 				subscriptionsProductContainer,
-				isFeature ? subscriptionsProductContainerFeature : css``,
+				isFeature && subscriptionsProductContainerFeature,
 				cssOverrides,
 			]}
 		>
 			<div
 				css={[
 					subscriptionsImageContainer,
-					isFeature ? subscriptionsImageContainerFeature : css``,
+					isFeature && subscriptionsImageContainerFeature,
 				]}
 			>
 				<div css={isFeature ? subscriptionsImageFeature : subscriptionsImage}>
@@ -57,13 +57,13 @@ function SubscriptionsProduct({
 			<div
 				css={[
 					subscriptionsDescriptionContainer,
-					isFeature ? subscriptionsDescriptionContainerFeature : css``,
+					isFeature && subscriptionsDescriptionContainerFeature,
 				]}
 			>
 				<div
 					css={[
 						subscriptionsDescription,
-						isFeature ? subscriptionsDescriptionFeature : css``,
+						isFeature && subscriptionsDescriptionFeature,
 					]}
 				>
 					<SubscriptionsProductDescription
