@@ -358,7 +358,6 @@ function showPaymentMethod(
 			break;
 
 		case null:
-		case undefined:
 			console.log('Undefined payment method');
 			break;
 

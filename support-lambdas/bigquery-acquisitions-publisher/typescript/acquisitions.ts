@@ -1,11 +1,11 @@
 import type { IsoCurrency } from './currencySchema';
 import type {
+	AcquisitionProduct,
 	IsoCountry,
 	PaymentFrequency,
-	Product,
 	PaymentProvider,
 	PrintOptions,
-	AcquisitionProduct,
+	Product,
 } from './schemas';
 
 // This is the shape of the data we'll send to BigQuery
@@ -19,7 +19,7 @@ export type FactAcquisitionEventRow = {
 	component_type?: string | null;
 	campaign_codes: [string] | [];
 	referrer_url?: string | null;
-	ab_tests: { name: string; variant: string }[];
+	ab_tests: Array<{ name: string; variant: string }>;
 	payment_frequency: PaymentFrequency;
 	payment_provider?: PaymentProvider | null;
 	print_options?: { product: string; delivery_country_code: string } | null;
@@ -28,7 +28,7 @@ export type FactAcquisitionEventRow = {
 	page_view_id?: string | null;
 	referrer_page_view_id?: string | null;
 	promo_code?: string | null;
-	query_parameters: { key: string; value: string }[];
+	query_parameters: Array<{ key: string; value: string }>;
 	reused_existing_payment_method: boolean;
 	acquisition_type: string;
 	reader_type: string;
@@ -98,7 +98,7 @@ export const transformAcquisitionProductForBigQuery = (
 		zuora_subscription_number: acquisitionProduct.zuoraSubscriptionNumber,
 		contribution_id: acquisitionProduct.contributionId,
 		payment_id: acquisitionProduct.paymentId,
-		platform: mapPlatformName(acquisitionProduct.platform || 'SUPPORT'),
+		platform: mapPlatformName(acquisitionProduct.platform ?? 'SUPPORT'),
 		labels: acquisitionProduct.labels,
 		source: acquisitionProduct.source,
 	};

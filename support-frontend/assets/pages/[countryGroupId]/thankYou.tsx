@@ -21,8 +21,8 @@ import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { setHideSupportMessaginCookie } from '../../helpers/storage/contributionsCookies';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
+import OnboardingComponent from './components/onboardingComponent';
 import { ThankYouComponent } from './components/thankYouComponent';
-import ThankYouOnboardingComponent from './components/thankYouOnboardingComponent';
 
 const SKIP_NEW_ONBOARDING_EXPERIENCE_KEY = 'gu.skipNewOnboardingExperience';
 
@@ -172,7 +172,7 @@ export function ThankYou({
 		storage.session.get(SKIP_NEW_ONBOARDING_EXPERIENCE_KEY) !== 'true'
 	) {
 		return (
-			<ThankYouOnboardingComponent
+			<OnboardingComponent
 				supportRegionId={supportRegionId}
 				csrf={csrf}
 				payment={payment}

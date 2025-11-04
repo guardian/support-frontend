@@ -23,9 +23,7 @@ export interface AmountValuesObject {
 	hideChooseYourAmount: boolean;
 }
 
-type AmountsCardData = {
-	[key in ContributionType]: AmountValuesObject;
-};
+type AmountsCardData = Record<ContributionType, AmountValuesObject>;
 
 export interface AmountsVariant {
 	variantName: string;

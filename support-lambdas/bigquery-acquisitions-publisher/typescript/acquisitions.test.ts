@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import type {
+	FactAcquisitionEventRow} from './acquisitions';
 import {
-	FactAcquisitionEventRow,
 	transformAcquisitionProductForBigQuery,
 } from './acquisitions';
 import type { AcquisitionProduct } from './schemas';
