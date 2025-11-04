@@ -1,38 +1,20 @@
-import { css } from '@emotion/react';
-import {
-	from,
-	neutral,
-	palette,
-	textEgyptian17,
-} from '@guardian/source/foundations';
+import { brandAlt } from '@guardian/source/foundations';
 import AnchorButton from 'components/button/anchorButton';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import type { ProductBenefit } from 'helpers/productCatalog';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
-
-const checkmarkBenefitList = css`
-	display: block;
-	${textEgyptian17}
-	margin: 16px 20px 18px 0;
-	line-height: 140%;
-	${from.mobileLandscape} {
-		margin: 27px 20px 25px 0;
-	}
-	${from.desktop} {
-		margin: 45px 20px 25px 0;
-	}
-
-	:before {
-		content: '';
-		position: absolute;
-		width: 100%;
-		margin-top: -6px;
-		margin-left: -52px;
-		${from.tablet} {
-			border-top: 1px solid ${neutral[86]};
-		}
-	}
-`;
+import {
+	subscriptionBenefit,
+	subscriptionButtonsContainer,
+	subscriptionButtonsContainerFeature,
+	subscriptionDescription,
+	subscriptionOffer,
+	subscriptionOfferFeature,
+	subscriptionSubtitleLarge,
+	subscriptionSubtitleSmall,
+	subscriptionTitle,
+	subscriptionTitleFeature,
+} from './subscriptionsProductDescriptionStyles';
 
 type PropTypes = {
 	title: string;
@@ -75,14 +57,17 @@ function SubscriptionsProductDescription({
 }: PropTypes): JSX.Element {
 	return (
 		<div>
-			<h2 className="subscriptions__product-title">{title}</h2>
-			{offer && <h3 className="subscriptions__sales">{offer}</h3>}
+			<h2 css={[subscriptionTitle, isFeature && subscriptionTitleFeature]}>
+				{title}
+			</h2>
 			{offer && (
-				<h3 className="subscriptions__product-subtitle--small">{subtitle}</h3>
+				<h3 css={[subscriptionOffer, isFeature && subscriptionOfferFeature]}>
+					{offer}
+				</h3>
 			)}
-			{!offer && (
-				<h3 className="subscriptions__product-subtitle--large">{subtitle}</h3>
-			)}
+			<h3 css={offer ? subscriptionSubtitleSmall : subscriptionSubtitleLarge}>
+				{subtitle}
+			</h3>
 			{benefits ? (
 				<BenefitsCheckList
 					benefitsCheckListData={benefits.map((benefit) => {
@@ -99,20 +84,19 @@ function SubscriptionsProductDescription({
 						};
 					})}
 					benefitsHeading="Subscribe below to unlock the following benefits:"
-					iconColor={palette.brandAlt[400]}
-					cssOverrides={checkmarkBenefitList}
+					iconColor={brandAlt[400]}
+					cssOverrides={subscriptionBenefit}
 				/>
 			) : (
-				<p className="subscriptions__description">{description}</p>
+				<p className="subscriptions__description" css={subscriptionDescription}>
+					{description}
+				</p>
 			)}
 			<div
-				className={
-					isFeature
-						? benefits
-							? 'subscriptions__button-container--feature--benefits'
-							: 'subscriptions__button-container--feature'
-						: 'subscriptions__button-container'
-				}
+				css={[
+					subscriptionButtonsContainer,
+					isFeature && subscriptionButtonsContainerFeature,
+				]}
 			>
 				{buttons.map((button, index) => (
 					<AnchorButton

@@ -21,7 +21,6 @@ const benefitHeadingCss = css`
 `;
 
 const checkListIconCss = (style: CheckListStyle) => css`
-	vertical-align: top;
 	padding-right: ${style === 'compact' ? '4px' : '10px'};
 	line-height: 0;
 `;
