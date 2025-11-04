@@ -24,8 +24,8 @@ export const afterEachTasks = (
 				);
 			}
 		}
-		for (const page1 of context.pages()) {
-			await page1.close();
+		for (const page of context.pages()) {
+			await page.close();
 		}
 	});
 };
