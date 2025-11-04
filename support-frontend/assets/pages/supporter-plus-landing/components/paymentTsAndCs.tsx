@@ -299,12 +299,16 @@ export function PaymentTsAndCs({
 	const paymentTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
 		DigitalSubscription: (
 			<div>
-				Payment taken after the first 14 day free trial. At the end of the free
-				trial period your subscription will auto-renew, and you will be charged,
-				each month at the full price of £14.99 per month or £149 per year unless
-				you cancel. You can cancel at any time before your next renewal date.
-				Cancellation will take effect at the end of your current subscription
-				month. To cancel, go to {manageMyAccountLink()} or see our{' '}
+				Your first payment will be taken on day 15 after signing up but you can
+				access your benefits straight away. Unless you cancel, each{' '}
+				{billingPeriod.toLocaleLowerCase()} payment will be taken on this date
+				using your chosen payment method. You can cancel your subscription at
+				any time before your next renewal date. If you cancel your subscription
+				within 14 days of signing up, your subscription will stop immediately
+				and we will not take the first payment from you. Cancellation of your
+				subscription after 14 days will take effect at the end of your current{' '}
+				{billingPeriod.toLocaleLowerCase()} payment period. To cancel, go to{' '}
+				{manageMyAccountLink()} or see our{' '}
 				{termsLink('Terms', digitalSubscriptionTermsLink)}.
 			</div>
 		),

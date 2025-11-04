@@ -38,7 +38,7 @@ const guardianAdLiteTermsLink = `https://www.theguardian.com/guardian-ad-lite-tc
 const paperTermsLink =
 	'https://www.theguardian.com/info/2021/aug/04/guardian-and-observer-voucher-subscription-card-and-home-delivery-subscription-services-terms-and-conditions';
 const digitalSubscriptionTermsLink =
-	'https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions';
+	'https://www.theguardian.com/info/2025/oct/31/guardian-subscription-terms-and-conditions';
 const guardianWeeklyTermsLink =
 	'https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions';
 const observerLinks = {
