@@ -41,7 +41,7 @@ test.describe('Guardian Weekly Gift Checkout', () =>
 				`/${internationalisationId.toLowerCase()}/subscribe/weekly/gift`,
 				{
 					context,
-					baseURL,
+					baseURL: baseURL ?? 'https://support.theguardian.com',
 					product,
 					ratePlan,
 					paymentType,

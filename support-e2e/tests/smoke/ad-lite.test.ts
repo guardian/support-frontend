@@ -22,14 +22,15 @@ test.describe('Ad Lite Checkout', () =>
 				`/uk/guardian-ad-lite`,
 				{
 					context,
-					baseURL,
+					baseURL: baseURL ?? 'https://support.theguardian.com',
 					product: 'GuardianAdLite',
 					paymentType,
 					internationalisationId: 'UK',
+					ratePlan: 'Monthly',
 				},
 				async (page) => {
 					// Transition from landing page to checkout:
-					const purchaseButton = await page.getByText('Get Guardian Ad-Lite');
+					const purchaseButton = page.getByText('Get Guardian Ad-Lite');
 					await purchaseButton.click();
 				},
 			);

@@ -1,6 +1,7 @@
-import { BrowserContext, expect, Page } from '@playwright/test';
-import { setupPage } from './page';
+import type { BrowserContext, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { completeGenericCheckout } from './completeGenericCheckout';
+import { setupPage } from './page';
 
 type TestDetails = {
 	context: BrowserContext;
@@ -9,7 +10,7 @@ type TestDetails = {
 	paymentType: string;
 	internationalisationId: string;
 	postCode?: string;
-	ratePlan?: string;
+	ratePlan: string;
 };
 
 export const visitLandingPageAndCompleteCheckout = async (
