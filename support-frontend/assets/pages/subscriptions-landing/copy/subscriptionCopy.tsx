@@ -3,7 +3,7 @@ import type { SerializedStyles } from '@emotion/utils';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import * as React from 'react';
+import type * as React from 'react';
 import PaperPackShot from 'components/packshots/paperPackshot';
 import WeeklyPackShot from 'components/packshots/weeklyPackshot';
 import type { Participations } from 'helpers/abTests/models';
