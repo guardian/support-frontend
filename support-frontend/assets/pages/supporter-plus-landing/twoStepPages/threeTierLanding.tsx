@@ -464,7 +464,7 @@ export function ThreeTierLanding({
 			countryGroupId,
 		),
 		cta: {
-			copy: 'Subscribe',
+			copy: settings.products.TierThree.cta.copy,
 		},
 	};
 	const tier3ProductDescription = enablePremiumDigital
