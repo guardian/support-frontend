@@ -195,13 +195,13 @@ export default function Tooltip({
 	const { x, y, refs, strategy, context } = useFloating({
 		open,
 		onOpenChange: setOpen,
-		placement: placement ? placement : 'top',
+		placement: placement ?? 'top',
 		// Make sure the tooltip stays on the screen
 		whileElementsMounted: autoUpdate,
 		middleware: [
 			offset({
-				mainAxis: yAxisOffset ? yAxisOffset : 16,
-				crossAxis: xAxisOffset ? xAxisOffset : 0,
+				mainAxis: yAxisOffset ?? 16,
+				crossAxis: xAxisOffset ?? 0,
 			}),
 			flip({
 				// Ensure the tooltip only appears above / below reference element

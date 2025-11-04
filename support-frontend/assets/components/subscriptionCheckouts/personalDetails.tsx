@@ -5,7 +5,7 @@ import {
 	TextInput,
 	themeButtonReaderRevenueBrandAlt,
 } from '@guardian/source/react-components';
-import React from 'react';
+import type React from 'react';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import { emailRegexPattern } from 'helpers/forms/formValidation';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';

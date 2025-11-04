@@ -1,7 +1,7 @@
-// components
 import { getSubscriptionCopy } from '../copy/subscriptionCopy';
-import type { SubscriptionsLandingPropTypes } from '../subscriptionsLandingProps';
+import type { SubscriptionsLandingProps } from '../subscriptionsLandingProps';
 import FeatureHeader from './featureHeader';
+import { subscriptionsProductContainerStyle } from './subscriptionsLandingContentStyles';
 import SubscriptionsProduct from './subscriptionsProduct';
 
 const isFeature = (index: number) => index === 0 || index === 2; // make the first and third card a feature
@@ -10,7 +10,7 @@ function SubscriptionsLandingContent({
 	countryGroupId,
 	pricingCopy,
 	participations,
-}: SubscriptionsLandingPropTypes): JSX.Element | null {
+}: SubscriptionsLandingProps): JSX.Element | null {
 	if (!pricingCopy) {
 		return null;
 	}
@@ -39,7 +39,7 @@ function SubscriptionsLandingContent({
 			id="qa-subscriptions-landing-page"
 		>
 			<FeatureHeader featureHeaderMsg={supportMsg} />
-			<div className="subscriptions__product-container">
+			<div css={subscriptionsProductContainerStyle}>
 				{subscriptionCopy.map((product, index) => (
 					<SubscriptionsProduct
 						title={product.title}
@@ -57,7 +57,7 @@ function SubscriptionsLandingContent({
 								: product.offer
 						}
 						isFeature={isFeature(index)}
-						classModifier={product.classModifier ?? []}
+						cssOverrides={product.cssOverrides}
 						benefits={product.benefits}
 					/>
 				))}

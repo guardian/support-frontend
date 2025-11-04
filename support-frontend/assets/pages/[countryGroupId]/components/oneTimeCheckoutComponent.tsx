@@ -99,8 +99,8 @@ import {
 	preventDefaultValidityMessage,
 } from '../validation';
 import { BackButton } from './backButton';
-import CheckoutLayout from './checkoutLayout';
 import { FormSection, Legend, shorterBoxMargin } from './form';
+import GuardianPageLayout from './GuardianPageLayout';
 import {
 	checkedRadioLabelColour,
 	defaultRadioLabelColour,
@@ -605,7 +605,7 @@ export function OneTimeCheckoutComponent({
 		: 'Pay now';
 
 	return (
-		<CheckoutLayout>
+		<GuardianPageLayout>
 			<Box>
 				<BoxContents>
 					<div
@@ -909,7 +909,7 @@ export function OneTimeCheckoutComponent({
 							}}
 							transactionCostTotal={simpleFormatAmount(
 								currency,
-								finalAmount ? finalAmount : 0,
+								finalAmount ?? 0,
 							)}
 						/>
 
@@ -961,6 +961,6 @@ export function OneTimeCheckoutComponent({
 					<p>Please wait</p>
 				</LoadingOverlay>
 			)}
-		</CheckoutLayout>
+		</GuardianPageLayout>
 	);
 }

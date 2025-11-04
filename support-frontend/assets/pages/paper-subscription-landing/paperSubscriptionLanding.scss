@@ -6,20 +6,8 @@
 }
 
 /**** FOOTER HACK ****/
-.component-left-margin-section:before {
-	content: none;
-}
-
 .component-content.component-content--feature,
 .component-left-margin-section__content {
 	margin: 0 auto;
 	max-width: 1290px;
-}
-
-.component-footer {
-	background-color: gu-colour('brand-main');
-}
-
-.component-content__content {
-	max-width: unset;
 }

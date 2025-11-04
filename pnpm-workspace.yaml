@@ -8,7 +8,6 @@ packages:
 catalog:
   typescript: ^5.2.2
   zod: ^3.23.8
-  eslint: ^8.57.0
   prettier: ^2.8.8
   jest: ^29.2.4
   jest-runner-groups: ^2.2.0
@@ -21,6 +20,5 @@ catalog:
   "@aws-sdk/credential-provider-node": 3.699.0
   "@aws-sdk/client-dynamodb": ^3.879.0
   "@aws-sdk/util-dynamodb": ^3.879.0
-  "@guardian/eslint-config-typescript": 12.0.0
   "@guardian/prettier": ^2.1.5
   "@guardian/support-service-lambdas": "guardian/support-service-lambdas#c86cc9cab9b8349bcbf43b64841568f3312a0868"

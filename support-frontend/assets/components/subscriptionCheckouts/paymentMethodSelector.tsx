@@ -7,7 +7,8 @@ import {
 	SvgPayPalBrand,
 } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
-import React, { useEffect } from 'react';
+import type React from 'react';
+import { useEffect } from 'react';
 import Rows from 'components/base/rows';
 import SvgSepa from 'components/svgs/sepa';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';

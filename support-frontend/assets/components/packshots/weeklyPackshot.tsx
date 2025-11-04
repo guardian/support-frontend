@@ -1,8 +1,9 @@
 import GridPicture from 'components/gridPicture/gridPicture';
+import { weeklyPackShotContainer } from './weeklyPackshotStyle';
 
-function GuardianWeeklyPackShotHero(): JSX.Element {
+function WeeklyPackShot(): JSX.Element {
 	return (
-		<div className="subscriptions-feature-packshot">
+		<div css={weeklyPackShotContainer}>
 			<GridPicture
 				sources={[
 					{
@@ -29,4 +30,4 @@ function GuardianWeeklyPackShotHero(): JSX.Element {
 	);
 }
 
-export default GuardianWeeklyPackShotHero;
+export default WeeklyPackShot;
