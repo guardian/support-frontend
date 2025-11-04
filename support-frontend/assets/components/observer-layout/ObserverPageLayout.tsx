@@ -34,30 +34,39 @@ const columns = css`
 	padding-top: ${space[2]}px;
 `;
 
-type CheckoutLayoutProps = {
+export default function ObserverPageLayout({
+	children,
+	noBorders = false,
+}: {
 	children: ReactNode;
-};
-
-export default function ObserverLayout({ children }: CheckoutLayoutProps) {
+	noBorders?: boolean;
+	noFooterLinks?: boolean;
+}) {
 	return (
 		<PageScaffold header={<></>} footer={<></>}>
-			<Container
-				sideBorders
-				topBorder
-				cssOverrides={darkBackgroundContainerMobile}
-			>
-				<Columns cssOverrides={columns} collapseUntil="tablet">
-					<Column span={[0, 2, 2, 3, 4]}></Column>
-					<Column span={[1, 8, 8, 8, 8]}>
-						<SecureTransactionIndicator
-							align="center"
-							theme="dark"
-							cssOverrides={secureTransactionIndicator}
-						/>
-						{children}
-					</Column>
-				</Columns>
-			</Container>
+			{noBorders ? (
+				<Container cssOverrides={darkBackgroundContainerMobile}>
+					{children}
+				</Container>
+			) : (
+				<Container
+					sideBorders
+					topBorder
+					cssOverrides={darkBackgroundContainerMobile}
+				>
+					<Columns cssOverrides={columns} collapseUntil="tablet">
+						<Column span={[0, 2, 2, 3, 4]}></Column>
+						<Column span={[1, 8, 8, 8, 8]}>
+							<SecureTransactionIndicator
+								align="center"
+								theme="dark"
+								cssOverrides={secureTransactionIndicator}
+							/>
+							{children}
+						</Column>
+					</Columns>
+				</Container>
+			)}
 		</PageScaffold>
 	);
 }
