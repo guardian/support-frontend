@@ -10,7 +10,7 @@ import {
 } from '@guardian/source/foundations';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { Container } from 'components/layout/container';
-import type { FeatureFlag } from 'helpers/featureFlags';
+import type { FeatureFlags } from 'helpers/featureFlags';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
@@ -89,7 +89,7 @@ type HeaderCardsProps = {
 	supportRegionId: SupportRegionId;
 	isSignedIn: boolean;
 	returnLink: string;
-	featureFlags: FeatureFlag;
+	featureFlags: FeatureFlags;
 };
 
 export function HeaderCards({

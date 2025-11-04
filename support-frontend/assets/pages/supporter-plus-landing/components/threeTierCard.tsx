@@ -19,7 +19,7 @@ import {
 	BenefitsCheckList,
 	checkListTextItemCss,
 } from 'components/checkoutBenefits/benefitsCheckList';
-import type { FeatureFlag } from 'helpers/featureFlags';
+import type { FeatureFlags } from 'helpers/featureFlags';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
@@ -39,7 +39,7 @@ export type CardContent = LandingPageProductDescription & {
 		| 'SupporterPlus'
 		| 'Contribution'
 		| 'DigitalSubscription';
-	featureFlags?: FeatureFlag;
+	featureFlags?: FeatureFlags;
 };
 
 export type ThreeTierCardProps = {

@@ -12,7 +12,7 @@ import type {
 } from '@modules/product-catalog/productCatalog';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { Participations } from './abTests/models';
-import type { FeatureFlag } from './featureFlags';
+import type { FeatureFlags } from './featureFlags';
 
 export const contributionLabel = 'Support';
 export const supporterPlusLabel = 'All-access digital';
@@ -574,7 +574,7 @@ const productCatalogGuardianWeeklyGift = {
 
 export const getProductLabel = (
 	productKey: ActiveProductKey,
-	featureFlags?: FeatureFlag,
+	featureFlags?: FeatureFlags,
 ): string => {
 	if (featureFlags) {
 		const { enablePremiumDigital, enableDigitalAccess } = featureFlags;
@@ -591,7 +591,7 @@ export const getProductLabel = (
 export const getProductDescription = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	featureFlags?: FeatureFlag,
+	featureFlags?: FeatureFlags,
 ): ProductDescription => {
 	if (featureFlags) {
 		const { enablePremiumDigital, enableDigitalAccess } = featureFlags;
