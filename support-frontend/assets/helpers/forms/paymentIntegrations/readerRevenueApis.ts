@@ -321,9 +321,7 @@ function checkRegularStatus(
 				return PaymentSuccess;
 
 			default: {
-				const failureReason = json.failureReason
-					? json.failureReason
-					: 'unknown';
+				const failureReason = json.failureReason ?? 'unknown';
 				const failureResult: PaymentResult = {
 					paymentStatus: 'failure',
 					error: failureReason,

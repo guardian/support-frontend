@@ -18,7 +18,7 @@ const logRenderingException = (e: Error): void => {
 	logException(
 		`Fatal error rendering page: ${window.location.pathname}. Error message: ${
 			e.message
-		}. Stack trace: ${e.stack ? e.stack : 'none'}`,
+		}. Stack trace: ${e.stack ?? 'none'}`,
 	);
 };
 

@@ -49,9 +49,7 @@ type GuardianWeeklyDomesticRatePlanKey =
 type SubscriptionCardRatePlanKey = ProductRatePlanKey<'SubscriptionCard'>;
 type ContributionRatePlanKey = ProductRatePlanKey<'Contribution'>;
 
-export type ActiveRatePlanKey = keyof {
-	[Key in
-		| OneTimeContributionRatePlanKey
+export type ActiveRatePlanKey = keyof Record<| OneTimeContributionRatePlanKey
 		| GuardianAdLiteRatePlanKey
 		| TierThreeRatePlanKey
 		| DigitalSubscriptionRatePlanKey
@@ -61,8 +59,7 @@ export type ActiveRatePlanKey = keyof {
 		| GuardianWeeklyRestOfWorldRatePlanKey
 		| GuardianWeeklyDomesticRatePlanKey
 		| SubscriptionCardRatePlanKey
-		| ContributionRatePlanKey]: true;
-};
+		| ContributionRatePlanKey, true>;
 
 export const productCatalog = window.guardian.productCatalog;
 

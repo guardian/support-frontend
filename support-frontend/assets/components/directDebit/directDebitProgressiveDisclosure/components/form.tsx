@@ -7,7 +7,7 @@ import {
 	TextInput,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
-import * as React from 'react';
+import type * as React from 'react';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
 import type { ErrorReason } from 'helpers/forms/errorReasons';

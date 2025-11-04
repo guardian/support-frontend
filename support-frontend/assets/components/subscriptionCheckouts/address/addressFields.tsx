@@ -14,7 +14,7 @@ import {
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
-import React from 'react';
+import type React from 'react';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { PostcodeFinder } from 'components/subscriptionCheckouts/address/postcodeFinder';
 import { Country } from 'helpers/internationalisation/classes/country';
@@ -116,7 +116,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 	const patternMismatch = 'Please use only letters, numbers and punctuation.';
 	const errorMessages: Record<
 		keyof AddressFieldsType,
-		{ [key in ValidityStateError]?: string }
+		Partial<Record<ValidityStateError, string>>
 	> = {
 		country: {
 			valueMissing: `Please enter a ${scope} country.`,

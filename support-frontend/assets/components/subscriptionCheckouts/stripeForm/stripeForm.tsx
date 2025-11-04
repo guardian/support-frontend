@@ -13,7 +13,7 @@ import type {
 	StripeError,
 } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
-import * as React from 'react';
+import type * as React from 'react';
 import './stripeForm.scss';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
