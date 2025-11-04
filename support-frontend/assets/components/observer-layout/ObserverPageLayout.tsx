@@ -34,16 +34,14 @@ const columns = css`
 	padding-top: ${space[2]}px;
 `;
 
-type CheckoutLayoutProps = {
-	children: ReactNode;
-	noBorders?: boolean;
-	noFooterLinks?: boolean;
-};
-
 export default function ObserverPageLayout({
 	children,
 	noBorders = false,
-}: CheckoutLayoutProps) {
+}: {
+	children: ReactNode;
+	noBorders?: boolean;
+	noFooterLinks?: boolean;
+}) {
 	return (
 		<PageScaffold header={<></>} footer={<></>}>
 			{noBorders ? (
