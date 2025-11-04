@@ -457,7 +457,7 @@ export class Frontend extends GuStack {
         threshold: 1,
         evaluationPeriods: 1,
         comparisonOperator:
-        ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+          ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
         metric: new Metric({
           metricName: "GetTickerDataError",
           namespace: "support-frontend",
