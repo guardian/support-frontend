@@ -260,8 +260,7 @@ export const getThankYouModuleData = (
 				<>
 					Sign in and start exploring more than 200 years of world history with
 					our newspapers archive. View digital reproductions of every front
-					page, article and advertisement printed in the Guardian from 1821 and
-					in the Observer from 1791.
+					page, article and advertisement printed in the Guardian from 1821.
 				</>
 			),
 			ctas: null,
