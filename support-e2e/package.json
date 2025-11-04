@@ -16,7 +16,7 @@
 		"test-cron-dev": "playwright test --project=cron --config=playwright.dev.config.ts --ui"
 	},
 	"dependencies": {
-		"@playwright/test": "1.46.1",
+		"@playwright/test": "^1.55.1",
 		"nanoid": "3.3.8"
 	},
 	"devDependencies": {
