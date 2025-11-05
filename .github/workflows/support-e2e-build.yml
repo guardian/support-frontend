@@ -1,4 +1,5 @@
 name: support-e2e-build.yml
+permissions: { contents: read }
 on:
   push:
     paths:
