@@ -14,9 +14,11 @@ import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/comp
 import type { Participations } from './abTests/models';
 import { getFeatureFlags } from './featureFlags';
 
-export const contributionLabel = 'Support';
-export const supporterPlusLabel = 'All-access digital';
-export const tierThreeLabel = 'Digital + print';
+export enum ProductTierLabel {
+	TierOne = 'Support',
+	TierTwo = 'All-access digital',
+	TierThree = 'Digital + print',
+}
 
 const activeProductKeys = [
 	'GuardianWeeklyDomestic',
@@ -313,7 +315,7 @@ export const productCatalogDescription: Record<
 		benefits: guardianAdLiteBenefits,
 	},
 	TierThree: {
-		label: tierThreeLabel,
+		label: ProductTierLabel.TierThree,
 		thankyouMessage: digitalThankyouMessage,
 		landingPagePath: '/contribute',
 		benefits: [guardianWeeklyBenefit],
@@ -366,7 +368,7 @@ export const productCatalogDescription: Record<
 		},
 	},
 	SupporterPlus: {
-		label: supporterPlusLabel,
+		label: ProductTierLabel.TierTwo,
 		landingPagePath: '/contribute',
 		benefits: supporterPlusBenefits,
 		ratePlans: {
@@ -461,7 +463,7 @@ export const productCatalogDescription: Record<
 		ratePlans: nationalPaperPlusRatePlans,
 	},
 	Contribution: {
-		label: contributionLabel,
+		label: ProductTierLabel.TierOne,
 		landingPagePath: '/contribute',
 		benefits: [supportBenefit, newsletterBenefitUS],
 		ratePlans: {
