@@ -1,5 +1,6 @@
 // ----- Imports ----- //
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { getFeatureFlags } from './featureFlags';
 import type { Promotion } from './productPrice/promotions';
 // ----- Terms & Conditions ----- //
 const privacyLink = 'https://www.theguardian.com/help/privacy-policy';
@@ -37,7 +38,9 @@ const tierThreeTermsLink =
 const guardianAdLiteTermsLink = `https://www.theguardian.com/guardian-ad-lite-tcs`;
 const paperTermsLink =
 	'https://www.theguardian.com/info/2021/aug/04/guardian-and-observer-voucher-subscription-card-and-home-delivery-subscription-services-terms-and-conditions';
-const digitalSubscriptionTermsLink =
+const digitalSubsTermsLink =
+	'https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions';
+const digitalPlusTermsLink =
 	'https://www.theguardian.com/info/2025/oct/31/guardian-subscription-terms-and-conditions';
 const guardianWeeklyTermsLink =
 	'https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions';
@@ -53,6 +56,10 @@ enum MediaGroup {
 const buildPromotionalTermsLink = (promotion: Promotion): string =>
 	`/p/${promotion.promoCode}/terms`;
 
+const { enablePremiumDigital } = getFeatureFlags();
+const digitalSubscriptionTermsLink = enablePremiumDigital
+	? digitalPlusTermsLink
+	: digitalSubsTermsLink;
 // ----- Exports ----- //
 export {
 	contributionsTermsLinks,
