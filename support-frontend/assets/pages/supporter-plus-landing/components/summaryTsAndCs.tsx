@@ -69,7 +69,7 @@ export function SummaryTsAndCs({
 		isSundayOnlyNewsletterSubscription ||
 		isPaperPlusSub(productKey, ratePlanKey);
 
-	const featureFlags = getFeatureFlags();
+	const { enablePremiumDigital } = getFeatureFlags();
 	const { label: productName } = getProductDescription(productKey, ratePlanKey);
 
 	const rateDescriptor = ratePlanDescription ?? ratePlanKey;
@@ -123,10 +123,7 @@ export function SummaryTsAndCs({
 		),
 		TierThree: summaryTsAndCsTierThreeGuardianAdLite,
 		DigitalSubscription: (
-			<>
-				{featureFlags.enablePremiumDigital &&
-					summaryTsAndCsTierThreeGuardianAdLite}
-			</>
+			<>{enablePremiumDigital && summaryTsAndCsTierThreeGuardianAdLite}</>
 		),
 		GuardianAdLite: summaryTsAndCsTierThreeGuardianAdLite,
 	};

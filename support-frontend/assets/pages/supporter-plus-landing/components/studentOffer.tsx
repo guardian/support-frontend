@@ -115,10 +115,10 @@ export function StudentOffer({
 	if (!price) {
 		return <></>;
 	}
-	const featureFlags = getFeatureFlags();
+	const { enableDigitalAccess } = getFeatureFlags();
 	const productLabel = getProductLabel('SupporterPlus');
 	const url = `/${countryGroups[countryGroupId].supportRegionId}/student${
-		featureFlags.enableDigitalAccess ? '?enableDigitalAccess' : ''
+		enableDigitalAccess ? '?enableDigitalAccess' : ''
 	}`;
 	return (
 		<>
@@ -129,7 +129,7 @@ export function StudentOffer({
 				<h2 css={heading}>Student subscription</h2>
 				<p css={standFirst}>
 					Keep up to date on the latest news with
-					{featureFlags.enableDigitalAccess ? ' a ' : ' an '}
+					{enableDigitalAccess ? ' a ' : ' an '}
 					<span css={boldCopy}>{productLabel}</span> subscription for just{' '}
 					{currencyGlyph}
 					{price}&nbsp;a&nbsp;year.

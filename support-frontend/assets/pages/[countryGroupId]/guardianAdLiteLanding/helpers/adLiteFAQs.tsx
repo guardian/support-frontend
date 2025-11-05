@@ -4,7 +4,7 @@ import { getProductLabel } from 'helpers/productCatalog';
 import { helpCentreUrl } from 'helpers/urls/externalLinks';
 import type { FAQItem } from 'pages/[countryGroupId]/components/accordionFAQ';
 
-const featureFlags = getFeatureFlags();
+const { enablePremiumDigital } = getFeatureFlags();
 export const adLiteFAQs: FAQItem[] = [
 	{
 		title: 'What is included in my Guardian Ad-Lite subscription?',
@@ -21,9 +21,7 @@ export const adLiteFAQs: FAQItem[] = [
 					A Guardian Ad-Lite subscription does not entitle you to the additional
 					benefits on offer via our {getProductLabel('SupporterPlus')} and
 					{getProductLabel(
-						featureFlags.enablePremiumDigital
-							? 'DigitalSubscription'
-							: 'TierThree',
+						enablePremiumDigital ? 'DigitalSubscription' : 'TierThree',
 					)}{' '}
 					subscriptions, which are stated <a href="/contribute">here</a>.
 				</p>
