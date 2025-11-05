@@ -5,12 +5,12 @@ import { setupPage } from './page';
 
 type TestDetails = {
 	context: BrowserContext;
-	baseURL: string;
+	baseURL?: string;
 	product: string;
 	paymentType: string;
 	internationalisationId: string;
 	postCode?: string;
-	ratePlan: string;
+	ratePlan?: string;
 };
 
 export const visitLandingPageAndCompleteCheckout = async (

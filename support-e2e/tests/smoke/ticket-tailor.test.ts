@@ -8,20 +8,20 @@ const isProd = (baseURL: string): boolean => {
 	}
 };
 
-const eventIdFromBaseURL = (baseURL: string): string => {
+const eventIdFromBaseURL = (baseURL?: string): string => {
 	const prodE2EEventId = '1428771';
 	const codeE2EEventId = '1354460';
-	if (isProd(baseURL)) {
+	if (!baseURL || isProd(baseURL)) {
 		return prodE2EEventId;
 	} else {
 		return codeE2EEventId;
 	}
 };
 
-const iframeSrcFromBaseUrl = (baseURL: string): string => {
+const iframeSrcFromBaseUrl = (baseURL?: string): string => {
 	const prodIframeSrc = 'https://tickets.theguardian.live';
 	const codeIframeSrc = 'https://www.tickettailor.com';
-	if (isProd(baseURL)) {
+	if (!baseURL || isProd(baseURL)) {
 		return prodIframeSrc;
 	} else {
 		return codeIframeSrc;

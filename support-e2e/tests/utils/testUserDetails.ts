@@ -84,10 +84,10 @@ export const setTestUserDetails = async (
 	product: string,
 	internationalisationId: string,
 	testFields: TestFields,
-	ratePlan: string,
+	ratePlan?: string,
 ) => {
 	const stateLabel = internationalisationId === 'CA' ? 'Province' : 'State';
-	const isWeeklyGift = ['3MonthGift', 'OneYearGift'].includes(ratePlan);
+	const isWeeklyGift = ['3MonthGift', 'OneYearGift'].includes(ratePlan ?? '');
 	if (isWeeklyGift && testFields.recipient) {
 		await setGiftingCoreDetails(
 			page,

@@ -12,7 +12,7 @@ type TestDetails = {
 	paymentType: string;
 	internationalisationId: string;
 	postCode?: string;
-	ratePlan: string;
+	ratePlan?: string;
 };
 
 const recaptchaAndSubmit = async (page: Page) => {
