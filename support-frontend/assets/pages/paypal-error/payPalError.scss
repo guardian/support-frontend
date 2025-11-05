@@ -1,20 +1,14 @@
 // -----  gu-sass ----- //
 @import '~stylesheets/skeleton/skeleton';
-@import '~stylesheets/gu-sass/gu-sass';
 
 // ----- Shared Components ----- //
-
-@import '~components/ctaLink/ctaLink';
 @import '~components/footer/footer';
 @import '~components/headers/header/header';
 @import '~components/pageSection/pageSection';
 @import '~components/questionsContact/questionsContact';
 
 // ----- Page-Specific Styles ----- //
-
 #paypal-error-page {
-	// ----- Headings
-
 	.paypal-error__heading {
 		font-family: $gu-headline;
 		color: gu-colour(neutral-7);
