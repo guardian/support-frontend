@@ -14,11 +14,6 @@ const studentTsAndCs: Partial<Record<CountryGroupId, JSX.Element>> = {
 			the University of Technology Sydney (UTS). Redemption of the offer is
 			conditional upon registration using a valid and active UTS email address.
 			Your email address may be subjected to an internal verification process to
-			confirm your eligibility as a UTS student – you subscription offered under
-			this agreement is strictly limited to currently enrolled students of the
-			University of Technology Sydney (UTS). Redemption of the offer is
-			conditional upon registration using a valid and active UTS email address.
-			Your email address may be subjected to an internal verification process to
 			confirm your eligibility as a UTS student – you may refer to the
 			Guardian’s{` `}
 			<a href={privacyLink} target="_blank" rel="noopener noreferrer">
