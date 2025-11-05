@@ -1,10 +1,12 @@
 import { expect, test } from '@playwright/test';
-import { email, firstName, lastName } from '../utils/users';
-import { checkRecaptcha } from '../utils/recaptcha';
 import { fillInCardDetails } from '../utils/cardDetails';
+import { forceSkipNewOnboardingExperience } from '../utils/forceSkipNewOnboardingExperience';
 import { setupPage } from '../utils/page';
+import { checkRecaptcha } from '../utils/recaptcha';
 import { setTestUserCoreDetails } from '../utils/testUserDetails';
 import { tierTwoProductLabel } from '../utils/products';
+import { email, firstName, lastName } from '../utils/users';
+
 
 /**
  * These tests are here to test that the promoCode values and associated copy
@@ -52,6 +54,7 @@ import { tierTwoProductLabel } from '../utils/products';
 			baseURL,
 			`/uk/contribute?promoCode=${testDetails.promoCode}`,
 		);
+		await forceSkipNewOnboardingExperience(page);
 		await page.getByRole('tab').getByText(testDetails.frequency).click();
 
 		const cardHeading = page.getByRole('heading', {
