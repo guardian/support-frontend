@@ -1,4 +1,4 @@
-export interface FeatureFlags {
+interface FeatureFlags {
 	enablePremiumDigital: boolean;
 	enableDigitalAccess: boolean;
 }

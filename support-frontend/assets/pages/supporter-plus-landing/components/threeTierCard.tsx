@@ -19,7 +19,7 @@ import {
 	BenefitsCheckList,
 	checkListTextItemCss,
 } from 'components/checkoutBenefits/benefitsCheckList';
-import type { FeatureFlags } from 'helpers/featureFlags';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
@@ -39,7 +39,6 @@ export type CardContent = LandingPageProductDescription & {
 		| 'SupporterPlus'
 		| 'Contribution'
 		| 'DigitalSubscription';
-	featureFlags?: FeatureFlags;
 };
 
 export type ThreeTierCardProps = {
@@ -214,15 +213,15 @@ export function ThreeTierCard({
 		link,
 		cta,
 		product,
-		featureFlags,
 	} = cardContent;
+	const { enablePremiumDigital } = getFeatureFlags();
 	const currency = currencies[currencyId];
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const formattedPrice = simpleFormatAmount(currency, price);
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	const pillCopy = promotion?.landingPage?.roundel ?? cardContent.label?.copy;
 	const isPremiumDigitalProduct =
-		product === 'DigitalSubscription' && featureFlags?.enablePremiumDigital;
+		product === 'DigitalSubscription' && enablePremiumDigital;
 	const inAdditionToAllAccessDigital =
 		product === 'TierThree' || isPremiumDigitalProduct;
 	return (

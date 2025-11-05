@@ -416,7 +416,6 @@ export function ThreeTierLanding({
 		link: `checkout?${tier2UrlParams.toString()}`,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion: tier2Promotion,
-		featureFlags,
 		isUserSelected:
 			urlSearchParamsProduct === 'SupporterPlus' ||
 			isCardUserSelected(tier2Pricing, tier2Promotion?.discount?.amount),
@@ -495,7 +494,6 @@ export function ThreeTierLanding({
 		isUserSelected:
 			urlSearchParamsProduct === tier3Product ||
 			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount),
-		featureFlags,
 		...tier3ProductDescription,
 	};
 
