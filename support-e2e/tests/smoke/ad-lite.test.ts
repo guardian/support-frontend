@@ -29,7 +29,7 @@ test.describe('Ad Lite Checkout', () =>
 					ratePlan: 'Monthly',
 				},
 				async (page) => {
-					// Transition from landing page to checkout:
+					// Transition from landing page to check out:
 					const purchaseButton = page.getByText('Get Guardian Ad-Lite');
 					await purchaseButton.click();
 				},
