@@ -2,7 +2,6 @@ import type {
 	CountryGroupId,
 	SupportRegionId,
 } from '@modules/internationalisation/countryGroup';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import { privacyLink } from 'helpers/legal';
 import { getProductLabel } from 'helpers/productCatalog';
 import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
@@ -10,13 +9,18 @@ import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 const studentTsAndCs: Partial<Record<CountryGroupId, JSX.Element>> = {
 	AUDCountries: (
 		<div>
-			Access to the {getProductLabel('SupporterPlus', getFeatureFlags())}{' '}
-			subscription offered under this agreement is strictly limited to currently
-			enrolled students of the University of Technology Sydney (UTS). Redemption
-			of the offer is conditional upon registration using a valid and active UTS
-			email address. Your email address may be subjected to an internal
-			verification process to confirm your eligibility as a UTS student – you
-			may refer to the Guardian’s{` `}
+			Access to the {getProductLabel('SupporterPlus')} subscription offered
+			under this agreement is strictly limited to currently enrolled students of
+			the University of Technology Sydney (UTS). Redemption of the offer is
+			conditional upon registration using a valid and active UTS email address.
+			Your email address may be subjected to an internal verification process to
+			confirm your eligibility as a UTS student – you subscription offered under
+			this agreement is strictly limited to currently enrolled students of the
+			University of Technology Sydney (UTS). Redemption of the offer is
+			conditional upon registration using a valid and active UTS email address.
+			Your email address may be subjected to an internal verification process to
+			confirm your eligibility as a UTS student – you may refer to the
+			Guardian’s{` `}
 			<a href={privacyLink} target="_blank" rel="noopener noreferrer">
 				privacy policy
 			</a>{' '}

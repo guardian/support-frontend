@@ -1,7 +1,6 @@
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import { getUser } from 'helpers/user/user';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import {
@@ -34,7 +33,6 @@ export function GuardianAdLiteLanding({
 	 * 2. SessionStorage load
 	 * 3. Default https://www.theguardian.com
 	 */
-	const featureFlags = getFeatureFlags();
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsReturn = urlSearchParams.get('returnAddress');
 	if (urlSearchParamsReturn) {
@@ -46,7 +44,6 @@ export function GuardianAdLiteLanding({
 				supportRegionId={supportRegionId}
 				returnLink={getReturnAddress()} // defaults to urlSearchParamsReturn if available
 				isSignedIn={user.isSignedIn}
-				featureFlags={featureFlags}
 			/>
 			<PosterComponent />
 			<AccordionFAQ faqItems={adLiteFAQs} />

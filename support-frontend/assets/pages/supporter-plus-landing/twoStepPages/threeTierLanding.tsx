@@ -407,7 +407,7 @@ export function ThreeTierLanding({
 	}
 	const tier2ProductDescription = {
 		...settings.products.SupporterPlus,
-		title: getProductLabel('SupporterPlus', featureFlags),
+		title: getProductLabel('SupporterPlus'),
 	};
 
 	const tier2Card: CardContent = {

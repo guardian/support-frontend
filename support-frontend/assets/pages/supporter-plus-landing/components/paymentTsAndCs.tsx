@@ -3,7 +3,6 @@ import { neutral, space, textSans12 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import {
 	buildPromotionalTermsLink,
 	contributionsTermsLinks,
@@ -38,8 +37,7 @@ import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/comp
 import { FinePrint } from './finePrint';
 import { ManageMyAccountLink } from './manageMyAccountLink';
 
-const featureFlags = getFeatureFlags();
-const tierThreeLabel = getProductLabel('TierThree', featureFlags);
+const tierThreeLabel = getProductLabel('TierThree');
 
 const marginTop = css`
 	margin-top: 4px;
@@ -77,7 +75,7 @@ export function FooterTsAndCs({
 	const getProductNameSummary = (): string => {
 		switch (productKey) {
 			case 'GuardianAdLite':
-				return `the ${getProductLabel('GuardianAdLite', featureFlags)}`;
+				return `the ${getProductLabel('GuardianAdLite')}`;
 			case 'TierThree':
 				return tierThreeLabel;
 			default:
@@ -260,7 +258,7 @@ export function PaymentTsAndCs({
 				promotion,
 		  );
 
-	const productLabel = getProductLabel(productKey, featureFlags);
+	const productLabel = getProductLabel(productKey);
 	const subscriptionBasis = !isStudentOneYearRatePlan
 		? 'on a subscription basis'
 		: '';
@@ -294,9 +292,9 @@ export function PaymentTsAndCs({
 
 	const studentSupporterPlusTsAndCs: JSX.Element = (
 		<>
-			You may cancel your {getProductLabel('SupporterPlus', featureFlags)}{' '}
-			subscription within 14 days of taking out the subscription. If you do,
-			you'll receive a full refund and your subscription will stop immediately.{' '}
+			You may cancel your {getProductLabel('SupporterPlus')} subscription within
+			14 days of taking out the subscription. If you do, you'll receive a full
+			refund and your subscription will stop immediately.{' '}
 			{accountAndTermsLCopyAndLinks}. This subscription does not auto-renew.
 		</>
 	);

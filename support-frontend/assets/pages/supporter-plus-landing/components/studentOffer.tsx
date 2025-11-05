@@ -116,7 +116,7 @@ export function StudentOffer({
 		return <></>;
 	}
 	const featureFlags = getFeatureFlags();
-	const productLabel = getProductLabel('SupporterPlus', featureFlags);
+	const productLabel = getProductLabel('SupporterPlus');
 	const url = `/${countryGroups[countryGroupId].supportRegionId}/student${
 		featureFlags.enableDigitalAccess ? '?enableDigitalAccess' : ''
 	}`;

@@ -10,7 +10,6 @@ import {
 } from '@guardian/source/foundations';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { Container } from 'components/layout/container';
-import type { FeatureFlags } from 'helpers/featureFlags';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
@@ -89,14 +88,12 @@ type HeaderCardsProps = {
 	supportRegionId: SupportRegionId;
 	isSignedIn: boolean;
 	returnLink: string;
-	featureFlags: FeatureFlags;
 };
 
 export function HeaderCards({
 	supportRegionId,
 	isSignedIn,
 	returnLink,
-	featureFlags,
 }: HeaderCardsProps): JSX.Element {
 	const contributionType = 'Monthly';
 	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
@@ -141,8 +138,7 @@ export function HeaderCards({
 						<p css={paragraph}>
 							If you already have Guardian Ad-Lite or another Guardian
 							subscription that offers ad-free reading, such as{' '}
-							{getProductLabel('SupporterPlus', featureFlags)}, you should,{' '}
-							{SignInLink}
+							{getProductLabel('SupporterPlus')}, you should, {SignInLink}
 						</p>
 					</div>
 				)}
