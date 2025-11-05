@@ -70,11 +70,7 @@ export function SummaryTsAndCs({
 		isPaperPlusSub(productKey, ratePlanKey);
 
 	const featureFlags = getFeatureFlags();
-	const { label: productName } = getProductDescription(
-		productKey,
-		ratePlanKey,
-		featureFlags,
-	);
+	const { label: productName } = getProductDescription(productKey, ratePlanKey);
 
 	const rateDescriptor = ratePlanDescription ?? ratePlanKey;
 

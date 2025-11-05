@@ -12,7 +12,6 @@ import type {
 } from '@modules/product-catalog/productCatalog';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { Participations } from './abTests/models';
-import type { FeatureFlags } from './featureFlags';
 import { getFeatureFlags } from './featureFlags';
 
 export const contributionLabel = 'Support';
@@ -587,16 +586,13 @@ export const getProductLabel = (productKey: ActiveProductKey): string => {
 export const getProductDescription = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	featureFlags?: FeatureFlags,
 ): ProductDescription => {
-	if (featureFlags) {
-		const { enablePremiumDigital, enableDigitalAccess } = featureFlags;
-		if (productKey === 'DigitalSubscription' && enablePremiumDigital) {
-			return productCatalogDescriptionPremiumDigital;
-		}
-		if (productKey === 'SupporterPlus' && enableDigitalAccess) {
-			return productCatalogDescriptionDigitalAccess;
-		}
+	const { enablePremiumDigital, enableDigitalAccess } = getFeatureFlags();
+	if (productKey === 'DigitalSubscription' && enablePremiumDigital) {
+		return productCatalogDescriptionPremiumDigital;
+	}
+	if (productKey === 'SupporterPlus' && enableDigitalAccess) {
+		return productCatalogDescriptionDigitalAccess;
 	}
 	if (isGuardianWeeklyGiftProduct(productKey, ratePlanKey)) {
 		return productCatalogGuardianWeeklyGift[productKey];

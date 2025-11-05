@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { between, space } from '@guardian/source/foundations';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import { getProductDescription } from 'helpers/productCatalog';
 import type {
 	ActiveProductKey,
@@ -33,11 +32,7 @@ export function BenefitsBodyCopy({
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 }): JSX.Element {
-	const { label: productName } = getProductDescription(
-		productKey,
-		ratePlanKey,
-		getFeatureFlags(),
-	);
+	const { label: productName } = getProductDescription(productKey, ratePlanKey);
 
 	return (
 		<span css={downloadCopy}>Your {productName} subscription includes:</span>

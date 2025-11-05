@@ -82,7 +82,6 @@ function Heading({
 		const { label: productName } = getProductDescription(
 			productKey,
 			ratePlanKey,
-			featureFlags,
 		);
 
 		return (

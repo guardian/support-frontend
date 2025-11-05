@@ -454,7 +454,6 @@ export function ThreeTierLanding({
 	const { label: title, labelPill: titlePill } = getProductDescription(
 		'DigitalSubscription',
 		ratePlanKey,
-		featureFlags,
 	);
 	const premiumDigitalProductDescription = {
 		title,
