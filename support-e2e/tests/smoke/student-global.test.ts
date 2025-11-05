@@ -1,12 +1,12 @@
 import { expect, test } from '@playwright/test';
-import { email, firstName, lastName } from '../utils/users';
-import { checkRecaptcha } from '../utils/recaptcha';
 import { fillInCardDetails } from '../utils/cardDetails';
-import { setupPage } from '../utils/page';
-import { setTestUserCoreDetails } from '../utils/testUserDetails';
 import { fillInDirectDebitDetails } from '../utils/directDebitDetails';
 import { forceSkipNewOnboardingExperience } from '../utils/forceSkipNewOnboardingExperience';
-import { tierTwoProductLabel } from '../utils/products';
+import { setupPage } from '../utils/page';
+import { ProductTierLabel } from '../utils/products';
+import { checkRecaptcha } from '../utils/recaptcha';
+import { setTestUserCoreDetails } from '../utils/testUserDetails';
+import { email, firstName, lastName } from '../utils/users';
 
 [
 	{
@@ -16,7 +16,7 @@ import { tierTwoProductLabel } from '../utils/products';
 		product: 'SupporterPlus',
 		ratePlan: 'OneYearStudent',
 		amountDescription: '£9',
-		expectedCardHeading: tierTwoProductLabel,
+		expectedCardHeading: ProductTierLabel.TierTwo,
 		expectedCheckoutText:
 			'If you cancel within the first 14 days, you will receive a full refund.',
 		accessibleCtaText: 'Subscribe',
@@ -29,7 +29,7 @@ import { tierTwoProductLabel } from '../utils/products';
 		product: 'SupporterPlus',
 		ratePlan: 'OneYearStudent',
 		amountDescription: '$10',
-		expectedCardHeading: tierTwoProductLabel,
+		expectedCardHeading: ProductTierLabel.TierTwo,
 		expectedCheckoutText:
 			'If you cancel within the first 14 days, you will receive a full refund.',
 		accessibleCtaText: 'Subscribe',
@@ -42,7 +42,7 @@ import { tierTwoProductLabel } from '../utils/products';
 		product: 'SupporterPlus',
 		ratePlan: 'OneYearStudent',
 		amountDescription: '$10',
-		expectedCardHeading: tierTwoProductLabel,
+		expectedCardHeading: ProductTierLabel.TierTwo,
 		expectedCheckoutText:
 			'If you cancel within the first 14 days, you will receive a full refund.',
 		accessibleCtaText: 'Subscribe',

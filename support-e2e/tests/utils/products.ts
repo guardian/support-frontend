@@ -1,3 +1,5 @@
-export const tierOneProductLabel = 'Support';
-export const tierTwoProductLabel = 'All-access digital';
-export const tierThreeProductLabel = 'Digital + print';
+export enum ProductTierLabel {
+	TierOne = 'Support',
+	TierTwo = 'All-access digital',
+	TierThree = 'Digital + print',
+}
