@@ -10,8 +10,6 @@ import {
 	until,
 } from '@guardian/source/foundations';
 import { useEffect } from 'react';
-import AppImageGuardianNews from 'components/svgs/appGuardianNews';
-import AppImageFeast from 'components/svgs/appImageFeast';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import AppDownloadImage from './appDownload/AppDownloadImage';
 import AppDownloadQRCodes from './appDownload/AppDownloadQRCodes';
@@ -124,24 +122,6 @@ const sizeContainer = css`
 	}
 `;
 
-const bodyApps = css`
-	display: flex;
-	justify-content: space-between;
-	margin-top: ${space[6]}px;
-`;
-const bodyAppsTop = css`
-	${from.tablet} {
-		border-bottom: 1px solid ${neutral[86]};
-	}
-`;
-
-const bodyStyle = css`
-	max-width: 240px;
-	${from.mobileMedium} {
-		max-width: 340px;
-	}
-`;
-
 const bodyCopyStyle = css`
 	${textEgyptian15};
 	margin-bottom: ${space[1]}px;
@@ -153,13 +133,6 @@ const bodyCopyMarginTop = css`
 	margin-top: ${space[3]}px;
 	${from.tablet} {
 		margin-top: ${space[2]}px;
-	}
-`;
-
-const appContainer = css`
-	width: 55px;
-	${from.mobileLandscape} {
-		width: 75px;
 	}
 `;
 
@@ -212,22 +185,6 @@ const hideBelowTablet = css`
 	}
 `;
 
-const ctaContainerApps = css`
-	margin-top: ${space[4]}px;
-
-	// appDownload ctas require margin-top but appsDownload does not
-	> div {
-		margin-top: 0;
-	}
-`;
-const ctaTop = css`
-	padding-bottom: 32px;
-`;
-
-const ctaBottom = css`
-	padding-bottom: ${space[4]}px;
-`;
-
 export const TEST_ID_PREFIX = 'tyModule';
 
 export type ThankYouModuleType =
@@ -257,8 +214,6 @@ export interface ThankYouModuleProps {
 	icon?: JSX.Element;
 	isSignedIn?: boolean;
 	trackComponentLoadId?: string;
-	bodyCopySecond?: JSX.Element | string;
-	ctasSecond?: JSX.Element | null;
 }
 
 function ThankYouModule({
@@ -269,8 +224,6 @@ function ThankYouModule({
 	bodyCopy,
 	ctas,
 	trackComponentLoadId,
-	bodyCopySecond,
-	ctasSecond,
 }: ThankYouModuleProps): JSX.Element {
 	useEffect(() => {
 		trackComponentLoadId && trackComponentLoad(trackComponentLoadId);
@@ -296,7 +249,7 @@ function ThankYouModule({
 			: paddingRight;
 
 	const isNewspaperArchiveBenefit = moduleType === 'newspaperArchiveBenefit';
-	const resizeContainer = isNewspaperArchiveBenefit ? sizeContainer : css``;
+	const resizeContainer = isNewspaperArchiveBenefit && sizeContainer;
 	const resizeImgContainer = !isNewspaperArchiveBenefit
 		? sizeImgContainer
 		: css``;
@@ -315,38 +268,13 @@ function ThankYouModule({
 				<div css={iconContainer}>{icon}</div>
 				<div css={[headerContainer, resizeContainer]}>{header}</div>
 				<div css={[bodyContainer, resizeContainer]}>
-					{isDownloadModules ? (
-						<>
-							<div css={[bodyApps, bodyAppsTop]}>
-								<div css={bodyStyle}>
-									<p css={bodyCopyStyle}>{bodyCopy}</p>
-									<div css={[ctaContainerApps, ctaTop]}>{ctas}</div>
-								</div>
-								<span css={appContainer}>
-									<AppImageGuardianNews></AppImageGuardianNews>
-								</span>
-							</div>
-							<div css={bodyApps}>
-								<div css={bodyStyle}>
-									<p css={bodyCopyStyle}>{bodyCopySecond}</p>
-									<div css={[ctaContainerApps, ctaBottom]}>{ctasSecond}</div>
-								</div>
-								<span css={appContainer}>
-									<AppImageFeast></AppImageFeast>
-								</span>
-							</div>
-						</>
-					) : (
-						<>
-							<p css={[bodyCopyStyle, bodyCopyMarginTop]}>{bodyCopy}</p>
-							<div css={resizeMarginTop}>{ctas}</div>
-						</>
-					)}
+					<div css={[bodyCopyStyle, bodyCopyMarginTop]}>{bodyCopy}</div>
+					<div css={resizeMarginTop}>{ctas}</div>
 				</div>
 
 				{hasImagery ? (
 					<div css={[imgContainer, resizeImgContainer]}>
-						{isNewspaperArchiveBenefit ? (
+						{!isNewspaperArchiveBenefit ? (
 							<NewspaperArchiveImage />
 						) : (
 							<AppDownloadImage />
