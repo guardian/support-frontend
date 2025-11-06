@@ -19,7 +19,7 @@ test.describe('Ad Lite Checkout', () =>
 				`/uk/guardian-ad-lite`,
 				{
 					context,
-					baseURL: baseURL,
+					baseURL,
 					product: 'GuardianAdLite',
 					paymentType,
 					internationalisationId: 'UK',
