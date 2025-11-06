@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
-import { afterEachTasks } from '../utils/afterEachTest';
 import { testObserverCheckout } from '../test/observerCheckout';
+import { afterEachTasks } from '../utils/afterEachTest';
 
 afterEachTasks(test);
 

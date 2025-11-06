@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 export const fillInDirectDebitDetails = async (page: Page) => {
 	await page.getByLabel('Account name').fill('CP Scott');

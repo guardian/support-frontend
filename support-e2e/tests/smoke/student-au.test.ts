@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test';
-import { email, firstName, lastName } from '../utils/users';
-import { checkRecaptcha } from '../utils/recaptcha';
 import { fillInCardDetails } from '../utils/cardDetails';
-import { setupPage } from '../utils/page';
-import { setTestUserCoreDetails } from '../utils/testUserDetails';
 import { forceSkipNewOnboardingExperience } from '../utils/forceSkipNewOnboardingExperience';
+import { setupPage } from '../utils/page';
+import { checkRecaptcha } from '../utils/recaptcha';
+import { setTestUserCoreDetails } from '../utils/testUserDetails';
+import { email, firstName, lastName } from '../utils/users';
 
 [
 	{
@@ -43,7 +43,7 @@ import { forceSkipNewOnboardingExperience } from '../utils/forceSkipNewOnboardin
 		).toBeVisible();
 
 		// Click through to the checkout
-		const purchaseButton = await page.getByText(testDetails.accessibleCtaText);
+		const purchaseButton = page.getByText(testDetails.accessibleCtaText);
 		await purchaseButton.click();
 
 		// Checkout

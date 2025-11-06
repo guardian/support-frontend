@@ -1,20 +1,21 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
-import { email, firstName, lastName } from '../utils/users';
-import { setupPage } from '../utils/page';
-import { setTestUserCoreDetails } from '../utils/testUserDetails';
-import { fillInPayPalDetails } from '../utils/paypal';
 import {
 	fillInCardDetails,
 	fillInDeclinedCardDetails,
 } from '../utils/cardDetails';
+import { setupPage } from '../utils/page';
+import { fillInPayPalDetails } from '../utils/paypal';
 import { checkRecaptcha } from '../utils/recaptcha';
+import { setTestUserCoreDetails } from '../utils/testUserDetails';
+import { email } from '../utils/users';
 
 type TestDetails = {
 	paymentType: string;
 	internationalisationId: string;
 };
 
-const submitForm = (page) =>
+const submitForm = (page: Page) =>
 	page
 		.getByRole('button', {
 			name: ` with `,
@@ -54,7 +55,7 @@ export const testOneTimeCheckout = (testDetails: TestDetails) => {
 
 		if (paymentType === 'PayPal') {
 			await expect(page).toHaveURL(/.*paypal.com/, { timeout: 600000 });
-			fillInPayPalDetails(page);
+			await fillInPayPalDetails(page);
 		}
 
 		await expect(page.getByRole('heading', { name: 'Thank you' })).toBeVisible({

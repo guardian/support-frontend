@@ -1,6 +1,6 @@
 import test from '@playwright/test';
-import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAndCompleteCheckout';
 import { forceSkipNewOnboardingExperience } from '../utils/forceSkipNewOnboardingExperience';
+import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAndCompleteCheckout';
 
 const tests = [
 	{
