@@ -1,4 +1,4 @@
-import { BrowserContext, expect } from '@playwright/test';
+import type { BrowserContext } from '@playwright/test';
 
 export const setTestCookies = async (
 	context: BrowserContext,

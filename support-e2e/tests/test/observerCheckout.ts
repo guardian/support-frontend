@@ -1,12 +1,12 @@
 import { expect, test } from '@playwright/test';
 import { setupPage } from '../utils/page';
-import { setTestUserDetails } from '../utils/testUserDetails';
-import { getUserFields } from '../utils/userFields';
 import {
 	expectToLandOnStripeCheckoutPage,
 	fillStripeCheckoutForm,
 	submitStripeCheckoutForm,
 } from '../utils/stripeCheckoutForm';
+import { setTestUserDetails } from '../utils/testUserDetails';
+import { getUserFields } from '../utils/userFields';
 
 type TestDetails = {
 	product: string;

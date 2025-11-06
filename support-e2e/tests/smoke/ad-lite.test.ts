@@ -26,10 +26,11 @@ test.describe('Ad Lite Checkout', () =>
 					product: 'GuardianAdLite',
 					paymentType,
 					internationalisationId: 'UK',
+					ratePlan: 'Monthly',
 				},
 				async (page) => {
-					// Transition from landing page to checkout:
-					const purchaseButton = await page.getByText('Get Guardian Ad-Lite');
+					// Transition from landing page to check out:
+					const purchaseButton = page.getByText('Get Guardian Ad-Lite');
 					await purchaseButton.click();
 				},
 			);

@@ -26,7 +26,7 @@ test.describe('Ad Lite Checkout', () =>
 				},
 				async (page) => {
 					// Transition from landing page to checkout:
-					const purchaseButton = await page.getByText('Get Guardian Ad-Lite');
+					const purchaseButton = page.getByText('Get Guardian Ad-Lite');
 					await purchaseButton.click();
 				},
 			);
