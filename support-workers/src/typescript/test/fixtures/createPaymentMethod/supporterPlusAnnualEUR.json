@@ -26,6 +26,11 @@
     "billingPeriod": "Annual",
     "productType": "SupporterPlus"
   },
+  "productInformation": {
+    "product": "SupporterPlus",
+    "ratePlan": "Annual",
+    "amount": 120
+  },
   "analyticsInfo": {
     "isGiftPurchase": false,
     "paymentProvider": "Stripe"

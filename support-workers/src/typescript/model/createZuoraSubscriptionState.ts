@@ -21,7 +21,7 @@ import {
 
 const baseProductStateSchema = z.object({
 	paymentMethod: paymentMethodSchema,
-	productInformation: productPurchaseSchema.nullish(),
+	productInformation: productPurchaseSchema,
 	salesForceContact: salesforceContactRecordSchema,
 });
 

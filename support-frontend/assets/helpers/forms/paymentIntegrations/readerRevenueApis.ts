@@ -173,7 +173,7 @@ export type RegularPaymentRequest = {
 	email: string;
 	giftRecipient?: GiftRecipientType;
 	product: ProductFields;
-	productInformation?: ProductPurchase;
+	productInformation: ProductPurchase;
 	firstDeliveryDate: Option<string>;
 	paymentFields: RegularPaymentFields;
 	ophanIds: OphanIds;

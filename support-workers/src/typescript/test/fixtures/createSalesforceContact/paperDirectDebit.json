@@ -35,6 +35,22 @@
     "deliveryAgent": null,
     "productType": "Paper"
   },
+  "productInformation": {
+    "product": "SubscriptionCard",
+    "ratePlan": "Everyday",
+    "firstDeliveryDate": "2024-10-17",
+    "deliveryContact": {
+      "firstName": "Test",
+      "lastName": "User",
+      "workEmail": "test@test.com",
+      "address1": "123 Test Street",
+      "address2": null,
+      "city": "Sheffield",
+      "state": "",
+      "postalCode": "S10 4XX",
+      "country": "GB"
+    }
+  },
   "analyticsInfo": {
     "isGiftPurchase": false,
     "paymentProvider": "DirectDebit"

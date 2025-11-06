@@ -91,7 +91,7 @@ export const sendThankYouEmailStateSchema = z.union([
 		productType: z.literal('GuardianWeekly'),
 		user: userSchema,
 		product: productTypeSchema,
-		productInformation: productPurchaseSchema.optional(),
+		productInformation: productPurchaseSchema,
 		giftRecipient: giftRecipientSchema.optional(),
 		paymentMethod: paymentMethodSchema,
 		paymentSchedule: paymentScheduleSchema,

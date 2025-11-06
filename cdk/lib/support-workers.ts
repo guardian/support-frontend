@@ -301,7 +301,6 @@ export class SupportWorkers extends GuStack {
     const isTierThree = isProductType("TierThree");
 
     const shouldUseTSLambda = Condition.and(
-      Condition.isNotNull("$.state.productInformation"),
       Condition.or(
         isOneYearStudent,
         isGuardianAdLite,

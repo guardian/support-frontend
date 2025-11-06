@@ -248,8 +248,7 @@ const buildSendThankYouEmailState = (
 		productType: state.product.productType,
 		user: state.user,
 		product: state.product,
-		productInformation:
-			state.productSpecificState.productInformation ?? undefined,
+		productInformation: state.productSpecificState.productInformation,
 		paymentMethod: state.productSpecificState.paymentMethod,
 		accountNumber: createZuoraSubscriptionResult.accountNumber,
 		subscriptionNumber: subscriptionNumber,

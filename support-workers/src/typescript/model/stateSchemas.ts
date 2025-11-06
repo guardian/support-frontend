@@ -89,7 +89,7 @@ export const baseStateSchema = z.object({
 	user: userSchema,
 	giftRecipient: giftRecipientSchema.nullable(),
 	product: productTypeSchema,
-	productInformation: productPurchaseSchema.nullish(),
+	productInformation: productPurchaseSchema,
 	analyticsInfo: analyticsInfoSchema,
 	//TODO: This should probably be a date but the scala lambdas struggle to deserialise the default date representation
 	// so leave it as a string until all the lambdas are Typescript
