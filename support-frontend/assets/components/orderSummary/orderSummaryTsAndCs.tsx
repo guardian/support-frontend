@@ -123,7 +123,7 @@ export function OrderSummaryTsAndCs({
 	const rateDescriptor = ratePlanDescription
 		? ratePlanDescription
 				.replace(/^The\s+/i, '') // Remove "The" at the start, case-insensitive, with following space
-				.replace(observerLabelSuffix, '') // Remove Observer ", digital & print" at the end, case-insensitive, with preceding space
+				.replace(observerLabelSuffix, '') // Removes Observer label suffix
 				.replace(/\s*package$/i, '') // Remove "package" at the end, case-insensitive, with preceding space
 				.trim()
 		: ratePlanKey;
