@@ -9,7 +9,7 @@ const logoContainer = css`
 	display: flex;
 	justify-content: center;
 	text-decoration: none;
-	margin: ${space[6]}px 0 ${space[3]}px 0;
+	margin: ${space[6]}px 0 ${space[4]}px 0;
 
 	${from.desktop} {
 		margin: ${space[12]}px 0 ${space[8]}px 0;
@@ -17,7 +17,7 @@ const logoContainer = css`
 `;
 
 const logo = css`
-	width: 246px;
+	width: 228px;
 
 	${from.desktop} {
 		width: 382px;
