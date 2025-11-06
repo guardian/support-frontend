@@ -281,12 +281,12 @@ const paperPlusRatePlans: RatePlanDetails = {
 	},
 	Sunday: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'The Observer',
+		label: 'The Observer, digital & print',
 		hideSimilarProductsConsent: true,
 	},
 	SundayPlus: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'The Observer',
+		label: 'The Observer, digital & print',
 		hideSimilarProductsConsent: true,
 	},
 };
