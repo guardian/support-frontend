@@ -8,9 +8,10 @@ import {
 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { productLegal } from 'helpers/legalCopy';
-import type {
-	ActiveProductKey,
-	ActiveRatePlanKey,
+import {
+	type ActiveProductKey,
+	type ActiveRatePlanKey,
+	observerLabelSuffix,
 } from 'helpers/productCatalog';
 import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import {
@@ -122,7 +123,7 @@ export function OrderSummaryTsAndCs({
 	const rateDescriptor = ratePlanDescription
 		? ratePlanDescription
 				.replace(/^The\s+/i, '') // Remove "The" at the start, case-insensitive, with following space
-				.replace(/\s*, digital & print$/i, '') // Remove Observer ", digital & print" at the end, case-insensitive, with preceding space
+				.replace(observerLabelSuffix, '') // Remove Observer ", digital & print" at the end, case-insensitive, with preceding space
 				.replace(/\s*package$/i, '') // Remove "package" at the end, case-insensitive, with preceding space
 				.trim()
 		: ratePlanKey;

@@ -269,6 +269,7 @@ const nationalPaperPlusRatePlans: RatePlanDetails = {
 	},
 };
 
+export const observerLabelSuffix = ', digital & print';
 const paperPlusRatePlans: RatePlanDetails = {
 	...nationalPaperPlusRatePlans,
 	Saturday: {
@@ -281,12 +282,12 @@ const paperPlusRatePlans: RatePlanDetails = {
 	},
 	Sunday: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'The Observer, digital & print',
+		label: `The Observer${observerLabelSuffix}`,
 		hideSimilarProductsConsent: true,
 	},
 	SundayPlus: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'The Observer, digital & print',
+		label: `The Observer${observerLabelSuffix}`,
 		hideSimilarProductsConsent: true,
 	},
 };
