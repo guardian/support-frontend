@@ -1,3 +1,4 @@
+import { ThemeProvider } from '@emotion/react';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
@@ -6,6 +7,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
+import { observerThemeButton } from 'components/observer-layout/styles';
 import {
 	getStripeKeyForCountry,
 	getStripeKeyForProduct,
@@ -293,55 +295,62 @@ export function Checkout({
 		true,
 	);
 
-	const PageLayout = window.guardian.isObserverSubdomain
+	const { isObserverSubdomain } = window.guardian;
+	const PageLayout = isObserverSubdomain
 		? ObserverPageLayout
 		: GuardianPageLayout;
 
-	return (
-		<Elements stripe={stripePromise} options={elementsOptions}>
-			<PageLayout>
-				<CheckoutSummary
-					supportRegionId={supportRegionId}
-					appConfig={appConfig}
-					productKey={productKey}
-					ratePlanKey={ratePlanKey}
-					promotion={promotion}
-					originalAmount={payment.originalAmount}
-					countryId={countryId}
-					forcedCountry={forcedCountry}
-					abParticipations={abParticipations}
-					landingPageSettings={landingPageSettings}
-					weeklyDeliveryDate={weeklyDeliveryDate}
-					thresholdAmount={thresholdAmount}
-					studentDiscount={studentDiscount}
-					nudgeSettings={nudgeSettings}
-				/>
+	const theme = {
+		...(isObserverSubdomain && { observerThemeButton }),
+	};
 
-				<CheckoutForm
-					supportRegionId={supportRegionId}
-					appConfig={appConfig}
-					stripePublicKey={stripePublicKey}
-					isTestUser={isTestUser}
-					productKey={productKey}
-					ratePlanKey={ratePlanKey}
-					promotion={promotion}
-					originalAmount={payment.originalAmount}
-					discountedAmount={payment.discountedAmount}
-					contributionAmount={payment.contributionAmount}
-					finalAmount={payment.finalAmount}
-					useStripeExpressCheckout={useStripeExpressCheckout}
-					countryId={countryId}
-					forcedCountry={forcedCountry}
-					abParticipations={abParticipations}
-					landingPageSettings={landingPageSettings}
-					checkoutSession={checkoutSession}
-					clearCheckoutSession={clearCheckoutSession}
-					weeklyDeliveryDate={weeklyDeliveryDate}
-					setWeeklyDeliveryDate={setWeeklyDeliveryDate}
-					thresholdAmount={thresholdAmount}
-					studentDiscount={studentDiscount}
-				/>
-			</PageLayout>
-		</Elements>
+	return (
+		<ThemeProvider theme={theme}>
+			<Elements stripe={stripePromise} options={elementsOptions}>
+				<PageLayout>
+					<CheckoutSummary
+						supportRegionId={supportRegionId}
+						appConfig={appConfig}
+						productKey={productKey}
+						ratePlanKey={ratePlanKey}
+						promotion={promotion}
+						originalAmount={payment.originalAmount}
+						countryId={countryId}
+						forcedCountry={forcedCountry}
+						abParticipations={abParticipations}
+						landingPageSettings={landingPageSettings}
+						weeklyDeliveryDate={weeklyDeliveryDate}
+						thresholdAmount={thresholdAmount}
+						studentDiscount={studentDiscount}
+						nudgeSettings={nudgeSettings}
+					/>
+
+					<CheckoutForm
+						supportRegionId={supportRegionId}
+						appConfig={appConfig}
+						stripePublicKey={stripePublicKey}
+						isTestUser={isTestUser}
+						productKey={productKey}
+						ratePlanKey={ratePlanKey}
+						promotion={promotion}
+						originalAmount={payment.originalAmount}
+						discountedAmount={payment.discountedAmount}
+						contributionAmount={payment.contributionAmount}
+						finalAmount={payment.finalAmount}
+						useStripeExpressCheckout={useStripeExpressCheckout}
+						countryId={countryId}
+						forcedCountry={forcedCountry}
+						abParticipations={abParticipations}
+						landingPageSettings={landingPageSettings}
+						checkoutSession={checkoutSession}
+						clearCheckoutSession={clearCheckoutSession}
+						weeklyDeliveryDate={weeklyDeliveryDate}
+						setWeeklyDeliveryDate={setWeeklyDeliveryDate}
+						thresholdAmount={thresholdAmount}
+						studentDiscount={studentDiscount}
+					/>
+				</PageLayout>
+			</Elements>
+		</ThemeProvider>
 	);
 }
