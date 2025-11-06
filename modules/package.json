@@ -2,7 +2,7 @@
   "name": "modules",
   "version": "1.0.0",
   "scripts": {
-    "lint:check": "eslint **/*.ts",
+    "lint": "eslint **/*.ts",
     "lint:fix": "eslint --fix **/*.ts",
     "check-formatting": "prettier --check **.ts",
     "fix-formatting": "prettier --write **.ts"

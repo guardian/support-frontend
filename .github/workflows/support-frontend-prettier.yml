@@ -17,4 +17,4 @@ jobs:
         uses: ./.github/actions/setup-node-and-install
 
       - name: Prettier check
-        run: pnpm --filter support-frontend prettier:check
+        run: pnpm --filter support-frontend prettier
