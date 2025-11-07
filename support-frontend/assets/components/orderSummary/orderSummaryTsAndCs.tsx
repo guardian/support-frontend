@@ -8,9 +8,9 @@ import {
 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { productLegal } from 'helpers/legalCopy';
-import type {
-	ActiveProductKey,
-	ActiveRatePlanKey,
+import {
+	type ActiveProductKey,
+	type ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import {
@@ -83,8 +83,8 @@ export function OrderSummaryStartDate({
 export interface OrderSummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
-	ratePlanDescription?: string;
 	countryGroupId: CountryGroupId;
+	ratePlanDescription?: string;
 	promotion?: Promotion;
 	thresholdAmount?: number;
 	deliveryDate?: Date;
@@ -92,9 +92,9 @@ export interface OrderSummaryTsAndCsProps {
 export function OrderSummaryTsAndCs({
 	productKey,
 	ratePlanKey,
-	ratePlanDescription,
 	countryGroupId,
 	promotion,
+	ratePlanDescription,
 	thresholdAmount = 0,
 	deliveryDate,
 }: OrderSummaryTsAndCsProps): JSX.Element | null {
@@ -119,12 +119,7 @@ export function OrderSummaryTsAndCs({
 			ratePlanKey as ActivePaperProductOptions,
 		);
 	const deliveryStartDate = deliveryStart ? formatUserDate(deliveryStart) : '';
-	const rateDescriptor = ratePlanDescription
-		? ratePlanDescription
-				.replace(/^The\s+/i, '') // Remove "The" at the start, case-insensitive, with following space
-				.replace(/\s*package$/i, '') // Remove "package" at the end, case-insensitive, with preceding space
-				.trim()
-		: ratePlanKey;
+	const rateDescriptor = ratePlanDescription ?? ratePlanKey;
 
 	const tierThreeSupporterPlusTsAndCs = (
 		<div css={containerSummaryTsCs}>

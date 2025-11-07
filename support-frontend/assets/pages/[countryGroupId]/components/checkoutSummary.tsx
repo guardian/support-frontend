@@ -85,7 +85,7 @@ export default function CheckoutSummary({
 		getSupportRegionIdConfig(supportRegionId);
 	const { enablePremiumDigital } = getFeatureFlags();
 	const productDescription = getProductDescription(productKey, ratePlanKey);
-	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
+	const ratePlanDetail = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
 	};
 	const isRecurringContribution = productKey === 'Contribution';
@@ -187,9 +187,9 @@ export default function CheckoutSummary({
 					productKey={productKey}
 					productLabel={productDescription.label}
 					ratePlanKey={ratePlanKey}
-					ratePlanLabel={ratePlanDescription.label}
+					ratePlanLabel={ratePlanDetail.displayName ?? ratePlanDetail.label}
 					paymentFrequency={getBillingPeriodNoun(
-						ratePlanDescription.billingPeriod,
+						ratePlanDetail.billingPeriod,
 						isGuardianWeeklyGiftProduct(productKey, ratePlanKey),
 					)}
 					amount={originalAmount}
@@ -213,7 +213,7 @@ export default function CheckoutSummary({
 						<OrderSummaryTsAndCs
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
-							ratePlanDescription={ratePlanDescription.label}
+							ratePlanDescription={ratePlanDetail.label}
 							countryGroupId={countryGroupId}
 							thresholdAmount={thresholdAmount}
 							promotion={promotion}
