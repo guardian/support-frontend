@@ -35,7 +35,8 @@ export default function buildCheckoutUrl(
 	if (promoCode) {
 		urlSearchParams.set('promoCode', promoCode);
 	}
-	if (getFeatureFlags().enableDigitalAccess) {
+	const { enableDigitalAccess } = getFeatureFlags();
+	if (enableDigitalAccess) {
 		urlSearchParams.set('enableDigitalAccess', 'true');
 	}
 	return `/${supportRegionId}/checkout?${urlSearchParams.toString()}`;
