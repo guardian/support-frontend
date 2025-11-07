@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { fillInCardDetails } from '../utils/cardDetails';
 import { forceSkipNewOnboardingExperience } from '../utils/forceSkipNewOnboardingExperience';
 import { setupPage } from '../utils/page';
+import { ProductTierLabel } from '../utils/products';
 import { checkRecaptcha } from '../utils/recaptcha';
 import { setTestUserCoreDetails } from '../utils/testUserDetails';
 import { email, firstName, lastName } from '../utils/users';
@@ -15,25 +16,25 @@ import { email, firstName, lastName } from '../utils/users';
 		tier: 2,
 		frequency: 'Monthly',
 		promoCode: 'E2E_TEST_SPLUS_MONTHLY',
-		expectedCardHeading: 'All-access digital',
+		expectedCardHeading: ProductTierLabel.TierTwo,
 		expectedPromoText:
 			/£(\d|\.)+\/month for (\d|\.) months, then £(\d|\.)+\/month/,
 		expectedCheckoutTotalText: 'Was £12, now £9.60/month',
 		expectedThankYouText:
 			/You'll pay £(\d|\.)+\/month for the first (\d|\.)+ months, then £(\d|\.)+\/month afterwards unless you cancel\./,
-		accessibleCtaText: 'All-access digital',
+		accessibleCtaText: ProductTierLabel.TierTwo,
 	},
 	{
 		tier: 2,
 		frequency: 'Annual',
 		promoCode: 'E2E_TEST_SPLUS_ANNUAL',
-		expectedCardHeading: 'All-access digital',
+		expectedCardHeading: ProductTierLabel.TierTwo,
 		expectedPromoText:
 			/£(\d|\.)+\/year for the first year, then £(\d|\.)+\/year/i,
 		expectedCheckoutTotalText: /Was £(\d|\.)+, now £(\d|\.)+\/year/i,
 		expectedThankYouText:
 			/You'll pay £(\d|\.)+\/year for the first year, then £(\d|\.)+\/year afterwards unless you cancel\./i,
-		accessibleCtaText: 'All-access digital',
+		accessibleCtaText: ProductTierLabel.TierTwo,
 	},
 ].forEach((testDetails) => {
 	test(`${testDetails.expectedCardHeading} ${testDetails.frequency} ${testDetails.promoCode}`, async ({

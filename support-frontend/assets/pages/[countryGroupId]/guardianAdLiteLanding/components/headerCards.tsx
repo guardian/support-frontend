@@ -13,6 +13,7 @@ import { Container } from 'components/layout/container';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
+	getProductLabel,
 	productCatalog,
 	productCatalogGuardianAdLite,
 } from 'helpers/productCatalog';
@@ -136,8 +137,8 @@ export function HeaderCards({
 					<div css={signIn}>
 						<p css={paragraph}>
 							If you already have Guardian Ad-Lite or another Guardian
-							subscription that offers ad-free reading, such as All-access
-							digital, you should, {SignInLink}
+							subscription that offers ad-free reading, such as{' '}
+							{getProductLabel('SupporterPlus')}, you should, {SignInLink}
 						</p>
 					</div>
 				)}

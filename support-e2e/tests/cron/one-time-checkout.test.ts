@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
-import { afterEachTasks } from '../utils/afterEachTest';
 import { testOneTimeCheckout } from '../test/oneTimeCheckout';
+import { afterEachTasks } from '../utils/afterEachTest';
 
 afterEachTasks(test);
 

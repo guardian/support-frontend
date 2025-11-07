@@ -1,4 +1,4 @@
-import { BrowserContext, Page } from '@playwright/test';
+import type { BrowserContext, Page } from '@playwright/test';
 import { setTestCookies } from './cookies';
 
 export const setupPage = async (

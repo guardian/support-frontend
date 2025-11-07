@@ -20,7 +20,6 @@ countryGroupsWithStates.forEach((internationalisationId) => {
 			const page = await context.newPage();
 			const domain = new URL(baseURL ?? 'support.theguardian.com').hostname;
 			await setTestCookies(context, 'SupportPostDeployTestF', domain);
-
 			await page.goto(
 				`/${internationalisationId}/checkout?product=${product}&ratePlan=${ratePlan}${
 					contribution ? `&contribution=${contribution}` : ''

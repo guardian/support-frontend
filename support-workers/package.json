@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --group=-integration",
     "it-test": "jest --group=integration",
-    "lint:check": "eslint src/typescript/**/*.ts",
+    "lint": "eslint src/typescript/**/*.ts",
     "lint:fix": "eslint --fix src/typescript/**/*.ts",
     "check-formatting": "prettier --check **.ts",
     "fix-formatting": "prettier --write **.ts",
@@ -16,8 +16,8 @@
     "clean-target": "rm -rf target && mkdir -p target",
     "zip": "cd target/typescript && zip -r support-workers.zip ./* -x \".*\" -x \"__MACOSX\"",
     "bundle-and-zip": "pnpm clean-target && pnpm bundle && pnpm zip",
-    "check-modules": "pnpm --filter modules check-formatting && pnpm --filter modules lint:check",
-    "package": "pnpm check-modules && pnpm check-formatting && pnpm lint:check && pnpm build && pnpm test && pnpm bundle-and-zip",
+    "check-modules": "pnpm --filter modules check-formatting && pnpm --filter modules lint",
+    "package": "pnpm check-modules && pnpm check-formatting && pnpm lint && pnpm build && pnpm test && pnpm bundle-and-zip",
     "deploy-to-code": "node deployToCode.mjs",
     "package-and-deploy": "pnpm package && pnpm deploy-to-code"
   },

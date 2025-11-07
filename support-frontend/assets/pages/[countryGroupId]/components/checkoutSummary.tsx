@@ -125,7 +125,7 @@ export default function CheckoutSummary({
 	}
 
 	const premiumDigitalBenefits =
-		enablePremiumDigital && productKey === 'DigitalSubscription'
+		productKey === 'DigitalSubscription' && enablePremiumDigital
 			? getPremiumDigitalAllBenefits(countryGroupId)
 			: undefined;
 	const benefitsCheckListData =

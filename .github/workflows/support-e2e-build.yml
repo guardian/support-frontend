@@ -1,0 +1,25 @@
+name: support-e2e-build.yml
+permissions: { contents: read }
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    paths:
+      - support-e2e/**
+
+jobs:
+  support_e2e_build:
+    name: support-e2e - build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - name: Setup Node and Install Dependencies
+        uses: ./.github/actions/setup-node-and-install
+
+      - name: Lint check
+        run: pnpm --filter support-e2e lint
+
+      - name: Type check
+        run: pnpm --filter support-e2e build

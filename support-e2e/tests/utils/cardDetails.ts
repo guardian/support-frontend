@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 export const fillInCardDetails = (page: Page) =>
 	fillInCardDetailsWithNumber(page, '4242424242424242');

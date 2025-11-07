@@ -1,4 +1,4 @@
-import {
+import type {
 	PlaywrightTestArgs,
 	PlaywrightTestOptions,
 	PlaywrightWorkerArgs,
@@ -16,7 +16,7 @@ export const afterEachTasks = (
 		if (process.env.RUNNING_IN_BROWSERSTACK) {
 			if (testInfo.status) {
 				await page.evaluate(
-					(_) => {},
+					() => {},
 					`browserstack_executor: ${JSON.stringify({
 						action: 'setSessionStatus',
 						arguments: { status: testInfo.status },
@@ -24,8 +24,8 @@ export const afterEachTasks = (
 				);
 			}
 		}
-		context.pages().forEach(async (page) => {
+		for (const page of context.pages()) {
 			await page.close();
-		});
+		}
 	});
 };
