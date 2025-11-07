@@ -84,11 +84,7 @@ export default function CheckoutSummary({
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const { enablePremiumDigital } = getFeatureFlags();
-	const productDescription = getProductDescription(
-		productKey,
-		ratePlanKey,
-		enablePremiumDigital,
-	);
+	const productDescription = getProductDescription(productKey, ratePlanKey);
 	const ratePlanDetail = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
 	};
