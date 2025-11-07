@@ -84,6 +84,7 @@ type RatePlanDetails = Record<
 	string,
 	{
 		billingPeriod: RecurringBillingPeriod;
+		displayName?: string;
 		label?: string;
 		hideSimilarProductsConsent?: boolean;
 		fixedTerm?: boolean;
@@ -245,49 +246,60 @@ const digitalThankyouMessage = `You'll receive a confirmation email containing e
 const nationalPaperPlusRatePlans: RatePlanDetails = {
 	Everyday: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'Every day package',
+		displayName: 'Every day package',
+		label: 'every day',
 	},
 	EverydayPlus: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'Every day package',
+		displayName: 'Every day package',
+		label: 'every day',
 	},
 	Sixday: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'Six day package',
+		displayName: 'Six day package',
+		label: 'six day',
 	},
 	SixdayPlus: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'Six day package',
+		displayName: 'Six day package',
+		label: 'six day',
 	},
 	Weekend: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'Weekend package',
+		displayName: 'Weekend package',
+		label: 'weekend',
 	},
 	WeekendPlus: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'Weekend package',
+		displayName: 'Weekend package',
+		label: 'weekend',
 	},
 };
 
-export const observerLabelSuffix = ', digital & print';
 const paperPlusRatePlans: RatePlanDetails = {
 	...nationalPaperPlusRatePlans,
 	Saturday: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'Saturday package',
+		displayName: 'Saturday package',
+		label: 'saturday',
 	},
 	SaturdayPlus: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'Saturday package',
+		displayName: 'Saturday package',
+		label: 'saturday',
 	},
 	Sunday: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: `The Observer${observerLabelSuffix}`,
+		displayName: 'The Observer, digital & print',
+		label: 'Observer',
+
 		hideSimilarProductsConsent: true,
 	},
 	SundayPlus: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: `The Observer${observerLabelSuffix}`,
+		displayName: 'The Observer, digital & print',
+		label: 'Observer',
+
 		hideSimilarProductsConsent: true,
 	},
 };

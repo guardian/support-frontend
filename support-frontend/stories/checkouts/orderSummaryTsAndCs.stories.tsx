@@ -1,7 +1,5 @@
-import {
-	OrderSummaryTsAndCs,
-	OrderSummaryTsAndCsProps,
-} from 'components/orderSummary/orderSummaryTsAndCs';
+import type { OrderSummaryTsAndCsProps } from 'components/orderSummary/orderSummaryTsAndCs';
+import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
 
 export default {
 	title: 'Checkouts/Ts&Cs Order Summary',
