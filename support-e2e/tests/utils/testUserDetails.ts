@@ -1,5 +1,5 @@
-import { Page } from '@playwright/test';
-import { TestRecipient, TestFields } from './userFields';
+import type { Page } from '@playwright/test';
+import type { TestFields, TestRecipient } from './userFields';
 
 const selectDeliveryAgent = async (page: Page) => {
 	// Depending on whether there are one or multiple delivery agents we need to do different things here.
@@ -84,11 +84,11 @@ export const setTestUserDetails = async (
 	product: string,
 	internationalisationId: string,
 	testFields: TestFields,
-	ratePlan: string,
+	ratePlan?: string,
 ) => {
 	const stateLabel = internationalisationId === 'CA' ? 'Province' : 'State';
-	const isWeeklyGift = ['3MonthGift', 'OneYearGift'].includes(ratePlan);
-	if (isWeeklyGift) {
+	const isWeeklyGift = ['3MonthGift', 'OneYearGift'].includes(ratePlan ?? '');
+	if (isWeeklyGift && testFields.recipient) {
 		await setGiftingCoreDetails(
 			page,
 			testFields.email,
@@ -106,7 +106,10 @@ export const setTestUserDetails = async (
 		);
 	}
 
-	if (['US', 'AU', 'CA'].includes(internationalisationId)) {
+	if (
+		['US', 'AU', 'CA'].includes(internationalisationId) &&
+		testFields.addresses
+	) {
 		await page
 			.getByLabel(stateLabel)
 			.selectOption({ label: testFields.addresses[0].state });

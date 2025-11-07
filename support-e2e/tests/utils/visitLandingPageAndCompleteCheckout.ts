@@ -1,10 +1,11 @@
-import { BrowserContext, expect, Page } from '@playwright/test';
-import { setupPage } from './page';
+import type { BrowserContext, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { completeGenericCheckout } from './completeGenericCheckout';
+import { setupPage } from './page';
 
 type TestDetails = {
 	context: BrowserContext;
-	baseURL: string;
+	baseURL?: string;
 	product: string;
 	paymentType: string;
 	internationalisationId: string;

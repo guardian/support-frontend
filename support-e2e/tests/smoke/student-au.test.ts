@@ -44,7 +44,7 @@ import { email, firstName, lastName } from '../utils/users';
 		).toBeVisible();
 
 		// Click through to the checkout
-		const purchaseButton = await page.getByText(testDetails.accessibleCtaText);
+		const purchaseButton = page.getByText(testDetails.accessibleCtaText);
 		await purchaseButton.click();
 
 		// Checkout

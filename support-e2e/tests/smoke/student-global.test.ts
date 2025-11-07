@@ -66,14 +66,14 @@ import { email, firstName, lastName } from '../utils/users';
 		).toBeVisible();
 
 		// Click through to the checkout
-		const purchaseButton = await page.getByText(testDetails.accessibleCtaText);
+		const purchaseButton = page.getByText(testDetails.accessibleCtaText);
 		await purchaseButton.click();
 
 		await page.waitForURL('https://www.studentbeans.com/**');
 		const studentBeansCardHeader = page.getByText(
 			`${testDetails.expectedCardHeading} subscription - ${testDetails.amountDescription}/year`,
 		);
-		expect(studentBeansCardHeader).toBeVisible();
+		await expect(studentBeansCardHeader).toBeVisible();
 	});
 
 	test(`${testDetails.expectedCardHeading} checkout for ${testDetails.country}`, async ({
