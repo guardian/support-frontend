@@ -57,9 +57,11 @@ const oneYearStudentDiscount = {
 	fullPriceWithCurrency: '£120',
 };
 
-const contributionKey = 'Contribution';
-const supporterPlusKey = 'SupporterPlus';
-const tierThreeKey = 'TierThree';
+enum ProductKeys {
+	Contribution = 'Contribution',
+	SupporterPlusKey = 'SupporterPlus',
+	TierThreeKey = 'TierThree',
+}
 
 export default {
 	title: 'Checkouts/Contributions Order Summary',
@@ -132,7 +134,7 @@ Default.args = {
 
 export const SingleContribution = Template.bind({});
 SingleContribution.args = {
-	productKey: contributionKey,
+	productKey: ProductKeys.Contribution,
 	ratePlanKey: 'OneTime',
 	productLabel: 'One-off contribution',
 	enableCheckList: false,
@@ -156,9 +158,9 @@ SingleContribution.args = {
 
 export const RecurringContribution = Template.bind({});
 RecurringContribution.args = {
-	productKey: contributionKey,
+	productKey: ProductKeys.Contribution,
 	ratePlanKey: 'Monthly',
-	productLabel: getProductLabel(contributionKey),
+	productLabel: getProductLabel(ProductKeys.Contribution),
 	enableCheckList: true,
 	amount: 3,
 	currency: {
@@ -191,9 +193,9 @@ RecurringContribution.args = {
 
 export const SupporterPlus = Template.bind({});
 SupporterPlus.args = {
-	productKey: supporterPlusKey,
+	productKey: ProductKeys.SupporterPlusKey,
 	ratePlanKey: 'Monthly',
-	productLabel: getProductLabel(supporterPlusKey),
+	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
 	enableCheckList: true,
 	amount: 12,
 	currency: {
@@ -227,9 +229,9 @@ SupporterPlus.args = {
 
 export const TierThree = Template.bind({});
 TierThree.args = {
-	productKey: tierThreeKey,
+	productKey: ProductKeys.TierThreeKey,
 	ratePlanKey: 'Monthly',
-	productLabel: getProductLabel(tierThreeKey),
+	productLabel: getProductLabel(ProductKeys.TierThreeKey),
 	enableCheckList: true,
 	amount: 27,
 	currency: {
@@ -273,9 +275,9 @@ TierThree.args = {
 
 export const StudentOneYear = Template.bind({});
 StudentOneYear.args = {
-	productKey: supporterPlusKey,
+	productKey: ProductKeys.SupporterPlusKey,
 	ratePlanKey: 'OneYearStudent',
-	productLabel: getProductLabel(supporterPlusKey),
+	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
 	paymentFrequency: 'year',
 	enableCheckList: true,
 	amount: 120,
