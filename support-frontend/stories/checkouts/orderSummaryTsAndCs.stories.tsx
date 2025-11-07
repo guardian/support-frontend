@@ -55,7 +55,7 @@ export const SubscriptionCardWeekend = Template.bind({});
 SubscriptionCardWeekend.args = {
 	productKey: 'SubscriptionCard',
 	ratePlanKey: 'WeekendPlus',
-	ratePlanDescription: 'Weekend package',
+	ratePlanDescription: 'Weekend',
 	countryGroupId: 'GBPCountries',
 };
 
@@ -63,6 +63,6 @@ export const HomeDeliverySixday = Template.bind({});
 HomeDeliverySixday.args = {
 	productKey: 'HomeDelivery',
 	ratePlanKey: 'SixdayPlus',
-	ratePlanDescription: 'Six day package',
+	ratePlanDescription: 'Six day',
 	countryGroupId: 'GBPCountries',
 };
