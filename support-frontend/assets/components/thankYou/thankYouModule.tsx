@@ -274,7 +274,7 @@ function ThankYouModule({
 
 				{hasImagery ? (
 					<div css={[imgContainer, resizeImgContainer]}>
-						{!isNewspaperArchiveBenefit ? (
+						{isNewspaperArchiveBenefit ? (
 							<NewspaperArchiveImage />
 						) : (
 							<AppDownloadImage />
