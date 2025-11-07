@@ -342,7 +342,7 @@ export function ThankYouComponent({
 					/>
 
 					<ThankYouNavLinks
-						observerPrint={observerPrint}
+						isObserverPrint={!!observerPrint}
 						isGuardianAdLite={isGuardianAdLite}
 					/>
 				</div>
