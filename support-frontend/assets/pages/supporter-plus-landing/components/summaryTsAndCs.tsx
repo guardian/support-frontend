@@ -68,13 +68,9 @@ export function SummaryTsAndCs({
 	const isPaperSundayOrPlus =
 		isSundayOnlyNewsletterSubscription ||
 		isPaperPlusSub(productKey, ratePlanKey);
-	const { enablePremiumDigital } = getFeatureFlags();
 
-	const { label: productName } = getProductDescription(
-		productKey,
-		ratePlanKey,
-		enablePremiumDigital,
-	);
+	const { enablePremiumDigital } = getFeatureFlags();
+	const { label: productName } = getProductDescription(productKey, ratePlanKey);
 
 	const rateDescriptor = ratePlanDescription ?? ratePlanKey;
 

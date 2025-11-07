@@ -1,31 +1,32 @@
 import test from '@playwright/test';
 import { forceSkipNewOnboardingExperience } from '../utils/forceSkipNewOnboardingExperience';
+import { ProductTierLabel } from '../utils/products';
 import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAndCompleteCheckout';
 
 const tests = [
 	{
-		productLabel: 'Support',
+		productLabel: ProductTierLabel.TierOne,
 		product: 'Contribution',
 		billingFrequency: 'Monthly',
 		paymentType: 'Direct debit',
 		internationalisationId: 'UK',
 	},
 	{
-		productLabel: 'Support',
+		productLabel: ProductTierLabel.TierOne,
 		product: 'Contribution',
 		billingFrequency: 'Annual',
 		paymentType: 'Credit/Debit card',
 		internationalisationId: 'CA',
 	},
 	{
-		productLabel: 'All-access digital',
+		productLabel: ProductTierLabel.TierTwo,
 		product: 'SupporterPlus',
 		billingFrequency: 'Monthly',
 		paymentType: 'Credit/Debit card',
 		internationalisationId: 'US',
 	},
 	{
-		productLabel: 'Digital + print',
+		productLabel: ProductTierLabel.TierThree,
 		product: 'TierThree',
 		billingFrequency: 'Annual',
 		paymentType: 'Credit/Debit card',

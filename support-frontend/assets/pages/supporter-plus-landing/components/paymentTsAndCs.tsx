@@ -16,7 +16,7 @@ import {
 	tierThreeTermsLink,
 } from 'helpers/legal';
 import { productLegal } from 'helpers/legalCopy';
-import { productCatalogDescription } from 'helpers/productCatalog';
+import { getProductLabel } from 'helpers/productCatalog';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -36,6 +36,8 @@ import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/dis
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { FinePrint } from './finePrint';
 import { ManageMyAccountLink } from './manageMyAccountLink';
+
+const tierThreeLabel = getProductLabel('TierThree');
 
 const marginTop = css`
 	margin-top: 4px;
@@ -73,9 +75,9 @@ export function FooterTsAndCs({
 	const getProductNameSummary = (): string => {
 		switch (productKey) {
 			case 'GuardianAdLite':
-				return 'the Guardian Ad-Lite';
+				return `the ${getProductLabel('GuardianAdLite')}`;
 			case 'TierThree':
-				return 'Digital + print';
+				return tierThreeLabel;
 			default:
 				return 'our';
 		}
@@ -256,7 +258,7 @@ export function PaymentTsAndCs({
 				promotion,
 		  );
 
-	const productLabel = productCatalogDescription[productKey].label;
+	const productLabel = getProductLabel(productKey);
 	const subscriptionBasis = !isStudentOneYearRatePlan
 		? 'on a subscription basis'
 		: '';
@@ -287,12 +289,13 @@ export function PaymentTsAndCs({
 			{accountAndTermsLCopyAndLinks}.
 		</>
 	);
+
 	const studentSupporterPlusTsAndCs: JSX.Element = (
 		<>
-			You may cancel your All-access digital subscription within 14 days of
-			taking out the subscription. If you do, you'll receive a full refund and
-			your subscription will stop immediately. {accountAndTermsLCopyAndLinks}.
-			This subscription does not auto-renew.
+			You may cancel your {getProductLabel('SupporterPlus')} subscription within
+			14 days of taking out the subscription. If you do, you'll receive a full
+			refund and your subscription will stop immediately.{' '}
+			{accountAndTermsLCopyAndLinks}. This subscription does not auto-renew.
 		</>
 	);
 
@@ -338,21 +341,21 @@ export function PaymentTsAndCs({
 		TierThree: (
 			<div>
 				<p>
-					By signing up, you are taking out a Digital + print subscription. Your
-					Digital + print subscription will auto-renew each{' '}
+					By signing up, you are taking out a {tierThreeLabel} subscription.
+					Your {tierThreeLabel} subscription will auto-renew each{' '}
 					{billingPeriodSingular} unless cancelled. Your first payment will be
 					taken on the publication date of your first Guardian Weekly magazine
 					(as shown in the checkout) but you will start to receive your digital
 					benefits when you sign up. Unless you cancel, subsequent{' '}
 					{billingPeriodPlural} payments will be taken on this date using your
-					chosen payment method. You can cancel your Digital + print
+					chosen payment method. You can cancel your {tierThreeLabel}{' '}
 					subscription at any time before your next renewal date. If you cancel
-					your Digital + print subscription within 14 days of signing up, your
+					your {tierThreeLabel} subscription within 14 days of signing up, your
 					subscription will stop immediately and we will not take the first
 					payment from you. Cancellation of your subscription after 14 days will
 					take effect at the end of your current {billingPeriodPlural} payment
 					period. To cancel go to&nbsp;
-					{ManageMyAccountLink} or see our Digital + print{' '}
+					{ManageMyAccountLink} or see our {tierThreeLabel}{' '}
 					{termsLink('Terms', tierThreeTermsLink)}.
 				</p>
 			</div>

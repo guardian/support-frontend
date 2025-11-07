@@ -5,6 +5,7 @@ import {
 } from '@guardian/source/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import type { ProductBenefit } from 'helpers/globalsAndSwitches/landingPageSettings';
+import { getProductLabel } from 'helpers/productCatalog';
 import {
 	benefitsListCSS,
 	btnStyleOverrides,
@@ -29,18 +30,19 @@ export default function StudentProductCard({
 	ctaLabel: string;
 	discountSummary?: string;
 }) {
+	const supporterPlusLabel = getProductLabel('SupporterPlus');
 	return (
 		<section css={container}>
 			<div css={pill}>Student offer</div>
 			<div css={headWrapper}>
-				<h2 css={heading}>All-access digital</h2>
+				<h2 css={heading}>{supporterPlusLabel}</h2>
 				<p css={priceCss}>{price}</p>
 			</div>
 			<LinkButton
 				data-testid="cta-button"
 				href={ctaUrl}
 				cssOverrides={btnStyleOverrides}
-				aria-label="All-access digital"
+				aria-label={supporterPlusLabel}
 				theme={themeButtonReaderRevenueBrand}
 			>
 				{ctaLabel}

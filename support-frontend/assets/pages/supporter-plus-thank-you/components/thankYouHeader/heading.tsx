@@ -41,7 +41,7 @@ function Heading({
 	const contributionProduct = isContributionProduct(productKey);
 	const isGuardianPrint = isPrintProduct(productKey) && !isObserverPrint;
 	const { enablePremiumDigital } = getFeatureFlags();
-	const isPremiumDigital = isDigitalEdition && enablePremiumDigital;
+	const isPremiumDigital = enablePremiumDigital && isDigitalEdition;
 
 	const contributorName = name && name.length < 10 ? name : '';
 
@@ -81,7 +81,6 @@ function Heading({
 		const { label: productName } = getProductDescription(
 			productKey,
 			ratePlanKey,
-			isPremiumDigital,
 		);
 
 		return (

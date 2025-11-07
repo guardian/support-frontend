@@ -19,9 +19,11 @@ import {
 	BenefitsCheckList,
 	checkListTextItemCss,
 } from 'components/checkoutBenefits/benefitsCheckList';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
+import { getProductLabel } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -37,7 +39,6 @@ export type CardContent = LandingPageProductDescription & {
 		| 'SupporterPlus'
 		| 'Contribution'
 		| 'DigitalSubscription';
-	enablePremiumDigital?: boolean;
 };
 
 export type ThreeTierCardProps = {
@@ -212,8 +213,8 @@ export function ThreeTierCard({
 		link,
 		cta,
 		product,
-		enablePremiumDigital,
 	} = cardContent;
+	const { enablePremiumDigital } = getFeatureFlags();
 	const currency = currencies[currencyId];
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const formattedPrice = simpleFormatAmount(currency, price);
@@ -269,7 +270,8 @@ export function ThreeTierCard({
 			{inAdditionToAllAccessDigital && (
 				<div css={benefitsPrefixCss}>
 					<span>
-						The rewards from <strong>All-access digital</strong>
+						The rewards from{' '}
+						<strong> {getProductLabel('SupporterPlus')}</strong>
 					</span>
 					{benefits.length > 0 && <span css={benefitsPrefixPlus}>plus</span>}
 				</div>

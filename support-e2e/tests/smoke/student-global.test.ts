@@ -3,6 +3,7 @@ import { fillInCardDetails } from '../utils/cardDetails';
 import { fillInDirectDebitDetails } from '../utils/directDebitDetails';
 import { forceSkipNewOnboardingExperience } from '../utils/forceSkipNewOnboardingExperience';
 import { setupPage } from '../utils/page';
+import { ProductTierLabel } from '../utils/products';
 import { checkRecaptcha } from '../utils/recaptcha';
 import { setTestUserCoreDetails } from '../utils/testUserDetails';
 import { email, firstName, lastName } from '../utils/users';
@@ -15,7 +16,7 @@ import { email, firstName, lastName } from '../utils/users';
 		product: 'SupporterPlus',
 		ratePlan: 'OneYearStudent',
 		amountDescription: '£9',
-		expectedCardHeading: 'All-access digital',
+		expectedCardHeading: ProductTierLabel.TierTwo,
 		expectedCheckoutText:
 			'If you cancel within the first 14 days, you will receive a full refund.',
 		accessibleCtaText: 'Subscribe',
@@ -28,7 +29,7 @@ import { email, firstName, lastName } from '../utils/users';
 		product: 'SupporterPlus',
 		ratePlan: 'OneYearStudent',
 		amountDescription: '$10',
-		expectedCardHeading: 'All-access digital',
+		expectedCardHeading: ProductTierLabel.TierTwo,
 		expectedCheckoutText:
 			'If you cancel within the first 14 days, you will receive a full refund.',
 		accessibleCtaText: 'Subscribe',
@@ -41,7 +42,7 @@ import { email, firstName, lastName } from '../utils/users';
 		product: 'SupporterPlus',
 		ratePlan: 'OneYearStudent',
 		amountDescription: '$10',
-		expectedCardHeading: 'All-access digital',
+		expectedCardHeading: ProductTierLabel.TierTwo,
 		expectedCheckoutText:
 			'If you cancel within the first 14 days, you will receive a full refund.',
 		accessibleCtaText: 'Subscribe',

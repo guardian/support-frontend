@@ -12,6 +12,13 @@ import type {
 } from '@modules/product-catalog/productCatalog';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { Participations } from './abTests/models';
+import { getFeatureFlags } from './featureFlags';
+
+export enum ProductTierLabel {
+	TierOne = 'Support',
+	TierTwo = 'All-access digital',
+	TierThree = 'Digital + print',
+}
 
 const activeProductKeys = [
 	'GuardianWeeklyDomestic',
@@ -308,7 +315,7 @@ export const productCatalogDescription: Record<
 		benefits: guardianAdLiteBenefits,
 	},
 	TierThree: {
-		label: 'Digital + print',
+		label: ProductTierLabel.TierThree,
 		thankyouMessage: digitalThankyouMessage,
 		landingPagePath: '/contribute',
 		benefits: [guardianWeeklyBenefit],
@@ -361,7 +368,7 @@ export const productCatalogDescription: Record<
 		},
 	},
 	SupporterPlus: {
-		label: 'All-access digital',
+		label: ProductTierLabel.TierTwo,
 		landingPagePath: '/contribute',
 		benefits: supporterPlusBenefits,
 		ratePlans: {
@@ -456,7 +463,7 @@ export const productCatalogDescription: Record<
 		ratePlans: nationalPaperPlusRatePlans,
 	},
 	Contribution: {
-		label: 'Support',
+		label: ProductTierLabel.TierOne,
 		landingPagePath: '/contribute',
 		benefits: [supportBenefit, newsletterBenefitUS],
 		ratePlans: {
@@ -513,6 +520,11 @@ const editionsDigitalBenefit = {
 	tooltip: `Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.`,
 };
 
+const productCatalogDescriptionDigitalAccess = {
+	...productCatalogDescription.SupporterPlus,
+	label: 'Digital access',
+};
+
 export const productCatalogDescriptionPremiumDigital = {
 	...productCatalogDescription.DigitalSubscription,
 	label: 'Digital plus',
@@ -562,13 +574,27 @@ const productCatalogGuardianWeeklyGift = {
 	},
 };
 
+export const getProductLabel = (productKey: ActiveProductKey): string => {
+	const { enablePremiumDigital, enableDigitalAccess } = getFeatureFlags();
+	if (productKey === 'DigitalSubscription' && enablePremiumDigital) {
+		return productCatalogDescriptionPremiumDigital.label;
+	}
+	if (productKey === 'SupporterPlus' && enableDigitalAccess) {
+		return productCatalogDescriptionDigitalAccess.label;
+	}
+	return productCatalogDescription[productKey].label;
+};
+
 export const getProductDescription = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	enablePremiumDigital: boolean,
 ): ProductDescription => {
-	if (enablePremiumDigital && productKey === 'DigitalSubscription') {
+	const { enablePremiumDigital, enableDigitalAccess } = getFeatureFlags();
+	if (productKey === 'DigitalSubscription' && enablePremiumDigital) {
 		return productCatalogDescriptionPremiumDigital;
+	}
+	if (productKey === 'SupporterPlus' && enableDigitalAccess) {
+		return productCatalogDescriptionDigitalAccess;
 	}
 	if (isGuardianWeeklyGiftProduct(productKey, ratePlanKey)) {
 		return productCatalogGuardianWeeklyGift[productKey];

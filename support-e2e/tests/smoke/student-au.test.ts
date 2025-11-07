@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { fillInCardDetails } from '../utils/cardDetails';
 import { forceSkipNewOnboardingExperience } from '../utils/forceSkipNewOnboardingExperience';
 import { setupPage } from '../utils/page';
+import { ProductTierLabel } from '../utils/products';
 import { checkRecaptcha } from '../utils/recaptcha';
 import { setTestUserCoreDetails } from '../utils/testUserDetails';
 import { email, firstName, lastName } from '../utils/users';
@@ -10,7 +11,7 @@ import { email, firstName, lastName } from '../utils/users';
 	{
 		frequency: 'Monthly',
 		promoCode: 'UTS_STUDENT',
-		expectedCardHeading: 'All-access digital',
+		expectedCardHeading: ProductTierLabel.TierTwo,
 		expectedPromoText: '$0/month for two years, then $20/month',
 		expectedCheckoutTotalText: 'Was $20, now $0/month',
 		accessibleCtaText: 'Sign up for free',
