@@ -1,5 +1,5 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { getFeatureFlags } from 'helpers/featureFlags';
+import { FeatureFlagName, getFeatureFlags } from 'helpers/featureFlags';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -36,8 +36,8 @@ export default function buildCheckoutUrl(
 		urlSearchParams.set('promoCode', promoCode);
 	}
 	const { enableDigitalAccess } = getFeatureFlags();
-	if (enableDigitalAccess) {
-		urlSearchParams.set('enableDigitalAccess', 'true');
-	}
-	return `/${supportRegionId}/checkout?${urlSearchParams.toString()}`;
+	const featureFlag = enableDigitalAccess
+		? `&${FeatureFlagName.EnableDigitalAccess}`
+		: '';
+	return `/${supportRegionId}/checkout?${urlSearchParams.toString()}${featureFlag}`;
 }

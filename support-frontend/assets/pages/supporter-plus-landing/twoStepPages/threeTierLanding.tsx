@@ -41,7 +41,7 @@ import {
 	getCampaignSettings,
 } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
-import { getFeatureFlags } from 'helpers/featureFlags';
+import { FeatureFlagName, getFeatureFlags } from 'helpers/featureFlags';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
@@ -401,9 +401,9 @@ export function ThreeTierLanding({
 	if (tier2Promotion) {
 		tier2UrlParams.set('promoCode', tier2Promotion.promoCode);
 	}
-	if (enableDigitalAccess) {
-		tier2UrlParams.set('enableDigitalAccess', 'true');
-	}
+	const tier2FeatureFlag = enableDigitalAccess
+		? `&${FeatureFlagName.EnableDigitalAccess}`
+		: '';
 	const tier2ProductDescription = {
 		...settings.products.SupporterPlus,
 		title: getProductLabel('SupporterPlus'),
@@ -412,7 +412,7 @@ export function ThreeTierLanding({
 	const tier2Card: CardContent = {
 		product: 'SupporterPlus',
 		price: tier2Pricing,
-		link: `checkout?${tier2UrlParams.toString()}`,
+		link: `checkout?${tier2UrlParams.toString()}${tier2FeatureFlag}`,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion: tier2Promotion,
 		isUserSelected:
@@ -482,13 +482,14 @@ export function ThreeTierLanding({
 	if (tier3Promotion) {
 		tier3UrlParams.set('promoCode', tier3Promotion.promoCode);
 	}
-	if (enablePremiumDigital) {
-		tier3UrlParams.set('enablePremiumDigital', 'true');
-	}
+	const tier3FeatureFlag = enablePremiumDigital
+		? `&${FeatureFlagName.EnablePremiumDigital}`
+		: '';
+
 	const tier3Card: CardContent = {
 		product: tier3Product,
 		price: tier3Pricing,
-		link: `checkout?${tier3UrlParams.toString()}`,
+		link: `checkout?${tier3UrlParams.toString()}${tier3FeatureFlag}`,
 		promotion: tier3Promotion,
 		isUserSelected:
 			urlSearchParamsProduct === tier3Product ||
