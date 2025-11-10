@@ -64,6 +64,10 @@ case object PayPalGateway extends PaymentGateway {
   val name = "PayPal Express"
 }
 
+case object PayPalCompletePaymentsGateway extends PaymentGateway {
+  val name = "PayPal Complete Payments"
+}
+
 case object DirectDebitGateway extends PaymentGateway {
   val name = "GoCardless"
 }
