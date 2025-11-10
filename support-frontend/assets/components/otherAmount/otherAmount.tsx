@@ -31,7 +31,6 @@ export function OtherAmount({
 	maxAmount,
 }: OtherAmountProps): JSX.Element | null {
 	const currencyDetails = getCurrencyInfo(currency);
-	const prefix = currencyDetails.glyph;
 
 	if (selectedAmount === 'other') {
 		return (
@@ -39,7 +38,7 @@ export function OtherAmount({
 				<NumericInput
 					id="otherAmount"
 					label="Enter your amount"
-					prefixText={prefix}
+					prefixText={currencyDetails.glyph}
 					error={errors?.[0]}
 					value={otherAmount === '0' ? '' : otherAmount}
 					type="number"

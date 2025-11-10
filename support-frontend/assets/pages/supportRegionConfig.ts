@@ -1,8 +1,8 @@
 import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
+import { getCurrencyInfo } from '@modules/internationalisation/currency';
 
 type SupportRegionConfig = {
 	currency: CurrencyInfo;
@@ -21,55 +21,52 @@ type SupportRegionConfig = {
 export const getSupportRegionIdConfig = (
 	supportRegionId: SupportRegionId,
 ): SupportRegionConfig => {
-	const currencyInfo = (code: IsoCurrency): CurrencyInfo =>
-		getCurrencyInfo(code);
-
 	switch (supportRegionId) {
 		case SupportRegionId.UK:
 			return {
-				currency: currencyInfo('GBP'),
+				currency: getCurrencyInfo('GBP'),
 				currencyKey: 'GBP',
 				countryGroupId: 'GBPCountries',
 			};
 
 		case SupportRegionId.US:
 			return {
-				currency: currencyInfo('USD'),
+				currency: getCurrencyInfo('USD'),
 				currencyKey: 'USD',
 				countryGroupId: 'UnitedStates',
 			};
 
 		case SupportRegionId.AU:
 			return {
-				currency: currencyInfo('AUD'),
+				currency: getCurrencyInfo('AUD'),
 				currencyKey: 'AUD',
 				countryGroupId: 'AUDCountries',
 			};
 
 		case SupportRegionId.EU:
 			return {
-				currency: currencyInfo('EUR'),
+				currency: getCurrencyInfo('EUR'),
 				currencyKey: 'EUR',
 				countryGroupId: 'EURCountries',
 			};
 
 		case SupportRegionId.NZ:
 			return {
-				currency: currencyInfo('NZD'),
+				currency: getCurrencyInfo('NZD'),
 				currencyKey: 'NZD',
 				countryGroupId: 'NZDCountries',
 			};
 
 		case SupportRegionId.CA:
 			return {
-				currency: currencyInfo('CAD'),
+				currency: getCurrencyInfo('CAD'),
 				currencyKey: 'CAD',
 				countryGroupId: 'Canada',
 			};
 
 		case SupportRegionId.INT:
 			return {
-				currency: currencyInfo('USD'),
+				currency: getCurrencyInfo('USD'),
 				currencyKey: 'USD',
 				countryGroupId: 'International',
 			};
