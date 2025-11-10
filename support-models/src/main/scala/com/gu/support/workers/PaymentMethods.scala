@@ -5,7 +5,13 @@ import com.gu.i18n.Country
 import com.gu.i18n.Country.UK
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
-import com.gu.support.zuora.api.{DirectDebitGateway, PayPalGateway, PaymentGateway, SepaGateway}
+import com.gu.support.zuora.api.{
+  DirectDebitGateway,
+  PayPalCompletePaymentsGateway,
+  PayPalGateway,
+  PaymentGateway,
+  SepaGateway,
+}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 
@@ -52,6 +58,13 @@ case class PayPalReferenceTransaction(
     PaypalType: String = "ExpressCheckout",
     Type: String = "PayPal",
     PaymentGateway: PaymentGateway = PayPalGateway,
+) extends PaymentMethod
+
+case class PayPalCompletePaymentsReferenceTransaction(
+    PaypalBaid: String,
+    PaypalEmail: String,
+    Type: String = "PayPalCompletePayments",
+    PaymentGateway: PaymentGateway = PayPalCompletePaymentsGateway,
 ) extends PaymentMethod
 
 case class DirectDebitPaymentMethod(
