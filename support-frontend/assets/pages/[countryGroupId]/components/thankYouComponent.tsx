@@ -303,7 +303,7 @@ export function ThankYouComponent({
 		...maybeThankYouModule(isPremiumDigital, 'newspaperArchiveBenefit'),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(
-			!isTierThree && !isGuardianAdLite && !isPrint,
+			!isTierThree && !isGuardianAdLite && !isPrint && !isPremiumDigital,
 			'socialShare',
 		),
 		...maybeThankYouModule(
