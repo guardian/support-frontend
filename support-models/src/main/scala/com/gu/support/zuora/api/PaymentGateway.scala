@@ -24,6 +24,7 @@ object PaymentGateway {
     case StripeGatewayDefault.name => StripeGatewayDefault
     case StripeGatewayAUD.name => StripeGatewayAUD
     case PayPalGateway.name => PayPalGateway
+    case PayPalCompletePaymentsGateway.name => PayPalCompletePaymentsGateway
     case DirectDebitGateway.name => DirectDebitGateway
     case DirectDebitTortoiseMediaGateway.name => DirectDebitTortoiseMediaGateway
     case SepaGateway.name => SepaGateway
