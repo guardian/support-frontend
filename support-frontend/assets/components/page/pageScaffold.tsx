@@ -1,6 +1,6 @@
 import { css, Global } from '@emotion/react';
 import { FocusStyleManager, palette } from '@guardian/source/foundations';
-import type { ReactNode } from 'react';
+import { type ReactNode, useEffect } from 'react';
 import CsrBanner from 'components/csr/csrBanner';
 import { SkipLink } from 'components/skipLink/skipLink';
 import { TestUserBanner } from 'components/test-user-banner/testUserBanner';
@@ -32,14 +32,16 @@ export type PageScaffoldProps = {
 	children: ReactNode;
 };
 
-FocusStyleManager.onlyShowFocusOnTabs();
-
 export function PageScaffold({
 	header,
 	footer,
 	children,
 }: PageScaffoldProps): JSX.Element {
 	useScrollToAnchor();
+
+	useEffect(() => {
+		FocusStyleManager.onlyShowFocusOnTabs();
+	}, []);
 
 	return (
 		<div css={container}>
