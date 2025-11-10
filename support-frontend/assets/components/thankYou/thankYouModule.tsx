@@ -277,6 +277,7 @@ function ThankYouModule({
 	}, []);
 
 	const hasQrCodes = moduleType === 'appDownload';
+	const appDownloadEditions = moduleType === 'appDownloadEditions';
 	const isDownloadModules = moduleType === 'appsDownload';
 	const hasImagery = ['appDownload', 'newspaperArchiveBenefit'].includes(
 		moduleType,
@@ -290,7 +291,9 @@ function ThankYouModule({
 			: defaultContainerNoIcon;
 
 	const maybePaddingRight =
-		!hasImagery && (isDownloadModules ? paddingRightApps : paddingRight);
+		!hasImagery && (isDownloadModules || appDownloadEditions)
+			? paddingRightApps
+			: paddingRight;
 
 	const isNewspaperArchiveBenefit = moduleType === 'newspaperArchiveBenefit';
 	const resizeContainer = isNewspaperArchiveBenefit ? sizeContainer : css``;
@@ -336,7 +339,7 @@ function ThankYouModule({
 					) : (
 						<>
 							<p css={[bodyCopyStyle, bodyCopyMarginTop]}>{bodyCopy}</p>
-							<div css={resizeMarginTop}>{ctas}</div>
+							{ctas && <div css={resizeMarginTop}>{ctas}</div>}
 						</>
 					)}
 				</div>
