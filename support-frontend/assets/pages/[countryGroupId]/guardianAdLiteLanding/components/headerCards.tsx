@@ -9,9 +9,9 @@ import {
 	textSans17,
 } from '@guardian/source/foundations';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { Container } from 'components/layout/container';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import { currencies } from 'helpers/internationalisation/currency';
 import {
 	getProductLabel,
 	productCatalog,
@@ -97,7 +97,7 @@ export function HeaderCards({
 }: HeaderCardsProps): JSX.Element {
 	const contributionType = 'Monthly';
 	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
-	const currency = currencies[currencyKey];
+	const currency = getCurrencyInfo(currencyKey);
 	const price =
 		productCatalog.GuardianAdLite?.ratePlans[contributionType]?.pricing[
 			currencyKey

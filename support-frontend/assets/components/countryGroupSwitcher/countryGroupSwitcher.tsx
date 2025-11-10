@@ -11,9 +11,9 @@ import Dialog from 'components/dialog/dialog';
 import Menu, { LinkItem } from 'components/menu/menu';
 import SvgDropdownArrow from 'components/svgs/dropdownArrow';
 import { clearParticipationsFromSession } from 'helpers/abTests/sessionStorage';
-import { currencies } from 'helpers/internationalisation/currency';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import { extendedGlyph } from 'helpers/internationalisation/currency';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
 
 const countryGroupSwitcherButton = css`
@@ -91,10 +91,7 @@ function CountryGroupSwitcher({
 			>
 				{countryGroups[selectedCountryGroup].name}{' '}
 				<strong>
-					{
-						currencies[countryGroups[selectedCountryGroup].currency]
-							.extendedGlyph
-					}
+					{extendedGlyph(countryGroups[selectedCountryGroup].currency)}
 				</strong>
 				<SvgDropdownArrow />
 			</button>
@@ -132,7 +129,7 @@ function CountryGroupSwitcher({
 							isSelected={countryGroupId === selectedCountryGroup}
 						>
 							{countryGroups[countryGroupId].name}{' '}
-							{currencies[countryGroups[countryGroupId].currency].extendedGlyph}
+							{extendedGlyph(countryGroups[selectedCountryGroup].currency)}
 						</LinkItem>
 					))}
 					<button

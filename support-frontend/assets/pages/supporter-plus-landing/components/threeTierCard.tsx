@@ -12,7 +12,9 @@ import {
 	LinkButton,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
+import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
+import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { BenefitPill } from 'components/checkoutBenefits/benefitPill';
 import {
@@ -21,8 +23,6 @@ import {
 } from 'components/checkoutBenefits/benefitsCheckList';
 import { getFeatureFlags } from 'helpers/featureFlags';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import type { Currency } from 'helpers/internationalisation/currency';
-import { currencies } from 'helpers/internationalisation/currency';
 import { getProductLabel } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -164,7 +164,7 @@ const benefitsPrefixPlus = css`
 `;
 
 const discountSummaryCopy = (
-	currency: Currency,
+	currency: CurrencyInfo,
 	promoCount: number,
 	price: number,
 	promotion: Promotion,
@@ -215,7 +215,7 @@ export function ThreeTierCard({
 		product,
 	} = cardContent;
 	const { enablePremiumDigital } = getFeatureFlags();
-	const currency = currencies[currencyId];
+	const currency = getCurrencyInfo(currencyId);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const formattedPrice = simpleFormatAmount(currency, price);
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;

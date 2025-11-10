@@ -2,8 +2,8 @@ import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { NumericInput } from '@guardian/source-development-kitchen/react-components';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
+import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import type { HTMLAttributes } from 'react';
-import { currencies } from 'helpers/internationalisation/currency';
 
 const topSpacing = css`
 	margin-top: ${space[2]}px;
@@ -30,13 +30,8 @@ export function OtherAmount({
 	minAmount,
 	maxAmount,
 }: OtherAmountProps): JSX.Element | null {
-	const currencyDetails = currencies[currency];
-	const glyph = currencyDetails.isPaddedGlyph
-		? ` ${currencyDetails.glyph} `
-		: currencyDetails.glyph;
-
-	const prefix = currencyDetails.isSuffixGlyph ? '' : glyph;
-	const suffix = currencyDetails.isSuffixGlyph ? glyph : '';
+	const currencyDetails = getCurrencyInfo(currency);
+	const prefix = currencyDetails.glyph;
 
 	if (selectedAmount === 'other') {
 		return (
@@ -45,7 +40,6 @@ export function OtherAmount({
 					id="otherAmount"
 					label="Enter your amount"
 					prefixText={prefix}
-					suffixText={suffix}
 					error={errors?.[0]}
 					value={otherAmount === '0' ? '' : otherAmount}
 					type="number"

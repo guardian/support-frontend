@@ -1,13 +1,10 @@
 import { css } from '@emotion/react';
 import { neutral, space, textSans17 } from '@guardian/source/foundations';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
+import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { getFeatureFlags } from 'helpers/featureFlags';
 import { formatAmount } from 'helpers/forms/checkouts';
-import {
-	currencies,
-	spokenCurrencies,
-} from 'helpers/internationalisation/currency';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -86,8 +83,7 @@ export function SummaryTsAndCs({
 	}
 
 	const amountWithCurrency = formatAmount(
-		currencies[currency],
-		spokenCurrencies[currency],
+		getCurrencyInfo(currency),
 		amount,
 		false,
 	);
