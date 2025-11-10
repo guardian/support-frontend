@@ -77,6 +77,12 @@ const container = (
 	`;
 };
 
+const titleContainer = css`
+	display: flex;
+	justify-content: center;
+	gap: ${space[2]}px;
+`;
+
 const titleCss = css`
 	${textSansBold15};
 	color: #606060;
@@ -233,9 +239,10 @@ export function ThreeTierCard({
 					title={promotion?.landingPage?.roundel ?? pillCopy}
 				/>
 			)}
-			<h2 css={[titleCss, checkListTextItemCss]}>
-				{titlePill && <BenefitPill copy={titlePill} />} <>{title}</>
-			</h2>
+			<div css={titleContainer}>
+				{titlePill && <BenefitPill copy={titlePill} />}
+				<h2 css={[titleCss, checkListTextItemCss]}>{title}</h2>
+			</div>
 			<p css={priceCss(!!promotion)}>
 				{promotion && (
 					<>
