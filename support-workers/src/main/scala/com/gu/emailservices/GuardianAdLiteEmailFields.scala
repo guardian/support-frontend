@@ -5,6 +5,7 @@ import com.gu.support.workers.{
   ClonedDirectDebitPaymentMethod,
   CreditCardReferenceTransaction,
   DirectDebitPaymentMethod,
+  PayPalCompletePaymentsReferenceTransaction,
   PayPalReferenceTransaction,
   PaymentMethod,
   SepaPaymentMethod,
@@ -41,6 +42,7 @@ class GuardianAdLiteEmailFields(created: DateTime) {
     case _: ClonedDirectDebitPaymentMethod => "Direct Debit"
     case _: SepaPaymentMethod => "SEPA"
     case _: PayPalReferenceTransaction => "PayPal"
+    case _: PayPalCompletePaymentsReferenceTransaction => "PayPal"
     case _: CreditCardReferenceTransaction => "credit / debit card"
   }
 }
