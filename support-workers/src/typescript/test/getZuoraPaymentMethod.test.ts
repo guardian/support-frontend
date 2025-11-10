@@ -30,7 +30,7 @@ describe('getZuoraPaymentMethod', () => {
 			PaypalEmail: 'user@example.com',
 		} as PaymentMethod;
 		expect(getZuoraPaymentMethod(paymentMethod)).toEqual({
-			type: 'PayPalCP',
+			type: 'PayPalNativeEC',
 			BAID: 'baid_789',
 			email: 'user@example.com',
 		});
