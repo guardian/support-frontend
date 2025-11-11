@@ -28,12 +28,19 @@ const container = css`
 	${from.tablet} {
 		max-width: 620px;
 		padding-left: ${space[4]}px;
-		padding-right: 0px;
+		padding-right: ${space[4]}px;
 		border: 1px solid ${neutral[86]};
 	}
 `;
 
-const gridContainer = css`
+const defaultContainerNoIcon = css`
+	margin: ${space[3]}px ${space[2]}px;
+	${until.tablet} {
+		margin-top: ${space[0]}px;
+	}
+`;
+
+const defaultGridContainer = css`
 	display: grid;
 	grid-column-gap: ${space[3]}px;
 	grid-template-columns: min-content 1fr;
@@ -59,6 +66,31 @@ const iconContainer = css`
 
 	${from.tablet} {
 		display: block;
+	}
+`;
+
+const imageryGridContainer = css`
+	display: grid;
+	grid-column-gap: ${space[3]}px;
+	grid-template-columns: min-content 1fr;
+	grid-template-areas:
+		'icon header'
+		'body body'
+		'img img';
+
+	${from.tablet} {
+		grid-template-columns: min-content 270px 1fr;
+		grid-template-areas:
+			'icon header img'
+			'---- body img'
+			'---- qrCodes qrCodes';
+	}
+
+	${between.desktop.and.leftCol} {
+		grid-template-areas:
+			'icon header header'
+			'---- body body'
+			'---- qrCodes qrCodes';
 	}
 `;
 
@@ -107,21 +139,9 @@ const imgContainer = css`
 	align-self: flex-end;
 `;
 
-const sizeImgContainer = css`
-	margin-top: ${space[2]}px;
-	${until.tablet} {
-		margin-top: ${space[4]}px;
-	}
-`;
-
 const paddingRight = css`
 	${from.tablet} {
 		padding-right: 54px;
-	}
-`;
-const paddingRightApps = css`
-	${from.tablet} {
-		padding-right: ${space[4]}px;
 	}
 `;
 
@@ -131,6 +151,10 @@ const imageryStyle = css`
 	${until.tablet} {
 		padding-bottom: 0;
 	}
+`;
+
+const ctaStyle = css`
+	margin-top: ${space[6]}px;
 `;
 
 export const TEST_ID_PREFIX = 'tyModule';
@@ -176,44 +200,37 @@ function ThankYouModule({
 		trackComponentLoadId && trackComponentLoad(trackComponentLoadId);
 	}, []);
 
-	const appDownloadEditions = moduleType === 'appDownloadEditions';
-	const isDownloadModules = moduleType === 'appsDownload';
 	const isNewspaperArchiveBenefit = moduleType === 'newspaperArchiveBenefit';
-
-	const maybePaddingRight =
-		!isNewspaperArchiveBenefit &&
-		(isDownloadModules || appDownloadEditions
-			? paddingRightApps
-			: paddingRight);
+	const isAppDownloadModule = ['appsDownload', 'appDownloadEditions'].includes(
+		moduleType,
+	);
 
 	const resizeContainer = isNewspaperArchiveBenefit && sizeContainer;
-	const resizeImgContainer = !isNewspaperArchiveBenefit && sizeImgContainer;
-
-	const resizeMarginTop =
-		!isNewspaperArchiveBenefit &&
-		css`
-			margin-top: ${space[6]}px;
-		`;
 
 	return (
 		<section
 			css={[
 				container,
-				maybePaddingRight,
+				!isAppDownloadModule && paddingRight,
 				isNewspaperArchiveBenefit && imageryStyle,
 			]}
 			data-testid={`${TEST_ID_PREFIX}-${moduleType}`}
 		>
-			<div css={gridContainer}>
+			<div
+				css={[
+					icon ? defaultGridContainer : defaultContainerNoIcon,
+					isNewspaperArchiveBenefit && imageryGridContainer,
+				]}
+			>
 				<div css={iconContainer}>{icon}</div>
 				<div css={[headerContainer, resizeContainer]}>{header}</div>
 				<div css={[bodyContainer, resizeContainer]}>
 					<div css={[bodyCopyStyle, bodyCopyMarginTop]}>{bodyCopy}</div>
-					<div css={resizeMarginTop}>{ctas}</div>
+					<div css={ctaStyle}>{ctas}</div>
 				</div>
 
 				{isNewspaperArchiveBenefit && (
-					<div css={[imgContainer, resizeImgContainer]}>
+					<div css={[imgContainer]}>
 						<NewspaperArchiveImage />
 					</div>
 				)}
