@@ -1,13 +1,25 @@
+import { getProductRatePlan } from '@guardian/support-service-lambdas/modules/zuora/src/createSubscription/getProductRatePlan';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import { getProductCatalogFromApi } from '@modules/product-catalog/api';
+import type { ProductCatalog } from '@modules/product-catalog/productCatalog';
+import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
+import dayjs from 'dayjs';
+import { buildContributionThankYouEmailFields } from '../emailFields/contributionEmailFields';
+import type { ThankYouEmailFields } from '../emailFields/emailFields';
+import { buildSupporterPlusThankYouEmailFields } from '../emailFields/supporterPlusEmailFields';
+import type { PaymentMethod } from '../model/paymentMethod';
 import type { ProductType } from '../model/productType';
 import type { SendAcquisitionEventState } from '../model/sendAcquisitionEventState';
+import { stageFromEnvironment } from '../model/stage';
 import type { WrappedState } from '../model/stateSchemas';
-import type { ThankYouEmailFields } from '../model/thankYouEmailFields';
-import {
-	buildContributionThankYouEmailFields,
-	buildSupporterPlusThankYouEmailFields,
-} from '../model/thankYouEmailFields';
+import { ServiceProvider } from '../services/config';
 import { getIfDefined } from '../util/nullAndUndefined';
+
+const stage = stageFromEnvironment();
+
+const productCatalogProvider = new ServiceProvider(stage, async (stage) => {
+	return getProductCatalogFromApi(stage);
+});
 
 export const handler = async (
 	state: WrappedState<SendAcquisitionEventState>,
@@ -18,6 +30,14 @@ export const handler = async (
 		sendThankYouEmailState.productInformation,
 		'productInformation is required',
 	);
+
+	const fixedTerm = isFixedTerm(
+		await productCatalogProvider.getServiceForUser(
+			sendThankYouEmailState.user.isTestUser,
+		),
+		productInformation,
+	);
+
 	switch (productInformation.product) {
 		case 'Contribution':
 			sendEmail(
@@ -30,14 +50,23 @@ export const handler = async (
 			);
 			break;
 		case 'SupporterPlus':
-			sendEmail(
-				buildSupporterPlusThankYouEmailFields(
-					sendThankYouEmailState.user,
-					sendThankYouEmailState.product.currency,
-					getBillingPeriod(sendThankYouEmailState.product),
-					sendThankYouEmailState.subscriptionNumber,
-				),
-			);
+			if (sendThankYouEmailState.productType === 'SupporterPlus') {
+				sendEmail(
+					buildSupporterPlusThankYouEmailFields({
+						now: dayjs(),
+						user: sendThankYouEmailState.user,
+						currency: sendThankYouEmailState.product.currency,
+						billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
+						subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
+						isFixedTerm: fixedTerm,
+						paymentSchedule: sendThankYouEmailState.paymentSchedule,
+						paymentMethod: sendThankYouEmailState.paymentMethod,
+						mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
+					}),
+				);
+			} else {
+				throw new Error('Product type mismatch: expected SupporterPlus');
+			}
 			break;
 		// case 'DigitalSubscription':
 		// 	sendDigitalSubscriptionEmail();
@@ -61,12 +90,28 @@ export const handler = async (
 
 	return Promise.resolve({ success: true });
 };
-
+function isFixedTerm(
+	productCatalog: ProductCatalog,
+	productInformation: ProductPurchase,
+) {
+	const productRatePlan = getProductRatePlan(
+		productCatalog,
+		productInformation,
+	);
+	return productRatePlan.termType === 'FixedTerm';
+}
 function getBillingPeriod(productType: ProductType) {
 	if (productType.productType === 'GuardianAdLite') {
 		return BillingPeriod.Monthly;
 	}
 	return productType.billingPeriod;
+}
+
+function getMandateId(paymentMethod: PaymentMethod) {
+	if (paymentMethod.Type === 'BankTransfer') {
+		return 'Mandate'; // TODO: retrieve actual mandate ID
+	}
+	return;
 }
 
 function sendEmail(emailFields: ThankYouEmailFields) {

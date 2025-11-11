@@ -1,8 +1,10 @@
+import { partition } from '@modules/arrayFunctions';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
+import { isNonEmpty } from '@modules/nullAndUndefined';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import dayjs from 'dayjs';
-import type { Payment, PaymentSchedule } from './paymentSchedule';
+import type { Payment, PaymentSchedule } from '../model/paymentSchedule';
 
 function billingPeriodNoun(period: BillingPeriod): string {
 	switch (period) {
@@ -78,22 +80,6 @@ function monthsBetween(start: Date, end: Date): number {
 	const startD = dayjs(start);
 	const endD = dayjs(end);
 	return endD.diff(startD, 'month');
-}
-
-export function partition<T>(
-	array: T[],
-	predicate: (item: T) => boolean,
-): [T[], T[]] {
-	const pass: T[] = [];
-	const fail: T[] = [];
-	for (const item of array) {
-		(predicate(item) ? pass : fail).push(item);
-	}
-	return [pass, fail];
-}
-
-export function isNonEmpty<T>(arr: T[]): arr is [T, ...T[]] {
-	return arr.length > 0;
 }
 
 export function describe(
