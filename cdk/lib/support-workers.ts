@@ -266,7 +266,7 @@ export class SupportWorkers extends GuStack {
       [promotionsDynamoTablePolicy, secretsManagerPolicy]
     ).addCatch(failureHandler, catchProps);
 
-    const sendThankYouEmail = createScalaLambda("SendThankYouEmail", [
+    const sendThankYouEmail = createTypescriptLambda("SendThankYouEmail", [
       emailSqsPolicy,
     ]);
     const updateSupporterProductData = createScalaLambda(
