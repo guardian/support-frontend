@@ -9,7 +9,7 @@ export function getFeatureFlags(): FeatureFlags {
 	const urlParams = new URLSearchParams(window.location.search);
 
 	return {
-		enablePremiumDigital: isCode() || urlParams.has('disablePremiumDigital'),
+		enablePremiumDigital: isCode() || urlParams.has('enablePremiumDigital'),
 		enableDigitalAccess: urlParams.has('enableDigitalAccess'),
 	};
 }
