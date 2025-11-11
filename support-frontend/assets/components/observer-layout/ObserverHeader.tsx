@@ -2,8 +2,8 @@ import { css } from '@emotion/react';
 import { from, space } from '@guardian/source/foundations';
 import { Column, Columns } from '@guardian/source/react-components';
 import { Container } from 'components/layout/container';
-import { background } from './colours';
 import { ObserverLogo } from './ObserverLogo';
+import { observerColours } from './styles';
 
 const logoContainer = css`
 	display: flex;
@@ -27,7 +27,7 @@ const logo = css`
 export default function ObserverHeader(): JSX.Element {
 	return (
 		<header>
-			<Container backgroundColor={background}>
+			<Container backgroundColor={observerColours.pageBackgroundColor}>
 				<Columns>
 					<Column>
 						<div css={logoContainer}>
