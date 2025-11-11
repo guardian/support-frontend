@@ -1,4 +1,4 @@
-import { isProd } from './urls/url';
+import { isCode } from './urls/url';
 
 interface FeatureFlags {
 	enablePremiumDigital: boolean;
@@ -9,7 +9,7 @@ export function getFeatureFlags(): FeatureFlags {
 	const urlParams = new URLSearchParams(window.location.search);
 
 	return {
-		enablePremiumDigital: !(isProd() || urlParams.has('disablePremiumDigital')),
+		enablePremiumDigital: isCode() || urlParams.has('disablePremiumDigital'),
 		enableDigitalAccess: urlParams.has('enableDigitalAccess'),
 	};
 }
