@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { from } from '@guardian/source/foundations';
 
 const scales = css`
+	height: 55px;
 	width: auto;
 	display: block;
 
