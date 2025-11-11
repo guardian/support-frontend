@@ -14,7 +14,17 @@ function getPaymentMethodFields(
 	paymentMethod: PaymentMethod,
 	created: Dayjs,
 	mandateId?: string,
-) {
+):
+	| { 'payment method': 'credit / debit card'; 'first payment date': string }
+	| {
+			'payment method': 'Direct Debit';
+			'account name': string;
+			'account number': string;
+			'sort code': string;
+			'Mandate ID': string;
+			'first payment date': string;
+	  }
+	| { 'payment method': 'PayPal'; 'first payment date': string } {
 	switch (paymentMethod.Type) {
 		case 'BankTransfer':
 			return {
