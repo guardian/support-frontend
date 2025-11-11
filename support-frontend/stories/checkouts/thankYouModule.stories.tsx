@@ -1,18 +1,16 @@
 import { css } from '@emotion/react';
 import { from, space, sport } from '@guardian/source/foundations';
 import { Column, Columns, Container } from '@guardian/source/react-components';
-import React from 'react';
+import type React from 'react';
 import { Provider } from 'react-redux';
 import { createTestStoreForContributions } from '__test-utils__/testStore';
+import AppDownload from 'components/thankYou/appDownload/AppDownload';
 import AppDownloadBadges from 'components/thankYou/appDownload/AppDownloadBadges';
 import {
 	AppDownloadBodyCopy,
 	appDownloadHeader,
-	AppFeastDownloadBodyCopy,
-	appFeastDownloadHeader,
-	AppNewsDownloadBodyCopy,
-	appNewsDownloadHeader,
 	appsDownloadHeader,
+	getDownloadApps,
 } from 'components/thankYou/appDownload/appDownloadItems';
 import {
 	ausMapBodyCopy,
@@ -38,6 +36,7 @@ import {
 	socialShareHeader,
 	SocialShareIcons,
 } from 'components/thankYou/socialShare/SocialShareItems';
+import { SubscriptionStartItems } from 'components/thankYou/subscriptionStart/subscriptionStartItems';
 import {
 	SupportReminderBodyCopy,
 	SupportReminderCTAandPrivacy,
@@ -45,7 +44,6 @@ import {
 import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
-import { SubscriptionStartItems } from 'components/thankYou/subscriptionStart/subscriptionStartItems';
 import { WhatNext } from 'components/thankYou/whatNext/whatNext';
 import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
@@ -113,8 +111,6 @@ function Template(args: ThankYouModuleProps): JSX.Element {
 						header={args.header}
 						bodyCopy={args.bodyCopy}
 						ctas={args.ctas}
-						bodyCopySecond={args.bodyCopySecond}
-						ctasSecond={args.ctasSecond}
 					/>
 				</Column>
 				<Column></Column>
@@ -153,21 +149,12 @@ NewsFeastApps.args = {
 	icon: getThankYouModuleIcon('appsDownload'),
 	header: appsDownloadHeader,
 	bodyCopy: (
-		<>
-			<h2>{appNewsDownloadHeader}</h2>
-			<AppNewsDownloadBodyCopy />
-		</>
+		<AppDownload
+			apps={getDownloadApps(['GuardianNews', 'guardianFeast'])}
+			countryGroupId="GBPCountries"
+		/>
 	),
-	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
-	bodyCopySecond: (
-		<>
-			<h2>{appFeastDownloadHeader}</h2>
-			<AppFeastDownloadBodyCopy />
-		</>
-	),
-	ctasSecond: (
-		<AppDownloadBadges countryGroupId={'GBPCountries'} isFeast={true} />
-	),
+	ctas: null,
 };
 
 export const NewspaperArchiveBenefit = Template.bind({});
