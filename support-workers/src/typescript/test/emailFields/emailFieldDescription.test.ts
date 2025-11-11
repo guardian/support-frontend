@@ -1,6 +1,6 @@
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import { describe as describeSchedule } from '../model/emailFieldDescription';
-import type { Payment, PaymentSchedule } from '../model/paymentSchedule';
+import { describe as describeSchedule } from '../../emailFields/emailFieldDescription';
+import type { Payment, PaymentSchedule } from '../../model/paymentSchedule';
 
 function addMonths(date: Date, months: number): Date {
 	const d = new Date(date.getTime());
@@ -27,7 +27,7 @@ describe('emailFieldDescription.describe', () => {
 		const scheduleList = payments(standardDigitalPackPayment, [12]);
 		const schedule: PaymentSchedule = { payments: scheduleList };
 		const expected = '£119.90 every year';
-		expect(describeSchedule(schedule, BillingPeriod.Annual, 'GBP')).toBe(
+		expect(describeSchedule(schedule, BillingPeriod.Annual, 'GBP', false)).toBe(
 			expected,
 		);
 	});
@@ -40,9 +40,9 @@ describe('emailFieldDescription.describe', () => {
 		const scheduleList = payments(standardDigitalPackPayment, [3, 6, 9]);
 		const schedule: PaymentSchedule = { payments: scheduleList };
 		const expected = '$57.50 every quarter';
-		expect(describeSchedule(schedule, BillingPeriod.Quarterly, 'USD')).toBe(
-			expected,
-		);
+		expect(
+			describeSchedule(schedule, BillingPeriod.Quarterly, 'USD', false),
+		).toBe(expected);
 	});
 
 	test('explains a simple monthly payment schedule correctly', () => {
@@ -56,9 +56,9 @@ describe('emailFieldDescription.describe', () => {
 		);
 		const schedule: PaymentSchedule = { payments: scheduleList };
 		const expected = '€11.99 every month';
-		expect(describeSchedule(schedule, BillingPeriod.Monthly, 'EUR')).toBe(
-			expected,
-		);
+		expect(
+			describeSchedule(schedule, BillingPeriod.Monthly, 'EUR', false),
+		).toBe(expected);
 	});
 
 	test('explains a payment schedule truthfully if we only get information about the first payment', () => {
@@ -70,7 +70,7 @@ describe('emailFieldDescription.describe', () => {
 			payments: [discountedDigitalPackPayment],
 		};
 		const expected = '£100.90 for the first year';
-		expect(describeSchedule(schedule, BillingPeriod.Annual, 'GBP')).toBe(
+		expect(describeSchedule(schedule, BillingPeriod.Annual, 'GBP', false)).toBe(
 			expected,
 		);
 	});
@@ -90,9 +90,9 @@ describe('emailFieldDescription.describe', () => {
 		];
 		const schedule: PaymentSchedule = { payments: scheduleList };
 		const expected = '£5.99 every month for 3 months, then £11.99 every month';
-		expect(describeSchedule(schedule, BillingPeriod.Monthly, 'GBP')).toBe(
-			expected,
-		);
+		expect(
+			describeSchedule(schedule, BillingPeriod.Monthly, 'GBP', false),
+		).toBe(expected);
 	});
 
 	test('explains a payment schedule correctly for an annual subscription', () => {
@@ -108,7 +108,7 @@ describe('emailFieldDescription.describe', () => {
 			payments: [firstDiscountedPayment, firstFullPricePayment],
 		};
 		const expected = '£59.76 for the first year, then £95.00 every year';
-		expect(describeSchedule(schedule, BillingPeriod.Annual, 'GBP')).toBe(
+		expect(describeSchedule(schedule, BillingPeriod.Annual, 'GBP', false)).toBe(
 			expected,
 		);
 	});
@@ -129,23 +129,23 @@ describe('emailFieldDescription.describe', () => {
 		const schedule: PaymentSchedule = { payments: scheduleList };
 		const expected =
 			'£30.00 every quarter for 2 quarters, then £37.50 every quarter';
-		expect(describeSchedule(schedule, BillingPeriod.Quarterly, 'GBP')).toBe(
-			expected,
-		);
+		expect(
+			describeSchedule(schedule, BillingPeriod.Quarterly, 'GBP', false),
+		).toBe(expected);
 	});
 
 	test('correctly formats zero amounts with multiple zero amounts in the payment schedule', () => {
 		const zeroPayment: Payment = { date: referenceDate, amount: 0.0 };
 		const scheduleList: Payment[] = payments(zeroPayment, [10]);
 		const schedule: PaymentSchedule = { payments: scheduleList };
-		const got = describeSchedule(schedule, BillingPeriod.Monthly, 'AUD');
+		const got = describeSchedule(schedule, BillingPeriod.Monthly, 'AUD', false);
 		expect(got).toBe('$0.00 every month');
 	});
 
 	test('correctly formats zero amounts with a single zero amount in the payment schedule', () => {
 		const zeroPayment: Payment = { date: referenceDate, amount: 0.0 };
 		const schedule: PaymentSchedule = { payments: [zeroPayment] };
-		const got = describeSchedule(schedule, BillingPeriod.Monthly, 'AUD');
+		const got = describeSchedule(schedule, BillingPeriod.Monthly, 'AUD', false);
 		expect(got).toBe('$0.00 for the first month');
 	});
 });
