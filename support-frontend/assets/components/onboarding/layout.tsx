@@ -8,6 +8,7 @@ import {
 import type { ReactNode } from 'react';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
+import type { OnboardingProps } from 'pages/[countryGroupId]/components/onboardingComponent';
 import type { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
 import OnboardingHeading from './heading';
 
@@ -20,12 +21,16 @@ const contentColumnStyles = css`
 	margin: auto;
 `;
 
-interface OnboardingLayoutProps {
+interface OnboardingLayoutProps extends OnboardingProps {
 	children: ReactNode;
 	onboardingStep: OnboardingSteps;
 }
 
-function OnboardingLayout({ children, onboardingStep }: OnboardingLayoutProps) {
+function OnboardingLayout({
+	children,
+	onboardingStep,
+	...onboardingProps
+}: OnboardingLayoutProps) {
 	return (
 		<PageScaffold
 			header={<Header />}
@@ -35,7 +40,7 @@ function OnboardingLayout({ children, onboardingStep }: OnboardingLayoutProps) {
 				</FooterWithContents>
 			}
 		>
-			<OnboardingHeading onboardingStep={onboardingStep} />
+			<OnboardingHeading onboardingStep={onboardingStep} {...onboardingProps} />
 			<Container sideBorders cssOverrides={greyBackgroundContainer}>
 				<Columns collapseUntil="tablet">
 					<Column cssOverrides={contentColumnStyles} span={[1, 10, 8]}>

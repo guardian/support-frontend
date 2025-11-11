@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import {
 	between,
@@ -11,9 +12,13 @@ import {
 	textSansBold34,
 } from '@guardian/source/foundations';
 import { Column, Columns, Container } from '@guardian/source/react-components';
+import { useMemo } from 'preact/hooks';
 import GridImage from 'components/gridImage/gridImage';
-import type { CSSOverridable } from 'helpers/types/cssOverrideable';
+import { getThankYouOrder } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
+import type { OnboardingProps } from 'pages/[countryGroupId]/components/onboardingComponent';
 import { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
+import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
+import { heroContainer } from './sections/sectionsStyles';
 
 const contentColumnStyles = css`
 	margin: auto;
@@ -27,25 +32,17 @@ const containerNoPaddingStyles = css`
 	}
 `;
 
+const containerAbsolute = css`
+	position: absolute;
+	left: 0;
+	right: 0;
+`;
+
 const headerSpacerDiv = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: flex-start;
-	margin-bottom: ${space[2]}px;
-`;
-
-const heroContainer = css`
-	width: 100%;
-	aspect-ratio: 21 / 9;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: white;
-
-	img {
-		height: 100%;
-	}
 `;
 
 const thankYouHeading = css`
@@ -86,7 +83,7 @@ const thankYouSubtext = css`
 	color: white;
 
 	${from.mobileMedium} {
-		margin-bottom: ${space[1]}px;
+		margin-bottom: ${space[3]}px;
 	}
 
 	${between.mobileMedium.and.mobileLandscape} {
@@ -106,40 +103,79 @@ const thankYouSubtext = css`
 	}
 `;
 
-interface OnboardingHeadingProps extends CSSOverridable {
+interface OnboardingHeadingProps extends OnboardingProps {
 	onboardingStep: OnboardingSteps;
 }
 
-function OnboardingHeading({ onboardingStep }: OnboardingHeadingProps) {
-	// --------------------------- //
-	// TODO: Dynamically generated based on Products and User profile
-	const ONBOARDING_STEP_CONTENT_MAP: Record<
-		OnboardingSteps,
-		{ headingHero: string; heading: string; subtext: string }
-	> = {
-		[OnboardingSteps.Summary]: {
-			headingHero: 'aspect ratio 21:9',
-			heading: 'Thank you for subscribing to All-access digital',
-			subtext:
-				"You've just joined over 1.3m others who support independent journalism.",
-		},
-		[OnboardingSteps.GuardianApp]: {
-			headingHero: 'Placeholder',
-			heading: 'Placeholder',
-			subtext: 'Placeholder',
-		},
-		[OnboardingSteps.FeastApp]: {
-			headingHero: 'Placeholder',
-			heading: 'Placeholder',
-			subtext: 'Placeholder',
-		},
-		[OnboardingSteps.ThankYou]: {
-			headingHero: 'Placeholder',
-			heading: 'Placeholder',
-			subtext: 'Placeholder',
-		},
-	};
-	// --------------------------- //
+function OnboardingHeading({
+	onboardingStep,
+	landingPageSettings,
+	productKey,
+}: OnboardingHeadingProps) {
+	const order = getThankYouOrder();
+	const productSettings =
+		productKey && landingPageSettings.products[productKey];
+
+	const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
+
+	const ONBOARDING_STEP_CONTENT_MAP = useMemo<
+		Record<
+			OnboardingSteps,
+			{
+				heading?: string;
+				subtext?: string;
+				gridId?: string;
+				altText?: string;
+				aspectRatio: SerializedStyles;
+			}
+		>
+	>(
+		() => ({
+			[OnboardingSteps.Summary]: {
+				heading: `Thank you ${
+					order?.firstName && order.firstName + ' '
+				}for subscribing to ${productSettings?.title}`,
+				subtext:
+					"You've just joined over 1.3m others who support independent journalism.",
+				gridId: 'onboardingSummaryHero',
+				altText: 'Onboarding summary hero holding The Guardian logo',
+				aspectRatio: css`
+					aspect-ratio: 21 / 9;
+				`,
+			},
+			[OnboardingSteps.GuardianApp]: {
+				gridId: windowWidthIsGreaterThan('tablet')
+					? 'onboardingGuardianAppHero'
+					: 'onboardingGuardianAppHeroMobile',
+				altText: 'Onboarding guardian app hero showing multiple articles',
+				aspectRatio: css`
+					aspect-ratio: 3 / 2;
+				`,
+			},
+			[OnboardingSteps.FeastApp]: {
+				gridId: windowWidthIsGreaterThan('tablet')
+					? 'onboardingFeastAppHero'
+					: 'onboardingFeastAppHeroMobile',
+				altText: 'Onboarding feast app hero showing multiple articles',
+				aspectRatio: css`
+					aspect-ratio: 3 / 2;
+				`,
+			},
+			[OnboardingSteps.Completed]: {
+				aspectRatio: css`
+					aspect-ratio: 3 / 2;
+				`,
+			},
+		}),
+		[order, windowWidthIsGreaterThan],
+	);
+
+	if (
+		onboardingStep === OnboardingSteps.Completed &&
+		windowWidthIsLessThan('tablet')
+	) {
+		return null;
+	}
 
 	return (
 		<Container
@@ -147,26 +183,42 @@ function OnboardingHeading({ onboardingStep }: OnboardingHeadingProps) {
 			topBorder
 			borderColor={palette.brand[600]}
 			backgroundColor={palette.brand[400]}
-			cssOverrides={containerNoPaddingStyles}
+			cssOverrides={[
+				containerNoPaddingStyles,
+				...(onboardingStep === OnboardingSteps.Completed
+					? [containerAbsolute]
+					: []),
+			]}
 		>
 			<Columns collapseUntil="tablet">
 				<Column cssOverrides={contentColumnStyles} span={[1, 10, 8]}>
 					<div css={headerSpacerDiv}>
-						<div css={heroContainer}>
-							<GridImage
-								gridId="onboardingSummaryHero"
-								srcSizes={[2000, 1000, 500]}
-								sizes="(max-width: 739px) 140px, 422px"
-								imgType="png"
-								altText="Onboarding hero"
-							/>
+						<div
+							css={[
+								heroContainer,
+								ONBOARDING_STEP_CONTENT_MAP[onboardingStep].aspectRatio,
+							]}
+						>
+							{ONBOARDING_STEP_CONTENT_MAP[onboardingStep].gridId && (
+								<GridImage
+									gridId={ONBOARDING_STEP_CONTENT_MAP[onboardingStep].gridId}
+									srcSizes={[2000, 1000, 500]}
+									sizes="(max-width: 739px) 140px, 422px"
+									imgType="png"
+									altText={ONBOARDING_STEP_CONTENT_MAP[onboardingStep].altText}
+								/>
+							)}
 						</div>
-						<h1 css={thankYouHeading}>
-							{ONBOARDING_STEP_CONTENT_MAP[onboardingStep].heading}
-						</h1>
-						<p css={thankYouSubtext}>
-							{ONBOARDING_STEP_CONTENT_MAP[onboardingStep].subtext}
-						</p>
+						{ONBOARDING_STEP_CONTENT_MAP[onboardingStep].heading && (
+							<h1 css={thankYouHeading}>
+								{ONBOARDING_STEP_CONTENT_MAP[onboardingStep].heading}
+							</h1>
+						)}
+						{ONBOARDING_STEP_CONTENT_MAP[onboardingStep].subtext && (
+							<p css={thankYouSubtext}>
+								{ONBOARDING_STEP_CONTENT_MAP[onboardingStep].subtext}
+							</p>
+						)}
 					</div>
 				</Column>
 			</Columns>
