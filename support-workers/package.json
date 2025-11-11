@@ -32,6 +32,7 @@
     "@aws-sdk/credential-provider-node": "catalog:",
     "@aws-sdk/client-dynamodb": "catalog:",
     "@aws-sdk/util-dynamodb": "catalog:",
+    "@aws-sdk/client-sqs": "catalog:",
     "@guardian/support-service-lambdas": "catalog:",
     "dayjs": "^1.11.13",
     "stripe": "^17.4.0",

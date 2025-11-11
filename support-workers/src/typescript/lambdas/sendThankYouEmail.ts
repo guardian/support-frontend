@@ -1,11 +1,11 @@
 import { getProductRatePlan } from '@guardian/support-service-lambdas/modules/zuora/src/createSubscription/getProductRatePlan';
+import { sendEmail } from '@modules/email/email';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { getProductCatalogFromApi } from '@modules/product-catalog/api';
 import type { ProductCatalog } from '@modules/product-catalog/productCatalog';
 import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
 import dayjs from 'dayjs';
 import { buildContributionThankYouEmailFields } from '../emailFields/contributionEmailFields';
-import type { ThankYouEmailFields } from '../emailFields/emailFields';
 import { buildSupporterPlusThankYouEmailFields } from '../emailFields/supporterPlusEmailFields';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { ProductType } from '../model/productType';
@@ -40,7 +40,8 @@ export const handler = async (
 
 	switch (productInformation.product) {
 		case 'Contribution':
-			sendEmail(
+			await sendEmail(
+				stage,
 				buildContributionThankYouEmailFields(
 					sendThankYouEmailState.user,
 					productInformation.amount,
@@ -51,7 +52,8 @@ export const handler = async (
 			break;
 		case 'SupporterPlus':
 			if (sendThankYouEmailState.productType === 'SupporterPlus') {
-				sendEmail(
+				await sendEmail(
+					stage,
 					buildSupporterPlusThankYouEmailFields({
 						now: dayjs(),
 						user: sendThankYouEmailState.user,
@@ -112,8 +114,4 @@ function getMandateId(paymentMethod: PaymentMethod) {
 		return 'Mandate'; // TODO: retrieve actual mandate ID
 	}
 	return;
-}
-
-function sendEmail(emailFields: ThankYouEmailFields) {
-	console.log(`Sending email with fields: ${JSON.stringify(emailFields)}`);
 }
