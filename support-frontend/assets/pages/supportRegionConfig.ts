@@ -1,11 +1,12 @@
+import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import type { Currency } from 'helpers/internationalisation/currency';
-import { currencies } from 'helpers/internationalisation/currency';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
+import { getCurrencyInfo } from '@modules/internationalisation/currency';
 
 type SupportRegionConfig = {
-	currency: Currency;
-	currencyKey: keyof typeof currencies;
+	currency: CurrencyInfo;
+	currencyKey: IsoCurrency;
 	countryGroupId: CountryGroupId;
 };
 
@@ -23,49 +24,49 @@ export const getSupportRegionIdConfig = (
 	switch (supportRegionId) {
 		case SupportRegionId.UK:
 			return {
-				currency: currencies.GBP,
+				currency: getCurrencyInfo('GBP'),
 				currencyKey: 'GBP',
 				countryGroupId: 'GBPCountries',
 			};
 
 		case SupportRegionId.US:
 			return {
-				currency: currencies.USD,
+				currency: getCurrencyInfo('USD'),
 				currencyKey: 'USD',
 				countryGroupId: 'UnitedStates',
 			};
 
 		case SupportRegionId.AU:
 			return {
-				currency: currencies.AUD,
+				currency: getCurrencyInfo('AUD'),
 				currencyKey: 'AUD',
 				countryGroupId: 'AUDCountries',
 			};
 
 		case SupportRegionId.EU:
 			return {
-				currency: currencies.EUR,
+				currency: getCurrencyInfo('EUR'),
 				currencyKey: 'EUR',
 				countryGroupId: 'EURCountries',
 			};
 
 		case SupportRegionId.NZ:
 			return {
-				currency: currencies.NZD,
+				currency: getCurrencyInfo('NZD'),
 				currencyKey: 'NZD',
 				countryGroupId: 'NZDCountries',
 			};
 
 		case SupportRegionId.CA:
 			return {
-				currency: currencies.CAD,
+				currency: getCurrencyInfo('CAD'),
 				currencyKey: 'CAD',
 				countryGroupId: 'Canada',
 			};
 
 		case SupportRegionId.INT:
 			return {
-				currency: currencies.USD,
+				currency: getCurrencyInfo('USD'),
 				currencyKey: 'USD',
 				countryGroupId: 'International',
 			};

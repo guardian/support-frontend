@@ -110,8 +110,7 @@ Default.args = {
 	currency: {
 		glyph: '£',
 		extendedGlyph: '£',
-		isSuffixGlyph: false,
-		isPaddedGlyph: false,
+		spokenCurrency: 'pound',
 	},
 	checkListData: checkListData,
 	tsAndCs: (
@@ -142,8 +141,7 @@ SingleContribution.args = {
 	currency: {
 		glyph: '$',
 		extendedGlyph: 'US$',
-		isSuffixGlyph: false,
-		isPaddedGlyph: false,
+		spokenCurrency: 'dollar',
 	},
 	checkListData: [],
 	tsAndCs: <></>,
@@ -166,8 +164,7 @@ RecurringContribution.args = {
 	currency: {
 		glyph: '£',
 		extendedGlyph: '£',
-		isSuffixGlyph: false,
-		isPaddedGlyph: false,
+		spokenCurrency: 'pound',
 	},
 	checkListData: [
 		...productCatalogDescription.Contribution.benefits.map((benefit) => ({
@@ -201,8 +198,7 @@ SupporterPlus.args = {
 	currency: {
 		glyph: '£',
 		extendedGlyph: '£',
-		isSuffixGlyph: false,
-		isPaddedGlyph: false,
+		spokenCurrency: 'pound',
 	},
 	checkListData: [
 		...productCatalogDescription.SupporterPlus.benefits.map((benefit) => ({
@@ -237,8 +233,7 @@ TierThree.args = {
 	currency: {
 		glyph: '£',
 		extendedGlyph: '£',
-		isSuffixGlyph: false,
-		isPaddedGlyph: false,
+		spokenCurrency: 'pound',
 	},
 	checkListData: [
 		...productCatalogDescription.SupporterPlus.benefits.map((benefit) => ({
@@ -284,8 +279,7 @@ StudentOneYear.args = {
 	currency: {
 		glyph: '£',
 		extendedGlyph: '£',
-		isSuffixGlyph: false,
-		isPaddedGlyph: false,
+		spokenCurrency: 'pound',
 	},
 	checkListData: [
 		...productCatalogDescription.SupporterPlus.benefits.map((benefit) => ({

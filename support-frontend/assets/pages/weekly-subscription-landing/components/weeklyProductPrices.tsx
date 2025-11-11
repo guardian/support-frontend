@@ -8,7 +8,7 @@ import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type { Product } from 'components/product/productOption';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import { currencies } from 'helpers/internationalisation/currency';
+import { glyph } from 'helpers/internationalisation/currency';
 import { internationaliseProduct } from 'helpers/productCatalog';
 import {
 	billingPeriodToRatePlan,
@@ -61,7 +61,7 @@ const getCheckoutUrl = (
 };
 
 const getCurrencySymbol = (currencyId: IsoCurrency): string =>
-	currencies[currencyId].glyph;
+	glyph(currencyId);
 
 const getPriceWithSymbol = (currencyId: IsoCurrency, price: number) =>
 	getCurrencySymbol(currencyId) + fixDecimals(price);
@@ -71,7 +71,7 @@ const getPromotionLabel = (currency: IsoCurrency, promotion?: Promotion) => {
 		return '';
 	}
 	if (promotion.name.startsWith('12for12')) {
-		return `Special Offer: 12 for ${currencies[currency].glyph}${
+		return `Special Offer: 12 for ${glyph(currency)}${
 			promotion.discountedPrice ?? '12'
 		}`;
 	} else if (promotion.promoCode.startsWith('GWBLACKFRIDAY')) {
