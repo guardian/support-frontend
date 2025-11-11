@@ -1,9 +1,22 @@
+import { css } from '@emotion/react';
+import { from } from '@guardian/source/foundations';
+
+const scales = css`
+	width: auto;
+	display: block;
+
+	${from.mobileLandscape} {
+		height: 75px;
+	}
+`;
+
 export default function AppImageGuardianEditions() {
 	return (
 		<svg
 			width={77}
 			height={78}
 			viewBox="0 0 77 78"
+			css={scales}
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 			xmlnsXlink="http://www.w3.org/1999/xlink"

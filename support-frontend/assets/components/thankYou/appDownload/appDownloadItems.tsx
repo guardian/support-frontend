@@ -92,7 +92,8 @@ const downloadApps: Record<AppDownloadKey, AppDownload> = {
 	},
 	guardianEditions: {
 		name: 'The Guardian Editions app',
-		description: 'Unlock full access to our quality news app today.',
+		description:
+			'Enjoy unlimited access to our full range of e-magazines and paper, available for mobile and tablet.',
 		appIcon: <AppImageGuardianEditions />,
 		playStoreUrl:
 			'https://play.google.com/store/apps/details?id=com.guardian.editions&hl=en_GB&gl=US',
