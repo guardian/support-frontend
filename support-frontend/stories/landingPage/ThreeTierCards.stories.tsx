@@ -1,12 +1,11 @@
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
-import { currencies } from 'helpers/internationalisation/currency';
+import { CurrencyValues } from '@modules/internationalisation/currency';
 import type { ThreeTierCardsProps } from 'pages/supporter-plus-landing/components/threeTierCards';
 import { ThreeTierCards } from 'pages/supporter-plus-landing/components/threeTierCards';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 import { fallBackLandingPageSelection } from '../../assets/helpers/abTests/landingPageAbTests';
-import { IsoCurrency } from '@modules/internationalisation/currency';
 
 export default {
 	title: 'LandingPage/Three Tier Cards',
@@ -14,7 +13,7 @@ export default {
 	argTypes: {
 		linkCtaClickHandler: { action: 'tier card clicked' },
 		currencyId: {
-			options: Object.keys(currencies) as IsoCurrency[],
+			options: CurrencyValues,
 			control: { type: 'radio' },
 		},
 	},

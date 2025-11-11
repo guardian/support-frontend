@@ -13,8 +13,8 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import { countryGroups } from '@modules/internationalisation/countryGroup';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getFeatureFlags } from 'helpers/featureFlags';
-import { currencies } from 'helpers/internationalisation/currency';
 import { getProductLabel, productCatalog } from 'helpers/productCatalog';
+import { glyph } from '../../../helpers/internationalisation/currency';
 
 const container = css`
 	text-align: center;
@@ -108,7 +108,7 @@ export function StudentOffer({
 		productCatalog.SupporterPlus?.ratePlans['OneYearStudent']?.pricing[
 			currencyKey
 		];
-	const currencyGlyph = currencies[currencyKey].glyph;
+	const currencyGlyph = glyph(currencyKey);
 
 	// We don't expect this to happen, but don't render the copy with a missing
 	// price if it ever does.

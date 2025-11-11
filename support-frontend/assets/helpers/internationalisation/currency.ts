@@ -2,88 +2,11 @@
 
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import {
+	getCurrencyInfo,
+	type IsoCurrency,
+} from '@modules/internationalisation/currency';
 import { getQueryParameter } from 'helpers/urls/url';
-
-// ----- Types ----- //
-
-export type Currency = {
-	glyph: string;
-	extendedGlyph: string;
-	isSuffixGlyph: boolean;
-	isPaddedGlyph: boolean;
-};
-export type SpokenCurrency = {
-	singular: string;
-	plural: string;
-};
-
-// ----- Config ----- //
-
-const currencies: Record<IsoCurrency, Currency> = {
-	GBP: {
-		glyph: '£',
-		extendedGlyph: '£',
-		isSuffixGlyph: false,
-		isPaddedGlyph: false,
-	},
-	USD: {
-		glyph: '$',
-		extendedGlyph: 'US$',
-		isSuffixGlyph: false,
-		isPaddedGlyph: false,
-	},
-	AUD: {
-		glyph: '$',
-		extendedGlyph: 'AU$',
-		isSuffixGlyph: false,
-		isPaddedGlyph: false,
-	},
-	EUR: {
-		glyph: '€',
-		extendedGlyph: '€',
-		isSuffixGlyph: false,
-		isPaddedGlyph: false,
-	},
-	NZD: {
-		glyph: '$',
-		extendedGlyph: 'NZ$',
-		isSuffixGlyph: false,
-		isPaddedGlyph: false,
-	},
-	CAD: {
-		glyph: '$',
-		extendedGlyph: 'CA$',
-		isSuffixGlyph: false,
-		isPaddedGlyph: false,
-	},
-};
-const spokenCurrencies: Record<IsoCurrency, SpokenCurrency> = {
-	GBP: {
-		singular: 'pound',
-		plural: 'pounds',
-	},
-	USD: {
-		singular: 'dollar',
-		plural: 'dollars',
-	},
-	AUD: {
-		singular: 'dollar',
-		plural: 'dollars',
-	},
-	EUR: {
-		singular: 'euro',
-		plural: 'euros',
-	},
-	NZD: {
-		singular: 'dollar',
-		plural: 'dollars',
-	},
-	CAD: {
-		singular: 'dollar',
-		plural: 'dollars',
-	},
-};
 
 // ----- Functions ----- //
 function fromCountryGroupId(countryGroupId: CountryGroupId): IsoCurrency {
@@ -131,16 +54,10 @@ function detect(countryGroup: CountryGroupId): IsoCurrency {
 	return fromQueryParameter() ?? fromCountryGroupId(countryGroup);
 }
 
-const glyph = (c: IsoCurrency): string => currencies[c].glyph;
+const glyph = (c: IsoCurrency): string => getCurrencyInfo(c).glyph;
 
-const extendedGlyph = (c: IsoCurrency): string => currencies[c].extendedGlyph;
+const extendedGlyph = (c: IsoCurrency): string =>
+	getCurrencyInfo(c).extendedGlyph;
 
 // ----- Exports ----- //
-export {
-	detect,
-	spokenCurrencies,
-	fromCountryGroupId,
-	currencies,
-	glyph,
-	extendedGlyph,
-};
+export { detect, fromCountryGroupId, glyph, extendedGlyph };

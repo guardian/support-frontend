@@ -1,6 +1,6 @@
+import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { isAnyOf } from '@reduxjs/toolkit';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import { currencies } from 'helpers/internationalisation/currency';
 import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ContributionsStartListening } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
@@ -124,7 +124,7 @@ export function addProductSideEffects(
 					const maxAmount = getMaximumContributionAmount(productType)(state);
 
 					if (amountIsNotInRange(customAmount, minAmount, maxAmount)) {
-						const currency = currencies[currencyId];
+						const currency = getCurrencyInfo(currencyId);
 						listenerApi.dispatch(
 							setOtherAmountError(
 								`Please provide an amount between ${simpleFormatAmount(
