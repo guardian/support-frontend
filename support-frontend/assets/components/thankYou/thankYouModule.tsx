@@ -11,8 +11,6 @@ import {
 } from '@guardian/source/foundations';
 import { useEffect } from 'react';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import AppDownloadImage from './appDownload/AppDownloadImage';
-import AppDownloadQRCodes from './appDownload/AppDownloadQRCodes';
 import NewspaperArchiveImage from './newspaperArchive/newspaperArchiveImage';
 
 const container = css`
@@ -35,7 +33,7 @@ const container = css`
 	}
 `;
 
-const defaultGridContainer = css`
+const gridContainer = css`
 	display: grid;
 	grid-column-gap: ${space[3]}px;
 	grid-template-columns: min-content 1fr;
@@ -47,38 +45,6 @@ const defaultGridContainer = css`
 		grid-template-areas:
 			'icon header'
 			'---- body';
-	}
-`;
-
-const defaultContainerNoIcon = css`
-	margin: ${space[3]}px ${space[2]}px;
-	${until.tablet} {
-		margin-top: ${space[0]}px;
-	}
-`;
-
-const imageryAndQrCodesGridContainer = css`
-	display: grid;
-	grid-column-gap: ${space[3]}px;
-	grid-template-columns: min-content 1fr;
-	grid-template-areas:
-		'icon header'
-		'body body'
-		'img img';
-
-	${from.tablet} {
-		grid-template-columns: min-content 270px 1fr;
-		grid-template-areas:
-			'icon header img'
-			'---- body img'
-			'---- qrCodes qrCodes';
-	}
-
-	${between.desktop.and.leftCol} {
-		grid-template-areas:
-			'icon header header'
-			'---- body body'
-			'---- qrCodes qrCodes';
 	}
 `;
 
@@ -148,16 +114,6 @@ const sizeImgContainer = css`
 	}
 `;
 
-const qrCodesContainer = css`
-	${from.tablet} {
-		grid-area: qrCodes;
-		margin-top: ${space[5]}px;
-		margin-right: ${space[5]}px;
-		padding-top: 30px;
-		border-top: 1px solid ${neutral[86]};
-	}
-`;
-
 const paddingRight = css`
 	${from.tablet} {
 		padding-right: 54px;
@@ -174,14 +130,6 @@ const imageryStyle = css`
 
 	${until.tablet} {
 		padding-bottom: 0;
-	}
-`;
-
-const hideBelowTablet = css`
-	display: none;
-
-	${from.tablet} {
-		display: block;
 	}
 `;
 
@@ -218,7 +166,6 @@ export interface ThankYouModuleProps {
 
 function ThankYouModule({
 	moduleType,
-	isSignedIn,
 	icon,
 	header,
 	bodyCopy,
@@ -229,39 +176,32 @@ function ThankYouModule({
 		trackComponentLoadId && trackComponentLoad(trackComponentLoadId);
 	}, []);
 
-	const hasQrCodes = moduleType === 'appDownload';
 	const appDownloadEditions = moduleType === 'appDownloadEditions';
 	const isDownloadModules = moduleType === 'appsDownload';
-	const hasImagery = ['appDownload', 'newspaperArchiveBenefit'].includes(
-		moduleType,
-	);
-
-	const gridContainer =
-		hasImagery || hasQrCodes
-			? imageryAndQrCodesGridContainer
-			: icon
-			? defaultGridContainer
-			: defaultContainerNoIcon;
+	const isNewspaperArchiveBenefit = moduleType === 'newspaperArchiveBenefit';
 
 	const maybePaddingRight =
-		!hasImagery && (isDownloadModules || appDownloadEditions)
+		!isNewspaperArchiveBenefit &&
+		(isDownloadModules || appDownloadEditions
 			? paddingRightApps
-			: paddingRight;
+			: paddingRight);
 
-	const isNewspaperArchiveBenefit = moduleType === 'newspaperArchiveBenefit';
 	const resizeContainer = isNewspaperArchiveBenefit && sizeContainer;
-	const resizeImgContainer = !isNewspaperArchiveBenefit
-		? sizeImgContainer
-		: css``;
-	const resizeMarginTop = !isNewspaperArchiveBenefit
-		? css`
-				margin-top: ${space[6]}px;
-		  `
-		: css``;
+	const resizeImgContainer = !isNewspaperArchiveBenefit && sizeImgContainer;
+
+	const resizeMarginTop =
+		!isNewspaperArchiveBenefit &&
+		css`
+			margin-top: ${space[6]}px;
+		`;
 
 	return (
 		<section
-			css={[container, maybePaddingRight, hasImagery && imageryStyle]}
+			css={[
+				container,
+				maybePaddingRight,
+				isNewspaperArchiveBenefit && imageryStyle,
+			]}
 			data-testid={`${TEST_ID_PREFIX}-${moduleType}`}
 		>
 			<div css={gridContainer}>
@@ -272,21 +212,11 @@ function ThankYouModule({
 					<div css={resizeMarginTop}>{ctas}</div>
 				</div>
 
-				{hasImagery ? (
+				{isNewspaperArchiveBenefit && (
 					<div css={[imgContainer, resizeImgContainer]}>
-						{isNewspaperArchiveBenefit ? (
-							<NewspaperArchiveImage />
-						) : (
-							<AppDownloadImage />
-						)}
+						<NewspaperArchiveImage />
 					</div>
-				) : null}
-
-				{hasQrCodes && isSignedIn ? (
-					<div css={[qrCodesContainer, hideBelowTablet]}>
-						<AppDownloadQRCodes />
-					</div>
-				) : null}
+				)}
 			</div>
 		</section>
 	);
