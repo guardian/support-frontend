@@ -18,14 +18,8 @@ import { PlayStoreMobileLandscape } from './playStoreMobileLandscape';
 import { PlayStoreMobileMedium } from './playStoreMobileMedium';
 import { PlayStoreTablet } from './playStoreTablet';
 
-export const iosAppUrl =
-	'https://apps.apple.com/app/the-guardian-live-world-news/id409128287';
-export const androidAppUrl =
-	'https://play.google.com/store/apps/details?id=com.guardian';
-export const iosFeastAppUrl =
-	'https://apps.apple.com/us/app/guardian-feast/id6468674686';
-export const androidFeastAppUrl =
-	'https://play.google.com/store/apps/details?id=uk.co.guardian.feast';
+export const guardianAppUrl = 'https://guardian.go.link/home?adj_t=1u2r07na';
+export const feastAppUrl = 'https://guardian-feast.go.link/home?adj_t=1u2gdk5r';
 
 const badgesContainer = css`
 	display: flex;
@@ -68,62 +62,38 @@ const separator = css`
 	border-right: 1px solid ${neutral[73]};
 `;
 
-function OnboardingAppBadgesMobile({
-	isoLink,
-	androidLink,
-}: {
-	isoLink: string;
-	androidLink: string;
-}) {
+function OnboardingAppBadgesMobile({ link }: { link: string }) {
 	return (
 		<div css={badgesContainer}>
-			<AppStoreMobile link={isoLink} />
-			<PlayStoreMobile link={androidLink} />
+			<AppStoreMobile link={link} />
+			<PlayStoreMobile link={link} />
 		</div>
 	);
 }
 
-function OnboardingAppBadgesMedium({
-	isoLink,
-	androidLink,
-}: {
-	isoLink: string;
-	androidLink: string;
-}) {
+function OnboardingAppBadgesMedium({ link }: { link: string }) {
 	return (
 		<div css={badgesContainer}>
-			<AppStoreMobileMedium link={isoLink} />
-			<PlayStoreMobileMedium link={androidLink} />
+			<AppStoreMobileMedium link={link} />
+			<PlayStoreMobileMedium link={link} />
 		</div>
 	);
 }
 
-function OnboardingAppBadgesTablet({
-	isoLink,
-	androidLink,
-}: {
-	isoLink: string;
-	androidLink: string;
-}) {
+function OnboardingAppBadgesTablet({ link }: { link: string }) {
 	return (
 		<div css={badgesContainer}>
-			<AppStoreTablet link={isoLink} />
-			<PlayStoreTablet link={androidLink} />
+			<AppStoreTablet link={link} />
+			<PlayStoreTablet link={link} />
 		</div>
 	);
 }
 
-function OnboardingAppBadgesMobileLandscape({
-	isoLink,
-	androidLink,
-}: {
-	isoLink: string;
-	androidLink: string;
-}) {
+function OnboardingAppBadgesMobileLandscape({ link }: { link: string }) {
 	return (
 		<div css={badgesContainer}>
-			<AppStoreMobileLandscape link={isoLink} />
-			<PlayStoreMobileLandscape link={androidLink} />
+			<AppStoreMobileLandscape link={link} />
+			<PlayStoreMobileLandscape link={link} />
 		</div>
 	);
 }
@@ -136,43 +106,19 @@ export function OnboardingAppBadgesDownload({
 	const { windowWidthIsGreaterThan } = useWindowWidth();
 
 	const badges = useMemo(() => {
-		const isoLink =
+		const link =
 			onboardingStep === OnboardingSteps.GuardianApp
-				? iosAppUrl
-				: iosFeastAppUrl;
-		const androidLink =
-			onboardingStep === OnboardingSteps.GuardianApp
-				? androidAppUrl
-				: androidFeastAppUrl;
+				? guardianAppUrl
+				: feastAppUrl;
 
 		if (windowWidthIsGreaterThan('tablet')) {
-			return (
-				<OnboardingAppBadgesTablet
-					isoLink={isoLink}
-					androidLink={androidLink}
-				/>
-			);
+			return <OnboardingAppBadgesTablet link={link} />;
 		} else if (windowWidthIsGreaterThan('mobileLandscape')) {
-			return (
-				<OnboardingAppBadgesMobileLandscape
-					isoLink={isoLink}
-					androidLink={androidLink}
-				/>
-			);
+			return <OnboardingAppBadgesMobileLandscape link={link} />;
 		} else if (windowWidthIsGreaterThan('mobileMedium')) {
-			return (
-				<OnboardingAppBadgesMedium
-					isoLink={isoLink}
-					androidLink={androidLink}
-				/>
-			);
+			return <OnboardingAppBadgesMedium link={link} />;
 		} else {
-			return (
-				<OnboardingAppBadgesMobile
-					isoLink={isoLink}
-					androidLink={androidLink}
-				/>
-			);
+			return <OnboardingAppBadgesMobile link={link} />;
 		}
 	}, [windowWidthIsGreaterThan, onboardingStep]);
 

@@ -90,8 +90,6 @@ export function OnboardingAppsDiscovery({
 		? hasMobileAppDownloaded
 		: hasFeastMobileAppDownloaded;
 
-	const appName = isGuardianApp ? 'Guardian' : 'Feast';
-
 	const appBenefits = isGuardianApp
 		? GUARDIAN_APP_BENEFITS
 		: FEAST_APP_BENEFITS;
@@ -106,10 +104,11 @@ export function OnboardingAppsDiscovery({
 			<ContentBox>
 				<Stack space={2}>
 					<h1 css={headings}>
-						{/* Always discover for feast */}
-						{hasAppDownloaded
-							? `Discover the ${appName} app`
-							: `Discover the ${appName} app`}
+						{isGuardianApp
+							? hasAppDownloaded
+								? 'Discover the Guardian app'
+								: 'Download the Guardian app'
+							: 'Discover the Feast app'}
 					</h1>
 					<p css={descriptions}>
 						{isGuardianApp

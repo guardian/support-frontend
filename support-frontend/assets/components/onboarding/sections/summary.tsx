@@ -117,12 +117,6 @@ function OnboardingSummary({
 		nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 3);
 	}
 
-	const formattedNextPayment = nextPaymentDate.toLocaleDateString('en-GB', {
-		day: 'numeric',
-		month: 'long',
-		year: 'numeric',
-	});
-
 	return (
 		<Stack
 			space={5}
@@ -144,17 +138,13 @@ function OnboardingSummary({
 						<div css={paymentDetailsContainer}>
 							<Stack space={2}>
 								<p css={boldDescriptions}>Product</p>
-								{/* <p css={boldDescriptions}>Subscription ID</p>
-								<p css={boldDescriptions}>Payment method</p> */}
-								<p css={boldDescriptions}>Amount paid today</p>
-								<p css={boldDescriptions}>Next payment</p>
+								<p css={boldDescriptions}>Price</p>
+								<p css={boldDescriptions}>Payment method</p>
 							</Stack>
 							<Stack space={2}>
 								<p css={descriptions}>{productSettings?.title}</p>
-								{/* <p css={descriptions}>Subscription ID</p>
-								<p css={descriptions}>Payment method</p> */}
 								<p css={descriptions}>{fullAmount}</p>
-								<p css={descriptions}>{formattedNextPayment}</p>
+								<p css={descriptions}>{}</p>
 							</Stack>
 						</div>
 					</Stack>

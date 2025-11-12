@@ -1,26 +1,26 @@
 import { css } from '@emotion/react';
 import {
 	from,
+	headlineMedium20,
+	headlineMedium24,
+	headlineMedium28,
 	neutral,
 	space,
 	sport,
 	textSans14,
 	textSans17,
 	textSansBold17,
-	textSansBold20,
-	textSansBold24,
-	textSansBold28,
 } from '@guardian/source/foundations';
 
 const headings = css`
-	${textSansBold20}
+	${headlineMedium20}
 
 	${from.mobileMedium} {
-		${textSansBold24}
+		${headlineMedium24}
 	}
 
 	${from.tablet} {
-		${textSansBold28}
+		${headlineMedium28}
 	}
 `;
 

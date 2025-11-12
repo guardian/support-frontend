@@ -3,13 +3,13 @@ import { css } from '@emotion/react';
 import {
 	between,
 	from,
+	headlineMedium20,
+	headlineMedium24,
+	headlineMedium28,
+	headlineMedium34,
 	palette,
 	space,
 	textSans17,
-	textSansBold20,
-	textSansBold24,
-	textSansBold28,
-	textSansBold34,
 } from '@guardian/source/foundations';
 import { Column, Columns, Container } from '@guardian/source/react-components';
 import { useMemo } from 'preact/hooks';
@@ -51,10 +51,10 @@ const thankYouHeading = css`
 	margin-top: ${space[1]}px;
 
 	color: white;
-	${textSansBold20}
+	${headlineMedium20}
 
 	${from.mobileMedium} {
-		${textSansBold24}
+		${headlineMedium24}
 	}
 
 	${between.mobileMedium.and.mobileLandscape} {
@@ -66,12 +66,12 @@ const thankYouHeading = css`
 	}
 
 	${from.mobileLandscape} {
-		${textSansBold28}
+		${headlineMedium28}
 	}
 
 	${from.tablet} {
 		margin-top: ${space[2]}px;
-		${textSansBold34}
+		${headlineMedium34}
 	}
 `;
 
