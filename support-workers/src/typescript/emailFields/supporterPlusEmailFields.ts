@@ -1,4 +1,4 @@
-import type { IsoCurrency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { zuoraDateFormat } from '@modules/zuora/utils/common';
 import type { Dayjs } from 'dayjs';
