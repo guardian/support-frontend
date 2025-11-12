@@ -32,16 +32,14 @@ describe('ThankYouNavLinks', () => {
 		jest.clearAllMocks();
 	});
 
-	it('renders the Observer button when observerPrint and observerThemeButton are present', () => {
+	it('renders the Observer button for observer product and observerThemeButton are present', () => {
 		// Arrange
 		(useTheme as jest.Mock).mockReturnValue({
 			observerThemeButton,
 		});
 
 		// Act
-		render(
-			<ThankYouNavLinks isObserverPrint={true} isGuardianAdLite={false} />,
-		);
+		render(<ThankYouNavLinks productKey="HomeDelivery" ratePlanKey="Sunday" />);
 
 		const button = screen.getByRole('link', { name: /get started/i });
 		expect(button).toHaveAttribute(
@@ -62,9 +60,7 @@ describe('ThankYouNavLinks', () => {
 		(useTheme as jest.Mock).mockReturnValue({ observerThemeButton: undefined });
 
 		// Act
-		render(
-			<ThankYouNavLinks isObserverPrint={true} isGuardianAdLite={false} />,
-		);
+		render(<ThankYouNavLinks productKey="HomeDelivery" ratePlanKey="Sunday" />);
 
 		// Assert
 		expect(
@@ -78,7 +74,7 @@ describe('ThankYouNavLinks', () => {
 
 		// Act
 		render(
-			<ThankYouNavLinks isObserverPrint={false} isGuardianAdLite={false} />,
+			<ThankYouNavLinks productKey="HomeDelivery" ratePlanKey="Everyday" />,
 		);
 
 		const button = screen.getByRole('link', {
@@ -100,7 +96,7 @@ describe('ThankYouNavLinks', () => {
 
 		// Act
 		render(
-			<ThankYouNavLinks isObserverPrint={false} isGuardianAdLite={true} />,
+			<ThankYouNavLinks productKey="GuardianAdLite" ratePlanKey="Monthly" />,
 		);
 
 		// Assert
@@ -114,9 +110,7 @@ describe('ThankYouNavLinks', () => {
 		(useTheme as jest.Mock).mockReturnValue({ observerThemeButton: {} });
 
 		// Act
-		render(
-			<ThankYouNavLinks isObserverPrint={true} isGuardianAdLite={false} />,
-		);
+		render(<ThankYouNavLinks productKey="HomeDelivery" ratePlanKey="Sunday" />);
 
 		fireEvent.click(screen.getByRole('link', { name: /get started/i }));
 
@@ -132,7 +126,7 @@ describe('ThankYouNavLinks', () => {
 
 		// Act
 		render(
-			<ThankYouNavLinks isObserverPrint={true} isGuardianAdLite={false} />,
+			<ThankYouNavLinks productKey="HomeDelivery" ratePlanKey="Everyday" />,
 		);
 
 		fireEvent.click(

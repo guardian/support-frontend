@@ -31,7 +31,6 @@ import {
 import { getUser } from 'helpers/user/user';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
-import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import {
 	isGuardianWeeklyProduct,
@@ -47,6 +46,7 @@ import {
 	getReturnAddress,
 	getThankYouOrder,
 } from '../checkout/helpers/sessionStorage';
+import getObserver from '../helpers/getObserver';
 import GuardianPageLayout from './GuardianPageLayout';
 import ThankYouNavLinks from './ThankYouNavLinks';
 
@@ -157,29 +157,12 @@ export function ThankYouComponent({
 		billingPeriod,
 		currencyKey,
 	);
-	const subscriptionCardProductsKey: ActiveProductKey[] = ['SubscriptionCard'];
-	const paperProductsKeys: ActiveProductKey[] = [
-		'NationalDelivery',
-		'HomeDelivery',
-	];
 
 	const isPrint = isPrintProduct(productKey);
 	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
 
-	const getObserver = (): ObserverPrint | undefined => {
-		if (paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday') {
-			return ObserverPrint.Paper;
-		}
-		if (
-			subscriptionCardProductsKey.includes(productKey) &&
-			ratePlanKey === 'Sunday'
-		) {
-			return ObserverPrint.SubscriptionCard;
-		}
+	const observerPrint = getObserver(productKey, ratePlanKey);
 
-		return undefined;
-	};
-	const observerPrint = getObserver();
 	const { enablePremiumDigital } = getFeatureFlags();
 
 	const isGuardianPrint = isPrint && !observerPrint;
@@ -341,10 +324,7 @@ export function ThankYouComponent({
 						thankYouModulesData={thankYouModuleData}
 					/>
 
-					<ThankYouNavLinks
-						isObserverPrint={!!observerPrint}
-						isGuardianAdLite={isGuardianAdLite}
-					/>
+					<ThankYouNavLinks productKey={productKey} ratePlanKey={ratePlanKey} />
 				</div>
 			</PageLayout>
 		</ThemeProvider>

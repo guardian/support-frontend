@@ -2,11 +2,16 @@ import { css, useTheme } from '@emotion/react';
 import { space, until } from '@guardian/source/foundations';
 import { LinkButton } from '@guardian/source/react-components';
 import { getObserverButtonProps } from 'components/observer-layout/observerButtonProps';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import {
 	OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
 	OPHAN_COMPONENT_ID_RETURN_TO_OBSERVER,
 } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import getObserver from '../helpers/getObserver';
 
 const buttonContainer = css`
 	position: absolute;
@@ -22,12 +27,13 @@ const buttonContainer = css`
 `;
 
 export default function ThankYouNavLinks({
-	isObserverPrint,
-	isGuardianAdLite,
+	productKey,
+	ratePlanKey,
 }: {
-	isObserverPrint: boolean;
-	isGuardianAdLite: boolean;
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
 }) {
+	const observerPrint = getObserver(productKey, ratePlanKey);
 	const { observerThemeButton } = useTheme();
 	const props = observerThemeButton && getObserverButtonProps();
 	const buttonText = observerThemeButton
@@ -36,7 +42,7 @@ export default function ThankYouNavLinks({
 
 	return (
 		<div css={buttonContainer}>
-			{isObserverPrint && (
+			{!!observerPrint && (
 				<LinkButton
 					href="https://www.observer.co.uk/welcome"
 					priority="tertiary"
@@ -50,7 +56,7 @@ export default function ThankYouNavLinks({
 				</LinkButton>
 			)}
 
-			{!isGuardianAdLite && !observerThemeButton && (
+			{productKey !== 'GuardianAdLite' && !observerPrint && (
 				<LinkButton
 					href="https://www.theguardian.com"
 					priority="tertiary"
