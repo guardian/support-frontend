@@ -28,7 +28,7 @@ import {
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { helpCentreUrl } from 'helpers/urls/externalLinks';
+import { getHelpCentreUrl } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
@@ -170,7 +170,7 @@ function paperTsAndCs(
 				{deliveryTsAndCs} You can cancel your subscription at any time before
 				your next renewal date. Cancellation will take effect at the end of your
 				current payment period. To cancel, use the contact details listed on our{' '}
-				{termsLink('Help Centre', helpCentreUrl)}.{' '}
+				{termsLink('Help Centre', getHelpCentreUrl())}.{' '}
 			</div>
 			<div>
 				{paperShareTsAndCs}
