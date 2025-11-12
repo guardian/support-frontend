@@ -2,18 +2,13 @@ import { Global } from '@emotion/react';
 import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import { PrerenderGlobalStyles } from 'helpers/rendering/prerenderGlobalStyles';
 import { reset } from 'stylesheets/emotion/reset';
-import AnimatedDots from '../spinners/animatedDots';
 
 export function ObserverHoldingContent() {
 	return (
 		<>
 			<Global styles={reset} />
 			<PrerenderGlobalStyles />
-			<ObserverPageLayout noBorders>
-				<div>
-					<AnimatedDots appearance="dark" />
-				</div>
-			</ObserverPageLayout>
+			<ObserverPageLayout noBorders>{null}</ObserverPageLayout>
 		</>
 	);
 }
