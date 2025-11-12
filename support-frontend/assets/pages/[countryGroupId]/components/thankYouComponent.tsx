@@ -1,10 +1,10 @@
-import { css } from '@emotion/react';
+import { css, ThemeProvider } from '@emotion/react';
 import { storage } from '@guardian/libs';
-import { from, space, until } from '@guardian/source/foundations';
-import { LinkButton } from '@guardian/source/react-components';
+import { from } from '@guardian/source/foundations';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
+import { observerThemeButton } from 'components/observer-layout/styles';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { Participations } from 'helpers/abTests/models';
@@ -22,11 +22,6 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { type CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { get } from 'helpers/storage/cookie';
-import {
-	OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
-	OPHAN_COMPONENT_ID_RETURN_TO_OBSERVER,
-} from 'helpers/thankYouPages/utils/ophan';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
 import {
 	sendEventCheckoutValue,
@@ -36,7 +31,6 @@ import {
 import { getUser } from 'helpers/user/user';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
-import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import {
 	isGuardianWeeklyProduct,
@@ -52,7 +46,9 @@ import {
 	getReturnAddress,
 	getThankYouOrder,
 } from '../checkout/helpers/sessionStorage';
+import getObserver from '../helpers/getObserver';
 import GuardianPageLayout from './GuardianPageLayout';
+import ThankYouNavLinks from './ThankYouNavLinks';
 
 const thankYouContainer = css`
 	position: relative;
@@ -62,18 +58,6 @@ const thankYouContainer = css`
 const headerContainer = css`
 	${from.desktop} {
 		width: 860px;
-	}
-`;
-const buttonContainer = css`
-	position: absolute;
-	bottom: ${space[8]}px;
-	& > a:first-child {
-		margin-right: ${space[3]}px;
-	}
-	${until.tablet} {
-		& > a {
-			margin-bottom: ${space[4]}px;
-		}
 	}
 `;
 
@@ -173,29 +157,12 @@ export function ThankYouComponent({
 		billingPeriod,
 		currencyKey,
 	);
-	const subscriptionCardProductsKey: ActiveProductKey[] = ['SubscriptionCard'];
-	const paperProductsKeys: ActiveProductKey[] = [
-		'NationalDelivery',
-		'HomeDelivery',
-	];
 
 	const isPrint = isPrintProduct(productKey);
 	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
 
-	const getObserver = (): ObserverPrint | undefined => {
-		if (paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday') {
-			return ObserverPrint.Paper;
-		}
-		if (
-			subscriptionCardProductsKey.includes(productKey) &&
-			ratePlanKey === 'Sunday'
-		) {
-			return ObserverPrint.SubscriptionCard;
-		}
+	const observerPrint = getObserver(productKey, ratePlanKey);
 
-		return undefined;
-	};
-	const observerPrint = getObserver();
 	const { enablePremiumDigital } = getFeatureFlags();
 
 	const isGuardianPrint = isPrint && !observerPrint;
@@ -324,58 +291,42 @@ export function ThankYouComponent({
 		),
 	];
 
-	const PageLayout = window.guardian.isObserverSubdomain
+	const { isObserverSubdomain } = window.guardian;
+	const PageLayout = isObserverSubdomain
 		? ObserverPageLayout
 		: GuardianPageLayout;
 
+	const theme = {
+		...(isObserverSubdomain && { observerThemeButton }),
+	};
+
 	return (
-		<PageLayout observerPrint={observerPrint} noBorders noFooterLinks>
-			<div css={thankYouContainer}>
-				<div css={headerContainer}>
-					<ThankYouHeader
-						productKey={productKey}
-						ratePlanKey={ratePlanKey}
-						name={order.firstName}
-						amount={payment.originalAmount}
-						isDirectDebitPayment={order.paymentMethod === 'DirectDebit'}
-						currency={currencyKey}
-						promotion={promotion}
-						observerPrint={observerPrint}
-						startDate={startDate}
+		<ThemeProvider theme={theme}>
+			<PageLayout observerPrint={observerPrint} noBorders noFooterLinks>
+				<div css={thankYouContainer}>
+					<div css={headerContainer}>
+						<ThankYouHeader
+							productKey={productKey}
+							ratePlanKey={ratePlanKey}
+							name={order.firstName}
+							amount={payment.originalAmount}
+							isDirectDebitPayment={order.paymentMethod === 'DirectDebit'}
+							currency={currencyKey}
+							promotion={promotion}
+							observerPrint={observerPrint}
+							startDate={startDate}
+						/>
+					</div>
+
+					<ThankYouModules
+						isSignedIn={isSignedIn}
+						thankYouModules={thankYouModules}
+						thankYouModulesData={thankYouModuleData}
 					/>
-				</div>
 
-				<ThankYouModules
-					isSignedIn={isSignedIn}
-					thankYouModules={thankYouModules}
-					thankYouModulesData={thankYouModuleData}
-				/>
-
-				<div css={buttonContainer}>
-					{!!observerPrint && (
-						<LinkButton
-							href="https://www.observer.co.uk/welcome"
-							priority="tertiary"
-							onClick={() =>
-								trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_OBSERVER)
-							}
-						>
-							Return to the Observer
-						</LinkButton>
-					)}
-					{!isGuardianAdLite && (
-						<LinkButton
-							href="https://www.theguardian.com"
-							priority="tertiary"
-							onClick={() =>
-								trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)
-							}
-						>
-							Return to the Guardian
-						</LinkButton>
-					)}
+					<ThankYouNavLinks productKey={productKey} ratePlanKey={ratePlanKey} />
 				</div>
-			</div>
-		</PageLayout>
+			</PageLayout>
+		</ThemeProvider>
 	);
 }
