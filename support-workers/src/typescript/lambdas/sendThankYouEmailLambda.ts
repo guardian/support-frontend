@@ -5,8 +5,9 @@ import { getProductCatalogFromApi } from '@modules/product-catalog/api';
 import type { ProductCatalog } from '@modules/product-catalog/productCatalog';
 import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
 import dayjs from 'dayjs';
-import { buildContributionThankYouEmailFields } from '../emailFields/contributionEmailFields';
-import { buildSupporterPlusThankYouEmailFields } from '../emailFields/supporterPlusEmailFields';
+import { buildContributionEmailFields } from '../emailFields/contributionEmailFields';
+import { buildDigitalSubscriptionEmailFields } from '../emailFields/digitalSubscriptionEmailFields';
+import { buildSupporterPlusEmailFields } from '../emailFields/supporterPlusEmailFields';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { ProductType } from '../model/productType';
 import type { SendAcquisitionEventState } from '../model/sendAcquisitionEventState';
@@ -42,19 +43,22 @@ export const handler = async (
 		case 'Contribution':
 			await sendEmail(
 				stage,
-				buildContributionThankYouEmailFields(
-					sendThankYouEmailState.user,
-					productInformation.amount,
-					sendThankYouEmailState.product.currency,
-					productInformation.ratePlan,
-				),
+				buildContributionEmailFields({
+					now: dayjs(),
+					user: sendThankYouEmailState.user,
+					amount: productInformation.amount,
+					currency: sendThankYouEmailState.product.currency,
+					paymentMethod: sendThankYouEmailState.paymentMethod,
+					mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
+					ratePlan: productInformation.ratePlan,
+				}),
 			);
 			break;
 		case 'SupporterPlus':
 			if (sendThankYouEmailState.productType === 'SupporterPlus') {
 				await sendEmail(
 					stage,
-					buildSupporterPlusThankYouEmailFields({
+					buildSupporterPlusEmailFields({
 						now: dayjs(),
 						user: sendThankYouEmailState.user,
 						currency: sendThankYouEmailState.product.currency,
@@ -70,9 +74,25 @@ export const handler = async (
 				throw new Error('Product type mismatch: expected SupporterPlus');
 			}
 			break;
-		// case 'DigitalSubscription':
-		// 	sendDigitalSubscriptionEmail();
-		// 	break;
+		case 'DigitalSubscription':
+			if (sendThankYouEmailState.productType === 'DigitalSubscription') {
+				// TODO: This needs testing once the new email template is ready
+				await sendEmail(
+					stage,
+					buildDigitalSubscriptionEmailFields({
+						user: sendThankYouEmailState.user,
+						currency: sendThankYouEmailState.product.currency,
+						billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
+						subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
+						paymentSchedule: sendThankYouEmailState.paymentSchedule,
+						paymentMethod: sendThankYouEmailState.paymentMethod,
+						mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
+					}),
+				);
+			} else {
+				throw new Error('Product type mismatch: expected DigitalPack');
+			}
+			break;
 		// case 'NationalDelivery':
 		// case 'SubscriptionCard':
 		// case 'HomeDelivery':

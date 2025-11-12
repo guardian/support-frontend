@@ -61,7 +61,7 @@ export const sendThankYouEmailStateSchema = z.union([
 	}),
 
 	z.object({
-		productType: z.literal('DigitalPack'),
+		productType: z.literal('DigitalSubscription'),
 		user: userSchema,
 		product: productTypeSchema,
 		productInformation: productPurchaseSchema,

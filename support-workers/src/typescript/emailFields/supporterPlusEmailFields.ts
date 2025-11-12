@@ -1,57 +1,17 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { zuoraDateFormat } from '@modules/zuora/utils/common';
-import type { Dayjs } from 'dayjs';
 import type dayjs from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
-import { getIfDefined } from '../util/nullAndUndefined';
 import { describe } from './emailFieldDescription';
-import { buildThankYouEmailFields, formatDate } from './emailFields';
+import {
+	buildThankYouEmailFields,
+	getPaymentMethodFieldsSupporterPlus,
+} from './emailFields';
 
-function getPaymentMethodFields(
-	paymentMethod: PaymentMethod,
-	created: Dayjs,
-	mandateId?: string,
-):
-	| { 'payment method': 'credit / debit card'; 'first payment date': string }
-	| {
-			'payment method': 'Direct Debit';
-			'account name': string;
-			'account number': string;
-			'sort code': string;
-			'Mandate ID': string;
-			'first payment date': string;
-	  }
-	| { 'payment method': 'PayPal'; 'first payment date': string } {
-	switch (paymentMethod.Type) {
-		case 'BankTransfer':
-			return {
-				'payment method': 'Direct Debit',
-				'account name': paymentMethod.BankTransferAccountName,
-				'account number': paymentMethod.BankTransferAccountNumber,
-				'sort code': paymentMethod.BankCode,
-				'Mandate ID': getIfDefined(
-					mandateId,
-					'No Mandate ID was provided for a Direct Debit payment',
-				),
-				'first payment date': formatDate(created.add(10, 'days')),
-			};
-		case 'CreditCardReferenceTransaction':
-			return {
-				'payment method': 'credit / debit card',
-				'first payment date': formatDate(created),
-			};
-		case 'PayPal':
-			return {
-				'payment method': 'PayPal',
-				'first payment date': formatDate(created),
-			};
-	}
-}
-
-export function buildSupporterPlusThankYouEmailFields({
+export function buildSupporterPlusEmailFields({
 	now,
 	user,
 	currency,
@@ -72,7 +32,7 @@ export function buildSupporterPlusThankYouEmailFields({
 	isFixedTerm: boolean;
 	mandateId?: string;
 }) {
-	const paymentMethodFields = getPaymentMethodFields(
+	const paymentMethodFields = getPaymentMethodFieldsSupporterPlus(
 		paymentMethod,
 		now,
 		mandateId,
