@@ -28,7 +28,7 @@ catalogs:
       specifier: ^2.1.5
       version: 2.1.5
     '@guardian/support-service-lambdas':
-      specifier: guardian/support-service-lambdas#b6cdd76221f3571e695e69f5e1d15898adafbd5d
+      specifier: guardian/support-service-lambdas#908b66b31ff251515fec52eab566750c1aa7a767
       version: 1.0.0
     '@types/jest':
       specifier: ^29.5.12
@@ -131,7 +131,7 @@ importers:
         version: 2.1.5(prettier@2.8.8)
       '@guardian/support-service-lambdas':
         specifier: 'catalog:'
-        version: git+https://git@github.com:guardian/support-service-lambdas.git#b6cdd76221f3571e695e69f5e1d15898adafbd5d
+        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/908b66b31ff251515fec52eab566750c1aa7a767
       '@types/node':
         specifier: 'catalog:'
         version: 20.19.0
@@ -201,7 +201,7 @@ importers:
         version: 18.1.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@26.0.0(@guardian/ophan-tracker-js@2.6.1)(tslib@2.8.1)(typescript@5.5.4))(@guardian/source@10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/support-service-lambdas':
         specifier: 'catalog:'
-        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/b6cdd76221f3571e695e69f5e1d15898adafbd5d
+        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/908b66b31ff251515fec52eab566750c1aa7a767
       '@guardian/tsconfig':
         specifier: ^0.2.0
         version: 0.2.0
@@ -545,7 +545,7 @@ importers:
         version: 3.896.0(@aws-sdk/client-dynamodb@3.896.0)
       '@guardian/support-service-lambdas':
         specifier: 'catalog:'
-        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/b6cdd76221f3571e695e69f5e1d15898adafbd5d
+        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/908b66b31ff251515fec52eab566750c1aa7a767
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
@@ -2312,12 +2312,8 @@ packages:
       typescript:
         optional: true
 
-  '@guardian/support-service-lambdas@git+https://git@github.com:guardian/support-service-lambdas.git#b6cdd76221f3571e695e69f5e1d15898adafbd5d':
-    resolution: {commit: b6cdd76221f3571e695e69f5e1d15898adafbd5d, repo: git@github.com:guardian/support-service-lambdas.git, type: git}
-    version: 1.0.0
-
-  '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/b6cdd76221f3571e695e69f5e1d15898adafbd5d':
-    resolution: {tarball: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/b6cdd76221f3571e695e69f5e1d15898adafbd5d}
+  '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/908b66b31ff251515fec52eab566750c1aa7a767':
+    resolution: {tarball: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/908b66b31ff251515fec52eab566750c1aa7a767}
     version: 1.0.0
 
   '@guardian/tsconfig@0.2.0':
@@ -9330,31 +9326,31 @@ snapshots:
       '@aws-sdk/util-endpoints': 3.808.0
       '@aws-sdk/util-user-agent-browser': 3.804.0
       '@aws-sdk/util-user-agent-node': 3.816.0
-      '@smithy/config-resolver': 4.2.2
-      '@smithy/core': 3.13.0
-      '@smithy/fetch-http-handler': 5.2.1
-      '@smithy/hash-node': 4.1.1
-      '@smithy/invalid-dependency': 4.1.1
-      '@smithy/middleware-content-length': 4.1.1
-      '@smithy/middleware-endpoint': 4.2.5
-      '@smithy/middleware-retry': 4.3.1
-      '@smithy/middleware-serde': 4.1.1
-      '@smithy/middleware-stack': 4.1.1
-      '@smithy/node-config-provider': 4.2.2
-      '@smithy/node-http-handler': 4.2.1
-      '@smithy/protocol-http': 5.2.1
-      '@smithy/smithy-client': 4.6.5
-      '@smithy/types': 4.5.0
-      '@smithy/url-parser': 4.1.1
-      '@smithy/util-base64': 4.1.0
-      '@smithy/util-body-length-browser': 4.1.0
-      '@smithy/util-body-length-node': 4.1.0
-      '@smithy/util-defaults-mode-browser': 4.1.5
-      '@smithy/util-defaults-mode-node': 4.1.5
-      '@smithy/util-endpoints': 3.1.2
-      '@smithy/util-middleware': 4.1.1
-      '@smithy/util-retry': 4.1.2
-      '@smithy/util-utf8': 4.1.0
+      '@smithy/config-resolver': 4.4.3
+      '@smithy/core': 3.18.0
+      '@smithy/fetch-http-handler': 5.3.6
+      '@smithy/hash-node': 4.2.5
+      '@smithy/invalid-dependency': 4.2.5
+      '@smithy/middleware-content-length': 4.2.5
+      '@smithy/middleware-endpoint': 4.3.7
+      '@smithy/middleware-retry': 4.4.7
+      '@smithy/middleware-serde': 4.2.5
+      '@smithy/middleware-stack': 4.2.5
+      '@smithy/node-config-provider': 4.3.5
+      '@smithy/node-http-handler': 4.4.5
+      '@smithy/protocol-http': 5.3.5
+      '@smithy/smithy-client': 4.9.3
+      '@smithy/types': 4.9.0
+      '@smithy/url-parser': 4.2.5
+      '@smithy/util-base64': 4.3.0
+      '@smithy/util-body-length-browser': 4.2.0
+      '@smithy/util-body-length-node': 4.2.1
+      '@smithy/util-defaults-mode-browser': 4.3.6
+      '@smithy/util-defaults-mode-node': 4.2.9
+      '@smithy/util-endpoints': 3.2.5
+      '@smithy/util-middleware': 4.2.5
+      '@smithy/util-retry': 4.2.5
+      '@smithy/util-utf8': 4.2.0
       tslib: 2.8.1
     transitivePeerDependencies:
       - aws-crt
@@ -9632,31 +9628,31 @@ snapshots:
       '@aws-sdk/util-endpoints': 3.808.0
       '@aws-sdk/util-user-agent-browser': 3.804.0
       '@aws-sdk/util-user-agent-node': 3.816.0
-      '@smithy/config-resolver': 4.2.2
-      '@smithy/core': 3.13.0
-      '@smithy/fetch-http-handler': 5.2.1
-      '@smithy/hash-node': 4.1.1
-      '@smithy/invalid-dependency': 4.1.1
-      '@smithy/middleware-content-length': 4.1.1
-      '@smithy/middleware-endpoint': 4.2.5
-      '@smithy/middleware-retry': 4.3.1
-      '@smithy/middleware-serde': 4.1.1
-      '@smithy/middleware-stack': 4.1.1
-      '@smithy/node-config-provider': 4.2.2
-      '@smithy/node-http-handler': 4.2.1
-      '@smithy/protocol-http': 5.2.1
-      '@smithy/smithy-client': 4.6.5
-      '@smithy/types': 4.5.0
-      '@smithy/url-parser': 4.1.1
-      '@smithy/util-base64': 4.1.0
-      '@smithy/util-body-length-browser': 4.1.0
-      '@smithy/util-body-length-node': 4.1.0
-      '@smithy/util-defaults-mode-browser': 4.1.5
-      '@smithy/util-defaults-mode-node': 4.1.5
-      '@smithy/util-endpoints': 3.1.2
-      '@smithy/util-middleware': 4.1.1
-      '@smithy/util-retry': 4.1.2
-      '@smithy/util-utf8': 4.1.0
+      '@smithy/config-resolver': 4.4.3
+      '@smithy/core': 3.18.0
+      '@smithy/fetch-http-handler': 5.3.6
+      '@smithy/hash-node': 4.2.5
+      '@smithy/invalid-dependency': 4.2.5
+      '@smithy/middleware-content-length': 4.2.5
+      '@smithy/middleware-endpoint': 4.3.7
+      '@smithy/middleware-retry': 4.4.7
+      '@smithy/middleware-serde': 4.2.5
+      '@smithy/middleware-stack': 4.2.5
+      '@smithy/node-config-provider': 4.3.5
+      '@smithy/node-http-handler': 4.4.5
+      '@smithy/protocol-http': 5.3.5
+      '@smithy/smithy-client': 4.9.3
+      '@smithy/types': 4.9.0
+      '@smithy/url-parser': 4.2.5
+      '@smithy/util-base64': 4.3.0
+      '@smithy/util-body-length-browser': 4.2.0
+      '@smithy/util-body-length-node': 4.2.1
+      '@smithy/util-defaults-mode-browser': 4.3.6
+      '@smithy/util-defaults-mode-node': 4.2.9
+      '@smithy/util-endpoints': 3.2.5
+      '@smithy/util-middleware': 4.2.5
+      '@smithy/util-retry': 4.2.5
+      '@smithy/util-utf8': 4.2.0
       tslib: 2.8.1
     transitivePeerDependencies:
       - aws-crt
@@ -12335,9 +12331,7 @@ snapshots:
       react: 18.2.0
       typescript: 5.5.4
 
-  '@guardian/support-service-lambdas@git+https://git@github.com:guardian/support-service-lambdas.git#b6cdd76221f3571e695e69f5e1d15898adafbd5d': {}
-
-  '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/b6cdd76221f3571e695e69f5e1d15898adafbd5d': {}
+  '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/908b66b31ff251515fec52eab566750c1aa7a767': {}
 
   '@guardian/tsconfig@0.2.0': {}
 
