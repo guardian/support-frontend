@@ -1,6 +1,3 @@
-import { expect, userEvent, waitFor, within } from 'storybook/test';
-import React from 'react';
-import CountryGroupSwitcherComponent from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -11,6 +8,9 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
+import type React from 'react';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
+import CountryGroupSwitcherComponent from 'components/countryGroupSwitcher/countryGroupSwitcher';
 
 export default {
 	title: 'Internationalisation/Country Group Switcher',
@@ -69,6 +69,7 @@ CountryGroupSwitcher.args = {
 	countryGroup: GBPCountries,
 };
 
+// Test opening and closing the country group switcher
 CountryGroupSwitcher.play = async ({
 	canvasElement,
 }: {
@@ -76,17 +77,58 @@ CountryGroupSwitcher.play = async ({
 }) => {
 	const canvas = within(canvasElement);
 
-	userEvent.click(canvas.getByRole('button'));
+	await userEvent.click(canvas.getByRole('button'));
 
-	await waitFor(() => {
-		expect(canvas.getByRole('dialog')).toHaveAttribute('aria-hidden', 'false');
+	await expect(canvas.getByRole('dialog')).toHaveAttribute(
+		'aria-hidden',
+		'false',
+	);
+
+	await waitFor(async () => {
+		await userEvent.click(canvas.getByTestId('dialog-backdrop'));
 	});
 
-	await waitFor(() => {
-		userEvent.click(canvas.getByTestId('dialog-backdrop'));
+	await waitFor(async () => {
+		await expect(canvas.getByTestId('dialog')).not.toBeVisible();
 	});
+};
 
-	await waitFor(() => {
-		expect(canvas.getByTestId('dialog')).not.toBeVisible();
-	});
+export function ExpandedCountryGroupSwitcher(args: {
+	countryGroup: CountryGroupId;
+}): JSX.Element {
+	return (
+		<CountryGroupSwitcherComponent
+			countryGroupIds={[
+				GBPCountries,
+				UnitedStates,
+				AUDCountries,
+				EURCountries,
+				NZDCountries,
+				Canada,
+				International,
+			]}
+			selectedCountryGroup={args.countryGroup}
+			subPath={window.location.search}
+		/>
+	);
+}
+
+ExpandedCountryGroupSwitcher.args = {
+	countryGroup: GBPCountries,
+};
+
+// Put the country group switcher into an expanded state before taking the snapshot
+ExpandedCountryGroupSwitcher.play = async ({
+	canvasElement,
+}: {
+	canvasElement: HTMLCanvasElement;
+}) => {
+	const canvas = within(canvasElement);
+
+	await userEvent.click(canvas.getByRole('button'));
+
+	await expect(canvas.getByRole('dialog')).toHaveAttribute(
+		'aria-hidden',
+		'false',
+	);
 };
