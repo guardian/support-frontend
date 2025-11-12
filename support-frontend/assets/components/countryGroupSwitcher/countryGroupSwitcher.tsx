@@ -129,7 +129,7 @@ function CountryGroupSwitcher({
 							isSelected={countryGroupId === selectedCountryGroup}
 						>
 							{countryGroups[countryGroupId].name}{' '}
-							{extendedGlyph(countryGroups[selectedCountryGroup].currency)}
+							{extendedGlyph(countryGroups[countryGroupId].currency)}
 						</LinkItem>
 					))}
 					<button
