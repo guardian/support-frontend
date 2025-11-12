@@ -1,0 +1,146 @@
+{
+  "state": {
+    "sendThankYouEmailState": {
+      "productType": "SupporterPlus",
+      "user": {
+        "id": "200498461",
+        "primaryEmailAddress": "rupert.bates+Z4MWW7pTuLt65XWz2qNks@theguardian.com",
+        "title": null,
+        "firstName": "support.e2e.firstName+rRjKO",
+        "lastName": "support.e2e.lastName+w9B3z",
+        "billingAddress": {
+          "lineOne": null,
+          "lineTwo": null,
+          "city": null,
+          "state": "NY",
+          "postCode": "",
+          "country": "US"
+        },
+        "deliveryAddress": null,
+        "telephoneNumber": null,
+        "isTestUser": true,
+        "deliveryInstructions": null
+      },
+      "product": {
+        "amount": 15,
+        "currency": "USD",
+        "billingPeriod": "Monthly",
+        "productType": "SupporterPlus"
+      },
+      "productInformation": {
+        "product": "SupporterPlus",
+        "ratePlan": "Monthly",
+        "amount": 15
+      },
+      "paymentMethod": {
+        "TokenId": "pm_0SSbZ3ItVxyc3Q6nn8IwwsyB",
+        "SecondTokenId": "cus_TPQPMKLEYLTujl",
+        "CreditCardNumber": "4242",
+        "CreditCardExpirationMonth": 1,
+        "CreditCardExpirationYear": 2050,
+        "CreditCardType": "Visa",
+        "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+        "Type": "CreditCardReferenceTransaction",
+        "StripePaymentType": "StripeCheckout"
+      },
+      "paymentSchedule": {
+        "payments": [
+          {
+            "date": "2025-11-12",
+            "amount": 15
+          },
+          {
+            "date": "2025-12-12",
+            "amount": 15
+          },
+          {
+            "date": "2026-01-12",
+            "amount": 15
+          },
+          {
+            "date": "2026-02-12",
+            "amount": 15
+          },
+          {
+            "date": "2026-03-12",
+            "amount": 15
+          },
+          {
+            "date": "2026-04-12",
+            "amount": 15
+          },
+          {
+            "date": "2026-05-12",
+            "amount": 15
+          },
+          {
+            "date": "2026-06-12",
+            "amount": 15
+          },
+          {
+            "date": "2026-07-12",
+            "amount": 15
+          },
+          {
+            "date": "2026-08-12",
+            "amount": 15
+          },
+          {
+            "date": "2026-09-12",
+            "amount": 15
+          },
+          {
+            "date": "2026-10-12",
+            "amount": 15
+          }
+        ]
+      },
+      "accountNumber": "A01062201",
+      "subscriptionNumber": "A-S01043443"
+    },
+    "requestId": "472d4572-71a5-9e74-0000-000000004b2d",
+    "analyticsInfo": {
+      "isGiftPurchase": false,
+      "paymentProvider": "Stripe"
+    },
+    "acquisitionData": {
+      "ophanIds": {
+        "pageviewId": "mhvvk37t83clido9npjk",
+        "browserId": null
+      },
+      "referrerAcquisitionData": {
+        "campaignCode": null,
+        "referrerPageviewId": "",
+        "referrerUrl": null,
+        "componentId": null,
+        "componentType": null,
+        "source": null,
+        "abTests": null,
+        "queryParameters": [],
+        "hostname": "support.code.dev-theguardian.com",
+        "gaClientId": null,
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36",
+        "ipAddress": "10.248.135.88",
+        "labels": [
+          "generic-checkout"
+        ]
+      },
+      "supportAbTests": [
+        {
+          "name": "2023-08-08_BENEFITS_GONE__US",
+          "variant": "VARIANT"
+        },
+        {
+          "name": "LP_COUNTDOWN_US",
+          "variant": "EXPIRED_VARIANT"
+        }
+      ]
+    }
+  },
+  "requestInfo": {
+    "testUser": true,
+    "failed": false,
+    "messages": []
+  },
+  "error": null
+}

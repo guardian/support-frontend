@@ -1,12 +1,13 @@
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import dayjs from 'dayjs';
-import { buildSupporterPlusThankYouEmailFields } from '../../emailFields/supporterPlusEmailFields';
+import { buildSupporterPlusEmailFields } from '../../emailFields/supporterPlusEmailFields';
 import {
 	creditCardPaymentMethod,
 	directDebitPaymentMethod,
 	emailAddress,
 	emailUser,
 	fixedTermPaymentSchedule,
+	mandateId,
 	paymentSchedule,
 	subscriptionNumber,
 	today,
@@ -14,7 +15,7 @@ import {
 
 describe('Supporter plus thank you email fields', () => {
 	it('should build correct email fields for monthly supporter plus with DD', () => {
-		const emailFields = buildSupporterPlusThankYouEmailFields({
+		const emailFields = buildSupporterPlusEmailFields({
 			now: dayjs(today),
 			user: emailUser,
 			currency: 'GBP',
@@ -23,7 +24,7 @@ describe('Supporter plus thank you email fields', () => {
 			paymentSchedule: paymentSchedule,
 			paymentMethod: directDebitPaymentMethod,
 			isFixedTerm: false,
-			mandateId: '65HK26E',
+			mandateId: mandateId,
 		});
 
 		const expected = {
@@ -34,7 +35,7 @@ describe('Supporter plus thank you email fields', () => {
 						first_name: emailUser.firstName,
 						email_address: emailAddress,
 						'account name': directDebitPaymentMethod.BankTransferAccountName,
-						'Mandate ID': '65HK26E',
+						'Mandate ID': mandateId,
 						'sort code': directDebitPaymentMethod.BankCode,
 						'payment method': 'Direct Debit',
 						'first payment date': 'Friday, 21 November 2025',
@@ -58,7 +59,7 @@ describe('Supporter plus thank you email fields', () => {
 		expect(emailFields).toStrictEqual(expected);
 	});
 	test('should build correct email fields for annual supporter plus with credit card', () => {
-		const emailFields = buildSupporterPlusThankYouEmailFields({
+		const emailFields = buildSupporterPlusEmailFields({
 			now: dayjs(today),
 			user: emailUser,
 			currency: 'GBP',
@@ -96,7 +97,7 @@ describe('Supporter plus thank you email fields', () => {
 	});
 
 	test('should build correct email fields for fixed term subscription', () => {
-		const emailFields = buildSupporterPlusThankYouEmailFields({
+		const emailFields = buildSupporterPlusEmailFields({
 			now: dayjs(today),
 			user: emailUser,
 			currency: 'GBP',

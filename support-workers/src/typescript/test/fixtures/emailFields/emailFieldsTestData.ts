@@ -8,6 +8,7 @@ import type { User } from '../../../model/stateSchemas';
 export const today = '2025-11-11';
 export const emailAddress = 'test@thegulocal.com';
 export const subscriptionNumber = 'A-S123456';
+export const mandateId = 'MANDATE_ID';
 
 export const emailUser: User = {
 	id: '1234',

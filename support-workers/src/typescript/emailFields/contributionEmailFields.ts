@@ -1,23 +1,44 @@
-import type { IsoCurrency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { EmailMessageWithIdentityUserId } from '@modules/email/email';
-import dayjs from 'dayjs';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type dayjs from 'dayjs';
+import type { PaymentMethod } from '../model/paymentMethod';
 import type { User } from '../model/stateSchemas';
-import { buildThankYouEmailFields } from './emailFields';
+import {
+	buildThankYouEmailFields,
+	getPaymentMethodFieldsSupporterPlus,
+} from './emailFields';
 
-export function buildContributionThankYouEmailFields(
-	user: User,
-	amount: number,
-	currency: IsoCurrency,
-	ratePlan: 'Annual' | 'Monthly',
-): EmailMessageWithIdentityUserId {
+export function buildContributionEmailFields({
+	now,
+	user,
+	amount,
+	currency,
+	paymentMethod,
+	mandateId,
+	ratePlan,
+}: {
+	now: dayjs.Dayjs;
+	user: User;
+	amount: number;
+	currency: IsoCurrency;
+	paymentMethod: PaymentMethod;
+	mandateId?: string;
+	ratePlan: 'Annual' | 'Monthly';
+}): EmailMessageWithIdentityUserId {
+	const paymentMethodFields = getPaymentMethodFieldsSupporterPlus(
+		paymentMethod,
+		now,
+		mandateId,
+	);
 	const productFields = {
 		EmailAddress: user.primaryEmailAddress,
-		created: dayjs().toISOString(), // TODO: check formatting
+		created: now.toISOString(),
 		amount: amount.toString(),
 		currency: currency,
 		edition: user.billingAddress.country,
 		name: user.firstName,
 		product: `${ratePlan.toLowerCase()}-contribution`,
+		...paymentMethodFields,
 	};
 	return buildThankYouEmailFields(
 		user,
