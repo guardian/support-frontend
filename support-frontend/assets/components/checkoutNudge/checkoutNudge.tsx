@@ -31,6 +31,7 @@ import { getSupportRegionIdConfig } from '../../pages/supportRegionConfig';
 
 const nudgeBoxOverrides = css`
 	border: none;
+  margin-top: ${space[3]}px;
 `;
 
 const innerBoxOverrides = css`
