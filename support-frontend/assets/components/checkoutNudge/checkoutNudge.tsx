@@ -30,8 +30,10 @@ import type {
 import { productCatalog } from '../../helpers/productCatalog';
 import { getBenefitsChecklistFromLandingPageTool } from '../../pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { getSupportRegionIdConfig } from '../../pages/supportRegionConfig';
-import type { BenefitsCheckListData } from '../checkoutBenefits/benefitsCheckList';
-import { BenefitsCheckList } from '../checkoutBenefits/benefitsCheckList';
+import {
+	BenefitsCheckList,
+	type BenefitsCheckListData,
+} from '../checkoutBenefits/benefitsCheckList';
 
 const nudgeBoxOverrides = css`
 	border: none;
