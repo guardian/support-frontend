@@ -6,6 +6,7 @@ import {
 	palette,
 	space,
 	textSans14,
+	textSans15,
 	textSans17,
 } from '@guardian/source/foundations';
 import {
@@ -123,11 +124,12 @@ const detailsSection = css`
 `;
 
 const termsAndConditions = css`
-	${textSans17};
-	color: ${neutral[0]};
-	p {
-		margin-top: ${space[1]}px;
-	}
+	${textSans15};
+	color: ${neutral[7]};
+	border: 1px solid ${neutral[46]};
+	border-radius: ${space[4]}px;
+	background-color: ${neutral[97]};
+	padding: ${space[2]}px ${space[3]}px;
 	& div:nth-child(2) {
 		margin-top: ${space[3]}px;
 		${textSans14};

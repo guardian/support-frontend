@@ -30,24 +30,23 @@ import { productCatalog } from '../../helpers/productCatalog';
 import { getSupportRegionIdConfig } from '../../pages/supportRegionConfig';
 
 const nudgeBoxOverrides = css`
-	background-color: ${neutral[97]};
 	border: none;
 `;
 
 const innerBoxOverrides = css`
 	display: grid;
-	padding: ${space[4]}px;
+	padding: 0px;
 
 	${until.tablet} {
-		padding: ${space[4]}px;
+		padding: 0px;
 	}
 
 	${from.tablet} {
-		padding: ${space[4]}px;
+		padding: 0px;
 	}
 
 	${from.desktop} {
-		padding: ${space[4]}px;
+		padding: 0px;
 	}
 `;
 
