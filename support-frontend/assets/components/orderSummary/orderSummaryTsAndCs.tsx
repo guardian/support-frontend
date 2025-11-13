@@ -32,7 +32,6 @@ import {
 const containerSummaryTsCs = css`
 	border-radius: ${space[2]}px;
 	background-color: ${neutral[97]};
-	padding: ${space[3]}px;
 `;
 const productStartDate = css`
 	display: block;

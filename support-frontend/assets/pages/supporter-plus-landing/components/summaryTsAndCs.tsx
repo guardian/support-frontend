@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { neutral, space, textSans17 } from '@guardian/source/foundations';
+import { neutral, space, textSans15 } from '@guardian/source/foundations';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
@@ -25,10 +25,11 @@ import {
 
 const containerSummaryTsCs = css`
 	margin-top: ${space[6]}px;
-	border-radius: ${space[2]}px;
+	border-radius: ${space[4]}px;
+	border: 1px solid ${neutral[46]};
 	background-color: ${neutral[97]};
-	padding: ${space[3]}px;
-	${textSans17};
+	padding: ${space[2]}px ${space[3]}px;
+	${textSans15};
 	color: ${neutral[0]};
 	& a {
 		color: ${neutral[7]};
