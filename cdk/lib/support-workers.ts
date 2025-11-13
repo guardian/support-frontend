@@ -288,13 +288,6 @@ export class SupportWorkers extends GuStack {
     // Choice state to choose between the Scala and Typescript S+ lambdas
     const isProductType = (product: string) =>
       Condition.stringEquals("$.state.productInformation.product", product);
-    const isOneYearStudent = Condition.and(
-      isProductType("SupporterPlus"),
-      Condition.stringEquals(
-        "$.state.productInformation.ratePlan",
-        "OneYearStudent"
-      )
-    );
     const isGuardianAdLite = isProductType("GuardianAdLite");
     const isContribution = isProductType("Contribution");
     const isSupporterPLus = isProductType("SupporterPlus");
@@ -303,7 +296,6 @@ export class SupportWorkers extends GuStack {
     const shouldUseTSLambda = Condition.and(
       Condition.isNotNull("$.state.productInformation"),
       Condition.or(
-        isOneYearStudent,
         isGuardianAdLite,
         isContribution,
         isSupporterPLus,
