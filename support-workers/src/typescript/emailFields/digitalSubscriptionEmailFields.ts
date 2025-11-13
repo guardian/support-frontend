@@ -7,8 +7,8 @@ import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
 import { getIfDefined } from '../util/nullAndUndefined';
-import { describe, firstPayment } from './emailFieldDescription';
 import { buildThankYouEmailFields, formatDate } from './emailFields';
+import { describePayments, firstPayment } from './paymentDescription';
 
 function getPaymentMethodFields(
 	paymentMethod: PaymentMethod,
@@ -67,7 +67,7 @@ export function buildDigitalSubscriptionEmailFields({
 		first_name: user.firstName,
 		last_name: user.lastName,
 		emailaddress: user.primaryEmailAddress,
-		subscription_details: describe(
+		subscription_details: describePayments(
 			paymentSchedule,
 			billingPeriod,
 			currency,

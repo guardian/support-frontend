@@ -1,5 +1,5 @@
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import { describe as describeSchedule } from '../../emailFields/emailFieldDescription';
+import { describePayments as describeSchedule } from '../../emailFields/paymentDescription';
 import type { Payment, PaymentSchedule } from '../../model/paymentSchedule';
 
 function addMonths(date: Date, months: number): Date {
@@ -16,7 +16,7 @@ function payments(original: Payment, subsequentMonths: number[]): Payment[] {
 	return [original, ...subsequentPayments];
 }
 
-describe('emailFieldDescription.describe', () => {
+describe('paymentDescription.describe', () => {
 	const referenceDate = new Date(Date.UTC(2019, 0, 14)); // Jan 14 2019 UTC
 
 	test('explains a simple annual payment schedule correctly', () => {

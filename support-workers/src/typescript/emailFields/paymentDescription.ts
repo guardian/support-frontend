@@ -82,7 +82,7 @@ function monthsBetween(start: Date, end: Date): number {
 	return endD.diff(startD, 'month');
 }
 
-export function describe(
+export function describePayments(
 	paymentSchedule: PaymentSchedule,
 	billingPeriod: BillingPeriod,
 	currency: IsoCurrency,

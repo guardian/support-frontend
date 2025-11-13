@@ -7,6 +7,7 @@ import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSc
 import dayjs from 'dayjs';
 import { buildContributionEmailFields } from '../emailFields/contributionEmailFields';
 import { buildDigitalSubscriptionEmailFields } from '../emailFields/digitalSubscriptionEmailFields';
+import { buildPaperEmailFields } from '../emailFields/paperEmailFields';
 import { buildSupporterPlusEmailFields } from '../emailFields/supporterPlusEmailFields';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { ProductType } from '../model/productType';
@@ -14,6 +15,8 @@ import type { SendAcquisitionEventState } from '../model/sendAcquisitionEventSta
 import { stageFromEnvironment } from '../model/stage';
 import type { WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
+import type { DeliveryAgentDetails } from '../services/paperRound';
+import { getPaperRoundConfig, PaperRoundService } from '../services/paperRound';
 import { getIfDefined } from '../util/nullAndUndefined';
 
 const stage = stageFromEnvironment();
@@ -21,6 +24,16 @@ const stage = stageFromEnvironment();
 const productCatalogProvider = new ServiceProvider(stage, async (stage) => {
 	return getProductCatalogFromApi(stage);
 });
+
+const deliveryAgentsProvider = new ServiceProvider(stage, async (stage) => {
+	const paperRoundConfig = await getPaperRoundConfig(stage);
+	const paperRoundService = new PaperRoundService(paperRoundConfig);
+	return await paperRoundService.agents();
+});
+
+function getDeliveryAgent(refId: number, agents: DeliveryAgentDetails[]) {
+	return agents.find((agent) => agent.refid === refId);
+}
 
 export const handler = async (
 	state: WrappedState<SendAcquisitionEventState>,
@@ -93,11 +106,50 @@ export const handler = async (
 				throw new Error('Product type mismatch: expected DigitalPack');
 			}
 			break;
-		// case 'NationalDelivery':
-		// case 'SubscriptionCard':
-		// case 'HomeDelivery':
-		// 	sendPaperEmail();
-		// 	break;
+		case 'NationalDelivery':
+			if (sendThankYouEmailState.productType === 'Paper') {
+				const deliveryAgent = getDeliveryAgent(
+					productInformation.deliveryAgent,
+					await deliveryAgentsProvider.getServiceForUser(
+						sendThankYouEmailState.user.isTestUser,
+					),
+				);
+				await sendEmail(
+					stage,
+					buildPaperEmailFields({
+						user: sendThankYouEmailState.user,
+						currency: sendThankYouEmailState.product.currency,
+						subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
+						paymentSchedule: sendThankYouEmailState.paymentSchedule,
+						paymentMethod: sendThankYouEmailState.paymentMethod,
+						mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
+						productInformation: productInformation,
+						deliveryAgentDetails: deliveryAgent,
+					}),
+				);
+			} else {
+				throw new Error('Product type mismatch: expected Paper');
+			}
+			break;
+		case 'SubscriptionCard':
+		case 'HomeDelivery':
+			if (sendThankYouEmailState.productType === 'Paper') {
+				await sendEmail(
+					stage,
+					buildPaperEmailFields({
+						user: sendThankYouEmailState.user,
+						currency: sendThankYouEmailState.product.currency,
+						subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
+						paymentSchedule: sendThankYouEmailState.paymentSchedule,
+						paymentMethod: sendThankYouEmailState.paymentMethod,
+						mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
+						productInformation: productInformation,
+					}),
+				);
+			} else {
+				throw new Error('Product type mismatch: expected Paper');
+			}
+			break;
 		// case 'TierThree':
 		// 	sendTierThreeEmail();
 		// 	break;

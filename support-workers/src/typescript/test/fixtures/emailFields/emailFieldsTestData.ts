@@ -4,11 +4,44 @@ import type {
 	StripePaymentMethod,
 } from '../../../model/paymentMethod';
 import type { User } from '../../../model/stateSchemas';
+import type { DeliveryAgentDetails } from '../../../services/paperRound';
 
 export const today = '2025-11-11';
 export const emailAddress = 'test@thegulocal.com';
 export const subscriptionNumber = 'A-S123456';
 export const mandateId = 'MANDATE_ID';
+export const address = {
+	lineOne: '90 York Way',
+	city: 'London',
+	state: '',
+	postCode: 'N1 9GU',
+	country: 'GB' as const,
+};
+
+export const deliveryContact = {
+	firstName: 'Mickey',
+	lastName: 'Mouse',
+	workEmail: emailAddress,
+	country: 'GB' as const,
+	city: 'London',
+	address1: '90 York Way',
+	postalCode: 'N1 9GU',
+};
+
+export const deliveryAgentDetails: DeliveryAgentDetails = {
+	agentname: 'Test Agent',
+	refid: 123,
+	refgroupid: 0,
+	startdate: '10/10/1989',
+	enddate: '2100-01-01',
+	address1: '1 Test Street',
+	address2: '',
+	town: 'Croydon',
+	county: 'London',
+	postcode: 'BR3 1AA',
+	telephone: '12343567890',
+	email: 'test-agent@thegulocal.com',
+};
 
 export const emailUser: User = {
 	id: '1234',
@@ -16,13 +49,7 @@ export const emailUser: User = {
 	title: null,
 	firstName: 'Mickey',
 	lastName: 'Mouse',
-	billingAddress: {
-		lineOne: '90 York Way',
-		city: 'London',
-		state: '',
-		postCode: 'N1 9GU',
-		country: 'GB',
-	},
+	billingAddress: address,
 	deliveryAddress: null,
 	isTestUser: false,
 };
@@ -72,6 +99,19 @@ export const fixedTermPaymentSchedule = {
 		{
 			date: dayjs('2025-12-11').toDate(),
 			amount: 9,
+		},
+	],
+};
+
+export const paperPaymentSchedule = {
+	payments: [
+		{
+			date: dayjs('2025-11-18').toDate(),
+			amount: 10.0,
+		},
+		{
+			date: dayjs('2025-12-18').toDate(),
+			amount: 10.0,
 		},
 	],
 };

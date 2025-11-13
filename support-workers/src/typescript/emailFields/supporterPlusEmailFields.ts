@@ -5,11 +5,11 @@ import type dayjs from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
-import { describe } from './emailFieldDescription';
 import {
 	buildThankYouEmailFields,
 	getPaymentMethodFieldsSupporterPlus,
 } from './emailFields';
+import { describePayments } from './paymentDescription';
 
 export function buildSupporterPlusEmailFields({
 	now,
@@ -46,7 +46,7 @@ export function buildSupporterPlusEmailFields({
 		billing_period: billingPeriod.toLowerCase(),
 		product: `${billingPeriod.toLowerCase()}-supporter-plus`,
 		zuorasubscriberid: subscriptionNumber,
-		subscription_details: describe(
+		subscription_details: describePayments(
 			paymentSchedule,
 			billingPeriod,
 			currency,

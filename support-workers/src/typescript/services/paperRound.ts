@@ -54,9 +54,4 @@ export class PaperRoundService {
 			`PaperRound API request failed with status ${response.status}`,
 		);
 	}
-
-	async getAgentById(refId: number): Promise<DeliveryAgentDetails | undefined> {
-		const agents = await this.agents();
-		return agents.find((agent) => agent.refid === refId);
-	}
 }
