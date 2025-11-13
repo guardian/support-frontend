@@ -2,7 +2,6 @@ import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
-import { ObserverHoldingContent } from 'components/serverSideRendered/observerHoldingContent';
 import { WithCoreWebVitals } from 'helpers/coreWebVitals/withCoreWebVitals';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
 import {
@@ -23,10 +22,14 @@ const abParticipations = {
 setUpTrackingAndConsents(abParticipations);
 const appConfig = parseAppConfig(window.guardian);
 
+const delay = () => new Promise((resolve) => setTimeout(resolve, 5000));
+
 const Checkout = lazy(() => {
-	return import(/* webpackChunkName: "checkout" */ './checkout').then((mod) => {
-		return { default: mod.Checkout };
-	});
+	return delay().then(() =>
+		import(/* webpackChunkName: "checkout" */ './checkout').then((mod) => {
+			return { default: mod.Checkout };
+		}),
+	);
 });
 const OneTimeCheckout = lazy(() => {
 	return import(
@@ -70,11 +73,13 @@ const StudentLandingPageGlobalContainer = lazy(() => {
 	});
 });
 
-function GuardianOrObserverHoldingContent() {
+function GuardianOrNoHoldingContent() {
 	const { isObserverSubdomain } = window.guardian;
 
+	// We already rendered Observer content on the server, so let's try not rendering again
+	// here to avoid adding to the router bundle.
 	if (isObserverSubdomain) {
-		return <ObserverHoldingContent />;
+		return null;
 	} else {
 		return <GuardianHoldingContent />;
 	}
@@ -97,7 +102,7 @@ const router = createBrowserRouter([
 		{
 			path: `/${supportRegionId}/checkout`,
 			element: (
-				<Suspense fallback={<GuardianOrObserverHoldingContent />}>
+				<Suspense fallback={<GuardianOrNoHoldingContent />}>
 					<Checkout
 						supportRegionId={supportRegionId}
 						appConfig={appConfig}
@@ -124,7 +129,7 @@ const router = createBrowserRouter([
 		{
 			path: `/${supportRegionId}/thank-you`,
 			element: (
-				<Suspense fallback={<GuardianOrObserverHoldingContent />}>
+				<Suspense fallback={<GuardianOrNoHoldingContent />}>
 					<ThankYou
 						supportRegionId={supportRegionId}
 						appConfig={appConfig}
