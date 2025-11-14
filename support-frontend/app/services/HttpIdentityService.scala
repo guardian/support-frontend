@@ -80,6 +80,21 @@ object CreateSignInTokenResponse {
   implicit val readCreateSignInTokenResponse: Reads[CreateSignInTokenResponse] = Json.reads[CreateSignInTokenResponse]
 }
 
+case class Newsletter(
+    id: String,
+    theme: String,
+    group: String,
+    name: String,
+    description: String,
+    frequency: String,
+    subscribed: Boolean,
+    exactTargetListId: Int,
+)
+
+object Newsletter {
+  implicit val newsletterReads: Reads[Newsletter] = Json.reads[Newsletter]
+}
+
 object IdentityService {
   def apply(config: Identity)(implicit wsClient: WSClient): IdentityService =
     new IdentityService(apiUrl = config.apiUrl, apiClientToken = config.apiClientToken)
@@ -90,8 +105,10 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
   import IdentityServiceEnrichers._
 
   private def request(path: String): WSRequest = {
+    val url = s"$apiUrl/$path"
+    logger.info(s"Making request to: $url")
     wsClient
-      .url(s"$apiUrl/$path")
+      .url(url)
       .withHttpHeaders("Authorization" -> s"Bearer $apiClientToken")
   }
 
@@ -133,6 +150,26 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .attemptT
       .leftMap(_.toString)
       .subflatMap(resp => resp.json.validate[CreateSignInTokenResponse].asEither.leftMap(_.mkString(",")))
+  }
+
+  def getNewsletters()(implicit ec: ExecutionContext): Future[List[Newsletter]] = {
+    request("users/me/newsletters")
+      .get()
+      .map { response =>
+        if (response.status >= 200 && response.status < 300) {
+          response.json.validate[List[Newsletter]].asOpt.getOrElse {
+            logger.error(scrub"Failed to parse newsletters response: ${response.body}")
+            List.empty
+          }
+        } else {
+          logger.error(scrub"Failed to fetch newsletters: ${response.status} ${response.body}")
+          List.empty
+        }
+      }
+      .recover { case e: Exception =>
+        logger.error(scrub"Exception fetching newsletters: ${e.getMessage}")
+        List.empty
+      }
   }
 
   def getOrCreateUserFromEmail(

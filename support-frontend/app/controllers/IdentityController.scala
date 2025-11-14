@@ -66,6 +66,12 @@ class IdentityController(
           },
         )
   }
+
+  def getNewsletters(): Action[AnyContent] = PrivateAction.async { implicit request =>
+    identityService.getNewsletters().map { newsletters =>
+      Ok(GetNewslettersResponse(newsletters).asJson)
+    }
+  }
 }
 
 case class SendMarketingRequest(email: String)
@@ -86,4 +92,10 @@ object CreateSignInTokenRequest {
 case class CreateSignInLinkResponse(signInLink: String)
 object CreateSignInLinkResponse {
   implicit val encoder: Encoder[CreateSignInLinkResponse] = deriveEncoder
+}
+
+case class GetNewslettersResponse(newsletters: List[services.Newsletter])
+object GetNewslettersResponse {
+  implicit val newsletterEncoder: Encoder[services.Newsletter] = deriveEncoder
+  implicit val encoder: Encoder[GetNewslettersResponse] = deriveEncoder
 }
