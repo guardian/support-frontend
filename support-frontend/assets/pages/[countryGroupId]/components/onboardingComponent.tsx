@@ -84,7 +84,6 @@ function OnboardingComponent({
 
 	// -------------
 	// Fetch newsletters from Identity API
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Available for use in the component
 	const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
 
 	useEffect(() => {
@@ -96,6 +95,8 @@ function OnboardingComponent({
 
 		void fetchNewsletters();
 	}, []);
+
+	console.debug('Newsletters:', newsletters);
 	// -------------
 
 	const { isSignedIn } = getUser();
