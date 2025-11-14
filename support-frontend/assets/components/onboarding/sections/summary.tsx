@@ -143,7 +143,7 @@ function OnboardingSummary({
 		: 'Credit/Debit card';
 	const paymentMethod =
 		order?.accountNumber && isDirectDebit
-			? order.accountNumber
+			? `ending ${order.accountNumber}`
 			: paymentMethodCopy;
 
 	return (

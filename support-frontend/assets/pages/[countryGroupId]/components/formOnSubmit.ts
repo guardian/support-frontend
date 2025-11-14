@@ -99,11 +99,9 @@ export const submitForm = async ({
 	const supportAbTests = getSupportAbTests(abParticipations);
 	const deliveryInstructions = formData.get('deliveryInstructions') as string;
 	const similarProductsConsent = getConsentValue(formData, CONSENT_ID);
-	let accountNumberDisplay;
+	let redactedAccountNumber = '';
 	if (paymentFields.paymentType === 'DirectDebit') {
-		accountNumberDisplay = `ending ******${paymentFields.accountNumber.slice(
-			-2,
-		)}`;
+		redactedAccountNumber = `******${paymentFields.accountNumber.slice(-2)}`;
 	}
 
 	const productInformation = buildProductInformation({
@@ -171,7 +169,7 @@ export const submitForm = async ({
 			supportRegionId,
 			paymentRequest,
 			deliveryDate,
-			accountNumber: accountNumberDisplay,
+			accountNumber: redactedAccountNumber,
 		});
 
 		// If Stripe hosted checkout, delete previously persisted form details
