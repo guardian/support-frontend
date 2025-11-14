@@ -8,6 +8,7 @@ import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSc
 import dayjs from 'dayjs';
 import { buildContributionEmailFields } from '../emailFields/contributionEmailFields';
 import { buildDigitalSubscriptionEmailFields } from '../emailFields/digitalSubscriptionEmailFields';
+import { buildGuardianAdLiteEmailFields } from '../emailFields/guardianAdLiteEmailFields';
 import { buildGuardianWeeklyEmailFields } from '../emailFields/guardianWeeklyEmailFields';
 import { buildPaperEmailFields } from '../emailFields/paperEmailFields';
 import { buildSupporterPlusEmailFields } from '../emailFields/supporterPlusEmailFields';
@@ -183,6 +184,23 @@ async function sendGuardianWeeklyEmail(
 	}
 }
 
+async function sendGuardianAdLiteEmail(
+	sendThankYouEmailState: SendThankYouEmailState,
+) {
+	if (checkStateProductType('GuardianAdLite', sendThankYouEmailState)) {
+		await sendEmailWithStage(
+			buildGuardianAdLiteEmailFields({
+				user: sendThankYouEmailState.user,
+				subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
+				billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
+				currency: sendThankYouEmailState.product.currency,
+				paymentMethod: sendThankYouEmailState.paymentMethod,
+				paymentSchedule: sendThankYouEmailState.paymentSchedule,
+			}),
+		);
+	}
+}
+
 export const handler = async (
 	state: WrappedState<SendAcquisitionEventState>,
 ) => {
@@ -215,9 +233,9 @@ export const handler = async (
 		case 'GuardianWeeklyRestOfWorld':
 			await sendGuardianWeeklyEmail(sendThankYouEmailState, productInformation);
 			break;
-		// case 'GuardianAdLite':
-		// 	sendGuardianAdLiteEmail();
-		// 	break;
+		case 'GuardianAdLite':
+			await sendGuardianAdLiteEmail(sendThankYouEmailState);
+			break;
 	}
 
 	return Promise.resolve({ success: true });
