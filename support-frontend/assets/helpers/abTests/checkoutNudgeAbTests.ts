@@ -88,7 +88,7 @@ const checkoutNudgeAbTests: CheckoutNudgeTest[] = [
 	},
 	{
 		name: '2025-11-13_nudgeToSupporterPlus',
-		status: 'Live',
+		status: 'Draft',
 		regionTargeting: {
 			targetedCountryGroups: [],
 		},
