@@ -7,12 +7,14 @@ import type { SendAcquisitionEventState } from '../model/sendAcquisitionEventSta
 import type { WrappedState } from '../model/stateSchemas';
 import contributionJson from './fixtures/sendThankYouEmail/contributionState.json';
 import digitalSubscriptionJson from './fixtures/sendThankYouEmail/digitalSubscriptionState.json';
+import guardianAdLiteJson from './fixtures/sendThankYouEmail/guardianAdLiteState.json';
+import guardianWeeklyJson from './fixtures/sendThankYouEmail/guardianWeeklyState.json';
 import supporterPlusJson from './fixtures/sendThankYouEmail/supporterPlusState.json';
 import tierThreeJson from './fixtures/sendThankYouEmail/tierThreeState.json';
 
 describe('sendThankYouEmailLambda integration', () => {
 	// If you want to receive the test emails, change this to your email address
-	const emailToSendTestEmailsTo = 'rupert.bates+smoke-test@theguardian.com';
+	const emailToSendTestEmailsTo = `rupert.bates+smoke-test123@theguardian.com`;
 
 	const sendEmail = (state: WrappedState<SendAcquisitionEventState>) => {
 		state.state.sendThankYouEmailState.user.primaryEmailAddress =
@@ -37,5 +39,15 @@ describe('sendThankYouEmailLambda integration', () => {
 	});
 	test('we can send a tier three email successfully', async () => {
 		await sendEmail(tierThreeJson as WrappedState<SendAcquisitionEventState>);
+	});
+	test('we can send a guardian weekly email successfully', async () => {
+		await sendEmail(
+			guardianWeeklyJson as WrappedState<SendAcquisitionEventState>,
+		);
+	});
+	test('we can send a Guardian Ad-Lite email successfully', async () => {
+		await sendEmail(
+			guardianAdLiteJson as WrappedState<SendAcquisitionEventState>,
+		);
 	});
 });

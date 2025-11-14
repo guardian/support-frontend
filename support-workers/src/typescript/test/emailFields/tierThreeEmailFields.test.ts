@@ -13,7 +13,7 @@ import {
 } from '../fixtures/emailFields/emailFieldsTestData';
 
 describe('Tier three thank you email fields', () => {
-	it('should build correct email fields for monthly tier three with DD', () => {
+	it('should build correct email fields for monthly tier three', () => {
 		const today = dayjs('2025-11-11');
 		const firstDeliveryDate = today.add(7, 'day');
 		const emailFields = buildTierThreeEmailFields({
