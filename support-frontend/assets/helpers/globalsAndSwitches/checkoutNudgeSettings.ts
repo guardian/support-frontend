@@ -11,12 +11,16 @@ interface Copy {
 	body?: string;
 }
 
+interface Benefits {
+	label: string;
+}
+
 export interface CheckoutNudgeVariant {
 	name: string;
 	nudge?: {
 		nudgeCopy: Copy;
 		thankyouCopy: Copy;
-		showBenefits: boolean;
+		benefits?: Benefits;
 		nudgeToProduct: Product;
 	};
 }

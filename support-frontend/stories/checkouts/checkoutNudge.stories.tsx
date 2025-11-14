@@ -62,3 +62,17 @@ Annual.args = {
 	ratePlan: 'Annual',
 	amount: 5,
 };
+
+export const BenefitsList = Template.bind({});
+
+BenefitsList.args = {
+	supportRegionId: SupportRegionId.UK,
+	heading: 'Make the biggest impact',
+	product: 'SupporterPlus',
+	ratePlan: 'Monthly',
+	amount: 15,
+	benefits: {
+		label: 'Your all-access benefits:',
+		checkListData: [{'isChecked':true,'text':'Unlimited access to the Guardian app'},{'isChecked':true,'text':'Ad-free reading on all your devices'}],
+	},
+};
