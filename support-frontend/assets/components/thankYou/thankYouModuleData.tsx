@@ -31,7 +31,7 @@ import {
 	OPHAN_COMPONENT_ID_SOCIAL,
 	OPHAN_COMPONENT_ID_SURVEY,
 } from 'helpers/thankYouPages/utils/ophan';
-import { manageSubsUrl } from 'helpers/urls/externalLinks';
+import { getManageSubsUrl } from 'helpers/urls/externalLinks';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import { isPrintProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { getCurrency } from '../../helpers/productPrice/productPrices';
@@ -412,7 +412,7 @@ export const getThankYouModuleData = (
 			),
 			ctas: (
 				<AddressCta
-					address={returnAddress ?? ''}
+					getAddress={() => returnAddress ?? ''}
 					copy={'Head back to the Guardian'}
 					hasArrow={true}
 				/>
@@ -428,7 +428,7 @@ export const getThankYouModuleData = (
 			),
 			ctas: (
 				<AddressCta
-					address={manageSubsUrl}
+					getAddress={() => getManageSubsUrl()}
 					copy={'Sign in to activate your subscription'}
 				/>
 			),

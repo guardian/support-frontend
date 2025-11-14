@@ -64,7 +64,7 @@ const container = css`
 	}
 `;
 
-export function HoldingContent() {
+export function GuardianHoldingContent() {
 	return (
 		<div css={container}>
 			<Global styles={[reset, guardianFonts]} />

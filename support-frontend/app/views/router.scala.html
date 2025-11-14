@@ -6,6 +6,7 @@
 
 @import com.gu.identity.model.User
 @import views.ViewHelpers.outputJson
+@import _root_.utils.ObserverUtils
 @(
   geoData: GeoData,
   serversideTests: Map[String,Participation],
@@ -23,7 +24,7 @@
 
 @main(
   title = "Support the Guardian | Checkout",
-  mainElement = assets.getSsrCacheContentsAsHtml(divId = "router", file = "ssr-holding-content.html"),
+  mainElement = assets.getSsrCacheContentsAsHtml(divId = "router", file = if (ObserverUtils.isObserverSubdomain(request.host)) "ssr-observer-holding-content.html" else "ssr-holding-content.html"),
   mainJsBundle = RefPath("[countryGroupId]/router.js"),
   mainStyleBundle = None,
   description = Some("Help us deliver the independent journalism the world needs. Support the Guardian by making a contribution."),

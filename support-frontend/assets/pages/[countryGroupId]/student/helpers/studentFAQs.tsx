@@ -4,7 +4,7 @@ import type {
 } from '@modules/internationalisation/countryGroup';
 import { privacyLink, supporterPlusTermsLink } from 'helpers/legal';
 import { getProductLabel } from 'helpers/productCatalog';
-import { helpCentreUrl } from 'helpers/urls/externalLinks';
+import { getHelpCentreUrl } from 'helpers/urls/externalLinks';
 import type { FAQItem } from 'pages/[countryGroupId]/components/accordionFAQ';
 import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 
@@ -27,7 +27,7 @@ const supporterPlusBodyManage: JSX.Element = (
 const supporterPlusBodyContact: JSX.Element = (
 	<p>
 		For any queries, including subscription-related queries, visit our{' '}
-		<a href={helpCentreUrl}>Help centre</a>.
+		<a href={getHelpCentreUrl()}>Help centre</a>.
 	</p>
 );
 
