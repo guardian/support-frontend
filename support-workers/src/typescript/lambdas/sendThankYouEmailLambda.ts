@@ -9,9 +9,14 @@ import { buildContributionEmailFields } from '../emailFields/contributionEmailFi
 import { buildDigitalSubscriptionEmailFields } from '../emailFields/digitalSubscriptionEmailFields';
 import { buildPaperEmailFields } from '../emailFields/paperEmailFields';
 import { buildSupporterPlusEmailFields } from '../emailFields/supporterPlusEmailFields';
+import { buildTierThreeEmailFields } from '../emailFields/tierThreeEmailFields';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { ProductType } from '../model/productType';
-import type { SendAcquisitionEventState } from '../model/sendAcquisitionEventState';
+import type {
+	SendAcquisitionEventState,
+	SendThankYouEmailProductType,
+	SendThankYouEmailState,
+} from '../model/sendAcquisitionEventState';
 import { stageFromEnvironment } from '../model/stage';
 import type { WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
@@ -68,7 +73,7 @@ export const handler = async (
 			);
 			break;
 		case 'SupporterPlus':
-			if (sendThankYouEmailState.productType === 'SupporterPlus') {
+			if (checkStateProductType('SupporterPlus', sendThankYouEmailState)) {
 				await sendEmail(
 					stage,
 					buildSupporterPlusEmailFields({
@@ -83,12 +88,12 @@ export const handler = async (
 						mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
 					}),
 				);
-			} else {
-				throw new Error('Product type mismatch: expected SupporterPlus');
 			}
 			break;
 		case 'DigitalSubscription':
-			if (sendThankYouEmailState.productType === 'DigitalSubscription') {
+			if (
+				checkStateProductType('DigitalSubscription', sendThankYouEmailState)
+			) {
 				// TODO: This needs testing once the new email template is ready
 				await sendEmail(
 					stage,
@@ -102,12 +107,10 @@ export const handler = async (
 						mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
 					}),
 				);
-			} else {
-				throw new Error('Product type mismatch: expected DigitalPack');
 			}
 			break;
 		case 'NationalDelivery':
-			if (sendThankYouEmailState.productType === 'Paper') {
+			if (checkStateProductType('Paper', sendThankYouEmailState)) {
 				const deliveryAgent = getDeliveryAgent(
 					productInformation.deliveryAgent,
 					await deliveryAgentsProvider.getServiceForUser(
@@ -127,13 +130,11 @@ export const handler = async (
 						deliveryAgentDetails: deliveryAgent,
 					}),
 				);
-			} else {
-				throw new Error('Product type mismatch: expected Paper');
 			}
 			break;
 		case 'SubscriptionCard':
 		case 'HomeDelivery':
-			if (sendThankYouEmailState.productType === 'Paper') {
+			if (checkStateProductType('Paper', sendThankYouEmailState)) {
 				await sendEmail(
 					stage,
 					buildPaperEmailFields({
@@ -146,13 +147,25 @@ export const handler = async (
 						productInformation: productInformation,
 					}),
 				);
-			} else {
-				throw new Error('Product type mismatch: expected Paper');
 			}
 			break;
-		// case 'TierThree':
-		// 	sendTierThreeEmail();
-		// 	break;
+		case 'TierThree':
+			if (checkStateProductType('TierThree', sendThankYouEmailState)) {
+				await sendEmail(
+					stage,
+					buildTierThreeEmailFields({
+						user: sendThankYouEmailState.user,
+						currency: sendThankYouEmailState.product.currency,
+						billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
+						subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
+						paymentSchedule: sendThankYouEmailState.paymentSchedule,
+						paymentMethod: sendThankYouEmailState.paymentMethod,
+						mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
+						productInformation: productInformation,
+					}),
+				);
+			}
+			break;
 		// case 'GuardianWeeklyDomestic':
 		// case 'GuardianWeeklyRestOfWorld':
 		// 	sendGuardianWeeklyEmail();
@@ -164,6 +177,17 @@ export const handler = async (
 
 	return Promise.resolve({ success: true });
 };
+
+function checkStateProductType<T extends SendThankYouEmailProductType>(
+	productTypeName: T,
+	state: SendThankYouEmailState,
+): state is SendThankYouEmailState & { productType: T } {
+	if (state.productType === productTypeName) {
+		return true;
+	}
+	throw new Error('Product type mismatch: expected ' + productTypeName);
+}
+
 function isFixedTerm(
 	productCatalog: ProductCatalog,
 	productInformation: ProductPurchase,
