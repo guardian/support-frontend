@@ -1,4 +1,5 @@
 import { getProductRatePlan } from '@guardian/support-service-lambdas/modules/zuora/src/createSubscription/getProductRatePlan';
+import type { EmailMessageWithIdentityUserId } from '@modules/email/email';
 import { sendEmail } from '@modules/email/email';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { getProductCatalogFromApi } from '@modules/product-catalog/api';
@@ -7,8 +8,10 @@ import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSc
 import dayjs from 'dayjs';
 import { buildContributionEmailFields } from '../emailFields/contributionEmailFields';
 import { buildDigitalSubscriptionEmailFields } from '../emailFields/digitalSubscriptionEmailFields';
+import { buildGuardianWeeklyEmailFields } from '../emailFields/guardianWeeklyEmailFields';
 import { buildPaperEmailFields } from '../emailFields/paperEmailFields';
 import { buildSupporterPlusEmailFields } from '../emailFields/supporterPlusEmailFields';
+import type { TierThreeProductPurchase } from '../emailFields/tierThreeEmailFields';
 import { buildTierThreeEmailFields } from '../emailFields/tierThreeEmailFields';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { ProductType } from '../model/productType';
@@ -40,6 +43,146 @@ function getDeliveryAgent(refId: number, agents: DeliveryAgentDetails[]) {
 	return agents.find((agent) => agent.refid === refId);
 }
 
+async function sendSupporterPlusEmail(
+	sendThankYouEmailState: SendThankYouEmailState,
+	productInformation: Extract<ProductPurchase, { product: 'SupporterPlus' }>,
+) {
+	if (checkStateProductType('SupporterPlus', sendThankYouEmailState)) {
+		const fixedTerm = isFixedTerm(
+			await productCatalogProvider.getServiceForUser(
+				sendThankYouEmailState.user.isTestUser,
+			),
+			productInformation,
+		);
+		await sendEmailWithStage(
+			buildSupporterPlusEmailFields({
+				now: dayjs(),
+				user: sendThankYouEmailState.user,
+				currency: sendThankYouEmailState.product.currency,
+				billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
+				subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
+				isFixedTerm: fixedTerm,
+				paymentSchedule: sendThankYouEmailState.paymentSchedule,
+				paymentMethod: sendThankYouEmailState.paymentMethod,
+				mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
+			}),
+		);
+	}
+}
+
+async function sendContributionEmail(
+	sendThankYouEmailState: SendThankYouEmailState,
+	productInformation: Extract<ProductPurchase, { product: 'Contribution' }>,
+) {
+	if (checkStateProductType('Contribution', sendThankYouEmailState)) {
+		await sendEmailWithStage(
+			buildContributionEmailFields({
+				now: dayjs(),
+				user: sendThankYouEmailState.user,
+				amount: productInformation.amount,
+				currency: sendThankYouEmailState.product.currency,
+				paymentMethod: sendThankYouEmailState.paymentMethod,
+				mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
+				ratePlan: productInformation.ratePlan,
+			}),
+		);
+	}
+}
+
+async function sendDigitalSubscriptionEmail(
+	sendThankYouEmailState: SendThankYouEmailState,
+) {
+	if (checkStateProductType('DigitalSubscription', sendThankYouEmailState)) {
+		await sendEmailWithStage(
+			buildDigitalSubscriptionEmailFields({
+				user: sendThankYouEmailState.user,
+				currency: sendThankYouEmailState.product.currency,
+				billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
+				subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
+				paymentSchedule: sendThankYouEmailState.paymentSchedule,
+				paymentMethod: sendThankYouEmailState.paymentMethod,
+				mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
+			}),
+		);
+	}
+}
+
+async function sendPaperEmail(
+	sendThankYouEmailState: SendThankYouEmailState,
+	productInformation: Extract<
+		ProductPurchase,
+		{ product: 'NationalDelivery' | 'SubscriptionCard' | 'HomeDelivery' }
+	>,
+) {
+	if (checkStateProductType('Paper', sendThankYouEmailState)) {
+		const deliveryAgent =
+			productInformation.product === 'NationalDelivery'
+				? getDeliveryAgent(
+						productInformation.deliveryAgent,
+						await deliveryAgentsProvider.getServiceForUser(
+							sendThankYouEmailState.user.isTestUser,
+						),
+				  )
+				: undefined;
+		await sendEmailWithStage(
+			buildPaperEmailFields({
+				user: sendThankYouEmailState.user,
+				currency: sendThankYouEmailState.product.currency,
+				subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
+				paymentSchedule: sendThankYouEmailState.paymentSchedule,
+				paymentMethod: sendThankYouEmailState.paymentMethod,
+				mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
+				productInformation: productInformation,
+				deliveryAgentDetails: deliveryAgent,
+			}),
+		);
+	}
+}
+
+async function sendTierThreeEmail(
+	sendThankYouEmailState: SendThankYouEmailState,
+	productInformation: TierThreeProductPurchase,
+) {
+	if (checkStateProductType('TierThree', sendThankYouEmailState)) {
+		await sendEmailWithStage(
+			buildTierThreeEmailFields({
+				user: sendThankYouEmailState.user,
+				currency: sendThankYouEmailState.product.currency,
+				billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
+				subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
+				paymentSchedule: sendThankYouEmailState.paymentSchedule,
+				paymentMethod: sendThankYouEmailState.paymentMethod,
+				mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
+				productInformation: productInformation,
+			}),
+		);
+	}
+}
+
+async function sendGuardianWeeklyEmail(
+	sendThankYouEmailState: SendThankYouEmailState,
+	productInformation: Extract<
+		ProductPurchase,
+		{ product: 'GuardianWeeklyDomestic' | 'GuardianWeeklyRestOfWorld' }
+	>,
+) {
+	if (checkStateProductType('GuardianWeekly', sendThankYouEmailState)) {
+		await sendEmailWithStage(
+			buildGuardianWeeklyEmailFields({
+				user: sendThankYouEmailState.user,
+				currency: sendThankYouEmailState.product.currency,
+				billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
+				subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
+				paymentSchedule: sendThankYouEmailState.paymentSchedule,
+				paymentMethod: sendThankYouEmailState.paymentMethod,
+				mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
+				productInformation: productInformation,
+				giftRecipient: sendThankYouEmailState.giftRecipient,
+			}),
+		);
+	}
+}
+
 export const handler = async (
 	state: WrappedState<SendAcquisitionEventState>,
 ) => {
@@ -50,126 +193,28 @@ export const handler = async (
 		'productInformation is required',
 	);
 
-	const fixedTerm = isFixedTerm(
-		await productCatalogProvider.getServiceForUser(
-			sendThankYouEmailState.user.isTestUser,
-		),
-		productInformation,
-	);
-
 	switch (productInformation.product) {
 		case 'Contribution':
-			await sendEmail(
-				stage,
-				buildContributionEmailFields({
-					now: dayjs(),
-					user: sendThankYouEmailState.user,
-					amount: productInformation.amount,
-					currency: sendThankYouEmailState.product.currency,
-					paymentMethod: sendThankYouEmailState.paymentMethod,
-					mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
-					ratePlan: productInformation.ratePlan,
-				}),
-			);
+			await sendContributionEmail(sendThankYouEmailState, productInformation);
 			break;
 		case 'SupporterPlus':
-			if (checkStateProductType('SupporterPlus', sendThankYouEmailState)) {
-				await sendEmail(
-					stage,
-					buildSupporterPlusEmailFields({
-						now: dayjs(),
-						user: sendThankYouEmailState.user,
-						currency: sendThankYouEmailState.product.currency,
-						billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
-						subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
-						isFixedTerm: fixedTerm,
-						paymentSchedule: sendThankYouEmailState.paymentSchedule,
-						paymentMethod: sendThankYouEmailState.paymentMethod,
-						mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
-					}),
-				);
-			}
+			await sendSupporterPlusEmail(sendThankYouEmailState, productInformation);
 			break;
 		case 'DigitalSubscription':
-			if (
-				checkStateProductType('DigitalSubscription', sendThankYouEmailState)
-			) {
-				// TODO: This needs testing once the new email template is ready
-				await sendEmail(
-					stage,
-					buildDigitalSubscriptionEmailFields({
-						user: sendThankYouEmailState.user,
-						currency: sendThankYouEmailState.product.currency,
-						billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
-						subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
-						paymentSchedule: sendThankYouEmailState.paymentSchedule,
-						paymentMethod: sendThankYouEmailState.paymentMethod,
-						mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
-					}),
-				);
-			}
+			await sendDigitalSubscriptionEmail(sendThankYouEmailState);
 			break;
 		case 'NationalDelivery':
-			if (checkStateProductType('Paper', sendThankYouEmailState)) {
-				const deliveryAgent = getDeliveryAgent(
-					productInformation.deliveryAgent,
-					await deliveryAgentsProvider.getServiceForUser(
-						sendThankYouEmailState.user.isTestUser,
-					),
-				);
-				await sendEmail(
-					stage,
-					buildPaperEmailFields({
-						user: sendThankYouEmailState.user,
-						currency: sendThankYouEmailState.product.currency,
-						subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
-						paymentSchedule: sendThankYouEmailState.paymentSchedule,
-						paymentMethod: sendThankYouEmailState.paymentMethod,
-						mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
-						productInformation: productInformation,
-						deliveryAgentDetails: deliveryAgent,
-					}),
-				);
-			}
-			break;
 		case 'SubscriptionCard':
 		case 'HomeDelivery':
-			if (checkStateProductType('Paper', sendThankYouEmailState)) {
-				await sendEmail(
-					stage,
-					buildPaperEmailFields({
-						user: sendThankYouEmailState.user,
-						currency: sendThankYouEmailState.product.currency,
-						subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
-						paymentSchedule: sendThankYouEmailState.paymentSchedule,
-						paymentMethod: sendThankYouEmailState.paymentMethod,
-						mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
-						productInformation: productInformation,
-					}),
-				);
-			}
+			await sendPaperEmail(sendThankYouEmailState, productInformation);
 			break;
 		case 'TierThree':
-			if (checkStateProductType('TierThree', sendThankYouEmailState)) {
-				await sendEmail(
-					stage,
-					buildTierThreeEmailFields({
-						user: sendThankYouEmailState.user,
-						currency: sendThankYouEmailState.product.currency,
-						billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
-						subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
-						paymentSchedule: sendThankYouEmailState.paymentSchedule,
-						paymentMethod: sendThankYouEmailState.paymentMethod,
-						mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
-						productInformation: productInformation,
-					}),
-				);
-			}
+			await sendTierThreeEmail(sendThankYouEmailState, productInformation);
 			break;
-		// case 'GuardianWeeklyDomestic':
-		// case 'GuardianWeeklyRestOfWorld':
-		// 	sendGuardianWeeklyEmail();
-		// 	break;
+		case 'GuardianWeeklyDomestic':
+		case 'GuardianWeeklyRestOfWorld':
+			await sendGuardianWeeklyEmail(sendThankYouEmailState, productInformation);
+			break;
 		// case 'GuardianAdLite':
 		// 	sendGuardianAdLiteEmail();
 		// 	break;
@@ -210,4 +255,8 @@ function getMandateId(paymentMethod: PaymentMethod) {
 		return 'Mandate'; // TODO: retrieve actual mandate ID
 	}
 	return;
+}
+
+function sendEmailWithStage(fields: EmailMessageWithIdentityUserId) {
+	return sendEmail(stage, fields);
 }

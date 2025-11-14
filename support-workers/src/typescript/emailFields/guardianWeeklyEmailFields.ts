@@ -6,17 +6,17 @@ import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSc
 import dayjs from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
-import type { User } from '../model/stateSchemas';
+import type { GiftRecipient, User } from '../model/stateSchemas';
 import { buildDeliveryEmailFields } from './deliveryEmailFields';
 import { buildThankYouEmailFields, formatDate } from './emailFields';
 import { describePayments, firstPayment } from './paymentDescription';
 
-export type TierThreeProductPurchase = Extract<
+type GuardianWeeklyProductPurchase = Extract<
 	ProductPurchase,
-	{ product: 'TierThree' }
+	{ product: 'GuardianWeeklyDomestic' | 'GuardianWeeklyRestOfWorld' }
 >;
 
-export function buildTierThreeEmailFields({
+export function buildGuardianWeeklyEmailFields({
 	user,
 	currency,
 	billingPeriod,
@@ -25,6 +25,7 @@ export function buildTierThreeEmailFields({
 	paymentMethod,
 	mandateId,
 	productInformation,
+	giftRecipient,
 }: {
 	user: User;
 	currency: IsoCurrency;
@@ -33,19 +34,24 @@ export function buildTierThreeEmailFields({
 	paymentSchedule: PaymentSchedule;
 	paymentMethod: PaymentMethod;
 	mandateId?: string;
-	productInformation: TierThreeProductPurchase;
+	productInformation: GuardianWeeklyProductPurchase;
+	giftRecipient?: GiftRecipient;
 }): EmailMessageWithIdentityUserId {
-	const firstPaymentDate = dayjs(firstPayment(paymentSchedule).date);
-	const additionalFields: Record<string, string> = {
-		billing_period: billingPeriod.toLowerCase(),
-		first_payment_date: formatDate(firstPaymentDate),
-		subscription_details: describePayments(
-			paymentSchedule,
-			billingPeriod,
-			currency,
-			false,
-		),
-	};
+	const gifteeFields = giftRecipient
+		? {
+				giftee_first_name: giftRecipient.firstName,
+				giftee_last_name: giftRecipient.lastName,
+		  }
+		: undefined;
+
+	const secondPaymentFields = paymentSchedule.payments[1]
+		? {
+				date_of_second_payment: formatDate(
+					dayjs(paymentSchedule.payments[1].date),
+				),
+		  }
+		: undefined;
+
 	const deliveryFields = buildDeliveryEmailFields({
 		subscriptionNumber: subscriptionNumber,
 		user: user,
@@ -61,12 +67,13 @@ export function buildTierThreeEmailFields({
 		mandateId: mandateId,
 	});
 	const productFields = {
-		...additionalFields,
+		...secondPaymentFields,
+		...gifteeFields,
 		...deliveryFields,
 	};
 	return buildThankYouEmailFields(
 		user,
-		DataExtensionNames.tierThreeDay0Email,
+		DataExtensionNames.guardianWeeklyDay0Email,
 		productFields,
 	);
 }
