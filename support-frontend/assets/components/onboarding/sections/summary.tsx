@@ -7,10 +7,10 @@ import {
 	SvgTickRound,
 } from '@guardian/source/react-components';
 import { ToggleSwitch } from '@guardian/source-development-kitchen/react-components';
+import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import { extendedGlyph } from 'helpers/internationalisation/currency';
 import {
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
@@ -116,8 +116,10 @@ function OnboardingSummary({
 		productKey && landingPageSettings.products[productKey];
 
 	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
-	const currency = extendedGlyph(currencyKey);
-	const amountPaidToday = simpleFormatAmount(currency, payment.finalAmount);
+	const amountPaidToday = simpleFormatAmount(
+		getCurrencyInfo(currencyKey),
+		payment.finalAmount,
+	);
 
 	const billingPeriod = ratePlanKey
 		? ratePlanToBillingPeriod(ratePlanKey)
