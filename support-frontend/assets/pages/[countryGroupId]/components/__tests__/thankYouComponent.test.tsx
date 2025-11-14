@@ -107,7 +107,7 @@ describe('thankYouComponent', () => {
 					ratePlanKey: 'Sunday',
 					identityUserType: 'new',
 				},
-				['signUp', 'whatNext'],
+				['signUp', 'whatNext', 'observerAppDownload'],
 			);
 		});
 	});
@@ -158,6 +158,7 @@ describe('thankYouComponent', () => {
 		it('should display the correct thankyou cards for Observer', () => {
 			testComponent({ productKey: 'SubscriptionCard', ratePlanKey: 'Sunday' }, [
 				'whatNext',
+				'observerAppDownload',
 			]);
 		});
 	});
@@ -241,6 +242,7 @@ describe('thankYouComponent', () => {
 			testComponent({ productKey: 'SubscriptionCard', ratePlanKey: 'Sunday' }, [
 				'signIn',
 				'whatNext',
+				'observerAppDownload',
 			]);
 		});
 	});
