@@ -99,6 +99,12 @@ export const submitForm = async ({
 	const supportAbTests = getSupportAbTests(abParticipations);
 	const deliveryInstructions = formData.get('deliveryInstructions') as string;
 	const similarProductsConsent = getConsentValue(formData, CONSENT_ID);
+	let accountNumberDisplay;
+	if (paymentFields.paymentType === 'DirectDebit') {
+		accountNumberDisplay = `ending ******${paymentFields.accountNumber.slice(
+			-2,
+		)}`;
+	}
 
 	const productInformation = buildProductInformation({
 		productFields: productFields,
@@ -165,6 +171,7 @@ export const submitForm = async ({
 			supportRegionId,
 			paymentRequest,
 			deliveryDate,
+			accountNumber: accountNumberDisplay,
 		});
 
 		// If Stripe hosted checkout, delete previously persisted form details
@@ -204,6 +211,7 @@ const processSubscription = async ({
 	supportRegionId,
 	paymentRequest,
 	deliveryDate,
+	accountNumber,
 }: {
 	personalData: FormPersonalFields;
 	appliedPromotion?: AppliedPromotion;
@@ -214,6 +222,7 @@ const processSubscription = async ({
 	supportRegionId: SupportRegionId;
 	paymentRequest: RegularPaymentRequest;
 	deliveryDate?: Date;
+	accountNumber?: string;
 }) => {
 	const createSubscriptionResult = await createSubscription(paymentRequest);
 
@@ -232,6 +241,7 @@ const processSubscription = async ({
 			createSubscriptionResult.status,
 			supportRegionId,
 			deliveryDate,
+			accountNumber,
 		);
 	} else {
 		console.error(
@@ -258,6 +268,7 @@ const buildThankYouPageUrl = (
 	status: 'success' | 'pending',
 	supportRegionId: SupportRegionId,
 	deliveryDate?: Date,
+	accountNumber?: string,
 ) => {
 	const order = {
 		firstName: personalData.firstName,
@@ -265,6 +276,7 @@ const buildThankYouPageUrl = (
 		paymentMethod: paymentMethod,
 		status: status,
 		deliveryDate: deliveryDate,
+		accountNumber,
 	};
 	setThankYouOrder(order);
 	const thankYouUrlSearchParams = new URLSearchParams();

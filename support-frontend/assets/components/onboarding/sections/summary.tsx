@@ -1,6 +1,11 @@
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
-import { Button, Stack, SvgTickRound } from '@guardian/source/react-components';
+import {
+	Button,
+	Stack,
+	SvgDirectDebit,
+	SvgTickRound,
+} from '@guardian/source/react-components';
 import { ToggleSwitch } from '@guardian/source-development-kitchen/react-components';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
@@ -32,6 +37,18 @@ import {
 	paymentDetailsContainer,
 	separator,
 } from './sectionsStyles';
+
+const purchaseSummaryDetailsContainer = css`
+	text-align: end;
+`;
+
+const paymentMethodContainer = css`
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+	gap: ${space[1]}px;
+`;
 
 export function OnboardingSummarySuccessfulSignIn({
 	handleStepNavigation,
@@ -117,6 +134,18 @@ function OnboardingSummary({
 		nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 3);
 	}
 
+	const isDirectDebit = order?.paymentMethod === 'DirectDebit';
+	const isPaypal = order?.paymentMethod === 'PayPal';
+	const paymentMethodCopy = isDirectDebit
+		? 'Direct Debit'
+		: isPaypal
+		? 'PayPal'
+		: 'Credit/Debit card';
+	const paymentMethod =
+		order?.accountNumber && isDirectDebit
+			? order.accountNumber
+			: paymentMethodCopy;
+
 	return (
 		<Stack
 			space={5}
@@ -141,12 +170,28 @@ function OnboardingSummary({
 								<p css={boldDescriptions}>Price</p>
 								<p css={boldDescriptions}>Payment method</p>
 							</Stack>
-							<Stack space={2}>
+							<Stack space={2} cssOverrides={purchaseSummaryDetailsContainer}>
 								<p css={descriptions}>{productSettings?.title}</p>
 								<p css={descriptions}>{fullAmount}</p>
-								<p css={descriptions}>{}</p>
+								<div css={paymentMethodContainer}>
+									{isDirectDebit && <SvgDirectDebit size="medium" />}
+									<p css={descriptions}>{paymentMethod}</p>
+								</div>
 							</Stack>
 						</div>
+						{isDirectDebit && (
+							<>
+								<div css={separator} />
+								<span css={boldDescriptions}>
+									Your Direct Debit has been set up.{' '}
+								</span>
+								<span css={descriptions}>
+									You will receive an email within three business days
+									confirming your recurring payment. This will appear as
+									'Guardian' on your bank statements.
+								</span>
+							</>
+						)}
 					</Stack>
 				</Stack>
 			</ContentBox>

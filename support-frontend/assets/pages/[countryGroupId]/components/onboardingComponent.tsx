@@ -12,6 +12,8 @@ import OnboardingSummary, {
 } from 'components/onboarding/sections/summary';
 import useAnalyticsProfile from 'helpers/customHooks/useAnalyticsProfile';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
+import type { Newsletter } from 'helpers/identity/newsletters';
+import { getNewsletters } from 'helpers/identity/newsletters';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -79,6 +81,22 @@ function OnboardingComponent({
 			<div>Unable to read your order {JSON.stringify(sessionStorageOrder)}</div>
 		);
 	}
+
+	// -------------
+	// Fetch newsletters from Identity API
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Available for use in the component
+	const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
+
+	useEffect(() => {
+		const fetchNewsletters = async () => {
+			const newslettersData = await getNewsletters();
+			setNewsletters(newslettersData);
+			console.debug('Newsletters fetched:', newslettersData);
+		};
+
+		void fetchNewsletters();
+	}, []);
+	// -------------
 
 	const { isSignedIn } = getUser();
 	const { hasMobileAppDownloaded, hasFeastMobileAppDownloaded } =
@@ -180,7 +198,7 @@ function OnboardingComponent({
 								src={iframeTarget}
 								width="100%"
 								css={identityFrameStyles}
-							></iframe>
+							/>
 						) : (
 							<OnboardingSummarySuccessfulSignIn
 								handleStepNavigation={handleStepNavigation}
