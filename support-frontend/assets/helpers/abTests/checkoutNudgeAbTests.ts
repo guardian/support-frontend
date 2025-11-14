@@ -3,6 +3,7 @@ import type {
 	CheckoutNudgeTest,
 	CheckoutNudgeVariant,
 } from '../globalsAndSwitches/checkoutNudgeSettings';
+import { isSwitchOn } from '../globalsAndSwitches/globals';
 import { CountryGroup } from '../internationalisation/classes/countryGroup';
 import {
 	countryGroupMatches,
@@ -171,6 +172,9 @@ export function getCheckoutNudgeParticipations(
 ): CheckoutNudgeSettings | undefined {
 	// Are nudges disabled?
 	if (queryString.includes('disable-nudge')) {
+		return undefined;
+	}
+	if (!isSwitchOn('featureSwitches.enableCheckoutNudge')) {
 		return undefined;
 	}
 

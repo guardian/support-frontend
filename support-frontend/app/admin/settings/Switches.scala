@@ -25,6 +25,7 @@ case class FeatureSwitches(
     authenticateWithOkta: Option[SwitchState],
     enableCampaignCountdown: Option[SwitchState],
     enableThankYouOnboarding: Option[SwitchState],
+    enableCheckoutNudge: Option[SwitchState],
 )
 
 object FeatureSwitches {
