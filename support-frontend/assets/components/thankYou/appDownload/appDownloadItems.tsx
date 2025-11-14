@@ -10,6 +10,7 @@ import {
 	getDailyEditionUrl,
 	getIosAppUrl,
 } from 'helpers/urls/externalLinks';
+import ObserverQRCode from './qr-codes/ObserverQRCode';
 
 const downloadCopy = css`
 	${between.desktop.and.leftCol} {
@@ -63,18 +64,23 @@ export function AppFeastDownloadBodyCopy(): JSX.Element {
 /* Data for rendering Download apps */
 
 export type AppDownload = {
-	name: string;
+	title: string | null;
 	description: string;
-	appIcon: JSX.Element;
+	appIcon: JSX.Element | null;
 	playStoreUrl: string;
 	getAppStoreUrl: (arg: CountryGroupId) => string;
+	qrCodeImage?: JSX.Element;
 };
 
-type AppDownloadKey = 'GuardianNews' | 'guardianFeast' | 'guardianEditions';
+type AppDownloadKey =
+	| 'GuardianNews'
+	| 'guardianFeast'
+	| 'guardianEditions'
+	| 'observer';
 
 const downloadApps: Record<AppDownloadKey, AppDownload> = {
 	GuardianNews: {
-		name: 'The Guardian News app',
+		title: 'The Guardian News app',
 		description:
 			'Unlock limitless Guardian journalism in our quality news app today.',
 		appIcon: <AppImageGuardianNews />,
@@ -83,7 +89,7 @@ const downloadApps: Record<AppDownloadKey, AppDownload> = {
 			getIosAppUrl(countryGroupId),
 	},
 	guardianFeast: {
-		name: 'The Guardian Feast app',
+		title: 'The Guardian Feast app',
 		description:
 			'Make a feast out of anything with the Guardian’s new recipe app : Feast.',
 		appIcon: <AppImageFeast />,
@@ -91,7 +97,7 @@ const downloadApps: Record<AppDownloadKey, AppDownload> = {
 		getAppStoreUrl: () => feastAppUrl,
 	},
 	guardianEditions: {
-		name: 'The Guardian Editions app',
+		title: 'The Guardian Editions app',
 		description:
 			'Enjoy unlimited access to our full range of e-magazines and paper, available for mobile and tablet.',
 		appIcon: <AppImageGuardianEditions />,
@@ -99,6 +105,16 @@ const downloadApps: Record<AppDownloadKey, AppDownload> = {
 			'https://play.google.com/store/apps/details?id=com.guardian.editions&hl=en_GB&gl=US',
 		getAppStoreUrl: (countryGroupId: CountryGroupId) =>
 			getDailyEditionUrl(countryGroupId),
+	},
+	observer: {
+		title: null,
+		description:
+			'Download the subscriber-only Observer app and gain instant access to all The Observer articles, podcasts, puzzles and recipes.',
+		appIcon: null,
+		playStoreUrl:
+			'https://play.google.com/store/apps/details?id=com.tortoisemedia.tortoise',
+		getAppStoreUrl: () => 'https://apps.apple.com/gb/app/tortoise/id1441428990',
+		qrCodeImage: <ObserverQRCode />,
 	},
 };
 

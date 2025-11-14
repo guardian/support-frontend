@@ -234,6 +234,7 @@ export type ThankYouModuleType =
 	| 'appDownload'
 	| 'appsDownload'
 	| 'appDownloadEditions'
+	| 'observerAppDownload'
 	| 'ausMap'
 	| 'feedback'
 	| 'signIn'
