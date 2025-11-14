@@ -18,8 +18,8 @@ import { PlayStoreMobileLandscape } from './playStoreMobileLandscape';
 import { PlayStoreMobileMedium } from './playStoreMobileMedium';
 import { PlayStoreTablet } from './playStoreTablet';
 
-export const guardianAppUrl = 'https://guardian.go.link/home?adj_t=1u2r07na';
-export const feastAppUrl = 'https://guardian-feast.go.link/home?adj_t=1u2gdk5r';
+const guardianAppUrl = 'https://guardian.go.link/home?adj_t=1u2r07na';
+const feastAppUrl = 'https://guardian-feast.go.link/home?adj_t=1u2gdk5r';
 
 const badgesContainer = css`
 	display: flex;
