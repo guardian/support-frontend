@@ -135,30 +135,6 @@ Default.args = {
 	landingPageSettings,
 };
 
-export const SingleContribution = Template.bind({});
-SingleContribution.args = {
-	productKey: ProductKeys.Contribution,
-	ratePlanKey: 'OneTime',
-	productLabel: 'One-off contribution',
-	enableCheckList: false,
-	amount: 25,
-	currency: {
-		glyph: '$',
-		extendedGlyph: 'US$',
-		spokenCurrency: 'dollar',
-	},
-	checkListData: [],
-	tsAndCs: <></>,
-	startDate: null,
-	headerButton: (
-		<Button priority="tertiary" size="xsmall">
-			Change
-		</Button>
-	),
-	supportRegionId: SupportRegionId.US,
-	landingPageSettings,
-};
-
 export const RecurringContribution = Template.bind({});
 RecurringContribution.args = {
 	productKey: ProductKeys.Contribution,
