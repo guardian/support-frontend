@@ -1,6 +1,12 @@
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { CheckoutNudgeTest } from '../../globalsAndSwitches/checkoutNudgeSettings';
 import { getCheckoutNudgeParticipations } from '../checkoutNudgeAbTests';
 import { CHECKOUT_NUDGE_PARTICIPATIONS_KEY } from '../sessionStorage';
+
+jest.mock('helpers/globalsAndSwitches/globals', () => ({
+	__esModule: true,
+	isSwitchOn: jest.fn(),
+}));
 
 const copy = {
 	heading: 'test heading',
@@ -93,6 +99,10 @@ const tests: CheckoutNudgeTest[] = [
 ];
 
 describe('getCheckoutNudgeParticipations', () => {
+	beforeEach(() => {
+		const mockIsSwitchOn = isSwitchOn as jest.MockedFunction<typeof isSwitchOn>;
+		mockIsSwitchOn.mockImplementation(() => true);
+	});
 	afterEach(() => {
 		window.sessionStorage.clear();
 	});
@@ -197,5 +207,31 @@ describe('getCheckoutNudgeParticipations', () => {
 			fromProduct: annualRecurringToSupporterPlus.nudgeFromProduct,
 			participations: { [annualRecurringToSupporterPlus.name]: 'control' },
 		});
+	});
+
+	it('does not assign a user to a test if switch is off', () => {
+		const mockIsSwitchOn = isSwitchOn as jest.MockedFunction<typeof isSwitchOn>;
+		mockIsSwitchOn.mockImplementation(
+			(key: string) => key !== 'featureSwitches.enableCheckoutNudge',
+		);
+		const result = getCheckoutNudgeParticipations(
+			'GBPCountries',
+			'/uk/checkout',
+			tests,
+			0,
+			'product=Contribution&ratePlan=Annual',
+		);
+		expect(result).toBeUndefined();
+	});
+
+	it('does not assign a user to a test if disable-nudge query parameter is present', () => {
+		const result = getCheckoutNudgeParticipations(
+			'GBPCountries',
+			'/uk/checkout',
+			tests,
+			0,
+			'product=Contribution&ratePlan=Annual&disable-nudge',
+		);
+		expect(result).toBeUndefined();
 	});
 });
