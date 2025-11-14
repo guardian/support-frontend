@@ -8,6 +8,7 @@ import type { WrappedState } from '../model/stateSchemas';
 import contributionJson from './fixtures/sendThankYouEmail/contributionState.json';
 import digitalSubscriptionJson from './fixtures/sendThankYouEmail/digitalSubscriptionState.json';
 import supporterPlusJson from './fixtures/sendThankYouEmail/supporterPlusState.json';
+import tierThreeJson from './fixtures/sendThankYouEmail/tierThreeState.json';
 
 describe('sendThankYouEmailLambda integration', () => {
 	test('we can send a supporter plus email successfully', async () => {
@@ -20,5 +21,8 @@ describe('sendThankYouEmailLambda integration', () => {
 		await handler(
 			digitalSubscriptionJson as WrappedState<SendAcquisitionEventState>,
 		);
+	});
+	test('we can send a tier three email successfully', async () => {
+		await handler(tierThreeJson as WrappedState<SendAcquisitionEventState>);
 	});
 });
