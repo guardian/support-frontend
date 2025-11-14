@@ -33,6 +33,24 @@ const appStoreLink = css`
 	}
 `;
 
+const responsiveLayoutStyles = css`
+	gap: ${space[3]}px;
+
+	${from.tablet} {
+		flex-direction: column;
+		align-items: flex-start;
+		a {
+			width: 190px;
+			background-color: #000;
+			border-radius: ${space[2]}px;
+
+			svg {
+				margin: 0 auto;
+			}
+		}
+	}
+`;
+
 const editionsPlayStoreUrl =
 	'https://play.google.com/store/apps/details?id=com.guardian.editions&hl=en_GB&gl=US';
 
@@ -111,12 +129,14 @@ export function AppDownloadBadgesEditions({
 export function AppStoreBadges({
 	playStoreUrl,
 	appStoreUrl,
+	responsiveLayout = false,
 }: {
 	playStoreUrl: string;
 	appStoreUrl: string;
+	responsiveLayout?: boolean;
 }) {
 	return (
-		<div css={container}>
+		<div css={[container, responsiveLayout && responsiveLayoutStyles]}>
 			<a
 				href={appStoreUrl}
 				target="blank"

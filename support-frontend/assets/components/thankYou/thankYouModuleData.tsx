@@ -51,6 +51,7 @@ import {
 	appsDownloadHeader,
 	getDownloadApps,
 } from './appDownload/appDownloadItems';
+import AppDownloadWithQRCode from './appDownload/AppDownloadWithQRCode';
 import { ausMapBodyCopy, AusMapCTA, ausMapHeader } from './ausMap/ausMapItems';
 import {
 	FeedbackBodyCopy,
@@ -185,6 +186,17 @@ export const getThankYouModuleData = (
 			header: appDownloadHeader,
 			bodyCopy: <AppDownloadBodyCopy />,
 			ctas: <AppDownloadBadges countryGroupId={countryGroupId} />,
+		},
+		observerAppDownload: {
+			icon: getThankYouModuleIcon('appsDownload'),
+			header: 'Download the subscriber-only Observer app',
+			bodyCopy: (
+				<AppDownloadWithQRCode
+					apps={getDownloadApps(['observer'])}
+					countryGroupId={countryGroupId}
+				/>
+			),
+			ctas: null,
 		},
 		appDownloadEditions: enablePremiumDigital
 			? {
