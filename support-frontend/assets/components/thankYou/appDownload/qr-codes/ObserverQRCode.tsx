@@ -11,7 +11,6 @@ export default function ObserverQRCode() {
 				<path d="M73.9865 0H0V75H73.9865V0Z" fill="white" />
 				<mask
 					id="mask0_3168_26347"
-					style="mask-type:luminance"
 					maskUnits="userSpaceOnUse"
 					x="2"
 					y="2"
