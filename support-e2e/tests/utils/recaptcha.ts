@@ -1,10 +1,9 @@
-import { expect, Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 
 export const checkRecaptcha = async (page: Page) => {
 	await expect(
-		await page
-			.frameLocator('[title="reCAPTCHA"]')
-			.locator('#recaptcha-anchor-label'),
+		page.frameLocator('[title="reCAPTCHA"]').locator('#recaptcha-anchor-label'),
 	).toBeVisible({
 		timeout: 10000,
 	});

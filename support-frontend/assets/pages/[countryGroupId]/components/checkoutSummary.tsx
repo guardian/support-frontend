@@ -84,12 +84,8 @@ export default function CheckoutSummary({
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const { enablePremiumDigital } = getFeatureFlags();
-	const productDescription = getProductDescription(
-		productKey,
-		ratePlanKey,
-		enablePremiumDigital,
-	);
-	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
+	const productDescription = getProductDescription(productKey, ratePlanKey);
+	const ratePlanDetail = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
 	};
 	const isRecurringContribution = productKey === 'Contribution';
@@ -125,7 +121,7 @@ export default function CheckoutSummary({
 	}
 
 	const premiumDigitalBenefits =
-		enablePremiumDigital && productKey === 'DigitalSubscription'
+		productKey === 'DigitalSubscription' && enablePremiumDigital
 			? getPremiumDigitalAllBenefits(countryGroupId)
 			: undefined;
 	const benefitsCheckListData =
@@ -191,9 +187,9 @@ export default function CheckoutSummary({
 					productKey={productKey}
 					productLabel={productDescription.label}
 					ratePlanKey={ratePlanKey}
-					ratePlanLabel={ratePlanDescription.label}
+					ratePlanLabel={ratePlanDetail.displayName ?? ratePlanDetail.label}
 					paymentFrequency={getBillingPeriodNoun(
-						ratePlanDescription.billingPeriod,
+						ratePlanDetail.billingPeriod,
 						isGuardianWeeklyGiftProduct(productKey, ratePlanKey),
 					)}
 					amount={originalAmount}
@@ -217,7 +213,7 @@ export default function CheckoutSummary({
 						<OrderSummaryTsAndCs
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
-							ratePlanDescription={ratePlanDescription.label}
+							ratePlanDescription={ratePlanDetail.label}
 							countryGroupId={countryGroupId}
 							thresholdAmount={thresholdAmount}
 							promotion={promotion}
@@ -236,6 +232,7 @@ export default function CheckoutSummary({
 					studentDiscount={studentDiscount}
 					supportRegionId={supportRegionId}
 					nudgeSettings={nudgeSettings}
+					landingPageSettings={landingPageSettings}
 				/>
 			</BoxContents>
 		</Box>

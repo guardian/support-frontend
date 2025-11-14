@@ -17,5 +17,5 @@ jobs:
         uses: ./.github/actions/setup-node-and-install
 
       - name: Lint check
-        run: pnpm lint:check
+        run: pnpm lint
         working-directory: support-frontend

@@ -10,6 +10,9 @@ import { Column, Columns, Container } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
+import ObserverFooter from './ObserverFooter';
+import ObserverHeader from './ObserverHeader';
+import { observerColours } from './styles';
 
 const secureTransactionIndicator = css`
 	margin-bottom: ${space[3]}px;
@@ -20,9 +23,8 @@ const secureTransactionIndicator = css`
 
 const darkBackgroundContainerMobile = css`
 	display: flex;
-	background-color: ${palette.neutral[97]};
+	background-color: ${observerColours.pageBackgroundColor};
 	${until.tablet} {
-		background-color: #fff;
 		border-bottom: 1px solid ${palette.brand[600]};
 	}
 `;
@@ -43,7 +45,7 @@ export default function ObserverPageLayout({
 	noFooterLinks?: boolean;
 }) {
 	return (
-		<PageScaffold header={<></>} footer={<></>}>
+		<PageScaffold header={<ObserverHeader />} footer={<ObserverFooter />}>
 			{noBorders ? (
 				<Container cssOverrides={darkBackgroundContainerMobile}>
 					{children}

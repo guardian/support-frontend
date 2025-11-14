@@ -7,7 +7,7 @@ import type * as React from 'react';
 import PaperPackShot from 'components/packshots/paperPackshot';
 import WeeklyPackShot from 'components/packshots/weeklyPackshot';
 import type { Participations } from 'helpers/abTests/models';
-import { currencies, detect } from 'helpers/internationalisation/currency';
+import { detect, glyph } from 'helpers/internationalisation/currency';
 import type { ProductBenefit } from 'helpers/productCatalog';
 import {
 	fixDecimals,
@@ -48,7 +48,7 @@ const getDisplayPrice = (
 	price: number,
 	billingPeriod = BillingPeriod.Monthly,
 ): string => {
-	const currency = currencies[detect(countryGroupId)].glyph;
+	const currency = glyph(detect(countryGroupId));
 	return `${currency}${fixDecimals(price)}/${billingPeriod}`;
 };
 

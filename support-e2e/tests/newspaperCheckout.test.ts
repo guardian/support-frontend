@@ -1,12 +1,12 @@
 import 'dotenv/config';
 import { expect, test } from '@playwright/test';
-import { email, firstName, lastName } from './utils/users';
-import { checkRecaptcha } from './utils/recaptcha';
+import { afterEachTasks } from './utils/afterEachTest';
 import { fillInCardDetails } from './utils/cardDetails';
 import { fillInDirectDebitDetails } from './utils/directDebitDetails';
-import { fillInPayPalDetails } from './utils/paypal';
 import { setupPage } from './utils/page';
-import { afterEachTasks } from './utils/afterEachTest';
+import { fillInPayPalDetails } from './utils/paypal';
+import { checkRecaptcha } from './utils/recaptcha';
+import { email, firstName, lastName } from './utils/users';
 
 interface TestDetails {
 	frequency: 'Every day' | 'Weekend' | 'Six day' | 'Saturday' | 'Sunday';
@@ -104,7 +104,7 @@ test.describe('Sign up newspaper subscription', () => {
 					await checkRecaptcha(page);
 					await page.locator('button:has-text("Subscribe")').click();
 					break;
-				case 'Paypal':
+				case 'Paypal': {
 					const popupPagePromise = page.waitForEvent('popup');
 					await page
 						.locator("iframe[name^='xcomponent__ppbutton']")
@@ -116,8 +116,9 @@ test.describe('Sign up newspaper subscription', () => {
 						.getByRole('button', { name: 'PayPal' })
 						.click({ delay: 2000 });
 					const popupPage = await popupPagePromise;
-					fillInPayPalDetails(popupPage);
+					await fillInPayPalDetails(popupPage);
 					break;
+				}
 			}
 
 			const subscribedMessage = `You have now subscribed to the ${testDetails.frequency} package`;

@@ -1,13 +1,10 @@
 import { css } from '@emotion/react';
-import { neutral, space, textSans17 } from '@guardian/source/foundations';
+import { neutral, space, textSans15 } from '@guardian/source/foundations';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
+import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { getFeatureFlags } from 'helpers/featureFlags';
 import { formatAmount } from 'helpers/forms/checkouts';
-import {
-	currencies,
-	spokenCurrencies,
-} from 'helpers/internationalisation/currency';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -28,10 +25,11 @@ import {
 
 const containerSummaryTsCs = css`
 	margin-top: ${space[6]}px;
-	border-radius: ${space[2]}px;
+	border-radius: ${space[4]}px;
+	border: 1px solid ${neutral[46]};
 	background-color: ${neutral[97]};
-	padding: ${space[3]}px;
-	${textSans17};
+	padding: ${space[2]}px ${space[3]}px;
+	${textSans15};
 	color: ${neutral[0]};
 	& a {
 		color: ${neutral[7]};
@@ -68,13 +66,9 @@ export function SummaryTsAndCs({
 	const isPaperSundayOrPlus =
 		isSundayOnlyNewsletterSubscription ||
 		isPaperPlusSub(productKey, ratePlanKey);
-	const { enablePremiumDigital } = getFeatureFlags();
 
-	const { label: productName } = getProductDescription(
-		productKey,
-		ratePlanKey,
-		enablePremiumDigital,
-	);
+	const { enablePremiumDigital } = getFeatureFlags();
+	const { label: productName } = getProductDescription(productKey, ratePlanKey);
 
 	const rateDescriptor = ratePlanDescription ?? ratePlanKey;
 
@@ -90,8 +84,7 @@ export function SummaryTsAndCs({
 	}
 
 	const amountWithCurrency = formatAmount(
-		currencies[currency],
-		spokenCurrencies[currency],
+		getCurrencyInfo(currency),
 		amount,
 		false,
 	);

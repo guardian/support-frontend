@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { ContributionType } from 'helpers/contributions';
@@ -11,10 +12,6 @@ import {
 	StripeHostedCheckout,
 } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
-import type {
-	Currency,
-	SpokenCurrency,
-} from 'helpers/internationalisation/currency';
 
 // ----- Types ----- //
 export type PaymentMethodSwitch =
@@ -102,8 +99,7 @@ function round(amount: number) {
 	return Math.round(amount * 1e2) / 1e2;
 }
 
-const simpleFormatAmount = (currency: Currency, amount: number): string => {
-	const glyph = currency.isPaddedGlyph ? ` ${currency.glyph} ` : currency.glyph;
+const simpleFormatAmount = (currency: CurrencyInfo, amount: number): string => {
 	/**
 	 * We need to round the amount before checking if it is an Int for the edge case of something like 12.0001
 	 * which would not be an int, but then format as 12.00, whereas we'd like 12.
@@ -115,21 +111,17 @@ const simpleFormatAmount = (currency: Currency, amount: number): string => {
 		? roundedAmount.toString()
 		: roundedAmount.toFixed(2);
 
-	const valueWithGlyph = currency.isSuffixGlyph
-		? `${amountText}${glyph}`
-		: `${glyph}${amountText}`;
-	return valueWithGlyph.trim();
+	return `${currency.glyph}${amountText}`.trim();
 };
 
 const formatAmount = (
-	currency: Currency,
-	spokenCurrency: SpokenCurrency,
+	currency: CurrencyInfo,
 	amount: number,
 	verbose: boolean,
 ): string => {
 	if (verbose) {
 		return `${amount} ${
-			amount === 1 ? spokenCurrency.singular : spokenCurrency.plural
+			amount === 1 ? currency.spokenCurrency : `${currency.spokenCurrency}s`
 		}`;
 	}
 

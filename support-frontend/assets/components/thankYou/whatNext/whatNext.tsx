@@ -1,6 +1,5 @@
 import { palette } from '@guardian/source/foundations';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { getCurrencyGlyph } from '@modules/internationalisation/currency';
 import OrderedList from 'components/list/orderedList';
 import type {
 	ActiveProductKey,
@@ -12,6 +11,7 @@ import {
 	isGuardianWeeklyProduct,
 	isPrintProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import { glyph } from '../../../helpers/internationalisation/currency';
 import BulletPointedList from '../utilityComponents/BulletPointedList';
 import { helpCenterCta, myAccountCta } from './whatNextCta';
 
@@ -97,7 +97,7 @@ export function WhatNext({
 		const guardianAdLiteItems = [
 			'You will receive an email confirming the details of your subscription',
 			startDate
-				? `Your payment of ${getCurrencyGlyph(
+				? `Your payment of ${glyph(
 						currency,
 				  )}${amount}/month will be taken on ${startDate}`
 				: '',

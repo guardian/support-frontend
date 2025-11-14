@@ -1,11 +1,20 @@
-type FeatureFlag = {
-	enablePremiumDigital: boolean;
-};
+import { isCode } from './urls/url';
 
-export function getFeatureFlags(): FeatureFlag {
+interface FeatureFlags {
+	enablePremiumDigital: boolean;
+	enableDigitalAccess: boolean;
+}
+
+export function getFeatureFlags(): FeatureFlags {
 	const urlParams = new URLSearchParams(window.location.search);
 
+	const enablePremiumDigitalParam = urlParams.get('enablePremiumDigital');
+
 	return {
-		enablePremiumDigital: urlParams.has('enablePremiumDigital'),
+		enablePremiumDigital:
+			(isCode() && enablePremiumDigitalParam !== 'false') ||
+			(enablePremiumDigitalParam !== null &&
+				enablePremiumDigitalParam === 'true'),
+		enableDigitalAccess: urlParams.has('enableDigitalAccess'),
 	};
 }

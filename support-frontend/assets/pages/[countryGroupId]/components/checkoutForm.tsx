@@ -198,8 +198,10 @@ export default function CheckoutForm({
 		getSupportRegionIdConfig(supportRegionId);
 
 	const { enablePremiumDigital } = getFeatureFlags();
+	const isPremiumDigitalProduct =
+		enablePremiumDigital && productKey === 'DigitalSubscription';
 
-	const productDescription = enablePremiumDigital
+	const productDescription = isPremiumDigitalProduct
 		? productCatalogDescriptionPremiumDigital
 		: productCatalogDescription[productKey];
 	const hasDeliveryAddress = !!productDescription.deliverableTo;

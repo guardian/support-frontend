@@ -1,9 +1,9 @@
 // ----- Imports ----- //
 
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
-import { currencies } from 'helpers/internationalisation/currency';
 import { getValidPaymentMethods, simpleFormatAmount } from '../forms/checkouts';
 
 jest.mock('helpers/globalsAndSwitches/globals', () => ({
@@ -55,10 +55,10 @@ describe('checkouts', () => {
 
 	describe('simpleFormatAmount', () => {
 		it.each([
-			[currencies.GBP, 12, '£12'],
-			[currencies.NZD, 12.5, '$12.50'],
-			[currencies.CAD, 12.0005, '$12'],
-			[currencies.CAD, 12.015, '$12.02'],
+			[getCurrencyInfo('GBP'), 12, '£12'],
+			[getCurrencyInfo('NZD'), 12.5, '$12.50'],
+			[getCurrencyInfo('CAD'), 12.0005, '$12'],
+			[getCurrencyInfo('CAD'), 12.015, '$12.02'],
 		])(`%i%i should format as %i`, (currency, amount, expected) => {
 			expect(simpleFormatAmount(currency, amount)).toBe(expected);
 		});

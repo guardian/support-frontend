@@ -1,11 +1,11 @@
-import { Page, expect } from '@playwright/test';
+import type { Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { fillInCardDetails } from './cardDetails';
+import { fillInDirectDebitDetails } from './directDebitDetails';
 import { fillInPayPalDetails } from './paypal';
 import { checkRecaptcha } from './recaptcha';
 import { setTestUserDetails } from './testUserDetails';
 import { getUserFields } from './userFields';
-import { email, firstName, lastName } from './users';
-import { fillInDirectDebitDetails } from './directDebitDetails';
 
 type TestDetails = {
 	product: string;
@@ -25,7 +25,7 @@ const recaptchaAndSubmit = async (page: Page) => {
 };
 
 export const completeGenericCheckout = async (
-	page,
+	page: Page,
 	testDetails: TestDetails,
 ) => {
 	const { product, internationalisationId, postCode, paymentType, ratePlan } =
@@ -40,7 +40,7 @@ export const completeGenericCheckout = async (
 
 	await page.getByRole('radio', { name: paymentType }).check();
 	switch (paymentType) {
-		case 'PayPal':
+		case 'PayPal': {
 			const popupPagePromise = page.waitForEvent('popup');
 			await page
 				.locator("iframe[name^='xcomponent__ppbutton']")
@@ -52,8 +52,9 @@ export const completeGenericCheckout = async (
 				.locator('[role="button"]:has-text("Pay with")')
 				.click({ delay: 2000 });
 			const popupPage = await popupPagePromise;
-			fillInPayPalDetails(popupPage);
+			await fillInPayPalDetails(popupPage);
 			break;
+		}
 		case 'Credit/Debit card':
 			await fillInCardDetails(page);
 			await recaptchaAndSubmit(page);

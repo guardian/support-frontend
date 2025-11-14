@@ -26,9 +26,12 @@ const secureTransactionIndicator = css`
 	}
 `;
 
-const darkBackgroundContainerMobile = css`
+const containerStyles = css`
 	display: flex;
 	background-color: ${palette.neutral[97]};
+`;
+
+const containerMobileStyles = css`
 	${until.tablet} {
 		background-color: ${palette.brand[400]};
 		border-bottom: 1px solid ${palette.brand[600]};
@@ -67,13 +70,14 @@ export default function GuardianPageLayout({
 			}
 		>
 			{noBorders ? (
-				<Container cssOverrides={darkBackgroundContainerMobile}>
-					{children}
-				</Container>
+				<Container cssOverrides={containerStyles}>{children}</Container>
 			) : (
 				<>
 					<CheckoutHeading withTopBorder={true} />
-					<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
+					<Container
+						sideBorders
+						cssOverrides={[containerStyles, containerMobileStyles]}
+					>
 						<Columns cssOverrides={columns} collapseUntil="tablet">
 							<Column span={[0, 2, 2, 3, 4]}></Column>
 							<Column span={[1, 8, 8, 8, 8]}>

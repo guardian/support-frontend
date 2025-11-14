@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 const paypalUsernamePrefixes = [
 	'sb-uadtx34786338',
@@ -33,7 +33,7 @@ export const fillInPayPalDetails = async (page: Page) => {
 
 	const emailInput = page.locator('#email');
 
-	await emailInput.fill(`${[paypalUsernamePrefix]}@personal.example.com`);
+	await emailInput.fill(`${paypalUsernamePrefix}@personal.example.com`);
 
 	const nextButton = page.locator('#btnNext');
 

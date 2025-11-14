@@ -6,12 +6,14 @@ import {
 	palette,
 	space,
 	textSans14,
+	textSans15,
 	textSans17,
 } from '@guardian/source/foundations';
 import {
 	Button,
 	SvgChevronDownSingle,
 } from '@guardian/source/react-components';
+import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { useState } from 'react';
 import {
@@ -20,7 +22,6 @@ import {
 } from 'components/checkoutBenefits/benefitsCheckList';
 import { CheckoutNudgeSelector } from 'components/checkoutNudge/checkoutNudge';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import type { Currency } from 'helpers/internationalisation/currency';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -30,6 +31,7 @@ import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSunda
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
+import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { PriceSummary } from './priceSummary';
 
 const componentStyles = css`
@@ -123,11 +125,12 @@ const detailsSection = css`
 `;
 
 const termsAndConditions = css`
-	${textSans17};
-	color: ${neutral[0]};
-	p {
-		margin-top: ${space[1]}px;
-	}
+	${textSans15};
+	color: ${neutral[7]};
+	border: 1px solid ${neutral[46]};
+	border-radius: ${space[4]}px;
+	background-color: ${neutral[97]};
+	padding: ${space[2]}px ${space[3]}px;
 	& div:nth-child(2) {
 		margin-top: ${space[3]}px;
 		${textSans14};
@@ -141,7 +144,7 @@ export type ContributionsOrderSummaryProps = {
 	ratePlanLabel?: string;
 	amount: number;
 	promotion?: Promotion;
-	currency: Currency;
+	currency: CurrencyInfo;
 	enableCheckList: boolean;
 	checkListData: BenefitsCheckListData[];
 	startDate: React.ReactNode;
@@ -153,6 +156,7 @@ export type ContributionsOrderSummaryProps = {
 	studentDiscount?: StudentDiscount;
 	supportRegionId: SupportRegionId;
 	nudgeSettings?: CheckoutNudgeSettings;
+	landingPageSettings: LandingPageVariant;
 };
 
 export function ContributionsOrderSummary({
@@ -173,6 +177,7 @@ export function ContributionsOrderSummary({
 	studentDiscount,
 	supportRegionId,
 	nudgeSettings,
+	landingPageSettings,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -252,15 +257,16 @@ export function ContributionsOrderSummary({
 					isWeeklyGift={isWeeklyGift}
 				/>
 			</div>
+			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
 			{nudgeSettings && (
 				<CheckoutNudgeSelector
 					nudgeSettings={nudgeSettings}
 					currentProduct={productKey}
 					currentRatePlan={ratePlanKey}
 					supportRegionId={supportRegionId}
+					landingPageSettings={landingPageSettings}
 				/>
 			)}
-			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
 		</div>
 	);
 }

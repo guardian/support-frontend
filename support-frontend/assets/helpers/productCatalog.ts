@@ -12,6 +12,13 @@ import type {
 } from '@modules/product-catalog/productCatalog';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { Participations } from './abTests/models';
+import { getFeatureFlags } from './featureFlags';
+
+export enum ProductTierLabel {
+	TierOne = 'Support',
+	TierTwo = 'All-access digital',
+	TierThree = 'Digital + print',
+}
 
 const activeProductKeys = [
 	'GuardianWeeklyDomestic',
@@ -84,6 +91,7 @@ type RatePlanDetails = Record<
 	string,
 	{
 		billingPeriod: RecurringBillingPeriod;
+		displayName?: string;
 		label?: string;
 		hideSimilarProductsConsent?: boolean;
 		fixedTerm?: boolean;
@@ -245,27 +253,33 @@ const digitalThankyouMessage = `You'll receive a confirmation email containing e
 const nationalPaperPlusRatePlans: RatePlanDetails = {
 	Everyday: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'Every day package',
+		displayName: 'Every day package',
+		label: 'every day',
 	},
 	EverydayPlus: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'Every day package',
+		displayName: 'Every day package',
+		label: 'every day',
 	},
 	Sixday: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'Six day package',
+		displayName: 'Six day package',
+		label: 'six day',
 	},
 	SixdayPlus: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'Six day package',
+		displayName: 'Six day package',
+		label: 'six day',
 	},
 	Weekend: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'Weekend package',
+		displayName: 'Weekend package',
+		label: 'weekend',
 	},
 	WeekendPlus: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'Weekend package',
+		displayName: 'Weekend package',
+		label: 'weekend',
 	},
 };
 
@@ -273,20 +287,26 @@ const paperPlusRatePlans: RatePlanDetails = {
 	...nationalPaperPlusRatePlans,
 	Saturday: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'Saturday package',
+		displayName: 'Saturday package',
+		label: 'saturday',
 	},
 	SaturdayPlus: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'Saturday package',
+		displayName: 'Saturday package',
+		label: 'saturday',
 	},
 	Sunday: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'The Observer',
+		displayName: 'The Observer, digital & print',
+		label: 'Observer',
+
 		hideSimilarProductsConsent: true,
 	},
 	SundayPlus: {
 		billingPeriod: BillingPeriod.Monthly,
-		label: 'The Observer',
+		displayName: 'The Observer, digital & print',
+		label: 'Observer',
+
 		hideSimilarProductsConsent: true,
 	},
 };
@@ -308,7 +328,7 @@ export const productCatalogDescription: Record<
 		benefits: guardianAdLiteBenefits,
 	},
 	TierThree: {
-		label: 'Digital + print',
+		label: ProductTierLabel.TierThree,
 		thankyouMessage: digitalThankyouMessage,
 		landingPagePath: '/contribute',
 		benefits: [guardianWeeklyBenefit],
@@ -361,7 +381,7 @@ export const productCatalogDescription: Record<
 		},
 	},
 	SupporterPlus: {
-		label: 'All-access digital',
+		label: ProductTierLabel.TierTwo,
 		landingPagePath: '/contribute',
 		benefits: supporterPlusBenefits,
 		ratePlans: {
@@ -456,7 +476,7 @@ export const productCatalogDescription: Record<
 		ratePlans: nationalPaperPlusRatePlans,
 	},
 	Contribution: {
-		label: 'Support',
+		label: ProductTierLabel.TierOne,
 		landingPagePath: '/contribute',
 		benefits: [supportBenefit, newsletterBenefitUS],
 		ratePlans: {
@@ -513,6 +533,11 @@ const editionsDigitalBenefit = {
 	tooltip: `Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.`,
 };
 
+const productCatalogDescriptionDigitalAccess = {
+	...productCatalogDescription.SupporterPlus,
+	label: 'Digital access',
+};
+
 export const productCatalogDescriptionPremiumDigital = {
 	...productCatalogDescription.DigitalSubscription,
 	label: 'Digital plus',
@@ -562,13 +587,27 @@ const productCatalogGuardianWeeklyGift = {
 	},
 };
 
+export const getProductLabel = (productKey: ActiveProductKey): string => {
+	const { enablePremiumDigital, enableDigitalAccess } = getFeatureFlags();
+	if (productKey === 'DigitalSubscription' && enablePremiumDigital) {
+		return productCatalogDescriptionPremiumDigital.label;
+	}
+	if (productKey === 'SupporterPlus' && enableDigitalAccess) {
+		return productCatalogDescriptionDigitalAccess.label;
+	}
+	return productCatalogDescription[productKey].label;
+};
+
 export const getProductDescription = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	enablePremiumDigital: boolean,
 ): ProductDescription => {
-	if (enablePremiumDigital && productKey === 'DigitalSubscription') {
+	const { enablePremiumDigital, enableDigitalAccess } = getFeatureFlags();
+	if (productKey === 'DigitalSubscription' && enablePremiumDigital) {
 		return productCatalogDescriptionPremiumDigital;
+	}
+	if (productKey === 'SupporterPlus' && enableDigitalAccess) {
+		return productCatalogDescriptionDigitalAccess;
 	}
 	if (isGuardianWeeklyGiftProduct(productKey, ratePlanKey)) {
 		return productCatalogGuardianWeeklyGift[productKey];

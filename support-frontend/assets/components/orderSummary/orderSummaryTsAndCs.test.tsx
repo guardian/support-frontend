@@ -39,16 +39,10 @@ describe('orderSummaryTs&Cs Snapshot comparison', () => {
 		['SupporterPlus', 'GBPCountries', 'Monthly', undefined, 12],
 		['SupporterPlus', 'GBPCountries', 'OneYearStudent', undefined, 9],
 		['TierThree', 'UnitedStates', 'RestOfWorldMonthly', undefined, 45],
-		[
-			'SubscriptionCard',
-			'GBPCountries',
-			'WeekendPlus',
-			'Weekend package',
-			69.99,
-		],
-		['HomeDelivery', 'GBPCountries', 'SixdayPlus', 'Six day package', 83.99],
-		['SubscriptionCard', 'GBPCountries', 'Sunday', 'The Observer', 15.99],
-		['HomeDelivery', 'GBPCountries', 'Sunday', 'The Observer', 20.99],
+		['SubscriptionCard', 'GBPCountries', 'WeekendPlus', 'Weekend', 69.99],
+		['HomeDelivery', 'GBPCountries', 'SixdayPlus', 'Six day', 83.99],
+		['SubscriptionCard', 'GBPCountries', 'Sunday', 'Observer', 15.99],
+		['HomeDelivery', 'GBPCountries', 'Sunday', 'Observer', 20.99],
 	];
 	it.each(orderSummaryProductKeys)(
 		`orderSummaryTs&Cs render product %s for region %s for ratePlan %s correctly`,

@@ -12,16 +12,18 @@ import {
 	LinkButton,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
+import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
+import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { BenefitPill } from 'components/checkoutBenefits/benefitPill';
 import {
 	BenefitsCheckList,
 	checkListTextItemCss,
 } from 'components/checkoutBenefits/benefitsCheckList';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import type { Currency } from 'helpers/internationalisation/currency';
-import { currencies } from 'helpers/internationalisation/currency';
+import { getProductLabel } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -37,7 +39,6 @@ export type CardContent = LandingPageProductDescription & {
 		| 'SupporterPlus'
 		| 'Contribution'
 		| 'DigitalSubscription';
-	enablePremiumDigital?: boolean;
 };
 
 export type ThreeTierCardProps = {
@@ -75,6 +76,12 @@ const container = (
 		}
 	`;
 };
+
+const titleContainer = css`
+	display: flex;
+	justify-content: center;
+	gap: ${space[2]}px;
+`;
 
 const titleCss = css`
 	${textSansBold15};
@@ -163,7 +170,7 @@ const benefitsPrefixPlus = css`
 `;
 
 const discountSummaryCopy = (
-	currency: Currency,
+	currency: CurrencyInfo,
 	promoCount: number,
 	price: number,
 	promotion: Promotion,
@@ -212,9 +219,9 @@ export function ThreeTierCard({
 		link,
 		cta,
 		product,
-		enablePremiumDigital,
 	} = cardContent;
-	const currency = currencies[currencyId];
+	const { enablePremiumDigital } = getFeatureFlags();
+	const currency = getCurrencyInfo(currencyId);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const formattedPrice = simpleFormatAmount(currency, price);
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
@@ -232,9 +239,10 @@ export function ThreeTierCard({
 					title={promotion?.landingPage?.roundel ?? pillCopy}
 				/>
 			)}
-			<h2 css={[titleCss, checkListTextItemCss]}>
-				{titlePill && <BenefitPill copy={titlePill} />} <>{title}</>
-			</h2>
+			<div css={titleContainer}>
+				{titlePill && <BenefitPill copy={titlePill} />}
+				<h2 css={[titleCss, checkListTextItemCss]}>{title}</h2>
+			</div>
 			<p css={priceCss(!!promotion)}>
 				{promotion && (
 					<>
@@ -269,7 +277,8 @@ export function ThreeTierCard({
 			{inAdditionToAllAccessDigital && (
 				<div css={benefitsPrefixCss}>
 					<span>
-						The rewards from <strong>All-access digital</strong>
+						The rewards from{' '}
+						<strong> {getProductLabel('SupporterPlus')}</strong>
 					</span>
 					{benefits.length > 0 && <span css={benefitsPrefixPlus}>plus</span>}
 				</div>

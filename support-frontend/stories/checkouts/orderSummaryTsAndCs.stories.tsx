@@ -1,7 +1,5 @@
-import {
-	OrderSummaryTsAndCs,
-	OrderSummaryTsAndCsProps,
-} from 'components/orderSummary/orderSummaryTsAndCs';
+import type { OrderSummaryTsAndCsProps } from 'components/orderSummary/orderSummaryTsAndCs';
+import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
 
 export default {
 	title: 'Checkouts/Ts&Cs Order Summary',
@@ -57,7 +55,7 @@ export const SubscriptionCardWeekend = Template.bind({});
 SubscriptionCardWeekend.args = {
 	productKey: 'SubscriptionCard',
 	ratePlanKey: 'WeekendPlus',
-	ratePlanDescription: 'Weekend package',
+	ratePlanDescription: 'Weekend',
 	countryGroupId: 'GBPCountries',
 };
 
@@ -65,6 +63,6 @@ export const HomeDeliverySixday = Template.bind({});
 HomeDeliverySixday.args = {
 	productKey: 'HomeDelivery',
 	ratePlanKey: 'SixdayPlus',
-	ratePlanDescription: 'Six day package',
+	ratePlanDescription: 'Six day',
 	countryGroupId: 'GBPCountries',
 };
