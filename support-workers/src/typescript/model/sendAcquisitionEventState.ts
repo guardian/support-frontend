@@ -107,6 +107,9 @@ export type SendThankYouEmailState = z.infer<
 	typeof sendThankYouEmailStateSchema
 >;
 
+export type SendThankYouEmailProductType =
+	SendThankYouEmailState['productType'];
+
 export const sendAcquisitionEventStateSchema = z.object({
 	requestId: z.string(),
 	sendThankYouEmailState: sendThankYouEmailStateSchema,

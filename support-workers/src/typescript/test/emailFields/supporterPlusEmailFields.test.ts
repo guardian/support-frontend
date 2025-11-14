@@ -1,3 +1,4 @@
+import { DataExtensionNames } from '@modules/email/email';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import dayjs from 'dayjs';
 import { buildSupporterPlusEmailFields } from '../../emailFields/supporterPlusEmailFields';
@@ -52,7 +53,7 @@ describe('Supporter plus thank you email fields', () => {
 					},
 				},
 			},
-			DataExtensionName: 'supporter-plus',
+			DataExtensionName: DataExtensionNames.supporterPlusDay0Email,
 			IdentityUserId: '1234',
 		};
 
@@ -90,7 +91,7 @@ describe('Supporter plus thank you email fields', () => {
 					},
 				},
 			},
-			DataExtensionName: 'supporter-plus',
+			DataExtensionName: DataExtensionNames.supporterPlusDay0Email,
 			IdentityUserId: '1234',
 		};
 		expect(emailFields).toStrictEqual(expected);
@@ -133,7 +134,7 @@ describe('Supporter plus thank you email fields', () => {
 					},
 				},
 			},
-			DataExtensionName: 'supporter-plus',
+			DataExtensionName: DataExtensionNames.supporterPlusDay0Email,
 			IdentityUserId: '1234',
 		};
 		expect(emailFields).toStrictEqual(expected);
