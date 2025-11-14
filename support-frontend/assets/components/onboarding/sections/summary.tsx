@@ -10,7 +10,7 @@ import { ToggleSwitch } from '@guardian/source-development-kitchen/react-compone
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import { currencies } from 'helpers/internationalisation/currency';
+import { extendedGlyph } from 'helpers/internationalisation/currency';
 import {
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
@@ -116,7 +116,7 @@ function OnboardingSummary({
 		productKey && landingPageSettings.products[productKey];
 
 	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
-	const currency = currencies[currencyKey];
+	const currency = extendedGlyph(currencyKey);
 	const amountPaidToday = simpleFormatAmount(currency, payment.finalAmount);
 
 	const billingPeriod = ratePlanKey
