@@ -1,11 +1,16 @@
 import { writeFileSync } from 'fs';
 import { resolve } from 'path';
 import { renderToString } from 'react-dom/server';
-import { HoldingContent } from '../assets/components/serverSideRendered/holdingContent';
+import { GuardianHoldingContent } from '../assets/components/serverSideRendered/guardianHoldingContent';
 import { NewspaperArchiveHeader } from '../assets/components/serverSideRendered/newspaperArchiveHeader';
+import { ObserverHoldingContent } from '../assets/components/serverSideRendered/observerHoldingContent';
 
 const ssrComponents = [
-	{ component: <HoldingContent />, fileName: 'ssr-holding-content' },
+	{ component: <GuardianHoldingContent />, fileName: 'ssr-holding-content' },
+	{
+		component: <ObserverHoldingContent />,
+		fileName: 'ssr-observer-holding-content',
+	},
 	{
 		component: <NewspaperArchiveHeader />,
 		fileName: 'ssr-newspaper-archive-header',

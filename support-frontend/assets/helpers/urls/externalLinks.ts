@@ -11,14 +11,16 @@ import { getBaseDomain } from 'helpers/urls/url';
 const patronsUrl = 'https://patrons.theguardian.com';
 const patronsUrlUS =
 	'https://manage.theguardian.com/help-centre/article/contribute-another-way';
-const manageUrl = `https://manage.${getBaseDomain()}`;
 const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
 const androidAppUrl =
 	'https://play.google.com/store/apps/details?id=com.guardian';
 const feastAppUrl = 'https://guardian-feast.go.link?adj_t=1dufrlhf';
-const manageSubsUrl = `${manageUrl}/subscriptions`;
-const helpCentreUrl = `${manageUrl}/help-centre`;
+
 // ----- Functions ----- //
+
+const getManageUrl = () => `https://manage.${getBaseDomain()}`;
+const getManageSubsUrl = () => `${getManageUrl()}/subscriptions`;
+const getHelpCentreUrl = () => `${getManageUrl()}/help-centre`;
 
 function getPatronsLink(
 	intCmp?: string,
@@ -83,7 +85,7 @@ export {
 	getDailyEditionUrl,
 	getSignoutUrl,
 	getReauthenticateUrl,
-	manageSubsUrl,
-	helpCentreUrl,
+	getManageSubsUrl,
+	getHelpCentreUrl,
 	feastAppUrl,
 };

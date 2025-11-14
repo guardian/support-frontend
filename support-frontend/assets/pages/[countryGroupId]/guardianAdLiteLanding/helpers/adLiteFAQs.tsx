@@ -1,7 +1,7 @@
 import { getFeatureFlags } from 'helpers/featureFlags';
 import { guardianAdLiteTermsLink } from 'helpers/legal';
 import { getProductLabel } from 'helpers/productCatalog';
-import { helpCentreUrl } from 'helpers/urls/externalLinks';
+import { getHelpCentreUrl } from 'helpers/urls/externalLinks';
 import type { FAQItem } from 'pages/[countryGroupId]/components/accordionFAQ';
 
 const { enablePremiumDigital } = getFeatureFlags();
@@ -53,8 +53,8 @@ export const adLiteFAQs: FAQItem[] = [
 		body: (
 			<p>
 				For any queries, including subscription-related queries, please visit
-				our <a href={helpCentreUrl}>Help centre</a>, where you will also find
-				contact details for your region.
+				our <a href={getHelpCentreUrl()}>Help centre</a>, where you will also
+				find contact details for your region.
 			</p>
 		),
 	},
