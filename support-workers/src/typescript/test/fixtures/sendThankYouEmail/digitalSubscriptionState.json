@@ -4,7 +4,7 @@
     "sendThankYouEmailState": {
       "user": {
         "id": "200006458",
-        "primaryEmailAddress": "rupert.bates@theguardian.com",
+        "primaryEmailAddress": "test@thegulocal.com",
         "title": null,
         "firstName": "Test",
         "lastName": "User",

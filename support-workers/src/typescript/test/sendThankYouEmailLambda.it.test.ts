@@ -11,18 +11,31 @@ import supporterPlusJson from './fixtures/sendThankYouEmail/supporterPlusState.j
 import tierThreeJson from './fixtures/sendThankYouEmail/tierThreeState.json';
 
 describe('sendThankYouEmailLambda integration', () => {
+	// If you want to receive the test emails, change this to your email address
+	const emailToSendTestEmailsTo = 'rupert.bates+smoke-test@theguardian.com';
+
+	const sendEmail = (state: WrappedState<SendAcquisitionEventState>) => {
+		state.state.sendThankYouEmailState.user.primaryEmailAddress =
+			emailToSendTestEmailsTo;
+		return handler(state);
+	};
+
 	test('we can send a supporter plus email successfully', async () => {
-		await handler(supporterPlusJson as WrappedState<SendAcquisitionEventState>);
+		await sendEmail(
+			supporterPlusJson as WrappedState<SendAcquisitionEventState>,
+		);
 	});
 	test('we can send a contribution email successfully', async () => {
-		await handler(contributionJson as WrappedState<SendAcquisitionEventState>);
+		await sendEmail(
+			contributionJson as WrappedState<SendAcquisitionEventState>,
+		);
 	});
 	test('we can send a digital subscription email successfully', async () => {
-		await handler(
+		await sendEmail(
 			digitalSubscriptionJson as WrappedState<SendAcquisitionEventState>,
 		);
 	});
 	test('we can send a tier three email successfully', async () => {
-		await handler(tierThreeJson as WrappedState<SendAcquisitionEventState>);
+		await sendEmail(tierThreeJson as WrappedState<SendAcquisitionEventState>);
 	});
 });
