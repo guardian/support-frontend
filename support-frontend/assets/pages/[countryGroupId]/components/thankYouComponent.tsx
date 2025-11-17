@@ -90,7 +90,6 @@ export function ThankYouComponent({
 	landingPageSettings,
 }: CheckoutComponentProps) {
 	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
-	const { isSignedIn } = getUser();
 
 	const { countryGroupId, currencyKey } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -177,7 +176,7 @@ export function ThankYouComponent({
 	const validEmail = email !== '';
 
 	// Clarify Guardian Ad-lite thankyou page states
-	const signedInUser = isSignedIn;
+	const { isSignedIn } = getUser();
 	const userNotSignedIn = !isSignedIn && identityUserType === 'current';
 	const guestUser = !isSignedIn && identityUserType === 'new';
 
@@ -279,16 +278,13 @@ export function ThankYouComponent({
 			isGuardianAdLite && userNotSignedIn,
 			'signInToActivate',
 		),
-		...maybeThankYouModule(
-			isGuardianAdLite && signedInUser,
-			'reminderToSignIn',
-		),
+		...maybeThankYouModule(isGuardianAdLite && isSignedIn, 'reminderToSignIn'),
 		...maybeThankYouModule(
 			isGuardianAdLite && guestUser,
 			'reminderToActivateSubscription',
 		),
 		...maybeThankYouModule(
-			isGuardianAdLite && (signedInUser || guestUser),
+			isGuardianAdLite && (isSignedIn || guestUser),
 			'headlineReturn',
 		),
 	];
