@@ -114,12 +114,12 @@ export function WhatNext({
 			<a href="https://www.observer.co.uk">Observer.co.uk</a>
 		);
 		const observerWelcome = (
-			<p>
+			<>
 				The Observer will be in touch shortly via email to welcome you. Check
 				your spam folder or add the {observerLink} domain to your preferred
 				sender list. Log in to {observerLink} or The Observer app now for full
 				digital access.
-			</p>
+			</>
 		);
 		const observerSubscriptionCardItems = [
 			...guardianSubscriptionCardItems,
