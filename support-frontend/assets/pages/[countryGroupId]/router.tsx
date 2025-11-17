@@ -75,9 +75,9 @@ function GuardianOrObserverHoldingContent() {
 
 	if (isObserverSubdomain) {
 		return <ObserverHoldingContent />;
-	} else {
-		return <GuardianHoldingContent />;
 	}
+
+	return <GuardianHoldingContent />;
 }
 
 const router = createBrowserRouter([
