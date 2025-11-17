@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import type {
-	AbTest,
+	AbTestRegister,
 	ComponentEvent,
 	TAction,
 	TComponentType,
@@ -15,7 +15,6 @@ import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 export type OphanAction = TAction;
 export type OphanComponentType = TComponentType;
 export type OphanComponentEvent = ComponentEvent;
-export type OphanABPayload = AbTest[]; // For backward compatibility with tests
 
 // ----- Functions ----- //
 const trackComponentEvents = (componentEvent: ComponentEvent): void =>
@@ -31,24 +30,45 @@ const trackBFCacheLoad = (): void =>
 		action: 'VIEW',
 	});
 
-export const buildOphanPayload = (participations: Participations): AbTest[] => {
+export const buildOphanPayload = (
+	participations: Participations,
+): AbTestRegister => {
 	const activeTests: Array<[string, string]> =
 		Object.entries(participations).filter(testIsActive);
 
-	return activeTests.map((participation) => ({
-		name: participation[0],
-		variant: participation[1],
-		complete: false,
-		campaignCodes: [],
-	}));
+	return activeTests.reduce<AbTestRegister>(
+		(
+			payload: AbTestRegister,
+			participation: [string, string],
+		): AbTestRegister => {
+			const ophanABEvent = {
+				variantName: participation[1],
+				complete: false,
+				campaignCodes: [],
+			};
+			return {
+				...payload,
+				[participation[0]]: ophanABEvent,
+			};
+		},
+		{},
+	);
 };
 
-const trackAbTests = (participations: Participations): void =>
+export const buildAbTestRegister = (
+	participations: Participations,
+): AbTestRegister => buildOphanPayload(participations);
+
+const trackAbTests = (participations: Participations): void => {
+	const abRegister = buildOphanPayload(participations);
+
+	if (Object.keys(abRegister).length === 0) {
+		return;
+	}
 	record({
-		ab: {
-			tests: buildOphanPayload(participations),
-		},
+		abTestRegister: abRegister,
 	});
+};
 
 // Set referring pageview data in localstorage if it's not already there. This is picked up by ophan, see:
 // https://github.com/guardian/ophan/blob/75b86abcce07369c8998521399327d436246c016/tracker-js/assets/coffee/ophan/click-path-capture.coffee#L41
