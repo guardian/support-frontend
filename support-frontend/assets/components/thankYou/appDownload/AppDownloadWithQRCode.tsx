@@ -8,6 +8,7 @@ import {
 	textSansBold12,
 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { AppStoreBadges } from './AppDownloadBadges';
 import { type AppDownload } from './appDownloadItems';
 
@@ -75,6 +76,11 @@ export default function AppDownloadWithQRCode({
 	apps: AppDownload[];
 	countryGroupId: CountryGroupId;
 }): JSX.Element {
+	const { windowWidthIsGreaterThan } = useWindowWidth();
+	const instructions = windowWidthIsGreaterThan('tablet')
+		? 'Scan the QR code to'
+		: 'Use the button below to';
+
 	return (
 		<>
 			{apps.map(
@@ -84,7 +90,7 @@ export default function AppDownloadWithQRCode({
 				) => (
 					<div css={bodyApps} key={index}>
 						{title && <h2 css={headingstyle}>{title}</h2>}
-						<p css={descriptionStyle}>{description}</p>
+						<p css={descriptionStyle}>{`${instructions} ${description}`}</p>
 
 						<div css={downloadLinks}>
 							<AppStoreBadges
