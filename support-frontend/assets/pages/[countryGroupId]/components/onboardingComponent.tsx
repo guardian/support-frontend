@@ -112,7 +112,7 @@ function OnboardingComponent({
 		documentLocation.protocol
 	}//${documentLocation.hostname.replace('support', 'profile')}`;
 	const iframeTarget = `${iframeOrigin}${
-		guestUser ? '/onboarding/register' : '/onboarding/signin'
+		guestUser ? '/iframed/register' : '/iframed/signin'
 	}`;
 
 	const [currentStep, setCurrentStep] = useState<OnboardingSteps>();
