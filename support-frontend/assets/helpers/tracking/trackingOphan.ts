@@ -59,14 +59,12 @@ export const buildAbTestRegister = (
 ): AbTestRegister => buildOphanPayload(participations);
 
 const trackAbTests = (participations: Participations): void => {
-	 
 	const abRegister = buildOphanPayload(participations);
-	 
+
 	if (Object.keys(abRegister).length === 0) {
 		return;
 	}
 	record({
-		 
 		abTestRegister: abRegister,
 	});
 };

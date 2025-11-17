@@ -20,7 +20,7 @@ describe('Ophan AB Payload', () => {
 				campaignCodes: [],
 			},
 		};
-		 
+
 		const payload: AbTestRegister = buildOphanPayload(input);
 		expect(payload).toEqual(expected);
 	});
@@ -42,7 +42,7 @@ describe('Ophan AB Payload', () => {
 				campaignCodes: [],
 			},
 		};
-		 
+
 		const payload: AbTestRegister = buildAbTestRegister(input);
 		expect(payload).toEqual(expected);
 	});
