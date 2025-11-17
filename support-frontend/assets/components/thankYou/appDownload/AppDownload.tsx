@@ -72,12 +72,12 @@ export default function AppDownload({
 		<>
 			{apps.map(
 				(
-					{ name, description, appIcon, playStoreUrl, getAppStoreUrl },
+					{ title, description, appIcon, playStoreUrl, getAppStoreUrl },
 					index,
 				) => (
 					<div css={bodyApps} key={index}>
 						<div css={bodyStyle}>
-							<h2 css={headingstyle}>{name}</h2>
+							<h2 css={headingstyle}>{title}</h2>
 							<p css={descriptionStyle}>{description}</p>
 							<div css={[appStoreBadges]}>
 								<AppStoreBadges

@@ -256,6 +256,7 @@ export function ThankYouComponent({
 			isTierThree || isSupporterPlus || (isGuardianPrint && !isGuardianWeekly),
 			'appsDownload',
 		),
+		...maybeThankYouModule(!!observerPrint, 'observerAppDownload'),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
 			isOneOff ||
