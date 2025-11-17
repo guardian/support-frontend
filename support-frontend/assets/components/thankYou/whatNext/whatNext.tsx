@@ -1,4 +1,5 @@
-import { palette } from '@guardian/source/foundations';
+import { css } from '@emotion/react';
+import { neutral, palette } from '@guardian/source/foundations';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import OrderedList from 'components/list/orderedList';
 import type {
@@ -14,6 +15,13 @@ import {
 import { glyph } from '../../../helpers/internationalisation/currency';
 import BulletPointedList from '../utilityComponents/BulletPointedList';
 import { helpCenterCta, myAccountCta } from './whatNextCta';
+
+const neutralFontColour = css`
+	color: ${neutral[7]};
+	:visited {
+		color: ${neutral[7]};
+	}
+`;
 
 export function WhatNext({
 	productKey,
@@ -111,7 +119,9 @@ export function WhatNext({
 
 	if (observerPrint) {
 		const observerLink = (
-			<a href="https://www.observer.co.uk">Observer.co.uk</a>
+			<a href="https://www.observer.co.uk" css={neutralFontColour}>
+				Observer.co.uk
+			</a>
 		);
 		const observerWelcome = (
 			<>
