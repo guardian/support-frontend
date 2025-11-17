@@ -76,11 +76,12 @@ const separator = css`
 const benefitsItem = css`
 	display: flex;
 	align-items: flex-start;
+	margin-bottom: ${space[2]}px;
 `;
 
 const benefitsItemText = css`
 	${descriptions}
-	line-height: ${space[8]}px;
+	padding-top: ${space[0]}px;
 `;
 
 const benefitsItemIcon = css`

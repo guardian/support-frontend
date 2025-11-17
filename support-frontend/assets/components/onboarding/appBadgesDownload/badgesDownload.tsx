@@ -5,18 +5,11 @@ import {
 	space,
 	textSansBold14,
 } from '@guardian/source/foundations';
-import { useMemo } from 'preact/hooks';
 import { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { AppsQrCode } from './appsQrCode';
-import { AppStoreMobile } from './appStoreMobile';
-import { AppStoreMobileLandscape } from './appStoreMobileLandscape';
-import { AppStoreMobileMedium } from './appStoreMobileMedium';
-import { AppStoreTablet } from './appStoreTablet';
-import { PlayStoreMobile } from './playStoreMobile';
-import { PlayStoreMobileLandscape } from './playStoreMobileLandscape';
-import { PlayStoreMobileMedium } from './playStoreMobileMedium';
-import { PlayStoreTablet } from './playStoreTablet';
+import { AppStoreMobile } from './appStore';
+import { PlayStoreMobile } from './playStore';
 
 const guardianAppUrl = 'https://guardian.go.link/home?adj_t=1u2r07na';
 const feastAppUrl = 'https://guardian-feast.go.link/home?adj_t=1u2gdk5r';
@@ -26,11 +19,28 @@ const badgesContainer = css`
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
+	gap: ${space[2]}px;
 
 	${from.tablet} {
 		flex-direction: column;
 		align-items: flex-start;
-		gap: ${space[2]}px;
+		flex: 3;
+	}
+`;
+
+const badge = css`
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex: 1;
+	background-color: ${neutral[0]};
+	height: ${space[10]}px;
+	border-radius: ${space[2]}px;
+
+	${from.tablet} {
+		width: 100%;
+		max-height: ${space[12]}px;
 	}
 `;
 
@@ -55,48 +65,17 @@ const qrContainer = css`
 	align-items: center;
 	justify-content: center;
 	gap: ${space[2]}px;
+	flex: 2;
 	${textSansBold14}
+
+	${from.tablet} {
+		margin-right: ${space[9]}px;
+	}
 `;
 
 const separator = css`
 	border-right: 1px solid ${neutral[73]};
 `;
-
-function OnboardingAppBadgesMobile({ link }: { link: string }) {
-	return (
-		<div css={badgesContainer}>
-			<AppStoreMobile link={link} />
-			<PlayStoreMobile link={link} />
-		</div>
-	);
-}
-
-function OnboardingAppBadgesMedium({ link }: { link: string }) {
-	return (
-		<div css={badgesContainer}>
-			<AppStoreMobileMedium link={link} />
-			<PlayStoreMobileMedium link={link} />
-		</div>
-	);
-}
-
-function OnboardingAppBadgesTablet({ link }: { link: string }) {
-	return (
-		<div css={badgesContainer}>
-			<AppStoreTablet link={link} />
-			<PlayStoreTablet link={link} />
-		</div>
-	);
-}
-
-function OnboardingAppBadgesMobileLandscape({ link }: { link: string }) {
-	return (
-		<div css={badgesContainer}>
-			<AppStoreMobileLandscape link={link} />
-			<PlayStoreMobileLandscape link={link} />
-		</div>
-	);
-}
 
 export function OnboardingAppBadgesDownload({
 	onboardingStep,
@@ -105,26 +84,21 @@ export function OnboardingAppBadgesDownload({
 }) {
 	const { windowWidthIsGreaterThan } = useWindowWidth();
 
-	const badges = useMemo(() => {
-		const link =
-			onboardingStep === OnboardingSteps.GuardianApp
-				? guardianAppUrl
-				: feastAppUrl;
-
-		if (windowWidthIsGreaterThan('tablet')) {
-			return <OnboardingAppBadgesTablet link={link} />;
-		} else if (windowWidthIsGreaterThan('mobileLandscape')) {
-			return <OnboardingAppBadgesMobileLandscape link={link} />;
-		} else if (windowWidthIsGreaterThan('mobileMedium')) {
-			return <OnboardingAppBadgesMedium link={link} />;
-		} else {
-			return <OnboardingAppBadgesMobile link={link} />;
-		}
-	}, [windowWidthIsGreaterThan, onboardingStep]);
+	const link =
+		onboardingStep === OnboardingSteps.GuardianApp
+			? guardianAppUrl
+			: feastAppUrl;
 
 	return (
 		<div css={container}>
-			{badges}
+			<div css={badgesContainer}>
+				<a css={badge} href={link} target="_blank">
+					<AppStoreMobile />
+				</a>
+				<a css={badge} href={link} target="_blank">
+					<PlayStoreMobile />
+				</a>
+			</div>
 			{windowWidthIsGreaterThan('tablet') ? (
 				<>
 					<div css={separator} />

@@ -3,6 +3,7 @@ import { palette, space } from '@guardian/source/foundations';
 import { Button, Stack, SvgTickRound } from '@guardian/source/react-components';
 import type { HandleStepNavigationFunction } from 'pages/[countryGroupId]/components/onboardingComponent';
 import { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
+import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { OnboardingAppBadgesDownload } from '../appBadgesDownload/badgesDownload';
 import ContentBox from '../contentBox';
 import {
@@ -85,6 +86,8 @@ export function OnboardingAppsDiscovery({
 	onboardingStep: OnboardingSteps;
 	handleStepNavigation: HandleStepNavigationFunction;
 }) {
+	const { windowWidthIsGreaterThan } = useWindowWidth();
+
 	const isGuardianApp = onboardingStep === OnboardingSteps.GuardianApp;
 	const hasAppDownloaded = isGuardianApp
 		? hasMobileAppDownloaded
@@ -93,6 +96,8 @@ export function OnboardingAppsDiscovery({
 	const appBenefits = isGuardianApp
 		? GUARDIAN_APP_BENEFITS
 		: FEAST_APP_BENEFITS;
+
+	const isTabledOrLarger = windowWidthIsGreaterThan('tablet');
 
 	return (
 		<Stack
@@ -127,7 +132,7 @@ export function OnboardingAppsDiscovery({
 								<div css={benefitsItemIcon}>
 									<SvgTickRound
 										isAnnouncedByScreenReader
-										size="medium"
+										size={isTabledOrLarger ? 'medium' : 'small'}
 										theme={{ fill: palette.brand[500] }}
 									/>
 								</div>

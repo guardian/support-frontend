@@ -202,7 +202,7 @@ function OnboardingHeading({
 							{ONBOARDING_STEP_CONTENT_MAP[onboardingStep].gridId && (
 								<GridImage
 									gridId={ONBOARDING_STEP_CONTENT_MAP[onboardingStep].gridId}
-									srcSizes={[2000, 1000, 500]}
+									srcSizes={[2000]}
 									sizes="(max-width: 739px) 140px, 422px"
 									imgType="png"
 									altText={ONBOARDING_STEP_CONTENT_MAP[onboardingStep].altText}
