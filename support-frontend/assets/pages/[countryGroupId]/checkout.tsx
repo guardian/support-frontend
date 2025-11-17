@@ -12,6 +12,7 @@ import {
 	getStripeKeyForCountry,
 	getStripeKeyForProduct,
 } from 'helpers/forms/stripe';
+import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
@@ -295,13 +296,12 @@ export function Checkout({
 		true,
 	);
 
-	const { isObserverSubdomain } = window.guardian;
-	const PageLayout = isObserverSubdomain
+	const PageLayout = isObserverSubdomain()
 		? ObserverPageLayout
 		: GuardianPageLayout;
 
 	const theme = {
-		...(isObserverSubdomain && { observerThemeButton }),
+		...(isObserverSubdomain() && { observerThemeButton }),
 	};
 
 	return (

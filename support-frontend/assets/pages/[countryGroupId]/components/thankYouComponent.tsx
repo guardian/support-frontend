@@ -9,6 +9,7 @@ import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { Participations } from 'helpers/abTests/models';
 import { getFeatureFlags } from 'helpers/featureFlags';
+import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type {
 	ActiveProductKey,
@@ -292,13 +293,12 @@ export function ThankYouComponent({
 		),
 	];
 
-	const { isObserverSubdomain } = window.guardian;
-	const PageLayout = isObserverSubdomain
+	const PageLayout = isObserverSubdomain()
 		? ObserverPageLayout
 		: GuardianPageLayout;
 
 	const theme = {
-		...(isObserverSubdomain && { observerThemeButton }),
+		...(isObserverSubdomain() && { observerThemeButton }),
 	};
 
 	return (
