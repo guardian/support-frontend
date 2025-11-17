@@ -5,7 +5,7 @@ import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import YellowHighlightText from './YellowHighlightText';
+import TextHighlight from './HighlightText';
 
 const headerTitleText = css`
 	${titlepiece42};
@@ -70,9 +70,9 @@ export default function ContributionHeading({
 			<h1 css={headerTitleText}>
 				Thank you <span data-qm-masking="blocklist">{name}</span> for supporting
 				us with{' '}
-				<YellowHighlightText>
+				<TextHighlight>
 					{promotion ? promotionPriceWithCurrency : amountWithCurrency}
-				</YellowHighlightText>
+				</TextHighlight>
 				&nbsp;
 				{frequency}
 				{promotion && <sup css={supCss}>*</sup>}

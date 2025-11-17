@@ -14,8 +14,8 @@ import {
 	longHeaderTitleText,
 	tier3LineBreak,
 } from './headingStyles';
+import HighlightText from './HighlightText';
 import { isContributionProduct, isPrintProduct } from './utils/productMatchers';
-import YellowHighlightText from './YellowHighlightText';
 
 type HeadingProps = {
 	name: string | null;
@@ -71,8 +71,7 @@ function Heading({
 		return (
 			<h1 css={headerTitleText}>
 				Thank you <span data-qm-masking="blocklist">{contributorName}</span> for
-				subscribing to the{' '}
-				<YellowHighlightText>Digital Edition</YellowHighlightText>
+				subscribing to the <HighlightText>Digital Edition</HighlightText>
 			</h1>
 		);
 	}
@@ -86,7 +85,7 @@ function Heading({
 		return (
 			<h1 css={longHeaderTitleText}>
 				Thank you <span data-qm-masking="blocklist">{contributorName}</span> for
-				subscribing to <YellowHighlightText>{productName}</YellowHighlightText>
+				subscribing to <HighlightText>{productName}</HighlightText>
 				{(isTier3 || isPremiumDigital) && (
 					<>
 						<br css={tier3LineBreak} />
@@ -100,8 +99,7 @@ function Heading({
 	if (isObserverPrint) {
 		return (
 			<h1 css={headerTitleText}>
-				You are now an{' '}
-				<YellowHighlightText>Observer subscriber</YellowHighlightText>.
+				You are now an <HighlightText>Observer subscriber</HighlightText>.
 				<br />
 				Welcome and thank you for supporting Observer journalism!
 			</h1>
