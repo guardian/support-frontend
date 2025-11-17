@@ -2,6 +2,7 @@ import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
+import { ObserverHoldingContent } from 'components/serverSideRendered/observerHoldingContent';
 import { WithCoreWebVitals } from 'helpers/coreWebVitals/withCoreWebVitals';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
@@ -72,7 +73,7 @@ const StudentLandingPageGlobalContainer = lazy(() => {
 
 function GuardianOrObserverHoldingContent() {
 	if (isObserverSubdomain()) {
-		return null;
+		return <ObserverHoldingContent />;
 	}
 
 	return <GuardianHoldingContent />;
