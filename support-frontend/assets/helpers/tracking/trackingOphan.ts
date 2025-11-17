@@ -36,16 +36,22 @@ export const buildOphanPayload = (
 	const activeTests: Array<[string, string]> =
 		Object.entries(participations).filter(testIsActive);
 
-	return activeTests.reduce<AbTestRegister>((payload: AbTestRegister, participation: [string, string]): AbTestRegister => {
-		const ophanABEvent = {
-			variantName: participation[1],
-			complete: false,
-			campaignCodes: [],
-		};
-		return Object.assign({}, payload, {
-			[participation[0]]: ophanABEvent,
-		});
-	}, {});
+	return activeTests.reduce<AbTestRegister>(
+		(
+			payload: AbTestRegister,
+			participation: [string, string],
+		): AbTestRegister => {
+			const ophanABEvent = {
+				variantName: participation[1],
+				complete: false,
+				campaignCodes: [],
+			};
+			return Object.assign({}, payload, {
+				[participation[0]]: ophanABEvent,
+			});
+		},
+		{},
+	);
 };
 
 export const buildAbTestRegister = (
@@ -53,14 +59,14 @@ export const buildAbTestRegister = (
 ): AbTestRegister => buildOphanPayload(participations);
 
 const trackAbTests = (participations: Participations): void => {
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- buildOphanPayload returns proper AbTestRegister type
+	 
 	const abRegister = buildOphanPayload(participations);
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- Object.keys accepts any object
+	 
 	if (Object.keys(abRegister).length === 0) {
 		return;
 	}
 	record({
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- abRegister matches expected record structure
+		 
 		abTestRegister: abRegister,
 	});
 };

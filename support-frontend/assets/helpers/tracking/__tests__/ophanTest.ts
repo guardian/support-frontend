@@ -20,7 +20,7 @@ describe('Ophan AB Payload', () => {
 				campaignCodes: [],
 			},
 		};
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- buildOphanPayload returns AbTestRegister
+		 
 		const payload: AbTestRegister = buildOphanPayload(input);
 		expect(payload).toEqual(expected);
 	});
@@ -42,7 +42,7 @@ describe('Ophan AB Payload', () => {
 				campaignCodes: [],
 			},
 		};
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- buildAbTestRegister returns AbTestRegister
+		 
 		const payload: AbTestRegister = buildAbTestRegister(input);
 		expect(payload).toEqual(expected);
 	});
