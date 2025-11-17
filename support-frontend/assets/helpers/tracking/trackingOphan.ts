@@ -46,9 +46,10 @@ export const buildOphanPayload = (
 				complete: false,
 				campaignCodes: [],
 			};
-			return Object.assign({}, payload, {
+			return {
+				...payload,
 				[participation[0]]: ophanABEvent,
-			});
+			};
 		},
 		{},
 	);
