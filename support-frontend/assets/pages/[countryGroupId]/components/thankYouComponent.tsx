@@ -245,7 +245,10 @@ export function ThankYouComponent({
 				(!isPending && guestUser && !isGuardianAdLite && !isGuardianPrint),
 			'signUp',
 		), // Complete your Guardian account
-		...maybeThankYouModule(userNotSignedIn && !isGuardianAdLite, 'signIn'), // Sign in to access your benefits
+		...maybeThankYouModule(
+			userNotSignedIn && !isGuardianAdLite && !observerPrint,
+			'signIn',
+		), // Sign in to access your benefits
 		...maybeThankYouModule(isTierThree || isPremiumDigital, 'benefits'),
 		...maybeThankYouModule(
 			isTierThree || isNationalDelivery,
