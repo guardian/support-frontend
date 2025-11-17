@@ -21,7 +21,21 @@ exports[`Summary Ts&Cs Snapshot comparison whatNext renders correctly (signedIn=
     <li
       class="css-k6etrx"
     >
-      The Observer team will be in touch shortly via email to welcome you. Check your spam folder or add the observer.co.uk domain to your preferred sender list.
+      <p>
+        The Observer will be in touch shortly via email to welcome you. Check your spam folder or add the 
+        <a
+          href="https://www.observer.co.uk"
+        >
+          Observer.co.uk
+        </a>
+         domain to your preferred sender list. Log in to 
+        <a
+          href="https://www.observer.co.uk"
+        >
+          Observer.co.uk
+        </a>
+         or The Observer app now for full digital access.
+      </p>
     </li>
   </ol>
 </div>
@@ -33,17 +47,26 @@ exports[`Summary Ts&Cs Snapshot comparison whatNext renders correctly (signedIn=
     <li
       class="css-k6etrx"
     >
-      Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future.
+      Look out for an email from The Guardian confirming your subscription. It has everything you need to know about how to manage your Observer digital & print subscription in the future.
     </li>
     <li
       class="css-k6etrx"
     >
-      Your newspaper will be delivered to your door.
-    </li>
-    <li
-      class="css-k6etrx"
-    >
-      The Observer team will be in touch shortly via email to welcome you. Check your spam folder or add the observer.co.uk domain to your preferred sender list.
+      <p>
+        The Observer will be in touch shortly via email to welcome you. Check your spam folder or add the 
+        <a
+          href="https://www.observer.co.uk"
+        >
+          Observer.co.uk
+        </a>
+         domain to your preferred sender list. Log in to 
+        <a
+          href="https://www.observer.co.uk"
+        >
+          Observer.co.uk
+        </a>
+         or The Observer app now for full digital access.
+      </p>
     </li>
   </ol>
 </div>
