@@ -10,6 +10,11 @@ import {
 	ThankYouComponent,
 } from '../thankYouComponent';
 
+jest.mock('pages/aus-moment-map/hooks/useWindowWidth', () => ({
+	useWindowWidth: () => ({
+		windowWidthIsGreaterThan: () => true,
+	}),
+}));
 jest.mock('../../checkout/helpers/sessionStorage', () => ({
 	getThankYouOrder: () => 'order',
 	getReturnAddress: () => 'adress',
