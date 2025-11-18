@@ -482,9 +482,6 @@ export function ThreeTierLanding({
 	if (tier3Promotion) {
 		tier3UrlParams.set('promoCode', tier3Promotion.promoCode);
 	}
-	if (enablePremiumDigital) {
-		tier3UrlParams.set('enablePremiumDigital', 'true');
-	}
 	const tier3Card: CardContent = {
 		product: tier3Product,
 		price: tier3Pricing,
