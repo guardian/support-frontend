@@ -9,6 +9,7 @@ import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { Participations } from 'helpers/abTests/models';
 import { getFeatureFlags } from 'helpers/featureFlags';
+import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type {
 	ActiveProductKey,
@@ -89,7 +90,6 @@ export function ThankYouComponent({
 	landingPageSettings,
 }: CheckoutComponentProps) {
 	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
-	const { isSignedIn } = getUser();
 
 	const { countryGroupId, currencyKey } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -176,7 +176,7 @@ export function ThankYouComponent({
 	const validEmail = email !== '';
 
 	// Clarify Guardian Ad-lite thankyou page states
-	const signedInUser = isSignedIn;
+	const { isSignedIn } = getUser();
 	const userNotSignedIn = !isSignedIn && identityUserType === 'current';
 	const guestUser = !isSignedIn && identityUserType === 'new';
 
@@ -256,6 +256,7 @@ export function ThankYouComponent({
 			isTierThree || isSupporterPlus || (isGuardianPrint && !isGuardianWeekly),
 			'appsDownload',
 		),
+		...maybeThankYouModule(!!observerPrint, 'observerAppDownload'),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
 			isOneOff ||
@@ -277,27 +278,23 @@ export function ThankYouComponent({
 			isGuardianAdLite && userNotSignedIn,
 			'signInToActivate',
 		),
-		...maybeThankYouModule(
-			isGuardianAdLite && signedInUser,
-			'reminderToSignIn',
-		),
+		...maybeThankYouModule(isGuardianAdLite && isSignedIn, 'reminderToSignIn'),
 		...maybeThankYouModule(
 			isGuardianAdLite && guestUser,
 			'reminderToActivateSubscription',
 		),
 		...maybeThankYouModule(
-			isGuardianAdLite && (signedInUser || guestUser),
+			isGuardianAdLite && (isSignedIn || guestUser),
 			'headlineReturn',
 		),
 	];
 
-	const { isObserverSubdomain } = window.guardian;
-	const PageLayout = isObserverSubdomain
+	const PageLayout = isObserverSubdomain()
 		? ObserverPageLayout
 		: GuardianPageLayout;
 
 	const theme = {
-		...(isObserverSubdomain && { observerThemeButton }),
+		...(isObserverSubdomain() && { observerThemeButton }),
 	};
 
 	return (

@@ -31,7 +31,7 @@ import {
 	OPHAN_COMPONENT_ID_SOCIAL,
 	OPHAN_COMPONENT_ID_SURVEY,
 } from 'helpers/thankYouPages/utils/ophan';
-import { manageSubsUrl } from 'helpers/urls/externalLinks';
+import { getManageSubsUrl } from 'helpers/urls/externalLinks';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import { isPrintProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { getCurrency } from '../../helpers/productPrice/productPrices';
@@ -51,6 +51,7 @@ import {
 	appsDownloadHeader,
 	getDownloadApps,
 } from './appDownload/appDownloadItems';
+import AppDownloadWithQRCode from './appDownload/AppDownloadWithQRCode';
 import { ausMapBodyCopy, AusMapCTA, ausMapHeader } from './ausMap/ausMapItems';
 import {
 	FeedbackBodyCopy,
@@ -185,6 +186,17 @@ export const getThankYouModuleData = (
 			header: appDownloadHeader,
 			bodyCopy: <AppDownloadBodyCopy />,
 			ctas: <AppDownloadBadges countryGroupId={countryGroupId} />,
+		},
+		observerAppDownload: {
+			icon: getThankYouModuleIcon('appsDownload'),
+			header: 'Download the subscriber-only Observer app',
+			bodyCopy: (
+				<AppDownloadWithQRCode
+					apps={getDownloadApps(['observer'])}
+					countryGroupId={countryGroupId}
+				/>
+			),
+			ctas: null,
 		},
 		appDownloadEditions: enablePremiumDigital
 			? {
@@ -412,7 +424,7 @@ export const getThankYouModuleData = (
 			),
 			ctas: (
 				<AddressCta
-					address={returnAddress ?? ''}
+					getAddress={() => returnAddress ?? ''}
 					copy={'Head back to the Guardian'}
 					hasArrow={true}
 				/>
@@ -428,7 +440,7 @@ export const getThankYouModuleData = (
 			),
 			ctas: (
 				<AddressCta
-					address={manageSubsUrl}
+					getAddress={() => getManageSubsUrl()}
 					copy={'Sign in to activate your subscription'}
 				/>
 			),
