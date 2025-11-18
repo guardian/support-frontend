@@ -75,4 +75,25 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeContributionsOnlyCountries: true,
 	},
+	supporterPlusLandingHero: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: true,
+		referrerControlled: false,
+		seed: 7,
+		targetPage: pageUrlRegexes.contributions.usLandingPageOnly,
+		excludeContributionsOnlyCountries: true,
+	},
 };

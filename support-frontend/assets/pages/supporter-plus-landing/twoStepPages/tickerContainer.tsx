@@ -1,4 +1,4 @@
-import { css } from '@emotion/react';
+import { css, type SerializedStyles } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import type { TickerData } from '@guardian/source-development-kitchen/dist/react-components/ticker/Ticker';
 import { Ticker } from '@guardian/source-development-kitchen/react-components';
@@ -35,10 +35,12 @@ const containerStyle = css`
 
 interface TickerContainerProps {
 	tickerSettings: TickerSettings;
+	cssOverrides?: SerializedStyles;
 }
 
 export function TickerContainer({
 	tickerSettings,
+	cssOverrides = css``,
 }: TickerContainerProps): JSX.Element {
 	const tickerStylingSettings = {
 		headlineColour: '#FFFFFF',
@@ -52,7 +54,7 @@ export function TickerContainer({
 
 	if (tickerData) {
 		return (
-			<div css={containerStyle}>
+			<div css={[containerStyle, cssOverrides]}>
 				<Ticker
 					currencySymbol={tickerSettings.currencySymbol}
 					copy={{

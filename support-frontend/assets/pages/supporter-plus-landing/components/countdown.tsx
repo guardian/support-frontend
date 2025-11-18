@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, palette } from '@guardian/source/foundations';
+import { from, palette, space } from '@guardian/source/foundations';
 import { useEffect, useState } from 'react';
 import type { CountdownSettings } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { parseCountdownSettings } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -23,9 +23,9 @@ const outer = css`
 const container = (colours?: CountdownSettings) => css`
 	width: 100%;
 	background-color: ${colours ? colours.theme.backgroundColor : '#1e3e72'};
-	color: ${colours ? colours.theme.foregroundColor : palette.neutral[100]};
-	padding: 12px 40px;
-	border-radius: 8px;
+	color: ${colours ? colours.theme.foregroundColor : palette.neutral[0]};
+	padding: ${space[1]}px ${space[6]}px;
+	border-radius: ${space[2]}px;
 
 	display: flex;
 	flex-direction: row;

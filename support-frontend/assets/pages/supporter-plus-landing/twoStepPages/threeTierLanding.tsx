@@ -42,6 +42,8 @@ import {
 } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
 import { getFeatureFlags } from 'helpers/featureFlags';
+import type { ImageId } from 'helpers/images/theGrid';
+import { gridUrl } from 'helpers/images/theGrid';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { glyph } from 'helpers/internationalisation/currency';
 import {
@@ -65,6 +67,7 @@ import { SupportOnce } from '../components/supportOnce';
 import type { CardContent } from '../components/threeTierCard';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
+import { SupporterPlusLandingHero } from './supporterPlusLandingHero';
 import { TickerContainer } from './tickerContainer';
 
 const recurringContainer = css`
@@ -138,6 +141,21 @@ const standFirst = css`
 	}
 	${from.desktop} {
 		margin: ${space[4]}px auto ${space[9]}px;
+	}
+`;
+
+const supportHeading = css`
+	text-align: left;
+	color: ${palette.neutral[100]};
+	margin: 0 0 ${space[4]}px;
+	${headlineBold24}
+
+	${from.tablet} {
+		text-align: center;
+	}
+
+	${from.desktop} {
+		font-size: 2rem;
 	}
 `;
 
@@ -289,6 +307,7 @@ type ThreeTierLandingProps = {
 export function ThreeTierLanding({
 	supportRegionId,
 	settings,
+	abParticipations,
 }: ThreeTierLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsProduct = urlSearchParams.get('product');
@@ -300,6 +319,12 @@ export function ThreeTierLanding({
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const countryId = Country.detect();
+	const showImageHero = abParticipations.supporterPlusLandingHero === 'variant';
+	const heroImageId: ImageId =
+		countryGroupId === UnitedStates
+			? 'supporterPlusLandingUnitedStates'
+			: 'supporterPlusLanding';
+	const heroImageUrl = showImageHero ? gridUrl(heroImageId, 2000) : undefined;
 
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
@@ -498,6 +523,9 @@ export function ThreeTierLanding({
 
 	const sanitisedHeading = getSanitisedHtml(settings.copy.heading);
 	const sanitisedSubheading = getSanitisedHtml(settings.copy.subheading);
+	const headingHtml = headingOverride
+		? getSanitisedHtml(headingOverride)
+		: sanitisedHeading;
 
 	return (
 		<PageScaffold
@@ -582,42 +610,49 @@ export function ThreeTierLanding({
 				</>
 			}
 		>
+			{showImageHero && (
+				<SupporterPlusLandingHero
+					heroImageUrl={heroImageUrl}
+					headingHtml={headingHtml}
+					subheadingHtml={sanitisedSubheading}
+					countdownSettings={countdownSettings}
+					tickerSettings={settings.tickerSettings}
+					setHeadingOverride={setHeadingOverride}
+					tierTwoCard={tier2Card}
+					billingPeriod={billingPeriod}
+					currencyId={currencyId}
+				/>
+			)}
 			<Container
 				sideBorders
-				topBorder
+				topBorder={!showImageHero}
 				borderColor="rgba(170, 170, 180, 0.5)"
 				cssOverrides={recurringContainer}
 			>
 				<div css={innerContentContainer}>
-					{countdownSettings && (
+					{!showImageHero && countdownSettings && (
 						<Countdown
 							countdownSettings={countdownSettings}
 							setHeadingOverride={setHeadingOverride}
 						/>
 					)}
 
-					{headingOverride && (
-						<h1 css={heading}>
-							<span
-								dangerouslySetInnerHTML={{
-									__html: getSanitisedHtml(headingOverride),
-								}}
+					{!showImageHero && (
+						<>
+							<h1 css={heading}>
+								<span dangerouslySetInnerHTML={{ __html: headingHtml }} />
+							</h1>
+							<p
+								css={standFirst}
+								dangerouslySetInnerHTML={{ __html: sanitisedSubheading }}
 							/>
-						</h1>
+						</>
 					)}
-					{!headingOverride && (
-						<h1 css={heading}>
-							<span dangerouslySetInnerHTML={{ __html: sanitisedHeading }} />
-						</h1>
-					)}
-					<p
-						css={standFirst}
-						dangerouslySetInnerHTML={{ __html: sanitisedSubheading }}
-					/>
 
-					{settings.tickerSettings && (
+					{!showImageHero && settings.tickerSettings && (
 						<TickerContainer tickerSettings={settings.tickerSettings} />
 					)}
+					{showImageHero && <h2 css={supportHeading}>All ways to support</h2>}
 					<BillingPeriodButtons
 						billingPeriods={paymentFrequencies.map((paymentFrequency) =>
 							contributionTypeToBillingPeriod(paymentFrequency),
