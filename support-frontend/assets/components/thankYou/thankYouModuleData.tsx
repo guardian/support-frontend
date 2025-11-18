@@ -287,11 +287,10 @@ export const getThankYouModuleData = (
 		},
 		signIn: {
 			icon: getThankYouModuleIcon('signIn'),
-			header: signInHeader(isTierThree, observerPrint, isGuardianPrint),
+			header: signInHeader(isTierThree, isGuardianPrint),
 			bodyCopy: (
 				<SignInBodyCopy
 					isTierThree={isTierThree}
-					observerPrint={observerPrint}
 					isGuardianPrint={isGuardianPrint}
 				/>
 			),
@@ -299,11 +298,7 @@ export const getThankYouModuleData = (
 				<SignInCTA
 					email={email}
 					csrf={csrf}
-					buttonLabel={
-						observerPrint ?? (isTierThree || isGuardianPrint)
-							? 'Sign in'
-							: 'Continue'
-					}
+					buttonLabel={isTierThree || isGuardianPrint ? 'Sign in' : 'Continue'}
 				/>
 			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SIGN_IN,
@@ -314,7 +309,6 @@ export const getThankYouModuleData = (
 			bodyCopy: (
 				<SignUpBodyCopy
 					isTierThree={isTierThree}
-					observerPrint={observerPrint}
 					isGuardianPrint={isGuardianPrint}
 				/>
 			),

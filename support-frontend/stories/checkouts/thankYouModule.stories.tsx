@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { from, space, sport } from '@guardian/source/foundations';
 import { Column, Columns, Container } from '@guardian/source/react-components';
-import React from 'react';
+import type React from 'react';
 import { Provider } from 'react-redux';
 import { createTestStoreForContributions } from '__test-utils__/testStore';
 import AppDownloadBadges from 'components/thankYou/appDownload/AppDownloadBadges';
@@ -38,6 +38,7 @@ import {
 	socialShareHeader,
 	SocialShareIcons,
 } from 'components/thankYou/socialShare/SocialShareItems';
+import { SubscriptionStartItems } from 'components/thankYou/subscriptionStart/subscriptionStartItems';
 import {
 	SupportReminderBodyCopy,
 	SupportReminderCTAandPrivacy,
@@ -45,7 +46,6 @@ import {
 import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
-import { SubscriptionStartItems } from 'components/thankYou/subscriptionStart/subscriptionStartItems';
 import { WhatNext } from 'components/thankYou/whatNext/whatNext';
 import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
@@ -237,16 +237,6 @@ SignUpTier3.args = {
 	ctas: null,
 };
 
-export const SignUpObserver = Template.bind({});
-SignUpObserver.args = {
-	moduleType: 'signUp',
-	isSignedIn: false,
-	icon: getThankYouModuleIcon('signUp'),
-	header: signUpHeader,
-	bodyCopy: <SignUpBodyCopy observerPrint={ObserverPrint.Paper} />,
-	ctas: null,
-};
-
 export const SignIn = Template.bind({});
 SignIn.args = {
 	moduleType: 'signIn',
@@ -266,24 +256,6 @@ SignInTier3.args = {
 	icon: getThankYouModuleIcon('signIn'),
 	header: signInHeader(true),
 	bodyCopy: <SignInBodyCopy isTierThree={true} isGuardianPrint={false} />,
-	ctas: (
-		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="Sign in" />
-	),
-};
-
-export const SignInObserver = Template.bind({});
-SignInObserver.args = {
-	moduleType: 'signIn',
-	isSignedIn: false,
-	icon: getThankYouModuleIcon('signIn'),
-	header: signInHeader(true, ObserverPrint.Paper),
-	bodyCopy: (
-		<SignInBodyCopy
-			observerPrint={ObserverPrint.Paper}
-			isTierThree={false}
-			isGuardianPrint={false}
-		/>
-	),
 	ctas: (
 		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="Sign in" />
 	),
