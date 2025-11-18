@@ -111,8 +111,7 @@ const downloadApps: Record<AppDownloadKey, AppDownload> = {
 		description:
 			'download the subscriber-only Observer app and gain instant access to all The Observer articles, podcasts, puzzles and recipes.',
 		appIcon: null,
-		playStoreUrl:
-			'https://play.google.com/store/apps/details?id=com.tortoisemedia.tortoise',
+		playStoreUrl: '',
 		getAppStoreUrl: () => 'https://apps.apple.com/gb/app/tortoise/id1441428990',
 		qrCodeImage: <ObserverQRCode />,
 	},
