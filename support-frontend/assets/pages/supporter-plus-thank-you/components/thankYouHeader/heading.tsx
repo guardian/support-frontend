@@ -1,3 +1,4 @@
+import { useTheme } from '@emotion/react';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getFeatureFlags } from 'helpers/featureFlags';
 import {
@@ -12,6 +13,7 @@ import GuardianPrintHeading from './GuardianPrintHeading';
 import {
 	headerTitleText,
 	longHeaderTitleText,
+	observerHeaderTitleText,
 	tier3LineBreak,
 } from './headingStyles';
 import HighlightText from './HighlightText';
@@ -97,11 +99,15 @@ function Heading({
 	}
 
 	if (isObserverPrint) {
+		const { observerThemeButton } = useTheme();
 		return (
-			<h1 css={headerTitleText}>
-				You are now an <HighlightText>Observer subscriber</HighlightText>.
+			<h1
+				css={[headerTitleText, observerThemeButton && observerHeaderTitleText]}
+			>
+				You are now an{' '}
+				<HighlightText>Observer digital & print subscriber</HighlightText>.
 				<br />
-				Welcome and thank you for supporting Observer journalism!
+				Thank you for subscribing to The Observer.
 			</h1>
 		);
 	}
