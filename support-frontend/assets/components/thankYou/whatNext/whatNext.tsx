@@ -114,7 +114,7 @@ export function WhatNext({
 		const guardianItems = isSubscriptionCard
 			? subscriptionCardItems
 			: guardianHomeDeliveryItems;
-		return <OrderedList items={guardianItems.filter(Boolean)} />;
+		return <OrderedList items={guardianItems} />;
 	}
 
 	if (observerPrint) {
@@ -142,7 +142,7 @@ export function WhatNext({
 		const observerItems = isSubscriptionCard
 			? observerSubscriptionCardItems
 			: observerHomeDeliveryItems;
-		return <OrderedList items={observerItems.filter(Boolean)} />;
+		return <OrderedList items={observerItems} />;
 	}
 
 	return null;
