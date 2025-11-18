@@ -81,9 +81,7 @@ function ThankYouHeader({
 					/>
 				)}
 
-				{isDirectDebitPayment && (
-					<DirectDebitMessage mediaGroup="Guardian Media Group" />
-				)}
+				{isDirectDebitPayment && <DirectDebitMessage />}
 
 				{showLegitimateInterestMessage && (
 					<LegitimateInterestMessage

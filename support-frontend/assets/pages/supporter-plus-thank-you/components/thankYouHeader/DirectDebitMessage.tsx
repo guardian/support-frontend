@@ -1,16 +1,12 @@
 import { messageBold, messageMargin } from './MessageStyles';
 
-function DirectDebitMessage({
-	mediaGroup,
-}: {
-	mediaGroup: string;
-}): JSX.Element {
+function DirectDebitMessage(): JSX.Element {
 	return (
 		<div css={messageMargin}>
 			<strong css={messageBold}>Your Direct Debit has been set up. </strong>
-			You will receive an email from The Guardian within three business days
-			confirming your recurring payment. This will appear as '{mediaGroup}' on
-			your bank statements.
+			You will receive an email within three business days confirming your
+			recurring payment. This will appear as 'Guardian Media Group' on your bank
+			statements.
 		</div>
 	);
 }
