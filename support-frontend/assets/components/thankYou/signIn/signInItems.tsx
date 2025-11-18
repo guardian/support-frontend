@@ -17,7 +17,6 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { routes } from 'helpers/urls/routes';
 import { isCodeOrProd } from 'helpers/urls/url';
 import { catchPromiseHandler } from 'helpers/utilities/promise';
-import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
 const bodyText = css`
 	${textEgyptian15};
@@ -58,12 +57,8 @@ type CreateSignInUrlResponse = {
 	signInLink: string;
 };
 
-export const signInHeader = (
-	isTier3?: boolean,
-	observerPrint?: ObserverPrint,
-	isGuardianPrint?: boolean,
-) => {
-	if (observerPrint ?? isGuardianPrint) {
+export const signInHeader = (isTier3?: boolean, isGuardianPrint?: boolean) => {
+	if (isGuardianPrint) {
 		return 'Sign in to access to your account';
 	}
 	if (isTier3) {
@@ -75,11 +70,9 @@ export const signInHeader = (
 export function SignInBodyCopy({
 	isTierThree,
 	isGuardianPrint,
-	observerPrint,
 }: {
 	isTierThree: boolean;
 	isGuardianPrint: boolean;
-	observerPrint?: ObserverPrint;
 }): JSX.Element {
 	const [isExpanded, setIsExpanded] = useState(false);
 
@@ -88,7 +81,7 @@ export function SignInBodyCopy({
 		setIsExpanded(true);
 	};
 
-	if (observerPrint ?? isGuardianPrint) {
+	if (isGuardianPrint) {
 		return (
 			<p>
 				Make sure you’re signed in on all your devices when browsing our website

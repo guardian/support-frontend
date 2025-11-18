@@ -242,11 +242,19 @@ export function ThankYouComponent({
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(
 			(isGuardianPrint && guestUser) ||
-				(!isPending && guestUser && !isGuardianAdLite && !isGuardianPrint),
+				(!isPending &&
+					guestUser &&
+					!isGuardianAdLite &&
+					!isGuardianPrint &&
+					!observerPrint),
 			'signUp',
 		), // Complete your Guardian account
-		...maybeThankYouModule(userNotSignedIn && !isGuardianAdLite, 'signIn'), // Sign in to access your benefits
+		...maybeThankYouModule(
+			userNotSignedIn && !isGuardianAdLite && !observerPrint,
+			'signIn',
+		), // Sign in to access your benefits
 		...maybeThankYouModule(isTierThree || isPremiumDigital, 'benefits'),
+		...maybeThankYouModule(!!observerPrint, 'observerAppDownload'),
 		...maybeThankYouModule(
 			isTierThree || isNationalDelivery,
 			'subscriptionStart',
@@ -256,15 +264,13 @@ export function ThankYouComponent({
 			isTierThree || isSupporterPlus || (isGuardianPrint && !isGuardianWeekly),
 			'appsDownload',
 		),
-		...maybeThankYouModule(!!observerPrint, 'observerAppDownload'),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
 			isOneOff ||
 				(!(isTierThree && enablePremiumDigital) &&
 					isSignedIn &&
 					!isGuardianAdLite &&
-					!observerPrint &&
-					!isGuardianPrint),
+					!isPrint),
 			'feedback',
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
