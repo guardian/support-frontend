@@ -9,7 +9,7 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % catsVersion,
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
-  "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
+  "com.indoorvivants" %% "scala-uri" % scalaUriVersion,
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.3",
   "software.amazon.awssdk" % "sqs" % awsClientVersion2,
   // This is required to force aws libraries to use the latest version of jackson
