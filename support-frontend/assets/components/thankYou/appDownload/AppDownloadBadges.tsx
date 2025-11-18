@@ -29,6 +29,7 @@ const responsiveLayoutStyles = css`
 	${from.tablet} {
 		flex-direction: column;
 		align-items: flex-start;
+		justify-content: center;
 		a {
 			width: 190px;
 			background-color: #000;
@@ -123,25 +124,31 @@ export function AppStoreBadges({
 }) {
 	return (
 		<div css={[container, responsiveLayout && responsiveLayoutStyles]}>
-			<a
-				href={appStoreUrl}
-				target="blank"
-				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_APP_STORE_BADGE)}
-				aria-label="Download on the Apple App Store"
-			>
-				<AppleAppStoreBadge />
-			</a>
+			{appStoreUrl && (
+				<a
+					href={appStoreUrl}
+					target="blank"
+					onClick={() =>
+						trackComponentClick(OPHAN_COMPONENT_ID_APP_STORE_BADGE)
+					}
+					aria-label="Download on the Apple App Store"
+				>
+					<AppleAppStoreBadge />
+				</a>
+			)}
 
-			<a
-				href={playStoreUrl}
-				target="blank"
-				onClick={() =>
-					trackComponentClick(OPHAN_COMPONENT_ID_GOOGLE_PLAY_BADGE)
-				}
-				aria-label="Get it on Google Play"
-			>
-				<GooglePlayStoreBadge />
-			</a>
+			{playStoreUrl && (
+				<a
+					href={playStoreUrl}
+					target="blank"
+					onClick={() =>
+						trackComponentClick(OPHAN_COMPONENT_ID_GOOGLE_PLAY_BADGE)
+					}
+					aria-label="Get it on Google Play"
+				>
+					<GooglePlayStoreBadge />
+				</a>
+			)}
 		</div>
 	);
 }
