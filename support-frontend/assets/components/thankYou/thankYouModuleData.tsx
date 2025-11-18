@@ -44,10 +44,6 @@ import {
 	AppDownloadEditionsBodyCopy,
 	appDownloadEditionsHeader,
 	appDownloadHeader,
-	AppFeastDownloadBodyCopy,
-	appFeastDownloadHeader,
-	AppNewsDownloadBodyCopy,
-	appNewsDownloadHeader,
 	appsDownloadHeader,
 	getDownloadApps,
 } from './appDownload/appDownloadItems';
@@ -90,10 +86,6 @@ export interface ThankYouModuleData {
 	bodyCopySecond?: string | JSX.Element;
 	ctasSecond?: JSX.Element | null;
 }
-
-const headingCss = css`
-	font-weight: 700;
-`;
 
 const checklistCss = css`
 	margin-top: ${space[4]}px;
@@ -165,21 +157,12 @@ export const getThankYouModuleData = (
 			icon: getThankYouModuleIcon('appsDownload'),
 			header: appsDownloadHeader,
 			bodyCopy: (
-				<>
-					<h2 css={headingCss}>{appNewsDownloadHeader}</h2>
-					<AppNewsDownloadBodyCopy />
-				</>
+				<AppDownload
+					apps={getDownloadApps(['GuardianNews', 'guardianFeast'])}
+					countryGroupId={countryGroupId}
+				/>
 			),
-			ctas: <AppDownloadBadges countryGroupId={countryGroupId} />,
-			bodyCopySecond: (
-				<>
-					<h2 css={headingCss}>{appFeastDownloadHeader}</h2>
-					<AppFeastDownloadBodyCopy />
-				</>
-			),
-			ctasSecond: (
-				<AppDownloadBadges countryGroupId={countryGroupId} isFeast={true} />
-			),
+			ctas: null,
 		},
 		appDownload: {
 			icon: getThankYouModuleIcon('appDownload'),
