@@ -20,7 +20,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % "0.14.3",
   "io.circe" %% "circe-parser" % circeVersion,
-  "io.circe" %% "circe-optics" % "0.14.1",
+  "io.circe" %% "circe-optics" % "0.15.1",
   "joda-time" % "joda-time" % "2.9.9",
   "com.gu.identity" %% "identity-auth-play" % "4.12",
   "com.okta.jwt" % "okta-jwt-verifier" % oktaJwtVerifierVersion,
@@ -52,7 +52,7 @@ excludeDependencies ++= Seq(
 )
 
 ThisBuild / libraryDependencySchemes ++= Seq(
-  "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
+  "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always,
 )
 
 Compile / doc / sources := Seq.empty
@@ -85,11 +85,13 @@ def getFiles(rootFile: File, deployName: String): Seq[(File, String)] = {
   getFiles0(rootFile)
 }
 
-val jvmParameters = Def.setting(Seq(
-  "-XX:MaxMetaspaceSize=256m",
-  s"-Xlog:gc*:/var/log/${packageName.value}/gc.log", // https://docs.azul.com/prime/Unified-GC-Logging#enabling-unified-gc-logging
-  "-XX:-OmitStackTraceInFastThrow",
-))
+val jvmParameters = Def.setting(
+  Seq(
+    "-XX:MaxMetaspaceSize=256m",
+    s"-Xlog:gc*:/var/log/${packageName.value}/gc.log", // https://docs.azul.com/prime/Unified-GC-Logging#enabling-unified-gc-logging
+    "-XX:-OmitStackTraceInFastThrow",
+  ),
+)
 val playParameters = Seq(
   "-Dpidfile.path=/dev/null", // https://www.playframework.com/documentation/3.0.x/ProductionConfiguration#Changing-the-path-of-RUNNING_PID
 )
