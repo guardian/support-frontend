@@ -20,7 +20,7 @@ libraryDependencies += "org.vafer" % "jdeb" % "1.10" artifacts (Artifact("jdeb",
 
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.2")
 
-addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.13.0")
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.14.4")
 
 addSbtPlugin("com.gu" % "sbt-riffraff-artifact" % "1.1.18")
 
