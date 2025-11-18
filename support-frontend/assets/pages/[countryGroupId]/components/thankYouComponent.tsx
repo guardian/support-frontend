@@ -242,7 +242,11 @@ export function ThankYouComponent({
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(
 			(isGuardianPrint && guestUser) ||
-				(!isPending && guestUser && !isGuardianAdLite && !isGuardianPrint),
+				(!isPending &&
+					guestUser &&
+					!isGuardianAdLite &&
+					!isGuardianPrint &&
+					!observerPrint),
 			'signUp',
 		), // Complete your Guardian account
 		...maybeThankYouModule(

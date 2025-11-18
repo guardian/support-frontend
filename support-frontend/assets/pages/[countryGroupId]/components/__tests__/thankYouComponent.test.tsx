@@ -112,7 +112,7 @@ describe('thankYouComponent', () => {
 					ratePlanKey: 'Sunday',
 					identityUserType: 'new',
 				},
-				['signUp', 'whatNext', 'observerAppDownload'],
+				['whatNext', 'observerAppDownload'],
 			);
 		});
 	});
