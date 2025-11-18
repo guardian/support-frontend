@@ -53,7 +53,6 @@ test.describe('Three Tier Checkout', () =>
 				{ context, baseURL, product, paymentType, internationalisationId },
 				async (page) => {
 					// Transition from landing page to checkout:
-
 					await forceSkipNewOnboardingExperience(page);
 
 					// 1. Select the billing frequency
