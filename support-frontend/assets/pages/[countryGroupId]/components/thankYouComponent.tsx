@@ -270,8 +270,7 @@ export function ThankYouComponent({
 				(!(isTierThree && enablePremiumDigital) &&
 					isSignedIn &&
 					!isGuardianAdLite &&
-					!observerPrint &&
-					!isGuardianPrint),
+					!isPrint),
 			'feedback',
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
