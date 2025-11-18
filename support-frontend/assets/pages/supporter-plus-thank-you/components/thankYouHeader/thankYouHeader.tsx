@@ -64,6 +64,38 @@ function ThankYouHeader({
 	const showProductCatalogMessage = isGuardianAdLite && !observerPrint;
 	const showStartDateMessage = isPrint && !isSubscriptionCard;
 
+	function renderSubHeading() {
+		if (observerPrint) {
+			return (
+				<ObserverMessage observerPrint={observerPrint} startDate={startDate} />
+			);
+		}
+
+		return (
+			<>
+				{showStartDateMessage && (
+					<StartDateMessage
+						productKey={productKey}
+						ratePlanKey={ratePlanKey}
+						startDate={startDate}
+					/>
+				)}
+
+				{isDirectDebitPayment && <DirectDebitMessage />}
+
+				{showLegitimateInterestMessage && (
+					<LegitimateInterestMessage
+						showPaymentStatus={!isDirectDebitPayment}
+					/>
+				)}
+
+				{showProductCatalogMessage && (
+					<ProductCatalogMessage productKey={productKey} />
+				)}
+			</>
+		);
+	}
+
 	return (
 		<header css={header}>
 			<Heading
@@ -75,34 +107,7 @@ function ThankYouHeader({
 				isObserverPrint={!!observerPrint}
 				promotion={promotion}
 			/>
-
-			<div css={headerSupportingText}>
-				{showStartDateMessage && (
-					<StartDateMessage
-						productKey={productKey}
-						ratePlanKey={ratePlanKey}
-						startDate={startDate}
-					/>
-				)}
-
-				{isDirectDebitPayment && (
-					<DirectDebitMessage
-						mediaGroup={observerPrint ? 'The Observer' : 'Guardian Media Group'}
-					/>
-				)}
-
-				{showLegitimateInterestMessage && (
-					<LegitimateInterestMessage
-						showPaymentStatus={!isDirectDebitPayment}
-					/>
-				)}
-
-				{observerPrint && <ObserverMessage observerPrint={observerPrint} />}
-
-				{showProductCatalogMessage && (
-					<ProductCatalogMessage productKey={productKey} />
-				)}
-			</div>
+			<div css={headerSupportingText}>{renderSubHeading()}</div>
 		</header>
 	);
 }

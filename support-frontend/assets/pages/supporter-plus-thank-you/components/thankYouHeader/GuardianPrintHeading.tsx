@@ -8,8 +8,8 @@ import {
 	longHeaderTitleText,
 	weeklyGiftLineBreak,
 } from './headingStyles';
+import HighlightText from './HighlightText';
 import { isGuardianWeeklyGiftProduct } from './utils/productMatchers';
-import YellowHighlightText from './YellowHighlightText';
 
 export default function GuardianPrintHeading({
 	productKey,
@@ -28,7 +28,7 @@ export default function GuardianPrintHeading({
 				{thankYouText}
 				<br />
 				You have now subscribed to{' '}
-				<YellowHighlightText>the Guardian Weekly</YellowHighlightText>
+				<HighlightText>the Guardian Weekly</HighlightText>
 			</h1>
 		);
 	}
@@ -40,9 +40,7 @@ export default function GuardianPrintHeading({
 				<br />
 				<div css={weeklyGiftLineBreak}>
 					<span>You have now purchased a </span>
-					<YellowHighlightText>
-						Guardian Weekly gift subscription
-					</YellowHighlightText>
+					<HighlightText>Guardian Weekly gift subscription</HighlightText>
 				</div>
 			</h1>
 		);
@@ -60,7 +58,7 @@ export default function GuardianPrintHeading({
 			{thankYouText}
 			<br />
 			You have now subscribed to the{' '}
-			<YellowHighlightText>{ratePlanDisplayName}</YellowHighlightText>
+			<HighlightText>{ratePlanDisplayName}</HighlightText>
 		</h1>
 	);
 }

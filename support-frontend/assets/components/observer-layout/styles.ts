@@ -10,6 +10,7 @@ const observerColours = {
 	pageBackgroundColor: '#F6F5F3',
 	footerBackgroundColor: '#000000',
 	footerHoverColor: '#E6E6E6',
+	HighlightTextColor: '#F1C7AA',
 };
 
 export { observerThemeButton, observerColours };

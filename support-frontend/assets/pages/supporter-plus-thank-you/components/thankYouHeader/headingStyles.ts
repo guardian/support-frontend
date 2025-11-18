@@ -25,6 +25,12 @@ export const headerTitleText = css`
 	}
 `;
 
+export const observerHeaderTitleText = css`
+	${from.tablet} {
+		font-size: 28px;
+	}
+`;
+
 export const longHeaderTitleText = css`
 	${titlepiece42};
 	font-size: 24px;
