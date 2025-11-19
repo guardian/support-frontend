@@ -1,21 +1,18 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import BulletPointedList from 'components/thankYou/utilityComponents/BulletPointedList';
-import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
 export const signUpHeader = 'Complete your Guardian account';
 
 export function SignUpBodyCopy({
 	isTierThree,
-	observerPrint,
 	isGuardianPrint,
 }: {
 	isTierThree?: boolean;
 	isGuardianPrint?: boolean;
-	observerPrint?: ObserverPrint;
 }): JSX.Element {
 	const upperCopy = () => {
-		if (observerPrint ?? isGuardianPrint) {
+		if (isGuardianPrint) {
 			return 'To finish creating your account, please check your inbox for an email from us. This step will complete your account setup and will allow you to manage your subscription.';
 		}
 		if (isTierThree) {
@@ -30,7 +27,7 @@ export function SignUpBodyCopy({
 	return (
 		<>
 			<p>{upperCopy()}</p>
-			{!observerPrint && !isGuardianPrint && (
+			{!isGuardianPrint && (
 				<>
 					{!isTierThree && (
 						<div

@@ -38,6 +38,12 @@ const containerMobileStyles = css`
 	}
 `;
 
+const noBordersContainerMobileStyles = css`
+	${until.tablet} {
+		background-color: ${palette.neutral[100]};
+	}
+`;
+
 const columns = css`
 	position: relative;
 	color: ${palette.neutral[7]};
@@ -70,7 +76,11 @@ export default function GuardianPageLayout({
 			}
 		>
 			{noBorders ? (
-				<Container cssOverrides={containerStyles}>{children}</Container>
+				<Container
+					cssOverrides={[containerStyles, noBordersContainerMobileStyles]}
+				>
+					{children}
+				</Container>
 			) : (
 				<>
 					<CheckoutHeading withTopBorder={true} />

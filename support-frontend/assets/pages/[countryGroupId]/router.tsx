@@ -1,8 +1,10 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { HoldingContent } from 'components/serverSideRendered/holdingContent';
+import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
+import { ObserverHoldingContent } from 'components/serverSideRendered/observerHoldingContent';
 import { WithCoreWebVitals } from 'helpers/coreWebVitals/withCoreWebVitals';
+import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	getAbParticipations,
@@ -69,12 +71,20 @@ const StudentLandingPageGlobalContainer = lazy(() => {
 	});
 });
 
+function GuardianOrObserverHoldingContent() {
+	if (isObserverSubdomain()) {
+		return <ObserverHoldingContent />;
+	}
+
+	return <GuardianHoldingContent />;
+}
+
 const router = createBrowserRouter([
 	...Object.values(SupportRegionId).flatMap((supportRegionId) => [
 		{
 			path: `/${supportRegionId}/contribute/:campaignCode?`,
 			element: (
-				<Suspense fallback={<HoldingContent />}>
+				<Suspense fallback={<GuardianHoldingContent />}>
 					<LandingPage
 						supportRegionId={supportRegionId}
 						abParticipations={abParticipations}
@@ -86,7 +96,7 @@ const router = createBrowserRouter([
 		{
 			path: `/${supportRegionId}/checkout`,
 			element: (
-				<Suspense fallback={<HoldingContent />}>
+				<Suspense fallback={<GuardianOrObserverHoldingContent />}>
 					<Checkout
 						supportRegionId={supportRegionId}
 						appConfig={appConfig}
@@ -100,7 +110,7 @@ const router = createBrowserRouter([
 		{
 			path: `/${supportRegionId}/one-time-checkout`,
 			element: (
-				<Suspense fallback={<HoldingContent />}>
+				<Suspense fallback={<GuardianHoldingContent />}>
 					<OneTimeCheckout
 						supportRegionId={supportRegionId}
 						appConfig={appConfig}
@@ -114,7 +124,7 @@ const router = createBrowserRouter([
 		{
 			path: `/${supportRegionId}/thank-you`,
 			element: (
-				<Suspense fallback={<HoldingContent />}>
+				<Suspense fallback={<GuardianOrObserverHoldingContent />}>
 					<ThankYou
 						supportRegionId={supportRegionId}
 						appConfig={appConfig}
@@ -127,7 +137,7 @@ const router = createBrowserRouter([
 		{
 			path: `/${supportRegionId}/guardian-ad-lite`,
 			element: (
-				<Suspense fallback={<HoldingContent />}>
+				<Suspense fallback={<GuardianHoldingContent />}>
 					<GuardianAdLiteLanding supportRegionId={supportRegionId} />
 				</Suspense>
 			),
@@ -135,7 +145,7 @@ const router = createBrowserRouter([
 		{
 			path: `/${supportRegionId}/student`,
 			element: (
-				<Suspense fallback={<HoldingContent />}>
+				<Suspense fallback={<GuardianHoldingContent />}>
 					<StudentLandingPageGlobalContainer
 						supportRegionId={supportRegionId}
 						landingPageVariant={landingPageParticipations.variant}
@@ -147,7 +157,7 @@ const router = createBrowserRouter([
 	{
 		path: '/au/student/UTS',
 		element: (
-			<Suspense fallback={<HoldingContent />}>
+			<Suspense fallback={<GuardianHoldingContent />}>
 				<StudentLandingPageUTSContainer
 					landingPageVariant={landingPageParticipations.variant}
 				/>
