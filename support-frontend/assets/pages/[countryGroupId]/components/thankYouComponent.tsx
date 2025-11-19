@@ -305,7 +305,7 @@ export function ThankYouComponent({
 
 	return (
 		<ThemeProvider theme={theme}>
-			<PageLayout observerPrint={observerPrint} noBorders noFooterLinks>
+			<PageLayout observerPrint={observerPrint} noFooterLinks>
 				<div css={thankYouContainer}>
 					<div css={headerContainer}>
 						<ThankYouHeader
