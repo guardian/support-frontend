@@ -19,11 +19,8 @@ import NewspaperArchiveImage from './newspaperArchive/newspaperArchiveImage';
 
 const container = css`
 	background: white;
-	padding-left: 10px;
-	padding-right: 10px;
-	padding-top: ${space[2]}px;
-	padding-bottom: ${space[5]}px;
-	border-bottom: 1px solid ${neutral[86]};
+	padding: ${space[2]}px 10px 0;
+	border-top: 1px solid ${neutral[86]};
 	break-inside: avoid;
 	:not(:first-child) {
 		margin-top: ${space[4]}px;
