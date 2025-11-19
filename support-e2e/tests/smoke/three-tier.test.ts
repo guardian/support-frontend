@@ -27,7 +27,7 @@ const tests = [
 	},
 	{
 		productLabel: ProductTierLabel.TierThree,
-		product: 'TierThree',
+		product: 'DigitalSubscription',
 		billingFrequency: 'Annual',
 		paymentType: 'Credit/Debit card',
 		internationalisationId: 'EU',

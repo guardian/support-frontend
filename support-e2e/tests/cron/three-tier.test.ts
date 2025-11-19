@@ -13,7 +13,7 @@ const tests = [
 	},
 	{
 		productLabel: ProductTierLabel.TierThree,
-		product: 'TierThree',
+		product: 'DigitalSubscription',
 		billingFrequency: 'Monthly',
 		paymentType: 'PayPal',
 		internationalisationId: 'UK',

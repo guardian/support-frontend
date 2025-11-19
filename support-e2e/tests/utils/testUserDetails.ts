@@ -26,6 +26,7 @@ const requireAddress = (
 	switch (product) {
 		case 'GuardianWeeklyDomestic':
 		case 'GuardianWeeklyRestOfWorld':
+		case 'TierThree':
 			return true; // global
 		case 'HomeDelivery':
 		case 'NationalDelivery':
