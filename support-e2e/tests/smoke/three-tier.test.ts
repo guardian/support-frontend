@@ -27,7 +27,7 @@ const tests = [
 	},
 	{
 		productLabel: ProductTierLabel.TierThree,
-		product: 'TierThree',
+		product: 'DigitalSubscription',
 		billingFrequency: 'Annual',
 		paymentType: 'Credit/Debit card',
 		internationalisationId: 'EU',
@@ -53,7 +53,6 @@ test.describe('Three Tier Checkout', () =>
 				{ context, baseURL, product, paymentType, internationalisationId },
 				async (page) => {
 					// Transition from landing page to checkout:
-
 					await forceSkipNewOnboardingExperience(page);
 
 					// 1. Select the billing frequency
