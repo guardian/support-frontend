@@ -6,6 +6,8 @@ if (req.http.host ~ "^observer\." &&
     !req.url ~ "^/assets/" &&
     !req.url ~ "^/favicon.ico" &&
     !req.url ~ "^/favicon.png" &&
+    !req.url ~ "^/oauth/authorize" &&
+    !req.url ~ "^/oauth/callback"
   ) {
   error 802 "redirect";
 }
