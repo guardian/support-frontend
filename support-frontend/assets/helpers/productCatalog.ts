@@ -13,6 +13,7 @@ import type {
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { Participations } from './abTests/models';
 import { getFeatureFlags } from './featureFlags';
+import { isObserverSubdomain } from './globalsAndSwitches/observer';
 
 export enum ProductTierLabel {
 	TierOne = 'Support',
@@ -297,14 +298,18 @@ const paperPlusRatePlans: RatePlanDetails = {
 	},
 	Sunday: {
 		billingPeriod: BillingPeriod.Monthly,
-		displayName: 'The Observer, digital & print',
+		displayName: isObserverSubdomain()
+			? 'The Observer, digital & print'
+			: 'The Observer',
 		label: 'Observer',
 
 		hideSimilarProductsConsent: true,
 	},
 	SundayPlus: {
 		billingPeriod: BillingPeriod.Monthly,
-		displayName: 'The Observer, digital & print',
+		displayName: isObserverSubdomain()
+			? 'The Observer, digital & print'
+			: 'The Observer',
 		label: 'Observer',
 
 		hideSimilarProductsConsent: true,
