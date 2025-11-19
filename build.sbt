@@ -43,7 +43,6 @@ inThisBuild(
     scalaVersion := "2.13.13",
     // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
     updateOptions := updateOptions.value.withCachedResolution(true),
-    resolvers ++= Resolver.sonatypeOssRepos("releases"), // libraries that haven't yet synced to maven central
     assembly / assemblyMergeStrategy := {
       case PathList("models", xs @ _*) => MergeStrategy.discard
       case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
