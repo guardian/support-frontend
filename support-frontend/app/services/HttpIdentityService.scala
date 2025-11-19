@@ -112,6 +112,14 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .withHttpHeaders("Authorization" -> s"Bearer $apiClientToken")
   }
 
+  private def requestWithAccessToken(path: String, accessToken: String): WSRequest = {
+    val url = s"$apiUrl/$path"
+    logger.info(s"Making request with access token to: $url")
+    wsClient
+      .url(url)
+      .withHttpHeaders("Authorization" -> s"Bearer $accessToken")
+  }
+
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean] = {
     val payload = Json.obj("email" -> email, "set-consents" -> Json.arr("supporter"))
     request(s"consent-email").post(payload).map { response =>
@@ -152,8 +160,8 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .subflatMap(resp => resp.json.validate[CreateSignInTokenResponse].asEither.leftMap(_.mkString(",")))
   }
 
-  def getNewsletters()(implicit ec: ExecutionContext): Future[List[Newsletter]] = {
-    request("users/me/newsletters")
+  def getNewsletters(accessToken: String)(implicit ec: ExecutionContext): Future[List[Newsletter]] = {
+    requestWithAccessToken("users/me/newsletters", accessToken)
       .get()
       .map { response =>
         if (response.status >= 200 && response.status < 300) {

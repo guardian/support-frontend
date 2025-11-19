@@ -3,7 +3,7 @@ import { palette, space } from '@guardian/source/foundations';
 import { Button, Stack, SvgTickRound } from '@guardian/source/react-components';
 import GridImage from 'components/gridImage/gridImage';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
-import { helpCentreUrl, manageSubsUrl } from 'helpers/urls/externalLinks';
+import { getHelpCentreUrl, getManageSubsUrl } from 'helpers/urls/externalLinks';
 import type {
 	HandleStepNavigationFunction,
 	OnboardingProductKey,
@@ -100,12 +100,12 @@ export function OnboardingCompleted({
 			</ContentBox>
 			<p css={newslettersAppUsageInformation}>
 				Need help? Visit our{' '}
-				<a href={helpCentreUrl} css={linkStyle}>
+				<a href={getHelpCentreUrl()} css={linkStyle}>
 					Help Centre
 				</a>{' '}
 				to find the FAQs and contact options. You can manage your subscription
 				anytime in{' '}
-				<a href={manageSubsUrl} css={linkStyle}>
+				<a href={getManageSubsUrl()} css={linkStyle}>
 					Manage my account
 				</a>
 				.

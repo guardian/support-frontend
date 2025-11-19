@@ -68,8 +68,14 @@ class IdentityController(
   }
 
   def getNewsletters(): Action[AnyContent] = PrivateAction.async { implicit request =>
-    identityService.getNewsletters().map { newsletters =>
-      Ok(GetNewslettersResponse(newsletters).asJson)
+    request.cookies.get("GU_ACCESS_TOKEN") match {
+      case Some(cookie) =>
+        identityService.getNewsletters(cookie.value).map { newsletters =>
+          Ok(GetNewslettersResponse(newsletters).asJson)
+        }
+      case None =>
+        logger.error(scrub"No GU_ACCESS_TOKEN cookie found")
+        Future.successful(Unauthorized("No access token found"))
     }
   }
 }
