@@ -254,7 +254,10 @@ export function ThankYouComponent({
 			'signIn',
 		), // Sign in to access your benefits
 		...maybeThankYouModule(isTierThree || isPremiumDigital, 'benefits'),
-		...maybeThankYouModule(!!observerPrint, 'observerAppDownload'),
+		...maybeThankYouModule(
+			!!observerPrint && isObserverSubdomain(),
+			'observerAppDownload',
+		),
 		...maybeThankYouModule(
 			isTierThree || isNationalDelivery,
 			'subscriptionStart',
