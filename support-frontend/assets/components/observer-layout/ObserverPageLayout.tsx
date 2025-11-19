@@ -29,6 +29,12 @@ const darkBackgroundContainerMobile = css`
 	}
 `;
 
+const noBordersContainerMobileStyles = css`
+	${until.tablet} {
+		background-color: ${palette.neutral[100]};
+	}
+`;
+
 const columns = css`
 	position: relative;
 	color: ${palette.neutral[7]};
@@ -47,7 +53,12 @@ export default function ObserverPageLayout({
 	return (
 		<PageScaffold header={<ObserverHeader />} footer={<ObserverFooter />}>
 			{noBorders ? (
-				<Container cssOverrides={darkBackgroundContainerMobile}>
+				<Container
+					cssOverrides={[
+						darkBackgroundContainerMobile,
+						noBordersContainerMobileStyles,
+					]}
+				>
 					{children}
 				</Container>
 			) : (
