@@ -23,7 +23,7 @@
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 @main(
-  title = "Support the Guardian | Checkout",
+  title =  if (ObserverUtils.isObserverSubdomain(request.host)) "The Observer, digital & print | Checkout" else "Support the Guardian | Checkout",
   mainElement = assets.getSsrCacheContentsAsHtml(divId = "router", file = if (ObserverUtils.isObserverSubdomain(request.host)) "ssr-observer-holding-content.html" else "ssr-holding-content.html"),
   mainJsBundle = RefPath("[countryGroupId]/router.js"),
   mainStyleBundle = None,
