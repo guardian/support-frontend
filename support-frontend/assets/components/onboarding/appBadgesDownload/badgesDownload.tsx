@@ -7,8 +7,9 @@ import {
 } from '@guardian/source/foundations';
 import { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
-import { AppsQrCode } from './appsQrCode';
 import { AppStoreMobile } from './appStore';
+import { FeastAppsQrCode } from './feastAppsQrCode';
+import { GuardianAppsQrCode } from './guardianAppsQrCode';
 import { PlayStoreMobile } from './playStore';
 
 const guardianAppUrl = 'https://guardian.go.link/home?adj_t=1u2r07na';
@@ -88,6 +89,12 @@ export function OnboardingAppBadgesDownload({
 		onboardingStep === OnboardingSteps.GuardianApp
 			? guardianAppUrl
 			: feastAppUrl;
+	const qrCode =
+		onboardingStep === OnboardingSteps.GuardianApp ? (
+			<GuardianAppsQrCode />
+		) : (
+			<FeastAppsQrCode />
+		);
 
 	return (
 		<div css={container}>
@@ -103,7 +110,7 @@ export function OnboardingAppBadgesDownload({
 				<>
 					<div css={separator} />
 					<div css={qrContainer}>
-						<AppsQrCode />
+						{qrCode}
 						<p>Scan to get the App</p>
 					</div>
 				</>

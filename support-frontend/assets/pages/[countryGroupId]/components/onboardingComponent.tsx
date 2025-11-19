@@ -86,13 +86,13 @@ function OnboardingComponent({
 	// Fetch newsletters from Identity API
 	const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
 
-	useEffect(() => {
-		const fetchNewsletters = async () => {
-			const newslettersData = await getNewsletters();
-			setNewsletters(newslettersData);
-			console.debug('Newsletters fetched:', newslettersData);
-		};
+	const fetchNewsletters = async () => {
+		const newslettersData = await getNewsletters();
+		setNewsletters(newslettersData);
+		console.debug('Newsletters fetched:', newslettersData);
+	};
 
+	useEffect(() => {
 		void fetchNewsletters();
 	}, []);
 
@@ -163,6 +163,7 @@ function OnboardingComponent({
 			if (data.type === 'userStateChange') {
 				if (data.value === 'userSignedIn') {
 					setShowIdentityIframe(false);
+					void fetchNewsletters();
 				}
 			}
 		};

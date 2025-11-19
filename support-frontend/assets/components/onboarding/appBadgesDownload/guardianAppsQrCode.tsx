@@ -1,4 +1,4 @@
-export function AppsQrCode() {
+export function GuardianAppsQrCode() {
 	return (
 		<svg
 			width="84"
