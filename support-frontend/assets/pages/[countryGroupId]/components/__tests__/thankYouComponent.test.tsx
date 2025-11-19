@@ -203,7 +203,12 @@ describe('thankYouComponent', () => {
 		it('should display the correct thankyou cards for Digital Edition', () => {
 			testComponent(
 				{ productKey: 'DigitalSubscription', ratePlanKey: 'Monthly' },
-				['signIn', 'appDownloadEditions', 'socialShare'],
+				[
+					'signIn',
+					'benefits',
+					'appDownloadEditions',
+					'newspaperArchiveBenefit',
+				],
 			);
 		});
 
