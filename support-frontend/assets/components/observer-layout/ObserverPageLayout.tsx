@@ -37,6 +37,7 @@ const noBordersContainerMobileStyles = css`
 
 const topBorder = css`
 	border-top: 1px solid ${palette.neutral[86]};
+	padding-top: ${space[2]}px;
 `;
 
 const columns = css`
