@@ -1,14 +1,15 @@
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
-import { Button, Stack, SvgTickRound } from '@guardian/source/react-components';
+import {
+	LinkButton,
+	Stack,
+	SvgTickRound,
+} from '@guardian/source/react-components';
 import GridImage from 'components/gridImage/gridImage';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { getHelpCentreUrl, getManageSubsUrl } from 'helpers/urls/externalLinks';
-import type {
-	HandleStepNavigationFunction,
-	OnboardingProductKey,
-} from 'pages/[countryGroupId]/components/onboardingComponent';
-import { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
+import { isProd } from 'helpers/urls/url';
+import type { OnboardingProductKey } from 'pages/[countryGroupId]/components/onboardingComponent';
 import ContentBox from '../contentBox';
 import {
 	benefitsItem,
@@ -40,11 +41,9 @@ const completedStack = css`
 export function OnboardingCompleted({
 	productKey,
 	landingPageSettings,
-	handleStepNavigation,
 }: {
 	productKey?: OnboardingProductKey;
 	landingPageSettings: LandingPageVariant;
-	handleStepNavigation: HandleStepNavigationFunction;
 }) {
 	const productSettings =
 		productKey && landingPageSettings.products[productKey];
@@ -89,13 +88,17 @@ export function OnboardingCompleted({
 							</li>
 						))}
 					</ul>
-					<Button
+					<LinkButton
 						priority="primary"
 						cssOverrides={[buttonOverrides]}
-						onClick={() => handleStepNavigation(OnboardingSteps.Completed)}
+						href={
+							isProd()
+								? 'https://theguardian.com'
+								: 'https://code.dev-theguardian.com'
+						}
 					>
 						Continue to the Guardian
-					</Button>
+					</LinkButton>
 				</Stack>
 			</ContentBox>
 			<p css={newslettersAppUsageInformation}>

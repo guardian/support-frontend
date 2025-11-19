@@ -230,7 +230,6 @@ function OnboardingComponent({
 				<OnboardingCompleted
 					productKey={productKey}
 					landingPageSettings={landingPageSettings}
-					handleStepNavigation={handleStepNavigation}
 				/>
 			)}
 		</OnboardingLayout>
