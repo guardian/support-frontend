@@ -17,6 +17,7 @@ import {
 } from 'helpers/productPrice/billingPeriods';
 import { getThankYouOrder } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
 import type {
+	CurrentUserState,
 	HandleStepNavigationFunction,
 	OnboardingProps,
 } from 'pages/[countryGroupId]/components/onboardingComponent';
@@ -50,19 +51,40 @@ const paymentMethodContainer = css`
 	gap: ${space[1]}px;
 `;
 
+const onboardingSummaryCopyMapping: Record<
+	CurrentUserState,
+	{ title: string; description: string }
+> = {
+	existingUserSignedIn: {
+		title: 'Just one more step',
+		description:
+			'Let’s show you what’s included in your all-access subscription.',
+	},
+	userSignedIn: {
+		title: 'Welcome back. You’re signed in!',
+		description: 'You can now explore your exclusive benefits.',
+	},
+	userRegistered: {
+		title: 'Welcome to the Guardian',
+		description:
+			'Your account is set up and ready to go. Now you can explore your exclusive benefits.',
+	},
+};
+
 export function OnboardingSummarySuccessfulSignIn({
 	handleStepNavigation,
+	userState,
 }: {
 	handleStepNavigation: HandleStepNavigationFunction;
+	userState: CurrentUserState;
 }) {
 	const [switchNewsletterEnabled, setSwitchNewsletterEnabled] = useState(true);
 
 	return (
 		<Stack space={2}>
-			<h1 css={headings}>Welcome to the Guardian</h1>
+			<h1 css={headings}>{onboardingSummaryCopyMapping[userState].title}</h1>
 			<p css={descriptions}>
-				Your account is set up and ready to go. Now you can explore your
-				exclusive benefits.
+				{onboardingSummaryCopyMapping[userState].description}
 			</p>
 
 			<Stack

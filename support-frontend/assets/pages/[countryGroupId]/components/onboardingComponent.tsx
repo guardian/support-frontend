@@ -31,6 +31,8 @@ const identityFrameStyles = css`
 	border-radius: ${space[2]}px;
 `;
 
+type UserStateChange = 'userSignedIn' | 'userRegistered';
+
 type MessageEventData =
 	| {
 			type: 'iframeHeightChange';
@@ -40,8 +42,11 @@ type MessageEventData =
 	| {
 			type: 'userStateChange';
 			context: 'supporterOnboarding';
-			value: 'userSignedIn' | 'userRegistered' | 'authError';
+			value: UserStateChange;
 	  };
+
+export type CurrentUserState = UserStateChange | 'existingUserSignedIn';
+
 export type HandleStepNavigationFunction = (
 	targetStep: OnboardingSteps,
 ) => void;
@@ -119,6 +124,9 @@ function OnboardingComponent({
 	const [showIdentityIframe, setShowIdentityIframe] = useState(
 		userNotSignedIn || guestUser,
 	);
+	const [userState, setUserState] = useState<CurrentUserState>(
+		'existingUserSignedIn',
+	);
 	const identityIframeRef = useRef<HTMLIFrameElement>(null);
 
 	// Handle URL params and set the current step from navigation
@@ -161,8 +169,9 @@ function OnboardingComponent({
 			}
 
 			if (data.type === 'userStateChange') {
-				if (data.value === 'userSignedIn') {
+				if (['userSignedIn', 'userRegistered'].includes(data.value)) {
 					setShowIdentityIframe(false);
+					setUserState(data.value);
 					void fetchNewsletters();
 				}
 			}
@@ -204,6 +213,7 @@ function OnboardingComponent({
 						) : (
 							<OnboardingSummarySuccessfulSignIn
 								handleStepNavigation={handleStepNavigation}
+								userState={userState}
 							/>
 						)}
 					</ContentBox>
