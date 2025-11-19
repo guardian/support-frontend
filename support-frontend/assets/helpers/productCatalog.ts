@@ -500,7 +500,6 @@ export const productCatalogDescription: Record<
 
 const paperArchiveDigitalBenefit = {
 	copy: `Digital access to the Guardian’s 200 year newspaper archive`,
-	isNew: true,
 	tooltip:
 		'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was, since 1821.',
 	specificToRegions: [
@@ -513,9 +512,13 @@ const paperArchiveDigitalBenefit = {
 	] as CountryGroupId[],
 };
 
+const digitalPaperBenefitUK = {
+	copy: 'Daily digital Guardian newspaper',
+	specificToRegions: ['GBPCountries'] as CountryGroupId[],
+};
+
 const paperArchiveDigitalBenefitUK = {
 	copy: `Digital access to the Guardian’s 200 year newspaper archive`,
-	isNew: true,
 	tooltip:
 		'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was in the UK, since 1821.',
 	specificToRegions: ['GBPCountries'] as CountryGroupId[],
@@ -523,13 +526,11 @@ const paperArchiveDigitalBenefitUK = {
 
 const weeklyDigitalBenefit = {
 	copy: `Guardian Weekly e-magazine`,
-	isNew: true,
 	tooltip: `Accessed through the Guardian Editions app, the Guardian Weekly e-magazine features a handpicked and carefully curated selection of in-depth articles, global news, opinion and more. Enjoy wherever you are, on your favourite device.`,
 };
 
 const editionsDigitalBenefit = {
 	copy: `The Long Read e-magazine`,
-	isNew: true,
 	tooltip: `Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.`,
 };
 
@@ -549,6 +550,7 @@ export const productCatalogDescriptionPremiumDigital = {
 		editionsDigitalBenefit,
 		paperArchiveDigitalBenefit,
 		paperArchiveDigitalBenefitUK,
+		digitalPaperBenefitUK,
 	],
 };
 
