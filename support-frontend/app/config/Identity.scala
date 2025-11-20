@@ -33,5 +33,6 @@ class Identity(config: Config) {
   lazy val oauthTokenUrl = config.getString("oauth.token.url")
   lazy val oauthCallbackUrl = config.getString("oauth.callback.url")
   lazy val oauthEventsCallbackUrl = config.getString("oauth.eventsCallback.url")
+  lazy val oauthObserverCallbackUrl = config.getString("oauth.observerCallback.url")
   lazy val oauthScopes = config.getString("oauth.scopes")
 }
