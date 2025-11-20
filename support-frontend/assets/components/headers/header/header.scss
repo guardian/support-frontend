@@ -24,24 +24,6 @@ $header-links-min-width: gu-span(12);
 		align-items: stretch;
 		justify-content: flex-start;
 	}
-
-	.svg-guardian-logo {
-		display: block;
-		float: right;
-		margin-top: math.div($gu-v-spacing, 2.4);
-		margin-bottom: $gu-v-spacing * 1.5;
-		height: 48px;
-		width: auto;
-		@include mq($from: mobileLandscape) {
-			height: 56px;
-		}
-		@include mq($from: tablet) {
-			height: 72px;
-		}
-		@include mq($from: desktop) {
-			height: 95px;
-		}
-	}
 }
 
 .component-header--padlock {
