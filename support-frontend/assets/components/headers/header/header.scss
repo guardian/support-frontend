@@ -175,7 +175,8 @@ $header-links-min-width: gu-span(12);
 	margin: 0 ($gu-h-spacing * -2) 0 0;
 	box-sizing: border-box;
 
-	@media (min-width: $header-links-min-width + 40) {
+
+  @media (min-width: #{$header-links-min-width + 40}) {
 		margin: 0 ($gu-h-spacing * -1);
 		border-left: 1px solid gu-colour(brand-pastel);
 		border-right: 1px solid gu-colour(brand-pastel);
