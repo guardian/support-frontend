@@ -82,7 +82,7 @@ describe('ThankYouNavLinks', () => {
 		});
 
 		// Assert
-		expect(button).toHaveAttribute('href', 'https://www.theguardian.com');
+		expect(button).toHaveAttribute('href', 'theguardian.com');
 
 		expect(button).toHaveStyle({
 			color: themeButton.textTertiary,

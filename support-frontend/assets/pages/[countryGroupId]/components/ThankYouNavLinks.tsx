@@ -11,6 +11,7 @@ import {
 	OPHAN_COMPONENT_ID_RETURN_TO_OBSERVER,
 } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { getBaseDomain, isProd } from 'helpers/urls/url';
 import getObserver from '../helpers/getObserver';
 
 const buttonContainer = css`
@@ -39,6 +40,9 @@ export default function ThankYouNavLinks({
 	const buttonText = observerThemeButton
 		? 'Get Started'
 		: 'Return to the Observer';
+	const domain = getBaseDomain();
+	const dcr =
+		domain === 'thegulocal.com' ? 'https://www.theguardian.com' : domain;
 
 	return (
 		<div css={buttonContainer}>
@@ -58,11 +62,13 @@ export default function ThankYouNavLinks({
 
 			{productKey !== 'GuardianAdLite' && !observerPrint && (
 				<LinkButton
-					href="https://www.theguardian.com"
+					href={dcr}
 					priority="tertiary"
-					onClick={() =>
-						trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)
-					}
+					onClick={() => {
+						if (isProd()) {
+							trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN);
+						}
+					}}
 				>
 					Return to the Guardian
 				</LinkButton>
