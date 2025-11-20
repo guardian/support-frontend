@@ -24,31 +24,39 @@ const contentColumnStyles = css`
 interface OnboardingLayoutProps extends OnboardingProps {
 	children: ReactNode;
 	onboardingStep: OnboardingSteps;
+	scrollToTopRef: React.RefObject<HTMLDivElement>;
 }
 
 function OnboardingLayout({
 	children,
 	onboardingStep,
+	scrollToTopRef,
 	...onboardingProps
 }: OnboardingLayoutProps) {
 	return (
-		<PageScaffold
-			header={<Header />}
-			footer={
-				<FooterWithContents>
-					<FooterLinks />
-				</FooterWithContents>
-			}
-		>
-			<OnboardingHeading onboardingStep={onboardingStep} {...onboardingProps} />
-			<Container sideBorders cssOverrides={greyBackgroundContainer}>
-				<Columns collapseUntil="tablet">
-					<Column cssOverrides={contentColumnStyles} span={[1, 10, 8]}>
-						{children}
-					</Column>
-				</Columns>
-			</Container>
-		</PageScaffold>
+		<>
+			<div ref={scrollToTopRef} />
+			<PageScaffold
+				header={<Header />}
+				footer={
+					<FooterWithContents>
+						<FooterLinks />
+					</FooterWithContents>
+				}
+			>
+				<OnboardingHeading
+					onboardingStep={onboardingStep}
+					{...onboardingProps}
+				/>
+				<Container sideBorders cssOverrides={greyBackgroundContainer}>
+					<Columns collapseUntil="tablet">
+						<Column cssOverrides={contentColumnStyles} span={[1, 10, 8]}>
+							{children}
+						</Column>
+					</Columns>
+				</Container>
+			</PageScaffold>
+		</>
 	);
 }
 

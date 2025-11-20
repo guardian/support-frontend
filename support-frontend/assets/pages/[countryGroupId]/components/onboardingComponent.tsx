@@ -80,12 +80,15 @@ function OnboardingComponent({
 	identityUserType,
 }: OnboardingProps) {
 	const order = getThankYouOrder();
+
 	if (!order) {
 		const sessionStorageOrder = storage.session.get('thankYouOrder');
 		return (
 			<div>Unable to read your order {JSON.stringify(sessionStorageOrder)}</div>
 		);
 	}
+
+	const scrollToTopRef = useRef<HTMLDivElement>(null);
 
 	// -------------
 	// Fetch newsletters from Identity API
@@ -145,7 +148,6 @@ function OnboardingComponent({
 
 	// Handle URL params and set the current step from navigation
 	const handleStepNavigation: HandleStepNavigationFunction = (targetStep) => {
-		setCurrentStep(targetStep);
 		searchParams[1]((prev) => {
 			prev.set('step', targetStep);
 			return prev;
@@ -156,6 +158,10 @@ function OnboardingComponent({
 		if (searchParams[0].has('step')) {
 			const urlStep = searchParams[0].get('step') as OnboardingSteps;
 			setCurrentStep(urlStep);
+
+			requestAnimationFrame(() => {
+				scrollToTopRef.current?.scrollIntoView({ behavior: 'smooth' });
+			});
 		} else {
 			setCurrentStep(OnboardingSteps.Summary);
 			searchParams[1]((prev) => {
@@ -200,6 +206,7 @@ function OnboardingComponent({
 
 	return (
 		<OnboardingLayout
+			scrollToTopRef={scrollToTopRef}
 			onboardingStep={currentStep ?? OnboardingSteps.Summary}
 			supportRegionId={supportRegionId}
 			csrf={csrf}

@@ -182,8 +182,11 @@ function OnboardingSummary({
 					<h1 css={headings}>Purchase summary</h1>
 					<p css={descriptions}>
 						{`Thanks for your payment. We’ve sent a payment confirmation email to
-                    ${order?.email ?? 'your email address'}.`}
+                    `}
 					</p>
+					<span css={boldDescriptions}>{`${
+						order?.email ?? 'your email address'
+					}.`}</span>
 
 					<Stack space={2} cssOverrides={paymentDetailsBox}>
 						<p css={boldDescriptions}>Payment details</p>

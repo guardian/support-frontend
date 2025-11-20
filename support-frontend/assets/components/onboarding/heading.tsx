@@ -78,6 +78,7 @@ const thankYouHeading = css`
 const thankYouSubtext = css`
 	align-self: flex-start;
 	margin: 0;
+	margin-bottom: ${space[2]}px;
 
 	${textSans17}
 	color: white;

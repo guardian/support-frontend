@@ -137,7 +137,7 @@ export function OnboardingAppsDiscovery({
 									/>
 								</div>
 								<span css={benefitsItemText}>
-									<b css={boldDescriptions}>{benefit.title}</b> -{' '}
+									<b css={boldDescriptions}>{benefit.title}</b> —{' '}
 									{benefit.description}
 								</span>{' '}
 							</li>

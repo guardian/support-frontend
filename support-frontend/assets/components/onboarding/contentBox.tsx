@@ -7,8 +7,11 @@ const contentBoxMainStyle = css`
 	background-color: ${neutral[100]};
 	border: 1px solid ${neutral[100]};
 	border-radius: ${space[3]}px;
-	padding: ${space[3]}px;
 	padding-bottom: ${space[6]}px;
+`;
+
+const contentBoxPaddingStyle = css`
+	padding: ${space[3]}px;
 
 	${from.tablet} {
 		padding: ${space[8]}px;
@@ -17,11 +20,26 @@ const contentBoxMainStyle = css`
 
 interface ContentBoxProps {
 	children: React.ReactNode;
+	removePadding?: boolean;
 	cssOverrides?: SerializedStyles;
 }
 
-function ContentBox({ children, cssOverrides }: ContentBoxProps) {
-	return <div css={[contentBoxMainStyle, cssOverrides]}>{children}</div>;
+function ContentBox({
+	children,
+	cssOverrides,
+	removePadding = false,
+}: ContentBoxProps) {
+	return (
+		<div
+			css={[
+				cssOverrides,
+				contentBoxMainStyle,
+				!removePadding ? contentBoxPaddingStyle : css``,
+			]}
+		>
+			{children}
+		</div>
+	);
 }
 
 export default ContentBox;

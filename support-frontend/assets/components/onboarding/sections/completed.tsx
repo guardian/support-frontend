@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { palette, space } from '@guardian/source/foundations';
+import { from, palette, space } from '@guardian/source/foundations';
 import {
 	LinkButton,
 	Stack,
@@ -38,6 +38,14 @@ const completedStack = css`
 	z-index: 1;
 `;
 
+const completedStackPadding = css`
+	padding: ${space[3]}px;
+
+	${from.tablet} {
+		padding: ${space[8]}px;
+	}
+`;
+
 export function OnboardingCompleted({
 	productKey,
 	landingPageSettings,
@@ -50,27 +58,29 @@ export function OnboardingCompleted({
 
 	return (
 		<Stack space={5} cssOverrides={completedStack}>
-			<ContentBox>
-				<Stack space={5}>
-					<div css={[heroContainer, heroAspectRatio]}>
-						<GridImage
-							gridId={'onboardingCompletedHero'}
-							srcSizes={[2000, 1000, 500]}
-							sizes="(max-width: 739px) 140px, 422px"
-							imgType="png"
-							altText={'Onboarding completed hero'}
-						/>
-					</div>
+			<ContentBox removePadding>
+				<div css={[heroContainer, heroAspectRatio]}>
+					<GridImage
+						gridId={'onboardingCompletedHero'}
+						srcSizes={[2000, 1000, 500]}
+						sizes="(max-width: 739px) 140px, 422px"
+						imgType="png"
+						altText={'Onboarding completed hero'}
+					/>
+				</div>
+				<Stack space={5} cssOverrides={completedStackPadding}>
 					<div css={separator} />
-					<h1 css={headings}>Thank you</h1>
-					<p css={descriptions}>
-						In a world increasingly shaped by disinformation and division, the
-						Guardian’s trusted journalism stands as a powerful counterforce.
-					</p>
-					<p css={descriptions}>
-						Your support makes that possible, and now that your All-access
-						digital subscription is active, you have access to:
-					</p>
+					<Stack space={2}>
+						<h1 css={headings}>Thank you</h1>
+						<p css={descriptions}>
+							In a world increasingly shaped by disinformation and division, the
+							Guardian’s trusted journalism stands as a powerful counterforce.
+						</p>
+						<p css={descriptions}>
+							Your support makes that possible, and now that your All-access
+							digital subscription is active, you have access to:
+						</p>
+					</Stack>
 					<ul>
 						{productSettings?.benefits.map((benefit) => (
 							<li
