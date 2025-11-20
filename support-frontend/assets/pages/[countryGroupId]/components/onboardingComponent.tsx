@@ -116,9 +116,23 @@ function OnboardingComponent({
 	const iframeOrigin = `${
 		documentLocation.protocol
 	}//${documentLocation.hostname.replace('support', 'profile')}`;
-	const iframeTarget = `${iframeOrigin}${
-		guestUser ? '/iframed/register/email' : '/iframed/signin'
-	}`;
+
+	const getIframeTargetUrl = (email: string) => {
+		const iframeTargetUrl = new URL(
+			`${iframeOrigin}${
+				guestUser ? '/iframed/register/email' : '/iframed/signin'
+			}`,
+		);
+
+		if (email) {
+			iframeTargetUrl.searchParams.set(
+				'prepopulateEmail',
+				encodeURIComponent(email),
+			);
+		}
+
+		return iframeTargetUrl.toString();
+	};
 
 	const [currentStep, setCurrentStep] = useState<OnboardingSteps>();
 	const [showIdentityIframe, setShowIdentityIframe] = useState(
@@ -170,9 +184,9 @@ function OnboardingComponent({
 
 			if (data.type === 'userStateChange') {
 				if (['userSignedIn', 'userRegistered'].includes(data.value)) {
-					setShowIdentityIframe(false);
-					setUserState(data.value);
 					void fetchNewsletters();
+					setUserState(data.value);
+					setShowIdentityIframe(false);
 				}
 			}
 		};
@@ -206,7 +220,7 @@ function OnboardingComponent({
 						{showIdentityIframe ? (
 							<iframe
 								ref={identityIframeRef}
-								src={iframeTarget}
+								src={getIframeTargetUrl(order.email)}
 								width="100%"
 								css={identityFrameStyles}
 							/>

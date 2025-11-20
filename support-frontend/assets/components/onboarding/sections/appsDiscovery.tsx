@@ -121,7 +121,7 @@ export function OnboardingAppsDiscovery({
 							: 'Level up your cooking with more than 6,000 recipes and smart, exclusive cooking features.'}
 					</p>
 
-					{!hasMobileAppDownloaded && (
+					{!hasAppDownloaded && (
 						<OnboardingAppBadgesDownload onboardingStep={onboardingStep} />
 					)}
 
