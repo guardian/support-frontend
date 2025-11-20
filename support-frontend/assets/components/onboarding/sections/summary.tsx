@@ -56,12 +56,12 @@ const onboardingSummaryCopyMapping: Record<
 	{ title: string; description: string }
 > = {
 	existingUserSignedIn: {
-		title: 'Just one more step',
+		title: "You're ready to go",
 		description:
-			'Let’s show you what’s included in your all-access subscription.',
+			"Find out what's included in your All-access digital subscription.",
 	},
 	userSignedIn: {
-		title: 'Welcome back. You’re signed in!',
+		title: 'You’re signed in!',
 		description: 'You can now explore your exclusive benefits.',
 	},
 	userRegistered: {

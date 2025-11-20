@@ -130,12 +130,18 @@ function OnboardingHeading({
 				aspectRatio: SerializedStyles;
 			}
 		>
-	>(
-		() => ({
+	>(() => {
+		// Non breaking hyphen
+		const allAccessTitle =
+			productSettings?.title === 'All-access digital'
+				? `All\u2011access digital`
+				: productSettings?.title;
+
+		return {
 			[OnboardingSteps.Summary]: {
 				heading: `Thank you ${
 					order?.firstName && order.firstName + ' '
-				}for subscribing to ${productSettings?.title}`,
+				}for subscribing to ${allAccessTitle}`,
 				subtext:
 					"You've just joined over 1.3m others who support independent journalism.",
 				gridId: 'onboardingSummaryHero',
@@ -167,9 +173,8 @@ function OnboardingHeading({
 					aspect-ratio: 3 / 2;
 				`,
 			},
-		}),
-		[order, windowWidthIsGreaterThan],
-	);
+		};
+	}, [order, windowWidthIsGreaterThan]);
 
 	if (
 		onboardingStep === OnboardingSteps.Completed &&

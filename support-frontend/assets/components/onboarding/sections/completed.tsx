@@ -43,6 +43,7 @@ const completedStackPadding = css`
 
 	${from.tablet} {
 		padding: ${space[8]}px;
+		padding-top: ${space[3]}px;
 	}
 `;
 
