@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { neutral, palette } from '@guardian/source/foundations';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import OrderedList from 'components/list/orderedList';
+import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -123,12 +124,13 @@ export function WhatNext({
 				Observer.co.uk
 			</a>
 		);
+		const observerApp = ` or The Observer app now for full digital access`;
 		const observerWelcome = (
 			<>
 				The Observer will be in touch shortly via email to welcome you. Check
 				your spam folder or add the {observerLink} domain to your preferred
-				sender list. Log in to {observerLink} or The Observer app now for full
-				digital access.
+				sender list. Log in to {observerLink}
+				{isObserverSubdomain() && observerApp}.
 			</>
 		);
 		const observerSubscriptionCardItems = [
