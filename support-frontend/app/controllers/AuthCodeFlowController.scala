@@ -43,10 +43,17 @@ class AuthCodeFlowController(cc: ControllerComponents, authService: AsyncAuthent
    */
 
   /** /events is served from live.theguardian.com to avoid apps blocking the domain as an in app purchase. We should
-    * redirect back to this domain.
+    * redirect back to this domain. Similarly, the Observer checkout flow is served from observer.theguardian.com, so we
+    * need to redirect back to that domain.
     */
   def oauthCallbackUrl(request: Request[AnyContent]): String = {
-    if (request.host.startsWith("live.")) config.oauthEventsCallbackUrl else config.oauthCallbackUrl
+    val subdomain = request.host.split("\\.").headOption
+
+    subdomain match {
+      case Some("live") => config.oauthEventsCallbackUrl
+      case Some("observer") => config.oauthObserverCallbackUrl
+      case _ => config.oauthCallbackUrl
+    }
   }
 
   def authorize(): Action[AnyContent] = Action { implicit request =>
