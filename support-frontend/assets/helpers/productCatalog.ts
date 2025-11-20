@@ -284,6 +284,7 @@ const nationalPaperPlusRatePlans: RatePlanDetails = {
 	},
 };
 
+const isObserverSubDomain = isObserverSubdomain();
 const paperPlusRatePlans: RatePlanDetails = {
 	...nationalPaperPlusRatePlans,
 	Saturday: {
@@ -298,18 +299,18 @@ const paperPlusRatePlans: RatePlanDetails = {
 	},
 	Sunday: {
 		billingPeriod: BillingPeriod.Monthly,
-		displayName: isObserverSubdomain()
-			? 'The Observer, digital & print'
-			: 'The Observer',
+		displayName: `The Observer${
+			isObserverSubDomain ? ', digital & print' : ''
+		}`,
 		label: 'Observer',
 
 		hideSimilarProductsConsent: true,
 	},
 	SundayPlus: {
 		billingPeriod: BillingPeriod.Monthly,
-		displayName: isObserverSubdomain()
-			? 'The Observer, digital & print'
-			: 'The Observer',
+		displayName: `The Observer${
+			isObserverSubDomain ? ', digital & print' : ''
+		}`,
 		label: 'Observer',
 
 		hideSimilarProductsConsent: true,
