@@ -325,6 +325,9 @@ export function ThreeTierLanding({
 		: undefined;
 	// We override the heading when there's a live countdown
 	const [headingOverride, setHeadingOverride] = useState<string | undefined>();
+	const [countdownDaysLeft, setCountdownDaysLeft] = useState<
+		string | undefined
+	>();
 
 	const enableSingleContributionsTab =
 		campaignSettings?.enableSingleContributions ??
@@ -493,6 +496,15 @@ export function ThreeTierLanding({
 		...tier3ProductDescription,
 	};
 
+	// automate days remaining copy where campaign has a countdown
+	const DATE_PLACEHOLDER_TEMPLATE = '%%CAMPAIGN_DEADLINE%%';
+	const replaceDatePlaceholder = (copy: string, deadline?: string): string => {
+		if (copy.includes(DATE_PLACEHOLDER_TEMPLATE) && deadline) {
+			return copy.replace(DATE_PLACEHOLDER_TEMPLATE, deadline);
+		}
+		return copy;
+	};
+
 	const sanitisedHeading = getSanitisedHtml(settings.copy.heading);
 	const sanitisedSubheading = getSanitisedHtml(settings.copy.subheading);
 
@@ -590,6 +602,7 @@ export function ThreeTierLanding({
 						<Countdown
 							countdownSettings={countdownSettings}
 							setHeadingOverride={setHeadingOverride}
+							setDaysTillDeadline={setCountdownDaysLeft}
 						/>
 					)}
 
@@ -597,7 +610,9 @@ export function ThreeTierLanding({
 						<h1 css={heading}>
 							<span
 								dangerouslySetInnerHTML={{
-									__html: getSanitisedHtml(headingOverride),
+									__html: getSanitisedHtml(
+										replaceDatePlaceholder(headingOverride, countdownDaysLeft),
+									),
 								}}
 							/>
 						</h1>
