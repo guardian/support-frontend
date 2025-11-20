@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { from } from '@guardian/source/foundations';
 
-export const svg_guardian_logo = css`
+const svg_guardian_logo = css`
 	display: block;
 	float: right;
 	margin-top: ${12 / 2.4}px;
