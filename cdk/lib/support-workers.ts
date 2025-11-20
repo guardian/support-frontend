@@ -651,46 +651,6 @@ export class SupportWorkers extends GuStack {
       threshold: 0,
     }).node.addDependency(stateMachine);
 
-    const tierThreeMetricDuration = Duration.minutes(5);
-    const tierThreeEvaluationPeriods = 288; // The number of 5 minute periods in 24 hours
-    const tierThreeAlarmPeriod = Duration.minutes(
-      tierThreeMetricDuration.toMinutes() * tierThreeEvaluationPeriods
-    );
-    new GuAlarm(this, `NoTierThreeAcquisitionInPeriodAlarm`, {
-      app,
-      actionsEnabled: isProd,
-      okAction: true,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `URGENT 9-5 - ${
-        this.stage
-      } support-workers No successful Tier Three checkouts in ${tierThreeAlarmPeriod.toHumanString()}.`,
-      metric: new MathExpression({
-        label: "AllTierThreeConversions",
-        expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
-        usingMetrics: {
-          m1: this.buildPaymentSuccessMetric(
-            PaymentProviders.Stripe,
-            ProductTypes.TierThree,
-            tierThreeMetricDuration
-          ),
-          m2: this.buildPaymentSuccessMetric(
-            PaymentProviders.DirectDebit,
-            ProductTypes.TierThree,
-            tierThreeMetricDuration
-          ),
-          m3: this.buildPaymentSuccessMetric(
-            PaymentProviders.PayPal,
-            ProductTypes.TierThree,
-            tierThreeMetricDuration
-          ),
-        },
-      }),
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: tierThreeEvaluationPeriods,
-      treatMissingData: TreatMissingData.BREACHING,
-      threshold: 0,
-    }).node.addDependency(stateMachine);
-
     // Begining of Ad-Lite
     const adLiteMetricDuration = Duration.minutes(5);
     const adLiteEvaluationPeriods = 144; // The number of 5 minute periods in 12 hours
