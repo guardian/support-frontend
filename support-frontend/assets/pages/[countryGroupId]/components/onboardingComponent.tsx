@@ -21,6 +21,7 @@ import type {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
+import * as cookie from 'helpers/storage/cookie';
 import { getUser } from 'helpers/user/user';
 import OnboardingLayout from '../../../components/onboarding/layout';
 import { getThankYouOrder } from '../checkout/helpers/sessionStorage';
@@ -199,9 +200,9 @@ function OnboardingComponent({
 			const pollForAccessToken = () => {
 				attempts++;
 
-				const { isSignedIn } = getUser();
+				const hasAccessToken = cookie.get('GU_ACCESS_TOKEN');
 
-				if (isSignedIn) {
+				if (hasAccessToken) {
 					document.body.removeChild(iframe);
 					console.debug('OAuth flow completed - access token is now available');
 
