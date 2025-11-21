@@ -608,7 +608,7 @@ export function OneTimeCheckoutComponent({
 		: 'Pay now';
 
 	return (
-		<GuardianPageLayout>
+		<GuardianPageLayout borderBox>
 			<Box>
 				<BoxContents>
 					<div
