@@ -6,6 +6,13 @@ import { Padlock } from 'components/svgs/padlock';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import Links from '../links/links';
+import {
+	component_header__padlock,
+	component_header__row,
+	component_header_checkout__row,
+	component_header_topnav_logo_graun,
+	testUserBanner,
+} from './headerStyles';
 import MobileMenuToggler from './mobileMenuToggler';
 import './header.scss';
 
@@ -33,7 +40,7 @@ function TopNav({ display, utility }: TopNavPropTypes) {
 				<div className="component-header-topnav__checkout">
 					<div />
 					<div className="component-header-topnav--checkout-text">
-						<div className="component-header--padlock">
+						<div css={component_header__padlock}>
 							<Padlock />
 						</div>
 						<h1>Checkout</h1>
@@ -42,7 +49,7 @@ function TopNav({ display, utility }: TopNavPropTypes) {
 			)}
 			<div className="component-header-topnav-logo">
 				<a
-					className="component-header-topnav-logo__graun"
+					css={component_header_topnav_logo_graun}
 					href="https://www.theguardian.com"
 				>
 					<div className="visually-hidden">Return to the Guardian</div>
@@ -85,7 +92,7 @@ export default class Header extends Component<PropTypes, State> {
 				])}
 			>
 				{!!isTestUser && (
-					<div className="test-user-banner">
+					<div css={testUserBanner}>
 						<span>You are a test user</span>
 					</div>
 				)}
@@ -105,13 +112,13 @@ export default class Header extends Component<PropTypes, State> {
 						)}
 					</div>
 					{display === 'navigation' && (
-						<div className="component-header__row">
+						<div css={component_header__row}>
 							<Links countryGroupId={countryGroupId} location="desktop" />
 						</div>
 					)}
 					{display === 'checkout' && (
-						<div className="component-header__row component-header-checkout--row">
-							<div className="component-header--padlock">
+						<div css={[component_header__row, component_header_checkout__row]}>
+							<div css={component_header__padlock}>
 								<Padlock />
 							</div>
 							<div>Checkout</div>
