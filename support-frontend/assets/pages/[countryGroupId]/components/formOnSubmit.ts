@@ -41,6 +41,17 @@ import type { PaymentMethod } from './paymentFields';
 import { FormSubmissionError } from './paymentFields';
 import { CONSENT_ID } from './SimilarProductsConsent';
 
+function getFirstDeliveryDate(
+	productKey: ActiveProductKey,
+	ratePlanKey: ActivePaperProductOptions,
+	weeklyGiftDeliveryDate?: Date,
+): string | null {
+	const firstDelivery =
+		weeklyGiftDeliveryDate ??
+		getProductFirstDeliveryDate(productKey, ratePlanKey);
+	return firstDelivery ? formatMachineDate(firstDelivery) : null;
+}
+
 export const submitForm = async ({
 	supportRegionId,
 	productKey,
@@ -80,16 +91,11 @@ export const submitForm = async ({
 		labels: ['generic-checkout'], // Shall we get rid of this now?
 	};
 
-	const firstDelivery =
-		weeklyGiftDeliveryDate ??
-		getProductFirstDeliveryDate(
-			productKey,
-			ratePlanKey as ActivePaperProductOptions,
-		);
-
-	const firstDeliveryDate = firstDelivery
-		? formatMachineDate(firstDelivery)
-		: null;
+	const firstDeliveryDate = getFirstDeliveryDate(
+		productKey,
+		ratePlanKey as ActivePaperProductOptions,
+		weeklyGiftDeliveryDate,
+	);
 
 	const promoCode = promotion?.promoCode;
 	const appliedPromotion =
