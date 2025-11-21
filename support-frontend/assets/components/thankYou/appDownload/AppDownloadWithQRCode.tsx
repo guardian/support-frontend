@@ -13,6 +13,7 @@ import { AppStoreBadges } from './AppDownloadBadges';
 import { type AppDownload } from './appDownloadItems';
 
 const bodyApps = css`
+	padding-top: ${space[4]}px;
 	&:not(:last-child) {
 		padding-bottom: ${space[8]}px;
 	}

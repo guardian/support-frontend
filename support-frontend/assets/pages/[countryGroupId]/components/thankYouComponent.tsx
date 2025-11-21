@@ -309,7 +309,7 @@ export function ThankYouComponent({
 
 	return (
 		<ThemeProvider theme={theme}>
-			<PageLayout observerPrint={observerPrint} noFooterLinks>
+			<PageLayout observerPrint={observerPrint} noBorders noFooterLinks>
 				<div css={thankYouContainer}>
 					<div css={headerContainer}>
 						<ThankYouHeader

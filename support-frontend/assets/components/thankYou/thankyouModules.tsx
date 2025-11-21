@@ -13,10 +13,15 @@ type ThankYouModulesProps = {
 const mansory = css`
 	column-count: 1;
 	column-gap: ${space[4]}px;
+	margin-bottom: 184px;
 	margin-top: ${space[4]}px;
 
 	${from.desktop} {
 		column-count: 2;
+	}
+
+	${from.phablet} {
+		margin-bottom: 108px;
 	}
 `;
 

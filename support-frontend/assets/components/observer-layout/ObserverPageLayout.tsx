@@ -7,9 +7,9 @@ import {
 	until,
 } from '@guardian/source/foundations';
 import { Column, Columns, Container } from '@guardian/source/react-components';
+import type { ReactNode } from 'react';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
-import type { PageLayoutProps } from 'pages/[countryGroupId]/components/GuardianPageLayout';
 import ObserverFooter from './ObserverFooter';
 import ObserverHeader from './ObserverHeader';
 import { observerColours } from './styles';
@@ -29,17 +29,6 @@ const darkBackgroundContainerMobile = css`
 	}
 `;
 
-const noBordersContainerMobileStyles = css`
-	${until.tablet} {
-		background-color: ${palette.neutral[100]};
-	}
-`;
-
-const topBorder = css`
-	border-top: 1px solid ${palette.neutral[86]};
-	padding-top: ${space[2]}px;
-`;
-
 const columns = css`
 	position: relative;
 	color: ${palette.neutral[7]};
@@ -49,11 +38,19 @@ const columns = css`
 
 export default function ObserverPageLayout({
 	children,
-	borderBox = false,
-}: PageLayoutProps) {
+	noBorders = false,
+}: {
+	children: ReactNode;
+	noBorders?: boolean;
+	noFooterLinks?: boolean;
+}) {
 	return (
 		<PageScaffold header={<ObserverHeader />} footer={<ObserverFooter />}>
-			{borderBox ? (
+			{noBorders ? (
+				<Container cssOverrides={darkBackgroundContainerMobile}>
+					{children}
+				</Container>
+			) : (
 				<Container
 					sideBorders
 					topBorder
@@ -70,16 +67,6 @@ export default function ObserverPageLayout({
 							{children}
 						</Column>
 					</Columns>
-				</Container>
-			) : (
-				<Container
-					cssOverrides={[
-						darkBackgroundContainerMobile,
-						noBordersContainerMobileStyles,
-						topBorder,
-					]}
-				>
-					{children}
 				</Container>
 			)}
 		</PageScaffold>
