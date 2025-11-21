@@ -105,18 +105,14 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
   import IdentityServiceEnrichers._
 
   private def request(path: String): WSRequest = {
-    val url = s"$apiUrl/$path"
-    logger.info(s"Making request to: $url")
     wsClient
-      .url(url)
+      .url(s"$apiUrl/$path")
       .withHttpHeaders("Authorization" -> s"Bearer $apiClientToken")
   }
 
   private def requestWithAccessToken(path: String, accessToken: String): WSRequest = {
-    val url = s"$apiUrl/$path"
-    logger.info(s"Making request with access token to: $url")
     wsClient
-      .url(url)
+      .url(s"$apiUrl/$path")
       .withHttpHeaders("Authorization" -> s"Bearer $accessToken")
   }
 
