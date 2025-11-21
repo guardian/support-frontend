@@ -1,6 +1,7 @@
 import { useTheme } from '@emotion/react';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getFeatureFlags } from 'helpers/featureFlags';
+import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import {
 	type ActiveProductKey,
 	type ActiveRatePlanKey,
@@ -105,7 +106,10 @@ function Heading({
 				css={[headerTitleText, observerThemeButton && observerHeaderTitleText]}
 			>
 				You are now an{' '}
-				<HighlightText>Observer digital & print subscriber</HighlightText>.
+				<HighlightText>
+					Observer{isObserverSubdomain() ? ' digital & print' : ''} subscriber
+				</HighlightText>
+				.
 				<br />
 				Thank you for subscribing to The Observer.
 			</h1>

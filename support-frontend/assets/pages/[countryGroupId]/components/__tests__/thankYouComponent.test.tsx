@@ -112,7 +112,7 @@ describe('thankYouComponent', () => {
 					ratePlanKey: 'Sunday',
 					identityUserType: 'new',
 				},
-				['whatNext', 'observerAppDownload'],
+				['signUp', 'whatNext'],
 			);
 		});
 	});
@@ -163,7 +163,6 @@ describe('thankYouComponent', () => {
 		it('should display the correct thankyou cards for Observer', () => {
 			testComponent({ productKey: 'SubscriptionCard', ratePlanKey: 'Sunday' }, [
 				'whatNext',
-				'observerAppDownload',
 			]);
 		});
 	});
@@ -203,7 +202,12 @@ describe('thankYouComponent', () => {
 		it('should display the correct thankyou cards for Digital Edition', () => {
 			testComponent(
 				{ productKey: 'DigitalSubscription', ratePlanKey: 'Monthly' },
-				['signIn', 'appDownloadEditions', 'socialShare'],
+				[
+					'signIn',
+					'benefits',
+					'appDownloadEditions',
+					'newspaperArchiveBenefit',
+				],
 			);
 		});
 
@@ -245,8 +249,8 @@ describe('thankYouComponent', () => {
 
 		it('should display the correct thankyou cards for Observer', () => {
 			testComponent({ productKey: 'SubscriptionCard', ratePlanKey: 'Sunday' }, [
+				'signIn',
 				'whatNext',
-				'observerAppDownload',
 			]);
 		});
 	});

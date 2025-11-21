@@ -1,5 +1,3 @@
-import { isCode } from './urls/url';
-
 interface FeatureFlags {
 	enablePremiumDigital: boolean;
 	enableDigitalAccess: boolean;
@@ -8,13 +6,8 @@ interface FeatureFlags {
 export function getFeatureFlags(): FeatureFlags {
 	const urlParams = new URLSearchParams(window.location.search);
 
-	const enablePremiumDigitalParam = urlParams.get('enablePremiumDigital');
-
 	return {
-		enablePremiumDigital:
-			(isCode() && enablePremiumDigitalParam !== 'false') ||
-			(enablePremiumDigitalParam !== null &&
-				enablePremiumDigitalParam === 'true'),
+		enablePremiumDigital: !urlParams.has('disableDigitalPlus'),
 		enableDigitalAccess: urlParams.has('enableDigitalAccess'),
 	};
 }

@@ -19,10 +19,7 @@ import NewspaperArchiveImage from './newspaperArchive/newspaperArchiveImage';
 
 const container = css`
 	background: white;
-	padding-left: 10px;
-	padding-right: 10px;
-	padding-top: ${space[2]}px;
-	padding-bottom: ${space[5]}px;
+	padding: ${space[3]}px 10px ${space[6]}px;
 	border-bottom: 1px solid ${neutral[86]};
 	break-inside: avoid;
 	:not(:first-child) {
@@ -340,7 +337,7 @@ function ThankYouModule({
 					) : (
 						<>
 							<p css={[bodyCopyStyle, bodyCopyMarginTop]}>{bodyCopy}</p>
-							<div css={resizeMarginTop}>{ctas}</div>
+							{ctas && <div css={resizeMarginTop}>{ctas}</div>}
 						</>
 					)}
 				</div>

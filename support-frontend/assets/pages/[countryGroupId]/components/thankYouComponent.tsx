@@ -162,6 +162,7 @@ export function ThankYouComponent({
 	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
 
 	const observerPrint = getObserver(productKey, ratePlanKey);
+	const isObserverSubDomain = isObserverSubdomain();
 
 	const { enablePremiumDigital } = getFeatureFlags();
 
@@ -246,15 +247,18 @@ export function ThankYouComponent({
 					guestUser &&
 					!isGuardianAdLite &&
 					!isGuardianPrint &&
-					!observerPrint),
+					!isObserverSubDomain),
 			'signUp',
 		), // Complete your Guardian account
 		...maybeThankYouModule(
-			userNotSignedIn && !isGuardianAdLite && !observerPrint,
+			userNotSignedIn && !isGuardianAdLite && !isObserverSubDomain,
 			'signIn',
 		), // Sign in to access your benefits
 		...maybeThankYouModule(isTierThree || isPremiumDigital, 'benefits'),
-		...maybeThankYouModule(!!observerPrint, 'observerAppDownload'),
+		...maybeThankYouModule(
+			!!isObserverSubDomain && !!observerPrint,
+			'observerAppDownload',
+		),
 		...maybeThankYouModule(
 			isTierThree || isNationalDelivery,
 			'subscriptionStart',
@@ -305,7 +309,7 @@ export function ThankYouComponent({
 
 	return (
 		<ThemeProvider theme={theme}>
-			<PageLayout observerPrint={observerPrint} noBorders noFooterLinks>
+			<PageLayout observerPrint={observerPrint} noFooterLinks>
 				<div css={thankYouContainer}>
 					<div css={headerContainer}>
 						<ThankYouHeader
