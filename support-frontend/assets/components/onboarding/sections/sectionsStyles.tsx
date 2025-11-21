@@ -77,6 +77,10 @@ const benefitsItem = css`
 	display: flex;
 	align-items: flex-start;
 	margin-bottom: ${space[2]}px;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
 `;
 
 const benefitsItemText = css`
@@ -86,7 +90,7 @@ const benefitsItemText = css`
 
 const benefitsItemIcon = css`
 	min-width: ${space[8]}px;
-	margin-right: ${space[2]}px;
+	margin-right: ${space[0]}px;
 `;
 
 const heroContainer = css`

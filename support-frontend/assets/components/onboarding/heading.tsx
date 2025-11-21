@@ -100,7 +100,7 @@ const thankYouSubtext = css`
 	}
 
 	${from.desktop} {
-		margin-bottom: ${space[4]}px;
+		margin-bottom: ${space[8]}px;
 	}
 `;
 
@@ -147,7 +147,7 @@ function OnboardingHeading({
 				gridId: 'onboardingSummaryHero',
 				altText: 'Onboarding summary hero holding The Guardian logo',
 				aspectRatio: css`
-					aspect-ratio: 21 / 9;
+					aspect-ratio: 25 / 9;
 				`,
 			},
 			[OnboardingSteps.GuardianApp]: {

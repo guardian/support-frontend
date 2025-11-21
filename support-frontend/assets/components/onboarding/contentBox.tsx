@@ -7,7 +7,6 @@ const contentBoxMainStyle = css`
 	background-color: ${neutral[100]};
 	border: 1px solid ${neutral[100]};
 	border-radius: ${space[3]}px;
-	padding-bottom: ${space[6]}px;
 `;
 
 const contentBoxPaddingStyle = css`
@@ -15,6 +14,7 @@ const contentBoxPaddingStyle = css`
 
 	${from.tablet} {
 		padding: ${space[8]}px;
+		padding-top: ${space[6]}px;
 	}
 `;
 

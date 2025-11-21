@@ -10,6 +10,7 @@ import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageS
 import { getHelpCentreUrl, getManageSubsUrl } from 'helpers/urls/externalLinks';
 import { getBaseDomain } from 'helpers/urls/url';
 import type { OnboardingProductKey } from 'pages/[countryGroupId]/components/onboardingComponent';
+import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import ContentBox from '../contentBox';
 import {
 	benefitsItem,
@@ -57,6 +58,8 @@ export function OnboardingCompleted({
 	const productSettings =
 		productKey && landingPageSettings.products[productKey];
 
+	const { windowWidthIsLessThan } = useWindowWidth();
+
 	return (
 		<Stack space={5} cssOverrides={completedStack}>
 			<ContentBox removePadding>
@@ -91,7 +94,7 @@ export function OnboardingCompleted({
 								<div css={benefitsItemIcon}>
 									<SvgTickRound
 										isAnnouncedByScreenReader
-										size="medium"
+										size={windowWidthIsLessThan('desktop') ? 'small' : 'medium'}
 										theme={{ fill: palette.brand[500] }}
 									/>
 								</div>

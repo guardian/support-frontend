@@ -22,6 +22,7 @@ import type {
 	OnboardingProps,
 } from 'pages/[countryGroupId]/components/onboardingComponent';
 import { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
+import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import ContentBox from '../contentBox';
 import {
@@ -61,7 +62,7 @@ const onboardingSummaryCopyMapping: Record<
 			"Find out what's included in your All-access digital subscription.",
 	},
 	userSignedIn: {
-		title: 'You’re signed in!',
+		title: 'You’re signed in',
 		description: 'You can now explore your exclusive benefits.',
 	},
 	userRegistered: {
@@ -136,6 +137,7 @@ function OnboardingSummary({
 	const order = getThankYouOrder();
 	const productSettings =
 		productKey && landingPageSettings.products[productKey];
+	const { windowWidthIsLessThan } = useWindowWidth();
 
 	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
 	const amountPaidToday = simpleFormatAmount(
@@ -170,6 +172,11 @@ function OnboardingSummary({
 			? `ending ${order.accountNumber}`
 			: paymentMethodCopy;
 
+	const emailWithSoftHyphen = (order?.email ?? 'your email address').replace(
+		'@',
+		'\u00AD@',
+	);
+
 	return (
 		<Stack
 			space={5}
@@ -181,12 +188,10 @@ function OnboardingSummary({
 				<Stack space={2}>
 					<h1 css={headings}>Purchase summary</h1>
 					<p css={descriptions}>
-						{`Thanks for your payment. We’ve sent a payment confirmation email to
+						{`Thanks for your payment. We've sent a payment confirmation email to
                     `}
 					</p>
-					<span css={boldDescriptions}>{`${
-						order?.email ?? 'your email address'
-					}.`}</span>
+					<span css={boldDescriptions}>{emailWithSoftHyphen}.</span>
 
 					<Stack space={2} cssOverrides={paymentDetailsBox}>
 						<p css={boldDescriptions}>Payment details</p>
@@ -236,7 +241,7 @@ function OnboardingSummary({
 								<div css={benefitsItemIcon}>
 									<SvgTickRound
 										isAnnouncedByScreenReader
-										size="medium"
+										size={windowWidthIsLessThan('desktop') ? 'small' : 'medium'}
 										theme={{ fill: palette.brand[500] }}
 									/>
 								</div>
