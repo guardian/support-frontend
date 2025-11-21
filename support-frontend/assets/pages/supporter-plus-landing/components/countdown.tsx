@@ -163,7 +163,7 @@ export default function Countdown({
 
 	useEffect(() => {
 		setDaysTillDeadline(days);
-	},[days]);
+	}, [days]);
 
 	return (
 		<>
