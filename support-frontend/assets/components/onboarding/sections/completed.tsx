@@ -8,7 +8,7 @@ import {
 import GridImage from 'components/gridImage/gridImage';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { getHelpCentreUrl, getManageSubsUrl } from 'helpers/urls/externalLinks';
-import { isProd } from 'helpers/urls/url';
+import { getBaseDomain } from 'helpers/urls/url';
 import type { OnboardingProductKey } from 'pages/[countryGroupId]/components/onboardingComponent';
 import ContentBox from '../contentBox';
 import {
@@ -102,11 +102,7 @@ export function OnboardingCompleted({
 					<LinkButton
 						priority="primary"
 						cssOverrides={[buttonOverrides]}
-						href={
-							isProd()
-								? 'https://theguardian.com'
-								: 'https://code.dev-theguardian.com'
-						}
+						href={getBaseDomain()}
 					>
 						Continue to the Guardian
 					</LinkButton>

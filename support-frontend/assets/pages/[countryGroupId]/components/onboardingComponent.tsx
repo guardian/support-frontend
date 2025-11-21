@@ -95,9 +95,17 @@ function OnboardingComponent({
 	const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
 
 	const fetchNewsletters = async () => {
-		const newslettersData = await getNewsletters();
-		setNewsletters(newslettersData);
-		console.debug('Newsletters fetched:', newslettersData);
+		if (!getUser().isSignedIn) {
+			return;
+		}
+
+		try {
+			const newslettersData = await getNewsletters();
+			setNewsletters(newslettersData);
+			console.debug('Newsletters fetched:', newslettersData);
+		} catch (error) {
+			console.error('Error fetching newsletters:', error);
+		}
 	};
 
 	useEffect(() => {
@@ -108,8 +116,11 @@ function OnboardingComponent({
 	// -------------
 
 	const { isSignedIn } = getUser();
-	const { hasMobileAppDownloaded, hasFeastMobileAppDownloaded } =
-		useAnalyticsProfile();
+	const {
+		hasMobileAppDownloaded,
+		hasFeastMobileAppDownloaded,
+		loadAnalyticsData,
+	} = useAnalyticsProfile();
 	const searchParams = useSearchParams();
 
 	const userNotSignedIn = !isSignedIn && identityUserType === 'current';
@@ -171,6 +182,47 @@ function OnboardingComponent({
 		}
 	}, [searchParams]);
 
+	const triggerOAuthFlow = () => {
+		try {
+			// Hidden iframe to trigger the OAuth flow. This will set the GU_ACCESS_TOKEN and GU_ID_TOKEN cookies.
+			// Poll for the access token cookie until it is available.
+			const iframe = document.createElement('iframe');
+			iframe.style.display = 'none';
+			iframe.src = '/oauth/authorize';
+
+			document.body.appendChild(iframe);
+
+			const MAX_ATTEMPTS = 30;
+			const POLL_INTERVAL = 200;
+			let attempts = 0;
+
+			const pollForAccessToken = () => {
+				attempts++;
+
+				const { isSignedIn } = getUser();
+
+				if (isSignedIn) {
+					document.body.removeChild(iframe);
+					console.debug('OAuth flow completed - access token is now available');
+
+					void fetchNewsletters();
+					void loadAnalyticsData();
+				} else if (attempts < MAX_ATTEMPTS) {
+					setTimeout(pollForAccessToken, POLL_INTERVAL);
+				} else {
+					document.body.removeChild(iframe);
+					console.warn(
+						'OAuth flow timed out - access token not received within expected time',
+					);
+				}
+			};
+
+			setTimeout(pollForAccessToken, POLL_INTERVAL);
+		} catch (error) {
+			console.error('Failed to trigger OAuth flow:', error);
+		}
+	};
+
 	// Handle iframe message from the identity iframe
 	useEffect(() => {
 		const receiveIframeMessage = (event: MessageEvent<MessageEventData>) => {
@@ -190,9 +242,10 @@ function OnboardingComponent({
 
 			if (data.type === 'userStateChange') {
 				if (['userSignedIn', 'userRegistered'].includes(data.value)) {
-					void fetchNewsletters();
 					setUserState(data.value);
 					setShowIdentityIframe(false);
+
+					triggerOAuthFlow();
 				}
 			}
 		};
@@ -202,6 +255,11 @@ function OnboardingComponent({
 		return () => {
 			window.removeEventListener('message', receiveIframeMessage);
 		};
+	}, []);
+
+	useEffect(() => {
+		console.debug('Triggering OAuth flow');
+		triggerOAuthFlow();
 	}, []);
 
 	return (
