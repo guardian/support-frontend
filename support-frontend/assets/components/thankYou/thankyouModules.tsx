@@ -14,6 +14,7 @@ const mansory = css`
 	column-count: 1;
 	column-gap: ${space[4]}px;
 	margin-top: ${space[4]}px;
+	min-height: 50vh;
 
 	${from.desktop} {
 		column-count: 2;

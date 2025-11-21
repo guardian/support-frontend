@@ -20,12 +20,6 @@ const buttonContainer = css`
 		width: 100%;
 	}
 
-	${from.desktop} {
-		position: absolute;
-		bottom: ${space[12]}px;
-		margin-bottom: 0;
-	}
-
 	${from.tablet} {
 		a {
 			width: auto;

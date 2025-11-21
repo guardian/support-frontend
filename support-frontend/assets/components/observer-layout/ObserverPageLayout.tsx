@@ -49,7 +49,7 @@ const columns = css`
 
 export default function ObserverPageLayout({
 	children,
-	borderBox = false,
+	borderBox,
 }: PageLayoutProps) {
 	return (
 		<PageScaffold header={<ObserverHeader />} footer={<ObserverFooter />}>
