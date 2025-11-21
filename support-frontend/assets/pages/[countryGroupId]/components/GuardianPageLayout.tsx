@@ -53,15 +53,15 @@ const columns = css`
 
 export type PageLayoutProps = {
 	children: ReactNode;
+	borderBox: boolean;
 	observerPrint?: ObserverPrint;
-	borderBox?: boolean;
 	noFooterLinks?: boolean;
 };
 
 export default function GuardianPageLayout({
 	children,
 	observerPrint,
-	borderBox = false,
+	borderBox,
 	noFooterLinks = false,
 }: PageLayoutProps) {
 	return (
