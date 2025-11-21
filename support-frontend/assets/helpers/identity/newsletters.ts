@@ -39,6 +39,7 @@ export async function getNewsletters(): Promise<Newsletter[]> {
  * @param subscribed - Whether to subscribe (true) or unsubscribe (false)
  * @returns Promise resolving to void
  */
+// @knip-ignore Will be used in future implementation
 export async function updateNewsletter(
 	id: string,
 	subscribed: boolean,
