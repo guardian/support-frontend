@@ -56,7 +56,10 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
-import { getSanitisedHtml, replaceDatePlaceholder } from '../../../helpers/utilities/utilities';
+import {
+	getSanitisedHtml,
+	replaceDatePlaceholder,
+} from '../../../helpers/utilities/utilities';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import Countdown from '../components/countdown';
 import { OneOffCard } from '../components/oneOffCard';

@@ -70,13 +70,13 @@ function replaceDatePlaceholder(copy: string, deadline?: string): string {
 	// TODO: handle 05
 
 	let replacement = '';
-    
-    if (deadline === '0') {
-        replacement = 'Final day';
-    } else if (deadline === '1') {
-        replacement = '1 day left';
-    } else if (deadline !== undefined) {
-        replacement = `${deadline} days remaining`;
+
+	if (deadline === '0') {
+		replacement = 'Final day';
+	} else if (deadline === '1') {
+		replacement = '1 day left';
+	} else if (deadline !== undefined) {
+		replacement = `${deadline} days remaining`;
 	}
 
 	return copy.replaceAll(DEADLINE_PLACEHOLDER_TEMPLATE, replacement);
