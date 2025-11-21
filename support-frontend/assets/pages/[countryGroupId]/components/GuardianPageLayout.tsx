@@ -51,17 +51,19 @@ const columns = css`
 	padding-top: ${space[2]}px;
 `;
 
+export type PageLayoutProps = {
+	children: ReactNode;
+	observerPrint?: ObserverPrint;
+	borderBox?: boolean;
+	noFooterLinks?: boolean;
+};
+
 export default function GuardianPageLayout({
 	children,
 	observerPrint,
-	noBorders = false,
+	borderBox = false,
 	noFooterLinks = false,
-}: {
-	children: ReactNode;
-	observerPrint?: ObserverPrint;
-	noBorders?: boolean;
-	noFooterLinks?: boolean;
-}) {
+}: PageLayoutProps) {
 	return (
 		<PageScaffold
 			header={<Header />}
@@ -75,13 +77,7 @@ export default function GuardianPageLayout({
 				</FooterWithContents>
 			}
 		>
-			{noBorders ? (
-				<Container
-					cssOverrides={[containerStyles, noBordersContainerMobileStyles]}
-				>
-					{children}
-				</Container>
-			) : (
+			{borderBox ? (
 				<>
 					<CheckoutHeading withTopBorder={true} />
 					<Container
@@ -101,6 +97,12 @@ export default function GuardianPageLayout({
 						</Columns>
 					</Container>
 				</>
+			) : (
+				<Container
+					cssOverrides={[containerStyles, noBordersContainerMobileStyles]}
+				>
+					{children}
+				</Container>
 			)}
 		</PageScaffold>
 	);

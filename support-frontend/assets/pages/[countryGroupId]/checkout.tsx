@@ -307,7 +307,7 @@ export function Checkout({
 	return (
 		<ThemeProvider theme={theme}>
 			<Elements stripe={stripePromise} options={elementsOptions}>
-				<PageLayout>
+				<PageLayout borderBox>
 					<CheckoutSummary
 						supportRegionId={supportRegionId}
 						appConfig={appConfig}

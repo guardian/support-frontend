@@ -616,7 +616,10 @@ export default function CheckoutForm({
 				abParticipations,
 				promotion,
 				contributionAmount,
-				deliveryDate: isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+				weeklyGiftDeliveryDate: isGuardianWeeklyGiftProduct(
+					productKey,
+					ratePlanKey,
+				)
 					? weeklyDeliveryDate
 					: undefined,
 			});
