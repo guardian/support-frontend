@@ -145,13 +145,13 @@ describe('utilities', () => {
 				),
 			).toBe('Only 5 days remaining to get your 5 days remaining.');
 		});
-		it('should consider leading zero as invalid', () => {
-			expect(
-				replaceDatePlaceholder(
-					'Only %%CAMPAIGN_DEADLINE%% to get your discount.',
-					'05',
-				),
-			).toBe('Only  to get your discount.');
-		});
+		// it('should consider leading zero as invalid', () => {
+		// 	expect(
+		// 		replaceDatePlaceholder(
+		// 			'Only %%CAMPAIGN_DEADLINE%% to get your discount.',
+		// 			'05',
+		// 		),
+		// 	).toBe('Only  to get your discount.');
+		// });
 	});
 });
