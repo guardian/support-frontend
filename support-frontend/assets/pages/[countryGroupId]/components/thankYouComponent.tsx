@@ -51,11 +51,6 @@ import getObserver from '../helpers/getObserver';
 import GuardianPageLayout from './GuardianPageLayout';
 import ThankYouNavLinks from './ThankYouNavLinks';
 
-const thankYouContainer = css`
-	position: relative;
-	height: 100%;
-`;
-
 const headerContainer = css`
 	${from.desktop} {
 		width: 860px;
@@ -310,7 +305,7 @@ export function ThankYouComponent({
 	return (
 		<ThemeProvider theme={theme}>
 			<PageLayout observerPrint={observerPrint} borderBox={false} noFooterLinks>
-				<div css={thankYouContainer}>
+				<div>
 					<div css={headerContainer}>
 						<ThankYouHeader
 							productKey={productKey}
