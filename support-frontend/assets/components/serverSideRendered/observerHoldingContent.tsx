@@ -8,7 +8,7 @@ export function ObserverHoldingContent() {
 		<>
 			<Global styles={reset} />
 			<PrerenderGlobalStyles />
-			<ObserverPageLayout noBorders>{null}</ObserverPageLayout>
+			<ObserverPageLayout>{null}</ObserverPageLayout>
 		</>
 	);
 }
