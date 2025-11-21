@@ -21,6 +21,7 @@ import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { setHideSupportMessaginCookie } from '../../helpers/storage/contributionsCookies';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
+import type { OnboardingProductKey } from './components/onboardingComponent';
 import OnboardingComponent from './components/onboardingComponent';
 import { ThankYouComponent } from './components/thankYouComponent';
 
@@ -176,7 +177,7 @@ export function ThankYou({
 				supportRegionId={supportRegionId}
 				csrf={csrf}
 				payment={payment}
-				productKey={productKey}
+				productKey={productKey as OnboardingProductKey}
 				ratePlanKey={ratePlanKey}
 				promotion={promotion}
 				identityUserType={userType}

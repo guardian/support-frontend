@@ -80,6 +80,21 @@ object CreateSignInTokenResponse {
   implicit val readCreateSignInTokenResponse: Reads[CreateSignInTokenResponse] = Json.reads[CreateSignInTokenResponse]
 }
 
+case class Newsletter(
+    id: String,
+    theme: String,
+    group: String,
+    name: String,
+    description: String,
+    frequency: String,
+    subscribed: Boolean,
+    exactTargetListId: Int,
+)
+
+object Newsletter {
+  implicit val newsletterReads: Reads[Newsletter] = Json.reads[Newsletter]
+}
+
 object IdentityService {
   def apply(config: Identity)(implicit wsClient: WSClient): IdentityService =
     new IdentityService(apiUrl = config.apiUrl, apiClientToken = config.apiClientToken)
@@ -93,6 +108,12 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     wsClient
       .url(s"$apiUrl/$path")
       .withHttpHeaders("Authorization" -> s"Bearer $apiClientToken")
+  }
+
+  private def requestWithAccessToken(path: String, accessToken: String): WSRequest = {
+    wsClient
+      .url(s"$apiUrl/$path")
+      .withHttpHeaders("Authorization" -> s"Bearer $accessToken")
   }
 
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean] = {
@@ -133,6 +154,47 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .attemptT
       .leftMap(_.toString)
       .subflatMap(resp => resp.json.validate[CreateSignInTokenResponse].asEither.leftMap(_.mkString(",")))
+  }
+
+  def getNewsletters(accessToken: String)(implicit ec: ExecutionContext): Future[List[Newsletter]] = {
+    requestWithAccessToken("users/me/newsletters", accessToken)
+      .get()
+      .map { response =>
+        if (response.status >= 200 && response.status < 300) {
+          response.json.validate[List[Newsletter]].asOpt.getOrElse {
+            logger.error(scrub"Failed to parse newsletters response: ${response.body}")
+            List.empty
+          }
+        } else {
+          logger.error(scrub"Failed to fetch newsletters: ${response.status} ${response.body}")
+          List.empty
+        }
+      }
+      .recover { case e: Exception =>
+        logger.error(scrub"Exception fetching newsletters: ${e.getMessage}")
+        List.empty
+      }
+  }
+
+  def updateNewsletter(accessToken: String, id: String, subscribed: Boolean)(implicit
+      ec: ExecutionContext,
+  ): Future[Boolean] = {
+    val payload = Json.obj("id" -> id, "subscribed" -> subscribed)
+    requestWithAccessToken("users/me/newsletters", accessToken)
+      .patch(payload)
+      .map { response =>
+        if (response.status >= 200 && response.status < 300) {
+          logger.info(s"Successfully updated newsletter subscription for $id to $subscribed")
+          true
+        } else {
+          logger.error(scrub"Failed to update newsletter: ${response.status} ${response.body}")
+          false
+        }
+      }
+      .recover { case e: Exception =>
+        logger.error(scrub"Exception updating newsletter: ${e.getMessage}")
+        false
+      }
   }
 
   def getOrCreateUserFromEmail(
