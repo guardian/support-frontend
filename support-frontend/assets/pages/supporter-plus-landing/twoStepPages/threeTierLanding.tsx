@@ -505,9 +505,6 @@ export function ThreeTierLanding({
 		return copy;
 	};
 
-	const sanitisedHeading = getSanitisedHtml(settings.copy.heading);
-	const sanitisedSubheading = getSanitisedHtml(settings.copy.subheading);
-
 	return (
 		<PageScaffold
 			header={
@@ -619,12 +616,28 @@ export function ThreeTierLanding({
 					)}
 					{!headingOverride && (
 						<h1 css={heading}>
-							<span dangerouslySetInnerHTML={{ __html: sanitisedHeading }} />
+							<span
+								dangerouslySetInnerHTML={{
+									__html: getSanitisedHtml(
+										replaceDatePlaceholder(
+											settings.copy.heading,
+											countdownDaysLeft,
+										),
+									),
+								}}
+							/>
 						</h1>
 					)}
 					<p
 						css={standFirst}
-						dangerouslySetInnerHTML={{ __html: sanitisedSubheading }}
+						dangerouslySetInnerHTML={{
+							__html: getSanitisedHtml(
+								replaceDatePlaceholder(
+									settings.copy.subheading,
+									countdownDaysLeft,
+								),
+							),
+						}}
 					/>
 
 					{settings.tickerSettings && (
