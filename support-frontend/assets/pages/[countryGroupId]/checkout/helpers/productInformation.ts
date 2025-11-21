@@ -1,10 +1,11 @@
+import { isInList } from '@guardian/support-service-lambdas/modules/arrayFunctions';
 import { getIfDefined } from '@guardian/support-service-lambdas/modules/nullAndUndefined';
 import {
-	isDeliveryProduct,
+	deliveryProducts,
 	requiresDeliveryInstructions,
-} from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
-import type { ProductPurchase } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
-import { productPurchaseSchema } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
+} from '@modules/product-catalog/productCatalog';
+import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
+import { productPurchaseSchema } from '@modules/product-catalog/productPurchaseSchema';
 import type {
 	GiftRecipientType,
 	ProductFields,
@@ -44,7 +45,8 @@ export const buildProductInformation = ({
 		});
 	}
 
-	if (isDeliveryProduct(productKey)) {
+	// TODO: work out why isDeliveryProduct isn't working
+	if (isInList(deliveryProducts)(productKey)) {
 		const deliveryDate = new Date(
 			getIfDefined(
 				firstDeliveryDate,

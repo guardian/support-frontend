@@ -1,5 +1,4 @@
 import { DataExtensionNames } from '@modules/email/email';
-import { BillingPeriod } from '@modules/product/billingPeriod';
 import { buildGuardianAdLiteEmailFields } from '../../emailFields/guardianAdLiteEmailFields';
 import {
 	creditCardPaymentMethod,
@@ -12,7 +11,6 @@ describe('guardianAdLiteEmailFields', () => {
 	test('should build the correct email fields for Guardian Ad-Lite', () => {
 		const emailFields = buildGuardianAdLiteEmailFields({
 			user: emailUser,
-			billingPeriod: BillingPeriod.Monthly,
 			currency: 'GBP',
 			subscriptionNumber: subscriptionNumber,
 			paymentSchedule: {

@@ -1,10 +1,12 @@
-import { getProductRatePlan } from '@guardian/support-service-lambdas/modules/zuora/src/createSubscription/getProductRatePlan';
 import type { EmailMessageWithIdentityUserId } from '@modules/email/email';
 import { sendEmail } from '@modules/email/email';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { getProductCatalogFromApi } from '@modules/product-catalog/api';
 import type { ProductCatalog } from '@modules/product-catalog/productCatalog';
 import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
+import { getProductRatePlan } from '@modules/zuora/createSubscription/getProductRatePlan';
+import { getPaymentMethods } from '@modules/zuora/paymentMethod';
+import { ZuoraClient } from '@modules/zuora/zuoraClient';
 import dayjs from 'dayjs';
 import { buildContributionEmailFields } from '../emailFields/contributionEmailFields';
 import { buildDigitalSubscriptionEmailFields } from '../emailFields/digitalSubscriptionEmailFields';
@@ -14,7 +16,7 @@ import { buildPaperEmailFields } from '../emailFields/paperEmailFields';
 import { buildSupporterPlusEmailFields } from '../emailFields/supporterPlusEmailFields';
 import type { TierThreeProductPurchase } from '../emailFields/tierThreeEmailFields';
 import { buildTierThreeEmailFields } from '../emailFields/tierThreeEmailFields';
-import type { PaymentMethod } from '../model/paymentMethod';
+import type { PaymentMethodType } from '../model/paymentMethod';
 import type { ProductType } from '../model/productType';
 import type {
 	SendAcquisitionEventState,
@@ -40,14 +42,17 @@ const deliveryAgentsProvider = new ServiceProvider(stage, async (stage) => {
 	return await paperRoundService.agents();
 });
 
-function getDeliveryAgent(refId: number, agents: DeliveryAgentDetails[]) {
-	return agents.find((agent) => agent.refid === refId);
-}
+const zuoraServiceProvider = new ServiceProvider(stage, async (stage) => {
+	return ZuoraClient.create(stage);
+});
 
 async function sendSupporterPlusEmail(
 	sendThankYouEmailState: SendThankYouEmailState,
 	productInformation: Extract<ProductPurchase, { product: 'SupporterPlus' }>,
 ) {
+	// We've checked that the ProductPurchase is of type SupporterPlus, but we also need to check
+	// that the SendThankYouEmailState is of type SupporterPlus to satisfy TypeScript. Once we
+	// are using the ProductPurchase information exclusively we can refactor this out.
 	if (checkStateProductType('SupporterPlus', sendThankYouEmailState)) {
 		const fixedTerm = isFixedTerm(
 			await productCatalogProvider.getServiceForUser(
@@ -65,7 +70,11 @@ async function sendSupporterPlusEmail(
 				isFixedTerm: fixedTerm,
 				paymentSchedule: sendThankYouEmailState.paymentSchedule,
 				paymentMethod: sendThankYouEmailState.paymentMethod,
-				mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
+				mandateId: await getMandateId(
+					sendThankYouEmailState.user.isTestUser,
+					sendThankYouEmailState.paymentMethod.Type,
+					sendThankYouEmailState.accountNumber,
+				),
 			}),
 		);
 	}
@@ -83,7 +92,11 @@ async function sendContributionEmail(
 				amount: productInformation.amount,
 				currency: sendThankYouEmailState.product.currency,
 				paymentMethod: sendThankYouEmailState.paymentMethod,
-				mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
+				mandateId: await getMandateId(
+					sendThankYouEmailState.user.isTestUser,
+					sendThankYouEmailState.paymentMethod.Type,
+					sendThankYouEmailState.accountNumber,
+				),
 				ratePlan: productInformation.ratePlan,
 			}),
 		);
@@ -102,7 +115,11 @@ async function sendDigitalSubscriptionEmail(
 				subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
 				paymentSchedule: sendThankYouEmailState.paymentSchedule,
 				paymentMethod: sendThankYouEmailState.paymentMethod,
-				mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
+				mandateId: await getMandateId(
+					sendThankYouEmailState.user.isTestUser,
+					sendThankYouEmailState.paymentMethod.Type,
+					sendThankYouEmailState.accountNumber,
+				),
 			}),
 		);
 	}
@@ -132,7 +149,11 @@ async function sendPaperEmail(
 				subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
 				paymentSchedule: sendThankYouEmailState.paymentSchedule,
 				paymentMethod: sendThankYouEmailState.paymentMethod,
-				mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
+				mandateId: await getMandateId(
+					sendThankYouEmailState.user.isTestUser,
+					sendThankYouEmailState.paymentMethod.Type,
+					sendThankYouEmailState.accountNumber,
+				),
 				productInformation: productInformation,
 				deliveryAgentDetails: deliveryAgent,
 			}),
@@ -153,7 +174,11 @@ async function sendTierThreeEmail(
 				subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
 				paymentSchedule: sendThankYouEmailState.paymentSchedule,
 				paymentMethod: sendThankYouEmailState.paymentMethod,
-				mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
+				mandateId: await getMandateId(
+					sendThankYouEmailState.user.isTestUser,
+					sendThankYouEmailState.paymentMethod.Type,
+					sendThankYouEmailState.accountNumber,
+				),
 				productInformation: productInformation,
 			}),
 		);
@@ -176,7 +201,11 @@ async function sendGuardianWeeklyEmail(
 				subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
 				paymentSchedule: sendThankYouEmailState.paymentSchedule,
 				paymentMethod: sendThankYouEmailState.paymentMethod,
-				mandateId: getMandateId(sendThankYouEmailState.paymentMethod),
+				mandateId: await getMandateId(
+					sendThankYouEmailState.user.isTestUser,
+					sendThankYouEmailState.paymentMethod.Type,
+					sendThankYouEmailState.accountNumber,
+				),
 				productInformation: productInformation,
 				giftRecipient: sendThankYouEmailState.giftRecipient,
 			}),
@@ -192,7 +221,6 @@ async function sendGuardianAdLiteEmail(
 			buildGuardianAdLiteEmailFields({
 				user: sendThankYouEmailState.user,
 				subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
-				billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
 				currency: sendThankYouEmailState.product.currency,
 				paymentMethod: sendThankYouEmailState.paymentMethod,
 				paymentSchedule: sendThankYouEmailState.paymentSchedule,
@@ -241,6 +269,10 @@ export const handler = async (
 	return Promise.resolve({ success: true });
 };
 
+function getDeliveryAgent(refId: number, agents: DeliveryAgentDetails[]) {
+	return agents.find((agent) => agent.refid === refId);
+}
+
 function checkStateProductType<T extends SendThankYouEmailProductType>(
 	productTypeName: T,
 	state: SendThankYouEmailState,
@@ -261,6 +293,7 @@ function isFixedTerm(
 	);
 	return productRatePlan.termType === 'FixedTerm';
 }
+
 function getBillingPeriod(productType: ProductType) {
 	if (productType.productType === 'GuardianAdLite') {
 		return BillingPeriod.Monthly;
@@ -268,9 +301,17 @@ function getBillingPeriod(productType: ProductType) {
 	return productType.billingPeriod;
 }
 
-function getMandateId(paymentMethod: PaymentMethod) {
-	if (paymentMethod.Type === 'BankTransfer') {
-		return 'Mandate'; // TODO: retrieve actual mandate ID
+async function getMandateId(
+	isTestUser: boolean,
+	paymentMethodType: PaymentMethodType,
+	accountNumber: string,
+) {
+	if (paymentMethodType === 'BankTransfer') {
+		const response = await getPaymentMethods(
+			await zuoraServiceProvider.getServiceForUser(isTestUser),
+			accountNumber,
+		);
+		return response.banktransfer?.[0]?.mandateInfo.mandateId ?? undefined;
 	}
 	return;
 }
