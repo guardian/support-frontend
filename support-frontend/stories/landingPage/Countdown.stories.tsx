@@ -57,70 +57,83 @@ Default.args = {
 		},
 	},
 	setHeadingOverride: () => {},
+	setDaysTillDeadline: () => {},
 };
 
 export const DeadlineNear = Template.bind({});
 DeadlineNear.args = {
 	countdownSettings: {
-    overwriteHeadingLabel: 'deadline near',
-    countdownStartTimestamp: buildTimestamp(Date.now() - 1 * millisecondsInDay),
-    countdownDeadlineTimestamp: buildTimestamp(Date.now() + 5 * millisecondsInSecond),
-    useLocalTime: true,
+		overwriteHeadingLabel: 'deadline near',
+		countdownStartTimestamp: buildTimestamp(Date.now() - 1 * millisecondsInDay),
+		countdownDeadlineTimestamp: buildTimestamp(
+			Date.now() + 5 * millisecondsInSecond,
+		),
+		useLocalTime: true,
 		theme: {
 			backgroundColor: '#1e3e72',
 			foregroundColor: '#ffffff',
 		},
 	},
 	setHeadingOverride: () => {},
+	setDaysTillDeadline: () => {},
 };
 
 export const DeadlinePassedHidden = Template.bind({});
 DeadlinePassedHidden.args = {
 	countdownSettings: {
-    overwriteHeadingLabel: 'deadline passed',
-    countdownStartTimestamp: buildTimestamp(Date.now() - 1 * millisecondsInDay),
-    countdownDeadlineTimestamp: buildTimestamp(Date.now() - 5 * millisecondsInSecond),
-    useLocalTime: true,
+		overwriteHeadingLabel: 'deadline passed',
+		countdownStartTimestamp: buildTimestamp(Date.now() - 1 * millisecondsInDay),
+		countdownDeadlineTimestamp: buildTimestamp(
+			Date.now() - 5 * millisecondsInSecond,
+		),
+		useLocalTime: true,
 		theme: {
 			backgroundColor: '#1e3e72',
 			foregroundColor: '#ffffff',
 		},
 	},
 	setHeadingOverride: () => {},
+	setDaysTillDeadline: () => {},
 };
 
 export const NotYetAvailableHidden = Template.bind({});
 NotYetAvailableHidden.args = {
 	countdownSettings: {
-    overwriteHeadingLabel: 'start date well in future',
-    countdownStartTimestamp: buildTimestamp(Date.now() + 1 * millisecondsInDay),
-    countdownDeadlineTimestamp: buildTimestamp(Date.now() + 5 * millisecondsInDay),
-    useLocalTime: true,
+		overwriteHeadingLabel: 'start date well in future',
+		countdownStartTimestamp: buildTimestamp(Date.now() + 1 * millisecondsInDay),
+		countdownDeadlineTimestamp: buildTimestamp(
+			Date.now() + 5 * millisecondsInDay,
+		),
+		useLocalTime: true,
 		theme: {
 			backgroundColor: '#1e3e72',
 			foregroundColor: '#ffffff',
 		},
 	},
 	setHeadingOverride: () => {},
+	setDaysTillDeadline: () => {},
 };
 
 export const ThemedSubCampaign = Template.bind({});
 ThemedSubCampaign.args = {
 	countdownSettings: {
-    overwriteHeadingLabel: 'change colour theme',
-    countdownStartTimestamp:
-			buildTimestamp(Date.now() - 1 * millisecondsInDay + 1 * millisecondsInHour),
-    countdownDeadlineTimestamp:
-			buildTimestamp(Date.now() +
-      (2 * millisecondsInDay +
-        1 * millisecondsInHour +
-        45 * millisecondsInMinute +
-        30 * millisecondsInSecond)),
-    useLocalTime: true,
+		overwriteHeadingLabel: 'change colour theme',
+		countdownStartTimestamp: buildTimestamp(
+			Date.now() - 1 * millisecondsInDay + 1 * millisecondsInHour,
+		),
+		countdownDeadlineTimestamp: buildTimestamp(
+			Date.now() +
+				(2 * millisecondsInDay +
+					1 * millisecondsInHour +
+					45 * millisecondsInMinute +
+					30 * millisecondsInSecond),
+		),
+		useLocalTime: true,
 		theme: {
 			backgroundColor: '#ab0613',
 			foregroundColor: '#ffffff',
 		},
 	},
 	setHeadingOverride: () => {},
+	setDaysTillDeadline: () => {},
 };
