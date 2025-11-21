@@ -56,7 +56,7 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
-import { getSanitisedHtml } from '../../../helpers/utilities/utilities';
+import { getSanitisedHtml, replaceDatePlaceholder } from '../../../helpers/utilities/utilities';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import Countdown from '../components/countdown';
 import { OneOffCard } from '../components/oneOffCard';
@@ -494,15 +494,6 @@ export function ThreeTierLanding({
 			urlSearchParamsProduct === tier3Product ||
 			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount),
 		...tier3ProductDescription,
-	};
-
-	// automate days remaining copy where campaign has a countdown
-	const DATE_PLACEHOLDER_TEMPLATE = '%%CAMPAIGN_DEADLINE%%';
-	const replaceDatePlaceholder = (copy: string, deadline?: string): string => {
-		if (copy.includes(DATE_PLACEHOLDER_TEMPLATE) && deadline) {
-			return copy.replace(DATE_PLACEHOLDER_TEMPLATE, deadline);
-		}
-		return copy;
 	};
 
 	return (

@@ -55,6 +55,33 @@ function getSanitisedHtml(markdownString: string): string {
 	});
 }
 
+// Automate days remaining copy where campaign has a countdown in the page
+// relies on the countdown updating state in the 3 tier landing page component
+const DEADLINE_PLACEHOLDER_TEMPLATE = '%%CAMPAIGN_DEADLINE%%';
+function replaceDatePlaceholder(copy: string, deadline?: string): string {
+	if (!copy.includes(DEADLINE_PLACEHOLDER_TEMPLATE)) {
+		return copy;
+	}
+
+	if (deadline !== undefined && !/^\d+$/.test(deadline)) {
+		return copy.replaceAll(DEADLINE_PLACEHOLDER_TEMPLATE, '');
+	}
+
+	// TODO: handle 05
+
+	let replacement = '';
+    
+    if (deadline === '0') {
+        replacement = 'Final day';
+    } else if (deadline === '1') {
+        replacement = '1 day left';
+    } else if (deadline !== undefined) {
+        replacement = `${deadline} days remaining`;
+	}
+
+	return copy.replaceAll(DEADLINE_PLACEHOLDER_TEMPLATE, replacement);
+}
+
 // Parses a comma-separated string of amounts and returns an array of valid, unique numbers.
 // Filters out invalid values (NaN, negative, zero, infinite) and removes duplicates.
 function parseCustomAmounts(customAmountsParam: string): number[] {
@@ -74,4 +101,5 @@ export {
 	hiddenIf,
 	deserialiseJsonObject,
 	parseCustomAmounts,
+	replaceDatePlaceholder,
 };
