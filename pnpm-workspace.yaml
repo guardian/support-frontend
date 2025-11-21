@@ -16,9 +16,10 @@ catalog:
   "@types/jest": ^29.5.12
   "@types/node": ^20.11.27
   "@aws-sdk/client-ssm": ^3.679.0
+  "@aws-sdk/client-sqs": ^3.848.0
   "@aws-sdk/client-secrets-manager": ^3.848.0
   "@aws-sdk/credential-provider-node": 3.699.0
   "@aws-sdk/client-dynamodb": ^3.879.0
   "@aws-sdk/util-dynamodb": ^3.879.0
   "@guardian/prettier": ^2.1.5
-  "@guardian/support-service-lambdas": "guardian/support-service-lambdas#e2b776884cd73ca2546e954a45145a0deac87a21"
+  "@guardian/support-service-lambdas": "guardian/support-service-lambdas#b6cdd76221f3571e695e69f5e1d15898adafbd5d"
