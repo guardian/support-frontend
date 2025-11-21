@@ -3,6 +3,7 @@ import {
 	ascending,
 	classNameWithModifiers,
 	deserialiseJsonObject,
+	replaceDatePlaceholder,
 	roundToDecimalPlaces,
 } from '../utilities/utilities';
 // ----- Tests ----- //
@@ -82,6 +83,75 @@ describe('utilities', () => {
 		it('should return null for JSON that is malformed', () => {
 			const serialised = '{{notvalidJSON';
 			expect(deserialiseJsonObject(serialised)).toBeNull();
+		});
+	});
+	describe('replaceDeadlinePlaceholderTemplate', () => {
+		it('should return copy without change if no template contained', () => {
+			expect(replaceDatePlaceholder('hello', undefined)).toBe('hello');
+		});
+		it('should replace with Final day if 0 passed', () => {
+			expect(
+				replaceDatePlaceholder(
+					'Only %%CAMPAIGN_DEADLINE%% to get your discount.',
+					'0',
+				),
+			).toBe('Only Final day to get your discount.');
+		});
+		it('should replace with 1 day left if 1 passed', () => {
+			expect(
+				replaceDatePlaceholder(
+					'Only %%CAMPAIGN_DEADLINE%% to get your discount.',
+					'1',
+				),
+			).toBe('Only 1 day left to get your discount.');
+		});
+		it('should replace with 2 days remaining if 2 passed', () => {
+			expect(
+				replaceDatePlaceholder(
+					'Only %%CAMPAIGN_DEADLINE%% to get your discount.',
+					'2',
+				),
+			).toBe('Only 2 days remaining to get your discount.');
+		});
+		it('should replace with an empty space if undefined passed', () => {
+			expect(
+				replaceDatePlaceholder(
+					'Only %%CAMPAIGN_DEADLINE%% to get your discount.',
+					undefined,
+				),
+			).toBe('Only  to get your discount.');
+		});
+		it('should replace with an empty space if non number character passed', () => {
+			expect(
+				replaceDatePlaceholder(
+					'Only %%CAMPAIGN_DEADLINE%% to get your discount.',
+					'YY',
+				),
+			).toBe('Only  to get your discount.');
+		});
+		it('should replace with an empty space if empty space passed', () => {
+			expect(
+				replaceDatePlaceholder(
+					'Only %%CAMPAIGN_DEADLINE%% to get your discount.',
+					'',
+				),
+			).toBe('Only  to get your discount.');
+		});
+		it('should replace all instances of the template', () => {
+			expect(
+				replaceDatePlaceholder(
+					'Only %%CAMPAIGN_DEADLINE%% to get your %%CAMPAIGN_DEADLINE%%.',
+					'5',
+				),
+			).toBe('Only 5 days remaining to get your 5 days remaining.');
+		});
+		it('should consider leading zero as invalid', () => {
+			expect(
+				replaceDatePlaceholder(
+					'Only %%CAMPAIGN_DEADLINE%% to get your discount.',
+					'05',
+				),
+			).toBe('Only  to get your discount.');
 		});
 	});
 });
