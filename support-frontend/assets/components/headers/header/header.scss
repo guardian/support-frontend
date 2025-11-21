@@ -26,12 +26,6 @@ $header-links-min-width: gu-span(12);
 	}
 }
 
-.component-header--padlock {
-	margin-right: math.div($gu-h-spacing, 3);
-	display: inline-block;
-	margin-top: 2px;
-}
-
 .component-header-mobile-menu-toggler {
 	@include mq($until: tablet) {
 		display: block;
@@ -86,17 +80,6 @@ $header-links-min-width: gu-span(12);
 	}
 }
 
-.component-header__row {
-	display: flex;
-	width: 100%;
-	& > .component-header-topnav {
-		flex: 1 1 auto;
-	}
-	& > .component-header-links {
-		flex: 1 1 auto;
-	}
-}
-
 .component-header-topnav {
 	display: flex;
 	justify-content: space-between;
@@ -135,12 +118,6 @@ $header-links-min-width: gu-span(12);
 	@include mq($from: wide) {
 		padding-right: gu-span(1) + $gu-h-spacing;
 	}
-}
-
-.component-header-topnav-logo__graun {
-	float: right;
-	height: 100%;
-	flex: 0 1 auto;
 }
 
 .component-header-links--desktop {
@@ -322,22 +299,6 @@ $header-links-min-width: gu-span(12);
 	}
 }
 
-.component-header-checkout--row {
-	width: 100%;
-	color: gu-colour(neutral-100);
-	@include gu-fontset-body-sans;
-	padding: $gu-v-spacing;
-	border-top: 1px solid gu-colour(brand-pastel);
-
-	@include mq($from: desktop) {
-		display: none;
-	}
-
-	@include mq($until: tablet) {
-		display: none;
-	}
-}
-
 .component-header-links__li.component-header-links__li--show-on-tablet {
 	display: block;
 
@@ -345,9 +306,4 @@ $header-links-min-width: gu-span(12);
 	@media (min-width: 884px) {
 		display: none;
 	}
-}
-
-.test-user-banner {
-	background-color: red;
-	width: 100%;
 }
