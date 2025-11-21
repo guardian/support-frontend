@@ -80,10 +80,13 @@ export const submitForm = async ({
 		labels: ['generic-checkout'], // Shall we get rid of this now?
 	};
 
-	const firstDelivery = getProductFirstDeliveryDate(
-		productKey,
-		ratePlanKey as ActivePaperProductOptions,
-	);
+	const firstDelivery =
+		deliveryDate ??
+		getProductFirstDeliveryDate(
+			productKey,
+			ratePlanKey as ActivePaperProductOptions,
+		);
+
 	const firstDeliveryDate = firstDelivery
 		? formatMachineDate(firstDelivery)
 		: null;
@@ -128,7 +131,6 @@ export const submitForm = async ({
 		similarProductsConsent,
 		giftRecipient,
 	};
-
 	if (
 		paymentFields.paymentType === 'StripeHostedCheckout' &&
 		!paymentFields.checkoutSessionId
