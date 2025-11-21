@@ -7,7 +7,8 @@ if (req.http.host ~ "^observer\." &&
     !req.url ~ "^/favicon.ico" &&
     !req.url ~ "^/favicon.png" &&
     !req.url ~ "^/oauth/authorize" &&
-    !req.url ~ "^/oauth/callback"
+    !req.url ~ "^/oauth/callback" &&
+    !req.url ~ "^/postcode-lookup/"
   ) {
   error 802 "redirect";
 }
