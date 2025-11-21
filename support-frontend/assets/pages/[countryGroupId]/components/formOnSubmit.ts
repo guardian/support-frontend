@@ -53,7 +53,7 @@ export const submitForm = async ({
 	abParticipations,
 	promotion,
 	contributionAmount,
-	deliveryDate,
+	weeklyGiftDeliveryDate,
 }: {
 	supportRegionId: SupportRegionId;
 	productKey: ActiveProductKey;
@@ -66,7 +66,7 @@ export const submitForm = async ({
 	abParticipations: Participations;
 	promotion: Promotion | undefined;
 	contributionAmount: number | undefined;
-	deliveryDate?: Date;
+	weeklyGiftDeliveryDate?: Date;
 }): Promise<string> => {
 	const personalData = extractPersonalDataFromForm(formData);
 	const giftRecipient = extractGiftRecipientDataFromForm(formData);
@@ -81,7 +81,7 @@ export const submitForm = async ({
 	};
 
 	const firstDelivery =
-		deliveryDate ??
+		weeklyGiftDeliveryDate ??
 		getProductFirstDeliveryDate(
 			productKey,
 			ratePlanKey as ActivePaperProductOptions,
@@ -166,7 +166,7 @@ export const submitForm = async ({
 			paymentMethod,
 			supportRegionId,
 			paymentRequest,
-			deliveryDate,
+			deliveryDate: weeklyGiftDeliveryDate,
 		});
 
 		// If Stripe hosted checkout, delete previously persisted form details
