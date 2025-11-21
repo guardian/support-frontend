@@ -166,7 +166,7 @@ export const submitForm = async ({
 			paymentMethod,
 			supportRegionId,
 			paymentRequest,
-			deliveryDate: weeklyGiftDeliveryDate,
+			weeklyGiftDeliveryDate,
 		});
 
 		// If Stripe hosted checkout, delete previously persisted form details
@@ -205,7 +205,7 @@ const processSubscription = async ({
 	paymentMethod,
 	supportRegionId,
 	paymentRequest,
-	deliveryDate,
+	weeklyGiftDeliveryDate,
 }: {
 	personalData: FormPersonalFields;
 	appliedPromotion?: AppliedPromotion;
@@ -215,7 +215,7 @@ const processSubscription = async ({
 	paymentMethod: PaymentMethod;
 	supportRegionId: SupportRegionId;
 	paymentRequest: RegularPaymentRequest;
-	deliveryDate?: Date;
+	weeklyGiftDeliveryDate?: Date;
 }) => {
 	const createSubscriptionResult = await createSubscription(paymentRequest);
 
@@ -233,7 +233,7 @@ const processSubscription = async ({
 			paymentMethod,
 			createSubscriptionResult.status,
 			supportRegionId,
-			deliveryDate,
+			weeklyGiftDeliveryDate,
 		);
 	} else {
 		console.error(
@@ -259,14 +259,14 @@ const buildThankYouPageUrl = (
 	paymentMethod: PaymentMethod,
 	status: 'success' | 'pending',
 	supportRegionId: SupportRegionId,
-	deliveryDate?: Date,
+	weeklyGiftDeliveryDate?: Date,
 ) => {
 	const order = {
 		firstName: personalData.firstName,
 		email: personalData.email,
-		paymentMethod: paymentMethod,
-		status: status,
-		deliveryDate: deliveryDate,
+		paymentMethod,
+		status,
+		deliveryDate: weeklyGiftDeliveryDate,
 	};
 	setThankYouOrder(order);
 	const thankYouUrlSearchParams = new URLSearchParams();
