@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { fetchJson } from 'helpers/async/fetch';
 import * as cookie from 'helpers/storage/cookie';
-import { getUser } from 'helpers/user/user';
 
 const COOKIE_NAME = 'GU_user_analytics_profile';
 const COOKIE_TTL_DAYS = 1;
@@ -13,10 +12,6 @@ const useAnalyticsProfile = () => {
 	const [dataLoaded, setDataLoaded] = useState(false);
 
 	const loadAnalyticsData = useCallback(async () => {
-		if (!getUser().isSignedIn) {
-			return;
-		}
-
 		if (dataLoaded) {
 			return;
 		}

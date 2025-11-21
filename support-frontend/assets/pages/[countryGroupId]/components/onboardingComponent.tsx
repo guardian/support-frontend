@@ -96,10 +96,6 @@ function OnboardingComponent({
 	const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
 
 	const fetchNewsletters = async () => {
-		if (!getUser().isSignedIn) {
-			return;
-		}
-
 		try {
 			const newslettersData = await getNewsletters();
 			setNewsletters(newslettersData);
@@ -204,7 +200,6 @@ function OnboardingComponent({
 
 				if (hasAccessToken) {
 					document.body.removeChild(iframe);
-					console.debug('OAuth flow completed - access token is now available');
 
 					void fetchNewsletters();
 					void loadAnalyticsData();
@@ -212,9 +207,6 @@ function OnboardingComponent({
 					setTimeout(pollForAccessToken, POLL_INTERVAL);
 				} else {
 					document.body.removeChild(iframe);
-					console.warn(
-						'OAuth flow timed out - access token not received within expected time',
-					);
 				}
 			};
 
@@ -256,11 +248,6 @@ function OnboardingComponent({
 		return () => {
 			window.removeEventListener('message', receiveIframeMessage);
 		};
-	}, []);
-
-	useEffect(() => {
-		console.debug('Triggering OAuth flow');
-		triggerOAuthFlow();
 	}, []);
 
 	return (
