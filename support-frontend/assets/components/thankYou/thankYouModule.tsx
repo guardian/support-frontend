@@ -337,7 +337,7 @@ function ThankYouModule({
 					) : (
 						<>
 							<p css={[bodyCopyStyle, bodyCopyMarginTop]}>{bodyCopy}</p>
-							<div css={resizeMarginTop}>{ctas}</div>
+							{ctas && <div css={resizeMarginTop}>{ctas}</div>}
 						</>
 					)}
 				</div>
