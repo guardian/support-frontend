@@ -2,7 +2,7 @@ package controllers
 
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.CustomActionBuilders
-import admin.settings.{AllSettings, AllSettingsProvider, On, Switches}
+import admin.settings.{Status, _}
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.Currency
@@ -26,16 +26,7 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.AsyncAuthenticationService.IdentityIdAndEmail
 import services.stepfunctions.{CreateSupportWorkersRequest, SupportWorkersClient}
-import services.{
-  IdentityService,
-  RecaptchaResponse,
-  RecaptchaService,
-  StripeCheckoutSessionService,
-  TestUserService,
-  UserBenefitsApiServiceProvider,
-  UserBenefitsResponse,
-  UserDetails,
-}
+import services._
 import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber, PaperValidation}
 
@@ -294,12 +285,18 @@ class CreateSubscriptionController(
 
     logDetailedMessage("createSubscription")
 
+    val inOnboardingExperiment =
+      settings.switches.featureSwitches.enableThankYouOnboarding.exists(_.isOn) &&
+        FeatureSwitches.productsWithThankYouOnboarding.exists(
+          _.getClass.getSimpleName.stripSuffix("$") == request.body.product.getClass.getSimpleName,
+        )
+
     for {
       _ <- validate(request, settings.switches)
       userDetails <- maybeLoggedInUserDetails match {
         case Some(userDetails) => EitherT.pure[Future, CreateSubscriptionError](userDetails)
         case None =>
-          getOrCreateIdentityUser(request.body, request.headers.get("Referer"))
+          getOrCreateIdentityUser(request.body, request.headers.get("Referer"), !inOnboardingExperiment)
             .map(userDetails => UserDetailsWithSignedInStatus(userDetails, isSignedIn = false))
             .leftMap(mapIdentityErrorToCreateSubscriptionError)
       }
@@ -365,6 +362,7 @@ class CreateSubscriptionController(
   private def getOrCreateIdentityUser(
       body: CreateSupportWorkersRequest,
       referer: Option[String],
+      accountVerificationEmail: Boolean,
   ): EitherT[Future, IdentityError, UserDetails] = {
     implicit val scheduler: Scheduler = system.scheduler
     identityService.getOrCreateUserFromEmail(
@@ -373,6 +371,7 @@ class CreateSubscriptionController(
       body.lastName,
       body.ophanIds.pageviewId,
       referer,
+      accountVerificationEmail,
     )
   }
 
