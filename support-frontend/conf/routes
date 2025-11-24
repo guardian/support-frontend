@@ -103,7 +103,7 @@ POST  /contribute/send-marketing                                   controllers.I
 # ------ Identity ------ #
 POST /identity/signin-url                                          controllers.IdentityController.createSignInURL()
 GET  /identity/newsletters                                         controllers.IdentityController.getNewslettersSubscriptions()
-PATCH /identity/newsletters                                        controllers.IdentityController.updateNewsletter()
+PATCH /identity/newsletters                                        controllers.IdentityController.updateNewsletterSubscription()
 
 # ----- Subscriptions ----- #
 

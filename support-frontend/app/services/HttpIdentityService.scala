@@ -209,7 +209,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       }
   }
 
-  def updateNewsletter(accessToken: String, id: String, subscribed: Boolean, origin: String)(implicit
+  def updateNewsletterSubscription(accessToken: String, id: String, subscribed: Boolean, origin: String)(implicit
       ec: ExecutionContext,
   ): Future[Boolean] = {
     val payload = Json.obj("id" -> id, "subscribed" -> subscribed)

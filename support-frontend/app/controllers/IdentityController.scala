@@ -89,24 +89,25 @@ class IdentityController(
     }
   }
 
-  def updateNewsletter(): Action[UpdateNewsletterRequest] = PrivateAction.async(circe.json[UpdateNewsletterRequest]) {
-    implicit request =>
+  def updateNewsletterSubscription(): Action[UpdateNewsletterRequest] =
+    PrivateAction.async(circe.json[UpdateNewsletterRequest]) { implicit request =>
       request.cookies.get("GU_ACCESS_TOKEN") match {
         case Some(cookie) =>
           val origin = getOrigin(request)
-          identityService.updateNewsletter(cookie.value, request.body.id, request.body.subscribed, origin).map {
-            success =>
+          identityService
+            .updateNewsletterSubscription(cookie.value, request.body.id, request.body.subscribed, origin)
+            .map { success =>
               if (success) {
                 NoContent
               } else {
                 InternalServerError("Failed to update newsletter subscription")
               }
-          }
+            }
         case None =>
           logger.error(scrub"No GU_ACCESS_TOKEN cookie found")
           Future.successful(Unauthorized("No access token found"))
       }
-  }
+    }
 }
 
 case class SendMarketingRequest(email: String)
