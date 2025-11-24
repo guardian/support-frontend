@@ -1,14 +1,13 @@
 import { css } from '@emotion/react';
 import { from } from '@guardian/source/foundations';
 
-const svg_guardian_logo = css`
+const guardianLogoStyle = css`
 	display: block;
 	float: right;
-	margin-top: ${12 / 2.4}px;
-	margin-bottom: ${12 * 1.5}px;
-	height: 48px;
 	width: auto;
-
+	margin-top: 5px;
+	margin-bottom: 18px;
+	height: 48px;
 	${from.mobileLandscape} {
 		height: 56px;
 	}
@@ -24,7 +23,7 @@ const svg_guardian_logo = css`
 export default function SvgGuardianLogo() {
 	return (
 		<svg
-			css={svg_guardian_logo}
+			css={guardianLogoStyle}
 			width="295.75px"
 			height="95px"
 			xmlns="http://www.w3.org/2000/svg"
