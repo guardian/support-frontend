@@ -132,12 +132,12 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .withHttpHeaders("Authorization" -> s"Bearer $apiClientToken")
   }
 
-  private def requestWithAccessToken(path: String, accessToken: String): WSRequest = {
+  private def requestWithAccessToken(path: String, accessToken: String, origin: String): WSRequest = {
     wsClient
       .url(s"$apiUrl/$path")
       .withHttpHeaders(
         "Authorization" -> s"Bearer $accessToken",
-        "Origin" -> "https://gucode.co.uk",
+        "Origin" -> origin,
         "x-gu-is-oauth" -> "true",
       )
   }
@@ -182,8 +182,8 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .subflatMap(resp => resp.json.validate[CreateSignInTokenResponse].asEither.leftMap(_.mkString(",")))
   }
 
-  def getNewsletters(accessToken: String)(implicit ec: ExecutionContext): Future[NewsletterResponse] = {
-    requestWithAccessToken("users/me/newsletters", accessToken)
+  def getNewsletters(accessToken: String, origin: String)(implicit ec: ExecutionContext): Future[NewsletterResponse] = {
+    requestWithAccessToken("users/me/newsletters", accessToken, origin)
       .get()
       .map { response =>
         if (response.status >= 200 && response.status < 300) {
@@ -207,11 +207,11 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       }
   }
 
-  def updateNewsletter(accessToken: String, id: String, subscribed: Boolean)(implicit
+  def updateNewsletter(accessToken: String, id: String, subscribed: Boolean, origin: String)(implicit
       ec: ExecutionContext,
   ): Future[Boolean] = {
     val payload = Json.obj("id" -> id, "subscribed" -> subscribed)
-    requestWithAccessToken("users/me/newsletters", accessToken)
+    requestWithAccessToken("users/me/newsletters", accessToken, origin)
       .patch(payload)
       .map { response =>
         if (response.status >= 200 && response.status < 300) {
