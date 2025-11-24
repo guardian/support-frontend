@@ -7,10 +7,10 @@ import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import Links from '../links/links';
 import {
-	component_header__padlock,
 	component_header__row,
 	component_header_checkout__row,
 	component_header_topnav_logo_graun,
+	padlockContainer,
 	testUserBanner,
 } from './headerStyles';
 import MobileMenuToggler from './mobileMenuToggler';
@@ -33,6 +33,7 @@ type TopNavPropTypes = {
 };
 
 function TopNav({ display, utility }: TopNavPropTypes) {
+	console.log('*** display=', display);
 	return (
 		<div className="component-header-topnav">
 			<div className="component-header-topnav__utility">{utility}</div>
@@ -40,7 +41,7 @@ function TopNav({ display, utility }: TopNavPropTypes) {
 				<div className="component-header-topnav__checkout">
 					<div />
 					<div className="component-header-topnav--checkout-text">
-						<div css={component_header__padlock}>
+						<div css={padlockContainer}>
 							<Padlock />
 						</div>
 						<h1>Checkout</h1>
@@ -118,7 +119,7 @@ export default class Header extends Component<PropTypes, State> {
 					)}
 					{display === 'checkout' && (
 						<div css={[component_header__row, component_header_checkout__row]}>
-							<div css={component_header__padlock}>
+							<div css={padlockContainer}>
 								<Padlock />
 							</div>
 							<div>Checkout</div>

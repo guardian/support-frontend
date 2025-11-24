@@ -1,4 +1,3 @@
-import Header from 'components/headers/header/header';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -9,6 +8,7 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
+import Header from 'components/headers/header/header';
 
 export default {
 	title: 'Core/Header',

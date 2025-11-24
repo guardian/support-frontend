@@ -52,7 +52,7 @@ export const testUserBanner = css`
 	width: 100%;
 `;
 
-export const component_header__padlock = css`
+export const padlockContainer = css`
 	margin-right: ${20 / 3}px;
 	display: inline-block;
 	margin-top: 2px;
