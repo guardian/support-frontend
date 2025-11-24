@@ -71,11 +71,11 @@ class IdentityController(
         )
   }
 
-  def getNewsletters(): Action[AnyContent] = PrivateAction.async { implicit request =>
+  def getNewslettersSubscriptions(): Action[AnyContent] = PrivateAction.async { implicit request =>
     request.cookies.get("GU_ACCESS_TOKEN") match {
       case Some(cookie) =>
         val origin = getOrigin(request)
-        identityService.getNewsletters(cookie.value, origin).map { response =>
+        identityService.getNewslettersSubscriptions(cookie.value, origin).map { response =>
           response.errors match {
             case Some(errors) if errors.nonEmpty =>
               BadRequest(GetNewslettersResponse(response.newsletters, response.errors).asJson)

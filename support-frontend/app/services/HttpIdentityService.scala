@@ -182,7 +182,9 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .subflatMap(resp => resp.json.validate[CreateSignInTokenResponse].asEither.leftMap(_.mkString(",")))
   }
 
-  def getNewsletters(accessToken: String, origin: String)(implicit ec: ExecutionContext): Future[NewsletterResponse] = {
+  def getNewslettersSubscriptions(accessToken: String, origin: String)(implicit
+      ec: ExecutionContext,
+  ): Future[NewsletterResponse] = {
     requestWithAccessToken("users/me/newsletters", accessToken, origin)
       .get()
       .map { response =>
