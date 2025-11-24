@@ -240,45 +240,6 @@ $header-links-min-width: gu-span(12);
 			.component-header-topnav__utility {
 				display: none;
 			}
-
-			.component-header-topnav__checkout {
-				display: flex;
-				flex: 0 0 490px;
-				color: gu-colour(neutral-100);
-				@include gu-fontset-body-sans;
-
-				@include mq($until: tablet) {
-					flex: none;
-					border-right: none;
-				}
-
-				.component-header-topnav--checkout-text {
-					border-top: 1px solid gu-colour(brand-pastel);
-					border-left: 1px solid gu-colour(brand-pastel);
-					padding: $gu-v-spacing $gu-h-spacing;
-					width: 100%;
-					align-self: flex-end;
-
-					:nth-child(2) {
-						display: inline-block;
-						vertical-align: top;
-					}
-
-					@include mq($until: tablet) {
-						border-left: none;
-						border-top: none;
-						padding-left: $gu-h-spacing * 0.25;
-					}
-				}
-
-				@include mq($from: tablet, $until: desktop) {
-					display: none;
-				}
-
-				@include mq($from: leftCol) {
-					flex: 0 0 650px;
-				}
-			}
 		}
 
 		.component-header-topnav-logo {

@@ -37,11 +37,8 @@ export default {
 	},
 };
 
-function Template(args: {
-	display: 'navigation' | 'checkout' | 'guardianLogo';
-	countryGroupId: CountryGroupId;
-}): JSX.Element {
-	return <Header display={args.display} countryGroupId={args.countryGroupId} />;
+function Template(args: { countryGroupId: CountryGroupId }): JSX.Element {
+	return <Header countryGroupId={args.countryGroupId} />;
 }
 
 Template.args = {} as Record<string, unknown>;
@@ -49,13 +46,5 @@ Template.args = {} as Record<string, unknown>;
 export const Navigation = Template.bind({});
 
 Navigation.args = {
-	display: 'navigation',
-	countryGroupId: GBPCountries,
-};
-
-export const Checkout = Template.bind({});
-
-Checkout.args = {
-	display: 'checkout',
 	countryGroupId: GBPCountries,
 };
