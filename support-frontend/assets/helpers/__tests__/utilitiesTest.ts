@@ -105,13 +105,13 @@ describe('utilities', () => {
 				),
 			).toBe('Only 1 day left to get your discount.');
 		});
-		it('should replace with 2 days remaining if 2 passed', () => {
+		it('should replace with 2 days left if 2 passed', () => {
 			expect(
 				replaceDatePlaceholder(
 					'Only %%CAMPAIGN_DEADLINE%% to get your discount.',
 					'2',
 				),
-			).toBe('Only 2 days remaining to get your discount.');
+			).toBe('Only 2 days left to get your discount.');
 		});
 		it('should replace with an empty space if undefined passed', () => {
 			expect(
@@ -143,15 +143,15 @@ describe('utilities', () => {
 					'Only %%CAMPAIGN_DEADLINE%% to get your %%CAMPAIGN_DEADLINE%%.',
 					'5',
 				),
-			).toBe('Only 5 days remaining to get your 5 days remaining.');
+			).toBe('Only 5 days left to get your 5 days left.');
 		});
-		// it('should consider leading zero as invalid', () => {
-		// 	expect(
-		// 		replaceDatePlaceholder(
-		// 			'Only %%CAMPAIGN_DEADLINE%% to get your discount.',
-		// 			'05',
-		// 		),
-		// 	).toBe('Only  to get your discount.');
-		// });
+		it('should strip leading zeros', () => {
+			expect(
+				replaceDatePlaceholder(
+					'Only %%CAMPAIGN_DEADLINE%% to get your discount.',
+					'005',
+				),
+			).toBe('Only 5 days left to get your discount.');
+		});
 	});
 });

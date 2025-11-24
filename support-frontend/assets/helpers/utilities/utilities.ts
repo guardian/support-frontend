@@ -63,20 +63,20 @@ function replaceDatePlaceholder(copy: string, deadline?: string): string {
 		return copy;
 	}
 
-	if (deadline !== undefined && !/^\d+$/.test(deadline)) {
+	if (deadline === undefined || !/^\d+$/.test(deadline)) {
 		return copy.replaceAll(DEADLINE_PLACEHOLDER_TEMPLATE, '');
 	}
 
-	// TODO: handle 05
+	const daysLeft = parseInt(deadline);
 
 	let replacement = '';
 
-	if (deadline === '0') {
+	if (daysLeft === 0) {
 		replacement = 'Final day';
-	} else if (deadline === '1') {
+	} else if (daysLeft === 1) {
 		replacement = '1 day left';
-	} else if (deadline !== undefined) {
-		replacement = `${deadline} days remaining`;
+	} else {
+		replacement = `${daysLeft} days left`;
 	}
 
 	return copy.replaceAll(DEADLINE_PLACEHOLDER_TEMPLATE, replacement);
