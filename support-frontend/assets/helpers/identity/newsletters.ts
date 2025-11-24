@@ -29,7 +29,7 @@ export async function getNewslettersSubscriptions(
 	csrf: CsrfState,
 ): Promise<NewsletterSubscription[]> {
 	const response = await fetchJson<NewslettersApiResponse>(
-		'/api/newsletters',
+		'/identity/newsletters',
 		getRequestOptions('same-origin', csrf),
 	);
 
@@ -57,7 +57,7 @@ export async function updateNewsletterSubscription(
 ): Promise<void> {
 	try {
 		const response = await fetch(
-			'/api/newsletters',
+			'/identity/newsletters',
 			requestOptions(
 				{
 					id,
