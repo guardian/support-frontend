@@ -2,7 +2,7 @@ package controllers
 
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.CustomActionBuilders
-import admin.settings.{Status, _}
+import admin.settings.{AllSettings, AllSettingsProvider, On, Switches}
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.Currency
@@ -26,7 +26,16 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.AsyncAuthenticationService.IdentityIdAndEmail
 import services.stepfunctions.{CreateSupportWorkersRequest, SupportWorkersClient}
-import services._
+import services.{
+  IdentityService,
+  RecaptchaResponse,
+  RecaptchaService,
+  StripeCheckoutSessionService,
+  TestUserService,
+  UserBenefitsApiServiceProvider,
+  UserBenefitsResponse,
+  UserDetails,
+}
 import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber, PaperValidation}
 
@@ -287,8 +296,8 @@ class CreateSubscriptionController(
 
     val inOnboardingExperiment =
       settings.switches.featureSwitches.enableThankYouOnboarding.exists(_.isOn) &&
-        FeatureSwitches.productsWithThankYouOnboarding.exists(
-          _.getClass.getSimpleName.stripSuffix("$") == request.body.product.getClass.getSimpleName,
+        settings.productsWithThankYouOnboarding.contains(
+          request.body.product.getClass.getSimpleName,
         )
 
     for {

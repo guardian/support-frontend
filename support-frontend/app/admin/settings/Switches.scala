@@ -31,9 +31,6 @@ case class FeatureSwitches(
 
 object FeatureSwitches {
   implicit val featureSwitchesCodec: Codec[FeatureSwitches] = deriveCodec
-
-  val productsWithThankYouOnboarding: Set[SupporterPlus.type] = Set(SupporterPlus)
-
 }
 
 case class CampaignSwitches(
