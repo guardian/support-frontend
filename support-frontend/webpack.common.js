@@ -1,15 +1,15 @@
 'use-strict';
 
 const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
-const pxtorem = require('postcss-pxtorem');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const { paletteAsSass } = require('./scripts/pasteup-sass');
-const { getClassName } = require('./scripts/css');
-const entryPoints = require('./webpack.entryPoints');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const pxtorem = require('postcss-pxtorem');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+const { getClassName } = require('./scripts/css');
+const { paletteAsSass } = require('./scripts/pasteup-sass');
+const entryPoints = require('./webpack.entryPoints');
 
 const cssLoaders = [
 	{
@@ -33,7 +33,6 @@ const cssLoaders = [
 
 // Hide mini-css-extract-plugin spam logs
 class CleanUpStatsPlugin {
-	// eslint-disable-next-line class-methods-use-this
 	shouldPickStatChild(child) {
 		return child.name.indexOf('mini-css-extract-plugin') !== 0;
 	}
@@ -42,7 +41,6 @@ class CleanUpStatsPlugin {
 		compiler.hooks.done.tap('CleanUpStatsPlugin', (stats) => {
 			const { children } = stats.compilation;
 			if (Array.isArray(children)) {
-				// eslint-disable-next-line no-param-reassign
 				stats.compilation.children = children.filter((child) =>
 					this.shouldPickStatChild(child),
 				);
@@ -94,6 +92,18 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 			'@modules/internationalisation': path.resolve(
 				__dirname,
 				'./node_modules/@guardian/support-service-lambdas/modules/internationalisation/src',
+			),
+			'@modules/product-catalog': path.resolve(
+				__dirname,
+				'./node_modules/@guardian/support-service-lambdas/modules/product-catalog/src',
+			),
+			'@modules/arrayFunctions': path.resolve(
+				__dirname,
+				'./node_modules/@guardian/support-service-lambdas/modules/arrayFunctions',
+			),
+			'@modules/objectFunctions': path.resolve(
+				__dirname,
+				'./node_modules/@guardian/support-service-lambdas/modules/objectFunctions',
 			),
 			'@modules': path.resolve(__dirname, '../modules'),
 		},
