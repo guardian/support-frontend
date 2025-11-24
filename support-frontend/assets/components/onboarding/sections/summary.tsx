@@ -155,7 +155,7 @@ export function OnboardingSummarySuccessfulSignIn({
 				<Stack space={1}>
 					<h2 css={boldDescriptions}>Saturday Edition newsletter</h2>
 					<p css={descriptions}>
-						An exclusive email highlighting the week's best Guardian journalism
+						An exclusive email highlighting the week’s best Guardian journalism
 						from our editor-in-chief, Katharine Viner
 					</p>
 				</Stack>
