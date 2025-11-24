@@ -93,7 +93,8 @@ function OnboardingComponent({
 
 	// -------------
 	// Fetch newsletters from Identity API
-	const [userNewslettersSubscriptions, setUserNewslettersSubscriptions] = useState<NewsletterSubscription[] | null>(null);
+	const [userNewslettersSubscriptions, setUserNewslettersSubscriptions] =
+		useState<NewsletterSubscription[] | null>(null);
 
 	const fetchUserNewslettersSubscriptions = async () => {
 		try {

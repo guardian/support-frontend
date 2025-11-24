@@ -25,7 +25,9 @@ interface NewslettersApiResponse extends Record<string, unknown> {
  * @returns Promise resolving to an array of newsletters subscriptions
  * @throws Error if the API returns an error
  */
-export async function getNewslettersSubscriptions(csrf: CsrfState): Promise<NewsletterSubscription[]> {
+export async function getNewslettersSubscriptions(
+	csrf: CsrfState,
+): Promise<NewsletterSubscription[]> {
 	const response = await fetchJson<NewslettersApiResponse>(
 		'/api/newsletters',
 		getRequestOptions('same-origin', csrf),
@@ -86,5 +88,7 @@ export function getNewsletterSubscriptionById(
 	newslettersSubscriptions: NewsletterSubscription[],
 	id: NewsletterId,
 ): NewsletterSubscription | undefined {
-	return newslettersSubscriptions.find((newsletterSubscription) => newsletterSubscription.listId === String(id));
+	return newslettersSubscriptions.find(
+		(newsletterSubscription) => newsletterSubscription.listId === String(id),
+	);
 }

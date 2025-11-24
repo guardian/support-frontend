@@ -84,7 +84,7 @@ export function OnboardingSummarySuccessfulSignIn({
 	handleStepNavigation,
 	userState,
 	userNewslettersSubscriptions,
-	csrf
+	csrf,
 }: {
 	handleStepNavigation: HandleStepNavigationFunction;
 	userState: CurrentUserState;
@@ -125,7 +125,11 @@ export function OnboardingSummarySuccessfulSignIn({
 		setIsUpdatingNewsletterSubscription(true);
 
 		try {
-			await updateNewsletterSubscription(csrf, NewsletterId.SaturdayEdition, newState);
+			await updateNewsletterSubscription(
+				csrf,
+				NewsletterId.SaturdayEdition,
+				newState,
+			);
 		} catch (error) {
 			console.error('Failed to update newsletter preference:', error);
 			// Revert the toggle on error
