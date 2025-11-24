@@ -110,13 +110,20 @@ function guardianWeeklyLanding(countryGroupId: CountryGroupId, gift: boolean) {
 const promotionTermsUrl = (promoCode: string) =>
 	`${getOrigin()}/p/${promoCode}/terms`;
 
+function getPaperOrigin(productOptions: ProductOptions): string {
+	const origin = getOrigin();
+	return productOptions === 'Sunday'
+		? origin.replace('support', 'observer')
+		: origin;
+}
+
 function paperCheckoutUrl(
 	fulfilmentOption: FulfilmentOptions,
 	productOptions: ProductOptions,
 	promoCode?: Option<string>,
 	abTestName?: string,
 ) {
-	const url = `${getOrigin()}/uk/checkout`;
+	const url = `${getPaperOrigin(productOptions)}/uk/checkout`;
 
 	const params = abTestName
 		? {
