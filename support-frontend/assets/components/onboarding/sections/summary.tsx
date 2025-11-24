@@ -10,12 +10,19 @@ import { ToggleSwitch } from '@guardian/source-development-kitchen/react-compone
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
+import { useEffect } from 'react';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import { getNewsletterById, type Newsletter, NewsletterId, updateNewsletter } from 'helpers/identity/newsletters';
+import {
+	getNewsletterSubscriptionById,
+	NewsletterId,
+	type NewsletterSubscription,
+	updateNewsletterSubscription,
+} from 'helpers/identity/newsletters';
 import {
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { getThankYouOrder } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
 import type {
 	CurrentUserState,
@@ -76,49 +83,56 @@ const onboardingSummaryCopyMapping: Record<
 export function OnboardingSummarySuccessfulSignIn({
 	handleStepNavigation,
 	userState,
-	newsletters,
+	userNewslettersSubscriptions,
+	csrf
 }: {
 	handleStepNavigation: HandleStepNavigationFunction;
 	userState: CurrentUserState;
-	newsletters: Newsletter[];
+	userNewslettersSubscriptions: NewsletterSubscription[] | null;
+	csrf: CsrfState;
 }) {
-	// Find the Saturday Edition newsletter using the type-safe helper
-	const saturdayEditionNewsletter = getNewsletterById(
-		newsletters,
-		NewsletterId.SaturdayEdition,
-	);
+	const [switchNewsletterEnabled, setSwitchNewsletterEnabled] = useState(false);
+	const [
+		isUpdatingNewsletterSubscription,
+		setIsUpdatingNewsletterSubscription,
+	] = useState(true);
 
-	const [switchNewsletterEnabled, setSwitchNewsletterEnabled] = useState(
-		saturdayEditionNewsletter?.subscribed ?? true,
-	);
+	useEffect(() => {
+		if (userNewslettersSubscriptions) {
+			// Find the Saturday Edition newsletter using the type-safe helper
+			const saturdayEditionNewsletterSubscription =
+				getNewsletterSubscriptionById(
+					userNewslettersSubscriptions,
+					NewsletterId.SaturdayEdition,
+				);
 
-	// Track pending state to prevent race conditions and multiple rapid requests
-	const [isUpdatingNewsletter, setIsUpdatingNewsletter] = useState(false);
+			if (saturdayEditionNewsletterSubscription) {
+				setSwitchNewsletterEnabled(true);
+			}
+
+			setIsUpdatingNewsletterSubscription(false);
+		}
+	}, [userNewslettersSubscriptions]);
 
 	const handleNewsletterToggle = async () => {
 		// Prevent multiple simultaneous requests
-		if (isUpdatingNewsletter) {
+		if (isUpdatingNewsletterSubscription) {
 			return;
 		}
 
 		const newState = !switchNewsletterEnabled;
 		setSwitchNewsletterEnabled(newState);
-		setIsUpdatingNewsletter(true);
+		setIsUpdatingNewsletterSubscription(true);
 
-		if (saturdayEditionNewsletter) {
-			try {
-				await updateNewsletter(saturdayEditionNewsletter.id, newState);
-			} catch (error) {
-				console.error('Failed to update newsletter preference:', error);
-				// Revert the toggle on error
-				setSwitchNewsletterEnabled(!newState);
-			} finally {
-				// Always re-enable the toggle when request completes
-				setIsUpdatingNewsletter(false);
-			}
-		} else {
-			// Re-enable if newsletter not found
-			setIsUpdatingNewsletter(false);
+		try {
+			await updateNewsletterSubscription(csrf, NewsletterId.SaturdayEdition, newState);
+		} catch (error) {
+			console.error('Failed to update newsletter preference:', error);
+			// Revert the toggle on error
+			setSwitchNewsletterEnabled(!newState);
+		} finally {
+			// Always re-enable the toggle when request completes
+			setIsUpdatingNewsletterSubscription(false);
 		}
 	};
 
@@ -161,9 +175,13 @@ export function OnboardingSummarySuccessfulSignIn({
 				</Stack>
 				<div
 					css={css`
-						opacity: ${isUpdatingNewsletter ? 0.6 : 1};
-						pointer-events: ${isUpdatingNewsletter ? 'none' : 'auto'};
-						cursor: ${isUpdatingNewsletter ? 'not-allowed' : 'pointer'};
+						opacity: ${isUpdatingNewsletterSubscription ? 0.6 : 1};
+						pointer-events: ${isUpdatingNewsletterSubscription
+							? 'none'
+							: 'auto'};
+						cursor: ${isUpdatingNewsletterSubscription
+							? 'not-allowed'
+							: 'pointer'};
 					`}
 				>
 					<ToggleSwitch

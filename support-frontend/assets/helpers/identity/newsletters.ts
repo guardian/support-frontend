@@ -10,22 +10,22 @@ export enum NewsletterId {
 	SaturdayEdition = '6042',
 }
 
-export interface Newsletter {
+export interface NewsletterSubscription {
 	listId: string;
 }
 
 interface NewslettersApiResponse extends Record<string, unknown> {
-	newsletters?: Newsletter[];
+	newsletters?: NewsletterSubscription[];
 	errors?: string[];
 }
 
 /**
- * Fetches available newsletters from the Identity API
+ * Fetches available newsletters subscriptions from the Identity API
  * @param csrf - CSRF state for authentication
- * @returns Promise resolving to an array of newsletters
+ * @returns Promise resolving to an array of newsletters subscriptions
  * @throws Error if the API returns an error
  */
-export async function getNewsletters(csrf: CsrfState): Promise<Newsletter[]> {
+export async function getNewslettersSubscriptions(csrf: CsrfState): Promise<NewsletterSubscription[]> {
 	const response = await fetchJson<NewslettersApiResponse>(
 		'/api/newsletters',
 		getRequestOptions('same-origin', csrf),
@@ -43,11 +43,13 @@ export async function getNewsletters(csrf: CsrfState): Promise<Newsletter[]> {
 
 /**
  * Updates a newsletter subscription
+ * @param csrf - CSRF state for authentication
  * @param id - The newsletter ID
  * @param subscribed - Whether to subscribe (true) or unsubscribe (false)
  * @returns Promise resolving to void
  */
-export async function updateNewsletter(
+export async function updateNewsletterSubscription(
+	csrf: CsrfState,
 	id: string,
 	subscribed: boolean,
 ): Promise<void> {
@@ -61,7 +63,7 @@ export async function updateNewsletter(
 				},
 				'same-origin',
 				'PATCH',
-				null,
+				csrf,
 			),
 		);
 		if (!response.ok) {
@@ -75,14 +77,14 @@ export async function updateNewsletter(
 }
 
 /**
- * Finds a newsletter by its enum ID
- * @param newsletters - Array of newsletters to search
+ * Finds a newsletter subscription by newsletter enum ID
+ * @param newslettersSubscriptions - Array of newsletters subscriptions to search
  * @param id - The newsletter ID enum value
- * @returns The matching newsletter, or undefined if not found
+ * @returns The matching newsletter subscription, or undefined if not found
  */
-export function getNewsletterById(
-	newsletters: Newsletter[],
+export function getNewsletterSubscriptionById(
+	newslettersSubscriptions: NewsletterSubscription[],
 	id: NewsletterId,
-): Newsletter | undefined {
-	return newsletters.find((newsletter) => newsletter.listId === String(id));
+): NewsletterSubscription | undefined {
+	return newslettersSubscriptions.find((newsletterSubscription) => newsletterSubscription.listId === String(id));
 }
