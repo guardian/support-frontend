@@ -93,11 +93,11 @@ function OnboardingComponent({
 
 	// -------------
 	// Fetch newsletters from Identity API
-	const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
+	const [newsletters, setNewsletters] = useState<Newsletter[] | null>(null);
 
 	const fetchNewsletters = async () => {
 		try {
-			const newslettersData = await getNewsletters();
+			const newslettersData = await getNewsletters(csrf);
 			setNewsletters(newslettersData);
 			console.debug('Newsletters fetched:', newslettersData);
 		} catch (error) {
@@ -281,7 +281,8 @@ function OnboardingComponent({
 							<OnboardingSummarySuccessfulSignIn
 								handleStepNavigation={handleStepNavigation}
 								userState={userState}
-								newsletters={newsletters}
+								// newsletters={newsletters}
+								newsletters={[]}
 							/>
 						)}
 					</ContentBox>

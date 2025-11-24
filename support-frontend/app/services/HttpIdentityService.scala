@@ -81,18 +81,40 @@ object CreateSignInTokenResponse {
 }
 
 case class Newsletter(
-    id: String,
-    theme: String,
-    group: String,
-    name: String,
-    description: String,
-    frequency: String,
-    subscribed: Boolean,
-    exactTargetListId: Int,
+    listId: String,
 )
 
 object Newsletter {
   implicit val newsletterReads: Reads[Newsletter] = Json.reads[Newsletter]
+}
+
+case class NewsletterApiResult(
+    htmlPreference: String,
+    subscriptions: List[Newsletter],
+    globalSubscriptionStatus: String,
+)
+
+object NewsletterApiResult {
+  implicit val newsletterApiResultReads: Reads[NewsletterApiResult] = Json.reads[NewsletterApiResult]
+}
+
+case class NewsletterApiResponse(
+    result: NewsletterApiResult,
+    status: String,
+)
+
+object NewsletterApiResponse {
+  implicit val newsletterApiResponseReads: Reads[NewsletterApiResponse] = Json.reads[NewsletterApiResponse]
+}
+
+case class NewsletterResponse(
+    newsletters: Option[List[Newsletter]],
+    errors: Option[List[String]],
+)
+
+object NewsletterResponse {
+  def success(newsletters: List[Newsletter]): NewsletterResponse = NewsletterResponse(Some(newsletters), None)
+  def failure(error: String): NewsletterResponse = NewsletterResponse(None, Some(List(error)))
 }
 
 object IdentityService {
@@ -160,23 +182,28 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .subflatMap(resp => resp.json.validate[CreateSignInTokenResponse].asEither.leftMap(_.mkString(",")))
   }
 
-  def getNewsletters(accessToken: String)(implicit ec: ExecutionContext): Future[List[Newsletter]] = {
+  def getNewsletters(accessToken: String)(implicit ec: ExecutionContext): Future[NewsletterResponse] = {
     requestWithAccessToken("users/me/newsletters", accessToken)
       .get()
       .map { response =>
         if (response.status >= 200 && response.status < 300) {
-          response.json.validate[List[Newsletter]].asOpt.getOrElse {
-            logger.error(scrub"Failed to parse newsletters response: ${response.body}")
-            List.empty
+          response.json.validate[NewsletterApiResponse].asOpt match {
+            case Some(apiResponse) => NewsletterResponse.success(apiResponse.result.subscriptions)
+            case None =>
+              val errorMsg = s"Failed to parse newsletters response: ${response.body}"
+              logger.error(scrub"$errorMsg")
+              NewsletterResponse.failure(errorMsg)
           }
         } else {
-          logger.error(scrub"Failed to fetch newsletters: ${response.status} ${response.body}")
-          List.empty
+          val errorMsg = s"Failed to fetch newsletters: ${response.status} ${response.body}"
+          logger.error(scrub"$errorMsg")
+          NewsletterResponse.failure(errorMsg)
         }
       }
       .recover { case e: Exception =>
-        logger.error(scrub"Exception fetching newsletters: ${e.getMessage}")
-        List.empty
+        val errorMsg = s"Exception fetching newsletters: ${e.getMessage}"
+        logger.error(scrub"$errorMsg")
+        NewsletterResponse.failure(errorMsg)
       }
   }
 

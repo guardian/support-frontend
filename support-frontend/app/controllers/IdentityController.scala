@@ -70,8 +70,8 @@ class IdentityController(
   def getNewsletters(): Action[AnyContent] = PrivateAction.async { implicit request =>
     request.cookies.get("GU_ACCESS_TOKEN") match {
       case Some(cookie) =>
-        identityService.getNewsletters(cookie.value).map { newsletters =>
-          Ok(GetNewslettersResponse(newsletters).asJson)
+        identityService.getNewsletters(cookie.value).map { response =>
+          Ok(GetNewslettersResponse(response.newsletters, response.errors).asJson)
         }
       case None =>
         logger.error(scrub"No GU_ACCESS_TOKEN cookie found")
@@ -117,10 +117,17 @@ object CreateSignInLinkResponse {
   implicit val encoder: Encoder[CreateSignInLinkResponse] = deriveEncoder
 }
 
-case class GetNewslettersResponse(newsletters: List[services.Newsletter])
+case class GetNewslettersResponse(newsletters: Option[List[services.Newsletter]], errors: Option[List[String]])
 object GetNewslettersResponse {
   implicit val newsletterEncoder: Encoder[services.Newsletter] = deriveEncoder
-  implicit val encoder: Encoder[GetNewslettersResponse] = deriveEncoder
+  implicit val encoder: Encoder[GetNewslettersResponse] = Encoder.instance { response =>
+    io.circe.Json.obj(
+      List(
+        response.newsletters.map(n => "newsletters" -> io.circe.Encoder[List[services.Newsletter]].apply(n)),
+        response.errors.map(e => "errors" -> io.circe.Encoder[List[String]].apply(e)),
+      ).flatten: _*,
+    )
+  }
 }
 
 case class UpdateNewsletterRequest(id: String, subscribed: Boolean)

@@ -1,3 +1,4 @@
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { fetchJson, getRequestOptions, requestOptions } from '../async/fetch';
 
 /**
@@ -6,51 +7,38 @@ import { fetchJson, getRequestOptions, requestOptions } from '../async/fetch';
  * Used to safely reference newsletters throughout the application
  */
 export enum NewsletterId {
-	SaturdayEdition = 'saturday-edition',
+	SaturdayEdition = '6042',
 }
 
 export interface Newsletter {
-	id: string;
-	theme: string;
-	group: string;
-	name: string;
-	description: string;
-	frequency: string;
-	subscribed: boolean;
-	exactTargetListId: number;
+	listId: string;
 }
 
-interface GetNewslettersResponse extends Record<string, unknown> {
+interface NewslettersApiResponse extends Record<string, unknown> {
 	newsletters?: Newsletter[];
-	error?: string;
+	errors?: string[];
 }
 
 /**
  * Fetches available newsletters from the Identity API
+ * @param csrf - CSRF state for authentication
  * @returns Promise resolving to an array of newsletters
  * @throws Error if the API returns an error
  */
-export async function getNewsletters(): Promise<Newsletter[]> {
-	try {
-		const response = await fetchJson<GetNewslettersResponse>(
-			'/api/newsletters',
-			getRequestOptions('same-origin', null),
-		);
-		console.debug('Newsletters fetched:', response);
+export async function getNewsletters(csrf: CsrfState): Promise<Newsletter[]> {
+	const response = await fetchJson<NewslettersApiResponse>(
+		'/api/newsletters',
+		getRequestOptions('same-origin', csrf),
+	);
 
-		if (response.error) {
-			throw new Error(`API Error: ${response.error}`);
-		}
-
-		if (response.newsletters) {
-			return response.newsletters;
-		}
-
-		throw new Error('Invalid response format: no newsletters or error message');
-	} catch (error) {
-		console.error('Error fetching newsletters:', error);
-		throw error;
+	if (response.errors && response.errors.length > 0) {
+		const errorMessage = response.errors.join(', ');
+		console.error('Error fetching newsletters:', errorMessage);
+		throw new Error(`Failed to fetch newsletters: ${errorMessage}`);
 	}
+
+	console.debug('Newsletters fetched successfully:', response.newsletters);
+	return response.newsletters ?? [];
 }
 
 /**
@@ -96,5 +84,5 @@ export function getNewsletterById(
 	newsletters: Newsletter[],
 	id: NewsletterId,
 ): Newsletter | undefined {
-	return newsletters.find((newsletter) => newsletter.id === String(id));
+	return newsletters.find((newsletter) => newsletter.listId === String(id));
 }
