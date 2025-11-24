@@ -68,18 +68,10 @@ class IdentityController(
   }
 
   def getNewsletters(): Action[AnyContent] = PrivateAction.async { implicit request =>
-    val requestDomain = request.host
     request.cookies.get("GU_ACCESS_TOKEN") match {
       case Some(cookie) =>
-        identityService.getNewsletters(cookie.value).map { result =>
-          result match {
-            case Right(newsletters) =>
-              Ok(GetNewslettersResponse(newsletters).asJson)
-            case Left(errorMsg) =>
-              val fullError = s"Request from domain: $requestDomain. $errorMsg"
-              logger.error(scrub"Error fetching newsletters: $fullError")
-              BadRequest(ErrorResponse(fullError).asJson)
-          }
+        identityService.getNewsletters(cookie.value).map { newsletters =>
+          Ok(GetNewslettersResponse(newsletters).asJson)
         }
       case None =>
         logger.error(scrub"No GU_ACCESS_TOKEN cookie found")
@@ -129,11 +121,6 @@ case class GetNewslettersResponse(newsletters: List[services.Newsletter])
 object GetNewslettersResponse {
   implicit val newsletterEncoder: Encoder[services.Newsletter] = deriveEncoder
   implicit val encoder: Encoder[GetNewslettersResponse] = deriveEncoder
-}
-
-case class ErrorResponse(error: String)
-object ErrorResponse {
-  implicit val encoder: Encoder[ErrorResponse] = deriveEncoder
 }
 
 case class UpdateNewsletterRequest(id: String, subscribed: Boolean)

@@ -113,7 +113,11 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
   private def requestWithAccessToken(path: String, accessToken: String): WSRequest = {
     wsClient
       .url(s"$apiUrl/$path")
-      .withHttpHeaders("Authorization" -> s"Bearer $accessToken")
+      .withHttpHeaders(
+        "Authorization" -> s"Bearer $accessToken",
+        "Origin" -> "https://gucode.co.uk",
+        "x-gu-is-oauth" -> "true",
+      )
   }
 
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean] = {
@@ -156,31 +160,23 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .subflatMap(resp => resp.json.validate[CreateSignInTokenResponse].asEither.leftMap(_.mkString(",")))
   }
 
-  def getNewsletters(accessToken: String)(implicit ec: ExecutionContext): Future[Either[String, List[Newsletter]]] = {
-    val apiEndpoint = s"$apiUrl/users/me/newsletters"
+  def getNewsletters(accessToken: String)(implicit ec: ExecutionContext): Future[List[Newsletter]] = {
     requestWithAccessToken("users/me/newsletters", accessToken)
       .get()
       .map { response =>
         if (response.status >= 200 && response.status < 300) {
-          response.json.validate[List[Newsletter]].asOpt match {
-            case Some(newsletters) => Right(newsletters)
-            case None =>
-              val errorMsg =
-                s"Failed to parse newsletters response from API endpoint: $apiEndpoint. Response: ${response.body}"
-              logger.error(scrub"$errorMsg")
-              Left(errorMsg)
+          response.json.validate[List[Newsletter]].asOpt.getOrElse {
+            logger.error(scrub"Failed to parse newsletters response: ${response.body}")
+            List.empty
           }
         } else {
-          val errorMsg =
-            s"Failed to fetch newsletters from API endpoint: $apiEndpoint. Status: ${response.status}. Response: ${response.body}"
-          logger.error(scrub"$errorMsg")
-          Left(errorMsg)
+          logger.error(scrub"Failed to fetch newsletters: ${response.status} ${response.body}")
+          List.empty
         }
       }
       .recover { case e: Exception =>
-        val errorMsg = s"Exception fetching newsletters from API endpoint: $apiEndpoint. Error: ${e.getMessage}"
-        logger.error(scrub"$errorMsg")
-        Left(errorMsg)
+        logger.error(scrub"Exception fetching newsletters: ${e.getMessage}")
+        List.empty
       }
   }
 
