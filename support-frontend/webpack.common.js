@@ -5,10 +5,10 @@ const autoprefixer = require('autoprefixer');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const pxtorem = require('postcss-pxtorem');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const { getClassName } = require('./scripts/css');
-const { paletteAsSass } = require('./scripts/pasteup-sass');
 const entryPoints = require('./webpack.entryPoints');
 
 const cssLoaders = [
@@ -85,27 +85,11 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 	},
 
 	resolve: {
+		plugins: [new TsconfigPathsPlugin()],
 		alias: {
 			react: 'preact/compat',
 			'react-dom': 'preact/compat',
 			ophan: 'ophan-tracker-js/build/ophan.support',
-			'@modules/internationalisation': path.resolve(
-				__dirname,
-				'./node_modules/@guardian/support-service-lambdas/modules/internationalisation/src',
-			),
-			'@modules/product-catalog': path.resolve(
-				__dirname,
-				'./node_modules/@guardian/support-service-lambdas/modules/product-catalog/src',
-			),
-			'@modules/arrayFunctions': path.resolve(
-				__dirname,
-				'./node_modules/@guardian/support-service-lambdas/modules/arrayFunctions',
-			),
-			'@modules/objectFunctions': path.resolve(
-				__dirname,
-				'./node_modules/@guardian/support-service-lambdas/modules/objectFunctions',
-			),
-			'@modules': path.resolve(__dirname, '../modules'),
 		},
 		modules: [
 			path.resolve(__dirname, 'assets'),
