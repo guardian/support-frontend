@@ -16,8 +16,6 @@ function Template(args: GuardianPrintHeadingProps) {
 		padding: ${space[6]}px;
 	`;
 
-	console.log({ args });
-
 	return (
 		<div css={innerContentContainer}>
 			<GuardianPrintHeading {...args} />
