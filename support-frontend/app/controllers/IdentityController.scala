@@ -29,7 +29,7 @@ class IdentityController(
   import actionRefiners._
 
   private def getOrigin(request: RequestHeader): String = {
-    s"https//${request.host}"
+    s"https://${request.host}"
   }
 
   def warnAndReturn(): Status =
