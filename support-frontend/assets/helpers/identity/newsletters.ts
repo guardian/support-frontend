@@ -9,11 +9,6 @@ export enum NewsletterId {
 	SaturdayEdition = 'saturday-edition',
 }
 
-/**
- * Helper type to get values from the enum
- */
-export type NewsletterIdValue = `${NewsletterId}`;
-
 export interface Newsletter {
 	id: string;
 	theme: string;
@@ -42,15 +37,15 @@ export async function getNewsletters(): Promise<Newsletter[]> {
 			getRequestOptions('same-origin', null),
 		);
 		console.debug('Newsletters fetched:', response);
-		
+
 		if (response.error) {
 			throw new Error(`API Error: ${response.error}`);
 		}
-		
+
 		if (response.newsletters) {
 			return response.newsletters;
 		}
-		
+
 		throw new Error('Invalid response format: no newsletters or error message');
 	} catch (error) {
 		console.error('Error fetching newsletters:', error);
@@ -99,7 +94,7 @@ export async function updateNewsletter(
  */
 export function getNewsletterById(
 	newsletters: Newsletter[],
-	id: NewsletterId | NewsletterIdValue,
+	id: NewsletterId,
 ): Newsletter | undefined {
 	return newsletters.find((newsletter) => newsletter.id === String(id));
 }
