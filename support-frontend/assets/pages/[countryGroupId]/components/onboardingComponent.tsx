@@ -281,6 +281,7 @@ function OnboardingComponent({
 							<OnboardingSummarySuccessfulSignIn
 								handleStepNavigation={handleStepNavigation}
 								userState={userState}
+								newsletters={newsletters}
 							/>
 						)}
 					</ContentBox>

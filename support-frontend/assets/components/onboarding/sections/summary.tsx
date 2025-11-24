@@ -11,6 +11,7 @@ import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import { getNewsletterById, type Newsletter, NewsletterId, updateNewsletter } from 'helpers/identity/newsletters';
 import {
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
@@ -75,11 +76,51 @@ const onboardingSummaryCopyMapping: Record<
 export function OnboardingSummarySuccessfulSignIn({
 	handleStepNavigation,
 	userState,
+	newsletters,
 }: {
 	handleStepNavigation: HandleStepNavigationFunction;
 	userState: CurrentUserState;
+	newsletters: Newsletter[];
 }) {
-	const [switchNewsletterEnabled, setSwitchNewsletterEnabled] = useState(true);
+	// Find the Saturday Edition newsletter using the type-safe helper
+	const saturdayEditionNewsletter = getNewsletterById(
+		newsletters,
+		NewsletterId.SaturdayEdition,
+	);
+
+	const [switchNewsletterEnabled, setSwitchNewsletterEnabled] = useState(
+		saturdayEditionNewsletter?.subscribed ?? true,
+	);
+
+	// Track pending state to prevent race conditions and multiple rapid requests
+	const [isUpdatingNewsletter, setIsUpdatingNewsletter] = useState(false);
+
+	const handleNewsletterToggle = async () => {
+		// Prevent multiple simultaneous requests
+		if (isUpdatingNewsletter) {
+			return;
+		}
+
+		const newState = !switchNewsletterEnabled;
+		setSwitchNewsletterEnabled(newState);
+		setIsUpdatingNewsletter(true);
+
+		if (saturdayEditionNewsletter) {
+			try {
+				await updateNewsletter(saturdayEditionNewsletter.id, newState);
+			} catch (error) {
+				console.error('Failed to update newsletter preference:', error);
+				// Revert the toggle on error
+				setSwitchNewsletterEnabled(!newState);
+			} finally {
+				// Always re-enable the toggle when request completes
+				setIsUpdatingNewsletter(false);
+			}
+		} else {
+			// Re-enable if newsletter not found
+			setIsUpdatingNewsletter(false);
+		}
+	};
 
 	return (
 		<Stack space={2}>
@@ -114,14 +155,22 @@ export function OnboardingSummarySuccessfulSignIn({
 				<Stack space={1}>
 					<h2 css={boldDescriptions}>Saturday Edition newsletter</h2>
 					<p css={descriptions}>
-						An exclusive email highlighting the week’s best Guardian journalism
+						An exclusive email highlighting the week's best Guardian journalism
 						from our editor-in-chief, Katharine Viner
 					</p>
 				</Stack>
-				<ToggleSwitch
-					checked={switchNewsletterEnabled}
-					onClick={() => setSwitchNewsletterEnabled(!switchNewsletterEnabled)}
-				/>
+				<div
+					css={css`
+						opacity: ${isUpdatingNewsletter ? 0.6 : 1};
+						pointer-events: ${isUpdatingNewsletter ? 'none' : 'auto'};
+						cursor: ${isUpdatingNewsletter ? 'not-allowed' : 'pointer'};
+					`}
+				>
+					<ToggleSwitch
+						checked={switchNewsletterEnabled}
+						onClick={() => void handleNewsletterToggle()}
+					/>
+				</div>
 			</div>
 		</Stack>
 	);

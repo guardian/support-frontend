@@ -1,5 +1,19 @@
 import { fetchJson, getRequestOptions, requestOptions } from '../async/fetch';
 
+/**
+ * Newsletter IDs enum
+ * These are the authoritative identifiers for newsletters from the Identity API
+ * Used to safely reference newsletters throughout the application
+ */
+export enum NewsletterId {
+	SaturdayEdition = 'saturday-edition',
+}
+
+/**
+ * Helper type to get values from the enum
+ */
+export type NewsletterIdValue = `${NewsletterId}`;
+
 export interface Newsletter {
 	id: string;
 	theme: string;
@@ -39,7 +53,7 @@ export async function getNewsletters(): Promise<Newsletter[]> {
  * @param subscribed - Whether to subscribe (true) or unsubscribe (false)
  * @returns Promise resolving to void
  */
-async function updateNewsletter(
+export async function updateNewsletter(
 	id: string,
 	subscribed: boolean,
 ): Promise<void> {
@@ -66,6 +80,29 @@ async function updateNewsletter(
 	}
 }
 
-// Console log to prevent linter issues. Remember to
-// export the function later when it is ready to be used.
-console.log(updateNewsletter);
+/**
+ * Finds a newsletter by its enum ID
+ * @param newsletters - Array of newsletters to search
+ * @param id - The newsletter ID enum value
+ * @returns The matching newsletter, or undefined if not found
+ */
+export function getNewsletterById(
+	newsletters: Newsletter[],
+	id: NewsletterId | NewsletterIdValue,
+): Newsletter | undefined {
+	return newsletters.find((newsletter) => newsletter.id === String(id));
+}
+
+/**
+ * Finds a newsletter by its display name
+ * Useful for fallback lookups or testing
+ * @param newsletters - Array of newsletters to search
+ * @param name - The newsletter display name
+ * @returns The matching newsletter, or undefined if not found
+ */
+export function getNewsletterByName(
+	newsletters: Newsletter[],
+	name: string,
+): Newsletter | undefined {
+	return newsletters.find((newsletter) => newsletter.name === name);
+}
