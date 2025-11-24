@@ -26,12 +26,14 @@ export interface Newsletter {
 }
 
 interface GetNewslettersResponse extends Record<string, unknown> {
-	newsletters: Newsletter[];
+	newsletters?: Newsletter[];
+	error?: string;
 }
 
 /**
  * Fetches available newsletters from the Identity API
  * @returns Promise resolving to an array of newsletters
+ * @throws Error if the API returns an error
  */
 export async function getNewsletters(): Promise<Newsletter[]> {
 	try {
@@ -40,10 +42,19 @@ export async function getNewsletters(): Promise<Newsletter[]> {
 			getRequestOptions('same-origin', null),
 		);
 		console.debug('Newsletters fetched:', response);
-		return response.newsletters;
+		
+		if (response.error) {
+			throw new Error(`API Error: ${response.error}`);
+		}
+		
+		if (response.newsletters) {
+			return response.newsletters;
+		}
+		
+		throw new Error('Invalid response format: no newsletters or error message');
 	} catch (error) {
 		console.error('Error fetching newsletters:', error);
-		return [];
+		throw error;
 	}
 }
 
