@@ -103,17 +103,3 @@ export function getNewsletterById(
 ): Newsletter | undefined {
 	return newsletters.find((newsletter) => newsletter.id === String(id));
 }
-
-/**
- * Finds a newsletter by its display name
- * Useful for fallback lookups or testing
- * @param newsletters - Array of newsletters to search
- * @param name - The newsletter display name
- * @returns The matching newsletter, or undefined if not found
- */
-export function getNewsletterByName(
-	newsletters: Newsletter[],
-	name: string,
-): Newsletter | undefined {
-	return newsletters.find((newsletter) => newsletter.name === name);
-}
