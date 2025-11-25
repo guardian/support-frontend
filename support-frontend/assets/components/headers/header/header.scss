@@ -6,26 +6,6 @@
 
 $header-links-min-width: gu-span(12);
 
-// Retain the original box-sizing value for the header
-// to preserve logo positioning logic across the CSS and JS
-.component-header,
-.component-header * {
-	box-sizing: content-box;
-}
-
-.component-header {
-	background-color: gu-colour(brand-main);
-	display: flex;
-	align-items: center;
-	justify-content: stretch;
-	overflow: hidden;
-
-	.component-dialog {
-		align-items: stretch;
-		justify-content: flex-start;
-	}
-}
-
 .component-header-mobile-menu-toggler {
 	@include mq($until: tablet) {
 		display: block;
@@ -60,26 +40,6 @@ $header-links-min-width: gu-span(12);
 	}
 }
 
-.component-header__wrapper {
-	width: 100%;
-	margin: auto;
-	padding: 0 ($gu-h-spacing * 0.5);
-	position: relative;
-	flex: 1 1 auto;
-
-	@include mq($from: tablet) {
-		max-width: $header-links-min-width;
-	}
-
-	@include mq($from: leftCol) {
-		max-width: gu-span(14);
-	}
-
-	@include mq($from: wide) {
-		max-width: gu-span(16);
-	}
-}
-
 .component-header-links--desktop {
 	@include mq($until: tablet) {
 		display: none;
@@ -98,24 +58,6 @@ $header-links-min-width: gu-span(12);
 		margin: 0 ($gu-h-spacing * -1);
 		border-left: 1px solid gu-colour(brand-pastel);
 		border-right: 1px solid gu-colour(brand-pastel);
-	}
-
-	@include mq($from: tablet) {
-		.component-header--one-row-from-tablet & {
-			position: absolute;
-			bottom: 0;
-			left: $gu-h-spacing * 0.5;
-			right: gu-span(5);
-		}
-	}
-
-	@include mq($from: leftCol) {
-		.component-header--one-row-from-leftCol & {
-			position: absolute;
-			bottom: 0;
-			left: $gu-h-spacing * 0.5;
-			right: gu-span(5);
-		}
 	}
 
 	.component-header-links__ul {

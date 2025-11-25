@@ -9,6 +9,7 @@ function gu_span(columns: number): string {
 
 export const topNavContainer = css`
 	display: flex;
+	flex: 1 1 auto;
 	justify-content: space-between;
 `;
 
@@ -30,7 +31,7 @@ export const logoContainer = css`
 	}
 
 	${from.wide} {
-		padding-right: gu-span(1) + $gu-h-spacing;
+		padding-right: 80px;
 	}
 `;
 
@@ -50,31 +51,65 @@ export const logoContainerGBP = css`
 	}
 `;
 
-export const component_header__row = css`
+export const headerContainer = css`
+	background-color: ${brand[400]};
 	display: flex;
-	width: 100%;
-	// TODO : Conversion Pending
-	& > .component-header-topnav {
-		flex: 1 1 auto;
-	}
-	// TODO : Conversion Pending
-	& > .component-header-links {
-		flex: 1 1 auto;
+	align-items: center;
+	justify-content: stretch;
+	overflow: hidden;
+	* {
+		box-sizing: content-box;
 	}
 `;
 
-export const testUserBanner = css`
+export const headerContainerROW = css`
+	div > div > nav {
+		${from.tablet} {
+			position: absolute;
+			bottom: 0;
+			left: 10px;
+			right: ${gu_span(5)};
+		}
+	}
+`;
+
+export const headerContainerGBP = css`
+	div > div > nav {
+		${from.leftCol} {
+			position: absolute;
+			bottom: 0;
+			left: 10px;
+			right: ${gu_span(5)};
+		}
+	}
+`;
+
+export const headerTestUserBanner = css`
 	background-color: red;
 	width: 100%;
 `;
 
-// export const component_header = css`
-// 	background-color: ${brand[400]};
-// 	display: flex;
-// 	align-items: center;
-// 	justify-content: stretch;
-// 	overflow: hidden;
-// 	* {
-// 		box-sizing: content-box;
-// 	}
-// `;
+export const headerWrapper = css`
+	flex: 1 1 auto;
+	margin: auto;
+	padding: 0 10px;
+	position: relative;
+	width: 100%;
+
+	${from.tablet} {
+		max-width: ${gu_span(12)};
+	}
+
+	${from.leftCol} {
+		max-width: ${gu_span(14)};
+	}
+
+	${from.wide} {
+		max-width: ${gu_span(16)};
+	}
+`;
+
+export const headerLinksContainer = css`
+	display: flex;
+	width: 100%;
+`;
