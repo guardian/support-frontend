@@ -1,3 +1,4 @@
+import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { PaperProductOptions } from '@modules/product/productOptions';
@@ -9,7 +10,11 @@ import type {
 } from 'helpers/productPrice/productPrices';
 import { getProductPrice, showPrice } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { finalPrice, getAppliedPromo } from 'helpers/productPrice/promotions';
+import {
+	discountSummaryCopy,
+	finalPrice,
+	getAppliedPromo,
+} from 'helpers/productPrice/promotions';
 import type { TrackingProperties } from 'helpers/productPrice/subscriptions';
 import {
 	sendTrackingEventsOnClick,
@@ -38,11 +43,18 @@ const getPriceCopyString = (
 	return <>per month{productCopy}</>;
 };
 
+// Show promo summary if there's a promo, otherwise show savings vs retail if any
 const getOfferText = (price: ProductPrice, promo?: Promotion) => {
-	// If there's a promo, don't show savings vs retail as the promo code will
-	// only apply for a limited period.
+	// If there's a promo, instead of showing the savings vs retail, show the
+	// summary of the promo.
 	if (promo?.discount?.amount) {
-		return '';
+		return discountSummaryCopy(
+			getCurrencyInfo(price.currency),
+			0, // promoCount, controls trailing asterisks, not needed here
+			price.price,
+			promo,
+			BillingPeriod.Monthly,
+		);
 	}
 
 	if (price.savingVsRetail && price.savingVsRetail > 0) {
@@ -231,7 +243,7 @@ export const getPlans = (
 					copy[fulfilmentOption][productOption],
 				),
 				planData: getPlanData(productOption, fulfilmentOption),
-				offerCopy: getOfferText(priceAfterPromosApplied, promotion),
+				offerCopy: getOfferText(nonDiscountedPrice, promotion),
 				showLabel,
 				productLabel,
 				unavailableOutsideLondon: getUnavailableOutsideLondon(
