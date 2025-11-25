@@ -268,6 +268,7 @@ export class SupportWorkers extends GuStack {
 
     const sendThankYouEmail = createTypescriptLambda("SendThankYouEmail", [
       emailSqsPolicy,
+      secretsManagerPolicy,
     ]);
     const updateSupporterProductData = createScalaLambda(
       "UpdateSupporterProductData",
