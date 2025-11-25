@@ -91,11 +91,15 @@ export function OnboardingSummarySuccessfulSignIn({
 	userNewslettersSubscriptions: NewsletterSubscription[] | null;
 	csrf: CsrfState;
 }) {
-	const [switchNewsletterEnabled, setSwitchNewsletterEnabled] = useState(false);
+	/**
+	 * Consider the Saturday Edition newsletter subscription as subscribed.
+	 * Either the user has an active subscription or we will subscribe them automatically.
+	 */
+	const [switchNewsletterEnabled, setSwitchNewsletterEnabled] = useState(true);
 	const [
 		isUpdatingNewsletterSubscription,
 		setIsUpdatingNewsletterSubscription,
-	] = useState(true);
+	] = useState(false);
 
 	useEffect(() => {
 		if (userNewslettersSubscriptions) {
@@ -106,23 +110,22 @@ export function OnboardingSummarySuccessfulSignIn({
 					NewsletterId.SaturdayEdition,
 				);
 
-			if (saturdayEditionNewsletterSubscription) {
-				setSwitchNewsletterEnabled(true);
+			if (!saturdayEditionNewsletterSubscription) {
+				// If not found, default to subscribed (will be auto-subscribed)
+				void handleNewsletterToggle(true);
 			}
-
-			setIsUpdatingNewsletterSubscription(false);
 		}
 	}, [userNewslettersSubscriptions]);
 
-	const handleNewsletterToggle = async () => {
+	const handleNewsletterToggle = async (newSubscribeState?: boolean) => {
 		// Prevent multiple simultaneous requests
 		if (isUpdatingNewsletterSubscription) {
 			return;
 		}
-
-		const newState = !switchNewsletterEnabled;
-		setSwitchNewsletterEnabled(newState);
 		setIsUpdatingNewsletterSubscription(true);
+
+		const newState = newSubscribeState ?? !switchNewsletterEnabled;
+		setSwitchNewsletterEnabled(newState);
 
 		try {
 			await updateNewsletterSubscription(
@@ -177,22 +180,10 @@ export function OnboardingSummarySuccessfulSignIn({
 						from our editor-in-chief, Katharine Viner
 					</p>
 				</Stack>
-				<div
-					css={css`
-						opacity: ${isUpdatingNewsletterSubscription ? 0.6 : 1};
-						pointer-events: ${isUpdatingNewsletterSubscription
-							? 'none'
-							: 'auto'};
-						cursor: ${isUpdatingNewsletterSubscription
-							? 'not-allowed'
-							: 'pointer'};
-					`}
-				>
-					<ToggleSwitch
-						checked={switchNewsletterEnabled}
-						onClick={() => void handleNewsletterToggle()}
-					/>
-				</div>
+				<ToggleSwitch
+					checked={switchNewsletterEnabled}
+					onClick={() => void handleNewsletterToggle()}
+				/>
 			</div>
 		</Stack>
 	);
