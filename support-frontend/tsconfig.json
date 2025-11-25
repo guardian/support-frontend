@@ -20,6 +20,8 @@
 			"@modules/product-catalog/*": [
 				"../node_modules/@guardian/support-service-lambdas/modules/product-catalog/src/*"
 			],
+      "@modules/arrayFunctions": ["../node_modules/@guardian/support-service-lambdas/modules/arrayFunctions"],
+      "@modules/objectFunctions": ["../node_modules/@guardian/support-service-lambdas/modules/objectFunctions"],
 			"@modules/*": ["../../modules/*"]
 		},
 		"types": ["@testing-library/jest-dom"]

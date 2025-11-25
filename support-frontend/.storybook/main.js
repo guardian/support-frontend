@@ -1,6 +1,7 @@
 const path = require('path');
-const vite = require('vite');
 const preact = require('@preact/preset-vite');
+const vite = require('vite');
+
 module.exports = {
 	stories: ['../stories/**/*.stories.@(js|jsx|ts|tsx)'],
 	addons: [
@@ -70,6 +71,20 @@ module.exports = {
 						replacement: path.resolve(
 							__dirname,
 							'../node_modules/@guardian/support-service-lambdas/modules/internationalisation/src',
+						),
+					},
+					{
+						find: '@modules/arrayFunctions',
+						replacement: path.resolve(
+							__dirname,
+							'../node_modules/@guardian/support-service-lambdas/modules/arrayFunctions',
+						),
+					},
+					{
+						find: '@modules/objectFunctions',
+						replacement: path.resolve(
+							__dirname,
+							'../node_modules/@guardian/support-service-lambdas/modules/objectFunctions',
 						),
 					},
 					{

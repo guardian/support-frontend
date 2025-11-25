@@ -1,5 +1,5 @@
 import { css, useTheme } from '@emotion/react';
-import { space, until } from '@guardian/source/foundations';
+import { from, space } from '@guardian/source/foundations';
 import { LinkButton } from '@guardian/source/react-components';
 import { getObserverButtonProps } from 'components/observer-layout/observerButtonProps';
 import type {
@@ -14,14 +14,15 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import getObserver from '../helpers/getObserver';
 
 const buttonContainer = css`
-	position: absolute;
-	bottom: ${space[8]}px;
-	& > a:first-child {
-		margin-right: ${space[3]}px;
+	margin-top: ${space[4]}px;
+	margin-bottom: ${space[12]}px;
+	a {
+		width: 100%;
 	}
-	${until.tablet} {
-		& > a {
-			margin-bottom: ${space[4]}px;
+
+	${from.tablet} {
+		a {
+			width: auto;
 		}
 	}
 `;
