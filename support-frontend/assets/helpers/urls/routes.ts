@@ -113,7 +113,7 @@ const promotionTermsUrl = (promoCode: string) =>
 function getPaperOrigin(productOptions: ProductOptions): string {
 	const origin = getOrigin();
 	return productOptions === 'Sunday'
-		? origin.replace('support', 'observer')
+		? origin.replace(/^https:\/\/support/, 'https://observer')
 		: origin;
 }
 
