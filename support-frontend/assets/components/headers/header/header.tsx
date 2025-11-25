@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { Component } from 'react';
+import { useState } from 'react';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
@@ -13,21 +13,15 @@ import {
 import MobileMenuToggler from './mobileMenuToggler';
 import './header.scss';
 
-type PropTypes = {
-	utility?: JSX.Element;
+type HeaderProps = {
 	countryGroupId: CountryGroupId;
+	utility?: JSX.Element;
 };
-type State = {
-	isTestUser: boolean | null | undefined;
-};
-
-// ----- Component ----- //
-
-type TopNavPropTypes = {
+type TopNavProps = {
 	utility?: JSX.Element;
 };
 
-function TopNav({ utility }: TopNavPropTypes) {
+function TopNav({ utility }: TopNavProps) {
 	return (
 		<div className="component-header-topnav">
 			<div className="component-header-topnav__utility">{utility}</div>
@@ -44,53 +38,36 @@ function TopNav({ utility }: TopNavPropTypes) {
 	);
 }
 
-export default class Header extends Component<PropTypes, State> {
-	static defaultProps = {
-		utility: null,
-	};
-	state = {
-		isTestUser: getGlobal<boolean>('isTestUser'),
-	};
-
-	componentDidMount(): void {
-		this.setState({
-			isTestUser: getGlobal<boolean>('isTestUser'),
-		});
-	}
-
-	render(): JSX.Element {
-		const { utility, countryGroupId } = this.props;
-		const { isTestUser } = this.state;
-
-		return (
-			<header
-				className={classNameWithModifiers('component-header', [
-					countryGroupId !== 'GBPCountries'
-						? 'one-row-from-tablet'
-						: 'one-row-from-leftCol',
-					'display-navigation',
-				])}
-			>
-				{!!isTestUser && (
-					<div css={testUserBanner}>
-						<span>You are a test user</span>
-					</div>
-				)}
-				<div className="component-header__wrapper">
-					<div className="component-header__row">
-						<TopNav utility={utility} />
-						<MobileMenuToggler
-							links={
-								<Links countryGroupId={countryGroupId} location="mobile" />
-							}
-							utility={utility}
-						/>
-					</div>
-					<div css={component_header__row}>
-						<Links countryGroupId={countryGroupId} location="desktop" />
-					</div>
+export default function Header({ utility, countryGroupId }: HeaderProps) {
+	const [isTestUser] = useState(getGlobal<boolean>('isTestUser'));
+	const countryModifier =
+		countryGroupId !== 'GBPCountries'
+			? 'one-row-from-tablet'
+			: 'one-row-from-leftCol';
+	return (
+		<header
+			className={classNameWithModifiers('component-header', [
+				countryModifier,
+				'display-navigation',
+			])}
+		>
+			{!!isTestUser && (
+				<div css={testUserBanner}>
+					<span>You are a test user</span>
 				</div>
-			</header>
-		);
-	}
+			)}
+			<div className="component-header__wrapper">
+				<div className="component-header__row">
+					<TopNav utility={utility} />
+					<MobileMenuToggler
+						links={<Links countryGroupId={countryGroupId} location="mobile" />}
+						utility={utility}
+					/>
+				</div>
+				<div css={component_header__row}>
+					<Links countryGroupId={countryGroupId} location="desktop" />
+				</div>
+			</div>
+		</header>
+	);
 }
