@@ -1,9 +1,12 @@
+import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { IsoCountry } from '@modules/internationalisation/country';
-import type { BillingPeriod } from '@modules/product/billingPeriod';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { NoFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { ProductOptions } from '@modules/product/productOptions';
 import { NoProductOptions } from '@modules/product/productOptions';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type {
 	ProductPrice,
 	ProductPrices,
@@ -166,6 +169,38 @@ function finalPrice(
 	);
 }
 
+const discountSummaryCopy = (
+	currency: CurrencyInfo,
+	promoCount: number,
+	price: number,
+	promotion: Promotion,
+	billingPeriod: BillingPeriod,
+) => {
+	/**
+	 * EXAMPLE:
+	 * - £6/month for the first month, then £10/month
+	 * - £6.5/month for 6 months, then £10/month
+	 * - £173/year for the first year, then £275/year
+	 */
+	const durationMonths = promotion.discount?.durationMonths ?? 0;
+	const formattedPrice = simpleFormatAmount(currency, price);
+	const formattedPromotionPrice = simpleFormatAmount(
+		currency,
+		promotion.discountedPrice ?? 0,
+	);
+	const periodNoun = getBillingPeriodNoun(billingPeriod);
+	const duration =
+		billingPeriod === BillingPeriod.Annual
+			? durationMonths / 12
+			: durationMonths;
+
+	return `${formattedPromotionPrice}/${periodNoun} for ${
+		periodNoun === 'year' || duration === 1 ? 'the first' : ''
+	}${duration > 1 ? duration : ''} ${periodNoun}${
+		duration > 1 ? 's' : ''
+	}, then ${formattedPrice}/${periodNoun}${'*'.repeat(promoCount)}`;
+};
+
 export {
 	getPromotion,
 	getAppliedPromo,
@@ -174,4 +209,5 @@ export {
 	getPromotionCopy,
 	promotionHTML,
 	finalPrice,
+	discountSummaryCopy,
 };

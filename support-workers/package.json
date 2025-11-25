@@ -11,7 +11,7 @@
     "check-formatting": "prettier --check **.ts",
     "fix-formatting": "prettier --write **.ts",
     "fix": "pnpm fix-formatting && pnpm lint:fix",
-    "build": "tsc",
+    "build": "tsc --noEmit",
     "bundle": "node esbuild.config.mjs",
     "clean-target": "rm -rf target && mkdir -p target",
     "zip": "cd target/typescript && zip -r support-workers.zip ./* -x \".*\" -x \"__MACOSX\"",

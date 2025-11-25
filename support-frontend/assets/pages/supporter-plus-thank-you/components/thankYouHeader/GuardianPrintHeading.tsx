@@ -11,13 +11,15 @@ import {
 import HighlightText from './HighlightText';
 import { isGuardianWeeklyGiftProduct } from './utils/productMatchers';
 
+export type GuardianPrintHeadingProps = {
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
+};
+
 export default function GuardianPrintHeading({
 	productKey,
 	ratePlanKey,
-}: {
-	productKey: ActiveProductKey;
-	ratePlanKey: ActiveRatePlanKey;
-}) {
+}: GuardianPrintHeadingProps) {
 	const thankYouText = 'Thank you for supporting our journalism!';
 	const guardianWeekly = ['Monthly', 'Annual', 'Quarterly'].includes(
 		ratePlanKey,
@@ -48,7 +50,7 @@ export default function GuardianPrintHeading({
 
 	const maybeRatePlanDetails =
 		productCatalogDescription[productKey].ratePlans[ratePlanKey];
-	const maybeRatePlanDisplayName = maybeRatePlanDetails?.label;
+	const maybeRatePlanDisplayName = maybeRatePlanDetails?.displayName;
 	// This will be something like "Six day package"
 	const ratePlanDisplayName =
 		maybeRatePlanDisplayName ?? `${ratePlanKey} package`;
