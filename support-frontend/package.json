@@ -33,47 +33,6 @@
 	"browserslist": [
 		"extends @guardian/browserslist-config"
 	],
-	"jest": {
-		"testMatch": [
-			"**/__tests__/**/*.[jt]s?(x)",
-			"**/?(*.)+(spec|test).[jt]s?(x)",
-			"!**/__fixtures__/**"
-		],
-		"transform": {
-			".+\\.(js|jsx|ts|tsx)$": "./node_modules/babel-jest"
-		},
-		"transformIgnorePatterns": [
-			"/node_modules/\\.pnpm/(?!@guardian)",
-			"^.+\\.module\\.(css|sass|scss)$"
-		],
-		"moduleFileExtensions": [
-			"js",
-			"ts",
-			"json",
-			"es6",
-			"jsx",
-			"tsx"
-		],
-		"modulePaths": [
-			"assets"
-		],
-		"modulePathIgnorePatterns": [
-			"target",
-			"assets copy"
-		],
-		"moduleNameMapper": {
-			"\\.(css|less|sass|scss)$": "<rootDir>/assets/__mocks__/styleMock.ts",
-			"\\.(svg|png|jpg)$": "<rootDir>/assets/__mocks__/imageMock.ts",
-			"@modules/product-catalog/(.*)$": "@guardian/support-service-lambdas/modules/product-catalog/src/$1",
-			"@modules/internationalisation/(.*)$": "@guardian/support-service-lambdas/modules/internationalisation/src/$1",
-			"@modules/(.*)$": "<rootDir>/../modules/$1"
-		},
-		"setupFilesAfterEnv": [
-			"./jestSetup"
-		],
-		"verbose": true,
-		"testEnvironment": "jest-environment-jsdom-global"
-	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/guardian/support-frontend.git"
@@ -176,6 +135,7 @@
 		"search-in-file": "^3.5.2",
 		"storybook": "^9.1.10",
 		"ts-loader": "9.4.4",
+		"tsconfig-paths-webpack-plugin": "^4.2.0",
 		"typescript": "5.5.4",
 		"vite": "6.3.5",
 		"webpack": "^5.94.0",

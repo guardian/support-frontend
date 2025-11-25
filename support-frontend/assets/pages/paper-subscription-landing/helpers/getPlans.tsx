@@ -7,11 +7,7 @@ import type {
 	ProductPrice,
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
-import {
-	getDiscountVsRetail,
-	getProductPrice,
-	showPrice,
-} from 'helpers/productPrice/productPrices';
+import { getProductPrice, showPrice } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { finalPrice, getAppliedPromo } from 'helpers/productPrice/promotions';
 import type { TrackingProperties } from 'helpers/productPrice/subscriptions';
@@ -43,17 +39,10 @@ const getPriceCopyString = (
 };
 
 const getOfferText = (price: ProductPrice, promo?: Promotion) => {
+	// If there's a promo, don't show savings vs retail as the promo code will
+	// only apply for a limited period.
 	if (promo?.discount?.amount) {
-		const discount = getDiscountVsRetail(
-			price.price,
-			price.savingVsRetail ?? 0,
-			promo.discount.amount,
-		);
-		if (discount > 0) {
-			return `Save ${discount}% on retail price`;
-		} else {
-			return '';
-		}
+		return '';
 	}
 
 	if (price.savingVsRetail && price.savingVsRetail > 0) {
