@@ -378,7 +378,7 @@ class CreateSubscriptionController(
   private def getOrCreateIdentityUser(
       body: CreateSupportWorkersRequest,
       referer: Option[String],
-      accountVerificationEmail: Boolean,
+      sendIdentityVerificationEmail: Boolean,
   ): EitherT[Future, IdentityError, UserDetails] = {
     implicit val scheduler: Scheduler = system.scheduler
     identityService.getOrCreateUserFromEmail(
@@ -387,7 +387,7 @@ class CreateSubscriptionController(
       body.lastName,
       body.ophanIds.pageviewId,
       referer,
-      accountVerificationEmail,
+      sendIdentityVerificationEmail,
     )
   }
 

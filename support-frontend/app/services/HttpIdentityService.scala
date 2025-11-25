@@ -141,7 +141,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       lastName: String,
       pageViewId: Option[String],
       referer: Option[String],
-      accountVerificationEmail: Boolean,
+      sendIdentityVerificationEmail: Boolean,
   )(implicit ec: ExecutionContext, scheduler: Scheduler): EitherT[Future, IdentityError, UserDetails] = {
     // Try to fetch the user's information with their email address and if it does not exist
     // or there is an error try again up to a total of 3 times with a 500 millisecond delay between
@@ -150,7 +150,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     // call succeeded but timed out before returning a valid response
     retry(
       getUserDetailsFromEmail(email).leftFlatMap(_ =>
-        createUserIdFromEmailUser(email, firstName, lastName, pageViewId, referer, accountVerificationEmail),
+        createUserIdFromEmailUser(email, firstName, lastName, pageViewId, referer, sendIdentityVerificationEmail),
       ),
       delay = 500.milliseconds,
       retries = 2,
@@ -187,7 +187,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       lastName: String,
       pageViewId: Option[String],
       referer: Option[String],
-      accountVerificationEmail: Boolean,
+      sendIdentityVerificationEmail: Boolean,
   )(implicit ec: ExecutionContext, scheduler: Scheduler): EitherT[Future, IdentityError, UserDetails] = {
     val body = CreateGuestAccountRequestBody(
       email,
@@ -210,7 +210,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
         .withMethod("POST")
         .withQueryStringParameters(
           List(
-            Some(("accountVerificationEmail", s"$accountVerificationEmail")),
+            Some(("accountVerificationEmail", s"$sendIdentityVerificationEmail")),
             pageViewId.map(viewId => ("refViewId", viewId)),
             referer.map(refUrl => ("ref", refUrl)),
           ).flatten: _*,
