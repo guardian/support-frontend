@@ -6,7 +6,7 @@ import 'helpers/types/option';
 import './content.scss';
 
 // ---- Types ----- //
-export type Appearance = 'white' | 'grey' | 'highlight' | 'feature' | 'dark';
+type Appearance = 'white' | 'grey' | 'highlight' | 'feature' | 'dark';
 
 type PropTypes = {
 	appearance: Appearance;
