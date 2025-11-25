@@ -299,6 +299,13 @@ class CreateSubscriptionController(
         settings.productsWithThankYouOnboarding.contains(
           request.body.product.getClass.getSimpleName,
         )
+    if (inOnboardingExperiment) {
+      logger.info(
+        s"${request.body.product.getClass.getSimpleName} is in the onboarding experiment - skipping identity verification email in all cases",
+      )
+    } else {
+      logger.info("not in onboarding experiment - sending identity verification as required")
+    }
 
     for {
       _ <- validate(request, settings.switches)
