@@ -7,8 +7,13 @@ import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import Links from '../links/links';
 import {
 	component_header__row,
-	component_header_topnav_logo_graun,
+	logoContainer,
+	logoContainerGBP,
+	logoContainerROW,
+	logoLink,
 	testUserBanner,
+	topNavContainer,
+	utilityContainer,
 } from './headerStyles';
 import MobileMenuToggler from './mobileMenuToggler';
 import './header.scss';
@@ -17,19 +22,15 @@ type HeaderProps = {
 	countryGroupId: CountryGroupId;
 	utility?: JSX.Element;
 };
-type TopNavProps = {
-	utility?: JSX.Element;
-};
 
-function TopNav({ utility }: TopNavProps) {
+function HeaderTopNav({ utility, countryGroupId }: HeaderProps) {
+	const logoContainerRegion =
+		countryGroupId === 'GBPCountries' ? logoContainerGBP : logoContainerROW;
 	return (
-		<div className="component-header-topnav">
-			<div className="component-header-topnav__utility">{utility}</div>
-			<div className="component-header-topnav-logo">
-				<a
-					css={component_header_topnav_logo_graun}
-					href="https://www.theguardian.com"
-				>
+		<div css={topNavContainer}>
+			<div css={utilityContainer}>{utility}</div>
+			<div css={[logoContainer, logoContainerRegion]}>
+				<a css={logoLink} href="https://www.theguardian.com">
 					<div className="visually-hidden">Return to the Guardian</div>
 					<SvgGuardianLogo />
 				</a>
@@ -58,7 +59,7 @@ export default function Header({ utility, countryGroupId }: HeaderProps) {
 			)}
 			<div className="component-header__wrapper">
 				<div className="component-header__row">
-					<TopNav utility={utility} />
+					<HeaderTopNav countryGroupId={countryGroupId} utility={utility} />
 					<MobileMenuToggler
 						links={<Links countryGroupId={countryGroupId} location="mobile" />}
 						utility={utility}
