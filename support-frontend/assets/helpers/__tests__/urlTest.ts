@@ -5,6 +5,7 @@ import {
 	addQueryParamsToURL,
 	getAllQueryParams,
 	getAllQueryParamsWithExclusions,
+	getPaperOrigin,
 } from '../urls/url';
 
 // ----- Tests ----- //
@@ -139,6 +140,22 @@ describe('url', () => {
 			expect(getAllQueryParamsWithExclusions(['foo'])).toEqual([
 				['spam', 'eggs'],
 			]);
+		});
+	});
+
+	describe('getPaperOrigin', () => {
+		it('should return Observer origin for Sunday paper', () => {
+			jsdom.reconfigure({
+				url: `https://support.thegulocal.com/uk/subscribe/paper`,
+			});
+
+			expect(getPaperOrigin('Sunday')).toBe('https://observer.thegulocal.com');
+		});
+		it('should return Guardian origin for Everyday paper', () => {
+			jsdom.reconfigure({
+				url: `https://support.thegulocal.com/uk/subscribe/paper`,
+			});
+			expect(getPaperOrigin('Everyday')).toBe('https://support.thegulocal.com');
 		});
 	});
 });

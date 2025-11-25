@@ -12,6 +12,7 @@ import {
 	addQueryParamsToURL,
 	getAllQueryParams,
 	getOrigin,
+	getPaperOrigin,
 	isProd,
 } from './url';
 
@@ -109,13 +110,6 @@ function guardianWeeklyLanding(countryGroupId: CountryGroupId, gift: boolean) {
 
 const promotionTermsUrl = (promoCode: string) =>
 	`${getOrigin()}/p/${promoCode}/terms`;
-
-function getPaperOrigin(productOptions: ProductOptions): string {
-	const origin = getOrigin();
-	return productOptions === 'Sunday'
-		? origin.replace(/^https:\/\/support/, 'https://observer')
-		: origin;
-}
 
 function paperCheckoutUrl(
 	fulfilmentOption: FulfilmentOptions,
