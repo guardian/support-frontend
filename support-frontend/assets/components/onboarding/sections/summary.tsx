@@ -14,7 +14,7 @@ import { useEffect } from 'react';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
 	getNewsletterSubscriptionById,
-	NewsletterId,
+	NewslettersIds,
 	type NewsletterSubscription,
 	updateNewsletterSubscription,
 } from 'helpers/identity/newsletters';
@@ -107,7 +107,7 @@ export function OnboardingSummarySuccessfulSignIn({
 			const saturdayEditionNewsletterSubscription =
 				getNewsletterSubscriptionById(
 					userNewslettersSubscriptions,
-					NewsletterId.SaturdayEdition,
+					NewslettersIds.SaturdayEdition,
 				);
 
 			if (!saturdayEditionNewsletterSubscription) {
@@ -130,7 +130,7 @@ export function OnboardingSummarySuccessfulSignIn({
 		try {
 			await updateNewsletterSubscription(
 				csrf,
-				NewsletterId.SaturdayEdition,
+				NewslettersIds.SaturdayEdition,
 				newState,
 			);
 		} catch (error) {

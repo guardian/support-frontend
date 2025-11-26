@@ -2,13 +2,27 @@ import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { fetchJson, getRequestOptions, requestOptions } from '../async/fetch';
 
 /**
- * Newsletter IDs enum
- * These are the authoritative identifiers for newsletters from the Identity API
- * Used to safely reference newsletters throughout the application
+ * Determine current stage for frontend logic.
+ * Attempts to read a serverside-provided stage flag, falling back to hostname heuristics.
  */
-export enum NewsletterId {
-	SaturdayEdition = '6042',
+function getStage(): 'CODE' | 'PROD' {
+	const host = window.location.hostname.toLowerCase();
+	if (host.includes('.code.dev-theguardian.') || host.includes('.thegulocal.')) {
+		return 'CODE';
+	}
+	return 'PROD';
 }
+
+/**
+ * Newsletter IDs mapping (runtime-resolved)
+ * These are the authoritative identifiers for newsletters from the Identity API
+ * The values can differ per environment (CODE vs PROD).
+ */
+export const NewslettersIds = {
+	SaturdayEdition: getStage() === 'PROD' ? '6031' : '6042',
+} as const;
+
+export type NewsletterId = typeof NewslettersIds[keyof typeof NewslettersIds];
 
 export interface NewsletterSubscription {
 	listId: string;
@@ -81,7 +95,7 @@ export async function updateNewsletterSubscription(
 /**
  * Finds a newsletter subscription by newsletter enum ID
  * @param newslettersSubscriptions - Array of newsletters subscriptions to search
- * @param id - The newsletter ID enum value
+ * @param id - The newsletter ID value
  * @returns The matching newsletter subscription, or undefined if not found
  */
 export function getNewsletterSubscriptionById(
