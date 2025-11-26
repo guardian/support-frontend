@@ -138,14 +138,8 @@ object CreateSignInLinkResponse {
 case class GetNewslettersResponse(newsletters: Option[List[services.Newsletter]], errors: Option[List[String]])
 object GetNewslettersResponse {
   implicit val newsletterEncoder: Encoder[services.Newsletter] = deriveEncoder
-  implicit val encoder: Encoder[GetNewslettersResponse] = Encoder.instance { response =>
-    io.circe.Json.obj(
-      List(
-        response.newsletters.map(n => "newsletters" -> io.circe.Encoder[List[services.Newsletter]].apply(n)),
-        response.errors.map(e => "errors" -> io.circe.Encoder[List[String]].apply(e)),
-      ).flatten: _*,
-    )
-  }
+  implicit val encoder: Encoder[GetNewslettersResponse] =
+    deriveEncoder[GetNewslettersResponse].mapJson(_.dropNullValues)
 }
 
 case class UpdateNewsletterRequest(id: String, subscribed: Boolean)
