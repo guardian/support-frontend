@@ -327,6 +327,7 @@ const mockSettings = {
 	},
 	metricUrl:
 		'https://metric-push-api-code.support.guardianapis.com/metric-push-api',
+	productsWithThankYouOnboarding: ['SupporterPlus'],
 } as AppConfig['settings'];
 
 window.guardian = { ...window.guardian, settings: mockSettings };
