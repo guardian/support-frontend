@@ -31,6 +31,7 @@ object PaymentProvider {
     StripeApplePay,
     StripePaymentRequestButton,
     PayPal,
+    PayPalCompletePayments,
     DirectDebit,
     Sepa,
     Existing,
