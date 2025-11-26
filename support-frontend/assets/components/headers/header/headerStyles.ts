@@ -1,10 +1,11 @@
 import { css } from '@emotion/react';
 import { brand, from, space } from '@guardian/source/foundations';
 
-function gu_span(columns: number): string {
+const brandPastel = '#506991';
+function gu_span(columns: number): number {
 	const gu_col_width = 60;
 	const gu_h_spacing = 20;
-	return `${columns * gu_col_width + gu_h_spacing * (columns - 1)}px`;
+	return columns * gu_col_width + gu_h_spacing * (columns - 1);
 }
 
 export const topNavContainer = css`
@@ -25,7 +26,7 @@ export const logoLink = css`
 
 export const logoContainer = css`
 	${from.tablet} {
-		width: ${gu_span(5)};
+		width: ${gu_span(5)}px;
 		background-color: ${brand[400]};
 		float: right;
 	}
@@ -37,7 +38,7 @@ export const logoContainer = css`
 
 export const logoContainerROW = css`
 	${from.tablet} {
-		border-left: 1px solid #506991;
+		border-left: 1px solid ${brandPastel};
 		z-index: 10;
 		position: relative;
 	}
@@ -45,7 +46,7 @@ export const logoContainerROW = css`
 
 export const logoContainerGBP = css`
 	${from.leftCol} {
-		border-left: 1px solid #506991;
+		border-left: 1px solid ${brandPastel};
 		z-index: 10;
 		position: relative;
 	}
@@ -68,7 +69,7 @@ export const headerContainerROW = css`
 			position: absolute;
 			bottom: 0;
 			left: ${space[3]}px;
-			right: ${gu_span(5)};
+			right: ${gu_span(5)}px;
 		}
 	}
 `;
@@ -79,7 +80,7 @@ export const headerContainerGBP = css`
 			position: absolute;
 			bottom: 0;
 			left: ${space[3]}px;
-			right: ${gu_span(5)};
+			right: ${gu_span(5)}px;
 		}
 	}
 `;
@@ -97,15 +98,15 @@ export const headerWrapper = css`
 	width: 100%;
 
 	${from.tablet} {
-		max-width: ${gu_span(12)};
+		max-width: ${gu_span(12)}px;
 	}
 
 	${from.leftCol} {
-		max-width: ${gu_span(14)};
+		max-width: ${gu_span(14)}px;
 	}
 
 	${from.wide} {
-		max-width: ${gu_span(16)};
+		max-width: ${gu_span(16)}px;
 	}
 `;
 
