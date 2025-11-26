@@ -222,13 +222,21 @@ function OnboardingSummary({
 		nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 3);
 	}
 
-	const isDirectDebit = order?.paymentMethod === 'DirectDebit';
+	const isDirectDebit = order?.paymentMethod === 'DirectDebit' || order?.paymentMethod === 'Sepa';
 	const isPaypal = order?.paymentMethod === 'PayPal';
+	const isStripeCard =
+		order?.paymentMethod === 'Stripe' ||
+		order?.paymentMethod === 'StripeExpressCheckoutElement' ||
+		order?.paymentMethod === 'StripeHostedCheckout';
+	
 	const paymentMethodCopy = isDirectDebit
 		? 'Direct Debit'
 		: isPaypal
 		? 'PayPal'
-		: 'Credit/Debit card';
+		: isStripeCard
+		? 'Credit/Debit card'
+		: 'Your selected payment method';
+	
 	const paymentMethod =
 		order?.accountNumber && isDirectDebit
 			? `ending ${order.accountNumber}`
