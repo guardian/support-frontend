@@ -75,13 +75,12 @@ class IdentityController(
     request.cookies.get("GU_ACCESS_TOKEN") match {
       case Some(cookie) =>
         val origin = getOrigin(request)
-        identityService.getNewslettersSubscriptions(cookie.value, origin).map { response =>
-          response.errors match {
-            case Some(errors) if errors.nonEmpty =>
-              BadRequest(GetNewslettersResponse(response.newsletters, response.errors).asJson)
-            case _ =>
-              Ok(GetNewslettersResponse(response.newsletters, response.errors).asJson)
-          }
+        identityService.getNewslettersSubscriptions(cookie.value, origin).map {
+          case Right(newsletters) =>
+            Ok(GetNewslettersResponse(Some(newsletters), None).asJson)
+          case Left(error) =>
+            logger.error(scrub"Failed to get newsletters subscriptions: $error")
+            BadRequest(GetNewslettersResponse(None, Some(List("Failed to retrieve newsletter subscriptions"))).asJson)
         }
       case None =>
         logger.error(scrub"No GU_ACCESS_TOKEN cookie found")
