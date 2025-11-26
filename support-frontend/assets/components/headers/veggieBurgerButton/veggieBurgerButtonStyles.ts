@@ -1,15 +1,18 @@
-@import '~stylesheets/gu-sass/gu-sass';
+import { css } from '@emotion/react';
+import { brandAlt } from '@guardian/source/foundations';
 
-.component-veggie-burger-button {
+export const gu_cta_height = 42;
+
+export const component_veggie_burger_button = css`
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	text-align: center;
-	height: $gu-cta-height;
-	width: $gu-cta-height;
+	height: ${gu_cta_height}px;
+	width: ${gu_cta_height}px;
 	margin: 0;
 	padding: 0;
-	background: gu-colour(highlight-main);
+	background: ${brandAlt[400]};
 	border-radius: 100%;
 	border: 0;
 	cursor: pointer;
@@ -22,4 +25,4 @@
 		bottom: 0;
 		margin: auto;
 	}
-}
+`;
