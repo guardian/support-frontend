@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { fetchJson } from 'helpers/async/fetch';
-import { analyticsProfileCache } from './analyticsProfileCache';
+import { useAnalyticsProfileCache } from './analyticsProfileCache';
 
 const useAnalyticsProfile = () => {
+	const cache = useAnalyticsProfileCache();
 	const [hasMobileAppDownloaded, setHasMobileAppDownloaded] = useState(false);
 	const [hasFeastMobileAppDownloaded, setHasFeastMobileAppDownloaded] =
 		useState(false);
@@ -14,7 +15,7 @@ const useAnalyticsProfile = () => {
 		}
 
 		// Check in-memory cache first (shared across all hook instances)
-		const cachedData = analyticsProfileCache.get();
+		const cachedData = cache.get();
 		if (cachedData) {
 			setHasMobileAppDownloaded(cachedData.hasMobileAppDownloaded);
 			setHasFeastMobileAppDownloaded(cachedData.hasFeastMobileAppDownloaded);
@@ -23,7 +24,7 @@ const useAnalyticsProfile = () => {
 		}
 
 		// Check if there's already a pending request to avoid duplicate calls
-		const pendingRequest = analyticsProfileCache.getPendingRequest();
+		const pendingRequest = cache.getPendingRequest();
 		if (pendingRequest) {
 			try {
 				const data = await pendingRequest;
@@ -50,7 +51,7 @@ const useAnalyticsProfile = () => {
 			hasFeastMobileAppDownloaded: response.hasFeastMobileAppDownloaded,
 		}));
 
-		analyticsProfileCache.setPendingRequest(requestPromise);
+		cache.setPendingRequest(requestPromise);
 
 		try {
 			const data = await requestPromise;
@@ -60,13 +61,13 @@ const useAnalyticsProfile = () => {
 			setDataLoaded(true);
 
 			// Store in cache for subsequent requests within this page load
-			analyticsProfileCache.set(data);
+			cache.set(data);
 		} catch (error) {
 			console.error('Error calling Analytics endpoint:', error);
 		} finally {
-			analyticsProfileCache.clearPendingRequest();
+			cache.clearPendingRequest();
 		}
-	}, [dataLoaded]);
+	}, [dataLoaded, cache]);
 
 	useEffect(() => {
 		void loadAnalyticsData();
