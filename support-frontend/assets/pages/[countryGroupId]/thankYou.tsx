@@ -6,7 +6,6 @@ import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import {
-	type ActiveProductKey,
 	type ActiveRatePlanKey,
 	isProductKey,
 	productCatalog,
@@ -25,9 +24,6 @@ import OnboardingComponent from './components/onboardingComponent';
 import { ThankYouComponent } from './components/thankYouComponent';
 
 const SKIP_NEW_ONBOARDING_EXPERIENCE_KEY = 'gu.skipNewOnboardingExperience';
-
-const PRODUCTS_WITH_THANK_YOU_ONBOARDING: Array<ActiveProductKey | undefined> =
-	['SupporterPlus'];
 
 type ThankYouProps = {
 	supportRegionId: SupportRegionId;
@@ -168,7 +164,8 @@ export function ThankYou({
 
 	if (
 		isSwitchOn('featureSwitches.enableThankYouOnboarding') &&
-		PRODUCTS_WITH_THANK_YOU_ONBOARDING.includes(productKey) &&
+		productKey !== undefined &&
+		appConfig.settings.productsWithThankYouOnboarding.includes(productKey) &&
 		storage.session.get(SKIP_NEW_ONBOARDING_EXPERIENCE_KEY) !== 'true'
 	) {
 		return (

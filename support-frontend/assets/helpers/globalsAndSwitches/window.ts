@@ -9,6 +9,8 @@ import { optional, z } from 'zod';
 import type { LegacyProductType } from 'helpers/legacyTypeConversions';
 import { legacyProductTypes } from 'helpers/legacyTypeConversions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { ActiveProductKey } from '../productCatalog';
+import { isProductKey } from '../productCatalog';
 
 /**
  * This file is used to validate data that gets injected from
@@ -189,6 +191,9 @@ const PaymentConfigSchema = z.object({
 			),
 		}),
 		metricUrl: z.string(),
+		productsWithThankYouOnboarding: z.array(
+			z.string().refine<ActiveProductKey>(isProductKey),
+		),
 	}),
 	isObserverSubdomain: z.boolean(),
 });

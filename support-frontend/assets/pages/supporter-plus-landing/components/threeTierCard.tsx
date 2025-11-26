@@ -12,10 +12,9 @@ import {
 	LinkButton,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
-import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
-import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { BenefitPill } from 'components/checkoutBenefits/benefitPill';
 import {
 	BenefitsCheckList,
@@ -25,7 +24,10 @@ import { getFeatureFlags } from 'helpers/featureFlags';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { getProductLabel } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
-import type { Promotion } from 'helpers/productPrice/promotions';
+import {
+	discountSummaryCopy,
+	type Promotion,
+} from 'helpers/productPrice/promotions';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { ThreeTierCardPill } from './threeTierCardPill';
 
@@ -168,38 +170,6 @@ const benefitsPrefixPlus = css`
 		margin-left: ${space[2]}px;
 	}
 `;
-
-const discountSummaryCopy = (
-	currency: CurrencyInfo,
-	promoCount: number,
-	price: number,
-	promotion: Promotion,
-	billingPeriod: BillingPeriod,
-) => {
-	/**
-	 * EXAMPLE:
-	 * - £6/month for the first month, then £10/month
-	 * - £6.5/month for 6 months, then £10/month
-	 * - £173/year for the first year, then £275/year
-	 */
-	const durationMonths = promotion.discount?.durationMonths ?? 0;
-	const formattedPrice = simpleFormatAmount(currency, price);
-	const formattedPromotionPrice = simpleFormatAmount(
-		currency,
-		promotion.discountedPrice ?? 0,
-	);
-	const periodNoun = getBillingPeriodNoun(billingPeriod);
-	const duration =
-		billingPeriod === BillingPeriod.Annual
-			? durationMonths / 12
-			: durationMonths;
-
-	return `${formattedPromotionPrice}/${periodNoun} for ${
-		periodNoun === 'year' || duration === 1 ? 'the first' : ''
-	}${duration > 1 ? duration : ''} ${periodNoun}${
-		duration > 1 ? 's' : ''
-	}, then ${formattedPrice}/${periodNoun}${'*'.repeat(promoCount)}`;
-};
 
 export function ThreeTierCard({
 	cardContent,
