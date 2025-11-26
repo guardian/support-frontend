@@ -32,43 +32,47 @@ export function formatDate(date: Dayjs) {
 	return date.format('dddd, D MMMM YYYY');
 }
 
+export function mask(accountNumber: string): string {
+	return accountNumber.replace(/.(?=.{2})/g, '*');
+}
+
 export function getPaymentMethodFieldsSupporterPlus(
 	paymentMethod: PaymentMethod,
 	created: Dayjs,
 	mandateId?: string,
 ):
-	| { 'payment method': 'credit / debit card'; 'first payment date': string }
+	| { payment_method: 'credit / debit card'; first_payment_date: string }
 	| {
-			'payment method': 'Direct Debit';
-			'account name': string;
-			'account number': string;
-			'sort code': string;
-			'Mandate ID': string;
-			'first payment date': string;
+			payment_method: 'Direct Debit';
+			account_name: string;
+			account_number: string;
+			sort_code: string;
+			Mandate_ID: string;
+			first_payment_date: string;
 	  }
-	| { 'payment method': 'PayPal'; 'first payment date': string } {
+	| { payment_method: 'PayPal'; first_payment_date: string } {
 	switch (paymentMethod.Type) {
 		case 'BankTransfer':
 			return {
-				'payment method': 'Direct Debit',
-				'account name': paymentMethod.BankTransferAccountName,
-				'account number': paymentMethod.BankTransferAccountNumber,
-				'sort code': paymentMethod.BankCode,
-				'Mandate ID': getIfDefined(
+				payment_method: 'Direct Debit',
+				account_name: paymentMethod.BankTransferAccountName,
+				account_number: mask(paymentMethod.BankTransferAccountNumber),
+				sort_code: paymentMethod.BankCode,
+				Mandate_ID: getIfDefined(
 					mandateId,
 					'No Mandate ID was provided for a Direct Debit payment',
 				),
-				'first payment date': formatDate(created.add(10, 'days')),
+				first_payment_date: formatDate(created.add(10, 'days')),
 			};
 		case 'CreditCardReferenceTransaction':
 			return {
-				'payment method': 'credit / debit card',
-				'first payment date': formatDate(created),
+				payment_method: 'credit / debit card',
+				first_payment_date: formatDate(created),
 			};
 		case 'PayPal':
 			return {
-				'payment method': 'PayPal',
-				'first payment date': formatDate(created),
+				payment_method: 'PayPal',
+				first_payment_date: formatDate(created),
 			};
 	}
 }

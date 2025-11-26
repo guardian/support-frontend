@@ -66,7 +66,7 @@ export const directDebitPaymentMethod: DirectDebitPaymentMethod = {
 	BankTransferAccountName: `${emailUser.firstName} ${emailUser.lastName}`,
 	BankCode: '20-20-20',
 	Type: 'BankTransfer',
-	BankTransferAccountNumber: '******11',
+	BankTransferAccountNumber: '11111111',
 	BankTransferType: 'DirectDebitUK',
 	PaymentGateway: 'GoCardless',
 };

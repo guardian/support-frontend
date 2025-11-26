@@ -2,7 +2,7 @@ import { getCountryNameByIsoCode } from '@modules/internationalisation/country';
 import type { Dayjs } from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { User } from '../model/stateSchemas';
-import { formatDate } from './emailFields';
+import { formatDate, mask } from './emailFields';
 
 type PaymentFields =
 	| { payment_method: 'Credit/Debit Card' }
@@ -104,9 +104,6 @@ export function buildDeliveryEmailFields({
 	};
 }
 
-function mask(accountNumber: string): string {
-	return accountNumber.replace(/.(?=.{2})/g, '*');
-}
 function hyphenate(sortCode: string): string {
 	return sortCode.replace(/(\d{2})(\d{2})(\d{2})/, '$1-$2-$3');
 }
