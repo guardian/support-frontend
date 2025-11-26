@@ -4,23 +4,6 @@
 
 $mobile-menu-gutter: ($gu-h-spacing * 2.5);
 
-.component-header-mobile-menu {
-	background: gu-colour(brand-main);
-	min-height: 100%;
-	min-height: 100vh;
-	max-width: 95vw;
-	position: relative;
-	box-shadow: 3px 0 16px rgba(0, 0, 0, 0.4);
-
-	.component-header-mobile-menu__scroll {
-		height: 100%;
-		height: 100vh;
-		overflow: auto;
-		box-sizing: border-box;
-		padding: $gu-v-spacing * 0.5 0 $gu-v-spacing * 2;
-	}
-}
-
 .component-header-links--mobile {
 	display: block;
 	clear: both;
@@ -53,16 +36,5 @@ $mobile-menu-gutter: ($gu-h-spacing * 2.5);
 		&:first-child {
 			border-top: none;
 		}
-	}
-}
-
-.component-header-mobile-menu__utility {
-	margin-left: $mobile-menu-gutter;
-	border-top: 1px solid gu-colour(brand-pastel);
-	padding: ($gu-v-spacing * 0.5) 0;
-	margin-top: $gu-v-spacing;
-
-	.component-country-group-switcher .component-select-input__select {
-		@include gu-fontset-body-sans($size-only: true);
 	}
 }

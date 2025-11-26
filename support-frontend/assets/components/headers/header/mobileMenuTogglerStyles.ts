@@ -17,9 +17,4 @@ export const mobileMenuContainer = css`
 			margin-top: ${space[10]}px;
 		}
 	}
-
-	/* .component-dialog--open .component-header-mobile-menu {
-		animation: open-menu $gu-animation-speed-med cubic-bezier(0.23, 1, 0.32, 1)
-			both;
-	} */
 `;

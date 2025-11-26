@@ -1,6 +1,6 @@
 import type { SerializedStyles } from '@emotion/react';
 import type { AriaAttributes, ReactNode, Ref } from 'react';
-import { buttonStyle } from './veggieBurgerButtonStyles';
+import { buttonOpen } from './veggieBurgerButtonStyles';
 
 type PropTypes = {
 	children: ReactNode;
@@ -20,7 +20,7 @@ function VeggieBurgerButton({
 	...otherProps
 }: PropTypes): JSX.Element {
 	return (
-		<button css={[buttonStyle, cssOverride]} ref={ref} {...otherProps}>
+		<button css={[buttonOpen, cssOverride]} ref={ref} {...otherProps}>
 			<span className="visually-hidden">{label}</span>
 			{children}
 		</button>
