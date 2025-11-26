@@ -176,7 +176,6 @@ export const submitForm = async ({
 			paymentMethod,
 			supportRegionId,
 			paymentRequest,
-			deliveryDate,
 			accountNumber: redactedAccountNumber,
 			weeklyGiftDeliveryDate,
 		});
@@ -217,7 +216,6 @@ const processSubscription = async ({
 	paymentMethod,
 	supportRegionId,
 	paymentRequest,
-	deliveryDate,
 	accountNumber,
 	weeklyGiftDeliveryDate,
 }: {
@@ -249,7 +247,6 @@ const processSubscription = async ({
 			paymentMethod,
 			createSubscriptionResult.status,
 			supportRegionId,
-			deliveryDate,
 			accountNumber,
 			weeklyGiftDeliveryDate,
 		);
