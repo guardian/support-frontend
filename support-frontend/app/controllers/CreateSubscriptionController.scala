@@ -294,12 +294,25 @@ class CreateSubscriptionController(
 
     logDetailedMessage("createSubscription")
 
+    val inOnboardingExperiment =
+      settings.switches.featureSwitches.enableThankYouOnboarding.exists(_.isOn) &&
+        settings.productsWithThankYouOnboarding.contains(
+          request.body.product.getClass.getSimpleName,
+        )
+    if (inOnboardingExperiment) {
+      logger.info(
+        s"${request.body.product.getClass.getSimpleName} is in the onboarding experiment - skipping identity verification email in all cases",
+      )
+    } else {
+      logger.info("not in onboarding experiment - sending identity verification as required")
+    }
+
     for {
       _ <- validate(request, settings.switches)
       userDetails <- maybeLoggedInUserDetails match {
         case Some(userDetails) => EitherT.pure[Future, CreateSubscriptionError](userDetails)
         case None =>
-          getOrCreateIdentityUser(request.body, request.headers.get("Referer"))
+          getOrCreateIdentityUser(request.body, request.headers.get("Referer"), !inOnboardingExperiment)
             .map(userDetails => UserDetailsWithSignedInStatus(userDetails, isSignedIn = false))
             .leftMap(mapIdentityErrorToCreateSubscriptionError)
       }
@@ -365,6 +378,7 @@ class CreateSubscriptionController(
   private def getOrCreateIdentityUser(
       body: CreateSupportWorkersRequest,
       referer: Option[String],
+      sendIdentityVerificationEmail: Boolean,
   ): EitherT[Future, IdentityError, UserDetails] = {
     implicit val scheduler: Scheduler = system.scheduler
     identityService.getOrCreateUserFromEmail(
@@ -373,6 +387,7 @@ class CreateSubscriptionController(
       body.lastName,
       body.ophanIds.pageviewId,
       referer,
+      sendIdentityVerificationEmail,
     )
   }
 
