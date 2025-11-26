@@ -70,9 +70,8 @@ class AnalyticsProfileCache {
 }
 
 // Context for sharing cache instance
-const AnalyticsProfileCacheContext = createContext<AnalyticsProfileCache | null>(
-	null,
-);
+const AnalyticsProfileCacheContext =
+	createContext<AnalyticsProfileCache | null>(null);
 
 /**
  * Provider component that creates and shares a cache instance
@@ -83,7 +82,7 @@ export function AnalyticsProfileCacheProvider({
 	children: ReactNode;
 }) {
 	const cacheRef = useRef<AnalyticsProfileCache>();
-	
+
 	if (!cacheRef.current) {
 		cacheRef.current = new AnalyticsProfileCache();
 	}
@@ -101,12 +100,12 @@ export function AnalyticsProfileCacheProvider({
  */
 export function useAnalyticsProfileCache(): AnalyticsProfileCache {
 	const cache = useContext(AnalyticsProfileCacheContext);
-	
+
 	if (!cache) {
 		throw new Error(
 			'useAnalyticsProfileCache must be used within an AnalyticsProfileCacheProvider',
 		);
 	}
-	
+
 	return cache;
 }
