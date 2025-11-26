@@ -28,6 +28,10 @@ class IdentityController(
 
   import actionRefiners._
 
+  private def getOrigin(request: RequestHeader): String = {
+    s"https://${request.host}"
+  }
+
   def warnAndReturn(): Status =
     warn().fold(
       { t =>
@@ -67,34 +71,44 @@ class IdentityController(
         )
   }
 
-  def getNewsletters(): Action[AnyContent] = PrivateAction.async { implicit request =>
+  def getNewslettersSubscriptions(): Action[AnyContent] = PrivateAction.async { implicit request =>
     request.cookies.get("GU_ACCESS_TOKEN") match {
       case Some(cookie) =>
-        identityService.getNewsletters(cookie.value).map { newsletters =>
-          Ok(GetNewslettersResponse(newsletters).asJson)
-        }
+        val origin = getOrigin(request)
+        identityService
+          .getNewslettersSubscriptions(cookie.value, origin)
+          .map {
+            case Right(newsletters) => Ok(GetNewslettersResponseSuccess(newsletters).asJson)
+            case Left(error) =>
+              logger.error(scrub"Failed to get newsletters subscriptions: $error")
+              BadRequest(
+                GetNewslettersResponseFailure(List("Failed to retrieve newsletter subscriptions")).asJson,
+              )
+          }
       case None =>
         logger.error(scrub"No GU_ACCESS_TOKEN cookie found")
         Future.successful(Unauthorized("No access token found"))
     }
   }
 
-  def updateNewsletter(): Action[UpdateNewsletterRequest] = PrivateAction.async(circe.json[UpdateNewsletterRequest]) {
-    implicit request =>
+  def updateNewsletterSubscription(): Action[UpdateNewsletterRequest] =
+    PrivateAction.async(circe.json[UpdateNewsletterRequest]) { implicit request =>
       request.cookies.get("GU_ACCESS_TOKEN") match {
         case Some(cookie) =>
-          identityService.updateNewsletter(cookie.value, request.body.id, request.body.subscribed).map { success =>
-            if (success) {
-              NoContent
-            } else {
-              InternalServerError("Failed to update newsletter subscription")
+          val origin = getOrigin(request)
+          identityService
+            .updateNewsletterSubscription(cookie.value, request.body.id, request.body.subscribed, origin)
+            .map {
+              case Right(_) => NoContent
+              case Left(error) =>
+                logger.error(scrub"Failed to update newsletter subscription: $error")
+                InternalServerError("Failed to update newsletter subscription")
             }
-          }
         case None =>
           logger.error(scrub"No GU_ACCESS_TOKEN cookie found")
           Future.successful(Unauthorized("No access token found"))
       }
-  }
+    }
 }
 
 case class SendMarketingRequest(email: String)
@@ -117,10 +131,15 @@ object CreateSignInLinkResponse {
   implicit val encoder: Encoder[CreateSignInLinkResponse] = deriveEncoder
 }
 
-case class GetNewslettersResponse(newsletters: List[services.Newsletter])
-object GetNewslettersResponse {
+case class GetNewslettersResponseSuccess(newsletters: List[services.Newsletter])
+object GetNewslettersResponseSuccess {
   implicit val newsletterEncoder: Encoder[services.Newsletter] = deriveEncoder
-  implicit val encoder: Encoder[GetNewslettersResponse] = deriveEncoder
+  implicit val encoder: Encoder[GetNewslettersResponseSuccess] = deriveEncoder
+}
+
+case class GetNewslettersResponseFailure(errors: List[String])
+object GetNewslettersResponseFailure {
+  implicit val encoder: Encoder[GetNewslettersResponseFailure] = deriveEncoder
 }
 
 case class UpdateNewsletterRequest(id: String, subscribed: Boolean)

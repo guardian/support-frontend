@@ -12,8 +12,8 @@ import OnboardingSummary, {
 } from 'components/onboarding/sections/summary';
 import useAnalyticsProfile from 'helpers/customHooks/useAnalyticsProfile';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
-import type { Newsletter } from 'helpers/identity/newsletters';
-import { getNewsletters } from 'helpers/identity/newsletters';
+import type { NewsletterSubscription } from 'helpers/identity/newsletters';
+import { getNewslettersSubscriptions } from 'helpers/identity/newsletters';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -99,24 +99,22 @@ function OnboardingComponent({
 
 	// -------------
 	// Fetch newsletters from Identity API
-	const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
+	const [userNewslettersSubscriptions, setUserNewslettersSubscriptions] =
+		useState<NewsletterSubscription[] | null>(null);
 
-	const fetchNewsletters = async () => {
+	const fetchUserNewslettersSubscriptions = async () => {
 		try {
-			const newslettersData = await getNewsletters();
-			setNewsletters(newslettersData);
-			console.debug('Newsletters fetched:', newslettersData);
+			const newslettersData = await getNewslettersSubscriptions(csrf);
+			setUserNewslettersSubscriptions(newslettersData);
+			console.debug('User Newsletters Subscriptions fetched:', newslettersData);
 		} catch (error) {
-			console.error('Error fetching newsletters:', error);
+			console.error('Error fetching User Newsletters Subscriptions:', error);
 		}
 	};
 
 	useEffect(() => {
-		void fetchNewsletters();
+		void fetchUserNewslettersSubscriptions();
 	}, []);
-
-	console.debug('Newsletters:', newsletters);
-	// -------------
 
 	const { isSignedIn } = getUser();
 	const {
@@ -207,7 +205,7 @@ function OnboardingComponent({
 				if (hasAccessToken) {
 					document.body.removeChild(iframe);
 
-					void fetchNewsletters();
+					void fetchUserNewslettersSubscriptions();
 					void loadAnalyticsData();
 				} else if (attempts < MAX_ATTEMPTS) {
 					setTimeout(pollForAccessToken, POLL_INTERVAL);
@@ -298,6 +296,8 @@ function OnboardingComponent({
 							<OnboardingSummarySuccessfulSignIn
 								handleStepNavigation={handleStepNavigation}
 								userState={userState}
+								userNewslettersSubscriptions={userNewslettersSubscriptions}
+								csrf={csrf}
 							/>
 						)}
 					</ContentBox>

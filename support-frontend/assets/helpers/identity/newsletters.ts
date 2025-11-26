@@ -1,51 +1,80 @@
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { fetchJson, getRequestOptions, requestOptions } from '../async/fetch';
 
-export interface Newsletter {
-	id: string;
-	theme: string;
-	group: string;
-	name: string;
-	description: string;
-	frequency: string;
-	subscribed: boolean;
-	exactTargetListId: number;
-}
-
-interface GetNewslettersResponse extends Record<string, unknown> {
-	newsletters: Newsletter[];
+/**
+ * Determine current stage for frontend logic.
+ * Attempts to read a serverside-provided stage flag, falling back to hostname heuristics.
+ */
+function getStage(): 'CODE' | 'PROD' {
+	const host = window.location.hostname.toLowerCase();
+	if (
+		host.includes('.code.dev-theguardian.') ||
+		host.includes('.thegulocal.')
+	) {
+		return 'CODE';
+	}
+	return 'PROD';
 }
 
 /**
- * Fetches available newsletters from the Identity API
- * @returns Promise resolving to an array of newsletters
+ * Newsletter IDs mapping (runtime-resolved)
+ * These are the authoritative identifiers for newsletters from the Identity API
+ * The values can differ per environment (CODE vs PROD).
  */
-export async function getNewsletters(): Promise<Newsletter[]> {
-	try {
-		const response = await fetchJson<GetNewslettersResponse>(
-			'/api/newsletters',
-			getRequestOptions('same-origin', null),
-		);
-		console.debug('Newsletters fetched:', response);
-		return response.newsletters;
-	} catch (error) {
-		console.error('Error fetching newsletters:', error);
-		return [];
+export const NewslettersIds = {
+	SaturdayEdition: getStage() === 'PROD' ? '6031' : '6042',
+} as const;
+
+type NewsletterId = (typeof NewslettersIds)[keyof typeof NewslettersIds];
+
+export interface NewsletterSubscription {
+	listId: string;
+}
+
+interface NewslettersApiResponse extends Record<string, unknown> {
+	newsletters?: NewsletterSubscription[];
+	errors?: string[];
+}
+
+/**
+ * Fetches available newsletters subscriptions from the Identity API
+ * @param csrf - CSRF state for authentication
+ * @returns Promise resolving to an array of newsletters subscriptions
+ * @throws Error if the API returns an error
+ */
+export async function getNewslettersSubscriptions(
+	csrf: CsrfState,
+): Promise<NewsletterSubscription[]> {
+	const response = await fetchJson<NewslettersApiResponse>(
+		'/identity/newsletters',
+		getRequestOptions('same-origin', csrf),
+	);
+
+	if (response.errors && response.errors.length > 0) {
+		const errorMessage = response.errors.join(', ');
+		console.error('Error fetching newsletters:', errorMessage);
+		throw new Error(`Failed to fetch newsletters: ${errorMessage}`);
 	}
+
+	console.debug('Newsletters fetched successfully:', response.newsletters);
+	return response.newsletters ?? [];
 }
 
 /**
  * Updates a newsletter subscription
+ * @param csrf - CSRF state for authentication
  * @param id - The newsletter ID
  * @param subscribed - Whether to subscribe (true) or unsubscribe (false)
  * @returns Promise resolving to void
  */
-async function updateNewsletter(
+export async function updateNewsletterSubscription(
+	csrf: CsrfState,
 	id: string,
 	subscribed: boolean,
 ): Promise<void> {
 	try {
 		const response = await fetch(
-			'/api/newsletters',
+			'/identity/newsletters',
 			requestOptions(
 				{
 					id,
@@ -53,7 +82,7 @@ async function updateNewsletter(
 				},
 				'same-origin',
 				'PATCH',
-				null,
+				csrf,
 			),
 		);
 		if (!response.ok) {
@@ -66,6 +95,17 @@ async function updateNewsletter(
 	}
 }
 
-// Console log to prevent linter issues. Remember to
-// export the function later when it is ready to be used.
-console.log(updateNewsletter);
+/**
+ * Finds a newsletter subscription by newsletter enum ID
+ * @param newslettersSubscriptions - Array of newsletters subscriptions to search
+ * @param id - The newsletter ID value
+ * @returns The matching newsletter subscription, or undefined if not found
+ */
+export function getNewsletterSubscriptionById(
+	newslettersSubscriptions: NewsletterSubscription[],
+	id: NewsletterId,
+): NewsletterSubscription | undefined {
+	return newslettersSubscriptions.find(
+		(newsletterSubscription) => newsletterSubscription.listId === String(id),
+	);
+}

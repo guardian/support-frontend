@@ -10,11 +10,19 @@ import { ToggleSwitch } from '@guardian/source-development-kitchen/react-compone
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
+import { useEffect } from 'react';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import {
+	getNewsletterSubscriptionById,
+	NewslettersIds,
+	type NewsletterSubscription,
+	updateNewsletterSubscription,
+} from 'helpers/identity/newsletters';
 import {
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { getThankYouOrder } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
 import type {
 	CurrentUserState,
@@ -75,11 +83,65 @@ const onboardingSummaryCopyMapping: Record<
 export function OnboardingSummarySuccessfulSignIn({
 	handleStepNavigation,
 	userState,
+	userNewslettersSubscriptions,
+	csrf,
 }: {
 	handleStepNavigation: HandleStepNavigationFunction;
 	userState: CurrentUserState;
+	userNewslettersSubscriptions: NewsletterSubscription[] | null;
+	csrf: CsrfState;
 }) {
+	/**
+	 * Consider the Saturday Edition newsletter subscription as subscribed.
+	 * Either the user has an active subscription or we will subscribe them automatically.
+	 */
 	const [switchNewsletterEnabled, setSwitchNewsletterEnabled] = useState(true);
+	const [
+		isUpdatingNewsletterSubscription,
+		setIsUpdatingNewsletterSubscription,
+	] = useState(false);
+
+	useEffect(() => {
+		if (userNewslettersSubscriptions) {
+			// Find the Saturday Edition newsletter using the type-safe helper
+			const saturdayEditionNewsletterSubscription =
+				getNewsletterSubscriptionById(
+					userNewslettersSubscriptions,
+					NewslettersIds.SaturdayEdition,
+				);
+
+			if (!saturdayEditionNewsletterSubscription) {
+				// If not found, default to subscribed (will be auto-subscribed)
+				void handleNewsletterToggle(true);
+			}
+		}
+	}, [userNewslettersSubscriptions]);
+
+	const handleNewsletterToggle = async (newSubscribeState?: boolean) => {
+		// Prevent multiple simultaneous requests
+		if (isUpdatingNewsletterSubscription) {
+			return;
+		}
+		setIsUpdatingNewsletterSubscription(true);
+
+		const newState = newSubscribeState ?? !switchNewsletterEnabled;
+		setSwitchNewsletterEnabled(newState);
+
+		try {
+			await updateNewsletterSubscription(
+				csrf,
+				NewslettersIds.SaturdayEdition,
+				newState,
+			);
+		} catch (error) {
+			console.error('Failed to update newsletter preference:', error);
+			// Revert the toggle on error
+			setSwitchNewsletterEnabled(!newState);
+		} finally {
+			// Always re-enable the toggle when request completes
+			setIsUpdatingNewsletterSubscription(false);
+		}
+	};
 
 	return (
 		<Stack space={2}>
@@ -120,7 +182,7 @@ export function OnboardingSummarySuccessfulSignIn({
 				</Stack>
 				<ToggleSwitch
 					checked={switchNewsletterEnabled}
-					onClick={() => setSwitchNewsletterEnabled(!switchNewsletterEnabled)}
+					onClick={() => void handleNewsletterToggle()}
 				/>
 			</div>
 		</Stack>

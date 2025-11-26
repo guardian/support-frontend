@@ -13,7 +13,7 @@ import models.identity.requests.CreateGuestAccountRequestBody
 import models.identity.responses.IdentityErrorResponse.{GuestEndpoint, IdentityError, OtherIdentityError, UserEndpoint}
 import models.identity.responses.{GuestRegistrationResponse, IdentityErrorResponse, UserResponse}
 import org.apache.pekko.actor.Scheduler
-import play.api.libs.json.{JsPath, Json, JsonValidationError, Reads}
+import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
 
@@ -81,18 +81,30 @@ object CreateSignInTokenResponse {
 }
 
 case class Newsletter(
-    id: String,
-    theme: String,
-    group: String,
-    name: String,
-    description: String,
-    frequency: String,
-    subscribed: Boolean,
-    exactTargetListId: Int,
+    listId: String,
 )
 
 object Newsletter {
   implicit val newsletterReads: Reads[Newsletter] = Json.reads[Newsletter]
+}
+
+case class NewsletterApiResult(
+    htmlPreference: String,
+    subscriptions: List[Newsletter],
+    globalSubscriptionStatus: String,
+)
+
+object NewsletterApiResult {
+  implicit val newsletterApiResultReads: Reads[NewsletterApiResult] = Json.reads[NewsletterApiResult]
+}
+
+case class NewsletterApiResponse(
+    result: NewsletterApiResult,
+    status: String,
+)
+
+object NewsletterApiResponse {
+  implicit val newsletterApiResponseReads: Reads[NewsletterApiResponse] = Json.reads[NewsletterApiResponse]
 }
 
 object IdentityService {
@@ -110,10 +122,14 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .withHttpHeaders("Authorization" -> s"Bearer $apiClientToken")
   }
 
-  private def requestWithAccessToken(path: String, accessToken: String): WSRequest = {
+  private def requestWithAccessToken(path: String, accessToken: String, origin: String): WSRequest = {
     wsClient
       .url(s"$apiUrl/$path")
-      .withHttpHeaders("Authorization" -> s"Bearer $accessToken")
+      .withHttpHeaders(
+        "Authorization" -> s"Bearer $accessToken",
+        "Origin" -> origin,
+        "x-gu-is-oauth" -> "true",
+      )
   }
 
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean] = {
@@ -156,44 +172,44 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .subflatMap(resp => resp.json.validate[CreateSignInTokenResponse].asEither.leftMap(_.mkString(",")))
   }
 
-  def getNewsletters(accessToken: String)(implicit ec: ExecutionContext): Future[List[Newsletter]] = {
-    requestWithAccessToken("users/me/newsletters", accessToken)
+  def getNewslettersSubscriptions(accessToken: String, origin: String)(implicit
+      ec: ExecutionContext,
+  ): Future[Either[String, List[Newsletter]]] = {
+    requestWithAccessToken("users/me/newsletters", accessToken, origin)
       .get()
       .map { response =>
         if (response.status >= 200 && response.status < 300) {
-          response.json.validate[List[Newsletter]].asOpt.getOrElse {
-            logger.error(scrub"Failed to parse newsletters response: ${response.body}")
-            List.empty
+          response.json.validate[NewsletterApiResponse] match {
+            case JsSuccess(apiResponse, _) => Right(apiResponse.result.subscriptions)
+            case JsError(errors) =>
+              Left(s"Failed to parse newsletters response: ${errors.mkString(", ")}")
           }
         } else {
-          logger.error(scrub"Failed to fetch newsletters: ${response.status} ${response.body}")
-          List.empty
+          Left(s"Failed to fetch newsletters")
         }
       }
       .recover { case e: Exception =>
-        logger.error(scrub"Exception fetching newsletters: ${e.getMessage}")
-        List.empty
+        Left(s"Exception fetching newsletters: ${e.toString}")
       }
   }
 
-  def updateNewsletter(accessToken: String, id: String, subscribed: Boolean)(implicit
+  def updateNewsletterSubscription(accessToken: String, id: String, subscribed: Boolean, origin: String)(implicit
       ec: ExecutionContext,
-  ): Future[Boolean] = {
+  ): Future[Either[String, Unit]] = {
     val payload = Json.obj("id" -> id, "subscribed" -> subscribed)
-    requestWithAccessToken("users/me/newsletters", accessToken)
+    requestWithAccessToken("users/me/newsletters", accessToken, origin)
       .patch(payload)
       .map { response =>
         if (response.status >= 200 && response.status < 300) {
-          logger.info(s"Successfully updated newsletter subscription for $id to $subscribed")
-          true
+          Right(())
         } else {
-          logger.error(scrub"Failed to update newsletter: ${response.status} ${response.body}")
-          false
+          val errorMsg = s"Failed to update newsletter: ${response.status} ${response.body}"
+          Left(errorMsg)
         }
       }
       .recover { case e: Exception =>
-        logger.error(scrub"Exception updating newsletter: ${e.getMessage}")
-        false
+        val errorMsg = s"Exception updating newsletter: ${e.getMessage}"
+        Left(errorMsg)
       }
   }
 
