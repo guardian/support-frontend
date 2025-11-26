@@ -1,3 +1,5 @@
+import type { ProductOptions } from '@modules/product/productOptions';
+
 // ----- Types ----- //
 type Domain = 'thegulocal.com' | 'code.dev-theguardian.com' | 'theguardian.com';
 type Env = 'DEV' | 'CODE' | 'PROD';
@@ -51,6 +53,12 @@ function addQueryParamsToURL(
 	return `${baseUrl}?${searchParams.toString()}`;
 }
 
+function getPaperOrigin(productOptions: ProductOptions): string {
+	const origin = getOrigin();
+	return productOptions === 'Sunday'
+		? origin.replace(/^https:\/\/support/, 'https://observer')
+		: origin;
+}
 function getOrigin(): string {
 	const loc = window.location;
 	return (
@@ -89,6 +97,7 @@ export {
 	getQueryParameter,
 	getAllQueryParams,
 	getAllQueryParamsWithExclusions,
+	getPaperOrigin,
 	getOrigin,
 	getBaseDomain,
 	addQueryParamsToURL,
