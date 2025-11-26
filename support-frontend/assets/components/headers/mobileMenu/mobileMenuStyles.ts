@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { gu_cta_height } from '../veggieBurgerButton/veggieBurgerButtonStyles';
+import { gu_cta_height } from '../header/headerStyles';
 
 export const component_veggie_burger_button = css`
 	position: absolute;

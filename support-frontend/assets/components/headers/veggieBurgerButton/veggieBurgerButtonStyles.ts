@@ -1,9 +1,8 @@
 import { css } from '@emotion/react';
 import { brandAlt } from '@guardian/source/foundations';
+import { gu_cta_height } from '../header/headerStyles';
 
-export const gu_cta_height = 42;
-
-export const component_veggie_burger_button = css`
+export const buttonStyle = css`
 	display: flex;
 	align-items: center;
 	justify-content: center;
