@@ -22,7 +22,7 @@ export const NewslettersIds = {
 	SaturdayEdition: getStage() === 'PROD' ? '6031' : '6042',
 } as const;
 
-export type NewsletterId = typeof NewslettersIds[keyof typeof NewslettersIds];
+type NewsletterId = typeof NewslettersIds[keyof typeof NewslettersIds];
 
 export interface NewsletterSubscription {
 	listId: string;
