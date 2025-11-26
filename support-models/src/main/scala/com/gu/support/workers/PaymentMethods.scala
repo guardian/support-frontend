@@ -61,7 +61,7 @@ case class PayPalReferenceTransaction(
 ) extends PaymentMethod
 
 case class PayPalCompletePaymentsReferenceTransaction(
-    PaypalBaid: String,
+    PaypalPaymentToken: String,
     PaypalEmail: String,
     Type: String = "PayPalCompletePayments",
     PaymentGateway: PaymentGateway = PayPalCompletePaymentsGateway,
