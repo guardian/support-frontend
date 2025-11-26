@@ -110,9 +110,6 @@ function OnboardingComponent({
 		void fetchUserNewslettersSubscriptions();
 	}, []);
 
-	console.debug('Newsletters:', userNewslettersSubscriptions);
-	// -------------
-
 	const { isSignedIn } = getUser();
 	const {
 		hasMobileAppDownloaded,
