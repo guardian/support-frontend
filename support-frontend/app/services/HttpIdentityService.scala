@@ -182,20 +182,14 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
           response.json.validate[NewsletterApiResponse].asOpt match {
             case Some(apiResponse) => Right(apiResponse.result.subscriptions)
             case None =>
-              val errorMsg = s"Failed to parse newsletters response: ${response.body}"
-              logger.error(scrub"$errorMsg")
-              Left(errorMsg)
+              Left(s"Failed to parse newsletters response")
           }
         } else {
-          val errorMsg = s"Failed to fetch newsletters: ${response.status} ${response.body}"
-          logger.error(scrub"$errorMsg")
-          Left(errorMsg)
+          Left(s"Failed to fetch newsletters")
         }
       }
       .recover { case e: Exception =>
-        val errorMsg = s"Exception fetching newsletters: ${e.getMessage}"
-        logger.error(scrub"$errorMsg")
-        Left(errorMsg)
+        Left(s"Exception fetching newsletters: ${e.getMessage}")
       }
   }
 
