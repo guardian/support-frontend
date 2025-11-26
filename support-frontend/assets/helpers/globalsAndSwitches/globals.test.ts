@@ -97,6 +97,7 @@ describe('getGlobal', () => {
 					Canada: [],
 				},
 				metricUrl: '',
+				productsWithThankYouOnboarding: [],
 			},
 		};
 	});

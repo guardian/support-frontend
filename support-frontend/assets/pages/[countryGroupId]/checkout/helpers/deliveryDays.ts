@@ -45,7 +45,7 @@ const getWeeklyDays = (testDate?: number): Date[] => {
 
 	const publicationDays = nonChrismassy.splice(weeksToAdd);
 	const publicationStartDays = publicationDays.filter((day) => {
-		const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
+		const invalidPublicationDates = ['-12-24', '-12-25', '-12-26', '-12-30'];
 		const date = formatMachineDate(day);
 		return !invalidPublicationDates.some((dateSuffix) =>
 			date.endsWith(dateSuffix),
