@@ -13,7 +13,7 @@ import models.identity.requests.CreateGuestAccountRequestBody
 import models.identity.responses.IdentityErrorResponse.{GuestEndpoint, IdentityError, OtherIdentityError, UserEndpoint}
 import models.identity.responses.{GuestRegistrationResponse, IdentityErrorResponse, UserResponse}
 import org.apache.pekko.actor.Scheduler
-import play.api.libs.json.{JsPath, Json, JsonValidationError, Reads}
+import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
 
@@ -180,8 +180,8 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .map { response =>
         if (response.status >= 200 && response.status < 300) {
           response.json.validate[NewsletterApiResponse] match {
-            case play.api.libs.json.JsSuccess(apiResponse, _) => Right(apiResponse.result.subscriptions)
-            case play.api.libs.json.JsError(errors) =>
+            case JsSuccess(apiResponse, _) => Right(apiResponse.result.subscriptions)
+            case JsError(errors) =>
               Left(s"Failed to parse newsletters response: ${errors.mkString(", ")}")
           }
         } else {
