@@ -170,5 +170,15 @@ describe('url', () => {
 				'https://support.theguardian.com',
 			);
 		});
+
+		it('does not change the subdomain if it is already correct', () => {
+			jsdom.reconfigure({
+				url: `https://support.theguardian.com/uk/subscribe/paper`,
+			});
+
+			expect(getOriginAndForceSubdomain('support')).toBe(
+				'https://support.theguardian.com',
+			);
+		});
 	});
 });
