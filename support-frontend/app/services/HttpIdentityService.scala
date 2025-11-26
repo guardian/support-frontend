@@ -201,17 +201,14 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .patch(payload)
       .map { response =>
         if (response.status >= 200 && response.status < 300) {
-          logger.info(s"Successfully updated newsletter subscription for $id to $subscribed")
           Right(())
         } else {
           val errorMsg = s"Failed to update newsletter: ${response.status} ${response.body}"
-          logger.error(scrub"$errorMsg")
           Left(errorMsg)
         }
       }
       .recover { case e: Exception =>
         val errorMsg = s"Exception updating newsletter: ${e.getMessage}"
-        logger.error(scrub"$errorMsg")
         Left(errorMsg)
       }
   }
