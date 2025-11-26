@@ -195,22 +195,24 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
 
   def updateNewsletterSubscription(accessToken: String, id: String, subscribed: Boolean, origin: String)(implicit
       ec: ExecutionContext,
-  ): Future[Boolean] = {
+  ): Future[Either[String, Unit]] = {
     val payload = Json.obj("id" -> id, "subscribed" -> subscribed)
     requestWithAccessToken("users/me/newsletters", accessToken, origin)
       .patch(payload)
       .map { response =>
         if (response.status >= 200 && response.status < 300) {
           logger.info(s"Successfully updated newsletter subscription for $id to $subscribed")
-          true
+          Right(())
         } else {
-          logger.error(scrub"Failed to update newsletter: ${response.status} ${response.body}")
-          false
+          val errorMsg = s"Failed to update newsletter: ${response.status} ${response.body}"
+          logger.error(scrub"$errorMsg")
+          Left(errorMsg)
         }
       }
       .recover { case e: Exception =>
-        logger.error(scrub"Exception updating newsletter: ${e.getMessage}")
-        false
+        val errorMsg = s"Exception updating newsletter: ${e.getMessage}"
+        logger.error(scrub"$errorMsg")
+        Left(errorMsg)
       }
   }
 

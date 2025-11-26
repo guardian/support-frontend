@@ -101,12 +101,11 @@ class IdentityController(
           val origin = getOrigin(request)
           identityService
             .updateNewsletterSubscription(cookie.value, request.body.id, request.body.subscribed, origin)
-            .map { success =>
-              if (success) {
-                NoContent
-              } else {
+            .map {
+              case Right(_) => NoContent
+              case Left(error) =>
+                logger.error(scrub"Failed to update newsletter subscription: $error")
                 InternalServerError("Failed to update newsletter subscription")
-              }
             }
         case None =>
           logger.error(scrub"No GU_ACCESS_TOKEN cookie found")
