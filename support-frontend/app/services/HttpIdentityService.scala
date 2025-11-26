@@ -189,7 +189,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
         }
       }
       .recover { case e: Exception =>
-        Left(s"Exception fetching newsletters: ${e.getMessage}")
+        Left(s"Exception fetching newsletters: ${e.toString}")
       }
   }
 
