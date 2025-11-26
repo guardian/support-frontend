@@ -77,17 +77,14 @@ class IdentityController(
         val origin = getOrigin(request)
         identityService
           .getNewslettersSubscriptions(cookie.value, origin)
-          .map(
-            _.fold(
-              error => {
-                logger.error(scrub"Failed to get newsletters subscriptions: $error")
-                BadRequest(
-                  GetNewslettersResponseFailure(List("Failed to retrieve newsletter subscriptions")).asJson,
-                )
-              },
-              newsletters => Ok(GetNewslettersResponseSuccess(newsletters).asJson),
-            ),
-          )
+          .map {
+            case Right(newsletters) => Ok(GetNewslettersResponseSuccess(newsletters).asJson)
+            case Left(error) =>
+              logger.error(scrub"Failed to get newsletters subscriptions: $error")
+              BadRequest(
+                GetNewslettersResponseFailure(List("Failed to retrieve newsletter subscriptions")).asJson,
+              )
+          }
       case None =>
         logger.error(scrub"No GU_ACCESS_TOKEN cookie found")
         Future.successful(Unauthorized("No access token found"))
