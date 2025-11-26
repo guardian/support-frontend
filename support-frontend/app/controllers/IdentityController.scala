@@ -82,10 +82,10 @@ class IdentityController(
               error => {
                 logger.error(scrub"Failed to get newsletters subscriptions: $error")
                 BadRequest(
-                  GetNewslettersResponse(None, Some(List("Failed to retrieve newsletter subscriptions"))).asJson,
+                  GetNewslettersResponseFailure(List("Failed to retrieve newsletter subscriptions")).asJson,
                 )
               },
-              newsletters => Ok(GetNewslettersResponse(Some(newsletters), None).asJson),
+              newsletters => Ok(GetNewslettersResponseSuccess(newsletters).asJson),
             ),
           )
       case None =>
@@ -134,11 +134,15 @@ object CreateSignInLinkResponse {
   implicit val encoder: Encoder[CreateSignInLinkResponse] = deriveEncoder
 }
 
-case class GetNewslettersResponse(newsletters: Option[List[services.Newsletter]], errors: Option[List[String]])
-object GetNewslettersResponse {
+case class GetNewslettersResponseSuccess(newsletters: List[services.Newsletter])
+object GetNewslettersResponseSuccess {
   implicit val newsletterEncoder: Encoder[services.Newsletter] = deriveEncoder
-  implicit val encoder: Encoder[GetNewslettersResponse] =
-    deriveEncoder[GetNewslettersResponse].mapJson(_.dropNullValues)
+  implicit val encoder: Encoder[GetNewslettersResponseSuccess] = deriveEncoder
+}
+
+case class GetNewslettersResponseFailure(errors: List[String])
+object GetNewslettersResponseFailure {
+  implicit val encoder: Encoder[GetNewslettersResponseFailure] = deriveEncoder
 }
 
 case class UpdateNewsletterRequest(id: String, subscribed: Boolean)
