@@ -7,7 +7,7 @@
 
 import { createContext, type ReactNode, useContext, useRef } from 'react';
 
-export interface AnalyticsProfileData {
+interface AnalyticsProfileData {
 	hasMobileAppDownloaded: boolean;
 	hasFeastMobileAppDownloaded: boolean;
 }
