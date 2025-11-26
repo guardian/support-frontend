@@ -5,6 +5,7 @@ import {
 	addQueryParamsToURL,
 	getAllQueryParams,
 	getAllQueryParamsWithExclusions,
+	getOriginAndForceSubdomain,
 	getPaperOrigin,
 } from '../urls/url';
 
@@ -156,6 +157,18 @@ describe('url', () => {
 				url: `https://support.thegulocal.com/uk/subscribe/paper`,
 			});
 			expect(getPaperOrigin('Everyday')).toBe('https://support.thegulocal.com');
+		});
+	});
+
+	describe('getOriginAndForceSubdomain', () => {
+		it('returns the current origin with the subdomain specified', () => {
+			jsdom.reconfigure({
+				url: `https://observer.theguardian.com/uk/subscribe/paper`,
+			});
+
+			expect(getOriginAndForceSubdomain('support')).toBe(
+				'https://support.theguardian.com',
+			);
 		});
 	});
 });

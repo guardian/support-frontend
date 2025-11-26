@@ -54,10 +54,9 @@ function addQueryParamsToURL(
 }
 
 function getPaperOrigin(productOptions: ProductOptions): string {
-	const origin = getOrigin();
 	return productOptions === 'Sunday'
-		? origin.replace(/^https:\/\/support/, 'https://observer')
-		: origin;
+		? getOriginAndForceSubdomain('observer')
+		: getOrigin();
 }
 function getOrigin(): string {
 	const loc = window.location;
@@ -65,6 +64,11 @@ function getOrigin(): string {
 		window.location.origin ||
 		`${loc.protocol}//${loc.hostname}${loc.port ? `:${loc.port}` : ''}`
 	);
+}
+
+function getOriginAndForceSubdomain(subdomain: string): string {
+	const origin = getOrigin();
+	return origin.replace(/^https:\/\/[\w-]*?\./, `https://${subdomain}.`);
 }
 
 // Retrieves the domain for the given env, e.g. guardian.com/gulocal.com.
@@ -99,6 +103,7 @@ export {
 	getAllQueryParamsWithExclusions,
 	getPaperOrigin,
 	getOrigin,
+	getOriginAndForceSubdomain,
 	getBaseDomain,
 	addQueryParamsToURL,
 	isProd,
