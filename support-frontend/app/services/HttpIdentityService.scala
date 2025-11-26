@@ -107,16 +107,6 @@ object NewsletterApiResponse {
   implicit val newsletterApiResponseReads: Reads[NewsletterApiResponse] = Json.reads[NewsletterApiResponse]
 }
 
-case class NewsletterResponse(
-    newsletters: Option[List[Newsletter]],
-    errors: Option[List[String]],
-)
-
-object NewsletterResponse {
-  def success(newsletters: List[Newsletter]): NewsletterResponse = NewsletterResponse(Some(newsletters), None)
-  def failure(error: String): NewsletterResponse = NewsletterResponse(None, Some(List(error)))
-}
-
 object IdentityService {
   def apply(config: Identity)(implicit wsClient: WSClient): IdentityService =
     new IdentityService(apiUrl = config.apiUrl, apiClientToken = config.apiClientToken)
@@ -184,28 +174,28 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
 
   def getNewslettersSubscriptions(accessToken: String, origin: String)(implicit
       ec: ExecutionContext,
-  ): Future[NewsletterResponse] = {
+  ): Future[Either[String, List[Newsletter]]] = {
     requestWithAccessToken("users/me/newsletters", accessToken, origin)
       .get()
       .map { response =>
         if (response.status >= 200 && response.status < 300) {
           response.json.validate[NewsletterApiResponse].asOpt match {
-            case Some(apiResponse) => NewsletterResponse.success(apiResponse.result.subscriptions)
+            case Some(apiResponse) => Right(apiResponse.result.subscriptions)
             case None =>
               val errorMsg = s"Failed to parse newsletters response: ${response.body}"
               logger.error(scrub"$errorMsg")
-              NewsletterResponse.failure(errorMsg)
+              Left(errorMsg)
           }
         } else {
           val errorMsg = s"Failed to fetch newsletters: ${response.status} ${response.body}"
           logger.error(scrub"$errorMsg")
-          NewsletterResponse.failure(errorMsg)
+          Left(errorMsg)
         }
       }
       .recover { case e: Exception =>
         val errorMsg = s"Exception fetching newsletters: ${e.getMessage}"
         logger.error(scrub"$errorMsg")
-        NewsletterResponse.failure(errorMsg)
+        Left(errorMsg)
       }
   }
 
