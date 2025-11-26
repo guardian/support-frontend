@@ -7,7 +7,10 @@ import { fetchJson, getRequestOptions, requestOptions } from '../async/fetch';
  */
 function getStage(): 'CODE' | 'PROD' {
 	const host = window.location.hostname.toLowerCase();
-	if (host.includes('.code.dev-theguardian.') || host.includes('.thegulocal.')) {
+	if (
+		host.includes('.code.dev-theguardian.') ||
+		host.includes('.thegulocal.')
+	) {
 		return 'CODE';
 	}
 	return 'PROD';
@@ -22,7 +25,7 @@ export const NewslettersIds = {
 	SaturdayEdition: getStage() === 'PROD' ? '6031' : '6042',
 } as const;
 
-type NewsletterId = typeof NewslettersIds[keyof typeof NewslettersIds];
+type NewsletterId = (typeof NewslettersIds)[keyof typeof NewslettersIds];
 
 export interface NewsletterSubscription {
 	listId: string;
