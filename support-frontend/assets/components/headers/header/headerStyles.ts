@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { brand, from } from '@guardian/source/foundations';
+import { brand, from, space } from '@guardian/source/foundations';
 
 function gu_span(columns: number): string {
 	const gu_col_width = 60;
@@ -14,7 +14,7 @@ export const topNavContainer = css`
 `;
 
 export const utilityContainer = css`
-	padding-top: 6px;
+	padding-top: ${space[2]}px;
 `;
 
 export const logoLink = css`
@@ -31,7 +31,7 @@ export const logoContainer = css`
 	}
 
 	${from.wide} {
-		padding-right: 80px;
+		padding-right: ${space[18]}px;
 	}
 `;
 
@@ -67,7 +67,7 @@ export const headerContainerROW = css`
 		${from.tablet} {
 			position: absolute;
 			bottom: 0;
-			left: 10px;
+			left: ${space[3]}px;
 			right: ${gu_span(5)};
 		}
 	}
@@ -78,7 +78,7 @@ export const headerContainerGBP = css`
 		${from.leftCol} {
 			position: absolute;
 			bottom: 0;
-			left: 10px;
+			left: ${space[3]}px;
 			right: ${gu_span(5)};
 		}
 	}
