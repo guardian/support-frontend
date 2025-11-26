@@ -63,11 +63,16 @@ function replaceDatePlaceholder(copy: string, deadline?: string): string {
 		return copy;
 	}
 
-	if (!deadline || !/^\d+$/.test(deadline)) {
+	if (!deadline) {
 		return copy.replaceAll(DEADLINE_PLACEHOLDER_TEMPLATE, '');
 	}
 
 	const daysLeft = parseInt(deadline, 10);
+
+	if (isNaN(daysLeft)) {
+		return copy.replaceAll(DEADLINE_PLACEHOLDER_TEMPLATE, '');
+	}
+
 	const replacement =
 		daysLeft === 0
 			? 'Final day'
