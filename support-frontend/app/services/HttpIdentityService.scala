@@ -179,10 +179,10 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .get()
       .map { response =>
         if (response.status >= 200 && response.status < 300) {
-          response.json.validate[NewsletterApiResponse].asOpt match {
-            case Some(apiResponse) => Right(apiResponse.result.subscriptions)
-            case None =>
-              Left(s"Failed to parse newsletters response")
+          response.json.validate[NewsletterApiResponse] match {
+            case play.api.libs.json.JsSuccess(apiResponse, _) => Right(apiResponse.result.subscriptions)
+            case play.api.libs.json.JsError(errors) =>
+              Left(s"Failed to parse newsletters response: ${errors.mkString(", ")}")
           }
         } else {
           Left(s"Failed to fetch newsletters")
