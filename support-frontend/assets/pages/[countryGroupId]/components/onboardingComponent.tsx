@@ -33,6 +33,7 @@ const identityFrameStyles = css`
 `;
 
 type UserStateChange = 'userSignedIn' | 'userRegistered';
+type HrefIframeAllowList = 'recaptchaPrivacyPolicy' | 'recaptchaTerms';
 
 type MessageEventData =
 	| {
@@ -44,6 +45,11 @@ type MessageEventData =
 			type: 'userStateChange';
 			context: 'supporterOnboarding';
 			value: UserStateChange;
+	  }
+	| {
+			type: 'iframedLinkClicked';
+			context: 'supporterOnboarding';
+			value: HrefIframeAllowList;
 	  };
 
 export type CurrentUserState = UserStateChange | 'existingUserSignedIn';
@@ -239,6 +245,17 @@ function OnboardingComponent({
 					setShowIdentityIframe(false);
 
 					triggerOAuthFlow();
+				}
+			}
+
+			if (data.type === 'iframedLinkClicked') {
+				switch (data.value) {
+					case 'recaptchaPrivacyPolicy':
+						window.location.href = 'https://policies.google.com/privacy';
+						break;
+					case 'recaptchaTerms':
+						window.location.href = 'https://policies.google.com/terms';
+						break;
 				}
 			}
 		};
