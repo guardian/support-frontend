@@ -68,7 +68,7 @@ export function buildPaperEmailFields({
 		mandateId: mandateId,
 	});
 	const productFields = {
-		package: productInformation.ratePlan, // TODO: is this ok with plus plans?
+		package: productInformation.ratePlan,
 		...deliveryAgentFields,
 		...deliveryFields,
 	};

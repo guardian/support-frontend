@@ -76,8 +76,7 @@ export function buildDigitalSubscriptionEmailFields({
 		date_of_first_payment: formatDate(
 			dayjs(firstPayment(paymentSchedule).date),
 		),
-		country:
-			getCountryNameByIsoCode(user.billingAddress.country) ?? 'Unknown Country', // TODO: handle unknown country better
+		country: getCountryNameByIsoCode(user.billingAddress.country) ?? '',
 		trial_period: '14',
 		zuorasubscriberid: subscriptionNumber,
 		...paymentMethodFields,

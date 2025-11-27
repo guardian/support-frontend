@@ -21,7 +21,7 @@ export interface TestFields {
 }
 
 const userCoreFields: TestFields = {
-	email: 'rupert.bates+smoke-test123@theguardian.com',
+	email: email(),
 	firstName: firstName(),
 	lastName: lastName(),
 	recipient: {

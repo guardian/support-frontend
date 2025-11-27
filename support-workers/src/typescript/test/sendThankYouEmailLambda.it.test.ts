@@ -14,7 +14,7 @@ import tierThreeJson from './fixtures/sendThankYouEmail/tierThreeState.json';
 
 describe('sendThankYouEmailLambda integration', () => {
 	// If you want to receive the test emails, change this to your email address
-	const emailToSendTestEmailsTo = `rupert.bates+smoke-test123@theguardian.com`;
+	const emailToSendTestEmailsTo = `integration-test@thegulocal.com`;
 
 	const sendEmail = (state: WrappedState<SendAcquisitionEventState>) => {
 		state.state.sendThankYouEmailState.user.primaryEmailAddress =
