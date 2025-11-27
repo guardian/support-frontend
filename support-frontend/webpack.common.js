@@ -9,7 +9,6 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const { getClassName } = require('./scripts/css');
-const { paletteAsSass } = require('./scripts/pasteup-sass');
 const entryPoints = require('./webpack.entryPoints');
 
 const cssLoaders = [

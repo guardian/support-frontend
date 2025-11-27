@@ -25,6 +25,7 @@ import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { parameteriseUrl } from 'helpers/urls/routes';
+import { getOriginAndForceSubdomain } from 'helpers/urls/url';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -157,11 +158,17 @@ export default function CheckoutSummary({
 				return undefined;
 		}
 	};
-	const backUrl = parameteriseUrl(
-		`/${supportRegionId}${productDescription.landingPagePath}`,
-		promotion?.promoCode,
-		getPaperFulfilmentOption(productKey),
-	);
+
+	// We need to force the subdomain to support in case we're on the Observer
+	// subdomain which can't serve the subscribe/paper landing page. This is for
+	// Sunday paper subs.
+	const backUrl =
+		getOriginAndForceSubdomain('support') +
+		parameteriseUrl(
+			`/${supportRegionId}${productDescription.landingPagePath}`,
+			promotion?.promoCode,
+			getPaperFulfilmentOption(productKey),
+		);
 
 	return (
 		<Box cssOverrides={shorterBoxMargin}>

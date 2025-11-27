@@ -56,7 +56,10 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
-import { getSanitisedHtml } from '../../../helpers/utilities/utilities';
+import {
+	getSanitisedHtml,
+	replaceDatePlaceholder,
+} from '../../../helpers/utilities/utilities';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import Countdown from '../components/countdown';
 import { OneOffCard } from '../components/oneOffCard';
@@ -325,6 +328,9 @@ export function ThreeTierLanding({
 		: undefined;
 	// We override the heading when there's a live countdown
 	const [headingOverride, setHeadingOverride] = useState<string | undefined>();
+	const [countdownDaysLeft, setCountdownDaysLeft] = useState<
+		string | undefined
+	>();
 
 	const enableSingleContributionsTab =
 		campaignSettings?.enableSingleContributions ??
@@ -493,9 +499,6 @@ export function ThreeTierLanding({
 		...tier3ProductDescription,
 	};
 
-	const sanitisedHeading = getSanitisedHtml(settings.copy.heading);
-	const sanitisedSubheading = getSanitisedHtml(settings.copy.subheading);
-
 	return (
 		<PageScaffold
 			header={
@@ -590,6 +593,7 @@ export function ThreeTierLanding({
 						<Countdown
 							countdownSettings={countdownSettings}
 							setHeadingOverride={setHeadingOverride}
+							setDaysTillDeadline={setCountdownDaysLeft}
 						/>
 					)}
 
@@ -597,19 +601,37 @@ export function ThreeTierLanding({
 						<h1 css={heading}>
 							<span
 								dangerouslySetInnerHTML={{
-									__html: getSanitisedHtml(headingOverride),
+									__html: getSanitisedHtml(
+										replaceDatePlaceholder(headingOverride, countdownDaysLeft),
+									),
 								}}
 							/>
 						</h1>
 					)}
 					{!headingOverride && (
 						<h1 css={heading}>
-							<span dangerouslySetInnerHTML={{ __html: sanitisedHeading }} />
+							<span
+								dangerouslySetInnerHTML={{
+									__html: getSanitisedHtml(
+										replaceDatePlaceholder(
+											settings.copy.heading,
+											countdownDaysLeft,
+										),
+									),
+								}}
+							/>
 						</h1>
 					)}
 					<p
 						css={standFirst}
-						dangerouslySetInnerHTML={{ __html: sanitisedSubheading }}
+						dangerouslySetInnerHTML={{
+							__html: getSanitisedHtml(
+								replaceDatePlaceholder(
+									settings.copy.subheading,
+									countdownDaysLeft,
+								),
+							),
+						}}
 					/>
 
 					{settings.tickerSettings && (
