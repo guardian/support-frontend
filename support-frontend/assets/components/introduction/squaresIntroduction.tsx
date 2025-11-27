@@ -1,20 +1,16 @@
-// ----- Imports ----- //
-import type { HeadingSize } from 'components/heading/heading';
 import SvgSquaresHeroDesktop from 'components/svgs/squaresHeroDesktop';
 import SvgSquaresHeroMobile from 'components/svgs/squaresHeroMobile';
 import SvgSquaresHeroTablet from 'components/svgs/squaresHeroTablet';
 import 'components/heading/heading';
 import HighlightText from 'pages/supporter-plus-thank-you/components/thankYouHeader/HighlightText';
 
-// ----- Types ----- //
-type PropTypes = {
+function SquaresIntroduction({
+	headings,
+	errorCode,
+}: {
 	headings: string[];
-	highlightsHeadingSize: HeadingSize;
 	errorCode?: string;
-};
-
-// ----- Component ----- //
-function SquaresIntroduction(props: PropTypes) {
+}) {
 	return (
 		<section className="component-squares-introduction">
 			<SvgSquaresHeroDesktop />
@@ -22,10 +18,8 @@ function SquaresIntroduction(props: PropTypes) {
 			<SvgSquaresHeroMobile />
 			<div className="component-squares-introduction__content">
 				<h1 className="component-squares-introduction__heading">
-					{props.errorCode && (
-						<HighlightText>{`Error ${props.errorCode}`}</HighlightText>
-					)}
-					{props.headings.map((heading) => (
+					{errorCode && <HighlightText>{`Error ${errorCode}`}</HighlightText>}
+					{headings.map((heading) => (
 						<span className="component-squares-introduction__heading-line">
 							{heading}
 						</span>
@@ -35,11 +29,5 @@ function SquaresIntroduction(props: PropTypes) {
 		</section>
 	);
 }
-
-// ----- Default Props ----- //
-SquaresIntroduction.defaultProps = {
-	highlights: null,
-	highlightsHeadingSize: 2,
-}; // ----- Exports ----- //
 
 export default SquaresIntroduction;
