@@ -20,7 +20,6 @@ import {
 	utilityContainer,
 } from './headerStyles';
 import MobileMenuToggler from './mobileMenuToggler';
-import './header.scss';
 
 type HeaderProps = {
 	countryGroupId: CountryGroupId;
