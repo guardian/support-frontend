@@ -3,7 +3,7 @@ import type {
 	CheckoutNudgeTest,
 	CheckoutNudgeVariant,
 } from '../globalsAndSwitches/checkoutNudgeSettings';
-import { isSwitchOn } from '../globalsAndSwitches/globals';
+import { getSettings, isSwitchOn } from '../globalsAndSwitches/globals';
 import { CountryGroup } from '../internationalisation/classes/countryGroup';
 import {
 	countryGroupMatches,
@@ -17,126 +17,6 @@ import {
 	getSessionParticipations,
 	setSessionParticipations,
 } from './sessionStorage';
-
-const checkoutNudgeAbTests: CheckoutNudgeTest[] = [
-	{
-		name: 'nudgeToLowRegularRollout__US',
-		status: 'Live',
-		regionTargeting: {
-			targetedCountryGroups: ['UnitedStates'],
-		},
-		nudgeFromProduct: {
-			product: 'OneTimeContribution',
-			ratePlan: 'OneTime',
-		},
-		variants: [
-			{
-				name: 'control',
-				nudge: {
-					nudgeToProduct: {
-						product: 'Contribution',
-						ratePlan: 'Monthly',
-					},
-					nudgeCopy: {
-						heading: 'Can I make a bigger impact?',
-						body: 'Yes! We’re grateful for any amount you can spare, but supporting us on a monthly basis helps to power Guardian journalism in perpetuity. Cancel anytime.',
-					},
-					thankyouCopy: {
-						heading: 'Thank you for choosing to support us monthly',
-						body: 'Your support makes a huge difference in keeping our journalism free from outside influence.',
-					},
-				},
-			},
-		],
-	},
-	{
-		name: 'nudgeToLowRegularRollout__NON_US',
-		status: 'Live',
-		regionTargeting: {
-			targetedCountryGroups: [
-				'GBPCountries',
-				'AUDCountries',
-				'Canada',
-				'EURCountries',
-				'NZDCountries',
-				'International',
-			],
-		},
-		nudgeFromProduct: {
-			product: 'OneTimeContribution',
-			ratePlan: 'OneTime',
-		},
-		variants: [
-			{
-				name: 'control',
-				nudge: {
-					nudgeToProduct: {
-						product: 'Contribution',
-						ratePlan: 'Monthly',
-					},
-					nudgeCopy: {
-						heading: 'Make a bigger impact',
-						body: 'The reliability of recurring support powers our journalism in perpetuity. Could you make a small monthly contribution instead? Cancel anytime.',
-					},
-					thankyouCopy: {
-						heading: 'Thank you for choosing to support us monthly',
-						body: 'You are helping to support the future of independent journalism.',
-					},
-				},
-			},
-		],
-	},
-	{
-		name: '2025-11-13_nudgeToSupporterPlus',
-		status: 'Live',
-		regionTargeting: {
-			targetedCountryGroups: [],
-		},
-		nudgeFromProduct: {
-			product: 'Contribution',
-		},
-		variants: [
-			{
-				// No nudge
-				name: 'control',
-			},
-			{
-				name: 'v1',
-				nudge: {
-					nudgeToProduct: {
-						product: 'SupporterPlus',
-					},
-					nudgeCopy: {
-						heading: 'Make the biggest impact',
-						body: 'Support independent journalism with an All-access digital subscription and get great benefits.',
-					},
-					thankyouCopy: {
-						heading: 'Thank you for choosing to upgrade',
-						body: 'Alongside your extra benefits you are also helping ensure the future of the Guardian.',
-					},
-				},
-			},
-			{
-				name: 'v2',
-				nudge: {
-					nudgeToProduct: {
-						product: 'SupporterPlus',
-					},
-					nudgeCopy: {
-						heading: 'Make the biggest impact',
-					},
-					thankyouCopy: {
-						heading: 'Thank you for choosing to upgrade',
-						body: 'Alongside your extra benefits you are also helping ensure the future of the Guardian.',
-					},
-					benefits: {
-						label: 'Your all-access benefits:',
-					},
-				},
-			},
-		],
-	},
-];
 
 const productMatches = (
 	test: CheckoutNudgeTest,
@@ -166,7 +46,7 @@ export interface CheckoutNudgeSettings {
 export function getCheckoutNudgeParticipations(
 	countryGroupId: CountryGroupId = CountryGroup.detect(),
 	path: string = window.location.pathname,
-	tests: CheckoutNudgeTest[] = checkoutNudgeAbTests,
+	tests: CheckoutNudgeTest[] = getSettings().checkoutNudgeTests ?? [],
 	mvtId: number = getMvtId(),
 	queryString: string = window.location.search,
 ): CheckoutNudgeSettings | undefined {
@@ -174,6 +54,7 @@ export function getCheckoutNudgeParticipations(
 	if (queryString.includes('disable-nudge')) {
 		return undefined;
 	}
+
 	if (!isSwitchOn('featureSwitches.enableCheckoutNudge')) {
 		return undefined;
 	}
@@ -210,43 +91,39 @@ export function getCheckoutNudgeParticipations(
 				variant: variantData.variant,
 			};
 		}
-	} else {
-		// No participation in session storage, assign user to a test + variant
-		const test = tests
-			.filter((test) => test.status === 'Live')
-			.find((test) => {
-				return (
-					countryGroupMatches(
-						test.regionTargeting?.targetedCountryGroups,
-						countryGroupId,
-					) && productMatches(test, path, queryString)
-				);
-			});
-
-		if (test) {
-			const idx = randomNumber(mvtId, test.name) % test.variants.length;
-			const variant = test.variants[idx];
-
-			if (variant) {
-				const participations = {
-					[test.name]: variant.name,
-				};
-				// Record the participation in session storage so that we can track it from the checkout
-				setSessionParticipations(
-					participations,
-					CHECKOUT_NUDGE_PARTICIPATIONS_KEY,
-				);
-
-				return {
-					participations,
-					fromProduct: test.nudgeFromProduct,
-					variant,
-				};
-			}
-		}
 	}
-	// No test found
-	return undefined;
+	// No participation in session storage, assign user to a test + variant
+	const test = tests.find((test) => {
+		return (
+			countryGroupMatches(
+				test.regionTargeting?.targetedCountryGroups,
+				countryGroupId,
+			) && productMatches(test, path, queryString)
+		);
+	});
+
+	if (!test) {
+		return undefined;
+	}
+
+	const idx = randomNumber(mvtId, test.name) % test.variants.length;
+	const variant = test.variants[idx];
+
+	if (!variant) {
+		return undefined;
+	}
+
+	const participations = {
+		[test.name]: variant.name,
+	};
+	// Record the participation in session storage so that we can track it from the checkout
+	setSessionParticipations(participations, CHECKOUT_NUDGE_PARTICIPATIONS_KEY);
+
+	return {
+		participations,
+		fromProduct: test.nudgeFromProduct,
+		variant,
+	};
 }
 
 // Use the AB test participations to find the specific variant configuration for this page
