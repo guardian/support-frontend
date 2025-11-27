@@ -6,6 +6,7 @@
  */
 
 import { createContext, type ReactNode, useContext, useRef } from 'react';
+import { fetchJson } from '../async/fetch';
 
 interface AnalyticsProfileData {
 	hasMobileAppDownloaded: boolean;
@@ -18,54 +19,39 @@ interface CacheEntry {
 }
 
 class AnalyticsProfileCache {
-	private cache: CacheEntry | null = null;
-	private pendingRequest: Promise<AnalyticsProfileData> | null = null;
+	private cache: Promise<CacheEntry> | null = null;
 	private readonly CACHE_TTL_MS = 60 * 1000; // 1 minute TTL
 
-	get(): AnalyticsProfileData | null {
-		if (!this.cache) {
-			console.debug('AnalyticsProfileCache: cache miss');
-			return null;
-		}
-
-		const isExpired = Date.now() - this.cache.timestamp > this.CACHE_TTL_MS;
-		if (isExpired) {
-			console.debug('AnalyticsProfileCache: cache expired');
-			this.cache = null;
-			return null;
+	async get(): Promise<AnalyticsProfileData> {
+		if (
+			!this.cache ||
+			Date.now() - (await this.cache).timestamp > this.CACHE_TTL_MS
+		) {
+			console.debug('AnalyticsProfileCache: cache miss/expired');
+			this.cache = fetchJson<{
+				identityId: string;
+				hasMobileAppDownloaded: boolean;
+				hasFeastMobileAppDownloaded: boolean;
+			}>('/analytics-user-profile', {
+				mode: 'cors',
+				credentials: 'include',
+			}).then((response) => ({
+				timestamp: Date.now(),
+				data: {
+					hasMobileAppDownloaded: response.hasMobileAppDownloaded,
+					hasFeastMobileAppDownloaded: response.hasFeastMobileAppDownloaded,
+				},
+			}));
+			return this.cache.then((cache) => cache.data);
 		}
 
 		console.debug('AnalyticsProfileCache: cache hit');
-		return this.cache.data;
-	}
-
-	set(data: AnalyticsProfileData): void {
-		console.debug('AnalyticsProfileCache: setting cache');
-		this.cache = {
-			data,
-			timestamp: Date.now(),
-		};
-	}
-
-	getPendingRequest(): Promise<AnalyticsProfileData> | null {
-		console.debug('AnalyticsProfileCache: getPendingRequest');
-		return this.pendingRequest;
-	}
-
-	setPendingRequest(promise: Promise<AnalyticsProfileData>): void {
-		console.debug('AnalyticsProfileCache: setPendingRequest');
-		this.pendingRequest = promise;
-	}
-
-	clearPendingRequest(): void {
-		console.debug('AnalyticsProfileCache: clearPendingRequest');
-		this.pendingRequest = null;
+		return (await this.cache).data;
 	}
 
 	clear(): void {
-		console.debug('AnalyticsProfileCache: clear cache');
+		console.debug('AnalyticsProfileCache: clear');
 		this.cache = null;
-		this.pendingRequest = null;
 	}
 }
 
