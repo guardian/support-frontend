@@ -20,8 +20,6 @@ const useAnalyticsProfile = () => {
 			setDataLoaded(true);
 		} catch (error) {
 			console.error('Error calling Analytics endpoint:', error);
-		} finally {
-			cache.clear();
 		}
 	}, [dataLoaded, cache]);
 

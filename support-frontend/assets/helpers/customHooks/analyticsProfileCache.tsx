@@ -13,25 +13,69 @@ interface AnalyticsProfileData {
 	hasFeastMobileAppDownloaded: boolean;
 }
 
-class AnalyticsProfileCache {
-	private data: Promise<AnalyticsProfileData> | null = null;
+export class AnalyticsProfileCache {
+	// In-flight refresh promise
+	private dataPromise: Promise<AnalyticsProfileData> | null = null;
+	// Last successful value
+	private lastValue: AnalyticsProfileData | null = null;
+	// Timestamp of last successful refresh
 	private timestamp: number | null = null;
-	private readonly CACHE_TTL_MS = 60 * 1000; // 1 minute TTL
+	// TTL in milliseconds
+	private readonly ttlMs: number;
 
+	constructor(ttlMs: number = 60 * 1000) {
+		this.ttlMs = ttlMs;
+	}
+
+	/**
+	 * Get cached data with stale-while-revalidate behavior:
+	 * - If no successful value yet, trigger a fetch and return the in-flight promise.
+	 * - If value exists and is fresh, return it immediately.
+	 * - If value exists but is stale, return the last value immediately and kick off a background refresh.
+	 * - If the refresh fails, keep returning the last good value.
+	 * Concurrent calls during a refresh will share the same in-flight promise.
+	 */
 	async get(): Promise<AnalyticsProfileData> {
-		if (
-			this.data === null ||
-			this.timestamp === null ||
-			Date.now() - this.timestamp > this.CACHE_TTL_MS
-		) {
-			console.debug('AnalyticsProfileCache: cache miss/expired');
-			this.timestamp = Date.now();
-			this.data = this.startRefresh();
-		} else {
-			console.debug('AnalyticsProfileCache: cache hit');
+		const now = Date.now();
+		const isFresh =
+			this.timestamp !== null && now - this.timestamp <= this.ttlMs;
+
+		// No successful value yet: start refresh if needed and return the promise
+		if (this.lastValue === null) {
+			let promise = this.dataPromise;
+			if (!promise) {
+				console.debug('AnalyticsProfileCache: initial fetch');
+				promise = this.startRefresh();
+				this.dataPromise = promise;
+			} else {
+				console.debug(
+					'AnalyticsProfileCache: awaiting in-flight initial fetch',
+				);
+			}
+			return promise;
 		}
 
-		return this.data;
+		// Value exists
+		if (isFresh) {
+			console.debug('AnalyticsProfileCache: cache hit (fresh)');
+			return Promise.resolve(this.lastValue);
+		}
+
+		// Stale value: start a background refresh if not already in-flight,
+		// but return the last good value immediately
+		if (!this.dataPromise) {
+			console.debug(
+				'AnalyticsProfileCache: cache stale, starting background refresh',
+			);
+			this.dataPromise = this.startRefresh();
+			// Avoid unhandled rejection for background refresh callers
+			this.dataPromise.catch(() => {});
+		} else {
+			console.debug(
+				'AnalyticsProfileCache: cache stale, refresh already in-flight',
+			);
+		}
+		return Promise.resolve(this.lastValue);
 	}
 
 	private startRefresh = () =>
@@ -42,14 +86,34 @@ class AnalyticsProfileCache {
 		}>('/analytics-user-profile', {
 			mode: 'cors',
 			credentials: 'include',
-		}).then((response) => ({
-			hasMobileAppDownloaded: response.hasMobileAppDownloaded,
-			hasFeastMobileAppDownloaded: response.hasFeastMobileAppDownloaded,
-		}));
+		})
+			.then((response) => {
+				const value: AnalyticsProfileData = {
+					hasMobileAppDownloaded: response.hasMobileAppDownloaded,
+					hasFeastMobileAppDownloaded: response.hasFeastMobileAppDownloaded,
+				};
+				this.lastValue = value;
+				this.timestamp = Date.now();
+				return value;
+			})
+			.catch((error) => {
+				// Keep lastValue and timestamp unchanged on failure
+				console.error('AnalyticsProfileCache: refresh failed', error);
+				throw error;
+			})
+			.finally(() => {
+				// Reset the in-flight promise when the refresh completes
+				this.dataPromise = null;
+			});
 
+	/**
+	 * Explicitly clear the cache. Use for identity changes or manual invalidation.
+	 */
 	clear(): void {
 		console.debug('AnalyticsProfileCache: clear');
 		this.timestamp = null;
+		this.lastValue = null;
+		this.dataPromise = null;
 	}
 }
 
@@ -62,13 +126,15 @@ const AnalyticsProfileCacheContext =
  */
 export function AnalyticsProfileCacheProvider({
 	children,
+	ttlMs,
 }: {
 	children: ReactNode;
+	ttlMs?: number;
 }) {
 	const cacheRef = useRef<AnalyticsProfileCache>();
 
 	if (!cacheRef.current) {
-		cacheRef.current = new AnalyticsProfileCache();
+		cacheRef.current = new AnalyticsProfileCache(ttlMs);
 	}
 
 	return (
