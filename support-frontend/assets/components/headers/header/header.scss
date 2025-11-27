@@ -13,14 +13,6 @@ $header-links-min-width: gu-span(12);
 	}
 }
 
-.component-header-links--desktop {
-	.component-header-links__li--active {
-		.component-header-links__link {
-			box-shadow: inset 0 4px 0 gu-colour(highlight-main);
-		}
-	}
-}
-
 .component-header--display-checkout {
 	.component-header__wrapper {
 		max-width: 50rem;

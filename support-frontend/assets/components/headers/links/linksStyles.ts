@@ -56,6 +56,14 @@ export const component_header_links__ul = css`
 	}
 `;
 
+export const component_header_links__li__active = css`
+	${from.tablet} {
+		a {
+			box-shadow: inset 0 4px 0 ${brandAlt[400]};
+		}
+	}
+`;
+
 export const component_header_links__li__show_on_tablet = css`
 	display: block;
 

@@ -1,4 +1,4 @@
-import type { SerializedStyles } from '@emotion/react';
+import { css, type SerializedStyles } from '@emotion/react';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -6,14 +6,13 @@ import {
 	GBPCountries,
 	NZDCountries,
 } from '@modules/internationalisation/countryGroup';
-// import cx from 'classnames';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getPatronsLink } from 'helpers/urls/externalLinks';
 import { routes } from 'helpers/urls/routes';
-// import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import {
 	component_header_links,
 	component_header_links__li,
+	component_header_links__li__active,
 	component_header_links__li__show_on_tablet,
 	component_header_links__link,
 	component_header_links__ul,
@@ -92,18 +91,18 @@ function internationalisationID(
 	return null;
 }
 
-// function getActiveLinkClassModifiers(
-// 	urlWithoutParams: string,
-// 	href: string,
-// ): string | null {
-// 	if (
-// 		urlWithoutParams.endsWith(href) ||
-// 		urlWithoutParams.endsWith(`${href}/delivery`)
-// 	) {
-// 		return 'active';
-// 	}
-// 	return null;
-// }
+function getActiveLinkClassModifiers(
+	urlWithoutParams: string,
+	href: string,
+): string | null {
+	if (
+		urlWithoutParams.endsWith(href) ||
+		urlWithoutParams.endsWith(`${href}/delivery`)
+	) {
+		return 'active';
+	}
+	return null;
+}
 
 // Export
 function Links({
@@ -112,8 +111,8 @@ function Links({
 	countryGroupId,
 	cssOverride,
 }: PropTypes): JSX.Element {
-	// const { protocol, host, pathname } = window.location;
-	// const urlWithoutParams = `${protocol}//${host}${pathname}`;
+	const { protocol, host, pathname } = window.location;
+	const urlWithoutParams = `${protocol}//${host}${pathname}`;
 	const internationalisationIDValue = internationalisationID(countryGroupId);
 	const isNotUk = internationalisationIDValue !== 'uk';
 	return (
@@ -163,15 +162,15 @@ function Links({
 					})
 					.map(
 						({ href, text, trackAs, opensInNewWindow, additionalStyles }) => (
-							// 						<li
-							// 	className={cx(
-							// 		classNameWithModifiers('component-header-links__li', [
-							// 			getActiveLinkClassModifiers(urlWithoutParams, href),
-							// 		]),
-							// 		additionalStyles,
-							// 	)}
-							// >
-							<li css={[component_header_links__li, additionalStyles]}>
+							<li
+								css={[
+									component_header_links__li,
+									getActiveLinkClassModifiers(urlWithoutParams, href)
+										? component_header_links__li__active
+										: css``,
+									additionalStyles,
+								]}
+							>
 								<a
 									onClick={sendTrackingEventsOnClick({
 										id: ['header-link', trackAs, location].join(' - '),
