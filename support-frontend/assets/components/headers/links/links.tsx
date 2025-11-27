@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -5,11 +6,17 @@ import {
 	GBPCountries,
 	NZDCountries,
 } from '@modules/internationalisation/countryGroup';
-import cx from 'classnames';
+// import cx from 'classnames';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getPatronsLink } from 'helpers/urls/externalLinks';
 import { routes } from 'helpers/urls/routes';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
+// import { classNameWithModifiers } from 'helpers/utilities/utilities';
+import {
+	component_header_links,
+	component_header_links__li,
+	component_header_links__link,
+	component_header_links__ul,
+} from './linksStyles';
 
 // types
 type HeaderNavLink = {
@@ -27,6 +34,7 @@ type PropTypes = {
 	location: 'desktop' | 'mobile';
 	countryGroupId?: CountryGroupId;
 	getRef?: (element: Element | null) => void;
+	cssOverride?: SerializedStyles;
 };
 
 const links: HeaderNavLink[] = [
@@ -83,30 +91,33 @@ function internationalisationID(
 	return null;
 }
 
-function getActiveLinkClassModifiers(
-	urlWithoutParams: string,
-	href: string,
-): string | null {
-	if (
-		urlWithoutParams.endsWith(href) ||
-		urlWithoutParams.endsWith(`${href}/delivery`)
-	) {
-		return 'active';
-	}
-	return null;
-}
+// function getActiveLinkClassModifiers(
+// 	urlWithoutParams: string,
+// 	href: string,
+// ): string | null {
+// 	if (
+// 		urlWithoutParams.endsWith(href) ||
+// 		urlWithoutParams.endsWith(`${href}/delivery`)
+// 	) {
+// 		return 'active';
+// 	}
+// 	return null;
+// }
 
 // Export
-function Links({ location, getRef, countryGroupId }: PropTypes): JSX.Element {
-	const { protocol, host, pathname } = window.location;
-	const urlWithoutParams = `${protocol}//${host}${pathname}`;
+function Links({
+	location,
+	getRef,
+	countryGroupId,
+	cssOverride,
+}: PropTypes): JSX.Element {
+	// const { protocol, host, pathname } = window.location;
+	// const urlWithoutParams = `${protocol}//${host}${pathname}`;
 	const internationalisationIDValue = internationalisationID(countryGroupId);
 	const isNotUk = internationalisationIDValue !== 'uk';
 	return (
-		<nav
-			className={classNameWithModifiers('component-header-links', [location])}
-		>
-			<ul className="component-header-links__ul" ref={getRef}>
+		<nav css={[component_header_links, cssOverride]}>
+			<ul css={component_header_links__ul} ref={getRef}>
 				{links
 					.filter(({ text }) => {
 						if (
@@ -149,30 +160,29 @@ function Links({ location, getRef, countryGroupId }: PropTypes): JSX.Element {
 							href: `/${internationalisationIDValue}${link.href}`,
 						};
 					})
-					.map(
-						({ href, text, trackAs, opensInNewWindow, additionalClasses }) => (
-							<li
-								className={cx(
-									classNameWithModifiers('component-header-links__li', [
-										getActiveLinkClassModifiers(urlWithoutParams, href),
-									]),
-									additionalClasses,
-								)}
+					.map(({ href, text, trackAs, opensInNewWindow }) => (
+						// 						<li
+						// 	className={cx(
+						// 		classNameWithModifiers('component-header-links__li', [
+						// 			getActiveLinkClassModifiers(urlWithoutParams, href),
+						// 		]),
+						// 		additionalClasses,
+						// 	)}
+						// >
+						<li css={component_header_links__li}>
+							<a
+								onClick={sendTrackingEventsOnClick({
+									id: ['header-link', trackAs, location].join(' - '),
+									componentType: 'ACQUISITIONS_OTHER',
+								})}
+								css={component_header_links__link}
+								href={href}
+								target={opensInNewWindow ? '_blank' : ''}
 							>
-								<a
-									onClick={sendTrackingEventsOnClick({
-										id: ['header-link', trackAs, location].join(' - '),
-										componentType: 'ACQUISITIONS_OTHER',
-									})}
-									className="component-header-links__link"
-									href={href}
-									target={opensInNewWindow ? '_blank' : ''}
-								>
-									{text}
-								</a>
-							</li>
-						),
-					)}
+								{text}
+							</a>
+						</li>
+					))}
 			</ul>
 		</nav>
 	);

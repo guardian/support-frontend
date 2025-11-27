@@ -25,12 +25,12 @@ export const menuLinksContainer = css`
 	height: 100vh;
 	overflow: auto;
 	box-sizing: border-box;
-	padding: ${gu_v_spacing * 0.5} 0 ${gu_v_spacing * 2};
+	padding: ${gu_v_spacing * 0.5}px 0 ${gu_v_spacing * 2}px;
 `;
 
 export const menuUtilityContainer = css`
 	margin-left: ${gu_h_spacing * 2.5};
 	border-top: 1px solid ${brandPastel};
-	padding: ${gu_v_spacing * 0.5} 0;
+	padding: ${gu_v_spacing * 0.5}px 0;
 	margin-top: ${gu_v_spacing}px;
 `;

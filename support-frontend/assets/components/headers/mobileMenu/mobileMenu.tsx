@@ -2,7 +2,6 @@ import type { SerializedStyles } from '@emotion/react';
 import type { ReactNode } from 'react';
 import SvgClose from 'components/svgs/close';
 import VeggieBurgerButton from '../veggieBurgerButton/veggieBurgerButton';
-import './mobileMenu.scss';
 import {
 	buttonClose,
 	menuContainer,
