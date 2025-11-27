@@ -28,26 +28,29 @@ class AnalyticsProfileCache {
 			Date.now() - (await this.cache).timestamp > this.CACHE_TTL_MS
 		) {
 			console.debug('AnalyticsProfileCache: cache miss/expired');
-			this.cache = fetchJson<{
-				identityId: string;
-				hasMobileAppDownloaded: boolean;
-				hasFeastMobileAppDownloaded: boolean;
-			}>('/analytics-user-profile', {
-				mode: 'cors',
-				credentials: 'include',
-			}).then((response) => ({
-				timestamp: Date.now(),
-				data: {
-					hasMobileAppDownloaded: response.hasMobileAppDownloaded,
-					hasFeastMobileAppDownloaded: response.hasFeastMobileAppDownloaded,
-				},
-			}));
-			return this.cache.then((cache) => cache.data);
+			this.cache = this.startRefresh();
+		} else {
+			console.debug('AnalyticsProfileCache: cache hit');
 		}
 
-		console.debug('AnalyticsProfileCache: cache hit');
 		return (await this.cache).data;
 	}
+
+	private startRefresh = () =>
+		fetchJson<{
+			identityId: string;
+			hasMobileAppDownloaded: boolean;
+			hasFeastMobileAppDownloaded: boolean;
+		}>('/analytics-user-profile', {
+			mode: 'cors',
+			credentials: 'include',
+		}).then((response) => ({
+			timestamp: Date.now(),
+			data: {
+				hasMobileAppDownloaded: response.hasMobileAppDownloaded,
+				hasFeastMobileAppDownloaded: response.hasFeastMobileAppDownloaded,
+			},
+		}));
 
 	clear(): void {
 		console.debug('AnalyticsProfileCache: clear');
