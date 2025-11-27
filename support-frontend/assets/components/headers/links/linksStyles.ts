@@ -56,6 +56,15 @@ export const component_header_links__ul = css`
 	}
 `;
 
+export const component_header_links__li__show_on_tablet = css`
+	display: block;
+
+	// custom breakpoint - we are using a 'custom breakpoint' because this is linked to the menu toggle which has a custom break point applied in js
+	@media (min-width: 884px) {
+		display: none;
+	}
+`;
+
 export const component_header_links__li = css`
 	${until.tablet} {
 		margin-left: ${gu_h_spacing * 2.5}px;

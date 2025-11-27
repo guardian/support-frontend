@@ -14,6 +14,7 @@ import { routes } from 'helpers/urls/routes';
 import {
 	component_header_links,
 	component_header_links__li,
+	component_header_links__li__show_on_tablet,
 	component_header_links__link,
 	component_header_links__ul,
 } from './linksStyles';
@@ -27,7 +28,7 @@ type HeaderNavLink = {
 	opensInNewWindow?: boolean;
 	include?: CountryGroupId[];
 	exclude?: CountryGroupId[];
-	additionalClasses?: string;
+	additionalStyles?: SerializedStyles;
 };
 
 type PropTypes = {
@@ -42,7 +43,7 @@ const links: HeaderNavLink[] = [
 		href: routes.recurringContribCheckout,
 		text: 'Contributions',
 		trackAs: 'contributions',
-		additionalClasses: 'component-header-links__li--show-on-tablet',
+		additionalStyles: component_header_links__li__show_on_tablet,
 		internal: true,
 	},
 	{
@@ -160,29 +161,31 @@ function Links({
 							href: `/${internationalisationIDValue}${link.href}`,
 						};
 					})
-					.map(({ href, text, trackAs, opensInNewWindow }) => (
-						// 						<li
-						// 	className={cx(
-						// 		classNameWithModifiers('component-header-links__li', [
-						// 			getActiveLinkClassModifiers(urlWithoutParams, href),
-						// 		]),
-						// 		additionalClasses,
-						// 	)}
-						// >
-						<li css={component_header_links__li}>
-							<a
-								onClick={sendTrackingEventsOnClick({
-									id: ['header-link', trackAs, location].join(' - '),
-									componentType: 'ACQUISITIONS_OTHER',
-								})}
-								css={component_header_links__link}
-								href={href}
-								target={opensInNewWindow ? '_blank' : ''}
-							>
-								{text}
-							</a>
-						</li>
-					))}
+					.map(
+						({ href, text, trackAs, opensInNewWindow, additionalStyles }) => (
+							// 						<li
+							// 	className={cx(
+							// 		classNameWithModifiers('component-header-links__li', [
+							// 			getActiveLinkClassModifiers(urlWithoutParams, href),
+							// 		]),
+							// 		additionalStyles,
+							// 	)}
+							// >
+							<li css={[component_header_links__li, additionalStyles]}>
+								<a
+									onClick={sendTrackingEventsOnClick({
+										id: ['header-link', trackAs, location].join(' - '),
+										componentType: 'ACQUISITIONS_OTHER',
+									})}
+									css={component_header_links__link}
+									href={href}
+									target={opensInNewWindow ? '_blank' : ''}
+								>
+									{text}
+								</a>
+							</li>
+						),
+					)}
 			</ul>
 		</nav>
 	);

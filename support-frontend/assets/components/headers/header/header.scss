@@ -14,7 +14,6 @@ $header-links-min-width: gu-span(12);
 }
 
 .component-header-links--desktop {
-
 	.component-header-links__li--active {
 		.component-header-links__link {
 			box-shadow: inset 0 4px 0 gu-colour(highlight-main);
@@ -65,14 +64,5 @@ $header-links-min-width: gu-span(12);
 		}
 		padding-right: $gu-h-spacing * 0.5;
 		padding-top: $gu-v-spacing * 0.5;
-	}
-}
-
-.component-header-links__li.component-header-links__li--show-on-tablet {
-	display: block;
-
-	// custom breakpoint - we are using a 'custom breakpoint' because this is linked to the menu toggle which has a custom break point applied in js
-	@media (min-width: 884px) {
-		display: none;
 	}
 }
