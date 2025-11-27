@@ -1,11 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { fetchJson } from 'helpers/async/fetch';
-import * as cookie from 'helpers/storage/cookie';
-
-const COOKIE_NAME = 'GU_user_analytics_profile';
-const COOKIE_TTL_DAYS = 1;
+import { useAnalyticsProfileCache } from './analyticsProfileCache';
 
 const useAnalyticsProfile = () => {
+	const cache = useAnalyticsProfileCache();
 	const [hasMobileAppDownloaded, setHasMobileAppDownloaded] = useState(false);
 	const [hasFeastMobileAppDownloaded, setHasFeastMobileAppDownloaded] =
 		useState(false);
@@ -16,57 +14,60 @@ const useAnalyticsProfile = () => {
 			return;
 		}
 
-		const cachedData = cookie.get(COOKIE_NAME);
-
+		// Check in-memory cache first (shared across all hook instances)
+		const cachedData = cache.get();
 		if (cachedData) {
-			try {
-				const parsedData = JSON.parse(cachedData) as {
-					hasMobileAppDownloaded?: boolean;
-					hasFeastMobileAppDownloaded?: boolean;
-				};
+			setHasMobileAppDownloaded(cachedData.hasMobileAppDownloaded);
+			setHasFeastMobileAppDownloaded(cachedData.hasFeastMobileAppDownloaded);
+			setDataLoaded(true);
+			return;
+		}
 
-				setHasMobileAppDownloaded(parsedData.hasMobileAppDownloaded ?? false);
-				setHasFeastMobileAppDownloaded(
-					parsedData.hasFeastMobileAppDownloaded ?? false,
-				);
+		// Check if there's already a pending request to avoid duplicate calls
+		const pendingRequest = cache.getPendingRequest();
+		if (pendingRequest) {
+			try {
+				const data = await pendingRequest;
+				setHasMobileAppDownloaded(data.hasMobileAppDownloaded);
+				setHasFeastMobileAppDownloaded(data.hasFeastMobileAppDownloaded);
 				setDataLoaded(true);
 				return;
 			} catch (error) {
-				console.error('Error parsing cached analytics data:', error);
-				cookie.set(COOKIE_NAME, '', -1);
+				// Fall through to make a new request
+				console.error('Error with pending request:', error);
 			}
 		}
+
+		// Make the API call and cache the promise to deduplicate concurrent requests
+		const requestPromise = fetchJson<{
+			identityId: string;
+			hasMobileAppDownloaded: boolean;
+			hasFeastMobileAppDownloaded: boolean;
+		}>('/analytics-user-profile', {
+			mode: 'cors',
+			credentials: 'include',
+		}).then((response) => ({
+			hasMobileAppDownloaded: response.hasMobileAppDownloaded,
+			hasFeastMobileAppDownloaded: response.hasFeastMobileAppDownloaded,
+		}));
+
+		cache.setPendingRequest(requestPromise);
 
 		try {
-			const response = await fetchJson<{
-				identityId: string;
-				hasMobileAppDownloaded: boolean;
-				hasFeastMobileAppDownloaded: boolean;
-			}>('/analytics-user-profile', {
-				mode: 'cors',
-				credentials: 'include',
-			});
+			const data = await requestPromise;
 
-			setHasMobileAppDownloaded(response.hasMobileAppDownloaded);
-			setHasFeastMobileAppDownloaded(response.hasFeastMobileAppDownloaded);
+			setHasMobileAppDownloaded(data.hasMobileAppDownloaded);
+			setHasFeastMobileAppDownloaded(data.hasFeastMobileAppDownloaded);
 			setDataLoaded(true);
 
-			const dataToCache = {
-				hasMobileAppDownloaded: response.hasMobileAppDownloaded,
-				hasFeastMobileAppDownloaded: response.hasFeastMobileAppDownloaded,
-				timestamp: Date.now(),
-			};
-
-			try {
-				const cookieValue = JSON.stringify(dataToCache);
-				cookie.set(COOKIE_NAME, cookieValue, COOKIE_TTL_DAYS);
-			} catch (cookieError) {
-				console.error('Error setting cookie:', cookieError);
-			}
+			// Store in cache for subsequent requests within this page load
+			cache.set(data);
 		} catch (error) {
 			console.error('Error calling Analytics endpoint:', error);
+		} finally {
+			cache.clearPendingRequest();
 		}
-	}, [dataLoaded]);
+	}, [dataLoaded, cache]);
 
 	useEffect(() => {
 		void loadAnalyticsData();

@@ -105,7 +105,7 @@ export function OnboardingCompleted({
 					<LinkButton
 						priority="primary"
 						cssOverrides={[buttonOverrides]}
-						href={getBaseDomain()}
+						href={`https://${getBaseDomain()}`}
 					>
 						Continue to the Guardian
 					</LinkButton>
