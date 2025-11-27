@@ -1,60 +1,8 @@
-@use 'sass:math';
-
-@import '~stylesheets/gu-sass/gu-sass';
-
-$header-links-min-width: gu-span(12);
-
 @keyframes open-menu {
 	from {
 		transform: translateX(-100%);
 	}
 	to {
 		transform: translateX(0);
-	}
-}
-
-.component-header--display-checkout {
-	.component-header__wrapper {
-		max-width: 50rem;
-
-		@include mq($from: tablet, $until: desktop) {
-			max-width: 100%;
-			padding: 0;
-			margin: 0;
-		}
-
-		@include mq($from: leftCol) {
-			max-width: 60rem;
-		}
-
-		.component-header-topnav {
-			@include mq($until: tablet) {
-				justify-content: space-between;
-			}
-
-			@include mq($from: tablet, $until: desktop) {
-				justify-content: flex-end;
-			}
-
-			.component-header-topnav__utility {
-				display: none;
-			}
-		}
-
-		.component-header-topnav-logo {
-			flex: 0 1 auto;
-
-			@include mq($from: desktop) {
-				margin-right: -30px;
-			}
-		}
-	}
-
-	.component-header-topnav-logo {
-		@include mq($from: desktop) {
-			border-left: 1px solid gu-colour(brand-pastel);
-		}
-		padding-right: $gu-h-spacing * 0.5;
-		padding-top: $gu-v-spacing * 0.5;
 	}
 }
