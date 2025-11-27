@@ -1,10 +1,19 @@
 import { css } from '@emotion/react';
-import { neutral, space } from '@guardian/source/foundations';
+import { storage } from '@guardian/libs';
+import { space } from '@guardian/source/foundations';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useRef, useState } from 'preact/hooks';
+import { useSearchParams } from 'react-router-dom';
 import ContentBox from 'components/onboarding/contentBox';
+import { OnboardingAppsDiscovery } from 'components/onboarding/sections/appsDiscovery';
+import { OnboardingCompleted } from 'components/onboarding/sections/completed';
+import OnboardingSummary, {
+	OnboardingSummarySuccessfulSignIn,
+} from 'components/onboarding/sections/summary';
 import useAnalyticsProfile from 'helpers/customHooks/useAnalyticsProfile';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
+import type { NewsletterSubscription } from 'helpers/identity/newsletters';
+import { getNewslettersSubscriptions } from 'helpers/identity/newsletters';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -12,30 +21,46 @@ import type {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
+import * as cookie from 'helpers/storage/cookie';
 import { getUser } from 'helpers/user/user';
 import OnboardingLayout from '../../../components/onboarding/layout';
+import { getThankYouOrder } from '../checkout/helpers/sessionStorage';
 import { OnboardingSteps } from './onboardingSteps';
 
-// --------------------------- //
-// Placeholder Styles for the onboarding content
-const contentStyle = css`
-	text-align: center;
-	padding: ${space[6]}px 0;
+const identityFrameStyles = css`
+	overflow: hidden;
+	border-radius: ${space[2]}px;
 `;
 
-const headingStyle = css`
-	color: ${neutral[7]};
-	margin-bottom: ${space[4]}px;
-`;
+type UserStateChange = 'userSignedIn' | 'userRegistered';
+type HrefIframeAllowList = 'recaptchaPrivacyPolicy' | 'recaptchaTerms';
 
-const textStyle = css`
-	color: ${neutral[20]};
-	line-height: 1.5;
-	margin-bottom: ${space[3]}px;
-`;
-// --------------------------- //
+type MessageEventData =
+	| {
+			type: 'iframeHeightChange';
+			context: 'supporterOnboarding';
+			value: number;
+	  }
+	| {
+			type: 'userStateChange';
+			context: 'supporterOnboarding';
+			value: UserStateChange;
+	  }
+	| {
+			type: 'iframedLinkClicked';
+			context: 'supporterOnboarding';
+			value: HrefIframeAllowList;
+	  };
 
-interface OnboardingProps {
+export type CurrentUserState = UserStateChange | 'existingUserSignedIn';
+
+export type HandleStepNavigationFunction = (
+	targetStep: OnboardingSteps,
+) => void;
+
+export type OnboardingProductKey = Extract<ActiveProductKey, 'SupporterPlus'>;
+
+export interface OnboardingProps {
 	supportRegionId: SupportRegionId;
 	csrf: CsrfState;
 	payment: {
@@ -44,7 +69,7 @@ interface OnboardingProps {
 		contributionAmount?: number;
 		finalAmount: number;
 	};
-	productKey?: ActiveProductKey;
+	productKey?: OnboardingProductKey;
 	ratePlanKey?: ActiveRatePlanKey;
 	promotion?: Promotion;
 	landingPageSettings: LandingPageVariant;
@@ -53,6 +78,7 @@ interface OnboardingProps {
 
 function OnboardingComponent({
 	supportRegionId,
+	csrf,
 	payment,
 	productKey,
 	ratePlanKey,
@@ -60,127 +86,247 @@ function OnboardingComponent({
 	landingPageSettings,
 	identityUserType,
 }: OnboardingProps) {
-	const user = getUser();
-	const { hasMobileAppDownloaded, hasFeastMobileAppDownloaded } =
-		useAnalyticsProfile();
+	const order = getThankYouOrder();
 
-	const [currentStep, setCurrentStep] = useState<OnboardingSteps>();
+	if (!order) {
+		const sessionStorageOrder = storage.session.get('thankYouOrder');
+		return (
+			<div>Unable to read your order {JSON.stringify(sessionStorageOrder)}</div>
+		);
+	}
 
-	// --------------------------- //
-	// TODO: Dynamically generated based on Products and User profile
-	const onboardingSteps = useMemo(() => {
-		return [
-			{
-				label: 'Summary',
-				step: OnboardingSteps.Summary,
-			},
-			{
-				label: 'Guardian App',
-				step: OnboardingSteps.GuardianApp,
-			},
-			{
-				label: 'Feast App',
-				step: OnboardingSteps.FeastApp,
-			},
-			{
-				label: 'Thank You',
-				step: OnboardingSteps.ThankYou,
-			},
-		];
-	}, []);
+	const scrollToTopRef = useRef<HTMLDivElement>(null);
 
-	// User: New or Current? Signed In or not?
-	console.debug('identityUserType', identityUserType);
-	console.debug('user', user, user.isSignedIn);
+	// -------------
+	// Fetch newsletters from Identity API
+	const [userNewslettersSubscriptions, setUserNewslettersSubscriptions] =
+		useState<NewsletterSubscription[] | null>(null);
 
-	// Product information
-	console.debug('payment', payment);
-	console.debug('productKey', productKey);
-	console.debug('ratePlanKey', ratePlanKey);
-	console.debug('promotion', promotion);
-	console.debug('landingPageSettings', landingPageSettings);
-
-	// Analytics data
-	console.debug('hasMobileAppDownloaded', hasMobileAppDownloaded);
-	console.debug('hasFeastMobileAppDownloaded', hasFeastMobileAppDownloaded);
-	// --------------------------- //
-
-	const handleStepNavigation = (currentStep: OnboardingSteps) => {
-		const nextStep =
-			onboardingSteps[
-				onboardingSteps.findIndex((step) => step.step === currentStep) + 1
-			];
-
-		if (nextStep) {
-			const newParams = new URLSearchParams(window.location.search);
-			newParams.set('step', nextStep.step);
-			window.history.pushState({}, '', `?${newParams.toString()}`);
-			setCurrentStep(nextStep.step);
-		} else {
-			window.history.pushState({}, '', 'https://www.theguardian.com');
+	const fetchUserNewslettersSubscriptions = async () => {
+		try {
+			const newslettersData = await getNewslettersSubscriptions(csrf);
+			setUserNewslettersSubscriptions(newslettersData);
+			console.debug('User Newsletters Subscriptions fetched:', newslettersData);
+		} catch (error) {
+			console.error('Error fetching User Newsletters Subscriptions:', error);
 		}
 	};
 
-	// Handle URL params and set the current step from navigation
 	useEffect(() => {
-		const urlParams = new URLSearchParams(window.location.search);
+		void fetchUserNewslettersSubscriptions();
+	}, []);
 
-		if (urlParams.has('step')) {
-			const urlStep = urlParams.get('step') as OnboardingSteps;
+	const { isSignedIn } = getUser();
+	const {
+		hasMobileAppDownloaded,
+		hasFeastMobileAppDownloaded,
+		loadAnalyticsData,
+	} = useAnalyticsProfile();
+	const searchParams = useSearchParams();
+
+	const userNotSignedIn = !isSignedIn && identityUserType === 'current';
+	const guestUser = !isSignedIn && identityUserType === 'new';
+
+	const documentLocation = document.location;
+	const iframeOrigin = `${
+		documentLocation.protocol
+	}//${documentLocation.hostname.replace('support', 'profile')}`;
+
+	const getIframeTargetUrl = (email: string) => {
+		const iframeTargetUrl = new URL(
+			`${iframeOrigin}${
+				guestUser ? '/iframed/register/email' : '/iframed/signin'
+			}`,
+		);
+
+		if (email) {
+			iframeTargetUrl.searchParams.set(
+				'prepopulateEmail',
+				encodeURIComponent(email),
+			);
+		}
+
+		return iframeTargetUrl.toString();
+	};
+
+	const [currentStep, setCurrentStep] = useState<OnboardingSteps>();
+	const [showIdentityIframe, setShowIdentityIframe] = useState(
+		userNotSignedIn || guestUser,
+	);
+	const [userState, setUserState] = useState<CurrentUserState>(
+		'existingUserSignedIn',
+	);
+	const identityIframeRef = useRef<HTMLIFrameElement>(null);
+
+	// Handle URL params and set the current step from navigation
+	const handleStepNavigation: HandleStepNavigationFunction = (targetStep) => {
+		searchParams[1]((prev) => {
+			prev.set('step', targetStep);
+			return prev;
+		});
+	};
+
+	useEffect(() => {
+		if (searchParams[0].has('step')) {
+			const urlStep = searchParams[0].get('step') as OnboardingSteps;
 			setCurrentStep(urlStep);
+
+			requestAnimationFrame(() => {
+				scrollToTopRef.current?.scrollIntoView({ behavior: 'smooth' });
+			});
 		} else {
 			setCurrentStep(OnboardingSteps.Summary);
-
-			urlParams.set('step', OnboardingSteps.Summary);
-			window.history.pushState({}, '', `?${urlParams.toString()}`);
+			searchParams[1]((prev) => {
+				prev.set('step', OnboardingSteps.Summary);
+				return prev;
+			});
 		}
+	}, [searchParams]);
+
+	const triggerOAuthFlow = () => {
+		try {
+			// Hidden iframe to trigger the OAuth flow. This will set the GU_ACCESS_TOKEN and GU_ID_TOKEN cookies.
+			// Poll for the access token cookie until it is available.
+			const iframe = document.createElement('iframe');
+			iframe.style.display = 'none';
+			iframe.src = '/oauth/authorize';
+
+			document.body.appendChild(iframe);
+
+			const MAX_ATTEMPTS = 30;
+			const POLL_INTERVAL = 200;
+			let attempts = 0;
+
+			const pollForAccessToken = () => {
+				attempts++;
+
+				const hasAccessToken = cookie.get('GU_ACCESS_TOKEN');
+
+				if (hasAccessToken) {
+					document.body.removeChild(iframe);
+
+					void fetchUserNewslettersSubscriptions();
+					void loadAnalyticsData();
+				} else if (attempts < MAX_ATTEMPTS) {
+					setTimeout(pollForAccessToken, POLL_INTERVAL);
+				} else {
+					document.body.removeChild(iframe);
+				}
+			};
+
+			setTimeout(pollForAccessToken, POLL_INTERVAL);
+		} catch (error) {
+			console.error('Failed to trigger OAuth flow:', error);
+		}
+	};
+
+	// Handle iframe message from the identity iframe
+	useEffect(() => {
+		const receiveIframeMessage = (event: MessageEvent<MessageEventData>) => {
+			if (event.origin !== iframeOrigin) {
+				return;
+			}
+
+			const data = event.data;
+
+			if (data.type === 'iframeHeightChange') {
+				const iframeEl = identityIframeRef.current;
+
+				if (iframeEl) {
+					iframeEl.style.height = `${data.value}px`;
+				}
+			}
+
+			if (data.type === 'userStateChange') {
+				if (['userSignedIn', 'userRegistered'].includes(data.value)) {
+					setUserState(data.value);
+					setShowIdentityIframe(false);
+
+					triggerOAuthFlow();
+				}
+			}
+
+			if (data.type === 'iframedLinkClicked') {
+				switch (data.value) {
+					case 'recaptchaPrivacyPolicy':
+						window.location.href = 'https://policies.google.com/privacy';
+						break;
+					case 'recaptchaTerms':
+						window.location.href = 'https://policies.google.com/terms';
+						break;
+				}
+			}
+		};
+
+		window.addEventListener('message', receiveIframeMessage);
+
+		return () => {
+			window.removeEventListener('message', receiveIframeMessage);
+		};
 	}, []);
 
 	return (
-		<OnboardingLayout onboardingStep={currentStep ?? OnboardingSteps.Summary}>
-			<ContentBox>
-				{/* // --------------------------- // */}
-				{/* Placeholder Content for the onboarding content */}
-				<div css={contentStyle}>
-					<h1 css={headingStyle}>Welcome to your new onboarding experience!</h1>
-					<p css={textStyle}>
-						Thank you for supporting The Guardian. This is a new onboarding flow
-						for region: <strong>{supportRegionId}</strong>
-					</p>
-
-					{currentStep === OnboardingSteps.Summary && (
-						<>
-							<p>Summary</p>
-							<button onClick={() => handleStepNavigation(currentStep)}>
-								Next
-							</button>
-						</>
-					)}
-					{currentStep === OnboardingSteps.GuardianApp && (
-						<>
-							<p>Guardian App</p>
-							<button onClick={() => handleStepNavigation(currentStep)}>
-								Next
-							</button>
-						</>
-					)}
-					{currentStep === OnboardingSteps.FeastApp && (
-						<>
-							<p>Feast App</p>
-							<button onClick={() => handleStepNavigation(currentStep)}>
-								Next
-							</button>
-						</>
-					)}
-					{currentStep === OnboardingSteps.ThankYou && (
-						<>
-							<p>Thank You</p>
-						</>
-					)}
-				</div>
-				{/* // --------------------------- // */}
-			</ContentBox>
-			<ContentBox>Test Content</ContentBox>
+		<OnboardingLayout
+			scrollToTopRef={scrollToTopRef}
+			onboardingStep={currentStep ?? OnboardingSteps.Summary}
+			supportRegionId={supportRegionId}
+			csrf={csrf}
+			payment={payment}
+			productKey={productKey}
+			ratePlanKey={ratePlanKey}
+			promotion={promotion}
+			landingPageSettings={landingPageSettings}
+			identityUserType={identityUserType}
+		>
+			{currentStep === OnboardingSteps.Summary && (
+				<>
+					<ContentBox
+						cssOverrides={css`
+							margin-top: ${space[5]}px;
+						`}
+					>
+						{showIdentityIframe ? (
+							<iframe
+								ref={identityIframeRef}
+								src={getIframeTargetUrl(order.email)}
+								width="100%"
+								css={identityFrameStyles}
+							/>
+						) : (
+							<OnboardingSummarySuccessfulSignIn
+								handleStepNavigation={handleStepNavigation}
+								userState={userState}
+								userNewslettersSubscriptions={userNewslettersSubscriptions}
+								csrf={csrf}
+							/>
+						)}
+					</ContentBox>
+					<OnboardingSummary
+						productKey={productKey}
+						landingPageSettings={landingPageSettings}
+						supportRegionId={supportRegionId}
+						csrf={csrf}
+						payment={payment}
+						identityUserType={identityUserType}
+						ratePlanKey={ratePlanKey}
+					/>
+				</>
+			)}
+			{(currentStep === OnboardingSteps.GuardianApp ||
+				currentStep === OnboardingSteps.FeastApp) && (
+				<OnboardingAppsDiscovery
+					hasMobileAppDownloaded={hasMobileAppDownloaded}
+					hasFeastMobileAppDownloaded={hasFeastMobileAppDownloaded}
+					onboardingStep={currentStep}
+					handleStepNavigation={handleStepNavigation}
+				/>
+			)}
+			{currentStep === OnboardingSteps.Completed && (
+				<OnboardingCompleted
+					productKey={productKey}
+					landingPageSettings={landingPageSettings}
+				/>
+			)}
 		</OnboardingLayout>
 	);
 }

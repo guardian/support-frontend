@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import { LinkButton } from '@guardian/source/react-components';
-import Footer from 'components/footer/footer';
+import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
 import Page from 'components/page/page';
 import PageSection from 'components/pageSection/pageSection';

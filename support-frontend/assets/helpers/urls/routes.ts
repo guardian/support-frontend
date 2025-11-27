@@ -12,6 +12,7 @@ import {
 	addQueryParamsToURL,
 	getAllQueryParams,
 	getOrigin,
+	getPaperOrigin,
 	isProd,
 } from './url';
 
@@ -116,7 +117,7 @@ function paperCheckoutUrl(
 	promoCode?: Option<string>,
 	abTestName?: string,
 ) {
-	const url = `${getOrigin()}/uk/checkout`;
+	const url = `${getPaperOrigin(productOptions)}/uk/checkout`;
 
 	const params = abTestName
 		? {

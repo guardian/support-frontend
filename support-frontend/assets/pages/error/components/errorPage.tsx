@@ -30,7 +30,7 @@ export default function ErrorPage(props: PropTypes): JSX.Element {
 		>
 			<SquaresIntroduction
 				headings={props.headings}
-				highlights={props.errorCode ? [`Error ${props.errorCode}`] : []}
+				errorCode={props.errorCode}
 			/>
 			<PageSection>
 				<Text>

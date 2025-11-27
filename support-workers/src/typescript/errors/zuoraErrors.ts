@@ -10,6 +10,7 @@ const transactionDeclinedMessages = [
 	'Transaction declined.402 - [card_error/card_declined/pickup_card] Your card was declined.',
 	'Transaction declined.402 - [card_error/card_declined/generic_decline] Your card was declined.',
 	"Transaction declined.402 - [card_error/incorrect_cvc/incorrect_cvc] Your card's security code is incorrect.",
+	"Transaction declined.402 - [card_error/invalid_cvc/invalid_cvc] Your card's security code is invalid.",
 	'Transaction declined.402 - [card_error/incorrect_number/incorrect_number] Your card number is incorrect.',
 	'Transaction declined.402 - [card_error/card_declined/card_velocity_exceeded] Your card was declined for making repeated attempts too frequently or exceeding its amount limit.',
 	'Transaction declined.402 - [card_error/card_declined/revocation_of_authorization] Your card was declined.',
