@@ -6,10 +6,5 @@ Resources:
     Properties:
       AccessControl: Private
       BucketName: support-frontend-static
-      MetricsConfigurations:
+      MetricsConfigurations: 
         - Id: EntireBucket
-      LifecycleConfiguration:
-        Rules:
-          - Id: ExpireObjectsAfter1Year
-            Status: Enabled
-            ExpirationInDays: 365
