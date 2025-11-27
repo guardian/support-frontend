@@ -13,27 +13,25 @@ interface AnalyticsProfileData {
 	hasFeastMobileAppDownloaded: boolean;
 }
 
-interface CacheEntry {
-	data: AnalyticsProfileData;
-	timestamp: number;
-}
-
 class AnalyticsProfileCache {
-	private cache: Promise<CacheEntry> | null = null;
+	private data: Promise<AnalyticsProfileData> | null = null;
+	private timestamp: number | null = null;
 	private readonly CACHE_TTL_MS = 60 * 1000; // 1 minute TTL
 
 	async get(): Promise<AnalyticsProfileData> {
 		if (
-			!this.cache ||
-			Date.now() - (await this.cache).timestamp > this.CACHE_TTL_MS
+			this.data === null ||
+			this.timestamp === null ||
+			Date.now() - this.timestamp > this.CACHE_TTL_MS
 		) {
 			console.debug('AnalyticsProfileCache: cache miss/expired');
-			this.cache = this.startRefresh();
+			this.timestamp = Date.now();
+			this.data = this.startRefresh();
 		} else {
 			console.debug('AnalyticsProfileCache: cache hit');
 		}
 
-		return (await this.cache).data;
+		return this.data;
 	}
 
 	private startRefresh = () =>
@@ -45,16 +43,13 @@ class AnalyticsProfileCache {
 			mode: 'cors',
 			credentials: 'include',
 		}).then((response) => ({
-			timestamp: Date.now(),
-			data: {
-				hasMobileAppDownloaded: response.hasMobileAppDownloaded,
-				hasFeastMobileAppDownloaded: response.hasFeastMobileAppDownloaded,
-			},
+			hasMobileAppDownloaded: response.hasMobileAppDownloaded,
+			hasFeastMobileAppDownloaded: response.hasFeastMobileAppDownloaded,
 		}));
 
 	clear(): void {
 		console.debug('AnalyticsProfileCache: clear');
-		this.cache = null;
+		this.timestamp = null;
 	}
 }
 
