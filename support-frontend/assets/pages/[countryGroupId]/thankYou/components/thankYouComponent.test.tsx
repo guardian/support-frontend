@@ -8,7 +8,7 @@ import { fallBackLandingPageSelection } from '../../../../helpers/abTests/landin
 import {
 	type CheckoutComponentProps,
 	ThankYouComponent,
-} from '../../thankYou/components/thankYouComponent';
+} from './thankYouComponent';
 
 jest.mock('pages/aus-moment-map/hooks/useWindowWidth', () => ({
 	useWindowWidth: () => ({
