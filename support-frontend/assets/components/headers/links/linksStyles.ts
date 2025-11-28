@@ -34,7 +34,7 @@ export const component_header_links = css`
 		box-sizing: border-box;
 
 		@media (min-width: ${gu_span(12) + 40}px) {
-			margin: 0 ${gu_h_spacing * -1}px 0 0;
+			margin: 0 ${gu_h_spacing * -1}px;
 			border-left: 1px solid ${brandPastel};
 			border-right: 1px solid ${brandPastel};
 		}
