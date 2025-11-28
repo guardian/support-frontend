@@ -1,34 +1,17 @@
 // ----- Imports ----- //
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { useState } from 'react';
-import SvgGuardianLogo from 'components/svgs/guardianLogo';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import Links from '../links/links';
+import { TopNav } from './headerTopNav';
 import MobileMenuToggler from './mobileMenuToggler';
 import './header.scss';
 
-type HeaderProps = {
+export type HeaderProps = {
 	utility?: JSX.Element;
 	countryGroupId?: CountryGroupId;
 };
-
-function TopNav({ utility }: HeaderProps) {
-	return (
-		<div className="component-header-topnav">
-			<div className="component-header-topnav__utility">{utility}</div>
-			<div className="component-header-topnav-logo">
-				<a
-					className="component-header-topnav-logo__graun"
-					href="https://www.theguardian.com"
-				>
-					<div className="visually-hidden">Return to the Guardian</div>
-					<SvgGuardianLogo />
-				</a>
-			</div>
-		</div>
-	);
-}
 
 export default function Header({ utility, countryGroupId }: HeaderProps) {
 	const [isTestUser] = useState(getGlobal<boolean>('isTestUser'));
