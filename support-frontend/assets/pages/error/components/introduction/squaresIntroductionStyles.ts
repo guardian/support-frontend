@@ -1,28 +1,31 @@
 import { css } from '@emotion/react';
-import { from, neutral, space } from '@guardian/source/foundations';
+import {
+	from,
+	headlineBold28,
+	headlineBold34,
+	headlineBold42,
+	headlineBold50,
+	neutral,
+	space,
+} from '@guardian/source/foundations';
 
 export const sectionStyles = css`
+	${headlineBold28}
 	background-color: ${neutral[97]};
 	color: ${neutral[7]};
 	position: relative;
 	overflow: hidden;
-	font-weight: bold;
-	font-size: 28px;
-	line-height: 30px;
 
 	${from.mobileMedium} {
-		font-size: 30px;
-		line-height: 32px;
+		${headlineBold34}
 	}
 
 	${from.phablet} {
-		font-size: 46px;
-		line-height: 50px;
+		${headlineBold42}
 	}
 
 	${from.desktop} {
-		font-size: 48px;
-		line-height: 52px;
+		${headlineBold50}
 	}
 `;
 
