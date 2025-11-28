@@ -11,7 +11,7 @@ import {
 	OPHAN_COMPONENT_ID_RETURN_TO_OBSERVER,
 } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import getObserver from '../helpers/getObserver';
+import getObserver from '../../helpers/getObserver';
 
 const buttonContainer = css`
 	margin-top: ${space[4]}px;

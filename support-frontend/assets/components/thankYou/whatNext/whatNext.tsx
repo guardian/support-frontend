@@ -7,12 +7,12 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import {
 	isGuardianWeeklyGiftProduct,
 	isGuardianWeeklyProduct,
 	isPrintProduct,
-} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+} from 'helpers/productMatchers';
+import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import { glyph } from '../../../helpers/internationalisation/currency';
 import BulletPointedList from '../utilityComponents/BulletPointedList';
 import { helpCenterCta, myAccountCta } from './whatNextCta';

@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
 import GuardianPrintHeading, {
 	type GuardianPrintHeadingProps,
-} from 'pages/supporter-plus-thank-you/components/thankYouHeader/GuardianPrintHeading';
+} from 'pages/[countryGroupId]/thankYou/components/GuardianPrintHeading';
 
 export default {
 	title: 'ThankYou/GuardianPrintHeading',

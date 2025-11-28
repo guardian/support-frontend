@@ -16,6 +16,10 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import {
+	isGuardianWeeklyProduct,
+	isPrintProduct,
+} from 'helpers/productMatchers';
+import {
 	billingPeriodToContributionType,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
@@ -32,23 +36,19 @@ import {
 import { getUser } from 'helpers/user/user';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
-import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
-import {
-	isGuardianWeeklyProduct,
-	isPrintProduct,
-} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
-import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
-import ThankYouModules from '../../../components/thankYou/thankyouModules';
-import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
-import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
-import { getSupportRegionIdConfig } from '../../supportRegionConfig';
-import { getPremiumDigitalAllBenefits } from '../checkout/helpers/benefitsChecklist';
+import type { BenefitsCheckListData } from '../../../../components/checkoutBenefits/benefitsCheckList';
+import ThankYouModules from '../../../../components/thankYou/thankyouModules';
+import type { LandingPageVariant } from '../../../../helpers/globalsAndSwitches/landingPageSettings';
+import type { ActivePaperProductOptions } from '../../../../helpers/productCatalogToProductOption';
+import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
+import { getPremiumDigitalAllBenefits } from '../../checkout/helpers/benefitsChecklist';
 import {
 	getReturnAddress,
 	getThankYouOrder,
-} from '../checkout/helpers/sessionStorage';
-import getObserver from '../helpers/getObserver';
-import GuardianPageLayout from './GuardianPageLayout';
+} from '../../checkout/helpers/sessionStorage';
+import GuardianPageLayout from '../../components/GuardianPageLayout';
+import getObserver from '../../helpers/getObserver';
+import ThankYouHeader from './thankYouHeader';
 import ThankYouNavLinks from './ThankYouNavLinks';
 
 const headerContainer = css`
