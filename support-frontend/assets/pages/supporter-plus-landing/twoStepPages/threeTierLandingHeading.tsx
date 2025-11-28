@@ -35,7 +35,8 @@ export function ThreeTierLandingHeading({
 	abParticipations,
 }: Props): JSX.Element {
 	const { isSignedIn } = getUser();
-	const variant = abParticipations.mparticlePastContributor?.toLowerCase();
+	const variant =
+		abParticipations.landingPageMparticlePastContributor?.toLowerCase();
 
 	const [mparticleHeadingOverride, setMparticleHeadingOverride] = useState<
 		string | undefined
@@ -49,7 +50,7 @@ export function ThreeTierLandingHeading({
 					trackComponentEvents({
 						component: {
 							componentType: 'ACQUISITIONS_OTHER',
-							id: `mparticlePastContributor-${variant}`,
+							id: `landingPageMparticlePastContributor-${variant}`,
 						},
 						action: 'INSERT',
 					});
