@@ -37,19 +37,19 @@ import {
 	isGuardianWeeklyProduct,
 	isPrintProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
-import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
-import ThankYouModules from '../../../components/thankYou/thankyouModules';
-import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
-import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
-import { getSupportRegionIdConfig } from '../../supportRegionConfig';
-import { getPremiumDigitalAllBenefits } from '../checkout/helpers/benefitsChecklist';
+import type { BenefitsCheckListData } from '../../../../components/checkoutBenefits/benefitsCheckList';
+import ThankYouModules from '../../../../components/thankYou/thankyouModules';
+import type { LandingPageVariant } from '../../../../helpers/globalsAndSwitches/landingPageSettings';
+import type { ActivePaperProductOptions } from '../../../../helpers/productCatalogToProductOption';
+import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
+import { getPremiumDigitalAllBenefits } from '../../checkout/helpers/benefitsChecklist';
 import {
 	getReturnAddress,
 	getThankYouOrder,
-} from '../checkout/helpers/sessionStorage';
-import getObserver from '../helpers/getObserver';
-import GuardianPageLayout from './GuardianPageLayout';
-import ThankYouNavLinks from './ThankYouNavLinks';
+} from '../../checkout/helpers/sessionStorage';
+import GuardianPageLayout from '../../components/GuardianPageLayout';
+import ThankYouNavLinks from '../../components/ThankYouNavLinks';
+import getObserver from '../../helpers/getObserver';
 
 const headerContainer = css`
 	${from.desktop} {

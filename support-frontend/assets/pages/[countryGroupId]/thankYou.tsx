@@ -23,7 +23,7 @@ import { setHideSupportMessaginCookie } from '../../helpers/storage/contribution
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
 import type { OnboardingProductKey } from './components/onboardingComponent';
 import OnboardingComponent from './components/onboardingComponent';
-import { ThankYouComponent } from './components/thankYouComponent';
+import { ThankYouComponent } from './thankYou/components/thankYouComponent';
 
 const SKIP_NEW_ONBOARDING_EXPERIENCE_KEY = 'gu.skipNewOnboardingExperience';
 
