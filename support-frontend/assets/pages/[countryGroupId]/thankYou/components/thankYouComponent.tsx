@@ -47,9 +47,9 @@ import {
 	getThankYouOrder,
 } from '../../checkout/helpers/sessionStorage';
 import GuardianPageLayout from '../../components/GuardianPageLayout';
-import ThankYouNavLinks from '../../components/ThankYouNavLinks';
 import getObserver from '../../helpers/getObserver';
 import ThankYouHeader from './thankYouHeader';
+import ThankYouNavLinks from './ThankYouNavLinks';
 
 const headerContainer = css`
 	${from.desktop} {
