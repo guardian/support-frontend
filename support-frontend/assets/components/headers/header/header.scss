@@ -20,11 +20,6 @@ $header-links-min-width: gu-span(12);
 	justify-content: stretch;
 	overflow: hidden;
 
-	.component-dialog {
-		align-items: stretch;
-		justify-content: flex-start;
-	}
-
 	.svg-guardian-logo {
 		display: block;
 		float: right;
@@ -42,12 +37,6 @@ $header-links-min-width: gu-span(12);
 			height: 95px;
 		}
 	}
-}
-
-.component-header--padlock {
-	margin-right: math.div($gu-h-spacing, 3);
-	display: inline-block;
-	margin-top: 2px;
 }
 
 .component-header-mobile-menu-toggler {
@@ -68,10 +57,6 @@ $header-links-min-width: gu-span(12);
 		@include mq($from: tablet) {
 			margin-top: 40px;
 		}
-	}
-	.component-dialog--open .component-header-mobile-menu {
-		animation: open-menu $gu-animation-speed-med cubic-bezier(0.23, 1, 0.32, 1)
-			both;
 	}
 }
 
