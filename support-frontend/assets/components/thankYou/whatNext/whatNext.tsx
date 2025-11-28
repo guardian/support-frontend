@@ -11,7 +11,7 @@ import {
 	isGuardianWeeklyGiftProduct,
 	isGuardianWeeklyProduct,
 	isPrintProduct,
-} from 'pages/[countryGroupId]/helpers/productMatchers';
+} from 'helpers/productMatchers';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import { glyph } from '../../../helpers/internationalisation/currency';
 import BulletPointedList from '../utilityComponents/BulletPointedList';

@@ -4,7 +4,7 @@ import {
 	productCatalogDescription,
 } from 'helpers/productCatalog';
 import HighlightText from '../../../../components/HighlightText';
-import { isGuardianWeeklyGiftProduct } from '../../helpers/productMatchers';
+import { isGuardianWeeklyGiftProduct } from '../../../../helpers/productMatchers';
 import {
 	headerTitleText,
 	longHeaderTitleText,

@@ -14,6 +14,10 @@ import {
 } from 'helpers/productCatalog';
 import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import {
+	isGuardianWeeklyGiftProduct,
+	isGuardianWeeklyOrTierThreeProduct,
+} from 'helpers/productMatchers';
+import {
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
@@ -24,10 +28,6 @@ import {
 	isPaperPlusSub,
 	isSundayOnlyNewspaperSub,
 } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
-import {
-	isGuardianWeeklyGiftProduct,
-	isGuardianWeeklyOrTierThreeProduct,
-} from 'pages/[countryGroupId]/helpers/productMatchers';
 
 const containerSummaryTsCs = css`
 	border-radius: ${space[2]}px;

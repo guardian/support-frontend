@@ -12,7 +12,7 @@ import HighlightText from '../../../../components/HighlightText';
 import {
 	isContributionProduct,
 	isPrintProduct,
-} from '../../helpers/productMatchers';
+} from '../../../../helpers/productMatchers';
 import ContributionHeading from './ContributionHeading';
 import GenericHeading from './GenericHeading';
 import GuardianPrintHeading from './GuardianPrintHeading';

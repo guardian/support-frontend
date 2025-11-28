@@ -10,7 +10,7 @@ import type {
 	ProductKey,
 	ProductRatePlanKey,
 } from '@modules/product-catalog/productCatalog';
-import { isGuardianWeeklyGiftProduct } from 'pages/[countryGroupId]/helpers/productMatchers';
+import { isGuardianWeeklyGiftProduct } from 'helpers/productMatchers';
 import type { Participations } from './abTests/models';
 import { getFeatureFlags } from './featureFlags';
 import { isObserverSubdomain } from './globalsAndSwitches/observer';

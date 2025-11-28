@@ -5,7 +5,7 @@ import type {
 import {
 	isGuardianWeeklyGiftProduct,
 	isGuardianWeeklyProduct,
-} from '../../helpers/productMatchers';
+} from '../../../../helpers/productMatchers';
 import { messageBold, messageMargin } from './MessageStyles';
 
 export default function StartDateMessage({

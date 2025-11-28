@@ -16,6 +16,10 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import {
+	isGuardianWeeklyProduct,
+	isPrintProduct,
+} from 'helpers/productMatchers';
+import {
 	billingPeriodToContributionType,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
@@ -32,10 +36,6 @@ import {
 import { getUser } from 'helpers/user/user';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
-import {
-	isGuardianWeeklyProduct,
-	isPrintProduct,
-} from 'pages/[countryGroupId]/helpers/productMatchers';
 import type { BenefitsCheckListData } from '../../../../components/checkoutBenefits/benefitsCheckList';
 import ThankYouModules from '../../../../components/thankYou/thankyouModules';
 import type { LandingPageVariant } from '../../../../helpers/globalsAndSwitches/landingPageSettings';

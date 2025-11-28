@@ -52,6 +52,7 @@ import {
 	productCatalogDescriptionPremiumDigital,
 	showSimilarProductsConsentForRatePlan,
 } from 'helpers/productCatalog';
+import { isGuardianWeeklyGiftProduct } from 'helpers/productMatchers';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
@@ -60,7 +61,6 @@ import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
 import { getWeeklyDays } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
-import { isGuardianWeeklyGiftProduct } from 'pages/[countryGroupId]/helpers/productMatchers';
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';

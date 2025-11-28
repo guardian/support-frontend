@@ -17,6 +17,7 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
+import { isPrintProduct } from 'helpers/productMatchers';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import {
 	setThankYouFeedbackSurveyHasBeenCompleted,
@@ -32,7 +33,6 @@ import {
 	OPHAN_COMPONENT_ID_SURVEY,
 } from 'helpers/thankYouPages/utils/ophan';
 import { getManageSubsUrl } from 'helpers/urls/externalLinks';
-import { isPrintProduct } from 'pages/[countryGroupId]/helpers/productMatchers';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import { getCurrency } from '../../helpers/productPrice/productPrices';
 import AppDownload from './appDownload/AppDownload';
