@@ -69,3 +69,4 @@ export const paymentMethodSchema = z.discriminatedUnion('Type', [
 	directDebitPaymentMethodSchema,
 ]);
 export type PaymentMethod = z.infer<typeof paymentMethodSchema>;
+export type PaymentMethodType = PaymentMethod['Type'];
