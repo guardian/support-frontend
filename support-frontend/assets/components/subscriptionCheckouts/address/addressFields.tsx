@@ -6,17 +6,18 @@ import {
 	Select,
 	TextInput,
 } from '@guardian/source/react-components';
+import { PostcodeLookup } from '@ideal-postcodes/postcode-lookup';
+import type { IsoCountry } from '@modules/internationalisation/country';
 import {
 	auStates,
 	caStates,
 	usStates,
 } from '@modules/internationalisation/country';
-import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
 import type React from 'react';
+import { useEffect, useRef } from 'react';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
-import { PostcodeFinder } from 'components/subscriptionCheckouts/address/postcodeFinder';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type {
 	ActiveProductKey,
@@ -37,6 +38,7 @@ import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from '../../../pages/[countryGroupId]/validation';
+import { PostcodeFinder } from './postcodeFinder';
 import type { PostcodeFinderResult } from './postcodeLookup';
 
 type StatePropTypes = AddressFieldsState & {
@@ -197,6 +199,27 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 			props.setErrors(updatedErrors);
 		}
 	};
+	const didRunRef = useRef(false);
+	useEffect(() => {
+		if (didRunRef.current) {
+			return;
+		}
+		didRunRef.current = true;
+		console.log('Setting up Postcode Lookup');
+		PostcodeLookup.setup({
+			apiKey: 'ak_mhj47btdwoAftJP8XFULLlNgz66IO',
+			context: `#postcode-lookup`,
+			input: '#postcode',
+			button: '#button',
+			outputFields: {
+				line_1: `#${scope}-lineOne`,
+				line_2: `#${scope}-lineTwo`,
+				line_3: `#${scope}-stateProvince`,
+				post_town: `#${scope}-city`,
+				postcode: `#${scope}-postcode`,
+			},
+		});
+	}, []);
 
 	return (
 		<div data-component={`${scope}AddressFields`}>
@@ -264,29 +287,31 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				<OptionForSelect value="">Select a country</OptionForSelect>
 				{sortedOptions(props.countries)}
 			</Select>
-
 			{props.country === 'GB' ? (
-				<PostcodeFinder
-					postcode={props.postcodeState.postcode}
-					isLoading={props.postcodeState.isLoading}
-					error={props.postcodeState.error}
-					results={props.postcodeState.results}
-					onPostcodeUpdate={(postcode) => {
-						props.setPostcode(postcode);
-						props.setPostcodeForFinder(postcode);
-					}}
-					onPostcodeError={props.setPostcodeErrorForFinder}
-					onFindAddress={props.onFindAddress}
-					onAddressSelected={({
-						lineOne,
-						lineTwo,
-						city,
-					}: PostcodeFinderResult) => {
-						props.setLineOne(lineOne ?? '');
-						props.setLineTwo(lineTwo ?? '');
-						props.setTownCity(city ?? '');
-					}}
-				/>
+				<>
+					<PostcodeFinder
+						postcode={props.postcodeState.postcode}
+						isLoading={props.postcodeState.isLoading}
+						error={props.postcodeState.error}
+						results={props.postcodeState.results}
+						onPostcodeUpdate={(postcode) => {
+							props.setPostcode(postcode);
+							props.setPostcodeForFinder(postcode);
+						}}
+						onPostcodeError={props.setPostcodeErrorForFinder}
+						onFindAddress={props.onFindAddress}
+						onAddressSelected={({
+							lineOne,
+							lineTwo,
+							city,
+						}: PostcodeFinderResult) => {
+							props.setLineOne(lineOne ?? '');
+							props.setLineTwo(lineTwo ?? '');
+							props.setTownCity(city ?? '');
+						}}
+					/>
+					<div id={'postcode-lookup'} css={marginBottom}></div>
+				</>
 			) : null}
 			<TextInput
 				cssOverrides={marginBottom}

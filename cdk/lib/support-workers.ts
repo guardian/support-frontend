@@ -689,6 +689,7 @@ export class SupportWorkers extends GuStack {
       threshold: 0,
     }).node.addDependency(stateMachine);
   }
+
   // End of Ad-Lite
 
   buildPaymentSuccessMetric = (
