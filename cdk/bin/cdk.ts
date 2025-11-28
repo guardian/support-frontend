@@ -24,7 +24,7 @@ new Frontend(app, "Frontend-PROD", {
     maximumInstances: 6,
   },
   shouldCreateAlarms: true,
-  shouldEnableAlbAccessLogs: false,
+  shouldEnableAlbAccessLogs: true,
 });
 
 new Frontend(app, "Frontend-CODE", {
