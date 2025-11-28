@@ -4,7 +4,7 @@ import { useState } from 'react';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import Links from '../links/links';
-import { component_header_links_mobile_hide } from '../links/linksStyles';
+import { linksNavHide } from '../links/linksStyles';
 import {
 	headerContainer,
 	headerContainerGBP,
@@ -65,7 +65,7 @@ export default function Header({ utility, countryGroupId }: HeaderProps) {
 					<Links
 						countryGroupId={countryGroupId}
 						location="desktop"
-						cssOverride={component_header_links_mobile_hide}
+						cssOverride={linksNavHide}
 					/>
 				</div>
 			</div>

@@ -13,12 +13,12 @@ import {
 	gu_v_spacing,
 } from '../header/headerStyles';
 
-export const component_header_links_mobile_hide = css`
+export const linksNavHide = css`
 	${until.tablet} {
 		display: none;
 	}
 `;
-export const component_header_links = css`
+export const linksNav = css`
 	${until.tablet} {
 		display: block;
 		clear: both;
@@ -41,7 +41,7 @@ export const component_header_links = css`
 	}
 `;
 
-export const component_header_links__ul = css`
+export const linksList = css`
 	${until.tablet} {
 		list-style: none;
 	}
@@ -56,7 +56,7 @@ export const component_header_links__ul = css`
 	}
 `;
 
-export const component_header_links__li__active = css`
+export const linksListItemActive = css`
 	${from.tablet} {
 		a {
 			box-shadow: inset 0 4px 0 ${brandAlt[400]};
@@ -64,7 +64,7 @@ export const component_header_links__li__active = css`
 	}
 `;
 
-export const component_header_links__li__show_on_tablet = css`
+export const linksListItemTabletDisplay = css`
 	display: block;
 
 	// custom breakpoint - we are using a 'custom breakpoint' because this is linked to the menu toggle which has a custom break point applied in js
@@ -73,7 +73,7 @@ export const component_header_links__li__show_on_tablet = css`
 	}
 `;
 
-export const component_header_links__li = css`
+export const linksListItem = css`
 	${until.tablet} {
 		margin-left: ${gu_h_spacing * 2.5}px;
 		border-top: 1px solid ${brandPastel};
@@ -97,7 +97,7 @@ export const component_header_links__li = css`
 	}
 `;
 
-export const component_header_links__link = css`
+export const linksListItemNavigate = css`
 	${until.tablet} {
 		font-family: GH Guardian Headline;
 		font-size: 24px;

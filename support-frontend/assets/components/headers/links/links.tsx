@@ -10,12 +10,12 @@ import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getPatronsLink } from 'helpers/urls/externalLinks';
 import { routes } from 'helpers/urls/routes';
 import {
-	component_header_links,
-	component_header_links__li,
-	component_header_links__li__active,
-	component_header_links__li__show_on_tablet,
-	component_header_links__link,
-	component_header_links__ul,
+	linksList,
+	linksListItem,
+	linksListItemActive,
+	linksListItemNavigate,
+	linksListItemTabletDisplay,
+	linksNav,
 } from './linksStyles';
 
 // types
@@ -42,7 +42,7 @@ const links: HeaderNavLink[] = [
 		href: routes.recurringContribCheckout,
 		text: 'Contributions',
 		trackAs: 'contributions',
-		additionalStyles: component_header_links__li__show_on_tablet,
+		additionalStyles: linksListItemTabletDisplay,
 		internal: true,
 	},
 	{
@@ -116,8 +116,8 @@ function Links({
 	const internationalisationIDValue = internationalisationID(countryGroupId);
 	const isNotUk = internationalisationIDValue !== 'uk';
 	return (
-		<nav css={[component_header_links, cssOverride]}>
-			<ul css={component_header_links__ul} ref={getRef}>
+		<nav css={[linksNav, cssOverride]}>
+			<ul css={linksList} ref={getRef}>
 				{links
 					.filter(({ text }) => {
 						if (
@@ -164,9 +164,9 @@ function Links({
 						({ href, text, trackAs, opensInNewWindow, additionalStyles }) => (
 							<li
 								css={[
-									component_header_links__li,
+									linksListItem,
 									getActiveLinkClassModifiers(urlWithoutParams, href)
-										? component_header_links__li__active
+										? linksListItemActive
 										: css``,
 									additionalStyles,
 								]}
@@ -176,7 +176,7 @@ function Links({
 										id: ['header-link', trackAs, location].join(' - '),
 										componentType: 'ACQUISITIONS_OTHER',
 									})}
-									css={component_header_links__link}
+									css={linksListItemNavigate}
 									href={href}
 									target={opensInNewWindow ? '_blank' : ''}
 								>
