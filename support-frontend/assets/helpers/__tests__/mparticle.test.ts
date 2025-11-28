@@ -50,7 +50,7 @@ describe('fetchIsPastSingleContributor', () => {
 	it('should return true when mparticle returns isPastSingleContributor: true', async () => {
 		mockFetch.mockResolvedValueOnce({
 			ok: true,
-			json: () => ({ isPastSingleContributor: true }),
+			json: () => ({ isAudienceMember: true }),
 		});
 
 		const isSignedIn = true;
@@ -63,7 +63,7 @@ describe('fetchIsPastSingleContributor', () => {
 	it('should return false when mparticle returns isPastSingleContributor: false', async () => {
 		mockFetch.mockResolvedValueOnce({
 			ok: true,
-			json: () => ({ isPastSingleContributor: false }),
+			json: () => ({ isAudienceMember: false }),
 		});
 
 		const isSignedIn = true;

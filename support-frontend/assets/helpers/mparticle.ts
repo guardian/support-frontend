@@ -1,6 +1,8 @@
 import { type ConsentState, onConsent } from '@guardian/libs';
 import { fetchJson } from './async/fetch';
 
+const PAST_CONTRIBUTOR_MPARTICLE_AUDIENCE_ID = 22994;
+
 const hasTargetingConsent = (): Promise<boolean> =>
 	onConsent()
 		.then(({ canTarget }: ConsentState) => canTarget)
@@ -31,13 +33,13 @@ const fetchIsPastSingleContributor = async (
 
 	try {
 		const response = await fetchJson<{
-			isPastSingleContributor: boolean;
-		}>('/analytics-user-profile', {
+			isAudienceMember: boolean;
+		}>(`/audience/${PAST_CONTRIBUTOR_MPARTICLE_AUDIENCE_ID}/member`, {
 			mode: 'cors',
 			credentials: 'include',
 		});
 
-		return response.isPastSingleContributor;
+		return response.isAudienceMember;
 	} catch (error) {
 		console.log(
 			`Error fetching audience data from mparticle: ${String(error)}`,

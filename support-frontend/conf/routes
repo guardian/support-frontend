@@ -191,6 +191,7 @@ GET /prices                                                       controllers.Pr
 
 # ----- Analytics API (mParticle) ----- #
 GET /analytics-user-profile                                       controllers.AnalyticsController.getAnalyticsUserProfile()
+GET /audience/:id/member                                          controllers.AnalyticsController.isAudienceMember(id: Int)
 
 # ----- Newspaper Archive ----- #
 GET /newspaper-archive-header                                      controllers.NewspaperArchiveController.getHeader

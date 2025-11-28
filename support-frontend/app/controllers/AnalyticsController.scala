@@ -18,11 +18,17 @@ case class AnalyticsUserProfileResponse(
     identityId: String,
     hasMobileAppDownloaded: Boolean,
     hasFeastMobileAppDownloaded: Boolean,
-    isPastSingleContributor: Boolean,
 )
 
 object AnalyticsUserProfileResponse {
   implicit val encoder: Encoder[AnalyticsUserProfileResponse] = deriveEncoder
+}
+
+case class IsAudienceMemberResponse(
+    isAudienceMember: Boolean,
+)
+object IsAudienceMemberResponse {
+  implicit val encoder: Encoder[IsAudienceMemberResponse] = deriveEncoder
 }
 
 class AnalyticsController(
@@ -36,6 +42,7 @@ class AnalyticsController(
 
   import actionRefiners._
   import AnalyticsUserProfileResponse._
+  import IsAudienceMemberResponse._
 
   type AuthenticatedUserRequest[A] = AuthenticatedRequest[A, User]
 
@@ -61,7 +68,6 @@ class AnalyticsController(
           MParticleUserProfile(
             hasMobileAppDownloaded = false,
             hasFeastMobileAppDownloaded = false,
-            isPastSingleContributor = false,
           )
         }
       } yield {
@@ -69,9 +75,18 @@ class AnalyticsController(
           identityId = request.user.id,
           hasMobileAppDownloaded = userProfile.hasMobileAppDownloaded,
           hasFeastMobileAppDownloaded = userProfile.hasFeastMobileAppDownloaded,
-          isPastSingleContributor = userProfile.isPastSingleContributor,
         )
         Ok(response.asJson)
       }
+    }
+
+  /** Checks if the user is in the provided mparticle audience ID. This should only be used if the user has consented
+    * for targeting.
+    */
+  def isAudienceMember(audienceId: Int): Action[AnyContent] =
+    (MaybeAuthenticatedAction andThen RequireAuthenticatedUser).async { implicit request =>
+      mparticleClient
+        .isAudienceMember(request.user.id, audienceId)
+        .map(result => Ok(IsAudienceMemberResponse(result).asJson))
     }
 }
