@@ -14,10 +14,10 @@ export const buttonClose = css`
 `;
 
 export const menuContainer = css`
-	background: ${brand[400]};
+	position: relative;
 	min-height: 100vh;
 	max-width: 95vw;
-	position: relative;
+	background: ${brand[400]};
 	box-shadow: 3px 0 16px rgba(0, 0, 0, 0.4);
 `;
 
@@ -29,8 +29,8 @@ export const menuLinksContainer = css`
 `;
 
 export const menuUtilityContainer = css`
-	margin-left: ${gu_h_spacing * 2.5}px;
-	border-top: 1px solid ${brandPastel};
 	padding: ${gu_v_spacing * 0.5}px 0;
+	margin-left: ${gu_h_spacing * 2.5}px;
 	margin-top: ${gu_v_spacing}px;
+	border-top: 1px solid ${brandPastel};
 `;

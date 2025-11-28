@@ -42,14 +42,11 @@ export const linksNav = css`
 `;
 
 export const linksList = css`
-	${until.tablet} {
-		list-style: none;
-	}
+	list-style: none;
 	${from.tablet} {
-		list-style: none;
 		display: inline-flex;
 		width: auto;
-		> * {
+		* {
 			flex: 0 0 auto;
 			display: block;
 		}
@@ -77,7 +74,7 @@ export const linksListItem = css`
 	${until.tablet} {
 		margin-left: ${gu_h_spacing * 2.5}px;
 		border-top: 1px solid ${brandPastel};
-		&:first-child {
+		:first-child {
 			border-top: none;
 		}
 	}
@@ -89,7 +86,7 @@ export const linksListItem = css`
 		}
 		:last-child {
 			a {
-				&:after {
+				:after {
 					display: none;
 				}
 			}
@@ -98,47 +95,36 @@ export const linksListItem = css`
 `;
 
 export const linksListItemNavigate = css`
-	${until.tablet} {
-		font-family: GH Guardian Headline;
-		font-size: 24px;
-		font-weight: 900;
-		line-height: 90%;
-		color: ${neutral[100]};
-		text-decoration: none;
-		display: block;
-		padding: ${gu_v_spacing * 0.5}px ${gu_h_spacing}px ${gu_v_spacing * 1.5}px 0;
-		overflow: hidden;
-		position: relative;
-		box-shadow: inset 0 0 0 ${brandAlt[400]};
-		transition: 0.2s linear;
+	display: block;
+	overflow: hidden;
+	position: relative;
+	font-family: GH Guardian Headline;
+	font-weight: 900;
+	line-height: 90%;
+	text-decoration: none;
+	color: ${neutral[100]};
+	box-shadow: inset 0 0 0 ${brandAlt[400]};
 
-		&:hover,
-		&:focus {
+	${until.tablet} {
+		font-size: 24px;
+		padding: ${gu_v_spacing * 0.5}px ${gu_h_spacing}px ${gu_v_spacing * 1.5}px 0;
+		transition: 0.2s linear;
+		:hover,
+		:focus {
 			text-decoration: underline;
 		}
 	}
 	${from.tablet} {
-		font-family: GH Guardian Headline;
 		font-size: 20px;
-		font-weight: 900;
-		line-height: 90%;
-		color: ${neutral[100]};
-		text-decoration: none;
-		display: block;
-		height: ${gu_v_spacing * 3.5}px;
 		padding: ${gu_v_spacing / 1.75}px ${gu_h_spacing * 1.5}px
 			${gu_v_spacing / 1.5}px ${gu_h_spacing / 3}px;
-		overflow: hidden;
-		position: relative;
-		box-shadow: inset 0 0 0 ${brandAlt[400]};
 		transition: 0.3s ease-in-out;
+		height: ${gu_v_spacing * 3.5}px;
 		box-sizing: border-box;
-
-		&:hover {
+		:hover {
 			box-shadow: inset 0 4px 0 ${brandAlt[400]};
 		}
-
-		&:after {
+		:after {
 			content: '';
 			position: absolute;
 			right: 0;
