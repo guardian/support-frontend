@@ -79,6 +79,11 @@ const paymentMethodData = {
 		label: 'PayPal',
 		icon: <SvgPayPalBrand />,
 	},
+	PayPalCompletePayments: {
+		id: 'qa-paypal-complete-payments',
+		label: 'PayPalCompletePayments',
+		icon: <SvgPayPalBrand />,
+	},
 	DirectDebit: {
 		id: 'qa-direct-debit',
 		label: 'Direct debit',

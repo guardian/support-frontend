@@ -160,6 +160,15 @@ export const getZuoraPaymentMethod = (
 				BAID: paymentMethod.PaypalBaid,
 				email: paymentMethod.PaypalEmail,
 			};
+		case 'PayPalCompletePayments':
+			return {
+				type: 'PayPalCP',
+				tokens: {
+					gatewayType: 'PayPalCP',
+					tokenId: paymentMethod.PaypalPaymentToken,
+				},
+				email: paymentMethod.PaypalEmail,
+			};
 		case 'BankTransfer':
 			return {
 				type: 'Bacs',

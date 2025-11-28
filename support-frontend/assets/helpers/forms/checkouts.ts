@@ -18,6 +18,7 @@ export type PaymentMethodSwitch =
 	| 'directDebit'
 	| 'sepa'
 	| 'payPal'
+	| 'payPalCompletePayments'
 	| 'stripe'
 	| 'stripeHostedCheckout';
 
