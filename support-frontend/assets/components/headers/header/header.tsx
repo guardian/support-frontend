@@ -1,7 +1,5 @@
 // ----- Imports ----- //
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { useState } from 'react';
-import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import Links from '../links/links';
 import { TopNav } from './headerTopNav';
@@ -14,7 +12,6 @@ export type HeaderProps = {
 };
 
 export default function Header({ utility, countryGroupId }: HeaderProps) {
-	const [isTestUser] = useState(getGlobal<boolean>('isTestUser'));
 	return (
 		<header
 			className={classNameWithModifiers('component-header', [
@@ -23,11 +20,6 @@ export default function Header({ utility, countryGroupId }: HeaderProps) {
 					: 'one-row-from-leftCol',
 			])}
 		>
-			{!!isTestUser && (
-				<div className="test-user-banner">
-					<span>You are a test user</span>
-				</div>
-			)}
 			<div className="component-header__wrapper">
 				<div className="component-header__row">
 					<TopNav utility={utility} />
