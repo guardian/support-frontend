@@ -19,11 +19,6 @@ export const headerContainer = css`
 	background-color: ${brand[400]};
 `;
 
-export const headerTestUserBanner = css`
-	width: 100%;
-	background-color: red;
-`;
-
 export const headerWrapper = css`
 	flex: 1 1 auto;
 	position: relative;

@@ -1,7 +1,5 @@
 // ----- Imports ----- //
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { useState } from 'react';
-import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import Links from '../links/links';
 import { linksNavHide } from '../links/linksStyles';
 import {
@@ -9,7 +7,6 @@ import {
 	headerLinksContainer,
 	headerLinksContainerGBP,
 	headerLinksContainerROW,
-	headerTestUserBanner,
 	headerWrapper,
 } from './headerStyles';
 import { HeaderTopNav } from './headerTopNav';
@@ -21,18 +18,12 @@ export type HeaderProps = {
 };
 
 export default function Header({ utility, countryGroupId }: HeaderProps) {
-	const [isTestUser] = useState(getGlobal<boolean>('isTestUser'));
 	const headerLinksContainerRegion =
 		countryGroupId === 'GBPCountries'
 			? headerLinksContainerGBP
 			: headerLinksContainerROW;
 	return (
 		<header css={headerContainer}>
-			{!!isTestUser && (
-				<div css={headerTestUserBanner}>
-					<span>You are a test user</span>
-				</div>
-			)}
 			<div css={headerWrapper}>
 				<div css={[headerLinksContainer]}>
 					<HeaderTopNav countryGroupId={countryGroupId} utility={utility} />
