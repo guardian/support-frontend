@@ -1,3 +1,17 @@
+import { css } from '@emotion/react';
+import { from } from '@guardian/source/foundations';
+
+const desktopSvg = css`
+	position: absolute;
+	top: 0;
+	min-height: 100%;
+	display: none;
+
+	${from.desktop} {
+		display: inline;
+	}
+`;
+
 export default function SvgSquaresHeroDesktop() {
 	return (
 		<svg
@@ -5,6 +19,7 @@ export default function SvgSquaresHeroDesktop() {
 			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 1142 406"
 			preserveAspectRatio="xMinYMid slice"
+			css={desktopSvg}
 		>
 			<g fill="none" fillRule="evenodd">
 				<path d="M-47 281h87v87h-87z" fill="#8AD5F5" />

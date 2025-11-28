@@ -3,13 +3,13 @@ import Rows from 'components/base/rows';
 import AnchorButton from 'components/button/anchorButton';
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
-import SquaresIntroduction from 'components/introduction/squaresIntroduction';
 import Page from 'components/page/page';
 import PageSection from 'components/pageSection/pageSection';
 import Text, { LargeParagraph } from 'components/text/text';
 import '../error.scss';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { contributionsEmail } from 'helpers/legal';
+import SquaresIntroduction from './introduction/squaresIntroduction';
 
 // ----- Types ----- //
 type PropTypes = {
