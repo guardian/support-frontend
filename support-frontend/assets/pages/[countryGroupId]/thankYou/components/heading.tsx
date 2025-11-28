@@ -8,6 +8,11 @@ import {
 	getProductDescription,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import HighlightText from '../../../../components/HighlightText';
+import {
+	isContributionProduct,
+	isPrintProduct,
+} from '../../helpers/productMatchers';
 import ContributionHeading from './ContributionHeading';
 import GenericHeading from './GenericHeading';
 import GuardianPrintHeading from './GuardianPrintHeading';
@@ -17,8 +22,6 @@ import {
 	observerHeaderTitleText,
 	tier3LineBreak,
 } from './headingStyles';
-import HighlightText from './HighlightText';
-import { isContributionProduct, isPrintProduct } from './utils/productMatchers';
 
 type HeadingProps = {
 	name: string | null;

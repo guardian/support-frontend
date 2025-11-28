@@ -1,4 +1,4 @@
-import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import { isGuardianWeeklyGiftProduct } from 'pages/[countryGroupId]/helpers/productMatchers';
 import type { ActiveProductKey, ActiveRatePlanKey } from './productCatalog';
 import { subscriptionProductTypes } from './productPrice/subscriptions';
 

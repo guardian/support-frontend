@@ -3,13 +3,13 @@ import {
 	type ActiveRatePlanKey,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
+import HighlightText from '../../../../components/HighlightText';
+import { isGuardianWeeklyGiftProduct } from '../../helpers/productMatchers';
 import {
 	headerTitleText,
 	longHeaderTitleText,
 	weeklyGiftLineBreak,
 } from './headingStyles';
-import HighlightText from './HighlightText';
-import { isGuardianWeeklyGiftProduct } from './utils/productMatchers';
 
 export type GuardianPrintHeadingProps = {
 	productKey: ActiveProductKey;

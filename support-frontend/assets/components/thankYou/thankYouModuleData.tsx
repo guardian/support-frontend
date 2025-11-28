@@ -32,8 +32,8 @@ import {
 	OPHAN_COMPONENT_ID_SURVEY,
 } from 'helpers/thankYouPages/utils/ophan';
 import { getManageSubsUrl } from 'helpers/urls/externalLinks';
+import { isPrintProduct } from 'pages/[countryGroupId]/helpers/productMatchers';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
-import { isPrintProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { getCurrency } from '../../helpers/productPrice/productPrices';
 import AppDownload from './appDownload/AppDownload';
 import AppDownloadBadges, {

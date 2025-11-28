@@ -7,13 +7,13 @@ import type {
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
-import DirectDebitMessage from '../../../supporter-plus-thank-you/components/thankYouHeader/DirectDebitMessage';
-import Heading from '../../../supporter-plus-thank-you/components/thankYouHeader/heading';
-import LegitimateInterestMessage from '../../../supporter-plus-thank-you/components/thankYouHeader/LegitimateInterestMessage';
-import ObserverMessage from '../../../supporter-plus-thank-you/components/thankYouHeader/ObserverMessage';
-import ProductCatalogMessage from '../../../supporter-plus-thank-you/components/thankYouHeader/ProductCatalogMessage';
-import StartDateMessage from '../../../supporter-plus-thank-you/components/thankYouHeader/StartDateMessage';
-import { isPrintProduct } from '../../../supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import { isPrintProduct } from '../../helpers/productMatchers';
+import DirectDebitMessage from './DirectDebitMessage';
+import Heading from './heading';
+import LegitimateInterestMessage from './LegitimateInterestMessage';
+import ObserverMessage from './ObserverMessage';
+import ProductCatalogMessage from './ProductCatalogMessage';
+import StartDateMessage from './StartDateMessage';
 
 const header = css`
 	background: white;

@@ -2,11 +2,11 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import { messageBold, messageMargin } from './MessageStyles';
 import {
 	isGuardianWeeklyGiftProduct,
 	isGuardianWeeklyProduct,
-} from './utils/productMatchers';
+} from '../../helpers/productMatchers';
+import { messageBold, messageMargin } from './MessageStyles';
 
 export default function StartDateMessage({
 	productKey,

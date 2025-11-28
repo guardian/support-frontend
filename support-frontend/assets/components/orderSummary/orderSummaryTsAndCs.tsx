@@ -27,7 +27,7 @@ import {
 import {
 	isGuardianWeeklyGiftProduct,
 	isGuardianWeeklyOrTierThreeProduct,
-} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+} from 'pages/[countryGroupId]/helpers/productMatchers';
 
 const containerSummaryTsCs = css`
 	border-radius: ${space[2]}px;

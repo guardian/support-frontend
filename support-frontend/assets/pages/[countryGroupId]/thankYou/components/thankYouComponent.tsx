@@ -35,7 +35,7 @@ import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/hel
 import {
 	isGuardianWeeklyProduct,
 	isPrintProduct,
-} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+} from 'pages/[countryGroupId]/helpers/productMatchers';
 import type { BenefitsCheckListData } from '../../../../components/checkoutBenefits/benefitsCheckList';
 import ThankYouModules from '../../../../components/thankYou/thankyouModules';
 import type { LandingPageVariant } from '../../../../helpers/globalsAndSwitches/landingPageSettings';
