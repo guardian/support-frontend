@@ -2,7 +2,7 @@ import SvgGuardianLogo from 'components/svgs/guardianLogo';
 import type { HeaderProps } from './header';
 import './header.scss';
 
-export function TopNav({ utility }: HeaderProps) {
+export default function TopNav({ utility }: HeaderProps) {
 	return (
 		<div className="component-header-topnav">
 			<div className="component-header-topnav__utility">{utility}</div>

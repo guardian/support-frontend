@@ -1,8 +1,7 @@
-// ----- Imports ----- //
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import Links from '../links/links';
-import { TopNav } from './headerTopNav';
+import TopNav from './headerTopNav';
 import MobileMenuToggler from './mobileMenuToggler';
 import './header.scss';
 
