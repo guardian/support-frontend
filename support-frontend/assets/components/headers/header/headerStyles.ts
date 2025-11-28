@@ -116,4 +116,7 @@ export const headerWrapper = css`
 export const headerLinksContainer = css`
 	display: flex;
 	width: 100%;
+	nav {
+		flex: 1 1 auto;
+	}
 `;
