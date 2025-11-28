@@ -6,50 +6,6 @@
 
 $header-links-min-width: gu-span(12);
 
-// Retain the original box-sizing value for the header
-// to preserve logo positioning logic across the CSS and JS
-.component-header,
-.component-header * {
-	box-sizing: content-box;
-}
-
-.component-header {
-	background-color: gu-colour(brand-main);
-	display: flex;
-	align-items: center;
-	justify-content: stretch;
-	overflow: hidden;
-
-	.component-dialog {
-		align-items: stretch;
-		justify-content: flex-start;
-	}
-
-	.svg-guardian-logo {
-		display: block;
-		float: right;
-		margin-top: math.div($gu-v-spacing, 2.4);
-		margin-bottom: $gu-v-spacing * 1.5;
-		height: 48px;
-		width: auto;
-		@include mq($from: mobileLandscape) {
-			height: 56px;
-		}
-		@include mq($from: tablet) {
-			height: 72px;
-		}
-		@include mq($from: desktop) {
-			height: 95px;
-		}
-	}
-}
-
-.component-header--padlock {
-	margin-right: math.div($gu-h-spacing, 3);
-	display: inline-block;
-	margin-top: 2px;
-}
-
 .component-header-mobile-menu-toggler {
 	@include mq($until: tablet) {
 		display: block;
@@ -84,83 +40,6 @@ $header-links-min-width: gu-span(12);
 	}
 }
 
-.component-header__wrapper {
-	width: 100%;
-	margin: auto;
-	padding: 0 ($gu-h-spacing * 0.5);
-	position: relative;
-	flex: 1 1 auto;
-
-	@include mq($from: tablet) {
-		max-width: $header-links-min-width;
-	}
-
-	@include mq($from: leftCol) {
-		max-width: gu-span(14);
-	}
-
-	@include mq($from: wide) {
-		max-width: gu-span(16);
-	}
-}
-
-.component-header__row {
-	display: flex;
-	width: 100%;
-	& > .component-header-topnav {
-		flex: 1 1 auto;
-	}
-	& > .component-header-links {
-		flex: 1 1 auto;
-	}
-}
-
-.component-header-topnav {
-	display: flex;
-	justify-content: space-between;
-}
-
-.component-header-topnav__utility {
-	padding-top: $gu-v-spacing * 0.5;
-
-	.component-country-group-switcher {
-		@include mq($until: tablet) {
-			display: none;
-		}
-	}
-}
-
-.component-header-topnav-logo {
-	@include mq($from: tablet) {
-		width: gu-span(5);
-		background-color: gu-colour(brand-main);
-		float: right;
-		.component-header--one-row-from-tablet & {
-			border-left: 1px solid gu-colour(brand-pastel);
-			z-index: 10;
-			position: relative;
-		}
-	}
-
-	@include mq($from: leftCol) {
-		.component-header--one-row-from-leftCol & {
-			border-left: 1px solid gu-colour(brand-pastel);
-			z-index: 10;
-			position: relative;
-		}
-	}
-
-	@include mq($from: wide) {
-		padding-right: gu-span(1) + $gu-h-spacing;
-	}
-}
-
-.component-header-topnav-logo__graun {
-	float: right;
-	height: 100%;
-	flex: 0 1 auto;
-}
-
 .component-header-links--desktop {
 	@include mq($until: tablet) {
 		display: none;
@@ -175,28 +54,10 @@ $header-links-min-width: gu-span(12);
 	margin: 0 ($gu-h-spacing * -2) 0 0;
 	box-sizing: border-box;
 
-	@media (min-width: $header-links-min-width + 40) {
+	@media (min-width: #{$header-links-min-width + 40}) {
 		margin: 0 ($gu-h-spacing * -1);
 		border-left: 1px solid gu-colour(brand-pastel);
 		border-right: 1px solid gu-colour(brand-pastel);
-	}
-
-	@include mq($from: tablet) {
-		.component-header--one-row-from-tablet & {
-			position: absolute;
-			bottom: 0;
-			left: $gu-h-spacing * 0.5;
-			right: gu-span(5);
-		}
-	}
-
-	@include mq($from: leftCol) {
-		.component-header--one-row-from-leftCol & {
-			position: absolute;
-			bottom: 0;
-			left: $gu-h-spacing * 0.5;
-			right: gu-span(5);
-		}
 	}
 
 	.component-header-links__ul {
@@ -281,45 +142,6 @@ $header-links-min-width: gu-span(12);
 			.component-header-topnav__utility {
 				display: none;
 			}
-
-			.component-header-topnav__checkout {
-				display: flex;
-				flex: 0 0 490px;
-				color: gu-colour(neutral-100);
-				@include gu-fontset-body-sans;
-
-				@include mq($until: tablet) {
-					flex: none;
-					border-right: none;
-				}
-
-				.component-header-topnav--checkout-text {
-					border-top: 1px solid gu-colour(brand-pastel);
-					border-left: 1px solid gu-colour(brand-pastel);
-					padding: $gu-v-spacing $gu-h-spacing;
-					width: 100%;
-					align-self: flex-end;
-
-					:nth-child(2) {
-						display: inline-block;
-						vertical-align: top;
-					}
-
-					@include mq($until: tablet) {
-						border-left: none;
-						border-top: none;
-						padding-left: $gu-h-spacing * 0.25;
-					}
-				}
-
-				@include mq($from: tablet, $until: desktop) {
-					display: none;
-				}
-
-				@include mq($from: leftCol) {
-					flex: 0 0 650px;
-				}
-			}
 		}
 
 		.component-header-topnav-logo {
@@ -340,22 +162,6 @@ $header-links-min-width: gu-span(12);
 	}
 }
 
-.component-header-checkout--row {
-	width: 100%;
-	color: gu-colour(neutral-100);
-	@include gu-fontset-body-sans;
-	padding: $gu-v-spacing;
-	border-top: 1px solid gu-colour(brand-pastel);
-
-	@include mq($from: desktop) {
-		display: none;
-	}
-
-	@include mq($until: tablet) {
-		display: none;
-	}
-}
-
 .component-header-links__li.component-header-links__li--show-on-tablet {
 	display: block;
 
@@ -363,9 +169,4 @@ $header-links-min-width: gu-span(12);
 	@media (min-width: 884px) {
 		display: none;
 	}
-}
-
-.test-user-banner {
-	background-color: red;
-	width: 100%;
 }
