@@ -255,22 +255,6 @@ $header-links-min-width: gu-span(12);
 	}
 }
 
-.component-header-checkout--row {
-	width: 100%;
-	color: gu-colour(neutral-100);
-	@include gu-fontset-body-sans;
-	padding: $gu-v-spacing;
-	border-top: 1px solid gu-colour(brand-pastel);
-
-	@include mq($from: desktop) {
-		display: none;
-	}
-
-	@include mq($until: tablet) {
-		display: none;
-	}
-}
-
 .component-header-links__li.component-header-links__li--show-on-tablet {
 	display: block;
 
