@@ -107,6 +107,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       ContributionTypes(Nil, Nil, Nil, Nil, Nil, Nil, Nil),
       MetricUrl("http://localhost"),
       Nil,
+      Nil,
     )
 
     def fakeDigitalPack(
