@@ -109,6 +109,7 @@ export function DeliveryRecipientAddress({
 					setErrors={setAddressErrors}
 					onFindAddress={(postcode) => {
 						setDeliveryPostcodeStateLoading(true);
+						console.log('Finding addresses for postcode:', postcode);
 						void findAddressesForPostcode(postcode).then((results) => {
 							setDeliveryPostcodeStateLoading(false);
 							setDeliveryPostcodeStateResults(results);
