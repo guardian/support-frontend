@@ -86,9 +86,6 @@ $header-links-min-width: gu-span(12);
 	& > .component-header-topnav {
 		flex: 1 1 auto;
 	}
-	& > .component-header-links {
-		flex: 1 1 auto;
-	}
 }
 
 .component-header-topnav {
@@ -135,109 +132,6 @@ $header-links-min-width: gu-span(12);
 	float: right;
 	height: 100%;
 	flex: 0 1 auto;
-}
-
-.component-header-links--desktop {
-	@include mq($until: tablet) {
-		display: none;
-	}
-
-	display: flex;
-	justify-content: flex-start;
-	background-color: gu-colour(brand-main);
-	border-top: 1px solid gu-colour(brand-pastel);
-	z-index: 9;
-	white-space: nowrap;
-	margin: 0 ($gu-h-spacing * -2) 0 0;
-	box-sizing: border-box;
-
-	@media (min-width: #{$header-links-min-width + 40}) {
-		margin: 0 ($gu-h-spacing * -1);
-		border-left: 1px solid gu-colour(brand-pastel);
-		border-right: 1px solid gu-colour(brand-pastel);
-	}
-
-	@include mq($from: tablet) {
-		.component-header--one-row-from-tablet & {
-			position: absolute;
-			bottom: 0;
-			left: $gu-h-spacing * 0.5;
-			right: gu-span(5);
-		}
-	}
-
-	@include mq($from: leftCol) {
-		.component-header--one-row-from-leftCol & {
-			position: absolute;
-			bottom: 0;
-			left: $gu-h-spacing * 0.5;
-			right: gu-span(5);
-		}
-	}
-
-	.component-header-links__ul {
-		list-style: none;
-		display: inline-flex;
-		width: auto;
-		> * {
-			flex: 0 0 auto;
-			display: block;
-		}
-	}
-
-	.component-header-links__link {
-		@include gu-fontset-nav-desktop;
-		color: gu-colour(neutral-100);
-		text-decoration: none;
-		display: block;
-		height: $gu-v-spacing * 3.5;
-		padding: math.div($gu-v-spacing, 1.75) ($gu-h-spacing * 1.5)
-			math.div($gu-v-spacing, 1.5) math.div($gu-h-spacing, 3);
-		overflow: hidden;
-		position: relative;
-		box-shadow: inset 0 0 0 gu-colour(highlight-main);
-		transition: $gu-transition;
-		box-sizing: border-box;
-
-		&:hover {
-			box-shadow: inset 0 4px 0 gu-colour(highlight-main);
-		}
-
-		&:after {
-			content: '';
-			position: absolute;
-			right: 0;
-			bottom: 14px;
-			top: 0;
-			width: 1px;
-			background-color: gu-colour(brand-pastel);
-		}
-	}
-
-	.component-header-links__li--active {
-		.component-header-links__link {
-			box-shadow: inset 0 4px 0 gu-colour(highlight-main);
-		}
-	}
-
-	.component-header-links__li:first-child > .component-header-links__link {
-		padding-left: $gu-h-spacing;
-	}
-
-	.component-header-links__li:last-child > .component-header-links__link {
-		&:after {
-			display: none;
-		}
-	}
-}
-
-.component-header-links__li.component-header-links__li--show-on-tablet {
-	display: block;
-
-	// custom breakpoint - we are using a 'custom breakpoint' because this is linked to the menu toggle which has a custom break point applied in js
-	@media (min-width: 884px) {
-		display: none;
-	}
 }
 
 .test-user-banner {
