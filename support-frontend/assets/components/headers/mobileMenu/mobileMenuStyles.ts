@@ -29,7 +29,7 @@ export const menuLinksContainer = css`
 `;
 
 export const menuUtilityContainer = css`
-	margin-left: ${gu_h_spacing * 2.5};
+	margin-left: ${gu_h_spacing * 2.5}px;
 	border-top: 1px solid ${brandPastel};
 	padding: ${gu_v_spacing * 0.5}px 0;
 	margin-top: ${gu_v_spacing}px;
