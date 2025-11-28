@@ -60,7 +60,6 @@
 		"@stripe/stripe-js": "^4.1.0",
 		"@types/seedrandom": "^3.0.8",
 		"@types/uuid": "^9.0.2",
-		"classnames": "^2.5.1",
 		"dompurify": "^3.2.4",
 		"escape-string-regexp": "5.0.0",
 		"framer-motion": "^1.11.1",
