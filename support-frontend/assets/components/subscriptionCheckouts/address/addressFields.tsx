@@ -6,6 +6,7 @@ import {
 	Select,
 	TextInput,
 } from '@guardian/source/react-components';
+import { PostcodeLookup } from '@ideal-postcodes/postcode-lookup';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import {
 	auStates,
@@ -14,7 +15,8 @@ import {
 } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
-import React, { useEffect, useRef } from 'react';
+import type React from 'react';
+import { useEffect, useRef } from 'react';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type {
@@ -23,8 +25,8 @@ import type {
 } from 'helpers/productCatalog';
 import { internationaliseProductAndRatePlan } from 'helpers/productCatalog';
 import type {
-	AddressFields as AddressFieldsType,
 	AddressFieldsState,
+	AddressFields as AddressFieldsType,
 	AddressFormFieldError,
 	PostcodeFinderState,
 } from 'helpers/redux/checkout/address/state';
@@ -36,9 +38,8 @@ import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from '../../../pages/[countryGroupId]/validation';
-import { PostcodeLookup } from '@ideal-postcodes/postcode-lookup';
 import { PostcodeFinder } from './postcodeFinder';
-import { PostcodeFinderResult } from './postcodeLookup';
+import type { PostcodeFinderResult } from './postcodeLookup';
 
 type StatePropTypes = AddressFieldsState & {
 	scope: AddressType;
@@ -200,7 +201,9 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 	};
 	const didRunRef = useRef(false);
 	useEffect(() => {
-		if (didRunRef.current) return;
+		if (didRunRef.current) {
+			return;
+		}
 		didRunRef.current = true;
 		console.log('Setting up Postcode Lookup');
 		PostcodeLookup.setup({
