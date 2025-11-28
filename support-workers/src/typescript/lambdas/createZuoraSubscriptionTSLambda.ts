@@ -116,6 +116,7 @@ export const handler = async (
 			accountNumber: createSubscriptionResult.accountNumber,
 			currency: currency,
 			productPurchase: productInformation,
+			appliedPromotion: state.state.appliedPromotion ?? undefined,
 		};
 
 		const previewInvoices = await previewCreateSubscription(

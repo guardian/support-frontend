@@ -8,6 +8,7 @@ import {
 import type { ReactNode } from 'react';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
+import type { OnboardingProps } from 'pages/[countryGroupId]/components/onboardingComponent';
 import type { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
 import OnboardingHeading from './heading';
 
@@ -20,30 +21,42 @@ const contentColumnStyles = css`
 	margin: auto;
 `;
 
-interface OnboardingLayoutProps {
+interface OnboardingLayoutProps extends OnboardingProps {
 	children: ReactNode;
 	onboardingStep: OnboardingSteps;
+	scrollToTopRef: React.RefObject<HTMLDivElement>;
 }
 
-function OnboardingLayout({ children, onboardingStep }: OnboardingLayoutProps) {
+function OnboardingLayout({
+	children,
+	onboardingStep,
+	scrollToTopRef,
+	...onboardingProps
+}: OnboardingLayoutProps) {
 	return (
-		<PageScaffold
-			header={<Header />}
-			footer={
-				<FooterWithContents>
-					<FooterLinks />
-				</FooterWithContents>
-			}
-		>
-			<OnboardingHeading onboardingStep={onboardingStep} />
-			<Container sideBorders cssOverrides={greyBackgroundContainer}>
-				<Columns collapseUntil="tablet">
-					<Column cssOverrides={contentColumnStyles} span={[1, 10, 8]}>
-						{children}
-					</Column>
-				</Columns>
-			</Container>
-		</PageScaffold>
+		<>
+			<div ref={scrollToTopRef} />
+			<PageScaffold
+				header={<Header />}
+				footer={
+					<FooterWithContents>
+						<FooterLinks />
+					</FooterWithContents>
+				}
+			>
+				<OnboardingHeading
+					onboardingStep={onboardingStep}
+					{...onboardingProps}
+				/>
+				<Container sideBorders cssOverrides={greyBackgroundContainer}>
+					<Columns collapseUntil="tablet">
+						<Column cssOverrides={contentColumnStyles} span={[1, 10, 8]}>
+							{children}
+						</Column>
+					</Columns>
+				</Container>
+			</PageScaffold>
+		</>
 	);
 }
 
