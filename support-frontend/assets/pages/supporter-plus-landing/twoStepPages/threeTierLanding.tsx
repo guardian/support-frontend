@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import { cmp } from '@guardian/libs';
 import {
 	from,
-	headlineBold24,
 	palette,
 	space,
 	textSans17,
@@ -68,6 +67,7 @@ import { SupportOnce } from '../components/supportOnce';
 import type { CardContent } from '../components/threeTierCard';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
+import { ThreeTierLandingHeading } from './threeTierLandingHeading';
 import { TickerContainer } from './tickerContainer';
 
 const recurringContainer = css`
@@ -110,19 +110,6 @@ const innerContentContainer = css`
 	max-width: 940px;
 	margin: 0 auto;
 	text-align: center;
-`;
-
-const heading = css`
-	text-wrap: balance;
-	text-align: left;
-	color: ${palette.neutral[100]};
-	${headlineBold24}
-	${from.tablet} {
-		text-align: center;
-	}
-	${from.desktop} {
-		font-size: 2.625rem;
-	}
 `;
 
 const standFirst = css`
@@ -292,6 +279,7 @@ type ThreeTierLandingProps = {
 export function ThreeTierLanding({
 	supportRegionId,
 	settings,
+	abParticipations,
 }: ThreeTierLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsProduct = urlSearchParams.get('product');
@@ -597,31 +585,12 @@ export function ThreeTierLanding({
 						/>
 					)}
 
-					{headingOverride && (
-						<h1 css={heading}>
-							<span
-								dangerouslySetInnerHTML={{
-									__html: getSanitisedHtml(
-										replaceDatePlaceholder(headingOverride, countdownDaysLeft),
-									),
-								}}
-							/>
-						</h1>
-					)}
-					{!headingOverride && (
-						<h1 css={heading}>
-							<span
-								dangerouslySetInnerHTML={{
-									__html: getSanitisedHtml(
-										replaceDatePlaceholder(
-											settings.copy.heading,
-											countdownDaysLeft,
-										),
-									),
-								}}
-							/>
-						</h1>
-					)}
+					<ThreeTierLandingHeading
+						heading={headingOverride ?? settings.copy.heading}
+						countdownDaysLeft={countdownDaysLeft}
+						abParticipations={abParticipations}
+					/>
+
 					<p
 						css={standFirst}
 						dangerouslySetInnerHTML={{
