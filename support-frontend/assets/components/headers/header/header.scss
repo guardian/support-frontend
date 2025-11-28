@@ -60,15 +60,6 @@ $header-links-min-width: gu-span(12);
 	}
 }
 
-@keyframes open-menu {
-	from {
-		transform: translateX(-100%);
-	}
-	to {
-		transform: translateX(0);
-	}
-}
-
 .component-header__wrapper {
 	width: 100%;
 	margin: auto;
