@@ -5,15 +5,14 @@ import type { User } from '../model/stateSchemas';
 import { formatDate, mask } from './emailFields';
 
 type PaymentFields =
-	| { payment_method: 'Credit/Debit Card' }
+	| { payment_method: 'Credit/Debit Card' | 'PayPal' }
 	| {
 			bank_account_no: string;
 			bank_sort_code: string;
 			account_holder: string;
 			payment_method: 'Direct Debit';
 			mandate_id: string;
-	  }
-	| { payment_method: 'PayPal' };
+	  };
 
 type BasicFields = {
 	ZuoraSubscriberId: string;

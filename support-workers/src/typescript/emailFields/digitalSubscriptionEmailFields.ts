@@ -21,8 +21,7 @@ function getPaymentMethodFields(
 			account_number: string;
 			mandateid: string;
 	  }
-	| { default_payment_method: 'Credit/Debit Card' }
-	| { default_payment_method: 'PayPal' } {
+	| { default_payment_method: 'Credit/Debit Card' | 'PayPal' } {
 	switch (paymentMethod.Type) {
 		case 'BankTransfer':
 			return {

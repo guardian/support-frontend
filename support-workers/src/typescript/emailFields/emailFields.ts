@@ -41,7 +41,10 @@ export function getPaymentMethodFieldsSupporterPlus(
 	created: Dayjs,
 	mandateId?: string,
 ):
-	| { payment_method: 'credit / debit card'; first_payment_date: string }
+	| {
+			payment_method: 'credit / debit card' | 'PayPal';
+			first_payment_date: string;
+	  }
 	| {
 			payment_method: 'Direct Debit';
 			account_name: string;
@@ -49,8 +52,7 @@ export function getPaymentMethodFieldsSupporterPlus(
 			sort_code: string;
 			Mandate_ID: string;
 			first_payment_date: string;
-	  }
-	| { payment_method: 'PayPal'; first_payment_date: string } {
+	  } {
 	switch (paymentMethod.Type) {
 		case 'BankTransfer':
 			return {
