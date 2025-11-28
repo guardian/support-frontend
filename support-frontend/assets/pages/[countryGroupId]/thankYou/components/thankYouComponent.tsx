@@ -32,7 +32,6 @@ import {
 import { getUser } from 'helpers/user/user';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
-import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import {
 	isGuardianWeeklyProduct,
 	isPrintProduct,
@@ -50,6 +49,7 @@ import {
 import GuardianPageLayout from '../../components/GuardianPageLayout';
 import ThankYouNavLinks from '../../components/ThankYouNavLinks';
 import getObserver from '../../helpers/getObserver';
+import ThankYouHeader from './thankYouHeader';
 
 const headerContainer = css`
 	${from.desktop} {
