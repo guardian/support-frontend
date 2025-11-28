@@ -18,6 +18,7 @@ case class AnalyticsUserProfileResponse(
     identityId: String,
     hasMobileAppDownloaded: Boolean,
     hasFeastMobileAppDownloaded: Boolean,
+    isPastSingleContributor: Boolean,
 )
 
 object AnalyticsUserProfileResponse {
@@ -57,13 +58,18 @@ class AnalyticsController(
       for {
         userProfile <- mparticleClient.getUserProfile(request.user.id).recover { case ex =>
           logger.error(scrub"Failed to get mParticle user profile: ${ex.getMessage}", ex)
-          MParticleUserProfile(hasMobileAppDownloaded = false, hasFeastMobileAppDownloaded = false)
+          MParticleUserProfile(
+            hasMobileAppDownloaded = false,
+            hasFeastMobileAppDownloaded = false,
+            isPastSingleContributor = false,
+          )
         }
       } yield {
         val response = AnalyticsUserProfileResponse(
           identityId = request.user.id,
           hasMobileAppDownloaded = userProfile.hasMobileAppDownloaded,
           hasFeastMobileAppDownloaded = userProfile.hasFeastMobileAppDownloaded,
+          isPastSingleContributor = userProfile.isPastSingleContributor,
         )
         Ok(response.asJson)
       }

@@ -16,6 +16,7 @@ import scala.concurrent.{ExecutionContext, Future}
 case class MParticleUserProfile(
     hasMobileAppDownloaded: Boolean,
     hasFeastMobileAppDownloaded: Boolean,
+    isPastSingleContributor: Boolean,
 )
 
 case class MParticleAccessToken(token: String) extends AnyVal
@@ -176,6 +177,7 @@ class MParticleClient(
   private def parseUserProfile(profileResponse: ProfileResponse): MParticleUserProfile = {
     val hasMobileAppDownloaded = profileResponse.audience_memberships.exists(_.audience_id == 22581)
     val hasFeastMobileAppDownloaded = profileResponse.audience_memberships.exists(_.audience_id == 22582)
-    MParticleUserProfile(hasMobileAppDownloaded, hasFeastMobileAppDownloaded)
+    val isPastSingleContributor = profileResponse.audience_memberships.exists(_.audience_id == 22994)
+    MParticleUserProfile(hasMobileAppDownloaded, hasFeastMobileAppDownloaded, isPastSingleContributor)
   }
 }
