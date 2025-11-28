@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import SvgClose from 'components/svgs/close';
 import VeggieBurgerButton from '../veggieBurgerButton/veggieBurgerButton';
 import './mobileMenu.scss';
+import { buttonClose } from './mobileMenuStyles';
 
 export type Position = {
 	x: number;
@@ -46,6 +47,7 @@ function MobileMenu({
 				}
 				label="close"
 				onClick={onClose}
+				cssOverride={buttonClose}
 			>
 				<SvgClose />
 			</VeggieBurgerButton>
