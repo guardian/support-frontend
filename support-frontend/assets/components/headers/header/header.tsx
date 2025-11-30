@@ -2,7 +2,7 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import Links from '../links/links';
 import { linksNavHide } from '../links/linksStyles';
-import TopNav from './headerTopNav';
+import { HeaderTopNav } from './headerTopNav';
 import MobileMenuToggler from './mobileMenuToggler';
 import './header.scss';
 
@@ -22,7 +22,7 @@ export default function Header({ utility, countryGroupId }: HeaderProps) {
 		>
 			<div className="component-header__wrapper">
 				<div className="component-header__row">
-					<TopNav utility={utility} />
+					<HeaderTopNav utility={utility} countryGroupId={countryGroupId} />
 					<MobileMenuToggler
 						links={<Links countryGroupId={countryGroupId} location="mobile" />}
 						utility={utility}
