@@ -8,11 +8,14 @@ import {
 import { SvgTickRound } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 
-const benefitsContainer = css`
-	${textSans15};
+const benefitsContainerTitle = css`
 	margin: ${space[5]}px 0 ${space[2]}px;
 	padding-top: ${space[2]}px;
 	border-top: 1px solid ${neutral[86]};
+`;
+
+const benefitsContainer = css`
+	${textSans15};
 `;
 
 const benefitsList = css`
@@ -43,9 +46,8 @@ export default function BenefitsList({
 	if (listItems.length === 0) {
 		return null;
 	}
-
 	return (
-		<section css={benefitsContainer}>
+		<section css={[benefitsContainer, title && benefitsContainerTitle]}>
 			{title && <h4>{title}</h4>}
 
 			<ul css={benefitsList}>

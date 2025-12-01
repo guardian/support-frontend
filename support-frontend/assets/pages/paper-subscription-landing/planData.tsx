@@ -8,7 +8,7 @@ const benefitStyle = css`
 `;
 
 interface Benefits {
-	label: JSX.Element;
+	label?: JSX.Element;
 	items: JSX.Element[];
 }
 
@@ -120,7 +120,7 @@ const digitalBenefitsMap: Partial<
 		label: digitalRewardsLabel,
 		items: guardianDigitalRewards,
 	},
-	Sunday: { label: <></>, items: observerDigitalRewards },
+	Sunday: { items: observerDigitalRewards },
 };
 
 const planDescriptions: Record<
