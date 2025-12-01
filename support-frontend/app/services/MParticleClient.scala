@@ -155,6 +155,11 @@ class MParticleClient(
     response <- callProfileAPI(identityId, accessToken)
   } yield parseUserProfile(response)
 
+  def isAudienceMember(identityId: String, audienceId: Int): Future[Boolean] = for {
+    accessToken <- authClient.getCachedAccessToken()
+    response <- callProfileAPI(identityId, accessToken)
+  } yield response.audience_memberships.exists(_.audience_id == audienceId)
+
   private def callProfileAPI(identityId: String, accessToken: MParticleAccessToken): Future[ProfileResponse] = {
     val fields = "audience_memberships"
     val endpoint =
