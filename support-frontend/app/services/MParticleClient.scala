@@ -2,7 +2,7 @@ package services
 
 import com.gu.monitoring.SafeLogging
 import com.gu.okhttp.RequestRunners.FutureHttpClient
-import com.gu.rest.WebServiceHelper
+import com.gu.rest.{CodeBody, WebServiceClientError, WebServiceHelper}
 import config.{MparticleConfig, MparticleConfigProvider}
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
@@ -115,6 +115,11 @@ class MParticleAuthClient(
     }
   }
 
+  def invalidateAndRefreshToken(): Future[MParticleAccessToken] = {
+    tokenCache.set(None)
+    getCachedAccessToken()
+  }
+
   private def getAccessToken(): Future[(MParticleAccessToken, Int)] = {
     val request = OAuthTokenRequest(
       client_id = config.clientId,
@@ -184,12 +189,21 @@ class MParticleClient(
       identity = Identity(`type` = "customer_id", value = identityId),
     )
 
-    postJson[ProfileResponse](
+    def post() = postJson[ProfileResponse](
       endpoint = endpoint,
       data = request.asJson,
       headers = Map("Authorization" -> s"Bearer ${accessToken.token}"),
       params = Map("fields" -> fields),
     )
+
+    post().recoverWith { case WebServiceClientError(CodeBody("401", _)) =>
+      // Unauthorized - refresh the bearer token now instead of waiting for next refresh, and try again
+      logger.info("Received 401 from mParticle, invalidating token and retrying")
+      for {
+        _ <- authClient.invalidateAndRefreshToken()
+        response <- post()
+      } yield response
+    }
   }
 
   private def parseUserProfile(profileResponse: ProfileResponse): MParticleUserProfile = {
