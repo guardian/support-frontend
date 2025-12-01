@@ -20,11 +20,6 @@ $header-links-min-width: gu-span(12);
 	justify-content: stretch;
 	overflow: hidden;
 
-	.component-dialog {
-		align-items: stretch;
-		justify-content: flex-start;
-	}
-
 	.svg-guardian-logo {
 		display: block;
 		float: right;
@@ -42,12 +37,6 @@ $header-links-min-width: gu-span(12);
 			height: 95px;
 		}
 	}
-}
-
-.component-header--padlock {
-	margin-right: math.div($gu-h-spacing, 3);
-	display: inline-block;
-	margin-top: 2px;
 }
 
 .component-header-mobile-menu-toggler {
@@ -68,19 +57,6 @@ $header-links-min-width: gu-span(12);
 		@include mq($from: tablet) {
 			margin-top: 40px;
 		}
-	}
-	.component-dialog--open .component-header-mobile-menu {
-		animation: open-menu $gu-animation-speed-med cubic-bezier(0.23, 1, 0.32, 1)
-			both;
-	}
-}
-
-@keyframes open-menu {
-	from {
-		transform: translateX(-100%);
-	}
-	to {
-		transform: translateX(0);
 	}
 }
 
@@ -175,7 +151,7 @@ $header-links-min-width: gu-span(12);
 	margin: 0 ($gu-h-spacing * -2) 0 0;
 	box-sizing: border-box;
 
-	@media (min-width: $header-links-min-width + 40) {
+	@media (min-width: ($header-links-min-width + 40)) {
 		margin: 0 ($gu-h-spacing * -1);
 		border-left: 1px solid gu-colour(brand-pastel);
 		border-right: 1px solid gu-colour(brand-pastel);
@@ -252,107 +228,6 @@ $header-links-min-width: gu-span(12);
 		&:after {
 			display: none;
 		}
-	}
-}
-
-.component-header--display-checkout {
-	.component-header__wrapper {
-		max-width: 50rem;
-
-		@include mq($from: tablet, $until: desktop) {
-			max-width: 100%;
-			padding: 0;
-			margin: 0;
-		}
-
-		@include mq($from: leftCol) {
-			max-width: 60rem;
-		}
-
-		.component-header-topnav {
-			@include mq($until: tablet) {
-				justify-content: space-between;
-			}
-
-			@include mq($from: tablet, $until: desktop) {
-				justify-content: flex-end;
-			}
-
-			.component-header-topnav__utility {
-				display: none;
-			}
-
-			.component-header-topnav__checkout {
-				display: flex;
-				flex: 0 0 490px;
-				color: gu-colour(neutral-100);
-				@include gu-fontset-body-sans;
-
-				@include mq($until: tablet) {
-					flex: none;
-					border-right: none;
-				}
-
-				.component-header-topnav--checkout-text {
-					border-top: 1px solid gu-colour(brand-pastel);
-					border-left: 1px solid gu-colour(brand-pastel);
-					padding: $gu-v-spacing $gu-h-spacing;
-					width: 100%;
-					align-self: flex-end;
-
-					:nth-child(2) {
-						display: inline-block;
-						vertical-align: top;
-					}
-
-					@include mq($until: tablet) {
-						border-left: none;
-						border-top: none;
-						padding-left: $gu-h-spacing * 0.25;
-					}
-				}
-
-				@include mq($from: tablet, $until: desktop) {
-					display: none;
-				}
-
-				@include mq($from: leftCol) {
-					flex: 0 0 650px;
-				}
-			}
-		}
-
-		.component-header-topnav-logo {
-			flex: 0 1 auto;
-
-			@include mq($from: desktop) {
-				margin-right: -30px;
-			}
-		}
-	}
-
-	.component-header-topnav-logo {
-		@include mq($from: desktop) {
-			border-left: 1px solid gu-colour(brand-pastel);
-		}
-		padding-right: $gu-h-spacing * 0.5;
-		padding-top: $gu-v-spacing * 0.5;
-	}
-}
-
-.component-header-checkout--row {
-	width: 100%;
-	color: gu-colour(neutral-100);
-	@include gu-fontset-body-sans;
-	padding: $gu-v-spacing;
-	border-top: 1px solid gu-colour(brand-pastel);
-
-	@include mq($from: desktop) {
-		display: none;
-	}
-
-	@include mq($until: tablet) {
-		display: none;
 	}
 }
 
