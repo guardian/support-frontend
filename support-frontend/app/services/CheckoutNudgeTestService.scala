@@ -13,8 +13,10 @@ trait CheckoutNudgeTestService {
 
 /** A service for polling DynamoDB for checkout nudge tests config
   */
-class CheckoutNudgeTestServiceImpl(stage: Stage)(implicit ec: ExecutionContext, system: ActorSystem)
-    extends ChannelTestService[CheckoutNudgeTest](
+class CheckoutNudgeTestServiceImpl(stage: Stage)(implicit
+    ec: ExecutionContext,
+    system: ActorSystem,
+) extends ChannelTestService[CheckoutNudgeTest](
       stage,
       ChannelTestConfig(
         channelName = "CheckoutNudge",
@@ -22,8 +24,4 @@ class CheckoutNudgeTestServiceImpl(stage: Stage)(implicit ec: ExecutionContext, 
         errorMetric = getCheckoutNudgeTestsError,
       ),
     )
-    with CheckoutNudgeTestService {
-
-  override protected def postProcess(tests: List[CheckoutNudgeTest]): List[CheckoutNudgeTest] =
-    tests.filter(_.status == Status.Live)
-}
+    with CheckoutNudgeTestService {}

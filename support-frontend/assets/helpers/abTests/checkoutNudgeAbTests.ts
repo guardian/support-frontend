@@ -93,14 +93,16 @@ export function getCheckoutNudgeParticipations(
 		}
 	}
 	// No participation in session storage, assign user to a test + variant
-	const test = tests.find((test) => {
-		return (
-			countryGroupMatches(
-				test.regionTargeting?.targetedCountryGroups,
-				countryGroupId,
-			) && productMatches(test, path, queryString)
-		);
-	});
+	const test = tests
+		.filter((test) => test.status === 'Live')
+		.find((test) => {
+			return (
+				countryGroupMatches(
+					test.regionTargeting?.targetedCountryGroups,
+					countryGroupId,
+				) && productMatches(test, path, queryString)
+			);
+		});
 
 	if (!test) {
 		return undefined;

@@ -45,7 +45,9 @@ abstract class ChannelTestService[T: Decoder](
   private val credentialsProvider = AwsCredentialsProviderChain.builder
     .credentialsProviders(
       ProfileCredentialsProvider.builder.profileName(ProfileName).build,
-      InstanceProfileCredentialsProvider.builder.asyncCredentialUpdateEnabled(false).build,
+      InstanceProfileCredentialsProvider.builder
+        .asyncCredentialUpdateEnabled(false)
+        .build,
       EnvironmentVariableCredentialsProvider.create(),
     )
     .build
@@ -57,6 +59,7 @@ abstract class ChannelTestService[T: Decoder](
 
   private val tableName = stage match {
     case Stages.PROD => "support-admin-console-channel-tests-PROD"
+    case Stages.DEV => "support-admin-console-channel-tests-DEV"
     case _ => "support-admin-console-channel-tests-CODE"
   }
 
@@ -68,7 +71,9 @@ abstract class ChannelTestService[T: Decoder](
     val condition = Condition
       .builder()
       .comparisonOperator(ComparisonOperator.EQ)
-      .attributeValueList(AttributeValue.builder().s(config.channelName).build())
+      .attributeValueList(
+        AttributeValue.builder().s(config.channelName).build(),
+      )
       .build()
 
     val query = QueryRequest
@@ -88,8 +93,12 @@ abstract class ChannelTestService[T: Decoder](
           }
           .map {
             case err @ Left(msg) =>
-              AwsCloudWatchMetricPut(cloudwatchClient)(config.errorMetric(stage))
-              logger.error(s"Could not decode ${config.testTypeName} config: $msg")
+              AwsCloudWatchMetricPut(cloudwatchClient)(
+                config.errorMetric(stage),
+              )
+              logger.error(
+                s"Could not decode ${config.testTypeName} config: $msg",
+              )
               err
             case ok @ Right(_) => ok
           }
@@ -107,7 +116,9 @@ abstract class ChannelTestService[T: Decoder](
       }
       .recover { case NonFatal(error) =>
         AwsCloudWatchMetricPut(cloudwatchClient)(config.errorMetric(stage))
-        logger.error(s"Error fetching ${config.testTypeName} from DynamoDB: ${error.getMessage}")
+        logger.error(
+          s"Error fetching ${config.testTypeName} from DynamoDB: ${error.getMessage}",
+        )
         Nil
       }
   })
