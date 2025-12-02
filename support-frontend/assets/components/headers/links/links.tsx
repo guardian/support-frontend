@@ -91,17 +91,11 @@ function internationalisationID(
 	return null;
 }
 
-function getActiveLinkClassModifiers(
-	urlWithoutParams: string,
-	href: string,
-): string | null {
-	if (
+function isActiveLink(urlWithoutParams: string, href: string): boolean {
+	return (
 		urlWithoutParams.endsWith(href) ||
 		urlWithoutParams.endsWith(`${href}/delivery`)
-	) {
-		return 'active';
-	}
-	return null;
+	);
 }
 
 // Export
@@ -165,9 +159,7 @@ function Links({
 							<li
 								css={[
 									linksListItem,
-									getActiveLinkClassModifiers(urlWithoutParams, href)
-										? linksListItemActive
-										: css``,
+									isActiveLink(urlWithoutParams, href) && linksListItemActive,
 									additionalStyles,
 								]}
 							>
