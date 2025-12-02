@@ -12,11 +12,11 @@ import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider
 
 @IntegrationTest
 class IdealPostcodesServiceSpec extends AsyncFlatSpec with Matchers {
-  private val parameterStoreConfig = SSMConfigurationLocation(s"/support/frontend/CODE", "eu-west-1").load(
+  private lazy val parameterStoreConfig = SSMConfigurationLocation(s"/support/frontend/CODE", "eu-west-1").load(
     ProfileCredentialsProvider.builder.profileName(ProfileName).build,
   )
-  private val apiKey = parameterStoreConfig.getString("ideal-postcodes-api.key")
-  val service =
+  private lazy val apiKey = parameterStoreConfig.getString("ideal-postcodes-api.key")
+  private lazy val service =
     new IdealPostcodesService(IdealPostcodesConfig(apiKey), RequestRunners.futureRunner)
 
   "IdealPostcodesService" should "be able to find a postcode" in {
