@@ -22,6 +22,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
+import { isGuardianWeeklyGiftProduct } from 'helpers/productMatchers';
 import {
 	getBillingPeriodNoun,
 	getBillingPeriodTitle,
@@ -33,7 +34,6 @@ import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
-import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { FinePrint } from './finePrint';
 import { ManageMyAccountLink } from './manageMyAccountLink';
 

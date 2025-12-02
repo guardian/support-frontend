@@ -26,10 +26,10 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
+import { isGuardianWeeklyGiftProduct } from 'helpers/productMatchers';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
-import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { PriceSummary } from './priceSummary';

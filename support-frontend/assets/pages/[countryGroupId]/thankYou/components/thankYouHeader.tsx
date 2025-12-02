@@ -7,13 +7,13 @@ import type {
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
+import { isPrintProduct } from '../../../../helpers/productMatchers';
 import DirectDebitMessage from './DirectDebitMessage';
 import Heading from './heading';
 import LegitimateInterestMessage from './LegitimateInterestMessage';
 import ObserverMessage from './ObserverMessage';
 import ProductCatalogMessage from './ProductCatalogMessage';
 import StartDateMessage from './StartDateMessage';
-import { isPrintProduct } from './utils/productMatchers';
 
 const header = css`
 	background: white;

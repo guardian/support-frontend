@@ -16,8 +16,8 @@ import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
+import ThankYouFooter from 'pages/[countryGroupId]/thankYou/components/thankYouFooter';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
-import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 
 const secureTransactionIndicator = css`
 	margin-bottom: ${space[3]}px;

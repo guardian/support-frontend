@@ -1,8 +1,8 @@
+import HighlightText from 'components/HighlightText';
 import SvgSquaresHeroDesktop from 'components/svgs/squaresHeroDesktop';
 import SvgSquaresHeroMobile from 'components/svgs/squaresHeroMobile';
 import SvgSquaresHeroTablet from 'components/svgs/squaresHeroTablet';
 import 'components/heading/heading';
-import HighlightText from 'pages/supporter-plus-thank-you/components/thankYouHeader/HighlightText';
 
 function SquaresIntroduction({
 	headings,

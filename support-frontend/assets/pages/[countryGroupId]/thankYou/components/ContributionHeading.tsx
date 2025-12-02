@@ -5,7 +5,7 @@ import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import HighlightText from './HighlightText';
+import HighlightText from '../../../../components/HighlightText';
 
 const headerTitleText = css`
 	${titlepiece42};
