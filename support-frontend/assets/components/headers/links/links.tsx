@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -5,11 +6,17 @@ import {
 	GBPCountries,
 	NZDCountries,
 } from '@modules/internationalisation/countryGroup';
-import cx from 'classnames';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getPatronsLink } from 'helpers/urls/externalLinks';
 import { routes } from 'helpers/urls/routes';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
+import {
+	linksList,
+	linksListItem,
+	linksListItemActive,
+	linksListItemNavigate,
+	linksListItemTabletDisplay,
+	linksNav,
+} from './linksStyles';
 
 // types
 type HeaderNavLink = {
@@ -20,13 +27,14 @@ type HeaderNavLink = {
 	opensInNewWindow?: boolean;
 	include?: CountryGroupId[];
 	exclude?: CountryGroupId[];
-	additionalClasses?: string;
+	additionalStyles?: SerializedStyles;
 };
 
 type PropTypes = {
 	location: 'desktop' | 'mobile';
 	countryGroupId?: CountryGroupId;
 	getRef?: (element: Element | null) => void;
+	cssOverride?: SerializedStyles;
 };
 
 const links: HeaderNavLink[] = [
@@ -34,7 +42,7 @@ const links: HeaderNavLink[] = [
 		href: routes.recurringContribCheckout,
 		text: 'Contributions',
 		trackAs: 'contributions',
-		additionalClasses: 'component-header-links__li--show-on-tablet',
+		additionalStyles: linksListItemTabletDisplay,
 		internal: true,
 	},
 	{
@@ -83,30 +91,27 @@ function internationalisationID(
 	return null;
 }
 
-function getActiveLinkClassModifiers(
-	urlWithoutParams: string,
-	href: string,
-): string | null {
-	if (
+function isActiveLink(urlWithoutParams: string, href: string): boolean {
+	return (
 		urlWithoutParams.endsWith(href) ||
 		urlWithoutParams.endsWith(`${href}/delivery`)
-	) {
-		return 'active';
-	}
-	return null;
+	);
 }
 
 // Export
-function Links({ location, getRef, countryGroupId }: PropTypes): JSX.Element {
+function Links({
+	location,
+	getRef,
+	countryGroupId,
+	cssOverride,
+}: PropTypes): JSX.Element {
 	const { protocol, host, pathname } = window.location;
 	const urlWithoutParams = `${protocol}//${host}${pathname}`;
 	const internationalisationIDValue = internationalisationID(countryGroupId);
 	const isNotUk = internationalisationIDValue !== 'uk';
 	return (
-		<nav
-			className={classNameWithModifiers('component-header-links', [location])}
-		>
-			<ul className="component-header-links__ul" ref={getRef}>
+		<nav css={[linksNav, cssOverride]}>
+			<ul css={linksList} ref={getRef}>
 				{links
 					.filter(({ text }) => {
 						if (
@@ -150,21 +155,20 @@ function Links({ location, getRef, countryGroupId }: PropTypes): JSX.Element {
 						};
 					})
 					.map(
-						({ href, text, trackAs, opensInNewWindow, additionalClasses }) => (
+						({ href, text, trackAs, opensInNewWindow, additionalStyles }) => (
 							<li
-								className={cx(
-									classNameWithModifiers('component-header-links__li', [
-										getActiveLinkClassModifiers(urlWithoutParams, href),
-									]),
-									additionalClasses,
-								)}
+								css={[
+									linksListItem,
+									isActiveLink(urlWithoutParams, href) && linksListItemActive,
+									additionalStyles,
+								]}
 							>
 								<a
 									onClick={sendTrackingEventsOnClick({
 										id: ['header-link', trackAs, location].join(' - '),
 										componentType: 'ACQUISITIONS_OTHER',
 									})}
-									className="component-header-links__link"
+									css={linksListItemNavigate}
 									href={href}
 									target={opensInNewWindow ? '_blank' : ''}
 								>
