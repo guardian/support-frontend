@@ -54,7 +54,10 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 	};
 	it('should return the correct benefits checklist for DigitalSubscription', () => {
 		expect(
-			getBenefitsChecklistFromLandingPageTool('DigitalSubscription', landingPageSettings),
+			getBenefitsChecklistFromLandingPageTool(
+				'DigitalSubscription',
+				landingPageSettings,
+			),
 		).toEqual([
 			{
 				isChecked: true,

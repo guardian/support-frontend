@@ -107,8 +107,7 @@ export function ThankYouComponent({
 	 * We should remove it for something more generic.
 	 */
 	const isTier =
-		productKey === 'Contribution' ||
-		productKey === 'SupporterPlus';
+		productKey === 'Contribution' || productKey === 'SupporterPlus';
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const isOneOff = billingPeriod === BillingPeriod.OneTime;
 
@@ -183,12 +182,14 @@ export function ThankYouComponent({
 	const getBenefits = (): BenefitsCheckListData[] => {
 		// Three Tier products get their config from the Landing Page tool
 		if (isTier) {
-			return (
-				landingPageSettings.products[productKey]?.benefits.map((benefit) => ({
-					isChecked: true,
-					text: benefit.copy,
-				})) ?? []
-			);
+			const product = landingPageSettings.products[productKey];
+			if (product === undefined) {
+				return [];
+			}
+			return product.benefits.map((benefit) => ({
+				isChecked: true,
+				text: benefit.copy,
+			}));
 		}
 		if (isPremiumDigital) {
 			return getPremiumDigitalAllBenefits(countryGroupId);
