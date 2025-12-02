@@ -1,9 +1,28 @@
-// The main guardian logo.
+import { css } from '@emotion/react';
+import { from } from '@guardian/source/foundations';
+
+const guardianLogoStyle = css`
+	display: block;
+	float: right;
+	width: auto;
+	margin-top: 5px;
+	margin-bottom: 18px;
+	height: 48px;
+	${from.mobileLandscape} {
+		height: 56px;
+	}
+	${from.tablet} {
+		height: 72px;
+	}
+	${from.desktop} {
+		height: 95px;
+	}
+`;
 
 export default function SvgGuardianLogo() {
 	return (
 		<svg
-			className="svg-guardian-logo"
+			css={guardianLogoStyle}
 			width="295.75px"
 			height="95px"
 			xmlns="http://www.w3.org/2000/svg"
