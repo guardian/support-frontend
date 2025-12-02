@@ -30,16 +30,10 @@ export function priceWithCurrency(
 }
 
 export function firstPayment(paymentSchedule: PaymentSchedule): Payment {
-	if (
-		paymentSchedule.payments.length === 0 ||
-		paymentSchedule.payments[0] === undefined
-	) {
-		throw new Error('Payment schedule has no payments');
+	if (isNonEmpty(paymentSchedule.payments)) {
+		return earliestPayment(paymentSchedule.payments);
 	}
-	return paymentSchedule.payments.reduce<Payment>(
-		(min, payment) => (payment.date < min.date ? payment : min),
-		paymentSchedule.payments[0],
-	);
+	throw new Error('Payment schedule has no payments');
 }
 
 // Helper that asserts a non-empty array of payments and returns the earliest one
