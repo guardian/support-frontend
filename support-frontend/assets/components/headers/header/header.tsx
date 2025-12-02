@@ -1,6 +1,7 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import Links from '../links/links';
+import { linksNavHide } from '../links/linksStyles';
 import TopNav from './headerTopNav';
 import MobileMenuToggler from './mobileMenuToggler';
 import './header.scss';
@@ -28,7 +29,11 @@ export default function Header({ utility, countryGroupId }: HeaderProps) {
 					/>
 				</div>
 				<div className="component-header__row">
-					<Links countryGroupId={countryGroupId} location="desktop" />
+					<Links
+						countryGroupId={countryGroupId}
+						location="desktop"
+						cssOverride={linksNavHide}
+					/>
 				</div>
 			</div>
 		</header>
