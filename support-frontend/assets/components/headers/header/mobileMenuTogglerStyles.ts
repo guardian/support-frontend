@@ -7,7 +7,7 @@ export const mobileMenuContainer = css`
 		display: block;
 	}
 
-	button {
+	> button {
 		margin-left: 5px;
 		margin-top: 22px;
 		${from.mobileLandscape} {
