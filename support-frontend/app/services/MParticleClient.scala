@@ -8,6 +8,7 @@ import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
 import org.joda.time.DateTime
+import services.VersionedCache.Versioned
 
 import java.util.concurrent.atomic.AtomicReference
 import scala.concurrent.duration._
@@ -54,7 +55,7 @@ case class ProfileResponse(
 case class MParticleError(message: String) extends Throwable(message)
 
 object MParticleClient {
-  case class VersionedToken(token: MParticleAccessToken, version: Int)
+  case class TokenWithExpiry(token: MParticleAccessToken, expiresAt: DateTime)
 
   implicit val oauthTokenRequestEncoder: Encoder[OAuthTokenRequest] = deriveEncoder
   implicit val mParticleAccessTokenDecoder: Decoder[MParticleAccessToken] =
@@ -75,15 +76,12 @@ class MParticleAuthClient(
 
   import MParticleClient._
 
-  private case class CachedToken(token: MParticleAccessToken, expiresAt: DateTime)
-
   /** Sometimes the token becomes invalid unexpectedly, and mparticle returns 401s for that token. When this happens we
     * need to refresh the token immediately. We version each token so that we can keep track of which token has become
     * invalid. This is necessary to prevent multiple token refreshes when we have concurrent requests using the invalid
     * token.
     */
-  private case class VersionedFutureToken(cachedToken: Future[CachedToken], version: Int)
-  private val tokenCache = new AtomicReference[VersionedFutureToken](getVersionedCachedToken(1))
+  private val tokenCache = new VersionedCache(getTokenWithExpiry)
   private val safetyMargin = 2.minutes
 
   // format: off
@@ -96,43 +94,32 @@ class MParticleAuthClient(
     *   2. the current version matches the provided maybeInvalidVersion
     */
   // format: on
-  def getCachedAccessToken(maybeInvalidVersion: Option[Int] = None): Future[VersionedToken] = {
+  def getCachedAccessToken(maybeInvalidVersion: Option[Int]): Future[Versioned[TokenWithExpiry]] = {
     val now = DateTime.now()
+    val currentCacheValue = tokenCache.getCurrentVersion()
 
-    val VersionedFutureToken(futureCachedToken, version) = tokenCache.get()
-    futureCachedToken.flatMap { cachedToken =>
-      val isFresh = cachedToken.expiresAt.isAfter(now)
-      val isValidVersion = !maybeInvalidVersion.contains(version)
-      if (isValidVersion && isFresh) {
-        // We can use the existing cached token
-        Future.successful(VersionedToken(cachedToken.token, version))
-      } else {
-        // We cannot use the existing cached token, attempt a refresh
-        tokenCache.updateAndGet { latest =>
-          // Ensure another thread hasn't already triggered a refresh by checking the version hasn't changed
-          if (version == latest.version) {
-            getVersionedCachedToken(version + 1)
-          } else {
-            // version has since updated, no need to refresh
-            latest
-          }
-        } match {
-          case VersionedFutureToken(futureToken, version) =>
-            futureToken.map(cachedToken => VersionedToken(cachedToken.token, version))
+    maybeInvalidVersion match {
+      case Some(invalidVersion) if currentCacheValue.version != invalidVersion =>
+        Future.successful(currentCacheValue) // We can use the existing cached token
+      case _ =>
+        currentCacheValue.cachedToken.map {
+          case TokenWithExpiry(_, expiresAt) if expiresAt.isAfter(now) =>
+            currentCacheValue // We can use the existing cached token
+          case _ =>
+            tokenCache.getNextVersion(
+              currentCacheValue.version,
+            ) // We cannot use the existing cached token, attempt a refresh
         }
-      }
     }
   }
 
-  private def getVersionedCachedToken(version: Int): VersionedFutureToken = {
-    val future = getAccessToken().map { case (accessToken, expiresInSeconds) =>
+  private def getTokenWithExpiry(): Future[TokenWithExpiry] =
+    getAccessToken().map { case (accessToken: MParticleAccessToken, expiresInSeconds: Int) =>
       val now = DateTime.now()
       val actualExpiryTime = now.plusSeconds(expiresInSeconds)
       val safeExpiryTime = actualExpiryTime.minus(safetyMargin.toMillis)
-      CachedToken(accessToken, safeExpiryTime)
+      TokenWithExpiry(accessToken, safeExpiryTime)
     }
-    VersionedFutureToken(future, version)
-  }
 
   private def getAccessToken(): Future[(MParticleAccessToken, Int)] = {
     val request = OAuthTokenRequest(
@@ -188,12 +175,7 @@ class MParticleClient(
   override val wsUrl: String = mparticleConfig.apiUrl
   override val verboseLogging: Boolean = false
 
-  def getUserProfile(identityId: String): Future[MParticleUserProfile] = for {
-    accessToken <- authClient.getCachedAccessToken()
-    response <- callProfileAPI(identityId, accessToken)
-  } yield parseUserProfile(response)
-
-  private def callProfileAPI(identityId: String, accessToken: VersionedToken): Future[ProfileResponse] = {
+  def getUserProfile(identityId: String): Future[MParticleUserProfile] = with401Retry { accessToken =>
     val fields = "audience_memberships"
     val endpoint =
       s"userprofile/v1/resolve/${mparticleConfig.orgId}/${mparticleConfig.accountId}/${mparticleConfig.workspaceId}"
@@ -203,26 +185,59 @@ class MParticleClient(
       identity = Identity(`type` = "customer_id", value = identityId),
     )
 
-    def post() = postJson[ProfileResponse](
+    postJson[ProfileResponse](
       endpoint = endpoint,
       data = request.asJson,
-      headers = Map("Authorization" -> s"Bearer ${accessToken.token.token}"),
+      headers = Map("Authorization" -> s"Bearer ${accessToken.token}"),
       params = Map("fields" -> fields),
-    )
+    ).map(parseUserProfile)
+  }
 
-    post().recoverWith { case WebServiceClientError(CodeBody("401", _)) =>
-      // Unauthorized - refresh the bearer token now instead of waiting for next refresh, and try again
-      logger.info("Received 401 from mParticle, invalidating token and retrying")
-      for {
-        _ <- authClient.getCachedAccessToken(Some(accessToken.version))
-        response <- post()
-      } yield response
-    }
+  private def with401Retry[R](getResponse: MParticleAccessToken => Future[R]): Future[R] = {
+    for {
+      versionAndFutureToken <- authClient.getCachedAccessToken(None)
+      accessToken <- versionAndFutureToken.cachedToken
+      response <- getResponse(accessToken.token).recoverWith { case WebServiceClientError(CodeBody("401", _)) =>
+        // Unauthorized - refresh the bearer token now instead of waiting for next refresh, and try again
+        logger.info("Received 401 from mParticle, invalidating token and retrying")
+        for {
+          eventualToken <- authClient.getCachedAccessToken(Some(versionAndFutureToken.version))
+          nextAccessToken <- eventualToken.cachedToken
+          response <- getResponse(nextAccessToken.token)
+        } yield response
+      }
+    } yield response
   }
 
   private def parseUserProfile(profileResponse: ProfileResponse): MParticleUserProfile = {
     val hasMobileAppDownloaded = profileResponse.audience_memberships.exists(_.audience_id == 22581)
     val hasFeastMobileAppDownloaded = profileResponse.audience_memberships.exists(_.audience_id == 22582)
     MParticleUserProfile(hasMobileAppDownloaded, hasFeastMobileAppDownloaded)
+  }
+}
+
+object VersionedCache {
+
+  case class Versioned[A](cachedToken: Future[A], version: Int)
+
+}
+class VersionedCache[A](fn: () => Future[A]) {
+
+  private val cache: AtomicReference[Versioned[A]] = new AtomicReference[Versioned[A]](Versioned(fn(), 1))
+
+  def getCurrentVersion(): Versioned[A] = cache.get()
+
+  def getNextVersion(invalidVersion: Int): Versioned[A] = {
+    val promise = Promise[A]()
+    val versionedFutureToken = cache.updateAndGet { latest =>
+      // Ensure another thread hasn't already triggered a refresh by checking the version hasn't changed
+      if (invalidVersion != latest.version) latest // version has since updated, no need to refresh
+      else Versioned(promise.future, invalidVersion + 1)
+    }
+    if (versionedFutureToken.cachedToken == promise.future) {
+      // we won - so start the call
+      promise.completeWith(fn())
+    }
+    versionedFutureToken
   }
 }
