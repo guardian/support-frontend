@@ -2,7 +2,7 @@ package services
 
 import com.gu.monitoring.SafeLogging
 import com.gu.okhttp.RequestRunners.FutureHttpClient
-import com.gu.rest.WebServiceHelper
+import com.gu.rest.{CodeBody, WebServiceClientError, WebServiceHelper}
 import config.{MparticleConfig, MparticleConfigProvider}
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
@@ -11,7 +11,7 @@ import org.joda.time.DateTime
 
 import java.util.concurrent.atomic.AtomicReference
 import scala.concurrent.duration._
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future, Promise}
 
 case class MParticleUserProfile(
     hasMobileAppDownloaded: Boolean,
@@ -75,6 +75,8 @@ class MParticleAuthClient(
 
   private case class CachedToken(token: String, expiresAt: DateTime)
   private val tokenCache = new AtomicReference[Option[CachedToken]](None)
+  // The pendingRefresh value prevents concurrent token refresh attempts
+  private val pendingRefresh = new AtomicReference[Option[Promise[MParticleAccessToken]]](None)
   private val safetyMargin = 2.minutes
 
   def getCachedAccessToken(): Future[MParticleAccessToken] = {
@@ -84,16 +86,38 @@ class MParticleAuthClient(
       case Some(cachedToken) if cachedToken.expiresAt.isAfter(now) =>
         Future.successful(MParticleAccessToken(cachedToken.token))
       case _ =>
-        getAccessToken().map { case (accessToken, expiresInSeconds) =>
-          val actualExpiryTime = now.plusSeconds(expiresInSeconds)
-          val safeExpiryTime = actualExpiryTime.minus(safetyMargin.toMillis)
-          tokenCache.set(Some(CachedToken(accessToken.token, safeExpiryTime)))
-          logger.info(
-            s"Cached new mParticle access token, expires at: $safeExpiryTime (${safetyMargin.toSeconds}s safety margin)",
-          )
-          accessToken
+        // Only perform token refresh if there isn't a pending refresh
+        val promise = Promise[MParticleAccessToken]()
+        if (pendingRefresh.compareAndSet(None, Some(promise))) {
+          getAccessToken()
+            .map { case (accessToken, expiresInSeconds) =>
+              val actualExpiryTime = now.plusSeconds(expiresInSeconds)
+              val safeExpiryTime = actualExpiryTime.minus(safetyMargin.toMillis)
+              tokenCache.set(Some(CachedToken(accessToken.token, safeExpiryTime)))
+              logger.info(
+                s"Cached new mParticle access token, expires at: $safeExpiryTime (${safetyMargin.toSeconds}s safety margin)",
+              )
+              accessToken
+            }
+            .onComplete { result =>
+              pendingRefresh.set(None)
+              promise.complete(result)
+            }
+
+          promise.future
+        } else {
+          // Wait for pending refresh
+          pendingRefresh.get() match {
+            case Some(existingPromise) => existingPromise.future
+            case None => getCachedAccessToken()
+          }
         }
     }
+  }
+
+  def invalidateAndRefreshToken(): Future[MParticleAccessToken] = {
+    tokenCache.set(None)
+    getCachedAccessToken()
   }
 
   private def getAccessToken(): Future[(MParticleAccessToken, Int)] = {
@@ -165,12 +189,21 @@ class MParticleClient(
       identity = Identity(`type` = "customer_id", value = identityId),
     )
 
-    postJson[ProfileResponse](
+    def post() = postJson[ProfileResponse](
       endpoint = endpoint,
       data = request.asJson,
       headers = Map("Authorization" -> s"Bearer ${accessToken.token}"),
       params = Map("fields" -> fields),
     )
+
+    post().recoverWith { case WebServiceClientError(CodeBody("401", _)) =>
+      // Unauthorized - refresh the bearer token now instead of waiting for next refresh, and try again
+      logger.info("Received 401 from mParticle, invalidating token and retrying")
+      for {
+        _ <- authClient.invalidateAndRefreshToken()
+        response <- post()
+      } yield response
+    }
   }
 
   private def parseUserProfile(profileResponse: ProfileResponse): MParticleUserProfile = {
