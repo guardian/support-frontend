@@ -32,6 +32,7 @@ import {
 import { getUser } from 'helpers/user/user';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
+import { isPaperPlusSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import {
 	isGuardianWeeklyProduct,
@@ -42,7 +43,10 @@ import ThankYouModules from '../../../components/thankYou/thankyouModules';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
-import { getPremiumDigitalAllBenefits } from '../checkout/helpers/benefitsChecklist';
+import {
+	getPaperPlusDigitalBenefits,
+	getPremiumDigitalAllBenefits,
+} from '../checkout/helpers/benefitsChecklist';
 import {
 	getReturnAddress,
 	getThankYouOrder,
@@ -153,6 +157,7 @@ export function ThankYouComponent({
 		currencyKey,
 	);
 
+	const isPaperPlus = isPaperPlusSub(productKey, ratePlanKey);
 	const isPrint = isPrintProduct(productKey);
 	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
 
@@ -199,6 +204,9 @@ export function ThankYouComponent({
 		}
 		if (isPremiumDigital) {
 			return getPremiumDigitalAllBenefits(countryGroupId);
+		}
+		if (isPaperPlus || !!observerPrint) {
+			return getPaperPlusDigitalBenefits(productKey, ratePlanKey) ?? [];
 		}
 		return [];
 	};
