@@ -5,44 +5,45 @@ import com.gu.rest.{CodeBody, WebServiceClientError}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait TokenFetcher[X, V] {
-  def isCacheRecordValid(record: X): Boolean
-  def fetchNewCacheRecord(): Future[X]
-  def extractTokenFromCacheRecord(record: X): V
+trait TokenFetcher[RECORD, TOKEN] {
+  def isCacheRecordValid(record: RECORD): Boolean
+  def fetchNewCacheRecord(): Future[RECORD]
+  def extractTokenFromCacheRecord(record: RECORD): TOKEN
 }
 
-trait ValidAuthTokenProvider[V] {
-  def withToken[R](getResponse: V => Future[R])(implicit ec: ExecutionContext): Future[R]
+trait ValidAuthTokenProvider[TOKEN] {
+  def withToken[RESULT](getResponse: TOKEN => Future[RESULT])(implicit ec: ExecutionContext): Future[RESULT]
 }
 
-private class ValidAuthTokenProviderImpl[T, V](tokenProvider: TokenFetcher[T, V])
-    extends ValidAuthTokenProvider[V]
+private class ValidAuthTokenProviderImpl[RECORD, TOKEN](tokenProvider: TokenFetcher[RECORD, TOKEN])
+    extends ValidAuthTokenProvider[TOKEN]
     with SafeLogging {
 
-  private val tokenCache: VersionedCache[T] = new VersionedCache(tokenProvider.fetchNewCacheRecord)
+  private val tokenCache: VersionedCache[RECORD] = new VersionedCache(tokenProvider.fetchNewCacheRecord)
 
   private def getToken(maybeInvalidVersion: Option[Int])(implicit ec: ExecutionContext) =
     tokenCache.getUsableValue(maybeInvalidVersion, tokenProvider.isCacheRecordValid)
 
-  def withToken[R](getResponse: V => Future[R])(implicit ec: ExecutionContext): Future[R] = {
+  def withToken[RESULT](getResponse: TOKEN => Future[RESULT])(implicit ec: ExecutionContext): Future[RESULT] = {
     for {
       versionAndFutureToken <- getToken(None)
-      accessToken <- versionAndFutureToken.eventualA
-      response <- getResponse(tokenProvider.extractTokenFromCacheRecord(accessToken)).recoverWith {
-        case WebServiceClientError(CodeBody("401", _)) =>
-          // Unauthorized - refresh the bearer token now instead of waiting for next refresh, and try again
-          logger.info("Received 401 from mParticle, invalidating token and retrying")
-          for {
-            eventualToken <- getToken(Some(versionAndFutureToken.version))
-            nextAccessToken <- eventualToken.eventualA
-            response <- getResponse(tokenProvider.extractTokenFromCacheRecord(nextAccessToken))
-          } yield response
+      accessToken <- versionAndFutureToken.eventualRecord
+      token = tokenProvider.extractTokenFromCacheRecord(accessToken)
+      response <- getResponse(token).recoverWith { case WebServiceClientError(CodeBody("401", _)) =>
+        // Unauthorized - refresh the bearer token now instead of waiting for next refresh, and try again
+        logger.info("Received 401 from mParticle, invalidating token and retrying")
+        for {
+          eventualToken <- getToken(Some(versionAndFutureToken.version))
+          nextAccessToken <- eventualToken.eventualRecord
+          nextToken = tokenProvider.extractTokenFromCacheRecord(nextAccessToken)
+          response <- getResponse(nextToken)
+        } yield response
       }
     } yield response
   }
 }
 
 object ValidAuthTokenProvider {
-  def apply[T, V](tokenProvider: TokenFetcher[T, V]): ValidAuthTokenProvider[V] =
+  def apply[RECORD, TOKEN](tokenProvider: TokenFetcher[RECORD, TOKEN]): ValidAuthTokenProvider[TOKEN] =
     new ValidAuthTokenProviderImpl(tokenProvider)
 }
