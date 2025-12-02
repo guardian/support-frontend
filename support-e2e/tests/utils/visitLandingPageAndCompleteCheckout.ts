@@ -34,11 +34,11 @@ export const visitLandingPageAndCompleteCheckout = async (
 	await landingPageToCheckoutFn(page);
 
 	// Wait for the checkout page to load
-	await expect(
-		page.getByRole('heading', { name: 'Your subscription' }),
-	).toBeVisible({
-		timeout: 100000,
-	});
+	await expect(page.getByRole('heading', { name: 'Your support' })).toBeVisible(
+		{
+			timeout: 100000,
+		},
+	);
 
 	await completeGenericCheckout(page, {
 		product,

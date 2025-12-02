@@ -208,7 +208,7 @@ export function ContributionsOrderSummary({
 	return (
 		<div css={componentStyles}>
 			<div css={[summaryRow, rowSpacing, headingRow]}>
-				<h2 css={headingCss}>Your subscription</h2>
+				<h2 css={headingCss}>Your support</h2>
 				{headerButton}
 			</div>
 			<hr css={hrCss} />
