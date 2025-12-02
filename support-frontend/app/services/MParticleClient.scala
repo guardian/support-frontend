@@ -158,6 +158,23 @@ class MParticleAuthClient(
       }
     }
   }
+
+  def with401Retry[R](getResponse: MParticleAccessToken => Future[R]): Future[R] = {
+    for {
+      versionAndFutureToken <- getCachedAccessToken(None)
+      accessToken <- versionAndFutureToken.cachedToken
+      response <- getResponse(accessToken.token).recoverWith { case WebServiceClientError(CodeBody("401", _)) =>
+        // Unauthorized - refresh the bearer token now instead of waiting for next refresh, and try again
+        logger.info("Received 401 from mParticle, invalidating token and retrying")
+        for {
+          eventualToken <- getCachedAccessToken(Some(versionAndFutureToken.version))
+          nextAccessToken <- eventualToken.cachedToken
+          response <- getResponse(nextAccessToken.token)
+        } yield response
+      }
+    } yield response
+  }
+
 }
 
 class MParticleClient(
@@ -175,7 +192,7 @@ class MParticleClient(
   override val wsUrl: String = mparticleConfig.apiUrl
   override val verboseLogging: Boolean = false
 
-  def getUserProfile(identityId: String): Future[MParticleUserProfile] = with401Retry { accessToken =>
+  def getUserProfile(identityId: String): Future[MParticleUserProfile] = authClient.with401Retry { accessToken =>
     val fields = "audience_memberships"
     val endpoint =
       s"userprofile/v1/resolve/${mparticleConfig.orgId}/${mparticleConfig.accountId}/${mparticleConfig.workspaceId}"
@@ -191,22 +208,6 @@ class MParticleClient(
       headers = Map("Authorization" -> s"Bearer ${accessToken.token}"),
       params = Map("fields" -> fields),
     ).map(parseUserProfile)
-  }
-
-  private def with401Retry[R](getResponse: MParticleAccessToken => Future[R]): Future[R] = {
-    for {
-      versionAndFutureToken <- authClient.getCachedAccessToken(None)
-      accessToken <- versionAndFutureToken.cachedToken
-      response <- getResponse(accessToken.token).recoverWith { case WebServiceClientError(CodeBody("401", _)) =>
-        // Unauthorized - refresh the bearer token now instead of waiting for next refresh, and try again
-        logger.info("Received 401 from mParticle, invalidating token and retrying")
-        for {
-          eventualToken <- authClient.getCachedAccessToken(Some(versionAndFutureToken.version))
-          nextAccessToken <- eventualToken.cachedToken
-          response <- getResponse(nextAccessToken.token)
-        } yield response
-      }
-    } yield response
   }
 
   private def parseUserProfile(profileResponse: ProfileResponse): MParticleUserProfile = {
