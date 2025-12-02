@@ -63,8 +63,8 @@ Default.args = {
 		{
 			isUserSelected: true,
 			price: 25,
-			product: 'TierThree',
-			...fallBackLandingPageSelection.products.TierThree,
+			product: 'DigitalSubscription',
+			...fallBackLandingPageSelection.products.DigitalSubscription,
 			promotion: {
 				discountedPrice: 16,
 				discount: {

@@ -91,21 +91,17 @@ export const getBenefitsChecklistFromLandingPageTool = (
 	if (productKey === 'Contribution') {
 		// Also show SupporterPlus benefits greyed out
 		return benefitsAsChecklist({
-			checked: landingPageSettings.products.Contribution.benefits,
-			unchecked: landingPageSettings.products.SupporterPlus.benefits,
+			checked: landingPageSettings.products.Contribution?.benefits ?? [],
+			unchecked: landingPageSettings.products.SupporterPlus?.benefits ?? [],
 		});
 	} else if (productKey === 'SupporterPlus') {
 		return benefitsAsChecklist({
-			checked: landingPageSettings.products.SupporterPlus.benefits,
+			checked: landingPageSettings.products.SupporterPlus?.benefits ?? [],
 			unchecked: [],
 		});
-	} else if (productKey === 'TierThree') {
-		// Also show SupporterPlus benefits
+	} else if (productKey === 'DigitalSubscription') {
 		return benefitsAsChecklist({
-			checked: [
-				...landingPageSettings.products.TierThree.benefits,
-				...landingPageSettings.products.SupporterPlus.benefits,
-			],
+			checked: landingPageSettings.products.DigitalSubscription?.benefits ?? [],
 			unchecked: [],
 		});
 	}

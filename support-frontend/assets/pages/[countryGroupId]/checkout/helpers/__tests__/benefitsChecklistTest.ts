@@ -8,18 +8,18 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 			subheading: 'TierThree subheading',
 		},
 		products: {
-			TierThree: {
-				title: 'TierThree title',
+			DigitalSubscription: {
+				title: 'DigitalSubscription title',
 				benefits: [
 					{
-						copy: 'TierThree benefit 1',
+						copy: 'DigitalSubscription benefit 1',
 					},
 					{
-						copy: 'TierThree benefit 2',
+						copy: 'DigitalSubscription benefit 2',
 					},
 				],
 				cta: {
-					copy: 'TierThree cta',
+					copy: 'DigitalSubscription cta',
 				},
 			},
 			SupporterPlus: {
@@ -52,25 +52,17 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 			},
 		},
 	};
-	it('should return the correct benefits checklist for TierThree', () => {
+	it('should return the correct benefits checklist for DigitalSubscription', () => {
 		expect(
-			getBenefitsChecklistFromLandingPageTool('TierThree', landingPageSettings),
+			getBenefitsChecklistFromLandingPageTool('DigitalSubscription', landingPageSettings),
 		).toEqual([
 			{
 				isChecked: true,
-				text: 'TierThree benefit 1',
+				text: 'DigitalSubscription benefit 1',
 			},
 			{
 				isChecked: true,
-				text: 'TierThree benefit 2',
-			},
-			{
-				isChecked: true,
-				text: 'SupporterPlus benefit 1',
-			},
-			{
-				isChecked: true,
-				text: 'SupporterPlus benefit 2',
+				text: 'DigitalSubscription benefit 2',
 			},
 		]);
 	});

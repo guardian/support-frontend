@@ -108,8 +108,7 @@ export function ThankYouComponent({
 	 */
 	const isTier =
 		productKey === 'Contribution' ||
-		productKey === 'SupporterPlus' ||
-		productKey === 'TierThree';
+		productKey === 'SupporterPlus';
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const isOneOff = billingPeriod === BillingPeriod.OneTime;
 
@@ -184,23 +183,12 @@ export function ThankYouComponent({
 	const getBenefits = (): BenefitsCheckListData[] => {
 		// Three Tier products get their config from the Landing Page tool
 		if (isTier) {
-			// Also show SupporterPlus benefits for TierThree
-			const tierThreeAdditionalBenefits =
-				productKey === 'TierThree'
-					? landingPageSettings.products.SupporterPlus.benefits.map(
-							(benefit) => ({
-								isChecked: true,
-								text: benefit.copy,
-							}),
-					  )
-					: [];
-			return [
-				...landingPageSettings.products[productKey].benefits.map((benefit) => ({
+			return (
+				landingPageSettings.products[productKey]?.benefits.map((benefit) => ({
 					isChecked: true,
 					text: benefit.copy,
-				})),
-				...tierThreeAdditionalBenefits,
-			];
+				})) ?? []
+			);
 		}
 		if (isPremiumDigital) {
 			return getPremiumDigitalAllBenefits(countryGroupId);

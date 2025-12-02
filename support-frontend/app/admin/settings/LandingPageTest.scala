@@ -86,9 +86,9 @@ object TickerSettings {
   implicit val tickerCodec: Codec[TickerSettings] = deriveCodec
 }
 case class Products(
-    Contribution: LandingPageProductDescription,
-    SupporterPlus: LandingPageProductDescription,
-    TierThree: LandingPageProductDescription,
+    Contribution: Option[LandingPageProductDescription],
+    SupporterPlus: Option[LandingPageProductDescription],
+    DigitalSubscription: Option[LandingPageProductDescription],
 )
 
 object Products {

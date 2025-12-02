@@ -65,8 +65,8 @@ export default function StudentHeader({
 	);
 
 	// In the UK on this page only, add an additional benefit to the list
-	const { benefits: configuredBenefits } =
-		landingPageVariant.products.SupporterPlus;
+	const { benefits: configuredBenefits } = landingPageVariant.products
+		.SupporterPlus ?? { benefits: [] };
 
 	const benefits =
 		supportRegionId === SupportRegionId.UK
