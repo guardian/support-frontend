@@ -1,8 +1,6 @@
 @use 'sass:math';
 
 @import '~stylesheets/gu-sass/gu-sass';
-@import '~components/headers/veggieBurgerButton/veggieBurgerButton.scss';
-@import '~components/headers/mobileMenu/mobileMenu.scss';
 
 $header-links-min-width: gu-span(12);
 
@@ -35,27 +33,6 @@ $header-links-min-width: gu-span(12);
 		}
 		@include mq($from: desktop) {
 			height: 95px;
-		}
-	}
-}
-
-.component-header-mobile-menu-toggler {
-	@include mq($until: tablet) {
-		display: block;
-	}
-	display: none;
-	[data-not-hydrated] & {
-		display: none;
-	}
-	& > .component-veggie-burger-button {
-		margin-left: $gu-h-spacing * 0.25;
-		/*aligned with the logo*/
-		margin-top: 22px;
-		@include mq($from: mobileLandscape) {
-			margin-top: 28px;
-		}
-		@include mq($from: tablet) {
-			margin-top: 40px;
 		}
 	}
 }
