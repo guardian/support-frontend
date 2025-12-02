@@ -76,10 +76,26 @@ class MParticleAuthClient(
   import MParticleClient._
 
   private case class CachedToken(token: MParticleAccessToken, expiresAt: DateTime)
+
+  /** Sometimes the token becomes invalid unexpectedly, and mparticle returns 401s for that token. When this happens we
+    * need to refresh the token immediately. We version each token so that we can keep track of which token has become
+    * invalid. This is necessary to prevent multiple token refreshes when we have concurrent requests using the invalid
+    * token.
+    */
   private case class VersionedFutureToken(cachedToken: Future[CachedToken], version: Int)
   private val tokenCache = new AtomicReference[VersionedFutureToken](getVersionedCachedToken(1))
   private val safetyMargin = 2.minutes
 
+  // format: off
+  /**
+    * Returns the cached token and its version. Optionally takes an existing invalid version number. This is provided if
+    * mparticle has returned a 401, indicating that that token is no longer valid.
+    *
+    * This function will attempt to refresh the token if either:
+    *   1. the token has expired (based on its expires_in value)
+    *   2. the current version matches the provided maybeInvalidVersion
+    */
+  // format: on
   def getCachedAccessToken(maybeInvalidVersion: Option[Int] = None): Future[VersionedToken] = {
     val now = DateTime.now()
 
@@ -88,14 +104,17 @@ class MParticleAuthClient(
       val isFresh = cachedToken.expiresAt.isAfter(now)
       val isValidVersion = !maybeInvalidVersion.contains(version)
       if (isValidVersion && isFresh) {
+        // We can use the existing cached token
         Future.successful(VersionedToken(cachedToken.token, version))
       } else {
-        tokenCache.updateAndGet { case v @ VersionedFutureToken(cachedToken, latestVersion) =>
-          if (version == latestVersion) {
+        // We cannot use the existing cached token, attempt a refresh
+        tokenCache.updateAndGet { latest =>
+          // Ensure another thread hasn't already triggered a refresh by checking the version hasn't changed
+          if (version == latest.version) {
             getVersionedCachedToken(version + 1)
           } else {
-            // version has already updated, return existing value
-            v
+            // version has since updated, no need to refresh
+            latest
           }
         } match {
           case VersionedFutureToken(futureToken, version) =>
