@@ -101,7 +101,10 @@ export const getBenefitsChecklistFromLandingPageTool = (
 		});
 	} else if (productKey === 'DigitalSubscription') {
 		return benefitsAsChecklist({
-			checked: landingPageSettings.products.DigitalSubscription?.benefits ?? [],
+			checked: [
+				...(landingPageSettings.products.DigitalSubscription?.benefits ?? []),
+				...(landingPageSettings.products.SupporterPlus?.benefits ?? []),
+			],
 			unchecked: [],
 		});
 	}
