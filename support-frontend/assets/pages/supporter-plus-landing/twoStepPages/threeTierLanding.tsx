@@ -446,10 +446,12 @@ export function ThreeTierLanding({
 	const tier3ProductDescription = {
 		title: settings.products.DigitalSubscription?.title ?? title,
 		titlePill: settings.products.DigitalSubscription?.titlePill ?? titlePill,
-		benefits: filterProductDescriptionBenefits(
-			productCatalogDescriptionPremiumDigital,
-			countryGroupId,
-		),
+		benefits:
+			settings.products.DigitalSubscription?.benefits ??
+			filterProductDescriptionBenefits(
+				productCatalogDescriptionPremiumDigital,
+				countryGroupId,
+			),
 		cta: settings.products.DigitalSubscription?.cta ?? { copy: 'Support' },
 	};
 	const tier3ProductPrice = allProductPrices.DigitalPack;

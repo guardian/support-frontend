@@ -47,6 +47,7 @@ case class LandingPageProductDescription(
     label: Option[Label] = None,
     benefits: List[ProductBenefit],
     cta: Cta,
+    titlePill: Option[String] = None,
 )
 
 case class Cta(
