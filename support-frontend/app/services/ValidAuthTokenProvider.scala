@@ -11,7 +11,13 @@ trait TokenFetcher[X, V] {
   def extractTokenFromCacheRecord(record: X): V
 }
 
-class ValidAuthTokenProvider[T, V](tokenProvider: TokenFetcher[T, V]) extends SafeLogging {
+trait ValidAuthTokenProvider[V] {
+  def withToken[R](getResponse: V => Future[R])(implicit ec: ExecutionContext): Future[R]
+}
+
+private class ValidAuthTokenProviderImpl[T, V](tokenProvider: TokenFetcher[T, V])
+    extends ValidAuthTokenProvider[V]
+    with SafeLogging {
 
   private val tokenCache: VersionedCache[T] = new VersionedCache(tokenProvider.fetchNewCacheRecord)
 
@@ -34,5 +40,9 @@ class ValidAuthTokenProvider[T, V](tokenProvider: TokenFetcher[T, V]) extends Sa
       }
     } yield response
   }
+}
 
+object ValidAuthTokenProvider {
+  def apply[T, V](tokenProvider: TokenFetcher[T, V]): ValidAuthTokenProvider[V] =
+    new ValidAuthTokenProviderImpl(tokenProvider)
 }

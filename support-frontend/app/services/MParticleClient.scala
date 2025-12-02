@@ -143,9 +143,9 @@ class MParticleClient(
 
   private lazy val mparticleConfig: MparticleConfig = mparticleConfigProvider.get()
 
-  private lazy val validAuthTokenProvider = {
+  private lazy val validAuthTokenProvider: ValidAuthTokenProvider[MParticleAccessToken] = {
     val authClient = new MParticleAuthClient(httpClient, mparticleConfig)
-    new ValidAuthTokenProvider(authClient)
+    ValidAuthTokenProvider(authClient)
   }
 
   override val wsUrl: String = mparticleConfig.apiUrl
