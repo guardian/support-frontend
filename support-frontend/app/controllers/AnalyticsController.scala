@@ -10,7 +10,7 @@ import io.circe.syntax._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import play.api.mvc.Security.AuthenticatedRequest
-import services.{MParticleClient, MParticleUserProfile}
+import services.{MParticleClient, MParticleProfileClient, MParticleUserProfile}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -55,7 +55,7 @@ class AnalyticsController(
   def getAnalyticsUserProfile(): Action[AnyContent] =
     (MaybeAuthenticatedAction andThen RequireAuthenticatedUser).async { implicit request =>
       for {
-        userProfile <- mparticleClient.getUserProfile(request.user.id).recover { case ex =>
+        userProfile <- new MParticleProfileClient(mparticleClient).getUserProfile(request.user.id).recover { case ex =>
           logger.error(scrub"Failed to get mParticle user profile: ${ex.getMessage}", ex)
           MParticleUserProfile(hasMobileAppDownloaded = false, hasFeastMobileAppDownloaded = false)
         }

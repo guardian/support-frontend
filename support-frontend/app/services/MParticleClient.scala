@@ -6,12 +6,14 @@ import com.gu.rest.WebServiceHelper
 import config.{MparticleConfig, MparticleConfigProvider}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
-import io.circe.{Decoder, Encoder}
+import io.circe.{Decoder, Encoder, Json}
 import org.joda.time.DateTime
 import services.MParticleClient.TokenCacheRecord
 
+import scala.collection.immutable.Map.empty
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
+import scala.reflect.ClassTag
 
 case class MParticleUserProfile(
     hasMobileAppDownloaded: Boolean,
@@ -33,24 +35,6 @@ case class OAuthTokenResponse(
     expires_in: Int,
 )
 
-case class Identity(
-    `type`: String,
-    value: String,
-)
-
-case class ProfileRequest(
-    environment_type: String,
-    identity: Identity,
-)
-
-case class AudienceMembership(
-    audience_id: Int,
-)
-
-case class ProfileResponse(
-    audience_memberships: List[AudienceMembership],
-)
-
 case class MParticleError(message: String) extends Throwable(message)
 
 object MParticleClient {
@@ -60,10 +44,6 @@ object MParticleClient {
   implicit val mParticleAccessTokenDecoder: Decoder[MParticleAccessToken] =
     Decoder[String].map(MParticleAccessToken.apply)
   implicit val oauthTokenResponseDecoder: Decoder[OAuthTokenResponse] = deriveDecoder
-  implicit val identityEncoder: Encoder[Identity] = deriveEncoder
-  implicit val profileRequestEncoder: Encoder[ProfileRequest] = deriveEncoder
-  implicit val audienceMembershipDecoder: Decoder[AudienceMembership] = deriveDecoder
-  implicit val profileResponseDecoder: Decoder[ProfileResponse] = deriveDecoder
   implicit val mparticleErrorDecoder: Decoder[MParticleError] = deriveDecoder
 }
 
@@ -141,7 +121,7 @@ class MParticleClient(
 
   import MParticleClient._
 
-  private lazy val mparticleConfig: MparticleConfig = mparticleConfigProvider.get()
+  lazy val mparticleConfig: MparticleConfig = mparticleConfigProvider.get()
 
   private lazy val validAuthTokenProvider: ValidAuthTokenProvider[MParticleAccessToken] = {
     val authClient = new MParticleAuthClient(httpClient, mparticleConfig)
@@ -151,31 +131,18 @@ class MParticleClient(
   override val wsUrl: String = mparticleConfig.apiUrl
   override val verboseLogging: Boolean = false
 
-  def getUserProfile(identityId: String): Future[MParticleUserProfile] = {
-    val fields = "audience_memberships"
-    val endpoint =
-      s"userprofile/v1/resolve/${mparticleConfig.orgId}/${mparticleConfig.accountId}/${mparticleConfig.workspaceId}"
-
-    val request = ProfileRequest(
-      environment_type = mparticleConfig.apiEnv,
-      identity = Identity(`type` = "customer_id", value = identityId),
+  def postJsonWithAuth[A: Decoder: ClassTag](
+      endpoint: String,
+      data: Json,
+      headers: Map[String, String] = empty,
+      params: Map[String, String] = empty,
+  ): Future[A] = validAuthTokenProvider.withToken { token =>
+    postJson[A](
+      endpoint = endpoint,
+      data = data,
+      headers = headers ++ Map("Authorization" -> s"Bearer ${token.tokenAsString}"),
+      params = params,
     )
-
-    val eventualResponse = validAuthTokenProvider.withToken { token =>
-      postJson[ProfileResponse](
-        endpoint = endpoint,
-        data = request.asJson,
-        headers = Map("Authorization" -> s"Bearer ${token.tokenAsString}"),
-        params = Map("fields" -> fields),
-      )
-    }
-
-    eventualResponse.map(parseUserProfile)
   }
 
-  private def parseUserProfile(profileResponse: ProfileResponse): MParticleUserProfile = {
-    val hasMobileAppDownloaded = profileResponse.audience_memberships.exists(_.audience_id == 22581)
-    val hasFeastMobileAppDownloaded = profileResponse.audience_memberships.exists(_.audience_id == 22582)
-    MParticleUserProfile(hasMobileAppDownloaded, hasFeastMobileAppDownloaded)
-  }
 }
