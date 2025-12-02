@@ -13,12 +13,12 @@ class SubscriptionProductCookiesCreatorTest extends AnyFlatSpec with Matchers {
   private val creator = SubscriptionProductCookiesCreator(GuardianDomain("thegulocal.com"))
 
   private def expectedCookie(name: String, ageInDays: Int) = {
-    val ageInSeconds = ageInDays * 24 * 60 * 60
+    val ageInSeconds = BigInt(ageInDays * 24 * 60 * 60)
 
     Cookie(
       name = name,
-      value = s"${now.getMillis + (ageInSeconds * 1000)}",
-      maxAge = Some(ageInSeconds),
+      value = (now.getMillis + (ageInSeconds * 1000)).toString,
+      maxAge = Some(ageInSeconds.toInt),
       secure = true,
       httpOnly = false,
       domain = Some("thegulocal.com"),
@@ -29,9 +29,9 @@ class SubscriptionProductCookiesCreatorTest extends AnyFlatSpec with Matchers {
     val guardianAdLite = GuardianAdLite(GBP)
     val cookies = creator.createCookiesForProduct(guardianAdLite, now)
 
-    cookies should contain(expectedCookie(name = "gu_allow_reject_all", ageInDays = 7))
+    cookies should contain(expectedCookie(name = "gu_allow_reject_all", ageInDays = 30))
     // It should also contain the user features expiry cookie
-    cookies should contain(expectedCookie(name = "gu_user_benefits_expiry", ageInDays = 7))
+    cookies should contain(expectedCookie(name = "gu_user_benefits_expiry", ageInDays = 1))
   }
 
   it should "not set the hide support messaging cookie for Guardian Ad Lite because it is not a supporter product" in {
@@ -40,18 +40,18 @@ class SubscriptionProductCookiesCreatorTest extends AnyFlatSpec with Matchers {
 
     cookies.map(_.name) should not contain "gu_hide_support_messaging"
     // It should also contain the user features expiry cookie
-    cookies should contain(expectedCookie(name = "gu_user_benefits_expiry", ageInDays = 7))
+    cookies should contain(expectedCookie(name = "gu_user_benefits_expiry", ageInDays = 1))
   }
 
   it should "set the ad-free cookie, the hide supporter revenue cookie and the allow reject all cookie for SupporterPlus" in {
     val supporterPlus = SupporterPlus(BigDecimal(12), GBP, Monthly)
     val cookies = creator.createCookiesForProduct(supporterPlus, now)
 
-    cookies should contain(expectedCookie(name = "GU_AF1", ageInDays = 7))
-    cookies should contain(expectedCookie(name = "gu_hide_support_messaging", ageInDays = 7))
-    cookies should contain(expectedCookie(name = "gu_allow_reject_all", ageInDays = 7))
+    cookies should contain(expectedCookie(name = "GU_AF1", ageInDays = 30))
+    cookies should contain(expectedCookie(name = "gu_hide_support_messaging", ageInDays = 30))
+    cookies should contain(expectedCookie(name = "gu_allow_reject_all", ageInDays = 30))
     // It should also contain the user features expiry cookie
-    cookies should contain(expectedCookie(name = "gu_user_benefits_expiry", ageInDays = 7))
+    cookies should contain(expectedCookie(name = "gu_user_benefits_expiry", ageInDays = 1))
   }
 
 }
