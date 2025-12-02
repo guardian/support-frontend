@@ -33,6 +33,7 @@ export function formatDate(date: Dayjs) {
 }
 
 export function mask(accountNumber: string): string {
+	// Replace all but the last two characters with asterisks
 	return accountNumber.replace(/.(?=.{2})/g, '*');
 }
 
@@ -53,6 +54,7 @@ export function getPaymentMethodFieldsSupporterPlus(
 			Mandate_ID: string;
 			first_payment_date: string;
 	  } {
+	const DIRECT_DEBIT_LEAD_TIME_DAYS = 10;
 	switch (paymentMethod.Type) {
 		case 'BankTransfer':
 			return {
@@ -64,7 +66,9 @@ export function getPaymentMethodFieldsSupporterPlus(
 					mandateId,
 					'No Mandate ID was provided for a Direct Debit payment',
 				),
-				first_payment_date: formatDate(created.add(10, 'days')),
+				first_payment_date: formatDate(
+					created.add(DIRECT_DEBIT_LEAD_TIME_DAYS, 'days'),
+				),
 			};
 		case 'CreditCardReferenceTransaction':
 			return {

@@ -1,7 +1,7 @@
 import type { EmailMessageWithIdentityUserId } from '@modules/email/email';
 import { DataExtensionNames } from '@modules/email/email';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
 import dayjs from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
@@ -28,7 +28,7 @@ export function buildTierThreeEmailFields({
 }: {
 	user: User;
 	currency: IsoCurrency;
-	billingPeriod: BillingPeriod;
+	billingPeriod: RecurringBillingPeriod;
 	subscriptionNumber: string;
 	paymentSchedule: PaymentSchedule;
 	paymentMethod: PaymentMethod;

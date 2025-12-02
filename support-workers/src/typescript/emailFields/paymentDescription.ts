@@ -2,11 +2,12 @@ import { partition } from '@modules/arrayFunctions';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { isNonEmpty } from '@modules/nullAndUndefined';
+import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import dayjs from 'dayjs';
 import type { Payment, PaymentSchedule } from '../model/paymentSchedule';
 
-function billingPeriodNoun(period: BillingPeriod): string {
+function billingPeriodNoun(period: RecurringBillingPeriod): string {
 	switch (period) {
 		case BillingPeriod.Monthly:
 			return 'month';
@@ -14,8 +15,6 @@ function billingPeriodNoun(period: BillingPeriod): string {
 			return 'quarter';
 		case BillingPeriod.Annual:
 			return 'year';
-		default:
-			return period;
 	}
 }
 
@@ -57,7 +56,7 @@ export function pluralise(num: number, thing: string): string {
 
 export function introductoryPeriod(
 	introductoryBillingPeriods: number,
-	billingPeriod: BillingPeriod,
+	billingPeriod: RecurringBillingPeriod,
 ): string {
 	return pluralise(
 		introductoryBillingPeriods,
@@ -65,7 +64,7 @@ export function introductoryPeriod(
 	);
 }
 
-export function fixedTermNoun(billingPeriod: BillingPeriod): string {
+export function fixedTermNoun(billingPeriod: RecurringBillingPeriod): string {
 	switch (billingPeriod) {
 		case BillingPeriod.Quarterly:
 			return '3 months';
@@ -84,7 +83,7 @@ function monthsBetween(start: Date, end: Date): number {
 
 export function describePayments(
 	paymentSchedule: PaymentSchedule,
-	billingPeriod: BillingPeriod,
+	billingPeriod: RecurringBillingPeriod,
 	currency: IsoCurrency,
 	fixedTerm: boolean,
 ): string {
@@ -132,7 +131,7 @@ function descriptionWithSingleIntroductoryPeriod(
 	paymentsWithDifferentPrice: [Payment, ...Payment[]],
 	currency: IsoCurrency,
 	initialPrice: number,
-	billingPeriod: BillingPeriod,
+	billingPeriod: RecurringBillingPeriod,
 ) {
 	const firstDifferent = paymentsWithDifferentPrice[0];
 	return `${priceWithCurrency(
@@ -151,7 +150,7 @@ function descriptionWithMultipleIntroductoryPeriods(
 	paymentsWithDifferentPrice: Payment[],
 	currency: IsoCurrency,
 	initialPrice: number,
-	billingPeriod: BillingPeriod,
+	billingPeriod: RecurringBillingPeriod,
 ) {
 	const firstIntroductoryPayment = earliestPayment(paymentsWithInitialPrice);
 	const firstDifferentPayment = earliestPayment(

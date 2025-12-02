@@ -1,7 +1,7 @@
 import type { EmailMessageWithIdentityUserId } from '@modules/email/email';
 import { getCountryNameByIsoCode } from '@modules/internationalisation/country';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import dayjs from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
@@ -55,7 +55,7 @@ export function buildDigitalSubscriptionEmailFields({
 }: {
 	user: User;
 	currency: IsoCurrency;
-	billingPeriod: BillingPeriod;
+	billingPeriod: RecurringBillingPeriod;
 	subscriptionNumber: string;
 	paymentSchedule: PaymentSchedule;
 	paymentMethod: PaymentMethod;

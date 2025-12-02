@@ -1,5 +1,5 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import { zuoraDateFormat } from '@modules/zuora/utils/common';
 import type dayjs from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
@@ -25,7 +25,7 @@ export function buildSupporterPlusEmailFields({
 	now: dayjs.Dayjs;
 	user: User;
 	currency: IsoCurrency;
-	billingPeriod: BillingPeriod;
+	billingPeriod: RecurringBillingPeriod;
 	subscriptionNumber: string;
 	paymentSchedule: PaymentSchedule;
 	paymentMethod: PaymentMethod;
