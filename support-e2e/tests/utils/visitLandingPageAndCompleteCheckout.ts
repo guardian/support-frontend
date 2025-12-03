@@ -2,7 +2,6 @@ import type { BrowserContext, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 import { completeGenericCheckout } from './completeGenericCheckout';
 import { setupPage } from './page';
-import { isPrintProduct } from './products';
 
 type TestDetails = {
 	context: BrowserContext;
@@ -35,7 +34,7 @@ export const visitLandingPageAndCompleteCheckout = async (
 	await landingPageToCheckoutFn(page);
 
 	// Wait for the checkout page to load
-	const title = `Your ${isPrintProduct(product) ? 'subscription' : 'support'}`;
+	const title = `Your ${product === 'Contribution' ? 'support' : 'subscription'}`;
 	await expect(page.getByRole('heading', { name: title })).toBeVisible({
 		timeout: 100000,
 	});

@@ -30,8 +30,8 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import {
+	isContributionOnlyProduct,
 	isGuardianWeeklyGiftProduct,
-	isPrintProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
@@ -208,7 +208,7 @@ export function ContributionsOrderSummary({
 
 	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 	const title = `Your ${
-		isPrintProduct(productKey) ? 'subscription' : 'support'
+		isContributionOnlyProduct(productKey) ? 'support' : 'subscription'
 	}`;
 
 	return (

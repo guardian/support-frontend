@@ -29,6 +29,12 @@ export function isPrintProduct(productKey: ActiveProductKey): boolean {
 	return printProductsKeys.includes(productKey);
 }
 
+export function isContributionOnlyProduct(
+	productKey: ActiveProductKey,
+): boolean {
+	return productKey === 'Contribution';
+}
+
 export function isContributionProduct(productKey: ActiveProductKey): boolean {
 	return contributionProductKeys.includes(productKey);
 }
