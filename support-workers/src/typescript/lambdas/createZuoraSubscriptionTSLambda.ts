@@ -29,7 +29,7 @@ import { stageFromEnvironment } from '../model/stage';
 import type { WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
 import { getIfDefined } from '../util/nullAndUndefined';
-import { replaceDatesWithZuoraFormatDeep } from '../util/zuoraDateReplacer';
+import { replaceDatesWithZuoraFormat } from '../util/zuoraDateReplacer';
 
 const stage = stageFromEnvironment();
 
@@ -126,7 +126,7 @@ export const handler = async (
 			previewInputFields,
 		);
 
-		return replaceDatesWithZuoraFormatDeep(
+		return replaceDatesWithZuoraFormat(
 			buildOutputState(
 				state,
 				createZuoraSubscriptionState,

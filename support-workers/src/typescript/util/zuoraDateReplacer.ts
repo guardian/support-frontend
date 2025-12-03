@@ -2,51 +2,56 @@ import { zuoraDateFormat } from '@modules/zuora/utils/common';
 import dayjs from 'dayjs';
 
 /**
- * Recursively clones an input value, replacing date instances
+ * Recursively clones an input value, replacing Date instances
  * with the formatted string from `zuoraDateFormat`.
  * Other values are left unchanged. Arrays and plain objects are deep-copied.
- * Does not support circular references.
+ * Does not function values or support circular references.
  */
 export type ReplaceDates<T> = T extends Date
 	? string
-	: T extends (...args: unknown[]) => unknown
-	? T
-	: T extends string
-	? string
-	: T extends Array<infer U>
-	? Array<ReplaceDates<U>>
+	: T extends ReadonlyArray<infer U>
+	? ReadonlyArray<ReplaceDates<U>>
 	: T extends object
 	? { [K in keyof T]: ReplaceDates<T[K]> }
 	: T;
 
-export function replaceDatesWithZuoraFormatDeep<T>(input: T): ReplaceDates<T> {
-	function formatIfDateLike(v: unknown): unknown {
-		if (v instanceof Date && !isNaN(v.getTime())) {
-			return zuoraDateFormat(dayjs(v));
-		}
-		return v;
+function isRecord(value: unknown): value is Record<string, unknown> {
+	if (value === null || typeof value !== 'object') {
+		return false;
+	}
+	if (Array.isArray(value) || value instanceof Date) {
+		return false;
 	}
 
-	function clone(value: unknown): unknown {
-		if (value === null) {
-			return null;
-		}
-		if (value instanceof Date) {
-			return formatIfDateLike(value);
-		}
-		if (Array.isArray(value)) {
-			return value.map(clone);
-		}
-		if (typeof value === 'object') {
-			const obj = value as Record<string, unknown>;
-			const out: Record<string, unknown> = {};
-			for (const key of Object.keys(obj)) {
-				out[key] = clone(obj[key]);
-			}
-			return out;
-		}
-		return value; // strings, numbers, booleans, functions, symbols
-	}
+	const proto: unknown = Object.getPrototypeOf(value);
+	return proto === Object.prototype || proto === null;
+}
 
-	return clone(input) as ReplaceDates<T>;
+// Overloads return precise types without assertions.
+function clone<T extends Record<string, unknown>>(
+	value: T,
+): { [K in keyof T]: ReplaceDates<T[K]> };
+function clone<T>(value: T): ReplaceDates<T>;
+function clone(value: unknown): unknown {
+	if (value === null) {
+		return null;
+	}
+	if (value instanceof Date) {
+		return zuoraDateFormat(dayjs(value));
+	}
+	if (Array.isArray(value)) {
+		return value.map(clone);
+	}
+	if (isRecord(value)) {
+		const out: Record<string, unknown> = {};
+		for (const key of Object.keys(value)) {
+			out[key] = clone(value[key]);
+		}
+		return out;
+	}
+	return value;
+}
+
+export function replaceDatesWithZuoraFormat<T>(input: T): ReplaceDates<T> {
+	return clone(input);
 }
