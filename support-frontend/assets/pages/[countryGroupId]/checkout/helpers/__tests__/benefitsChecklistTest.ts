@@ -1,4 +1,6 @@
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { getBenefitsChecklistFromLandingPageTool } from '../benefitsChecklist';
+import { expectedDefaultBenefits } from './__fixtures__/expectedDefaultBenefits';
 
 describe('getBenefitsChecklistFromLandingPageTool', () => {
 	const landingPageSettings = {
@@ -52,11 +54,13 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 			},
 		},
 	};
+	const GBP = 'GBPCountries';
 	it('should return the correct benefits checklist for DigitalSubscription', () => {
 		expect(
 			getBenefitsChecklistFromLandingPageTool(
 				'DigitalSubscription',
 				landingPageSettings,
+				GBP,
 			),
 		).toEqual([
 			{
@@ -82,6 +86,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 			getBenefitsChecklistFromLandingPageTool(
 				'Contribution',
 				landingPageSettings,
+				GBP,
 			),
 		).toMatchObject([
 			{
@@ -115,6 +120,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 			getBenefitsChecklistFromLandingPageTool(
 				'SupporterPlus',
 				landingPageSettings,
+				GBP,
 			),
 		).toEqual([
 			{
@@ -132,7 +138,39 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 			getBenefitsChecklistFromLandingPageTool(
 				'GuardianAdLite',
 				landingPageSettings,
+				GBP,
 			),
 		).toBeUndefined();
+	});
+
+	describe('getBenefitsChecklistFromLandingPageTool with missing benefits in landing page tool', () => {
+		const countryGroups = [
+			'GBPCountries',
+			'AUDCountries',
+			'EURCountries',
+			'UnitedStates',
+			'International',
+			'NZDCountries',
+			'Canada',
+		];
+		const products = ['Contribution', 'SupporterPlus', 'DigitalSubscription'];
+		const landingPageSettingsWithoutProducts = {
+			...landingPageSettings,
+			products: {},
+		};
+		products.forEach((product) => {
+			countryGroups.forEach((countryGroup) => {
+				it(`should return default benefits if none are defined in landing page tool for ${product} in ${countryGroup}`, () => {
+					const result = getBenefitsChecklistFromLandingPageTool(
+						product as 'Contribution' | 'SupporterPlus' | 'DigitalSubscription',
+						landingPageSettingsWithoutProducts,
+						countryGroup as CountryGroupId,
+					);
+					expect(result).toEqual(
+						expectedDefaultBenefits[product]?.[countryGroup],
+					);
+				});
+			});
+		});
 	});
 });

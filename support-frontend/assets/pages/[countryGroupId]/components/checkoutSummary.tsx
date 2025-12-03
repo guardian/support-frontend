@@ -128,7 +128,11 @@ export default function CheckoutSummary({
 	const benefitsCheckListData =
 		premiumDigitalBenefits ??
 		getPaperPlusDigitalBenefits(productKey, ratePlanKey) ??
-		getBenefitsChecklistFromLandingPageTool(productKey, landingPageSettings) ??
+		getBenefitsChecklistFromLandingPageTool(
+			productKey,
+			landingPageSettings,
+			countryGroupId,
+		) ??
 		getBenefitsChecklistFromProductDescription(
 			productDescription,
 			countryGroupId,

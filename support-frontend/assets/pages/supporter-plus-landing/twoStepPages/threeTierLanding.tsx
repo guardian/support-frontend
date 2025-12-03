@@ -35,6 +35,7 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import type { Participations } from 'helpers/abTests/models';
 import {
 	countdownSwitchOn,
@@ -48,6 +49,7 @@ import {
 	getProductDescription,
 	getProductLabel,
 	productCatalog,
+	productCatalogDescription,
 	productCatalogDescriptionPremiumDigital,
 } from 'helpers/productCatalog';
 import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -370,6 +372,8 @@ export function ThreeTierLanding({
 
 	const ratePlanKey = getRatePlanKey(contributionType);
 
+	const fallbackProducts = fallBackLandingPageSelection.products;
+
 	/**
 	 * Tier 1: Contributions
 	 * We use the product catalog for the recurring Contribution tier amount
@@ -390,9 +394,16 @@ export function ThreeTierLanding({
 			urlSearchParamsProduct === 'Contribution' ||
 			isCardUserSelected(tier1Pricing),
 		...settings.products.Contribution,
-		title: settings.products.Contribution?.title ?? 'Support',
-		benefits: settings.products.Contribution?.benefits ?? [],
-		cta: settings.products.Contribution?.cta ?? { copy: 'Support' },
+		title:
+			settings.products.Contribution?.title ?? getProductLabel('Contribution'),
+		benefits:
+			settings.products.Contribution?.benefits ??
+			filterProductDescriptionBenefits(
+				productCatalogDescription.Contribution,
+				countryGroupId,
+			),
+		cta:
+			settings.products.Contribution?.cta ?? fallbackProducts.Contribution!.cta,
 	};
 
 	/** Tier 2: SupporterPlus */
@@ -416,8 +427,15 @@ export function ThreeTierLanding({
 	const tier2ProductDescription = {
 		...settings.products.SupporterPlus,
 		title: getProductLabel('SupporterPlus'),
-		benefits: settings.products.SupporterPlus?.benefits ?? [],
-		cta: settings.products.SupporterPlus?.cta ?? { copy: 'Support' },
+		benefits:
+			settings.products.SupporterPlus?.benefits ??
+			filterProductDescriptionBenefits(
+				productCatalogDescription.SupporterPlus,
+				countryGroupId,
+			),
+		cta:
+			settings.products.SupporterPlus?.cta ??
+			fallbackProducts.SupporterPlus!.cta,
 	};
 
 	const tier2Card: CardContent = {
@@ -471,7 +489,9 @@ export function ThreeTierLanding({
 				productCatalogDescriptionPremiumDigital,
 				countryGroupId,
 			),
-		cta: settings.products.DigitalSubscription?.cta ?? { copy: 'Support' },
+		cta:
+			settings.products.DigitalSubscription?.cta ??
+			fallbackProducts.DigitalSubscription!.cta,
 	};
 	const tier3ProductPrice = allProductPrices.DigitalPack;
 	const tier3Promotion = tier3ProductPrice
