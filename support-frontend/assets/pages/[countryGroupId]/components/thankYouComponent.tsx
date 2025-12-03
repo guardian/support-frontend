@@ -157,7 +157,7 @@ export function ThankYouComponent({
 		currencyKey,
 	);
 
-	const isPaperPlus = isPaperPlusSub(productKey, ratePlanKey);
+	const isGuardianPaperPlus = isPaperPlusSub(productKey, ratePlanKey); // Observer not a Plus plan
 	const isPrint = isPrintProduct(productKey);
 	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
 
@@ -205,7 +205,7 @@ export function ThankYouComponent({
 		if (isPremiumDigital) {
 			return getPremiumDigitalAllBenefits(countryGroupId);
 		}
-		if (isPaperPlus || !!observerPrint) {
+		if (isGuardianPaperPlus || !!observerPrint) {
 			return getPaperPlusDigitalBenefits(productKey, ratePlanKey) ?? [];
 		}
 		return [];
@@ -281,7 +281,10 @@ export function ThankYouComponent({
 			'feedback',
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
-		...maybeThankYouModule(isPremiumDigital, 'newspaperArchiveBenefit'),
+		...maybeThankYouModule(
+			isPremiumDigital || isGuardianPaperPlus,
+			'newspaperArchiveBenefit',
+		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(
 			!isTierThree && !isGuardianAdLite && !isPrint && !isPremiumDigital,
