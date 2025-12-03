@@ -1,3 +1,21 @@
+import { css } from '@emotion/react';
+import { from } from '@guardian/source/foundations';
+
+const tabletSvg = css`
+	position: absolute;
+	top: 0;
+	min-height: 100%;
+	display: none;
+
+	${from.mobileLandscape} {
+		display: inline;
+	}
+
+	${from.desktop} {
+		display: none;
+	}
+`;
+
 export default function SvgSquaresHeroTablet() {
 	return (
 		<svg
@@ -5,6 +23,7 @@ export default function SvgSquaresHeroTablet() {
 			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 768 382"
 			preserveAspectRatio="xMinYMid slice"
+			css={tabletSvg}
 		>
 			<g fill="none" fillRule="evenodd">
 				<path d="M-72 305h87v87h-87z" fill="#5CC9F8" />

@@ -8,7 +8,7 @@ const benefitStyle = css`
 `;
 
 interface Benefits {
-	label: JSX.Element;
+	label?: JSX.Element;
 	items: JSX.Element[];
 }
 
@@ -39,18 +39,32 @@ const digitalRewardsLabel = (
 	</>
 );
 
-const baseDigitalRewards = [
+const guardianDigitalRewardsTop = [
 	<>Unlimited access to the refreshed Guardian app and Guardian Feast app</>,
 	<>
 		Unlimited access to the Guardian Editions app so you can enjoy newspapers on
 		your mobile and tablet
 	</>,
+];
+const guardianDigitalRewardsBottom = [
 	<>Ad-free reading on the Guardian app and website</>,
 	<>
 		Exclusive newsletter for supporters, sent every week from the Guardian
 		newsroom
 	</>,
 	<>Far fewer asks for support</>,
+];
+const guardianDigitalRewards = [
+	...guardianDigitalRewardsTop,
+	...guardianDigitalRewardsBottom,
+];
+const observerDigitalRewards = [
+	<>Access to The Observer digital subscription</>,
+];
+const baseDigitalRewards = [
+	...guardianDigitalRewardsTop,
+	...observerDigitalRewards,
+	...guardianDigitalRewardsBottom,
 ];
 
 const benefitGuardianSixDay = (
@@ -103,7 +117,7 @@ const digitalBenefitsMap: Partial<
 	},
 	SixdayPlus: {
 		label: digitalRewardsLabel,
-		items: baseDigitalRewards,
+		items: guardianDigitalRewards,
 	},
 	WeekendPlus: {
 		label: digitalRewardsLabel,
@@ -111,9 +125,9 @@ const digitalBenefitsMap: Partial<
 	},
 	SaturdayPlus: {
 		label: digitalRewardsLabel,
-		items: baseDigitalRewards,
+		items: guardianDigitalRewards,
 	},
-	Sunday: undefined, // Has no digital benefits
+	Sunday: { items: observerDigitalRewards },
 };
 
 const planDescriptions: Record<
