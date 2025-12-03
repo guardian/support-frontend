@@ -32,7 +32,7 @@ const contributionsTermsLinks: Record<CountryGroupId, string> = {
 const guardianLiveTermsLink =
 	'https://www.theguardian.com/info/2014/sep/09/guardian-live-events-terms-and-conditions';
 const supporterPlusTermsLink =
-	'https://www.theguardian.com/info/2022/oct/28/the-guardian-supporter-plus-terms-and-conditions';
+	'https://www.theguardian.com/info/2025/oct/31/guardian-subscription-terms-and-conditions';
 const tierThreeTermsLink =
 	'https://www.theguardian.com/info/article/2024/jul/19/digital-print-terms-and-conditions';
 const guardianAdLiteTermsLink = `https://www.theguardian.com/guardian-ad-lite-tcs`;
