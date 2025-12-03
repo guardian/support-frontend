@@ -67,6 +67,14 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 				isChecked: true,
 				text: 'DigitalSubscription benefit 2',
 			},
+			{
+				isChecked: true,
+				text: 'SupporterPlus benefit 1',
+			},
+			{
+				isChecked: true,
+				text: 'SupporterPlus benefit 2',
+			},
 		]);
 	});
 	it('should return the correct benefits checklist for Contribution', () => {
