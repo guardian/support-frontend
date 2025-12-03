@@ -11,7 +11,7 @@ import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider
 
 @IntegrationTest
-class IdealPostcodesServiceSpec extends AsyncFlatSpec with Matchers {
+class IdealPostcodesServiceITSpec extends AsyncFlatSpec with Matchers {
   private lazy val parameterStoreConfig = SSMConfigurationLocation(s"/support/frontend/CODE", "eu-west-1").load(
     ProfileCredentialsProvider.builder.profileName(ProfileName).build,
   )
