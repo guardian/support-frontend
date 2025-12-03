@@ -29,7 +29,10 @@ import type {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
-import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import {
+	isGuardianWeeklyGiftProduct,
+	isPrintProduct,
+} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { PriceSummary } from './priceSummary';
@@ -204,11 +207,14 @@ export function ContributionsOrderSummary({
 	const period = studentDiscount?.periodNoun ?? paymentFrequency;
 
 	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
+	const title = `Your ${
+		isPrintProduct(productKey) ? 'subscription' : 'support'
+	}`;
 
 	return (
 		<div css={componentStyles}>
 			<div css={[summaryRow, rowSpacing, headingRow]}>
-				<h2 css={headingCss}>Your support</h2>
+				<h2 css={headingCss}>{title}</h2>
 				{headerButton}
 			</div>
 			<hr css={hrCss} />
