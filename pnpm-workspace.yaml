@@ -15,6 +15,7 @@ catalog:
   esbuild: ^0.25.5
   "@types/jest": ^29.5.12
   "@types/node": ^20.11.27
+  "@aws-sdk/client-sqs": ^3.848.0
   "@aws-sdk/client-ssm": ^3.679.0
   "@aws-sdk/client-secrets-manager": ^3.848.0
   "@aws-sdk/credential-provider-node": 3.699.0
