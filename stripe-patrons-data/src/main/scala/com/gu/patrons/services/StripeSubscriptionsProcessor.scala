@@ -67,7 +67,9 @@ abstract class DynamoProcessor(
           identityId,
           "guardian_patron",
           "Guardian Patron",
-          sub.currentPeriodEnd,
+          // adding 2 days as a buffer to try to resolve an issue in the app where a user is told that they don't
+          // have an active subscription on the last day of their billing period
+          sub.currentPeriodEnd.plusDays(2),
           sub.created,
           None,
         ),
