@@ -266,7 +266,7 @@ export const handler = async (
 			break;
 	}
 
-	return Promise.resolve({ success: true });
+	return { success: true };
 };
 
 function getDeliveryAgent(refId: number, agents: DeliveryAgentDetails[]) {
