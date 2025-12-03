@@ -8,12 +8,24 @@ import com.gu.support.config.IdealPostcodesConfig
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider
+import software.amazon.awssdk.auth.credentials.{
+  AwsCredentialsProviderChain,
+  EnvironmentVariableCredentialsProvider,
+  InstanceProfileCredentialsProvider,
+  ProfileCredentialsProvider,
+}
 
 @IntegrationTest
 class IdealPostcodesServiceITSpec extends AsyncFlatSpec with Matchers {
+  private lazy val credentialsProvider = AwsCredentialsProviderChain.builder
+    .credentialsProviders(
+      ProfileCredentialsProvider.builder.profileName(ProfileName).build,
+      InstanceProfileCredentialsProvider.builder.asyncCredentialUpdateEnabled(false).build,
+      EnvironmentVariableCredentialsProvider.create(),
+    )
+    .build
   private lazy val parameterStoreConfig = SSMConfigurationLocation(s"/support/frontend/CODE", "eu-west-1").load(
-    ProfileCredentialsProvider.builder.profileName(ProfileName).build,
+    credentialsProvider,
   )
   private lazy val apiKey = parameterStoreConfig.getString("ideal-postcodes-api.key")
   private lazy val service =
