@@ -1,6 +1,8 @@
 // ----- Imports ----- //
+import { css } from '@emotion/react';
+import { from, palette, space } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
-import { Content } from './Content';
+import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 
 type PropTypes = {
 	appearance: {
@@ -11,15 +13,43 @@ type PropTypes = {
 	children: ReactNode;
 };
 
+const paddingStyle = css`
+	padding-top: ${space[2]}px;
+`;
+const contentStyle = css`
+	position: relative;
+	display: flex;
+	flex-grow: 1;
+	flex-basis: ${space[24] * 10}px;
+	padding: 0 ${space[5]}px ${space[4]}px;
+	max-width: 700px;
+	border-bottom: 1px solid ${palette.brand[600]};
+`;
+
+function getBorderStyling(centred = false) {
+	const breakpoint = centred ? from.wide : from.tablet;
+	return css`
+		${breakpoint} {
+			border-left: 1px solid ${palette.brand[600]};
+			border-right: 1px solid ${palette.brand[600]};
+		}
+	`;
+}
+
 function FooterContent({ appearance, children }: PropTypes): JSX.Element {
+	const { centred, border, paddingTop } = appearance;
 	return (
-		<div className="component-left-margin-section">
-			<div className="component-left-margin-section__content">
-				<Content className="component-content__content" appearance={appearance}>
-					{children}
-				</Content>
+		<LeftMarginSection>
+			<div
+				css={[
+					contentStyle,
+					paddingTop && paddingStyle,
+					border && getBorderStyling(centred),
+				]}
+			>
+				{children}
 			</div>
-		</div>
+		</LeftMarginSection>
 	);
 }
 
