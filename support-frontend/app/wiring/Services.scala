@@ -8,6 +8,7 @@ import com.gu.aws.AwsS3Client
 import com.gu.identity.auth._
 import com.gu.okhttp.RequestRunners
 import com.gu.support.getaddressio.GetAddressIOService
+import com.gu.support.idealpostcodes.IdealPostcodesService
 import com.gu.support.paperround.PaperRoundServiceProvider
 import com.gu.support.promotions.PromotionServiceProvider
 import play.api.BuiltInComponentsFromContext
@@ -96,6 +97,9 @@ trait Services {
 
   lazy val getAddressIOService: GetAddressIOService =
     new GetAddressIOService(appConfig.getAddressIOConfig, RequestRunners.futureRunner)
+
+  lazy val idealPostcodesService: IdealPostcodesService =
+    new IdealPostcodesService(appConfig.idealPostcodesConfig, RequestRunners.futureRunner)
 
   lazy val paperRoundServiceProvider: PaperRoundServiceProvider =
     new PaperRoundServiceProvider(appConfig.paperRoundConfigProvider)
