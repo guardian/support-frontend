@@ -39,14 +39,12 @@ const digitalRewardsLabel = (
 	</>
 );
 
-const guardianDigitalRewardsTop = [
+const guardianDigitalRewards = [
 	<>Unlimited access to the refreshed Guardian app and Guardian Feast app</>,
 	<>
 		Unlimited access to the Guardian Editions app so you can enjoy newspapers on
 		your mobile and tablet
 	</>,
-];
-const guardianDigitalRewardsBottom = [
 	<>Ad-free reading on the Guardian app and website</>,
 	<>
 		Exclusive newsletter for supporters, sent every week from the Guardian
@@ -54,17 +52,13 @@ const guardianDigitalRewardsBottom = [
 	</>,
 	<>Far fewer asks for support</>,
 ];
-const guardianDigitalRewards = [
-	...guardianDigitalRewardsTop,
-	...guardianDigitalRewardsBottom,
-];
+
 const observerDigitalRewards = [
 	<>Access to The Observer digital subscription</>,
 ];
 const baseDigitalRewards = [
-	...guardianDigitalRewardsTop,
+	...guardianDigitalRewards,
 	...observerDigitalRewards,
-	...guardianDigitalRewardsBottom,
 ];
 
 const benefitGuardianSixDay = (
