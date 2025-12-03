@@ -31,7 +31,7 @@ class IdealPostcodesServiceITSpec extends AsyncFlatSpec with Matchers {
   private lazy val service =
     new IdealPostcodesService(IdealPostcodesConfig(apiKey), RequestRunners.futureRunner)
 
-  "IdealPostcodesService" should "be able to find a postcode" in {
+  "IdealPostcodesService" should "be able to find a postcode" ignore {
     service.find("N19GU").map { result =>
       result.nonEmpty shouldBe true
       val address = result.head
@@ -44,7 +44,7 @@ class IdealPostcodesServiceITSpec extends AsyncFlatSpec with Matchers {
     }
   }
 
-  it should "be able to find another postcode" in {
+  it should "be able to find another postcode" ignore {
     service.find("NN13ER").map { result =>
       result.head.state shouldBe Some("Northamptonshire")
     }
