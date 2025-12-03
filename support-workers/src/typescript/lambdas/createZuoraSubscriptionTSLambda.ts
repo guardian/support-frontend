@@ -29,7 +29,7 @@ import { stageFromEnvironment } from '../model/stage';
 import type { WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
 import { getIfDefined } from '../util/nullAndUndefined';
-import { zuoraDateReplacer } from '../util/zuoraDateReplacer';
+import { replaceDatesWithZuoraFormat } from '../util/zuoraDateReplacer';
 
 const stage = stageFromEnvironment();
 
@@ -126,14 +126,13 @@ export const handler = async (
 			previewInputFields,
 		);
 
-		return JSON.stringify(
+		return replaceDatesWithZuoraFormat(
 			buildOutputState(
 				state,
 				createZuoraSubscriptionState,
 				createSubscriptionResult,
 				previewInvoices,
 			),
-			zuoraDateReplacer,
 		);
 	} catch (error) {
 		throw asRetryError(error);
