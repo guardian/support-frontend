@@ -207,7 +207,7 @@ async function sendGuardianWeeklyEmail(
 					sendThankYouEmailState.accountNumber,
 				),
 				productInformation: productInformation,
-				giftRecipient: sendThankYouEmailState.giftRecipient,
+				giftRecipient: sendThankYouEmailState.giftRecipient ?? undefined,
 			}),
 		);
 	}
