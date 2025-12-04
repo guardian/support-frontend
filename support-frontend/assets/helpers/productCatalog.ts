@@ -19,6 +19,7 @@ export enum ProductTierLabel {
 	TierOne = 'Support',
 	TierTwo = 'All-access digital',
 	TierThree = 'Digital + print',
+	DigitalSubscription = 'Digital plus',
 }
 
 const activeProductKeys = [
