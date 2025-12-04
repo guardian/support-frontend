@@ -85,7 +85,6 @@ jobs:
                 type: aws-lambda
                 parameters:
                   functionNames:
-                    - "-CreateZuoraSubscriptionLambda-"
                     - "-UpdateSupporterProductDataLambda-"
                     - "-FailureHandlerLambda-"
                     - "-SendAcquisitionEventLambda-"
