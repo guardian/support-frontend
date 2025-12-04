@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-<<<<<<< HEAD
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { from } from '@guardian/source/foundations';
