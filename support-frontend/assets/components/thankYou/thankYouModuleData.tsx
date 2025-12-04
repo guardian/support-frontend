@@ -12,7 +12,6 @@ import {
 	BenefitsCheckList,
 	type BenefitsCheckListData,
 } from 'components/checkoutBenefits/benefitsCheckList';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -36,13 +35,9 @@ import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/pro
 import { isPrintProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { getCurrency } from '../../helpers/productPrice/productPrices';
 import AppDownload from './appDownload/AppDownload';
-import AppDownloadBadges, {
-	AppDownloadBadgesEditions,
-} from './appDownload/AppDownloadBadges';
+import AppDownloadBadges from './appDownload/AppDownloadBadges';
 import {
 	AppDownloadBodyCopy,
-	AppDownloadEditionsBodyCopy,
-	appDownloadEditionsHeader,
 	appDownloadHeader,
 	AppFeastDownloadBodyCopy,
 	appFeastDownloadHeader,
@@ -159,7 +154,6 @@ export const getThankYouModuleData = (
 				: 'guardian_supporter_below'
 		}`;
 	};
-	const { enablePremiumDigital } = getFeatureFlags();
 	const thankYouModuleData: Record<ThankYouModuleType, ThankYouModuleData> = {
 		appsDownload: {
 			icon: getThankYouModuleIcon('appsDownload'),
@@ -198,28 +192,21 @@ export const getThankYouModuleData = (
 			),
 			ctas: null,
 		},
-		appDownloadEditions: enablePremiumDigital
-			? {
-					icon: getThankYouModuleIcon('appsDownload'),
-					header: 'Explore your subscriber’s App',
-					bodyCopy: (
-						<AppDownload
-							apps={getDownloadApps([
-								'GuardianNews',
-								'guardianFeast',
-								'guardianEditions',
-							])}
-							countryGroupId={countryGroupId}
-						/>
-					),
-					ctas: null,
-			  }
-			: {
-					icon: getThankYouModuleIcon('appDownload'),
-					header: appDownloadEditionsHeader,
-					bodyCopy: <AppDownloadEditionsBodyCopy />,
-					ctas: <AppDownloadBadgesEditions countryGroupId={countryGroupId} />,
-			  },
+		appDownloadEditions: {
+			icon: getThankYouModuleIcon('appsDownload'),
+			header: 'Explore your subscriber’s App',
+			bodyCopy: (
+				<AppDownload
+					apps={getDownloadApps([
+						'GuardianNews',
+						'guardianFeast',
+						'guardianEditions',
+					])}
+					countryGroupId={countryGroupId}
+				/>
+			),
+			ctas: null,
+		},
 		ausMap: {
 			icon: getThankYouModuleIcon('ausMap'),
 			header: ausMapHeader,
