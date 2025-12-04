@@ -6,6 +6,7 @@ import { productTypeSchema } from './productType';
 import {
 	acquisitionDataSchema,
 	analyticsInfoSchema,
+	dateOrDateStringSchema,
 	giftRecipientSchema,
 	userSchema,
 } from './stateSchemas';
@@ -83,7 +84,7 @@ export const sendThankYouEmailStateSchema = z.union([
 		promoCode: z.string().optional(),
 		accountNumber: z.string(),
 		subscriptionNumber: z.string(),
-		firstDeliveryDate: z.string(),
+		firstDeliveryDate: dateOrDateStringSchema,
 		similarProductsConsent: z.boolean().optional(),
 	}),
 
@@ -92,13 +93,13 @@ export const sendThankYouEmailStateSchema = z.union([
 		user: userSchema,
 		product: productTypeSchema,
 		productInformation: productPurchaseSchema.optional(),
-		giftRecipient: giftRecipientSchema.optional(),
+		giftRecipient: giftRecipientSchema.nullish(),
 		paymentMethod: paymentMethodSchema,
 		paymentSchedule: paymentScheduleSchema,
 		promoCode: z.string().optional(),
 		accountNumber: z.string(),
 		subscriptionNumber: z.string(),
-		firstDeliveryDate: z.string(),
+		firstDeliveryDate: dateOrDateStringSchema,
 		similarProductsConsent: z.boolean().optional(),
 	}),
 ]);
