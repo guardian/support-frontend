@@ -12,8 +12,8 @@ import { FeastAppsQrCode } from './feastAppsQrCode';
 import { GuardianAppsQrCode } from './guardianAppsQrCode';
 import { PlayStoreMobile } from './playStore';
 
-const guardianAppUrl = 'https://guardian.go.link/home?adj_t=1u2r07na';
-const feastAppUrl = 'https://guardian-feast.go.link/home?adj_t=1u2gdk5r';
+const guardianAppUrl = 'https://guardian.go.link/home?adj_t=1vddwf4h';
+const feastAppUrl = 'https://guardian-feast.go.link/home?adj_t=1vktw84s';
 
 const badgesContainer = css`
 	display: flex;
