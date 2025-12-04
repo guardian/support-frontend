@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { from, palette, space } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
+import { gu_span } from 'stylesheets/emotion/layout';
 
 type PropTypes = {
 	appearance: {
@@ -22,7 +23,7 @@ const contentStyle = css`
 	flex-grow: 1;
 	flex-basis: ${space[24] * 10}px;
 	padding: 0 ${space[5]}px ${space[4]}px;
-	max-width: 700px;
+	max-width: ${gu_span(10)}px;
 `;
 
 function getBorderStyling(centred = false) {
@@ -53,11 +54,4 @@ function FooterContent({ appearance, children }: PropTypes): JSX.Element {
 	);
 }
 
-FooterContent.defaultProps = {
-	appearance: {
-		centred: false,
-		border: false,
-		paddingTop: false,
-	},
-};
 export default FooterContent;
