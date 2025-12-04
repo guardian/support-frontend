@@ -10,6 +10,11 @@ import {
 	userSchema,
 } from './stateSchemas';
 
+const dateOrDateStringSchema = z.preprocess(
+	(input) => (typeof input === 'string' ? new Date(input) : input),
+	z.date(),
+);
+
 export const sendThankYouEmailStateSchema = z.union([
 	z.object({
 		productType: z.literal('Contribution'),
@@ -83,7 +88,7 @@ export const sendThankYouEmailStateSchema = z.union([
 		promoCode: z.string().optional(),
 		accountNumber: z.string(),
 		subscriptionNumber: z.string(),
-		firstDeliveryDate: z.string(),
+		firstDeliveryDate: dateOrDateStringSchema,
 		similarProductsConsent: z.boolean().optional(),
 	}),
 
@@ -98,7 +103,7 @@ export const sendThankYouEmailStateSchema = z.union([
 		promoCode: z.string().optional(),
 		accountNumber: z.string(),
 		subscriptionNumber: z.string(),
-		firstDeliveryDate: z.string(),
+		firstDeliveryDate: dateOrDateStringSchema,
 		similarProductsConsent: z.boolean().optional(),
 	}),
 ]);
