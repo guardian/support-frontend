@@ -11,9 +11,10 @@ import type { Participations } from 'helpers/abTests/models';
 import { getFeatureFlags } from 'helpers/featureFlags';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import { Country } from 'helpers/internationalisation/classes/country';
-import type {
-	ActiveProductKey,
-	ActiveRatePlanKey,
+import {
+	type ActiveProductKey,
+	type ActiveRatePlanKey,
+	productCatalogDescription,
 } from 'helpers/productCatalog';
 import {
 	billingPeriodToContributionType,
@@ -43,7 +44,10 @@ import ThankYouModules from '../../../components/thankYou/thankyouModules';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
-import { getPaperPlusDigitalBenefits } from '../checkout/helpers/benefitsChecklist';
+import {
+	filterProductDescriptionBenefits,
+	getPaperPlusDigitalBenefits,
+} from '../checkout/helpers/benefitsChecklist';
 import {
 	getReturnAddress,
 	getThankYouOrder,
@@ -181,19 +185,28 @@ export function ThankYouComponent({
 	const getBenefits = (): BenefitsCheckListData[] => {
 		// Three Tier products get their config from the Landing Page tool
 		if (isTier) {
-			const productBenefits =
-				landingPageSettings.products[productKey]?.benefits.map((benefit) => ({
-					isChecked: true,
-					text: benefit.copy,
-				})) ?? [];
+			const productBenefits = (
+				landingPageSettings.products[productKey]?.benefits ??
+				filterProductDescriptionBenefits(
+					productCatalogDescription[productKey],
+					countryGroupId,
+				)
+			).map((benefit) => ({
+				isChecked: true,
+				text: benefit.copy,
+			}));
 			const digitalSubscriptionAdditionalBenefits =
 				productKey === 'DigitalSubscription'
-					? landingPageSettings.products.SupporterPlus?.benefits.map(
-							(benefit) => ({
-								isChecked: true,
-								text: benefit.copy,
-							}),
-					  ) ?? []
+					? (
+							landingPageSettings.products.SupporterPlus?.benefits ??
+							filterProductDescriptionBenefits(
+								productCatalogDescription.SupporterPlus,
+								countryGroupId,
+							)
+					  ).map((benefit) => ({
+							isChecked: true,
+							text: benefit.copy,
+					  }))
 					: [];
 			return [...productBenefits, ...digitalSubscriptionAdditionalBenefits];
 		}

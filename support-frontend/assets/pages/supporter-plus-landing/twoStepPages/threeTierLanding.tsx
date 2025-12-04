@@ -13,10 +13,7 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
-import type {
-	CountryGroupId,
-	SupportRegionId,
-} from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
@@ -271,20 +268,6 @@ function getRatePlanKey(contributionType: ContributionType) {
 			return 'Monthly';
 	}
 }
-const getTierThreeRatePlanKey = (
-	contributionType: ContributionType,
-	countryGroupId: CountryGroupId,
-) => {
-	const ratePlanKey =
-		countryGroupId === 'International'
-			? contributionType === 'ANNUAL'
-				? 'RestOfWorldAnnual'
-				: 'RestOfWorldMonthly'
-			: contributionType === 'ANNUAL'
-			? 'DomesticAnnual'
-			: 'DomesticMonthly';
-	return ratePlanKey;
-};
 
 type ThreeTierLandingProps = {
 	supportRegionId: SupportRegionId;
@@ -300,7 +283,7 @@ export function ThreeTierLanding({
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
 	const urlSearchParamsPromoCode = urlSearchParams.get('promoCode');
-	const { enablePremiumDigital, enableDigitalAccess } = getFeatureFlags();
+	const { enableDigitalAccess } = getFeatureFlags();
 
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -467,14 +450,11 @@ export function ThreeTierLanding({
 	 * This should only exist as long as the Tier three hack is in place.
 	 */
 	const tier3Product = 'DigitalSubscription';
-	const tier3RatePlanKey = enablePremiumDigital
-		? ratePlanKey
-		: getTierThreeRatePlanKey(contributionType, countryGroupId);
-	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[tier3RatePlanKey]
+	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[ratePlanKey]
 		?.pricing[currencyId] as number;
 	const tier3UrlParams = new URLSearchParams({
 		product: tier3Product,
-		ratePlan: tier3RatePlanKey,
+		ratePlan: ratePlanKey,
 	});
 	const { label: title, labelPill: titlePill } = getProductDescription(
 		'DigitalSubscription',
