@@ -1,16 +1,23 @@
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
 import type { HeaderProps } from './header';
-import './header.scss';
+import {
+	logoContainer,
+	logoContainerGBP,
+	logoContainerROW,
+	logoLink,
+	topNavContainer,
+	utilityContainer,
+} from './headerTopNavStyles';
 
-export default function TopNav({ utility }: HeaderProps) {
+export function HeaderTopNav({ utility, countryGroupId }: HeaderProps) {
+	const logoContainerRegion =
+		countryGroupId === 'GBPCountries' ? logoContainerGBP : logoContainerROW;
+
 	return (
-		<div className="component-header-topnav">
-			<div className="component-header-topnav__utility">{utility}</div>
-			<div className="component-header-topnav-logo">
-				<a
-					className="component-header-topnav-logo__graun"
-					href="https://www.theguardian.com"
-				>
+		<div css={topNavContainer}>
+			<div css={utilityContainer}>{utility}</div>
+			<div css={[logoContainer, logoContainerRegion]}>
+				<a css={logoLink} href="https://www.theguardian.com">
 					<div className="visually-hidden">Return to the Guardian</div>
 					<SvgGuardianLogo />
 				</a>
