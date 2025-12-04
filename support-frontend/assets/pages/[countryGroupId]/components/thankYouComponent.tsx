@@ -43,10 +43,7 @@ import ThankYouModules from '../../../components/thankYou/thankyouModules';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
-import {
-	getPaperPlusDigitalBenefits,
-	getPremiumDigitalAllBenefits,
-} from '../checkout/helpers/benefitsChecklist';
+import { getPaperPlusDigitalBenefits } from '../checkout/helpers/benefitsChecklist';
 import {
 	getReturnAddress,
 	getThankYouOrder,
@@ -107,7 +104,9 @@ export function ThankYouComponent({
 	 * We should remove it for something more generic.
 	 */
 	const isTier =
-		productKey === 'Contribution' || productKey === 'SupporterPlus';
+		productKey === 'Contribution' ||
+		productKey === 'SupporterPlus' ||
+		productKey === 'DigitalSubscription';
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const isOneOff = billingPeriod === BillingPeriod.OneTime;
 
@@ -182,17 +181,21 @@ export function ThankYouComponent({
 	const getBenefits = (): BenefitsCheckListData[] => {
 		// Three Tier products get their config from the Landing Page tool
 		if (isTier) {
-			const product = landingPageSettings.products[productKey];
-			if (product === undefined) {
-				return [];
-			}
-			return product.benefits.map((benefit) => ({
-				isChecked: true,
-				text: benefit.copy,
-			}));
-		}
-		if (isPremiumDigital) {
-			return getPremiumDigitalAllBenefits(countryGroupId);
+			const productBenefits =
+				landingPageSettings.products[productKey]?.benefits.map((benefit) => ({
+					isChecked: true,
+					text: benefit.copy,
+				})) ?? [];
+			const digitalSubscriptionAdditionalBenefits =
+				productKey === 'DigitalSubscription'
+					? landingPageSettings.products.SupporterPlus?.benefits.map(
+							(benefit) => ({
+								isChecked: true,
+								text: benefit.copy,
+							}),
+					  ) ?? []
+					: [];
+			return [...productBenefits, ...digitalSubscriptionAdditionalBenefits];
 		}
 		if (isPaperPlus || !!observerPrint) {
 			return getPaperPlusDigitalBenefits(productKey, ratePlanKey) ?? [];
