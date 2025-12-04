@@ -23,12 +23,12 @@ const contentStyle = css`
 	flex-basis: ${space[24] * 10}px;
 	padding: 0 ${space[5]}px ${space[4]}px;
 	max-width: 700px;
-	border-bottom: 1px solid ${palette.brand[600]};
 `;
 
 function getBorderStyling(centred = false) {
 	const breakpoint = centred ? from.wide : from.tablet;
 	return css`
+		border-bottom: 1px solid ${palette.brand[600]};
 		${breakpoint} {
 			border-left: 1px solid ${palette.brand[600]};
 			border-right: 1px solid ${palette.brand[600]};
