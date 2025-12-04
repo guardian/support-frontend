@@ -30,7 +30,7 @@ libraryDependencies ++= Seq(
   "com.lihaoyi" %% "pprint" % "0.8.1",
 )
 
-dependencyOverrides += "com.google.code.gson" % "gson" % "2.9.0"
+dependencyOverrides += "com.google.code.gson" % "gson" % "2.9.1"
 
 assemblyJarName := s"${name.value}.jar"
 
