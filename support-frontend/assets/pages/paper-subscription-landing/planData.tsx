@@ -53,13 +53,7 @@ const guardianDigitalRewards = [
 	<>Far fewer asks for support</>,
 ];
 
-const observerDigitalRewards = [
-	<>Access to The Observer digital subscription</>,
-];
-const baseDigitalRewards = [
-	...guardianDigitalRewards,
-	...observerDigitalRewards,
-];
+const baseDigitalRewards = [...guardianDigitalRewards];
 
 const benefitGuardianSixDay = (
 	<span css={benefitStyle}>
@@ -121,7 +115,6 @@ const digitalBenefitsMap: Partial<
 		label: digitalRewardsLabel,
 		items: guardianDigitalRewards,
 	},
-	Sunday: { items: observerDigitalRewards },
 };
 
 const planDescriptions: Record<

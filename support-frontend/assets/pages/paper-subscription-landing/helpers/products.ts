@@ -56,7 +56,7 @@ export const getProductLabel = (
 	switch (productOption) {
 		case 'Sunday':
 			return {
-				text: 'The Observer, digital & print',
+				text: 'The Observer',
 				channel: Channel.Observer,
 			};
 		case 'WeekendPlus':
