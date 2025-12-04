@@ -1,6 +1,5 @@
 import { useTheme } from '@emotion/react';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import {
 	type ActiveProductKey,
@@ -38,13 +37,11 @@ function Heading({
 	isObserverPrint,
 	promotion,
 }: HeadingProps) {
-	const isDigitalEdition = productKey === 'DigitalSubscription';
+	const isPremiumDigital = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isTier3 = productKey === 'TierThree';
 	const contributionProduct = isContributionProduct(productKey);
 	const isGuardianPrint = isPrintProduct(productKey) && !isObserverPrint;
-	const { enablePremiumDigital } = getFeatureFlags();
-	const isPremiumDigital = enablePremiumDigital && isDigitalEdition;
 
 	const contributorName = name && name.length < 10 ? name : '';
 
@@ -67,15 +64,6 @@ function Heading({
 				promotion={promotion}
 				isoCurrency={currency}
 			/>
-		);
-	}
-
-	if (isDigitalEdition && !isPremiumDigital) {
-		return (
-			<h1 css={headerTitleText}>
-				Thank you <span data-qm-masking="blocklist">{contributorName}</span> for
-				subscribing to the <HighlightText>Digital Edition</HighlightText>
-			</h1>
 		);
 	}
 
