@@ -15,6 +15,7 @@ import { SalesforceService } from '../services/salesforce';
 import { getSalesforceConfig } from '../services/salesforceClient';
 import { user } from '../test/fixtures/salesforce/integrationTests';
 import { getIfDefined } from '../util/nullAndUndefined';
+import { replaceDatesWithZuoraFormat } from '../util/zuoraDateReplacer';
 
 const stage = stageFromEnvironment();
 const salesforceServiceProvider = new ServiceProvider(stage, async (stage) => {
@@ -38,10 +39,10 @@ export const handler = async (
 			createSalesforceContactState.giftRecipient,
 			createSalesforceContactState.product.productType,
 		);
-		return {
+		return replaceDatesWithZuoraFormat({
 			...state,
 			state: createNextState(createSalesforceContactState, contactRecords),
-		};
+		});
 	} catch (error) {
 		throw asRetryError(error);
 	}
