@@ -41,17 +41,18 @@ const baseContent = css`
 
 // ----- Props ----- //
 type PropTypes = {
-	className?: string | null | undefined;
 	children: ReactNode;
+	cssOverrides?: string;
 };
 
 // ----- Component ----- //
 export default function LeftMarginSection({
 	children,
+	cssOverrides,
 }: PropTypes): JSX.Element {
 	return (
 		<section css={baseSection}>
-			<div css={baseContent}>{children}</div>
+			<div css={[baseContent, cssOverrides]}>{children}</div>
 		</section>
 	);
 }
