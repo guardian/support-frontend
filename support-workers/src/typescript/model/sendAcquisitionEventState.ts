@@ -93,7 +93,7 @@ export const sendThankYouEmailStateSchema = z.union([
 		user: userSchema,
 		product: productTypeSchema,
 		productInformation: productPurchaseSchema.optional(),
-		giftRecipient: giftRecipientSchema.optional(),
+		giftRecipient: giftRecipientSchema.nullish(),
 		paymentMethod: paymentMethodSchema,
 		paymentSchedule: paymentScheduleSchema,
 		promoCode: z.string().optional(),

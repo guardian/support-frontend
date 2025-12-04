@@ -4,8 +4,8 @@
 
 import { RetryError, RetryErrorType } from '../errors/retryError';
 import { handler } from '../lambdas/createZuoraSubscriptionTSLambda';
-import type { CreateZuoraSubscriptionState } from '../model/createZuoraSubscriptionState';
-import type { WrappedState } from '../model/stateSchemas';
+import { createZuoraSubscriptionStateSchema } from '../model/createZuoraSubscriptionState';
+import { wrapperSchemaForState } from '../model/stateSchemas';
 import guardianWeeklyJson from './fixtures/createZuoraSubscription/guardianWeeklyInput.json';
 import transactionDeclinedJson from './fixtures/createZuoraSubscription/transactionDeclinedInput.json';
 
@@ -17,7 +17,9 @@ describe('createZuoraSubscriptionLambda integration', () => {
 		async () => {
 			try {
 				await handler(
-					transactionDeclinedJson as WrappedState<CreateZuoraSubscriptionState>,
+					wrapperSchemaForState(createZuoraSubscriptionStateSchema).parse(
+						transactionDeclinedJson,
+					),
 				);
 				fail('Expected handler to throw');
 			} catch (error) {
@@ -34,8 +36,9 @@ describe('createZuoraSubscriptionLambda integration', () => {
 	test(
 		'we encode dates correctly in the output',
 		async () => {
-			const input =
-				guardianWeeklyJson as WrappedState<CreateZuoraSubscriptionState>;
+			const input = wrapperSchemaForState(
+				createZuoraSubscriptionStateSchema,
+			).parse(guardianWeeklyJson);
 			input.state.requestId = new Date().getTime().toString(); // Ensure unique requestId because it is used as an idempotency key
 			const output = await handler(input);
 			if (

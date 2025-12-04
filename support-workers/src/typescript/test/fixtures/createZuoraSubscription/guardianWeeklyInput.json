@@ -38,7 +38,7 @@
       "productInformation": {
         "product": "GuardianWeeklyDomestic",
         "ratePlan": "Monthly",
-        "firstDeliveryDate": "2025-12-12T00:00:00.000Z",
+        "firstDeliveryDate": "2025-12-12",
         "deliveryContact": {
           "firstName": "support.e2e.firstName+pxkV6",
           "lastName": "support.e2e.lastName+aE88D",
