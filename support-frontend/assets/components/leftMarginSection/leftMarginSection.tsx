@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { from, palette } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
@@ -42,7 +43,7 @@ const baseContent = css`
 // ----- Props ----- //
 type PropTypes = {
 	children: ReactNode;
-	cssOverrides?: string;
+	cssOverrides?: SerializedStyles;
 };
 
 // ----- Component ----- //
