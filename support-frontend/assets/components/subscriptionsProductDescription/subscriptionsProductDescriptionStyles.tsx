@@ -3,7 +3,6 @@ import {
 	brandAlt,
 	from,
 	headlineBold34,
-	headlineLight20,
 	headlineLight24,
 	headlineLight28,
 	neutral,
@@ -13,7 +12,6 @@ import {
 } from '@guardian/source/foundations';
 
 export const subscriptionDescription = css`
-	// No Font
 	position: relative;
 	&:before {
 		width: 200%;
@@ -108,7 +106,8 @@ export const subscriptionTitleFeature = css`
 `;
 
 export const subscriptionOffer = css`
-	${headlineLight20};
+	${textEgyptian17};
+	font-size: 20px;
 	line-height: 24px;
 	display: inline-block;
 	color: ${neutral[7]};
