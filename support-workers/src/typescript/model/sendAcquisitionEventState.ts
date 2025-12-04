@@ -6,14 +6,10 @@ import { productTypeSchema } from './productType';
 import {
 	acquisitionDataSchema,
 	analyticsInfoSchema,
+	dateOrDateStringSchema,
 	giftRecipientSchema,
 	userSchema,
 } from './stateSchemas';
-
-const dateOrDateStringSchema = z.preprocess(
-	(input) => (typeof input === 'string' ? new Date(input) : input),
-	z.date(),
-);
 
 export const sendThankYouEmailStateSchema = z.union([
 	z.object({
