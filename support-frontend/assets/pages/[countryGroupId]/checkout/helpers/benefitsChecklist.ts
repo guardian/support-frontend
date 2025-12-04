@@ -20,24 +20,6 @@ import type {
 	ProductDescription,
 } from '../../../../helpers/productCatalog';
 
-export const getPremiumDigitalAllBenefits = (
-	countryGroupId: CountryGroupId,
-): BenefitsCheckListData[] => {
-	const digitalPremiumBenefits = filterProductDescriptionBenefits(
-		productCatalogDescriptionPremiumDigital,
-		countryGroupId,
-	);
-	const supporterPlusBenefits = filterProductDescriptionBenefits(
-		productCatalogDescription.SupporterPlus,
-		countryGroupId,
-	);
-	// Append SupporterPlus benefits
-	return benefitsAsChecklist({
-		checked: [...digitalPremiumBenefits, ...supporterPlusBenefits],
-		unchecked: [],
-	});
-};
-
 export const getPaperPlusDigitalBenefits = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
