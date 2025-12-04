@@ -75,9 +75,6 @@ export const handler = async (
 			'productInformation is required',
 		);
 
-		// TODO:
-		//  Validate paper payment gateway? Might be done already by schema
-
 		const inputFields: CreateSubscriptionInputFields<ZuoraPaymentMethod> = {
 			accountName: salesforceContact.AccountId, // We store the Salesforce Account id in the name field
 			createdRequestId: createZuoraSubscriptionState.requestId,
