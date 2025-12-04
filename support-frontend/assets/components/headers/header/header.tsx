@@ -1,34 +1,37 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import Links from '../links/links';
 import { linksNavHide } from '../links/linksStyles';
-import TopNav from './headerTopNav';
+import {
+	headerContainer,
+	headerLinksContainer,
+	headerLinksContainerGBP,
+	headerLinksContainerROW,
+	headerWrapper,
+} from './headerStyles';
+import { HeaderTopNav } from './headerTopNav';
 import MobileMenuToggler from './mobileMenuToggler';
-import './header.scss';
 
 export type HeaderProps = {
+	countryGroupId: CountryGroupId;
 	utility?: JSX.Element;
-	countryGroupId?: CountryGroupId;
 };
 
 export default function Header({ utility, countryGroupId }: HeaderProps) {
+	const headerLinksContainerRegion =
+		countryGroupId === 'GBPCountries'
+			? headerLinksContainerGBP
+			: headerLinksContainerROW;
 	return (
-		<header
-			className={classNameWithModifiers('component-header', [
-				countryGroupId !== 'GBPCountries'
-					? 'one-row-from-tablet'
-					: 'one-row-from-leftCol',
-			])}
-		>
-			<div className="component-header__wrapper">
-				<div className="component-header__row">
-					<TopNav utility={utility} />
+		<header css={headerContainer}>
+			<div css={headerWrapper}>
+				<div css={[headerLinksContainer]}>
+					<HeaderTopNav countryGroupId={countryGroupId} utility={utility} />
 					<MobileMenuToggler
 						links={<Links countryGroupId={countryGroupId} location="mobile" />}
 						utility={utility}
 					/>
 				</div>
-				<div className="component-header__row">
+				<div css={[headerLinksContainer, headerLinksContainerRegion]}>
 					<Links
 						countryGroupId={countryGroupId}
 						location="desktop"
