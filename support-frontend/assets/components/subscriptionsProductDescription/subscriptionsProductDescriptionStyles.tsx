@@ -3,6 +3,7 @@ import {
 	brandAlt,
 	from,
 	headlineBold34,
+	headlineLight20,
 	headlineLight24,
 	headlineLight28,
 	neutral,
@@ -11,6 +12,7 @@ import {
 } from '@guardian/source/foundations';
 
 export const subscriptionDescription = css`
+	// No Font
 	position: relative;
 	&:before {
 		width: 200%;
@@ -109,9 +111,8 @@ export const subscriptionTitleFeature = css`
 `;
 
 export const subscriptionOffer = css`
-	font-size: 28px;
-	line-height: 30px;
-	font-weight: 300;
+	${headlineLight20};
+	line-height: 24px;
 	display: inline-block;
 	color: ${neutral[7]};
 	background-color: ${brandAlt[400]};
@@ -119,18 +120,12 @@ export const subscriptionOffer = css`
 	padding: 0px 7px 3px;
 	margin: 6px 0px;
 
-	${until.desktop} {
-		font-size: 24px;
-	}
-
-	${until.tablet} {
+	${from.mobileLandscape} {
 		font-size: 24px;
 		line-height: 30px;
 	}
-
-	${until.mobileLandscape} {
-		font-size: 20px;
-		line-height: 24px;
+	${from.desktop} {
+		font-size: 28px;
 	}
 `;
 

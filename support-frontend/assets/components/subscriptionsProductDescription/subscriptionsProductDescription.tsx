@@ -89,7 +89,7 @@ function SubscriptionsProductDescription({
 				/>
 			) : (
 				<p className="subscriptions__description" css={subscriptionDescription}>
-					{description}
+					2{description}
 				</p>
 			)}
 			<div
