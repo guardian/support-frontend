@@ -1,10 +1,10 @@
 // ----- Imports ----- //
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { from, palette } from '@guardian/source/foundations';
+import { from } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
+import { gu_span } from 'stylesheets/emotion/layout';
 
-// ----- Styles ----- //
 const baseSection = css`
 	display: flex;
 
@@ -20,37 +20,24 @@ const baseSection = css`
 
 const baseContent = css`
 	flex-grow: 1;
-	/*
-		Original SCSS:
-		flex-basis: gu-span(9) + $gu-h-spacing;
-		with $gu-col-width: 60px and $gu-h-spacing: 20px
-		=> 9 * 60 + 8 * 20 = 700px
-	*/
-	flex-basis: 700px;
-	/* border-left: 1px solid ${palette.neutral[86]}; */
+	flex-basis: ${gu_span(9)}px;
 
 	${from.desktop} {
-		/* gu-span(10) + $gu-h-spacing => 10 * 60 + 9 * 20 = 780px */
-		flex-basis: 780px;
+		flex-basis: ${gu_span(10)}px;
 	}
 
 	${from.leftCol} {
-		/* gu-span(12) + $gu-h-spacing => 12 * 60 + 11 * 20 = 980px */
-		flex-basis: 980px;
+		flex-basis: ${gu_span(12)}px;
 	}
 `;
 
-// ----- Props ----- //
-type PropTypes = {
-	children: ReactNode;
-	cssOverrides?: SerializedStyles;
-};
-
-// ----- Component ----- //
 export default function LeftMarginSection({
 	children,
 	cssOverrides,
-}: PropTypes): JSX.Element {
+}: {
+	children: ReactNode;
+	cssOverrides?: SerializedStyles;
+}): JSX.Element {
 	return (
 		<section css={baseSection}>
 			<div css={[baseContent, cssOverrides]}>{children}</div>
