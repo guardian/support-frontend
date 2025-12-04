@@ -1,10 +1,15 @@
-package services
+package services.mparticle
 
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 
 import scala.concurrent.{ExecutionContext, Future}
+
+case class MParticleUserProfile(
+    hasMobileAppDownloaded: Boolean,
+    hasFeastMobileAppDownloaded: Boolean,
+)
 
 case class Identity(
     `type`: String,

@@ -10,7 +10,7 @@ import io.circe.syntax._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import play.api.mvc.Security.AuthenticatedRequest
-import services.{MParticleClient, MParticleProfileClient, MParticleUserProfile}
+import services.mparticle.{MParticleClient, MParticleProfileClient, MParticleUserProfile}
 
 import scala.concurrent.{ExecutionContext, Future}
 

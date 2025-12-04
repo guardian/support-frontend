@@ -14,10 +14,10 @@ import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSComponents
 import services._
+import services.mparticle.MParticleClient
 import services.paypal.PayPalNvpServiceProvider
 import services.pricing.{DefaultPromotionServiceS3, PriceSummaryServiceProvider}
 import services.stepfunctions.{StateWrapper, SupportWorkersClient}
-import services.MParticleClient
 
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
