@@ -15,6 +15,7 @@ import {
 } from './productType';
 import {
 	baseStateSchema,
+	dateOrDateStringSchema,
 	giftRecipientSchema,
 	userSchema,
 } from './stateSchemas';
@@ -51,7 +52,7 @@ export const tierThreeStateSchema = z
 		productType: z.literal('TierThree'),
 		user: userSchema,
 		product: tierThreeProductSchema,
-		firstDeliveryDate: z.string(),
+		firstDeliveryDate: dateOrDateStringSchema,
 		appliedPromotion: appliedPromotionSchema.nullable(),
 		similarProductsConsent: z.boolean().nullable(),
 	})
@@ -84,7 +85,7 @@ export const paperStateSchema = z
 		productType: z.literal('Paper'),
 		user: userSchema,
 		product: paperProductSchema,
-		firstDeliveryDate: z.string(),
+		firstDeliveryDate: dateOrDateStringSchema,
 		appliedPromotion: appliedPromotionSchema.nullable(),
 		similarProductsConsent: z.boolean().nullable(),
 	})
@@ -97,7 +98,7 @@ export const guardianWeeklyStateSchema = z
 		user: userSchema,
 		giftRecipient: giftRecipientSchema.nullable(),
 		product: guardianWeeklyProductSchema,
-		firstDeliveryDate: z.string(),
+		firstDeliveryDate: dateOrDateStringSchema,
 		appliedPromotion: appliedPromotionSchema.nullable(),
 		similarProductsConsent: z.boolean().nullable(),
 	})
