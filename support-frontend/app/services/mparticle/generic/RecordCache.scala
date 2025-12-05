@@ -22,7 +22,7 @@ object RecordCache {
       ec: ExecutionContext,
   ): RecordCache[A] = {
     val recordCacheWithoutDateExpiry = new AtomicVersionedRecordCache(tokenFetcher)
-    val recordCacheWithDateExpiry = recordCacheWithoutDateExpiry.filter(_.expiresAt.isAfter(DateTime.now()))
+    val recordCacheWithDateExpiry = recordCacheWithoutDateExpiry.filterCachedRecord(_.expiresAt.isAfter(DateTime.now()))
     recordCacheWithDateExpiry.map(_.value)
   }
 
@@ -43,14 +43,17 @@ trait RecordCache[RECORD] {
     */
   def get(maybeInvalidVersion: Option[Int]): Future[Versioned[RECORD]]
 
-  /** This adds further criteria to make it only return valid records. For example you can make it only return records
-    * if their expiry is in the future.
+  /** This adds further criteria to make it only return a valid cached record. For example you can make it only return
+    * records if their expiry is in the future.
+    *
+    * Note: If the current record fails the check, the next record is ALWAYS returned, even if they already fail
+    * validation.
     *
     * @param isValid
     * @param ec
     * @return
     */
-  def filter(isValid: RECORD => Boolean)(implicit
+  def filterCachedRecord(isValid: RECORD => Boolean)(implicit
       ec: ExecutionContext,
   ): RecordCache[RECORD] = new RecordCache[RECORD] {
     override def get(maybeInvalidVersion: Option[Int]): Future[Versioned[RECORD]] =

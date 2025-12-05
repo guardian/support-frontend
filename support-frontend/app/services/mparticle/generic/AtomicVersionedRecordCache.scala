@@ -1,10 +1,25 @@
 package services.mparticle.generic
 
 import com.gu.monitoring.SafeLogging
+import services.mparticle.generic.AtomicUpdateAndGet.CacheValue
 import services.mparticle.generic.RecordCache.Versioned
 
 import java.util.concurrent.atomic.AtomicReference
 import scala.concurrent.{ExecutionContext, Future, Promise}
+
+object AtomicUpdateAndGet {
+  type CacheValue[RECORD] = Option[Versioned[Future[RECORD]]]
+  def apply[RECORD](): AtomicUpdateAndGet[RECORD] = {
+    val cache = new AtomicReference[CacheValue[RECORD]](None)
+    new AtomicUpdateAndGet[RECORD]() {
+      override def updateAndGet(f: CacheValue[RECORD] => CacheValue[RECORD]): CacheValue[RECORD] =
+        cache.updateAndGet(existingValue => f(existingValue))
+    }
+  }
+}
+trait AtomicUpdateAndGet[RECORD] {
+  def updateAndGet(f: CacheValue[RECORD] => CacheValue[RECORD]): CacheValue[RECORD]
+}
 
 /** This class represents a cache which manages fetching of a record a minimal number of times.
   *
@@ -16,13 +31,13 @@ import scala.concurrent.{ExecutionContext, Future, Promise}
   * @param recordIsValid
   * @tparam RECORD
   */
-class AtomicVersionedRecordCache[RECORD](fetchFreshRecord: TokenFetcher[RECORD])(implicit
+class AtomicVersionedRecordCache[RECORD](
+    fetchFreshRecord: TokenFetcher[RECORD],
+    cache: AtomicUpdateAndGet[RECORD] = AtomicUpdateAndGet[RECORD](),
+)(implicit
     ec: ExecutionContext,
 ) extends SafeLogging
     with RecordCache[RECORD] {
-
-  private val cache: AtomicReference[Versioned[Future[RECORD]]] =
-    new AtomicReference[Versioned[Future[RECORD]]](Versioned(fetchFreshRecord.fetchToken(), 1))
 
   /** This function returns a record that is not the version passed in, calling fetchFreshRecord if necessary.
     *
@@ -51,13 +66,14 @@ class AtomicVersionedRecordCache[RECORD](fetchFreshRecord: TokenFetcher[RECORD])
       excludeVersion: Option[Int],
       promise: Promise[RECORD],
   ): Versioned[Future[RECORD]] =
-    cache.updateAndGet { latest =>
-      val versionIsInvalid = excludeVersion.contains(latest.version)
+    cache.updateAndGet { maybeCurrent =>
+      val maybeCurrentVersion = maybeCurrent.map(_.version)
+      val versionIsInvalid = maybeCurrentVersion.forall(currentVersion => excludeVersion.contains(currentVersion))
       if (versionIsInvalid)
-        Versioned(promise.future, latest.version + 1)
+        Some(Versioned(promise.future, maybeCurrentVersion.map(_ + 1).getOrElse(1)))
       else
-        latest
-    }
+        maybeCurrent
+    }.get
 
   private def sequence(versionedEventualRecord: Versioned[Future[RECORD]]): Future[Versioned[RECORD]] =
     for {
