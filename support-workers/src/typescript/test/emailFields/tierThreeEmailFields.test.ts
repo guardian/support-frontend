@@ -48,13 +48,11 @@ describe('Tier three thank you email fields', () => {
 						delivery_address_town: emailUser.billingAddress.city,
 						delivery_postcode: emailUser.billingAddress.postCode,
 						delivery_country: 'United Kingdom',
-
 						subscription_rate: '£10.00 every month', // Not used duplicate
 						date_of_first_paper: formatDate(firstDeliveryDate), // Not used
 						date_of_first_payment: formatDate(firstDeliveryDate), // Not used it's added by buildDeliveryEmailFields
 						subscriber_id: subscriptionNumber, // Not used duplicate
 						last_name: emailUser.lastName, // Not used
-						EmailAddress: emailAddress, // Not used
 					},
 				},
 			},
