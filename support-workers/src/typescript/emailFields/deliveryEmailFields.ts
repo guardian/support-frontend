@@ -53,6 +53,7 @@ function getPaymentFields(
 				payment_method: 'Credit/Debit Card',
 			};
 		case 'PayPal':
+		case 'PayPalCompletePayments':
 			return {
 				payment_method: 'PayPal',
 			};

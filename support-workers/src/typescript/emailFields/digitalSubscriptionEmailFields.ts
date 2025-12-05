@@ -39,6 +39,7 @@ function getPaymentMethodFields(
 				default_payment_method: 'Credit/Debit Card',
 			};
 		case 'PayPal':
+		case 'PayPalCompletePayments':
 			return {
 				default_payment_method: 'PayPal',
 			};
