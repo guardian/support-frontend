@@ -225,6 +225,11 @@ async function createPayPalPaymentMethod(
 	);
 	const email = await payPalService.retrieveEmail(payPal.baid);
 
+	const paypalEmail = getIfDefined(
+		email,
+		'Could not retrieve email from PayPal',
+	);
+
 	const shouldUsePayPalCompletePaymentsWithBAID = abTestParticipations.some(
 		(abTest) =>
 			abTest.name === 'paypalCompletePaymentsWithBAID' &&
@@ -234,7 +239,7 @@ async function createPayPalPaymentMethod(
 	if (shouldUsePayPalCompletePaymentsWithBAID) {
 		return {
 			PaypalBaid: payPal.baid,
-			PaypalEmail: getIfDefined(email, 'Could not retrieve email from PayPal'),
+			PaypalEmail: paypalEmail,
 			Type: 'PayPalCompletePaymentsWithBAID',
 			PaymentGateway: 'PayPal Complete Payments',
 		};
@@ -242,7 +247,7 @@ async function createPayPalPaymentMethod(
 
 	return {
 		PaypalBaid: payPal.baid,
-		PaypalEmail: getIfDefined(email, 'Could not retrieve email from PayPal'),
+		PaypalEmail: paypalEmail,
 		PaypalType: 'ExpressCheckout',
 		Type: 'PayPal',
 		PaymentGateway: 'PayPal Express',
