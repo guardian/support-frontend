@@ -45,6 +45,7 @@ const guardianDigitalRewards = [
 		Unlimited access to the Guardian Editions app so you can enjoy newspapers on
 		your mobile and tablet
 	</>,
+	<>Digital access to the Guardian’s 200 year newspaper archive</>,
 	<>Ad-free reading on the Guardian app and website</>,
 	<>
 		Exclusive newsletter for supporters, sent every week from the Guardian
