@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
-import { PageScaffold } from 'components/page/pageScaffold';
+import Page from 'components/page/page';
 import {
 	getAbParticipations,
 	setUpTrackingAndConsents,
@@ -20,7 +20,7 @@ function SubscriptionsLandingPage({
 	referrerAcquisitions,
 }: SubscriptionsLandingProps) {
 	return (
-		<PageScaffold
+		<Page
 			header={<Header countryGroupId={countryGroupId} />}
 			footer={<Footer centred />}
 		>
@@ -30,7 +30,7 @@ function SubscriptionsLandingPage({
 				pricingCopy={pricingCopy}
 				referrerAcquisitions={referrerAcquisitions}
 			/>
-		</PageScaffold>
+		</Page>
 	);
 }
 
