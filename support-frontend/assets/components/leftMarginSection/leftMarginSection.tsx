@@ -1,35 +1,46 @@
 // ----- Imports ----- //
+import type { SerializedStyles } from '@emotion/react';
+import { css } from '@emotion/react';
+import { from } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
-import './leftMarginSection.scss';
+import { gu_span } from 'stylesheets/emotion/layout';
 
-// ----- Props ----- //
-type PropTypes = {
-	modifierClasses: Array<string | null | undefined>;
-	className: string | null | undefined;
+const baseSection = css`
+	display: flex;
+
+	${from.tablet} {
+		&:before {
+			content: '';
+			flex-basis: 0;
+			flex-grow: 1;
+			display: block;
+		}
+	}
+`;
+
+const baseContent = css`
+	flex-grow: 1;
+	flex-basis: ${gu_span(9)}px;
+
+	${from.desktop} {
+		flex-basis: ${gu_span(10)}px;
+	}
+
+	${from.leftCol} {
+		flex-basis: ${gu_span(12)}px;
+	}
+`;
+
+export default function LeftMarginSection({
+	children,
+	cssOverrides,
+}: {
 	children: ReactNode;
-};
-
-// ----- Component ----- //
-export default function LeftMarginSection(props: PropTypes): JSX.Element {
+	cssOverrides?: SerializedStyles;
+}): JSX.Element {
 	return (
-		<section
-			className={[
-				props.className,
-				classNameWithModifiers(
-					'component-left-margin-section',
-					props.modifierClasses,
-				),
-			].join(' ')}
-		>
-			<div className="component-left-margin-section__content">
-				{props.children}
-			</div>
+		<section css={baseSection}>
+			<div css={[baseContent, cssOverrides]}>{children}</div>
 		</section>
 	);
-} // ----- Default Props ----- //
-
-LeftMarginSection.defaultProps = {
-	modifierClasses: [],
-	className: null,
-};
+}
