@@ -6,6 +6,7 @@ import {
 	headlineLight24,
 	headlineLight28,
 	neutral,
+	textEgyptian14,
 	textEgyptian17,
 	until,
 } from '@guardian/source/foundations';
@@ -23,29 +24,25 @@ export const subscriptionDescription = css`
 		margin-top: -6px;
 	}
 
-	font-weight: 400;
-	margin: 45px 20px 25px 0;
-	font-size: 20px;
-	line-height: 28px;
+	${textEgyptian14}
+	line-height: 16px;
+	margin: 16px 10px 18px 0;
 
-	${until.desktop} {
-		margin: 27px 20px 25px 0;
+	${from.mobileMedium} {
+		margin: 16px 20px 18px 0;
+	}
+	${from.mobileLandscape} {
 		font-size: 16px;
 		line-height: 18px;
+		margin: 27px 20px 25px 0;
 	}
-
 	${until.tablet} {
 		max-width: 100%;
 	}
-
-	${until.mobileLandscape} {
-		font-size: 14px;
-		line-height: 16px;
-		margin: 16px 20px 18px 0;
-	}
-
-	${until.mobileMedium} {
-		margin: 16px 10px 18px 0;
+	${from.desktop} {
+		font-size: 20px;
+		line-height: 28px;
+		margin: 45px 20px 25px 0;
 	}
 `;
 
@@ -109,9 +106,9 @@ export const subscriptionTitleFeature = css`
 `;
 
 export const subscriptionOffer = css`
-	font-size: 28px;
-	line-height: 30px;
-	font-weight: 300;
+	${textEgyptian17};
+	font-size: 20px;
+	line-height: 24px;
 	display: inline-block;
 	color: ${neutral[7]};
 	background-color: ${brandAlt[400]};
@@ -119,18 +116,12 @@ export const subscriptionOffer = css`
 	padding: 0px 7px 3px;
 	margin: 6px 0px;
 
-	${until.desktop} {
-		font-size: 24px;
-	}
-
-	${until.tablet} {
+	${from.mobileLandscape} {
 		font-size: 24px;
 		line-height: 30px;
 	}
-
-	${until.mobileLandscape} {
-		font-size: 20px;
-		line-height: 24px;
+	${from.desktop} {
+		font-size: 28px;
 	}
 `;
 
