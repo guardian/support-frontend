@@ -14,7 +14,6 @@ import {
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	type ActiveProductKey,
@@ -35,7 +34,6 @@ import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
 	getPaperPlusDigitalBenefits,
-	getPremiumDigitalAllBenefits,
 } from '../checkout/helpers/benefitsChecklist';
 import { ukSpecificAdditionalBenefit } from '../student/components/StudentHeader';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
@@ -84,7 +82,6 @@ export default function CheckoutSummary({
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
-	const { enablePremiumDigital } = getFeatureFlags();
 	const productDescription = getProductDescription(productKey, ratePlanKey);
 	const ratePlanDetail = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
@@ -121,14 +118,13 @@ export default function CheckoutSummary({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
-	const premiumDigitalBenefits =
-		productKey === 'DigitalSubscription' && enablePremiumDigital
-			? getPremiumDigitalAllBenefits(countryGroupId)
-			: undefined;
 	const benefitsCheckListData =
-		premiumDigitalBenefits ??
 		getPaperPlusDigitalBenefits(productKey, ratePlanKey) ??
-		getBenefitsChecklistFromLandingPageTool(productKey, landingPageSettings) ??
+		getBenefitsChecklistFromLandingPageTool(
+			productKey,
+			landingPageSettings,
+			countryGroupId,
+		) ??
 		getBenefitsChecklistFromProductDescription(
 			productDescription,
 			countryGroupId,

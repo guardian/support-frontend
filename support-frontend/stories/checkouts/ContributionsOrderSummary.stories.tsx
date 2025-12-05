@@ -63,7 +63,7 @@ const oneYearStudentDiscount = {
 enum ProductKeys {
 	Contribution = 'Contribution',
 	SupporterPlusKey = 'SupporterPlus',
-	TierThreeKey = 'TierThree',
+	DigitalSubscription = 'DigitalSubscription',
 }
 
 export default {
@@ -206,11 +206,11 @@ SupporterPlus.args = {
 	landingPageSettings,
 };
 
-export const TierThree = Template.bind({});
-TierThree.args = {
-	productKey: ProductKeys.TierThreeKey,
+export const DigitalSubscription = Template.bind({});
+DigitalSubscription.args = {
+	productKey: ProductKeys.DigitalSubscription,
 	ratePlanKey: 'Monthly',
-	productLabel: getProductLabel(ProductKeys.TierThreeKey),
+	productLabel: getProductLabel(ProductKeys.DigitalSubscription),
 	enableCheckList: true,
 	amount: 27,
 	currency: {
@@ -219,18 +219,16 @@ TierThree.args = {
 		spokenCurrency: 'pound',
 	},
 	checkListData: [
-		...productCatalogDescription.SupporterPlus.benefits.map((benefit) => ({
-			isChecked: true,
-			text: benefit.copy,
-		})),
-		...productCatalogDescription.TierThree.benefits.map((benefit) => ({
-			isChecked: true,
-			text: benefit.copy,
-		})),
+		...productCatalogDescription.DigitalSubscription.benefits.map(
+			(benefit) => ({
+				isChecked: true,
+				text: benefit.copy,
+			}),
+		),
 	],
 	tsAndCs: (
 		<OrderSummaryTsAndCs
-			productKey={'TierThree'}
+			productKey={'DigitalSubscription'}
 			ratePlanKey={'Monthly'}
 			countryGroupId={GBPCountries}
 			thresholdAmount={27}
@@ -238,7 +236,7 @@ TierThree.args = {
 	),
 	startDate: (
 		<OrderSummaryStartDate
-			productKey="TierThree"
+			productKey="DigitalSubscription"
 			ratePlanKey={'Monthly'}
 			startDate={'Friday, April 11, 2025'}
 		/>
