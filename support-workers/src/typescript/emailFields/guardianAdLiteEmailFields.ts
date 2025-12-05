@@ -48,7 +48,7 @@ function getPaymentMethodDescription(paymentMethod: PaymentMethod): string {
 		case 'CreditCardReferenceTransaction':
 			return 'credit / debit card';
 		case 'PayPal':
-		case 'PayPalCompletePayments':
+		case 'PayPalCompletePaymentsWithBAID':
 			return 'PayPal';
 		case 'BankTransfer':
 			return 'Direct Debit';

@@ -156,7 +156,7 @@ export const getZuoraPaymentMethod = (
 				BAID: paymentMethod.PaypalBaid,
 				email: paymentMethod.PaypalEmail,
 			};
-		case 'PayPalCompletePayments':
+		case 'PayPalCompletePaymentsWithBAID':
 			return {
 				type: 'PayPalCP',
 				BAID: paymentMethod.PaypalBaid,

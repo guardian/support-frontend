@@ -15,7 +15,7 @@ import {
 import type {
 	DirectDebitPaymentMethod,
 	PaymentMethod,
-	PayPalCompletePaymentsPaymentMethod,
+	PayPalCompletePaymentsWithBAIDPaymentMethod,
 	StripePaymentMethod,
 } from '../model/paymentMethod';
 import type { ProductType } from '../model/productType';
@@ -209,7 +209,7 @@ async function createStripePaymentMethod(
 async function createPayPalPaymentMethod(
 	isTestUser: boolean,
 	payPal: PayPalPaymentFields,
-): Promise<PayPalCompletePaymentsPaymentMethod> {
+): Promise<PayPalCompletePaymentsWithBAIDPaymentMethod> {
 	const payPalService = await paypalServiceProvider.getServiceForUser(
 		isTestUser,
 	);
@@ -217,7 +217,7 @@ async function createPayPalPaymentMethod(
 	return {
 		PaypalBaid: payPal.baid,
 		PaypalEmail: getIfDefined(email, 'Could not retrieve email from PayPal'),
-		Type: 'PayPalCompletePayments',
+		Type: 'PayPalCompletePaymentsWithBAID',
 		PaymentGateway: 'PayPal Complete Payments',
 	};
 }
