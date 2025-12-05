@@ -82,8 +82,8 @@ Promotion.args = {
 	paymentFrequency: 'MONTHLY',
 	cardTier: 3,
 	cardContent: {
-		...fallBackLandingPageSelection.products.TierThree,
-		product: 'TierThree',
+		...fallBackLandingPageSelection.products.DigitalSubscription,
+		product: 'DigitalSubscription',
 		isUserSelected: false,
 		price: 38.5,
 		cta: { copy: 'Support' },
