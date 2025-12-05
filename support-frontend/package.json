@@ -43,7 +43,7 @@
 	"dependencies": {
 		"@emotion/react": "^11.14.0",
 		"@emotion/utils": "^1.1.0",
-		"@floating-ui/react": "^0.27.6",
+		"@floating-ui/react": "^0.27.13",
 		"@guardian/core-web-vitals": "^11.1.0",
 		"@guardian/libs": "^26.0.0",
 		"@guardian/ophan-tracker-js": "0.0.0-canary-20251117102231",
