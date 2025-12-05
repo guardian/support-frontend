@@ -1,4 +1,6 @@
 // ----- Imports ----- //
+import { css } from '@emotion/react';
+import { from, palette, space } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import PageSection from 'components/pageSection/pageSection';
@@ -11,6 +13,17 @@ import {
 type PropTypes = {
 	countryGroupId: CountryGroupId;
 };
+
+const pageSectionBorderTop = css`
+	border-top: 1px solid ${palette.neutral[86]};
+
+	padding-top: ${space[3]}px;
+	padding-bottom: ${space[3]}px;
+
+	${from.desktop} {
+		padding-left: ${space[5]}px;
+	}
+`;
 
 // ----- Component ----- //
 function QuestionsContact(props: PropTypes) {
@@ -26,7 +39,7 @@ function QuestionsContact(props: PropTypes) {
 	);
 	return (
 		<div className="component-questions-contact">
-			<PageSection modifierClass="questions-contact" heading="Questions?">
+			<PageSection cssOverrides={pageSectionBorderTop} heading="Questions?">
 				<p className="component-questions-contact__description">
 					If you have any questions about contributing to The&nbsp;Guardian,
 					please&nbsp;
