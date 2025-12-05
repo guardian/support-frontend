@@ -34,6 +34,7 @@ import { ServiceProvider } from '../services/config';
 import { getPayPalConfig, PayPalService } from '../services/payPal';
 import { getStripeConfig, StripeService } from '../services/stripe';
 import { getIfDefined } from '../util/nullAndUndefined';
+import { replaceDatesWithZuoraFormat } from '../util/zuoraDateReplacer';
 
 const stage = stageFromEnvironment();
 const stripeServiceProvider = new ServiceProvider(stage, async (stage) => {
@@ -53,12 +54,14 @@ export const handler = async (
 		const createPaymentMethodState = wrapperSchemaForState(
 			createPaymentMethodStateSchema,
 		).parse(state).state;
-		return createSalesforceContactState(
-			state,
-			await createPaymentMethod(
-				createPaymentMethodState.paymentFields,
-				createPaymentMethodState.user,
-				createPaymentMethodState.product,
+		return replaceDatesWithZuoraFormat(
+			createSalesforceContactState(
+				state,
+				await createPaymentMethod(
+					createPaymentMethodState.paymentFields,
+					createPaymentMethodState.user,
+					createPaymentMethodState.product,
+				),
 			),
 		);
 	} catch (error) {

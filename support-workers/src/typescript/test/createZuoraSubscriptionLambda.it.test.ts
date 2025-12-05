@@ -4,9 +4,10 @@
 
 import { RetryError, RetryErrorType } from '../errors/retryError';
 import { handler } from '../lambdas/createZuoraSubscriptionTSLambda';
-import type { CreateZuoraSubscriptionState } from '../model/createZuoraSubscriptionState';
-import type { WrappedState } from '../model/stateSchemas';
-import json from './fixtures/createZuoraSubscription/transactionDeclinedInput.json';
+import { createZuoraSubscriptionStateSchema } from '../model/createZuoraSubscriptionState';
+import { wrapperSchemaForState } from '../model/stateSchemas';
+import guardianWeeklyJson from './fixtures/createZuoraSubscription/guardianWeeklyInput.json';
+import transactionDeclinedJson from './fixtures/createZuoraSubscription/transactionDeclinedInput.json';
 
 const testTimeout = 20000;
 
@@ -15,7 +16,11 @@ describe('createZuoraSubscriptionLambda integration', () => {
 		'we handle a transaction declined error from Stripe appropriately',
 		async () => {
 			try {
-				await handler(json as WrappedState<CreateZuoraSubscriptionState>);
+				await handler(
+					wrapperSchemaForState(createZuoraSubscriptionStateSchema).parse(
+						transactionDeclinedJson,
+					),
+				);
 				fail('Expected handler to throw');
 			} catch (error) {
 				if (error instanceof RetryError) {
@@ -25,6 +30,25 @@ describe('createZuoraSubscriptionLambda integration', () => {
 					fail('Error is not an instance of RetryError');
 				}
 			}
+		},
+		testTimeout,
+	);
+	test(
+		'we encode dates correctly in the output',
+		async () => {
+			const input = wrapperSchemaForState(
+				createZuoraSubscriptionStateSchema,
+			).parse(guardianWeeklyJson);
+			input.state.requestId = new Date().getTime().toString(); // Ensure unique requestId because it is used as an idempotency key
+			const output = await handler(input);
+			if (
+				output.state.sendThankYouEmailState.productType !== 'GuardianWeekly'
+			) {
+				fail('Expected productType to be GuardianWeekly');
+			}
+			expect(output.state.sendThankYouEmailState.firstDeliveryDate).toBe(
+				'2025-12-12',
+			);
 		},
 		testTimeout,
 	);

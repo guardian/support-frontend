@@ -266,8 +266,9 @@ export class SupportWorkers extends GuStack {
       [promotionsDynamoTablePolicy, secretsManagerPolicy]
     ).addCatch(failureHandler, catchProps);
 
-    const sendThankYouEmail = createScalaLambda("SendThankYouEmail", [
+    const sendThankYouEmail = createTypescriptLambda("SendThankYouEmail", [
       emailSqsPolicy,
+      secretsManagerPolicy,
     ]);
     const updateSupporterProductData = createScalaLambda(
       "UpdateSupporterProductData",
@@ -292,6 +293,11 @@ export class SupportWorkers extends GuStack {
     const isContribution = isProductType("Contribution");
     const isSupporterPLus = isProductType("SupporterPlus");
     const isTierThree = isProductType("TierThree");
+    const isNewspaper = Condition.or(
+      isProductType("HomeDelivery"),
+      isProductType("NationalDelivery"),
+      isProductType("SubscriptionCard")
+    );
 
     const shouldUseTSLambda = Condition.and(
       Condition.isNotNull("$.state.productInformation"),
@@ -299,7 +305,8 @@ export class SupportWorkers extends GuStack {
         isGuardianAdLite,
         isContribution,
         isSupporterPLus,
-        isTierThree
+        isTierThree,
+        isNewspaper
       )
     );
 

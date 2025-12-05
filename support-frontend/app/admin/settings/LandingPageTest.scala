@@ -47,6 +47,7 @@ case class LandingPageProductDescription(
     label: Option[Label] = None,
     benefits: List[ProductBenefit],
     cta: Cta,
+    titlePill: Option[String] = None,
 )
 
 case class Cta(
@@ -86,9 +87,9 @@ object TickerSettings {
   implicit val tickerCodec: Codec[TickerSettings] = deriveCodec
 }
 case class Products(
-    Contribution: LandingPageProductDescription,
-    SupporterPlus: LandingPageProductDescription,
-    TierThree: LandingPageProductDescription,
+    Contribution: Option[LandingPageProductDescription],
+    SupporterPlus: Option[LandingPageProductDescription],
+    DigitalSubscription: Option[LandingPageProductDescription],
 )
 
 object Products {
