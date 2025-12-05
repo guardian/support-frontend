@@ -9,6 +9,33 @@ object RecordCache {
 
   case class Versioned[RECORD](record: RECORD, version: Int)
 
+  /** This gets a versioned future from the cache and retries it once if it's failed.
+    *
+    * Notes:
+    *
+    * It needs access to the version even if the Future is failed, so the version needs to be outside of the Future on
+    * entry.
+    *
+    * On exit, the Future is on the outside because we don't know the ultimate version number until the future is
+    * resolved.
+    *
+    * @param cache
+    * @param ec
+    * @tparam RECORD
+    * @return
+    */
+  def withSingleRetry[RECORD](cache: VersionedRecordCache[RECORD])(implicit
+      ec: ExecutionContext,
+  ): RecordCache[RECORD] = new RecordCache[RECORD] {
+    def get(excludeVersion: Option[Int]): Future[Versioned[RECORD]] = {
+      val currentVersion = cache.get(excludeVersion)
+      currentVersion.record.map(record => Versioned(record, currentVersion.version)).recoverWith { error =>
+        val retryVersion = cache.get(Some(currentVersion.version))
+        retryVersion.record.map(record => Versioned(record, retryVersion.version))
+      }
+    }
+  }
+
   case class RecordWithExpiry[A](value: A, expiresAt: DateTime)
 
   /** This creates a new cache that expires TokenWithExpiry records based on their expiresAt.
@@ -21,7 +48,7 @@ object RecordCache {
   def withExpiry[A](tokenFetcher: TokenFetcher[RecordWithExpiry[A]])(implicit
       ec: ExecutionContext,
   ): RecordCache[A] = {
-    val recordCacheWithoutDateExpiry = new AtomicVersionedRecordCache(tokenFetcher)
+    val recordCacheWithoutDateExpiry = withSingleRetry(new AtomicVersionedRecordCache(tokenFetcher))
     val recordCacheWithDateExpiry = recordCacheWithoutDateExpiry.filterCachedRecord(_.expiresAt.isAfter(DateTime.now()))
     recordCacheWithDateExpiry.map(_.value)
   }

@@ -6,6 +6,20 @@ import services.mparticle.generic.RecordCache.Versioned
 
 import scala.concurrent.{ExecutionContext, Future, Promise}
 
+trait VersionedRecordCache[RECORD] {
+
+  /** This function returns a record that is not the version passed in, calling fetchFreshRecord if necessary.
+    *
+    * We need to sequence it to get the Future on the outside, otherwise it's impossible to implement filter (above).
+    *
+    * @param excludeVersion
+    * @param ec
+    * @return
+    *   a future with a version inside
+    */
+  def get(excludeVersion: Option[Int]): Versioned[Future[RECORD]]
+}
+
 object AtomicVersionedRecordCache {
   type CacheValue[RECORD] = Option[Versioned[Future[RECORD]]]
 }
@@ -27,7 +41,7 @@ class AtomicVersionedRecordCache[RECORD](
 )(implicit
     ec: ExecutionContext,
 ) extends SafeLogging
-    with RecordCache[RECORD] {
+    with VersionedRecordCache[RECORD] {
 
   /** This function returns a record that is not the version passed in, calling fetchFreshRecord if necessary.
     *
@@ -38,13 +52,10 @@ class AtomicVersionedRecordCache[RECORD](
     * @return
     *   a future with a version inside
     */
-  override def get(excludeVersion: Option[Int]): Future[Versioned[RECORD]] =
-    sequence(atomicStoreNewFetchIfCurrentVersionIsInvalid(excludeVersion))
-
-  private def atomicStoreNewFetchIfCurrentVersionIsInvalid(excludeVersion: Option[Int]): Versioned[Future[RECORD]] = {
+  override def get(excludeVersion: Option[Int]): Versioned[Future[RECORD]] = {
     val promise = Promise[RECORD]()
     val versionedEventualRecord: Versioned[Future[RECORD]] =
-      atomicStorePromiseIfCurrentVersionIsInvalid(excludeVersion, promise)
+      atomicStorePromiseIfCurrentVersionIsInvalid(excludeVersion, promise.future)
     if (versionedEventualRecord.record == promise.future) {
       // we won - so start the call
       promise.completeWith(fetchFreshRecord.fetchToken())
@@ -54,20 +65,15 @@ class AtomicVersionedRecordCache[RECORD](
 
   private def atomicStorePromiseIfCurrentVersionIsInvalid(
       excludeVersion: Option[Int],
-      promise: Promise[RECORD],
+      future: Future[RECORD],
   ): Versioned[Future[RECORD]] =
     cache.maybeUpdateAndGet { maybeCurrent =>
       val maybeCurrentVersion = maybeCurrent.map(_.version)
       val versionIsInvalid = maybeCurrentVersion.forall(currentVersion => excludeVersion.contains(currentVersion))
       if (versionIsInvalid)
-        Some(Some(Versioned(promise.future, maybeCurrentVersion.map(_ + 1).getOrElse(1))))
+        Some(Some(Versioned(future, maybeCurrentVersion.map(_ + 1).getOrElse(1))))
       else
         None
     }.get
-
-  private def sequence(versionedEventualRecord: Versioned[Future[RECORD]]): Future[Versioned[RECORD]] =
-    for {
-      recordToUse <- versionedEventualRecord.record
-    } yield Versioned(recordToUse, versionedEventualRecord.version)
 
 }
