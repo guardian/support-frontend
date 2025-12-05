@@ -1,24 +1,13 @@
 package services.mparticle.generic
 
 import com.gu.monitoring.SafeLogging
-import services.mparticle.generic.AtomicUpdateAndGet.CacheValue
+import services.mparticle.generic.AtomicVersionedRecordCache.CacheValue
 import services.mparticle.generic.RecordCache.Versioned
 
-import java.util.concurrent.atomic.AtomicReference
 import scala.concurrent.{ExecutionContext, Future, Promise}
 
-object AtomicUpdateAndGet {
+object AtomicVersionedRecordCache {
   type CacheValue[RECORD] = Option[Versioned[Future[RECORD]]]
-  def apply[RECORD](): AtomicUpdateAndGet[RECORD] = {
-    val cache = new AtomicReference[CacheValue[RECORD]](None)
-    new AtomicUpdateAndGet[RECORD]() {
-      override def updateAndGet(f: CacheValue[RECORD] => CacheValue[RECORD]): CacheValue[RECORD] =
-        cache.updateAndGet(existingValue => f(existingValue))
-    }
-  }
-}
-trait AtomicUpdateAndGet[RECORD] {
-  def updateAndGet(f: CacheValue[RECORD] => CacheValue[RECORD]): CacheValue[RECORD]
 }
 
 /** This class represents a cache which manages fetching of a record a minimal number of times.
@@ -33,7 +22,8 @@ trait AtomicUpdateAndGet[RECORD] {
   */
 class AtomicVersionedRecordCache[RECORD](
     fetchFreshRecord: TokenFetcher[RECORD],
-    cache: AtomicUpdateAndGet[RECORD] = AtomicUpdateAndGet[RECORD](),
+    cache: MaybeUpdateAndGet[CacheValue[RECORD]] =
+      MaybeUpdateAndGet[CacheValue[RECORD]](AtomicUpdateAndGet[CacheValue[RECORD]](None)),
 )(implicit
     ec: ExecutionContext,
 ) extends SafeLogging
@@ -66,13 +56,13 @@ class AtomicVersionedRecordCache[RECORD](
       excludeVersion: Option[Int],
       promise: Promise[RECORD],
   ): Versioned[Future[RECORD]] =
-    cache.updateAndGet { maybeCurrent =>
+    cache.maybeUpdateAndGet { maybeCurrent =>
       val maybeCurrentVersion = maybeCurrent.map(_.version)
       val versionIsInvalid = maybeCurrentVersion.forall(currentVersion => excludeVersion.contains(currentVersion))
       if (versionIsInvalid)
-        Some(Versioned(promise.future, maybeCurrentVersion.map(_ + 1).getOrElse(1)))
+        Some(Some(Versioned(promise.future, maybeCurrentVersion.map(_ + 1).getOrElse(1))))
       else
-        maybeCurrent
+        None
     }.get
 
   private def sequence(versionedEventualRecord: Versioned[Future[RECORD]]): Future[Versioned[RECORD]] =

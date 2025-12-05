@@ -2,17 +2,17 @@ package services.mparticle.generic
 
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
-import services.mparticle.generic.AtomicUpdateAndGet.CacheValue
+import services.mparticle.generic.AtomicVersionedRecordCache.CacheValue
 
 import scala.concurrent.{Future, Promise}
 
 class AtomicVersionedRecordCacheSpec extends AsyncFlatSpec with Matchers {
 
-  class TestAtomicUpdateAndGet[RECORD] extends AtomicUpdateAndGet[RECORD] {
+  class TestMaybeUpdateAndGet[RECORD] extends MaybeUpdateAndGet[CacheValue[RECORD]] {
     private var current: CacheValue[RECORD] = None
 
-    override def updateAndGet(f: CacheValue[RECORD] => CacheValue[RECORD]): CacheValue[RECORD] = {
-      current = f(current)
+    override def maybeUpdateAndGet(f: CacheValue[RECORD] => Option[CacheValue[RECORD]]): CacheValue[RECORD] = {
+      current = f(current).getOrElse(current)
       current
     }
   }
@@ -39,7 +39,7 @@ class AtomicVersionedRecordCacheSpec extends AsyncFlatSpec with Matchers {
 
   it should "fetch record on first get with no excluded version" in {
     val mockTokenFetcher = new TestTokenFetcher(Iterator("record1", "record2"))
-    val mockAtomicReference = new TestAtomicUpdateAndGet[String]
+    val mockAtomicReference = new TestMaybeUpdateAndGet[String]
     val cache = new AtomicVersionedRecordCache(mockTokenFetcher, mockAtomicReference)
 
     cache.get(None).map { actual =>
@@ -51,7 +51,7 @@ class AtomicVersionedRecordCacheSpec extends AsyncFlatSpec with Matchers {
 
   it should "return cached record on second get with no excluded version" in {
     val fetcher = new TestTokenFetcher(Iterator("record1", "record2"))
-    val atomicUpdate = new TestAtomicUpdateAndGet[String]
+    val atomicUpdate = new TestMaybeUpdateAndGet[String]
     val cache = new AtomicVersionedRecordCache(fetcher, atomicUpdate)
 
     for {
@@ -66,7 +66,7 @@ class AtomicVersionedRecordCacheSpec extends AsyncFlatSpec with Matchers {
 
   it should "refetch when current version is excluded" in {
     val fetcher = new TestTokenFetcher(Iterator("record1", "record2"))
-    val atomicUpdate = new TestAtomicUpdateAndGet[String]
+    val atomicUpdate = new TestMaybeUpdateAndGet[String]
     val cache = new AtomicVersionedRecordCache(fetcher, atomicUpdate)
 
     for {
@@ -82,7 +82,7 @@ class AtomicVersionedRecordCacheSpec extends AsyncFlatSpec with Matchers {
 
   it should "not refetch when excluded version doesn't match current" in {
     val fetcher = new TestTokenFetcher(Iterator("record1", "record2"))
-    val atomicUpdate = new TestAtomicUpdateAndGet[String]
+    val atomicUpdate = new TestMaybeUpdateAndGet[String]
     val cache = new AtomicVersionedRecordCache(fetcher, atomicUpdate)
 
     for {
@@ -97,7 +97,7 @@ class AtomicVersionedRecordCacheSpec extends AsyncFlatSpec with Matchers {
 
   it should "only fetch once for concurrent requests with empty cache" in {
     val fetcher = new TestSlowTokenFetcher()
-    val atomicUpdate = new TestAtomicUpdateAndGet[String]
+    val atomicUpdate = new TestMaybeUpdateAndGet[String]
     val cache = new AtomicVersionedRecordCache(fetcher, atomicUpdate)
 
     val future1 = cache.get(None)
@@ -121,7 +121,7 @@ class AtomicVersionedRecordCacheSpec extends AsyncFlatSpec with Matchers {
 
   it should "maintain version consistency across multiple refetches" in {
     val fetcher = new TestTokenFetcher(Iterator("record1", "record2", "record3"))
-    val atomicUpdate = new TestAtomicUpdateAndGet[String]
+    val atomicUpdate = new TestMaybeUpdateAndGet[String]
     val cache = new AtomicVersionedRecordCache(fetcher, atomicUpdate)
 
     for {
@@ -139,7 +139,7 @@ class AtomicVersionedRecordCacheSpec extends AsyncFlatSpec with Matchers {
 
   it should "return cached record when filterCachedRecord passes" in {
     val fetcher = new TestTokenFetcher(Iterator(10, 20, 30))
-    val atomicUpdate = new TestAtomicUpdateAndGet[Int]
+    val atomicUpdate = new TestMaybeUpdateAndGet[Int]
     val cache = new AtomicVersionedRecordCache(fetcher, atomicUpdate)
 
     var filterCallCount = 0
@@ -158,7 +158,7 @@ class AtomicVersionedRecordCacheSpec extends AsyncFlatSpec with Matchers {
 
   it should "refetch when filterCachedRecord fails on cached record" in {
     val fetcher = new TestTokenFetcher(Iterator(3, 10, 20))
-    val atomicUpdate = new TestAtomicUpdateAndGet[Int]
+    val atomicUpdate = new TestMaybeUpdateAndGet[Int]
     val cache = new AtomicVersionedRecordCache(fetcher, atomicUpdate)
 
     var filterCallCount = 0
@@ -177,7 +177,7 @@ class AtomicVersionedRecordCacheSpec extends AsyncFlatSpec with Matchers {
 
   it should "call filterCachedRecord every time on cached values" in {
     val fetcher = new TestTokenFetcher(Iterator(10, 5, 20))
-    val atomicUpdate = new TestAtomicUpdateAndGet[Int]
+    val atomicUpdate = new TestMaybeUpdateAndGet[Int]
     val cache = new AtomicVersionedRecordCache(fetcher, atomicUpdate)
 
     var filterCallCount = 0
@@ -204,7 +204,7 @@ class AtomicVersionedRecordCacheSpec extends AsyncFlatSpec with Matchers {
 
   it should "apply filterCachedRecord on subsequent gets if the version is invalid" in {
     val fetcher = new TestTokenFetcher(Iterator(10, 5, 20))
-    val atomicUpdate = new TestAtomicUpdateAndGet[Int]
+    val atomicUpdate = new TestMaybeUpdateAndGet[Int]
     val cache = new AtomicVersionedRecordCache(fetcher, atomicUpdate)
 
     var filterCallCount = 0
@@ -228,7 +228,7 @@ class AtomicVersionedRecordCacheSpec extends AsyncFlatSpec with Matchers {
 
   it should "refetch when filterCachedRecord becomes false for cached value (simulating expiry)" in {
     val fetcher = new TestTokenFetcher(Iterator(10, 20, 30))
-    val atomicUpdate = new TestAtomicUpdateAndGet[Int]
+    val atomicUpdate = new TestMaybeUpdateAndGet[Int]
     val cache = new AtomicVersionedRecordCache(fetcher, atomicUpdate)
 
     var threshold = 5
@@ -256,7 +256,7 @@ class AtomicVersionedRecordCacheSpec extends AsyncFlatSpec with Matchers {
 
   it should "transform the record while preserving version" in {
     val fetcher = new TestTokenFetcher(Iterator("hello", "world"))
-    val atomicUpdate = new TestAtomicUpdateAndGet[String]
+    val atomicUpdate = new TestMaybeUpdateAndGet[String]
     val cache = new AtomicVersionedRecordCache(fetcher, atomicUpdate)
     val mappedCache = cache.map(_.toUpperCase)
 
@@ -269,7 +269,7 @@ class AtomicVersionedRecordCacheSpec extends AsyncFlatSpec with Matchers {
 
   it should "apply transformation on cached values" in {
     val fetcher = new TestTokenFetcher(Iterator("hello", "world"))
-    val atomicUpdate = new TestAtomicUpdateAndGet[String]
+    val atomicUpdate = new TestMaybeUpdateAndGet[String]
     val cache = new AtomicVersionedRecordCache(fetcher, atomicUpdate)
     val mappedCache = cache.map(_.length)
 
@@ -287,7 +287,7 @@ class AtomicVersionedRecordCacheSpec extends AsyncFlatSpec with Matchers {
 
   it should "chain multiple map operations" in {
     val fetcher = new TestTokenFetcher(Iterator("hello", "world"))
-    val atomicUpdate = new TestAtomicUpdateAndGet[String]
+    val atomicUpdate = new TestMaybeUpdateAndGet[String]
     val cache = new AtomicVersionedRecordCache(fetcher, atomicUpdate)
     val mappedCache = cache
       .map(_.toUpperCase)
@@ -301,7 +301,7 @@ class AtomicVersionedRecordCacheSpec extends AsyncFlatSpec with Matchers {
 
   it should "work with map after filterCachedRecord" in {
     val fetcher = new TestTokenFetcher(Iterator(5, 10, 15))
-    val atomicUpdate = new TestAtomicUpdateAndGet[Int]
+    val atomicUpdate = new TestMaybeUpdateAndGet[Int]
     val cache = new AtomicVersionedRecordCache(fetcher, atomicUpdate)
     val transformedCache = cache
       .filterCachedRecord(_ > 8)
