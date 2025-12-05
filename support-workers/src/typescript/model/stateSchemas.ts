@@ -52,6 +52,7 @@ const abTestSchema = z.object({
 	name: z.string(),
 	variant: z.string(),
 });
+export type AbTest = z.infer<typeof abTestSchema>;
 
 const queryParamSchema = z.object({
 	name: z.string(),
