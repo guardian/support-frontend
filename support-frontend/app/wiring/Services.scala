@@ -15,10 +15,10 @@ import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSComponents
 import services._
+import services.mparticle.MParticleClient
 import services.paypal.PayPalNvpServiceProvider
 import services.pricing.{DefaultPromotionServiceS3, PriceSummaryServiceProvider}
 import services.stepfunctions.{StateWrapper, SupportWorkersClient}
-import services.MParticleClient
 
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
@@ -74,7 +74,7 @@ trait Services {
 
   lazy val paymentAPIService = new PaymentAPIService(wsClient, appConfig.paymentApiUrl)
 
-  lazy val mparticleClient = new MParticleClient(RequestRunners.futureRunner, appConfig.mparticleConfigProvider)
+  lazy val mparticleClient = MParticleClient(RequestRunners.futureRunner, appConfig.mparticleConfigProvider)
 
   lazy val recaptchaService = new RecaptchaService(wsClient)
 
