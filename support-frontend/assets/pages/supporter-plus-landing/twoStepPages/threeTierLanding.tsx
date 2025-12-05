@@ -47,7 +47,6 @@ import {
 	getProductLabel,
 	productCatalog,
 	productCatalogDescription,
-	productCatalogDescriptionPremiumDigital,
 } from 'helpers/productCatalog';
 import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { allProductPrices } from 'helpers/productPrice/productPrices';
@@ -466,7 +465,7 @@ export function ThreeTierLanding({
 		benefits:
 			settings.products.DigitalSubscription?.benefits ??
 			filterProductDescriptionBenefits(
-				productCatalogDescriptionPremiumDigital,
+				productCatalogDescription.DigitalSubscription,
 				countryGroupId,
 			),
 		cta:

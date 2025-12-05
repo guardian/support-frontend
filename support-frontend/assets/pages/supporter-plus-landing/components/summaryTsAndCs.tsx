@@ -3,7 +3,6 @@ import { neutral, space, textSans15 } from '@guardian/source/foundations';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import { formatAmount } from 'helpers/forms/checkouts';
 import type {
 	ActiveProductKey,
@@ -67,7 +66,6 @@ export function SummaryTsAndCs({
 		isSundayOnlyNewsletterSubscription ||
 		isPaperPlusSub(productKey, ratePlanKey);
 
-	const { enablePremiumDigital } = getFeatureFlags();
 	const { label: productName } = getProductDescription(productKey, ratePlanKey);
 
 	const rateDescriptor = ratePlanDescription ?? ratePlanKey;
@@ -119,9 +117,7 @@ export function SummaryTsAndCs({
 			</>
 		),
 		TierThree: summaryTsAndCsTierThreeGuardianAdLite,
-		DigitalSubscription: (
-			<>{enablePremiumDigital && summaryTsAndCsTierThreeGuardianAdLite}</>
-		),
+		DigitalSubscription: <>{summaryTsAndCsTierThreeGuardianAdLite}</>,
 		GuardianAdLite: summaryTsAndCsTierThreeGuardianAdLite,
 	};
 	return summaryTsAndCs[productKey] ?? null;

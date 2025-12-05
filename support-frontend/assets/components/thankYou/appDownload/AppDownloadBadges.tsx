@@ -9,7 +9,6 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import {
 	androidAppUrl,
 	feastAppUrl,
-	getDailyEditionUrl,
 	getIosAppUrl,
 } from 'helpers/urls/externalLinks';
 import AppleAppStoreBadge from './badges/AppleAppStoreBadge';
@@ -42,9 +41,6 @@ const responsiveLayoutStyles = css`
 	}
 `;
 
-const editionsPlayStoreUrl =
-	'https://play.google.com/store/apps/details?id=com.guardian.editions&hl=en_GB&gl=US';
-
 function AppDownloadBadges({
 	countryGroupId,
 	isFeast,
@@ -67,38 +63,6 @@ function AppDownloadBadges({
 			{/* Google Play */}
 			<a
 				href={isFeast ? feastAppUrl : androidAppUrl}
-				target="blank"
-				onClick={() =>
-					trackComponentClick(OPHAN_COMPONENT_ID_GOOGLE_PLAY_BADGE)
-				}
-				aria-label="Get it on Google Play"
-			>
-				<GooglePlayStoreBadge />
-			</a>
-		</div>
-	);
-}
-
-export function AppDownloadBadgesEditions({
-	countryGroupId,
-}: {
-	countryGroupId: CountryGroupId;
-}): JSX.Element {
-	return (
-		<div css={container}>
-			{/* App Store */}
-			<a
-				href={getDailyEditionUrl(countryGroupId)}
-				target="blank"
-				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_APP_STORE_BADGE)}
-				aria-label="Download on the Apple App Store"
-			>
-				<AppleAppStoreBadge />
-			</a>
-
-			{/* Google Play */}
-			<a
-				href={editionsPlayStoreUrl}
 				target="blank"
 				onClick={() =>
 					trackComponentClick(OPHAN_COMPONENT_ID_GOOGLE_PLAY_BADGE)
