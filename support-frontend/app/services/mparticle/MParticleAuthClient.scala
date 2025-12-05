@@ -6,7 +6,11 @@ import config.MparticleConfig
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
+import org.joda.time.DateTime
+import services.mparticle.generic.TokenFetcher
+import services.mparticle.generic.RecordCache.RecordWithExpiry
 
+import scala.concurrent.duration.DurationInt
 import scala.concurrent.{ExecutionContext, Future}
 
 case class MParticleAccessToken(tokenAsString: String) extends AnyVal
@@ -20,7 +24,6 @@ case class OAuthTokenRequest(
 
 case class OAuthTokenResponse(
     access_token: MParticleAccessToken,
-    token_type: String,
     expires_in: Int,
 )
 
@@ -36,11 +39,21 @@ class MParticleAuthClient(
     val httpClient: FutureHttpClient,
     config: MparticleConfig,
 )(implicit ec: ExecutionContext)
-    extends SafeLogging {
+    extends SafeLogging
+    with TokenFetcher[RecordWithExpiry[MParticleAccessToken]] {
 
   import MParticleAuthClient._
 
-  def getAccessToken(): Future[(MParticleAccessToken, Int)] = {
+  private val safetyMargin = 2.minutes
+
+  override def fetchToken(): Future[RecordWithExpiry[MParticleAccessToken]] = getAccessToken().map { authResponse =>
+    val now = DateTime.now()
+    val actualExpiryTime = now.plusSeconds(authResponse.expires_in)
+    val safeExpiryTime = actualExpiryTime.minus(safetyMargin.toMillis)
+    RecordWithExpiry(authResponse.access_token, safeExpiryTime)
+  }
+
+  def getAccessToken(): Future[OAuthTokenResponse] = {
     val request = OAuthTokenRequest(
       client_id = config.clientId,
       client_secret = config.clientSecret,
@@ -65,7 +78,7 @@ class MParticleAuthClient(
       if (response.code() == 200) {
         io.circe.parser.decode[OAuthTokenResponse](response.body().string()) match {
           case Right(tokenResponse) =>
-            Future.successful((tokenResponse.access_token, tokenResponse.expires_in))
+            Future.successful(tokenResponse)
           case Left(error) =>
             val errorMsg = s"Error parsing access token response: ${error.getMessage}"
             Future.failed(new RuntimeException(errorMsg))
