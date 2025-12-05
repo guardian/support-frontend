@@ -31,7 +31,6 @@ export function buildContributionEmailFields({
 		mandateId,
 	);
 	const productFields = {
-		EmailAddress: user.primaryEmailAddress,
 		created: now.toISOString(),
 		amount: amount.toString(),
 		currency: currency,

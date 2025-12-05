@@ -31,7 +31,6 @@ describe('Paper email fields', () => {
 					first_name: deliveryContact.firstName,
 					last_name: deliveryContact.lastName,
 					account_holder: 'Mickey Mouse',
-					EmailAddress: emailAddress,
 					ZuoraSubscriberId: subscriptionNumber,
 					package: 'Everyday',
 					date_of_first_payment: 'Tuesday, 18 November 2025',

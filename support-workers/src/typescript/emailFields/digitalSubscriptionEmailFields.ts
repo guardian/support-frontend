@@ -65,7 +65,6 @@ export function buildDigitalSubscriptionEmailFields({
 	const productFields = {
 		first_name: user.firstName,
 		last_name: user.lastName,
-		emailaddress: user.primaryEmailAddress,
 		subscription_details: describePayments(
 			paymentSchedule,
 			billingPeriod,

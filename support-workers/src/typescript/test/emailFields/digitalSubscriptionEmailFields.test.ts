@@ -28,7 +28,6 @@ describe('digitalSubscriptionEmailFields', () => {
 					SubscriberAttributes: {
 						first_name: emailUser.firstName,
 						last_name: emailUser.lastName,
-						emailaddress: emailAddress,
 						mandateid: mandateId,
 						subscription_details: '£119.90 for the first year',
 						date_of_first_payment: 'Tuesday, 11 November 2025',

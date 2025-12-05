@@ -30,7 +30,6 @@ export function buildGuardianAdLiteEmailFields({
 	);
 	const productFields = {
 		zuorasubscriberid: subscriptionNumber,
-		email_address: user.primaryEmailAddress,
 		billing_period: 'monthly',
 		first_payment_date: formatDate(dayjs(firstPayment(paymentSchedule).date)),
 		payment_method: getPaymentMethodDescription(paymentMethod),

@@ -38,7 +38,6 @@ export function buildSupporterPlusEmailFields({
 		mandateId,
 	);
 	const productFields = {
-		email_address: user.primaryEmailAddress,
 		created: zuoraDateFormat(now),
 		currency: currency,
 		first_name: user.firstName,
