@@ -76,6 +76,7 @@ export function getPaymentMethodFieldsSupporterPlus(
 				first_payment_date: formatDate(created),
 			};
 		case 'PayPal':
+		case 'PayPalCompletePayments':
 			return {
 				payment_method: 'PayPal',
 				first_payment_date: formatDate(created),
