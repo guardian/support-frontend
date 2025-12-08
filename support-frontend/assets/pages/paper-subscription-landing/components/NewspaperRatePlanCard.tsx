@@ -63,12 +63,11 @@ function NewspaperRatePlanCard({
 	const isObserverChannel = productLabel?.channel === Channel.Observer;
 
 	const renderPlanDetails = () => (
-		<span css={!planData?.digitalRewards?.label && benefitsListSection}>
+		<div css={!planData?.digitalRewards?.label && benefitsListSection}>
 			<BenefitsList
 				title={planData?.benefits.label}
 				listItems={planData?.benefits.items}
 			/>
-
 			<BenefitsList
 				title={planData?.digitalRewards?.label}
 				listItems={planData?.digitalRewards?.items}
@@ -79,7 +78,7 @@ function NewspaperRatePlanCard({
 					Only available inside Greater London.
 				</p>
 			)}
-		</span>
+		</div>
 	);
 
 	return (
