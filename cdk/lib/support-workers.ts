@@ -298,6 +298,7 @@ export class SupportWorkers extends GuStack {
       isProductType("NationalDelivery"),
       isProductType("SubscriptionCard")
     );
+    const isDigitalSubscription = isProductType("DigitalSubscription");
 
     const shouldUseTSLambda = Condition.and(
       Condition.isNotNull("$.state.productInformation"),
@@ -306,7 +307,8 @@ export class SupportWorkers extends GuStack {
         isContribution,
         isSupporterPLus,
         isTierThree,
-        isNewspaper
+        isNewspaper,
+        isDigitalSubscription
       )
     );
 

@@ -242,7 +242,7 @@ const buildSendThankYouEmailState = (
 	};
 
 	return sendThankYouEmailStateSchema.parse({
-		productType: state.product.productType,
+		productType: state.productSpecificState.productType,
 		user: state.user,
 		product: state.product,
 		productInformation:
