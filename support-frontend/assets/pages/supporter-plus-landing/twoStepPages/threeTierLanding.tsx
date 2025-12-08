@@ -323,11 +323,31 @@ export function ThreeTierLanding({
 
 	const enableStudentOffer = ['uk', 'us', 'ca'].includes(supportRegionId);
 
-	const getInitialContributionType = () => {
+	const getInitialContributionType = (): ContributionType => {
+		// 1. Query Parameters take precedence
 		if (enableSingleContributionsTab && urlSearchParamsOneTime) {
 			return 'ONE_OFF';
 		}
-		return urlSearchParamsRatePlan === 'Annual' ? 'ANNUAL' : 'MONTHLY';
+		if (urlSearchParamsRatePlan === 'Annual') {
+			return 'ANNUAL';
+		}
+		if (urlSearchParamsRatePlan === 'Monthly') {
+			return 'MONTHLY';
+		}
+
+		// 2. Default Selection from Settings
+		const defaultBillingPeriod =
+			settings.defaultProductSelection?.billingPeriod;
+
+		if (defaultBillingPeriod === 'Annual') {
+			return 'ANNUAL';
+		}
+		if (defaultBillingPeriod === 'OneTime' && enableSingleContributionsTab) {
+			return 'ONE_OFF';
+		}
+
+		// 3. Fallback
+		return 'MONTHLY';
 	};
 
 	const [contributionType, setContributionType] = useState<ContributionType>(
@@ -369,13 +389,30 @@ export function ThreeTierLanding({
 		contribution: tier1Pricing.toString(),
 	});
 	const tier1Url = `checkout?${tier1UrlParams.toString()}`;
+	const getDefaultSelectedProduct = () => {
+		if (urlSearchParamsProduct) {
+			return urlSearchParamsProduct;
+		}
+		if (
+			isCardUserSelected(tier1Pricing) ||
+			isCardUserSelected(tier2Pricing, tier2Promotion?.discount?.amount) ||
+			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount)
+		) {
+			return undefined;
+		}
+		return settings.defaultProductSelection?.productType;
+	};
+
+	const defaultSelectedProduct = getDefaultSelectedProduct();
+
 	const tier1Card: CardContent = {
 		product: 'Contribution',
 		price: tier1Pricing,
 		link: tier1Url,
 		isUserSelected:
 			urlSearchParamsProduct === 'Contribution' ||
-			isCardUserSelected(tier1Pricing),
+			isCardUserSelected(tier1Pricing) ||
+			(!urlSearchParamsProduct && defaultSelectedProduct === 'Contribution'),
 		...settings.products.Contribution,
 		title:
 			settings.products.Contribution?.title ?? getProductLabel('Contribution'),
@@ -429,7 +466,8 @@ export function ThreeTierLanding({
 		promotion: tier2Promotion,
 		isUserSelected:
 			urlSearchParamsProduct === 'SupporterPlus' ||
-			isCardUserSelected(tier2Pricing, tier2Promotion?.discount?.amount),
+			isCardUserSelected(tier2Pricing, tier2Promotion?.discount?.amount) ||
+			(!urlSearchParamsProduct && defaultSelectedProduct === 'SupporterPlus'),
 		...tier2ProductDescription,
 	};
 
@@ -493,7 +531,8 @@ export function ThreeTierLanding({
 		promotion: tier3Promotion,
 		isUserSelected:
 			urlSearchParamsProduct === tier3Product ||
-			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount),
+			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount) ||
+			(!urlSearchParamsProduct && defaultSelectedProduct === tier3Product),
 		...tier3ProductDescription,
 	};
 
