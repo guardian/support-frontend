@@ -17,7 +17,7 @@ object ProductType {
   case object OneTimeContribution extends ProductType
   case object Contribution extends ProductType
   case object SupporterPlus extends ProductType
-  case object TierThree extends ProductType
+  case object DigitalSubscription extends ProductType
 
   implicit val customConfig: Configuration = Configuration.default.withDefaults
   implicit val encoder: Encoder[ProductType] = deriveEnumerationEncoder[ProductType]
