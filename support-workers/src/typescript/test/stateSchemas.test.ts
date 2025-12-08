@@ -17,6 +17,7 @@ import createPaymentSupporterPlus from './fixtures/createPaymentMethod/supporter
 import createSalesforceContactContribution from './fixtures/createSalesforceContact/contributionMonthlyUSD.json';
 import createSalesforceContactPaper from './fixtures/createSalesforceContact/paperDirectDebit.json';
 import createDigitalPackSubscription from './fixtures/createZuoraSubscription/digitalSubscriptionInput.json';
+import sendThankYouDigitalPackJson from './fixtures/sendThankYouEmail/digitalSubscriptionState.json';
 
 describe('stateSchemas', () => {
 	test('createPaymentMethodStateSchema works for supporter plus', () => {
@@ -94,12 +95,12 @@ describe('stateSchemas', () => {
 		const digitalSubscription = wrapperSchemaForState(
 			createZuoraSubscriptionStateSchema,
 		).parse(createDigitalPackSubscription);
-		expect(digitalSubscription.state.product.currency).toBe('GBP');
+		expect(digitalSubscription.state.product.currency).toBe('EUR');
 	});
 	test('sendThankYouEmailStateSchema works for digital subscription', () => {
 		const digitalSubscription = wrapperSchemaForState(
 			sendAcquisitionEventStateSchema,
-		).parse(createDigitalPackSubscription);
+		).parse(sendThankYouDigitalPackJson);
 		expect(
 			digitalSubscription.state.sendThankYouEmailState.product.currency,
 		).toBe('EUR');

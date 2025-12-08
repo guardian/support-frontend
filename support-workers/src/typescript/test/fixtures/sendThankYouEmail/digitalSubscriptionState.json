@@ -1,46 +1,41 @@
 {
   "state": {
-    "requestId": "472d4572-71a5-9e74-0000-0000000049c8",
     "sendThankYouEmailState": {
+      "productType": "DigitalSubscription",
       "user": {
-        "id": "200006458",
-        "primaryEmailAddress": "test@thegulocal.com",
+        "id": "200512858",
+        "primaryEmailAddress": "support.e2e+9AAdSvcbKHKdIekO8-5yi@thegulocal.com",
         "title": null,
-        "firstName": "Test",
-        "lastName": "User",
+        "firstName": "support.e2e.firstName+7Vyhd",
+        "lastName": "support.e2e.lastName+VrVYE",
         "billingAddress": {
           "lineOne": null,
           "lineTwo": null,
           "city": null,
           "state": null,
           "postCode": null,
-          "country": "GB"
+          "country": "DE"
         },
         "deliveryAddress": null,
         "telephoneNumber": null,
-        "isTestUser": false,
+        "isTestUser": true,
         "deliveryInstructions": null
       },
       "product": {
-        "currency": "GBP",
-        "billingPeriod": "Monthly",
+        "currency": "EUR",
+        "billingPeriod": "Annual",
         "productType": "DigitalPack"
       },
       "productInformation": {
         "product": "DigitalSubscription",
-        "ratePlan": "Monthly",
-        "amount": null,
-        "deliveryAgent": null,
-        "deliveryInstructions": null,
-        "deliveryContact": null,
-        "firstDeliveryDate": null
+        "ratePlan": "Annual"
       },
       "paymentMethod": {
-        "TokenId": "pm_0SSb9zItVxyc3Q6nQ8gCofMB",
-        "SecondTokenId": "cus_TPQ0A0fSmYN4ux",
+        "TokenId": "pm_0Sc4eEItVxyc3Q6n2DBHkSOQ",
+        "SecondTokenId": "cus_TZD4FrVytKeFLB",
         "CreditCardNumber": "4242",
         "CreditCardExpirationMonth": 1,
-        "CreditCardExpirationYear": 2026,
+        "CreditCardExpirationYear": 2050,
         "CreditCardType": "Visa",
         "PaymentGateway": "Stripe PaymentIntents GNM Membership",
         "Type": "CreditCardReferenceTransaction",
@@ -49,72 +44,22 @@
       "paymentSchedule": {
         "payments": [
           {
-            "date": "2025-11-28",
-            "amount": 18
-          },
-          {
-            "date": "2025-12-28",
-            "amount": 18
-          },
-          {
-            "date": "2026-01-28",
-            "amount": 18
-          },
-          {
-            "date": "2026-02-28",
-            "amount": 18
-          },
-          {
-            "date": "2026-03-28",
-            "amount": 18
-          },
-          {
-            "date": "2026-04-28",
-            "amount": 18
-          },
-          {
-            "date": "2026-05-28",
-            "amount": 18
-          },
-          {
-            "date": "2026-06-28",
-            "amount": 18
-          },
-          {
-            "date": "2026-07-28",
-            "amount": 18
-          },
-          {
-            "date": "2026-08-28",
-            "amount": 18
-          },
-          {
-            "date": "2026-09-28",
-            "amount": 18
-          },
-          {
-            "date": "2026-10-28",
-            "amount": 18
-          },
-          {
-            "date": "2026-11-28",
-            "amount": 18
+            "date": "2025-12-24",
+            "amount": 191.23
           }
         ]
       },
-      "promoCode": null,
-      "accountNumber": "A01062148",
-      "subscriptionNumber": "A-S01043391",
-      "similarProductsConsent": true,
-      "productType": "DigitalSubscription"
+      "accountNumber": "A01072695",
+      "subscriptionNumber": "A-S01053726"
     },
+    "requestId": "1765202513231",
     "analyticsInfo": {
       "isGiftPurchase": false,
       "paymentProvider": "Stripe"
     },
     "acquisitionData": {
       "ophanIds": {
-        "pageviewId": "mhvum3jlnkxklb6iwi29",
+        "pageviewId": "mix761vql8qao8a24mfs",
         "browserId": null
       },
       "referrerAcquisitionData": {
@@ -128,28 +73,24 @@
         "queryParameters": [],
         "hostname": "support.code.dev-theguardian.com",
         "gaClientId": null,
-        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
-        "ipAddress": "10.248.135.88",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36",
+        "ipAddress": "10.248.135.10",
         "labels": [
           "generic-checkout"
         ]
       },
       "supportAbTests": [
         {
-          "name": "abandonedBasket",
-          "variant": "control"
-        },
-        {
-          "name": "LP_COUNTDOWN",
+          "name": "LP_TICKER",
           "variant": "CONTROL"
         }
       ]
     }
   },
-  "error": null,
   "requestInfo": {
-    "testUser": false,
+    "testUser": true,
     "failed": false,
     "messages": []
-  }
+  },
+  "error": null
 }
