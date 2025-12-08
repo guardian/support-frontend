@@ -11,9 +11,10 @@ import type { Participations } from 'helpers/abTests/models';
 import { getFeatureFlags } from 'helpers/featureFlags';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import { Country } from 'helpers/internationalisation/classes/country';
-import type {
-	ActiveProductKey,
-	ActiveRatePlanKey,
+import {
+	type ActiveProductKey,
+	type ActiveRatePlanKey,
+	productCatalogDescription,
 } from 'helpers/productCatalog';
 import {
 	billingPeriodToContributionType,
@@ -44,8 +45,8 @@ import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/lan
 import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import {
+	filterProductDescriptionBenefits,
 	getPaperPlusDigitalBenefits,
-	getPremiumDigitalAllBenefits,
 } from '../checkout/helpers/benefitsChecklist';
 import {
 	getReturnAddress,
@@ -109,7 +110,7 @@ export function ThankYouComponent({
 	const isTier =
 		productKey === 'Contribution' ||
 		productKey === 'SupporterPlus' ||
-		productKey === 'TierThree';
+		productKey === 'DigitalSubscription';
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const isOneOff = billingPeriod === BillingPeriod.OneTime;
 
@@ -184,26 +185,30 @@ export function ThankYouComponent({
 	const getBenefits = (): BenefitsCheckListData[] => {
 		// Three Tier products get their config from the Landing Page tool
 		if (isTier) {
-			// Also show SupporterPlus benefits for TierThree
-			const tierThreeAdditionalBenefits =
-				productKey === 'TierThree'
-					? landingPageSettings.products.SupporterPlus.benefits.map(
-							(benefit) => ({
-								isChecked: true,
-								text: benefit.copy,
-							}),
-					  )
+			const productBenefits = (
+				landingPageSettings.products[productKey]?.benefits ??
+				filterProductDescriptionBenefits(
+					productCatalogDescription[productKey],
+					countryGroupId,
+				)
+			).map((benefit) => ({
+				isChecked: true,
+				text: benefit.copy,
+			}));
+			const digitalSubscriptionAdditionalBenefits =
+				productKey === 'DigitalSubscription'
+					? (
+							landingPageSettings.products.SupporterPlus?.benefits ??
+							filterProductDescriptionBenefits(
+								productCatalogDescription.SupporterPlus,
+								countryGroupId,
+							)
+					  ).map((benefit) => ({
+							isChecked: true,
+							text: benefit.copy,
+					  }))
 					: [];
-			return [
-				...landingPageSettings.products[productKey].benefits.map((benefit) => ({
-					isChecked: true,
-					text: benefit.copy,
-				})),
-				...tierThreeAdditionalBenefits,
-			];
-		}
-		if (isPremiumDigital) {
-			return getPremiumDigitalAllBenefits(countryGroupId);
+			return [...productBenefits, ...digitalSubscriptionAdditionalBenefits];
 		}
 		if (isGuardianPaperPlus || !!observerPrint) {
 			return getPaperPlusDigitalBenefits(productKey, ratePlanKey) ?? [];
