@@ -8,9 +8,10 @@ import com.gu.support.workers._
 
 case class SubscriptionProductCookiesCreator(domain: GuardianDomain) {
   private val oneDayInSeconds = 60 * 60 * 24;
-  private val maxAgeInDays = 7
+  private val benefitsCookieLengthInDays = 30
+  private val benefitsExpiryCookieLengthInDays = 1
 
-  private def persistentCookieWithMaxAge(name: String, now: DateTime) = {
+  private def persistentCookieWithMaxAge(name: String, now: DateTime, maxAgeInDays: Int) = {
     val expiryTime = now.plusDays(maxAgeInDays).withTimeAtStartOfDay().getMillis.toString
     Cookie(
       name = name,
@@ -22,16 +23,20 @@ case class SubscriptionProductCookiesCreator(domain: GuardianDomain) {
     )
   }
   private def adFreeCookie(now: DateTime) =
-    persistentCookieWithMaxAge("GU_AF1", now)
+    persistentCookieWithMaxAge(name = "GU_AF1", now = now, maxAgeInDays = benefitsCookieLengthInDays)
 
   private def hideSupportMessagingCookie(now: DateTime) =
-    persistentCookieWithMaxAge("gu_hide_support_messaging", now)
+    persistentCookieWithMaxAge(name = "gu_hide_support_messaging", now = now, maxAgeInDays = benefitsCookieLengthInDays)
 
   private def allowRejectAllCookie(now: DateTime) =
-    persistentCookieWithMaxAge("gu_allow_reject_all", now)
+    persistentCookieWithMaxAge(name = "gu_allow_reject_all", now = now, maxAgeInDays = benefitsCookieLengthInDays)
 
   private def userBenefitsExpiryCookie(now: DateTime) =
-    persistentCookieWithMaxAge("gu_user_benefits_expiry", now)
+    persistentCookieWithMaxAge(
+      name = "gu_user_benefits_expiry",
+      now = now,
+      maxAgeInDays = benefitsExpiryCookieLengthInDays,
+    )
 
   def createCookiesForProduct(product: ProductType, now: DateTime): List[Cookie] = {
     // Setting the user benefits cookies used by frontend. See:

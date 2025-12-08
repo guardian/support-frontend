@@ -69,9 +69,9 @@ export interface LandingPageProductDescription {
 }
 
 interface LandingPageProducts {
-	Contribution: LandingPageProductDescription;
-	SupporterPlus: LandingPageProductDescription;
-	TierThree: LandingPageProductDescription;
+	Contribution?: LandingPageProductDescription;
+	SupporterPlus?: LandingPageProductDescription;
+	DigitalSubscription?: LandingPageProductDescription;
 }
 
 interface LandingPageCopy {

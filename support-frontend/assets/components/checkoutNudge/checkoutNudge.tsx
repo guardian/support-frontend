@@ -290,7 +290,8 @@ export function CheckoutNudgeSelector({
 	) {
 		// Show the nudge
 		const { nudgeToProduct } = nudge;
-		const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
+		const { currencyKey, countryGroupId } =
+			getSupportRegionIdConfig(supportRegionId);
 		// If nudgeToProduct doesn't define a ratePlan then attempt to use whatever the current selected ratePlan is
 		const ratePlan = nudgeToProduct.ratePlan ?? currentRatePlan;
 		const amount =
@@ -303,6 +304,7 @@ export function CheckoutNudgeSelector({
 				getBenefitsChecklistFromLandingPageTool(
 					nudgeToProduct.product,
 					landingPageSettings,
+					countryGroupId,
 				) ?? [];
 			const props = {
 				supportRegionId,

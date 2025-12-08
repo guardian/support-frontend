@@ -6,6 +6,7 @@ import { productTypeSchema } from './productType';
 import {
 	acquisitionDataSchema,
 	analyticsInfoSchema,
+	dateOrDateStringSchema,
 	giftRecipientSchema,
 	userSchema,
 } from './stateSchemas';
@@ -61,7 +62,7 @@ export const sendThankYouEmailStateSchema = z.union([
 	}),
 
 	z.object({
-		productType: z.literal('DigitalPack'),
+		productType: z.literal('DigitalSubscription'),
 		user: userSchema,
 		product: productTypeSchema,
 		productInformation: productPurchaseSchema,
@@ -83,7 +84,7 @@ export const sendThankYouEmailStateSchema = z.union([
 		promoCode: z.string().optional(),
 		accountNumber: z.string(),
 		subscriptionNumber: z.string(),
-		firstDeliveryDate: z.string(),
+		firstDeliveryDate: dateOrDateStringSchema,
 		similarProductsConsent: z.boolean().optional(),
 	}),
 
@@ -92,13 +93,13 @@ export const sendThankYouEmailStateSchema = z.union([
 		user: userSchema,
 		product: productTypeSchema,
 		productInformation: productPurchaseSchema.optional(),
-		giftRecipient: giftRecipientSchema.optional(),
+		giftRecipient: giftRecipientSchema.nullish(),
 		paymentMethod: paymentMethodSchema,
 		paymentSchedule: paymentScheduleSchema,
 		promoCode: z.string().optional(),
 		accountNumber: z.string(),
 		subscriptionNumber: z.string(),
-		firstDeliveryDate: z.string(),
+		firstDeliveryDate: dateOrDateStringSchema,
 		similarProductsConsent: z.boolean().optional(),
 	}),
 ]);
@@ -106,6 +107,9 @@ export const sendThankYouEmailStateSchema = z.union([
 export type SendThankYouEmailState = z.infer<
 	typeof sendThankYouEmailStateSchema
 >;
+
+export type SendThankYouEmailProductType =
+	SendThankYouEmailState['productType'];
 
 export const sendAcquisitionEventStateSchema = z.object({
 	requestId: z.string(),

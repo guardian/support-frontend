@@ -36,50 +36,57 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
   private def listAttr(value: List[AttributeValue]): AttributeValue = AttributeValue.builder().l(value.asJava).build()
 
   private val products = Products(
-    Contribution = LandingPageProductDescription(
-      title = "Support",
-      benefits = List(
-        ProductBenefit(copy = "Give to the Guardian every month with Support"),
+    Contribution = Some(
+      LandingPageProductDescription(
+        title = "Support",
+        benefits = List(
+          ProductBenefit(copy = "Give to the Guardian every month with Support"),
+        ),
+        cta = Cta(copy = "Support"),
       ),
-      cta = Cta(copy = "Support"),
     ),
-    SupporterPlus = LandingPageProductDescription(
-      title = "All-access digital",
-      benefits = List(
-        ProductBenefit(
-          copy = "Unlimited access to the Guardian app",
-          tooltip = Some(
-            "Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.",
+    SupporterPlus = Some(
+      LandingPageProductDescription(
+        title = "All-access digital",
+        benefits = List(
+          ProductBenefit(
+            copy = "Unlimited access to the Guardian app",
+            tooltip = Some(
+              "Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.",
+            ),
+          ),
+          ProductBenefit(copy = "Ad-free reading on all your devices"),
+          ProductBenefit(copy = "Exclusive newsletter for supporters, sent every week from the Guardian newsroom"),
+          ProductBenefit(
+            copy = "Far fewer asks for support",
+            tooltip =
+              Some("You'll see far fewer financial support asks at the bottom of articles or in pop-up banners."),
+          ),
+          ProductBenefit(
+            copy = "Unlimited access to the Guardian Feast app",
+            tooltip = Some(
+              "Make a feast out of anything with the Guardian’s new recipe app. Feast has thousands of recipes including quick and budget-friendly weeknight dinners, and showstopping weekend dishes – plus smart app features to make mealtimes inspiring.",
+            ),
+            label = Some(Label(copy = "New")),
           ),
         ),
-        ProductBenefit(copy = "Ad-free reading on all your devices"),
-        ProductBenefit(copy = "Exclusive newsletter for supporters, sent every week from the Guardian newsroom"),
-        ProductBenefit(
-          copy = "Far fewer asks for support",
-          tooltip = Some("You'll see far fewer financial support asks at the bottom of articles or in pop-up banners."),
-        ),
-        ProductBenefit(
-          copy = "Unlimited access to the Guardian Feast app",
-          tooltip = Some(
-            "Make a feast out of anything with the Guardian’s new recipe app. Feast has thousands of recipes including quick and budget-friendly weeknight dinners, and showstopping weekend dishes – plus smart app features to make mealtimes inspiring.",
-          ),
-          label = Some(Label(copy = "New")),
-        ),
+        cta = Cta(copy = "Support"),
+        label = Some(Label(copy = "Recommended")),
       ),
-      cta = Cta(copy = "Support"),
-      label = Some(Label(copy = "Recommended")),
     ),
-    TierThree = LandingPageProductDescription(
-      title = "Digital + print",
-      benefits = List(
-        ProductBenefit(
-          copy = "Guardian Weekly print magazine delivered to your door every week",
-          tooltip = Some(
-            "Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.",
+    DigitalSubscription = Some(
+      LandingPageProductDescription(
+        title = "Digital plus",
+        benefits = List(
+          ProductBenefit(
+            copy = "Guardian Weekly print magazine delivered to your door every week",
+            tooltip = Some(
+              "Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.",
+            ),
           ),
         ),
+        cta = Cta(copy = "Support"),
       ),
-      cta = Cta(copy = "Support"),
     ),
   )
 
@@ -164,9 +171,9 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
                       "label" -> mapAttr(Map("copy" -> stringAttr("Recommended"))),
                     ),
                   ),
-                  "TierThree" -> mapAttr(
+                  "DigitalSubscription" -> mapAttr(
                     Map(
-                      "title" -> stringAttr("Digital + print"),
+                      "title" -> stringAttr("Digital plus"),
                       "benefits" -> listAttr(
                         List(
                           mapAttr(

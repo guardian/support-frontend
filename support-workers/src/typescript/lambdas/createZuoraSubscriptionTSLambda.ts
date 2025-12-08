@@ -29,7 +29,7 @@ import { stageFromEnvironment } from '../model/stage';
 import type { WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
 import { getIfDefined } from '../util/nullAndUndefined';
-import { zuoraDateReplacer } from '../util/zuoraDateReplacer';
+import { replaceDatesWithZuoraFormat } from '../util/zuoraDateReplacer';
 
 const stage = stageFromEnvironment();
 
@@ -74,9 +74,6 @@ export const handler = async (
 			productSpecificState.productInformation,
 			'productInformation is required',
 		);
-
-		// TODO:
-		//  Validate paper payment gateway? Might be done already by schema
 
 		const inputFields: CreateSubscriptionInputFields<ZuoraPaymentMethod> = {
 			accountName: salesforceContact.AccountId, // We store the Salesforce Account id in the name field
@@ -126,14 +123,13 @@ export const handler = async (
 			previewInputFields,
 		);
 
-		return JSON.stringify(
+		return replaceDatesWithZuoraFormat(
 			buildOutputState(
 				state,
 				createZuoraSubscriptionState,
 				createSubscriptionResult,
 				previewInvoices,
 			),
-			zuoraDateReplacer,
 		);
 	} catch (error) {
 		throw asRetryError(error);

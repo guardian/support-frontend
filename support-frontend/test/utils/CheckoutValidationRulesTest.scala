@@ -996,7 +996,7 @@ object TestData {
     OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On)),
     recurringPaymentMethodSwitches,
     subscriptionsPaymentMethodSwitches,
-    SubscriptionsSwitches(Some(On), Some(On)),
+    SubscriptionsSwitches(Some(On), Some(On), Some(On)),
     FeatureSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
     CampaignSwitches(Some(On), Some(On)),
     RecaptchaSwitches(Some(On), Some(On)),
