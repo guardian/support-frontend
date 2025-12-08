@@ -3,12 +3,12 @@ import type {
 	DirectDebitPaymentFields,
 	StripePaymentFields,
 } from '../model/paymentFields';
-import { sendThankYouEmailStateSchema } from '../model/sendAcquisitionEventState';
+import { sendAcquisitionEventStateSchema } from '../model/sendAcquisitionEventState';
 import type { CreatePaymentMethodState } from '../model/stateSchemas';
-import { wrapperSchemaForState } from '../model/stateSchemas';
 import {
 	createPaymentMethodStateSchema,
 	createSalesforceContactStateSchema,
+	wrapperSchemaForState,
 } from '../model/stateSchemas';
 import createPaymentContribution from './fixtures/createPaymentMethod/contributionMonthlyUSD.json';
 import contributionWithPayPal from './fixtures/createPaymentMethod/contributionWithPayPal.json';
@@ -98,8 +98,10 @@ describe('stateSchemas', () => {
 	});
 	test('sendThankYouEmailStateSchema works for digital subscription', () => {
 		const digitalSubscription = wrapperSchemaForState(
-			sendThankYouEmailStateSchema,
+			sendAcquisitionEventStateSchema,
 		).parse(createDigitalPackSubscription);
-		expect(digitalSubscription.state.product.currency).toBe('GBP');
+		expect(
+			digitalSubscription.state.sendThankYouEmailState.product.currency,
+		).toBe('EUR');
 	});
 });
