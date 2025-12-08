@@ -18,7 +18,7 @@ import services._
 import services.paypal.PayPalNvpServiceProvider
 import services.pricing.{DefaultPromotionServiceS3, PriceSummaryServiceProvider}
 import services.stepfunctions.{StateWrapper, SupportWorkersClient}
-import services.MParticleClient
+import services.mparticle.MParticleClient
 
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
