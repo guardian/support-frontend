@@ -85,7 +85,7 @@ const pricesInfo = css`
 
 const termsLink = css`
 	${textSans12};
-	color: ${palette.brand[500]};
+	color: ${palette.neutral[100]};
 	margin-left: ${space[9]}px;
 	margin-top: -12px;
 `;
