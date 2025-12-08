@@ -17,6 +17,7 @@ import play.api.mvc.{Call, Request}
 import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
 import services.stepfunctions.SupportWorkersClient._
 import software.amazon.awssdk.services.sfn.model.{StateExitedEventDetails, StateMachineStatus}
+import utils.SupportWorkersUtils
 
 import java.util.UUID
 import scala.concurrent.{ExecutionContextExecutor, Future}
@@ -164,10 +165,7 @@ class SupportWorkersClient(
           request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress),
         similarProductsConsent = request.body.similarProductsConsent,
       )
-      name =
-        (if (user.isTestUser) "TestUser-" else "") +
-          createPaymentMethodState.product.describe + "-" +
-          createPaymentMethodState.paymentFields.describe
+      name = SupportWorkersUtils.buildExecutionName(isTestUser = user.isTestUser, state = createPaymentMethodState)
       executionResult <- underlying
         .triggerExecution(createPaymentMethodState, user.isTestUser, name)
         .bimap(
