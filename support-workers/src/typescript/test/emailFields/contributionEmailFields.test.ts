@@ -25,6 +25,7 @@ describe('contributionEmailFields', () => {
 				ContactAttributes: {
 					SubscriberAttributes: {
 						name: emailUser.firstName,
+						first_name: emailUser.firstName,
 						amount: '5',
 						currency: 'GBP',
 						edition: emailUser.billingAddress.country,

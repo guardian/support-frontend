@@ -37,6 +37,56 @@ export function mask(accountNumber: string): string {
 	return accountNumber.replace(/.(?=.{2})/g, '*');
 }
 
+export function hyphenate(sortCode: string): string {
+	return sortCode.replace(/(\d{2})(\d{2})(\d{2})/, '$1-$2-$3');
+}
+
+export function getNonDeliveryFields(
+	user: User,
+	subscriptionNumber: string,
+): Record<string, string> {
+	return {
+		first_name: user.firstName,
+		last_name: user.lastName,
+		subscriber_id: subscriptionNumber,
+	};
+}
+
+export type EmailPaymentFields =
+	| { payment_method: 'Credit/Debit Card' | 'PayPal' }
+	| {
+			bank_account_no: string;
+			bank_sort_code: string;
+			account_holder: string;
+			payment_method: 'Direct Debit';
+			mandate_id: string;
+	  };
+
+export function getPaymentFields(
+	paymentMethod: PaymentMethod,
+	mandateId?: string,
+): EmailPaymentFields {
+	switch (paymentMethod.Type) {
+		case 'BankTransfer':
+			return {
+				bank_account_no: mask(paymentMethod.BankTransferAccountNumber),
+				bank_sort_code: hyphenate(paymentMethod.BankCode),
+				account_holder: paymentMethod.BankTransferAccountName,
+				payment_method: 'Direct Debit',
+				mandate_id: mandateId ?? '',
+			};
+		case 'CreditCardReferenceTransaction':
+			return {
+				payment_method: 'Credit/Debit Card',
+			};
+		case 'PayPal':
+		case 'PayPalCompletePaymentsWithBAID':
+			return {
+				payment_method: 'PayPal',
+			};
+	}
+}
+
 export function getPaymentMethodFieldsSupporterPlus(
 	paymentMethod: PaymentMethod,
 	created: Dayjs,

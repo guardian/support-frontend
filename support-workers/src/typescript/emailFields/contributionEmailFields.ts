@@ -36,6 +36,7 @@ export function buildContributionEmailFields({
 		currency: currency,
 		edition: user.billingAddress.country,
 		name: user.firstName,
+		first_name: user.firstName,
 		product: `${ratePlan.toLowerCase()}-contribution`,
 		...paymentMethodFields,
 	};

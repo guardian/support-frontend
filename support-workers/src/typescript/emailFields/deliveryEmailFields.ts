@@ -2,17 +2,8 @@ import { getCountryNameByIsoCode } from '@modules/internationalisation/country';
 import type { Dayjs } from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { User } from '../model/stateSchemas';
-import { formatDate, mask } from './emailFields';
-
-type PaymentFields =
-	| { payment_method: 'Credit/Debit Card' | 'PayPal' }
-	| {
-			bank_account_no: string;
-			bank_sort_code: string;
-			account_holder: string;
-			payment_method: 'Direct Debit';
-			mandate_id: string;
-	  };
+import type { EmailPaymentFields } from './emailFields';
+import { formatDate, getPaymentFields } from './emailFields';
 
 type BasicFields = {
 	ZuoraSubscriberId: string;
@@ -32,32 +23,8 @@ type AddressFields = {
 	delivery_country: string;
 };
 
-type DeliveryEmailFields = BasicFields & AddressFields & PaymentFields;
+type DeliveryEmailFields = BasicFields & AddressFields & EmailPaymentFields;
 
-function getPaymentFields(
-	paymentMethod: PaymentMethod,
-	mandateId?: string,
-): PaymentFields {
-	switch (paymentMethod.Type) {
-		case 'BankTransfer':
-			return {
-				bank_account_no: mask(paymentMethod.BankTransferAccountNumber),
-				bank_sort_code: hyphenate(paymentMethod.BankCode),
-				account_holder: paymentMethod.BankTransferAccountName,
-				payment_method: 'Direct Debit',
-				mandate_id: mandateId ?? '',
-			};
-		case 'CreditCardReferenceTransaction':
-			return {
-				payment_method: 'Credit/Debit Card',
-			};
-		case 'PayPal':
-		case 'PayPalCompletePaymentsWithBAID':
-			return {
-				payment_method: 'PayPal',
-			};
-	}
-}
 export function buildDeliveryEmailFields({
 	subscriptionNumber,
 	user,
@@ -100,8 +67,4 @@ export function buildDeliveryEmailFields({
 		...addressFields,
 		...paymentFields,
 	};
-}
-
-function hyphenate(sortCode: string): string {
-	return sortCode.replace(/(\d{2})(\d{2})(\d{2})/, '$1-$2-$3');
 }
