@@ -1,8 +1,11 @@
+import { createZuoraSubscriptionStateSchema } from '../model/createZuoraSubscriptionState';
 import type {
 	DirectDebitPaymentFields,
 	StripePaymentFields,
 } from '../model/paymentFields';
+import { sendThankYouEmailStateSchema } from '../model/sendAcquisitionEventState';
 import type { CreatePaymentMethodState } from '../model/stateSchemas';
+import { wrapperSchemaForState } from '../model/stateSchemas';
 import {
 	createPaymentMethodStateSchema,
 	createSalesforceContactStateSchema,
@@ -13,6 +16,7 @@ import createPaymentPaper from './fixtures/createPaymentMethod/paperDirectDebit.
 import createPaymentSupporterPlus from './fixtures/createPaymentMethod/supporterPlusAnnualEUR.json';
 import createSalesforceContactContribution from './fixtures/createSalesforceContact/contributionMonthlyUSD.json';
 import createSalesforceContactPaper from './fixtures/createSalesforceContact/paperDirectDebit.json';
+import createDigitalPackSubscription from './fixtures/createZuoraSubscription/digitalSubscriptionInput.json';
 
 describe('stateSchemas', () => {
 	test('createPaymentMethodStateSchema works for supporter plus', () => {
@@ -85,5 +89,17 @@ describe('stateSchemas', () => {
 		if (paper.paymentMethod.Type === 'BankTransfer') {
 			expect(paper.paymentMethod.PaymentGateway).toBe('GoCardless');
 		}
+	});
+	test('createZuoraSubscriptionStateSchema works for digital subscription', () => {
+		const digitalSubscription = wrapperSchemaForState(
+			createZuoraSubscriptionStateSchema,
+		).parse(createDigitalPackSubscription);
+		expect(digitalSubscription.state.product.currency).toBe('GBP');
+	});
+	test('sendThankYouEmailStateSchema works for digital subscription', () => {
+		const digitalSubscription = wrapperSchemaForState(
+			sendThankYouEmailStateSchema,
+		).parse(createDigitalPackSubscription);
+		expect(digitalSubscription.state.product.currency).toBe('GBP');
 	});
 });

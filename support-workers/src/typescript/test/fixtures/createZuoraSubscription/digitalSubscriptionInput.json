@@ -1,0 +1,96 @@
+{
+  "state": {
+    "sendThankYouEmailState": {
+      "productType": "DigitalSubscription",
+      "user": {
+        "id": "200512858",
+        "primaryEmailAddress": "support.e2e+9AAdSvcbKHKdIekO8-5yi@thegulocal.com",
+        "title": null,
+        "firstName": "support.e2e.firstName+7Vyhd",
+        "lastName": "support.e2e.lastName+VrVYE",
+        "billingAddress": {
+          "lineOne": null,
+          "lineTwo": null,
+          "city": null,
+          "state": null,
+          "postCode": null,
+          "country": "DE"
+        },
+        "deliveryAddress": null,
+        "telephoneNumber": null,
+        "isTestUser": true,
+        "deliveryInstructions": null
+      },
+      "product": {
+        "currency": "EUR",
+        "billingPeriod": "Annual",
+        "productType": "DigitalPack"
+      },
+      "productInformation": {
+        "product": "DigitalSubscription",
+        "ratePlan": "Annual"
+      },
+      "paymentMethod": {
+        "TokenId": "pm_0Sc4eEItVxyc3Q6n2DBHkSOQ",
+        "SecondTokenId": "cus_TZD4FrVytKeFLB",
+        "CreditCardNumber": "4242",
+        "CreditCardExpirationMonth": 1,
+        "CreditCardExpirationYear": 2050,
+        "CreditCardType": "Visa",
+        "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+        "Type": "CreditCardReferenceTransaction",
+        "StripePaymentType": "StripeCheckout"
+      },
+      "paymentSchedule": {
+        "payments": [
+          {
+            "date": "2025-12-24",
+            "amount": 191.23
+          }
+        ]
+      },
+      "accountNumber": "A01072695",
+      "subscriptionNumber": "A-S01053726"
+    },
+    "requestId": "1765202513231",
+    "analyticsInfo": {
+      "isGiftPurchase": false,
+      "paymentProvider": "Stripe"
+    },
+    "acquisitionData": {
+      "ophanIds": {
+        "pageviewId": "mix761vql8qao8a24mfs",
+        "browserId": null
+      },
+      "referrerAcquisitionData": {
+        "campaignCode": null,
+        "referrerPageviewId": "",
+        "referrerUrl": null,
+        "componentId": null,
+        "componentType": null,
+        "source": null,
+        "abTests": null,
+        "queryParameters": [],
+        "hostname": "support.code.dev-theguardian.com",
+        "gaClientId": null,
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36",
+        "ipAddress": "10.248.135.10",
+        "labels": [
+          "generic-checkout"
+        ]
+      },
+      "supportAbTests": [
+        {
+          "name": "LP_TICKER",
+          "variant": "CONTROL"
+        }
+      ]
+    }
+  },
+  "requestInfo": {
+    "testUser": true,
+    "failed": false,
+    "messages": []
+  },
+  "error": null
+}
