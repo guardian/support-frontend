@@ -256,11 +256,6 @@ export class SupportWorkers extends GuStack {
       "CreateSalesforceContact"
     ).addCatch(failureHandler, catchProps);
 
-    const createZuoraSubscriptionScala = createScalaLambda(
-      "CreateZuoraSubscription",
-      [promotionsDynamoTablePolicy]
-    ).addCatch(failureHandler, catchProps);
-
     const createZuoraSubscriptionTS = createTypescriptLambda(
       "CreateZuoraSubscriptionTS",
       [promotionsDynamoTablePolicy, secretsManagerPolicy]
@@ -286,42 +281,9 @@ export class SupportWorkers extends GuStack {
       .branch(sendAcquisitionEvent)
       .branch(checkoutSuccess);
 
-    // Choice state to choose between the Scala and Typescript S+ lambdas
-    const isProductType = (product: string) =>
-      Condition.stringEquals("$.state.productInformation.product", product);
-    const isGuardianAdLite = isProductType("GuardianAdLite");
-    const isContribution = isProductType("Contribution");
-    const isSupporterPLus = isProductType("SupporterPlus");
-    const isTierThree = isProductType("TierThree");
-    const isNewspaper = Condition.or(
-      isProductType("HomeDelivery"),
-      isProductType("NationalDelivery"),
-      isProductType("SubscriptionCard")
-    );
-    const isDigitalSubscription = isProductType("DigitalSubscription");
-
-    const shouldUseTSLambda = Condition.and(
-      Condition.isNotNull("$.state.productInformation"),
-      Condition.or(
-        isGuardianAdLite,
-        isContribution,
-        isSupporterPLus,
-        isTierThree,
-        isNewspaper,
-        isDigitalSubscription
-      )
-    );
-
-    const createZuoraSubscriptionChoice = new Choice(
-      this,
-      "CreateZuoraSubscriptionChoice"
-    )
-      .when(shouldUseTSLambda, createZuoraSubscriptionTS.next(parallelSteps))
-      .otherwise(createZuoraSubscriptionScala.next(parallelSteps));
-
     const allSteps = createPaymentMethodLambda
       .next(createSalesforceContactLambda)
-      .next(createZuoraSubscriptionChoice);
+      .next(createZuoraSubscriptionTS.next(parallelSteps));
 
     const stateMachine = new StateMachine(this, "SupportWorkers", {
       stateMachineName: `${app}-${this.stage}`, // Used by support-frontend to find the state machine
