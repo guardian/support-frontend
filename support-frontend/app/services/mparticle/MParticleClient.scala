@@ -7,6 +7,7 @@ import config.{MparticleConfig, MparticleConfigProvider}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax.EncoderOps
 import io.circe.{Decoder, Encoder}
+import org.apache.pekko.actor.ActorSystem
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -46,7 +47,7 @@ object MParticleClient {
 class MParticleClient(
     val httpClient: FutureHttpClient,
     mparticleConfigProvider: MparticleConfigProvider,
-)(implicit ec: ExecutionContext)
+)(implicit ec: ExecutionContext, system: ActorSystem)
     extends WebServiceHelper[MParticleError]
     with SafeLogging {
 

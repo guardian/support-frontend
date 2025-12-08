@@ -6,7 +6,10 @@ import config.MparticleConfig
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
+import org.apache.pekko.actor.ActorSystem
+import org.joda.time.DateTime
 
+import scala.concurrent.duration._
 import java.util.concurrent.atomic.AtomicReference
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Random, Success}
@@ -15,6 +18,8 @@ case class MParticleAccessToken(token: String) extends AnyVal
 object MParticleAccessToken {
   implicit val decoder: Decoder[MParticleAccessToken] = deriveDecoder
 }
+
+case class Token(token: MParticleAccessToken, created: DateTime)
 
 case class OAuthTokenRequest(
     client_id: String,
@@ -44,23 +49,33 @@ object OAuthTokenResponse {
 class MParticleTokenProvider(
     val httpClient: FutureHttpClient,
     config: MparticleConfig,
-)(implicit ec: ExecutionContext) {
+)(implicit ec: ExecutionContext, system: ActorSystem) {
   import OAuthTokenResponse._
   import OAuthTokenRequest._
 
-  private val tokens = new AtomicReference[Set[MParticleAccessToken]](Set.empty)
+  private val tokens = new AtomicReference[Set[Token]](Set.empty)
 
   // Fetch the first pool of tokens
   (1 to 3).foreach(_ => fetchAndStoreToken())
 
+  // Every hour purge the oldest token
+  system.scheduler.scheduleAtFixedRate(1.hour, 1.hour)(() => {
+    tokens
+      .get()
+      .toList
+      .sortBy(_.created)
+      .headOption
+      .foreach(purgeToken)
+  })
+
   // Randomly select a token
-  private def getToken(): Option[MParticleAccessToken] = {
+  private def getToken(): Option[Token] = {
     val currentTokens = tokens.get().toVector
     if (currentTokens.nonEmpty) Some(currentTokens(Random.nextInt(currentTokens.size)))
     else None
   }
 
-  private def fetchToken(): Future[MParticleAccessToken] = {
+  private def fetchToken(): Future[Token] = {
     val request = OAuthTokenRequest(
       client_id = config.clientId,
       client_secret = config.clientSecret,
@@ -86,9 +101,7 @@ class MParticleTokenProvider(
       if (response.code() == 200) {
         io.circe.parser.decode[OAuthTokenResponse](response.body().string()) match {
           case Right(tokenResponse) =>
-            // TODO - handle expiry
-//            Future.successful((tokenResponse.access_token, tokenResponse.expires_in))
-            Future.successful(tokenResponse.access_token)
+            Future.successful(Token(tokenResponse.access_token, DateTime.now()))
           case Left(error) =>
             val errorMsg = s"Error parsing access token response: ${error.getMessage}"
             Future.failed(new RuntimeException(errorMsg))
@@ -113,7 +126,7 @@ class MParticleTokenProvider(
       }
   }
 
-  private def purgeToken(token: MParticleAccessToken): Unit = {
+  private def purgeToken(token: Token): Unit = {
     tokens.updateAndGet(currentTokens => {
       // Check the token is still in the set
       if (currentTokens.contains(token)) {
@@ -129,7 +142,7 @@ class MParticleTokenProvider(
   def requestWithToken[T](fn: MParticleAccessToken => Future[T]): Future[T] = {
     getToken() match {
       case Some(token) =>
-        fn(token).recoverWith { case WebServiceClientError(CodeBody("401", _)) =>
+        fn(token.token).recoverWith { case WebServiceClientError(CodeBody("401", _)) =>
           purgeToken(token)
           requestWithToken(fn)
         }
