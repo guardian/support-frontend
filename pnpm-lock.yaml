@@ -491,9 +491,6 @@ importers:
       google-auth-library:
         specifier: ^9.0.0
         version: 9.15.1
-      jws:
-        specifier: ^4.0.1
-        version: 4.0.1
       zod:
         specifier: ^3.24.2
         version: 3.25.30
