@@ -4,6 +4,8 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution With ra
 
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution With ratePlanKey Monthly renders correctly 1`] = `"We will attempt to take payment of £0, on the first day of every month, from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time."`;
 
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for DigitalSubscription With ratePlanKey Annual renders correctly 1`] = `"The Digital plus subscription will auto-renew each year. You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
+
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for DigitalSubscription With ratePlanKey Monthly renders correctly 1`] = `"The Digital plus subscription will auto-renew each month. You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
 
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With ratePlanKey Annual renders correctly 1`] = `"The Guardian Ad-Lite subscription will auto-renew each year. You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
@@ -23,7 +25,3 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SubscriptionCard Wit
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With ratePlanKey Annual renders correctly 1`] = `"The All-access digital subscription and any contribution will auto-renew each year. You will be charged the subscription and contribution amounts using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
 
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With ratePlanKey Monthly renders correctly 1`] = `"The All-access digital subscription and any contribution will auto-renew each month. You will be charged the subscription and contribution amounts using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
-
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With ratePlanKey DomesticAnnual renders correctly 1`] = `"The Digital + print subscriptions will auto-renew each year. You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
-
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With ratePlanKey DomesticMonthly renders correctly 1`] = `"The Digital + print subscriptions will auto-renew each month. You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;

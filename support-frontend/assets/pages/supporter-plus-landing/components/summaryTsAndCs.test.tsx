@@ -30,12 +30,11 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 		${'Contribution'}        | ${'Annual'}
 		${'SupporterPlus'}       | ${'Monthly'}
 		${'SupporterPlus'}       | ${'Annual'}
-		${'TierThree'}           | ${'DomesticMonthly'}
-		${'TierThree'}           | ${'DomesticAnnual'}
 		${'OneTimeContribution'} | ${'OneTime'}
 		${'GuardianAdLite'}      | ${'Monthly'}
 		${'GuardianAdLite'}      | ${'Annual'}
 		${'DigitalSubscription'} | ${'Monthly'}
+		${'DigitalSubscription'} | ${'Annual'}
 		${'SubscriptionCard'}    | ${'WeekendPlus'}
 		${'HomeDelivery'}        | ${'SixdayPlus'}
 		${'SubscriptionCard'}    | ${'Sunday'}
