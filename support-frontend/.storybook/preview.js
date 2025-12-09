@@ -1,5 +1,5 @@
-import { viewports } from './viewports';
 import { withFocusStyleManager } from './decorators/withFocusStyleManager';
+import { viewports } from './viewports';
 import '../assets/stylesheets/skeleton/skeleton.scss';
 import MockDate from 'mockdate';
 
@@ -34,6 +34,12 @@ const argTypes = {
 		},
 	},
 };
+
+if (typeof window !== 'undefined') {
+	window.guardian = window.guardian || {};
+	window.guardian.settings = window.guardian.settings || {};
+	window.guardian.settings.metricUrl = 'https://metrics.gutools.co.uk';
+}
 
 /** This avoids having false positives when the date changes */
 MockDate.set('Sat Jan 1 2024 12:00:00 GMT+0000 (Greenwich Mean Time)');
