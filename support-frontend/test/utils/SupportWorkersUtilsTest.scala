@@ -22,17 +22,19 @@ import java.util.UUID
 
 class SupportWorkersUtilsTest extends AnyFlatSpec with Matchers {
   "buildExecutionName" should "include the TestUser prefix when it's a test user" in {
-    val state = SupportWorkersUtilsTestData.generateState(PayPalPaymentFields("fake-baid"))
+    val state =
+      SupportWorkersUtilsTestData.generateState(paymentFields = PayPalPaymentFields("fake-baid"), isTestUser = true)
 
-    val name = SupportWorkersUtils.buildExecutionName(isTestUser = true, state = state)
+    val name = SupportWorkersUtils.buildExecutionName(state = state)
 
     name should be("TestUser-Monthly-DigitalPack-GBP-PayPal")
   }
 
   it should "not include the TestUser prefix when it's a not test user" in {
-    val state = SupportWorkersUtilsTestData.generateState(PayPalPaymentFields("fake-baid"))
+    val state =
+      SupportWorkersUtilsTestData.generateState(paymentFields = PayPalPaymentFields("fake-baid"), isTestUser = false)
 
-    val name = SupportWorkersUtils.buildExecutionName(isTestUser = false, state = state)
+    val name = SupportWorkersUtils.buildExecutionName(state = state)
 
     name should be("Monthly-DigitalPack-GBP-PayPal")
   }
@@ -42,9 +44,13 @@ class SupportWorkersUtilsTest extends AnyFlatSpec with Matchers {
       AbTest("paypalCompletePaymentsWithBAID", "variant"),
     )
     val acquisitionData = SupportWorkersUtilsTestData.generateAcquisitionData(abTests)
-    val state = SupportWorkersUtilsTestData.generateState(PayPalPaymentFields("fake-baid"), acquisitionData)
+    val state = SupportWorkersUtilsTestData.generateState(
+      paymentFields = PayPalPaymentFields("fake-baid"),
+      isTestUser = false,
+      acquisitionData = acquisitionData,
+    )
 
-    val name = SupportWorkersUtils.buildExecutionName(isTestUser = false, state = state)
+    val name = SupportWorkersUtils.buildExecutionName(state = state)
 
     name should be("Monthly-DigitalPack-GBP-PayPalCPWithBAID")
   }
@@ -54,9 +60,13 @@ class SupportWorkersUtilsTest extends AnyFlatSpec with Matchers {
       AbTest("paypalCompletePaymentsWithBAID", "variant"),
     )
     val acquisitionData = SupportWorkersUtilsTestData.generateAcquisitionData(abTests)
-    val state = SupportWorkersUtilsTestData.generateState(DirectDebitPaymentFields("a", "b", "c", "d"), acquisitionData)
+    val state = SupportWorkersUtilsTestData.generateState(
+      paymentFields = DirectDebitPaymentFields("a", "b", "c", "d"),
+      isTestUser = false,
+      acquisitionData = acquisitionData,
+    )
 
-    val name = SupportWorkersUtils.buildExecutionName(isTestUser = false, state = state)
+    val name = SupportWorkersUtils.buildExecutionName(state = state)
 
     name should be("Monthly-DigitalPack-GBP-DirectDebit")
   }
@@ -90,11 +100,22 @@ object SupportWorkersUtilsTestData {
     )
   }
 
-  def generateState(paymentFields: PaymentFields, acquisitionData: Option[AcquisitionData] = None) = {
+  def generateState(
+      paymentFields: PaymentFields,
+      isTestUser: Boolean,
+      acquisitionData: Option[AcquisitionData] = None,
+  ) = {
     CreatePaymentMethodState(
       requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-      user =
-        User("111222", "example@theguardian.com", None, "A", "B", Address(None, None, None, None, None, Country.UK)),
+      user = User(
+        id = "111222",
+        primaryEmailAddress = "example@theguardian.com",
+        title = None,
+        firstName = "A",
+        lastName = "B",
+        billingAddress = Address(None, None, None, None, None, Country.UK),
+        isTestUser = isTestUser,
+      ),
       giftRecipient = None,
       product = DigitalPack(Currency.GBP, Monthly),
       productInformation = Some(ProductInformation("DigitalSubscription", "Monthly", None, None, None, None, None)),

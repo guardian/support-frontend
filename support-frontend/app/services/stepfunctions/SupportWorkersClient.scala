@@ -165,7 +165,7 @@ class SupportWorkersClient(
           request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress),
         similarProductsConsent = request.body.similarProductsConsent,
       )
-      name = SupportWorkersUtils.buildExecutionName(isTestUser = user.isTestUser, state = createPaymentMethodState)
+      name = SupportWorkersUtils.buildExecutionName(createPaymentMethodState)
       executionResult <- underlying
         .triggerExecution(createPaymentMethodState, user.isTestUser, name)
         .bimap(
