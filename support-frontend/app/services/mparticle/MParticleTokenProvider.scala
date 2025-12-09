@@ -146,12 +146,12 @@ class MParticleTokenProvider(
   }
 
   // Runs the given fetch function. If a 401 is returned then it retries with a different token
-  def requestWithToken[T](fn: MParticleAccessToken => Future[T]): Future[T] = {
+  def requestWithToken[T](fetch: MParticleAccessToken => Future[T]): Future[T] = {
     getToken() match {
       case Some(token) =>
-        fn(token.token).recoverWith { case WebServiceClientError(CodeBody("401", _)) =>
+        fetch(token.token).recoverWith { case WebServiceClientError(CodeBody("401", _)) =>
           purgeToken(token)
-          requestWithToken(fn)
+          requestWithToken(fetch)
         }
       case None =>
         // We currently have no tokens
