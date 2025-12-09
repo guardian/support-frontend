@@ -122,7 +122,7 @@ class MParticleTokenProvider(
     }
   }
 
-  private def fetchAndStoreToken(): Unit = {
+  private def fetchAndStoreToken(backoff: Int = 1): Unit = {
     fetchToken()
       .onComplete {
         case Success(token) =>
@@ -131,7 +131,7 @@ class MParticleTokenProvider(
           })
         case Failure(exception) =>
           logger.error(s"Error fetching oauth token from mparticle: ${exception.getMessage}")
-          system.scheduler.scheduleOnce(2.seconds)(fetchAndStoreToken())
+          system.scheduler.scheduleOnce(backoff.seconds)(fetchAndStoreToken(Math.min(backoff * 2, 60)))
       }
   }
 
