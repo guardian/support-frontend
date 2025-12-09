@@ -23,8 +23,9 @@ export function buildGuardianWeeklyEmailFields({
 	subscriptionNumber,
 	paymentSchedule,
 	paymentMethod,
-	mandateId,
 	productInformation,
+	isFixedTerm,
+	mandateId,
 	giftRecipient,
 }: {
 	user: User;
@@ -33,8 +34,9 @@ export function buildGuardianWeeklyEmailFields({
 	subscriptionNumber: string;
 	paymentSchedule: PaymentSchedule;
 	paymentMethod: PaymentMethod;
-	mandateId?: string;
 	productInformation: GuardianWeeklyProductPurchase;
+	isFixedTerm: boolean;
+	mandateId?: string;
 	giftRecipient?: GiftRecipient | null;
 }): EmailMessageWithIdentityUserId {
 	const gifteeFields = giftRecipient
@@ -61,7 +63,7 @@ export function buildGuardianWeeklyEmailFields({
 			paymentSchedule,
 			billingPeriod,
 			currency,
-			false,
+			isFixedTerm,
 		),
 		paymentMethod: paymentMethod,
 		mandateId: mandateId,
