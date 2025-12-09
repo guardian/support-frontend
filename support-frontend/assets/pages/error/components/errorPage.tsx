@@ -12,7 +12,7 @@ import { contributionsEmail } from 'helpers/legal';
 import SquaresIntroduction from './introduction/squaresIntroduction';
 
 // ----- Types ----- //
-type PropTypes = {
+export type ErrorPageProps = {
 	errorCode?: string;
 	headings: string[];
 	copy: string;
@@ -22,7 +22,7 @@ type PropTypes = {
 
 // ----- Component ----- //
 
-export default function ErrorPage(props: PropTypes): JSX.Element {
+export default function ErrorPage(props: ErrorPageProps): JSX.Element {
 	return (
 		<Page
 			header={<Header countryGroupId={CountryGroup.detect()} />}
