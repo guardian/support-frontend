@@ -1,7 +1,6 @@
 import { productPurchaseSchema } from '@modules/product-catalog/productPurchaseSchema';
 import { z } from 'zod';
 import { paymentMethodSchema } from './paymentMethod';
-//import { paymentScheduleSchema } from './paymentSchedule';
 import { paymentScheduleSchema } from './paymentSchedule';
 import { productTypeSchema } from './productType';
 import {
