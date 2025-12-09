@@ -1,26 +1,12 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { from, palette } from '@guardian/source/foundations';
+import { from, palette, space } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import 'helpers/types/option';
-import './content.scss';
 
-// ---- Types ----- //
-type Appearance = 'white' | 'grey' | 'highlight' | 'feature' | 'dark';
-
-type PropTypes = {
-	appearance: Appearance;
-	id?: string;
-	children: ReactNode;
-	image: ReactNode | null;
-	modifierClasses: string[];
-	innerBackground?: string | null;
-	needsHigherZindex: boolean;
-	border: boolean | null;
-};
-
+// ----- Styles ----- //
+// Replacement for .component-left-margin-section__content rules in content.scss
 const leftBorderStyle = css`
 	max-width: 100%;
 	position: relative;
@@ -29,72 +15,33 @@ const leftBorderStyle = css`
 		border-left: 1px solid ${palette.neutral[86]};
 	}
 `;
+
+// Replacement for .component-content--white block-colours (simplified)
+const contentWrapper = css`
+	border: 1px solid ${palette.neutral[86]};
+	background-color: ${palette.neutral[100]};
+`;
+
+// Replacement for .component-content__content padding/max-width
+const innerContent = css`
+	box-sizing: border-box;
+	max-width: 700px; /* approximates gu-span(9) */
+	padding: ${space[2]}px ${space[3]}px 0;
+
+	${from.desktop} {
+		padding-top: ${space[4]}px;
+	}
+`;
+
 // ----- Render ----- //
-function Content({
-	appearance,
-	children,
-	id,
-	modifierClasses,
-	innerBackground,
-	image,
-	needsHigherZindex,
-	border,
-}: PropTypes): JSX.Element {
+function Content({ children }: { children: ReactNode }): JSX.Element {
 	return (
-		<div
-			id={id}
-			className={classNameWithModifiers('component-content', [
-				appearance,
-				image ? 'overflow-hidden' : null,
-				needsHigherZindex ? 'higher' : null,
-				border === false ? 'no-border' : null,
-				border === true ? 'force-border' : null,
-				...modifierClasses,
-			])}
-		>
+		<div css={contentWrapper}>
 			<LeftMarginSection cssOverrides={leftBorderStyle}>
-				<div
-					className={
-						innerBackground
-							? `component-content__content--${innerBackground}`
-							: 'component-content__content'
-					}
-				>
-					{children}
-					{image && <div className="component-content__image">{image}</div>}
-				</div>
+				<div css={innerContent}>{children}</div>
 			</LeftMarginSection>
 		</div>
 	);
 }
-
-Content.defaultProps = {
-	appearance: 'white',
-	id: null,
-	image: null,
-	modifierClasses: [],
-	innerBackground: null,
-	needsHigherZindex: false,
-	border: null,
-};
-
-// ---- Children ----- //
-/*
-Adds a multiline divider between block children.
-*/
-export function Divider({ small }: { small: boolean }): JSX.Element {
-	return (
-		<div
-			className={classNameWithModifiers('component-content__divider', [
-				small ? 'small' : null,
-			])}
-		>
-			<hr className="component-content__divider__line" />
-		</div>
-	);
-}
-Divider.defaultProps = {
-	small: false,
-};
 
 export default Content;
