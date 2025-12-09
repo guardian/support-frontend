@@ -145,13 +145,18 @@ class MParticleTokenProvider(
     })
   }
 
+  private val maxRetries = 3
   // Runs the given fetch function. If a 401 is returned then it retries with a different token
-  def requestWithToken[T](fetch: MParticleAccessToken => Future[T]): Future[T] = {
+  def requestWithToken[T](fetch: MParticleAccessToken => Future[T], retries: Int = 0): Future[T] = {
     getToken() match {
       case Some(token) =>
         fetch(token.token).recoverWith { case WebServiceClientError(CodeBody("401", _)) =>
           purgeToken(token)
-          requestWithToken(fetch)
+          if (retries < maxRetries) {
+            requestWithToken(fetch, retries + 1)
+          } else {
+            Future.failed(new Exception(s"Max retries ($maxRetries) reached for mParticle"))
+          }
         }
       case None =>
         // We currently have no tokens
