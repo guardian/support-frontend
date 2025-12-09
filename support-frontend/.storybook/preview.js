@@ -39,6 +39,22 @@ if (typeof window !== 'undefined') {
 	window.guardian = window.guardian || {};
 	window.guardian.settings = window.guardian.settings || {};
 	window.guardian.settings.metricUrl = 'https://metrics.gutools.co.uk';
+
+	const domain = window.location.hostname;
+	const userName = 'storybook-user';
+	const cookies = [
+		{ name: 'pre-signin-test-user', value: userName, domain, path: '/' },
+		{ name: '_test_username', value: userName, domain, path: '/' },
+		{ name: '_post_deploy_user', value: 'true', domain, path: '/' },
+		{ name: 'GU_TK', value: '1.1', domain, path: '/' },
+	];
+
+	cookies.forEach(({ name, value, path }) => {
+		// Let the browser use the current host as domain (storybook host)
+		document.cookie = `${name}=${encodeURIComponent(
+			value,
+		)}; path=${path}; SameSite=Lax`;
+	});
 }
 
 /** This avoids having false positives when the date changes */
