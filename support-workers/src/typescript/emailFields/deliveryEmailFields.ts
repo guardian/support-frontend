@@ -16,7 +16,6 @@ type PaymentFields =
 
 type BasicFields = {
 	ZuoraSubscriberId: string;
-	EmailAddress: string;
 	subscriber_id: string;
 	first_name: string;
 	last_name: string;
@@ -77,7 +76,6 @@ export function buildDeliveryEmailFields({
 }): DeliveryEmailFields {
 	const basicFields = {
 		ZuoraSubscriberId: subscriptionNumber,
-		EmailAddress: user.primaryEmailAddress,
 		subscriber_id: subscriptionNumber,
 		first_name: user.firstName,
 		last_name: user.lastName,
