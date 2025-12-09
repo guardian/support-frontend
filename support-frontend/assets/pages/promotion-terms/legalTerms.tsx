@@ -1,4 +1,5 @@
-import Content, { Divider } from 'components/content/content';
+import Content from 'components/content/content';
+import Divider from 'components/content/Divider';
 import { Title } from 'components/text/text';
 import {
 	DigitalPack,
