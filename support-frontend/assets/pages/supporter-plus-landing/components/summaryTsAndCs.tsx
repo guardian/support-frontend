@@ -87,14 +87,18 @@ export function SummaryTsAndCs({
 		false,
 	);
 
-	const summaryTsAndCsTierThreeGuardianAdLite = (
+	const autoRenewUtilCancelTsAndCs = (
 		<div css={containerSummaryTsCs}>
 			The {productName} subscription
-			{productKey === 'TierThree' ? 's' : ''} will auto-renew each {periodNoun}.
-			You will be charged the subscription amount using your chosen payment
+			{productKey === 'TierThree' ? 's' : ''}
+			{productKey === 'SupporterPlus' ? ' and any contribution' : ''} will
+			auto-renew each {periodNoun}. You will be charged the subscription
+			{productKey === 'SupporterPlus' ? ' and contribution' : ''} amount
+			{productKey === 'SupporterPlus' ? 's' : ''} using your chosen payment
 			method at each renewal, at the rate then in effect, unless you cancel.
 		</div>
 	);
+
 	const summaryTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
 		Contribution: (
 			<div css={containerSummaryTsCs}>
@@ -105,20 +109,11 @@ export function SummaryTsAndCs({
 			</div>
 		),
 		SupporterPlus: (
-			<>
-				{!isStudentOneYearRatePlan && (
-					<div css={containerSummaryTsCs}>
-						The {productName} subscription and any contribution will auto-renew
-						each {periodNoun}. You will be charged the subscription and
-						contribution amounts using your chosen payment method at each
-						renewal, at the rate then in effect, unless you cancel.
-					</div>
-				)}
-			</>
+			<>{!isStudentOneYearRatePlan && autoRenewUtilCancelTsAndCs}</>
 		),
-		TierThree: summaryTsAndCsTierThreeGuardianAdLite,
-		DigitalSubscription: <>{summaryTsAndCsTierThreeGuardianAdLite}</>,
-		GuardianAdLite: summaryTsAndCsTierThreeGuardianAdLite,
+		TierThree: autoRenewUtilCancelTsAndCs,
+		DigitalSubscription: <>{autoRenewUtilCancelTsAndCs}</>,
+		GuardianAdLite: autoRenewUtilCancelTsAndCs,
 	};
 	return summaryTsAndCs[productKey] ?? null;
 }
