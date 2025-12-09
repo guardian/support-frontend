@@ -57,6 +57,10 @@ const guardianDigitalRewards = [
 const observerDigitalRewards = [
 	<>Access to The Observer digital subscription</>,
 ];
+const baseDigitalRewards = [
+	...guardianDigitalRewards,
+	...observerDigitalRewards,
+];
 
 const benefitGuardianSixDay = (
 	<span css={benefitStyle}>
@@ -104,7 +108,7 @@ const digitalBenefitsMap: Partial<
 > = {
 	EverydayPlus: {
 		label: digitalRewardsLabel,
-		items: guardianDigitalRewards,
+		items: baseDigitalRewards,
 	},
 	SixdayPlus: {
 		label: digitalRewardsLabel,
@@ -112,7 +116,7 @@ const digitalBenefitsMap: Partial<
 	},
 	WeekendPlus: {
 		label: digitalRewardsLabel,
-		items: guardianDigitalRewards,
+		items: baseDigitalRewards,
 	},
 	SaturdayPlus: {
 		label: digitalRewardsLabel,
