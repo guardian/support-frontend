@@ -59,7 +59,6 @@ abstract class ChannelTestService[T: Decoder](
 
   private val tableName = stage match {
     case Stages.PROD => "support-admin-console-channel-tests-PROD"
-    case Stages.DEV => "support-admin-console-channel-tests-DEV"
     case _ => "support-admin-console-channel-tests-CODE"
   }
 
