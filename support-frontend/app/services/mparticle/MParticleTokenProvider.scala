@@ -67,12 +67,13 @@ class MParticleTokenProvider(
 
   // Every hour purge the oldest token
   system.scheduler.scheduleAtFixedRate(1.hour, 1.hour)(() => {
-    tokens
-      .get()
-      .toList
-      .sortBy(_.created)
-      .headOption
-      .foreach(purgeToken)
+    val currentTokens = tokens.get().toList
+    if (currentTokens.size >= 3) {
+      currentTokens
+        .sortBy(_.created)
+        .headOption
+        .foreach(purgeToken)
+    }
   })
 
   // Randomly select a token
