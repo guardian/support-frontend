@@ -21,7 +21,8 @@ import scala.util.{Failure, Random, Success}
 
 case class MParticleAccessToken(token: String) extends AnyVal
 object MParticleAccessToken {
-  implicit val decoder: Decoder[MParticleAccessToken] = deriveDecoder
+  implicit val decoder: Decoder[MParticleAccessToken] =
+    Decoder[String].map(MParticleAccessToken.apply)
 }
 
 case class Token(token: MParticleAccessToken, created: DateTime)
