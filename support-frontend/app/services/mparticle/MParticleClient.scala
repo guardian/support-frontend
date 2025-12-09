@@ -62,27 +62,25 @@ class MParticleClient(
   override val verboseLogging: Boolean = false
 
   def getUserProfile(identityId: String): Future[MParticleUserProfile] = {
+    val fields = "audience_memberships"
+    val endpoint =
+      s"userprofile/v1/resolve/${mparticleConfig.orgId}/${mparticleConfig.accountId}/${mparticleConfig.workspaceId}"
+
+    val request = ProfileRequest(
+      environment_type = mparticleConfig.apiEnv,
+      identity = Identity(`type` = "customer_id", value = identityId),
+    )
+
     tokenProvider
       .requestWithToken(accessToken =>
-        {
-          val fields = "audience_memberships"
-          val endpoint =
-            s"userprofile/v1/resolve/${mparticleConfig.orgId}/${mparticleConfig.accountId}/${mparticleConfig.workspaceId}"
-
-          val request = ProfileRequest(
-            environment_type = mparticleConfig.apiEnv,
-            identity = Identity(`type` = "customer_id", value = identityId),
-          )
-
-          postJson[ProfileResponse](
-            endpoint = endpoint,
-            data = request.asJson,
-            headers = Map("Authorization" -> s"Bearer ${accessToken.token}"),
-            params = Map("fields" -> fields),
-          )
-        }
-          .map(parseUserProfile),
+        postJson[ProfileResponse](
+          endpoint = endpoint,
+          data = request.asJson,
+          headers = Map("Authorization" -> s"Bearer ${accessToken.token}"),
+          params = Map("fields" -> fields),
+        ),
       )
+      .map(parseUserProfile)
   }
 
   private def parseUserProfile(profileResponse: ProfileResponse): MParticleUserProfile = {
