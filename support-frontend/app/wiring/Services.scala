@@ -74,7 +74,8 @@ trait Services {
 
   lazy val paymentAPIService = new PaymentAPIService(wsClient, appConfig.paymentApiUrl)
 
-  lazy val mparticleClient = new MParticleClient(RequestRunners.futureRunner, appConfig.mparticleConfigProvider)
+  lazy val mparticleClient =
+    new MParticleClient(RequestRunners.futureRunner, appConfig.mparticleConfigProvider, appConfig.stage)
 
   lazy val recaptchaService = new RecaptchaService(wsClient)
 

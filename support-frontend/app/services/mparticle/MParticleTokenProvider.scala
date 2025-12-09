@@ -1,7 +1,12 @@
 package services.mparticle
 
+import com.gu.aws.AwsCloudWatchMetricPut
+import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
+import com.gu.aws.AwsCloudWatchMetricSetup.getMParticleTokenError
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.{CodeBody, WebServiceClientError}
+import com.gu.support.config.Stage
+import com.typesafe.scalalogging.StrictLogging
 import config.MparticleConfig
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
@@ -49,7 +54,9 @@ object OAuthTokenResponse {
 class MParticleTokenProvider(
     val httpClient: FutureHttpClient,
     config: MparticleConfig,
-)(implicit ec: ExecutionContext, system: ActorSystem) {
+    stage: Stage,
+)(implicit ec: ExecutionContext, system: ActorSystem)
+    extends StrictLogging {
   import OAuthTokenResponse._
   import OAuthTokenRequest._
 
@@ -121,8 +128,8 @@ class MParticleTokenProvider(
             currentTokens.incl(token)
           })
         case Failure(exception) =>
-          // TODO - log and back off?
-          fetchAndStoreToken()
+          logger.error(s"Error fetching oauth token from mparticle: ${exception.getMessage}")
+          system.scheduler.scheduleOnce(2.seconds)(fetchAndStoreToken())
       }
   }
 
@@ -147,7 +154,8 @@ class MParticleTokenProvider(
           requestWithToken(fn)
         }
       case None =>
-        // TODO - log + alarm
+        // We currently have no tokens
+        AwsCloudWatchMetricPut(cloudwatchClient)(getMParticleTokenError(stage))
         Future.failed(new Exception("No token available"))
     }
   }

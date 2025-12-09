@@ -3,6 +3,7 @@ package services.mparticle
 import com.gu.monitoring.SafeLogging
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
+import com.gu.support.config.Stage
 import config.{MparticleConfig, MparticleConfigProvider}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax.EncoderOps
@@ -47,6 +48,7 @@ object MParticleClient {
 class MParticleClient(
     val httpClient: FutureHttpClient,
     mparticleConfigProvider: MparticleConfigProvider,
+    stage: Stage,
 )(implicit ec: ExecutionContext, system: ActorSystem)
     extends WebServiceHelper[MParticleError]
     with SafeLogging {
@@ -54,7 +56,7 @@ class MParticleClient(
   import MParticleClient._
 
   private lazy val mparticleConfig: MparticleConfig = mparticleConfigProvider.get()
-  private lazy val tokenProvider = new MParticleTokenProvider(httpClient, mparticleConfig)
+  private lazy val tokenProvider = new MParticleTokenProvider(httpClient, mparticleConfig, stage)
 
   override val wsUrl: String = mparticleConfig.apiUrl
   override val verboseLogging: Boolean = false
