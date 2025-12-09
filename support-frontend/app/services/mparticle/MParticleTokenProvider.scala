@@ -154,6 +154,7 @@ class MParticleTokenProvider(
           if (retries < maxRetries) {
             requestWithToken(fetch, retries + 1)
           } else {
+            AwsCloudWatchMetricPut(cloudwatchClient)(getMParticleTokenError(stage))
             Future.failed(new Exception(s"Max retries ($maxRetries) reached for mParticle"))
           }
         }
