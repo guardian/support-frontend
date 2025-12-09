@@ -61,16 +61,16 @@ class MParticleTokenProvider(
   import OAuthTokenResponse._
   import OAuthTokenRequest._
 
-  private val tokenCount = 3
+  private val desiredTokenCount = 3
   private val tokens = new AtomicReference[Set[Token]](Set.empty)
 
   // Fetch the first pool of tokens
-  (1 to tokenCount).foreach(_ => fetchAndStoreToken())
+  (1 to desiredTokenCount).foreach(_ => fetchAndStoreToken())
 
   // Every hour purge the oldest token
   system.scheduler.scheduleAtFixedRate(1.hour, 1.hour)(() => {
     val currentTokens = tokens.get().toList
-    if (currentTokens.size >= tokenCount) {
+    if (currentTokens.size >= desiredTokenCount) {
       currentTokens
         .sortBy(_.created)
         .headOption
