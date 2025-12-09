@@ -23,7 +23,7 @@ const contentStyle = css`
 	flex-grow: 1;
 	flex-basis: ${space[24] * 10}px;
 	padding: 0 ${space[5]}px ${space[4]}px;
-	max-width: ${gu_span(10)}px;
+	max-width: ${gu_span(9)}px;
 `;
 
 function getBorderStyling(centred = false) {

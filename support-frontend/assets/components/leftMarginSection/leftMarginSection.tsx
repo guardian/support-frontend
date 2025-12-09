@@ -3,7 +3,7 @@ import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { from } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
-import { gu_span } from 'stylesheets/emotion/layout';
+import { gu_h_spacing, gu_span } from 'stylesheets/emotion/layout';
 
 const baseSection = css`
 	display: flex;
@@ -20,14 +20,14 @@ const baseSection = css`
 
 const baseContent = css`
 	flex-grow: 1;
-	flex-basis: ${gu_span(9)}px;
+	flex-basis: ${gu_span(9) + gu_h_spacing}px;
 
 	${from.desktop} {
-		flex-basis: ${gu_span(10)}px;
+		flex-basis: ${gu_span(10) + gu_h_spacing}px;
 	}
 
 	${from.leftCol} {
-		flex-basis: ${gu_span(12)}px;
+		flex-basis: ${gu_span(12) + gu_h_spacing}px;
 	}
 `;
 
