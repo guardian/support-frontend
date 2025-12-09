@@ -71,7 +71,8 @@ class ContributionEmailFields(
           ),
         )
       case _: PayPalReferenceTransaction => Future.successful(List("payment method" -> "PayPal"))
-      case _: PayPalCompletePaymentsReferenceTransaction => Future.successful(List("payment method" -> "PayPal"))
+      case _: PayPalCompletePaymentsWithBAIDReferenceTransaction =>
+        Future.successful(List("payment method" -> "PayPal"))
       case _: CreditCardReferenceTransaction => Future.successful(List("payment method" -> "credit / debit card"))
     }
   }

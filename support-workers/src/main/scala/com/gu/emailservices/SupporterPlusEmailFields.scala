@@ -90,7 +90,7 @@ class SupporterPlusEmailFields(
         )
       case _: PayPalReferenceTransaction =>
         Future.successful(List("payment method" -> "PayPal", "first payment date" -> formatDate(created.toLocalDate)))
-      case _: PayPalCompletePaymentsReferenceTransaction =>
+      case _: PayPalCompletePaymentsWithBAIDReferenceTransaction =>
         Future.successful(List("payment method" -> "PayPal", "first payment date" -> formatDate(created.toLocalDate)))
       case _: CreditCardReferenceTransaction =>
         Future.successful(

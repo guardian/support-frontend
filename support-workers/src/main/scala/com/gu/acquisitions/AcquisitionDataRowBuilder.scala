@@ -18,7 +18,7 @@ import com.gu.support.workers.{
   GuardianWeekly,
   Monthly,
   Paper,
-  PayPalCompletePaymentsReferenceTransaction,
+  PayPalCompletePaymentsWithBAIDReferenceTransaction,
   PayPalReferenceTransaction,
   PaymentMethod,
   ProductType,
@@ -115,7 +115,7 @@ object AcquisitionDataRowBuilder {
           case _ => Stripe
         }
       case _: PayPalReferenceTransaction => PayPal
-      case _: PayPalCompletePaymentsReferenceTransaction => PayPal
+      case _: PayPalCompletePaymentsWithBAIDReferenceTransaction => PayPal
       case _: DirectDebitPaymentMethod | _: ClonedDirectDebitPaymentMethod => DirectDebit
       case _: SepaPaymentMethod => StripeSepa
     }

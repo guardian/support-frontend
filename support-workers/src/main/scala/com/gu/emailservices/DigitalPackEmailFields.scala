@@ -212,7 +212,7 @@ class DigitalPackPaymentEmailFields(getMandate: String => Future[Option[String]]
         )
       case _: CreditCardReferenceTransaction => Future.successful(CCAttributes())
       case _: PayPalReferenceTransaction => Future.successful(PPAttributes())
-      case _: PayPalCompletePaymentsReferenceTransaction => Future.successful(PPAttributes())
+      case _: PayPalCompletePaymentsWithBAIDReferenceTransaction => Future.successful(PPAttributes())
       case sepa: SepaPaymentMethod => Future.successful(SepaAttributes(sepa.BankTransferAccountNumber))
     }
 
