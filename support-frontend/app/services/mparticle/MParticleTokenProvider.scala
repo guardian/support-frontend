@@ -4,7 +4,7 @@ import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
 import com.gu.aws.AwsCloudWatchMetricSetup.getMParticleTokenError
 import com.gu.okhttp.RequestRunners.FutureHttpClient
-import com.gu.rest.{CodeBody, WebServiceClientError}
+import com.gu.rest.{CodeBody, WebServiceClientError, WebServiceHelper}
 import com.gu.support.config.Stage
 import com.typesafe.scalalogging.StrictLogging
 import config.MparticleConfig
@@ -57,9 +57,12 @@ class MParticleTokenProvider(
     config: MparticleConfig,
     stage: Stage,
 )(implicit ec: ExecutionContext, system: ActorSystem)
-    extends StrictLogging {
+    extends WebServiceHelper[MParticleError] {
   import OAuthTokenResponse._
   import OAuthTokenRequest._
+
+  override val wsUrl: String = config.tokenUrl
+  override val verboseLogging: Boolean = false
 
   private val desiredTokenCount = 3
   private val tokens = new AtomicReference[Set[Token]](Set.empty)
@@ -93,34 +96,12 @@ class MParticleTokenProvider(
       grant_type = "client_credentials",
     )
 
-    // OAuth token endpoint is on a different domain, so we need to use a custom HTTP client call
-    import com.gu.okhttp.RichOkHttpClient
-    import okhttp3._
-
-    val body = RequestBody.create(
-      MediaType.parse("application/json; charset=utf-8"),
-      request.asJson.noSpaces,
-    )
-
-    val oauthRequest = new Request.Builder()
-      .url(config.tokenUrl)
-      .post(body)
-      .build()
-
-    httpClient(oauthRequest).flatMap { response =>
-      if (response.code() == 200) {
-        io.circe.parser.decode[OAuthTokenResponse](response.body().string()) match {
-          case Right(tokenResponse) =>
-            Future.successful(Token(tokenResponse.access_token, DateTime.now()))
-          case Left(error) =>
-            val errorMsg = s"Error parsing access token response: ${error.getMessage}"
-            Future.failed(new RuntimeException(errorMsg))
-        }
-      } else {
-        val errorMsg = s"mParticle OAuth returned error: status=${response.code()} body=${response.body().string()}"
-        Future.failed(new RuntimeException(errorMsg))
-      }
-    }
+    postJson[OAuthTokenResponse](
+      endpoint = "oauth/token",
+      data = request.asJson,
+    ).map(tokenResponse => {
+      Token(tokenResponse.access_token, DateTime.now())
+    })
   }
 
   private def fetchAndStoreToken(backoff: Int = 1): Unit = {
@@ -131,7 +112,7 @@ class MParticleTokenProvider(
             currentTokens.incl(token)
           })
         case Failure(exception) =>
-          logger.error(s"Error fetching oauth token from mparticle: ${exception.getMessage}")
+          logger.error(scrub"Error fetching oauth token from mparticle", exception)
           system.scheduler.scheduleOnce(backoff.seconds)(fetchAndStoreToken(Math.min(backoff * 2, 60)))
       }
   }

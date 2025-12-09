@@ -35,14 +35,11 @@ case class ProfileResponse(
     audience_memberships: List[AudienceMembership],
 )
 
-case class MParticleError(message: String) extends Throwable(message)
-
 object MParticleClient {
   implicit val identityEncoder: Encoder[Identity] = deriveEncoder
   implicit val profileRequestEncoder: Encoder[ProfileRequest] = deriveEncoder
   implicit val audienceMembershipDecoder: Decoder[AudienceMembership] = deriveDecoder
   implicit val profileResponseDecoder: Decoder[ProfileResponse] = deriveDecoder
-  implicit val mparticleErrorDecoder: Decoder[MParticleError] = deriveDecoder
 }
 
 class MParticleClient(
@@ -50,8 +47,7 @@ class MParticleClient(
     mparticleConfigProvider: MparticleConfigProvider,
     stage: Stage,
 )(implicit ec: ExecutionContext, system: ActorSystem)
-    extends WebServiceHelper[MParticleError]
-    with SafeLogging {
+    extends WebServiceHelper[MParticleError] {
 
   import MParticleClient._
 
