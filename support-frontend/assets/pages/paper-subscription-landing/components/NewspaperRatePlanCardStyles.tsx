@@ -131,3 +131,9 @@ export const planDescription = css`
 		display: none;
 	}
 `;
+
+export const benefitsListSection = css`
+	> section {
+		margin-bottom: 0;
+	}
+`;
