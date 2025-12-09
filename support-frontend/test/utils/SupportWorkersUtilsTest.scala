@@ -3,7 +3,18 @@ package utils
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds, QueryParameter, ReferrerAcquisitionData}
 import com.gu.support.workers.states.{AnalyticsInfo, CreatePaymentMethodState}
-import com.gu.support.workers.{Address, DigitalPack, Monthly, PayPal, PayPalPaymentFields, ProductInformation, User}
+import com.gu.support.workers.{
+  Address,
+  DigitalPack,
+  DirectDebitPaymentFields,
+  Monthly,
+  PayPal,
+  PayPalPaymentFields,
+  PaymentFields,
+  ProductInformation,
+  StripePaymentFields,
+  User,
+}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -11,7 +22,7 @@ import java.util.UUID
 
 class SupportWorkersUtilsTest extends AnyFlatSpec with Matchers {
   "buildExecutionName" should "include the TestUser prefix when it's a test user" in {
-    val state = SupportWorkersUtilsTestData.generateState()
+    val state = SupportWorkersUtilsTestData.generateState(PayPalPaymentFields("fake-baid"))
 
     val name = SupportWorkersUtils.buildExecutionName(isTestUser = true, state = state)
 
@@ -19,23 +30,35 @@ class SupportWorkersUtilsTest extends AnyFlatSpec with Matchers {
   }
 
   it should "not include the TestUser prefix when it's a not test user" in {
-    val state = SupportWorkersUtilsTestData.generateState()
+    val state = SupportWorkersUtilsTestData.generateState(PayPalPaymentFields("fake-baid"))
 
     val name = SupportWorkersUtils.buildExecutionName(isTestUser = false, state = state)
 
     name should be("Monthly-DigitalPack-GBP-PayPal")
   }
 
-  it should "change the name when the user in in the PayPal Complete Payments AB test" in {
+  it should "change the name when the user in in the PayPal Complete Payments AB test and paying with PayPal" in {
     val abTests = Set(
       AbTest("paypalCompletePaymentsWithBAID", "variant"),
     )
     val acquisitionData = SupportWorkersUtilsTestData.generateAcquisitionData(abTests)
-    val state = SupportWorkersUtilsTestData.generateState(acquisitionData)
+    val state = SupportWorkersUtilsTestData.generateState(PayPalPaymentFields("fake-baid"), acquisitionData)
 
     val name = SupportWorkersUtils.buildExecutionName(isTestUser = false, state = state)
 
     name should be("Monthly-DigitalPack-GBP-PayPalCPWithBAID")
+  }
+
+  it should "not change the name when the user in in the PayPal Complete Payments AB test but not paying with PayPal" in {
+    val abTests = Set(
+      AbTest("paypalCompletePaymentsWithBAID", "variant"),
+    )
+    val acquisitionData = SupportWorkersUtilsTestData.generateAcquisitionData(abTests)
+    val state = SupportWorkersUtilsTestData.generateState(DirectDebitPaymentFields("a", "b", "c", "d"), acquisitionData)
+
+    val name = SupportWorkersUtils.buildExecutionName(isTestUser = false, state = state)
+
+    name should be("Monthly-DigitalPack-GBP-DirectDebit")
   }
 }
 
@@ -67,7 +90,7 @@ object SupportWorkersUtilsTestData {
     )
   }
 
-  def generateState(acquisitionData: Option[AcquisitionData] = None) = {
+  def generateState(paymentFields: PaymentFields, acquisitionData: Option[AcquisitionData] = None) = {
     CreatePaymentMethodState(
       requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       user =
@@ -76,7 +99,7 @@ object SupportWorkersUtilsTestData {
       product = DigitalPack(Currency.GBP, Monthly),
       productInformation = Some(ProductInformation("DigitalSubscription", "Monthly", None, None, None, None, None)),
       analyticsInfo = AnalyticsInfo(false, PayPal),
-      paymentFields = PayPalPaymentFields("fake-baid"),
+      paymentFields = paymentFields,
       firstDeliveryDate = None,
       appliedPromotion = None,
       csrUsername = None,
