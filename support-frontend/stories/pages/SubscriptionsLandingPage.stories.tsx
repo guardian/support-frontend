@@ -37,7 +37,7 @@ const defaultArgs: SubscriptionsLandingProps = {
 			discountCopy:
 				'Guardian and Observer newspaper subscriptions to suit every reader',
 		},
-	},
+	} as SubscriptionsLandingProps['pricingCopy'],
 	referrerAcquisitions: {
 		componentType: 'ACQUISITIONS_OTHER',
 		componentId: 'storybook-subscriptions-landing',
