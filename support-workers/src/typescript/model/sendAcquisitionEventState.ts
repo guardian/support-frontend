@@ -19,7 +19,6 @@ const commonSchema = z.object({
 	paymentSchedule: paymentScheduleSchema,
 	accountNumber: z.string(),
 	subscriptionNumber: z.string(),
-	similarProductsConsent: z.boolean().optional(),
 });
 
 const commonSchemaWithConsent = commonSchema.extend({
