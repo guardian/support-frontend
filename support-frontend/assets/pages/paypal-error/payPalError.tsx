@@ -24,7 +24,7 @@ const pageSectionBodyOverrides = css`
 	}
 `;
 
-const content = (
+export const PayPalError = (
 	<Page
 		header={<Header countryGroupId={CountryGroup.detect()} />}
 		footer={<Footer />}
