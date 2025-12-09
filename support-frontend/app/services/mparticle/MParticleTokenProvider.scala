@@ -134,15 +134,11 @@ class MParticleTokenProvider(
   }
 
   private def purgeToken(token: Token): Unit = {
-    tokens.updateAndGet(currentTokens => {
-      // Check the token is still in the set
-      if (currentTokens.contains(token)) {
-        fetchAndStoreToken() // begin fetch in the background
-        currentTokens.excl(token) // remove the invalid token now
-      } else {
-        currentTokens
-      }
-    })
+    val previousTokens = tokens.getAndUpdate(currentTokens => currentTokens.excl(token))
+    // Only fetch a replacement if this call actually removed the token
+    if (previousTokens.contains(token)) {
+      fetchAndStoreToken() // begin fetch in the background
+    }
   }
 
   private val maxRetries = 3
