@@ -278,7 +278,10 @@ export function ThankYouComponent({
 			'feedback',
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
-		...maybeThankYouModule(isDigitalEdition, 'newspaperArchiveBenefit'),
+		...maybeThankYouModule(
+			isDigitalEdition || isGuardianPaperPlus,
+			'newspaperArchiveBenefit',
+		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(
 			!isTierThree && !isGuardianAdLite && !isPrint && !isDigitalEdition,
