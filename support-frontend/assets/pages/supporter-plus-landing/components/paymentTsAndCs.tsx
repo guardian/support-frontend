@@ -6,7 +6,7 @@ import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import {
 	buildPromotionalTermsLink,
 	contributionsTermsLinks,
-	digitalSubscriptionTermsLink,
+	digitalPlusTermsLink,
 	guardianAdLiteTermsLink,
 	guardianWeeklyTermsLink,
 	observerLinks,
@@ -87,7 +87,7 @@ export function FooterTsAndCs({
 			case 'GuardianAdLite':
 				return termsLink('Terms', guardianAdLiteTermsLink);
 			case 'DigitalSubscription':
-				return termsLink('Terms and Conditions', digitalSubscriptionTermsLink);
+				return termsLink('Terms and Conditions', digitalPlusTermsLink);
 			case 'SupporterPlus':
 				return termsLink('Terms and Conditions', supporterPlusTermsLink);
 			case 'TierThree':
@@ -312,7 +312,7 @@ export function PaymentTsAndCs({
 				subscription after 14 days will take effect at the end of your current{' '}
 				{billingPeriod.toLocaleLowerCase()} payment period. To cancel, go to{' '}
 				{manageMyAccountLink()} or see our{' '}
-				{termsLink('Terms', digitalSubscriptionTermsLink)}.
+				{termsLink('Terms', digitalPlusTermsLink)}.
 			</div>
 		),
 		GuardianAdLite: (
