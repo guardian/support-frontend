@@ -6,6 +6,8 @@ import type { Tests } from './models';
 // This is to ensure the participation is picked up by ophan. The client side
 // navigation from landing page to thank you page *won't* register any new
 // participations.
+// Note: These regexes are matched against the pathname only (i.e. no domain or
+// query string)
 export const pageUrlRegexes = {
 	contributions: {
 		/*
@@ -15,10 +17,8 @@ export const pageUrlRegexes = {
 		allLandingPagesAndThankyouPages:
 			'^(?!(?:/subscribe/(paper|weekly)/checkout$))(?:/(uk|us|ca|eu|nz|int))?/(checkout|one-time-checkout|contribute|thankyou|thank-you)(/.*)?$',
 		usLandingPageOnly: '/us/contribute$',
-		genericCheckoutOnly:
-			'(uk|us|au|ca|eu|nz|int)/checkout|thank-you\\?product(.*)?$',
-		oneTimeCheckoutOnly:
-			'(uk|us|au|ca|eu|nz|int)/one-time-checkout|thank-you\\?contribution(.*)?$',
+		genericCheckoutOnly: '(uk|us|au|ca|eu|nz|int)/checkout$',
+		oneTimeCheckoutOnly: '(uk|us|au|ca|eu|nz|int)/one-time-checkout$',
 	},
 	subscriptions: {
 		paper: {
@@ -73,6 +73,28 @@ export const tests: Tests = {
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 1,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		excludeContributionsOnlyCountries: true,
+	},
+	paypalCompletePaymentsWithBAID: {
+		variants: [
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				// X% of audience in this test, all get the variant. Everyone
+				// else gets the control (i.e. PayPal express) This is fine -
+				// we're not comparing the two groups, just rolling out PayPalCP
+				// gradually.
+				size: 0,
+			},
+		},
+		isActive: true,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 1,
+		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
 		excludeContributionsOnlyCountries: true,
 	},
 };
