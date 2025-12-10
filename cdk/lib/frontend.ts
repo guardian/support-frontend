@@ -470,6 +470,30 @@ export class Frontend extends GuStack {
         treatMissingData: TreatMissingData.NOT_BREACHING,
         snsTopicName: `alarms-handler-topic-${this.stage}`,
       });
+
+      new GuAlarm(this, "MParticleTokenError", {
+        app,
+        alarmName: alarmName("support-frontend MParticleTokenError"),
+        alarmDescription: alarmDescription(
+          "support-frontend failed to use the mparticle API because no valid oauth token was available"
+        ),
+        actionsEnabled: shouldCreateAlarms,
+        threshold: 1,
+        evaluationPeriods: 1,
+        comparisonOperator:
+        ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+        metric: new Metric({
+          metricName: "MParticleTokenError",
+          namespace: "support-frontend",
+          dimensionsMap: {
+            Stage: this.stage,
+          },
+          statistic: "Sum",
+          period: Duration.seconds(60),
+        }),
+        treatMissingData: TreatMissingData.NOT_BREACHING,
+        snsTopicName: `alarms-handler-topic-${this.stage}`,
+      });
     }
   }
 }
