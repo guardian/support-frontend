@@ -193,6 +193,12 @@ async function sendGuardianWeeklyEmail(
 	>,
 ) {
 	if (checkStateProductType('GuardianWeekly', sendThankYouEmailState)) {
+		const fixedTerm = isFixedTerm(
+			await productCatalogProvider.getServiceForUser(
+				sendThankYouEmailState.user.isTestUser,
+			),
+			productInformation,
+		);
 		await sendEmailWithStage(
 			buildGuardianWeeklyEmailFields({
 				user: sendThankYouEmailState.user,
@@ -201,12 +207,13 @@ async function sendGuardianWeeklyEmail(
 				subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
 				paymentSchedule: sendThankYouEmailState.paymentSchedule,
 				paymentMethod: sendThankYouEmailState.paymentMethod,
+				productInformation: productInformation,
+				isFixedTerm: fixedTerm,
 				mandateId: await getMandateId(
 					sendThankYouEmailState.user.isTestUser,
 					sendThankYouEmailState.paymentMethod.Type,
 					sendThankYouEmailState.accountNumber,
 				),
-				productInformation: productInformation,
 				giftRecipient: sendThankYouEmailState.giftRecipient,
 			}),
 		);
