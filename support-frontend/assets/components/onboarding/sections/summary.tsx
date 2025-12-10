@@ -18,6 +18,7 @@ import {
 	type NewsletterSubscription,
 	updateNewsletterSubscription,
 } from 'helpers/identity/newsletters';
+import { productLegal } from 'helpers/legalCopy';
 import {
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
@@ -44,12 +45,18 @@ import {
 	newsletterContainer,
 	newslettersAppUsageInformation,
 	paymentDetailsBox,
-	paymentDetailsContainer,
 	separator,
 } from './sectionsStyles';
 
 const purchaseSummaryDetailsContainer = css`
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+`;
+
+const purchaseSummaryDetailsPriceText = css`
 	text-align: end;
+	text-wrap: balance;
 `;
 
 const paymentMethodContainer = css`
@@ -195,23 +202,36 @@ function OnboardingSummary({
 	supportRegionId,
 	payment,
 	ratePlanKey,
+	promotion,
 }: OnboardingProps) {
 	const order = getThankYouOrder();
 	const productSettings =
 		productKey && landingPageSettings.products[productKey];
 	const { windowWidthIsLessThan } = useWindowWidth();
 
-	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
+	const { currencyKey, countryGroupId } =
+		getSupportRegionIdConfig(supportRegionId);
+
 	const amountPaidToday = simpleFormatAmount(
 		getCurrencyInfo(currencyKey),
 		payment.finalAmount,
 	);
 
-	const billingPeriod = ratePlanKey
-		? ratePlanToBillingPeriod(ratePlanKey)
-		: undefined;
-	const periodNoun = billingPeriod ? getBillingPeriodNoun(billingPeriod) : '';
+	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
+	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const fullAmount = `${amountPaidToday}/${periodNoun}`;
+	let promoMessage = '';
+
+	if (promotion) {
+		promoMessage =
+			productLegal(
+				countryGroupId,
+				billingPeriod,
+				' per ',
+				payment.originalAmount,
+				promotion,
+			) + ' thereafter';
+	}
 
 	const nextPaymentDate = new Date();
 	if (billingPeriod === BillingPeriod.Monthly) {
@@ -267,21 +287,25 @@ function OnboardingSummary({
 					<Stack space={2} cssOverrides={paymentDetailsBox}>
 						<p css={boldDescriptions}>Payment details</p>
 						<div css={separator} />
-						<div css={paymentDetailsContainer}>
-							<Stack space={2}>
+						<Stack space={2}>
+							<div css={purchaseSummaryDetailsContainer}>
 								<p css={boldDescriptions}>Product</p>
-								<p css={boldDescriptions}>Price</p>
-								<p css={boldDescriptions}>Payment method</p>
-							</Stack>
-							<Stack space={2} cssOverrides={purchaseSummaryDetailsContainer}>
 								<p css={descriptions}>{productSettings?.title}</p>
-								<p css={descriptions}>{fullAmount}</p>
+							</div>
+							<div css={purchaseSummaryDetailsContainer}>
+								<p css={boldDescriptions}>Price</p>
+								<p css={[descriptions, purchaseSummaryDetailsPriceText]}>
+									{promoMessage || fullAmount}
+								</p>
+							</div>
+							<div css={purchaseSummaryDetailsContainer}>
+								<p css={boldDescriptions}>Payment method</p>
 								<div css={paymentMethodContainer}>
 									{isDirectDebit && <SvgDirectDebit size="medium" />}
 									<p css={descriptions}>{paymentMethod}</p>
 								</div>
-							</Stack>
-						</div>
+							</div>
+						</Stack>
 						{isDirectDebit && (
 							<>
 								<div css={separator} />
