@@ -11,7 +11,6 @@ import {
 	filterBenefitByABTest,
 	filterBenefitByRegion,
 	productCatalogDescription,
-	productCatalogDescriptionPremiumDigital,
 } from '../../../../helpers/productCatalog';
 import type {
 	ActiveProductKey,
@@ -102,7 +101,7 @@ export const getBenefitsChecklistFromLandingPageTool = (
 			checked: [
 				...(landingPageSettings.products.DigitalSubscription?.benefits ??
 					filterProductDescriptionBenefits(
-						productCatalogDescriptionPremiumDigital,
+						productCatalogDescription.DigitalSubscription,
 						countryGroupId,
 					)),
 				...(landingPageSettings.products.SupporterPlus?.benefits ??

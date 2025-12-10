@@ -13,7 +13,7 @@ import type { SubscriptionsLandingProps } from './subscriptionsLandingProps';
 import { subscriptionsLandingProps } from './subscriptionsLandingProps';
 
 // ----- Render ----- //
-function SubscriptionsLandingPage({
+export function SubscriptionsLandingPage({
 	countryGroupId,
 	participations,
 	pricingCopy,

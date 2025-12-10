@@ -45,6 +45,7 @@ const guardianDigitalRewards = [
 		Unlimited access to the Guardian Editions app so you can enjoy newspapers on
 		your mobile and tablet
 	</>,
+	<>Digital access to the Guardian’s 200 year newspaper archive</>,
 	<>Ad-free reading on the Guardian app and website</>,
 	<>
 		Exclusive newsletter for supporters, sent every week from the Guardian
@@ -55,6 +56,10 @@ const guardianDigitalRewards = [
 
 const observerDigitalRewards = [
 	<>Access to The Observer digital subscription</>,
+];
+const baseDigitalRewards = [
+	...guardianDigitalRewards,
+	...observerDigitalRewards,
 ];
 
 const benefitGuardianSixDay = (
@@ -103,7 +108,7 @@ const digitalBenefitsMap: Partial<
 > = {
 	EverydayPlus: {
 		label: digitalRewardsLabel,
-		items: guardianDigitalRewards,
+		items: baseDigitalRewards,
 	},
 	SixdayPlus: {
 		label: digitalRewardsLabel,
@@ -111,7 +116,7 @@ const digitalBenefitsMap: Partial<
 	},
 	WeekendPlus: {
 		label: digitalRewardsLabel,
-		items: guardianDigitalRewards,
+		items: baseDigitalRewards,
 	},
 	SaturdayPlus: {
 		label: digitalRewardsLabel,
