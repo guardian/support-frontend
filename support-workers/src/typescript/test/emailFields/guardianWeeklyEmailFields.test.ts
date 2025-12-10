@@ -24,13 +24,14 @@ describe('Guardian weekly thank you email fields', () => {
 			subscriptionNumber: subscriptionNumber,
 			paymentSchedule: paperPaymentSchedule,
 			paymentMethod: creditCardPaymentMethod,
-			mandateId: undefined,
 			productInformation: {
 				product: 'GuardianWeeklyDomestic',
 				ratePlan: 'Monthly',
 				firstDeliveryDate: firstDeliveryDate.toDate(),
 				deliveryContact: deliveryContact,
 			},
+			isFixedTerm: false,
+			mandateId: undefined,
 		});
 
 		const expected = {
@@ -77,13 +78,14 @@ describe('Guardian weekly thank you email fields', () => {
 			subscriptionNumber: subscriptionNumber,
 			paymentSchedule: paperPaymentSchedule,
 			paymentMethod: creditCardPaymentMethod,
-			mandateId: undefined,
 			productInformation: {
 				product: 'GuardianWeeklyRestOfWorld',
 				ratePlan: 'Annual',
 				firstDeliveryDate: firstDeliveryDate.toDate(),
 				deliveryContact: deliveryContact,
 			},
+			isFixedTerm: true,
+			mandateId: undefined,
 			giftRecipient: giftRecipient,
 		});
 		const expected = {
@@ -102,7 +104,7 @@ describe('Guardian weekly thank you email fields', () => {
 						giftee_first_name: 'Gift',
 						giftee_last_name: 'Recipient',
 						date_of_second_payment: 'Thursday, 18 December 2025',
-						subscription_rate: '$10.00 every year',
+						subscription_rate: '$10.00 for 12 months',
 						date_of_first_paper: formatDate(firstDeliveryDate),
 						date_of_first_payment: formatDate(firstDeliveryDate),
 						subscriber_id: subscriptionNumber,
