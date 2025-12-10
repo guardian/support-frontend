@@ -124,7 +124,7 @@ function getStudentBeanLink(countryGroupId: CountryGroupId) {
 }
 
 // ----- Render ----- //
-function WeeklyLandingPage({
+export function WeeklyLandingPage({
 	countryId,
 	productPrices,
 	promotionCopy,
