@@ -35,8 +35,18 @@ export const Default: Story = {
 		reportLink: true,
 		supportLink: true,
 	},
+	parameters: {
+		chromatic: {
+			viewports: ['mobile', 'tablet', 'desktop', 'wide'],
+		},
+	},
 };
 
 export const PayPal: Story = {
 	render: () => <MemoryRouter>{PayPalError}</MemoryRouter>,
+	parameters: {
+		chromatic: {
+			viewports: ['mobile', 'tablet', 'desktop', 'wide'],
+		},
+	},
 };

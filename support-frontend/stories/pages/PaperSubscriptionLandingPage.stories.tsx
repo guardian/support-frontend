@@ -167,9 +167,19 @@ const collectionArgs = {
 export const NewspaperHomeDelivery: Story = {
 	render: (args: PaperLandingPropTypes) => <PaperLandingPage {...args} />,
 	args: homeDeliveryArgs,
+	parameters: {
+		chromatic: {
+			viewports: ['mobile', 'tablet', 'desktop', 'wide'],
+		},
+	},
 };
 
 export const NewspaperCollection: Story = {
 	render: (args: PaperLandingPropTypes) => <PaperLandingPage {...args} />,
 	args: collectionArgs,
+	parameters: {
+		chromatic: {
+			viewports: ['mobile', 'tablet', 'desktop', 'wide'],
+		},
+	},
 };

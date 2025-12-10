@@ -58,4 +58,9 @@ export const Default: Story = {
 		</MemoryRouter>
 	),
 	args: defaultArgs,
+	parameters: {
+		chromatic: {
+			viewports: ['mobile', 'tablet', 'desktop', 'wide'],
+		},
+	},
 };
