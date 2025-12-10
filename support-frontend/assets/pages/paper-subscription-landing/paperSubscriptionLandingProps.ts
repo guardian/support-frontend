@@ -1,3 +1,4 @@
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { Participations } from 'helpers/abTests/models';
 import {
 	getProductPrices,
@@ -10,6 +11,7 @@ export type PaperLandingPropTypes = {
 	productPrices: ProductPrices | null | undefined;
 	promotionCopy: PromotionCopy | null | undefined;
 	participations: Participations;
+	fulfilment?: PaperFulfilmentOptions;
 };
 
 export const paperLandingProps = (
