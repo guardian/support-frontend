@@ -1,7 +1,7 @@
 import type { EmailMessageWithIdentityUserId } from '@modules/email/email';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
-import type dayjs from 'dayjs';
+import type { Dayjs } from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
@@ -11,8 +11,19 @@ import {
 	getPaymentMethodFieldsSupporterPlus,
 } from './emailFields';
 
-export function buildContributionEmailFields(input: {
-	now: dayjs.Dayjs;
+export function buildContributionEmailFields({
+	now,
+	user,
+	amount,
+	currency,
+	billingPeriod,
+	subscriptionNumber,
+	paymentSchedule,
+	paymentMethod,
+	mandateId,
+	ratePlan,
+}: {
+	now: Dayjs;
 	user: User;
 	amount: number;
 	currency: IsoCurrency;
@@ -24,29 +35,35 @@ export function buildContributionEmailFields(input: {
 	ratePlan: 'Annual' | 'Monthly';
 }): EmailMessageWithIdentityUserId {
 	const nonDeliveryEmailFields = buildNonDeliveryEmailFields({
+		user,
+		subscriptionNumber,
+		currency,
+		billingPeriod,
+		paymentMethod,
+		paymentSchedule,
+		mandateId,
 		isFixedTerm: false, // There are no fixed term contribution rate plans
-		...input,
 	});
 
 	const oldNonStandardPaymentFields = getPaymentMethodFieldsSupporterPlus(
-		input.paymentMethod,
-		input.now,
-		input.mandateId,
+		paymentMethod,
+		now,
+		mandateId,
 	);
 
 	const productFields = {
-		created: input.now.toISOString(),
-		amount: input.amount.toString(),
-		edition: input.user.billingAddress.country,
+		created: now.toISOString(),
+		amount: amount.toString(),
+		edition: user.billingAddress.country,
 		name: nonDeliveryEmailFields.first_name, // This is duplicate and will be removed in a future PR
-		product: `${input.ratePlan.toLowerCase()}-contribution`,
-		currency: input.currency,
+		product: `${ratePlan.toLowerCase()}-contribution`,
+		currency,
 		...oldNonStandardPaymentFields,
 		...nonDeliveryEmailFields,
 	};
 
 	return buildThankYouEmailFields(
-		input.user,
+		user,
 		'regular-contribution-thank-you',
 		productFields,
 	);
