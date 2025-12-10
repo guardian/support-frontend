@@ -38,9 +38,6 @@ export const copyWidthStyle = css`
 		max-width: 734px;
 	}
 `;
-export const imageHeightStyle = css`
-	padding: ${space[4]}px;
-`;
 export const paragraphStyle = css`
 	line-height: 130%;
 	padding-top: ${space[4]}px;

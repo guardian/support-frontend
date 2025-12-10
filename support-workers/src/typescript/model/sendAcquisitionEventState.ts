@@ -11,96 +11,50 @@ import {
 	userSchema,
 } from './stateSchemas';
 
+const commonSchema = z.object({
+	user: userSchema,
+	product: productTypeSchema,
+	productInformation: productPurchaseSchema,
+	paymentMethod: paymentMethodSchema,
+	paymentSchedule: paymentScheduleSchema,
+	accountNumber: z.string(),
+	subscriptionNumber: z.string(),
+});
+
+const commonSchemaWithConsent = commonSchema.extend({
+	similarProductsConsent: z.boolean().optional(),
+});
+
+const commonSchemaWithConsentAndPromo = commonSchemaWithConsent.extend({
+	promoCode: z.string().optional(),
+});
+
+const deliveryProductSchema = commonSchemaWithConsentAndPromo.extend({
+	firstDeliveryDate: dateOrDateStringSchema,
+});
+
 export const sendThankYouEmailStateSchema = z.union([
-	z.object({
+	commonSchemaWithConsent.extend({
 		productType: z.literal('Contribution'),
-		user: userSchema,
-		product: productTypeSchema,
-		productInformation: productPurchaseSchema,
-		paymentMethod: paymentMethodSchema,
-		accountNumber: z.string(),
-		subscriptionNumber: z.string(),
-		similarProductsConsent: z.boolean().optional(),
 	}),
-
-	z.object({
+	commonSchemaWithConsentAndPromo.extend({
 		productType: z.literal('SupporterPlus'),
-		user: userSchema,
-		product: productTypeSchema,
-		productInformation: productPurchaseSchema,
-		paymentMethod: paymentMethodSchema,
-		paymentSchedule: paymentScheduleSchema,
-		promoCode: z.string().optional(),
-		accountNumber: z.string(),
-		subscriptionNumber: z.string(),
-		similarProductsConsent: z.boolean().optional(),
 	}),
-
-	z.object({
-		productType: z.literal('TierThree'),
-		user: userSchema,
-		product: productTypeSchema,
-		productInformation: productPurchaseSchema,
-		paymentMethod: paymentMethodSchema,
-		paymentSchedule: paymentScheduleSchema,
-		promoCode: z.string().optional(),
-		accountNumber: z.string(),
-		subscriptionNumber: z.string(),
-		firstDeliveryDate: z.string(),
-		similarProductsConsent: z.boolean().optional(),
-	}),
-
-	z.object({
+	commonSchema.extend({
 		productType: z.literal('GuardianAdLite'),
-		user: userSchema,
-		product: productTypeSchema,
-		productInformation: productPurchaseSchema,
-		paymentMethod: paymentMethodSchema,
-		paymentSchedule: paymentScheduleSchema,
-		accountNumber: z.string(),
-		subscriptionNumber: z.string(),
 	}),
-
-	z.object({
+	commonSchemaWithConsentAndPromo.extend({
 		productType: z.literal('DigitalSubscription'),
-		user: userSchema,
-		product: productTypeSchema,
-		productInformation: productPurchaseSchema,
-		paymentMethod: paymentMethodSchema,
-		paymentSchedule: paymentScheduleSchema,
-		promoCode: z.string().optional(),
-		accountNumber: z.string(),
-		subscriptionNumber: z.string(),
-		similarProductsConsent: z.boolean().optional(),
 	}),
-
-	z.object({
+	deliveryProductSchema.extend({
+		productType: z.literal('TierThree'),
+	}),
+	deliveryProductSchema.extend({
 		productType: z.literal('Paper'),
-		user: userSchema,
-		product: productTypeSchema,
-		productInformation: productPurchaseSchema,
-		paymentMethod: paymentMethodSchema,
-		paymentSchedule: paymentScheduleSchema,
-		promoCode: z.string().optional(),
-		accountNumber: z.string(),
-		subscriptionNumber: z.string(),
-		firstDeliveryDate: dateOrDateStringSchema,
-		similarProductsConsent: z.boolean().optional(),
 	}),
-
-	z.object({
+	deliveryProductSchema.extend({
 		productType: z.literal('GuardianWeekly'),
-		user: userSchema,
-		product: productTypeSchema,
-		productInformation: productPurchaseSchema.optional(),
 		giftRecipient: giftRecipientSchema.nullish(),
-		paymentMethod: paymentMethodSchema,
-		paymentSchedule: paymentScheduleSchema,
-		promoCode: z.string().optional(),
-		accountNumber: z.string(),
-		subscriptionNumber: z.string(),
-		firstDeliveryDate: dateOrDateStringSchema,
-		similarProductsConsent: z.boolean().optional(),
 	}),
 ]);
 
