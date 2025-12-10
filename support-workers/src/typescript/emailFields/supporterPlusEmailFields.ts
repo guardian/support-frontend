@@ -6,10 +6,10 @@ import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
 import {
+	buildNonDeliveryEmailFields,
 	buildThankYouEmailFields,
 	getPaymentMethodFieldsSupporterPlus,
 } from './emailFields';
-import { describePayments } from './paymentDescription';
 
 export function buildSupporterPlusEmailFields({
 	now,
@@ -32,7 +32,17 @@ export function buildSupporterPlusEmailFields({
 	isFixedTerm: boolean;
 	mandateId?: string;
 }) {
-	const paymentMethodFields = getPaymentMethodFieldsSupporterPlus(
+	const nonDeliveryEmailFields = buildNonDeliveryEmailFields({
+		user,
+		subscriptionNumber,
+		currency,
+		billingPeriod,
+		paymentMethod,
+		paymentSchedule,
+		mandateId,
+		isFixedTerm,
+	});
+	const oldNonStandardPaymentFields = getPaymentMethodFieldsSupporterPlus(
 		paymentMethod,
 		now,
 		mandateId,
@@ -40,19 +50,13 @@ export function buildSupporterPlusEmailFields({
 	const productFields = {
 		created: zuoraDateFormat(now),
 		currency: currency,
-		first_name: user.firstName,
-		last_name: user.lastName,
 		billing_period: billingPeriod.toLowerCase(),
 		product: `${billingPeriod.toLowerCase()}-supporter-plus`,
-		zuorasubscriberid: subscriptionNumber,
-		subscription_details: describePayments(
-			paymentSchedule,
-			billingPeriod,
-			currency,
-			isFixedTerm,
-		),
+		zuorasubscriberid: nonDeliveryEmailFields.subscriber_id, // This is duplicate and will be removed in a future PR
+		subscription_details: nonDeliveryEmailFields.subscription_rate, // This is duplicate and will be removed in a future PR
 		is_fixed_term: isFixedTerm.toString(),
-		...paymentMethodFields,
+		...oldNonStandardPaymentFields,
+		...nonDeliveryEmailFields,
 	};
 	return buildThankYouEmailFields(user, 'supporter-plus', productFields);
 }

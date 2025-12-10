@@ -8,7 +8,7 @@ import { getProductRatePlan } from '@modules/zuora/createSubscription/getProduct
 import { getPaymentMethods } from '@modules/zuora/paymentMethod';
 import { ZuoraClient } from '@modules/zuora/zuoraClient';
 import dayjs from 'dayjs';
-import { buildContributionEmailFieldsFromState } from '../emailFields/contributionEmailFields';
+import { buildContributionEmailFields } from '../emailFields/contributionEmailFields';
 import { buildDigitalSubscriptionEmailFields } from '../emailFields/digitalSubscriptionEmailFields';
 import { buildGuardianAdLiteEmailFields } from '../emailFields/guardianAdLiteEmailFields';
 import { buildGuardianWeeklyEmailFields } from '../emailFields/guardianWeeklyEmailFields';
@@ -86,10 +86,22 @@ async function sendContributionEmail(
 ) {
 	if (checkStateProductType('Contribution', sendThankYouEmailState)) {
 		await sendEmailWithStage(
-			await buildContributionEmailFieldsFromState(
-				sendThankYouEmailState,
-				productInformation,
-			),
+			buildContributionEmailFields({
+				now: dayjs(),
+				user: sendThankYouEmailState.user,
+				amount: productInformation.amount,
+				currency: sendThankYouEmailState.product.currency,
+				billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
+				subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
+				paymentSchedule: sendThankYouEmailState.paymentSchedule,
+				paymentMethod: sendThankYouEmailState.paymentMethod,
+				mandateId: await getMandateId(
+					sendThankYouEmailState.user.isTestUser,
+					sendThankYouEmailState.paymentMethod.Type,
+					sendThankYouEmailState.accountNumber,
+				),
+				ratePlan: productInformation.ratePlan,
+			}),
 		);
 	}
 }

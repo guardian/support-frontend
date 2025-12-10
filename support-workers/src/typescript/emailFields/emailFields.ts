@@ -6,24 +6,32 @@ import type {
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
+import minMax from 'dayjs/plugin/minMax';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
 import { getIfDefined } from '../util/nullAndUndefined';
 import { describePayments, firstPayment } from './paymentDescription';
 
+dayjs.extend(minMax);
+
+const DIRECT_DEBIT_LEAD_TIME_DAYS = 10;
+
 export type EmailCommonFields = {
 	first_name: string;
 	last_name: string;
 	subscriber_id: string;
-	first_payment_date: string;
 	subscription_rate: string;
 };
 
 export type EmailPaymentFields =
-	| { payment_method: 'Credit/Debit Card' | 'PayPal' }
+	| {
+			payment_method: 'Credit/Debit Card' | 'PayPal';
+			first_payment_date: string;
+	  }
 	| {
 			payment_method: 'Direct Debit';
+			first_payment_date: string;
 			account_holder: string;
 			bank_account_no: string;
 			bank_sort_code: string;
@@ -51,7 +59,11 @@ export function buildNonDeliveryEmailFields({
 	isFixedTerm: boolean;
 	mandateId?: string;
 }): NonDeliveryEmailFields {
-	const paymentFields = getPaymentFields(paymentMethod, mandateId);
+	const paymentFields = getPaymentFields(
+		paymentMethod,
+		dayjs(firstPayment(paymentSchedule).date),
+		mandateId,
+	);
 	const subscriptionDetails = describePayments(
 		paymentSchedule,
 		billingPeriod,
@@ -62,7 +74,6 @@ export function buildNonDeliveryEmailFields({
 		first_name: user.firstName,
 		last_name: user.lastName,
 		subscriber_id: subscriptionNumber,
-		first_payment_date: formatDate(dayjs(firstPayment(paymentSchedule).date)),
 		subscription_rate: subscriptionDetails,
 		...paymentFields,
 	};
@@ -70,6 +81,7 @@ export function buildNonDeliveryEmailFields({
 
 export function getPaymentFields(
 	paymentMethod: PaymentMethod,
+	firstZuoraPaymentDate: Dayjs,
 	mandateId?: string,
 ): EmailPaymentFields {
 	switch (paymentMethod.Type) {
@@ -80,15 +92,23 @@ export function getPaymentFields(
 				account_holder: paymentMethod.BankTransferAccountName,
 				payment_method: 'Direct Debit',
 				mandate_id: mandateId ?? '',
+				first_payment_date: formatDate(
+					dayjs.max(
+						firstZuoraPaymentDate,
+						dayjs().add(DIRECT_DEBIT_LEAD_TIME_DAYS, 'day'),
+					),
+				),
 			};
 		case 'CreditCardReferenceTransaction':
 			return {
 				payment_method: 'Credit/Debit Card',
+				first_payment_date: formatDate(firstZuoraPaymentDate),
 			};
 		case 'PayPal':
 		case 'PayPalCompletePaymentsWithBAID':
 			return {
 				payment_method: 'PayPal',
+				first_payment_date: formatDate(firstZuoraPaymentDate),
 			};
 	}
 }
