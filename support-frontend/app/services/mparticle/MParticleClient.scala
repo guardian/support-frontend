@@ -58,9 +58,7 @@ class MParticleClient(
   override val verboseLogging: Boolean = false
 
   // Called from the healthcheck handler. Calling this causes the MParticleTokenProvider to fetch the first batch of tokens
-  def initialise(): Unit = {
-    logger.info("Initialising MParticleClient")
-  }
+  def initialise(): Unit = {}
 
   def getUserProfile(identityId: String): Future[MParticleUserProfile] = {
     val fields = "audience_memberships"
