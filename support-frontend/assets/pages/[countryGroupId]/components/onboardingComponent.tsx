@@ -70,7 +70,7 @@ export interface OnboardingProps {
 		finalAmount: number;
 	};
 	productKey?: OnboardingProductKey;
-	ratePlanKey?: ActiveRatePlanKey;
+	ratePlanKey: ActiveRatePlanKey;
 	promotion?: Promotion;
 	landingPageSettings: LandingPageVariant;
 	identityUserType: UserType;
@@ -309,6 +309,7 @@ function OnboardingComponent({
 						payment={payment}
 						identityUserType={identityUserType}
 						ratePlanKey={ratePlanKey}
+						promotion={promotion}
 					/>
 				</>
 			)}
