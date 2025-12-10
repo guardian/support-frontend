@@ -68,6 +68,7 @@ class MParticleTokenProvider(
   private val tokens = new AtomicReference[Set[Token]](Set.empty)
 
   // Fetch the first pool of tokens
+  logger.info("Fetching initial batch of mparticle tokens")
   (1 to desiredTokenCount).foreach(_ => fetchAndStoreToken())
 
   // Every hour purge the oldest token
