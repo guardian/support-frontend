@@ -4,6 +4,7 @@ import actions.CustomActionBuilders
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import com.gu.identity.model.User
 import com.gu.monitoring.SafeLogging
+import com.gu.rest.{CodeBody, WebServiceClientError}
 import io.circe.{Encoder, Json}
 import io.circe.generic.semiauto.deriveEncoder
 import io.circe.syntax._
@@ -55,9 +56,13 @@ class AnalyticsController(
   def getAnalyticsUserProfile(): Action[AnyContent] =
     (MaybeAuthenticatedAction andThen RequireAuthenticatedUser).async { implicit request =>
       for {
-        userProfile <- mparticleClient.getUserProfile(request.user.id).recover { case ex =>
-          logger.error(scrub"Failed to get mParticle user profile: ${ex.getMessage}", ex)
-          MParticleUserProfile(hasMobileAppDownloaded = false, hasFeastMobileAppDownloaded = false)
+        userProfile <- mparticleClient.getUserProfile(request.user.id).recover {
+          case WebServiceClientError(CodeBody("404", _)) =>
+            logger.info("mParticle returned 404 for user")
+            MParticleUserProfile(hasMobileAppDownloaded = false, hasFeastMobileAppDownloaded = false)
+          case ex =>
+            logger.error(scrub"Failed to get mParticle user profile: ${ex.getMessage}", ex)
+            MParticleUserProfile(hasMobileAppDownloaded = false, hasFeastMobileAppDownloaded = false)
         }
       } yield {
         val response = AnalyticsUserProfileResponse(
