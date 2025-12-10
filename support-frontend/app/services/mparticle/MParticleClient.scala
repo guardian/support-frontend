@@ -1,6 +1,5 @@
 package services.mparticle
 
-import com.gu.monitoring.SafeLogging
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
 import com.gu.support.config.Stage
@@ -51,8 +50,8 @@ class MParticleClient(
 
   import MParticleClient._
 
-  private lazy val mparticleConfig: MparticleConfig = mparticleConfigProvider.get()
-  private lazy val tokenProvider = new MParticleTokenProvider(httpClient, mparticleConfig, stage)
+  private val mparticleConfig: MparticleConfig = mparticleConfigProvider.get()
+  private val tokenProvider = new MParticleTokenProvider(httpClient, mparticleConfig, stage)
 
   override val wsUrl: String = mparticleConfig.apiUrl
   override val verboseLogging: Boolean = false
