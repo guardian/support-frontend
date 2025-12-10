@@ -11,7 +11,7 @@ import { renderPage } from 'helpers/rendering/render';
 // ----- Page Startup ----- //
 setUpTrackingAndConsents({});
 // ----- Render ----- //
-const content = (
+export const PayPalError = (
 	<Page
 		header={<Header countryGroupId={CountryGroup.detect()} />}
 		footer={<Footer />}
@@ -29,4 +29,4 @@ const content = (
 		</div>
 	</Page>
 );
-renderPage(content);
+renderPage(PayPalError);

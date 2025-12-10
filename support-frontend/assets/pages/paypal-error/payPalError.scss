@@ -6,7 +6,7 @@
 @import '~components/questionsContact/questionsContact';
 
 // ----- Page-Specific Styles ----- //
-#paypal-error-page {
+.paypal-error {
 	.paypal-error__heading {
 		font-family: $gu-headline;
 		color: gu-colour(neutral-7);

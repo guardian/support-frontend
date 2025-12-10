@@ -34,7 +34,6 @@ describe('Supporter plus thank you email fields', () => {
 				ContactAttributes: {
 					SubscriberAttributes: {
 						first_name: emailUser.firstName,
-						email_address: emailAddress,
 						account_name: directDebitPaymentMethod.BankTransferAccountName,
 						Mandate_ID: mandateId,
 						sort_code: directDebitPaymentMethod.BankCode,
@@ -76,7 +75,6 @@ describe('Supporter plus thank you email fields', () => {
 				ContactAttributes: {
 					SubscriberAttributes: {
 						first_name: 'Mickey',
-						email_address: emailAddress,
 						payment_method: 'credit / debit card',
 						first_payment_date: 'Tuesday, 11 November 2025',
 						subscription_details:
@@ -116,7 +114,6 @@ describe('Supporter plus thank you email fields', () => {
 				ContactAttributes: {
 					SubscriberAttributes: {
 						first_name: 'Mickey',
-						email_address: emailAddress,
 						account_name: 'Mickey Mouse',
 						Mandate_ID: '65HK26E',
 						sort_code: '20-20-20',
