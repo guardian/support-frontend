@@ -177,7 +177,7 @@ export function ThankYou({
 					csrf={csrf}
 					payment={payment}
 					productKey={productKey as OnboardingProductKey}
-					ratePlanKey={ratePlanKey}
+					ratePlanKey={ratePlanKey ?? 'OneTime'}
 					promotion={promotion}
 					identityUserType={userType}
 					landingPageSettings={landingPageSettings}
