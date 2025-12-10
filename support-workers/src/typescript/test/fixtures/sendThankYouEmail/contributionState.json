@@ -48,6 +48,14 @@
         "Type": "BankTransfer",
         "PaymentGateway": "GoCardless"
       },
+      "paymentSchedule": {
+        "payments": [
+          {
+            "date": "2025-12-05",
+            "amount": 412.8
+          }
+        ]
+      },
       "accountNumber": "A01062212",
       "subscriptionNumber": "A-S01043454"
     },
