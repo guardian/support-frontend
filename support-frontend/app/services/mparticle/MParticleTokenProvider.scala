@@ -91,6 +91,7 @@ class MParticleTokenProvider(
   }
 
   private def fetchToken(): Future[Token] = {
+    logger.info("Fetching new mparticle oauth token")
     val request = OAuthTokenRequest(
       client_id = config.clientId,
       client_secret = config.clientSecret,
