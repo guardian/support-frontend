@@ -4,7 +4,9 @@
 
 import { handler } from '../lambdas/sendThankYouEmailLambda';
 import type { SendAcquisitionEventState } from '../model/sendAcquisitionEventState';
+import { sendAcquisitionEventStateSchema } from '../model/sendAcquisitionEventState';
 import type { WrappedState } from '../model/stateSchemas';
+import { wrapperSchemaForState } from '../model/stateSchemas';
 import contributionJson from './fixtures/sendThankYouEmail/contributionState.json';
 import digitalSubscriptionJson from './fixtures/sendThankYouEmail/digitalSubscriptionState.json';
 import guardianAdLiteJson from './fixtures/sendThankYouEmail/guardianAdLiteState.json';
@@ -24,30 +26,44 @@ describe('sendThankYouEmailLambda integration', () => {
 
 	test('we can send a supporter plus email successfully', async () => {
 		await sendEmail(
-			supporterPlusJson as WrappedState<SendAcquisitionEventState>,
+			wrapperSchemaForState(sendAcquisitionEventStateSchema).parse(
+				supporterPlusJson,
+			),
 		);
 	});
 	test('we can send a contribution email successfully', async () => {
 		await sendEmail(
-			contributionJson as WrappedState<SendAcquisitionEventState>,
+			wrapperSchemaForState(sendAcquisitionEventStateSchema).parse(
+				contributionJson,
+			),
 		);
 	});
 	test('we can send a digital subscription email successfully', async () => {
 		await sendEmail(
-			digitalSubscriptionJson as WrappedState<SendAcquisitionEventState>,
+			wrapperSchemaForState(sendAcquisitionEventStateSchema).parse(
+				digitalSubscriptionJson,
+			),
 		);
 	});
 	test('we can send a tier three email successfully', async () => {
-		await sendEmail(tierThreeJson as WrappedState<SendAcquisitionEventState>);
+		await sendEmail(
+			wrapperSchemaForState(sendAcquisitionEventStateSchema).parse(
+				tierThreeJson,
+			),
+		);
 	});
 	test('we can send a guardian weekly email successfully', async () => {
 		await sendEmail(
-			guardianWeeklyJson as WrappedState<SendAcquisitionEventState>,
+			wrapperSchemaForState(sendAcquisitionEventStateSchema).parse(
+				guardianWeeklyJson,
+			),
 		);
 	});
 	test('we can send a Guardian Ad-Lite email successfully', async () => {
 		await sendEmail(
-			guardianAdLiteJson as WrappedState<SendAcquisitionEventState>,
+			wrapperSchemaForState(sendAcquisitionEventStateSchema).parse(
+				guardianAdLiteJson,
+			),
 		);
 	});
 });
