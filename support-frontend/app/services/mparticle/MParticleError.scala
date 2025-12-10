@@ -1,9 +1,10 @@
 package services.mparticle
 
 import io.circe.Decoder
-import io.circe.generic.semiauto.deriveDecoder
 
 case class MParticleError(message: String) extends Throwable(message)
 object MParticleError {
-  implicit val mparticleErrorDecoder: Decoder[MParticleError] = deriveDecoder
+  // Decoding fails because we want to fall back on the generic WebServiceClientError
+  implicit val mparticleErrorDecoder: Decoder[MParticleError] =
+    Decoder.failedWithMessage("Decoding MParticleError is not supported")
 }
