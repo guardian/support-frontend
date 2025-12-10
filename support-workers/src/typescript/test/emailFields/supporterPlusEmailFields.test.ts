@@ -17,7 +17,7 @@ import {
 describe('Supporter plus thank you email fields', () => {
 	it('should build correct email fields for monthly supporter plus with DD', () => {
 		const emailFields = buildSupporterPlusEmailFields({
-			now: dayjs(today),
+			today: dayjs(today),
 			user: emailUser,
 			currency: 'GBP',
 			billingPeriod: BillingPeriod.Monthly,
@@ -38,7 +38,7 @@ describe('Supporter plus thank you email fields', () => {
 						Mandate_ID: mandateId,
 						sort_code: directDebitPaymentMethod.BankCode,
 						payment_method: 'Direct Debit',
-						first_payment_date: 'Saturday, 20 December 2025',
+						first_payment_date: 'Thursday, 11 December 2025',
 						subscription_details:
 							'£10.00 for the first month, then £12.00 every month',
 						zuorasubscriberid: subscriptionNumber,
@@ -67,7 +67,7 @@ describe('Supporter plus thank you email fields', () => {
 	});
 	test('should build correct email fields for annual supporter plus with credit card', () => {
 		const emailFields = buildSupporterPlusEmailFields({
-			now: dayjs(today),
+			today: dayjs(today),
 			user: emailUser,
 			currency: 'GBP',
 			billingPeriod: BillingPeriod.Annual,
@@ -107,7 +107,7 @@ describe('Supporter plus thank you email fields', () => {
 
 	test('should build correct email fields for fixed term subscription', () => {
 		const emailFields = buildSupporterPlusEmailFields({
-			now: dayjs(today),
+			today: dayjs(today),
 			user: emailUser,
 			currency: 'GBP',
 			billingPeriod: BillingPeriod.Annual,
@@ -128,7 +128,7 @@ describe('Supporter plus thank you email fields', () => {
 						Mandate_ID: '65HK26E',
 						sort_code: '20-20-20',
 						payment_method: 'Direct Debit',
-						first_payment_date: 'Saturday, 20 December 2025',
+						first_payment_date: 'Thursday, 11 December 2025',
 						subscription_details: '£9.00 for 12 months',
 						zuorasubscriberid: subscriptionNumber,
 						last_name: 'Mouse',

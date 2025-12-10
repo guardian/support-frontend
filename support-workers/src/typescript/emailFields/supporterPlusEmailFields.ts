@@ -12,7 +12,7 @@ import {
 } from './emailFields';
 
 export function buildSupporterPlusEmailFields({
-	now,
+	today,
 	user,
 	currency,
 	billingPeriod,
@@ -22,7 +22,7 @@ export function buildSupporterPlusEmailFields({
 	isFixedTerm,
 	mandateId,
 }: {
-	now: dayjs.Dayjs;
+	today: dayjs.Dayjs;
 	user: User;
 	currency: IsoCurrency;
 	billingPeriod: RecurringBillingPeriod;
@@ -33,6 +33,7 @@ export function buildSupporterPlusEmailFields({
 	mandateId?: string;
 }) {
 	const nonDeliveryEmailFields = buildNonDeliveryEmailFields({
+		today: today,
 		user,
 		subscriptionNumber,
 		currency,
@@ -44,11 +45,11 @@ export function buildSupporterPlusEmailFields({
 	});
 	const oldNonStandardPaymentFields = getPaymentMethodFieldsSupporterPlus(
 		paymentMethod,
-		now,
+		today,
 		mandateId,
 	);
 	const productFields = {
-		created: zuoraDateFormat(now),
+		created: zuoraDateFormat(today),
 		currency: currency,
 		billing_period: billingPeriod.toLowerCase(),
 		product: `${billingPeriod.toLowerCase()}-supporter-plus`,

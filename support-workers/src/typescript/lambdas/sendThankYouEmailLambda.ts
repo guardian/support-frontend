@@ -62,7 +62,7 @@ async function sendSupporterPlusEmail(
 		);
 		await sendEmailWithStage(
 			buildSupporterPlusEmailFields({
-				now: dayjs(),
+				today: dayjs(),
 				user: sendThankYouEmailState.user,
 				currency: sendThankYouEmailState.product.currency,
 				billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
@@ -87,7 +87,7 @@ async function sendContributionEmail(
 	if (checkStateProductType('Contribution', sendThankYouEmailState)) {
 		await sendEmailWithStage(
 			buildContributionEmailFields({
-				now: dayjs(),
+				today: dayjs(),
 				user: sendThankYouEmailState.user,
 				amount: productInformation.amount,
 				currency: sendThankYouEmailState.product.currency,
@@ -112,6 +112,7 @@ async function sendDigitalSubscriptionEmail(
 	if (checkStateProductType('DigitalSubscription', sendThankYouEmailState)) {
 		await sendEmailWithStage(
 			buildDigitalSubscriptionEmailFields({
+				today: dayjs(),
 				user: sendThankYouEmailState.user,
 				currency: sendThankYouEmailState.product.currency,
 				billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
@@ -147,6 +148,7 @@ async function sendPaperEmail(
 				: undefined;
 		await sendEmailWithStage(
 			buildPaperEmailFields({
+				today: dayjs(),
 				user: sendThankYouEmailState.user,
 				currency: sendThankYouEmailState.product.currency,
 				subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
@@ -171,6 +173,7 @@ async function sendTierThreeEmail(
 	if (checkStateProductType('TierThree', sendThankYouEmailState)) {
 		await sendEmailWithStage(
 			buildTierThreeEmailFields({
+				today: dayjs(),
 				user: sendThankYouEmailState.user,
 				currency: sendThankYouEmailState.product.currency,
 				billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
@@ -204,6 +207,7 @@ async function sendGuardianWeeklyEmail(
 		);
 		await sendEmailWithStage(
 			buildGuardianWeeklyEmailFields({
+				today: dayjs(),
 				user: sendThankYouEmailState.user,
 				currency: sendThankYouEmailState.product.currency,
 				billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
@@ -229,11 +233,17 @@ async function sendGuardianAdLiteEmail(
 	if (checkStateProductType('GuardianAdLite', sendThankYouEmailState)) {
 		await sendEmailWithStage(
 			buildGuardianAdLiteEmailFields({
+				today: dayjs(),
 				user: sendThankYouEmailState.user,
 				subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
 				currency: sendThankYouEmailState.product.currency,
 				paymentMethod: sendThankYouEmailState.paymentMethod,
 				paymentSchedule: sendThankYouEmailState.paymentSchedule,
+				mandateId: await getMandateId(
+					sendThankYouEmailState.user.isTestUser,
+					sendThankYouEmailState.paymentMethod.Type,
+					sendThankYouEmailState.accountNumber,
+				),
 			}),
 		);
 	}

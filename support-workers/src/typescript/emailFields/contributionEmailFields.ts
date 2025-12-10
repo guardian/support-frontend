@@ -12,7 +12,7 @@ import {
 } from './emailFields';
 
 export function buildContributionEmailFields({
-	now,
+	today,
 	user,
 	amount,
 	currency,
@@ -23,7 +23,7 @@ export function buildContributionEmailFields({
 	mandateId,
 	ratePlan,
 }: {
-	now: Dayjs;
+	today: Dayjs;
 	user: User;
 	amount: number;
 	currency: IsoCurrency;
@@ -35,6 +35,7 @@ export function buildContributionEmailFields({
 	ratePlan: 'Annual' | 'Monthly';
 }): EmailMessageWithIdentityUserId {
 	const nonDeliveryEmailFields = buildNonDeliveryEmailFields({
+		today: today,
 		user,
 		subscriptionNumber,
 		currency,
@@ -47,12 +48,12 @@ export function buildContributionEmailFields({
 
 	const oldNonStandardPaymentFields = getPaymentMethodFieldsSupporterPlus(
 		paymentMethod,
-		now,
+		today,
 		mandateId,
 	);
 
 	const productFields = {
-		created: now.toISOString(),
+		created: today.toISOString(),
 		amount: amount.toString(),
 		edition: user.billingAddress.country,
 		name: nonDeliveryEmailFields.first_name, // This is duplicate and will be removed in a future PR

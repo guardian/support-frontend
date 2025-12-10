@@ -41,6 +41,7 @@ export type EmailPaymentFields =
 export type NonDeliveryEmailFields = EmailCommonFields & EmailPaymentFields;
 
 export function buildNonDeliveryEmailFields({
+	today,
 	user,
 	subscriptionNumber,
 	currency,
@@ -50,6 +51,7 @@ export function buildNonDeliveryEmailFields({
 	isFixedTerm,
 	mandateId,
 }: {
+	today: Dayjs;
 	user: User;
 	subscriptionNumber: string;
 	currency: IsoCurrency;
@@ -60,6 +62,7 @@ export function buildNonDeliveryEmailFields({
 	mandateId?: string;
 }): NonDeliveryEmailFields {
 	const paymentFields = getPaymentFields(
+		today,
 		paymentMethod,
 		dayjs(firstPayment(paymentSchedule).date),
 		mandateId,
@@ -80,6 +83,7 @@ export function buildNonDeliveryEmailFields({
 }
 
 export function getPaymentFields(
+	today: Dayjs,
 	paymentMethod: PaymentMethod,
 	firstZuoraPaymentDate: Dayjs,
 	mandateId?: string,
@@ -95,7 +99,7 @@ export function getPaymentFields(
 				first_payment_date: formatDate(
 					dayjs.max(
 						firstZuoraPaymentDate,
-						dayjs().add(DIRECT_DEBIT_LEAD_TIME_DAYS, 'day'),
+						today.add(DIRECT_DEBIT_LEAD_TIME_DAYS, 'day'),
 					),
 				),
 			};

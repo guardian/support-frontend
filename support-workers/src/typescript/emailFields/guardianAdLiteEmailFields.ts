@@ -2,54 +2,53 @@ import type { EmailMessageWithIdentityUserId } from '@modules/email/email';
 import { DataExtensionNames } from '@modules/email/email';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import dayjs from 'dayjs';
+import type { Dayjs } from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
-import { buildThankYouEmailFields, formatDate } from './emailFields';
-import { describePayments, firstPayment } from './paymentDescription';
+import {
+	buildNonDeliveryEmailFields,
+	buildThankYouEmailFields,
+} from './emailFields';
 
 export function buildGuardianAdLiteEmailFields({
+	today,
 	user,
 	subscriptionNumber,
 	currency,
 	paymentMethod,
 	paymentSchedule,
+	mandateId,
 }: {
+	today: Dayjs;
 	user: User;
 	subscriptionNumber: string;
 	currency: IsoCurrency;
 	paymentMethod: PaymentMethod;
 	paymentSchedule: PaymentSchedule;
+	mandateId?: string;
 }): EmailMessageWithIdentityUserId {
-	const subscriptionDetails = describePayments(
-		paymentSchedule,
-		BillingPeriod.Monthly, // Guardian Ad Lite is always billed monthly
+	const nonDeliveryEmailFields = buildNonDeliveryEmailFields({
+		today: today,
+		user,
+		subscriptionNumber,
 		currency,
-		false,
-	);
+		billingPeriod: BillingPeriod.Monthly,
+		paymentMethod,
+		paymentSchedule,
+		mandateId: mandateId,
+		isFixedTerm: false, // Guardian Ad-Lite has no fixed term rate plans
+	});
+
 	const productFields = {
 		zuorasubscriberid: subscriptionNumber,
 		billing_period: 'monthly',
-		first_payment_date: formatDate(dayjs(firstPayment(paymentSchedule).date)),
-		payment_method: getPaymentMethodDescription(paymentMethod),
-		subscription_details: subscriptionDetails,
+		subscription_details: nonDeliveryEmailFields.subscription_rate, // Duplicate, to be removed in a future PR
+		...nonDeliveryEmailFields,
 	};
 	return buildThankYouEmailFields(
 		user,
 		DataExtensionNames.guardianAdLiteDay0Email,
 		productFields,
 	);
-}
-
-function getPaymentMethodDescription(paymentMethod: PaymentMethod): string {
-	switch (paymentMethod.Type) {
-		case 'CreditCardReferenceTransaction':
-			return 'credit / debit card';
-		case 'PayPal':
-		case 'PayPalCompletePaymentsWithBAID':
-			return 'PayPal';
-		case 'BankTransfer':
-			return 'Direct Debit';
-	}
 }

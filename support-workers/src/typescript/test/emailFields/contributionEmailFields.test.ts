@@ -10,9 +10,9 @@ import {
 
 describe('contributionEmailFields', () => {
 	test('should build the correct email fields for recurring contribution thank you email', () => {
-		const now = dayjs('2025-11-11');
+		const today = dayjs('2025-11-11');
 		const emailFields = buildContributionEmailFields({
-			now: now,
+			today: today,
 			user: emailUser,
 			amount: 5,
 			currency: 'GBP',

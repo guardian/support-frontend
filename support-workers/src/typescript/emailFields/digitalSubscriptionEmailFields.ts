@@ -2,13 +2,15 @@ import type { EmailMessageWithIdentityUserId } from '@modules/email/email';
 import { getCountryNameByIsoCode } from '@modules/internationalisation/country';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
-import dayjs from 'dayjs';
+import type { Dayjs } from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
 import { getIfDefined } from '../util/nullAndUndefined';
-import { buildThankYouEmailFields, formatDate } from './emailFields';
-import { describePayments, firstPayment } from './paymentDescription';
+import {
+	buildNonDeliveryEmailFields,
+	buildThankYouEmailFields,
+} from './emailFields';
 
 function getPaymentMethodFields(
 	paymentMethod: PaymentMethod,
@@ -46,6 +48,7 @@ function getPaymentMethodFields(
 	}
 }
 export function buildDigitalSubscriptionEmailFields({
+	today,
 	user,
 	currency,
 	billingPeriod,
@@ -54,6 +57,7 @@ export function buildDigitalSubscriptionEmailFields({
 	paymentMethod,
 	mandateId,
 }: {
+	today: Dayjs;
 	user: User;
 	currency: IsoCurrency;
 	billingPeriod: RecurringBillingPeriod;
@@ -62,23 +66,31 @@ export function buildDigitalSubscriptionEmailFields({
 	paymentMethod: PaymentMethod;
 	mandateId?: string;
 }): EmailMessageWithIdentityUserId {
-	const paymentMethodFields = getPaymentMethodFields(paymentMethod, mandateId);
+	const nonDeliveryEmailFields = buildNonDeliveryEmailFields({
+		today: today,
+		user,
+		subscriptionNumber,
+		currency,
+		billingPeriod,
+		paymentMethod,
+		paymentSchedule,
+		mandateId,
+		isFixedTerm: false, // Digital subscriptions are not fixed term
+	});
+
+	const oldNonStandardPaymentFields = getPaymentMethodFields(
+		paymentMethod,
+		mandateId,
+	);
+
 	const productFields = {
-		first_name: user.firstName,
-		last_name: user.lastName,
-		subscription_details: describePayments(
-			paymentSchedule,
-			billingPeriod,
-			currency,
-			false,
-		),
-		date_of_first_payment: formatDate(
-			dayjs(firstPayment(paymentSchedule).date),
-		),
+		subscription_details: nonDeliveryEmailFields.subscription_rate, // Duplicate, to be removed in a future PR
+		date_of_first_payment: nonDeliveryEmailFields.first_payment_date, // Duplicate, to be removed in a future PR
 		country: getCountryNameByIsoCode(user.billingAddress.country) ?? '',
 		trial_period: '14',
-		zuorasubscriberid: subscriptionNumber,
-		...paymentMethodFields,
+		zuorasubscriberid: subscriptionNumber, // Duplicate, to be removed in a future PR
+		...oldNonStandardPaymentFields,
+		...nonDeliveryEmailFields,
 	};
 	return buildThankYouEmailFields(user, 'digipack', productFields);
 }

@@ -22,6 +22,7 @@ type DeliveryFields = {
 type DeliveryEmailFields = NonDeliveryEmailFields & DeliveryFields;
 
 export function buildDeliveryEmailFields({
+	today,
 	user,
 	subscriptionNumber,
 	currency,
@@ -32,6 +33,7 @@ export function buildDeliveryEmailFields({
 	isFixedTerm,
 	mandateId,
 }: {
+	today: Dayjs;
 	user: User;
 	subscriptionNumber: string;
 	currency: IsoCurrency;
@@ -44,6 +46,7 @@ export function buildDeliveryEmailFields({
 }): DeliveryEmailFields {
 	const nonDeliveryFields: NonDeliveryEmailFields = buildNonDeliveryEmailFields(
 		{
+			today: today,
 			user: user,
 			subscriptionNumber: subscriptionNumber,
 			currency: currency,

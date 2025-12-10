@@ -6,6 +6,7 @@ import { DataExtensionNames } from '@modules/email/email';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
+import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
@@ -20,6 +21,7 @@ type PaperProductPurchase = Extract<
 >;
 
 export function buildPaperEmailFields({
+	today,
 	user,
 	currency,
 	subscriptionNumber,
@@ -29,6 +31,7 @@ export function buildPaperEmailFields({
 	productInformation,
 	deliveryAgentDetails,
 }: {
+	today: Dayjs;
 	user: User;
 	currency: IsoCurrency;
 	subscriptionNumber: string;
@@ -53,6 +56,7 @@ export function buildPaperEmailFields({
 			: undefined;
 
 	const deliveryFields = buildDeliveryEmailFields({
+		today: today,
 		user: user,
 		subscriptionNumber: subscriptionNumber,
 		currency: currency,

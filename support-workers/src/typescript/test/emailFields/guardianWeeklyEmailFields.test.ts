@@ -18,6 +18,7 @@ describe('Guardian weekly thank you email fields', () => {
 		const today = dayjs('2025-11-11');
 		const firstDeliveryDate = today.add(7, 'day');
 		const emailFields = buildGuardianWeeklyEmailFields({
+			today: today,
 			user: emailUser,
 			currency: 'GBP',
 			billingPeriod: BillingPeriod.Monthly,
@@ -73,6 +74,7 @@ describe('Guardian weekly thank you email fields', () => {
 			title: 'Mrs',
 		};
 		const emailFields = buildGuardianWeeklyEmailFields({
+			today: today,
 			user: emailUser,
 			currency: 'USD',
 			billingPeriod: BillingPeriod.Annual,

@@ -17,6 +17,7 @@ describe('Tier three thank you email fields', () => {
 		const today = dayjs('2025-11-11');
 		const firstDeliveryDate = today.add(7, 'day');
 		const emailFields = buildTierThreeEmailFields({
+			today: today,
 			user: emailUser,
 			currency: 'GBP',
 			billingPeriod: BillingPeriod.Monthly,
