@@ -9,7 +9,6 @@ import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { GiftRecipient, User } from '../model/stateSchemas';
 import { buildDeliveryEmailFields } from './deliveryEmailFields';
 import { buildThankYouEmailFields, formatDate } from './emailFields';
-import { describePayments, firstPayment } from './paymentDescription';
 
 type GuardianWeeklyProductPurchase = Extract<
 	ProductPurchase,
@@ -55,17 +54,14 @@ export function buildGuardianWeeklyEmailFields({
 		: undefined;
 
 	const deliveryFields = buildDeliveryEmailFields({
-		subscriptionNumber: subscriptionNumber,
 		user: user,
-		firstDeliveryDate: dayjs(productInformation.firstDeliveryDate),
-		firstPaymentDate: dayjs(firstPayment(paymentSchedule).date),
-		paymentDescription: describePayments(
-			paymentSchedule,
-			billingPeriod,
-			currency,
-			isFixedTerm,
-		),
+		subscriptionNumber: subscriptionNumber,
+		currency: currency,
+		billingPeriod: billingPeriod,
 		paymentMethod: paymentMethod,
+		paymentSchedule: paymentSchedule,
+		firstDeliveryDate: dayjs(productInformation.firstDeliveryDate),
+		isFixedTerm: isFixedTerm,
 		mandateId: mandateId,
 	});
 	const productFields = {

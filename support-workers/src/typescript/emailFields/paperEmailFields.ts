@@ -13,7 +13,6 @@ import type { User } from '../model/stateSchemas';
 import type { DeliveryAgentDetails } from '../services/paperRound';
 import { buildDeliveryEmailFields } from './deliveryEmailFields';
 import { buildThankYouEmailFields } from './emailFields';
-import { describePayments, firstPayment } from './paymentDescription';
 
 type PaperProductPurchase = Extract<
 	ProductPurchase,
@@ -54,17 +53,14 @@ export function buildPaperEmailFields({
 			: undefined;
 
 	const deliveryFields = buildDeliveryEmailFields({
-		subscriptionNumber: subscriptionNumber,
 		user: user,
-		firstDeliveryDate: dayjs(productInformation.firstDeliveryDate),
-		firstPaymentDate: dayjs(firstPayment(paymentSchedule).date),
-		paymentDescription: describePayments(
-			paymentSchedule,
-			BillingPeriod.Monthly, // Paper products are always monthly
-			currency,
-			false,
-		),
+		subscriptionNumber: subscriptionNumber,
+		currency: currency,
+		billingPeriod: BillingPeriod.Monthly, // Paper products are always monthly
 		paymentMethod: paymentMethod,
+		paymentSchedule: paymentSchedule,
+		firstDeliveryDate: dayjs(productInformation.firstDeliveryDate),
+		isFixedTerm: false, // There are no fixed term paper products
 		mandateId: mandateId,
 	});
 	const productFields = {

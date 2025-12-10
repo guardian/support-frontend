@@ -79,7 +79,7 @@ export function describePayments(
 	paymentSchedule: PaymentSchedule,
 	billingPeriod: RecurringBillingPeriod,
 	currency: IsoCurrency,
-	fixedTerm: boolean,
+	isFixedTerm: boolean,
 ): string {
 	const initialPrice = firstPayment(paymentSchedule).amount;
 
@@ -90,7 +90,7 @@ export function describePayments(
 
 	const noun = billingPeriodNoun(billingPeriod);
 
-	if (fixedTerm) {
+	if (isFixedTerm) {
 		return `${priceWithCurrency(currency, initialPrice)} for ${fixedTermNoun(
 			billingPeriod,
 		)}`;

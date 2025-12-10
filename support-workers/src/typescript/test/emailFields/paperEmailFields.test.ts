@@ -34,6 +34,7 @@ describe('Paper email fields', () => {
 					ZuoraSubscriberId: subscriptionNumber,
 					package: 'Everyday',
 					date_of_first_payment: 'Tuesday, 18 November 2025',
+					first_payment_date: 'Tuesday, 18 November 2025',
 					bank_sort_code: '20-20-20',
 					mandate_id: mandateId,
 					bank_account_no: '******11',

@@ -47,18 +47,20 @@ export function buildTierThreeEmailFields({
 		),
 	};
 	const deliveryFields = buildDeliveryEmailFields({
-		subscriptionNumber: subscriptionNumber,
-		user: user,
-		firstDeliveryDate: dayjs(productInformation.firstDeliveryDate),
-		firstPaymentDate: dayjs(firstPayment(paymentSchedule).date),
-		paymentDescription: describePayments(
-			paymentSchedule,
-			billingPeriod,
-			currency,
-			false,
-		),
-		paymentMethod: paymentMethod,
-		mandateId: mandateId,
+		user: {
+			subscriptionNumber: subscriptionNumber,
+			user: user,
+			firstDeliveryDate: dayjs(productInformation.firstDeliveryDate),
+			firstPaymentDate: dayjs(firstPayment(paymentSchedule).date),
+			paymentDescription: describePayments(
+				paymentSchedule,
+				billingPeriod,
+				currency,
+				false,
+			),
+			paymentMethod: paymentMethod,
+			mandateId: mandateId,
+		},
 	});
 	const productFields = {
 		...additionalFields,

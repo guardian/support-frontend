@@ -8,7 +8,7 @@ import { getProductRatePlan } from '@modules/zuora/createSubscription/getProduct
 import { getPaymentMethods } from '@modules/zuora/paymentMethod';
 import { ZuoraClient } from '@modules/zuora/zuoraClient';
 import dayjs from 'dayjs';
-import { buildContributionEmailFields } from '../emailFields/contributionEmailFields';
+import { buildContributionEmailFieldsFromState } from '../emailFields/contributionEmailFields';
 import { buildDigitalSubscriptionEmailFields } from '../emailFields/digitalSubscriptionEmailFields';
 import { buildGuardianAdLiteEmailFields } from '../emailFields/guardianAdLiteEmailFields';
 import { buildGuardianWeeklyEmailFields } from '../emailFields/guardianWeeklyEmailFields';
@@ -86,19 +86,10 @@ async function sendContributionEmail(
 ) {
 	if (checkStateProductType('Contribution', sendThankYouEmailState)) {
 		await sendEmailWithStage(
-			buildContributionEmailFields({
-				now: dayjs(),
-				user: sendThankYouEmailState.user,
-				amount: productInformation.amount,
-				currency: sendThankYouEmailState.product.currency,
-				paymentMethod: sendThankYouEmailState.paymentMethod,
-				mandateId: await getMandateId(
-					sendThankYouEmailState.user.isTestUser,
-					sendThankYouEmailState.paymentMethod.Type,
-					sendThankYouEmailState.accountNumber,
-				),
-				ratePlan: productInformation.ratePlan,
-			}),
+			await buildContributionEmailFieldsFromState(
+				sendThankYouEmailState,
+				productInformation,
+			),
 		);
 	}
 }
@@ -301,14 +292,14 @@ function isFixedTerm(
 	return productRatePlan.termType === 'FixedTerm';
 }
 
-function getBillingPeriod(productType: ProductType) {
+export function getBillingPeriod(productType: ProductType) {
 	if (productType.productType === 'GuardianAdLite') {
 		return BillingPeriod.Monthly;
 	}
 	return productType.billingPeriod;
 }
 
-async function getMandateId(
+export async function getMandateId(
 	isTestUser: boolean,
 	paymentMethodType: PaymentMethodType,
 	accountNumber: string,
