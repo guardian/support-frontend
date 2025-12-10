@@ -63,6 +63,7 @@ class MParticleTokenProvider(
 
   override val wsUrl: String = config.tokenUrl
   override val verboseLogging: Boolean = false
+  override val requestLogging: Boolean = false
 
   private val desiredTokenCount = 3
   private val tokens = new AtomicReference[Set[Token]](Set.empty)
