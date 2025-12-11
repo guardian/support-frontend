@@ -14,7 +14,7 @@ setUpTrackingAndConsents({});
 export const PayPalError = (
 	<Page
 		header={<Header countryGroupId={CountryGroup.detect()} />}
-		footer={<Footer />}
+		footer={<Footer fullWidth />}
 	>
 		<div className="paypal-error">
 			<PageSection modifierClass="paypal-error">

@@ -3,6 +3,7 @@ import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { from } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
+import type { Appearance } from 'components/footerCompliant/containers/FooterContent';
 import { gu_h_spacing, gu_span } from 'stylesheets/emotion/layout';
 
 const baseSection = css`
@@ -31,16 +32,27 @@ const baseContent = css`
 	}
 `;
 
+const fullWidthbaseContent = css`
+	margin: 0 auto;
+	max-width: 1290px;
+`;
+
 export default function LeftMarginSection({
 	children,
+	appearance,
 	cssOverrides,
 }: {
 	children: ReactNode;
+	appearance?: Appearance;
 	cssOverrides?: SerializedStyles;
 }): JSX.Element {
+	const { fullWidth } = appearance ?? {};
+
 	return (
-		<section css={baseSection}>
-			<div css={[baseContent, cssOverrides]}>{children}</div>
+		<section css={!fullWidth && baseSection}>
+			<div css={[fullWidth ? fullWidthbaseContent : baseContent, cssOverrides]}>
+				{children}
+			</div>
 		</section>
 	);
 }

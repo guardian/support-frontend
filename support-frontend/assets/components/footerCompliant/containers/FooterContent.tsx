@@ -5,13 +5,11 @@ import type { ReactNode } from 'react';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import { gu_span } from 'stylesheets/emotion/layout';
 
-type PropTypes = {
-	appearance: {
-		centred?: boolean;
-		border?: boolean;
-		paddingTop?: boolean;
-	};
-	children: ReactNode;
+export type Appearance = {
+	centred?: boolean;
+	border?: boolean;
+	paddingTop?: boolean;
+	fullWidth?: boolean;
 };
 
 const paddingStyle = css`
@@ -26,6 +24,10 @@ const contentStyle = css`
 	max-width: ${gu_span(9)}px;
 `;
 
+const fullWidthContentStyle = css`
+	max-width: unset;
+`;
+
 function getBorderStyling(centred = false) {
 	const breakpoint = centred ? from.wide : from.tablet;
 	return css`
@@ -37,13 +39,21 @@ function getBorderStyling(centred = false) {
 	`;
 }
 
-function FooterContent({ appearance, children }: PropTypes): JSX.Element {
-	const { centred, border, paddingTop } = appearance;
+function FooterContent({
+	appearance,
+	children,
+}: {
+	appearance: Appearance;
+	children: ReactNode;
+}): JSX.Element {
+	const { centred, border, paddingTop, fullWidth } = appearance;
+
 	return (
-		<LeftMarginSection>
+		<LeftMarginSection appearance={appearance}>
 			<div
 				css={[
 					contentStyle,
+					fullWidth && fullWidthContentStyle,
 					paddingTop && paddingStyle,
 					border && getBorderStyling(centred),
 				]}

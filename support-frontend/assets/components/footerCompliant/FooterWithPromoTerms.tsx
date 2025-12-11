@@ -132,7 +132,7 @@ function FooterWithPromoTerms({
 	termsConditionsLink: string;
 }) {
 	return (
-		<Footer termsConditionsLink={termsConditionsLink}>
+		<Footer termsConditionsLink={termsConditionsLink} fullWidth>
 			{orderIsAGift ? (
 				<GiftLinks
 					productPrices={productPrices}

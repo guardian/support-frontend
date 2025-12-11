@@ -22,7 +22,7 @@ export function SubscriptionsLandingPage({
 	return (
 		<Page
 			header={<Header countryGroupId={countryGroupId} />}
-			footer={<Footer centred />}
+			footer={<Footer centred fullWidth />}
 		>
 			<SubscriptionLandingContent
 				countryGroupId={countryGroupId}
