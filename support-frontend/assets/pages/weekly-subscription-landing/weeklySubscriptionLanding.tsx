@@ -75,7 +75,11 @@ function WeeklyLPContent({
 				/>
 			}
 		>
-			<WeeklyHero orderIsAGift={orderIsAGift} promotionCopy={promotionCopy} />
+			<WeeklyHero
+				orderIsAGift={orderIsAGift}
+				promotionCopy={promotionCopy}
+				countryGroupId={countryGroupId}
+			/>
 			<FullWidthContainer>
 				<CentredContainer>
 					<Block cssOverrides={styles.closeGapAfterPageTitle}>

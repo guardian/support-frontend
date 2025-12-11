@@ -22,7 +22,6 @@ import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
 import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
-import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
@@ -31,6 +30,7 @@ import { guardianWeeklyHeroBlue } from 'stylesheets/emotion/colours';
 type WeeklyHeroPropTypes = {
 	orderIsAGift: boolean;
 	promotionCopy: PromotionCopy;
+	countryGroupId: CountryGroupId;
 };
 
 const styles = {
@@ -79,8 +79,8 @@ const styles = {
 	`,
 };
 
-const getRegionalCopyFor = (region: CountryGroupId): JSX.Element =>
-	region === GBPCountries ? (
+const getRegionalCopyFor = (region: CountryGroupId): JSX.Element => {
+	return region === GBPCountries ? (
 		<span>
 			Find clarity
 			<br css={styles.showOnMobile} /> with the Guardian&apos;s global magazine
@@ -91,6 +91,7 @@ const getRegionalCopyFor = (region: CountryGroupId): JSX.Element =>
 			<br css={styles.showOnMobile} /> Guardian in print
 		</span>
 	);
+};
 
 const getFirstParagraph = (
 	promotionCopy: PromotionCopy,
@@ -129,11 +130,10 @@ const getFirstParagraph = (
 export function WeeklyHero({
 	orderIsAGift,
 	promotionCopy,
+	countryGroupId,
 }: WeeklyHeroPropTypes): JSX.Element {
 	const defaultRoundelText = 'Save up to 35% a year';
-	const defaultTitle = orderIsAGift
-		? null
-		: getRegionalCopyFor(CountryGroup.detect());
+	const defaultTitle = orderIsAGift ? null : getRegionalCopyFor(countryGroupId);
 	const title = promotionCopy.title ?? defaultTitle;
 	const copy = getFirstParagraph(promotionCopy, orderIsAGift);
 	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
