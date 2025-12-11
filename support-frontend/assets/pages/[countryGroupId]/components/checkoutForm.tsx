@@ -846,64 +846,6 @@ export default function CheckoutForm({
 									weeklyDeliveryDate={weeklyDeliveryDate}
 									setWeeklyDeliveryDate={setWeeklyDeliveryDate}
 								/>
-								<>
-									WEEKLY GIFT SO HAS DELIVERY ADDRESS ONLY
-									<PersonalAddressFields
-										countryId={countryId}
-										countries={productDescription.deliverableTo}
-										checkoutSession={checkoutSession}
-										productKey={productKey}
-										deliveryPostcodeIsOutsideM25={deliveryPostcodeIsOutsideM25}
-										deliveryPostcode={deliveryPostcode}
-										setDeliveryPostcode={setDeliveryPostcode}
-										chosenDeliveryAgent={chosenDeliveryAgent}
-										setChosenDeliveryAgent={setChosenDeliveryAgent}
-										deliveryAgents={deliveryAgents}
-										deliveryAgentError={deliveryAgentError}
-										setDeliveryAgentError={setDeliveryAgentError}
-										deliveryAddressErrors={deliveryAddressErrors}
-										setDeliveryAddressErrors={setDeliveryAddressErrors}
-										isWeeklyGift={isWeeklyGift}
-									/>
-								</>
-							</>
-						)}
-
-						<>
-							PERSONAL DETAILS BUT IF WEEKLY GIFT DISPLAY BILLING ADDRESS OPTION
-							<PersonalDetailsFields
-								countryId={countryId}
-								countries={productDescription.deliverableTo}
-								legend={legendPersonalDetails}
-								firstName={firstName}
-								setFirstName={setFirstName}
-								lastName={lastName}
-								setLastName={setLastName}
-								email={email}
-								setEmail={setEmail}
-								confirmedEmail={confirmedEmail}
-								setConfirmedEmail={setConfirmedEmail}
-								phoneNumber={phoneNumber}
-								setPhoneNumber={setPhoneNumber}
-								billingStatePostcode={billingStatePostcode}
-								hasDeliveryAddress={hasDeliveryAddress}
-								isEmailAddressReadOnly={isSignedIn}
-								isSignedIn={isSignedIn}
-								isWeeklyGift={isWeeklyGift}
-							/>
-						</>
-
-						{/**
-						 * We need the billing-country for all transactions, even non-deliverable ones
-						 * which we get from the GU_country cookie which comes from the Fastly geo client.
-						 */}
-						{!hasDeliveryAddress && (
-							<input type="hidden" name="billing-country" value={countryId} />
-						)}
-						{!isWeeklyGift && hasDeliveryAddress && (
-							<>
-								NOT WEEKLY GIFT BUT IF HAS DELIVERY ADDRESS DISPLAY BILLING
-								ADDRESS OPTION
 								<PersonalAddressFields
 									countryId={countryId}
 									countries={productDescription.deliverableTo}
@@ -919,9 +861,57 @@ export default function CheckoutForm({
 									setDeliveryAgentError={setDeliveryAgentError}
 									deliveryAddressErrors={deliveryAddressErrors}
 									setDeliveryAddressErrors={setDeliveryAddressErrors}
-									billingStatePostcode={billingStatePostcode}
+									isWeeklyGift={isWeeklyGift}
 								/>
 							</>
+						)}
+
+						<PersonalDetailsFields
+							countryId={countryId}
+							countries={productDescription.deliverableTo}
+							legend={legendPersonalDetails}
+							firstName={firstName}
+							setFirstName={setFirstName}
+							lastName={lastName}
+							setLastName={setLastName}
+							email={email}
+							setEmail={setEmail}
+							confirmedEmail={confirmedEmail}
+							setConfirmedEmail={setConfirmedEmail}
+							phoneNumber={phoneNumber}
+							setPhoneNumber={setPhoneNumber}
+							billingStatePostcode={billingStatePostcode}
+							hasDeliveryAddress={hasDeliveryAddress}
+							isEmailAddressReadOnly={isSignedIn}
+							isSignedIn={isSignedIn}
+							isWeeklyGift={isWeeklyGift}
+						/>
+
+						{/**
+						 * We need the billing-country for all transactions, even non-deliverable ones
+						 * which we get from the GU_country cookie which comes from the Fastly geo client.
+						 */}
+						{!hasDeliveryAddress && (
+							<input type="hidden" name="billing-country" value={countryId} />
+						)}
+						{!isWeeklyGift && hasDeliveryAddress && (
+							<PersonalAddressFields
+								countryId={countryId}
+								countries={productDescription.deliverableTo}
+								checkoutSession={checkoutSession}
+								productKey={productKey}
+								deliveryPostcodeIsOutsideM25={deliveryPostcodeIsOutsideM25}
+								deliveryPostcode={deliveryPostcode}
+								setDeliveryPostcode={setDeliveryPostcode}
+								chosenDeliveryAgent={chosenDeliveryAgent}
+								setChosenDeliveryAgent={setChosenDeliveryAgent}
+								deliveryAgents={deliveryAgents}
+								deliveryAgentError={deliveryAgentError}
+								setDeliveryAgentError={setDeliveryAgentError}
+								deliveryAddressErrors={deliveryAddressErrors}
+								setDeliveryAddressErrors={setDeliveryAddressErrors}
+								billingStatePostcode={billingStatePostcode}
+							/>
 						)}
 
 						<FormSection ref={paymentMethodRef}>
