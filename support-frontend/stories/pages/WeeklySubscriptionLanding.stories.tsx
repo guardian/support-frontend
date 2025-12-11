@@ -14,6 +14,14 @@ export default {
 					'A full-page rendering of the Subscriptions Newspaper landing page.',
 			},
 		},
+		chromatic: {
+			modes: {
+				mobile: { viewport: 'mobile' },
+				desktop: { viewport: 'desktop' },
+				tablet: { viewport: 'tablet' },
+				wide: { viewport: 'wide' },
+			},
+		},
 	},
 };
 
