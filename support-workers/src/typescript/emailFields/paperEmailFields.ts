@@ -64,7 +64,7 @@ export function buildPaperEmailFields({
 		paymentMethod: paymentMethod,
 		paymentSchedule: paymentSchedule,
 		firstDeliveryDate: dayjs(productInformation.firstDeliveryDate),
-		isFixedTerm: false, // There are no fixed term paper products
+		isFixedTerm: false, // There are no fixed term paper rate plans
 		mandateId: mandateId,
 	});
 	const productFields = {

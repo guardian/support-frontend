@@ -33,7 +33,7 @@ export function buildGuardianAdLiteEmailFields({
 		user,
 		subscriptionNumber,
 		currency,
-		billingPeriod: BillingPeriod.Monthly,
+		billingPeriod: BillingPeriod.Monthly, // Guardian Ad Lite is always billed monthly
 		paymentMethod,
 		paymentSchedule,
 		mandateId: mandateId,

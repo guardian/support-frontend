@@ -12,7 +12,7 @@ import {
 	buildThankYouEmailFields,
 } from './emailFields';
 
-function getPaymentMethodFields(
+function getOldNonStandardPaymentFields(
 	paymentMethod: PaymentMethod,
 	mandateId?: string,
 ):
@@ -75,10 +75,10 @@ export function buildDigitalSubscriptionEmailFields({
 		paymentMethod,
 		paymentSchedule,
 		mandateId,
-		isFixedTerm: false, // Digital subscriptions are not fixed term
+		isFixedTerm: false, // There are no fixed term Digital subscription rate plans
 	});
 
-	const oldNonStandardPaymentFields = getPaymentMethodFields(
+	const oldNonStandardPaymentFields = getOldNonStandardPaymentFields(
 		paymentMethod,
 		mandateId,
 	);

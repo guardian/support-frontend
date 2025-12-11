@@ -34,7 +34,6 @@ describe('contributionEmailFields', () => {
 				ContactAttributes: {
 					SubscriberAttributes: {
 						name: emailUser.firstName,
-						first_name: emailUser.firstName,
 						amount: '5',
 						currency: 'GBP',
 						edition: emailUser.billingAddress.country,
@@ -46,6 +45,7 @@ describe('contributionEmailFields', () => {
 						account_number: '******11',
 						sort_code: directDebitPaymentMethod.BankCode,
 						payment_method: 'Direct Debit',
+						first_name: emailUser.firstName,
 						account_holder: 'Mickey Mouse',
 						bank_account_no: '******11',
 						bank_sort_code: '20-20-20',

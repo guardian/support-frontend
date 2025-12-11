@@ -53,8 +53,8 @@ export function buildSupporterPlusEmailFields({
 		currency: currency,
 		billing_period: billingPeriod.toLowerCase(),
 		product: `${billingPeriod.toLowerCase()}-supporter-plus`,
-		zuorasubscriberid: nonDeliveryEmailFields.subscriber_id, // This is duplicate and will be removed in a future PR
-		subscription_details: nonDeliveryEmailFields.subscription_rate, // This is duplicate and will be removed in a future PR
+		zuorasubscriberid: nonDeliveryEmailFields.subscriber_id, // This is a duplicate and will be removed in a future PR
+		subscription_details: nonDeliveryEmailFields.subscription_rate, // This is a duplicate and will be removed in a future PR
 		is_fixed_term: isFixedTerm.toString(),
 		...oldNonStandardPaymentFields,
 		...nonDeliveryEmailFields,
