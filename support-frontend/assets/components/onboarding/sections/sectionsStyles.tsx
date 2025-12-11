@@ -56,12 +56,6 @@ const paymentDetailsBox = css`
 	margin-top: ${space[5]}px;
 `;
 
-const paymentDetailsContainer = css`
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-`;
-
 const newslettersAppUsageInformation = css`
 	${textSans14}
 	margin-bottom: ${space[10]}px;
@@ -112,7 +106,6 @@ export {
 	buttonOverrides,
 	newsletterContainer,
 	paymentDetailsBox,
-	paymentDetailsContainer,
 	newslettersAppUsageInformation,
 	separator,
 	benefitsItem,

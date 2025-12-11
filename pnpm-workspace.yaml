@@ -22,4 +22,4 @@ catalog:
   "@aws-sdk/client-dynamodb": ^3.879.0
   "@aws-sdk/util-dynamodb": ^3.879.0
   "@guardian/prettier": ^2.1.5
-  "@guardian/support-service-lambdas": "guardian/support-service-lambdas#4cda6f2628e55122dc805888fef295b850daf996"
+  "@guardian/support-service-lambdas": "guardian/support-service-lambdas#2eed38951dc49b5374be40e6c64d282e75f72bfe"
