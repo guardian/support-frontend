@@ -8,9 +8,6 @@ import {
 	mainCss,
 	stickyCss,
 } from 'components/subscriptionCheckouts/layoutStyles';
-import moduleStyles from './layout.module.scss';
-
-const styles = moduleStyles as { wrapper: string };
 
 type AsideWrapPosition = 'top' | 'bottom';
 type PropTypes = {
@@ -45,9 +42,7 @@ CheckoutLayout.defaultProps = {
 };
 
 function Content({ children }: { children: ReactNode }): JSX.Element {
-	return (
-		<LeftMarginSection className={styles.wrapper}>{children}</LeftMarginSection>
-	);
+	return <LeftMarginSection>{children}</LeftMarginSection>;
 }
 
 export { Content };
