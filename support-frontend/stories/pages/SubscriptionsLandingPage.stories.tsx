@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/preact-vite';
 import { MemoryRouter } from 'react-router-dom';
 import { SubscriptionsLandingPage } from 'pages/subscriptions-landing/subscriptionsLanding';
 import type { SubscriptionsLandingProps } from 'pages/subscriptions-landing/subscriptionsLandingProps';
-import { viewports } from '../../.storybook/viewports';
 
 const meta: Meta<SubscriptionsLandingProps> = {
 	title: 'Pages/Subscriptions Landing Page',
@@ -16,10 +15,10 @@ const meta: Meta<SubscriptionsLandingProps> = {
 		},
 		chromatic: {
 			modes: {
-				mobile: viewports.mobile,
-				desktop: viewports.desktop,
-				tablet: viewports.tablet,
-				wide: viewports.wide,
+				mobile: { viewport: 'mobile' },
+				desktop: { viewport: 'desktop' },
+				tablet: { viewport: 'tablet' },
+				wide: { viewport: 'wide' },
 			},
 		},
 	},
