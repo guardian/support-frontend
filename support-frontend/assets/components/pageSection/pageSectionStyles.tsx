@@ -5,7 +5,7 @@ import {
 	palette,
 	space,
 } from '@guardian/source/foundations';
-import { gu_span } from 'stylesheets/emotion/layout';
+import { gu_span, gu_v_spacing } from 'stylesheets/emotion/layout';
 
 export const sectionStyles = css`
 	/* previously .component-page-section__content extended .gu-content-margin */
@@ -60,7 +60,7 @@ export const headingStyles = css`
 			display: inline-block;
 			height: 36px;
 			position: absolute;
-			top: 0;
+			top: -${space[3]}px;
 			right: ${space[4]}px;
 		}
 	}
@@ -70,7 +70,7 @@ export const bodyStyles = css`
 	box-sizing: border-box;
 
 	.component-text {
-		margin: ${space[9]}px 0;
+		margin: ${gu_v_spacing * 3}px 0;
 	}
 
 	${from.desktop} {
