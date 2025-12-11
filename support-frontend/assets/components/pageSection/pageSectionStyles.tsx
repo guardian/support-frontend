@@ -3,41 +3,41 @@ import {
 	from,
 	headlineBold24,
 	palette,
+	breakpoints as sourceBreakpoints,
 	space,
 } from '@guardian/source/foundations';
-import { gu_span, gu_v_spacing } from 'stylesheets/emotion/layout';
+import { gu_h_spacing, gu_v_spacing } from 'stylesheets/emotion/layout';
 
 export const sectionStyles = css`
-	/* previously .component-page-section__content extended .gu-content-margin */
 	box-sizing: border-box;
-	padding: 0 ${space[3]}px;
+	padding: 0 (${gu_h_spacing} * 0.5);
 
 	${from.mobileLandscape} {
-		max-width: ${gu_span(6)}px;
+		max-width: ${sourceBreakpoints.mobileLandscape}px;
 		margin: 0 auto;
-		padding: 0 ${space[5]}px;
+		padding: 0 ${gu_h_spacing}px;
 	}
 
 	${from.phablet} {
-		max-width: ${gu_span(9)}px;
+		max-width: ${sourceBreakpoints.phablet}px;
 	}
 
 	${from.tablet} {
-		max-width: ${gu_span(10)}px;
+		max-width: ${sourceBreakpoints.tablet}px;
 	}
 
 	${from.desktop} {
-		max-width: ${gu_span(12)}px;
-		padding: 0 ${space[5]}px 0 ${space[10]}px;
+		max-width: ${sourceBreakpoints.desktop}px;
+		padding: 0 ${gu_h_spacing}px 0 ${gu_h_spacing * 2}pxpx;
 	}
 
 	${from.leftCol} {
-		max-width: ${gu_span(14)}px;
-		padding: 0 ${space[8]}px;
+		max-width: ${sourceBreakpoints.leftCol}px;
+		padding: 0 ${gu_h_spacing * 1.5}px;
 	}
 
 	${from.wide} {
-		max-width: ${gu_span(16)}px;
+		max-width: ${sourceBreakpoints.wide}px;
 	}
 `;
 
