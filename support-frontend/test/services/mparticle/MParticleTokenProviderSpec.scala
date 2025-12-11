@@ -39,7 +39,7 @@ class MParticleTokenProviderSpec
       clientId = "test-client-id",
       clientSecret = "test-secret",
       apiUrl = "https://api.test.com",
-      tokenUrl = "https://oauth.test.com/token",
+      loginBaseUrl = "https://oauth.test.com/token",
       orgId = "orgId",
       accountId = "accountId",
       workspaceId = "workspaceId",

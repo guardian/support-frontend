@@ -61,7 +61,7 @@ class MParticleTokenProvider(
   import OAuthTokenResponse._
   import OAuthTokenRequest._
 
-  override val wsUrl: String = config.tokenUrl
+  override val wsUrl: String = config.loginBaseUrl
   override val verboseLogging: Boolean = false
   override val requestLogging: Boolean = false
 
