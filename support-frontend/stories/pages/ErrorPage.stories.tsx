@@ -15,6 +15,14 @@ const meta: Meta = {
 					'Full-page error experience including header, footer, intro squares and support/home links.',
 			},
 		},
+		chromatic: {
+			modes: {
+				mobile: { viewport: 'mobile' },
+				desktop: { viewport: 'desktop' },
+				tablet: { viewport: 'tablet' },
+				wide: { viewport: 'wide' },
+			},
+		},
 	},
 };
 
@@ -35,18 +43,8 @@ export const Default: Story = {
 		reportLink: true,
 		supportLink: true,
 	},
-	parameters: {
-		chromatic: {
-			viewports: ['mobile', 'tablet', 'desktop', 'wide'],
-		},
-	},
 };
 
 export const PayPal: Story = {
 	render: () => <MemoryRouter>{PayPalError}</MemoryRouter>,
-	parameters: {
-		chromatic: {
-			viewports: ['mobile', 'tablet', 'desktop', 'wide'],
-		},
-	},
 };

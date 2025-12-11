@@ -15,6 +15,14 @@ export default {
 					'A full-page rendering of the Subscriptions Newspaper landing page.',
 			},
 		},
+		chromatic: {
+			modes: {
+				mobile: { viewport: 'mobile' },
+				desktop: { viewport: 'desktop' },
+				tablet: { viewport: 'tablet' },
+				wide: { viewport: 'wide' },
+			},
+		},
 	},
 };
 
@@ -167,19 +175,9 @@ const collectionArgs = {
 export const NewspaperHomeDelivery: Story = {
 	render: (args: PaperLandingPropTypes) => <PaperLandingPage {...args} />,
 	args: homeDeliveryArgs,
-	parameters: {
-		chromatic: {
-			viewports: ['mobile', 'tablet', 'desktop', 'wide'],
-		},
-	},
 };
 
 export const NewspaperCollection: Story = {
 	render: (args: PaperLandingPropTypes) => <PaperLandingPage {...args} />,
 	args: collectionArgs,
-	parameters: {
-		chromatic: {
-			viewports: ['mobile', 'tablet', 'desktop', 'wide'],
-		},
-	},
 };

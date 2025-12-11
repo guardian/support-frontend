@@ -14,6 +14,14 @@ export default {
 					'A full-page rendering of the Subscriptions Newspaper landing page.',
 			},
 		},
+		chromatic: {
+			modes: {
+				mobile: { viewport: 'mobile' },
+				desktop: { viewport: 'desktop' },
+				tablet: { viewport: 'tablet' },
+				wide: { viewport: 'wide' },
+			},
+		},
 	},
 };
 
@@ -77,19 +85,9 @@ const giftArgs: WeeklyLandingPropTypes = {
 export const Default: Story = {
 	render: (args: WeeklyLandingPropTypes) => <WeeklyLandingPage {...args} />,
 	args: defaultArgs,
-	parameters: {
-		chromatic: {
-			viewports: ['mobile', 'tablet', 'desktop', 'wide'],
-		},
-	},
 };
 
 export const Gift: Story = {
 	render: (args: WeeklyLandingPropTypes) => <WeeklyLandingPage {...args} />,
 	args: giftArgs,
-	parameters: {
-		chromatic: {
-			viewports: ['mobile', 'tablet', 'desktop', 'wide'],
-		},
-	},
 };
