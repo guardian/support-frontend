@@ -88,7 +88,7 @@ export const tests: Tests = {
 				// else gets the control (i.e. PayPal express) This is fine -
 				// we're not comparing the two groups, just rolling out PayPalCP
 				// gradually.
-				size: 0,
+				size: 0.1, // 10%
 			},
 		},
 		isActive: true,
