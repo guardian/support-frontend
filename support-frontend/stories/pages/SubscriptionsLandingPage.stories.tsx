@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/preact-vite';
 import { MemoryRouter } from 'react-router-dom';
 import { SubscriptionsLandingPage } from 'pages/subscriptions-landing/subscriptionsLanding';
 import type { SubscriptionsLandingProps } from 'pages/subscriptions-landing/subscriptionsLandingProps';
+import { viewports } from '../../.storybook/viewports';
 
 const meta: Meta<SubscriptionsLandingProps> = {
 	title: 'Pages/Subscriptions Landing Page',
@@ -11,6 +12,14 @@ const meta: Meta<SubscriptionsLandingProps> = {
 			description: {
 				component:
 					'A full-page rendering of the Subscriptions landing experience, wrapped in a MemoryRouter for Storybook.',
+			},
+		},
+		chromatic: {
+			modes: {
+				mobile: viewports.mobile,
+				desktop: viewports.desktop,
+				tablet: viewports.tablet,
+				wide: viewports.wide,
 			},
 		},
 	},
@@ -58,10 +67,4 @@ export const Default: Story = {
 		</MemoryRouter>
 	),
 	args: defaultArgs,
-};
-
-Default.parameters = {
-	chromatic: {
-		modes: ['mobile', 'tablet', 'desktop', 'wide'],
-	},
 };
