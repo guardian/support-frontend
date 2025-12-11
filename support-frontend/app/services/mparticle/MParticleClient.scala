@@ -1,7 +1,7 @@
 package services.mparticle
 
 import com.gu.okhttp.RequestRunners.FutureHttpClient
-import com.gu.rest.WebServiceHelper
+import com.gu.rest.{CodeBody, WebServiceClientError, WebServiceHelper}
 import com.gu.support.config.Stage
 import config.{MparticleConfig, MparticleConfigProvider}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
@@ -79,6 +79,10 @@ class MParticleClient(
         ),
       )
       .map(parseUserProfile)
+      .recover { case WebServiceClientError(CodeBody("404", _)) =>
+        logger.info("mParticle returned 404 for user")
+        MParticleUserProfile(hasMobileAppDownloaded = false, hasFeastMobileAppDownloaded = false)
+      }
   }
 
   private def parseUserProfile(profileResponse: ProfileResponse): MParticleUserProfile = {

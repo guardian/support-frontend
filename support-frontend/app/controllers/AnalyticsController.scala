@@ -55,22 +55,19 @@ class AnalyticsController(
 
   def getAnalyticsUserProfile(): Action[AnyContent] =
     (MaybeAuthenticatedAction andThen RequireAuthenticatedUser).async { implicit request =>
-      for {
-        userProfile <- mparticleClient.getUserProfile(request.user.id).recover {
-          case WebServiceClientError(CodeBody("404", _)) =>
-            logger.info("mParticle returned 404 for user")
-            MParticleUserProfile(hasMobileAppDownloaded = false, hasFeastMobileAppDownloaded = false)
-          case ex =>
-            logger.error(scrub"Failed to get mParticle user profile: ${ex.getMessage}", ex)
-            MParticleUserProfile(hasMobileAppDownloaded = false, hasFeastMobileAppDownloaded = false)
+      mparticleClient
+        .getUserProfile(request.user.id)
+        .map { userProfile =>
+          val response = AnalyticsUserProfileResponse(
+            identityId = request.user.id,
+            hasMobileAppDownloaded = userProfile.hasMobileAppDownloaded,
+            hasFeastMobileAppDownloaded = userProfile.hasFeastMobileAppDownloaded,
+          )
+          Ok(response.asJson)
         }
-      } yield {
-        val response = AnalyticsUserProfileResponse(
-          identityId = request.user.id,
-          hasMobileAppDownloaded = userProfile.hasMobileAppDownloaded,
-          hasFeastMobileAppDownloaded = userProfile.hasFeastMobileAppDownloaded,
-        )
-        Ok(response.asJson)
-      }
+        .recover { ex =>
+          logger.error(scrub"Failed to get mParticle user profile: ${ex.getMessage}", ex)
+          InternalServerError("Error getting user profile")
+        }
     }
 }
