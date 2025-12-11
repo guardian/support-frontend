@@ -62,6 +62,6 @@ export const Default: Story = {
 
 Default.parameters = {
 	chromatic: {
-		viewports: ['mobile', 'tablet', 'desktop', 'wide'],
+		modes: ['mobile', 'tablet', 'desktop', 'wide'],
 	},
 };
