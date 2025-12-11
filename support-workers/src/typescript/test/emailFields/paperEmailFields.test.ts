@@ -33,7 +33,8 @@ describe('Paper email fields', () => {
 					account_holder: 'Mickey Mouse',
 					ZuoraSubscriberId: subscriptionNumber,
 					package: 'Everyday',
-					date_of_first_payment: 'Tuesday, 18 November 2025',
+					date_of_first_payment: 'Friday, 21 November 2025',
+					first_payment_date: 'Friday, 21 November 2025',
 					bank_sort_code: '20-20-20',
 					mandate_id: mandateId,
 					bank_account_no: '******11',
@@ -55,6 +56,7 @@ describe('Paper email fields', () => {
 	};
 	it('should build correct email fields for HomeDelivery Everyday sub with DD', () => {
 		const emailFields = buildPaperEmailFields({
+			today: today,
 			user: emailUser,
 			currency: 'GBP',
 			subscriptionNumber: subscriptionNumber,
@@ -74,6 +76,7 @@ describe('Paper email fields', () => {
 	});
 	it('should build correct email fields for NationalDelivery Everyday sub with DD and delivery agent details', () => {
 		const emailFields = buildPaperEmailFields({
+			today: today,
 			user: emailUser,
 			currency: 'GBP',
 			subscriptionNumber: subscriptionNumber,

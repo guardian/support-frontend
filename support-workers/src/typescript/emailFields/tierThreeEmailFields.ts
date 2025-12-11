@@ -3,13 +3,12 @@ import { DataExtensionNames } from '@modules/email/email';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
-import dayjs from 'dayjs';
+import type { Dayjs } from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
 import { buildDeliveryEmailFields } from './deliveryEmailFields';
-import { buildThankYouEmailFields, formatDate } from './emailFields';
-import { describePayments, firstPayment } from './paymentDescription';
+import { buildThankYouEmailFields } from './emailFields';
 
 export type TierThreeProductPurchase = Extract<
 	ProductPurchase,
@@ -17,6 +16,7 @@ export type TierThreeProductPurchase = Extract<
 >;
 
 export function buildTierThreeEmailFields({
+	today,
 	user,
 	currency,
 	billingPeriod,
@@ -24,42 +24,34 @@ export function buildTierThreeEmailFields({
 	paymentSchedule,
 	paymentMethod,
 	mandateId,
-	productInformation,
+	firstDeliveryDate,
 }: {
+	today: Dayjs;
 	user: User;
 	currency: IsoCurrency;
 	billingPeriod: RecurringBillingPeriod;
 	subscriptionNumber: string;
 	paymentSchedule: PaymentSchedule;
 	paymentMethod: PaymentMethod;
+	firstDeliveryDate: Dayjs;
 	mandateId?: string;
-	productInformation: TierThreeProductPurchase;
 }): EmailMessageWithIdentityUserId {
-	const firstPaymentDate = dayjs(firstPayment(paymentSchedule).date);
-	const additionalFields: Record<string, string> = {
-		billing_period: billingPeriod.toLowerCase(),
-		first_payment_date: formatDate(firstPaymentDate),
-		subscription_details: describePayments(
-			paymentSchedule,
-			billingPeriod,
-			currency,
-			false,
-		),
-	};
 	const deliveryFields = buildDeliveryEmailFields({
-		subscriptionNumber: subscriptionNumber,
+		today: today,
 		user: user,
-		firstDeliveryDate: dayjs(productInformation.firstDeliveryDate),
-		firstPaymentDate: dayjs(firstPayment(paymentSchedule).date),
-		paymentDescription: describePayments(
-			paymentSchedule,
-			billingPeriod,
-			currency,
-			false,
-		),
+		subscriptionNumber: subscriptionNumber,
+		currency: currency,
+		billingPeriod: billingPeriod,
 		paymentMethod: paymentMethod,
+		paymentSchedule: paymentSchedule,
+		isFixedTerm: false,
+		firstDeliveryDate: firstDeliveryDate,
 		mandateId: mandateId,
 	});
+	const additionalFields: Record<string, string> = {
+		billing_period: billingPeriod.toLowerCase(),
+		subscription_details: deliveryFields.subscription_rate,
+	};
 	const productFields = {
 		...additionalFields,
 		...deliveryFields,

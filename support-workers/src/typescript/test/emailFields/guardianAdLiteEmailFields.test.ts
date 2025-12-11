@@ -1,4 +1,5 @@
 import { DataExtensionNames } from '@modules/email/email';
+import dayjs from 'dayjs';
 import { buildGuardianAdLiteEmailFields } from '../../emailFields/guardianAdLiteEmailFields';
 import {
 	creditCardPaymentMethod,
@@ -9,7 +10,9 @@ import {
 
 describe('guardianAdLiteEmailFields', () => {
 	test('should build the correct email fields for Guardian Ad-Lite', () => {
+		const today = dayjs('2025-10-26');
 		const emailFields = buildGuardianAdLiteEmailFields({
+			today: today,
 			user: emailUser,
 			currency: 'GBP',
 			subscriptionNumber: subscriptionNumber,
@@ -30,7 +33,11 @@ describe('guardianAdLiteEmailFields', () => {
 						subscription_details: '£10.00 every month',
 						first_payment_date: 'Tuesday, 11 November 2025',
 						zuorasubscriberid: subscriptionNumber,
-						payment_method: 'credit / debit card',
+						payment_method: 'Credit/Debit Card',
+						subscriber_id: subscriptionNumber,
+						subscription_rate: '£10.00 every month',
+						first_name: emailUser.firstName,
+						last_name: emailUser.lastName,
 					},
 				},
 			},

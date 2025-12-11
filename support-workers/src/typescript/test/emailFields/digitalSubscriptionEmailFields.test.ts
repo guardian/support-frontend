@@ -1,4 +1,5 @@
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import dayjs from 'dayjs';
 import { buildDigitalSubscriptionEmailFields } from '../../emailFields/digitalSubscriptionEmailFields';
 import {
 	directDebitPaymentMethod,
@@ -10,7 +11,9 @@ import {
 
 describe('digitalSubscriptionEmailFields', () => {
 	test('should build the correct email fields for digital subscription thank you email', () => {
+		const today = dayjs('2025-10-26');
 		const emailFields = buildDigitalSubscriptionEmailFields({
+			today: today,
 			user: emailUser,
 			currency: 'GBP',
 			billingPeriod: BillingPeriod.Annual,
@@ -38,6 +41,14 @@ describe('digitalSubscriptionEmailFields', () => {
 						account_number: directDebitPaymentMethod.BankTransferAccountNumber,
 						sort_code: directDebitPaymentMethod.BankCode,
 						default_payment_method: 'Direct Debit',
+						subscriber_id: subscriptionNumber,
+						subscription_rate: '£119.90 for the first year',
+						payment_method: 'Direct Debit',
+						first_payment_date: 'Tuesday, 11 November 2025',
+						account_holder: 'Mickey Mouse',
+						bank_account_no: '******11',
+						bank_sort_code: '20-20-20',
+						mandate_id: 'MANDATE_ID',
 					},
 				},
 			},
