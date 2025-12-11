@@ -1,11 +1,9 @@
 // ----- Imports ----- //
-import { css } from '@emotion/react';
-import { from, palette, space } from '@guardian/source/foundations';
+
 import { css } from '@emotion/react';
 import { from, palette, space } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-import { gu_span } from 'stylesheets/emotion/layout';
 import { gu_span } from 'stylesheets/emotion/layout';
 
 export type Appearance = {
@@ -64,7 +62,6 @@ function FooterContent({
 			>
 				{children}
 			</div>
-		</LeftMarginSection>
 		</LeftMarginSection>
 	);
 }
