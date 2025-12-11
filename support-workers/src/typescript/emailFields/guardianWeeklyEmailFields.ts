@@ -9,7 +9,8 @@ import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { GiftRecipient, User } from '../model/stateSchemas';
 import { buildDeliveryEmailFields } from './deliveryEmailFields';
-import { buildThankYouEmailFields, formatDate } from './emailFields';
+import { buildThankYouEmailFields } from './emailFields';
+import { formatDate } from './paymentEmailFields';
 
 export type GuardianWeeklyProductPurchase = Extract<
 	ProductPurchase,

@@ -8,8 +8,8 @@ import type { User } from '../model/stateSchemas';
 import {
 	buildNonDeliveryEmailFields,
 	buildThankYouEmailFields,
-	getPaymentMethodFieldsSupporterPlus,
 } from './emailFields';
+import { getPaymentMethodFieldsSupporterPlus } from './paymentEmailFields';
 
 export function buildContributionEmailFields({
 	today,

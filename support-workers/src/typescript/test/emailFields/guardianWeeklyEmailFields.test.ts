@@ -1,8 +1,8 @@
 import { DataExtensionNames } from '@modules/email/email';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import dayjs from 'dayjs';
-import { formatDate } from '../../emailFields/emailFields';
 import { buildGuardianWeeklyEmailFields } from '../../emailFields/guardianWeeklyEmailFields';
+import { formatDate } from '../../emailFields/paymentEmailFields';
 import type { GiftRecipient } from '../../model/stateSchemas';
 import {
 	creditCardPaymentMethod,

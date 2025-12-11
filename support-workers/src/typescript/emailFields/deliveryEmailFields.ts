@@ -6,7 +6,8 @@ import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
 import type { NonDeliveryEmailFields } from './emailFields';
-import { buildNonDeliveryEmailFields, formatDate } from './emailFields';
+import { buildNonDeliveryEmailFields } from './emailFields';
+import { formatDate } from './paymentEmailFields';
 
 type DeliveryFields = {
 	ZuoraSubscriberId: string;
