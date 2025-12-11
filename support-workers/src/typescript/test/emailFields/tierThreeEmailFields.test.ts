@@ -5,7 +5,6 @@ import { formatDate } from '../../emailFields/emailFields';
 import { buildTierThreeEmailFields } from '../../emailFields/tierThreeEmailFields';
 import {
 	creditCardPaymentMethod,
-	deliveryContact,
 	emailAddress,
 	emailUser,
 	paperPaymentSchedule,
@@ -25,12 +24,7 @@ describe('Tier three thank you email fields', () => {
 			paymentSchedule: paperPaymentSchedule,
 			paymentMethod: creditCardPaymentMethod,
 			mandateId: undefined,
-			productInformation: {
-				product: 'TierThree',
-				ratePlan: 'DomesticMonthly',
-				firstDeliveryDate: firstDeliveryDate.toDate(),
-				deliveryContact: deliveryContact,
-			},
+			firstDeliveryDate: firstDeliveryDate,
 		});
 
 		const expected = {

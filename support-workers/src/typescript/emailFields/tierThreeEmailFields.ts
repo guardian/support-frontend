@@ -4,7 +4,6 @@ import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
 import type { Dayjs } from 'dayjs';
-import dayjs from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
@@ -25,7 +24,7 @@ export function buildTierThreeEmailFields({
 	paymentSchedule,
 	paymentMethod,
 	mandateId,
-	productInformation,
+	firstDeliveryDate,
 }: {
 	today: Dayjs;
 	user: User;
@@ -34,8 +33,8 @@ export function buildTierThreeEmailFields({
 	subscriptionNumber: string;
 	paymentSchedule: PaymentSchedule;
 	paymentMethod: PaymentMethod;
+	firstDeliveryDate: Dayjs;
 	mandateId?: string;
-	productInformation: TierThreeProductPurchase;
 }): EmailMessageWithIdentityUserId {
 	const deliveryFields = buildDeliveryEmailFields({
 		today: today,
@@ -46,7 +45,7 @@ export function buildTierThreeEmailFields({
 		paymentMethod: paymentMethod,
 		paymentSchedule: paymentSchedule,
 		isFixedTerm: false,
-		firstDeliveryDate: dayjs(productInformation.firstDeliveryDate),
+		firstDeliveryDate: firstDeliveryDate,
 		mandateId: mandateId,
 	});
 	const additionalFields: Record<string, string> = {

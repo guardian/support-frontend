@@ -6,7 +6,6 @@ import { buildGuardianWeeklyEmailFields } from '../../emailFields/guardianWeekly
 import type { GiftRecipient } from '../../model/stateSchemas';
 import {
 	creditCardPaymentMethod,
-	deliveryContact,
 	emailAddress,
 	emailUser,
 	paperPaymentSchedule,
@@ -25,12 +24,7 @@ describe('Guardian weekly thank you email fields', () => {
 			subscriptionNumber: subscriptionNumber,
 			paymentSchedule: paperPaymentSchedule,
 			paymentMethod: creditCardPaymentMethod,
-			productInformation: {
-				product: 'GuardianWeeklyDomestic',
-				ratePlan: 'Monthly',
-				firstDeliveryDate: firstDeliveryDate.toDate(),
-				deliveryContact: deliveryContact,
-			},
+			firstDeliveryDate: firstDeliveryDate,
 			isFixedTerm: false,
 			mandateId: undefined,
 		});
@@ -81,12 +75,7 @@ describe('Guardian weekly thank you email fields', () => {
 			subscriptionNumber: subscriptionNumber,
 			paymentSchedule: paperPaymentSchedule,
 			paymentMethod: creditCardPaymentMethod,
-			productInformation: {
-				product: 'GuardianWeeklyRestOfWorld',
-				ratePlan: 'Annual',
-				firstDeliveryDate: firstDeliveryDate.toDate(),
-				deliveryContact: deliveryContact,
-			},
+			firstDeliveryDate: firstDeliveryDate,
 			isFixedTerm: true,
 			mandateId: undefined,
 			giftRecipient: giftRecipient,

@@ -15,7 +15,7 @@ import type { DeliveryAgentDetails } from '../services/paperRound';
 import { buildDeliveryEmailFields } from './deliveryEmailFields';
 import { buildThankYouEmailFields } from './emailFields';
 
-type PaperProductPurchase = Extract<
+export type PaperProductPurchase = Extract<
 	ProductPurchase,
 	{ product: 'NationalDelivery' | 'HomeDelivery' | 'SubscriptionCard' }
 >;
