@@ -20,12 +20,14 @@ export type ErrorPageProps = {
 	supportLink?: boolean;
 };
 
+const countryGroupId = CountryGroup.detect();
+console.log('🚀 ~ countryGroupId:', countryGroupId);
 // ----- Component ----- //
 
 export default function ErrorPage(props: ErrorPageProps): JSX.Element {
 	return (
 		<Page
-			header={<Header countryGroupId={CountryGroup.detect()} />}
+			header={<Header countryGroupId={countryGroupId} />}
 			footer={<Footer />}
 		>
 			<SquaresIntroduction

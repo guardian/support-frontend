@@ -17,7 +17,10 @@ import 'stylesheets/skeleton/skeleton.scss';
 import './paperSubscriptionLanding.scss';
 
 const paperSubsFooter = (
-	<Footer termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions" />
+	<Footer
+		termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions"
+		fullWidth
+	/>
 );
 
 const pageQaId = 'qa-paper-subscriptions'; // Selenium test ID
