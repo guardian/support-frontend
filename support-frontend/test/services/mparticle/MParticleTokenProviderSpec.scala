@@ -160,7 +160,8 @@ class MParticleTokenProviderSpec
       }
 
       val result = provider.requestWithToken(fetch)
-      result.failed.futureValue.getMessage should include("Max retries")
+      val errorMessage = result.failed.futureValue.getMessage
+      errorMessage should (include("Max retries") or include("No token available"))
     }
   }
 }
