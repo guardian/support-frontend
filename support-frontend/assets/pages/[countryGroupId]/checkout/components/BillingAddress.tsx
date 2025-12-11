@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
-import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSession';
@@ -55,47 +54,48 @@ export function BillingAddress({
 		AddressFormFieldError[]
 	>([]);
 
-	const countryGroupId = CountryGroup.fromCountry(countryId) ?? 'International';
 	return (
 		<fieldset>
-			<AddressFields
-				scope={'billing'}
-				lineOne={billingLineOne}
-				lineTwo={billingLineTwo}
-				city={billingCity}
-				country={billingCountry}
-				state={state}
-				postCode={postcode}
-				countryGroupId={countryGroupId}
-				countries={countries ?? {}}
-				errors={billingAddressErrors}
-				postcodeState={{
-					results: billingPostcodeStateResults,
-					isLoading: billingPostcodeStateLoading,
-					postcode: postcode,
-					error: '',
-				}}
-				setLineOne={setBillingLineOne}
-				setLineTwo={setBillingLineTwo}
-				setTownCity={setBillingCity}
-				setState={setState}
-				setPostcode={setPostcode}
-				setCountry={setBillingCountry}
-				setPostcodeForFinder={() => {
-					// no-op
-				}}
-				setPostcodeErrorForFinder={() => {
-					// no-op
-				}}
-				setErrors={setBillingAddressErrors}
-				onFindAddress={(postcode) => {
-					setBillingPostcodeStateLoading(true);
-					void findAddressesForPostcode(postcode).then((results) => {
-						setBillingPostcodeStateLoading(false);
-						setBillingPostcodeStateResults(results);
-					});
-				}}
-			/>
+			<>
+				BILLING ADDRESS
+				<AddressFields
+					scope={'billing'}
+					lineOne={billingLineOne}
+					lineTwo={billingLineTwo}
+					city={billingCity}
+					country={billingCountry}
+					state={state}
+					postCode={postcode}
+					countries={countries ?? {}}
+					errors={billingAddressErrors}
+					postcodeState={{
+						results: billingPostcodeStateResults,
+						isLoading: billingPostcodeStateLoading,
+						postcode: postcode,
+						error: '',
+					}}
+					setLineOne={setBillingLineOne}
+					setLineTwo={setBillingLineTwo}
+					setTownCity={setBillingCity}
+					setState={setState}
+					setPostcode={setPostcode}
+					setCountry={setBillingCountry}
+					setPostcodeForFinder={() => {
+						// no-op
+					}}
+					setPostcodeErrorForFinder={() => {
+						// no-op
+					}}
+					setErrors={setBillingAddressErrors}
+					onFindAddress={(postcode) => {
+						setBillingPostcodeStateLoading(true);
+						void findAddressesForPostcode(postcode).then((results) => {
+							setBillingPostcodeStateLoading(false);
+							setBillingPostcodeStateResults(results);
+						});
+					}}
+				/>
+			</>
 		</fieldset>
 	);
 }
