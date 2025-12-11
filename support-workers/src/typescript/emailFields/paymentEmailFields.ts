@@ -1,7 +1,10 @@
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
+import minMax from 'dayjs/plugin/minMax';
 import type { PaymentMethod } from '../model/paymentMethod';
 import { getIfDefined } from '../util/nullAndUndefined';
+
+dayjs.extend(minMax);
 
 const DIRECT_DEBIT_LEAD_TIME_DAYS = 10;
 

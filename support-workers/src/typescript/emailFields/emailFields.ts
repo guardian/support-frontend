@@ -6,15 +6,12 @@ import type {
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
-import minMax from 'dayjs/plugin/minMax';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
 import { describePayments, firstPayment } from './paymentDescription';
 import type { EmailPaymentFields } from './paymentEmailFields';
 import { getPaymentFields } from './paymentEmailFields';
-
-dayjs.extend(minMax);
 
 type EmailCommonFields = {
 	first_name: string;
