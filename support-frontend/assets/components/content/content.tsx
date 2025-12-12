@@ -1,4 +1,6 @@
 // ----- Imports ----- //
+import { css } from '@emotion/react';
+import { from, palette } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
@@ -19,6 +21,14 @@ type PropTypes = {
 	border: boolean | null;
 };
 
+const leftBorderStyle = css`
+	max-width: 100%;
+	position: relative;
+
+	${from.tablet} {
+		border-left: 1px solid ${palette.neutral[86]};
+	}
+`;
 // ----- Render ----- //
 function Content({
 	appearance,
@@ -42,7 +52,7 @@ function Content({
 				...modifierClasses,
 			])}
 		>
-			<LeftMarginSection>
+			<LeftMarginSection cssOverrides={leftBorderStyle}>
 				<div
 					className={
 						innerBackground

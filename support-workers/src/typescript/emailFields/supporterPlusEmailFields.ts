@@ -6,13 +6,13 @@ import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
 import {
+	buildNonDeliveryEmailFields,
 	buildThankYouEmailFields,
-	getPaymentMethodFieldsSupporterPlus,
 } from './emailFields';
-import { describePayments } from './paymentDescription';
+import { getPaymentMethodFieldsSupporterPlus } from './paymentEmailFields';
 
 export function buildSupporterPlusEmailFields({
-	now,
+	today,
 	user,
 	currency,
 	billingPeriod,
@@ -22,7 +22,7 @@ export function buildSupporterPlusEmailFields({
 	isFixedTerm,
 	mandateId,
 }: {
-	now: dayjs.Dayjs;
+	today: dayjs.Dayjs;
 	user: User;
 	currency: IsoCurrency;
 	billingPeriod: RecurringBillingPeriod;
@@ -32,27 +32,32 @@ export function buildSupporterPlusEmailFields({
 	isFixedTerm: boolean;
 	mandateId?: string;
 }) {
-	const paymentMethodFields = getPaymentMethodFieldsSupporterPlus(
+	const nonDeliveryEmailFields = buildNonDeliveryEmailFields({
+		today: today,
+		user,
+		subscriptionNumber,
+		currency,
+		billingPeriod,
 		paymentMethod,
-		now,
+		paymentSchedule,
+		mandateId,
+		isFixedTerm,
+	});
+	const oldNonStandardPaymentFields = getPaymentMethodFieldsSupporterPlus(
+		paymentMethod,
+		today,
 		mandateId,
 	);
 	const productFields = {
-		created: zuoraDateFormat(now),
+		created: zuoraDateFormat(today),
 		currency: currency,
-		first_name: user.firstName,
-		last_name: user.lastName,
 		billing_period: billingPeriod.toLowerCase(),
 		product: `${billingPeriod.toLowerCase()}-supporter-plus`,
-		zuorasubscriberid: subscriptionNumber,
-		subscription_details: describePayments(
-			paymentSchedule,
-			billingPeriod,
-			currency,
-			isFixedTerm,
-		),
+		zuorasubscriberid: nonDeliveryEmailFields.subscriber_id, // This is a duplicate and will be removed in a future PR
+		subscription_details: nonDeliveryEmailFields.subscription_rate, // This is a duplicate and will be removed in a future PR
 		is_fixed_term: isFixedTerm.toString(),
-		...paymentMethodFields,
+		...oldNonStandardPaymentFields,
+		...nonDeliveryEmailFields,
 	};
 	return buildThankYouEmailFields(user, 'supporter-plus', productFields);
 }

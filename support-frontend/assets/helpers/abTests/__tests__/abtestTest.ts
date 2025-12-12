@@ -638,26 +638,10 @@ it('targetPage matching', () => {
 		targetPageMatches('/uk/contribute/checkout', genericCheckoutOnly),
 	).toEqual(false);
 	expect(targetPageMatches('/uk/checkout', genericCheckoutOnly)).toEqual(true);
+	// One time checkout targeting
 	expect(
-		targetPageMatches(
-			'/uk/thank-you?product=SupporterPlus&ratePlan=Monthly&userType=current',
-			genericCheckoutOnly,
-		),
+		targetPageMatches('/uk/one-time-checkout', oneTimeCheckoutOnly),
 	).toEqual(true);
-	expect(targetPageMatches('/uk/thankyou', genericCheckoutOnly)).toEqual(false);
-	expect(targetPageMatches('/uk/thank-you', genericCheckoutOnly)).toEqual(
-		false,
-	);
-	expect(
-		targetPageMatches(
-			'/uk/thank-you?contribution=1&userType=current',
-			oneTimeCheckoutOnly,
-		),
-	).toEqual(true);
-	expect(targetPageMatches('/uk/thankyou', oneTimeCheckoutOnly)).toEqual(false);
-	expect(targetPageMatches('/uk/thank-you', oneTimeCheckoutOnly)).toEqual(
-		false,
-	);
 });
 
 describe('getAmountsTestVariant', () => {

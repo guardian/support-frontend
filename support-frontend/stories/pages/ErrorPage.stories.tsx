@@ -15,6 +15,14 @@ const meta: Meta = {
 					'Full-page error experience including header, footer, intro squares and support/home links.',
 			},
 		},
+		chromatic: {
+			modes: {
+				mobile: { viewport: 'mobile' },
+				desktop: { viewport: 'desktop' },
+				tablet: { viewport: 'tablet' },
+				wide: { viewport: 'wide' },
+			},
+		},
 	},
 };
 

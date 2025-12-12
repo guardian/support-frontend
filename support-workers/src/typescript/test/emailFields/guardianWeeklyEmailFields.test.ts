@@ -1,12 +1,11 @@
 import { DataExtensionNames } from '@modules/email/email';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import dayjs from 'dayjs';
-import { formatDate } from '../../emailFields/emailFields';
 import { buildGuardianWeeklyEmailFields } from '../../emailFields/guardianWeeklyEmailFields';
+import { formatDate } from '../../emailFields/paymentEmailFields';
 import type { GiftRecipient } from '../../model/stateSchemas';
 import {
 	creditCardPaymentMethod,
-	deliveryContact,
 	emailAddress,
 	emailUser,
 	paperPaymentSchedule,
@@ -18,18 +17,14 @@ describe('Guardian weekly thank you email fields', () => {
 		const today = dayjs('2025-11-11');
 		const firstDeliveryDate = today.add(7, 'day');
 		const emailFields = buildGuardianWeeklyEmailFields({
+			today: today,
 			user: emailUser,
 			currency: 'GBP',
 			billingPeriod: BillingPeriod.Monthly,
 			subscriptionNumber: subscriptionNumber,
 			paymentSchedule: paperPaymentSchedule,
 			paymentMethod: creditCardPaymentMethod,
-			productInformation: {
-				product: 'GuardianWeeklyDomestic',
-				ratePlan: 'Monthly',
-				firstDeliveryDate: firstDeliveryDate.toDate(),
-				deliveryContact: deliveryContact,
-			},
+			firstDeliveryDate: firstDeliveryDate,
 			isFixedTerm: false,
 			mandateId: undefined,
 		});
@@ -51,6 +46,7 @@ describe('Guardian weekly thank you email fields', () => {
 						subscription_rate: '£10.00 every month',
 						date_of_first_paper: formatDate(firstDeliveryDate),
 						date_of_first_payment: formatDate(firstDeliveryDate),
+						first_payment_date: formatDate(firstDeliveryDate),
 						subscriber_id: subscriptionNumber,
 						last_name: emailUser.lastName,
 					},
@@ -72,18 +68,14 @@ describe('Guardian weekly thank you email fields', () => {
 			title: 'Mrs',
 		};
 		const emailFields = buildGuardianWeeklyEmailFields({
+			today: today,
 			user: emailUser,
 			currency: 'USD',
 			billingPeriod: BillingPeriod.Annual,
 			subscriptionNumber: subscriptionNumber,
 			paymentSchedule: paperPaymentSchedule,
 			paymentMethod: creditCardPaymentMethod,
-			productInformation: {
-				product: 'GuardianWeeklyRestOfWorld',
-				ratePlan: 'Annual',
-				firstDeliveryDate: firstDeliveryDate.toDate(),
-				deliveryContact: deliveryContact,
-			},
+			firstDeliveryDate: firstDeliveryDate,
 			isFixedTerm: true,
 			mandateId: undefined,
 			giftRecipient: giftRecipient,
@@ -107,6 +99,7 @@ describe('Guardian weekly thank you email fields', () => {
 						subscription_rate: '$10.00 for 12 months',
 						date_of_first_paper: formatDate(firstDeliveryDate),
 						date_of_first_payment: formatDate(firstDeliveryDate),
+						first_payment_date: formatDate(firstDeliveryDate),
 						subscriber_id: subscriptionNumber,
 						last_name: emailUser.lastName,
 					},

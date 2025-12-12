@@ -24,6 +24,7 @@ import lib.RedirectWithEncodedQueryString
 import models.GeoData
 import play.api.libs.circe.Circe
 import play.api.mvc._
+import services.mparticle.MParticleClient
 import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
 import services.{CachedProductCatalogServiceProvider, PaymentAPIService, TestUserService, TickerService}
 import utils.FastlyGEOIP._
@@ -223,6 +224,7 @@ class Application(
     cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
     val supportUrl: String,
     tickerService: TickerService,
+    mparticleClient: MParticleClient,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with SettingsSurrogateKeySyntax
@@ -469,6 +471,7 @@ class Application(
   }
 
   def healthcheck: Action[AnyContent] = PrivateAction {
+    mparticleClient.initialise()
     if (priceSummaryServiceProvider.forUser(false).getPrices(SupporterPlus, List()).isEmpty)
       InternalServerError("no prices in catalog")
     else
