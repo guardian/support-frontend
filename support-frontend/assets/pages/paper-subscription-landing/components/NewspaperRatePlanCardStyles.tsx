@@ -132,8 +132,18 @@ export const planDescription = css`
 	}
 `;
 
-export const benefitsListSection = css`
+export const sectionMarginZero = css`
 	> section {
 		margin-bottom: 0;
 	}
+`;
+
+export const planDetailsContainer = css`
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+`;
+
+export const planDetailsEndSection = css`
+	margin-top: auto;
 `;

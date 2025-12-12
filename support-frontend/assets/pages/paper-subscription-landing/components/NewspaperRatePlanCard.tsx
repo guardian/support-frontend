@@ -14,7 +14,6 @@ import { type Product } from '../../../components/product/productOption';
 import {
 	badge,
 	badgeObserver,
-	benefitsListSection,
 	ButtonCTA,
 	card,
 	cardHeader,
@@ -25,6 +24,9 @@ import {
 	cardPrice,
 	cardWithLabel,
 	planDescription,
+	planDetailsContainer,
+	planDetailsEndSection,
+	sectionMarginZero,
 } from './NewspaperRatePlanCardStyles';
 
 function NewspaperRatePlanCard({
@@ -63,7 +65,12 @@ function NewspaperRatePlanCard({
 	const isObserverChannel = productLabel?.channel === Channel.Observer;
 
 	const renderPlanDetails = () => (
-		<div css={!planData?.digitalRewards?.label && benefitsListSection}>
+		<div
+			css={[
+				planDetailsContainer,
+				!planData?.digitalRewards?.label && sectionMarginZero,
+			]}
+		>
 			<BenefitsList
 				title={planData?.benefits.label}
 				listItems={planData?.benefits.items}
@@ -72,12 +79,14 @@ function NewspaperRatePlanCard({
 				title={planData?.digitalRewards?.label}
 				listItems={planData?.digitalRewards?.items}
 			/>
-			{unavailableOutsideLondon && (
-				<p css={cardInfo}>
-					<SvgInfoRound size="xsmall" />
-					Only available inside Greater London.
-				</p>
-			)}
+			<div css={planDetailsEndSection}>
+				{unavailableOutsideLondon && (
+					<p css={cardInfo}>
+						<SvgInfoRound size="xsmall" />
+						Only available inside Greater London.
+					</p>
+				)}
+			</div>
 		</div>
 	);
 
