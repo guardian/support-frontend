@@ -1,6 +1,5 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
-import { zuoraDateFormat } from '@modules/zuora/utils/common';
 import type dayjs from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
@@ -49,10 +48,8 @@ export function buildSupporterPlusEmailFields({
 		mandateId,
 	);
 	const productFields = {
-		created: zuoraDateFormat(today),
 		currency: currency,
 		billing_period: billingPeriod.toLowerCase(),
-		product: `${billingPeriod.toLowerCase()}-supporter-plus`,
 		is_fixed_term: isFixedTerm.toString(),
 		...oldNonStandardPaymentFields,
 		...nonDeliveryEmailFields,
