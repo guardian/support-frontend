@@ -152,10 +152,11 @@ async function sendGuardianWeeklyEmail(
 				giftRecipient: sendThankYouEmailState.giftRecipient,
 			}),
 		);
+	} else {
+		throw new Error(
+			`Invalid product type ${sendThankYouEmailState.productType} for Guardian Weekly email`,
+		);
 	}
-	throw new Error(
-		`Invalid product type ${sendThankYouEmailState.productType} for Guardian Weekly email`,
-	);
 }
 
 async function sendGuardianAdLiteEmail(
