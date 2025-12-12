@@ -1,4 +1,5 @@
 import { withFocusStyleManager } from './decorators/withFocusStyleManager';
+import { withUKPath } from './decorators/withUKPath';
 import { viewports } from './viewports';
 import '../assets/stylesheets/skeleton/skeleton.scss';
 import MockDate from 'mockdate';
@@ -20,7 +21,7 @@ const parameters = {
 	},
 };
 
-const decorators = [withFocusStyleManager];
+const decorators = [withFocusStyleManager, withUKPath];
 
 const argTypes = {
 	cssOverrides: {

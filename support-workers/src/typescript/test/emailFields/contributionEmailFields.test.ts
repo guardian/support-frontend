@@ -1,3 +1,4 @@
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import dayjs from 'dayjs';
 import { buildContributionEmailFields } from '../../emailFields/contributionEmailFields';
 import {
@@ -9,12 +10,20 @@ import {
 
 describe('contributionEmailFields', () => {
 	test('should build the correct email fields for recurring contribution thank you email', () => {
-		const now = dayjs('2025-11-11');
+		const today = dayjs('2025-11-11');
 		const emailFields = buildContributionEmailFields({
-			now: now,
+			today: today,
 			user: emailUser,
 			amount: 5,
 			currency: 'GBP',
+			billingPeriod: BillingPeriod.Monthly,
+			subscriptionNumber: 'SUBSCRIPTION123',
+			paymentSchedule: {
+				payments: [
+					{ date: new Date('2025-11-21'), amount: 5 },
+					{ date: new Date('2025-12-21'), amount: 5 },
+				],
+			},
 			paymentMethod: directDebitPaymentMethod,
 			mandateId: mandateId,
 			ratePlan: 'Monthly',
@@ -36,6 +45,14 @@ describe('contributionEmailFields', () => {
 						account_number: '******11',
 						sort_code: directDebitPaymentMethod.BankCode,
 						payment_method: 'Direct Debit',
+						first_name: emailUser.firstName,
+						account_holder: 'Mickey Mouse',
+						bank_account_no: '******11',
+						bank_sort_code: '20-20-20',
+						last_name: 'Mouse',
+						mandate_id: 'MANDATE_ID',
+						subscriber_id: 'SUBSCRIPTION123',
+						subscription_rate: '£5.00 every month',
 					},
 				},
 			},

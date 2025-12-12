@@ -1,30 +1,18 @@
+import type { IsoCurrency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import { getCountryNameByIsoCode } from '@modules/internationalisation/country';
+import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type { Dayjs } from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
+import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
-import { formatDate, mask } from './emailFields';
+import type { NonDeliveryEmailFields } from './emailFields';
+import { buildNonDeliveryEmailFields } from './emailFields';
+import { formatDate } from './paymentEmailFields';
 
-type PaymentFields =
-	| { payment_method: 'Credit/Debit Card' | 'PayPal' }
-	| {
-			bank_account_no: string;
-			bank_sort_code: string;
-			account_holder: string;
-			payment_method: 'Direct Debit';
-			mandate_id: string;
-	  };
-
-type BasicFields = {
+type DeliveryFields = {
 	ZuoraSubscriberId: string;
-	subscriber_id: string;
-	first_name: string;
-	last_name: string;
 	date_of_first_paper: string;
 	date_of_first_payment: string;
-	subscription_rate: string;
-};
-
-type AddressFields = {
 	delivery_address_line_1: string;
 	delivery_address_line_2: string;
 	delivery_address_town: string;
@@ -32,60 +20,50 @@ type AddressFields = {
 	delivery_country: string;
 };
 
-type DeliveryEmailFields = BasicFields & AddressFields & PaymentFields;
+type DeliveryEmailFields = NonDeliveryEmailFields & DeliveryFields;
 
-function getPaymentFields(
-	paymentMethod: PaymentMethod,
-	mandateId?: string,
-): PaymentFields {
-	switch (paymentMethod.Type) {
-		case 'BankTransfer':
-			return {
-				bank_account_no: mask(paymentMethod.BankTransferAccountNumber),
-				bank_sort_code: hyphenate(paymentMethod.BankCode),
-				account_holder: paymentMethod.BankTransferAccountName,
-				payment_method: 'Direct Debit',
-				mandate_id: mandateId ?? '',
-			};
-		case 'CreditCardReferenceTransaction':
-			return {
-				payment_method: 'Credit/Debit Card',
-			};
-		case 'PayPal':
-		case 'PayPalCompletePaymentsWithBAID':
-			return {
-				payment_method: 'PayPal',
-			};
-	}
-}
 export function buildDeliveryEmailFields({
-	subscriptionNumber,
+	today,
 	user,
-	firstDeliveryDate,
-	firstPaymentDate,
-	paymentDescription,
+	subscriptionNumber,
+	currency,
+	billingPeriod,
 	paymentMethod,
+	paymentSchedule,
+	firstDeliveryDate,
+	isFixedTerm,
 	mandateId,
 }: {
-	subscriptionNumber: string;
+	today: Dayjs;
 	user: User;
-	firstDeliveryDate: Dayjs;
-	firstPaymentDate: Dayjs;
-	paymentDescription: string;
+	subscriptionNumber: string;
+	currency: IsoCurrency;
+	billingPeriod: RecurringBillingPeriod;
 	paymentMethod: PaymentMethod;
+	paymentSchedule: PaymentSchedule;
+	firstDeliveryDate: Dayjs;
+	isFixedTerm: boolean;
 	mandateId?: string;
 }): DeliveryEmailFields {
-	const basicFields = {
-		ZuoraSubscriberId: subscriptionNumber,
-		subscriber_id: subscriptionNumber,
-		first_name: user.firstName,
-		last_name: user.lastName,
-		date_of_first_paper: formatDate(firstDeliveryDate),
-		date_of_first_payment: formatDate(firstPaymentDate),
-		subscription_rate: paymentDescription,
-	};
+	const nonDeliveryFields: NonDeliveryEmailFields = buildNonDeliveryEmailFields(
+		{
+			today: today,
+			user: user,
+			subscriptionNumber: subscriptionNumber,
+			currency: currency,
+			billingPeriod: billingPeriod,
+			paymentMethod: paymentMethod,
+			paymentSchedule: paymentSchedule,
+			isFixedTerm: isFixedTerm,
+			mandateId: mandateId,
+		},
+	);
+
 	const address = user.deliveryAddress ?? user.billingAddress;
-	const addressFields = {
+	const deliveryFields = {
+		ZuoraSubscriberId: subscriptionNumber, // This is a duplicate and will be removed in a later PR
+		date_of_first_paper: formatDate(firstDeliveryDate),
+		date_of_first_payment: nonDeliveryFields.first_payment_date, // This is a duplicate and will be removed in a later PR
 		delivery_address_line_1: address.lineOne ?? '',
 		delivery_address_line_2: address.lineTwo ?? '',
 		delivery_address_town: address.city ?? '',
@@ -93,15 +71,8 @@ export function buildDeliveryEmailFields({
 		delivery_country: getCountryNameByIsoCode(address.country) ?? '',
 	};
 
-	const paymentFields = getPaymentFields(paymentMethod, mandateId);
-
 	return {
-		...basicFields,
-		...addressFields,
-		...paymentFields,
+		...nonDeliveryFields,
+		...deliveryFields,
 	};
-}
-
-function hyphenate(sortCode: string): string {
-	return sortCode.replace(/(\d{2})(\d{2})(\d{2})/, '$1-$2-$3');
 }
