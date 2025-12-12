@@ -6,6 +6,7 @@ import {
 	neutral,
 	palette,
 	space,
+	textSans12,
 	textSans14,
 	textSans15,
 	textSans17,
@@ -96,6 +97,12 @@ export const cardInfo = css`
 	}
 `;
 
+export const cardLegalCopy = css`
+	${textSans12};
+	text-align: left;
+	margin-top: ${space[2]}px;
+`;
+
 export const cardPrice = css`
 	${headlineBold34};
 	small {
@@ -132,8 +139,19 @@ export const planDescription = css`
 	}
 `;
 
-export const benefitsListSection = css`
+export const sectionMarginZero = css`
 	> section {
 		margin-bottom: 0;
 	}
+`;
+
+export const planDetailsContainer = css`
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+`;
+
+export const planDetailsEndSection = css`
+	margin-top: auto;
+	padding-top: ${space[9]}px;
 `;
