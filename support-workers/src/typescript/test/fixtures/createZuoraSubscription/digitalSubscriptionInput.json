@@ -1,0 +1,119 @@
+{
+  "state": {
+    "productSpecificState": {
+      "productType": "DigitalSubscription",
+      "billingCountry": "GB",
+      "product": {
+        "currency": "EUR",
+        "billingPeriod": "Annual",
+        "productType": "DigitalPack"
+      },
+      "productInformation": {
+        "product": "DigitalSubscription",
+        "ratePlan": "Annual"
+      },
+      "paymentMethod": {
+        "TokenId": "pm_0Sc4eEItVxyc3Q6n2DBHkSOQ",
+        "SecondTokenId": "cus_TZD4FrVytKeFLB",
+        "CreditCardNumber": "4242",
+        "CreditCardExpirationMonth": 1,
+        "CreditCardExpirationYear": 2050,
+        "CreditCardType": "Visa",
+        "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+        "Type": "CreditCardReferenceTransaction",
+        "StripePaymentType": "StripeCheckout"
+      },
+      "appliedPromotion": null,
+      "salesForceContact": {
+        "Id": "003UD00000rUFEgYAO",
+        "AccountId": "001UD00000QWOGkYAP"
+      },
+      "similarProductsConsent": true
+    },
+    "requestId": "0c30d065-9e11-130e-0000-000000012c31",
+    "user": {
+      "id": "200512858",
+      "primaryEmailAddress": "support.e2e+9AAdSvcbKHKdIekO8-5yi@thegulocal.com",
+      "title": null,
+      "firstName": "support.e2e.firstName+7Vyhd",
+      "lastName": "support.e2e.lastName+VrVYE",
+      "billingAddress": {
+        "lineOne": null,
+        "lineTwo": null,
+        "city": null,
+        "state": null,
+        "postCode": null,
+        "country": "DE"
+      },
+      "deliveryAddress": null,
+      "telephoneNumber": null,
+      "isTestUser": true,
+      "deliveryInstructions": null
+    },
+    "giftRecipient": null,
+    "product": {
+      "currency": "EUR",
+      "billingPeriod": "Annual",
+      "productType": "DigitalPack"
+    },
+    "productInformation": {
+      "product": "DigitalSubscription",
+      "ratePlan": "Annual"
+    },
+    "analyticsInfo": {
+      "isGiftPurchase": false,
+      "paymentProvider": "Stripe"
+    },
+    "firstDeliveryDate": null,
+    "appliedPromotion": null,
+    "csrUsername": null,
+    "salesforceCaseId": null,
+    "acquisitionData": {
+      "ophanIds": {
+        "pageviewId": "mix761vql8qao8a24mfs",
+        "browserId": null
+      },
+      "referrerAcquisitionData": {
+        "campaignCode": null,
+        "referrerPageviewId": "",
+        "referrerUrl": null,
+        "componentId": null,
+        "componentType": null,
+        "source": null,
+        "abTests": null,
+        "queryParameters": [],
+        "hostname": "support.code.dev-theguardian.com",
+        "gaClientId": null,
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36",
+        "ipAddress": "10.248.135.10",
+        "labels": [
+          "generic-checkout"
+        ]
+      },
+      "supportAbTests": [
+        {
+          "name": "LP_TICKER",
+          "variant": "CONTROL"
+        }
+      ]
+    },
+    "similarProductsConsent": true,
+    "paymentMethod": {
+      "TokenId": "pm_0Sc4eEItVxyc3Q6n2DBHkSOQ",
+      "SecondTokenId": "cus_TZD4FrVytKeFLB",
+      "CreditCardNumber": "4242",
+      "CreditCardExpirationMonth": 1,
+      "CreditCardExpirationYear": 2050,
+      "CreditCardType": "Visa",
+      "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+      "Type": "CreditCardReferenceTransaction",
+      "StripePaymentType": "StripeCheckout"
+    }
+  },
+  "error": null,
+  "requestInfo": {
+    "testUser": true,
+    "failed": false,
+    "messages": []
+  }
+}

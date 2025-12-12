@@ -1,0 +1,103 @@
+{
+  "state": {
+    "sendThankYouEmailState": {
+      "productType": "Contribution",
+      "user": {
+        "id": "200498513",
+        "primaryEmailAddress": "test@thegulocal.com",
+        "title": null,
+        "firstName": "support.e2e.firstName+cQNjW",
+        "lastName": "support.e2e.lastName+raq0E",
+        "billingAddress": {
+          "lineOne": null,
+          "lineTwo": null,
+          "city": null,
+          "state": null,
+          "postCode": null,
+          "country": "GB"
+        },
+        "deliveryAddress": null,
+        "telephoneNumber": null,
+        "isTestUser": true,
+        "deliveryInstructions": null
+      },
+      "product": {
+        "amount": 5,
+        "currency": "GBP",
+        "billingPeriod": "Monthly",
+        "productType": "Contribution"
+      },
+      "productInformation": {
+        "product": "Contribution",
+        "ratePlan": "Monthly",
+        "amount": 5
+      },
+      "paymentMethod": {
+        "FirstName": "support.e2e.firstName+cQNjW",
+        "LastName": "support.e2e.lastName+raq0E",
+        "BankTransferAccountName": "CP Scott",
+        "BankCode": "200000",
+        "BankTransferAccountNumber": "55779911",
+        "Country": "GB",
+        "City": null,
+        "PostalCode": null,
+        "State": null,
+        "StreetName": null,
+        "StreetNumber": null,
+        "BankTransferType": "DirectDebitUK",
+        "Type": "BankTransfer",
+        "PaymentGateway": "GoCardless"
+      },
+      "paymentSchedule": {
+        "payments": [
+          {
+            "date": "2025-12-05",
+            "amount": 412.8
+          }
+        ]
+      },
+      "accountNumber": "A01062212",
+      "subscriptionNumber": "A-S01043454"
+    },
+    "requestId": "472d4572-71a5-9e74-0000-000000004cdb",
+    "analyticsInfo": {
+      "isGiftPurchase": false,
+      "paymentProvider": "DirectDebit"
+    },
+    "acquisitionData": {
+      "ophanIds": {
+        "pageviewId": "mhvwkc6ei19s7vd0m3ul",
+        "browserId": null
+      },
+      "referrerAcquisitionData": {
+        "campaignCode": null,
+        "referrerPageviewId": "",
+        "referrerUrl": null,
+        "componentId": null,
+        "componentType": null,
+        "source": null,
+        "abTests": null,
+        "queryParameters": [],
+        "hostname": "support.code.dev-theguardian.com",
+        "gaClientId": null,
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36",
+        "ipAddress": "10.248.135.173",
+        "labels": [
+          "generic-checkout"
+        ]
+      },
+      "supportAbTests": [
+        {
+          "name": "LP_COUNTDOWN",
+          "variant": "CONTROL"
+        }
+      ]
+    }
+  },
+  "requestInfo": {
+    "testUser": true,
+    "failed": false,
+    "messages": []
+  },
+  "error": null
+}

@@ -15,12 +15,14 @@ import {
 import type {
 	DirectDebitPaymentMethod,
 	PaymentMethod,
+	PayPalCompletePaymentsWithBAIDPaymentMethod,
 	PayPalPaymentMethod,
 	StripePaymentMethod,
 } from '../model/paymentMethod';
 import type { ProductType } from '../model/productType';
 import { stageFromEnvironment } from '../model/stage';
 import type {
+	AbTest,
 	CreatePaymentMethodState,
 	CreateSalesforceContactState,
 	User,
@@ -34,6 +36,7 @@ import { ServiceProvider } from '../services/config';
 import { getPayPalConfig, PayPalService } from '../services/payPal';
 import { getStripeConfig, StripeService } from '../services/stripe';
 import { getIfDefined } from '../util/nullAndUndefined';
+import { replaceDatesWithZuoraFormat } from '../util/zuoraDateReplacer';
 
 const stage = stageFromEnvironment();
 const stripeServiceProvider = new ServiceProvider(stage, async (stage) => {
@@ -53,12 +56,16 @@ export const handler = async (
 		const createPaymentMethodState = wrapperSchemaForState(
 			createPaymentMethodStateSchema,
 		).parse(state).state;
-		return createSalesforceContactState(
-			state,
-			await createPaymentMethod(
-				createPaymentMethodState.paymentFields,
-				createPaymentMethodState.user,
-				createPaymentMethodState.product,
+
+		return replaceDatesWithZuoraFormat(
+			createSalesforceContactState(
+				state,
+				await createPaymentMethod(
+					createPaymentMethodState.paymentFields,
+					createPaymentMethodState.user,
+					createPaymentMethodState.product,
+					createPaymentMethodState.acquisitionData?.supportAbTests ?? [],
+				),
 			),
 		);
 	} catch (error) {
@@ -70,6 +77,7 @@ export function createPaymentMethod(
 	paymentFields: PaymentFields,
 	user: User,
 	productType: ProductType,
+	abTestParticipations: AbTest[],
 ): Promise<PaymentMethod> {
 	switch (paymentFields.paymentType) {
 		case 'Stripe':
@@ -80,7 +88,11 @@ export function createPaymentMethod(
 		case 'StripeHostedCheckout':
 			return createStripeHostedPaymentMethod(user.isTestUser, paymentFields);
 		case 'PayPal':
-			return createPayPalPaymentMethod(user.isTestUser, paymentFields);
+			return createPayPalPaymentMethod(
+				user.isTestUser,
+				paymentFields,
+				abTestParticipations,
+			);
 		case 'DirectDebit':
 			return createDirectDebitPaymentMethod(user, paymentFields, productType);
 		case 'Existing':
@@ -206,14 +218,36 @@ async function createStripePaymentMethod(
 async function createPayPalPaymentMethod(
 	isTestUser: boolean,
 	payPal: PayPalPaymentFields,
-): Promise<PayPalPaymentMethod> {
+	abTestParticipations: AbTest[],
+): Promise<PayPalPaymentMethod | PayPalCompletePaymentsWithBAIDPaymentMethod> {
 	const payPalService = await paypalServiceProvider.getServiceForUser(
 		isTestUser,
 	);
 	const email = await payPalService.retrieveEmail(payPal.baid);
+
+	const paypalEmail = getIfDefined(
+		email,
+		'Could not retrieve email from PayPal',
+	);
+
+	const shouldUsePayPalCompletePaymentsWithBAID = abTestParticipations.some(
+		(abTest) =>
+			abTest.name === 'paypalCompletePaymentsWithBAID' &&
+			abTest.variant === 'variant',
+	);
+
+	if (shouldUsePayPalCompletePaymentsWithBAID) {
+		return {
+			PaypalBaid: payPal.baid,
+			PaypalEmail: paypalEmail,
+			Type: 'PayPalCompletePaymentsWithBAID',
+			PaymentGateway: 'PayPal Complete Payments',
+		};
+	}
+
 	return {
 		PaypalBaid: payPal.baid,
-		PaypalEmail: getIfDefined(email, 'Could not retrieve email from PayPal'),
+		PaypalEmail: paypalEmail,
 		PaypalType: 'ExpressCheckout',
 		Type: 'PayPal',
 		PaymentGateway: 'PayPal Express',

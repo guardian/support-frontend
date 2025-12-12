@@ -1,5 +1,6 @@
+import type { SerializedStyles } from '@emotion/react';
 import type { AriaAttributes, ReactNode, Ref } from 'react';
-import './veggieBurgerButton.scss';
+import { buttonOpen } from './veggieBurgerButtonStyles';
 
 type PropTypes = {
 	children: ReactNode;
@@ -8,20 +9,18 @@ type PropTypes = {
 	onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 	ref?: Ref<HTMLButtonElement>;
 	style?: Record<string, string | number>;
+	cssOverride?: SerializedStyles;
 };
 
 function VeggieBurgerButton({
 	children,
 	label,
 	ref,
+	cssOverride,
 	...otherProps
 }: PropTypes): JSX.Element {
 	return (
-		<button
-			className="component-veggie-burger-button"
-			ref={ref}
-			{...otherProps}
-		>
+		<button css={[buttonOpen, cssOverride]} ref={ref} {...otherProps}>
 			<span className="visually-hidden">{label}</span>
 			{children}
 		</button>

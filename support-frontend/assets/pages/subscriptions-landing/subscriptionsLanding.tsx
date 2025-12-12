@@ -13,7 +13,7 @@ import type { SubscriptionsLandingProps } from './subscriptionsLandingProps';
 import { subscriptionsLandingProps } from './subscriptionsLandingProps';
 
 // ----- Render ----- //
-function SubscriptionsLandingPage({
+export function SubscriptionsLandingPage({
 	countryGroupId,
 	participations,
 	pricingCopy,
@@ -22,7 +22,7 @@ function SubscriptionsLandingPage({
 	return (
 		<Page
 			header={<Header countryGroupId={countryGroupId} />}
-			footer={<Footer centred />}
+			footer={<Footer centred fullWidth />}
 		>
 			<SubscriptionLandingContent
 				countryGroupId={countryGroupId}

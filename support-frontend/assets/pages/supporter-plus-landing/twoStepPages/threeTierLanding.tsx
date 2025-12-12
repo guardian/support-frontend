@@ -12,10 +12,7 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
-import type {
-	CountryGroupId,
-	SupportRegionId,
-} from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
@@ -34,6 +31,7 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import type { Participations } from 'helpers/abTests/models';
 import {
 	countdownSwitchOn,
@@ -47,7 +45,7 @@ import {
 	getProductDescription,
 	getProductLabel,
 	productCatalog,
-	productCatalogDescriptionPremiumDigital,
+	productCatalogDescription,
 } from 'helpers/productCatalog';
 import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { allProductPrices } from 'helpers/productPrice/productPrices';
@@ -256,20 +254,6 @@ function getRatePlanKey(contributionType: ContributionType) {
 			return 'Monthly';
 	}
 }
-const getTierThreeRatePlanKey = (
-	contributionType: ContributionType,
-	countryGroupId: CountryGroupId,
-) => {
-	const ratePlanKey =
-		countryGroupId === 'International'
-			? contributionType === 'ANNUAL'
-				? 'RestOfWorldAnnual'
-				: 'RestOfWorldMonthly'
-			: contributionType === 'ANNUAL'
-			? 'DomesticAnnual'
-			: 'DomesticMonthly';
-	return ratePlanKey;
-};
 
 type ThreeTierLandingProps = {
 	supportRegionId: SupportRegionId;
@@ -286,7 +270,7 @@ export function ThreeTierLanding({
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
 	const urlSearchParamsPromoCode = urlSearchParams.get('promoCode');
-	const { enablePremiumDigital, enableDigitalAccess } = getFeatureFlags();
+	const { enableDigitalAccess } = getFeatureFlags();
 
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -358,6 +342,8 @@ export function ThreeTierLanding({
 
 	const ratePlanKey = getRatePlanKey(contributionType);
 
+	const fallbackProducts = fallBackLandingPageSelection.products;
+
 	/**
 	 * Tier 1: Contributions
 	 * We use the product catalog for the recurring Contribution tier amount
@@ -378,6 +364,16 @@ export function ThreeTierLanding({
 			urlSearchParamsProduct === 'Contribution' ||
 			isCardUserSelected(tier1Pricing),
 		...settings.products.Contribution,
+		title:
+			settings.products.Contribution?.title ?? getProductLabel('Contribution'),
+		benefits:
+			settings.products.Contribution?.benefits ??
+			filterProductDescriptionBenefits(
+				productCatalogDescription.Contribution,
+				countryGroupId,
+			),
+		cta:
+			settings.products.Contribution?.cta ?? fallbackProducts.Contribution!.cta,
 	};
 
 	/** Tier 2: SupporterPlus */
@@ -401,6 +397,15 @@ export function ThreeTierLanding({
 	const tier2ProductDescription = {
 		...settings.products.SupporterPlus,
 		title: getProductLabel('SupporterPlus'),
+		benefits:
+			settings.products.SupporterPlus?.benefits ??
+			filterProductDescriptionBenefits(
+				productCatalogDescription.SupporterPlus,
+				countryGroupId,
+			),
+		cta:
+			settings.products.SupporterPlus?.cta ??
+			fallbackProducts.SupporterPlus!.cta,
 	};
 
 	const tier2Card: CardContent = {
@@ -431,46 +436,38 @@ export function ThreeTierLanding({
 	 *
 	 * This should only exist as long as the Tier three hack is in place.
 	 */
-	const tier3Product = enablePremiumDigital
-		? 'DigitalSubscription'
-		: 'TierThree';
-	const tier3RatePlanKey = enablePremiumDigital
-		? ratePlanKey
-		: getTierThreeRatePlanKey(contributionType, countryGroupId);
-	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[tier3RatePlanKey]
+	const tier3Product = 'DigitalSubscription';
+	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[ratePlanKey]
 		?.pricing[currencyId] as number;
 	const tier3UrlParams = new URLSearchParams({
 		product: tier3Product,
-		ratePlan: tier3RatePlanKey,
+		ratePlan: ratePlanKey,
 	});
 	const { label: title, labelPill: titlePill } = getProductDescription(
 		'DigitalSubscription',
 		ratePlanKey,
 	);
-	const premiumDigitalProductDescription = {
-		title,
-		titlePill,
-		benefits: filterProductDescriptionBenefits(
-			productCatalogDescriptionPremiumDigital,
-			countryGroupId,
-		),
-		cta: {
-			copy: settings.products.TierThree.cta.copy,
-		},
+	const tier3ProductDescription = {
+		title: settings.products.DigitalSubscription?.title ?? title,
+		titlePill: settings.products.DigitalSubscription?.titlePill ?? titlePill,
+		benefits:
+			settings.products.DigitalSubscription?.benefits ??
+			filterProductDescriptionBenefits(
+				productCatalogDescription.DigitalSubscription,
+				countryGroupId,
+			),
+		cta:
+			settings.products.DigitalSubscription?.cta ??
+			fallbackProducts.DigitalSubscription!.cta,
 	};
-	const tier3ProductDescription = enablePremiumDigital
-		? premiumDigitalProductDescription
-		: settings.products.TierThree;
-	const tier3ProductPrice = enablePremiumDigital
-		? allProductPrices.DigitalPack
-		: allProductPrices.TierThree;
+	const tier3ProductPrice = allProductPrices.DigitalPack;
 	const tier3Promotion = tier3ProductPrice
 		? getPromotion(
 				tier3ProductPrice,
 				countryId,
 				billingPeriod,
 				countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
-				enablePremiumDigital ? 'NewspaperArchive' : 'NoProductOptions',
+				'NewspaperArchive',
 		  )
 		: undefined;
 	if (tier3Promotion) {

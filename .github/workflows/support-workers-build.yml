@@ -85,8 +85,6 @@ jobs:
                 type: aws-lambda
                 parameters:
                   functionNames:
-                    - "-CreateZuoraSubscriptionLambda-"
-                    - "-SendThankYouEmailLambda-"
                     - "-UpdateSupporterProductDataLambda-"
                     - "-FailureHandlerLambda-"
                     - "-SendAcquisitionEventLambda-"
@@ -99,6 +97,7 @@ jobs:
                     - "-CreateSalesforceContactLambda-"
                     - "-CreatePaymentMethodLambda-"
                     - "-CreateZuoraSubscriptionTSLambda-"
+                    - "-SendThankYouEmailLambda-"
                   fileName: support-workers.zip
                 dependencies: [cfn]
               it-tests:

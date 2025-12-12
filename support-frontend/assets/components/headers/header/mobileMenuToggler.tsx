@@ -1,4 +1,3 @@
-// ----- Imports ----- //
 import { useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import Dialog from 'components/dialog/dialog';
@@ -7,6 +6,7 @@ import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { Position } from '../mobileMenu/mobileMenu';
 import MobileMenu from '../mobileMenu/mobileMenu';
 import VeggieBurgerButton from '../veggieBurgerButton/veggieBurgerButton';
+import { mobileMenuContainer } from './mobileMenuTogglerStyles';
 
 type PropTypes = {
 	utility: ReactNode;
@@ -24,7 +24,7 @@ export default function MobileMenuToggler({
 	const buttonRef = useRef<HTMLButtonElement>(null);
 
 	return (
-		<div className="component-header-mobile-menu-toggler">
+		<div css={mobileMenuContainer}>
 			<VeggieBurgerButton
 				ref={buttonRef}
 				aria-haspopup="dialog"

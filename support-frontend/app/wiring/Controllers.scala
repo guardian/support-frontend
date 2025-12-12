@@ -42,6 +42,7 @@ trait Controllers {
     cachedProductCatalogServiceProvider,
     appConfig.supportUrl,
     tickerService,
+    mparticleClient,
   )
 
   lazy val diagnosticsController = new DiagnosticsController(
@@ -192,6 +193,8 @@ trait Controllers {
   lazy val getAddressController = new GetAddress(
     controllerComponents,
     getAddressIOService,
+    idealPostcodesService,
+    allSettingsProvider,
     actionBuilders,
   )
 

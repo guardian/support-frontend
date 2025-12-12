@@ -6,6 +6,11 @@ import { paymentFieldsSchema, paymentProviderSchema } from './paymentFields';
 import { paymentMethodSchema } from './paymentMethod';
 import { productTypeSchema } from './productType';
 
+export const dateOrDateStringSchema = z.preprocess(
+	(input) => (typeof input === 'string' ? new Date(input) : input),
+	z.date(),
+);
+
 export const titleSchema = z.union([
 	z.literal('Mr'),
 	z.literal('Mrs'),
@@ -47,6 +52,7 @@ const abTestSchema = z.object({
 	name: z.string(),
 	variant: z.string(),
 });
+export type AbTest = z.infer<typeof abTestSchema>;
 
 const queryParamSchema = z.object({
 	name: z.string(),
@@ -91,9 +97,7 @@ export const baseStateSchema = z.object({
 	product: productTypeSchema,
 	productInformation: productPurchaseSchema.nullish(),
 	analyticsInfo: analyticsInfoSchema,
-	//TODO: This should probably be a date but the scala lambdas struggle to deserialise the default date representation
-	// so leave it as a string until all the lambdas are Typescript
-	firstDeliveryDate: z.string().nullable(),
+	firstDeliveryDate: dateOrDateStringSchema.nullable(),
 	appliedPromotion: appliedPromotionSchema.nullable(),
 	csrUsername: z.string().nullable(),
 	salesforceCaseId: z.string().nullable(),

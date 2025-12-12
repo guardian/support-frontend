@@ -14,6 +14,7 @@ import { type Product } from '../../../components/product/productOption';
 import {
 	badge,
 	badgeObserver,
+	benefitsListSection,
 	ButtonCTA,
 	card,
 	cardHeader,
@@ -62,12 +63,11 @@ function NewspaperRatePlanCard({
 	const isObserverChannel = productLabel?.channel === Channel.Observer;
 
 	const renderPlanDetails = () => (
-		<>
+		<div css={!planData?.digitalRewards?.label && benefitsListSection}>
 			<BenefitsList
 				title={planData?.benefits.label}
 				listItems={planData?.benefits.items}
 			/>
-
 			<BenefitsList
 				title={planData?.digitalRewards?.label}
 				listItems={planData?.digitalRewards?.items}
@@ -78,7 +78,7 @@ function NewspaperRatePlanCard({
 					Only available inside Greater London.
 				</p>
 			)}
-		</>
+		</div>
 	);
 
 	return (

@@ -43,14 +43,16 @@ const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
 
 function NewspaperProductTabs({
 	productPrices,
+	fulfilment,
 }: {
 	productPrices: ProductPrices;
+	fulfilment?: PaperFulfilmentOptions;
 }) {
-	const fulfilment =
-		window.location.hash === `#${HomeDelivery}` ? HomeDelivery : Collection;
-
+	const paperFulfilment =
+		fulfilment ??
+		(window.location.hash === `#${HomeDelivery}` ? HomeDelivery : Collection);
 	const [selectedTab, setSelectedTab] =
-		useState<PaperFulfilmentOptions>(fulfilment);
+		useState<PaperFulfilmentOptions>(paperFulfilment);
 
 	const { windowWidthIsGreaterThan } = useWindowWidth();
 	const [productRatePlans, setProductRatePlans] = useState<Product[]>(

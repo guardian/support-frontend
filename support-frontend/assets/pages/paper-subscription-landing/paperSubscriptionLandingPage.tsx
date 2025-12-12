@@ -17,14 +17,18 @@ import 'stylesheets/skeleton/skeleton.scss';
 import './paperSubscriptionLanding.scss';
 
 const paperSubsFooter = (
-	<Footer termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions" />
+	<Footer
+		termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions"
+		fullWidth
+	/>
 );
 
 const pageQaId = 'qa-paper-subscriptions'; // Selenium test ID
 
-function PaperLandingPage({
+export function PaperLandingPage({
 	productPrices,
 	promotionCopy,
+	fulfilment,
 }: PaperLandingPropTypes) {
 	if (!productPrices) {
 		return null;
@@ -40,13 +44,14 @@ function PaperLandingPage({
 				promotionCopy={sanitisedPromoCopy}
 				paperHeroItems={getPaperPlusItems(productPrices)}
 			/>
-			<NewspaperProductTabs productPrices={productPrices} />
+			<NewspaperProductTabs
+				productPrices={productPrices}
+				fulfilment={fulfilment}
+			/>
 		</Page>
 	);
 }
 
 const abParticipations = getAbParticipations();
 setUpTrackingAndConsents(abParticipations);
-const content = <PaperLandingPage {...paperLandingProps(abParticipations)} />;
-renderPage(content);
-export { content };
+renderPage(<PaperLandingPage {...paperLandingProps(abParticipations)} />);

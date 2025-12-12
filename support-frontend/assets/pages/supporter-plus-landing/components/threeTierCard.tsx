@@ -20,7 +20,6 @@ import {
 	BenefitsCheckList,
 	checkListTextItemCss,
 } from 'components/checkoutBenefits/benefitsCheckList';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { getProductLabel } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
@@ -36,11 +35,7 @@ export type CardContent = LandingPageProductDescription & {
 	link: string;
 	price: number;
 	promotion?: Promotion;
-	product:
-		| 'TierThree'
-		| 'SupporterPlus'
-		| 'Contribution'
-		| 'DigitalSubscription';
+	product: 'SupporterPlus' | 'Contribution' | 'DigitalSubscription';
 };
 
 export type ThreeTierCardProps = {
@@ -190,16 +185,12 @@ export function ThreeTierCard({
 		cta,
 		product,
 	} = cardContent;
-	const { enablePremiumDigital } = getFeatureFlags();
 	const currency = getCurrencyInfo(currencyId);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const formattedPrice = simpleFormatAmount(currency, price);
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	const pillCopy = promotion?.landingPage?.roundel ?? cardContent.label?.copy;
-	const isPremiumDigitalProduct =
-		product === 'DigitalSubscription' && enablePremiumDigital;
-	const inAdditionToAllAccessDigital =
-		product === 'TierThree' || isPremiumDigitalProduct;
+	const inAdditionToAllAccessDigital = product === 'DigitalSubscription';
 	return (
 		<section css={container(!!pillCopy, isUserSelected, isSubdued)}>
 			{isUserSelected && <ThreeTierCardPill title="Your selection" />}
@@ -260,7 +251,7 @@ export function ThreeTierCard({
 						isChecked: true,
 						toolTip: benefit.tooltip,
 						pill: benefit.label?.copy,
-						hideBullet: benefits.length <= 1 && product !== 'TierThree',
+						hideBullet: benefits.length <= 1,
 					};
 				})}
 				style={'compact'}

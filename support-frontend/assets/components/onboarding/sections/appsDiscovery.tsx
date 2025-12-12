@@ -52,7 +52,7 @@ const FEAST_APP_BENEFITS = [
 	{
 		title: 'Home',
 		description:
-			'Choose from over 6,000 curated recipes from our Guardian cooks.',
+			'Choose from over 7,000 curated recipes from our Guardian cooks.',
 	},
 	{
 		title: 'Search',

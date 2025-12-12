@@ -15,10 +15,11 @@ catalog:
   esbuild: ^0.25.5
   "@types/jest": ^29.5.12
   "@types/node": ^20.11.27
+  "@aws-sdk/client-sqs": ^3.848.0
   "@aws-sdk/client-ssm": ^3.679.0
   "@aws-sdk/client-secrets-manager": ^3.848.0
   "@aws-sdk/credential-provider-node": 3.699.0
   "@aws-sdk/client-dynamodb": ^3.879.0
   "@aws-sdk/util-dynamodb": ^3.879.0
   "@guardian/prettier": ^2.1.5
-  "@guardian/support-service-lambdas": "guardian/support-service-lambdas#0d59cdc60cfd25edf626badfd01a55b1aa4a7c41"
+  "@guardian/support-service-lambdas": "guardian/support-service-lambdas#2eed38951dc49b5374be40e6c64d282e75f72bfe"

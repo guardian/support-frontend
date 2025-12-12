@@ -1,50 +1,32 @@
 // ----- Imports ----- //
+import type { SerializedStyles } from '@emotion/react';
 import type { ReactNode } from 'react';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
-import './pageSection.scss';
+import {
+	bodyStyles,
+	headerStyles,
+	headingStyles,
+	sectionStyles,
+} from './pageSectionStyles';
 
-// ----- Props ----- //
-type PropTypes = {
-	modifierClass?: string;
+function PageSection({
+	heading,
+	children,
+	cssOverrides,
+}: {
 	heading?: string;
-	headingChildren?: ReactNode;
 	children?: ReactNode;
-};
-
-// ----- Component ----- //
-function PageSection(props: PropTypes): JSX.Element {
+	cssOverrides?: SerializedStyles;
+}): JSX.Element {
 	return (
-		<section
-			className={classNameWithModifiers('component-page-section', [
-				props.modifierClass,
-			])}
-		>
-			<div className="component-page-section__content">
-				<div className="component-page-section__header">
-					<Heading heading={props.heading} />
-					{props.headingChildren}
+		<section css={sectionStyles}>
+			<div css={cssOverrides}>
+				<div css={headerStyles}>
+					{heading && <h2 css={headingStyles}>{heading}</h2>}
 				</div>
-				<div className="component-page-section__body">{props.children}</div>
+				<div css={bodyStyles}>{children}</div>
 			</div>
 		</section>
 	);
 }
-
-// ----- Auxiliary Components ----- //
-function Heading(props: { heading: string | null | undefined }) {
-	if (props.heading) {
-		return <h2 className="component-page-section__heading">{props.heading}</h2>;
-	}
-
-	return null;
-}
-
-// ----- Default Props ----- //
-PageSection.defaultProps = {
-	modifierClass: '',
-	heading: '',
-	headingChildren: null,
-	children: null,
-}; // ----- Exports ----- //
 
 export default PageSection;

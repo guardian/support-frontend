@@ -68,14 +68,25 @@ export const fallBackLandingPageSelection: LandingPageVariant = {
 			},
 			label: { copy: 'Recommended' },
 		},
-		TierThree: {
-			title: ProductTierLabel.TierThree,
+		DigitalSubscription: {
+			title: ProductTierLabel.DigitalSubscription,
 			benefits: [
 				{
-					copy: 'Guardian Weekly print magazine delivered to your door every week',
+					copy: 'Guardian Weekly e-magazine',
 					tooltip:
-						'Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.',
+						'Accessed through the Guardian Editions app, the Guardian Weekly e-magazine features a handpicked and carefully curated selection of in-depth articles, global news, opinion and more. Enjoy wherever you are, on your favourite device.',
 				},
+				{
+					copy: 'The Long Read e-magazine',
+					tooltip:
+						'Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.',
+				},
+				{
+					copy: 'Digital access to the Guardian’s 200 year newspaper archive',
+					tooltip:
+						'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was in the UK, since 1821.',
+				},
+				{ copy: 'Daily digital Guardian newspaper' },
 			],
 			cta: { copy: 'Support' },
 		},

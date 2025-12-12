@@ -14,9 +14,11 @@ import com.gu.support.workers.{
   CreditCardReferenceTransaction,
   DigitalPack,
   DirectDebitPaymentMethod,
+  GuardianAdLite,
   GuardianWeekly,
   Monthly,
   Paper,
+  PayPalCompletePaymentsWithBAIDReferenceTransaction,
   PayPalReferenceTransaction,
   PaymentMethod,
   ProductType,
@@ -26,7 +28,6 @@ import com.gu.support.workers.{
   StripePaymentType,
   SupporterPlus,
   TierThree,
-  GuardianAdLite,
 }
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import org.joda.time.{DateTime, DateTimeZone}
@@ -114,6 +115,7 @@ object AcquisitionDataRowBuilder {
           case _ => Stripe
         }
       case _: PayPalReferenceTransaction => PayPal
+      case _: PayPalCompletePaymentsWithBAIDReferenceTransaction => PayPal
       case _: DirectDebitPaymentMethod | _: ClonedDirectDebitPaymentMethod => DirectDebit
       case _: SepaPaymentMethod => StripeSepa
     }

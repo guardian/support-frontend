@@ -29,7 +29,7 @@ import { stageFromEnvironment } from '../model/stage';
 import type { WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
 import { getIfDefined } from '../util/nullAndUndefined';
-import { zuoraDateReplacer } from '../util/zuoraDateReplacer';
+import { replaceDatesWithZuoraFormat } from '../util/zuoraDateReplacer';
 
 const stage = stageFromEnvironment();
 
@@ -74,9 +74,6 @@ export const handler = async (
 			productSpecificState.productInformation,
 			'productInformation is required',
 		);
-
-		// TODO:
-		//  Validate paper payment gateway? Might be done already by schema
 
 		const inputFields: CreateSubscriptionInputFields<ZuoraPaymentMethod> = {
 			accountName: salesforceContact.AccountId, // We store the Salesforce Account id in the name field
@@ -126,14 +123,13 @@ export const handler = async (
 			previewInputFields,
 		);
 
-		return JSON.stringify(
+		return replaceDatesWithZuoraFormat(
 			buildOutputState(
 				state,
 				createZuoraSubscriptionState,
 				createSubscriptionResult,
 				previewInvoices,
 			),
-			zuoraDateReplacer,
 		);
 	} catch (error) {
 		throw asRetryError(error);
@@ -157,6 +153,12 @@ export const getZuoraPaymentMethod = (
 		case 'PayPal':
 			return {
 				type: 'PayPalNativeEC',
+				BAID: paymentMethod.PaypalBaid,
+				email: paymentMethod.PaypalEmail,
+			};
+		case 'PayPalCompletePaymentsWithBAID':
+			return {
+				type: 'PayPalCP',
 				BAID: paymentMethod.PaypalBaid,
 				email: paymentMethod.PaypalEmail,
 			};
@@ -246,7 +248,7 @@ const buildSendThankYouEmailState = (
 	};
 
 	return sendThankYouEmailStateSchema.parse({
-		productType: state.product.productType,
+		productType: state.productSpecificState.productType,
 		user: state.user,
 		product: state.product,
 		productInformation:
