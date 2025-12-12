@@ -1,4 +1,3 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
 import { useState } from 'react';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
@@ -6,29 +5,21 @@ import { findAddressesForPostcode } from 'components/subscriptionCheckouts/addre
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSession';
+import type { BillingStatePostcodeCountry } from './BillingAddressFields';
 
-type BillingAddressProps = {
+export type BillingAddressProps = {
 	countries?: Record<string, string>;
 	checkoutSession?: CheckoutSession;
-	postcode: string;
-	setPostcode: (value: string) => void;
-	state: string;
-	setState: (value: string) => void;
-	billingCountry: IsoCountry;
-	setBillingCountry: (value: IsoCountry) => void;
+	billingStatePostcodeCountry: BillingStatePostcodeCountry;
 };
 
 export function BillingAddress({
 	countries,
 	checkoutSession,
-	postcode,
-	setPostcode,
-	state,
-	setState,
-	billingCountry,
-	setBillingCountry,
+	billingStatePostcodeCountry,
 }: BillingAddressProps) {
 	/** Billing address */
+	const postcode = billingStatePostcodeCountry.billingPostcode;
 	const [billingLineOne, setBillingLineOne] =
 		useStateWithCheckoutSession<string>(
 			checkoutSession?.formFields.addressFields.billingAddress.lineOne,
@@ -58,8 +49,8 @@ export function BillingAddress({
 				lineOne={billingLineOne}
 				lineTwo={billingLineTwo}
 				city={billingCity}
-				country={billingCountry}
-				state={state}
+				country={billingStatePostcodeCountry.billingCountry}
+				state={billingStatePostcodeCountry.billingState}
 				postCode={postcode}
 				countries={countries ?? {}}
 				errors={billingAddressErrors}
@@ -72,9 +63,9 @@ export function BillingAddress({
 				setLineOne={setBillingLineOne}
 				setLineTwo={setBillingLineTwo}
 				setTownCity={setBillingCity}
-				setState={setState}
-				setPostcode={setPostcode}
-				setCountry={setBillingCountry}
+				setState={billingStatePostcodeCountry.setBillingState}
+				setPostcode={billingStatePostcodeCountry.setBillingPostcode}
+				setCountry={billingStatePostcodeCountry.setBillingCountry}
 				setPostcodeForFinder={() => {
 					// no-op
 				}}

@@ -9,19 +9,11 @@ import {
 	preventDefaultValidityMessage,
 } from 'pages/[countryGroupId]/validation';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
+import type { BillingStatePostcodeCountry } from './BillingAddressFields';
 import { BillingAddressFields } from './BillingAddressFields';
 import { PersonalEmailFields } from './PersonalEmailFields';
 import { PersonalFields } from './PersonalFields';
 import { PersonalPhoneField } from './PersonalPhoneField';
-
-export type BillingStatePostcodeCountry = {
-	billingState: string;
-	setBillingState: (value: string) => void;
-	billingPostcode: string;
-	setBillingPostcode: (value: string) => void;
-	billingCountry: IsoCountry;
-	setBillingCountry: (value: IsoCountry) => void;
-};
 
 type PersonalDetailsFieldsProps = {
 	countryId: IsoCountry;

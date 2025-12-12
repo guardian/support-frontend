@@ -6,9 +6,9 @@ import { DeliveryAgentsSelect } from 'pages/paper-subscription-checkout/componen
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import type { DeliveryAgentsResponse } from '../helpers/getDeliveryAgents';
 import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
+import type { BillingStatePostcodeCountry } from './BillingAddressFields';
 import { BillingAddressFields } from './BillingAddressFields';
 import { DeliveryRecipientAddress } from './DeliveryRecipientAddress';
-import type { BillingStatePostcodeCountry } from './PersonalDetailsFields';
 
 type PersonalAddressFieldsProps = {
 	countryId: IsoCountry;
