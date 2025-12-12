@@ -18,7 +18,7 @@ const pageSectionBodyOverrides = css`
 	padding-bottom: ${space[12]}px;
 
 	${from.desktop} {
-		padding-left: ${space[5]}px;
+		padding-left: ${space[6]}px;
 		padding-bottom: ${space[14]}px;
 	}
 `;
