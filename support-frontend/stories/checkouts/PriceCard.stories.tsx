@@ -22,8 +22,8 @@ Template.args = {} as Omit<PriceCardProps, 'onClick'>;
 export const WithFrequency = Template.bind({});
 
 WithFrequency.args = {
-	amount: 10,
-	label: '£10 per month',
+	amount: 12,
+	label: '£12 per month',
 	isSelected: true,
 };
 
