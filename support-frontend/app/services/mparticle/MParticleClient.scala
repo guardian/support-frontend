@@ -59,7 +59,7 @@ class MParticleClient(
   // Called from the healthcheck handler. Calling this causes the MParticleTokenProvider to fetch the first batch of tokens
   def initialise(): Unit = {}
 
-  def getUserProfile(identityId: String): Future[MParticleUserProfile] = {
+  private def fetchAudienceMemberships(identityId: String): Future[ProfileResponse] = {
     val fields = "audience_memberships"
     val endpoint =
       s"userprofile/v1/resolve/${mparticleConfig.orgId}/${mparticleConfig.accountId}/${mparticleConfig.workspaceId}"
@@ -78,12 +78,20 @@ class MParticleClient(
           params = Map("fields" -> fields),
         ),
       )
+  }
+
+  def getUserProfile(identityId: String): Future[MParticleUserProfile] = {
+    fetchAudienceMemberships(identityId)
       .map(parseUserProfile)
       .recover { case WebServiceClientError(CodeBody("404", _)) =>
         logger.info("mParticle returned 404 for user")
         MParticleUserProfile(hasMobileAppDownloaded = false, hasFeastMobileAppDownloaded = false)
       }
   }
+
+  def isAudienceMember(identityId: String, audienceId: Int): Future[Boolean] =
+    fetchAudienceMemberships(identityId)
+      .map(response => response.audience_memberships.exists(_.audience_id == audienceId))
 
   private def parseUserProfile(profileResponse: ProfileResponse): MParticleUserProfile = {
     val hasMobileAppDownloaded = profileResponse.audience_memberships.exists(_.audience_id == 22581)
