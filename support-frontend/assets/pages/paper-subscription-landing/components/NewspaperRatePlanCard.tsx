@@ -20,6 +20,7 @@ import {
 	cardHeading,
 	cardInfo,
 	cardLabel,
+	cardLegalCopy,
 	cardOffer,
 	cardPrice,
 	cardWithLabel,
@@ -84,6 +85,13 @@ function NewspaperRatePlanCard({
 					<p css={cardInfo}>
 						<SvgInfoRound size="xsmall" />
 						Only available inside Greater London.
+					</p>
+				)}
+				{isObserverChannel && (
+					<p css={cardLegalCopy}>
+						Note: this subscription is with Tortoise Media, the owner of The
+						Observer. The Guardian manages delivery of Sunday only print
+						subscriptions for Tortoise Media
 					</p>
 				)}
 			</div>

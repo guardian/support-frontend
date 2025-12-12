@@ -6,6 +6,7 @@ import {
 	neutral,
 	palette,
 	space,
+	textSans12,
 	textSans14,
 	textSans15,
 	textSans17,
@@ -94,6 +95,12 @@ export const cardInfo = css`
 		fill: ${palette.brandAlt[400]};
 		z-index: 0;
 	}
+`;
+
+export const cardLegalCopy = css`
+	${textSans12};
+	text-align: left;
+	margin-top: ${space[2]}px;
 `;
 
 export const cardPrice = css`
