@@ -15,7 +15,6 @@ setUpTrackingAndConsents({});
 // ----- Render ----- //
 
 const pageSectionBodyOverrides = css`
-	padding-top: ${space[3]}px;
 	padding-bottom: ${space[12]}px;
 
 	${from.desktop} {

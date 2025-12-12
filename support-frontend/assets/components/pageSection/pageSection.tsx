@@ -18,8 +18,8 @@ function PageSection({
 	cssOverrides?: SerializedStyles;
 }): JSX.Element {
 	return (
-		<section css={cssOverrides}>
-			<div css={sectionStyles}>
+		<section css={sectionStyles}>
+			<div css={cssOverrides}>
 				<div css={headerStyles}>
 					{heading && <h2 css={headingStyles}>{heading}</h2>}
 				</div>

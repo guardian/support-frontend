@@ -16,8 +16,6 @@ type PropTypes = {
 
 const pageSectionBorderTop = css`
 	border-top: 1px solid ${palette.neutral[86]};
-
-	padding-top: ${space[3]}px;
 	padding-bottom: ${space[3]}px;
 
 	${from.desktop} {

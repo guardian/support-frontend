@@ -10,7 +10,7 @@ import { gu_h_spacing, gu_v_spacing } from 'stylesheets/emotion/layout';
 
 export const sectionStyles = css`
 	box-sizing: border-box;
-	padding: 0 (${gu_h_spacing} * 0.5);
+	padding: 0 ${gu_h_spacing * 0.5}px;
 
 	${from.mobileLandscape} {
 		max-width: ${sourceBreakpoints.mobileLandscape}px;
@@ -28,7 +28,7 @@ export const sectionStyles = css`
 
 	${from.desktop} {
 		max-width: ${sourceBreakpoints.desktop}px;
-		padding: 0 ${gu_h_spacing}px 0 ${gu_h_spacing * 2}pxpx;
+		padding: 0 ${gu_h_spacing}px 0 ${gu_h_spacing * 2}px;
 	}
 
 	${from.leftCol} {
@@ -60,7 +60,7 @@ export const headingStyles = css`
 			display: inline-block;
 			height: 36px;
 			position: absolute;
-			top: -${space[3]}px;
+			top: 0;
 			right: ${space[4]}px;
 		}
 	}
@@ -68,12 +68,11 @@ export const headingStyles = css`
 
 export const bodyStyles = css`
 	box-sizing: border-box;
-
-	.component-text {
-		margin: ${gu_v_spacing * 3}px 0;
-	}
+	padding-top: ${gu_v_spacing}px;
+	padding-bottom: ${gu_v_spacing * 3}px;
 
 	${from.desktop} {
+		padding-bottom: 0;
 		display: inline-block;
 		width: 80%;
 	}
