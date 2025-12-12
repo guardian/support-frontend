@@ -8,7 +8,7 @@ import type { DeliveryAgentsResponse } from '../helpers/getDeliveryAgents';
 import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
 import { BillingAddressFields } from './BillingAddressFields';
 import { DeliveryRecipientAddress } from './DeliveryRecipientAddress';
-import type { BillingStatePostcode } from './PersonalDetailsFields';
+import type { BillingStatePostcodeCountry } from './PersonalDetailsFields';
 
 type PersonalAddressFieldsProps = {
 	countryId: IsoCountry;
@@ -27,7 +27,7 @@ type PersonalAddressFieldsProps = {
 	setDeliveryAddressErrors: React.Dispatch<
 		React.SetStateAction<AddressFormFieldError[]>
 	>;
-	billingStatePostcode?: BillingStatePostcode;
+	billingStatePostcodeCountry?: BillingStatePostcodeCountry;
 	isWeeklyGift?: boolean;
 };
 
@@ -46,13 +46,15 @@ export function PersonalAddressFields({
 	setDeliveryAgentError,
 	deliveryAddressErrors,
 	setDeliveryAddressErrors,
-	billingStatePostcode,
+	billingStatePostcodeCountry,
 	isWeeklyGift = false,
 }: PersonalAddressFieldsProps) {
-	const legendDelivery = billingStatePostcode
+	const legendDelivery = billingStatePostcodeCountry
 		? `2. Delivery address`
 		: `3. Gift recipient's address`;
-	const legendOutsideM25 = `${billingStatePostcode ? 3 : 4}. Delivery Agent`;
+	const legendOutsideM25 = `${
+		billingStatePostcodeCountry ? 3 : 4
+	}. Delivery Agent`;
 
 	return (
 		<>
@@ -67,12 +69,11 @@ export function PersonalAddressFields({
 				addressErrors={deliveryAddressErrors}
 				setAddressErrors={setDeliveryAddressErrors}
 			/>
-			{billingStatePostcode && (
+			{billingStatePostcodeCountry && (
 				<BillingAddressFields
-					countryId={countryId}
 					countries={countries}
 					checkoutSession={checkoutSession}
-					billingStatePostcode={billingStatePostcode}
+					billingStatePostcodeCountry={billingStatePostcodeCountry}
 					isWeeklyGift={isWeeklyGift}
 				/>
 			)}

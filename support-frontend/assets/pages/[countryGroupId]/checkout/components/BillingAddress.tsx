@@ -8,23 +8,25 @@ import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSession';
 
 type BillingAddressProps = {
-	countryId: IsoCountry;
 	countries?: Record<string, string>;
 	checkoutSession?: CheckoutSession;
 	postcode: string;
 	setPostcode: (value: string) => void;
 	state: string;
 	setState: (value: string) => void;
+	billingCountry: IsoCountry;
+	setBillingCountry: (value: IsoCountry) => void;
 };
 
 export function BillingAddress({
 	countries,
-	countryId,
 	checkoutSession,
 	postcode,
 	setPostcode,
 	state,
 	setState,
+	billingCountry,
+	setBillingCountry,
 }: BillingAddressProps) {
 	/** Billing address */
 	const [billingLineOne, setBillingLineOne] =
@@ -45,11 +47,6 @@ export function BillingAddress({
 		useState<PostcodeFinderResult[]>([]);
 	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
 		useState(false);
-	const [billingCountry, setBillingCountry] =
-		useStateWithCheckoutSession<IsoCountry>(
-			checkoutSession?.formFields.addressFields.billingAddress.country,
-			countryId,
-		);
 	const [billingAddressErrors, setBillingAddressErrors] = useState<
 		AddressFormFieldError[]
 	>([]);

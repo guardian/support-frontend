@@ -14,11 +14,13 @@ import { PersonalEmailFields } from './PersonalEmailFields';
 import { PersonalFields } from './PersonalFields';
 import { PersonalPhoneField } from './PersonalPhoneField';
 
-export type BillingStatePostcode = {
+export type BillingStatePostcodeCountry = {
 	billingState: string;
 	setBillingState: (value: string) => void;
 	billingPostcode: string;
 	setBillingPostcode: (value: string) => void;
+	billingCountry: IsoCountry;
+	setBillingCountry: (value: IsoCountry) => void;
 };
 
 type PersonalDetailsFieldsProps = {
@@ -35,7 +37,7 @@ type PersonalDetailsFieldsProps = {
 	setConfirmedEmail: (value: string) => void;
 	phoneNumber: string;
 	setPhoneNumber: (value: string) => void;
-	billingStatePostcode?: BillingStatePostcode;
+	billingStatePostcodeCountry?: BillingStatePostcodeCountry;
 	hasDeliveryAddress?: boolean;
 	isEmailAddressReadOnly?: boolean;
 	isSignedIn?: boolean;
@@ -56,7 +58,7 @@ export function PersonalDetailsFields({
 	setConfirmedEmail,
 	phoneNumber,
 	setPhoneNumber,
-	billingStatePostcode,
+	billingStatePostcodeCountry,
 	hasDeliveryAddress = false,
 	isEmailAddressReadOnly = false,
 	isSignedIn = false,
@@ -99,13 +101,13 @@ export function PersonalDetailsFields({
 				 */}
 				{!hasDeliveryAddress && (
 					<>
-						{billingStatePostcode?.setBillingState &&
+						{billingStatePostcodeCountry?.setBillingState &&
 							countriesRequiringBillingState.includes(countryId) && (
 								<StateSelect
 									countryId={countryId}
-									state={billingStatePostcode.billingState}
+									state={billingStatePostcodeCountry.billingState}
 									onStateChange={(event) => {
-										billingStatePostcode.setBillingState(
+										billingStatePostcodeCountry.setBillingState(
 											event.currentTarget.value,
 										);
 									}}
@@ -126,47 +128,49 @@ export function PersonalDetailsFields({
 									error={billingStateError}
 								/>
 							)}
-						{billingStatePostcode?.setBillingPostcode && countryId === 'US' && (
-							<div>
-								<TextInput
-									id="zipCode"
-									label="ZIP code"
-									name="billing-postcode"
-									onChange={(event) => {
-										billingStatePostcode.setBillingPostcode(event.target.value);
-									}}
-									onBlur={(event) => {
-										event.target.checkValidity();
-									}}
-									maxLength={20}
-									value={billingStatePostcode.billingPostcode}
-									pattern={doesNotContainExtendedEmojiOrLeadingSpace}
-									error={billingPostcodeError}
-									optional
-									onInvalid={(event) => {
-										preventDefaultValidityMessage(event.currentTarget);
-										const validityState = event.currentTarget.validity;
-										if (validityState.valid) {
-											setBillingPostcodeError(undefined);
-										} else {
-											if (validityState.patternMismatch) {
-												setBillingPostcodeError(
-													'Please enter a valid zip code.',
-												);
+						{billingStatePostcodeCountry?.setBillingPostcode &&
+							countryId === 'US' && (
+								<div>
+									<TextInput
+										id="zipCode"
+										label="ZIP code"
+										name="billing-postcode"
+										onChange={(event) => {
+											billingStatePostcodeCountry.setBillingPostcode(
+												event.target.value,
+											);
+										}}
+										onBlur={(event) => {
+											event.target.checkValidity();
+										}}
+										maxLength={20}
+										value={billingStatePostcodeCountry.billingPostcode}
+										pattern={doesNotContainExtendedEmojiOrLeadingSpace}
+										error={billingPostcodeError}
+										optional
+										onInvalid={(event) => {
+											preventDefaultValidityMessage(event.currentTarget);
+											const validityState = event.currentTarget.validity;
+											if (validityState.valid) {
+												setBillingPostcodeError(undefined);
+											} else {
+												if (validityState.patternMismatch) {
+													setBillingPostcodeError(
+														'Please enter a valid zip code.',
+													);
+												}
 											}
-										}
-									}}
-									// We have seen this field be filled in with an email address
-									autoComplete={'off'}
-								/>
-							</div>
-						)}
+										}}
+										// We have seen this field be filled in with an email address
+										autoComplete={'off'}
+									/>
+								</div>
+							)}
 					</>
 				)}
-				{isWeeklyGift && billingStatePostcode && (
+				{isWeeklyGift && billingStatePostcodeCountry && (
 					<BillingAddressFields
-						countryId={countryId}
-						billingStatePostcode={billingStatePostcode}
+						billingStatePostcodeCountry={billingStatePostcodeCountry}
 						countries={countries}
 						isWeeklyGift={isWeeklyGift}
 					/>
