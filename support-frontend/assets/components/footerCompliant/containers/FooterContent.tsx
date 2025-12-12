@@ -2,8 +2,8 @@
 import { css } from '@emotion/react';
 import { from, palette, space } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
-import { gu_span } from 'components/headers/header/headerStyles';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
+import { gu_span } from 'stylesheets/emotion/layout';
 
 export type Appearance = {
 	centred?: boolean;
