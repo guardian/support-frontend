@@ -5,8 +5,14 @@ const PAST_CONTRIBUTOR_MPARTICLE_AUDIENCE_ID = 22994;
 
 const hasTargetingConsent = (): Promise<boolean> =>
 	onConsent()
-		.then(({ canTarget }: ConsentState) => canTarget)
-		.catch(() => false);
+		.then(({ canTarget }: ConsentState) => {
+			console.log({ canTarget });
+			return canTarget;
+		})
+		.catch((err) => {
+			console.error(err);
+			return false;
+		});
 
 /**
  * Returns true if user is in mparticle "past contributors" audience.
