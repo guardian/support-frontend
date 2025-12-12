@@ -86,6 +86,16 @@ case class TickerSettings(
 object TickerSettings {
   implicit val tickerCodec: Codec[TickerSettings] = deriveCodec
 }
+
+case class DefaultProductSelection(
+    productType: String,
+    billingPeriod: String,
+)
+
+object DefaultProductSelection {
+  implicit val codec: Codec[DefaultProductSelection] = deriveCodec
+}
+
 case class Products(
     Contribution: Option[LandingPageProductDescription],
     SupporterPlus: Option[LandingPageProductDescription],
@@ -106,6 +116,7 @@ case class LandingPageVariant(
     products: Products,
     tickerSettings: Option[TickerSettings],
     countdownSettings: Option[CountdownSettings],
+    defaultProductSelection: Option[DefaultProductSelection],
 )
 
 object LandingPageVariant {
