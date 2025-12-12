@@ -19,6 +19,7 @@ const giftTests = [
 		ratePlan: 'OneYearGift',
 		paymentType: 'Credit/Debit card',
 		internationalisationId: 'INT',
+		billingCountry: 'United States',
 	},
 	{
 		product: 'GuardianWeeklyDomestic',
@@ -30,10 +31,16 @@ const giftTests = [
 
 test.describe('Guardian Weekly Gift Checkout', () =>
 	giftTests.map((testDetails) => {
-		const { ratePlan, product, paymentType, internationalisationId } =
-			testDetails;
+		const {
+			ratePlan,
+			product,
+			paymentType,
+			internationalisationId,
+			billingCountry,
+		} = testDetails;
+		const countries = `${internationalisationId}${billingCountry ? ` / ${billingCountry}` : ''}`;
 		const giftPeriod = ratePlan === '3MonthGift' ? '3 months' : '12 months';
-		test(`${product} - ${ratePlan} - ${paymentType} - ${internationalisationId}`, async ({
+		test(`${product} - ${ratePlan} - ${paymentType} - ${countries}`, async ({
 			context,
 			baseURL,
 		}) => {

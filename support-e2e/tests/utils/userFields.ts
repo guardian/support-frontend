@@ -1,6 +1,7 @@
 import { email, firstName, lastName, userName } from './users';
 
 export interface TestAddress {
+	billingCountry?: string;
 	postCode?: string;
 	state?: string;
 	firstLine?: string;
@@ -88,6 +89,12 @@ const userDetails: Record<string, TestFields> = {
 				firstLine: '19 Foster Street',
 				city: 'Sydney',
 			},
+			{
+				billingCountry: 'United Kingdom',
+				postCode: 'N1 9GU',
+				firstLine: '90 York Way',
+				city: 'London',
+			}, // Billing region differs from delivery
 		],
 	},
 	NZ: {
@@ -108,6 +115,13 @@ const userDetails: Record<string, TestFields> = {
 				firstLine: '0C Heerengracht Street',
 				city: 'Cape Town',
 			},
+			{
+				billingCountry: 'United States',
+				postCode: '10006',
+				state: 'New York',
+				firstLine: '61 Broadway',
+				city: 'New York',
+			}, // Billing region differs from delivery
 		],
 	},
 };

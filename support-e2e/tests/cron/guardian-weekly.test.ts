@@ -15,6 +15,7 @@ const tests = [
 		paymentType: 'PayPal',
 		internationalisationId: 'INT',
 		postCode: '8001',
+		billingCountry: 'United States',
 	},
 	{
 		product: 'GuardianWeeklyDomestic',
@@ -27,10 +28,16 @@ const tests = [
 
 test.describe('Guardian Weekly Checkout', () =>
 	tests.map((testDetails) => {
-		const { ratePlan, product, paymentType, internationalisationId, postCode } =
-			testDetails;
-
-		test(`Guardian Weekly - ${ratePlan} - ${paymentType} - ${internationalisationId} - ${postCode}`, async ({
+		const {
+			ratePlan,
+			product,
+			paymentType,
+			internationalisationId,
+			postCode,
+			billingCountry,
+		} = testDetails;
+		const countries = `${internationalisationId}${billingCountry ? ` / ${billingCountry}` : ''}`;
+		test(`Guardian Weekly - ${ratePlan} - ${paymentType} - ${countries}`, async ({
 			context,
 			baseURL,
 		}) => {
