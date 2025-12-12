@@ -33,7 +33,6 @@ function getBorderStyling(centred = false) {
 	const breakpoint = centred ? from.wide : from.tablet;
 	return css`
 		border-bottom: 1px solid ${palette.brand[600]};
-		border-bottom: 1px solid ${palette.brand[600]};
 		${breakpoint} {
 			border-left: 1px solid ${palette.brand[600]};
 			border-right: 1px solid ${palette.brand[600]};
