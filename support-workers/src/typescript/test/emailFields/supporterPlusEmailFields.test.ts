@@ -39,9 +39,6 @@ describe('Supporter plus thank you email fields', () => {
 						sort_code: directDebitPaymentMethod.BankCode,
 						payment_method: 'Direct Debit',
 						first_payment_date: 'Thursday, 11 December 2025',
-						subscription_details:
-							'£10.00 for the first month, then £12.00 every month',
-						zuorasubscriberid: subscriptionNumber,
 						last_name: emailUser.lastName,
 						currency: 'GBP',
 						billing_period: 'monthly',
@@ -84,9 +81,6 @@ describe('Supporter plus thank you email fields', () => {
 						first_name: 'Mickey',
 						payment_method: 'Credit/Debit Card',
 						first_payment_date: 'Thursday, 11 December 2025',
-						subscription_details:
-							'£10.00 for the first year, then £12.00 every year',
-						zuorasubscriberid: subscriptionNumber,
 						last_name: 'Mouse',
 						currency: 'GBP',
 						billing_period: 'annual',
@@ -129,8 +123,6 @@ describe('Supporter plus thank you email fields', () => {
 						sort_code: '20-20-20',
 						payment_method: 'Direct Debit',
 						first_payment_date: 'Thursday, 11 December 2025',
-						subscription_details: '£9.00 for 12 months',
-						zuorasubscriberid: subscriptionNumber,
 						last_name: 'Mouse',
 						currency: 'GBP',
 						billing_period: 'annual',
