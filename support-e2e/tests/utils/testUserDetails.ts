@@ -128,9 +128,18 @@ export const setTestUserDetails = async (
 
 		// To run in sequence using async/await, for required over forEach
 		let index = 0;
-		const postcodeLabel =
-			internationalisationId === 'US' ? 'ZIP code' : 'Postcode';
+		const getPostcodeLabel = (country: string): string => {
+			return ['US', 'United States'].includes(country)
+				? 'ZIP code'
+				: 'Postcode';
+		};
 		for (const address of testFields.addresses) {
+			if (address.billingCountry) {
+				await page
+					.getByLabel('Country')
+					.nth(index)
+					.selectOption({ label: address.billingCountry });
+			}
 			if (address.state) {
 				await page
 					.getByLabel(stateLabel)
@@ -138,10 +147,17 @@ export const setTestUserDetails = async (
 					.selectOption({ label: address.state });
 			}
 			if (address.postCode) {
+				const billingCountryAdjust =
+					address.billingCountry === 'United States' ? -1 : 0;
+				const nthIndex =
+					billingCountryAdjust +
+					(internationalisationId === 'UK' ? index * 2 : index);
 				await page
-					.getByLabel(postcodeLabel)
+					.getByLabel(
+						getPostcodeLabel(address.billingCountry ?? internationalisationId),
+					)
 					// UK postCodes have extra lookup, doubling its location on screen
-					.nth(internationalisationId === 'UK' ? index * 2 : index)
+					.nth(nthIndex)
 					.fill(address.postCode);
 			}
 			if (address.firstLine) {
