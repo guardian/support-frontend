@@ -18,7 +18,6 @@ const leftBorderStyle = css`
 
 // Replacement for .component-content--white block-colours (simplified)
 const contentWrapper = css`
-	border: 1px solid ${palette.neutral[86]};
 	background-color: ${palette.neutral[100]};
 `;
 
@@ -30,6 +29,7 @@ const innerContent = css`
 
 	${from.desktop} {
 		padding-top: ${space[4]}px;
+		padding-bottom: ${space[4]}px;
 	}
 `;
 
