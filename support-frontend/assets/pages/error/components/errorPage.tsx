@@ -24,8 +24,9 @@ export type ErrorPageProps = {
 
 const countryGroupId = CountryGroup.detect();
 
-export const paddingTopStyle = css`
+const paddingOverrides = css`
 	padding-top: ${gu_v_spacing * 2}px;
+	padding-bottom: ${gu_v_spacing * 3}px;
 `;
 
 export default function ErrorPage(props: ErrorPageProps): JSX.Element {
@@ -38,7 +39,7 @@ export default function ErrorPage(props: ErrorPageProps): JSX.Element {
 				headings={props.headings}
 				errorCode={props.errorCode}
 			/>
-			<PageSection cssOverrides={paddingTopStyle}>
+			<PageSection cssOverrides={paddingOverrides}>
 				<Text>
 					<LargeParagraph>
 						<span className="error-copy__text">{props.copy} </span>

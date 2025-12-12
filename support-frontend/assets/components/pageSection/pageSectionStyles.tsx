@@ -69,7 +69,6 @@ export const headingStyles = css`
 export const bodyStyles = css`
 	box-sizing: border-box;
 	padding-top: ${gu_v_spacing}px;
-	padding-bottom: ${gu_v_spacing * 3}px;
 
 	${from.desktop} {
 		padding-bottom: 0;
