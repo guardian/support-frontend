@@ -153,4 +153,5 @@ export const planDetailsContainer = css`
 
 export const planDetailsEndSection = css`
 	margin-top: auto;
+	padding-top: ${space[9]}px;
 `;
