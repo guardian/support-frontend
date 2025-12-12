@@ -25,10 +25,10 @@ const contentWrapper = css`
 const innerContent = css`
 	box-sizing: border-box;
 	max-width: 700px; /* approximates gu-span(9) */
-	padding: ${space[2]}px ${space[3]}px 0;
+	padding: ${space[3]}px ${space[3]}px 0;
 
 	${from.desktop} {
-		padding-top: ${space[4]}px;
+		padding-top: ${space[6]}pxpx;
 		padding-bottom: ${space[4]}px;
 	}
 `;
