@@ -41,7 +41,7 @@ const fetchIsPastSingleContributor = async (
 
 		return response.isAudienceMember;
 	} catch (error) {
-		console.log(
+		console.error(
 			`Error fetching audience data from mparticle: ${String(error)}`,
 		);
 		return false;
