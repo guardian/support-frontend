@@ -30,7 +30,7 @@ WithFrequency.args = {
 export const WithoutFrequency = Template.bind({});
 
 WithoutFrequency.args = {
-	amount: 30,
-	label: '$30',
+	amount: 20,
+	label: '$20',
 	isSelected: false,
 };
