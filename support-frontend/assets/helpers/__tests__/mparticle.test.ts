@@ -37,15 +37,15 @@ describe('fetchIsPastSingleContributor', () => {
 		expect(mockFetch).not.toHaveBeenCalled();
 	});
 
-	// it('should return false when user does not have targeting consent', async () => {
-	// 	mockOnConsent.mockResolvedValue({ canTarget: false, framework: null });
-	//
-	// 	const isSignedIn = true;
-	// 	const variant = 'control';
-	// 	const result = await fetchIsPastSingleContributor(isSignedIn, variant);
-	// 	expect(result).toBe(false);
-	// 	expect(mockFetch).not.toHaveBeenCalled();
-	// });
+	it('should return false when user does not have targeting consent', async () => {
+		mockOnConsent.mockResolvedValue({ canTarget: false, framework: null });
+
+		const isSignedIn = true;
+		const variant = 'control';
+		const result = await fetchIsPastSingleContributor(isSignedIn, variant);
+		expect(result).toBe(false);
+		expect(mockFetch).not.toHaveBeenCalled();
+	});
 
 	it('should return true when mparticle returns isPastSingleContributor: true', async () => {
 		mockFetch.mockResolvedValueOnce({
