@@ -80,21 +80,23 @@ function NewspaperRatePlanCard({
 				title={planData?.digitalRewards?.label}
 				listItems={planData?.digitalRewards?.items}
 			/>
-			<div css={planDetailsEndSection}>
-				{unavailableOutsideLondon && (
-					<p css={cardInfo}>
-						<SvgInfoRound size="xsmall" />
-						Only available inside Greater London.
-					</p>
-				)}
-				{isObserverChannel && (
-					<p css={cardLegalCopy}>
-						Note: this subscription is with Tortoise Media, the owner of The
-						Observer. The Guardian manages delivery of Sunday only print
-						subscriptions for Tortoise Media
-					</p>
-				)}
-			</div>
+			{(unavailableOutsideLondon ?? isObserverChannel) && (
+				<div css={planDetailsEndSection}>
+					{unavailableOutsideLondon && (
+						<p css={cardInfo}>
+							<SvgInfoRound size="xsmall" />
+							Only available inside Greater London.
+						</p>
+					)}
+					{isObserverChannel && (
+						<p css={cardLegalCopy}>
+							Note: this subscription is with Tortoise Media, the owner of The
+							Observer. The Guardian manages delivery of Sunday only print
+							subscriptions for Tortoise Media
+						</p>
+					)}
+				</div>
+			)}
 		</div>
 	);
 
