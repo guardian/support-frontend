@@ -1,11 +1,10 @@
 import { DataExtensionNames } from '@modules/email/email';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import dayjs from 'dayjs';
-import { formatDate } from '../../emailFields/emailFields';
+import { formatDate } from '../../emailFields/paymentEmailFields';
 import { buildTierThreeEmailFields } from '../../emailFields/tierThreeEmailFields';
 import {
 	creditCardPaymentMethod,
-	deliveryContact,
 	emailAddress,
 	emailUser,
 	paperPaymentSchedule,
@@ -17,6 +16,7 @@ describe('Tier three thank you email fields', () => {
 		const today = dayjs('2025-11-11');
 		const firstDeliveryDate = today.add(7, 'day');
 		const emailFields = buildTierThreeEmailFields({
+			today: today,
 			user: emailUser,
 			currency: 'GBP',
 			billingPeriod: BillingPeriod.Monthly,
@@ -24,12 +24,7 @@ describe('Tier three thank you email fields', () => {
 			paymentSchedule: paperPaymentSchedule,
 			paymentMethod: creditCardPaymentMethod,
 			mandateId: undefined,
-			productInformation: {
-				product: 'TierThree',
-				ratePlan: 'DomesticMonthly',
-				firstDeliveryDate: firstDeliveryDate.toDate(),
-				deliveryContact: deliveryContact,
-			},
+			firstDeliveryDate: firstDeliveryDate,
 		});
 
 		const expected = {

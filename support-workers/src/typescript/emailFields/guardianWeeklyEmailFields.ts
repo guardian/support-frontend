@@ -3,38 +3,43 @@ import { DataExtensionNames } from '@modules/email/email';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
+import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { GiftRecipient, User } from '../model/stateSchemas';
 import { buildDeliveryEmailFields } from './deliveryEmailFields';
-import { buildThankYouEmailFields, formatDate } from './emailFields';
-import { describePayments, firstPayment } from './paymentDescription';
+import { buildThankYouEmailFields } from './emailFields';
+import { formatDate } from './paymentEmailFields';
 
-type GuardianWeeklyProductPurchase = Extract<
+export type GuardianWeeklyProductPurchase = Extract<
 	ProductPurchase,
 	{ product: 'GuardianWeeklyDomestic' | 'GuardianWeeklyRestOfWorld' }
 >;
 
 export function buildGuardianWeeklyEmailFields({
+	today,
 	user,
 	currency,
 	billingPeriod,
 	subscriptionNumber,
 	paymentSchedule,
 	paymentMethod,
+	firstDeliveryDate,
+	isFixedTerm,
 	mandateId,
-	productInformation,
 	giftRecipient,
 }: {
+	today: Dayjs;
 	user: User;
 	currency: IsoCurrency;
 	billingPeriod: RecurringBillingPeriod;
 	subscriptionNumber: string;
 	paymentSchedule: PaymentSchedule;
 	paymentMethod: PaymentMethod;
+	firstDeliveryDate: Dayjs;
+	isFixedTerm: boolean;
 	mandateId?: string;
-	productInformation: GuardianWeeklyProductPurchase;
 	giftRecipient?: GiftRecipient | null;
 }): EmailMessageWithIdentityUserId {
 	const gifteeFields = giftRecipient
@@ -53,17 +58,15 @@ export function buildGuardianWeeklyEmailFields({
 		: undefined;
 
 	const deliveryFields = buildDeliveryEmailFields({
-		subscriptionNumber: subscriptionNumber,
+		today: today,
 		user: user,
-		firstDeliveryDate: dayjs(productInformation.firstDeliveryDate),
-		firstPaymentDate: dayjs(firstPayment(paymentSchedule).date),
-		paymentDescription: describePayments(
-			paymentSchedule,
-			billingPeriod,
-			currency,
-			false,
-		),
+		subscriptionNumber: subscriptionNumber,
+		currency: currency,
+		billingPeriod: billingPeriod,
 		paymentMethod: paymentMethod,
+		paymentSchedule: paymentSchedule,
+		firstDeliveryDate: firstDeliveryDate,
+		isFixedTerm: isFixedTerm,
 		mandateId: mandateId,
 	});
 	const productFields = {

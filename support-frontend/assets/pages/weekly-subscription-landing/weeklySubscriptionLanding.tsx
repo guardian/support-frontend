@@ -75,7 +75,11 @@ function WeeklyLPContent({
 				/>
 			}
 		>
-			<WeeklyHero orderIsAGift={orderIsAGift} promotionCopy={promotionCopy} />
+			<WeeklyHero
+				orderIsAGift={orderIsAGift}
+				promotionCopy={promotionCopy}
+				countryGroupId={countryGroupId}
+			/>
 			<FullWidthContainer>
 				<CentredContainer>
 					<Block cssOverrides={styles.closeGapAfterPageTitle}>
@@ -124,7 +128,7 @@ function getStudentBeanLink(countryGroupId: CountryGroupId) {
 }
 
 // ----- Render ----- //
-function WeeklyLandingPage({
+export function WeeklyLandingPage({
 	countryId,
 	productPrices,
 	promotionCopy,

@@ -20,9 +20,10 @@ import {
 } from './footerStyles';
 // ----- Props ----- //
 type PropTypes = {
-	centred: boolean;
 	termsConditionsLink: string;
 	children: ReactNode;
+	centred: boolean;
+	fullWidth?: boolean;
 };
 
 // ----- Component ----- //
@@ -30,6 +31,7 @@ function Footer({
 	centred,
 	children,
 	termsConditionsLink,
+	fullWidth,
 }: PropTypes): JSX.Element {
 	function showPrivacyManager() {
 		cmp.showPrivacyManager();
@@ -43,6 +45,7 @@ function Footer({
 						border: true,
 						paddingTop: true,
 						centred,
+						fullWidth,
 					}}
 				>
 					<div>
@@ -54,6 +57,7 @@ function Footer({
 				appearance={{
 					border: true,
 					centred,
+					fullWidth,
 				}}
 			>
 				<ul css={linksList}>
@@ -99,6 +103,7 @@ function Footer({
 			<FooterContent
 				appearance={{
 					centred,
+					fullWidth,
 				}}
 			>
 				<div css={backToTopLink}>
@@ -113,6 +118,7 @@ function Footer({
 // ----- Default Props ----- //
 Footer.defaultProps = {
 	centred: false,
+	fullWidth: false,
 	termsConditionsLink: '',
 	children: [],
 }; // ----- Exports ----- //

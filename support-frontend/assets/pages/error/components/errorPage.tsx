@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import { css } from '@emotion/react';
 import Rows from 'components/base/rows';
 import AnchorButton from 'components/button/anchorButton';
 import Footer from 'components/footerCompliant/Footer';
@@ -9,6 +10,7 @@ import Text, { LargeParagraph } from 'components/text/text';
 import '../error.scss';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { contributionsEmail } from 'helpers/legal';
+import { gu_v_spacing } from 'stylesheets/emotion/layout';
 import SquaresIntroduction from './introduction/squaresIntroduction';
 
 // ----- Types ----- //
@@ -20,19 +22,24 @@ export type ErrorPageProps = {
 	supportLink?: boolean;
 };
 
-// ----- Component ----- //
+const countryGroupId = CountryGroup.detect();
+
+const paddingOverrides = css`
+	padding-top: ${gu_v_spacing * 2}px;
+	padding-bottom: ${gu_v_spacing * 3}px;
+`;
 
 export default function ErrorPage(props: ErrorPageProps): JSX.Element {
 	return (
 		<Page
-			header={<Header countryGroupId={CountryGroup.detect()} />}
+			header={<Header countryGroupId={countryGroupId} />}
 			footer={<Footer />}
 		>
 			<SquaresIntroduction
 				headings={props.headings}
 				errorCode={props.errorCode}
 			/>
-			<PageSection>
+			<PageSection cssOverrides={paddingOverrides}>
 				<Text>
 					<LargeParagraph>
 						<span className="error-copy__text">{props.copy} </span>

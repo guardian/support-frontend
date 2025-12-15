@@ -111,9 +111,9 @@ object AwsCloudWatchMetricSetup {
       ),
     )
 
-  def getCheckoutNudgeTestsError(stage: Stage): MetricRequest =
+  def getMParticleTokenError(stage: Stage): MetricRequest =
     getMetricRequest(
-      MetricName("GetCheckoutNudgeTestsError"),
+      MetricName("MParticleTokenError"),
       Map(
         MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
       ),
