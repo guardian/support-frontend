@@ -14,7 +14,6 @@ import { getPaperPlusItems } from './helpers/PaperHeroCopy';
 import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
 import 'stylesheets/skeleton/skeleton.scss';
-import './paperSubscriptionLanding.scss';
 
 const paperSubsFooter = (
 	<Footer
