@@ -42,6 +42,20 @@ const requireAddress = (
 	}
 };
 
+const postCodeIndex = (
+	internationalisationId: string,
+	index: number,
+	billingCountry?: string,
+): number => {
+	// UK postCodes have extra lookup, doubling their location on screen
+	// United States billingCountry is for a differing region so is shifted up
+	return internationalisationId === 'UK'
+		? index * 2
+		: billingCountry === 'United States'
+			? index - 1
+			: index;
+};
+
 export const setTestUserCoreDetails = async (
 	page: Page,
 	email: string,
@@ -147,17 +161,17 @@ export const setTestUserDetails = async (
 					.selectOption({ label: address.state });
 			}
 			if (address.postCode) {
-				const billingCountryAdjust =
-					address.billingCountry === 'United States' ? -1 : 0;
-				const nthIndex =
-					billingCountryAdjust +
-					(internationalisationId === 'UK' ? index * 2 : index);
 				await page
 					.getByLabel(
 						getPostcodeLabel(address.billingCountry ?? internationalisationId),
 					)
-					// UK postCodes have extra lookup, doubling its location on screen
-					.nth(nthIndex)
+					.nth(
+						postCodeIndex(
+							internationalisationId,
+							index,
+							address.billingCountry,
+						),
+					)
 					.fill(address.postCode);
 			}
 			if (address.firstLine) {
