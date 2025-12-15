@@ -87,5 +87,9 @@ class AnalyticsController(
       mparticleClient
         .isAudienceMember(request.user.id, audienceId)
         .map(result => Ok(IsAudienceMemberResponse(result).asJson))
+        .recover { ex =>
+          logger.error(scrub"Failed to check mParticle audience: ${ex.getMessage}", ex)
+          InternalServerError("Error checking audience membership")
+        }
     }
 }
