@@ -149,6 +149,8 @@ export const planDetailsContainer = css`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
+	margin-top: ${space[5]}px;
+	gap: ${space[5]}px;
 `;
 
 export const planDetailsEndSection = css`
