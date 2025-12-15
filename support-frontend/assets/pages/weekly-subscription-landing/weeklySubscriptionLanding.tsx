@@ -30,6 +30,7 @@ import Benefits from './components/content/benefits';
 import GiftBenefits from './components/content/giftBenefits';
 import { WeeklyHero } from './components/hero/hero';
 import WeeklyProductPrices from './components/weeklyProductPrices';
+import './weeklySubscriptionLanding.scss';
 import type {
 	WeeklyLandingPropTypes,
 	WeeklyLPContentPropTypes,

@@ -1,0 +1,13 @@
+// -----  gu-sass ----- //
+@import '~stylesheets/gu-sass/gu-sass';
+
+:root {
+	scroll-behavior: smooth;
+}
+
+/**** FOOTER HACK ****/
+.component-content.component-content--feature,
+.component-left-margin-section__content {
+	margin: 0 auto;
+	max-width: 1290px;
+}
