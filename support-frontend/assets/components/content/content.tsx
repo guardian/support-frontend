@@ -1,9 +1,10 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { from, palette, space } from '@guardian/source/foundations';
+import { from, palette } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import 'helpers/types/option';
+import { gu_h_spacing, gu_v_spacing } from 'stylesheets/emotion/layout';
 
 // ----- Styles ----- //
 // Replacement for .component-left-margin-section__content rules in content.scss
@@ -25,11 +26,10 @@ const contentWrapper = css`
 const innerContent = css`
 	box-sizing: border-box;
 	max-width: 700px; /* approximates gu-span(9) */
-	padding: ${space[3]}px ${space[3]}px 0;
+	padding: ${gu_v_spacing * 0.5}px ${gu_h_spacing * 0.5}px 0;
 
 	${from.desktop} {
-		padding-top: ${space[6]}pxpx;
-		padding-bottom: ${space[4]}px;
+		padding-top: ${gu_v_spacing * 2}px;
 	}
 `;
 
