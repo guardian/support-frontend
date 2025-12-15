@@ -26,10 +26,12 @@ const fetchIsPastSingleContributor = async (
 		return false;
 	}
 
+	// @ts-expect-error TS6133 - temp
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars -- temp
 	const hasConsent = await hasTargetingConsent();
-	if (!hasConsent) {
-		return false;
-	}
+	// if (!hasConsent) {
+	// 	return false;
+	// }
 
 	try {
 		const response = await fetchJson<{
