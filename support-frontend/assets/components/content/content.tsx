@@ -26,7 +26,7 @@ const contentWrapper = css`
 const innerContent = css`
 	box-sizing: border-box;
 	max-width: 700px; /* approximates gu-span(9) */
-	padding: ${gu_v_spacing * 0.5}px ${gu_h_spacing * 0.5}px 0;
+	padding: ${gu_v_spacing * 0.5}px ${gu_h_spacing * 0.5}px ${gu_v_spacing * 2}px;
 
 	${from.desktop} {
 		padding-top: ${gu_v_spacing * 2}px;
