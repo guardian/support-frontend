@@ -13,15 +13,6 @@ import NewspaperProductTabs from './components/NewspaperProductTabs';
 import { getPaperPlusItems } from './helpers/PaperHeroCopy';
 import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
-import 'stylesheets/skeleton/skeleton.scss';
-import './paperSubscriptionLanding.scss';
-
-const paperSubsFooter = (
-	<Footer
-		termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions"
-		fullWidth
-	/>
-);
 
 const pageQaId = 'qa-paper-subscriptions'; // Selenium test ID
 
@@ -38,7 +29,12 @@ export function PaperLandingPage({
 		<Page
 			id={pageQaId}
 			header={<Header countryGroupId={GBPCountries} />}
-			footer={paperSubsFooter}
+			footer={
+				<Footer
+					termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions"
+					fullWidth
+				/>
+			}
 		>
 			<NewspaperHero
 				promotionCopy={sanitisedPromoCopy}
