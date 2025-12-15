@@ -143,15 +143,18 @@ export function ContributionsOnlyLanding({
 		getSupportRegionIdConfig(supportRegionId);
 	const countryId = Country.detect();
 
-	const getInitialBillingPeriod = (): BillingPeriod => {
+	const getInitialBillingPeriod = () => {
 		// 1. Query Parameters take precedence
-		if (urlSearchParams.has('oneTime') || ratePlanParam === 'OneTime') {
+		if (urlSearchParams.has('oneTime')) {
 			return BillingPeriod.OneTime;
 		}
-		if (ratePlanParam === 'Annual') {
+
+		const ratePlanParamLower = ratePlanParam.trim().toLowerCase();
+		if (ratePlanParamLower === 'onetime') {
+			return BillingPeriod.OneTime;
+		} else if (ratePlanParamLower === 'annual') {
 			return BillingPeriod.Annual;
-		}
-		if (ratePlanParam === 'Monthly') {
+		} else if (ratePlanParamLower === 'monthly') {
 			return BillingPeriod.Monthly;
 		}
 
@@ -162,6 +165,7 @@ export function ContributionsOnlyLanding({
 
 		const isContributionDefault =
 			defaultSelection?.productType === 'Contribution';
+
 		if (isContributionDefault && defaultSelection.billingPeriod === 'Annual') {
 			return BillingPeriod.Annual;
 		}
