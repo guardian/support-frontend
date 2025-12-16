@@ -149,7 +149,7 @@ export const planDetailsContainer = css`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	margin-top: ${space[5]}px;
+	margin: ${space[5]}px 0 ${space[2]}px;
 	gap: ${space[5]}px;
 `;
 
