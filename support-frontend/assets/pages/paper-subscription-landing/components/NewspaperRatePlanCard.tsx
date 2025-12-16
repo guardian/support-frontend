@@ -68,6 +68,9 @@ function NewspaperRatePlanCard({
 	// a single list UI wise.
 	const digitalRewardsHasLabel = planData?.digitalRewards?.label;
 
+	const shouldShowEndSection =
+		Boolean(unavailableOutsideLondon) || isObserverChannel;
+
 	const renderPlanDetails = () => (
 		<div css={[planDetailsContainer]}>
 			{digitalRewardsHasLabel ? (
@@ -90,7 +93,7 @@ function NewspaperRatePlanCard({
 					]}
 				/>
 			)}
-			{(unavailableOutsideLondon ?? isObserverChannel) && (
+			{shouldShowEndSection && (
 				<div css={planDetailsEndSection}>
 					{unavailableOutsideLondon && (
 						<p css={cardInfo}>
