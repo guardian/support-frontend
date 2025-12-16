@@ -7,6 +7,7 @@ import {
 	setUpTrackingAndConsents,
 } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
+import 'stylesheets/skeleton/skeleton.scss';
 import SubscriptionLandingContent from './components/subscriptionsLandingContent';
 import type { SubscriptionsLandingProps } from './subscriptionsLandingProps';
 import { subscriptionsLandingProps } from './subscriptionsLandingProps';
