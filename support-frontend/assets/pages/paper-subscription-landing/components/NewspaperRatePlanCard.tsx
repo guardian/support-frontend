@@ -27,7 +27,6 @@ import {
 	planDescription,
 	planDetailsContainer,
 	planDetailsEndSection,
-	sectionMarginZero,
 } from './NewspaperRatePlanCardStyles';
 
 function NewspaperRatePlanCard({
@@ -65,21 +64,32 @@ function NewspaperRatePlanCard({
 
 	const isObserverChannel = productLabel?.channel === Channel.Observer;
 
+	// If the digital rewards section has no label, then we combine the benefits into
+	// a single list UI wise.
+	const digitalRewardsHasLabel = planData?.digitalRewards?.label;
+
 	const renderPlanDetails = () => (
-		<div
-			css={[
-				planDetailsContainer,
-				!planData?.digitalRewards?.label && sectionMarginZero,
-			]}
-		>
-			<BenefitsList
-				title={planData?.benefits.label}
-				listItems={planData?.benefits.items}
-			/>
-			<BenefitsList
-				title={planData?.digitalRewards?.label}
-				listItems={planData?.digitalRewards?.items}
-			/>
+		<div css={[planDetailsContainer]}>
+			{digitalRewardsHasLabel ? (
+				<>
+					<BenefitsList
+						title={planData.benefits.label}
+						listItems={planData.benefits.items}
+					/>
+					<BenefitsList
+						title={planData.digitalRewards?.label}
+						listItems={planData.digitalRewards?.items}
+					/>
+				</>
+			) : (
+				<BenefitsList
+					title={planData?.benefits.label}
+					listItems={[
+						...(planData?.benefits.items ?? []),
+						...(planData?.digitalRewards?.items ?? []),
+					]}
+				/>
+			)}
 			{(unavailableOutsideLondon ?? isObserverChannel) && (
 				<div css={planDetailsEndSection}>
 					{unavailableOutsideLondon && (

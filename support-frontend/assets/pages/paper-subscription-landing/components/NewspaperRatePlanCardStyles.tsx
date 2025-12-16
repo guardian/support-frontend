@@ -139,12 +139,6 @@ export const planDescription = css`
 	}
 `;
 
-export const sectionMarginZero = css`
-	> section {
-		margin-bottom: 0;
-	}
-`;
-
 export const planDetailsContainer = css`
 	height: 100%;
 	display: flex;
@@ -155,5 +149,4 @@ export const planDetailsContainer = css`
 
 export const planDetailsEndSection = css`
 	margin-top: auto;
-	padding-top: ${space[9]}px;
 `;
