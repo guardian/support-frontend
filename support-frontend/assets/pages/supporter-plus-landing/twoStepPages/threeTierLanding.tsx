@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import { cmp } from '@guardian/libs';
 import {
 	from,
-	headlineBold24,
 	palette,
 	space,
 	textSans17,
@@ -66,6 +65,7 @@ import { SupportOnce } from '../components/supportOnce';
 import type { CardContent } from '../components/threeTierCard';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
+import { ThreeTierLandingHeading } from './threeTierLandingHeading';
 import { TickerContainer } from './tickerContainer';
 
 const recurringContainer = css`
@@ -108,19 +108,6 @@ const innerContentContainer = css`
 	max-width: 940px;
 	margin: 0 auto;
 	text-align: center;
-`;
-
-const heading = css`
-	text-wrap: balance;
-	text-align: left;
-	color: ${palette.neutral[100]};
-	${headlineBold24}
-	${from.tablet} {
-		text-align: center;
-	}
-	${from.desktop} {
-		font-size: 2.625rem;
-	}
 `;
 
 const standFirst = css`
@@ -276,9 +263,13 @@ type ThreeTierLandingProps = {
 export function ThreeTierLanding({
 	supportRegionId,
 	settings,
+	abParticipations,
 }: ThreeTierLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
-	const urlSearchParamsProduct = urlSearchParams.get('product');
+	const rawUrlSearchParamsProduct = urlSearchParams.get('product');
+	const urlSearchParamsProduct = rawUrlSearchParamsProduct
+		? rawUrlSearchParamsProduct.toLowerCase()
+		: undefined;
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
 	const urlSearchParamsPromoCode = urlSearchParams.get('promoCode');
@@ -322,11 +313,31 @@ export function ThreeTierLanding({
 
 	const enableStudentOffer = ['uk', 'us', 'ca'].includes(supportRegionId);
 
-	const getInitialContributionType = () => {
+	const getInitialContributionType = (): ContributionType => {
+		// 1. Query Parameters take precedence
 		if (enableSingleContributionsTab && urlSearchParamsOneTime) {
 			return 'ONE_OFF';
 		}
-		return urlSearchParamsRatePlan === 'Annual' ? 'ANNUAL' : 'MONTHLY';
+		const ratePlanParam = urlSearchParamsRatePlan?.trim().toLowerCase();
+		if (ratePlanParam === 'annual') {
+			return 'ANNUAL';
+		} else if (ratePlanParam === 'monthly') {
+			return 'MONTHLY';
+		}
+
+		// 2. Default Selection from Settings
+		const defaultBillingPeriod =
+			settings.defaultProductSelection?.billingPeriod;
+
+		if (defaultBillingPeriod === 'Annual') {
+			return 'ANNUAL';
+		}
+		if (defaultBillingPeriod === 'OneTime' && enableSingleContributionsTab) {
+			return 'ONE_OFF';
+		}
+
+		// 3. Fallback
+		return 'MONTHLY';
 	};
 
 	const [contributionType, setContributionType] = useState<ContributionType>(
@@ -368,13 +379,32 @@ export function ThreeTierLanding({
 		contribution: tier1Pricing.toString(),
 	});
 	const tier1Url = `checkout?${tier1UrlParams.toString()}`;
+
+	const getDefaultSelectedProduct = () => {
+		if (urlSearchParamsProduct) {
+			return urlSearchParamsProduct;
+		}
+
+		if (
+			isCardUserSelected(tier1Pricing) ||
+			isCardUserSelected(tier2Pricing, tier2Promotion?.discount?.amount) ||
+			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount)
+		) {
+			return undefined;
+		}
+		return settings.defaultProductSelection?.productType.toLowerCase();
+	};
+
+	const defaultSelectedProduct = getDefaultSelectedProduct();
+
 	const tier1Card: CardContent = {
 		product: 'Contribution',
 		price: tier1Pricing,
 		link: tier1Url,
 		isUserSelected:
-			urlSearchParamsProduct === 'Contribution' ||
-			isCardUserSelected(tier1Pricing),
+			urlSearchParamsProduct === 'contribution' ||
+			isCardUserSelected(tier1Pricing) ||
+			(!urlSearchParamsProduct && defaultSelectedProduct === 'contribution'),
 		...settings.products.Contribution,
 		title:
 			settings.products.Contribution?.title ?? getProductLabel('Contribution'),
@@ -427,8 +457,9 @@ export function ThreeTierLanding({
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion: tier2Promotion,
 		isUserSelected:
-			urlSearchParamsProduct === 'SupporterPlus' ||
-			isCardUserSelected(tier2Pricing, tier2Promotion?.discount?.amount),
+			urlSearchParamsProduct === 'supporterplus' ||
+			isCardUserSelected(tier2Pricing, tier2Promotion?.discount?.amount) ||
+			(!urlSearchParamsProduct && defaultSelectedProduct === 'supporterplus'),
 		...tier2ProductDescription,
 	};
 
@@ -491,8 +522,10 @@ export function ThreeTierLanding({
 		link: `checkout?${tier3UrlParams.toString()}`,
 		promotion: tier3Promotion,
 		isUserSelected:
-			urlSearchParamsProduct === tier3Product ||
-			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount),
+			urlSearchParamsProduct === tier3Product.toLowerCase() ||
+			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount) ||
+			(!urlSearchParamsProduct &&
+				defaultSelectedProduct === tier3Product.toLowerCase()),
 		...tier3ProductDescription,
 	};
 
@@ -594,31 +627,12 @@ export function ThreeTierLanding({
 						/>
 					)}
 
-					{headingOverride && (
-						<h1 css={heading}>
-							<span
-								dangerouslySetInnerHTML={{
-									__html: getSanitisedHtml(
-										replaceDatePlaceholder(headingOverride, countdownDaysLeft),
-									),
-								}}
-							/>
-						</h1>
-					)}
-					{!headingOverride && (
-						<h1 css={heading}>
-							<span
-								dangerouslySetInnerHTML={{
-									__html: getSanitisedHtml(
-										replaceDatePlaceholder(
-											settings.copy.heading,
-											countdownDaysLeft,
-										),
-									),
-								}}
-							/>
-						</h1>
-					)}
+					<ThreeTierLandingHeading
+						heading={headingOverride ?? settings.copy.heading}
+						countdownDaysLeft={countdownDaysLeft}
+						abParticipations={abParticipations}
+					/>
+
 					<p
 						css={standFirst}
 						dangerouslySetInnerHTML={{

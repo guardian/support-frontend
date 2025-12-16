@@ -16,6 +16,7 @@ import admin.settings.{
   TickerCopy,
   TickerSettings,
 }
+import io.circe.Decoder
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
@@ -23,6 +24,9 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 import scala.jdk.CollectionConverters.{MapHasAsJava, SeqHasAsJava}
 
 class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
+
+  private def parseDynamoRecord[T: Decoder](record: java.util.Map[String, AttributeValue]): Either[io.circe.Error, T] =
+    DynamoJsonConverter.mapToJson(record).as[T]
 
   private def stringAttr(value: String): AttributeValue = AttributeValue.builder().s(value).build()
   private def booleanAttr(value: Boolean): AttributeValue = AttributeValue.builder().bool(value).build()
@@ -216,7 +220,7 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
       ),
     )
 
-    val result = LandingPageTestService.parseLandingPageTest(dynamoTest.asJava)
+    val result = parseDynamoRecord[LandingPageTest](dynamoTest.asJava)
     result shouldBe Right(
       LandingPageTest(
         name = "test1",
@@ -258,6 +262,7 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
                 ),
               )
             },
+            defaultProductSelection = None,
           ),
         ),
       ),

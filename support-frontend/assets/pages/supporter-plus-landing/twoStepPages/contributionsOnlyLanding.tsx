@@ -20,11 +20,7 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { Country } from 'helpers/internationalisation/classes/country';
-import type { ActiveRatePlanKey } from 'helpers/productCatalog';
-import {
-	billingPeriodToContributionType,
-	ratePlanToBillingPeriod,
-} from 'helpers/productPrice/billingPeriods';
+import { billingPeriodToContributionType } from 'helpers/productPrice/billingPeriods';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import { AmountsCard } from '../components/amountsCard';
 
@@ -148,15 +144,39 @@ export function ContributionsOnlyLanding({
 	const countryId = Country.detect();
 
 	const getInitialBillingPeriod = () => {
+		// 1. Query Parameters take precedence
 		if (urlSearchParams.has('oneTime')) {
 			return BillingPeriod.OneTime;
 		}
-		if (['Annual', 'OneTime'].includes(ratePlanParam)) {
-			return ratePlanToBillingPeriod(ratePlanParam as ActiveRatePlanKey);
-		} else {
+
+		const ratePlanParamLower = ratePlanParam.trim().toLowerCase();
+		if (ratePlanParamLower === 'onetime') {
+			return BillingPeriod.OneTime;
+		} else if (ratePlanParamLower === 'annual') {
+			return BillingPeriod.Annual;
+		} else if (ratePlanParamLower === 'monthly') {
 			return BillingPeriod.Monthly;
 		}
+
+		// 2. Default Selection from Settings
+		const settings = window.guardian.settings;
+		const defaultSelection =
+			settings.landingPageTests?.[0]?.variants?.[0]?.defaultProductSelection;
+
+		const isContributionDefault =
+			defaultSelection?.productType === 'Contribution';
+
+		if (isContributionDefault && defaultSelection.billingPeriod === 'Annual') {
+			return BillingPeriod.Annual;
+		}
+		if (isContributionDefault && defaultSelection.billingPeriod === 'OneTime') {
+			return BillingPeriod.OneTime;
+		}
+
+		// 3. Fallback
+		return BillingPeriod.Monthly;
 	};
+
 	const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>(
 		getInitialBillingPeriod(),
 	);
