@@ -2,24 +2,27 @@ import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { Checkbox, Label } from '@guardian/source/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
-import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSession';
+import type { BillingAddressProps } from './BillingAddress';
 import { BillingAddress } from './BillingAddress';
-import type { BillingStatePostcode } from './PersonalDetailsFields';
 
-type BillingAddressFieldsProps = {
-	countryId: IsoCountry;
-	countries?: Record<string, string>;
-	checkoutSession?: CheckoutSession;
-	billingStatePostcode: BillingStatePostcode;
+export type BillingStatePostcodeCountry = {
+	billingState: string;
+	setBillingState: (value: string) => void;
+	billingPostcode: string;
+	setBillingPostcode: (value: string) => void;
+	billingCountry: IsoCountry;
+	setBillingCountry: (value: IsoCountry) => void;
+};
+
+type BillingAddressFieldsProps = BillingAddressProps & {
 	isWeeklyGift: boolean;
 };
 
 export function BillingAddressFields({
-	countryId,
 	countries,
 	checkoutSession,
-	billingStatePostcode,
+	billingStatePostcodeCountry,
 	isWeeklyGift,
 }: BillingAddressFieldsProps) {
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
@@ -51,13 +54,9 @@ export function BillingAddressFields({
 			</fieldset>
 			{!billingAddressMatchesDelivery && (
 				<BillingAddress
-					countryId={countryId}
 					countries={countries}
 					checkoutSession={checkoutSession}
-					postcode={billingStatePostcode.billingPostcode}
-					setPostcode={billingStatePostcode.setBillingPostcode}
-					state={billingStatePostcode.billingState}
-					setState={billingStatePostcode.setBillingState}
+					billingStatePostcodeCountry={billingStatePostcodeCountry}
 				/>
 			)}
 		</>

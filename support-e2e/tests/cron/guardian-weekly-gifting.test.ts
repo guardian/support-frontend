@@ -14,14 +14,27 @@ const giftTests = [
 		paymentType: 'PayPal',
 		internationalisationId: 'US',
 	},
+	{
+		product: 'GuardianWeeklyRestOfWorld',
+		ratePlan: 'OneYearGift',
+		paymentType: 'PayPal',
+		internationalisationId: 'INT',
+		billingCountry: 'United States',
+	},
 ];
 
 test.describe('Guardian Weekly Gift Checkout', () =>
 	giftTests.map((testDetails) => {
-		const { ratePlan, product, paymentType, internationalisationId } =
-			testDetails;
+		const {
+			ratePlan,
+			product,
+			paymentType,
+			internationalisationId,
+			billingCountry,
+		} = testDetails;
+		const countries = `${internationalisationId}${billingCountry ? ` / ${billingCountry}` : ''}`;
 		const giftPeriod = ratePlan === '3MonthGift' ? '3 months' : '12 months';
-		test(`${product} - ${ratePlan} - ${paymentType} - ${internationalisationId}`, async ({
+		test(`${product} - ${ratePlan} - ${paymentType} - ${countries}`, async ({
 			context,
 			baseURL,
 		}) => {

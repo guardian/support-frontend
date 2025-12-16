@@ -11,6 +11,7 @@ type TestDetails = {
 	internationalisationId: string;
 	postCode?: string;
 	ratePlan?: string;
+	billingCountry?: string;
 };
 
 export const visitLandingPageAndCompleteCheckout = async (
@@ -26,6 +27,7 @@ export const visitLandingPageAndCompleteCheckout = async (
 		internationalisationId,
 		postCode,
 		ratePlan,
+		billingCountry,
 	} = testDetails;
 	const page = await context.newPage();
 	await setupPage(page, context, baseURL, landingPagePath);
@@ -45,5 +47,6 @@ export const visitLandingPageAndCompleteCheckout = async (
 		internationalisationId,
 		postCode,
 		ratePlan,
+		billingCountry,
 	});
 };

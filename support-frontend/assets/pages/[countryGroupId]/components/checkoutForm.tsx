@@ -68,6 +68,7 @@ import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
+import type { BillingStatePostcodeCountry } from '../checkout/components/BillingAddressFields';
 import { PersonalAddressFields } from '../checkout/components/PersonalAddressFields';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
 import { WeeklyDeliveryDates } from '../checkout/components/WeeklyDeliveryDates';
@@ -277,14 +278,6 @@ export default function CheckoutForm({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
-	const validPaymentMethods = getPaymentMethods(
-		countryId,
-		productKey,
-		ratePlanKey,
-	)
-		.filter(isPaymentMethod)
-		.filter(paymentMethodIsActive);
-
 	const [paymentMethod, setPaymentMethod] = useStateWithCheckoutSession<
 		PaymentMethod | undefined
 	>(checkoutSession ? StripeHostedCheckout : undefined, undefined);
@@ -472,6 +465,21 @@ export default function CheckoutForm({
 		'',
 	);
 
+	// billingCountry selector used to determine available payment methods
+	const [billingCountry, setBillingCountry] =
+		useStateWithCheckoutSession<IsoCountry>(
+			checkoutSession?.formFields.addressFields.billingAddress.country,
+			countryId,
+		);
+
+	const validPaymentMethods = getPaymentMethods(
+		billingCountry,
+		productKey,
+		ratePlanKey,
+	)
+		.filter(isPaymentMethod)
+		.filter(paymentMethodIsActive);
+
 	/** Gift recipient details */
 	// Session storage unavailable yet, using state
 	const [recipientFirstName, setRecipientFirstName] =
@@ -648,11 +656,13 @@ export default function CheckoutForm({
 	);
 
 	const billingPeriod = productFields.billingPeriod;
-	const billingStatePostcode = {
+	const billingStatePostcodeCountry: BillingStatePostcodeCountry = {
 		billingState: billingState,
 		setBillingState: setBillingState,
 		billingPostcode: billingPostcode,
 		setBillingPostcode: setBillingPostcode,
+		billingCountry: billingCountry,
+		setBillingCountry: setBillingCountry,
 	};
 
 	const billingPreposition = productDescription.ratePlans[ratePlanKey]
@@ -880,7 +890,7 @@ export default function CheckoutForm({
 							setConfirmedEmail={setConfirmedEmail}
 							phoneNumber={phoneNumber}
 							setPhoneNumber={setPhoneNumber}
-							billingStatePostcode={billingStatePostcode}
+							billingStatePostcodeCountry={billingStatePostcodeCountry}
 							hasDeliveryAddress={hasDeliveryAddress}
 							isEmailAddressReadOnly={isSignedIn}
 							isSignedIn={isSignedIn}
@@ -910,7 +920,7 @@ export default function CheckoutForm({
 								setDeliveryAgentError={setDeliveryAgentError}
 								deliveryAddressErrors={deliveryAddressErrors}
 								setDeliveryAddressErrors={setDeliveryAddressErrors}
-								billingStatePostcode={billingStatePostcode}
+								billingStatePostcodeCountry={billingStatePostcodeCountry}
 							/>
 						)}
 

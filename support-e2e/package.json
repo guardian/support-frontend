@@ -15,7 +15,7 @@
 		"test-cron-ui-code": "playwright test --project=cron --config=playwright.code.config.ts --ui",
 		"test-cron-dev": "playwright test --project=cron --config=playwright.dev.config.ts --ui",
 		"lint": "eslint ./tests/**/*.ts",
-    "build": "tsc --noEmit"
+		"build": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@playwright/test": "^1.55.1",

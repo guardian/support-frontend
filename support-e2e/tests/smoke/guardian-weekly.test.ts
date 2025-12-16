@@ -31,27 +31,40 @@ const tests = [
 		ratePlan: 'Annual',
 		paymentType: 'Credit/Debit card',
 		internationalisationId: 'INT',
+		billingCountry: 'United States',
 	},
 	{
 		product: 'GuardianWeeklyDomestic',
 		ratePlan: 'Quarterly',
 		paymentType: 'Credit/Debit card',
 		internationalisationId: 'AU',
+		billingCountry: 'United Kingdom',
 	},
 ];
 
 test.describe('Guardian Weekly Checkout', () =>
 	tests.map((testDetails) => {
-		const { ratePlan, product, paymentType, internationalisationId } =
-			testDetails;
-
-		test(`${product} - ${ratePlan} - ${paymentType} - ${internationalisationId}`, async ({
+		const {
+			ratePlan,
+			product,
+			paymentType,
+			internationalisationId,
+			billingCountry,
+		} = testDetails;
+		const countries = `${internationalisationId}${billingCountry ? ` / ${billingCountry}` : ''}`;
+		test(`${product} - ${ratePlan} - ${paymentType} - ${countries}`, async ({
 			context,
 			baseURL,
 		}) => {
 			await visitLandingPageAndCompleteCheckout(
 				`/${internationalisationId.toLowerCase()}/subscribe/weekly`,
-				{ context, baseURL, product, paymentType, internationalisationId },
+				{
+					context,
+					baseURL,
+					product,
+					paymentType,
+					internationalisationId,
+				},
 				async (page) => {
 					// Transition from landing page to checkout:
 
