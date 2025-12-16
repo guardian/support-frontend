@@ -47,13 +47,12 @@ const postCodeIndex = (
 	index: number,
 	billingCountry?: string,
 ): number => {
-	// UK postCodes have extra lookup, doubling their location on screen
-	// United States billingCountry is for a differing region so is shifted up
-	return internationalisationId === 'UK'
-		? index * 2
-		: billingCountry === 'United States'
-			? index - 1
-			: index;
+	// delivery only - UK postCodes have extra lookup, doubling their location on screen
+	if (!billingCountry) {
+		return internationalisationId === 'UK' ? index * 2 : index;
+	}
+	// delivery and billing - Regions excluding United Kingdom (extra lookup), the billingCountry is shifted up
+	return billingCountry === 'United Kingdom' ? index : index - 1;
 };
 
 export const setTestUserCoreDetails = async (
