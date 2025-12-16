@@ -73,7 +73,6 @@ ObserverNewspaperCard.args = {
 			items: ['Benefit 1', 'Benefit 2'],
 		},
 		digitalRewards: {
-			label: 'Digital rewards label',
 			items: ['Digital reward 1', 'Digital reward 2'],
 		},
 	},
