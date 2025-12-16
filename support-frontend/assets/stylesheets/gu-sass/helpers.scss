@@ -98,20 +98,7 @@
 	}
 }
 
-// ----- Assistive technologies guidance (non-visible) ----- //
-@mixin visually-hidden {
-	border: 0;
-	clip: rect(0 0 0 0);
-	height: 1px;
-	margin: -1px !important;
-	overflow: hidden;
-	padding: 0;
-	position: absolute !important;
-	width: 1px;
-}
-
 // ----- Global hide helper ----- //
-
 .is-hidden,
 [hidden] {
 	display: none !important;

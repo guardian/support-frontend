@@ -4,24 +4,22 @@ import { buttonOpen } from './veggieBurgerButtonStyles';
 
 type PropTypes = {
 	children: ReactNode;
-	label: string;
-	'aria-haspopup'?: AriaAttributes['aria-haspopup'];
-	onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 	ref?: Ref<HTMLButtonElement>;
-	style?: Record<string, string | number>;
 	cssOverride?: SerializedStyles;
+	onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+	style?: Record<string, string | number>;
+	'aria-haspopup'?: AriaAttributes['aria-haspopup'];
+	'aria-label'?: string;
 };
 
 function VeggieBurgerButton({
 	children,
-	label,
 	ref,
 	cssOverride,
 	...otherProps
 }: PropTypes): JSX.Element {
 	return (
 		<button css={[buttonOpen, cssOverride]} ref={ref} {...otherProps}>
-			<span className="visually-hidden">{label}</span>
 			{children}
 		</button>
 	);

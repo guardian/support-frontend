@@ -1,56 +1,56 @@
-// /*
-// Standard sizes and margins for the content and headers.
-// */
-// .gu-content-margin {
-// 	box-sizing: border-box;
-// 	padding: 0 ($gu-h-spacing * 0.5);
+/*
+Standard sizes and margins for the content and headers.
+*/
+.gu-content-margin {
+	box-sizing: border-box;
+	padding: 0 ($gu-h-spacing * 0.5);
 
-// 	@include mq($from: mobileLandscape) {
-// 		width: gu-breakpoint(mobileLandscape);
-// 		margin: 0 auto;
-// 		padding: 0 $gu-h-spacing;
-// 	}
+	@include mq($from: mobileLandscape) {
+		width: gu-breakpoint(mobileLandscape);
+		margin: 0 auto;
+		padding: 0 $gu-h-spacing;
+	}
 
-// 	@include mq($from: phablet) {
-// 		width: gu-breakpoint(phablet);
-// 		margin: 0 auto;
-// 		padding: 0 auto;
-// 	}
+	@include mq($from: phablet) {
+		width: gu-breakpoint(phablet);
+		margin: 0 auto;
+		padding: 0 auto;
+	}
 
-// 	@include mq($from: tablet) {
-// 		width: gu-breakpoint(tablet);
-// 		padding: 0 $gu-h-spacing;
-// 	}
+	@include mq($from: tablet) {
+		width: gu-breakpoint(tablet);
+		padding: 0 $gu-h-spacing;
+	}
 
-// 	@include mq($from: desktop) {
-// 		width: gu-breakpoint(desktop);
-// 		padding: 0 $gu-h-spacing 0 $gu-h-spacing * 2;
-// 	}
+	@include mq($from: desktop) {
+		width: gu-breakpoint(desktop);
+		padding: 0 $gu-h-spacing 0 $gu-h-spacing * 2;
+	}
 
-// 	@include mq($from: leftCol) {
-// 		width: gu-breakpoint(leftCol);
-// 		padding: 0 $gu-h-spacing * 1.5;
-// 	}
+	@include mq($from: leftCol) {
+		width: gu-breakpoint(leftCol);
+		padding: 0 $gu-h-spacing * 1.5;
+	}
 
-// 	@include mq($from: wide) {
-// 		width: gu-breakpoint(wide);
-// 	}
-// }
+	@include mq($from: wide) {
+		width: gu-breakpoint(wide);
+	}
+}
 
-// .gu-content {
-// 	@supports (display: flex) {
-// 		display: flex;
-// 		flex-direction: column;
-// 		min-height: 100vh;
-// 	}
-// }
+.gu-content {
+	@supports (display: flex) {
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+	}
+}
 
-// .gu-content__main {
-// 	background-color: gu-colour(neutral-93);
-// 	@supports (display: flex) {
-// 		flex: 1 0 auto;
-// 	}
-// }
+.gu-content__main {
+	background-color: gu-colour(neutral-93);
+	@supports (display: flex) {
+		flex: 1 0 auto;
+	}
+}
 
 /*
 Type defaults
@@ -62,27 +62,20 @@ dialog {
 	-webkit-font-smoothing: antialiased;
 }
 
-// body {
-// 	line-height: 1.5;
-// }
+body {
+	line-height: 1.5;
+}
 
-// strong {
-// 	font-weight: bolder;
-// }
-
-/*
-Assistive technologies guidance (non-visible)
-*/
-.visually-hidden {
-	@include visually-hidden;
+strong {
+	font-weight: bolder;
 }
 
 /*
 Disable forms pre hydration
 */
-// [data-not-hydrated] {
-// 	input,
-// 	button {
-// 		pointer-events: none;
-// 	}
-// }
+[data-not-hydrated] {
+	input,
+	button {
+		pointer-events: none;
+	}
+}
