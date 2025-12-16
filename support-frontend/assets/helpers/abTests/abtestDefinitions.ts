@@ -84,17 +84,35 @@ export const tests: Tests = {
 		audiences: {
 			ALL: {
 				offset: 0,
-				// X% of audience in this test, all get the variant. Everyone
-				// else gets the control (i.e. PayPal express) This is fine -
-				// we're not comparing the two groups, just rolling out PayPalCP
-				// gradually.
-				size: 0,
+				// Everyone gets PayPalCP
+				size: 1, // 100%
 			},
 		},
 		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 1,
 		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
+		excludeContributionsOnlyCountries: true,
+	},
+	landingPageMparticlePastContributor: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: true,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 2,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeContributionsOnlyCountries: true,
 	},
 };

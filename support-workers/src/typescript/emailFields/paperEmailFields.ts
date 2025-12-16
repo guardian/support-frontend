@@ -6,6 +6,7 @@ import { DataExtensionNames } from '@modules/email/email';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
+import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
@@ -13,14 +14,14 @@ import type { User } from '../model/stateSchemas';
 import type { DeliveryAgentDetails } from '../services/paperRound';
 import { buildDeliveryEmailFields } from './deliveryEmailFields';
 import { buildThankYouEmailFields } from './emailFields';
-import { describePayments, firstPayment } from './paymentDescription';
 
-type PaperProductPurchase = Extract<
+export type PaperProductPurchase = Extract<
 	ProductPurchase,
 	{ product: 'NationalDelivery' | 'HomeDelivery' | 'SubscriptionCard' }
 >;
 
 export function buildPaperEmailFields({
+	today,
 	user,
 	currency,
 	subscriptionNumber,
@@ -30,6 +31,7 @@ export function buildPaperEmailFields({
 	productInformation,
 	deliveryAgentDetails,
 }: {
+	today: Dayjs;
 	user: User;
 	currency: IsoCurrency;
 	subscriptionNumber: string;
@@ -54,17 +56,15 @@ export function buildPaperEmailFields({
 			: undefined;
 
 	const deliveryFields = buildDeliveryEmailFields({
-		subscriptionNumber: subscriptionNumber,
+		today: today,
 		user: user,
-		firstDeliveryDate: dayjs(productInformation.firstDeliveryDate),
-		firstPaymentDate: dayjs(firstPayment(paymentSchedule).date),
-		paymentDescription: describePayments(
-			paymentSchedule,
-			BillingPeriod.Monthly, // Paper products are always monthly
-			currency,
-			false,
-		),
+		subscriptionNumber: subscriptionNumber,
+		currency: currency,
+		billingPeriod: BillingPeriod.Monthly, // Paper products are always monthly
 		paymentMethod: paymentMethod,
+		paymentSchedule: paymentSchedule,
+		firstDeliveryDate: dayjs(productInformation.firstDeliveryDate),
+		isFixedTerm: false, // There are no fixed term paper rate plans
 		mandateId: mandateId,
 	});
 	const productFields = {

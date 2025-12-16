@@ -31,7 +31,7 @@ function getTermsConditionsLink({ product }: PromotionTerms) {
 }
 
 // ----- Render ----- //
-function PromotionTermsPage(props: PromotionTermsPropTypes) {
+export function PromotionTermsPage(props: PromotionTermsPropTypes) {
 	return (
 		<Page
 			header={<Header countryGroupId={CountryGroup.detect()} />}
@@ -47,4 +47,4 @@ function PromotionTermsPage(props: PromotionTermsPropTypes) {
 	);
 }
 
-renderPage(PromotionTermsPage(getPromotionTermsProps()));
+renderPage(<PromotionTermsPage {...getPromotionTermsProps()} />);

@@ -13,6 +13,14 @@ const meta: Meta<SubscriptionsLandingProps> = {
 					'A full-page rendering of the Subscriptions landing experience, wrapped in a MemoryRouter for Storybook.',
 			},
 		},
+		chromatic: {
+			modes: {
+				mobile: { viewport: 'mobile' },
+				desktop: { viewport: 'desktop' },
+				tablet: { viewport: 'tablet' },
+				wide: { viewport: 'wide' },
+			},
+		},
 	},
 };
 

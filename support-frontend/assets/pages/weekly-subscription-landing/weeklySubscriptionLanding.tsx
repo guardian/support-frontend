@@ -30,7 +30,6 @@ import Benefits from './components/content/benefits';
 import GiftBenefits from './components/content/giftBenefits';
 import { WeeklyHero } from './components/hero/hero';
 import WeeklyProductPrices from './components/weeklyProductPrices';
-import './weeklySubscriptionLanding.scss';
 import type {
 	WeeklyLandingPropTypes,
 	WeeklyLPContentPropTypes,
@@ -75,7 +74,11 @@ function WeeklyLPContent({
 				/>
 			}
 		>
-			<WeeklyHero orderIsAGift={orderIsAGift} promotionCopy={promotionCopy} />
+			<WeeklyHero
+				orderIsAGift={orderIsAGift}
+				promotionCopy={promotionCopy}
+				countryGroupId={countryGroupId}
+			/>
 			<FullWidthContainer>
 				<CentredContainer>
 					<Block cssOverrides={styles.closeGapAfterPageTitle}>

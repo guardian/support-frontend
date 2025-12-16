@@ -132,6 +132,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "enableCheckoutNudge" : {
           |        "description" : "Enable checkout nudge",
           |        "state" : "On"
+          |      },
+          |      "enableMParticle" : {
+          |        "description" : "Enable mparticle",
+          |        "state" : "On"
           |      }
           |    }
           |  },
@@ -179,7 +183,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           ),
           subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(Off)),
           subscriptionsSwitches = SubscriptionsSwitches(Some(On), Some(On), Some(On)),
-          featureSwitches = FeatureSwitches(Some(On), Some(On), Some(Off), Some(On), Some(Off), Some(On)),
+          featureSwitches = FeatureSwitches(Some(On), Some(On), Some(Off), Some(On), Some(Off), Some(On), Some(On)),
           campaignSwitches = CampaignSwitches(Some(Off), Some(Off)),
           recaptchaSwitches = RecaptchaSwitches(Some(On), Some(On)),
         ),

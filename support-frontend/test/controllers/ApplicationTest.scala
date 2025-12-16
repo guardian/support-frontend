@@ -24,7 +24,9 @@ import play.api.mvc.{AnyContent, BodyParser}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, header, status, stubControllerComponents}
 import services._
+import services.mparticle.MParticleClient
 import services.pricing.{CountryGroupPrices, PriceSummaryService, PriceSummaryServiceProvider}
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -52,7 +54,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     checkToken = csrfCheck,
     csrfConfig = csrfConfig,
     stage = stage,
-    featureSwitches = FeatureSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
+    featureSwitches = FeatureSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
     testUsersService = TestUserService("secret"),
   )
 
@@ -91,6 +93,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     productCatalog,
     "support.thegulocal.com",
     mock[TickerService],
+    mock[MParticleClient],
   )(mock[ExecutionContext])
 
   "/healthcheck" should {

@@ -7,7 +7,7 @@ import {
 	setUpTrackingAndConsents,
 } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
-import './subscriptionsLanding.scss';
+import 'stylesheets/skeleton/skeleton.scss';
 import SubscriptionLandingContent from './components/subscriptionsLandingContent';
 import type { SubscriptionsLandingProps } from './subscriptionsLandingProps';
 import { subscriptionsLandingProps } from './subscriptionsLandingProps';
@@ -22,7 +22,7 @@ export function SubscriptionsLandingPage({
 	return (
 		<Page
 			header={<Header countryGroupId={countryGroupId} />}
-			footer={<Footer centred />}
+			footer={<Footer centred fullWidth />}
 		>
 			<SubscriptionLandingContent
 				countryGroupId={countryGroupId}
