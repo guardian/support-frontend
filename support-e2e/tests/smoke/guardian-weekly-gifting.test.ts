@@ -7,6 +7,7 @@ const giftTests = [
 		ratePlan: '3MonthGift',
 		paymentType: 'Credit/Debit card',
 		internationalisationId: 'UK',
+		billingCountry: 'United States',
 	},
 	{
 		product: 'GuardianWeeklyDomestic',
@@ -48,7 +49,7 @@ test.describe('Guardian Weekly Gift Checkout', () =>
 				`/${internationalisationId.toLowerCase()}/subscribe/weekly/gift`,
 				{
 					context,
-					baseURL: baseURL,
+					baseURL,
 					product,
 					ratePlan,
 					paymentType,

@@ -42,10 +42,12 @@ const userDetails: Record<string, TestFields> = {
 				city: 'London',
 			},
 			{
-				postCode: 'M1 1PW',
-				firstLine: '3 Cross Street',
-				city: 'Manchester',
-			},
+				billingCountry: 'United States',
+				postCode: '10006',
+				state: 'New York',
+				firstLine: '61 Broadway',
+				city: 'New York',
+			}, // Optional billing region differs from delivery
 		],
 	},
 	EU: {
@@ -129,8 +131,15 @@ const userDetails: Record<string, TestFields> = {
 export const getUserFields = (
 	country: string,
 	postCode?: string,
+	billingCountry?: string,
 ): TestFields => {
-	const validUserDetails = userDetails[country];
+	const countryUserDetails = userDetails[country];
+	const validUserDetails = billingCountry
+		? countryUserDetails
+		: {
+				...countryUserDetails,
+				addresses: countryUserDetails.addresses?.slice(0, 1),
+			}; // Remove billing address if not specified
 	const userDetailsCopy = structuredClone(validUserDetails); // Create a deep copy
 	if (
 		postCode &&
