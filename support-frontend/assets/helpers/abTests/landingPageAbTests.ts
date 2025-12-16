@@ -2,6 +2,7 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import { ProductTierLabel } from 'helpers/productCatalog';
 import { getSettings } from '../globalsAndSwitches/globals';
 import type {
+	DefaultProductSelection,
 	LandingPageTest,
 	LandingPageVariant,
 } from '../globalsAndSwitches/landingPageSettings';
@@ -20,6 +21,11 @@ import {
 } from './sessionStorage';
 
 // Fallback config in case there's an issue getting it from the server
+const fallbackDefaultProductSelection: DefaultProductSelection = {
+	productType: 'SupporterPlus',
+	billingPeriod: 'Monthly',
+};
+
 export const fallBackLandingPageSelection: LandingPageVariant = {
 	name: 'CONTROL',
 	copy: {
@@ -91,6 +97,7 @@ export const fallBackLandingPageSelection: LandingPageVariant = {
 			cta: { copy: 'Support' },
 		},
 	},
+	defaultProductSelection: fallbackDefaultProductSelection,
 };
 
 const landingPageRegex = '^/.*/contribute(/.*)?$';

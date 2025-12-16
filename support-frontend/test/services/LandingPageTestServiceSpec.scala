@@ -262,6 +262,7 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
                 ),
               )
             },
+            defaultProductSelection = None,
           ),
         ),
       ),

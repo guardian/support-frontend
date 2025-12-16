@@ -68,6 +68,11 @@ export interface LandingPageProductDescription {
 	};
 }
 
+export interface DefaultProductSelection {
+	productType: 'Contribution' | 'SupporterPlus' | 'DigitalSubscription';
+	billingPeriod: 'OneTime' | 'Monthly' | 'Annual';
+}
+
 interface LandingPageProducts {
 	Contribution?: LandingPageProductDescription;
 	SupporterPlus?: LandingPageProductDescription;
@@ -85,6 +90,7 @@ export interface LandingPageVariant {
 	products: LandingPageProducts;
 	tickerSettings?: TickerSettings;
 	countdownSettings?: CountdownSettings;
+	defaultProductSelection?: DefaultProductSelection;
 }
 
 interface RegionTargeting {
