@@ -5,10 +5,11 @@ const vite = require('vite');
 module.exports = {
 	stories: ['../stories/**/*.stories.@(js|jsx|ts|tsx)'],
 	addons: [
-		'@storybook/addon-a11y',
-		'@storybook/addon-links',
-		'@storybook/addon-docs',
-	],
+        '@storybook/addon-a11y',
+        '@storybook/addon-links',
+        '@storybook/addon-docs',
+        '@chromatic-com/storybook'
+    ],
 	core: {
 		builder: '@storybook/builder-vite',
 	},
