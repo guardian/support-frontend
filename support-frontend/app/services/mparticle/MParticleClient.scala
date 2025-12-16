@@ -1,5 +1,6 @@
 package services.mparticle
 
+import admin.settings.{AllSettings, AllSettingsProvider}
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.{CodeBody, WebServiceClientError, WebServiceHelper}
 import com.gu.support.config.Stage
@@ -45,6 +46,7 @@ class MParticleClient(
     val httpClient: FutureHttpClient,
     mparticleConfigProvider: MparticleConfigProvider,
     stage: Stage,
+    settingsProvider: AllSettingsProvider,
 )(implicit ec: ExecutionContext, system: ActorSystem)
     extends WebServiceHelper[MParticleError] {
 
@@ -59,7 +61,7 @@ class MParticleClient(
   // Called from the healthcheck handler. Calling this causes the MParticleTokenProvider to fetch the first batch of tokens
   def initialise(): Unit = {}
 
-  def getUserProfile(identityId: String): Future[MParticleUserProfile] = {
+  private def fetchAudienceMemberships(identityId: String): Future[ProfileResponse] = {
     val fields = "audience_memberships"
     val endpoint =
       s"userprofile/v1/resolve/${mparticleConfig.orgId}/${mparticleConfig.accountId}/${mparticleConfig.workspaceId}"
@@ -78,11 +80,35 @@ class MParticleClient(
           params = Map("fields" -> fields),
         ),
       )
-      .map(parseUserProfile)
-      .recover { case WebServiceClientError(CodeBody("404", _)) =>
-        logger.info("mParticle returned 404 for user")
-        MParticleUserProfile(hasMobileAppDownloaded = false, hasFeastMobileAppDownloaded = false)
-      }
+  }
+
+  private def mparticleEnabled: Boolean =
+    settingsProvider.getAllSettings().switches.featureSwitches.enableMParticle.exists(_.isOn)
+
+  def getUserProfile(identityId: String): Future[MParticleUserProfile] = {
+    if (mparticleEnabled) {
+      fetchAudienceMemberships(identityId)
+        .map(parseUserProfile)
+        .recover { case WebServiceClientError(CodeBody("404", _)) =>
+          logger.info("mParticle returned 404 for user")
+          MParticleUserProfile(hasMobileAppDownloaded = false, hasFeastMobileAppDownloaded = false)
+        }
+    } else {
+      Future.successful(MParticleUserProfile(hasMobileAppDownloaded = false, hasFeastMobileAppDownloaded = false))
+    }
+  }
+
+  def isAudienceMember(identityId: String, audienceId: Int): Future[Boolean] = {
+    if (mparticleEnabled) {
+      fetchAudienceMemberships(identityId)
+        .map(response => response.audience_memberships.exists(_.audience_id == audienceId))
+        .recover { case WebServiceClientError(CodeBody("404", _)) =>
+          logger.info("mParticle returned 404 for user")
+          false
+        }
+    } else {
+      Future.successful(false)
+    }
   }
 
   private def parseUserProfile(profileResponse: ProfileResponse): MParticleUserProfile = {
