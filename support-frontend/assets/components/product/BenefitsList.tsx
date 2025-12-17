@@ -9,7 +9,6 @@ import { SvgTickRound } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 
 const benefitsContainerTitle = css`
-	margin: ${space[5]}px 0 ${space[2]}px;
 	padding-top: ${space[2]}px;
 	border-top: 1px solid ${neutral[86]};
 `;
