@@ -1,7 +1,7 @@
 import { routes } from 'helpers/urls/routes';
 
 const validBackButtonPathOverrides: Record<string, string | undefined> = {
-	subscriptionsLanding: routes.subscriptionsLanding,
+	subscribe: routes.subscriptionsLanding,
 };
 
 // If a valid override is provided, use that, otherwise fall back to the product

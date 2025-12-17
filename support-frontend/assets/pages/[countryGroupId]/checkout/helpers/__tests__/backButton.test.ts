@@ -2,7 +2,7 @@ import { buildBackButtonPath } from '../backButton';
 
 describe('buildBackButtonPath', () => {
 	it('returns the overridden path when a valid override is provided', () => {
-		const result = buildBackButtonPath('/contribute', 'subscriptionsLanding');
+		const result = buildBackButtonPath('/contribute', 'subscribe');
 
 		expect(result).toBe('/subscribe');
 	});
