@@ -160,7 +160,7 @@ export default function CheckoutSummary({
 	};
 
 	const backButtonPath = buildBackButtonPath(
-		productDescription,
+		productDescription.landingPagePath,
 		backButtonPathOverride,
 	);
 

@@ -1,4 +1,3 @@
-import type { ProductDescription } from 'helpers/productCatalog';
 import { routes } from 'helpers/urls/routes';
 
 const validBackButtonPathOverrides: Record<string, string | undefined> = {
@@ -8,8 +7,7 @@ const validBackButtonPathOverrides: Record<string, string | undefined> = {
 // If a valid override is provided, use that, otherwise fall back to the product
 // description's landing page path
 export const buildBackButtonPath = (
-	productDescription: ProductDescription,
+	defaultPath: string,
 	backButtonPathOverride: string | null,
 ): string =>
-	validBackButtonPathOverrides[backButtonPathOverride ?? ''] ??
-	productDescription.landingPagePath;
+	validBackButtonPathOverrides[backButtonPathOverride ?? ''] ?? defaultPath;
