@@ -46,7 +46,6 @@ Standard sizes and margins for the content and headers.
 }
 
 .gu-content__main {
-	background-color: gu-colour(neutral-93);
 	@supports (display: flex) {
 		flex: 1 0 auto;
 	}

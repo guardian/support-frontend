@@ -74,6 +74,11 @@ export const subscriptionTitle = css`
 	${headlineBold34};
 	margin: 0;
 
+	& mark {
+		background-color: unset;
+		color: ${brandAlt[400]};
+	}
+
 	${until.desktop} {
 		font-size: 32px;
 	}

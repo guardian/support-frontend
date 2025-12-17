@@ -57,9 +57,10 @@ function SubscriptionsProductDescription({
 }: PropTypes): JSX.Element {
 	return (
 		<div>
-			<h2 css={[subscriptionTitle, isFeature && subscriptionTitleFeature]}>
-				{title}
-			</h2>
+			<h2
+				css={[subscriptionTitle, isFeature && subscriptionTitleFeature]}
+				dangerouslySetInnerHTML={{ __html: title }}
+			/>
 			{offer && (
 				<h3 css={[subscriptionOffer, isFeature && subscriptionOfferFeature]}>
 					{offer}
@@ -72,14 +73,7 @@ function SubscriptionsProductDescription({
 				<BenefitsCheckList
 					benefitsCheckListData={benefits.map((benefit) => {
 						return {
-							text: (
-								<p>
-									{benefit.copyBoldStart && (
-										<strong>{benefit.copyBoldStart}</strong>
-									)}
-									{benefit.copy}
-								</p>
-							),
+							text: <p dangerouslySetInnerHTML={{ __html: benefit.copy }} />,
 							isChecked: true,
 						};
 					})}

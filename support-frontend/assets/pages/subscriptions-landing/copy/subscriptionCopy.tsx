@@ -4,19 +4,26 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type * as React from 'react';
+import DigitalPackshotHero from 'components/packshots/digital-packshot-hero';
 import PaperPackShot from 'components/packshots/paperPackshot';
 import WeeklyPackShot from 'components/packshots/weeklyPackshot';
 import type { Participations } from 'helpers/abTests/models';
 import { detect, glyph } from 'helpers/internationalisation/currency';
 import type { ProductBenefit } from 'helpers/productCatalog';
+import { productCatalog } from 'helpers/productCatalog';
 import {
+	DigitalPack,
 	fixDecimals,
 	GuardianWeekly,
 	Paper,
 	sendTrackingEventsOnClick,
 } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
-import { guardianWeeklyLanding, paperSubsUrl } from 'helpers/urls/routes';
+import {
+	digitalSubscriptionLanding,
+	guardianWeeklyLanding,
+	paperSubsUrl,
+} from 'helpers/urls/routes';
 import type { PriceCopy, PricingCopy } from '../subscriptionsLandingProps';
 import { weeklySubscriptionProductCardStyle } from './subscriptionCopyStyles';
 
@@ -52,12 +59,92 @@ const getDisplayPrice = (
 	return `${currency}${fixDecimals(price)}/${billingPeriod}`;
 };
 
+const getDigitalPlusDisplayPrice = (
+	countryGroupId: CountryGroupId,
+	billingPeriod: BillingPeriod,
+): string => {
+	const currencyKey = detect(countryGroupId);
+	const product = productCatalog['DigitalSubscription'];
+	const price = product?.ratePlans[billingPeriod]?.pricing[currencyKey];
+	if (!price) {
+		return '';
+	}
+
+	return getDisplayPrice(countryGroupId, price, billingPeriod);
+};
+
+const getDigitalPlusPrices = (countryGroupId: CountryGroupId): string => {
+	const priceMonthly = getDigitalPlusDisplayPrice(
+		countryGroupId,
+		BillingPeriod.Monthly,
+	);
+	const priceAnnual = getDigitalPlusDisplayPrice(
+		countryGroupId,
+		BillingPeriod.Annual,
+	);
+	return [priceMonthly, priceAnnual].join(' or ');
+};
+
 function getGuardianWeeklyOfferCopy(discountCopy: string) {
 	if (discountCopy !== '') {
 		return discountCopy;
 	}
 
 	return '';
+}
+
+function buildDigialPlusBenefits(): ProductBenefit[] {
+	const benefits = [
+		'<strong>The Guardian Editions app</strong> including Guardian newspaper, Guardian Weekly and the Long Read on your mobile and tablet',
+		'Unlimited access to the <strong>Guardian app</strong> and <strong>Guardian Feast app</strong>',
+		'Digital access to the Guardian’s 200 year <strong>newspaper archive</strong>',
+		'<strong>Ad-free reading</strong> on all your devices',
+	];
+	return benefits.map((benefit) => ({ copy: benefit }));
+}
+
+function digitalPlus(
+	countryGroupId: CountryGroupId,
+	priceCopy: PriceCopy,
+): ProductCopy {
+	return {
+		title: 'Enjoy our suite of editions with&nbsp;<mark>Digital Plus</mark>',
+		subtitle: getDigitalPlusPrices(countryGroupId),
+		buttons: [
+			{
+				ctaButtonText: getDigitalPlusDisplayPrice(
+					countryGroupId,
+					BillingPeriod.Monthly,
+				),
+				link: digitalSubscriptionLanding(countryGroupId, BillingPeriod.Monthly),
+				analyticsTracking: sendTrackingEventsOnClick({
+					id: 'digipack_monthly_cta',
+					product: 'DigitalPack',
+					componentType: 'ACQUISITIONS_BUTTON',
+				}),
+				modifierClasses: 'digital',
+				ariaLabel: `${BillingPeriod.Monthly} DigitalEdition`,
+			},
+			{
+				ctaButtonText: getDigitalPlusDisplayPrice(
+					countryGroupId,
+					BillingPeriod.Annual,
+				),
+				link: digitalSubscriptionLanding(countryGroupId, BillingPeriod.Annual),
+				analyticsTracking: sendTrackingEventsOnClick({
+					id: 'digipack_annual_cta',
+					product: 'DigitalPack',
+					componentType: 'ACQUISITIONS_BUTTON',
+				}),
+				modifierClasses: 'digital',
+				ariaLabel: `${BillingPeriod.Annual} DigitalEdition`,
+			},
+		],
+		benefits: buildDigialPlusBenefits(),
+		productImage: <DigitalPackshotHero />,
+		classModifier: ['subscriptions__digital'],
+		offer: priceCopy.discountCopy,
+	};
 }
 
 const guardianWeekly = (
@@ -134,6 +221,7 @@ const getSubscriptionCopy = (
 	if (countryGroupId === GBPCountries) {
 		productcopy.push(paper(countryGroupId, pricingCopy[Paper]));
 	}
+	productcopy.push(digitalPlus(countryGroupId, pricingCopy[DigitalPack]));
 	return productcopy;
 };
 
