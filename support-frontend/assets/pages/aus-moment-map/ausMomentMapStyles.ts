@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from } from '@guardian/source/dist/foundations';
+import { from } from '@guardian/source/foundations';
 
 export const mapPage = css`
 	display: flex;

@@ -7,7 +7,7 @@ import Header from 'components/headers/header/header';
 import Page from 'components/page/page';
 import PageSection from 'components/pageSection/pageSection';
 import Text, { LargeParagraph } from 'components/text/text';
-import '~stylesheets/skeleton/skeleton';
+import 'stylesheets/skeleton/skeleton.scss';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { contributionsEmail } from 'helpers/legal';
 import { gu_v_spacing } from 'stylesheets/emotion/layout';
