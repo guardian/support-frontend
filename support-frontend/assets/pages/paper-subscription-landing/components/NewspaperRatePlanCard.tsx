@@ -14,17 +14,19 @@ import { type Product } from '../../../components/product/productOption';
 import {
 	badge,
 	badgeObserver,
-	benefitsListSection,
 	ButtonCTA,
 	card,
 	cardHeader,
 	cardHeading,
 	cardInfo,
 	cardLabel,
+	cardLegalCopy,
 	cardOffer,
 	cardPrice,
 	cardWithLabel,
 	planDescription,
+	planDetailsContainer,
+	planDetailsEndSection,
 } from './NewspaperRatePlanCardStyles';
 
 function NewspaperRatePlanCard({
@@ -62,21 +64,51 @@ function NewspaperRatePlanCard({
 
 	const isObserverChannel = productLabel?.channel === Channel.Observer;
 
+	// If the digital rewards section has no label, then we combine the benefits into
+	// a single list UI wise.
+	const digitalRewardsHasLabel = planData?.digitalRewards?.label;
+
+	const shouldShowEndSection =
+		Boolean(unavailableOutsideLondon) || isObserverChannel;
+
 	const renderPlanDetails = () => (
-		<div css={!planData?.digitalRewards?.label && benefitsListSection}>
-			<BenefitsList
-				title={planData?.benefits.label}
-				listItems={planData?.benefits.items}
-			/>
-			<BenefitsList
-				title={planData?.digitalRewards?.label}
-				listItems={planData?.digitalRewards?.items}
-			/>
-			{unavailableOutsideLondon && (
-				<p css={cardInfo}>
-					<SvgInfoRound size="xsmall" />
-					Only available inside Greater London.
-				</p>
+		<div css={[planDetailsContainer]}>
+			{digitalRewardsHasLabel ? (
+				<>
+					<BenefitsList
+						title={planData.benefits.label}
+						listItems={planData.benefits.items}
+					/>
+					<BenefitsList
+						title={planData.digitalRewards?.label}
+						listItems={planData.digitalRewards?.items}
+					/>
+				</>
+			) : (
+				<BenefitsList
+					title={planData?.benefits.label}
+					listItems={[
+						...(planData?.benefits.items ?? []),
+						...(planData?.digitalRewards?.items ?? []),
+					]}
+				/>
+			)}
+			{shouldShowEndSection && (
+				<div css={planDetailsEndSection}>
+					{unavailableOutsideLondon && (
+						<p css={cardInfo}>
+							<SvgInfoRound size="xsmall" />
+							Only available inside Greater London.
+						</p>
+					)}
+					{isObserverChannel && (
+						<p css={cardLegalCopy}>
+							Note: this subscription is with Tortoise Media, the owner of The
+							Observer. The Guardian manages delivery of Sunday only print
+							subscriptions for Tortoise Media
+						</p>
+					)}
+				</div>
 			)}
 		</div>
 	);
