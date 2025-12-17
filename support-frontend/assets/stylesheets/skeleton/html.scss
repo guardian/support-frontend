@@ -71,13 +71,6 @@ strong {
 }
 
 /*
-Assistive technologies guidance (non-visible)
-*/
-.visually-hidden {
-	@include visually-hidden;
-}
-
-/*
 Disable forms pre hydration
 */
 [data-not-hydrated] {
