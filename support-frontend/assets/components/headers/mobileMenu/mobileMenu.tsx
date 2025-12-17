@@ -46,7 +46,7 @@ function MobileMenu({
 						top: closeButtonAt.y,
 					}
 				}
-				label="close"
+				aria-label="close"
 				onClick={onClose}
 				cssOverride={buttonClose}
 			>

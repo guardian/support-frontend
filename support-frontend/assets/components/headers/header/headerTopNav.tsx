@@ -17,8 +17,11 @@ export function HeaderTopNav({ utility, countryGroupId }: HeaderProps) {
 		<div css={topNavContainer}>
 			<div css={utilityContainer}>{utility}</div>
 			<div css={[logoContainer, logoContainerRegion]}>
-				<a css={logoLink} href="https://www.theguardian.com">
-					<div className="visually-hidden">Return to the Guardian</div>
+				<a
+					css={logoLink}
+					href="https://www.theguardian.com"
+					aria-label="Return to the Guardian"
+				>
 					<SvgGuardianLogo />
 				</a>
 			</div>
