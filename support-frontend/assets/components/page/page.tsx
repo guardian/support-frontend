@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import CsrBanner from 'components/csr/csrBanner';
 import { SkipLink } from 'components/skipLink/skipLink';
+import { mainContentStyles } from './pageStyles';
 
 type PageProps = {
 	id?: string;
@@ -31,7 +32,7 @@ export default function Page(pageProps: PageProps): JSX.Element {
 			<SkipLink id="maincontent" label="Skip to main content" />
 			<CsrBanner />
 			{header}
-			<main role="main" id="maincontent" className="gu-content__main">
+			<main role={'main'} id={'maincontent'} css={mainContentStyles}>
 				{children}
 			</main>
 			{footer}
