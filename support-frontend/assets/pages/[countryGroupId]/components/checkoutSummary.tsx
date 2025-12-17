@@ -29,6 +29,7 @@ import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNud
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
+import { buildBackButtonPath } from '../checkout/helpers/backButton';
 import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
@@ -59,6 +60,7 @@ type CheckoutSummaryProps = {
 	studentDiscount?: StudentDiscount;
 	nudgeSettings?: CheckoutNudgeSettings;
 	backButtonOrigin: string;
+	backButtonPathOverride: string | null;
 };
 
 export default function CheckoutSummary({
@@ -77,6 +79,7 @@ export default function CheckoutSummary({
 	studentDiscount,
 	nudgeSettings,
 	backButtonOrigin,
+	backButtonPathOverride,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
@@ -156,7 +159,10 @@ export default function CheckoutSummary({
 		}
 	};
 
-	const backButtonPath = productDescription.landingPagePath;
+	const backButtonPath = buildBackButtonPath(
+		productDescription,
+		backButtonPathOverride,
+	);
 
 	// We need to force the subdomain to support in case we're on the Observer
 	// subdomain which can't serve the subscribe/paper landing page. This is for

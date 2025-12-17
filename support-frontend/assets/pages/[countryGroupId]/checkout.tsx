@@ -306,6 +306,10 @@ export function Checkout({
 	};
 
 	const backButtonOrigin = getOriginAndForceSubdomain('support');
+	const backButtonPathOverrideParam = 'backLocation';
+	const backButtonPathOverride = urlSearchParams.get(
+		backButtonPathOverrideParam,
+	);
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -327,6 +331,7 @@ export function Checkout({
 						studentDiscount={studentDiscount}
 						nudgeSettings={nudgeSettings}
 						backButtonOrigin={backButtonOrigin}
+						backButtonPathOverride={backButtonPathOverride}
 					/>
 
 					<CheckoutForm
