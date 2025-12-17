@@ -13,21 +13,6 @@ body {
 	padding: 0;
 }
 
-.map-page,
-.map-page * {
-	box-sizing: content-box;
-}
-
-.map-page {
-	display: flex;
-	flex-shrink: 0;
-	flex-direction: column;
-	height: 100vh;
-	@include mq($from: desktop) {
-		overflow-x: hidden;
-	}
-}
-
 #header-wrapper {
 	display: flex;
 	flex-shrink: 0;

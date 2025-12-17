@@ -10,6 +10,8 @@ import { Header } from 'pages/aus-moment-map/components/header';
 import { Map } from 'pages/aus-moment-map/components/map';
 import type { TestimonialsCollection } from 'pages/aus-moment-map/types/testimonials';
 import 'pages/aus-moment-map/types/testimonials';
+import { pageDefaultStyles } from 'stylesheets/emotion/pageDefaults';
+import { mapPage } from './ausMomentMapStyles';
 import { TestimonialsContainer } from './components/testimonialsContainer';
 import { useWindowWidth } from './hooks/useWindowWidth';
 
@@ -147,7 +149,7 @@ function AusMomentMap(): JSX.Element {
 	);
 
 	return (
-		<div className="map-page">
+		<div css={[mapPage, pageDefaultStyles]}>
 			<Header />
 			<div className="main">
 				<motion.div

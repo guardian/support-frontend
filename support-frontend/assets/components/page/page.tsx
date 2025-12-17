@@ -3,7 +3,8 @@ import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import CsrBanner from 'components/csr/csrBanner';
 import { SkipLink } from 'components/skipLink/skipLink';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
+import { pageDefaultStyles } from 'stylesheets/emotion/pageDefaults';
+import { pageContainer } from './pageStyles';
 
 // ----- Types ----- //
 type PropTypes = {
@@ -39,10 +40,7 @@ export default function Page(props: PropTypes): JSX.Element {
 		});
 	}, []);
 	return (
-		<div
-			id={props.id}
-			className={classNameWithModifiers('gu-content', props.classModifiers)}
-		>
+		<div id={props.id} css={[pageContainer, pageDefaultStyles]}>
 			<SkipLink id="maincontent" label="Skip to main content" />
 			<CsrBanner />
 			{props.header}
