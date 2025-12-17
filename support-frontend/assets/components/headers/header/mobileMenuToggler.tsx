@@ -28,7 +28,7 @@ export default function MobileMenuToggler({
 			<VeggieBurgerButton
 				ref={buttonRef}
 				aria-haspopup="dialog"
-				label="menu"
+				aria-label="menu"
 				onClick={() => {
 					setMenuOpen(true);
 					sendTrackingEventsOnClick({
