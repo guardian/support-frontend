@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 import type { SerializedStyles } from '@emotion/react';
 import type { ReactNode } from 'react';
+import { pageDefaultStyles } from 'stylesheets/emotion/pageDefaults';
 import {
 	bodyStyles,
 	headerStyles,
@@ -18,7 +19,7 @@ function PageSection({
 	cssOverrides?: SerializedStyles;
 }): JSX.Element {
 	return (
-		<section css={sectionStyles}>
+		<section css={[sectionStyles, pageDefaultStyles]}>
 			<div css={cssOverrides}>
 				<div css={headerStyles}>
 					{heading && <h2 css={headingStyles}>{heading}</h2>}
