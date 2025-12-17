@@ -156,13 +156,15 @@ export default function CheckoutSummary({
 		}
 	};
 
+	const backButtonPath = productDescription.landingPagePath;
+
 	// We need to force the subdomain to support in case we're on the Observer
 	// subdomain which can't serve the subscribe/paper landing page. This is for
 	// Sunday paper subs.
 	const backUrl =
 		backButtonOrigin +
 		parameteriseUrl(
-			`/${supportRegionId}${productDescription.landingPagePath}`,
+			`/${supportRegionId}${backButtonPath}`,
 			promotion?.promoCode,
 			getPaperFulfilmentOption(productKey),
 		);
