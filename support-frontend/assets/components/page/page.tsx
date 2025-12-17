@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import CsrBanner from 'components/csr/csrBanner';
 import { SkipLink } from 'components/skipLink/skipLink';
-import { mainContentStyles } from './pageStyles';
+import { mainContentStyles, pageContainer } from './pageStyles';
 
 type PageProps = {
 	id?: string;
@@ -28,7 +28,7 @@ export default function Page(pageProps: PageProps): JSX.Element {
 	}, []);
 	const { id, header, footer, children } = pageProps;
 	return (
-		<div id={id} className={'gu-content'}>
+		<div id={id} css={pageContainer}>
 			<SkipLink id="maincontent" label="Skip to main content" />
 			<CsrBanner />
 			{header}
