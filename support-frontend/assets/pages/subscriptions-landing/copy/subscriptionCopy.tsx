@@ -37,26 +37,18 @@ export type ProductButton = {
 	ariaLabel?: string;
 };
 
-type AtLeastOne<T, K extends keyof T = keyof T> = K extends keyof T
-	? Required<Pick<T, K>> & Partial<Omit<T, K>>
-	: never;
-
-type ProductCopyBaseProps = {
+export type ProductCopy = {
 	title: string;
 	subtitle: string;
+	description: string;
 	productImage: React.ReactNode;
 	buttons: ProductButton[];
 	cssOverrides?: SerializedStyles;
 	offer?: string;
 	participations?: Participations;
+	benefits?: ProductBenefit[];
 	digitalPlusLayout?: boolean;
 };
-
-export type ProductCopy = ProductCopyBaseProps &
-	AtLeastOne<{
-		description: string;
-		benefits: ProductBenefit[];
-	}>;
 
 const getDisplayPrice = (
 	countryGroupId: CountryGroupId,
@@ -118,7 +110,7 @@ function digitalPlus(
 	return {
 		title: 'Enjoy our suite of editions with&nbsp;<mark>Digital Plus</mark>',
 		subtitle: getDigitalPlusPrices(countryGroupId),
-		description: 'oi!!!! mékié',
+		description: 'Enjoy our suite of editions with Digital Plus',
 		buttons: [
 			{
 				ctaButtonText: getDigitalPlusDisplayPrice(

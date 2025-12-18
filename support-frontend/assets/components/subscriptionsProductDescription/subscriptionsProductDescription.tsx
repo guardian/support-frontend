@@ -60,7 +60,7 @@ function SubscriptionsProductDescription({
 			<h2
 				css={[subscriptionTitle, isFeature && subscriptionTitleFeature]}
 				dangerouslySetInnerHTML={{ __html: title }}
-			/>
+			></h2>
 			{offer && (
 				<h3 css={[subscriptionOffer, isFeature && subscriptionOfferFeature]}>
 					{offer}
