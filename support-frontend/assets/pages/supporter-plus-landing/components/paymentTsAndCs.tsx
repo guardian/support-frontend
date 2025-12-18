@@ -271,7 +271,7 @@ export function PaymentTsAndCs({
 	const prefixBasis = (countryGroupId: CountryGroupId) => {
 		const startPhrase = `If you pay at least ${legalPrice(' per ')}`;
 		const midPhrase = countryGroupId === 'UnitedStates' ? ' thereafter,' : ',';
-		return `${startPhrase}${midPhrase} you will receive the ${productLabel} benefits on a subscription basis. `;
+		return `${startPhrase}${midPhrase} you will receive the ${productLabel} benefits on a subscription basis.`;
 	};
 	const supportBasis = `For support of ${legalPrice(
 		' or more per ',
@@ -283,7 +283,7 @@ export function PaymentTsAndCs({
 		return countryGroupId === 'UnitedStates' ? (
 			promotion ? (
 				<div>
-					{prefixBasis(countryGroupId)}If you give additional support beyond{' '}
+					{prefixBasis(countryGroupId)} If you give additional support beyond{' '}
 					{productLabel}, that amount will be charged separately as voluntary
 					contributions to the Guardian. If you cancel within 14 days of
 					subscribing, you’ll receive a full refund (including any
@@ -300,7 +300,7 @@ export function PaymentTsAndCs({
 			)
 		) : (
 			<div>
-				{prefixBasis(countryGroupId)}If you increase your payments per{' '}
+				{prefixBasis(countryGroupId)} If you increase your payments per{' '}
 				{billingPeriodSingular}, these additional amounts will be separate{' '}
 				{billingPeriodPlural} voluntary financial contributions to the Guardian.
 				The {productLabel} subscription and any contributions will auto-renew
@@ -334,7 +334,7 @@ export function PaymentTsAndCs({
 		return countryGroupId === 'UnitedStates' ? (
 			promotion ? (
 				<div>
-					{prefixBasis(countryGroupId)}Your first payment will be taken on day
+					{prefixBasis(countryGroupId)} Your first payment will be taken on day
 					15 after signing up but you can access your benefits straight away.
 					Unless you cancel, each {billingPeriodPlural} payment will be taken on
 					this date using your chosen payment method. You can cancel your
