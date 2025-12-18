@@ -6,6 +6,7 @@ import {
 	headlineLight24,
 	headlineLight28,
 	neutral,
+	space,
 	textEgyptian14,
 	textEgyptian17,
 	until,
@@ -60,12 +61,11 @@ export const subscriptionBenefit = css`
 
 	:before {
 		content: '';
-		position: absolute;
-		width: 100%;
-		margin-top: -6px;
-		margin-left: -52px;
-		${from.tablet} {
-			border-top: 1px solid ${neutral[86]};
+		display: block;
+		border-top: 1px solid ${neutral[86]};
+		margin-right: -${space[10]}px;
+		${from.desktop} {
+			margin-left: -${space[14]}px;
 		}
 	}
 `;

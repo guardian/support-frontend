@@ -88,7 +88,7 @@ function paperSubsUrl(
 	return baseURL;
 }
 
-function digitalSubscriptionLanding(
+function digitalPlusLanding(
 	countryGroupId: CountryGroupId,
 	billingPeriod?: BillingPeriod,
 ) {
@@ -181,7 +181,7 @@ export {
 	paperSubsUrl,
 	paperCheckoutUrl,
 	parameteriseUrl,
-	digitalSubscriptionLanding,
+	digitalPlusLanding as digitalSubscriptionLanding,
 	guardianWeeklyLanding,
 	promotionTermsUrl,
 };

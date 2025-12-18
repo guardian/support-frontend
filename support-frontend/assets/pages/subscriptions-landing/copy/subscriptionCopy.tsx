@@ -4,7 +4,7 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type * as React from 'react';
-import DigitalPackshotHero from 'components/packshots/digital-packshot-hero';
+import DigitalPlusPackshot from 'components/packshots/digital-plus-packshot';
 import PaperPackShot from 'components/packshots/paperPackshot';
 import WeeklyPackShot from 'components/packshots/weeklyPackshot';
 import type { Participations } from 'helpers/abTests/models';
@@ -18,7 +18,6 @@ import {
 	Paper,
 	sendTrackingEventsOnClick,
 } from 'helpers/productPrice/subscriptions';
-import type { Option } from 'helpers/types/option';
 import {
 	digitalSubscriptionLanding,
 	guardianWeeklyLanding,
@@ -38,9 +37,9 @@ export type ProductButton = {
 	ariaLabel?: string;
 };
 
-type ProductCopy = {
+export type ProductCopy = {
 	title: string;
-	subtitle: Option<string>;
+	subtitle: string;
 	description: string;
 	productImage: React.ReactNode;
 	buttons: ProductButton[];
@@ -48,6 +47,7 @@ type ProductCopy = {
 	offer?: string;
 	participations?: Participations;
 	benefits?: ProductBenefit[];
+	digitalPlusLayout?: boolean;
 };
 
 const getDisplayPrice = (
@@ -141,9 +141,9 @@ function digitalPlus(
 			},
 		],
 		benefits: buildDigialPlusBenefits(),
-		productImage: <DigitalPackshotHero />,
-		classModifier: ['subscriptions__digital'],
+		productImage: <DigitalPlusPackshot />,
 		offer: priceCopy.discountCopy,
+		digitalPlusLayout: true,
 	};
 }
 
