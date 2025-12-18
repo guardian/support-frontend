@@ -271,8 +271,7 @@ export function PaymentTsAndCs({
 	const prefixBasis = (countryGroupId: CountryGroupId) => {
 		const startPhrase = `If you pay at least ${legalPrice(' per ')}`;
 		const midPhrase = countryGroupId === 'UnitedStates' ? ' thereafter,' : ',';
-		const finalPhrase = ' on a subscription basis. ';
-		return `${startPhrase}${midPhrase} you will receive the ${productLabel} benefits${finalPhrase}`;
+		return `${startPhrase}${midPhrase} you will receive the ${productLabel} benefits on a subscription basis. `;
 	};
 	const supportBasis = `For support of ${legalPrice(
 		' or more per ',

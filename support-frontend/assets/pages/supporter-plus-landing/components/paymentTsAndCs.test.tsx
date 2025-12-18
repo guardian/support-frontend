@@ -56,7 +56,7 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 		['GuardianWeeklyRestOfWorld', 'Annual', 'International', 0],
 	];
 	it.each(paymentProductKeys)(
-		`paymentTs&Cs render product %s for region %s correctly`,
+		`paymentTs&Cs render product %s for period %s in region %s correctly`,
 		(paymentProductKey, ratePlanKey, countryGroupId, amount) => {
 			const promo: Promotion | undefined =
 				paymentProductKey === 'TierThree' &&
