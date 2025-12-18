@@ -40,10 +40,10 @@ export type ProductButton = {
 export type ProductCopy = {
 	title: string;
 	subtitle: string;
-	description: string;
+	description?: string;
 	productImage: React.ReactNode;
 	buttons: ProductButton[];
-	cssOverrides: SerializedStyles;
+	cssOverrides?: SerializedStyles;
 	offer?: string;
 	participations?: Participations;
 	benefits?: ProductBenefit[];
