@@ -100,6 +100,7 @@ function digitalPlusCheckoutDeepLink(
 		utm_content: `acquisition_${billingPeriod?.toLowerCase()}`,
 		utm_term: 'printcheckout',
 		utm_source: 'GUARDIAN_WEB',
+		backLocation: 'subscribe',
 	};
 
 	const domain = getOrigin();
