@@ -19,7 +19,7 @@ import {
 	sendTrackingEventsOnClick,
 } from 'helpers/productPrice/subscriptions';
 import {
-	digitalSubscriptionLanding,
+	getDigitalPlusCheckoutDeepLink,
 	guardianWeeklyLanding,
 	paperSubsUrl,
 } from 'helpers/urls/routes';
@@ -117,7 +117,10 @@ function digitalPlus(
 					countryGroupId,
 					BillingPeriod.Monthly,
 				),
-				link: digitalSubscriptionLanding(countryGroupId, BillingPeriod.Monthly),
+				link: getDigitalPlusCheckoutDeepLink(
+					countryGroupId,
+					BillingPeriod.Monthly,
+				),
 				analyticsTracking: sendTrackingEventsOnClick({
 					id: 'digital_plus_monthly_cta',
 					product: 'DigitalPack',
@@ -131,7 +134,10 @@ function digitalPlus(
 					countryGroupId,
 					BillingPeriod.Annual,
 				),
-				link: digitalSubscriptionLanding(countryGroupId, BillingPeriod.Annual),
+				link: getDigitalPlusCheckoutDeepLink(
+					countryGroupId,
+					BillingPeriod.Annual,
+				),
 				analyticsTracking: sendTrackingEventsOnClick({
 					id: 'digital_plus_annual_cta',
 					product: 'DigitalPack',

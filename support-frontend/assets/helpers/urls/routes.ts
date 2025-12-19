@@ -88,7 +88,7 @@ function paperSubsUrl(
 	return baseURL;
 }
 
-function digitalPlusCheckoutDeepLink(
+function getDigitalPlusCheckoutDeepLink(
 	countryGroupId: CountryGroupId,
 	billingPeriod?: BillingPeriod,
 ) {
@@ -193,7 +193,7 @@ export {
 	paperSubsUrl,
 	paperCheckoutUrl,
 	parameteriseUrl,
-	digitalPlusCheckoutDeepLink as digitalSubscriptionLanding,
+	getDigitalPlusCheckoutDeepLink,
 	guardianWeeklyLanding,
 	promotionTermsUrl,
 };
