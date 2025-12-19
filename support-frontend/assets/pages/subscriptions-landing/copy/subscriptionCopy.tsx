@@ -120,7 +120,7 @@ function digitalPlus(
 				link: digitalSubscriptionLanding(countryGroupId, BillingPeriod.Monthly),
 				analyticsTracking: sendTrackingEventsOnClick({
 					id: 'digital_plus_monthly_cta',
-					product: 'DigitalPlus',
+					product: 'DigitalPack',
 					componentType: 'ACQUISITIONS_BUTTON',
 				}),
 				modifierClasses: 'digital',
@@ -134,7 +134,7 @@ function digitalPlus(
 				link: digitalSubscriptionLanding(countryGroupId, BillingPeriod.Annual),
 				analyticsTracking: sendTrackingEventsOnClick({
 					id: 'digital_plus_annual_cta',
-					product: 'DigitalPlus',
+					product: 'DigitalPack',
 					componentType: 'ACQUISITIONS_BUTTON',
 				}),
 				modifierClasses: 'digital',
