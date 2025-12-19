@@ -27,6 +27,7 @@ import { getPromotion } from 'helpers/productPrice/promotions';
 import * as cookie from 'helpers/storage/cookie';
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
+import { getOriginAndForceSubdomain } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import { getProductWeeklyDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
@@ -304,6 +305,12 @@ export function Checkout({
 		...(isObserverSubdomain() && { observerThemeButton }),
 	};
 
+	const backButtonOrigin = getOriginAndForceSubdomain('support');
+	const backButtonPathOverrideParam = 'backLocation';
+	const backButtonPathOverride = urlSearchParams.get(
+		backButtonPathOverrideParam,
+	);
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Elements stripe={stripePromise} options={elementsOptions}>
@@ -323,6 +330,8 @@ export function Checkout({
 						thresholdAmount={thresholdAmount}
 						studentDiscount={studentDiscount}
 						nudgeSettings={nudgeSettings}
+						backButtonOrigin={backButtonOrigin}
+						backButtonPathOverride={backButtonPathOverride}
 					/>
 
 					<CheckoutForm
