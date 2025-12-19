@@ -62,37 +62,17 @@ const getDisplayPrice = (
 const getDigitalPlusDisplayPrice = (
 	countryGroupId: CountryGroupId,
 	billingPeriod: BillingPeriod,
-): string => {
+): string | null => {
 	const currencyKey = detect(countryGroupId);
 
 	const product = getProductCatalog()['DigitalSubscription'];
 	const price = product?.ratePlans[billingPeriod]?.pricing[currencyKey];
 	if (!price) {
-		return '';
+		return null;
 	}
 
 	return getDisplayPrice(countryGroupId, price, billingPeriod);
 };
-
-const getDigitalPlusPrices = (countryGroupId: CountryGroupId): string => {
-	const priceMonthly = getDigitalPlusDisplayPrice(
-		countryGroupId,
-		BillingPeriod.Monthly,
-	);
-	const priceAnnual = getDigitalPlusDisplayPrice(
-		countryGroupId,
-		BillingPeriod.Annual,
-	);
-	return [priceMonthly, priceAnnual].join(' or ');
-};
-
-function getGuardianWeeklyOfferCopy(discountCopy: string) {
-	if (discountCopy !== '') {
-		return discountCopy;
-	}
-
-	return '';
-}
 
 function buildDigialPlusBenefits(): ProductBenefit[] {
 	const benefits = [
@@ -104,48 +84,56 @@ function buildDigialPlusBenefits(): ProductBenefit[] {
 	return benefits.map((benefit) => ({ copy: benefit }));
 }
 
+function getDigitalPlusButtonsForBillingPeriods(
+	countryGroupId: CountryGroupId,
+	billingPeriods: BillingPeriod[],
+): ProductButton[] {
+	return billingPeriods.reduce<ProductButton[]>((buttons, billingPeriod) => {
+		const price = getDigitalPlusDisplayPrice(countryGroupId, billingPeriod);
+		if (price) {
+			buttons.push({
+				ctaButtonText: price,
+				link: getDigitalPlusCheckoutDeepLink(countryGroupId, billingPeriod),
+				analyticsTracking: sendTrackingEventsOnClick({
+					id: `digital_plus_${billingPeriod.toLowerCase()}_cta`,
+					product: 'DigitalPack',
+					componentType: 'ACQUISITIONS_BUTTON',
+				}),
+				ariaLabel: `${billingPeriod} DigitalPlus`,
+			});
+		}
+		return buttons;
+	}, []);
+}
+
+function getDigitalPlusSubtitleForBillingPeriods(
+	countryGroupId: CountryGroupId,
+	billingPeriods: BillingPeriod[],
+): string {
+	const prices = billingPeriods
+		.map((billingPeriod) =>
+			getDigitalPlusDisplayPrice(countryGroupId, billingPeriod),
+		)
+		.filter(Boolean);
+
+	return prices.join(' or ');
+}
+
 function digitalPlus(
 	countryGroupId: CountryGroupId,
 	priceCopy: PriceCopy,
 ): ProductCopy {
 	return {
 		title: 'Enjoy our suite of editions with&nbsp;<mark>Digital Plus</mark>',
-		subtitle: getDigitalPlusPrices(countryGroupId),
+		subtitle: getDigitalPlusSubtitleForBillingPeriods(countryGroupId, [
+			BillingPeriod.Monthly,
+			BillingPeriod.Annual,
+		]),
 		description: 'Enjoy our suite of editions with Digital Plus',
-		buttons: [
-			{
-				ctaButtonText: getDigitalPlusDisplayPrice(
-					countryGroupId,
-					BillingPeriod.Monthly,
-				),
-				link: getDigitalPlusCheckoutDeepLink(
-					countryGroupId,
-					BillingPeriod.Monthly,
-				),
-				analyticsTracking: sendTrackingEventsOnClick({
-					id: 'digital_plus_monthly_cta',
-					product: 'DigitalPack',
-					componentType: 'ACQUISITIONS_BUTTON',
-				}),
-				ariaLabel: `${BillingPeriod.Monthly} DigitalPlus`,
-			},
-			{
-				ctaButtonText: getDigitalPlusDisplayPrice(
-					countryGroupId,
-					BillingPeriod.Annual,
-				),
-				link: getDigitalPlusCheckoutDeepLink(
-					countryGroupId,
-					BillingPeriod.Annual,
-				),
-				analyticsTracking: sendTrackingEventsOnClick({
-					id: 'digital_plus_annual_cta',
-					product: 'DigitalPack',
-					componentType: 'ACQUISITIONS_BUTTON',
-				}),
-				ariaLabel: `${BillingPeriod.Annual} DigitalPlus`,
-			},
-		],
+		buttons: getDigitalPlusButtonsForBillingPeriods(countryGroupId, [
+			BillingPeriod.Monthly,
+			BillingPeriod.Annual,
+		]),
 		benefits: buildDigialPlusBenefits(),
 		productImage: <DigitalPlusPackshot />,
 		offer: priceCopy.discountCopy,
@@ -162,7 +150,7 @@ const guardianWeekly = (
 	subtitle: getDisplayPrice(countryGroupId, priceCopy.price),
 	description:
 		'Gain a deeper understanding of the issues that matter with the Guardian Weekly magazine. Every week, take your time over handpicked articles from the Guardian, delivered for free to wherever you are in the world.',
-	offer: getGuardianWeeklyOfferCopy(priceCopy.discountCopy),
+	offer: priceCopy.discountCopy || '',
 	buttons: [
 		{
 			ctaButtonText: 'Find out more',
