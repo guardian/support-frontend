@@ -41,6 +41,15 @@ SupporterPlus.args = {
 	amount: 120,
 };
 
+export const DigitalSubscription = Template.bind({});
+DigitalSubscription.args = {
+	productKey: 'DigitalSubscription',
+	ratePlanKey: 'Monthly',
+	countryGroupId: 'UnitedStates',
+	currency: 'USD',
+	amount: 28,
+};
+
 export const TierThree = Template.bind({});
 TierThree.args = {
 	productKey: 'TierThree',
