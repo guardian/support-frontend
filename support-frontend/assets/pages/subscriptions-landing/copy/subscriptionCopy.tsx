@@ -4,7 +4,7 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type * as React from 'react';
-import DigitalPlusPackshot from 'components/packshots/digital-plus-packshot';
+import DigitalPlusPackshot from 'components/packshots/digitalPlusPackshot';
 import PaperPackShot from 'components/packshots/paperPackshot';
 import WeeklyPackShot from 'components/packshots/weeklyPackshot';
 import type { Participations } from 'helpers/abTests/models';

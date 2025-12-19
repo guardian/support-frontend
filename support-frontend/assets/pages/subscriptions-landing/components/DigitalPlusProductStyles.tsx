@@ -30,6 +30,7 @@ export const subscriptionsImageContainer = css`
 
 	picture {
 		flex-grow: 1;
+		justify-self: center;
 		display: flex;
 
 		img {
