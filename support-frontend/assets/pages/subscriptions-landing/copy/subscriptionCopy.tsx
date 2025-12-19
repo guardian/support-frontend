@@ -127,8 +127,7 @@ function digitalPlus(
 					product: 'DigitalPack',
 					componentType: 'ACQUISITIONS_BUTTON',
 				}),
-				modifierClasses: 'digital',
-				ariaLabel: `${BillingPeriod.Monthly} DigitalEdition`,
+				ariaLabel: `${BillingPeriod.Monthly} DigitalPlus`,
 			},
 			{
 				ctaButtonText: getDigitalPlusDisplayPrice(
@@ -144,8 +143,7 @@ function digitalPlus(
 					product: 'DigitalPack',
 					componentType: 'ACQUISITIONS_BUTTON',
 				}),
-				modifierClasses: 'digital',
-				ariaLabel: `${BillingPeriod.Annual} DigitalEdition`,
+				ariaLabel: `${BillingPeriod.Annual} DigitalPlus`,
 			},
 		],
 		benefits: buildDigialPlusBenefits(),
