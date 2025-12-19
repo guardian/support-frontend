@@ -43,17 +43,19 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 	];
 
 	const paymentProductKeys: PaymentProductTestParams[] = [
-		['GuardianAdLite', 'Annual', 'GBPCountries', 0],
-		['DigitalSubscription', 'Monthly', 'GBPCountries', 0],
-		['Contribution', 'Annual', 'AUDCountries', 0],
+		['GuardianAdLite', 'Monthly', 'GBPCountries', 5],
+		['DigitalSubscription', 'Monthly', 'GBPCountries', 18],
+		['DigitalSubscription', 'Monthly', 'UnitedStates', 28],
+		['Contribution', 'Annual', 'AUDCountries', 100],
 		['SupporterPlus', 'Monthly', 'GBPCountries', 12],
+		['SupporterPlus', 'Monthly', 'UnitedStates', 15],
 		['SupporterPlus', 'OneYearStudent', 'GBPCountries', 9],
 		['TierThree', 'RestOfWorldMonthly', 'UnitedStates', 45],
-		['HomeDelivery', 'EverydayPlus', 'GBPCountries', 0],
-		['NationalDelivery', 'EverydayPlus', 'GBPCountries', 0],
-		['SubscriptionCard', 'EverydayPlus', 'GBPCountries', 0],
-		['GuardianWeeklyDomestic', 'Monthly', 'GBPCountries', 0],
-		['GuardianWeeklyRestOfWorld', 'Annual', 'International', 0],
+		['HomeDelivery', 'EverydayPlus', 'GBPCountries', 83.99],
+		['NationalDelivery', 'EverydayPlus', 'GBPCountries', 83.99],
+		['SubscriptionCard', 'EverydayPlus', 'GBPCountries', 69.99],
+		['GuardianWeeklyDomestic', 'Monthly', 'GBPCountries', 16.5],
+		['GuardianWeeklyRestOfWorld', 'Annual', 'International', 432],
 	];
 	it.each(paymentProductKeys)(
 		`paymentTs&Cs render product %s for period %s in region %s correctly`,
