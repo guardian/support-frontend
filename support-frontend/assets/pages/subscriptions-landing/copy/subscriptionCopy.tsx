@@ -10,7 +10,7 @@ import WeeklyPackShot from 'components/packshots/weeklyPackshot';
 import type { Participations } from 'helpers/abTests/models';
 import { detect, glyph } from 'helpers/internationalisation/currency';
 import type { ProductBenefit } from 'helpers/productCatalog';
-import { productCatalog } from 'helpers/productCatalog';
+import { getProductCatalog } from 'helpers/productCatalog';
 import {
 	DigitalPack,
 	fixDecimals,
@@ -64,7 +64,8 @@ const getDigitalPlusDisplayPrice = (
 	billingPeriod: BillingPeriod,
 ): string => {
 	const currencyKey = detect(countryGroupId);
-	const product = productCatalog['DigitalSubscription'];
+
+	const product = getProductCatalog()['DigitalSubscription'];
 	const price = product?.ratePlans[billingPeriod]?.pricing[currencyKey];
 	if (!price) {
 		return '';

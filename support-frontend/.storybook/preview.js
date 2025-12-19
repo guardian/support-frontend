@@ -56,27 +56,6 @@ if (typeof window !== 'undefined') {
 			value,
 		)}; path=${path}; SameSite=Lax`;
 	});
-
-	// mock the product catalog in the window object
-	window.guardian.productCatalog = {
-		DigitalSubscription: {
-			ratePlans: {
-				Annual: {
-					billingPeriod: 'Annual',
-					pricing: {
-						GBP: 180,
-					},
-				},
-				Monthly: {
-					billingPeriod: 'Month',
-
-					pricing: {
-						GBP: 18,
-					},
-				},
-			},
-		},
-	};
 }
 
 /** This avoids having false positives when the date changes */

@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
-import { brand, from, neutral, space } from '@guardian/source/foundations';
+import { from, neutral, palette, space } from '@guardian/source/foundations';
 
 export const subscriptionsProductContainer = css`
 	display: flex;
 	flex-direction: column;
-	background-color: ${brand[400]};
+	background-color: ${palette.brand[400]};
 	color: ${neutral[100]};
 	max-width: 1290px;
 	margin: 0 ${space[3]}px;
@@ -13,7 +13,6 @@ export const subscriptionsProductContainer = css`
 
 	${from.desktop} {
 		flex-direction: row-reverse;
-		margin: 0 ${space[3]}px;
 	}
 
 	${from.wide} {
@@ -25,7 +24,7 @@ export const subscriptionsImageContainer = css`
 	display: flex;
 	flex: 1;
 	align-self: flex-end;
-	background-color: ${brand[300]};
+	background-color: ${palette.brand[300]};
 	width: 100%;
 
 	picture {
@@ -39,7 +38,7 @@ export const subscriptionsImageContainer = css`
 	}
 
 	${from.desktop} {
-		background-color: ${brand[400]};
+		background-color: ${palette.brand[400]};
 	}
 `;
 
