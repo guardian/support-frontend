@@ -103,7 +103,8 @@ export function SummaryTsAndCs({
 	);
 
 	const autoRenewUtilCancelTsAndCs = (countryGroupId: CountryGroupId) => {
-		return countryGroupId === 'UnitedStates' ? (
+		return ['SupporterPlus', 'DigitalSubscription'].includes(productKey) &&
+			countryGroupId === 'UnitedStates' ? (
 			<div css={[containerSummaryTsCs, containerSummaryTsCsUS]}>
 				<p>
 					By clicking the Pay button below, you agree to enroll in your selected
