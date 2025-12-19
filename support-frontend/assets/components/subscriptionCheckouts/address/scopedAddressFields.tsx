@@ -39,6 +39,7 @@ function mapBillingAddressStateToProps(state: SubscriptionsState) {
 		postCode: state.page.checkoutForm.billingAddress.fields.postCode,
 		state: state.page.checkoutForm.billingAddress.fields.state,
 		errors: state.page.checkoutForm.billingAddress.fields.errors,
+		postcodeErrorForFinder: null,
 	};
 }
 
@@ -72,6 +73,7 @@ function mapDeliveryAddressStateToProps(state: SubscriptionsState) {
 		postCode: state.page.checkoutForm.deliveryAddress.fields.postCode,
 		state: state.page.checkoutForm.deliveryAddress.fields.state,
 		errors: state.page.checkoutForm.deliveryAddress.fields.errors,
+		postcodeErrorForFinder: null,
 	};
 }
 
