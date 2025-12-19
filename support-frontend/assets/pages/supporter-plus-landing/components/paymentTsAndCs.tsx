@@ -54,12 +54,12 @@ const container = css`
 	}
 `;
 
-const termsLink = (linkText: string, url: string) => (
+export const termsLink = (linkText: string, url: string) => (
 	<a target="_blank" rel="noopener noreferrer" href={url}>
 		{linkText}
 	</a>
 );
-const manageMyAccountLink = () =>
+export const manageMyAccountLink = () =>
 	termsLink('Manage My Account', 'http://manage.theguardian.com/');
 
 export function FooterTsAndCs({

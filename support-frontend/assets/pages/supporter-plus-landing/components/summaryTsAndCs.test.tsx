@@ -47,6 +47,7 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 				<SummaryTsAndCs
 					productKey={productKey as ActiveProductKey}
 					ratePlanKey={activeRatePlanKey as ActiveRatePlanKey}
+					countryGroupId={'GBPCountries'}
 					ratePlanDescription={
 						ratePlanDescription[activeRatePlanKey as ActiveRatePlanKey]
 					}

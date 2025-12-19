@@ -1116,6 +1116,7 @@ export default function CheckoutForm({
 						<SummaryTsAndCs
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
+							countryGroupId={countryGroupId}
 							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}
