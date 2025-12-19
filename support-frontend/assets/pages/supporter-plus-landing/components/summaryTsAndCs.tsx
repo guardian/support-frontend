@@ -1,5 +1,10 @@
 import { css } from '@emotion/react';
-import { neutral, space, textSans15 } from '@guardian/source/foundations';
+import {
+	brand,
+	neutral,
+	space,
+	textSans15,
+} from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
@@ -43,8 +48,15 @@ const marginTop = css`
 `;
 
 const containerSummaryTsCsUS = css`
-	border: 2px solid ${neutral[0]};
+	border: 3px solid ${neutral[0]};
 	border-radius: 0px;
+
+	strong {
+		font-weight: bold;
+	}
+	& a {
+		color: ${brand[500]};
+	}
 `;
 
 export interface SummaryTsAndCsProps {
@@ -108,10 +120,12 @@ export function SummaryTsAndCs({
 			<div css={[containerSummaryTsCs, containerSummaryTsCsUS]}>
 				<p>
 					By clicking the Pay button below, you agree to enroll in your selected
-					support plan and your payment method will be automatically charged the
-					amount shown each {periodNoun} until you cancel. We will notify you if
-					this amount changes. You may cancel at any time to avoid future
-					charges in {manageMyAccountLink()}.
+					support plan and your payment method will be{' '}
+					<strong>
+						automatically charged the amount shown each {periodNoun}
+					</strong>{' '}
+					until you cancel. We will notify you if this amount changes. You may
+					cancel at any time to avoid future charges in {manageMyAccountLink()}.
 				</p>
 				<p css={marginTop}>
 					Your enrollment is subject to and governed by the Guardian{' '}
