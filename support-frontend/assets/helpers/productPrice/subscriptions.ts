@@ -7,6 +7,7 @@ import type {
 } from '../tracking/trackingOphan';
 
 // ----- Types ------ //
+const DigitalPlus = 'DigitalPlus';
 const DigitalPack = 'DigitalPack';
 const PremiumTier = 'PremiumTier';
 const DailyEdition = 'DailyEdition';
@@ -16,6 +17,8 @@ const Paper = 'Paper';
 const PaperAndDigital = 'PaperAndDigital';
 
 export const subscriptionProductTypes = [
+	DigitalPlus,
+	DigitalPlus,
 	DigitalPack,
 	PremiumTier,
 	DailyEdition,
