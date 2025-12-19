@@ -43,15 +43,23 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 		`summaryTs&Cs for $productKey With ratePlanKey $activeRatePlanKey renders correctly`,
 		({ productKey, activeRatePlanKey }) => {
 			// Act
+			const countryGroupId =
+				productKey === 'DigitalSubscription' && activeRatePlanKey === 'Monthly'
+					? 'UnitedStates'
+					: 'GBPCountries';
+			const currency =
+				productKey === 'DigitalSubscription' && activeRatePlanKey === 'Monthly'
+					? 'USD'
+					: 'GBP';
 			const { container } = render(
 				<SummaryTsAndCs
 					productKey={productKey as ActiveProductKey}
 					ratePlanKey={activeRatePlanKey as ActiveRatePlanKey}
-					countryGroupId={'GBPCountries'}
+					countryGroupId={countryGroupId}
 					ratePlanDescription={
 						ratePlanDescription[activeRatePlanKey as ActiveRatePlanKey]
 					}
-					currency={'GBP'}
+					currency={currency}
 					amount={0}
 				/>,
 			);

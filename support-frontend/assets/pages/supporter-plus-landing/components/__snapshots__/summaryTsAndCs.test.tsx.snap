@@ -6,7 +6,7 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution With ra
 
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for DigitalSubscription With ratePlanKey Annual renders correctly 1`] = `"The Digital plus subscription will auto-renew each year. You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for DigitalSubscription With ratePlanKey Monthly renders correctly 1`] = `"The Digital plus subscription will auto-renew each month. You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for DigitalSubscription With ratePlanKey Monthly renders correctly 1`] = `"By clicking the Pay button below, you agree to enroll in your selected support plan and your payment method will be automatically charged the amount shown each month until you cancel. We will notify you if this amount changes. You may cancel at any time to avoid future charges in Manage My Account.Your enrollment is subject to and governed by the Guardian Terms and Conditions and Privacy Policy."`;
 
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With ratePlanKey Annual renders correctly 1`] = `"The Guardian Ad-Lite subscription will auto-renew each year. You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
 
