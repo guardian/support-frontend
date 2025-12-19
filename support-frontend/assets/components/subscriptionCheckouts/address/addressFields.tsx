@@ -55,6 +55,7 @@ type PropTypes = StatePropTypes & {
 	setCountry: (countryRaw: IsoCountry) => void;
 	setPostcodeForFinder: (postcode: string) => void;
 	setPostcodeErrorForFinder: (error: string) => void;
+	postcodeErrorForFinder: string | null;
 	setErrors?: React.Dispatch<React.SetStateAction<AddressFormFieldError[]>>;
 	onFindAddress: (postcode: string) => void;
 };
@@ -132,6 +133,7 @@ export function AddressFields({
 	setCountry,
 	setPostcodeForFinder,
 	setPostcodeErrorForFinder,
+	postcodeErrorForFinder,
 	setErrors,
 	onFindAddress,
 }: PropTypes) {
@@ -297,7 +299,8 @@ export function AddressFields({
 						setPostcode(postcode);
 						setPostcodeForFinder(postcode);
 					}}
-					onPostcodeError={setPostcodeErrorForFinder}
+					onPostcodeLookupError={setPostcodeErrorForFinder}
+					postcodeLookupError={postcodeErrorForFinder}
 					onFindAddress={onFindAddress}
 					onAddressSelected={({
 						lineOne,
