@@ -4,7 +4,7 @@ import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
 import com.gu.aws.AwsCloudWatchMetricSetup.getMParticleTokenError
 import com.gu.okhttp.RequestRunners.FutureHttpClient
-import com.gu.rest.{CodeBody, WebServiceClientError, WebServiceHelper}
+import com.gu.rest.{CodeBody, WebServiceClientError, WebServiceHelper, WebServiceHelperError}
 import com.gu.support.config.Stage
 import com.typesafe.scalalogging.StrictLogging
 import config.MparticleConfig
@@ -112,7 +112,7 @@ class MParticleTokenProvider(
       .onComplete {
         case Success(token) =>
           tokens.getAndUpdate(currentTokens => {
-            currentTokens.incl(token)
+            currentTokens.incl(token.copy(token = MParticleAccessToken(token.token.token)))
           })
         case Failure(exception) =>
           logger.error(scrub"Error fetching oauth token from mparticle", exception)
@@ -133,14 +133,16 @@ class MParticleTokenProvider(
   def requestWithToken[T](fetch: MParticleAccessToken => Future[T], retries: Int = 0): Future[T] = {
     getToken() match {
       case Some(token) =>
-        fetch(token.token).recoverWith { case WebServiceClientError(CodeBody("401", _)) =>
-          purgeToken(token)
-          if (retries < maxRetries) {
-            requestWithToken(fetch, retries + 1)
-          } else {
-            AwsCloudWatchMetricPut(cloudwatchClient)(getMParticleTokenError(stage))
-            Future.failed(new Exception(s"Max retries ($maxRetries) reached for mParticle"))
-          }
+        fetch(token.token).recoverWith {
+          case WebServiceClientError(CodeBody("401", _)) | WebServiceHelperError(CodeBody("401", _), _, _) =>
+            purgeToken(token)
+            if (retries < maxRetries) {
+              logger.info(s"Retrying mparticle request after 401 received")
+              requestWithToken(fetch, retries + 1)
+            } else {
+              AwsCloudWatchMetricPut(cloudwatchClient)(getMParticleTokenError(stage))
+              Future.failed(new Exception(s"Max retries ($maxRetries) reached for mParticle"))
+            }
         }
       case None =>
         // We currently have no tokens
