@@ -74,6 +74,7 @@ class MParticleTokenProviderSpec
       })
 
       val provider = new MParticleTokenProvider(httpClient, createMockConfig(), Stages.CODE)
+      provider.initialise()
 
       // Wait for initial tokens to be fetched
       eventually {
@@ -101,6 +102,7 @@ class MParticleTokenProviderSpec
       when(httpClient.apply(any[Request])).thenReturn(Future.successful(errorResponse))
 
       val provider = new MParticleTokenProvider(httpClient, createMockConfig(), Stages.CODE)
+      provider.initialise()
 
       val result = provider.requestWithToken(_ => Future.successful("should not succeed"))
 
@@ -126,6 +128,7 @@ class MParticleTokenProviderSpec
       })
 
       val provider = new MParticleTokenProvider(httpClient, createMockConfig(), Stages.CODE)
+      provider.initialise()
 
       // Eventually tokens should be fetched after retries
       eventually(timeout(10.seconds)) {
@@ -150,6 +153,7 @@ class MParticleTokenProviderSpec
       })
 
       val provider = new MParticleTokenProvider(httpClient, createMockConfig(), Stages.CODE)
+      provider.initialise()
 
       eventually {
         provider.requestWithToken(token => Future.successful("check tokens ready")).futureValue

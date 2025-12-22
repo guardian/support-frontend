@@ -68,20 +68,28 @@ class MParticleTokenProvider(
   private val desiredTokenCount = 3
   private val tokens = new AtomicReference[Set[Token]](Set.empty)
 
-  // Fetch the first pool of tokens
-  logger.info("Fetching initial batch of mparticle tokens")
-  (1 to desiredTokenCount).foreach(_ => fetchAndStoreToken())
+  def initialise(): Unit = {
+    // Fetch the first pool of tokens
+    logger.info("Fetching initial batch of mparticle tokens")
+    (1 to desiredTokenCount).foreach(_ => fetchAndStoreToken())
 
-  // Every hour purge the oldest token
-  system.scheduler.scheduleAtFixedRate(1.hour, 1.hour)(() => {
-    val currentTokens = tokens.get().toList
-    if (currentTokens.size >= desiredTokenCount) {
-      currentTokens
-        .sortBy(_.created)
-        .headOption
-        .foreach(purgeToken)
-    }
-  })
+    // Every hour purge the oldest token
+    system.scheduler.scheduleAtFixedRate(1.hour, 1.hour)(() => {
+      try {
+        logger.info("Running scheduled token purge")
+        val currentTokens = tokens.get().toList
+        if (currentTokens.size >= desiredTokenCount) {
+          currentTokens
+            .sortBy(_.created)
+            .headOption
+            .foreach(purgeToken)
+        }
+      } catch {
+        case ex: Exception =>
+          logger.error(scrub"Error during scheduled token purge", ex)
+      }
+    })
+  }
 
   // Randomly select a token
   private def getToken(): Option[Token] = {
