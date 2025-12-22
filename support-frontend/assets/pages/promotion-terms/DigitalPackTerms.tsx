@@ -1,7 +1,7 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import OrderedList from 'components/list/orderedList';
 import type { Option } from 'helpers/types/option';
-import { digitalSubscriptionLanding } from 'helpers/urls/routes';
+import { getDigitalPlusCheckoutDeepLink } from 'helpers/urls/routes';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 
 type PropTypes = {
@@ -22,7 +22,7 @@ export default function DigitalPackTerms(props: PropTypes) {
 		'By entering the promotion you are accepting these terms and conditions.',
 		<div>
 			To enter the promotion, you must: (i) either go to{' '}
-			<a href={digitalSubscriptionLanding(props.countryGroupId)}>
+			<a href={getDigitalPlusCheckoutDeepLink(props.countryGroupId)}>
 				support.theguardian.com
 			</a>{' '}
 			or call +44 (0) 330 333 6767 and quote promotion code {props.promoCode}{' '}
