@@ -1,5 +1,6 @@
 import { getSubscriptionCopy } from '../copy/subscriptionCopy';
 import type { SubscriptionsLandingProps } from '../subscriptionsLandingProps';
+import DigitalPlusProduct from './DigitalPlusProduct';
 import FeatureHeader from './featureHeader';
 import { subscriptionsProductContainerStyle } from './subscriptionsLandingContentStyles';
 import SubscriptionsProduct from './subscriptionsProduct';
@@ -40,27 +41,31 @@ function SubscriptionsLandingContent({
 		>
 			<FeatureHeader featureHeaderMsg={supportMsg} />
 			<div css={subscriptionsProductContainerStyle}>
-				{subscriptionCopy.map((product, index) => (
-					<SubscriptionsProduct
-						title={product.title}
-						subtitle={
-							validBlackFridayProduct(isBlackFriday, product.title)
-								? 'Annual'
-								: product.subtitle ?? ''
-						}
-						description={product.description}
-						productImage={product.productImage}
-						buttons={product.buttons}
-						offer={
-							validBlackFridayProduct(isBlackFriday, product.title)
-								? 'Black Friday Offer: 1/3 off'
-								: product.offer
-						}
-						isFeature={isFeature(index)}
-						cssOverrides={product.cssOverrides}
-						benefits={product.benefits}
-					/>
-				))}
+				{subscriptionCopy.map((product, index) =>
+					product.digitalPlusLayout === true ? (
+						<DigitalPlusProduct {...product} />
+					) : (
+						<SubscriptionsProduct
+							title={product.title}
+							subtitle={
+								validBlackFridayProduct(isBlackFriday, product.title)
+									? 'Annual'
+									: product.subtitle
+							}
+							description={product.description}
+							productImage={product.productImage}
+							buttons={product.buttons}
+							offer={
+								validBlackFridayProduct(isBlackFriday, product.title)
+									? 'Black Friday Offer: 1/3 off'
+									: product.offer
+							}
+							isFeature={isFeature(index)}
+							cssOverrides={product.cssOverrides}
+							benefits={product.benefits}
+						/>
+					),
+				)}
 			</div>
 		</div>
 	);
