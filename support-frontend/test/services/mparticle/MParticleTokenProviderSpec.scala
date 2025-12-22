@@ -1,7 +1,7 @@
 package services.mparticle
 
 import com.gu.okhttp.RequestRunners.FutureHttpClient
-import com.gu.rest.{CodeBody, WebServiceClientError}
+import com.gu.rest.{CodeBody, WebServiceClientError, WebServiceHelperError}
 import com.gu.support.config.Stages
 import config.MparticleConfig
 import okhttp3.{MediaType, Protocol, Request, Response, ResponseBody}
@@ -156,7 +156,7 @@ class MParticleTokenProviderSpec
       }
 
       val fetch: MParticleAccessToken => Future[String] = { _ =>
-        Future.failed(WebServiceClientError(CodeBody("401", "Unauthorized")))
+        Future.failed(WebServiceHelperError(CodeBody("401", "Unauthorized"), "Unauthorized"))
       }
 
       val result = provider.requestWithToken(fetch)

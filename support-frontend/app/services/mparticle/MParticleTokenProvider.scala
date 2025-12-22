@@ -112,7 +112,7 @@ class MParticleTokenProvider(
       .onComplete {
         case Success(token) =>
           tokens.getAndUpdate(currentTokens => {
-            currentTokens.incl(token.copy(token = MParticleAccessToken(token.token.token)))
+            currentTokens.incl(token)
           })
         case Failure(exception) =>
           logger.error(scrub"Error fetching oauth token from mparticle", exception)
