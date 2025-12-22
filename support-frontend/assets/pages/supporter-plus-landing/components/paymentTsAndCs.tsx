@@ -268,9 +268,13 @@ export function PaymentTsAndCs({
 		</>
 	);
 
-	const prefixBasis = (countryGroupId: CountryGroupId) => {
+	const prefixBasis = (
+		countryGroupId: CountryGroupId,
+		promotion?: Promotion,
+	) => {
 		const startPhrase = `If you pay at least ${legalPrice(' per ')}`;
-		const midPhrase = countryGroupId === 'UnitedStates' ? ' thereafter,' : ',';
+		const midPhrase =
+			countryGroupId === 'UnitedStates' && !!promotion ? ' thereafter,' : ',';
 		return `${startPhrase}${midPhrase} you will receive the ${productLabel} benefits on a subscription basis.`;
 	};
 	const supportBasis = `For support of ${legalPrice(
@@ -279,14 +283,15 @@ export function PaymentTsAndCs({
 
 	const supporterPlusTsAndCs = (
 		countryGroupId: CountryGroupId,
+		promotion?: Promotion,
 	): JSX.Element => {
 		return countryGroupId === 'UnitedStates' ? (
 			promotion ? (
 				<div>
-					{prefixBasis(countryGroupId)} If you give additional support beyond{' '}
-					{productLabel}, that amount will be charged separately as voluntary
-					contributions to the Guardian. If you cancel within 14 days of
-					subscribing, you’ll receive a full refund (including any
+					{prefixBasis(countryGroupId, promotion)} If you give additional
+					support beyond {productLabel}, that amount will be charged separately
+					as voluntary contributions to the Guardian. If you cancel within 14
+					days of subscribing, you’ll receive a full refund (including any
 					contributions) and your subscription will immediately stop.
 				</div>
 			) : (
@@ -330,20 +335,21 @@ export function PaymentTsAndCs({
 
 	const digitalSubscriptionTsAndCs = (
 		countryGroupId: CountryGroupId,
+		promotion?: Promotion,
 	): JSX.Element => {
 		return countryGroupId === 'UnitedStates' ? (
 			promotion ? (
 				<div>
-					{prefixBasis(countryGroupId)} Your first payment will be taken on day
-					15 after signing up but you can access your benefits straight away.
-					Unless you cancel, each {billingPeriodPlural} payment will be taken on
-					this date using your chosen payment method. You can cancel your
-					subscription at any time before your next renewal date. If you cancel
-					your subscription within 14 days of signing up, your subscription will
-					stop immediately and we will not take the first payment from you.
-					Cancellation of your subscription after 14 days will take effect at
-					the end of your current {billingPeriodPlural} payment period. To
-					cancel, go to Manage My Account or see our Terms.
+					{prefixBasis(countryGroupId, promotion)} Your first payment will be
+					taken on day 15 after signing up but you can access your benefits
+					straight away. Unless you cancel, each {billingPeriodPlural} payment
+					will be taken on this date using your chosen payment method. You can
+					cancel your subscription at any time before your next renewal date. If
+					you cancel your subscription within 14 days of signing up, your
+					subscription will stop immediately and we will not take the first
+					payment from you. Cancellation of your subscription after 14 days will
+					take effect at the end of your current {billingPeriodPlural} payment
+					period. To cancel, go to Manage My Account or see our Terms.
 				</div>
 			) : (
 				<div>
@@ -378,7 +384,7 @@ export function PaymentTsAndCs({
 	};
 
 	const paymentTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
-		DigitalSubscription: digitalSubscriptionTsAndCs(countryGroupId),
+		DigitalSubscription: digitalSubscriptionTsAndCs(countryGroupId, promotion),
 		GuardianAdLite: (
 			<div>
 				Your Guardian Ad-Lite subscription will auto-renew each{' '}
@@ -399,7 +405,7 @@ export function PaymentTsAndCs({
 			<div>
 				{isStudentOneYearRatePlan
 					? studentSupporterPlusTsAndCs
-					: supporterPlusTsAndCs(countryGroupId)}
+					: supporterPlusTsAndCs(countryGroupId, promotion)}
 			</div>
 		),
 		TierThree: (
