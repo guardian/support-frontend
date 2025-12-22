@@ -52,8 +52,10 @@ export const subscriptionsDescriptionContainer = css`
 `;
 
 export const subscriptionsDescription = css`
-	padding: ${space[3]}px ${space[6]}px;
-
+	padding: ${space[2]}px ${space[6]}px ${space[3]}px;
+	${from.tablet} {
+		padding-top: ${space[3]}px;
+	}
 	${from.desktop} {
 		padding-left: ${space[14]}px;
 	}

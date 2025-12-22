@@ -110,7 +110,6 @@ export const subscriptionTitleFeature = css`
 	}
 	${until.tablet} {
 		font-size: 24px;
-		padding-top: 15px;
 	}
 `;
 
