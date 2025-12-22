@@ -59,9 +59,9 @@ class MParticleClient(
   override val verboseLogging: Boolean = false
 
   // Called from the healthcheck handler. Call this to ensure the MParticleTokenProvider fetches the first batch of tokens
-  def initialise(): Unit = {
-    tokenProvider.initialise()
-  }
+  def initialise(): Unit = {}
+
+  tokenProvider.initialise()
 
   private def fetchAudienceMemberships(identityId: String): Future[ProfileResponse] = {
     val fields = "audience_memberships"
