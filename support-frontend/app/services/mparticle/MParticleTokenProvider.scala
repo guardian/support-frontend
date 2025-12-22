@@ -69,24 +69,27 @@ class MParticleTokenProvider(
   private val tokens = new AtomicReference[Set[Token]](Set.empty)
 
   def initialise(): Unit = {
-    // Fetch the first pool of tokens
     logger.info("Fetching initial batch of mparticle tokens")
-    (1 to desiredTokenCount).foreach(_ => fetchAndStoreToken())
+    val initialFetches = (1 to desiredTokenCount).foldLeft(Future.successful(())) { (acc, _) =>
+      acc.flatMap(_ => fetchAndStoreToken())
+    }
+
+    initialFetches.onComplete {
+      case Success(_) =>
+        logger.info(s"Successfully initialized $desiredTokenCount tokens")
+      case Failure(ex) =>
+        logger.error(scrub"Failed to initialize token pool", ex)
+    }
 
     // Every hour purge the oldest token
     system.scheduler.scheduleAtFixedRate(1.hour, 1.hour)(() => {
-      try {
-        logger.info("Running scheduled token purge")
-        val currentTokens = tokens.get().toList
-        if (currentTokens.size >= desiredTokenCount) {
-          currentTokens
-            .sortBy(_.created)
-            .headOption
-            .foreach(purgeToken)
-        }
-      } catch {
-        case ex: Exception =>
-          logger.error(scrub"Error during scheduled token purge", ex)
+      logger.info("Running scheduled mparticle token purge")
+      val currentTokens = tokens.get().toList
+      if (currentTokens.size >= desiredTokenCount) {
+        currentTokens
+          .sortBy(_.created)
+          .headOption
+          .foreach(purgeToken)
       }
     })
   }
@@ -115,16 +118,18 @@ class MParticleTokenProvider(
     })
   }
 
-  private def fetchAndStoreToken(backoff: Int = 1): Unit = {
+  private def fetchAndStoreToken(backoff: Int = 1): Future[Unit] = {
     fetchToken()
-      .onComplete {
-        case Success(token) =>
-          tokens.getAndUpdate(currentTokens => {
-            currentTokens.incl(token)
-          })
-        case Failure(exception) =>
-          logger.error(scrub"Error fetching oauth token from mparticle", exception)
-          system.scheduler.scheduleOnce(backoff.seconds)(fetchAndStoreToken(Math.min(backoff * 2, 60)))
+      .map { token =>
+        val newSize = tokens.updateAndGet(currentTokens => currentTokens + token).size
+        logger.info(s"Token added, now have $newSize tokens")
+      }
+      .recoverWith { case exception =>
+        logger.error(scrub"Error fetching oauth token from mparticle", exception)
+        system.scheduler.scheduleOnce(backoff.seconds) {
+          fetchAndStoreToken(Math.min(backoff * 2, 60))
+        }
+        Future.failed(exception)
       }
   }
 
