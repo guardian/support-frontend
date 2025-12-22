@@ -24,12 +24,12 @@ import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { parameteriseUrl } from 'helpers/urls/routes';
-import { getOriginAndForceSubdomain } from 'helpers/urls/url';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
+import { buildBackButtonPath } from '../checkout/helpers/backButton';
 import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
@@ -59,6 +59,8 @@ type CheckoutSummaryProps = {
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
 	nudgeSettings?: CheckoutNudgeSettings;
+	backButtonOrigin: string;
+	backButtonPathOverride: string | null;
 };
 
 export default function CheckoutSummary({
@@ -76,6 +78,8 @@ export default function CheckoutSummary({
 	thresholdAmount,
 	studentDiscount,
 	nudgeSettings,
+	backButtonOrigin,
+	backButtonPathOverride,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
@@ -155,13 +159,18 @@ export default function CheckoutSummary({
 		}
 	};
 
+	const backButtonPath = buildBackButtonPath(
+		productDescription.landingPagePath,
+		backButtonPathOverride,
+	);
+
 	// We need to force the subdomain to support in case we're on the Observer
 	// subdomain which can't serve the subscribe/paper landing page. This is for
 	// Sunday paper subs.
 	const backUrl =
-		getOriginAndForceSubdomain('support') +
+		backButtonOrigin +
 		parameteriseUrl(
-			`/${supportRegionId}${productDescription.landingPagePath}`,
+			`/${supportRegionId}${backButtonPath}`,
 			promotion?.promoCode,
 			getPaperFulfilmentOption(productKey),
 		);
