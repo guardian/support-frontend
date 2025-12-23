@@ -1,7 +1,5 @@
-import {
-	PaymentTsAndCs,
-	PaymentTsAndCsProps,
-} from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import type { PaymentTsAndCsProps } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 
 export default {
 	title: 'Checkouts/Ts&Cs Payment',
@@ -46,8 +44,16 @@ DigitalSubscription.args = {
 	countryGroupId: 'GBPCountries',
 };
 
-export const Contribution = Template.bind({});
-Contribution.args = {
+export const DigitalSubscriptionUS = Template.bind({});
+DigitalSubscriptionUS.args = {
+	productKey: 'DigitalSubscription',
+	ratePlanKey: 'Monthly',
+	countryGroupId: 'UnitedStates',
+	thresholdAmount: 28,
+};
+
+export const ContributionAU = Template.bind({});
+ContributionAU.args = {
 	productKey: 'Contribution',
 	ratePlanKey: 'Annual',
 	countryGroupId: 'AUDCountries',
@@ -59,6 +65,14 @@ SupporterPlus.args = {
 	ratePlanKey: 'Monthly',
 	countryGroupId: 'GBPCountries',
 	thresholdAmount: 12,
+};
+
+export const SupporterPlusUS = Template.bind({});
+SupporterPlusUS.args = {
+	productKey: 'SupporterPlus',
+	ratePlanKey: 'Monthly',
+	countryGroupId: 'UnitedStates',
+	thresholdAmount: 15,
 };
 
 export const SupporterPlusOneYearStudent = Template.bind({});
@@ -79,8 +93,8 @@ SupporterPlusAUStudent.args = {
 	studentDiscount: auStudentDiscount,
 };
 
-export const TierThree = Template.bind({});
-TierThree.args = {
+export const TierThreeUS = Template.bind({});
+TierThreeUS.args = {
 	productKey: 'TierThree',
 	ratePlanKey: 'Monthly',
 	countryGroupId: 'UnitedStates',

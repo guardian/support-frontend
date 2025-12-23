@@ -88,16 +88,28 @@ function paperSubsUrl(
 	return baseURL;
 }
 
-function digitalSubscriptionLanding(
+function getDigitalPlusCheckoutDeepLink(
 	countryGroupId: CountryGroupId,
 	billingPeriod?: BillingPeriod,
 ) {
-	const routeDigitalSubscription = `${
-		routes.checkout
-	}?product=DigitalSubscription&ratePlan=${billingPeriod ?? 'Monthly'}`;
-	return `${getOrigin()}/${countryPath(
-		countryGroupId,
-	)}${routeDigitalSubscription}`;
+	const urlParams = {
+		product: 'DigitalSubscription',
+		ratePlan: billingPeriod ?? 'Monthly',
+		utm_medium: 'ACQUISITIONS_SUPPORT_SITE',
+		utm_campaign: 'digitalplus',
+		utm_content: `acquisition_${billingPeriod?.toLowerCase()}`,
+		utm_term: 'printcheckout',
+		utm_source: 'GUARDIAN_WEB',
+		backLocation: 'subscribe',
+	};
+
+	const domain = getOrigin();
+	const localePath = countryPath(countryGroupId);
+	const checkoutRoute = routes.checkout;
+
+	const queryParams = new URLSearchParams(Object.entries(urlParams)).toString();
+
+	return `${domain}/${localePath}${checkoutRoute}?${queryParams}`;
 }
 
 function guardianWeeklyLanding(countryGroupId: CountryGroupId, gift: boolean) {
@@ -181,7 +193,7 @@ export {
 	paperSubsUrl,
 	paperCheckoutUrl,
 	parameteriseUrl,
-	digitalSubscriptionLanding,
+	getDigitalPlusCheckoutDeepLink,
 	guardianWeeklyLanding,
 	promotionTermsUrl,
 };
