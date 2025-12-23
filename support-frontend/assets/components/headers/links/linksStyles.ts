@@ -3,6 +3,7 @@ import {
 	brand,
 	brandAlt,
 	from,
+	headlineBold24,
 	neutral,
 	until,
 } from '@guardian/source/foundations';
@@ -98,15 +99,12 @@ export const linksListItemNavigate = css`
 	display: block;
 	overflow: hidden;
 	position: relative;
-	font-family: GH Guardian Headline;
-	font-weight: 900;
-	line-height: 90%;
+	${headlineBold24}
 	text-decoration: none;
 	color: ${neutral[100]};
 	box-shadow: inset 0 0 0 ${brandAlt[400]};
 
 	${until.tablet} {
-		font-size: 24px;
 		padding: ${gu_v_spacing * 0.5}px ${gu_h_spacing}px ${gu_v_spacing * 1.5}px 0;
 		transition: 0.2s linear;
 		:hover,
