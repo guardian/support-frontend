@@ -50,6 +50,8 @@ excludeDependencies ++= Seq(
   // by specifying is in the dependencies.
   ExclusionRule("net.sourceforge.htmlunit", "htmlunit"),
   ExclusionRule("commons-beanutils", "commons-beanutils"), // Also exclude commons-beanutils due to a vulnerability
+  // This exclusion, and the explicit inclusion of at.yawk.lz4:lz4-java:1.10.2 above is needed until we upgrade
+  // identity-auth-play to a version which doesn't pull in an older play and therefore an older version of lz4.
   ExclusionRule("org.lz4"),
 )
 
