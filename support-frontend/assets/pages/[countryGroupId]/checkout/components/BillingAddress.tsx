@@ -42,6 +42,10 @@ export function BillingAddress({
 		AddressFormFieldError[]
 	>([]);
 
+	const [postcodeLookupError, setPostcodeLookupError] = useState<string | null>(
+		null,
+	);
+
 	return (
 		<fieldset>
 			<AddressFields
@@ -69,16 +73,26 @@ export function BillingAddress({
 				setPostcodeForFinder={() => {
 					// no-op
 				}}
-				setPostcodeErrorForFinder={() => {
-					// no-op
+				setPostcodeErrorForFinder={(error) => {
+					setPostcodeLookupError(error);
 				}}
+				postcodeErrorForFinder={postcodeLookupError}
 				setErrors={setBillingAddressErrors}
 				onFindAddress={(postcode) => {
 					setBillingPostcodeStateLoading(true);
-					void findAddressesForPostcode(postcode).then((results) => {
-						setBillingPostcodeStateLoading(false);
-						setBillingPostcodeStateResults(results);
-					});
+
+					void findAddressesForPostcode(postcode)
+						.then((results) => {
+							setBillingPostcodeStateResults(results);
+							setPostcodeLookupError(null);
+						})
+						.catch(() => {
+							setBillingPostcodeStateResults([]);
+							setPostcodeLookupError('Postcode not found');
+						})
+						.finally(() => {
+							setBillingPostcodeStateLoading(false);
+						});
 				}}
 			/>
 		</fieldset>
