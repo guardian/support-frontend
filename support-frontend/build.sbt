@@ -37,7 +37,6 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
-  "at.yawk.lz4" % "lz4-java" % "1.10.2",
   filters,
   ws,
 )
@@ -50,8 +49,8 @@ excludeDependencies ++= Seq(
   // by specifying is in the dependencies.
   ExclusionRule("net.sourceforge.htmlunit", "htmlunit"),
   ExclusionRule("commons-beanutils", "commons-beanutils"), // Also exclude commons-beanutils due to a vulnerability
-  // This exclusion, and the explicit inclusion of at.yawk.lz4:lz4-java:1.10.2 above is needed until we upgrade
-  // identity-auth-play to a version which doesn't pull in an older play and therefore an older version of lz4.
+  // This exclusion is needed until we upgrade identity-auth-play to a version which doesn't pull in an older play and
+  // therefore an older version of lz4. The later version of lz4 pulled in by Play 3.0.10 will be used instead.
   ExclusionRule("org.lz4"),
 )
 
