@@ -2,8 +2,8 @@
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import CsrBanner from 'components/csr/csrBanner';
+import { pageDefaultStyles } from 'components/page/styles/pageDefaults';
 import { SkipLink } from 'components/skipLink/skipLink';
-import { pageDefaultStyles } from 'stylesheets/emotion/pageDefaults';
 import { pageContainer } from './pageStyles';
 
 // ----- Types ----- //

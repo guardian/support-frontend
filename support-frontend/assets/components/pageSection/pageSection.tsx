@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 import type { SerializedStyles } from '@emotion/react';
 import type { ReactNode } from 'react';
-import { pageDefaultStyles } from 'stylesheets/emotion/pageDefaults';
+import { pageDefaultStyles } from 'components/page/styles/pageDefaults';
 import {
 	bodyStyles,
 	headerStyles,
