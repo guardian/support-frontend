@@ -37,6 +37,7 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
+  "at.yawk.lz4" % "lz4-java" % "1.10.2",
   filters,
   ws,
 )
@@ -49,6 +50,7 @@ excludeDependencies ++= Seq(
   // by specifying is in the dependencies.
   ExclusionRule("net.sourceforge.htmlunit", "htmlunit"),
   ExclusionRule("commons-beanutils", "commons-beanutils"), // Also exclude commons-beanutils due to a vulnerability
+  ExclusionRule("org.lz4"),
 )
 
 ThisBuild / libraryDependencySchemes ++= Seq(
