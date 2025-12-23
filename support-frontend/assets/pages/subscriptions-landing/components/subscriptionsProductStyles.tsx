@@ -122,7 +122,7 @@ export const subscriptionsDescription = css`
 		transform: translateY(0);
 	}
 	${until.phablet} {
-		padding: 6px 0 30px 10px;
+		padding: 6px 20px 30px 10px;
 		position: static;
 		transform: none;
 	}

@@ -1,9 +1,6 @@
-import type { SerializedStyles } from '@emotion/react';
-import type { ReactNode } from 'react';
 import SubscriptionsProductDescription from 'components/subscriptionsProductDescription/subscriptionsProductDescription';
 import 'helpers/types/option';
-import type { ProductBenefit } from 'helpers/productCatalog';
-import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
+import type { ProductCopy } from 'pages/subscriptions-landing/copy/subscriptionCopy';
 import {
 	subscriptionsDescription,
 	subscriptionsDescriptionContainer,
@@ -17,25 +14,13 @@ import {
 	subscriptionsProductContainerFeature,
 } from './subscriptionsProductStyles';
 
-type SubscriptionsProductProps = {
-	title: string;
-	subtitle: string;
-	description: string;
-	buttons: ProductButton[];
-	productImage: ReactNode;
-	offer?: string;
-	isFeature?: boolean;
-	benefits?: ProductBenefit[];
-	cssOverrides?: SerializedStyles;
-};
-
 function SubscriptionsProduct({
 	productImage,
 	isFeature,
 	benefits,
 	cssOverrides,
 	...props
-}: SubscriptionsProductProps): JSX.Element {
+}: ProductCopy & { isFeature: boolean }): JSX.Element {
 	return (
 		<div
 			css={[
