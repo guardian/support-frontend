@@ -3,28 +3,21 @@ import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import CsrBanner from 'components/csr/csrBanner';
 import { SkipLink } from 'components/skipLink/skipLink';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
+import { mainContentStyles, pageContainer } from './pageStyles';
 
-// ----- Types ----- //
-type PropTypes = {
+type PageProps = {
 	id?: string;
 	header: ReactNode;
 	footer?: ReactNode;
 	children: ReactNode;
-	classModifiers: string[];
-	backgroundImageSrc?: string;
-}; // ----- Component ----- //
+};
 
-export default function Page(props: PropTypes): JSX.Element {
-	const backgroundImage = props.backgroundImageSrc ? (
-		<div className="background-image-container">
-			<img
-				className="background-image"
-				alt="landing page background illustration"
-				src={props.backgroundImageSrc}
-			/>
-		</div>
-	) : null;
+export default function Page({
+	id,
+	header,
+	footer,
+	children,
+}: PageProps): JSX.Element {
 	useEffect(() => {
 		requestAnimationFrame(() => {
 			if (window.location.hash) {
@@ -39,22 +32,14 @@ export default function Page(props: PropTypes): JSX.Element {
 		});
 	}, []);
 	return (
-		<div
-			id={props.id}
-			className={classNameWithModifiers('gu-content', props.classModifiers)}
-		>
+		<div id={id} css={pageContainer}>
 			<SkipLink id="maincontent" label="Skip to main content" />
 			<CsrBanner />
-			{props.header}
-			<main role="main" id="maincontent" className="gu-content__main">
-				{backgroundImage}
-				{props.children}
+			{header}
+			<main role={'main'} id={'maincontent'} css={mainContentStyles}>
+				{children}
 			</main>
-			{props.footer}
+			{footer}
 		</div>
 	);
-} // ----- Default Props ----- //
-
-Page.defaultProps = {
-	classModifiers: [],
-};
+}
