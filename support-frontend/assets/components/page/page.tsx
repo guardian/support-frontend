@@ -33,7 +33,7 @@ export default function Page({
 		});
 	}, []);
 	return (
-		<div id={id} css={pageContainer}>
+		<div id={id} css={[pageContainer, pageDefaultStyles]}>
 			<SkipLink id="maincontent" label="Skip to main content" />
 			<CsrBanner />
 			{header}
