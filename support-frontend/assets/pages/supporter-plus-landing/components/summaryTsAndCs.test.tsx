@@ -1,3 +1,5 @@
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { render } from '@testing-library/react';
 import type {
 	ActiveProductKey,
@@ -25,32 +27,34 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 	});
 
 	it.each`
-		productKey               | activeRatePlanKey
-		${'Contribution'}        | ${'Monthly'}
-		${'Contribution'}        | ${'Annual'}
-		${'SupporterPlus'}       | ${'Monthly'}
-		${'SupporterPlus'}       | ${'Annual'}
-		${'OneTimeContribution'} | ${'OneTime'}
-		${'GuardianAdLite'}      | ${'Monthly'}
-		${'GuardianAdLite'}      | ${'Annual'}
-		${'DigitalSubscription'} | ${'Monthly'}
-		${'DigitalSubscription'} | ${'Annual'}
-		${'SubscriptionCard'}    | ${'WeekendPlus'}
-		${'HomeDelivery'}        | ${'SixdayPlus'}
-		${'SubscriptionCard'}    | ${'Sunday'}
-		${'HomeDelivery'}        | ${'Sunday'}
+		productKey               | activeRatePlanKey | countryGroupId    | currency
+		${'Contribution'}        | ${'Monthly'}      | ${'GBPCountries'} | ${'GBP'}
+		${'Contribution'}        | ${'Annual'}       | ${'GBPCountries'} | ${'GBP'}
+		${'SupporterPlus'}       | ${'Monthly'}      | ${'GBPCountries'} | ${'GBP'}
+		${'SupporterPlus'}       | ${'Monthly'}      | ${'UnitedStates'} | ${'USD'}
+		${'SupporterPlus'}       | ${'Annual'}       | ${'GBPCountries'} | ${'GBP'}
+		${'OneTimeContribution'} | ${'OneTime'}      | ${'GBPCountries'} | ${'GBP'}
+		${'GuardianAdLite'}      | ${'Monthly'}      | ${'GBPCountries'} | ${'GBP'}
+		${'GuardianAdLite'}      | ${'Annual'}       | ${'GBPCountries'} | ${'GBP'}
+		${'DigitalSubscription'} | ${'Monthly'}      | ${'UnitedStates'} | ${'USD'}
+		${'DigitalSubscription'} | ${'Annual'}       | ${'GBPCountries'} | ${'GBP'}
+		${'SubscriptionCard'}    | ${'WeekendPlus'}  | ${'GBPCountries'} | ${'GBP'}
+		${'HomeDelivery'}        | ${'SixdayPlus'}   | ${'GBPCountries'} | ${'GBP'}
+		${'SubscriptionCard'}    | ${'Sunday'}       | ${'GBPCountries'} | ${'GBP'}
+		${'HomeDelivery'}        | ${'Sunday'}       | ${'GBPCountries'} | ${'GBP'}
 	`(
-		`summaryTs&Cs for $productKey With ratePlanKey $activeRatePlanKey renders correctly`,
-		({ productKey, activeRatePlanKey }) => {
+		`summaryTs&Cs for $productKey With ratePlanKey $activeRatePlanKey ($countryGroupId / $currency) renders correctly`,
+		({ productKey, activeRatePlanKey, countryGroupId, currency }) => {
 			// Act
 			const { container } = render(
 				<SummaryTsAndCs
 					productKey={productKey as ActiveProductKey}
 					ratePlanKey={activeRatePlanKey as ActiveRatePlanKey}
+					countryGroupId={countryGroupId as CountryGroupId}
 					ratePlanDescription={
 						ratePlanDescription[activeRatePlanKey as ActiveRatePlanKey]
 					}
-					currency={'GBP'}
+					currency={currency as IsoCurrency}
 					amount={0}
 				/>,
 			);
