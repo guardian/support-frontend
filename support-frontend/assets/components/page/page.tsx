@@ -12,7 +12,12 @@ type PageProps = {
 	children: ReactNode;
 };
 
-export default function Page(pageProps: PageProps): JSX.Element {
+export default function Page({
+	id,
+	header,
+	footer,
+	children,
+}: PageProps): JSX.Element {
 	useEffect(() => {
 		requestAnimationFrame(() => {
 			if (window.location.hash) {
@@ -26,7 +31,6 @@ export default function Page(pageProps: PageProps): JSX.Element {
 			}
 		});
 	}, []);
-	const { id, header, footer, children } = pageProps;
 	return (
 		<div id={id} css={pageContainer}>
 			<SkipLink id="maincontent" label="Skip to main content" />
