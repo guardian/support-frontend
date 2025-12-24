@@ -5,24 +5,24 @@ version := "0.1-SNAPSHOT"
 scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-Xfatal-warnings")
 
 libraryDependencies ++= Seq(
-  "org.joda" % "joda-convert" % "2.2.3",
+  "org.joda" % "joda-convert" % "2.2.4",
   "org.typelevel" %% "cats-core" % catsVersion,
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
-  "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
+  "com.indoorvivants" %% "scala-uri" % scalaUriVersion,
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.3",
   "software.amazon.awssdk" % "sqs" % awsClientVersion2,
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
-  "org.mockito" %% "mockito-scala" % "1.17.22" % "it,test",
-  "org.mockito" %% "mockito-scala-scalatest" % "1.17.22" % "it,test",
+  "org.mockito" %% "mockito-scala" % "1.17.45" % "it,test",
+  "org.mockito" %% "mockito-scala-scalatest" % "1.17.45" % "it,test",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % "it,test",
   "com.squareup.okhttp3" % "mockwebserver" % okhttpVersion % "it,test",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
-  "io.circe" %% "circe-generic-extras" % "0.14.3",
+  "io.circe" %% "circe-generic-extras" % "0.14.4",
   "io.circe" %% "circe-parser" % circeVersion,
   "io.sentry" % "sentry-logback" % "1.7.30",
   "com.google.code.findbugs" % "jsr305" % "3.0.2",
@@ -30,7 +30,7 @@ libraryDependencies ++= Seq(
   "com.lihaoyi" %% "pprint" % "0.8.1",
 )
 
-dependencyOverrides += "com.google.code.gson" % "gson" % "2.9.0"
+dependencyOverrides += "com.google.code.gson" % "gson" % "2.9.1"
 
 assemblyJarName := s"${name.value}.jar"
 
