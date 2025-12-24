@@ -1,4 +1,5 @@
 @import '~stylesheets/gu-sass/gu-sass';
+@import '~stylesheets/skeleton/html';
 
 .component-page-section__header {
 	@include mq($from: desktop) {

@@ -2,7 +2,6 @@
 import { init } from '@guardian/ophan-tracker-js/support';
 import { motion } from 'framer-motion';
 import * as React from 'react';
-import { pageDefaultStyles } from 'components/page/styles/pageDefaults';
 import { renderPage } from 'helpers/rendering/render';
 import './ausMomentMap.scss';
 import { Blurb } from 'pages/aus-moment-map/components/blurb';
@@ -11,7 +10,6 @@ import { Header } from 'pages/aus-moment-map/components/header';
 import { Map } from 'pages/aus-moment-map/components/map';
 import type { TestimonialsCollection } from 'pages/aus-moment-map/types/testimonials';
 import 'pages/aus-moment-map/types/testimonials';
-import { mapPage } from './ausMomentMapStyles';
 import { TestimonialsContainer } from './components/testimonialsContainer';
 import { useWindowWidth } from './hooks/useWindowWidth';
 
@@ -149,7 +147,7 @@ function AusMomentMap(): JSX.Element {
 	);
 
 	return (
-		<div css={[mapPage, pageDefaultStyles]}>
+		<div className="map-page">
 			<Header />
 			<div className="main">
 				<motion.div
