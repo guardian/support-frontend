@@ -75,7 +75,7 @@ excludeDependencies ++= Seq(
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
 dependencyOverrides += "commons-io" % "commons-io" % "2.14.0" % Test
 dependencyOverrides += "commons-beanutils" % "commons-beanutils" % "1.11.0" % Test
-dependencyOverrides += "org.json" % "json" % "20231013"
+dependencyOverrides += "org.json" % "json" % "20251224"
 
 Debian / packageName := name.value
 packageSummary := "Payment API Play App"
