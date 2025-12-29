@@ -23,7 +23,7 @@ jobs:
     - name: Run Playwright tests
       run: pnpm --filter support-e2e test-cron
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
