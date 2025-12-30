@@ -2,6 +2,7 @@
 import type { ReactNode } from 'react';
 import 'helpers/types/option';
 import './label.scss';
+import { footerContainer, optionalItalics } from './labelStyles';
 // ----- Types ----- //
 export type WithLabelProps = {
 	label: string;
@@ -34,12 +35,10 @@ function Label({
 				htmlFor={htmlFor}
 			>
 				{label}
-				{optional && (
-					<span className="component-form-label__note">Optional</span>
-				)}
+				{optional && <span css={optionalItalics}>Optional</span>}
 			</Element>
 			{children}
-			{footer && <div className="component-form-label__footer">{footer}</div>}
+			{footer && <div css={footerContainer}>{footer}</div>}
 		</div>
 	);
 }
