@@ -40,7 +40,7 @@ describe('Supporter plus thank you email fields', () => {
 						payment_method: 'Direct Debit',
 						first_payment_date: 'Thursday, 11 December 2025',
 						subscription_details:
-							'£10.00 for the first month, then2 £12.00 every month',
+							'£10.00 for the first month, then £12.00 every month',
 						zuorasubscriberid: subscriptionNumber,
 						last_name: emailUser.lastName,
 						currency: 'GBP',
@@ -51,7 +51,7 @@ describe('Supporter plus thank you email fields', () => {
 						product: 'monthly-supporter-plus',
 						subscriber_id: subscriptionNumber,
 						subscription_rate:
-							'£10.00 for the first month, then2 £12.00 every month',
+							'£10.00 for the first month, then £12.00 every month',
 						account_holder: 'Mickey Mouse',
 						bank_account_no: '******11',
 						bank_sort_code: '20-20-20',
