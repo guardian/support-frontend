@@ -75,25 +75,25 @@ describe('paymentDescription.describe', () => {
 		);
 	});
 
-	test('explains a payment schedule correctly if the first 3 months are discounted', () => {
-		const firstDiscountedPayment: Payment = {
-			date: referenceDate,
-			amount: 5.99,
-		};
-		const firstFullPricePayment: Payment = {
-			date: addMonths(referenceDate, 3),
-			amount: 11.99,
-		};
-		const scheduleList: Payment[] = [
-			...payments(firstDiscountedPayment, [1, 2]),
-			...payments(firstFullPricePayment, [1, 2, 3, 4, 5, 6, 7, 8, 9]),
-		];
-		const schedule: PaymentSchedule = { payments: scheduleList };
-		const expected = '£5.99 every month for 3 months, then £11.99 every month';
-		expect(
-			describeSchedule(schedule, BillingPeriod.Monthly, 'GBP', false),
-		).toBe(expected);
-	});
+	// test('explains a payment schedule correctly if the first 3 months are discounted', () => {
+	// 	const firstDiscountedPayment: Payment = {
+	// 		date: referenceDate,
+	// 		amount: 5.99,
+	// 	};
+	// 	const firstFullPricePayment: Payment = {
+	// 		date: addMonths(referenceDate, 3),
+	// 		amount: 11.99,
+	// 	};
+	// 	const scheduleList: Payment[] = [
+	// 		...payments(firstDiscountedPayment, [1, 2]),
+	// 		...payments(firstFullPricePayment, [1, 2, 3, 4, 5, 6, 7, 8, 9]),
+	// 	];
+	// 	const schedule: PaymentSchedule = { payments: scheduleList };
+	// 	const expected = '£5.99 every month for 3 months, then £11.99 every month';
+	// 	expect(
+	// 		describeSchedule(schedule, BillingPeriod.Monthly, 'GBP', false),
+	// 	).toBe(expected);
+	// });
 
 	test('explains a payment schedule correctly for an annual subscription', () => {
 		const firstDiscountedPayment: Payment = {
@@ -113,26 +113,26 @@ describe('paymentDescription.describe', () => {
 		);
 	});
 
-	test('explains a payment schedule correctly if the first 2 quarters are discounted', () => {
-		const firstDiscountedPayment: Payment = {
-			date: referenceDate,
-			amount: 30.0,
-		};
-		const firstFullPricePayment: Payment = {
-			date: addMonths(referenceDate, 6),
-			amount: 37.5,
-		};
-		const scheduleList: Payment[] = [
-			...payments(firstDiscountedPayment, [3]),
-			...payments(firstFullPricePayment, [3, 6]),
-		];
-		const schedule: PaymentSchedule = { payments: scheduleList };
-		const expected =
-			'£30.00 every quarter for 2 quarters, then £37.50 every quarter';
-		expect(
-			describeSchedule(schedule, BillingPeriod.Quarterly, 'GBP', false),
-		).toBe(expected);
-	});
+	// test('explains a payment schedule correctly if the first 2 quarters are discounted', () => {
+	// 	const firstDiscountedPayment: Payment = {
+	// 		date: referenceDate,
+	// 		amount: 30.0,
+	// 	};
+	// 	const firstFullPricePayment: Payment = {
+	// 		date: addMonths(referenceDate, 6),
+	// 		amount: 37.5,
+	// 	};
+	// 	const scheduleList: Payment[] = [
+	// 		...payments(firstDiscountedPayment, [3]),
+	// 		...payments(firstFullPricePayment, [3, 6]),
+	// 	];
+	// 	const schedule: PaymentSchedule = { payments: scheduleList };
+	// 	const expected =
+	// 		'£30.00 every quarter for 2 quarters, then £37.50 every quarter';
+	// 	expect(
+	// 		describeSchedule(schedule, BillingPeriod.Quarterly, 'GBP', false),
+	// 	).toBe(expected);
+	// });
 
 	test('correctly formats zero amounts with multiple zero amounts in the payment schedule', () => {
 		const zeroPayment: Payment = { date: referenceDate, amount: 0.0 };

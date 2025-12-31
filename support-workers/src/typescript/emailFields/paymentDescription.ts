@@ -112,7 +112,6 @@ export function describePayments(
 		paymentsWithInitialPrice.length === 1 &&
 		isNonEmpty(paymentsWithDifferentPrice)
 	) {
-		console.log('*** descriptionWithSingleIntroductoryPeriod called'); // DEBUG LOG
 		return descriptionWithSingleIntroductoryPeriod(
 			paymentsWithDifferentPrice,
 			currency,
@@ -121,13 +120,16 @@ export function describePayments(
 		);
 	}
 	console.log('*** descriptionWithMultipleIntroductoryPeriods called'); // DEBUG LOG
-	return descriptionWithMultipleIntroductoryPeriods(
-		paymentsWithInitialPrice as [Payment, ...Payment[]],
-		paymentsWithDifferentPrice,
-		currency,
-		initialPrice,
-		billingPeriod,
-	);
+	return `descriptionWithMultipleIntroductoryPeriods : paymentsWithInitialPrice:${JSON.stringify(
+		paymentsWithInitialPrice,
+	)}, paymentsWithDifferentPrice:${JSON.stringify(paymentsWithDifferentPrice)}`; // DEBUG LOG
+	// return descriptionWithMultipleIntroductoryPeriods(
+	// 	paymentsWithInitialPrice as [Payment, ...Payment[]],
+	// 	paymentsWithDifferentPrice,
+	// 	currency,
+	// 	initialPrice,
+	// 	billingPeriod,
+	// );
 }
 
 function descriptionWithSingleIntroductoryPeriod(
