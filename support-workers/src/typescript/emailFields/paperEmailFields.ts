@@ -41,6 +41,7 @@ export function buildPaperEmailFields({
 	productInformation: PaperProductPurchase;
 	deliveryAgentDetails?: DeliveryAgentDetails;
 }): EmailMessageWithIdentityUserId {
+	console.log('*** buildPaperEmailFields.paymentSchedule:', paymentSchedule); // DEBUG LOG
 	const deliveryAgentFields =
 		productInformation.product === 'NationalDelivery' && deliveryAgentDetails
 			? {

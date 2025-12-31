@@ -110,6 +110,10 @@ async function sendPaperEmail(
 	sendThankYouEmailState: SendThankYouEmailState,
 	productInformation: PaperProductPurchase,
 ) {
+	console.log(
+		'*** sendPaperEmail.paymentSchedule:',
+		sendThankYouEmailState.paymentSchedule,
+	); // DEBUG LOG
 	const deliveryAgent =
 		productInformation.product === 'NationalDelivery'
 			? getDeliveryAgent(
@@ -172,13 +176,15 @@ async function sendGuardianAdLiteEmail(
 export const handler = async (
 	state: WrappedState<SendAcquisitionEventState>,
 ) => {
-	console.info(`Input is ${JSON.stringify(state)}`);
+	console.info(`*** handler: Input is ${JSON.stringify(state)}`);
 	const sendThankYouEmailState = state.state.sendThankYouEmailState;
 	const productInformation = getIfDefined(
 		sendThankYouEmailState.productInformation,
 		'productInformation is required',
 	);
-
+	console.info(
+		`*** handler: productInformation is ${JSON.stringify(productInformation)}`,
+	);
 	switch (productInformation.product) {
 		case 'Contribution':
 			await sendContributionEmail(sendThankYouEmailState, productInformation);
