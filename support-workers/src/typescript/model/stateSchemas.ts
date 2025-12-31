@@ -6,10 +6,10 @@ import { paymentFieldsSchema, paymentProviderSchema } from './paymentFields';
 import { paymentMethodSchema } from './paymentMethod';
 import { productTypeSchema } from './productType';
 
-export const dateOrDateStringSchema = z.preprocess(
-	(input) => (typeof input === 'string' ? new Date(input) : input),
-	z.date(),
-);
+// export const dateOrDateStringSchema = z.preprocess(
+// 	(input) => (typeof input === 'string' ? new Date(input) : input),
+// 	z.date(),
+// );
 
 export const titleSchema = z.union([
 	z.literal('Mr'),
@@ -97,7 +97,7 @@ export const baseStateSchema = z.object({
 	product: productTypeSchema,
 	productInformation: productPurchaseSchema.nullish(),
 	analyticsInfo: analyticsInfoSchema,
-	firstDeliveryDate: dateOrDateStringSchema.nullable(),
+	firstDeliveryDate: z.string().nullable(),
 	appliedPromotion: appliedPromotionSchema.nullable(),
 	csrUsername: z.string().nullable(),
 	salesforceCaseId: z.string().nullable(),

@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { dateOrDateStringSchema } from './stateSchemas';
 
 export type InvoiceItem = {
 	serviceStartDate: Date;
@@ -8,7 +7,7 @@ export type InvoiceItem = {
 };
 
 const paymentSchema = z.object({
-	date: dateOrDateStringSchema,
+	date: z.date(),
 	amount: z.number(),
 });
 export type Payment = z.infer<typeof paymentSchema>;

@@ -6,7 +6,6 @@ import { productTypeSchema } from './productType';
 import {
 	acquisitionDataSchema,
 	analyticsInfoSchema,
-	dateOrDateStringSchema,
 	giftRecipientSchema,
 	userSchema,
 } from './stateSchemas';
@@ -30,7 +29,7 @@ const commonSchemaWithConsentAndPromo = commonSchemaWithConsent.extend({
 });
 
 const deliveryProductSchema = commonSchemaWithConsentAndPromo.extend({
-	firstDeliveryDate: dateOrDateStringSchema,
+	firstDeliveryDate: z.string(),
 });
 
 export const sendThankYouEmailStateSchema = z.union([
