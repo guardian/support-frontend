@@ -82,12 +82,19 @@ export function describePayments(
 	isFixedTerm: boolean,
 ): string {
 	const initialPrice = firstPayment(paymentSchedule).amount;
-
+	console.log('*** describePayments.paymentSchedule:', paymentSchedule); // DEBUG LOG
 	const [paymentsWithInitialPrice, paymentsWithDifferentPrice] = partition(
 		paymentSchedule.payments,
 		(payment) => payment.amount === initialPrice,
 	);
-
+	console.log(
+		'*** describePayments.paymentsWithInitialPrice:',
+		paymentsWithInitialPrice,
+	); // DEBUG LOG
+	console.log(
+		'*** describePayments.paymentsWithDifferentPrice:',
+		paymentsWithDifferentPrice,
+	); // DEBUG LOG
 	const noun = billingPeriodNoun(billingPeriod);
 
 	if (isFixedTerm) {
@@ -105,6 +112,7 @@ export function describePayments(
 		paymentsWithInitialPrice.length === 1 &&
 		isNonEmpty(paymentsWithDifferentPrice)
 	) {
+		console.log('*** descriptionWithSingleIntroductoryPeriod called'); // DEBUG LOG
 		return descriptionWithSingleIntroductoryPeriod(
 			paymentsWithDifferentPrice,
 			currency,
@@ -112,6 +120,7 @@ export function describePayments(
 			billingPeriod,
 		);
 	}
+	console.log('*** descriptionWithMultipleIntroductoryPeriods called'); // DEBUG LOG
 	return descriptionWithMultipleIntroductoryPeriods(
 		paymentsWithInitialPrice as [Payment, ...Payment[]],
 		paymentsWithDifferentPrice,
