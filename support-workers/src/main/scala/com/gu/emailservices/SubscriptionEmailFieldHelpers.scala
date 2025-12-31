@@ -47,6 +47,7 @@ object SubscriptionEmailFieldHelpers {
       currency: Currency,
       fixedTerm: Boolean,
   ): String = {
+    println(s"*** standardDescription.paymentSchedule: $paymentSchedule")
     val initialPrice = firstPayment(paymentSchedule).amount
     val (paymentsWithInitialPrice, paymentsWithDifferentPrice) =
       paymentSchedule.payments.partition(_.amount == initialPrice)
@@ -59,7 +60,7 @@ object SubscriptionEmailFieldHelpers {
       s"${priceWithCurrency(currency, initialPrice)} every ${billingPeriod.noun}"
     } else if (paymentsWithInitialPrice.length == 1) {
       s"${priceWithCurrency(currency, initialPrice)} for the first ${billingPeriod.noun}, " +
-        s"then ${priceWithCurrency(currency, paymentsWithDifferentPrice.head.amount)} every ${billingPeriod.noun}"
+        s"then1 ${priceWithCurrency(currency, paymentsWithDifferentPrice.head.amount)} every ${billingPeriod.noun}"
     } else {
       val introductoryTimespan = {
         val firstIntroductoryPayment = paymentsWithInitialPrice.minBy(_.date)
@@ -73,7 +74,7 @@ object SubscriptionEmailFieldHelpers {
         }
       }
       s"${priceWithCurrency(currency, initialPrice)} every ${billingPeriod.noun} for $introductoryTimespan, " +
-        s"then ${priceWithCurrency(currency, paymentsWithDifferentPrice.head.amount)} every ${billingPeriod.noun}"
+        s"then2 ${priceWithCurrency(currency, paymentsWithDifferentPrice.head.amount)} every ${billingPeriod.noun}"
     }
 
   }
