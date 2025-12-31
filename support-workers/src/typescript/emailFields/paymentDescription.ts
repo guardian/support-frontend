@@ -4,7 +4,7 @@ import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { isNonEmpty } from '@modules/nullAndUndefined';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import dayjs from 'dayjs';
+// import dayjs from 'dayjs';
 import type { Payment, PaymentSchedule } from '../model/paymentSchedule';
 
 function billingPeriodNoun(period: RecurringBillingPeriod): string {
@@ -69,11 +69,11 @@ export function fixedTermNoun(billingPeriod: RecurringBillingPeriod): string {
 	}
 }
 
-function monthsBetween(start: Date, end: Date): number {
-	const startD = dayjs(start);
-	const endD = dayjs(end);
-	return endD.diff(startD, 'month');
-}
+// function monthsBetween(start: Date, end: Date): number {
+// 	const startD = dayjs(start);
+// 	const endD = dayjs(end);
+// 	return endD.diff(startD, 'month');
+// }
 
 export function describePayments(
 	paymentSchedule: PaymentSchedule,
@@ -150,49 +150,49 @@ function descriptionWithSingleIntroductoryPeriod(
 	)} every ${billingPeriodNoun(billingPeriod)}`;
 }
 
-function descriptionWithMultipleIntroductoryPeriods(
-	paymentsWithInitialPrice: [Payment, ...Payment[]],
-	paymentsWithDifferentPrice: Payment[],
-	currency: IsoCurrency,
-	initialPrice: number,
-	billingPeriod: RecurringBillingPeriod,
-) {
-	const firstIntroductoryPayment = earliestPayment(paymentsWithInitialPrice);
-	const firstDifferentPayment = earliestPayment(
-		paymentsWithDifferentPrice as [Payment, ...Payment[]],
-	);
-	const monthsAtIntroductoryPrice = monthsBetween(
-		firstIntroductoryPayment.date,
-		firstDifferentPayment.date,
-	);
-	let timespan: string;
-	switch (billingPeriod) {
-		case BillingPeriod.Annual:
-			timespan = introductoryPeriod(
-				monthsAtIntroductoryPrice / 12,
-				billingPeriod,
-			);
-			break;
-		case BillingPeriod.Quarterly:
-			timespan = introductoryPeriod(
-				monthsAtIntroductoryPrice / 3,
-				billingPeriod,
-			);
-			break;
-		case BillingPeriod.Monthly:
-			timespan = introductoryPeriod(monthsAtIntroductoryPrice, billingPeriod);
-			break;
-		default:
-			timespan = introductoryPeriod(monthsAtIntroductoryPrice, billingPeriod);
-	}
-	return `${priceWithCurrency(
-		currency,
-		initialPrice,
-	)} every ${billingPeriodNoun(
-		billingPeriod,
-	)} for ${timespan}, then ${priceWithCurrency(
-		currency,
-		earliestPayment(paymentsWithDifferentPrice as [Payment, ...Payment[]])
-			.amount,
-	)} every ${billingPeriodNoun(billingPeriod)}`;
-}
+// function descriptionWithMultipleIntroductoryPeriods(
+// 	paymentsWithInitialPrice: [Payment, ...Payment[]],
+// 	paymentsWithDifferentPrice: Payment[],
+// 	currency: IsoCurrency,
+// 	initialPrice: number,
+// 	billingPeriod: RecurringBillingPeriod,
+// ) {
+// 	const firstIntroductoryPayment = earliestPayment(paymentsWithInitialPrice);
+// 	const firstDifferentPayment = earliestPayment(
+// 		paymentsWithDifferentPrice as [Payment, ...Payment[]],
+// 	);
+// 	const monthsAtIntroductoryPrice = monthsBetween(
+// 		firstIntroductoryPayment.date,
+// 		firstDifferentPayment.date,
+// 	);
+// 	let timespan: string;
+// 	switch (billingPeriod) {
+// 		case BillingPeriod.Annual:
+// 			timespan = introductoryPeriod(
+// 				monthsAtIntroductoryPrice / 12,
+// 				billingPeriod,
+// 			);
+// 			break;
+// 		case BillingPeriod.Quarterly:
+// 			timespan = introductoryPeriod(
+// 				monthsAtIntroductoryPrice / 3,
+// 				billingPeriod,
+// 			);
+// 			break;
+// 		case BillingPeriod.Monthly:
+// 			timespan = introductoryPeriod(monthsAtIntroductoryPrice, billingPeriod);
+// 			break;
+// 		default:
+// 			timespan = introductoryPeriod(monthsAtIntroductoryPrice, billingPeriod);
+// 	}
+// 	return `${priceWithCurrency(
+// 		currency,
+// 		initialPrice,
+// 	)} every ${billingPeriodNoun(
+// 		billingPeriod,
+// 	)} for ${timespan}, then ${priceWithCurrency(
+// 		currency,
+// 		earliestPayment(paymentsWithDifferentPrice as [Payment, ...Payment[]])
+// 			.amount,
+// 	)} every ${billingPeriodNoun(billingPeriod)}`;
+// }
