@@ -3,7 +3,11 @@ import { neutral, textSans17 } from '@guardian/source/foundations';
 import { gu_v_spacing } from 'stylesheets/emotion/layout';
 
 export const labelContainer = css`
-	@include label;
+	${textSans17};
+	font-size: 16px;
+	line-height: 1.15;
+	font-weight: bold;
+
 	margin-bottom: ${gu_v_spacing * 0.5}px;
 	display: block;
 	display: flex;

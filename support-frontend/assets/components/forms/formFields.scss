@@ -24,8 +24,3 @@
 		background-color: gu-colour(neutral-97);
 	}
 }
-
-@mixin label {
-	@include gu-fontset-body-sans;
-	font-weight: bold;
-}
