@@ -163,4 +163,371 @@ describe('buildPaymentSchedule', () => {
 			],
 		});
 	});
+	test('should handle paper subscriptions correctly', () => {
+		const invoiceItems = [
+			{
+				serviceStartDate: new Date('2026-01-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-02-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-03-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-04-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-05-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-06-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-07-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-08-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-09-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-10-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-11-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-12-12T00:00:00.000Z'),
+				amountWithoutTax: 5.68,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-01-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-02-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-03-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-04-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-05-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-06-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-07-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-08-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-09-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-10-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-11-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-12-12T00:00:00.000Z'),
+				amountWithoutTax: 5.68,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-01-12T00:00:00.000Z'),
+				amountWithoutTax: 11.01,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-02-12T00:00:00.000Z'),
+				amountWithoutTax: 11.01,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-03-12T00:00:00.000Z'),
+				amountWithoutTax: 11.01,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-04-12T00:00:00.000Z'),
+				amountWithoutTax: 11.01,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-05-12T00:00:00.000Z'),
+				amountWithoutTax: 11.01,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-06-12T00:00:00.000Z'),
+				amountWithoutTax: 11.01,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-07-12T00:00:00.000Z'),
+				amountWithoutTax: 11.01,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-08-12T00:00:00.000Z'),
+				amountWithoutTax: 11.01,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-09-12T00:00:00.000Z'),
+				amountWithoutTax: 11.01,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-10-12T00:00:00.000Z'),
+				amountWithoutTax: 11.01,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-11-12T00:00:00.000Z'),
+				amountWithoutTax: 11.01,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-12-12T00:00:00.000Z'),
+				amountWithoutTax: 7.46,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-01-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-02-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-03-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-04-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-05-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-06-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-07-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-08-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-09-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-10-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-11-12T00:00:00.000Z'),
+				amountWithoutTax: 8.39,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-12-12T00:00:00.000Z'),
+				amountWithoutTax: 5.68,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-01-12T00:00:00.000Z'),
+				amountWithoutTax: 0,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-02-12T00:00:00.000Z'),
+				amountWithoutTax: 0,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-03-12T00:00:00.000Z'),
+				amountWithoutTax: 0,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-04-12T00:00:00.000Z'),
+				amountWithoutTax: 0,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-05-12T00:00:00.000Z'),
+				amountWithoutTax: 0,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-06-12T00:00:00.000Z'),
+				amountWithoutTax: 0,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-07-12T00:00:00.000Z'),
+				amountWithoutTax: 0,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-08-12T00:00:00.000Z'),
+				amountWithoutTax: 0,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-09-12T00:00:00.000Z'),
+				amountWithoutTax: 0,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-10-12T00:00:00.000Z'),
+				amountWithoutTax: 0,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-11-12T00:00:00.000Z'),
+				amountWithoutTax: 0,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-12-12T00:00:00.000Z'),
+				amountWithoutTax: 0,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-01-12T00:00:00.000Z'),
+				amountWithoutTax: 9.03,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-02-12T00:00:00.000Z'),
+				amountWithoutTax: 9.03,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-03-12T00:00:00.000Z'),
+				amountWithoutTax: 9.03,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-04-12T00:00:00.000Z'),
+				amountWithoutTax: 9.03,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-05-12T00:00:00.000Z'),
+				amountWithoutTax: 9.03,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-06-12T00:00:00.000Z'),
+				amountWithoutTax: 9.03,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-07-12T00:00:00.000Z'),
+				amountWithoutTax: 9.03,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-08-12T00:00:00.000Z'),
+				amountWithoutTax: 9.03,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-09-12T00:00:00.000Z'),
+				amountWithoutTax: 9.03,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-10-12T00:00:00.000Z'),
+				amountWithoutTax: 9.03,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-11-12T00:00:00.000Z'),
+				amountWithoutTax: 9.03,
+				taxAmount: 0,
+			},
+			{
+				serviceStartDate: new Date('2026-12-12T00:00:00.000Z'),
+				amountWithoutTax: 6.12,
+				taxAmount: 0,
+			},
+		];
+		const result = buildPaymentSchedule(invoiceItems);
+
+		expect(result.payments.length).toEqual(12);
+	});
 });
