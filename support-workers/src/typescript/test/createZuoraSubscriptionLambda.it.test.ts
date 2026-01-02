@@ -8,6 +8,7 @@ import { createZuoraSubscriptionStateSchema } from '../model/createZuoraSubscrip
 import { wrapperSchemaForState } from '../model/stateSchemas';
 import digitalSubscriptionJson from './fixtures/createZuoraSubscription/digitalSubscriptionInput.json';
 import guardianWeeklyJson from './fixtures/createZuoraSubscription/guardianWeeklyInput.json';
+import paperJson from './fixtures/createZuoraSubscription/paperInput.json';
 import transactionDeclinedJson from './fixtures/createZuoraSubscription/transactionDeclinedInput.json';
 
 const testTimeout = 20000;
@@ -70,6 +71,24 @@ describe('createZuoraSubscriptionLambda integration', () => {
 			expect(
 				output.state.sendThankYouEmailState.paymentSchedule.payments.length,
 			).toBeGreaterThan(0);
+		},
+		testTimeout,
+	);
+	test(
+		'we get the correct payment schedule for a newspaper subscription',
+		async () => {
+			const input = wrapperSchemaForState(
+				createZuoraSubscriptionStateSchema,
+			).parse(paperJson);
+			input.state.requestId = new Date().getTime().toString(); // Ensure unique requestId because it is used as an idempotency key
+			const output = await handler(input);
+			if (output.state.sendThankYouEmailState.productType !== 'Paper') {
+				fail('Expected productType to be Paper');
+			}
+			const payments =
+				output.state.sendThankYouEmailState.paymentSchedule.payments;
+			expect(payments.length).toBe(13); // We preview 13 months of payments to allow for annual subs to have a second invoice
+			expect(payments[0]?.amount).toEqual(payments[11]?.amount); // Check that all payments are the same amount
 		},
 		testTimeout,
 	);
