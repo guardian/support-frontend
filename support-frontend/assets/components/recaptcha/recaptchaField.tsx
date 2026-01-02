@@ -1,7 +1,7 @@
 import type { WithErrorProps } from 'components/forms/customFields/error';
 import { Error } from 'components/forms/customFields/error';
 import type { WithLabelProps } from 'components/forms/label';
-import { Label } from 'components/forms/label';
+import Label from 'components/forms/label';
 import type { RecaptchaProps } from './recaptcha';
 import { Recaptcha } from './recaptcha';
 
