@@ -2,14 +2,14 @@ import { css } from '@emotion/react';
 import { neutral, textSans17 } from '@guardian/source/foundations';
 import { gu_v_spacing } from 'stylesheets/emotion/layout';
 
-// .component-form-label__label {
-// 	@include label;
-// 	margin-bottom: $gu-v-spacing * 0.5;
-// 	display: block;
-// 	display: flex;
-// 	align-items: center;
-// 	justify-content: space-between;
-// }
+export const labelContainer = css`
+	@include label;
+	margin-bottom: ${gu_v_spacing * 0.5}px;
+	display: block;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+`;
 
 export const optionalItalics = css`
 	font-style: italic;

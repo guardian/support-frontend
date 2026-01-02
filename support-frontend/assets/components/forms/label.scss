@@ -1,21 +1,21 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-.component-form-label__label {
-	@include label;
-	margin-bottom: $gu-v-spacing * 0.5;
-	display: block;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
+// .component-form-label__label {
+// 	@include label;
+// 	margin-bottom: $gu-v-spacing * 0.5;
+// 	display: block;
+// 	display: flex;
+// 	align-items: center;
+// 	justify-content: space-between;
+// }
 
-.component-form-label__note {
-	font-style: italic;
-	color: gu-colour(neutral-46);
-	font-weight: 400;
-}
+// .component-form-label__note {
+// 	font-style: italic;
+// 	color: gu-colour(neutral-46);
+// 	font-weight: 400;
+// }
 
-.component-form-label__footer {
-	@include gu-fontset-body-sans;
-	margin-top: $gu-v-spacing * 0.5;
-}
+// .component-form-label__footer {
+// 	@include gu-fontset-body-sans;
+// 	margin-top: $gu-v-spacing * 0.5;
+// }

@@ -6,7 +6,8 @@ import {
 } from '@stripe/react-stripe-js';
 import type { WithErrorProps } from 'components/forms/customFields/error';
 import { Error } from 'components/forms/customFields/error';
-import { Label, type WithLabelProps } from 'components/forms/label';
+import type { WithLabelProps } from 'components/forms/label';
+import Label from 'components/forms/label';
 import type { RecaptchaProps } from 'components/recaptcha/recaptcha';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 
