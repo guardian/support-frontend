@@ -13,7 +13,7 @@ import NewspaperProductTabs from './components/NewspaperProductTabs';
 import { getPaperPlusItems } from './helpers/PaperHeroCopy';
 import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
-import 'stylesheets/skeleton/skeleton.scss';
+import 'stylesheets/skeleton/skeletonSubsLanding.scss';
 
 const paperSubsFooter = (
 	<Footer
