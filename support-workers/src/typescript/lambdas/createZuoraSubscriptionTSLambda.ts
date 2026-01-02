@@ -1,6 +1,6 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getProductCatalogFromApi } from '@modules/product-catalog/api';
-import { getPromotions } from '@modules/promotions/getPromotions';
+import { getPromotions } from '@modules/promotions/v1/getPromotions';
 import type {
 	CreateSubscriptionInputFields,
 	CreateSubscriptionResponse,

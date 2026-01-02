@@ -1,5 +1,5 @@
 import { productPurchaseSchema } from '@modules/product-catalog/productPurchaseSchema';
-import { appliedPromotionSchema } from '@modules/promotions/schema';
+import { appliedPromotionSchema } from '@modules/promotions/v1/schema';
 import { z } from 'zod';
 import { salesforceContactRecordSchema } from '../services/salesforce';
 import { countrySchema } from './address';
