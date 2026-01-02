@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 import 'helpers/types/option';
-import './label.scss';
 import {
 	footerContainer,
 	labelContainer,
