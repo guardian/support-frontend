@@ -22,7 +22,6 @@ import type {
 import type { ProductType } from '../model/productType';
 import { stageFromEnvironment } from '../model/stage';
 import type {
-	AbTest,
 	CreatePaymentMethodState,
 	CreateSalesforceContactState,
 	User,
@@ -64,7 +63,6 @@ export const handler = async (
 					createPaymentMethodState.paymentFields,
 					createPaymentMethodState.user,
 					createPaymentMethodState.product,
-					createPaymentMethodState.acquisitionData?.supportAbTests ?? [],
 				),
 			),
 		);
@@ -77,7 +75,6 @@ export function createPaymentMethod(
 	paymentFields: PaymentFields,
 	user: User,
 	productType: ProductType,
-	abTestParticipations: AbTest[],
 ): Promise<PaymentMethod> {
 	switch (paymentFields.paymentType) {
 		case 'Stripe':
@@ -88,11 +85,7 @@ export function createPaymentMethod(
 		case 'StripeHostedCheckout':
 			return createStripeHostedPaymentMethod(user.isTestUser, paymentFields);
 		case 'PayPal':
-			return createPayPalPaymentMethod(
-				user.isTestUser,
-				paymentFields,
-				abTestParticipations,
-			);
+			return createPayPalPaymentMethod(user.isTestUser, paymentFields);
 		case 'DirectDebit':
 			return createDirectDebitPaymentMethod(user, paymentFields, productType);
 		case 'Existing':
@@ -218,7 +211,6 @@ async function createStripePaymentMethod(
 async function createPayPalPaymentMethod(
 	isTestUser: boolean,
 	payPal: PayPalPaymentFields,
-	abTestParticipations: AbTest[],
 ): Promise<PayPalPaymentMethod | PayPalCompletePaymentsWithBAIDPaymentMethod> {
 	const payPalService = await paypalServiceProvider.getServiceForUser(
 		isTestUser,
@@ -230,27 +222,11 @@ async function createPayPalPaymentMethod(
 		'Could not retrieve email from PayPal',
 	);
 
-	const shouldUsePayPalCompletePaymentsWithBAID = abTestParticipations.some(
-		(abTest) =>
-			abTest.name === 'paypalCompletePaymentsWithBAID' &&
-			abTest.variant === 'variant',
-	);
-
-	if (shouldUsePayPalCompletePaymentsWithBAID) {
-		return {
-			PaypalBaid: payPal.baid,
-			PaypalEmail: paypalEmail,
-			Type: 'PayPalCompletePaymentsWithBAID',
-			PaymentGateway: 'PayPal Complete Payments',
-		};
-	}
-
 	return {
 		PaypalBaid: payPal.baid,
 		PaypalEmail: paypalEmail,
-		PaypalType: 'ExpressCheckout',
-		Type: 'PayPal',
-		PaymentGateway: 'PayPal Express',
+		Type: 'PayPalCompletePaymentsWithBAID',
+		PaymentGateway: 'PayPal Complete Payments',
 	};
 }
 
