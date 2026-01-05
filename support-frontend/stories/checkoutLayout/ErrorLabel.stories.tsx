@@ -35,31 +35,3 @@ Default.args = {
 	error: 'default error message',
 	child: <div>Default Error</div>,
 };
-
-export const CardNumberWithError = Template.bind({});
-CardNumberWithError.args = {
-	id: 'card-number',
-	error: 'Invalid card number',
-	child: <div>Please re-enter</div>,
-};
-
-export const CardExpiryWithError = Template.bind({});
-CardExpiryWithError.args = {
-	id: 'card-expiry',
-	error: 'Invalid card expiry',
-	child: <div>Please re-enter</div>,
-};
-
-export const CardCvcWithError = Template.bind({});
-CardCvcWithError.args = {
-	id: 'card-cvc',
-	error: 'Invalid card cvc',
-	child: <div>Please re-enter</div>,
-};
-
-export const RecaptchaWithError = Template.bind({});
-RecaptchaWithError.args = {
-	id: 'recaptcha',
-	error: 'Invalid recaptcha',
-	child: <div>Please retry</div>,
-};
