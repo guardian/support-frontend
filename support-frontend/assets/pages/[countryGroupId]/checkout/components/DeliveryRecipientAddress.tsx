@@ -71,6 +71,10 @@ export function DeliveryRecipientAddress({
 			'',
 		);
 
+	const [postcodeLookupError, setPostcodeLookupError] = useState<string | null>(
+		null,
+	);
+
 	const countryGroupId = CountryGroup.fromCountry(countryId) ?? 'International';
 
 	return (
@@ -103,16 +107,26 @@ export function DeliveryRecipientAddress({
 					setPostcodeForFinder={() => {
 						// no-op
 					}}
-					setPostcodeErrorForFinder={() => {
-						// no-op
+					setPostcodeErrorForFinder={(message) => {
+						setPostcodeLookupError(message);
 					}}
+					postcodeErrorForFinder={postcodeLookupError}
 					setErrors={setAddressErrors}
 					onFindAddress={(postcode) => {
 						setDeliveryPostcodeStateLoading(true);
-						void findAddressesForPostcode(postcode).then((results) => {
-							setDeliveryPostcodeStateLoading(false);
-							setDeliveryPostcodeStateResults(results);
-						});
+
+						void findAddressesForPostcode(postcode)
+							.then((results) => {
+								setDeliveryPostcodeStateResults(results);
+								setPostcodeLookupError(null);
+							})
+							.catch(() => {
+								setDeliveryPostcodeStateResults([]);
+								setPostcodeLookupError('Postcode not found');
+							})
+							.finally(() => {
+								setDeliveryPostcodeStateLoading(false);
+							});
 					}}
 				/>
 			</fieldset>

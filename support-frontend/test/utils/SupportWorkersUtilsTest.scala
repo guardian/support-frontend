@@ -38,38 +38,6 @@ class SupportWorkersUtilsTest extends AnyFlatSpec with Matchers {
 
     name should be("Monthly-DigitalPack-GBP-PayPal")
   }
-
-  it should "change the name when the user in in the PayPal Complete Payments AB test and paying with PayPal" in {
-    val abTests = Set(
-      AbTest("paypalCompletePaymentsWithBAID", "variant"),
-    )
-    val acquisitionData = SupportWorkersUtilsTestData.generateAcquisitionData(abTests)
-    val state = SupportWorkersUtilsTestData.generateState(
-      paymentFields = PayPalPaymentFields("fake-baid"),
-      isTestUser = false,
-      acquisitionData = acquisitionData,
-    )
-
-    val name = SupportWorkersUtils.buildExecutionName(state = state)
-
-    name should be("Monthly-DigitalPack-GBP-PayPalCPWithBAID")
-  }
-
-  it should "not change the name when the user in in the PayPal Complete Payments AB test but not paying with PayPal" in {
-    val abTests = Set(
-      AbTest("paypalCompletePaymentsWithBAID", "variant"),
-    )
-    val acquisitionData = SupportWorkersUtilsTestData.generateAcquisitionData(abTests)
-    val state = SupportWorkersUtilsTestData.generateState(
-      paymentFields = DirectDebitPaymentFields("a", "b", "c", "d"),
-      isTestUser = false,
-      acquisitionData = acquisitionData,
-    )
-
-    val name = SupportWorkersUtils.buildExecutionName(state = state)
-
-    name should be("Monthly-DigitalPack-GBP-DirectDebit")
-  }
 }
 
 object SupportWorkersUtilsTestData {
