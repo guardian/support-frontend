@@ -2,6 +2,7 @@
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import CsrBanner from 'components/csr/csrBanner';
+import { pageDefaultStyles } from 'components/page/styles/pageDefaults';
 import { SkipLink } from 'components/skipLink/skipLink';
 import { mainContentStyles, pageContainer } from './pageStyles';
 
@@ -32,7 +33,7 @@ export default function Page({
 		});
 	}, []);
 	return (
-		<div id={id} css={pageContainer}>
+		<div id={id} css={[pageContainer, pageDefaultStyles]}>
 			<SkipLink id="maincontent" label="Skip to main content" />
 			<CsrBanner />
 			{header}
