@@ -6,7 +6,6 @@ import type { CheckoutHeadingProps } from 'components/checkoutHeading/checkoutHe
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import GridImage from 'components/gridImage/gridImage';
 import { Container } from 'components/layout/container';
-import { LandingPageHeading } from 'pages/digital-subscriber-checkout/components/landingPageHeading';
 import { withPositionRelative } from '../../.storybook/decorators/withPositionRelative';
 
 export default {
@@ -36,11 +35,7 @@ export default {
 };
 
 function Template(args: CheckoutHeadingProps): JSX.Element {
-	return (
-		<CheckoutHeading heading={args.heading} image={args.image}>
-			{args.children}
-		</CheckoutHeading>
-	);
+	return <CheckoutHeading image={args.image}>{args.children}</CheckoutHeading>;
 }
 
 Template.args = {} as Record<string, unknown>;
@@ -50,9 +45,6 @@ Template.decorators = [] as unknown[];
 export const Heading = Template.bind({});
 
 Heading.args = {
-	heading: (
-		<LandingPageHeading heading="Support fearless, independent journalism" />
-	),
 	children: (
 		<p style={{ marginRight: '48px' }}>
 			Help protect the Guardian&apos;s independence so we can keep delivering
