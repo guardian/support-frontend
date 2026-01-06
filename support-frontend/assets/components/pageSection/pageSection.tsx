@@ -1,4 +1,3 @@
-// ----- Imports ----- //
 import type { SerializedStyles } from '@emotion/react';
 import type { ReactNode } from 'react';
 import {
@@ -8,7 +7,7 @@ import {
 	sectionStyles,
 } from './pageSectionStyles';
 
-function PageSection({
+export default function PageSection({
 	heading,
 	children,
 	cssOverrides,
@@ -28,5 +27,3 @@ function PageSection({
 		</section>
 	);
 }
-
-export default PageSection;
