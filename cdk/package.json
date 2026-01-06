@@ -19,7 +19,7 @@
     "diff": "cdk diff --path-metadata false --version-reporting false"
   },
   "devDependencies": {
-    "@guardian/cdk": "61.8.1",
+    "@guardian/cdk": "62.2.1",
     "@guardian/prettier": "4.0.0",
     "@types/jest": "29.5.14",
     "@types/node": "22.15.29",
