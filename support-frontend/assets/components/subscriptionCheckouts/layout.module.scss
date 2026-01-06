@@ -1,8 +1,0 @@
-@import '~stylesheets/gu-sass/gu-sass';
-
-.wrapper :global(.component-left-margin-section__content) {
-	border-left: 1px solid gu-colour(neutral-86);
-	@include mq($from: tablet) {
-		@include multiline-top-border();
-	}
-}
