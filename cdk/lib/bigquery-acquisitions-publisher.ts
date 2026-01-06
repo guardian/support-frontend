@@ -113,7 +113,7 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
 
     new GuLambdaFunction(this, `${appName}Lambda`, {
       app: appName,
-      runtime: Runtime.NODEJS_20_X,
+      runtime: Runtime.NODEJS_22_X,
       fileName: `index.zip`,
       functionName,
       handler: "index.handler",
