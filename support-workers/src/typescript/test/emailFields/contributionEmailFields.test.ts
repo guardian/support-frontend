@@ -33,18 +33,10 @@ describe('contributionEmailFields', () => {
 				Address: emailAddress,
 				ContactAttributes: {
 					SubscriberAttributes: {
-						name: emailUser.firstName,
 						amount: '5',
 						currency: 'GBP',
-						billing_period: 'monthly',
-						edition: emailUser.billingAddress.country,
-						Mandate_ID: mandateId,
 						first_payment_date: 'Friday, 21 November 2025',
-						product: 'monthly-contribution',
 						created: '2025-11-11T00:00:00.000Z',
-						account_name: directDebitPaymentMethod.BankTransferAccountName,
-						account_number: '******11',
-						sort_code: directDebitPaymentMethod.BankCode,
 						payment_method: 'Direct Debit',
 						first_name: emailUser.firstName,
 						account_holder: 'Mickey Mouse',

@@ -9,7 +9,6 @@ import {
 	buildNonDeliveryEmailFields,
 	buildThankYouEmailFields,
 } from './emailFields';
-import { getPaymentMethodFieldsSupporterPlus } from './paymentEmailFields';
 
 export function buildContributionEmailFields({
 	today,
@@ -21,7 +20,6 @@ export function buildContributionEmailFields({
 	paymentSchedule,
 	paymentMethod,
 	mandateId,
-	ratePlan,
 }: {
 	today: Dayjs;
 	user: User;
@@ -32,7 +30,6 @@ export function buildContributionEmailFields({
 	paymentSchedule: PaymentSchedule;
 	paymentMethod: PaymentMethod;
 	mandateId?: string;
-	ratePlan: 'Annual' | 'Monthly';
 }): EmailMessageWithIdentityUserId {
 	const nonDeliveryEmailFields = buildNonDeliveryEmailFields({
 		today: today,
@@ -46,21 +43,10 @@ export function buildContributionEmailFields({
 		isFixedTerm: false, // There are no fixed term contribution rate plans
 	});
 
-	const oldNonStandardPaymentFields = getPaymentMethodFieldsSupporterPlus(
-		paymentMethod,
-		today,
-		mandateId,
-	);
-
 	const productFields = {
 		created: today.toISOString(),
 		amount: amount.toString(),
-		edition: user.billingAddress.country,
-		name: nonDeliveryEmailFields.first_name, // This is duplicate and will be removed in a future PR
-		product: `${ratePlan.toLowerCase()}-contribution`,
-		billing_period: billingPeriod.toLowerCase(),
 		currency,
-		...oldNonStandardPaymentFields,
 		...nonDeliveryEmailFields,
 	};
 
