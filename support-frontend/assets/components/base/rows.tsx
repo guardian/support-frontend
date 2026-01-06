@@ -1,33 +1,26 @@
-// ----- Imports ----- //
 import type { ReactNode } from 'react';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import './rows.scss';
 
-// ----- Types ----- //
-type PropTypes = {
-	gap: 'small' | 'normal' | 'large';
+type RowProps = {
+	gap?: 'small' | 'normal' | 'large';
+	className?: string | null;
 	children: ReactNode;
-	className: string | null | undefined;
 };
 
-// ----- Component ----- //
-function Rows({ children, className, gap, ...props }: PropTypes): JSX.Element {
+export default function Rows({
+	children,
+	className = null,
+	gap = 'normal',
+}: RowProps): JSX.Element {
 	return (
 		<div
 			className={[
 				className,
 				classNameWithModifiers('component-base-rows', [gap]),
 			].join(' ')}
-			{...props}
 		>
 			{children}
 		</div>
 	);
 }
-
-Rows.defaultProps = {
-	gap: 'normal',
-	className: null,
-}; // ----- Exports ----- //
-
-export default Rows;
