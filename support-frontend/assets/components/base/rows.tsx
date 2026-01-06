@@ -10,9 +10,8 @@ function marginTop(multiplier: number) {
 	`;
 }
 
-type Gap = 'small' | 'normal' | 'large';
+type Gap = 'normal' | 'large';
 const gapSizing: Record<Gap, number> = {
-	small: 0.5,
 	normal: 1,
 	large: 2,
 };
