@@ -1,5 +1,11 @@
 import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/utils';
+import { palette } from '@guardian/source/foundations';
+import type {
+	ButtonPriority,
+	ThemeButton,
+} from '@guardian/source/react-components';
+import { themeButtonReaderRevenueBrand } from '@guardian/source/react-components';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
@@ -32,8 +38,8 @@ export type ProductButton = {
 	link: string;
 	analyticsTracking: () => void;
 	hierarchy?: string;
-	modifierClasses?: string;
-	primary?: boolean;
+	priority?: ButtonPriority;
+	theme?: Partial<ThemeButton>;
 	ariaLabel?: string;
 };
 
@@ -49,6 +55,14 @@ export type ProductCopy = {
 	benefits?: ProductBenefit[];
 	digitalPlusLayout?: boolean;
 };
+
+const themeButtonLegacyDark: Partial<ThemeButton> = {
+	textPrimary: palette.neutral[100],
+	backgroundPrimary: palette.neutral[20],
+	textTertiary: palette.neutral[20],
+	backgroundTertiary: 'transparent',
+	borderTertiary: palette.neutral[20],
+} as const;
 
 const getDisplayPrice = (
 	countryGroupId: CountryGroupId,
@@ -100,6 +114,9 @@ function getDigitalPlusButtonsForBillingPeriods(
 					componentType: 'ACQUISITIONS_BUTTON',
 				}),
 				ariaLabel: `${billingPeriod} DigitalPlus`,
+				priority:
+					billingPeriod === BillingPeriod.Monthly ? 'primary' : 'tertiary',
+				theme: themeButtonReaderRevenueBrand,
 			});
 		}
 		return buttons;
@@ -160,7 +177,8 @@ const guardianWeekly = (
 				product: 'GuardianWeekly',
 				componentType: 'ACQUISITIONS_BUTTON',
 			}),
-			modifierClasses: 'guardian-weekly',
+			priority: 'primary',
+			theme: themeButtonLegacyDark,
 		},
 		{
 			ctaButtonText: 'See gift options',
@@ -170,7 +188,8 @@ const guardianWeekly = (
 				product: 'GuardianWeekly',
 				componentType: 'ACQUISITIONS_BUTTON',
 			}),
-			modifierClasses: 'guardian-weekly',
+			priority: 'tertiary',
+			theme: themeButtonLegacyDark,
 		},
 	],
 	productImage: <WeeklyPackShot />,
@@ -196,6 +215,8 @@ const paper = (
 					product: Paper,
 					componentType: 'ACQUISITIONS_BUTTON',
 				}),
+				priority: 'primary',
+				theme: themeButtonLegacyDark,
 			},
 		],
 		productImage: <PaperPackShot />,

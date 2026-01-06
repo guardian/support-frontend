@@ -1,5 +1,8 @@
 import { brandAlt } from '@guardian/source/foundations';
-import AnchorButton from 'components/button/anchorButton';
+import {
+	Button,
+	SvgArrowRightStraight,
+} from '@guardian/source/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import type { ProductBenefit } from 'helpers/productCatalog';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
@@ -24,26 +27,6 @@ type PropTypes = {
 	offer?: string;
 	buttons: ProductButton[];
 	benefits?: ProductBenefit[];
-};
-
-const getButtonAppearance = (
-	index: number,
-	isFeature?: boolean,
-	hierarchy?: string,
-	primary?: boolean,
-) => {
-	if (primary ?? (isFeature && index === 0)) {
-		return 'primary';
-	} else if (isFeature && index > 0) {
-		return 'tertiaryFeature';
-	} else if (
-		(!isFeature && index === 0) ||
-		(!isFeature && hierarchy === 'first')
-	) {
-		return 'secondary';
-	}
-
-	return 'tertiary';
 };
 
 function SubscriptionsProductDescription({
@@ -92,24 +75,19 @@ function SubscriptionsProductDescription({
 					isFeature && subscriptionButtonsContainerFeature,
 				]}
 			>
-				{buttons.map((button, index) => (
-					<AnchorButton
-						href={button.link}
-						onClick={button.analyticsTracking}
-						appearance={getButtonAppearance(
-							index,
-							isFeature,
-							button.hierarchy,
-							button.primary,
-						)}
-						modifierClasses={[
-							button.modifierClasses ?? '',
-							'subscriptions__product-button',
-						]}
-						aria-label={button.ariaLabel ?? null}
-					>
-						{button.ctaButtonText}
-					</AnchorButton>
+				{buttons.map((button) => (
+					<a href={button.link}>
+						<Button
+							onClick={button.analyticsTracking}
+							aria-label={button.ariaLabel}
+							icon={<SvgArrowRightStraight />}
+							iconSide="right"
+							priority={button.priority}
+							theme={button.theme}
+						>
+							{button.ctaButtonText}
+						</Button>
+					</a>
 				))}
 			</div>
 		</div>
