@@ -29,10 +29,7 @@ describe('guardianAdLiteEmailFields', () => {
 				Address: emailAddress,
 				ContactAttributes: {
 					SubscriberAttributes: {
-						billing_period: 'monthly',
-						subscription_details: '£10.00 every month',
 						first_payment_date: 'Tuesday, 11 November 2025',
-						zuorasubscriberid: subscriptionNumber,
 						payment_method: 'Credit/Debit Card',
 						subscriber_id: subscriptionNumber,
 						subscription_rate: '£10.00 every month',
