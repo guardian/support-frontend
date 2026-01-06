@@ -1,25 +1,21 @@
-// ----- Imports ----- //
 import type { ReactNode } from 'react';
 import type { HeadingSize } from 'components/heading/heading';
 import Heading from 'components/heading/heading';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import './text.scss';
 
-// ---- Types ----- //
-type PropTypes = {
+type TextProps = {
 	title?: string | null;
-	className: string | null | undefined;
-	children?: ReactNode | null | undefined;
-	headingSize: HeadingSize;
+	className?: string | null;
+	headingSize?: HeadingSize;
+	children?: ReactNode | null;
 };
-
-// ----- Render ----- //
-function Text({
-	title,
-	children,
-	headingSize,
-	className,
-}: PropTypes): JSX.Element {
+export default function Text({
+	title = null,
+	className = null,
+	headingSize = 2,
+	children = null,
+}: TextProps): JSX.Element {
 	return (
 		<div
 			className={[
@@ -35,13 +31,6 @@ function Text({
 	);
 }
 
-Text.defaultProps = {
-	headingSize: 2,
-	children: null,
-	title: null,
-	className: null,
-};
-// ----- Children ----- //
 export function Title({
 	children,
 	size,
@@ -69,6 +58,3 @@ export function SansParagraph({
 }): JSX.Element {
 	return <p className="component-text__sans">{children}</p>;
 }
-
-// ----- Exports ----- //
-export default Text;
