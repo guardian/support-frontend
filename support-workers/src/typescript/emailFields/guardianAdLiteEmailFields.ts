@@ -40,15 +40,9 @@ export function buildGuardianAdLiteEmailFields({
 		isFixedTerm: false, // Guardian Ad-Lite has no fixed term rate plans
 	});
 
-	const productFields = {
-		zuorasubscriberid: subscriptionNumber,
-		billing_period: 'monthly',
-		subscription_details: nonDeliveryEmailFields.subscription_rate, // Duplicate, to be removed in a future PR
-		...nonDeliveryEmailFields,
-	};
 	return buildThankYouEmailFields(
 		user,
 		DataExtensionNames.guardianAdLiteDay0Email,
-		productFields,
+		nonDeliveryEmailFields,
 	);
 }
