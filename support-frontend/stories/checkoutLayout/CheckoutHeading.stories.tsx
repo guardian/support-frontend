@@ -42,9 +42,9 @@ Template.args = {} as Record<string, unknown>;
 Template.parameters = {} as Record<string, unknown>;
 Template.decorators = [] as unknown[];
 
-export const Heading = Template.bind({});
+export const WithMenu = Template.bind({});
 
-Heading.args = {
+WithMenu.args = {
 	children: (
 		<p style={{ marginRight: '48px' }}>
 			Help protect the Guardian&apos;s independence so we can keep delivering
@@ -61,10 +61,6 @@ Heading.args = {
 		/>
 	),
 };
-
-export const WithMenu = Template.bind({});
-
-WithMenu.args = { ...Heading.args };
 
 WithMenu.decorators = [
 	(Story: React.FC): JSX.Element => (
@@ -91,7 +87,23 @@ WithMenu.decorators = [
 
 export const WithSiblingOverlaid = Template.bind({});
 
-WithSiblingOverlaid.args = { ...Heading.args };
+WithSiblingOverlaid.args = {
+	children: (
+		<p style={{ marginRight: '48px' }}>
+			Help protect the Guardian&apos;s independence so we can keep delivering
+			quality journalism that&apos;s open for everyone around the world, not
+			behind a paywall.
+		</p>
+	),
+	image: (
+		<GridImage
+			gridId="supporterPlusLanding"
+			srcSizes={[500]}
+			sizes="500px"
+			imgType="png"
+		/>
+	),
+};
 
 WithSiblingOverlaid.decorators = [
 	(Story: React.FC) => {
