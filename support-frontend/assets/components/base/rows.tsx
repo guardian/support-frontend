@@ -10,18 +10,20 @@ function marginTop(multiplier: number) {
 	`;
 }
 
-type RowsProps = {
-	gap?: 'small' | 'normal' | 'large';
-	children: ReactNode;
+type Gap = 'small' | 'normal' | 'large';
+const gapSizing: Record<Gap, number> = {
+	small: 0.5,
+	normal: 1,
+	large: 2,
 };
 
+type RowsProps = {
+	gap?: Gap;
+	children: ReactNode;
+};
 export default function Rows({
-	children,
 	gap = 'normal',
+	children,
 }: RowsProps): JSX.Element {
-	return (
-		<div css={marginTop(gap === 'small' ? 0.5 : gap === 'large' ? 2 : 1)}>
-			{children}
-		</div>
-	);
+	return <div css={marginTop(gapSizing[gap])}>{children}</div>;
 }
