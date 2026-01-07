@@ -28,7 +28,6 @@ module.exports = {
 		'assets/helpers/tracking/quantumMetric.ts',
 		'assets/helpers/user/details.ts',
 		'assets/helpers/user/user.ts',
-		'assets/helpers/utilities/utilities.ts',
 	],
 	ignoreDependencies: [
 		// used in package.json
