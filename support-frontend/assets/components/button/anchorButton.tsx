@@ -1,18 +1,45 @@
-// ----- Imports ----- //
-import type { SharedButtonPropTypes } from './_sharedButton';
-import SharedButton, { defaultProps } from './_sharedButton';
-import './button.scss';
+import type {
+	ButtonPriority,
+	Size,
+	ThemeButton,
+} from '@guardian/source/react-components';
+import {
+	Button,
+	SvgArrowRightStraight,
+} from '@guardian/source/react-components';
+import { anchorButtonStyle } from './anchorButtonStyles';
 
-// ----- Render ----- //
-type PropTypes = SharedButtonPropTypes & {
-	'aria-label'?: string | null | undefined;
-	href: string;
+export default function AnchorButton({
+	link,
+	ctaButtonText,
+	size,
+	ariaLabel,
+	priority,
+	theme,
+	onClick,
+}: {
+	link: string;
+	ctaButtonText: string;
+	size?: Size;
+	ariaLabel?: string;
+	priority?: ButtonPriority;
+	theme?: Partial<ThemeButton>;
 	onClick?: () => void;
-};
-
-function AnchorButton(props: PropTypes): JSX.Element {
-	return <SharedButton element="a" {...props} />;
+}): JSX.Element {
+	return (
+		<a href={link}>
+			<Button
+				onClick={onClick}
+				aria-label={ariaLabel}
+				icon={<SvgArrowRightStraight size="small" />}
+				iconSide="right"
+				priority={priority}
+				theme={theme}
+				cssOverrides={anchorButtonStyle}
+				size={size}
+			>
+				{ctaButtonText}
+			</Button>
+		</a>
+	);
 }
-
-AnchorButton.defaultProps = { ...defaultProps, 'aria-label': null };
-export default AnchorButton;

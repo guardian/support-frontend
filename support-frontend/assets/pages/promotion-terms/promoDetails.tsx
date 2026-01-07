@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
+import { themeButtonReaderRevenueBrand } from '@guardian/source/react-components';
 import AnchorButton from 'components/button/anchorButton';
 import Content from 'components/content/content';
 import { List } from 'components/list/list';
@@ -28,6 +29,10 @@ const landingPageForProduct = (props: PromotionTerms) => {
 	}
 };
 
+const buttonStyle = css`
+	margin: ${space[6]}px 0 ${space[4]}px;
+`;
+
 export default function PromoDetails(props: PromotionTerms): JSX.Element {
 	const validUntil = props.expires ? (
 		<LargeParagraph>
@@ -55,10 +60,10 @@ export default function PromoDetails(props: PromotionTerms): JSX.Element {
 			</LargeParagraph>
 			<div css={buttonStyle}>
 				<AnchorButton
-					href={`${landingPageForProduct(props)}?promoCode=${props.promoCode}`}
-				>
-					Get this offer
-				</AnchorButton>
+					link={`${landingPageForProduct(props)}?promoCode=${props.promoCode}`}
+					ctaButtonText="Get this offer"
+					theme={themeButtonReaderRevenueBrand}
+				/>
 			</div>
 		</Content>
 	);

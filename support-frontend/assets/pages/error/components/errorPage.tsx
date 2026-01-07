@@ -1,7 +1,10 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
+import { space } from '@guardian/source/foundations';
+import { themeButtonReaderRevenueBrand } from '@guardian/source/react-components';
 import Rows from 'components/base/rows';
 import AnchorButton from 'components/button/anchorButton';
+import { themeButtonLegacyGray } from 'components/button/theme';
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
 import Page from 'components/page/page';
@@ -31,6 +34,12 @@ const paddingOverrides = css`
 	padding-bottom: ${gu_v_spacing * 3}px;
 `;
 
+const buttonRow = css`
+	display: flex;
+	flex-direction: column;
+	gap: ${space[3]}px;
+`;
+
 export default function ErrorPage(props: ErrorPageProps): JSX.Element {
 	return (
 		<Page
@@ -48,23 +57,25 @@ export default function ErrorPage(props: ErrorPageProps): JSX.Element {
 						<ReportLink show={props.reportLink ?? false} />
 					</LargeParagraph>
 					<Rows>
-						{props.supportLink && (
+						<div css={buttonRow}>
+							{props.supportLink && (
+								<AnchorButton
+									aria-label="click here to support the Guardian"
+									link="/"
+									ctaButtonText="Support the Guardian"
+									theme={themeButtonReaderRevenueBrand}
+									size="small"
+								/>
+							)}
 							<AnchorButton
-								aria-label="click here to support the Guardian"
-								href="/"
-								modifierClasses={['support-the-guardian']}
-							>
-								Support the Guardian
-							</AnchorButton>
-						)}
-						<br />
-						<AnchorButton
-							aria-label="click here to return to the Guardian home page"
-							href="https://www.theguardian.com"
-							appearance="greyHollow"
-						>
-							Go to the Guardian home page
-						</AnchorButton>
+								aria-label="click here to return to the Guardian home page"
+								link="https://www.theguardian.com"
+								priority="tertiary"
+								theme={themeButtonLegacyGray}
+								ctaButtonText="Go to the Guardian home page"
+								size="small"
+							/>
+						</div>
 					</Rows>
 				</Text>
 			</PageSection>

@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/utils';
-import { palette } from '@guardian/source/foundations';
 import type {
 	ButtonPriority,
 	ThemeButton,
@@ -10,6 +9,7 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type * as React from 'react';
+import { themeButtonLegacyGray } from 'components/button/theme';
 import DigitalPlusPackshot from 'components/packshots/digitalPlusPackshot';
 import PaperPackShot from 'components/packshots/paperPackshot';
 import WeeklyPackShot from 'components/packshots/weeklyPackshot';
@@ -55,14 +55,6 @@ export type ProductCopy = {
 	benefits?: ProductBenefit[];
 	digitalPlusLayout?: boolean;
 };
-
-const themeButtonLegacyDark: Partial<ThemeButton> = {
-	textPrimary: palette.neutral[100],
-	backgroundPrimary: palette.neutral[20],
-	textTertiary: palette.neutral[20],
-	backgroundTertiary: 'transparent',
-	borderTertiary: palette.neutral[20],
-} as const;
 
 const getDisplayPrice = (
 	countryGroupId: CountryGroupId,
@@ -178,7 +170,7 @@ const guardianWeekly = (
 				componentType: 'ACQUISITIONS_BUTTON',
 			}),
 			priority: 'primary',
-			theme: themeButtonLegacyDark,
+			theme: themeButtonLegacyGray,
 		},
 		{
 			ctaButtonText: 'See gift options',
@@ -189,7 +181,7 @@ const guardianWeekly = (
 				componentType: 'ACQUISITIONS_BUTTON',
 			}),
 			priority: 'tertiary',
-			theme: themeButtonLegacyDark,
+			theme: themeButtonLegacyGray,
 		},
 	],
 	productImage: <WeeklyPackShot />,
@@ -216,7 +208,7 @@ const paper = (
 					componentType: 'ACQUISITIONS_BUTTON',
 				}),
 				priority: 'primary',
-				theme: themeButtonLegacyDark,
+				theme: themeButtonLegacyGray,
 			},
 		],
 		productImage: <PaperPackShot />,
