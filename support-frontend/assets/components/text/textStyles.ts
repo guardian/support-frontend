@@ -7,6 +7,7 @@ import {
 	palette,
 	textEgyptian17,
 	textSans20,
+	until,
 } from '@guardian/source/foundations';
 import { gu_h_spacing, gu_v_spacing } from 'stylesheets/emotion/layout';
 
@@ -33,9 +34,8 @@ export const component_text = css`
 export const component_text__heading = css`
 	// typography.gu-fontset-heading
 	${headlineBold24}
-	font-size: 26px;
-	${from.tablet} {
-		font-size: 28px;
+	${until.tablet} {
+		font-size: 22px;
 	}
 	margin-bottom: ${gu_v_spacing}px;
 	p {
