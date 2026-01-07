@@ -41,7 +41,7 @@ export const component_text__large = css`
 		font-size: 22px;
 	}
 	margin-top: ${gu_v_spacing}px;
-	line-height: 120%;
+	line-height: 125%;
 `;
 
 export const component_text__sans = css`
