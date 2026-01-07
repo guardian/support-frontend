@@ -3,7 +3,6 @@ import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { HomeDelivery } from '@modules/product/fulfilmentOptions';
 import type { ProductOptions } from '@modules/product/productOptions';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
-import type { ProductPrice } from 'helpers/productPrice/productPrices';
 
 const productOptionDisplayNames = {
 	Saturday: 'Saturday',
@@ -31,16 +30,6 @@ export function getOrderSummaryTitle(
 	return `${
 		productOptionDisplayNames[productOption]
 	} ${fulfilmentOptionDescriptor.toLowerCase()}`;
-}
-
-export function sensiblyGenerateDigiSubPrice(
-	totalPrice: ProductPrice,
-	paperPrice: ProductPrice,
-): ProductPrice {
-	const total = totalPrice.price;
-	const paper = paperPrice.price;
-	const digiSubPrice = (total * 100 - paper * 100) / 100;
-	return { ...totalPrice, price: digiSubPrice };
 }
 
 export function getPriceSummary(
