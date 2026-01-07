@@ -14,7 +14,6 @@ module.exports = {
 		// Ignore these files while the legacy checkout cleanup is ongoing. These
 		// files all have unused exports, which knip complains about. Ignoring them
 		// for now so that I can split this work across PRs to keep the size down.
-		'assets/helpers/forms/paymentIntegrations/readerRevenueApis.ts',
 		'assets/helpers/productPrice/readerType.ts',
 		'assets/helpers/productPrice/subscriptions.ts',
 		'assets/helpers/redux/checkout/address/actions.ts',
