@@ -1,35 +1,13 @@
 import { css } from '@emotion/react';
 import {
-	// brandAlt,
 	from,
 	headlineBold24,
 	headlineLight17,
-	palette,
 	textEgyptian17,
 	textSans15,
 	until,
 } from '@guardian/source/foundations';
-import { gu_h_spacing, gu_v_spacing } from 'stylesheets/emotion/layout';
-
-export const component_text = css`
-	// typography.gu-fontset-body
-	${textEgyptian17}
-	font-size: 24px;
-	overflow-wrap: break-word;
-	margin-top: ${gu_v_spacing / -1}px;
-	> *:not(:first-child) {
-		margin-top: ${gu_v_spacing}px;
-	}
-	a {
-		color: inherit;
-	}
-	code {
-		font-family: monospace;
-		background: ${palette.neutral[93]};
-		color: ${palette.neutral[7]};
-		padding: (${gu_v_spacing * 0.25}) px (${gu_h_spacing * 0.25}) px;
-	}
-`;
+import { gu_v_spacing } from 'stylesheets/emotion/layout';
 
 export const component_text__heading = css`
 	// typography.gu-fontset-heading
@@ -43,6 +21,17 @@ export const component_text__heading = css`
 	}
 `;
 
+export const component_text = css`
+	// typography.gu-fontset-body
+	${textEgyptian17}
+	font-size: 24px;
+	overflow-wrap: break-word;
+	margin-top: ${gu_v_spacing / -1}px;
+	> *:not(:first-child) {
+		margin-top: ${gu_v_spacing}px;
+	}
+`;
+
 export const component_text__large = css`
 	// typography.gu-fontset-heading
 	${headlineLight17}
@@ -52,6 +41,7 @@ export const component_text__large = css`
 		font-size: 22px;
 	}
 	margin-top: ${gu_v_spacing}px;
+	line-height: 135%;
 `;
 
 export const component_text__sans = css`
