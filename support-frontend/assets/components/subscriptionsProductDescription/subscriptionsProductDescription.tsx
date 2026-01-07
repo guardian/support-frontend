@@ -7,6 +7,7 @@ import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList
 import type { ProductBenefit } from 'helpers/productCatalog';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
 import {
+	buttonStyle,
 	subscriptionBenefit,
 	subscriptionButtonsContainer,
 	subscriptionButtonsContainerFeature,
@@ -84,6 +85,7 @@ function SubscriptionsProductDescription({
 							iconSide="right"
 							priority={button.priority}
 							theme={button.theme}
+							cssOverrides={buttonStyle}
 						>
 							{button.ctaButtonText}
 						</Button>
