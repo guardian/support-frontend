@@ -69,14 +69,4 @@ const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({
 	errors,
 });
 
-const setSubmissionError = (error: ErrorReason): Action => ({
-	type: 'SET_SUBMISSION_ERROR',
-	error,
-});
-
-const setFormSubmitted = (formSubmitted: boolean): Action => ({
-	type: 'SET_FORM_SUBMITTED',
-	formSubmitted,
-});
-
-export { setStage, setFormErrors, setSubmissionError, setFormSubmitted };
+export { setStage, setFormErrors };
