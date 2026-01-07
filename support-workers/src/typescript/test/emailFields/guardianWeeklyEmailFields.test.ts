@@ -35,7 +35,6 @@ describe('Guardian weekly thank you email fields', () => {
 				ContactAttributes: {
 					SubscriberAttributes: {
 						first_name: emailUser.firstName,
-						ZuoraSubscriberId: subscriptionNumber,
 						payment_method: 'Credit/Debit Card',
 						delivery_address_line_1: emailUser.billingAddress.lineOne,
 						delivery_address_line_2: '',
@@ -86,7 +85,6 @@ describe('Guardian weekly thank you email fields', () => {
 				ContactAttributes: {
 					SubscriberAttributes: {
 						first_name: emailUser.firstName,
-						ZuoraSubscriberId: subscriptionNumber,
 						payment_method: 'Credit/Debit Card',
 						delivery_address_line_1: emailUser.billingAddress.lineOne,
 						delivery_address_line_2: '',

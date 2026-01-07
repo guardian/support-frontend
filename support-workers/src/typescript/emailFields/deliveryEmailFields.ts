@@ -10,7 +10,6 @@ import { buildNonDeliveryEmailFields } from './emailFields';
 import { formatDate } from './paymentEmailFields';
 
 type DeliveryFields = {
-	ZuoraSubscriberId: string;
 	date_of_first_paper: string;
 	date_of_first_payment: string;
 	delivery_address_line_1: string;
@@ -61,7 +60,6 @@ export function buildDeliveryEmailFields({
 
 	const address = user.deliveryAddress ?? user.billingAddress;
 	const deliveryFields = {
-		ZuoraSubscriberId: subscriptionNumber, // This is a duplicate and will be removed in a later PR
 		date_of_first_paper: formatDate(firstDeliveryDate),
 		date_of_first_payment: nonDeliveryFields.first_payment_date, // This is a duplicate and will be removed in a later PR
 		delivery_address_line_1: address.lineOne ?? '',
