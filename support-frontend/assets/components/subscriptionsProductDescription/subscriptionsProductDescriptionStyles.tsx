@@ -191,7 +191,7 @@ export const subscriptionButtonsContainerFeature = css`
 
 export const buttonStyle = css`
 	svg {
-		transition: 0.3s ease-in-out; transform;
+		transition: 0.3s ease-in-out transform;
 		will-change: transform;
 	}
 	&:hover svg,

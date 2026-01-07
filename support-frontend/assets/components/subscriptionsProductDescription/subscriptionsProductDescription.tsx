@@ -81,7 +81,7 @@ function SubscriptionsProductDescription({
 						<Button
 							onClick={button.analyticsTracking}
 							aria-label={button.ariaLabel}
-							icon={<SvgArrowRightStraight />}
+							icon={<SvgArrowRightStraight size="small" />}
 							iconSide="right"
 							priority={button.priority}
 							theme={button.theme}
