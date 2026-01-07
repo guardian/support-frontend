@@ -9,7 +9,7 @@ import {
 } from '@guardian/source/foundations';
 import { gu_v_spacing } from 'stylesheets/emotion/layout';
 
-export const component_text__heading = css`
+export const textHeading = css`
 	// typography.gu-fontset-heading
 	${headlineBold24}
 	${until.tablet} {
@@ -21,7 +21,7 @@ export const component_text__heading = css`
 	}
 `;
 
-export const component_text = css`
+export const textContainer = css`
 	// typography.gu-fontset-body
 	${textEgyptian17}
 	font-size: 24px;
@@ -32,7 +32,7 @@ export const component_text = css`
 	}
 `;
 
-export const component_text__large = css`
+export const largeParagraphStyle = css`
 	// typography.gu-fontset-heading
 	${headlineLight17}
 	font-size: 18px;
@@ -44,7 +44,7 @@ export const component_text__large = css`
 	line-height: 120%;
 `;
 
-export const component_text__sans = css`
+export const sansParagraphStyle = css`
 	// typography.gu-fontset-body-sans
 	${textSans15}
 	font-size: 16px;
