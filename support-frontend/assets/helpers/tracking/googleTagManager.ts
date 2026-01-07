@@ -269,30 +269,8 @@ function successfulContributionConversion(
 	sendData('SuccessfulConversion', contributionConversionData);
 }
 
-function successfulSubscriptionConversion(
-	amount: number,
-	sourceCurrency: IsoCurrency,
-	paymentMethod: PaymentMethod,
-	billingPeriod: BillingPeriod,
-	productType: SubscriptionProduct,
-): void {
-	const subscriptionConversionData: SubscriptionConversionData = {
-		value: amount,
-		currency: sourceCurrency,
-		paymentMethod,
-		billingPeriod,
-		productType,
-	};
-
-	sendData('SuccessfulConversion', subscriptionConversionData);
-}
-
 // ----- Exports ---//
-export {
-	init,
-	successfulContributionConversion,
-	successfulSubscriptionConversion,
-};
+export { init, successfulContributionConversion };
 
 // ----- For Tests ---//
 export const _ = {
