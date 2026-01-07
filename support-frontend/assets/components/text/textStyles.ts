@@ -37,7 +37,7 @@ export const component_text__heading = css`
 	${until.tablet} {
 		font-size: 22px;
 	}
-	margin-bottom: ${gu_v_spacing}px;
+	margin: ${gu_v_spacing}px 0;
 	p {
 		margin-top: ${gu_v_spacing / -2}px;
 	}
