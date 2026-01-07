@@ -63,7 +63,7 @@ export const component_text__large = css`
 	font-size: 18px;
 	${from.tablet} {
 		// typography.gu-fontset-body-large
-		font-size: 26px;
+		font-size: 22px;
 	}
 	margin-top: ${gu_v_spacing}px;
 `;
