@@ -65,12 +65,14 @@ export const component_text__large = css`
 		// typography.gu-fontset-body-large
 		font-size: 26px;
 	}
+	margin-top: ${gu_v_spacing}px;
 `;
 
 export const component_text__sans = css`
 	// typography.gu-fontset-body-sans
 	${textSans20}
 	font-size: 22px;
+	margin-top: ${gu_v_spacing}px;
 `;
 
 // export const component_text__paddingTop = css`
