@@ -11,6 +11,9 @@ module.exports = {
 	ignoreExportsUsedInFile: false,
 	ignore: [
 		'**/knip.*.js',
+		// Ignore these files while the legacy checkout cleanup is ongoing. These
+		// files all have unused exports, which knip complains about. Ignoring them
+		// for now so that I can split this work across PRs to keep the size down.
 		'assets/components/checkoutForm/checkoutForm.tsx',
 		'assets/components/stripe/stripeDisclaimer.tsx',
 		'assets/helpers/forms/paymentIntegrations/payPalRecurringCheckout.ts',
