@@ -27,7 +27,6 @@ module.exports = {
 		'assets/helpers/tracking/googleTagManager.ts',
 		'assets/helpers/tracking/quantumMetric.ts',
 		'assets/helpers/user/details.ts',
-		'assets/helpers/user/user.ts',
 	],
 	ignoreDependencies: [
 		// used in package.json
