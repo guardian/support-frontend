@@ -23,7 +23,6 @@ module.exports = {
 		'assets/helpers/redux/checkout/personalDetails/actions.ts',
 		'assets/helpers/redux/checkout/product/actions.ts',
 		'assets/helpers/redux/checkout/product/selectors/productPrice.ts',
-		'assets/helpers/tracking/behaviour.ts',
 		'assets/helpers/tracking/googleTagManager.ts',
 		'assets/helpers/tracking/quantumMetric.ts',
 		'assets/helpers/user/details.ts',
