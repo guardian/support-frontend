@@ -5,7 +5,7 @@ import {
 	largeParagraphStyle,
 	sansParagraphStyle,
 	textContainer,
-	textHeading,
+	titleHeading,
 } from './textStyles';
 
 type TextProps = {
@@ -20,7 +20,7 @@ export default function Text({
 	children = null,
 }: TextProps): JSX.Element {
 	return (
-		<div css={[textContainer, !children ? textHeading : null]}>
+		<div css={textContainer}>
 			{title && <Title size={headingSize}>{title}</Title>}
 			{children}
 		</div>
@@ -35,7 +35,7 @@ export function Title({
 	size: HeadingSize;
 }): JSX.Element {
 	return (
-		<Heading size={size} cssOverrides={textHeading}>
+		<Heading size={size} cssOverrides={titleHeading}>
 			{children}
 		</Heading>
 	);
