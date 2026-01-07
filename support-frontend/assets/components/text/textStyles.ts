@@ -6,7 +6,7 @@ import {
 	headlineLight17,
 	palette,
 	textEgyptian17,
-	textSans20,
+	textSans15,
 	until,
 } from '@guardian/source/foundations';
 import { gu_h_spacing, gu_v_spacing } from 'stylesheets/emotion/layout';
@@ -43,20 +43,6 @@ export const component_text__heading = css`
 	}
 `;
 
-// export const component_text__callout = css`
-// 	// typography.gu-fontset-heading
-// 	${headlineBold24}
-// 	font-size: 26px;
-// 	${from.tablet} {
-// 		font-size: 28px;
-// 	}
-// 	& > strong {
-// 		padding: 0 ${gu_h_spacing * 0.25}px;
-// 		background-color: ${brandAlt[400]};
-// 		color: ${palette.neutral[7]};
-// 	}
-// `;
-
 export const component_text__large = css`
 	// typography.gu-fontset-heading
 	${headlineLight17}
@@ -70,11 +56,7 @@ export const component_text__large = css`
 
 export const component_text__sans = css`
 	// typography.gu-fontset-body-sans
-	${textSans20}
-	font-size: 22px;
+	${textSans15}
+	font-size: 16px;
 	margin-top: ${gu_v_spacing}px;
 `;
-
-// export const component_text__paddingTop = css`
-// 	padding-top: (${gu_v_spacing}px);
-// `;
