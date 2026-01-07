@@ -1,8 +1,12 @@
 import type { ReactNode } from 'react';
 import type { HeadingSize } from 'components/heading/heading';
 import Heading from 'components/heading/heading';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
-import './text.scss';
+import {
+	component_text,
+	component_text__heading,
+	component_text__large,
+	component_text__sans,
+} from './textStyles';
 
 type TextProps = {
 	title?: string | null;
@@ -12,19 +16,11 @@ type TextProps = {
 };
 export default function Text({
 	title = null,
-	className = null,
 	headingSize = 2,
 	children = null,
 }: TextProps): JSX.Element {
 	return (
-		<div
-			className={[
-				className,
-				classNameWithModifiers('component-text', [
-					!children ? 'heading-only' : null,
-				]),
-			].join(' ')}
-		>
+		<div css={[component_text, !children ? component_text__heading : null]}>
 			{title && <Title size={headingSize}>{title}</Title>}
 			{children}
 		</div>
@@ -39,7 +35,7 @@ export function Title({
 	size: HeadingSize;
 }): JSX.Element {
 	return (
-		<Heading size={size} className="component-text__heading">
+		<Heading size={size} cssOverrides={component_text__heading}>
 			{children}
 		</Heading>
 	);
@@ -49,12 +45,12 @@ export function LargeParagraph({
 }: {
 	children: ReactNode;
 }): JSX.Element {
-	return <p className="component-text__large">{children}</p>;
+	return <p css={component_text__large}>{children}</p>;
 }
 export function SansParagraph({
 	children,
 }: {
 	children: ReactNode;
 }): JSX.Element {
-	return <p className="component-text__sans">{children}</p>;
+	return <p css={component_text__sans}>{children}</p>;
 }

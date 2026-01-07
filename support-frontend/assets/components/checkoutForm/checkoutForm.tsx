@@ -1,8 +1,20 @@
-import type { SerializedStyles } from '@emotion/react';
+import { css, type SerializedStyles } from '@emotion/react';
+import { from, headlineBold24 } from '@guardian/source/foundations';
 import type { FormHTMLAttributes, ReactNode } from 'react';
 import Heading from 'components/heading/heading';
 import type { HeadingSize } from 'components/heading/heading';
 import './checkoutForm.scss';
+import { gu_v_spacing } from 'stylesheets/emotion/layout';
+
+const component_checkout_form_section__heading = css`
+	// typography.gu-fontset-heading
+	${headlineBold24}
+	font-size: 26px;
+	${from.tablet} {
+		font-size: 28px;
+	}
+	margin-bottom: ${gu_v_spacing * 2}px;
+`;
 
 type TitleProps =
 	| {
@@ -40,7 +52,7 @@ function FormSection({
 			{titleComponent && titleComponent}
 			{title && (
 				<Heading
-					className="component-checkout-form-section__heading"
+					cssOverrides={component_checkout_form_section__heading}
 					size={headingSize}
 				>
 					{title}
@@ -87,7 +99,7 @@ function FormSectionHiddenUntilSelected({
 				<div className="component-checkout-form-section__wrap">
 					{title && (
 						<Heading
-							className="component-checkout-form-section__heading"
+							cssOverrides={component_checkout_form_section__heading}
 							size={headingSize}
 						>
 							{title}
