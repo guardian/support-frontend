@@ -462,7 +462,7 @@ function PaperCheckoutForm(props: PropTypes) {
 										);
 									})}
 								</RadioGroup>
-								<Text>
+								<Text className="component-text__paddingTop">
 									<p>
 										We will take the first payment on the date you receive your
 										first {fulfilmentOptionDescriptor.toLowerCase()}.
