@@ -5,8 +5,6 @@ import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { Participations } from 'helpers/abTests/models';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import type { ProductPrice } from 'helpers/productPrice/productPrices';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { logException } from 'helpers/utilities/logger';
 import { getMvtId } from '../abTests/mvt';
 import type { ReferrerAcquisitionData } from './acquisitions';
@@ -15,7 +13,6 @@ import {
 	getContributionAnnualValue,
 	getConvertedAnnualValue,
 	getConvertedValue,
-	getSubscriptionAnnualValue,
 	waitForQuantumMetricAPi,
 } from './quantumMetricHelpers';
 
@@ -186,116 +183,6 @@ function sendEventAcquisitionDataFromQueryParamEvent(
 
 		sendEventWhenReadyTrigger(sendEventWhenReady);
 	});
-}
-
-function sendEventSubscriptionCheckoutEvent(
-	id:
-		| SendEventSubscriptionCheckoutStart
-		| SendEventSubscriptionCheckoutConversion,
-	productPrice: ProductPrice,
-	billingPeriod: BillingPeriod,
-	isConversion: boolean,
-): void {
-	void ifQmPermitted(() => {
-		const sendEventWhenReady = () => {
-			const sourceCurrency = productPrice.currency;
-			const targetCurrency: IsoCurrency = 'GBP';
-			const value = getSubscriptionAnnualValue(productPrice, billingPeriod);
-
-			if (!value) {
-				return;
-			} else if (window.QuantumMetricAPI?.isOn()) {
-				const convertedValue: number =
-					window.QuantumMetricAPI.currencyConvertFromToValue(
-						value,
-						sourceCurrency,
-						targetCurrency,
-					);
-				sendEvent(id, isConversion, Math.round(convertedValue).toString());
-			}
-		};
-
-		sendEventWhenReadyTrigger(sendEventWhenReady);
-	});
-}
-
-function productToCheckoutEvents(
-	product: SubscriptionProduct,
-	orderIsAGift: boolean,
-):
-	| {
-			start: SendEventSubscriptionCheckoutStart;
-			conversion: SendEventSubscriptionCheckoutConversion;
-	  }
-	| undefined {
-	switch (product) {
-		case 'DigitalPack':
-			return checkoutEvents(
-				SendEventSubscriptionCheckoutStart.DigiSub,
-				SendEventSubscriptionCheckoutConversion.DigiSub,
-			);
-		case 'GuardianWeekly':
-			return orderIsAGift
-				? checkoutEvents(
-						SendEventSubscriptionCheckoutStart.GuardianWeeklySubGift,
-						SendEventSubscriptionCheckoutConversion.GuardianWeeklySubGift,
-				  )
-				: checkoutEvents(
-						SendEventSubscriptionCheckoutStart.GuardianWeeklySub,
-						SendEventSubscriptionCheckoutConversion.GuardianWeeklySub,
-				  );
-		case 'Paper':
-		case 'PaperAndDigital':
-			return checkoutEvents(
-				SendEventSubscriptionCheckoutStart.PaperSub,
-				SendEventSubscriptionCheckoutConversion.PaperSub,
-			);
-		default:
-			return;
-	}
-}
-
-function checkoutEvents(
-	start: SendEventSubscriptionCheckoutStart,
-	conversion: SendEventSubscriptionCheckoutConversion,
-) {
-	return { start, conversion };
-}
-
-function sendEventSubscriptionCheckoutStart(
-	product: SubscriptionProduct,
-	orderIsAGift: boolean,
-	productPrice: ProductPrice,
-	billingPeriod: BillingPeriod,
-): void {
-	const sendEventIds = productToCheckoutEvents(product, orderIsAGift);
-
-	if (sendEventIds) {
-		sendEventSubscriptionCheckoutEvent(
-			sendEventIds.start,
-			productPrice,
-			billingPeriod,
-			false,
-		);
-	}
-}
-
-function sendEventSubscriptionCheckoutConversion(
-	product: SubscriptionProduct,
-	orderIsAGift: boolean,
-	productPrice: ProductPrice,
-	billingPeriod: BillingPeriod,
-): void {
-	const sendEventIds = productToCheckoutEvents(product, orderIsAGift);
-
-	if (sendEventIds) {
-		sendEventSubscriptionCheckoutEvent(
-			sendEventIds.conversion,
-			productPrice,
-			billingPeriod,
-			true,
-		);
-	}
 }
 
 function sendEventOneTimeCheckoutValue(
@@ -506,8 +393,6 @@ function init(
 // ----- Exports ----- //
 export {
 	init,
-	sendEventSubscriptionCheckoutStart,
-	sendEventSubscriptionCheckoutConversion,
 	sendEventContributionCheckoutConversion,
 	sendEventContributionCartValue,
 	sendEventPaymentMethodSelected,
