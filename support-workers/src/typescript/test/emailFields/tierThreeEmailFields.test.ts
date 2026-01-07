@@ -34,7 +34,6 @@ describe('Tier three thank you email fields', () => {
 					SubscriberAttributes: {
 						first_payment_date: formatDate(firstDeliveryDate),
 						first_name: emailUser.firstName,
-						ZuoraSubscriberId: subscriptionNumber,
 						subscription_details: '£10.00 every month',
 						payment_method: 'Credit/Debit Card',
 						billing_period: 'monthly',
