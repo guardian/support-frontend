@@ -31,7 +31,7 @@ export default function PromoDetails(props: PromotionTerms): JSX.Element {
 	) : null;
 	return (
 		<Content>
-			<Title size={1}>Promotional code: {props.promoCode}</Title>
+			<Title>Promotional code: {props.promoCode}</Title>
 			<LargeParagraph>
 				<strong>Promotion details:</strong> {props.description}
 			</LargeParagraph>
