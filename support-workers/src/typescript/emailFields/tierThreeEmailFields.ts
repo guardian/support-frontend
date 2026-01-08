@@ -24,7 +24,6 @@ export function buildTierThreeEmailFields({
 	paymentSchedule,
 	paymentMethod,
 	mandateId,
-	firstDeliveryDate,
 }: {
 	today: Dayjs;
 	user: User;
@@ -33,7 +32,6 @@ export function buildTierThreeEmailFields({
 	subscriptionNumber: string;
 	paymentSchedule: PaymentSchedule;
 	paymentMethod: PaymentMethod;
-	firstDeliveryDate: Dayjs;
 	mandateId?: string;
 }): EmailMessageWithIdentityUserId {
 	const deliveryFields = buildDeliveryEmailFields({
@@ -45,12 +43,10 @@ export function buildTierThreeEmailFields({
 		paymentMethod: paymentMethod,
 		paymentSchedule: paymentSchedule,
 		isFixedTerm: false,
-		firstDeliveryDate: firstDeliveryDate,
 		mandateId: mandateId,
 	});
 	const additionalFields: Record<string, string> = {
 		billing_period: billingPeriod.toLowerCase(),
-		subscription_details: deliveryFields.subscription_rate,
 	};
 	const productFields = {
 		...additionalFields,

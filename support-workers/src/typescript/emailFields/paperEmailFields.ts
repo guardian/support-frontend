@@ -7,7 +7,6 @@ import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
 import type { Dayjs } from 'dayjs';
-import dayjs from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
@@ -63,7 +62,6 @@ export function buildPaperEmailFields({
 		billingPeriod: BillingPeriod.Monthly, // Paper products are always monthly
 		paymentMethod: paymentMethod,
 		paymentSchedule: paymentSchedule,
-		firstDeliveryDate: dayjs(productInformation.firstDeliveryDate),
 		isFixedTerm: false, // There are no fixed term paper rate plans
 		mandateId: mandateId,
 	});
