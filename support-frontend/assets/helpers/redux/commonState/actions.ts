@@ -1,4 +1,4 @@
 import { commonSlice } from './reducer';
 
-export const { setInitialCommonState, setCountryInternationalisation } =
+export const { setInitialCommonState,  } =
 	commonSlice.actions;

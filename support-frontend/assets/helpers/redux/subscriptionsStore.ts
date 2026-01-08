@@ -1,4 +1,3 @@
-import type { TypedStartListening } from '@reduxjs/toolkit';
 import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { commonReducer } from './commonState/reducer';
@@ -16,11 +15,6 @@ const baseReducer = {
 // https://redux-toolkit.js.org/api/createListenerMiddleware
 const listenerMiddleware = createListenerMiddleware();
 
-export type SubscriptionsStartListening = TypedStartListening<
-	SubscriptionsState,
-	SubscriptionsDispatch
->;
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- this will be removed soon, but I'm doing this incrementally
 const subscriptionsStore = configureStore({
 	reducer: baseReducer,
@@ -31,5 +25,3 @@ const subscriptionsStore = configureStore({
 export type SubscriptionsStore = typeof subscriptionsStore;
 
 export type SubscriptionsState = ReturnType<typeof subscriptionsStore.getState>;
-
-export type SubscriptionsDispatch = typeof subscriptionsStore.dispatch;

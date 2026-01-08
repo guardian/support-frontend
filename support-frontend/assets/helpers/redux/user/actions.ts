@@ -1,4 +1,4 @@
 import { userSlice } from './reducer';
 
-export const { setIsReturningContributor, setIsSignedIn, setTestUserStatus } =
+export const {  setIsSignedIn,  } =
 	userSlice.actions;

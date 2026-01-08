@@ -110,7 +110,6 @@ export {
 	sendTrackingEventsOnView,
 	fixDecimals,
 	DigitalPack,
-	PaperAndDigital,
 	Paper,
 	GuardianWeekly,
 };

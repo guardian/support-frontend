@@ -24,6 +24,8 @@ module.exports = {
 		'assets/helpers/redux/checkout/product/actions.ts',
 		'assets/helpers/redux/checkout/product/selectors/productPrice.ts',
 		'assets/helpers/user/details.ts',
+		'assets/helpers/redux/checkout/addressMeta/reducer.ts',
+		'assets/helpers/redux/checkout/giftingState/reducer.ts',
 	],
 	ignoreDependencies: [
 		// used in package.json
