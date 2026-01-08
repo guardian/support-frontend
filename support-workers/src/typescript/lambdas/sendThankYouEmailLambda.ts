@@ -11,12 +11,10 @@ import dayjs from 'dayjs';
 import { buildContributionEmailFields } from '../emailFields/contributionEmailFields';
 import { buildDigitalSubscriptionEmailFields } from '../emailFields/digitalSubscriptionEmailFields';
 import { buildGuardianAdLiteEmailFields } from '../emailFields/guardianAdLiteEmailFields';
-import type { GuardianWeeklyProductPurchase } from '../emailFields/guardianWeeklyEmailFields';
 import { buildGuardianWeeklyEmailFields } from '../emailFields/guardianWeeklyEmailFields';
 import type { PaperProductPurchase } from '../emailFields/paperEmailFields';
 import { buildPaperEmailFields } from '../emailFields/paperEmailFields';
 import { buildSupporterPlusEmailFields } from '../emailFields/supporterPlusEmailFields';
-import type { TierThreeProductPurchase } from '../emailFields/tierThreeEmailFields';
 import { buildTierThreeEmailFields } from '../emailFields/tierThreeEmailFields';
 import type { PaymentMethodType } from '../model/paymentMethod';
 import type { ProductType } from '../model/productType';
@@ -130,25 +128,19 @@ async function sendPaperEmail(
 
 async function sendTierThreeEmail(
 	sendThankYouEmailState: SendThankYouEmailState,
-	productInformation: TierThreeProductPurchase,
 ) {
 	await sendEmailWithStage(
-		buildTierThreeEmailFields({
-			...(await getFieldsFromState(sendThankYouEmailState)),
-			firstDeliveryDate: dayjs(productInformation.firstDeliveryDate),
-		}),
+		buildTierThreeEmailFields(await getFieldsFromState(sendThankYouEmailState)),
 	);
 }
 
 async function sendGuardianWeeklyEmail(
 	sendThankYouEmailState: SendThankYouEmailState,
-	productInformation: GuardianWeeklyProductPurchase,
 ) {
 	if (sendThankYouEmailState.productType === 'GuardianWeekly') {
 		await sendEmailWithStage(
 			buildGuardianWeeklyEmailFields({
 				...(await getFieldsFromState(sendThankYouEmailState)),
-				firstDeliveryDate: dayjs(productInformation.firstDeliveryDate),
 				giftRecipient: sendThankYouEmailState.giftRecipient,
 			}),
 		);
@@ -195,11 +187,11 @@ export const handler = async (
 			await sendPaperEmail(sendThankYouEmailState, productInformation);
 			break;
 		case 'TierThree':
-			await sendTierThreeEmail(sendThankYouEmailState, productInformation);
+			await sendTierThreeEmail(sendThankYouEmailState);
 			break;
 		case 'GuardianWeeklyDomestic':
 		case 'GuardianWeeklyRestOfWorld':
-			await sendGuardianWeeklyEmail(sendThankYouEmailState, productInformation);
+			await sendGuardianWeeklyEmail(sendThankYouEmailState);
 			break;
 		case 'GuardianAdLite':
 			await sendGuardianAdLiteEmail(sendThankYouEmailState);
