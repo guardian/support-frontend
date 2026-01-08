@@ -70,29 +70,36 @@ class MParticleTokenProvider(
 
   def initialise(): Unit = {
     logger.info("Fetching initial batch of mparticle tokens")
-    val initialFetches = (1 to desiredTokenCount).foldLeft(Future.successful(())) { (acc, _) =>
-      acc.flatMap(_ => fetchAndStoreToken())
-    }
+    topUpTokens(currentCount = 0)
 
-    initialFetches.onComplete {
-      case Success(_) =>
-        logger.info(s"Successfully initialized $desiredTokenCount tokens")
-      case Failure(ex) =>
-        logger.error(scrub"Failed to initialize token pool", ex)
-    }
-
-    // Every hour purge the oldest token
     system.scheduler.scheduleAtFixedRate(1.hour, 1.hour)(() => {
-      logger.info("Running scheduled mparticle token purge")
-      val currentTokens = tokens.get().toList
-      if (currentTokens.size >= desiredTokenCount) {
-        currentTokens
-          .sortBy(_.created)
-          .headOption
-          .foreach(purgeToken)
-      }
+      logger.info("Running scheduled mparticle token maintenance")
+      val currentTokens = tokens.get()
+      val currentCount = currentTokens.size
+
+      if (currentCount < desiredTokenCount)
+        topUpTokens(currentCount)
+      else
+        purgeOldestToken(currentTokens)
     })
   }
+
+  // mparticle has a tendency to return the same token repeatedly if we make concurrent requests for tokens, so here we stagger the requests
+  private def topUpTokens(currentCount: Int): Unit = {
+    logger.info(s"Token count ($currentCount) below desired ($desiredTokenCount), topping up")
+    val tokensToFetch = desiredTokenCount - currentCount
+    (0 until tokensToFetch).foreach { n =>
+      system.scheduler.scheduleOnce(n.seconds) {
+        fetchAndStoreToken()
+      }
+    }
+  }
+
+  private def purgeOldestToken(currentTokens: Set[Token]): Unit =
+    currentTokens.toList
+      .sortBy(_.created)
+      .headOption
+      .foreach(token => purgeToken(token, replace = currentTokens.size <= desiredTokenCount))
 
   // Randomly select a token
   private def getToken(): Option[Token] = {
@@ -133,7 +140,7 @@ class MParticleTokenProvider(
       }
   }
 
-  private def purgeToken(token: Token): Unit = {
+  private def purgeToken(token: Token, replace: Boolean): Unit = {
     val previousTokens = tokens.getAndUpdate(currentTokens => currentTokens.excl(token))
     // Only fetch a replacement if this call actually removed the token
     if (previousTokens.contains(token)) {
@@ -148,7 +155,7 @@ class MParticleTokenProvider(
       case Some(token) =>
         fetch(token.token).recoverWith {
           case WebServiceClientError(CodeBody("401", _)) | WebServiceHelperError(CodeBody("401", _), _, _) =>
-            purgeToken(token)
+            purgeToken(token, replace = true)
             if (retries < maxRetries) {
               logger.info(s"Retrying mparticle request after 401 received")
               requestWithToken(fetch, retries + 1)
