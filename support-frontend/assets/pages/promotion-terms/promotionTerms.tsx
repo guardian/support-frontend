@@ -50,7 +50,7 @@ function getPromotionTermsProps(): PromotionTermsPropTypes {
 // ----- Render ----- //
 export function PromotionTermsPage(props: PromotionTermsPropTypes) {
 	return (
-		<PageScaffold
+		<Page
 			header={<Header countryGroupId={CountryGroup.detect()} />}
 			footer={
 				<Footer
@@ -59,8 +59,8 @@ export function PromotionTermsPage(props: PromotionTermsPropTypes) {
 			}
 		>
 			<PromoDetails {...props.promotionTerms} />
-			<LegalTerms {...props} />k
-		</PageScaffold>
+			<LegalTerms {...props} />
+		</Page>
 	);
 }
 
