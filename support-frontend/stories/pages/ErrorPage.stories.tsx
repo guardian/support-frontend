@@ -3,7 +3,6 @@ import { MemoryRouter } from 'react-router-dom';
 import type { ErrorPageProps } from 'pages/error/components/errorPage';
 import ErrorPage from 'pages/error/components/errorPage';
 import { PayPalError } from 'pages/paypal-error/payPalError';
-import 'pages/paypal-error/payPalError.scss';
 
 const meta: Meta = {
 	title: 'Pages/Error Page',
