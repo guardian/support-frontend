@@ -27,10 +27,6 @@ function classNameWithModifiers(
 	);
 }
 
-function hiddenIf(shouldHide: boolean, className: string): string {
-	return shouldHide ? classNameWithModifiers(className, ['hidden']) : className;
-}
-
 // Deserialises a JSON object from a string.
 function deserialiseJsonObject(
 	serialised: string,
@@ -99,7 +95,6 @@ export {
 	getSanitisedHtml,
 	roundToDecimalPlaces,
 	classNameWithModifiers,
-	hiddenIf,
 	deserialiseJsonObject,
 	parseCustomAmounts,
 	replaceDatePlaceholder,

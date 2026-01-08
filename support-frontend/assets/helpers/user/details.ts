@@ -8,4 +8,6 @@ export const titles: Record<string, string> = {
 	Prof: 'Prof',
 	Rev: 'Rev',
 };
+
+// TODO: Fix this type. Currently Title is just string.
 export type Title = keyof typeof titles;

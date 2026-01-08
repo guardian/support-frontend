@@ -2,21 +2,6 @@ import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { trackComponentEvents } from './trackingOphan';
 
-const trackCheckoutSubmitAttempt = (
-	componentId: string,
-	eventDetails: string,
-): void => {
-	trackComponentEvents({
-		component: {
-			componentType: 'ACQUISITIONS_BUTTON',
-			id: componentId,
-			labels: ['checkout-submit'],
-		},
-		action: 'CLICK',
-		value: eventDetails,
-	});
-};
-
 const trackThankYouPageLoaded = (
 	productCheckout: SubscriptionProduct,
 	paymentMethod: PaymentMethod | null | undefined,
@@ -55,9 +40,4 @@ const trackComponentLoad = (componentId: string): void => {
 	});
 };
 
-export {
-	trackThankYouPageLoaded,
-	trackComponentClick,
-	trackCheckoutSubmitAttempt,
-	trackComponentLoad,
-};
+export { trackThankYouPageLoaded, trackComponentClick, trackComponentLoad };

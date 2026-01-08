@@ -10,7 +10,6 @@ import {
 	applyDeliveryAddressRules,
 } from 'helpers/redux/checkout/address/validation';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
-import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { setFormErrors } from 'helpers/subscriptionsForms/formActions';
 import type {
 	FormField,
@@ -31,23 +30,10 @@ type AnyErrorType = Error<AddressFormField> | Error<FormField>;
 
 // ---- Validation ---- //
 
-export function validateWithDeliveryForm(
-	dispatch: Dispatch<Action>,
-	state: SubscriptionsState,
-): boolean {
-	const allErrors = withDeliveryValidation(state);
-	dispatchAllErrors(dispatch, allErrors);
-	return allErrors.length === 0;
-}
-
 export function checkoutFormIsValid(state: SubscriptionsState): boolean {
 	if (state.page.checkoutForm.product.productType === DigitalPack) {
 		return checkoutValidation(state).length === 0;
 	}
-	return withDeliveryValidation(state).length === 0;
-}
-
-export function withDeliveryFormIsValid(state: SubscriptionsState): boolean {
 	return withDeliveryValidation(state).length === 0;
 }
 
@@ -119,10 +105,6 @@ function withDeliveryValidation(state: SubscriptionsState): AnyErrorType[] {
 
 function shouldValidateBillingAddress(fields: FormFields) {
 	return !fields.billingAddressMatchesDelivery;
-}
-
-function dispatchAllErrors(dispatch: Dispatch, allErrors: AnyErrorType[]) {
-	allErrors.forEach((e) => e.dispatchErrors(dispatch));
 }
 
 function getErrorList(error: AnyErrorType) {

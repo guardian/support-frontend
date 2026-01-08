@@ -43,18 +43,6 @@ export type TrackingProperties = {
 };
 
 // ----- Functions ----- //
-const isPhysicalProduct = (product: SubscriptionProduct): boolean => {
-	switch (product) {
-		case Paper:
-		case PaperAndDigital:
-		case GuardianWeekly:
-			return true;
-
-		default:
-			return false;
-	}
-};
-
 function fixDecimals(number: number): string {
 	if (Number.isInteger(number)) {
 		return number.toString();
@@ -125,5 +113,4 @@ export {
 	PaperAndDigital,
 	Paper,
 	GuardianWeekly,
-	isPhysicalProduct,
 };
