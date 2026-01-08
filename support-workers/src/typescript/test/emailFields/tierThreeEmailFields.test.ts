@@ -24,7 +24,6 @@ describe('Tier three thank you email fields', () => {
 			paymentSchedule: paperPaymentSchedule,
 			paymentMethod: creditCardPaymentMethod,
 			mandateId: undefined,
-			firstDeliveryDate: firstDeliveryDate,
 		});
 
 		const expected = {
@@ -34,7 +33,6 @@ describe('Tier three thank you email fields', () => {
 					SubscriberAttributes: {
 						first_payment_date: formatDate(firstDeliveryDate),
 						first_name: emailUser.firstName,
-						subscription_details: '£10.00 every month',
 						payment_method: 'Credit/Debit Card',
 						billing_period: 'monthly',
 						delivery_address_line_1: emailUser.billingAddress.lineOne,
@@ -42,10 +40,8 @@ describe('Tier three thank you email fields', () => {
 						delivery_address_town: emailUser.billingAddress.city,
 						delivery_postcode: emailUser.billingAddress.postCode,
 						delivery_country: 'United Kingdom',
-						subscription_rate: '£10.00 every month', // Not used duplicate
-						date_of_first_paper: formatDate(firstDeliveryDate), // Not used
-						date_of_first_payment: formatDate(firstDeliveryDate), // Not used it's added by buildDeliveryEmailFields
-						subscriber_id: subscriptionNumber, // Not used duplicate
+						subscription_rate: '£10.00 every month',
+						subscriber_id: subscriptionNumber,
 						last_name: emailUser.lastName, // Not used
 					},
 				},

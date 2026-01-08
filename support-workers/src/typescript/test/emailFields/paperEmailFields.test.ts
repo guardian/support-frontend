@@ -20,7 +20,6 @@ describe('Paper email fields', () => {
 			ContactAttributes: {
 				SubscriberAttributes: {
 					subscription_rate: '£10.00 every month',
-					date_of_first_paper: 'Tuesday, 18 November 2025',
 					subscriber_id: subscriptionNumber,
 					delivery_address_line_1: '90 York Way',
 					delivery_address_line_2: '',
@@ -32,7 +31,6 @@ describe('Paper email fields', () => {
 					last_name: deliveryContact.lastName,
 					account_holder: 'Mickey Mouse',
 					package: 'Everyday',
-					date_of_first_payment: 'Friday, 21 November 2025',
 					first_payment_date: 'Friday, 21 November 2025',
 					bank_sort_code: '20-20-20',
 					mandate_id: mandateId,

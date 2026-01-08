@@ -25,7 +25,6 @@ export function buildGuardianWeeklyEmailFields({
 	subscriptionNumber,
 	paymentSchedule,
 	paymentMethod,
-	firstDeliveryDate,
 	isFixedTerm,
 	mandateId,
 	giftRecipient,
@@ -37,7 +36,6 @@ export function buildGuardianWeeklyEmailFields({
 	subscriptionNumber: string;
 	paymentSchedule: PaymentSchedule;
 	paymentMethod: PaymentMethod;
-	firstDeliveryDate: Dayjs;
 	isFixedTerm: boolean;
 	mandateId?: string;
 	giftRecipient?: GiftRecipient | null;
@@ -65,7 +63,6 @@ export function buildGuardianWeeklyEmailFields({
 		billingPeriod: billingPeriod,
 		paymentMethod: paymentMethod,
 		paymentSchedule: paymentSchedule,
-		firstDeliveryDate: firstDeliveryDate,
 		isFixedTerm: isFixedTerm,
 		mandateId: mandateId,
 	});

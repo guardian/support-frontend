@@ -7,11 +7,8 @@ import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
 import type { NonDeliveryEmailFields } from './emailFields';
 import { buildNonDeliveryEmailFields } from './emailFields';
-import { formatDate } from './paymentEmailFields';
 
 type DeliveryFields = {
-	date_of_first_paper: string;
-	date_of_first_payment: string;
 	delivery_address_line_1: string;
 	delivery_address_line_2: string;
 	delivery_address_town: string;
@@ -29,7 +26,6 @@ export function buildDeliveryEmailFields({
 	billingPeriod,
 	paymentMethod,
 	paymentSchedule,
-	firstDeliveryDate,
 	isFixedTerm,
 	mandateId,
 }: {
@@ -40,7 +36,6 @@ export function buildDeliveryEmailFields({
 	billingPeriod: RecurringBillingPeriod;
 	paymentMethod: PaymentMethod;
 	paymentSchedule: PaymentSchedule;
-	firstDeliveryDate: Dayjs;
 	isFixedTerm: boolean;
 	mandateId?: string;
 }): DeliveryEmailFields {
@@ -60,8 +55,6 @@ export function buildDeliveryEmailFields({
 
 	const address = user.deliveryAddress ?? user.billingAddress;
 	const deliveryFields = {
-		date_of_first_paper: formatDate(firstDeliveryDate),
-		date_of_first_payment: nonDeliveryFields.first_payment_date, // This is a duplicate and will be removed in a later PR
 		delivery_address_line_1: address.lineOne ?? '',
 		delivery_address_line_2: address.lineTwo ?? '',
 		delivery_address_town: address.city ?? '',
