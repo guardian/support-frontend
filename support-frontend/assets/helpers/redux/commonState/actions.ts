@@ -1,4 +1,3 @@
 import { commonSlice } from './reducer';
 
-export const { setInitialCommonState,  } =
-	commonSlice.actions;
+export const { setInitialCommonState } = commonSlice.actions;
