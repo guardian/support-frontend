@@ -143,7 +143,7 @@ class MParticleTokenProvider(
   private def purgeToken(token: Token, replace: Boolean): Unit = {
     val previousTokens = tokens.getAndUpdate(currentTokens => currentTokens.excl(token))
     // Only fetch a replacement if this call actually removed the token
-    if (previousTokens.contains(token)) {
+    if (replace && previousTokens.contains(token)) {
       fetchAndStoreToken() // begin fetch in the background
     }
   }
