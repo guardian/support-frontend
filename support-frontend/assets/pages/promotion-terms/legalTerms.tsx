@@ -32,7 +32,7 @@ export default function LegalTerms(props: PromotionTermsPropTypes) {
 	return (
 		<Content>
 			<Divider />
-			<Title size={1}>Promotion terms and conditions</Title>
+			<Title>Promotion terms and conditions</Title>
 			{getTermsForProduct(props)}
 		</Content>
 	);

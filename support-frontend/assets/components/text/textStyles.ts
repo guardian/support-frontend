@@ -9,7 +9,7 @@ import {
 } from '@guardian/source/foundations';
 import { gu_v_spacing } from 'stylesheets/emotion/layout';
 
-export const titleHeading = css`
+export const titleContainer = css`
 	${headlineBold24}
 	${until.tablet} {
 		font-size: 22px;

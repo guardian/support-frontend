@@ -1,56 +1,21 @@
 import type { ReactNode } from 'react';
-import type { HeadingSize } from 'components/heading/heading';
-import Heading from 'components/heading/heading';
 import {
 	largeParagraphStyle,
 	sansParagraphStyle,
 	textContainer,
-	titleHeading,
+	titleContainer,
 } from './textStyles';
 
-type TextProps = {
-	title?: string | null;
-	className?: string | null;
-	headingSize?: HeadingSize;
-	children?: ReactNode | null;
-};
-export default function Text({
-	title = null,
-	headingSize = 2,
-	children = null,
-}: TextProps): JSX.Element {
-	return (
-		<div css={textContainer}>
-			{title && <Title size={headingSize}>{title}</Title>}
-			{children}
-		</div>
-	);
+type ChildrenProp = { children: ReactNode };
+export default function Text({ children }: ChildrenProp): JSX.Element {
+	return <div css={textContainer}>{children}</div>;
 }
-
-export function Title({
-	children,
-	size,
-}: {
-	children: ReactNode;
-	size: HeadingSize;
-}): JSX.Element {
-	return (
-		<Heading size={size} cssOverrides={titleHeading}>
-			{children}
-		</Heading>
-	);
+export function Title({ children }: ChildrenProp): JSX.Element {
+	return <h1 css={titleContainer}>{children}</h1>;
 }
-export function LargeParagraph({
-	children,
-}: {
-	children: ReactNode;
-}): JSX.Element {
+export function LargeParagraph({ children }: ChildrenProp): JSX.Element {
 	return <p css={largeParagraphStyle}>{children}</p>;
 }
-export function SansParagraph({
-	children,
-}: {
-	children: ReactNode;
-}): JSX.Element {
+export function SansParagraph({ children }: ChildrenProp): JSX.Element {
 	return <p css={sansParagraphStyle}>{children}</p>;
 }
