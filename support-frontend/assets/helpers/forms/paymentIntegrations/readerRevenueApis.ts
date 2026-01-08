@@ -8,15 +8,9 @@ import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { ProductOptions } from '@modules/product/productOptions';
 import type { PaymentIntentResult, PaymentMethod } from '@stripe/stripe-js';
-import {
-	fetchJson,
-	getRequestOptions,
-	requestOptions,
-} from 'helpers/async/fetch';
-import { logPromise, pollUntilPromise } from 'helpers/async/promise';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { StripeHostedCheckout } from 'helpers/forms/paymentMethods';
-import {
+import type {
 	DirectDebit,
 	PayPal,
 	Sepa,
@@ -28,7 +22,6 @@ import type {
 	GuardianWeekly,
 	Paper,
 } from 'helpers/productPrice/subscriptions';
-import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import type {
 	AcquisitionABTest,
@@ -37,7 +30,6 @@ import type {
 } from 'helpers/tracking/acquisitions';
 import type { Option } from 'helpers/types/option';
 import type { Title } from 'helpers/user/details';
-import { logException } from 'helpers/utilities/logger';
 
 // ----- Types ----- //
 export type StripePaymentMethod =
@@ -99,7 +91,7 @@ type GuardianWeeklySubscription = {
 	billingPeriod: BillingPeriod;
 	fulfilmentOptions: FulfilmentOptions;
 };
-export type SubscriptionProductFields =
+type SubscriptionProductFields =
 	| SupporterPlus
 	| DigitalSubscription
 	| PaperSubscription
@@ -143,7 +135,7 @@ export type RegularPaymentFields =
 	| RegularDirectDebitPaymentFields
 	| RegularSepaPaymentFields
 	| RegularStripeHostedCheckoutPaymentFields;
-export type RegularPaymentRequestAddress = {
+type RegularPaymentRequestAddress = {
 	country: IsoCountry;
 	state?: UsState | null;
 	lineOne?: Option<string>;
@@ -245,170 +237,5 @@ export type StatusResponse = {
 const PaymentSuccess: PaymentResult = {
 	paymentStatus: 'success',
 };
-const POLLING_INTERVAL = 3000;
-const MAX_POLLS = 10;
 
-// ----- Functions ----- //
-function regularPaymentFieldsFromAuthorisation(
-	authorisation: PaymentAuthorisation,
-	stripePublicKey: string,
-	recaptchaToken: string,
-): RegularPaymentFields {
-	switch (authorisation.paymentMethod) {
-		case Stripe:
-			if (authorisation.paymentMethodId) {
-				return {
-					paymentType: Stripe,
-					paymentMethod: authorisation.paymentMethodId,
-					stripePaymentType: authorisation.stripePaymentMethod,
-					stripePublicKey: stripePublicKey,
-				};
-			}
-
-			throw new Error(
-				'Neither token nor paymentMethod found in authorisation data for Stripe recurring contribution',
-			);
-
-		case PayPal:
-			return {
-				paymentType: PayPal,
-				baid: authorisation.token,
-			};
-
-		case DirectDebit:
-			return {
-				paymentType: DirectDebit,
-				accountHolderName: authorisation.accountHolderName,
-				sortCode: authorisation.sortCode,
-				accountNumber: authorisation.accountNumber,
-				recaptchaToken,
-			};
-
-		case Sepa:
-			if (authorisation.country && authorisation.streetName) {
-				return {
-					paymentType: Sepa,
-					accountHolderName: authorisation.accountHolderName,
-					iban: authorisation.iban.replace(/ /g, ''),
-					country: authorisation.country,
-					streetName: authorisation.streetName,
-				};
-			} else {
-				return {
-					paymentType: Sepa,
-					accountHolderName: authorisation.accountHolderName,
-					iban: authorisation.iban.replace(/ /g, ''),
-				};
-			}
-	}
-}
-
-/**
- * Process the response for a regular payment from the recurring contribution endpoint.
- *
- * If the payment is:
- * - pending, then we start polling the API until it's done or some timeout occurs
- * - failed, then we bubble up an error value
- * - otherwise, we bubble up a success value
- */
-function checkRegularStatus(
-	csrf: CsrfState,
-): (statusResponse: StatusResponse) => Promise<PaymentResult> {
-	const handleCompletion = (json: StatusResponse) => {
-		switch (json.status) {
-			case 'success':
-			case 'pending':
-				return PaymentSuccess;
-
-			default: {
-				const failureReason = json.failureReason ?? 'unknown';
-				const failureResult: PaymentResult = {
-					paymentStatus: 'failure',
-					error: failureReason,
-				};
-				return failureResult;
-			}
-		}
-	};
-
-	// Exhaustion of the maximum number of polls is considered a payment success
-	const handleExhaustedPolls = (error: Error | undefined) => {
-		if (error === undefined) {
-			const exhaustedResult: PaymentResult = {
-				paymentStatus: 'success',
-				subscriptionCreationPending: true,
-			};
-			return exhaustedResult;
-		}
-
-		throw error;
-	};
-
-	return (statusResponse: StatusResponse) => {
-		switch (statusResponse.status) {
-			case 'pending':
-				return logPromise(
-					pollUntilPromise(
-						MAX_POLLS,
-						POLLING_INTERVAL,
-						() =>
-							fetchJson<StatusResponse>(
-								statusResponse.trackingUri,
-								getRequestOptions('same-origin', csrf),
-							),
-						(json2: StatusResponse) => json2.status === 'pending',
-					)
-						.then(handleCompletion)
-						.catch(handleExhaustedPolls),
-				);
-
-			default:
-				return Promise.resolve(handleCompletion(statusResponse));
-		}
-	};
-}
-
-/** Sends a regular payment request to the recurring contribution endpoint and checks the result */
-function postRegularPaymentRequest(
-	uri: string,
-	data: RegularPaymentRequest,
-	csrf: CsrfState,
-): Promise<PaymentResult> {
-	return logPromise(
-		fetch(uri, requestOptions(data, 'same-origin', 'POST', csrf)),
-	)
-		.then((response: Response) => {
-			if (response.status === 500) {
-				logException(`500 Error while trying to post to ${uri}`);
-				return {
-					paymentStatus: 'failure',
-					error: 'internal_error',
-				} as PaymentResult;
-			} else if (response.status === 400) {
-				return response.text().then((text: string) => {
-					logException(
-						`Bad request error while trying to post to ${uri} - ${text}`,
-					);
-					return {
-						paymentStatus: 'failure',
-						error: text,
-					} as PaymentResult;
-				});
-			}
-
-			return response.json().then(checkRegularStatus(csrf));
-		})
-		.catch(() => {
-			logException(`Error while trying to interact with ${uri}`);
-			return {
-				paymentStatus: 'failure',
-				error: 'unknown',
-			};
-		});
-}
-
-export {
-	postRegularPaymentRequest,
-	regularPaymentFieldsFromAuthorisation,
-	PaymentSuccess,
-};
+export { PaymentSuccess };
