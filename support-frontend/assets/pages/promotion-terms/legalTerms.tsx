@@ -7,8 +7,8 @@ import {
 } from 'helpers/productPrice/subscriptions';
 import DigitalPackTerms from 'pages/promotion-terms/DigitalPackTerms';
 import PaperTerms from 'pages/promotion-terms/PaperTerms';
-import type { PromotionTermsPropTypes } from 'pages/promotion-terms/promotionTermsReducer';
 import WeeklyTerms from 'pages/promotion-terms/weeklyTerms';
+import type { PromotionTermsPropTypes } from './promotionTermsPropTypes';
 
 const getTermsForProduct = (props: PromotionTermsPropTypes) => {
 	switch (props.promotionTerms.product) {
