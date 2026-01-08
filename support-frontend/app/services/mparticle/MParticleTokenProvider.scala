@@ -70,7 +70,7 @@ class MParticleTokenProvider(
 
   def initialise(): Unit = {
     logger.info("Fetching initial batch of mparticle tokens")
-    topUpTokens(currentCount = 0)
+    topUpTokens(currentCount = tokens.get().size)
 
     system.scheduler.scheduleAtFixedRate(1.hour, 1.hour)(() => {
       logger.info("Running scheduled mparticle token maintenance")
