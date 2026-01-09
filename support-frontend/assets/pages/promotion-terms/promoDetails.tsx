@@ -10,10 +10,6 @@ import { DigitalPack, Paper } from 'helpers/productPrice/subscriptions';
 import { routes } from 'helpers/urls/routes';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 
-const buttonStyle = css`
-	margin: ${space[6]}px 0 ${space[4]}px;
-`;
-
 const landingPageForProduct = (props: PromotionTerms) => {
 	switch (props.product) {
 		case DigitalPack:
