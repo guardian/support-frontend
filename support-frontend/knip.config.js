@@ -14,7 +14,6 @@ module.exports = {
 		// Ignore these files while the legacy checkout cleanup is ongoing. These
 		// files all have unused exports, which knip complains about. Ignoring them
 		// for now so that I can split this work across PRs to keep the size down.
-		'assets/helpers/redux/checkout/payment/payPal/reducer.ts',
 		'assets/helpers/redux/checkout/payment/stripeAccountDetails/reducer.ts',
 		'assets/helpers/redux/checkout/personalDetails/actions.ts',
 		'assets/helpers/redux/checkout/product/actions.ts',

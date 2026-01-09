@@ -4,7 +4,7 @@ import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/a
 import { initialPayPalState } from './state';
 import { loadPayPalExpressSdk } from './thunks';
 
-export const payPalSlice = createSlice({
+const payPalSlice = createSlice({
 	name: 'paypal',
 	initialState: initialPayPalState,
 	reducers: {
