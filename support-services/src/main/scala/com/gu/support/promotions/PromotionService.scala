@@ -19,7 +19,7 @@ class PromotionService(config: PromotionsConfig, maybeCollection: Option[Promoti
 
   def findPromotion(promoCode: PromoCode): Either[PromoError, PromotionWithCode] =
     promotionCollection.all.toList
-      .filter(_.promoCodes.exists(_ == promoCode))
+      .filter(_.promoCode == promoCode)
       .map(PromotionWithCode(promoCode, _)) match {
       case Nil => Left(NoSuchCode)
       case code :: Nil => Right(code)
@@ -28,13 +28,13 @@ class PromotionService(config: PromotionsConfig, maybeCollection: Option[Promoti
 
   // promoCodes here is expected to be a small list of default promos plus one from the querystring
   def findPromotions(promoCodes: List[PromoCode]): List[PromotionWithCode] = {
-    val promosByCode: Map[PromoCode, List[Promotion]] =
+    val promosByCode: Map[PromoCode, Promotion] =
       allPromotions
-        .flatMap(promo => promo.promoCodes.map(code => code -> promo))
-        .groupMap(_._1)(_._2)
+        .map(promo => promo.promoCode -> promo)
+        .toMap
 
-    promoCodes.foldLeft(List.empty[PromotionWithCode]) { (acc, promoCode) =>
-      acc ++ promosByCode.getOrElse(promoCode, Nil).map(promotion => PromotionWithCode(promoCode, promotion))
+    promoCodes.flatMap { promoCode =>
+      promosByCode.get(promoCode).map(PromotionWithCode(promoCode, _))
     }
   }
 

@@ -12,7 +12,7 @@ case class Promotion(
     description: String,
     appliesTo: AppliesTo,
     campaignCode: CampaignCode,
-    channelCodes: Map[Channel, Set[PromoCode]],
+    promoCode: PromoCode,
     starts: DateTime,
     expires: Option[DateTime],
     discount: Option[DiscountBenefit],
@@ -22,7 +22,7 @@ case class Promotion(
     tracking: Boolean = false,
     landingPage: Option[PromotionCopy] = None,
 ) {
-  def promoCodes: Iterable[PromoCode] = channelCodes.values.flatten
+  def promoCodes: Iterable[PromoCode] = Seq(promoCode)
 }
 
 object Promotion {
@@ -32,7 +32,8 @@ object Promotion {
   private def mapFields(c: ACursor) = c.withFocus {
     _.mapObject(
       _.extractBenefits
-        .renameField("codes", "channelCodes")
+        .renameField("startTimestamp", "starts")
+        .renameField("endTimestamp", "expires")
         .checkKeyExists("renewalOnly", Json.fromBoolean(false))
         .checkKeyExists("tracking", Json.fromBoolean(false)),
     )

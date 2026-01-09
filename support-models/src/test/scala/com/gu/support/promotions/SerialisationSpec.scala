@@ -112,7 +112,7 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
       description = "test",
       appliesTo = appliesTo,
       campaignCode = "",
-      channelCodes = Map[Channel, Set[PromoCode]]("" -> Set()),
+      promoCode = "",
       starts = DateTime.now(ISOChronology.getInstanceUTC),
       expires = None,
       discount = None,
