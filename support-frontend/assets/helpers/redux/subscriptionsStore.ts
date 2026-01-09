@@ -1,29 +1,7 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
-import type { BillingPeriod } from '@modules/product/billingPeriod';
-import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
-import type { ProductOptions } from '@modules/product/productOptions';
-import type { TypedStartListening } from '@reduxjs/toolkit';
 import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import { renderError } from 'helpers/rendering/render';
 import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import type { DateYMDString } from 'helpers/types/DateString';
-import { setUpUserState } from 'helpers/user/reduxSetup';
-import { addAddressSideEffects } from './checkout/address/subscriptionsSideEffects';
-import { addAddressMetaSideEffects } from './checkout/addressMeta/subscriptionsSideEffects';
-import { addPaymentsSideEffects } from './checkout/payment/subscriptionsSideEffects';
-import { addPersonalDetailsSideEffects } from './checkout/personalDetails/subscriptionsSideEffects';
-import {
-	setBillingPeriod,
-	setFulfilmentOption,
-	setProductOption,
-	setProductType,
-	setStartDate,
-} from './checkout/product/actions';
-import { setInitialCommonState } from './commonState/actions';
 import { commonReducer } from './commonState/reducer';
 import { debugReducer } from './debug/reducer';
-import { getInitialState } from './utils/setup';
 
 const subscriptionsPageReducer = createReducer();
 
@@ -37,14 +15,7 @@ const baseReducer = {
 // https://redux-toolkit.js.org/api/createListenerMiddleware
 const listenerMiddleware = createListenerMiddleware();
 
-export type SubscriptionsStartListening = TypedStartListening<
-	SubscriptionsState,
-	SubscriptionsDispatch
->;
-
-const startSubscriptionsListening =
-	listenerMiddleware.startListening as SubscriptionsStartListening;
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- this will be removed soon, but I'm doing this incrementally
 const subscriptionsStore = configureStore({
 	reducer: baseReducer,
 	middleware: (getDefaultMiddleware) =>
@@ -53,46 +24,4 @@ const subscriptionsStore = configureStore({
 
 export type SubscriptionsStore = typeof subscriptionsStore;
 
-export function initReduxForSubscriptions(
-	product: SubscriptionProduct,
-	initialBillingPeriod: BillingPeriod,
-	startDate?: DateYMDString,
-	productOption?: ProductOptions,
-	getFulfilmentOptionForCountry?: (country: IsoCountry) => FulfilmentOptions,
-	// Injecting the store and listener makes it possible to re-use this function for tests
-	store = subscriptionsStore,
-	startListening = startSubscriptionsListening,
-): SubscriptionsStore {
-	try {
-		addPersonalDetailsSideEffects(startListening);
-		addAddressSideEffects(startListening);
-		addPaymentsSideEffects(startListening);
-		addAddressMetaSideEffects(startListening);
-		const initialState = getInitialState();
-
-		store.dispatch(setInitialCommonState(initialState));
-		store.dispatch(setProductType(product));
-		store.dispatch(setBillingPeriod(initialBillingPeriod));
-		setUpUserState(store.dispatch);
-
-		startDate && store.dispatch(setStartDate(startDate));
-		productOption && store.dispatch(setProductOption(productOption));
-		getFulfilmentOptionForCountry &&
-			store.dispatch(
-				setFulfilmentOption(
-					getFulfilmentOptionForCountry(
-						initialState.internationalisation.countryId,
-					),
-				),
-			);
-
-		return store;
-	} catch (err) {
-		renderError(err as Error);
-		throw err;
-	}
-}
-
 export type SubscriptionsState = ReturnType<typeof subscriptionsStore.getState>;
-
-export type SubscriptionsDispatch = typeof subscriptionsStore.dispatch;

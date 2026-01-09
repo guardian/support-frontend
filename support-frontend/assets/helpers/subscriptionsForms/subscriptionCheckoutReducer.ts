@@ -1,4 +1,3 @@
-import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { combineReducers } from 'redux';
 import {
 	billingAddressReducer,
@@ -27,7 +26,6 @@ import { userReducer } from 'helpers/redux/user/reducer';
 import type { UserState } from 'helpers/redux/user/state';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import { createFormReducer } from 'helpers/subscriptionsForms/formReducer';
-import type { Option } from 'helpers/types/option';
 
 type ReduxState<PageState> = {
 	common: CommonState;
@@ -59,8 +57,6 @@ export type WithDeliveryCheckoutState = ReduxState<{
 	user: UserState;
 }>;
 
-export type AnyCheckoutState = CheckoutState | WithDeliveryCheckoutState;
-
 export function createReducer() {
 	return combineReducers({
 		checkout: createFormReducer(),
@@ -80,8 +76,3 @@ export function createReducer() {
 		user: userReducer,
 	});
 }
-
-export const getFulfilmentOption = (
-	state: WithDeliveryCheckoutState,
-): Option<FulfilmentOptions> =>
-	state.page.checkoutForm.product.fulfilmentOption;

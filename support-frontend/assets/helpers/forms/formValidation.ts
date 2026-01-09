@@ -9,9 +9,6 @@ export const emailRegexPattern =
 export const isEmpty: (arg0?: string | null) => boolean = (input) =>
 	typeof input === 'undefined' || input == null || input.trim().length === 0;
 
-export const isValidEmail: (arg0: string | null) => boolean = (input) =>
-	!!input && new RegExp(emailRegexPattern).test(input);
-
 export const isValidZipCode = (zipCode: string): boolean =>
 	/^\d{5}(-\d{4})?$/.test(zipCode);
 
@@ -24,16 +21,6 @@ export const notLongerThan = (
 	}
 	return value.length < maxLength;
 };
-
-export const emailAddressesMatch: (
-	isSignedIn: boolean,
-	email: string,
-	confirmEmail?: string,
-) => boolean = (isSignedIn, email, confirmEmail) =>
-	isSignedIn || email === confirmEmail;
-
-export const checkOptionalEmail: (arg0: string | null) => boolean = (input) =>
-	isEmpty(input) || isValidEmail(input);
 
 // regex from: https://gist.github.com/simonwhitaker/5748487?permalink_comment_id=4648104#gistcomment-4648104
 // based on UK Gov logic: https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/488478/Bulk_Data_Transfer_-_additional_validation_valid_from_12_November_2015.pdf
