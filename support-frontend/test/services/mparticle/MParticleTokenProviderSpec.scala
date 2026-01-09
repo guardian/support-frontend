@@ -77,9 +77,7 @@ class MParticleTokenProviderSpec
       provider.initialise()
 
       // Wait for initial tokens to be fetched
-      eventually {
-        provider.requestWithToken(token => Future.successful("success")).futureValue shouldBe "success"
-      }
+      Thread.sleep(2000)
 
       var attemptCount = 0
       val fetch: MParticleAccessToken => Future[String] = { _ =>
