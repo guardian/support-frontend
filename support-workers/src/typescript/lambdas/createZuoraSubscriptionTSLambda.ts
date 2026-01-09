@@ -1,6 +1,5 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getProductCatalogFromApi } from '@modules/product-catalog/api';
-// import { getPromotions } from '@modules/promotions/v1/getPromotions';
 import { getPromotion } from '@modules/promotions/v2/getPromotion';
 import type { Promo } from '@modules/promotions/v2/schema';
 import type {
