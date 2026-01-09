@@ -1,4 +1,3 @@
-import { SvgInfoRound } from '@guardian/source/react-components';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Collection, HomeDelivery } from '@modules/product/fulfilmentOptions';
 import type { ReactElement } from 'react';
@@ -8,7 +7,6 @@ import FullWidthContainer from 'components/containers/fullWidthContainer';
 import Carousel from 'components/product/Carousel';
 import { type Product } from 'components/product/productOption';
 import Tabs, { type TabProps } from 'components/tabs/tabs';
-import { observerLinks } from 'helpers/legal';
 import { ActivePaperProductTypes } from 'helpers/productCatalogToProductOption';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
@@ -17,10 +15,8 @@ import NewspaperRatePlanCard from 'pages/paper-subscription-landing/components/N
 import { getPlans } from '../helpers/getPlans';
 import { windowSetHashProperty } from '../helpers/windowSetHashProperty';
 import NewspaperTabHero from './content/NewspaperTabHero';
-import {
-	cardsContainer,
-	productInfoWrapper,
-} from './NewspapperProductTabsStyles';
+import { cardsContainer } from './NewspapperProductTabsStyles';
+import PaperLandingTsAndCs from './PaperLandingTsAndCs';
 
 type TabOptions = {
 	text: string;
@@ -106,17 +102,7 @@ function NewspaperProductTabs({
 						renderProducts()
 					)}
 				</section>
-				<div css={productInfoWrapper}>
-					<SvgInfoRound size="medium" />
-					<p>
-						{selectedTab === HomeDelivery && 'Delivery is included. '}
-						You can cancel your subscription at any time. Sunday only
-						subscriptions for The Observer are offered by Tortoise Media Ltd.
-						Tortoise Media's{' '}
-						<a href={observerLinks.TERMS}>terms and conditions</a> and{' '}
-						<a href={observerLinks.PRIVACY}>privacy policy</a> will apply.
-					</p>
-				</div>
+				<PaperLandingTsAndCs paperFulfilment={selectedTab} />
 			</CentredContainer>
 		</FullWidthContainer>
 	);
