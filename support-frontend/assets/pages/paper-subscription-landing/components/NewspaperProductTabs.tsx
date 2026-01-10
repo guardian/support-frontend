@@ -102,7 +102,11 @@ function NewspaperProductTabs({
 						renderProducts()
 					)}
 				</section>
-				<PaperLandingTsAndCs paperFulfilment={selectedTab} />
+				<PaperLandingTsAndCs
+					paperFulfilment={selectedTab}
+					productPrices={productPrices}
+					activePaperProducts={ActivePaperProductTypes}
+				/>
 			</CentredContainer>
 		</FullWidthContainer>
 	);
