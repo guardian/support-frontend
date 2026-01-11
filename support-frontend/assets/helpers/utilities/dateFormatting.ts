@@ -34,3 +34,10 @@ export function getDateWithOrdinal(date: Date): string {
 	const dayOfMonth = date.getDate();
 	return `${dayOfMonth}${nth(dayOfMonth)}`;
 }
+
+export function getDateString(date: Date, excludeYear?: boolean): string {
+	const day = getDateWithOrdinal(date);
+	const month = getLongMonth(date);
+	const year = getNumericYear(date);
+	return excludeYear ? `${day} ${month}` : `${day} ${month} ${year}`;
+}

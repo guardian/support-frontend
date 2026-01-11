@@ -5,17 +5,19 @@ import { observerLinks } from 'helpers/legal';
 import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { productInfoWrapper } from './PaperLandingTsAndCsStyles';
-import PrintPromotionTsAndCs from './PrintPromotionTsAndCs';
+import PaperPromotionTsAndCs from './PrintPromotionTsAndCs';
+
+export type PaperTsAndCsProps = {
+	paperFulfilment: PaperFulfilmentOptions;
+	productPrices: ProductPrices;
+	activePaperProducts: ActivePaperProductOptions[];
+};
 
 export default function PaperLandingTsAndCs({
 	paperFulfilment,
 	productPrices,
 	activePaperProducts,
-}: {
-	paperFulfilment: PaperFulfilmentOptions;
-	productPrices: ProductPrices;
-	activePaperProducts: ActivePaperProductOptions[];
-}): JSX.Element {
+}: PaperTsAndCsProps): JSX.Element {
 	return (
 		<>
 			<div css={productInfoWrapper}>
@@ -29,8 +31,7 @@ export default function PaperLandingTsAndCs({
 					<a href={observerLinks.PRIVACY}>privacy policy</a> will apply.
 				</p>
 			</div>
-			<PrintPromotionTsAndCs
-				country={'GB'}
+			<PaperPromotionTsAndCs
 				paperFulfilment={paperFulfilment}
 				productPrices={productPrices}
 				activePaperProducts={activePaperProducts}
