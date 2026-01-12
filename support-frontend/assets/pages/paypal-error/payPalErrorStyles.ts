@@ -28,7 +28,7 @@ export const payPalErrorCopy = css`
 	color: ${palette.neutral[7]};
 	margin: ${gu_v_spacing}px 0;
 	${headlineLight20}
-	line-height: 150%;
+	line-height: 1.5;
 	padding-bottom: ${space[5]}px;
 	${from.desktop} {
 		font-size: 28px;
