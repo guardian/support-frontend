@@ -4,15 +4,6 @@ import type {
 	ContributionsDispatch,
 	ContributionsState,
 } from './contributionsStore';
-import type {
-	SubscriptionsDispatch,
-	SubscriptionsState,
-} from './subscriptionsStore';
-
-export const useSubscriptionsDispatch: () => SubscriptionsDispatch =
-	useDispatch;
-export const useSubscriptionsSelector: TypedUseSelectorHook<SubscriptionsState> =
-	useSelector;
 
 export const useContributionsDispatch: () => ContributionsDispatch =
 	useDispatch;
