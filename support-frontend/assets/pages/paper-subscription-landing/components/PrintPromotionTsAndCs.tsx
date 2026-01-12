@@ -47,10 +47,14 @@ function getFirstPromotionList(
 				productPrices,
 			),
 		);
-	// ToDo : Unique promotionExpiryList items.
+	const uniquePromotionExpiryList =
+		promotionExpiryList.length !== 0
+			? [...new Set(promotionExpiryList)]
+			: promotionExpiryList;
+
 	return (
 		<p>
-			{promotionExpiryList}
+			{uniquePromotionExpiryList}
 			{copyEnd}
 		</p>
 	);
