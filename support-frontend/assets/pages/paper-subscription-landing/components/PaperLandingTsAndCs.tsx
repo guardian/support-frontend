@@ -5,7 +5,7 @@ import { observerLinks } from 'helpers/legal';
 import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { productInfoWrapper } from './PaperLandingTsAndCsStyles';
-import PaperPromotionTsAndCs from './PrintPromotionTsAndCs';
+import PaperPromotionTsAndCs from './PaperPromotionTsAndCs';
 
 export type PaperTsAndCsProps = {
 	paperFulfilment: PaperFulfilmentOptions;

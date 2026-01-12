@@ -25,7 +25,7 @@ export const promotionContainer = css`
 	}
 
 	${from.tablet} {
-		padding: ${space[8]}px ${space[5]}px ${space[6]}px;
+		padding: 0 ${space[5]}px ${space[6]}px;
 		background-color: unset;
 		border-bottom: none;
 		svg {
