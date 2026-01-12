@@ -5,7 +5,7 @@ import { observerLinks } from 'helpers/legal';
 import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { productInfoWrapper } from './PaperLandingTsAndCsStyles';
-import PaperPromotionTsAndCs from './PaperPromotionTsAndCs';
+import PaperPromotionExpiries from './PaperPromotionExpiries';
 
 export type PaperTsAndCsProps = {
 	paperFulfilment: PaperFulfilmentOptions;
@@ -31,7 +31,7 @@ export default function PaperLandingTsAndCs({
 					<a href={observerLinks.PRIVACY}>privacy policy</a> will apply.
 				</p>
 			</div>
-			<PaperPromotionTsAndCs
+			<PaperPromotionExpiries
 				paperFulfilment={paperFulfilment}
 				productPrices={productPrices}
 				activePaperProducts={activePaperProducts}
