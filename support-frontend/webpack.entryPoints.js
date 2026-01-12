@@ -11,7 +11,6 @@ module.exports = {
 		weeklySubscriptionLandingPage:
 			'pages/weekly-subscription-landing/weeklySubscriptionLanding.tsx',
 		payPalErrorPage: 'pages/paypal-error/payPalError.tsx',
-		payPalErrorPageStyles: 'pages/paypal-error/payPalError.scss',
 		error404Page: 'pages/error/error404.tsx',
 		error500Page: 'pages/error/error500.tsx',
 		downForMaintenancePage: 'pages/error/maintenance.tsx',
