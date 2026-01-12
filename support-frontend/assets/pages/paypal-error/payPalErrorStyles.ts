@@ -8,7 +8,6 @@ import {
 } from '@guardian/source/foundations';
 import { gu_v_spacing } from 'stylesheets/emotion/layout';
 
-const payPalErrorMaxWidth = 600;
 export const pageSectionBodyOverrides = css`
 	padding-bottom: ${space[12]}px;
 	${from.desktop} {
@@ -33,6 +32,6 @@ export const payPalErrorCopy = css`
 	${from.desktop} {
 		font-size: 28px;
 		padding-bottom: ${space[9]}px;
-		width: ${payPalErrorMaxWidth}px;
+		width: 600px;
 	}
 `;
