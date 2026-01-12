@@ -22,7 +22,7 @@ export const pageSectionBorderTop = css`
 export const componentQuestionsContactDescription = css`
 	${textEgyptian17}
 	font-size: 16px;
-	line-height: 150%;
+	line-height: 1.5;
 	${from.phablet} {
 		width: 500px;
 	}
