@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { Title } from 'helpers/user/details';
 import { initialGiftingState } from './state';
 
-export const giftingSlice = createSlice({
+const giftingSlice = createSlice({
 	name: 'gifting',
 	initialState: initialGiftingState,
 	reducers: {
