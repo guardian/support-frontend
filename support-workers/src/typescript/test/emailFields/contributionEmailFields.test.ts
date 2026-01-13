@@ -35,6 +35,7 @@ describe('contributionEmailFields', () => {
 						amount: '5',
 						currency: 'GBP',
 						first_payment_date: 'Friday, 21 November 2025',
+						billing_period: 'monthly',
 						payment_method: 'Direct Debit',
 						first_name: emailUser.firstName,
 						last_name: emailUser.lastName,

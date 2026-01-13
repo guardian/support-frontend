@@ -45,6 +45,7 @@ export function buildContributionEmailFields({
 
 	const productFields = {
 		amount: amount.toString(),
+		billing_period: billingPeriod.toLowerCase(),
 		currency,
 		...nonDeliveryEmailFields,
 	};
