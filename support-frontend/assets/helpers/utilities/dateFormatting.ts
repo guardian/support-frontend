@@ -35,9 +35,9 @@ export function getDateWithOrdinal(date: Date): string {
 	return `${dayOfMonth}${nth(dayOfMonth)}`;
 }
 
-export function getDateString(date: Date, excludeYear?: boolean): string {
+export function getDateString(date: Date): string {
 	const day = getDateWithOrdinal(date);
 	const month = getLongMonth(date);
 	const year = getNumericYear(date);
-	return excludeYear ? `${day} ${month}` : `${day} ${month} ${year}`;
+	return `${day} ${month} ${year}`;
 }
