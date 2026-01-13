@@ -44,7 +44,6 @@ export function buildContributionEmailFields({
 	});
 
 	const productFields = {
-		created: today.toISOString(),
 		amount: amount.toString(),
 		currency,
 		...nonDeliveryEmailFields,
