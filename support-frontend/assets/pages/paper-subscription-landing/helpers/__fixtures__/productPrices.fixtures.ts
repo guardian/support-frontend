@@ -10,6 +10,12 @@ export const baseCollectionPromotion = {
 	description: '20% off',
 };
 
+const baseProductOption = {
+	price: 9.99,
+	currency: 'GBP',
+	fixedTerm: false,
+};
+
 export const productPrices: ProductPrices = {
 	'United Kingdom': {
 		HomeDelivery: {
@@ -17,6 +23,7 @@ export const productPrices: ProductPrices = {
 				Monthly: {
 					GBP: {
 						promotions: [baseHomeDeliveryPromotion],
+						...baseProductOption,
 					},
 				},
 			},
