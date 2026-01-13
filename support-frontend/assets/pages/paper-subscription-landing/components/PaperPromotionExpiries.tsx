@@ -1,49 +1,42 @@
 import { getDateString } from 'helpers/utilities/dateFormatting';
 import type { PaperPromotion } from '../helpers/getPromotions';
-import type { PaperTsAndCsProps } from './PaperLandingTsAndCs';
 import { promotionContainer } from './PaperPromotionExpiriesStyles';
 
-function getPromoProductsAndExpiry(paperPromo?: PaperPromotion): string {
-	if (!paperPromo?.expires) {
+function getPromoProductsAndExpiry(paperPromotion?: PaperPromotion): string {
+	if (!paperPromotion?.expires) {
 		return '';
 	}
-	const products = paperPromo.activePaperProducts
+	const products = paperPromotion.activePaperProducts
 		.map((paperProduct) => paperProduct.replace('Plus', ''))
 		.join(', ');
-	return `${products} ${getPromoExpiry(paperPromo)}`;
+	return `${products} ${getPromoExpiry(paperPromotion).toLowerCase()}`;
 }
-function getPromoExpiry(paperPromo?: PaperPromotion): string {
-	if (!paperPromo?.expires) {
+function getPromoExpiry(paperPromotion?: PaperPromotion): string {
+	if (!paperPromotion?.expires) {
 		return '';
 	}
-	const expiryDate = new Date(paperPromo.expires);
+	const expiryDate = new Date(paperPromotion.expires);
 	return `Offer ends ${getDateString(expiryDate)}. `;
 }
 
-function displayPaperPromotionExpiries(
-	paperPromos?: PaperPromotion[],
-): JSX.Element {
-	const multiPaperPromotions = paperPromos ? paperPromos.length > 1 : 0;
-	return paperPromos && paperPromos.length > 0 ? (
+type PaperPromoExpiriesProps = {
+	paperPromotions: PaperPromotion[];
+};
+export default function PaperPromotionExpiries({
+	paperPromotions,
+}: PaperPromoExpiriesProps): JSX.Element {
+	return (
 		<div css={promotionContainer}>
 			<p>
-				{paperPromos.map((paperPromo, index) => (
+				{paperPromotions.map((paperPromotion, index) => (
 					<div key={index}>
 						{'*'.repeat(index + 1)}{' '}
-						{multiPaperPromotions
-							? getPromoProductsAndExpiry(paperPromo)
-							: getPromoExpiry(paperPromo)}
+						{paperPromotions.length > 1
+							? getPromoProductsAndExpiry(paperPromotion)
+							: getPromoExpiry(paperPromotion)}
 					</div>
 				))}
 			</p>
 		</div>
-	) : (
-		<></>
 	);
-}
-
-export default function PaperPromotionExpiries({
-	paperPromotions,
-}: PaperTsAndCsProps): JSX.Element {
-	return displayPaperPromotionExpiries(paperPromotions);
 }

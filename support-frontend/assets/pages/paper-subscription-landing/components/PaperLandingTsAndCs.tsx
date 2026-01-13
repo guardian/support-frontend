@@ -8,19 +8,16 @@ import type { PaperPromotion } from '../helpers/getPromotions';
 import { productInfoWrapper } from './PaperLandingTsAndCsStyles';
 import PaperPromotionExpiries from './PaperPromotionExpiries';
 
-export type PaperTsAndCsProps = {
+type PaperLandingTsAndCsProps = {
 	paperFulfilment: PaperFulfilmentOptions;
 	productPrices: ProductPrices;
 	activePaperProducts: ActivePaperProductOptions[];
 	paperPromotions?: PaperPromotion[];
 };
-
 export default function PaperLandingTsAndCs({
 	paperFulfilment,
-	productPrices,
-	activePaperProducts,
 	paperPromotions,
-}: PaperTsAndCsProps): JSX.Element {
+}: PaperLandingTsAndCsProps): JSX.Element {
 	return (
 		<>
 			<div css={productInfoWrapper}>
@@ -34,12 +31,9 @@ export default function PaperLandingTsAndCs({
 					<a href={observerLinks.PRIVACY}>privacy policy</a> will apply.
 				</p>
 			</div>
-			<PaperPromotionExpiries
-				paperFulfilment={paperFulfilment}
-				productPrices={productPrices}
-				activePaperProducts={activePaperProducts}
-				paperPromotions={paperPromotions}
-			/>
+			{paperPromotions && paperPromotions.length > 0 && (
+				<PaperPromotionExpiries paperPromotions={paperPromotions} />
+			)}
 		</>
 	);
 }
