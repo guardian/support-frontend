@@ -6,12 +6,16 @@ import { getDateString } from 'helpers/utilities/dateFormatting';
 import type { PaperTsAndCsProps } from './PaperLandingTsAndCs';
 import { promotionContainer } from './PaperPromotionExpiriesStyles';
 
-function getPromotionExpiry(promotion?: Promotion): string {
+const promoCodeDivider = '~';
+
+function getPromoCodeExpiry(promotion?: Promotion): string {
 	if (!promotion?.expires) {
 		return '';
 	}
 	const expiryDate = new Date(promotion.expires);
-	return `Offer ends ${getDateString(expiryDate)}. `;
+	return `${promotion.promoCode}${promoCodeDivider}Offer ends ${getDateString(
+		expiryDate,
+	)}. `;
 }
 
 function getFirstPromotion(
@@ -19,10 +23,11 @@ function getFirstPromotion(
 	paperProduct: PaperProductOptions,
 	productPrices: ProductPrices,
 ): string {
+	// first promotion would be shown on price card, we match this here
 	const firstPromotion =
 		productPrices['United Kingdom']?.[paperFulfilment]?.[paperProduct]?.Monthly
 			?.GBP?.promotions?.[0];
-	return getPromotionExpiry(firstPromotion);
+	return getPromoCodeExpiry(firstPromotion);
 }
 
 function displayPaperPromotionExpiries(
@@ -49,15 +54,18 @@ export default function PaperPromotionExpiries({
 	productPrices,
 	activePaperProducts,
 }: PaperTsAndCsProps): JSX.Element {
-	const promotionExpiryList = activePaperProducts
+	const promoCodeExpiries = activePaperProducts
 		.filter((paperOption) => paperOption.endsWith('Plus'))
 		.map((paperOption) =>
 			getFirstPromotion(paperFulfilment, paperOption, productPrices),
 		)
 		.filter((expiry) => expiry !== '');
-	const uniquePromotionExpiryList =
-		promotionExpiryList.length > 0
-			? [...new Set(promotionExpiryList)]
-			: promotionExpiryList;
-	return displayPaperPromotionExpiries(uniquePromotionExpiryList);
+	const uniquePromoCodeExpiries =
+		promoCodeExpiries.length > 0
+			? [...new Set(promoCodeExpiries)]
+			: promoCodeExpiries;
+	const uniqueExpiries = uniquePromoCodeExpiries.map((promo) =>
+		promo.substring(promo.lastIndexOf(promoCodeDivider) + 1),
+	);
+	return displayPaperPromotionExpiries(uniqueExpiries);
 }
