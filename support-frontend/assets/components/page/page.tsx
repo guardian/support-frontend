@@ -1,9 +1,12 @@
 // ----- Imports ----- //
+import { Global } from '@emotion/react';
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import CsrBanner from 'components/csr/csrBanner';
 import { pageDefaultStyles } from 'components/page/styles/pageDefaults';
 import { SkipLink } from 'components/skipLink/skipLink';
+import { guardianFonts } from 'stylesheets/emotion/fonts';
+import { reset } from 'stylesheets/emotion/reset';
 import { mainContentStyles, pageContainer } from './pageStyles';
 
 type PageProps = {
@@ -34,6 +37,7 @@ export default function Page({
 	}, []);
 	return (
 		<div id={id} css={[pageContainer, pageDefaultStyles]}>
+			<Global styles={[reset, guardianFonts]} />
 			<SkipLink id="maincontent" label="Skip to main content" />
 			<CsrBanner />
 			{header}
