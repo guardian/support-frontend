@@ -40,7 +40,7 @@ export type AddressFields = AddressFieldsValidatedState & {
 	city: string | null;
 };
 
-export type AddressFormField = keyof AddressFields;
+type AddressFormField = keyof AddressFields;
 export type AddressFormFieldError = FormError<AddressFormField>;
 
 export type AddressFieldsState = AddressFields & {

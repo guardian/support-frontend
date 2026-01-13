@@ -7,7 +7,7 @@ import {
 	GuardianWeekly,
 } from 'helpers/productPrice/subscriptions';
 import { PromotionTermsPage } from 'pages/promotion-terms/promotionTerms';
-import type { PromotionTermsPropTypes } from 'pages/promotion-terms/promotionTermsReducer';
+import type { PromotionTermsPropTypes } from 'pages/promotion-terms/promotionTermsPropTypes';
 
 export default {
 	title: 'Pages/Promotion Terms',

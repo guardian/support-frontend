@@ -1,6 +1,3 @@
-// ----- Imports ----- //
-import { css } from '@emotion/react';
-import { from, space } from '@guardian/source/foundations';
 import { LinkButton } from '@guardian/source/react-components';
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
@@ -10,28 +7,25 @@ import QuestionsContact from 'components/questionsContact/questionsContact';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
+import {
+	pageSectionBodyOverrides,
+	payPalErrorCopy,
+	payPalErrorHeader,
+} from './payPalErrorStyles';
+
 // ----- Page Startup ----- //
 setUpTrackingAndConsents({});
 // ----- Render ----- //
-
-const pageSectionBodyOverrides = css`
-	padding-bottom: ${space[12]}px;
-
-	${from.desktop} {
-		padding-left: ${space[6]}px;
-		padding-bottom: ${space[14]}px;
-	}
-`;
 
 export const PayPalError = (
 	<Page
 		header={<Header countryGroupId={CountryGroup.detect()} />}
 		footer={<Footer />}
 	>
-		<div className="paypal-error">
+		<div>
 			<PageSection cssOverrides={pageSectionBodyOverrides}>
-				<h1 className="paypal-error__heading">Please try again</h1>
-				<p className="paypal-error__copy">
+				<h1 css={payPalErrorHeader}>Please try again</h1>
+				<p css={payPalErrorCopy}>
 					Sorry, we were unable to complete your payment the first time. Don’t
 					worry, you haven’t been charged anything.
 				</p>
