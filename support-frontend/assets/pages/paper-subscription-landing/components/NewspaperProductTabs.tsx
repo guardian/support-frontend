@@ -58,7 +58,7 @@ function NewspaperProductTabs({
 
 	const getPromotions = () =>
 		getPaperPromotions({
-			ActivePaperProductTypes,
+			activePaperProductTypes: ActivePaperProductTypes,
 			productPrices,
 			paperFulfilment: selectedTab,
 		});
