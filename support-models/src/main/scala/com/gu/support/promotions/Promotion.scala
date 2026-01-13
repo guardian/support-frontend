@@ -21,9 +21,7 @@ case class Promotion(
     renewalOnly: Boolean = false,
     tracking: Boolean = false,
     landingPage: Option[PromotionCopy] = None,
-) {
-  def promoCodes: Iterable[PromoCode] = Seq(promoCode)
-}
+)
 
 object Promotion {
   import com.gu.support.encoding.CustomCodecs.ISODate.decodeDateTime
