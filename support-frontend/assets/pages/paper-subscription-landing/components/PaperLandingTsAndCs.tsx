@@ -4,9 +4,9 @@ import { HomeDelivery } from '@modules/product/fulfilmentOptions';
 import { observerLinks } from 'helpers/legal';
 import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { PaperPromotion } from '../helpers/getPromotions';
 import { productInfoWrapper } from './PaperLandingTsAndCsStyles';
 import PaperPromotionExpiries from './PaperPromotionExpiries';
-import type { PaperPromotion } from './PaperPromotions';
 
 export type PaperTsAndCsProps = {
 	paperFulfilment: PaperFulfilmentOptions;

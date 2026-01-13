@@ -19,8 +19,6 @@ import { windowSetHashProperty } from '../helpers/windowSetHashProperty';
 import NewspaperTabHero from './content/NewspaperTabHero';
 import { cardsContainer } from './NewspapperProductTabsStyles';
 import PaperLandingTsAndCs from './PaperLandingTsAndCs';
-import type { PaperPromotion } from './PaperPromotions';
-import { getPaperPromotions } from './PaperPromotions';
 
 type TabOptions = {
 	text: string;
@@ -61,22 +59,18 @@ function NewspaperProductTabs({
 			paperFulfilment: selectedTab,
 		});
 
-	const [, setPromotions] = useState<PaperPromotion[]>(getPromotions());
+	const [promotions, setPromotions] = useState<PaperPromotion[]>(
+		getPromotions(),
+	);
 
 	const { windowWidthIsGreaterThan } = useWindowWidth();
 	const [productRatePlans, setProductRatePlans] = useState<Product[]>(
 		getPlans(selectedTab, productPrices, ActivePaperProductTypes),
 	);
-	const [paperPromotions, setPaperPromotions] = useState<PaperPromotion[]>(
-		getPaperPromotions(paperFulfilment, ActivePaperProductTypes, productPrices),
-	);
 
 	useEffect(() => {
 		setProductRatePlans(
 			getPlans(selectedTab, productPrices, ActivePaperProductTypes),
-		);
-		setPaperPromotions(
-			getPaperPromotions(selectedTab, ActivePaperProductTypes, productPrices),
 		);
 		setPromotions(getPromotions());
 	}, [selectedTab]);
@@ -126,7 +120,7 @@ function NewspaperProductTabs({
 					paperFulfilment={selectedTab}
 					productPrices={productPrices}
 					activePaperProducts={ActivePaperProductTypes}
-					paperPromotions={paperPromotions}
+					paperPromotions={promotions}
 				/>
 			</CentredContainer>
 		</FullWidthContainer>

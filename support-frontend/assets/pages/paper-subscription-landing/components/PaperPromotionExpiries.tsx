@@ -1,14 +1,14 @@
 import { getDateString } from 'helpers/utilities/dateFormatting';
+import type { PaperPromotion } from '../helpers/getPromotions';
 import type { PaperTsAndCsProps } from './PaperLandingTsAndCs';
 import { promotionContainer } from './PaperPromotionExpiriesStyles';
-import type { PaperPromotion } from './PaperPromotions';
 
 function getPromoProductsAndExpiry(paperPromo?: PaperPromotion): string {
 	if (!paperPromo?.expires) {
 		return '';
 	}
 	const products = paperPromo.activePaperProducts
-		.map((paperProduct) => paperProduct)
+		.map((paperProduct) => paperProduct.replace('Plus', ''))
 		.join(', ');
 	return `${products} ${getPromoExpiry(paperPromo)}`;
 }
@@ -29,7 +29,7 @@ function displayPaperPromotionExpiries(
 			<p>
 				{paperPromos.map((paperPromo, index) => (
 					<div key={index}>
-						{'*'.repeat(index + 1)}
+						{'*'.repeat(index + 1)}{' '}
 						{multiPaperPromotions
 							? getPromoProductsAndExpiry(paperPromo)
 							: getPromoExpiry(paperPromo)}
