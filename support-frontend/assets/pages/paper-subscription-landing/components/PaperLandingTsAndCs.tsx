@@ -6,17 +6,20 @@ import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductO
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { productInfoWrapper } from './PaperLandingTsAndCsStyles';
 import PaperPromotionExpiries from './PaperPromotionExpiries';
+import type { PaperPromotion } from './PaperPromotions';
 
 export type PaperTsAndCsProps = {
 	paperFulfilment: PaperFulfilmentOptions;
 	productPrices: ProductPrices;
 	activePaperProducts: ActivePaperProductOptions[];
+	paperPromotions?: PaperPromotion[];
 };
 
 export default function PaperLandingTsAndCs({
 	paperFulfilment,
 	productPrices,
 	activePaperProducts,
+	paperPromotions,
 }: PaperTsAndCsProps): JSX.Element {
 	return (
 		<>
@@ -35,6 +38,7 @@ export default function PaperLandingTsAndCs({
 				paperFulfilment={paperFulfilment}
 				productPrices={productPrices}
 				activePaperProducts={activePaperProducts}
+				paperPromotions={paperPromotions}
 			/>
 		</>
 	);
