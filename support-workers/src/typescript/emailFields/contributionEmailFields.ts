@@ -58,6 +58,7 @@ export function buildContributionEmailFields({
 		edition: user.billingAddress.country,
 		name: nonDeliveryEmailFields.first_name, // This is duplicate and will be removed in a future PR
 		product: `${ratePlan.toLowerCase()}-contribution`,
+		billing_period: billingPeriod.toLowerCase(),
 		currency,
 		...oldNonStandardPaymentFields,
 		...nonDeliveryEmailFields,

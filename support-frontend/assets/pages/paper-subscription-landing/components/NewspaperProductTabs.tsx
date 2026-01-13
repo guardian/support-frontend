@@ -13,6 +13,8 @@ import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import NewspaperRatePlanCard from 'pages/paper-subscription-landing/components/NewspaperRatePlanCard';
 import { getPlans } from '../helpers/getPlans';
+import type { PaperPromotion } from '../helpers/getPromotions';
+import getPaperPromotions from '../helpers/getPromotions';
 import { windowSetHashProperty } from '../helpers/windowSetHashProperty';
 import NewspaperTabHero from './content/NewspaperTabHero';
 import { cardsContainer } from './NewspapperProductTabsStyles';
@@ -52,6 +54,15 @@ function NewspaperProductTabs({
 	const [selectedTab, setSelectedTab] =
 		useState<PaperFulfilmentOptions>(paperFulfilment);
 
+	const getPromotions = () =>
+		getPaperPromotions({
+			activePaperProductTypes: ActivePaperProductTypes,
+			productPrices,
+			paperFulfilment: selectedTab,
+		});
+
+	const [, setPromotions] = useState<PaperPromotion[]>(getPromotions());
+
 	const { windowWidthIsGreaterThan } = useWindowWidth();
 	const [productRatePlans, setProductRatePlans] = useState<Product[]>(
 		getPlans(selectedTab, productPrices, ActivePaperProductTypes),
@@ -67,6 +78,7 @@ function NewspaperProductTabs({
 		setPaperPromotions(
 			getPaperPromotions(selectedTab, ActivePaperProductTypes, productPrices),
 		);
+		setPromotions(getPromotions());
 	}, [selectedTab]);
 
 	const handleTabChange = (tabId: PaperFulfilmentOptions) => {

@@ -36,6 +36,7 @@ describe('contributionEmailFields', () => {
 						name: emailUser.firstName,
 						amount: '5',
 						currency: 'GBP',
+						billing_period: 'monthly',
 						edition: emailUser.billingAddress.country,
 						Mandate_ID: mandateId,
 						first_payment_date: 'Friday, 21 November 2025',
