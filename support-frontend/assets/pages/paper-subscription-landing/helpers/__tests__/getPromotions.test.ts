@@ -52,7 +52,7 @@ describe('getPaperPromotions', () => {
 		});
 
 		expect(result).toHaveLength(1);
-		expect(result[0]?.activePaperProducts).toEqual(
+		expect(result[0].activePaperProducts).toEqual(
 			expect.arrayContaining(['EverydayPlus', 'WeekendPlus']),
 		);
 	});
@@ -75,6 +75,6 @@ describe('getPaperPromotions', () => {
 		});
 
 		expect(result).toHaveLength(1);
-		expect(result[0]?.promoCode).toBe('FIRST');
+		expect(result[0].promoCode).toBe('FIRST');
 	});
 });

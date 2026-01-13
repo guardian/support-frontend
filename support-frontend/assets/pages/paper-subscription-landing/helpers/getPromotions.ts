@@ -19,9 +19,12 @@ export default function getPaperPromotions({
 	productPrices: ProductPrices;
 	paperFulfilment: PaperFulfilmentOptions;
 }): PaperPromotion[] {
-	return activePaperProductTypes
-		.filter((paperOption) => paperOption.endsWith('Plus'))
-		.reduce<PaperPromotion[]>((promotions, paperOption) => {
+	const activePlusProducts = activePaperProductTypes.filter((paperOption) =>
+		paperOption.endsWith('Plus'),
+	);
+
+	return activePlusProducts.reduce<PaperPromotion[]>(
+		(promotions, paperOption) => {
 			// To avoid multiuple promotions being added for the same promo code,
 			// we only consider the first promotion for each product option
 			const [firstPromotion] =
@@ -47,5 +50,7 @@ export default function getPaperPromotions({
 			}
 
 			return promotions;
-		}, []);
+		},
+		[],
+	);
 }
