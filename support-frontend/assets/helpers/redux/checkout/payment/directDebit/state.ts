@@ -1,11 +1,12 @@
 import { z } from 'zod';
 import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
 
-export type Phase = 'entry' | 'confirmation';
+type Phase = 'entry' | 'confirmation';
 
 const numericStringRegex = /^\d+$/;
 
-export const directDebitSchema = z.object({
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- needed for the type below
+const directDebitSchema = z.object({
 	sortCode: z
 		.string()
 		.length(6, 'Please enter your sort code')
@@ -30,15 +31,4 @@ export type DirectDebitState = DirectDebitValidateableState & {
 	formError: string;
 	phase: Phase;
 	errors?: SliceErrors<DirectDebitValidateableState>;
-};
-
-export const initialDirectDebitState: DirectDebitState = {
-	isPopUpOpen: false,
-	isDDGuaranteeOpen: false,
-	sortCode: '',
-	accountNumber: '',
-	accountHolderName: '',
-	accountHolderConfirmation: false,
-	formError: '',
-	phase: 'entry',
 };

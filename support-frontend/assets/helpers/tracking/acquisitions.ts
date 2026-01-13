@@ -71,6 +71,7 @@ const ACQUISITIONS_STORAGE_KEY = 'acquisitionData';
 
 // ----- Campaigns ----- //
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- needed for the type below
 const campaigns: Record<string, string[]> = {
 	seven_fifty_middle: ['gdnwb_copts_editorial_memco_seven_fifty_middle'],
 	seven_fifty_end: ['gdnwb_copts_editorial_memco_seven_fifty_end'],
@@ -90,23 +91,6 @@ const campaigns: Record<string, string[]> = {
 export type Campaign = keyof typeof campaigns;
 
 // ----- Functions ----- //
-
-// Retrieves the user's campaign, if known, from the campaign code.
-function getCampaign(
-	acquisition: ReferrerAcquisitionData,
-): Campaign | null | undefined {
-	const { campaignCode } = acquisition;
-
-	if (!campaignCode) {
-		return null;
-	}
-
-	return (
-		Object.keys(campaigns).find((campaign) =>
-			campaigns[campaign]?.includes(campaignCode),
-		) ?? null
-	);
-}
 
 // Stores the acquisition data in sessionStorage.
 function storeReferrerAcquisitionDataInSessionStorage(
@@ -342,7 +326,6 @@ function getReferrerAcquisitionData(): ReferrerAcquisitionData {
 
 // ----- Exports ----- //
 export {
-	getCampaign,
 	getReferrerAcquisitionData,
 	getOphanIds,
 	participationsToAcquisitionABTest,
