@@ -33,8 +33,8 @@ export const handler = async (
 		identityId: sendThankYouEmailState.user.id,
 		productRatePlanId: productRatePlan.id,
 		productRatePlanName: `support-workers added ${sendThankYouEmailState.productInformation.product}`,
-		contractEffectiveDate: dayjs().toISOString(),
-		termEndDate: dayjs().add(1, 'week').toISOString(), // This will be overwritten by the sync from Zuora
+		contractEffectiveDate: dayjs(),
+		termEndDate: dayjs().add(1, 'week'), // This will be overwritten by the sync from Zuora
 	};
 	await sendToSupporterProductData(stage, supporterRatePlanItem);
 };
