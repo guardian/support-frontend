@@ -1,6 +1,3 @@
 import { thankYou } from './reducer';
 
-export const {
-	setThankYouFeedbackSurveyHasBeenCompleted,
-	setThankYouSupportReminder,
-} = thankYou.actions;
+export const { setThankYouSupportReminder } = thankYou.actions;

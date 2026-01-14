@@ -3,7 +3,7 @@ import { storage } from '@guardian/libs';
 import { from } from '@guardian/source/foundations';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import { observerThemeButton } from 'components/observer-layout/styles';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
@@ -167,6 +167,9 @@ export function ThankYouComponent({
 		paymentMethod,
 	]);
 
+	const [feedbackSurveyCompleted, setFeedbackSurveyCompleted] =
+		useState<boolean>(false);
+
 	const isGuardianPaperPlus = isPaperPlusSub(productKey, ratePlanKey); // Observer not a Plus plan
 	const isPrint = isPrintProduct(productKey);
 	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
@@ -244,11 +247,12 @@ export function ThankYouComponent({
 		campaignCode: undefined,
 		checklistData: benefitsChecklist,
 		supportReminder: undefined,
-		feedbackSurveyHasBeenCompleted: undefined,
 		finalAmount: payment.finalAmount,
 		returnAddress: getReturnAddress(), // Session storage returnAddress (from GuardianAdLiteLanding)
 		isSignedIn,
 		observerPrint,
+		feedbackSurveyCompleted,
+		setFeedbackSurveyCompleted,
 	});
 	const maybeThankYouModule = (
 		condition: boolean,
