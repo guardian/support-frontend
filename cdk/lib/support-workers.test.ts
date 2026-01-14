@@ -9,8 +9,8 @@ describe("The support-workers stack", () => {
       stack: "support",
       stage: "PROD",
       promotionsDynamoTables: [
-        "arn:aws:dynamodb:*:*:table/support-admin-console-promos-CODE",
-        "arn:aws:dynamodb:*:*:table/support-admin-console-promos-PROD",
+        "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE",
+        "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
       ],
       s3Files: [
         "arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-CODE/catalog.json",

@@ -694,8 +694,8 @@ exports[`The support-workers stack matches the snapshot 1`] = `
               ],
               "Effect": "Allow",
               "Resource": [
-                "arn:aws:dynamodb:*:*:table/support-admin-console-promos-CODE",
-                "arn:aws:dynamodb:*:*:table/support-admin-console-promos-PROD",
+                "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE",
+                "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
               ],
             },
             {
