@@ -14,8 +14,6 @@ import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import NewspaperRatePlanCard from 'pages/paper-subscription-landing/components/NewspaperRatePlanCard';
 import { getPlans } from '../helpers/getPlans';
 import type { PaperPromotion } from '../helpers/getPromotions';
-import type { PaperPromotion } from '../helpers/getPromotions';
-import getPaperPromotions from '../helpers/getPromotions';
 import getPaperPromotions from '../helpers/getPromotions';
 import { windowSetHashProperty } from '../helpers/windowSetHashProperty';
 import NewspaperTabHero from './content/NewspaperTabHero';
