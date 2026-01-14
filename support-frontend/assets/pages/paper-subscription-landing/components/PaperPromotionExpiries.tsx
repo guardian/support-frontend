@@ -2,17 +2,15 @@ import { getDateString } from 'helpers/utilities/dateFormatting';
 import type { PaperPromotion } from '../helpers/getPromotions';
 import { promotionContainer } from './PaperPromotionExpiriesStyles';
 
-function getPromoProductsAndExpiry(paperPromotion?: PaperPromotion): string {
-	if (!paperPromotion?.expires) {
-		return '';
-	}
+function getPromoProductsAndExpiry(paperPromotion: PaperPromotion): string {
 	const products = paperPromotion.activePaperProducts
 		.map((paperProduct) => paperProduct.replace('Plus', ''))
 		.join(', ');
-	return `${products} ${getPromoExpiry(paperPromotion).toLowerCase()}`;
+	const expiry = getPromoExpiry(paperPromotion);
+	return `${products} ${expiry.charAt(0).toLowerCase() + expiry.slice(1)}`;
 }
-function getPromoExpiry(paperPromotion?: PaperPromotion): string {
-	if (!paperPromotion?.expires) {
+function getPromoExpiry(paperPromotion: PaperPromotion): string {
+	if (!paperPromotion.expires) {
 		return '';
 	}
 	const expiryDate = new Date(paperPromotion.expires);

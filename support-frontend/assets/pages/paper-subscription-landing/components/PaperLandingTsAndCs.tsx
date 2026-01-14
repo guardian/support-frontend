@@ -18,6 +18,9 @@ export default function PaperLandingTsAndCs({
 	paperFulfilment,
 	paperPromotions,
 }: PaperLandingTsAndCsProps): JSX.Element {
+	const paperPromosWithExpiry = paperPromotions?.filter(
+		(paperPromotion) => paperPromotion.expires,
+	);
 	return (
 		<>
 			<div css={productInfoWrapper}>
@@ -31,8 +34,8 @@ export default function PaperLandingTsAndCs({
 					<a href={observerLinks.PRIVACY}>privacy policy</a> will apply.
 				</p>
 			</div>
-			{paperPromotions && paperPromotions.length > 0 && (
-				<PaperPromotionExpiries paperPromotions={paperPromotions} />
+			{paperPromosWithExpiry && paperPromosWithExpiry.length > 0 && (
+				<PaperPromotionExpiries paperPromotions={paperPromosWithExpiry} />
 			)}
 		</>
 	);
