@@ -246,7 +246,6 @@ export function ThankYouComponent({
 		email,
 		campaignCode: undefined,
 		checklistData: benefitsChecklist,
-		supportReminder: undefined,
 		finalAmount: payment.finalAmount,
 		returnAddress: getReturnAddress(), // Session storage returnAddress (from GuardianAdLiteLanding)
 		isSignedIn,

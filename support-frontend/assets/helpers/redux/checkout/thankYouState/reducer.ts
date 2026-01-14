@@ -6,7 +6,7 @@ import type {
 } from './state';
 import { initialThankYouState } from './state';
 
-export const thankYou = createSlice({
+const thankYou = createSlice({
 	name: 'thankYou',
 	initialState: initialThankYouState,
 	reducers: {
