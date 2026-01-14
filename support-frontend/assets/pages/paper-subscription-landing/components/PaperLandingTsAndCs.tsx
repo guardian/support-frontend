@@ -25,7 +25,7 @@ export default function PaperLandingTsAndCs({
 		(paperPromotion) => paperPromotion.expires,
 	);
 	const paperPromoContainsExpiry =
-		paperPromotions && paperPromotions.length > 0;
+		paperPromosWithExpiry && paperPromosWithExpiry.length > 0;
 	return (
 		<>
 			<div
