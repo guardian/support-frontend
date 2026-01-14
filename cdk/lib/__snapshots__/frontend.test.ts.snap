@@ -413,7 +413,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 "dynamodb:DescribeTable",
               ],
               "Effect": "Allow",
-              "Resource": "arn:aws:dynamodb:*:*:table/support-admin-console-promos-PROD",
+              "Resource": "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
             },
           ],
           "Version": "2012-10-17",

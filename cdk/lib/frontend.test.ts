@@ -9,7 +9,7 @@ describe("The Frontend stack", () => {
       stack: "support",
       stage: "PROD",
       membershipSubPromotionsTables: [
-        "arn:aws:dynamodb:*:*:table/support-admin-console-promos-PROD",
+        "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
       ],
       domainName: "support.theguardian.com.origin.membership.guardianapis.com",
       scaling: {
