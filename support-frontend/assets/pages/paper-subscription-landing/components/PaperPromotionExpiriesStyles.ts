@@ -10,16 +10,6 @@ export const promotionContainer = css`
 	color: ${palette.neutral[100]};
 	background-color: ${palette.brand[400]};
 	border-bottom: 1px solid ${palette.brand[600]};
-
-	svg {
-		flex-shrink: 0;
-		fill: ${palette.neutral[100]};
-	}
-
-	a {
-		color: ${palette.neutral[100]};
-	}
-
 	p {
 		padding-top: ${space[1]}px;
 	}
@@ -28,18 +18,12 @@ export const promotionContainer = css`
 		padding: 0 ${space[5]}px ${space[6]}px;
 		background-color: unset;
 		border-bottom: none;
-		svg {
-			fill: ${palette.brand[400]};
-		}
-
-		a,
-		p,
-		li {
+		p {
 			color: ${palette.neutral[7]};
 		}
 	}
 
 	${from.desktop} {
-		padding: ${space[4]}px 0 ${space[8]}px;
+		padding: ${space[1]}px 0 ${space[8]}px;
 	}
 `;

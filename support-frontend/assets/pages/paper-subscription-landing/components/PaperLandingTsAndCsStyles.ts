@@ -42,3 +42,10 @@ export const productInfoWrapper = css`
 		padding: ${space[4]}px 0 ${space[8]}px;
 	}
 `;
+
+export const productExpiryAdjust = css`
+	border-bottom: none;
+	${from.tablet} {
+		padding-bottom: ${space[2]}px;
+	}
+`;
