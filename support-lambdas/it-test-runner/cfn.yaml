@@ -71,7 +71,7 @@ Resources:
         - Statement:
             - Effect: Allow
               Action: dynamodb:Scan
-              Resource: arn:aws:dynamodb:*:*:table/support-admin-console-promos-CODE
+              Resource: arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE
         - Statement:
             - Effect: Allow
               Action:

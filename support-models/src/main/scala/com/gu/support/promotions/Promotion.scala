@@ -12,7 +12,7 @@ case class Promotion(
     description: String,
     appliesTo: AppliesTo,
     campaignCode: CampaignCode,
-    promoCode: PromoCode,
+    channelCodes: Map[Channel, Set[PromoCode]],
     starts: DateTime,
     expires: Option[DateTime],
     discount: Option[DiscountBenefit],
@@ -21,7 +21,9 @@ case class Promotion(
     renewalOnly: Boolean = false,
     tracking: Boolean = false,
     landingPage: Option[PromotionCopy] = None,
-)
+) {
+  def promoCodes: Iterable[PromoCode] = channelCodes.values.flatten
+}
 
 object Promotion {
   import com.gu.support.encoding.CustomCodecs.ISODate.decodeDateTime
@@ -30,8 +32,7 @@ object Promotion {
   private def mapFields(c: ACursor) = c.withFocus {
     _.mapObject(
       _.extractBenefits
-        .renameField("startTimestamp", "starts")
-        .renameField("endTimestamp", "expires")
+        .renameField("codes", "channelCodes")
         .checkKeyExists("renewalOnly", Json.fromBoolean(false))
         .checkKeyExists("tracking", Json.fromBoolean(false)),
     )

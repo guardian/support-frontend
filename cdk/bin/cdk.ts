@@ -34,7 +34,7 @@ new Frontend(app, "Frontend-CODE", {
   stage: "CODE",
   cloudFormationStackName,
   membershipSubPromotionsTables: [
-    "arn:aws:dynamodb:*:*:table/support-admin-console-promos-CODE",
+    "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE",
   ],
   domainName: "support.code.theguardian.com.origin.membership.guardianapis.com",
   scaling: {
