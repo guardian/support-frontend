@@ -1,10 +1,11 @@
 import { getDateString } from 'helpers/utilities/dateFormatting';
 import type { PaperPromotion } from '../helpers/getPromotions';
+import { getTitle } from '../helpers/products';
 import { promotionContainer } from './PaperPromotionExpiriesStyles';
 
 function getPromoProductsAndExpiry(paperPromotion: PaperPromotion): string {
 	const products = paperPromotion.activePaperProducts
-		.map((paperProduct) => paperProduct.replace('Plus', ''))
+		.map((paperProduct) => getTitle(paperProduct))
 		.join(', ');
 	const expiry = getPromoExpiry(paperPromotion);
 	return `${products} ${expiry.charAt(0).toLowerCase() + expiry.slice(1)}`;
