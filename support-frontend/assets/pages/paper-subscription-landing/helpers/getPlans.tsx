@@ -57,11 +57,14 @@ const getOfferText = (price: ProductPrice, promo?: Promotion) => {
 		);
 	}
 
+	return '';
+};
+
+const getSavingsText = (price: ProductPrice): string | null => {
 	if (price.savingVsRetail && price.savingVsRetail > 0) {
 		return `Save ${Math.floor(price.savingVsRetail)}% on retail price`;
 	}
-
-	return '';
+	return null;
 };
 
 const getUnavailableOutsideLondon = (
@@ -244,6 +247,7 @@ export const getPlans = (
 				),
 				planData: getPlanData(productOption, fulfilmentOption),
 				offerCopy: getOfferText(nonDiscountedPrice, promotion),
+				savingsText: getSavingsText(nonDiscountedPrice),
 				showLabel,
 				productLabel,
 				unavailableOutsideLondon: getUnavailableOutsideLondon(
