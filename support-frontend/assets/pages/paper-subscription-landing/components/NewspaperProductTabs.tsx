@@ -65,14 +65,14 @@ function NewspaperProductTabs({
 
 	const { windowWidthIsGreaterThan } = useWindowWidth();
 	const [productRatePlans, setProductRatePlans] = useState<Product[]>(
-		getPlans(selectedTab, productPrices, ActivePaperProductTypes),
+		getPlans(selectedTab, productPrices, ActivePaperProductTypes, promotions),
 	);
 
 	useEffect(() => {
-		setProductRatePlans(
-			getPlans(selectedTab, productPrices, ActivePaperProductTypes),
-		);
 		setPromotions(getPromotions());
+		setProductRatePlans(
+			getPlans(selectedTab, productPrices, ActivePaperProductTypes, promotions),
+		);
 	}, [selectedTab]);
 
 	const handleTabChange = (tabId: PaperFulfilmentOptions) => {

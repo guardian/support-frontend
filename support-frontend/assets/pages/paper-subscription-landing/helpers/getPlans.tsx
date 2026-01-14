@@ -23,6 +23,7 @@ import {
 import { paperCheckoutUrl } from 'helpers/urls/routes';
 import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import getPlanData from '../planData';
+import type { PaperPromotion } from './getPromotions';
 import { getProductLabel, getTitle } from './products';
 
 const getPriceCopyString = (
@@ -44,13 +45,15 @@ const getPriceCopyString = (
 };
 
 // Show promo summary if there's a promo, otherwise show savings vs retail if any
-const getOfferText = (price: ProductPrice, promo?: Promotion) => {
-	// If there's a promo, instead of showing the savings vs retail, show the
-	// summary of the promo.
-	if (promo?.discount?.amount) {
+const getOfferText = (
+	price: ProductPrice,
+	promo?: Promotion,
+	promotionIndex?: number,
+) => {
+	if (promo?.discount?.amount && promotionIndex !== undefined) {
 		return discountSummaryCopy(
 			getCurrencyInfo(price.currency),
-			0, // promoCount, controls trailing asterisks, not needed here
+			promotionIndex,
 			price.price,
 			promo,
 			BillingPeriod.Monthly,
@@ -203,6 +206,7 @@ export const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
 	activePaperProductTypes: ActivePaperProductOptions[],
+	promotions: PaperPromotion[],
 ): Product[] =>
 	activePaperProductTypes
 		.filter(
@@ -217,7 +221,13 @@ export const getPlans = (
 				fulfilmentOption,
 				productOption,
 			);
+
 			const promotion = getAppliedPromo(priceAfterPromosApplied.promotions);
+
+			const promotionIndex = promotions.findIndex((promo) =>
+				promo.activePaperProducts.includes(productOption),
+			);
+
 			const promoCode = promotion ? promotion.promoCode : null;
 			const trackingProperties: TrackingProperties = {
 				id: `subscribe_now_cta-${[productOption, fulfilmentOption].join()}`,
@@ -246,7 +256,7 @@ export const getPlans = (
 					copy[fulfilmentOption][productOption],
 				),
 				planData: getPlanData(productOption, fulfilmentOption),
-				offerCopy: getOfferText(nonDiscountedPrice, promotion),
+				offerCopy: getOfferText(nonDiscountedPrice, promotion, promotionIndex),
 				savingsText: getSavingsText(nonDiscountedPrice),
 				showLabel,
 				productLabel,
