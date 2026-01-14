@@ -17,6 +17,8 @@ new Frontend(app, "Frontend-PROD", {
   membershipSubPromotionsTables: [
     "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
     "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE",
+    "arn:aws:dynamodb:*:*:table/support-admin-console-promos-PROD",
+    "arn:aws:dynamodb:*:*:table/support-admin-console-promos-CODE",
   ],
   domainName: "support.theguardian.com.origin.membership.guardianapis.com",
   scaling: {

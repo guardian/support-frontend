@@ -17,10 +17,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
-import {
-	setThankYouFeedbackSurveyHasBeenCompleted,
-	setThankYouSupportReminder,
-} from 'helpers/redux/checkout/thankYouState/actions';
+import { setThankYouSupportReminder } from 'helpers/redux/checkout/thankYouState/actions';
 import type { ThankYouSupportReminderState } from 'helpers/redux/checkout/thankYouState/state';
 import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import {
@@ -109,32 +106,53 @@ const defaultSupportReminder = {
 	hasBeenCompleted: false,
 	errorMessage: '',
 };
-const defaultFeedbackSurveyHasBeenCompleted = false;
 
-export const getThankYouModuleData = (
-	productKey: ActiveProductKey,
-	ratePlanKey: ActiveRatePlanKey,
-	countryGroupId: CountryGroupId,
-	countryId: IsoCountry,
-	csrf: CsrfState,
-	isOneOff: boolean,
-	amountIsAboveThreshold: boolean,
-	isTierThree: boolean,
-	startDate?: string,
-	email?: string,
-	campaignCode?: string,
-	checklistData?: BenefitsCheckListData[],
-	supportReminder?: ThankYouSupportReminderState,
-	feedbackSurveyHasBeenCompleted?: boolean,
-	finalAmount?: number,
-	returnAddress?: string,
-	isSignedIn?: boolean,
-	observerPrint?: ObserverPrint,
-): Record<ThankYouModuleType, ThankYouModuleData> => {
-	const initialFeedbackSurveyHasBeenCompleted =
-		feedbackSurveyHasBeenCompleted ?? defaultFeedbackSurveyHasBeenCompleted;
-	const [feedbackSurveyCompleted, setFeedbackSurveyCompleted] =
-		useState<boolean>(initialFeedbackSurveyHasBeenCompleted);
+type GetThankYouModuleDataParams = {
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
+	countryGroupId: CountryGroupId;
+	countryId: IsoCountry;
+	csrf: CsrfState;
+	isOneOff: boolean;
+	amountIsAboveThreshold: boolean;
+	isTierThree: boolean;
+	startDate?: string;
+	email?: string;
+	campaignCode?: string;
+	checklistData?: BenefitsCheckListData[];
+	supportReminder?: ThankYouSupportReminderState;
+	finalAmount?: number;
+	returnAddress?: string;
+	isSignedIn?: boolean;
+	observerPrint?: ObserverPrint;
+	feedbackSurveyCompleted: boolean;
+	setFeedbackSurveyCompleted: (completed: boolean) => void;
+};
+
+export const getThankYouModuleData = ({
+	productKey,
+	ratePlanKey,
+	countryGroupId,
+	countryId,
+	csrf,
+	isOneOff,
+	amountIsAboveThreshold,
+	isTierThree,
+	startDate,
+	email,
+	campaignCode,
+	checklistData,
+	supportReminder,
+	finalAmount,
+	returnAddress,
+	isSignedIn,
+	observerPrint,
+	feedbackSurveyCompleted,
+	setFeedbackSurveyCompleted,
+}: GetThankYouModuleDataParams): Record<
+	ThankYouModuleType,
+	ThankYouModuleData
+> => {
 	const [supportReminderCompleted, setSupportReminderCompleted] =
 		useState<ThankYouSupportReminderState>(
 			supportReminder ?? defaultSupportReminder,
@@ -227,10 +245,6 @@ export const getThankYouModuleData = (
 					feedbackSurveyLink={getFeedbackSurveyLink()}
 					onClick={() => {
 						setFeedbackSurveyCompleted(true);
-						if (feedbackSurveyHasBeenCompleted) {
-							const dispatch = useContributionsDispatch();
-							dispatch(setThankYouFeedbackSurveyHasBeenCompleted(true));
-						}
 					}}
 				/>
 			),

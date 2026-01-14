@@ -44,8 +44,7 @@ const defaultArgs: SubscriptionsLandingProps = {
 		},
 		Paper: {
 			price: 12.19,
-			discountCopy:
-				'Guardian and Observer newspaper subscriptions to suit every reader',
+			discountCopy: '',
 		},
 	} as SubscriptionsLandingProps['pricingCopy'],
 	referrerAcquisitions: {
