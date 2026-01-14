@@ -91,11 +91,9 @@ export class SupportWorkers extends GuStack {
       ],
       resources: props.promotionsDynamoTables,
     });
-    const supporterProductDataTablePolicy = new PolicyStatement({
-      actions: ["dynamodb:PutItem", "dynamodb:UpdateItem"],
-      resources: props.supporterProductDataTables.map((table) =>
-        Fn.importValue(table)
-      ),
+    const supporterProductDataSqsPolicy = new PolicyStatement({
+      actions: ["sqs:GetQueueUrl", "sqs:SendMessage"],
+      resources: [Fn.importValue(`supporter-product-data-${this.stage}`)],
     });
     const parameterStorePolicy = new PolicyStatement({
       actions: ["ssm:GetParameter"],
@@ -265,9 +263,9 @@ export class SupportWorkers extends GuStack {
       emailSqsPolicy,
       secretsManagerPolicy,
     ]);
-    const updateSupporterProductData = createScalaLambda(
+    const updateSupporterProductData = createTypescriptLambda(
       "UpdateSupporterProductData",
-      [supporterProductDataTablePolicy]
+      [supporterProductDataSqsPolicy]
     );
     const sendAcquisitionEvent = createScalaLambda("SendAcquisitionEvent", [
       eventBusPolicy,
