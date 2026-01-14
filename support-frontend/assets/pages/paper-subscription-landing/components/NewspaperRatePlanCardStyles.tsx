@@ -17,7 +17,7 @@ export const card = css`
 	${textSans17};
 	position: relative;
 	display: grid;
-	grid-template-rows: 126px 74px;
+	grid-template-rows: 126px 88px;
 
 	background-color: ${neutral[100]};
 	color: ${neutral[7]};
@@ -149,8 +149,8 @@ export const planDetailsContainer = css`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	margin: ${space[5]}px 0 ${space[2]}px;
-	gap: ${space[5]}px;
+	margin: ${space[1]}px 0 ${space[2]}px;
+	gap: ${space[6]}px;
 `;
 
 export const planDetailsEndSection = css`
