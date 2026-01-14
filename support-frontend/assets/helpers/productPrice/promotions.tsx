@@ -171,7 +171,7 @@ function finalPrice(
 
 const discountSummaryCopy = (
 	currency: CurrencyInfo,
-	promotionIndex: number,
+	promoCount: number,
 	price: number,
 	promotion: Promotion,
 	billingPeriod: BillingPeriod,
@@ -198,7 +198,7 @@ const discountSummaryCopy = (
 		periodNoun === 'year' || duration === 1 ? 'the first' : ''
 	}${duration > 1 ? duration : ''} ${periodNoun}${
 		duration > 1 ? 's' : ''
-	}, then ${formattedPrice}/${periodNoun}${'*'.repeat(promotionIndex + 1)}`;
+	}, then ${formattedPrice}/${periodNoun}${'*'.repeat(promoCount)}`;
 };
 
 export {

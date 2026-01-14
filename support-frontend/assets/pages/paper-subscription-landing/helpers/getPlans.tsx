@@ -53,7 +53,7 @@ const getOfferText = (
 	if (promo?.discount?.amount && promotionIndex !== undefined) {
 		return discountSummaryCopy(
 			getCurrencyInfo(price.currency),
-			promotionIndex,
+			promotionIndex + 1, // if promotionIndex is 0, we want to show one "*"
 			price.price,
 			promo,
 			BillingPeriod.Monthly,
