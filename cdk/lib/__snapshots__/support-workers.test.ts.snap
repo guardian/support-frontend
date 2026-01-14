@@ -4065,9 +4065,10 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                 "sqs:SendMessage",
               ],
               "Effect": "Allow",
-              "Resource": {
-                "Fn::ImportValue": "supporter-product-data-PROD",
-              },
+              "Resource": [
+                "arn:aws:sqs:eu-west-1:865473395570:supporter-product-data-CODE",
+                "arn:aws:sqs:eu-west-1:865473395570:supporter-product-data-PROD",
+              ],
             },
             {
               "Action": [

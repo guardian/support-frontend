@@ -48,7 +48,7 @@ type PaymentProvider = keyof typeof PaymentProviders;
 interface SupportWorkersProps extends GuStackProps {
   promotionsDynamoTables: string[];
   s3Files: string[];
-  supporterProductDataTables: string[];
+  supporterProductDataQueueArns: string[];
   eventBusArns: string[];
   parameterStorePaths: string[];
   secretsManagerPaths: string[];
@@ -93,7 +93,7 @@ export class SupportWorkers extends GuStack {
     });
     const supporterProductDataSqsPolicy = new PolicyStatement({
       actions: ["sqs:GetQueueUrl", "sqs:SendMessage"],
-      resources: [Fn.importValue(`supporter-product-data-${this.stage}`)],
+      resources: props.supporterProductDataQueueArns,
     });
     const parameterStorePolicy = new PolicyStatement({
       actions: ["ssm:GetParameter"],

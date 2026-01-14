@@ -17,9 +17,9 @@ describe("The support-workers stack", () => {
         "arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-PROD/catalog.json",
         "arn:aws:s3:::support-workers-private/*",
       ],
-      supporterProductDataTables: [
-        "supporter-product-data-tables-CODE-SupporterProductDataTable",
-        "supporter-product-data-tables-PROD-SupporterProductDataTable",
+      supporterProductDataQueueArns: [
+        "arn:aws:sqs:eu-west-1:865473395570:supporter-product-data-CODE",
+        "arn:aws:sqs:eu-west-1:865473395570:supporter-product-data-PROD",
       ],
       eventBusArns: [
         "arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-CODE",
