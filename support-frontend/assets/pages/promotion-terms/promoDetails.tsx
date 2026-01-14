@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
+import { themeButtonReaderRevenueBrand } from '@guardian/source/react-components';
 import AnchorButton from 'components/button/anchorButton';
 import Content from 'components/content/content';
 import { List } from 'components/list/list';
@@ -8,10 +9,6 @@ import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import { DigitalPack, Paper } from 'helpers/productPrice/subscriptions';
 import { routes } from 'helpers/urls/routes';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
-
-const buttonStyle = css`
-	margin: ${space[6]}px 0 ${space[4]}px;
-`;
 
 const landingPageForProduct = (props: PromotionTerms) => {
 	switch (props.product) {
@@ -27,6 +24,10 @@ const landingPageForProduct = (props: PromotionTerms) => {
 				: routes.guardianWeeklySubscriptionLanding;
 	}
 };
+
+const buttonStyle = css`
+	margin: ${space[6]}px 0 ${space[4]}px;
+`;
 
 export default function PromoDetails(props: PromotionTerms): JSX.Element {
 	const validUntil = props.expires ? (
@@ -55,10 +56,10 @@ export default function PromoDetails(props: PromotionTerms): JSX.Element {
 			</LargeParagraph>
 			<div css={buttonStyle}>
 				<AnchorButton
-					href={`${landingPageForProduct(props)}?promoCode=${props.promoCode}`}
-				>
-					Get this offer
-				</AnchorButton>
+					link={`${landingPageForProduct(props)}?promoCode=${props.promoCode}`}
+					ctaButtonText="Get this offer"
+					theme={themeButtonReaderRevenueBrand}
+				/>
 			</div>
 		</Content>
 	);

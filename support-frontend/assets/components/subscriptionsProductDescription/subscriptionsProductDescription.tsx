@@ -26,26 +26,6 @@ type PropTypes = {
 	benefits?: ProductBenefit[];
 };
 
-const getButtonAppearance = (
-	index: number,
-	isFeature?: boolean,
-	hierarchy?: string,
-	primary?: boolean,
-) => {
-	if (primary ?? (isFeature && index === 0)) {
-		return 'primary';
-	} else if (isFeature && index > 0) {
-		return 'tertiaryFeature';
-	} else if (
-		(!isFeature && index === 0) ||
-		(!isFeature && hierarchy === 'first')
-	) {
-		return 'secondary';
-	}
-
-	return 'tertiary';
-};
-
 function SubscriptionsProductDescription({
 	title,
 	subtitle,
@@ -92,24 +72,15 @@ function SubscriptionsProductDescription({
 					isFeature && subscriptionButtonsContainerFeature,
 				]}
 			>
-				{buttons.map((button, index) => (
+				{buttons.map((button) => (
 					<AnchorButton
-						href={button.link}
 						onClick={button.analyticsTracking}
-						appearance={getButtonAppearance(
-							index,
-							isFeature,
-							button.hierarchy,
-							button.primary,
-						)}
-						modifierClasses={[
-							button.modifierClasses ?? '',
-							'subscriptions__product-button',
-						]}
-						aria-label={button.ariaLabel ?? null}
-					>
-						{button.ctaButtonText}
-					</AnchorButton>
+						ariaLabel={button.ariaLabel}
+						priority={button.priority}
+						theme={button.theme}
+						link={button.link}
+						ctaButtonText={button.ctaButtonText}
+					/>
 				))}
 			</div>
 		</div>

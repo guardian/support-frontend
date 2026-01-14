@@ -1,5 +1,5 @@
-import AnchorButton from '../../assets/components/button/anchorButton';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
+import AnchorButton from '../../assets/components/button/anchorButton';
 
 export default {
 	title: 'Core/AnchorButton',
@@ -8,5 +8,7 @@ export default {
 };
 
 export function AnchorButtonStory(): JSX.Element {
-	return <AnchorButton href="https://www.theguardian.com">Test</AnchorButton>;
+	return (
+		<AnchorButton link="https://www.theguardian.com" ctaButtonText="Test" />
+	);
 }

@@ -1,9 +1,15 @@
 import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/utils';
+import type {
+	ButtonPriority,
+	ThemeButton,
+} from '@guardian/source/react-components';
+import { themeButtonReaderRevenueBrand } from '@guardian/source/react-components';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type * as React from 'react';
+import { themeButtonLegacyGray } from 'components/button/theme';
 import DigitalPlusPackshot from 'components/packshots/digitalPlusPackshot';
 import PaperPackShot from 'components/packshots/paperPackshot';
 import WeeklyPackShot from 'components/packshots/weeklyPackshot';
@@ -32,8 +38,8 @@ export type ProductButton = {
 	link: string;
 	analyticsTracking: () => void;
 	hierarchy?: string;
-	modifierClasses?: string;
-	primary?: boolean;
+	priority?: ButtonPriority;
+	theme?: Partial<ThemeButton>;
 	ariaLabel?: string;
 };
 
@@ -100,6 +106,9 @@ function getDigitalPlusButtonsForBillingPeriods(
 					componentType: 'ACQUISITIONS_BUTTON',
 				}),
 				ariaLabel: `${billingPeriod} DigitalPlus`,
+				priority:
+					billingPeriod === BillingPeriod.Monthly ? 'primary' : 'tertiary',
+				theme: themeButtonReaderRevenueBrand,
 			});
 		}
 		return buttons;
@@ -160,7 +169,8 @@ const guardianWeekly = (
 				product: 'GuardianWeekly',
 				componentType: 'ACQUISITIONS_BUTTON',
 			}),
-			modifierClasses: 'guardian-weekly',
+			priority: 'primary',
+			theme: themeButtonLegacyGray,
 		},
 		{
 			ctaButtonText: 'See gift options',
@@ -170,7 +180,8 @@ const guardianWeekly = (
 				product: 'GuardianWeekly',
 				componentType: 'ACQUISITIONS_BUTTON',
 			}),
-			modifierClasses: 'guardian-weekly',
+			priority: 'tertiary',
+			theme: themeButtonLegacyGray,
 		},
 	],
 	productImage: <WeeklyPackShot />,
@@ -196,6 +207,8 @@ const paper = (
 					product: Paper,
 					componentType: 'ACQUISITIONS_BUTTON',
 				}),
+				priority: 'primary',
+				theme: themeButtonLegacyGray,
 			},
 		],
 		productImage: <PaperPackShot />,
