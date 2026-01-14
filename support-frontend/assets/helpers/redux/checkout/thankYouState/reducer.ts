@@ -10,12 +10,6 @@ export const thankYou = createSlice({
 	name: 'thankYou',
 	initialState: initialThankYouState,
 	reducers: {
-		setThankYouFeedbackSurveyHasBeenCompleted(
-			state,
-			action: PayloadAction<boolean>,
-		) {
-			state.feedbackSurveyHasBeenCompleted = action.payload;
-		},
 		setThankYouMarketingConsent(
 			state,
 			action: PayloadAction<ThankYouMarketingConsentState>,
