@@ -111,26 +111,50 @@ const defaultSupportReminder = {
 };
 const defaultFeedbackSurveyHasBeenCompleted = false;
 
-export const getThankYouModuleData = (
-	productKey: ActiveProductKey,
-	ratePlanKey: ActiveRatePlanKey,
-	countryGroupId: CountryGroupId,
-	countryId: IsoCountry,
-	csrf: CsrfState,
-	isOneOff: boolean,
-	amountIsAboveThreshold: boolean,
-	isTierThree: boolean,
-	startDate?: string,
-	email?: string,
-	campaignCode?: string,
-	checklistData?: BenefitsCheckListData[],
-	supportReminder?: ThankYouSupportReminderState,
-	feedbackSurveyHasBeenCompleted?: boolean,
-	finalAmount?: number,
-	returnAddress?: string,
-	isSignedIn?: boolean,
-	observerPrint?: ObserverPrint,
-): Record<ThankYouModuleType, ThankYouModuleData> => {
+type GetThankYouModuleDataParams = {
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
+	countryGroupId: CountryGroupId;
+	countryId: IsoCountry;
+	csrf: CsrfState;
+	isOneOff: boolean;
+	amountIsAboveThreshold: boolean;
+	isTierThree: boolean;
+	startDate?: string;
+	email?: string;
+	campaignCode?: string;
+	checklistData?: BenefitsCheckListData[];
+	supportReminder?: ThankYouSupportReminderState;
+	feedbackSurveyHasBeenCompleted?: boolean;
+	finalAmount?: number;
+	returnAddress?: string;
+	isSignedIn?: boolean;
+	observerPrint?: ObserverPrint;
+};
+
+export const getThankYouModuleData = ({
+	productKey,
+	ratePlanKey,
+	countryGroupId,
+	countryId,
+	csrf,
+	isOneOff,
+	amountIsAboveThreshold,
+	isTierThree,
+	startDate,
+	email,
+	campaignCode,
+	checklistData,
+	supportReminder,
+	feedbackSurveyHasBeenCompleted,
+	finalAmount,
+	returnAddress,
+	isSignedIn,
+	observerPrint,
+}: GetThankYouModuleDataParams): Record<
+	ThankYouModuleType,
+	ThankYouModuleData
+> => {
 	const initialFeedbackSurveyHasBeenCompleted =
 		feedbackSurveyHasBeenCompleted ?? defaultFeedbackSurveyHasBeenCompleted;
 	const [feedbackSurveyCompleted, setFeedbackSurveyCompleted] =

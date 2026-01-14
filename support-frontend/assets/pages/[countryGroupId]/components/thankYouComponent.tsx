@@ -230,26 +230,26 @@ export function ThankYouComponent({
 			ratePlanKey as ActivePaperProductOptions,
 		);
 	const startDate = deliveryStart ? formatUserDate(deliveryStart) : undefined;
-	const thankYouModuleData = getThankYouModuleData(
+	const thankYouModuleData = getThankYouModuleData({
 		productKey,
 		ratePlanKey,
 		countryGroupId,
 		countryId,
 		csrf,
 		isOneOff,
-		isSupporterPlus,
+		amountIsAboveThreshold: isSupporterPlus,
 		isTierThree,
 		startDate,
 		email,
-		undefined,
-		benefitsChecklist,
-		undefined,
-		undefined,
-		payment.finalAmount,
-		getReturnAddress(), // Session storage returnAddress (from GuardianAdLiteLanding)
+		campaignCode: undefined,
+		checklistData: benefitsChecklist,
+		supportReminder: undefined,
+		feedbackSurveyHasBeenCompleted: undefined,
+		finalAmount: payment.finalAmount,
+		returnAddress: getReturnAddress(), // Session storage returnAddress (from GuardianAdLiteLanding)
 		isSignedIn,
 		observerPrint,
-	);
+	});
 	const maybeThankYouModule = (
 		condition: boolean,
 		moduleType: ThankYouModuleType,
