@@ -8,7 +8,11 @@ import type {
 	ProductPrice,
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
-import { getProductPrice, showPrice } from 'helpers/productPrice/productPrices';
+import {
+	getDiscountVsRetail,
+	getProductPrice,
+	showPrice,
+} from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import {
 	discountSummaryCopy,
@@ -63,10 +67,28 @@ const getOfferText = (
 	return '';
 };
 
-const getSavingsText = (price: ProductPrice): string | null => {
+const getSavingsText = (
+	price: ProductPrice,
+	promo?: Promotion,
+): string | null => {
+	if (promo?.discount?.amount) {
+		const discount = getDiscountVsRetail(
+			price.price,
+			price.savingVsRetail ?? 0,
+			promo.discount.amount,
+		);
+
+		if (discount > 0) {
+			return `Save ${discount}% on retail price`;
+		}
+
+		return null;
+	}
+
 	if (price.savingVsRetail && price.savingVsRetail > 0) {
 		return `Save ${Math.floor(price.savingVsRetail)}% on retail price`;
 	}
+
 	return null;
 };
 
@@ -243,6 +265,10 @@ export const getPlans = (
 			);
 			const showLabel = productOption === 'SixdayPlus';
 			const productLabel = getProductLabel(productOption);
+			const savingsText =
+				productOption !== 'Sunday'
+					? getSavingsText(nonDiscountedPrice, promotion)
+					: null;
 
 			return {
 				title: getTitle(productOption),
@@ -257,7 +283,7 @@ export const getPlans = (
 				),
 				planData: getPlanData(productOption, fulfilmentOption),
 				offerCopy: getOfferText(nonDiscountedPrice, promotion, promotionIndex),
-				savingsText: getSavingsText(nonDiscountedPrice),
+				savingsText,
 				showLabel,
 				productLabel,
 				unavailableOutsideLondon: getUnavailableOutsideLondon(
