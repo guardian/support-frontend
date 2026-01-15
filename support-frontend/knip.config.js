@@ -15,6 +15,7 @@ module.exports = {
 		// files all have unused exports, which knip complains about. Ignoring them
 		// for now so that I can split this work across PRs to keep the size down.
 		'assets/helpers/user/details.ts',
+		'assets/helpers/redux/contributionsStore.ts',
 	],
 	ignoreDependencies: [
 		// used in package.json
