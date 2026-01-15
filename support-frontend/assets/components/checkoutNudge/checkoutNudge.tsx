@@ -18,6 +18,7 @@ import type { SupportRegionId } from '@modules/internationalisation/countryGroup
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useEffect } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { Country } from 'helpers/internationalisation/classes/country';
 import {
 	allProductPrices,
@@ -84,7 +85,7 @@ const nudgeButtonOverrides = css`
 
 const previousPriceStrikeThrough = css`
 	font-weight: 400;
-	text-decoration: underline;
+	text-decoration: line-through;
 `;
 
 const benefitsContainer = css`
@@ -134,7 +135,7 @@ export function CheckoutNudge({
 
 	const originalPrice = `${currency.glyph}${amount.toString()}`;
 	const displayPrice = promotion?.discountedPrice
-		? `${currency.glyph}${promotion.discountedPrice.toString()}`
+		? simpleFormatAmount(currency, promotion.discountedPrice)
 		: originalPrice;
 
 	const getButtonCopy = promotion?.discountedPrice ? (
@@ -304,6 +305,39 @@ function isValidProductPriceKey(
 }
 
 /**
+ * Helper to get promotion for the nudge
+ */
+function getNudgePromotion(
+	promoCodes: string[] | undefined,
+	product: string,
+	ratePlan: string,
+): Promotion | undefined {
+	if (!promoCodes?.length || !isValidProductPriceKey(product)) {
+		return undefined;
+	}
+
+	const productPrices = allProductPrices[product];
+	const billingPeriod = ratePlanToBillingPeriod[ratePlan as ActiveRatePlanKey];
+	if (!productPrices || !billingPeriod) {
+		return undefined;
+	}
+
+	try {
+		const productPrice = getProductPrice(
+			productPrices,
+			Country.detect(),
+			billingPeriod,
+		);
+		return productPrice.promotions?.find((p) =>
+			promoCodes.includes(p.promoCode),
+		);
+	} catch (error) {
+		console.warn('Failed to get product price for promotion:', error);
+		return undefined;
+	}
+}
+
+/**
  * The CheckoutNudgeSelector component is used on the checkout components.
  * If the current product+ratePlan matches the nudge's `fromProduct` then the nudge is displayed.
  * If the current product+ratePlan matches the nudge's `toProduct` and the 'fromNudge' query param is present then the nudge thankyou is displayed.
@@ -325,86 +359,80 @@ export function CheckoutNudgeSelector({
 	landingPageSettings,
 }: CheckoutNudgeSelectorProps) {
 	const { nudge, promoCodes } = nudgeSettings.variant;
+	// No nudge configured
 	if (!nudge) {
-		// No nudge configured for this variant
 		return null;
-	} else if (
-		nudgeSettings.fromProduct.product === currentProduct &&
-		(nudgeSettings.fromProduct.ratePlan === undefined ||
-			nudgeSettings.fromProduct.ratePlan === currentRatePlan)
-	) {
-		// Show the nudge
-		const { nudgeToProduct } = nudge;
-		const { currencyKey, countryGroupId } =
-			getSupportRegionIdConfig(supportRegionId);
-		// If nudgeToProduct doesn't define a ratePlan then attempt to use whatever the current selected ratePlan is
-		const ratePlan = nudgeToProduct.ratePlan ?? currentRatePlan;
-		const amount =
-			productCatalog[nudgeToProduct.product]?.ratePlans[ratePlan]?.pricing[
-				currencyKey
-			];
+	}
 
-		let promotion: Promotion | undefined;
-		if (promoCodes && promoCodes.length > 0) {
-			const countryId = Country.detect();
-			const productKey = nudgeToProduct.product;
+	const { nudgeToProduct } = nudge;
+	const { currencyKey, countryGroupId } =
+		getSupportRegionIdConfig(supportRegionId);
 
-			if (isValidProductPriceKey(productKey)) {
-				const productPrices = allProductPrices[productKey];
-				const billingPeriod = ratePlanToBillingPeriod[ratePlan];
-				if (productPrices && billingPeriod) {
-					try {
-						const productPrice = getProductPrice(
-							productPrices,
-							countryId,
-							billingPeriod,
-						);
-						promotion = productPrice.promotions?.find((promo: Promotion) =>
-							promoCodes.includes(promo.promoCode),
-						);
-					} catch (error) {
-						// If getProductPrice throws, continue with the original amount
-						console.warn('Failed to get product price for promotion:', error);
-					}
-				}
-			}
-		}
+	// Handle "Thank You" State
+	const isFromNudge = new URLSearchParams(window.location.search).get(
+		'fromNudge',
+	);
+	const matchesNudgeTo =
+		nudgeToProduct.product === currentProduct &&
+		(nudgeToProduct.ratePlan === undefined ||
+			nudgeToProduct.ratePlan === currentRatePlan);
 
-		if (amount) {
-			const checkListData =
-				getBenefitsChecklistFromLandingPageTool(
-					nudgeToProduct.product,
-					landingPageSettings,
-					countryGroupId,
-				) ?? [];
-			const props = {
-				supportRegionId,
-				product: nudgeToProduct.product,
-				ratePlan,
-				amount,
-				promotion,
-				heading: nudge.nudgeCopy.heading,
-				body: nudge.nudgeCopy.body,
-				benefits: nudge.benefits
-					? {
-							checkListData: checkListData.slice(0, 2),
-							label: nudge.benefits.label,
-					  }
-					: undefined,
-			};
-			return <CheckoutNudge {...props} />;
-		}
-	} else if (
-		new URLSearchParams(window.location.search).get('fromNudge') &&
-		nudge.nudgeToProduct.product === currentProduct &&
-		(nudge.nudgeToProduct.ratePlan === undefined ||
-			nudge.nudgeToProduct.ratePlan === currentRatePlan)
-	) {
-		// Show the thankyou
+	if (isFromNudge && matchesNudgeTo) {
 		const { heading, body } = nudge.thankyouCopy;
 		return <CheckoutNudgeThankYou heading={heading} body={body} />;
 	}
 
-	// Nothing to show
-	return null;
+	// Check if we should show the Nudge
+	const matchesFromProduct =
+		nudgeSettings.fromProduct.product === currentProduct &&
+		(nudgeSettings.fromProduct.ratePlan === undefined ||
+			nudgeSettings.fromProduct.ratePlan === currentRatePlan);
+
+	if (!matchesFromProduct) {
+		return null;
+	}
+
+	const ratePlan = nudgeToProduct.ratePlan ?? currentRatePlan;
+	const amount =
+		productCatalog[nudgeToProduct.product]?.ratePlans[ratePlan]?.pricing[
+			currencyKey
+		];
+
+	// No amount found
+	if (!amount) {
+		return null;
+	}
+
+	const promotion = getNudgePromotion(
+		promoCodes,
+		nudgeToProduct.product,
+		ratePlan,
+	);
+
+	const checkListData =
+		getBenefitsChecklistFromLandingPageTool(
+			nudgeToProduct.product,
+			landingPageSettings,
+			countryGroupId,
+		) ?? [];
+
+	return (
+		<CheckoutNudge
+			supportRegionId={supportRegionId}
+			product={nudgeToProduct.product}
+			ratePlan={ratePlan}
+			amount={amount}
+			promotion={promotion}
+			heading={nudge.nudgeCopy.heading}
+			body={nudge.nudgeCopy.body}
+			benefits={
+				nudge.benefits
+					? {
+							checkListData: checkListData.slice(0, 2),
+							label: nudge.benefits.label,
+					  }
+					: undefined
+			}
+		/>
+	);
 }
