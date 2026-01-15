@@ -17,7 +17,6 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
-import type { ThankYouSupportReminderState } from 'helpers/redux/checkout/thankYouState/state';
 import {
 	OPHAN_COMPONENT_ID_AUS_MAP,
 	OPHAN_COMPONENT_ID_SIGN_IN,
@@ -104,6 +103,12 @@ const defaultSupportReminder = {
 	hasBeenCompleted: false,
 	errorMessage: '',
 };
+
+interface ThankYouSupportReminderState {
+	selectedChoiceIndex: number;
+	hasBeenCompleted: boolean;
+	errorMessage: string | null;
+}
 
 type GetThankYouModuleDataParams = {
 	productKey: ActiveProductKey;

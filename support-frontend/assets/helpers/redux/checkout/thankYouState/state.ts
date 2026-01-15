@@ -4,12 +4,6 @@ export interface ThankYouMarketingConsentState {
 	errorMessage: string | null;
 }
 
-export interface ThankYouSupportReminderState {
-	selectedChoiceIndex: number;
-	hasBeenCompleted: boolean;
-	errorMessage: string | null;
-}
-
 export type ThankYouState = {
 	marketingConsent: ThankYouMarketingConsentState;
 };
