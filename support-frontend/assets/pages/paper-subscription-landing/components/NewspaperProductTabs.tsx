@@ -1,10 +1,11 @@
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Collection, HomeDelivery } from '@modules/product/fulfilmentOptions';
 import type { ReactElement } from 'react';
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import Carousel from 'components/product/Carousel';
+import { type Product } from 'components/product/productOption';
 import Tabs, { type TabProps } from 'components/tabs/tabs';
 import { ActivePaperProductTypes } from 'helpers/productCatalogToProductOption';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
@@ -12,6 +13,7 @@ import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import NewspaperRatePlanCard from 'pages/paper-subscription-landing/components/NewspaperRatePlanCard';
 import { getPlans } from '../helpers/getPlans';
+import type { PaperPromotion } from '../helpers/getPromotions';
 import getPaperPromotions from '../helpers/getPromotions';
 import { windowSetHashProperty } from '../helpers/windowSetHashProperty';
 import NewspaperTabHero from './content/NewspaperTabHero';
@@ -50,23 +52,28 @@ function NewspaperProductTabs({
 	const [selectedTab, setSelectedTab] =
 		useState<PaperFulfilmentOptions>(paperFulfilment);
 
+	const getPromotions = () =>
+		getPaperPromotions({
+			activePaperProductTypes: ActivePaperProductTypes,
+			productPrices,
+			paperFulfilment: selectedTab,
+		});
+
+	const [promotions, setPromotions] = useState<PaperPromotion[]>(
+		getPromotions(),
+	);
+
 	const { windowWidthIsGreaterThan } = useWindowWidth();
-
-	const promotions = useMemo(
-		() =>
-			getPaperPromotions({
-				activePaperProductTypes: ActivePaperProductTypes,
-				productPrices,
-				paperFulfilment: selectedTab,
-			}),
-		[selectedTab],
+	const [productRatePlans, setProductRatePlans] = useState<Product[]>(
+		getPlans(selectedTab, productPrices, ActivePaperProductTypes),
 	);
 
-	const productRatePlans = useMemo(
-		() =>
-			getPlans(selectedTab, productPrices, ActivePaperProductTypes, promotions),
-		[selectedTab, promotions],
-	);
+	useEffect(() => {
+		setProductRatePlans(
+			getPlans(selectedTab, productPrices, ActivePaperProductTypes),
+		);
+		setPromotions(getPromotions());
+	}, [selectedTab]);
 
 	const handleTabChange = (tabId: PaperFulfilmentOptions) => {
 		setSelectedTab(tabId);
