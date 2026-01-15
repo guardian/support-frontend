@@ -85,13 +85,15 @@ object ServicesFixtures {
       description = s"$code description",
       appliesTo = AppliesTo.ukOnly(ids.toSet),
       campaignCode = "C",
-      channelCodes = Map("testChannel" -> Set(code)),
+      promoCode = code,
       starts = starts,
       expires = Some(expires),
       discount = discount,
       freeTrial = freeTrial,
+      incentive = None,
       tracking = tracking,
       renewalOnly = renewal,
+      landingPage = None,
     )
   }
 }
