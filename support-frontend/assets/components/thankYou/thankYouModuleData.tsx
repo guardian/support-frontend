@@ -17,9 +17,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
-import { setThankYouSupportReminder } from 'helpers/redux/checkout/thankYouState/actions';
 import type { ThankYouSupportReminderState } from 'helpers/redux/checkout/thankYouState/state';
-import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import {
 	OPHAN_COMPONENT_ID_AUS_MAP,
 	OPHAN_COMPONENT_ID_SIGN_IN,
@@ -120,7 +118,6 @@ type GetThankYouModuleDataParams = {
 	email?: string;
 	campaignCode?: string;
 	checklistData?: BenefitsCheckListData[];
-	supportReminder?: ThankYouSupportReminderState;
 	finalAmount?: number;
 	returnAddress?: string;
 	isSignedIn?: boolean;
@@ -142,7 +139,6 @@ export const getThankYouModuleData = ({
 	email,
 	campaignCode,
 	checklistData,
-	supportReminder,
 	finalAmount,
 	returnAddress,
 	isSignedIn,
@@ -154,9 +150,7 @@ export const getThankYouModuleData = ({
 	ThankYouModuleData
 > => {
 	const [supportReminderCompleted, setSupportReminderCompleted] =
-		useState<ThankYouSupportReminderState>(
-			supportReminder ?? defaultSupportReminder,
-		);
+		useState<ThankYouSupportReminderState>(defaultSupportReminder);
 
 	const isGuardianPrint = isPrintProduct(productKey) && !observerPrint;
 
@@ -338,15 +332,6 @@ export const getThankYouModuleData = ({
 							...supportReminderCompleted,
 							selectedChoiceIndex: index,
 						});
-						if (supportReminder) {
-							const dispatch = useContributionsDispatch();
-							dispatch(
-								setThankYouSupportReminder({
-									...supportReminderCompleted,
-									selectedChoiceIndex: index,
-								}),
-							);
-						}
 					}}
 				/>
 			),
@@ -359,15 +344,6 @@ export const getThankYouModuleData = ({
 							...supportReminderCompleted,
 							hasBeenCompleted: true,
 						});
-						if (supportReminder) {
-							const dispatch = useContributionsDispatch();
-							dispatch(
-								setThankYouSupportReminder({
-									...supportReminderCompleted,
-									hasBeenCompleted: true,
-								}),
-							);
-						}
 					}}
 				/>
 			),
