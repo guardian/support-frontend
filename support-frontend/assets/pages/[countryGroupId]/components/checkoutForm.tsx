@@ -473,7 +473,7 @@ export default function CheckoutForm({
 		);
 
 	const validPaymentMethods = getPaymentMethods(
-		billingCountry,
+		countryId,
 		productKey,
 		ratePlanKey,
 	)
