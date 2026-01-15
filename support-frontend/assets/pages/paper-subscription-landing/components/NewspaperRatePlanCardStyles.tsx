@@ -7,6 +7,7 @@ import {
 	palette,
 	space,
 	textSans12,
+	textSans14,
 	textSans15,
 	textSans17,
 	textSansBold14,
@@ -16,8 +17,8 @@ import {
 export const card = css`
 	${textSans17};
 	position: relative;
-	display: grid;
-	grid-template-rows: 126px 88px;
+	display: flex;
+	flex-direction: column;
 
 	background-color: ${neutral[100]};
 	color: ${neutral[7]};
@@ -56,8 +57,7 @@ export const badgeObserver = css`
 `;
 
 export const cardOffer = css`
-	${textSans12};
-	margin-top: ${space[2]}px;
+	${textSans14};
 	color: ${neutral[38]};
 	text-align: center;
 	${from.tablet} {
@@ -105,15 +105,9 @@ export const cardLegalCopy = css`
 
 export const cardPrice = css`
 	${headlineBold34};
-	margin-top: ${space[2]}px;
 	small {
 		${textSans15};
 	}
-`;
-
-export const savingsTextStyle = css`
-	${textSans15};
-	margin-top: 2px;
 `;
 
 export const cardLabel = css`
@@ -134,7 +128,7 @@ export const ButtonCTA = css`
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
-	margin: ${space[3]}px 0 ${space[2]}px;
+	margin: ${space[5]}px 0 ${space[2]}px;
 `;
 
 export const planDescription = css`
@@ -149,8 +143,8 @@ export const planDetailsContainer = css`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	margin: ${space[1]}px 0 ${space[2]}px;
-	gap: ${space[6]}px;
+	margin: ${space[5]}px 0 ${space[2]}px;
+	gap: ${space[5]}px;
 `;
 
 export const planDetailsEndSection = css`
