@@ -84,7 +84,7 @@ const nudgeButtonOverrides = css`
 
 const previousPriceStrikeThrough = css`
 	font-weight: 400;
-	text-decoration: line-through;
+	text-decoration: underline;
 `;
 
 const benefitsContainer = css`
@@ -139,7 +139,7 @@ export function CheckoutNudge({
 
 	const getButtonCopy = promotion?.discountedPrice ? (
 		<>
-			{`Support us for\u00A0`}
+			{`Support\u00A0`}
 			<span css={previousPriceStrikeThrough}>{originalPrice}</span>
 			{`\u00A0${displayPrice}/${ratePlanDescription}`}
 		</>
