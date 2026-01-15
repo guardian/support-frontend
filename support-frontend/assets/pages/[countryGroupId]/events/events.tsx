@@ -89,7 +89,7 @@ export function Events({ supportRegionId }: Props) {
 	const isTestUser = !!cookie.get('_test_username');
 	const shouldUseCode = isTestUser || !isProd();
 	const ticketTailorUrl = shouldUseCode
-		? 'https://www.tickettailor.com/events/guardianlivecode'
+		? 'https://tickets-code.theguardian.live/events/guardianlivecode'
 		: 'https://tickets.theguardian.live/events/guardianlive';
 
 	const params = useParams();

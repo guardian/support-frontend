@@ -1,6 +1,6 @@
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
-import Page from 'components/page/page';
+import { PageScaffold } from 'components/page/pageScaffold';
 import {
 	getGlobal,
 	getProductPrices,
@@ -19,7 +19,6 @@ import {
 import { renderPage } from 'helpers/rendering/render';
 import LegalTerms from 'pages/promotion-terms/legalTerms';
 import PromoDetails from 'pages/promotion-terms/promoDetails';
-import './promotionTerms.scss';
 import type { PromotionTermsPropTypes } from './promotionTermsPropTypes';
 
 setUpTrackingAndConsents(getAbParticipations());
@@ -50,7 +49,7 @@ function getPromotionTermsProps(): PromotionTermsPropTypes {
 // ----- Render ----- //
 export function PromotionTermsPage(props: PromotionTermsPropTypes) {
 	return (
-		<Page
+		<PageScaffold
 			header={<Header countryGroupId={CountryGroup.detect()} />}
 			footer={
 				<Footer
@@ -59,8 +58,8 @@ export function PromotionTermsPage(props: PromotionTermsPropTypes) {
 			}
 		>
 			<PromoDetails {...props.promotionTerms} />
-			<LegalTerms {...props} />
-		</Page>
+			<LegalTerms {...props} />k
+		</PageScaffold>
 	);
 }
 

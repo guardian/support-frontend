@@ -3,6 +3,7 @@ import { storage } from '@guardian/libs';
 import { from } from '@guardian/source/foundations';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import { useEffect, useState } from 'react';
 import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import { observerThemeButton } from 'components/observer-layout/styles';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
@@ -119,43 +120,55 @@ export function ThankYouComponent({
 			? 'Stripe'
 			: order.paymentMethod;
 
-	// quarterly needs support in future for GW products (when they are enabled). So not needed currently, defaults to monthly.
-	successfulContributionConversion(
-		payment.finalAmount, // This is the final amount after discounts
-		billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY',
-		currencyKey,
-		paymentMethod,
-		productKey,
-	);
-
-	/**
-	 * This is some annoying transformation we need from
-	 * Product API => Contributions work we need to do
-	 */
-	if (isOneOff) {
-		// track conversion with QM
-		sendEventOneTimeCheckoutValue(
-			payment.originalAmount, // This is the amount before discounts
+	useEffect(() => {
+		// quarterly needs support in future for GW products (when they are enabled). So not needed currently, defaults to monthly.
+		successfulContributionConversion(
+			payment.finalAmount, // This is the final amount after discounts
+			billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY',
 			currencyKey,
-			true,
-		);
-	} else {
-		// track conversion with QM
-		sendEventCheckoutValue(
-			payment.originalAmount, // This is the amount before discounts
+			paymentMethod,
 			productKey,
+		);
+
+		/**
+		 * This is some annoying transformation we need from
+		 * Product API => Contributions work we need to do
+		 */
+		if (isOneOff) {
+			// track conversion with QM
+			sendEventOneTimeCheckoutValue(
+				payment.originalAmount, // This is the amount before discounts
+				currencyKey,
+				true,
+			);
+		} else {
+			// track conversion with QM
+			sendEventCheckoutValue(
+				payment.originalAmount, // This is the amount before discounts
+				productKey,
+				billingPeriod,
+				currencyKey,
+				true,
+			);
+		}
+
+		// track conversion with QM
+		sendEventContributionCheckoutConversion(
+			payment.originalAmount, // This is the amount before discounts
 			billingPeriod,
 			currencyKey,
-			true,
 		);
-	}
-
-	// track conversion with QM
-	sendEventContributionCheckoutConversion(
-		payment.originalAmount, // This is the amount before discounts
+	}, [
+		isOneOff,
+		payment,
+		productKey,
 		billingPeriod,
 		currencyKey,
-	);
+		paymentMethod,
+	]);
+
+	const [feedbackSurveyCompleted, setFeedbackSurveyCompleted] =
+		useState<boolean>(false);
 
 	const isGuardianPaperPlus = isPaperPlusSub(productKey, ratePlanKey); // Observer not a Plus plan
 	const isPrint = isPrintProduct(productKey);
@@ -220,26 +233,26 @@ export function ThankYouComponent({
 			ratePlanKey as ActivePaperProductOptions,
 		);
 	const startDate = deliveryStart ? formatUserDate(deliveryStart) : undefined;
-	const thankYouModuleData = getThankYouModuleData(
+	const thankYouModuleData = getThankYouModuleData({
 		productKey,
 		ratePlanKey,
 		countryGroupId,
 		countryId,
 		csrf,
 		isOneOff,
-		isSupporterPlus,
+		amountIsAboveThreshold: isSupporterPlus,
 		isTierThree,
 		startDate,
 		email,
-		undefined,
-		benefitsChecklist,
-		undefined,
-		undefined,
-		payment.finalAmount,
-		getReturnAddress(), // Session storage returnAddress (from GuardianAdLiteLanding)
+		campaignCode: undefined,
+		checklistData: benefitsChecklist,
+		finalAmount: payment.finalAmount,
+		returnAddress: getReturnAddress(), // Session storage returnAddress (from GuardianAdLiteLanding)
 		isSignedIn,
 		observerPrint,
-	);
+		feedbackSurveyCompleted,
+		setFeedbackSurveyCompleted,
+	});
 	const maybeThankYouModule = (
 		condition: boolean,
 		moduleType: ThankYouModuleType,
