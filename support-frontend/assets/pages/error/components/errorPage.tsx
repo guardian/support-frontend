@@ -29,7 +29,7 @@ export type ErrorPageProps = {
 
 const countryGroupId = CountryGroup.detect();
 
-export const mainContentStyles = css`
+const mainContentStyles = css`
 	background-color: ${palette.neutral[93]};
 	@supports (display: flex) {
 		flex: 1 0 auto;
