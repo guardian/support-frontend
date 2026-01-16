@@ -21,7 +21,7 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { Country } from 'helpers/internationalisation/classes/country';
 import {
-	allProductPrices,
+	allCheckoutNudgeProductPrices,
 	getProductPrice,
 } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -296,12 +296,14 @@ const ratePlanToBillingPeriod: Partial<
 };
 
 /**
- * Type guard to check if a product key exists in allProductPrices
+ * Type guard to check if a product key exists in allCheckoutNudgeProductPrices
  */
-function isValidProductPriceKey(
+function isValidCheckoutNudgeProductKey(
 	key: string,
-): key is keyof typeof allProductPrices {
-	return key in allProductPrices;
+): key is keyof typeof allCheckoutNudgeProductPrices {
+	return (
+		!!allCheckoutNudgeProductPrices && key in allCheckoutNudgeProductPrices
+	);
 }
 
 /**
@@ -312,13 +314,17 @@ function getNudgePromotion(
 	product: string,
 	ratePlan: string,
 ): Promotion | undefined {
-	if (!promoCodes?.length || !isValidProductPriceKey(product)) {
+	if (
+		!promoCodes?.length ||
+		!isValidCheckoutNudgeProductKey(product) ||
+		!allCheckoutNudgeProductPrices
+	) {
 		return undefined;
 	}
 
-	const productPrices = allProductPrices[product];
+	const productPrices = allCheckoutNudgeProductPrices[product];
 	const billingPeriod = ratePlanToBillingPeriod[ratePlan as ActiveRatePlanKey];
-	if (!productPrices || !billingPeriod) {
+	if (!billingPeriod) {
 		return undefined;
 	}
 

@@ -7,6 +7,7 @@
 @import controllers.PaymentMethodConfigs
 @import com.gu.support.encoding.CustomCodecs._
 @import controllers.AllProductPrices
+@import controllers.ProductPricesWrapper
 @import views.ViewHelpers.outputJson
 @import io.circe.JsonObject
 @import services.Tickers
@@ -25,7 +26,7 @@
   shareImageUrl: String,
   v2recaptchaConfigPublicKey: String,
   serversideTests: Map[String, Participation] = Map(),
-  allProductPrices: AllProductPrices,
+  productPricesWrapper: ProductPricesWrapper,
   productCatalog: JsonObject,
   noIndex: Boolean,
   canonicalLink: String,
@@ -66,7 +67,8 @@
       };
     }
 
-    window.guardian.allProductPrices = @Html(outputJson(allProductPrices))
+    window.guardian.allProductPrices = @Html(outputJson(productPricesWrapper.allProductPrices))
+    window.guardian.allCheckoutNudgeProductPrices = @Html(outputJson(productPricesWrapper.allCheckoutNudgeProductPrices))
     window.guardian.tickerData = @Html(outputJson(tickerData))
   </script>
 

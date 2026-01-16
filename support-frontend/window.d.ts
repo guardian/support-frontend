@@ -44,6 +44,11 @@ declare global {
 				TierThree: ProductPrices;
 				DigitalSubscription: ProductPrices;
 			};
+			allCheckoutNudgeProductPrices?: {
+				SupporterPlus: ProductPrices;
+				TierThree: ProductPrices;
+				DigitalSubscription: ProductPrices;
+			};
 			serversideTests?: Participations | null;
 			settings: Settings;
 			testMode?: boolean;

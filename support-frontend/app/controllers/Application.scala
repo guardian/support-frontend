@@ -4,6 +4,7 @@ import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.CustomActionBuilders
 import admin.ServersideAbTest.{Participation, generateParticipations}
 import admin.settings.{AllSettings, AllSettingsProvider, On, SettingsSurrogateKeySyntax}
+import admin.settings.Status.Live
 import assets.{AssetsResolver, RefPath}
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
@@ -51,6 +52,7 @@ case class AppConfig private (
     checkoutPostcodeLookup: Boolean,
     productCatalog: JsonObject,
     allProductPrices: AllProductPrices,
+    allCheckoutNudgeProductPrices: AllProductPrices,
     serversideTests: Map[String, Participation],
     user: Option[AppConfig.User],
     settings: AllSettings,
@@ -79,6 +81,7 @@ object AppConfig extends InternationalisationCodecs {
       productCatalog: JsonObject,
       serversideTests: Map[String, Participation],
       allProductPrices: AllProductPrices,
+      allCheckoutNudgeProductPrices: AllProductPrices,
       user: Option[IdUser],
       isTestUser: Boolean,
       settings: AllSettings,
@@ -157,6 +160,7 @@ object AppConfig extends InternationalisationCodecs {
       productCatalog = productCatalog,
       serversideTests = serversideTests,
       allProductPrices = allProductPrices,
+      allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
       user = user.map(user =>
         User(
           id = user.id,
@@ -204,6 +208,16 @@ case class AllProductPrices(
 
 object AllProductPrices extends InternationalisationCodecs {
   implicit val allProductPricesEncoder: Encoder[AllProductPrices] = deriveEncoder
+}
+
+/** Wrapper for both regular and checkout nudge product prices to avoid exceeding Twirl's 22 parameter limit */
+case class ProductPricesWrapper(
+    allProductPrices: AllProductPrices,
+    allCheckoutNudgeProductPrices: AllProductPrices,
+)
+
+object ProductPricesWrapper extends InternationalisationCodecs {
+  implicit val productPricesWrapperEncoder: Encoder[ProductPricesWrapper] = deriveEncoder
 }
 
 class Application(
@@ -412,6 +426,13 @@ class Application(
 
     val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
 
+    val checkoutNudgePromoCodes = settings.checkoutNudgeTests
+      .filter(_.status == Live)
+      .flatMap(_.variants)
+      .flatMap(_.promoCodes.getOrElse(Nil))
+      .distinct
+    val allCheckoutNudgeProductPrices = getAllProductPrices(isTestUser, checkoutNudgePromoCodes)
+
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
     // We want the canonical link to point to the geo-redirect page so that users arriving from
     // search will be redirected to the correct version of the page
@@ -441,7 +462,7 @@ class Application(
       shareImageUrl = shareImageUrl(settings),
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
       serversideTests = serversideTests,
-      allProductPrices = allProductPrices,
+      productPricesWrapper = ProductPricesWrapper(allProductPrices, allCheckoutNudgeProductPrices),
       productCatalog = productCatalog,
       noIndex = noIndexing,
       canonicalLink = canonicalLink,
@@ -608,6 +629,13 @@ class Application(
 
     val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
 
+    val checkoutNudgePromoCodes = settings.checkoutNudgeTests
+      .filter(_.status == Live)
+      .flatMap(_.variants)
+      .flatMap(_.promoCodes.getOrElse(Nil))
+      .distinct
+    val allCheckoutNudgeProductPrices = getAllProductPrices(isTestUser, checkoutNudgePromoCodes)
+
     Ok(
       views.html.router(
         geoData = geoData,
@@ -626,7 +654,7 @@ class Application(
         membersDataApiUrl = membersDataApiUrl,
         guestAccountCreationToken = guestAccountCreationToken,
         productCatalog = productCatalog,
-        allProductPrices = allProductPrices,
+        productPricesWrapper = ProductPricesWrapper(allProductPrices, allCheckoutNudgeProductPrices),
         user = request.user,
         homeDeliveryPostcodes = Some(PaperValidation.M25_POSTCODE_PREFIXES),
       ),
@@ -649,6 +677,13 @@ class Application(
     val queryPromos = request.queryString.getOrElse("promoCode", Nil).toList
     val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
 
+    val checkoutNudgePromoCodes = settings.checkoutNudgeTests
+      .filter(_.status == Live)
+      .flatMap(_.variants)
+      .flatMap(_.promoCodes.getOrElse(Nil))
+      .distinct
+    val allCheckoutNudgeProductPrices = getAllProductPrices(isTestUser, checkoutNudgePromoCodes)
+
     val appConfig = AppConfig.fromConfig(
       geoData = request.geoData,
       paymentMethodConfigs = PaymentMethodConfigs(
@@ -668,6 +703,7 @@ class Application(
       productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get(),
       serversideTests = generateParticipations(Nil),
       allProductPrices = allProductPrices,
+      allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
       user = request.user,
       isTestUser = isTestUser,
       settings = settings,
