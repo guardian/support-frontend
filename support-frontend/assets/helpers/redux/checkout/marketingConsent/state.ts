@@ -1,5 +1,5 @@
 // ----- Types ----- //
-export type MarketingConsentState = {
+type MarketingConsentState = {
 	error: boolean;
 	confirmOptIn: boolean | null | undefined;
 	requestPending: boolean;

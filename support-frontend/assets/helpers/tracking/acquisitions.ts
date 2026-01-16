@@ -69,27 +69,6 @@ export type PaymentAPIAcquisitionData = {
 const ACQUISITIONS_PARAM = 'acquisitionData';
 const ACQUISITIONS_STORAGE_KEY = 'acquisitionData';
 
-// ----- Campaigns ----- //
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- needed for the type below
-const campaigns: Record<string, string[]> = {
-	seven_fifty_middle: ['gdnwb_copts_editorial_memco_seven_fifty_middle'],
-	seven_fifty_end: ['gdnwb_copts_editorial_memco_seven_fifty_end'],
-	seven_fifty_email: ['gdnwb_copts_email_memco_seven_fifty'],
-	epic_paradise_paradise_highlight: [
-		'gdnwb_copts_memco_epic_paradise_paradise_highlight',
-	],
-	epic_paradise_different_highlight: [
-		'gdnwb_copts_memco_epic_paradise_different_highlight',
-	],
-	epic_paradise_control: ['gdnwb_copts_memco_epic_paradise_control'],
-	epic_paradise_standfirst: ['gdnwb_copts_memco_epic_paradise_standfirst'],
-	banner_just_one_control: ['banner_just_one_control'],
-	banner_just_one_just_one: ['banner_just_one_just_one'],
-};
-
-export type Campaign = keyof typeof campaigns;
-
 // ----- Functions ----- //
 
 // Stores the acquisition data in sessionStorage.
