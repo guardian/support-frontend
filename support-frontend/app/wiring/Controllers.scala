@@ -96,20 +96,6 @@ trait Controllers {
     appConfig.stage,
   )
 
-  lazy val digitalPackFormController = new DigitalSubscriptionFormController(
-    priceSummaryServiceProvider,
-    assetsResolver,
-    actionBuilders,
-    testUsers,
-    appConfig.regularStripeConfigProvider,
-    appConfig.regularPayPalConfigProvider,
-    controllerComponents,
-    allSettingsProvider,
-    appConfig.recaptchaConfigProvider,
-    cachedProductCatalogServiceProvider,
-    appConfig.stage,
-  )
-
   lazy val createSubscriptionController = new CreateSubscriptionController(
     supportWorkersClient,
     actionBuilders,
