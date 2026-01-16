@@ -23,6 +23,7 @@ export interface CheckoutNudgeVariant {
 		benefits?: Benefits;
 		nudgeToProduct: Product;
 	};
+	promoCodes?: string[];
 }
 
 interface RegionTargeting {

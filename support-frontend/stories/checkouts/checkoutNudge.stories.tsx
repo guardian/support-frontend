@@ -1,13 +1,11 @@
+import { css } from '@emotion/react';
 import { Column, Columns } from '@guardian/source/react-components';
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
-import {
-	CheckoutNudge,
-	CheckoutNudgeProps,
-} from 'components/checkoutNudge/checkoutNudge';
+import { CheckoutNudge } from 'components/checkoutNudge/checkoutNudge';
+import type { CheckoutNudgeProps } from 'components/checkoutNudge/checkoutNudge';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
-import { css } from '@emotion/react';
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 
 export default {
 	title: 'Checkouts/Checkout Nudge',
@@ -73,6 +71,70 @@ BenefitsList.args = {
 	amount: 15,
 	benefits: {
 		label: 'Your all-access benefits:',
-		checkListData: [{'isChecked':true,'text':'Unlimited access to the Guardian app'},{'isChecked':true,'text':'Ad-free reading on all your devices'}],
+		checkListData: [
+			{ isChecked: true, text: 'Unlimited access to the Guardian app' },
+			{ isChecked: true, text: 'Ad-free reading on all your devices' },
+		],
+	},
+};
+
+export const WithPromotion = Template.bind({});
+
+WithPromotion.args = {
+	supportRegionId: SupportRegionId.UK,
+	heading: 'Support us and save',
+	body: 'Get all-access digital for less. Your support powers our independent journalism.',
+	product: 'SupporterPlus',
+	ratePlan: 'Monthly',
+	amount: 12,
+	promotion: {
+		name: 'Special Offer',
+		description: '25% off for 3 months',
+		promoCode: 'PROMO25',
+		discountedPrice: 9,
+		numberOfDiscountedPeriods: 3,
+		discount: {
+			amount: 25,
+			durationMonths: 3,
+		},
+		landingPage: {
+			title: 'Special offer',
+			description: 'Save 25% for your first 3 months',
+			roundel: '25% off',
+		},
+	},
+	benefits: {
+		label: 'Your all-access benefits:',
+		checkListData: [
+			{ isChecked: true, text: 'Unlimited access to the Guardian app' },
+			{ isChecked: true, text: 'Ad-free reading on all your devices' },
+		],
+	},
+};
+
+export const WithPromotionAnnual = Template.bind({});
+
+WithPromotionAnnual.args = {
+	supportRegionId: SupportRegionId.UK,
+	heading: 'Support us and save',
+	body: 'Get all-access digital for less. Your support powers our independent journalism.',
+	product: 'SupporterPlus',
+	ratePlan: 'Annual',
+	amount: 120,
+	promotion: {
+		name: 'Annual Special',
+		description: '30% off annual subscription',
+		promoCode: 'ANNUAL30',
+		discountedPrice: 84,
+		numberOfDiscountedPeriods: 1,
+		discount: {
+			amount: 30,
+			durationMonths: 12,
+		},
+		landingPage: {
+			title: 'Annual special offer',
+			description: 'Save 30% on your annual subscription',
+			roundel: '30% off',
+		},
 	},
 };

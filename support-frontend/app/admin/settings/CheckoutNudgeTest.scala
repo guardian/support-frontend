@@ -76,6 +76,7 @@ object CheckoutNudge {
 case class CheckoutNudgeVariant(
     name: String,
     nudge: Option[CheckoutNudge] = None,
+    promoCodes: Option[List[String]] = None,
 )
 
 object CheckoutNudgeVariant {

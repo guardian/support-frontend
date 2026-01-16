@@ -42,6 +42,12 @@ declare global {
 			allProductPrices?: {
 				SupporterPlus: ProductPrices;
 				TierThree: ProductPrices;
+				DigitalSubscription: ProductPrices;
+			};
+			allCheckoutNudgeProductPrices?: {
+				SupporterPlus: ProductPrices;
+				TierThree: ProductPrices;
+				DigitalSubscription: ProductPrices;
 			};
 			serversideTests?: Participations | null;
 			settings: Settings;

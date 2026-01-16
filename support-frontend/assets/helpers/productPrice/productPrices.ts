@@ -117,6 +117,9 @@ const getDiscountVsRetail = (
 
 const allProductPrices = window.guardian.allProductPrices;
 
+const allCheckoutNudgeProductPrices =
+	window.guardian.allCheckoutNudgeProductPrices;
+
 export {
 	getProductPrice,
 	getFirstValidPrice,
@@ -126,4 +129,5 @@ export {
 	isNumeric,
 	getDiscountVsRetail,
 	allProductPrices,
+	allCheckoutNudgeProductPrices,
 };
