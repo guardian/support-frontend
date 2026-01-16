@@ -7,7 +7,7 @@ import {
 } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 import { Children } from 'react';
-import { copyrightNotice } from 'helpers/legal';
+import { copyrightNotice, privacyLink } from 'helpers/legal';
 import Rows from '../base/rows';
 import { BackToTop } from './BackToTop';
 import FooterContent from './containers/FooterContent';
@@ -78,11 +78,7 @@ function Footer({
 						</Link>
 					</li>
 					<li css={link}>
-						<Link
-							subdued
-							href="https://www.theguardian.com/help/privacy-policy"
-							theme={themeLinkBrand}
-						>
+						<Link subdued href={privacyLink} theme={themeLinkBrand}>
 							Privacy Policy
 						</Link>
 					</li>
