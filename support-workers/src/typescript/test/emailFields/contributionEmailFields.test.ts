@@ -26,31 +26,22 @@ describe('contributionEmailFields', () => {
 			},
 			paymentMethod: directDebitPaymentMethod,
 			mandateId: mandateId,
-			ratePlan: 'Monthly',
 		});
 		const expected = {
 			To: {
 				Address: emailAddress,
 				ContactAttributes: {
 					SubscriberAttributes: {
-						name: emailUser.firstName,
 						amount: '5',
 						currency: 'GBP',
-						billing_period: 'monthly',
-						edition: emailUser.billingAddress.country,
-						Mandate_ID: mandateId,
 						first_payment_date: 'Friday, 21 November 2025',
-						product: 'monthly-contribution',
-						created: '2025-11-11T00:00:00.000Z',
-						account_name: directDebitPaymentMethod.BankTransferAccountName,
-						account_number: '******11',
-						sort_code: directDebitPaymentMethod.BankCode,
+						billing_period: 'monthly',
 						payment_method: 'Direct Debit',
 						first_name: emailUser.firstName,
+						last_name: emailUser.lastName,
 						account_holder: 'Mickey Mouse',
 						bank_account_no: '******11',
 						bank_sort_code: '20-20-20',
-						last_name: 'Mouse',
 						mandate_id: 'MANDATE_ID',
 						subscriber_id: 'SUBSCRIPTION123',
 						subscription_rate: '£5.00 every month',

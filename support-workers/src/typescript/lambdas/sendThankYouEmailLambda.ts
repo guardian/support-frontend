@@ -89,7 +89,6 @@ async function sendContributionEmail(
 		buildContributionEmailFields({
 			...(await getFieldsFromState(sendThankYouEmailState)),
 			amount: productInformation.amount,
-			ratePlan: productInformation.ratePlan,
 		}),
 	);
 }
