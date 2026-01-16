@@ -18,8 +18,6 @@ import { productReducer } from 'helpers/redux/checkout/product/reducer';
 import type { ProductState } from 'helpers/redux/checkout/product/state';
 import { recaptchaReducer } from 'helpers/redux/checkout/recaptcha/reducer';
 import type { RecaptchaState } from 'helpers/redux/checkout/recaptcha/state';
-import { thankYouReducer } from 'helpers/redux/checkout/thankYouState/reducer';
-import type { ThankYouState } from 'helpers/redux/checkout/thankYouState/state';
 import { userReducer } from 'helpers/redux/user/reducer';
 import type { UserState } from 'helpers/redux/user/state';
 import type { Action } from './legacyActionCreators';
@@ -43,7 +41,6 @@ interface PageState {
 		payment: PaymentState;
 		billingAddress: AddressState;
 		addressMeta: AddressMetaState;
-		thankYou: ThankYouState;
 	};
 	user: UserState;
 }
@@ -94,7 +91,6 @@ function initReducer(): Reducer<PageState> {
 			payment: paymentReducer,
 			billingAddress: billingAddressReducer,
 			addressMeta: addressMetaReducer,
-			thankYou: thankYouReducer,
 		}),
 		user: userReducer,
 	});
