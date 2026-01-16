@@ -21,11 +21,6 @@ export type FullPaymentMethod = {
 	stripePaymentMethod?: StripePaymentMethod;
 };
 
-export const recaptchaRequiredPaymentMethods: PaymentMethod[] = [
-	DirectDebit,
-	Stripe,
-];
-
 const paymentMethods = [
 	Stripe,
 	PayPal,

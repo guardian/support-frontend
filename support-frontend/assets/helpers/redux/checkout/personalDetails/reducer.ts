@@ -6,7 +6,7 @@ import type { Title } from 'helpers/user/details';
 import { resetValidation, validateForm } from '../checkoutActions';
 import { initialPersonalDetailsState, personalDetailsSchema } from './state';
 
-export const personalDetailsSlice = createSlice({
+const personalDetailsSlice = createSlice({
 	name: 'personalDetails',
 	initialState: initialPersonalDetailsState,
 	reducers: {

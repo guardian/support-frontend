@@ -27,7 +27,7 @@ const terms = css`
 	}
 `;
 
-export type RecaptchaProps = {
+type RecaptchaProps = {
 	id?: string;
 	onRecaptchaCompleted: (token: string) => void;
 	onRecaptchaExpired?: () => void;

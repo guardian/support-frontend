@@ -1,6 +1,6 @@
 import type { DeliveryAgentsResponse } from '../../../../pages/[countryGroupId]/checkout/helpers/getDeliveryAgents';
 
-export type AddressMetaState = {
+type AddressMetaState = {
 	billingAddressMatchesDelivery: boolean;
 	deliveryInstructions?: string;
 	deliveryAgent: DeliveryAgentState;

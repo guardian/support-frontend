@@ -1,4 +1,4 @@
-export type RecaptchaState = {
+type RecaptchaState = {
 	token: string;
 	completed: boolean;
 	errors: string[];

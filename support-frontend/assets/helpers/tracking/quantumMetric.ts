@@ -269,34 +269,6 @@ function sendEventContributionCheckoutConversion(
 	});
 }
 
-// TODO: To be deleted with the 2-step checkout
-function sendEventContributionCartValue(
-	amount: string,
-	billingPeriod: BillingPeriod,
-	sourceCurrency: IsoCurrency,
-): void {
-	if (amount === 'other' || Number.isNaN(parseInt(amount))) {
-		return;
-	}
-	void ifQmPermitted(() => {
-		const sendEventWhenReady = () => {
-			const sendEventId =
-				billingPeriod === BillingPeriod.OneTime
-					? SendEventContributionAmountUpdate.SingleContribution
-					: SendEventContributionAmountUpdate.RecurringContribution;
-			const convertedValue = getContributionAnnualValue(
-				billingPeriod,
-				parseInt(amount),
-				sourceCurrency,
-			);
-			if (convertedValue) {
-				sendEvent(sendEventId, false, Math.round(convertedValue).toString());
-			}
-		};
-		sendEventWhenReadyTrigger(sendEventWhenReady);
-	});
-}
-
 function sendEventPaymentMethodSelected(
 	paymentMethod: PaymentMethod | 'StripeExpressCheckoutElement' | null,
 ): void {
@@ -394,7 +366,6 @@ function init(
 export {
 	init,
 	sendEventContributionCheckoutConversion,
-	sendEventContributionCartValue,
 	sendEventPaymentMethodSelected,
 	sendEventCheckoutValue,
 	sendEventOneTimeCheckoutValue,

@@ -76,8 +76,3 @@ export const initialPostcodeFinderState: PostcodeFinderState = {
 	isLoading: false,
 	postcode: '',
 };
-
-export interface AddressState {
-	fields: AddressFieldsState;
-	postcode: PostcodeFinderState;
-}

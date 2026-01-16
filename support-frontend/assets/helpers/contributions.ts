@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 
 // ----- Types ----- //
 export const contributionTypes = ['ONE_OFF', 'MONTHLY', 'ANNUAL'];
@@ -81,36 +80,6 @@ export type OtherAmounts = Record<
 >;
 
 export type SelectedAmounts = Record<ContributionType, number | 'other'>;
-
-const getAmount = (
-	selectedAmounts: SelectedAmounts,
-	otherAmounts: OtherAmounts,
-	contributionType: ContributionType,
-	coverTransactionCostSelected?: boolean,
-): number => {
-	const selectedChoiceCardAmount = selectedAmounts[contributionType];
-	/**
-	 * TODO: otherAmount falls back to zero if no other amount
-	 * entered by user. This prevents the function returning NaN.
-	 * Ideally it would return undefined and we'd handle that, but the
-	 * impact of doing so was deemed too great, considering most use cases
-	 * are in the soon to be deprecated 2-step checkout.
-	 */
-	const otherAmount = otherAmounts[contributionType].amount ?? '0';
-
-	const selectedAmount =
-		selectedChoiceCardAmount === 'other'
-			? parseFloat(otherAmount)
-			: selectedChoiceCardAmount;
-
-	// Only cover transaction costs for one off contributions
-	const coverTransactionCost =
-		coverTransactionCostSelected && contributionType === 'ONE_OFF';
-
-	return coverTransactionCost
-		? roundToDecimalPlaces(selectedAmount * 1.04)
-		: selectedAmount;
-};
 
 // ----- Setup ----- //
 
@@ -261,9 +230,4 @@ const isContributionsOnlyCountry = (
 };
 
 // ----- Exports ----- //
-export {
-	config,
-	getAmount,
-	contributionsOnlyAmountsTestName,
-	isContributionsOnlyCountry,
-};
+export { config, contributionsOnlyAmountsTestName, isContributionsOnlyCountry };

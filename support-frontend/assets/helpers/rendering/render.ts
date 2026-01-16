@@ -74,4 +74,4 @@ const renderPage = (
 	}
 };
 
-export { renderPage, renderError };
+export { renderPage };

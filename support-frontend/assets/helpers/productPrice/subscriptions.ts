@@ -24,7 +24,6 @@ export const subscriptionProductTypes = [
 	Paper,
 	PaperAndDigital,
 ] as const;
-export const paperProductTypes = [Paper, PaperAndDigital];
 
 export type SubscriptionProduct = (typeof subscriptionProductTypes)[number];
 
