@@ -20,6 +20,7 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { Country } from 'helpers/internationalisation/classes/country';
+import { guardianContactUsLink, guardianHelpCentreLink } from 'helpers/legal';
 import { billingPeriodToContributionType } from 'helpers/productPrice/billingPeriods';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import { AmountsCard } from '../components/amountsCard';
@@ -119,12 +120,12 @@ const links = [
 		},
 	},
 	{
-		href: 'https://www.theguardian.com/help/contact-us',
+		href: guardianContactUsLink,
 		text: 'Contact us',
 		isExternal: true,
 	},
 	{
-		href: 'https://www.theguardian.com/help',
+		href: guardianHelpCentreLink,
 		text: 'Help centre',
 		isExternal: true,
 	},
