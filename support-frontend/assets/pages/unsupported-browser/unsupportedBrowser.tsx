@@ -7,22 +7,20 @@ import { guardianHelpCentreLink } from 'helpers/legal';
 import Footer from './components/footer';
 import {
 	boxAlignment,
-	container,
-	unsupported_browser__introduction_text,
-	unsupported_browser__why_support,
-	unsupported_browser__why_support_copy,
-	unsupported_browser__why_support_heading,
-	unsupported_browser__why_support_subheading,
+	introductionColor,
+	unsupportedBrowserContainer,
+	whySupportContainer,
+	whySupportCopy,
+	whySupportHeading,
+	whySupportSubheading,
 } from './unsupportedBrowserStyles';
 
 export default function UnsupportedBrowser(): JSX.Element {
 	return (
 		<>
 			<PageScaffold header={<Header />} footer={<Footer />}>
-				<div css={container}>
-					<section
-						css={[boxAlignment(5, 5), unsupported_browser__introduction_text]}
-					>
+				<div css={unsupportedBrowserContainer}>
+					<section css={[boxAlignment(5, 5), introductionColor]}>
 						<p>
 							The browser you are using has known problems which may prevent
 							some of this site's features from working as they should.
@@ -40,33 +38,27 @@ export default function UnsupportedBrowser(): JSX.Element {
 						</p>
 						<p>Thank you!</p>
 					</section>
-					<section css={unsupported_browser__why_support}>
+					<section css={whySupportContainer}>
 						<div css={boxAlignment(0, 0)}>
-							<h1 css={unsupported_browser__why_support_heading}>
-								Why do we need your support?
-							</h1>
-							<h2 css={unsupported_browser__why_support_subheading}>
-								No one edits our editor
-							</h2>
-							<p css={unsupported_browser__why_support_copy}>
+							<h1 css={whySupportHeading}>Why do we need your support?</h1>
+							<h2 css={whySupportSubheading}>No one edits our editor</h2>
+							<p css={whySupportCopy}>
 								Your support is vital in helping the Guardian do the most
 								important journalism of all: that which takes time and effort.
 								More people than ever now read and support the Guardian's
 								independent, quality and investigative journalism.
 							</p>
-							<h2 css={unsupported_browser__why_support_subheading}>
+							<h2 css={whySupportSubheading}>
 								Advertising revenues are falling
 							</h2>
-							<p css={unsupported_browser__why_support_copy}>
+							<p css={whySupportCopy}>
 								Like many media organisations, the Guardian is operating in an
 								incredibly challenging commercial environment, and the
 								advertising that we used to rely on to fund our work continues
 								to fall.
 							</p>
-							<h2 css={unsupported_browser__why_support_subheading}>
-								We haven't put up a paywall
-							</h2>
-							<p css={unsupported_browser__why_support_copy}>
+							<h2 css={whySupportSubheading}>We haven't put up a paywall</h2>
+							<p css={whySupportCopy}>
 								We want to keep our journalism as open as we can.
 							</p>
 						</div>

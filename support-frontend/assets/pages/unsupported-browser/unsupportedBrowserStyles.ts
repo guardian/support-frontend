@@ -50,7 +50,7 @@ export const boxAlignment = (
 	}
 `;
 
-export const container = css`
+export const unsupportedBrowserContainer = css`
 	background-color: ${neutral[93]};
 	flex: 1 0 auto;
 	${textEgyptian15};
@@ -58,31 +58,27 @@ export const container = css`
 	line-height: 1.5;
 `;
 
-export const unsupported_browser__introduction_text = css`
+export const introductionColor = css`
 	background-color: #e9e939;
-	/* padding-top: 5px;
-	padding-bottom: 5px;
-	margin-top: 5px;
-	margin-bottom: 5px; */
 `;
 
-export const unsupported_browser__why_support = css`
+export const whySupportContainer = css`
 	padding-bottom: ${gu_v_spacing * 2}px;
 `;
 
-export const unsupported_browser__why_support_heading = css`
+export const whySupportHeading = css`
 	${headlineBold24};
 	line-height: 1.5;
 	padding: ${gu_v_spacing}px 0 0;
 `;
 
-export const unsupported_browser__why_support_subheading = css`
+export const whySupportSubheading = css`
 	${headlineBold20};
 	line-height: 1.5;
 	padding: ${gu_v_spacing}px 0;
 `;
 
-export const unsupported_browser__why_support_copy = css`
+export const whySupportCopy = css`
 	${from.desktop} {
 		width: 60%;
 	}
