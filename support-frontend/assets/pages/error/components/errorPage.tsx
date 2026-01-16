@@ -1,13 +1,13 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { space } from '@guardian/source/foundations';
+import { palette, space } from '@guardian/source/foundations';
 import { themeButtonReaderRevenueBrand } from '@guardian/source/react-components';
 import Rows from 'components/base/rows';
 import AnchorButton from 'components/button/anchorButton';
 import { themeButtonLegacyGray } from 'components/button/theme';
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
-import Page from 'components/page/page';
+import { PageScaffold } from 'components/page/pageScaffold';
 import PageSection from 'components/pageSection/pageSection';
 import Text, { LargeParagraph } from 'components/text/text';
 import 'stylesheets/gu-sass/gu-sass.scss';
@@ -29,6 +29,13 @@ export type ErrorPageProps = {
 
 const countryGroupId = CountryGroup.detect();
 
+const mainContentStyles = css`
+	background-color: ${palette.neutral[93]};
+	@supports (display: flex) {
+		flex: 1 0 auto;
+	}
+`;
+
 const paddingOverrides = css`
 	padding-top: ${gu_v_spacing * 2}px;
 	padding-bottom: ${gu_v_spacing * 3}px;
@@ -42,44 +49,46 @@ const buttonRow = css`
 
 export default function ErrorPage(props: ErrorPageProps): JSX.Element {
 	return (
-		<Page
+		<PageScaffold
 			header={<Header countryGroupId={countryGroupId} />}
 			footer={<Footer />}
 		>
-			<SquaresIntroduction
-				headings={props.headings}
-				errorCode={props.errorCode}
-			/>
-			<PageSection cssOverrides={paddingOverrides}>
-				<Text>
-					<LargeParagraph>
-						<span className="error-copy__text">{props.copy} </span>
-						<ReportLink show={props.reportLink ?? false} />
-					</LargeParagraph>
-					<Rows>
-						<div css={buttonRow}>
-							{props.supportLink && (
+			<div css={mainContentStyles}>
+				<SquaresIntroduction
+					headings={props.headings}
+					errorCode={props.errorCode}
+				/>
+				<PageSection cssOverrides={paddingOverrides}>
+					<Text>
+						<LargeParagraph>
+							<span className="error-copy__text">{props.copy} </span>
+							<ReportLink show={props.reportLink ?? false} />
+						</LargeParagraph>
+						<Rows>
+							<div css={buttonRow}>
+								{props.supportLink && (
+									<AnchorButton
+										aria-label="click here to support the Guardian"
+										link="/"
+										ctaButtonText="Support the Guardian"
+										theme={themeButtonReaderRevenueBrand}
+										size="small"
+									/>
+								)}
 								<AnchorButton
-									aria-label="click here to support the Guardian"
-									link="/"
-									ctaButtonText="Support the Guardian"
-									theme={themeButtonReaderRevenueBrand}
+									aria-label="click here to return to the Guardian home page"
+									link="https://www.theguardian.com"
+									priority="tertiary"
+									theme={themeButtonLegacyGray}
+									ctaButtonText="Go to the Guardian home page"
 									size="small"
 								/>
-							)}
-							<AnchorButton
-								aria-label="click here to return to the Guardian home page"
-								link="https://www.theguardian.com"
-								priority="tertiary"
-								theme={themeButtonLegacyGray}
-								ctaButtonText="Go to the Guardian home page"
-								size="small"
-							/>
-						</div>
-					</Rows>
-				</Text>
-			</PageSection>
-		</Page>
+							</div>
+						</Rows>
+					</Text>
+				</PageSection>
+			</div>
+		</PageScaffold>
 	);
 } // ----- Auxiliary Components ----- //
 
