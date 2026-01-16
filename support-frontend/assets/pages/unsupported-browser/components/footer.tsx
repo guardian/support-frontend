@@ -1,4 +1,4 @@
-import { privacyLink } from 'helpers/legal';
+import { defaultContributionEmail, privacyLink } from 'helpers/legal';
 import { gu_v_spacing } from 'stylesheets/emotion/layout';
 import { gu_content_margin } from '../unsupportedBrowserStyles';
 import {
@@ -36,7 +36,7 @@ export default function Footer(): JSX.Element {
 				you have any questions about contributing to the Guardian, please{' '}
 				<a
 					css={unsupported_browser__footer_legal_link}
-					href="mailto:contribution.support@@theguardian.com"
+					href={defaultContributionEmail}
 				>
 					contact us here
 				</a>

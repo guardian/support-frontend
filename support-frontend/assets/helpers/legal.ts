@@ -54,6 +54,7 @@ const buildPromotionalTermsLink = (promotion: Promotion): string =>
 	`/p/${promotion.promoCode}/terms`;
 
 export {
+	defaultContributionEmail,
 	contributionsTermsLinks,
 	privacyLink,
 	copyrightNotice,
