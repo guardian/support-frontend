@@ -41,6 +41,7 @@ import type { ContributionType } from 'helpers/contributions';
 import { getFeatureFlags } from 'helpers/featureFlags';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { glyph } from 'helpers/internationalisation/currency';
+import { guardianContactUsLink, guardianHelpCentreLink } from 'helpers/legal';
 import {
 	getProductDescription,
 	getProductLabel,
@@ -183,12 +184,12 @@ const links = [
 		},
 	},
 	{
-		href: 'https://www.theguardian.com/help/contact-us',
+		href: guardianContactUsLink,
 		text: 'Contact us',
 		isExternal: true,
 	},
 	{
-		href: 'https://www.theguardian.com/help',
+		href: guardianHelpCentreLink,
 		text: 'Help centre',
 		isExternal: true,
 	},

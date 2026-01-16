@@ -3,6 +3,7 @@ import 'stylesheets/gu-sass/gu-sass.scss';
 import 'stylesheets/skeleton/fonts.scss';
 import 'stylesheets/skeleton/reset-src.scss';
 import { PageScaffold } from 'components/page/pageScaffold';
+import { guardianHelpCentreLink } from 'helpers/legal';
 import Footer from './components/footer';
 import {
 	container,
@@ -37,10 +38,8 @@ export default function UnsupportedBrowser(): JSX.Element {
 						</p>
 						<p>
 							If you continue to have difficulty making a payment, our{' '}
-							<a href="https://www.theguardian.com/info/tech-feedback">
-								customer support team
-							</a>{' '}
-							are on hand to help.
+							<a href={guardianHelpCentreLink}>customer support team</a> are on
+							hand to help.
 						</p>
 						<p>Thank you!</p>
 					</section>

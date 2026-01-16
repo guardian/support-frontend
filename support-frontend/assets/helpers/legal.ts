@@ -3,6 +3,8 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import type { Promotion } from './productPrice/promotions';
 // ----- Terms & Conditions ----- //
 const privacyLink = 'https://www.theguardian.com/help/privacy-policy';
+const guardianHelpCentreLink = 'https://www.theguardian.com/help';
+const guardianContactUsLink = 'https://www.theguardian.com/help/contact-us';
 const defaultContributionEmail = 'mailto:contribution.support@theguardian.com';
 const copyrightNotice = `\u00A9 ${new Date().getFullYear()} Guardian News and Media Limited or its
   affiliated companies. All rights reserved.`;
@@ -54,6 +56,8 @@ const buildPromotionalTermsLink = (promotion: Promotion): string =>
 	`/p/${promotion.promoCode}/terms`;
 
 export {
+	guardianContactUsLink,
+	guardianHelpCentreLink,
 	defaultContributionEmail,
 	contributionsTermsLinks,
 	privacyLink,
