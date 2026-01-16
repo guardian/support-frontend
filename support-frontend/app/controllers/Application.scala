@@ -210,16 +210,6 @@ object AllProductPrices extends InternationalisationCodecs {
   implicit val allProductPricesEncoder: Encoder[AllProductPrices] = deriveEncoder
 }
 
-/** Wrapper for both regular and checkout nudge product prices to avoid exceeding Twirl's 22 parameter limit */
-case class ProductPricesWrapper(
-    allProductPrices: AllProductPrices,
-    allCheckoutNudgeProductPrices: AllProductPrices,
-)
-
-object ProductPricesWrapper extends InternationalisationCodecs {
-  implicit val productPricesWrapperEncoder: Encoder[ProductPricesWrapper] = deriveEncoder
-}
-
 class Application(
     actionRefiners: CustomActionBuilders,
     val assets: AssetsResolver,
@@ -426,13 +416,6 @@ class Application(
 
     val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
 
-    val checkoutNudgePromoCodes = settings.checkoutNudgeTests
-      .filter(_.status == Live)
-      .flatMap(_.variants)
-      .flatMap(_.promoCodes.getOrElse(Nil))
-      .distinct
-    val allCheckoutNudgeProductPrices = getAllProductPrices(isTestUser, checkoutNudgePromoCodes)
-
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
     // We want the canonical link to point to the geo-redirect page so that users arriving from
     // search will be redirected to the correct version of the page
@@ -462,7 +445,7 @@ class Application(
       shareImageUrl = shareImageUrl(settings),
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
       serversideTests = serversideTests,
-      productPricesWrapper = ProductPricesWrapper(allProductPrices, allCheckoutNudgeProductPrices),
+      allProductPrices = allProductPrices,
       productCatalog = productCatalog,
       noIndex = noIndexing,
       canonicalLink = canonicalLink,
@@ -654,7 +637,8 @@ class Application(
         membersDataApiUrl = membersDataApiUrl,
         guestAccountCreationToken = guestAccountCreationToken,
         productCatalog = productCatalog,
-        productPricesWrapper = ProductPricesWrapper(allProductPrices, allCheckoutNudgeProductPrices),
+        allProductPrices = allProductPrices,
+        allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
         user = request.user,
         homeDeliveryPostcodes = Some(PaperValidation.M25_POSTCODE_PREFIXES),
       ),

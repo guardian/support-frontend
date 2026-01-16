@@ -2,7 +2,7 @@
 @import assets.RefPath
 @import assets.AssetsResolver
 @import admin.settings.AllSettings
-@import controllers.ProductPricesWrapper
+@import controllers.AllProductPrices
 @import io.circe.JsonObject
 
 @import com.gu.identity.model.User
@@ -17,7 +17,8 @@
   membersDataApiUrl: String,
   guestAccountCreationToken: Option[String],
   v2recaptchaConfigPublicKey: String,
-  productPricesWrapper: ProductPricesWrapper,
+  allProductPrices: AllProductPrices,
+  allCheckoutNudgeProductPrices: AllProductPrices,
   productCatalog: JsonObject,
   user: Option[User],
   homeDeliveryPostcodes: Option[List[String]] = None,
@@ -39,8 +40,8 @@
 ){
   <script type="text/javascript">
     window.guardian = window.guardian || {};
-    window.guardian.allProductPrices = @Html(outputJson(productPricesWrapper.allProductPrices))
-    window.guardian.allCheckoutNudgeProductPrices = @Html(outputJson(productPricesWrapper.allCheckoutNudgeProductPrices))
+    window.guardian.allProductPrices = @Html(outputJson(allProductPrices))
+    window.guardian.allCheckoutNudgeProductPrices = @Html(outputJson(allCheckoutNudgeProductPrices))
   </script>
 
   @homeDeliveryPostcodes.map { postcodes =>
