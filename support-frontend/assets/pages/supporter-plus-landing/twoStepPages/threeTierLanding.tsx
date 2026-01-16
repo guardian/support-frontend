@@ -509,8 +509,6 @@ export function ThreeTierLanding({
 				tier3ProductPrice,
 				countryId,
 				billingPeriod,
-				countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
-				'NewspaperArchive',
 		  )
 		: undefined;
 	if (tier3Promotion) {
