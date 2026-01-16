@@ -10,7 +10,6 @@ import createPaymentDirectDebitPaper from './fixtures/createPaymentMethod/paperD
 
 const wrapPayload = (payload: CreatePaymentMethodState) => ({
 	state: payload,
-	error: null,
 	requestInfo: {
 		testUser: false,
 		failed: false,

@@ -1,4 +1,5 @@
 import { productPurchaseSchema } from '@modules/product-catalog/productPurchaseSchema';
+import { optionalDropNulls } from '@modules/schemaUtils';
 import { z } from 'zod';
 import { paymentMethodSchema } from './paymentMethod';
 import { paymentScheduleSchema } from './paymentSchedule';
@@ -54,7 +55,7 @@ export const sendThankYouEmailStateSchema = z.union([
 	}),
 	deliveryProductSchema.extend({
 		productType: z.literal('GuardianWeekly'),
-		giftRecipient: giftRecipientSchema.nullish(),
+		giftRecipient: optionalDropNulls(giftRecipientSchema),
 	}),
 ]);
 
@@ -69,7 +70,7 @@ export const sendAcquisitionEventStateSchema = z.object({
 	requestId: z.string(),
 	sendThankYouEmailState: sendThankYouEmailStateSchema,
 	analyticsInfo: analyticsInfoSchema,
-	acquisitionData: acquisitionDataSchema.nullish(),
+	acquisitionData: optionalDropNulls(acquisitionDataSchema),
 });
 
 export type SendAcquisitionEventState = z.infer<

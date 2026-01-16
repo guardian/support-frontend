@@ -4,6 +4,7 @@ import {
 	productOptionsSchema,
 	recurringBillingPeriodSchema,
 } from '@modules/product/schemas';
+import { optionalDropNulls } from '@modules/schemaUtils';
 import { z } from 'zod';
 
 export const contributionProductSchema = z.object({
@@ -31,7 +32,7 @@ export const paperProductSchema = z.object({
 	fulfilmentOptions: fulfilmentOptionsSchema,
 	productOptions: productOptionsSchema,
 	productType: z.literal('Paper'),
-	deliveryAgent: z.number().nullish(),
+	deliveryAgent: optionalDropNulls(z.number()),
 });
 export const guardianWeeklyProductSchema = z.object({
 	currency: isoCurrencySchema,

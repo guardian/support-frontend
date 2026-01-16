@@ -1,5 +1,6 @@
 import { productPurchaseSchema } from '@modules/product-catalog/productPurchaseSchema';
 import { appliedPromotionSchema } from '@modules/promotions/v1/schema';
+import { optionalDropNulls } from '@modules/schemaUtils';
 import { boolean, z } from 'zod';
 import { addressSchema } from './address';
 import { paymentFieldsSchema, paymentProviderSchema } from './paymentFields';
@@ -27,14 +28,14 @@ export type Title = z.infer<typeof titleSchema>;
 export const userSchema = z.object({
 	id: z.string(),
 	primaryEmailAddress: z.string(),
-	title: titleSchema.nullable(),
+	title: optionalDropNulls(titleSchema),
 	firstName: z.string(),
 	lastName: z.string(),
 	billingAddress: addressSchema,
-	deliveryAddress: addressSchema.nullable(),
-	telephoneNumber: z.string().nullish(),
+	deliveryAddress: optionalDropNulls(addressSchema),
+	telephoneNumber: optionalDropNulls(z.string()),
 	isTestUser: z.boolean(),
-	deliveryInstructions: z.string().nullish(),
+	deliveryInstructions: optionalDropNulls(z.string()),
 });
 export type User = z.infer<typeof userSchema>;
 
@@ -44,8 +45,8 @@ export const analyticsInfoSchema = z.object({
 });
 
 const ophanIdsSchema = z.object({
-	pageviewId: z.string().nullable(),
-	browserId: z.string().nullable(),
+	pageviewId: optionalDropNulls(z.string()),
+	browserId: optionalDropNulls(z.string()),
 });
 
 const abTestSchema = z.object({
@@ -60,19 +61,19 @@ const queryParamSchema = z.object({
 });
 
 const referrerAcquisitionDataSchema = z.object({
-	campaignCode: z.string().nullable(),
-	referrerPageviewId: z.string().nullable(),
-	referrerUrl: z.string().nullable(),
-	componentId: z.string().nullable(),
-	componentType: z.string().nullable(),
-	source: z.string().nullable(),
-	abTests: z.array(abTestSchema).nullable(),
-	queryParameters: z.array(queryParamSchema).nullable(),
-	hostname: z.string().nullable(),
-	gaClientId: z.string().nullable(),
-	userAgent: z.string().nullable(),
-	ipAddress: z.string().nullable(),
-	labels: z.array(z.string()).nullable(),
+	campaignCode: optionalDropNulls(z.string()),
+	referrerPageviewId: optionalDropNulls(z.string()),
+	referrerUrl: optionalDropNulls(z.string()),
+	componentId: optionalDropNulls(z.string()),
+	componentType: optionalDropNulls(z.string()),
+	source: optionalDropNulls(z.string()),
+	abTests: optionalDropNulls(z.array(abTestSchema)),
+	queryParameters: optionalDropNulls(z.array(queryParamSchema)),
+	hostname: optionalDropNulls(z.string()),
+	gaClientId: optionalDropNulls(z.string()),
+	userAgent: optionalDropNulls(z.string()),
+	ipAddress: optionalDropNulls(z.string()),
+	labels: optionalDropNulls(z.array(z.string())),
 });
 
 export const acquisitionDataSchema = z.object({
@@ -82,10 +83,10 @@ export const acquisitionDataSchema = z.object({
 });
 
 export const giftRecipientSchema = z.object({
-	title: titleSchema.nullable(),
+	title: optionalDropNulls(titleSchema),
 	firstName: z.string(),
 	lastName: z.string(),
-	email: z.string().nullable(),
+	email: optionalDropNulls(z.string()),
 });
 
 export type GiftRecipient = z.infer<typeof giftRecipientSchema>;
@@ -93,16 +94,16 @@ export type GiftRecipient = z.infer<typeof giftRecipientSchema>;
 export const baseStateSchema = z.object({
 	requestId: z.string(),
 	user: userSchema,
-	giftRecipient: giftRecipientSchema.nullable(),
+	giftRecipient: optionalDropNulls(giftRecipientSchema),
 	product: productTypeSchema,
-	productInformation: productPurchaseSchema.nullish(),
+	productInformation: optionalDropNulls(productPurchaseSchema),
 	analyticsInfo: analyticsInfoSchema,
-	firstDeliveryDate: dateOrDateStringSchema.nullable(),
-	appliedPromotion: appliedPromotionSchema.nullable(),
-	csrUsername: z.string().nullable(),
-	salesforceCaseId: z.string().nullable(),
-	acquisitionData: acquisitionDataSchema.nullable(),
-	similarProductsConsent: boolean().nullable(),
+	firstDeliveryDate: optionalDropNulls(dateOrDateStringSchema),
+	appliedPromotion: optionalDropNulls(appliedPromotionSchema),
+	csrUsername: optionalDropNulls(z.string()),
+	salesforceCaseId: optionalDropNulls(z.string()),
+	acquisitionData: optionalDropNulls(acquisitionDataSchema),
+	similarProductsConsent: optionalDropNulls(boolean()),
 });
 
 export const createPaymentMethodStateSchema = baseStateSchema.merge(
@@ -141,10 +142,10 @@ export type LambdaState =
 
 export type WrappedState<InputState> = {
 	state: InputState;
-	error: {
+	error?: {
 		Error: string;
 		Cause: string;
-	} | null;
+	};
 	requestInfo: RequestInfo;
 };
 
@@ -153,20 +154,20 @@ export function wrapperSchemaForState<SchemaType extends z.ZodTypeAny>(
 ) {
 	return z.object({
 		state: stateSchema,
-		error: z
-			.object({
+		error: optionalDropNulls(
+			z.object({
 				Error: z.string(),
 				Cause: z.string(),
-			})
-			.nullable(),
+			}),
+		),
 		requestInfo: requestInfoSchema,
 	});
 }
 
 export function wrapState<S extends LambdaState>(
 	state: S,
-	error: { Error: string; Cause: string } | null = null,
 	requestInfo: RequestInfo,
+	error?: { Error: string; Cause: string },
 ): WrappedState<S> {
 	return {
 		state,

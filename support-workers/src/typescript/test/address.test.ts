@@ -7,9 +7,8 @@ import {
 describe('combinedAddressLine', () => {
 	test('it should return an AddressLine when there is only a lineOne', () => {
 		const lineOne = '123 trash alley';
-		const lineTwo = null;
 
-		const combined = combinedAddressLine(lineOne, lineTwo);
+		const combined = combinedAddressLine(lineOne, undefined);
 
 		const expected = { streetNumber: '123', streetName: 'trash alley' };
 
@@ -31,7 +30,7 @@ describe('combinedAddressLine', () => {
 	});
 
 	test('it should return undefined when there is neither a lineOne nor a lineTwo', () => {
-		const combined = combinedAddressLine(null, null);
+		const combined = combinedAddressLine(undefined, undefined);
 
 		const expected = undefined;
 
