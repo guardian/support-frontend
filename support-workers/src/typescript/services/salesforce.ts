@@ -290,10 +290,9 @@ export const createGuardianWeeklyGiftRecipientContactRecordRequest = (
 
 export const createMailingAddressFields = (user: User) => {
 	return {
-		// typescript
-		MailingStreet:
-			(user.deliveryAddress && getAddressLine(user.deliveryAddress)) ??
-			undefined,
+		MailingStreet: user.deliveryAddress
+			? getAddressLine(user.deliveryAddress)
+			: undefined,
 		MailingCity: user.deliveryAddress?.city,
 		MailingState: user.deliveryAddress?.state,
 		MailingPostalCode: user.deliveryAddress?.postCode,

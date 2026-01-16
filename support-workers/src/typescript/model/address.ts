@@ -90,11 +90,10 @@ export function getAddressLine(address: Address): string | undefined {
 		address.lineOne,
 		address.lineTwo,
 	);
-	return (
-		(combinedAddressLineResult &&
-			asFormattedString(combinedAddressLineResult)) ??
-		undefined
-	);
+	if (combinedAddressLineResult) {
+		return asFormattedString(combinedAddressLineResult);
+	}
+	return;
 }
 
 export function truncateForZuoraStreetNameLimit(
