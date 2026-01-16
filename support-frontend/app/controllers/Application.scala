@@ -4,7 +4,6 @@ import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.CustomActionBuilders
 import admin.ServersideAbTest.{Participation, generateParticipations}
 import admin.settings.{AllSettings, AllSettingsProvider, On, SettingsSurrogateKeySyntax}
-import admin.settings.Status.Live
 import assets.{AssetsResolver, RefPath}
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
@@ -237,23 +236,14 @@ class Application(
 
   implicit val a: AssetsResolver = assets
 
-  def getAllProductPrices(isTestUser: Boolean, queryPromos: List[String], settings: AllSettings): AllProductPrices = {
-    // Extract all promo codes from checkout nudge tests that are Live
-    val checkoutNudgePromos = settings.checkoutNudgeTests
-      .filter(_.status == Live)
-      .flatMap(_.variants)
-      .flatMap(_.promoCodes.getOrElse(Nil))
-      .distinct
-
-    val allPromos = queryPromos ++ checkoutNudgePromos
-
+  def getAllProductPrices(isTestUser: Boolean, queryPromos: List[String]): AllProductPrices = {
     AllProductPrices(
-      SupporterPlus = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, allPromos),
-      TierThree = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, allPromos),
-      Paper = priceSummaryServiceProvider.forUser(isTestUser).getPrices(Paper, allPromos),
-      GuardianWeekly = priceSummaryServiceProvider.forUser(isTestUser).getPrices(GuardianWeekly, allPromos),
-      GuardianWeeklyGift = priceSummaryServiceProvider.forUser(isTestUser).getPrices(GuardianWeekly, allPromos, Gift),
-      DigitalPack = priceSummaryServiceProvider.forUser(isTestUser).getPrices(DigitalPack, allPromos),
+      SupporterPlus = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos),
+      TierThree = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos),
+      Paper = priceSummaryServiceProvider.forUser(isTestUser).getPrices(Paper, queryPromos),
+      GuardianWeekly = priceSummaryServiceProvider.forUser(isTestUser).getPrices(GuardianWeekly, queryPromos),
+      GuardianWeeklyGift = priceSummaryServiceProvider.forUser(isTestUser).getPrices(GuardianWeekly, queryPromos, Gift),
+      DigitalPack = priceSummaryServiceProvider.forUser(isTestUser).getPrices(DigitalPack, queryPromos),
     )
   }
 
@@ -420,7 +410,7 @@ class Application(
         .getOrElse("promoCode", Nil)
         .toList
 
-    val allProductPrices = getAllProductPrices(isTestUser, queryPromos, settings)
+    val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
 
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
     // We want the canonical link to point to the geo-redirect page so that users arriving from
@@ -616,7 +606,7 @@ class Application(
         .getOrElse("promoCode", Nil)
         .toList
 
-    val allProductPrices = getAllProductPrices(isTestUser, queryPromos, settings)
+    val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
 
     Ok(
       views.html.router(
@@ -657,7 +647,7 @@ class Application(
     val isTestUser = testUserService.isTestUser(request)
 
     val queryPromos = request.queryString.getOrElse("promoCode", Nil).toList
-    val allProductPrices = getAllProductPrices(isTestUser, queryPromos, settings)
+    val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
 
     val appConfig = AppConfig.fromConfig(
       geoData = request.geoData,
