@@ -109,7 +109,6 @@ export function createSalesforceContactState(
 
 	return {
 		state: outputState,
-		error: null,
 		requestInfo: wrappedState.requestInfo,
 	};
 }
@@ -259,7 +258,7 @@ export function createDirectDebitPaymentMethod(
 		City: user.billingAddress.city,
 		PostalCode: user.billingAddress.postCode,
 		State: user.billingAddress.state,
-		StreetName: addressLine?.streetName ?? null,
-		StreetNumber: addressLine?.streetNumber ?? null,
+		StreetName: addressLine?.streetName,
+		StreetNumber: addressLine?.streetNumber,
 	});
 }

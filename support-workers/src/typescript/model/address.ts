@@ -1,14 +1,15 @@
 import { isoCountries } from '@modules/internationalisation/country';
+import { optionalDropNulls } from '@modules/schemaUtils';
 import { z } from 'zod';
 
 export const countrySchema = z.enum(isoCountries);
 
 export const addressSchema = z.object({
-	lineOne: z.string().nullable(),
-	lineTwo: z.string().nullish(),
-	city: z.string().nullable(),
-	state: z.string().nullable(),
-	postCode: z.string().nullable(),
+	lineOne: optionalDropNulls(z.string()),
+	lineTwo: optionalDropNulls(z.string()),
+	city: optionalDropNulls(z.string()),
+	state: optionalDropNulls(z.string()),
+	postCode: optionalDropNulls(z.string()),
 	country: countrySchema,
 });
 
@@ -20,8 +21,8 @@ type AddressLine = {
 };
 
 export function combinedAddressLine(
-	addressLine1: string | null,
-	addressLine2?: string | null,
+	addressLine1: string | undefined,
+	addressLine2: string | undefined,
 ): AddressLine | undefined {
 	const singleAddressLine = (addressLine: string): AddressLine => {
 		const pattern = /([0-9]+) (.+)/;
@@ -84,15 +85,16 @@ export function combinedAddressLine(
 	return undefined;
 }
 
-export function getAddressLine(address: Address): string | null {
+export function getAddressLine(address: Address): string | undefined {
 	const combinedAddressLineResult = combinedAddressLine(
 		address.lineOne,
 		address.lineTwo,
 	);
-	if (combinedAddressLineResult) {
-		return asFormattedString(combinedAddressLineResult);
-	}
-	return null;
+	return (
+		(combinedAddressLineResult &&
+			asFormattedString(combinedAddressLineResult)) ??
+		undefined
+	);
 }
 
 export function truncateForZuoraStreetNameLimit(

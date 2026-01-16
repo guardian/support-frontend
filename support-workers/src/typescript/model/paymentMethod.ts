@@ -1,3 +1,4 @@
+import { optionalDropNulls } from '@modules/schemaUtils';
 import { z } from 'zod';
 import { countrySchema } from './address';
 import { stripePaymentTypeSchema } from './paymentFields';
@@ -60,11 +61,11 @@ const directDebitPaymentMethodSchema = z.object({
 	BankCode: z.string(),
 	BankTransferAccountNumber: z.string(),
 	Country: countrySchema,
-	City: z.string().nullable(),
-	PostalCode: z.string().nullable(),
-	State: z.string().nullable(),
-	StreetName: z.string().nullable(),
-	StreetNumber: z.string().nullable(),
+	City: optionalDropNulls(z.string()),
+	PostalCode: optionalDropNulls(z.string()),
+	State: optionalDropNulls(z.string()),
+	StreetName: optionalDropNulls(z.string()),
+	StreetNumber: optionalDropNulls(z.string()),
 	BankTransferType: z.literal('DirectDebitUK'),
 	Type: z.literal('BankTransfer'),
 	PaymentGateway: directDebitPaymentGatewaySchema,

@@ -16,20 +16,20 @@ type BuyerIdentifierProps = {
 	Email: string;
 };
 type MailingAddress = {
-	MailingStreet: string | null;
-	MailingCity: string | null;
+	MailingStreet?: string;
+	MailingCity?: string;
 	MailingState?: string; // optional because mandatory for US/CAN/AUS but not collected for UK/NZ
 	MailingPostalCode?: string; // optional because mandatory for US/CAN/AUS/UK but optional for rest of world
-	MailingCountry: string | null;
+	MailingCountry?: string;
 };
 type BaseBillingAddress = {
 	OtherState?: string; // optional because mandatory for US/CAN/AUS but not collected for UK/NZ
 	OtherPostalCode?: string; //collected (optionally) for some countries, but not all
-	OtherCountry: string | null;
+	OtherCountry?: string;
 };
 type BillingAddress = BaseBillingAddress & {
-	OtherStreet: string | null;
-	OtherCity: string | null;
+	OtherStreet?: string;
+	OtherCity?: string;
 };
 
 type GuardianWeeklyGiftRecipientOnlyProps = {
@@ -40,7 +40,7 @@ type GuardianWeeklyGiftRecipientOnlyProps = {
 };
 type GuardianWeeklyGiftBuyerOnlyProps = {
 	Salutation?: Title;
-	Phone?: string | null;
+	Phone?: string;
 };
 
 //ContactRecordRequest types
@@ -126,14 +126,14 @@ export class SalesforceService {
 
 	createContactRecords = async (
 		user: User,
-		giftRecipient: GiftRecipient | null,
 		productType: ProductTypeName,
+		giftRecipient?: GiftRecipient,
 	): Promise<SalesforceContactRecord> => {
 		const hasGiftRecipient = !!giftRecipient;
 		const buyerContact = createBuyerRecordRequest(
 			user,
-			giftRecipient,
 			productType,
+			giftRecipient,
 		);
 		const buyerResponse = await this.upsert(buyerContact);
 
@@ -208,8 +208,8 @@ export const validGuardianWeeklyGiftRecipientFields = (
 
 export const createBuyerRecordRequest = (
 	user: User,
-	giftRecipient: GiftRecipient | null,
 	productType: ProductTypeName,
+	giftRecipient?: GiftRecipient,
 ): BuyerContactRecordRequest => {
 	switch (productType) {
 		case 'Paper':
@@ -241,7 +241,8 @@ export const createDigitalOnlyContactRecordRequest = (
 		Email: user.primaryEmailAddress,
 		FirstName: user.firstName,
 		LastName: user.lastName,
-		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
+		OtherCountry:
+			getCountryNameByIsoCode(user.billingAddress.country) ?? undefined,
 		...(user.billingAddress.state
 			? { OtherState: user.billingAddress.state }
 			: {}),
@@ -278,7 +279,7 @@ export const createGuardianWeeklyGiftRecipientContactRecordRequest = (
 ): GuardianWeeklyGiftRecipientContactRecordRequest => {
 	return {
 		AccountId: accountId,
-		Salutation: giftRecipient.title ?? undefined,
+		Salutation: giftRecipient.title,
 		FirstName: giftRecipient.firstName,
 		LastName: giftRecipient.lastName,
 		...(giftRecipient.email ? { Email: giftRecipient.email } : {}),
@@ -289,15 +290,17 @@ export const createGuardianWeeklyGiftRecipientContactRecordRequest = (
 
 export const createMailingAddressFields = (user: User) => {
 	return {
-		MailingStreet: user.deliveryAddress
-			? getAddressLine(user.deliveryAddress)
-			: null,
-		MailingCity: user.deliveryAddress?.city ?? null,
-		MailingState: user.deliveryAddress?.state ?? undefined,
-		MailingPostalCode: user.deliveryAddress?.postCode ?? undefined,
-		MailingCountry: user.deliveryAddress?.country
-			? getCountryNameByIsoCode(user.deliveryAddress.country)
-			: null,
+		// typescript
+		MailingStreet:
+			(user.deliveryAddress && getAddressLine(user.deliveryAddress)) ??
+			undefined,
+		MailingCity: user.deliveryAddress?.city,
+		MailingState: user.deliveryAddress?.state,
+		MailingPostalCode: user.deliveryAddress?.postCode,
+		MailingCountry:
+			(user.deliveryAddress?.country &&
+				getCountryNameByIsoCode(user.deliveryAddress.country)) ??
+			undefined,
 	};
 };
 
@@ -305,9 +308,10 @@ export const createBillingAddressFields = (user: User) => {
 	return {
 		OtherStreet: getAddressLine(user.billingAddress),
 		OtherCity: user.billingAddress.city,
-		OtherState: user.billingAddress.state ?? undefined,
-		OtherPostalCode: user.billingAddress.postCode ?? undefined,
-		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
+		OtherState: user.billingAddress.state,
+		OtherPostalCode: user.billingAddress.postCode,
+		OtherCountry:
+			getCountryNameByIsoCode(user.billingAddress.country) ?? undefined,
 	};
 };
 

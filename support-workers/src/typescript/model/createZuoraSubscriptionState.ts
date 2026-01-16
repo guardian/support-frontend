@@ -1,5 +1,6 @@
 import { productPurchaseSchema } from '@modules/product-catalog/productPurchaseSchema';
 import { appliedPromotionSchema } from '@modules/promotions/v1/schema';
+import { optionalDropNulls } from '@modules/schemaUtils';
 import { z } from 'zod';
 import { salesforceContactRecordSchema } from '../services/salesforce';
 import { countrySchema } from './address';
@@ -22,7 +23,7 @@ import {
 
 const baseProductStateSchema = z.object({
 	paymentMethod: paymentMethodSchema,
-	productInformation: productPurchaseSchema.nullish(),
+	productInformation: optionalDropNulls(productPurchaseSchema),
 	salesForceContact: salesforceContactRecordSchema,
 });
 
@@ -30,7 +31,7 @@ export const contributionStateSchema = z
 	.object({
 		productType: z.literal('Contribution'),
 		product: contributionProductSchema,
-		similarProductsConsent: z.boolean().nullable(),
+		similarProductsConsent: optionalDropNulls(z.boolean()),
 	})
 	.merge(baseProductStateSchema);
 
@@ -41,8 +42,8 @@ export const supporterPlusStateSchema = z
 		productType: z.literal('SupporterPlus'),
 		billingCountry: countrySchema,
 		product: supporterPlusProductSchema,
-		appliedPromotion: appliedPromotionSchema.nullable(),
-		similarProductsConsent: z.boolean().nullable(),
+		appliedPromotion: optionalDropNulls(appliedPromotionSchema),
+		similarProductsConsent: optionalDropNulls(z.boolean()),
 	})
 	.merge(baseProductStateSchema);
 export type SupporterPlusState = z.infer<typeof supporterPlusStateSchema>;
@@ -53,8 +54,8 @@ export const tierThreeStateSchema = z
 		user: userSchema,
 		product: tierThreeProductSchema,
 		firstDeliveryDate: dateOrDateStringSchema,
-		appliedPromotion: appliedPromotionSchema.nullable(),
-		similarProductsConsent: z.boolean().nullable(),
+		appliedPromotion: optionalDropNulls(appliedPromotionSchema),
+		similarProductsConsent: optionalDropNulls(z.boolean()),
 	})
 	.merge(baseProductStateSchema);
 export type TierThreeState = z.infer<typeof tierThreeStateSchema>;
@@ -72,8 +73,8 @@ export const digitalSubscriptionStateSchema = z
 		productType: z.literal('DigitalSubscription'),
 		billingCountry: countrySchema,
 		product: digitalPackProductSchema,
-		appliedPromotion: appliedPromotionSchema.nullable(),
-		similarProductsConsent: z.boolean().nullable(),
+		appliedPromotion: optionalDropNulls(appliedPromotionSchema),
+		similarProductsConsent: optionalDropNulls(z.boolean()),
 	})
 	.merge(baseProductStateSchema);
 export type DigitalSubscriptionState = z.infer<
@@ -86,8 +87,8 @@ export const paperStateSchema = z
 		user: userSchema,
 		product: paperProductSchema,
 		firstDeliveryDate: dateOrDateStringSchema,
-		appliedPromotion: appliedPromotionSchema.nullable(),
-		similarProductsConsent: z.boolean().nullable(),
+		appliedPromotion: optionalDropNulls(appliedPromotionSchema),
+		similarProductsConsent: optionalDropNulls(z.boolean()),
 	})
 	.merge(baseProductStateSchema);
 export type PaperState = z.infer<typeof paperStateSchema>;
@@ -96,11 +97,11 @@ export const guardianWeeklyStateSchema = z
 	.object({
 		productType: z.literal('GuardianWeekly'),
 		user: userSchema,
-		giftRecipient: giftRecipientSchema.nullable(),
+		giftRecipient: optionalDropNulls(giftRecipientSchema),
 		product: guardianWeeklyProductSchema,
 		firstDeliveryDate: dateOrDateStringSchema,
-		appliedPromotion: appliedPromotionSchema.nullable(),
-		similarProductsConsent: z.boolean().nullable(),
+		appliedPromotion: optionalDropNulls(appliedPromotionSchema),
+		similarProductsConsent: optionalDropNulls(z.boolean()),
 	})
 	.merge(baseProductStateSchema);
 export type GuardianWeeklyState = z.infer<typeof guardianWeeklyStateSchema>;
