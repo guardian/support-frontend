@@ -10,7 +10,7 @@ import {
 } from '@guardian/source/foundations';
 import { gu_h_spacing, gu_v_spacing } from 'stylesheets/emotion/layout';
 
-export const gu_content_margin = (
+export const boxAlignment = (
 	paddingVertical: number,
 	marginVertical: number,
 ) => css`

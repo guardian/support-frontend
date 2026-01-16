@@ -1,6 +1,6 @@
 import { defaultContributionEmail, privacyLink } from 'helpers/legal';
 import { gu_v_spacing } from 'stylesheets/emotion/layout';
-import { gu_content_margin } from '../unsupportedBrowserStyles';
+import { boxAlignment } from '../unsupportedBrowserStyles';
 import {
 	unsupported_browser__footer,
 	unsupported_browser__footer_copyright,
@@ -11,9 +11,7 @@ import {
 
 export default function Footer(): JSX.Element {
 	return (
-		<div
-			css={[gu_content_margin(gu_v_spacing, 0), unsupported_browser__footer]}
-		>
+		<div css={[boxAlignment(gu_v_spacing, 0), unsupported_browser__footer]}>
 			<a css={unsupported_browser__footer_privacy_policy} href={privacyLink}>
 				Privacy Policy
 			</a>

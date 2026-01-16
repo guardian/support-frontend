@@ -6,8 +6,8 @@ import { PageScaffold } from 'components/page/pageScaffold';
 import { guardianHelpCentreLink } from 'helpers/legal';
 import Footer from './components/footer';
 import {
+	boxAlignment,
 	container,
-	gu_content_margin,
 	unsupported_browser__introduction_text,
 	unsupported_browser__why_support,
 	unsupported_browser__why_support_copy,
@@ -21,10 +21,7 @@ export default function UnsupportedBrowser(): JSX.Element {
 			<PageScaffold header={<Header />} footer={<Footer />}>
 				<div css={container}>
 					<section
-						css={[
-							gu_content_margin(5, 5),
-							unsupported_browser__introduction_text,
-						]}
+						css={[boxAlignment(5, 5), unsupported_browser__introduction_text]}
 					>
 						<p>
 							The browser you are using has known problems which may prevent
@@ -44,7 +41,7 @@ export default function UnsupportedBrowser(): JSX.Element {
 						<p>Thank you!</p>
 					</section>
 					<section css={unsupported_browser__why_support}>
-						<div css={gu_content_margin(0, 0)}>
+						<div css={boxAlignment(0, 0)}>
 							<h1 css={unsupported_browser__why_support_heading}>
 								Why do we need your support?
 							</h1>
