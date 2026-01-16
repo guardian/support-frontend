@@ -113,7 +113,7 @@ new SupportWorkers(app, "SupportWorkers-CODE", {
   stack: "support",
   stage: "CODE",
   promotionsDynamoTables: [
-    "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE",
+    "arn:aws:dynamodb:*:*:table/support-admin-console-promos-CODE",
   ],
   s3Files: [
     "arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-CODE/catalog.json",
@@ -137,8 +137,8 @@ new SupportWorkers(app, "SupportWorkers-PROD", {
   stack: "support",
   stage: "PROD",
   promotionsDynamoTables: [
-    "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE",
-    "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
+    "arn:aws:dynamodb:*:*:table/support-admin-console-promos-CODE",
+    "arn:aws:dynamodb:*:*:table/support-admin-console-promos-PROD",
   ],
   s3Files: [
     "arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-CODE/catalog.json",

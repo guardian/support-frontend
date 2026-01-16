@@ -1,6 +1,7 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getProductCatalogFromApi } from '@modules/product-catalog/api';
-import { getPromotions } from '@modules/promotions/v1/getPromotions';
+import { getPromotion } from '@modules/promotions/v2/getPromotion';
+import type { Promo } from '@modules/promotions/v2/schema';
 import type {
 	CreateSubscriptionInputFields,
 	CreateSubscriptionResponse,
@@ -41,9 +42,20 @@ const productCatalogProvider = new ServiceProvider(stage, async (stage) => {
 	return getProductCatalogFromApi(stage);
 });
 
-const promotionsProvider = new ServiceProvider(stage, async (stage) => {
-	return getPromotions(stage);
+const promotionProvider = new ServiceProvider(stage, (stage) => {
+	return Promise.resolve((promoCode: string) => getPromotion(promoCode, stage));
 });
+
+const getPromotionForUser = async (
+	promoCode: string | undefined,
+	isTestUser: boolean,
+): Promise<Promo | undefined> => {
+	if (promoCode) {
+		const getPromo = await promotionProvider.getServiceForUser(isTestUser);
+		return await getPromo(promoCode);
+	}
+	return undefined;
+};
 
 export const handler = async (
 	state: WrappedState<CreateZuoraSubscriptionState>,
@@ -98,14 +110,15 @@ export const handler = async (
 		const productCatalog = await productCatalogProvider.getServiceForUser(
 			createZuoraSubscriptionState.user.isTestUser,
 		);
-		const promotions = await promotionsProvider.getServiceForUser(
+		const promotion = await getPromotionForUser(
+			inputFields.appliedPromotion?.promoCode,
 			createZuoraSubscriptionState.user.isTestUser,
 		);
 		const createSubscriptionResult = await createSubscription(
 			zuoraClient,
 			productCatalog,
-			promotions,
 			inputFields,
+			promotion,
 		);
 
 		const previewInputFields: PreviewCreateSubscriptionInputFields = {
@@ -119,8 +132,8 @@ export const handler = async (
 		const previewInvoices = await previewCreateSubscription(
 			zuoraClient,
 			productCatalog,
-			promotions,
 			previewInputFields,
+			promotion,
 		);
 
 		return replaceDatesWithZuoraFormat(
