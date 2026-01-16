@@ -20,6 +20,7 @@ import { useEffect } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { Country } from 'helpers/internationalisation/classes/country';
+import { getLegacyProductType } from 'helpers/legacyTypeConversions';
 import {
 	allCheckoutNudgeProductPrices,
 	getProductPrice,
@@ -314,15 +315,19 @@ function getNudgePromotion(
 	product: string,
 	ratePlan: string,
 ): Promotion | undefined {
+	const legacyProductKey = getLegacyProductType(
+		product as ActiveProductKey,
+		ratePlan as ActiveRatePlanKey,
+	);
 	if (
 		!promoCodes?.length ||
-		!isValidCheckoutNudgeProductKey(product) ||
+		!isValidCheckoutNudgeProductKey(legacyProductKey) ||
 		!allCheckoutNudgeProductPrices
 	) {
 		return undefined;
 	}
 
-	const productPrices = allCheckoutNudgeProductPrices[product];
+	const productPrices = allCheckoutNudgeProductPrices[legacyProductKey];
 	const billingPeriod = ratePlanToBillingPeriod[ratePlan as ActiveRatePlanKey];
 	if (!billingPeriod) {
 		return undefined;
