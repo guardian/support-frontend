@@ -51,7 +51,7 @@ export function selectPriceForProduct(state: SubscriptionsState): ProductPrice {
 	throw renderError(new Error('Could not determine product price'));
 }
 
-export function selectDiscountedPrice(state: SubscriptionsState): ProductPrice {
+function selectDiscountedPrice(state: SubscriptionsState): ProductPrice {
 	const { common, page } = state;
 	const { product } = page.checkoutForm;
 	if (requiredFieldsForProduct[product.productType](product)) {

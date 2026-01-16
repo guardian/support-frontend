@@ -4,7 +4,7 @@ import type { DeliveryAgentsResponse } from '../../../../pages/[countryGroupId]/
 import { initialState } from './state';
 import { getDeliveryAgentsThunk } from './thunks';
 
-export const addressMetaSlice = createSlice({
+const addressMetaSlice = createSlice({
 	name: 'addressMeta',
 	initialState,
 	reducers: {

@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { StripeAccountType } from 'helpers/forms/stripe';
 import { initialState } from './state';
 
-export const stripeAccountDetailsSlice = createSlice({
+const stripeAccountDetailsSlice = createSlice({
 	name: 'stripeAccountDetails',
 	initialState,
 	reducers: {

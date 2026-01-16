@@ -1,10 +1,4 @@
 import { personalDetailsSlice } from './reducer';
 
-export const {
-	setTitle,
-	setFirstName,
-	setLastName,
-	setEmail,
-	setConfirmEmail,
-	setTelephone,
-} = personalDetailsSlice.actions;
+export const { setFirstName, setLastName, setEmail } =
+	personalDetailsSlice.actions;
