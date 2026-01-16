@@ -505,11 +505,7 @@ export function ThreeTierLanding({
 	};
 	const tier3ProductPrice = allProductPrices.DigitalPack;
 	const tier3Promotion = tier3ProductPrice
-		? getPromotion(
-				tier3ProductPrice,
-				countryId,
-				billingPeriod,
-		  )
+		? getPromotion(tier3ProductPrice, countryId, billingPeriod)
 		: undefined;
 	if (tier3Promotion) {
 		tier3UrlParams.set('promoCode', tier3Promotion.promoCode);
