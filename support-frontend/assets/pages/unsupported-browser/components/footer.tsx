@@ -1,0 +1,47 @@
+import { gu_v_spacing } from 'stylesheets/emotion/layout';
+import {
+	gu_content_margin,
+	unsupported_browser__footer,
+	unsupported_browser__footer_copyright,
+	unsupported_browser__footer_legal,
+	unsupported_browser__footer_legal_link,
+	unsupported_browser__footer_privacy_policy,
+} from './footerStyle';
+
+export default function Footer(): JSX.Element {
+	return (
+		<div css={[gu_content_margin(gu_v_spacing), unsupported_browser__footer]}>
+			<a
+				css={unsupported_browser__footer_privacy_policy}
+				href="https://www.theguardian.com/help/privacy-policy"
+			>
+				Privacy Policy
+			</a>
+			<small css={unsupported_browser__footer_copyright}>
+				© 2018 Guardian News and Media Limited or its affiliated companies. All
+				rights reserved.
+			</small>
+			<p
+				css={[
+					unsupported_browser__footer_copyright,
+					unsupported_browser__footer_legal,
+				]}
+			>
+				The ultimate owner of the Guardian is The Scott Trust Limited, whose
+				role it is to secure the editorial and financial independence of the
+				Guardian in perpetuity. Reader contributions support the Guardian’s
+				journalism. Please note that your support of the Guardian’s journalism
+				does not constitute a charitable donation, as such your contribution is
+				not eligible for Gift Aid in the UK nor a tax-deduction elsewhere. If
+				you have any questions about contributing to the Guardian, please{' '}
+				<a
+					css={unsupported_browser__footer_legal_link}
+					href="mailto:contribution.support@@theguardian.com"
+				>
+					contact us here
+				</a>
+				.
+			</p>
+		</div>
+	);
+}
