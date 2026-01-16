@@ -2,27 +2,27 @@ import { css } from '@emotion/react';
 import { brand, neutral, textSans12 } from '@guardian/source/foundations';
 import { gu_v_spacing } from 'stylesheets/emotion/layout';
 
-export const unsupported_browser__footer = css`
+export const footerContainer = css`
 	${textSans12};
 	background-color: ${brand[400]};
 `;
 
-export const unsupported_browser__footer_copyright = css`
+export const copyrightAndLegalStyles = css`
 	font-weight: 400;
 	display: block;
 	padding: 3px 0;
 	color: ${neutral[86]};
 `;
 
-export const unsupported_browser__footer_legal = css`
+export const legalStyles = css`
 	${textSans12};
 	margin-top: ${gu_v_spacing}px;
 `;
 
-export const unsupported_browser__footer_legal_link = css`
+export const legalLinkStyles = css`
 	color: inherit;
 `;
-export const unsupported_browser__footer_privacy_policy = css`
+export const privacyLinkStyles = css`
 	text-decoration: none;
 	color: ${neutral[86]};
 	padding: 5px 0;

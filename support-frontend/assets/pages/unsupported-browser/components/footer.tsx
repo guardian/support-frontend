@@ -2,29 +2,24 @@ import { defaultContributionEmail, privacyLink } from 'helpers/legal';
 import { gu_v_spacing } from 'stylesheets/emotion/layout';
 import { boxAlignment } from '../unsupportedBrowserStyles';
 import {
-	unsupported_browser__footer,
-	unsupported_browser__footer_copyright,
-	unsupported_browser__footer_legal,
-	unsupported_browser__footer_legal_link,
-	unsupported_browser__footer_privacy_policy,
+	copyrightAndLegalStyles,
+	footerContainer,
+	legalLinkStyles,
+	legalStyles,
+	privacyLinkStyles,
 } from './footerStyles';
 
 export default function Footer(): JSX.Element {
 	return (
-		<div css={[boxAlignment(gu_v_spacing, 0), unsupported_browser__footer]}>
-			<a css={unsupported_browser__footer_privacy_policy} href={privacyLink}>
+		<div css={[boxAlignment(gu_v_spacing, 0), footerContainer]}>
+			<a css={privacyLinkStyles} href={privacyLink}>
 				Privacy Policy
 			</a>
-			<small css={unsupported_browser__footer_copyright}>
+			<small css={copyrightAndLegalStyles}>
 				© 2018 Guardian News and Media Limited or its affiliated companies. All
 				rights reserved.
 			</small>
-			<p
-				css={[
-					unsupported_browser__footer_copyright,
-					unsupported_browser__footer_legal,
-				]}
-			>
+			<p css={[copyrightAndLegalStyles, legalStyles]}>
 				The ultimate owner of the Guardian is The Scott Trust Limited, whose
 				role it is to secure the editorial and financial independence of the
 				Guardian in perpetuity. Reader contributions support the Guardian’s
@@ -32,10 +27,7 @@ export default function Footer(): JSX.Element {
 				does not constitute a charitable donation, as such your contribution is
 				not eligible for Gift Aid in the UK nor a tax-deduction elsewhere. If
 				you have any questions about contributing to the Guardian, please{' '}
-				<a
-					css={unsupported_browser__footer_legal_link}
-					href={defaultContributionEmail}
-				>
+				<a css={legalLinkStyles} href={defaultContributionEmail}>
 					contact us here
 				</a>
 				.
