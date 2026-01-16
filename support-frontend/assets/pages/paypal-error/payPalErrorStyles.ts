@@ -8,6 +8,10 @@ import {
 } from '@guardian/source/foundations';
 import { gu_v_spacing } from 'stylesheets/emotion/layout';
 
+export const mainContentStyles = css`
+	background-color: ${palette.neutral[100]};
+`;
+
 export const pageSectionBodyOverrides = css`
 	padding-bottom: ${space[12]}px;
 	${from.desktop} {
