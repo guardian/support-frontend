@@ -374,8 +374,8 @@ class Application(
       views.html.main(
         "Support the Guardian | Un-supported browser",
         views.EmptyDiv("unsupported-browser-page"),
-        RefPath("unSupportedBrowserPage.js"),
-        Some(RefPath("unSupportedBrowserPage.css")),
+        RefPath("unsupportedBrowserPage.js"),
+        Some(RefPath("unsupportedBrowserPage.css")),
         noindex = stage != PROD,
       )()(assets, request, settingsProvider.getAllSettings()),
     ).withSettingsSurrogateKey

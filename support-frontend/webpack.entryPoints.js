@@ -14,7 +14,7 @@ module.exports = {
 		error404Page: 'pages/error/error404.tsx',
 		error500Page: 'pages/error/error500.tsx',
 		downForMaintenancePage: 'pages/error/maintenance.tsx',
-    unSupportedBrowserPage: 'pages/unsupported-browser/unsupportedBrowserRender.tsx',
+    unsupportedBrowserPage: 'pages/unsupported-browser/unsupportedBrowserRender.tsx',
 		contributionsRedirectStyles:
 			'stylesheets/fallback-pages/contributionsRedirect.scss',
 		promotionTerms: 'pages/promotion-terms/promotionTerms.tsx',
