@@ -320,10 +320,6 @@ class Application(
     RedirectWithEncodedQueryString(location + path, request.queryString)
   }
 
-  def unsupportedBrowserScala: Action[AnyContent] = NoCacheAction() { implicit request =>
-    Ok(views.html.unsupportedBrowserPageScala())
-  }
-
   def contributionsLanding(
       countryCode: String,
       campaignCode: String,

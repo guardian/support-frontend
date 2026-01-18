@@ -15,8 +15,6 @@ module.exports = {
 		error500Page: 'pages/error/error500.tsx',
 		downForMaintenancePage: 'pages/error/maintenance.tsx',
     unSupportedBrowserPage: 'pages/unsupported-browser/unsupportedBrowserRender.tsx',
-		unsupportedBrowserStyles:
-			'stylesheets/fallback-pages/unsupportedBrowser.scss',
 		contributionsRedirectStyles:
 			'stylesheets/fallback-pages/contributionsRedirect.scss',
 		promotionTerms: 'pages/promotion-terms/promotionTerms.tsx',

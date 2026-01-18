@@ -7,7 +7,6 @@ GET /cookies                                                       controllers.D
 
 # ----- Unsupported Browsers ----- #
 
-GET /unsupported-browser-scala                                     controllers.Application.unsupportedBrowserScala()
 GET /unsupported-browser                                           controllers.Application.unsupportedBrowser()
 
 # ----- Down For Maintenance ----- #
