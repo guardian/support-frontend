@@ -46,11 +46,9 @@ export const deliveryAgentDetails: DeliveryAgentDetails = {
 export const emailUser: User = {
 	id: '1234',
 	primaryEmailAddress: emailAddress,
-	title: null,
 	firstName: 'Mickey',
 	lastName: 'Mouse',
 	billingAddress: address,
-	deliveryAddress: null,
 	isTestUser: false,
 };
 
@@ -58,7 +56,7 @@ export const directDebitPaymentMethod: DirectDebitPaymentMethod = {
 	FirstName: emailUser.firstName,
 	LastName: emailUser.lastName,
 	StreetNumber: emailUser.billingAddress.lineOne,
-	StreetName: emailUser.billingAddress.lineTwo ?? null,
+	StreetName: emailUser.billingAddress.lineTwo,
 	City: emailUser.billingAddress.city,
 	PostalCode: emailUser.billingAddress.postCode,
 	State: emailUser.billingAddress.state,

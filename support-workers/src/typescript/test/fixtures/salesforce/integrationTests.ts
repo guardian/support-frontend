@@ -20,16 +20,7 @@ export const customer: PrintContactRecordRequest = {
 	Email: emailAddress,
 	FirstName: name,
 	LastName: name,
-	OtherStreet: null,
-	OtherCity: null,
-	OtherState: undefined,
-	OtherPostalCode: undefined,
 	OtherCountry: uk,
-	MailingStreet: null,
-	MailingCity: null,
-	MailingState: undefined,
-	MailingPostalCode: undefined,
-	MailingCountry: null,
 };
 
 const address = {
@@ -50,5 +41,4 @@ export const user = {
 	billingAddress: address,
 	deliveryAddress: address,
 	isTestUser: false,
-	deliveryInstructions: null,
 };

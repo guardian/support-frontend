@@ -36,8 +36,8 @@ export const handler = async (
 		);
 		const contactRecords = await serviceForUser.createContactRecords(
 			createSalesforceContactState.user,
-			createSalesforceContactState.giftRecipient,
 			createSalesforceContactState.product.productType,
+			createSalesforceContactState.giftRecipient,
 		);
 		return replaceDatesWithZuoraFormat({
 			...state,
