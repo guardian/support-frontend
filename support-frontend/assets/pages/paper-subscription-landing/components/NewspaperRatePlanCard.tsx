@@ -27,11 +27,13 @@ import {
 	planDescription,
 	planDetailsContainer,
 	planDetailsEndSection,
+	savingsTextStyle,
 } from './NewspaperRatePlanCardStyles';
 
 function NewspaperRatePlanCard({
 	title,
 	price,
+	savingsText,
 	planData,
 	offerCopy,
 	buttonCopy,
@@ -123,12 +125,12 @@ function NewspaperRatePlanCard({
 						{productLabel.text}
 					</span>
 				)}
+				<p css={cardPrice}>
+					{price}
+					<small>/month</small>
+				</p>
+				{savingsText && <p css={savingsTextStyle}>{savingsText}</p>}
 			</section>
-
-			<p css={cardPrice}>
-				{price}
-				<small>/month</small>
-			</p>
 
 			<div css={ButtonCTA}>
 				<LinkButton
@@ -140,9 +142,9 @@ function NewspaperRatePlanCard({
 				>
 					{buttonCopy}
 				</LinkButton>
+				<p css={cardOffer}>{offerCopy}</p>
 			</div>
 
-			<p css={cardOffer}>{offerCopy}</p>
 			<p css={planDescription}>{planData?.description}</p>
 
 			{windowWidthIsGreaterThan('tablet') ? (
