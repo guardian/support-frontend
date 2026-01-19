@@ -36,5 +36,6 @@ export const handler = async (
 		contractEffectiveDate: dayjs(),
 		termEndDate: dayjs().add(1, 'week'), // This will be overwritten by the sync from Zuora
 	};
-	await sendToSupporterProductData(stage, supporterRatePlanItem);
+	const dynamoStage = sendThankYouEmailState.user.isTestUser ? 'CODE' : stage;
+	await sendToSupporterProductData(dynamoStage, supporterRatePlanItem);
 };
