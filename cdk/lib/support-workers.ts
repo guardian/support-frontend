@@ -48,7 +48,7 @@ type PaymentProvider = keyof typeof PaymentProviders;
 interface SupportWorkersProps extends GuStackProps {
   promotionsDynamoTables: string[];
   s3Files: string[];
-  supporterProductDataTables: string[];
+  supporterProductDataQueueArns: string[];
   eventBusArns: string[];
   parameterStorePaths: string[];
   secretsManagerPaths: string[];
@@ -91,11 +91,9 @@ export class SupportWorkers extends GuStack {
       ],
       resources: props.promotionsDynamoTables,
     });
-    const supporterProductDataTablePolicy = new PolicyStatement({
-      actions: ["dynamodb:PutItem", "dynamodb:UpdateItem"],
-      resources: props.supporterProductDataTables.map((table) =>
-        Fn.importValue(table)
-      ),
+    const supporterProductDataSqsPolicy = new PolicyStatement({
+      actions: ["sqs:GetQueueUrl", "sqs:SendMessage"],
+      resources: props.supporterProductDataQueueArns,
     });
     const parameterStorePolicy = new PolicyStatement({
       actions: ["ssm:GetParameter"],
@@ -265,9 +263,9 @@ export class SupportWorkers extends GuStack {
       emailSqsPolicy,
       secretsManagerPolicy,
     ]);
-    const updateSupporterProductData = createScalaLambda(
+    const updateSupporterProductData = createTypescriptLambda(
       "UpdateSupporterProductData",
-      [supporterProductDataTablePolicy]
+      [supporterProductDataSqsPolicy]
     );
     const sendAcquisitionEvent = createScalaLambda("SendAcquisitionEvent", [
       eventBusPolicy,

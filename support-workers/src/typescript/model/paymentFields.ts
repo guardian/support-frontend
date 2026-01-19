@@ -1,3 +1,4 @@
+import { optionalDropNulls } from '@modules/schemaUtils';
 import { z } from 'zod';
 // Payment fields are the details entered by the user into the checkout as opposed to
 // payment methods which are the activated payment details which are passed into Zuora
@@ -41,7 +42,7 @@ const stripePaymentFieldsSchema = z.object({
 export type StripePaymentFields = z.infer<typeof stripePaymentFieldsSchema>;
 const stripeHostedPaymentFieldsSchema = z.object({
 	paymentType: stripeHostedPaymentProviderSchema,
-	checkoutSessionId: z.string().nullable(),
+	checkoutSessionId: optionalDropNulls(z.string()),
 	stripePublicKey: z.string(),
 });
 export type StripeHostedPaymentFields = z.infer<

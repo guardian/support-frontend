@@ -38,7 +38,7 @@ export function buildGuardianWeeklyEmailFields({
 	paymentMethod: PaymentMethod;
 	isFixedTerm: boolean;
 	mandateId?: string;
-	giftRecipient?: GiftRecipient | null;
+	giftRecipient?: GiftRecipient;
 }): EmailMessageWithIdentityUserId {
 	const gifteeFields = giftRecipient
 		? {

@@ -4,6 +4,7 @@ import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.CustomActionBuilders
 import admin.ServersideAbTest.{Participation, generateParticipations}
 import admin.settings.{AllSettings, AllSettingsProvider, On, SettingsSurrogateKeySyntax}
+import admin.settings.Status.Live
 import assets.{AssetsResolver, RefPath}
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
@@ -51,6 +52,7 @@ case class AppConfig private (
     checkoutPostcodeLookup: Boolean,
     productCatalog: JsonObject,
     allProductPrices: AllProductPrices,
+    allCheckoutNudgeProductPrices: AllProductPrices,
     serversideTests: Map[String, Participation],
     user: Option[AppConfig.User],
     settings: AllSettings,
@@ -79,6 +81,7 @@ object AppConfig extends InternationalisationCodecs {
       productCatalog: JsonObject,
       serversideTests: Map[String, Participation],
       allProductPrices: AllProductPrices,
+      allCheckoutNudgeProductPrices: AllProductPrices,
       user: Option[IdUser],
       isTestUser: Boolean,
       settings: AllSettings,
@@ -157,6 +160,7 @@ object AppConfig extends InternationalisationCodecs {
       productCatalog = productCatalog,
       serversideTests = serversideTests,
       allProductPrices = allProductPrices,
+      allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
       user = user.map(user =>
         User(
           id = user.id,
@@ -608,6 +612,13 @@ class Application(
 
     val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
 
+    val checkoutNudgePromoCodes = settings.checkoutNudgeTests
+      .filter(_.status == Live)
+      .flatMap(_.variants)
+      .flatMap(_.promoCodes.getOrElse(Nil))
+      .distinct
+    val allCheckoutNudgeProductPrices = getAllProductPrices(isTestUser, checkoutNudgePromoCodes)
+
     Ok(
       views.html.router(
         geoData = geoData,
@@ -627,6 +638,7 @@ class Application(
         guestAccountCreationToken = guestAccountCreationToken,
         productCatalog = productCatalog,
         allProductPrices = allProductPrices,
+        allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
         user = request.user,
         homeDeliveryPostcodes = Some(PaperValidation.M25_POSTCODE_PREFIXES),
       ),
@@ -649,6 +661,13 @@ class Application(
     val queryPromos = request.queryString.getOrElse("promoCode", Nil).toList
     val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
 
+    val checkoutNudgePromoCodes = settings.checkoutNudgeTests
+      .filter(_.status == Live)
+      .flatMap(_.variants)
+      .flatMap(_.promoCodes.getOrElse(Nil))
+      .distinct
+    val allCheckoutNudgeProductPrices = getAllProductPrices(isTestUser, checkoutNudgePromoCodes)
+
     val appConfig = AppConfig.fromConfig(
       geoData = request.geoData,
       paymentMethodConfigs = PaymentMethodConfigs(
@@ -668,6 +687,7 @@ class Application(
       productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get(),
       serversideTests = generateParticipations(Nil),
       allProductPrices = allProductPrices,
+      allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
       user = request.user,
       isTestUser = isTestUser,
       settings = settings,
