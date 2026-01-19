@@ -39,13 +39,14 @@ import {
 export type Product = {
 	title: string;
 	price: string;
-	children?: ReactNode;
-	offerCopy?: ReactNode;
+	href: string;
 	priceCopy: ReactNode;
 	buttonCopy: string;
-	href: string;
 	onClick: () => void;
 	onView: () => void;
+	children?: ReactNode;
+	offerCopy?: ReactNode;
+	savingsText?: string | null;
 	showLabel?: boolean;
 	productLabel?: ProductLabelProps;
 	cssOverrides?: SerializedStyles;

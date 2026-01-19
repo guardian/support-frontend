@@ -20,7 +20,6 @@ import { productReducer } from 'helpers/redux/checkout/product/reducer';
 import type { ProductState } from 'helpers/redux/checkout/product/state';
 import { recaptchaReducer } from 'helpers/redux/checkout/recaptcha/reducer';
 import type { RecaptchaState } from 'helpers/redux/checkout/recaptcha/state';
-import { thankYouReducer } from 'helpers/redux/checkout/thankYouState/reducer';
 import type { CommonState } from 'helpers/redux/commonState/state';
 import { userReducer } from 'helpers/redux/user/reducer';
 import type { UserState } from 'helpers/redux/user/state';
@@ -71,7 +70,6 @@ export function createReducer() {
 			billingAddress: billingAddressReducer,
 			addressMeta: addressMetaReducer,
 			payment: paymentReducer,
-			thankYou: thankYouReducer,
 		}),
 		user: userReducer,
 	});
