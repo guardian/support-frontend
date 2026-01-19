@@ -1,5 +1,4 @@
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
-import 'stylesheets/gu-sass/gu-sass.scss';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { guardianHelpCentreLink } from 'helpers/legal';
 import Footer from './components/footer';
