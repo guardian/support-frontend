@@ -40,11 +40,16 @@ export const handler = async (
 
 	await sendPaymentSuccessMetric(stage, state.state);
 
+	console.log('Sent payment success metric');
 	const acquisitionEvent = buildFromState(state.state);
+
+	console.log(`Acquisition event built: ${JSON.stringify(acquisitionEvent)}`);
 
 	const service =
 		await acquisitionEventBusServiceServiceProvider.getServiceForUser(
 			state.state.sendThankYouEmailState.user.isTestUser,
 		);
 	await service.sendEvent(acquisitionEvent);
+	console.log('Acquisition event sent to EventBridge');
+	return { success: true };
 };

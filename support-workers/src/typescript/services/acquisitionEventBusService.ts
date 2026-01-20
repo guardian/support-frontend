@@ -17,14 +17,18 @@ export class AcquisitionEventBusService {
 		const command = new PutEventsCommand({
 			Entries: [
 				{
+					Time: new Date(),
 					EventBusName: this.eventBusName,
-					Source: 'support-workers.sendAcquisitionEventLambda',
+					Source: 'support-workers.1',
 					DetailType: 'AcquisitionsEvent',
 					Detail: JSON.stringify(acquisitionEvent),
 				},
 			],
 		});
 
-		await this.eventBridgeClient.send(command);
+		console.log(`EventBridge PutEventsCommand: ${JSON.stringify(command)}`);
+
+		const result = await this.eventBridgeClient.send(command);
+		console.log(`EventBridge response: ${JSON.stringify(result)}`);
 	}
 }

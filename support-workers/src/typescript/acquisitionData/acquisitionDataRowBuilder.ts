@@ -22,8 +22,7 @@ type AcquisitionProduct =
 	| 'SUPPORTER_PLUS'
 	| 'TIER_THREE'
 	| 'DIGITAL_SUBSCRIPTION'
-	| 'PAPER'
-	| 'GUARDIAN_WEEKLY'
+	| 'PRINT_SUBSCRIPTION'
 	| 'GUARDIAN_AD_LITE';
 type PaymentFrequency = 'MONTHLY' | 'QUARTERLY' | 'ANNUALLY';
 type PaymentProvider =
@@ -31,7 +30,7 @@ type PaymentProvider =
 	| 'STRIPE_APPLE_PAY'
 	| 'STRIPE_PAYMENT_REQUEST_BUTTON'
 	| 'PAYPAL'
-	| 'DIRECT_DEBIT';
+	| 'GOCARDLESS';
 type PrintProduct =
 	| 'HOME_DELIVERY_EVERYDAY'
 	| 'HOME_DELIVERY_EVERYDAY_PLUS'
@@ -69,7 +68,7 @@ type AcquisitionTypeDetails = {
 
 type PrintOptions = {
 	product: PrintProduct;
-	country: IsoCountry;
+	deliveryCountry: IsoCountry;
 };
 
 export type AcquisitionDataRow = {
@@ -197,7 +196,7 @@ function paymentProviderFromPaymentMethod(
 	) {
 		return 'PAYPAL';
 	}
-	return 'DIRECT_DEBIT';
+	return 'GOCARDLESS';
 }
 
 function getAbTests(data: AcquisitionData): AbTest[] {
@@ -221,9 +220,8 @@ function productTypeAndAmount(product: ProductType): {
 		case 'DigitalPack':
 			return { product: 'DIGITAL_SUBSCRIPTION' };
 		case 'Paper':
-			return { product: 'PAPER' };
 		case 'GuardianWeekly':
-			return { product: 'GUARDIAN_WEEKLY' };
+			return { product: 'PRINT_SUBSCRIPTION' };
 		case 'GuardianAdLite':
 			return { product: 'GUARDIAN_AD_LITE' };
 	}
@@ -240,14 +238,17 @@ function printOptionsFromProduct(
 	) {
 		return {
 			product: toPrintProduct(productInformation),
-			country: 'GB',
+			deliveryCountry: 'GB',
 		};
 	}
 	if (
 		productInformation.product === 'GuardianWeeklyDomestic' ||
 		productInformation.product === 'GuardianWeeklyRestOfWorld'
 	) {
-		return { product: 'GUARDIAN_WEEKLY', country: deliveryCountry ?? 'GB' };
+		return {
+			product: 'GUARDIAN_WEEKLY',
+			deliveryCountry: deliveryCountry ?? 'GB',
+		};
 	}
 	return undefined;
 }
