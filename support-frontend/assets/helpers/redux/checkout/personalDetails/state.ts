@@ -4,7 +4,6 @@ import {
 	zuoraCompatibleString,
 } from 'helpers/redux/utils/validation/commonRules';
 import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
-import { getUser } from 'helpers/user/user';
 
 export const userTypeSchema = z.union([z.literal('new'), z.literal('current')]);
 export type UserType = z.infer<typeof userTypeSchema>;
@@ -18,6 +17,7 @@ const emailRules = zuoraCompatibleString(
 		.max(maxLengths.email, 'Email address is too long'),
 );
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- needed for type below
 const personalDetailsSchema = z
 	.object({
 		title: z.optional(z.string()),
@@ -56,15 +56,4 @@ type PersonalDetailsValidatedFields = z.infer<typeof personalDetailsSchema>;
 
 export type PersonalDetailsState = PersonalDetailsValidatedFields & {
 	errors?: SliceErrors<PersonalDetailsValidatedFields>;
-};
-
-const user = getUser();
-
-const initialPersonalDetailsState: PersonalDetailsState = {
-	firstName: user.firstName ?? '',
-	lastName: user.lastName ?? '',
-	email: user.email ?? '',
-	confirmEmail: '',
-	isSignedIn: user.isSignedIn,
-	errors: {},
 };

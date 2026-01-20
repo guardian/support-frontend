@@ -389,9 +389,6 @@ importers:
       husky:
         specifier: ^7.0.1
         version: 7.0.4
-      immer:
-        specifier: ^9.0.21
-        version: 9.0.21
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.19.0)(babel-plugin-macros@3.1.0)

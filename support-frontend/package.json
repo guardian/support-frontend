@@ -114,7 +114,6 @@
 		"fast-sass-loader": "^2.0.1",
 		"file-loader": "^6.2.0",
 		"husky": "^7.0.1",
-		"immer": "^9.0.21",
 		"jest": "^29.7.0",
 		"jest-environment-jsdom": "^29.7.0",
 		"jest-environment-jsdom-global": "^4.0.0",

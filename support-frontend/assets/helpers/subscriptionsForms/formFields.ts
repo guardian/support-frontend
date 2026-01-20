@@ -1,16 +1,11 @@
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { ProductOptions } from '@modules/product/productOptions';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { DateYMDString } from 'helpers/types/DateString';
-import type { Option } from 'helpers/types/option';
 import type { Title } from 'helpers/user/details';
-
-type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
 
 type GiftingFields = {
 	titleGiftRecipient?: Title;
@@ -41,16 +36,3 @@ type FormFields = PersonalDetailsState &
 		deliveryProvider?: number;
 	};
 export type FormField = keyof FormFields | 'recaptcha';
-type FormState = Omit<
-	FormFields,
-	| keyof PersonalDetailsState
-	| keyof GiftingFields
-	| keyof ProductFields
-	| 'paymentMethod'
-	| 'billingAddressMatchesDelivery'
-> & {
-	stage: Stage;
-	formErrors: Array<FormError<FormField>>;
-	submissionError: Option<ErrorReason>;
-	formSubmitted: boolean;
-};

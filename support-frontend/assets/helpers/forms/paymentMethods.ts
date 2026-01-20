@@ -1,5 +1,4 @@
 import type { PaymentMethodSwitch } from './checkouts';
-import type { StripePaymentMethod } from './paymentIntegrations/readerRevenueApis';
 
 const Stripe = 'Stripe';
 const PayPal = 'PayPal';
@@ -15,11 +14,6 @@ export type PaymentMethod =
 	| typeof StripeHostedCheckout
 	| typeof Sepa
 	| typeof None;
-
-type FullPaymentMethod = {
-	paymentMethod: PaymentMethod;
-	stripePaymentMethod?: StripePaymentMethod;
-};
 
 const paymentMethods = [
 	Stripe,
