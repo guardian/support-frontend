@@ -10,20 +10,20 @@ export const promotionContainer = css`
 	color: ${palette.neutral[100]};
 	background-color: ${palette.brand[400]};
 	border-bottom: 1px solid ${palette.brand[600]};
-	p {
-		padding-top: ${space[1]}px;
-	}
 
 	${from.tablet} {
 		padding: 0 ${space[5]}px ${space[6]}px;
 		background-color: unset;
 		border-bottom: none;
-		p {
-			color: ${palette.neutral[7]};
-		}
 	}
-
 	${from.desktop} {
 		padding: ${space[1]}px 0 ${space[8]}px;
+	}
+`;
+
+export const promotionParagraph = css`
+	padding-top: ${space[1]}px;
+	${from.tablet} {
+		color: ${palette.neutral[7]};
 	}
 `;

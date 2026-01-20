@@ -1,7 +1,11 @@
 import { getDateString } from 'helpers/utilities/dateFormatting';
+import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import type { PaperPromotion } from '../helpers/getPromotions';
 import { getTitle } from '../helpers/products';
-import { promotionContainer } from './PaperPromotionExpiriesStyles';
+import {
+	promotionContainer,
+	promotionParagraph,
+} from './PaperPromotionExpiriesStyles';
 
 function getPromoProductsAndExpiry(paperPromotion: PaperPromotion): string {
 	const products = paperPromotion.activePaperProducts
@@ -18,6 +22,29 @@ function getPromoExpiry(paperPromotion: PaperPromotion): string {
 	return `Offer ends ${getDateString(expiryDate)}. `;
 }
 
+function getPromotion(
+	paperPromotion: PaperPromotion,
+	index: number,
+	multiPromo: boolean,
+): string {
+	const star = '*'.repeat(index + 1);
+	const promoText = multiPromo
+		? getPromoProductsAndExpiry(paperPromotion)
+		: getPromoExpiry(paperPromotion);
+	return `${star} ${promoText}`;
+}
+function getPromotionList(paperPromotions: PaperPromotion[]): JSX.Element[] {
+	const { windowWidthIsGreaterThan } = useWindowWidth();
+	const multiPromo = paperPromotions.length > 1;
+	return paperPromotions.map((paperPromotion, index) =>
+		windowWidthIsGreaterThan('tablet') ? (
+			<span key={index}>{getPromotion(paperPromotion, index, multiPromo)}</span>
+		) : (
+			<div key={index}>{getPromotion(paperPromotion, index, multiPromo)}</div>
+		),
+	);
+}
+
 type PaperPromoExpiriesProps = {
 	paperPromotions: PaperPromotion[];
 };
@@ -26,16 +53,7 @@ export default function PaperPromotionExpiries({
 }: PaperPromoExpiriesProps): JSX.Element {
 	return (
 		<div css={promotionContainer}>
-			<p>
-				{paperPromotions.map((paperPromotion, index) => (
-					<div key={index}>
-						{'*'.repeat(index + 1)}{' '}
-						{paperPromotions.length > 1
-							? getPromoProductsAndExpiry(paperPromotion)
-							: getPromoExpiry(paperPromotion)}
-					</div>
-				))}
-			</p>
+			<p css={promotionParagraph}>{getPromotionList(paperPromotions)}</p>
 		</div>
 	);
 }
