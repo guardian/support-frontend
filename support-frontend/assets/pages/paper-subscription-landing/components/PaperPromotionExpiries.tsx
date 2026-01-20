@@ -1,11 +1,7 @@
 import { getDateString } from 'helpers/utilities/dateFormatting';
-import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import type { PaperPromotion } from '../helpers/getPromotions';
 import { getTitle } from '../helpers/products';
-import {
-	promotionContainer,
-	promotionParagraph,
-} from './PaperPromotionExpiriesStyles';
+import { promotionContainer } from './PaperPromotionExpiriesStyles';
 
 function getPromoProductsAndExpiry(paperPromotion: PaperPromotion): string {
 	const products = paperPromotion.activePaperProducts
@@ -33,19 +29,6 @@ function getPromotion(
 		: getPromoExpiry(paperPromotion);
 	return `${star} ${promoText}`;
 }
-function getPromotionList(
-	paperPromotions: PaperPromotion[],
-	fromTablet: boolean,
-): JSX.Element[] {
-	const multiPromo = paperPromotions.length > 1;
-	return paperPromotions.map((paperPromotion, index) =>
-		fromTablet ? (
-			<span>{getPromotion(paperPromotion, index, multiPromo)}</span>
-		) : (
-			<div>{getPromotion(paperPromotion, index, multiPromo)}</div>
-		),
-	);
-}
 
 type PaperPromoExpiriesProps = {
 	paperPromotions: PaperPromotion[];
@@ -53,12 +36,12 @@ type PaperPromoExpiriesProps = {
 export default function PaperPromotionExpiries({
 	paperPromotions,
 }: PaperPromoExpiriesProps): JSX.Element {
-	const { windowWidthIsGreaterThan } = useWindowWidth();
+	const multiPromo = paperPromotions.length > 1;
 	return (
 		<div css={promotionContainer}>
-			<p css={promotionParagraph}>
-				{getPromotionList(paperPromotions, windowWidthIsGreaterThan('tablet'))}
-			</p>
+			{paperPromotions.map((paperPromotion, index) => (
+				<p>{getPromotion(paperPromotion, index, multiPromo)}</p>
+			))}
 		</div>
 	);
 }
