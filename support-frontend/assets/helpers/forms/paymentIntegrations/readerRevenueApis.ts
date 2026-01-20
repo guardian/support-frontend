@@ -7,7 +7,7 @@ import type { SupportRegionId } from '@modules/internationalisation/countryGroup
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { ProductOptions } from '@modules/product/productOptions';
-import type { PaymentIntentResult, PaymentMethod } from '@stripe/stripe-js';
+import type { PaymentMethod } from '@stripe/stripe-js';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { StripeHostedCheckout } from 'helpers/forms/paymentMethods';
 import type {
@@ -180,39 +180,6 @@ export type RegularPaymentRequest = {
 	debugInfo: string;
 	similarProductsConsent?: boolean;
 };
-type StripePaymentIntentAuthorisation = {
-	paymentMethod: typeof Stripe;
-	stripePaymentMethod: StripePaymentMethod;
-	paymentMethodId: string | PaymentMethod;
-	handle3DS?: (clientSecret: string) => Promise<PaymentIntentResult>;
-};
-type PayPalAuthorisation = {
-	paymentMethod: typeof PayPal;
-	token: string;
-};
-type DirectDebitAuthorisation = {
-	paymentMethod: typeof DirectDebit;
-	accountHolderName: string;
-	sortCode: string;
-	accountNumber: string;
-};
-type SepaAuthorisation = {
-	paymentMethod: typeof Sepa;
-	accountHolderName: string;
-	iban: string;
-	country?: string;
-	streetName?: string;
-};
-// Represents an authorisation to execute payments with a given payment method.
-// This will generally be supplied by third-party code (Stripe, PayPal, GoCardless).
-// It applies both to one-off payments, where it is sent to the Payment API which
-// immediately executes the payment, and recurring, where it ultimately ends up in Zuora
-// which uses it to execute payments in the future.
-export type PaymentAuthorisation =
-	| StripePaymentIntentAuthorisation
-	| PayPalAuthorisation
-	| DirectDebitAuthorisation
-	| SepaAuthorisation;
 
 type Status = 'failure' | 'pending' | 'success';
 
