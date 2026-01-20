@@ -32,7 +32,7 @@ import { manageMyAccountLink, termsLink } from './paymentTsAndCs';
 
 const containerSummaryTsCs = css`
 	margin-top: ${space[6]}px;
-	border-radius: ${space[4]}px;
+	border-radius: ${space[3]}px;
 	border: 1px solid ${neutral[46]};
 	background-color: ${neutral[97]};
 	padding: ${space[2]}px ${space[3]}px;
