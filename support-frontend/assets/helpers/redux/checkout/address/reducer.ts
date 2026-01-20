@@ -23,16 +23,9 @@ import {
 export const {
 	reducer: deliveryAddressReducer,
 	fieldsSlice: deliveryAddressFieldsSlice,
-	postcodeFinderSlice: deliveryAddressPostcodeFinderSlice,
-	findAddresses: deliveryAddressFindAddresses,
 } = getAddressReducer('delivery');
 
-export const {
-	reducer: billingAddressReducer,
-	fieldsSlice: billingAddressFieldsSlice,
-	postcodeFinderSlice: billingAddressPostcodeFinderSlice,
-	findAddresses: billingAddressFindAddresses,
-} = getAddressReducer('billing');
+export const { reducer: billingAddressReducer } = getAddressReducer('billing');
 
 // ---- Helpers ---- //
 
