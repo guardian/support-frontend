@@ -111,51 +111,51 @@ export type AcquisitionDataRow = {
 export function buildFromState(
 	state: SendAcquisitionEventState,
 ): AcquisitionDataRow {
-	const common = state.sendThankYouEmailState;
-	const { product, amount } = productTypeAndAmount(common.product);
-	const details = getAcquisitionTypeDetails(common);
+	const { sendThankYouEmailState, acquisitionData } = state;
+	const { product, amount } = productTypeAndAmount(
+		sendThankYouEmailState.product,
+	);
+	const details = getAcquisitionTypeDetails(sendThankYouEmailState);
 	const printOptions = printOptionsFromProduct(
-		common.productInformation,
-		common.user.deliveryAddress?.country,
+		sendThankYouEmailState.productInformation,
+		sendThankYouEmailState.user.deliveryAddress?.country,
 	);
 
 	return {
 		eventTimeStamp: dayjs(),
 		product,
 		amount,
-		country: common.user.billingAddress.country,
-		currency: common.product.currency,
-		componentId: state.acquisitionData?.referrerAcquisitionData.componentId,
-		componentType: state.acquisitionData?.referrerAcquisitionData.componentType,
-		campaignCode:
-			state.acquisitionData?.referrerAcquisitionData.campaignCode ?? undefined,
-		source: state.acquisitionData?.referrerAcquisitionData.source ?? undefined,
-		referrerUrl:
-			state.acquisitionData?.referrerAcquisitionData.referrerUrl ?? undefined,
-		abTests: state.acquisitionData ? getAbTests(state.acquisitionData) : [],
-		paymentFrequency: paymentFrequencyFromBillingPeriod(common.product),
+		country: sendThankYouEmailState.user.billingAddress.country,
+		currency: sendThankYouEmailState.product.currency,
+		componentId: acquisitionData?.referrerAcquisitionData.componentId,
+		componentType: acquisitionData?.referrerAcquisitionData.componentType,
+		campaignCode: acquisitionData?.referrerAcquisitionData.campaignCode,
+		source: acquisitionData?.referrerAcquisitionData.source,
+		referrerUrl: acquisitionData?.referrerAcquisitionData.referrerUrl,
+		abTests: acquisitionData ? getAbTests(acquisitionData) : [],
+		paymentFrequency: paymentFrequencyFromBillingPeriod(
+			sendThankYouEmailState.product,
+		),
 		paymentProvider: paymentProviderFromPaymentMethod(details.paymentMethod),
 		printOptions,
-		browserId: state.acquisitionData?.ophanIds.browserId,
-		identityId: common.user.id,
-		pageViewId: state.acquisitionData?.ophanIds.pageviewId,
+		browserId: acquisitionData?.ophanIds.browserId,
+		identityId: sendThankYouEmailState.user.id,
+		pageViewId: acquisitionData?.ophanIds.pageviewId,
 		referrerPageViewId:
-			state.acquisitionData?.referrerAcquisitionData.referrerPageviewId,
+			acquisitionData?.referrerAcquisitionData.referrerPageviewId,
 		labels: buildLabels(state),
 		promoCode: details.promoCode,
 		reusedExistingPaymentMethod: false,
 		readerType: details.readerType,
 		acquisitionType: PURCHASE, // This is the only acquisition type we currently have now that we don't sell digital subscriptions gifts
 		zuoraSubscriptionNumber: details.zuoraSubscriptionNumber,
-		queryParameters: state.acquisitionData
-			? getQueryParameters(state.acquisitionData)
-			: [],
+		queryParameters: acquisitionData ? getQueryParameters(acquisitionData) : [],
 		platform: SUPPORT,
-		state: common.user.billingAddress.state,
-		email: common.user.primaryEmailAddress,
+		state: sendThankYouEmailState.user.billingAddress.state,
+		email: sendThankYouEmailState.user.primaryEmailAddress,
 		similarProductsConsent:
-			common.productType !== 'GuardianAdLite' // The Guardian Ad-Lite checkout doesn't ask for the similar products consent
-				? common.similarProductsConsent
+			sendThankYouEmailState.productType !== 'GuardianAdLite' // The Guardian Ad-Lite checkout doesn't ask for the similar products consent
+				? sendThankYouEmailState.similarProductsConsent
 				: false,
 		// For now always leave this as undefined, even for PayPal transactions. We do set this for single PayPal
 		// contributions. In future we can figure out whether it's worth finding the equivalent for a recurring PayPal
