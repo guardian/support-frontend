@@ -16,7 +16,7 @@ import type {
 	AcquisitionData,
 	QueryParam,
 } from '../model/stateSchemas';
-
+// TODO: Take these types from the bigqquery-acquisition-publisher module but maybe move it to support-service-lambdas first
 type AcquisitionProduct =
 	| 'RECURRING_CONTRIBUTION'
 	| 'SUPPORTER_PLUS'
@@ -24,14 +24,14 @@ type AcquisitionProduct =
 	| 'DIGITAL_SUBSCRIPTION'
 	| 'PRINT_SUBSCRIPTION'
 	| 'GUARDIAN_AD_LITE';
-type PaymentFrequency = 'MONTHLY' | 'QUARTERLY' | 'ANNUALLY';
-type PaymentProvider =
+type AcquisitionPaymentFrequency = 'MONTHLY' | 'QUARTERLY' | 'ANNUALLY';
+type AcquisitionPaymentProvider =
 	| 'STRIPE'
 	| 'STRIPE_APPLE_PAY'
 	| 'STRIPE_PAYMENT_REQUEST_BUTTON'
 	| 'PAYPAL'
 	| 'GOCARDLESS';
-type PrintProduct =
+type AcquisitionPrintProduct =
 	| 'HOME_DELIVERY_EVERYDAY'
 	| 'HOME_DELIVERY_EVERYDAY_PLUS'
 	| 'HOME_DELIVERY_SIXDAY'
@@ -67,9 +67,12 @@ type AcquisitionTypeDetails = {
 };
 
 type PrintOptions = {
-	product: PrintProduct;
+	product: AcquisitionPrintProduct;
 	deliveryCountry: IsoCountry;
 };
+
+const PURCHASE = 'Purchase';
+const SUPPORT = 'SUPPORT';
 
 export type AcquisitionDataRow = {
 	eventTimeStamp: Dayjs;
@@ -83,8 +86,8 @@ export type AcquisitionDataRow = {
 	source?: string;
 	referrerUrl?: string;
 	abTests: AbTest[];
-	paymentFrequency: PaymentFrequency;
-	paymentProvider?: PaymentProvider;
+	paymentFrequency: AcquisitionPaymentFrequency;
+	paymentProvider?: AcquisitionPaymentProvider;
 	printOptions?: PrintOptions;
 	browserId?: string;
 	identityId?: string;
@@ -94,16 +97,14 @@ export type AcquisitionDataRow = {
 	promoCode?: string;
 	reusedExistingPaymentMethod: boolean;
 	readerType: ReaderType;
-	acquisitionType: 'Purchase';
+	acquisitionType: typeof PURCHASE;
 	zuoraSubscriptionNumber?: string;
-	contributionId?: string;
-	paymentId?: string;
 	queryParameters: QueryParam[];
-	platform?: string;
+	platform: typeof SUPPORT;
 	postalCode?: string;
 	state?: string;
 	email?: string;
-	similarProductsConsent: boolean;
+	similarProductsConsent?: boolean;
 	paypalTransactionId?: string;
 };
 
@@ -144,33 +145,34 @@ export function buildFromState(
 		promoCode: details.promoCode,
 		reusedExistingPaymentMethod: false,
 		readerType: details.readerType,
-		acquisitionType: 'Purchase',
+		acquisitionType: PURCHASE, // This is the only acquisition type we currently have now that we don't sell digital subscriptions gifts
 		zuoraSubscriptionNumber: details.zuoraSubscriptionNumber,
-		contributionId: undefined,
-		paymentId: undefined,
 		queryParameters: state.acquisitionData
 			? getQueryParameters(state.acquisitionData)
 			: [],
-		platform: undefined,
+		platform: SUPPORT,
 		state: common.user.billingAddress.state,
 		email: common.user.primaryEmailAddress,
 		similarProductsConsent:
-			common.productType !== 'GuardianAdLite'
-				? common.similarProductsConsent ?? false
+			common.productType !== 'GuardianAdLite' // The Guardian Ad-Lite checkout doesn't ask for the similar products consent
+				? common.similarProductsConsent
 				: false,
+		// For now always leave this as undefined, even for PayPal transactions. We do set this for single PayPal
+		// contributions. In future we can figure out whether it's worth finding the equivalent for a recurring PayPal
+		// payment and wire this in, but it's currently not needed.
 		paypalTransactionId: undefined,
 	};
 }
 
 function paymentFrequencyFromBillingPeriod(
 	productType: ProductType,
-): PaymentFrequency {
+): AcquisitionPaymentFrequency {
 	const billingPeriod =
 		productType.productType === 'GuardianAdLite'
 			? BillingPeriod.Monthly
 			: productType.billingPeriod;
 
-	const map: Record<RecurringBillingPeriod, PaymentFrequency> = {
+	const map: Record<RecurringBillingPeriod, AcquisitionPaymentFrequency> = {
 		Monthly: 'MONTHLY',
 		Quarterly: 'QUARTERLY',
 		Annual: 'ANNUALLY',
@@ -180,7 +182,7 @@ function paymentFrequencyFromBillingPeriod(
 
 function paymentProviderFromPaymentMethod(
 	paymentMethod: PaymentMethod,
-): PaymentProvider {
+): AcquisitionPaymentProvider {
 	if (paymentMethod.Type === 'CreditCardReferenceTransaction') {
 		if (paymentMethod.StripePaymentType === 'StripeApplePay') {
 			return 'STRIPE_APPLE_PAY';
@@ -253,7 +255,9 @@ function printOptionsFromProduct(
 	return undefined;
 }
 
-function toPrintProduct(productInformation: ProductPurchase): PrintProduct {
+function toPrintProduct(
+	productInformation: ProductPurchase,
+): AcquisitionPrintProduct {
 	switch (productInformation.product) {
 		case 'HomeDelivery':
 			switch (productInformation.ratePlan) {
