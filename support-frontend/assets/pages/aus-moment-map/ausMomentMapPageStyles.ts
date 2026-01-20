@@ -21,6 +21,8 @@ export const ausMomentMapPageStyles = css`
 		overflow-x: hidden;
 		margin: 0;
 		padding: 0;
+		-moz-osx-font-smoothing: grayscale;
+		-webkit-font-smoothing: antialiased;
 	}
 
 	.map-page,
@@ -54,7 +56,10 @@ export const ausMomentMapPageStyles = css`
 
 	#header {
 		${headlineBold34}
+		font-size: 36px;
+		line-height: 1.5;
 		color: ${palette.neutral[93]};
+		-webkit-font-smoothing: antialiased;
 		${until.tablet} {
 			display: none;
 		}
@@ -231,7 +236,8 @@ export const ausMomentMapPageStyles = css`
 
 	h2.blurb,
 	h2.selected-territory {
-		${titlepiece50};
+		${titlepiece42};
+		font-size: 3rem;
 		text-align: left;
 		color: ${palette.neutral[7]};
 		line-height: 100%;
@@ -570,6 +576,7 @@ export const ausMomentMapPageStyles = css`
 
 	.testimonial-component {
 		${textEgyptian17}
+		line-height: 1.5;
 		margin-top: 12px;
 		border: 1px solid ${palette.neutral[86]};
 		padding: 12px;
@@ -581,6 +588,9 @@ export const ausMomentMapPageStyles = css`
 	}
 
 	.testimonial-cta {
+		${textEgyptian17}
+		font-size: 16px;
+		line-height: 1.5;
 		margin-top: 12px;
 		padding: 12px;
 		border: 1px solid ${palette.brand[400]};
