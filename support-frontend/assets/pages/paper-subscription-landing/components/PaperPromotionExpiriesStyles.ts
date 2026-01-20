@@ -8,7 +8,7 @@ export const promotionContainer = css`
 	color: ${palette.neutral[100]};
 	background-color: ${palette.brand[400]};
 	border-bottom: 1px solid ${palette.brand[600]};
-	> p {
+	p {
 		display: block;
 		padding-top: ${space[1]}px;
 	}
@@ -17,7 +17,7 @@ export const promotionContainer = css`
 		padding: 0 ${space[5]}px ${space[6]}px;
 		background-color: unset;
 		border-bottom: none;
-		> p {
+		p {
 			display: inline;
 			color: ${palette.neutral[7]};
 		}
