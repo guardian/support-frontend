@@ -6,7 +6,7 @@ import { Country } from 'helpers/internationalisation/classes/country';
 import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 
-export const addressFieldsSchema = z
+const addressFieldsSchema = z
 	.object({
 		country: z.enum(isoCountries),
 		state: z
@@ -50,7 +50,7 @@ export type AddressFieldsState = AddressFields & {
 	errorObject?: SliceErrors<AddressFieldsValidatedState>;
 };
 
-export function getInitialAddressFieldsState(): AddressFieldsState {
+function getInitialAddressFieldsState(): AddressFieldsState {
 	const country = Country.detect();
 	return {
 		country,
@@ -71,7 +71,7 @@ export type PostcodeFinderState = {
 	error?: string;
 };
 
-export const initialPostcodeFinderState: PostcodeFinderState = {
+const initialPostcodeFinderState: PostcodeFinderState = {
 	results: [],
 	isLoading: false,
 	postcode: '',

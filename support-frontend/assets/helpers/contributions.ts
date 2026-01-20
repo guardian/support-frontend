@@ -3,7 +3,7 @@ import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 
 // ----- Types ----- //
-export const contributionTypes = ['ONE_OFF', 'MONTHLY', 'ANNUAL'];
+const contributionTypes = ['ONE_OFF', 'MONTHLY', 'ANNUAL'];
 
 type RegularContributionTypeMap<T> = {
 	MONTHLY: T;
@@ -72,14 +72,14 @@ type Config = Record<
 	}
 >;
 
-export type OtherAmounts = Record<
+type OtherAmounts = Record<
 	ContributionType,
 	{
 		amount: string | null;
 	}
 >;
 
-export type SelectedAmounts = Record<ContributionType, number | 'other'>;
+type SelectedAmounts = Record<ContributionType, number | 'other'>;
 
 // ----- Setup ----- //
 

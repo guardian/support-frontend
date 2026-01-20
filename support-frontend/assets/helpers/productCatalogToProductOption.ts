@@ -83,8 +83,4 @@ export const getProductOptionFromProductAndRatePlan = (
 			return getPaperProductOptions(ratePlanKey);
 	}
 };
-export {
-	paperProductsWithoutDigital,
-	paperProductsWithDigital,
-	ActivePaperProductTypes,
-};
+export { ActivePaperProductTypes };

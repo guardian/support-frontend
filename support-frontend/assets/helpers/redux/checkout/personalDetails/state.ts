@@ -18,7 +18,7 @@ const emailRules = zuoraCompatibleString(
 		.max(maxLengths.email, 'Email address is too long'),
 );
 
-export const personalDetailsSchema = z
+const personalDetailsSchema = z
 	.object({
 		title: z.optional(z.string()),
 		firstName: zuoraCompatibleString(
@@ -60,7 +60,7 @@ export type PersonalDetailsState = PersonalDetailsValidatedFields & {
 
 const user = getUser();
 
-export const initialPersonalDetailsState: PersonalDetailsState = {
+const initialPersonalDetailsState: PersonalDetailsState = {
 	firstName: user.firstName ?? '',
 	lastName: user.lastName ?? '',
 	email: user.email ?? '',

@@ -107,7 +107,6 @@ export {
 	notLongerThan,
 	firstError,
 	formError,
-	removeError,
 	validate,
 	zuoraCompatibleString,
 	requiredDeliveryAgentChosen,

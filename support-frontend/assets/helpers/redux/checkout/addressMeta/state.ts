@@ -13,7 +13,7 @@ export type DeliveryAgentState = {
 	chosenAgent?: number;
 };
 
-export const initialState: AddressMetaState = {
+const initialState: AddressMetaState = {
 	billingAddressMatchesDelivery: true,
 	deliveryAgent: { isLoading: false, response: undefined },
 };

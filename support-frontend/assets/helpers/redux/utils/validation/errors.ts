@@ -11,7 +11,7 @@ export type SliceErrors<S extends ValidateableState> = Partial<
 	Record<keyof S, string[]>
 >;
 
-export function getSliceErrorsFromZodResult<S extends ValidateableState>(
+function getSliceErrorsFromZodResult<S extends ValidateableState>(
 	validationResult: z.ZodFormattedError<S>,
 ): SliceErrors<S> {
 	return Object.keys(validationResult).reduce<SliceErrors<S>>(
@@ -42,7 +42,7 @@ type PaymentMethodConditional = (
 ) => boolean;
 
 // Create a handler for the validateForm action for any Redux slice which needs to store errors
-export function createSliceValidatorFor(
+function createSliceValidatorFor(
 	schema: Schema,
 	checkPaymentMethod: PaymentMethodConditional = () => true,
 ) {

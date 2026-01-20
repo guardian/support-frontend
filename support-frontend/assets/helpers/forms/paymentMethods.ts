@@ -16,7 +16,7 @@ export type PaymentMethod =
 	| typeof Sepa
 	| typeof None;
 
-export type FullPaymentMethod = {
+type FullPaymentMethod = {
 	paymentMethod: PaymentMethod;
 	stripePaymentMethod?: StripePaymentMethod;
 };

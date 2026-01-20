@@ -10,7 +10,7 @@ import type { DateYMDString } from 'helpers/types/DateString';
 import type { Option } from 'helpers/types/option';
 import type { Title } from 'helpers/user/details';
 
-export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
+type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
 
 type GiftingFields = {
 	titleGiftRecipient?: Title;
@@ -41,7 +41,7 @@ type FormFields = PersonalDetailsState &
 		deliveryProvider?: number;
 	};
 export type FormField = keyof FormFields | 'recaptcha';
-export type FormState = Omit<
+type FormState = Omit<
 	FormFields,
 	| keyof PersonalDetailsState
 	| keyof GiftingFields

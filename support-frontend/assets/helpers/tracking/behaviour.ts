@@ -40,4 +40,4 @@ const trackComponentLoad = (componentId: string): void => {
 	});
 };
 
-export { trackThankYouPageLoaded, trackComponentClick, trackComponentLoad };
+export { trackComponentClick, trackComponentLoad };
