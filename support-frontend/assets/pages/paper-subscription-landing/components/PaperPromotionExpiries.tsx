@@ -38,9 +38,9 @@ function getPromotionList(paperPromotions: PaperPromotion[]): JSX.Element[] {
 	const multiPromo = paperPromotions.length > 1;
 	return paperPromotions.map((paperPromotion, index) =>
 		windowWidthIsGreaterThan('tablet') ? (
-			<span key={index}>{getPromotion(paperPromotion, index, multiPromo)}</span>
+			<span>{getPromotion(paperPromotion, index, multiPromo)}</span>
 		) : (
-			<div key={index}>{getPromotion(paperPromotion, index, multiPromo)}</div>
+			<div>{getPromotion(paperPromotion, index, multiPromo)}</div>
 		),
 	);
 }
