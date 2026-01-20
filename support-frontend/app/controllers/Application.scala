@@ -463,7 +463,7 @@ class Application(
         title = "Guardian Supporters Map",
         mainElement = EmptyDiv("aus-moment-map"),
         mainJsBundle = RefPath("ausMomentMap.js"),
-        mainStyleBundle = Some(RefPath("ausMomentMap.css")),
+        mainStyleBundle = None,
         description = stringsConfig.contributionsLandingDescription,
         canonicalLink = Some("https://support.theguardian.com/aus-map"),
         shareImageUrl = Some(
