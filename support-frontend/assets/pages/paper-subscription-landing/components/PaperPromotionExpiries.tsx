@@ -33,11 +33,13 @@ function getPromotion(
 		: getPromoExpiry(paperPromotion);
 	return `${star} ${promoText}`;
 }
-function getPromotionList(paperPromotions: PaperPromotion[]): JSX.Element[] {
-	const { windowWidthIsGreaterThan } = useWindowWidth();
+function getPromotionList(
+	paperPromotions: PaperPromotion[],
+	fromTablet: boolean,
+): JSX.Element[] {
 	const multiPromo = paperPromotions.length > 1;
 	return paperPromotions.map((paperPromotion, index) =>
-		windowWidthIsGreaterThan('tablet') ? (
+		fromTablet ? (
 			<span>{getPromotion(paperPromotion, index, multiPromo)}</span>
 		) : (
 			<div>{getPromotion(paperPromotion, index, multiPromo)}</div>
@@ -51,9 +53,12 @@ type PaperPromoExpiriesProps = {
 export default function PaperPromotionExpiries({
 	paperPromotions,
 }: PaperPromoExpiriesProps): JSX.Element {
+	const { windowWidthIsGreaterThan } = useWindowWidth();
 	return (
 		<div css={promotionContainer}>
-			<p css={promotionParagraph}>{getPromotionList(paperPromotions)}</p>
+			<p css={promotionParagraph}>
+				{getPromotionList(paperPromotions, windowWidthIsGreaterThan('tablet'))}
+			</p>
 		</div>
 	);
 }
