@@ -81,7 +81,7 @@ export function Container({
 				sidePadding ? sidePaddingStyles : noPaddingStyles,
 				sideBorders ? sideBorderStyles(borderColor) : css``,
 				topBorder ? topBorderStyles(borderColor) : css``,
-				typographyDefaults,
+				typographyDefaults(),
 				cssOverrides,
 			]}
 			{...props}

@@ -20,6 +20,7 @@ import {
 	BenefitsCheckList,
 	type BenefitsCheckListData,
 } from 'components/checkoutBenefits/benefitsCheckList';
+import { typographyDefaults } from 'components/checkoutBox/checkoutBox';
 import { CheckoutNudgeSelector } from 'components/checkoutNudge/checkoutNudge';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type {
@@ -212,7 +213,7 @@ export function ContributionsOrderSummary({
 	}`;
 
 	return (
-		<div css={componentStyles}>
+		<div css={[componentStyles, typographyDefaults(15)]}>
 			<div css={[summaryRow, rowSpacing, headingRow]}>
 				<h2 css={headingCss}>{title}</h2>
 				{headerButton}

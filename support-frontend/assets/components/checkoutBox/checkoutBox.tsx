@@ -32,7 +32,7 @@ export interface BoxProps extends CSSOverridable {
 export function Box(props: BoxProps): JSX.Element {
 	const TagName = props.tag ?? 'section';
 	return (
-		<TagName css={[mainStyles, typographyDefaults, props.cssOverrides ?? '']}>
+		<TagName css={[mainStyles, typographyDefaults(), props.cssOverrides ?? '']}>
 			{props.children}
 		</TagName>
 	);
@@ -50,9 +50,9 @@ const innerContainerStyles = css`
 	}
 `;
 
-export const typographyDefaults = css`
+export const typographyDefaults = (fontSize?: number) => css`
 	${textEgyptian15};
-	font-size: ${space[4]}px;
+	font-size: ${fontSize ?? space[4]}px;
 	line-height: 1.5;
 `;
 
@@ -60,7 +60,11 @@ export function BoxContents(props: BoxProps): JSX.Element {
 	const TagName = props.tag ?? 'div';
 	return (
 		<TagName
-			css={[innerContainerStyles, typographyDefaults, props.cssOverrides ?? '']}
+			css={[
+				innerContainerStyles,
+				typographyDefaults(),
+				props.cssOverrides ?? '',
+			]}
 		>
 			{props.children}
 		</TagName>
