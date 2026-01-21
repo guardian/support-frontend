@@ -14,7 +14,7 @@ import {
 import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
+import type { UserType } from 'helpers/user/userType';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import type { Participations } from '../../helpers/abTests/models';
