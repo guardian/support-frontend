@@ -113,27 +113,8 @@ export const subscriptionTitleFeature = css`
 	}
 `;
 
-export const subscriptionOffer = css`
-	${textEgyptian17};
-	font-size: 20px;
-	line-height: 24px;
-	display: inline-block;
-	color: ${neutral[7]};
-	background-color: ${brandAlt[400]};
-	vertical-align: middle;
-	padding: 0px 7px 3px;
-	margin: 6px 0px;
-
-	${from.mobileLandscape} {
-		font-size: 24px;
-		line-height: 30px;
-	}
-	${from.desktop} {
-		font-size: 28px;
-	}
-`;
-
 export const subscriptionOfferFeature = css`
+	display: block;
 	color: ${neutral[7]};
 `;
 

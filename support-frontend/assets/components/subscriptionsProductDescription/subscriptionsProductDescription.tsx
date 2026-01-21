@@ -8,7 +8,6 @@ import {
 	subscriptionButtonsContainer,
 	subscriptionButtonsContainerFeature,
 	subscriptionDescription,
-	subscriptionOffer,
 	subscriptionOfferFeature,
 	subscriptionSubtitleLarge,
 	subscriptionSubtitleSmall,
@@ -41,12 +40,8 @@ function SubscriptionsProductDescription({
 				css={[subscriptionTitle, isFeature && subscriptionTitleFeature]}
 				dangerouslySetInnerHTML={{ __html: title }}
 			></h2>
-			{offer && (
-				<h3 css={[subscriptionOffer, isFeature && subscriptionOfferFeature]}>
-					{offer}
-				</h3>
-			)}
 			<h3 css={offer ? subscriptionSubtitleSmall : subscriptionSubtitleLarge}>
+				<span css={subscriptionOfferFeature}>{offer}</span>
 				{subtitle}
 			</h3>
 			{benefits ? (
