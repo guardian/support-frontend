@@ -38,7 +38,7 @@ describe('Paper email fields', () => {
 				},
 			},
 		},
-		DataExtensionName: DataExtensionNames.homeDeliveryDay0Email,
+		DataExtensionName: DataExtensionNames.day0Emails.homeDelivery,
 		IdentityUserId: '1234',
 	};
 	const expectedDeliveryAgentFields = {
@@ -98,7 +98,7 @@ describe('Paper email fields', () => {
 			},
 		);
 		expect(emailFields.DataExtensionName).toBe(
-			DataExtensionNames.nationalDeliveryDay0Email,
+			DataExtensionNames.day0Emails.nationalDelivery,
 		);
 		expect(emailFields.IdentityUserId).toBe(expected.IdentityUserId);
 	});

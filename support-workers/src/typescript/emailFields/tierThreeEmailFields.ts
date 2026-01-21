@@ -54,7 +54,7 @@ export function buildTierThreeEmailFields({
 	};
 	return buildThankYouEmailFields(
 		user,
-		DataExtensionNames.tierThreeDay0Email,
+		DataExtensionNames.day0Emails.tierThree,
 		productFields,
 	);
 }

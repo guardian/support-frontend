@@ -1,3 +1,4 @@
+import { DataExtensionNames } from '@modules/email/email';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import dayjs from 'dayjs';
 import { buildDigitalSubscriptionEmailFields } from '../../emailFields/digitalSubscriptionEmailFields';
@@ -43,7 +44,7 @@ describe('digitalSubscriptionEmailFields', () => {
 					},
 				},
 			},
-			DataExtensionName: 'digipack',
+			DataExtensionName: DataExtensionNames.day0Emails.digitalSubscription,
 			IdentityUserId: '1234',
 		};
 		expect(emailFields).toStrictEqual(expected);
