@@ -3,8 +3,6 @@ import { from, palette, space, textSans15 } from '@guardian/source/foundations';
 
 export const promotionContainer = css`
 	${textSans15}
-	display: flex;
-	align-items: flex-start;
 	gap: ${space[1]}px;
 	padding: 0 ${space[3]}px ${space[5]}px;
 	color: ${palette.neutral[100]};
@@ -19,10 +17,10 @@ export const promotionContainer = css`
 		background-color: unset;
 		border-bottom: none;
 		p {
+			display: inline;
 			color: ${palette.neutral[7]};
 		}
 	}
-
 	${from.desktop} {
 		padding: ${space[1]}px 0 ${space[8]}px;
 	}
