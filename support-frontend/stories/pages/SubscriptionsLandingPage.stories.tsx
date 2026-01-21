@@ -2,12 +2,13 @@ import type { Meta, StoryObj } from '@storybook/preact-vite';
 import { MemoryRouter } from 'react-router-dom';
 import { SubscriptionsLandingPage } from 'pages/subscriptions-landing/subscriptionsLanding';
 import type { SubscriptionsLandingProps } from 'pages/subscriptions-landing/subscriptionsLandingProps';
+import { hideTestBanner } from '../../.storybook/decorators/withoutTestBanner';
 import { withProductCatalog } from '../../.storybook/decorators/withProductCatalog';
 
 const meta: Meta<SubscriptionsLandingProps> = {
 	title: 'Pages/Subscriptions Landing Page',
 	component: SubscriptionsLandingPage,
-	decorators: [withProductCatalog],
+	decorators: [withProductCatalog, hideTestBanner],
 	parameters: {
 		docs: {
 			description: {
