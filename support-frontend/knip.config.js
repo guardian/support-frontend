@@ -23,7 +23,6 @@ module.exports = {
 		// could be used to run Chromatic locally
 		'chromatic',
 		'concurrently', // used in devrun.sh
-		'sass-mq', // imported from breakpoints.scss
 		'@babel/runtime', // required by the build (errors without it)
 		'@emotion/eslint-plugin', // used in eslint config for support-frontend
 	],
