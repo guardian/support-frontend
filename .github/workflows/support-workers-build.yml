@@ -86,7 +86,6 @@ jobs:
                 parameters:
                   functionNames:
                     - "-FailureHandlerLambda-"
-                    - "-SendAcquisitionEventLambda-"
                   fileName: support-workers.jar
                 dependencies: [cfn]
               support-workers-typescript:
@@ -98,6 +97,7 @@ jobs:
                     - "-CreateZuoraSubscriptionTSLambda-"
                     - "-SendThankYouEmailLambda-"
                     - "-UpdateSupporterProductDataLambda-"
+                    - "-SendAcquisitionEventLambda-"
                   fileName: support-workers.zip
                 dependencies: [cfn]
               it-tests:

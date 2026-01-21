@@ -14,8 +14,7 @@ module.exports = {
 		error404Page: 'pages/error/error404.tsx',
 		error500Page: 'pages/error/error500.tsx',
 		downForMaintenancePage: 'pages/error/maintenance.tsx',
-		unsupportedBrowserStyles:
-			'stylesheets/fallback-pages/unsupportedBrowser.scss',
+    unsupportedBrowserPage: 'pages/unsupported-browser/unsupportedBrowserRender.tsx',
 		promotionTerms: 'pages/promotion-terms/promotionTerms.tsx',
 		ausMomentMap: 'pages/aus-moment-map/ausMomentMap.tsx',
 	},

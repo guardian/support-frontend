@@ -1,9 +1,8 @@
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { guardianContactUsLink } from 'helpers/legal';
 
 function ContactPageLink(props: { linkText: string }) {
-	return (
-		<a href="https://www.theguardian.com/help/contact-us">{props.linkText}</a>
-	);
+	return <a href={guardianContactUsLink}>{props.linkText}</a>;
 }
 
 const useDotcomContactPage = (): boolean =>
