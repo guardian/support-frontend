@@ -7,7 +7,7 @@ import {
 	TextInput,
 } from '@guardian/source/react-components';
 import { sepaEligibleCountries } from 'helpers/internationalisation/sepaEligibleCountries';
-import type { SepaState } from 'helpers/redux/checkout/payment/sepa/state';
+import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
 import { sortedOptions } from '../forms/customFields/sortedOptions';
 
 // -- Styles -- //
@@ -32,6 +32,17 @@ export type SepaFormProps = {
 	updateAddressStreetName: (addressStreetName: string) => void;
 	updateAddressCountry: (addressCountry: string) => void;
 	errors: SepaState['errors'];
+};
+
+type SepaValidateableState = {
+	iban: string;
+	accountHolderName: string;
+	streetName: string;
+	country: string;
+};
+
+type SepaState = SepaValidateableState & {
+	errors: SliceErrors<SepaValidateableState>;
 };
 
 export function SepaForm({
