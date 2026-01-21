@@ -49,16 +49,9 @@ const narrowBoxMarginAndPadding = css`
 		margin-bottom: ${space[4]}px;
 	}
 
-	> div {
-		padding: 0;
-	}
-
-	// Ticket Tailor widget itself contains a margin & border
-	// not accessible directly (class:box-color-background)
-	// We can reduce its container box to hide
-	// the margin & border
+	// Slightly offset the spacing added by the Ticket Tailor widget itself.
 	> div div div {
-		margin: -2px -2px -8px -2px;
+		margin: -8px;
 	}
 `;
 
@@ -76,10 +69,6 @@ const tscs = css`
 			color: ${palette.neutral[97]};
 		}
 	}
-`;
-
-const ttWidgetContainer = css`
-	padding: ${space[5]}px;
 `;
 
 const footerWiden = css`
@@ -144,29 +133,27 @@ export function Events({ supportRegionId }: Props) {
 					<Column span={[1, 8, 8, 8, 8]}>
 						<Box cssOverrides={narrowBoxMarginAndPadding}>
 							<BoxContents>
-								<div css={ttWidgetContainer}>
-									<div className="tt-widget">
-										<div className="tt-widget-fallback">
-											<p>
-												<a
-													href={`${ticketTailorUrl}/${eventId}/book`}
-													target="_blank"
-												>
-													Click here to buy tickets
-												</a>
-											</p>
-										</div>
-										<script
-											src="https://cdn.tickettailor.com/js/widgets/min/widget.js"
-											data-url={`${embedUrl}`}
-											data-type="inline"
-											data-inline-minimal="true"
-											data-inline-show-logo="false"
-											data-inline-bg-fill="false"
-											data-inline-inherit-ref-from-url-param=""
-											data-inline-ref="support-theguardian-com"
-										></script>
+								<div className="tt-widget">
+									<div className="tt-widget-fallback">
+										<p>
+											<a
+												href={`${ticketTailorUrl}/${eventId}/book`}
+												target="_blank"
+											>
+												Click here to buy tickets
+											</a>
+										</p>
 									</div>
+									<script
+										src="https://cdn.tickettailor.com/js/widgets/min/widget.js"
+										data-url={`${embedUrl}`}
+										data-type="inline"
+										data-inline-minimal="true"
+										data-inline-show-logo="false"
+										data-inline-bg-fill="false"
+										data-inline-inherit-ref-from-url-param=""
+										data-inline-ref="support-theguardian-com"
+									></script>
 								</div>
 							</BoxContents>
 						</Box>
