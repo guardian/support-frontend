@@ -28,18 +28,6 @@ const ActivePaperProductTypes: PaperProductOptions[] = [
 ] as const;
 export type ActivePaperProductOptions =
 	(typeof ActivePaperProductTypes)[number];
-const paperProductsWithDigital = {
-	Saturday: SaturdayPlus,
-	Weekend: WeekendPlus,
-	Sixday: SixdayPlus,
-	Everyday: EverydayPlus,
-} as Record<ProductOptions, ProductOptions>;
-const paperProductsWithoutDigital = {
-	SaturdayPlus: Saturday,
-	WeekendPlus: Weekend,
-	SixdayPlus: Sixday,
-	EverydayPlus: Everyday,
-} as Record<ProductOptions, ProductOptions>;
 
 const getPaperProductOptions = (
 	ratePlanKey: ActiveRatePlanKey,
@@ -83,8 +71,4 @@ export const getProductOptionFromProductAndRatePlan = (
 			return getPaperProductOptions(ratePlanKey);
 	}
 };
-export {
-	paperProductsWithoutDigital,
-	paperProductsWithDigital,
-	ActivePaperProductTypes,
-};
+export { ActivePaperProductTypes };
