@@ -1,5 +1,10 @@
 import { css } from '@emotion/react';
-import { from, neutral, space } from '@guardian/source/foundations';
+import {
+	from,
+	neutral,
+	space,
+	textEgyptian15,
+} from '@guardian/source/foundations';
 import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 
 const mainStyles = css`
@@ -27,7 +32,7 @@ export interface BoxProps extends CSSOverridable {
 export function Box(props: BoxProps): JSX.Element {
 	const TagName = props.tag ?? 'section';
 	return (
-		<TagName css={[mainStyles, props.cssOverrides ?? '']}>
+		<TagName css={[mainStyles, typographyDefaults, props.cssOverrides ?? '']}>
 			{props.children}
 		</TagName>
 	);
@@ -45,10 +50,18 @@ const innerContainerStyles = css`
 	}
 `;
 
+const typographyDefaults = css`
+	${textEgyptian15};
+	font-size: ${space[4]}px;
+	line-height: 1.5;
+`;
+
 export function BoxContents(props: BoxProps): JSX.Element {
 	const TagName = props.tag ?? 'div';
 	return (
-		<TagName css={[innerContainerStyles, props.cssOverrides ?? '']}>
+		<TagName
+			css={[innerContainerStyles, typographyDefaults, props.cssOverrides ?? '']}
+		>
 			{props.children}
 		</TagName>
 	);
