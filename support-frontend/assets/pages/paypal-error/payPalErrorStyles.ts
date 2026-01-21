@@ -9,7 +9,7 @@ import {
 import { gu_v_spacing } from 'stylesheets/emotion/layout';
 
 export const mainContentStyles = css`
-	background-color: ${palette.neutral[100]};
+	background-color: ${palette.neutral[93]};
 `;
 
 export const pageSectionBodyOverrides = css`
