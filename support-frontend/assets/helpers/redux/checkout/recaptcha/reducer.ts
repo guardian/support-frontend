@@ -4,7 +4,7 @@ import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/a
 import { resetValidation, validateForm } from '../checkoutActions';
 import { initialState } from './state';
 
-export const recaptchaSlice = createSlice({
+const recaptchaSlice = createSlice({
 	name: 'recaptcha',
 	initialState,
 	reducers: {

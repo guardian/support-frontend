@@ -12,7 +12,7 @@ export type SupporterStatus = {
 	guardianPatron?: boolean;
 };
 
-export type UserState = {
+type UserState = {
 	id?: string;
 	supporterStatus: SupporterStatus;
 	isTestUser: boolean;

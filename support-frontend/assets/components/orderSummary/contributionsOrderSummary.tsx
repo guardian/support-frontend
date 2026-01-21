@@ -131,7 +131,7 @@ const termsAndConditions = css`
 	${textSans15};
 	color: ${neutral[7]};
 	border: 1px solid ${neutral[46]};
-	border-radius: ${space[4]}px;
+	border-radius: ${space[3]}px;
 	background-color: ${neutral[97]};
 	padding: ${space[2]}px ${space[3]}px;
 	& div:nth-child(2) {

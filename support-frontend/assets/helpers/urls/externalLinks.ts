@@ -74,7 +74,6 @@ const getProfileUrl = (path: string) => (returnUrl?: string | null) => {
 };
 
 const getSignoutUrl = getProfileUrl('signout');
-const getReauthenticateUrl = getProfileUrl('reauthenticate');
 
 // ----- Exports ----- //
 
@@ -84,7 +83,6 @@ export {
 	androidAppUrl,
 	getDailyEditionUrl,
 	getSignoutUrl,
-	getReauthenticateUrl,
 	getManageSubsUrl,
 	getHelpCentreUrl,
 	feastAppUrl,

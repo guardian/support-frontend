@@ -5,11 +5,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 
-export type StripeAccountType = 'ONE_OFF' | 'REGULAR';
-
-export type StripePaymentIntentResult = {
-	client_secret?: string;
-};
+type StripeAccountType = 'ONE_OFF' | 'REGULAR';
 
 function getStripeKeyForCountry(
 	stripeAccountType: StripeAccountType,
