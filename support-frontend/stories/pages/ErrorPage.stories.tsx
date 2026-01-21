@@ -3,10 +3,12 @@ import { MemoryRouter } from 'react-router-dom';
 import type { ErrorPageProps } from 'pages/error/components/errorPage';
 import ErrorPage from 'pages/error/components/errorPage';
 import { PayPalError } from 'pages/paypal-error/payPalError';
+import { hideTestBanner } from '../../.storybook/decorators/withoutTestBanner';
 
 const meta: Meta = {
 	title: 'Pages/Error Page',
 	component: ErrorPage,
+	decorators: [hideTestBanner],
 	parameters: {
 		docs: {
 			description: {

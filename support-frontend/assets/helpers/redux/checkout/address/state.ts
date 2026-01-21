@@ -2,11 +2,11 @@ import { isoCountries } from '@modules/internationalisation/country';
 import { z } from 'zod';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { isEmpty, isValidZipCode } from 'helpers/forms/formValidation';
-import { Country } from 'helpers/internationalisation/classes/country';
 import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 
-export const addressFieldsSchema = z
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- needed for type below
+const addressFieldsSchema = z
 	.object({
 		country: z.enum(isoCountries),
 		state: z
@@ -50,29 +50,9 @@ export type AddressFieldsState = AddressFields & {
 	errorObject?: SliceErrors<AddressFieldsValidatedState>;
 };
 
-export function getInitialAddressFieldsState(): AddressFieldsState {
-	const country = Country.detect();
-	return {
-		country,
-		state: '',
-		lineOne: null,
-		lineTwo: null,
-		postCode: '',
-		city: null,
-		errors: [],
-		errorObject: {},
-	};
-}
-
 export type PostcodeFinderState = {
 	results: PostcodeFinderResult[];
 	isLoading: boolean;
 	postcode: string;
 	error?: string;
-};
-
-export const initialPostcodeFinderState: PostcodeFinderState = {
-	results: [],
-	isLoading: false,
-	postcode: '',
 };

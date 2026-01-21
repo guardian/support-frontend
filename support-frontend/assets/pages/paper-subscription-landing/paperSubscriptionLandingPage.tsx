@@ -1,7 +1,7 @@
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
-import Page from 'components/page/page';
+import { PageScaffold } from 'components/page/pageScaffold';
 import {
 	getAbParticipations,
 	setUpTrackingAndConsents,
@@ -36,7 +36,7 @@ export function PaperLandingPage({
 	}
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 	return (
-		<Page
+		<PageScaffold
 			id={pageQaId}
 			header={<Header countryGroupId={GBPCountries} />}
 			footer={paperSubsFooter}
@@ -49,7 +49,7 @@ export function PaperLandingPage({
 				productPrices={productPrices}
 				fulfilment={fulfilment}
 			/>
-		</Page>
+		</PageScaffold>
 	);
 }
 

@@ -3,8 +3,6 @@ import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 
 // ----- Types ----- //
-export const contributionTypes = ['ONE_OFF', 'MONTHLY', 'ANNUAL'];
-
 type RegularContributionTypeMap<T> = {
 	MONTHLY: T;
 	ANNUAL: T;
@@ -71,15 +69,6 @@ type Config = Record<
 		default: number; // TODO - remove this field once old payment flow has gone
 	}
 >;
-
-export type OtherAmounts = Record<
-	ContributionType,
-	{
-		amount: string | null;
-	}
->;
-
-export type SelectedAmounts = Record<ContributionType, number | 'other'>;
 
 // ----- Setup ----- //
 

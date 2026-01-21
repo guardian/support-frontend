@@ -64,13 +64,6 @@ function firstError<FieldType>(
 	return msgs[0];
 }
 
-function removeError<FieldType>(
-	field: FieldType,
-	formErrors: Array<FormError<FieldType>>,
-): Array<FormError<FieldType>> {
-	return formErrors.filter((error) => error.field !== field);
-}
-
 function formError<FieldType>(
 	field: FieldType,
 	message: string,
@@ -107,7 +100,6 @@ export {
 	notLongerThan,
 	firstError,
 	formError,
-	removeError,
 	validate,
 	zuoraCompatibleString,
 	requiredDeliveryAgentChosen,

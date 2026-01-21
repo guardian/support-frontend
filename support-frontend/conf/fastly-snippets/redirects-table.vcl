@@ -43,6 +43,7 @@ table support_frontend_redirects {
   "/int/subscribe/digital/checkout/gift": "/int/contribute",
   "/nz/subscribe/digital/checkout/gift": "/nz/contribute",
   "/ca/subscribe/digital/checkout/gift": "/ca/contribute",
+  "/monthly-contributions": "/contribute",
   "/us/subscribe": "/us/subscribe/weekly",
   "/au/subscribe": "/au/subscribe/weekly",
   "/eu/subscribe": "/eu/subscribe/weekly",

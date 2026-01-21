@@ -8,10 +8,12 @@ import {
 } from 'helpers/productPrice/subscriptions';
 import { PromotionTermsPage } from 'pages/promotion-terms/promotionTerms';
 import type { PromotionTermsPropTypes } from 'pages/promotion-terms/promotionTermsPropTypes';
+import { hideTestBanner } from '../../.storybook/decorators/withoutTestBanner';
 
 export default {
 	title: 'Pages/Promotion Terms',
 	component: PromotionTermsPage,
+	decorators: [hideTestBanner],
 	parameters: {
 		docs: {
 			description: {

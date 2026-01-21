@@ -1,13 +1,14 @@
 import { LinkButton } from '@guardian/source/react-components';
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
-import Page from 'components/page/page';
+import { PageScaffold } from 'components/page/pageScaffold';
 import PageSection from 'components/pageSection/pageSection';
 import QuestionsContact from 'components/questionsContact/questionsContact';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import {
+	mainContentStyles,
 	pageSectionBodyOverrides,
 	payPalErrorCopy,
 	payPalErrorHeader,
@@ -18,11 +19,11 @@ setUpTrackingAndConsents({});
 // ----- Render ----- //
 
 export const PayPalError = (
-	<Page
+	<PageScaffold
 		header={<Header countryGroupId={CountryGroup.detect()} />}
 		footer={<Footer />}
 	>
-		<div>
+		<div css={mainContentStyles}>
 			<PageSection cssOverrides={pageSectionBodyOverrides}>
 				<h1 css={payPalErrorHeader}>Please try again</h1>
 				<p css={payPalErrorCopy}>
@@ -33,6 +34,6 @@ export const PayPalError = (
 			</PageSection>
 			<QuestionsContact />
 		</div>
-	</Page>
+	</PageScaffold>
 );
 renderPage(PayPalError);

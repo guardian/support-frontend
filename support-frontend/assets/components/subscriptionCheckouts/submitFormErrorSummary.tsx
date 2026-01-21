@@ -8,7 +8,6 @@ import {
 import { InlineError } from '@guardian/source/react-components';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
-import type { CardFieldName } from './stripeForm/stripeForm';
 
 const errorContainer = css`
 	border: 4px ${errorColour[400]} solid;
@@ -26,6 +25,7 @@ const boldText = css`
 	font-weight: bold;
 `;
 // ----- Types ----- //
+type CardFieldName = 'cardNumber' | 'cardExpiry' | 'cardCvc';
 type PropTypes = {
 	errors: Array<
 		Record<string, string> | FormError<FormField> | FormError<CardFieldName>
