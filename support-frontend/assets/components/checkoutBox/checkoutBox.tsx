@@ -50,7 +50,7 @@ const innerContainerStyles = css`
 	}
 `;
 
-const typographyDefaults = css`
+export const typographyDefaults = css`
 	${textEgyptian15};
 	font-size: ${space[4]}px;
 	line-height: 1.5;

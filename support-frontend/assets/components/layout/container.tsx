@@ -4,6 +4,7 @@ import { from, neutral } from '@guardian/source/foundations';
 import { Container as SourceContainer } from '@guardian/source/react-components';
 import type { HTMLAttributes } from 'react';
 import type React from 'react';
+import { typographyDefaults } from 'components/checkoutBox/checkoutBox';
 
 type ContainerElement =
 	| 'div'
@@ -80,6 +81,7 @@ export function Container({
 				sidePadding ? sidePaddingStyles : noPaddingStyles,
 				sideBorders ? sideBorderStyles(borderColor) : css``,
 				topBorder ? topBorderStyles(borderColor) : css``,
+				typographyDefaults,
 				cssOverrides,
 			]}
 			{...props}

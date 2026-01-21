@@ -7,6 +7,7 @@ import {
 	textSans14,
 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { typographyDefaults } from 'components/checkoutBox/checkoutBox';
 import { productLegal } from 'helpers/legalCopy';
 import {
 	type ActiveProductKey,
@@ -121,7 +122,7 @@ export function OrderSummaryTsAndCs({
 	const rateDescriptor = ratePlanDescription ?? ratePlanKey;
 
 	const tierThreeSupporterPlusTsAndCs = (
-		<div css={containerSummaryTsCs}>
+		<div css={[containerSummaryTsCs, typographyDefaults]}>
 			{promotion && (
 				<p>
 					You’ll pay {promoMessage} afterwards unless you cancel. Offer only
@@ -164,7 +165,7 @@ export function OrderSummaryTsAndCs({
 		</div>
 	);
 	const defaultOrderSummaryTsAndCs = (
-		<div css={containerSummaryTsCs}>
+		<div css={[containerSummaryTsCs, typographyDefaults]}>
 			{promotion && <p>You’ll pay {promoMessage}.</p>}
 			<p>Auto renews every {periodNoun} until you cancel.</p>
 			<p>
@@ -192,11 +193,11 @@ export function OrderSummaryTsAndCs({
 		};
 	const paperPlusTsAndCs = (
 		<>
-			<div css={containerSummaryTsCs}>
+			<div css={[containerSummaryTsCs, typographyDefaults]}>
 				{promotion && <p>You’ll pay {promoMessage}.</p>}
 				<p>Auto renews every {periodNoun} until you cancel. Cancel anytime.</p>
 			</div>
-			<div css={containerSummaryTsCs}>
+			<div css={[containerSummaryTsCs, typographyDefaults]}>
 				{isPaperSundayOrPlus && (
 					<>
 						{paperSundayOrPlusCopy[productKey]}
