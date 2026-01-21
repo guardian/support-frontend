@@ -9,7 +9,6 @@ export const promotionContainer = css`
 	background-color: ${palette.brand[400]};
 	border-bottom: 1px solid ${palette.brand[600]};
 	p {
-		display: block;
 		padding-top: ${space[1]}px;
 	}
 
