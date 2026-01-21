@@ -267,9 +267,10 @@ export class SupportWorkers extends GuStack {
       "UpdateSupporterProductData",
       [supporterProductDataSqsPolicy]
     );
-    const sendAcquisitionEvent = createScalaLambda("SendAcquisitionEvent", [
-      eventBusPolicy,
-    ]);
+    const sendAcquisitionEvent = createTypescriptLambda(
+      "SendAcquisitionEvent",
+      [eventBusPolicy]
+    );
 
     const checkoutSuccess = new Succeed(this, "CheckoutSuccess");
 
