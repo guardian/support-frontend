@@ -7,7 +7,7 @@ import {
 	TextInput,
 } from '@guardian/source/react-components';
 import { sepaEligibleCountries } from 'helpers/internationalisation/sepaEligibleCountries';
-import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
+import type { SliceErrors } from 'helpers/types/SliceErrors';
 import { sortedOptions } from '../forms/customFields/sortedOptions';
 
 // -- Styles -- //

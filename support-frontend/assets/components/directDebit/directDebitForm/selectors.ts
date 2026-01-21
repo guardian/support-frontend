@@ -1,4 +1,4 @@
-import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
+import type { SliceErrors } from 'helpers/types/SliceErrors';
 
 type DirectDebitValidateableState = {
 	sortCode: string;

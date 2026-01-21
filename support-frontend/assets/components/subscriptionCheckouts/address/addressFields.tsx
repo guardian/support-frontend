@@ -23,11 +23,11 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { internationaliseProductAndRatePlan } from 'helpers/productCatalog';
-import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
+import type { SliceErrors } from 'helpers/types/SliceErrors';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
