@@ -324,10 +324,6 @@ class Application(
     RedirectWithEncodedQueryString(location + path, request.queryString)
   }
 
-  def unsupportedBrowser: Action[AnyContent] = NoCacheAction() { implicit request =>
-    Ok(views.html.unsupportedBrowserPage())
-  }
-
   def contributionsLanding(
       countryCode: String,
       campaignCode: String,
@@ -372,6 +368,18 @@ class Application(
         views.EmptyDiv("down-for-maintenance-page"),
         RefPath("downForMaintenancePage.js"),
         Some(RefPath("downForMaintenancePage.css")),
+        noindex = stage != PROD,
+      )()(assets, request, settingsProvider.getAllSettings()),
+    ).withSettingsSurrogateKey
+  }
+
+  def unsupportedBrowser(): Action[AnyContent] = NoCacheAction() { implicit request =>
+    Ok(
+      views.html.main(
+        "Support the Guardian | Un-supported browser",
+        views.EmptyDiv("unsupported-browser-page"),
+        RefPath("unsupportedBrowserPage.js"),
+        None,
         noindex = stage != PROD,
       )()(assets, request, settingsProvider.getAllSettings()),
     ).withSettingsSurrogateKey
