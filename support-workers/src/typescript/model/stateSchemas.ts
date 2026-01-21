@@ -59,6 +59,7 @@ const queryParamSchema = z.object({
 	name: z.string(),
 	value: z.string(),
 });
+export type QueryParam = z.infer<typeof queryParamSchema>;
 
 const referrerAcquisitionDataSchema = z.object({
 	campaignCode: optionalDropNulls(z.string()),
@@ -81,6 +82,7 @@ export const acquisitionDataSchema = z.object({
 	referrerAcquisitionData: referrerAcquisitionDataSchema,
 	supportAbTests: z.array(abTestSchema),
 });
+export type AcquisitionData = z.infer<typeof acquisitionDataSchema>;
 
 export const giftRecipientSchema = z.object({
 	title: optionalDropNulls(titleSchema),

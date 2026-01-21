@@ -15,6 +15,8 @@ catalog:
   esbuild: ^0.25.5
   "@types/jest": ^29.5.12
   "@types/node": ^20.11.27
+  "@aws-sdk/client-cloudwatch": ^3.848.0
+  "@aws-sdk/client-eventbridge": ^3.848.0
   "@aws-sdk/client-sqs": ^3.848.0
   "@aws-sdk/client-ssm": ^3.679.0
   "@aws-sdk/client-secrets-manager": ^3.848.0
@@ -22,4 +24,4 @@ catalog:
   "@aws-sdk/client-dynamodb": ^3.879.0
   "@aws-sdk/util-dynamodb": ^3.879.0
   "@guardian/prettier": ^2.1.5
-  "@guardian/support-service-lambdas": "guardian/support-service-lambdas#64db53b6c6d337bd1d2094e4f0c58e670b5f6b50"
+  "@guardian/support-service-lambdas": "guardian/support-service-lambdas#d00fef7a40129c9cad174c77a0c0ed6279876e31"

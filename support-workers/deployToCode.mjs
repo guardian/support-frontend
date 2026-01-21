@@ -18,6 +18,7 @@ const LAMBDA_FUNCTIONS = [
 	'CreateZuoraSubscriptionTSLambda',
 	'SendThankYouEmailLambda',
 	'UpdateSupporterProductDataLambda',
+	'SendAcquisitionEventLambda',
 ];
 
 const ssmClient = new SSMClient({
