@@ -1,11 +1,3 @@
-// Copied from
-// https://github.com/playframework/playframework/blob/master/framework/src/play/
-// src/main/scala/play/api/data/validation/Validation.scala#L81
-// but with minor modification (last * becomes +) to enforce at least one dot in domain.  This is
-// for compatibility with Stripe
-export const emailRegexPattern =
-	"^[a-zA-Z0-9\\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$";
-
 export const isEmpty: (arg0?: string | null) => boolean = (input) =>
 	typeof input === 'undefined' || input == null || input.trim().length === 0;
 
