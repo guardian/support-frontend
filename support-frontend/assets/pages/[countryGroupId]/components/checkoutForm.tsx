@@ -28,6 +28,7 @@ import { paymentMethodData } from 'components/paymentMethodSelector/paymentMetho
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
+import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
@@ -52,7 +53,6 @@ import {
 } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import type { CsrfState } from 'helpers/types/csrf';

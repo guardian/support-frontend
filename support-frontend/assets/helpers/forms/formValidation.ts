@@ -1,9 +1,3 @@
-export const isEmpty: (arg0?: string | null) => boolean = (input) =>
-	typeof input === 'undefined' || input == null || input.trim().length === 0;
-
-export const isValidZipCode = (zipCode: string): boolean =>
-	/^\d{5}(-\d{4})?$/.test(zipCode);
-
 export const notLongerThan = (
 	value: string | null,
 	maxLength: number,

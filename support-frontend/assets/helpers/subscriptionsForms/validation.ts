@@ -2,10 +2,6 @@ import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { DeliveryAgentState } from 'helpers/redux/checkout/addressMeta/state';
 
 // ----- Types ----- //
-export type Rule<Err> = {
-	rule: boolean;
-	error: Err;
-};
 export type FormError<FieldType> = {
 	field: FieldType;
 	message: string;
@@ -74,13 +70,6 @@ function formError<FieldType>(
 	};
 }
 
-function validate<Err>(rules: Array<Rule<Err>>): Err[] {
-	return rules.reduce<Err[]>(
-		(errors, { rule, error }) => (rule ? errors : [...errors, error]),
-		[],
-	);
-}
-
 function deliveryAgentHasBeenChosen(
 	deliveryAgent: DeliveryAgentState,
 ): boolean {
@@ -100,8 +89,7 @@ export {
 	notLongerThan,
 	firstError,
 	formError,
-	validate,
 	zuoraCompatibleString,
 	requiredDeliveryAgentChosen,
-	deliveryAgentsAreAvailable,
+	
 };

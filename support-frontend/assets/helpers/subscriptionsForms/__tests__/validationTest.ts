@@ -6,7 +6,6 @@ import {
 	notLongerThan,
 	notNull,
 	requiredDeliveryAgentChosen,
-	validate,
 	zuoraCompatibleString,
 } from '../validation';
 
@@ -164,26 +163,6 @@ describe('validation', () => {
 				field: 'foo',
 				message: 'bar',
 			});
-		});
-	});
-
-	describe('validate', () => {
-		it('should return a list of validation errors', () => {
-			const rules = [
-				{
-					rule: false,
-					error: 'foo',
-				},
-				{
-					rule: true,
-					error: 'bar',
-				},
-				{
-					rule: false,
-					error: 'baz',
-				},
-			];
-			expect(validate(rules)).toEqual(['foo', 'baz']);
 		});
 	});
 });

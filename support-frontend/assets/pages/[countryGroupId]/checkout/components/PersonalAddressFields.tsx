@@ -1,6 +1,6 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
+import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import { FormSection, Legend } from 'pages/[countryGroupId]/components/form';
 import { DeliveryAgentsSelect } from 'pages/paper-subscription-checkout/components/deliveryAgentsSelect';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
