@@ -1,6 +1,3 @@
-import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
-import type { DeliveryAgentState } from 'helpers/redux/checkout/addressMeta/state';
-
 // ----- Types ----- //
 export type FormError<FieldType> = {
 	field: FieldType;
@@ -35,20 +32,6 @@ function zuoraCompatibleString(s: string | null | undefined): boolean {
 	return !takesFourBytesInUTF8Regex.test(s);
 }
 
-function requiredDeliveryAgentChosen(
-	fulfilmentOption: FulfilmentOptions | null,
-	deliveryAgent: DeliveryAgentState,
-): boolean {
-	if (
-		fulfilmentOption === 'HomeDelivery' &&
-		deliveryAgentsAreAvailable(deliveryAgent)
-	) {
-		return deliveryAgentHasBeenChosen(deliveryAgent);
-	}
-
-	return true;
-}
-
 // ----- Functions ----- //
 function firstError<FieldType>(
 	field: FieldType,
@@ -70,18 +53,6 @@ function formError<FieldType>(
 	};
 }
 
-function deliveryAgentHasBeenChosen(
-	deliveryAgent: DeliveryAgentState,
-): boolean {
-	return deliveryAgent.chosenAgent ? true : false;
-}
-
-function deliveryAgentsAreAvailable(
-	deliveryAgent: DeliveryAgentState,
-): boolean {
-	return (deliveryAgent.response?.agents?.length ?? 0) > 0;
-}
-
 // ----- Exports ----- //
 export {
 	nonEmptyString,
@@ -90,6 +61,4 @@ export {
 	firstError,
 	formError,
 	zuoraCompatibleString,
-	requiredDeliveryAgentChosen,
-	
 };
