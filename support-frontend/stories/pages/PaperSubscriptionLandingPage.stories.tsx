@@ -4,10 +4,12 @@ import type { StoryObj } from '@storybook/preact-vite';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { PaperLandingPage } from 'pages/paper-subscription-landing/paperSubscriptionLandingPage';
 import type { PaperLandingPropTypes } from 'pages/paper-subscription-landing/paperSubscriptionLandingProps';
+import { hideTestBanner } from '../../.storybook/decorators/withoutTestBanner';
 
 export default {
 	title: 'Pages/Subscriptions Newspaper',
 	component: PaperLandingPage,
+	decorators: [hideTestBanner],
 	parameters: {
 		docs: {
 			description: {

@@ -3,10 +3,12 @@ import type { StoryObj } from '@storybook/preact-vite';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { WeeklyLandingPage } from 'pages/weekly-subscription-landing/weeklySubscriptionLanding';
 import type { WeeklyLandingPropTypes } from 'pages/weekly-subscription-landing/weeklySubscriptionLandingProps';
+import { hideTestBanner } from '../../.storybook/decorators/withoutTestBanner';
 
 export default {
 	title: 'Pages/Subscriptions Weekly',
 	component: WeeklyLandingPage,
+	decorators: [hideTestBanner],
 	parameters: {
 		docs: {
 			description: {
