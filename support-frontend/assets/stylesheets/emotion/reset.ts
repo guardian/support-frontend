@@ -7,9 +7,10 @@ export const reset = css`
 	html,
 	dialog {
 		font-family: 'GuardianTextEgyptian', Georgia, serif;
+		-moz-osx-font-smoothing: grayscale;
+		-webkit-font-smoothing: antialiased;
 	}
 
-	-webkit-font-smoothing: antialiased;
 	body {
 		line-height: 1.5;
 	}
