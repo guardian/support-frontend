@@ -1,7 +1,6 @@
 import { withFocusStyleManager } from './decorators/withFocusStyleManager';
 import { withUKPath } from './decorators/withUKPath';
 import { viewports } from './viewports';
-import '../assets/stylesheets/skeleton/html.scss';
 import MockDate from 'mockdate';
 import { withGlobalStyles } from './decorators/withGlobalStyles';
 
