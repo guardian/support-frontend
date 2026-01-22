@@ -9,13 +9,7 @@ module.exports = {
 	entry: [...flattenedEntryPoints, 'scripts/build-ssr-content.tsx!'],
 	project: ['**/*.{js,jsx,ts,tsx,scss}!'],
 	ignoreExportsUsedInFile: false,
-	ignore: [
-		'**/knip.*.js',
-		// Ignore these files while the legacy checkout cleanup is ongoing. These
-		// files all have unused exports, which knip complains about. Ignoring them
-		// for now so that I can split this work across PRs to keep the size down.
-		'assets/helpers/user/details.ts',
-	],
+	ignore: ['**/knip.*.js'],
 	ignoreDependencies: [
 		// used in package.json
 		'@guardian/browserslist-config',
