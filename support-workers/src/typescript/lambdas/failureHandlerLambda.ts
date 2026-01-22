@@ -44,9 +44,14 @@ async function sendFailureEmail(state: SendThankYouEmailState) {
 	await sendEmail(stage, emailFields);
 }
 
+function handleError(state: WrappedState<SendAcquisitionEventState>) {
+	console.info(`Trying to handle error ${JSON.stringify(state.error)}`);
+}
+
 export const handler = async (
 	state: WrappedState<SendAcquisitionEventState>,
 ) => {
 	console.info(`Input is ${JSON.stringify(state)}`);
 	await sendFailureEmail(state.state.sendThankYouEmailState);
+	handleError(state);
 };
