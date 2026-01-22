@@ -1,10 +1,9 @@
 import { withFocusStyleManager } from './decorators/withFocusStyleManager';
 import { withUKPath } from './decorators/withUKPath';
 import { viewports } from './viewports';
-// import '../assets/stylesheets/skeleton/fonts.scss';
-// import '../assets/stylesheets/skeleton/reset-src.scss';
 import '../assets/stylesheets/skeleton/html.scss';
 import MockDate from 'mockdate';
+import { withGlobalStyles } from './decorators/withGlobalStyles';
 
 const parameters = {
 	actions: { argTypesRegex: '^on[A-Z].*' },
@@ -23,7 +22,7 @@ const parameters = {
 	},
 };
 
-const decorators = [withFocusStyleManager, withUKPath];
+const decorators = [withFocusStyleManager, withUKPath, withGlobalStyles];
 
 const argTypes = {
 	cssOverrides: {

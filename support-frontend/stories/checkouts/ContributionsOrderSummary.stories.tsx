@@ -1,4 +1,4 @@
-import { css, Global } from '@emotion/react';
+import { css } from '@emotion/react';
 import { Button, Column, Columns } from '@guardian/source/react-components';
 import { SupportRegionId } from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
@@ -13,8 +13,6 @@ import {
 	getProductLabel,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
-import { guardianFonts } from 'stylesheets/emotion/fonts';
-import { reset } from 'stylesheets/emotion/reset';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 import { fallBackLandingPageSelection } from '../../assets/helpers/abTests/landingPageAbTests';
@@ -77,12 +75,6 @@ export default {
 		headerButton: { table: { disable: true } },
 	},
 	decorators: [
-		(Story: React.FC): JSX.Element => (
-			<>
-				<Global styles={[reset, guardianFonts]} />
-				<Story />
-			</>
-		),
 		(Story: React.FC): JSX.Element => (
 			<Columns
 				collapseUntil="tablet"
