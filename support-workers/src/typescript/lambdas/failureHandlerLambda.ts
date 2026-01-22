@@ -1,14 +1,13 @@
 import type { DataExtensionName } from '@modules/email/email';
-import { sendEmail } from '@modules/email/email';
-import { DataExtensionNames } from '@modules/email/email';
+import { DataExtensionNames, sendEmail } from '@modules/email/email';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { buildEmailFields } from '../emailFields/emailFields';
-import type {
-	SendAcquisitionEventState,
-	SendThankYouEmailState,
-} from '../model/sendAcquisitionEventState';
 import { stageFromEnvironment } from '../model/stage';
-import type { WrappedState } from '../model/stateSchemas';
+import type {
+	CreatePaymentMethodState,
+	WrappedState,
+} from '../model/stateSchemas';
+import { getIfDefined } from '../util/nullAndUndefined';
 
 const stage = stageFromEnvironment();
 
@@ -36,22 +35,25 @@ function getDataExtensionName(product: ProductKey): DataExtensionName {
 	}
 }
 
-async function sendFailureEmail(state: SendThankYouEmailState) {
+async function sendFailureEmail(state: CreatePaymentMethodState) {
 	const dataExtensionName = getDataExtensionName(
-		state.productInformation.product,
+		getIfDefined(
+			state.productInformation?.product,
+			'productInformation.product is required',
+		),
 	);
 	const emailFields = buildEmailFields(state.user, dataExtensionName, {});
 	await sendEmail(stage, emailFields);
 }
 
-function handleError(state: WrappedState<SendAcquisitionEventState>) {
+function handleError(state: WrappedState<CreatePaymentMethodState>) {
 	console.info(`Trying to handle error ${JSON.stringify(state.error)}`);
 }
 
 export const handler = async (
-	state: WrappedState<SendAcquisitionEventState>,
+	state: WrappedState<CreatePaymentMethodState>, // TODO handle other state types
 ) => {
 	console.info(`Input is ${JSON.stringify(state)}`);
-	await sendFailureEmail(state.state.sendThankYouEmailState);
+	await sendFailureEmail(state.state);
 	handleError(state);
 };
