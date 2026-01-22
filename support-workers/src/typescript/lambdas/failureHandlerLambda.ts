@@ -2,10 +2,7 @@ import type { DataExtensionName } from '@modules/email/email';
 import { sendEmail } from '@modules/email/email';
 import { DataExtensionNames } from '@modules/email/email';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
-import {
-	buildEmailFields,
-	buildThankYouEmailFields,
-} from '../emailFields/emailFields';
+import { buildEmailFields } from '../emailFields/emailFields';
 import type {
 	SendAcquisitionEventState,
 	SendThankYouEmailState,
@@ -43,11 +40,7 @@ async function sendFailureEmail(state: SendThankYouEmailState) {
 	const dataExtensionName = getDataExtensionName(
 		state.productInformation.product,
 	);
-	const emailFields = buildThankYouEmailFields(
-		state.user,
-		dataExtensionName,
-		{},
-	);
+	const emailFields = buildEmailFields(state.user, dataExtensionName, {});
 	await sendEmail(stage, emailFields);
 }
 

@@ -8,7 +8,7 @@ import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
 import { buildDeliveryEmailFields } from './deliveryEmailFields';
-import { buildThankYouEmailFields } from './emailFields';
+import { buildEmailFields } from './emailFields';
 
 export type TierThreeProductPurchase = Extract<
 	ProductPurchase,
@@ -52,7 +52,7 @@ export function buildTierThreeEmailFields({
 		...additionalFields,
 		...deliveryFields,
 	};
-	return buildThankYouEmailFields(
+	return buildEmailFields(
 		user,
 		DataExtensionNames.day0Emails.tierThree,
 		productFields,

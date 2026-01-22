@@ -9,7 +9,7 @@ import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { GiftRecipient, User } from '../model/stateSchemas';
 import { buildDeliveryEmailFields } from './deliveryEmailFields';
-import { buildThankYouEmailFields } from './emailFields';
+import { buildEmailFields } from './emailFields';
 import { formatDate } from './paymentEmailFields';
 
 export type GuardianWeeklyProductPurchase = Extract<
@@ -71,7 +71,7 @@ export function buildGuardianWeeklyEmailFields({
 		...gifteeFields,
 		...deliveryFields,
 	};
-	return buildThankYouEmailFields(
+	return buildEmailFields(
 		user,
 		DataExtensionNames.day0Emails.guardianWeekly,
 		productFields,
