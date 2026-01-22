@@ -1,6 +1,6 @@
 package services
 
-import admin.settings.{CheckoutNudgeTest, Status}
+import admin.settings.{CheckoutNudgeTest, LandingPageTest, Status}
 import com.gu.aws.AwsCloudWatchMetricSetup.getCheckoutNudgeTestsError
 import com.gu.support.config.Stage
 import org.apache.pekko.actor.ActorSystem
@@ -24,4 +24,7 @@ class CheckoutNudgeTestServiceImpl(stage: Stage)(implicit
         errorMetric = getCheckoutNudgeTestsError,
       ),
     )
-    with CheckoutNudgeTestService {}
+    with CheckoutNudgeTestService {
+  override protected def postProcess(tests: List[CheckoutNudgeTest]): List[CheckoutNudgeTest] =
+    tests.sortBy(_.priority)
+}

@@ -86,6 +86,7 @@ object CheckoutNudgeVariant {
 case class CheckoutNudgeTest(
     name: String,
     status: Status,
+    priority: Int,
     regionTargeting: Option[RegionTargeting] = None,
     nudgeFromProduct: Product,
     variants: List[CheckoutNudgeVariant],
