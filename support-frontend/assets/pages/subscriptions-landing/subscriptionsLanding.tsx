@@ -7,7 +7,6 @@ import {
 	setUpTrackingAndConsents,
 } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
-import 'stylesheets/gu-sass/gu-sass.scss';
 import 'stylesheets/skeleton/fonts.scss';
 import 'stylesheets/skeleton/reset-src.scss';
 import SubscriptionLandingContent from './components/subscriptionsLandingContent';

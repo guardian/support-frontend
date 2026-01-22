@@ -10,7 +10,6 @@ import Header from 'components/headers/header/header';
 import { PageScaffold } from 'components/page/pageScaffold';
 import PageSection from 'components/pageSection/pageSection';
 import Text, { LargeParagraph } from 'components/text/text';
-import 'stylesheets/gu-sass/gu-sass.scss';
 import 'stylesheets/skeleton/fonts.scss';
 import 'stylesheets/skeleton/reset-src.scss';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
