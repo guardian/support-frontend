@@ -367,7 +367,7 @@ class Application(
         "Support the Guardian | Down for essential maintenance",
         views.EmptyDiv("down-for-maintenance-page"),
         RefPath("downForMaintenancePage.js"),
-        Some(RefPath("downForMaintenancePage.css")),
+        None,
         noindex = stage != PROD,
       )()(assets, request, settingsProvider.getAllSettings()),
     ).withSettingsSurrogateKey
