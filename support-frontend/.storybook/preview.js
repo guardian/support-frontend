@@ -3,7 +3,6 @@ import { withUKPath } from './decorators/withUKPath';
 import { viewports } from './viewports';
 import '../assets/stylesheets/gu-sass/gu-sass.scss';
 import '../assets/stylesheets/skeleton/fonts.scss';
-import '../assets/stylesheets/skeleton/reset-src.scss';
 import '../assets/stylesheets/skeleton/html.scss';
 import MockDate from 'mockdate';
 

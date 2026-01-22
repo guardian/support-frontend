@@ -12,7 +12,6 @@ import PageSection from 'components/pageSection/pageSection';
 import Text, { LargeParagraph } from 'components/text/text';
 import 'stylesheets/gu-sass/gu-sass.scss';
 import 'stylesheets/skeleton/fonts.scss';
-import 'stylesheets/skeleton/reset-src.scss';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { contributionsEmail } from 'helpers/legal';
 import { gu_v_spacing } from 'stylesheets/emotion/layout';

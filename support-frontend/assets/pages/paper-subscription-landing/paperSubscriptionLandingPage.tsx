@@ -15,7 +15,6 @@ import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
 import 'stylesheets/gu-sass/gu-sass.scss';
 import 'stylesheets/skeleton/fonts.scss';
-import 'stylesheets/skeleton/reset-src.scss';
 
 const paperSubsFooter = (
 	<Footer
