@@ -2,11 +2,9 @@ import type { DataExtensionName } from '@modules/email/email';
 import { DataExtensionNames, sendEmail } from '@modules/email/email';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { buildEmailFields } from '../emailFields/emailFields';
+import type { FailureHandlerState } from '../model/failureHandlerState';
 import { stageFromEnvironment } from '../model/stage';
-import type {
-	CreatePaymentMethodState,
-	WrappedState,
-} from '../model/stateSchemas';
+import type { WrappedState } from '../model/stateSchemas';
 import { getIfDefined } from '../util/nullAndUndefined';
 
 const stage = stageFromEnvironment();
@@ -35,10 +33,10 @@ function getDataExtensionName(product: ProductKey): DataExtensionName {
 	}
 }
 
-async function sendFailureEmail(state: CreatePaymentMethodState) {
+async function sendFailureEmail(state: FailureHandlerState) {
 	const dataExtensionName = getDataExtensionName(
 		getIfDefined(
-			state.productInformation?.product,
+			state.productInformation.product,
 			'productInformation.product is required',
 		),
 	);
@@ -46,12 +44,12 @@ async function sendFailureEmail(state: CreatePaymentMethodState) {
 	await sendEmail(stage, emailFields);
 }
 
-function handleError(state: WrappedState<CreatePaymentMethodState>) {
+function handleError(state: WrappedState<FailureHandlerState>) {
 	console.info(`Trying to handle error ${JSON.stringify(state.error)}`);
 }
 
 export const handler = async (
-	state: WrappedState<CreatePaymentMethodState>, // TODO handle other state types
+	state: WrappedState<FailureHandlerState>, // TODO handle other state types
 ) => {
 	console.info(`Input is ${JSON.stringify(state)}`);
 	await sendFailureEmail(state.state);
