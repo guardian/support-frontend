@@ -38,7 +38,7 @@ describe('guardianAdLiteEmailFields', () => {
 					},
 				},
 			},
-			DataExtensionName: DataExtensionNames.guardianAdLiteDay0Email,
+			DataExtensionName: DataExtensionNames.day0Emails.guardianAdLite,
 			IdentityUserId: '1234',
 		};
 		expect(emailFields).toStrictEqual(expected);

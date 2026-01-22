@@ -48,7 +48,7 @@ describe('Guardian weekly thank you email fields', () => {
 					},
 				},
 			},
-			DataExtensionName: DataExtensionNames.guardianWeeklyDay0Email,
+			DataExtensionName: DataExtensionNames.day0Emails.guardianWeekly,
 			IdentityUserId: '1234',
 		};
 
@@ -97,7 +97,7 @@ describe('Guardian weekly thank you email fields', () => {
 					},
 				},
 			},
-			DataExtensionName: DataExtensionNames.guardianWeeklyDay0Email,
+			DataExtensionName: DataExtensionNames.day0Emails.guardianWeekly,
 			IdentityUserId: '1234',
 		};
 

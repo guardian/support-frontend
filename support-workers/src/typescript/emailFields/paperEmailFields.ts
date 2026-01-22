@@ -84,19 +84,19 @@ function getDataExtensionName(
 		productInformation.product === 'HomeDelivery' &&
 		productInformation.ratePlan === 'Sunday'
 	) {
-		return DataExtensionNames.homeDeliveryObserverDay0Email;
+		return DataExtensionNames.day0Emails.homeDeliveryObserver;
 	}
 	if (
 		productInformation.product === 'SubscriptionCard' &&
 		productInformation.ratePlan === 'Sunday'
 	) {
-		return DataExtensionNames.subscriptionCardObserverDay0Email;
+		return DataExtensionNames.day0Emails.subscriptionCardObserver;
 	}
 	if (productInformation.product === 'HomeDelivery') {
-		return DataExtensionNames.homeDeliveryDay0Email;
+		return DataExtensionNames.day0Emails.homeDelivery;
 	}
 	if (productInformation.product === 'NationalDelivery') {
-		return DataExtensionNames.nationalDeliveryDay0Email;
+		return DataExtensionNames.day0Emails.nationalDelivery;
 	}
-	return DataExtensionNames.subscriptionCardDay0Email;
+	return DataExtensionNames.day0Emails.subscriptionCard;
 }

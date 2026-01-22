@@ -1,3 +1,4 @@
+import { DataExtensionNames } from '@modules/email/email';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import dayjs from 'dayjs';
 import { buildContributionEmailFields } from '../../emailFields/contributionEmailFields';
@@ -48,7 +49,7 @@ describe('contributionEmailFields', () => {
 					},
 				},
 			},
-			DataExtensionName: 'regular-contribution-thank-you',
+			DataExtensionName: DataExtensionNames.day0Emails.recurringContribution,
 			IdentityUserId: '1234',
 		};
 		expect(emailFields).toStrictEqual(expected);

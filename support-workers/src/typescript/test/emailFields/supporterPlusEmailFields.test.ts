@@ -54,7 +54,7 @@ describe('Supporter plus thank you email fields', () => {
 					},
 				},
 			},
-			DataExtensionName: DataExtensionNames.supporterPlusDay0Email,
+			DataExtensionName: DataExtensionNames.day0Emails.supporterPlus,
 			IdentityUserId: '1234',
 		};
 
@@ -89,7 +89,7 @@ describe('Supporter plus thank you email fields', () => {
 					},
 				},
 			},
-			DataExtensionName: DataExtensionNames.supporterPlusDay0Email,
+			DataExtensionName: DataExtensionNames.day0Emails.supporterPlus,
 			IdentityUserId: '1234',
 		};
 		expect(emailFields).toStrictEqual(expected);
@@ -133,7 +133,7 @@ describe('Supporter plus thank you email fields', () => {
 					},
 				},
 			},
-			DataExtensionName: DataExtensionNames.supporterPlusDay0Email,
+			DataExtensionName: DataExtensionNames.day0Emails.supporterPlus,
 			IdentityUserId: '1234',
 		};
 		expect(emailFields).toStrictEqual(expected);

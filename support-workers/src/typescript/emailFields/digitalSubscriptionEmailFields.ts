@@ -1,4 +1,5 @@
 import type { EmailMessageWithIdentityUserId } from '@modules/email/email';
+import { DataExtensionNames } from '@modules/email/email';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type { Dayjs } from 'dayjs';
@@ -45,5 +46,9 @@ export function buildDigitalSubscriptionEmailFields({
 		currency: currency,
 		...nonDeliveryEmailFields,
 	};
-	return buildThankYouEmailFields(user, 'digipack', productFields);
+	return buildThankYouEmailFields(
+		user,
+		DataExtensionNames.day0Emails.digitalSubscription,
+		productFields,
+	);
 }
