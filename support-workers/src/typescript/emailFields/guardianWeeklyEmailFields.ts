@@ -73,7 +73,7 @@ export function buildGuardianWeeklyEmailFields({
 	};
 	return buildThankYouEmailFields(
 		user,
-		DataExtensionNames.guardianWeeklyDay0Email,
+		DataExtensionNames.day0Emails.guardianWeekly,
 		productFields,
 	);
 }

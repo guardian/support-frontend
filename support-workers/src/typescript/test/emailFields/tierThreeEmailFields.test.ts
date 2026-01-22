@@ -46,7 +46,7 @@ describe('Tier three thank you email fields', () => {
 					},
 				},
 			},
-			DataExtensionName: DataExtensionNames.tierThreeDay0Email,
+			DataExtensionName: DataExtensionNames.day0Emails.tierThree,
 			IdentityUserId: '1234',
 		};
 

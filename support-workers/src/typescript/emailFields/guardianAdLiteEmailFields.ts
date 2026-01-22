@@ -42,7 +42,7 @@ export function buildGuardianAdLiteEmailFields({
 
 	return buildThankYouEmailFields(
 		user,
-		DataExtensionNames.guardianAdLiteDay0Email,
+		DataExtensionNames.day0Emails.guardianAdLite,
 		nonDeliveryEmailFields,
 	);
 }

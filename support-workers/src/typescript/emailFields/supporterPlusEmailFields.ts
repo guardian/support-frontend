@@ -1,3 +1,4 @@
+import { DataExtensionNames } from '@modules/email/email';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type dayjs from 'dayjs';
@@ -54,5 +55,9 @@ export function buildSupporterPlusEmailFields({
 		...oldNonStandardPaymentFields,
 		...nonDeliveryEmailFields,
 	};
-	return buildThankYouEmailFields(user, 'supporter-plus', productFields);
+	return buildThankYouEmailFields(
+		user,
+		DataExtensionNames.day0Emails.supporterPlus,
+		productFields,
+	);
 }
