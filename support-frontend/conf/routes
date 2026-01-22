@@ -44,13 +44,6 @@ GET /events/archive                                                controllers.A
 GET /masterclasses                                                 controllers.Application.redirect(location="https://membership.theguardian.com/masterclasses")
 GET /event/*eventId                                                controllers.Application.redirectPath(location="https://membership.theguardian.com/event/", eventId)
 
-
-# This is a temporary client-side redirect based on geo-location
-# Once we have a separate payment failure email for US and UK we can consider removing it
-
-GET  /monthly-contributions                                        controllers.Application.permanentRedirect(location="/contribute")
-
-
 # ----- Contributions ----- #
 
 # Contribution checkout redirect => checkout 👇
