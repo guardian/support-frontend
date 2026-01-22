@@ -24,8 +24,6 @@ import {
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { renderPage } from 'helpers/rendering/render';
 import { routes } from 'helpers/urls/routes';
-import 'stylesheets/skeleton/fonts.scss';
-import 'stylesheets/skeleton/reset-src.scss';
 import { GuardianWeeklyFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
 import Benefits from './components/content/benefits';
 import GiftBenefits from './components/content/giftBenefits';
