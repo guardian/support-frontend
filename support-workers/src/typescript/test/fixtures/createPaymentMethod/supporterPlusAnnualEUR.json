@@ -1,4 +1,4 @@
-{
+  {
   "requestId": "fb597527-2563-f84a-0000-0000000016e5",
   "user": {
     "id": "9999999999999",
@@ -25,6 +25,11 @@
     "currency": "EUR",
     "billingPeriod": "Annual",
     "productType": "SupporterPlus"
+  },
+  "productInformation": {
+    "product": "SupporterPlus",
+    "ratePlan": "Annual",
+    "amount": 120
   },
   "analyticsInfo": {
     "isGiftPurchase": false,

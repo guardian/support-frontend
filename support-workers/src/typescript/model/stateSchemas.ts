@@ -98,7 +98,7 @@ export const baseStateSchema = z.object({
 	user: userSchema,
 	giftRecipient: optionalDropNulls(giftRecipientSchema),
 	product: productTypeSchema,
-	productInformation: optionalDropNulls(productPurchaseSchema),
+	productInformation: productPurchaseSchema,
 	analyticsInfo: analyticsInfoSchema,
 	firstDeliveryDate: optionalDropNulls(dateOrDateStringSchema),
 	appliedPromotion: optionalDropNulls(appliedPromotionSchema),

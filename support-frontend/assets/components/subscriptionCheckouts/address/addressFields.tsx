@@ -23,21 +23,38 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { internationaliseProductAndRatePlan } from 'helpers/productCatalog';
-import type {
-	AddressFieldsState,
-	AddressFields as AddressFieldsType,
-	AddressFormFieldError,
-	PostcodeFinderState,
-} from 'helpers/redux/checkout/address/state';
-import { isPostcodeOptional } from 'helpers/redux/checkout/address/validation';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
+import type { SliceErrors } from 'helpers/types/SliceErrors';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from '../../../pages/[countryGroupId]/validation';
 import type { PostcodeFinderResult } from './postcodeLookup';
+
+type AddressFieldsValidatedState = {
+	state: string;
+	postCode: string;
+	country: IsoCountry;
+};
+
+type AddressFieldsType = AddressFieldsValidatedState & {
+	lineOne: string | null;
+	lineTwo: string | null;
+	city: string | null;
+};
+
+type AddressFormField = keyof AddressFieldsType;
+export type AddressFormFieldError = FormError<AddressFormField>;
+
+type AddressFieldsState = AddressFieldsType & {
+	// TODO: Eventually we should move the subs checkouts over to the new validation mechanism
+	// but for now we need to leave the old validation mechanism alone
+	errors: AddressFormFieldError[];
+	errorObject?: SliceErrors<AddressFieldsValidatedState>;
+};
 
 type StatePropTypes = AddressFieldsState & {
 	scope: AddressType;
@@ -58,6 +75,13 @@ type PropTypes = StatePropTypes & {
 	postcodeErrorForFinder: string | null;
 	setErrors?: React.Dispatch<React.SetStateAction<AddressFormFieldError[]>>;
 	onFindAddress: (postcode: string) => void;
+};
+
+type PostcodeFinderState = {
+	results: PostcodeFinderResult[];
+	isLoading: boolean;
+	postcode: string;
+	error?: string;
 };
 
 const marginBottom = css`
@@ -110,6 +134,9 @@ function statesForCountry(country: Option<IsoCountry>): React.ReactNode {
 			return null;
 	}
 }
+
+const isPostcodeOptional = (country: IsoCountry | null): boolean =>
+	country !== 'GB' && country !== 'AU' && country !== 'US' && country !== 'CA';
 
 type ValidityStateError = 'valueMissing' | 'patternMismatch';
 

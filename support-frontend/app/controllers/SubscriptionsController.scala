@@ -110,7 +110,7 @@ class SubscriptionsController(
         title,
         mainElement,
         RefPath(js),
-        Some(RefPath("subscriptionsLandingPage.css")),
+        None,
         description = stringsConfig.subscriptionsLandingDescription,
         noindex = stage != PROD,
       ) {

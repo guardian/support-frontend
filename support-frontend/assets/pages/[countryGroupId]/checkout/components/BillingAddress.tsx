@@ -1,8 +1,8 @@
 import { useState } from 'react';
+import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
-import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSession';
 import type { BillingStatePostcodeCountry } from './BillingAddressFields';
