@@ -98,6 +98,9 @@ export const tests: Tests = {
 	},
 	landingPageMparticleLatencyTest: {
 		variants: [
+      {
+				id: 'control',
+			},
 			{
 				id: 'variant',
 			},
