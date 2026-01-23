@@ -317,11 +317,13 @@ export function ThreeTierLanding({
 
 	useEffect(() => {
 		const variant =
-			abParticipations.landingPageMparticlePastContributor?.toLowerCase();
-		void fetchIsPastSingleContributor(true, variant).then(() => {
-			setIsMparticleLoading(false);
-		});
-	}, [isSignedIn, abParticipations.landingPageMparticlePastContributor]);
+			abParticipations.landingPageMparticleLatencyTest?.toLowerCase();
+		void fetchIsPastSingleContributor(isSignedIn, variant === 'variant').then(
+			() => {
+				setIsMparticleLoading(false);
+			},
+		);
+	}, [isSignedIn, abParticipations.landingPageMparticleLatencyTest]);
 
 	const enableSingleContributionsTab =
 		campaignSettings?.enableSingleContributions ??

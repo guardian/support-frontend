@@ -23,16 +23,14 @@ describe('fetchIsPastSingleContributor', () => {
 
 	it('should return false when isSignedIn = false', async () => {
 		const isSignedIn = false;
-		const variant = 'control';
-		const result = await fetchIsPastSingleContributor(isSignedIn, variant);
+		const result = await fetchIsPastSingleContributor(isSignedIn, true);
 		expect(result).toBe(false);
 		expect(mockFetch).not.toHaveBeenCalled();
 	});
 
 	it('should return false when user is not in test', async () => {
 		const isSignedIn = true;
-		const variant = undefined;
-		const result = await fetchIsPastSingleContributor(isSignedIn, variant);
+		const result = await fetchIsPastSingleContributor(isSignedIn, false);
 		expect(result).toBe(false);
 		expect(mockFetch).not.toHaveBeenCalled();
 	});
@@ -41,8 +39,7 @@ describe('fetchIsPastSingleContributor', () => {
 		mockOnConsent.mockResolvedValue({ canTarget: false, framework: null });
 
 		const isSignedIn = true;
-		const variant = 'control';
-		const result = await fetchIsPastSingleContributor(isSignedIn, variant);
+		const result = await fetchIsPastSingleContributor(isSignedIn, true);
 		expect(result).toBe(false);
 		expect(mockFetch).not.toHaveBeenCalled();
 	});
@@ -54,8 +51,7 @@ describe('fetchIsPastSingleContributor', () => {
 		});
 
 		const isSignedIn = true;
-		const variant = 'control';
-		const result = await fetchIsPastSingleContributor(isSignedIn, variant);
+		const result = await fetchIsPastSingleContributor(isSignedIn, true);
 		expect(result).toBe(true);
 		expect(mockFetch).toHaveBeenCalled();
 	});
@@ -67,8 +63,7 @@ describe('fetchIsPastSingleContributor', () => {
 		});
 
 		const isSignedIn = true;
-		const variant = 'control';
-		const result = await fetchIsPastSingleContributor(isSignedIn, variant);
+		const result = await fetchIsPastSingleContributor(isSignedIn, true);
 		expect(result).toBe(false);
 		expect(mockFetch).toHaveBeenCalled();
 	});
@@ -80,8 +75,7 @@ describe('fetchIsPastSingleContributor', () => {
 		});
 
 		const isSignedIn = true;
-		const variant = 'control';
-		const result = await fetchIsPastSingleContributor(isSignedIn, variant);
+		const result = await fetchIsPastSingleContributor(isSignedIn, true);
 		expect(result).toBe(false);
 	});
 
@@ -89,8 +83,7 @@ describe('fetchIsPastSingleContributor', () => {
 		mockFetch.mockRejectedValueOnce(new Error('Network error'));
 
 		const isSignedIn = true;
-		const variant = 'control';
-		const result = await fetchIsPastSingleContributor(isSignedIn, variant);
+		const result = await fetchIsPastSingleContributor(isSignedIn, true);
 		expect(result).toBe(false);
 	});
 });
