@@ -14,12 +14,12 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from '../../../helpers/productCatalog';
-import type { UserType } from '../../../helpers/redux/checkout/personalDetails/state';
 import {
 	getOphanIds,
 	getReferrerAcquisitionData,
 	getSupportAbTests,
 } from '../../../helpers/tracking/acquisitions';
+import type { UserType } from '../../../helpers/user/userType';
 import { getProductFirstDeliveryDate } from '../checkout/helpers/deliveryDays';
 import type { FormPersonalFields } from '../checkout/helpers/formDataExtractors';
 import {

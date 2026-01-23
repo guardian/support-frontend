@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import type { CsrfState } from 'helpers/types/csrf';
 import { routes } from 'helpers/urls/routes';
 
 type CheckBankAccountDetails = {

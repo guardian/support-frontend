@@ -1,4 +1,4 @@
-import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import type { CsrfState } from 'helpers/types/csrf';
 import { fetchJson, getRequestOptions, requestOptions } from '../async/fetch';
 
 /**

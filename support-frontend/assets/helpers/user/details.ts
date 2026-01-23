@@ -1,4 +1,5 @@
-export const titles: Record<string, string> = {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by type below
+const titles: Record<string, string> = {
 	Ms: 'Ms',
 	Mr: 'Mr',
 	Mrs: 'Mrs',

@@ -8,12 +8,12 @@ import {
 import { useEffect, useState } from 'react';
 import BulletPointedList from 'components/thankYou/utilityComponents/BulletPointedList';
 import ExpandableContainer from 'components/thankYou/utilityComponents/ExpandableContainer';
-import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import {
 	OPHAN_COMPONENT_ID_READ_MORE_SIGN_IN,
 	OPHAN_COMPONENT_ID_SIGN_IN,
 } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import type { CsrfState } from 'helpers/types/csrf';
 import { routes } from 'helpers/urls/routes';
 import { isCodeOrProd } from 'helpers/urls/url';
 import { catchPromiseHandler } from 'helpers/utilities/promise';
