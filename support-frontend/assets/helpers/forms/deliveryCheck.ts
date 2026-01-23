@@ -18,4 +18,4 @@ const postcodeIsWithinDeliveryArea = (
 	allowedPrefixes.filter((prefix) => postcodeHasPrefix(postcode, prefix))
 		.length > 0;
 
-export { postcodeIsWithinDeliveryArea, M25_POSTCODE_PREFIXES };
+export { postcodeIsWithinDeliveryArea };

@@ -1,6 +1,6 @@
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { RegularPaymentRequest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { UserType } from '../../../helpers/redux/checkout/personalDetails/state';
+import type { UserType } from '../../../helpers/user/userType';
 
 /**
  * This module contains the logic for creating a subscription or recurring contribution.

@@ -21,8 +21,6 @@ import {
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { type CsrfState } from 'helpers/redux/checkout/csrf/state';
-import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { get } from 'helpers/storage/cookie';
 import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
 import {
@@ -30,7 +28,9 @@ import {
 	sendEventContributionCheckoutConversion,
 	sendEventOneTimeCheckoutValue,
 } from 'helpers/tracking/quantumMetric';
+import { type CsrfState } from 'helpers/types/csrf';
 import { getUser } from 'helpers/user/user';
+import type { UserType } from 'helpers/user/userType';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import { isPaperPlusSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';

@@ -19,10 +19,10 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
-import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import * as cookie from 'helpers/storage/cookie';
+import type { CsrfState } from 'helpers/types/csrf';
 import { getUser } from 'helpers/user/user';
+import type { UserType } from 'helpers/user/userType';
 import OnboardingLayout from '../../../components/onboarding/layout';
 import { getThankYouOrder } from '../checkout/helpers/sessionStorage';
 import { OnboardingSteps } from './onboardingSteps';
