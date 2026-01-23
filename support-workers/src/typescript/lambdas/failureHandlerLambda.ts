@@ -46,11 +46,10 @@ async function sendFailureEmail(state: FailureHandlerState) {
 
 function handleError(state: WrappedState<FailureHandlerState>) {
 	console.info(`Trying to handle error ${JSON.stringify(state.error)}`);
+	//if (errorShouldBeSuppressed())
 }
 
-export const handler = async (
-	state: WrappedState<FailureHandlerState>, // TODO handle other state types
-) => {
+export const handler = async (state: WrappedState<FailureHandlerState>) => {
 	console.info(`Input is ${JSON.stringify(state)}`);
 	await sendFailureEmail(state.state);
 	handleError(state);
