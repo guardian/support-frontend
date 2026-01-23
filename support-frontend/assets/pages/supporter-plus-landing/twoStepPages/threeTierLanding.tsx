@@ -24,12 +24,14 @@ import {
 } from '@modules/internationalisation/countryGroup';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
+import { useEffect } from 'react';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
+import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import type { Participations } from 'helpers/abTests/models';
@@ -42,6 +44,7 @@ import { getFeatureFlags } from 'helpers/featureFlags';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { glyph } from 'helpers/internationalisation/currency';
 import { guardianContactUsLink, guardianHelpCentreLink } from 'helpers/legal';
+import { fetchIsPastSingleContributor } from 'helpers/mparticle';
 import {
 	getProductDescription,
 	getProductLabel,
@@ -52,6 +55,7 @@ import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPer
 import { allProductPrices } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
+import { getUser } from 'helpers/user/user';
 import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
@@ -307,6 +311,17 @@ export function ThreeTierLanding({
 	const [countdownDaysLeft, setCountdownDaysLeft] = useState<
 		string | undefined
 	>();
+	const [isMparticleLoading, setIsMparticleLoading] = useState(true);
+
+	const { isSignedIn } = getUser();
+
+	useEffect(() => {
+		const variant =
+			abParticipations.landingPageMparticlePastContributor?.toLowerCase();
+		void fetchIsPastSingleContributor(true, variant).then(() => {
+			setIsMparticleLoading(false);
+		});
+	}, [isSignedIn, abParticipations.landingPageMparticlePastContributor]);
 
 	const enableSingleContributionsTab =
 		campaignSettings?.enableSingleContributions ??
@@ -524,7 +539,9 @@ export function ThreeTierLanding({
 		...tier3ProductDescription,
 	};
 
-	return (
+	return isMparticleLoading ? (
+		<GuardianHoldingContent />
+	) : (
 		<PageScaffold
 			header={
 				<>
