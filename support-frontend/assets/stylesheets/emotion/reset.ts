@@ -4,7 +4,13 @@ import { resets } from '@guardian/source/foundations';
 export const reset = css`
 	${resets.resetCSS}
 
-	-webkit-font-smoothing: antialiased;
+	html,
+	dialog {
+		font-family: 'GuardianTextEgyptian', Georgia, serif;
+		-moz-osx-font-smoothing: grayscale;
+		-webkit-font-smoothing: antialiased;
+	}
+
 	body {
 		line-height: 1.5;
 	}
