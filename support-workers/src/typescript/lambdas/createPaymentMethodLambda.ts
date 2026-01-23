@@ -67,7 +67,8 @@ export const handler = async (
 			),
 		);
 	} catch (error) {
-		throw asRetryError(error);
+		const mappedError = asRetryError(error);
+		throw mappedError;
 	}
 };
 
