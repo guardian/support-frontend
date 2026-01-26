@@ -12,7 +12,6 @@ import type {
 	StripeCardNumberElementChangeEvent,
 } from '@stripe/stripe-js';
 import { ElementDecorator } from './elementDecorator';
-import type { StripeCardFormDisplayErrors } from './selectors';
 
 const inlineContainer = css`
 	display: flex;
@@ -21,6 +20,14 @@ const inlineContainer = css`
 		margin-right: ${space[4]}px;
 	}
 `;
+
+type StripeCardFormDisplayErrors = {
+	cardNumber?: string[];
+	expiry?: string[];
+	cvc?: string[];
+	recaptcha?: string[];
+	zipCode?: string[];
+};
 
 type StripeCardFormProps = {
 	onCardNumberChange: (event: StripeCardNumberElementChangeEvent) => void;

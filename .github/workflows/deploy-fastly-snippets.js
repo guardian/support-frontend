@@ -53,6 +53,17 @@ const snippets = [
     name: "support-frontend - Observer Archive redirect error",
     type: "error",
   },
+  // Live events redirect
+  {
+    file: "./support-frontend/conf/fastly-snippets/live-events-redirect-recv.vcl",
+    name: "support-frontend - Live events redirect recv",
+    type: "recv",
+  },
+  {
+    file: "./support-frontend/conf/fastly-snippets/live-events-redirect-error.vcl",
+    name: "support-frontend - Live events redirect error",
+    type: "error",
+  },
   // Books redirect
   {
     file: "./support-frontend/conf/fastly-snippets/books-redirect-recv.vcl",

@@ -23,7 +23,7 @@ import {
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
-import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import type { CsrfState } from 'helpers/types/csrf';
 import { getThankYouOrder } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
 import type {
 	CurrentUserState,

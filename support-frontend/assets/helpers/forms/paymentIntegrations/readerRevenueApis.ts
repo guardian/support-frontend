@@ -22,7 +22,6 @@ import type {
 	GuardianWeekly,
 	Paper,
 } from 'helpers/productPrice/subscriptions';
-import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import type {
 	AcquisitionABTest,
 	OphanIds,
@@ -30,6 +29,7 @@ import type {
 } from 'helpers/tracking/acquisitions';
 import type { Option } from 'helpers/types/option';
 import type { Title } from 'helpers/user/details';
+import type { UserType } from 'helpers/user/userType';
 
 // ----- Types ----- //
 export type StripePaymentMethod =
