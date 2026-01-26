@@ -954,6 +954,24 @@ exports[`The Payment API stack matches the snapshot 1`] = `
         "EvaluationPeriods": 18,
         "MetricName": "payment-success",
         "Namespace": "support-payment-api-PROD",
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Period": 300,
         "Statistic": "Sum",
         "Tags": [
@@ -1045,6 +1063,24 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "ReturnData": false,
           },
         ],
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Tags": [
           {
             "Key": "gu:cdk:version",
@@ -1100,6 +1136,24 @@ exports[`The Payment API stack matches the snapshot 1`] = `
         "EvaluationPeriods": 12,
         "MetricName": "payment-success",
         "Namespace": "support-payment-api-PROD",
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Period": 300,
         "Statistic": "Sum",
         "Tags": [
