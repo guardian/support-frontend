@@ -316,23 +316,24 @@ export function ThreeTierLanding({
 	const { isSignedIn } = getUser();
 
 	useEffect(() => {
-    const variant =
-      abParticipations.landingPageMparticleLatencyTest?.toLowerCase();
-    
-    const timeout = new Promise<void>((resolve) => {
-      setTimeout(() => {
-        setIsMparticleLoading(false);
-        resolve();
-      }, 2000);
-    });
+		const variant =
+			abParticipations.landingPageMparticleLatencyTest?.toLowerCase();
 
-    const fetchRequest = fetchIsPastSingleContributor(isSignedIn, variant === 'variant').then(
-      () => {
-        setIsMparticleLoading(false);
-      },
-    );
+		const timeout = new Promise<void>((resolve) => {
+			setTimeout(() => {
+				setIsMparticleLoading(false);
+				resolve();
+			}, 2000);
+		});
 
-    void Promise.race([fetchRequest, timeout]);
+		const fetchRequest = fetchIsPastSingleContributor(
+			isSignedIn,
+			variant === 'variant',
+		).then(() => {
+			setIsMparticleLoading(false);
+		});
+
+		void Promise.race([fetchRequest, timeout]);
 	}, [isSignedIn, abParticipations.landingPageMparticleLatencyTest]);
 
 	const enableSingleContributionsTab =
