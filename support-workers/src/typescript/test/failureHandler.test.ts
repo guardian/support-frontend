@@ -7,6 +7,7 @@ import type { WrappedState } from '../model/stateSchemas';
 import { wrapperSchemaForState } from '../model/stateSchemas';
 import callIssuerError from './fixtures/failureHandler/callIssuerError.json';
 import doNotHonorError from './fixtures/failureHandler/doNotHonorError.json';
+import insufficientFundsError from './fixtures/failureHandler/insufficientFundsError.json';
 import stripeUsedTokenError from './fixtures/failureHandler/stripeUsedTokenError.json';
 
 function testWithJson(
@@ -27,25 +28,32 @@ function testWithJson(
 }
 
 describe('FailureHandlerLambda parsing', () => {
-	test('parsing works ok', () => {
+	test('payment method has already been attached error', () => {
 		testWithJson(
 			stripeUsedTokenError,
 			'The payment method you provided has already been attached to a customer.',
 			'unknown',
 		);
 	});
-	test('parsing works ok 2', () => {
+	test('call_issuer error', () => {
 		testWithJson(
 			callIssuerError,
 			'Transaction declined.402 - [card_error/card_declined/call_issuer] Your card was declined. You can call your bank for details.',
 			'payment_method_unacceptable',
 		);
 	});
-	test('parsing works ok 3', () => {
+	test('do_not_honor error', () => {
 		testWithJson(
 			doNotHonorError,
 			'Transaction declined.402 - [card_error/card_declined/do_not_honor] Your card was declined.',
 			'payment_method_unacceptable',
+		);
+	});
+	test('insufficient_funds error', () => {
+		testWithJson(
+			insufficientFundsError,
+			'Transaction declined.402 - [card_error/card_declined/insufficient_funds] Your card has insufficient funds.',
+			'insufficient_funds',
 		);
 	});
 });
