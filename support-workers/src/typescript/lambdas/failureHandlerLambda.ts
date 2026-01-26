@@ -2,6 +2,7 @@ import type { DataExtensionName } from '@modules/email/email';
 import { DataExtensionNames, sendEmail } from '@modules/email/email';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { buildEmailFields } from '../emailFields/emailFields';
+import { checkoutFailureReasonFromErrorMessage } from '../errors/checkoutFailureReasons';
 import { errorFromStateSchema } from '../errors/errorFromStateSchema';
 import { isTransactionDeclinedError } from '../errors/zuoraErrors';
 import type { CheckoutFailureState } from '../model/checkoutFailureState';
@@ -52,9 +53,12 @@ function handleError(state: WrappedState<FailureHandlerState>) {
 	const shouldTriggerAlarm = !isTransactionDeclinedError(
 		causingError.errorMessage,
 	);
+	const checkoutFailureReason = checkoutFailureReasonFromErrorMessage(
+		causingError.errorMessage,
+	);
 	const checkoutFailureState: CheckoutFailureState = {
 		user: state.state.user,
-		checkoutFailureReason: 'unknown', // TODO: map from causingError - this is broken in PROD currently
+		checkoutFailureReason,
 	};
 	return {
 		checkoutFailureState,

@@ -4,20 +4,20 @@
       "productType": "Contribution",
       "product": {
         "amount": 5,
-        "currency": "CAD",
+        "currency": "USD",
         "billingPeriod": "Monthly",
         "productType": "Contribution"
       },
       "productInformation": {
+        "amount": 5,
         "product": "Contribution",
-        "ratePlan": "Monthly",
-        "amount": 5
+        "ratePlan": "Monthly"
       },
       "paymentMethod": {
-        "TokenId": "pm_tok_12345",
-        "SecondTokenId": "cus_12345",
+        "TokenId": "pm_000000000000000000000000",
+        "SecondTokenId": "cus_00000000000000",
         "CreditCardNumber": "4242",
-        "CreditCardExpirationMonth": 4,
+        "CreditCardExpirationMonth": 1,
         "CreditCardExpirationYear": 2030,
         "CreditCardType": "MasterCard",
         "PaymentGateway": "Stripe PaymentIntents GNM Membership",
@@ -25,15 +25,15 @@
         "StripePaymentType": "StripeCheckout"
       },
       "salesForceContact": {
-        "Id": "003xxxxxxxxxxxxxxx",
-        "AccountId": "001xxxxxxxxxxxxxxx"
+        "Id": "003000000000000000",
+        "AccountId": "001000000000000000"
       },
       "similarProductsConsent": true
     },
-    "requestId": "7a477a3f-d593-c570-0000-00000001a5ee",
+    "requestId": "00000000-0000-0000-0000-000000000000",
     "user": {
-      "id": "100000001",
-      "primaryEmailAddress": "test.user@example.com",
+      "id": "11111111",
+      "primaryEmailAddress": "test.user@thegulocal.com",
       "title": null,
       "firstName": "Test",
       "lastName": "User",
@@ -41,9 +41,9 @@
         "lineOne": null,
         "lineTwo": null,
         "city": null,
-        "state": "QC",
-        "postCode": null,
-        "country": "CA"
+        "state": "MO",
+        "postCode": "63110",
+        "country": "US"
       },
       "deliveryAddress": null,
       "telephoneNumber": null,
@@ -53,14 +53,14 @@
     "giftRecipient": null,
     "product": {
       "amount": 5,
-      "currency": "CAD",
+      "currency": "USD",
       "billingPeriod": "Monthly",
       "productType": "Contribution"
     },
     "productInformation": {
+      "amount": 5,
       "product": "Contribution",
-      "ratePlan": "Monthly",
-      "amount": 5
+      "ratePlan": "Monthly"
     },
     "analyticsInfo": {
       "isGiftPurchase": false,
@@ -72,24 +72,20 @@
     "salesforceCaseId": null,
     "acquisitionData": {
       "ophanIds": {
-        "pageviewId": "pageview_id",
-        "browserId": "browser_id"
+        "pageviewId": "mkqsgj39pjyfu49zvt3f",
+        "browserId": null
       },
       "referrerAcquisitionData": {
         "campaignCode": null,
-        "referrerPageviewId": "referrer_pageview_id",
-        "referrerUrl": "https://www.theguardian.com/commentisfree/2025/dec/29/american-reckoning",
-        "componentId": "gdnwb_copts_memco_2025-01-01_NEW_YEAR_EPIC__EU_ROW_CONTROL",
-        "componentType": "ACQUISITIONS_EPIC",
+        "referrerPageviewId": "mkqsgj39pjyfu49zvt3f",
+        "referrerUrl": "https://www.theguardian.com/us-news/2026/jan/14/some-news-story",
+        "componentId": "2026-01-08_NY_BANNER1_MOBILE__US_V2_HYBRID",
+        "componentType": "ACQUISITIONS_ENGAGEMENT_BANNER",
         "source": "GUARDIAN_WEB",
         "abTests": [
           {
-            "name": "2025-01-01_NEW_YEAR_EPIC__EU_ROW",
-            "variant": "CONTROL"
-          },
-          {
-            "name": "2025_12_18_HIGHER_SINGLES__CA",
-            "variant": "CONTROL"
+            "name": "2026-01-08_NY_BANNER1_MOBILE__US",
+            "variant": "V2_HYBRID"
           }
         ],
         "queryParameters": [
@@ -104,7 +100,7 @@
         ],
         "hostname": "support.theguardian.com",
         "gaClientId": null,
-        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:146.0) Gecko/20100101 Firefox/146.0",
+        "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Mobile Safari/537.36",
         "ipAddress": "127.0.0.1",
         "labels": [
           "generic-checkout"
@@ -112,37 +108,33 @@
       },
       "supportAbTests": [
         {
-          "name": "paypalCompletePaymentsWithBAID",
-          "variant": "variant"
+          "name": "2026_13_01_RECURRING_TO_SUPPORTERPLUS_ROWUS",
+          "variant": "V2"
         },
         {
-          "name": "LP_DEFAULT",
+          "name": "LP_DEFAULT_US",
           "variant": "CONTROL"
         },
         {
-          "name": "landingPageMparticlePastContributor",
-          "variant": "control"
-        },
-        {
-          "name": "2025_12_16_SUPPORTERPLUS_TO_DIGITALPLUS",
-          "variant": "control"
-        },
-        {
-          "name": "2025_12_18_HIGHER_SINGLES__CA",
-          "variant": "CONTROL"
+          "name": "2025_12_18_HIGHER_SINGLES__US",
+          "variant": "V1_HIGHER_SINGLES"
         },
         {
           "name": "abandonedBasket",
+          "variant": "control"
+        },
+        {
+          "name": "landingPageMparticlePastContributor",
           "variant": "variant"
         }
       ]
     },
     "similarProductsConsent": true,
     "paymentMethod": {
-      "TokenId": "pm_tok_12345",
-      "SecondTokenId": "cus_12345",
+      "TokenId": "pm_000000000000000000000000",
+      "SecondTokenId": "cus_00000000000000",
       "CreditCardNumber": "4242",
-      "CreditCardExpirationMonth": 4,
+      "CreditCardExpirationMonth": 1,
       "CreditCardExpirationYear": 2030,
       "CreditCardType": "MasterCard",
       "PaymentGateway": "Stripe PaymentIntents GNM Membership",
@@ -151,8 +143,8 @@
     }
   },
   "error": {
-    "Error": "RetryLimited",
-    "Cause": "{\"errorType\":\"RetryLimited\",\"errorMessage\":\"Transaction declined.402 - [card_error/card_declined/call_issuer] Your card was declined. You can call your bank for details.\",\"trace\":[\"RetryLimited: Transaction declined.402 - [card_error/card_declined/call_issuer] Your card was declined. You can call your bank for details.\",\"    at retryLimited (/var/task/createZuoraSubscriptionTSLambda.js:101214:33)\",\"    at mapZuoraError (/var/task/createZuoraSubscriptionTSLambda.js:101248:10)\",\"    at asRetryError (/var/task/createZuoraSubscriptionTSLambda.js:101266:12)\",\"    at Runtime.handler (/var/task/createZuoraSubscriptionTSLambda.js:102092:11)\",\"    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\"]}"
+    "Error": "RetryNone",
+    "Cause": "{\"errorType\":\"RetryNone\",\"errorMessage\":\"Transaction declined.402 - [card_error/expired_card/expired_card] Your card has expired.\",\"trace\":[\"RetryNone: Transaction declined.402 - [card_error/expired_card/expired_card] Your card has expired.\",\"    at retryNone (/var/task/createZuoraSubscriptionTSLambda.js:101364:30)\",\"    at mapZuoraError (/var/task/createZuoraSubscriptionTSLambda.js:101397:12)\",\"    at asRetryError (/var/task/createZuoraSubscriptionTSLambda.js:101417:12)\",\"    at Runtime.handler (/var/task/createZuoraSubscriptionTSLambda.js:102245:11)\",\"    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\"]}"
   },
   "requestInfo": {
     "testUser": false,

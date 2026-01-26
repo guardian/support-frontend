@@ -1,30 +1,51 @@
+import type { CheckoutFailureReason } from '../errors/checkoutFailureReasons';
+import { checkoutFailureReasonFromErrorMessage } from '../errors/checkoutFailureReasons';
 import { errorFromStateSchema } from '../errors/errorFromStateSchema';
 import type { FailureHandlerState } from '../model/failureHandlerState';
 import { failureHandlerStateSchema } from '../model/failureHandlerState';
 import type { WrappedState } from '../model/stateSchemas';
 import { wrapperSchemaForState } from '../model/stateSchemas';
+import callIssuerError from './fixtures/failureHandler/callIssuerError.json';
+import doNotHonorError from './fixtures/failureHandler/doNotHonorError.json';
 import stripeUsedTokenError from './fixtures/failureHandler/stripeUsedTokenError.json';
-import transactionDeclinedError from './fixtures/failureHandler/transactionDeclinedError.json';
 
-test('parsing works ok', () => {
+function testWithJson(
+	json: unknown,
+	errorMessage: string,
+	checkoutFailureReason: CheckoutFailureReason,
+) {
 	const state: WrappedState<FailureHandlerState> = wrapperSchemaForState(
 		failureHandlerStateSchema,
-	).parse(stripeUsedTokenError);
+	).parse(json);
 	const cause = errorFromStateSchema.parse(
 		JSON.parse(state.error?.Cause ?? ''),
 	);
-	expect(cause.errorMessage).toEqual(
-		'The payment method you provided has already been attached to a customer.',
+	expect(cause.errorMessage).toEqual(errorMessage);
+	expect(checkoutFailureReasonFromErrorMessage(cause.errorMessage)).toEqual(
+		checkoutFailureReason,
 	);
-});
-test('parsing works ok 2', () => {
-	const state: WrappedState<FailureHandlerState> = wrapperSchemaForState(
-		failureHandlerStateSchema,
-	).parse(transactionDeclinedError);
-	const cause = errorFromStateSchema.parse(
-		JSON.parse(state.error?.Cause ?? ''),
-	);
-	expect(cause.errorMessage).toEqual(
-		'Transaction declined.402 - [card_error/card_declined/call_issuer] Your card was declined. You can call your bank for details.',
-	);
+}
+
+describe('FailureHandlerLambda parsing', () => {
+	test('parsing works ok', () => {
+		testWithJson(
+			stripeUsedTokenError,
+			'The payment method you provided has already been attached to a customer.',
+			'unknown',
+		);
+	});
+	test('parsing works ok 2', () => {
+		testWithJson(
+			callIssuerError,
+			'Transaction declined.402 - [card_error/card_declined/call_issuer] Your card was declined. You can call your bank for details.',
+			'payment_method_unacceptable',
+		);
+	});
+	test('parsing works ok 3', () => {
+		testWithJson(
+			doNotHonorError,
+			'Transaction declined.402 - [card_error/card_declined/do_not_honor] Your card was declined.',
+			'payment_method_unacceptable',
+		);
+	});
 });
