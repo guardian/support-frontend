@@ -17,15 +17,14 @@ const hasTargetingConsent = (): Promise<boolean> =>
  */
 const fetchIsPastSingleContributor = async (
 	isSignedIn: boolean,
-	variant?: string,
+	isVariantToFetch?: boolean,
 ): Promise<boolean> => {
 	if (!isSignedIn) {
 		return false;
 	}
-	if (!(variant === 'control' || variant === 'variant')) {
+	if (!isVariantToFetch) {
 		return false;
 	}
-
 	const hasConsent = await hasTargetingConsent();
 	if (!hasConsent) {
 		return false;

@@ -289,6 +289,7 @@ export class PaymentApi extends GuStack {
         this.stage
       } No successful paypal payments via payment-api for ${paypalAlarmPeriod.toHumanString()}`,
       actionsEnabled: props.stage === "PROD",
+      okAction: true,
       threshold: 0,
       evaluationPeriods: paypalEvaluationPeriods,
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
@@ -309,6 +310,7 @@ export class PaymentApi extends GuStack {
       app,
       alarmName: `[CDK] ${app} ${this.stage} No successful stripe payments via payment-api for an hour`,
       actionsEnabled: props.stage === "PROD",
+      okAction: true,
       threshold: 0,
       evaluationPeriods: 12,
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
@@ -360,6 +362,7 @@ export class PaymentApi extends GuStack {
         this.stage
       } No successful stripe express payments via payment-api for ${stripeExpressAlarmPeriod.toHumanString()}`,
       actionsEnabled: props.stage === "PROD",
+      okAction: true,
       threshold: 0,
       evaluationPeriods: stripeExpressEvaluationPeriods,
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
