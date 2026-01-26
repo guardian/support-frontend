@@ -9,6 +9,8 @@ import com.gu.retry.EitherTRetry.retry
 import config.Identity
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
+import models.GeoData
+import models.identity.RegistrationLocation
 import models.identity.requests.CreateGuestAccountRequestBody
 import models.identity.responses.IdentityErrorResponse.{GuestEndpoint, IdentityError, OtherIdentityError, UserEndpoint}
 import models.identity.responses.{GuestRegistrationResponse, IdentityErrorResponse, UserResponse}
@@ -207,6 +209,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       pageViewId: Option[String],
       referer: Option[String],
       sendIdentityVerificationEmail: Boolean,
+      geoData: GeoData,
   )(implicit ec: ExecutionContext, scheduler: Scheduler): EitherT[Future, IdentityError, UserDetails] = {
     // Try to fetch the user's information with their email address and if it does not exist
     // or there is an error try again up to a total of 3 times with a 500 millisecond delay between
@@ -214,9 +217,21 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     // We try to fetch the user information at the start of each attempt in case a previous `createUser`
     // call succeeded but timed out before returning a valid response
     retry(
-      getUserDetailsFromEmail(email).leftFlatMap(_ =>
-        createUserIdFromEmailUser(email, firstName, lastName, pageViewId, referer, sendIdentityVerificationEmail),
-      ),
+      getUserDetailsFromEmail(email).leftFlatMap(_ => {
+        val registrationLocation = RegistrationLocation.registrationLocationFromGeoData(geoData)
+        val registrationLocationState = RegistrationLocation.registrationLocationStateFromGeoData(geoData)
+
+        createUserIdFromEmailUser(
+          email = email,
+          firstName = firstName,
+          lastName = lastName,
+          pageViewId = pageViewId,
+          referer = referer,
+          sendIdentityVerificationEmail = sendIdentityVerificationEmail,
+          registrationLocation = registrationLocation,
+          registrationLocationState = registrationLocationState,
+        )
+      }),
       delay = 500.milliseconds,
       retries = 2,
     )
@@ -253,12 +268,16 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       pageViewId: Option[String],
       referer: Option[String],
       sendIdentityVerificationEmail: Boolean,
+      registrationLocation: Option[String] = None,
+      registrationLocationState: Option[String] = None,
   )(implicit ec: ExecutionContext, scheduler: Scheduler): EitherT[Future, IdentityError, UserDetails] = {
     val body = CreateGuestAccountRequestBody(
       email,
       PrivateFields(
         firstName = Some(firstName).filter(_.nonEmpty),
         secondName = Some(lastName).filter(_.nonEmpty),
+        registrationLocation = registrationLocation,
+        registrationLocationState = registrationLocationState,
       ),
     )
     execute(
