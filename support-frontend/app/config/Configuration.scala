@@ -60,8 +60,6 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val mparticleConfigProvider = new MparticleConfigProvider(config, stage)
 
-  lazy val capiKey = config.getString("capi-key")
-
   lazy val zuoraConfigProvider = new ZuoraConfigProvider(config, stage)
 }
 

@@ -64,7 +64,6 @@ GET  /$country<(uk|us|ca)>/student                                 controllers.A
 
 GET  /aus-2020-map                                                 controllers.Application.ausMomentMap()
 GET  /aus-map                                                      controllers.Application.ausMomentMap()
-GET  /thank-you-shareable-articles                                 controllers.ArticleShare.getArticles()
 
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou                   controllers.Application.contributionsLanding(country: String, campaignCode = "")
 
