@@ -46,8 +46,13 @@ GET  /one-time-checkout                                            controllers.A
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/one-time-checkout   controllers.Application.productCheckoutRouter(countryGroupId: String)
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/thank-you           controllers.Application.productCheckoutRouter(countryGroupId: String)
 
-GET  /$countryGroupId<(uk|eu)>/guardian-ad-lite                    controllers.Application.productCheckoutRouter(countryGroupId: String)
-GET /guardian-ad-lite                                              controllers.Application.geoRedirectToPath(path = "guardian-ad-lite")
+GET  /$countryGroupId<(uk|eu)>/guardian-ad-lite                         controllers.Application.productCheckoutRouter(countryGroupId: String)
+GET /us/guardian-ad-lite                                             controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET /au/guardian-ad-lite                                             controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET /int/guardian-ad-lite                                            controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET /nz/guardian-ad-lite                                             controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET /ca/guardian-ad-lite                                             controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET /guardian-ad-lite                                                controllers.Application.geoRedirectToPath(path = "guardian-ad-lite")
 
 GET  /contribute                                                   controllers.Application.contributeGeoRedirect(campaignCode = "")
 GET  /contribute/:campaignCode                                     controllers.Application.contributeGeoRedirect(campaignCode: String)
