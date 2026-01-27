@@ -116,7 +116,6 @@ POST /stripe-checkout-session/create                               controllers.C
 GET  /login                                                        controllers.Login.login()
 GET  /loginAction                                                  controllers.Login.loginAction()
 GET  /oauth2callback                                               controllers.Login.oauth2Callback()
-GET  /logout                                                       controllers.Login.logout()
 GET  /test-users                                                   controllers.TestUsersManagement.createTestUser()
 
 # ----- Okta auth ----- #
