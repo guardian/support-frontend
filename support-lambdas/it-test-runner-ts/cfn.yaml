@@ -1,0 +1,176 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Lambda for running the IT tests in TypeScript. Runs support-workers integration tests on a schedule.
+
+Parameters:
+  Stage:
+    Description: Stage name
+    Type: String
+    AllowedValues:
+      - PROD
+      - CODE
+    Default: CODE
+
+Mappings:
+  Constants:
+    Alarm:
+      Process: See the wiki at https://github.com/guardian/support-frontend/wiki/Automated-IT-Tests
+
+Conditions:
+  IsProd: !Equals [!Ref Stage, PROD]
+
+Resources:
+  LambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Runs the support-workers IT tests using pnpm
+      FunctionName:
+        !Sub support-it-tests-ts-${Stage}
+      Handler: index.handler
+      CodeUri:
+        Bucket: support-workers-dist
+        Key: !Sub support/${Stage}/it-test-runner-ts/it-test-runner-ts.zip
+      MemorySize: 3008
+      Runtime: nodejs22.x
+      Timeout: 900
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          Stage: !Ref Stage
+          NODE_ENV: production
+      Events:
+        RerunTests:
+          Type: Schedule
+          Properties:
+            Schedule: 'rate(6 hours)'
+            Description: run the tests regularly so we know if they're broken
+      EventInvokeConfig:
+        MaximumRetryAttempts: 0
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/support-it-tests-ts-${Stage}:*"
+        - Statement:
+            - Effect: Allow
+              Action: cloudwatch:PutMetricData
+              Resource: "*"
+        - Statement:
+            - Effect: Allow
+              Action: s3:GetObject
+              Resource:
+               - arn:aws:s3:::support-workers-private/CODE/support-workers.private.conf
+               - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-CODE/catalog.json
+               - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-PROD/catalog.json
+        - Statement:
+            - Effect: Allow
+              Action: dynamodb:Scan
+              Resource: arn:aws:dynamodb:*:*:table/support-admin-console-promos-CODE
+        - Statement:
+            - Effect: Allow
+              Action:
+                - sqs:SendMessage
+                - sqs:GetQueueUrl
+              Resource:
+                Fn::ImportValue: !Sub "comms-CODE-EmailQueueArn"
+        - Statement:
+            - Effect: Allow
+              Action: events:PutEvents
+              Resource: !Sub arn:aws:events:${AWS::Region}:${AWS::AccountId}:event-bus/acquisitions-bus-CODE
+
+  LambdaLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: LambdaFunction
+    Properties:
+      LogGroupName: !Sub /aws/lambda/support-it-tests-ts-${Stage}
+      RetentionInDays: 90
+
+  ITTestFailureAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
+      ActionsEnabled: !If [IsProd, true, false]
+      AlarmName: !Join
+        - ' '
+        - - 'non urgent -'
+          - 'IT Tests (TS) are failing'
+          - !Ref Stage
+      AlarmDescription: !Join
+        - ' '
+        - - 'Impact - There may be improperly tested code in PROD or CODE test data is broken.'
+          - !FindInMap [ Constants, Alarm, Process ]
+      Metrics:
+        - Id: total
+          Expression: "FILL(m1,0)"
+          Label: ITTestsFailed
+        - Id: m1
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: support-frontend
+              MetricName: it-test-failed
+              Dimensions:
+                - Name: Stage
+                  Value: !Ref Stage
+            Stat: Sum
+            Period: 900
+            Unit: Count
+      ComparisonOperator: GreaterThanThreshold
+      Threshold: 0
+      EvaluationPeriods: 25
+      DatapointsToAlarm: 1
+      TreatMissingData: breaching
+
+  ITTestNotRunningAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
+      ActionsEnabled: !If [IsProd, true, false]
+      AlarmName: !Join
+        - ' '
+        - - 'non urgent -'
+          - 'IT Tests (TS) are not running'
+          - !Ref Stage
+      AlarmDescription: !Join
+        - ' '
+        - - 'Impact - we are not aware of integration test pass/fail status'
+          - !FindInMap [ Constants, Alarm, Process ]
+      Metrics:
+        - Id: total
+          Expression: "SUM([FILL(m1,0),FILL(m2,0)])"
+          Label: ITTestsCount
+        - Id: m1
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: support-frontend
+              MetricName: it-test-succeeded
+              Dimensions:
+                - Name: Stage
+                  Value: !Ref Stage
+            Stat: Sum
+            Period: 3600
+            Unit: Count
+        - Id: m2
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: support-frontend
+              MetricName: it-test-failed
+              Dimensions:
+                - Name: Stage
+                  Value: !Ref Stage
+            Stat: Sum
+            Period: 3600
+            Unit: Count
+      ComparisonOperator: LessThanThreshold
+      Threshold: 100
+      EvaluationPeriods: 7
+      DatapointsToAlarm: 7
+      TreatMissingData: breaching

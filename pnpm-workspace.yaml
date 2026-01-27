@@ -2,6 +2,7 @@ packages:
   - 'support-frontend'
   - 'cdk'
   - 'support-lambdas/bigquery-acquisitions-publisher'
+  - 'support-lambdas/it-test-runner-ts'
   - 'support-e2e'
   - 'support-workers'
   - 'modules'
@@ -15,6 +16,7 @@ catalog:
   esbuild: ^0.25.5
   "@types/jest": ^29.5.12
   "@types/node": ^20.11.27
+  "@types/aws-lambda": ^8.10.145
   "@aws-sdk/client-cloudwatch": ^3.848.0
   "@aws-sdk/client-eventbridge": ^3.848.0
   "@aws-sdk/client-sqs": ^3.848.0

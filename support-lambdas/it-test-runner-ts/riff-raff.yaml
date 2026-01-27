@@ -1,0 +1,19 @@
+stacks: [support]
+regions: [eu-west-1]
+allowedStages:
+  - CODE
+  - PROD
+deployments:
+  cfn:
+    type: cloud-formation
+    app: it-test-runner-ts
+    parameters:
+      templatePath: cfn.yaml
+  it-test-runner-ts:
+    type: aws-lambda
+    parameters:
+      bucket: support-workers-dist
+      functionNames:
+        - "-it-tests-ts-"
+      fileName: it-test-runner-ts.zip
+    dependencies: [cfn]

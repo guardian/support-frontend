@@ -36,6 +36,9 @@ catalogs:
     '@guardian/support-service-lambdas':
       specifier: guardian/support-service-lambdas#f559d3e214fcc75bf7d0f24f60e6849c3e472b7e
       version: 1.0.0
+    '@types/aws-lambda':
+      specifier: ^8.10.145
+      version: 8.10.149
     '@types/jest':
       specifier: ^29.5.12
       version: 29.5.14
@@ -507,6 +510,31 @@ importers:
       vitest:
         specifier: ^3.0.7
         version: 3.1.4(@types/node@22.15.29)(jiti@2.4.2)(jsdom@20.0.3)(sass@1.89.0)(terser@5.40.0)(tsx@4.19.4)(yaml@2.8.0)
+
+  support-lambdas/it-test-runner-ts:
+    dependencies:
+      '@aws-sdk/client-cloudwatch':
+        specifier: 'catalog:'
+        version: 3.971.0
+      '@aws-sdk/credential-provider-node':
+        specifier: 'catalog:'
+        version: 3.699.0(@aws-sdk/client-sso-oidc@3.817.0)(@aws-sdk/client-sts@3.817.0)
+    devDependencies:
+      '@guardian/prettier':
+        specifier: 'catalog:'
+        version: 2.1.5(prettier@3.5.3)
+      '@types/aws-lambda':
+        specifier: 'catalog:'
+        version: 8.10.149
+      '@types/node':
+        specifier: 'catalog:'
+        version: 20.19.0
+      esbuild:
+        specifier: 'catalog:'
+        version: 0.25.5
+      typescript:
+        specifier: 'catalog:'
+        version: 5.8.3
 
   support-workers:
     dependencies:
@@ -9754,7 +9782,7 @@ snapshots:
       '@smithy/node-http-handler': 4.4.5
       '@smithy/protocol-http': 5.3.5
       '@smithy/smithy-client': 4.9.8
-      '@smithy/types': 4.9.0
+      '@smithy/types': 4.12.0
       '@smithy/url-parser': 4.2.5
       '@smithy/util-base64': 4.3.0
       '@smithy/util-body-length-browser': 4.2.0
@@ -11139,7 +11167,7 @@ snapshots:
       '@smithy/node-http-handler': 4.4.5
       '@smithy/protocol-http': 5.3.5
       '@smithy/smithy-client': 4.9.8
-      '@smithy/types': 4.9.0
+      '@smithy/types': 4.12.0
       '@smithy/url-parser': 4.2.5
       '@smithy/util-base64': 4.3.0
       '@smithy/util-body-length-browser': 4.2.0
@@ -11369,9 +11397,9 @@ snapshots:
       '@aws-sdk/core': 3.896.0
       '@aws-sdk/nested-clients': 3.896.0
       '@aws-sdk/types': 3.893.0
-      '@smithy/property-provider': 4.2.5
-      '@smithy/shared-ini-file-loader': 4.4.0
-      '@smithy/types': 4.9.0
+      '@smithy/property-provider': 4.2.8
+      '@smithy/shared-ini-file-loader': 4.4.3
+      '@smithy/types': 4.12.0
       tslib: 2.8.1
     transitivePeerDependencies:
       - aws-crt
@@ -12847,6 +12875,10 @@ snapshots:
   '@guardian/prettier@2.1.5(prettier@2.8.8)':
     dependencies:
       prettier: 2.8.8
+
+  '@guardian/prettier@2.1.5(prettier@3.5.3)':
+    dependencies:
+      prettier: 3.5.3
 
   '@guardian/prettier@4.0.0(prettier@2.8.8)(tslib@2.8.1)':
     dependencies:
