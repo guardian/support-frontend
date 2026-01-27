@@ -1,0 +1,125 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`IT Test Runner Docker stack matches the snapshot 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [],
+    "gu:cdk:version": "TEST",
+  },
+  "Resources": {
+    "PnpmTestRunnerF37E55D4": {
+      "DependsOn": [
+        "PnpmTestRunnerServiceRoleB6B0154A",
+      ],
+      "Properties": {
+        "Code": {
+          "ImageUri": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ".dkr.ecr.",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ".",
+                {
+                  "Ref": "AWS::URLSuffix",
+                },
+                "/aws-cdk/assets:2d2bf6467e6bc2d3a31b99bba3abd2eb8a36e2dae1806273cb393e2ef2107630",
+              ],
+            ],
+          },
+        },
+        "Environment": {
+          "Variables": {
+            "STAGE": "PROD",
+          },
+        },
+        "EphemeralStorage": {
+          "Size": 5120,
+        },
+        "MemorySize": 4096,
+        "PackageType": "Image",
+        "Role": {
+          "Fn::GetAtt": [
+            "PnpmTestRunnerServiceRoleB6B0154A",
+            "Arn",
+          ],
+        },
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Timeout": 600,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "PnpmTestRunnerServiceRoleB6B0154A": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+  },
+}
+`;
