@@ -62,14 +62,12 @@ function handleError(
 		user: state.state.user,
 		checkoutFailureReason,
 	};
-	const requestInfo = {
-		...state.requestInfo,
-		failed: shouldTriggerAlarm,
-	};
-
 	return {
 		state: checkoutFailureState,
-		requestInfo,
+		requestInfo: {
+			...state.requestInfo,
+			failed: shouldTriggerAlarm,
+		},
 	};
 }
 
