@@ -1,0 +1,97 @@
+name: Build IT Test Runner TypeScript
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  it_test_runner_ts_build:
+    if: >-
+      (github.actor != 'dependabot[bot]') &&
+        (github.repository_owner == 'guardian' ||
+          github.event_name == 'push')
+
+    permissions:
+      id-token: write
+      contents: read
+
+    name: it-test-runner-ts build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Env
+        run: env
+
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - name: Setup Node and Install Dependencies
+        uses: ./.github/actions/setup-node-and-install
+
+      - name: Build CFN from CDK
+        run: ./script/ci
+        working-directory: cdk
+
+      - name: Build TypeScript Lambda
+        run: pnpm --filter it-test-runner-ts build
+
+      - name: Bundle Lambda with esbuild
+        run: pnpm --filter it-test-runner-ts bundle
+
+      - name: Package Lambda with support-workers
+        run: |
+          # Clean previous builds
+          rm -rf support-lambdas/it-test-runner-ts/target
+          mkdir -p support-lambdas/it-test-runner-ts/target
+
+          # Copy the entire support-workers directory structure needed for tests
+          mkdir -p support-lambdas/it-test-runner-ts/target/support-workers
+
+          # Copy package.json and related files
+          cp support-workers/package.json support-lambdas/it-test-runner-ts/target/support-workers/
+          cp support-workers/pnpm-lock.yaml support-lambdas/it-test-runner-ts/target/support-workers/ 2>/dev/null || true
+          cp support-workers/jest.config.js support-lambdas/it-test-runner-ts/target/support-workers/
+          cp support-workers/tsconfig.json support-lambdas/it-test-runner-ts/target/support-workers/
+
+          # Copy source and test directories
+          cp -r support-workers/src support-lambdas/it-test-runner-ts/target/support-workers/
+
+          # Copy node_modules (needed for tests to run)
+          cp -r support-workers/node_modules support-lambdas/it-test-runner-ts/target/support-workers/
+
+          # Copy pnpm workspace files
+          cp pnpm-workspace.yaml support-lambdas/it-test-runner-ts/target/
+          cp package.json support-lambdas/it-test-runner-ts/target/
+
+          # Copy the bundled Lambda code
+          cp support-lambdas/it-test-runner-ts/target/index.js support-lambdas/it-test-runner-ts/target/
+          cp support-lambdas/it-test-runner-ts/target/index.js.map support-lambdas/it-test-runner-ts/target/
+
+      - name: Create deployment package
+        run: |
+          cd support-lambdas/it-test-runner-ts/target
+          zip -r it-test-runner-ts.zip index.js index.js.map support-workers pnpm-workspace.yaml package.json -x "*.git*" -x "*/.DS_Store"
+          ls -lh it-test-runner-ts.zip
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          aws-region: eu-west-1
+
+      - name: Upload to Riff-Raff
+        uses: guardian/actions-riff-raff@v4
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          projectName: "support:lambdas:it-test-runner-ts"
+          buildNumberOffset: 16000
+          configPath: "support-lambdas/it-test-runner-ts/riff-raff.yaml"
+          commentingEnabled: "false"
+          contentDirectories: |
+            cfn:
+              - ./cdk/cdk.out
+            it-test-runner-ts:
+              - ./support-lambdas/it-test-runner-ts/target/it-test-runner-ts.zip
