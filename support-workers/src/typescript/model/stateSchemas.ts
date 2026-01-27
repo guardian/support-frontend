@@ -3,9 +3,13 @@ import { appliedPromotionSchema } from '@modules/promotions/v1/schema';
 import { optionalDropNulls } from '@modules/schemaUtils';
 import { boolean, z } from 'zod';
 import { addressSchema } from './address';
+import type { CheckoutFailureState } from './checkoutFailureState';
+import type { CreateZuoraSubscriptionState } from './createZuoraSubscriptionState';
+import type { FailureHandlerState } from './failureHandlerState';
 import { paymentFieldsSchema, paymentProviderSchema } from './paymentFields';
 import { paymentMethodSchema } from './paymentMethod';
 import { productTypeSchema } from './productType';
+import type { SendAcquisitionEventState } from './sendAcquisitionEventState';
 
 export const dateOrDateStringSchema = z.preprocess(
 	(input) => (typeof input === 'string' ? new Date(input) : input),
@@ -140,7 +144,11 @@ export type RequestInfo = z.infer<typeof requestInfoSchema>;
 
 export type LambdaState =
 	| CreatePaymentMethodState
-	| CreateSalesforceContactState;
+	| CreateSalesforceContactState
+	| CreateZuoraSubscriptionState
+	| SendAcquisitionEventState
+	| FailureHandlerState
+	| CheckoutFailureState;
 
 export type WrappedState<InputState> = {
 	state: InputState;

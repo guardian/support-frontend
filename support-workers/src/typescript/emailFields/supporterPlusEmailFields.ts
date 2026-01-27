@@ -5,10 +5,7 @@ import type dayjs from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
-import {
-	buildNonDeliveryEmailFields,
-	buildThankYouEmailFields,
-} from './emailFields';
+import { buildEmailFields, buildNonDeliveryEmailFields } from './emailFields';
 import { getPaymentMethodFieldsSupporterPlus } from './paymentEmailFields';
 
 export function buildSupporterPlusEmailFields({
@@ -55,7 +52,7 @@ export function buildSupporterPlusEmailFields({
 		...oldNonStandardPaymentFields,
 		...nonDeliveryEmailFields,
 	};
-	return buildThankYouEmailFields(
+	return buildEmailFields(
 		user,
 		DataExtensionNames.day0Emails.supporterPlus,
 		productFields,
