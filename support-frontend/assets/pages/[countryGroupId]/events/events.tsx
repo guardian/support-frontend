@@ -49,9 +49,11 @@ const narrowBoxMarginAndPadding = css`
 		margin-bottom: ${space[4]}px;
 	}
 
-	// Slightly offset the spacing added by the Ticket Tailor widget itself.
-	> div div div {
-		margin: -8px;
+	// From tablet, slightly offset the spacing added by the Ticket Tailor widget itself.
+	${from.tablet} {
+		> div div div {
+			margin: -8px;
+		}
 	}
 `;
 
