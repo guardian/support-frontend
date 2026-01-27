@@ -132,7 +132,7 @@ export const tests: Tests = {
 				size: 0,
 			},
 		},
-		isActive: true,
+		isActive: false,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 3,
 		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
