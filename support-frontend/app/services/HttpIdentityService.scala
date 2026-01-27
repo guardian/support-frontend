@@ -132,19 +132,6 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       )
   }
 
-  def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean] = {
-    val payload = Json.obj("email" -> email, "set-consents" -> Json.arr("supporter"))
-    request(s"consent-email").post(payload).map { response =>
-      val validResponse = response.status >= 200 && response.status < 300
-      if (validResponse) logger.info("Successful response from Identity Consent API")
-      else logger.error(scrub"Failure response from Identity Consent API: ${response.toString}")
-      validResponse
-    } recover { case e: Exception =>
-      logger.error(scrub"Failed to update the user's marketing preferences $e")
-      false
-    }
-  }
-
   def getUserType(
       email: String,
   )(implicit ec: ExecutionContext): EitherT[Future, GetUserTypeError, GetUserTypeResponse] = {
