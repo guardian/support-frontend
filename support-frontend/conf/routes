@@ -1,201 +1,177 @@
-# ----- System -----
 
-GET /healthcheck controllers.Application.healthcheck()
-GET /error500 lib.ErrorController.error500()
-GET /cookies controllers.DiagnosticsController.cookies()
+# ----- System ----- #
 
-# ----- Unsupported Browsers -----
+GET /healthcheck                                                   controllers.Application.healthcheck()
+GET /error500                                                      lib.ErrorController.error500()
+GET /cookies                                                       controllers.DiagnosticsController.cookies()
 
-GET /unsupported-browser controllers.Application.unsupportedBrowser()
+# ----- Unsupported Browsers ----- #
 
-# ----- Down For Maintenance -----
+GET /unsupported-browser                                           controllers.Application.unsupportedBrowser()
 
-GET /maintenance controllers.Application.downForMaintenance()
+# ----- Down For Maintenance ----- #
 
-# ----- Remove trailing slashes so that /uk/ redirects to /uk ----
+GET /maintenance                                                   controllers.Application.downForMaintenance()
 
-GET /\*path/ controllers.Application.removeTrailingSlash(path: String)
+# ----- Remove trailing slashes so that /uk/ redirects to /uk ---- #
 
-# ----- Sitemap -----
+GET  /*path/                                                       controllers.Application.removeTrailingSlash(path: String)
 
-GET /sitemap.xml controllers.SiteMap.sitemap()
+# ----- Sitemap ----- #
 
-# ----- Contributions -----
+GET /sitemap.xml                                                   controllers.SiteMap.sitemap()
+
+# ----- Contributions ----- #
 
 # Contribution checkout redirect => checkout 👇
-
-GET /contribute/checkout controllers.Application.contributeGeoRedirect(campaignCode = "")
-GET /checkout controllers.Application.checkoutGeoRedirect(campaignCode = "")
-GET /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/contribute/checkout controllers.Application.redirectContributionsCheckout(countryGroupId: String)
+GET  /contribute/checkout                                          controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET  /checkout                                                     controllers.Application.checkoutGeoRedirect(campaignCode = "")
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/contribute/checkout controllers.Application.redirectContributionsCheckout(countryGroupId: String)
 
 # Checkout
-
-GET /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/checkout            controllers.Application.productCheckoutRouter(countryGroupId: String)
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/checkout            controllers.Application.productCheckoutRouter(countryGroupId: String)
 GET  /one-time-checkout                                            controllers.Application.geoRedirectToPath(path = "one-time-checkout")
-GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/one-time-checkout controllers.Application.productCheckoutRouter(countryGroupId: String)
-GET /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/thank-you controllers.Application.productCheckoutRouter(countryGroupId: String)
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/one-time-checkout   controllers.Application.productCheckoutRouter(countryGroupId: String)
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/thank-you           controllers.Application.productCheckoutRouter(countryGroupId: String)
 
-GET /$countryGroupId<(uk|eu)>/guardian-ad-lite controllers.Application.productCheckoutRouter(countryGroupId: String)
-GET /us/guardian-ad-lite controllers.Application.contributeGeoRedirect(campaignCode = "")
-GET /au/guardian-ad-lite controllers.Application.contributeGeoRedirect(campaignCode = "")
-GET /int/guardian-ad-lite controllers.Application.contributeGeoRedirect(campaignCode = "")
-GET /nz/guardian-ad-lite controllers.Application.contributeGeoRedirect(campaignCode = "")
-GET /ca/guardian-ad-lite controllers.Application.contributeGeoRedirect(campaignCode = "")
-GET /guardian-ad-lite controllers.Application.geoRedirectToPath(path = "guardian-ad-lite")
+GET  /$countryGroupId<(uk|eu)>/guardian-ad-lite                         controllers.Application.productCheckoutRouter(countryGroupId: String)
+GET /us/guardian-ad-lite                                             controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET /au/guardian-ad-lite                                             controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET /int/guardian-ad-lite                                            controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET /nz/guardian-ad-lite                                             controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET /ca/guardian-ad-lite                                             controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET /guardian-ad-lite                                                controllers.Application.geoRedirectToPath(path = "guardian-ad-lite")
 
-GET /contribute controllers.Application.contributeGeoRedirect(campaignCode = "")
-GET /contribute/:campaignCode controllers.Application.contributeGeoRedirect(campaignCode: String)
-GET /$country<(uk|us|au|eu|int|nz|ca)>/contribute                 controllers.Application.contributionsLanding(country: String, campaignCode = "")
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/:campaignCode controllers.Application.contributionsLanding(country: String, campaignCode: String)
+GET  /contribute                                                   controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET  /contribute/:campaignCode                                     controllers.Application.contributeGeoRedirect(campaignCode: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute                 controllers.Application.contributionsLanding(country: String, campaignCode = "")
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/:campaignCode   controllers.Application.contributionsLanding(country: String, campaignCode: String)
 
-GET /au/student/UTS controllers.Application.studentLanding(country = "au", campaignCode = "")
-GET /$country<(uk|us|ca)>/student controllers.Application.studentLanding(country: String, campaignCode = "")
+GET  /au/student/UTS                                               controllers.Application.studentLanding(country = "au", campaignCode = "")
+GET  /$country<(uk|us|ca)>/student                                 controllers.Application.studentLanding(country: String, campaignCode = "")
 
-GET /aus-2020-map controllers.Application.ausMomentMap()
-GET /aus-map controllers.Application.ausMomentMap()
-GET /thank-you-shareable-articles controllers.ArticleShare.getArticles()
+GET  /aus-2020-map                                                 controllers.Application.ausMomentMap()
+GET  /aus-map                                                      controllers.Application.ausMomentMap()
+GET  /thank-you-shareable-articles                                 controllers.ArticleShare.getArticles()
 
-GET /$country<(uk|us|au|eu|int|nz|ca)>/thankyou controllers.Application.contributionsLanding(country: String, campaignCode = "")
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou                   controllers.Application.contributionsLanding(country: String, campaignCode = "")
 
-POST /contribute/recurring/create controllers.CreateSubscriptionController.create()
-GET /support-workers/status controllers.SupportWorkersStatus.status(jobId: String)
 
-POST /stripe/create-setup-intent/recaptcha controllers.StripeController.createSetupIntentRecaptcha()
-POST /stripe/create-setup-intent/prb controllers.StripeController.createSetupIntentPRB()
+POST /contribute/recurring/create                                  controllers.CreateSubscriptionController.create()
+GET  /support-workers/status                                       controllers.SupportWorkersStatus.status(jobId: String)
+
+
+POST  /stripe/create-setup-intent/recaptcha                        controllers.StripeController.createSetupIntentRecaptcha()
+POST  /stripe/create-setup-intent/prb                              controllers.StripeController.createSetupIntentPRB()
 
 # this endpoint should be removed once identity remove
-
 # the need for a client token
+POST  /contribute/send-marketing                                   controllers.IdentityController.submitMarketing()
 
-POST /contribute/send-marketing controllers.IdentityController.submitMarketing()
+# ------ Identity ------ #
+POST /identity/signin-url                                          controllers.IdentityController.createSignInURL()
+GET  /identity/newsletters                                         controllers.IdentityController.getNewslettersSubscriptions()
+PATCH /identity/newsletters                                        controllers.IdentityController.updateNewsletterSubscription()
 
-# ------ Identity ------
+# ----- Subscriptions ----- #
 
-POST /identity/signin-url controllers.IdentityController.createSignInURL()
-GET /identity/newsletters controllers.IdentityController.getNewslettersSubscriptions()
-PATCH /identity/newsletters controllers.IdentityController.updateNewsletterSubscription()
-
-# ----- Subscriptions -----
-
-GET /subscribe controllers.SubscriptionsController.geoRedirect()
-GET /$country<(uk|us|au|eu|int|nz|ca)>/subscribe controllers.SubscriptionsController.landing(country: String)
+GET  /subscribe                                                    controllers.SubscriptionsController.geoRedirect()
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe                  controllers.SubscriptionsController.landing(country: String)
 
 # Events
-
-GET /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/events/:eventId controllers.Application.eventsRouter(countryGroupId: String, eventId: String)
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/events/:eventId     controllers.Application.eventsRouter(countryGroupId: String, eventId: String)
 
 # This is just a fallback in case someone accidentally uses an unsupported country-specific
-
 # subscribe route. We just redirect to the subscriptions site and let its geolocation handle it.
-
-GET /:country/subscribe controllers.SubscriptionsController.legacyRedirect(country: String)
+GET  /:country/subscribe                                           controllers.SubscriptionsController.legacyRedirect(country: String)
 
 # Digital subscriptions
+GET  /subscribe/digitaledition                                     controllers.Application.geoRedirectToPath(path = "subscribe/digitaledition")
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digitaledition   controllers.Application.redirectContributionsCheckoutDigital(country: String)
 
-GET /subscribe/digitaledition controllers.Application.geoRedirectToPath(path = "subscribe/digitaledition")
-GET /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digitaledition controllers.Application.redirectContributionsCheckoutDigital(country: String)
+GET  /weekly                                                       controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)
+GET  /subscribe/weekly                                             controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)
+GET  /subscribe/weekly/gift                                        controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = true)
+GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly           controllers.WeeklySubscriptionController.weekly(country: String, orderIsAGift: Boolean = false)
+GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly/gift      controllers.WeeklySubscriptionController.weekly(country: String, orderIsAGift: Boolean = true)
 
-GET /weekly controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)
-GET /subscribe/weekly controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)
-GET /subscribe/weekly/gift controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = true)
-GET /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly           controllers.WeeklySubscriptionController.weekly(country: String, orderIsAGift: Boolean = false)
-GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly/gift controllers.WeeklySubscriptionController.weekly(country: String, orderIsAGift: Boolean = true)
+GET  /uk/subscribe/paper                                           controllers.PaperSubscriptionController.paper()
+GET  /subscribe/paper/checkout                                     controllers.Application.redirectCheckoutPaper(fulfilment: String, product: String)
 
-GET /uk/subscribe/paper controllers.PaperSubscriptionController.paper()
-GET /subscribe/paper/checkout controllers.Application.redirectCheckoutPaper(fulfilment: String, product: String)
+GET /postcode-lookup/:postcode                                     controllers.GetAddress.findAddress(postcode: String)
+GET /delivery-agents/:postcode                                     controllers.PaperRound.getAgents(postcode: String)
 
-GET /postcode-lookup/:postcode controllers.GetAddress.findAddress(postcode: String)
-GET /delivery-agents/:postcode controllers.PaperRound.getAgents(postcode: String)
+POST /subscribe/create                                             controllers.CreateSubscriptionController.create()
+POST /stripe-checkout-session/create                               controllers.CreateSubscriptionController.createStripeCheckoutSession()
 
-POST /subscribe/create controllers.CreateSubscriptionController.create()
-POST /stripe-checkout-session/create controllers.CreateSubscriptionController.createStripeCheckoutSession()
+# ----- Authentication ----- #
 
-# ----- Authentication -----
+GET  /login                                                        controllers.Login.login()
+GET  /loginAction                                                  controllers.Login.loginAction()
+GET  /oauth2callback                                               controllers.Login.oauth2Callback()
+GET  /logout                                                       controllers.Login.logout()
+GET  /test-users                                                   controllers.TestUsersManagement.createTestUser()
 
-GET /login controllers.Login.login()
-GET /loginAction controllers.Login.loginAction()
-GET /oauth2callback controllers.Login.oauth2Callback()
-GET /logout controllers.Login.logout()
-GET /test-users controllers.TestUsersManagement.createTestUser()
+# ----- Okta auth ----- #
 
-# ----- Okta auth -----
+GET /oauth/authorize                                               controllers.AuthCodeFlowController.authorize()
+GET /oauth/callback                                                controllers.AuthCodeFlowController.callback(code: Option[String], state: String, error: Option[String], error_description: Option[String])
 
-GET /oauth/authorize controllers.AuthCodeFlowController.authorize()
-GET /oauth/callback controllers.AuthCodeFlowController.callback(code: Option[String], state: String, error: Option[String], error_description: Option[String])
+# ----- PayPal (Recurring Endpoints) ----- #
 
-# ----- PayPal (Recurring Endpoints) -----
+POST /paypal/setup-payment                                         controllers.PayPalRegular.setupPayment()
+POST /paypal/create-agreement                                      controllers.PayPalRegular.createAgreement()
+POST /paypal/one-click-checkout                                    controllers.PayPalRegular.createAgreementAndRetrieveUser()
+GET  /paypal/return                                                controllers.PayPalRegular.returnUrl()
+GET  /paypal/cancel                                                controllers.PayPalRegular.cancelUrl()
 
-POST /paypal/setup-payment controllers.PayPalRegular.setupPayment()
-POST /paypal/create-agreement controllers.PayPalRegular.createAgreement()
-POST /paypal/one-click-checkout controllers.PayPalRegular.createAgreementAndRetrieveUser()
-GET /paypal/return controllers.PayPalRegular.returnUrl()
-GET /paypal/cancel controllers.PayPalRegular.cancelUrl()
-
-# ----- PayPal (One-off Endpoints) -----
+# ----- PayPal (One-off Endpoints) ----- #
 
 # For PayPal one-off create a payment by sending a request to the payment API directly.
-
 # <payment-api-host>/contribute/one-off/paypal/create-payment
-
 # https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalPaymentData.scala#L74
-
 # When creating the payment, we tell PayPal where to redirect back to if payment succeeds.
-
 # This endpoint is the return URL we supply to PayPal.
-
-GET /$country<(uk|us|au|eu|int|nz|ca)>/paypal/rest/return         controllers.PayPalOneOff.returnURL(paymentId: String, PayerID: String, email: String, country: String, thankyou = "thankyou")
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/paypal/rest/returnOneTime controllers.PayPalOneOff.returnURL(paymentId: String, PayerID: String, email: String, country: String, thankyou = "thank-you")
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/paypal/rest/return         controllers.PayPalOneOff.returnURL(paymentId: String, PayerID: String, email: String, country: String, thankyou = "thankyou")
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/paypal/rest/returnOneTime  controllers.PayPalOneOff.returnURL(paymentId: String, PayerID: String, email: String, country: String, thankyou = "thank-you")
 
 # If we get an error back from the execute-payment request to PayPal,
-
 # we need to redirect the user to a page that tells them their payment failed.
+GET  /paypal/rest/error                                            controllers.PayPalOneOff.paypalError()
 
-GET /paypal/rest/error controllers.PayPalOneOff.paypalError()
+# ----- Direct Debit ----- #
 
-# ----- Direct Debit -----
+POST /direct-debit/check-account                                   controllers.DirectDebit.checkAccount()
 
-POST /direct-debit/check-account controllers.DirectDebit.checkAccount()
+# ----- Promotions ----- #
+GET /p/:promoCode/terms                                           controllers.Promotions.terms(promoCode)
+GET /p/:promoCode                                                 controllers.Promotions.promo(promoCode)
 
-# ----- Promotions -----
+# ----- Prices API ----- #
+GET /prices                                                       controllers.PricesController.getPrices()
 
-GET /p/:promoCode/terms controllers.Promotions.terms(promoCode)
-GET /p/:promoCode controllers.Promotions.promo(promoCode)
-
-# ----- Prices API -----
-
-GET /prices controllers.PricesController.getPrices()
-
-# ----- Analytics API (mParticle) -----
-
-GET /analytics-user-profile controllers.AnalyticsController.getAnalyticsUserProfile()
-
+# ----- Analytics API (mParticle) ----- #
+GET /analytics-user-profile                                       controllers.AnalyticsController.getAnalyticsUserProfile()
 # This endpoint should only be used if the user has consented for targeting -
+GET /audience/:id/member                                          controllers.AnalyticsController.isAudienceMember(id: Int)
 
-GET /audience/:id/member controllers.AnalyticsController.isAudienceMember(id: Int)
+# ----- Newspaper Archive ----- #
+GET /newspaper-archive-header                                      controllers.NewspaperArchiveController.getHeader
 
-# ----- Newspaper Archive -----
-
-GET /newspaper-archive-header controllers.NewspaperArchiveController.getHeader
-
-# ----- Verification -----
-
+# ----- Verification ----- #
 # This has to be here to work in PROD
+# Not 100% sure why as it works locally via the /*path route
+GET  /.well-known/*file                                            controllers.Assets.at(path="/public", file)
 
-# Not 100% sure why as it works locally via the /\*path route
+GET /api/app-config                                                controllers.Application.appConfigJson()
 
-GET /.well-known/\*file controllers.Assets.at(path="/public", file)
-
-GET /api/app-config controllers.Application.appConfigJson()
-
-# ----- Assets -----
-
+# ----- Assets ----- #
 # See application.conf for cache time config
 
-GET /favicon.ico controllers.Favicon.get()
+GET  /favicon.ico                                                  controllers.Favicon.get()
 
-GET /assets/*file controllers.Assets.at(path="/public/compiled-assets", file)
-GET /*file controllers.Assets.at(path="/public", file)
+GET  /assets/*file                                                 controllers.Assets.at(path="/public/compiled-assets", file)
+GET  /*file                                                        controllers.Assets.at(path="/public", file)
 
-# Deprecated - for Metrics Only
-
-POST /stripe/create-setup-intent/auth controllers.StripeController.createSetupIntentWithAuth()
+# Deprecated - for Metrics Only #
+POST  /stripe/create-setup-intent/auth                             controllers.StripeController.createSetupIntentWithAuth()
