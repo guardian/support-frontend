@@ -9,7 +9,7 @@ module.exports = {
 	},
 	transformIgnorePatterns: [
 		'/node_modules/\\.pnpm/(?!@guardian)',
-		'^.+\\.module\\.(css)$',
+		'^.+\\.module\\.css$',
 	],
 	moduleFileExtensions: ['js', 'ts', 'json', 'es6', 'jsx', 'tsx'],
 	modulePaths: ['assets'],
