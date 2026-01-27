@@ -9,13 +9,13 @@ module.exports = {
 	},
 	transformIgnorePatterns: [
 		'/node_modules/\\.pnpm/(?!@guardian)',
-		'^.+\\.module\\.(css|sass|scss)$',
+		'^.+\\.module\\.css$',
 	],
 	moduleFileExtensions: ['js', 'ts', 'json', 'es6', 'jsx', 'tsx'],
 	modulePaths: ['assets'],
 	modulePathIgnorePatterns: ['target', 'assets copy'],
 	moduleNameMapper: {
-		'\\.(css|less|sass|scss)$': '<rootDir>/assets/__mocks__/styleMock.ts',
+		'\\.(css|less)$': '<rootDir>/assets/__mocks__/styleMock.ts',
 		'\\.(svg|png|jpg)$': '<rootDir>/assets/__mocks__/imageMock.ts',
 		'@modules/product-catalog/(.*)$':
 			'@guardian/support-service-lambdas/modules/product-catalog/src/$1',

@@ -266,20 +266,6 @@ class Application(
     RedirectWithEncodedQueryString(redirectUrl, request.queryString, status = FOUND)
   }
 
-  def supportGeoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val supportPageVariant = request.geoData.countryGroup match {
-      case Some(US) => "us"
-      case Some(Australia) => "au"
-      case _ => "uk"
-    }
-
-    RedirectWithEncodedQueryString(
-      buildRegionalisedContributeLink(supportPageVariant),
-      request.queryString,
-      status = FOUND,
-    )
-  }
-
   def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val url = getGeoPath(request, campaignCode, "contribute")
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)

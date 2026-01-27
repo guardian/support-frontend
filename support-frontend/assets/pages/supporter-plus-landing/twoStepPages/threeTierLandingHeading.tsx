@@ -43,25 +43,26 @@ export function ThreeTierLandingHeading({
 	>(undefined);
 
 	useEffect(() => {
-		void fetchIsPastSingleContributor(isSignedIn, variant).then(
-			(isPastSingleContributor) => {
-				if (isPastSingleContributor) {
-					// Track both control + variant here, so we can see which users are actually in the audience
-					trackComponentEvents({
-						component: {
-							componentType: 'ACQUISITIONS_OTHER',
-							id: `landingPageMparticlePastContributor-${variant}`,
-						},
-						action: 'INSERT',
-					});
-					if (variant === 'variant') {
-						setMparticleHeadingOverride(
-							'Support our fearless, independent journalism again',
-						);
-					}
+		void fetchIsPastSingleContributor(
+			isSignedIn,
+			variant === 'control' || variant === 'variant',
+		).then((isPastSingleContributor) => {
+			if (isPastSingleContributor) {
+				// Track both control + variant here, so we can see which users are actually in the audience
+				trackComponentEvents({
+					component: {
+						componentType: 'ACQUISITIONS_OTHER',
+						id: `landingPageMparticlePastContributor-${variant}`,
+					},
+					action: 'INSERT',
+				});
+				if (variant === 'variant') {
+					setMparticleHeadingOverride(
+						'Support our fearless, independent journalism again',
+					);
 				}
-			},
-		);
+			}
+		});
 	}, [isSignedIn, variant]);
 
 	return (

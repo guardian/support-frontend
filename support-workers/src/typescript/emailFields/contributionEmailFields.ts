@@ -6,10 +6,7 @@ import type { Dayjs } from 'dayjs';
 import type { PaymentMethod } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
-import {
-	buildNonDeliveryEmailFields,
-	buildThankYouEmailFields,
-} from './emailFields';
+import { buildEmailFields, buildNonDeliveryEmailFields } from './emailFields';
 
 export function buildContributionEmailFields({
 	today,
@@ -51,7 +48,7 @@ export function buildContributionEmailFields({
 		...nonDeliveryEmailFields,
 	};
 
-	return buildThankYouEmailFields(
+	return buildEmailFields(
 		user,
 		DataExtensionNames.day0Emails.recurringContribution,
 		productFields,

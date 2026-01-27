@@ -64,7 +64,7 @@ export function buildNonDeliveryEmailFields({
 	};
 }
 
-export function buildThankYouEmailFields(
+export function buildEmailFields(
 	user: User,
 	dataExtensionName: DataExtensionName,
 	productSpecificFields: Record<string, string>,

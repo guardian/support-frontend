@@ -28,11 +28,11 @@ const transactionDeclinedMessages = [
 	// This list should be kept in sync with the list in src/main/scala/com/gu/support/workers/exceptions/CardDeclinedMessages.scala
 ];
 
-const isTransactionDeclinedError = (error: ZuoraError) =>
-	transactionDeclinedMessages.includes(error.message);
+export const isTransactionDeclinedError = (errorMessage: string) =>
+	transactionDeclinedMessages.includes(errorMessage);
 
 export function mapZuoraError(error: ZuoraError) {
-	if (isTransactionDeclinedError(error)) {
+	if (isTransactionDeclinedError(error.message)) {
 		return retryNone(error.message);
 	}
 	return retryLimited(`${error.message}`);

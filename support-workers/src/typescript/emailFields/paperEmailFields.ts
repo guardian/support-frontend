@@ -12,7 +12,7 @@ import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { User } from '../model/stateSchemas';
 import type { DeliveryAgentDetails } from '../services/paperRound';
 import { buildDeliveryEmailFields } from './deliveryEmailFields';
-import { buildThankYouEmailFields } from './emailFields';
+import { buildEmailFields } from './emailFields';
 
 export type PaperProductPurchase = Extract<
 	ProductPurchase,
@@ -70,7 +70,7 @@ export function buildPaperEmailFields({
 		...deliveryAgentFields,
 		...deliveryFields,
 	};
-	return buildThankYouEmailFields(
+	return buildEmailFields(
 		user,
 		getDataExtensionName(productInformation),
 		productFields,
