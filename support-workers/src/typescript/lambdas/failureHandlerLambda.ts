@@ -45,7 +45,9 @@ async function sendFailureEmail(state: FailureHandlerState) {
 	await sendEmail(stage, emailFields);
 }
 
-function handleError(state: WrappedState<FailureHandlerState>) {
+function handleError(
+	state: WrappedState<FailureHandlerState>,
+): WrappedState<CheckoutFailureState> {
 	console.info(`Trying to handle error ${JSON.stringify(state.error)}`);
 	const causingError = errorFromStateSchema.parse(
 		JSON.parse(getIfDefined(state.error?.Cause, 'No Cause error found')),
@@ -60,12 +62,14 @@ function handleError(state: WrappedState<FailureHandlerState>) {
 		user: state.state.user,
 		checkoutFailureReason,
 	};
+	const requestInfo = {
+		...state.requestInfo,
+		failed: shouldTriggerAlarm,
+	};
+
 	return {
-		checkoutFailureState,
-		requestInfo: {
-			...state.requestInfo,
-			failed: shouldTriggerAlarm,
-		},
+		state: checkoutFailureState,
+		requestInfo,
 	};
 }
 
