@@ -251,21 +251,6 @@ class Application(
     )
   }
 
-  def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val redirectUrl = buildRegionalisedContributeLink(request.geoData.countryGroup match {
-      case Some(UK) => "uk"
-      case Some(US) => "us"
-      case Some(Australia) => "au"
-      case Some(Europe) => "eu"
-      case Some(Canada) => "ca"
-      case Some(NewZealand) => "nz"
-      case Some(RestOfTheWorld) => "int"
-      case _ => "uk"
-    })
-
-    RedirectWithEncodedQueryString(redirectUrl, request.queryString, status = FOUND)
-  }
-
   def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val url = getGeoPath(request, campaignCode, "contribute")
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
@@ -290,10 +275,6 @@ class Application(
     List(getGeoRedirectUrl(request.geoData.countryGroup, product), campaignCode)
       .filter(_.nonEmpty)
       .mkString("/")
-  }
-
-  def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
-    RedirectWithEncodedQueryString(location, request.queryString, status = FOUND)
   }
 
   def permanentRedirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
