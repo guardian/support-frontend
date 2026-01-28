@@ -41,19 +41,6 @@ class IdentityController(
       _ => NotFound,
     )
 
-  def submitMarketing(): Action[SendMarketingRequest] = PrivateAction.async(circe.json[SendMarketingRequest]) {
-    implicit request =>
-      val result = identityService.sendConsentPreferencesEmail(request.body.email)
-      result.map { res =>
-        if (res) {
-          logger.info(s"Successfully sent consents preferences email for ${request.body.email}")
-          Ok
-        } else {
-          warnAndReturn()
-        }
-      }
-  }
-
   def createSignInURL(): Action[CreateSignInTokenRequest] = PrivateAction.async(circe.json[CreateSignInTokenRequest]) {
     implicit request =>
       identityService

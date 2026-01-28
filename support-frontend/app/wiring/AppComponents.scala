@@ -57,7 +57,6 @@ class AppComponents(context: Context)
     errorController,
     diagnosticsController,
     siteMapController,
-    articleShareController,
     createSubscriptionController,
     supportWorkersStatusController,
     stripeController,
