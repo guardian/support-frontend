@@ -28,7 +28,7 @@ exports[`IT Test Runner Docker stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::URLSuffix",
                 },
-                "/aws-cdk/assets:2d2bf6467e6bc2d3a31b99bba3abd2eb8a36e2dae1806273cb393e2ef2107630",
+                "/aws-cdk/assets:2fa88b5708ed771427bffd3f5cb4e8ba062a9029a9348846651eff7aacf34c19",
               ],
             ],
           },
@@ -39,7 +39,7 @@ exports[`IT Test Runner Docker stack matches the snapshot 1`] = `
           },
         },
         "EphemeralStorage": {
-          "Size": 5120,
+          "Size": 10240,
         },
         "MemorySize": 4096,
         "PackageType": "Image",
@@ -67,7 +67,7 @@ exports[`IT Test Runner Docker stack matches the snapshot 1`] = `
             "Value": "PROD",
           },
         ],
-        "Timeout": 600,
+        "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
     },
