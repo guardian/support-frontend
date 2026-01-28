@@ -3,6 +3,7 @@ import { App } from "aws-cdk-lib";
 import { AcquisitionEventsApi } from "../lib/acquisition-events-api";
 import { BigqueryAcquisitionsPublisher } from "../lib/bigquery-acquisitions-publisher";
 import { Frontend } from "../lib/frontend";
+import { ItTestRunnerDocker } from "../lib/it-test-runner-docker";
 import { PaymentApi } from "../lib/payment-api";
 import { StripePatronsData } from "../lib/stripe-patrons-data";
 import { SupportWorkers } from "../lib/support-workers";
@@ -161,4 +162,13 @@ new SupportWorkers(app, "SupportWorkers-PROD", {
     "arn:aws:secretsmanager:eu-west-1:865473395570:secret:CODE/Zuora-OAuth/SupportServiceLambdas-*",
     "arn:aws:secretsmanager:eu-west-1:865473395570:secret:PROD/Zuora-OAuth/SupportServiceLambdas-*",
   ],
+});
+
+new ItTestRunnerDocker(app, "ItTestRunnerDocker-CODE", {
+  stack: "support",
+  stage: "CODE",
+});
+new ItTestRunnerDocker(app, "ItTestRunnerDocker-PROD", {
+  stack: "support",
+  stage: "PROD",
 });
