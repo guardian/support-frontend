@@ -177,6 +177,3 @@ GET  /favicon.ico                                                  controllers.F
 
 GET  /assets/*file                                                 controllers.Assets.at(path="/public/compiled-assets", file)
 GET  /*file                                                        controllers.Assets.at(path="/public", file)
-
-# Deprecated - for Metrics Only #
-POST  /stripe/create-setup-intent/auth                             controllers.StripeController.createSetupIntentWithAuth()
