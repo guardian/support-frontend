@@ -1,0 +1,2171 @@
+> support-workers@1.0.0 it-test /private/tmp/run-1769612153865/support-workers
+    > NODE_OPTIONS="$NODE_OPTIONS --experimental-vm-modules" jest --group=integration
+
+    (node:24351) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+    (Use `node --trace-warnings ...` to show where the warning was created)
+     PASS  src/typescript/test/stripeIntegration.test.ts
+     PASS  src/typescript/test/paperRound.it.test.ts
+    (node:24348) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    [api.ts:8::getProductCatalogFromApi] getProductCatalogFromApi
+    (node:24349) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+    (Use `node --trace-warnings ...` to show where the warning was created)
+    [api.ts:19::getProductCatalogFromApi] Successfully fetched Product Catalog
+    [api.ts:8::getProductCatalogFromApi] getProductCatalogFromApi
+    [api.ts:19::getProductCatalogFromApi] Successfully fetched Product Catalog
+    [createSubscription.ts:199::createSubscription] TRACE HTTP ZuoraClient ENTRY ARGS
+    path: /v1/orders
+    method: POST
+    schema: (ZodType not expanded)
+    body: {"newAccount":{"name":"0019E00001ct6lUQAQ","currency":"GBP","crmId":"0019E00001ct6lUQAQ","customFields":{"sfContactId__c":"0039E00001Lin87QAB","IdentityId__c":"21841796","CreatedRequestId__c":"32630b4c-d9ff-617d-0000-000000001789"},"billCycleDay":0,"autoPay":true,"paymentGateway":"Stripe PaymentIntents GNM Membership","paymentMethod":{"type":"CreditCardReferenceTransaction","tokenId":"pm_0S1SrNItVxyc3Q6ntB3yRwJ9","secondTokenId":"cus_SxNccaDzSlgCsG","cardNumber":"4242","expirationMonth":2,"expirationYear":2026,"cardType":"Visa"},"billToContact":{"firstName":"test","lastName":"test","workEmail":"test@test.com","country":"GB"}},"orderDate":"2026-01-28","description":"Created by createSubscription.ts in support-service-lambdas","subscriptions":[{"orderActions":[{"type":"CreateSubscription","triggerDates":[{"name":"ContractEffective","triggerDate":"2026-01-28"},{"name":"CustomerAcceptance","triggerDate":"2026-01-28"}],"createSubscription":{"terms":{"autoRenew":true,"initialTerm":{"period":12,"periodType":"Month","termType":"TERMED"},"renewalSetting":"RENEW_WITH_SPECIFIC_TERM","renewalTerms":[{"period":12,"periodType":"Month"}]},"subscribeToRatePlans":[{"productRatePlanId":"8ad08cbd8586721c01858804e3275376","chargeOverrides":[{"productRatePlanChargeId":"8ad09ea0858682bb0185880ac57f4c4c","pricing":{"recurringFlatFee":{"listPrice":0}}}]}]}}],"customFields":{"DeliveryAgent__c":"","ReaderType__c":"Direct","LastPlanAddedDate__c":"2026-01-28","CreatedRequestId__c":"32630b4c-d9ff-617d-0000-000000001789"}}],"processingOptions":{"runBilling":true,"collectPayment":true}}
+    headers: { idempotency-key: "32630b4c-d9ff-617d-0000-000000001789" }
+     PASS  src/typescript/test/payPalIntegration.test.ts
+      ● Console
+
+        console.log
+          PayPal: Successful PayPal NVP request (NVPResponse: BILLINGAGREEMENTID=B-3CG39635EM902001K&BILLINGAGREEMENTSTATUS=Active&TIMESTAMP=2026-01-28T14%3A56%3A06Z&CORRELATIONID=0026ae4ecc7cf&ACK=Success&VERSION=124.0&BUILD=59115149&EMAIL=doc%40gu.co.uk&PAYERID=3VNCN9NDEGRGW&PAYERSTATUS=verified&FIRSTNAME=Emmett&LASTNAME=Brown&COUNTRYCODE=US&ADDRESSID=PayPal)
+
+          at PayPalService.logNVPResponse (src/typescript/services/payPal.ts:37:13)
+
+        console.log
+          doc@gu.co.uk
+
+          at Object.<anonymous> (src/typescript/test/payPalIntegration.test.ts:16:10)
+
+    [api.ts:8::getProductCatalogFromApi] getProductCatalogFromApi
+    [api.ts:19::getProductCatalogFromApi] Successfully fetched Product Catalog
+    [sendThankYouEmailLambda.ts:231::getMandateId] TRACE HTTP ZuoraClient ENTRY ARGS
+    path: /v1/accounts/A01092731/payment-methods
+    method: GET
+    schema: (ZodType not expanded)
+     PASS  src/typescript/test/sendAcquisitionEventLambda.it.test.ts
+      ● Console
+
+        console.info
+          Input is {"state":{"requestId":"472d4572-71a5-9e74-0000-000000004cdb","sendThankYouEmailState":{"user":{"id":"200498513","primaryEmailAddress":"test@thegulocal.com","firstName":"support.e2e.firstName+cQNjW","lastName":"support.e2e.lastName+raq0E","billingAddress":{"country":"GB"},"isTestUser":true},"product":{"amount":5,"currency":"GBP","billingPeriod":"Monthly","productType":"Contribution"},"productInformation":{"amount":5,"product":"Contribution","ratePlan":"Monthly"},"paymentMethod":{"FirstName":"support.e2e.firstName+cQNjW","LastName":"support.e2e.lastName+raq0E","BankTransferAccountName":"CP Scott","BankCode":"200000","BankTransferAccountNumber":"55779911","Country":"GB","BankTransferType":"DirectDebitUK","Type":"BankTransfer","PaymentGateway":"GoCardless"},"paymentSchedule":{"payments":[{"date":"2025-12-05T00:00:00.000Z","amount":412.8}]},"accountNumber":"A01092731","subscriptionNumber":"A-S01073354","productType":"Contribution"},"analyticsInfo":{"isGiftPurchase":false,"paymentProvider":"DirectDebit"},"acquisitionData":{"ophanIds":{"pageviewId":"mhvwkc6ei19s7vd0m3ul"},"referrerAcquisitionData":{"referrerPageviewId":"","queryParameters":[],"hostname":"support.code.dev-theguardian.com","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36","ipAddress":"10.248.135.173","labels":["generic-checkout"]},"supportAbTests":[{"name":"LP_COUNTDOWN","variant":"CONTROL"}]}},"requestInfo":{"testUser":true,"failed":false,"messages":[]}}
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:39:10)
+
+        console.log
+          Sent payment success metric
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:43:10)
+
+        console.log
+          Acquisition event built: {"eventTimeStamp":"2026-01-28T14:56:05.712Z","product":"RECURRING_CONTRIBUTION","amount":5,"country":"GB","currency":"GBP","abTests":[{"name":"LP_COUNTDOWN","variant":"CONTROL"}],"paymentFrequency":"MONTHLY","paymentProvider":"GOCARDLESS","identityId":"200498513","pageViewId":"mhvwkc6ei19s7vd0m3ul","referrerPageViewId":"","labels":["generic-checkout"],"reusedExistingPaymentMethod":false,"readerType":"Direct","acquisitionType":"Purchase","zuoraSubscriptionNumber":"A-S01073354","queryParameters":[],"platform":"SUPPORT","email":"test@thegulocal.com"}
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:46:10)
+
+        console.log
+          EventBridge PutEventsCommand: {"middlewareStack":{},"schema":[9,"com.amazonaws.eventbridge","PutEvents",0,null,null],"input":{"Entries":[{"Time":"2026-01-28T14:56:05.713Z","EventBusName":"acquisitions-bus-CODE","Source":"support-workers.1","DetailType":"AcquisitionsEvent","Detail":"{\"eventTimeStamp\":\"2026-01-28T14:56:05.712Z\",\"product\":\"RECURRING_CONTRIBUTION\",\"amount\":5,\"country\":\"GB\",\"currency\":\"GBP\",\"abTests\":[{\"name\":\"LP_COUNTDOWN\",\"variant\":\"CONTROL\"}],\"paymentFrequency\":\"MONTHLY\",\"paymentProvider\":\"GOCARDLESS\",\"identityId\":\"200498513\",\"pageViewId\":\"mhvwkc6ei19s7vd0m3ul\",\"referrerPageViewId\":\"\",\"labels\":[\"generic-checkout\"],\"reusedExistingPaymentMethod\":false,\"readerType\":\"Direct\",\"acquisitionType\":\"Purchase\",\"zuoraSubscriptionNumber\":\"A-S01073354\",\"queryParameters\":[],\"platform\":\"SUPPORT\",\"email\":\"test@thegulocal.com\"}"}]},"serialize":null,"deserialize":null}
+
+          at AcquisitionEventBusService.sendEvent (src/typescript/services/acquisitionEventBusService.ts:29:11)
+
+        console.log
+          EventBridge response: {"FailedEntryCount":0,"Entries":[{"EventId":"5feb5e1b-cccc-39c8-32fd-736e0f7e1c27"}],"$metadata":{"httpStatusCode":200,"requestId":"9a74a642-a267-4f36-b9cb-0b036b56878c","attempts":1,"totalRetryDelay":0}}
+
+          at AcquisitionEventBusService.sendEvent (src/typescript/services/acquisitionEventBusService.ts:32:11)
+
+        console.log
+          Acquisition event sent to EventBridge
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:53:10)
+
+        console.info
+          Input is {"state":{"requestId":"1765202513231","sendThankYouEmailState":{"user":{"id":"200512858","primaryEmailAddress":"support.e2e+9AAdSvcbKHKdIekO8-5yi@thegulocal.com","firstName":"support.e2e.firstName+7Vyhd","lastName":"support.e2e.lastName+VrVYE","billingAddress":{"country":"DE"},"isTestUser":true},"product":{"currency":"EUR","billingPeriod":"Annual","productType":"DigitalPack"},"productInformation":{"product":"DigitalSubscription","ratePlan":"Annual"},"paymentMethod":{"TokenId":"pm_0Sc4eEItVxyc3Q6n2DBHkSOQ","SecondTokenId":"cus_TZD4FrVytKeFLB","CreditCardNumber":"4242","CreditCardExpirationMonth":1,"CreditCardExpirationYear":2050,"CreditCardType":"Visa","PaymentGateway":"Stripe PaymentIntents GNM Membership","Type":"CreditCardReferenceTransaction","StripePaymentType":"StripeCheckout"},"paymentSchedule":{"payments":[{"date":"2025-12-24T00:00:00.000Z","amount":191.23}]},"accountNumber":"A01072695","subscriptionNumber":"A-S02222222","productType":"DigitalSubscription"},"analyticsInfo":{"isGiftPurchase":false,"paymentProvider":"Stripe"},"acquisitionData":{"ophanIds":{"pageviewId":"mix761vql8qao8a24mfs"},"referrerAcquisitionData":{"referrerPageviewId":"","queryParameters":[],"hostname":"support.code.dev-theguardian.com","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36","ipAddress":"10.248.135.10","labels":["generic-checkout"]},"supportAbTests":[{"name":"LP_TICKER","variant":"CONTROL"}]}},"requestInfo":{"testUser":true,"failed":false,"messages":[]}}
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:39:10)
+
+        console.log
+          Sent payment success metric
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:43:10)
+
+        console.log
+          Acquisition event built: {"eventTimeStamp":"2026-01-28T14:56:06.026Z","product":"DIGITAL_SUBSCRIPTION","country":"DE","currency":"EUR","abTests":[{"name":"LP_TICKER","variant":"CONTROL"}],"paymentFrequency":"ANNUALLY","paymentProvider":"STRIPE","identityId":"200512858","pageViewId":"mix761vql8qao8a24mfs","referrerPageViewId":"","labels":["generic-checkout"],"reusedExistingPaymentMethod":false,"readerType":"Direct","acquisitionType":"Purchase","zuoraSubscriptionNumber":"A-S02222222","queryParameters":[],"platform":"SUPPORT","email":"support.e2e+9AAdSvcbKHKdIekO8-5yi@thegulocal.com"}
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:46:10)
+
+        console.log
+          EventBridge PutEventsCommand: {"middlewareStack":{},"schema":[9,"com.amazonaws.eventbridge","PutEvents",0,null,null],"input":{"Entries":[{"Time":"2026-01-28T14:56:06.026Z","EventBusName":"acquisitions-bus-CODE","Source":"support-workers.1","DetailType":"AcquisitionsEvent","Detail":"{\"eventTimeStamp\":\"2026-01-28T14:56:06.026Z\",\"product\":\"DIGITAL_SUBSCRIPTION\",\"country\":\"DE\",\"currency\":\"EUR\",\"abTests\":[{\"name\":\"LP_TICKER\",\"variant\":\"CONTROL\"}],\"paymentFrequency\":\"ANNUALLY\",\"paymentProvider\":\"STRIPE\",\"identityId\":\"200512858\",\"pageViewId\":\"mix761vql8qao8a24mfs\",\"referrerPageViewId\":\"\",\"labels\":[\"generic-checkout\"],\"reusedExistingPaymentMethod\":false,\"readerType\":\"Direct\",\"acquisitionType\":\"Purchase\",\"zuoraSubscriptionNumber\":\"A-S02222222\",\"queryParameters\":[],\"platform\":\"SUPPORT\",\"email\":\"support.e2e+9AAdSvcbKHKdIekO8-5yi@thegulocal.com\"}"}]},"serialize":null,"deserialize":null}
+
+          at AcquisitionEventBusService.sendEvent (src/typescript/services/acquisitionEventBusService.ts:29:11)
+
+        console.log
+          EventBridge response: {"FailedEntryCount":0,"Entries":[{"EventId":"2c892032-a46f-92c3-db9a-3190e61feaaf"}],"$metadata":{"httpStatusCode":200,"requestId":"b5d03a0b-167d-4bbb-9630-d49398d9c764","attempts":1,"totalRetryDelay":0}}
+
+          at AcquisitionEventBusService.sendEvent (src/typescript/services/acquisitionEventBusService.ts:32:11)
+
+        console.log
+          Acquisition event sent to EventBridge
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:53:10)
+
+        console.info
+          Input is {"state":{"requestId":"009eb789-4744-c520-0000-00000000004d","sendThankYouEmailState":{"user":{"id":"200500775","primaryEmailAddress":"test@thegulocal.com","firstName":"support.e2e.firstName+uGaRH","lastName":"support.e2e.lastName+jkP1B","billingAddress":{"country":"GB"},"isTestUser":true},"product":{"currency":"GBP","productType":"GuardianAdLite"},"productInformation":{"product":"GuardianAdLite","ratePlan":"Monthly"},"paymentMethod":{"TokenId":"pm_0STOf2ItVxyc3Q6ngmwjuNCa","SecondTokenId":"cus_TQF9DfOCL3VGIv","CreditCardNumber":"4242","CreditCardExpirationMonth":1,"CreditCardExpirationYear":2050,"CreditCardType":"Visa","PaymentGateway":"Stripe PaymentIntents GNM Membership","Type":"CreditCardReferenceTransaction","StripePaymentType":"StripeCheckout"},"paymentSchedule":{"payments":[{"date":"2025-11-29T00:00:00.000Z","amount":5},{"date":"2025-12-29T00:00:00.000Z","amount":5},{"date":"2026-01-29T00:00:00.000Z","amount":5},{"date":"2026-02-28T00:00:00.000Z","amount":5},{"date":"2026-03-29T00:00:00.000Z","amount":5},{"date":"2026-04-29T00:00:00.000Z","amount":5},{"date":"2026-05-29T00:00:00.000Z","amount":5},{"date":"2026-06-29T00:00:00.000Z","amount":5},{"date":"2026-07-29T00:00:00.000Z","amount":5},{"date":"2026-08-29T00:00:00.000Z","amount":5},{"date":"2026-09-29T00:00:00.000Z","amount":5},{"date":"2026-10-29T00:00:00.000Z","amount":2.58}]},"accountNumber":"A01063053","subscriptionNumber":"A-S03333333","productType":"GuardianAdLite"},"analyticsInfo":{"isGiftPurchase":false,"paymentProvider":"Stripe"},"acquisitionData":{"ophanIds":{"pageviewId":"mhyzx8tb69th51ma0yka"},"referrerAcquisitionData":{"referrerPageviewId":"","queryParameters":[],"hostname":"support.thegulocal.com","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36","ipAddress":"127.0.0.1","labels":["generic-checkout"]},"supportAbTests":[{"name":"LP_COUNTDOWN","variant":"V1"}]}},"requestInfo":{"testUser":true,"failed":false,"messages":[]}}
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:39:10)
+
+        console.log
+          Sent payment success metric
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:43:10)
+
+        console.log
+          Acquisition event built: {"eventTimeStamp":"2026-01-28T14:56:06.166Z","product":"GUARDIAN_AD_LITE","country":"GB","currency":"GBP","abTests":[{"name":"LP_COUNTDOWN","variant":"V1"}],"paymentFrequency":"MONTHLY","paymentProvider":"STRIPE","identityId":"200500775","pageViewId":"mhyzx8tb69th51ma0yka","referrerPageViewId":"","labels":["generic-checkout"],"reusedExistingPaymentMethod":false,"readerType":"Direct","acquisitionType":"Purchase","zuoraSubscriptionNumber":"A-S03333333","queryParameters":[],"platform":"SUPPORT","email":"test@thegulocal.com","similarProductsConsent":false}
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:46:10)
+
+        console.log
+          EventBridge PutEventsCommand: {"middlewareStack":{},"schema":[9,"com.amazonaws.eventbridge","PutEvents",0,null,null],"input":{"Entries":[{"Time":"2026-01-28T14:56:06.166Z","EventBusName":"acquisitions-bus-CODE","Source":"support-workers.1","DetailType":"AcquisitionsEvent","Detail":"{\"eventTimeStamp\":\"2026-01-28T14:56:06.166Z\",\"product\":\"GUARDIAN_AD_LITE\",\"country\":\"GB\",\"currency\":\"GBP\",\"abTests\":[{\"name\":\"LP_COUNTDOWN\",\"variant\":\"V1\"}],\"paymentFrequency\":\"MONTHLY\",\"paymentProvider\":\"STRIPE\",\"identityId\":\"200500775\",\"pageViewId\":\"mhyzx8tb69th51ma0yka\",\"referrerPageViewId\":\"\",\"labels\":[\"generic-checkout\"],\"reusedExistingPaymentMethod\":false,\"readerType\":\"Direct\",\"acquisitionType\":\"Purchase\",\"zuoraSubscriptionNumber\":\"A-S03333333\",\"queryParameters\":[],\"platform\":\"SUPPORT\",\"email\":\"test@thegulocal.com\",\"similarProductsConsent\":false}"}]},"serialize":null,"deserialize":null}
+
+          at AcquisitionEventBusService.sendEvent (src/typescript/services/acquisitionEventBusService.ts:29:11)
+
+        console.log
+          EventBridge response: {"FailedEntryCount":0,"Entries":[{"EventId":"167c77da-3318-86fd-e650-9183887d6954"}],"$metadata":{"httpStatusCode":200,"requestId":"c1ecee84-f10c-41a4-aa4d-da1213aa6534","attempts":1,"totalRetryDelay":0}}
+
+          at AcquisitionEventBusService.sendEvent (src/typescript/services/acquisitionEventBusService.ts:32:11)
+
+        console.log
+          Acquisition event sent to EventBridge
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:53:10)
+
+        console.info
+          Input is {"state":{"requestId":"009eb789-4744-c520-0000-00000000003e","sendThankYouEmailState":{"user":{"id":"200499853","primaryEmailAddress":"test@thegulocal.com","firstName":"support.e2e.firstName+xBie3","lastName":"support.e2e.lastName+mKBhN","billingAddress":{"lineOne":"3 Cross Street","lineTwo":"","city":"Manchester","postCode":"M1 1PW","country":"GB"},"deliveryAddress":{"lineOne":"90 York Way","lineTwo":"","city":"London","postCode":"N1 9GU","country":"GB"},"isTestUser":true},"product":{"currency":"GBP","billingPeriod":"Monthly","fulfilmentOptions":"Domestic","productType":"GuardianWeekly"},"productInformation":{"deliveryContact":{"address1":"90 York Way","address2":"","city":"London","country":"GB","firstName":"support.e2e.firstName+xBie3","lastName":"support.e2e.lastName+mKBhN","postalCode":"N1 9GU","state":null,"workEmail":"rupert.bates+smoke-test@theguardian.com"},"firstDeliveryDate":"2025-11-28T00:00:00.000Z","product":"GuardianWeeklyDomestic","ratePlan":"Monthly"},"paymentMethod":{"TokenId":"pm_0STNqOItVxyc3Q6nNnUcoSoC","SecondTokenId":"cus_TQEJQxRrAJb7zV","CreditCardNumber":"4242","CreditCardExpirationMonth":1,"CreditCardExpirationYear":2050,"CreditCardType":"Visa","PaymentGateway":"Stripe PaymentIntents GNM Membership","Type":"CreditCardReferenceTransaction","StripePaymentType":"StripeCheckout"},"paymentSchedule":{"payments":[{"date":"2025-11-28T00:00:00.000Z","amount":14.85},{"date":"2025-12-28T00:00:00.000Z","amount":14.85},{"date":"2026-01-28T00:00:00.000Z","amount":14.85},{"date":"2026-02-28T00:00:00.000Z","amount":14.85},{"date":"2026-03-28T00:00:00.000Z","amount":14.85},{"date":"2026-04-28T00:00:00.000Z","amount":14.85},{"date":"2026-05-28T00:00:00.000Z","amount":14.85},{"date":"2026-06-28T00:00:00.000Z","amount":14.85},{"date":"2026-07-28T00:00:00.000Z","amount":14.85},{"date":"2026-08-28T00:00:00.000Z","amount":14.85},{"date":"2026-09-28T00:00:00.000Z","amount":14.85},{"date":"2026-10-28T00:00:00.000Z","amount":14.85},{"date":"2026-11-28T00:00:00.000Z","amount":16.5}]},"accountNumber":"A01063021","subscriptionNumber":"A-S04444444","similarProductsConsent":true,"promoCode":"10ANNUAL","firstDeliveryDate":"2025-11-28T00:00:00.000Z","productType":"GuardianWeekly"},"analyticsInfo":{"isGiftPurchase":false,"paymentProvider":"Stripe"},"acquisitionData":{"ophanIds":{"pageviewId":"mhyy1ujxsh20bkv1grlv"},"referrerAcquisitionData":{"referrerPageviewId":"","queryParameters":[],"hostname":"support.thegulocal.com","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36","ipAddress":"127.0.0.1","labels":["generic-checkout"]},"supportAbTests":[]}},"requestInfo":{"testUser":true,"failed":false,"messages":[]}}
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:39:10)
+
+        console.log
+          Sent payment success metric
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:43:10)
+
+        console.log
+          Acquisition event built: {"eventTimeStamp":"2026-01-28T14:56:06.301Z","product":"PRINT_SUBSCRIPTION","country":"GB","currency":"GBP","abTests":[],"paymentFrequency":"MONTHLY","paymentProvider":"STRIPE","printOptions":{"product":"GUARDIAN_WEEKLY","deliveryCountry":"GB"},"identityId":"200499853","pageViewId":"mhyy1ujxsh20bkv1grlv","referrerPageViewId":"","labels":["generic-checkout"],"promoCode":"10ANNUAL","reusedExistingPaymentMethod":false,"readerType":"Direct","acquisitionType":"Purchase","zuoraSubscriptionNumber":"A-S04444444","queryParameters":[],"platform":"SUPPORT","email":"test@thegulocal.com","similarProductsConsent":true}
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:46:10)
+
+        console.log
+          EventBridge PutEventsCommand: {"middlewareStack":{},"schema":[9,"com.amazonaws.eventbridge","PutEvents",0,null,null],"input":{"Entries":[{"Time":"2026-01-28T14:56:06.301Z","EventBusName":"acquisitions-bus-CODE","Source":"support-workers.1","DetailType":"AcquisitionsEvent","Detail":"{\"eventTimeStamp\":\"2026-01-28T14:56:06.301Z\",\"product\":\"PRINT_SUBSCRIPTION\",\"country\":\"GB\",\"currency\":\"GBP\",\"abTests\":[],\"paymentFrequency\":\"MONTHLY\",\"paymentProvider\":\"STRIPE\",\"printOptions\":{\"product\":\"GUARDIAN_WEEKLY\",\"deliveryCountry\":\"GB\"},\"identityId\":\"200499853\",\"pageViewId\":\"mhyy1ujxsh20bkv1grlv\",\"referrerPageViewId\":\"\",\"labels\":[\"generic-checkout\"],\"promoCode\":\"10ANNUAL\",\"reusedExistingPaymentMethod\":false,\"readerType\":\"Direct\",\"acquisitionType\":\"Purchase\",\"zuoraSubscriptionNumber\":\"A-S04444444\",\"queryParameters\":[],\"platform\":\"SUPPORT\",\"email\":\"test@thegulocal.com\",\"similarProductsConsent\":true}"}]},"serialize":null,"deserialize":null}
+
+          at AcquisitionEventBusService.sendEvent (src/typescript/services/acquisitionEventBusService.ts:29:11)
+
+        console.log
+          EventBridge response: {"FailedEntryCount":0,"Entries":[{"EventId":"b1edac26-fbc3-2e40-f1d2-b41b09f74bec"}],"$metadata":{"httpStatusCode":200,"requestId":"7333412e-9240-44b5-899d-8257ad3376a2","attempts":1,"totalRetryDelay":0}}
+
+          at AcquisitionEventBusService.sendEvent (src/typescript/services/acquisitionEventBusService.ts:32:11)
+
+        console.log
+          Acquisition event sent to EventBridge
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:53:10)
+
+        console.info
+          Input is {"state":{"requestId":"c1cd21ae-bd89-4e78-0000-000000000a1f","sendThankYouEmailState":{"user":{"id":"21841960","primaryEmailAddress":"test.user@thegulocal.com","firstName":"Test","lastName":"User","billingAddress":{"country":"GB"},"isTestUser":false},"product":{"amount":12,"currency":"GBP","billingPeriod":"Monthly","productType":"SupporterPlus"},"productInformation":{"amount":12,"product":"SupporterPlus","ratePlan":"Monthly"},"paymentMethod":{"PaypalBaid":"B-81M54065TB6970351","PaypalEmail":"membership.paypal-buyer@theguardian.com","Type":"PayPalCompletePaymentsWithBAID","PaymentGateway":"PayPal Complete Payments"},"paymentSchedule":{"payments":[{"date":"2026-01-20T00:00:00.000Z","amount":12},{"date":"2026-02-20T00:00:00.000Z","amount":12},{"date":"2026-03-20T00:00:00.000Z","amount":12},{"date":"2026-04-20T00:00:00.000Z","amount":12},{"date":"2026-05-20T00:00:00.000Z","amount":12},{"date":"2026-06-20T00:00:00.000Z","amount":12},{"date":"2026-07-20T00:00:00.000Z","amount":12},{"date":"2026-08-20T00:00:00.000Z","amount":12},{"date":"2026-09-20T00:00:00.000Z","amount":12},{"date":"2026-10-20T00:00:00.000Z","amount":12},{"date":"2026-11-20T00:00:00.000Z","amount":12},{"date":"2026-12-20T00:00:00.000Z","amount":12},{"date":"2027-01-20T00:00:00.000Z","amount":12},{"date":"2027-02-20T00:00:00.000Z","amount":12}]},"accountNumber":"A01089211","subscriptionNumber":"A-S05555555","productType":"SupporterPlus"},"analyticsInfo":{"isGiftPurchase":false,"paymentProvider":"PayPal"},"acquisitionData":{"ophanIds":{"pageviewId":"mkmpgv3w9xtctrr0s9mw"},"referrerAcquisitionData":{"referrerPageviewId":"","queryParameters":[],"hostname":"support.code.dev-theguardian.com","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:146.0) Gecko/20100101 Firefox/146.0","ipAddress":"10.248.135.81","labels":["generic-checkout"]},"supportAbTests":[{"name":"abandonedBasket","variant":"variant"},{"name":"landingPageMparticlePastContributor","variant":"variant"},{"name":"LP_COUNTDOWN","variant":"CONTROL"}]}},"requestInfo":{"testUser":false,"failed":false,"messages":[]}}
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:39:10)
+
+        console.log
+          Sent payment success metric
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:43:10)
+
+        console.log
+          Acquisition event built: {"eventTimeStamp":"2026-01-28T14:56:06.431Z","product":"SUPPORTER_PLUS","country":"GB","currency":"GBP","abTests":[{"name":"abandonedBasket","variant":"variant"},{"name":"landingPageMparticlePastContributor","variant":"variant"},{"name":"LP_COUNTDOWN","variant":"CONTROL"}],"paymentFrequency":"MONTHLY","paymentProvider":"PAYPAL","identityId":"21841960","pageViewId":"mkmpgv3w9xtctrr0s9mw","referrerPageViewId":"","labels":["generic-checkout"],"reusedExistingPaymentMethod":false,"readerType":"Direct","acquisitionType":"Purchase","zuoraSubscriptionNumber":"A-S05555555","queryParameters":[],"platform":"SUPPORT","email":"test.user@thegulocal.com"}
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:46:10)
+
+        console.log
+          EventBridge PutEventsCommand: {"middlewareStack":{},"schema":[9,"com.amazonaws.eventbridge","PutEvents",0,null,null],"input":{"Entries":[{"Time":"2026-01-28T14:56:06.432Z","EventBusName":"acquisitions-bus-CODE","Source":"support-workers.1","DetailType":"AcquisitionsEvent","Detail":"{\"eventTimeStamp\":\"2026-01-28T14:56:06.431Z\",\"product\":\"SUPPORTER_PLUS\",\"country\":\"GB\",\"currency\":\"GBP\",\"abTests\":[{\"name\":\"abandonedBasket\",\"variant\":\"variant\"},{\"name\":\"landingPageMparticlePastContributor\",\"variant\":\"variant\"},{\"name\":\"LP_COUNTDOWN\",\"variant\":\"CONTROL\"}],\"paymentFrequency\":\"MONTHLY\",\"paymentProvider\":\"PAYPAL\",\"identityId\":\"21841960\",\"pageViewId\":\"mkmpgv3w9xtctrr0s9mw\",\"referrerPageViewId\":\"\",\"labels\":[\"generic-checkout\"],\"reusedExistingPaymentMethod\":false,\"readerType\":\"Direct\",\"acquisitionType\":\"Purchase\",\"zuoraSubscriptionNumber\":\"A-S05555555\",\"queryParameters\":[],\"platform\":\"SUPPORT\",\"email\":\"test.user@thegulocal.com\"}"}]},"serialize":null,"deserialize":null}
+
+          at AcquisitionEventBusService.sendEvent (src/typescript/services/acquisitionEventBusService.ts:29:11)
+
+        console.log
+          EventBridge response: {"FailedEntryCount":0,"Entries":[{"EventId":"d7d071d3-71ee-597c-dced-b52ea65a81f7"}],"$metadata":{"httpStatusCode":200,"requestId":"2b41ff1b-2620-4f62-b3dc-cd4743c719ca","attempts":1,"totalRetryDelay":0}}
+
+          at AcquisitionEventBusService.sendEvent (src/typescript/services/acquisitionEventBusService.ts:32:11)
+
+        console.log
+          Acquisition event sent to EventBridge
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:53:10)
+
+        console.info
+          Input is {"state":{"requestId":"aa69f1ed-9129-ee4c-0000-00000000001f","sendThankYouEmailState":{"user":{"id":"200499853","primaryEmailAddress":"test@thegulocal.com","firstName":"support.e2e.firstName+nGRM9","lastName":"support.e2e.lastName+3vp0c","billingAddress":{"lineOne":"Pariser Platz","lineTwo":"","city":"Berlin","state":"","postCode":"10117","country":"DE"},"deliveryAddress":{"lineOne":"Pariser Platz","lineTwo":"","city":"Berlin","state":"","postCode":"10117","country":"DE"},"isTestUser":true},"product":{"currency":"EUR","billingPeriod":"Annual","fulfilmentOptions":"Domestic","productOptions":"NoProductOptions","productType":"TierThree"},"productInformation":{"deliveryContact":{"address1":"Pariser Platz","address2":"","city":"Berlin","country":"DE","firstName":"support.e2e.firstName+nGRM9","lastName":"support.e2e.lastName+3vp0c","postalCode":"10117","state":"","workEmail":"rupert.bates+smoke-test@theguardian.com"},"firstDeliveryDate":"2025-12-05T00:00:00.000Z","product":"TierThree","ratePlan":"DomesticAnnual"},"paymentMethod":{"TokenId":"pm_0STJJFItVxyc3Q6n7xBDAcuL","SecondTokenId":"cus_TQ9cXPmYuB67ya","CreditCardNumber":"4242","CreditCardExpirationMonth":1,"CreditCardExpirationYear":2050,"CreditCardType":"Visa","PaymentGateway":"Stripe PaymentIntents GNM Membership","Type":"CreditCardReferenceTransaction","StripePaymentType":"StripeCheckout"},"paymentSchedule":{"payments":[{"date":"2025-12-05T00:00:00.000Z","amount":412.8}]},"accountNumber":"A01062862","subscriptionNumber":"A-S06666666","promoCode":"TIER3_EU_ANNUAL","firstDeliveryDate":"2025-12-05T00:00:00.000Z","productType":"TierThree"},"analyticsInfo":{"isGiftPurchase":false,"paymentProvider":"Stripe"},"acquisitionData":{"ophanIds":{"pageviewId":"mhynocchxh0yp1i18c6v"},"referrerAcquisitionData":{"referrerPageviewId":"","queryParameters":[],"hostname":"support.thegulocal.com","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36","ipAddress":"127.0.0.1","labels":["generic-checkout"]},"supportAbTests":[{"name":"LP_TICKER","variant":"CONTROL"}]}},"requestInfo":{"testUser":true,"failed":false,"messages":[]}}
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:39:10)
+
+        console.log
+          Sent payment success metric
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:43:10)
+
+        console.log
+          Acquisition event built: {"eventTimeStamp":"2026-01-28T14:56:06.647Z","product":"TIER_THREE","country":"DE","currency":"EUR","abTests":[{"name":"LP_TICKER","variant":"CONTROL"}],"paymentFrequency":"ANNUALLY","paymentProvider":"STRIPE","identityId":"200499853","pageViewId":"mhynocchxh0yp1i18c6v","referrerPageViewId":"","labels":["generic-checkout"],"promoCode":"TIER3_EU_ANNUAL","reusedExistingPaymentMethod":false,"readerType":"Direct","acquisitionType":"Purchase","zuoraSubscriptionNumber":"A-S06666666","queryParameters":[],"platform":"SUPPORT","state":"","email":"test@thegulocal.com"}
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:46:10)
+
+        console.log
+          EventBridge PutEventsCommand: {"middlewareStack":{},"schema":[9,"com.amazonaws.eventbridge","PutEvents",0,null,null],"input":{"Entries":[{"Time":"2026-01-28T14:56:06.648Z","EventBusName":"acquisitions-bus-CODE","Source":"support-workers.1","DetailType":"AcquisitionsEvent","Detail":"{\"eventTimeStamp\":\"2026-01-28T14:56:06.647Z\",\"product\":\"TIER_THREE\",\"country\":\"DE\",\"currency\":\"EUR\",\"abTests\":[{\"name\":\"LP_TICKER\",\"variant\":\"CONTROL\"}],\"paymentFrequency\":\"ANNUALLY\",\"paymentProvider\":\"STRIPE\",\"identityId\":\"200499853\",\"pageViewId\":\"mhynocchxh0yp1i18c6v\",\"referrerPageViewId\":\"\",\"labels\":[\"generic-checkout\"],\"promoCode\":\"TIER3_EU_ANNUAL\",\"reusedExistingPaymentMethod\":false,\"readerType\":\"Direct\",\"acquisitionType\":\"Purchase\",\"zuoraSubscriptionNumber\":\"A-S06666666\",\"queryParameters\":[],\"platform\":\"SUPPORT\",\"state\":\"\",\"email\":\"test@thegulocal.com\"}"}]},"serialize":null,"deserialize":null}
+
+          at AcquisitionEventBusService.sendEvent (src/typescript/services/acquisitionEventBusService.ts:29:11)
+
+        console.log
+          EventBridge response: {"FailedEntryCount":0,"Entries":[{"EventId":"b8351d4a-bfe4-b474-937e-19f810030fb4"}],"$metadata":{"httpStatusCode":200,"requestId":"787675e0-e5d2-4e94-888b-13ea09f3189c","attempts":1,"totalRetryDelay":0}}
+
+          at AcquisitionEventBusService.sendEvent (src/typescript/services/acquisitionEventBusService.ts:32:11)
+
+        console.log
+          Acquisition event sent to EventBridge
+
+          at handler (src/typescript/lambdas/sendAcquisitionEventLambda.ts:53:10)
+
+    [createSubscription.ts:199::createSubscription] TRACE HTTP ZuoraClient ERROR SHORT_ARGS
+    path: /v1/orders
+    method: POST
+    ERROR
+    ZuoraError: Transaction declined.402 - [card_error/card_declined/generic_decline] Your card was declined.
+        at generateZuoraError (/private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/errors/zuoraErrorHandler.ts:22:10)
+        at ZuoraClient.fetch (/private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/zuoraClient.ts:54:43)
+        at processTicksAndRejections (node:internal/process/task_queues:95:5)
+        at /private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/routing/src/logger.ts:153:20
+        at ZuoraClient.post (/private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/restClient.ts:45:10)
+        at handler (/private/tmp/run-1769612153865/support-workers/src/typescript/lambdas/createZuoraSubscriptionTSLambda.ts:117:36)
+        at Object.<anonymous> (/private/tmp/run-1769612153865/support-workers/src/typescript/test/createZuoraSubscriptionLambda.it.test.ts:23:5)
+    {
+      zuoraErrorDetails: [
+        {
+          code: "58560099",
+          message: "Transaction declined.402 - [card_error/card_declined/generic_decline] Your card was declined."
+        }
+      ],
+      code: 200,
+      name: "ZuoraError"
+    }
+    Caused by: RestClientError: parsing failure
+        at ZuoraClient.fetch (/private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/restClient.ts:142:10)
+        at processTicksAndRejections (node:internal/process/task_queues:95:5)
+        at ZuoraClient.fetch (/private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/zuoraClient.ts:38:11)
+        at /private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/routing/src/logger.ts:153:20
+        at ZuoraClient.post (/private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/restClient.ts:45:10)
+        at handler (/private/tmp/run-1769612153865/support-workers/src/typescript/lambdas/createZuoraSubscriptionTSLambda.ts:117:36)
+        at Object.<anonymous> (/private/tmp/run-1769612153865/support-workers/src/typescript/test/createZuoraSubscriptionLambda.it.test.ts:23:5)
+    {
+      status: 200,
+      responseBody: "{\n  \"success\" : false,\n  \"processId\" : \"A5A3B9AA4FAFD47A\",\n  \"reasons\" : [ {\n    \"code\" : 58560099,\n    \"message\" : \"Transaction declined.402 - [card_error/card_declined/generic_decline] Your card was declined.\"\n  } ],\n  \"requestId\" : \"2c229786-f302-470b-a83f-a2907d771af1\"\n}",
+      responseHeaders: {
+        connection: "keep-alive",
+        content-encoding: "gzip",
+        content-type: "application/json; charset=utf-8",
+        date: "Wed, 28 Jan 2026 14:56:07 GMT",
+        permissions-policy: "camera=(), microphone=(self)",
+        ratelimit-limit: "50000, 50000;w=60, 2250000;w=3600, 27000000;w=86400",
+        ratelimit-remaining: "49999",
+        ratelimit-reset: "60",
+        referrer-policy: "strict-origin-when-cross-origin",
+        strict-transport-security: "max-age=31536000; includeSubDomains",
+        transfer-encoding: "chunked",
+        vary: "Accept-Encoding",
+        zuora-request-id: "9d52ddb0-e811-4e57-bc6a-9fe794da74e1",
+        zuora-version: "0"
+      },
+      name: "RestClientError"
+    }
+    Caused by: ZodError: [
+      {
+        "code": "custom",
+        "message": "Invalid input",
+        "path": []
+      }
+    ]
+        at Object.get error [as error] (/private/tmp/run-1769612153865/node_modules/.pnpm/zod@3.25.30/node_modules/zod/dist/cjs/v3/types.js:57:31)
+        at ZodPipeline.parse (/private/tmp/run-1769612153865/node_modules/.pnpm/zod@3.25.30/node_modules/zod/dist/cjs/v3/types.js:132:22)
+        at ZuoraClient.fetch (/private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/restClient.ts:140:18)
+        at processTicksAndRejections (node:internal/process/task_queues:95:5)
+        at ZuoraClient.fetch (/private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/zuoraClient.ts:38:11)
+        at /private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/routing/src/logger.ts:153:20
+        at ZuoraClient.post (/private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/restClient.ts:45:10)
+        at handler (/private/tmp/run-1769612153865/support-workers/src/typescript/lambdas/createZuoraSubscriptionTSLambda.ts:117:36)
+        at Object.<anonymous> (/private/tmp/run-1769612153865/support-workers/src/typescript/test/createZuoraSubscriptionLambda.it.test.ts:23:5)
+    {
+      issues: [
+        {
+          code: "custom",
+          message: "Invalid input",
+          path: []
+        }
+      ],
+      name: "ZodError"
+    }
+    [sendThankYouEmailLambda.ts:231::getMandateId] TRACE HTTP ZuoraClient EXIT SHORT_ARGS
+    path: /v1/accounts/A01092731/payment-methods
+    method: GET
+    RESULT
+    {
+      defaultPaymentMethodId: "8ad097d19bef0374019c046dc7012b70",
+      paymentGateway: "GoCardless",
+      banktransfer: [
+        {
+          id: "8ad097d19bef0374019c046dc7012b70",
+          type: "Bacs",
+          isDefault: true,
+          accountKey: "8ad097d19bef0374019c046dc7462b71",
+          paymentMethodNumber: null,
+          status: "Active",
+          lastTransaction: "Approved",
+          useDefaultRetryRule: true,
+          bankIdentificationNumber: null,
+          deviceSessionId: null,
+          existingMandate: null,
+          ipAddress: null,
+          lastFailedSaleTransactionDate: null,
+          lastTransactionDateTime: "2026-01-28 11:47:10",
+          lastTransactionStatus: "Approved",
+          maxConsecutivePaymentFailures: null,
+          numConsecutiveFailures: 0,
+          paymentRetryWindow: null,
+          totalNumberOfProcessedPayments: 1,
+          totalNumberOfErrorPayments: 0,
+          createdDate: "2026-01-28 11:47:07",
+          updatedDate: "2026-01-28 11:47:10",
+          createdBy: "2a28c6b8a90444e0a3b8d26658cb4cff",
+          updatedBy: "2a28c6b8a90444e0a3b8d26658cb4cff",
+          bankTransferType: "DirectDebitUK",
+          IBAN: "****9911",
+          businessIdentificationCode: null,
+          accountNumber: "****9911",
+          bankCode: "200000",
+          branchCode: null,
+          identityNumber: null,
+          accountHolderInfo: {
+            accountHolderName: "RB",
+            phone: null,
+            email: null,
+            addressLine1: null,
+            addressLine2: null,
+            zipCode: null,
+            city: null,
+            country: "United Kingdom",
+            state: null
+          },
+          mandateInfo: {
+            mandateStatus: null,
+            mandateReason: null,
+            mandateId: "AB38G5R",
+            mandateReceivedStatus: null,
+            existingMandateStatus: null,
+            mandateCreationDate: null,
+            mandateUpdateDate: null
+          }
+        }
+      ]
+    }
+    [api.ts:8::getProductCatalogFromApi] getProductCatalogFromApi
+    [api.ts:19::getProductCatalogFromApi] Successfully fetched Product Catalog
+    [createSubscription.ts:199::createSubscription] TRACE HTTP ZuoraClient ENTRY ARGS
+    path: /v1/orders
+    method: POST
+    schema: (ZodType not expanded)
+    body: {"newAccount":{"name":"001UD00000QMLC4YAP","currency":"GBP","crmId":"001UD00000QMLC4YAP","customFields":{"sfContactId__c":"003UD00000r97HIYAY","IdentityId__c":"200511982","CreatedRequestId__c":"1769612167550"},"billCycleDay":0,"autoPay":true,"paymentGateway":"Stripe PaymentIntents GNM Membership","paymentMethod":{"type":"CreditCardReferenceTransaction","tokenId":"pm_0SaKZ0ItVxyc3Q6n2BPnBvSw","secondTokenId":"cus_TXPNzY1889IAYB","cardNumber":"4242","expirationMonth":1,"expirationYear":2050,"cardType":"Visa"},"billToContact":{"firstName":"support.e2e.firstName+pxkV6","lastName":"support.e2e.lastName+aE88D","workEmail":"support.e2e+aPFBg6OjZ2P4YwHrhx7Yq@thegulocal.com","country":"GB","city":"Manchester","address1":"3 Cross Street","address2":"","postalCode":"M1 1PW"},"soldToContact":{"address1":"90 York Way","address2":"","city":"London","country":"GB","firstName":"support.e2e.firstName+pxkV6","lastName":"support.e2e.lastName+aE88D","postalCode":"N1 9GU","state":null,"workEmail":"support.e2e+aPFBg6OjZ2P4YwHrhx7Yq@thegulocal.com"}},"orderDate":"2026-01-28","description":"Created by createSubscription.ts in support-service-lambdas","subscriptions":[{"orderActions":[{"type":"CreateSubscription","triggerDates":[{"name":"ContractEffective","triggerDate":"2026-01-28"},{"name":"CustomerAcceptance","triggerDate":"2026-02-02"}],"createSubscription":{"terms":{"autoRenew":true,"initialTerm":{"period":12,"periodType":"Month","termType":"TERMED"},"renewalSetting":"RENEW_WITH_SPECIFIC_TERM","renewalTerms":[{"period":12,"periodType":"Month"}]},"subscribeToRatePlans":[{"productRatePlanId":"2c92c0f878ac40300178acaa04bb401d","chargeOverrides":[]}]}}],"customFields":{"DeliveryAgent__c":"","ReaderType__c":"Direct","LastPlanAddedDate__c":"2026-01-28","CreatedRequestId__c":"1769612167550"}}],"processingOptions":{"runBilling":true,"collectPayment":true}}
+    headers: { idempotency-key: "1769612167550" }
+     PASS  src/typescript/test/sendThankYouEmailLambda.it.test.ts
+      ● Console
+
+        console.info
+          Input is {"state":{"requestId":"c1cd21ae-bd89-4e78-0000-000000000a1f","sendThankYouEmailState":{"user":{"id":"21841960","primaryEmailAddress":"integration-test@thegulocal.com","firstName":"Test","lastName":"User","billingAddress":{"country":"GB"},"isTestUser":false},"product":{"amount":12,"currency":"GBP","billingPeriod":"Monthly","productType":"SupporterPlus"},"productInformation":{"amount":12,"product":"SupporterPlus","ratePlan":"Monthly"},"paymentMethod":{"PaypalBaid":"B-81M54065TB6970351","PaypalEmail":"membership.paypal-buyer@theguardian.com","Type":"PayPalCompletePaymentsWithBAID","PaymentGateway":"PayPal Complete Payments"},"paymentSchedule":{"payments":[{"date":"2026-01-20T00:00:00.000Z","amount":12},{"date":"2026-02-20T00:00:00.000Z","amount":12},{"date":"2026-03-20T00:00:00.000Z","amount":12},{"date":"2026-04-20T00:00:00.000Z","amount":12},{"date":"2026-05-20T00:00:00.000Z","amount":12},{"date":"2026-06-20T00:00:00.000Z","amount":12},{"date":"2026-07-20T00:00:00.000Z","amount":12},{"date":"2026-08-20T00:00:00.000Z","amount":12},{"date":"2026-09-20T00:00:00.000Z","amount":12},{"date":"2026-10-20T00:00:00.000Z","amount":12},{"date":"2026-11-20T00:00:00.000Z","amount":12},{"date":"2026-12-20T00:00:00.000Z","amount":12},{"date":"2027-01-20T00:00:00.000Z","amount":12},{"date":"2027-02-20T00:00:00.000Z","amount":12}]},"accountNumber":"A01089211","subscriptionNumber":"A-S05555555","productType":"SupporterPlus"},"analyticsInfo":{"isGiftPurchase":false,"paymentProvider":"PayPal"},"acquisitionData":{"ophanIds":{"pageviewId":"mkmpgv3w9xtctrr0s9mw"},"referrerAcquisitionData":{"referrerPageviewId":"","queryParameters":[],"hostname":"support.code.dev-theguardian.com","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:146.0) Gecko/20100101 Firefox/146.0","ipAddress":"10.248.135.81","labels":["generic-checkout"]},"supportAbTests":[{"name":"abandonedBasket","variant":"variant"},{"name":"landingPageMparticlePastContributor","variant":"variant"},{"name":"LP_COUNTDOWN","variant":"CONTROL"}]}},"requestInfo":{"testUser":false,"failed":false,"messages":[]}}
+
+          at handler (src/typescript/lambdas/sendThankYouEmailLambda.ts:166:10)
+
+        console.log
+          Sending email message {
+            "To": {
+              "Address": "integration-test@thegulocal.com",
+              "ContactAttributes": {
+                "SubscriberAttributes": {
+                  "currency": "GBP",
+                  "billing_period": "monthly",
+                  "is_fixed_term": "false",
+                  "payment_method": "PayPal",
+                  "first_payment_date": "Tuesday, 20 January 2026",
+                  "first_name": "Test",
+                  "last_name": "User",
+                  "subscriber_id": "A-S05555555",
+                  "subscription_rate": "£12.00 every month"
+                }
+              }
+            },
+            "DataExtensionName": "supporter-plus",
+            "IdentityUserId": "21841960"
+          } to queue braze-emails-CODE
+
+          at sendEmail (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/email/src/email.ts:85:2)
+
+        console.log
+          Response from email send was {
+            "MD5OfMessageBody": "c209bd3051893b56eeffec9531ef0453",
+            "MessageId": "d84d16de-6de9-471b-ad64-9be8552c2190",
+            "$metadata": {
+              "httpStatusCode": 200,
+              "requestId": "7f49640b-5c42-56cf-a980-05ff79841ff0",
+              "attempts": 1,
+              "totalRetryDelay": 0
+            }
+          }
+
+          at sendEmail (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/email/src/email.ts:93:2)
+
+        console.info
+          Input is {"state":{"requestId":"472d4572-71a5-9e74-0000-000000004cdb","sendThankYouEmailState":{"user":{"id":"200498513","primaryEmailAddress":"integration-test@thegulocal.com","firstName":"support.e2e.firstName+cQNjW","lastName":"support.e2e.lastName+raq0E","billingAddress":{"country":"GB"},"isTestUser":true},"product":{"amount":5,"currency":"GBP","billingPeriod":"Monthly","productType":"Contribution"},"productInformation":{"amount":5,"product":"Contribution","ratePlan":"Monthly"},"paymentMethod":{"FirstName":"support.e2e.firstName+cQNjW","LastName":"support.e2e.lastName+raq0E","BankTransferAccountName":"CP Scott","BankCode":"200000","BankTransferAccountNumber":"55779911","Country":"GB","BankTransferType":"DirectDebitUK","Type":"BankTransfer","PaymentGateway":"GoCardless"},"paymentSchedule":{"payments":[{"date":"2025-12-05T00:00:00.000Z","amount":412.8}]},"accountNumber":"A01092731","subscriptionNumber":"A-S01073354","productType":"Contribution"},"analyticsInfo":{"isGiftPurchase":false,"paymentProvider":"DirectDebit"},"acquisitionData":{"ophanIds":{"pageviewId":"mhvwkc6ei19s7vd0m3ul"},"referrerAcquisitionData":{"referrerPageviewId":"","queryParameters":[],"hostname":"support.code.dev-theguardian.com","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36","ipAddress":"10.248.135.173","labels":["generic-checkout"]},"supportAbTests":[{"name":"LP_COUNTDOWN","variant":"CONTROL"}]}},"requestInfo":{"testUser":true,"failed":false,"messages":[]}}
+
+          at handler (src/typescript/lambdas/sendThankYouEmailLambda.ts:166:10)
+
+        console.log
+          fetching zuora bearer token for stage: CODE
+
+          at ZuoraBearerTokenProvider.fetchZuoraBearerToken (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/auth/bearerTokenProvider.ts:43:11)
+
+        console.log
+          Sending email message {
+            "To": {
+              "Address": "integration-test@thegulocal.com",
+              "ContactAttributes": {
+                "SubscriberAttributes": {
+                  "amount": "5",
+                  "billing_period": "monthly",
+                  "currency": "GBP",
+                  "first_name": "support.e2e.firstName+cQNjW",
+                  "last_name": "support.e2e.lastName+raq0E",
+                  "subscriber_id": "A-S01073354",
+                  "subscription_rate": "£412.80 for the first month",
+                  "bank_account_no": "******11",
+                  "bank_sort_code": "20-00-00",
+                  "account_holder": "CP Scott",
+                  "payment_method": "Direct Debit",
+                  "mandate_id": "AB38G5R",
+                  "first_payment_date": "Saturday, 7 February 2026"
+                }
+              }
+            },
+            "DataExtensionName": "regular-contribution-thank-you",
+            "IdentityUserId": "200498513"
+          } to queue braze-emails-CODE
+
+          at sendEmail (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/email/src/email.ts:85:2)
+
+        console.log
+          Response from email send was {
+            "MD5OfMessageBody": "96878f11ff56f39382b62fe067df35b3",
+            "MessageId": "6cada246-e373-4d45-82a1-8d2ca3e4128e",
+            "$metadata": {
+              "httpStatusCode": 200,
+              "requestId": "ea2de64d-f04b-5c39-bb23-87b9d58ce506",
+              "attempts": 1,
+              "totalRetryDelay": 0
+            }
+          }
+
+          at sendEmail (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/email/src/email.ts:93:2)
+
+        console.info
+          Input is {"state":{"requestId":"1765202513231","sendThankYouEmailState":{"user":{"id":"200512858","primaryEmailAddress":"integration-test@thegulocal.com","firstName":"support.e2e.firstName+7Vyhd","lastName":"support.e2e.lastName+VrVYE","billingAddress":{"country":"DE"},"isTestUser":true},"product":{"currency":"EUR","billingPeriod":"Annual","productType":"DigitalPack"},"productInformation":{"product":"DigitalSubscription","ratePlan":"Annual"},"paymentMethod":{"TokenId":"pm_0Sc4eEItVxyc3Q6n2DBHkSOQ","SecondTokenId":"cus_TZD4FrVytKeFLB","CreditCardNumber":"4242","CreditCardExpirationMonth":1,"CreditCardExpirationYear":2050,"CreditCardType":"Visa","PaymentGateway":"Stripe PaymentIntents GNM Membership","Type":"CreditCardReferenceTransaction","StripePaymentType":"StripeCheckout"},"paymentSchedule":{"payments":[{"date":"2025-12-24T00:00:00.000Z","amount":191.23}]},"accountNumber":"A01072695","subscriptionNumber":"A-S02222222","productType":"DigitalSubscription"},"analyticsInfo":{"isGiftPurchase":false,"paymentProvider":"Stripe"},"acquisitionData":{"ophanIds":{"pageviewId":"mix761vql8qao8a24mfs"},"referrerAcquisitionData":{"referrerPageviewId":"","queryParameters":[],"hostname":"support.code.dev-theguardian.com","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36","ipAddress":"10.248.135.10","labels":["generic-checkout"]},"supportAbTests":[{"name":"LP_TICKER","variant":"CONTROL"}]}},"requestInfo":{"testUser":true,"failed":false,"messages":[]}}
+
+          at handler (src/typescript/lambdas/sendThankYouEmailLambda.ts:166:10)
+
+        console.log
+          Sending email message {
+            "To": {
+              "Address": "integration-test@thegulocal.com",
+              "ContactAttributes": {
+                "SubscriberAttributes": {
+                  "currency": "EUR",
+                  "first_name": "support.e2e.firstName+7Vyhd",
+                  "last_name": "support.e2e.lastName+VrVYE",
+                  "subscriber_id": "A-S02222222",
+                  "subscription_rate": "€191.23 for the first year",
+                  "payment_method": "Credit/Debit Card",
+                  "first_payment_date": "Wednesday, 24 December 2025"
+                }
+              }
+            },
+            "DataExtensionName": "digipack",
+            "IdentityUserId": "200512858"
+          } to queue braze-emails-CODE
+
+          at sendEmail (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/email/src/email.ts:85:2)
+
+        console.log
+          Response from email send was {
+            "MD5OfMessageBody": "1dfba48f29ef10576d809dcf6e2e2a1c",
+            "MessageId": "1606dc78-851b-4158-861d-4ccdbcaac263",
+            "$metadata": {
+              "httpStatusCode": 200,
+              "requestId": "f4ba745f-d0d2-5c26-b32b-15abf515e519",
+              "attempts": 1,
+              "totalRetryDelay": 0
+            }
+          }
+
+          at sendEmail (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/email/src/email.ts:93:2)
+
+        console.info
+          Input is {"state":{"requestId":"aa69f1ed-9129-ee4c-0000-00000000001f","sendThankYouEmailState":{"user":{"id":"200499853","primaryEmailAddress":"integration-test@thegulocal.com","firstName":"support.e2e.firstName+nGRM9","lastName":"support.e2e.lastName+3vp0c","billingAddress":{"lineOne":"Pariser Platz","lineTwo":"","city":"Berlin","state":"","postCode":"10117","country":"DE"},"deliveryAddress":{"lineOne":"Pariser Platz","lineTwo":"","city":"Berlin","state":"","postCode":"10117","country":"DE"},"isTestUser":true},"product":{"currency":"EUR","billingPeriod":"Annual","fulfilmentOptions":"Domestic","productOptions":"NoProductOptions","productType":"TierThree"},"productInformation":{"deliveryContact":{"address1":"Pariser Platz","address2":"","city":"Berlin","country":"DE","firstName":"support.e2e.firstName+nGRM9","lastName":"support.e2e.lastName+3vp0c","postalCode":"10117","state":"","workEmail":"rupert.bates+smoke-test@theguardian.com"},"firstDeliveryDate":"2025-12-05T00:00:00.000Z","product":"TierThree","ratePlan":"DomesticAnnual"},"paymentMethod":{"TokenId":"pm_0STJJFItVxyc3Q6n7xBDAcuL","SecondTokenId":"cus_TQ9cXPmYuB67ya","CreditCardNumber":"4242","CreditCardExpirationMonth":1,"CreditCardExpirationYear":2050,"CreditCardType":"Visa","PaymentGateway":"Stripe PaymentIntents GNM Membership","Type":"CreditCardReferenceTransaction","StripePaymentType":"StripeCheckout"},"paymentSchedule":{"payments":[{"date":"2025-12-05T00:00:00.000Z","amount":412.8}]},"accountNumber":"A01062862","subscriptionNumber":"A-S06666666","promoCode":"TIER3_EU_ANNUAL","firstDeliveryDate":"2025-12-05T00:00:00.000Z","productType":"TierThree"},"analyticsInfo":{"isGiftPurchase":false,"paymentProvider":"Stripe"},"acquisitionData":{"ophanIds":{"pageviewId":"mhynocchxh0yp1i18c6v"},"referrerAcquisitionData":{"referrerPageviewId":"","queryParameters":[],"hostname":"support.thegulocal.com","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36","ipAddress":"127.0.0.1","labels":["generic-checkout"]},"supportAbTests":[{"name":"LP_TICKER","variant":"CONTROL"}]}},"requestInfo":{"testUser":true,"failed":false,"messages":[]}}
+
+          at handler (src/typescript/lambdas/sendThankYouEmailLambda.ts:166:10)
+
+        console.log
+          Sending email message {
+            "To": {
+              "Address": "integration-test@thegulocal.com",
+              "ContactAttributes": {
+                "SubscriberAttributes": {
+                  "billing_period": "annual",
+                  "first_name": "support.e2e.firstName+nGRM9",
+                  "last_name": "support.e2e.lastName+3vp0c",
+                  "subscriber_id": "A-S06666666",
+                  "subscription_rate": "€412.80 for the first year",
+                  "payment_method": "Credit/Debit Card",
+                  "first_payment_date": "Friday, 5 December 2025",
+                  "delivery_address_line_1": "Pariser Platz",
+                  "delivery_address_line_2": "",
+                  "delivery_address_town": "Berlin",
+                  "delivery_postcode": "10117",
+                  "delivery_country": "Germany"
+                }
+              }
+            },
+            "DataExtensionName": "tier-three",
+            "IdentityUserId": "200499853"
+          } to queue braze-emails-CODE
+
+          at sendEmail (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/email/src/email.ts:85:2)
+
+        console.log
+          Response from email send was {
+            "MD5OfMessageBody": "271988a176035ef4a5e6e0809c7518fd",
+            "MessageId": "00329e1f-68e9-42de-b627-c93013e5cd3f",
+            "$metadata": {
+              "httpStatusCode": 200,
+              "requestId": "bd0bc7de-3dff-535e-a91f-a62a18382a61",
+              "attempts": 1,
+              "totalRetryDelay": 0
+            }
+          }
+
+          at sendEmail (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/email/src/email.ts:93:2)
+
+        console.info
+          Input is {"state":{"requestId":"009eb789-4744-c520-0000-00000000003e","sendThankYouEmailState":{"user":{"id":"200499853","primaryEmailAddress":"integration-test@thegulocal.com","firstName":"support.e2e.firstName+xBie3","lastName":"support.e2e.lastName+mKBhN","billingAddress":{"lineOne":"3 Cross Street","lineTwo":"","city":"Manchester","postCode":"M1 1PW","country":"GB"},"deliveryAddress":{"lineOne":"90 York Way","lineTwo":"","city":"London","postCode":"N1 9GU","country":"GB"},"isTestUser":true},"product":{"currency":"GBP","billingPeriod":"Monthly","fulfilmentOptions":"Domestic","productType":"GuardianWeekly"},"productInformation":{"deliveryContact":{"address1":"90 York Way","address2":"","city":"London","country":"GB","firstName":"support.e2e.firstName+xBie3","lastName":"support.e2e.lastName+mKBhN","postalCode":"N1 9GU","state":null,"workEmail":"rupert.bates+smoke-test@theguardian.com"},"firstDeliveryDate":"2025-11-28T00:00:00.000Z","product":"GuardianWeeklyDomestic","ratePlan":"Monthly"},"paymentMethod":{"TokenId":"pm_0STNqOItVxyc3Q6nNnUcoSoC","SecondTokenId":"cus_TQEJQxRrAJb7zV","CreditCardNumber":"4242","CreditCardExpirationMonth":1,"CreditCardExpirationYear":2050,"CreditCardType":"Visa","PaymentGateway":"Stripe PaymentIntents GNM Membership","Type":"CreditCardReferenceTransaction","StripePaymentType":"StripeCheckout"},"paymentSchedule":{"payments":[{"date":"2025-11-28T00:00:00.000Z","amount":14.85},{"date":"2025-12-28T00:00:00.000Z","amount":14.85},{"date":"2026-01-28T00:00:00.000Z","amount":14.85},{"date":"2026-02-28T00:00:00.000Z","amount":14.85},{"date":"2026-03-28T00:00:00.000Z","amount":14.85},{"date":"2026-04-28T00:00:00.000Z","amount":14.85},{"date":"2026-05-28T00:00:00.000Z","amount":14.85},{"date":"2026-06-28T00:00:00.000Z","amount":14.85},{"date":"2026-07-28T00:00:00.000Z","amount":14.85},{"date":"2026-08-28T00:00:00.000Z","amount":14.85},{"date":"2026-09-28T00:00:00.000Z","amount":14.85},{"date":"2026-10-28T00:00:00.000Z","amount":14.85},{"date":"2026-11-28T00:00:00.000Z","amount":16.5}]},"accountNumber":"A01063021","subscriptionNumber":"A-S04444444","similarProductsConsent":true,"promoCode":"10ANNUAL","firstDeliveryDate":"2025-11-28T00:00:00.000Z","productType":"GuardianWeekly"},"analyticsInfo":{"isGiftPurchase":false,"paymentProvider":"Stripe"},"acquisitionData":{"ophanIds":{"pageviewId":"mhyy1ujxsh20bkv1grlv"},"referrerAcquisitionData":{"referrerPageviewId":"","queryParameters":[],"hostname":"support.thegulocal.com","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36","ipAddress":"127.0.0.1","labels":["generic-checkout"]},"supportAbTests":[]}},"requestInfo":{"testUser":true,"failed":false,"messages":[]}}
+
+          at handler (src/typescript/lambdas/sendThankYouEmailLambda.ts:166:10)
+
+        console.log
+          Sending email message {
+            "To": {
+              "Address": "integration-test@thegulocal.com",
+              "ContactAttributes": {
+                "SubscriberAttributes": {
+                  "date_of_second_payment": "Sunday, 28 December 2025",
+                  "first_name": "support.e2e.firstName+xBie3",
+                  "last_name": "support.e2e.lastName+mKBhN",
+                  "subscriber_id": "A-S04444444",
+                  "subscription_rate": "£14.85 every month for 12 months, then £16.50 every month",
+                  "payment_method": "Credit/Debit Card",
+                  "first_payment_date": "Friday, 28 November 2025",
+                  "delivery_address_line_1": "90 York Way",
+                  "delivery_address_line_2": "",
+                  "delivery_address_town": "London",
+                  "delivery_postcode": "N1 9GU",
+                  "delivery_country": "United Kingdom"
+                }
+              }
+            },
+            "DataExtensionName": "guardian-weekly",
+            "IdentityUserId": "200499853"
+          } to queue braze-emails-CODE
+
+          at sendEmail (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/email/src/email.ts:85:2)
+
+        console.log
+          Response from email send was {
+            "MD5OfMessageBody": "31febcdd4e9073f2dd8f6ccef7bf51fb",
+            "MessageId": "d59dc999-ec44-4376-aa39-79ff3a16f235",
+            "$metadata": {
+              "httpStatusCode": 200,
+              "requestId": "96c9a202-ca93-5433-9c15-c3f6ef548d0c",
+              "attempts": 1,
+              "totalRetryDelay": 0
+            }
+          }
+
+          at sendEmail (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/email/src/email.ts:93:2)
+
+        console.info
+          Input is {"state":{"requestId":"009eb789-4744-c520-0000-00000000004d","sendThankYouEmailState":{"user":{"id":"200500775","primaryEmailAddress":"integration-test@thegulocal.com","firstName":"support.e2e.firstName+uGaRH","lastName":"support.e2e.lastName+jkP1B","billingAddress":{"country":"GB"},"isTestUser":true},"product":{"currency":"GBP","productType":"GuardianAdLite"},"productInformation":{"product":"GuardianAdLite","ratePlan":"Monthly"},"paymentMethod":{"TokenId":"pm_0STOf2ItVxyc3Q6ngmwjuNCa","SecondTokenId":"cus_TQF9DfOCL3VGIv","CreditCardNumber":"4242","CreditCardExpirationMonth":1,"CreditCardExpirationYear":2050,"CreditCardType":"Visa","PaymentGateway":"Stripe PaymentIntents GNM Membership","Type":"CreditCardReferenceTransaction","StripePaymentType":"StripeCheckout"},"paymentSchedule":{"payments":[{"date":"2025-11-29T00:00:00.000Z","amount":5},{"date":"2025-12-29T00:00:00.000Z","amount":5},{"date":"2026-01-29T00:00:00.000Z","amount":5},{"date":"2026-02-28T00:00:00.000Z","amount":5},{"date":"2026-03-29T00:00:00.000Z","amount":5},{"date":"2026-04-29T00:00:00.000Z","amount":5},{"date":"2026-05-29T00:00:00.000Z","amount":5},{"date":"2026-06-29T00:00:00.000Z","amount":5},{"date":"2026-07-29T00:00:00.000Z","amount":5},{"date":"2026-08-29T00:00:00.000Z","amount":5},{"date":"2026-09-29T00:00:00.000Z","amount":5},{"date":"2026-10-29T00:00:00.000Z","amount":2.58}]},"accountNumber":"A01063053","subscriptionNumber":"A-S03333333","productType":"GuardianAdLite"},"analyticsInfo":{"isGiftPurchase":false,"paymentProvider":"Stripe"},"acquisitionData":{"ophanIds":{"pageviewId":"mhyzx8tb69th51ma0yka"},"referrerAcquisitionData":{"referrerPageviewId":"","queryParameters":[],"hostname":"support.thegulocal.com","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36","ipAddress":"127.0.0.1","labels":["generic-checkout"]},"supportAbTests":[{"name":"LP_COUNTDOWN","variant":"V1"}]}},"requestInfo":{"testUser":true,"failed":false,"messages":[]}}
+
+          at handler (src/typescript/lambdas/sendThankYouEmailLambda.ts:166:10)
+
+        console.log
+          Sending email message {
+            "To": {
+              "Address": "integration-test@thegulocal.com",
+              "ContactAttributes": {
+                "SubscriberAttributes": {
+                  "first_name": "support.e2e.firstName+uGaRH",
+                  "last_name": "support.e2e.lastName+jkP1B",
+                  "subscriber_id": "A-S03333333",
+                  "subscription_rate": "£5.00 every month for 11 months, then £2.58 every month",
+                  "payment_method": "Credit/Debit Card",
+                  "first_payment_date": "Saturday, 29 November 2025"
+                }
+              }
+            },
+            "DataExtensionName": "guardian-ad-lite",
+            "IdentityUserId": "200500775"
+          } to queue braze-emails-CODE
+
+          at sendEmail (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/email/src/email.ts:85:2)
+
+        console.log
+          Response from email send was {
+            "MD5OfMessageBody": "0cec44350875aa782dd06ab44aecd2f3",
+            "MessageId": "0d84bb1c-2dfb-46b8-a964-f0e603735f40",
+            "$metadata": {
+              "httpStatusCode": 200,
+              "requestId": "3ddf9cc9-9e23-5057-bd76-fd3dbbe44968",
+              "attempts": 1,
+              "totalRetryDelay": 0
+            }
+          }
+
+          at sendEmail (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/email/src/email.ts:93:2)
+
+    [createSubscription.ts:199::createSubscription] TRACE HTTP ZuoraClient EXIT SHORT_ARGS
+    path: /v1/orders
+    method: POST
+    RESULT
+    {
+      orderNumber: "O-01140609",
+      accountNumber: "A01092925",
+      subscriptionNumbers: [
+        "A-S01073540"
+      ]
+    }
+    [previewCreateSubscription.ts:94::previewCreateSubscription] TRACE HTTP ZuoraClient ENTRY ARGS
+    path: /v1/orders/preview
+    method: POST
+    schema: (ZodType not expanded)
+    body: {"existingAccountNumber":"A01092925","orderDate":"2026-01-28","subscriptions":[{"orderActions":[{"type":"CreateSubscription","triggerDates":[{"name":"ContractEffective","triggerDate":"2026-01-28"},{"name":"CustomerAcceptance","triggerDate":"2026-02-02"}],"createSubscription":{"terms":{"autoRenew":true,"initialTerm":{"period":14,"periodType":"Month","termType":"TERMED"},"renewalSetting":"RENEW_WITH_SPECIFIC_TERM","renewalTerms":[{"period":14,"periodType":"Month"}]},"subscribeToRatePlans":[{"productRatePlanId":"2c92c0f878ac40300178acaa04bb401d","chargeOverrides":[]}]}}]}],"previewOptions":{"previewThruType":"SpecificDate","previewTypes":["BillingDocs"],"specificPreviewThruDate":"2027-02-28"}}
+    headers: undefined
+    [previewCreateSubscription.ts:94::previewCreateSubscription] TRACE HTTP ZuoraClient EXIT SHORT_ARGS
+    path: /v1/orders/preview
+    method: POST
+    RESULT
+    {
+      success: true,
+      previewResult: {
+        invoices: [
+          {
+            amount: 214.5,
+            amountWithoutTax: 214.5,
+            taxAmount: 0,
+            targetDate: "2027-02-28T00:00:00.000Z",
+            invoiceItems: [
+              {
+                serviceStartDate: "2026-02-02T00:00:00.000Z",
+                serviceEndDate: "2026-03-01T00:00:00.000Z",
+                amountWithoutTax: 16.5,
+                taxAmount: 0,
+                chargeName: "GW Oct 18 - Monthly - Domestic",
+                productName: "Guardian Weekly - Domestic",
+                productRatePlanChargeId: "2c92c0f878ac40300178acae0612681b",
+                unitPrice: 16.5
+              },
+              {
+                serviceStartDate: "2026-03-02T00:00:00.000Z",
+                serviceEndDate: "2026-04-01T00:00:00.000Z",
+                amountWithoutTax: 16.5,
+                taxAmount: 0,
+                chargeName: "GW Oct 18 - Monthly - Domestic",
+                productName: "Guardian Weekly - Domestic",
+                productRatePlanChargeId: "2c92c0f878ac40300178acae0612681b",
+                unitPrice: 16.5
+              },
+              {
+                serviceStartDate: "2026-04-02T00:00:00.000Z",
+                serviceEndDate: "2026-05-01T00:00:00.000Z",
+                amountWithoutTax: 16.5,
+                taxAmount: 0,
+                chargeName: "GW Oct 18 - Monthly - Domestic",
+                productName: "Guardian Weekly - Domestic",
+                productRatePlanChargeId: "2c92c0f878ac40300178acae0612681b",
+                unitPrice: 16.5
+              },
+              {
+                serviceStartDate: "2026-05-02T00:00:00.000Z",
+                serviceEndDate: "2026-06-01T00:00:00.000Z",
+                amountWithoutTax: 16.5,
+                taxAmount: 0,
+                chargeName: "GW Oct 18 - Monthly - Domestic",
+                productName: "Guardian Weekly - Domestic",
+                productRatePlanChargeId: "2c92c0f878ac40300178acae0612681b",
+                unitPrice: 16.5
+              },
+              {
+                serviceStartDate: "2026-06-02T00:00:00.000Z",
+                serviceEndDate: "2026-07-01T00:00:00.000Z",
+                amountWithoutTax: 16.5,
+                taxAmount: 0,
+                chargeName: "GW Oct 18 - Monthly - Domestic",
+                productName: "Guardian Weekly - Domestic",
+                productRatePlanChargeId: "2c92c0f878ac40300178acae0612681b",
+                unitPrice: 16.5
+              },
+              {
+                serviceStartDate: "2026-07-02T00:00:00.000Z",
+                serviceEndDate: "2026-08-01T00:00:00.000Z",
+                amountWithoutTax: 16.5,
+                taxAmount: 0,
+                chargeName: "GW Oct 18 - Monthly - Domestic",
+                productName: "Guardian Weekly - Domestic",
+                productRatePlanChargeId: "2c92c0f878ac40300178acae0612681b",
+                unitPrice: 16.5
+              },
+              {
+                serviceStartDate: "2026-08-02T00:00:00.000Z",
+                serviceEndDate: "2026-09-01T00:00:00.000Z",
+                amountWithoutTax: 16.5,
+                taxAmount: 0,
+                chargeName: "GW Oct 18 - Monthly - Domestic",
+                productName: "Guardian Weekly - Domestic",
+                productRatePlanChargeId: "2c92c0f878ac40300178acae0612681b",
+                unitPrice: 16.5
+              },
+              {
+                serviceStartDate: "2026-09-02T00:00:00.000Z",
+                serviceEndDate: "2026-10-01T00:00:00.000Z",
+                amountWithoutTax: 16.5,
+                taxAmount: 0,
+                chargeName: "GW Oct 18 - Monthly - Domestic",
+                productName: "Guardian Weekly - Domestic",
+                productRatePlanChargeId: "2c92c0f878ac40300178acae0612681b",
+                unitPrice: 16.5
+              },
+              {
+                serviceStartDate: "2026-10-02T00:00:00.000Z",
+                serviceEndDate: "2026-11-01T00:00:00.000Z",
+                amountWithoutTax: 16.5,
+                taxAmount: 0,
+                chargeName: "GW Oct 18 - Monthly - Domestic",
+                productName: "Guardian Weekly - Domestic",
+                productRatePlanChargeId: "2c92c0f878ac40300178acae0612681b",
+                unitPrice: 16.5
+              },
+              {
+                serviceStartDate: "2026-11-02T00:00:00.000Z",
+                serviceEndDate: "2026-12-01T00:00:00.000Z",
+                amountWithoutTax: 16.5,
+                taxAmount: 0,
+                chargeName: "GW Oct 18 - Monthly - Domestic",
+                productName: "Guardian Weekly - Domestic",
+                productRatePlanChargeId: "2c92c0f878ac40300178acae0612681b",
+                unitPrice: 16.5
+              },
+              {
+                serviceStartDate: "2026-12-02T00:00:00.000Z",
+                serviceEndDate: "2027-01-01T00:00:00.000Z",
+                amountWithoutTax: 16.5,
+                taxAmount: 0,
+                chargeName: "GW Oct 18 - Monthly - Domestic",
+                productName: "Guardian Weekly - Domestic",
+                productRatePlanChargeId: "2c92c0f878ac40300178acae0612681b",
+                unitPrice: 16.5
+              },
+              {
+                serviceStartDate: "2027-01-02T00:00:00.000Z",
+                serviceEndDate: "2027-02-01T00:00:00.000Z",
+                amountWithoutTax: 16.5,
+                taxAmount: 0,
+                chargeName: "GW Oct 18 - Monthly - Domestic",
+                productName: "Guardian Weekly - Domestic",
+                productRatePlanChargeId: "2c92c0f878ac40300178acae0612681b",
+                unitPrice: 16.5
+              },
+              {
+                serviceStartDate: "2027-02-02T00:00:00.000Z",
+                serviceEndDate: "2027-03-01T00:00:00.000Z",
+                amountWithoutTax: 16.5,
+                taxAmount: 0,
+                chargeName: "GW Oct 18 - Monthly - Domestic",
+                productName: "Guardian Weekly - Domestic",
+                productRatePlanChargeId: "2c92c0f878ac40300178acae0612681b",
+                unitPrice: 16.5
+              }
+            ]
+          }
+        ]
+      }
+    }
+    [createSubscription.ts:199::createSubscription] TRACE HTTP ZuoraClient ENTRY ARGS
+    path: /v1/orders
+    method: POST
+    schema: (ZodType not expanded)
+    body: {"newAccount":{"name":"001UD00000QWOGkYAP","currency":"EUR","crmId":"001UD00000QWOGkYAP","customFields":{"sfContactId__c":"003UD00000rUFEgYAO","IdentityId__c":"200512858","CreatedRequestId__c":"1769612170457"},"billCycleDay":0,"autoPay":true,"paymentGateway":"Stripe PaymentIntents GNM Membership","paymentMethod":{"type":"CreditCardReferenceTransaction","tokenId":"pm_0Sc4eEItVxyc3Q6n2DBHkSOQ","secondTokenId":"cus_TZD4FrVytKeFLB","cardNumber":"4242","expirationMonth":1,"expirationYear":2050,"cardType":"Visa"},"billToContact":{"firstName":"support.e2e.firstName+7Vyhd","lastName":"support.e2e.lastName+VrVYE","workEmail":"support.e2e+9AAdSvcbKHKdIekO8-5yi@thegulocal.com","country":"DE"}},"orderDate":"2026-01-28","description":"Created by createSubscription.ts in support-service-lambdas","subscriptions":[{"orderActions":[{"type":"CreateSubscription","triggerDates":[{"name":"ContractEffective","triggerDate":"2026-01-28"},{"name":"CustomerAcceptance","triggerDate":"2026-02-13"}],"createSubscription":{"terms":{"autoRenew":true,"initialTerm":{"period":12,"periodType":"Month","termType":"TERMED"},"renewalSetting":"RENEW_WITH_SPECIFIC_TERM","renewalTerms":[{"period":12,"periodType":"Month"}]},"subscribeToRatePlans":[{"productRatePlanId":"2c92c0f94bbffaaa014bc6a4212e205b","chargeOverrides":[]}]}}],"customFields":{"DeliveryAgent__c":"","ReaderType__c":"Direct","LastPlanAddedDate__c":"2026-01-28","CreatedRequestId__c":"1769612170457"}}],"processingOptions":{"runBilling":true,"collectPayment":true}}
+    headers: { idempotency-key: "1769612170457" }
+    [createSubscription.ts:199::createSubscription] TRACE HTTP ZuoraClient EXIT SHORT_ARGS
+    path: /v1/orders
+    method: POST
+    RESULT
+    {
+      orderNumber: "O-01140610",
+      accountNumber: "A01092926",
+      subscriptionNumbers: [
+        "A-S01073541"
+      ]
+    }
+    [previewCreateSubscription.ts:94::previewCreateSubscription] TRACE HTTP ZuoraClient ENTRY ARGS
+    path: /v1/orders/preview
+    method: POST
+    schema: (ZodType not expanded)
+    body: {"existingAccountNumber":"A01092926","orderDate":"2026-01-28","subscriptions":[{"orderActions":[{"type":"CreateSubscription","triggerDates":[{"name":"ContractEffective","triggerDate":"2026-01-28"},{"name":"CustomerAcceptance","triggerDate":"2026-02-13"}],"createSubscription":{"terms":{"autoRenew":true,"initialTerm":{"period":14,"periodType":"Month","termType":"TERMED"},"renewalSetting":"RENEW_WITH_SPECIFIC_TERM","renewalTerms":[{"period":14,"periodType":"Month"}]},"subscribeToRatePlans":[{"productRatePlanId":"2c92c0f94bbffaaa014bc6a4212e205b","chargeOverrides":[]}]}}]}],"previewOptions":{"previewThruType":"SpecificDate","previewTypes":["BillingDocs"],"specificPreviewThruDate":"2027-02-28"}}
+    headers: undefined
+     PASS  src/typescript/test/salesforce.it.test.ts (8.373 s)
+      ● Console
+
+        console.log
+          Auth token is invalid or expired, fetching a new one
+
+          at AuthService.getAuthentication (src/typescript/services/salesforceClient.ts:86:12)
+
+        console.log
+          Trying to authenticate with Salesforce
+
+          at AuthService.fetchAuthToken (src/typescript/services/salesforceClient.ts:93:11)
+
+        console.log
+          Authenticated with Salesforce successfully
+
+          at AuthService.fetchAuthToken (src/typescript/services/salesforceClient.ts:116:11)
+
+        console.log
+          Auth token is invalid or expired, fetching a new one
+
+          at AuthService.getAuthentication (src/typescript/services/salesforceClient.ts:86:12)
+
+        console.log
+          Trying to authenticate with Salesforce
+
+          at AuthService.fetchAuthToken (src/typescript/services/salesforceClient.ts:93:11)
+
+        console.log
+          Authenticated with Salesforce successfully
+
+          at AuthService.fetchAuthToken (src/typescript/services/salesforceClient.ts:116:11)
+
+        console.log
+          Auth token is invalid or expired, fetching a new one
+
+          at AuthService.getAuthentication (src/typescript/services/salesforceClient.ts:86:12)
+
+        console.log
+          Trying to authenticate with Salesforce
+
+          at AuthService.fetchAuthToken (src/typescript/services/salesforceClient.ts:93:11)
+
+        console.log
+          Authenticated with Salesforce successfully
+
+          at AuthService.fetchAuthToken (src/typescript/services/salesforceClient.ts:116:11)
+
+        console.info
+          Input is {"state":{"requestId":"a81f0dee-1aa5-efbf-0000-00000001315e","user":{"id":"9999999999999","primaryEmailAddress":"test@test.com","firstName":"Test","lastName":"User","billingAddress":{"state":"NJ","postCode":"07071","country":"US"},"isTestUser":false},"product":{"amount":5,"currency":"USD","billingPeriod":"Monthly","productType":"Contribution"},"productInformation":{"amount":5,"product":"Contribution","ratePlan":"Monthly"},"analyticsInfo":{"isGiftPurchase":false,"paymentProvider":"Stripe"},"acquisitionData":{"ophanIds":{"pageviewId":"9999999999999","browserId":"9999999999999"},"referrerAcquisitionData":{"referrerPageviewId":"","referrerUrl":"https://www.theguardian.com/us-news/2024/oct/08/salmonella-egg-recall-fda","componentId":"AMP__2024_07_18_AMP_BETSY__US__V1_RECURRING","componentType":"ACQUISITIONS_EPIC","source":"GOOGLE_AMP","abTests":[{"name":"2024_07_18_AMP_BETSY__US","variant":"V1_RECURRING"}],"queryParameters":[{"name":"selected-contribution-type","value":"MONTHLY"},{"name":"selected-amount","value":"5"}],"hostname":"support.theguardian.com","userAgent":"Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Mobile Safari/537.36","ipAddress":"127.0.0.1","labels":["generic-checkout"]},"supportAbTests":[{"name":"abandonedBasket","variant":"control"},{"name":"auPartnerBenefit","variant":"variant"}]},"paymentMethod":{"TokenId":"pm_9999999999999","SecondTokenId":"cus_9999999999999","CreditCardNumber":"4242","CreditCardExpirationMonth":7,"CreditCardExpirationYear":2027,"PaymentGateway":"Stripe PaymentIntents GNM Membership","Type":"CreditCardReferenceTransaction","StripePaymentType":"StripePaymentRequestButton"}},"requestInfo":{"testUser":false,"failed":false,"messages":[]}}
+
+          at handler (src/typescript/lambdas/createSalesforceContactLambda.ts:30:11)
+
+        console.log
+          Auth token is invalid or expired, fetching a new one
+
+          at AuthService.getAuthentication (src/typescript/services/salesforceClient.ts:86:12)
+
+        console.log
+          Trying to authenticate with Salesforce
+
+          at AuthService.fetchAuthToken (src/typescript/services/salesforceClient.ts:93:11)
+
+        console.log
+          Authenticated with Salesforce successfully
+
+          at AuthService.fetchAuthToken (src/typescript/services/salesforceClient.ts:116:11)
+
+        console.info
+          Input is {"state":{"requestId":"531f493c-c880-fb83-0000-00000000111b","user":{"id":"21841796","primaryEmailAddress":"Test.User@gmail.com","firstName":"Test","lastName":"User","billingAddress":{"lineOne":"York Place","city":"London","state":"","postCode":"N19GU","country":"GB"},"deliveryAddress":{"lineOne":"York Place","city":"London","state":"","postCode":"N19GU","country":"GB"},"telephoneNumber":"+4411111111111","isTestUser":false},"giftRecipient":{"firstName":"Test","lastName":"User","email":"Test.User@gmail.com"},"product":{"currency":"GBP","billingPeriod":"Quarterly","fulfilmentOptions":"Domestic","productType":"GuardianWeekly"},"productInformation":{"deliveryContact":{"address1":"90 York Way","address2":"","city":"London","country":"GB","firstName":"support.e2e.firstName+pxkV6","lastName":"support.e2e.lastName+aE88D","postalCode":"N1 9GU","state":null,"workEmail":"support.e2e+aPFBg6OjZ2P4YwHrhx7Yq@thegulocal.com"},"firstDeliveryDate":"2025-12-12T00:00:00.000Z","product":"GuardianWeeklyDomestic","ratePlan":"ThreeMonthGift"},"analyticsInfo":{"isGiftPurchase":true,"paymentProvider":"DirectDebit"},"firstDeliveryDate":"2025-07-25T00:00:00.000Z","acquisitionData":{"ophanIds":{"pageviewId":"mcywaoxrovvvh02sdtuf"},"referrerAcquisitionData":{"referrerPageviewId":"","queryParameters":[],"hostname":"support.code.dev-theguardian.com","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:140.0) Gecko/20100101 Firefox/140.0","ipAddress":"10.248.135.28"},"supportAbTests":[]},"paymentMethod":{"FirstName":"Test","LastName":"User","BankTransferAccountName":"RB","BankCode":"200000","BankTransferAccountNumber":"55779911","Country":"GB","City":"London","PostalCode":"N19GU","State":"","StreetName":"Trelawney Road","StreetNumber":"8","BankTransferType":"DirectDebitUK","Type":"BankTransfer","PaymentGateway":"GoCardless"}},"requestInfo":{"testUser":false,"failed":false,"messages":[]}}
+
+          at handler (src/typescript/lambdas/createSalesforceContactLambda.ts:30:11)
+
+    [previewCreateSubscription.ts:94::previewCreateSubscription] TRACE HTTP ZuoraClient EXIT SHORT_ARGS
+    path: /v1/orders/preview
+    method: POST
+    RESULT
+    {
+      success: true,
+      previewResult: {
+        invoices: [
+          {
+            amount: 400,
+            amountWithoutTax: 333.34,
+            taxAmount: 66.66,
+            targetDate: "2027-02-28T00:00:00.000Z",
+            invoiceItems: [
+              {
+                serviceStartDate: "2026-02-13T00:00:00.000Z",
+                serviceEndDate: "2027-02-12T00:00:00.000Z",
+                amountWithoutTax: 166.67,
+                taxAmount: 33.33,
+                chargeName: "Digital Pack Annual",
+                productName: "Digital Pack",
+                productRatePlanChargeId: "2c92c0f94bbffaaa014bc6a4213e205d",
+                unitPrice: 200
+              },
+              {
+                serviceStartDate: "2027-02-13T00:00:00.000Z",
+                serviceEndDate: "2028-02-12T00:00:00.000Z",
+                amountWithoutTax: 166.67,
+                taxAmount: 33.33,
+                chargeName: "Digital Pack Annual",
+                productName: "Digital Pack",
+                productRatePlanChargeId: "2c92c0f94bbffaaa014bc6a4213e205d",
+                unitPrice: 200
+              }
+            ]
+          }
+        ]
+      }
+    }
+    [createSubscription.ts:199::createSubscription] TRACE HTTP ZuoraClient ENTRY ARGS
+    path: /v1/orders
+    method: POST
+    schema: (ZodType not expanded)
+    body: {"newAccount":{"name":"001UD00000RLuA2YAL","currency":"GBP","crmId":"001UD00000RLuA2YAL","customFields":{"sfContactId__c":"003UD00000tbDXPYA2","IdentityId__c":"200610906","CreatedRequestId__c":"1769612172622"},"billCycleDay":0,"autoPay":true,"paymentGateway":"Stripe PaymentIntents GNM Membership","paymentMethod":{"type":"CreditCardReferenceTransaction","tokenId":"pm_0Sl5COItVxyc3Q6ndEOykOeX","secondTokenId":"cus_TiWECwfrzXVqOM","cardNumber":"4242","expirationMonth":1,"expirationYear":2050,"cardType":"Visa"},"billToContact":{"firstName":"test3","lastName":"test3","workEmail":"test.user+u237mfsh4lsp8itcbua@guardian.co.uk","country":"GB","city":"London","address1":"90 York Way","address2":"","postalCode":"N1 9GU"},"soldToContact":{"address1":"90 York Way","address2":"","city":"London","country":"GB","firstName":"test3","lastName":"test3","postalCode":"N1 9GU","state":null,"workEmail":"test.user+u237mfsh4lsp8itcbua@guardian.co.uk"}},"orderDate":"2026-01-28","description":"Created by createSubscription.ts in support-service-lambdas","subscriptions":[{"orderActions":[{"type":"CreateSubscription","triggerDates":[{"name":"ContractEffective","triggerDate":"2026-01-28"},{"name":"CustomerAcceptance","triggerDate":"2026-02-02"}],"createSubscription":{"terms":{"autoRenew":true,"initialTerm":{"period":12,"periodType":"Month","termType":"TERMED"},"renewalSetting":"RENEW_WITH_SPECIFIC_TERM","renewalTerms":[{"period":12,"periodType":"Month"}]},"subscribeToRatePlans":[{"productRatePlanId":"2c92c0f86fa49142016fa49ea1af28c8","chargeOverrides":[]}]}}],"customFields":{"DeliveryAgent__c":"","ReaderType__c":"Direct","LastPlanAddedDate__c":"2026-01-28","CreatedRequestId__c":"1769612172622"}}],"processingOptions":{"runBilling":true,"collectPayment":true}}
+    headers: { idempotency-key: "1769612172622" }
+    [createSubscription.ts:199::createSubscription] TRACE HTTP ZuoraClient EXIT SHORT_ARGS
+    path: /v1/orders
+    method: POST
+    RESULT
+    {
+      orderNumber: "O-01140611",
+      accountNumber: "A01092927",
+      subscriptionNumbers: [
+        "A-S01073542"
+      ]
+    }
+    [previewCreateSubscription.ts:94::previewCreateSubscription] TRACE HTTP ZuoraClient ENTRY ARGS
+    path: /v1/orders/preview
+    method: POST
+    schema: (ZodType not expanded)
+    body: {"existingAccountNumber":"A01092927","orderDate":"2026-01-28","subscriptions":[{"orderActions":[{"type":"CreateSubscription","triggerDates":[{"name":"ContractEffective","triggerDate":"2026-01-28"},{"name":"CustomerAcceptance","triggerDate":"2026-02-02"}],"createSubscription":{"terms":{"autoRenew":true,"initialTerm":{"period":14,"periodType":"Month","termType":"TERMED"},"renewalSetting":"RENEW_WITH_SPECIFIC_TERM","renewalTerms":[{"period":14,"periodType":"Month"}]},"subscribeToRatePlans":[{"productRatePlanId":"2c92c0f86fa49142016fa49ea1af28c8","chargeOverrides":[]}]}}]}],"previewOptions":{"previewThruType":"SpecificDate","previewTypes":["BillingDocs"],"specificPreviewThruDate":"2027-02-28"}}
+    headers: undefined
+     PASS  src/typescript/test/createZuoraSubscriptionLambda.it.test.ts (10.538 s)
+      ● Console
+
+        console.info
+          Input is {"state":{"requestId":"32630b4c-d9ff-617d-0000-000000001789","user":{"id":"21841796","primaryEmailAddress":"test@test.com","firstName":"test","lastName":"test","billingAddress":{"country":"GB"},"isTestUser":false},"product":{"amount":12,"currency":"GBP","billingPeriod":"Monthly","productType":"SupporterPlus"},"productInformation":{"amount":12,"product":"SupporterPlus","ratePlan":"Monthly"},"analyticsInfo":{"isGiftPurchase":false,"paymentProvider":"Stripe"},"acquisitionData":{"ophanIds":{"pageviewId":"mewwgcj5tcojm96n8108"},"referrerAcquisitionData":{"referrerPageviewId":"","queryParameters":[{"name":"product","value":"Contribution"},{"name":"ratePlan","value":"Monthly"},{"name":"userType","value":"current"},{"name":"contribution","value":"5"}],"hostname":"support.code.dev-theguardian.com","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:142.0) Gecko/20100101 Firefox/142.0","ipAddress":"10.248.135.161","labels":["generic-checkout"]},"supportAbTests":[{"name":"abandonedBasket","variant":"control"},{"name":"LP_COUNTDOWN","variant":"CONTROL"}]},"similarProductsConsent":true,"productSpecificState":{"productType":"SupporterPlus","billingCountry":"GB","product":{"amount":12,"currency":"GBP","billingPeriod":"Monthly","productType":"SupporterPlus"},"similarProductsConsent":true,"paymentMethod":{"TokenId":"pm_0S1SrNItVxyc3Q6ntB3yRwJ9","SecondTokenId":"cus_SxNccaDzSlgCsG","CreditCardNumber":"4242","CreditCardExpirationMonth":2,"CreditCardExpirationYear":2026,"CreditCardType":"Visa","PaymentGateway":"Stripe PaymentIntents GNM Membership","Type":"CreditCardReferenceTransaction","StripePaymentType":"StripeCheckout"},"productInformation":{"amount":12,"product":"SupporterPlus","ratePlan":"Monthly"},"salesForceContact":{"Id":"0039E00001Lin87QAB","AccountId":"0019E00001ct6lUQAQ"}}},"requestInfo":{"testUser":false,"failed":false,"messages":[]}}
+
+          at handler (src/typescript/lambdas/createZuoraSubscriptionTSLambda.ts:64:11)
+
+        console.log
+          No promotion applied
+
+          at getPromotionInputFields (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/createSubscription/createSubscription.ts:79:11)
+
+        console.log
+          fetching zuora bearer token for stage: CODE
+
+          at ZuoraBearerTokenProvider.fetchZuoraBearerToken (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/auth/bearerTokenProvider.ts:43:11)
+
+        console.log
+          Mapping ZuoraError: ZuoraError: Transaction declined.402 - [card_error/card_declined/generic_decline] Your card was declined.
+              at generateZuoraError (/private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/errors/zuoraErrorHandler.ts:22:10)
+              at ZuoraClient.fetch (/private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/zuoraClient.ts:54:43)
+              at processTicksAndRejections (node:internal/process/task_queues:95:5)
+              at /private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/routing/src/logger.ts:153:20
+              ... 2 lines matching cause stack trace ...
+              at Object.<anonymous> (/private/tmp/run-1769612153865/support-workers/src/typescript/test/createZuoraSubscriptionLambda.it.test.ts:23:5) {
+            zuoraErrorDetails: [
+              {
+                code: '58560099',
+                message: 'Transaction declined.402 - [card_error/card_declined/generic_decline] Your card was declined.'
+              }
+            ],
+            code: 200,
+            [cause]: RestClientError: parsing failure
+                at ZuoraClient.fetch (/private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/restClient.ts:142:10)
+                at processTicksAndRejections (node:internal/process/task_queues:95:5)
+                ... 4 lines matching cause stack trace ...
+                at Object.<anonymous> (/private/tmp/run-1769612153865/support-workers/src/typescript/test/createZuoraSubscriptionLambda.it.test.ts:23:5) {
+              status: 200,
+              responseBody: '{\n' +
+                '  "success" : false,\n' +
+                '  "processId" : "A5A3B9AA4FAFD47A",\n' +
+                '  "reasons" : [ {\n' +
+                '    "code" : 58560099,\n' +
+                '    "message" : "Transaction declined.402 - [card_error/card_declined/generic_decline] Your card was declined."\n' +
+                '  } ],\n' +
+                '  "requestId" : "2c229786-f302-470b-a83f-a2907d771af1"\n' +
+                '}',
+              responseHeaders: {
+                connection: 'keep-alive',
+                'content-encoding': 'gzip',
+                'content-type': 'application/json; charset=utf-8',
+                date: 'Wed, 28 Jan 2026 14:56:07 GMT',
+                'permissions-policy': 'camera=(), microphone=(self)',
+                'ratelimit-limit': '50000, 50000;w=60, 2250000;w=3600, 27000000;w=86400',
+                'ratelimit-remaining': '49999',
+                'ratelimit-reset': '60',
+                'referrer-policy': 'strict-origin-when-cross-origin',
+                'strict-transport-security': 'max-age=31536000; includeSubDomains',
+                'transfer-encoding': 'chunked',
+                vary: 'Accept-Encoding',
+                'zuora-request-id': '9d52ddb0-e811-4e57-bc6a-9fe794da74e1',
+                'zuora-version': '0'
+              },
+              [cause]: ZodError: [
+                {
+                  "code": "custom",
+                  "message": "Invalid input",
+                  "path": []
+                }
+              ]
+                  at Object.get error [as error] (/private/tmp/run-1769612153865/node_modules/.pnpm/zod@3.25.30/node_modules/zod/dist/cjs/v3/types.js:57:31)
+                  at ZodPipeline.parse (/private/tmp/run-1769612153865/node_modules/.pnpm/zod@3.25.30/node_modules/zod/dist/cjs/v3/types.js:132:22)
+                  at ZuoraClient.fetch (/private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/restClient.ts:140:18)
+                  at processTicksAndRejections (node:internal/process/task_queues:95:5)
+                  at ZuoraClient.fetch (/private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/zuoraClient.ts:38:11)
+                  at /private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/routing/src/logger.ts:153:20
+                  at ZuoraClient.post (/private/tmp/run-1769612153865/node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/restClient.ts:45:10)
+                  at handler (/private/tmp/run-1769612153865/support-workers/src/typescript/lambdas/createZuoraSubscriptionTSLambda.ts:117:36)
+                  at Object.<anonymous> (/private/tmp/run-1769612153865/support-workers/src/typescript/test/createZuoraSubscriptionLambda.it.test.ts:23:5) {
+                issues: [Array],
+                addIssue: [Function (anonymous)],
+                addIssues: [Function (anonymous)],
+                errors: [Array]
+              }
+            }
+          }
+
+          at asRetryError (src/typescript/errors/errorHandler.ts:21:11)
+
+        console.info
+          Input is {"state":{"requestId":"1769612167550","user":{"id":"200511982","primaryEmailAddress":"support.e2e+aPFBg6OjZ2P4YwHrhx7Yq@thegulocal.com","firstName":"support.e2e.firstName+pxkV6","lastName":"support.e2e.lastName+aE88D","billingAddress":{"lineOne":"3 Cross Street","lineTwo":"","city":"Manchester","postCode":"M1 1PW","country":"GB"},"deliveryAddress":{"lineOne":"90 York Way","lineTwo":"","city":"London","postCode":"N1 9GU","country":"GB"},"isTestUser":true},"product":{"currency":"GBP","billingPeriod":"Monthly","fulfilmentOptions":"Domestic","productType":"GuardianWeekly"},"productInformation":{"deliveryContact":{"address1":"90 York Way","address2":"","city":"London","country":"GB","firstName":"support.e2e.firstName+pxkV6","lastName":"support.e2e.lastName+aE88D","postalCode":"N1 9GU","state":null,"workEmail":"support.e2e+aPFBg6OjZ2P4YwHrhx7Yq@thegulocal.com"},"firstDeliveryDate":"2025-12-12T00:00:00.000Z","product":"GuardianWeeklyDomestic","ratePlan":"Monthly"},"analyticsInfo":{"isGiftPurchase":false,"paymentProvider":"Stripe"},"firstDeliveryDate":"2025-12-12T00:00:00.000Z","acquisitionData":{"ophanIds":{"pageviewId":"miqbsyqq97klc8ajmhyq"},"referrerAcquisitionData":{"referrerPageviewId":"","queryParameters":[],"hostname":"support.code.dev-theguardian.com","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36","ipAddress":"10.248.135.125","labels":["generic-checkout"]},"supportAbTests":[]},"similarProductsConsent":true,"productSpecificState":{"productType":"GuardianWeekly","user":{"id":"200511982","primaryEmailAddress":"support.e2e+aPFBg6OjZ2P4YwHrhx7Yq@thegulocal.com","firstName":"support.e2e.firstName+pxkV6","lastName":"support.e2e.lastName+aE88D","billingAddress":{"lineOne":"3 Cross Street","lineTwo":"","city":"Manchester","postCode":"M1 1PW","country":"GB"},"deliveryAddress":{"lineOne":"90 York Way","lineTwo":"","city":"London","postCode":"N1 9GU","country":"GB"},"isTestUser":true},"product":{"currency":"GBP","billingPeriod":"Monthly","fulfilmentOptions":"Domestic","productType":"GuardianWeekly"},"firstDeliveryDate":"2025-12-12T00:00:00.000Z","similarProductsConsent":true,"paymentMethod":{"TokenId":"pm_0SaKZ0ItVxyc3Q6n2BPnBvSw","SecondTokenId":"cus_TXPNzY1889IAYB","CreditCardNumber":"4242","CreditCardExpirationMonth":1,"CreditCardExpirationYear":2050,"CreditCardType":"Visa","PaymentGateway":"Stripe PaymentIntents GNM Membership","Type":"CreditCardReferenceTransaction","StripePaymentType":"StripeCheckout"},"productInformation":{"deliveryContact":{"address1":"90 York Way","address2":"","city":"London","country":"GB","firstName":"support.e2e.firstName+pxkV6","lastName":"support.e2e.lastName+aE88D","postalCode":"N1 9GU","state":null,"workEmail":"support.e2e+aPFBg6OjZ2P4YwHrhx7Yq@thegulocal.com"},"firstDeliveryDate":"2026-02-02T14:56:07.550Z","product":"GuardianWeeklyDomestic","ratePlan":"Monthly"},"salesForceContact":{"Id":"003UD00000r97HIYAY","AccountId":"001UD00000QMLC4YAP"}}},"requestInfo":{"testUser":true,"failed":false,"messages":[]}}
+
+          at handler (src/typescript/lambdas/createZuoraSubscriptionTSLambda.ts:64:11)
+
+        console.log
+          No promotion applied
+
+          at getPromotionInputFields (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/createSubscription/createSubscription.ts:79:11)
+
+        console.log
+          fetching zuora bearer token for stage: CODE
+
+          at ZuoraBearerTokenProvider.fetchZuoraBearerToken (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/auth/bearerTokenProvider.ts:43:11)
+
+        console.log
+          No promotion applied
+
+          at getPromotionInputFields (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/createSubscription/createSubscription.ts:79:11)
+
+        console.info
+          Input is {"state":{"requestId":"1769612170457","user":{"id":"200512858","primaryEmailAddress":"support.e2e+9AAdSvcbKHKdIekO8-5yi@thegulocal.com","firstName":"support.e2e.firstName+7Vyhd","lastName":"support.e2e.lastName+VrVYE","billingAddress":{"country":"DE"},"isTestUser":true},"product":{"currency":"EUR","billingPeriod":"Annual","productType":"DigitalPack"},"productInformation":{"product":"DigitalSubscription","ratePlan":"Annual"},"analyticsInfo":{"isGiftPurchase":false,"paymentProvider":"Stripe"},"acquisitionData":{"ophanIds":{"pageviewId":"mix761vql8qao8a24mfs"},"referrerAcquisitionData":{"referrerPageviewId":"","queryParameters":[],"hostname":"support.code.dev-theguardian.com","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36","ipAddress":"10.248.135.10","labels":["generic-checkout"]},"supportAbTests":[{"name":"LP_TICKER","variant":"CONTROL"}]},"similarProductsConsent":true,"productSpecificState":{"productType":"DigitalSubscription","billingCountry":"GB","product":{"currency":"EUR","billingPeriod":"Annual","productType":"DigitalPack"},"similarProductsConsent":true,"paymentMethod":{"TokenId":"pm_0Sc4eEItVxyc3Q6n2DBHkSOQ","SecondTokenId":"cus_TZD4FrVytKeFLB","CreditCardNumber":"4242","CreditCardExpirationMonth":1,"CreditCardExpirationYear":2050,"CreditCardType":"Visa","PaymentGateway":"Stripe PaymentIntents GNM Membership","Type":"CreditCardReferenceTransaction","StripePaymentType":"StripeCheckout"},"productInformation":{"product":"DigitalSubscription","ratePlan":"Annual"},"salesForceContact":{"Id":"003UD00000rUFEgYAO","AccountId":"001UD00000QWOGkYAP"}}},"requestInfo":{"testUser":true,"failed":false,"messages":[]}}
+
+          at handler (src/typescript/lambdas/createZuoraSubscriptionTSLambda.ts:64:11)
+
+        console.log
+          No promotion applied
+
+          at getPromotionInputFields (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/createSubscription/createSubscription.ts:79:11)
+
+        console.log
+          No promotion applied
+
+          at getPromotionInputFields (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/createSubscription/createSubscription.ts:79:11)
+
+        console.info
+          Input is {"state":{"requestId":"1769612172622","user":{"id":"200610906","primaryEmailAddress":"test.user+u237mfsh4lsp8itcbua@guardian.co.uk","firstName":"test3","lastName":"test3","billingAddress":{"lineOne":"90 York Way","lineTwo":"","city":"London","postCode":"N1 9GU","country":"GB"},"deliveryAddress":{"lineOne":"90 York Way","lineTwo":"","city":"London","postCode":"N1 9GU","country":"GB"},"isTestUser":true},"product":{"currency":"GBP","billingPeriod":"Monthly","fulfilmentOptions":"Collection","productOptions":"SixdayPlus","productType":"Paper"},"productInformation":{"deliveryContact":{"address1":"90 York Way","address2":"","city":"London","country":"GB","firstName":"test3","lastName":"test3","postalCode":"N1 9GU","state":null,"workEmail":"test.user+u237mfsh4lsp8itcbua@guardian.co.uk"},"firstDeliveryDate":"2026-01-12T00:00:00.000Z","product":"SubscriptionCard","ratePlan":"SixdayPlus"},"analyticsInfo":{"isGiftPurchase":false,"paymentProvider":"Stripe"},"firstDeliveryDate":"2026-01-12T00:00:00.000Z","acquisitionData":{"ophanIds":{"pageviewId":"mjwpgign18o5qhzpoiou"},"referrerAcquisitionData":{"referrerPageviewId":"","queryParameters":[],"hostname":"support.code.dev-theguardian.com","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36","ipAddress":"10.248.135.153","labels":["generic-checkout"]},"supportAbTests":[{"name":"abandonedBasket","variant":"control"},{"name":"paypalCompletePaymentsWithBAID","variant":"variant"},{"name":"landingPageMparticlePastContributor","variant":"variant"},{"name":"LP_COUNTDOWN","variant":"V1"}]},"similarProductsConsent":true,"productSpecificState":{"productType":"Paper","user":{"id":"200610906","primaryEmailAddress":"test.user+u237mfsh4lsp8itcbua@guardian.co.uk","firstName":"test3","lastName":"test3","billingAddress":{"lineOne":"90 York Way","lineTwo":"","city":"London","postCode":"N1 9GU","country":"GB"},"deliveryAddress":{"lineOne":"90 York Way","lineTwo":"","city":"London","postCode":"N1 9GU","country":"GB"},"isTestUser":true},"product":{"currency":"GBP","billingPeriod":"Monthly","fulfilmentOptions":"Collection","productOptions":"SixdayPlus","productType":"Paper"},"firstDeliveryDate":"2026-01-12T00:00:00.000Z","similarProductsConsent":true,"paymentMethod":{"TokenId":"pm_0Sl5COItVxyc3Q6ndEOykOeX","SecondTokenId":"cus_TiWECwfrzXVqOM","CreditCardNumber":"4242","CreditCardExpirationMonth":1,"CreditCardExpirationYear":2050,"CreditCardType":"Visa","PaymentGateway":"Stripe PaymentIntents GNM Membership","Type":"CreditCardReferenceTransaction","StripePaymentType":"StripeCheckout"},"productInformation":{"deliveryContact":{"address1":"90 York Way","address2":"","city":"London","country":"GB","firstName":"test3","lastName":"test3","postalCode":"N1 9GU","state":null,"workEmail":"test.user+u237mfsh4lsp8itcbua@guardian.co.uk"},"firstDeliveryDate":"2026-02-02T14:56:12.622Z","product":"SubscriptionCard","ratePlan":"SixdayPlus"},"salesForceContact":{"Id":"003UD00000tbDXPYA2","AccountId":"001UD00000RLuA2YAL"}}},"requestInfo":{"testUser":true,"failed":false,"messages":[]}}
+
+          at handler (src/typescript/lambdas/createZuoraSubscriptionTSLambda.ts:64:11)
+
+        console.log
+          No promotion applied
+
+          at getPromotionInputFields (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/createSubscription/createSubscription.ts:79:11)
+
+        console.log
+          No promotion applied
+
+          at getPromotionInputFields (../node_modules/.pnpm/@guardian+support-service-lambdas@https+++codeload.github.com+guardian+support-service-_c31ce1de1ea706ac5c7890f08ecee239/node_modules/@guardian/support-service-lambdas/modules/zuora/src/createSubscription/createSubscription.ts:79:11)
+
+
+    Test Suites: 7 passed, 7 of 24 total
+    Tests:       27 passed, 27 total
+    Snapshots:   0 total
+    Time:        10.93 s
+    Ran all test suites.
+    [previewCreateSubscription.ts:94::previewCreateSubscription] TRACE HTTP ZuoraClient EXIT SHORT_ARGS
+    path: /v1/orders/preview
+    method: POST
+    RESULT
+    {
+      success: true,
+      previewResult: {
+        invoices: [
+          {
+            amount: 805.87,
+            amountWithoutTax: 805.87,
+            taxAmount: 0,
+            targetDate: "2027-02-28T00:00:00.000Z",
+            invoiceItems: [
+              {
+                serviceStartDate: "2026-02-02T00:00:00.000Z",
+                serviceEndDate: "2026-03-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Wednesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2a528e2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-03-02T00:00:00.000Z",
+                serviceEndDate: "2026-04-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Wednesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2a528e2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-04-02T00:00:00.000Z",
+                serviceEndDate: "2026-05-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Wednesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2a528e2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-05-02T00:00:00.000Z",
+                serviceEndDate: "2026-06-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Wednesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2a528e2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-06-02T00:00:00.000Z",
+                serviceEndDate: "2026-07-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Wednesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2a528e2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-07-02T00:00:00.000Z",
+                serviceEndDate: "2026-08-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Wednesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2a528e2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-08-02T00:00:00.000Z",
+                serviceEndDate: "2026-09-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Wednesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2a528e2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-09-02T00:00:00.000Z",
+                serviceEndDate: "2026-10-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Wednesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2a528e2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-10-02T00:00:00.000Z",
+                serviceEndDate: "2026-11-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Wednesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2a528e2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-11-02T00:00:00.000Z",
+                serviceEndDate: "2026-12-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Wednesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2a528e2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-12-02T00:00:00.000Z",
+                serviceEndDate: "2027-01-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Wednesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2a528e2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2027-01-02T00:00:00.000Z",
+                serviceEndDate: "2027-02-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Wednesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2a528e2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2027-02-02T00:00:00.000Z",
+                serviceEndDate: "2027-03-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Wednesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2a528e2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-02-02T00:00:00.000Z",
+                serviceEndDate: "2026-03-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Friday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea1ce28ca",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-03-02T00:00:00.000Z",
+                serviceEndDate: "2026-04-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Friday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea1ce28ca",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-04-02T00:00:00.000Z",
+                serviceEndDate: "2026-05-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Friday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea1ce28ca",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-05-02T00:00:00.000Z",
+                serviceEndDate: "2026-06-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Friday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea1ce28ca",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-06-02T00:00:00.000Z",
+                serviceEndDate: "2026-07-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Friday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea1ce28ca",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-07-02T00:00:00.000Z",
+                serviceEndDate: "2026-08-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Friday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea1ce28ca",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-08-02T00:00:00.000Z",
+                serviceEndDate: "2026-09-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Friday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea1ce28ca",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-09-02T00:00:00.000Z",
+                serviceEndDate: "2026-10-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Friday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea1ce28ca",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-10-02T00:00:00.000Z",
+                serviceEndDate: "2026-11-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Friday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea1ce28ca",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-11-02T00:00:00.000Z",
+                serviceEndDate: "2026-12-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Friday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea1ce28ca",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-12-02T00:00:00.000Z",
+                serviceEndDate: "2027-01-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Friday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea1ce28ca",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2027-01-02T00:00:00.000Z",
+                serviceEndDate: "2027-02-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Friday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea1ce28ca",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2027-02-02T00:00:00.000Z",
+                serviceEndDate: "2027-03-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Friday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea1ce28ca",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-02-02T00:00:00.000Z",
+                serviceEndDate: "2026-03-01T00:00:00.000Z",
+                amountWithoutTax: 11.01,
+                taxAmount: 0,
+                chargeName: "Saturday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea21028d2",
+                unitPrice: 11.01
+              },
+              {
+                serviceStartDate: "2026-03-02T00:00:00.000Z",
+                serviceEndDate: "2026-04-01T00:00:00.000Z",
+                amountWithoutTax: 11.01,
+                taxAmount: 0,
+                chargeName: "Saturday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea21028d2",
+                unitPrice: 11.01
+              },
+              {
+                serviceStartDate: "2026-04-02T00:00:00.000Z",
+                serviceEndDate: "2026-05-01T00:00:00.000Z",
+                amountWithoutTax: 11.01,
+                taxAmount: 0,
+                chargeName: "Saturday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea21028d2",
+                unitPrice: 11.01
+              },
+              {
+                serviceStartDate: "2026-05-02T00:00:00.000Z",
+                serviceEndDate: "2026-06-01T00:00:00.000Z",
+                amountWithoutTax: 11.01,
+                taxAmount: 0,
+                chargeName: "Saturday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea21028d2",
+                unitPrice: 11.01
+              },
+              {
+                serviceStartDate: "2026-06-02T00:00:00.000Z",
+                serviceEndDate: "2026-07-01T00:00:00.000Z",
+                amountWithoutTax: 11.01,
+                taxAmount: 0,
+                chargeName: "Saturday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea21028d2",
+                unitPrice: 11.01
+              },
+              {
+                serviceStartDate: "2026-07-02T00:00:00.000Z",
+                serviceEndDate: "2026-08-01T00:00:00.000Z",
+                amountWithoutTax: 11.01,
+                taxAmount: 0,
+                chargeName: "Saturday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea21028d2",
+                unitPrice: 11.01
+              },
+              {
+                serviceStartDate: "2026-08-02T00:00:00.000Z",
+                serviceEndDate: "2026-09-01T00:00:00.000Z",
+                amountWithoutTax: 11.01,
+                taxAmount: 0,
+                chargeName: "Saturday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea21028d2",
+                unitPrice: 11.01
+              },
+              {
+                serviceStartDate: "2026-09-02T00:00:00.000Z",
+                serviceEndDate: "2026-10-01T00:00:00.000Z",
+                amountWithoutTax: 11.01,
+                taxAmount: 0,
+                chargeName: "Saturday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea21028d2",
+                unitPrice: 11.01
+              },
+              {
+                serviceStartDate: "2026-10-02T00:00:00.000Z",
+                serviceEndDate: "2026-11-01T00:00:00.000Z",
+                amountWithoutTax: 11.01,
+                taxAmount: 0,
+                chargeName: "Saturday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea21028d2",
+                unitPrice: 11.01
+              },
+              {
+                serviceStartDate: "2026-11-02T00:00:00.000Z",
+                serviceEndDate: "2026-12-01T00:00:00.000Z",
+                amountWithoutTax: 11.01,
+                taxAmount: 0,
+                chargeName: "Saturday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea21028d2",
+                unitPrice: 11.01
+              },
+              {
+                serviceStartDate: "2026-12-02T00:00:00.000Z",
+                serviceEndDate: "2027-01-01T00:00:00.000Z",
+                amountWithoutTax: 11.01,
+                taxAmount: 0,
+                chargeName: "Saturday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea21028d2",
+                unitPrice: 11.01
+              },
+              {
+                serviceStartDate: "2027-01-02T00:00:00.000Z",
+                serviceEndDate: "2027-02-01T00:00:00.000Z",
+                amountWithoutTax: 11.01,
+                taxAmount: 0,
+                chargeName: "Saturday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea21028d2",
+                unitPrice: 11.01
+              },
+              {
+                serviceStartDate: "2027-02-02T00:00:00.000Z",
+                serviceEndDate: "2027-03-01T00:00:00.000Z",
+                amountWithoutTax: 11.01,
+                taxAmount: 0,
+                chargeName: "Saturday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea21028d2",
+                unitPrice: 11.01
+              },
+              {
+                serviceStartDate: "2026-02-02T00:00:00.000Z",
+                serviceEndDate: "2026-03-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Thursday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea25928da",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-03-02T00:00:00.000Z",
+                serviceEndDate: "2026-04-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Thursday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea25928da",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-04-02T00:00:00.000Z",
+                serviceEndDate: "2026-05-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Thursday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea25928da",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-05-02T00:00:00.000Z",
+                serviceEndDate: "2026-06-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Thursday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea25928da",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-06-02T00:00:00.000Z",
+                serviceEndDate: "2026-07-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Thursday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea25928da",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-07-02T00:00:00.000Z",
+                serviceEndDate: "2026-08-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Thursday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea25928da",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-08-02T00:00:00.000Z",
+                serviceEndDate: "2026-09-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Thursday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea25928da",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-09-02T00:00:00.000Z",
+                serviceEndDate: "2026-10-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Thursday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea25928da",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-10-02T00:00:00.000Z",
+                serviceEndDate: "2026-11-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Thursday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea25928da",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-11-02T00:00:00.000Z",
+                serviceEndDate: "2026-12-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Thursday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea25928da",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-12-02T00:00:00.000Z",
+                serviceEndDate: "2027-01-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Thursday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea25928da",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2027-01-02T00:00:00.000Z",
+                serviceEndDate: "2027-02-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Thursday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea25928da",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2027-02-02T00:00:00.000Z",
+                serviceEndDate: "2027-03-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Thursday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea25928da",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-02-02T00:00:00.000Z",
+                serviceEndDate: "2026-03-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Monday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea34528f2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-03-02T00:00:00.000Z",
+                serviceEndDate: "2026-04-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Monday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea34528f2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-04-02T00:00:00.000Z",
+                serviceEndDate: "2026-05-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Monday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea34528f2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-05-02T00:00:00.000Z",
+                serviceEndDate: "2026-06-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Monday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea34528f2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-06-02T00:00:00.000Z",
+                serviceEndDate: "2026-07-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Monday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea34528f2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-07-02T00:00:00.000Z",
+                serviceEndDate: "2026-08-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Monday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea34528f2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-08-02T00:00:00.000Z",
+                serviceEndDate: "2026-09-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Monday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea34528f2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-09-02T00:00:00.000Z",
+                serviceEndDate: "2026-10-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Monday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea34528f2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-10-02T00:00:00.000Z",
+                serviceEndDate: "2026-11-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Monday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea34528f2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-11-02T00:00:00.000Z",
+                serviceEndDate: "2026-12-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Monday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea34528f2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-12-02T00:00:00.000Z",
+                serviceEndDate: "2027-01-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Monday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea34528f2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2027-01-02T00:00:00.000Z",
+                serviceEndDate: "2027-02-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Monday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea34528f2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2027-02-02T00:00:00.000Z",
+                serviceEndDate: "2027-03-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Monday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea34528f2",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-02-02T00:00:00.000Z",
+                serviceEndDate: "2026-03-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Tuesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2f528ea",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-03-02T00:00:00.000Z",
+                serviceEndDate: "2026-04-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Tuesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2f528ea",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-04-02T00:00:00.000Z",
+                serviceEndDate: "2026-05-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Tuesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2f528ea",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-05-02T00:00:00.000Z",
+                serviceEndDate: "2026-06-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Tuesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2f528ea",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-06-02T00:00:00.000Z",
+                serviceEndDate: "2026-07-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Tuesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2f528ea",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-07-02T00:00:00.000Z",
+                serviceEndDate: "2026-08-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Tuesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2f528ea",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-08-02T00:00:00.000Z",
+                serviceEndDate: "2026-09-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Tuesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2f528ea",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-09-02T00:00:00.000Z",
+                serviceEndDate: "2026-10-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Tuesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2f528ea",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-10-02T00:00:00.000Z",
+                serviceEndDate: "2026-11-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Tuesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2f528ea",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-11-02T00:00:00.000Z",
+                serviceEndDate: "2026-12-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Tuesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2f528ea",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-12-02T00:00:00.000Z",
+                serviceEndDate: "2027-01-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Tuesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2f528ea",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2027-01-02T00:00:00.000Z",
+                serviceEndDate: "2027-02-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Tuesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2f528ea",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2027-02-02T00:00:00.000Z",
+                serviceEndDate: "2027-03-01T00:00:00.000Z",
+                amountWithoutTax: 8.39,
+                taxAmount: 0,
+                chargeName: "Tuesday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea2f528ea",
+                unitPrice: 8.39
+              },
+              {
+                serviceStartDate: "2026-02-02T00:00:00.000Z",
+                serviceEndDate: "2026-03-01T00:00:00.000Z",
+                amountWithoutTax: 0,
+                taxAmount: 0,
+                chargeName: "Sunday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea39a28fc",
+                unitPrice: 0
+              },
+              {
+                serviceStartDate: "2026-03-02T00:00:00.000Z",
+                serviceEndDate: "2026-04-01T00:00:00.000Z",
+                amountWithoutTax: 0,
+                taxAmount: 0,
+                chargeName: "Sunday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea39a28fc",
+                unitPrice: 0
+              },
+              {
+                serviceStartDate: "2026-04-02T00:00:00.000Z",
+                serviceEndDate: "2026-05-01T00:00:00.000Z",
+                amountWithoutTax: 0,
+                taxAmount: 0,
+                chargeName: "Sunday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea39a28fc",
+                unitPrice: 0
+              },
+              {
+                serviceStartDate: "2026-05-02T00:00:00.000Z",
+                serviceEndDate: "2026-06-01T00:00:00.000Z",
+                amountWithoutTax: 0,
+                taxAmount: 0,
+                chargeName: "Sunday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea39a28fc",
+                unitPrice: 0
+              },
+              {
+                serviceStartDate: "2026-06-02T00:00:00.000Z",
+                serviceEndDate: "2026-07-01T00:00:00.000Z",
+                amountWithoutTax: 0,
+                taxAmount: 0,
+                chargeName: "Sunday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea39a28fc",
+                unitPrice: 0
+              },
+              {
+                serviceStartDate: "2026-07-02T00:00:00.000Z",
+                serviceEndDate: "2026-08-01T00:00:00.000Z",
+                amountWithoutTax: 0,
+                taxAmount: 0,
+                chargeName: "Sunday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea39a28fc",
+                unitPrice: 0
+              },
+              {
+                serviceStartDate: "2026-08-02T00:00:00.000Z",
+                serviceEndDate: "2026-09-01T00:00:00.000Z",
+                amountWithoutTax: 0,
+                taxAmount: 0,
+                chargeName: "Sunday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea39a28fc",
+                unitPrice: 0
+              },
+              {
+                serviceStartDate: "2026-09-02T00:00:00.000Z",
+                serviceEndDate: "2026-10-01T00:00:00.000Z",
+                amountWithoutTax: 0,
+                taxAmount: 0,
+                chargeName: "Sunday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea39a28fc",
+                unitPrice: 0
+              },
+              {
+                serviceStartDate: "2026-10-02T00:00:00.000Z",
+                serviceEndDate: "2026-11-01T00:00:00.000Z",
+                amountWithoutTax: 0,
+                taxAmount: 0,
+                chargeName: "Sunday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea39a28fc",
+                unitPrice: 0
+              },
+              {
+                serviceStartDate: "2026-11-02T00:00:00.000Z",
+                serviceEndDate: "2026-12-01T00:00:00.000Z",
+                amountWithoutTax: 0,
+                taxAmount: 0,
+                chargeName: "Sunday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea39a28fc",
+                unitPrice: 0
+              },
+              {
+                serviceStartDate: "2026-12-02T00:00:00.000Z",
+                serviceEndDate: "2027-01-01T00:00:00.000Z",
+                amountWithoutTax: 0,
+                taxAmount: 0,
+                chargeName: "Sunday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea39a28fc",
+                unitPrice: 0
+              },
+              {
+                serviceStartDate: "2027-01-02T00:00:00.000Z",
+                serviceEndDate: "2027-02-01T00:00:00.000Z",
+                amountWithoutTax: 0,
+                taxAmount: 0,
+                chargeName: "Sunday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea39a28fc",
+                unitPrice: 0
+              },
+              {
+                serviceStartDate: "2027-02-02T00:00:00.000Z",
+                serviceEndDate: "2027-03-01T00:00:00.000Z",
+                amountWithoutTax: 0,
+                taxAmount: 0,
+                chargeName: "Sunday",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea39a28fc",
+                unitPrice: 0
+              },
+              {
+                serviceStartDate: "2026-02-02T00:00:00.000Z",
+                serviceEndDate: "2026-03-01T00:00:00.000Z",
+                amountWithoutTax: 9.03,
+                taxAmount: 0,
+                chargeName: "Digital Pack bolt-on",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea3ee290b",
+                unitPrice: 9.03
+              },
+              {
+                serviceStartDate: "2026-03-02T00:00:00.000Z",
+                serviceEndDate: "2026-04-01T00:00:00.000Z",
+                amountWithoutTax: 9.03,
+                taxAmount: 0,
+                chargeName: "Digital Pack bolt-on",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea3ee290b",
+                unitPrice: 9.03
+              },
+              {
+                serviceStartDate: "2026-04-02T00:00:00.000Z",
+                serviceEndDate: "2026-05-01T00:00:00.000Z",
+                amountWithoutTax: 9.03,
+                taxAmount: 0,
+                chargeName: "Digital Pack bolt-on",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea3ee290b",
+                unitPrice: 9.03
+              },
+              {
+                serviceStartDate: "2026-05-02T00:00:00.000Z",
+                serviceEndDate: "2026-06-01T00:00:00.000Z",
+                amountWithoutTax: 9.03,
+                taxAmount: 0,
+                chargeName: "Digital Pack bolt-on",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea3ee290b",
+                unitPrice: 9.03
+              },
+              {
+                serviceStartDate: "2026-06-02T00:00:00.000Z",
+                serviceEndDate: "2026-07-01T00:00:00.000Z",
+                amountWithoutTax: 9.03,
+                taxAmount: 0,
+                chargeName: "Digital Pack bolt-on",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea3ee290b",
+                unitPrice: 9.03
+              },
+              {
+                serviceStartDate: "2026-07-02T00:00:00.000Z",
+                serviceEndDate: "2026-08-01T00:00:00.000Z",
+                amountWithoutTax: 9.03,
+                taxAmount: 0,
+                chargeName: "Digital Pack bolt-on",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea3ee290b",
+                unitPrice: 9.03
+              },
+              {
+                serviceStartDate: "2026-08-02T00:00:00.000Z",
+                serviceEndDate: "2026-09-01T00:00:00.000Z",
+                amountWithoutTax: 9.03,
+                taxAmount: 0,
+                chargeName: "Digital Pack bolt-on",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea3ee290b",
+                unitPrice: 9.03
+              },
+              {
+                serviceStartDate: "2026-09-02T00:00:00.000Z",
+                serviceEndDate: "2026-10-01T00:00:00.000Z",
+                amountWithoutTax: 9.03,
+                taxAmount: 0,
+                chargeName: "Digital Pack bolt-on",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea3ee290b",
+                unitPrice: 9.03
+              },
+              {
+                serviceStartDate: "2026-10-02T00:00:00.000Z",
+                serviceEndDate: "2026-11-01T00:00:00.000Z",
+                amountWithoutTax: 9.03,
+                taxAmount: 0,
+                chargeName: "Digital Pack bolt-on",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea3ee290b",
+                unitPrice: 9.03
+              },
+              {
+                serviceStartDate: "2026-11-02T00:00:00.000Z",
+                serviceEndDate: "2026-12-01T00:00:00.000Z",
+                amountWithoutTax: 9.03,
+                taxAmount: 0,
+                chargeName: "Digital Pack bolt-on",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea3ee290b",
+                unitPrice: 9.03
+              },
+              {
+                serviceStartDate: "2026-12-02T00:00:00.000Z",
+                serviceEndDate: "2027-01-01T00:00:00.000Z",
+                amountWithoutTax: 9.03,
+                taxAmount: 0,
+                chargeName: "Digital Pack bolt-on",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea3ee290b",
+                unitPrice: 9.03
+              },
+              {
+                serviceStartDate: "2027-01-02T00:00:00.000Z",
+                serviceEndDate: "2027-02-01T00:00:00.000Z",
+                amountWithoutTax: 9.03,
+                taxAmount: 0,
+                chargeName: "Digital Pack bolt-on",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea3ee290b",
+                unitPrice: 9.03
+              },
+              {
+                serviceStartDate: "2027-02-02T00:00:00.000Z",
+                serviceEndDate: "2027-03-01T00:00:00.000Z",
+                amountWithoutTax: 9.03,
+                taxAmount: 0,
+                chargeName: "Digital Pack bolt-on",
+                productName: "Newspaper Digital Voucher",
+                productRatePlanChargeId: "2c92c0f86fa49142016fa49ea3ee290b",
+                unitPrice: 9.03
+              }
+            ]
+          }
+        ]
+      }
+    }

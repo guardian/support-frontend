@@ -13,7 +13,7 @@ ENV PATH="$PNPM_HOME:$PATH"
 # Ensure pnpm stores packages in /tmp instead of the default read-only home
 RUN pnpm config --global set store-dir /tmp/.pnpm-store
 
-COPY src/handler.js ${LAMBDA_TASK_ROOT}
+COPY src/handler.ts ${LAMBDA_TASK_ROOT}
 
 CMD [ "handler.handler" ]
 

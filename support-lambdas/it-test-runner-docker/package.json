@@ -1,0 +1,32 @@
+{
+  "name": "it-test-runner-docker",
+  "version": "1.0.0",
+  "description": "Lambda for running IT tests on a schedule",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "bundle": "node esbuild.config.mjs",
+    "test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest",
+    "clean": "rm -rf dist target",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint --fix src/**/*.ts",
+    "check-formatting": "prettier --check src/**/*.ts",
+    "fix-formatting": "prettier --write src/**/*.ts",
+    "package": "./package.sh"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cloudwatch": "catalog:",
+    "@aws-sdk/credential-provider-node": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/jest": "catalog:",
+    "@guardian/prettier": "catalog:",
+    "esbuild": "catalog:",
+    "typescript": "catalog:",
+    "jest": "catalog:",
+    "prettier": "catalog:",
+    "ts-jest": "catalog:"
+  },
+  "private": true
+}
