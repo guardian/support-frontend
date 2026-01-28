@@ -18,12 +18,12 @@ exports.handler = async (event) => {
     execSync('pnpm install --frozen-lockfile', { stdio: 'inherit' });
 
     console.log("Running tests...");
-    const result = execSync('pnpm --filter support-workers run it-test', {
-        stdio: 'pipe',
+    execSync('pnpm --filter support-workers run it-test', {
+        stdio: 'inherit',
         env: { ...process.env, CI: 'true' }
-    }).toString();
+    });
 
-    return { success: true, output: result };
+    return { success: true };
   } catch (error) {
     console.error(error);
     return { success: false, error: error.message, output: error.stdout?.toString() };

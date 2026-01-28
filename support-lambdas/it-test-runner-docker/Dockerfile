@@ -1,7 +1,7 @@
 FROM public.ecr.aws/lambda/nodejs:20
 
-# Install git for checkout
-RUN yum install -y git
+# Install git for checkout (AL2023 uses dnf)
+RUN dnf install -y git
 
 # Enable pnpm via corepack
 RUN corepack enable && corepack prepare pnpm@latest --activate
@@ -16,3 +16,4 @@ RUN pnpm config --global set store-dir /tmp/.pnpm-store
 COPY handler.js ${LAMBDA_TASK_ROOT}
 
 CMD [ "handler.handler" ]
+
