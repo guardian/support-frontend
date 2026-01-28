@@ -21,6 +21,18 @@ GET  /*path/                                                       controllers.A
 
 GET /sitemap.xml                                                   controllers.SiteMap.sitemap()
 
+
+# ----- Geo landings ----- #
+GET /us                                                            controllers.Application.redirect(location="/us/contribute")
+GET /au                                                            controllers.Application.redirect(location="/au/contribute")
+GET /eu                                                            controllers.Application.redirect(location="/eu/contribute")
+GET /int                                                           controllers.Application.redirect(location="/int/contribute")
+GET /nz                                                            controllers.Application.redirect(location="/nz/contribute")
+GET /ca                                                            controllers.Application.redirect(location="/ca/contribute")
+GET /uk                                                            controllers.Application.redirect(location="/uk/support")
+GET /                                                              controllers.Application.geoRedirect()
+
+
 # ----- Contributions ----- #
 
 # Contribution checkout redirect => checkout 👇
