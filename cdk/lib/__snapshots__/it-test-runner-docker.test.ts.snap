@@ -28,7 +28,7 @@ exports[`IT Test Runner Docker stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::URLSuffix",
                 },
-                "/aws-cdk/assets:2fa88b5708ed771427bffd3f5cb4e8ba062a9029a9348846651eff7aacf34c19",
+                "/aws-cdk/assets:286ef12aea9d94dca7fc25b5e36356f6028dca1e9c3fb6124582c4bc815f0ace",
               ],
             ],
           },
