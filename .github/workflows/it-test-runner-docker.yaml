@@ -34,7 +34,7 @@ jobs:
           role-to-assume: ${{ secrets.IT_TEST_RUNNER_ECR_ROLE_ARN }}
           aws-region: eu-west-1
 
-      - run: pnpm --filter it-test-runner-docker build
+      - run: pnpm --filter it-test-runner-docker bundle
 
       - name: Login to Amazon ECR
         id: login-ecr
