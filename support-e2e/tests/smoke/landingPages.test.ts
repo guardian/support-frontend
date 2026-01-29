@@ -102,6 +102,7 @@ test.describe('Contributions landing page', () => {
 		await expect(
 			page.locator('id=supporter-plus-landing-page-uk'),
 		).toBeVisible();
+		// assert that there are three sections under the tabpanel (Support, Supporter Plus, Digital Plus)
 		const tabpanel = page.getByRole('tabpanel');
 		expect(await tabpanel.locator(':scope > section').count()).toBe(3);
 	});
