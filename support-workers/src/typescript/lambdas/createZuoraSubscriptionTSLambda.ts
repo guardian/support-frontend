@@ -242,19 +242,19 @@ export const buildOutputState = (
 		error: wrappedState.error,
 	};
 };
-const buildSendThankYouEmailState = (
+export const buildSendThankYouEmailState = (
 	state: CreateZuoraSubscriptionState,
 	createZuoraSubscriptionResult: CreateSubscriptionResponse,
 	paymentSchedule: PaymentSchedule,
 	subscriptionNumber: string,
 ): SendThankYouEmailState => {
-	const { similarProductsConsent, firstDeliveryDate } = {
-		similarProductsConsent: undefined,
-		firstDeliveryDate: undefined,
-		...state.productSpecificState.productInformation,
-	};
+	const firstDeliveryDate =
+		'firstDeliveryDate' in state.productSpecificState.productInformation
+			? state.productSpecificState.productInformation.firstDeliveryDate
+			: undefined;
 
-	const { giftRecipient, appliedPromotion } = {
+	const { similarProductsConsent, giftRecipient, appliedPromotion } = {
+		similarProductsConsent: undefined,
 		giftRecipient: undefined,
 		appliedPromotion: undefined,
 		...state.productSpecificState,
@@ -264,8 +264,7 @@ const buildSendThankYouEmailState = (
 		productType: state.productSpecificState.productType,
 		user: state.user,
 		product: state.product,
-		productInformation:
-			state.productSpecificState.productInformation ?? undefined,
+		productInformation: state.productSpecificState.productInformation,
 		paymentMethod: state.productSpecificState.paymentMethod,
 		accountNumber: createZuoraSubscriptionResult.accountNumber,
 		subscriptionNumber: subscriptionNumber,
