@@ -1,0 +1,19 @@
+stacks: [support]
+regions: [eu-west-1]
+
+deployments:
+  it-test-runner-docker:
+    type: aws-lambda
+    parameters:
+      functionNames: [  it-test-runner-docker-]
+      fileName: index.zip
+      prefixStack: false
+    dependencies: [ cfn ]
+  cfn:
+    type: cloud-formation
+    app: it-test-runner-docker
+    parameters:
+      templateStagePaths:
+        CODE: ItTestRunnerDocker-CODE.template.json
+        PROD: ItTestRunnerDocker-PROD.template.json
+      prependStackToCloudFormationStackName: false
