@@ -292,10 +292,6 @@ class Application(
       .mkString("/")
   }
 
-  def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
-    RedirectWithEncodedQueryString(location, request.queryString, status = FOUND)
-  }
-
   def permanentRedirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
     RedirectWithEncodedQueryString(location, request.queryString, status = MOVED_PERMANENTLY)
   }

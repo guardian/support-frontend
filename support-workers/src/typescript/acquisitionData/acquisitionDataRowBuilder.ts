@@ -104,7 +104,7 @@ export type AcquisitionDataRow = {
 	postalCode?: string;
 	state?: string;
 	email?: string;
-	similarProductsConsent?: boolean;
+	similarProductsConsent: boolean | null;
 	paypalTransactionId?: string;
 };
 
@@ -155,8 +155,8 @@ export function buildFromState(
 		email: sendThankYouEmailState.user.primaryEmailAddress,
 		similarProductsConsent:
 			sendThankYouEmailState.productType !== 'GuardianAdLite' // The Guardian Ad-Lite checkout doesn't ask for the similar products consent
-				? sendThankYouEmailState.similarProductsConsent
-				: false,
+				? sendThankYouEmailState.similarProductsConsent ?? null
+				: null,
 		// For now always leave this as undefined, even for PayPal transactions. We do set this for single PayPal
 		// contributions. In future we can figure out whether it's worth finding the equivalent for a recurring PayPal
 		// payment and wire this in, but it's currently not needed.
