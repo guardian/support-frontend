@@ -65,9 +65,8 @@ jobs:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
           projectName: "support:lambdas:it-test-runner-docker"
-          buildNumberOffset: 15000
-          configPath: "cdk/cdk.out/riff-raff.yaml"
+          configPath: "support-lambdas/it-test-runner-docker/riff-raff.yaml"
           commentingEnabled: "false"
           contentDirectories: |
-            it-test-runner-docker-cfn:
+            cfn:
               - ./cdk/cdk.out
