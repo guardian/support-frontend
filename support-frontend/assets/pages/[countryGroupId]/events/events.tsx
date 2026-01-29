@@ -49,16 +49,11 @@ const narrowBoxMarginAndPadding = css`
 		margin-bottom: ${space[4]}px;
 	}
 
-	> div {
-		padding: 0;
-	}
-
-	// Ticket Tailor widget itself contains a margin & border
-	// not accessible directly (class:box-color-background)
-	// We can reduce its container box to hide
-	// the margin & border
-	> div div div {
-		margin: -2px -2px -8px -2px;
+	// From tablet, slightly offset the spacing added by the Ticket Tailor widget itself.
+	${from.tablet} {
+		> div div div {
+			margin: -8px;
+		}
 	}
 `;
 

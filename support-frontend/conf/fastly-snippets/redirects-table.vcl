@@ -9,7 +9,6 @@ table support_frontend_redirects {
   "/nz/support": "/nz/contribute",
   "/ca/support": "/ca/contribute",
   "/showcase": "/contribute",
-  "/": "/contribute",
   "/us": "/us/contribute",
   "/uk": "/uk/contribute",
   "/au": "/au/contribute",
@@ -57,6 +56,11 @@ table support_frontend_redirects {
   "/int/subscribe": "/int/subscribe/weekly",
   "/nz/subscribe": "/nz/subscribe/weekly",
   "/ca/subscribe": "/ca/subscribe/weekly",
+  "/us/guardian-ad-lite": "/us/contribute",
+  "/au/guardian-ad-lite": "/au/contribute",
+  "/int/guardian-ad-lite": "/int/contribute",
+  "/nz/guardian-ad-lite": "/nz/contribute",
+  "/ca/guardian-ad-lite": "/ca/contribute",
 
   # paper
   "/paper": "/uk/subscribe/paper",
