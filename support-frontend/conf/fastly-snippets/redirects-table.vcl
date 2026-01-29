@@ -9,7 +9,6 @@ table support_frontend_redirects {
   "/nz/support": "/nz/contribute",
   "/ca/support": "/ca/contribute",
   "/showcase": "/contribute",
-  "/": "/contribute",
   "/us": "/us/contribute",
   "/uk": "/uk/contribute",
   "/au": "/au/contribute",
