@@ -153,10 +153,10 @@ export function buildFromState(
 		platform: SUPPORT,
 		state: sendThankYouEmailState.user.billingAddress.state,
 		email: sendThankYouEmailState.user.primaryEmailAddress,
+		// Pass null rather than undefined for interoperability with the soft-opt-in-consent-setter lambda
 		similarProductsConsent:
-			sendThankYouEmailState.productType !== 'GuardianAdLite' // The Guardian Ad-Lite checkout doesn't ask for the similar products consent
-				? sendThankYouEmailState.similarProductsConsent ?? null
-				: null,
+			sendThankYouEmailState.similarProductsConsent ?? null,
+
 		// For now always leave this as undefined, even for PayPal transactions. We do set this for single PayPal
 		// contributions. In future we can figure out whether it's worth finding the equivalent for a recurring PayPal
 		// payment and wire this in, but it's currently not needed.
