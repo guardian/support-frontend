@@ -2,9 +2,9 @@ import {
 	EventBridgeClient,
 	PutEventsCommand,
 } from '@aws-sdk/client-eventbridge';
+import { awsConfig } from '@modules/aws/config';
 import type { AcquisitionDataRow } from '../acquisitionData/acquisitionDataRowBuilder';
 import type { Stage } from '../model/stage';
-import { awsConfig } from '../util/awsConfig';
 
 export class AcquisitionEventBusService {
 	constructor(stage: Stage) {

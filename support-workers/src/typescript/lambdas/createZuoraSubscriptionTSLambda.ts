@@ -61,8 +61,6 @@ export const handler = async (
 	state: WrappedState<CreateZuoraSubscriptionState>,
 ) => {
 	try {
-		console.info(`Input is ${JSON.stringify(state)}`);
-
 		const createZuoraSubscriptionState = state.state;
 		const productSpecificState =
 			createZuoraSubscriptionState.productSpecificState;
