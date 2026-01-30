@@ -533,37 +533,6 @@ class Application(
     }
   }
 
-  def redirectContributionsCheckout(countryGroupId: String) = MaybeAuthenticatedAction { implicit request =>
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
-
-    val isTestUser = testUserService.isTestUser(request)
-    val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
-
-    val (product, ratePlan, maybeSelectedAmount) =
-      getProductParamsFromContributionParams(countryGroupId, productCatalog, request.queryString)
-
-    val qsWithoutTypeAndAmount = request.queryString - "selected-contribution-type" - "selected-amount"
-
-    if (product == "OneOff") {
-      val queryStringMaybeWithContributionAmount = maybeSelectedAmount
-        .map(selectedAmount => qsWithoutTypeAndAmount + ("contribution" -> Seq(selectedAmount.toString)))
-        .getOrElse(qsWithoutTypeAndAmount)
-
-      Redirect(s"/$countryGroupId/one-time-checkout", queryStringMaybeWithContributionAmount, MOVED_PERMANENTLY)
-    } else {
-      val queryString = qsWithoutTypeAndAmount ++ Map(
-        "product" -> Seq(product),
-        "ratePlan" -> Seq(ratePlan),
-      )
-
-      val queryStringMaybeWithContributionAmount = maybeSelectedAmount
-        .map(selectedAmount => queryString + ("contribution" -> Seq(selectedAmount.toString)))
-        .getOrElse(queryString)
-
-      Redirect(s"/$countryGroupId/checkout", queryStringMaybeWithContributionAmount, MOVED_PERMANENTLY)
-    }
-  }
-
   def redirectContributionsCheckoutDigital(countryGroupId: String) = {
     redirectToCheckout(countryGroupId, "DigitalSubscription", "Monthly")
   }
