@@ -1,4 +1,4 @@
-name: Build support-workers
+name: Build support-workers integration tests
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ env:
   GU_SUPPORT_WORKERS_LOAD_S3_CONFIG: false
 
 jobs:
-  support_workers_build:
+  support_workers_it_tests:
     if: >-
       (github.actor != 'dependabot[bot]') &&
         (github.repository_owner == 'guardian' ||
@@ -21,7 +21,7 @@ jobs:
       contents: read
       pull-requests: write
 
-    name: support-workers build
+    name: support-workers integration tests
     runs-on: ubuntu-latest
     steps:
       - name: Env
@@ -39,6 +39,6 @@ jobs:
           role-to-assume: ${{ secrets.CREATE_ZUORA_SUBSCRIPTION_ROLE }}
           aws-region: eu-west-1
 
-      - name: Build TypeScript lambdas
+      - name: Run integration tests
         run: pnpm --filter support-workers it-test:create-zuora
 
