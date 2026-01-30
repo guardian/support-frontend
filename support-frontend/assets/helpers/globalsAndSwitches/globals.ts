@@ -27,6 +27,27 @@ function getGlobal<T>(path = ''): T | null {
 	return null;
 }
 
+function getLocal<T>(path = ''): T | null {
+	try {
+		const localSwitches = sessionStorage.getItem('switches');
+		const parsedSwitches = localSwitches ? JSON.parse(localSwitches) : {};
+		const value = path.split('.').reduce((config, key) => {
+			if (isRecord(config)) {
+				return config[key];
+			}
+			return config;
+		}, parsedSwitches);
+		if (value) {
+			return value as T;
+		}
+
+		return null;
+	} catch (e) {
+		console.error('Failed to read overrides:', e);
+		return null;
+	}
+}
+
 const emptyAmountsTestVariants: AmountsVariant[] = [
 	{
 		variantName: 'CONTROL',
@@ -139,7 +160,13 @@ const getPromotionCopy = (): PromotionCopy | null =>
 	getGlobal<PromotionCopy>('promotionCopy');
 
 const isSwitchOn = (switchName: string): boolean => {
-	const sw = getGlobal<Status>(`settings.switches.${switchName}`);
+	let sw;
+
+	sw = getLocal<Status>(switchName);
+
+	if (!sw) {
+		sw = getGlobal<Status>(`settings.switches.${switchName}`);
+	}
 	return !!(sw && sw === 'On');
 };
 
