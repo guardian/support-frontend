@@ -5,6 +5,7 @@ packages:
   - 'support-e2e'
   - 'support-workers'
   - 'modules'
+  - 'support-lambdas/it-test-runner-docker'
 catalog:
   typescript: ^5.2.2
   zod: ^3.23.8

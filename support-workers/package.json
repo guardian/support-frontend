@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --group=-integration",
-    "it-test": "jest --group=integration",
+    "it-test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --group=integration",
     "lint": "eslint src/typescript/**/*.ts",
     "lint:fix": "eslint --fix src/typescript/**/*.ts",
     "check-formatting": "prettier --check **.ts",

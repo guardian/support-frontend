@@ -2,6 +2,8 @@
  * @group integration
  */
 
+import { zuoraDateFormat } from '@modules/zuora/utils/common';
+import dayjs from 'dayjs';
 import { RetryError, RetryErrorType } from '../errors/retryError';
 import { handler } from '../lambdas/createZuoraSubscriptionTSLambda';
 import { createZuoraSubscriptionStateSchema } from '../model/createZuoraSubscriptionState';
@@ -42,6 +44,15 @@ describe('createZuoraSubscriptionLambda integration', () => {
 				createZuoraSubscriptionStateSchema,
 			).parse(guardianWeeklyJson);
 			input.state.requestId = new Date().getTime().toString(); // Ensure unique requestId because it is used as an idempotency key
+			const firstDeliveryDate = dayjs().add(5, 'day').toDate();
+			if (
+				input.state.productSpecificState.productInformation?.product ===
+				'GuardianWeeklyDomestic'
+			) {
+				input.state.productSpecificState.productInformation.firstDeliveryDate =
+					firstDeliveryDate;
+			}
+
 			const output = await handler(input);
 			if (
 				output.state.sendThankYouEmailState.productType !== 'GuardianWeekly'
@@ -49,7 +60,7 @@ describe('createZuoraSubscriptionLambda integration', () => {
 				fail('Expected productType to be GuardianWeekly');
 			}
 			expect(output.state.sendThankYouEmailState.firstDeliveryDate).toBe(
-				'2025-12-12',
+				zuoraDateFormat(dayjs(firstDeliveryDate)),
 			);
 		},
 		testTimeout,
@@ -81,6 +92,14 @@ describe('createZuoraSubscriptionLambda integration', () => {
 				createZuoraSubscriptionStateSchema,
 			).parse(paperJson);
 			input.state.requestId = new Date().getTime().toString(); // Ensure unique requestId because it is used as an idempotency key
+			const firstDeliveryDate = dayjs().add(5, 'day').toDate();
+			if (
+				input.state.productSpecificState.productInformation?.product ===
+				'SubscriptionCard'
+			) {
+				input.state.productSpecificState.productInformation.firstDeliveryDate =
+					firstDeliveryDate;
+			}
 			const output = await handler(input);
 			if (output.state.sendThankYouEmailState.productType !== 'Paper') {
 				fail('Expected productType to be Paper');

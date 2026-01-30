@@ -1,0 +1,12 @@
+stacks: [support]
+regions: [eu-west-1]
+
+deployments:
+  cfn:
+    type: cloud-formation
+    app: it-test-runner-docker
+    parameters:
+      templateStagePaths:
+        CODE: ItTestRunnerDocker-CODE.template.json
+        PROD: ItTestRunnerDocker-PROD.template.json
+      prependStackToCloudFormationStackName: false
