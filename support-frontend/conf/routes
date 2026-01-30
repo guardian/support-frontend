@@ -52,7 +52,6 @@ GET  /$country<(uk|us|ca)>/student                                 controllers.A
 
 GET  /aus-2020-map                                                 controllers.Application.ausMomentMap()
 GET  /aus-map                                                      controllers.Application.ausMomentMap()
-GET  /thank-you-shareable-articles                                 controllers.ArticleShare.getArticles()
 
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou                   controllers.Application.contributionsLanding(country: String, campaignCode = "")
 
@@ -63,10 +62,6 @@ GET  /support-workers/status                                       controllers.S
 
 POST  /stripe/create-setup-intent/recaptcha                        controllers.StripeController.createSetupIntentRecaptcha()
 POST  /stripe/create-setup-intent/prb                              controllers.StripeController.createSetupIntentPRB()
-
-# this endpoint should be removed once identity remove
-# the need for a client token
-POST  /contribute/send-marketing                                   controllers.IdentityController.submitMarketing()
 
 # ------ Identity ------ #
 POST /identity/signin-url                                          controllers.IdentityController.createSignInURL()
@@ -109,7 +104,6 @@ POST /stripe-checkout-session/create                               controllers.C
 GET  /login                                                        controllers.Login.login()
 GET  /loginAction                                                  controllers.Login.loginAction()
 GET  /oauth2callback                                               controllers.Login.oauth2Callback()
-GET  /logout                                                       controllers.Login.logout()
 GET  /test-users                                                   controllers.TestUsersManagement.createTestUser()
 
 # ----- Okta auth ----- #
@@ -120,7 +114,6 @@ GET /oauth/callback                                                controllers.A
 # ----- PayPal (Recurring Endpoints) ----- #
 
 POST /paypal/setup-payment                                         controllers.PayPalRegular.setupPayment()
-POST /paypal/create-agreement                                      controllers.PayPalRegular.createAgreement()
 POST /paypal/one-click-checkout                                    controllers.PayPalRegular.createAgreementAndRetrieveUser()
 GET  /paypal/return                                                controllers.PayPalRegular.returnUrl()
 GET  /paypal/cancel                                                controllers.PayPalRegular.cancelUrl()
@@ -172,6 +165,3 @@ GET  /favicon.ico                                                  controllers.F
 
 GET  /assets/*file                                                 controllers.Assets.at(path="/public/compiled-assets", file)
 GET  /*file                                                        controllers.Assets.at(path="/public", file)
-
-# Deprecated - for Metrics Only #
-POST  /stripe/create-setup-intent/auth                             controllers.StripeController.createSetupIntentWithAuth()
