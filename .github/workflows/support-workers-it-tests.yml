@@ -40,8 +40,5 @@ jobs:
           aws-region: eu-west-1
 
       - name: Run integration tests
-        run: |
-          unset AWS_PROFILE
-          aws sts get-caller-identity
-          pnpm --filter support-workers it-test:create-zuora
+        run: pnpm --filter support-workers it-test:create-zuora
 
