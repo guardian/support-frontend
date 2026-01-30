@@ -40,5 +40,9 @@ jobs:
           aws-region: eu-west-1
 
       - name: Run integration tests
+        env:
+          # The SDK prioritizes AWS_PROFILE over the static credentials from assume-role.
+          # We unset it here to force the SDK to use the injected AWS_ACCESS_KEY_ID etc.
+          AWS_PROFILE: ""
         run: pnpm --filter support-workers it-test:create-zuora
 
