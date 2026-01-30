@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest --group=-integration",
     "it-test": "jest --group=integration",
+    "it-test:create-zuora": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest createZuoraSubscriptionLambda.it.test.ts",
     "lint": "eslint src/typescript/**/*.ts",
     "lint:fix": "eslint --fix src/typescript/**/*.ts",
     "check-formatting": "prettier --check **.ts",
