@@ -9,7 +9,7 @@ import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
 import io.circe.syntax.EncoderOps
 import play.api.libs.circe.Circe
-import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
+import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, Request}
 import services.{PayPalNvpService, TestUserService}
 import services.paypal.{PayPalBillingDetails, PayPalCompletePaymentsServiceProvider, PayPalNvpServiceProvider, Token}
 import views.EmptyDiv
@@ -52,21 +52,21 @@ class PayPalCompletePayments(
   import actionBuilders._
 
   def createSetupToken: Action[CreateSetupToken] =
-    MaybeAuthenticatedActionOnFormSubmission.async(circe.json[CreateSetupToken]) { implicit request =>
+    PrivateAction.async(circe.json[CreateSetupToken]) { implicit request =>
       val payPalCPService = getPayPalCPServiceForRequest(request)
       payPalCPService.createSetupToken
         .map { token => Ok(SetupToken(token).asJson) }
     }
 
   def createPaymentToken: Action[CreatePaymentToken] =
-    MaybeAuthenticatedActionOnFormSubmission.async(circe.json[CreatePaymentToken]) { implicit request =>
+    PrivateAction.async(circe.json[CreatePaymentToken]) { implicit request =>
       val payPalCPService = getPayPalCPServiceForRequest(request)
       payPalCPService
         .createPaymentToken(request.body.setup_token)
         .map { token => Ok(PaymentToken(token.id, token.email).asJson) }
     }
 
-  private def getPayPalCPServiceForRequest[T](request: OptionalAuthRequest[_]) = {
+  private def getPayPalCPServiceForRequest[T](request: Request[_]) = {
     val isTestUser = testUsers.isTestUser(request)
     payPalCPServiceProvider.forUser(isTestUser)
   }
