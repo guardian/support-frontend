@@ -46,7 +46,7 @@ describe('createZuoraSubscriptionLambda integration', () => {
 			input.state.requestId = new Date().getTime().toString(); // Ensure unique requestId because it is used as an idempotency key
 			const firstDeliveryDate = dayjs().add(5, 'day').toDate();
 			if (
-				input.state.productSpecificState.productInformation?.product ===
+				input.state.productSpecificState.productInformation.product ===
 				'GuardianWeeklyDomestic'
 			) {
 				input.state.productSpecificState.productInformation.firstDeliveryDate =
@@ -94,7 +94,7 @@ describe('createZuoraSubscriptionLambda integration', () => {
 			input.state.requestId = new Date().getTime().toString(); // Ensure unique requestId because it is used as an idempotency key
 			const firstDeliveryDate = dayjs().add(5, 'day').toDate();
 			if (
-				input.state.productSpecificState.productInformation?.product ===
+				input.state.productSpecificState.productInformation.product ===
 				'SubscriptionCard'
 			) {
 				input.state.productSpecificState.productInformation.firstDeliveryDate =
