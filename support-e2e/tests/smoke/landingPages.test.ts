@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
-import { afterEachTasks } from './utils/afterEachTest';
-import { setTestCookies } from './utils/cookies';
-import { firstName } from './utils/users';
+import { afterEachTasks } from '../utils/afterEachTest';
+import { setTestCookies } from '../utils/cookies';
+import { firstName } from '../utils/users';
 
 afterEachTasks(test);
 
@@ -84,5 +84,26 @@ test.describe('Subscriptions landing page', () => {
 				})
 				.first(),
 		).toBeVisible();
+	});
+});
+
+test.describe('Contributions landing page', () => {
+	test('Basic loading-when a user visits the root path it should redirect to the contributions landing page', async ({
+		baseURL,
+		context,
+	}) => {
+		const page = await context.newPage();
+		const baseUrlWithFallback = baseURL ?? 'https://support.theguardian.com';
+		const pageUrl = `${baseUrlWithFallback}/`;
+		const domain = new URL(pageUrl).hostname;
+		await setTestCookies(context, firstName(), domain);
+		await page.goto(pageUrl);
+
+		await expect(
+			page.locator('id=supporter-plus-landing-page-uk'),
+		).toBeVisible();
+		// assert that there are three sections under the tabpanel (Support, Supporter Plus, Digital Plus)
+		const tabpanel = page.getByRole('tabpanel');
+		expect(await tabpanel.locator(':scope > section').count()).toBe(3);
 	});
 });
