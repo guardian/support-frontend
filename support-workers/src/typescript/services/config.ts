@@ -1,14 +1,13 @@
 import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
+import { awsConfig } from '@modules/aws/config';
 import type { z } from 'zod';
 import type { Stage } from '../model/stage';
-import { awsConfig, isRunningLocally } from '../util/awsConfig';
 
 export async function getConfig<I, O, T extends z.ZodType<O, z.ZodTypeDef, I>>(
 	stage: Stage,
 	configKeyName: string,
 	schema: T,
 ): Promise<O> {
-	console.log(`Is running locally = ${isRunningLocally}`);
 	const ssmClient = new SSMClient(awsConfig);
 	const params = {
 		Name: `/${stage}/support/support-workers/${configKeyName}`,

@@ -29,7 +29,6 @@ import { sendThankYouEmailStateSchema } from '../model/sendAcquisitionEventState
 import { stageFromEnvironment } from '../model/stage';
 import type { WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
-import { awsConfig, isRunningLocally } from '../util/awsConfig';
 import { getIfDefined } from '../util/nullAndUndefined';
 import { replaceDatesWithZuoraFormat } from '../util/zuoraDateReplacer';
 
@@ -62,12 +61,6 @@ export const handler = async (
 	state: WrappedState<CreateZuoraSubscriptionState>,
 ) => {
 	try {
-		console.info(`Input is ${JSON.stringify(state)}`);
-		console.info(`CI = ${process.env.CI}`);
-		console.log(`Is running locally = ${isRunningLocally}`);
-		console.log(`AWS config = ${JSON.stringify(awsConfig)}`);
-		console.log(`Profile = ${process.env.AWS_PROFILE}`);
-
 		const createZuoraSubscriptionState = state.state;
 		const productSpecificState =
 			createZuoraSubscriptionState.productSpecificState;
