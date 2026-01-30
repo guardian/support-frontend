@@ -20,31 +20,28 @@ const commonSchema = z.object({
 	paymentSchedule: paymentScheduleSchema,
 	accountNumber: z.string(),
 	subscriptionNumber: z.string(),
-});
-
-const commonSchemaWithConsent = commonSchema.extend({
 	similarProductsConsent: z.boolean().optional(),
 });
 
-const commonSchemaWithConsentAndPromo = commonSchemaWithConsent.extend({
+const commonSchemaWithPromo = commonSchema.extend({
 	promoCode: z.string().optional(),
 });
 
-const deliveryProductSchema = commonSchemaWithConsentAndPromo.extend({
+const deliveryProductSchema = commonSchemaWithPromo.extend({
 	firstDeliveryDate: dateOrDateStringSchema,
 });
 
 export const sendThankYouEmailStateSchema = z.union([
-	commonSchemaWithConsent.extend({
+	commonSchema.extend({
 		productType: z.literal('Contribution'),
 	}),
-	commonSchemaWithConsentAndPromo.extend({
+	commonSchemaWithPromo.extend({
 		productType: z.literal('SupporterPlus'),
 	}),
 	commonSchema.extend({
 		productType: z.literal('GuardianAdLite'),
 	}),
-	commonSchemaWithConsentAndPromo.extend({
+	commonSchemaWithPromo.extend({
 		productType: z.literal('DigitalSubscription'),
 	}),
 	deliveryProductSchema.extend({
