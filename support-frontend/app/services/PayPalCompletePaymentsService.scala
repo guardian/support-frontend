@@ -3,7 +3,7 @@ package services
 import com.gu.monitoring.SafeLogging
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
-import com.gu.support.config.PayPalCompletePaymentsConfig
+import com.gu.support.config.{PayPalCompletePaymentsConfig, Stage, Stages}
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.touchpoint.TouchpointService
@@ -17,18 +17,18 @@ object GetAccessTokenResponse {
 }
 
 case class ExperienceContext(
-    return_url: String = "https://support.thegulocal.com",
-    cancel_url: String = "https://support.thegulocal.com",
-    shipping_preference: String = "NO_SHIPPING",
+    return_url: String,
+    cancel_url: String,
+    shipping_preference: String,
 )
 object ExperienceContext {
   implicit val codec: Codec[ExperienceContext] = deriveCodec
 }
 
 case class PayPalPaymentSource(
-    usage_type: String = "MERCHANT",
-    customer_type: String = "CONSUMER",
-    experience_context: ExperienceContext = ExperienceContext(),
+    usage_type: String,
+    customer_type: String,
+    experience_context: ExperienceContext,
 )
 object PayPalPaymentSource {
   implicit val codec: Codec[PayPalPaymentSource] = deriveCodec
@@ -39,12 +39,12 @@ object PayPalTokenSource {
   implicit val codec: Codec[PayPalTokenSource] = deriveCodec
 }
 
-case class SetupPaymentSource(paypal: PayPalPaymentSource = PayPalPaymentSource())
+case class SetupPaymentSource(paypal: PayPalPaymentSource)
 object SetupPaymentSource {
   implicit val codec: Codec[SetupPaymentSource] = deriveCodec
 }
 
-case class CreateSetupTokenRequest(payment_source: SetupPaymentSource = SetupPaymentSource())
+case class CreateSetupTokenRequest(payment_source: SetupPaymentSource)
 object CreateSetupTokenRequest {
   implicit val codec: Codec[CreateSetupTokenRequest] = deriveCodec
 }
@@ -86,8 +86,8 @@ object PaymentToken {
   implicit val codec: Codec[PaymentToken] = deriveCodec
 }
 
-class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client: FutureHttpClient)(implicit
-    executionContext: ExecutionContext,
+class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client: FutureHttpClient, stage: Stage)(
+    implicit executionContext: ExecutionContext,
 ) extends TouchpointService
     with WebServiceHelper[PayPalCompletePaymentsError]
     with SafeLogging {
@@ -112,8 +112,28 @@ class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client
     ).map(_.access_token)
   }
 
+  private def getSupportSiteBaseUrl: String = {
+    stage match {
+      case Stages.PROD => "https://support.theguardian.com"
+      case Stages.CODE => "https://support.code.dev-theguardian.com"
+      case Stages.DEV => "https://support.thegulocal.com"
+    }
+  }
+
   def createSetupToken: Future[String] = {
-    val payload = CreateSetupTokenRequest()
+    val payload = CreateSetupTokenRequest(
+      payment_source = SetupPaymentSource(
+        paypal = PayPalPaymentSource(
+          usage_type = "MERCHANT",
+          customer_type = "CONSUMER",
+          experience_context = ExperienceContext(
+            return_url = getSupportSiteBaseUrl,
+            cancel_url = getSupportSiteBaseUrl,
+            shipping_preference = "NO_SHIPPING",
+          ),
+        ),
+      ),
+    )
     for {
       accessToken <- getAccessToken
       setupTokenResponse <- postJson[CreateSetupTokenResponse](

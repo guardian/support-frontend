@@ -31,6 +31,7 @@ trait Services {
   lazy val payPalCompletePaymentsServiceProvider =
     new PayPalCompletePaymentsServiceProvider(
       appConfig.payPalCompletePaymentsConfigProvider,
+      appConfig.stage,
       RequestRunners.futureRunner,
     )
 
