@@ -14,24 +14,24 @@ import services.paypal.PayPalCompletePaymentsServiceProvider
 
 import scala.concurrent.ExecutionContext
 
-case class CreateSetupToken()
-object CreateSetupToken {
-  implicit val codec: Codec[CreateSetupToken] = deriveCodec
+case class SetupTokenRequest()
+object SetupTokenRequest {
+  implicit val codec: Codec[SetupTokenRequest] = deriveCodec
 }
 
-case class CreatePaymentToken(setup_token: String)
-object CreatePaymentToken {
-  implicit val codec: Codec[CreatePaymentToken] = deriveCodec
+case class PaymentTokenRequest(setup_token: String)
+object PaymentTokenRequest {
+  implicit val codec: Codec[PaymentTokenRequest] = deriveCodec
 }
 
-case class SetupToken(token: String)
-object SetupToken {
-  implicit val codec: Codec[SetupToken] = deriveCodec
+case class SetupTokenResponse(token: String)
+object SetupTokenResponse {
+  implicit val codec: Codec[SetupTokenResponse] = deriveCodec
 }
 
-case class PaymentToken(token: String, email: String)
-object PaymentToken {
-  implicit val codec: Codec[PaymentToken] = deriveCodec
+case class PaymentTokenResponse(token: String, email: String)
+object PaymentTokenResponse {
+  implicit val codec: Codec[PaymentTokenResponse] = deriveCodec
 }
 
 class PayPalCompletePayments(
@@ -49,19 +49,19 @@ class PayPalCompletePayments(
 
   import actionBuilders._
 
-  def createSetupToken: Action[CreateSetupToken] =
-    PrivateAction.async(circe.json[CreateSetupToken]) { implicit request =>
+  def createSetupToken: Action[SetupTokenRequest] =
+    PrivateAction.async(circe.json[SetupTokenRequest]) { implicit request =>
       val payPalCPService = getPayPalCPServiceForRequest(request)
       payPalCPService.createSetupToken
-        .map { token => Ok(SetupToken(token).asJson) }
+        .map { token => Ok(SetupTokenResponse(token).asJson) }
     }
 
-  def createPaymentToken: Action[CreatePaymentToken] =
-    PrivateAction.async(circe.json[CreatePaymentToken]) { implicit request =>
+  def createPaymentToken: Action[PaymentTokenRequest] =
+    PrivateAction.async(circe.json[PaymentTokenRequest]) { implicit request =>
       val payPalCPService = getPayPalCPServiceForRequest(request)
       payPalCPService
         .createPaymentToken(request.body.setup_token)
-        .map { token => Ok(PaymentToken(token.id, token.email).asJson) }
+        .map { token => Ok(PaymentTokenResponse(token.id, token.email).asJson) }
     }
 
   private def getPayPalCPServiceForRequest[T](request: Request[_]) = {
