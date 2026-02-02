@@ -99,7 +99,6 @@ const defaultArgs: WeeklyLandingPropTypes = {
 	productPrices: weeklyProductPrices,
 	promotionCopy: undefined,
 	orderIsAGift: false,
-	participations: {},
 };
 const giftArgs: WeeklyLandingPropTypes = {
 	...defaultArgs,

@@ -1,6 +1,5 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import type { Participations } from 'helpers/abTests/models';
 import {
 	getGlobal,
 	getProductPrices,
@@ -16,31 +15,15 @@ export type WeeklyLandingPropTypes = {
 	countryGroupId: CountryGroupId;
 	productPrices: ProductPrices | null | undefined;
 	promotionCopy: PromotionCopy | null | undefined;
-	orderIsAGift: boolean | null | undefined;
-	participations: Participations;
-};
-
-export type WeeklyLPContentPropTypes = {
-	countryId: IsoCountry;
-	countryGroupId: CountryGroupId;
-	productPrices: ProductPrices;
-	promotionCopy: PromotionCopy;
 	orderIsAGift: boolean;
-	participations: Participations;
-	pageQaId: string;
-	header: JSX.Element;
-	giftNonGiftLink: string;
 };
 
 const countryGroupId = CountryGroup.detect();
 
-export const weeklyLandingProps = (
-	participations: Participations,
-): WeeklyLandingPropTypes => ({
+export const weeklyLandingProps = (): WeeklyLandingPropTypes => ({
 	countryGroupId,
 	countryId: Country.detect(),
 	productPrices: getProductPrices(),
 	promotionCopy: getPromotionCopy(),
-	orderIsAGift: getGlobal('orderIsAGift'),
-	participations,
+	orderIsAGift: getGlobal('orderIsAGift') ?? false,
 });

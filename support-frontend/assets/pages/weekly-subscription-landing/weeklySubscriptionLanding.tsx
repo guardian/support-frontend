@@ -17,10 +17,6 @@ import headerWithCountrySwitcherContainer from 'components/headers/header/header
 import Block from 'components/page/block';
 import { PageScaffold } from 'components/page/pageScaffold';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
-import {
-	getAbParticipations,
-	setUpTrackingAndConsents,
-} from 'helpers/page/page';
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { renderPage } from 'helpers/rendering/render';
 import { routes } from 'helpers/urls/routes';
@@ -29,10 +25,7 @@ import Benefits from './components/content/benefits';
 import GiftBenefits from './components/content/giftBenefits';
 import { WeeklyHero } from './components/hero/hero';
 import WeeklyProductPrices from './components/weeklyProductPrices';
-import type {
-	WeeklyLandingPropTypes,
-	WeeklyLPContentPropTypes,
-} from './weeklySubscriptionLandingProps';
+import type { WeeklyLandingPropTypes } from './weeklySubscriptionLandingProps';
 import { weeklyLandingProps } from './weeklySubscriptionLandingProps';
 
 const styles = {
@@ -51,20 +44,54 @@ const styles = {
 	`,
 };
 
-function WeeklyLPContent({
+function getStudentBeanLink(countryGroupId: CountryGroupId) {
+	if (countryGroupId === 'AUDCountries') {
+		return routes.guardianWeeklyStudentAU;
+	}
+	return routes.guardianWeeklyStudentUK;
+}
+
+export function WeeklyLandingPage({
 	countryId,
+	countryGroupId,
 	productPrices,
 	promotionCopy,
 	orderIsAGift,
-	countryGroupId,
-	pageQaId,
-	header,
-	giftNonGiftLink,
-}: WeeklyLPContentPropTypes) {
+}: WeeklyLandingPropTypes) {
+	if (!productPrices) {
+		return null;
+	}
+
+	const path = orderIsAGift
+		? routes.guardianWeeklySubscriptionLandingGift
+		: routes.guardianWeeklySubscriptionLanding;
+	const giftNonGiftLink = orderIsAGift
+		? routes.guardianWeeklySubscriptionLanding
+		: routes.guardianWeeklySubscriptionLandingGift;
+	const sanitisedPromoCopy = getPromotionCopy(promotionCopy, orderIsAGift);
+
+	// ID for Selenium tests
+	const pageQaId = `qa-guardian-weekly${orderIsAGift ? '-gift' : ''}`;
+
+	const Header = headerWithCountrySwitcherContainer({
+		path,
+		countryGroupId,
+		listOfCountryGroups: [
+			GBPCountries,
+			UnitedStates,
+			AUDCountries,
+			EURCountries,
+			Canada,
+			NZDCountries,
+			International,
+		],
+		trackProduct: 'GuardianWeekly',
+	});
+
 	return (
 		<PageScaffold
 			id={pageQaId}
-			header={header}
+			header={<Header />}
 			footer={
 				<GuardianWeeklyFooter
 					productPrices={productPrices}
@@ -75,7 +102,7 @@ function WeeklyLPContent({
 		>
 			<WeeklyHero
 				orderIsAGift={orderIsAGift}
-				promotionCopy={promotionCopy}
+				promotionCopy={sanitisedPromoCopy}
 				countryGroupId={countryGroupId}
 			/>
 			<FullWidthContainer>
@@ -118,67 +145,4 @@ function WeeklyLPContent({
 	);
 }
 
-function getStudentBeanLink(countryGroupId: CountryGroupId) {
-	if (countryGroupId === 'AUDCountries') {
-		return routes.guardianWeeklyStudentAU;
-	}
-	return routes.guardianWeeklyStudentUK;
-}
-
-// ----- Render ----- //
-export function WeeklyLandingPage({
-	countryId,
-	productPrices,
-	promotionCopy,
-	orderIsAGift,
-	countryGroupId,
-	participations,
-}: WeeklyLandingPropTypes) {
-	if (!productPrices) {
-		return null;
-	}
-
-	const path = orderIsAGift
-		? routes.guardianWeeklySubscriptionLandingGift
-		: routes.guardianWeeklySubscriptionLanding;
-	const giftNonGiftLink = orderIsAGift
-		? routes.guardianWeeklySubscriptionLanding
-		: routes.guardianWeeklySubscriptionLandingGift;
-
-	const sanitisedPromoCopy = getPromotionCopy(promotionCopy, orderIsAGift);
-	// ID for Selenium tests
-	const pageQaId = `qa-guardian-weekly${orderIsAGift ? '-gift' : ''}`;
-
-	const Header = headerWithCountrySwitcherContainer({
-		path,
-		countryGroupId,
-		listOfCountryGroups: [
-			GBPCountries,
-			UnitedStates,
-			AUDCountries,
-			EURCountries,
-			Canada,
-			NZDCountries,
-			International,
-		],
-		trackProduct: 'GuardianWeekly',
-	});
-
-	return (
-		<WeeklyLPContent
-			countryId={countryId}
-			countryGroupId={countryGroupId}
-			productPrices={productPrices}
-			promotionCopy={sanitisedPromoCopy}
-			orderIsAGift={orderIsAGift ?? false}
-			participations={participations}
-			pageQaId={pageQaId}
-			header={<Header />}
-			giftNonGiftLink={giftNonGiftLink}
-		/>
-	);
-}
-
-const abParticipations = getAbParticipations();
-setUpTrackingAndConsents(abParticipations);
-renderPage(<WeeklyLandingPage {...weeklyLandingProps(abParticipations)} />);
+renderPage(<WeeklyLandingPage {...weeklyLandingProps()} />);
