@@ -76,7 +76,7 @@ object CreatePaymentTokenRequest {
   implicit val codec: Codec[CreatePaymentTokenRequest] = deriveCodec
 }
 
-case class PayPalCompletePaymentsError(Message: String) extends Throwable(s"$Message")
+case class PayPalCompletePaymentsError(name: String, message: String) extends Throwable(s"$name: $message")
 object PayPalCompletePaymentsError {
   implicit val codec: Codec[PayPalCompletePaymentsError] = deriveCodec
 }
