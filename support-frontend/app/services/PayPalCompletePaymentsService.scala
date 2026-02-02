@@ -101,39 +101,36 @@ class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client
     )
   }
 
+  private def getAccessToken: Future[String] = {
+    postForm[GetAccessTokenResponse](
+      endpoint = "/v1/oauth2/token",
+      data = Map("grant_type" -> List("client_credentials")),
+      headers = Map(
+        "Authorization" -> ("Basic " + java.util.Base64.getEncoder
+          .encodeToString(s"${config.clientId}:${config.clientSecret}".getBytes)),
+      ),
+    ).map(_.access_token)
+  }
+
   def createSetupToken: Future[String] = {
     val payload = CreateSetupTokenRequest()
     for {
-      getAccessTokenResponse <- postForm[GetAccessTokenResponse](
-        endpoint = "/v1/oauth2/token",
-        data = Map("grant_type" -> List("client_credentials")),
-        headers = Map(
-          "Authorization" -> ("Basic " + java.util.Base64.getEncoder
-            .encodeToString(s"${config.clientId}:${config.clientSecret}".getBytes)),
-        ),
-      )
+      accessToken <- getAccessToken
       setupTokenResponse <- postJson[CreateSetupTokenResponse](
         endpoint = "/v3/vault/setup-tokens",
         data = payload.asJson,
-        headers = buildAuthorization(getAccessTokenResponse.access_token),
+        headers = buildAuthorization(accessToken),
       )
     } yield setupTokenResponse.id
   }
 
   def createPaymentToken(setupToken: String): Future[PaymentToken] = {
     for {
-      getAccessTokenResponse <- postForm[GetAccessTokenResponse](
-        endpoint = "/v1/oauth2/token",
-        data = Map("grant_type" -> List("client_credentials")),
-        headers = Map(
-          "Authorization" -> ("Basic " + java.util.Base64.getEncoder
-            .encodeToString(s"${config.clientId}:${config.clientSecret}".getBytes)),
-        ),
-      )
+      accessToken <- getAccessToken
       paymentTokenResponse <- postJson[CreatePaymentTokenResponse](
         endpoint = "/v3/vault/payment-tokens",
         data = CreatePaymentTokenRequest(PaymentSource(PayPalTokenSource(setupToken))).asJson,
-        headers = buildAuthorization(getAccessTokenResponse.access_token),
+        headers = buildAuthorization(accessToken),
       )
     } yield PaymentToken(paymentTokenResponse.id, paymentTokenResponse.payment_source.paypal.email_address)
   }
