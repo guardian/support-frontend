@@ -34,7 +34,7 @@ object PayPalPaymentSource {
   implicit val codec: Codec[PayPalPaymentSource] = deriveCodec
 }
 
-case class PayPalTokenSource(id: String, `type`: String = "SETUP_TOKEN")
+case class PayPalTokenSource(id: String, `type`: String)
 object PayPalTokenSource {
   implicit val codec: Codec[PayPalTokenSource] = deriveCodec
 }
@@ -149,7 +149,7 @@ class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client
       accessToken <- getAccessToken
       paymentTokenResponse <- postJson[CreatePaymentTokenResponse](
         endpoint = "/v3/vault/payment-tokens",
-        data = CreatePaymentTokenRequest(PaymentSource(PayPalTokenSource(setupToken))).asJson,
+        data = CreatePaymentTokenRequest(PaymentSource(PayPalTokenSource(setupToken, "SETUP_TOKEN"))).asJson,
         headers = buildAuthorization(accessToken),
       )
     } yield PaymentToken(paymentTokenResponse.id, paymentTokenResponse.payment_source.paypal.email_address)
