@@ -31,7 +31,6 @@ GET /                                                              controllers.A
 # Contribution checkout redirect => checkout 👇
 GET  /contribute/checkout                                          controllers.Application.contributeGeoRedirect(campaignCode = "")
 GET  /checkout                                                     controllers.Application.checkoutGeoRedirect(campaignCode = "")
-GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/contribute/checkout controllers.Application.redirectContributionsCheckout(countryGroupId: String)
 
 # Checkout
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/checkout            controllers.Application.productCheckoutRouter(countryGroupId: String)
