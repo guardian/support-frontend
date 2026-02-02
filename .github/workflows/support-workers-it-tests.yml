@@ -40,5 +40,7 @@ jobs:
           aws-region: eu-west-1
 
       - name: Run integration tests
+        env:
+          STAGE: CODE
         run: pnpm --filter support-workers it-test
 
