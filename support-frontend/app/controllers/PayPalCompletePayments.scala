@@ -1,18 +1,16 @@
 package controllers
 
-import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.CustomActionBuilders
-import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.{AssetsResolver, RefPath}
+import admin.settings.{AllSettingsProvider, SettingsSurrogateKeySyntax}
+import assets.AssetsResolver
 import com.gu.monitoring.SafeLogging
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
 import io.circe.syntax.EncoderOps
 import play.api.libs.circe.Circe
-import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, Request}
-import services.{PayPalNvpService, TestUserService}
-import services.paypal.{PayPalBillingDetails, PayPalCompletePaymentsServiceProvider, PayPalNvpServiceProvider, Token}
-import views.EmptyDiv
+import play.api.mvc.{AbstractController, Action, ControllerComponents, Request}
+import services.TestUserService
+import services.paypal.PayPalCompletePaymentsServiceProvider
 
 import scala.concurrent.ExecutionContext
 
