@@ -1,7 +1,7 @@
 import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
+import { awsConfig } from '@modules/aws/config';
 import type { z } from 'zod';
 import type { Stage } from '../model/stage';
-import { awsConfig } from '../util/awsConfig';
 
 export async function getConfig<I, O, T extends z.ZodType<O, z.ZodTypeDef, I>>(
 	stage: Stage,

@@ -2,14 +2,19 @@ import { GuAlarm } from "@guardian/cdk/lib/constructs/cloudwatch";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuStack } from "@guardian/cdk/lib/constructs/core";
 import { GuLambdaFunction } from "@guardian/cdk/lib/constructs/lambda";
-import { type App, Duration, Fn } from "aws-cdk-lib";
+import { type App, CfnOutput, Duration, Fn } from "aws-cdk-lib";
 import {
   ComparisonOperator,
   MathExpression,
   Metric,
   TreatMissingData,
 } from "aws-cdk-lib/aws-cloudwatch";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import {
+  Effect,
+  PolicyStatement,
+  Role,
+  WebIdentityPrincipal,
+} from "aws-cdk-lib/aws-iam";
 import { Architecture, LoggingFormat, Runtime } from "aws-cdk-lib/aws-lambda";
 import {
   Choice,
@@ -104,6 +109,49 @@ export class SupportWorkers extends GuStack {
       actions: ["secretsmanager:GetSecretValue"],
       resources: props.secretsManagerPaths,
     });
+
+    if (this.stage === "CODE") {
+      // --- Integration Test Role ---
+      // This role allows GitHub Actions to assume a role with all the permissions
+      // assigned to the various Lambdas in this stack. This facilitates running
+      // integration tests that execute the Lambda logic locally but interact with
+      // real AWS resources. We only create this role in the CODE stage
+
+      const integrationTestRole = new Role(this, "IntegrationTestRole", {
+        roleName: `support-workers-it-test-role-${this.stage}`,
+        assumedBy: new WebIdentityPrincipal(
+          `arn:aws:iam::${this.account}:oidc-provider/token.actions.githubusercontent.com`,
+          {
+            StringLike: {
+              // Allows any branch in the support-frontend repo to assume this role
+              "token.actions.githubusercontent.com:sub":
+                "repo:guardian/support-frontend:*",
+              "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+            },
+          }
+        ),
+        description:
+          "Role assumed by GitHub Actions to run integration tests with full stack permissions",
+      });
+
+      // Attach all policies used by the Lambdas, if you add a new policy to a Lambda
+      // please also add it here to ensure the integration test role has the same permissions
+      [
+        s3Policy,
+        emailSqsPolicy,
+        eventBusPolicy,
+        cloudWatchLoggingPolicy,
+        promotionsDynamoTablePolicy,
+        supporterProductDataSqsPolicy,
+        parameterStorePolicy,
+        secretsManagerPolicy,
+      ].forEach((policy) => integrationTestRole.addToPolicy(policy));
+
+      new CfnOutput(this, "IntegrationTestRoleOutput", {
+        value: integrationTestRole.roleArn,
+        description: "ARN of the role to use in GitHub Actions for IT tests",
+      });
+    }
 
     // Lambdas
     const lambdaDefaultConfig = {
