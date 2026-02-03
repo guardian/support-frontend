@@ -16,9 +16,10 @@ object GetAccessTokenResponse {
   implicit val codec: Codec[GetAccessTokenResponse] = deriveCodec
 }
 
+// TODO: Stop hardcoding return_url and cancel_url
 case class ExperienceContext(
-    return_url: String = "https://support.thegulocal.com",
-    cancel_url: String = "https://support.thegulocal.com",
+    return_url: String = "https://support.code.dev-theguardian.com",
+    cancel_url: String = "https://support.code.dev-theguardian.com",
     shipping_preference: String = "NO_SHIPPING",
 )
 object ExperienceContext {
