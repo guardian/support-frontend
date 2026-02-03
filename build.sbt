@@ -107,7 +107,6 @@ lazy val root = (project in file("."))
     `support-internationalisation`,
     `support-services`,
     `stripe-intent`,
-    `it-test-runner`,
     `module-aws`,
     `module-acquisition-events`,
     `module-rest`,
@@ -312,11 +311,6 @@ lazy val `stripe-intent` = (project in file("support-lambdas/stripe-intent"))
   .dependsOn(`module-rest`, `support-config`, `module-aws`)
   .aggregate(`module-rest`, `support-config`, `module-aws`)
 
-lazy val `it-test-runner` = (project in file("support-lambdas/it-test-runner"))
-  .enablePlugins(RiffRaffArtifact)
-  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
-  .dependsOn(`module-aws`)
-
 lazy val `acquisition-events-api` = (project in file("support-lambdas/acquisition-events-api"))
   .enablePlugins(RiffRaffArtifact)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
@@ -332,6 +326,5 @@ lazy val `support-lambdas` = (project in file("support-lambdas"))
   .settings(scalafmtSettings)
   .aggregate(
     `stripe-intent`,
-    `it-test-runner`,
     `acquisition-events-api`,
   )
