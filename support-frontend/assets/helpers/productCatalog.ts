@@ -19,6 +19,7 @@ export enum ProductTierLabel {
 	TierOne = 'Support',
 	TierTwo = 'All-access digital',
 	TierThree = 'Digital + print',
+	DigitalSubscription = 'Digital plus',
 }
 
 const activeProductKeys = [
@@ -73,6 +74,8 @@ export type ActiveRatePlanKey = keyof Record<
 >;
 
 export const productCatalog = window.guardian.productCatalog;
+// TODO: we should probably move into using this function so we can acess the an updated version of the product catalog
+export const getProductCatalog = () => window.guardian.productCatalog;
 
 export type ProductBenefit = {
 	copy: string;
@@ -163,11 +166,6 @@ function displayBenefitByABTestVariant(
 export function isProductKey(val: unknown): val is ActiveProductKey {
 	return activeProductKeys.includes(val as ActiveProductKey);
 }
-
-const digitalEditionBenefit = {
-	copy: 'Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
-	copyBoldStart: 'The Digital Edition app. ',
-};
 
 const appBenefit = {
 	copy: 'Unlimited access to the Guardian app',
@@ -317,6 +315,42 @@ const paperPlusRatePlans: RatePlanDetails = {
 	},
 };
 
+const digitalPaperBenefitUK = {
+	copy: 'Daily digital Guardian newspaper',
+	specificToRegions: ['GBPCountries'] as CountryGroupId[],
+};
+
+const paperArchiveDigitalBenefitUK = {
+	copy: `Digital access to the Guardian’s 200 year newspaper archive`,
+	tooltip:
+		'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was in the UK, since 1821.',
+	specificToRegions: ['GBPCountries'] as CountryGroupId[],
+};
+
+const weeklyDigitalBenefit = {
+	copy: `Guardian Weekly e-magazine`,
+	tooltip: `Accessed through the Guardian Editions app, the Guardian Weekly e-magazine features a handpicked and carefully curated selection of in-depth articles, global news, opinion and more. Enjoy wherever you are, on your favourite device.`,
+};
+
+const editionsDigitalBenefit = {
+	copy: `The Long Read e-magazine`,
+	tooltip: `Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.`,
+};
+
+const paperArchiveDigitalBenefit = {
+	copy: `Digital access to the Guardian’s 200 year newspaper archive`,
+	tooltip:
+		'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was, since 1821.',
+	specificToRegions: [
+		'UnitedStates',
+		'EURCountries',
+		'AUDCountries',
+		'NZDCountries',
+		'Canada',
+		'International',
+	] as CountryGroupId[],
+};
+
 export const productCatalogDescription: Record<
 	ActiveProductKey,
 	ProductDescription
@@ -356,20 +390,16 @@ export const productCatalogDescription: Record<
 		},
 	},
 	DigitalSubscription: {
-		label: 'The Guardian Digital Edition',
-		thankyouMessage: `You have now unlocked access to the Guardian and Observer newspapers, which you can enjoy across all your devices, wherever you are in the world.
-            Soon, you will receive weekly newsletters from our supporter editor. We'll also be in touch with other ways to get closer to our journalism. ${' '}`,
-		landingPagePath: '/subscribe',
+		label: 'Digital plus',
+		labelPill: 'New',
+		thankyouMessage: digitalThankyouMessage,
+		landingPagePath: '/contribute',
 		benefits: [
-			digitalEditionBenefit,
-			{
-				copy: 'Read our reporting on the go',
-				copyBoldStart: 'Full access to the Guardian app. ',
-			},
-			{
-				copy: 'Enjoy a free trial of your subscription, before you pay',
-				copyBoldStart: 'Free 14 day trial. ',
-			},
+			weeklyDigitalBenefit,
+			editionsDigitalBenefit,
+			paperArchiveDigitalBenefit,
+			paperArchiveDigitalBenefitUK,
+			digitalPaperBenefitUK,
 		],
 		ratePlans: {
 			Monthly: {
@@ -504,60 +534,9 @@ export const productCatalogDescription: Record<
 	},
 };
 
-const paperArchiveDigitalBenefit = {
-	copy: `Digital access to the Guardian’s 200 year newspaper archive`,
-	tooltip:
-		'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was, since 1821.',
-	specificToRegions: [
-		'UnitedStates',
-		'EURCountries',
-		'AUDCountries',
-		'NZDCountries',
-		'Canada',
-		'International',
-	] as CountryGroupId[],
-};
-
-const digitalPaperBenefitUK = {
-	copy: 'Daily digital Guardian newspaper',
-	specificToRegions: ['GBPCountries'] as CountryGroupId[],
-};
-
-const paperArchiveDigitalBenefitUK = {
-	copy: `Digital access to the Guardian’s 200 year newspaper archive`,
-	tooltip:
-		'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was in the UK, since 1821.',
-	specificToRegions: ['GBPCountries'] as CountryGroupId[],
-};
-
-const weeklyDigitalBenefit = {
-	copy: `Guardian Weekly e-magazine`,
-	tooltip: `Accessed through the Guardian Editions app, the Guardian Weekly e-magazine features a handpicked and carefully curated selection of in-depth articles, global news, opinion and more. Enjoy wherever you are, on your favourite device.`,
-};
-
-const editionsDigitalBenefit = {
-	copy: `The Long Read e-magazine`,
-	tooltip: `Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.`,
-};
-
 const productCatalogDescriptionDigitalAccess = {
 	...productCatalogDescription.SupporterPlus,
 	label: 'Digital access',
-};
-
-export const productCatalogDescriptionPremiumDigital = {
-	...productCatalogDescription.DigitalSubscription,
-	label: 'Digital plus',
-	labelPill: 'New',
-	thankyouMessage: digitalThankyouMessage,
-	landingPagePath: '/contribute',
-	benefits: [
-		weeklyDigitalBenefit,
-		editionsDigitalBenefit,
-		paperArchiveDigitalBenefit,
-		paperArchiveDigitalBenefitUK,
-		digitalPaperBenefitUK,
-	],
 };
 
 export function productCatalogGuardianAdLite(): Record<
@@ -596,10 +575,7 @@ const productCatalogGuardianWeeklyGift = {
 };
 
 export const getProductLabel = (productKey: ActiveProductKey): string => {
-	const { enablePremiumDigital, enableDigitalAccess } = getFeatureFlags();
-	if (productKey === 'DigitalSubscription' && enablePremiumDigital) {
-		return productCatalogDescriptionPremiumDigital.label;
-	}
+	const { enableDigitalAccess } = getFeatureFlags();
 	if (productKey === 'SupporterPlus' && enableDigitalAccess) {
 		return productCatalogDescriptionDigitalAccess.label;
 	}
@@ -610,10 +586,7 @@ export const getProductDescription = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): ProductDescription => {
-	const { enablePremiumDigital, enableDigitalAccess } = getFeatureFlags();
-	if (productKey === 'DigitalSubscription' && enablePremiumDigital) {
-		return productCatalogDescriptionPremiumDigital;
-	}
+	const { enableDigitalAccess } = getFeatureFlags();
 	if (productKey === 'SupporterPlus' && enableDigitalAccess) {
 		return productCatalogDescriptionDigitalAccess;
 	}

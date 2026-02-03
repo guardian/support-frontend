@@ -47,6 +47,7 @@ case class LandingPageProductDescription(
     label: Option[Label] = None,
     benefits: List[ProductBenefit],
     cta: Cta,
+    titlePill: Option[String] = None,
 )
 
 case class Cta(
@@ -85,10 +86,20 @@ case class TickerSettings(
 object TickerSettings {
   implicit val tickerCodec: Codec[TickerSettings] = deriveCodec
 }
+
+case class DefaultProductSelection(
+    productType: String,
+    billingPeriod: String,
+)
+
+object DefaultProductSelection {
+  implicit val codec: Codec[DefaultProductSelection] = deriveCodec
+}
+
 case class Products(
-    Contribution: LandingPageProductDescription,
-    SupporterPlus: LandingPageProductDescription,
-    TierThree: LandingPageProductDescription,
+    Contribution: Option[LandingPageProductDescription],
+    SupporterPlus: Option[LandingPageProductDescription],
+    DigitalSubscription: Option[LandingPageProductDescription],
 )
 
 object Products {
@@ -105,6 +116,7 @@ case class LandingPageVariant(
     products: Products,
     tickerSettings: Option[TickerSettings],
     countdownSettings: Option[CountdownSettings],
+    defaultProductSelection: Option[DefaultProductSelection],
 )
 
 object LandingPageVariant {

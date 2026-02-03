@@ -17,6 +17,7 @@ import type {
 	DirectDebitPaymentMethod,
 	PaymentMethod,
 	PayPalCompletePaymentsPaymentMethod,
+	PayPalCompletePaymentsWithBAIDPaymentMethod,
 	PayPalPaymentMethod,
 	StripePaymentMethod,
 } from '../model/paymentMethod';
@@ -36,6 +37,7 @@ import { ServiceProvider } from '../services/config';
 import { getPayPalConfig, PayPalService } from '../services/payPal';
 import { getStripeConfig, StripeService } from '../services/stripe';
 import { getIfDefined } from '../util/nullAndUndefined';
+import { replaceDatesWithZuoraFormat } from '../util/zuoraDateReplacer';
 
 const stage = stageFromEnvironment();
 const stripeServiceProvider = new ServiceProvider(stage, async (stage) => {
@@ -55,16 +57,20 @@ export const handler = async (
 		const createPaymentMethodState = wrapperSchemaForState(
 			createPaymentMethodStateSchema,
 		).parse(state).state;
-		return createSalesforceContactState(
-			state,
-			await createPaymentMethod(
-				createPaymentMethodState.paymentFields,
-				createPaymentMethodState.user,
-				createPaymentMethodState.product,
+
+		return replaceDatesWithZuoraFormat(
+			createSalesforceContactState(
+				state,
+				await createPaymentMethod(
+					createPaymentMethodState.paymentFields,
+					createPaymentMethodState.user,
+					createPaymentMethodState.product,
+				),
 			),
 		);
 	} catch (error) {
-		throw asRetryError(error);
+		const mappedError = asRetryError(error);
+		throw mappedError;
 	}
 };
 
@@ -108,7 +114,6 @@ export function createSalesforceContactState(
 
 	return {
 		state: outputState,
-		error: null,
 		requestInfo: wrappedState.requestInfo,
 	};
 }
@@ -210,17 +215,22 @@ async function createStripePaymentMethod(
 async function createPayPalPaymentMethod(
 	isTestUser: boolean,
 	payPal: PayPalPaymentFields,
-): Promise<PayPalPaymentMethod> {
+): Promise<PayPalPaymentMethod | PayPalCompletePaymentsWithBAIDPaymentMethod> {
 	const payPalService = await paypalServiceProvider.getServiceForUser(
 		isTestUser,
 	);
 	const email = await payPalService.retrieveEmail(payPal.baid);
+
+	const paypalEmail = getIfDefined(
+		email,
+		'Could not retrieve email from PayPal',
+	);
+
 	return {
 		PaypalBaid: payPal.baid,
-		PaypalEmail: getIfDefined(email, 'Could not retrieve email from PayPal'),
-		PaypalType: 'ExpressCheckout',
-		Type: 'PayPal',
-		PaymentGateway: 'PayPal Express',
+		PaypalEmail: paypalEmail,
+		Type: 'PayPalCompletePaymentsWithBAID',
+		PaymentGateway: 'PayPal Complete Payments',
 	};
 }
 
@@ -263,7 +273,7 @@ export function createDirectDebitPaymentMethod(
 		City: user.billingAddress.city,
 		PostalCode: user.billingAddress.postCode,
 		State: user.billingAddress.state,
-		StreetName: addressLine?.streetName ?? null,
-		StreetNumber: addressLine?.streetNumber ?? null,
+		StreetName: addressLine?.streetName,
+		StreetNumber: addressLine?.streetNumber,
 	});
 }

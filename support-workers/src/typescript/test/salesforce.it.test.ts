@@ -122,7 +122,7 @@ describe('CreateSalesforceContatctLambda', () => {
 				createSalesforceContactContribution,
 			);
 		const result = await handler(
-			wrapState(inputState, null, {
+			wrapState(inputState, {
 				testUser: false,
 				failed: false,
 				messages: [],

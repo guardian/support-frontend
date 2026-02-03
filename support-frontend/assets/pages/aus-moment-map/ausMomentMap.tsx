@@ -1,15 +1,17 @@
 // ----- Imports ----- //
+import { Global } from '@emotion/react';
 import { init } from '@guardian/ophan-tracker-js/support';
 import { motion } from 'framer-motion';
 import * as React from 'react';
 import { renderPage } from 'helpers/rendering/render';
-import './ausMomentMap.scss';
 import { Blurb } from 'pages/aus-moment-map/components/blurb';
 import { CloseButton } from 'pages/aus-moment-map/components/closeButton';
 import { Header } from 'pages/aus-moment-map/components/header';
 import { Map } from 'pages/aus-moment-map/components/map';
 import type { TestimonialsCollection } from 'pages/aus-moment-map/types/testimonials';
 import 'pages/aus-moment-map/types/testimonials';
+import { guardianFonts } from 'stylesheets/emotion/fonts';
+import { ausMomentMapPageStyles } from './ausMomentMapPageStyles';
 import { TestimonialsContainer } from './components/testimonialsContainer';
 import { useWindowWidth } from './hooks/useWindowWidth';
 
@@ -147,50 +149,53 @@ function AusMomentMap(): JSX.Element {
 	);
 
 	return (
-		<div className="map-page">
-			<Header />
-			<div className="main">
-				<motion.div
-					className="left"
-					variants={mapVariants}
-					animate={animationVariant()}
-					transition={animationTransition}
-					positionTransition
-				>
-					{windowWidthIsLessThan('desktop') && <Blurb />}
-					<Map
-						selectedTerritory={selectedTerritory}
-						setSelectedTerritory={(territory) => {
-							setSelectedTerritory(territory);
-							setShouldScrollIntoView(true);
-						}}
-						ref={mapRef}
-					/>
+		<>
+			<Global styles={[guardianFonts, ausMomentMapPageStyles]} />
+			<div className="map-page">
+				<Header />
+				<div className="main">
 					<motion.div
-						className="left-padded-inner"
-						transition={animationTransition}
+						className="left"
+						variants={mapVariants}
 						animate={animationVariant()}
-						variants={blurbVariants}
+						transition={animationTransition}
+						positionTransition
 					>
-						<Blurb slim />
-					</motion.div>
-				</motion.div>
-				<div className="right">
-					{windowWidthIsGreaterThan('desktop') && <Blurb />}
-					{windowWidthIsGreaterThan('desktop') ? (
+						{windowWidthIsLessThan('desktop') && <Blurb />}
+						<Map
+							selectedTerritory={selectedTerritory}
+							setSelectedTerritory={(territory) => {
+								setSelectedTerritory(territory);
+								setShouldScrollIntoView(true);
+							}}
+							ref={mapRef}
+						/>
 						<motion.div
-							className="testimonials-overlay"
-							{...testimonialsProps()}
+							className="left-padded-inner"
+							transition={animationTransition}
+							animate={animationVariant()}
+							variants={blurbVariants}
 						>
-							<CloseButton onClick={() => setSelectedTerritory(null)} />
-							{createTestimonialsContainer()}
+							<Blurb slim />
 						</motion.div>
-					) : (
-						<div>{createTestimonialsContainer()}</div>
-					)}
+					</motion.div>
+					<div className="right">
+						{windowWidthIsGreaterThan('desktop') && <Blurb />}
+						{windowWidthIsGreaterThan('desktop') ? (
+							<motion.div
+								className="testimonials-overlay"
+								{...testimonialsProps()}
+							>
+								<CloseButton onClick={() => setSelectedTerritory(null)} />
+								{createTestimonialsContainer()}
+							</motion.div>
+						) : (
+							<div>{createTestimonialsContainer()}</div>
+						)}
+					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 }
 

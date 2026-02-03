@@ -6,6 +6,7 @@ import com.gu.support.workers.{
   CreditCardReferenceTransaction,
   DirectDebitPaymentMethod,
   PayPalCompletePaymentsReferenceTransaction,
+  PayPalCompletePaymentsWithBAIDReferenceTransaction,
   PayPalReferenceTransaction,
   PaymentMethod,
   SepaPaymentMethod,
@@ -43,6 +44,7 @@ class GuardianAdLiteEmailFields(created: DateTime) {
     case _: SepaPaymentMethod => "SEPA"
     case _: PayPalReferenceTransaction => "PayPal"
     case _: PayPalCompletePaymentsReferenceTransaction => "PayPal"
+    case _: PayPalCompletePaymentsWithBAIDReferenceTransaction => "PayPal"
     case _: CreditCardReferenceTransaction => "credit / debit card"
   }
 }

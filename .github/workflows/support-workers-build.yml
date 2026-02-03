@@ -81,17 +81,6 @@ jobs:
                   templateStagePaths:
                     CODE: SupportWorkers-CODE.template.json
                     PROD: SupportWorkers-PROD.template.json
-              support-workers-scala:
-                type: aws-lambda
-                parameters:
-                  functionNames:
-                    - "-CreateZuoraSubscriptionLambda-"
-                    - "-SendThankYouEmailLambda-"
-                    - "-UpdateSupporterProductDataLambda-"
-                    - "-FailureHandlerLambda-"
-                    - "-SendAcquisitionEventLambda-"
-                  fileName: support-workers.jar
-                dependencies: [cfn]
               support-workers-typescript:
                 type: aws-lambda
                 parameters:
@@ -99,6 +88,10 @@ jobs:
                     - "-CreateSalesforceContactLambda-"
                     - "-CreatePaymentMethodLambda-"
                     - "-CreateZuoraSubscriptionTSLambda-"
+                    - "-SendThankYouEmailLambda-"
+                    - "-UpdateSupporterProductDataLambda-"
+                    - "-SendAcquisitionEventLambda-"
+                    - "-FailureHandlerLambda-"
                   fileName: support-workers.zip
                 dependencies: [cfn]
               it-tests:
@@ -110,8 +103,6 @@ jobs:
               cfn:
                 - cdk/cdk.out/SupportWorkers-CODE.template.json
                 - cdk/cdk.out/SupportWorkers-PROD.template.json
-              support-workers-scala:
-                - support-workers/target/scala-2.13/support-workers.jar
               support-workers-typescript:
                 - support-workers/target/typescript/support-workers.zip
               it-tests:

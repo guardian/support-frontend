@@ -67,6 +67,13 @@ case class PayPalCompletePaymentsReferenceTransaction(
     PaymentGateway: PaymentGateway = PayPalCompletePaymentsGateway,
 ) extends PaymentMethod
 
+case class PayPalCompletePaymentsWithBAIDReferenceTransaction(
+    PaypalBaid: String,
+    PaypalEmail: String,
+    Type: String = "PayPalCompletePaymentsWithBAID",
+    PaymentGateway: PaymentGateway = PayPalCompletePaymentsGateway,
+) extends PaymentMethod
+
 case class DirectDebitPaymentMethod(
     FirstName: String,
     LastName: String,
@@ -129,6 +136,9 @@ object PaymentMethod {
   implicit val payPalReferenceTransactionCodec: Codec[PayPalReferenceTransaction] = deriveCodec
   implicit val payPalCompletePaymentsReferenceTransactionCodec: Codec[PayPalCompletePaymentsReferenceTransaction] =
     deriveCodec
+  implicit val payPalCompletePaymentsWithBAIDReferenceTransactionCodec
+      : Codec[PayPalCompletePaymentsWithBAIDReferenceTransaction] =
+    deriveCodec
   implicit val creditCardReferenceTransactionCodec: Codec[CreditCardReferenceTransaction] = deriveCodec
   implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = deriveCodec
   implicit val sepaPaymentMethodCodec: Codec[SepaPaymentMethod] = deriveCodec
@@ -138,6 +148,7 @@ object PaymentMethod {
   implicit val encodePaymentMethod: Encoder[PaymentMethod] = Encoder.instance {
     case pp: PayPalReferenceTransaction => pp.asJson
     case ppcp: PayPalCompletePaymentsReferenceTransaction => ppcp.asJson
+    case ppcpwb: PayPalCompletePaymentsWithBAIDReferenceTransaction => ppcpwb.asJson
     case card: CreditCardReferenceTransaction => card.asJson
     case dd: DirectDebitPaymentMethod => dd.asJson
     case sepa: SepaPaymentMethod => sepa.asJson.deepDropNullValues
@@ -147,6 +158,7 @@ object PaymentMethod {
   implicit val decodePaymentMethod: Decoder[PaymentMethod] =
     List[Decoder[PaymentMethod]](
       Decoder[PayPalReferenceTransaction].widen,
+      Decoder[PayPalCompletePaymentsWithBAIDReferenceTransaction].widen,
       Decoder[PayPalCompletePaymentsReferenceTransaction].widen,
       Decoder[CreditCardReferenceTransaction].widen,
       Decoder[ClonedDirectDebitPaymentMethod].widen, // ordering is significant (at least between direct debit variants)

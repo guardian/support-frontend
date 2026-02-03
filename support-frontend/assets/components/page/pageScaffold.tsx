@@ -27,12 +27,14 @@ const container = css`
 `;
 
 export type PageScaffoldProps = {
+	id?: string;
 	header?: ReactNode;
 	footer?: ReactNode;
 	children: ReactNode;
 };
 
 export function PageScaffold({
+	id,
 	header,
 	footer,
 	children,
@@ -44,7 +46,7 @@ export function PageScaffold({
 	}, []);
 
 	return (
-		<div css={container}>
+		<div id={id} css={container}>
 			<Global styles={[reset, guardianFonts]} />
 			<nav aria-label="Skip to section">
 				<SkipLink id="maincontent" label="Skip to main content" />

@@ -14,12 +14,12 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from '../../../helpers/productCatalog';
-import type { UserType } from '../../../helpers/redux/checkout/personalDetails/state';
 import {
 	getOphanIds,
 	getReferrerAcquisitionData,
 	getSupportAbTests,
 } from '../../../helpers/tracking/acquisitions';
+import type { UserType } from '../../../helpers/user/userType';
 import { getProductFirstDeliveryDate } from '../checkout/helpers/deliveryDays';
 import type { FormPersonalFields } from '../checkout/helpers/formDataExtractors';
 import {
@@ -108,6 +108,10 @@ export const submitForm = async ({
 	const supportAbTests = getSupportAbTests(abParticipations);
 	const deliveryInstructions = formData.get('deliveryInstructions') as string;
 	const similarProductsConsent = getConsentValue(formData, CONSENT_ID);
+	let redactedAccountNumber = '';
+	if (paymentFields.paymentType === 'DirectDebit') {
+		redactedAccountNumber = `******${paymentFields.accountNumber.slice(-2)}`;
+	}
 
 	const productInformation = buildProductInformation({
 		productFields: productFields,
@@ -172,6 +176,7 @@ export const submitForm = async ({
 			paymentMethod,
 			supportRegionId,
 			paymentRequest,
+			accountNumber: redactedAccountNumber,
 			weeklyGiftDeliveryDate,
 		});
 
@@ -211,6 +216,7 @@ const processSubscription = async ({
 	paymentMethod,
 	supportRegionId,
 	paymentRequest,
+	accountNumber,
 	weeklyGiftDeliveryDate,
 }: {
 	personalData: FormPersonalFields;
@@ -221,6 +227,8 @@ const processSubscription = async ({
 	paymentMethod: PaymentMethod;
 	supportRegionId: SupportRegionId;
 	paymentRequest: RegularPaymentRequest;
+	deliveryDate?: Date;
+	accountNumber?: string;
 	weeklyGiftDeliveryDate?: Date;
 }) => {
 	const createSubscriptionResult = await createSubscription(paymentRequest);
@@ -239,6 +247,7 @@ const processSubscription = async ({
 			paymentMethod,
 			createSubscriptionResult.status,
 			supportRegionId,
+			accountNumber,
 			weeklyGiftDeliveryDate,
 		);
 	} else {
@@ -265,11 +274,13 @@ const buildThankYouPageUrl = (
 	paymentMethod: PaymentMethod,
 	status: 'success' | 'pending',
 	supportRegionId: SupportRegionId,
+	accountNumber?: string,
 	weeklyGiftDeliveryDate?: Date,
 ) => {
 	const order = {
 		firstName: personalData.firstName,
 		email: personalData.email,
+		accountNumber,
 		paymentMethod,
 		status,
 		deliveryDate: weeklyGiftDeliveryDate,

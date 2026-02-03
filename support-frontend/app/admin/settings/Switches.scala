@@ -27,6 +27,7 @@ case class FeatureSwitches(
     enableCampaignCountdown: Option[SwitchState],
     enableThankYouOnboarding: Option[SwitchState],
     enableCheckoutNudge: Option[SwitchState],
+    enableMParticle: Option[SwitchState],
 )
 
 object FeatureSwitches {
@@ -45,6 +46,7 @@ object CampaignSwitches {
 case class SubscriptionsSwitches(
     useDotcomContactPage: Option[SwitchState],
     checkoutPostcodeLookup: Option[SwitchState],
+    useIdealPostcodes: Option[SwitchState],
 )
 
 object SubscriptionsSwitches {

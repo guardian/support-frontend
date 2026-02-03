@@ -2,6 +2,7 @@ import { storage } from '@guardian/libs';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import { AnalyticsProfileCacheProvider } from 'helpers/customHooks/analyticsProfileCache';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
@@ -13,13 +14,14 @@ import {
 import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
+import type { UserType } from 'helpers/user/userType';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { setHideSupportMessaginCookie } from '../../helpers/storage/contributionsCookies';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
+import type { OnboardingProductKey } from './components/onboardingComponent';
 import OnboardingComponent from './components/onboardingComponent';
 import { ThankYouComponent } from './components/thankYouComponent';
 
@@ -169,16 +171,18 @@ export function ThankYou({
 		storage.session.get(SKIP_NEW_ONBOARDING_EXPERIENCE_KEY) !== 'true'
 	) {
 		return (
-			<OnboardingComponent
-				supportRegionId={supportRegionId}
-				csrf={csrf}
-				payment={payment}
-				productKey={productKey}
-				ratePlanKey={ratePlanKey}
-				promotion={promotion}
-				identityUserType={userType}
-				landingPageSettings={landingPageSettings}
-			/>
+			<AnalyticsProfileCacheProvider>
+				<OnboardingComponent
+					supportRegionId={supportRegionId}
+					csrf={csrf}
+					payment={payment}
+					productKey={productKey as OnboardingProductKey}
+					ratePlanKey={ratePlanKey ?? 'OneTime'}
+					promotion={promotion}
+					identityUserType={userType}
+					landingPageSettings={landingPageSettings}
+				/>
+			</AnalyticsProfileCacheProvider>
 		);
 	}
 

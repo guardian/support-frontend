@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source/foundations';
+import { palette, space, textSans17 } from '@guardian/source/foundations';
 import {
 	Button,
 	Option,
@@ -18,7 +18,8 @@ interface PostCodeFinderProps {
 	results?: PostcodeFinderResult[];
 	error?: string;
 	onPostcodeUpdate: (postcode: string) => void;
-	onPostcodeError: (error: string) => void;
+	onPostcodeLookupError: (error: string) => void;
+	postcodeLookupError: string | null;
 	onFindAddress: (postcode: string) => void;
 	onAddressSelected: (result: PostcodeFinderResult) => void;
 }
@@ -29,7 +30,8 @@ export function PostcodeFinder({
 	results,
 	error,
 	onPostcodeUpdate,
-	onPostcodeError,
+	onPostcodeLookupError,
+	postcodeLookupError,
 	onFindAddress,
 	onAddressSelected,
 }: PostCodeFinderProps): JSX.Element {
@@ -39,7 +41,7 @@ export function PostcodeFinder({
 		}
 
 		if (postcode.trim() === '') {
-			onPostcodeError('Please enter a postcode');
+			onPostcodeLookupError('Please enter a postcode');
 			return;
 		}
 
@@ -81,6 +83,12 @@ export function PostcodeFinder({
 					</div>
 				)}
 			</div>
+
+			{postcodeLookupError && (
+				<div css={styles.errorContainer} role="alert">
+					{postcodeLookupError}
+				</div>
+			)}
 
 			{results && results.length > 0 && (
 				<div css={styles.addressSelectorContainer}>
@@ -158,5 +166,10 @@ const styles = {
 	`,
 	addressSelectorContainer: css`
 		margin-top: ${space[6]}px;
+	`,
+	errorContainer: css`
+		${textSans17};
+		margin-top: ${space[4]}px;
+		color: ${palette.error[400]};
 	`,
 };

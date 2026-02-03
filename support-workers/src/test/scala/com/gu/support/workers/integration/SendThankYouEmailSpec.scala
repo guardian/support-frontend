@@ -453,7 +453,7 @@ object TestData {
             description = "descpromo",
             appliesTo = AppliesTo(Set("8a128ed885fc6ded018602296ace3eb8" /*s+*/ ), Set(Country.UK)),
             campaignCode = "ccode",
-            channelCodes = Map("webchannel" -> Set("SUPPORTER_PLUS_PROMO")),
+            promoCode = "SUPPORTER_PLUS_PROMO",
             starts = DateTime.now,
             expires = None,
             discount = Some(DiscountBenefit(80d, Some(Months.months(3)))),

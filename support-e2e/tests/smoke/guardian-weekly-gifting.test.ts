@@ -7,6 +7,7 @@ const giftTests = [
 		ratePlan: '3MonthGift',
 		paymentType: 'Credit/Debit card',
 		internationalisationId: 'UK',
+		billingCountry: 'United States',
 	},
 	{
 		product: 'GuardianWeeklyDomestic',
@@ -19,6 +20,7 @@ const giftTests = [
 		ratePlan: 'OneYearGift',
 		paymentType: 'Credit/Debit card',
 		internationalisationId: 'INT',
+		billingCountry: 'United States',
 	},
 	{
 		product: 'GuardianWeeklyDomestic',
@@ -30,10 +32,16 @@ const giftTests = [
 
 test.describe('Guardian Weekly Gift Checkout', () =>
 	giftTests.map((testDetails) => {
-		const { ratePlan, product, paymentType, internationalisationId } =
-			testDetails;
+		const {
+			ratePlan,
+			product,
+			paymentType,
+			internationalisationId,
+			billingCountry,
+		} = testDetails;
+		const countries = `${internationalisationId}${billingCountry ? ` / ${billingCountry}` : ''}`;
 		const giftPeriod = ratePlan === '3MonthGift' ? '3 months' : '12 months';
-		test(`${product} - ${ratePlan} - ${paymentType} - ${internationalisationId}`, async ({
+		test(`${product} - ${ratePlan} - ${paymentType} - ${countries}`, async ({
 			context,
 			baseURL,
 		}) => {
@@ -41,7 +49,7 @@ test.describe('Guardian Weekly Gift Checkout', () =>
 				`/${internationalisationId.toLowerCase()}/subscribe/weekly/gift`,
 				{
 					context,
-					baseURL: baseURL,
+					baseURL,
 					product,
 					ratePlan,
 					paymentType,

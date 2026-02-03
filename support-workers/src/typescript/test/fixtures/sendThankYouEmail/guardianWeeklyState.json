@@ -1,0 +1,166 @@
+{
+  "state": {
+    "requestId": "009eb789-4744-c520-0000-00000000003e",
+    "sendThankYouEmailState": {
+      "user": {
+        "id": "200499853",
+        "primaryEmailAddress": "test@thegulocal.com",
+        "title": null,
+        "firstName": "support.e2e.firstName+xBie3",
+        "lastName": "support.e2e.lastName+mKBhN",
+        "billingAddress": {
+          "lineOne": "3 Cross Street",
+          "lineTwo": "",
+          "city": "Manchester",
+          "state": null,
+          "postCode": "M1 1PW",
+          "country": "GB"
+        },
+        "deliveryAddress": {
+          "lineOne": "90 York Way",
+          "lineTwo": "",
+          "city": "London",
+          "state": null,
+          "postCode": "N1 9GU",
+          "country": "GB"
+        },
+        "telephoneNumber": null,
+        "isTestUser": true,
+        "deliveryInstructions": null
+      },
+      "product": {
+        "currency": "GBP",
+        "billingPeriod": "Monthly",
+        "fulfilmentOptions": "Domestic",
+        "productType": "GuardianWeekly"
+      },
+      "productInformation": {
+        "product": "GuardianWeeklyDomestic",
+        "ratePlan": "Monthly",
+        "amount": null,
+        "deliveryAgent": null,
+        "deliveryInstructions": null,
+        "deliveryContact": {
+          "firstName": "support.e2e.firstName+xBie3",
+          "lastName": "support.e2e.lastName+mKBhN",
+          "workEmail": "rupert.bates+smoke-test@theguardian.com",
+          "country": "GB",
+          "state": null,
+          "city": "London",
+          "address1": "90 York Way",
+          "address2": "",
+          "postalCode": "N1 9GU"
+        },
+        "firstDeliveryDate": "2025-11-28T00:00:00.000Z"
+      },
+      "giftRecipient": null,
+      "paymentMethod": {
+        "TokenId": "pm_0STNqOItVxyc3Q6nNnUcoSoC",
+        "SecondTokenId": "cus_TQEJQxRrAJb7zV",
+        "CreditCardNumber": "4242",
+        "CreditCardExpirationMonth": 1,
+        "CreditCardExpirationYear": 2050,
+        "CreditCardType": "Visa",
+        "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+        "Type": "CreditCardReferenceTransaction",
+        "StripePaymentType": "StripeCheckout"
+      },
+      "paymentSchedule": {
+        "payments": [
+          {
+            "date": "2025-11-28",
+            "amount": 14.85
+          },
+          {
+            "date": "2025-12-28",
+            "amount": 14.85
+          },
+          {
+            "date": "2026-01-28",
+            "amount": 14.85
+          },
+          {
+            "date": "2026-02-28",
+            "amount": 14.85
+          },
+          {
+            "date": "2026-03-28",
+            "amount": 14.85
+          },
+          {
+            "date": "2026-04-28",
+            "amount": 14.85
+          },
+          {
+            "date": "2026-05-28",
+            "amount": 14.85
+          },
+          {
+            "date": "2026-06-28",
+            "amount": 14.85
+          },
+          {
+            "date": "2026-07-28",
+            "amount": 14.85
+          },
+          {
+            "date": "2026-08-28",
+            "amount": 14.85
+          },
+          {
+            "date": "2026-09-28",
+            "amount": 14.85
+          },
+          {
+            "date": "2026-10-28",
+            "amount": 14.85
+          },
+          {
+            "date": "2026-11-28",
+            "amount": 16.5
+          }
+        ]
+      },
+      "promoCode": "10ANNUAL",
+      "accountNumber": "A01063021",
+      "subscriptionNumber": "A-S04444444",
+      "firstDeliveryDate": "2025-11-28",
+      "similarProductsConsent": true,
+      "productType": "GuardianWeekly"
+    },
+    "analyticsInfo": {
+      "isGiftPurchase": false,
+      "paymentProvider": "Stripe"
+    },
+    "acquisitionData": {
+      "ophanIds": {
+        "pageviewId": "mhyy1ujxsh20bkv1grlv",
+        "browserId": null
+      },
+      "referrerAcquisitionData": {
+        "campaignCode": null,
+        "referrerPageviewId": "",
+        "referrerUrl": null,
+        "componentId": null,
+        "componentType": null,
+        "source": null,
+        "abTests": null,
+        "queryParameters": [],
+        "hostname": "support.thegulocal.com",
+        "gaClientId": null,
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36",
+        "ipAddress": "127.0.0.1",
+        "labels": [
+          "generic-checkout"
+        ]
+      },
+      "supportAbTests": []
+    }
+  },
+  "error": null,
+  "requestInfo": {
+    "testUser": true,
+    "failed": false,
+    "messages": []
+  }
+}

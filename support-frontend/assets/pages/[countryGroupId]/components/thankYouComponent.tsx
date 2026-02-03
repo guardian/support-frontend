@@ -3,25 +3,24 @@ import { storage } from '@guardian/libs';
 import { from } from '@guardian/source/foundations';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import { useEffect, useState } from 'react';
 import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import { observerThemeButton } from 'components/observer-layout/styles';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { Participations } from 'helpers/abTests/models';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import { Country } from 'helpers/internationalisation/classes/country';
-import type {
-	ActiveProductKey,
-	ActiveRatePlanKey,
+import {
+	type ActiveProductKey,
+	type ActiveRatePlanKey,
+	productCatalogDescription,
 } from 'helpers/productCatalog';
 import {
 	billingPeriodToContributionType,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { type CsrfState } from 'helpers/redux/checkout/csrf/state';
-import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { get } from 'helpers/storage/cookie';
 import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
 import {
@@ -29,9 +28,12 @@ import {
 	sendEventContributionCheckoutConversion,
 	sendEventOneTimeCheckoutValue,
 } from 'helpers/tracking/quantumMetric';
+import { type CsrfState } from 'helpers/types/csrf';
 import { getUser } from 'helpers/user/user';
+import type { UserType } from 'helpers/user/userType';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
+import { isPaperPlusSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import {
 	isGuardianWeeklyProduct,
@@ -42,7 +44,10 @@ import ThankYouModules from '../../../components/thankYou/thankyouModules';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
-import { getPremiumDigitalAllBenefits } from '../checkout/helpers/benefitsChecklist';
+import {
+	filterProductDescriptionBenefits,
+	getPaperPlusDigitalBenefits,
+} from '../checkout/helpers/benefitsChecklist';
 import {
 	getReturnAddress,
 	getThankYouOrder,
@@ -105,7 +110,7 @@ export function ThankYouComponent({
 	const isTier =
 		productKey === 'Contribution' ||
 		productKey === 'SupporterPlus' ||
-		productKey === 'TierThree';
+		productKey === 'DigitalSubscription';
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const isOneOff = billingPeriod === BillingPeriod.OneTime;
 
@@ -115,51 +120,62 @@ export function ThankYouComponent({
 			? 'Stripe'
 			: order.paymentMethod;
 
-	// quarterly needs support in future for GW products (when they are enabled). So not needed currently, defaults to monthly.
-	successfulContributionConversion(
-		payment.finalAmount, // This is the final amount after discounts
-		billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY',
-		currencyKey,
-		paymentMethod,
-		productKey,
-	);
-
-	/**
-	 * This is some annoying transformation we need from
-	 * Product API => Contributions work we need to do
-	 */
-	if (isOneOff) {
-		// track conversion with QM
-		sendEventOneTimeCheckoutValue(
-			payment.originalAmount, // This is the amount before discounts
+	useEffect(() => {
+		// quarterly needs support in future for GW products (when they are enabled). So not needed currently, defaults to monthly.
+		successfulContributionConversion(
+			payment.finalAmount, // This is the final amount after discounts
+			billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY',
 			currencyKey,
-			true,
-		);
-	} else {
-		// track conversion with QM
-		sendEventCheckoutValue(
-			payment.originalAmount, // This is the amount before discounts
+			paymentMethod,
 			productKey,
+		);
+
+		/**
+		 * This is some annoying transformation we need from
+		 * Product API => Contributions work we need to do
+		 */
+		if (isOneOff) {
+			// track conversion with QM
+			sendEventOneTimeCheckoutValue(
+				payment.originalAmount, // This is the amount before discounts
+				currencyKey,
+				true,
+			);
+		} else {
+			// track conversion with QM
+			sendEventCheckoutValue(
+				payment.originalAmount, // This is the amount before discounts
+				productKey,
+				billingPeriod,
+				currencyKey,
+				true,
+			);
+		}
+
+		// track conversion with QM
+		sendEventContributionCheckoutConversion(
+			payment.originalAmount, // This is the amount before discounts
 			billingPeriod,
 			currencyKey,
-			true,
 		);
-	}
-
-	// track conversion with QM
-	sendEventContributionCheckoutConversion(
-		payment.originalAmount, // This is the amount before discounts
+	}, [
+		isOneOff,
+		payment,
+		productKey,
 		billingPeriod,
 		currencyKey,
-	);
+		paymentMethod,
+	]);
 
+	const [feedbackSurveyCompleted, setFeedbackSurveyCompleted] =
+		useState<boolean>(false);
+
+	const isGuardianPaperPlus = isPaperPlusSub(productKey, ratePlanKey); // Observer not a Plus plan
 	const isPrint = isPrintProduct(productKey);
 	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
 
 	const observerPrint = getObserver(productKey, ratePlanKey);
 	const isObserverSubDomain = isObserverSubdomain();
-
-	const { enablePremiumDigital } = getFeatureFlags();
 
 	const isGuardianPrint = isPrint && !observerPrint;
 	const isDigitalEdition = productKey === 'DigitalSubscription';
@@ -167,7 +183,6 @@ export function ThankYouComponent({
 	const isSupporterPlus = productKey === 'SupporterPlus';
 	const isTierThree = productKey === 'TierThree';
 	const isNationalDelivery = productKey === 'NationalDelivery';
-	const isPremiumDigital = isDigitalEdition && enablePremiumDigital;
 	const { email } = order;
 	const validEmail = email !== '';
 
@@ -179,26 +194,33 @@ export function ThankYouComponent({
 	const getBenefits = (): BenefitsCheckListData[] => {
 		// Three Tier products get their config from the Landing Page tool
 		if (isTier) {
-			// Also show SupporterPlus benefits for TierThree
-			const tierThreeAdditionalBenefits =
-				productKey === 'TierThree'
-					? landingPageSettings.products.SupporterPlus.benefits.map(
-							(benefit) => ({
-								isChecked: true,
-								text: benefit.copy,
-							}),
-					  )
+			const productBenefits = (
+				landingPageSettings.products[productKey]?.benefits ??
+				filterProductDescriptionBenefits(
+					productCatalogDescription[productKey],
+					countryGroupId,
+				)
+			).map((benefit) => ({
+				isChecked: true,
+				text: benefit.copy,
+			}));
+			const digitalSubscriptionAdditionalBenefits =
+				productKey === 'DigitalSubscription'
+					? (
+							landingPageSettings.products.SupporterPlus?.benefits ??
+							filterProductDescriptionBenefits(
+								productCatalogDescription.SupporterPlus,
+								countryGroupId,
+							)
+					  ).map((benefit) => ({
+							isChecked: true,
+							text: benefit.copy,
+					  }))
 					: [];
-			return [
-				...landingPageSettings.products[productKey].benefits.map((benefit) => ({
-					isChecked: true,
-					text: benefit.copy,
-				})),
-				...tierThreeAdditionalBenefits,
-			];
+			return [...productBenefits, ...digitalSubscriptionAdditionalBenefits];
 		}
-		if (isPremiumDigital) {
-			return getPremiumDigitalAllBenefits(countryGroupId);
+		if (isGuardianPaperPlus || !!observerPrint) {
+			return getPaperPlusDigitalBenefits(productKey, ratePlanKey) ?? [];
 		}
 		return [];
 	};
@@ -211,26 +233,26 @@ export function ThankYouComponent({
 			ratePlanKey as ActivePaperProductOptions,
 		);
 	const startDate = deliveryStart ? formatUserDate(deliveryStart) : undefined;
-	const thankYouModuleData = getThankYouModuleData(
+	const thankYouModuleData = getThankYouModuleData({
 		productKey,
 		ratePlanKey,
 		countryGroupId,
 		countryId,
 		csrf,
 		isOneOff,
-		isSupporterPlus,
+		amountIsAboveThreshold: isSupporterPlus,
 		isTierThree,
 		startDate,
 		email,
-		undefined,
-		benefitsChecklist,
-		undefined,
-		undefined,
-		payment.finalAmount,
-		getReturnAddress(), // Session storage returnAddress (from GuardianAdLiteLanding)
+		campaignCode: undefined,
+		checklistData: benefitsChecklist,
+		finalAmount: payment.finalAmount,
+		returnAddress: getReturnAddress(), // Session storage returnAddress (from GuardianAdLiteLanding)
 		isSignedIn,
 		observerPrint,
-	);
+		feedbackSurveyCompleted,
+		setFeedbackSurveyCompleted,
+	});
 	const maybeThankYouModule = (
 		condition: boolean,
 		moduleType: ThankYouModuleType,
@@ -249,7 +271,7 @@ export function ThankYouComponent({
 			userNotSignedIn && !isGuardianAdLite && !isObserverSubDomain,
 			'signIn',
 		), // Sign in to access your benefits
-		...maybeThankYouModule(isTierThree || isPremiumDigital, 'benefits'),
+		...maybeThankYouModule(isTierThree || isDigitalEdition, 'benefits'),
 		...maybeThankYouModule(
 			!!isObserverSubDomain && !!observerPrint,
 			'observerAppDownload',
@@ -265,18 +287,17 @@ export function ThankYouComponent({
 		),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
-			isOneOff ||
-				(!(isTierThree && enablePremiumDigital) &&
-					isSignedIn &&
-					!isGuardianAdLite &&
-					!isPrint),
+			isOneOff || (!isTierThree && isSignedIn && !isGuardianAdLite && !isPrint),
 			'feedback',
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
-		...maybeThankYouModule(isPremiumDigital, 'newspaperArchiveBenefit'),
+		...maybeThankYouModule(
+			isDigitalEdition || isGuardianPaperPlus,
+			'newspaperArchiveBenefit',
+		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(
-			!isTierThree && !isGuardianAdLite && !isPrint && !isPremiumDigital,
+			!isTierThree && !isGuardianAdLite && !isPrint && !isDigitalEdition,
 			'socialShare',
 		),
 		...maybeThankYouModule(

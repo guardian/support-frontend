@@ -12,6 +12,8 @@
       "@modules/product-catalog/*": ["./node_modules/@guardian/support-service-lambdas/modules/product-catalog/src/*"],
       "@modules/routing/*": ["./node_modules/@guardian/support-service-lambdas/modules/routing/src/*"],
       "@modules/promotions/*": ["./node_modules/@guardian/support-service-lambdas/modules/promotions/src/*"],
+      "@modules/email/*": ["./node_modules/@guardian/support-service-lambdas/modules/email/src/*"],
+      "@modules/supporter-product-data/*": ["./node_modules/@guardian/support-service-lambdas/modules/supporter-product-data/src/*"],
       "@modules/product/*": ["../modules/product/*"],
       "@modules/*": ["./node_modules/@guardian/support-service-lambdas/modules/*"]
     }

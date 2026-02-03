@@ -28,10 +28,10 @@ import { paymentMethodData } from 'components/paymentMethodSelector/paymentMetho
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
+import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
@@ -50,15 +50,13 @@ import {
 	type ActiveProductKey,
 	type ActiveRatePlanKey,
 	productCatalogDescription,
-	productCatalogDescriptionPremiumDigital,
 	showSimilarProductsConsentForRatePlan,
 } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
-import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
+import type { CsrfState } from 'helpers/types/csrf';
 import { logException } from 'helpers/utilities/logger';
 import { getWeeklyDays } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
@@ -71,6 +69,7 @@ import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
+import type { BillingStatePostcodeCountry } from '../checkout/components/BillingAddressFields';
 import { PersonalAddressFields } from '../checkout/components/PersonalAddressFields';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
 import { WeeklyDeliveryDates } from '../checkout/components/WeeklyDeliveryDates';
@@ -204,13 +203,7 @@ export default function CheckoutForm({
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 
-	const { enablePremiumDigital } = getFeatureFlags();
-	const isPremiumDigitalProduct =
-		enablePremiumDigital && productKey === 'DigitalSubscription';
-
-	const productDescription = isPremiumDigitalProduct
-		? productCatalogDescriptionPremiumDigital
-		: productCatalogDescription[productKey];
+	const productDescription = productCatalogDescription[productKey];
 	const hasDeliveryAddress = !!productDescription.deliverableTo;
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
@@ -291,14 +284,6 @@ export default function CheckoutForm({
 	if (isInvalidAmount) {
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
-
-	const validPaymentMethods = getPaymentMethods(
-		countryId,
-		productKey,
-		ratePlanKey,
-	)
-		.filter(isPaymentMethod)
-		.filter(paymentMethodIsActive);
 
 	const [paymentMethod, setPaymentMethod] = useStateWithCheckoutSession<
 		PaymentMethod | undefined
@@ -502,6 +487,21 @@ export default function CheckoutForm({
 		'',
 	);
 
+	// billingCountry selector used to determine available payment methods
+	const [billingCountry, setBillingCountry] =
+		useStateWithCheckoutSession<IsoCountry>(
+			checkoutSession?.formFields.addressFields.billingAddress.country,
+			countryId,
+		);
+
+	const validPaymentMethods = getPaymentMethods(
+		countryId,
+		productKey,
+		ratePlanKey,
+	)
+		.filter(isPaymentMethod)
+		.filter(paymentMethodIsActive);
+
 	/** Gift recipient details */
 	// Session storage unavailable yet, using state
 	const [recipientFirstName, setRecipientFirstName] =
@@ -678,11 +678,13 @@ export default function CheckoutForm({
 	);
 
 	const billingPeriod = productFields.billingPeriod;
-	const billingStatePostcode = {
+	const billingStatePostcodeCountry: BillingStatePostcodeCountry = {
 		billingState: billingState,
 		setBillingState: setBillingState,
 		billingPostcode: billingPostcode,
 		setBillingPostcode: setBillingPostcode,
+		billingCountry: billingCountry,
+		setBillingCountry: setBillingCountry,
 	};
 
 	const billingPreposition = productDescription.ratePlans[ratePlanKey]
@@ -910,7 +912,7 @@ export default function CheckoutForm({
 							setConfirmedEmail={setConfirmedEmail}
 							phoneNumber={phoneNumber}
 							setPhoneNumber={setPhoneNumber}
-							billingStatePostcode={billingStatePostcode}
+							billingStatePostcodeCountry={billingStatePostcodeCountry}
 							hasDeliveryAddress={hasDeliveryAddress}
 							isEmailAddressReadOnly={isSignedIn}
 							isSignedIn={isSignedIn}
@@ -940,7 +942,7 @@ export default function CheckoutForm({
 								setDeliveryAgentError={setDeliveryAgentError}
 								deliveryAddressErrors={deliveryAddressErrors}
 								setDeliveryAddressErrors={setDeliveryAddressErrors}
-								billingStatePostcode={billingStatePostcode}
+								billingStatePostcodeCountry={billingStatePostcodeCountry}
 							/>
 						)}
 
@@ -1136,6 +1138,7 @@ export default function CheckoutForm({
 						<SummaryTsAndCs
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
+							countryGroupId={countryGroupId}
 							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}

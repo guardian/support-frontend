@@ -12,18 +12,10 @@ import {
 	BenefitsCheckList,
 	type BenefitsCheckListData,
 } from 'components/checkoutBenefits/benefitsCheckList';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
-import {
-	setThankYouFeedbackSurveyHasBeenCompleted,
-	setThankYouSupportReminder,
-} from 'helpers/redux/checkout/thankYouState/actions';
-import type { ThankYouSupportReminderState } from 'helpers/redux/checkout/thankYouState/state';
-import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import {
 	OPHAN_COMPONENT_ID_AUS_MAP,
 	OPHAN_COMPONENT_ID_SIGN_IN,
@@ -31,18 +23,15 @@ import {
 	OPHAN_COMPONENT_ID_SOCIAL,
 	OPHAN_COMPONENT_ID_SURVEY,
 } from 'helpers/thankYouPages/utils/ophan';
+import type { CsrfState } from 'helpers/types/csrf';
 import { getManageSubsUrl } from 'helpers/urls/externalLinks';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import { isPrintProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { getCurrency } from '../../helpers/productPrice/productPrices';
 import AppDownload from './appDownload/AppDownload';
-import AppDownloadBadges, {
-	AppDownloadBadgesEditions,
-} from './appDownload/AppDownloadBadges';
+import AppDownloadBadges from './appDownload/AppDownloadBadges';
 import {
 	AppDownloadBodyCopy,
-	AppDownloadEditionsBodyCopy,
-	appDownloadEditionsHeader,
 	appDownloadHeader,
 	AppFeastDownloadBodyCopy,
 	appFeastDownloadHeader,
@@ -114,36 +103,59 @@ const defaultSupportReminder = {
 	hasBeenCompleted: false,
 	errorMessage: '',
 };
-const defaultFeedbackSurveyHasBeenCompleted = false;
 
-export const getThankYouModuleData = (
-	productKey: ActiveProductKey,
-	ratePlanKey: ActiveRatePlanKey,
-	countryGroupId: CountryGroupId,
-	countryId: IsoCountry,
-	csrf: CsrfState,
-	isOneOff: boolean,
-	amountIsAboveThreshold: boolean,
-	isTierThree: boolean,
-	startDate?: string,
-	email?: string,
-	campaignCode?: string,
-	checklistData?: BenefitsCheckListData[],
-	supportReminder?: ThankYouSupportReminderState,
-	feedbackSurveyHasBeenCompleted?: boolean,
-	finalAmount?: number,
-	returnAddress?: string,
-	isSignedIn?: boolean,
-	observerPrint?: ObserverPrint,
-): Record<ThankYouModuleType, ThankYouModuleData> => {
-	const initialFeedbackSurveyHasBeenCompleted =
-		feedbackSurveyHasBeenCompleted ?? defaultFeedbackSurveyHasBeenCompleted;
-	const [feedbackSurveyCompleted, setFeedbackSurveyCompleted] =
-		useState<boolean>(initialFeedbackSurveyHasBeenCompleted);
+interface ThankYouSupportReminderState {
+	selectedChoiceIndex: number;
+	hasBeenCompleted: boolean;
+	errorMessage: string | null;
+}
+
+type GetThankYouModuleDataParams = {
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
+	countryGroupId: CountryGroupId;
+	countryId: IsoCountry;
+	csrf: CsrfState;
+	isOneOff: boolean;
+	amountIsAboveThreshold: boolean;
+	isTierThree: boolean;
+	startDate?: string;
+	email?: string;
+	campaignCode?: string;
+	checklistData?: BenefitsCheckListData[];
+	finalAmount?: number;
+	returnAddress?: string;
+	isSignedIn?: boolean;
+	observerPrint?: ObserverPrint;
+	feedbackSurveyCompleted: boolean;
+	setFeedbackSurveyCompleted: (completed: boolean) => void;
+};
+
+export const getThankYouModuleData = ({
+	productKey,
+	ratePlanKey,
+	countryGroupId,
+	countryId,
+	csrf,
+	isOneOff,
+	amountIsAboveThreshold,
+	isTierThree,
+	startDate,
+	email,
+	campaignCode,
+	checklistData,
+	finalAmount,
+	returnAddress,
+	isSignedIn,
+	observerPrint,
+	feedbackSurveyCompleted,
+	setFeedbackSurveyCompleted,
+}: GetThankYouModuleDataParams): Record<
+	ThankYouModuleType,
+	ThankYouModuleData
+> => {
 	const [supportReminderCompleted, setSupportReminderCompleted] =
-		useState<ThankYouSupportReminderState>(
-			supportReminder ?? defaultSupportReminder,
-		);
+		useState<ThankYouSupportReminderState>(defaultSupportReminder);
 
 	const isGuardianPrint = isPrintProduct(productKey) && !observerPrint;
 
@@ -159,7 +171,6 @@ export const getThankYouModuleData = (
 				: 'guardian_supporter_below'
 		}`;
 	};
-	const { enablePremiumDigital } = getFeatureFlags();
 	const thankYouModuleData: Record<ThankYouModuleType, ThankYouModuleData> = {
 		appsDownload: {
 			icon: getThankYouModuleIcon('appsDownload'),
@@ -198,28 +209,21 @@ export const getThankYouModuleData = (
 			),
 			ctas: null,
 		},
-		appDownloadEditions: enablePremiumDigital
-			? {
-					icon: getThankYouModuleIcon('appsDownload'),
-					header: 'Explore your subscriber’s App',
-					bodyCopy: (
-						<AppDownload
-							apps={getDownloadApps([
-								'GuardianNews',
-								'guardianFeast',
-								'guardianEditions',
-							])}
-							countryGroupId={countryGroupId}
-						/>
-					),
-					ctas: null,
-			  }
-			: {
-					icon: getThankYouModuleIcon('appDownload'),
-					header: appDownloadEditionsHeader,
-					bodyCopy: <AppDownloadEditionsBodyCopy />,
-					ctas: <AppDownloadBadgesEditions countryGroupId={countryGroupId} />,
-			  },
+		appDownloadEditions: {
+			icon: getThankYouModuleIcon('appsDownload'),
+			header: 'Explore your subscriber’s App',
+			bodyCopy: (
+				<AppDownload
+					apps={getDownloadApps([
+						'GuardianNews',
+						'guardianFeast',
+						'guardianEditions',
+					])}
+					countryGroupId={countryGroupId}
+				/>
+			),
+			ctas: null,
+		},
 		ausMap: {
 			icon: getThankYouModuleIcon('ausMap'),
 			header: ausMapHeader,
@@ -240,10 +244,6 @@ export const getThankYouModuleData = (
 					feedbackSurveyLink={getFeedbackSurveyLink()}
 					onClick={() => {
 						setFeedbackSurveyCompleted(true);
-						if (feedbackSurveyHasBeenCompleted) {
-							const dispatch = useContributionsDispatch();
-							dispatch(setThankYouFeedbackSurveyHasBeenCompleted(true));
-						}
 					}}
 				/>
 			),
@@ -337,15 +337,6 @@ export const getThankYouModuleData = (
 							...supportReminderCompleted,
 							selectedChoiceIndex: index,
 						});
-						if (supportReminder) {
-							const dispatch = useContributionsDispatch();
-							dispatch(
-								setThankYouSupportReminder({
-									...supportReminderCompleted,
-									selectedChoiceIndex: index,
-								}),
-							);
-						}
 					}}
 				/>
 			),
@@ -358,15 +349,6 @@ export const getThankYouModuleData = (
 							...supportReminderCompleted,
 							hasBeenCompleted: true,
 						});
-						if (supportReminder) {
-							const dispatch = useContributionsDispatch();
-							dispatch(
-								setThankYouSupportReminder({
-									...supportReminderCompleted,
-									hasBeenCompleted: true,
-								}),
-							);
-						}
 					}}
 				/>
 			),

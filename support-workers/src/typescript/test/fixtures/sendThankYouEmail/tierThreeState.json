@@ -1,0 +1,119 @@
+{
+  "state": {
+    "sendThankYouEmailState": {
+      "productType": "TierThree",
+      "user": {
+        "id": "200499853",
+        "primaryEmailAddress": "test@thegulocal.com",
+        "title": null,
+        "firstName": "support.e2e.firstName+nGRM9",
+        "lastName": "support.e2e.lastName+3vp0c",
+        "billingAddress": {
+          "lineOne": "Pariser Platz",
+          "lineTwo": "",
+          "city": "Berlin",
+          "state": "",
+          "postCode": "10117",
+          "country": "DE"
+        },
+        "deliveryAddress": {
+          "lineOne": "Pariser Platz",
+          "lineTwo": "",
+          "city": "Berlin",
+          "state": "",
+          "postCode": "10117",
+          "country": "DE"
+        },
+        "telephoneNumber": null,
+        "isTestUser": true,
+        "deliveryInstructions": null
+      },
+      "product": {
+        "currency": "EUR",
+        "billingPeriod": "Annual",
+        "fulfilmentOptions": "Domestic",
+        "productOptions": "NoProductOptions",
+        "productType": "TierThree"
+      },
+      "productInformation": {
+        "product": "TierThree",
+        "ratePlan": "DomesticAnnual",
+        "firstDeliveryDate": "2025-12-05",
+        "deliveryContact": {
+          "firstName": "support.e2e.firstName+nGRM9",
+          "lastName": "support.e2e.lastName+3vp0c",
+          "workEmail": "rupert.bates+smoke-test@theguardian.com",
+          "country": "DE",
+          "state": "",
+          "city": "Berlin",
+          "address1": "Pariser Platz",
+          "address2": "",
+          "postalCode": "10117"
+        }
+      },
+      "paymentMethod": {
+        "TokenId": "pm_0STJJFItVxyc3Q6n7xBDAcuL",
+        "SecondTokenId": "cus_TQ9cXPmYuB67ya",
+        "CreditCardNumber": "4242",
+        "CreditCardExpirationMonth": 1,
+        "CreditCardExpirationYear": 2050,
+        "CreditCardType": "Visa",
+        "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+        "Type": "CreditCardReferenceTransaction",
+        "StripePaymentType": "StripeCheckout"
+      },
+      "paymentSchedule": {
+        "payments": [
+          {
+            "date": "2025-12-05",
+            "amount": 412.8
+          }
+        ]
+      },
+      "promoCode": "TIER3_EU_ANNUAL",
+      "accountNumber": "A01062862",
+      "subscriptionNumber": "A-S06666666",
+      "firstDeliveryDate": "2025-12-05"
+    },
+    "requestId": "aa69f1ed-9129-ee4c-0000-00000000001f",
+    "analyticsInfo": {
+      "isGiftPurchase": false,
+      "paymentProvider": "Stripe"
+    },
+    "acquisitionData": {
+      "ophanIds": {
+        "pageviewId": "mhynocchxh0yp1i18c6v",
+        "browserId": null
+      },
+      "referrerAcquisitionData": {
+        "campaignCode": null,
+        "referrerPageviewId": "",
+        "referrerUrl": null,
+        "componentId": null,
+        "componentType": null,
+        "source": null,
+        "abTests": null,
+        "queryParameters": [],
+        "hostname": "support.thegulocal.com",
+        "gaClientId": null,
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36",
+        "ipAddress": "127.0.0.1",
+        "labels": [
+          "generic-checkout"
+        ]
+      },
+      "supportAbTests": [
+        {
+          "name": "LP_TICKER",
+          "variant": "CONTROL"
+        }
+      ]
+    }
+  },
+  "requestInfo": {
+    "testUser": true,
+    "failed": false,
+    "messages": []
+  },
+  "error": null
+}

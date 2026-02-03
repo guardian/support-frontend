@@ -42,16 +42,11 @@ trait Controllers {
     cachedProductCatalogServiceProvider,
     appConfig.supportUrl,
     tickerService,
+    mparticleClient,
   )
 
   lazy val diagnosticsController = new DiagnosticsController(
     actionBuilders,
-  )
-
-  lazy val articleShareController = new ArticleShare(
-    actionBuilders,
-    controllerComponents,
-    capiService,
   )
 
   lazy val subscriptionsController = new SubscriptionsController(
@@ -92,20 +87,6 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.supportUrl,
-    appConfig.stage,
-  )
-
-  lazy val digitalPackFormController = new DigitalSubscriptionFormController(
-    priceSummaryServiceProvider,
-    assetsResolver,
-    actionBuilders,
-    testUsers,
-    appConfig.regularStripeConfigProvider,
-    appConfig.regularPayPalConfigProvider,
-    controllerComponents,
-    allSettingsProvider,
-    appConfig.recaptchaConfigProvider,
-    cachedProductCatalogServiceProvider,
     appConfig.stage,
   )
 
@@ -201,6 +182,8 @@ trait Controllers {
   lazy val getAddressController = new GetAddress(
     controllerComponents,
     getAddressIOService,
+    idealPostcodesService,
+    allSettingsProvider,
     actionBuilders,
   )
 

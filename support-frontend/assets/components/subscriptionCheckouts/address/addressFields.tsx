@@ -23,21 +23,38 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { internationaliseProductAndRatePlan } from 'helpers/productCatalog';
-import type {
-	AddressFieldsState,
-	AddressFields as AddressFieldsType,
-	AddressFormFieldError,
-	PostcodeFinderState,
-} from 'helpers/redux/checkout/address/state';
-import { isPostcodeOptional } from 'helpers/redux/checkout/address/validation';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
+import type { SliceErrors } from 'helpers/types/SliceErrors';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from '../../../pages/[countryGroupId]/validation';
 import type { PostcodeFinderResult } from './postcodeLookup';
+
+type AddressFieldsValidatedState = {
+	state: string;
+	postCode: string;
+	country: IsoCountry;
+};
+
+type AddressFieldsType = AddressFieldsValidatedState & {
+	lineOne: string | null;
+	lineTwo: string | null;
+	city: string | null;
+};
+
+type AddressFormField = keyof AddressFieldsType;
+export type AddressFormFieldError = FormError<AddressFormField>;
+
+type AddressFieldsState = AddressFieldsType & {
+	// TODO: Eventually we should move the subs checkouts over to the new validation mechanism
+	// but for now we need to leave the old validation mechanism alone
+	errors: AddressFormFieldError[];
+	errorObject?: SliceErrors<AddressFieldsValidatedState>;
+};
 
 type StatePropTypes = AddressFieldsState & {
 	scope: AddressType;
@@ -55,8 +72,16 @@ type PropTypes = StatePropTypes & {
 	setCountry: (countryRaw: IsoCountry) => void;
 	setPostcodeForFinder: (postcode: string) => void;
 	setPostcodeErrorForFinder: (error: string) => void;
+	postcodeErrorForFinder: string | null;
 	setErrors?: React.Dispatch<React.SetStateAction<AddressFormFieldError[]>>;
 	onFindAddress: (postcode: string) => void;
+};
+
+type PostcodeFinderState = {
+	results: PostcodeFinderResult[];
+	isLoading: boolean;
+	postcode: string;
+	error?: string;
 };
 
 const marginBottom = css`
@@ -110,9 +135,35 @@ function statesForCountry(country: Option<IsoCountry>): React.ReactNode {
 	}
 }
 
+const isPostcodeOptional = (country: IsoCountry | null): boolean =>
+	country !== 'GB' && country !== 'AU' && country !== 'US' && country !== 'CA';
+
 type ValidityStateError = 'valueMissing' | 'patternMismatch';
 
-export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
+export function AddressFields({
+	scope,
+	countryGroupId,
+	country,
+	lineOne,
+	lineTwo,
+	city,
+	state,
+	postCode,
+	errors,
+	countries,
+	postcodeState,
+	setLineOne,
+	setLineTwo,
+	setTownCity,
+	setState,
+	setPostcode,
+	setCountry,
+	setPostcodeForFinder,
+	setPostcodeErrorForFinder,
+	postcodeErrorForFinder,
+	setErrors,
+	onFindAddress,
+}: PropTypes) {
 	const patternMismatch = 'Please use only letters, numbers and punctuation.';
 	const errorMessages: Record<
 		keyof AddressFieldsType,
@@ -134,14 +185,14 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 		},
 		state: {
 			valueMissing:
-				props.country === 'CA'
+				country === 'CA'
 					? `Please select a ${scope} province/territory.`
 					: `Please select a ${scope} state.`,
 			patternMismatch,
 		},
 		postCode: {
 			valueMissing: `Please enter a ${scope} ${
-				props.country === 'US' ? 'ZIP code' : 'postcode'
+				country === 'US' ? 'ZIP code' : 'postcode'
 			}`,
 			patternMismatch,
 		},
@@ -157,7 +208,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 		 * On the non-generic checkouts we don't pass it
 		 * to AddressFields as Redux/Zod handles validation errors.
 		 **/
-		if (!props.setErrors) {
+		if (!setErrors) {
 			return;
 		}
 
@@ -165,8 +216,8 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 		const validityState = event.currentTarget.validity;
 		if (validityState.valid) {
 			// remove all errors for the field
-			props.setErrors(
-				props.errors.filter((error) => {
+			setErrors(
+				errors.filter((error) => {
 					return error.field != field;
 				}),
 			);
@@ -177,7 +228,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 			];
 			const updatedErrors: AddressFormFieldError[] = [
 				// remove all errors for field
-				...props.errors.filter((error) => {
+				...errors.filter((error) => {
 					return error.field != field;
 				}),
 				// add all unresolved errors for the field
@@ -194,7 +245,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 					})
 					.filter(isNonNullable),
 			];
-			props.setErrors(updatedErrors);
+			setErrors(updatedErrors);
 		}
 	};
 
@@ -205,7 +256,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				id={`${scope}-country`}
 				data-qm-masking="blocklist"
 				label="Country"
-				value={props.country}
+				value={country}
 				onChange={(event) => {
 					const selectedCountry = Country.fromString(event.target.value);
 
@@ -254,37 +305,38 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 					}
 
 					if (selectedCountry) {
-						props.setCountry(selectedCountry);
+						setCountry(selectedCountry);
 					}
 				}}
-				error={firstError('country', props.errors)}
+				error={firstError('country', errors)}
 				name={`${scope}-country`}
-				data-link-name={`${scope}CountrySelect : ${props.country}`}
+				data-link-name={`${scope}CountrySelect : ${country}`}
 			>
 				<OptionForSelect value="">Select a country</OptionForSelect>
-				{sortedOptions(props.countries)}
+				{sortedOptions(countries)}
 			</Select>
 
-			{props.country === 'GB' ? (
+			{country === 'GB' ? (
 				<PostcodeFinder
-					postcode={props.postcodeState.postcode}
-					isLoading={props.postcodeState.isLoading}
-					error={props.postcodeState.error}
-					results={props.postcodeState.results}
+					postcode={postcodeState.postcode}
+					isLoading={postcodeState.isLoading}
+					error={postcodeState.error}
+					results={postcodeState.results}
 					onPostcodeUpdate={(postcode) => {
-						props.setPostcode(postcode);
-						props.setPostcodeForFinder(postcode);
+						setPostcode(postcode);
+						setPostcodeForFinder(postcode);
 					}}
-					onPostcodeError={props.setPostcodeErrorForFinder}
-					onFindAddress={props.onFindAddress}
+					onPostcodeLookupError={setPostcodeErrorForFinder}
+					postcodeLookupError={postcodeErrorForFinder}
+					onFindAddress={onFindAddress}
 					onAddressSelected={({
 						lineOne,
 						lineTwo,
 						city,
 					}: PostcodeFinderResult) => {
-						props.setLineOne(lineOne ?? '');
-						props.setLineTwo(lineTwo ?? '');
-						props.setTownCity(city ?? '');
+						setLineOne(lineOne ?? '');
+						setLineTwo(lineTwo ?? '');
+						setTownCity(city ?? '');
 					}}
 				/>
 			) : null}
@@ -294,9 +346,9 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				data-qm-masking="blocklist"
 				label="Address Line 1"
 				type="text"
-				value={props.lineOne ?? ''}
-				onChange={(e) => props.setLineOne(e.target.value)}
-				error={firstError('lineOne', props.errors)}
+				value={lineOne ?? ''}
+				onChange={(e) => setLineOne(e.target.value)}
+				error={firstError('lineOne', errors)}
 				name={`${scope}-lineOne`}
 				maxLength={100}
 				pattern={doesNotContainExtendedEmojiOrLeadingSpace}
@@ -314,9 +366,9 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				label="Address Line 2"
 				optional
 				type="text"
-				value={props.lineTwo ?? ''}
-				onChange={(e) => props.setLineTwo(e.target.value)}
-				error={firstError('lineTwo', props.errors)}
+				value={lineTwo ?? ''}
+				onChange={(e) => setLineTwo(e.target.value)}
+				error={firstError('lineTwo', errors)}
 				name={`${scope}-lineTwo`}
 				maxLength={100}
 				pattern={doesNotContainExtendedEmojiOrLeadingSpace}
@@ -334,9 +386,9 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				label="Town/City"
 				type="text"
 				maxLength={40}
-				value={props.city ?? ''}
-				onChange={(e) => props.setTownCity(e.target.value)}
-				error={firstError('city', props.errors)}
+				value={city ?? ''}
+				onChange={(e) => setTownCity(e.target.value)}
+				error={firstError('city', errors)}
 				name={`${scope}-city`}
 				pattern={doesNotContainExtendedEmojiOrLeadingSpace}
 				onBlur={(event) => {
@@ -350,11 +402,11 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				cssOverrides={[marginBottom, selectStateStyles]}
 				id={`${scope}-stateProvince`}
 				data-qm-masking="blocklist"
-				label={props.country === 'CA' ? 'Province/Territory' : 'State'}
-				value={props.state}
-				onChange={(e) => props.setState(e.target.value)}
-				error={firstError('state', props.errors)}
-				isShown={shouldShowStateDropdown(props.country)}
+				label={country === 'CA' ? 'Province/Territory' : 'State'}
+				value={state}
+				onChange={(e) => setState(e.target.value)}
+				error={firstError('state', errors)}
+				isShown={shouldShowStateDropdown(country)}
 				name={`${scope}-stateProvince`}
 				required
 				onBlur={(event) => {
@@ -366,9 +418,9 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 			>
 				<>
 					<OptionForSelect value="">{`Select a ${
-						props.country === 'CA' ? 'province/territory' : 'state'
+						country === 'CA' ? 'province/territory' : 'state'
 					}`}</OptionForSelect>
-					{statesForCountry(props.country)}
+					{statesForCountry(country)}
 				</>
 			</MaybeSelect>
 			<MaybeInput
@@ -376,11 +428,11 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				id={`${scope}-stateProvince`}
 				data-qm-masking="blocklist"
 				label="State"
-				value={props.state}
-				onChange={(e) => props.setState(e.target.value)}
-				error={firstError('state', props.errors)}
+				value={state}
+				onChange={(e) => setState(e.target.value)}
+				error={firstError('state', errors)}
 				optional
-				isShown={shouldShowStateInput(props.country)}
+				isShown={shouldShowStateInput(country)}
 				name={`${scope}-stateProvince`}
 				pattern={doesNotContainExtendedEmojiOrLeadingSpace}
 				onBlur={(event) => {
@@ -394,12 +446,12 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				cssOverrides={marginBottom}
 				id={`${scope}-postcode`}
 				data-qm-masking="blocklist"
-				label={props.country === 'US' ? 'ZIP code' : 'Postcode'}
+				label={country === 'US' ? 'ZIP code' : 'Postcode'}
 				type="text"
-				optional={isPostcodeOptional(props.country)}
-				value={props.postCode}
-				onChange={(e) => props.setPostcode(e.target.value)}
-				error={firstError('postCode', props.errors)}
+				optional={isPostcodeOptional(country)}
+				value={postCode}
+				onChange={(e) => setPostcode(e.target.value)}
+				error={firstError('postCode', errors)}
 				name={`${scope}-postcode`}
 				maxLength={20}
 				pattern={doesNotContainExtendedEmojiOrLeadingSpace}

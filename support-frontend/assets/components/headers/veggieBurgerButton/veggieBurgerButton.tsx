@@ -1,32 +1,27 @@
+import type { SerializedStyles } from '@emotion/react';
+import * as React from 'react';
 import type { AriaAttributes, ReactNode, Ref } from 'react';
-import './veggieBurgerButton.scss';
+import { buttonOpen } from './veggieBurgerButtonStyles';
 
 type PropTypes = {
 	children: ReactNode;
-	label: string;
-	'aria-haspopup'?: AriaAttributes['aria-haspopup'];
+	cssOverride?: SerializedStyles;
 	onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-	ref?: Ref<HTMLButtonElement>;
 	style?: Record<string, string | number>;
+	'aria-haspopup'?: AriaAttributes['aria-haspopup'];
+	'aria-label'?: string;
 };
 
-function VeggieBurgerButton({
-	children,
-	label,
-	ref,
-	...otherProps
-}: PropTypes): JSX.Element {
+const VeggieBurgerButton = React.forwardRef(function (
+	{ children, cssOverride, ...otherProps }: PropTypes,
+	ref: Ref<HTMLButtonElement>,
+): JSX.Element {
 	return (
-		<button
-			className="component-veggie-burger-button"
-			ref={ref}
-			{...otherProps}
-		>
-			<span className="visually-hidden">{label}</span>
+		<button css={[buttonOpen, cssOverride]} ref={ref} {...otherProps}>
 			{children}
 		</button>
 	);
-}
+});
 
 VeggieBurgerButton.defaultProps = {
 	'aria-haspopup': false,

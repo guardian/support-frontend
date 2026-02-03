@@ -27,11 +27,6 @@ const openCss = css`
 	right: 0;
 	z-index: 100;
 	contain: strict;
-	&.component-dialog--styled {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
 `;
 const styledCss = css`
 	background: rgba(0, 0, 0, 0.6);

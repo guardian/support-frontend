@@ -5,7 +5,7 @@ import com.typesafe.config.Config
 
 case class MparticleConfig(
     apiUrl: String,
-    tokenUrl: String,
+    loginBaseUrl: String,
     orgId: String,
     accountId: String,
     workspaceId: String,
@@ -17,11 +17,11 @@ case class MparticleConfig(
 class MparticleConfigProvider(config: Config, stage: Stage)
     extends TouchpointConfigProvider[MparticleConfig](config, stage) {
 
-  override def get(isTestUser: Boolean): MparticleConfig = {
-    if (isTestUser || stage != Stages.PROD) {
+  override def get(isTestUser: Boolean = false): MparticleConfig = {
+    if (stage != Stages.PROD) {
       MparticleConfig(
         apiUrl = "https://api.mparticle.com",
-        tokenUrl = "https://sso.auth.mparticle.com/oauth/token",
+        loginBaseUrl = "https://sso.auth.mparticle.com",
         orgId = "4000380",
         accountId = "590",
         workspaceId = "1402",
@@ -32,7 +32,7 @@ class MparticleConfigProvider(config: Config, stage: Stage)
     } else {
       MparticleConfig(
         apiUrl = "https://api.mparticle.com",
-        tokenUrl = "https://sso.auth.mparticle.com/oauth/token",
+        loginBaseUrl = "https://sso.auth.mparticle.com",
         orgId = "4000380",
         accountId = "589",
         workspaceId = "1401",

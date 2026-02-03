@@ -2,8 +2,6 @@ import { css } from '@emotion/react';
 import { from, space, sport } from '@guardian/source/foundations';
 import { Column, Columns, Container } from '@guardian/source/react-components';
 import type React from 'react';
-import { Provider } from 'react-redux';
-import { createTestStoreForContributions } from '__test-utils__/testStore';
 import AppDownloadBadges from 'components/thankYou/appDownload/AppDownloadBadges';
 import {
 	AppDownloadBodyCopy,
@@ -205,17 +203,6 @@ Feedback.args = {
 		/>
 	),
 };
-Feedback.decorators = [
-	(Story: React.FC): JSX.Element => {
-		const store = createTestStoreForContributions();
-
-		return (
-			<Provider store={store}>
-				<Story />
-			</Provider>
-		);
-	},
-];
 
 export const SignUp = Template.bind({});
 SignUp.args = {
@@ -260,18 +247,6 @@ SignInTier3.args = {
 		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="Sign in" />
 	),
 };
-
-SignIn.decorators = [
-	(Story: React.FC): JSX.Element => {
-		const store = createTestStoreForContributions();
-
-		return (
-			<Provider store={store}>
-				<Story />
-			</Provider>
-		);
-	},
-];
 
 export const AusMap = Template.bind({});
 AusMap.args = {
@@ -480,15 +455,3 @@ SubscriptionStartTierThree.args = {
 	),
 	ctas: null,
 };
-
-SupportReminder.decorators = [
-	(Story: React.FC): JSX.Element => {
-		const store = createTestStoreForContributions();
-
-		return (
-			<Provider store={store}>
-				<Story />
-			</Provider>
-		);
-	},
-];

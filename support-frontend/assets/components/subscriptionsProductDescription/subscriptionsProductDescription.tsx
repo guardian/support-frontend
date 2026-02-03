@@ -8,7 +8,6 @@ import {
 	subscriptionButtonsContainer,
 	subscriptionButtonsContainerFeature,
 	subscriptionDescription,
-	subscriptionOffer,
 	subscriptionOfferFeature,
 	subscriptionSubtitleLarge,
 	subscriptionSubtitleSmall,
@@ -26,26 +25,6 @@ type PropTypes = {
 	benefits?: ProductBenefit[];
 };
 
-const getButtonAppearance = (
-	index: number,
-	isFeature?: boolean,
-	hierarchy?: string,
-	primary?: boolean,
-) => {
-	if (primary ?? (isFeature && index === 0)) {
-		return 'primary';
-	} else if (isFeature && index > 0) {
-		return 'tertiaryFeature';
-	} else if (
-		(!isFeature && index === 0) ||
-		(!isFeature && hierarchy === 'first')
-	) {
-		return 'secondary';
-	}
-
-	return 'tertiary';
-};
-
 function SubscriptionsProductDescription({
 	title,
 	subtitle,
@@ -57,29 +36,19 @@ function SubscriptionsProductDescription({
 }: PropTypes): JSX.Element {
 	return (
 		<div>
-			<h2 css={[subscriptionTitle, isFeature && subscriptionTitleFeature]}>
-				{title}
-			</h2>
-			{offer && (
-				<h3 css={[subscriptionOffer, isFeature && subscriptionOfferFeature]}>
-					{offer}
-				</h3>
-			)}
+			<h2
+				css={[subscriptionTitle, isFeature && subscriptionTitleFeature]}
+				dangerouslySetInnerHTML={{ __html: title }}
+			></h2>
 			<h3 css={offer ? subscriptionSubtitleSmall : subscriptionSubtitleLarge}>
+				<span css={subscriptionOfferFeature}>{offer}</span>
 				{subtitle}
 			</h3>
 			{benefits ? (
 				<BenefitsCheckList
 					benefitsCheckListData={benefits.map((benefit) => {
 						return {
-							text: (
-								<p>
-									{benefit.copyBoldStart && (
-										<strong>{benefit.copyBoldStart}</strong>
-									)}
-									{benefit.copy}
-								</p>
-							),
+							text: <p dangerouslySetInnerHTML={{ __html: benefit.copy }} />,
 							isChecked: true,
 						};
 					})}
@@ -98,24 +67,15 @@ function SubscriptionsProductDescription({
 					isFeature && subscriptionButtonsContainerFeature,
 				]}
 			>
-				{buttons.map((button, index) => (
+				{buttons.map((button) => (
 					<AnchorButton
-						href={button.link}
 						onClick={button.analyticsTracking}
-						appearance={getButtonAppearance(
-							index,
-							isFeature,
-							button.hierarchy,
-							button.primary,
-						)}
-						modifierClasses={[
-							button.modifierClasses ?? '',
-							'subscriptions__product-button',
-						]}
-						aria-label={button.ariaLabel ?? null}
-					>
-						{button.ctaButtonText}
-					</AnchorButton>
+						ariaLabel={button.ariaLabel}
+						priority={button.priority}
+						theme={button.theme}
+						link={button.link}
+						ctaButtonText={button.ctaButtonText}
+					/>
 				))}
 			</div>
 		</div>

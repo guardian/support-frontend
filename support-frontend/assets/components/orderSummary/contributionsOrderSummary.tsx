@@ -29,7 +29,10 @@ import type {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
-import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import {
+	isContributionOnlyProduct,
+	isGuardianWeeklyGiftProduct,
+} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { PriceSummary } from './priceSummary';
@@ -128,7 +131,7 @@ const termsAndConditions = css`
 	${textSans15};
 	color: ${neutral[7]};
 	border: 1px solid ${neutral[46]};
-	border-radius: ${space[4]}px;
+	border-radius: ${space[3]}px;
 	background-color: ${neutral[97]};
 	padding: ${space[2]}px ${space[3]}px;
 	& div:nth-child(2) {
@@ -204,11 +207,14 @@ export function ContributionsOrderSummary({
 	const period = studentDiscount?.periodNoun ?? paymentFrequency;
 
 	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
+	const title = `Your ${
+		isContributionOnlyProduct(productKey) ? 'support' : 'subscription'
+	}`;
 
 	return (
 		<div css={componentStyles}>
 			<div css={[summaryRow, rowSpacing, headingRow]}>
-				<h2 css={headingCss}>Your subscription</h2>
+				<h2 css={headingCss}>{title}</h2>
 				{headerButton}
 			</div>
 			<hr css={hrCss} />

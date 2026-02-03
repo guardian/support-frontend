@@ -1,4 +1,3 @@
-// ----- Imports ----- //
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import PageSection from 'components/pageSection/pageSection';
@@ -7,39 +6,38 @@ import {
 	ContactPageLink,
 	useDotcomContactPage,
 } from 'helpers/utilities/dotcomContactPage';
-// ---- Types ----- //
-type PropTypes = {
-	countryGroupId: CountryGroupId;
+import {
+	componentQuestionsContactDescription,
+	componentQuestionsContactLink,
+	pageSectionBorderTop,
+} from './questionsContactStyles';
+
+type QuestionsContactProps = {
+	countryGroupId?: CountryGroupId;
 };
 
-// ----- Component ----- //
-function QuestionsContact(props: PropTypes) {
+export default function QuestionsContact({
+	countryGroupId,
+}: QuestionsContactProps): JSX.Element {
 	const contactUs = useDotcomContactPage() ? (
 		<ContactPageLink linkText="contact us" />
 	) : (
 		<a
-			className="component-questions-contact__link"
-			href={contributionsEmail[props.countryGroupId]}
+			css={componentQuestionsContactLink}
+			href={contributionsEmail[countryGroupId ?? GBPCountries]}
 		>
 			contact us
 		</a>
 	);
 	return (
-		<div className="component-questions-contact">
-			<PageSection modifierClass="questions-contact" heading="Questions?">
-				<p className="component-questions-contact__description">
+		<>
+			<PageSection cssOverrides={pageSectionBorderTop} heading="Questions?">
+				<p css={componentQuestionsContactDescription}>
 					If you have any questions about contributing to The&nbsp;Guardian,
 					please&nbsp;
 					{contactUs}
 				</p>
 			</PageSection>
-		</div>
+		</>
 	);
 }
-
-// ----- Default Props ----- //
-QuestionsContact.defaultProps = {
-	countryGroupId: GBPCountries,
-}; // ----- Exports ----- //
-
-export default QuestionsContact;

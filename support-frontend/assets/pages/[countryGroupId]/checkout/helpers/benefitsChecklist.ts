@@ -11,7 +11,6 @@ import {
 	filterBenefitByABTest,
 	filterBenefitByRegion,
 	productCatalogDescription,
-	productCatalogDescriptionPremiumDigital,
 } from '../../../../helpers/productCatalog';
 import type {
 	ActiveProductKey,
@@ -19,24 +18,6 @@ import type {
 	ProductBenefit,
 	ProductDescription,
 } from '../../../../helpers/productCatalog';
-
-export const getPremiumDigitalAllBenefits = (
-	countryGroupId: CountryGroupId,
-): BenefitsCheckListData[] => {
-	const digitalPremiumBenefits = filterProductDescriptionBenefits(
-		productCatalogDescriptionPremiumDigital,
-		countryGroupId,
-	);
-	const supporterPlusBenefits = filterProductDescriptionBenefits(
-		productCatalogDescription.SupporterPlus,
-		countryGroupId,
-	);
-	// Append SupporterPlus benefits
-	return benefitsAsChecklist({
-		checked: [...digitalPremiumBenefits, ...supporterPlusBenefits],
-		unchecked: [],
-	});
-};
 
 export const getPaperPlusDigitalBenefits = (
 	productKey: ActiveProductKey,
@@ -86,25 +67,48 @@ const benefitsAsChecklist = ({
 export const getBenefitsChecklistFromLandingPageTool = (
 	productKey: ProductKey,
 	landingPageSettings: LandingPageVariant,
+	countryGroupId: CountryGroupId,
 ): BenefitsCheckListData[] | undefined => {
 	// Three Tier products get their config from the Landing Page tool
 	if (productKey === 'Contribution') {
 		// Also show SupporterPlus benefits greyed out
 		return benefitsAsChecklist({
-			checked: landingPageSettings.products.Contribution.benefits,
-			unchecked: landingPageSettings.products.SupporterPlus.benefits,
+			checked:
+				landingPageSettings.products.Contribution?.benefits ??
+				filterProductDescriptionBenefits(
+					productCatalogDescription.Contribution,
+					countryGroupId,
+				),
+			unchecked:
+				landingPageSettings.products.SupporterPlus?.benefits ??
+				filterProductDescriptionBenefits(
+					productCatalogDescription.SupporterPlus,
+					countryGroupId,
+				),
 		});
 	} else if (productKey === 'SupporterPlus') {
 		return benefitsAsChecklist({
-			checked: landingPageSettings.products.SupporterPlus.benefits,
+			checked:
+				landingPageSettings.products.SupporterPlus?.benefits ??
+				filterProductDescriptionBenefits(
+					productCatalogDescription.SupporterPlus,
+					countryGroupId,
+				),
 			unchecked: [],
 		});
-	} else if (productKey === 'TierThree') {
-		// Also show SupporterPlus benefits
+	} else if (productKey === 'DigitalSubscription') {
 		return benefitsAsChecklist({
 			checked: [
-				...landingPageSettings.products.TierThree.benefits,
-				...landingPageSettings.products.SupporterPlus.benefits,
+				...(landingPageSettings.products.DigitalSubscription?.benefits ??
+					filterProductDescriptionBenefits(
+						productCatalogDescription.DigitalSubscription,
+						countryGroupId,
+					)),
+				...(landingPageSettings.products.SupporterPlus?.benefits ??
+					filterProductDescriptionBenefits(
+						productCatalogDescription.SupporterPlus,
+						countryGroupId,
+					)),
 			],
 			unchecked: [],
 		});

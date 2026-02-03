@@ -27,10 +27,6 @@ function classNameWithModifiers(
 	);
 }
 
-function hiddenIf(shouldHide: boolean, className: string): string {
-	return shouldHide ? classNameWithModifiers(className, ['hidden']) : className;
-}
-
 // Deserialises a JSON object from a string.
 function deserialiseJsonObject(
 	serialised: string,
@@ -63,11 +59,16 @@ function replaceDatePlaceholder(copy: string, deadline?: string): string {
 		return copy;
 	}
 
-	if (!deadline || !/^\d+$/.test(deadline)) {
+	if (!deadline) {
 		return copy.replaceAll(DEADLINE_PLACEHOLDER_TEMPLATE, '');
 	}
 
 	const daysLeft = parseInt(deadline, 10);
+
+	if (isNaN(daysLeft)) {
+		return copy.replaceAll(DEADLINE_PLACEHOLDER_TEMPLATE, '');
+	}
+
 	const replacement =
 		daysLeft === 0
 			? 'Final day'
@@ -94,7 +95,6 @@ export {
 	getSanitisedHtml,
 	roundToDecimalPlaces,
 	classNameWithModifiers,
-	hiddenIf,
 	deserialiseJsonObject,
 	parseCustomAmounts,
 	replaceDatePlaceholder,

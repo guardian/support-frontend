@@ -6,6 +6,8 @@ import {
 	headlineLight24,
 	headlineLight28,
 	neutral,
+	space,
+	textEgyptian14,
 	textEgyptian17,
 	until,
 } from '@guardian/source/foundations';
@@ -23,29 +25,25 @@ export const subscriptionDescription = css`
 		margin-top: -6px;
 	}
 
-	font-weight: 400;
-	margin: 45px 20px 25px 0;
-	font-size: 20px;
-	line-height: 28px;
+	${textEgyptian14}
+	line-height: 16px;
+	margin: 16px 10px 18px 0;
 
-	${until.desktop} {
-		margin: 27px 20px 25px 0;
+	${from.mobileMedium} {
+		margin: 16px 0 18px 0;
+	}
+	${from.mobileLandscape} {
 		font-size: 16px;
 		line-height: 18px;
+		margin: 27px 0 25px 0;
 	}
-
 	${until.tablet} {
 		max-width: 100%;
 	}
-
-	${until.mobileLandscape} {
-		font-size: 14px;
-		line-height: 16px;
-		margin: 16px 20px 18px 0;
-	}
-
-	${until.mobileMedium} {
-		margin: 16px 10px 18px 0;
+	${from.desktop} {
+		font-size: 20px;
+		line-height: 28px;
+		margin: 45px 20px 25px 0;
 	}
 `;
 
@@ -53,7 +51,11 @@ export const subscriptionBenefit = css`
 	display: block;
 	${textEgyptian17}
 	margin: 16px 20px 18px 0;
-	line-height: 140%;
+
+	> p:first-child {
+		font-weight: 400;
+	}
+
 	${from.mobileLandscape} {
 		margin: 27px 20px 25px 0;
 	}
@@ -63,12 +65,11 @@ export const subscriptionBenefit = css`
 
 	:before {
 		content: '';
-		position: absolute;
-		width: 100%;
-		margin-top: -6px;
-		margin-left: -52px;
-		${from.tablet} {
-			border-top: 1px solid ${neutral[86]};
+		display: block;
+		border-top: 1px solid ${neutral[86]};
+		margin-right: -${space[10]}px;
+		${from.desktop} {
+			margin-left: -${space[14]}px;
 		}
 	}
 `;
@@ -76,6 +77,11 @@ export const subscriptionBenefit = css`
 export const subscriptionTitle = css`
 	${headlineBold34};
 	margin: 0;
+
+	& mark {
+		background-color: unset;
+		color: ${brandAlt[400]};
+	}
 
 	${until.desktop} {
 		font-size: 32px;
@@ -104,37 +110,11 @@ export const subscriptionTitleFeature = css`
 	}
 	${until.tablet} {
 		font-size: 24px;
-		padding-top: 15px;
-	}
-`;
-
-export const subscriptionOffer = css`
-	font-size: 28px;
-	line-height: 30px;
-	font-weight: 300;
-	display: inline-block;
-	color: ${neutral[7]};
-	background-color: ${brandAlt[400]};
-	vertical-align: middle;
-	padding: 0px 7px 3px;
-	margin: 6px 0px;
-
-	${until.desktop} {
-		font-size: 24px;
-	}
-
-	${until.tablet} {
-		font-size: 24px;
-		line-height: 30px;
-	}
-
-	${until.mobileLandscape} {
-		font-size: 20px;
-		line-height: 24px;
 	}
 `;
 
 export const subscriptionOfferFeature = css`
+	display: block;
 	color: ${neutral[7]};
 `;
 
@@ -175,47 +155,17 @@ export const subscriptionSubtitleLarge = css`
 `;
 
 export const subscriptionButtonsContainer = css`
-	display: block;
-
-	${from.phablet} {
-		width: 80%;
-		padding-bottom: 20px;
-	}
-
-	${from.tablet} {
-		display: inline-block;
-		padding-bottom: 0;
-	}
-
-	${from.desktop} {
-		width: 100%;
-		padding-bottom: 20px;
-	}
-
-	& a:nth-of-type(2) {
-		margin-top: 10px;
-
-		${from.desktop} {
-			margin-top: 0;
-			margin-left: 5px;
-		}
-	}
+	display: flex;
+	margin-bottom: ${space[6]}px;
+	gap: 10px;
+	flex-wrap: wrap;
 `;
 
 export const subscriptionButtonsContainerFeature = css`
-	& a:nth-of-type(2) {
-		${from.mobileLandscape} {
-			margin-left: 10px;
-			margin-top: 0;
-		}
-
-		${from.tablet} {
-			margin-left: 0;
-			margin-top: 10px;
-		}
-
-		${from.desktop} {
-			margin: 0 0 0 10px;
+	${until.mobileLandscape} {
+		flex-direction: column;
+		> a {
+			justify-content: center;
 		}
 	}
 `;

@@ -1,6 +1,7 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getProductCatalogFromApi } from '@modules/product-catalog/api';
-import { getPromotions } from '@modules/promotions/getPromotions';
+import { getPromotion } from '@modules/promotions/v2/getPromotion';
+import type { Promo } from '@modules/promotions/v2/schema';
 import type {
 	CreateSubscriptionInputFields,
 	CreateSubscriptionResponse,
@@ -29,7 +30,7 @@ import { stageFromEnvironment } from '../model/stage';
 import type { WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
 import { getIfDefined } from '../util/nullAndUndefined';
-import { zuoraDateReplacer } from '../util/zuoraDateReplacer';
+import { replaceDatesWithZuoraFormat } from '../util/zuoraDateReplacer';
 
 const stage = stageFromEnvironment();
 
@@ -41,9 +42,20 @@ const productCatalogProvider = new ServiceProvider(stage, async (stage) => {
 	return getProductCatalogFromApi(stage);
 });
 
-const promotionsProvider = new ServiceProvider(stage, async (stage) => {
-	return getPromotions(stage);
+const promotionProvider = new ServiceProvider(stage, (stage) => {
+	return Promise.resolve((promoCode: string) => getPromotion(promoCode, stage));
 });
+
+const getPromotionForUser = async (
+	promoCode: string | undefined,
+	isTestUser: boolean,
+): Promise<Promo | undefined> => {
+	if (promoCode) {
+		const getPromo = await promotionProvider.getServiceForUser(isTestUser);
+		return await getPromo(promoCode);
+	}
+	return undefined;
+};
 
 export const handler = async (
 	state: WrappedState<CreateZuoraSubscriptionState>,
@@ -75,9 +87,6 @@ export const handler = async (
 			'productInformation is required',
 		);
 
-		// TODO:
-		//  Validate paper payment gateway? Might be done already by schema
-
 		const inputFields: CreateSubscriptionInputFields<ZuoraPaymentMethod> = {
 			accountName: salesforceContact.AccountId, // We store the Salesforce Account id in the name field
 			createdRequestId: createZuoraSubscriptionState.requestId,
@@ -101,14 +110,15 @@ export const handler = async (
 		const productCatalog = await productCatalogProvider.getServiceForUser(
 			createZuoraSubscriptionState.user.isTestUser,
 		);
-		const promotions = await promotionsProvider.getServiceForUser(
+		const promotion = await getPromotionForUser(
+			inputFields.appliedPromotion?.promoCode,
 			createZuoraSubscriptionState.user.isTestUser,
 		);
 		const createSubscriptionResult = await createSubscription(
 			zuoraClient,
 			productCatalog,
-			promotions,
 			inputFields,
+			promotion,
 		);
 
 		const previewInputFields: PreviewCreateSubscriptionInputFields = {
@@ -116,23 +126,23 @@ export const handler = async (
 			accountNumber: createSubscriptionResult.accountNumber,
 			currency: currency,
 			productPurchase: productInformation,
+			appliedPromotion: state.state.appliedPromotion ?? undefined,
 		};
 
 		const previewInvoices = await previewCreateSubscription(
 			zuoraClient,
 			productCatalog,
-			promotions,
 			previewInputFields,
+			promotion,
 		);
 
-		return JSON.stringify(
+		return replaceDatesWithZuoraFormat(
 			buildOutputState(
 				state,
 				createZuoraSubscriptionState,
 				createSubscriptionResult,
 				previewInvoices,
 			),
-			zuoraDateReplacer,
 		);
 	} catch (error) {
 		throw asRetryError(error);
@@ -166,6 +176,12 @@ export const getZuoraPaymentMethod = (
 					gatewayType: 'PayPalCP',
 					tokenId: paymentMethod.PaypalPaymentToken,
 				},
+				email: paymentMethod.PaypalEmail,
+			};
+		case 'PayPalCompletePaymentsWithBAID':
+			return {
+				type: 'PayPalCP',
+				BAID: paymentMethod.PaypalBaid,
 				email: paymentMethod.PaypalEmail,
 			};
 		case 'BankTransfer':
@@ -235,30 +251,29 @@ export const buildOutputState = (
 		error: wrappedState.error,
 	};
 };
-const buildSendThankYouEmailState = (
+export const buildSendThankYouEmailState = (
 	state: CreateZuoraSubscriptionState,
 	createZuoraSubscriptionResult: CreateSubscriptionResponse,
 	paymentSchedule: PaymentSchedule,
 	subscriptionNumber: string,
 ): SendThankYouEmailState => {
-	const { similarProductsConsent, firstDeliveryDate } = {
-		similarProductsConsent: undefined,
-		firstDeliveryDate: undefined,
-		...state.productSpecificState.productInformation,
-	};
+	const firstDeliveryDate =
+		'firstDeliveryDate' in state.productSpecificState.productInformation
+			? state.productSpecificState.productInformation.firstDeliveryDate
+			: undefined;
 
-	const { giftRecipient, appliedPromotion } = {
+	const { similarProductsConsent, giftRecipient, appliedPromotion } = {
+		similarProductsConsent: undefined,
 		giftRecipient: undefined,
 		appliedPromotion: undefined,
 		...state.productSpecificState,
 	};
 
 	return sendThankYouEmailStateSchema.parse({
-		productType: state.product.productType,
+		productType: state.productSpecificState.productType,
 		user: state.user,
 		product: state.product,
-		productInformation:
-			state.productSpecificState.productInformation ?? undefined,
+		productInformation: state.productSpecificState.productInformation,
 		paymentMethod: state.productSpecificState.paymentMethod,
 		accountNumber: createZuoraSubscriptionResult.accountNumber,
 		subscriptionNumber: subscriptionNumber,

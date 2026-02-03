@@ -24,7 +24,9 @@ import play.api.mvc.{AnyContent, BodyParser}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, header, status, stubControllerComponents}
 import services._
+import services.mparticle.MParticleClient
 import services.pricing.{CountryGroupPrices, PriceSummaryService, PriceSummaryServiceProvider}
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -52,7 +54,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     checkToken = csrfCheck,
     csrfConfig = csrfConfig,
     stage = stage,
-    featureSwitches = FeatureSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
+    featureSwitches = FeatureSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
     testUsersService = TestUserService("secret"),
   )
 
@@ -91,6 +93,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     productCatalog,
     "support.thegulocal.com",
     mock[TickerService],
+    mock[MParticleClient],
   )(mock[ExecutionContext])
 
   "/healthcheck" should {
@@ -214,41 +217,6 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
       assert(product === "SupporterPlus")
       assert(ratePlan === "Annual")
       assert(maybeContributionAmount === None)
-    }
-  }
-
-  "redirectContributionsCheckout" should {
-    "redirect one time contributions from the old checkout to the new path, rewriting the amount and keeping additional params" in {
-      // This means we won't attempt to authenticate the user
-      when(config.signedInCookieName).thenReturn("signed_in_cookie")
-      val geoCode = "uk"
-      val request = FakeRequest(
-        method = "GET",
-        path = s"/$geoCode/contribute/checkout?selected-contribution-type=one_off&selected-amount=30&extra=param",
-      )
-
-      val result = applicationMock.redirectContributionsCheckout(geoCode).apply(request)
-
-      assert(status(result) === 301)
-      assert(header("Location", result) === Some(s"/$geoCode/one-time-checkout?extra=param&contribution=30"))
-    }
-
-    "redirect Supporter+ from the old checkout to the new path, keeping additional params" in {
-      // This means we won't attempt to authenticate the user
-      when(config.signedInCookieName).thenReturn("signed_in_cookie")
-      val geoCode = "uk"
-      val request = FakeRequest(
-        method = "GET",
-        // When the amount is missing, we default to being eligible for S+
-        path = s"/$geoCode/contribute/checkout?selected-contribution-type=recurring&extra=param",
-      )
-
-      val result = applicationMock.redirectContributionsCheckout(geoCode).apply(request)
-
-      assert(status(result) === 301)
-      assert(
-        header("Location", result) === Some(s"/$geoCode/checkout?extra=param&product=SupporterPlus&ratePlan=Monthly"),
-      )
     }
   }
 }

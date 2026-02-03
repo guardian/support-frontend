@@ -1,7 +1,7 @@
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
-import Page from 'components/page/page';
+import { PageScaffold } from 'components/page/pageScaffold';
 import {
 	getAbParticipations,
 	setUpTrackingAndConsents,
@@ -13,25 +13,27 @@ import NewspaperProductTabs from './components/NewspaperProductTabs';
 import { getPaperPlusItems } from './helpers/PaperHeroCopy';
 import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
-import 'stylesheets/skeleton/skeleton.scss';
-import './paperSubscriptionLanding.scss';
 
 const paperSubsFooter = (
-	<Footer termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions" />
+	<Footer
+		termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions"
+		fullWidth
+	/>
 );
 
 const pageQaId = 'qa-paper-subscriptions'; // Selenium test ID
 
-function PaperLandingPage({
+export function PaperLandingPage({
 	productPrices,
 	promotionCopy,
+	fulfilment,
 }: PaperLandingPropTypes) {
 	if (!productPrices) {
 		return null;
 	}
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 	return (
-		<Page
+		<PageScaffold
 			id={pageQaId}
 			header={<Header countryGroupId={GBPCountries} />}
 			footer={paperSubsFooter}
@@ -40,13 +42,14 @@ function PaperLandingPage({
 				promotionCopy={sanitisedPromoCopy}
 				paperHeroItems={getPaperPlusItems(productPrices)}
 			/>
-			<NewspaperProductTabs productPrices={productPrices} />
-		</Page>
+			<NewspaperProductTabs
+				productPrices={productPrices}
+				fulfilment={fulfilment}
+			/>
+		</PageScaffold>
 	);
 }
 
 const abParticipations = getAbParticipations();
 setUpTrackingAndConsents(abParticipations);
-const content = <PaperLandingPage {...paperLandingProps(abParticipations)} />;
-renderPage(content);
-export { content };
+renderPage(<PaperLandingPage {...paperLandingProps(abParticipations)} />);

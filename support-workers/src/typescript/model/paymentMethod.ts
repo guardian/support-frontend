@@ -1,3 +1,4 @@
+import { optionalDropNulls } from '@modules/schemaUtils';
 import { z } from 'zod';
 import { countrySchema } from './address';
 import { stripePaymentTypeSchema } from './paymentFields';
@@ -35,6 +36,17 @@ const payPalCompletePaymentsPaymentMethodSchema = z.object({
 export type PayPalCompletePaymentsPaymentMethod = z.infer<
 	typeof payPalCompletePaymentsPaymentMethodSchema
 >;
+
+const payPalCompletePaymentsWithBAIDPaymentMethodSchema = z.object({
+	PaypalBaid: z.string(),
+	PaypalEmail: z.string(),
+	Type: z.literal('PayPalCompletePaymentsWithBAID'),
+	PaymentGateway: z.literal('PayPal Complete Payments'),
+});
+export type PayPalCompletePaymentsWithBAIDPaymentMethod = z.infer<
+	typeof payPalCompletePaymentsWithBAIDPaymentMethodSchema
+>;
+
 const stripePaymentMethodSchema = z.object({
 	TokenId: z.string(), // Stripe Card id
 	SecondTokenId: z.string(), // Stripe Customer Id
@@ -59,11 +71,11 @@ const directDebitPaymentMethodSchema = z.object({
 	BankCode: z.string(),
 	BankTransferAccountNumber: z.string(),
 	Country: countrySchema,
-	City: z.string().nullable(),
-	PostalCode: z.string().nullable(),
-	State: z.string().nullable(),
-	StreetName: z.string().nullable(),
-	StreetNumber: z.string().nullable(),
+	City: optionalDropNulls(z.string()),
+	PostalCode: optionalDropNulls(z.string()),
+	State: optionalDropNulls(z.string()),
+	StreetName: optionalDropNulls(z.string()),
+	StreetNumber: optionalDropNulls(z.string()),
 	BankTransferType: z.literal('DirectDebitUK'),
 	Type: z.literal('BankTransfer'),
 	PaymentGateway: directDebitPaymentGatewaySchema,
@@ -75,7 +87,9 @@ export type DirectDebitPaymentMethod = z.infer<
 export const paymentMethodSchema = z.discriminatedUnion('Type', [
 	payPalPaymentPaymentMethodSchema,
 	payPalCompletePaymentsPaymentMethodSchema,
+	payPalCompletePaymentsWithBAIDPaymentMethodSchema,
 	stripePaymentMethodSchema,
 	directDebitPaymentMethodSchema,
 ]);
 export type PaymentMethod = z.infer<typeof paymentMethodSchema>;
+export type PaymentMethodType = PaymentMethod['Type'];

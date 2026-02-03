@@ -7,7 +7,11 @@ import {
 } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 import { Children } from 'react';
-import { copyrightNotice } from 'helpers/legal';
+import {
+	copyrightNotice,
+	guardianContactUsLink,
+	privacyLink,
+} from 'helpers/legal';
 import Rows from '../base/rows';
 import { BackToTop } from './BackToTop';
 import FooterContent from './containers/FooterContent';
@@ -20,9 +24,10 @@ import {
 } from './footerStyles';
 // ----- Props ----- //
 type PropTypes = {
-	centred: boolean;
 	termsConditionsLink: string;
 	children: ReactNode;
+	centred: boolean;
+	fullWidth?: boolean;
 };
 
 // ----- Component ----- //
@@ -30,6 +35,7 @@ function Footer({
 	centred,
 	children,
 	termsConditionsLink,
+	fullWidth,
 }: PropTypes): JSX.Element {
 	function showPrivacyManager() {
 		cmp.showPrivacyManager();
@@ -43,6 +49,7 @@ function Footer({
 						border: true,
 						paddingTop: true,
 						centred,
+						fullWidth,
 					}}
 				>
 					<div>
@@ -54,6 +61,7 @@ function Footer({
 				appearance={{
 					border: true,
 					centred,
+					fullWidth,
 				}}
 			>
 				<ul css={linksList}>
@@ -66,19 +74,12 @@ function Footer({
 						</Link>
 					</li>
 					<li css={link}>
-						<Link
-							href="https://www.theguardian.com/help/contact-us"
-							theme={themeLinkBrand}
-						>
+						<Link href={guardianContactUsLink} theme={themeLinkBrand}>
 							Contact us
 						</Link>
 					</li>
 					<li css={link}>
-						<Link
-							subdued
-							href="https://www.theguardian.com/help/privacy-policy"
-							theme={themeLinkBrand}
-						>
+						<Link subdued href={privacyLink} theme={themeLinkBrand}>
 							Privacy Policy
 						</Link>
 					</li>
@@ -99,6 +100,7 @@ function Footer({
 			<FooterContent
 				appearance={{
 					centred,
+					fullWidth,
 				}}
 			>
 				<div css={backToTopLink}>
@@ -113,6 +115,7 @@ function Footer({
 // ----- Default Props ----- //
 Footer.defaultProps = {
 	centred: false,
+	fullWidth: false,
 	termsConditionsLink: '',
 	children: [],
 }; // ----- Exports ----- //

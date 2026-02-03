@@ -28,32 +28,6 @@ const ActivePaperProductTypes: PaperProductOptions[] = [
 ] as const;
 export type ActivePaperProductOptions =
 	(typeof ActivePaperProductTypes)[number];
-const paperProductsWithDigital = {
-	Saturday: SaturdayPlus,
-	Weekend: WeekendPlus,
-	Sixday: SixdayPlus,
-	Everyday: EverydayPlus,
-} as Record<ProductOptions, ProductOptions>;
-const paperProductsWithoutDigital = {
-	SaturdayPlus: Saturday,
-	WeekendPlus: Weekend,
-	SixdayPlus: Sixday,
-	EverydayPlus: Everyday,
-} as Record<ProductOptions, ProductOptions>;
-// Returns the product option with the opposite 'add digital' option to the one passed
-// e.g. SaturdayPlus -> Saturday
-function productOptionIfDigiAddOnChanged(
-	selectedOption: ProductOptions,
-): ProductOptions {
-	if (selectedOption === 'NoProductOptions') {
-		return selectedOption;
-	}
-	const matchingProducLookup = {
-		...paperProductsWithDigital,
-		...paperProductsWithoutDigital,
-	};
-	return matchingProducLookup[selectedOption];
-}
 
 const getPaperProductOptions = (
 	ratePlanKey: ActiveRatePlanKey,
@@ -97,9 +71,4 @@ export const getProductOptionFromProductAndRatePlan = (
 			return getPaperProductOptions(ratePlanKey);
 	}
 };
-export {
-	productOptionIfDigiAddOnChanged,
-	paperProductsWithoutDigital,
-	paperProductsWithDigital,
-	ActivePaperProductTypes,
-};
+export { ActivePaperProductTypes };

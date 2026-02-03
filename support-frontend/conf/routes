@@ -22,35 +22,8 @@ GET  /*path/                                                       controllers.A
 GET /sitemap.xml                                                   controllers.SiteMap.sitemap()
 
 
-# ----- Geo landings ----- #
-GET /us                                                            controllers.Application.redirect(location="/us/contribute")
-GET /au                                                            controllers.Application.redirect(location="/au/contribute")
-GET /eu                                                            controllers.Application.redirect(location="/eu/contribute")
-GET /int                                                           controllers.Application.redirect(location="/int/contribute")
-GET /nz                                                            controllers.Application.redirect(location="/nz/contribute")
-GET /ca                                                            controllers.Application.redirect(location="/ca/contribute")
-GET /uk                                                            controllers.Application.redirect(location="/uk/support")
+# ----- root ----- #
 GET /                                                              controllers.Application.geoRedirect()
-
-
-# ----- Bundles Landing Page ----- #
-
-GET /support                                                       controllers.Application.supportGeoRedirect()
-GET /$country<(uk|us|au|eu|int|nz|ca)>/support                     controllers.Application.contributionsLanding(country: String, campaignCode = "")
-# redirect from old ab test
-GET /showcase                                                      controllers.Application.permanentRedirect(location="/uk/support")
-
-
-# ----- Events Redirect ----- #
-GET /events/archive                                                controllers.Application.redirect(location="https://membership.theguardian.com/events/archive")
-GET /masterclasses                                                 controllers.Application.redirect(location="https://membership.theguardian.com/masterclasses")
-GET /event/*eventId                                                controllers.Application.redirectPath(location="https://membership.theguardian.com/event/", eventId)
-
-
-# This is a temporary client-side redirect based on geo-location
-# Once we have a separate payment failure email for US and UK we can consider removing it
-
-GET  /monthly-contributions                                        controllers.Application.permanentRedirect(location="/contribute")
 
 
 # ----- Contributions ----- #
@@ -58,7 +31,6 @@ GET  /monthly-contributions                                        controllers.A
 # Contribution checkout redirect => checkout 👇
 GET  /contribute/checkout                                          controllers.Application.contributeGeoRedirect(campaignCode = "")
 GET  /checkout                                                     controllers.Application.checkoutGeoRedirect(campaignCode = "")
-GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/contribute/checkout controllers.Application.redirectContributionsCheckout(countryGroupId: String)
 
 # Checkout
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/checkout            controllers.Application.productCheckoutRouter(countryGroupId: String)
@@ -67,11 +39,6 @@ GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/one-time-checkout   controllers.A
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/thank-you           controllers.Application.productCheckoutRouter(countryGroupId: String)
 
 GET  /$countryGroupId<(uk|eu)>/guardian-ad-lite                         controllers.Application.productCheckoutRouter(countryGroupId: String)
-GET /us/guardian-ad-lite                                             controllers.Application.contributeGeoRedirect(campaignCode = "")
-GET /au/guardian-ad-lite                                             controllers.Application.contributeGeoRedirect(campaignCode = "")
-GET /int/guardian-ad-lite                                            controllers.Application.contributeGeoRedirect(campaignCode = "")
-GET /nz/guardian-ad-lite                                             controllers.Application.contributeGeoRedirect(campaignCode = "")
-GET /ca/guardian-ad-lite                                             controllers.Application.contributeGeoRedirect(campaignCode = "")
 GET /guardian-ad-lite                                                controllers.Application.geoRedirectToPath(path = "guardian-ad-lite")
 
 GET  /contribute                                                   controllers.Application.contributeGeoRedirect(campaignCode = "")
@@ -84,7 +51,6 @@ GET  /$country<(uk|us|ca)>/student                                 controllers.A
 
 GET  /aus-2020-map                                                 controllers.Application.ausMomentMap()
 GET  /aus-map                                                      controllers.Application.ausMomentMap()
-GET  /thank-you-shareable-articles                                 controllers.ArticleShare.getArticles()
 
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou                   controllers.Application.contributionsLanding(country: String, campaignCode = "")
 
@@ -96,12 +62,10 @@ GET  /support-workers/status                                       controllers.S
 POST  /stripe/create-setup-intent/recaptcha                        controllers.StripeController.createSetupIntentRecaptcha()
 POST  /stripe/create-setup-intent/prb                              controllers.StripeController.createSetupIntentPRB()
 
-# this endpoint should be removed once identity remove
-# the need for a client token
-POST  /contribute/send-marketing                                   controllers.IdentityController.submitMarketing()
-
 # ------ Identity ------ #
 POST /identity/signin-url                                          controllers.IdentityController.createSignInURL()
+GET  /identity/newsletters                                         controllers.IdentityController.getNewslettersSubscriptions()
+PATCH /identity/newsletters                                        controllers.IdentityController.updateNewsletterSubscription()
 
 # ----- Subscriptions ----- #
 
@@ -116,15 +80,8 @@ GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/events/:eventId     controllers.A
 GET  /:country/subscribe                                           controllers.SubscriptionsController.legacyRedirect(country: String)
 
 # Digital subscriptions
-GET  /digital                                                      controllers.Application.geoRedirectToPath(path = "subscribe/digital")
-GET  /subscribe/digital                                            controllers.Application.geoRedirectToPath(path = "subscribe/digital")
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital          controllers.Application.redirectContributionsCheckoutDigital(country: String)
 GET  /subscribe/digitaledition                                     controllers.Application.geoRedirectToPath(path = "subscribe/digitaledition")
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digitaledition   controllers.Application.redirectContributionsCheckoutDigital(country: String)
-
-# redirect from old checkout urls
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout       controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout")
-GET  /subscribe/digital/checkout                                         controllers.DigitalSubscriptionFormController.displayForm()
 
 GET  /weekly                                                       controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)
 GET  /subscribe/weekly                                             controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)
@@ -146,7 +103,6 @@ POST /stripe-checkout-session/create                               controllers.C
 GET  /login                                                        controllers.Login.login()
 GET  /loginAction                                                  controllers.Login.loginAction()
 GET  /oauth2callback                                               controllers.Login.oauth2Callback()
-GET  /logout                                                       controllers.Login.logout()
 GET  /test-users                                                   controllers.TestUsersManagement.createTestUser()
 
 # ----- Okta auth ----- #
@@ -157,7 +113,6 @@ GET /oauth/callback                                                controllers.A
 # ----- PayPal (Recurring Endpoints) ----- #
 
 POST /paypal/setup-payment                                         controllers.PayPalRegular.setupPayment()
-POST /paypal/create-agreement                                      controllers.PayPalRegular.createAgreement()
 POST /paypal/one-click-checkout                                    controllers.PayPalRegular.createAgreementAndRetrieveUser()
 GET  /paypal/return                                                controllers.PayPalRegular.returnUrl()
 GET  /paypal/cancel                                                controllers.PayPalRegular.cancelUrl()
@@ -193,6 +148,8 @@ GET /prices                                                       controllers.Pr
 
 # ----- Analytics API (mParticle) ----- #
 GET /analytics-user-profile                                       controllers.AnalyticsController.getAnalyticsUserProfile()
+# This endpoint should only be used if the user has consented for targeting -
+GET /audience/:id/member                                          controllers.AnalyticsController.isAudienceMember(id: Int)
 
 # ----- Newspaper Archive ----- #
 GET /newspaper-archive-header                                      controllers.NewspaperArchiveController.getHeader
@@ -211,6 +168,3 @@ GET  /favicon.ico                                                  controllers.F
 
 GET  /assets/*file                                                 controllers.Assets.at(path="/public/compiled-assets", file)
 GET  /*file                                                        controllers.Assets.at(path="/public", file)
-
-# Deprecated - for Metrics Only #
-POST  /stripe/create-setup-intent/auth                             controllers.StripeController.createSetupIntentWithAuth()

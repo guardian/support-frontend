@@ -9,17 +9,17 @@ describe("The support-workers stack", () => {
       stack: "support",
       stage: "PROD",
       promotionsDynamoTables: [
-        "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE",
-        "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
+        "arn:aws:dynamodb:*:*:table/support-admin-console-promos-CODE",
+        "arn:aws:dynamodb:*:*:table/support-admin-console-promos-PROD",
       ],
       s3Files: [
         "arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-CODE/catalog.json",
         "arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-PROD/catalog.json",
         "arn:aws:s3:::support-workers-private/*",
       ],
-      supporterProductDataTables: [
-        "supporter-product-data-tables-CODE-SupporterProductDataTable",
-        "supporter-product-data-tables-PROD-SupporterProductDataTable",
+      supporterProductDataQueueArns: [
+        "arn:aws:sqs:eu-west-1:865473395570:supporter-product-data-CODE",
+        "arn:aws:sqs:eu-west-1:865473395570:supporter-product-data-PROD",
       ],
       eventBusArns: [
         "arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-CODE",

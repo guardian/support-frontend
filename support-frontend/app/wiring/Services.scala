@@ -8,6 +8,7 @@ import com.gu.aws.AwsS3Client
 import com.gu.identity.auth._
 import com.gu.okhttp.RequestRunners
 import com.gu.support.getaddressio.GetAddressIOService
+import com.gu.support.idealpostcodes.IdealPostcodesService
 import com.gu.support.paperround.PaperRoundServiceProvider
 import com.gu.support.promotions.PromotionServiceProvider
 import play.api.BuiltInComponentsFromContext
@@ -17,7 +18,7 @@ import services._
 import services.paypal.{PayPalCompletePaymentsServiceProvider, PayPalNvpServiceProvider}
 import services.pricing.{DefaultPromotionServiceS3, PriceSummaryServiceProvider}
 import services.stepfunctions.{StateWrapper, SupportWorkersClient}
-import services.MParticleClient
+import services.mparticle.MParticleClient
 
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
@@ -49,8 +50,6 @@ trait Services {
     )
   }
 
-  lazy val capiService = new CapiService(wsClient, appConfig.capiKey)
-
   lazy val testUsers = TestUserService(appConfig.identity.testUserSecret)
 
   lazy val asyncAuthenticationService = AsyncAuthenticationService(appConfig.identity, wsClient)
@@ -79,7 +78,13 @@ trait Services {
 
   lazy val paymentAPIService = new PaymentAPIService(wsClient, appConfig.paymentApiUrl)
 
-  lazy val mparticleClient = new MParticleClient(RequestRunners.futureRunner, appConfig.mparticleConfigProvider)
+  lazy val mparticleClient =
+    new MParticleClient(
+      RequestRunners.futureRunner,
+      appConfig.mparticleConfigProvider,
+      appConfig.stage,
+      allSettingsProvider,
+    )
 
   lazy val recaptchaService = new RecaptchaService(wsClient)
 
@@ -90,8 +95,10 @@ trait Services {
 
   lazy val landingPageTestService = new LandingPageTestServiceImpl(appConfig.stage)
 
+  lazy val checkoutNudgeTestService = new CheckoutNudgeTestServiceImpl(appConfig.stage)
+
   lazy val allSettingsProvider: AllSettingsProvider =
-    AllSettingsProvider.fromConfig(appConfig, landingPageTestService).valueOr(throw _)
+    AllSettingsProvider.fromConfig(appConfig, landingPageTestService, checkoutNudgeTestService).valueOr(throw _)
 
   lazy val defaultPromotionService = new DefaultPromotionServiceS3(s3Client, appConfig.stage, actorSystem)
 
@@ -102,6 +109,9 @@ trait Services {
 
   lazy val getAddressIOService: GetAddressIOService =
     new GetAddressIOService(appConfig.getAddressIOConfig, RequestRunners.futureRunner)
+
+  lazy val idealPostcodesService: IdealPostcodesService =
+    new IdealPostcodesService(appConfig.idealPostcodesConfig, RequestRunners.futureRunner)
 
   lazy val paperRoundServiceProvider: PaperRoundServiceProvider =
     new PaperRoundServiceProvider(appConfig.paperRoundConfigProvider)

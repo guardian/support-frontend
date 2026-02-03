@@ -1,33 +1,25 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
 import { useState } from 'react';
+import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
-import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSession';
+import type { BillingStatePostcodeCountry } from './BillingAddressFields';
 
-type BillingAddressProps = {
-	countryId: IsoCountry;
+export type BillingAddressProps = {
 	countries?: Record<string, string>;
 	checkoutSession?: CheckoutSession;
-	postcode: string;
-	setPostcode: (value: string) => void;
-	state: string;
-	setState: (value: string) => void;
+	billingStatePostcodeCountry: BillingStatePostcodeCountry;
 };
 
 export function BillingAddress({
 	countries,
-	countryId,
 	checkoutSession,
-	postcode,
-	setPostcode,
-	state,
-	setState,
+	billingStatePostcodeCountry,
 }: BillingAddressProps) {
 	/** Billing address */
+	const postcode = billingStatePostcodeCountry.billingPostcode;
 	const [billingLineOne, setBillingLineOne] =
 		useStateWithCheckoutSession<string>(
 			checkoutSession?.formFields.addressFields.billingAddress.lineOne,
@@ -46,16 +38,14 @@ export function BillingAddress({
 		useState<PostcodeFinderResult[]>([]);
 	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
 		useState(false);
-	const [billingCountry, setBillingCountry] =
-		useStateWithCheckoutSession<IsoCountry>(
-			checkoutSession?.formFields.addressFields.billingAddress.country,
-			countryId,
-		);
 	const [billingAddressErrors, setBillingAddressErrors] = useState<
 		AddressFormFieldError[]
 	>([]);
 
-	const countryGroupId = CountryGroup.fromCountry(countryId) ?? 'International';
+	const [postcodeLookupError, setPostcodeLookupError] = useState<string | null>(
+		null,
+	);
+
 	return (
 		<fieldset>
 			<AddressFields
@@ -63,10 +53,9 @@ export function BillingAddress({
 				lineOne={billingLineOne}
 				lineTwo={billingLineTwo}
 				city={billingCity}
-				country={billingCountry}
-				state={state}
+				country={billingStatePostcodeCountry.billingCountry}
+				state={billingStatePostcodeCountry.billingState}
 				postCode={postcode}
-				countryGroupId={countryGroupId}
 				countries={countries ?? {}}
 				errors={billingAddressErrors}
 				postcodeState={{
@@ -78,22 +67,32 @@ export function BillingAddress({
 				setLineOne={setBillingLineOne}
 				setLineTwo={setBillingLineTwo}
 				setTownCity={setBillingCity}
-				setState={setState}
-				setPostcode={setPostcode}
-				setCountry={setBillingCountry}
+				setState={billingStatePostcodeCountry.setBillingState}
+				setPostcode={billingStatePostcodeCountry.setBillingPostcode}
+				setCountry={billingStatePostcodeCountry.setBillingCountry}
 				setPostcodeForFinder={() => {
 					// no-op
 				}}
-				setPostcodeErrorForFinder={() => {
-					// no-op
+				setPostcodeErrorForFinder={(error) => {
+					setPostcodeLookupError(error);
 				}}
+				postcodeErrorForFinder={postcodeLookupError}
 				setErrors={setBillingAddressErrors}
 				onFindAddress={(postcode) => {
 					setBillingPostcodeStateLoading(true);
-					void findAddressesForPostcode(postcode).then((results) => {
-						setBillingPostcodeStateLoading(false);
-						setBillingPostcodeStateResults(results);
-					});
+
+					void findAddressesForPostcode(postcode)
+						.then((results) => {
+							setBillingPostcodeStateResults(results);
+							setPostcodeLookupError(null);
+						})
+						.catch(() => {
+							setBillingPostcodeStateResults([]);
+							setPostcodeLookupError('Postcode not found');
+						})
+						.finally(() => {
+							setBillingPostcodeStateLoading(false);
+						});
 				}}
 			/>
 		</fieldset>

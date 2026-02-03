@@ -1,4 +1,6 @@
-const EventualSentry = import('@sentry/browser');
+const EventualSentry = import(
+	/* webpackChunkName: "sentry" */ '@sentry/browser'
+);
 
 // ----- Functions ----- //
 const init = (): Promise<void> =>

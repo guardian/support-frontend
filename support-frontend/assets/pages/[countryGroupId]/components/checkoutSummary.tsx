@@ -14,7 +14,6 @@ import {
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	type ActiveProductKey,
@@ -30,11 +29,11 @@ import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNud
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
+import { buildBackButtonPath } from '../checkout/helpers/backButton';
 import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
 	getPaperPlusDigitalBenefits,
-	getPremiumDigitalAllBenefits,
 } from '../checkout/helpers/benefitsChecklist';
 import { ukSpecificAdditionalBenefit } from '../student/components/StudentHeader';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
@@ -60,6 +59,8 @@ type CheckoutSummaryProps = {
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
 	nudgeSettings?: CheckoutNudgeSettings;
+	backButtonOrigin: string;
+	backButtonPathOverride: string | null;
 };
 
 export default function CheckoutSummary({
@@ -77,13 +78,14 @@ export default function CheckoutSummary({
 	thresholdAmount,
 	studentDiscount,
 	nudgeSettings,
+	backButtonOrigin,
+	backButtonPathOverride,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
-	const { enablePremiumDigital } = getFeatureFlags();
 	const productDescription = getProductDescription(productKey, ratePlanKey);
 	const ratePlanDetail = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
@@ -120,14 +122,13 @@ export default function CheckoutSummary({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
-	const premiumDigitalBenefits =
-		productKey === 'DigitalSubscription' && enablePremiumDigital
-			? getPremiumDigitalAllBenefits(countryGroupId)
-			: undefined;
 	const benefitsCheckListData =
-		premiumDigitalBenefits ??
 		getPaperPlusDigitalBenefits(productKey, ratePlanKey) ??
-		getBenefitsChecklistFromLandingPageTool(productKey, landingPageSettings) ??
+		getBenefitsChecklistFromLandingPageTool(
+			productKey,
+			landingPageSettings,
+			countryGroupId,
+		) ??
 		getBenefitsChecklistFromProductDescription(
 			productDescription,
 			countryGroupId,
@@ -157,11 +158,22 @@ export default function CheckoutSummary({
 				return undefined;
 		}
 	};
-	const backUrl = parameteriseUrl(
-		`/${supportRegionId}${productDescription.landingPagePath}`,
-		promotion?.promoCode,
-		getPaperFulfilmentOption(productKey),
+
+	const backButtonPath = buildBackButtonPath(
+		productDescription.landingPagePath,
+		backButtonPathOverride,
 	);
+
+	// We need to force the subdomain to support in case we're on the Observer
+	// subdomain which can't serve the subscribe/paper landing page. This is for
+	// Sunday paper subs.
+	const backUrl =
+		backButtonOrigin +
+		parameteriseUrl(
+			`/${supportRegionId}${backButtonPath}`,
+			promotion?.promoCode,
+			getPaperFulfilmentOption(productKey),
+		);
 
 	return (
 		<Box cssOverrides={shorterBoxMargin}>

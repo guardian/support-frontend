@@ -1,28 +1,27 @@
 // ----- Imports ----- //
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
-import Page from 'components/page/page';
+import { PageScaffold } from 'components/page/pageScaffold';
 import {
 	getAbParticipations,
 	setUpTrackingAndConsents,
 } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
-import './subscriptionsLanding.scss';
 import SubscriptionLandingContent from './components/subscriptionsLandingContent';
 import type { SubscriptionsLandingProps } from './subscriptionsLandingProps';
 import { subscriptionsLandingProps } from './subscriptionsLandingProps';
 
 // ----- Render ----- //
-function SubscriptionsLandingPage({
+export function SubscriptionsLandingPage({
 	countryGroupId,
 	participations,
 	pricingCopy,
 	referrerAcquisitions,
 }: SubscriptionsLandingProps) {
 	return (
-		<Page
+		<PageScaffold
 			header={<Header countryGroupId={countryGroupId} />}
-			footer={<Footer centred />}
+			footer={<Footer centred fullWidth />}
 		>
 			<SubscriptionLandingContent
 				countryGroupId={countryGroupId}
@@ -30,7 +29,7 @@ function SubscriptionsLandingPage({
 				pricingCopy={pricingCopy}
 				referrerAcquisitions={referrerAcquisitions}
 			/>
-		</Page>
+		</PageScaffold>
 	);
 }
 

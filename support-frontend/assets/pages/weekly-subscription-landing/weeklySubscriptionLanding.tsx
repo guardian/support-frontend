@@ -15,7 +15,7 @@ import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 import Block from 'components/page/block';
-import Page from 'components/page/page';
+import { PageScaffold } from 'components/page/pageScaffold';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import {
 	getAbParticipations,
@@ -24,13 +24,11 @@ import {
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { renderPage } from 'helpers/rendering/render';
 import { routes } from 'helpers/urls/routes';
-import 'stylesheets/skeleton/skeleton.scss';
 import { GuardianWeeklyFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
 import Benefits from './components/content/benefits';
 import GiftBenefits from './components/content/giftBenefits';
 import { WeeklyHero } from './components/hero/hero';
 import WeeklyProductPrices from './components/weeklyProductPrices';
-import './weeklySubscriptionLanding.scss';
 import type {
 	WeeklyLandingPropTypes,
 	WeeklyLPContentPropTypes,
@@ -64,7 +62,7 @@ function WeeklyLPContent({
 	giftNonGiftLink,
 }: WeeklyLPContentPropTypes) {
 	return (
-		<Page
+		<PageScaffold
 			id={pageQaId}
 			header={header}
 			footer={
@@ -75,7 +73,11 @@ function WeeklyLPContent({
 				/>
 			}
 		>
-			<WeeklyHero orderIsAGift={orderIsAGift} promotionCopy={promotionCopy} />
+			<WeeklyHero
+				orderIsAGift={orderIsAGift}
+				promotionCopy={promotionCopy}
+				countryGroupId={countryGroupId}
+			/>
 			<FullWidthContainer>
 				<CentredContainer>
 					<Block cssOverrides={styles.closeGapAfterPageTitle}>
@@ -112,7 +114,7 @@ function WeeklyLPContent({
 					</div>
 				</CentredContainer>
 			</FullWidthContainer>
-		</Page>
+		</PageScaffold>
 	);
 }
 
@@ -124,7 +126,7 @@ function getStudentBeanLink(countryGroupId: CountryGroupId) {
 }
 
 // ----- Render ----- //
-function WeeklyLandingPage({
+export function WeeklyLandingPage({
 	countryId,
 	productPrices,
 	promotionCopy,

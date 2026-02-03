@@ -1,5 +1,6 @@
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { render } from '@testing-library/react';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -7,7 +8,6 @@ import type {
 import { SummaryTsAndCs } from './summaryTsAndCs';
 
 // Mocking price retrieval from productCatalog (not available in window at runtime)
-jest.mock('helpers/featureFlags');
 jest.mock('helpers/utilities/dateFormatting', () => ({
 	getDateWithOrdinal: () => 'first',
 	getLongMonth: () => 'March',
@@ -27,39 +27,34 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 	});
 
 	it.each`
-		productKey               | activeRatePlanKey
-		${'Contribution'}        | ${'Monthly'}
-		${'Contribution'}        | ${'Annual'}
-		${'SupporterPlus'}       | ${'Monthly'}
-		${'SupporterPlus'}       | ${'Annual'}
-		${'TierThree'}           | ${'DomesticMonthly'}
-		${'TierThree'}           | ${'DomesticAnnual'}
-		${'OneTimeContribution'} | ${'OneTime'}
-		${'GuardianAdLite'}      | ${'Monthly'}
-		${'GuardianAdLite'}      | ${'Annual'}
-		${'DigitalSubscription'} | ${'Monthly'}
-		${'SubscriptionCard'}    | ${'WeekendPlus'}
-		${'HomeDelivery'}        | ${'SixdayPlus'}
-		${'SubscriptionCard'}    | ${'Sunday'}
-		${'HomeDelivery'}        | ${'Sunday'}
+		productKey               | activeRatePlanKey | countryGroupId    | currency
+		${'Contribution'}        | ${'Monthly'}      | ${'GBPCountries'} | ${'GBP'}
+		${'Contribution'}        | ${'Annual'}       | ${'GBPCountries'} | ${'GBP'}
+		${'SupporterPlus'}       | ${'Monthly'}      | ${'GBPCountries'} | ${'GBP'}
+		${'SupporterPlus'}       | ${'Monthly'}      | ${'UnitedStates'} | ${'USD'}
+		${'SupporterPlus'}       | ${'Annual'}       | ${'GBPCountries'} | ${'GBP'}
+		${'OneTimeContribution'} | ${'OneTime'}      | ${'GBPCountries'} | ${'GBP'}
+		${'GuardianAdLite'}      | ${'Monthly'}      | ${'GBPCountries'} | ${'GBP'}
+		${'GuardianAdLite'}      | ${'Annual'}       | ${'GBPCountries'} | ${'GBP'}
+		${'DigitalSubscription'} | ${'Monthly'}      | ${'UnitedStates'} | ${'USD'}
+		${'DigitalSubscription'} | ${'Annual'}       | ${'GBPCountries'} | ${'GBP'}
+		${'SubscriptionCard'}    | ${'WeekendPlus'}  | ${'GBPCountries'} | ${'GBP'}
+		${'HomeDelivery'}        | ${'SixdayPlus'}   | ${'GBPCountries'} | ${'GBP'}
+		${'SubscriptionCard'}    | ${'Sunday'}       | ${'GBPCountries'} | ${'GBP'}
+		${'HomeDelivery'}        | ${'Sunday'}       | ${'GBPCountries'} | ${'GBP'}
 	`(
-		`summaryTs&Cs for $productKey With ratePlanKey $activeRatePlanKey renders correctly`,
-		({ productKey, activeRatePlanKey }) => {
-			// Arrange
-			(getFeatureFlags as jest.Mock).mockReturnValue({
-				enablePremiumDigital: false,
-				enableDigitalAccess: false,
-			});
-
+		`summaryTs&Cs for $productKey With ratePlanKey $activeRatePlanKey ($countryGroupId / $currency) renders correctly`,
+		({ productKey, activeRatePlanKey, countryGroupId, currency }) => {
 			// Act
 			const { container } = render(
 				<SummaryTsAndCs
 					productKey={productKey as ActiveProductKey}
 					ratePlanKey={activeRatePlanKey as ActiveRatePlanKey}
+					countryGroupId={countryGroupId as CountryGroupId}
 					ratePlanDescription={
 						ratePlanDescription[activeRatePlanKey as ActiveRatePlanKey]
 					}
-					currency={'GBP'}
+					currency={currency as IsoCurrency}
 					amount={0}
 				/>,
 			);
@@ -68,24 +63,4 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 			expect(container.textContent).toMatchSnapshot();
 		},
 	);
-
-	it('renders summaryTs&Cs for the Digital SUbscription when the Premium Digital flag is enabled', () => {
-		// Arrange
-		(getFeatureFlags as jest.Mock).mockReturnValue({
-			enablePremiumDigital: true,
-		});
-
-		// Act
-		const { container } = render(
-			<SummaryTsAndCs
-				productKey="DigitalSubscription"
-				ratePlanKey="Monthly"
-				currency={'GBP'}
-				amount={0}
-			/>,
-		);
-
-		// Assert
-		expect(container.textContent).toMatchSnapshot();
-	});
 });

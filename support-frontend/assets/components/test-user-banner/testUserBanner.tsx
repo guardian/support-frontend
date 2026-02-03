@@ -30,7 +30,7 @@ export function TestUserBanner(): JSX.Element | null {
 		const isThankYouPage = window.location.pathname.includes('thankyou');
 
 		return (
-			<div css={testUserBannerStyles}>
+			<div css={testUserBannerStyles} role="banner">
 				<p>You are a test user</p>
 				{isThankYouPage && <ThankYouUserTypeSelector />}
 			</div>

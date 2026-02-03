@@ -48,7 +48,7 @@ type PaymentProvider = keyof typeof PaymentProviders;
 interface SupportWorkersProps extends GuStackProps {
   promotionsDynamoTables: string[];
   s3Files: string[];
-  supporterProductDataTables: string[];
+  supporterProductDataQueueArns: string[];
   eventBusArns: string[];
   parameterStorePaths: string[];
   secretsManagerPaths: string[];
@@ -91,11 +91,9 @@ export class SupportWorkers extends GuStack {
       ],
       resources: props.promotionsDynamoTables,
     });
-    const supporterProductDataTablePolicy = new PolicyStatement({
-      actions: ["dynamodb:PutItem", "dynamodb:UpdateItem"],
-      resources: props.supporterProductDataTables.map((table) =>
-        Fn.importValue(table)
-      ),
+    const supporterProductDataSqsPolicy = new PolicyStatement({
+      actions: ["sqs:GetQueueUrl", "sqs:SendMessage"],
+      resources: props.supporterProductDataQueueArns,
     });
     const parameterStorePolicy = new PolicyStatement({
       actions: ["ssm:GetParameter"],
@@ -122,56 +120,6 @@ export class SupportWorkers extends GuStack {
         GU_SUPPORT_WORKERS_STAGE: this.stage,
         EMAIL_QUEUE_NAME: Fn.importValue(`comms-${this.stage}-EmailQueueName`),
       },
-    };
-
-    const createScalaLambda = (
-      lambdaName: string,
-      additionalPolicies: PolicyStatement[] = []
-    ) => {
-      const lambdaId = `${lambdaName}Lambda`;
-      const lambda = new GuLambdaFunction(this, lambdaId, {
-        ...lambdaDefaultConfig,
-        app: "support-workers-scala",
-        fileName: `support-workers.jar`,
-        runtime: Runtime.JAVA_21,
-        handler: `com.gu.support.workers.lambdas.${lambdaName}::handleRequest`,
-        functionName: `${this.stack}-${lambdaName}Lambda-${this.stage}`,
-        initialPolicy: [
-          s3Policy,
-          cloudWatchLoggingPolicy,
-          ...additionalPolicies,
-        ],
-      });
-      this.overrideLogicalId(lambda, {
-        logicalId: lambdaId,
-        reason: "Moving existing lambda to CDK",
-      });
-      return new LambdaInvoke(this, lambdaName, {
-        lambdaFunction: lambda,
-        outputPath: "$.Payload", // Without this, LambdaInvoke wraps the output state as described here: https://github.com/aws/aws-cdk/issues/29473
-      })
-        .addRetry({
-          errors: ["com.gu.support.workers.exceptions.RetryNone"],
-          maxAttempts: 0,
-        })
-        .addRetry({
-          errors: ["com.gu.support.workers.exceptions.RetryLimited"],
-          maxAttempts: 5,
-          interval: Duration.seconds(1),
-          backoffRate: 10, // Retry after 1 sec, 10 sec, 100 sec, 16 mins and 2 hours 46 mins
-        })
-        .addRetry({
-          errors: ["com.gu.support.workers.exceptions.RetryUnlimited"],
-          maxAttempts: 999999, //If we don't provide a value here it defaults to 3
-          interval: Duration.seconds(1),
-          backoffRate: 2,
-        })
-        .addRetry({
-          errors: [Errors.ALL], // Wildcard to capture any error which originates from outside of our code (e.g. an exception from AWS)
-          maxAttempts: 999999,
-          interval: Duration.seconds(3),
-          backoffRate: 2,
-        });
     };
 
     const createTypescriptLambda = (
@@ -239,7 +187,7 @@ export class SupportWorkers extends GuStack {
       .when(Condition.booleanEquals("$.requestInfo.failed", true), failState)
       .otherwise(checkoutFailure);
 
-    const failureHandler = createScalaLambda("FailureHandler", [
+    const failureHandler = createTypescriptLambda("FailureHandler", [
       emailSqsPolicy,
     ]).next(succeedOrFailChoice);
 
@@ -256,26 +204,23 @@ export class SupportWorkers extends GuStack {
       "CreateSalesforceContact"
     ).addCatch(failureHandler, catchProps);
 
-    const createZuoraSubscriptionScala = createScalaLambda(
-      "CreateZuoraSubscription",
-      [promotionsDynamoTablePolicy]
-    ).addCatch(failureHandler, catchProps);
-
     const createZuoraSubscriptionTS = createTypescriptLambda(
       "CreateZuoraSubscriptionTS",
       [promotionsDynamoTablePolicy, secretsManagerPolicy]
     ).addCatch(failureHandler, catchProps);
 
-    const sendThankYouEmail = createScalaLambda("SendThankYouEmail", [
+    const sendThankYouEmail = createTypescriptLambda("SendThankYouEmail", [
       emailSqsPolicy,
+      secretsManagerPolicy,
     ]);
-    const updateSupporterProductData = createScalaLambda(
+    const updateSupporterProductData = createTypescriptLambda(
       "UpdateSupporterProductData",
-      [supporterProductDataTablePolicy]
+      [supporterProductDataSqsPolicy]
     );
-    const sendAcquisitionEvent = createScalaLambda("SendAcquisitionEvent", [
-      eventBusPolicy,
-    ]);
+    const sendAcquisitionEvent = createTypescriptLambda(
+      "SendAcquisitionEvent",
+      [eventBusPolicy]
+    );
 
     const checkoutSuccess = new Succeed(this, "CheckoutSuccess");
 
@@ -285,34 +230,9 @@ export class SupportWorkers extends GuStack {
       .branch(sendAcquisitionEvent)
       .branch(checkoutSuccess);
 
-    // Choice state to choose between the Scala and Typescript S+ lambdas
-    const isProductType = (product: string) =>
-      Condition.stringEquals("$.state.productInformation.product", product);
-    const isGuardianAdLite = isProductType("GuardianAdLite");
-    const isContribution = isProductType("Contribution");
-    const isSupporterPLus = isProductType("SupporterPlus");
-    const isTierThree = isProductType("TierThree");
-
-    const shouldUseTSLambda = Condition.and(
-      Condition.isNotNull("$.state.productInformation"),
-      Condition.or(
-        isGuardianAdLite,
-        isContribution,
-        isSupporterPLus,
-        isTierThree
-      )
-    );
-
-    const createZuoraSubscriptionChoice = new Choice(
-      this,
-      "CreateZuoraSubscriptionChoice"
-    )
-      .when(shouldUseTSLambda, createZuoraSubscriptionTS.next(parallelSteps))
-      .otherwise(createZuoraSubscriptionScala.next(parallelSteps));
-
     const allSteps = createPaymentMethodLambda
       .next(createSalesforceContactLambda)
-      .next(createZuoraSubscriptionChoice);
+      .next(createZuoraSubscriptionTS.next(parallelSteps));
 
     const stateMachine = new StateMachine(this, "SupportWorkers", {
       stateMachineName: `${app}-${this.stage}`, // Used by support-frontend to find the state machine

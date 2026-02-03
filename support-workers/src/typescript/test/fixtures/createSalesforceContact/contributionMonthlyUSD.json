@@ -26,6 +26,11 @@
     "billingPeriod": "Monthly",
     "productType": "Contribution"
   },
+  "productInformation": {
+    "product": "Contribution",
+    "ratePlan": "Monthly",
+    "amount": 5
+  },
   "analyticsInfo": {
     "isGiftPurchase": false,
     "paymentProvider": "Stripe"

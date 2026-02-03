@@ -8,8 +8,6 @@ const pxtorem = require('postcss-pxtorem');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-const { getClassName } = require('./scripts/css');
-const { paletteAsSass } = require('./scripts/pasteup-sass');
 const entryPoints = require('./webpack.entryPoints');
 
 const cssLoaders = [
@@ -19,15 +17,6 @@ const cssLoaders = [
 			postcssOptions: {
 				plugins: [pxtorem({ propList: ['*'] }), autoprefixer()],
 			},
-		},
-	},
-	{
-		loader: 'fast-sass-loader',
-		options: {
-			includePaths: [
-				path.resolve(__dirname, 'assets'),
-				path.resolve(__dirname),
-			],
 		},
 	},
 ];
@@ -141,36 +130,6 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 				options: {
 					name: '[path][name].[ext]',
 				},
-			},
-			{
-				test: /\.scss$/,
-				exclude: /\.module.scss$/,
-				use: [
-					MiniCssExtractPlugin.loader,
-					{
-						loader: 'css-loader',
-					},
-					...cssLoaders,
-				],
-			},
-			{
-				test: /\.module.scss$/,
-				use: [
-					MiniCssExtractPlugin.loader,
-					{
-						loader: 'css-loader',
-						options: {
-							modules: {
-								getLocalIdent: (context, localIdentName, localName) =>
-									getClassName(
-										path.relative(__dirname, context.resourcePath),
-										localName,
-									),
-							},
-						},
-					},
-					...cssLoaders,
-				],
 			},
 			{
 				test: /\.css$/,

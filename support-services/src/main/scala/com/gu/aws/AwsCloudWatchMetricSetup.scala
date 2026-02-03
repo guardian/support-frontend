@@ -103,9 +103,25 @@ object AwsCloudWatchMetricSetup {
       ),
     )
 
+  def getCheckoutNudgeTestsError(stage: Stage): MetricRequest =
+    getMetricRequest(
+      MetricName("GetCheckoutNudgeTestsError"),
+      Map(
+        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
+      ),
+    )
+
   def getTickerDataError(stage: Stage): MetricRequest =
     getMetricRequest(
       MetricName("GetTickerDataError"),
+      Map(
+        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
+      ),
+    )
+
+  def getMParticleTokenError(stage: Stage): MetricRequest =
+    getMetricRequest(
+      MetricName("MParticleTokenError"),
       Map(
         MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
       ),

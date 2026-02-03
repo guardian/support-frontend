@@ -13,6 +13,7 @@ type TestDetails = {
 	internationalisationId: string;
 	postCode?: string;
 	ratePlan?: string;
+	billingCountry?: string;
 };
 
 const recaptchaAndSubmit = async (page: Page) => {
@@ -28,13 +29,19 @@ export const completeGenericCheckout = async (
 	page: Page,
 	testDetails: TestDetails,
 ) => {
-	const { product, internationalisationId, postCode, paymentType, ratePlan } =
-		testDetails;
+	const {
+		product,
+		internationalisationId,
+		postCode,
+		paymentType,
+		ratePlan,
+		billingCountry,
+	} = testDetails;
 	await setTestUserDetails(
 		page,
 		product,
 		internationalisationId,
-		getUserFields(internationalisationId, postCode),
+		getUserFields(internationalisationId, postCode, billingCountry),
 		ratePlan,
 	);
 
