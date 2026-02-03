@@ -1,7 +1,3 @@
-// ----- Imports ----- //
-import { css } from '@emotion/react';
-import { from } from '@guardian/source/foundations';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
@@ -11,45 +7,18 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
-import CentredContainer from 'components/containers/centredContainer';
-import FullWidthContainer from 'components/containers/fullWidthContainer';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
-import Block from 'components/page/block';
 import { PageScaffold } from 'components/page/pageScaffold';
-import GiftNonGiftCta from 'components/product/giftNonGiftCta';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { renderPage } from 'helpers/rendering/render';
 import { routes } from 'helpers/urls/routes';
 import { GuardianWeeklyFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
-import Benefits from './components/content/benefits';
-import GiftBenefits from './components/content/giftBenefits';
-import { WeeklyHero } from './components/hero/hero';
-import WeeklyProductPrices from './components/weeklyProductPrices';
+import { WeeklyHero } from './components/weeklyHero';
+import { WeeklyDigitalLP } from './weeklyDigitalLP';
+import { WeeklyLP } from './weeklyLP';
 import type { WeeklyLandingPropTypes } from './weeklySubscriptionLandingProps';
 import { weeklyLandingProps } from './weeklySubscriptionLandingProps';
-
-const styles = {
-	closeGapAfterPageTitle: css`
-		margin-top: 0;
-	`,
-	displayRowEvenly: css`
-		${from.phablet} {
-			display: flex;
-			flex-direction: row;
-			justify-content: space-evenly;
-		}
-	`,
-	weeklyHeroContainerOverrides: css`
-		display: flex;
-	`,
-};
-
-function getStudentBeanLink(countryGroupId: CountryGroupId) {
-	if (countryGroupId === 'AUDCountries') {
-		return routes.guardianWeeklyStudentAU;
-	}
-	return routes.guardianWeeklyStudentUK;
-}
 
 export function WeeklyLandingPage({
 	countryId,
@@ -62,12 +31,11 @@ export function WeeklyLandingPage({
 		return null;
 	}
 
+	const { enableWeeklyDigital } = getFeatureFlags();
+
 	const path = orderIsAGift
 		? routes.guardianWeeklySubscriptionLandingGift
 		: routes.guardianWeeklySubscriptionLanding;
-	const giftNonGiftLink = orderIsAGift
-		? routes.guardianWeeklySubscriptionLanding
-		: routes.guardianWeeklySubscriptionLandingGift;
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy, orderIsAGift);
 
 	// ID for Selenium tests
@@ -105,42 +73,21 @@ export function WeeklyLandingPage({
 				promotionCopy={sanitisedPromoCopy}
 				countryGroupId={countryGroupId}
 			/>
-			<FullWidthContainer>
-				<CentredContainer>
-					<Block cssOverrides={styles.closeGapAfterPageTitle}>
-						{orderIsAGift ? <GiftBenefits /> : <Benefits />}
-					</Block>
-				</CentredContainer>
-			</FullWidthContainer>
-			<FullWidthContainer theme="dark" hasOverlap>
-				<CentredContainer>
-					<WeeklyProductPrices
-						countryId={countryId}
-						productPrices={productPrices}
-						orderIsAGift={orderIsAGift}
-					/>
-				</CentredContainer>
-			</FullWidthContainer>
-			<FullWidthContainer theme="white">
-				<CentredContainer>
-					<div css={styles.displayRowEvenly}>
-						<GiftNonGiftCta
-							product="Guardian Weekly"
-							href={giftNonGiftLink}
-							orderIsAGift={orderIsAGift}
-						/>
-						{(countryGroupId === 'GBPCountries' ||
-							countryGroupId === 'AUDCountries') && (
-							<GiftNonGiftCta
-								product="Student"
-								href={getStudentBeanLink(countryGroupId)}
-								orderIsAGift={orderIsAGift}
-								isStudent={true}
-							/>
-						)}
-					</div>
-				</CentredContainer>
-			</FullWidthContainer>
+			{enableWeeklyDigital ? (
+				<WeeklyDigitalLP
+					countryId={countryId}
+					countryGroupId={countryGroupId}
+					productPrices={productPrices}
+					orderIsAGift={orderIsAGift}
+				/>
+			) : (
+				<WeeklyLP
+					countryId={countryId}
+					countryGroupId={countryGroupId}
+					productPrices={productPrices}
+					orderIsAGift={orderIsAGift}
+				/>
+			)}
 		</PageScaffold>
 	);
 }
