@@ -98,7 +98,6 @@ lazy val root = (project in file("."))
   )
   .aggregate(
     `support-frontend`,
-    `support-workers`,
     `supporter-product-data`,
     `supporter-product-data-dynamo`,
     `stripe-patrons-data`,
@@ -140,31 +139,6 @@ lazy val `support-frontend` = (project in file("support-frontend"))
     `support-config`,
     `support-internationalisation`,
     `module-retry`,
-  )
-
-lazy val `support-workers` = (project in file("support-workers"))
-  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
-  .configs(IntegrationTest)
-  .settings(
-    integrationTestSettings,
-    scalafmtSettings,
-    libraryDependencies ++= commonDependencies,
-    scalacOptions += "-Ytasty-reader",
-  )
-  .dependsOn(
-    `support-services` % "test->test;it->test;compile->compile",
-    `support-models` % "test->test;it->test;compile->compile",
-    `support-config`,
-    `support-internationalisation`,
-    `module-acquisition-events`,
-    `supporter-product-data-dynamo`,
-  )
-  .aggregate(
-    `support-services`,
-    `support-models`,
-    `support-config`,
-    `support-internationalisation`,
-    `supporter-product-data-dynamo`,
   )
 
 lazy val `supporter-product-data` = (project in file("supporter-product-data"))
