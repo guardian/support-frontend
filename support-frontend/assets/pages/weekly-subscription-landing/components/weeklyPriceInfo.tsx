@@ -1,0 +1,76 @@
+import { css } from '@emotion/react';
+import {
+	neutral,
+	palette,
+	space,
+	textSans12,
+} from '@guardian/source/foundations';
+import {
+	Link,
+	SvgGift,
+	SvgInfoRound,
+	themeLinkBrand,
+} from '@guardian/source/react-components';
+import ProductInfoChip from 'components/product/productInfoChip';
+import { guardianWeeklyTermsLink } from 'helpers/legal';
+import { termsLink } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+
+const pricesInfo = css`
+	margin-top: ${space[6]}px;
+	& a {
+		color: ${neutral[100]};
+		:visited {
+			color: ${neutral[100]};
+		}
+	}
+`;
+const termsLinkStyle = css`
+	${textSans12};
+	color: ${palette.neutral[100]};
+	margin-left: ${space[9]}px;
+	margin-top: -12px;
+`;
+
+const termsAndConditionsLink = () =>
+	termsLink('Terms and Conditions', guardianWeeklyTermsLink);
+
+type WeeklyPriceInfoProps = {
+	orderIsAGift?: boolean;
+	giftInfo?: boolean;
+};
+export function WeeklyPriceInfo({
+	orderIsAGift,
+	giftInfo,
+}: WeeklyPriceInfoProps): JSX.Element {
+	const deliveryCostInfo = (
+		<>
+			Delivery cost included.{' '}
+			{!orderIsAGift && 'You can cancel your subscription at any time'}
+			{!giftInfo && <>. View full_ {termsAndConditionsLink()}</>}
+		</>
+	);
+
+	return (
+		<div css={pricesInfo}>
+			{!orderIsAGift && giftInfo && (
+				<ProductInfoChip icon={<SvgGift />}>
+					Gifting is available
+				</ProductInfoChip>
+			)}
+			<ProductInfoChip icon={<SvgInfoRound />}>
+				{deliveryCostInfo}
+			</ProductInfoChip>
+			{giftInfo && (
+				<ProductInfoChip>
+					<Link
+						href={guardianWeeklyTermsLink}
+						cssOverrides={termsLinkStyle}
+						theme={themeLinkBrand}
+					>
+						Click here to see full Terms and Conditions
+					</Link>
+				</ProductInfoChip>
+			)}
+		</div>
+	);
+}

@@ -18,11 +18,11 @@ type PropTypes = {
 	isStudent?: boolean;
 };
 const giftOrPersonal = css`
-	padding: ${space[3]}px ${space[3]}px ${space[12]}px;
+	padding: ${space[8]}px ${space[24]}px ${space[12]}px 0;
 `;
 const giftOrPersonalCopy = css`
 	${textEgyptian17};
-	margin-bottom: ${space[9]}px;
+	margin-bottom: ${space[6]}px;
 `;
 const giftOrPersonalHeading = css`
 	${headlineBold34};
