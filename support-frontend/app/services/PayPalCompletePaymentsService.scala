@@ -101,6 +101,8 @@ class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client
     )
   }
 
+  // Get an access token, using a client ID and secret
+  // https://developer.paypal.com/api/rest/authentication/
   private def getAccessToken: Future[String] = {
     postForm[GetAccessTokenResponse](
       endpoint = "/v1/oauth2/token",
@@ -120,9 +122,12 @@ class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client
     }
   }
 
+  // Create a setup token
+  // https://developer.paypal.com/docs/api/payment-tokens/v3/#setup-tokens_create
   def createSetupToken: Future[String] = {
     val payload = CreateSetupTokenRequest(
       payment_source = SetupPaymentSource(
+        // The source is PayPal, since the user's funding source is their PayPal account
         paypal = PayPalPaymentSource(
           usage_type = "MERCHANT",
           customer_type = "CONSUMER",
@@ -144,6 +149,8 @@ class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client
     } yield setupTokenResponse.id
   }
 
+  // Exchange an approved setup token for a payment token
+  // https://developer.paypal.com/docs/api/payment-tokens/v3/#payment-tokens_create
   def createPaymentToken(setupToken: String): Future[PaymentToken] = {
     for {
       accessToken <- getAccessToken
