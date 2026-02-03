@@ -36,7 +36,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.SUPPORT_WORKERS_IT_TEST_ROLE }}
+          role-to-assume: ${{ secrets.SUPPORT_WORKERS_IT_TEST_ROLE_ARN }}
           aws-region: eu-west-1
 
       - name: Run integration tests
