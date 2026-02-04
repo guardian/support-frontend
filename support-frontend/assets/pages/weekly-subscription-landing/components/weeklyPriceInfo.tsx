@@ -25,8 +25,7 @@ const pricesInfo = css`
 	}
 `;
 const pricesInfoDigital = css`
-	margin-top: ${space[4]}px;
-	margin-bottom: ${space[9]}px;
+	margin: ${space[4]}px 0 ${space[9]}px 0;
 `;
 const termsLinkStyle = css`
 	${textSans12};
@@ -55,7 +54,7 @@ export function WeeklyPriceInfo({
 	);
 
 	return (
-		<div css={[pricesInfo, !orderIsAGift && pricesInfoDigital]}>
+		<div css={[pricesInfo, !giftInfo && pricesInfoDigital]}>
 			{!orderIsAGift && giftInfo && (
 				<ProductInfoChip icon={<SvgGift />}>
 					Gifting is available
