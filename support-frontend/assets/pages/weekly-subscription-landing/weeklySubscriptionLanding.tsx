@@ -98,6 +98,7 @@ export function WeeklyLandingPage({
 					productPrices={productPrices}
 					orderIsAGift={orderIsAGift}
 					promotionCopy={promotionCopy}
+					enableWeeklyDigital={enableWeeklyDigital}
 				/>
 			) : (
 				<WeeklyLP
@@ -106,6 +107,7 @@ export function WeeklyLandingPage({
 					productPrices={productPrices}
 					orderIsAGift={orderIsAGift}
 					promotionCopy={promotionCopy}
+					enableWeeklyDigital={enableWeeklyDigital}
 				/>
 			)}
 		</PageScaffold>

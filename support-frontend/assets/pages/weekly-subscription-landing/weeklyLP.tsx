@@ -38,6 +38,7 @@ type WeeklyLPPropTypes = {
 	countryGroupId: CountryGroupId;
 	productPrices: ProductPrices | null | undefined;
 	orderIsAGift: boolean;
+	enableWeeklyDigital: boolean;
 	promotionCopy?: PromotionCopy;
 };
 
@@ -46,6 +47,7 @@ export function WeeklyLP({
 	countryGroupId,
 	productPrices,
 	orderIsAGift,
+	enableWeeklyDigital,
 	promotionCopy,
 }: WeeklyLPPropTypes): JSX.Element {
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy, orderIsAGift);
@@ -55,6 +57,7 @@ export function WeeklyLP({
 				orderIsAGift={orderIsAGift}
 				promotionCopy={sanitisedPromoCopy}
 				countryGroupId={countryGroupId}
+				enableWeeklyDigital={enableWeeklyDigital}
 			/>
 			<FullWidthContainer>
 				<CentredContainer>

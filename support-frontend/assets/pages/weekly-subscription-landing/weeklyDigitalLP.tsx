@@ -10,8 +10,8 @@ import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { WeeklyBenefits } from './components/weeklyBenefits';
 import { WeeklyCards } from './components/weeklyCards';
-import { WeeklyDigitalHero } from './components/weeklyDigitalHero';
 import { WeeklyGiftStudentSubs } from './components/weeklyGiftStudentSubs';
+import { WeeklyHero } from './components/weeklyHero';
 import { WeeklyPriceInfo } from './components/weeklyPriceInfo';
 
 type WeeklyDigitalLPProps = {
@@ -19,6 +19,7 @@ type WeeklyDigitalLPProps = {
 	countryGroupId: CountryGroupId;
 	productPrices: ProductPrices;
 	orderIsAGift: boolean;
+	enableWeeklyDigital: boolean;
 	promotionCopy?: PromotionCopy;
 };
 export function WeeklyDigitalLP({
@@ -26,6 +27,7 @@ export function WeeklyDigitalLP({
 	countryGroupId,
 	productPrices,
 	orderIsAGift,
+	enableWeeklyDigital,
 	promotionCopy,
 }: WeeklyDigitalLPProps): JSX.Element {
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy, orderIsAGift);
@@ -37,10 +39,11 @@ export function WeeklyDigitalLP({
 	const sampleWeeklyCardsCopy = `PRICE CARDS COMPONENT Annual=>${productPrice?.currency}${productPrice?.price}`;
 	return (
 		<>
-			<WeeklyDigitalHero
+			<WeeklyHero
 				orderIsAGift={orderIsAGift}
 				promotionCopy={sanitisedPromoCopy}
 				countryGroupId={countryGroupId}
+				enableWeeklyDigital={enableWeeklyDigital}
 			/>
 			<FullWidthContainer theme="brand">
 				<CentredContainer>
