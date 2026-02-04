@@ -6,7 +6,7 @@ import {
 	getAbParticipations,
 	setUpTrackingAndConsents,
 } from 'helpers/page/page';
-import { getPromotionCopy } from 'helpers/productPrice/promotions';
+import { getSanitisedPromoCopy } from 'helpers/productPrice/promotions';
 import { renderPage } from 'helpers/rendering/render';
 import NewspaperHero from './components/NewspaperHero';
 import NewspaperProductTabs from './components/NewspaperProductTabs';
@@ -31,7 +31,7 @@ export function PaperLandingPage({
 	if (!productPrices) {
 		return null;
 	}
-	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
+	const sanitisedPromoCopy = getSanitisedPromoCopy(promotionCopy);
 	return (
 		<PageScaffold
 			id={pageQaId}
