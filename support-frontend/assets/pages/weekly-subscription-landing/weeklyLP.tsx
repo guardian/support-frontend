@@ -6,9 +6,12 @@ import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import Block from 'components/page/block';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { PromotionCopy } from 'helpers/productPrice/promotions';
+import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import Benefits from './components/content/benefits';
 import GiftBenefits from './components/content/giftBenefits';
 import { WeeklyGiftStudentSubs } from './components/weeklyGiftStudentSubs';
+import { WeeklyHero } from './components/weeklyHero';
 import WeeklyProductPrices from './components/weeklyProductPrices';
 
 const weeklyGiftPadding = css`
@@ -35,6 +38,7 @@ type WeeklyLPPropTypes = {
 	countryGroupId: CountryGroupId;
 	productPrices: ProductPrices | null | undefined;
 	orderIsAGift: boolean;
+	promotionCopy?: PromotionCopy;
 };
 
 export function WeeklyLP({
@@ -42,9 +46,16 @@ export function WeeklyLP({
 	countryGroupId,
 	productPrices,
 	orderIsAGift,
+	promotionCopy,
 }: WeeklyLPPropTypes): JSX.Element {
+	const sanitisedPromoCopy = getPromotionCopy(promotionCopy, orderIsAGift);
 	return (
 		<>
+			<WeeklyHero
+				orderIsAGift={orderIsAGift}
+				promotionCopy={sanitisedPromoCopy}
+				countryGroupId={countryGroupId}
+			/>
 			<FullWidthContainer>
 				<CentredContainer>
 					<Block cssOverrides={styles.closeGapAfterPageTitle}>
