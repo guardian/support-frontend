@@ -34,7 +34,7 @@ const termsLinkStyle = css`
 	margin-top: -12px;
 `;
 
-const termsAndConditionsLink = () =>
+export const weeklyTermsAndConditionsLink = () =>
 	termsLink('Terms and Conditions', guardianWeeklyTermsLink);
 
 type WeeklyPriceInfoProps = {
@@ -49,7 +49,7 @@ export function WeeklyPriceInfo({
 		<>
 			Delivery cost included.{' '}
 			{!orderIsAGift && 'You can cancel your subscription at any time'}
-			{!giftInfo && <>. View full&nbsp;{termsAndConditionsLink()}</>}
+			{!giftInfo && <>. View full&nbsp;{weeklyTermsAndConditionsLink()}</>}
 		</>
 	);
 

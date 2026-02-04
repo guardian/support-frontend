@@ -1,4 +1,5 @@
-import type { SerializedStyles } from '@emotion/react';
+import { css, type SerializedStyles } from '@emotion/react';
+import { neutral, space } from '@guardian/source/foundations';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
@@ -8,24 +9,34 @@ import type { ReactNode } from 'react';
 import { guardianWeeklyTermsLink } from 'helpers/legal';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import type { Option } from 'helpers/types/option';
 import { promotionTermsUrl } from 'helpers/urls/routes';
+import { weeklyTermsAndConditionsLink } from 'pages/weekly-subscription-landing/components/weeklyPriceInfo';
 import Footer from './Footer';
 import { footerTextHeading } from './footerStyles';
 
-type FooterWithPromoTermsProps = {
-	productPrices: ProductPrices;
-	country: IsoCountry;
-	orderIsAGift: boolean;
-	cssOverrides?: SerializedStyles;
+const weeklyFooter = (enableWeeklyDigital: boolean) => {
+	return !enableWeeklyDigital
+		? css`
+				p {
+					margin-top: ${space[3]}px;
+				}
+		  `
+		: undefined;
 };
+const promoOfferLink = css`
+	& a {
+		:visited {
+			color: ${neutral[100]};
+		}
+	}
+`;
 
 const getPromoUrl = (
 	productPrices: ProductPrices,
 	country: IsoCountry,
 	billingPeriod: BillingPeriod,
 	fulfillmentOption: FulfilmentOptions,
-): Option<string> => {
+) => {
 	const promotion = getPromotion(
 		productPrices,
 		country,
@@ -33,25 +44,25 @@ const getPromoUrl = (
 		fulfillmentOption,
 		NoProductOptions,
 	);
-	return promotion ? promotionTermsUrl(promotion.promoCode) : null;
+	return promotion ? promotionTermsUrl(promotion.promoCode) : undefined;
 };
 
 type LinkTypes = {
 	productPrices: ProductPrices;
 	country: IsoCountry;
 	fulfillmentOption: FulfilmentOptions;
-	cssOverrides?: SerializedStyles;
+	enableWeeklyDigital: boolean;
 };
 
-function MaybeLink(props: { href: Option<string>; text: string }) {
-	return props.href ? <a href={props.href}>{props.text}</a> : null;
+function MaybeLink({ href, text }: { text: string; href?: string }) {
+	return href ? <a href={href}>{text}</a> : null;
 }
 
 function RegularLinks({
 	productPrices,
 	country,
 	fulfillmentOption,
-	cssOverrides,
+	enableWeeklyDigital,
 }: LinkTypes) {
 	const annualUrl = getPromoUrl(
 		productPrices,
@@ -68,7 +79,10 @@ function RegularLinks({
 	const multipleOffers = !!(annualUrl && monthlyUrl);
 	if (annualUrl ?? monthlyUrl) {
 		return (
-			<PromoTerms cssOverrides={cssOverrides}>
+			<PromoTerms
+				enableWeeklyDigital={enableWeeklyDigital}
+				cssOverrides={weeklyFooter(enableWeeklyDigital)}
+			>
 				<span>
 					<MaybeLink href={monthlyUrl} text="monthly" />
 					{multipleOffers ? ' and ' : ''}
@@ -85,7 +99,7 @@ function GiftLinks({
 	productPrices,
 	country,
 	fulfillmentOption,
-	cssOverrides,
+	enableWeeklyDigital,
 }: LinkTypes) {
 	const annualUrl = getPromoUrl(
 		productPrices,
@@ -102,7 +116,10 @@ function GiftLinks({
 	const multipleOffers = !!(annualUrl && quarterlyUrl);
 	if (annualUrl ?? quarterlyUrl) {
 		return (
-			<PromoTerms cssOverrides={cssOverrides}>
+			<PromoTerms
+				enableWeeklyDigital={enableWeeklyDigital}
+				cssOverrides={weeklyFooter(enableWeeklyDigital)}
+			>
 				<span>
 					<MaybeLink href={quarterlyUrl} text="quarterly" />
 					{multipleOffers ? ' and ' : ''}
@@ -117,29 +134,43 @@ function GiftLinks({
 
 interface PromoTermsProps {
 	children: ReactNode;
+	enableWeeklyDigital: boolean;
 	cssOverrides?: SerializedStyles;
 }
-function PromoTerms({ children, cssOverrides }: PromoTermsProps) {
+function PromoTerms({
+	children,
+	enableWeeklyDigital,
+	cssOverrides,
+}: PromoTermsProps) {
+	const termsAndConditionsLink = enableWeeklyDigital
+		? weeklyTermsAndConditionsLink()
+		: 'promotion terms and conditions';
 	return (
 		<span css={cssOverrides}>
 			<h3 id="qa-component-customer-service" css={footerTextHeading}>
 				Promotion terms and conditions
 			</h3>
-			<p>
+			<p css={promoOfferLink}>
 				Offer subject to availability. Guardian News and Media Ltd
 				(&quot;GNM&quot;) reserves the right to withdraw this promotion at any
-				time. Full promotion terms and conditions for our&nbsp;
+				time. Full {termsAndConditionsLink} for our&nbsp;
 				{children}.
 			</p>
 		</span>
 	);
 }
 
+type FooterWithPromoTermsProps = {
+	productPrices: ProductPrices;
+	country: IsoCountry;
+	orderIsAGift: boolean;
+	enableWeeklyDigital: boolean;
+};
 function GuardianWeeklyFooter({
 	productPrices,
 	orderIsAGift,
 	country,
-	cssOverrides,
+	enableWeeklyDigital,
 }: FooterWithPromoTermsProps): JSX.Element {
 	const weeklyFulfillmentOption = Domestic;
 	return (
@@ -149,14 +180,14 @@ function GuardianWeeklyFooter({
 					productPrices={productPrices}
 					country={country}
 					fulfillmentOption={weeklyFulfillmentOption}
-					cssOverrides={cssOverrides}
+					enableWeeklyDigital={enableWeeklyDigital}
 				/>
 			) : (
 				<RegularLinks
 					productPrices={productPrices}
 					country={country}
 					fulfillmentOption={weeklyFulfillmentOption}
-					cssOverrides={cssOverrides}
+					enableWeeklyDigital={enableWeeklyDigital}
 				/>
 			)}
 		</Footer>

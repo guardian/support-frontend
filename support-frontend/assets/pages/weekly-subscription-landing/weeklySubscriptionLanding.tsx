@@ -76,14 +76,6 @@ export function WeeklyLandingPage({
 		return null;
 	}
 
-	const weeklyLPFooter = !enableWeeklyDigital
-		? css`
-				p {
-					margin-top: ${space[3]}px;
-				}
-		  `
-		: undefined;
-
 	const path = orderIsAGift
 		? routes.guardianWeeklySubscriptionLandingGift
 		: routes.guardianWeeklySubscriptionLanding;
@@ -115,7 +107,7 @@ export function WeeklyLandingPage({
 					productPrices={productPrices}
 					orderIsAGift={!!orderIsAGift}
 					country={countryId}
-					cssOverrides={weeklyLPFooter}
+					enableWeeklyDigital={enableWeeklyDigital}
 				/>
 			}
 		>
