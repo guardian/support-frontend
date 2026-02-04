@@ -49,7 +49,7 @@ export function WeeklyPriceInfo({
 		<>
 			Delivery cost included.{' '}
 			{!orderIsAGift && 'You can cancel your subscription at any time'}
-			{!giftInfo && <>. View full_ {termsAndConditionsLink()}</>}
+			{!giftInfo && <>. View full&nbsp;{termsAndConditionsLink()}</>}
 		</>
 	);
 
