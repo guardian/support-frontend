@@ -172,7 +172,7 @@ type OneTimeCheckoutComponentProps = {
 	useStripeExpressCheckout: boolean;
 	nudgeSettings?: CheckoutNudgeSettings;
 	landingPageSettings: LandingPageVariant;
-  singleCheckoutSettings: SingleCheckoutVariant;
+	singleCheckoutSettings: SingleCheckoutVariant;
 };
 
 function paymentMethodIsActive(paymentMethod: PaymentMethod) {
@@ -259,7 +259,7 @@ export function OneTimeCheckoutComponent({
 	useStripeExpressCheckout,
 	nudgeSettings,
 	landingPageSettings,
-  singleCheckoutSettings,
+	singleCheckoutSettings,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);

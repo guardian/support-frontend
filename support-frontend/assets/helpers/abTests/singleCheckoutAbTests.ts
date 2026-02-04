@@ -74,7 +74,7 @@ export function getSingleCheckoutParticipations(
 	} else {
 		// No participation in session storage, assign user to a test + variant
 		console.log(tests);
-    const test = tests
+		const test = tests
 			.filter((test) => test.status == 'Live')
 			.find((test) => {
 				return countryGroupMatches(

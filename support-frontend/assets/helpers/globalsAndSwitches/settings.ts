@@ -33,5 +33,5 @@ export type Settings = {
 	metricUrl: string;
 	landingPageTests?: LandingPageTest[];
 	checkoutNudgeTests?: CheckoutNudgeTest[];
-  singleCheckoutTests?: SingleCheckoutTest[];
+	singleCheckoutTests?: SingleCheckoutTest[];
 };
