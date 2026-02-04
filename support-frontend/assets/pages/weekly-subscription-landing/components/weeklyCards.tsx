@@ -8,11 +8,11 @@ import {
 } from '@guardian/source/foundations';
 
 const pricesSection = css`
-	padding: ${space[4]}px 0 0;
 	color: ${neutral[100]};
 `;
 
 const pricesHeadline = css`
+	padding: ${space[8]}px 0 0;
 	${headlineBold24};
 	${from.tablet} {
 		font-size: 34px;
