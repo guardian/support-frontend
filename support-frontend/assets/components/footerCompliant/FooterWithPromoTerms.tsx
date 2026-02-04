@@ -1,9 +1,11 @@
+import type { SerializedStyles } from '@emotion/react';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Domestic } from '@modules/product/fulfilmentOptions';
 import { NoProductOptions } from '@modules/product/productOptions';
 import type { ReactNode } from 'react';
+import { guardianWeeklyTermsLink } from 'helpers/legal';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { Option } from 'helpers/types/option';
@@ -15,6 +17,7 @@ type FooterWithPromoTermsProps = {
 	productPrices: ProductPrices;
 	country: IsoCountry;
 	orderIsAGift: boolean;
+	cssOverrides?: SerializedStyles;
 };
 
 const getPromoUrl = (
@@ -37,30 +40,35 @@ type LinkTypes = {
 	productPrices: ProductPrices;
 	country: IsoCountry;
 	fulfillmentOption: FulfilmentOptions;
+	cssOverrides?: SerializedStyles;
 };
 
 function MaybeLink(props: { href: Option<string>; text: string }) {
 	return props.href ? <a href={props.href}>{props.text}</a> : null;
 }
 
-function RegularLinks(props: LinkTypes) {
+function RegularLinks({
+	productPrices,
+	country,
+	fulfillmentOption,
+	cssOverrides,
+}: LinkTypes) {
 	const annualUrl = getPromoUrl(
-		props.productPrices,
-		props.country,
+		productPrices,
+		country,
 		BillingPeriod.Annual,
-		props.fulfillmentOption,
+		fulfillmentOption,
 	);
 	const monthlyUrl = getPromoUrl(
-		props.productPrices,
-		props.country,
+		productPrices,
+		country,
 		BillingPeriod.Monthly,
-		props.fulfillmentOption,
+		fulfillmentOption,
 	);
 	const multipleOffers = !!(annualUrl && monthlyUrl);
-
 	if (annualUrl ?? monthlyUrl) {
 		return (
-			<PromoTerms>
+			<PromoTerms cssOverrides={cssOverrides}>
 				<span>
 					<MaybeLink href={monthlyUrl} text="monthly" />
 					{multipleOffers ? ' and ' : ''}
@@ -73,23 +81,28 @@ function RegularLinks(props: LinkTypes) {
 	return null;
 }
 
-function GiftLinks(props: LinkTypes) {
+function GiftLinks({
+	productPrices,
+	country,
+	fulfillmentOption,
+	cssOverrides,
+}: LinkTypes) {
 	const annualUrl = getPromoUrl(
-		props.productPrices,
-		props.country,
+		productPrices,
+		country,
 		BillingPeriod.Annual,
-		props.fulfillmentOption,
+		fulfillmentOption,
 	);
 	const quarterlyUrl = getPromoUrl(
-		props.productPrices,
-		props.country,
+		productPrices,
+		country,
 		BillingPeriod.Quarterly,
-		props.fulfillmentOption,
+		fulfillmentOption,
 	);
 	const multipleOffers = !!(annualUrl && quarterlyUrl);
 	if (annualUrl ?? quarterlyUrl) {
 		return (
-			<PromoTerms>
+			<PromoTerms cssOverrides={cssOverrides}>
 				<span>
 					<MaybeLink href={quarterlyUrl} text="quarterly" />
 					{multipleOffers ? ' and ' : ''}
@@ -104,10 +117,11 @@ function GiftLinks(props: LinkTypes) {
 
 interface PromoTermsProps {
 	children: ReactNode;
+	cssOverrides?: SerializedStyles;
 }
-function PromoTerms({ children }: PromoTermsProps) {
+function PromoTerms({ children, cssOverrides }: PromoTermsProps) {
 	return (
-		<>
+		<span css={cssOverrides}>
 			<h3 id="qa-component-customer-service" css={footerTextHeading}>
 				Promotion terms and conditions
 			</h3>
@@ -117,36 +131,7 @@ function PromoTerms({ children }: PromoTermsProps) {
 				time. Full promotion terms and conditions for our&nbsp;
 				{children}.
 			</p>
-		</>
-	);
-}
-
-function FooterWithPromoTerms({
-	productPrices,
-	orderIsAGift,
-	country,
-	fulfillmentOption,
-	termsConditionsLink,
-}: FooterWithPromoTermsProps & {
-	fulfillmentOption: FulfilmentOptions;
-	termsConditionsLink: string;
-}) {
-	return (
-		<Footer termsConditionsLink={termsConditionsLink} fullWidth>
-			{orderIsAGift ? (
-				<GiftLinks
-					productPrices={productPrices}
-					country={country}
-					fulfillmentOption={fulfillmentOption}
-				/>
-			) : (
-				<RegularLinks
-					productPrices={productPrices}
-					country={country}
-					fulfillmentOption={fulfillmentOption}
-				/>
-			)}
-		</Footer>
+		</span>
 	);
 }
 
@@ -154,17 +139,27 @@ function GuardianWeeklyFooter({
 	productPrices,
 	orderIsAGift,
 	country,
+	cssOverrides,
 }: FooterWithPromoTermsProps): JSX.Element {
-	const termsConditionsLink =
-		'https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions';
+	const weeklyFulfillmentOption = Domestic;
 	return (
-		<FooterWithPromoTerms
-			productPrices={productPrices}
-			orderIsAGift={orderIsAGift}
-			country={country}
-			fulfillmentOption={Domestic}
-			termsConditionsLink={termsConditionsLink}
-		/>
+		<Footer termsConditionsLink={guardianWeeklyTermsLink} fullWidth>
+			{orderIsAGift ? (
+				<GiftLinks
+					productPrices={productPrices}
+					country={country}
+					fulfillmentOption={weeklyFulfillmentOption}
+					cssOverrides={cssOverrides}
+				/>
+			) : (
+				<RegularLinks
+					productPrices={productPrices}
+					country={country}
+					fulfillmentOption={weeklyFulfillmentOption}
+					cssOverrides={cssOverrides}
+				/>
+			)}
+		</Footer>
 	);
 }
 

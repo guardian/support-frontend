@@ -1,3 +1,5 @@
+import { css } from '@emotion/react';
+import { space } from '@guardian/source/foundations';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
@@ -46,6 +48,14 @@ export function WeeklyLandingPage({
 	}
 
 	const { enableWeeklyDigital } = getFeatureFlags();
+	const weeklyLPFooter = !enableWeeklyDigital
+		? css`
+				p {
+					margin-top: ${space[3]}px;
+				}
+		  `
+		: undefined;
+
 	const path = orderIsAGift
 		? routes.guardianWeeklySubscriptionLandingGift
 		: routes.guardianWeeklySubscriptionLanding;
@@ -77,6 +87,7 @@ export function WeeklyLandingPage({
 					productPrices={productPrices}
 					orderIsAGift={!!orderIsAGift}
 					country={countryId}
+					cssOverrides={weeklyLPFooter}
 				/>
 			}
 		>
