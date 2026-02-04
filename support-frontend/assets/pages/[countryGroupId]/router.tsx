@@ -13,13 +13,17 @@ import {
 import { renderPage } from 'helpers/rendering/render';
 import { getCheckoutNudgeParticipations } from '../../helpers/abTests/checkoutNudgeAbTests';
 import { getLandingPageParticipations } from '../../helpers/abTests/landingPageAbTests';
+import { getSingleCheckoutParticipations } from '../../helpers/abTests/singleCheckoutAbTests';
 
 const landingPageParticipations = getLandingPageParticipations();
 const checkoutNudgeSettings = getCheckoutNudgeParticipations();
+const singleCheckoutSettings = getSingleCheckoutParticipations();
+
 const abParticipations = {
 	...getAbParticipations(),
 	...landingPageParticipations.participations,
 	...checkoutNudgeSettings?.participations,
+	...singleCheckoutSettings.participations,
 };
 setUpTrackingAndConsents(abParticipations);
 const appConfig = parseAppConfig(window.guardian);
@@ -117,6 +121,7 @@ const router = createBrowserRouter([
 						abParticipations={abParticipations}
 						nudgeSettings={checkoutNudgeSettings}
 						landingPageSettings={landingPageParticipations.variant}
+            singleCheckoutSettings={singleCheckoutSettings.variant}
 					/>
 				</Suspense>
 			),

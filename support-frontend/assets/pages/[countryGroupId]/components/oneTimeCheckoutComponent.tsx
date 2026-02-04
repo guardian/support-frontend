@@ -87,6 +87,7 @@ import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTs
 import { CheckoutNudgeSelector } from '../../../components/checkoutNudge/checkoutNudge';
 import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
+import type { SingleCheckoutVariant } from '../../../helpers/globalsAndSwitches/singleCheckoutSettings';
 import {
 	updateAbandonedBasketCookie,
 	useAbandonedBasketCookie,
@@ -171,6 +172,7 @@ type OneTimeCheckoutComponentProps = {
 	useStripeExpressCheckout: boolean;
 	nudgeSettings?: CheckoutNudgeSettings;
 	landingPageSettings: LandingPageVariant;
+  singleCheckoutSettings: SingleCheckoutVariant;
 };
 
 function paymentMethodIsActive(paymentMethod: PaymentMethod) {
@@ -257,6 +259,7 @@ export function OneTimeCheckoutComponent({
 	useStripeExpressCheckout,
 	nudgeSettings,
 	landingPageSettings,
+  singleCheckoutSettings,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -617,13 +620,13 @@ export function OneTimeCheckoutComponent({
 						`}
 					>
 						<div css={titleAndButtonContainer}>
-							<h2 css={title}>Support just once</h2>
+							<h2 css={title}>{singleCheckoutSettings.heading}</h2>
 							<BackButton
 								path={`/${supportRegionId}/contribute`}
 								buttonText="back"
 							/>
 						</div>
-						<p css={standFirst}>Support us with the amount of your choice.</p>
+						<p css={standFirst}>{singleCheckoutSettings.subheading}</p>
 						<PriceCards
 							amounts={amounts}
 							selectedAmount={selectedPriceCard}
