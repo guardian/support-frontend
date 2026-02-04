@@ -121,7 +121,7 @@ const router = createBrowserRouter([
 						abParticipations={abParticipations}
 						nudgeSettings={checkoutNudgeSettings}
 						landingPageSettings={landingPageParticipations.variant}
-            singleCheckoutSettings={singleCheckoutSettings.variant}
+						singleCheckoutSettings={singleCheckoutSettings.variant}
 					/>
 				</Suspense>
 			),
