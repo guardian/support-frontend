@@ -24,10 +24,7 @@ import {
 } from 'helpers/globalsAndSwitches/globals';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import {
-	getCountryGroup,
-	type ProductPrices,
-} from 'helpers/productPrice/productPrices';
+import { type ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { getSanitisedPromoCopy } from 'helpers/productPrice/promotions';
 import { renderPage } from 'helpers/rendering/render';
@@ -42,19 +39,21 @@ import { WeeklyHero } from './components/weeklyHero';
 import { WeeklyPriceInfo } from './components/weeklyPriceInfo';
 import WeeklyProductPrices from './components/weeklyProductPrices';
 
-const weeklyGiftPadding = css`
-	background-color: white;
-	section {
-		padding: ${space[3]}px ${space[3]}px ${space[12]}px;
-	}
-	section > div {
-		margin-bottom: ${space[9]}px;
-	}
-	${from.phablet} {
-		justify-content: space-around;
-	}
-`;
-
+const { enableWeeklyDigital } = getFeatureFlags();
+const weeklyGiftPadding = !enableWeeklyDigital
+	? css`
+			background-color: white;
+			section {
+				padding: ${space[3]}px ${space[3]}px ${space[12]}px;
+			}
+			section > div {
+				margin-bottom: ${space[9]}px;
+			}
+			${from.phablet} {
+				justify-content: space-around;
+			}
+	  `
+	: undefined;
 const closeGapAfterPageTitle = css`
 	margin-top: 0;
 `;
@@ -77,7 +76,6 @@ export function WeeklyLandingPage({
 		return null;
 	}
 
-	const { enableWeeklyDigital } = getFeatureFlags();
 	const weeklyLPFooter = !enableWeeklyDigital
 		? css`
 				p {
@@ -108,12 +106,6 @@ export function WeeklyLandingPage({
 		trackProduct: 'GuardianWeekly',
 	});
 	const sanitisedPromoCopy = getSanitisedPromoCopy(promotionCopy, orderIsAGift);
-	const countryGroup = getCountryGroup(countryId);
-	const productPrice =
-		productPrices[countryGroup.name]?.Domestic?.NoProductOptions?.Annual?.[
-			countryGroup.currency
-		];
-	const sampleWeeklyCardsCopy = `PRICE CARDS COMPONENT Annual=>${productPrice?.currency}${productPrice?.price}`;
 	return (
 		<PageScaffold
 			id={pageQaId}
@@ -136,7 +128,7 @@ export function WeeklyLandingPage({
 			{enableWeeklyDigital ? (
 				<FullWidthContainer theme="brand">
 					<CentredContainer>
-						<WeeklyCards sampleCopy={sampleWeeklyCardsCopy} />
+						<WeeklyCards countryId={countryId} productPrices={productPrices} />
 						<WeeklyBenefits sampleCopy="WEEKLY BENEFITS COMPONENT" />
 						<WeeklyPriceInfo />
 					</CentredContainer>

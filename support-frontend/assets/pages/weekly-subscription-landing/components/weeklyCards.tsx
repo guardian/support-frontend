@@ -6,6 +6,9 @@ import {
 	space,
 	textEgyptian17,
 } from '@guardian/source/foundations';
+import type { IsoCountry } from '@modules/internationalisation/country';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { getCountryGroup } from 'helpers/productPrice/productPrices';
 
 const pricesSection = css`
 	color: ${neutral[100]};
@@ -35,16 +38,26 @@ const priceCardsContainer = css`
 	justify-content: center;
 `;
 
-type WeeklyCardsPropTypes = {
-	sampleCopy: string;
+type WeeklyCardsProps = {
+	countryId: IsoCountry;
+	productPrices: ProductPrices;
 };
 
-export function WeeklyCards({ sampleCopy }: WeeklyCardsPropTypes): JSX.Element {
+export function WeeklyCards({
+	countryId,
+	productPrices,
+}: WeeklyCardsProps): JSX.Element {
+	const countryGroup = getCountryGroup(countryId);
+	const productPrice =
+		productPrices[countryGroup.name]?.Domestic?.NoProductOptions?.Annual?.[
+			countryGroup.currency
+		];
+	const sampleWeeklyCardsCopy = `PRICE CARDS COMPONENT Annual=>${productPrice?.currency}${productPrice?.price}`;
 	return (
 		<section css={pricesSection} id="subscribe weekly">
 			<h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>
 			<p css={pricesSubHeadline}>Choose how you'd like to pay</p>
-			<div css={priceCardsContainer}>{sampleCopy}</div>
+			<div css={priceCardsContainer}>{sampleWeeklyCardsCopy}</div>
 		</section>
 	);
 }
