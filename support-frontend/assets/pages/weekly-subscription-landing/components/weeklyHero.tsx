@@ -1,8 +1,5 @@
-// ----- Imports ----- //
-
 import { css } from '@emotion/react';
 import {
-	brandAlt,
 	from,
 	headlineBold28,
 	headlineBold42,
@@ -14,6 +11,7 @@ import {
 	LinkButton,
 	SvgArrowDownStraight,
 	themeButton,
+	themeButtonBrandAlt,
 } from '@guardian/source/react-components';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
@@ -56,66 +54,28 @@ const weeklyShowOnMobile = css`
 		display: none;
 	}
 `;
-const weeklyYellowBackground = css`
-	background-color: ${brandAlt[400]};
+const containerHero = (enableWeeklyDigital: boolean) => css`
+	background-color: ${enableWeeklyDigital
+		? palette.neutral[100]
+		: guardianWeeklyHeroBlue};
+	margin-bottom: ${enableWeeklyDigital ? space[8] : 0}px;
+`;
+const strapLineColour = (enableWeeklyDigital: boolean) => css`
+	background-color: ${enableWeeklyDigital
+		? palette.brand[800]
+		: palette.brandAlt[400]};
 `;
 
-const weeklyDigitalHeroCopy = css`
-	padding: 0 ${space[3]}px ${space[3]}px;
-	color: ${palette.neutral[7]};
-`;
-const weeklyDigitalHeroTitle = css`
-	${headlineBold28};
-	margin-bottom: ${space[3]}px;
-	${from.mobileLandscape} {
-		width: 75%;
-	}
-	${from.tablet} {
-		${headlineBold42};
-		width: 100%;
-	}
-`;
-const weeklyDigitalHeroParagraph = css`
-	${textEgyptian17};
-	margin-bottom: ${space[9]}px;
-	/* apply the same margin to paragraphs parsed from markdown from promo codes */
-	& p:not(:last-of-type) {
-		margin-bottom: ${space[9]}px;
-	}
-`;
-const weeklyDigitalShowOnMobile = css`
-	display: block;
-	${from.mobileLandscape} {
-		display: none;
-	}
-`;
-const weeklyDigitalYellowBackground = css`
-	background-color: ${brandAlt[400]};
-`;
-
-const getRegionalCopyFor = (
-	region: CountryGroupId,
-	enableWeeklyDigital: boolean,
-): JSX.Element => {
+const getRegionalCopyFor = (region: CountryGroupId): JSX.Element => {
 	return region === GBPCountries ? (
 		<span>
 			Find clarity
-			<br
-				css={
-					enableWeeklyDigital ? weeklyDigitalShowOnMobile : weeklyShowOnMobile
-				}
-			/>{' '}
-			with the Guardian&apos;s global magazine
+			<br css={weeklyShowOnMobile} /> with the Guardian&apos;s global magazine
 		</span>
 	) : (
 		<span>
 			Read The
-			<br
-				css={
-					enableWeeklyDigital ? weeklyDigitalShowOnMobile : weeklyShowOnMobile
-				}
-			/>{' '}
-			Guardian in print
+			<br css={weeklyShowOnMobile} /> Guardian in print
 		</span>
 	);
 };
@@ -167,22 +127,10 @@ export function WeeklyHero({
 	enableWeeklyDigital,
 }: WeeklyHeroProps): JSX.Element {
 	const defaultRoundelText = 'Save up to 35% a year';
-	const defaultTitle = orderIsAGift
-		? null
-		: getRegionalCopyFor(countryGroupId, enableWeeklyDigital);
+	const defaultTitle = orderIsAGift ? null : getRegionalCopyFor(countryGroupId);
 	const title = promotionCopy.title ?? defaultTitle;
 	const copy = getFirstParagraph(promotionCopy, orderIsAGift);
 	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
-	const containerColour = css`
-		background-color: ${guardianWeeklyHeroBlue};
-	`;
-	const linkButtonColour = css`
-		color: ${palette.neutral[7]};
-		&:hover {
-			background: ${'#AEBDC8'};
-		}
-	`;
-
 	return (
 		<PageTitle
 			title={orderIsAGift ? 'Give the Guardian Weekly' : 'The Guardian Weekly'}
@@ -192,11 +140,7 @@ export function WeeklyHero({
 				{!orderIsAGift && (
 					<OfferStrapline
 						copy={roundelText}
-						cssOverrides={
-							enableWeeklyDigital
-								? weeklyDigitalYellowBackground
-								: weeklyYellowBackground
-						}
+						cssOverrides={strapLineColour(enableWeeklyDigital)}
 					/>
 				)}
 				<Hero
@@ -210,27 +154,11 @@ export function WeeklyHero({
 						/>
 					}
 					roundelText={undefined}
-					cssOverrides={containerColour}
+					cssOverrides={containerHero(enableWeeklyDigital)}
 				>
-					<section
-						css={enableWeeklyDigital ? weeklyDigitalHeroCopy : weeklyHeroCopy}
-					>
-						<h2
-							css={
-								enableWeeklyDigital ? weeklyDigitalHeroTitle : weeklyHeroTitle
-							}
-						>
-							{title}
-						</h2>
-						<p
-							css={
-								enableWeeklyDigital
-									? weeklyDigitalHeroParagraph
-									: weeklyHeroParagraph
-							}
-						>
-							{copy}
-						</p>
+					<section css={weeklyHeroCopy}>
+						<h2 css={weeklyHeroTitle}>{title}</h2>
+						<p css={weeklyHeroParagraph}>{copy}</p>
 						<LinkButton
 							onClick={sendTrackingEventsOnClick({
 								id: 'options_cta_click',
@@ -240,9 +168,8 @@ export function WeeklyHero({
 							priority="tertiary"
 							iconSide="right"
 							icon={<SvgArrowDownStraight />}
-							cssOverrides={linkButtonColour}
 							href="#subscribe"
-							theme={themeButton}
+							theme={enableWeeklyDigital ? themeButtonBrandAlt : themeButton}
 						>
 							See pricing options
 						</LinkButton>
