@@ -53,7 +53,7 @@ export function WeeklyCards({
 		];
 	const sampleWeeklyCardsCopy = `PRICE CARDS COMPONENT Annual=>${productPrice?.currency}${productPrice?.price}`;
 	return (
-		<section css={pricesSection} id="subscribe weekly">
+		<section css={pricesSection} id="subscribeWeekly">
 			<h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>
 			<p css={pricesSubHeadline}>Choose how you'd like to pay</p>
 			<div css={priceCardsContainer}>{sampleWeeklyCardsCopy}</div>
