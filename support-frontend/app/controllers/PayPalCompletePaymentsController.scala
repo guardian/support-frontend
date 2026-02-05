@@ -34,7 +34,7 @@ object PaymentTokenResponse {
   implicit val codec: Codec[PaymentTokenResponse] = deriveCodec
 }
 
-class PayPalCompletePayments(
+class PayPalCompletePaymentsController(
     actionBuilders: CustomActionBuilders,
     assets: AssetsResolver,
     payPalCPServiceProvider: PayPalCompletePaymentsServiceProvider,

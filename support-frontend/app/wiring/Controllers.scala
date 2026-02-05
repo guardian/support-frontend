@@ -130,7 +130,7 @@ trait Controllers {
     allSettingsProvider,
   )
 
-  lazy val payPalCompletePaymentsController = new PayPalCompletePayments(
+  lazy val payPalCompletePaymentsController = new PayPalCompletePaymentsController(
     actionBuilders,
     assetsResolver,
     payPalCompletePaymentsServiceProvider,
