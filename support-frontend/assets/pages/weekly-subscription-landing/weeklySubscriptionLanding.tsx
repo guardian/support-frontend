@@ -39,10 +39,12 @@ import { WeeklyHero } from './components/weeklyHero';
 import { WeeklyPriceInfo } from './components/weeklyPriceInfo';
 import WeeklyProductPrices from './components/weeklyProductPrices';
 
-const closeGapAfterPageTitle = css`
-	margin-top: 0;
+const weeklySpacing = css`
+	div {
+		margin-top: 0;
+	}
 `;
-const weeklyDigitalSurround = css`
+const weeklyDigitalSpacing = css`
 	padding: ${space[8]}px ${space[3]}px ${space[9]}px;
 	${from.desktop} {
 		padding: ${space[8]}px 0 ${space[9]}px;
@@ -112,7 +114,7 @@ export function WeeklyLandingPage({
 			/>
 			{enableWeeklyDigital ? (
 				<FullWidthContainer theme="brand">
-					<CentredContainer cssOverrides={weeklyDigitalSurround}>
+					<CentredContainer cssOverrides={weeklyDigitalSpacing}>
 						<WeeklyCards countryId={countryId} productPrices={productPrices} />
 						<WeeklyBenefits sampleCopy="WEEKLY BENEFITS COMPONENT" />
 						<WeeklyPriceInfo />
@@ -121,10 +123,8 @@ export function WeeklyLandingPage({
 			) : (
 				<>
 					<FullWidthContainer>
-						<CentredContainer>
-							<Block cssOverrides={closeGapAfterPageTitle}>
-								{orderIsAGift ? <GiftBenefits /> : <Benefits />}
-							</Block>
+						<CentredContainer cssOverrides={weeklySpacing}>
+							<Block>{orderIsAGift ? <GiftBenefits /> : <Benefits />}</Block>
 						</CentredContainer>
 					</FullWidthContainer>
 					<FullWidthContainer theme="dark" hasOverlap>
