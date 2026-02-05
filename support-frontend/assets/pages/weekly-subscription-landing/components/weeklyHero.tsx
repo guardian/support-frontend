@@ -61,7 +61,10 @@ const containerHero = (enableWeeklyDigital: boolean) => css`
 	background-color: ${enableWeeklyDigital
 		? palette.neutral[100]
 		: guardianWeeklyHeroBlue};
-	margin-bottom: ${enableWeeklyDigital ? space[8] : 0}px;
+	margin-bottom: 0;
+	${from.desktop} {
+		margin-bottom: ${enableWeeklyDigital ? space[8] : 0}px;
+	}
 `;
 const strapLineColour = (enableWeeklyDigital: boolean) => css`
 	background-color: ${enableWeeklyDigital
