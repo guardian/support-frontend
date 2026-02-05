@@ -69,14 +69,14 @@ export function WeeklyGiftStudentSubs({
 					<GiftNonGiftCta
 						product="Guardian Weekly"
 						href={giftNonGiftLink}
-						orderIsAGift={orderIsAGift}
+						isGift={orderIsAGift}
 					/>
 					{(countryGroupId === 'GBPCountries' ||
 						countryGroupId === 'AUDCountries') && (
 						<GiftNonGiftCta
 							product="Student"
 							href={getStudentBeanLink(countryGroupId)}
-							orderIsAGift={orderIsAGift}
+							isGift={orderIsAGift}
 							isStudent={true}
 						/>
 					)}

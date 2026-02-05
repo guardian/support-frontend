@@ -16,7 +16,7 @@ type SubscriptionProduct = 'digital' | 'Guardian Weekly' | 'Student';
 type PropTypes = {
 	href: string;
 	product: SubscriptionProduct;
-	orderIsAGift: boolean;
+	isGift: boolean;
 	isStudent?: boolean;
 };
 const giftOrPersonal = css`
@@ -48,10 +48,10 @@ const linkButtonWidth = css`
 function GiftOrPersonalOrStudent({
 	href,
 	product,
-	orderIsAGift,
+	isGift,
 	isStudent,
 }: PropTypes) {
-	if (isStudent && orderIsAGift) {
+	if (isStudent && isGift) {
 		return null;
 	}
 	return (
@@ -60,14 +60,14 @@ function GiftOrPersonalOrStudent({
 				<h2 css={giftOrPersonalHeading}>
 					{isStudent
 						? 'Student subscriptions'
-						: orderIsAGift
+						: isGift
 						? 'Looking for a subscription for yourself?'
 						: 'Gift subscriptions'}
 				</h2>
 				{isStudent ? (
 					<p>{product}s get 50% off a Guardian Weekly subscription.</p>
 				) : (
-					!orderIsAGift && <p>A {product} subscription makes a great gift.</p>
+					!isGift && <p>A {product} subscription makes a great gift.</p>
 				)}
 			</div>
 			<LinkButton
@@ -79,7 +79,7 @@ function GiftOrPersonalOrStudent({
 				onClick={() => {
 					sendTrackingEventsOnClick({
 						id: `${
-							isStudent ? 'student' : orderIsAGift ? 'personal' : 'gift'
+							isStudent ? 'student' : isGift ? 'personal' : 'gift'
 						}_subscriptions_cta`,
 						componentType: 'ACQUISITIONS_BUTTON',
 					});
@@ -88,7 +88,7 @@ function GiftOrPersonalOrStudent({
 			>
 				{isStudent
 					? `I'm a student`
-					: orderIsAGift
+					: isGift
 					? 'See personal subscriptions'
 					: 'See gift subscriptions'}
 			</LinkButton>
