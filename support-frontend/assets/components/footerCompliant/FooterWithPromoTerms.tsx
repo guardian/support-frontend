@@ -1,4 +1,4 @@
-import { css, type SerializedStyles } from '@emotion/react';
+import { css } from '@emotion/react';
 import { neutral, space } from '@guardian/source/foundations';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import { BillingPeriod } from '@modules/product/billingPeriod';
@@ -17,9 +17,7 @@ import { footerTextHeading } from './footerStyles';
 const weeklyFooter = (enableWeeklyDigital: boolean) => {
 	return !enableWeeklyDigital
 		? css`
-				p {
-					margin-top: ${space[3]}px;
-				}
+				margin-top: ${space[3]}px;
 		  `
 		: undefined;
 };
@@ -79,10 +77,7 @@ function RegularLinks({
 	const multipleOffers = !!(annualUrl && monthlyUrl);
 	if (annualUrl ?? monthlyUrl) {
 		return (
-			<PromoTerms
-				enableWeeklyDigital={enableWeeklyDigital}
-				cssOverrides={weeklyFooter(enableWeeklyDigital)}
-			>
+			<PromoTerms enableWeeklyDigital={enableWeeklyDigital}>
 				<span>
 					<MaybeLink href={monthlyUrl} text="monthly" />
 					{multipleOffers ? ' and ' : ''}
@@ -116,10 +111,7 @@ function GiftLinks({
 	const multipleOffers = !!(annualUrl && quarterlyUrl);
 	if (annualUrl ?? quarterlyUrl) {
 		return (
-			<PromoTerms
-				enableWeeklyDigital={enableWeeklyDigital}
-				cssOverrides={weeklyFooter(enableWeeklyDigital)}
-			>
+			<PromoTerms enableWeeklyDigital={enableWeeklyDigital}>
 				<span>
 					<MaybeLink href={quarterlyUrl} text="quarterly" />
 					{multipleOffers ? ' and ' : ''}
@@ -135,22 +127,17 @@ function GiftLinks({
 interface PromoTermsProps {
 	children: ReactNode;
 	enableWeeklyDigital: boolean;
-	cssOverrides?: SerializedStyles;
 }
-function PromoTerms({
-	children,
-	enableWeeklyDigital,
-	cssOverrides,
-}: PromoTermsProps) {
+function PromoTerms({ children, enableWeeklyDigital }: PromoTermsProps) {
 	const termsAndConditionsLink = enableWeeklyDigital
 		? weeklyTermsAndConditionsLink()
 		: 'promotion terms and conditions';
 	return (
-		<span css={cssOverrides}>
+		<span>
 			<h3 id="qa-component-customer-service" css={footerTextHeading}>
 				Promotion terms and conditions
 			</h3>
-			<p css={promoOfferLink}>
+			<p css={[promoOfferLink, weeklyFooter(enableWeeklyDigital)]}>
 				Offer subject to availability. Guardian News and Media Ltd
 				(&quot;GNM&quot;) reserves the right to withdraw this promotion at any
 				time. Full {termsAndConditionsLink} for our&nbsp;
