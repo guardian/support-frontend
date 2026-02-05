@@ -88,13 +88,13 @@ const getRegionalCopyFor = (region: CountryGroupId): JSX.Element => {
 
 const getFirstParagraph = (
 	promotionCopy: PromotionCopy,
-	orderIsAGift: boolean,
+	isGift: boolean,
 ): JSX.Element | null => {
 	if (promotionCopy.description) {
 		return promotionHTML(promotionCopy.description);
 	}
 
-	if (orderIsAGift) {
+	if (isGift) {
 		return (
 			<>
 				<p>
@@ -121,29 +121,29 @@ const getFirstParagraph = (
 };
 
 type WeeklyHeroProps = {
-	orderIsAGift: boolean;
+	isGift: boolean;
 	promotionCopy: PromotionCopy;
 	countryGroupId: CountryGroupId;
 	enableWeeklyDigital: boolean;
 };
 export function WeeklyHero({
-	orderIsAGift,
+	isGift,
 	promotionCopy,
 	countryGroupId,
 	enableWeeklyDigital,
 }: WeeklyHeroProps): JSX.Element {
 	const defaultRoundelText = 'Save up to 35% a year';
-	const defaultTitle = orderIsAGift ? null : getRegionalCopyFor(countryGroupId);
+	const defaultTitle = isGift ? null : getRegionalCopyFor(countryGroupId);
 	const title = promotionCopy.title ?? defaultTitle;
-	const copy = getFirstParagraph(promotionCopy, orderIsAGift);
+	const copy = getFirstParagraph(promotionCopy, isGift);
 	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
 	return (
 		<PageTitle
-			title={orderIsAGift ? 'Give the Guardian Weekly' : 'The Guardian Weekly'}
+			title={isGift ? 'Give the Guardian Weekly' : 'The Guardian Weekly'}
 			theme="weekly"
 		>
 			<CentredContainer>
-				{!orderIsAGift && (
+				{!isGift && (
 					<OfferStrapline
 						copy={roundelText}
 						cssOverrides={strapLineColour(enableWeeklyDigital)}

@@ -107,7 +107,7 @@ export function WeeklyLandingPage({
 			}
 		>
 			<WeeklyHero
-				orderIsAGift={orderIsAGift}
+				isGift={orderIsAGift}
 				promotionCopy={sanitisedPromoCopy}
 				countryGroupId={countryGroupId}
 				enableWeeklyDigital={enableWeeklyDigital}
