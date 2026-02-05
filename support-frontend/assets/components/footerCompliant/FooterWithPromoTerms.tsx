@@ -17,7 +17,9 @@ import { footerTextHeading } from './footerStyles';
 const weeklyFooter = (enableWeeklyDigital: boolean) => {
 	return !enableWeeklyDigital
 		? css`
-				margin-top: ${space[3]}px;
+				P {
+					margin-top: ${space[3]}px;
+				}
 		  `
 		: undefined;
 };
@@ -133,11 +135,11 @@ function PromoTerms({ children, enableWeeklyDigital }: PromoTermsProps) {
 		? weeklyTermsAndConditionsLink()
 		: 'promotion terms and conditions';
 	return (
-		<span>
+		<span css={weeklyFooter(enableWeeklyDigital)}>
 			<h3 id="qa-component-customer-service" css={footerTextHeading}>
 				Promotion terms and conditions
 			</h3>
-			<p css={[promoOfferLink, weeklyFooter(enableWeeklyDigital)]}>
+			<p css={promoOfferLink}>
 				Offer subject to availability. Guardian News and Media Ltd
 				(&quot;GNM&quot;) reserves the right to withdraw this promotion at any
 				time. Full {termsAndConditionsLink} for our&nbsp;
