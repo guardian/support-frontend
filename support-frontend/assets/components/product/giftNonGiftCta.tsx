@@ -1,6 +1,8 @@
 import { css } from '@emotion/react';
 import {
+	from,
 	headlineBold34,
+	neutral,
 	space,
 	textEgyptian17,
 } from '@guardian/source/foundations';
@@ -18,7 +20,16 @@ type PropTypes = {
 	isStudent?: boolean;
 };
 const giftOrPersonal = css`
-	padding: ${space[8]}px ${space[24]}px ${space[12]}px 0;
+	border-top: 1px solid ${neutral[73]};
+	padding: ${space[5]}px ${space[3]}px ${space[8]}px;
+	${from.phablet} {
+		border-top: none;
+		padding: ${space[8]}px ${space[3]}px ${space[12]}px;
+	}
+	${from.desktop} {
+		padding-left: 0;
+		padding-right: ${space[9]}px;
+	}
 `;
 const giftOrPersonalCopy = css`
 	${textEgyptian17};
@@ -26,6 +37,12 @@ const giftOrPersonalCopy = css`
 `;
 const giftOrPersonalHeading = css`
 	${headlineBold34};
+`;
+const linkButtonWidth = css`
+	width: 100%;
+	${from.tablet} {
+		width: auto;
+	}
 `;
 
 function GiftOrPersonalOrStudent({
@@ -67,6 +84,7 @@ function GiftOrPersonalOrStudent({
 						componentType: 'ACQUISITIONS_BUTTON',
 					});
 				}}
+				cssOverrides={linkButtonWidth}
 			>
 				{isStudent
 					? `I'm a student`

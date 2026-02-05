@@ -9,10 +9,14 @@ import { routes } from 'helpers/urls/routes';
 const containerWeekly = css`
 	background-color: white;
 	section {
+		border-top: none;
 		padding: ${space[3]}px ${space[3]}px ${space[12]}px;
 	}
 	section > div {
 		margin-bottom: ${space[9]}px;
+	}
+	section > a {
+		width: auto;
 	}
 `;
 const displayRowEvenlyWeekly = css`
