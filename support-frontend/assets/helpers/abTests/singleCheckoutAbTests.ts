@@ -18,14 +18,76 @@ import {
 	SINGLE_CHECKOUT_PARTICIPATIONS_KEY,
 } from './sessionStorage';
 
-const fallBackSingleCheckoutSelection: SingleCheckoutVariant = {
-	name: 'CONTROL',
-	heading: 'Support just once',
-	subheading: 'Support us with the amount of your choice.',
-	amounts: {
-		amounts: [5, 10, 20],
-		defaultAmount: 10,
-		hideChooseYourAmount: false,
+const fallBackSingleCheckoutSelection: Record<string, SingleCheckoutVariant> = {
+	GBPCountries: {
+		name: 'CONTROL',
+		heading: 'Support just once',
+		subheading: 'Support us with the amount of your choice.',
+		amounts: {
+			amounts: [30, 60, 120, 240],
+			defaultAmount: 60,
+			hideChooseYourAmount: false,
+		},
+	},
+	UnitedStates: {
+		name: 'CONTROL',
+		heading: 'Support just once',
+		subheading: 'Support us with the amount of your choice.',
+		amounts: {
+			amounts: [25, 50, 100, 250],
+			defaultAmount: 50,
+			hideChooseYourAmount: false,
+		},
+	},
+	EURCountries: {
+		name: 'CONTROL',
+		heading: 'Support just once',
+		subheading: 'Support us with the amount of your choice.',
+		amounts: {
+			amounts: [25, 50, 100, 250],
+			defaultAmount: 50,
+			hideChooseYourAmount: false,
+		},
+	},
+	International: {
+		name: 'CONTROL',
+		heading: 'Support just once',
+		subheading: 'Support us with the amount of your choice.',
+		amounts: {
+			amounts: [25, 50, 100, 250],
+			defaultAmount: 50,
+			hideChooseYourAmount: false,
+		},
+	},
+	Canada: {
+		name: 'CONTROL',
+		heading: 'Support just once',
+		subheading: 'Support us with the amount of your choice.',
+		amounts: {
+			amounts: [25, 50, 100, 250],
+			defaultAmount: 50,
+			hideChooseYourAmount: false,
+		},
+	},
+	AUDCountries: {
+		name: 'CONTROL',
+		heading: 'Support just once',
+		subheading: 'Support us with the amount of your choice.',
+		amounts: {
+			amounts: [60, 100, 250, 500],
+			defaultAmount: 100,
+			hideChooseYourAmount: false,
+		},
+	},
+	NZDCountries: {
+		name: 'CONTROL',
+		heading: 'Support just once',
+		subheading: 'Support us with the amount of your choice.',
+		amounts: {
+			amounts: [50, 100, 250, 500],
+			defaultAmount: 100,
+			hideChooseYourAmount: false,
+		},
 	},
 };
 
@@ -51,7 +113,11 @@ export function getSingleCheckoutParticipations(
 		'force-single-checkout',
 	);
 	if (urlParticipations) {
-		const variant = getSingleCheckoutVariant(urlParticipations, tests);
+		const variant = getSingleCheckoutVariant(
+			urlParticipations,
+			tests,
+			countryGroupId,
+		);
 		return {
 			participations: urlParticipations,
 			variant,
@@ -66,14 +132,17 @@ export function getSingleCheckoutParticipations(
 		sessionParticipations &&
 		Object.entries(sessionParticipations).length > 0
 	) {
-		const variant = getSingleCheckoutVariant(sessionParticipations, tests);
+		const variant = getSingleCheckoutVariant(
+			sessionParticipations,
+			tests,
+			countryGroupId,
+		);
 		return {
 			participations: sessionParticipations,
 			variant,
 		};
 	} else {
 		// No participation in session storage, assign user to a test + variant
-		console.log(tests);
 		const test = tests
 			.filter((test) => test.status == 'Live')
 			.find((test) => {
@@ -109,9 +178,14 @@ export function getSingleCheckoutParticipations(
 		// No test found, use the fallback
 		return {
 			participations: trackParticipation
-				? { FALLBACK_SINGLE_CHECKOUT: fallBackSingleCheckoutSelection.name }
+				? {
+						FALLBACK_SINGLE_CHECKOUT:
+							fallBackSingleCheckoutSelection[countryGroupId]?.name,
+				  }
 				: ({} as Participations),
-			variant: fallBackSingleCheckoutSelection,
+			variant: fallBackSingleCheckoutSelection[
+				countryGroupId
+			] as SingleCheckoutVariant,
 		};
 	}
 }
@@ -120,6 +194,7 @@ export function getSingleCheckoutParticipations(
 function getSingleCheckoutVariant(
 	participations: Participations,
 	singleCheckoutTests: SingleCheckoutTest[] = [],
+	countryGroupId: CountryGroupId,
 ): SingleCheckoutVariant {
 	for (const test of singleCheckoutTests) {
 		// Is the user in this test?
@@ -133,5 +208,7 @@ function getSingleCheckoutVariant(
 			}
 		}
 	}
-	return fallBackSingleCheckoutSelection;
+	return fallBackSingleCheckoutSelection[
+		countryGroupId
+	] as SingleCheckoutVariant;
 }

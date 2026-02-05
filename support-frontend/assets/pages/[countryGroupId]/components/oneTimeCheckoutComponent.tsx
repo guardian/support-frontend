@@ -35,7 +35,6 @@ import { PriceCards } from 'components/priceCards/priceCards';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
-import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { config } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
@@ -59,7 +58,7 @@ import {
 	Stripe,
 	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
-import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import * as cookie from 'helpers/storage/cookie';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -75,6 +74,7 @@ import {
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import {
+	getSanitisedHtml,
 	parseCustomAmounts,
 	roundToDecimalPlaces,
 } from 'helpers/utilities/utilities';
@@ -84,6 +84,7 @@ import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/co
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { TickerContainer } from 'pages/supporter-plus-landing/twoStepPages/tickerContainer';
 import { CheckoutNudgeSelector } from '../../../components/checkoutNudge/checkoutNudge';
 import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -270,13 +271,6 @@ export function OneTimeCheckoutComponent({
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
 
-	const settings = getSettings();
-	const { selectedAmountsVariant } = getAmountsTestVariant(
-		countryId,
-		countryGroupId,
-		settings,
-	);
-
 	let customAmountsData;
 	const customAmountsParam = urlSearchParams.get('amounts');
 	if (customAmountsParam) {
@@ -288,9 +282,9 @@ export function OneTimeCheckoutComponent({
 		};
 	}
 
-	const { amountsCardData } = selectedAmountsVariant;
+	const amountsDataFromSingleCheckoutSettings = singleCheckoutSettings.amounts;
 	const { amounts, defaultAmount, hideChooseYourAmount } =
-		customAmountsData ?? amountsCardData['ONE_OFF'];
+		customAmountsData ?? amountsDataFromSingleCheckoutSettings;
 
 	const { preSelectedPriceCard, preSelectedOtherAmount } = getPreSelectedAmount(
 		preSelectedAmountParam,
@@ -620,13 +614,30 @@ export function OneTimeCheckoutComponent({
 						`}
 					>
 						<div css={titleAndButtonContainer}>
-							<h2 css={title}>{singleCheckoutSettings.heading}</h2>
+							<h2 css={title}>
+								<span
+									dangerouslySetInnerHTML={{
+										__html: getSanitisedHtml(singleCheckoutSettings.heading),
+									}}
+								/>
+							</h2>
 							<BackButton
 								path={`/${supportRegionId}/contribute`}
 								buttonText="back"
 							/>
 						</div>
-						<p css={standFirst}>{singleCheckoutSettings.subheading}</p>
+						<p css={standFirst}>
+							<span
+								dangerouslySetInnerHTML={{
+									__html: getSanitisedHtml(singleCheckoutSettings.subheading),
+								}}
+							/>
+						</p>
+						{singleCheckoutSettings.tickerSettings && (
+							<TickerContainer
+								tickerSettings={singleCheckoutSettings.tickerSettings}
+							/>
+						)}
 						<PriceCards
 							amounts={amounts}
 							selectedAmount={selectedPriceCard}

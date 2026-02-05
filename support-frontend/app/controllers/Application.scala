@@ -581,6 +581,7 @@ class Application(
     Ok(
       views.html.router(
         geoData = geoData,
+        serversideTests = serversideTests,
         paymentMethodConfigs = PaymentMethodConfigs(
           oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
           oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
@@ -589,16 +590,16 @@ class Application(
           regularDefaultPayPalConfig = payPalConfigProvider.get(false),
           regularTestPayPalConfig = payPalConfigProvider.get(true),
         ),
-        v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
-        serversideTests = serversideTests,
         paymentApiUrl = paymentAPIService.paymentAPIUrl,
         paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
         membersDataApiUrl = membersDataApiUrl,
         guestAccountCreationToken = guestAccountCreationToken,
-        productCatalog = productCatalog,
+        v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
         allProductPrices = allProductPrices,
         allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
+        productCatalog = productCatalog,
         user = request.user,
+        tickerData = tickerService.getTickers(),
         homeDeliveryPostcodes = Some(PaperValidation.M25_POSTCODE_PREFIXES),
       ),
     ).withSettingsSurrogateKey

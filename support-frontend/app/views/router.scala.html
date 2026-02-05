@@ -4,6 +4,7 @@
 @import admin.settings.AllSettings
 @import controllers.AllProductPrices
 @import io.circe.JsonObject
+@import services.Tickers
 
 @import com.gu.identity.model.User
 @import views.ViewHelpers.outputJson
@@ -21,6 +22,7 @@
   allCheckoutNudgeProductPrices: AllProductPrices,
   productCatalog: JsonObject,
   user: Option[User],
+  tickerData: Option[Tickers],
   homeDeliveryPostcodes: Option[List[String]] = None,
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
@@ -42,6 +44,7 @@
     window.guardian = window.guardian || {};
     window.guardian.allProductPrices = @Html(outputJson(allProductPrices))
     window.guardian.allCheckoutNudgeProductPrices = @Html(outputJson(allCheckoutNudgeProductPrices))
+    window.guardian.tickerData = @Html(outputJson(tickerData))
   </script>
 
   @homeDeliveryPostcodes.map { postcodes =>
