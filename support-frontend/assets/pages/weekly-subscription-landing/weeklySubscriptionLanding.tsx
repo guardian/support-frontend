@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import { from, space } from '@guardian/source/foundations';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
@@ -39,24 +38,10 @@ import { WeeklyHero } from './components/weeklyHero';
 import { WeeklyPriceInfo } from './components/weeklyPriceInfo';
 import WeeklyProductPrices from './components/weeklyProductPrices';
 
-const { enableWeeklyDigital } = getFeatureFlags();
-const weeklyGiftPadding = !enableWeeklyDigital
-	? css`
-			background-color: white;
-			section {
-				padding: ${space[3]}px ${space[3]}px ${space[12]}px;
-			}
-			section > div {
-				margin-bottom: ${space[9]}px;
-			}
-			${from.phablet} {
-				justify-content: space-evenly;
-			}
-	  `
-	: undefined;
 const closeGapAfterPageTitle = css`
 	margin-top: 0;
 `;
+const { enableWeeklyDigital } = getFeatureFlags();
 
 export type WeeklyLandingPageProps = {
 	countryId: IsoCountry;
@@ -148,7 +133,7 @@ export function WeeklyLandingPage({
 			<WeeklyGiftStudentSubs
 				countryGroupId={countryGroupId}
 				orderIsAGift={orderIsAGift}
-				cssOverrides={weeklyGiftPadding}
+				enableWeeklyDigital={enableWeeklyDigital}
 			/>
 		</PageScaffold>
 	);

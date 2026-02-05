@@ -1,13 +1,31 @@
-import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { from } from '@guardian/source/foundations';
+import { from, space } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import { routes } from 'helpers/urls/routes';
 
-const displayRowEvenly = css`
+const containerWeekly = css`
+	background-color: white;
+	section {
+		padding: ${space[3]}px ${space[3]}px ${space[12]}px;
+	}
+	section > div {
+		margin-bottom: ${space[9]}px;
+	}
+`;
+const displayRowEvenlyWeekly = css`
+	background-color: white;
+	display: block;
+	${from.phablet} {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-evenly;
+	}
+`;
+const displayRowEvenlyDigitalWeekly = css`
+	display: block;
 	${from.phablet} {
 		display: flex;
 		flex-direction: row;
@@ -25,20 +43,25 @@ function getStudentBeanLink(countryGroupId: CountryGroupId) {
 type WeeklyGiftStudentSubsPropTypes = {
 	countryGroupId: CountryGroupId;
 	orderIsAGift: boolean;
-	cssOverrides?: SerializedStyles;
+	enableWeeklyDigital: boolean;
 };
 export function WeeklyGiftStudentSubs({
 	countryGroupId,
 	orderIsAGift,
-	cssOverrides,
+	enableWeeklyDigital,
 }: WeeklyGiftStudentSubsPropTypes): JSX.Element {
 	const giftNonGiftLink = orderIsAGift
 		? routes.guardianWeeklySubscriptionLanding
 		: routes.guardianWeeklySubscriptionLandingGift;
+	const displayRowEvenly = enableWeeklyDigital
+		? displayRowEvenlyDigitalWeekly
+		: displayRowEvenlyWeekly;
 	return (
-		<FullWidthContainer cssOverrides={cssOverrides}>
+		<FullWidthContainer
+			cssOverrides={!enableWeeklyDigital ? containerWeekly : undefined}
+		>
 			<CentredContainer>
-				<div css={[displayRowEvenly, cssOverrides]}>
+				<div css={displayRowEvenly}>
 					<GiftNonGiftCta
 						product="Guardian Weekly"
 						href={giftNonGiftLink}
