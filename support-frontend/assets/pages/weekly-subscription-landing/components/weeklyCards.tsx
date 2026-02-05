@@ -23,7 +23,7 @@ const pricesHeadline = css`
 
 const pricesSubHeadline = css`
 	${textEgyptian17};
-	padding-bottom: ${space[4]}px 0;
+	padding-bottom: ${space[4]}px;
 `;
 
 const priceCardsContainer = css`
