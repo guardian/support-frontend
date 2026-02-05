@@ -14,7 +14,7 @@ function Template(args: Product) {
 		max-width: 500px;
 		margin: 0 auto;
 		background-color: ${palette.brand[400]};
-		padding: ${space[6]}px;
+		padding: ${space[10]}px;
 	`;
 
 	return (
@@ -28,6 +28,7 @@ Template.args = {} as Record<string, unknown>;
 
 export const DefaultWeeklyCard = Template.bind({});
 DefaultWeeklyCard.args = {
+	showLabel: true,
 	title: 'Quartlerly',
 	price: '£49.50',
 	discountedPrice: '£24.75',

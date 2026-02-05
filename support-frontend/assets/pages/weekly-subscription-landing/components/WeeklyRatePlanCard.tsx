@@ -9,8 +9,10 @@ import {
 	ButtonCTA,
 	card,
 	cardHeading,
+	cardLabel,
 	cardOffer,
 	cardPrice,
+	cardWithLabel,
 	savingsTextStyle,
 	strikethroughPriceStyle,
 } from './WeeklyRatePlanCardStyles';
@@ -23,6 +25,7 @@ function WeeklyRatePlanCard(product: Product) {
 		billingPeriodNoun,
 		priceCopy,
 		offerCopy,
+		showLabel,
 		href,
 		onClick,
 		onView,
@@ -45,20 +48,23 @@ function WeeklyRatePlanCard(product: Product) {
 	}, [hasBeenSeen]);
 
 	return (
-		<div ref={setElementToObserve} css={card}>
-			<h3 css={cardHeading}>{title}</h3>
-			<p css={cardPrice}>
-				{discountedPrice ? (
-					<>
-						<span css={strikethroughPriceStyle}>{price}</span>
-						{discountedPrice}
-					</>
-				) : (
-					price
-				)}
-				<small>/{billingPeriodNoun}</small>
-			</p>
-			<p css={savingsTextStyle}>{offerCopy}</p>
+		<div ref={setElementToObserve} css={[card, showLabel && cardWithLabel]}>
+			{showLabel && <div css={cardLabel}>Best deal</div>}
+			<section>
+				<h3 css={cardHeading}>{title}</h3>
+				<p css={cardPrice}>
+					{discountedPrice ? (
+						<>
+							<span css={strikethroughPriceStyle}>{price}</span>
+							{discountedPrice}
+						</>
+					) : (
+						price
+					)}
+					<small>/{billingPeriodNoun}</small>
+				</p>
+				<p css={savingsTextStyle}>{offerCopy}</p>
+			</section>
 			<div css={ButtonCTA}>
 				<LinkButton
 					href={href}
