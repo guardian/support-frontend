@@ -14,7 +14,7 @@ addSbtPlugin("com.github.sbt" % "sbt-digest" % "2.1.0")
 
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.11.0")
 
-addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.1.1")
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.1.5")
 
 libraryDependencies += "org.vafer" % "jdeb" % "1.10" artifacts (Artifact("jdeb", "jar", "jar"))
 
