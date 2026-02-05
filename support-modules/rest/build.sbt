@@ -10,7 +10,7 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % catsVersion,
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
-  "io.circe" %% "circe-generic-extras" % "0.14.3",
+  "io.circe" %% "circe-generic-extras" % "0.14.4",
   "io.circe" %% "circe-parser" % circeVersion,
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
 )
