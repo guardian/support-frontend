@@ -39,6 +39,22 @@
       "fulfilmentOptions": "Domestic",
       "productType": "GuardianWeekly"
     },
+    "productInformation": {
+      "product": "GuardianWeeklyDomestic",
+      "ratePlan": "ThreeMonthGift",
+      "firstDeliveryDate": "2025-12-12",
+      "deliveryContact": {
+        "firstName": "support.e2e.firstName+pxkV6",
+        "lastName": "support.e2e.lastName+aE88D",
+        "workEmail": "support.e2e+aPFBg6OjZ2P4YwHrhx7Yq@thegulocal.com",
+        "country": "GB",
+        "state": null,
+        "city": "London",
+        "address1": "90 York Way",
+        "address2": "",
+        "postalCode": "N1 9GU"
+      }
+    },
     "analyticsInfo": {
       "isGiftPurchase": true,
       "paymentProvider": "DirectDebit"
