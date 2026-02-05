@@ -108,7 +108,6 @@ function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
 						}
 						title={product.title}
 						price={product.price}
-						billingPeriodNoun={product.billingPeriodNoun}
 						offerCopy={product.offerCopy}
 						priceCopy={product.priceCopy}
 						buttonCopy={product.buttonCopy}
