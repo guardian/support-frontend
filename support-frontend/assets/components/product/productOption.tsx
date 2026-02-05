@@ -40,11 +40,11 @@ export type Product = {
 	title: string;
 	price: string;
 	href: string;
-	billingPeriodNoun: string;
 	priceCopy: ReactNode;
 	buttonCopy: string;
 	onClick: () => void;
 	onView: () => void;
+	billingPeriodNoun?: string;
 	discountedPrice?: string;
 	children?: ReactNode;
 	offerCopy?: ReactNode;
