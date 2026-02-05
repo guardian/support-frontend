@@ -38,24 +38,23 @@ export const weeklyTermsAndConditionsLink = () =>
 	termsLink('Terms and Conditions', guardianWeeklyTermsLink);
 
 type WeeklyPriceInfoProps = {
-	orderIsAGift?: boolean;
-	giftInfo?: boolean;
+	isGift?: boolean;
+	showGift?: boolean;
 };
 export function WeeklyPriceInfo({
-	orderIsAGift,
-	giftInfo,
+	isGift,
+	showGift,
 }: WeeklyPriceInfoProps): JSX.Element {
 	const deliveryCostInfo = (
-		<>
+		<div>
 			Delivery cost included.{' '}
-			{!orderIsAGift && 'You can cancel your subscription at any time'}
-			{!giftInfo && <>. View full&nbsp;{weeklyTermsAndConditionsLink()}</>}
-		</>
+			{!isGift && 'You can cancel your subscription at any time'}
+			{!showGift && <>. View full&nbsp;{weeklyTermsAndConditionsLink()}</>}
+		</div>
 	);
-
 	return (
-		<div css={[pricesInfo, !giftInfo && pricesInfoDigital]}>
-			{!orderIsAGift && giftInfo && (
+		<div css={[pricesInfo, !showGift && pricesInfoDigital]}>
+			{!isGift && showGift && (
 				<ProductInfoChip icon={<SvgGift />}>
 					Gifting is available
 				</ProductInfoChip>
@@ -63,7 +62,7 @@ export function WeeklyPriceInfo({
 			<ProductInfoChip icon={<SvgInfoRound />}>
 				{deliveryCostInfo}
 			</ProductInfoChip>
-			{giftInfo && (
+			{showGift && (
 				<ProductInfoChip>
 					<Link
 						href={guardianWeeklyTermsLink}

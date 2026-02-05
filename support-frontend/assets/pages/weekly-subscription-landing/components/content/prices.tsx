@@ -97,7 +97,7 @@ function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
 					/>
 				))}
 			</FlexContainer>
-			<WeeklyPriceInfo orderIsAGift={orderIsAGift} giftInfo={true} />
+			<WeeklyPriceInfo isGift={orderIsAGift} showGift={true} />
 		</section>
 	);
 }
