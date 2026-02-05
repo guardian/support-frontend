@@ -25,7 +25,7 @@ const pricesInfo = css`
 	}
 `;
 const pricesInfoDigital = css`
-	margin: ${space[4]}px 0 ${space[9]}px 0;
+	margin-top: ${space[4]}px;
 `;
 const termsLinkStyle = css`
 	${textSans12};

@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { from, space } from '@guardian/source/foundations';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
@@ -41,6 +42,13 @@ import WeeklyProductPrices from './components/weeklyProductPrices';
 const closeGapAfterPageTitle = css`
 	margin-top: 0;
 `;
+const weeklyDigitalSurround = css`
+	padding: ${space[8]}px ${space[3]}px ${space[9]}px;
+	${from.desktop} {
+		padding: none;
+	}
+`;
+
 const { enableWeeklyDigital } = getFeatureFlags();
 
 export type WeeklyLandingPageProps = {
@@ -104,7 +112,7 @@ export function WeeklyLandingPage({
 			/>
 			{enableWeeklyDigital ? (
 				<FullWidthContainer theme="brand">
-					<CentredContainer>
+					<CentredContainer cssOverrides={weeklyDigitalSurround}>
 						<WeeklyCards countryId={countryId} productPrices={productPrices} />
 						<WeeklyBenefits sampleCopy="WEEKLY BENEFITS COMPONENT" />
 						<WeeklyPriceInfo />

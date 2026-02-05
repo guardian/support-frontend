@@ -15,7 +15,6 @@ const pricesSection = css`
 `;
 
 const pricesHeadline = css`
-	padding: ${space[8]}px 0 0;
 	${headlineBold24};
 	${from.tablet} {
 		font-size: 34px;
