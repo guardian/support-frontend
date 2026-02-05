@@ -45,7 +45,7 @@ const closeGapAfterPageTitle = css`
 const weeklyDigitalSurround = css`
 	padding: ${space[8]}px ${space[3]}px ${space[9]}px;
 	${from.desktop} {
-		padding: none;
+		padding: 0;
 	}
 `;
 

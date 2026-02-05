@@ -28,7 +28,7 @@ const displayRowEvenlyWeekly = css`
 		justify-content: space-evenly;
 	}
 `;
-const displayRowEvenlyDigitalWeekly = css`
+const displayRowEvenlyWeeklyDigital = css`
 	display: block;
 	${from.phablet} {
 		display: flex;
@@ -58,7 +58,7 @@ export function WeeklyGiftStudentSubs({
 		? routes.guardianWeeklySubscriptionLanding
 		: routes.guardianWeeklySubscriptionLandingGift;
 	const displayRowEvenly = enableWeeklyDigital
-		? displayRowEvenlyDigitalWeekly
+		? displayRowEvenlyWeeklyDigital
 		: displayRowEvenlyWeekly;
 	return (
 		<FullWidthContainer
