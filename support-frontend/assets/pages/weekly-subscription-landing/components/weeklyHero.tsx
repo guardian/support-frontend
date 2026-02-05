@@ -54,6 +54,9 @@ const weeklyShowOnMobile = css`
 		display: none;
 	}
 `;
+const linkButtonColour = css`
+	color: ${palette.neutral[7]};
+`;
 const containerHero = (enableWeeklyDigital: boolean) => css`
 	background-color: ${enableWeeklyDigital
 		? palette.neutral[100]
@@ -169,6 +172,7 @@ export function WeeklyHero({
 							iconSide="right"
 							icon={<SvgArrowDownStraight />}
 							href="#subscribe"
+							cssOverrides={linkButtonColour}
 							theme={enableWeeklyDigital ? themeButtonBrandAlt : themeButton}
 						>
 							See pricing options
