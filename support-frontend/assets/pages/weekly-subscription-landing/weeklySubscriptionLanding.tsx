@@ -50,7 +50,7 @@ const weeklyGiftPadding = !enableWeeklyDigital
 				margin-bottom: ${space[9]}px;
 			}
 			${from.phablet} {
-				justify-content: space-around;
+				justify-content: space-evenly;
 			}
 	  `
 	: undefined;
