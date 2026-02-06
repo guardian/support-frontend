@@ -3,7 +3,7 @@ import type { Promotion } from '../promotions';
 import {
 	applyDiscount,
 	getAppliedPromo,
-	getPromotionCopy,
+	getSanitisedPromoCopy,
 	hasDiscount,
 	promotionHTML,
 } from '../promotions';
@@ -17,20 +17,20 @@ describe('getPromotionCopy', () => {
 	};
 
 	it('should return promotion copy if it exists', () => {
-		expect(getPromotionCopy()).toEqual({});
-		expect(getPromotionCopy(sanitisablePromotionCopy)).not.toEqual({});
+		expect(getSanitisedPromoCopy()).toEqual({});
+		expect(getSanitisedPromoCopy(sanitisablePromotionCopy)).not.toEqual({});
 	});
 
 	it('should return a santised html string when sanitisable promotion copy is provided', () => {
-		expect(getPromotionCopy(sanitisablePromotionCopy).title).toEqual(
+		expect(getSanitisedPromoCopy(sanitisablePromotionCopy).title).toEqual(
 			sanitisablePromotionCopy.title,
 		);
 
-		expect(getPromotionCopy(sanitisablePromotionCopy).description).toEqual(
+		expect(getSanitisedPromoCopy(sanitisablePromotionCopy).description).toEqual(
 			'The Guardian Weekly magazine:<ul><li>is a round-up of the <a href="https://www.theguardian.com/about/journalism">world news opinion and long reads that have shaped the week.</a></li><li>with striking photography and insightful companion pieces, all handpicked from the Guardian and the Observer.</li></ul>',
 		);
 
-		expect(getPromotionCopy(sanitisablePromotionCopy).roundel).toEqual(
+		expect(getSanitisedPromoCopy(sanitisablePromotionCopy).roundel).toEqual(
 			'<strong>Save <em>25%</em> for a year!</strong>',
 		);
 	});

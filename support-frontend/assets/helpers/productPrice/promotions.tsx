@@ -105,7 +105,7 @@ function getPromotion(
 	}
 }
 
-function getPromotionCopy(
+function getSanitisedPromoCopy(
 	promotionCopy?: PromotionCopy | null,
 	isGift?: boolean | null,
 ): PromotionCopy {
@@ -206,7 +206,7 @@ export {
 	getAppliedPromo,
 	applyDiscount,
 	hasDiscount,
-	getPromotionCopy,
+	getSanitisedPromoCopy,
 	promotionHTML,
 	finalPrice,
 	discountSummaryCopy,

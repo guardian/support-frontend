@@ -8,10 +8,11 @@ import {
 	textSansBold17,
 	until,
 } from '@guardian/source/foundations';
+import { weeklyBenefitsPaperHeroBlue } from 'stylesheets/emotion/colours';
 
 export const flexContainerOverride = css`
 	${textSans17};
-	background-color: #335182;
+	background-color: ${weeklyBenefitsPaperHeroBlue};
 	align-items: center;
 	justify-content: space-between;
 	flex-direction: column-reverse;
