@@ -36,6 +36,7 @@ const OrderSchema = z.object({
 		'StripeExpressCheckoutElement',
 		'StripeHostedCheckout',
 		'PayPal',
+		'PayPalCompletePayments',
 		'DirectDebit',
 		'Sepa',
 		'None',
