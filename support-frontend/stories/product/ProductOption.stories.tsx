@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import type { Product } from 'components/product/productOption';
 import ProductOptionComponent from 'components/product/productOption';
 import { Channel } from 'pages/paper-subscription-landing/helpers/products';

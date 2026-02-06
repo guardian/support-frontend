@@ -12,6 +12,7 @@ import { glyph } from 'helpers/internationalisation/currency';
 import { internationaliseProduct } from 'helpers/productCatalog';
 import {
 	billingPeriodToRatePlan,
+	getBillingPeriodNoun,
 	getBillingPeriodTitle,
 	weeklyBillingPeriods,
 	weeklyGiftBillingPeriods,
@@ -120,6 +121,10 @@ const weeklyProductProps = (
 	return {
 		title: getBillingPeriodTitle(billingPeriod, orderIsAGift),
 		price: getPriceWithSymbol(productPrice.currency, mainDisplayPrice),
+		discountedPrice: promotion?.discountedPrice
+			? getPriceWithSymbol(productPrice.currency, promotion.discountedPrice)
+			: undefined,
+		billingPeriodNoun: getBillingPeriodNoun(billingPeriod, orderIsAGift),
 		offerCopy,
 		priceCopy: (
 			<span>{getSimplifiedPriceDescription(productPrice, billingPeriod)}</span>
