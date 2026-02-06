@@ -8,7 +8,6 @@ import {
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import {
 	ExpressCheckoutElement,
 	useElements,
@@ -35,12 +34,9 @@ import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
-	DirectDebit,
 	isPaymentMethod,
 	type PaymentMethod as LegacyPaymentMethod,
-	PayPal,
 	PayPalCompletePayments,
-	Stripe,
 	StripeHostedCheckout,
 	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
@@ -76,6 +72,7 @@ import { WeeklyDeliveryDates } from '../checkout/components/WeeklyDeliveryDates'
 import { WeeklyGiftPersonalFields } from '../checkout/components/WeeklyGiftPersonalFields';
 import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgents';
 import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
+import { getPaymentMethods } from '../checkout/helpers/getPaymentMethods';
 import { getProductFields } from '../checkout/helpers/getProductFields';
 import type { PaymentToken } from '../checkout/helpers/paypalCompletePayments';
 import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession';
@@ -141,20 +138,6 @@ type CheckoutFormProps = {
 	setWeeklyDeliveryDate: (value: Date) => void;
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
-};
-
-const getPaymentMethods = (
-	countryId: IsoCountry,
-	productKey: ProductKey,
-	ratePlanKey: ActiveRatePlanKey,
-) => {
-	const maybeDirectDebit = countryId === 'GB' && DirectDebit;
-
-	if (isSundayOnlyNewspaperSub(productKey, ratePlanKey)) {
-		return [maybeDirectDebit, StripeHostedCheckout];
-	}
-
-	return [maybeDirectDebit, Stripe, PayPal, PayPalCompletePayments];
 };
 
 const LEGEND_PREFIX_WEEKLY_GIFT = 4;
@@ -500,6 +483,7 @@ export default function CheckoutForm({
 		countryId,
 		productKey,
 		ratePlanKey,
+		abParticipations,
 	)
 		.filter(isPaymentMethod)
 		.filter(paymentMethodIsActive);
