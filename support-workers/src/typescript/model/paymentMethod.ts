@@ -27,6 +27,16 @@ export type PayPalPaymentMethod = z.infer<
 	typeof payPalPaymentPaymentMethodSchema
 >;
 
+const payPalCompletePaymentsPaymentMethodSchema = z.object({
+	PaypalPaymentToken: z.string(),
+	PaypalEmail: z.string(),
+	Type: z.literal('PayPalCompletePayments'),
+	PaymentGateway: z.literal('PayPal Complete Payments'),
+});
+export type PayPalCompletePaymentsPaymentMethod = z.infer<
+	typeof payPalCompletePaymentsPaymentMethodSchema
+>;
+
 const payPalCompletePaymentsWithBAIDPaymentMethodSchema = z.object({
 	PaypalBaid: z.string(),
 	PaypalEmail: z.string(),
@@ -76,6 +86,7 @@ export type DirectDebitPaymentMethod = z.infer<
 
 export const paymentMethodSchema = z.discriminatedUnion('Type', [
 	payPalPaymentPaymentMethodSchema,
+	payPalCompletePaymentsPaymentMethodSchema,
 	payPalCompletePaymentsWithBAIDPaymentMethodSchema,
 	stripePaymentMethodSchema,
 	directDebitPaymentMethodSchema,
