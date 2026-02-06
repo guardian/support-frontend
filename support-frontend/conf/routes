@@ -131,6 +131,10 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/paypal/rest/returnOneTime  controllers.P
 # we need to redirect the user to a page that tells them their payment failed.
 GET  /paypal/rest/error                                            controllers.PayPalOneOff.paypalError()
 
+# ----- PayPal (Complete Payments) ----- #
+POST /paypal-complete-payments/setup-token                         controllers.PayPalCompletePaymentsController.createSetupToken()
+POST /paypal-complete-payments/payment-token                       controllers.PayPalCompletePaymentsController.createPaymentToken()
+
 # ----- Direct Debit ----- #
 
 POST /direct-debit/check-account                                   controllers.DirectDebit.checkAccount()
