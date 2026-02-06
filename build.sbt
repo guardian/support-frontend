@@ -98,7 +98,6 @@ lazy val root = (project in file("."))
   )
   .aggregate(
     `support-frontend`,
-    `support-workers`,
     `supporter-product-data`,
     `supporter-product-data-dynamo`,
     `stripe-patrons-data`,
@@ -107,7 +106,6 @@ lazy val root = (project in file("."))
     `support-internationalisation`,
     `support-services`,
     `stripe-intent`,
-    `it-test-runner`,
     `module-aws`,
     `module-acquisition-events`,
     `module-rest`,
@@ -141,31 +139,6 @@ lazy val `support-frontend` = (project in file("support-frontend"))
     `support-config`,
     `support-internationalisation`,
     `module-retry`,
-  )
-
-lazy val `support-workers` = (project in file("support-workers"))
-  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
-  .configs(IntegrationTest)
-  .settings(
-    integrationTestSettings,
-    scalafmtSettings,
-    libraryDependencies ++= commonDependencies,
-    scalacOptions += "-Ytasty-reader",
-  )
-  .dependsOn(
-    `support-services` % "test->test;it->test;compile->compile",
-    `support-models` % "test->test;it->test;compile->compile",
-    `support-config`,
-    `support-internationalisation`,
-    `module-acquisition-events`,
-    `supporter-product-data-dynamo`,
-  )
-  .aggregate(
-    `support-services`,
-    `support-models`,
-    `support-config`,
-    `support-internationalisation`,
-    `supporter-product-data-dynamo`,
   )
 
 lazy val `supporter-product-data` = (project in file("supporter-product-data"))
@@ -312,11 +285,6 @@ lazy val `stripe-intent` = (project in file("support-lambdas/stripe-intent"))
   .dependsOn(`module-rest`, `support-config`, `module-aws`)
   .aggregate(`module-rest`, `support-config`, `module-aws`)
 
-lazy val `it-test-runner` = (project in file("support-lambdas/it-test-runner"))
-  .enablePlugins(RiffRaffArtifact)
-  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
-  .dependsOn(`module-aws`)
-
 lazy val `acquisition-events-api` = (project in file("support-lambdas/acquisition-events-api"))
   .enablePlugins(RiffRaffArtifact)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
@@ -332,6 +300,5 @@ lazy val `support-lambdas` = (project in file("support-lambdas"))
   .settings(scalafmtSettings)
   .aggregate(
     `stripe-intent`,
-    `it-test-runner`,
     `acquisition-events-api`,
   )

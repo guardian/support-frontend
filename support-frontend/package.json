@@ -4,7 +4,7 @@
 	"description": "Frontend for the supporter platform.",
 	"scripts": {
 		"start": "./devrun.sh",
-		"clean": "echo 'Cleaning Public Folder' && rimraf public/compiled-assets",
+		"clean": "echo 'Cleaning Public Folder' && rm -rf public/compiled-assets",
 		"validate": "echo 'Validating TS' && npm-run-all 'lint:fix' && pnpm tsc && pnpm knip",
 		"typecheck": "tsc --noEmit",
 		"lint:nibble": "eslint-nibble ./assets --ext .ts,.tsx",
@@ -124,7 +124,6 @@
 		"postcss-pxtorem": "^6.1.0",
 		"preact": "^10.26.10",
 		"prettier": "^2.8.8",
-		"rimraf": "^6.1.2",
 		"search-in-file": "^3.5.2",
 		"storybook": "^9.1.17",
 		"ts-loader": "9.4.4",
