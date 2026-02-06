@@ -3,21 +3,13 @@ import {
 	from,
 	headlineBold24,
 	neutral,
-	palette,
 	space,
 	textEgyptian17,
-	textSans12,
 } from '@guardian/source/foundations';
-import {
-	Link,
-	SvgGift,
-	SvgInfoRound,
-	themeLinkBrand,
-} from '@guardian/source/react-components';
 import FlexContainer from 'components/containers/flexContainer';
-import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';
 import ProductOption from 'components/product/productOption';
+import { WeeklyPriceInfo } from '../weeklyPriceInfo';
 
 type PropTypes = {
 	orderIsAGift: boolean;
@@ -79,20 +71,6 @@ const pricesSubHeadline = css`
 	padding-bottom: ${space[2]}px;
 `;
 
-const pricesInfo = css`
-	margin-top: ${space[6]}px;
-`;
-
-const termsLink = css`
-	${textSans12};
-	color: ${palette.neutral[100]};
-	margin-left: ${space[9]}px;
-	margin-top: -12px;
-`;
-
-const termsConditionsLink =
-	'https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions';
-
 function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
 	return (
 		<section css={pricesSection} id="subscribe">
@@ -119,26 +97,7 @@ function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
 					/>
 				))}
 			</FlexContainer>
-			<div css={pricesInfo}>
-				{!orderIsAGift && (
-					<ProductInfoChip icon={<SvgGift />}>
-						Gifting is available
-					</ProductInfoChip>
-				)}
-				<ProductInfoChip icon={<SvgInfoRound />}>
-					Delivery cost included.{' '}
-					{!orderIsAGift && 'You can cancel your subscription at any time'}
-				</ProductInfoChip>
-				<ProductInfoChip>
-					<Link
-						href={termsConditionsLink}
-						cssOverrides={termsLink}
-						theme={themeLinkBrand}
-					>
-						Click here to see full Terms and Conditions
-					</Link>
-				</ProductInfoChip>
-			</div>
+			<WeeklyPriceInfo isGift={orderIsAGift} showGift={true} />
 		</section>
 	);
 }
