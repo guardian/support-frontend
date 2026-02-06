@@ -84,7 +84,6 @@ import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/co
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
-import { TickerContainer } from 'pages/supporter-plus-landing/twoStepPages/tickerContainer';
 import { CheckoutNudgeSelector } from '../../../components/checkoutNudge/checkoutNudge';
 import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -633,11 +632,6 @@ export function OneTimeCheckoutComponent({
 								}}
 							/>
 						</p>
-						{singleCheckoutSettings.tickerSettings && (
-							<TickerContainer
-								tickerSettings={singleCheckoutSettings.tickerSettings}
-							/>
-						)}
 						<PriceCards
 							amounts={amounts}
 							selectedAmount={selectedPriceCard}
