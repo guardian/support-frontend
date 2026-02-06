@@ -9,12 +9,13 @@ import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { ProductOptions } from '@modules/product/productOptions';
 import type { PaymentMethod } from '@stripe/stripe-js';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type { StripeHostedCheckout } from 'helpers/forms/paymentMethods';
 import type {
 	DirectDebit,
 	PayPal,
+	PayPalCompletePayments,
 	Sepa,
 	Stripe,
+	StripeHostedCheckout,
 } from 'helpers/forms/paymentMethods';
 import type { ReaderType } from 'helpers/productPrice/readerType';
 import type {
@@ -103,6 +104,11 @@ type RegularPayPalPaymentFields = {
 	paymentType: typeof PayPal;
 	baid: string;
 };
+type RegularPayPalCompletePaymentsPaymentFields = {
+	paymentType: typeof PayPalCompletePayments;
+	paymentToken: string;
+	email: string;
+};
 type RegularStripePaymentIntentFields = {
 	paymentType: typeof Stripe;
 	paymentMethod: string | PaymentMethod;
@@ -131,6 +137,7 @@ type RegularStripeHostedCheckoutPaymentFields = {
 };
 export type RegularPaymentFields =
 	| RegularPayPalPaymentFields
+	| RegularPayPalCompletePaymentsPaymentFields
 	| RegularStripePaymentIntentFields
 	| RegularDirectDebitPaymentFields
 	| RegularSepaPaymentFields
