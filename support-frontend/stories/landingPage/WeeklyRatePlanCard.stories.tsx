@@ -32,7 +32,7 @@ DefaultWeeklyCard.args = {
 	title: 'Quartlerly',
 	price: '£49.50',
 	discountedPrice: '£24.75',
-	billingPeriodNoun: 'month',
+	billingPeriodNoun: 'quarterly',
 	priceCopy: '£24.75/month for 3 months, then £49.50/month',
 	offerCopy: '50% off for 3 months',
 	href: 'https://support.theguardian.com',
