@@ -52,7 +52,11 @@ class PayPalCompletePaymentsController(
   def createSetupToken: Action[SetupTokenRequest] =
     PrivateAction.async(circe.json[SetupTokenRequest]) { implicit request =>
       val payPalCPService = getPayPalCPServiceForRequest(request)
-      payPalCPService.createSetupToken
+      payPalCPService
+        .createSetupToken(
+          returnUrl = routes.PayPalRegular.returnUrl().absoluteURL(secure = true),
+          cancelUrl = routes.PayPalRegular.cancelUrl().absoluteURL(secure = true),
+        )
         .map { token => Ok(SetupTokenResponse(token).asJson) }
     }
 

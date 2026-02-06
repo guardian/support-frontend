@@ -86,8 +86,8 @@ object PaymentToken {
   implicit val codec: Codec[PaymentToken] = deriveCodec
 }
 
-class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client: FutureHttpClient, stage: Stage)(
-    implicit executionContext: ExecutionContext,
+class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client: FutureHttpClient)(implicit
+    executionContext: ExecutionContext,
 ) extends TouchpointService
     with WebServiceHelper[PayPalCompletePaymentsError]
     with SafeLogging {
@@ -114,17 +114,9 @@ class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client
     ).map(_.access_token)
   }
 
-  private def getSupportSiteBaseUrl: String = {
-    stage match {
-      case Stages.PROD => "https://support.theguardian.com"
-      case Stages.CODE => "https://support.code.dev-theguardian.com"
-      case Stages.DEV => "https://support.thegulocal.com"
-    }
-  }
-
   // Create a setup token
   // https://developer.paypal.com/docs/api/payment-tokens/v3/#setup-tokens_create
-  def createSetupToken: Future[String] = {
+  def createSetupToken(returnUrl: String, cancelUrl: String): Future[String] = {
     val payload = CreateSetupTokenRequest(
       payment_source = SetupPaymentSource(
         // The source is PayPal, since the user's funding source is their PayPal account
@@ -132,8 +124,8 @@ class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client
           usage_type = "MERCHANT",
           customer_type = "CONSUMER",
           experience_context = ExperienceContext(
-            return_url = getSupportSiteBaseUrl,
-            cancel_url = getSupportSiteBaseUrl,
+            return_url = returnUrl,
+            cancel_url = cancelUrl,
             shipping_preference = "NO_SHIPPING",
           ),
         ),

@@ -9,12 +9,11 @@ import scala.concurrent.ExecutionContext
 
 class PayPalCompletePaymentsServiceProvider(
     configProvider: PayPalCompletePaymentsConfigProvider,
-    stage: Stage,
     client: FutureHttpClient,
 )(implicit
     executionContext: ExecutionContext,
 ) extends TouchpointServiceProvider[PayPalCompletePaymentsService, PayPalCompletePaymentsConfig](configProvider) {
   override protected def createService(config: PayPalCompletePaymentsConfig) = {
-    new PayPalCompletePaymentsService(config, client, stage)
+    new PayPalCompletePaymentsService(config, client)
   }
 }
