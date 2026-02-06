@@ -62,6 +62,7 @@ object CheckoutValidationRules {
   ) = paymentFields match {
     case _: PayPalPaymentFields =>
       if (switches.payPal.contains(On)) Valid else Invalid("Invalid Payment Method")
+    case _: PayPalCompletePaymentsPaymentFields => Valid // TODO: add switch
     case _: DirectDebitPaymentFields =>
       if (switches.directDebit.contains(On)) Valid else Invalid("Invalid Payment Method")
     case _: SepaPaymentFields =>
@@ -220,6 +221,8 @@ object PaidProductValidation {
         directDebitDetails.sortCode.nonEmpty.otherwise("DD sort code missing")
     case _: StripePaymentFields => Valid // already validated in PaymentMethodId.apply
     case payPalDetails: PayPalPaymentFields => payPalDetails.baid.nonEmpty.otherwise("paypal BAID missing")
+    case payPalCPDetails: PayPalCompletePaymentsPaymentFields =>
+      payPalCPDetails.paymentToken.nonEmpty.otherwise("paypal payment token missing")
     case SepaPaymentFields(accountHolderName, iban, country, streetName) =>
       accountHolderName.nonEmpty.otherwise("sepa account holder name missing") and
         iban.nonEmpty.otherwise("sepa iban empty")

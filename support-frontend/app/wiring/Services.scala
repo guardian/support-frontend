@@ -15,7 +15,7 @@ import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSComponents
 import services._
-import services.paypal.PayPalNvpServiceProvider
+import services.paypal.{PayPalCompletePaymentsServiceProvider, PayPalNvpServiceProvider}
 import services.pricing.{DefaultPromotionServiceS3, PriceSummaryServiceProvider}
 import services.stepfunctions.{StateWrapper, SupportWorkersClient}
 import services.mparticle.MParticleClient
@@ -27,6 +27,12 @@ trait Services {
   implicit private val s3Client: AwsS3Client = AwsS3Client
 
   lazy val payPalNvpServiceProvider = new PayPalNvpServiceProvider(appConfig.regularPayPalConfigProvider, wsClient)
+
+  lazy val payPalCompletePaymentsServiceProvider =
+    new PayPalCompletePaymentsServiceProvider(
+      appConfig.payPalCompletePaymentsConfigProvider,
+      RequestRunners.futureRunner,
+    )
 
   lazy val identityService = IdentityService(appConfig.identity)
 
