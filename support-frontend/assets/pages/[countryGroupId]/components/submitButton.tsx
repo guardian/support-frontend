@@ -164,7 +164,7 @@ export function SubmitButton({
 					)}
 					<PayPalScriptProvider
 						options={{
-							clientId: 'sb',
+							clientId: 'sb', // TODO: use a real client ID
 							environment: 'sandbox',
 							currency: 'GBP',
 							debug: false,
