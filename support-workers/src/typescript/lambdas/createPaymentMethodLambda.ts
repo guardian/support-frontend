@@ -3,6 +3,7 @@ import { combinedAddressLine } from '../model/address';
 import type {
 	DirectDebitPaymentFields,
 	PaymentFields,
+	PayPalCompletePaymentsPaymentFields,
 	PayPalPaymentFields,
 	StripeHostedPaymentFields,
 	StripePaymentFields,
@@ -15,6 +16,7 @@ import {
 import type {
 	DirectDebitPaymentMethod,
 	PaymentMethod,
+	PayPalCompletePaymentsPaymentMethod,
 	PayPalCompletePaymentsWithBAIDPaymentMethod,
 	PayPalPaymentMethod,
 	StripePaymentMethod,
@@ -87,6 +89,8 @@ export function createPaymentMethod(
 			return createStripeHostedPaymentMethod(user.isTestUser, paymentFields);
 		case 'PayPal':
 			return createPayPalPaymentMethod(user.isTestUser, paymentFields);
+		case 'PayPalCompletePayments':
+			return createPayPalCompletePaymentsPaymentMethod(paymentFields);
 		case 'DirectDebit':
 			return createDirectDebitPaymentMethod(user, paymentFields, productType);
 		case 'Existing':
@@ -230,6 +234,16 @@ async function createPayPalPaymentMethod(
 	};
 }
 
+function createPayPalCompletePaymentsPaymentMethod(
+	payPal: PayPalCompletePaymentsPaymentFields,
+): Promise<PayPalCompletePaymentsPaymentMethod> {
+	return Promise.resolve({
+		PaypalPaymentToken: payPal.paymentToken,
+		PaypalEmail: payPal.email,
+		Type: 'PayPalCompletePayments',
+		PaymentGateway: 'PayPal Complete Payments',
+	});
+}
 export function createDirectDebitPaymentMethod(
 	user: User,
 	dd: DirectDebitPaymentFields,
