@@ -1,6 +1,12 @@
 import { css } from '@emotion/react';
-import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
-import type { PaperProductOptions } from '@modules/product/productOptions';
+import type {
+	PaperFulfilmentOptions,
+	PrintFulfilmentOptions,
+} from '@modules/product/fulfilmentOptions';
+import {
+	type PaperProductOptions,
+	type PrintProductOptions,
+} from '@modules/product/productOptions';
 import type { BenefitsCheckListData } from 'components/checkoutBenefits/benefitsCheckList';
 
 const benefitStyle = css`
@@ -28,9 +34,12 @@ const benefitsSubscriptionLabel = (
 		Collect in store with a <strong>subscription card</strong>
 	</>
 );
+const weeklyBenefitsLabel = <>Weekly Subscription etc, etc, TODO</>;
 const benefitsLabel = {
 	HomeDelivery: benefitsHomeDeliveryLabel,
 	Collection: benefitsSubscriptionLabel,
+	Domestic: weeklyBenefitsLabel,
+	RestOfWorld: weeklyBenefitsLabel,
 };
 
 const digitalRewardsLabel = (
@@ -77,10 +86,15 @@ const benefitObserverSunday = (
 		The Observer on <strong>Sunday</strong>
 	</span>
 );
+const benefitWeekly = (
+	<span css={benefitStyle}>
+		Guardian Weekly Benefit <strong>TO DO</strong>
+	</span>
+);
 
-const getBenefitsMap = (
-	fulfilmentOption: PaperFulfilmentOptions,
-): Partial<Record<PaperProductOptions, Benefits>> => ({
+const getPrintBenefitsMap = (
+	fulfilmentOption: PrintFulfilmentOptions,
+): Partial<Record<PrintProductOptions, Benefits>> => ({
 	EverydayPlus: {
 		label: benefitsLabel[fulfilmentOption],
 		items: [benefitGuardianSixDay, benefitObserverSunday],
@@ -101,33 +115,97 @@ const getBenefitsMap = (
 		label: benefitsLabel[fulfilmentOption],
 		items: [benefitObserverSunday],
 	},
+	NoProductOptions: {
+		label: benefitsLabel[fulfilmentOption],
+		items: [benefitWeekly],
+	},
 });
 
-const digitalBenefitsMap: Partial<
-	Record<PaperProductOptions, Benefits | undefined>
+const printDigitalBenefitsMap: Record<
+	PrintFulfilmentOptions,
+	Partial<Record<PrintProductOptions, Benefits | undefined>>
 > = {
-	EverydayPlus: {
-		label: digitalRewardsLabel,
-		items: baseDigitalRewards,
+	Collection: {
+		EverydayPlus: {
+			label: digitalRewardsLabel,
+			items: baseDigitalRewards,
+		},
+		SixdayPlus: {
+			label: digitalRewardsLabel,
+			items: guardianDigitalRewards,
+		},
+		WeekendPlus: {
+			label: digitalRewardsLabel,
+			items: baseDigitalRewards,
+		},
+		SaturdayPlus: {
+			label: digitalRewardsLabel,
+			items: guardianDigitalRewards,
+		},
+		Sunday: { items: observerDigitalRewards },
 	},
-	SixdayPlus: {
-		label: digitalRewardsLabel,
-		items: guardianDigitalRewards,
+	HomeDelivery: {
+		EverydayPlus: {
+			label: digitalRewardsLabel,
+			items: baseDigitalRewards,
+		},
+		SixdayPlus: {
+			label: digitalRewardsLabel,
+			items: guardianDigitalRewards,
+		},
+		WeekendPlus: {
+			label: digitalRewardsLabel,
+			items: baseDigitalRewards,
+		},
+		SaturdayPlus: {
+			label: digitalRewardsLabel,
+			items: guardianDigitalRewards,
+		},
+		Sunday: { items: observerDigitalRewards },
 	},
-	WeekendPlus: {
-		label: digitalRewardsLabel,
-		items: baseDigitalRewards,
+	Domestic: {
+		EverydayPlus: {
+			label: digitalRewardsLabel,
+			items: baseDigitalRewards,
+		},
+		SixdayPlus: {
+			label: digitalRewardsLabel,
+			items: guardianDigitalRewards,
+		},
+		WeekendPlus: {
+			label: digitalRewardsLabel,
+			items: baseDigitalRewards,
+		},
+		SaturdayPlus: {
+			label: digitalRewardsLabel,
+			items: guardianDigitalRewards,
+		},
+		Sunday: { items: observerDigitalRewards },
 	},
-	SaturdayPlus: {
-		label: digitalRewardsLabel,
-		items: guardianDigitalRewards,
+	RestOfWorld: {
+		EverydayPlus: {
+			label: digitalRewardsLabel,
+			items: baseDigitalRewards,
+		},
+		SixdayPlus: {
+			label: digitalRewardsLabel,
+			items: guardianDigitalRewards,
+		},
+		WeekendPlus: {
+			label: digitalRewardsLabel,
+			items: baseDigitalRewards,
+		},
+		SaturdayPlus: {
+			label: digitalRewardsLabel,
+			items: guardianDigitalRewards,
+		},
+		Sunday: { items: observerDigitalRewards },
 	},
-	Sunday: { items: observerDigitalRewards },
 };
 
-const planDescriptions: Record<
-	PaperFulfilmentOptions,
-	Partial<Record<PaperProductOptions, JSX.Element>>
+const printPlanDescriptions: Record<
+	PrintFulfilmentOptions,
+	Partial<Record<PrintProductOptions, JSX.Element>>
 > = {
 	Collection: {
 		EverydayPlus: (
@@ -194,18 +272,45 @@ const planDescriptions: Record<
 			</>
 		),
 	},
+	Domestic: {
+		NoProductOptions: <>Weekly Domestic etc etc TODO</>,
+	},
+	RestOfWorld: {
+		NoProductOptions: <>Weekly ROW etc etc TODO</>,
+	},
 };
+
+export function getPrintPlanData(
+	ratePlanKey: PrintProductOptions,
+	fulfillmentOption: PrintFulfilmentOptions,
+): PlanData | undefined {
+	const description = printPlanDescriptions[fulfillmentOption][ratePlanKey];
+	if (!description) {
+		return undefined;
+	}
+
+	const benefits = getPrintBenefitsMap(fulfillmentOption)[ratePlanKey];
+	if (!benefits) {
+		return undefined;
+	}
+
+	return {
+		description: <></>,
+		benefits,
+		digitalRewards: printDigitalBenefitsMap[fulfillmentOption][ratePlanKey],
+	};
+}
 
 export default function getPlanData(
 	ratePlanKey: PaperProductOptions,
 	fulfillmentOption: PaperFulfilmentOptions,
 ): PlanData | undefined {
-	const description = planDescriptions[fulfillmentOption][ratePlanKey];
+	const description = printPlanDescriptions[fulfillmentOption][ratePlanKey];
 	if (!description) {
 		return undefined;
 	}
 
-	const benefits = getBenefitsMap(fulfillmentOption)[ratePlanKey];
+	const benefits = getPrintBenefitsMap(fulfillmentOption)[ratePlanKey];
 	if (!benefits) {
 		return undefined;
 	}
@@ -213,7 +318,7 @@ export default function getPlanData(
 	return {
 		description,
 		benefits,
-		digitalRewards: digitalBenefitsMap[ratePlanKey],
+		digitalRewards: printDigitalBenefitsMap[fulfillmentOption][ratePlanKey],
 	};
 }
 
