@@ -15,13 +15,13 @@ import Footer from './Footer';
 import { footerTextHeading } from './footerStyles';
 
 const weeklyFooter = (enableWeeklyDigital: boolean) => {
-	return !enableWeeklyDigital
-		? css`
+	return enableWeeklyDigital
+		? undefined
+		: css`
 				P {
 					margin-top: ${space[3]}px;
 				}
-		  `
-		: undefined;
+		  `;
 };
 const promoOfferLink = css`
 	& a {
