@@ -1,5 +1,6 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { Key } from './sessionStorage';
 
 export const breakpoints = {
 	mobile: 320,
@@ -70,6 +71,25 @@ type Tests = Record<string, Test>;
 
 type Participations = Record<string, string | undefined>;
 
+interface PageTest<Variant> {
+	name: string;
+	status: 'Live' | 'Draft';
+	priority?: number;
+	regionTargeting?: {
+		targetedCountryGroups?: CountryGroupId[];
+	};
+	variants: Variant[];
+}
+interface PageParticipationsConfig<Variant> {
+	tests: Array<PageTest<Variant>>;
+	pageRegex: string;
+	forceParamName: string;
+	sessionStorageKey: Key;
+	fallbackVariant: (countryGroupId: CountryGroupId) => Variant;
+	fallbackParticipationKey: string;
+	getVariantName: (variant: Variant) => string;
+}
+
 export type {
 	AcquisitionABTest,
 	Audience,
@@ -77,4 +97,6 @@ export type {
 	Test,
 	Tests,
 	Variant,
+	PageParticipationsConfig,
+	PageTest,
 };

@@ -7,7 +7,7 @@ const PARTICIPATIONS_KEY = 'abParticipations';
 const LANDING_PAGE_PARTICIPATIONS_KEY = 'landingPageParticipations';
 const CHECKOUT_NUDGE_PARTICIPATIONS_KEY = 'checkoutNudgeParticipations';
 const SINGLE_CHECKOUT_PARTICIPATIONS_KEY = 'singleCheckoutParticipations';
-type Key =
+export type Key =
 	| typeof PARTICIPATIONS_KEY
 	| typeof LANDING_PAGE_PARTICIPATIONS_KEY
 	| typeof CHECKOUT_NUDGE_PARTICIPATIONS_KEY

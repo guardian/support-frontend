@@ -4,7 +4,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
 import { ObserverHoldingContent } from 'components/serverSideRendered/observerHoldingContent';
 import { WithCoreWebVitals } from 'helpers/coreWebVitals/withCoreWebVitals';
+import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
+import type { SingleCheckoutVariant } from 'helpers/globalsAndSwitches/singleCheckoutSettings';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	getAbParticipations,
@@ -12,12 +14,17 @@ import {
 } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import { getCheckoutNudgeParticipations } from '../../helpers/abTests/checkoutNudgeAbTests';
-import { getLandingPageParticipations } from '../../helpers/abTests/landingPageAbTests';
-import { getSingleCheckoutParticipations } from '../../helpers/abTests/singleCheckoutAbTests';
+import { getLandingPageTestConfig } from '../../helpers/abTests/landingPageAbTests';
+import { getPageParticipations } from '../../helpers/abTests/pageParticipations';
+import { getSingleCheckoutTestConfig } from '../../helpers/abTests/singleCheckoutAbTests';
 
-const landingPageParticipations = getLandingPageParticipations();
+const landingPageParticipations = getPageParticipations<LandingPageVariant>(
+	getLandingPageTestConfig(),
+);
 const checkoutNudgeSettings = getCheckoutNudgeParticipations();
-const singleCheckoutSettings = getSingleCheckoutParticipations();
+const singleCheckoutSettings = getPageParticipations<SingleCheckoutVariant>(
+	getSingleCheckoutTestConfig(),
+);
 
 const abParticipations = {
 	...getAbParticipations(),
