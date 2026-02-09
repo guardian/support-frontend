@@ -13,6 +13,7 @@ import type { PaymentMethod as LegacyPaymentMethod } from '../../../helpers/form
 import {
 	DirectDebit,
 	PayPal,
+	PayPalCompletePayments,
 	StripeHostedCheckout,
 } from '../../../helpers/forms/paymentMethods';
 import {
@@ -183,6 +184,13 @@ export const getPaymentFieldsForPaymentMethod = async (
 			paymentType: StripeHostedCheckout,
 			checkoutSessionId: checkoutSessionId,
 			stripePublicKey,
+		};
+	}
+	if (paymentMethod === 'PayPalCompletePayments') {
+		return {
+			paymentType: PayPalCompletePayments,
+			paymentToken: formData.get('payPalPaymentToken') as string,
+			email: formData.get('payPalEmail') as string,
 		};
 	}
 
