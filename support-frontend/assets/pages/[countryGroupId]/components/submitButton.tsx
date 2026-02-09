@@ -167,7 +167,7 @@ export function SubmitButton({
 						options={{
 							clientId: 'sb', // TODO: use a real client ID
 							environment: 'sandbox',
-							currency: 'GBP',
+							currency: currencyKey,
 							debug: false,
 							disableFunding: paypalSdkFundingBlocklist,
 						}}
