@@ -87,7 +87,7 @@ import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTs
 import { CheckoutNudgeSelector } from '../../../components/checkoutNudge/checkoutNudge';
 import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
-import type { SingleCheckoutVariant } from '../../../helpers/globalsAndSwitches/singleCheckoutSettings';
+import type { OneTimeCheckoutVariant } from '../../../helpers/globalsAndSwitches/oneTimeCheckoutSettings';
 import {
 	updateAbandonedBasketCookie,
 	useAbandonedBasketCookie,
@@ -172,7 +172,7 @@ type OneTimeCheckoutComponentProps = {
 	useStripeExpressCheckout: boolean;
 	nudgeSettings?: CheckoutNudgeSettings;
 	landingPageSettings: LandingPageVariant;
-	singleCheckoutSettings: SingleCheckoutVariant;
+	oneTimeCheckoutSettings: OneTimeCheckoutVariant;
 };
 
 function paymentMethodIsActive(paymentMethod: PaymentMethod) {
@@ -259,7 +259,7 @@ export function OneTimeCheckoutComponent({
 	useStripeExpressCheckout,
 	nudgeSettings,
 	landingPageSettings,
-	singleCheckoutSettings,
+	oneTimeCheckoutSettings,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -281,9 +281,10 @@ export function OneTimeCheckoutComponent({
 		};
 	}
 
-	const amountsDataFromSingleCheckoutSettings = singleCheckoutSettings.amounts;
+	const amountsDataFromOneTimeCheckoutSettings =
+		oneTimeCheckoutSettings.amounts;
 	const { amounts, defaultAmount, hideChooseYourAmount } =
-		customAmountsData ?? amountsDataFromSingleCheckoutSettings;
+		customAmountsData ?? amountsDataFromOneTimeCheckoutSettings;
 
 	const { preSelectedPriceCard, preSelectedOtherAmount } = getPreSelectedAmount(
 		preSelectedAmountParam,
@@ -616,7 +617,7 @@ export function OneTimeCheckoutComponent({
 							<h2 css={title}>
 								<span
 									dangerouslySetInnerHTML={{
-										__html: getSanitisedHtml(singleCheckoutSettings.heading),
+										__html: getSanitisedHtml(oneTimeCheckoutSettings.heading),
 									}}
 								/>
 							</h2>
@@ -628,7 +629,7 @@ export function OneTimeCheckoutComponent({
 						<p css={standFirst}>
 							<span
 								dangerouslySetInnerHTML={{
-									__html: getSanitisedHtml(singleCheckoutSettings.subheading),
+									__html: getSanitisedHtml(oneTimeCheckoutSettings.subheading),
 								}}
 							/>
 						</p>

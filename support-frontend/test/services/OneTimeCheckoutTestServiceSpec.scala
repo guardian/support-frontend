@@ -3,8 +3,8 @@ package services
 import admin.settings.{
   AmountsSelection,
   RegionTargeting,
-  SingleCheckoutTest,
-  SingleCheckoutVariant,
+  OneTimeCheckoutTest,
+  OneTimeCheckoutVariant,
   Status,
   TickerCopy,
   TickerSettings,
@@ -16,7 +16,7 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
 import scala.jdk.CollectionConverters.{MapHasAsJava, SeqHasAsJava}
 
-class SingleCheckoutTestServiceSpec extends AsyncFlatSpec with Matchers {
+class OneTimeCheckoutTestServiceSpec extends AsyncFlatSpec with Matchers {
 
   private def parseDynamoRecord[T: Decoder](record: java.util.Map[String, AttributeValue]): Either[io.circe.Error, T] =
     DynamoJsonConverter.mapToJson(record).as[T]
@@ -28,9 +28,9 @@ class SingleCheckoutTestServiceSpec extends AsyncFlatSpec with Matchers {
     AttributeValue.builder().m(value.asJava).build()
   private def listAttr(value: List[AttributeValue]): AttributeValue = AttributeValue.builder().l(value.asJava).build()
 
-  "SingleCheckoutTestService" should "parseSingleCheckoutTest" in {
+  "OneTimeCheckoutTestService" should "parseOneTimeCheckoutTest" in {
     val dynamoTest = Map(
-      "channel" -> stringAttr("SingleCheckout"),
+      "channel" -> stringAttr("OneTimeCheckout"),
       "name" -> stringAttr("test1"),
       "priority" -> numberAttr(5),
       "status" -> stringAttr("Live"),
@@ -85,9 +85,9 @@ class SingleCheckoutTestServiceSpec extends AsyncFlatSpec with Matchers {
       ),
     )
 
-    val result = parseDynamoRecord[SingleCheckoutTest](dynamoTest.asJava)
+    val result = parseDynamoRecord[OneTimeCheckoutTest](dynamoTest.asJava)
     result shouldBe Right(
-      SingleCheckoutTest(
+      OneTimeCheckoutTest(
         name = "test1",
         status = Status.Live,
         priority = 5,
@@ -97,7 +97,7 @@ class SingleCheckoutTestServiceSpec extends AsyncFlatSpec with Matchers {
           ),
         ),
         variants = List(
-          SingleCheckoutVariant(
+          OneTimeCheckoutVariant(
             name = "control",
             heading = "Support the Guardian",
             subheading = "Help us deliver independent journalism",
@@ -114,7 +114,7 @@ class SingleCheckoutTestServiceSpec extends AsyncFlatSpec with Matchers {
               ),
             ),
           ),
-          SingleCheckoutVariant(
+          OneTimeCheckoutVariant(
             name = "variant",
             heading = "Make a contribution",
             subheading = "Your support powers our journalism",
@@ -130,9 +130,9 @@ class SingleCheckoutTestServiceSpec extends AsyncFlatSpec with Matchers {
     )
   }
 
-  it should "parseSingleCheckoutTest without optional fields" in {
+  it should "parseOneTimeCheckoutTest without optional fields" in {
     val dynamoTest = Map(
-      "channel" -> stringAttr("SingleCheckout"),
+      "channel" -> stringAttr("OneTimeCheckout"),
       "name" -> stringAttr("minimal-test"),
       "priority" -> numberAttr(1),
       "status" -> stringAttr("Draft"),
@@ -155,15 +155,15 @@ class SingleCheckoutTestServiceSpec extends AsyncFlatSpec with Matchers {
       ),
     )
 
-    val result = parseDynamoRecord[SingleCheckoutTest](dynamoTest.asJava)
+    val result = parseDynamoRecord[OneTimeCheckoutTest](dynamoTest.asJava)
     result shouldBe Right(
-      SingleCheckoutTest(
+      OneTimeCheckoutTest(
         name = "minimal-test",
         status = Status.Draft,
         priority = 1,
         regionTargeting = None,
         variants = List(
-          SingleCheckoutVariant(
+          OneTimeCheckoutVariant(
             name = "control",
             heading = "Support us",
             subheading = "Contribute today",

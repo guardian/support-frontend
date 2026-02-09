@@ -9,7 +9,7 @@ import * as cookie from 'helpers/storage/cookie';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
-import type { SingleCheckoutVariant } from '../../helpers/globalsAndSwitches/singleCheckoutSettings';
+import type { OneTimeCheckoutVariant } from '../../helpers/globalsAndSwitches/oneTimeCheckoutSettings';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
 import { OneTimeCheckoutComponent } from './components/oneTimeCheckoutComponent';
 
@@ -21,7 +21,7 @@ type OneTimeCheckoutProps = {
 	abParticipations: Participations;
 	nudgeSettings?: CheckoutNudgeSettings;
 	landingPageSettings: LandingPageVariant;
-	singleCheckoutSettings: SingleCheckoutVariant;
+	oneTimeCheckoutSettings: OneTimeCheckoutVariant;
 };
 
 const stripeExpressCheckoutSwitch =
@@ -33,7 +33,7 @@ export function OneTimeCheckout({
 	abParticipations,
 	nudgeSettings,
 	landingPageSettings,
-	singleCheckoutSettings,
+	oneTimeCheckoutSettings,
 }: OneTimeCheckoutProps) {
 	const { currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -72,7 +72,7 @@ export function OneTimeCheckout({
 				useStripeExpressCheckout={stripeExpressCheckoutSwitch === 'On'}
 				nudgeSettings={nudgeSettings}
 				landingPageSettings={landingPageSettings}
-				singleCheckoutSettings={singleCheckoutSettings}
+				oneTimeCheckoutSettings={oneTimeCheckoutSettings}
 			/>
 		</Elements>
 	);

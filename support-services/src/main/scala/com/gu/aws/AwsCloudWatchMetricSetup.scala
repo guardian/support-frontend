@@ -111,9 +111,9 @@ object AwsCloudWatchMetricSetup {
       ),
     )
 
-  def getSingleCheckoutTestsError(stage: Stage): MetricRequest =
+  def getOneTimeCheckoutTestsError(stage: Stage): MetricRequest =
     getMetricRequest(
-      MetricName("GetSingleCheckoutTestsError"),
+      MetricName("GetOneTimeCheckoutTestsError"),
       Map(
         MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
       ),

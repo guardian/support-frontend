@@ -2,7 +2,7 @@ import type { AmountsTests, ContributionTypes } from 'helpers/contributions';
 import 'helpers/contributions';
 import type { CheckoutNudgeTest } from './checkoutNudgeSettings';
 import type { LandingPageTest } from './landingPageSettings';
-import type { SingleCheckoutTest } from './singleCheckoutSettings';
+import type { OneTimeCheckoutTest } from './oneTimeCheckoutSettings';
 
 export type Status = 'On' | 'Off';
 
@@ -33,5 +33,5 @@ export type Settings = {
 	metricUrl: string;
 	landingPageTests?: LandingPageTest[];
 	checkoutNudgeTests?: CheckoutNudgeTest[];
-	singleCheckoutTests?: SingleCheckoutTest[];
+	oneTimeCheckoutTests?: OneTimeCheckoutTest[];
 };

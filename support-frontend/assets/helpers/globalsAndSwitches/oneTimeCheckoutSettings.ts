@@ -2,7 +2,7 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import type { AmountValuesObject } from 'helpers/contributions';
 import type { TickerSettings } from './landingPageSettings';
 
-export interface SingleCheckoutVariant {
+export interface OneTimeCheckoutVariant {
 	name: string;
 	heading: string;
 	subheading: string;
@@ -14,9 +14,9 @@ interface RegionTargeting {
 	targetedCountryGroups: CountryGroupId[];
 }
 
-export interface SingleCheckoutTest {
+export interface OneTimeCheckoutTest {
 	name: string;
 	status: 'Live' | 'Draft';
 	regionTargeting?: RegionTargeting;
-	variants: SingleCheckoutVariant[];
+	variants: OneTimeCheckoutVariant[];
 }

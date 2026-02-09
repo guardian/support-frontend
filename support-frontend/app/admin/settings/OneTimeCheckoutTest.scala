@@ -5,7 +5,7 @@ import com.gu.support.encoding.Codec.deriveCodec
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 
-case class SingleCheckoutVariant(
+case class OneTimeCheckoutVariant(
     name: String,
     heading: String,
     subheading: String,
@@ -13,19 +13,19 @@ case class SingleCheckoutVariant(
     tickerSettings: Option[TickerSettings],
 )
 
-object SingleCheckoutVariant {
-  implicit val codec: Codec[SingleCheckoutVariant] = deriveCodec
+object OneTimeCheckoutVariant {
+  implicit val codec: Codec[OneTimeCheckoutVariant] = deriveCodec
 }
 
-case class SingleCheckoutTest(
+case class OneTimeCheckoutTest(
     name: String,
     status: Status,
     priority: Int,
     regionTargeting: Option[RegionTargeting],
-    variants: List[SingleCheckoutVariant],
+    variants: List[OneTimeCheckoutVariant],
 )
 
-object SingleCheckoutTest {
-  implicit val encoder: Encoder[SingleCheckoutTest] = deriveEncoder
-  implicit val decoder: Decoder[SingleCheckoutTest] = deriveDecoder
+object OneTimeCheckoutTest {
+  implicit val encoder: Encoder[OneTimeCheckoutTest] = deriveEncoder
+  implicit val decoder: Decoder[OneTimeCheckoutTest] = deriveDecoder
 }
