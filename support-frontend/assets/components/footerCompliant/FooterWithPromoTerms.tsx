@@ -18,7 +18,7 @@ const weeklyFooter = (enableWeeklyDigital: boolean) => {
 	return enableWeeklyDigital
 		? undefined
 		: css`
-				P {
+				p {
 					margin-top: ${space[3]}px;
 				}
 		  `;
