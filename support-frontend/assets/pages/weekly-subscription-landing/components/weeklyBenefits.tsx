@@ -1,5 +1,11 @@
 import { css } from '@emotion/react';
-import { from, neutral, palette, space } from '@guardian/source/foundations';
+import {
+	from,
+	headlineBold24,
+	neutral,
+	palette,
+	space,
+} from '@guardian/source/foundations';
 import BenefitsList from 'components/product/BenefitsList';
 import type { PlanData } from 'pages/paper-subscription-landing/planData';
 import {
@@ -20,6 +26,10 @@ const benefitsContainer = css`
 		flex-direction: row;
 		justify-content: space-between;
 	}
+`;
+const headingContainer = css`
+	${headlineBold24};
+	margin-bottom: ${space[8]}px;
 `;
 const benefitsBorder = css`
 	border-top: 1px solid ${borderWhite};
@@ -42,7 +52,9 @@ export function WeeklyBenefits({
 	return (
 		<section css={benefitsContainer} id="subscribeWeeklyBenefits">
 			<div>
-				<h2>What do you get with a Guardian Weekly subscription?</h2>
+				<h2 css={headingContainer}>
+					What do you get with a Guardian Weekly subscription?
+				</h2>
 				<div css={benefitsBorder}>
 					<BenefitsList
 						title={planData?.benefits.label}
