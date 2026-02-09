@@ -13,6 +13,7 @@ import {
 	createSetupToken,
 	exchangeSetupTokenForPaymentToken,
 } from '../checkout/helpers/paypalCompletePayments';
+import { paypalSdkFundingBlocklist } from '../checkout/helpers/payPalSdkOptions';
 import type { PaymentMethod } from './paymentFields';
 
 type ApprovedSetupToken = {
@@ -168,6 +169,7 @@ export function SubmitButton({
 							environment: 'sandbox',
 							currency: 'GBP',
 							debug: false,
+							disableFunding: paypalSdkFundingBlocklist,
 						}}
 					>
 						<PayPalButtons
