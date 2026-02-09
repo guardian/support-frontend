@@ -36,7 +36,7 @@ const getPromoUrl = (
 	country: IsoCountry,
 	billingPeriod: BillingPeriod,
 	fulfillmentOption: FulfilmentOptions,
-) => {
+): string | undefined => {
 	const promotion = getPromotion(
 		productPrices,
 		country,
