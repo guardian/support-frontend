@@ -54,10 +54,6 @@ type LinkTypes = {
 	enableWeeklyDigital: boolean;
 };
 
-function MaybeLink({ href, text }: { text: string; href?: string }) {
-	return href ? <a href={href}>{text}</a> : null;
-}
-
 function RegularLinks({
 	productPrices,
 	country,
@@ -81,9 +77,9 @@ function RegularLinks({
 		return (
 			<PromoTerms enableWeeklyDigital={enableWeeklyDigital}>
 				<span>
-					<MaybeLink href={monthlyUrl} text="monthly" />
+					<a href={monthlyUrl}>monthly</a>
 					{multipleOffers ? ' and ' : ''}
-					<MaybeLink href={annualUrl} text="annual" />
+					<a href={annualUrl}>annual</a>
 					&nbsp;offer{multipleOffers ? 's' : ''}
 				</span>
 			</PromoTerms>
@@ -115,9 +111,9 @@ function GiftLinks({
 		return (
 			<PromoTerms enableWeeklyDigital={enableWeeklyDigital}>
 				<span>
-					<MaybeLink href={quarterlyUrl} text="quarterly" />
+					<a href={quarterlyUrl}>quarterly</a>
 					{multipleOffers ? ' and ' : ''}
-					<MaybeLink href={annualUrl} text="annual" />
+					<a href={annualUrl}>annual</a>
 					&nbsp;offer{multipleOffers ? 's' : ''}
 				</span>
 			</PromoTerms>
