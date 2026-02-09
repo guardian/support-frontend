@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { from, neutral, palette, space } from '@guardian/source/foundations';
-import type { IsoCountry } from '@modules/internationalisation/country';
 import BenefitsList from 'components/product/BenefitsList';
 import type { PlanData } from 'pages/paper-subscription-landing/planData';
 import {
@@ -22,14 +21,13 @@ const benefitsContainer = css`
 		justify-content: space-between;
 	}
 `;
-const benfitsBorder = css`
+const benefitsBorder = css`
 	border-top: 1px solid ${borderWhite};
 	display: flex;
 	flex-direction: column;
 `;
 
 type WeeklyBenefitsPropTypes = {
-	countryId: IsoCountry;
 	planData?: PlanData;
 };
 
@@ -40,7 +38,7 @@ export function WeeklyBenefits({
 		<section css={benefitsContainer} id="subscribeWeeklyBenefits">
 			<div>
 				<h2>What do you get with a Guardian Weekly subscription?</h2>
-				<div css={benfitsBorder}>
+				<div css={benefitsBorder}>
 					<BenefitsList
 						title={planData?.benefits.label}
 						listItems={planData?.benefits.items}

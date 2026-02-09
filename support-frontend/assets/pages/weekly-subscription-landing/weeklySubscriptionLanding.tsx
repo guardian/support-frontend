@@ -122,7 +122,7 @@ export function WeeklyLandingPage({
 				<FullWidthContainer theme="brand">
 					<CentredContainer cssOverrides={weeklyDigitalSpacing}>
 						<WeeklyCards countryId={countryId} productPrices={productPrices} />
-						<WeeklyBenefits countryId={countryId} planData={planData} />
+						<WeeklyBenefits planData={planData} />
 						<WeeklyPriceInfo />
 					</CentredContainer>
 				</FullWidthContainer>

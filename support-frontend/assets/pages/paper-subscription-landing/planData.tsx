@@ -34,12 +34,11 @@ const benefitsSubscriptionLabel = (
 		Collect in store with a <strong>subscription card</strong>
 	</>
 );
-const weeklyBenefitsLabel = <>Weekly Subscription etc, etc, TODO</>;
 const benefitsLabel = {
 	HomeDelivery: benefitsHomeDeliveryLabel,
 	Collection: benefitsSubscriptionLabel,
-	Domestic: weeklyBenefitsLabel,
-	RestOfWorld: weeklyBenefitsLabel,
+	Domestic: <></>,
+	RestOfWorld: <></>,
 };
 
 const digitalRewardsLabel = (
@@ -64,25 +63,25 @@ const guardianDigitalRewards = [
 ];
 
 const weeklyDigitalRewards = [
-	<>
+	<span css={benefitStyle}>
 		Unlimited access to the refreshed&nbsp;<strong>Guardian app</strong>
 		&nbsp;and&nbsp;<strong>Guardian Feast app</strong>
-	</>,
-	<>
+	</span>,
+	<span css={benefitStyle}>
 		Unlimited access to the&nbsp;<strong>Guardian Editions app</strong>&nbsp;so
 		you can enjoy newspapers on your mobile and tablet
-	</>,
-	<>
+	</span>,
+	<span css={benefitStyle}>
 		Digital access to the Guardian’s 200 year&nbsp;
 		<strong>newspaper archive</strong>
-	</>,
-	<>
+	</span>,
+	<span css={benefitStyle}>
 		<strong>Ad-free reading</strong>&nbsp;on the Guardian app and website
-	</>,
-	<>
+	</span>,
+	<span css={benefitStyle}>
 		<strong>Exclusive newsletter</strong>&nbsp;for supporters, sent every week
 		from the Guardian newsroom
-	</>,
+	</span>,
 	<>Far fewer asks for support</>,
 ];
 
@@ -240,10 +239,10 @@ const printPlanDescriptions: Record<
 		),
 	},
 	Domestic: {
-		NoProductOptions: <>Weekly Domestic etc etc TODO</>,
+		NoProductOptions: <></>,
 	},
 	RestOfWorld: {
-		NoProductOptions: <>Weekly ROW etc etc TODO</>,
+		NoProductOptions: <></>,
 	},
 };
 
@@ -255,16 +254,15 @@ export default function getPlanData(
 	if (!description) {
 		return undefined;
 	}
-
 	const benefits = getPrintBenefitsMap(fulfillmentOption)[ratePlanKey];
 	if (!benefits) {
 		return undefined;
 	}
-
+	const digitalRewards = getPrintDigitalBenefitsMap()[ratePlanKey];
 	return {
 		description,
 		benefits,
-		digitalRewards: getPrintDigitalBenefitsMap()[ratePlanKey],
+		digitalRewards,
 	};
 }
 
