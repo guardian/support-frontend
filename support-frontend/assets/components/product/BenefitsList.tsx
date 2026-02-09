@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import {
 	neutral,
@@ -40,18 +41,21 @@ export default function BenefitsList({
 	title,
 	listItems = [],
 	theme,
+	cssOverrides,
 }: {
 	title?: ReactNode;
 	listItems?: JSX.Element[];
 	theme?: Partial<ThemeIcon>;
+	cssOverrides?: SerializedStyles;
 }) {
 	if (listItems.length === 0) {
 		return null;
 	}
 	return (
-		<section css={[benefitsContainer, title && benefitsContainerTitle]}>
+		<section
+			css={[benefitsContainer, title && benefitsContainerTitle, cssOverrides]}
+		>
 			{title && <h4>{title}</h4>}
-
 			<ul css={benefitsList}>
 				{listItems.map((item) => (
 					<li css={benefitsItem}>

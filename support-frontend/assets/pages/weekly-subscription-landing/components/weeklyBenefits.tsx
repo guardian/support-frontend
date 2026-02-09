@@ -26,6 +26,11 @@ const benefitsBorder = css`
 	display: flex;
 	flex-direction: column;
 `;
+const benefitsTopBorderNarrow = css`
+	ul {
+		padding-top: ${space[3]}px;
+	}
+`;
 
 type WeeklyBenefitsPropTypes = {
 	planData?: PlanData;
@@ -43,6 +48,7 @@ export function WeeklyBenefits({
 						title={planData?.benefits.label}
 						listItems={planData?.benefits.items}
 						theme={{ fill: palette.brandAlt[400] }}
+						cssOverrides={benefitsTopBorderNarrow}
 					/>
 					<BenefitsList
 						title={planData?.digitalRewards?.label}
