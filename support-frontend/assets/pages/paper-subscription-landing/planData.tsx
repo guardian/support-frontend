@@ -63,6 +63,29 @@ const guardianDigitalRewards = [
 	<>Far fewer asks for support</>,
 ];
 
+const weeklyDigitalRewards = [
+	<>
+		Unlimited access to the refreshed&nbsp;<strong>Guardian app</strong>
+		&nbsp;and&nbsp;<strong>Guardian Feast app</strong>
+	</>,
+	<>
+		Unlimited access to the&nbsp;<strong>Guardian Editions app</strong>&nbsp;so
+		you can enjoy newspapers on your mobile and tablet
+	</>,
+	<>
+		Digital access to the Guardian’s 200 year&nbsp;
+		<strong>newspaper archive</strong>
+	</>,
+	<>
+		<strong>Ad-free reading</strong>&nbsp;on the Guardian app and website
+	</>,
+	<>
+		<strong>Exclusive newsletter</strong>&nbsp;for supporters, sent every week
+		from the Guardian newsroom
+	</>,
+	<>Far fewer asks for support</>,
+];
+
 const observerDigitalRewards = [
 	<>Access to The Observer digital subscription</>,
 ];
@@ -88,7 +111,7 @@ const benefitObserverSunday = (
 );
 const benefitWeekly = (
 	<span css={benefitStyle}>
-		Guardian Weekly Benefit <strong>TO DO</strong>
+		<strong>Guardian Weekly</strong> magazine delivered to your door
 	</span>
 );
 
@@ -116,92 +139,36 @@ const getPrintBenefitsMap = (
 		items: [benefitObserverSunday],
 	},
 	NoProductOptions: {
-		label: benefitsLabel[fulfilmentOption],
 		items: [benefitWeekly],
 	},
 });
 
-const printDigitalBenefitsMap: Record<
-	PrintFulfilmentOptions,
-	Partial<Record<PrintProductOptions, Benefits | undefined>>
-> = {
-	Collection: {
-		EverydayPlus: {
-			label: digitalRewardsLabel,
-			items: baseDigitalRewards,
-		},
-		SixdayPlus: {
-			label: digitalRewardsLabel,
-			items: guardianDigitalRewards,
-		},
-		WeekendPlus: {
-			label: digitalRewardsLabel,
-			items: baseDigitalRewards,
-		},
-		SaturdayPlus: {
-			label: digitalRewardsLabel,
-			items: guardianDigitalRewards,
-		},
-		Sunday: { items: observerDigitalRewards },
+const getPrintDigitalBenefitsMap = (): Partial<
+	Record<PrintProductOptions, Benefits>
+> => ({
+	EverydayPlus: {
+		label: digitalRewardsLabel,
+		items: baseDigitalRewards,
 	},
-	HomeDelivery: {
-		EverydayPlus: {
-			label: digitalRewardsLabel,
-			items: baseDigitalRewards,
-		},
-		SixdayPlus: {
-			label: digitalRewardsLabel,
-			items: guardianDigitalRewards,
-		},
-		WeekendPlus: {
-			label: digitalRewardsLabel,
-			items: baseDigitalRewards,
-		},
-		SaturdayPlus: {
-			label: digitalRewardsLabel,
-			items: guardianDigitalRewards,
-		},
-		Sunday: { items: observerDigitalRewards },
+	SixdayPlus: {
+		label: digitalRewardsLabel,
+		items: guardianDigitalRewards,
 	},
-	Domestic: {
-		EverydayPlus: {
-			label: digitalRewardsLabel,
-			items: baseDigitalRewards,
-		},
-		SixdayPlus: {
-			label: digitalRewardsLabel,
-			items: guardianDigitalRewards,
-		},
-		WeekendPlus: {
-			label: digitalRewardsLabel,
-			items: baseDigitalRewards,
-		},
-		SaturdayPlus: {
-			label: digitalRewardsLabel,
-			items: guardianDigitalRewards,
-		},
-		Sunday: { items: observerDigitalRewards },
+	WeekendPlus: {
+		label: digitalRewardsLabel,
+		items: baseDigitalRewards,
 	},
-	RestOfWorld: {
-		EverydayPlus: {
-			label: digitalRewardsLabel,
-			items: baseDigitalRewards,
-		},
-		SixdayPlus: {
-			label: digitalRewardsLabel,
-			items: guardianDigitalRewards,
-		},
-		WeekendPlus: {
-			label: digitalRewardsLabel,
-			items: baseDigitalRewards,
-		},
-		SaturdayPlus: {
-			label: digitalRewardsLabel,
-			items: guardianDigitalRewards,
-		},
-		Sunday: { items: observerDigitalRewards },
+	SaturdayPlus: {
+		label: digitalRewardsLabel,
+		items: guardianDigitalRewards,
 	},
-};
+	Sunday: {
+		items: observerDigitalRewards,
+	},
+	NoProductOptions: {
+		items: weeklyDigitalRewards,
+	},
+});
 
 const printPlanDescriptions: Record<
 	PrintFulfilmentOptions,
@@ -280,7 +247,7 @@ const printPlanDescriptions: Record<
 	},
 };
 
-export function getPrintPlanData(
+export default function getPlanData(
 	ratePlanKey: PrintProductOptions,
 	fulfillmentOption: PrintFulfilmentOptions,
 ): PlanData | undefined {
@@ -295,30 +262,9 @@ export function getPrintPlanData(
 	}
 
 	return {
-		description: <></>,
-		benefits,
-		digitalRewards: printDigitalBenefitsMap[fulfillmentOption][ratePlanKey],
-	};
-}
-
-export default function getPlanData(
-	ratePlanKey: PaperProductOptions,
-	fulfillmentOption: PaperFulfilmentOptions,
-): PlanData | undefined {
-	const description = printPlanDescriptions[fulfillmentOption][ratePlanKey];
-	if (!description) {
-		return undefined;
-	}
-
-	const benefits = getPrintBenefitsMap(fulfillmentOption)[ratePlanKey];
-	if (!benefits) {
-		return undefined;
-	}
-
-	return {
 		description,
 		benefits,
-		digitalRewards: printDigitalBenefitsMap[fulfillmentOption][ratePlanKey],
+		digitalRewards: getPrintDigitalBenefitsMap()[ratePlanKey],
 	};
 }
 

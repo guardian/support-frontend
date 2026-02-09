@@ -5,6 +5,7 @@ import {
 	space,
 	textSans15,
 } from '@guardian/source/foundations';
+import type { ThemeIcon } from '@guardian/source/react-components';
 import { SvgTickRound } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 
@@ -38,9 +39,11 @@ const benefitsItem = css`
 export default function BenefitsList({
 	title,
 	listItems = [],
+	theme,
 }: {
 	title?: ReactNode;
 	listItems?: JSX.Element[];
+	theme?: Partial<ThemeIcon>;
 }) {
 	if (listItems.length === 0) {
 		return null;
@@ -52,7 +55,11 @@ export default function BenefitsList({
 			<ul css={benefitsList}>
 				{listItems.map((item) => (
 					<li css={benefitsItem}>
-						<SvgTickRound isAnnouncedByScreenReader size="xsmall" />
+						<SvgTickRound
+							isAnnouncedByScreenReader
+							size="xsmall"
+							theme={theme}
+						/>
 						{item}
 					</li>
 				))}
