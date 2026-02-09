@@ -47,6 +47,10 @@ const getPromoUrl = (
 	return promotion ? promotionTermsUrl(promotion.promoCode) : undefined;
 };
 
+function MaybeLink({ href, text }: { text: string; href?: string }) {
+	return href ? <a href={href}>{text}</a> : null;
+}
+
 type LinkTypes = {
 	productPrices: ProductPrices;
 	country: IsoCountry;
@@ -77,9 +81,9 @@ function RegularLinks({
 		return (
 			<PromoTerms enableWeeklyDigital={enableWeeklyDigital}>
 				<span>
-					{monthlyUrl ? <a href={monthlyUrl}>monthly</a> : null}
+					<MaybeLink href={monthlyUrl} text="monthly" />
 					{multipleOffers ? ' and ' : ''}
-					{annualUrl ? <a href={annualUrl}>annual</a> : null}
+					<MaybeLink href={annualUrl} text="annual" />
 					&nbsp;offer{multipleOffers ? 's' : ''}
 				</span>
 			</PromoTerms>
@@ -111,9 +115,9 @@ function GiftLinks({
 		return (
 			<PromoTerms enableWeeklyDigital={enableWeeklyDigital}>
 				<span>
-					{quarterlyUrl ? <a href={quarterlyUrl}>quarterly</a> : null}
+					<MaybeLink href={quarterlyUrl} text="quarterly" />
 					{multipleOffers ? ' and ' : ''}
-					{annualUrl ? <a href={annualUrl}>annual</a> : null}
+					<MaybeLink href={annualUrl} text="annual" />
 					&nbsp;offer{multipleOffers ? 's' : ''}
 				</span>
 			</PromoTerms>
