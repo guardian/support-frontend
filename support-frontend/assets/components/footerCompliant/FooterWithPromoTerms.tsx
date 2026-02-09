@@ -77,9 +77,9 @@ function RegularLinks({
 		return (
 			<PromoTerms enableWeeklyDigital={enableWeeklyDigital}>
 				<span>
-					<a href={monthlyUrl}>monthly</a>
+					{monthlyUrl ? <a href={monthlyUrl}>monthly</a> : null}
 					{multipleOffers ? ' and ' : ''}
-					<a href={annualUrl}>annual</a>
+					{annualUrl ? <a href={annualUrl}>annual</a> : null}
 					&nbsp;offer{multipleOffers ? 's' : ''}
 				</span>
 			</PromoTerms>
@@ -111,9 +111,9 @@ function GiftLinks({
 		return (
 			<PromoTerms enableWeeklyDigital={enableWeeklyDigital}>
 				<span>
-					<a href={quarterlyUrl}>quarterly</a>
+					{quarterlyUrl ? <a href={quarterlyUrl}>quarterly</a> : null}
 					{multipleOffers ? ' and ' : ''}
-					<a href={annualUrl}>annual</a>
+					{annualUrl ? <a href={annualUrl}>annual</a> : null}
 					&nbsp;offer{multipleOffers ? 's' : ''}
 				</span>
 			</PromoTerms>
