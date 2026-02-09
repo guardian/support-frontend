@@ -5,14 +5,15 @@
     "test": "pnpm --stream -r run test"
   },
   "devDependencies": {
-    "husky": "^9.0.11",
+    "@guardian/eslint-config": "^11.0.0",
     "eslint": "^9.38.0",
-    "@guardian/eslint-config": "^11.0.0"
+    "husky": "^9.0.11"
   },
   "pnpm": {
     "overrides": {
-      "@typescript-eslint/typescript-estree": "^8.46.2"
+      "@typescript-eslint/typescript-estree": "^8.46.2",
+      "fast-xml-parser@>=4.3.6 <=5.3.3": ">=5.3.4"
     }
   },
-  "packageManager": "pnpm@10.9.0+sha256.ea53ab747ac8b7921de63b42eab1adf021e1fe6ded05f62f00885cc33a46118d"
+  "packageManager": "pnpm@10.28.2+sha256.afa99b0b4b3d11c1dad2b472f9318ae2c78673829749ded527f89f09071479a7"
 }

@@ -5,6 +5,8 @@ packages:
   - 'support-e2e'
   - 'support-workers'
   - 'modules'
+onlyBuiltDependencies:
+  - "@guardian/support-service-lambdas"
 catalog:
   typescript: ^5.2.2
   zod: ^3.23.8
@@ -18,9 +20,9 @@ catalog:
   "@aws-sdk/client-cloudwatch": ^3.848.0
   "@aws-sdk/client-eventbridge": ^3.848.0
   "@aws-sdk/client-sqs": ^3.848.0
-  "@aws-sdk/client-ssm": ^3.679.0
+  "@aws-sdk/client-ssm": ^3.983.0
   "@aws-sdk/client-secrets-manager": ^3.848.0
-  "@aws-sdk/credential-provider-node": 3.699.0
+  "@aws-sdk/credential-provider-node": 3.972.5
   "@aws-sdk/client-dynamodb": ^3.879.0
   "@aws-sdk/util-dynamodb": ^3.879.0
   "@guardian/prettier": ^2.1.5
