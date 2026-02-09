@@ -34,6 +34,23 @@ const benefitsContainer = css`
 		max-width: 472px;
 	}
 `;
+const imageContainer = css`
+	display: none;
+	${from.desktop} {
+		border-radius: ${space[2]}px;
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+	}
+	${from.leftCol} {
+		width: 100%;
+	}
+	${from.wide} {
+		border-radius: 0 ${space[2]}px ${space[2]}px 0;
+		justify-content: stretch;
+	}
+`;
+
 const headingContainer = css`
 	${headlineBold24};
 	margin-bottom: ${space[8]}px;
@@ -80,7 +97,7 @@ export function WeeklyBenefits({
 					/>
 				</div>
 			</div>
-			<div>IMAGE</div>
+			<div css={imageContainer}>IMAGE</div>
 		</section>
 	);
 }
