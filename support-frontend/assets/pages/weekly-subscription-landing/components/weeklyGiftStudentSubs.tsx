@@ -24,6 +24,12 @@ const containerWeekly = css`
 		width: auto;
 	}
 `;
+const containerDigitalWeekly = css`
+	${from.wide} {
+		padding-left: 80px;
+		padding-right: 80px;
+	}
+`;
 const centredContainerDigitalWeekly = css`
 	padding: ${space[5]}px ${space[3]}px ${space[10]}px;
 	${from.tablet} {
@@ -104,10 +110,11 @@ export function WeeklyGiftStudentSubs({
 	const displayRowEvenly = enableWeeklyDigital
 		? displayRowEvenlyWeeklyDigital
 		: displayRowEvenlyWeekly;
+	const fullWidthContainer = enableWeeklyDigital
+		? containerDigitalWeekly
+		: containerWeekly;
 	return (
-		<FullWidthContainer
-			cssOverrides={enableWeeklyDigital ? undefined : containerWeekly}
-		>
+		<FullWidthContainer cssOverrides={fullWidthContainer}>
 			<CentredContainer
 				cssOverrides={
 					enableWeeklyDigital ? centredContainerDigitalWeekly : undefined
