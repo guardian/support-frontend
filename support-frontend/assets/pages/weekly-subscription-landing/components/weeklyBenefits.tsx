@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import {
+	between,
 	from,
 	headlineBold24,
 	neutral,
@@ -7,6 +8,7 @@ import {
 	space,
 	textSans17,
 } from '@guardian/source/foundations';
+import GridImage from 'components/gridImage/gridImage';
 import BenefitsList from 'components/product/BenefitsList';
 import type { PlanData } from 'pages/paper-subscription-landing/planData';
 import {
@@ -19,7 +21,6 @@ const weeklyBenefitsContainer = css`
 	color: ${neutral[100]};
 	border-radius: ${space[2]}px;
 	width: 100%;
-	padding: ${space[3]}px ${space[4]}px ${space[8]}px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -29,25 +30,47 @@ const weeklyBenefitsContainer = css`
 	}
 `;
 const benefitsContainer = css`
+	padding: ${space[3]}px 0 ${space[8]}px ${space[4]}px;
 	width: 100%;
 	${from.desktop} {
-		max-width: 472px;
+		padding-right: ${space[5]}px;
+		max-width: 488px;
+	}
+	${from.leftCol} {
+		max-width: 516px;
+	}
+	${from.wide} {
+		max-width: 600px;
 	}
 `;
-const imageContainer = css`
+const imageContainerDesktop = css`
 	display: none;
-	${from.desktop} {
-		border-radius: ${space[2]}px;
+	${between.desktop.and.leftCol} {
 		display: flex;
 		justify-content: flex-end;
 		align-items: center;
+		img {
+			border-radius: ${space[2]}px;
+		}
 	}
+`;
+
+const imageContainerLeftCol = css`
+	display: none;
 	${from.leftCol} {
+		display: flex;
+		justify-content: flex-end;
+		padding: ${space[8]}px 0 ${space[8]}px;
 		width: 100%;
+		img {
+			border-radius: ${space[2]}px;
+		}
 	}
 	${from.wide} {
-		border-radius: 0 ${space[2]}px ${space[2]}px 0;
-		justify-content: stretch;
+		padding: 0;
+		img {
+			border-radius: 0 ${space[2]}px ${space[2]}px 0;
+		}
 	}
 `;
 
@@ -97,7 +120,24 @@ export function WeeklyBenefits({
 					/>
 				</div>
 			</div>
-			<div css={imageContainer}>IMAGE</div>
+			<div css={imageContainerDesktop}>
+				<GridImage
+					gridId={`weeklyBenefitHeroDesktop`}
+					srcSizes={[400]}
+					sizes="(max-width: 400px) 400px, (min-width: 400px) 400px"
+					imgType="png"
+					altText="Illustration of The Guardian Weekly benefits"
+				/>
+			</div>
+			<div css={imageContainerLeftCol}>
+				<GridImage
+					gridId={`weeklyBenefitHeroLeftCol`}
+					srcSizes={[541, 621]}
+					sizes="(min-width: 541px) 541px, (max-width: 621px) 621px"
+					imgType="png"
+					altText="Illustration of The Guardian Weekly benefits"
+				/>
+			</div>
 		</section>
 	);
 }
