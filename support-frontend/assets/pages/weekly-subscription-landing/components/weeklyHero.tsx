@@ -14,16 +14,15 @@ import {
 	themeButtonBrandAlt,
 } from '@guardian/source/react-components';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
 import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
-import { promotionHTML } from 'helpers/productPrice/promotions';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { guardianWeeklyHeroBlue } from 'stylesheets/emotion/colours';
+import { getFirstParagraph, getRegionalCopyFor } from './contentHelpers';
 
 const weeklyHeroCopy = css`
 	padding: 0 ${space[3]}px ${space[3]}px;
