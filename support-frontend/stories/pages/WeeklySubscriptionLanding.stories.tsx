@@ -1,8 +1,8 @@
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import type { StoryObj } from '@storybook/preact-vite';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { WeeklyLandingPageProps } from 'pages/weekly-subscription-landing/weeklySubscriptionLanding';
 import { WeeklyLandingPage } from 'pages/weekly-subscription-landing/weeklySubscriptionLanding';
-import type { WeeklyLandingPropTypes } from 'pages/weekly-subscription-landing/weeklySubscriptionLandingProps';
 import { hideTestBanner } from '../../.storybook/decorators/withoutTestBanner';
 
 export default {
@@ -91,27 +91,26 @@ const weeklyProductPrices = {
 	},
 } as unknown as ProductPrices;
 
-type Story = StoryObj<WeeklyLandingPropTypes>;
+type Story = StoryObj<WeeklyLandingPageProps>;
 
-const defaultArgs: WeeklyLandingPropTypes = {
+const defaultArgs: WeeklyLandingPageProps = {
 	countryId: 'GB',
 	countryGroupId: GBPCountries,
 	productPrices: weeklyProductPrices,
 	promotionCopy: undefined,
 	orderIsAGift: false,
-	participations: {},
 };
-const giftArgs: WeeklyLandingPropTypes = {
+const giftArgs: WeeklyLandingPageProps = {
 	...defaultArgs,
 	orderIsAGift: true,
 };
 
 export const Default: Story = {
-	render: (args: WeeklyLandingPropTypes) => <WeeklyLandingPage {...args} />,
+	render: (args: WeeklyLandingPageProps) => <WeeklyLandingPage {...args} />,
 	args: defaultArgs,
 };
 
 export const Gift: Story = {
-	render: (args: WeeklyLandingPropTypes) => <WeeklyLandingPage {...args} />,
+	render: (args: WeeklyLandingPageProps) => <WeeklyLandingPage {...args} />,
 	args: giftArgs,
 };

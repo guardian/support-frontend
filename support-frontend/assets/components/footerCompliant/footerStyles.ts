@@ -38,6 +38,10 @@ export const componentFooter = css`
 			color: ${brandAlt[400]};
 		}
 	}
+
+	p {
+		margin-top: 0;
+	}
 `;
 export const copyright = css`
 	font-size: ${textSans14};
