@@ -1,5 +1,10 @@
 import { css } from '@emotion/react';
-import { from, space } from '@guardian/source/foundations';
+import {
+	from,
+	headlineBold24,
+	space,
+	until,
+} from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
@@ -19,6 +24,18 @@ const containerWeekly = css`
 		width: auto;
 	}
 `;
+const centredContainerDigitalWeekly = css`
+	padding: ${space[5]}px ${space[3]}px ${space[10]}px;
+	${from.tablet} {
+		width: 100%;
+		padding: ${space[8]}px ${space[5]}px ${space[12]}px;
+	}
+	${from.wide} {
+		width: 100% - 64px;
+		padding-left: 0;
+		padding-right: 0;
+	}
+`;
 const displayRowEvenlyWeekly = css`
 	background-color: white;
 	display: block;
@@ -34,6 +51,33 @@ const displayRowEvenlyWeeklyDigital = css`
 		display: flex;
 		flex-direction: row;
 		justify-content: left;
+	}
+	section {
+		padding-top: 0;
+		padding-bottom: 0;
+		${from.tablet} {
+			padding-left: 0;
+		}
+		div > h2 {
+			${headlineBold24};
+			${from.tablet} {
+				font-size: 28px;
+			}
+			${from.wide} {
+				font-size: 34px;
+			}
+		}
+	}
+	section:nth-child(1) {
+		${until.tablet} {
+			border-top: none;
+			margin-bottom: ${space[8]}px;
+		}
+	}
+	section:nth-child(2) {
+		${until.tablet} {
+			padding-top: ${space[5]}px;
+		}
 	}
 `;
 
@@ -62,9 +106,13 @@ export function WeeklyGiftStudentSubs({
 		: displayRowEvenlyWeekly;
 	return (
 		<FullWidthContainer
-			cssOverrides={!enableWeeklyDigital ? containerWeekly : undefined}
+			cssOverrides={enableWeeklyDigital ? undefined : containerWeekly}
 		>
-			<CentredContainer>
+			<CentredContainer
+				cssOverrides={
+					enableWeeklyDigital ? centredContainerDigitalWeekly : undefined
+				}
+			>
 				<div css={displayRowEvenly}>
 					<GiftNonGiftCta
 						product="Guardian Weekly"

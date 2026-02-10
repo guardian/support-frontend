@@ -46,8 +46,15 @@ const weeklySpacing = css`
 `;
 const weeklyDigitalSpacing = css`
 	padding: ${space[8]}px ${space[3]}px ${space[9]}px;
+	${from.tablet} {
+		padding: ${space[8]}px ${space[5]}px ${space[9]}px;
+	}
 	${from.desktop} {
+		width: calc(100% - 32px);
 		padding: ${space[8]}px 0 ${space[9]}px;
+	}
+	${from.leftCol} {
+		width: calc(100% - 64px);
 	}
 `;
 
