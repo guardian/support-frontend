@@ -1,151 +1,161 @@
+import { getSettings } from '../../globalsAndSwitches/globals';
 import type { LandingPageTest } from '../../globalsAndSwitches/landingPageSettings';
 import {
 	fallBackLandingPageSelection,
-	getLandingPageParticipations,
-	getLandingPageVariant,
+	getLandingPageTestConfig,
+	landingPageTestConfig,
 } from '../landingPageAbTests';
 import { LANDING_PAGE_PARTICIPATIONS_KEY } from '../sessionStorage';
 
-const nonUsTest: LandingPageTest = {
-	name: 'LP_DEFAULT',
+jest.mock('../../globalsAndSwitches/globals', () => ({
+	__esModule: true,
+	getSettings: jest.fn(),
+}));
+
+const mockTest: LandingPageTest = {
+	name: 'TEST_LP',
 	status: 'Live',
-	regionTargeting: {
-		targetedCountryGroups: [
-			'GBPCountries',
-			'AUDCountries',
-			'EURCountries',
-			'International',
-			'NZDCountries',
-			'Canada',
-		],
-	},
+	regionTargeting: { targetedCountryGroups: ['GBPCountries'] },
 	variants: [
 		{
-			name: 'CONTROL',
+			name: 'VARIANT_A',
 			copy: {
-				heading: 'Support fearless, independent journalism!',
-				subheading:
-					"We're not owned by a billionaire or shareholders - our readers support us. Choose to join with one of the options below. <strong>Cancel anytime.</strong>",
+				heading: 'Test heading',
+				subheading: 'Test subheading',
 			},
 			products: fallBackLandingPageSelection.products,
 		},
 	],
 };
-const usTest: LandingPageTest = {
-	name: 'LP_DEFAULT_US',
-	status: 'Live',
-	regionTargeting: { targetedCountryGroups: ['UnitedStates'] },
-	variants: [
-		{
-			name: 'CONTROL',
-			copy: {
-				heading: 'Support fearless, independent journalism!',
-				subheading:
-					"We're not owned by a billionaire or profit-driven corporation: our fiercely independent journalism is funded by our readers. Monthly giving makes the most impact (and you can cancel anytime). Thank you.",
-			},
-			products: fallBackLandingPageSelection.products,
-		},
-	],
-};
-const tests = [usTest, nonUsTest];
 
-const mvtId = 0;
-
-describe('getLandingPageParticipations', () => {
-	afterEach(() => {
-		window.sessionStorage.clear();
+describe('landingPageTestConfig', () => {
+	it('has correct pageRegex for contribute pages', () => {
+		expect(landingPageTestConfig.pageRegex).toBe('^/.*/contribute(/.*)?$');
 	});
 
-	it('assigns a user to the UK test on UK landing page', () => {
-		const result = getLandingPageParticipations(
-			'GBPCountries',
-			'/uk/contribute',
-			tests,
-			mvtId,
-			'',
-		);
-		expect(result).toEqual({
-			variant: nonUsTest.variants[0],
-			participations: { [nonUsTest.name]: 'CONTROL' },
-		});
+	it('has correct forceParamName', () => {
+		expect(landingPageTestConfig.forceParamName).toBe('force-landing-page');
 	});
 
-	it('assigns a user to the US test on US landing page', () => {
-		const result = getLandingPageParticipations(
-			'UnitedStates',
-			'/us/contribute',
-			tests,
-			mvtId,
-			'',
-		);
-		expect(result).toEqual({
-			variant: usTest.variants[0],
-			participations: { [usTest.name]: 'CONTROL' },
-		});
-	});
-
-	it('assigns a user to the UK test on a checkout page if it is in session storage', () => {
-		window.sessionStorage.setItem(
+	it('has correct sessionStorageKey', () => {
+		expect(landingPageTestConfig.sessionStorageKey).toBe(
 			LANDING_PAGE_PARTICIPATIONS_KEY,
-			JSON.stringify({ [nonUsTest.name]: 'CONTROL' }),
 		);
-
-		const result = getLandingPageParticipations(
-			'GBPCountries',
-			'/uk/one-time-checkout',
-			tests,
-			mvtId,
-			'',
-		);
-		expect(result).toEqual({
-			variant: nonUsTest.variants[0],
-			participations: { [nonUsTest.name]: 'CONTROL' },
-		});
 	});
 
-	it('does not assign a user to the UK test on a checkout page if it is *not* in session storage', () => {
-		const result = getLandingPageParticipations(
-			'GBPCountries',
-			'/uk/one-time-checkout',
-			tests,
-			mvtId,
-			'',
+	it('has correct fallbackParticipationKey', () => {
+		expect(landingPageTestConfig.fallbackParticipationKey).toBe(
+			'FALLBACK_LANDING_PAGE',
 		);
-		expect(result.participations).toEqual({});
 	});
 
-	it('uses the force-landing-page url querystring parameter to force participation', () => {
-		const result = getLandingPageParticipations(
-			'GBPCountries',
-			'/uk/contribute',
-			tests,
-			mvtId,
-			'force-landing-page=LP_DEFAULT_US:CONTROL',
-		);
-		expect(result).toEqual({
-			variant: usTest.variants[0],
-			participations: { [usTest.name]: 'CONTROL' },
-		});
+	it('returns fallback variant', () => {
+		const result = landingPageTestConfig.fallbackVariant('GBPCountries');
+		expect(result).toBe(fallBackLandingPageSelection);
+	});
+
+	it('extracts variant name correctly', () => {
+		const variant = {
+			name: 'TEST_VARIANT',
+			copy: { heading: 'Test', subheading: 'Test' },
+			products: fallBackLandingPageSelection.products,
+		};
+		expect(landingPageTestConfig.getVariantName(variant)).toBe('TEST_VARIANT');
 	});
 });
 
-describe('getLandingPageVariant', () => {
-	it('finds variant for participation', () => {
-		const participations = {
-			TEST_A: 'V1',
-			TEST_B: 'V2',
-			[nonUsTest.name]: 'CONTROL',
-		};
-		const result = getLandingPageVariant(participations, tests);
-		expect(result).toEqual(nonUsTest.variants[0]);
+describe('getLandingPageTestConfig', () => {
+	const mockGetSettings = getSettings as jest.MockedFunction<
+		typeof getSettings
+	>;
+
+	afterEach(() => {
+		jest.clearAllMocks();
 	});
 
-	it('falls back on default settings if no landing page test matches', () => {
-		const participations = {
-			TEST_A: 'V1',
-			TEST_B: 'V2',
+	it('returns config with tests from settings', () => {
+		mockGetSettings.mockReturnValue({
+			landingPageTests: [mockTest],
+		} as ReturnType<typeof getSettings>);
+
+		const config = getLandingPageTestConfig();
+
+		expect(config.tests).toEqual([mockTest]);
+		expect(config.pageRegex).toBe('^/.*/contribute(/.*)?$');
+		expect(config.forceParamName).toBe('force-landing-page');
+		expect(config.sessionStorageKey).toBe(LANDING_PAGE_PARTICIPATIONS_KEY);
+	});
+
+	it('returns empty tests array when landingPageTests is undefined', () => {
+		mockGetSettings.mockReturnValue({
+			landingPageTests: undefined,
+		} as ReturnType<typeof getSettings>);
+
+		const config = getLandingPageTestConfig();
+
+		expect(config.tests).toEqual([]);
+	});
+
+	it('returns empty tests array when landingPageTests is null', () => {
+		mockGetSettings.mockReturnValue({
+			landingPageTests: null,
+		} as unknown as ReturnType<typeof getSettings>);
+
+		const config = getLandingPageTestConfig();
+
+		expect(config.tests).toEqual([]);
+	});
+
+	it('returns multiple tests from settings', () => {
+		const test2: LandingPageTest = {
+			name: 'TEST_LP_2',
+			status: 'Live',
+			regionTargeting: { targetedCountryGroups: ['UnitedStates'] },
+			variants: [
+				{
+					name: 'VARIANT_B',
+					copy: {
+						heading: 'Test heading 2',
+						subheading: 'Test subheading 2',
+					},
+					products: fallBackLandingPageSelection.products,
+				},
+			],
 		};
-		const result = getLandingPageVariant(participations, tests);
-		expect(result).toEqual(fallBackLandingPageSelection);
+
+		mockGetSettings.mockReturnValue({
+			landingPageTests: [mockTest, test2],
+		} as ReturnType<typeof getSettings>);
+
+		const config = getLandingPageTestConfig();
+
+		expect(config.tests).toHaveLength(2);
+		expect(config.tests).toEqual([mockTest, test2]);
+	});
+});
+
+describe('fallBackLandingPageSelection', () => {
+	it('has correct name', () => {
+		expect(fallBackLandingPageSelection.name).toBe('CONTROL');
+	});
+
+	it('has copy with heading and subheading', () => {
+		expect(fallBackLandingPageSelection.copy.heading).toBeDefined();
+		expect(fallBackLandingPageSelection.copy.subheading).toBeDefined();
+	});
+
+	it('has products for Contribution, SupporterPlus, and DigitalSubscription', () => {
+		expect(fallBackLandingPageSelection.products.Contribution).toBeDefined();
+		expect(fallBackLandingPageSelection.products.SupporterPlus).toBeDefined();
+		expect(
+			fallBackLandingPageSelection.products.DigitalSubscription,
+		).toBeDefined();
+	});
+
+	it('has defaultProductSelection', () => {
+		expect(fallBackLandingPageSelection.defaultProductSelection).toEqual({
+			productType: 'SupporterPlus',
+			billingPeriod: 'Monthly',
+		});
 	});
 });

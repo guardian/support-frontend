@@ -1,24 +1,11 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { ProductTierLabel } from 'helpers/productCatalog';
 import { getSettings } from '../globalsAndSwitches/globals';
 import type {
 	DefaultProductSelection,
-	LandingPageTest,
 	LandingPageVariant,
 } from '../globalsAndSwitches/landingPageSettings';
-import { CountryGroup } from '../internationalisation/classes/countryGroup';
-import {
-	countryGroupMatches,
-	getParticipationFromQueryString,
-	randomNumber,
-} from './helpers';
-import type { Participations } from './models';
-import { getMvtId } from './mvt';
-import {
-	getSessionParticipations,
-	LANDING_PAGE_PARTICIPATIONS_KEY,
-	setSessionParticipations,
-} from './sessionStorage';
+import type { PageParticipationsConfig } from './models';
+import { LANDING_PAGE_PARTICIPATIONS_KEY } from './sessionStorage';
 
 // Fallback config in case there's an issue getting it from the server
 const fallbackDefaultProductSelection: DefaultProductSelection = {
@@ -100,117 +87,28 @@ export const fallBackLandingPageSelection: LandingPageVariant = {
 	defaultProductSelection: fallbackDefaultProductSelection,
 };
 
-const landingPageRegex = '^/.*/contribute(/.*)?$';
-function isLandingPage(path: string) {
-	return !!path && !!path.match(landingPageRegex);
-}
+/**
+ * Configuration for landing page A/B tests
+ * Use with getPageParticipations to get the variant and participations
+ */
+export const landingPageTestConfig: Omit<
+	PageParticipationsConfig<LandingPageVariant>,
+	'tests'
+> = {
+	pageRegex: '^/.*/contribute(/.*)?$',
+	forceParamName: 'force-landing-page',
+	sessionStorageKey: LANDING_PAGE_PARTICIPATIONS_KEY,
+	fallbackVariant: () => fallBackLandingPageSelection,
+	fallbackParticipationKey: 'FALLBACK_LANDING_PAGE',
+	getVariantName: (variant) => variant.name,
+};
 
 /**
- * getLandingPageParticipations will always return a landing page variant, regardless of which
- * page the user is on. We sometimes need these settings on other pages as well.
- *
- * If the user is on the landing page, or session storage contains a landing page participation,
- * then it will also return the participations data for tracking.
- * Otherwise we assume the user has not arrived via the landing page, and the participations
- * object will be empty because we do not need to track it.
+ * Helper to get landing page test config with tests from settings
  */
-interface LandingPageParticipationsResult {
-	variant: LandingPageVariant;
-	participations: Participations;
-}
-export function getLandingPageParticipations(
-	countryGroupId: CountryGroupId = CountryGroup.detect(),
-	path: string = window.location.pathname,
-	tests: LandingPageTest[] = getSettings().landingPageTests ?? [],
-	mvtId: number = getMvtId(),
-	queryString: string = window.location.search,
-): LandingPageParticipationsResult {
-	// Is the participation forced in the url querystring?
-	const urlParticipations = getParticipationFromQueryString(
-		queryString,
-		'force-landing-page',
-	);
-	if (urlParticipations) {
-		const variant = getLandingPageVariant(urlParticipations, tests);
-		return {
-			participations: urlParticipations,
-			variant,
-		};
-	}
-
-	// Is there already a participation in session storage?
-	const sessionParticipations = getSessionParticipations(
-		LANDING_PAGE_PARTICIPATIONS_KEY,
-	);
-	if (
-		sessionParticipations &&
-		Object.entries(sessionParticipations).length > 0
-	) {
-		const variant = getLandingPageVariant(sessionParticipations, tests);
-		return {
-			participations: sessionParticipations,
-			variant,
-		};
-	} else {
-		// No participation in session storage, assign user to a test + variant
-		const test = tests
-			.filter((test) => test.status == 'Live')
-			.find((test) => {
-				return countryGroupMatches(
-					test.regionTargeting?.targetedCountryGroups,
-					countryGroupId,
-				);
-			});
-
-		// Only track participation if user is on the landing page
-		const trackParticipation = isLandingPage(path);
-
-		if (test) {
-			const idx = randomNumber(mvtId, test.name) % test.variants.length;
-			const variant = test.variants[idx];
-
-			if (variant) {
-				const participations = {
-					[test.name]: variant.name,
-				};
-				// Record the participation in session storage so that we can track it from the checkout
-				setSessionParticipations(
-					participations,
-					LANDING_PAGE_PARTICIPATIONS_KEY,
-				);
-
-				return {
-					participations: trackParticipation ? participations : {},
-					variant,
-				};
-			}
-		}
-		// No test found, use the fallback
-		return {
-			participations: trackParticipation
-				? { FALLBACK_LANDING_PAGE: fallBackLandingPageSelection.name }
-				: ({} as Participations),
-			variant: fallBackLandingPageSelection,
-		};
-	}
-}
-
-// Use the AB test participations to find the specific variant configuration for this page
-export function getLandingPageVariant(
-	participations: Participations,
-	landingPageTests: LandingPageTest[] = [],
-): LandingPageVariant {
-	for (const test of landingPageTests) {
-		// Is the user in this test?
-		const variantName = participations[test.name];
-		if (variantName) {
-			const variant = test.variants.find(
-				(variant) => variant.name === variantName,
-			);
-			if (variant) {
-				return variant;
-			}
-		}
-	}
-	return fallBackLandingPageSelection;
+export function getLandingPageTestConfig(): PageParticipationsConfig<LandingPageVariant> {
+	return {
+		...landingPageTestConfig,
+		tests: getSettings().landingPageTests ?? [],
+	};
 }

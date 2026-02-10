@@ -44,6 +44,8 @@ export type Product = {
 	buttonCopy: string;
 	onClick: () => void;
 	onView: () => void;
+	billingPeriodNoun?: string;
+	discountedPrice?: string;
 	children?: ReactNode;
 	offerCopy?: ReactNode;
 	savingsText?: string | null;

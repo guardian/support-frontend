@@ -15,13 +15,13 @@ import Footer from './Footer';
 import { footerTextHeading } from './footerStyles';
 
 const weeklyFooter = (enableWeeklyDigital: boolean) => {
-	return !enableWeeklyDigital
-		? css`
-				P {
+	return enableWeeklyDigital
+		? undefined
+		: css`
+				p {
 					margin-top: ${space[3]}px;
 				}
-		  `
-		: undefined;
+		  `;
 };
 const promoOfferLink = css`
 	& a {
@@ -36,7 +36,7 @@ const getPromoUrl = (
 	country: IsoCountry,
 	billingPeriod: BillingPeriod,
 	fulfillmentOption: FulfilmentOptions,
-) => {
+): string | undefined => {
 	const promotion = getPromotion(
 		productPrices,
 		country,
@@ -47,16 +47,16 @@ const getPromoUrl = (
 	return promotion ? promotionTermsUrl(promotion.promoCode) : undefined;
 };
 
+function MaybeLink({ href, text }: { text: string; href?: string }) {
+	return href ? <a href={href}>{text}</a> : null;
+}
+
 type LinkTypes = {
 	productPrices: ProductPrices;
 	country: IsoCountry;
 	fulfillmentOption: FulfilmentOptions;
 	enableWeeklyDigital: boolean;
 };
-
-function MaybeLink({ href, text }: { text: string; href?: string }) {
-	return href ? <a href={href}>{text}</a> : null;
-}
 
 function RegularLinks({
 	productPrices,

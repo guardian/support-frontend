@@ -83,7 +83,7 @@ jobs:
 
       - run: pnpm --filter bigquery-acquisitions-publisher tsc --noEmit
 
-      - run: pnpm --filter bigquery-acquisitions-publisher prettier -c typescript/*.ts
+      - run: pnpm --filter bigquery-acquisitions-publisher prettier
 
       - run: pnpm --filter bigquery-acquisitions-publisher test
 

@@ -5,24 +5,6 @@ import com.gu.support.encoding.Codec.deriveCodec
 import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
-
-sealed trait Status
-object Status {
-  case object Live extends Status
-  case object Draft extends Status
-
-  implicit val statusEncoder = deriveEnumerationEncoder[Status]
-  implicit val statusDecoder = deriveEnumerationDecoder[Status]
-}
-
-case class RegionTargeting(
-    targetedCountryGroups: List[String] = Nil,
-)
-
-object RegionTargeting {
-  implicit val codec: Codec[RegionTargeting] = deriveCodec
-}
-
 case class LandingPageCopy(
     heading: String,
     subheading: String,
@@ -71,22 +53,6 @@ case class CountdownSettings(
 object CountdownSettings {
   implicit val countdownCodec: Codec[CountdownSettings] = deriveCodec
 }
-case class TickerCopy(
-    countLabel: String,
-    goalCopy: String,
-)
-object TickerCopy {
-  implicit val codec: Codec[TickerCopy] = deriveCodec
-}
-case class TickerSettings(
-    currencySymbol: String,
-    copy: TickerCopy,
-    name: String,
-)
-object TickerSettings {
-  implicit val tickerCodec: Codec[TickerSettings] = deriveCodec
-}
-
 case class DefaultProductSelection(
     productType: String,
     billingPeriod: String,

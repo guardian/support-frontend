@@ -6,11 +6,12 @@ const PARTICIPATIONS_KEY = 'abParticipations';
 // For participation in landing page tests, which are passed through from the server
 const LANDING_PAGE_PARTICIPATIONS_KEY = 'landingPageParticipations';
 const CHECKOUT_NUDGE_PARTICIPATIONS_KEY = 'checkoutNudgeParticipations';
-type Key =
+const ONE_TIME_CHECKOUT_PARTICIPATIONS_KEY = 'oneTimeCheckoutParticipations';
+export type Key =
 	| typeof PARTICIPATIONS_KEY
 	| typeof LANDING_PAGE_PARTICIPATIONS_KEY
-	| typeof CHECKOUT_NUDGE_PARTICIPATIONS_KEY;
-
+	| typeof CHECKOUT_NUDGE_PARTICIPATIONS_KEY
+	| typeof ONE_TIME_CHECKOUT_PARTICIPATIONS_KEY;
 function getSessionParticipations(key: Key): Participations | undefined {
 	const participations = storage.getSession(key);
 	if (participations) {
@@ -31,6 +32,7 @@ function setSessionParticipations(participations: Participations, key: Key) {
 function clearParticipationsFromSession(): void {
 	storage.setSession(PARTICIPATIONS_KEY, JSON.stringify({}));
 	storage.setSession(LANDING_PAGE_PARTICIPATIONS_KEY, JSON.stringify({}));
+	storage.setSession(ONE_TIME_CHECKOUT_PARTICIPATIONS_KEY, JSON.stringify({}));
 }
 
 export {
@@ -40,4 +42,5 @@ export {
 	PARTICIPATIONS_KEY,
 	LANDING_PAGE_PARTICIPATIONS_KEY,
 	CHECKOUT_NUDGE_PARTICIPATIONS_KEY,
+	ONE_TIME_CHECKOUT_PARTICIPATIONS_KEY,
 };
