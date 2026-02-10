@@ -4,7 +4,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
 import { ObserverHoldingContent } from 'components/serverSideRendered/observerHoldingContent';
 import { WithCoreWebVitals } from 'helpers/coreWebVitals/withCoreWebVitals';
+import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
+import type { OneTimeCheckoutVariant } from 'helpers/globalsAndSwitches/oneTimeCheckoutSettings';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	getAbParticipations,
@@ -12,14 +14,23 @@ import {
 } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import { getCheckoutNudgeParticipations } from '../../helpers/abTests/checkoutNudgeAbTests';
-import { getLandingPageParticipations } from '../../helpers/abTests/landingPageAbTests';
+import { getLandingPageTestConfig } from '../../helpers/abTests/landingPageAbTests';
+import { getOneTimeCheckoutTestConfig } from '../../helpers/abTests/oneTimeCheckoutAbTests';
+import { getPageParticipations } from '../../helpers/abTests/pageParticipations';
 
-const landingPageParticipations = getLandingPageParticipations();
+const landingPageParticipations = getPageParticipations<LandingPageVariant>(
+	getLandingPageTestConfig(),
+);
 const checkoutNudgeSettings = getCheckoutNudgeParticipations();
+const oneTimeCheckoutSettings = getPageParticipations<OneTimeCheckoutVariant>(
+	getOneTimeCheckoutTestConfig(),
+);
+
 const abParticipations = {
 	...getAbParticipations(),
 	...landingPageParticipations.participations,
 	...checkoutNudgeSettings?.participations,
+	...oneTimeCheckoutSettings.participations,
 };
 setUpTrackingAndConsents(abParticipations);
 const appConfig = parseAppConfig(window.guardian);
@@ -117,6 +128,7 @@ const router = createBrowserRouter([
 						abParticipations={abParticipations}
 						nudgeSettings={checkoutNudgeSettings}
 						landingPageSettings={landingPageParticipations.variant}
+						oneTimeCheckoutSettings={oneTimeCheckoutSettings.variant}
 					/>
 				</Suspense>
 			),
