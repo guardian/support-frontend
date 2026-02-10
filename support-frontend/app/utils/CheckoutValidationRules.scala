@@ -45,7 +45,7 @@ object CheckoutValidationRules {
       switches: SubscriptionsPaymentMethodSwitches,
       paymentFields: PaymentFields,
   ) = paymentFields match {
-    case _: PayPalPaymentFields =>
+    case _: PayPalPaymentFields | _: PayPalCompletePaymentsPaymentFields =>
       if (switches.paypal.contains(On)) Valid else Invalid("Invalid Payment Method")
     case _: DirectDebitPaymentFields =>
       if (switches.directDebit.contains(On)) Valid else Invalid("Invalid Payment Method")
@@ -60,9 +60,8 @@ object CheckoutValidationRules {
       switches: RecurringPaymentMethodSwitches,
       paymentFields: PaymentFields,
   ) = paymentFields match {
-    case _: PayPalPaymentFields =>
+    case _: PayPalPaymentFields | _: PayPalCompletePaymentsPaymentFields =>
       if (switches.payPal.contains(On)) Valid else Invalid("Invalid Payment Method")
-    case _: PayPalCompletePaymentsPaymentFields => Valid // TODO: add switch
     case _: DirectDebitPaymentFields =>
       if (switches.directDebit.contains(On)) Valid else Invalid("Invalid Payment Method")
     case _: SepaPaymentFields =>
