@@ -40,10 +40,8 @@ export function toPaymentMethodSwitchNaming(
 ): PaymentMethodSwitch | null {
 	switch (paymentMethod) {
 		case PayPal:
-			return 'payPal';
-
 		case PayPalCompletePayments:
-			return 'payPalCompletePayments';
+			return 'payPal';
 
 		case Stripe:
 			return 'stripe';

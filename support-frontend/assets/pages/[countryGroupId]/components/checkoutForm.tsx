@@ -36,7 +36,6 @@ import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRec
 import {
 	isPaymentMethod,
 	type PaymentMethod as LegacyPaymentMethod,
-	PayPalCompletePayments,
 	StripeHostedCheckout,
 	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
@@ -105,11 +104,6 @@ import SimilarProductsConsent from './SimilarProductsConsent';
 import { SubmitButton } from './submitButton';
 
 function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
-	// TODO fix to properly reflect switches
-	if (paymentMethod === PayPalCompletePayments) {
-		return true;
-	}
-
 	return isSwitchOn(
 		`recurringPaymentMethods.${toPaymentMethodSwitchNaming(paymentMethod)}`,
 	);
