@@ -35,7 +35,6 @@ import { PriceCards } from 'components/priceCards/priceCards';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
-import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { config } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
@@ -59,7 +58,7 @@ import {
 	Stripe,
 	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
-import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import * as cookie from 'helpers/storage/cookie';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -75,6 +74,7 @@ import {
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import {
+	getSanitisedHtml,
 	parseCustomAmounts,
 	roundToDecimalPlaces,
 } from 'helpers/utilities/utilities';
@@ -87,6 +87,7 @@ import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTs
 import { CheckoutNudgeSelector } from '../../../components/checkoutNudge/checkoutNudge';
 import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
+import type { OneTimeCheckoutVariant } from '../../../helpers/globalsAndSwitches/oneTimeCheckoutSettings';
 import {
 	updateAbandonedBasketCookie,
 	useAbandonedBasketCookie,
@@ -171,6 +172,7 @@ type OneTimeCheckoutComponentProps = {
 	useStripeExpressCheckout: boolean;
 	nudgeSettings?: CheckoutNudgeSettings;
 	landingPageSettings: LandingPageVariant;
+	oneTimeCheckoutSettings: OneTimeCheckoutVariant;
 };
 
 function paymentMethodIsActive(paymentMethod: PaymentMethod) {
@@ -257,6 +259,7 @@ export function OneTimeCheckoutComponent({
 	useStripeExpressCheckout,
 	nudgeSettings,
 	landingPageSettings,
+	oneTimeCheckoutSettings,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -266,13 +269,6 @@ export function OneTimeCheckoutComponent({
 
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
-
-	const settings = getSettings();
-	const { selectedAmountsVariant } = getAmountsTestVariant(
-		countryId,
-		countryGroupId,
-		settings,
-	);
 
 	let customAmountsData;
 	const customAmountsParam = urlSearchParams.get('amounts');
@@ -285,9 +281,10 @@ export function OneTimeCheckoutComponent({
 		};
 	}
 
-	const { amountsCardData } = selectedAmountsVariant;
+	const amountsDataFromOneTimeCheckoutSettings =
+		oneTimeCheckoutSettings.amounts;
 	const { amounts, defaultAmount, hideChooseYourAmount } =
-		customAmountsData ?? amountsCardData['ONE_OFF'];
+		customAmountsData ?? amountsDataFromOneTimeCheckoutSettings;
 
 	const { preSelectedPriceCard, preSelectedOtherAmount } = getPreSelectedAmount(
 		preSelectedAmountParam,
@@ -617,13 +614,25 @@ export function OneTimeCheckoutComponent({
 						`}
 					>
 						<div css={titleAndButtonContainer}>
-							<h2 css={title}>Support just once</h2>
+							<h2 css={title}>
+								<span
+									dangerouslySetInnerHTML={{
+										__html: getSanitisedHtml(oneTimeCheckoutSettings.heading),
+									}}
+								/>
+							</h2>
 							<BackButton
 								path={`/${supportRegionId}/contribute`}
 								buttonText="back"
 							/>
 						</div>
-						<p css={standFirst}>Support us with the amount of your choice.</p>
+						<p css={standFirst}>
+							<span
+								dangerouslySetInnerHTML={{
+									__html: getSanitisedHtml(oneTimeCheckoutSettings.subheading),
+								}}
+							/>
+						</p>
 						<PriceCards
 							amounts={amounts}
 							selectedAmount={selectedPriceCard}

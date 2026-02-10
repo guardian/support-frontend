@@ -27,6 +27,7 @@ case class AllSettings(
     metricUrl: MetricUrl,
     landingPageTests: List[LandingPageTest],
     checkoutNudgeTests: List[CheckoutNudgeTest],
+    oneTimeCheckoutTests: List[OneTimeCheckoutTest],
     productsWithThankYouOnboarding: List[String] =
       AllSettings.productsWithThankYouOnboarding.toList.map(_.getClass.getSimpleName.stripSuffix("$")),
 )
