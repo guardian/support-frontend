@@ -47,12 +47,7 @@ const weeklyHeroParagraph = css`
 		margin-bottom: ${space[9]}px;
 	}
 `;
-const weeklyShowOnMobile = css`
-	display: block;
-	${from.mobileLandscape} {
-		display: none;
-	}
-`;
+
 const linkButtonColour = css`
 	color: ${palette.neutral[7]};
 `;
@@ -70,54 +65,6 @@ const strapLineColour = (enableWeeklyDigital: boolean) => css`
 		? palette.brand[800]
 		: palette.brandAlt[400]};
 `;
-
-const getRegionalCopyFor = (region: CountryGroupId): JSX.Element => {
-	return region === GBPCountries ? (
-		<span>
-			Find clarity
-			<br css={weeklyShowOnMobile} /> with the Guardian&apos;s global magazine
-		</span>
-	) : (
-		<span>
-			Read The
-			<br css={weeklyShowOnMobile} /> Guardian in print
-		</span>
-	);
-};
-
-const getFirstParagraph = (
-	promotionCopy: PromotionCopy,
-	isGift: boolean,
-): JSX.Element | null => {
-	if (promotionCopy.description) {
-		return promotionHTML(promotionCopy.description);
-	}
-
-	if (isGift) {
-		return (
-			<>
-				<p>
-					Gift the Guardian Weekly magazine to someone today, so they can gain a
-					deeper understanding of the issues they care about. They’ll find
-					in-depth reporting, alongside news, opinion pieces and long reads from
-					around the globe. From unpicking the election results to debunking
-					climate misinformation, they can take time with the Guardian Weekly to
-					help them make sense of the world.
-				</p>
-			</>
-		);
-	}
-
-	return (
-		<>
-			The Guardian Weekly takes you beyond the headlines to give you a deeper
-			understanding of the issues that really matter. Inside you’ll find the
-			week’s most memorable stories brought to life with striking photography.
-			Featuring a roundup of global news, opinion and long reads, all handpicked
-			from the Guardian and Observer.
-		</>
-	);
-};
 
 type WeeklyHeroProps = {
 	isGift: boolean;
