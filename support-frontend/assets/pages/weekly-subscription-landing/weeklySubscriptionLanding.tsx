@@ -53,10 +53,10 @@ const weeklyDigitalSpacing = css`
 		padding: ${space[8]}px 0 ${space[9]}px;
 	}
 	${from.leftCol} {
-		width: calc(100% - 64px);
+		width: calc(100% - 40px);
 	}
 	${from.wide} {
-		width: calc(100% - 160px);
+		width: calc(100% - 64px);
 	}
 `;
 

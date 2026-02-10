@@ -34,13 +34,13 @@ const benefitsContainer = css`
 	width: 100%;
 	${from.desktop} {
 		padding-right: ${space[5]}px;
-		max-width: 488px;
+		max-width: 508px;
 	}
 	${from.leftCol} {
-		max-width: 516px;
+		max-width: 536px;
 	}
 	${from.wide} {
-		max-width: 600px;
+		max-width: 620px;
 	}
 `;
 const imageContainerDesktop = css`
@@ -54,7 +54,6 @@ const imageContainerDesktop = css`
 		}
 	}
 `;
-
 const imageContainerLeftCol = css`
 	display: none;
 	${from.leftCol} {
@@ -73,7 +72,6 @@ const imageContainerLeftCol = css`
 		}
 	}
 `;
-
 const headingContainer = css`
 	${headlineBold24};
 	margin-bottom: ${space[8]}px;
@@ -92,10 +90,10 @@ const benefitsList = css`
 const digitalRewardsList = css`
 	${textSans17};
 `;
+
 type WeeklyBenefitsPropTypes = {
 	planData?: PlanData;
 };
-
 export function WeeklyBenefits({
 	planData,
 }: WeeklyBenefitsPropTypes): JSX.Element {
