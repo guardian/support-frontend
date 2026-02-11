@@ -131,7 +131,7 @@ export function WeeklyBenefits({
 				<GridImage
 					gridId={`weeklyBenefitHeroLeftCol`}
 					srcSizes={[541, 621]}
-					sizes="(min-width: 541px) 541px, (max-width: 621px) 621px"
+					sizes="(min-width: 541px) 541px, (min-width: 621px) 621px"
 					imgType="png"
 					altText="Illustration of The Guardian Weekly benefits"
 				/>
