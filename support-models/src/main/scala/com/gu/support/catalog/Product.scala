@@ -291,12 +291,13 @@ case object GuardianWeekly extends Product {
       id: String,
       billingPeriod: BillingPeriod,
       description: String,
+      productOptions: ProductOptions = NoProductOptions,
       readerType: ReaderType = Direct,
   ) = ProductRatePlan(
     id,
     billingPeriod,
     Domestic,
-    NoProductOptions,
+    productOptions,
     description,
     readerType = readerType,
   )
@@ -305,12 +306,13 @@ case object GuardianWeekly extends Product {
       id: String,
       billingPeriod: BillingPeriod,
       description: String,
+      productOptions: ProductOptions = NoProductOptions,
       readerType: ReaderType = Direct,
   ) = ProductRatePlan(
     id,
     billingPeriod,
     RestOfWorld,
-    NoProductOptions,
+    productOptions,
     description,
     readerType = readerType,
   )
@@ -320,13 +322,31 @@ case object GuardianWeekly extends Product {
       PROD -> List(
         restOfWorld("2c92a0fe6619b4b601661ab300222651", Annual, "Guardian Weekly annual, rest of world delivery"),
         restOfWorld(
+          "8a1296cc9bf9167b019c2925e5f1697c",
+          Annual,
+          "Guardian Weekly annual + Digital, rest of world delivery",
+          PlusDigital,
+        ),
+        restOfWorld(
           "2c92a0ff67cebd140167f0a2f66a12eb",
           Annual,
           "Guardian Weekly one year, rest of world delivery",
           readerType = Gift,
         ),
         restOfWorld("2c92a0086619bf8901661ab02752722f", Quarterly, "Guardian Weekly quarterly, rest of world delivery"),
+        restOfWorld(
+          "8a1286eb9bf8fee6019c2924e3c84552",
+          Quarterly,
+          "Guardian Weekly quarterly + Digital, rest of world delivery",
+          PlusDigital,
+        ),
         restOfWorld("2c92a0ff79ac64e30179ae45669b3a83", Monthly, "Guardian Weekly monthly, rest of world delivery"),
+        restOfWorld(
+          "8a1295179bf91686019c2923c1d2487a",
+          Monthly,
+          "Guardian Weekly monthly + Digital, rest of world delivery",
+          PlusDigital,
+        ),
         restOfWorld(
           "2c92a0076dd9892e016df8503e7c6c48",
           Quarterly,
@@ -335,13 +355,31 @@ case object GuardianWeekly extends Product {
         ),
         domestic("2c92a0fe6619b4b901661aa8e66c1692", Annual, "Guardian Weekly annual, domestic delivery"),
         domestic(
+          "71a10c626869c3262f1c33d50fd3000f",
+          Annual,
+          "Guardian Weekly annual + Digital, domestic delivery",
+          PlusDigital,
+        ),
+        domestic(
           "2c92a0ff67cebd0d0167f0a1a834234e",
           Annual,
           "Guardian Weekly one year, domestic delivery",
           readerType = Gift,
         ),
         domestic("2c92a0fe6619b4b301661aa494392ee2", Quarterly, "Guardian Weekly quarterly, domestic delivery"),
+        domestic(
+          "71a1b1d5ae19c3274a6c33d4e8c80000",
+          Quarterly,
+          "Guardian Weekly quarterly + Digital, domestic delivery",
+          PlusDigital,
+        ),
         domestic("2c92a0fd79ac64b00179ae3f9d474960", Monthly, "Guardian Weekly monthly, domestic delivery"),
+        domestic(
+          "71a1889a11e9c3262efc33d4d2e6003d",
+          Monthly,
+          "Guardian Weekly monthly + Digital, domestic delivery",
+          PlusDigital,
+        ),
         domestic(
           "2c92a00e6dd988e2016df85387417498",
           Quarterly,
@@ -352,13 +390,31 @@ case object GuardianWeekly extends Product {
       CODE -> List(
         restOfWorld("2c92c0f965f2122101660fb33ed24a45", Annual, "Guardian Weekly annual, rest of world delivery"),
         restOfWorld(
+          "71a10c626ff9c22b079c245239af0009",
+          Annual,
+          "Guardian Weekly annual + Digital, rest of world delivery",
+          PlusDigital,
+        ),
+        restOfWorld(
           "2c92c0f967caee410167eff78e7b5244",
           Annual,
           "Guardian Weekly one year, rest of world delivery",
           readerType = Gift,
         ),
         restOfWorld("2c92c0f965f2122101660fb81b745a06", Quarterly, "Guardian Weekly quarterly, rest of world delivery"),
+        restOfWorld(
+          "71a10c6268a9c22b079c2452f51f0137",
+          Quarterly,
+          "Guardian Weekly quarterly + Digital, rest of world delivery",
+          PlusDigital,
+        ),
         restOfWorld("2c92c0f878ac402c0178acb3a90a3620", Monthly, "Guardian Weekly monthly, rest of world delivery"),
+        restOfWorld(
+          "71a17af0e0e9c22c33ec241bf657005b",
+          Monthly,
+          "Guardian Weekly monthly + Digital, rest of world delivery",
+          PlusDigital,
+        ),
         restOfWorld(
           "2c92c0f96df75b5a016df81ba1c62609",
           Quarterly,
@@ -367,13 +423,31 @@ case object GuardianWeekly extends Product {
         ),
         domestic("2c92c0f965d280590165f16b1b9946c2", Annual, "Guardian Weekly annual, domestic delivery"),
         domestic(
+          "71a10c626869c3262f1c33d50fd3000f",
+          Annual,
+          "Guardian Weekly annual + Digital, domestic delivery",
+          PlusDigital,
+        ),
+        domestic(
           "2c92c0f867cae0700167eff921734f7b",
           Annual,
           "Guardian Weekly one year, domestic delivery",
           readerType = Gift,
         ),
         domestic("2c92c0f965dc30640165f150c0956859", Quarterly, "Guardian Weekly quarterly, domestic delivery"),
+        domestic(
+          "71a1b1d5ae19c3274a6c33d4e8c80000",
+          Quarterly,
+          "Guardian Weekly quarterly + Digital, domestic delivery",
+          PlusDigital,
+        ),
         domestic("2c92c0f878ac40300178acaa04bb401d", Monthly, "Guardian Weekly monthly, domestic delivery"),
+        domestic(
+          "71a1889a11e9c3262efc33d4d2e6003d",
+          Monthly,
+          "Guardian Weekly monthly + Digital, domestic delivery",
+          PlusDigital,
+        ),
         domestic(
           "2c92c0f96ded216a016df491134d4091",
           Quarterly,
