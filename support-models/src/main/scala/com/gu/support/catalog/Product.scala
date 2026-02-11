@@ -355,7 +355,7 @@ case object GuardianWeekly extends Product {
         ),
         domestic("2c92a0fe6619b4b901661aa8e66c1692", Annual, "Guardian Weekly annual, domestic delivery"),
         domestic(
-          "71a10c626869c3262f1c33d50fd3000f",
+          "8a1288599c2f45d4019c33de05fd6804",
           Annual,
           "Guardian Weekly annual + Digital, domestic delivery",
           PlusDigital,
@@ -368,14 +368,14 @@ case object GuardianWeekly extends Product {
         ),
         domestic("2c92a0fe6619b4b301661aa494392ee2", Quarterly, "Guardian Weekly quarterly, domestic delivery"),
         domestic(
-          "71a1b1d5ae19c3274a6c33d4e8c80000",
+          "8a129dff9c2f5e67019c33de1a2b1208",
           Quarterly,
           "Guardian Weekly quarterly + Digital, domestic delivery",
           PlusDigital,
         ),
         domestic("2c92a0fd79ac64b00179ae3f9d474960", Monthly, "Guardian Weekly monthly, domestic delivery"),
         domestic(
-          "71a1889a11e9c3262efc33d4d2e6003d",
+          "8a129dff9c2f5e67019c33de28dc1234",
           Monthly,
           "Guardian Weekly monthly + Digital, domestic delivery",
           PlusDigital,
