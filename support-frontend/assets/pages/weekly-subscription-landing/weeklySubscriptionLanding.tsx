@@ -110,6 +110,7 @@ export function WeeklyLandingPage({
 	const fulfilmentOption: PrintFulfilmentOptions =
 		countryGroupId === 'International' ? RestOfWorld : Domestic;
 	const planData = getPlanData('NoProductOptions', fulfilmentOption);
+	console.log('*** planData', planData);
 	return (
 		<PageScaffold
 			id={pageQaId}

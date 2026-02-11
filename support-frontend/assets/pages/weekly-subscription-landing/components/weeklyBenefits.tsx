@@ -91,12 +91,10 @@ const digitalRewardsList = css`
 	${textSans17};
 `;
 
-type WeeklyBenefitsPropTypes = {
+export type WeeklyBenefitsProps = {
 	planData?: PlanData;
 };
-export function WeeklyBenefits({
-	planData,
-}: WeeklyBenefitsPropTypes): JSX.Element {
+export function WeeklyBenefits({ planData }: WeeklyBenefitsProps): JSX.Element {
 	return (
 		<section css={weeklyBenefitsContainer} id="subscribeWeeklyBenefits">
 			<div css={benefitsContainer}>
