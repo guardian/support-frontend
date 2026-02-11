@@ -439,7 +439,7 @@ export const productCatalogDescription: Record<
 		benefits: [guardianWeeklyBenefit],
 		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
-			Monthly: {
+			MonthlyPlus: {
 				billingPeriod: BillingPeriod.Monthly,
 			},
 			OneYearGift: {
@@ -447,7 +447,7 @@ export const productCatalogDescription: Record<
 				hideSimilarProductsConsent: true,
 				fixedTerm: true,
 			},
-			Annual: {
+			AnnualPlus: {
 				billingPeriod: BillingPeriod.Annual,
 			},
 			Quarterly: {
@@ -466,7 +466,7 @@ export const productCatalogDescription: Record<
 		benefits: [guardianWeeklyBenefit],
 		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
-			Monthly: {
+			MonthlyPlus: {
 				billingPeriod: BillingPeriod.Monthly,
 			},
 			OneYearGift: {
@@ -474,10 +474,10 @@ export const productCatalogDescription: Record<
 				hideSimilarProductsConsent: true,
 				fixedTerm: true,
 			},
-			Annual: {
+			AnnualPlus: {
 				billingPeriod: BillingPeriod.Annual,
 			},
-			Quarterly: {
+			QuarterlyPlus: {
 				billingPeriod: BillingPeriod.Quarterly,
 			},
 			ThreeMonthGift: {

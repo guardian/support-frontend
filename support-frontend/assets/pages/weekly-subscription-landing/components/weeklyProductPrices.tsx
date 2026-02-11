@@ -46,6 +46,7 @@ const getCheckoutUrl = (
 	countryId: IsoCountry,
 	billingPeriod: RecurringBillingPeriod,
 	orderIsGift: boolean,
+	enableWeeklyDigitalPlans: boolean,
 	promotion?: Promotion,
 ): string => {
 	const countryGroupId = CountryGroup.fromCountry(countryId) ?? GBPCountries;
@@ -57,7 +58,11 @@ const getCheckoutUrl = (
 	return addQueryParamsToURL(url, {
 		promoCode: promotion?.promoCode,
 		product: productGuardianWeekly,
-		ratePlan: billingPeriodToRatePlan(billingPeriod, orderIsGift),
+		ratePlan: billingPeriodToRatePlan(
+			billingPeriod,
+			orderIsGift,
+			enableWeeklyDigitalPlans,
+		),
 	});
 };
 
@@ -102,6 +107,7 @@ const weeklyProductProps = (
 	billingPeriod: RecurringBillingPeriod,
 	productPrice: ProductPrice,
 	orderIsAGift = false,
+	enableWeeklyDigitalPlans = false,
 ) => {
 	const promotion = getAppliedPromo(productPrice.promotions);
 	const mainDisplayPrice = getMainDisplayPrice(productPrice, promotion);
@@ -130,7 +136,13 @@ const weeklyProductProps = (
 			<span>{getSimplifiedPriceDescription(productPrice, billingPeriod)}</span>
 		),
 		buttonCopy: 'Subscribe now',
-		href: getCheckoutUrl(countryId, billingPeriod, orderIsAGift, promotion),
+		href: getCheckoutUrl(
+			countryId,
+			billingPeriod,
+			orderIsAGift,
+			enableWeeklyDigitalPlans,
+			promotion,
+		),
 		label,
 		onClick: sendTrackingEventsOnClick(trackingProperties),
 		onView: sendTrackingEventsOnView(trackingProperties),
@@ -142,12 +154,14 @@ type WeeklyProductPricesProps = {
 	countryId: IsoCountry;
 	productPrices: ProductPrices | null | undefined;
 	orderIsAGift: boolean;
+	enableWeeklyDigitalPlans: boolean;
 };
 
 const getProducts = ({
 	countryId,
 	productPrices,
 	orderIsAGift,
+	enableWeeklyDigitalPlans,
 }: WeeklyProductPricesProps): Product[] => {
 	const billingPeriodsToUse = orderIsAGift
 		? weeklyGiftBillingPeriods
@@ -160,6 +174,7 @@ const getProducts = ({
 					countryId,
 					billingPeriod,
 					getWeeklyFulfilmentOption(countryId),
+					enableWeeklyDigitalPlans ? 'PlusDigital' : 'NoProductOptions',
 			  )
 			: {
 					price: 0,
@@ -172,6 +187,7 @@ const getProducts = ({
 			billingPeriod,
 			productPrice,
 			orderIsAGift,
+			enableWeeklyDigitalPlans,
 		);
 	});
 };
@@ -180,6 +196,7 @@ function WeeklyProductPrices({
 	countryId,
 	productPrices,
 	orderIsAGift,
+	enableWeeklyDigitalPlans,
 }: WeeklyProductPricesProps): JSX.Element | null {
 	if (!productPrices) {
 		return null;
@@ -189,6 +206,7 @@ function WeeklyProductPrices({
 		countryId,
 		productPrices,
 		orderIsAGift,
+		enableWeeklyDigitalPlans: enableWeeklyDigitalPlans,
 	});
 
 	return <Prices products={products} orderIsAGift={orderIsAGift} />;

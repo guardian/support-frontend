@@ -58,7 +58,7 @@ const weeklyDigitalSpacing = css`
 	}
 `;
 
-const { enableWeeklyDigital } = getFeatureFlags();
+const { enableWeeklyDigital, enableWeeklyDigitalPlans } = getFeatureFlags();
 
 export type WeeklyLandingPageProps = {
 	countryId: IsoCountry;
@@ -140,6 +140,7 @@ export function WeeklyLandingPage({
 								countryId={countryId}
 								productPrices={productPrices}
 								orderIsAGift={orderIsAGift}
+								enableWeeklyDigitalPlans={enableWeeklyDigitalPlans}
 							/>
 						</CentredContainer>
 					</FullWidthContainer>
