@@ -13,6 +13,7 @@ import {
 	createSetupToken,
 	exchangeSetupTokenForPaymentToken,
 } from '../checkout/helpers/paypalCompletePayments';
+import { getPayPalEnv } from '../checkout/helpers/payPalSdkOptions';
 import { paypalSdkFundingBlocklist } from '../checkout/helpers/payPalSdkOptions';
 import type { PaymentMethod } from './paymentFields';
 
@@ -58,7 +59,7 @@ export function SubmitButton({
 					<input type="hidden" name="payPalBAID" value={payPalBAID} />
 
 					<PayPalButton
-						env={isProd() && !isTestUser ? 'production' : 'sandbox'}
+						env={getPayPalEnv(isProd(), isTestUser)}
 						style={{
 							color: 'blue',
 							size: 'responsive',
@@ -166,7 +167,7 @@ export function SubmitButton({
 					<PayPalScriptProvider
 						options={{
 							clientId: 'sb', // TODO: use a real client ID
-							environment: 'sandbox',
+							environment: getPayPalEnv(isProd(), isTestUser),
 							currency: currencyKey,
 							debug: false,
 							disableFunding: paypalSdkFundingBlocklist,
