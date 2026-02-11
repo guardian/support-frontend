@@ -57,8 +57,8 @@ export default function BenefitsList({
 		>
 			{title && <h4>{title}</h4>}
 			<ul css={benefitsList}>
-				{listItems.map((item) => (
-					<li css={benefitsItem}>
+				{listItems.map((item, index) => (
+					<li key={`benefit${index}`} css={benefitsItem}>
 						<SvgTickRound
 							isAnnouncedByScreenReader
 							size="xsmall"
