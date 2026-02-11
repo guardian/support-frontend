@@ -37,8 +37,8 @@ const benefitsSubscriptionLabel = (
 const benefitsLabel = {
 	HomeDelivery: benefitsHomeDeliveryLabel,
 	Collection: benefitsSubscriptionLabel,
-	Domestic: <></>,
-	RestOfWorld: <></>,
+	Domestic: undefined,
+	RestOfWorld: undefined,
 };
 
 const digitalRewardsLabel = (
