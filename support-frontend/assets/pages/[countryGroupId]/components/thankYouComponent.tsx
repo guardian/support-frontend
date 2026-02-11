@@ -9,6 +9,7 @@ import { observerThemeButton } from 'components/observer-layout/styles';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { Participations } from 'helpers/abTests/models';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import { Country } from 'helpers/internationalisation/classes/country';
 import {
@@ -103,6 +104,8 @@ export function ThankYouComponent({
 	}
 	const isPending = order.status === 'pending';
 
+	const { enableWeeklyDigital } = getFeatureFlags();
+
 	/**
 	 * contributionType is only applicable to SupporterPlus and Contributions.
 	 * We should remove it for something more generic.
@@ -173,6 +176,7 @@ export function ThankYouComponent({
 	const isGuardianPaperPlus = isPaperPlusSub(productKey, ratePlanKey); // Observer not a Plus plan
 	const isPrint = isPrintProduct(productKey);
 	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
+	const isGuardianWeeklyDigital = isGuardianWeekly && enableWeeklyDigital;
 
 	const observerPrint = getObserver(productKey, ratePlanKey);
 	const isObserverSubDomain = isObserverSubdomain();
@@ -282,7 +286,10 @@ export function ThankYouComponent({
 		),
 		...maybeThankYouModule(isGuardianAdLite || isPrint, 'whatNext'),
 		...maybeThankYouModule(
-			isTierThree || isSupporterPlus || (isGuardianPrint && !isGuardianWeekly),
+			isTierThree ||
+				isSupporterPlus ||
+				isGuardianWeeklyDigital ||
+				(isGuardianPrint && !isGuardianWeekly),
 			'appsDownload',
 		),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
@@ -292,7 +299,7 @@ export function ThankYouComponent({
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
 		...maybeThankYouModule(
-			isDigitalEdition || isGuardianPaperPlus,
+			isDigitalEdition || isGuardianPaperPlus || isGuardianWeeklyDigital,
 			'newspaperArchiveBenefit',
 		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
