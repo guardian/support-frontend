@@ -20,3 +20,6 @@ export const paypalSdkFundingBlocklist = [
 	'sofort',
 	'venmo',
 ];
+
+export const getPayPalEnv = (isProd: boolean, isTestUser: boolean) =>
+	isProd && !isTestUser ? 'production' : 'sandbox';
