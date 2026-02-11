@@ -11,7 +11,11 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
-import type { PrintFulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import {
+	Domestic,
+	type PrintFulfilmentOptions,
+	RestOfWorld,
+} from '@modules/product/fulfilmentOptions';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
@@ -104,7 +108,7 @@ export function WeeklyLandingPage({
 	const sanitisedPromoCopy = getSanitisedPromoCopy(promotionCopy, orderIsAGift);
 
 	const fulfilmentOption: PrintFulfilmentOptions =
-		countryGroupId == 'International' ? 'RestOfWorld' : 'Domestic';
+		countryGroupId === 'International' ? RestOfWorld : Domestic;
 	const planData = getPlanData('NoProductOptions', fulfilmentOption);
 	return (
 		<PageScaffold
