@@ -71,6 +71,7 @@ class AppComponents(context: Context)
     authCodeFlowController,
     payPalRegularController,
     payPalOneOffController,
+    payPalCompletePaymentsController,
     directDebitController,
     promotionsController,
     pricesController,
