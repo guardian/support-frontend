@@ -46,7 +46,7 @@ import type { ActivePaperProductOptions } from '../../../helpers/productCatalogT
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import {
 	filterProductDescriptionBenefits,
-	getPaperPlusDigitalBenefits,
+	getPrintPlusDigitalBenefits,
 } from '../checkout/helpers/benefitsChecklist';
 import {
 	getReturnAddress,
@@ -220,7 +220,7 @@ export function ThankYouComponent({
 			return [...productBenefits, ...digitalSubscriptionAdditionalBenefits];
 		}
 		if (isGuardianPaperPlus || !!observerPrint) {
-			return getPaperPlusDigitalBenefits(productKey, ratePlanKey) ?? [];
+			return getPrintPlusDigitalBenefits(productKey, ratePlanKey) ?? [];
 		}
 		return [];
 	};

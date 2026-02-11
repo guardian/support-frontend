@@ -19,9 +19,10 @@ import type {
 	ProductDescription,
 } from '../../../../helpers/productCatalog';
 
-export const getPaperPlusDigitalBenefits = (
+export const getPrintPlusDigitalBenefits = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
+	enableWeeklyDigital?: boolean,
 ): BenefitsCheckListData[] | undefined => {
 	switch (productKey) {
 		case 'HomeDelivery':
@@ -34,6 +35,19 @@ export const getPaperPlusDigitalBenefits = (
 				ratePlanKey as PaperProductOptions,
 				'Collection',
 			);
+		case 'GuardianWeeklyDomestic':
+		case 'GuardianWeeklyRestOfWorld': {
+			const weeklyBenefits = enableWeeklyDigital
+				? getPlanBenefitData(
+						'NoProductOptions',
+						productKey === 'GuardianWeeklyDomestic'
+							? 'Domestic'
+							: 'RestOfWorld',
+				  )
+				: undefined;
+			console.log('*** weeklyBenefits', weeklyBenefits, enableWeeklyDigital);
+			return weeklyBenefits;
+		}
 		default:
 			return undefined;
 	}

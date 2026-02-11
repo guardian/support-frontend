@@ -14,6 +14,7 @@ import {
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	type ActiveProductKey,
@@ -33,7 +34,7 @@ import { buildBackButtonPath } from '../checkout/helpers/backButton';
 import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
-	getPaperPlusDigitalBenefits,
+	getPrintPlusDigitalBenefits,
 } from '../checkout/helpers/benefitsChecklist';
 import { ukSpecificAdditionalBenefit } from '../student/components/StudentHeader';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
@@ -122,8 +123,13 @@ export default function CheckoutSummary({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
+	const isWeekly =
+		productKey === 'GuardianWeeklyDomestic' ||
+		productKey === 'GuardianWeeklyRestOfWorld';
+	const enableWeeklyDigital = isWeekly && getFeatureFlags().enableWeeklyDigital;
+
 	const benefitsCheckListData =
-		getPaperPlusDigitalBenefits(productKey, ratePlanKey) ??
+		getPrintPlusDigitalBenefits(productKey, ratePlanKey, enableWeeklyDigital) ??
 		getBenefitsChecklistFromLandingPageTool(
 			productKey,
 			landingPageSettings,

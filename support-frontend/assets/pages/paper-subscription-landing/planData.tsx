@@ -1,12 +1,6 @@
 import { css } from '@emotion/react';
-import type {
-	PaperFulfilmentOptions,
-	PrintFulfilmentOptions,
-} from '@modules/product/fulfilmentOptions';
-import {
-	type PaperProductOptions,
-	type PrintProductOptions,
-} from '@modules/product/productOptions';
+import type { PrintFulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import { type PrintProductOptions } from '@modules/product/productOptions';
 import type { BenefitsCheckListData } from 'components/checkoutBenefits/benefitsCheckList';
 
 const benefitStyle = css`
@@ -267,10 +261,11 @@ export default function getPlanData(
 }
 
 export function getPlanBenefitData(
-	ratePlanKey: PaperProductOptions,
-	fulfillmentOption: PaperFulfilmentOptions,
+	ratePlanKey: PrintProductOptions,
+	fulfillmentOption: PrintFulfilmentOptions,
 ): BenefitsCheckListData[] | undefined {
 	const ratePlanData = getPlanData(ratePlanKey, fulfillmentOption);
+	console.log('*** ratePlanData', ratePlanData, ratePlanKey, fulfillmentOption);
 	if (!ratePlanData) {
 		return undefined;
 	}
