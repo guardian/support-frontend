@@ -36,6 +36,7 @@ function Template() {
 					</span>
 				}
 				ctaText="See pricing options"
+				ctaLink="#HomeDelivery"
 				onClick={() => {}}
 			/>
 		</div>

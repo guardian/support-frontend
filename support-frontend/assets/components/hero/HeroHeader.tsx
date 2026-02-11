@@ -17,19 +17,21 @@ import {
 } from './HeroHeaderStyles';
 
 export default function HeroHeader({
-	heroImage,
 	title,
 	description,
 	roundel,
+	heroImage,
 	ctaText,
+	ctaLink,
 	onClick,
 }: {
+	title: JSX.Element;
+	ctaText: string;
+	ctaLink: string;
+	onClick: () => void;
 	heroImage: ReactElement<GridImg> | ReactElement<GridPictureProp>;
 	roundel?: string;
-	title: JSX.Element;
-	description: JSX.Element | null;
-	ctaText: string;
-	onClick: () => void;
+	description?: JSX.Element;
 }) {
 	return (
 		<CentredContainer>
@@ -41,13 +43,13 @@ export default function HeroHeader({
 			>
 				<section css={heroCopy}>
 					<h2 css={heroTitle}>{title}</h2>
-					<p css={heroParagraph}>{description}</p>
+					{description && <p css={heroParagraph}>{description}</p>}
 					<LinkButton
 						onClick={onClick}
 						priority="tertiary"
 						iconSide="right"
 						icon={<SvgArrowDownStraight />}
-						href="#HomeDelivery"
+						href={ctaLink}
 						theme={themeButtonBrandAlt}
 					>
 						{ctaText}
