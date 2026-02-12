@@ -35,14 +35,14 @@ class StudentLandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
       "status" -> stringAttr("Live"),
       "priority" -> numberAttr(3),
       "regionId" -> stringAttr("AUDCountries"),
-      "variants" -> ListAttr(
+      "variants" -> listAttr(
         List(
           mapAttr(
             Map(
               "name" -> stringAttr("offer"),
               "heading" -> stringAttr("test heading"),
               "subheading" -> stringAttr("test subheading"),
-              "image" -> MapAttr(
+              "image" -> mapAttr(
                 "altText" -> stringAttr("Feast and News Apps"),
                 "desktopUrl" -> stringAttr(
                   "https://i.guim.co.uk/img/media/e78041ba4789772737f9daa2f54682630ef6e3fa/0_0_880_586/880.jpg?quality=100&s=05fd530c55c7b5102fbbb7a509d1dd98",
@@ -54,14 +54,14 @@ class StudentLandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
                   "https://i.guim.co.uk/img/media/e78041ba4789772737f9daa2f54682630ef6e3fa/0_0_880_586/880.jpg?quality=100&s=05fd530c55c7b5102fbbb7a509d1dd98",
                 ),
               ),
-              "institution" -> MapAttr(
+              "institution" -> mapAttr(
                 "name" -> stringAttr("Guardian University"),
                 "acronym" -> stringAttr("UTS"),
                 "logoUrl" -> stringAttr("https://www.theguardian.com"),
               ),
-              "promoCodes" -> MapAttr(
+              "promoCodes" -> mapAttr(
                 Map(
-                  "value" -> ListAttr(List(stringAttr("UTS_STUDENT"))),
+                  "value" -> listAttr(List(stringAttr("UTS_STUDENT"))),
                 ),
               ),
             ),
