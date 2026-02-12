@@ -1,6 +1,7 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
+import { useEffect, useState } from 'react';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
 import { isProd } from 'helpers/urls/url';
@@ -52,6 +53,15 @@ export function SubmitButton({
 	billingPeriod,
 	csrf,
 }: SubmitButtonProps) {
+	const [formIsValid, setFormIsValid] = useState<boolean>(true);
+	// I want to run this on every render, but only if paymentMethod has been selected
+	// to avoid going straight into an invalid state.
+	useEffect(() => {
+		if (paymentMethod) {
+			setFormIsValid(formRef.current?.checkValidity() ?? false);
+		}
+	});
+
 	switch (paymentMethod) {
 		case 'PayPal':
 			return payPalLoaded ? (
@@ -180,6 +190,7 @@ export function SubmitButton({
 								console.log({ setupToken });
 								return setupToken;
 							}}
+							disabled={!formIsValid}
 							onApprove={async (data) => {
 								const approvedSetupToken = (
 									data as unknown as ApprovedSetupToken
@@ -192,6 +203,17 @@ export function SubmitButton({
 
 								// This will trigger a form submission
 								setPayPalPaymentToken(paymentToken);
+							}}
+							onClick={() => {
+								// The button won't actually submit if the form
+								// isn't valid but we can check here and if invalid
+								// the browser will scroll the user to the first
+								// error if necessary
+								const valid = formRef.current?.checkValidity();
+								if (!valid) {
+									/** We run this so the form validation happens and focus on errors */
+									formRef.current?.requestSubmit();
+								}
 							}}
 						/>
 					</PayPalScriptProvider>
