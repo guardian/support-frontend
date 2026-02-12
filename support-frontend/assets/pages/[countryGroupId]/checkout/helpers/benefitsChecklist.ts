@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import type { PaperProductOptions } from '@modules/product/productOptions';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { getPlanBenefitData } from 'pages/paper-subscription-landing/planData';
 import type { BenefitsCheckListData } from '../../../../components/checkoutBenefits/benefitsCheckList';
@@ -25,15 +24,10 @@ export const getPaperPlusDigitalBenefits = (
 ): BenefitsCheckListData[] | undefined => {
 	switch (productKey) {
 		case 'HomeDelivery':
-			return getPlanBenefitData(
-				ratePlanKey as PaperProductOptions,
-				'HomeDelivery',
-			);
 		case 'SubscriptionCard':
-			return getPlanBenefitData(
-				ratePlanKey as PaperProductOptions,
-				'Collection',
-			);
+		case 'GuardianWeeklyDomestic':
+		case 'GuardianWeeklyRestOfWorld':
+			return getPlanBenefitData(productKey, ratePlanKey);
 		default:
 			return undefined;
 	}

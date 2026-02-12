@@ -1,13 +1,12 @@
 import { css } from '@emotion/react';
-import type {
-	PaperFulfilmentOptions,
-	PrintFulfilmentOptions,
-} from '@modules/product/fulfilmentOptions';
-import {
-	type PaperProductOptions,
-	type PrintProductOptions,
-} from '@modules/product/productOptions';
+import type { PrintFulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import { type PrintProductOptions } from '@modules/product/productOptions';
 import type { BenefitsCheckListData } from 'components/checkoutBenefits/benefitsCheckList';
+import { getFeatureFlags } from 'helpers/featureFlags';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 
 const benefitStyle = css`
 	display: inline-block;
@@ -247,18 +246,19 @@ const printPlanDescriptions: Record<
 };
 
 export default function getPlanData(
-	ratePlanKey: PrintProductOptions,
+	printProductOptions: PrintProductOptions,
 	fulfillmentOption: PrintFulfilmentOptions,
 ): PlanData | undefined {
-	const description = printPlanDescriptions[fulfillmentOption][ratePlanKey];
+	const description =
+		printPlanDescriptions[fulfillmentOption][printProductOptions];
 	if (!description) {
 		return undefined;
 	}
-	const benefits = getPrintBenefitsMap(fulfillmentOption)[ratePlanKey];
+	const benefits = getPrintBenefitsMap(fulfillmentOption)[printProductOptions];
 	if (!benefits) {
 		return undefined;
 	}
-	const digitalRewards = getPrintDigitalBenefitsMap()[ratePlanKey];
+	const digitalRewards = getPrintDigitalBenefitsMap()[printProductOptions];
 	return {
 		description,
 		benefits,
@@ -266,11 +266,75 @@ export default function getPlanData(
 	};
 }
 
+const getPrintProductOptions = (
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
+	enableWeeklyDigital?: boolean,
+): PrintProductOptions | undefined => {
+	switch (productKey) {
+		case 'HomeDelivery':
+		case 'SubscriptionCard':
+			return ratePlanKey as PrintProductOptions;
+		case 'GuardianWeeklyDomestic':
+		case 'GuardianWeeklyRestOfWorld':
+			return enableWeeklyDigital ? 'NoProductOptions' : undefined;
+		default:
+			return undefined;
+	}
+};
+const getPrintFulfilmentOption = (
+	productKey: ActiveProductKey,
+	enableWeeklyDigital?: boolean,
+): PrintFulfilmentOptions | undefined => {
+	switch (productKey) {
+		case 'HomeDelivery':
+		case 'NationalDelivery':
+			return 'HomeDelivery';
+		case 'SubscriptionCard':
+			return 'Collection';
+		case 'GuardianWeeklyDomestic':
+			return enableWeeklyDigital ? 'Domestic' : undefined;
+		case 'GuardianWeeklyRestOfWorld':
+			return enableWeeklyDigital ? 'RestOfWorld' : undefined;
+		default:
+			return undefined;
+	}
+};
 export function getPlanBenefitData(
-	ratePlanKey: PaperProductOptions,
-	fulfillmentOption: PaperFulfilmentOptions,
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
 ): BenefitsCheckListData[] | undefined {
-	const ratePlanData = getPlanData(ratePlanKey, fulfillmentOption);
+	const isWeekly =
+		productKey === 'GuardianWeeklyDomestic' ||
+		productKey === 'GuardianWeeklyRestOfWorld';
+	const isNotGift = !ratePlanKey.includes('Gift');
+	const enableWeeklyDigital =
+		isWeekly && getFeatureFlags().enableWeeklyDigital && isNotGift;
+
+	const printProductOptions = getPrintProductOptions(
+		productKey,
+		ratePlanKey,
+		enableWeeklyDigital,
+	);
+	if (!printProductOptions) {
+		return undefined;
+	}
+
+	const fulfillmentOption = getPrintFulfilmentOption(
+		productKey,
+		enableWeeklyDigital,
+	);
+	if (!fulfillmentOption) {
+		return undefined;
+	}
+
+	const ratePlanData = getPlanData(printProductOptions, fulfillmentOption);
+	console.log(
+		'*** ratePlanData',
+		ratePlanData,
+		printProductOptions,
+		fulfillmentOption,
+	);
 	if (!ratePlanData) {
 		return undefined;
 	}
