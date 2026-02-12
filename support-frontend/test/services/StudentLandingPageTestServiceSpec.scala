@@ -14,9 +14,10 @@ import io.circe.Decoder
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
-import java.awt.Image
 
-class StudentLandingPageTestServiceSpec extends AsynchFlatSpec with Matchers {
+import scala.jdk.CollectionConverters.{MapHasAsJava, SeqHasAsJava}
+
+class StudentLandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
 
   private def parseDynamoRecord[T: Decoder](record: java.util.Map[String, AttributeValue]): Either[io.circe.Error, T] =
     DynamoJsonConverter.mapToJson(record).as[T]
