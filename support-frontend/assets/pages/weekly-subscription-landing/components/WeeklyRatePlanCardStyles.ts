@@ -52,7 +52,7 @@ export const savingsTextStyle = css`
 	}
 `;
 
-export const cardOffer = css`
+export const discountSummaryStyle = css`
 	${textSans12};
 	margin-top: ${space[2]}px;
 	color: ${palette.neutral[38]};

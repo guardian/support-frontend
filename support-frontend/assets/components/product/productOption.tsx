@@ -41,13 +41,13 @@ export type Product = {
 	price: string;
 	href: string;
 	priceCopy: ReactNode;
-	buttonCopy: string;
 	onClick: () => void;
 	onView: () => void;
 	billingPeriodNoun?: string;
 	discountedPrice?: string;
 	children?: ReactNode;
 	offerCopy?: ReactNode;
+	discountSummary?: string;
 	savingsText?: string | null;
 	showLabel?: boolean;
 	productLabel?: ProductLabelProps;
@@ -157,10 +157,10 @@ function ProductOption(props: Product): JSX.Element {
 					cssOverrides={button}
 					href={props.href}
 					onClick={props.onClick}
-					aria-label={`${props.title}- ${props.buttonCopy}`}
+					aria-label={`${props.title}- Subscribe now`}
 					theme={themeButtonReaderRevenue}
 				>
-					{props.buttonCopy}
+					Subscribe now
 				</LinkButton>
 			</div>
 		</div>

@@ -32,10 +32,13 @@ const priceCardsContainer = css`
 	color: ${neutral[7]};
 	border-radius: ${space[2]}px;
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	width: 100%;
 	justify-content: center;
 	gap: ${space[5]}px;
+	${from.desktop} {
+		flex-direction: row;
+	}
 `;
 
 type WeeklyCardsProps = {
