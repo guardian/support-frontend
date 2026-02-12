@@ -208,6 +208,7 @@ const weeklyDigitalProduct = (
 		billingPeriodNoun: getBillingPeriodNoun(billingPeriod, orderIsAGift),
 		offerCopy,
 		discountSummary,
+		priceCopy: '',
 		savingsText: getSimplifiedPriceDescription(productPrice, billingPeriod),
 		href: getCheckoutUrl(countryId, billingPeriod, orderIsAGift, promotion),
 		showLabel: billingPeriod === BillingPeriod.Quarterly,
