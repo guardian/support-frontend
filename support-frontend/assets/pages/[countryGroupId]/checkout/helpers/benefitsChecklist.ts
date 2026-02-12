@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
-import { getPlanBenefitData } from 'pages/paper-subscription-landing/planData';
 import type { BenefitsCheckListData } from '../../../../components/checkoutBenefits/benefitsCheckList';
 import type { Participations } from '../../../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -12,26 +11,9 @@ import {
 	productCatalogDescription,
 } from '../../../../helpers/productCatalog';
 import type {
-	ActiveProductKey,
-	ActiveRatePlanKey,
 	ProductBenefit,
 	ProductDescription,
 } from '../../../../helpers/productCatalog';
-
-export const getPrintPlusDigitalBenefits = (
-	productKey: ActiveProductKey,
-	ratePlanKey: ActiveRatePlanKey,
-): BenefitsCheckListData[] | undefined => {
-	switch (productKey) {
-		case 'HomeDelivery':
-		case 'SubscriptionCard':
-		case 'GuardianWeeklyDomestic':
-		case 'GuardianWeeklyRestOfWorld':
-			return getPlanBenefitData(productKey, ratePlanKey);
-		default:
-			return undefined;
-	}
-};
 
 const benefitsAsChecklist = ({
 	checked,
