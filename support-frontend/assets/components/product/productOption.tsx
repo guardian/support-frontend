@@ -41,6 +41,7 @@ export type Product = {
 	price: string;
 	href: string;
 	priceCopy: ReactNode;
+	buttonCopy: string;
 	onClick: () => void;
 	onView: () => void;
 	billingPeriodNoun?: string;
@@ -157,10 +158,10 @@ function ProductOption(props: Product): JSX.Element {
 					cssOverrides={button}
 					href={props.href}
 					onClick={props.onClick}
-					aria-label={`${props.title}- Subscribe now`}
+					aria-label={`${props.title}- ${props.buttonCopy}`}
 					theme={themeButtonReaderRevenue}
 				>
-					Subscribe now
+					{props.buttonCopy}
 				</LinkButton>
 			</div>
 		</div>

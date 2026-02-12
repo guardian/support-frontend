@@ -123,31 +123,12 @@ const getCurrencySymbol = (currencyId: IsoCurrency): string =>
 const getPriceWithSymbol = (currencyId: IsoCurrency, price: number) =>
 	getCurrencySymbol(currencyId) + fixDecimals(price);
 
-const getPromotionLabel = (currency: IsoCurrency, promotion?: Promotion) => {
-	if (!promotion?.discount) {
-		return '';
-	}
-	if (promotion.name.startsWith('12for12')) {
-		return `Special Offer: 12 for ${glyph(currency)}${
-			promotion.discountedPrice ?? '12'
-		}`;
-	} else if (promotion.promoCode.startsWith('GWBLACKFRIDAY')) {
-		return `Black Friday Offer: ${
-			currency === 'GBP' || currency === 'EUR'
-				? `1/3 off`
-				: `${Math.round(promotion.discount.amount)}% off`
-		}`;
-	} else {
-		return `Save ${Math.round(promotion.discount.amount)}%`;
-	}
-};
-
 const weeklyProductProps = (
 	countryId: IsoCountry,
 	billingPeriod: RecurringBillingPeriod,
 	productPrice: ProductPrice,
 	orderIsAGift = false,
-) => {
+): Product => {
 	const promotion = getAppliedPromo(productPrice.promotions);
 	const mainDisplayPrice = getMainDisplayPrice(productPrice, promotion);
 	const offerCopy = promotion?.landingPage?.roundel ?? '';
@@ -162,7 +143,7 @@ const weeklyProductProps = (
 	const is12for12 = promotion?.promoCode.startsWith('12for12') ?? false;
 	const isBlackFriday =
 		promotion?.promoCode.startsWith('GWBLACKFRIDAY') ?? false;
-	const label = getPromotionLabel(productPrice.currency, promotion);
+
 	return {
 		title: getBillingPeriodTitle(billingPeriod, orderIsAGift),
 		price: getPriceWithSymbol(productPrice.currency, mainDisplayPrice),
@@ -175,10 +156,11 @@ const weeklyProductProps = (
 			<span>{getSimplifiedPriceDescription(productPrice, billingPeriod)}</span>
 		),
 		href: getCheckoutUrl(countryId, billingPeriod, orderIsAGift, promotion),
-		label,
+		showLabel: Boolean(promotion?.discount),
 		onClick: sendTrackingEventsOnClick(trackingProperties),
 		onView: sendTrackingEventsOnView(trackingProperties),
 		isSpecialOffer: is12for12 || isBlackFriday,
+		buttonCopy: 'Subscribe now',
 	};
 };
 
@@ -231,5 +213,6 @@ const weeklyDigitalProduct = (
 		showLabel: billingPeriod === BillingPeriod.Quarterly,
 		onClick: sendTrackingEventsOnClick(trackingProperties),
 		onView: sendTrackingEventsOnView(trackingProperties),
+		buttonCopy: 'Subscribe now',
 	};
 };

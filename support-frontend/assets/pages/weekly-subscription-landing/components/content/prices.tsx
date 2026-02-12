@@ -88,6 +88,7 @@ function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
 						price={product.price}
 						offerCopy={product.offerCopy}
 						priceCopy={product.priceCopy}
+						buttonCopy={product.buttonCopy}
 						href={product.href}
 						onClick={product.onClick}
 						onView={product.onView}
