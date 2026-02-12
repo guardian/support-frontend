@@ -43,21 +43,25 @@ class StudentLandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
               "heading" -> stringAttr("test heading"),
               "subheading" -> stringAttr("test subheading"),
               "image" -> mapAttr(
-                "altText" -> stringAttr("Feast and News Apps"),
-                "desktopUrl" -> stringAttr(
-                  "https://i.guim.co.uk/img/media/e78041ba4789772737f9daa2f54682630ef6e3fa/0_0_880_586/880.jpg?quality=100&s=05fd530c55c7b5102fbbb7a509d1dd98",
-                ),
-                "mobileUrl" -> stringAttr(
-                  "https://i.guim.co.uk/img/media/c36718611e0046117943fd69dfe67a4e5fb10f39/0_0_489_197/489.jpg?quality=100&s=de55d641047597a4fe5dce05f2d5105e",
-                ),
-                "tabletUrl" -> stringAttr(
-                  "https://i.guim.co.uk/img/media/e78041ba4789772737f9daa2f54682630ef6e3fa/0_0_880_586/880.jpg?quality=100&s=05fd530c55c7b5102fbbb7a509d1dd98",
+                Map(
+                  "altText" -> stringAttr("Feast and News Apps"),
+                  "desktopUrl" -> stringAttr(
+                    "https://i.guim.co.uk/img/media/e78041ba4789772737f9daa2f54682630ef6e3fa/0_0_880_586/880.jpg?quality=100&s=05fd530c55c7b5102fbbb7a509d1dd98",
+                  ),
+                  "mobileUrl" -> stringAttr(
+                    "https://i.guim.co.uk/img/media/c36718611e0046117943fd69dfe67a4e5fb10f39/0_0_489_197/489.jpg?quality=100&s=de55d641047597a4fe5dce05f2d5105e",
+                  ),
+                  "tabletUrl" -> stringAttr(
+                    "https://i.guim.co.uk/img/media/e78041ba4789772737f9daa2f54682630ef6e3fa/0_0_880_586/880.jpg?quality=100&s=05fd530c55c7b5102fbbb7a509d1dd98",
+                  ),
                 ),
               ),
               "institution" -> mapAttr(
-                "name" -> stringAttr("Guardian University"),
-                "acronym" -> stringAttr("UTS"),
-                "logoUrl" -> stringAttr("https://www.theguardian.com"),
+                Map(
+                  "acronym" -> stringAttr("UTS"),
+                  "logoUrl" -> stringAttr("https://www.theguardian.com"),
+                  "name" -> stringAttr("Guardian University"),
+                ),
               ),
               "promoCodes" -> mapAttr(
                 Map(
