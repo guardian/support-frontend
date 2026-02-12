@@ -14,7 +14,6 @@ import {
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	type ActiveProductKey,
@@ -123,13 +122,8 @@ export default function CheckoutSummary({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
-	const isWeekly =
-		productKey === 'GuardianWeeklyDomestic' ||
-		productKey === 'GuardianWeeklyRestOfWorld';
-	const enableWeeklyDigital = isWeekly && getFeatureFlags().enableWeeklyDigital;
-
 	const benefitsCheckListData =
-		getPrintPlusDigitalBenefits(productKey, ratePlanKey, enableWeeklyDigital) ??
+		getPrintPlusDigitalBenefits(productKey, ratePlanKey) ??
 		getBenefitsChecklistFromLandingPageTool(
 			productKey,
 			landingPageSettings,

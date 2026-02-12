@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import type { PaperProductOptions } from '@modules/product/productOptions';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { getPlanBenefitData } from 'pages/paper-subscription-landing/planData';
 import type { BenefitsCheckListData } from '../../../../components/checkoutBenefits/benefitsCheckList';
@@ -22,32 +21,13 @@ import type {
 export const getPrintPlusDigitalBenefits = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	enableWeeklyDigital?: boolean,
 ): BenefitsCheckListData[] | undefined => {
 	switch (productKey) {
 		case 'HomeDelivery':
-			return getPlanBenefitData(
-				ratePlanKey as PaperProductOptions,
-				'HomeDelivery',
-			);
 		case 'SubscriptionCard':
-			return getPlanBenefitData(
-				ratePlanKey as PaperProductOptions,
-				'Collection',
-			);
 		case 'GuardianWeeklyDomestic':
-		case 'GuardianWeeklyRestOfWorld': {
-			const weeklyBenefits = enableWeeklyDigital
-				? getPlanBenefitData(
-						'NoProductOptions',
-						productKey === 'GuardianWeeklyDomestic'
-							? 'Domestic'
-							: 'RestOfWorld',
-				  )
-				: undefined;
-			console.log('*** weeklyBenefits', weeklyBenefits, enableWeeklyDigital);
-			return weeklyBenefits;
-		}
+		case 'GuardianWeeklyRestOfWorld':
+			return getPlanBenefitData(productKey, ratePlanKey);
 		default:
 			return undefined;
 	}
