@@ -43,12 +43,17 @@ class SettingsIntegrationTest extends AsyncFlatSpec with Matchers with StrictLog
       def getTests(): List[OneTimeCheckoutTest] = Nil
     }
 
+    val mockStudentLandingPageTestService = new StudentLandingPageTestService {
+      def getTests(): List[StudentLandingPageTestService] = Nil
+    }
+
     val maybeAllSettings = for {
       allSettingsProvider <- AllSettingsProvider.fromConfig(
         configuration,
         mockLandingPageTestService,
         mockCheckoutNudgeTestService,
         mockOneTimeCheckoutTestService,
+        mockStudentLandingPageTestService,
       )
       allSettings = allSettingsProvider.getAllSettings()
     } yield allSettings

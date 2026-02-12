@@ -31,8 +31,8 @@ class StudentLandingPageTestServiceSpec extends AsynchFlatSpec with Matchers {
     val dynamoTest = Map(
       "channel" -> stringAttr("StudentLandingPage"),
       "name" -> stringAttr("2026-02-11_SKB-VALIDATION-TEST"),
-      "priority" -> numberAttr(3),
       "status" -> stringAttr("Live"),
+      "priority" -> numberAttr(3),
       "regionId" -> stringAttr("AUDCountries"),
       "variants" -> ListAttr(
         List(
@@ -42,7 +42,7 @@ class StudentLandingPageTestServiceSpec extends AsynchFlatSpec with Matchers {
               "heading" -> stringAttr("test heading"),
               "subheading" -> stringAttr("test subheading"),
               "image" -> MapAttr(
-                "altText" - stringAttr("Feast and News Apps"),
+                "altText" -> stringAttr("Feast and News Apps"),
                 "desktopUrl" -> stringAttr(
                   "https://i.guim.co.uk/img/media/e78041ba4789772737f9daa2f54682630ef6e3fa/0_0_880_586/880.jpg?quality=100&s=05fd530c55c7b5102fbbb7a509d1dd98",
                 ),
@@ -59,7 +59,9 @@ class StudentLandingPageTestServiceSpec extends AsynchFlatSpec with Matchers {
                 "logoUrl" -> stringAttr("https://www.theguardian.com"),
               ),
               "promoCodes" -> MapAttr(
-                "value" -> ListAttr(List(stringAttr("UTS_STUDENT"))),
+                Map(
+                  "value" -> ListAttr(List(stringAttr("UTS_STUDENT"))),
+                ),
               ),
             ),
           ),
@@ -73,22 +75,12 @@ class StudentLandingPageTestServiceSpec extends AsynchFlatSpec with Matchers {
         name = "2026-02-11_SKB-VALIDATION-TEST",
         status = Status.Live,
         priority = 3,
-        regionId = RegionTargeting(
-          List("AUDCountries"),
-        ),
+        regionId = "AUDCountries",
         variants = List(
           StudentLandingPageVariant(
             name = "offer",
             heading = "test heading",
-            s subheading = "test subheading",
-            institution = Institution(
-              name = "Guardian University",
-              acronym = "UTS",
-              logoUrl = "https://www.theguardian.com",
-            ),
-            promoCodes = PromoCode(
-              value = List("UTS_STUDENT"),
-            ),
+            subheading = "test subheading",
             image = Image(
               altText = "Feast and News Apps",
               desktopUrl =
@@ -97,6 +89,14 @@ class StudentLandingPageTestServiceSpec extends AsynchFlatSpec with Matchers {
                 "https://i.guim.co.uk/img/media/c36718611e0046117943fd69dfe67a4e5fb10f39/0_0_489_197/489.jpg?quality=100&s=de55d641047597a4fe5dce05f2d5105e",
               tabletUrl =
                 "https://i.guim.co.uk/img/media/e78041ba4789772737f9daa2f54682630ef6e3fa/0_0_880_586/880.jpg?quality=100&s=05fd530c55c7b5102fbbb7a509d1dd98",
+            ),
+            institution = Institution(
+              name = "Guardian University",
+              acronym = "UTS",
+              logoUrl = "https://www.theguardian.com",
+            ),
+            promoCodes = PromoCode(
+              value = List("UTS_STUDENT"),
             ),
           ),
         ),
