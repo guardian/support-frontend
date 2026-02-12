@@ -93,9 +93,17 @@ trait Services {
 
   lazy val oneTimeCheckoutTestService = new OneTimeCheckoutTestServiceImpl(appConfig.stage)
 
+  lazy val studentLandingPageTestService = new StudentLandingPageTestServiceImpl(appConfig.stage)
+
   lazy val allSettingsProvider: AllSettingsProvider =
     AllSettingsProvider
-      .fromConfig(appConfig, landingPageTestService, checkoutNudgeTestService, oneTimeCheckoutTestService)
+      .fromConfig(
+        appConfig,
+        landingPageTestService,
+        checkoutNudgeTestService,
+        oneTimeCheckoutTestService,
+        studentLandingPageTestService,
+      )
       .valueOr(throw _)
 
   lazy val defaultPromotionService = new DefaultPromotionServiceS3(s3Client, appConfig.stage, actorSystem)
