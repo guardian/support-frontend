@@ -18,7 +18,12 @@ import services.fastly.FastlyService
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import admin.settings.AmountsTests.AmountsTests
-import services.{CheckoutNudgeTestService, LandingPageTestService, OneTimeCheckoutTestService}
+import services.{
+  CheckoutNudgeTestService,
+  LandingPageTestService,
+  OneTimeCheckoutTestService,
+  StudentLandingPageTestService,
+}
 
 abstract class SettingsProvider[T] {
 
@@ -36,6 +41,7 @@ class AllSettingsProvider private (
     landingPageTestsProvider: LandingPageTestService,
     checkoutNudgeTestsProvider: CheckoutNudgeTestService,
     oneTimeCheckoutTestsProvider: OneTimeCheckoutTestService,
+    studentLandingPageTestsProvider: StudentLandingPageTestService,
 ) {
 
   def getAllSettings(): AllSettings = {
@@ -47,6 +53,7 @@ class AllSettingsProvider private (
       landingPageTestsProvider.getTests(),
       checkoutNudgeTestsProvider.getTests(),
       oneTimeCheckoutTestsProvider.getTests(),
+      studentLandingPageTestsProvider.getTests(),
     )
   }
 }
@@ -57,6 +64,7 @@ object AllSettingsProvider {
       landingPageTestService: LandingPageTestService,
       checkoutNudgeTestService: CheckoutNudgeTestService,
       oneTimeCheckoutTestService: OneTimeCheckoutTestService,
+      studentLandingPageTestService: StudentLandingPageTestService,
   )(implicit client: AwsS3Client, system: ActorSystem, wsClient: WSClient): Either[Throwable, AllSettingsProvider] = {
     for {
       switchesProvider <- SettingsProvider.fromAppConfig[Switches](config.settingsSources.switches, config)
@@ -71,6 +79,7 @@ object AllSettingsProvider {
       landingPageTestService,
       checkoutNudgeTestService,
       oneTimeCheckoutTestService,
+      studentLandingPageTestService,
     )
   }
 }
