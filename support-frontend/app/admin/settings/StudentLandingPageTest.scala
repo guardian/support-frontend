@@ -53,7 +53,7 @@ case class StudentLandingPageTest(
     status: Status,
     priority: Int,
     //  check regionId is getting correct type.
-    regionId: RegionTargeting,
+    regionId: String,
     variants: List[StudentLandingPageVariant],
 )
 
