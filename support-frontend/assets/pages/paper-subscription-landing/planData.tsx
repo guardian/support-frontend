@@ -282,7 +282,7 @@ const getPrintProductOptions = (
 			return undefined;
 	}
 };
-const getPrintFulfilmentOption = (
+const getPrintFulfilmentOptions = (
 	productKey: ActiveProductKey,
 	enableWeeklyDigital?: boolean,
 ): PrintFulfilmentOptions | undefined => {
@@ -300,7 +300,7 @@ const getPrintFulfilmentOption = (
 			return undefined;
 	}
 };
-export function getPlanBenefitData(
+export function getPrintPlusDigitalBenefits(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): BenefitsCheckListData[] | undefined {
@@ -320,7 +320,7 @@ export function getPlanBenefitData(
 		return undefined;
 	}
 
-	const fulfillmentOption = getPrintFulfilmentOption(
+	const fulfillmentOption = getPrintFulfilmentOptions(
 		productKey,
 		enableWeeklyDigital,
 	);

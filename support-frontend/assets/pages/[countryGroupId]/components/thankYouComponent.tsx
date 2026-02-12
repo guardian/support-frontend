@@ -9,6 +9,7 @@ import { observerThemeButton } from 'components/observer-layout/styles';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { Participations } from 'helpers/abTests/models';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import { Country } from 'helpers/internationalisation/classes/country';
 import {
@@ -34,6 +35,7 @@ import type { UserType } from 'helpers/user/userType';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import { isPaperPlusSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
+import { getPrintPlusDigitalBenefits } from 'pages/paper-subscription-landing/planData';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import {
 	isGuardianWeeklyProduct,
@@ -44,10 +46,7 @@ import ThankYouModules from '../../../components/thankYou/thankyouModules';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
-import {
-	filterProductDescriptionBenefits,
-	getPaperPlusDigitalBenefits,
-} from '../checkout/helpers/benefitsChecklist';
+import { filterProductDescriptionBenefits } from '../checkout/helpers/benefitsChecklist';
 import {
 	getReturnAddress,
 	getThankYouOrder,
@@ -102,6 +101,8 @@ export function ThankYouComponent({
 		);
 	}
 	const isPending = order.status === 'pending';
+
+	const { enableWeeklyDigital } = getFeatureFlags();
 
 	/**
 	 * contributionType is only applicable to SupporterPlus and Contributions.
@@ -173,6 +174,7 @@ export function ThankYouComponent({
 	const isGuardianPaperPlus = isPaperPlusSub(productKey, ratePlanKey); // Observer not a Plus plan
 	const isPrint = isPrintProduct(productKey);
 	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
+	const isGuardianWeeklyDigital = isGuardianWeekly && enableWeeklyDigital;
 
 	const observerPrint = getObserver(productKey, ratePlanKey);
 	const isObserverSubDomain = isObserverSubdomain();
@@ -220,7 +222,7 @@ export function ThankYouComponent({
 			return [...productBenefits, ...digitalSubscriptionAdditionalBenefits];
 		}
 		if (isGuardianPaperPlus || !!observerPrint) {
-			return getPaperPlusDigitalBenefits(productKey, ratePlanKey) ?? [];
+			return getPrintPlusDigitalBenefits(productKey, ratePlanKey) ?? [];
 		}
 		return [];
 	};
@@ -282,7 +284,10 @@ export function ThankYouComponent({
 		),
 		...maybeThankYouModule(isGuardianAdLite || isPrint, 'whatNext'),
 		...maybeThankYouModule(
-			isTierThree || isSupporterPlus || (isGuardianPrint && !isGuardianWeekly),
+			isTierThree ||
+				isSupporterPlus ||
+				isGuardianWeeklyDigital ||
+				(isGuardianPrint && !isGuardianWeekly),
 			'appsDownload',
 		),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
@@ -292,7 +297,7 @@ export function ThankYouComponent({
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
 		...maybeThankYouModule(
-			isDigitalEdition || isGuardianPaperPlus,
+			isDigitalEdition || isGuardianPaperPlus || isGuardianWeeklyDigital,
 			'newspaperArchiveBenefit',
 		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
