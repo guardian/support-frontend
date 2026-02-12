@@ -329,12 +329,6 @@ export function getPlanBenefitData(
 	}
 
 	const ratePlanData = getPlanData(printProductOptions, fulfillmentOption);
-	console.log(
-		'*** ratePlanData',
-		ratePlanData,
-		printProductOptions,
-		fulfillmentOption,
-	);
 	if (!ratePlanData) {
 		return undefined;
 	}
