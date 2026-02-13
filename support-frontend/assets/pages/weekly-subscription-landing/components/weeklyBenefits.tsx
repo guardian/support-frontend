@@ -11,10 +11,7 @@ import {
 import GridImage from 'components/gridImage/gridImage';
 import BenefitsList from 'components/product/BenefitsList';
 import type { PlanData } from 'pages/paper-subscription-landing/planData';
-import {
-	borderLightGrey,
-	weeklyBenefitsPaperHeroBlue,
-} from 'stylesheets/emotion/colours';
+import { weeklyBenefitsPaperHeroBlue } from 'stylesheets/emotion/colours';
 
 const weeklyBenefitsContainer = css`
 	background-color: ${weeklyBenefitsPaperHeroBlue};
@@ -77,7 +74,7 @@ const headingContainer = css`
 	margin-bottom: ${space[8]}px;
 `;
 const benefitsBorder = css`
-	border-top: 1px solid ${borderLightGrey};
+	border-top: 1px solid ${palette.neutral[86]};
 	display: flex;
 	flex-direction: column;
 `;
