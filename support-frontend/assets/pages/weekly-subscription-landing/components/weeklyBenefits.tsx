@@ -120,7 +120,7 @@ export function WeeklyBenefits({ planData }: WeeklyBenefitsProps): JSX.Element {
 				<GridImage
 					gridId={`weeklyBenefitHeroDesktop`}
 					srcSizes={[400]}
-					sizes="(max-width: 400px) 400px, (min-width: 400px) 400px"
+					sizes="400px"
 					imgType="png"
 					altText="Illustration of The Guardian Weekly benefits"
 				/>
