@@ -1,5 +1,4 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	countryGroups,
 	GBPCountries,
@@ -36,9 +35,6 @@ import {
 import type { OphanComponentType } from 'helpers/tracking/trackingOphan';
 import { addQueryParamsToURL, getOrigin } from 'helpers/urls/url';
 
-const countryPath = (countryGroupId: CountryGroupId) =>
-	countryGroups[countryGroupId].supportRegionId;
-
 const getCheckoutUrl = (
 	countryId: IsoCountry,
 	billingPeriod: RecurringBillingPeriod,
@@ -50,7 +46,9 @@ const getCheckoutUrl = (
 		countryGroups[countryGroupId].supportRegionId,
 		'GuardianWeeklyDomestic',
 	);
-	const url = `${getOrigin()}/${countryPath(countryGroupId)}/checkout`;
+	const region = countryGroups[countryGroupId].supportRegionId;
+
+	const url = `${getOrigin()}/${region}/checkout`;
 	return addQueryParamsToURL(url, {
 		promoCode: promotion?.promoCode,
 		product: productGuardianWeekly,
@@ -58,32 +56,10 @@ const getCheckoutUrl = (
 	});
 };
 
-const getCurrencySymbol = (currencyId: IsoCurrency): string =>
-	glyph(currencyId);
+const getPriceWithSymbol = (currencyId: IsoCurrency, price: number): string =>
+	`${glyph(currencyId)}${fixDecimals(price)}`;
 
-const getPriceWithSymbol = (currencyId: IsoCurrency, price: number) =>
-	getCurrencySymbol(currencyId) + fixDecimals(price);
-
-const getPromotionLabel = (currency: IsoCurrency, promotion?: Promotion) => {
-	if (!promotion?.discount) {
-		return '';
-	}
-	if (promotion.name.startsWith('12for12')) {
-		return `Special Offer: 12 for ${glyph(currency)}${
-			promotion.discountedPrice ?? '12'
-		}`;
-	} else if (promotion.promoCode.startsWith('GWBLACKFRIDAY')) {
-		return `Black Friday Offer: ${
-			currency === 'GBP' || currency === 'EUR'
-				? `1/3 off`
-				: `${Math.round(promotion.discount.amount)}% off`
-		}`;
-	} else {
-		return `Save ${Math.round(promotion.discount.amount)}%`;
-	}
-};
-
-const getMainDisplayPrice = (
+const getDisplayPrice = (
 	productPrice: ProductPrice,
 	promotion?: Promotion | null,
 ): number => {
@@ -114,7 +90,7 @@ export const getProducts = ({
 		);
 
 		const promotion = getAppliedPromo(productPrice.promotions);
-		const mainDisplayPrice = getMainDisplayPrice(productPrice, promotion);
+		const displayPrice = getDisplayPrice(productPrice, promotion);
 		const offerCopy = promotion?.landingPage?.roundel ?? '';
 		const trackingProperties = {
 			id: orderIsAGift
@@ -127,11 +103,10 @@ export const getProducts = ({
 		const is12for12 = promotion?.promoCode.startsWith('12for12') ?? false;
 		const isBlackFriday =
 			promotion?.promoCode.startsWith('GWBLACKFRIDAY') ?? false;
-		const label = getPromotionLabel(productPrice.currency, promotion);
 
 		return {
 			title: getBillingPeriodTitle(billingPeriod, orderIsAGift),
-			price: getPriceWithSymbol(productPrice.currency, mainDisplayPrice),
+			price: getPriceWithSymbol(productPrice.currency, displayPrice),
 			discountedPrice: promotion?.discountedPrice
 				? getPriceWithSymbol(productPrice.currency, promotion.discountedPrice)
 				: undefined,
@@ -140,7 +115,6 @@ export const getProducts = ({
 			priceCopy: getSimplifiedPriceDescription(productPrice, billingPeriod),
 			buttonCopy: 'Subscribe now',
 			href: getCheckoutUrl(countryId, billingPeriod, orderIsAGift, promotion),
-			label,
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
 			isSpecialOffer: is12for12 || isBlackFriday,
