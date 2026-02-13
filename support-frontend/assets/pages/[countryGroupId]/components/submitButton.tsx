@@ -68,6 +68,13 @@ const useFormIsValid = (
 			setFormIsValid(valid);
 		};
 
+		// We want to add the form change event listener when the user selects
+		// PayPal or PPCP, but we we also want to keep it if the user then
+		// switches to another payment method, so that if they then fix any form
+		// errors, the errors go away. That's why we don't remove us in a
+		// cleanup handler returned from the useEffect. This behaves similarly
+		// to the previous version of this code where the event listener was
+		// added in the validate callpack prop of the PayPalButton component.
 		if (shouldManageFormStateManually && !hasAddedEventListener) {
 			// And then run it on form change
 			formRef.current?.addEventListener('change', callback);
