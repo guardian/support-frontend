@@ -25,7 +25,6 @@ function WeeklyProductPrices({
 		productPrices,
 		billingPeriods,
 		orderIsAGift,
-		enableWeeklyDigitalPlans: enableWeeklyDigitalPlans,
 	});
 
 	return <Prices products={products} orderIsAGift={orderIsAGift} />;
