@@ -101,5 +101,6 @@ export interface LandingPageTest {
 	name: string;
 	status: 'Live' | 'Draft';
 	regionTargeting?: RegionTargeting;
+	mParticleAudience?: number;
 	variants: LandingPageVariant[];
 }
