@@ -527,8 +527,18 @@ export default function CheckoutForm({
 	}, [errorMessage]);
 
 	const onFormSubmit = async (formData: FormData) => {
+		// This shouldn't happen as the overlay which is displayed when
+		// isProcessingPayment is true should prevent button clicks. But this gives
+		// a little extra defence just in case.
+		if (isProcessingPayment) {
+			return;
+		}
+
+		setIsProcessingPayment(true);
+
 		if (paymentMethod === undefined) {
 			setPaymentMethodError('Please select a payment method');
+			setIsProcessingPayment(false);
 			return;
 		}
 
@@ -551,6 +561,7 @@ export default function CheckoutForm({
 			if (Object.values(newStripeFieldError).some((value) => value)) {
 				setStripeFieldError(newStripeFieldError);
 				paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
+				setIsProcessingPayment(false);
 				return;
 			}
 		}
@@ -560,6 +571,7 @@ export default function CheckoutForm({
 				recaptcha: 'Please complete security check',
 			});
 			paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
+			setIsProcessingPayment(false);
 			return;
 		}
 
@@ -569,6 +581,7 @@ export default function CheckoutForm({
 				: productKey;
 		if (finalProductKey == 'NationalDelivery' && !chosenDeliveryAgent) {
 			setDeliveryAgentError('Please select a delivery agent');
+			setIsProcessingPayment(false);
 			return;
 		}
 		if (paymentMethod === 'DirectDebit') {
@@ -583,10 +596,10 @@ export default function CheckoutForm({
 				setErrorContext(
 					'The transaction was temporarily declined. Please try entering you payment details again. Alternatively try another payment method.',
 				);
+				setIsProcessingPayment(false);
 				return;
 			}
 		}
-		setIsProcessingPayment(true);
 		try {
 			const paymentFields = await getPaymentFieldsForPaymentMethod(
 				paymentMethod,
