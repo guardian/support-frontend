@@ -24,6 +24,7 @@ import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { parameteriseUrl } from 'helpers/urls/routes';
+import { getPrintPlusDigitalBenefits } from 'pages/paper-subscription-landing/planData';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -33,7 +34,6 @@ import { buildBackButtonPath } from '../checkout/helpers/backButton';
 import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
-	getPaperPlusDigitalBenefits,
 } from '../checkout/helpers/benefitsChecklist';
 import { ukSpecificAdditionalBenefit } from '../student/components/StudentHeader';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
@@ -123,7 +123,7 @@ export default function CheckoutSummary({
 	}
 
 	const benefitsCheckListData =
-		getPaperPlusDigitalBenefits(productKey, ratePlanKey) ??
+		getPrintPlusDigitalBenefits(productKey, ratePlanKey) ??
 		getBenefitsChecklistFromLandingPageTool(
 			productKey,
 			landingPageSettings,
