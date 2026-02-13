@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import { observerThemeButton } from 'components/observer-layout/styles';
 import { getFeatureFlags } from 'helpers/featureFlags';
+import { getPaypalClientId } from 'helpers/forms/payPal';
 import {
 	getStripeKeyForCountry,
 	getStripeKeyForProduct,
@@ -200,6 +201,8 @@ export function Checkout({
 		getStripeKeyForCountry('REGULAR', countryId, currencyKey, isTestUser);
 	const stripePromise = loadStripe(stripePublicKey);
 
+	const paypalClientId = getPaypalClientId(isTestUser);
+
 	const stripeExpressCheckoutSwitch =
 		window.guardian.settings.switches.recurringPaymentMethods
 			.stripeExpressCheckout === 'On';
@@ -355,6 +358,7 @@ export function Checkout({
 						thresholdAmount={thresholdAmount}
 						studentDiscount={studentDiscount}
 						enableWeeklyDigital={enableWeeklyDigital}
+						paypalClientId={paypalClientId}
 					/>
 				</PageLayout>
 			</Elements>

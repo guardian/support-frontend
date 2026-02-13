@@ -36,6 +36,7 @@ type SubmitButtonProps = {
 	billingPeriod: BillingPeriod;
 	csrf: string;
 	formRef: React.RefObject<HTMLFormElement>;
+	paypalClientId: string;
 };
 
 const useFormIsValid = (
@@ -100,6 +101,7 @@ export function SubmitButton({
 	currencyKey,
 	billingPeriod,
 	csrf,
+	paypalClientId,
 }: SubmitButtonProps) {
 	// We only need this for PayPal and PayPalCompletePayments
 	const formIsValid = useFormIsValid(paymentMethod, formRef);
@@ -197,7 +199,7 @@ export function SubmitButton({
 					)}
 					<PayPalScriptProvider
 						options={{
-							clientId: 'sb', // TODO: use a real client ID
+							clientId: paypalClientId,
 							environment: getPayPalEnv(isProd(), isTestUser),
 							currency: currencyKey,
 							debug: false,

@@ -148,6 +148,7 @@ type CheckoutFormProps = {
 	promotion?: Promotion;
 	checkoutSession?: CheckoutSession;
 	studentDiscount?: StudentDiscount;
+	paypalClientId: string;
 };
 
 export default function CheckoutForm({
@@ -171,6 +172,7 @@ export default function CheckoutForm({
 	promotion,
 	checkoutSession,
 	studentDiscount,
+	paypalClientId,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
@@ -1158,6 +1160,7 @@ export default function CheckoutForm({
 								currencyKey={currencyKey}
 								billingPeriod={billingPeriod}
 								csrf={csrf.token ?? ''}
+								paypalClientId={paypalClientId}
 							/>
 						</div>
 						{errorMessage && (
