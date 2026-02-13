@@ -81,7 +81,7 @@ const weeklyDigitalRewards = [
 		<strong>Exclusive newsletter</strong>&nbsp;for supporters, sent every week
 		from the Guardian newsroom
 	</span>,
-	<>Far fewer asks for support</>,
+	<span css={benefitStyle}>Far fewer asks for support</span>,
 ];
 
 const observerDigitalRewards = [
