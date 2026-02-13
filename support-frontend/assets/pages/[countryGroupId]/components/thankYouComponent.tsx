@@ -174,7 +174,9 @@ export function ThankYouComponent({
 	const isGuardianPaperPlus = isPaperPlusSub(productKey, ratePlanKey); // Observer not a Plus plan
 	const isPrint = isPrintProduct(productKey);
 	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
-	const isGuardianWeeklyDigital = isGuardianWeekly && enableWeeklyDigital;
+	const isNotGift = !ratePlanKey.includes('Gift');
+	const isGuardianWeeklyDigital =
+		isGuardianWeekly && enableWeeklyDigital && isNotGift;
 
 	const observerPrint = getObserver(productKey, ratePlanKey);
 	const isObserverSubDomain = isObserverSubdomain();
@@ -287,7 +289,7 @@ export function ThankYouComponent({
 			isTierThree ||
 				isSupporterPlus ||
 				isGuardianWeeklyDigital ||
-				(isGuardianPrint && !isGuardianWeekly),
+				isGuardianPaperPlus,
 			'appsDownload',
 		),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
