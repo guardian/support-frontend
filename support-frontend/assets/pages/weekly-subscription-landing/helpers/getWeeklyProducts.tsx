@@ -39,6 +39,7 @@ const getCheckoutUrl = (
 	countryId: IsoCountry,
 	billingPeriod: RecurringBillingPeriod,
 	orderIsGift: boolean,
+	enableWeeklyDigitalPlans: boolean,
 	promotion?: Promotion,
 ): string => {
 	const countryGroupId = CountryGroup.fromCountry(countryId) ?? GBPCountries;
@@ -52,7 +53,11 @@ const getCheckoutUrl = (
 	return addQueryParamsToURL(url, {
 		promoCode: promotion?.promoCode,
 		product: productGuardianWeekly,
-		ratePlan: billingPeriodToRatePlan(billingPeriod, orderIsGift),
+		ratePlan: billingPeriodToRatePlan(
+			billingPeriod,
+			orderIsGift,
+			enableWeeklyDigitalPlans,
+		),
 	});
 };
 
@@ -75,11 +80,13 @@ export const getProducts = ({
 	productPrices,
 	billingPeriods,
 	orderIsAGift,
+	enableWeeklyDigitalPlans,
 }: {
 	countryId: IsoCountry;
 	productPrices: ProductPrices;
 	billingPeriods: RecurringBillingPeriod[];
 	orderIsAGift: boolean;
+	enableWeeklyDigitalPlans: boolean;
 }): Product[] =>
 	billingPeriods.map((billingPeriod) => {
 		const productPrice = getProductPrice(
@@ -87,6 +94,7 @@ export const getProducts = ({
 			countryId,
 			billingPeriod,
 			getWeeklyFulfilmentOption(countryId),
+			enableWeeklyDigitalPlans ? 'PlusDigital' : 'NoProductOptions',
 		);
 
 		const promotion = getAppliedPromo(productPrice.promotions);
@@ -114,7 +122,13 @@ export const getProducts = ({
 			offerCopy,
 			priceCopy: getSimplifiedPriceDescription(productPrice, billingPeriod),
 			buttonCopy: 'Subscribe now',
-			href: getCheckoutUrl(countryId, billingPeriod, orderIsAGift, promotion),
+			href: getCheckoutUrl(
+				countryId,
+				billingPeriod,
+				orderIsAGift,
+				enableWeeklyDigitalPlans,
+				promotion,
+			),
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
 			isSpecialOffer: is12for12 || isBlackFriday,
