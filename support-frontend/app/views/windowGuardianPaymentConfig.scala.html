@@ -74,6 +74,11 @@
     test: "@paymentMethodConfigs.regularTestPayPalConfig.payPalEnvironment"
   };
 
+  window.guardian.payPalClientId = {
+    default: "@paymentMethodConfigs.regularDefaultPayPalCompletePaymentsConfig.clientId",
+    test: "@paymentMethodConfigs.regularTestPayPalCompletePaymentsConfig.clientId"
+  }
+
   window.guardian.paymentApiUrl = "@paymentApiUrl";
   window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
   window.guardian.mdapiUrl = "@membersDataApiUrl";

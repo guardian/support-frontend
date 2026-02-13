@@ -186,6 +186,8 @@ case class PaymentMethodConfigs(
     regularTestStripeConfig: StripePublicConfig,
     regularDefaultPayPalConfig: PayPalConfig,
     regularTestPayPalConfig: PayPalConfig,
+    regularDefaultPayPalCompletePaymentsConfig: PayPalCompletePaymentsConfig,
+    regularTestPayPalCompletePaymentsConfig: PayPalCompletePaymentsConfig,
 )
 
 /** This class is only needed because you can't pass more than 22 arguments to a twirl template and passing both types
@@ -229,6 +231,7 @@ class Application(
     val supportUrl: String,
     tickerService: TickerService,
     mparticleClient: MParticleClient,
+    payPalCompletePaymentsConfigProvider: PayPalCompletePaymentsConfigProvider,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with SettingsSurrogateKeySyntax
@@ -425,6 +428,8 @@ class Application(
         regularTestStripeConfig = regularStripeConfigProvider.get(true),
         regularDefaultPayPalConfig = payPalConfigProvider.get(false),
         regularTestPayPalConfig = payPalConfigProvider.get(true),
+        regularDefaultPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(false),
+        regularTestPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(true),
       ),
       paymentApiUrl = paymentAPIService.paymentAPIUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
@@ -589,6 +594,8 @@ class Application(
           regularTestStripeConfig = regularStripeConfigProvider.get(true),
           regularDefaultPayPalConfig = payPalConfigProvider.get(false),
           regularTestPayPalConfig = payPalConfigProvider.get(true),
+          regularDefaultPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(false),
+          regularTestPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(true),
         ),
         paymentApiUrl = paymentAPIService.paymentAPIUrl,
         paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
@@ -637,6 +644,8 @@ class Application(
         regularTestStripeConfig = regularStripeConfigProvider.get(true),
         regularDefaultPayPalConfig = payPalConfigProvider.get(false),
         regularTestPayPalConfig = payPalConfigProvider.get(true),
+        regularDefaultPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(false),
+        regularTestPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(true),
       ),
       paymentAPIService = paymentAPIService,
       membersDataApiUrl = membersDataApiUrl,

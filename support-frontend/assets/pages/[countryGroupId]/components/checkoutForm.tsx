@@ -132,6 +132,7 @@ type CheckoutFormProps = {
 	setWeeklyDeliveryDate: (value: Date) => void;
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
+	paypalClientId: string;
 };
 
 const LEGEND_PREFIX_WEEKLY_GIFT = 4;
@@ -171,6 +172,7 @@ export default function CheckoutForm({
 	setWeeklyDeliveryDate,
 	thresholdAmount,
 	studentDiscount,
+	paypalClientId,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
@@ -1159,6 +1161,7 @@ export default function CheckoutForm({
 								currencyKey={currencyKey}
 								billingPeriod={billingPeriod}
 								csrf={csrf.token ?? ''}
+								paypalClientId={paypalClientId}
 							/>
 						</div>
 						{errorMessage && (
