@@ -38,6 +38,47 @@ type SubmitButtonProps = {
 	formRef: React.RefObject<HTMLFormElement>;
 };
 
+const useFormIsValid = (
+	paymentMethod: PaymentMethod | undefined,
+	formRef: React.RefObject<HTMLFormElement>,
+) => {
+	const [formIsValid, setFormIsValid] = useState<boolean>(false);
+	const [hasAddedEventListener, setHasAddedEventListener] =
+		useState<boolean>(false);
+
+	// We need to handle these payment methods slightly differently, because their
+	// button isn't part of the checkout form. We don't do this for all payment
+	// methods because it makes the validation a bit aggressive.
+	const shouldManageFormStateManually =
+		paymentMethod === 'PayPal' || paymentMethod === 'PayPalCompletePayments';
+
+	useEffect(() => {
+		if (shouldManageFormStateManually) {
+			setFormIsValid(formRef.current?.checkValidity() ?? false);
+		}
+
+		const callback = (event: Event) => {
+			const element = event.currentTarget as HTMLFormElement;
+			// We call this twice because the first time does not not give
+			// us an accurate state of the form. This seems to be because
+			// we use `setCustomValidity` on the elements
+			element.checkValidity();
+			const valid = element.checkValidity();
+
+			setFormIsValid(valid);
+		};
+
+		if (shouldManageFormStateManually && !hasAddedEventListener) {
+			// And then run it on form change
+			formRef.current?.addEventListener('change', callback);
+
+			setHasAddedEventListener(true);
+		}
+	}, [paymentMethod]);
+
+	return formIsValid;
+};
+
 export function SubmitButton({
 	buttonText,
 	paymentMethod,
@@ -53,14 +94,8 @@ export function SubmitButton({
 	billingPeriod,
 	csrf,
 }: SubmitButtonProps) {
-	const [formIsValid, setFormIsValid] = useState<boolean>(true);
-	// I want to run this on every render, but only if paymentMethod has been selected
-	// to avoid going straight into an invalid state.
-	useEffect(() => {
-		if (paymentMethod) {
-			setFormIsValid(formRef.current?.checkValidity() ?? false);
-		}
-	});
+	// We only need this for PayPal and PayPalCompletePayments
+	const formIsValid = useFormIsValid(paymentMethod, formRef);
 
 	switch (paymentMethod) {
 		case 'PayPal':
@@ -80,29 +115,11 @@ export function SubmitButton({
 						}}
 						commit={true}
 						validate={({ disable, enable }) => {
-							/** We run this initially to set the button to the correct state */
-							const valid = formRef.current?.checkValidity();
-							if (valid) {
+							if (formIsValid) {
 								enable();
 							} else {
 								disable();
 							}
-
-							/** And then run it on form change */
-							formRef.current?.addEventListener('change', (event) => {
-								const element = event.currentTarget as HTMLFormElement;
-								/* We call this twice because the first time does not
-                   not give us an accurate state of the form.
-                   This seems to be because we use `setCustomValidity` on the elements */
-								element.checkValidity();
-								const valid = element.checkValidity();
-
-								if (valid) {
-									enable();
-								} else {
-									disable();
-								}
-							});
 						}}
 						funding={{
 							disallowed: [
@@ -110,14 +127,11 @@ export function SubmitButton({
 							],
 						}}
 						onClick={() => {
-							// TODO - add tracking
-
 							// The button won't actually submit if the form
 							// isn't valid but we can check here and if invalid
 							// the browser will scroll the user to the first
 							// error if necessary
-							const valid = formRef.current?.checkValidity();
-							if (!valid) {
+							if (!formIsValid) {
 								/** We run this so the form validation happens and focus on errors */
 								formRef.current?.requestSubmit();
 							}
@@ -209,8 +223,7 @@ export function SubmitButton({
 								// isn't valid but we can check here and if invalid
 								// the browser will scroll the user to the first
 								// error if necessary
-								const valid = formRef.current?.checkValidity();
-								if (!valid) {
+								if (!formIsValid) {
 									/** We run this so the form validation happens and focus on errors */
 									formRef.current?.requestSubmit();
 								}
