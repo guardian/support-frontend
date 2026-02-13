@@ -223,7 +223,7 @@ export function ThankYouComponent({
 					: [];
 			return [...productBenefits, ...digitalSubscriptionAdditionalBenefits];
 		}
-		if (isGuardianPaperPlus || !!observerPrint) {
+		if (isGuardianPaperPlus || isGuardianWeeklyDigital || !!observerPrint) {
 			return getPrintPlusDigitalBenefits(productKey, ratePlanKey) ?? [];
 		}
 		return [];
