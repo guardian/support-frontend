@@ -87,9 +87,6 @@ const benefitsList = css`
 	}
 	${textSans17};
 `;
-const digitalRewardsList = css`
-	${textSans17};
-`;
 
 export type WeeklyBenefitsProps = {
 	planData?: PlanData;
@@ -104,15 +101,12 @@ export function WeeklyBenefits({ planData }: WeeklyBenefitsProps): JSX.Element {
 				<div css={benefitsBorder}>
 					<BenefitsList
 						title={planData?.benefits.label}
-						listItems={planData?.benefits.items}
+						listItems={[
+							...(planData?.benefits.items ?? []),
+							...(planData?.digitalRewards?.items ?? []),
+						]}
 						theme={{ fill: palette.brandAlt[400] }}
 						cssOverrides={benefitsList}
-					/>
-					<BenefitsList
-						title={planData?.digitalRewards?.label}
-						listItems={planData?.digitalRewards?.items}
-						theme={{ fill: palette.brandAlt[400] }}
-						cssOverrides={digitalRewardsList}
 					/>
 				</div>
 			</div>

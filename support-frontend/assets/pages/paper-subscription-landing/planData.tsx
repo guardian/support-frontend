@@ -1,4 +1,3 @@
-import { css } from '@emotion/react';
 import type { PrintFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { type PrintProductOptions } from '@modules/product/productOptions';
 import type { BenefitsCheckListData } from 'components/checkoutBenefits/benefitsCheckList';
@@ -7,10 +6,6 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-
-const benefitStyle = css`
-	display: inline-block;
-`;
 
 interface Benefits {
 	label?: JSX.Element;
@@ -62,26 +57,26 @@ const guardianDigitalRewards = [
 ];
 
 const weeklyDigitalRewards = [
-	<span css={benefitStyle}>
+	<>
 		Unlimited access to the refreshed&nbsp;<strong>Guardian app</strong>
 		&nbsp;and&nbsp;<strong>Guardian Feast app</strong>
-	</span>,
-	<span css={benefitStyle}>
+	</>,
+	<>
 		Unlimited access to the&nbsp;<strong>Guardian Editions app</strong>&nbsp;so
 		you can enjoy newspapers on your mobile and tablet
-	</span>,
-	<span css={benefitStyle}>
+	</>,
+	<>
 		Digital access to the Guardian’s 200 year&nbsp;
 		<strong>newspaper archive</strong>
-	</span>,
-	<span css={benefitStyle}>
+	</>,
+	<>
 		<strong>Ad-free reading</strong>&nbsp;on the Guardian app and website
-	</span>,
-	<span css={benefitStyle}>
+	</>,
+	<>
 		<strong>Exclusive newsletter</strong>&nbsp;for supporters, sent every week
 		from the Guardian newsroom
-	</span>,
-	<span css={benefitStyle}>Far fewer asks for support</span>,
+	</>,
+	<>Far fewer asks for support</>,
 ];
 
 const observerDigitalRewards = [
@@ -93,24 +88,24 @@ const baseDigitalRewards = [
 ];
 
 const benefitGuardianSixDay = (
-	<span css={benefitStyle}>
+	<>
 		The Guardian and all its supplements <strong>Monday to Saturday</strong>
-	</span>
+	</>
 );
 const benefitGuardianSaturday = (
-	<span css={benefitStyle}>
+	<>
 		<strong>Saturday</strong> edition of The Guardian and all its supplements
-	</span>
+	</>
 );
 const benefitObserverSunday = (
-	<span css={benefitStyle}>
+	<>
 		The Observer on <strong>Sunday</strong>
-	</span>
+	</>
 );
 const benefitWeekly = (
-	<span css={benefitStyle}>
+	<>
 		<strong>Guardian Weekly</strong> magazine delivered to your door
-	</span>
+	</>
 );
 
 const getPrintBenefitsMap = (

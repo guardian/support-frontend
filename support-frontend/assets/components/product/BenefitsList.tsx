@@ -64,7 +64,7 @@ export default function BenefitsList({
 							size="xsmall"
 							theme={theme}
 						/>
-						{item}
+						<p>{item}</p>
 					</li>
 				))}
 			</ul>
