@@ -289,7 +289,7 @@ export function ThankYouComponent({
 			isTierThree ||
 				isSupporterPlus ||
 				isGuardianWeeklyDigital ||
-				isGuardianPaperPlus,
+				(isGuardianPrint && !isGuardianWeekly),
 			'appsDownload',
 		),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
