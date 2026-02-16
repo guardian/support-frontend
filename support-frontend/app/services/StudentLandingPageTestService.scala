@@ -14,7 +14,7 @@ class StudentLandingPageTestServiceImpl(stage: Stage)(implicit ec: ExecutionCont
     extends ChannelTestService[StudentLandingPageTest](
       stage,
       ChannelTestConfig(
-        channelName = "SupportStudentLandingPage",
+        channelName = "StudentLandingPage",
         testTypeName = "student landing page test",
         errorMetric = getStudentLandingPageTestsError,
       ),
