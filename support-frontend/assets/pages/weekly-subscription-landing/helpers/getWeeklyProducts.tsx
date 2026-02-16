@@ -39,13 +39,19 @@ import type { OphanComponentType } from 'helpers/tracking/trackingOphan';
 import { addQueryParamsToURL, getOrigin } from 'helpers/urls/url';
 import { getDiscountSummary } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 
-const getCheckoutUrl = (
-	countryId: IsoCountry,
-	billingPeriod: RecurringBillingPeriod,
-	orderIsGift: boolean,
-	enableWeeklyDigitalPlans: boolean,
-	promotion?: Promotion,
-): string => {
+const getCheckoutUrl = ({
+	countryId,
+	billingPeriod,
+	orderIsGift,
+	enableWeeklyDigitalPlans,
+	promotion,
+}: {
+	countryId: IsoCountry;
+	billingPeriod: RecurringBillingPeriod;
+	orderIsGift: boolean;
+	enableWeeklyDigitalPlans: boolean;
+	promotion?: Promotion;
+}) => {
 	const countryGroupId = CountryGroup.fromCountry(countryId) ?? GBPCountries;
 	const productGuardianWeekly = internationaliseProduct(
 		countryGroups[countryGroupId].supportRegionId,
@@ -125,13 +131,13 @@ export const getProducts = ({
 			offerCopy,
 			priceCopy: getSimplifiedPriceDescription(productPrice, billingPeriod),
 			buttonCopy: 'Subscribe now',
-			href: getCheckoutUrl(
+			href: getCheckoutUrl({
 				countryId,
 				billingPeriod,
-				orderIsAGift,
-				false,
+				orderIsGift: orderIsAGift,
+				enableWeeklyDigitalPlans: false,
 				promotion,
-			),
+			}),
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
 			isSpecialOffer: is12for12 || isBlackFriday,
@@ -142,12 +148,10 @@ export const getWeeklyDigitalProducts = ({
 	countryId,
 	productPrices,
 	weeklyBillingPeriods,
-	orderIsAGift,
 }: {
 	countryId: IsoCountry;
 	productPrices: ProductPrices;
 	weeklyBillingPeriods: RecurringBillingPeriod[];
-	orderIsAGift: boolean;
 }): Product[] =>
 	weeklyBillingPeriods.map((billingPeriod) => {
 		const productPrice = getProductPrice(
@@ -162,9 +166,7 @@ export const getWeeklyDigitalProducts = ({
 
 		const offerCopy = promotion?.landingPage?.roundel ?? '';
 		const trackingProperties = {
-			id: orderIsAGift
-				? `subscribe_now_cta_gift-${billingPeriod}`
-				: `subscribe_now_cta-${billingPeriod}`,
+			id: `subscribe_now_cta-${billingPeriod}`,
 			product: 'GuardianWeekly' as SubscriptionProduct,
 			componentType: 'ACQUISITIONS_BUTTON' as OphanComponentType,
 		};
@@ -190,21 +192,21 @@ export const getWeeklyDigitalProducts = ({
 				: undefined;
 
 		return {
-			title: getBillingPeriodTitle(billingPeriod, orderIsAGift),
+			title: getBillingPeriodTitle(billingPeriod),
 			price: fullPriceWithCurrency,
 			discountedPrice: discountPriceWithCurrency,
-			billingPeriodNoun: getBillingPeriodNoun(billingPeriod, orderIsAGift),
+			billingPeriodNoun: getBillingPeriodNoun(billingPeriod),
 			offerCopy,
 			discountSummary,
 			priceCopy: '',
 			savingsText: getSimplifiedPriceDescription(productPrice, billingPeriod),
-			href: getCheckoutUrl(
+			href: getCheckoutUrl({
 				countryId,
 				billingPeriod,
-				orderIsAGift,
-				true,
+				orderIsGift: false,
+				enableWeeklyDigitalPlans: true,
 				promotion,
-			),
+			}),
 			showLabel: billingPeriod === BillingPeriod.Quarterly,
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),

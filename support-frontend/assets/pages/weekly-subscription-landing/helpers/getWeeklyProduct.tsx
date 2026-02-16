@@ -174,9 +174,7 @@ const weeklyDigitalProduct = (
 
 	const offerCopy = promotion?.landingPage?.roundel ?? '';
 	const trackingProperties = {
-		id: orderIsAGift
-			? `subscribe_now_cta_gift-${billingPeriod}`
-			: `subscribe_now_cta-${billingPeriod}`,
+		id: `subscribe_now_cta-${billingPeriod}`,
 		product: 'GuardianWeekly' as SubscriptionProduct,
 		componentType: 'ACQUISITIONS_BUTTON' as OphanComponentType,
 	};
@@ -202,7 +200,7 @@ const weeklyDigitalProduct = (
 			: undefined;
 
 	return {
-		title: getBillingPeriodTitle(billingPeriod, orderIsAGift),
+		title: getBillingPeriodTitle(billingPeriod),
 		price: fullPriceWithCurrency,
 		discountedPrice: discountPriceWithCurrency,
 		billingPeriodNoun: getBillingPeriodNoun(billingPeriod, orderIsAGift),
