@@ -12,7 +12,7 @@ class PromotionTermsSpec extends AsyncFlatSpec with Matchers {
       .promotionTermsFromPromotion(PROD)(
         PromotionWithCode(tenAnnual, guardianWeeklyAnnual),
       )
-    promotionTerms.productRatePlans.length shouldBe 2
+    promotionTerms.productRatePlans.length shouldBe 4
   }
 
   it should "be able to extract the promotion terms for a gift" in {

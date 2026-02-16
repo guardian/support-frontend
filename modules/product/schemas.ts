@@ -13,6 +13,7 @@ import {
 	EverydayPlus,
 	NewspaperArchive,
 	NoProductOptions,
+	PlusDigital,
 	Saturday,
 	SaturdayPlus,
 	Sixday,
@@ -50,4 +51,5 @@ export const productOptionsSchema = z.enum([
 	SaturdayPlus,
 	Sunday,
 	NewspaperArchive,
+	PlusDigital,
 ]);
