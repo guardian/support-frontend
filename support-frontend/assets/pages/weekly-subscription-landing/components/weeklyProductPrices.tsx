@@ -1,18 +1,21 @@
+import type { IsoCountry } from '@modules/internationalisation/country';
 import {
 	weeklyBillingPeriods,
 	weeklyGiftBillingPeriods,
 } from 'helpers/productPrice/billingPeriods';
-import {
-	getProducts,
-	type WeeklyProductPricesProps,
-} from '../helpers/getWeeklyProduct';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { getProducts } from '../helpers/getWeeklyProducts';
 import Prices from './content/prices';
 
 function WeeklyProductPrices({
 	countryId,
 	productPrices,
 	orderIsAGift,
-}: WeeklyProductPricesProps): JSX.Element | null {
+}: {
+	countryId: IsoCountry;
+	productPrices: ProductPrices;
+	orderIsAGift: boolean;
+}): JSX.Element | null {
 	const billingPeriods = orderIsAGift
 		? weeklyGiftBillingPeriods
 		: weeklyBillingPeriods;
@@ -22,8 +25,8 @@ function WeeklyProductPrices({
 		productPrices,
 		billingPeriods,
 		orderIsAGift,
-		enableWeeklyDigitalPlans,
 	});
+
 	return <Prices products={products} orderIsAGift={orderIsAGift} />;
 }
 

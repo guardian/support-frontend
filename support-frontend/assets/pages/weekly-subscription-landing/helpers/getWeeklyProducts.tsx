@@ -4,7 +4,10 @@ import {
 	GBPCountries,
 } from '@modules/internationalisation/countryGroup';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
+import {
+	BillingPeriod,
+	type RecurringBillingPeriod,
+} from '@modules/product/billingPeriod';
 import type { Product } from 'components/product/productOption';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { glyph } from 'helpers/internationalisation/currency';
@@ -34,6 +37,7 @@ import {
 } from 'helpers/productPrice/subscriptions';
 import type { OphanComponentType } from 'helpers/tracking/trackingOphan';
 import { addQueryParamsToURL, getOrigin } from 'helpers/urls/url';
+import { getDiscountSummary } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 
 const getCheckoutUrl = (
 	countryId: IsoCountry,
@@ -75,18 +79,17 @@ const getDisplayPrice = (
 	return productPrice.price;
 };
 
+// TODO: Decomission this function after non digital weekly products are removed
 export const getProducts = ({
 	countryId,
 	productPrices,
 	billingPeriods,
 	orderIsAGift,
-	enableWeeklyDigitalPlans,
 }: {
 	countryId: IsoCountry;
 	productPrices: ProductPrices;
 	billingPeriods: RecurringBillingPeriod[];
 	orderIsAGift: boolean;
-	enableWeeklyDigitalPlans: boolean;
 }): Product[] =>
 	billingPeriods.map((billingPeriod) => {
 		const productPrice = getProductPrice(
@@ -94,7 +97,7 @@ export const getProducts = ({
 			countryId,
 			billingPeriod,
 			getWeeklyFulfilmentOption(countryId),
-			enableWeeklyDigitalPlans ? 'PlusDigital' : 'NoProductOptions',
+			'NoProductOptions',
 		);
 
 		const promotion = getAppliedPromo(productPrice.promotions);
@@ -126,11 +129,85 @@ export const getProducts = ({
 				countryId,
 				billingPeriod,
 				orderIsAGift,
-				enableWeeklyDigitalPlans,
+				false,
 				promotion,
 			),
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
 			isSpecialOffer: is12for12 || isBlackFriday,
+		};
+	});
+
+export const getWeeklyDigitalProducts = ({
+	countryId,
+	productPrices,
+	weeklyBillingPeriods,
+	orderIsAGift,
+}: {
+	countryId: IsoCountry;
+	productPrices: ProductPrices;
+	weeklyBillingPeriods: RecurringBillingPeriod[];
+	orderIsAGift: boolean;
+}): Product[] =>
+	weeklyBillingPeriods.map((billingPeriod) => {
+		const productPrice = getProductPrice(
+			productPrices,
+			countryId,
+			billingPeriod,
+			getWeeklyFulfilmentOption(countryId),
+			'PlusDigital',
+		);
+
+		const promotion = getAppliedPromo(productPrice.promotions);
+
+		const offerCopy = promotion?.landingPage?.roundel ?? '';
+		const trackingProperties = {
+			id: orderIsAGift
+				? `subscribe_now_cta_gift-${billingPeriod}`
+				: `subscribe_now_cta-${billingPeriod}`,
+			product: 'GuardianWeekly' as SubscriptionProduct,
+			componentType: 'ACQUISITIONS_BUTTON' as OphanComponentType,
+		};
+		const fullPriceWithCurrency = getPriceWithSymbol(
+			productPrice.currency,
+			productPrice.price,
+		);
+
+		const discountPriceWithCurrency = promotion?.discountedPrice
+			? getPriceWithSymbol(productPrice.currency, promotion.discountedPrice)
+			: undefined;
+
+		const durationInMonths = promotion?.discount?.durationMonths;
+
+		const discountSummary =
+			durationInMonths && discountPriceWithCurrency
+				? getDiscountSummary({
+						fullPriceWithCurrency,
+						discountPriceWithCurrency,
+						durationInMonths,
+						billingPeriod,
+				  })
+				: undefined;
+
+		return {
+			title: getBillingPeriodTitle(billingPeriod, orderIsAGift),
+			price: fullPriceWithCurrency,
+			discountedPrice: discountPriceWithCurrency,
+			billingPeriodNoun: getBillingPeriodNoun(billingPeriod, orderIsAGift),
+			offerCopy,
+			discountSummary,
+			priceCopy: '',
+			savingsText: getSimplifiedPriceDescription(productPrice, billingPeriod),
+			href: getCheckoutUrl(
+				countryId,
+				billingPeriod,
+				orderIsAGift,
+				true,
+				promotion,
+			),
+			showLabel: billingPeriod === BillingPeriod.Quarterly,
+			onClick: sendTrackingEventsOnClick(trackingProperties),
+			onView: sendTrackingEventsOnView(trackingProperties),
+			buttonCopy: 'Subscribe now',
 		};
 	});

@@ -7,8 +7,9 @@ import {
 	textEgyptian17,
 } from '@guardian/source/foundations';
 import type { IsoCountry } from '@modules/internationalisation/country';
+import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { getProducts } from '../helpers/getWeeklyProduct';
+import { getWeeklyDigitalProducts } from '../helpers/getWeeklyProducts';
 import WeeklyRatePlanCard from './WeeklyRatePlanCard';
 
 const pricesSection = css`
@@ -50,9 +51,10 @@ export function WeeklyCards({
 	countryId,
 	productPrices,
 }: WeeklyCardsProps): JSX.Element {
-	const products = getProducts({
+	const products = getWeeklyDigitalProducts({
 		countryId,
 		productPrices,
+		weeklyBillingPeriods,
 		orderIsAGift: false,
 	});
 
