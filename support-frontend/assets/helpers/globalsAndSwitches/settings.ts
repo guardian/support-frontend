@@ -3,6 +3,7 @@ import 'helpers/contributions';
 import type { CheckoutNudgeTest } from './checkoutNudgeSettings';
 import type { LandingPageTest } from './landingPageSettings';
 import type { OneTimeCheckoutTest } from './oneTimeCheckoutSettings';
+import type { StudentLandingPageTest } from './studentLandingPageSettings';
 
 export type Status = 'On' | 'Off';
 
@@ -34,4 +35,5 @@ export type Settings = {
 	landingPageTests?: LandingPageTest[];
 	checkoutNudgeTests?: CheckoutNudgeTest[];
 	oneTimeCheckoutTests?: OneTimeCheckoutTest[];
+	studentLandingPageTests?: StudentLandingPageTest[];
 };
