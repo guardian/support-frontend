@@ -16,13 +16,14 @@ export const weeklyGiftBillingPeriods: RecurringBillingPeriod[] = [
 export function billingPeriodToRatePlan(
 	billingPeriod: BillingPeriod,
 	isWeeklyGifting: boolean,
+	enableWeeklyDigitalPlans: boolean,
 ): string {
 	if (isWeeklyGifting) {
 		return billingPeriod === BillingPeriod.Annual
 			? 'OneYearGift'
 			: 'ThreeMonthGift';
 	}
-	return billingPeriod.toString();
+	return billingPeriod.toString() + (enableWeeklyDigitalPlans ? 'Plus' : '');
 }
 
 export function getBillingPeriodNoun(
@@ -65,6 +66,7 @@ export function ratePlanToBillingPeriod(
 ): BillingPeriod {
 	switch (ratePlanKey) {
 		case 'Annual':
+		case 'AnnualPlus':
 		case 'RestOfWorldAnnual':
 		case 'DomesticAnnual':
 		case 'OneYearGift':
@@ -73,8 +75,10 @@ export function ratePlanToBillingPeriod(
 			return BillingPeriod.Annual;
 		case 'ThreeMonthGift':
 		case 'Quarterly':
+		case 'QuarterlyPlus':
 			return BillingPeriod.Quarterly;
 		case 'Monthly':
+		case 'MonthlyPlus':
 		case 'RestOfWorldMonthly':
 		case 'DomesticMonthly':
 		case 'Everyday':

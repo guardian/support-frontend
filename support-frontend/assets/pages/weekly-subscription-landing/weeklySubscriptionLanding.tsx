@@ -11,6 +11,11 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
+import {
+	Domestic,
+	type PrintFulfilmentOptions,
+	RestOfWorld,
+} from '@modules/product/fulfilmentOptions';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
@@ -29,6 +34,7 @@ import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { getSanitisedPromoCopy } from 'helpers/productPrice/promotions';
 import { renderPage } from 'helpers/rendering/render';
 import { routes } from 'helpers/urls/routes';
+import getPlanData from 'pages/paper-subscription-landing/planData';
 import { GuardianWeeklyFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
 import Benefits from './components/content/benefits';
 import GiftBenefits from './components/content/giftBenefits';
@@ -46,19 +52,19 @@ const weeklySpacing = css`
 `;
 const weeklyDigitalSpacing = css`
 	padding: ${space[8]}px ${space[3]}px ${space[9]}px;
-	${from.tablet} {
-		padding: ${space[8]}px ${space[5]}px ${space[9]}px;
-	}
 	${from.desktop} {
 		width: calc(100% - 32px);
 		padding: ${space[8]}px 0 ${space[9]}px;
 	}
 	${from.leftCol} {
+		width: calc(100% - 40px);
+	}
+	${from.wide} {
 		width: calc(100% - 64px);
 	}
 `;
 
-const { enableWeeklyDigital } = getFeatureFlags();
+const { enableWeeklyDigital, enableWeeklyDigitalPlans } = getFeatureFlags();
 
 export type WeeklyLandingPageProps = {
 	countryId: IsoCountry;
@@ -100,6 +106,10 @@ export function WeeklyLandingPage({
 		trackProduct: 'GuardianWeekly',
 	});
 	const sanitisedPromoCopy = getSanitisedPromoCopy(promotionCopy, orderIsAGift);
+
+	const fulfilmentOption: PrintFulfilmentOptions =
+		countryGroupId === 'International' ? RestOfWorld : Domestic;
+	const planData = getPlanData('NoProductOptions', fulfilmentOption);
 	return (
 		<PageScaffold
 			id={pageQaId}
@@ -123,7 +133,7 @@ export function WeeklyLandingPage({
 				<FullWidthContainer theme="brand">
 					<CentredContainer cssOverrides={weeklyDigitalSpacing}>
 						<WeeklyCards countryId={countryId} productPrices={productPrices} />
-						<WeeklyBenefits sampleCopy="WEEKLY BENEFITS COMPONENT" />
+						<WeeklyBenefits planData={planData} />
 						<WeeklyPriceInfo />
 					</CentredContainer>
 				</FullWidthContainer>
@@ -140,6 +150,7 @@ export function WeeklyLandingPage({
 								countryId={countryId}
 								productPrices={productPrices}
 								orderIsAGift={orderIsAGift}
+								enableWeeklyDigitalPlans={enableWeeklyDigitalPlans}
 							/>
 						</CentredContainer>
 					</FullWidthContainer>

@@ -31,9 +31,8 @@ const centredContainerDigitalWeekly = css`
 		padding: ${space[8]}px ${space[5]}px ${space[12]}px;
 	}
 	${from.wide} {
-		width: 100% - 64px;
-		padding-left: 0;
-		padding-right: 0;
+		padding-left: ${space[8]}px;
+		padding-right: ${space[8]}px;
 	}
 `;
 const displayRowEvenlyWeekly = css`
