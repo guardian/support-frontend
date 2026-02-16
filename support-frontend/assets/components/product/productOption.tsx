@@ -60,6 +60,7 @@ export type Product = {
 };
 
 function ProductOption(props: Product): JSX.Element {
+	console.log('🚀 ~ ProductOption ~ props:', props);
 	const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
 		threshold: 0.5,
 		debounce: true,

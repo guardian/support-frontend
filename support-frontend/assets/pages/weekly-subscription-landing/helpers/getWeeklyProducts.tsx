@@ -164,7 +164,6 @@ export const getWeeklyDigitalProducts = ({
 
 		const promotion = getAppliedPromo(productPrice.promotions);
 
-		const offerCopy = promotion?.landingPage?.roundel ?? '';
 		const trackingProperties = {
 			id: `subscribe_now_cta-${billingPeriod}`,
 			product: 'GuardianWeekly' as SubscriptionProduct,
@@ -196,10 +195,9 @@ export const getWeeklyDigitalProducts = ({
 			price: fullPriceWithCurrency,
 			discountedPrice: discountPriceWithCurrency,
 			billingPeriodNoun: getBillingPeriodNoun(billingPeriod),
-			offerCopy,
 			discountSummary,
 			priceCopy: '',
-			savingsText: getSimplifiedPriceDescription(productPrice, billingPeriod),
+			savingsText: promotion?.landingPage?.roundel ?? '',
 			href: getCheckoutUrl({
 				countryId,
 				billingPeriod,
