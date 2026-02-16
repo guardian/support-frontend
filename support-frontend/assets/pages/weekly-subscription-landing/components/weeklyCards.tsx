@@ -9,7 +9,7 @@ import {
 import type { IsoCountry } from '@modules/internationalisation/country';
 import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { getWeeklyDigitalProducts } from '../helpers/getWeeklyProducts';
+import { getWeeklyDigitalRatePlans } from '../helpers/getWeeklyProducts';
 import WeeklyRatePlanCard from './WeeklyRatePlanCard';
 
 const pricesSection = css`
@@ -42,16 +42,14 @@ const priceCardsContainer = css`
 	}
 `;
 
-type WeeklyCardsProps = {
-	countryId: IsoCountry;
-	productPrices: ProductPrices;
-};
-
 export function WeeklyCards({
 	countryId,
 	productPrices,
-}: WeeklyCardsProps): JSX.Element {
-	const products = getWeeklyDigitalProducts({
+}: {
+	countryId: IsoCountry;
+	productPrices: ProductPrices;
+}): JSX.Element {
+	const ratePlans = getWeeklyDigitalRatePlans({
 		countryId,
 		productPrices,
 		weeklyBillingPeriods,
@@ -62,8 +60,8 @@ export function WeeklyCards({
 			<h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>
 			<p css={pricesSubHeadline}>Choose how you'd like to pay</p>
 			<div css={priceCardsContainer}>
-				{products.map((product) => (
-					<WeeklyRatePlanCard {...product} />
+				{ratePlans.map((ratePlan) => (
+					<WeeklyRatePlanCard {...ratePlan} />
 				))}
 			</div>
 		</section>

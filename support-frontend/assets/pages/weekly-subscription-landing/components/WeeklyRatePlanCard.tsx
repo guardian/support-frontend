@@ -17,7 +17,7 @@ import {
 	strikethroughPriceStyle,
 } from './WeeklyRatePlanCardStyles';
 
-function WeeklyRatePlanCard(product: Product) {
+function WeeklyRatePlanCard(ratePlan: Product) {
 	const {
 		title,
 		price,
@@ -29,7 +29,7 @@ function WeeklyRatePlanCard(product: Product) {
 		href,
 		onClick,
 		onView,
-	} = product;
+	} = ratePlan;
 	const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
 		threshold: 0.5,
 		debounce: true,

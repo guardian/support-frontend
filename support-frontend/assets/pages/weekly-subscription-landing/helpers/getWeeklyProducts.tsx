@@ -144,7 +144,7 @@ export const getProducts = ({
 		};
 	});
 
-export const getWeeklyDigitalProducts = ({
+export const getWeeklyDigitalRatePlans = ({
 	countryId,
 	productPrices,
 	weeklyBillingPeriods,
