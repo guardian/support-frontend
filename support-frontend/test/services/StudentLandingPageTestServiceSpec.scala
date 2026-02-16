@@ -1,14 +1,6 @@
 package services
 
-import admin.settings.{
-  Image,
-  Institution,
-  PromoCode,
-  RegionTargeting,
-  StudentLandingPageTest,
-  StudentLandingPageVariant,
-  Status,
-}
+import admin.settings.{Image, Institution, RegionTargeting, StudentLandingPageTest, StudentLandingPageVariant, Status}
 
 import io.circe.Decoder
 import org.scalatest.flatspec.AsyncFlatSpec
@@ -31,17 +23,19 @@ class StudentLandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
   "StudentLandingPageTestService" should "parseStudentLandingPage" in {
     val dynamoTest = Map(
       "channel" -> stringAttr("StudentLandingPage"),
-      "name" -> stringAttr("2026-02-11_SKB-VALIDATION-TEST"),
+      "name" -> stringAttr("2026-02-09_SKB-REGION-FIX"),
       "status" -> stringAttr("Live"),
-      "priority" -> numberAttr(3),
+      "priority" -> numberAttr(1),
       "regionId" -> stringAttr("AUDCountries"),
       "variants" -> listAttr(
         List(
           mapAttr(
             Map(
               "name" -> stringAttr("offer"),
-              "heading" -> stringAttr("test heading"),
-              "subheading" -> stringAttr("test subheading"),
+              "heading" -> stringAttr("Subscribe to fearless, independent and inspiring journalism"),
+              "subheading" -> stringAttr(
+                "For a limited time, students with a valid UTS email address can unlock the premium experience of Guardian journalism, including unmetered app access, free for two years.",
+              ),
               "image" -> mapAttr(
                 Map(
                   "altText" -> stringAttr("Feast and News Apps"),
@@ -63,9 +57,9 @@ class StudentLandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
                   "name" -> stringAttr("Guardian University"),
                 ),
               ),
-              "promoCodes" -> mapAttr(
-                Map(
-                  "value" -> listAttr(List(stringAttr("UTS_STUDENT"))),
+              "promoCodes" -> listAttr(
+                List(
+                  stringAttr("UTS_STUDENT"),
                 ),
               ),
             ),
@@ -77,15 +71,16 @@ class StudentLandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
     val result = parseDynamoRecord[StudentLandingPageTest](dynamoTest.asJava)
     result shouldBe Right(
       StudentLandingPageTest(
-        name = "2026-02-11_SKB-VALIDATION-TEST",
+        name = "2026-02-09_SKB-REGION-FIX",
         status = Status.Live,
-        priority = 3,
+        priority = 1,
         regionId = "AUDCountries",
         variants = List(
           StudentLandingPageVariant(
             name = "offer",
-            heading = "test heading",
-            subheading = "test subheading",
+            heading = "Subscribe to fearless, independent and inspiring journalism",
+            subheading =
+              "For a limited time, students with a valid UTS email address can unlock the premium experience of Guardian journalism, including unmetered app access, free for two years.",
             image = Image(
               altText = "Feast and News Apps",
               desktopUrl =
@@ -100,9 +95,7 @@ class StudentLandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
               acronym = "UTS",
               logoUrl = "https://www.theguardian.com",
             ),
-            promoCodes = PromoCode(
-              value = List("UTS_STUDENT"),
-            ),
+            promoCodes = List("UTS_STUDENT"),
           ),
         ),
       ),
