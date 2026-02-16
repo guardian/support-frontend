@@ -55,7 +55,6 @@ export function WeeklyCards({
 		countryId,
 		productPrices,
 		weeklyBillingPeriods,
-		orderIsAGift: false,
 	});
 
 	return (
