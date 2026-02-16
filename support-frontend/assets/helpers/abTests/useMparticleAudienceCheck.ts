@@ -1,60 +1,87 @@
 import { useEffect, useState } from 'react';
+import type { LandingPageTest } from '../globalsAndSwitches/landingPageSettings';
 import { fetchIsUserInAudience } from '../mparticle';
 import { getUser } from '../user/user';
 
+interface AudienceCheckResult {
+	// null = still loading, undefined = no match found, LandingPageTest = matched test
+	matchedTest: LandingPageTest | undefined | null;
+}
+
 /**
- * Hook to check if a user should see content based on mParticle audience.
+ * Hook that checks a list of audience-targeted landing page tests
+ * and returns the first one where the user is in the mParticle audience.
  *
- * This hook follows the pattern used in threeTierLanding.tsx:
- * - Shows loading state while checking audience
- * - Falls back to not showing the test if check fails or times out
- * - Returns null while loading, boolean when complete
+ * - Returns { matchedTest: null } while checking
+ * - Returns { matchedTest: LandingPageTest } if a match is found
+ * - Returns { matchedTest: undefined } if no match or no tests to check
  */
-export function useMparticleAudienceCheck(audienceId?: number): boolean | null {
-	const [shouldShowTest, setShouldShowTest] = useState<boolean | null>(null);
+export function useMparticleAudienceCheck(
+	testsWithAudience: LandingPageTest[],
+): AudienceCheckResult {
+	const [matchedTest, setMatchedTest] = useState<
+		LandingPageTest | undefined | null
+	>(() => (testsWithAudience.length === 0 ? undefined : null));
 	const { isSignedIn } = getUser();
 
 	useEffect(() => {
-		console.log('useMparticleAudienceCheck useEffect called with:', {
-			audienceId,
-			isSignedIn,
-		});
-
-		// If no audience ID, show to everyone
-		if (!audienceId) {
-			console.log('No audienceId provided, showing to everyone');
-			setShouldShowTest(true);
+		if (testsWithAudience.length === 0) {
+			setMatchedTest(undefined);
 			return;
 		}
 
-		console.log('Checking audience membership for ID:', audienceId);
+		let cancelled = false;
 
-		// Set a timeout to prevent indefinite loading
 		const timeout = setTimeout(() => {
-			console.log('Audience check timed out after 2 seconds');
-			setShouldShowTest(false);
+			if (!cancelled) {
+				setMatchedTest(undefined);
+			}
 		}, 2000);
 
-		// Check if user is in the audience
-		fetchIsUserInAudience(isSignedIn, audienceId)
-			.then((isInAudience) => {
-				console.log('Audience check result:', isInAudience);
-				setShouldShowTest(isInAudience);
-			})
-			.catch((error) => {
-				// On error, default to not showing the test
-				console.error('Error checking mParticle audience:', error);
-				setShouldShowTest(false);
-			})
-			.finally(() => {
+		async function checkAudiences() {
+			for (const test of testsWithAudience) {
+				if (cancelled) {
+					return;
+				}
+
+				if (test.mParticleAudience === undefined) {
+					continue;
+				}
+
+				const audienceId = test.mParticleAudience;
+
+				try {
+					const isInAudience: boolean = await fetchIsUserInAudience(
+						isSignedIn,
+						audienceId,
+					);
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- isInAudience can be false at runtime
+					if (isInAudience && !cancelled) {
+						clearTimeout(timeout);
+						setMatchedTest(test);
+						return;
+					}
+				} catch (error) {
+					console.error(
+						`Error checking audience ${audienceId} for test ${test.name}:`,
+						error,
+					);
+				}
+			}
+			// No match found
+			if (!cancelled) {
 				clearTimeout(timeout);
-			});
+				setMatchedTest(undefined);
+			}
+		}
+
+		void checkAudiences();
 
 		return () => {
-			console.log('Cleaning up audience check');
+			cancelled = true;
 			clearTimeout(timeout);
 		};
-	}, [isSignedIn, audienceId]);
+	}, [isSignedIn, testsWithAudience.map((t) => t.name).join(',')]);
 
-	return shouldShowTest;
+	return { matchedTest };
 }

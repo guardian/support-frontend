@@ -1,7 +1,9 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
+import { useMparticleAudienceCheck } from 'helpers/abTests/useMparticleAudienceCheck';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import { ContributionsOnlyLanding } from 'pages/supporter-plus-landing/twoStepPages/contributionsOnlyLanding';
@@ -24,6 +26,33 @@ export function LandingPage({
 }: Props) {
 	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 
+	// Filter landing page tests that:
+	// 1. The user is participating in (present in abParticipations)
+	// 2. Have an mParticleAudience defined
+	const testsWithAudience = (
+		window.guardian.settings.landingPageTests ?? []
+	).filter(
+		(test) =>
+			abParticipations[test.name] !== undefined &&
+			test.mParticleAudience !== undefined,
+	);
+
+	// Check each test's audience sequentially, return first match
+	const { matchedTest } = useMparticleAudienceCheck(testsWithAudience);
+
+	// While checking audiences, show loading
+	if (matchedTest === null) {
+		return <GuardianHoldingContent />;
+	}
+
+	// If we found a matching test, use its variant
+	const effectiveSettings =
+		matchedTest !== undefined
+			? matchedTest.variants.find(
+					(v) => v.name === abParticipations[matchedTest.name],
+			  ) ?? landingPageSettings
+			: landingPageSettings;
+
 	const { selectedAmountsVariant: amounts } = getAmountsTestVariant(
 		countryId,
 		countryGroupId,
@@ -37,7 +66,7 @@ export function LandingPage({
 			<ThreeTierLanding
 				supportRegionId={supportRegionId}
 				abParticipations={abParticipations}
-				settings={landingPageSettings}
+				settings={effectiveSettings}
 			/>
 		);
 	} else {

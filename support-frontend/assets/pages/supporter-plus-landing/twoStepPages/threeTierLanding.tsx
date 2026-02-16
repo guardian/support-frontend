@@ -35,7 +35,6 @@ import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHo
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import type { Participations } from 'helpers/abTests/models';
-import { useMparticleAudienceCheck } from 'helpers/abTests/useMparticleAudienceCheck';
 import {
 	countdownSwitchOn,
 	getCampaignSettings,
@@ -71,7 +70,6 @@ import { SupportOnce } from '../components/supportOnce';
 import type { CardContent } from '../components/threeTierCard';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
-import { ContributionsOnlyLanding } from './contributionsOnlyLanding';
 import { ThreeTierLandingHeading } from './threeTierLandingHeading';
 import { TickerContainer } from './tickerContainer';
 
@@ -337,38 +335,6 @@ export function ThreeTierLanding({
 
 		void Promise.race([fetchRequest, timeout]);
 	}, [isSignedIn, abParticipations.landingPageMparticleLatencyTest]);
-
-	// Check mParticle audience for this test
-	// Find the landing page test the user is participating in via abParticipations
-	const currentTest = window.guardian.settings.landingPageTests?.find(
-		(test) => abParticipations[test.name] !== undefined,
-	);
-
-	console.log('=== mParticle Audience Check Debug ===');
-	console.log('Current variant name from settings:', settings.name);
-	console.log('abParticipations:', abParticipations);
-	console.log('Found test:', currentTest?.name);
-	console.log('mParticleAudience ID:', currentTest?.mParticleAudience);
-
-	const shouldShowTest = useMparticleAudienceCheck(
-		currentTest?.mParticleAudience,
-	);
-
-	console.log('shouldShowTest result:', shouldShowTest);
-	console.log('=====================================');
-
-	// Show loading state while checking audience
-	if (shouldShowTest === null) {
-		console.log('Showing loading state while checking audience...');
-		return <GuardianHoldingContent />;
-	}
-
-	// Don't show the test if user not in audience
-	if (!shouldShowTest && currentTest?.mParticleAudience) {
-		console.log('User not in audience, showing fallback');
-		// Show fallback landing page
-		return <ContributionsOnlyLanding supportRegionId={supportRegionId} />;
-	}
 
 	const enableSingleContributionsTab =
 		campaignSettings?.enableSingleContributions ??
