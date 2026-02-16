@@ -28,6 +28,7 @@ case class AllSettings(
     landingPageTests: List[LandingPageTest],
     checkoutNudgeTests: List[CheckoutNudgeTest],
     oneTimeCheckoutTests: List[OneTimeCheckoutTest],
+    studentLandingPageTests: List[StudentLandingPageTest],
     productsWithThankYouOnboarding: List[String] =
       AllSettings.productsWithThankYouOnboarding.toList.map(_.getClass.getSimpleName.stripSuffix("$")),
 )
