@@ -27,21 +27,13 @@ object Institution {
   implicit val codec: Codec[Institution] = deriveCodec
 }
 
-// case class PromoCode(
-//     value: String,
-// )
-
-// object PromoCode {
-//   implicit val codec: Codec[PromoCode] = deriveCodec
-// }
-
 case class StudentLandingPageVariant(
     name: String,
     heading: String,
     subheading: String,
     image: Image,
     institution: Institution,
-    promoCodes: List[String], // the problem is here.
+    promoCodes: List[String],
 )
 
 object StudentLandingPageVariant {
@@ -52,7 +44,6 @@ case class StudentLandingPageTest(
     name: String,
     status: Status,
     priority: Int,
-    //  check regionId is getting correct type.
     regionId: String,
     variants: List[StudentLandingPageVariant],
 )
