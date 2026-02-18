@@ -526,20 +526,19 @@ export default function CheckoutForm({
 		}
 	}, [errorMessage]);
 
-	const onFormSubmit = async (formData: FormData) => {
+	const onFormSubmit = async (formData: FormData): Promise<boolean> => {
 		// This shouldn't happen as the overlay which is displayed when
 		// isProcessingPayment is true should prevent button clicks. But this gives
 		// a little extra defence just in case.
 		if (isProcessingPayment) {
-			return;
+			return false;
 		}
 
 		setIsProcessingPayment(true);
 
 		if (paymentMethod === undefined) {
 			setPaymentMethodError('Please select a payment method');
-			setIsProcessingPayment(false);
-			return;
+			return false;
 		}
 
 		if (paymentMethod === 'Stripe') {
@@ -561,8 +560,7 @@ export default function CheckoutForm({
 			if (Object.values(newStripeFieldError).some((value) => value)) {
 				setStripeFieldError(newStripeFieldError);
 				paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
-				setIsProcessingPayment(false);
-				return;
+				return false;
 			}
 		}
 
@@ -571,8 +569,7 @@ export default function CheckoutForm({
 				recaptcha: 'Please complete security check',
 			});
 			paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
-			setIsProcessingPayment(false);
-			return;
+			return false;
 		}
 
 		const finalProductKey =
@@ -581,8 +578,7 @@ export default function CheckoutForm({
 				: productKey;
 		if (finalProductKey == 'NationalDelivery' && !chosenDeliveryAgent) {
 			setDeliveryAgentError('Please select a delivery agent');
-			setIsProcessingPayment(false);
-			return;
+			return false;
 		}
 		if (paymentMethod === 'DirectDebit') {
 			const response = await checkAccount(
@@ -596,8 +592,7 @@ export default function CheckoutForm({
 				setErrorContext(
 					'The transaction was temporarily declined. Please try entering you payment details again. Alternatively try another payment method.',
 				);
-				setIsProcessingPayment(false);
-				return;
+				return false;
 			}
 		}
 		try {
@@ -637,6 +632,7 @@ export default function CheckoutForm({
 					: undefined,
 			});
 			window.location.href = successUrl;
+			return true;
 		} catch (error) {
 			if (error instanceof FormSubmissionError) {
 				setErrorMessage(error.message);
@@ -650,13 +646,8 @@ export default function CheckoutForm({
 					`An error occurred in checkoutComponent.tsx while trying to submit the form: ${errorMessage}`,
 				);
 			}
-			// This state update is in the catch block because it has the effect
-			// of removing the processing overlay. If it was outside of the
-			// try/catch then in the case where the submitForm is successful the
-			// overlay would be removed before the redirect has completed
-			// resulting in a flash of the checkout with no overlay before the
-			// redirect to the thank you page.
-			setIsProcessingPayment(false);
+
+			return false;
 		}
 	};
 
@@ -699,7 +690,16 @@ export default function CheckoutForm({
 					event.preventDefault();
 					const form = event.currentTarget;
 					const formData = new FormData(form);
-					void onFormSubmit(formData);
+					void onFormSubmit(formData).then((success) => {
+						// If the onFormSubmit was not successful the promise resolves with
+						// false. In this case we need to remove the overlay so that the
+						// user can interact with the form again.
+						// If the onFormSubmit was successful the promise resolves with true
+						// and does a client side redirect, so there's nothing to do.
+						if (!success) {
+							setIsProcessingPayment(false);
+						}
+					});
 				}}
 			>
 				<Box
