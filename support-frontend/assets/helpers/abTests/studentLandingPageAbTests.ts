@@ -30,7 +30,7 @@ const fallBackStudentLandingPageSelection: Record<
  * Configuration for student landing page A/B tests
  * Use with getPageParticipations to get the variant and participations
  */
-export const studentLandingPageTestConfig: Omit<
+const studentLandingPageTestConfig: Omit<
 	PageParticipationsConfig<StudentLandingPageVariant>,
 	'tests'
 > = {
