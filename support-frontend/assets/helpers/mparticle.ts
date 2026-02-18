@@ -47,43 +47,4 @@ const fetchIsPastSingleContributor = async (
 	}
 };
 
-/**
- * Generic function to check if a user is in any mParticle audience.
- * Returns true if the user is in the specified audience, false otherwise.
- * Make a request to mparticle only if the user:
- * - is signed in
- * - has targeting consent
- */
-const fetchIsUserInAudience = async (
-	isSignedIn: boolean,
-	audienceId: number,
-): Promise<boolean> => {
-	if (!isSignedIn) {
-		return false;
-	}
-
-	const hasConsent = await hasTargetingConsent();
-	if (!hasConsent) {
-		return false;
-	}
-
-	try {
-		const response = await fetchJson<{
-			isAudienceMember: boolean;
-		}>(`/audience/${audienceId}/member`, {
-			mode: 'cors',
-			credentials: 'include',
-		});
-
-		return response.isAudienceMember;
-	} catch (error) {
-		console.error(
-			`Error fetching audience data from mparticle for audience ${audienceId}: ${String(
-				error,
-			)}`,
-		);
-		return false;
-	}
-};
-
-export { fetchIsPastSingleContributor, fetchIsUserInAudience };
+export { fetchIsPastSingleContributor };

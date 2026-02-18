@@ -10,6 +10,7 @@ import { createContext, type ReactNode, useContext, useRef } from 'react';
 interface AnalyticsProfileData {
 	hasMobileAppDownloaded: boolean;
 	hasFeastMobileAppDownloaded: boolean;
+	audienceMemberships: number[];
 }
 
 interface CacheEntry {

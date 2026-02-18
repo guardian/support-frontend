@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
 import { ObserverHoldingContent } from 'components/serverSideRendered/observerHoldingContent';
 import { WithCoreWebVitals } from 'helpers/coreWebVitals/withCoreWebVitals';
+import { AnalyticsProfileCacheProvider } from 'helpers/customHooks/analyticsProfileCache';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import type { OneTimeCheckoutVariant } from 'helpers/globalsAndSwitches/oneTimeCheckoutSettings';
@@ -256,7 +257,9 @@ function AppWithAudienceCheck() {
 function Router() {
 	return (
 		<WithCoreWebVitals>
-			<AppWithAudienceCheck />
+			<AnalyticsProfileCacheProvider>
+				<AppWithAudienceCheck />
+			</AnalyticsProfileCacheProvider>
 		</WithCoreWebVitals>
 	);
 }

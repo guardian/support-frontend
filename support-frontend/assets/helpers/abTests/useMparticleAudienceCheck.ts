@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
+import useAnalyticsProfile from '../customHooks/useAnalyticsProfile';
 import type { LandingPageTest } from '../globalsAndSwitches/landingPageSettings';
-import { fetchIsUserInAudience } from '../mparticle';
-import { getUser } from '../user/user';
+import {
+	getMparticleAudienceCheckCache,
+	setMparticleAudienceCheckCache,
+} from './sessionStorage';
 
 interface AudienceCheckResult {
 	// null = still loading, undefined = no match found, LandingPageTest = matched test
@@ -11,6 +14,9 @@ interface AudienceCheckResult {
 /**
  * Hook that checks a list of audience-targeted landing page tests
  * and returns the first one where the user is in the mParticle audience.
+ *
+ * Uses the analytics profile (single API call returning all audience memberships)
+ * and session storage to cache results across page loads.
  *
  * - Returns { matchedTest: null } while checking
  * - Returns { matchedTest: LandingPageTest } if a match is found
@@ -22,7 +28,10 @@ export function useMparticleAudienceCheck(
 	const [matchedTest, setMatchedTest] = useState<
 		LandingPageTest | undefined | null
 	>(() => (testsWithAudience.length === 0 ? undefined : null));
-	const { isSignedIn } = getUser();
+
+	const { audienceMemberships, dataLoaded } = useAnalyticsProfile();
+
+	const testNamesKey = testsWithAudience.map((t) => t.name).join(',');
 
 	useEffect(() => {
 		if (testsWithAudience.length === 0) {
@@ -30,58 +39,49 @@ export function useMparticleAudienceCheck(
 			return;
 		}
 
-		let cancelled = false;
+		const testNames = testsWithAudience.map((t) => t.name);
 
-		const timeout = setTimeout(() => {
-			if (!cancelled) {
-				setMatchedTest(undefined);
-			}
-		}, 2000);
+		// Check session storage cache first
+		const cached = getMparticleAudienceCheckCache();
 
-		async function checkAudiences() {
-			for (const test of testsWithAudience) {
-				if (cancelled) {
-					return;
-				}
+		if (cached) {
+			const testNamesSet = new Set(testNames);
+			const cachedTestNamesSet = new Set(cached.testsChecked);
+			const isSameTests =
+				testNamesSet.size === cachedTestNamesSet.size &&
+				[...testNamesSet].every((name) => cachedTestNamesSet.has(name));
 
-				if (test.mParticleAudience === undefined) {
-					continue;
-				}
-
-				const audienceId = test.mParticleAudience;
-
-				try {
-					const isInAudience: boolean = await fetchIsUserInAudience(
-						isSignedIn,
-						audienceId,
+			if (isSameTests) {
+				if (cached.matchedTestName === null) {
+					setMatchedTest(undefined);
+				} else {
+					const cachedTest = testsWithAudience.find(
+						(t) => t.name === cached.matchedTestName,
 					);
-					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- isInAudience can be false at runtime
-					if (isInAudience && !cancelled) {
-						clearTimeout(timeout);
-						setMatchedTest(test);
-						return;
-					}
-				} catch (error) {
-					console.error(
-						`Error checking audience ${audienceId} for test ${test.name}:`,
-						error,
-					);
+					setMatchedTest(cachedTest ?? undefined);
 				}
-			}
-			// No match found
-			if (!cancelled) {
-				clearTimeout(timeout);
-				setMatchedTest(undefined);
+				return;
 			}
 		}
 
-		void checkAudiences();
+		// Wait for the analytics profile to finish loading
+		if (!dataLoaded) {
+			return;
+		}
 
-		return () => {
-			cancelled = true;
-			clearTimeout(timeout);
-		};
-	}, [isSignedIn, testsWithAudience.map((t) => t.name).join(',')]);
+		// Synchronously check audience membership against the fetched profile
+		const matched = testsWithAudience.find(
+			(test) =>
+				test.mParticleAudience !== undefined &&
+				audienceMemberships.includes(test.mParticleAudience),
+		);
+
+		setMparticleAudienceCheckCache({
+			matchedTestName: matched?.name ?? null,
+			testsChecked: testNames,
+		});
+		setMatchedTest(matched ?? undefined);
+	}, [testNamesKey, dataLoaded, audienceMemberships]);
 
 	return { matchedTest };
 }

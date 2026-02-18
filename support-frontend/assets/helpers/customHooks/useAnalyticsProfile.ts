@@ -7,6 +7,7 @@ const useAnalyticsProfile = () => {
 	const [hasMobileAppDownloaded, setHasMobileAppDownloaded] = useState(false);
 	const [hasFeastMobileAppDownloaded, setHasFeastMobileAppDownloaded] =
 		useState(false);
+	const [audienceMemberships, setAudienceMemberships] = useState<number[]>([]);
 	const [dataLoaded, setDataLoaded] = useState(false);
 
 	const loadAnalyticsData = useCallback(async () => {
@@ -19,6 +20,7 @@ const useAnalyticsProfile = () => {
 		if (cachedData) {
 			setHasMobileAppDownloaded(cachedData.hasMobileAppDownloaded);
 			setHasFeastMobileAppDownloaded(cachedData.hasFeastMobileAppDownloaded);
+			setAudienceMemberships(cachedData.audienceMemberships);
 			setDataLoaded(true);
 			return;
 		}
@@ -30,6 +32,7 @@ const useAnalyticsProfile = () => {
 				const data = await pendingRequest;
 				setHasMobileAppDownloaded(data.hasMobileAppDownloaded);
 				setHasFeastMobileAppDownloaded(data.hasFeastMobileAppDownloaded);
+				setAudienceMemberships(data.audienceMemberships);
 				setDataLoaded(true);
 				return;
 			} catch (error) {
@@ -43,12 +46,14 @@ const useAnalyticsProfile = () => {
 			identityId: string;
 			hasMobileAppDownloaded: boolean;
 			hasFeastMobileAppDownloaded: boolean;
+			audienceMemberships: number[];
 		}>('/analytics-user-profile', {
 			mode: 'cors',
 			credentials: 'include',
 		}).then((response) => ({
 			hasMobileAppDownloaded: response.hasMobileAppDownloaded,
 			hasFeastMobileAppDownloaded: response.hasFeastMobileAppDownloaded,
+			audienceMemberships: response.audienceMemberships,
 		}));
 
 		cache.setPendingRequest(requestPromise);
@@ -58,13 +63,14 @@ const useAnalyticsProfile = () => {
 
 			setHasMobileAppDownloaded(data.hasMobileAppDownloaded);
 			setHasFeastMobileAppDownloaded(data.hasFeastMobileAppDownloaded);
-			setDataLoaded(true);
+			setAudienceMemberships(data.audienceMemberships);
 
 			// Store in cache for subsequent requests within this page load
 			cache.set(data);
 		} catch (error) {
 			console.error('Error calling Analytics endpoint:', error);
 		} finally {
+			setDataLoaded(true);
 			cache.clearPendingRequest();
 		}
 	}, [dataLoaded, cache]);
@@ -76,6 +82,8 @@ const useAnalyticsProfile = () => {
 	return {
 		hasMobileAppDownloaded,
 		hasFeastMobileAppDownloaded,
+		audienceMemberships,
+		dataLoaded,
 		loadAnalyticsData,
 	};
 };
