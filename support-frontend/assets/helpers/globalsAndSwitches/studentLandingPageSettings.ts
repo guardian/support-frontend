@@ -11,7 +11,7 @@ interface Institution {
 	logoUrl: string;
 }
 
-interface StudentLandingPageVariant {
+export interface StudentLandingPageVariant {
 	name: string;
 	heading: string;
 	subheading: string;

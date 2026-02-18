@@ -3,10 +3,12 @@ import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
 import { ObserverHoldingContent } from 'components/serverSideRendered/observerHoldingContent';
+import { getStudentLandingPageTestConfig } from 'helpers/abTests/studentLandingPageAbTests';
 import { WithCoreWebVitals } from 'helpers/coreWebVitals/withCoreWebVitals';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import type { OneTimeCheckoutVariant } from 'helpers/globalsAndSwitches/oneTimeCheckoutSettings';
+import type { StudentLandingPageVariant } from 'helpers/globalsAndSwitches/studentLandingPageSettings';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	getAbParticipations,
@@ -25,12 +27,17 @@ const checkoutNudgeSettings = getCheckoutNudgeParticipations();
 const oneTimeCheckoutSettings = getPageParticipations<OneTimeCheckoutVariant>(
 	getOneTimeCheckoutTestConfig(),
 );
+const studentLandingPageSettings =
+	getPageParticipations<StudentLandingPageVariant>(
+		getStudentLandingPageTestConfig(),
+	);
 
 const abParticipations = {
 	...getAbParticipations(),
 	...landingPageParticipations.participations,
 	...checkoutNudgeSettings?.participations,
 	...oneTimeCheckoutSettings.participations,
+	...studentLandingPageSettings.participations,
 };
 setUpTrackingAndConsents(abParticipations);
 const appConfig = parseAppConfig(window.guardian);
@@ -72,6 +79,13 @@ const StudentLandingPageUTSContainer = lazy(() => {
 		/* webpackChunkName: "StudentLandingPageUTSContainer" */ './student/StudentLandingPageUTSContainer'
 	).then((mod) => {
 		return { default: mod.StudentLandingPageUTSContainer };
+	});
+});
+const StudentLandingPageInstitutionContainer = lazy(() => {
+	return import(
+		/* webpackChunkName: "StudentLandingPageInstitutionContainer" */ './student/StudentLandingPageInstitutionContainer'
+	).then((mod) => {
+		return { default: mod.StudentLandingPageInstitutionContainer };
 	});
 });
 const StudentLandingPageGlobalContainer = lazy(() => {
@@ -161,6 +175,18 @@ const router = createBrowserRouter([
 					<StudentLandingPageGlobalContainer
 						supportRegionId={supportRegionId}
 						landingPageVariant={landingPageParticipations.variant}
+					/>
+				</Suspense>
+			),
+		},
+		{
+			path: `/${supportRegionId}/student/:institution`,
+			element: (
+				<Suspense fallback={<GuardianHoldingContent />}>
+					<StudentLandingPageInstitutionContainer
+						supportRegionId={supportRegionId}
+						landingPageVariant={landingPageParticipations.variant}
+						studentLandingPageVariant={studentLandingPageSettings.variant}
 					/>
 				</Suspense>
 			),

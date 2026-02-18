@@ -7,11 +7,14 @@ const PARTICIPATIONS_KEY = 'abParticipations';
 const LANDING_PAGE_PARTICIPATIONS_KEY = 'landingPageParticipations';
 const CHECKOUT_NUDGE_PARTICIPATIONS_KEY = 'checkoutNudgeParticipations';
 const ONE_TIME_CHECKOUT_PARTICIPATIONS_KEY = 'oneTimeCheckoutParticipations';
+const STUDENT_LANDING_PAGE_PARTICIPATIONS_KEY =
+	'studentLandingPageParticipations';
 export type Key =
 	| typeof PARTICIPATIONS_KEY
 	| typeof LANDING_PAGE_PARTICIPATIONS_KEY
 	| typeof CHECKOUT_NUDGE_PARTICIPATIONS_KEY
-	| typeof ONE_TIME_CHECKOUT_PARTICIPATIONS_KEY;
+	| typeof ONE_TIME_CHECKOUT_PARTICIPATIONS_KEY
+	| typeof STUDENT_LANDING_PAGE_PARTICIPATIONS_KEY;
 function getSessionParticipations(key: Key): Participations | undefined {
 	const participations = storage.getSession(key);
 	if (participations) {
@@ -33,6 +36,10 @@ function clearParticipationsFromSession(): void {
 	storage.setSession(PARTICIPATIONS_KEY, JSON.stringify({}));
 	storage.setSession(LANDING_PAGE_PARTICIPATIONS_KEY, JSON.stringify({}));
 	storage.setSession(ONE_TIME_CHECKOUT_PARTICIPATIONS_KEY, JSON.stringify({}));
+	storage.setSession(
+		STUDENT_LANDING_PAGE_PARTICIPATIONS_KEY,
+		JSON.stringify({}),
+	);
 }
 
 export {
@@ -43,4 +50,5 @@ export {
 	LANDING_PAGE_PARTICIPATIONS_KEY,
 	CHECKOUT_NUDGE_PARTICIPATIONS_KEY,
 	ONE_TIME_CHECKOUT_PARTICIPATIONS_KEY,
+	STUDENT_LANDING_PAGE_PARTICIPATIONS_KEY,
 };
