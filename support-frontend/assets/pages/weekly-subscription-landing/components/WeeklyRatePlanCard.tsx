@@ -10,27 +10,26 @@ import {
 	card,
 	cardHeading,
 	cardLabel,
-	cardOffer,
 	cardPrice,
 	cardWithLabel,
+	discountSummaryStyle,
 	savingsTextStyle,
 	strikethroughPriceStyle,
 } from './WeeklyRatePlanCardStyles';
 
-function WeeklyRatePlanCard(product: Product) {
+function WeeklyRatePlanCard(ratePlan: Product) {
 	const {
 		title,
 		price,
 		discountedPrice,
 		billingPeriodNoun,
-		priceCopy,
-		offerCopy,
+		discountSummary,
+		savingsText,
 		showLabel,
 		href,
 		onClick,
 		onView,
-		buttonCopy,
-	} = product;
+	} = ratePlan;
 	const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
 		threshold: 0.5,
 		debounce: true,
@@ -63,19 +62,19 @@ function WeeklyRatePlanCard(product: Product) {
 					)}
 					<small>/{billingPeriodNoun}</small>
 				</p>
-				<p css={savingsTextStyle}>{offerCopy}</p>
+				{savingsText && <p css={savingsTextStyle}>{savingsText}</p>}
 			</section>
 			<div css={ButtonCTA}>
 				<LinkButton
 					href={href}
 					onClick={onClick}
-					aria-label={`${title}- ${buttonCopy}`}
+					aria-label={`subscribe ${title}`}
 					theme={themeButtonReaderRevenue}
 				>
-					{buttonCopy}
+					Subscribe now
 				</LinkButton>
 			</div>
-			{priceCopy && <p css={cardOffer}>{priceCopy}</p>}
+			{discountSummary && <p css={discountSummaryStyle}>{discountSummary}</p>}
 		</div>
 	);
 }
