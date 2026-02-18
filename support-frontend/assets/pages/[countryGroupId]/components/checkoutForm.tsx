@@ -623,6 +623,8 @@ export default function CheckoutForm({
 					: undefined,
 			});
 			window.location.href = successUrl;
+			// It seems non-deterministic how much code is executed below setting
+			// window.location.href, but we return true here for completeness.
 			return true;
 		} catch (error) {
 			if (error instanceof FormSubmissionError) {
