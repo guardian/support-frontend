@@ -62,7 +62,11 @@ export function getBillingPeriodTitle(
 }
 
 export function ratePlanToBillingPeriod(
-	ratePlanKey: ActiveRatePlanKey,
+	ratePlanKey:
+		| ActiveRatePlanKey
+		| 'AnnualPlus'
+		| 'QuarterlyPlus'
+		| 'MonthlyPlus',
 ): BillingPeriod {
 	switch (ratePlanKey) {
 		case 'Annual':
