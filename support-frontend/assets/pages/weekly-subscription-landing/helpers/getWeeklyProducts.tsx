@@ -4,7 +4,10 @@ import {
 	GBPCountries,
 } from '@modules/internationalisation/countryGroup';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
+import {
+	BillingPeriod,
+	type RecurringBillingPeriod,
+} from '@modules/product/billingPeriod';
 import type { Product } from 'components/product/productOption';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { glyph } from 'helpers/internationalisation/currency';
@@ -34,14 +37,21 @@ import {
 } from 'helpers/productPrice/subscriptions';
 import type { OphanComponentType } from 'helpers/tracking/trackingOphan';
 import { addQueryParamsToURL, getOrigin } from 'helpers/urls/url';
+import { getDiscountSummary } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 
-const getCheckoutUrl = (
-	countryId: IsoCountry,
-	billingPeriod: RecurringBillingPeriod,
-	orderIsGift: boolean,
-	enableWeeklyDigitalPlans: boolean,
-	promotion?: Promotion,
-): string => {
+const getCheckoutUrl = ({
+	countryId,
+	billingPeriod,
+	orderIsGift,
+	enableWeeklyDigitalPlans,
+	promotion,
+}: {
+	countryId: IsoCountry;
+	billingPeriod: RecurringBillingPeriod;
+	orderIsGift: boolean;
+	enableWeeklyDigitalPlans: boolean;
+	promotion?: Promotion;
+}) => {
 	const countryGroupId = CountryGroup.fromCountry(countryId) ?? GBPCountries;
 	const productGuardianWeekly = internationaliseProduct(
 		countryGroups[countryGroupId].supportRegionId,
@@ -75,18 +85,17 @@ const getDisplayPrice = (
 	return productPrice.price;
 };
 
+// TODO: Decomission this function after non digital weekly products are removed
 export const getProducts = ({
 	countryId,
 	productPrices,
 	billingPeriods,
 	orderIsAGift,
-	enableWeeklyDigitalPlans,
 }: {
 	countryId: IsoCountry;
 	productPrices: ProductPrices;
 	billingPeriods: RecurringBillingPeriod[];
 	orderIsAGift: boolean;
-	enableWeeklyDigitalPlans: boolean;
 }): Product[] =>
 	billingPeriods.map((billingPeriod) => {
 		const productPrice = getProductPrice(
@@ -94,7 +103,7 @@ export const getProducts = ({
 			countryId,
 			billingPeriod,
 			getWeeklyFulfilmentOption(countryId),
-			enableWeeklyDigitalPlans ? 'PlusDigital' : 'NoProductOptions',
+			'NoProductOptions',
 		);
 
 		const promotion = getAppliedPromo(productPrice.promotions);
@@ -122,15 +131,83 @@ export const getProducts = ({
 			offerCopy,
 			priceCopy: getSimplifiedPriceDescription(productPrice, billingPeriod),
 			buttonCopy: 'Subscribe now',
-			href: getCheckoutUrl(
+			href: getCheckoutUrl({
 				countryId,
 				billingPeriod,
-				orderIsAGift,
-				enableWeeklyDigitalPlans,
+				orderIsGift: orderIsAGift,
+				enableWeeklyDigitalPlans: false,
 				promotion,
-			),
+			}),
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
 			isSpecialOffer: is12for12 || isBlackFriday,
+		};
+	});
+
+export const getWeeklyDigitalRatePlans = ({
+	countryId,
+	productPrices,
+	weeklyBillingPeriods,
+}: {
+	countryId: IsoCountry;
+	productPrices: ProductPrices;
+	weeklyBillingPeriods: RecurringBillingPeriod[];
+}): Product[] =>
+	weeklyBillingPeriods.map((billingPeriod) => {
+		const productPrice = getProductPrice(
+			productPrices,
+			countryId,
+			billingPeriod,
+			getWeeklyFulfilmentOption(countryId),
+			'PlusDigital',
+		);
+
+		const promotion = getAppliedPromo(productPrice.promotions);
+
+		const trackingProperties = {
+			id: `subscribe_now_cta-${billingPeriod}`,
+			product: 'GuardianWeekly' as SubscriptionProduct,
+			componentType: 'ACQUISITIONS_BUTTON' as OphanComponentType,
+		};
+		const fullPriceWithCurrency = getPriceWithSymbol(
+			productPrice.currency,
+			productPrice.price,
+		);
+
+		const discountPriceWithCurrency = promotion?.discountedPrice
+			? getPriceWithSymbol(productPrice.currency, promotion.discountedPrice)
+			: undefined;
+
+		const durationInMonths = promotion?.discount?.durationMonths;
+
+		const discountSummary =
+			durationInMonths && discountPriceWithCurrency
+				? getDiscountSummary({
+						fullPriceWithCurrency,
+						discountPriceWithCurrency,
+						durationInMonths,
+						billingPeriod,
+				  })
+				: undefined;
+
+		return {
+			title: getBillingPeriodTitle(billingPeriod),
+			price: fullPriceWithCurrency,
+			discountedPrice: discountPriceWithCurrency,
+			billingPeriodNoun: getBillingPeriodNoun(billingPeriod),
+			discountSummary,
+			priceCopy: '',
+			savingsText: promotion?.landingPage?.roundel ?? '',
+			href: getCheckoutUrl({
+				countryId,
+				billingPeriod,
+				orderIsGift: false,
+				enableWeeklyDigitalPlans: true,
+				promotion,
+			}),
+			showLabel: billingPeriod === BillingPeriod.Quarterly,
+			onClick: sendTrackingEventsOnClick(trackingProperties),
+			onView: sendTrackingEventsOnView(trackingProperties),
+			buttonCopy: 'Subscribe now',
 		};
 	});

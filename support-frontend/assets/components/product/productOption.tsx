@@ -48,6 +48,7 @@ export type Product = {
 	discountedPrice?: string;
 	children?: ReactNode;
 	offerCopy?: ReactNode;
+	discountSummary?: string;
 	savingsText?: string | null;
 	showLabel?: boolean;
 	productLabel?: ProductLabelProps;

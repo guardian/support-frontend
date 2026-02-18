@@ -11,12 +11,10 @@ function WeeklyProductPrices({
 	countryId,
 	productPrices,
 	orderIsAGift,
-	enableWeeklyDigitalPlans,
 }: {
 	countryId: IsoCountry;
 	productPrices: ProductPrices;
 	orderIsAGift: boolean;
-	enableWeeklyDigitalPlans: boolean;
 }): JSX.Element | null {
 	const billingPeriods = orderIsAGift
 		? weeklyGiftBillingPeriods
@@ -27,7 +25,6 @@ function WeeklyProductPrices({
 		productPrices,
 		billingPeriods,
 		orderIsAGift,
-		enableWeeklyDigitalPlans,
 	});
 
 	return <Prices products={products} orderIsAGift={orderIsAGift} />;
