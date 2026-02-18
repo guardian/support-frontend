@@ -527,15 +527,6 @@ export default function CheckoutForm({
 	}, [errorMessage]);
 
 	const onFormSubmit = async (formData: FormData): Promise<boolean> => {
-		// This shouldn't happen as the overlay which is displayed when
-		// isProcessingPayment is true should prevent button clicks. But this gives
-		// a little extra defence just in case.
-		if (isProcessingPayment) {
-			return false;
-		}
-
-		setIsProcessingPayment(true);
-
 		if (paymentMethod === undefined) {
 			setPaymentMethodError('Please select a payment method');
 			return false;
@@ -690,6 +681,16 @@ export default function CheckoutForm({
 					event.preventDefault();
 					const form = event.currentTarget;
 					const formData = new FormData(form);
+
+					// This shouldn't happen as the overlay which is displayed when
+					// isProcessingPayment is true should prevent button clicks. But this gives
+					// a little extra defence just in case.
+					if (isProcessingPayment) {
+						return;
+					}
+
+					setIsProcessingPayment(true);
+
 					void onFormSubmit(formData).then((success) => {
 						// If the onFormSubmit was not successful the promise resolves with
 						// false. In this case we need to remove the overlay so that the
