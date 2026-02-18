@@ -7,8 +7,10 @@ import {
 	textEgyptian17,
 } from '@guardian/source/foundations';
 import type { IsoCountry } from '@modules/internationalisation/country';
+import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { getCountryGroup } from 'helpers/productPrice/productPrices';
+import { getWeeklyDigitalRatePlans } from '../helpers/getWeeklyProducts';
+import WeeklyRatePlanCard from './WeeklyRatePlanCard';
 
 const pricesSection = css`
 	color: ${neutral[100]};
@@ -28,35 +30,40 @@ const pricesSubHeadline = css`
 
 const priceCardsContainer = css`
 	margin: ${space[10]}px 0 ${space[8]}px;
-	background-color: ${neutral[100]};
 	color: ${neutral[7]};
 	border-radius: ${space[2]}px;
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	width: 100%;
 	justify-content: center;
+	gap: ${space[5]}px;
+	${from.desktop} {
+		flex-direction: row;
+	}
 `;
-
-type WeeklyCardsProps = {
-	countryId: IsoCountry;
-	productPrices: ProductPrices;
-};
 
 export function WeeklyCards({
 	countryId,
 	productPrices,
-}: WeeklyCardsProps): JSX.Element {
-	const countryGroup = getCountryGroup(countryId);
-	const productPrice =
-		productPrices[countryGroup.name]?.Domestic?.NoProductOptions?.Annual?.[
-			countryGroup.currency
-		];
-	const sampleWeeklyCardsCopy = `PRICE CARDS COMPONENT Annual=>${productPrice?.currency}${productPrice?.price}`;
+}: {
+	countryId: IsoCountry;
+	productPrices: ProductPrices;
+}): JSX.Element {
+	const ratePlans = getWeeklyDigitalRatePlans({
+		countryId,
+		productPrices,
+		weeklyBillingPeriods,
+	});
+
 	return (
 		<section css={pricesSection} id="subscribeWeekly">
 			<h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>
 			<p css={pricesSubHeadline}>Choose how you'd like to pay</p>
-			<div css={priceCardsContainer}>{sampleWeeklyCardsCopy}</div>
+			<div css={priceCardsContainer}>
+				{ratePlans.map((ratePlan) => (
+					<WeeklyRatePlanCard {...ratePlan} />
+				))}
+			</div>
 		</section>
 	);
 }

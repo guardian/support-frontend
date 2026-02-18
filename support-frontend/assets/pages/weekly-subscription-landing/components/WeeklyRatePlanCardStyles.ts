@@ -9,6 +9,7 @@ import {
 	textSans12,
 	textSans15,
 	textSansBold15,
+	until,
 } from '@guardian/source/foundations';
 
 export const card = css`
@@ -22,6 +23,9 @@ export const card = css`
 
 export const cardWithLabel = css`
 	border-top-left-radius: 0;
+	${until.desktop} {
+		order: -1;
+	}
 `;
 
 export const cardHeading = css`
@@ -52,7 +56,7 @@ export const savingsTextStyle = css`
 	}
 `;
 
-export const cardOffer = css`
+export const discountSummaryStyle = css`
 	${textSans12};
 	margin-top: ${space[2]}px;
 	color: ${palette.neutral[38]};

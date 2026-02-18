@@ -11,8 +11,8 @@ scalacOptions ++= Seq(
 libraryDependencies ++= Seq(
   "software.amazon.awssdk" % "dynamodb" % awsClientVersion2,
   "software.amazon.awssdk" % "ssm" % awsClientVersion2,
-  "com.amazonaws" % "aws-lambda-java-core" % "1.2.3",
-  "com.amazonaws" % "aws-lambda-java-events" % "3.11.5",
+  "com.amazonaws" % "aws-lambda-java-core" % "1.4.0",
+  "com.amazonaws" % "aws-lambda-java-events" % "3.11.6",
   "com.stripe" % "stripe-java" % "20.136.0",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
