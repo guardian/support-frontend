@@ -18,9 +18,12 @@ import {
 } from '@modules/product/fulfilmentOptions';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
+import GridImage from 'components/gridImage/gridImage';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
+import HeroHeader from 'components/hero/HeroHeader';
 import Block from 'components/page/block';
 import { PageScaffold } from 'components/page/pageScaffold';
+import { PageTitle } from 'components/page/pageTitle';
 import { getFeatureFlags } from 'helpers/featureFlags';
 import {
 	getGlobal,
@@ -31,13 +34,18 @@ import { Country } from 'helpers/internationalisation/classes/country';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { type ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
-import { getSanitisedPromoCopy } from 'helpers/productPrice/promotions';
+import {
+	getSanitisedPromoCopy,
+	promotionHTML,
+} from 'helpers/productPrice/promotions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { renderPage } from 'helpers/rendering/render';
 import { routes } from 'helpers/urls/routes';
 import getPlanData from 'pages/paper-subscription-landing/planData';
 import { GuardianWeeklyFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
 import Benefits from './components/content/benefits';
 import GiftBenefits from './components/content/giftBenefits';
+import { getRegionalCopyFor } from './components/contentHelpers';
 import { WeeklyBenefits } from './components/weeklyBenefits';
 import { WeeklyCards } from './components/weeklyCards';
 import { WeeklyGiftStudentSubs } from './components/weeklyGiftStudentSubs';
@@ -50,6 +58,10 @@ const weeklySpacing = css`
 		margin-top: 0;
 	}
 `;
+const pageTitleSpacing = css`
+	padding-bottom: ${space[8]}px;
+`;
+
 const weeklyDigitalSpacing = css`
 	padding: ${space[8]}px ${space[3]}px ${space[9]}px;
 	${from.desktop} {
@@ -105,7 +117,7 @@ export function WeeklyLandingPage({
 		],
 		trackProduct: 'GuardianWeekly',
 	});
-	const sanitisedPromoCopy = getSanitisedPromoCopy(promotionCopy, orderIsAGift);
+	const promotion = getSanitisedPromoCopy(promotionCopy, orderIsAGift);
 
 	const fulfilmentOption: PrintFulfilmentOptions =
 		countryGroupId === 'International' ? RestOfWorld : Domestic;
@@ -123,22 +135,51 @@ export function WeeklyLandingPage({
 				/>
 			}
 		>
-			<WeeklyHero
-				isGift={orderIsAGift}
-				promotionCopy={sanitisedPromoCopy}
-				countryGroupId={countryGroupId}
-				enableWeeklyDigital={enableWeeklyDigital}
-			/>
 			{enableWeeklyDigital ? (
-				<FullWidthContainer theme="brand">
+				<>
+					<PageTitle
+						title="The Guardian Weekly"
+						theme="weekly"
+						cssOverrides={pageTitleSpacing}
+					>
+						<HeroHeader
+							heroImage={
+								<GridImage
+									gridId="weeklyCampaignHeroImg"
+									srcSizes={[500, 140]}
+									sizes="(max-width: 740px) 100%, 500px"
+									imgType="png"
+									altText="A collection of Guardian Weekly magazines"
+								/>
+							}
+							roundel={promotionCopy?.roundel ?? 'Save up to 35% a year'}
+							title={promotion.title ?? getRegionalCopyFor(countryGroupId)}
+							description={promotionHTML(promotion.description) ?? undefined}
+							ctaText="See pricing options"
+							ctaLink="#subscribe"
+							onClick={() =>
+								sendTrackingEventsOnClick({
+									id: 'options_cta_click',
+									product: 'GuardianWeekly',
+									componentType: 'ACQUISITIONS_BUTTON',
+								})
+							}
+						/>
+					</PageTitle>
 					<CentredContainer cssOverrides={weeklyDigitalSpacing}>
 						<WeeklyCards countryId={countryId} productPrices={productPrices} />
 						<WeeklyBenefits planData={planData} />
 						<WeeklyPriceInfo />
 					</CentredContainer>
-				</FullWidthContainer>
+				</>
 			) : (
 				<>
+					<WeeklyHero
+						isGift={orderIsAGift}
+						promotionCopy={promotion}
+						countryGroupId={countryGroupId}
+						enableWeeklyDigital={enableWeeklyDigital}
+					/>
 					<FullWidthContainer>
 						<CentredContainer cssOverrides={weeklySpacing}>
 							<Block>{orderIsAGift ? <GiftBenefits /> : <Benefits />}</Block>

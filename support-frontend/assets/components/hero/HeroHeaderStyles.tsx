@@ -7,8 +7,12 @@ import {
 	headlineBold34,
 	palette,
 	space,
+	textSansBold17,
 } from '@guardian/source/foundations';
 
+export const roundelStyles = css`
+	${textSansBold17}
+`;
 export const heroCssOverrides = css`
 	background-color: ${palette.neutral[100]};
 	color: ${palette.neutral[7]};
@@ -32,6 +36,7 @@ export const heroParagraph = css`
 	${article17};
 	line-height: 1.4;
 	margin-bottom: ${space[6]}px;
+	max-width: 550px;
 
 	/* apply the same margin to paragraphs parsed from markdown from promo codes */
 	& p:not(:last-of-type) {
@@ -39,7 +44,6 @@ export const heroParagraph = css`
 	}
 
 	${from.desktop} {
-		max-width: 75%;
 		margin-bottom: ${space[9]}px;
 	}
 `;

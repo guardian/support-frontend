@@ -14,6 +14,7 @@ import {
 	heroCssOverrides,
 	heroParagraph,
 	heroTitle,
+	roundelStyles,
 } from './HeroHeaderStyles';
 
 export default function HeroHeader({
@@ -25,7 +26,7 @@ export default function HeroHeader({
 	ctaLink,
 	onClick,
 }: {
-	title: JSX.Element;
+	title: JSX.Element | string;
 	ctaText: string;
 	ctaLink: string;
 	onClick: () => void;
@@ -35,7 +36,9 @@ export default function HeroHeader({
 }) {
 	return (
 		<CentredContainer>
-			{roundel && <OfferStrapline copy={roundel} size="small" />}
+			{roundel && (
+				<OfferStrapline copy={roundel} cssOverrides={roundelStyles} />
+			)}
 			<Hero
 				image={heroImage}
 				hideRoundelBelow="mobileMedium"
