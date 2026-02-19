@@ -14,7 +14,7 @@ const pageTitleSpacing = css`
 	padding-bottom: ${space[8]}px;
 `;
 
-export const roundelStyles = css`
+const roundelStyles = css`
 	${textSansBold17}
 `;
 
