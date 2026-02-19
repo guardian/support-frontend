@@ -1,10 +1,9 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { lazy, Suspense, useMemo, useRef } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
 import { ObserverHoldingContent } from 'components/serverSideRendered/observerHoldingContent';
 import { WithCoreWebVitals } from 'helpers/coreWebVitals/withCoreWebVitals';
-import { AnalyticsProfileCacheProvider } from 'helpers/customHooks/analyticsProfileCache';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import type { OneTimeCheckoutVariant } from 'helpers/globalsAndSwitches/oneTimeCheckoutSettings';
@@ -18,27 +17,13 @@ import { getCheckoutNudgeParticipations } from '../../helpers/abTests/checkoutNu
 import { getLandingPageTestConfig } from '../../helpers/abTests/landingPageAbTests';
 import type { Participations } from '../../helpers/abTests/models';
 import { getOneTimeCheckoutTestConfig } from '../../helpers/abTests/oneTimeCheckoutAbTests';
-import { getPageParticipations } from '../../helpers/abTests/pageParticipations';
-import { useMparticleAudienceCheck } from '../../helpers/abTests/useMparticleAudienceCheck';
+import {
+	getPageParticipations,
+	type PageParticipationsResult,
+} from '../../helpers/abTests/pageParticipations';
 
-const syncLandingPageParticipations = getPageParticipations<LandingPageVariant>(
-	getLandingPageTestConfig(),
-);
 const checkoutNudgeSettings = getCheckoutNudgeParticipations();
-const oneTimeCheckoutSettings = getPageParticipations<OneTimeCheckoutVariant>(
-	getOneTimeCheckoutTestConfig(),
-);
-
 const abParticipations = getAbParticipations();
-const makeAbParticipations = (landingPageParticipations?: Participations) => ({
-	...abParticipations,
-	...(landingPageParticipations ??
-		syncLandingPageParticipations.participations),
-	...checkoutNudgeSettings?.participations,
-	...oneTimeCheckoutSettings.participations,
-});
-
-const syncAbParticipations = makeAbParticipations();
 const appConfig = parseAppConfig(window.guardian);
 
 const Checkout = lazy(() => {
@@ -99,6 +84,7 @@ function GuardianOrObserverHoldingContent() {
 function buildRouter(
 	abParticipations: Participations,
 	landingPageSettings: LandingPageVariant,
+	oneTimeCheckoutVariant: OneTimeCheckoutVariant,
 ) {
 	return createBrowserRouter([
 		...Object.values(SupportRegionId).flatMap((supportRegionId) => [
@@ -138,7 +124,7 @@ function buildRouter(
 							abParticipations={abParticipations}
 							nudgeSettings={checkoutNudgeSettings}
 							landingPageSettings={landingPageSettings}
-							oneTimeCheckoutSettings={oneTimeCheckoutSettings.variant}
+							oneTimeCheckoutSettings={oneTimeCheckoutVariant}
 						/>
 					</Suspense>
 				),
@@ -190,8 +176,8 @@ function buildRouter(
 }
 
 /**
- * Top-level component that resolves mParticle audience checks
- * before finalizing test participations and tracking.
+ * Top-level component that resolves page participations (including mParticle audience
+ * checks) before finalizing test participations and tracking.
  *
  * This ensures:
  * 1. Tracking fires with the correct participations (after audience check)
@@ -200,45 +186,36 @@ function buildRouter(
 function AppWithAudienceCheck() {
 	const hasTracked = useRef(false);
 
-	// Find tests the user is participating in that have mParticleAudience
-	const testsWithAudience = useMemo(
-		() =>
-			(window.guardian.settings.landingPageTests ?? []).filter(
-				(test) =>
-					syncLandingPageParticipations.participations[test.name] !==
-						undefined && test.mParticleAudience !== undefined,
+	const [landingPageResult, setLandingPageResult] =
+		useState<PageParticipationsResult<LandingPageVariant> | null>(null);
+	const [oneTimeCheckoutResult, setOneTimeCheckoutResult] =
+		useState<PageParticipationsResult<OneTimeCheckoutVariant> | null>(null);
+
+	useEffect(() => {
+		void Promise.all([
+			getPageParticipations<LandingPageVariant>(getLandingPageTestConfig()),
+			getPageParticipations<OneTimeCheckoutVariant>(
+				getOneTimeCheckoutTestConfig(),
 			),
-		[],
-	);
+		]).then(([landing, oneTime]) => {
+			setLandingPageResult(landing);
+			setOneTimeCheckoutResult(oneTime);
+		});
+	}, []);
 
-	// Async audience check — returns null while loading, undefined if no match, or the matched test
-	const { matchedTest } = useMparticleAudienceCheck(testsWithAudience);
-
-	// Still checking audiences — show loading
-	if (matchedTest === null) {
+	if (!landingPageResult || !oneTimeCheckoutResult) {
 		return <GuardianHoldingContent />;
 	}
 
-	// Resolve the final variant and participations based on audience check result
-	let finalLandingPageSettings: LandingPageVariant =
-		syncLandingPageParticipations.variant;
-	let finalAbParticipations: Participations = syncAbParticipations;
-
-	if (matchedTest !== undefined) {
-		// User is in an audience — use the matched test's variant
-		const matchedVariant = matchedTest.variants.find(
-			(v) =>
-				v.name ===
-				syncLandingPageParticipations.participations[matchedTest.name],
-		);
-		finalLandingPageSettings =
-			matchedVariant ?? syncLandingPageParticipations.variant;
-		// Rebuild participations with only the matched test
-		finalAbParticipations = makeAbParticipations({
-			[matchedTest.name]:
-				syncLandingPageParticipations.participations[matchedTest.name],
-		});
-	}
+	const finalAbParticipations = useMemo<Participations>(
+		() => ({
+			...abParticipations,
+			...landingPageResult.participations,
+			...checkoutNudgeSettings?.participations,
+			...oneTimeCheckoutResult.participations,
+		}),
+		[landingPageResult.participations, oneTimeCheckoutResult.participations],
+	);
 
 	// Track once with the correct participations
 	if (!hasTracked.current) {
@@ -247,8 +224,17 @@ function AppWithAudienceCheck() {
 	}
 
 	const router = useMemo(
-		() => buildRouter(finalAbParticipations, finalLandingPageSettings),
-		[finalAbParticipations, finalLandingPageSettings],
+		() =>
+			buildRouter(
+				finalAbParticipations,
+				landingPageResult.variant,
+				oneTimeCheckoutResult.variant,
+			),
+		[
+			finalAbParticipations,
+			landingPageResult.variant,
+			oneTimeCheckoutResult.variant,
+		],
 	);
 
 	return <RouterProvider router={router} />;
@@ -257,9 +243,7 @@ function AppWithAudienceCheck() {
 function Router() {
 	return (
 		<WithCoreWebVitals>
-			<AnalyticsProfileCacheProvider>
-				<AppWithAudienceCheck />
-			</AnalyticsProfileCacheProvider>
+			<AppWithAudienceCheck />
 		</WithCoreWebVitals>
 	);
 }

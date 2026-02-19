@@ -7,8 +7,6 @@ const PARTICIPATIONS_KEY = 'abParticipations';
 const LANDING_PAGE_PARTICIPATIONS_KEY = 'landingPageParticipations';
 const CHECKOUT_NUDGE_PARTICIPATIONS_KEY = 'checkoutNudgeParticipations';
 const ONE_TIME_CHECKOUT_PARTICIPATIONS_KEY = 'oneTimeCheckoutParticipations';
-// For caching mParticle audience check results
-const MPARTICLE_AUDIENCE_CHECK_KEY = 'mparticleAudienceCheckResult';
 export type Key =
 	| typeof PARTICIPATIONS_KEY
 	| typeof LANDING_PAGE_PARTICIPATIONS_KEY
@@ -37,41 +35,10 @@ function clearParticipationsFromSession(): void {
 	storage.setSession(ONE_TIME_CHECKOUT_PARTICIPATIONS_KEY, JSON.stringify({}));
 }
 
-interface MparticleAudienceCheckCache {
-	matchedTestName: string | null;
-	testsChecked: string[];
-}
-
-function getMparticleAudienceCheckCache():
-	| MparticleAudienceCheckCache
-	| undefined {
-	const cached = storage.getSession(MPARTICLE_AUDIENCE_CHECK_KEY);
-	if (!cached) {
-		return undefined;
-	}
-	try {
-		return JSON.parse(cached) as MparticleAudienceCheckCache;
-	} catch (error) {
-		console.error(
-			'Failed to parse mParticle audience check cache from session storage',
-			error,
-		);
-		return undefined;
-	}
-}
-
-function setMparticleAudienceCheckCache(
-	cache: MparticleAudienceCheckCache,
-): void {
-	storage.setSession(MPARTICLE_AUDIENCE_CHECK_KEY, JSON.stringify(cache));
-}
-
 export {
 	clearParticipationsFromSession,
 	getSessionParticipations,
 	setSessionParticipations,
-	getMparticleAudienceCheckCache,
-	setMparticleAudienceCheckCache,
 	PARTICIPATIONS_KEY,
 	LANDING_PAGE_PARTICIPATIONS_KEY,
 	CHECKOUT_NUDGE_PARTICIPATIONS_KEY,
