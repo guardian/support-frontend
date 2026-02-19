@@ -32,7 +32,6 @@ export const heroParagraph = css`
 	${article17};
 	line-height: 1.4;
 	margin-bottom: ${space[6]}px;
-	max-width: 550px;
 
 	/* apply the same margin to paragraphs parsed from markdown from promo codes */
 	& p:not(:last-of-type) {
@@ -40,6 +39,7 @@ export const heroParagraph = css`
 	}
 
 	${from.desktop} {
+		max-width: min(550px, 75%);
 		margin-bottom: ${space[9]}px;
 	}
 `;
