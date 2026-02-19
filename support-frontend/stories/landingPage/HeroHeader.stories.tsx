@@ -28,7 +28,12 @@ function Template() {
 						altText="A collection of Guardian Weekly magazines"
 					/>
 				}
-				roundel={<OfferStrapline copy="Save up to 35% a year" />}
+				roundel={
+					<OfferStrapline
+						copy="Includes unlimited digital access"
+						size="small"
+					/>
+				}
 				title={<span>Save with a Guardian print subscription</span>}
 				description={
 					<span>
