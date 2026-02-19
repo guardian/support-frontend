@@ -1,8 +1,9 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source/foundations';
+import { space, textSansBold17 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import GridImage from 'components/gridImage/gridImage';
 import HeroHeader from 'components/hero/HeroHeader';
+import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { promotionHTML } from 'helpers/productPrice/promotions';
@@ -13,6 +14,10 @@ const pageTitleSpacing = css`
 	padding-bottom: ${space[8]}px;
 `;
 
+export const roundelStyles = css`
+	${textSansBold17}
+`;
+
 export default function WeeklyDigitalHero({
 	promotion,
 	countryGroupId,
@@ -20,6 +25,8 @@ export default function WeeklyDigitalHero({
 	promotion: PromotionCopy;
 	countryGroupId: CountryGroupId;
 }) {
+	const roundel = promotion.roundel ?? 'Save up to 35% a year';
+
 	return (
 		<PageTitle
 			title="The Guardian Weekly"
@@ -36,7 +43,7 @@ export default function WeeklyDigitalHero({
 						altText="A collection of Guardian Weekly magazines"
 					/>
 				}
-				roundel={promotion.roundel ?? 'Save up to 35% a year'}
+				roundel={<OfferStrapline copy={roundel} cssOverrides={roundelStyles} />}
 				title={promotion.title ?? getRegionalCopyFor(countryGroupId)}
 				description={promotionHTML(promotion.description) ?? undefined}
 				ctaText="See pricing options"

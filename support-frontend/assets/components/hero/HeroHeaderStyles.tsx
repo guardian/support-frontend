@@ -7,12 +7,8 @@ import {
 	headlineBold34,
 	palette,
 	space,
-	textSansBold17,
 } from '@guardian/source/foundations';
 
-export const roundelStyles = css`
-	${textSansBold17}
-`;
 export const heroCssOverrides = css`
 	background-color: ${palette.neutral[100]};
 	color: ${palette.neutral[7]};

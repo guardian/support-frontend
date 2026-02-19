@@ -8,13 +8,11 @@ import CentredContainer from 'components/containers/centredContainer';
 import type { GridImg } from 'components/gridImage/gridImage';
 import type { GridPictureProp } from 'components/gridPicture/gridPicture';
 import Hero from 'components/page/hero';
-import OfferStrapline from 'components/page/offerStrapline';
 import {
 	heroCopy,
 	heroCssOverrides,
 	heroParagraph,
 	heroTitle,
-	roundelStyles,
 } from './HeroHeaderStyles';
 
 export default function HeroHeader({
@@ -31,14 +29,12 @@ export default function HeroHeader({
 	ctaLink: string;
 	onClick: () => void;
 	heroImage: ReactElement<GridImg> | ReactElement<GridPictureProp>;
-	roundel?: string;
-	description?: JSX.Element;
+	roundel?: JSX.Element;
+	description?: JSX.Element | string;
 }) {
 	return (
 		<CentredContainer>
-			{roundel && (
-				<OfferStrapline copy={roundel} cssOverrides={roundelStyles} />
-			)}
+			{roundel && roundel}
 			<Hero
 				image={heroImage}
 				hideRoundelBelow="mobileMedium"
