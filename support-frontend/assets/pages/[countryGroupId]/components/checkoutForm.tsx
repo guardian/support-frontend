@@ -1161,6 +1161,8 @@ export default function CheckoutForm({
 								billingPeriod={billingPeriod}
 								csrf={csrf.token ?? ''}
 								paypalClientId={paypalClientId}
+								setErrorMessage={setErrorMessage}
+								setErrorContext={setErrorContext}
 							/>
 						</div>
 						{errorMessage && (

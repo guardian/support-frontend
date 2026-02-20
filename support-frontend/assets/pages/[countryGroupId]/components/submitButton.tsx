@@ -37,6 +37,8 @@ type SubmitButtonProps = {
 	csrf: string;
 	formRef: React.RefObject<HTMLFormElement>;
 	paypalClientId: string;
+	setErrorMessage: (message: string) => void;
+	setErrorContext: (context: string) => void;
 };
 
 const useFormIsValid = (
@@ -102,6 +104,8 @@ export function SubmitButton({
 	billingPeriod,
 	csrf,
 	paypalClientId,
+	setErrorMessage,
+	setErrorContext,
 }: SubmitButtonProps) {
 	// We only need this for PayPal and PayPalCompletePayments
 	const formIsValid = useFormIsValid(paymentMethod, formRef);
@@ -235,6 +239,11 @@ export function SubmitButton({
 									/** We run this so the form validation happens and focus on errors */
 									formRef.current?.requestSubmit();
 								}
+							}}
+							onError={() => {
+								// TODO: Get proper copy for this:
+								setErrorMessage('Sorry, something went wrong');
+								setErrorContext('Please try again.');
 							}}
 						/>
 					</PayPalScriptProvider>
