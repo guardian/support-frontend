@@ -1,7 +1,13 @@
-export const createSetupToken = async (csrfToken: string): Promise<string> => {
-	const body = JSON.stringify({});
+import z from 'zod';
 
-	const response = await fetch('/paypal-complete-payments/setup-token', {
+const request = async <T>(
+	path: string,
+	csrfToken: string,
+	body: string,
+	schema: z.ZodType<T>,
+	description: string,
+): Promise<T> => {
+	const response = await fetch(path, {
 		credentials: 'include',
 		method: 'POST',
 		headers: {
@@ -11,15 +17,43 @@ export const createSetupToken = async (csrfToken: string): Promise<string> => {
 		body,
 	});
 
-	const json = (await response.json()) as { token: string };
+	if (!response.ok) {
+		throw new Error(`${description} request returned a non OK response`);
+	}
 
-	return json.token;
+	const result = schema.safeParse(await response.json());
+
+	if (!result.success) {
+		throw new Error(`${description} response was invalid`);
+	}
+
+	return result.data;
 };
 
-export interface PaymentToken {
-	token: string;
-	email: string;
-}
+const createSetupTokenResponseSchema = z.object({
+	token: z.string(),
+});
+
+export const createSetupToken = async (csrfToken: string): Promise<string> => {
+	const body = JSON.stringify({});
+
+	const data = await request(
+		'/paypal-complete-payments/setup-token',
+		csrfToken,
+		body,
+		createSetupTokenResponseSchema,
+		'Create setup token',
+	);
+
+	return data.token;
+};
+
+const paymentTokenResponseSchema = z.object({
+	token: z.string(),
+	email: z.string(),
+});
+
+export type PaymentToken = z.infer<typeof paymentTokenResponseSchema>;
 
 export const exchangeSetupTokenForPaymentToken = async (
 	csrfToken: string,
@@ -27,17 +61,13 @@ export const exchangeSetupTokenForPaymentToken = async (
 ): Promise<PaymentToken> => {
 	const body = JSON.stringify({ setup_token: setupToken });
 
-	const response = await fetch('/paypal-complete-payments/payment-token', {
-		credentials: 'include',
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			'Csrf-Token': csrfToken,
-		},
+	const data = await request(
+		'/paypal-complete-payments/payment-token',
+		csrfToken,
 		body,
-	});
+		paymentTokenResponseSchema,
+		'Create payment token',
+	);
 
-	const json = (await response.json()) as PaymentToken;
-
-	return json;
+	return data;
 };

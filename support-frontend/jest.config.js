@@ -29,5 +29,5 @@ module.exports = {
 	},
 	setupFilesAfterEnv: ['./jestSetup'],
 	verbose: true,
-	testEnvironment: 'jest-environment-jsdom-global',
+	testEnvironment: './jestEnvironment.js',
 };
