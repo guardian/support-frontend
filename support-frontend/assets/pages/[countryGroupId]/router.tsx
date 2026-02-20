@@ -81,18 +81,18 @@ const StudentLandingPageUTSContainer = lazy(() => {
 		return { default: mod.StudentLandingPageUTSContainer };
 	});
 });
-const StudentLandingPageInstitutionContainer = lazy(() => {
-	return import(
-		/* webpackChunkName: "StudentLandingPageInstitutionContainer" */ './student/StudentLandingPageInstitutionContainer'
-	).then((mod) => {
-		return { default: mod.StudentLandingPageInstitutionContainer };
-	});
-});
 const StudentLandingPageGlobalContainer = lazy(() => {
 	return import(
 		/* webpackChunkName: "StudentLandingPageGlobalContainer" */ './student/StudentLandingPageGlobalContainer'
 	).then((mod) => {
 		return { default: mod.StudentLandingPageGlobalContainer };
+	});
+});
+const StudentLandingPageInstitutionContainer = lazy(() => {
+	return import(
+		/* webpackChunkName: "StudentLandingPageInstitutionContainer" */ './student/StudentLandingPageInstitutionContainer'
+	).then((mod) => {
+		return { default: mod.StudentLandingPageInstitutionContainer };
 	});
 });
 
