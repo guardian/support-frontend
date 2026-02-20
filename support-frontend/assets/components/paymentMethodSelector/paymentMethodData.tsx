@@ -26,6 +26,11 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 		label: 'PayPal',
 		icon: <PaypalIcon />,
 	},
+	PayPalCompletePayments: {
+		id: 'qa-paypal-complete-payments',
+		label: 'PayPal',
+		icon: <PaypalIcon />,
+	},
 	DirectDebit: {
 		id: 'qa-direct-debit',
 		label: 'Direct debit',

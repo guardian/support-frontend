@@ -45,6 +45,10 @@ const PaymentConfigSchema = z.object({
 		default: z.string(),
 		test: z.string(),
 	}),
+	payPalClientId: z.object({
+		default: z.string(),
+		test: z.string(),
+	}),
 	mdapiUrl: z.string(),
 	paymentApiPayPalEndpoint: z.string(),
 	paymentApiUrl: z.string(),
