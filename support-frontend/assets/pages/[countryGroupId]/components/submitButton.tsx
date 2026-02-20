@@ -210,7 +210,6 @@ export function SubmitButton({
 							style={{ color: 'blue', layout: 'horizontal' }}
 							createVaultSetupToken={async () => {
 								const setupToken = await createSetupToken(csrf);
-								console.log({ setupToken });
 								return setupToken;
 							}}
 							disabled={!formIsValid}
