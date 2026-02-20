@@ -1,4 +1,4 @@
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
@@ -13,6 +13,7 @@ import {
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
+import { SPECIFIC_DISCOUNTED_UNI_COUNTRYCODES } from './utilities';
 
 export function getDiscountDuration({
 	durationInMonths,
@@ -76,16 +77,19 @@ function isStudent(
 	requirePromotion?: boolean,
 ): boolean {
 	const isOneYearStudent =
-		ratePlanKey === 'OneYearStudent' && supportRegionId !== SupportRegionId.AU;
-	const isUTSStudent =
-		supportRegionId === SupportRegionId.AU &&
+		ratePlanKey === 'OneYearStudent' &&
+		!SPECIFIC_DISCOUNTED_UNI_COUNTRYCODES.includes(supportRegionId);
+	const isInstitutionDiscountSpecificStudent =
+		SPECIFIC_DISCOUNTED_UNI_COUNTRYCODES.includes(supportRegionId) &&
 		productKey === 'SupporterPlus' &&
 		ratePlanKey === 'Monthly';
-	const isUTSStudentWithPromoCode =
-		isUTSStudent && promotion?.promoCode === 'UTS_STUDENT';
+	const isInstitutionDiscountSpecificStudentWithPromoCode =
+		isInstitutionDiscountSpecificStudent && promotion?.promoCode != undefined;
 	return (
 		isOneYearStudent ||
-		(requirePromotion ? isUTSStudentWithPromoCode : isUTSStudent)
+		(requirePromotion
+			? isInstitutionDiscountSpecificStudentWithPromoCode
+			: isInstitutionDiscountSpecificStudent)
 	);
 }
 
