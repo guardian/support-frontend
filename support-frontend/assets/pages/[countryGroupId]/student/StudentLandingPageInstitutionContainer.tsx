@@ -31,6 +31,7 @@ export function StudentLandingPageInstitutionContainer({
 		countryId,
 		ratePlanToBillingPeriod(ratePlanKey),
 	);
+
 	const studentDiscount = getStudentDiscount(
 		supportRegionId,
 		ratePlanKey,
@@ -38,10 +39,6 @@ export function StudentLandingPageInstitutionContainer({
 		maybePromo,
 	);
 
-	console.log(
-		'the studentLandingPageVariant is ' +
-			JSON.stringify(studentLandingPageVariant),
-	);
 	return (
 		<>
 			{studentDiscount && (
