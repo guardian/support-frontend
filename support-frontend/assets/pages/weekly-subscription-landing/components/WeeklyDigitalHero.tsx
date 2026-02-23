@@ -5,7 +5,10 @@ import GridImage from 'components/gridImage/gridImage';
 import HeroHeader from 'components/hero/HeroHeader';
 import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
-import type { PromotionCopy } from 'helpers/productPrice/promotions';
+import {
+	type PromotionCopy,
+	promotionHTML,
+} from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getRegionalCopyFor } from './contentHelpers';
 
@@ -24,11 +27,17 @@ export default function WeeklyDigitalHero({
 	promotion: PromotionCopy;
 	countryGroupId: CountryGroupId;
 }) {
-	const { roundel, title, description } = promotion;
+	const { roundel, title, description: promotionDescription } = promotion;
 
 	const roundelComponent = roundel && (
 		<OfferStrapline copy={roundel} cssOverrides={roundelStyles} />
 	);
+
+	const description =
+		promotionDescription &&
+		promotionHTML(promotionDescription, {
+			tag: 'p',
+		});
 
 	const fallbackTitle = getRegionalCopyFor(countryGroupId);
 
@@ -50,7 +59,7 @@ export default function WeeklyDigitalHero({
 				}
 				roundel={roundelComponent}
 				title={title ?? fallbackTitle}
-				description={description}
+				description={description ?? undefined}
 				ctaText="See pricing options"
 				ctaLink="#subscribe"
 				onClick={() =>
