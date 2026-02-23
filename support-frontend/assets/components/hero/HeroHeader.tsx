@@ -29,12 +29,12 @@ export default function HeroHeader({
 	ctaLink: string;
 	onClick: () => void;
 	heroImage: ReactElement<GridImg> | ReactElement<GridPictureProp>;
-	roundel?: JSX.Element;
+	roundel?: JSX.Element | string;
 	description?: JSX.Element | string;
 }) {
 	return (
 		<CentredContainer>
-			{roundel && roundel}
+			{roundel}
 			<Hero
 				image={heroImage}
 				hideRoundelBelow="mobileMedium"

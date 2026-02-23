@@ -6,7 +6,6 @@ import HeroHeader from 'components/hero/HeroHeader';
 import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
-import { promotionHTML } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getRegionalCopyFor } from './contentHelpers';
 
@@ -25,7 +24,13 @@ export default function WeeklyDigitalHero({
 	promotion: PromotionCopy;
 	countryGroupId: CountryGroupId;
 }) {
-	const roundel = promotion.roundel ?? 'Save up to 35% a year';
+	const { roundel, title, description } = promotion;
+
+	const roundelComponent = roundel && (
+		<OfferStrapline copy={roundel} cssOverrides={roundelStyles} />
+	);
+
+	const fallbackTitle = getRegionalCopyFor(countryGroupId);
 
 	return (
 		<PageTitle
@@ -43,9 +48,9 @@ export default function WeeklyDigitalHero({
 						altText="A collection of Guardian Weekly magazines"
 					/>
 				}
-				roundel={<OfferStrapline copy={roundel} cssOverrides={roundelStyles} />}
-				title={promotion.title ?? getRegionalCopyFor(countryGroupId)}
-				description={promotionHTML(promotion.description) ?? undefined}
+				roundel={roundelComponent}
+				title={title ?? fallbackTitle}
+				description={description}
 				ctaText="See pricing options"
 				ctaLink="#subscribe"
 				onClick={() =>

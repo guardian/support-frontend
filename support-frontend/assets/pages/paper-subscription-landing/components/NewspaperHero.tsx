@@ -14,16 +14,25 @@ export default function NewspaperHero({
 	promotionCopy: PromotionCopy;
 	paperHeroItems: PaperHeroItems;
 }) {
-	const title = promotionCopy.title ?? paperHeroItems.titleCopy;
-	const description =
-		promotionHTML(promotionCopy.description, {
-			tag: 'p',
-		}) ?? paperHeroItems.bodyCopy;
-	const roundel = (
-		<OfferStrapline
-			copy={promotionCopy.roundel ?? paperHeroItems.roundelCopy ?? ''}
-			size="small"
-		/>
+	const {
+		roundel: promotionRoundel,
+		title,
+		description: promotionDescription,
+	} = promotionCopy;
+
+	const {
+		titleCopy: fallbackTitle,
+		roundelCopy: fallbackRoundel,
+		bodyCopy: fallbackDescription,
+	} = paperHeroItems;
+
+	const roundel = promotionRoundel ?? fallbackRoundel;
+	const description = promotionHTML(promotionDescription, {
+		tag: 'p',
+	});
+
+	const roundelComponent = roundel && (
+		<OfferStrapline copy={roundel} size="small" />
 	);
 
 	return (
@@ -59,10 +68,10 @@ export default function NewspaperHero({
 						altText=""
 					/>
 				}
-				roundel={roundel}
-				title={title}
-				description={description}
-				ctaLink='"#HomeDelivery'
+				roundel={roundelComponent}
+				title={title ?? fallbackTitle}
+				description={description ?? fallbackDescription}
+				ctaLink="#HomeDelivery"
 				ctaText="See pricing options"
 				onClick={sendTrackingEventsOnClick({
 					id: 'options_cta_click',
