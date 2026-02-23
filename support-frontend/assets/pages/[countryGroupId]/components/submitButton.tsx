@@ -211,7 +211,7 @@ export function SubmitButton({
 						}}
 					>
 						<PayPalButtons
-							style={{ color: 'blue', layout: 'horizontal' }}
+							style={{ color: 'blue', layout: 'horizontal', tagline: false }}
 							createVaultSetupToken={async () => {
 								const setupToken = await createSetupToken(csrf);
 								return setupToken;
