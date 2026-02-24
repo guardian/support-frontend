@@ -32,7 +32,7 @@ libraryDependencies ++= Seq(
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
   "com.squareup.okhttp3" % "okhttp" % "4.11.0",
   "com.gocardless" % "gocardless-pro" % "2.10.0",
-  "com.googlecode.libphonenumber" % "libphonenumber" % "8.13.20",
+  "com.googlecode.libphonenumber" % "libphonenumber" % "8.13.55",
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
