@@ -58,25 +58,25 @@ const guardianDigitalRewards = [
 
 const weeklyDigitalRewards = [
 	<>
-		Unlimited access to the refreshed&nbsp;<strong>Guardian app</strong>
-		&nbsp;and&nbsp;<strong>Guardian Feast app</strong>
+		Uninterrupted <strong>ad-free reading</strong> on the Guardian app and
+		website, with fewer asks for support
 	</>,
 	<>
-		Unlimited access to the&nbsp;<strong>Guardian Editions app</strong>&nbsp;so
-		you can enjoy newspapers on your mobile and tablet
+		Unlimited access to the refreshed <strong>Guardian app</strong> and{' '}
+		<strong>Guardian Feast app</strong>
 	</>,
 	<>
-		Digital access to the Guardian’s 200 year&nbsp;
-		<strong>newspaper archive</strong>
+		<strong>Exclusive newsletter</strong>&nbsp;for supporters, and a weekly
+		newsletter from the Guardian Weekly editor
 	</>,
 	<>
-		<strong>Ad-free reading</strong>&nbsp;on the Guardian app and website
+		Access to the Guardian’s 200 year <strong>digital archive</strong>
 	</>,
 	<>
-		<strong>Exclusive newsletter</strong>&nbsp;for supporters, sent every week
-		from the Guardian newsroom
+		Access to the <strong>Guardian Editions app</strong> to enjoy digital
+		versions of the Guardian Weekly and Long Read magazines, and the daily
+		newspaper on your mobile or tablet
 	</>,
-	<>Far fewer asks for support</>,
 ];
 
 const observerDigitalRewards = [
@@ -104,7 +104,7 @@ const benefitObserverSunday = (
 );
 const benefitWeekly = (
 	<>
-		<strong>Guardian Weekly</strong> magazine delivered to your door
+		<strong>The Guardian Weekly</strong> magazine, delivered to your door
 	</>
 );
 
