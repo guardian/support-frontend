@@ -30,7 +30,7 @@ libraryDependencies ++= Seq(
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
   "com.gu.play-googleauth" %% "play-v30" % "8.0.1",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
-  "com.squareup.okhttp3" % "okhttp" % "4.11.0",
+  "com.squareup.okhttp3" % "okhttp" % "4.12.0",
   "com.gocardless" % "gocardless-pro" % "2.10.0",
   "com.googlecode.libphonenumber" % "libphonenumber" % "8.13.55",
   // This is required to force aws libraries to use the latest version of jackson
