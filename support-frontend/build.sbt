@@ -8,7 +8,7 @@ libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.4.6",
   "com.gu" %% "simple-configuration-ssm" % "7.0.0",
   "org.mockito" % "mockito-core" % "2.28.2" % Test,
-  "io.sentry" % "sentry-logback" % "6.29.0",
+  "io.sentry" % "sentry-logback" % "6.34.0",
   "software.amazon.awssdk" % "sfn" % awsClientVersion2,
   "software.amazon.awssdk" % "sts" % awsClientVersion2,
   "software.amazon.awssdk" % "s3" % awsClientVersion2,
