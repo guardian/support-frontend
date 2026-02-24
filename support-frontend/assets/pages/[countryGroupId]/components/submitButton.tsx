@@ -216,7 +216,6 @@ export function SubmitButton({
 								const setupToken = await createSetupToken(csrf);
 								return setupToken;
 							}}
-							disabled={!formIsValid}
 							onApprove={async (data) => {
 								const approvedSetupToken = (
 									data as unknown as ApprovedSetupToken
@@ -230,7 +229,7 @@ export function SubmitButton({
 								// This will trigger a form submission
 								setPayPalPaymentToken(paymentToken);
 							}}
-							onClick={() => {
+							onClick={(_data, actions) => {
 								// The button won't actually submit if the form
 								// isn't valid but we can check here and if invalid
 								// the browser will scroll the user to the first
@@ -238,7 +237,18 @@ export function SubmitButton({
 								if (!formIsValid) {
 									/** We run this so the form validation happens and focus on errors */
 									formRef.current?.requestSubmit();
+									// We reject here so that the PayPal flow doesn't start.
+									// Unfortunately it does result in a brief flash of the modal.
+									// The PayPalButtons component does support a disabled prop
+									// but when set to true this renders the button in a clearly
+									// disabled state. The UI pattern used on the form is to leave
+									// the button clickable and then scroll to any validation
+									// errors if necessary. Rendering the button in a clearly
+									// disabled state isn't compatible with this pattern.
+									return actions.reject();
 								}
+
+								return actions.resolve();
 							}}
 							onError={() => {
 								// TODO: Get proper copy for this:
