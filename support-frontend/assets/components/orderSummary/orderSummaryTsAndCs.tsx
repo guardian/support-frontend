@@ -157,7 +157,11 @@ export function OrderSummaryTsAndCs({
 							post services.
 						</>
 					) : (
-						<>Auto renews every {periodNoun}. Cancel anytime.</>
+						<>
+							Auto renews every {periodNoun}. Cancel anytime. If you cancel
+							within the first 14 days, via Customer Service, you will receive a
+							full refund.
+						</>
 					)}
 				</p>
 			)}
