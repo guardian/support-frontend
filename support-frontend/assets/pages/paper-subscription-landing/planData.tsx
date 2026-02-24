@@ -78,6 +78,17 @@ const weeklyDigitalRewards = [
 		newspaper on your mobile or tablet
 	</>,
 ];
+const weeklyDigitalRewardsSimplified = [
+	<>Unlimited access to the Guardian app and Guardian Feast app</>,
+	<>Unlimited access to the Guardian Editions app</>,
+	<>Digital access to the Guardian’s 200-year newspaper archive</>,
+	<>Ad-free reading</>,
+	<>Fewer asks for support</>,
+	<>Exclusive supporter newsletters</>,
+];
+const getWeeklyDigitalRewards = (simplify?: boolean) => {
+	return simplify ? weeklyDigitalRewardsSimplified : weeklyDigitalRewards;
+};
 
 const observerDigitalRewards = [
 	<>Access to The Observer digital subscription</>,
@@ -107,9 +118,13 @@ const benefitWeekly = (
 		<strong>The Guardian Weekly</strong> magazine, delivered to your door
 	</>
 );
+const getWeeklyBenefit = (simplify?: boolean) => {
+	return simplify ? <>The Guardian Weekly magazine</> : benefitWeekly;
+};
 
 const getPrintBenefitsMap = (
 	fulfilmentOption: PrintFulfilmentOptions,
+	simplify?: boolean,
 ): Partial<Record<PrintProductOptions, Benefits>> => ({
 	EverydayPlus: {
 		label: benefitsLabel[fulfilmentOption],
@@ -132,13 +147,13 @@ const getPrintBenefitsMap = (
 		items: [benefitObserverSunday],
 	},
 	NoProductOptions: {
-		items: [benefitWeekly],
+		items: [getWeeklyBenefit(simplify)],
 	},
 });
 
-const getPrintDigitalBenefitsMap = (): Partial<
-	Record<PrintProductOptions, Benefits>
-> => ({
+const getPrintDigitalBenefitsMap = (
+	simplify?: boolean,
+): Partial<Record<PrintProductOptions, Benefits>> => ({
 	EverydayPlus: {
 		label: digitalRewardsLabel,
 		items: baseDigitalRewards,
@@ -159,7 +174,7 @@ const getPrintDigitalBenefitsMap = (): Partial<
 		items: observerDigitalRewards,
 	},
 	NoProductOptions: {
-		items: weeklyDigitalRewards,
+		items: getWeeklyDigitalRewards(simplify),
 	},
 });
 
@@ -243,17 +258,21 @@ const printPlanDescriptions: Record<
 export default function getPlanData(
 	printProductOptions: PrintProductOptions,
 	fulfillmentOption: PrintFulfilmentOptions,
+	simplify?: boolean,
 ): PlanData | undefined {
 	const description =
 		printPlanDescriptions[fulfillmentOption][printProductOptions];
 	if (!description) {
 		return undefined;
 	}
-	const benefits = getPrintBenefitsMap(fulfillmentOption)[printProductOptions];
+	const benefits = getPrintBenefitsMap(fulfillmentOption, simplify)[
+		printProductOptions
+	];
 	if (!benefits) {
 		return undefined;
 	}
-	const digitalRewards = getPrintDigitalBenefitsMap()[printProductOptions];
+	const digitalRewards =
+		getPrintDigitalBenefitsMap(simplify)[printProductOptions];
 	return {
 		description,
 		benefits,
@@ -323,7 +342,11 @@ export function getPrintPlusDigitalBenefits(
 		return undefined;
 	}
 
-	const ratePlanData = getPlanData(printProductOptions, fulfillmentOption);
+	const ratePlanData = getPlanData(
+		printProductOptions,
+		fulfillmentOption,
+		enableWeeklyDigital,
+	);
 	if (!ratePlanData) {
 		return undefined;
 	}
