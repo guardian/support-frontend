@@ -40,6 +40,7 @@ import Benefits from './components/content/benefits';
 import GiftBenefits from './components/content/giftBenefits';
 import { WeeklyBenefits } from './components/weeklyBenefits';
 import { WeeklyCards } from './components/weeklyCards';
+import WeeklyDigitalHero from './components/WeeklyDigitalHero';
 import { WeeklyGiftStudentSubs } from './components/weeklyGiftStudentSubs';
 import { WeeklyHero } from './components/weeklyHero';
 import { WeeklyPriceInfo } from './components/weeklyPriceInfo';
@@ -50,6 +51,7 @@ const weeklySpacing = css`
 		margin-top: 0;
 	}
 `;
+
 const weeklyDigitalSpacing = css`
 	padding: ${space[8]}px ${space[3]}px ${space[9]}px;
 	${from.desktop} {
@@ -105,7 +107,7 @@ export function WeeklyLandingPage({
 		],
 		trackProduct: 'GuardianWeekly',
 	});
-	const sanitisedPromoCopy = getSanitisedPromoCopy(promotionCopy, orderIsAGift);
+	const promotion = getSanitisedPromoCopy(promotionCopy, orderIsAGift);
 
 	const fulfilmentOption: PrintFulfilmentOptions =
 		countryGroupId === 'International' ? RestOfWorld : Domestic;
@@ -123,22 +125,26 @@ export function WeeklyLandingPage({
 				/>
 			}
 		>
-			<WeeklyHero
-				isGift={orderIsAGift}
-				promotionCopy={sanitisedPromoCopy}
-				countryGroupId={countryGroupId}
-				enableWeeklyDigital={enableWeeklyDigital}
-			/>
 			{enableWeeklyDigital ? (
-				<FullWidthContainer theme="brand">
+				<>
+					<WeeklyDigitalHero
+						promotion={promotion}
+						countryGroupId={countryGroupId}
+					/>
 					<CentredContainer cssOverrides={weeklyDigitalSpacing}>
 						<WeeklyCards countryId={countryId} productPrices={productPrices} />
 						<WeeklyBenefits planData={planData} />
 						<WeeklyPriceInfo />
 					</CentredContainer>
-				</FullWidthContainer>
+				</>
 			) : (
 				<>
+					<WeeklyHero
+						isGift={orderIsAGift}
+						promotionCopy={promotion}
+						countryGroupId={countryGroupId}
+						enableWeeklyDigital={enableWeeklyDigital}
+					/>
 					<FullWidthContainer>
 						<CentredContainer cssOverrides={weeklySpacing}>
 							<Block>{orderIsAGift ? <GiftBenefits /> : <Benefits />}</Block>
@@ -171,4 +177,5 @@ const weeklyLandingProps = (): WeeklyLandingPageProps => ({
 	productPrices: getProductPrices() ?? undefined,
 	promotionCopy: getPromotionCopy() ?? undefined,
 });
+
 renderPage(<WeeklyLandingPage {...weeklyLandingProps()} />);
