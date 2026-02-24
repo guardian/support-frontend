@@ -39,7 +39,7 @@ export const heroParagraph = css`
 	}
 
 	${from.desktop} {
-		max-width: 75%;
+		max-width: min(550px, 75%);
 		margin-bottom: ${space[9]}px;
 	}
 `;

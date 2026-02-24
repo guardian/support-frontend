@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
 import GridImage from 'components/gridImage/gridImage';
 import HeroHeader from 'components/hero/HeroHeader';
+import OfferStrapline from 'components/page/offerStrapline';
 
 export default {
 	title: 'LandingPage/HeroHeader',
@@ -27,7 +28,12 @@ function Template() {
 						altText="A collection of Guardian Weekly magazines"
 					/>
 				}
-				roundel="Includes unlimited digital access"
+				roundel={
+					<OfferStrapline
+						copy="Includes unlimited digital access"
+						size="small"
+					/>
+				}
 				title={<span>Save with a Guardian print subscription</span>}
 				description={
 					<span>
