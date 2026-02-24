@@ -26,52 +26,66 @@ const checkoutNudgeSettings = getCheckoutNudgeParticipations();
 const abParticipations = getAbParticipations();
 const appConfig = parseAppConfig(window.guardian);
 
-const Checkout = lazy(() => {
-	return import(/* webpackChunkName: "checkout" */ './checkout').then((mod) => {
-		return { default: mod.Checkout };
-	});
-});
-const OneTimeCheckout = lazy(() => {
-	return import(
-		/* webpackChunkName: "oneTimeCheckout" */ './oneTimeCheckout'
-	).then((mod) => {
-		return { default: mod.OneTimeCheckout };
-	});
-});
-const ThankYou = lazy(() => {
-	return import(/* webpackChunkName: "ThankYou" */ './thankYou').then((mod) => {
-		return { default: mod.ThankYou };
-	});
-});
-const GuardianAdLiteLanding = lazy(() => {
-	return import(
+const Checkout = lazy(() =>
+	import(/* webpackChunkName: "checkout" */ './checkout').then((mod) => ({
+		default: mod.Checkout,
+	})),
+);
+const OneTimeCheckout = lazy(() =>
+	import(/* webpackChunkName: "oneTimeCheckout" */ './oneTimeCheckout').then(
+		(mod) => ({ default: mod.OneTimeCheckout }),
+	),
+);
+const ThankYou = lazy(() =>
+	import(/* webpackChunkName: "ThankYou" */ './thankYou').then((mod) => ({
+		default: mod.ThankYou,
+	})),
+);
+const GuardianAdLiteLanding = lazy(() =>
+	import(
 		/* webpackChunkName: "GuardianAdLiteLanding" */ './guardianAdLiteLanding/guardianAdLiteLanding'
-	).then((mod) => {
-		return { default: mod.GuardianAdLiteLanding };
-	});
-});
-
-const LandingPage = lazy(() => {
-	return import(/* webpackChunkName: "LandingPage" */ './landingPage').then(
-		(mod) => {
-			return { default: mod.LandingPage };
-		},
-	);
-});
-const StudentLandingPageUTSContainer = lazy(() => {
-	return import(
+	).then((mod) => ({ default: mod.GuardianAdLiteLanding })),
+);
+const LandingPage = lazy(() =>
+	import(/* webpackChunkName: "LandingPage" */ './landingPage').then((mod) => ({
+		default: mod.LandingPage,
+	})),
+);
+const StudentLandingPageUTSContainer = lazy(() =>
+	import(
 		/* webpackChunkName: "StudentLandingPageUTSContainer" */ './student/StudentLandingPageUTSContainer'
-	).then((mod) => {
-		return { default: mod.StudentLandingPageUTSContainer };
-	});
-});
-const StudentLandingPageGlobalContainer = lazy(() => {
-	return import(
+	).then((mod) => ({ default: mod.StudentLandingPageUTSContainer })),
+);
+const StudentLandingPageGlobalContainer = lazy(() =>
+	import(
 		/* webpackChunkName: "StudentLandingPageGlobalContainer" */ './student/StudentLandingPageGlobalContainer'
-	).then((mod) => {
-		return { default: mod.StudentLandingPageGlobalContainer };
-	});
-});
+	).then((mod) => ({ default: mod.StudentLandingPageGlobalContainer })),
+);
+
+function preloadCurrentPageChunk(): void {
+	const path = window.location.pathname;
+	if (path.includes('/contribute')) {
+		void import(/* webpackChunkName: "LandingPage" */ './landingPage');
+	} else if (path.includes('/one-time-checkout')) {
+		void import(/* webpackChunkName: "oneTimeCheckout" */ './oneTimeCheckout');
+	} else if (path.includes('/checkout')) {
+		void import(/* webpackChunkName: "checkout" */ './checkout');
+	} else if (path.includes('/thank-you')) {
+		void import(/* webpackChunkName: "ThankYou" */ './thankYou');
+	} else if (path.includes('/guardian-ad-lite')) {
+		void import(
+			/* webpackChunkName: "GuardianAdLiteLanding" */ './guardianAdLiteLanding/guardianAdLiteLanding'
+		);
+	} else if (path.includes('/student/UTS')) {
+		void import(
+			/* webpackChunkName: "StudentLandingPageUTSContainer" */ './student/StudentLandingPageUTSContainer'
+		);
+	} else if (path.includes('/student')) {
+		void import(
+			/* webpackChunkName: "StudentLandingPageGlobalContainer" */ './student/StudentLandingPageGlobalContainer'
+		);
+	}
+}
 
 function GuardianOrObserverHoldingContent() {
 	if (isObserverSubdomain()) {
@@ -192,6 +206,7 @@ function AppWithAudienceCheck() {
 		useState<PageParticipationsResult<OneTimeCheckoutVariant> | null>(null);
 
 	useEffect(() => {
+		preloadCurrentPageChunk();
 		void Promise.all([
 			getPageParticipations<LandingPageVariant>(getLandingPageTestConfig()),
 			getPageParticipations<OneTimeCheckoutVariant>(
