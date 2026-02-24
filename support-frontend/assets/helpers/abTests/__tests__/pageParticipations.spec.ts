@@ -9,9 +9,9 @@ import {
 import type { PageParticipationsConfig, PageTest } from '../models';
 import { getMvtId } from '../mvt';
 import { getPageParticipations } from '../pageParticipations';
+import type { Key } from '../sessionStorage';
 import {
 	getSessionParticipations,
-	type Key,
 	setSessionParticipations,
 } from '../sessionStorage';
 
@@ -647,7 +647,7 @@ describe('getPageParticipations', () => {
 			expect(mockSetSessionParticipations).not.toHaveBeenCalled();
 		});
 
-		it('returns fallback when session participation has mParticleAudience and user is not in audience', async () => {
+		it('honours session participation even when user is not in the mParticle audience', async () => {
 			const variant = createTestVariant('control', 'control-value');
 			const fallback = createFallbackVariant();
 			const test = createAudienceTest('test-1', [variant], 42);
@@ -661,15 +661,11 @@ describe('getPageParticipations', () => {
 
 			mockLocation('/test/page');
 			mockGetSessionParticipations.mockReturnValue({ 'test-1': 'control' });
-			mockFetchAnalyticsUserProfile.mockResolvedValue({
-				hasMobileAppDownloaded: false,
-				hasFeastMobileAppDownloaded: false,
-				audienceMemberships: [],
-			});
 
 			const result = await getPageParticipations(config);
 
-			expect(result.variant).toEqual(fallback);
+			expect(result.variant).toEqual(variant);
+			expect(mockFetchAnalyticsUserProfile).not.toHaveBeenCalled();
 		});
 
 		it('bypasses audience check for URL-forced participations', async () => {

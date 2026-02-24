@@ -119,11 +119,6 @@ export async function getPageParticipations<Variant>(
 		sessionParticipations &&
 		Object.entries(sessionParticipations).length > 0
 	) {
-		const sessionTestName = Object.keys(sessionParticipations)[0];
-		const sessionTest = tests.find((t) => t.name === sessionTestName);
-		if (sessionTest && !(await isUserInAudience(sessionTest))) {
-			return makeFallback();
-		}
 		const variant = getVariant(sessionParticipations, tests);
 		return {
 			participations: sessionParticipations,
