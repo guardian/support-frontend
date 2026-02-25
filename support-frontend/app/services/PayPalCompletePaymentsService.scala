@@ -126,6 +126,7 @@ class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client
           experience_context = ExperienceContext(
             return_url = returnUrl,
             cancel_url = cancelUrl,
+            // TODO: Does this need to change for products which DO have a paper component?
             shipping_preference = "NO_SHIPPING",
           ),
         ),
