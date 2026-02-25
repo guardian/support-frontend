@@ -8,6 +8,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import { observerThemeButton } from 'components/observer-layout/styles';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import {
 	getStripeKeyForCountry,
 	getStripeKeyForProduct,
@@ -311,6 +312,8 @@ export function Checkout({
 		backButtonPathOverrideParam,
 	);
 
+	const { enableWeeklyDigital } = getFeatureFlags();
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Elements stripe={stripePromise} options={elementsOptions}>
@@ -332,6 +335,7 @@ export function Checkout({
 						nudgeSettings={nudgeSettings}
 						backButtonOrigin={backButtonOrigin}
 						backButtonPathOverride={backButtonPathOverride}
+						enableWeeklyDigital={enableWeeklyDigital}
 					/>
 
 					<CheckoutForm
@@ -343,12 +347,10 @@ export function Checkout({
 						ratePlanKey={ratePlanKey}
 						promotion={promotion}
 						originalAmount={payment.originalAmount}
-						discountedAmount={payment.discountedAmount}
 						contributionAmount={payment.contributionAmount}
 						finalAmount={payment.finalAmount}
 						useStripeExpressCheckout={useStripeExpressCheckout}
 						countryId={countryId}
-						forcedCountry={forcedCountry}
 						abParticipations={abParticipations}
 						landingPageSettings={landingPageSettings}
 						checkoutSession={checkoutSession}
@@ -357,6 +359,7 @@ export function Checkout({
 						setWeeklyDeliveryDate={setWeeklyDeliveryDate}
 						thresholdAmount={thresholdAmount}
 						studentDiscount={studentDiscount}
+						enableWeeklyDigital={enableWeeklyDigital}
 					/>
 				</PageLayout>
 			</Elements>

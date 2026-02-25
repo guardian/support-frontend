@@ -119,21 +119,20 @@ type CheckoutFormProps = {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	originalAmount: number;
-	discountedAmount?: number;
-	contributionAmount?: number;
 	finalAmount: number;
-	promotion?: Promotion;
 	useStripeExpressCheckout: boolean;
 	countryId: IsoCountry;
-	forcedCountry?: string;
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
-	checkoutSession?: CheckoutSession;
 	clearCheckoutSession: () => void;
 	weeklyDeliveryDate: Date;
 	setWeeklyDeliveryDate: (value: Date) => void;
 	thresholdAmount: number;
+	contributionAmount?: number;
+	promotion?: Promotion;
+	checkoutSession?: CheckoutSession;
 	studentDiscount?: StudentDiscount;
+	enableWeeklyDigital?: boolean;
 };
 
 const getPaymentMethods = (
@@ -175,18 +174,19 @@ export default function CheckoutForm({
 	productKey,
 	ratePlanKey,
 	originalAmount,
-	contributionAmount,
 	finalAmount,
-	promotion,
 	useStripeExpressCheckout,
 	countryId,
 	abParticipations,
-	checkoutSession,
 	clearCheckoutSession,
 	weeklyDeliveryDate,
 	setWeeklyDeliveryDate,
 	thresholdAmount,
+	contributionAmount,
+	promotion,
+	checkoutSession,
 	studentDiscount,
+	enableWeeklyDigital,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
@@ -1139,6 +1139,7 @@ export default function CheckoutForm({
 							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}
+							enableWeeklyDigital={enableWeeklyDigital}
 						/>
 						<div
 							css={css`

@@ -12,7 +12,6 @@ import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	type ActiveProductKey,
@@ -49,17 +48,18 @@ type CheckoutSummaryProps = {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	originalAmount: number;
-	promotion?: Promotion;
 	countryId: IsoCountry;
-	forcedCountry?: string;
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
-	studentDiscount?: StudentDiscount;
-	nudgeSettings?: CheckoutNudgeSettings;
 	backButtonOrigin: string;
 	backButtonPathOverride: string | null;
+	promotion?: Promotion;
+	forcedCountry?: string;
+	studentDiscount?: StudentDiscount;
+	nudgeSettings?: CheckoutNudgeSettings;
+	enableWeeklyDigital?: boolean;
 };
 
 export default function CheckoutSummary({
@@ -68,17 +68,18 @@ export default function CheckoutSummary({
 	productKey,
 	ratePlanKey,
 	originalAmount,
-	promotion,
 	countryId,
-	forcedCountry,
 	abParticipations,
 	landingPageSettings,
 	weeklyDeliveryDate,
 	thresholdAmount,
-	studentDiscount,
-	nudgeSettings,
 	backButtonOrigin,
 	backButtonPathOverride,
+	promotion,
+	forcedCountry,
+	studentDiscount,
+	nudgeSettings,
+	enableWeeklyDigital,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
@@ -90,7 +91,6 @@ export default function CheckoutSummary({
 		billingPeriod: BillingPeriod.Monthly,
 	};
 	const isRecurringContribution = productKey === 'Contribution';
-	const { enableWeeklyDigital } = getFeatureFlags();
 
 	/**
 	 * Is It a Contribution? URL queryPrice supplied?
