@@ -13,7 +13,7 @@ import {
 } from '@guardian/source/react-components';
 import ProductInfoChip from 'components/product/productInfoChip';
 import { guardianWeeklyTermsLink } from 'helpers/legal';
-import { termsLink } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { termsLink } from 'pages/supporter-plus-landing/components/termsLink';
 
 const pricesInfo = css`
 	margin-top: ${space[6]}px;

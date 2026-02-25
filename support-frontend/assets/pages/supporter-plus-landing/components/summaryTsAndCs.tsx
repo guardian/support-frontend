@@ -10,7 +10,11 @@ import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { formatAmount } from 'helpers/forms/checkouts';
-import { digitalPlusTermsLink, privacyLink } from 'helpers/legal';
+import {
+	digitalPlusTermsLink,
+	manageAccountLink,
+	privacyLink,
+} from 'helpers/legal';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -28,7 +32,7 @@ import {
 	isPaperPlusSub,
 	isSundayOnlyNewspaperSub,
 } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
-import { manageMyAccountLink, termsLink } from './paymentTsAndCs';
+import { termsLink } from './termsLink';
 
 const containerSummaryTsCs = css`
 	margin-top: ${space[6]}px;
@@ -141,7 +145,8 @@ export function SummaryTsAndCs({
 					By clicking the Pay button below, you agree to enroll in your selected
 					support plan and your payment method will be {usChargePeriod}
 					until you cancel. We will notify you if this amount changes. You may
-					cancel at any time to avoid future charges in {manageMyAccountLink()}.
+					cancel at any time to avoid future charges in{' '}
+					{termsLink('Manage My Account', manageAccountLink)}.
 				</p>
 				<p css={marginTop}>
 					Your enrollment is subject to and governed by the Guardian{' '}

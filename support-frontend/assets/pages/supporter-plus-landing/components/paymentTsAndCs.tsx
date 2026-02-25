@@ -2,16 +2,13 @@ import { css } from '@emotion/react';
 import { neutral, space, textSans12 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
-import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import {
 	buildPromotionalTermsLink,
-	contributionsTermsLinks,
 	digitalPlusTermsLink,
 	guardianAdLiteTermsLink,
 	guardianWeeklyTermsLink,
+	manageAccountLink,
 	observerLinks,
-	paperTermsLink,
-	privacyLink,
 	supporterPlusTermsLink,
 	tierThreeTermsLink,
 } from 'helpers/legal';
@@ -35,14 +32,13 @@ import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSunda
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { FinePrint } from './finePrint';
+import { FooterTsAndCs } from './footerTsAndCs';
 import { ManageMyAccountLink } from './manageMyAccountLink';
-
-const tierThreeLabel = getProductLabel('TierThree');
+import { termsLink } from './termsLink';
 
 const marginTop = css`
 	margin-top: 4px;
 `;
-
 const container = css`
 	${textSans12};
 	color: ${neutral[20]};
@@ -54,82 +50,7 @@ const container = css`
 	}
 `;
 
-export const termsLink = (linkText: string, url: string) => (
-	<a target="_blank" rel="noopener noreferrer" href={url}>
-		{linkText}
-	</a>
-);
-export const manageMyAccountLink = () =>
-	termsLink('Manage My Account', 'http://manage.theguardian.com/');
-
-export function FooterTsAndCs({
-	productKey,
-	countryGroupId,
-	ratePlanKey,
-}: {
-	productKey: ActiveProductKey;
-	countryGroupId: CountryGroupId;
-	ratePlanKey?: ActiveRatePlanKey;
-}) {
-	const privacy = <a href={privacyLink}>Privacy Policy</a>;
-	const getProductNameSummary = (): string => {
-		switch (productKey) {
-			case 'GuardianAdLite':
-				return `the ${getProductLabel('GuardianAdLite')}`;
-			case 'TierThree':
-				return tierThreeLabel;
-			default:
-				return 'our';
-		}
-	};
-	const getProductTerms = (): JSX.Element => {
-		switch (productKey) {
-			case 'GuardianAdLite':
-				return termsLink('Terms', guardianAdLiteTermsLink);
-			case 'DigitalSubscription':
-				return termsLink('Terms and Conditions', digitalPlusTermsLink);
-			case 'SupporterPlus':
-				return termsLink('Terms and Conditions', supporterPlusTermsLink);
-			case 'TierThree':
-				return termsLink('Terms', tierThreeTermsLink);
-			case 'HomeDelivery':
-			case 'NationalDelivery':
-			case 'SubscriptionCard':
-				return termsLink('Terms & Conditions', paperTermsLink);
-			case 'GuardianWeeklyDomestic':
-			case 'GuardianWeeklyRestOfWorld':
-				return termsLink('Terms & Conditions', guardianWeeklyTermsLink);
-			default:
-				return termsLink(
-					'Terms and Conditions',
-					contributionsTermsLinks[countryGroupId],
-				);
-		}
-	};
-
-	const weeklyGiftTerms = (
-		<>
-			To cancel, go to {manageMyAccountLink()} or see our{' '}
-			{termsLink('Terms', guardianWeeklyTermsLink)}. This subscription does not
-			auto-renew.
-		</>
-	);
-	const isWeeklyGift =
-		ratePlanKey && isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
-	return (
-		<div css={marginTop}>
-			By proceeding, you are agreeing to {getProductNameSummary()}{' '}
-			{getProductTerms()}. {isWeeklyGift && weeklyGiftTerms}
-			<p css={marginTop}>
-				To find out what personal data we collect and how we use it, please
-				visit our {privacy}.
-			</p>
-			<p css={marginTop}>
-				<StripeDisclaimer />
-			</p>
-		</div>
-	);
-}
+const tierThreeLabel = getProductLabel('TierThree');
 
 function getStudentPrice(
 	isStudentOneYearRatePlan: boolean,
@@ -141,7 +62,7 @@ function getStudentPrice(
 		: studentPricePeriod;
 }
 
-const paperShareTsAndCs =
+const printShareTsAndCs =
 	'We will share your contact and subscription details with our fulfilment partners';
 function paperTsAndCs(
 	paperFulfilmentOption: PaperFulfilmentOptions,
@@ -173,7 +94,7 @@ function paperTsAndCs(
 				{termsLink('Help Centre', getHelpCentreUrl())}.{' '}
 			</div>
 			<div>
-				{paperShareTsAndCs}
+				{printShareTsAndCs}
 				{paperFulfilmentOption === 'Collection'
 					? ' to provide you with your subscription card'
 					: ''}
@@ -182,22 +103,23 @@ function paperTsAndCs(
 		</>
 	);
 }
-
-export interface PaymentTsAndCsProps {
-	productKey: ActiveProductKey;
-	ratePlanKey: ActiveRatePlanKey;
-	countryGroupId: CountryGroupId;
-	studentDiscount?: StudentDiscount;
-	promotion?: Promotion;
-	thresholdAmount?: number;
-}
-
 const rightReservation = `Offer subject to availability. Guardian News and Media Ltd ("GNM") reserves the right to withdraw this promotion at any time. `;
-function weeklyTsAndCs(isWeeklyGift?: boolean, promotion?: Promotion) {
+function weeklyTsAndCs(
+	isWeeklyGift?: boolean,
+	promotion?: Promotion,
+	deliveryDate?: Date,
+	isWeeklyDigital?: boolean,
+): JSX.Element {
 	return (
 		<>
 			{isWeeklyGift && !promotion && <div>{rightReservation}</div>}
 			{promotion && <GuardianWeeklyPromoTerms promotion={promotion} />}
+			{isWeeklyDigital && (
+				<>
+					<GuardianWeeklyPaymentTerms deliveryDate={deliveryDate} />
+					<div css={marginTop}>{printShareTsAndCs}</div>
+				</>
+			)}
 		</>
 	);
 }
@@ -209,7 +131,32 @@ function GuardianWeeklyPromoTerms({ promotion }: { promotion: Promotion }) {
 		</div>
 	);
 }
+function GuardianWeeklyPaymentTerms({ deliveryDate }: { deliveryDate?: Date }) {
+	const deliveryTsAndCs = `Your first payment will be taken on ${
+		deliveryDate ? formatUserDate(deliveryDate) : 'the delivery date'
+	}.`;
+	return (
+		<div css={marginTop}>
+			{deliveryTsAndCs} You can cancel your subscription at any time before your
+			next renewal date. If you cancel within 14 days of sign-up, you’ll receive
+			a full refund. To cancel within 14 days sign-up and receive a refund
+			contact: Customer Service. Cancellation of your subscription after 14 days
+			will take effect at the end of your current payment period. To cancel,
+			contact Customer Service or see our{' '}
+			{termsLink('Terms', guardianWeeklyTermsLink)}.
+		</div>
+	);
+}
 
+export interface PaymentTsAndCsProps {
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
+	countryGroupId: CountryGroupId;
+	studentDiscount?: StudentDiscount;
+	promotion?: Promotion;
+	thresholdAmount?: number;
+	enableWeeklyDigital?: boolean;
+}
 export function PaymentTsAndCs({
 	productKey,
 	ratePlanKey,
@@ -217,6 +164,7 @@ export function PaymentTsAndCs({
 	studentDiscount,
 	promotion,
 	thresholdAmount = 0,
+	enableWeeklyDigital,
 }: PaymentTsAndCsProps): JSX.Element {
 	// Display for AUS Students who are on a subscription basis
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
@@ -362,8 +310,8 @@ export function PaymentTsAndCs({
 					immediately and we will not take the first payment from you.
 					Cancellation of your subscription after 14 days will take effect at
 					the end of your current {billingPeriodPlural} payment period. To
-					cancel, go to {manageMyAccountLink()} or see our{' '}
-					{termsLink('Terms', digitalPlusTermsLink)}.
+					cancel, go to {termsLink('Manage My Account', manageAccountLink)} or
+					see our {termsLink('Terms', digitalPlusTermsLink)}.
 				</div>
 			)
 		) : (
@@ -377,7 +325,7 @@ export function PaymentTsAndCs({
 				and we will not take the first payment from you. Cancellation of your
 				subscription after 14 days will take effect at the end of your current{' '}
 				{billingPeriod.toLocaleLowerCase()} payment period. To cancel, go to{' '}
-				{manageMyAccountLink()} or see our{' '}
+				{termsLink('Manage My Account', manageAccountLink)} or see our{' '}
 				{termsLink('Terms', digitalPlusTermsLink)}.
 			</div>
 		);
@@ -433,8 +381,18 @@ export function PaymentTsAndCs({
 		NationalDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
 		HomeDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
 		SubscriptionCard: paperTsAndCs('Collection', deliveryDate),
-		GuardianWeeklyDomestic: weeklyTsAndCs(isWeeklyGift, promotion),
-		GuardianWeeklyRestOfWorld: weeklyTsAndCs(isWeeklyGift, promotion),
+		GuardianWeeklyDomestic: weeklyTsAndCs(
+			isWeeklyGift,
+			promotion,
+			deliveryDate,
+			enableWeeklyDigital,
+		),
+		GuardianWeeklyRestOfWorld: weeklyTsAndCs(
+			isWeeklyGift,
+			promotion,
+			deliveryDate,
+			enableWeeklyDigital,
+		),
 	};
 	return (
 		<div css={container}>

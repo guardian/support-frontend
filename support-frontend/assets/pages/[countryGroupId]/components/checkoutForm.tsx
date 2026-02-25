@@ -1178,6 +1178,7 @@ export default function CheckoutForm({
 							studentDiscount={studentDiscount}
 							promotion={promotion}
 							thresholdAmount={thresholdAmount}
+							enableWeeklyDigital={enableWeeklyDigital}
 						/>
 					</BoxContents>
 				</Box>
