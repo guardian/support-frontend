@@ -127,20 +127,21 @@ export async function getPageParticipations<Variant>(
 	}
 
 	// No participation in session storage, assign user to a test + variant
-	const test = tests
-		.filter((test) => test.status === 'Live')
-		.find((test) => {
-			return countryGroupMatches(
-				test.regionTargeting?.targetedCountryGroups,
+	let test: PageTest<Variant> | undefined;
+	for (const currentTest of tests.filter((test) => test.status === 'Live')) {
+		if (
+			countryGroupMatches(
+				currentTest.regionTargeting?.targetedCountryGroups,
 				countryGroupId,
-			);
-		});
-
-	if (!test) {
-		return makeFallback();
+			) &&
+			(await isUserInAudience(currentTest))
+		) {
+			test = currentTest;
+			break;
+		}
 	}
 
-	if (!(await isUserInAudience(test))) {
+	if (!test) {
 		return makeFallback();
 	}
 
