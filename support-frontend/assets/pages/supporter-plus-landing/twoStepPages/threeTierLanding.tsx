@@ -445,6 +445,7 @@ export function ThreeTierLanding({
 			),
 		cta:
 			settings.products.Contribution?.cta ?? fallbackProducts.Contribution!.cta,
+		billingPeriodsCopy: settings.products.Contribution?.billingPeriodsCopy,
 	};
 
 	/** Tier 2: SupporterPlus */
@@ -477,6 +478,7 @@ export function ThreeTierLanding({
 		cta:
 			settings.products.SupporterPlus?.cta ??
 			fallbackProducts.SupporterPlus!.cta,
+		billingPeriodsCopy: settings.products.SupporterPlus?.billingPeriodsCopy,
 	};
 
 	const tier2Card: CardContent = {
@@ -531,6 +533,8 @@ export function ThreeTierLanding({
 		cta:
 			settings.products.DigitalSubscription?.cta ??
 			fallbackProducts.DigitalSubscription!.cta,
+		billingPeriodsCopy:
+			settings.products.DigitalSubscription?.billingPeriodsCopy,
 	};
 	const tier3ProductPrice = allProductPrices.DigitalPack;
 	const tier3Promotion = tier3ProductPrice

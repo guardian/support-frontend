@@ -59,6 +59,7 @@ export interface ProductBenefit {
 export interface LandingPageProductDescription {
 	title: string;
 	titlePill?: string;
+	billingPeriodsCopy?: string;
 	label?: {
 		copy: string;
 	};
