@@ -12,14 +12,14 @@
 			"@modules/aws/*": [
 				"./node_modules/@guardian/support-service-lambdas/modules/aws/src/*"
 			],
+			"@modules/zuora-catalog/*": [
+				"./node_modules/@guardian/support-service-lambdas/modules/zuora-catalog/src/*"
+			],
 			"@modules/zuora/*": [
 				"./node_modules/@guardian/support-service-lambdas/modules/zuora/src/*"
 			],
 			"@modules/product-catalog/*": [
 				"./node_modules/@guardian/support-service-lambdas/modules/product-catalog/src/*"
-			],
-			"@modules/zuora-catalog/zuoraCatalogSchema": [
-				"./node_modules/@guardian/support-service-lambdas/modules/zuora-catalog/src/zuoraCatalogSchema"
 			],
 			"@modules/routing/*": [
 				"./node_modules/@guardian/support-service-lambdas/modules/routing/src/*"
