@@ -26,64 +26,81 @@ const checkoutNudgeSettings = getCheckoutNudgeParticipations();
 const abParticipations = getAbParticipations();
 const appConfig = parseAppConfig(window.guardian);
 
+const chunks = {
+	contribute: () =>
+		import(/* webpackChunkName: "LandingPage" */ './landingPage'),
+	oneTimeCheckout: () =>
+		import(/* webpackChunkName: "oneTimeCheckout" */ './oneTimeCheckout'),
+	checkout: () => import(/* webpackChunkName: "checkout" */ './checkout'),
+	thankYou: () => import(/* webpackChunkName: "ThankYou" */ './thankYou'),
+	guardianAdLite: () =>
+		import(
+			/* webpackChunkName: "GuardianAdLiteLanding" */ './guardianAdLiteLanding/guardianAdLiteLanding'
+		),
+	studentUTS: () =>
+		import(
+			/* webpackChunkName: "StudentLandingPageUTSContainer" */ './student/StudentLandingPageUTSContainer'
+		),
+	student: () =>
+		import(
+			/* webpackChunkName: "StudentLandingPageGlobalContainer" */ './student/StudentLandingPageGlobalContainer'
+		),
+};
+
 const Checkout = lazy(() =>
-	import(/* webpackChunkName: "checkout" */ './checkout').then((mod) => ({
-		default: mod.Checkout,
-	})),
+	chunks.checkout().then((mod) => ({ default: mod.Checkout })),
 );
 const OneTimeCheckout = lazy(() =>
-	import(/* webpackChunkName: "oneTimeCheckout" */ './oneTimeCheckout').then(
-		(mod) => ({ default: mod.OneTimeCheckout }),
-	),
+	chunks.oneTimeCheckout().then((mod) => ({ default: mod.OneTimeCheckout })),
 );
 const ThankYou = lazy(() =>
-	import(/* webpackChunkName: "ThankYou" */ './thankYou').then((mod) => ({
-		default: mod.ThankYou,
-	})),
+	chunks.thankYou().then((mod) => ({ default: mod.ThankYou })),
 );
 const GuardianAdLiteLanding = lazy(() =>
-	import(
-		/* webpackChunkName: "GuardianAdLiteLanding" */ './guardianAdLiteLanding/guardianAdLiteLanding'
-	).then((mod) => ({ default: mod.GuardianAdLiteLanding })),
+	chunks
+		.guardianAdLite()
+		.then((mod) => ({ default: mod.GuardianAdLiteLanding })),
 );
 const LandingPage = lazy(() =>
-	import(/* webpackChunkName: "LandingPage" */ './landingPage').then((mod) => ({
-		default: mod.LandingPage,
-	})),
+	chunks.contribute().then((mod) => ({ default: mod.LandingPage })),
 );
 const StudentLandingPageUTSContainer = lazy(() =>
-	import(
-		/* webpackChunkName: "StudentLandingPageUTSContainer" */ './student/StudentLandingPageUTSContainer'
-	).then((mod) => ({ default: mod.StudentLandingPageUTSContainer })),
+	chunks
+		.studentUTS()
+		.then((mod) => ({ default: mod.StudentLandingPageUTSContainer })),
 );
 const StudentLandingPageGlobalContainer = lazy(() =>
-	import(
-		/* webpackChunkName: "StudentLandingPageGlobalContainer" */ './student/StudentLandingPageGlobalContainer'
-	).then((mod) => ({ default: mod.StudentLandingPageGlobalContainer })),
+	chunks
+		.student()
+		.then((mod) => ({ default: mod.StudentLandingPageGlobalContainer })),
 );
+const paths = {
+	contribute: '/contribute',
+	checkout: '/checkout',
+	oneTimeCheckout: '/one-time-checkout',
+	thankYou: '/thank-you',
+	guardianAdLite: '/guardian-ad-lite',
+	student: '/student',
+	studentUTS: '/student/UTS',
+} as const;
+
+// Most specific paths must come first so e.g. /student/UTS matches before /student
+const PRELOAD_CHUNKS: Array<[string, () => Promise<unknown>]> = [
+	[paths.studentUTS, chunks.studentUTS],
+	[paths.student, chunks.student],
+	[paths.contribute, chunks.contribute],
+	[paths.oneTimeCheckout, chunks.oneTimeCheckout],
+	[paths.checkout, chunks.checkout],
+	[paths.thankYou, chunks.thankYou],
+	[paths.guardianAdLite, chunks.guardianAdLite],
+];
 
 function preloadCurrentPageChunk(): void {
 	const path = window.location.pathname;
-	if (path.includes('/contribute')) {
-		void import(/* webpackChunkName: "LandingPage" */ './landingPage');
-	} else if (path.includes('/one-time-checkout')) {
-		void import(/* webpackChunkName: "oneTimeCheckout" */ './oneTimeCheckout');
-	} else if (path.includes('/checkout')) {
-		void import(/* webpackChunkName: "checkout" */ './checkout');
-	} else if (path.includes('/thank-you')) {
-		void import(/* webpackChunkName: "ThankYou" */ './thankYou');
-	} else if (path.includes('/guardian-ad-lite')) {
-		void import(
-			/* webpackChunkName: "GuardianAdLiteLanding" */ './guardianAdLiteLanding/guardianAdLiteLanding'
-		);
-	} else if (path.includes('/student/UTS')) {
-		void import(
-			/* webpackChunkName: "StudentLandingPageUTSContainer" */ './student/StudentLandingPageUTSContainer'
-		);
-	} else if (path.includes('/student')) {
-		void import(
-			/* webpackChunkName: "StudentLandingPageGlobalContainer" */ './student/StudentLandingPageGlobalContainer'
-		);
+	const match = PRELOAD_CHUNKS.find(([segment]) => path.includes(segment));
+	if (match) {
+		const [, chunk] = match;
+		void chunk();
 	}
 }
 
@@ -103,7 +120,7 @@ function buildRouter(
 	return createBrowserRouter([
 		...Object.values(SupportRegionId).flatMap((supportRegionId) => [
 			{
-				path: `/${supportRegionId}/contribute/:campaignCode?`,
+				path: `/${supportRegionId}${paths.contribute}/:campaignCode?`,
 				element: (
 					<Suspense fallback={<GuardianHoldingContent />}>
 						<LandingPage
@@ -115,7 +132,7 @@ function buildRouter(
 				),
 			},
 			{
-				path: `/${supportRegionId}/checkout`,
+				path: `/${supportRegionId}${paths.checkout}`,
 				element: (
 					<Suspense fallback={<GuardianOrObserverHoldingContent />}>
 						<Checkout
@@ -129,7 +146,7 @@ function buildRouter(
 				),
 			},
 			{
-				path: `/${supportRegionId}/one-time-checkout`,
+				path: `/${supportRegionId}${paths.oneTimeCheckout}`,
 				element: (
 					<Suspense fallback={<GuardianHoldingContent />}>
 						<OneTimeCheckout
@@ -144,7 +161,7 @@ function buildRouter(
 				),
 			},
 			{
-				path: `/${supportRegionId}/thank-you`,
+				path: `/${supportRegionId}${paths.thankYou}`,
 				element: (
 					<Suspense fallback={<GuardianOrObserverHoldingContent />}>
 						<ThankYou
@@ -157,7 +174,7 @@ function buildRouter(
 				),
 			},
 			{
-				path: `/${supportRegionId}/guardian-ad-lite`,
+				path: `/${supportRegionId}${paths.guardianAdLite}`,
 				element: (
 					<Suspense fallback={<GuardianHoldingContent />}>
 						<GuardianAdLiteLanding supportRegionId={supportRegionId} />
@@ -165,7 +182,7 @@ function buildRouter(
 				),
 			},
 			{
-				path: `/${supportRegionId}/student`,
+				path: `/${supportRegionId}${paths.student}`,
 				element: (
 					<Suspense fallback={<GuardianHoldingContent />}>
 						<StudentLandingPageGlobalContainer
@@ -177,7 +194,7 @@ function buildRouter(
 			},
 		]),
 		{
-			path: '/au/student/UTS',
+			path: `/au${paths.studentUTS}`,
 			element: (
 				<Suspense fallback={<GuardianHoldingContent />}>
 					<StudentLandingPageUTSContainer
