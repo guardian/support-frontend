@@ -1,21 +1,42 @@
 {
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "types": ["node", "jest"],
-    "resolveJsonModule": true,
-    "outDir": "target/typescript",
-    "baseUrl": "./",
-    "paths": {
-      "@modules/internationalisation/*": ["./node_modules/@guardian/support-service-lambdas/modules/internationalisation/src/*"],
-      "@modules/aws/*": ["./node_modules/@guardian/support-service-lambdas/modules/aws/src/*"],
-      "@modules/zuora/*": ["./node_modules/@guardian/support-service-lambdas/modules/zuora/src/*"],
-      "@modules/product-catalog/*": ["./node_modules/@guardian/support-service-lambdas/modules/product-catalog/src/*"],
-      "@modules/routing/*": ["./node_modules/@guardian/support-service-lambdas/modules/routing/src/*"],
-      "@modules/promotions/*": ["./node_modules/@guardian/support-service-lambdas/modules/promotions/src/*"],
-      "@modules/email/*": ["./node_modules/@guardian/support-service-lambdas/modules/email/src/*"],
-      "@modules/supporter-product-data/*": ["./node_modules/@guardian/support-service-lambdas/modules/supporter-product-data/src/*"],
-      "@modules/product/*": ["../modules/product/*"],
-      "@modules/*": ["./node_modules/@guardian/support-service-lambdas/modules/*"]
-    }
-  }
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"types": ["node", "jest"],
+		"resolveJsonModule": true,
+		"outDir": "target/typescript",
+		"baseUrl": "./",
+		"paths": {
+			"@modules/internationalisation/*": [
+				"./node_modules/@guardian/support-service-lambdas/modules/internationalisation/src/*"
+			],
+			"@modules/aws/*": [
+				"./node_modules/@guardian/support-service-lambdas/modules/aws/src/*"
+			],
+			"@modules/zuora/*": [
+				"./node_modules/@guardian/support-service-lambdas/modules/zuora/src/*"
+			],
+			"@modules/product-catalog/*": [
+				"./node_modules/@guardian/support-service-lambdas/modules/product-catalog/src/*"
+			],
+			"@modules/zuora-catalog/zuoraCatalogSchema": [
+				"./node_modules/@guardian/support-service-lambdas/modules/zuora-catalog/src/zuoraCatalogSchema"
+			],
+			"@modules/routing/*": [
+				"./node_modules/@guardian/support-service-lambdas/modules/routing/src/*"
+			],
+			"@modules/promotions/*": [
+				"./node_modules/@guardian/support-service-lambdas/modules/promotions/src/*"
+			],
+			"@modules/email/*": [
+				"./node_modules/@guardian/support-service-lambdas/modules/email/src/*"
+			],
+			"@modules/supporter-product-data/*": [
+				"./node_modules/@guardian/support-service-lambdas/modules/supporter-product-data/src/*"
+			],
+			"@modules/product/*": ["../modules/product/*"],
+			"@modules/*": [
+				"./node_modules/@guardian/support-service-lambdas/modules/*"
+			]
+		}
+	}
 }

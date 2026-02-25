@@ -23,6 +23,8 @@ module.exports = {
 			'@guardian/support-service-lambdas/modules/internationalisation/src/$1',
 		'@modules/arrayFunctions':
 			'@guardian/support-service-lambdas/modules/arrayFunctions',
+		'@modules/nullAndUndefined':
+			'@guardian/support-service-lambdas/modules/nullAndUndefined',
 		'@modules/objectFunctions':
 			'@guardian/support-service-lambdas/modules/objectFunctions',
 		'@modules/(.*)$': '<rootDir>/../modules/$1',
