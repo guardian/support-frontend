@@ -23,6 +23,7 @@ import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/hel
 import {
 	isPaperPlusSub,
 	isSundayOnlyNewspaperSub,
+	isWeeklyPlusSub,
 } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import {
 	isGuardianWeeklyGiftProduct,
@@ -102,6 +103,7 @@ export function OrderSummaryTsAndCs({
 	// Display for AUS Students who are on a subscription basis
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
 	const isPaperPlus = isPaperPlusSub(productKey, ratePlanKey);
+	const isWeeklyPlus = isWeeklyPlusSub(productKey, ratePlanKey);
 	const isPaperSundayOrPlus =
 		isPaperPlus || isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const promoMessage = productLegal(
@@ -148,22 +150,25 @@ export function OrderSummaryTsAndCs({
 				</>
 			)}
 			{isGuardianWeeklyOrTierThreeProduct(productKey) && (
-				<p>
-					{isGuardianWeeklyGiftProduct(productKey, ratePlanKey) ? (
-						<>
-							Your Guardian Weekly gift subscription will start on{' '}
-							{deliveryStartDate}. The recipient should receive their first
-							magazine 1 - 7 days after this issue date, depending on national
-							post services.
-						</>
-					) : (
-						<>
-							Auto renews every {periodNoun}. Cancel anytime. If you cancel
-							within the first 14 days, via Customer Service, you will receive a
-							full refund.
-						</>
-					)}
-				</p>
+				<>
+					<p>
+						{isGuardianWeeklyGiftProduct(productKey, ratePlanKey) ? (
+							<>
+								Your Guardian Weekly gift subscription will start on{' '}
+								{deliveryStartDate}. The recipient should receive their first
+								magazine 1 - 7 days after this issue date, depending on national
+								post services.
+							</>
+						) : (
+							<>
+								Auto renews every {periodNoun}. Cancel anytime.
+								{isWeeklyPlus
+									? ' If you cancel within the first 14 days, via Customer Service, you will receive a full refund.'
+									: ''}
+							</>
+						)}
+					</p>
+				</>
 			)}
 		</div>
 	);
