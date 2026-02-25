@@ -140,6 +140,29 @@ const termsAndConditions = css`
 	}
 `;
 
+const startDateWeeklyDigitalList = css`
+	${textSans15};
+	color: ${neutral[7]};
+	border: 1px solid ${neutral[46]};
+	border-radius: ${space[3]}px;
+	background-color: ${neutral[97]};
+	padding: ${space[2]}px ${space[3]}px;
+	margin-top: ${space[3]}px;
+`;
+
+const startDateList = css`
+	display: block;
+	${textSans14};
+	color: #606060;
+	background-color: ${palette.neutral[97]};
+	border-radius: ${space[3]}px;
+	padding: ${space[3]}px;
+	margin-top: ${space[2]}px;
+	${from.desktop} {
+		margin-top: ${space[4]}px;
+	}
+`;
+
 export type ContributionsOrderSummaryProps = {
 	productKey: ActiveProductKey;
 	productLabel: string;
@@ -151,15 +174,15 @@ export type ContributionsOrderSummaryProps = {
 	enableCheckList: boolean;
 	checkListData: BenefitsCheckListData[];
 	startDate: React.ReactNode;
+	landingPageSettings: LandingPageVariant;
 	paymentFrequency?: string;
 	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
-	tsAndCsTier3?: React.ReactNode;
 	studentDiscount?: StudentDiscount;
 	supportRegionId: SupportRegionId;
 	nudgeSettings?: CheckoutNudgeSettings;
-	landingPageSettings: LandingPageVariant;
+	enableWeeklyDigital?: boolean;
 };
 
 export function ContributionsOrderSummary({
@@ -176,11 +199,12 @@ export function ContributionsOrderSummary({
 	headerButton,
 	tsAndCs,
 	startDate,
+	landingPageSettings,
 	enableCheckList,
 	studentDiscount,
 	supportRegionId,
 	nudgeSettings,
-	landingPageSettings,
+	enableWeeklyDigital,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -248,7 +272,9 @@ export function ContributionsOrderSummary({
 				{hasCheckList && showCheckList && (
 					<>
 						<div css={checklistContainer}>{checkList}</div>
-						{startDate}
+						{!enableWeeklyDigital && !isWeeklyGift && (
+							<div css={startDateList}>{startDate}</div>
+						)}
 					</>
 				)}
 			</div>
@@ -264,6 +290,9 @@ export function ContributionsOrderSummary({
 				/>
 			</div>
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
+			{enableWeeklyDigital && (
+				<div css={startDateWeeklyDigitalList}>{startDate}</div>
+			)}
 			{nudgeSettings && (
 				<CheckoutNudgeSelector
 					nudgeSettings={nudgeSettings}

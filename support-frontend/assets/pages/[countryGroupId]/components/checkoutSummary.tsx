@@ -7,13 +7,12 @@ import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
-import {
-	OrderSummaryStartDate,
-	OrderSummaryTsAndCs,
-} from 'components/orderSummary/orderSummaryTsAndCs';
+import { OrderSummaryStartDate } from 'components/orderSummary/orderSummaryStartDate';
+import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
+import { getFeatureFlags } from 'helpers/featureFlags';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	type ActiveProductKey,
@@ -91,6 +90,7 @@ export default function CheckoutSummary({
 		billingPeriod: BillingPeriod.Monthly,
 	};
 	const isRecurringContribution = productKey === 'Contribution';
+	const { enableWeeklyDigital } = getFeatureFlags();
 
 	/**
 	 * Is It a Contribution? URL queryPrice supplied?
@@ -219,6 +219,7 @@ export default function CheckoutSummary({
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
 							startDate={formatUserDate(weeklyDeliveryDate)}
+							enableWeeklyDigital={enableWeeklyDigital}
 						/>
 					}
 					tsAndCs={
@@ -234,6 +235,7 @@ export default function CheckoutSummary({
 									? weeklyDeliveryDate
 									: undefined
 							}
+							enableWeeklyDigital={enableWeeklyDigital}
 						/>
 					}
 					headerButton={
@@ -245,6 +247,7 @@ export default function CheckoutSummary({
 					supportRegionId={supportRegionId}
 					nudgeSettings={nudgeSettings}
 					landingPageSettings={landingPageSettings}
+					enableWeeklyDigital={enableWeeklyDigital}
 				/>
 			</BoxContents>
 		</Box>

@@ -1,5 +1,4 @@
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 
 export const isSundayOnlyNewspaperSub = (
@@ -20,8 +19,6 @@ export const isWeeklyPlusSub = (
 	productKey: ProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): boolean =>
-	getFeatureFlags().enableWeeklyDigital &&
 	['GuardianWeeklyRestOfWorld', 'GuardianWeeklyDomestic'].includes(
 		productKey,
-	) &&
-	ratePlanKey.endsWith('Plus');
+	) && ratePlanKey.endsWith('Plus');
