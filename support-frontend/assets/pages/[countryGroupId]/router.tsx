@@ -1,8 +1,9 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { lazy, Suspense } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Await, createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
 import { ObserverHoldingContent } from 'components/serverSideRendered/observerHoldingContent';
+import type { Participations } from 'helpers/abTests/models';
 import { WithCoreWebVitals } from 'helpers/coreWebVitals/withCoreWebVitals';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
@@ -26,13 +27,24 @@ const oneTimeCheckoutSettings = getPageParticipations<OneTimeCheckoutVariant>(
 	getOneTimeCheckoutTestConfig(),
 );
 
-const abParticipations = {
-	...getAbParticipations(),
-	...landingPageParticipations.participations,
-	...checkoutNudgeSettings?.participations,
-	...oneTimeCheckoutSettings.participations,
-};
-setUpTrackingAndConsents(abParticipations);
+const emptyParticipations: Participations = {};
+const abParticipationsPromise: Promise<Participations> = new Promise(
+	(resolve) => {
+		setTimeout(() => {
+			resolve({
+				...getAbParticipations(),
+				...landingPageParticipations.participations,
+				...checkoutNudgeSettings?.participations,
+				...oneTimeCheckoutSettings.participations,
+			});
+		}, 5000);
+	},
+);
+
+void abParticipationsPromise.then((abParticipations) => {
+	setUpTrackingAndConsents(abParticipations);
+});
+
 const appConfig = parseAppConfig(window.guardian);
 
 const Checkout = lazy(() => {
@@ -58,14 +70,6 @@ const GuardianAdLiteLanding = lazy(() => {
 	).then((mod) => {
 		return { default: mod.GuardianAdLiteLanding };
 	});
-});
-
-const LandingPage = lazy(() => {
-	return import(/* webpackChunkName: "LandingPage" */ './landingPage').then(
-		(mod) => {
-			return { default: mod.LandingPage };
-		},
-	);
 });
 const StudentLandingPageUTSContainer = lazy(() => {
 	return import(
@@ -96,10 +100,23 @@ const router = createBrowserRouter([
 			path: `/${supportRegionId}/contribute/:campaignCode?`,
 			element: (
 				<Suspense fallback={<GuardianHoldingContent />}>
-					<LandingPage
-						supportRegionId={supportRegionId}
-						abParticipations={abParticipations}
-						landingPageSettings={landingPageParticipations.variant}
+					<Await
+						resolve={Promise.all([
+							abParticipationsPromise,
+							import(/* webpackChunkName: "LandingPage" */ './landingPage'),
+						])}
+						children={([
+							abParticipations,
+							{ LandingPage: LandingPageComponent },
+						]) => {
+							return (
+								<LandingPageComponent
+									supportRegionId={supportRegionId}
+									abParticipations={abParticipations}
+									landingPageSettings={landingPageParticipations.variant}
+								/>
+							);
+						}}
 					/>
 				</Suspense>
 			),
@@ -111,7 +128,7 @@ const router = createBrowserRouter([
 					<Checkout
 						supportRegionId={supportRegionId}
 						appConfig={appConfig}
-						abParticipations={abParticipations}
+						abParticipations={emptyParticipations}
 						landingPageSettings={landingPageParticipations.variant}
 						nudgeSettings={checkoutNudgeSettings}
 					/>
@@ -125,7 +142,7 @@ const router = createBrowserRouter([
 					<OneTimeCheckout
 						supportRegionId={supportRegionId}
 						appConfig={appConfig}
-						abParticipations={abParticipations}
+						abParticipations={emptyParticipations}
 						nudgeSettings={checkoutNudgeSettings}
 						landingPageSettings={landingPageParticipations.variant}
 						oneTimeCheckoutSettings={oneTimeCheckoutSettings.variant}
@@ -140,7 +157,7 @@ const router = createBrowserRouter([
 					<ThankYou
 						supportRegionId={supportRegionId}
 						appConfig={appConfig}
-						abParticipations={abParticipations}
+						abParticipations={emptyParticipations}
 						landingPageSettings={landingPageParticipations.variant}
 					/>
 				</Suspense>
