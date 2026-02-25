@@ -67,7 +67,9 @@ export type ActiveRatePlanKey = keyof Record<
 	| HomeDeliveryRatePlanKey
 	| SupporterPlusRatePlanKey
 	| GuardianWeeklyRestOfWorldRatePlanKey
+	// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents -- types are currently duplicated across products, but will be resolved when we move to a more data driven product catalog
 	| GuardianWeeklyDomesticRatePlanKey
+	// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents -- types are currently duplicated across products, but will be resolved when we move to a more data driven product catalog
 	| SubscriptionCardRatePlanKey
 	| ContributionRatePlanKey,
 	true
