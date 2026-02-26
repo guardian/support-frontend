@@ -6,6 +6,7 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
+import { isGuardianWeeklyDigitalProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 
 interface Benefits {
 	label?: JSX.Element;
@@ -318,12 +319,12 @@ export function getPrintPlusDigitalBenefits(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): BenefitsCheckListData[] | undefined {
-	const isWeekly =
-		productKey === 'GuardianWeeklyDomestic' ||
-		productKey === 'GuardianWeeklyRestOfWorld';
-	const isNotGift = !ratePlanKey.includes('Gift');
-	const enableWeeklyDigital =
-		isWeekly && getFeatureFlags().enableWeeklyDigital && isNotGift;
+	const enableWeeklyDigital = isGuardianWeeklyDigitalProduct(
+		productKey,
+		ratePlanKey,
+	)
+		? getFeatureFlags().enableWeeklyDigital
+		: false;
 
 	const printProductOptions = getPrintProductOptions(
 		productKey,
