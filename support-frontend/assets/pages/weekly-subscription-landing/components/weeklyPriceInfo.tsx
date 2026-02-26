@@ -25,6 +25,7 @@ const pricesInfo = css`
 	}
 `;
 const pricesInfoWeeklyDigital = css`
+	color: ${neutral[100]};
 	div {
 		${textSans12};
 		font-size: 15px;
