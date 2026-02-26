@@ -13,7 +13,7 @@ import {
 } from '@guardian/source/react-components';
 import ProductInfoChip from 'components/product/productInfoChip';
 import { guardianWeeklyTermsLink } from 'helpers/legal';
-import { termsLink } from 'pages/supporter-plus-landing/components/termsLink';
+import { textLink } from 'helpers/utilities/textLink';
 
 const pricesInfo = css`
 	margin-top: ${space[6]}px;
@@ -39,7 +39,7 @@ const termsLinkStyle = css`
 `;
 
 export const weeklyTermsAndConditionsLink = () =>
-	termsLink('Terms and Conditions', guardianWeeklyTermsLink);
+	textLink('Terms and Conditions', guardianWeeklyTermsLink);
 
 type WeeklyPriceInfoProps = {
 	isGift?: boolean;

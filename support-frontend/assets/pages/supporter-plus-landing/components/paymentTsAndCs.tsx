@@ -31,10 +31,10 @@ import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/hel
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import { textLink } from '../../../helpers/utilities/textLink';
 import { FinePrint } from './finePrint';
 import { FooterTsAndCs } from './footerTsAndCs';
 import { ManageMyAccountLink } from './manageMyAccountLink';
-import { termsLink } from './termsLink';
 
 const marginTop = css`
 	margin-top: 4px;
@@ -91,7 +91,7 @@ function paperTsAndCs(
 				{deliveryTsAndCs} You can cancel your subscription at any time before
 				your next renewal date. Cancellation will take effect at the end of your
 				current payment period. To cancel, use the contact details listed on our{' '}
-				{termsLink('Help Centre', getHelpCentreUrl())}.{' '}
+				{textLink('Help Centre', getHelpCentreUrl())}.{' '}
 			</div>
 			<div>
 				{printShareTsAndCs}
@@ -127,7 +127,7 @@ function GuardianWeeklyPromoTerms({ promotion }: { promotion: Promotion }) {
 	return (
 		<div>
 			{rightReservation}Full promotion terms and conditions for our{' '}
-			{termsLink('offer', buildPromotionalTermsLink(promotion))}.
+			{textLink('offer', buildPromotionalTermsLink(promotion))}.
 		</div>
 	);
 }
@@ -143,7 +143,7 @@ function GuardianWeeklyPaymentTerms({ deliveryDate }: { deliveryDate?: Date }) {
 			contact: Customer Service. Cancellation of your subscription after 14 days
 			will take effect at the end of your current payment period. To cancel,
 			contact Customer Service or see our{' '}
-			{termsLink('Terms', guardianWeeklyTermsLink)}.
+			{textLink('Terms', guardianWeeklyTermsLink)}.
 		</div>
 	);
 }
@@ -186,12 +186,12 @@ export function PaymentTsAndCs({
 		return (
 			<div css={container}>
 				The Observer is owned by Tortoise Media. By proceeding, you agree to
-				Tortoise Media’s {termsLink('Terms & Conditions', observerLinks.TERMS)}.
+				Tortoise Media’s {textLink('Terms & Conditions', observerLinks.TERMS)}.
 				We will share your contact and subscription details with our fulfilment
 				partners to provide you with your subscription card. To find out more
 				about what personal data Tortoise Media will collect and how it will be
 				used, please visit Tortoise Media’s{' '}
-				{termsLink('Privacy Policy', observerLinks.PRIVACY)}.
+				{textLink('Privacy Policy', observerLinks.PRIVACY)}.
 			</div>
 		);
 	}
@@ -212,7 +212,7 @@ export function PaymentTsAndCs({
 	const accountAndTermsLCopyAndLinks = (
 		<>
 			To cancel, go to {ManageMyAccountLink} or see our{' '}
-			{termsLink('Terms', supporterPlusTermsLink)}
+			{textLink('Terms', supporterPlusTermsLink)}
 		</>
 	);
 
@@ -310,8 +310,8 @@ export function PaymentTsAndCs({
 					immediately and we will not take the first payment from you.
 					Cancellation of your subscription after 14 days will take effect at
 					the end of your current {billingPeriodPlural} payment period. To
-					cancel, go to {termsLink('Manage My Account', manageAccountLink)} or
-					see our {termsLink('Terms', digitalPlusTermsLink)}.
+					cancel, go to {textLink('Manage My Account', manageAccountLink)} or
+					see our {textLink('Terms', digitalPlusTermsLink)}.
 				</div>
 			)
 		) : (
@@ -325,8 +325,8 @@ export function PaymentTsAndCs({
 				and we will not take the first payment from you. Cancellation of your
 				subscription after 14 days will take effect at the end of your current{' '}
 				{billingPeriod.toLocaleLowerCase()} payment period. To cancel, go to{' '}
-				{termsLink('Manage My Account', manageAccountLink)} or see our{' '}
-				{termsLink('Terms', digitalPlusTermsLink)}.
+				{textLink('Manage My Account', manageAccountLink)} or see our{' '}
+				{textLink('Terms', digitalPlusTermsLink)}.
 			</div>
 		);
 	};
@@ -346,7 +346,7 @@ export function PaymentTsAndCs({
 				and we will not take the first payment from you. Cancellation of your
 				subscription after 14 days will take effect at the end of your current
 				monthly payment period. To cancel, go to {ManageMyAccountLink} or see
-				our Guardian Ad-Lite {termsLink('Terms', guardianAdLiteTermsLink)}.
+				our Guardian Ad-Lite {textLink('Terms', guardianAdLiteTermsLink)}.
 			</div>
 		),
 		SupporterPlus: (
@@ -374,7 +374,7 @@ export function PaymentTsAndCs({
 					take effect at the end of your current {billingPeriodPlural} payment
 					period. To cancel go to&nbsp;
 					{ManageMyAccountLink} or see our {tierThreeLabel}{' '}
-					{termsLink('Terms', tierThreeTermsLink)}.
+					{textLink('Terms', tierThreeTermsLink)}.
 				</p>
 			</div>
 		),

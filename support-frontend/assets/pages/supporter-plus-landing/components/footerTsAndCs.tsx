@@ -18,7 +18,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
-import { termsLink } from './termsLink';
+import { textLink } from '../../../helpers/utilities/textLink';
 
 const marginTop = css`
 	margin-top: 4px;
@@ -48,22 +48,22 @@ export function FooterTsAndCs({
 	const getProductTerms = (): JSX.Element => {
 		switch (productKey) {
 			case 'GuardianAdLite':
-				return termsLink('Terms', guardianAdLiteTermsLink);
+				return textLink('Terms', guardianAdLiteTermsLink);
 			case 'DigitalSubscription':
-				return termsLink('Terms and Conditions', digitalPlusTermsLink);
+				return textLink('Terms and Conditions', digitalPlusTermsLink);
 			case 'SupporterPlus':
-				return termsLink('Terms and Conditions', supporterPlusTermsLink);
+				return textLink('Terms and Conditions', supporterPlusTermsLink);
 			case 'TierThree':
-				return termsLink('Terms', tierThreeTermsLink);
+				return textLink('Terms', tierThreeTermsLink);
 			case 'HomeDelivery':
 			case 'NationalDelivery':
 			case 'SubscriptionCard':
-				return termsLink('Terms & Conditions', paperTermsLink);
+				return textLink('Terms & Conditions', paperTermsLink);
 			case 'GuardianWeeklyDomestic':
 			case 'GuardianWeeklyRestOfWorld':
-				return termsLink('Terms & Conditions', guardianWeeklyTermsLink);
+				return textLink('Terms & Conditions', guardianWeeklyTermsLink);
 			default:
-				return termsLink(
+				return textLink(
 					'Terms and Conditions',
 					contributionsTermsLinks[countryGroupId],
 				);
@@ -72,9 +72,9 @@ export function FooterTsAndCs({
 
 	const weeklyGiftTerms = (
 		<>
-			To cancel, go to {termsLink('Manage My Account', manageAccountLink)} or
-			see our {termsLink('Terms', guardianWeeklyTermsLink)}. This subscription
-			does not auto-renew.
+			To cancel, go to {textLink('Manage My Account', manageAccountLink)} or see
+			our {textLink('Terms', guardianWeeklyTermsLink)}. This subscription does
+			not auto-renew.
 		</>
 	);
 	const isWeeklyGift =

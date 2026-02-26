@@ -32,7 +32,7 @@ import {
 	isPaperPlusSub,
 	isSundayOnlyNewspaperSub,
 } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
-import { termsLink } from './termsLink';
+import { textLink } from '../../../helpers/utilities/textLink';
 
 const containerSummaryTsCs = css`
 	margin-top: ${space[6]}px;
@@ -146,12 +146,12 @@ export function SummaryTsAndCs({
 					support plan and your payment method will be {usChargePeriod}
 					until you cancel. We will notify you if this amount changes. You may
 					cancel at any time to avoid future charges in{' '}
-					{termsLink('Manage My Account', manageAccountLink)}.
+					{textLink('Manage My Account', manageAccountLink)}.
 				</p>
 				<p css={marginTop}>
 					Your enrollment is subject to and governed by the Guardian{' '}
-					{termsLink('Terms and Conditions', digitalPlusTermsLink)} and{' '}
-					{termsLink('Privacy Policy', privacyLink)}.
+					{textLink('Terms and Conditions', digitalPlusTermsLink)} and{' '}
+					{textLink('Privacy Policy', privacyLink)}.
 				</p>
 			</div>
 		) : (
