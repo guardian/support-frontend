@@ -51,7 +51,7 @@ const marginTop = css`
 	margin-top: ${space[2]}px;
 `;
 
-const usContainer = css`
+const containerUS = css`
 	strong {
 		font-weight: bold;
 	}
@@ -59,12 +59,12 @@ const usContainer = css`
 		color: ${brand[500]};
 	}
 `;
-const usContainerSquare = css`
+const containerSquareUS = css`
 	border: 3px solid ${neutral[0]};
 	border-radius: 0px;
 `;
-const usContainerRound = css`
-	border: 1px solid ${neutral[0]};
+const containerRoundUS = css`
+	border: 1px solid ${neutral[60]};
 	border-radius: ${space[3]}px;
 `;
 
@@ -131,16 +131,16 @@ export function SummaryTsAndCs({
 		) : (
 			<strong>{usChargePeriodCopy}</strong>
 		);
-		const usContainerShape = productKey.startsWith('GuardianWeekly')
-			? usContainerRound
-			: usContainerSquare;
+		const containerShapeUS = productKey.startsWith('GuardianWeekly')
+			? containerRoundUS
+			: containerSquareUS;
 		return [
 			'SupporterPlus',
 			'DigitalSubscription',
 			'GuardianWeeklyDomestic',
 			'GuardianWeeklyRestOfWorld',
 		].includes(productKey) && countryGroupId === 'UnitedStates' ? (
-			<div css={[containerSummaryTsCs, usContainer, usContainerShape]}>
+			<div css={[containerSummaryTsCs, containerUS, containerShapeUS]}>
 				<p>
 					By clicking the Pay button below, you agree to enroll in your selected
 					support plan and your payment method will be {usChargePeriod}
