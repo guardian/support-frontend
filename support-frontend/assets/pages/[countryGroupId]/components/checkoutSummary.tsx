@@ -55,11 +55,11 @@ type CheckoutSummaryProps = {
 	thresholdAmount: number;
 	backButtonOrigin: string;
 	backButtonPathOverride: string | null;
+	enableWeeklyDigital: boolean;
 	promotion?: Promotion;
 	forcedCountry?: string;
 	studentDiscount?: StudentDiscount;
 	nudgeSettings?: CheckoutNudgeSettings;
-	enableWeeklyDigital?: boolean;
 };
 
 export default function CheckoutSummary({
@@ -75,11 +75,11 @@ export default function CheckoutSummary({
 	thresholdAmount,
 	backButtonOrigin,
 	backButtonPathOverride,
+	enableWeeklyDigital,
 	promotion,
 	forcedCountry,
 	studentDiscount,
 	nudgeSettings,
-	enableWeeklyDigital,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';

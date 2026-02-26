@@ -167,14 +167,15 @@ export type ContributionsOrderSummaryProps = {
 	productKey: ActiveProductKey;
 	productLabel: string;
 	ratePlanKey: ActiveRatePlanKey;
-	ratePlanLabel?: string;
 	amount: number;
-	promotion?: Promotion;
 	currency: CurrencyInfo;
 	enableCheckList: boolean;
 	checkListData: BenefitsCheckListData[];
 	startDate: React.ReactNode;
 	landingPageSettings: LandingPageVariant;
+	enableWeeklyDigital?: boolean;
+	ratePlanLabel?: string;
+	promotion?: Promotion;
 	paymentFrequency?: string;
 	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
@@ -182,29 +183,28 @@ export type ContributionsOrderSummaryProps = {
 	studentDiscount?: StudentDiscount;
 	supportRegionId: SupportRegionId;
 	nudgeSettings?: CheckoutNudgeSettings;
-	enableWeeklyDigital?: boolean;
 };
 
 export function ContributionsOrderSummary({
 	productKey,
 	productLabel,
 	ratePlanKey,
-	ratePlanLabel,
 	amount,
-	promotion,
 	currency,
-	paymentFrequency,
+	enableCheckList,
 	checkListData,
+	startDate,
+	landingPageSettings,
+	enableWeeklyDigital,
+	ratePlanLabel,
+	promotion,
+	paymentFrequency,
 	onCheckListToggle,
 	headerButton,
 	tsAndCs,
-	startDate,
-	landingPageSettings,
-	enableCheckList,
 	studentDiscount,
 	supportRegionId,
 	nudgeSettings,
-	enableWeeklyDigital,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(

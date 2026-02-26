@@ -17,7 +17,6 @@ import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/hel
 import {
 	isPaperPlusSub,
 	isSundayOnlyNewspaperSub,
-	isWeeklyPlusSub,
 } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import {
 	isGuardianWeeklyGiftProduct,
@@ -53,8 +52,6 @@ export function OrderSummaryTsAndCs({
 	// Display for AUS Students who are on a subscription basis
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
 	const isPaperPlus = isPaperPlusSub(productKey, ratePlanKey);
-	const isWeeklyPlus =
-		enableWeeklyDigital && isWeeklyPlusSub(productKey, ratePlanKey);
 	const isPaperSundayOrPlus =
 		isPaperPlus || isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const promoMessage = productLegal(
@@ -113,7 +110,7 @@ export function OrderSummaryTsAndCs({
 						) : (
 							<>
 								Auto renews every {periodNoun}. Cancel anytime.
-								{isWeeklyPlus
+								{enableWeeklyDigital
 									? ' If you cancel within the first 14 days, via Customer Service, you will receive a full refund.'
 									: ''}
 							</>

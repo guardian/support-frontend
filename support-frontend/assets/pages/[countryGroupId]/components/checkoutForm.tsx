@@ -111,30 +111,6 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 	);
 }
 
-type CheckoutFormProps = {
-	supportRegionId: SupportRegionId;
-	appConfig: AppConfig;
-	stripePublicKey: string;
-	isTestUser: boolean;
-	productKey: ActiveProductKey;
-	ratePlanKey: ActiveRatePlanKey;
-	originalAmount: number;
-	finalAmount: number;
-	useStripeExpressCheckout: boolean;
-	countryId: IsoCountry;
-	abParticipations: Participations;
-	landingPageSettings: LandingPageVariant;
-	clearCheckoutSession: () => void;
-	weeklyDeliveryDate: Date;
-	setWeeklyDeliveryDate: (value: Date) => void;
-	thresholdAmount: number;
-	contributionAmount?: number;
-	promotion?: Promotion;
-	checkoutSession?: CheckoutSession;
-	studentDiscount?: StudentDiscount;
-	enableWeeklyDigital?: boolean;
-};
-
 const getPaymentMethods = (
 	countryId: IsoCountry,
 	productKey: ProductKey,
@@ -166,6 +142,29 @@ const getPaymentLegendPrefix = (
 	return legendPrefix + 3;
 };
 
+type CheckoutFormProps = {
+	supportRegionId: SupportRegionId;
+	appConfig: AppConfig;
+	stripePublicKey: string;
+	isTestUser: boolean;
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
+	originalAmount: number;
+	finalAmount: number;
+	useStripeExpressCheckout: boolean;
+	countryId: IsoCountry;
+	abParticipations: Participations;
+	landingPageSettings: LandingPageVariant;
+	clearCheckoutSession: () => void;
+	weeklyDeliveryDate: Date;
+	setWeeklyDeliveryDate: (value: Date) => void;
+	thresholdAmount: number;
+	enableWeeklyDigital: boolean;
+	contributionAmount?: number;
+	promotion?: Promotion;
+	checkoutSession?: CheckoutSession;
+	studentDiscount?: StudentDiscount;
+};
 export default function CheckoutForm({
 	supportRegionId,
 	appConfig,
@@ -182,11 +181,11 @@ export default function CheckoutForm({
 	weeklyDeliveryDate,
 	setWeeklyDeliveryDate,
 	thresholdAmount,
+	enableWeeklyDigital,
 	contributionAmount,
 	promotion,
 	checkoutSession,
 	studentDiscount,
-	enableWeeklyDigital,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;

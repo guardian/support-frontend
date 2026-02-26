@@ -14,11 +14,3 @@ export const isPaperPlusSub = (
 ): boolean =>
 	['HomeDelivery', 'SubscriptionCard'].includes(productKey) &&
 	ratePlanKey.endsWith('Plus');
-
-export const isWeeklyPlusSub = (
-	productKey: ProductKey,
-	ratePlanKey: ActiveRatePlanKey,
-): boolean =>
-	['GuardianWeeklyRestOfWorld', 'GuardianWeeklyDomestic'].includes(
-		productKey,
-	) && ratePlanKey.endsWith('Plus');
