@@ -1,11 +1,13 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+	createBrowserRouter,
+	Outlet,
+	RouterProvider,
+	useRouteLoaderData,
+} from 'react-router-dom';
 import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
-import { ObserverHoldingContent } from 'components/serverSideRendered/observerHoldingContent';
 import { WithCoreWebVitals } from 'helpers/coreWebVitals/withCoreWebVitals';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
-import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import type { OneTimeCheckoutVariant } from 'helpers/globalsAndSwitches/oneTimeCheckoutSettings';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
 import {
@@ -23,57 +25,8 @@ import {
 } from '../../helpers/abTests/pageParticipations';
 
 const checkoutNudgeSettings = getCheckoutNudgeParticipations();
-const abParticipations = getAbParticipations();
 const appConfig = parseAppConfig(window.guardian);
 
-const chunks = {
-	contribute: () =>
-		import(/* webpackChunkName: "LandingPage" */ './landingPage'),
-	oneTimeCheckout: () =>
-		import(/* webpackChunkName: "oneTimeCheckout" */ './oneTimeCheckout'),
-	checkout: () => import(/* webpackChunkName: "checkout" */ './checkout'),
-	thankYou: () => import(/* webpackChunkName: "ThankYou" */ './thankYou'),
-	guardianAdLite: () =>
-		import(
-			/* webpackChunkName: "GuardianAdLiteLanding" */ './guardianAdLiteLanding/guardianAdLiteLanding'
-		),
-	studentUTS: () =>
-		import(
-			/* webpackChunkName: "StudentLandingPageUTSContainer" */ './student/StudentLandingPageUTSContainer'
-		),
-	student: () =>
-		import(
-			/* webpackChunkName: "StudentLandingPageGlobalContainer" */ './student/StudentLandingPageGlobalContainer'
-		),
-};
-
-const Checkout = lazy(() =>
-	chunks.checkout().then((mod) => ({ default: mod.Checkout })),
-);
-const OneTimeCheckout = lazy(() =>
-	chunks.oneTimeCheckout().then((mod) => ({ default: mod.OneTimeCheckout })),
-);
-const ThankYou = lazy(() =>
-	chunks.thankYou().then((mod) => ({ default: mod.ThankYou })),
-);
-const GuardianAdLiteLanding = lazy(() =>
-	chunks
-		.guardianAdLite()
-		.then((mod) => ({ default: mod.GuardianAdLiteLanding })),
-);
-const LandingPage = lazy(() =>
-	chunks.contribute().then((mod) => ({ default: mod.LandingPage })),
-);
-const StudentLandingPageUTSContainer = lazy(() =>
-	chunks
-		.studentUTS()
-		.then((mod) => ({ default: mod.StudentLandingPageUTSContainer })),
-);
-const StudentLandingPageGlobalContainer = lazy(() =>
-	chunks
-		.student()
-		.then((mod) => ({ default: mod.StudentLandingPageGlobalContainer })),
-);
 const paths = {
 	contribute: '/contribute',
 	checkout: '/checkout',
@@ -84,199 +37,198 @@ const paths = {
 	studentUTS: '/student/UTS',
 } as const;
 
-// Most specific paths must come first so e.g. /student/UTS matches before /student
-const PRELOAD_CHUNKS: Array<[string, () => Promise<unknown>]> = [
-	[paths.studentUTS, chunks.studentUTS],
-	[paths.student, chunks.student],
-	[paths.contribute, chunks.contribute],
-	[paths.oneTimeCheckout, chunks.oneTimeCheckout],
-	[paths.checkout, chunks.checkout],
-	[paths.thankYou, chunks.thankYou],
-	[paths.guardianAdLite, chunks.guardianAdLite],
-];
-
-function preloadCurrentPageChunk(): void {
-	const path = window.location.pathname;
-	const match = PRELOAD_CHUNKS.find(([segment]) => path.includes(segment));
-	if (match) {
-		const [, chunk] = match;
-		void chunk();
-	}
+interface LoaderData {
+	finalParticipations: Participations;
+	landing: PageParticipationsResult<LandingPageVariant>;
+	oneTime: PageParticipationsResult<OneTimeCheckoutVariant>;
 }
 
-function GuardianOrObserverHoldingContent() {
-	if (isObserverSubdomain()) {
-		return <ObserverHoldingContent />;
-	}
-
-	return <GuardianHoldingContent />;
-}
-
-function buildRouter(
-	abParticipations: Participations,
-	landingPageSettings: LandingPageVariant,
-	oneTimeCheckoutVariant: OneTimeCheckoutVariant,
-) {
-	return createBrowserRouter([
-		...Object.values(SupportRegionId).flatMap((supportRegionId) => [
-			{
-				path: `/${supportRegionId}${paths.contribute}/:campaignCode?`,
-				element: (
-					<Suspense fallback={<GuardianHoldingContent />}>
-						<LandingPage
-							supportRegionId={supportRegionId}
-							abParticipations={abParticipations}
-							landingPageSettings={landingPageSettings}
-						/>
-					</Suspense>
-				),
-			},
-			{
-				path: `/${supportRegionId}${paths.checkout}`,
-				element: (
-					<Suspense fallback={<GuardianOrObserverHoldingContent />}>
-						<Checkout
-							supportRegionId={supportRegionId}
-							appConfig={appConfig}
-							abParticipations={abParticipations}
-							landingPageSettings={landingPageSettings}
-							nudgeSettings={checkoutNudgeSettings}
-						/>
-					</Suspense>
-				),
-			},
-			{
-				path: `/${supportRegionId}${paths.oneTimeCheckout}`,
-				element: (
-					<Suspense fallback={<GuardianHoldingContent />}>
-						<OneTimeCheckout
-							supportRegionId={supportRegionId}
-							appConfig={appConfig}
-							abParticipations={abParticipations}
-							nudgeSettings={checkoutNudgeSettings}
-							landingPageSettings={landingPageSettings}
-							oneTimeCheckoutSettings={oneTimeCheckoutVariant}
-						/>
-					</Suspense>
-				),
-			},
-			{
-				path: `/${supportRegionId}${paths.thankYou}`,
-				element: (
-					<Suspense fallback={<GuardianOrObserverHoldingContent />}>
-						<ThankYou
-							supportRegionId={supportRegionId}
-							appConfig={appConfig}
-							abParticipations={abParticipations}
-							landingPageSettings={landingPageSettings}
-						/>
-					</Suspense>
-				),
-			},
-			{
-				path: `/${supportRegionId}${paths.guardianAdLite}`,
-				element: (
-					<Suspense fallback={<GuardianHoldingContent />}>
-						<GuardianAdLiteLanding supportRegionId={supportRegionId} />
-					</Suspense>
-				),
-			},
-			{
-				path: `/${supportRegionId}${paths.student}`,
-				element: (
-					<Suspense fallback={<GuardianHoldingContent />}>
-						<StudentLandingPageGlobalContainer
-							supportRegionId={supportRegionId}
-							landingPageVariant={landingPageSettings}
-						/>
-					</Suspense>
-				),
-			},
-		]),
-		{
-			path: `/au${paths.studentUTS}`,
-			element: (
-				<Suspense fallback={<GuardianHoldingContent />}>
-					<StudentLandingPageUTSContainer
-						landingPageVariant={landingPageSettings}
-					/>
-				</Suspense>
-			),
-		},
+async function rootLoader(): Promise<LoaderData> {
+	const [landing, oneTime] = await Promise.all([
+		getPageParticipations<LandingPageVariant>(getLandingPageTestConfig()),
+		getPageParticipations<OneTimeCheckoutVariant>(
+			getOneTimeCheckoutTestConfig(),
+		),
 	]);
+	const finalParticipations: Participations = {
+		...getAbParticipations(),
+		...landing.participations,
+		...checkoutNudgeSettings?.participations,
+		...oneTime.participations,
+	};
+	setUpTrackingAndConsents(finalParticipations);
+	return { landing, oneTime, finalParticipations };
 }
 
-/**
- * Top-level component that resolves page participations (including mParticle audience
- * checks) before finalizing test participations and tracking.
- *
- * This ensures:
- * 1. Tracking fires with the correct participations (after audience check)
- * 2. All routes receive the same resolved variant
- */
-function AppWithAudienceCheck() {
-	const hasTracked = useRef(false);
+function useRootLoaderData(): LoaderData {
+	return useRouteLoaderData('root') as LoaderData;
+}
 
-	const [landingPageResult, setLandingPageResult] =
-		useState<PageParticipationsResult<LandingPageVariant> | null>(null);
-	const [oneTimeCheckoutResult, setOneTimeCheckoutResult] =
-		useState<PageParticipationsResult<OneTimeCheckoutVariant> | null>(null);
-
-	useEffect(() => {
-		preloadCurrentPageChunk();
-		void Promise.all([
-			getPageParticipations<LandingPageVariant>(getLandingPageTestConfig()),
-			getPageParticipations<OneTimeCheckoutVariant>(
-				getOneTimeCheckoutTestConfig(),
-			),
-		]).then(([landing, oneTime]) => {
-			setLandingPageResult(landing);
-			setOneTimeCheckoutResult(oneTime);
-		});
-	}, []);
-
-	if (!landingPageResult || !oneTimeCheckoutResult) {
-		return <GuardianHoldingContent />;
-	}
-
-	const finalAbParticipations = useMemo<Participations>(
-		() => ({
-			...abParticipations,
-			...landingPageResult.participations,
-			...checkoutNudgeSettings?.participations,
-			...oneTimeCheckoutResult.participations,
-		}),
-		[landingPageResult.participations, oneTimeCheckoutResult.participations],
+function RootLayout() {
+	return (
+		<WithCoreWebVitals>
+			<Outlet />
+		</WithCoreWebVitals>
 	);
+}
 
-	// Track once with the correct participations
-	if (!hasTracked.current) {
-		hasTracked.current = true;
-		setUpTrackingAndConsents(finalAbParticipations);
-	}
-
-	const router = useMemo(
-		() =>
-			buildRouter(
-				finalAbParticipations,
-				landingPageResult.variant,
-				oneTimeCheckoutResult.variant,
-			),
-		[
-			finalAbParticipations,
-			landingPageResult.variant,
-			oneTimeCheckoutResult.variant,
+const router = createBrowserRouter([
+	{
+		id: 'root',
+		loader: rootLoader,
+		element: <RootLayout />,
+		children: [
+			...Object.values(SupportRegionId).flatMap((supportRegionId) => [
+				{
+					path: `/${supportRegionId}${paths.contribute}/:campaignCode?`,
+					lazy: async () => {
+						const { LandingPage } = await import(
+							/* webpackChunkName: "LandingPage" */ './landingPage'
+						);
+						return {
+							Component: function LandingPageRoute() {
+								const { finalParticipations, landing } = useRootLoaderData();
+								return (
+									<LandingPage
+										supportRegionId={supportRegionId}
+										abParticipations={finalParticipations}
+										landingPageSettings={landing.variant}
+									/>
+								);
+							},
+						};
+					},
+				},
+				{
+					path: `/${supportRegionId}${paths.checkout}`,
+					lazy: async () => {
+						const { Checkout } = await import(
+							/* webpackChunkName: "checkout" */ './checkout'
+						);
+						return {
+							Component: function CheckoutRoute() {
+								const { finalParticipations, landing } = useRootLoaderData();
+								return (
+									<Checkout
+										supportRegionId={supportRegionId}
+										appConfig={appConfig}
+										abParticipations={finalParticipations}
+										landingPageSettings={landing.variant}
+										nudgeSettings={checkoutNudgeSettings}
+									/>
+								);
+							},
+						};
+					},
+				},
+				{
+					path: `/${supportRegionId}${paths.oneTimeCheckout}`,
+					lazy: async () => {
+						const { OneTimeCheckout } = await import(
+							/* webpackChunkName: "oneTimeCheckout" */ './oneTimeCheckout'
+						);
+						return {
+							Component: function OneTimeCheckoutRoute() {
+								const { finalParticipations, landing, oneTime } =
+									useRootLoaderData();
+								return (
+									<OneTimeCheckout
+										supportRegionId={supportRegionId}
+										appConfig={appConfig}
+										abParticipations={finalParticipations}
+										nudgeSettings={checkoutNudgeSettings}
+										landingPageSettings={landing.variant}
+										oneTimeCheckoutSettings={oneTime.variant}
+									/>
+								);
+							},
+						};
+					},
+				},
+				{
+					path: `/${supportRegionId}${paths.thankYou}`,
+					lazy: async () => {
+						const { ThankYou } = await import(
+							/* webpackChunkName: "ThankYou" */ './thankYou'
+						);
+						return {
+							Component: function ThankYouRoute() {
+								const { finalParticipations, landing } = useRootLoaderData();
+								return (
+									<ThankYou
+										supportRegionId={supportRegionId}
+										appConfig={appConfig}
+										abParticipations={finalParticipations}
+										landingPageSettings={landing.variant}
+									/>
+								);
+							},
+						};
+					},
+				},
+				{
+					path: `/${supportRegionId}${paths.guardianAdLite}`,
+					lazy: async () => {
+						const { GuardianAdLiteLanding } = await import(
+							/* webpackChunkName: "GuardianAdLiteLanding" */ './guardianAdLiteLanding/guardianAdLiteLanding'
+						);
+						return {
+							Component: function GuardianAdLiteRoute() {
+								return (
+									<GuardianAdLiteLanding supportRegionId={supportRegionId} />
+								);
+							},
+						};
+					},
+				},
+				{
+					path: `/${supportRegionId}${paths.student}`,
+					lazy: async () => {
+						const { StudentLandingPageGlobalContainer } = await import(
+							/* webpackChunkName: "StudentLandingPageGlobalContainer" */ './student/StudentLandingPageGlobalContainer'
+						);
+						return {
+							Component: function StudentRoute() {
+								const { landing } = useRootLoaderData();
+								return (
+									<StudentLandingPageGlobalContainer
+										supportRegionId={supportRegionId}
+										landingPageVariant={landing.variant}
+									/>
+								);
+							},
+						};
+					},
+				},
+			]),
+			{
+				path: `/au${paths.studentUTS}`,
+				lazy: async () => {
+					const { StudentLandingPageUTSContainer } = await import(
+						/* webpackChunkName: "StudentLandingPageUTSContainer" */ './student/StudentLandingPageUTSContainer'
+					);
+					return {
+						Component: function StudentUTSRoute() {
+							const { landing } = useRootLoaderData();
+							return (
+								<StudentLandingPageUTSContainer
+									landingPageVariant={landing.variant}
+								/>
+							);
+						},
+					};
+				},
+			},
 		],
-	);
-
-	return <RouterProvider router={router} />;
-}
+	},
+]);
 
 function Router() {
 	return (
-		<WithCoreWebVitals>
-			<AppWithAudienceCheck />
-		</WithCoreWebVitals>
+		<RouterProvider
+			router={router}
+			fallbackElement={<GuardianHoldingContent />}
+		/>
 	);
 }
 
