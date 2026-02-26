@@ -94,7 +94,7 @@ BillingPeriodsCopy.args = {
 			product: 'SupporterPlus',
 			...fallBackLandingPageSelection.products.SupporterPlus,
 			billingPeriodsCopy:
-				'From %%PRICE_PRODUCT_WEEKLY%% per week, billed monthly or annually.',
+				'From %%PRICE_PRODUCT_WEEKLY%% per week',
 		},
 		{
 			isUserSelected: true,
