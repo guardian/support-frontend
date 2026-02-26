@@ -9,6 +9,7 @@ import {
 	type RecurringBillingPeriod,
 } from '@modules/product/billingPeriod';
 import type { Product } from 'components/product/productOption';
+import { enableWeeklyDigital } from 'helpers/featureFlags';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { glyph } from 'helpers/internationalisation/currency';
 import { internationaliseProduct } from 'helpers/productCatalog';
@@ -60,7 +61,7 @@ const getCheckoutUrl = ({
 	const region = countryGroups[countryGroupId].supportRegionId;
 
 	const url = `${getOrigin()}/${region}/checkout`;
-	return addQueryParamsToURL(url, {
+	const urlWithParams = addQueryParamsToURL(url, {
 		promoCode: promotion?.promoCode,
 		product: productGuardianWeekly,
 		ratePlan: billingPeriodToRatePlan(
@@ -69,6 +70,9 @@ const getCheckoutUrl = ({
 			enableWeeklyDigitalPlans,
 		),
 	});
+	return urlWithParams.concat(
+		enableWeeklyDigitalPlans ? `&${enableWeeklyDigital}` : '',
+	);
 };
 
 const getPriceWithSymbol = (currencyId: IsoCurrency, price: number): string =>
