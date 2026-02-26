@@ -27,10 +27,10 @@ const mockTest: LandingPageTest = {
 				...fallBackLandingPageSelection.products,
 				SupporterPlus: fallBackLandingPageSelection.products.SupporterPlus
 					? {
-						...fallBackLandingPageSelection.products.SupporterPlus,
-						billingPeriodsCopy:
-							'Pay %%CURRENCY_SYMBOL%%%%PRICE_PRODUCT_WEEKLY%% per week or monthly/annual options',
-					}
+							...fallBackLandingPageSelection.products.SupporterPlus,
+							billingPeriodsCopy:
+								'Pay %%CURRENCY_SYMBOL%%%%PRICE_PRODUCT_WEEKLY%% per week or monthly/annual options',
+					  }
 					: undefined,
 			},
 		},
