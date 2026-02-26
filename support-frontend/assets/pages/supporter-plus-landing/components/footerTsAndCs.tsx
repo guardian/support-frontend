@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { space } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import {
@@ -21,7 +22,7 @@ import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/comp
 import { textLink } from '../../../helpers/utilities/textLink';
 
 const marginTop = css`
-	margin-top: 4px;
+	margin-top: ${space[1]}px;
 `;
 
 interface FooterTsAndCsProps {

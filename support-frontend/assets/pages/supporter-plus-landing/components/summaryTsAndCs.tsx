@@ -46,11 +46,9 @@ const containerSummaryTsCs = css`
 		color: ${neutral[7]};
 	}
 `;
-
 const marginTop = css`
 	margin-top: ${space[2]}px;
 `;
-
 const containerUS = css`
 	strong {
 		font-weight: bold;

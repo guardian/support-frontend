@@ -37,7 +37,7 @@ import { FooterTsAndCs } from './footerTsAndCs';
 import { ManageMyAccountLink } from './manageMyAccountLink';
 
 const marginTop = css`
-	margin-top: 4px;
+	margin-top: ${space[1]}px;
 `;
 const container = css`
 	${textSans12};
