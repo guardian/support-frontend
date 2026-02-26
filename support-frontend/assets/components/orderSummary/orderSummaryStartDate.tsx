@@ -27,12 +27,8 @@ export function OrderSummaryStartDate({
 	startDate,
 	enableWeeklyDigital,
 }: OrderSummaryStartDateProps): JSX.Element | null {
-	const weeklyTierThreeStartCopy = `Your Guardian Weekly subscription will start on ${startDate}. Please
-          allow 1 to 7 days after your start date for your magazine to arrive,
-          depending on national post services.`;
-	const weeklyDigitalStartCopy = `Your first issue of Guardian Weekly will be ${startDate}. Please allow
-          1 to 7 days after this date for your magazine to arrive, depending on
-          national post services. Your digital benefits will start today.`;
+	const weeklyTierThreeStartCopy = `Your Guardian Weekly subscription will start on ${startDate}. Please allow 1 to 7 days after your start date for your magazine to arrive, depending on national post services.`;
+	const weeklyDigitalStartCopy = `Your first issue of Guardian Weekly will be ${startDate}. Please allow 1 to 7 days after this date for your magazine to arrive, depending on national post services. Your digital benefits will start today.`;
 	const weeklyStartCopy = enableWeeklyDigital
 		? weeklyDigitalStartCopy
 		: weeklyTierThreeStartCopy;
