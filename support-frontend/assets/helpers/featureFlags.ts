@@ -1,5 +1,5 @@
-const enableDigitalAccess = 'enableDigitalAccess';
-export const enableWeeklyDigital = 'enableWeeklyDigital';
+const featureFlagEnableDigitalAccess = 'enableDigitalAccess';
+export const featureFlagEnableWeeklyDigital = 'enableWeeklyDigital';
 
 interface FeatureFlags {
 	enableDigitalAccess: boolean;
@@ -10,7 +10,7 @@ export function getFeatureFlags(): FeatureFlags {
 	const urlParams = new URLSearchParams(window.location.search);
 
 	return {
-		enableDigitalAccess: urlParams.has(enableDigitalAccess),
-		enableWeeklyDigital: urlParams.has(enableWeeklyDigital),
+		enableDigitalAccess: urlParams.has(featureFlagEnableDigitalAccess),
+		enableWeeklyDigital: urlParams.has(featureFlagEnableWeeklyDigital),
 	};
 }

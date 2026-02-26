@@ -173,6 +173,7 @@ export default function CheckoutSummary({
 			`/${supportRegionId}${backButtonPath}`,
 			promotion?.promoCode,
 			getPaperFulfilmentOption(productKey),
+			enableWeeklyDigital,
 		);
 
 	return (

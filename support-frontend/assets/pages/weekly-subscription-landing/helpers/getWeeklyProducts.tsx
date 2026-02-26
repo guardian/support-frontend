@@ -9,7 +9,7 @@ import {
 	type RecurringBillingPeriod,
 } from '@modules/product/billingPeriod';
 import type { Product } from 'components/product/productOption';
-import { enableWeeklyDigital } from 'helpers/featureFlags';
+import { featureFlagEnableWeeklyDigital } from 'helpers/featureFlags';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { glyph } from 'helpers/internationalisation/currency';
 import { internationaliseProduct } from 'helpers/productCatalog';
@@ -71,7 +71,7 @@ const getCheckoutUrl = ({
 		),
 	});
 	return urlWithParams.concat(
-		enableWeeklyDigitalPlans ? `&${enableWeeklyDigital}` : '',
+		enableWeeklyDigitalPlans ? `&${featureFlagEnableWeeklyDigital}` : '',
 	);
 };
 
