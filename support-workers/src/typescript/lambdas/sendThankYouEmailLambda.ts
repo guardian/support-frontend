@@ -153,10 +153,9 @@ async function sendGuardianWeeklyEmail(
 
 	if (weeklyPlusRatePlan) {
 		await sendEmailWithStage(
-			buildGuardianWeeklyPlusEmailFields({
-				...(await getFieldsFromState(sendThankYouEmailState)),
-				giftRecipient: sendThankYouEmailState.giftRecipient,
-			}),
+			buildGuardianWeeklyPlusEmailFields(
+				await getFieldsFromState(sendThankYouEmailState),
+			),
 		);
 	} else {
 		await sendEmailWithStage(
