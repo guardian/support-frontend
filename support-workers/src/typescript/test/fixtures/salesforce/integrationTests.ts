@@ -3,8 +3,8 @@ import type { PrintContactRecordRequest } from 'src/typescript/services/salesfor
 import type { Title } from '../../../model/stateSchemas';
 
 export const idId = '9999999';
-export const salesforceId = '003UD00000vTrY3YAK';
-export const salesforceAccountId = '001UD00000SHvpuYAD';
+export const salesforceId = '003UD00000xXDLGYA4';
+export const salesforceAccountId = '001UD00000TN1lyYAD';
 export const emailAddress = 'integration-test@thegulocal.com';
 export const telephoneNumber = '0123456789';
 export const title: Title = 'Mrs';
