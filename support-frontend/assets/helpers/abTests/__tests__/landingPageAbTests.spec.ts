@@ -23,7 +23,16 @@ const mockTest: LandingPageTest = {
 				heading: 'Test heading',
 				subheading: 'Test subheading',
 			},
-			products: fallBackLandingPageSelection.products,
+			products: {
+				...fallBackLandingPageSelection.products,
+				SupporterPlus: fallBackLandingPageSelection.products.SupporterPlus
+					? {
+							...fallBackLandingPageSelection.products.SupporterPlus,
+							billingPeriodsCopy:
+								'Pay %%CURRENCY_SYMBOL%%%%PRICE_PRODUCT_WEEKLY%% per week or monthly/annual options',
+					  }
+					: undefined,
+			},
 		},
 	],
 };
