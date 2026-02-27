@@ -22,7 +22,7 @@ import { PageTitle } from 'components/page/pageTitle';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { guardianWeeklyHeroBlue } from 'stylesheets/emotion/colours';
-import { getFirstParagraph, getRegionalCopyFor } from './contentHelpers';
+import { getFirstParagraph, getRegionalTitle } from './contentHelpers';
 
 const weeklyHeroCopy = css`
 	padding: 0 ${space[3]}px ${space[3]}px;
@@ -79,7 +79,7 @@ export function WeeklyHero({
 	enableWeeklyDigital,
 }: WeeklyHeroProps): JSX.Element {
 	const defaultRoundelText = 'Save up to 35% a year';
-	const defaultTitle = isGift ? null : getRegionalCopyFor(countryGroupId);
+	const defaultTitle = isGift ? null : getRegionalTitle(countryGroupId);
 	const title = promotionCopy.title ?? defaultTitle;
 	const copy = getFirstParagraph(promotionCopy, isGift);
 	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
