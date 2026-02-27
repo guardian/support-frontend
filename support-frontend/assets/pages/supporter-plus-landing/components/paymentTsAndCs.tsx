@@ -139,7 +139,7 @@ function GuardianWeeklyPaymentTerms({ deliveryDate }: { deliveryDate?: Date }) {
 		<div css={marginTop}>
 			{deliveryTsAndCs} You can cancel your subscription at any time before your
 			next renewal date. If you cancel within 14 days of sign-up, you’ll receive
-			a full refund. To cancel within 14 days sign-up and receive a refund
+			a full refund. To cancel within 14 days of sign-up and receive a refund
 			contact: Customer Service. Cancellation of your subscription after 14 days
 			will take effect at the end of your current payment period. To cancel,
 			contact Customer Service or see our{' '}
