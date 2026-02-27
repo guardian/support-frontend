@@ -622,6 +622,7 @@ export default function CheckoutForm({
 				)
 					? weeklyDeliveryDate
 					: undefined,
+				enableWeeklyDigital,
 			});
 			window.location.href = successUrl;
 			// It seems non-deterministic how much code is executed below setting
