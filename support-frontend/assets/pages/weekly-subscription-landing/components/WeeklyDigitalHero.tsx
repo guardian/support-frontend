@@ -35,8 +35,9 @@ export default function WeeklyDigitalHero({
 		<OfferStrapline copy={roundel} cssOverrides={roundelStyles} />
 	);
 
-	const fallbackDescription =
-		'Discover our global print magazine, showcasing the best of our reporting, analysis, opinion and culture—beautifully designed for a more reflective read. With your subscription, you also get full digital access, including ad-free news, thousands of Feast recipes and more, all while supporting the Guardian’s independent journalism.';
+	const fallbackDescription = enableWeeklyDigital
+		? 'Discover our global print magazine, showcasing the best of our reporting, analysis, opinion and culture—beautifully designed for a more reflective read. With your subscription, you also get full digital access, including ad-free news, thousands of Feast recipes and more, all while supporting the Guardian’s independent journalism.'
+		: '';
 	const description = promotionDescription
 		? promotionHTML(promotionDescription, {
 				tag: 'p',
