@@ -6,66 +6,114 @@
  */
 
 import { createContext, type ReactNode, useContext, useRef } from 'react';
+import { fetchJson } from '../async/fetch';
 
 interface AnalyticsProfileData {
 	hasMobileAppDownloaded: boolean;
 	hasFeastMobileAppDownloaded: boolean;
 }
 
-interface CacheEntry {
-	data: AnalyticsProfileData;
-	timestamp: number;
-}
+export class AnalyticsProfileCache {
+	// In-flight refresh promise
+	private dataPromise: Promise<AnalyticsProfileData> | null = null;
+	// Last successful value
+	private lastValue: AnalyticsProfileData | null = null;
+	// Timestamp of last successful refresh
+	private timestamp: number | null = null;
+	// TTL in milliseconds
+	private readonly ttlMs: number;
 
-class AnalyticsProfileCache {
-	private cache: CacheEntry | null = null;
-	private pendingRequest: Promise<AnalyticsProfileData> | null = null;
-	private readonly CACHE_TTL_MS = 60 * 1000; // 1 minute TTL
+	constructor(ttlMs: number = 60 * 1000) {
+		this.ttlMs = ttlMs;
+	}
 
-	get(): AnalyticsProfileData | null {
-		if (!this.cache) {
-			console.debug('AnalyticsProfileCache: cache miss');
-			return null;
+	/**
+	 * Get cached data with stale-while-revalidate behavior:
+	 * - If no successful value yet, trigger a fetch and return the in-flight promise.
+	 * - If value exists and is fresh, return it immediately.
+	 * - If value exists but is stale, return the last value immediately and kick off a background refresh.
+	 * - If the refresh fails, keep returning the last good value.
+	 * Concurrent calls during a refresh will share the same in-flight promise.
+	 */
+	async get(): Promise<AnalyticsProfileData> {
+		const now = Date.now();
+		const isFresh =
+			this.timestamp !== null && now - this.timestamp <= this.ttlMs;
+
+		// No successful value yet: start refresh if needed and return the promise
+		if (this.lastValue === null) {
+			let promise = this.dataPromise;
+			if (!promise) {
+				console.debug('AnalyticsProfileCache: initial fetch');
+				promise = this.startRefresh();
+				this.dataPromise = promise;
+			} else {
+				console.debug(
+					'AnalyticsProfileCache: awaiting in-flight initial fetch',
+				);
+			}
+			return promise;
 		}
 
-		const isExpired = Date.now() - this.cache.timestamp > this.CACHE_TTL_MS;
-		if (isExpired) {
-			console.debug('AnalyticsProfileCache: cache expired');
-			this.cache = null;
-			return null;
+		// Value exists
+		if (isFresh) {
+			console.debug('AnalyticsProfileCache: cache hit (fresh)');
+			return Promise.resolve(this.lastValue);
 		}
 
-		console.debug('AnalyticsProfileCache: cache hit');
-		return this.cache.data;
+		// Stale value: start a background refresh if not already in-flight,
+		// but return the last good value immediately
+		if (!this.dataPromise) {
+			console.debug(
+				'AnalyticsProfileCache: cache stale, starting background refresh',
+			);
+			this.dataPromise = this.startRefresh();
+			// Avoid unhandled rejection for background refresh callers
+			this.dataPromise.catch(() => {});
+		} else {
+			console.debug(
+				'AnalyticsProfileCache: cache stale, refresh already in-flight',
+			);
+		}
+		return Promise.resolve(this.lastValue);
 	}
 
-	set(data: AnalyticsProfileData): void {
-		console.debug('AnalyticsProfileCache: setting cache');
-		this.cache = {
-			data,
-			timestamp: Date.now(),
-		};
-	}
+	private startRefresh = () =>
+		fetchJson<{
+			identityId: string;
+			hasMobileAppDownloaded: boolean;
+			hasFeastMobileAppDownloaded: boolean;
+		}>('/analytics-user-profile', {
+			mode: 'cors',
+			credentials: 'include',
+		})
+			.then((response) => {
+				const value: AnalyticsProfileData = {
+					hasMobileAppDownloaded: response.hasMobileAppDownloaded,
+					hasFeastMobileAppDownloaded: response.hasFeastMobileAppDownloaded,
+				};
+				this.lastValue = value;
+				this.timestamp = Date.now();
+				return value;
+			})
+			.catch((error) => {
+				// Keep lastValue and timestamp unchanged on failure
+				console.error('AnalyticsProfileCache: refresh failed', error);
+				throw error;
+			})
+			.finally(() => {
+				// Reset the in-flight promise when the refresh completes
+				this.dataPromise = null;
+			});
 
-	getPendingRequest(): Promise<AnalyticsProfileData> | null {
-		console.debug('AnalyticsProfileCache: getPendingRequest');
-		return this.pendingRequest;
-	}
-
-	setPendingRequest(promise: Promise<AnalyticsProfileData>): void {
-		console.debug('AnalyticsProfileCache: setPendingRequest');
-		this.pendingRequest = promise;
-	}
-
-	clearPendingRequest(): void {
-		console.debug('AnalyticsProfileCache: clearPendingRequest');
-		this.pendingRequest = null;
-	}
-
+	/**
+	 * Explicitly clear the cache. Use for identity changes or manual invalidation.
+	 */
 	clear(): void {
-		console.debug('AnalyticsProfileCache: clear cache');
-		this.cache = null;
-		this.pendingRequest = null;
+		console.debug('AnalyticsProfileCache: clear');
+		this.timestamp = null;
+		this.lastValue = null;
+		this.dataPromise = null;
 	}
 }
 
@@ -78,13 +126,15 @@ const AnalyticsProfileCacheContext =
  */
 export function AnalyticsProfileCacheProvider({
 	children,
+	ttlMs,
 }: {
 	children: ReactNode;
+	ttlMs?: number;
 }) {
 	const cacheRef = useRef<AnalyticsProfileCache>();
 
 	if (!cacheRef.current) {
-		cacheRef.current = new AnalyticsProfileCache();
+		cacheRef.current = new AnalyticsProfileCache(ttlMs);
 	}
 
 	return (
