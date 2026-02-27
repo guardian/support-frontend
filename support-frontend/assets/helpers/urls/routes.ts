@@ -7,6 +7,7 @@ import type {
 	PaperFulfilmentOptions,
 } from '@modules/product/fulfilmentOptions';
 import type { ProductOptions } from '@modules/product/productOptions';
+import { featureFlagEnableWeeklyDigital } from 'helpers/featureFlags';
 import type { Option } from 'helpers/types/option';
 import {
 	addQueryParamsToURL,
@@ -112,12 +113,17 @@ function getDigitalPlusCheckoutDeepLink(
 	return `${domain}/${localePath}${checkoutRoute}?${queryParams}`;
 }
 
-function guardianWeeklyLanding(countryGroupId: CountryGroupId, gift: boolean) {
-	return `${getOrigin()}/${countryPath(countryGroupId)}${
+function guardianWeeklyLanding(
+	countryGroupId: CountryGroupId,
+	gift: boolean,
+	enableWeeklyDigital?: boolean,
+): string {
+	const url = `${getOrigin()}/${countryPath(countryGroupId)}${
 		gift
 			? routes.guardianWeeklySubscriptionLandingGift
 			: routes.guardianWeeklySubscriptionLanding
 	}`;
+	return enableWeeklyDigital ? `${url}?${featureFlagEnableWeeklyDigital}` : url;
 }
 
 const promotionTermsUrl = (promoCode: string) =>
@@ -157,14 +163,20 @@ function parameteriseUrl(
 	url: string,
 	promoCode?: Option<string>,
 	fulfilmentOption?: PaperFulfilmentOptions,
+	enableWeeklyDigital?: boolean,
 ) {
 	const params = {
 		promoCode,
 	};
 	const urlWithParams = addQueryParamsToURL(url, params).replace(/\?$/, ''); // removes ? when no params
+	const urlWithParamsWeeklyDigital = urlWithParams.concat(
+		enableWeeklyDigital
+			? `${promoCode ? '&' : '?'}${featureFlagEnableWeeklyDigital}`
+			: '',
+	);
 	return fulfilmentOption
-		? `${urlWithParams}#${fulfilmentOption}`
-		: urlWithParams;
+		? `${urlWithParamsWeeklyDigital}#${fulfilmentOption}`
+		: urlWithParamsWeeklyDigital;
 }
 
 // If the user cancels before completing the payment flow, send them back to the contribute page.

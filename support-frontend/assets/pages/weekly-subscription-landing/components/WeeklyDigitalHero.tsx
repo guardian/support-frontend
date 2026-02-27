@@ -10,7 +10,7 @@ import {
 	promotionHTML,
 } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { getRegionalCopyFor } from './contentHelpers';
+import { getRegionalTitle } from './contentHelpers';
 
 const pageTitleSpacing = css`
 	padding-bottom: ${space[8]}px;
@@ -23,9 +23,11 @@ const roundelStyles = css`
 export default function WeeklyDigitalHero({
 	promotion,
 	countryGroupId,
+	enableWeeklyDigital,
 }: {
 	promotion: PromotionCopy;
 	countryGroupId: CountryGroupId;
+	enableWeeklyDigital: boolean;
 }) {
 	const { roundel, title, description: promotionDescription } = promotion;
 
@@ -33,13 +35,15 @@ export default function WeeklyDigitalHero({
 		<OfferStrapline copy={roundel} cssOverrides={roundelStyles} />
 	);
 
-	const description =
-		promotionDescription &&
-		promotionHTML(promotionDescription, {
-			tag: 'p',
-		});
-
-	const fallbackTitle = getRegionalCopyFor(countryGroupId);
+	const fallbackDescription = enableWeeklyDigital
+		? 'Discover our global print magazine, showcasing the best of our reporting, analysis, opinion and culture—beautifully designed for a more reflective read. With your subscription, you also get full digital access, including ad-free news, thousands of Feast recipes and more, all while supporting the Guardian’s independent journalism.'
+		: '';
+	const description = promotionDescription
+		? promotionHTML(promotionDescription, {
+				tag: 'p',
+		  })
+		: fallbackDescription;
+	const fallbackTitle = getRegionalTitle(countryGroupId, enableWeeklyDigital);
 
 	return (
 		<PageTitle

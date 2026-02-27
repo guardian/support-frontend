@@ -10,7 +10,11 @@ import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { formatAmount } from 'helpers/forms/checkouts';
-import { digitalPlusTermsLink, privacyLink } from 'helpers/legal';
+import {
+	digitalPlusTermsLink,
+	manageAccountLink,
+	privacyLink,
+} from 'helpers/legal';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -28,7 +32,7 @@ import {
 	isPaperPlusSub,
 	isSundayOnlyNewspaperSub,
 } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
-import { manageMyAccountLink, termsLink } from './paymentTsAndCs';
+import { textLink } from '../../../helpers/utilities/textLink';
 
 const containerSummaryTsCs = css`
 	margin-top: ${space[6]}px;
@@ -42,15 +46,10 @@ const containerSummaryTsCs = css`
 		color: ${neutral[7]};
 	}
 `;
-
 const marginTop = css`
 	margin-top: ${space[2]}px;
 `;
-
-const containerSummaryTsCsUS = css`
-	border: 3px solid ${neutral[0]};
-	border-radius: 0px;
-
+const containerUS = css`
 	strong {
 		font-weight: bold;
 	}
@@ -58,22 +57,32 @@ const containerSummaryTsCsUS = css`
 		color: ${brand[500]};
 	}
 `;
+const containerSquareUS = css`
+	border: 3px solid ${neutral[0]};
+	border-radius: 0px;
+`;
+const containerRoundUS = css`
+	border: 1px solid ${neutral[60]};
+	border-radius: ${space[3]}px;
+`;
 
 export interface SummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	countryGroupId: CountryGroupId;
-	ratePlanDescription?: string;
 	currency: IsoCurrency;
 	amount: number;
+	ratePlanDescription?: string;
+	enableWeeklyDigital?: boolean;
 }
 export function SummaryTsAndCs({
 	productKey,
 	ratePlanKey,
 	countryGroupId,
-	ratePlanDescription,
 	currency,
 	amount,
+	ratePlanDescription,
+	enableWeeklyDigital,
 }: SummaryTsAndCsProps): JSX.Element | null {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -94,7 +103,6 @@ export function SummaryTsAndCs({
 		isPaperPlusSub(productKey, ratePlanKey);
 
 	const { label: productName } = getProductDescription(productKey, ratePlanKey);
-
 	const rateDescriptor = ratePlanDescription ?? ratePlanKey;
 
 	if (isPaperSundayOrPlus) {
@@ -115,27 +123,39 @@ export function SummaryTsAndCs({
 	);
 
 	const autoRenewUtilCancelTsAndCs = (countryGroupId: CountryGroupId) => {
-		return ['SupporterPlus', 'DigitalSubscription'].includes(productKey) &&
-			countryGroupId === 'UnitedStates' ? (
-			<div css={[containerSummaryTsCs, containerSummaryTsCsUS]}>
+		const usChargePeriodCopy = `automatically charged the amount shown each ${periodNoun} `;
+		const usChargePeriod = productKey.startsWith('GuardianWeekly') ? (
+			usChargePeriodCopy
+		) : (
+			<strong>{usChargePeriodCopy}</strong>
+		);
+		const containerShapeUS = productKey.startsWith('GuardianWeekly')
+			? containerRoundUS
+			: containerSquareUS;
+		return [
+			'SupporterPlus',
+			'DigitalSubscription',
+			'GuardianWeeklyDomestic',
+			'GuardianWeeklyRestOfWorld',
+		].includes(productKey) && countryGroupId === 'UnitedStates' ? (
+			<div css={[containerSummaryTsCs, containerUS, containerShapeUS]}>
 				<p>
 					By clicking the Pay button below, you agree to enroll in your selected
-					support plan and your payment method will be{' '}
-					<strong>
-						automatically charged the amount shown each {periodNoun}
-					</strong>{' '}
+					support plan and your payment method will be {usChargePeriod}
 					until you cancel. We will notify you if this amount changes. You may
-					cancel at any time to avoid future charges in {manageMyAccountLink()}.
+					cancel at any time to avoid future charges in{' '}
+					{textLink('Manage My Account', manageAccountLink)}.
 				</p>
 				<p css={marginTop}>
 					Your enrollment is subject to and governed by the Guardian{' '}
-					{termsLink('Terms and Conditions', digitalPlusTermsLink)} and{' '}
-					{termsLink('Privacy Policy', privacyLink)}.
+					{textLink('Terms and Conditions', digitalPlusTermsLink)} and{' '}
+					{textLink('Privacy Policy', privacyLink)}.
 				</p>
 			</div>
 		) : (
 			<div css={containerSummaryTsCs}>
-				The {productName} subscription
+				{productKey.startsWith('GuardianWeekly') ? '' : 'The '}
+				{productName} subscription
 				{productKey === 'TierThree' ? 's' : ''}
 				{productKey === 'SupporterPlus' ? ' and any contribution' : ''} will
 				auto-renew each {periodNoun}. You will be charged the subscription
@@ -165,5 +185,23 @@ export function SummaryTsAndCs({
 		DigitalSubscription: <>{autoRenewUtilCancelTsAndCs(countryGroupId)}</>,
 		GuardianAdLite: autoRenewUtilCancelTsAndCs(countryGroupId),
 	};
-	return summaryTsAndCs[productKey] ?? null;
+
+	const weeklyDigitalSummaryTsAndCs: Partial<
+		Record<ActiveProductKey, JSX.Element>
+	> = {
+		...summaryTsAndCs,
+		GuardianWeeklyDomestic: autoRenewUtilCancelTsAndCs(countryGroupId),
+		GuardianWeeklyRestOfWorld: autoRenewUtilCancelTsAndCs(countryGroupId),
+	};
+
+	const getSummaryTsAndCs = (
+		productKey: ActiveProductKey,
+		enableWeeklyDigital?: boolean,
+	): JSX.Element | null => {
+		const summaryTscAndCs = enableWeeklyDigital
+			? weeklyDigitalSummaryTsAndCs[productKey]
+			: summaryTsAndCs[productKey];
+		return summaryTscAndCs ?? null;
+	};
+	return getSummaryTsAndCs(productKey, enableWeeklyDigital);
 }

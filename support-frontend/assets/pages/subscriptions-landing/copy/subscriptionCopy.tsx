@@ -150,44 +150,54 @@ function digitalPlus(
 	};
 }
 
-const guardianWeekly = (
+function guardianWeekly(
 	countryGroupId: CountryGroupId,
 	priceCopy: PriceCopy,
 	participations: Participations,
-): ProductCopy => ({
-	title: 'Guardian Weekly',
-	subtitle: getDisplayPrice(countryGroupId, priceCopy.price),
-	description:
-		'Gain a deeper understanding of the issues that matter with the Guardian Weekly magazine. Every week, take your time over handpicked articles from the Guardian, delivered for free to wherever you are in the world.',
-	offer: priceCopy.discountCopy || '',
-	buttons: [
-		{
-			ctaButtonText: 'Find out more',
-			link: guardianWeeklyLanding(countryGroupId, false),
-			analyticsTracking: sendTrackingEventsOnClick({
-				id: 'weekly_cta',
-				product: 'GuardianWeekly',
-				componentType: 'ACQUISITIONS_BUTTON',
-			}),
-			priority: 'primary',
-			theme: themeButtonLegacyGray,
-		},
-		{
-			ctaButtonText: 'See gift options',
-			link: guardianWeeklyLanding(countryGroupId, true),
-			analyticsTracking: sendTrackingEventsOnClick({
-				id: 'weekly_cta_gift',
-				product: 'GuardianWeekly',
-				componentType: 'ACQUISITIONS_BUTTON',
-			}),
-			priority: 'tertiary',
-			theme: themeButtonLegacyGray,
-		},
-	],
-	productImage: <WeeklyPackShot />,
-	participations: participations,
-	cssOverrides: weeklySubscriptionProductCardStyle,
-});
+	enableWeeklyDigital: boolean,
+): ProductCopy {
+	const weeklyDescription = enableWeeklyDigital
+		? 'A curated weekly news magazine featuring our best global journalism in print, delivered wherever you are in the world. Plus, enjoy unlimited access to our full suite of digital benefits for the complete Guardian experience.'
+		: 'Gain a deeper understanding of the issues that matter with the Guardian Weekly magazine. Every week, take your time over handpicked articles from the Guardian, delivered for free to wherever you are in the world.';
+	const weeklyTitle = enableWeeklyDigital
+		? 'The Guardian Weekly'
+		: 'Guardian Weekly';
+	const weeklyFindButton = {
+		ctaButtonText: 'Find out more',
+		link: guardianWeeklyLanding(countryGroupId, false, enableWeeklyDigital),
+		analyticsTracking: sendTrackingEventsOnClick({
+			id: 'weekly_cta',
+			product: 'GuardianWeekly',
+			componentType: 'ACQUISITIONS_BUTTON',
+		}),
+		priority: 'primary',
+		theme: themeButtonLegacyGray,
+	} as ProductButton;
+	const weeklyGiftButton = {
+		ctaButtonText: 'See gift options',
+		link: guardianWeeklyLanding(countryGroupId, true),
+		analyticsTracking: sendTrackingEventsOnClick({
+			id: 'weekly_cta_gift',
+			product: 'GuardianWeekly',
+			componentType: 'ACQUISITIONS_BUTTON',
+		}),
+		priority: 'tertiary',
+		theme: themeButtonLegacyGray,
+	} as ProductButton;
+	const weeklyButtons = enableWeeklyDigital
+		? [weeklyFindButton]
+		: [weeklyFindButton, weeklyGiftButton];
+	return {
+		title: weeklyTitle,
+		subtitle: getDisplayPrice(countryGroupId, priceCopy.price),
+		description: weeklyDescription,
+		offer: priceCopy.discountCopy || '',
+		buttons: weeklyButtons,
+		productImage: <WeeklyPackShot />,
+		participations: participations,
+		cssOverrides: weeklySubscriptionProductCardStyle,
+	};
+}
 
 const paper = (
 	countryGroupId: CountryGroupId,
@@ -221,9 +231,15 @@ const getSubscriptionCopy = (
 	countryGroupId: CountryGroupId,
 	pricingCopy: PricingCopy,
 	participations: Participations,
+	enableWeeklyDigital: boolean,
 ): ProductCopy[] => {
 	const productcopy: ProductCopy[] = [
-		guardianWeekly(countryGroupId, pricingCopy[GuardianWeekly], participations),
+		guardianWeekly(
+			countryGroupId,
+			pricingCopy[GuardianWeekly],
+			participations,
+			enableWeeklyDigital,
+		),
 	];
 	if (countryGroupId === GBPCountries) {
 		productcopy.push(paper(countryGroupId, pricingCopy[Paper]));

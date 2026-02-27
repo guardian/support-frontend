@@ -130,6 +130,7 @@ export function WeeklyLandingPage({
 					<WeeklyDigitalHero
 						promotion={promotion}
 						countryGroupId={countryGroupId}
+						enableWeeklyDigital={enableWeeklyDigital}
 					/>
 					<CentredContainer cssOverrides={weeklyDigitalSpacing}>
 						<WeeklyCards countryId={countryId} productPrices={productPrices} />

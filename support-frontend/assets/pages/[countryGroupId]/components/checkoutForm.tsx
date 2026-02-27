@@ -111,31 +111,6 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 	);
 }
 
-type CheckoutFormProps = {
-	supportRegionId: SupportRegionId;
-	appConfig: AppConfig;
-	stripePublicKey: string;
-	isTestUser: boolean;
-	productKey: ActiveProductKey;
-	ratePlanKey: ActiveRatePlanKey;
-	originalAmount: number;
-	discountedAmount?: number;
-	contributionAmount?: number;
-	finalAmount: number;
-	promotion?: Promotion;
-	useStripeExpressCheckout: boolean;
-	countryId: IsoCountry;
-	forcedCountry?: string;
-	abParticipations: Participations;
-	landingPageSettings: LandingPageVariant;
-	checkoutSession?: CheckoutSession;
-	clearCheckoutSession: () => void;
-	weeklyDeliveryDate: Date;
-	setWeeklyDeliveryDate: (value: Date) => void;
-	thresholdAmount: number;
-	studentDiscount?: StudentDiscount;
-};
-
 const getPaymentMethods = (
 	countryId: IsoCountry,
 	productKey: ProductKey,
@@ -167,6 +142,29 @@ const getPaymentLegendPrefix = (
 	return legendPrefix + 3;
 };
 
+type CheckoutFormProps = {
+	supportRegionId: SupportRegionId;
+	appConfig: AppConfig;
+	stripePublicKey: string;
+	isTestUser: boolean;
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
+	originalAmount: number;
+	finalAmount: number;
+	useStripeExpressCheckout: boolean;
+	countryId: IsoCountry;
+	abParticipations: Participations;
+	landingPageSettings: LandingPageVariant;
+	clearCheckoutSession: () => void;
+	weeklyDeliveryDate: Date;
+	setWeeklyDeliveryDate: (value: Date) => void;
+	thresholdAmount: number;
+	enableWeeklyDigital: boolean;
+	contributionAmount?: number;
+	promotion?: Promotion;
+	checkoutSession?: CheckoutSession;
+	studentDiscount?: StudentDiscount;
+};
 export default function CheckoutForm({
 	supportRegionId,
 	appConfig,
@@ -175,17 +173,18 @@ export default function CheckoutForm({
 	productKey,
 	ratePlanKey,
 	originalAmount,
-	contributionAmount,
 	finalAmount,
-	promotion,
 	useStripeExpressCheckout,
 	countryId,
 	abParticipations,
-	checkoutSession,
 	clearCheckoutSession,
 	weeklyDeliveryDate,
 	setWeeklyDeliveryDate,
 	thresholdAmount,
+	enableWeeklyDigital,
+	contributionAmount,
+	promotion,
+	checkoutSession,
 	studentDiscount,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
@@ -623,6 +622,7 @@ export default function CheckoutForm({
 				)
 					? weeklyDeliveryDate
 					: undefined,
+				enableWeeklyDigital,
 			});
 			window.location.href = successUrl;
 			// It seems non-deterministic how much code is executed below setting
@@ -1139,6 +1139,7 @@ export default function CheckoutForm({
 							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}
+							enableWeeklyDigital={enableWeeklyDigital}
 						/>
 						<div
 							css={css`
@@ -1177,6 +1178,7 @@ export default function CheckoutForm({
 							studentDiscount={studentDiscount}
 							promotion={promotion}
 							thresholdAmount={thresholdAmount}
+							enableWeeklyDigital={enableWeeklyDigital}
 						/>
 					</BoxContents>
 				</Box>

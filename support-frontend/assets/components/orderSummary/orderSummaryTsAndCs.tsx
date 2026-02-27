@@ -1,11 +1,5 @@
 import { css } from '@emotion/react';
-import {
-	from,
-	neutral,
-	palette,
-	space,
-	textSans14,
-} from '@guardian/source/foundations';
+import { neutral, space } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { productLegal } from 'helpers/legalCopy';
 import {
@@ -33,52 +27,6 @@ const containerSummaryTsCs = css`
 	border-radius: ${space[2]}px;
 	background-color: ${neutral[97]};
 `;
-const productStartDate = css`
-	display: block;
-	${textSans14};
-	color: #606060;
-	background-color: ${palette.neutral[97]};
-	border-radius: ${space[3]}px;
-	padding: ${space[3]}px;
-	margin-top: ${space[2]}px;
-	${from.desktop} {
-		margin-top: ${space[4]}px;
-	}
-	li + li {
-		margin-top: ${space[2]}px;
-	}
-`;
-
-interface OrderSummaryStartDateProps {
-	productKey: ActiveProductKey;
-	ratePlanKey: ActiveRatePlanKey;
-	startDate: string;
-}
-export function OrderSummaryStartDate({
-	productKey,
-	ratePlanKey,
-	startDate,
-}: OrderSummaryStartDateProps): JSX.Element | null {
-	if (
-		isGuardianWeeklyOrTierThreeProduct(productKey) &&
-		!isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
-	) {
-		return (
-			<ul css={productStartDate}>
-				{productKey === 'TierThree' && (
-					<li>Your digital benefits will start today.</li>
-				)}
-				<li>
-					Your Guardian Weekly subscription will start on {startDate}. Please
-					allow 1 to 7 days after your start date for your magazine to arrive,
-					depending on national post services.
-				</li>
-			</ul>
-		);
-	}
-	return null;
-}
-
 export interface OrderSummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
@@ -87,6 +35,7 @@ export interface OrderSummaryTsAndCsProps {
 	promotion?: Promotion;
 	thresholdAmount?: number;
 	deliveryDate?: Date;
+	enableWeeklyDigital?: boolean;
 }
 export function OrderSummaryTsAndCs({
 	productKey,
@@ -96,6 +45,7 @@ export function OrderSummaryTsAndCs({
 	ratePlanDescription,
 	thresholdAmount = 0,
 	deliveryDate,
+	enableWeeklyDigital,
 }: OrderSummaryTsAndCsProps): JSX.Element | null {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -148,18 +98,25 @@ export function OrderSummaryTsAndCs({
 				</>
 			)}
 			{isGuardianWeeklyOrTierThreeProduct(productKey) && (
-				<p>
-					{isGuardianWeeklyGiftProduct(productKey, ratePlanKey) ? (
-						<>
-							Your Guardian Weekly gift subscription will start on{' '}
-							{deliveryStartDate}. The recipient should receive their first
-							magazine 1 - 7 days after this issue date, depending on national
-							post services.
-						</>
-					) : (
-						<>Auto renews every {periodNoun}. Cancel anytime.</>
-					)}
-				</p>
+				<>
+					<p>
+						{isGuardianWeeklyGiftProduct(productKey, ratePlanKey) ? (
+							<>
+								Your Guardian Weekly gift subscription will start on{' '}
+								{deliveryStartDate}. The recipient should receive their first
+								magazine 1 - 7 days after this issue date, depending on national
+								post services.
+							</>
+						) : (
+							<>
+								Auto renews every {periodNoun}. Cancel anytime.
+								{enableWeeklyDigital
+									? ' If you cancel within the first 14 days, via Customer Service, you will receive a full refund.'
+									: ''}
+							</>
+						)}
+					</p>
+				</>
 			)}
 		</div>
 	);

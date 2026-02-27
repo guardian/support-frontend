@@ -7,10 +7,8 @@ import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
-import {
-	OrderSummaryStartDate,
-	OrderSummaryTsAndCs,
-} from 'components/orderSummary/orderSummaryTsAndCs';
+import { OrderSummaryStartDate } from 'components/orderSummary/orderSummaryStartDate';
+import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
@@ -50,17 +48,18 @@ type CheckoutSummaryProps = {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	originalAmount: number;
-	promotion?: Promotion;
 	countryId: IsoCountry;
-	forcedCountry?: string;
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
-	studentDiscount?: StudentDiscount;
-	nudgeSettings?: CheckoutNudgeSettings;
 	backButtonOrigin: string;
 	backButtonPathOverride: string | null;
+	enableWeeklyDigital: boolean;
+	promotion?: Promotion;
+	forcedCountry?: string;
+	studentDiscount?: StudentDiscount;
+	nudgeSettings?: CheckoutNudgeSettings;
 };
 
 export default function CheckoutSummary({
@@ -69,17 +68,18 @@ export default function CheckoutSummary({
 	productKey,
 	ratePlanKey,
 	originalAmount,
-	promotion,
 	countryId,
-	forcedCountry,
 	abParticipations,
 	landingPageSettings,
 	weeklyDeliveryDate,
 	thresholdAmount,
-	studentDiscount,
-	nudgeSettings,
 	backButtonOrigin,
 	backButtonPathOverride,
+	enableWeeklyDigital,
+	promotion,
+	forcedCountry,
+	studentDiscount,
+	nudgeSettings,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
@@ -173,6 +173,7 @@ export default function CheckoutSummary({
 			`/${supportRegionId}${backButtonPath}`,
 			promotion?.promoCode,
 			getPaperFulfilmentOption(productKey),
+			enableWeeklyDigital,
 		);
 
 	return (
@@ -219,6 +220,7 @@ export default function CheckoutSummary({
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
 							startDate={formatUserDate(weeklyDeliveryDate)}
+							enableWeeklyDigital={enableWeeklyDigital}
 						/>
 					}
 					tsAndCs={
@@ -234,6 +236,7 @@ export default function CheckoutSummary({
 									? weeklyDeliveryDate
 									: undefined
 							}
+							enableWeeklyDigital={enableWeeklyDigital}
 						/>
 					}
 					headerButton={
@@ -245,6 +248,7 @@ export default function CheckoutSummary({
 					supportRegionId={supportRegionId}
 					nudgeSettings={nudgeSettings}
 					landingPageSettings={landingPageSettings}
+					enableWeeklyDigital={enableWeeklyDigital}
 				/>
 			</BoxContents>
 		</Box>
