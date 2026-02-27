@@ -11,7 +11,9 @@ import dayjs from 'dayjs';
 import { buildContributionEmailFields } from '../emailFields/contributionEmailFields';
 import { buildDigitalSubscriptionEmailFields } from '../emailFields/digitalSubscriptionEmailFields';
 import { buildGuardianAdLiteEmailFields } from '../emailFields/guardianAdLiteEmailFields';
+import type { GuardianWeeklyProductPurchase } from '../emailFields/guardianWeeklyEmailFields';
 import { buildGuardianWeeklyEmailFields } from '../emailFields/guardianWeeklyEmailFields';
+import { buildGuardianWeeklyPlusEmailFields } from '../emailFields/guardianWeeklyPlusEmailFields';
 import type { PaperProductPurchase } from '../emailFields/paperEmailFields';
 import { buildPaperEmailFields } from '../emailFields/paperEmailFields';
 import { buildSupporterPlusEmailFields } from '../emailFields/supporterPlusEmailFields';
@@ -135,17 +137,32 @@ async function sendTierThreeEmail(
 
 async function sendGuardianWeeklyEmail(
 	sendThankYouEmailState: SendThankYouEmailState,
+	productInformation: GuardianWeeklyProductPurchase,
 ) {
-	if (sendThankYouEmailState.productType === 'GuardianWeekly') {
+	if (sendThankYouEmailState.productType !== 'GuardianWeekly') {
+		throw new Error(
+			`Invalid product type ${sendThankYouEmailState.productType} for Guardian Weekly email`,
+		);
+	}
+
+	const weeklyPlusRatePlan = [
+		'MonthlyPlus',
+		'QuarterlyPlus',
+		'AnnualPlus',
+	].includes(productInformation.ratePlan);
+
+	if (weeklyPlusRatePlan) {
+		await sendEmailWithStage(
+			buildGuardianWeeklyPlusEmailFields(
+				await getFieldsFromState(sendThankYouEmailState),
+			),
+		);
+	} else {
 		await sendEmailWithStage(
 			buildGuardianWeeklyEmailFields({
 				...(await getFieldsFromState(sendThankYouEmailState)),
 				giftRecipient: sendThankYouEmailState.giftRecipient,
 			}),
-		);
-	} else {
-		throw new Error(
-			`Invalid product type ${sendThankYouEmailState.productType} for Guardian Weekly email`,
 		);
 	}
 }
@@ -190,7 +207,7 @@ export const handler = async (
 			break;
 		case 'GuardianWeeklyDomestic':
 		case 'GuardianWeeklyRestOfWorld':
-			await sendGuardianWeeklyEmail(sendThankYouEmailState);
+			await sendGuardianWeeklyEmail(sendThankYouEmailState, productInformation);
 			break;
 		case 'GuardianAdLite':
 			await sendGuardianAdLiteEmail(sendThankYouEmailState);
