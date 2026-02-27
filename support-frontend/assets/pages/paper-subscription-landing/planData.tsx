@@ -71,7 +71,7 @@ const weeklyDigitalRewards = [
 		newsletter from the Guardian Weekly editor
 	</>,
 	<>
-		Access to the Guardian’s 200 year <strong>digital archive</strong>
+		Access to the Guardian’s 200-year <strong>digital archive</strong>
 	</>,
 	<>
 		Access to the <strong>Guardian Editions app</strong> to enjoy digital
