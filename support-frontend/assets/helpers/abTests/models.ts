@@ -78,6 +78,7 @@ interface PageTest<Variant> {
 	regionTargeting?: {
 		targetedCountryGroups?: CountryGroupId[];
 	};
+	mParticleAudience?: number;
 	variants: Variant[];
 }
 interface PageParticipationsConfig<Variant> {
