@@ -113,12 +113,17 @@ function getDigitalPlusCheckoutDeepLink(
 	return `${domain}/${localePath}${checkoutRoute}?${queryParams}`;
 }
 
-function guardianWeeklyLanding(countryGroupId: CountryGroupId, gift: boolean) {
-	return `${getOrigin()}/${countryPath(countryGroupId)}${
+function guardianWeeklyLanding(
+	countryGroupId: CountryGroupId,
+	gift: boolean,
+	enableWeeklyDigital?: boolean,
+): string {
+	const url = `${getOrigin()}/${countryPath(countryGroupId)}${
 		gift
 			? routes.guardianWeeklySubscriptionLandingGift
 			: routes.guardianWeeklySubscriptionLanding
 	}`;
+	return enableWeeklyDigital ? `${url}?${featureFlagEnableWeeklyDigital}` : url;
 }
 
 const promotionTermsUrl = (promoCode: string) =>
