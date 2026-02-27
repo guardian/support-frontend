@@ -14,23 +14,28 @@ import { isGuardianWeeklyGiftProduct } from './utils/productMatchers';
 export type GuardianPrintHeadingProps = {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
+	enableWeeklyDigital?: boolean;
 };
 
 export default function GuardianPrintHeading({
 	productKey,
 	ratePlanKey,
+	enableWeeklyDigital,
 }: GuardianPrintHeadingProps) {
 	const thankYouText = 'Thank you for supporting our journalism!';
-	const guardianWeekly = ['Monthly', 'Annual', 'Quarterly'].includes(
-		ratePlanKey,
-	);
+	const guardianWeekly =
+		ratePlanKey.startsWith('Monthly') ||
+		ratePlanKey.startsWith('Annual') ||
+		ratePlanKey.startsWith('Quarterly');
+	const nowSubscribed = enableWeeklyDigital
+		? 'You are subscribed to'
+		: 'You have now subscribed to';
 	if (guardianWeekly) {
 		return (
 			<h1 css={headerTitleText}>
 				{thankYouText}
 				<br />
-				You have now subscribed to{' '}
-				<HighlightText>the Guardian Weekly</HighlightText>
+				{nowSubscribed} <HighlightText>the Guardian Weekly</HighlightText>
 			</h1>
 		);
 	}
