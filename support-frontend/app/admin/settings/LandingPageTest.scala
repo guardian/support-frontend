@@ -30,6 +30,7 @@ case class LandingPageProductDescription(
     benefits: List[ProductBenefit],
     cta: Cta,
     titlePill: Option[String] = None,
+    billingPeriodsCopy: Option[String] = None,
 )
 
 case class Cta(
