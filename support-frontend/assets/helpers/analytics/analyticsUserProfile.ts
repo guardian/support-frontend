@@ -35,7 +35,6 @@ export async function fetchAnalyticsUserProfile(): Promise<AnalyticsProfileData>
 	if (pendingRequest) {
 		return pendingRequest;
 	}
-
 	pendingRequest = fetchJson<{
 		identityId: string;
 		hasMobileAppDownloaded: boolean;
