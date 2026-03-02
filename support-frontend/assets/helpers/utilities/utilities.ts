@@ -98,12 +98,13 @@ function parseBillingPeriodCopy(
 	price: number,
 	billingPeriod: BillingPeriod,
 ): string {
-	const weeklyPrice =
+	const pricePerDay =
 		billingPeriod === BillingPeriod.Annual
-			? price / 52
+			? price / 365
 			: billingPeriod === BillingPeriod.Monthly
-			? price / 4
+			? (price * 12) / 365
 			: price;
+	const weeklyPrice = pricePerDay * 7;
 	const formattedWeeklyPrice = simpleFormatAmount(currency, weeklyPrice);
 	return copy
 		.replaceAll('%%PRICE_PRODUCT_WEEKLY%%', formattedWeeklyPrice)
