@@ -29,16 +29,6 @@ import {
 const checkoutNudgeSettings = getCheckoutNudgeParticipations();
 const appConfig = parseAppConfig(window.guardian);
 
-const paths = {
-	contribute: '/contribute',
-	checkout: '/checkout',
-	oneTimeCheckout: '/one-time-checkout',
-	thankYou: '/thank-you',
-	guardianAdLite: '/guardian-ad-lite',
-	student: '/student',
-	studentUTS: '/student/UTS',
-} as const;
-
 interface LoaderData {
 	finalParticipations: Participations;
 	landing: PageParticipationsResult<LandingPageVariant>;
@@ -83,7 +73,7 @@ const router = createBrowserRouter([
 		children: [
 			...Object.values(SupportRegionId).flatMap((supportRegionId) => [
 				{
-					path: `/${supportRegionId}${paths.contribute}/:campaignCode?`,
+					path: `/${supportRegionId}/contribute/:campaignCode?`,
 					lazy: async () => {
 						const { LandingPage } = await import(
 							/* webpackChunkName: "LandingPage" */ './landingPage'
@@ -103,7 +93,7 @@ const router = createBrowserRouter([
 					},
 				},
 				{
-					path: `/${supportRegionId}${paths.checkout}`,
+					path: `/${supportRegionId}/checkout`,
 					lazy: async () => {
 						const { Checkout } = await import(
 							/* webpackChunkName: "checkout" */ './checkout'
@@ -125,7 +115,7 @@ const router = createBrowserRouter([
 					},
 				},
 				{
-					path: `/${supportRegionId}${paths.oneTimeCheckout}`,
+					path: `/${supportRegionId}/one-time-checkout`,
 					lazy: async () => {
 						const { OneTimeCheckout } = await import(
 							/* webpackChunkName: "oneTimeCheckout" */ './oneTimeCheckout'
@@ -149,7 +139,7 @@ const router = createBrowserRouter([
 					},
 				},
 				{
-					path: `/${supportRegionId}${paths.thankYou}`,
+					path: `/${supportRegionId}/thank-you`,
 					lazy: async () => {
 						const { ThankYou } = await import(
 							/* webpackChunkName: "ThankYou" */ './thankYou'
@@ -170,7 +160,7 @@ const router = createBrowserRouter([
 					},
 				},
 				{
-					path: `/${supportRegionId}${paths.guardianAdLite}`,
+					path: `/${supportRegionId}/guardian-ad-lite`,
 					lazy: async () => {
 						const { GuardianAdLiteLanding } = await import(
 							/* webpackChunkName: "GuardianAdLiteLanding" */ './guardianAdLiteLanding/guardianAdLiteLanding'
@@ -185,7 +175,7 @@ const router = createBrowserRouter([
 					},
 				},
 				{
-					path: `/${supportRegionId}${paths.student}`,
+					path: `/${supportRegionId}/student`,
 					lazy: async () => {
 						const { StudentLandingPageGlobalContainer } = await import(
 							/* webpackChunkName: "StudentLandingPageGlobalContainer" */ './student/StudentLandingPageGlobalContainer'
@@ -205,7 +195,7 @@ const router = createBrowserRouter([
 				},
 			]),
 			{
-				path: `/au${paths.studentUTS}`,
+				path: `/au/student/UTS`,
 				lazy: async () => {
 					const { StudentLandingPageUTSContainer } = await import(
 						/* webpackChunkName: "StudentLandingPageUTSContainer" */ './student/StudentLandingPageUTSContainer'
