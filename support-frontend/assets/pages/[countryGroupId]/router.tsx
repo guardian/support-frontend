@@ -6,8 +6,10 @@ import {
 	useRouteLoaderData,
 } from 'react-router-dom';
 import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
+import { ObserverHoldingContent } from 'components/serverSideRendered/observerHoldingContent';
 import { WithCoreWebVitals } from 'helpers/coreWebVitals/withCoreWebVitals';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
+import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import type { OneTimeCheckoutVariant } from 'helpers/globalsAndSwitches/oneTimeCheckoutSettings';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
 import {
@@ -77,6 +79,7 @@ const router = createBrowserRouter([
 		id: 'root',
 		loader: rootLoader,
 		element: <RootLayout />,
+		HydrateFallback: GuardianOrObserverHoldingContent,
 		children: [
 			...Object.values(SupportRegionId).flatMap((supportRegionId) => [
 				{
@@ -223,13 +226,16 @@ const router = createBrowserRouter([
 	},
 ]);
 
+function GuardianOrObserverHoldingContent() {
+	if (isObserverSubdomain()) {
+		return <ObserverHoldingContent />;
+	}
+
+	return <GuardianHoldingContent />;
+}
+
 function Router() {
-	return (
-		<RouterProvider
-			router={router}
-			fallbackElement={<GuardianHoldingContent />}
-		/>
-	);
+	return <RouterProvider router={router} />;
 }
 
 export default renderPage(<Router />);
