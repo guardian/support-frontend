@@ -1,5 +1,8 @@
+import type { CurrencyInfo } from '@modules/internationalisation/currency';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import DomPurify from 'dompurify';
 import snarkdown from 'snarkdown';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
 
 // A series of general purpose helper functions.
 // ----- Functions ----- //
@@ -89,6 +92,25 @@ function parseCustomAmounts(customAmountsParam: string): number[] {
 		.filter((amount, index, array) => array.indexOf(amount) === index);
 }
 
+function parseBillingPeriodCopy(
+	copy: string,
+	currency: CurrencyInfo,
+	price: number,
+	billingPeriod: BillingPeriod,
+): string {
+	const pricePerDay =
+		billingPeriod === BillingPeriod.Annual
+			? price / 365
+			: billingPeriod === BillingPeriod.Monthly
+			? (price * 12) / 365
+			: price;
+	const weeklyPrice = pricePerDay * 7;
+	const formattedWeeklyPrice = simpleFormatAmount(currency, weeklyPrice);
+	return copy
+		.replaceAll('%%PRICE_PRODUCT_WEEKLY%%', formattedWeeklyPrice)
+		.trim();
+}
+
 // ----- Exports ----- //
 export {
 	ascending,
@@ -97,5 +119,6 @@ export {
 	classNameWithModifiers,
 	deserialiseJsonObject,
 	parseCustomAmounts,
+	parseBillingPeriodCopy,
 	replaceDatePlaceholder,
 };
