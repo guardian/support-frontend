@@ -56,7 +56,7 @@ export function WeeklyCards({
 	});
 
 	return (
-		<section css={pricesSection} id="subscribeWeekly">
+		<section css={pricesSection} id="subscribe">
 			<h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>
 			<p css={pricesSubHeadline}>Choose how you'd like to pay</p>
 			<div css={priceCardsContainer}>
