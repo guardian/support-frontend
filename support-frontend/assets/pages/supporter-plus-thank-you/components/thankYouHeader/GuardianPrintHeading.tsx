@@ -9,7 +9,10 @@ import {
 	weeklyGiftLineBreak,
 } from './headingStyles';
 import HighlightText from './HighlightText';
-import { isGuardianWeeklyGiftProduct } from './utils/productMatchers';
+import {
+	isGuardianWeeklyGiftProduct,
+	isGuardianWeeklyProduct,
+} from './utils/productMatchers';
 
 export type GuardianPrintHeadingProps = {
 	productKey: ActiveProductKey;
@@ -23,14 +26,11 @@ export default function GuardianPrintHeading({
 	enableWeeklyDigital,
 }: GuardianPrintHeadingProps) {
 	const thankYouText = 'Thank you for supporting our journalism!';
-	const guardianWeekly =
-		ratePlanKey.startsWith('Monthly') ||
-		ratePlanKey.startsWith('Annual') ||
-		ratePlanKey.startsWith('Quarterly');
+	const isWeekly = isGuardianWeeklyProduct(productKey);
 	const nowSubscribed = enableWeeklyDigital
 		? 'You are subscribed to'
 		: 'You have now subscribed to';
-	if (guardianWeekly) {
+	if (isWeekly) {
 		return (
 			<h1 css={headerTitleText}>
 				{thankYouText}
