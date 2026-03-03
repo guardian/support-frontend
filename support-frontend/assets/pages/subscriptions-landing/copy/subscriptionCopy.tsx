@@ -193,7 +193,9 @@ function guardianWeekly(
 		description: weeklyDescription,
 		offer: priceCopy.discountCopy || '',
 		buttons: weeklyButtons,
-		productImage: <WeeklyPackShot />,
+		productImage: (
+			<WeeklyPackShot enableDisplayWeeklyDigital={enableWeeklyDigital} />
+		),
 		participations: participations,
 		cssOverrides: weeklySubscriptionProductCardStyle,
 	};
