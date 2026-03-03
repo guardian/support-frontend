@@ -1,5 +1,11 @@
 import { css } from '@emotion/react';
-import { space, textSansBold17 } from '@guardian/source/foundations';
+import {
+	between,
+	from,
+	space,
+	textSansBold17,
+	until,
+} from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import GridImage from 'components/gridImage/gridImage';
 import HeroHeader from 'components/hero/HeroHeader';
@@ -18,6 +24,25 @@ const pageTitleSpacing = css`
 
 const roundelStyles = css`
 	${textSansBold17}
+`;
+
+const imageContainerMobile = css`
+	display: none;
+	${until.tablet} {
+		display: block;
+	}
+`;
+const imageContainerTablet = css`
+	display: none;
+	${between.tablet.and.desktop} {
+		display: block;
+	}
+`;
+const imageContainerDesktop = css`
+	display: none;
+	${from.desktop} {
+		display: block;
+	}
 `;
 
 export default function WeeklyDigitalHero({
@@ -53,13 +78,35 @@ export default function WeeklyDigitalHero({
 		>
 			<HeroHeader
 				heroImage={
-					<GridImage
-						gridId="weeklyCampaignHeroImg"
-						srcSizes={[500, 140]}
-						sizes="(max-width: 740px) 100%, 500px"
-						imgType="png"
-						altText="A collection of Guardian Weekly magazines"
-					/>
+					<>
+						<div css={imageContainerMobile}>
+							<GridImage
+								gridId="weeklyDigitalLandingHero_16x9"
+								srcSizes={[368]}
+								sizes="(368px"
+								imgType="png"
+								altText="A collection of Guardian Weekly magazines"
+							/>
+						</div>
+						<div css={imageContainerTablet}>
+							<GridImage
+								gridId="weeklyDigitalLandingHero_1x1"
+								srcSizes={[340]}
+								sizes="340px"
+								imgType="png"
+								altText="A collection of Guardian Weekly magazines"
+							/>
+						</div>
+						<div css={imageContainerDesktop}>
+							<GridImage
+								gridId="weeklyDigitalLandingHero_5x3"
+								srcSizes={[420]}
+								sizes="420px"
+								imgType="png"
+								altText="A collection of Guardian Weekly magazines"
+							/>
+						</div>
+					</>
 				}
 				roundel={roundelComponent}
 				title={title ?? fallbackTitle}
