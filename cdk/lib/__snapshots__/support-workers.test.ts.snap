@@ -29,6 +29,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       "GuAlarm",
       "GuAlarm",
       "GuAlarm",
+      "GuAlarm",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -1154,7 +1155,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "EvaluationPeriods": 144,
         "Metrics": [
           {
-            "Expression": "SUM([FILL(m0,0),FILL(m1,0),FILL(m2,0),FILL(m3,0),FILL(m4,0)])",
+            "Expression": "SUM([FILL(m0,0),FILL(m1,0),FILL(m2,0),FILL(m3,0),FILL(m4,0),FILL(m5,0)])",
             "Id": "expr_1",
             "Label": "AllGuardianAdLiteConversions",
           },
@@ -1270,6 +1271,32 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                   {
                     "Name": "PaymentProvider",
                     "Value": "StripePaymentRequestButton",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "GuardianAdLite",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m5",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "StripeHostedCheckout",
                   },
                   {
                     "Name": "ProductType",
@@ -2067,6 +2094,109 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                   {
                     "Name": "PaymentProvider",
                     "Value": "PayPal",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "Paper",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "NoPaperStripeHostedAcquisitionInPeriodAlarm1F4D7C8B": {
+      "DependsOn": [
+        "SupportWorkersPROD",
+        "SupportWorkersRoleDefaultPolicyCB757939",
+        "SupportWorkersRole33385BA0",
+      ],
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "URGENT 9-5 - PROD support-workers No successful Paper StripeHostedCheckout (Observer) checkouts in 24h.",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "EvaluationPeriods": 288,
+        "Metrics": [
+          {
+            "Expression": "SUM([FILL(m1,0)])",
+            "Id": "expr_1",
+            "Label": "AllStripeHostedCheckoutPaperConversions",
+          },
+          {
+            "Id": "m1",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "StripeHostedCheckout",
                   },
                   {
                     "Name": "ProductType",
