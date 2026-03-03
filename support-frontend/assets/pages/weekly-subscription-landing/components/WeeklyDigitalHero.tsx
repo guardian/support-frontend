@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import {
 	between,
 	from,
+	headlineBold28,
 	space,
 	textSansBold17,
 	until,
@@ -20,6 +21,17 @@ import { getRegionalTitle } from './contentHelpers';
 
 const pageTitleSpacing = css`
 	padding-bottom: ${space[8]}px;
+
+	h2 {
+		${from.desktop} {
+			${headlineBold28};
+		}
+	}
+	p {
+		${from.desktop} {
+			max-width: 100%;
+		}
+	}
 `;
 
 const roundelStyles = css`
