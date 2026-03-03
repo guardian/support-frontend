@@ -168,12 +168,11 @@ function parameteriseUrl(
 	const params = {
 		promoCode,
 	};
-	const urlWithParams = addQueryParamsToURL(url, params).replace(/\?$/, ''); // removes ? when no params
-	const urlWithParamsWeeklyDigital = urlWithParams.concat(
-		enableWeeklyDigital
-			? `${promoCode ? '&' : '?'}${featureFlagEnableWeeklyDigital}`
-			: '',
-	);
+	const urlWithParamsWeeklyDigital = addQueryParamsToURL(
+		url,
+		params,
+		enableWeeklyDigital ? featureFlagEnableWeeklyDigital : undefined,
+	).replace(/\?$/, ''); // removes ? when no params
 	return fulfilmentOption
 		? `${urlWithParamsWeeklyDigital}#${fulfilmentOption}`
 		: urlWithParamsWeeklyDigital;

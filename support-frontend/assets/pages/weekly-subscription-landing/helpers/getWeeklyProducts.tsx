@@ -61,18 +61,20 @@ const getCheckoutUrl = ({
 	const region = countryGroups[countryGroupId].supportRegionId;
 
 	const url = `${getOrigin()}/${region}/checkout`;
-	const urlWithParams = addQueryParamsToURL(url, {
-		promoCode: promotion?.promoCode,
-		product: productGuardianWeekly,
-		ratePlan: billingPeriodToRatePlan(
-			billingPeriod,
-			orderIsGift,
-			enableWeeklyDigitalPlans,
-		),
-	});
-	return urlWithParams.concat(
-		enableWeeklyDigitalPlans ? `&${featureFlagEnableWeeklyDigital}` : '',
+	const urlWithParams = addQueryParamsToURL(
+		url,
+		{
+			promoCode: promotion?.promoCode,
+			product: productGuardianWeekly,
+			ratePlan: billingPeriodToRatePlan(
+				billingPeriod,
+				orderIsGift,
+				enableWeeklyDigitalPlans,
+			),
+		},
+		enableWeeklyDigitalPlans ? featureFlagEnableWeeklyDigital : undefined,
 	);
+	return urlWithParams;
 };
 
 const getPriceWithSymbol = (currencyId: IsoCurrency, price: number): string =>
