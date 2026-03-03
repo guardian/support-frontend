@@ -9,10 +9,19 @@ import {
 	space,
 } from '@guardian/source/foundations';
 
-export const heroCssOverrides = css`
+export const printHeroCssOverrides = css`
 	background-color: ${palette.neutral[100]};
 	color: ${palette.neutral[7]};
 	flex-direction: column-reverse;
+`;
+
+export const weeklyDigitalHeroCssOverrides = css`
+	background-color: ${palette.neutral[100]};
+	color: ${palette.neutral[7]};
+	flex-direction: column-reverse;
+	& div:nth-child(2) {
+		align-self: center;
+	}
 `;
 
 export const heroCopy = css`

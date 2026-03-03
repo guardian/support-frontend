@@ -132,6 +132,7 @@ export default function WeeklyDigitalHero({
 						componentType: 'ACQUISITIONS_BUTTON',
 					})
 				}
+				enableWeeklyDigital={enableWeeklyDigital}
 			/>
 		</PageTitle>
 	);
