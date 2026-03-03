@@ -14,3 +14,9 @@ export const weeklyPackShotContainer = css`
 		vertical-align: bottom;
 	}
 `;
+
+export const weeklyDigitalContainer = css`
+	img {
+		width: 100%;
+	}
+`;

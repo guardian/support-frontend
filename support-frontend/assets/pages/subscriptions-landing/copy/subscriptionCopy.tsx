@@ -154,6 +154,7 @@ const guardianWeekly = (
 	countryGroupId: CountryGroupId,
 	priceCopy: PriceCopy,
 	participations: Participations,
+	enableWeeklyDigital?: boolean,
 ): ProductCopy => ({
 	title: 'Guardian Weekly',
 	subtitle: getDisplayPrice(countryGroupId, priceCopy.price),
@@ -184,7 +185,9 @@ const guardianWeekly = (
 			theme: themeButtonLegacyGray,
 		},
 	],
-	productImage: <WeeklyPackShot />,
+	productImage: (
+		<WeeklyPackShot enableDisplayWeeklyDigital={enableWeeklyDigital} />
+	),
 	participations: participations,
 	cssOverrides: weeklySubscriptionProductCardStyle,
 });
@@ -221,9 +224,15 @@ const getSubscriptionCopy = (
 	countryGroupId: CountryGroupId,
 	pricingCopy: PricingCopy,
 	participations: Participations,
+	enableWeeklyDigital?: boolean,
 ): ProductCopy[] => {
 	const productcopy: ProductCopy[] = [
-		guardianWeekly(countryGroupId, pricingCopy[GuardianWeekly], participations),
+		guardianWeekly(
+			countryGroupId,
+			pricingCopy[GuardianWeekly],
+			participations,
+			enableWeeklyDigital,
+		),
 	];
 	if (countryGroupId === GBPCountries) {
 		productcopy.push(paper(countryGroupId, pricingCopy[Paper]));

@@ -17,6 +17,7 @@ export type SubscriptionsLandingProps = {
 	participations: Participations;
 	pricingCopy: PricingCopy | null | undefined;
 	referrerAcquisitions: ReferrerAcquisitionData;
+	enableWeeklyDigital?: boolean;
 };
 const countryGroupId = CountryGroup.detect();
 

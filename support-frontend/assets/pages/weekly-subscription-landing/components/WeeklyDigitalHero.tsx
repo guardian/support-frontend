@@ -77,7 +77,7 @@ export default function WeeklyDigitalHero({
 					<>
 						<div css={imageContainerMobile}>
 							<GridImage
-								gridId="weeklyDigitalLandingHero_16x9"
+								gridId="weeklyDigitalLandingHeroMobile_16x9"
 								srcSizes={[368]}
 								sizes="(368px"
 								imgType="png"
@@ -86,7 +86,7 @@ export default function WeeklyDigitalHero({
 						</div>
 						<div css={imageContainerTablet}>
 							<GridImage
-								gridId="weeklyDigitalLandingHero_1x1"
+								gridId="weeklyDigitalLandingHeroTablet_1x1"
 								srcSizes={[340]}
 								sizes="340px"
 								imgType="png"
@@ -95,7 +95,7 @@ export default function WeeklyDigitalHero({
 						</div>
 						<div css={imageContainerDesktop}>
 							<GridImage
-								gridId="weeklyDigitalLandingHero_5x3"
+								gridId="weeklyDigitalLandingHeroDesktop_5x3"
 								srcSizes={[420]}
 								sizes="420px"
 								imgType="png"
