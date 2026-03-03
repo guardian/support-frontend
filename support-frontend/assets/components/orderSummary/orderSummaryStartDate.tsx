@@ -27,21 +27,18 @@ export function OrderSummaryStartDate({
 	startDate,
 	enableWeeklyDigital,
 }: OrderSummaryStartDateProps): JSX.Element | null {
-	const weeklyTierThreeStartCopy = `Your Guardian Weekly subscription will start on ${startDate}. Please allow 1 to 7 days after your start date for your magazine to arrive, depending on national post services.`;
-	const weeklyDigitalStartCopy = `Your first issue of Guardian Weekly will be ${startDate}. Please allow 1 to 7 days after this date for your magazine to arrive, depending on national post services. Your digital benefits will start today.`;
-	const weeklyStartCopy = enableWeeklyDigital
-		? weeklyDigitalStartCopy
-		: weeklyTierThreeStartCopy;
+	const digitalBenefitsCopy = `Your digital benefits will start today.`;
+	const postalCopy = `Please allow 1 to 7 days after your start date for your magazine to arrive, depending on national post services.`;
+	const weeklyTierThreeCopy = `Your Guardian Weekly subscription will start on ${startDate}. ${postalCopy}`;
+	const weeklyDigitalCopy = `Your first issue of Guardian Weekly will be ${startDate}. ${postalCopy} ${digitalBenefitsCopy}`;
 	if (
 		isGuardianWeeklyOrTierThreeProduct(productKey) &&
 		!isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
 	) {
 		return (
 			<ul css={listStartDate}>
-				{productKey === 'TierThree' && (
-					<li>Your digital benefits will start today.</li>
-				)}
-				<li>{weeklyStartCopy}</li>
+				{productKey === 'TierThree' && <li>{digitalBenefitsCopy}</li>}
+				<li>{enableWeeklyDigital ? weeklyDigitalCopy : weeklyTierThreeCopy}</li>
 			</ul>
 		);
 	}
