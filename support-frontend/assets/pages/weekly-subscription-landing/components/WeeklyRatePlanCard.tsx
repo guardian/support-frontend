@@ -13,6 +13,7 @@ import {
 	cardPrice,
 	cardWithLabel,
 	discountSummaryStyle,
+	roundelPromotionStyles,
 	savingsTextStyle,
 	strikethroughPriceStyle,
 } from './WeeklyRatePlanCardStyles';
@@ -26,6 +27,7 @@ function WeeklyRatePlanCard(ratePlan: Product) {
 		discountSummary,
 		savingsText,
 		showLabel,
+		roundel,
 		href,
 		onClick,
 		onView,
@@ -48,7 +50,11 @@ function WeeklyRatePlanCard(ratePlan: Product) {
 
 	return (
 		<div ref={setElementToObserve} css={[card, showLabel && cardWithLabel]}>
-			{showLabel && <div css={cardLabel}>Best deal</div>}
+			{showLabel && (
+				<div css={[cardLabel, roundel ? roundelPromotionStyles : undefined]}>
+					{roundel ?? 'Best deal'}
+				</div>
+			)}
 			<section>
 				<h3 css={cardHeading}>{title}</h3>
 				<p css={cardPrice}>

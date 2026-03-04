@@ -86,3 +86,8 @@ export const cardLabel = css`
 	border-top-left-radius: ${space[1]}px;
 	border-top-right-radius: ${space[1]}px;
 `;
+
+export const roundelPromotionStyles = css`
+	background-color: ${palette.lifestyle[400]};
+	color: ${palette.neutral[100]};
+`;
