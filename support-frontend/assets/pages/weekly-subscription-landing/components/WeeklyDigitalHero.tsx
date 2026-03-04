@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import {
+	palette,
 	from,
 	headlineBold28,
 	space,
@@ -12,7 +13,7 @@ import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
 import { type PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { getFirstParagraph, getRegionalCopyFor } from './contentHelpers';
+import { getFirstParagraph } from './contentHelpers';
 
 const pageTitleSpacing = css`
 	padding-bottom: ${space[8]}px;
@@ -32,6 +33,10 @@ const pageTitleSpacing = css`
 const roundelStyles = css`
 	${textSansBold17}
 `;
+const roundelPromotionStyles = css`
+	background-color: ${palette.lifestyle[400]};
+	color: ${palette.neutral[100]};
+`;
 
 export default function WeeklyDigitalHero({
 	promotion,
@@ -48,7 +53,10 @@ export default function WeeklyDigitalHero({
 	const roundelComponent = (
 		<OfferStrapline
 			copy={roundel ?? 'Save up to 35% a year'}
-			cssOverrides={roundelStyles}
+			cssOverrides={[
+				roundelStyles,
+				promotion.roundel ? roundelPromotionStyles : css``,
+			]}
 		/>
 	);
 
