@@ -110,9 +110,11 @@ function sendConsentToOphan(): void {
 			};
 		}
 		if (consentState.aus) {
+			const consentUUID =
+				getCookie({ name: 'globalcmpUUID' }) ?? getCookie({ name: 'ccpaUUID' });
 			return {
 				consentJurisdiction: 'AUS',
-				consentUUID: getCookie({ name: 'ccpaUUID' }) ?? '',
+				consentUUID: consentUUID ?? '',
 				consent: consentState.aus.personalisedAdvertising ? 'true' : 'false',
 			};
 		}
