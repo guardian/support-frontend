@@ -60,9 +60,12 @@ export async function fetchAnalyticsUserProfile(): Promise<AnalyticsProfileData>
 			return cachedData;
 		})
 		.catch((error: unknown) => {
-			pendingRequest = null;
 			console.error('Error fetching analytics user profile:', error);
-			return emptyProfile;
+			cachedData = emptyProfile;
+			return cachedData;
+		})
+		.finally(() => {
+			pendingRequest = null;
 		});
 
 	return pendingRequest;
