@@ -197,7 +197,7 @@ if (
     client.geo.country_code == "ZM" ||
     client.geo.country_code == "ZW"
 ) {
-    if (req.url ~ "^(/(uk|us|au|int|nz|ca|eu))?/subscribe/weekly(/gift)?" || req.url ~ "^(/(uk|us|au|int|nz|ca|eu))?/subscribe/digitaledition) {
+    if (req.url ~ "^(/(uk|us|au|int|nz|ca|eu))?/subscribe/weekly(/gift)?" || req.url ~ "^(/(uk|us|au|int|nz|ca|eu))?/subscribe/digitaledition") {
         error 619;
     }
 }
