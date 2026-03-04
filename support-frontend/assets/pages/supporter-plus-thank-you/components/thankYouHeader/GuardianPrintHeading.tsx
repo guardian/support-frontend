@@ -26,19 +26,9 @@ export default function GuardianPrintHeading({
 	enableWeeklyDigital,
 }: GuardianPrintHeadingProps) {
 	const thankYouText = 'Thank you for supporting our journalism!';
-	const isWeekly = isGuardianWeeklyProduct(productKey);
 	const nowSubscribed = enableWeeklyDigital
 		? 'You are subscribed to'
 		: 'You have now subscribed to';
-	if (isWeekly) {
-		return (
-			<h1 css={headerTitleText}>
-				{thankYouText}
-				<br />
-				{nowSubscribed} <HighlightText>the Guardian Weekly</HighlightText>
-			</h1>
-		);
-	}
 
 	if (isGuardianWeeklyGiftProduct(productKey, ratePlanKey)) {
 		return (
@@ -49,6 +39,15 @@ export default function GuardianPrintHeading({
 					<span>You have now purchased a </span>
 					<HighlightText>Guardian Weekly gift subscription</HighlightText>
 				</div>
+			</h1>
+		);
+	}
+	if (isGuardianWeeklyProduct(productKey)) {
+		return (
+			<h1 css={headerTitleText}>
+				{thankYouText}
+				<br />
+				{nowSubscribed} <HighlightText>the Guardian Weekly</HighlightText>
 			</h1>
 		);
 	}

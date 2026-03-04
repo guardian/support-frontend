@@ -95,7 +95,7 @@ export default function WeeklyDigitalHero({
 							<GridImage
 								gridId="weeklyDigitalLandingHeroMobile_16x9"
 								srcSizes={[368]}
-								sizes="(368px"
+								sizes="368px"
 								imgType="png"
 								altText="A collection of Guardian Weekly magazines"
 							/>
