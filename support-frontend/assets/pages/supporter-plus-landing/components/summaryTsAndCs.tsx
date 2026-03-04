@@ -198,10 +198,10 @@ export function SummaryTsAndCs({
 		productKey: ActiveProductKey,
 		enableWeeklyDigital?: boolean,
 	): JSX.Element | null => {
-		const summaryTscAndCs = enableWeeklyDigital
+		const selectedSummaryTsAndCs = enableWeeklyDigital
 			? weeklyDigitalSummaryTsAndCs[productKey]
 			: summaryTsAndCs[productKey];
-		return summaryTscAndCs ?? null;
+		return selectedSummaryTsAndCs ?? null;
 	};
 	return getSummaryTsAndCs(productKey, enableWeeklyDigital);
 }
