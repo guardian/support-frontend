@@ -5,10 +5,8 @@ import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { ContributionsOrderSummaryProps } from 'components/orderSummary/contributionsOrderSummary';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
-import {
-	OrderSummaryStartDate,
-	OrderSummaryTsAndCs,
-} from 'components/orderSummary/orderSummaryTsAndCs';
+import { OrderSummaryStartDate } from 'components/orderSummary/orderSummaryStartDate';
+import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
 import {
 	getProductLabel,
 	productCatalogDescription,

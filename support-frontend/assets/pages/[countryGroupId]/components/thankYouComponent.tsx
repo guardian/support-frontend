@@ -345,6 +345,7 @@ export function ThankYouComponent({
 							promotion={promotion}
 							observerPrint={observerPrint}
 							startDate={startDate}
+							enableWeeklyDigital={isGuardianWeeklyDigital}
 						/>
 					</div>
 
