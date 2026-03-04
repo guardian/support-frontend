@@ -10,12 +10,9 @@ import GridPicture from 'components/gridPicture/gridPicture';
 import HeroHeader from 'components/hero/HeroHeader';
 import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
-import {
-	type PromotionCopy,
-	promotionHTML,
-} from 'helpers/productPrice/promotions';
+import { type PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { getRegionalTitle } from './contentHelpers';
+import { getFirstParagraph, getRegionalCopyFor } from './contentHelpers';
 
 const pageTitleSpacing = css`
 	padding-bottom: ${space[8]}px;
@@ -45,7 +42,8 @@ export default function WeeklyDigitalHero({
 	countryGroupId: CountryGroupId;
 	enableWeeklyDigital: boolean;
 }) {
-	const { roundel, title, description: promotionDescription } = promotion;
+	const { roundel, title } = promotion;
+	const description = getFirstParagraph(promotion);
 
 	const roundelComponent = roundel && (
 		<OfferStrapline copy={roundel} cssOverrides={roundelStyles} />
