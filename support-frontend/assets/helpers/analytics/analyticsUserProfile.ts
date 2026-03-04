@@ -35,15 +35,22 @@ export async function fetchAnalyticsUserProfile(): Promise<AnalyticsProfileData>
 	if (pendingRequest) {
 		return pendingRequest;
 	}
-	pendingRequest = fetchJson<{
-		identityId: string;
-		hasMobileAppDownloaded: boolean;
-		hasFeastMobileAppDownloaded: boolean;
-		audienceMemberships: number[];
-	}>('/analytics-user-profile', {
-		mode: 'cors',
-		credentials: 'include',
-	})
+	const timeoutPromise = new Promise<never>((_, reject) => {
+		window.setTimeout(() => reject(new Error('Request timed out')), 2000);
+	});
+
+	pendingRequest = Promise.race([
+		fetchJson<{
+			identityId: string;
+			hasMobileAppDownloaded: boolean;
+			hasFeastMobileAppDownloaded: boolean;
+			audienceMemberships: number[];
+		}>('/analytics-user-profile', {
+			mode: 'cors',
+			credentials: 'include',
+		}),
+		timeoutPromise,
+	])
 		.then((response) => {
 			cachedData = {
 				hasMobileAppDownloaded: response.hasMobileAppDownloaded,
