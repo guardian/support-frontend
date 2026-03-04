@@ -1,5 +1,5 @@
 # type: recv
-# fiddle: https://fiddle.fastly.dev/fiddle/6db36311
+# fiddle: https://fiddle.fastly.dev/fiddle/1842847b
 if (
     client.geo.country_code == "AD" ||
     client.geo.country_code == "AF" ||
