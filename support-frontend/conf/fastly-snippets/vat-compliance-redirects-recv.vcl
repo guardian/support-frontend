@@ -197,7 +197,7 @@ if (
     client.geo.country_code == "ZM" ||
     client.geo.country_code == "ZW"
 ) {
-    if (req.url ~ "^(\/[a-z]{2})?\/subscribe\/weekly" || req.url ~ "^(\/[a-z]{2})?\/subscribe\/digitaledition) {
+    if (req.url ~ "^(\/[a-z]{2})?\/subscribe\/weekly(\/gift)?" || req.url ~ "^(\/[a-z]{2})?\/subscribe\/digitaledition) {
         error 619;
     }
 }
