@@ -38,7 +38,10 @@ import {
 } from 'helpers/productPrice/subscriptions';
 import type { OphanComponentType } from 'helpers/tracking/trackingOphan';
 import { addQueryParamsToURL, getOrigin } from 'helpers/urls/url';
-import { getDiscountSummary } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import {
+	getDiscountDuration,
+	getDiscountSummary,
+} from 'pages/[countryGroupId]/student/helpers/discountDetails';
 
 const getCheckoutUrl = ({
 	countryId,
@@ -195,6 +198,12 @@ export const getWeeklyDigitalRatePlans = ({
 						billingPeriod,
 				  })
 				: undefined;
+		const savingsText =
+			promotion?.discount?.amount && durationInMonths
+				? `${promotion.discount.amount}% off for ${getDiscountDuration({
+						durationInMonths,
+				  })}`
+				: undefined;
 
 		return {
 			title: getBillingPeriodTitle(billingPeriod),
@@ -203,7 +212,7 @@ export const getWeeklyDigitalRatePlans = ({
 			billingPeriodNoun: getBillingPeriodNoun(billingPeriod),
 			discountSummary,
 			priceCopy: '',
-			savingsText: promotion?.landingPage?.roundel ?? '',
+			savingsText,
 			href: getCheckoutUrl({
 				countryId,
 				billingPeriod,
@@ -212,6 +221,7 @@ export const getWeeklyDigitalRatePlans = ({
 				promotion,
 			}),
 			showLabel: billingPeriod === BillingPeriod.Quarterly,
+			roundel: promotion?.name,
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
 			buttonCopy: 'Subscribe now',
