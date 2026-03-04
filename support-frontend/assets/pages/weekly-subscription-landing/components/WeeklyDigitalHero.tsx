@@ -45,8 +45,11 @@ export default function WeeklyDigitalHero({
 	const { roundel, title } = promotion;
 	const description = getFirstParagraph(promotion);
 
-	const roundelComponent = roundel && (
-		<OfferStrapline copy={roundel} cssOverrides={roundelStyles} />
+	const roundelComponent = (
+		<OfferStrapline
+			copy={roundel ?? 'Save up to 35% a year'}
+			cssOverrides={roundelStyles}
+		/>
 	);
 
 	const fallbackDescription = enableWeeklyDigital
