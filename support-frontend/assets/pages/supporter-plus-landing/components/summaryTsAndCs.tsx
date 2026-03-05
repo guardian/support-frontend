@@ -166,30 +166,31 @@ export function SummaryTsAndCs({
 		);
 	};
 
-	const summaryTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
-		Contribution: (
-			<div css={containerSummaryTsCs}>
-				We will attempt to take payment of {amountWithCurrency},{' '}
-				{renewalFrequency}, from now until you cancel your payment. Payments may
-				take up to 6 days to be recorded in your bank account. You can change
-				how much you give or cancel your payment at any time.
-			</div>
-		),
-		SupporterPlus: (
-			<>
-				{!isStudentOneYearRatePlan &&
-					autoRenewUtilCancelTsAndCs(countryGroupId)}
-			</>
-		),
-		TierThree: autoRenewUtilCancelTsAndCs(countryGroupId),
-		DigitalSubscription: <>{autoRenewUtilCancelTsAndCs(countryGroupId)}</>,
-		GuardianAdLite: autoRenewUtilCancelTsAndCs(countryGroupId),
-	};
+	const digitalSummaryTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> =
+		{
+			Contribution: (
+				<div css={containerSummaryTsCs}>
+					We will attempt to take payment of {amountWithCurrency},{' '}
+					{renewalFrequency}, from now until you cancel your payment. Payments
+					may take up to 6 days to be recorded in your bank account. You can
+					change how much you give or cancel your payment at any time.
+				</div>
+			),
+			SupporterPlus: (
+				<>
+					{!isStudentOneYearRatePlan &&
+						autoRenewUtilCancelTsAndCs(countryGroupId)}
+				</>
+			),
+			TierThree: autoRenewUtilCancelTsAndCs(countryGroupId),
+			DigitalSubscription: autoRenewUtilCancelTsAndCs(countryGroupId),
+			GuardianAdLite: autoRenewUtilCancelTsAndCs(countryGroupId),
+		};
 
 	const weeklyDigitalSummaryTsAndCs: Partial<
 		Record<ActiveProductKey, JSX.Element>
 	> = {
-		...summaryTsAndCs,
+		...digitalSummaryTsAndCs,
 		GuardianWeeklyDomestic: autoRenewUtilCancelTsAndCs(countryGroupId),
 		GuardianWeeklyRestOfWorld: autoRenewUtilCancelTsAndCs(countryGroupId),
 	};
@@ -198,10 +199,10 @@ export function SummaryTsAndCs({
 		productKey: ActiveProductKey,
 		enableWeeklyDigital?: boolean,
 	): JSX.Element | null => {
-		const selectedSummaryTsAndCs = enableWeeklyDigital
+		const summaryTsAndCs = enableWeeklyDigital
 			? weeklyDigitalSummaryTsAndCs[productKey]
-			: summaryTsAndCs[productKey];
-		return selectedSummaryTsAndCs ?? null;
+			: digitalSummaryTsAndCs[productKey];
+		return summaryTsAndCs ?? null;
 	};
 	return getSummaryTsAndCs(productKey, enableWeeklyDigital);
 }
