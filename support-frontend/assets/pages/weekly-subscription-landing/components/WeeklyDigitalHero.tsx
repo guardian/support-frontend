@@ -1,7 +1,12 @@
 import { css } from '@emotion/react';
-import { space, textSansBold17 } from '@guardian/source/foundations';
+import {
+	from,
+	headlineBold28,
+	space,
+	textSansBold17,
+} from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import GridImage from 'components/gridImage/gridImage';
+import GridPicture from 'components/gridPicture/gridPicture';
 import HeroHeader from 'components/hero/HeroHeader';
 import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
@@ -14,6 +19,17 @@ import { getRegionalTitle } from './contentHelpers';
 
 const pageTitleSpacing = css`
 	padding-bottom: ${space[8]}px;
+
+	h2 {
+		${from.desktop} {
+			${headlineBold28};
+		}
+	}
+	p {
+		${from.desktop} {
+			max-width: 100%;
+		}
+	}
 `;
 
 const roundelStyles = css`
@@ -50,16 +66,40 @@ export default function WeeklyDigitalHero({
 			title="The Guardian Weekly"
 			theme="weekly"
 			cssOverrides={pageTitleSpacing}
+			enableWeeklyDigital={enableWeeklyDigital}
 		>
 			<HeroHeader
 				heroImage={
-					<GridImage
-						gridId="weeklyCampaignHeroImg"
-						srcSizes={[500, 140]}
-						sizes="(max-width: 740px) 100%, 500px"
-						imgType="png"
-						altText="A collection of Guardian Weekly magazines"
-					/>
+					<>
+						<GridPicture
+							sources={[
+								{
+									gridId: `weeklyDigitalLandingHeroMobile_16x9`,
+									srcSizes: [368],
+									sizes: '368px',
+									imgType: 'png',
+									media: '(max-width: 739px)',
+								},
+								{
+									gridId: `weeklyDigitalLandingHeroTablet_1x1`,
+									srcSizes: [340],
+									sizes: '340px',
+									imgType: 'png',
+									media: '(max-width: 979px)',
+								},
+								{
+									gridId: `weeklyDigitalLandingHeroDesktop_5x3`,
+									srcSizes: [420],
+									sizes: '420px',
+									imgType: 'png',
+									media: '(min-width: 980px)',
+								},
+							]}
+							fallback={`weeklyDigitalLandingHeroDesktop_5x3p`}
+							fallbackSize={420}
+							altText="A collection of Guardian Weekly magazines"
+						/>
+					</>
 				}
 				roundel={roundelComponent}
 				title={title ?? fallbackTitle}
@@ -73,6 +113,7 @@ export default function WeeklyDigitalHero({
 						componentType: 'ACQUISITIONS_BUTTON',
 					})
 				}
+				enableWeeklyDigital={enableWeeklyDigital}
 			/>
 		</PageTitle>
 	);

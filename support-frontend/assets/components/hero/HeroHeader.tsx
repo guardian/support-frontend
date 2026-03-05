@@ -10,9 +10,11 @@ import type { GridPictureProp } from 'components/gridPicture/gridPicture';
 import Hero from 'components/page/hero';
 import {
 	heroCopy,
-	heroCssOverrides,
 	heroParagraph,
 	heroTitle,
+	printHeroCssOverrides,
+	weeklyDigitalContainerCssOverrides,
+	weeklyDigitalHeroCssOverrides,
 } from './HeroHeaderStyles';
 
 export default function HeroHeader({
@@ -23,6 +25,7 @@ export default function HeroHeader({
 	ctaText,
 	ctaLink,
 	onClick,
+	enableWeeklyDigital,
 }: {
 	title: JSX.Element | string;
 	ctaText: string;
@@ -31,9 +34,17 @@ export default function HeroHeader({
 	heroImage: ReactElement<GridImg> | ReactElement<GridPictureProp>;
 	roundel?: JSX.Element | string;
 	description?: JSX.Element | string;
+	enableWeeklyDigital?: boolean;
 }) {
+	const heroCssOverrides = enableWeeklyDigital
+		? weeklyDigitalHeroCssOverrides
+		: printHeroCssOverrides;
 	return (
-		<CentredContainer>
+		<CentredContainer
+			cssOverrides={
+				enableWeeklyDigital ? weeklyDigitalContainerCssOverrides : undefined
+			}
+		>
 			{roundel}
 			<Hero
 				image={heroImage}

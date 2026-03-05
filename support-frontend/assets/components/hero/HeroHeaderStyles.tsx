@@ -9,10 +9,32 @@ import {
 	space,
 } from '@guardian/source/foundations';
 
-export const heroCssOverrides = css`
+export const printHeroCssOverrides = css`
 	background-color: ${palette.neutral[100]};
 	color: ${palette.neutral[7]};
 	flex-direction: column-reverse;
+`;
+
+export const weeklyDigitalHeroCssOverrides = css`
+	background-color: ${palette.neutral[100]};
+	color: ${palette.neutral[7]};
+	flex-direction: column-reverse;
+	& div:nth-child(2) {
+		align-self: center;
+		${from.desktop} {
+			width: 50%;
+		}
+	}
+`;
+
+export const weeklyDigitalContainerCssOverrides = css`
+	${from.desktop} {
+		width: calc(100% - 64px);
+
+		h1 {
+			padding-left: 0px;
+		}
+	}
 `;
 
 export const heroCopy = css`
