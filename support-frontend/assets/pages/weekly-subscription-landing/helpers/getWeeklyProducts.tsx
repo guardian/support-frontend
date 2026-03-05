@@ -196,6 +196,7 @@ export const getWeeklyDigitalRatePlans = ({
 						discountPriceWithCurrency,
 						durationInMonths,
 						billingPeriod,
+						shortFormat: true,
 				  })
 				: undefined;
 		const savingsText =

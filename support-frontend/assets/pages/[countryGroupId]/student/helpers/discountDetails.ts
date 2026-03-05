@@ -41,19 +41,25 @@ export function getDiscountSummary({
 	durationInMonths,
 	billingPeriod,
 	promoCount = 0,
+	shortFormat = false,
 }: {
 	fullPriceWithCurrency: string;
 	discountPriceWithCurrency: string;
 	durationInMonths: number;
 	billingPeriod: BillingPeriod;
 	promoCount?: number;
+	shortFormat?: boolean;
 }) {
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const discountDuration = getDiscountDuration({
 		durationInMonths,
 	});
 
-	return `${discountPriceWithCurrency}/${periodNoun} for ${discountDuration}, then ${fullPriceWithCurrency}/${periodNoun}${'*'.repeat(
+	const discountOffer = shortFormat
+		? discountPriceWithCurrency
+		: `${discountPriceWithCurrency}/${periodNoun}`;
+
+	return `${discountOffer} for ${discountDuration}, then ${fullPriceWithCurrency}/${periodNoun}${'*'.repeat(
 		promoCount,
 	)}`;
 }
