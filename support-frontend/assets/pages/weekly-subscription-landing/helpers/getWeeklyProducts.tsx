@@ -205,6 +205,12 @@ export const getWeeklyDigitalRatePlans = ({
 				  })}`
 				: undefined;
 
+		// TODO: This value shuold be coming from the promo tool for a specific promotion, not all promotions.
+		// 		 This is a temporary solution until we have the ability to add custom copy for specific promotions in the promo tool.
+		const promotionRoundelText = promotion && 'Intro offer | 50% Off';
+		const defaultRoundelText =
+			billingPeriod === BillingPeriod.Quarterly ? 'best deal' : undefined;
+
 		return {
 			title: getBillingPeriodTitle(billingPeriod),
 			price: fullPriceWithCurrency,
@@ -220,8 +226,7 @@ export const getWeeklyDigitalRatePlans = ({
 				enableWeeklyDigitalPlans: true,
 				promotion,
 			}),
-			showLabel: billingPeriod === BillingPeriod.Quarterly,
-			roundel: promotion?.name,
+			roundel: promotionRoundelText ?? defaultRoundelText,
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
 			buttonCopy: 'Subscribe now',

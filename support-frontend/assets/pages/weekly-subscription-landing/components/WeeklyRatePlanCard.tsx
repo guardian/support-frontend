@@ -26,7 +26,6 @@ function WeeklyRatePlanCard(ratePlan: Product) {
 		billingPeriodNoun,
 		discountSummary,
 		savingsText,
-		showLabel,
 		roundel,
 		href,
 		onClick,
@@ -49,10 +48,10 @@ function WeeklyRatePlanCard(ratePlan: Product) {
 	}, [hasBeenSeen]);
 
 	return (
-		<div ref={setElementToObserve} css={[card, showLabel && cardWithLabel]}>
-			{showLabel && (
+		<div ref={setElementToObserve} css={[card, roundel && cardWithLabel]}>
+			{roundel && (
 				<div css={[cardLabel, roundel ? roundelPromotionStyles : undefined]}>
-					{roundel ?? 'Best deal'}
+					{roundel}
 				</div>
 			)}
 			<section>
