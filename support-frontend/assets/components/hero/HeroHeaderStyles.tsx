@@ -21,6 +21,19 @@ export const weeklyDigitalHeroCssOverrides = css`
 	flex-direction: column-reverse;
 	& div:nth-child(2) {
 		align-self: center;
+		${from.desktop} {
+			width: 50%;
+		}
+	}
+`;
+
+export const weeklyDigitalContainerCssOverrides = css`
+	${from.desktop} {
+		width: calc(100% - 64px);
+
+		h1 {
+			padding-left: 0px;
+		}
 	}
 `;
 

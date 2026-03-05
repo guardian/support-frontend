@@ -13,6 +13,7 @@ import {
 	heroParagraph,
 	heroTitle,
 	printHeroCssOverrides,
+	weeklyDigitalContainerCssOverrides,
 	weeklyDigitalHeroCssOverrides,
 } from './HeroHeaderStyles';
 
@@ -39,7 +40,11 @@ export default function HeroHeader({
 		? weeklyDigitalHeroCssOverrides
 		: printHeroCssOverrides;
 	return (
-		<CentredContainer>
+		<CentredContainer
+			cssOverrides={
+				enableWeeklyDigital ? weeklyDigitalContainerCssOverrides : undefined
+			}
+		>
 			{roundel}
 			<Hero
 				image={heroImage}

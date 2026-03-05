@@ -66,6 +66,7 @@ export default function WeeklyDigitalHero({
 			title="The Guardian Weekly"
 			theme="weekly"
 			cssOverrides={pageTitleSpacing}
+			enableWeeklyDigital={enableWeeklyDigital}
 		>
 			<HeroHeader
 				heroImage={

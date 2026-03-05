@@ -9,6 +9,7 @@ import {
 	titlepiece70,
 } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
+import { weeklyDigitalContainerCssOverrides } from 'components/hero/HeroHeaderStyles';
 import {
 	digitalSubscriptionsBlue,
 	guardianWeeklyBlue,
@@ -22,6 +23,7 @@ type PropTypes = {
 	theme: ThemeType;
 	cssOverrides?: SerializedStyles;
 	children: ReactNode;
+	enableWeeklyDigital?: boolean;
 };
 const themeColors: Record<ThemeType, string> = {
 	weekly: guardianWeeklyBlue,
@@ -93,10 +95,15 @@ export function PageTitle({
 	theme,
 	cssOverrides,
 	children,
+	enableWeeklyDigital,
 }: PropTypes): JSX.Element {
 	return (
 		<div css={[header, headerThemes[theme], cssOverrides]}>
-			<CentredContainer>
+			<CentredContainer
+				cssOverrides={
+					enableWeeklyDigital ? weeklyDigitalContainerCssOverrides : undefined
+				}
+			>
 				<h1 css={pageTitle}>{title}</h1>
 			</CentredContainer>
 			{children}
