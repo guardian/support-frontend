@@ -1,14 +1,12 @@
 import { css } from '@emotion/react';
 import {
-	between,
 	from,
 	headlineBold28,
 	space,
 	textSansBold17,
-	until,
 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import GridImage from 'components/gridImage/gridImage';
+import GridPicture from 'components/gridPicture/gridPicture';
 import HeroHeader from 'components/hero/HeroHeader';
 import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
@@ -36,25 +34,6 @@ const pageTitleSpacing = css`
 
 const roundelStyles = css`
 	${textSansBold17}
-`;
-
-const imageContainerMobile = css`
-	display: none;
-	${until.tablet} {
-		display: block;
-	}
-`;
-const imageContainerTablet = css`
-	display: none;
-	${between.tablet.and.desktop} {
-		display: block;
-	}
-`;
-const imageContainerDesktop = css`
-	display: none;
-	${from.desktop} {
-		display: block;
-	}
 `;
 
 export default function WeeklyDigitalHero({
@@ -91,33 +70,34 @@ export default function WeeklyDigitalHero({
 			<HeroHeader
 				heroImage={
 					<>
-						<div css={imageContainerMobile}>
-							<GridImage
-								gridId="weeklyDigitalLandingHeroMobile_16x9"
-								srcSizes={[368]}
-								sizes="368px"
-								imgType="png"
-								altText="A collection of Guardian Weekly magazines"
-							/>
-						</div>
-						<div css={imageContainerTablet}>
-							<GridImage
-								gridId="weeklyDigitalLandingHeroTablet_1x1"
-								srcSizes={[340]}
-								sizes="340px"
-								imgType="png"
-								altText="A collection of Guardian Weekly magazines"
-							/>
-						</div>
-						<div css={imageContainerDesktop}>
-							<GridImage
-								gridId="weeklyDigitalLandingHeroDesktop_5x3"
-								srcSizes={[420]}
-								sizes="420px"
-								imgType="png"
-								altText="A collection of Guardian Weekly magazines"
-							/>
-						</div>
+						<GridPicture
+							sources={[
+								{
+									gridId: `weeklyDigitalLandingHeroMobile_16x9`,
+									srcSizes: [368],
+									sizes: '368px',
+									imgType: 'png',
+									media: '(max-width: 739px)',
+								},
+								{
+									gridId: `weeklyDigitalLandingHeroTablet_1x1`,
+									srcSizes: [340],
+									sizes: '340px',
+									imgType: 'png',
+									media: '(max-width: 979px)',
+								},
+								{
+									gridId: `weeklyDigitalLandingHeroDesktop_5x3`,
+									srcSizes: [420],
+									sizes: '420px',
+									imgType: 'png',
+									media: '(min-width: 980px)',
+								},
+							]}
+							fallback={`weeklyDigitalLandingHeroDesktop_5x3p`}
+							fallbackSize={420}
+							altText="A collection of Guardian Weekly magazines"
+						/>
 					</>
 				}
 				roundel={roundelComponent}
