@@ -27,6 +27,7 @@ function WeeklyRatePlanCard(ratePlan: Product) {
 		discountSummary,
 		savingsText,
 		roundel,
+		hasPromotion,
 		href,
 		onClick,
 		onView,
@@ -50,7 +51,7 @@ function WeeklyRatePlanCard(ratePlan: Product) {
 	return (
 		<div ref={setElementToObserve} css={[card, roundel && cardWithLabel]}>
 			{roundel && (
-				<div css={[cardLabel, roundel ? roundelPromotionStyles : undefined]}>
+				<div css={[cardLabel, hasPromotion && roundelPromotionStyles]}>
 					{roundel}
 				</div>
 			)}

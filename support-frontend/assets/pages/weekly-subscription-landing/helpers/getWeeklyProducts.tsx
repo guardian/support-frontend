@@ -227,6 +227,7 @@ export const getWeeklyDigitalRatePlans = ({
 				promotion,
 			}),
 			roundel: promotionRoundelText ?? defaultRoundelText,
+			hasPromotion: !!promotion,
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
 			buttonCopy: 'Subscribe now',
