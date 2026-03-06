@@ -52,23 +52,13 @@ const useFormIsValid = (
 	// We need to handle these payment methods slightly differently, because their
 	// button isn't part of the checkout form. We don't do this for all payment
 	// methods because it makes the validation a bit aggressive.
-	const shouldManageFormStateManually = paymentMethod === 'PayPalCompletePayments';
+	const shouldManageFormStateManually =
+		paymentMethod === 'PayPalCompletePayments';
 
 	useEffect(() => {
 		if (shouldManageFormStateManually) {
 			setFormIsValid(formRef.current?.checkValidity() ?? false);
 		}
-
-		const callback = (event: Event) => {
-			const element = event.currentTarget as HTMLFormElement;
-			// We call this twice because the first time does not not give
-			// us an accurate state of the form. This seems to be because
-			// we use `setCustomValidity` on the elements
-			element.checkValidity();
-			const valid = element.checkValidity();
-
-			setFormIsValid(valid);
-		};
 
 		// We want to add the form change event listener when the user selects
 		// PPCP, but we we also want to keep it if the user then switches to
@@ -79,7 +69,16 @@ const useFormIsValid = (
 		// validate callpack prop of the PayPalButton component.
 		if (shouldManageFormStateManually && !hasAddedEventListener) {
 			// And then run it on form change
-			formRef.current?.addEventListener('change', callback);
+			formRef.current?.addEventListener('change', (event: Event) => {
+				const element = event.currentTarget as HTMLFormElement;
+				// We call this twice because the first time does not not give
+				// us an accurate state of the form. This seems to be because
+				// we use `setCustomValidity` on the elements
+				element.checkValidity();
+				const valid = element.checkValidity();
+
+				setFormIsValid(valid);
+			});
 
 			setHasAddedEventListener(true);
 		}
