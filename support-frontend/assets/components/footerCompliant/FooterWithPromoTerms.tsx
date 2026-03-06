@@ -6,11 +6,12 @@ import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Domestic } from '@modules/product/fulfilmentOptions';
 import { NoProductOptions } from '@modules/product/productOptions';
 import type { ReactNode } from 'react';
+import { usePromoTerms } from 'contexts/PromoTermsContext';
 import { guardianWeeklyTermsLink } from 'helpers/legal';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { promotionTermsUrl } from 'helpers/urls/routes';
-import { weeklyTermsAndConditionsLink } from 'pages/weekly-subscription-landing/components/weeklyPriceInfo';
 import Footer from './Footer';
 import { footerTextHeading } from './footerStyles';
 
@@ -126,41 +127,46 @@ function GiftLinks({
 	return null;
 }
 
-interface PromoTermsProps {
+function PromoTerms({
+	children,
+	enableWeeklyDigital,
+}: {
 	children: ReactNode;
 	enableWeeklyDigital: boolean;
-}
-function PromoTerms({ children, enableWeeklyDigital }: PromoTermsProps) {
-	const termsAndConditionsLink = enableWeeklyDigital
-		? weeklyTermsAndConditionsLink()
-		: 'promotion terms and conditions';
+}) {
+	const { promoTerms } = usePromoTerms();
+	const defaultPromoTerms = (
+		<>
+			Offer subject to availability. Guardian News and Media Ltd ("GNM")
+			reserves the right to withdraw this promotion at any time. Full promotion
+			terms and conditions for our {children}.
+		</>
+	);
+
 	return (
 		<span css={weeklyFooter(enableWeeklyDigital)}>
 			<h3 id="qa-component-customer-service" css={footerTextHeading}>
 				Promotion terms and conditions
 			</h3>
 			<p css={promoOfferLink}>
-				Offer subject to availability. Guardian News and Media Ltd
-				(&quot;GNM&quot;) reserves the right to withdraw this promotion at any
-				time. Full {termsAndConditionsLink} for our&nbsp;
-				{children}.
+				{enableWeeklyDigital && promoTerms ? promoTerms : defaultPromoTerms}
 			</p>
 		</span>
 	);
 }
 
-type FooterWithPromoTermsProps = {
-	productPrices: ProductPrices;
-	country: IsoCountry;
-	orderIsAGift: boolean;
-	enableWeeklyDigital: boolean;
-};
 function GuardianWeeklyFooter({
 	productPrices,
 	orderIsAGift,
 	country,
 	enableWeeklyDigital,
-}: FooterWithPromoTermsProps): JSX.Element {
+}: {
+	productPrices: ProductPrices;
+	country: IsoCountry;
+	orderIsAGift: boolean;
+	promotion?: Promotion | null;
+	enableWeeklyDigital: boolean;
+}) {
 	const weeklyFulfillmentOption = Domestic;
 	return (
 		<Footer termsConditionsLink={guardianWeeklyTermsLink} fullWidth>

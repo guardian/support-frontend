@@ -39,8 +39,8 @@ const termsLinkStyle = css`
 	margin-top: -12px;
 `;
 
-export const weeklyTermsAndConditionsLink = () =>
-	textLink('Terms and Conditions', guardianWeeklyTermsLink);
+const weeklyTermsAndConditionsLink = () =>
+	termsLink('Terms and Conditions', guardianWeeklyTermsLink);
 
 type WeeklyPriceInfoProps = {
 	isGift?: boolean;
