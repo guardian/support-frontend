@@ -4,13 +4,11 @@ import { getUser } from 'helpers/user/user';
 interface AnalyticsProfileData {
 	hasMobileAppDownloaded: boolean;
 	hasFeastMobileAppDownloaded: boolean;
-	audienceMemberships: number[];
 }
 
 const emptyProfile: AnalyticsProfileData = {
 	hasMobileAppDownloaded: false,
 	hasFeastMobileAppDownloaded: false,
-	audienceMemberships: [],
 };
 
 let cachedData: AnalyticsProfileData | null = null;
@@ -44,7 +42,6 @@ export async function fetchAnalyticsUserProfile(): Promise<AnalyticsProfileData>
 			identityId: string;
 			hasMobileAppDownloaded: boolean;
 			hasFeastMobileAppDownloaded: boolean;
-			audienceMemberships: number[];
 		}>('/analytics-user-profile', {
 			mode: 'cors',
 			credentials: 'include',
@@ -55,7 +52,6 @@ export async function fetchAnalyticsUserProfile(): Promise<AnalyticsProfileData>
 			cachedData = {
 				hasMobileAppDownloaded: response.hasMobileAppDownloaded,
 				hasFeastMobileAppDownloaded: response.hasFeastMobileAppDownloaded,
-				audienceMemberships: response.audienceMemberships,
 			};
 			return cachedData;
 		})

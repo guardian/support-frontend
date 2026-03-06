@@ -15,7 +15,6 @@ import scala.concurrent.{ExecutionContext, Future}
 case class MParticleUserProfile(
     hasMobileAppDownloaded: Boolean,
     hasFeastMobileAppDownloaded: Boolean,
-    audienceMemberships: List[Int],
 )
 
 case class Identity(
@@ -97,7 +96,6 @@ class MParticleClient(
           MParticleUserProfile(
             hasMobileAppDownloaded = false,
             hasFeastMobileAppDownloaded = false,
-            audienceMemberships = List.empty,
           )
         }
     } else {
@@ -105,9 +103,21 @@ class MParticleClient(
         MParticleUserProfile(
           hasMobileAppDownloaded = false,
           hasFeastMobileAppDownloaded = false,
-          audienceMemberships = List.empty,
         ),
       )
+    }
+  }
+
+  def getAudienceMemberships(identityId: String): Future[List[Int]] = {
+    if (mparticleEnabled) {
+      fetchAudienceMemberships(identityId)
+        .map(_.audience_memberships.map(_.audience_id))
+        .recover { case WebServiceClientError(CodeBody("404", _)) =>
+          logger.info("mParticle returned 404 for user")
+          List.empty
+        }
+    } else {
+      Future.successful(List.empty)
     }
   }
 
@@ -127,7 +137,6 @@ class MParticleClient(
   private def parseUserProfile(profileResponse: ProfileResponse): MParticleUserProfile = {
     val hasMobileAppDownloaded = profileResponse.audience_memberships.exists(_.audience_id == 22581)
     val hasFeastMobileAppDownloaded = profileResponse.audience_memberships.exists(_.audience_id == 22582)
-    val audienceMemberships = profileResponse.audience_memberships.map(_.audience_id)
-    MParticleUserProfile(hasMobileAppDownloaded, hasFeastMobileAppDownloaded, audienceMemberships)
+    MParticleUserProfile(hasMobileAppDownloaded, hasFeastMobileAppDownloaded)
   }
 }

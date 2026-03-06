@@ -5,7 +5,6 @@ const useAnalyticsProfile = () => {
 	const [hasMobileAppDownloaded, setHasMobileAppDownloaded] = useState(false);
 	const [hasFeastMobileAppDownloaded, setHasFeastMobileAppDownloaded] =
 		useState(false);
-	const [audienceMemberships, setAudienceMemberships] = useState<number[]>([]);
 	const [dataLoaded, setDataLoaded] = useState(false);
 
 	const loadAnalyticsData = useCallback(async () => {
@@ -16,7 +15,6 @@ const useAnalyticsProfile = () => {
 		const data = await fetchAnalyticsUserProfile();
 		setHasMobileAppDownloaded(data.hasMobileAppDownloaded);
 		setHasFeastMobileAppDownloaded(data.hasFeastMobileAppDownloaded);
-		setAudienceMemberships(data.audienceMemberships);
 		setDataLoaded(true);
 	}, [dataLoaded]);
 
@@ -27,7 +25,6 @@ const useAnalyticsProfile = () => {
 	return {
 		hasMobileAppDownloaded,
 		hasFeastMobileAppDownloaded,
-		audienceMemberships,
 		dataLoaded,
 		loadAnalyticsData,
 	};
