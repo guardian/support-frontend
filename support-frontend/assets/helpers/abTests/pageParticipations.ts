@@ -1,5 +1,4 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { fetchAnalyticsUserProfile } from 'helpers/analytics/analyticsUserProfile';
 import { CountryGroup } from '../internationalisation/classes/countryGroup';
 import {
 	countryGroupMatches,
@@ -17,7 +16,7 @@ import {
 	setSessionParticipations,
 } from './sessionStorage';
 
-export interface PageParticipationsResult<Variant> {
+interface PageParticipationsResult<Variant> {
 	variant: Variant;
 	participations: Participations;
 }
@@ -32,14 +31,10 @@ export interface PageParticipationsResult<Variant> {
  * then it will also return the participations data for tracking.
  * Otherwise we assume the user has not arrived via the target page, and the participations
  * object will be empty because we do not need to track it.
- *
- * For tests with `mParticleAudience`, the user must be a member of that audience
- * (verified via the analytics profile) or the fallback variant is returned instead.
- * URL-forced participations bypass this check.
  */
-export async function getPageParticipations<Variant>(
+export function getPageParticipations<Variant>(
 	config: PageParticipationsConfig<Variant>,
-): Promise<PageParticipationsResult<Variant>> {
+): PageParticipationsResult<Variant> {
 	const countryGroupId: CountryGroupId = CountryGroup.detect();
 	const path: string = window.location.pathname;
 	const mvtId: number = getMvtId();
@@ -74,33 +69,7 @@ export async function getPageParticipations<Variant>(
 		return fallbackVariant(countryGroupId);
 	};
 
-	const isUserInAudience = async (
-		test: PageTest<Variant>,
-	): Promise<boolean> => {
-		if (test.mParticleAudience === undefined) {
-			return true;
-		}
-		const profile = await fetchAnalyticsUserProfile();
-		const inAudience = profile.audienceMemberships.includes(
-			test.mParticleAudience,
-		);
-		return inAudience;
-	};
-
-	// Only track participation if user is on the target page
-	const trackParticipation = isTargetPage(path);
-
-	const makeFallback = (): PageParticipationsResult<Variant> => {
-		const fallback = fallbackVariant(countryGroupId);
-		return {
-			participations: trackParticipation
-				? { [fallbackParticipationKey]: getVariantName(fallback) }
-				: ({} as Participations),
-			variant: fallback,
-		};
-	};
-
-	// Is the participation forced in the url querystring? (bypass audience check)
+	// Is the participation forced in the url querystring?
 	const urlParticipations = getParticipationFromQueryString(
 		queryString,
 		forceParamName,
@@ -127,41 +96,44 @@ export async function getPageParticipations<Variant>(
 	}
 
 	// No participation in session storage, assign user to a test + variant
-	let test: PageTest<Variant> | undefined;
-	for (const currentTest of tests.filter((test) => test.status === 'Live')) {
-		if (
-			countryGroupMatches(
-				currentTest.regionTargeting?.targetedCountryGroups,
+	const test = tests
+		.filter((test) => test.status === 'Live')
+		.find((test) => {
+			return countryGroupMatches(
+				test.regionTargeting?.targetedCountryGroups,
 				countryGroupId,
-			) &&
-			(await isUserInAudience(currentTest))
-		) {
-			test = currentTest;
-			break;
+			);
+		});
+
+	// Only track participation if user is on the target page
+	const trackParticipation = isTargetPage(path);
+
+	if (test) {
+		const idx = randomNumber(mvtId, test.name) % test.variants.length;
+		const variant = test.variants[idx];
+
+		if (variant) {
+			const participations = {
+				[test.name]: getVariantName(variant),
+			};
+			// Record the participation in session storage so that we can track it from other pages
+			setSessionParticipations(participations, sessionStorageKey);
+
+			return {
+				participations: trackParticipation
+					? participations
+					: ({} as Participations),
+				variant,
+			};
 		}
 	}
 
-	if (!test) {
-		return makeFallback();
-	}
-
-	const idx = randomNumber(mvtId, test.name) % test.variants.length;
-	const variant = test.variants[idx];
-
-	if (!variant) {
-		return makeFallback();
-	}
-
-	const participations = {
-		[test.name]: getVariantName(variant),
-	};
-	// Record the participation in session storage so that we can track it from other pages
-	setSessionParticipations(participations, sessionStorageKey);
-
+	// No test found, use the fallback
+	const fallback = fallbackVariant(countryGroupId);
 	return {
 		participations: trackParticipation
-			? participations
+			? { [fallbackParticipationKey]: getVariantName(fallback) }
 			: ({} as Participations),
-		variant,
+		variant: fallback,
 	};
 }
