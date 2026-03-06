@@ -1,6 +1,8 @@
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { Product } from 'components/product/productOption';
+import { PromoTermsProvider } from 'contexts/PromoTermsContext';
 import WeeklyRatePlanCard from 'pages/weekly-subscription-landing/components/WeeklyRatePlanCard';
 
 export default {
@@ -19,7 +21,9 @@ function Template(args: Product) {
 
 	return (
 		<div css={innerContentContainer}>
-			<WeeklyRatePlanCard {...args} />
+			<PromoTermsProvider>
+				<WeeklyRatePlanCard {...args} />
+			</PromoTermsProvider>
 		</div>
 	);
 }
@@ -33,6 +37,7 @@ DefaultWeeklyCard.args = {
 	priceCopy: '',
 	discountedPrice: '£24.75',
 	billingPeriodNoun: 'quarterly',
+	billingPeriod: BillingPeriod.Quarterly,
 	discountSummary: '£24.75/month for 3 months, then £49.50/month',
 	savingsText: '50% off for 3 months',
 	href: 'https://support.theguardian.com',
