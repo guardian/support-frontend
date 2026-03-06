@@ -38,7 +38,10 @@ import {
 } from 'helpers/productPrice/subscriptions';
 import type { OphanComponentType } from 'helpers/tracking/trackingOphan';
 import { addQueryParamsToURL, getOrigin } from 'helpers/urls/url';
-import { getDiscountSummary } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import {
+	getDiscountDuration,
+	getDiscountSummary,
+} from 'pages/[countryGroupId]/student/helpers/discountDetails';
 
 const getCheckoutUrl = ({
 	countryId,
@@ -193,17 +196,31 @@ export const getWeeklyDigitalRatePlans = ({
 						discountPriceWithCurrency,
 						durationInMonths,
 						billingPeriod,
+						shortFormat: true,
 				  })
 				: undefined;
+		const savingsText =
+			promotion?.discount?.amount && durationInMonths
+				? `${promotion.discount.amount}% off for ${getDiscountDuration({
+						durationInMonths,
+				  })}`
+				: undefined;
+
+		// TODO: This value shuold be coming from the promo tool for a specific promotion, not all promotions.
+		// 		 This is a temporary solution until we have the ability to add custom copy for specific promotions in the promo tool.
+		const promotionRoundelText = promotion && 'Intro offer | 50% Off';
+		const defaultRoundelText =
+			billingPeriod === BillingPeriod.Quarterly ? 'best deal' : undefined;
 
 		return {
 			title: getBillingPeriodTitle(billingPeriod),
 			price: fullPriceWithCurrency,
 			discountedPrice: discountPriceWithCurrency,
 			billingPeriodNoun: getBillingPeriodNoun(billingPeriod),
+			billingPeriod,
 			discountSummary,
 			priceCopy: '',
-			savingsText: promotion?.landingPage?.roundel ?? '',
+			savingsText,
 			href: getCheckoutUrl({
 				countryId,
 				billingPeriod,
@@ -211,7 +228,8 @@ export const getWeeklyDigitalRatePlans = ({
 				enableWeeklyDigitalPlans: true,
 				promotion,
 			}),
-			showLabel: billingPeriod === BillingPeriod.Quarterly,
+			roundel: promotionRoundelText ?? defaultRoundelText,
+			hasPromotion: !!promotion,
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
 			buttonCopy: 'Subscribe now',

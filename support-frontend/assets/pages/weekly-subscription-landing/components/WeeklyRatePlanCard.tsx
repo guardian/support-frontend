@@ -4,7 +4,9 @@ import {
 } from '@guardian/source/react-components';
 import { useEffect } from 'react';
 import type { Product } from 'components/product/productOption';
+import { usePromoTerms } from 'contexts/PromoTermsContext';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
+import getWeeklyPromoTerms from '../helpers/getWeeklyPromoTerms';
 import {
 	ButtonCTA,
 	card,
@@ -13,6 +15,7 @@ import {
 	cardPrice,
 	cardWithLabel,
 	discountSummaryStyle,
+	roundelPromotionStyles,
 	savingsTextStyle,
 	strikethroughPriceStyle,
 } from './WeeklyRatePlanCardStyles';
@@ -23,9 +26,11 @@ function WeeklyRatePlanCard(ratePlan: Product) {
 		price,
 		discountedPrice,
 		billingPeriodNoun,
+		billingPeriod,
 		discountSummary,
 		savingsText,
-		showLabel,
+		roundel,
+		hasPromotion,
 		href,
 		onClick,
 		onView,
@@ -46,9 +51,25 @@ function WeeklyRatePlanCard(ratePlan: Product) {
 		hasBeenSeen && onView();
 	}, [hasBeenSeen]);
 
+	useEffect(() => {
+		const { setPromoTerms } = usePromoTerms();
+		if (hasPromotion && billingPeriod && discountedPrice) {
+			const promoTerms = getWeeklyPromoTerms(
+				billingPeriod,
+				price,
+				discountedPrice,
+			);
+			setPromoTerms(promoTerms);
+		}
+	}, [hasPromotion, billingPeriod, discountedPrice]);
+
 	return (
-		<div ref={setElementToObserve} css={[card, showLabel && cardWithLabel]}>
-			{showLabel && <div css={cardLabel}>Best deal</div>}
+		<div ref={setElementToObserve} css={[card, roundel && cardWithLabel]}>
+			{roundel && (
+				<div css={[cardLabel, hasPromotion && roundelPromotionStyles]}>
+					{roundel}
+				</div>
+			)}
 			<section>
 				<h3 css={cardHeading}>{title}</h3>
 				<p css={cardPrice}>

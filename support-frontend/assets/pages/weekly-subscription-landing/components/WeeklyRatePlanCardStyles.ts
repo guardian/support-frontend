@@ -61,9 +61,6 @@ export const discountSummaryStyle = css`
 	margin-top: ${space[2]}px;
 	color: ${palette.neutral[38]};
 	text-align: center;
-	${from.tablet} {
-		min-height: 20px;
-	}
 `;
 
 export const ButtonCTA = css`
@@ -85,4 +82,9 @@ export const cardLabel = css`
 	${textSansBold15};
 	border-top-left-radius: ${space[1]}px;
 	border-top-right-radius: ${space[1]}px;
+`;
+
+export const roundelPromotionStyles = css`
+	background-color: ${palette.lifestyle[400]};
+	color: ${palette.neutral[100]};
 `;
