@@ -70,7 +70,6 @@ export function ThankYou({
 
 	let payment: {
 		originalAmount: number;
-		discountedAmount?: number;
 		contributionAmount?: number;
 		finalAmount: number;
 	};
@@ -142,25 +141,17 @@ export function ThankYou({
 						fulfilmentOption,
 				  )
 				: undefined;
-			const discountedPrice = promotion?.discountedPrice;
-			const price = discountedPrice ?? productPrice;
 
-			if (productKey === 'SupporterPlus') {
-				/** SupporterPlus can have an additional contribution bolted onto the base price */
-				payment = {
-					originalAmount: productPrice,
-					discountedAmount: discountedPrice,
-					contributionAmount,
-					finalAmount: price + (contributionAmount ?? 0),
-				};
-			} else {
-				payment = {
-					originalAmount: productPrice,
-					discountedAmount: discountedPrice,
-					contributionAmount,
-					finalAmount: price,
-				};
-			}
+			/** SupporterPlus can have an additional contribution bolted onto the base price */
+			const finalAmount =
+				productPrice +
+				(productKey === 'SupporterPlus' ? contributionAmount ?? 0 : 0);
+
+			payment = {
+				originalAmount: productPrice,
+				contributionAmount,
+				finalAmount: finalAmount,
+			};
 		}
 	}
 
