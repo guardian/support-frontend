@@ -61,9 +61,6 @@ export const discountSummaryStyle = css`
 	margin-top: ${space[2]}px;
 	color: ${palette.neutral[38]};
 	text-align: center;
-	${from.tablet} {
-		min-height: 20px;
-	}
 `;
 
 export const ButtonCTA = css`
