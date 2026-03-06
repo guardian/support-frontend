@@ -1,5 +1,4 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { fetchAnalyticsUserProfile } from '../../analytics/analyticsUserProfile';
 import { CountryGroup } from '../../internationalisation/classes/countryGroup';
 import {
 	countryGroupMatches,
@@ -9,16 +8,11 @@ import {
 import type { PageParticipationsConfig, PageTest } from '../models';
 import { getMvtId } from '../mvt';
 import { getPageParticipations } from '../pageParticipations';
-import type { Key } from '../sessionStorage';
 import {
 	getSessionParticipations,
+	type Key,
 	setSessionParticipations,
 } from '../sessionStorage';
-
-jest.mock('../../analytics/analyticsUserProfile', () => ({
-	__esModule: true,
-	fetchAnalyticsUserProfile: jest.fn(),
-}));
 
 jest.mock('../../internationalisation/classes/countryGroup', () => ({
 	__esModule: true,
@@ -56,7 +50,6 @@ const mockGetParticipationFromQueryString = jest.mocked(
 const mockRandomNumber = jest.mocked(randomNumber);
 const mockGetSessionParticipations = jest.mocked(getSessionParticipations);
 const mockSetSessionParticipations = jest.mocked(setSessionParticipations);
-const mockFetchAnalyticsUserProfile = jest.mocked(fetchAnalyticsUserProfile);
 
 interface TestVariant {
 	name: string;
@@ -122,11 +115,6 @@ describe('getPageParticipations', () => {
 		mockGetParticipationFromQueryString.mockReturnValue(undefined);
 		mockRandomNumber.mockReturnValue(0);
 		mockGetSessionParticipations.mockReturnValue(undefined);
-		mockFetchAnalyticsUserProfile.mockResolvedValue({
-			hasMobileAppDownloaded: false,
-			hasFeastMobileAppDownloaded: false,
-			audienceMemberships: [],
-		});
 	});
 
 	afterEach(() => {
@@ -134,7 +122,7 @@ describe('getPageParticipations', () => {
 	});
 
 	describe('URL query string forced participation', () => {
-		it('returns forced participation from query string', async () => {
+		it('returns forced participation from query string', () => {
 			const variant1 = createTestVariant('control', 'control-value');
 			const variant2 = createTestVariant('variant-a', 'variant-a-value');
 			const test = createPageTest('test-1', [variant1, variant2]);
@@ -145,7 +133,7 @@ describe('getPageParticipations', () => {
 				'test-1': 'control',
 			});
 
-			const result = await getPageParticipations(config);
+			const result = getPageParticipations(config);
 
 			expect(result).toEqual({
 				participations: { 'test-1': 'control' },
@@ -157,7 +145,7 @@ describe('getPageParticipations', () => {
 			);
 		});
 
-		it('returns fallback variant when forced participation test not found', async () => {
+		it('returns fallback variant when forced participation test not found', () => {
 			const test = createPageTest('test-1', [
 				createTestVariant('control', 'control-value'),
 			]);
@@ -175,7 +163,7 @@ describe('getPageParticipations', () => {
 				'test-2': 'control',
 			});
 
-			const result = await getPageParticipations(config);
+			const result = getPageParticipations(config);
 
 			expect(result).toEqual({
 				participations: { 'test-2': 'control' },
@@ -183,7 +171,7 @@ describe('getPageParticipations', () => {
 			});
 		});
 
-		it('returns fallback variant when forced variant name not found in test', async () => {
+		it('returns fallback variant when forced variant name not found in test', () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant]);
 			const fallback = createFallbackVariant();
@@ -200,7 +188,7 @@ describe('getPageParticipations', () => {
 				'test-1': 'variant-b',
 			});
 
-			const result = await getPageParticipations(config);
+			const result = getPageParticipations(config);
 
 			expect(result).toEqual({
 				participations: { 'test-1': 'variant-b' },
@@ -210,7 +198,7 @@ describe('getPageParticipations', () => {
 	});
 
 	describe('Session storage participation', () => {
-		it('returns participation from session storage', async () => {
+		it('returns participation from session storage', () => {
 			const variant1 = createTestVariant('control', 'control-value');
 			const variant2 = createTestVariant('variant-a', 'variant-a-value');
 			const test = createPageTest('test-1', [variant1, variant2]);
@@ -219,7 +207,7 @@ describe('getPageParticipations', () => {
 			mockLocation('/test/page');
 			mockGetSessionParticipations.mockReturnValue({ 'test-1': 'variant-a' });
 
-			const result = await getPageParticipations(config);
+			const result = getPageParticipations(config);
 
 			expect(result).toEqual({
 				participations: { 'test-1': 'variant-a' },
@@ -230,7 +218,7 @@ describe('getPageParticipations', () => {
 			);
 		});
 
-		it('ignores empty session storage participations', async () => {
+		it('ignores empty session storage participations', () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live', [
 				'GBPCountries',
@@ -241,13 +229,13 @@ describe('getPageParticipations', () => {
 			mockGetSessionParticipations.mockReturnValue({});
 			mockCountryGroupMatches.mockReturnValue(true);
 
-			const result = await getPageParticipations(config);
+			const result = getPageParticipations(config);
 
 			expect(result.variant).toEqual(variant);
 			expect(mockCountryGroupMatches).toHaveBeenCalled();
 		});
 
-		it('returns fallback when session storage variant not found', async () => {
+		it('returns fallback when session storage variant not found', () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant]);
 			const fallback = createFallbackVariant();
@@ -264,7 +252,7 @@ describe('getPageParticipations', () => {
 				'test-1': 'non-existent-variant',
 			});
 
-			const result = await getPageParticipations(config);
+			const result = getPageParticipations(config);
 
 			expect(result).toEqual({
 				participations: { 'test-1': 'non-existent-variant' },
@@ -274,7 +262,7 @@ describe('getPageParticipations', () => {
 	});
 
 	describe('New test assignment', () => {
-		it('assigns user to a live test matching their country group', async () => {
+		it('assigns user to a live test matching their country group', () => {
 			const variant1 = createTestVariant('control', 'control-value');
 			const variant2 = createTestVariant('variant-a', 'variant-a-value');
 			const test = createPageTest('test-1', [variant1, variant2], 'Live', [
@@ -287,7 +275,7 @@ describe('getPageParticipations', () => {
 			mockCountryGroupMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(1);
 
-			const result = await getPageParticipations(config);
+			const result = getPageParticipations(config);
 
 			expect(result).toEqual({
 				participations: { 'test-1': 'variant-a' },
@@ -300,7 +288,7 @@ describe('getPageParticipations', () => {
 			);
 		});
 
-		it('filters out draft tests', async () => {
+		it('filters out draft tests', () => {
 			const draftVariant = createTestVariant('draft', 'draft-value');
 			const draftTest = createPageTest('draft-test', [draftVariant], 'Draft', [
 				'GBPCountries',
@@ -317,13 +305,13 @@ describe('getPageParticipations', () => {
 			mockLocation('/test/page');
 			mockDetect.mockReturnValue('GBPCountries');
 
-			const result = await getPageParticipations(config);
+			const result = getPageParticipations(config);
 
 			expect(result.variant).toEqual(fallback);
 			expect(mockCountryGroupMatches).not.toHaveBeenCalled();
 		});
 
-		it('returns first matching live test', async () => {
+		it('returns first matching live test', () => {
 			const variant1 = createTestVariant('control-1', 'control-1-value');
 			const variant2 = createTestVariant('control-2', 'control-2-value');
 			const test1 = createPageTest('test-1', [variant1], 'Live', [
@@ -341,7 +329,7 @@ describe('getPageParticipations', () => {
 				.mockReturnValueOnce(true);
 			mockRandomNumber.mockReturnValue(0);
 
-			const result = await getPageParticipations(config);
+			const result = getPageParticipations(config);
 
 			expect(result).toEqual({
 				participations: { 'test-2': 'control-2' },
@@ -349,7 +337,7 @@ describe('getPageParticipations', () => {
 			});
 		});
 
-		it('stores participation in session storage', async () => {
+		it('stores participation in session storage', () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live', [
 				'GBPCountries',
@@ -361,7 +349,7 @@ describe('getPageParticipations', () => {
 			mockCountryGroupMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 
-			await getPageParticipations(config);
+			getPageParticipations(config);
 
 			expect(mockSetSessionParticipations).toHaveBeenCalledWith(
 				{ 'test-1': 'control' },
@@ -371,7 +359,7 @@ describe('getPageParticipations', () => {
 	});
 
 	describe('Fallback behavior', () => {
-		it('returns fallback when no test matches country group', async () => {
+		it('returns fallback when no test matches country group', () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live', [
 				'UnitedStates',
@@ -389,7 +377,7 @@ describe('getPageParticipations', () => {
 			mockDetect.mockReturnValue('GBPCountries');
 			mockCountryGroupMatches.mockReturnValue(false);
 
-			const result = await getPageParticipations(config);
+			const result = getPageParticipations(config);
 
 			expect(result).toEqual({
 				participations: { FALLBACK_TEST: 'variant-fallback' },
@@ -397,7 +385,7 @@ describe('getPageParticipations', () => {
 			});
 		});
 
-		it('returns fallback when no tests are configured', async () => {
+		it('returns fallback when no tests are configured', () => {
 			const fallback = createFallbackVariant();
 			const config = createConfig(
 				[],
@@ -409,7 +397,7 @@ describe('getPageParticipations', () => {
 
 			mockLocation('/test/page');
 
-			const result = await getPageParticipations(config);
+			const result = getPageParticipations(config);
 
 			expect(result).toEqual({
 				participations: { FALLBACK_TEST: 'variant-fallback' },
@@ -417,7 +405,7 @@ describe('getPageParticipations', () => {
 			});
 		});
 
-		it('passes country group ID to fallback variant function', async () => {
+		it('passes country group ID to fallback variant function', () => {
 			const fallbackFn = jest.fn((countryGroupId: CountryGroupId) =>
 				createFallbackVariant(countryGroupId),
 			);
@@ -432,7 +420,7 @@ describe('getPageParticipations', () => {
 			mockLocation('/test/page');
 			mockDetect.mockReturnValue('AUDCountries');
 
-			const result = await getPageParticipations(config);
+			const result = getPageParticipations(config);
 
 			expect(fallbackFn).toHaveBeenCalledWith('AUDCountries');
 			expect(result.variant.name).toBe('variant-AUDCountries');
@@ -440,7 +428,7 @@ describe('getPageParticipations', () => {
 	});
 
 	describe('Config properties', () => {
-		it('uses custom getVariantName function', async () => {
+		it('uses custom getVariantName function', () => {
 			const variant = createTestVariant('control', 'custom-name');
 			const test = createPageTest('test-1', [variant], 'Live', [
 				'GBPCountries',
@@ -460,12 +448,12 @@ describe('getPageParticipations', () => {
 			mockCountryGroupMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 
-			const result = await getPageParticipations(config);
+			const result = getPageParticipations(config);
 
 			expect(result.participations).toEqual({ 'test-1': 'custom-name' });
 		});
 
-		it('uses custom fallback participation key', async () => {
+		it('uses custom fallback participation key', () => {
 			const fallback = createFallbackVariant();
 			const config = createConfig(
 				[],
@@ -478,14 +466,14 @@ describe('getPageParticipations', () => {
 
 			mockLocation('/test/page');
 
-			const result = await getPageParticipations(config);
+			const result = getPageParticipations(config);
 
 			expect(result.participations).toEqual({
 				CUSTOM_FALLBACK_KEY: 'variant-fallback',
 			});
 		});
 
-		it('uses custom session storage key', async () => {
+		it('uses custom session storage key', () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live', [
 				'GBPCountries',
@@ -502,7 +490,7 @@ describe('getPageParticipations', () => {
 			mockCountryGroupMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 
-			await getPageParticipations(config);
+			getPageParticipations(config);
 
 			expect(mockSetSessionParticipations).toHaveBeenCalledWith(
 				{ 'test-1': 'control' },
@@ -515,7 +503,7 @@ describe('getPageParticipations', () => {
 	});
 
 	describe('Edge cases', () => {
-		it('handles variant with null/undefined properties gracefully', async () => {
+		it('handles variant with null/undefined properties gracefully', () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live', [
 				'GBPCountries',
@@ -527,13 +515,13 @@ describe('getPageParticipations', () => {
 			mockCountryGroupMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 
-			const result = await getPageParticipations(config);
+			const result = getPageParticipations(config);
 
 			expect(result.variant).toBeDefined();
 			expect(result.participations).toBeDefined();
 		});
 
-		it('handles test without region targeting', async () => {
+		it('handles test without region targeting', () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live');
 			const config = createConfig([test]);
@@ -542,12 +530,12 @@ describe('getPageParticipations', () => {
 			mockCountryGroupMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 
-			const result = await getPageParticipations(config);
+			const result = getPageParticipations(config);
 
 			expect(result.variant).toEqual(variant);
 		});
 
-		it('returns fallback when variant is undefined in test', async () => {
+		it('returns fallback when variant is undefined in test', () => {
 			const test = createPageTest('test-1', [], 'Live', ['GBPCountries']);
 			const fallback = createFallbackVariant();
 			const config = createConfig(
@@ -563,12 +551,12 @@ describe('getPageParticipations', () => {
 			mockCountryGroupMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 
-			const result = await getPageParticipations(config);
+			const result = getPageParticipations(config);
 
 			expect(result.variant).toEqual(fallback);
 		});
 
-		it('handles empty pathname', async () => {
+		it('handles empty pathname', () => {
 			const fallback = createFallbackVariant();
 			const config = createConfig(
 				[],
@@ -580,108 +568,10 @@ describe('getPageParticipations', () => {
 
 			mockLocation('');
 
-			const result = await getPageParticipations(config);
+			const result = getPageParticipations(config);
 
 			expect(result.participations).toEqual({});
 			expect(result.variant).toEqual(fallback);
-		});
-	});
-
-	describe('mParticle audience gating', () => {
-		const createAudienceTest = (
-			name: string,
-			variants: TestVariant[],
-			audienceId: number,
-		): PageTest<TestVariant> => ({
-			name,
-			status: 'Live',
-			mParticleAudience: audienceId,
-			variants,
-		});
-
-		it('returns test variant when user is in the mParticle audience', async () => {
-			const variant = createTestVariant('control', 'control-value');
-			const test = createAudienceTest('test-1', [variant], 42);
-			const config = createConfig([test]);
-
-			mockLocation('/test/page');
-			mockDetect.mockReturnValue('GBPCountries');
-			mockCountryGroupMatches.mockReturnValue(true);
-			mockRandomNumber.mockReturnValue(0);
-			mockFetchAnalyticsUserProfile.mockResolvedValue({
-				hasMobileAppDownloaded: false,
-				hasFeastMobileAppDownloaded: false,
-				audienceMemberships: [42],
-			});
-
-			const result = await getPageParticipations(config);
-
-			expect(result.variant).toEqual(variant);
-			expect(result.participations).toEqual({ 'test-1': 'control' });
-		});
-
-		it('returns fallback when user is NOT in the mParticle audience', async () => {
-			const variant = createTestVariant('control', 'control-value');
-			const fallback = createFallbackVariant();
-			const test = createAudienceTest('test-1', [variant], 42);
-			const config = createConfig(
-				[test],
-				'^/test/page$',
-				'force-test',
-				'landingPageParticipations',
-				() => fallback,
-			);
-
-			mockLocation('/test/page');
-			mockDetect.mockReturnValue('GBPCountries');
-			mockCountryGroupMatches.mockReturnValue(true);
-			mockFetchAnalyticsUserProfile.mockResolvedValue({
-				hasMobileAppDownloaded: false,
-				hasFeastMobileAppDownloaded: false,
-				audienceMemberships: [99],
-			});
-
-			const result = await getPageParticipations(config);
-
-			expect(result.variant).toEqual(fallback);
-			expect(mockSetSessionParticipations).not.toHaveBeenCalled();
-		});
-
-		it('honours session participation even when user is not in the mParticle audience', async () => {
-			const variant = createTestVariant('control', 'control-value');
-			const fallback = createFallbackVariant();
-			const test = createAudienceTest('test-1', [variant], 42);
-			const config = createConfig(
-				[test],
-				'^/test/page$',
-				'force-test',
-				'landingPageParticipations',
-				() => fallback,
-			);
-
-			mockLocation('/test/page');
-			mockGetSessionParticipations.mockReturnValue({ 'test-1': 'control' });
-
-			const result = await getPageParticipations(config);
-
-			expect(result.variant).toEqual(variant);
-			expect(mockFetchAnalyticsUserProfile).not.toHaveBeenCalled();
-		});
-
-		it('bypasses audience check for URL-forced participations', async () => {
-			const variant = createTestVariant('control', 'control-value');
-			const test = createAudienceTest('test-1', [variant], 42);
-			const config = createConfig([test]);
-
-			mockLocation('/test/page', '?force-test=test-1:control');
-			mockGetParticipationFromQueryString.mockReturnValue({
-				'test-1': 'control',
-			});
-
-			const result = await getPageParticipations(config);
-
-			expect(result.participations).toEqual({ 'test-1': 'control' });
-			expect(mockFetchAnalyticsUserProfile).not.toHaveBeenCalled();
 		});
 	});
 });
