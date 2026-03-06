@@ -126,6 +126,7 @@ export function SubmitButton({
 						}}
 						commit={true}
 						validate={({ disable, enable }) => {
+							/** We run this initially to set the button to the correct state */
 							const valid = formRef.current?.checkValidity();
 							if (valid) {
 								enable();
