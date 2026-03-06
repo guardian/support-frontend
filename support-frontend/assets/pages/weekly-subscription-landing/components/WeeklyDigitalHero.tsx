@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import {
-	palette,
 	from,
 	headlineBold28,
+	palette,
 	space,
 	textSansBold17,
 } from '@guardian/source/foundations';
@@ -13,7 +13,7 @@ import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
 import { type PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { getFirstParagraph } from './contentHelpers';
+import { getFirstParagraph, getRegionalTitle } from './contentHelpers';
 
 const pageTitleSpacing = css`
 	padding-bottom: ${space[8]}px;
@@ -48,7 +48,17 @@ export default function WeeklyDigitalHero({
 	enableWeeklyDigital: boolean;
 }) {
 	const { roundel, title } = promotion;
-	const description = getFirstParagraph(promotion);
+	const fallbackDescription = enableWeeklyDigital ? (
+		<>
+			'Discover our global print magazine, showcasing the best of our reporting,
+			analysis, opinion and culture—beautifully designed for a more reflective
+			read. With your subscription, you also get full digital access, including
+			ad-free news, thousands of Feast recipes and more, all while supporting
+			the Guardian’s independent journalism.'
+		</>
+	) : undefined;
+	const fallbackTitle = getRegionalTitle(countryGroupId, enableWeeklyDigital);
+	const description = getFirstParagraph(promotion) ?? fallbackDescription;
 
 	const roundelComponent = (
 		<OfferStrapline
@@ -59,16 +69,6 @@ export default function WeeklyDigitalHero({
 			]}
 		/>
 	);
-
-	const fallbackDescription = enableWeeklyDigital
-		? 'Discover our global print magazine, showcasing the best of our reporting, analysis, opinion and culture—beautifully designed for a more reflective read. With your subscription, you also get full digital access, including ad-free news, thousands of Feast recipes and more, all while supporting the Guardian’s independent journalism.'
-		: '';
-	const description = promotionDescription
-		? promotionHTML(promotionDescription, {
-				tag: 'p',
-		  })
-		: fallbackDescription;
-	const fallbackTitle = getRegionalTitle(countryGroupId, enableWeeklyDigital);
 
 	return (
 		<PageTitle
@@ -112,7 +112,7 @@ export default function WeeklyDigitalHero({
 				}
 				roundel={roundelComponent}
 				title={title ?? fallbackTitle}
-				description={description ?? undefined}
+				description={description}
 				ctaText="See pricing options"
 				ctaLink="#subscribe"
 				onClick={() =>

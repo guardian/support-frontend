@@ -40,7 +40,7 @@ const termsLinkStyle = css`
 `;
 
 const weeklyTermsAndConditionsLink = () =>
-	termsLink('Terms and Conditions', guardianWeeklyTermsLink);
+	textLink('Terms and Conditions', guardianWeeklyTermsLink);
 
 type WeeklyPriceInfoProps = {
 	isGift?: boolean;
