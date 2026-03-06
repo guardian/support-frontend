@@ -19,11 +19,17 @@ case class AnalyticsUserProfileResponse(
     identityId: String,
     hasMobileAppDownloaded: Boolean,
     hasFeastMobileAppDownloaded: Boolean,
-    audienceMemberships: List[Int],
 )
 
 object AnalyticsUserProfileResponse {
   implicit val encoder: Encoder[AnalyticsUserProfileResponse] = deriveEncoder
+}
+
+case class AudienceMembershipsResponse(
+    audienceMemberships: List[Int],
+)
+object AudienceMembershipsResponse {
+  implicit val encoder: Encoder[AudienceMembershipsResponse] = deriveEncoder
 }
 
 case class IsAudienceMemberResponse(
@@ -44,6 +50,7 @@ class AnalyticsController(
 
   import actionRefiners._
   import AnalyticsUserProfileResponse._
+  import AudienceMembershipsResponse._
   import IsAudienceMemberResponse._
 
   type AuthenticatedUserRequest[A] = AuthenticatedRequest[A, User]
@@ -71,13 +78,28 @@ class AnalyticsController(
             identityId = request.user.id,
             hasMobileAppDownloaded = userProfile.hasMobileAppDownloaded,
             hasFeastMobileAppDownloaded = userProfile.hasFeastMobileAppDownloaded,
-            audienceMemberships = userProfile.audienceMemberships,
           )
           Ok(response.asJson)
         }
         .recover { ex =>
           logger.error(scrub"Failed to get mParticle user profile: ${ex.getMessage}", ex)
           InternalServerError("Error getting user profile")
+        }
+    }
+
+  /** Gets all mparticle audience memberships for the user. This should only be used if the user has consented for
+    * targeting.
+    */
+  def getAudienceMemberships(): Action[AnyContent] =
+    (MaybeAuthenticatedAction andThen RequireAuthenticatedUser).async { implicit request =>
+      mparticleClient
+        .getAudienceMemberships(request.user.id)
+        .map { response =>
+          Ok(AudienceMembershipsResponse(response).asJson)
+        }
+        .recover { ex =>
+          logger.error(scrub"Failed to get mParticle audience memberships: ${ex.getMessage}", ex)
+          InternalServerError("Error getting audience memberships")
         }
     }
 

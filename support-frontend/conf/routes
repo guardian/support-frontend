@@ -148,6 +148,8 @@ GET /prices                                                       controllers.Pr
 
 # ----- Analytics API (mParticle) ----- #
 GET /analytics-user-profile                                       controllers.AnalyticsController.getAnalyticsUserProfile()
+
+GET /audience-memberships                                         controllers.AnalyticsController.getAudienceMemberships()
 # This endpoint should only be used if the user has consented for targeting -
 GET /audience/:id/member                                          controllers.AnalyticsController.isAudienceMember(id: Int)
 
