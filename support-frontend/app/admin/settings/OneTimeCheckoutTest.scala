@@ -22,6 +22,7 @@ case class OneTimeCheckoutTest(
     status: Status,
     priority: Int,
     regionTargeting: Option[RegionTargeting],
+    mParticleAudience: Option[Int] = None,
     variants: List[OneTimeCheckoutVariant],
 )
 

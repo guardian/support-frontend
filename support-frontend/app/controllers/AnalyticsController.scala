@@ -19,6 +19,7 @@ case class AnalyticsUserProfileResponse(
     identityId: String,
     hasMobileAppDownloaded: Boolean,
     hasFeastMobileAppDownloaded: Boolean,
+    audienceMemberships: List[Int],
 )
 
 object AnalyticsUserProfileResponse {
@@ -70,6 +71,7 @@ class AnalyticsController(
             identityId = request.user.id,
             hasMobileAppDownloaded = userProfile.hasMobileAppDownloaded,
             hasFeastMobileAppDownloaded = userProfile.hasFeastMobileAppDownloaded,
+            audienceMemberships = userProfile.audienceMemberships,
           )
           Ok(response.asJson)
         }

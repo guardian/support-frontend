@@ -18,5 +18,6 @@ export interface OneTimeCheckoutTest {
 	name: string;
 	status: 'Live' | 'Draft';
 	regionTargeting?: RegionTargeting;
+	mParticleAudience?: number;
 	variants: OneTimeCheckoutVariant[];
 }
