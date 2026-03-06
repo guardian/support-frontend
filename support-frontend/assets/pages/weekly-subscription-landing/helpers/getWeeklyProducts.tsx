@@ -217,6 +217,7 @@ export const getWeeklyDigitalRatePlans = ({
 			price: fullPriceWithCurrency,
 			discountedPrice: discountPriceWithCurrency,
 			billingPeriodNoun: getBillingPeriodNoun(billingPeriod),
+			billingPeriod,
 			discountSummary,
 			priceCopy: '',
 			savingsText,

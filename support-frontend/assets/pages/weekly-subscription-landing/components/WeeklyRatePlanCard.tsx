@@ -2,6 +2,7 @@ import {
 	LinkButton,
 	themeButtonReaderRevenue,
 } from '@guardian/source/react-components';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useEffect } from 'react';
 import type { Product } from 'components/product/productOption';
 import { usePromoTerms } from 'contexts/PromoTermsContext';
@@ -25,6 +26,7 @@ function WeeklyRatePlanCard(ratePlan: Product) {
 		price,
 		discountedPrice,
 		billingPeriodNoun,
+		billingPeriod,
 		discountSummary,
 		savingsText,
 		roundel,
@@ -51,7 +53,10 @@ function WeeklyRatePlanCard(ratePlan: Product) {
 
 	useEffect(() => {
 		const { setPromoTerms } = usePromoTerms();
-		const promoTerm = `Introductory offer for quarterly subscriptions is ${discountedPrice} for the first quarter, then ${price}/quarter afterwards unless you cancel. Offer only available to new subscribers who do not have an existing subscription with the Guardian Weekly. Offer ends 12th April 2026.`;
+		const promoTerm =
+			billingPeriod === BillingPeriod.Quarterly
+				? `Introductory offer for quarterly subscriptions is ${discountedPrice} for the first quarter, then ${price}/quarter afterwards unless you cancel. Offer only available to new subscribers who do not have an existing subscription with the Guardian Weekly. Offer ends 12th April 2026.`
+				: null;
 		if (hasPromotion) {
 			setPromoTerms(promoTerm);
 		}
