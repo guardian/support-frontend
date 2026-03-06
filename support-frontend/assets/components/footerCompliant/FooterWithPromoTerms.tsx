@@ -9,7 +9,6 @@ import type { ReactNode } from 'react';
 import { usePromoTerms } from 'contexts/PromoTermsContext';
 import { guardianWeeklyTermsLink } from 'helpers/legal';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { promotionTermsUrl } from 'helpers/urls/routes';
 import Footer from './Footer';
@@ -164,7 +163,6 @@ function GuardianWeeklyFooter({
 	productPrices: ProductPrices;
 	country: IsoCountry;
 	orderIsAGift: boolean;
-	promotion?: Promotion | null;
 	enableWeeklyDigital: boolean;
 }) {
 	const weeklyFulfillmentOption = Domestic;
