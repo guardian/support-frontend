@@ -326,6 +326,7 @@ class Application(
 
   def studentLanding(
       countryCode: String,
+      institution: String,
       campaignCode: String,
   ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
@@ -416,7 +417,7 @@ class Application(
       mainElement = mainElement,
       js = RefPath("[countryGroupId]/router.js"),
       description =
-        if (pageName.startsWith("student")) stringsConfig.studentLandingDescription
+        if (pageName.startsWith("student")) stringsConfig.studentLandingDescription // TODO: doesn't exist
         else stringsConfig.contributionsLandingDescription,
       paymentMethodConfigs = PaymentMethodConfigs(
         oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),

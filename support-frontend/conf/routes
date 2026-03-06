@@ -46,8 +46,9 @@ GET  /contribute/:campaignCode                                     controllers.A
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute                 controllers.Application.contributionsLanding(country: String, campaignCode = "")
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/:campaignCode   controllers.Application.contributionsLanding(country: String, campaignCode: String)
 
-GET  /au/student/UTS                                               controllers.Application.studentLanding(country = "au", campaignCode = "")
-GET  /$country<(uk|us|ca)>/student                                 controllers.Application.studentLanding(country: String, campaignCode = "")
+GET  /au/student/UTS                                               controllers.Application.studentLanding(country = "au", institution = "", campaignCode = "")
+GET  /$country<(uk|us|ca)>/student                                 controllers.Application.studentLanding(country: String, institution = "", campaignCode = "")
+GET  /$country<(au|nz)>/student/:institution                       controllers.Application.studentLanding(country: String, institution: String, campaignCode = "")
 
 GET  /aus-2020-map                                                 controllers.Application.ausMomentMap()
 GET  /aus-map                                                      controllers.Application.ausMomentMap()
