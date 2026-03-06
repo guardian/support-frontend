@@ -96,7 +96,6 @@ class OneTimeCheckoutTestServiceSpec extends AsyncFlatSpec with Matchers {
             targetedCountryGroups = List("GBPCountries", "UnitedStates"),
           ),
         ),
-        mParticleAudience = None,
         variants = List(
           OneTimeCheckoutVariant(
             name = "control",
@@ -163,7 +162,6 @@ class OneTimeCheckoutTestServiceSpec extends AsyncFlatSpec with Matchers {
         status = Status.Draft,
         priority = 1,
         regionTargeting = None,
-        mParticleAudience = None,
         variants = List(
           OneTimeCheckoutVariant(
             name = "control",

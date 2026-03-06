@@ -231,7 +231,6 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
             targetedCountryGroups = List("GBPCountries"),
           ),
         ),
-        mParticleAudience = None,
         variants = List(
           LandingPageVariant(
             name = "control",
