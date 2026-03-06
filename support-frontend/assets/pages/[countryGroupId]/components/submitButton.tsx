@@ -52,8 +52,7 @@ const useFormIsValid = (
 	// We need to handle these payment methods slightly differently, because their
 	// button isn't part of the checkout form. We don't do this for all payment
 	// methods because it makes the validation a bit aggressive.
-	const shouldManageFormStateManually =
-		paymentMethod === 'PayPal' || paymentMethod === 'PayPalCompletePayments';
+	const shouldManageFormStateManually = paymentMethod === 'PayPalCompletePayments';
 
 	useEffect(() => {
 		if (shouldManageFormStateManually) {
@@ -72,12 +71,12 @@ const useFormIsValid = (
 		};
 
 		// We want to add the form change event listener when the user selects
-		// PayPal or PPCP, but we we also want to keep it if the user then
-		// switches to another payment method, so that if they then fix any form
-		// errors, the errors go away. That's why we don't remove us in a
-		// cleanup handler returned from the useEffect. This behaves similarly
-		// to the previous version of this code where the event listener was
-		// added in the validate callpack prop of the PayPalButton component.
+		// PPCP, but we we also want to keep it if the user then switches to
+		// another payment method, so that if they then fix any form errors, the
+		// errors go away. That's why we don't remove us in a cleanup handler
+		// returned from the useEffect. This behaves similarly to the previous
+		// version of this code where the event listener was added in the
+		// validate callpack prop of the PayPalButton component.
 		if (shouldManageFormStateManually && !hasAddedEventListener) {
 			// And then run it on form change
 			formRef.current?.addEventListener('change', callback);
@@ -107,7 +106,7 @@ export function SubmitButton({
 	setErrorMessage,
 	setErrorContext,
 }: SubmitButtonProps) {
-	// We only need this for PayPal and PayPalCompletePayments
+	// We only need this for PayPalCompletePayments
 	const formIsValid = useFormIsValid(paymentMethod, formRef);
 
 	switch (paymentMethod) {
@@ -128,11 +127,28 @@ export function SubmitButton({
 						}}
 						commit={true}
 						validate={({ disable, enable }) => {
-							if (formIsValid) {
+							const valid = formRef.current?.checkValidity();
+							if (valid) {
 								enable();
 							} else {
 								disable();
 							}
+
+							/** And then run it on form change */
+							formRef.current?.addEventListener('change', (event) => {
+								const element = event.currentTarget as HTMLFormElement;
+								/* We call this twice because the first time does not
+								not give us an accurate state of the form.
+								This seems to be because we use `setCustomValidity` on the elements */
+								element.checkValidity();
+								const valid = element.checkValidity();
+
+								if (valid) {
+									enable();
+								} else {
+									disable();
+								}
+							});
 						}}
 						funding={{
 							disallowed: [
@@ -144,7 +160,8 @@ export function SubmitButton({
 							// isn't valid but we can check here and if invalid
 							// the browser will scroll the user to the first
 							// error if necessary
-							if (!formIsValid) {
+							const valid = formRef.current?.checkValidity();
+							if (!valid) {
 								/** We run this so the form validation happens and focus on errors */
 								formRef.current?.requestSubmit();
 							}
