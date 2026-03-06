@@ -4,6 +4,7 @@ import {
 } from '@guardian/source/react-components';
 import { useEffect } from 'react';
 import type { Product } from 'components/product/productOption';
+import { usePromoTerms } from 'contexts/PromoTermsContext';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 import {
 	ButtonCTA,
@@ -47,6 +48,14 @@ function WeeklyRatePlanCard(ratePlan: Product) {
 	useEffect(() => {
 		hasBeenSeen && onView();
 	}, [hasBeenSeen]);
+
+	useEffect(() => {
+		const { setPromoTerms } = usePromoTerms();
+		const promoTerm = `Introductory offer for quarterly subscriptions is ${discountedPrice} for the first quarter, then ${price}/quarter afterwards unless you cancel. Offer only available to new subscribers who do not have an existing subscription with the Guardian Weekly. Offer ends 12th April 2026.`;
+		if (hasPromotion) {
+			setPromoTerms(promoTerm);
+		}
+	}, [hasPromotion]);
 
 	return (
 		<div ref={setElementToObserve} css={[card, roundel && cardWithLabel]}>
