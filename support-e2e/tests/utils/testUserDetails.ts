@@ -127,6 +127,11 @@ export const setTestUserDetails = async (
 			.getByLabel(stateLabel)
 			.selectOption({ label: testFields.addresses[0].state });
 	}
+	if (internationalisationId === 'US' && testFields.addresses) {
+		await page
+			.getByLabel('ZIP code')
+			.fill(testFields.addresses[0].postCode ?? '');
+	}
 	const checkboxLabel = isWeeklyGift
 		? "Billing address same as recipient's address"
 		: 'Billing address same as delivery address'; // WeeklyGift has different text
