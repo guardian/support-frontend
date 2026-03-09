@@ -1,4 +1,6 @@
-import { Duration, Stack, type StackProps } from "aws-cdk-lib";
+import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
+import { GuStack } from "@guardian/cdk/lib/constructs/core";
+import { type App, Duration } from "aws-cdk-lib";
 import { Rule, Schedule } from "aws-cdk-lib/aws-events";
 import { SfnStateMachine } from "aws-cdk-lib/aws-events-targets";
 import {
@@ -22,18 +24,9 @@ import {
   WaitTime,
 } from "aws-cdk-lib/aws-stepfunctions";
 import { LambdaInvoke } from "aws-cdk-lib/aws-stepfunctions-tasks";
-import type { Construct } from "constructs";
 
-interface SupporterProductDataStackProps extends StackProps {
-  stage: "CODE" | "PROD";
-}
-
-export class SupporterProductDataStack extends Stack {
-  constructor(
-    scope: Construct,
-    id: string,
-    props: SupporterProductDataStackProps
-  ) {
+export class SupporterProductDataTypescript extends GuStack {
+  constructor(scope: App, id: string, props: GuStackProps) {
     super(scope, id, props);
 
     const artifactBucket = Bucket.fromBucketName(
@@ -44,7 +37,7 @@ export class SupporterProductDataStack extends Stack {
 
     const lambdaArtifact = Code.fromBucket(
       artifactBucket,
-      `support/${props.stage}/supporter-product-data-typescript/supporter-product-data-typescript.zip`
+      `support/${this.stage}/supporter-product-data-typescript/supporter-product-data-typescript.zip`
     );
 
     const lambdaRole = new Role(this, "SupporterProductDataLambdaRole", {
@@ -69,7 +62,7 @@ export class SupporterProductDataStack extends Stack {
                 "ssm:PutParameter",
               ],
               resources: [
-                `arn:aws:ssm:${this.region}:${this.account}:parameter/supporter-product-data/${props.stage}/*`,
+                `arn:aws:ssm:${this.region}:${this.account}:parameter/supporter-product-data/${this.stage}/*`,
               ],
             }),
           ],
@@ -78,29 +71,29 @@ export class SupporterProductDataStack extends Stack {
     });
 
     const queryZuora = new Function(this, "QueryZuoraLambda", {
-      functionName: `support-SupporterProductDataTsQueryZuora-${props.stage}`,
+      functionName: `support-SupporterProductDataTsQueryZuora-${this.stage}`,
       runtime: Runtime.NODEJS_22_X,
       handler: "queryZuoraLambda.handler",
       code: lambdaArtifact,
       timeout: Duration.minutes(5),
       memorySize: 512,
       role: lambdaRole,
-      environment: { STAGE: props.stage },
+      environment: { STAGE: this.stage },
     });
 
     const fetchResults = new Function(this, "FetchResultsLambda", {
-      functionName: `support-SupporterProductDataTsFetchResults-${props.stage}`,
+      functionName: `support-SupporterProductDataTsFetchResults-${this.stage}`,
       runtime: Runtime.NODEJS_22_X,
       handler: "fetchResultsLambda.handler",
       code: lambdaArtifact,
       timeout: Duration.minutes(5),
       memorySize: 512,
       role: lambdaRole,
-      environment: { STAGE: props.stage },
+      environment: { STAGE: this.stage },
     });
 
     const queue = new Queue(this, "SupporterProductDataQueue", {
-      queueName: `supporter-product-data-typescript-${props.stage}`,
+      queueName: `supporter-product-data-typescript-${this.stage}`,
       visibilityTimeout: Duration.seconds(300),
     });
 
@@ -108,14 +101,14 @@ export class SupporterProductDataStack extends Stack {
       this,
       "AddSupporterRatePlanItemToQueueLambda",
       {
-        functionName: `support-SPDTS-AddToQueue-${props.stage}`,
+        functionName: `support-SPDTS-AddToQueue-${this.stage}`,
         runtime: Runtime.NODEJS_22_X,
         handler: "addSupporterRatePlanItemToQueueLambda.handler",
         code: lambdaArtifact,
         timeout: Duration.minutes(10),
         memorySize: 1024,
         role: lambdaRole,
-        environment: { STAGE: props.stage, QUEUE_URL: queue.queueUrl },
+        environment: { STAGE: this.stage, QUEUE_URL: queue.queueUrl },
       }
     );
 
@@ -123,14 +116,14 @@ export class SupporterProductDataStack extends Stack {
       this,
       "ProcessSupporterRatePlanItemLambda",
       {
-        functionName: `support-SPDTS-ProcessItem-${props.stage}`,
+        functionName: `support-SPDTS-ProcessItem-${this.stage}`,
         runtime: Runtime.NODEJS_22_X,
         handler: "processSupporterRatePlanItemLambda.handler",
         code: lambdaArtifact,
         timeout: Duration.minutes(10),
         memorySize: 1024,
         role: lambdaRole,
-        environment: { STAGE: props.stage },
+        environment: { STAGE: this.stage },
       }
     );
 
@@ -180,17 +173,16 @@ export class SupporterProductDataStack extends Stack {
       this,
       "SupporterProductDataStateMachine",
       {
-        stateMachineName: `supporter-product-data-typescript-${props.stage}`,
+        stateMachineName: `supporter-product-data-typescript-${this.stage}`,
         definitionBody: DefinitionBody.fromChainable(definition),
       }
     );
 
-    const schedule =
-      props.stage === "PROD"
-        ? "cron(*/5 * ? * * *)"
-        : "cron(0 6 ? * MON-FRI *)";
+    const scheduleExpression =
+      this.stage === "PROD" ? "cron(*/5 * ? * * *)" : "cron(0 6 ? * MON-FRI *)";
+
     new Rule(this, "SupporterProductDataSchedule", {
-      schedule: Schedule.expression(schedule),
+      schedule: Schedule.expression(scheduleExpression),
       targets: [new SfnStateMachine(stateMachine)],
     });
   }

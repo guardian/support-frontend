@@ -20,7 +20,7 @@ const nextDay = (isoDate: string): string => {
 
 export class DynamoService {
   constructor(
-    private readonly stage: Stage,
+    stage: Stage,
     private readonly tableName = process.env
       .SUPPORTER_PRODUCT_DATA_TABLE_NAME ?? `SupporterProductData-${stage}`,
     private readonly client = new DynamoDBClient({

@@ -1,4 +1,8 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { defaultProvider } from "@aws-sdk/credential-provider-node";
 import type { Stage } from "../model/stage";
 
@@ -27,5 +31,20 @@ export class S3Service {
         ContentLength: length,
       })
     );
+  }
+
+  async getObjectAsString(stage: Stage, filename: string): Promise<string> {
+    const response = await this.s3Client.send(
+      new GetObjectCommand({
+        Bucket: bucketNameForStage(stage),
+        Key: filename,
+      })
+    );
+
+    if (response.Body === undefined) {
+      throw new Error(`Missing S3 body for ${filename}`);
+    }
+
+    return response.Body.transformToString();
   }
 }
