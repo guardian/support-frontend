@@ -39,7 +39,18 @@ function setUpTracking(participations: Participations): void {
 }
 
 function setUpTrackingAndConsents(participations: Participations): void {
-	void setUpConsent();
+	const countryId: IsoCountry = Country.detect();
+	getLocale()
+		.then((localeCode) => {
+			const country = localeCode ?? countryId;
+			// Initialise the consent management platform using the getLocale result
+			// If getLocale fails to determine a location, fall back to the country detected by the country module
+			void consentInitialisation(country);
+		})
+		.catch((e) => {
+			console.log(`An exception was thrown getting the localeCode: ${e}`);
+			void consentInitialisation(countryId);
+		});
 	setUpTracking(participations);
 	sendConsentToOphan();
 }
