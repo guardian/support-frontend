@@ -210,7 +210,7 @@ export const getWeeklyDigitalRatePlans = ({
 		// 		 This is a temporary solution until we have the ability to add custom copy for specific promotions in the promo tool.
 		const promotionRoundelText = promotion && 'Intro offer | 50% Off';
 		const defaultRoundelText =
-			billingPeriod === BillingPeriod.Quarterly ? 'best deal' : undefined;
+			billingPeriod === BillingPeriod.Annual ? 'Best value' : undefined;
 
 		return {
 			title: getBillingPeriodTitle(billingPeriod),
