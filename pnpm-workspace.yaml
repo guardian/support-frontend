@@ -5,6 +5,7 @@ packages:
   - 'support-e2e'
   - 'support-workers'
   - 'modules'
+  - 'supporter-product-data-typescript'
 onlyBuiltDependencies:
   - "@guardian/support-service-lambdas"
 catalog:
