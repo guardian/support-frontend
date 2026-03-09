@@ -190,7 +190,7 @@ export function Checkout({
 		payment = {
 			originalAmount: productPrice,
 			contributionAmount,
-			finalAmount: finalAmount,
+			finalAmount,
 		};
 	}
 
