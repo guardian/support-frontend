@@ -1,0 +1,138 @@
+import type { Handler, SQSEvent } from "aws-lambda";
+import { type Stage, stageFromEnvironment } from "../model/stage";
+import type {
+  ContributionAmount,
+  SupporterRatePlanItem,
+} from "../model/supporterRatePlanItem";
+import { AlarmService } from "../services/alarmService";
+import { ConfigService } from "../services/configService";
+import { DynamoService } from "../services/dynamoService";
+import {
+  type MinimalZuoraSubscription,
+  ZuoraSubscriptionService,
+} from "../services/zuoraSubscriptionService";
+
+const contributionIdsForStage = (stage: Stage): string[] =>
+  stage === "PROD"
+    ? ["2c92a0fc5aacfadd015ad24db4ff5e97", "2c92a0fc5e1dc084015e37f58c200eea"]
+    : ["2c92c0f85a6b134e015a7fcd9f0c7855", "2c92c0f85e2d19af015e3896e824092c"];
+
+const contributionAmountFromZuoraSubscription = (
+  subscription: MinimalZuoraSubscription,
+  contributionIds: string[]
+): ContributionAmount | undefined => {
+  const contributionRatePlan = subscription.ratePlans.find((ratePlan) =>
+    contributionIds.includes(ratePlan.id)
+  );
+  const firstCharge = contributionRatePlan?.ratePlanCharges[0];
+  if (firstCharge?.price === undefined) {
+    return undefined;
+  }
+
+  return {
+    amount: firstCharge.price,
+    currency: firstCharge.currency,
+  };
+};
+
+interface ProcessItemDeps {
+  discountIds: string[];
+  contributionIds: string[];
+  getSubscription: (
+    subscriptionName: string
+  ) => Promise<MinimalZuoraSubscription>;
+  writeItem: (item: SupporterRatePlanItem) => Promise<void>;
+  triggerDynamoWriteAlarm: () => Promise<void>;
+}
+
+const buildDeps = async (): Promise<ProcessItemDeps> => {
+  const stage = stageFromEnvironment();
+  const configService = new ConfigService(stage);
+  const config = await configService.loadZuoraConfig();
+
+  const subscriptionService = new ZuoraSubscriptionService(config);
+  const dynamoService = new DynamoService(stage);
+  const alarmService = new AlarmService(stage);
+
+  return {
+    discountIds: config.discountProductRatePlanIds,
+    contributionIds: contributionIdsForStage(stage),
+    getSubscription: (subscriptionName) =>
+      subscriptionService.getSubscription(subscriptionName),
+    writeItem: (item) => dynamoService.writeItem(item),
+    triggerDynamoWriteAlarm: () => alarmService.triggerDynamoWriteAlarm(),
+  };
+};
+
+const addContributionAmountIfNeeded = async (
+  item: SupporterRatePlanItem,
+  deps: Pick<ProcessItemDeps, "contributionIds" | "getSubscription">
+): Promise<SupporterRatePlanItem> => {
+  if (!deps.contributionIds.includes(item.productRatePlanId)) {
+    return item;
+  }
+
+  const subscription = await deps.getSubscription(item.subscriptionName);
+  const contributionAmount = contributionAmountFromZuoraSubscription(
+    subscription,
+    deps.contributionIds
+  );
+
+  return {
+    ...item,
+    contributionAmount,
+  };
+};
+
+export const processItem = async (
+  item: SupporterRatePlanItem,
+  deps: ProcessItemDeps
+): Promise<void> => {
+  if (deps.discountIds.includes(item.productRatePlanId)) {
+    console.info("Supporter rate plan item is a discount and will be skipped", {
+      subscriptionName: item.subscriptionName,
+      productRatePlanId: item.productRatePlanId,
+    });
+    return;
+  }
+
+  try {
+    const itemWithContribution = await addContributionAmountIfNeeded(
+      item,
+      deps
+    );
+    await deps.writeItem(itemWithContribution);
+  } catch (error) {
+    console.error("Error writing item to Dynamo", {
+      subscriptionName: item.subscriptionName,
+      identityId: item.identityId,
+      error,
+    });
+    await deps.triggerDynamoWriteAlarm();
+  }
+};
+
+const parseItem = (body: string): SupporterRatePlanItem => {
+  try {
+    return JSON.parse(body) as SupporterRatePlanItem;
+  } catch {
+    throw new Error(
+      `Couldn't decode a SupporterRatePlanItem with body: ${body}`
+    );
+  }
+};
+
+export const processEvent = async (
+  event: SQSEvent,
+  deps: ProcessItemDeps
+): Promise<void> => {
+  await Promise.all(
+    event.Records.map(async (record) => {
+      const item = parseItem(record.body);
+      await processItem(item, deps);
+    })
+  );
+};
+
+export const handler: Handler<SQSEvent, void> = (event) =>
+  buildDeps().then((deps) => processEvent(event, deps));

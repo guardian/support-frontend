@@ -1,0 +1,71 @@
+import {
+  DynamoDBClient,
+  UpdateItemCommand,
+  type UpdateItemCommandInput,
+} from "@aws-sdk/client-dynamodb";
+import { defaultProvider } from "@aws-sdk/credential-provider-node";
+import type { Stage } from "../model/stage";
+import type { SupporterRatePlanItem } from "../model/supporterRatePlanItem";
+
+const epochSecondFromIsoDate = (isoDate: string): string => {
+  const atMidnight = new Date(`${isoDate}T00:00:00.000Z`);
+  return Math.floor(atMidnight.getTime() / 1000).toString();
+};
+
+const nextDay = (isoDate: string): string => {
+  const date = new Date(`${isoDate}T00:00:00.000Z`);
+  date.setUTCDate(date.getUTCDate() + 1);
+  return date.toISOString().slice(0, 10);
+};
+
+export class DynamoService {
+  constructor(
+    private readonly stage: Stage,
+    private readonly tableName = process.env
+      .SUPPORTER_PRODUCT_DATA_TABLE_NAME ?? `SupporterProductData-${stage}`,
+    private readonly client = new DynamoDBClient({
+      region: "eu-west-1",
+      credentials: defaultProvider(),
+    })
+  ) {}
+
+  async writeItem(item: SupporterRatePlanItem): Promise<void> {
+    const expiryDate = nextDay(item.termEndDate);
+
+    const expressionValues: NonNullable<
+      UpdateItemCommandInput["ExpressionAttributeValues"]
+    > = {
+      ":productRatePlanId": { S: item.productRatePlanId },
+      ":productRatePlanName": { S: item.productRatePlanName },
+      ":termEndDate": { S: item.termEndDate },
+      ":contractEffectiveDate": { S: item.contractEffectiveDate },
+      ":expiryDate": { N: epochSecondFromIsoDate(expiryDate) },
+    };
+
+    let updateExpression =
+      "SET productRatePlanId = :productRatePlanId, productRatePlanName = :productRatePlanName, termEndDate = :termEndDate, contractEffectiveDate = :contractEffectiveDate, expiryDate = :expiryDate";
+
+    if (item.contributionAmount !== undefined) {
+      expressionValues[":contributionAmount"] = {
+        N: item.contributionAmount.amount,
+      };
+      expressionValues[":contributionCurrency"] = {
+        S: item.contributionAmount.currency,
+      };
+      updateExpression +=
+        ", contributionAmount = :contributionAmount, contributionCurrency = :contributionCurrency";
+    }
+
+    await this.client.send(
+      new UpdateItemCommand({
+        TableName: this.tableName,
+        Key: {
+          identityId: { S: item.identityId },
+          subscriptionName: { S: item.subscriptionName },
+        },
+        UpdateExpression: updateExpression,
+        ExpressionAttributeValues: expressionValues,
+      })
+    );
+  }
+}

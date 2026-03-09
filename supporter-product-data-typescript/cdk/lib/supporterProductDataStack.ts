@@ -1,0 +1,197 @@
+import { Duration, Stack, type StackProps } from "aws-cdk-lib";
+import { Rule, Schedule } from "aws-cdk-lib/aws-events";
+import { SfnStateMachine } from "aws-cdk-lib/aws-events-targets";
+import {
+  Effect,
+  PolicyDocument,
+  PolicyStatement,
+  Role,
+  ServicePrincipal,
+} from "aws-cdk-lib/aws-iam";
+import { Code, Function, Runtime } from "aws-cdk-lib/aws-lambda";
+import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
+import { Bucket } from "aws-cdk-lib/aws-s3";
+import { Queue } from "aws-cdk-lib/aws-sqs";
+import {
+  Choice,
+  Condition,
+  DefinitionBody,
+  StateMachine,
+  Succeed,
+  Wait,
+  WaitTime,
+} from "aws-cdk-lib/aws-stepfunctions";
+import { LambdaInvoke } from "aws-cdk-lib/aws-stepfunctions-tasks";
+import type { Construct } from "constructs";
+
+interface SupporterProductDataStackProps extends StackProps {
+  stage: "CODE" | "PROD";
+}
+
+export class SupporterProductDataStack extends Stack {
+  constructor(
+    scope: Construct,
+    id: string,
+    props: SupporterProductDataStackProps
+  ) {
+    super(scope, id, props);
+
+    const artifactBucket = Bucket.fromBucketName(
+      this,
+      "SupporterProductDataTypescriptDistBucket",
+      "supporter-product-data-typescript-dist"
+    );
+
+    const lambdaArtifact = Code.fromBucket(
+      artifactBucket,
+      `support/${props.stage}/supporter-product-data-typescript/supporter-product-data-typescript.zip`
+    );
+
+    const lambdaRole = new Role(this, "SupporterProductDataLambdaRole", {
+      assumedBy: new ServicePrincipal("lambda.amazonaws.com"),
+      inlinePolicies: {
+        LambdaPermissions: new PolicyDocument({
+          statements: [
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              resources: ["*"],
+            }),
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: [
+                "ssm:GetParametersByPath",
+                "ssm:GetParameter",
+                "ssm:PutParameter",
+              ],
+              resources: [
+                `arn:aws:ssm:${this.region}:${this.account}:parameter/supporter-product-data/${props.stage}/*`,
+              ],
+            }),
+          ],
+        }),
+      },
+    });
+
+    const queryZuora = new Function(this, "QueryZuoraLambda", {
+      functionName: `support-SupporterProductDataTsQueryZuora-${props.stage}`,
+      runtime: Runtime.NODEJS_22_X,
+      handler: "queryZuoraLambda.handler",
+      code: lambdaArtifact,
+      timeout: Duration.minutes(5),
+      memorySize: 512,
+      role: lambdaRole,
+      environment: { STAGE: props.stage },
+    });
+
+    const fetchResults = new Function(this, "FetchResultsLambda", {
+      functionName: `support-SupporterProductDataTsFetchResults-${props.stage}`,
+      runtime: Runtime.NODEJS_22_X,
+      handler: "fetchResultsLambda.handler",
+      code: lambdaArtifact,
+      timeout: Duration.minutes(5),
+      memorySize: 512,
+      role: lambdaRole,
+      environment: { STAGE: props.stage },
+    });
+
+    const queue = new Queue(this, "SupporterProductDataQueue", {
+      queueName: `supporter-product-data-typescript-${props.stage}`,
+      visibilityTimeout: Duration.seconds(300),
+    });
+
+    const addToQueue = new Function(
+      this,
+      "AddSupporterRatePlanItemToQueueLambda",
+      {
+        functionName: `support-SPDTS-AddToQueue-${props.stage}`,
+        runtime: Runtime.NODEJS_22_X,
+        handler: "addSupporterRatePlanItemToQueueLambda.handler",
+        code: lambdaArtifact,
+        timeout: Duration.minutes(10),
+        memorySize: 1024,
+        role: lambdaRole,
+        environment: { STAGE: props.stage, QUEUE_URL: queue.queueUrl },
+      }
+    );
+
+    const processItem = new Function(
+      this,
+      "ProcessSupporterRatePlanItemLambda",
+      {
+        functionName: `support-SPDTS-ProcessItem-${props.stage}`,
+        runtime: Runtime.NODEJS_22_X,
+        handler: "processSupporterRatePlanItemLambda.handler",
+        code: lambdaArtifact,
+        timeout: Duration.minutes(10),
+        memorySize: 1024,
+        role: lambdaRole,
+        environment: { STAGE: props.stage },
+      }
+    );
+
+    queue.grantSendMessages(addToQueue);
+    queue.grantConsumeMessages(processItem);
+    processItem.addEventSource(new SqsEventSource(queue, { batchSize: 10 }));
+
+    const addToQueueAgainTask = new LambdaInvoke(this, "AddToQueueAgainTask", {
+      lambdaFunction: addToQueue,
+      outputPath: "$.Payload",
+    });
+
+    const moreToProcess = new Choice(this, "MoreToProcess");
+    moreToProcess
+      .when(
+        Condition.numberLessThanJsonPath("$.processedCount", "$.recordCount"),
+        addToQueueAgainTask
+      )
+      .otherwise(new Succeed(this, "Done"));
+
+    addToQueueAgainTask.next(moreToProcess);
+
+    const definition = new LambdaInvoke(this, "QueryZuoraTask", {
+      lambdaFunction: queryZuora,
+      outputPath: "$.Payload",
+    })
+      .next(
+        new Wait(this, "WaitForZuora", {
+          time: WaitTime.duration(Duration.seconds(30)),
+        })
+      )
+      .next(
+        new LambdaInvoke(this, "FetchResultsTask", {
+          lambdaFunction: fetchResults,
+          outputPath: "$.Payload",
+        })
+      )
+      .next(
+        new LambdaInvoke(this, "AddToQueueTask", {
+          lambdaFunction: addToQueue,
+          outputPath: "$.Payload",
+        })
+      )
+      .next(moreToProcess);
+
+    const stateMachine = new StateMachine(
+      this,
+      "SupporterProductDataStateMachine",
+      {
+        stateMachineName: `supporter-product-data-typescript-${props.stage}`,
+        definitionBody: DefinitionBody.fromChainable(definition),
+      }
+    );
+
+    const schedule =
+      props.stage === "PROD"
+        ? "cron(*/5 * ? * * *)"
+        : "cron(0 6 ? * MON-FRI *)";
+    new Rule(this, "SupporterProductDataSchedule", {
+      schedule: Schedule.expression(schedule),
+      targets: [new SfnStateMachine(stateMachine)],
+    });
+  }
+}
