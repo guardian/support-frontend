@@ -1,25 +1,10 @@
 'use-strict';
 
 const path = require('path');
-const autoprefixer = require('autoprefixer');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const pxtorem = require('postcss-pxtorem');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const entryPoints = require('./webpack.entryPoints');
-
-const cssLoaders = [
-	{
-		loader: 'postcss-loader',
-		options: {
-			postcssOptions: {
-				plugins: [pxtorem({ propList: ['*'] }), autoprefixer()],
-			},
-		},
-	},
-];
 
 // Hide mini-css-extract-plugin spam logs
 class CleanUpStatsPlugin {
@@ -39,7 +24,7 @@ class CleanUpStatsPlugin {
 	}
 }
 
-module.exports = (cssFilename, jsFilename, minimizeCss) => ({
+module.exports = (jsFilename) => ({
 	plugins: [
 		new WebpackManifestPlugin({
 			fileName: '../../conf/assets.json',
@@ -55,10 +40,6 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 					}),
 			  ]
 			: []),
-		new MiniCssExtractPlugin({
-			filename: path.join('stylesheets', cssFilename),
-		}),
-		...(minimizeCss ? [new CssMinimizerPlugin()] : []),
 		new CleanUpStatsPlugin(),
 	],
 
@@ -130,16 +111,6 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 				options: {
 					name: '[path][name].[ext]',
 				},
-			},
-			{
-				test: /\.css$/,
-				use: [
-					MiniCssExtractPlugin.loader,
-					{
-						loader: 'css-loader',
-					},
-					...cssLoaders,
-				],
 			},
 		],
 	},
