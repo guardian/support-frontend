@@ -9,9 +9,9 @@ import {
 import type { PageParticipationsConfig, PageTest } from '../models';
 import { getMvtId } from '../mvt';
 import { getPageParticipations } from '../pageParticipations';
-import type { Key } from '../sessionStorage';
 import {
 	getSessionParticipations,
+	type Key,
 	setSessionParticipations,
 } from '../sessionStorage';
 

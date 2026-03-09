@@ -93,18 +93,10 @@ class MParticleClient(
         .map(parseUserProfile)
         .recover { case WebServiceClientError(CodeBody("404", _)) =>
           logger.info("mParticle returned 404 for user")
-          MParticleUserProfile(
-            hasMobileAppDownloaded = false,
-            hasFeastMobileAppDownloaded = false,
-          )
+          MParticleUserProfile(hasMobileAppDownloaded = false, hasFeastMobileAppDownloaded = false)
         }
     } else {
-      Future.successful(
-        MParticleUserProfile(
-          hasMobileAppDownloaded = false,
-          hasFeastMobileAppDownloaded = false,
-        ),
-      )
+      Future.successful(MParticleUserProfile(hasMobileAppDownloaded = false, hasFeastMobileAppDownloaded = false))
     }
   }
 
