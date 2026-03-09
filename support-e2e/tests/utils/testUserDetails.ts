@@ -130,7 +130,7 @@ export const setTestUserDetails = async (
 	if (internationalisationId === 'US' && testFields.addresses) {
 		await page
 			.getByLabel('ZIP code')
-			.fill(testFields.addresses[0].postCode ?? '');
+			.fill(testFields.addresses[0].postCode ?? '90210');
 	}
 	const checkboxLabel = isWeeklyGift
 		? "Billing address same as recipient's address"
