@@ -139,7 +139,6 @@ export function PersonalDetailsFields({
 										value={billingStatePostcodeCountry.billingPostcode}
 										pattern={doesNotContainExtendedEmojiOrLeadingSpace}
 										error={billingPostcodeError}
-										optional={false}
 										onInvalid={(event) => {
 											preventDefaultValidityMessage(event.currentTarget);
 											const validityState = event.currentTarget.validity;
