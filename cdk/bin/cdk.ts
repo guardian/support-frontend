@@ -6,6 +6,7 @@ import { Frontend } from "../lib/frontend";
 import { PaymentApi } from "../lib/payment-api";
 import { StripePatronsData } from "../lib/stripe-patrons-data";
 import { SupportWorkers } from "../lib/support-workers";
+import { SupporterProductDataTypescript } from "../lib/supporter-product-data-typescript";
 
 const app = new App();
 const cloudFormationStackName = process.env.GU_CFN_STACK_NAME;
@@ -124,7 +125,7 @@ new SupportWorkers(app, "SupportWorkers-CODE", {
   ],
   parameterStorePaths: [
     "arn:aws:ssm:eu-west-1:865473395570:parameter/CODE/support/support-workers/*",
-    "arn:aws:ssm:eu-west-1:865473395570:parameter/PROD/support/support-workers/paper-round-config"
+    "arn:aws:ssm:eu-west-1:865473395570:parameter/PROD/support/support-workers/paper-round-config",
   ],
   secretsManagerPaths: [
     "arn:aws:secretsmanager:eu-west-1:865473395570:secret:CODE/Zuora-OAuth/SupportServiceLambdas-*",
@@ -159,4 +160,16 @@ new SupportWorkers(app, "SupportWorkers-PROD", {
     "arn:aws:secretsmanager:eu-west-1:865473395570:secret:CODE/Zuora-OAuth/SupportServiceLambdas-*",
     "arn:aws:secretsmanager:eu-west-1:865473395570:secret:PROD/Zuora-OAuth/SupportServiceLambdas-*",
   ],
+});
+
+new SupporterProductDataTypescript(app, "SupporterProductDataTypescript-CODE", {
+  stack: "support",
+  stage: "CODE",
+  cloudFormationStackName,
+});
+
+new SupporterProductDataTypescript(app, "SupporterProductDataTypescript-PROD", {
+  stack: "support",
+  stage: "PROD",
+  cloudFormationStackName,
 });

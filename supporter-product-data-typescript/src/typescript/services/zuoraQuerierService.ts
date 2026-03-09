@@ -1,3 +1,4 @@
+import type { BatchQueryRequest } from "../model/query";
 import type { BatchQueryResponse } from "../model/zuora";
 import type { ZuoraQuerierConfig } from "./configService";
 
@@ -38,5 +39,25 @@ export class ZuoraQuerierService {
         headers: this.authHeaders(),
       }
     );
+  }
+
+  async postQuery(request: BatchQueryRequest): Promise<BatchQueryResponse> {
+    const response = await fetch(
+      `${this.config.url.replace(/\/$/, "")}/batch-query/`,
+      {
+        method: "POST",
+        headers: {
+          ...this.authHeaders(),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(request),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to submit Zuora query: ${response.status}`);
+    }
+
+    return (await response.json()) as BatchQueryResponse;
   }
 }

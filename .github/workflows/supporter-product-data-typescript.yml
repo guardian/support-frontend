@@ -68,7 +68,7 @@ jobs:
                 dependencies: [cfn]
           contentDirectories: |
             cfn:
-              - supporter-product-data-typescript/cdk/cdk.out/SupporterProductDataTypescript-CODE.template.json
-              - supporter-product-data-typescript/cdk/cdk.out/SupporterProductDataTypescript-PROD.template.json
+              - cdk/cdk.out/SupporterProductDataTypescript-CODE.template.json
+              - cdk/cdk.out/SupporterProductDataTypescript-PROD.template.json
             supporter-product-data-typescript:
               - supporter-product-data-typescript/target/typescript/supporter-product-data-typescript.zip
