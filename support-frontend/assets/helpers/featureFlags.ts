@@ -1,3 +1,5 @@
+import { isCode } from './urls/url';
+
 const featureFlagEnableDigitalAccess = 'enableDigitalAccess';
 export const featureFlagEnableWeeklyDigital = 'enableWeeklyDigital';
 
@@ -11,6 +13,7 @@ export function getFeatureFlags(): FeatureFlags {
 
 	return {
 		enableDigitalAccess: urlParams.has(featureFlagEnableDigitalAccess),
-		enableWeeklyDigital: urlParams.has(featureFlagEnableWeeklyDigital),
+		enableWeeklyDigital:
+			isCode() || urlParams.has(featureFlagEnableWeeklyDigital),
 	};
 }
