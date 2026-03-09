@@ -61,7 +61,15 @@ const fetchAudienceMemberships = async (): Promise<number[]> => {
 		return [];
 	}
 
-	const hasConsent = await hasTargetingConsent();
+	const consentTimeout = new Promise<boolean>((resolve) =>
+		window.setTimeout(() => {
+			resolve(false);
+		}, 2000),
+	);
+	const hasConsent = await Promise.race([
+		hasTargetingConsent(),
+		consentTimeout,
+	]);
 	if (!hasConsent) {
 		return [];
 	}

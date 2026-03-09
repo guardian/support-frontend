@@ -51,7 +51,7 @@ function analyticsInitialisation(
 	});
 }
 
-function consentInitialisation(country: CountryCode): void {
+async function consentInitialisation(country: CountryCode): Promise<void> {
 	if (shouldInitCmp()) {
 		try {
 			const browserId = getCookie({ name: 'bwid', shouldMemoize: true });
@@ -64,6 +64,7 @@ function consentInitialisation(country: CountryCode): void {
 				country,
 				useNonAdvertisedList: true,
 			});
+			await onConsent();
 		} catch (e) {
 			if (typeof e === 'string') {
 				console.log(`An exception was thrown initialising the CMP: ${e}`);
