@@ -51,7 +51,7 @@ function analyticsInitialisation(
 	});
 }
 
-async function consentInitialisation(country: CountryCode): Promise<void> {
+function consentInitialisation(country: CountryCode): void {
 	if (shouldInitCmp()) {
 		try {
 			const browserId = getCookie({ name: 'bwid', shouldMemoize: true });
@@ -64,7 +64,6 @@ async function consentInitialisation(country: CountryCode): Promise<void> {
 				country,
 				useNonAdvertisedList: true,
 			});
-			await onConsent();
 		} catch (e) {
 			if (typeof e === 'string') {
 				console.log(`An exception was thrown initialising the CMP: ${e}`);
@@ -77,15 +76,7 @@ async function consentInitialisation(country: CountryCode): Promise<void> {
 	}
 }
 
-function sendConsentToOphan(): void {
-	onConsent()
-		.then((consentState) => {
-			return record(getOphanConsentDetails(consentState));
-		})
-		.catch((error) => {
-			console.error(error);
-		});
-
+async function sendConsentToOphan(): Promise<void> {
 	const getOphanConsentDetails = (
 		consentState: ConsentState,
 	): {
@@ -123,6 +114,13 @@ function sendConsentToOphan(): void {
 			consent: '',
 		};
 	};
+
+	try {
+		const consentState = await onConsent();
+		record(getOphanConsentDetails(consentState));
+	} catch (error) {
+		console.error(error);
+	}
 }
 
 // ----- Helpers ----- //
