@@ -62,7 +62,7 @@ export default function WeeklyDigitalHero({
 
 	const roundelComponent = (
 		<OfferStrapline
-			copy={roundel ?? 'Save up to 35% a year'}
+			copy={roundel ?? 'Includes unlimited digital access'}
 			cssOverrides={[
 				roundelStyles,
 				promotion.roundel ? roundelPromotionStyles : css``,
