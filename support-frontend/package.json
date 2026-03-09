@@ -59,7 +59,7 @@
 		"@stripe/stripe-js": "^4.1.0",
 		"@types/seedrandom": "^3.0.8",
 		"@types/uuid": "^9.0.2",
-		"dompurify": "^3.2.4",
+		"dompurify": "^3.3.2",
 		"escape-string-regexp": "5.0.0",
 		"framer-motion": "^1.11.1",
 		"lodash.debounce": "^4.0.6",
