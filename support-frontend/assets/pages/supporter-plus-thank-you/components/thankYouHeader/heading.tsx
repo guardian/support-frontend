@@ -14,7 +14,7 @@ import {
 	headerTitleText,
 	longHeaderTitleText,
 	observerHeaderTitleText,
-	tier3LineBreak,
+	premiumDigitalLineBreak,
 } from './headingStyles';
 import HighlightText from './HighlightText';
 import { isContributionProduct, isPrintProduct } from './utils/productMatchers';
@@ -41,7 +41,6 @@ function Heading({
 }: HeadingProps) {
 	const isPremiumDigital = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
-	const isTier3 = productKey === 'TierThree';
 	const contributionProduct = isContributionProduct(productKey);
 	const isGuardianPrint = isPrintProduct(productKey) && !isObserverPrint;
 
@@ -73,7 +72,7 @@ function Heading({
 		);
 	}
 
-	if (isTier3 || isGuardianAdLite || isPremiumDigital) {
+	if (isGuardianAdLite || isPremiumDigital) {
 		const { label: productName } = getProductDescription(
 			productKey,
 			ratePlanKey,
@@ -83,9 +82,9 @@ function Heading({
 			<h1 css={longHeaderTitleText}>
 				Thank you <span data-qm-masking="blocklist">{contributorName}</span> for
 				subscribing to <HighlightText>{productName}</HighlightText>
-				{(isTier3 || isPremiumDigital) && (
+				{isPremiumDigital && (
 					<>
-						<br css={tier3LineBreak} />
+						<br css={premiumDigitalLineBreak} />
 						Your valued support powers our journalism.
 					</>
 				)}
