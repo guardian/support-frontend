@@ -22,7 +22,7 @@ function Template(args: Product) {
 	return (
 		<div css={innerContentContainer}>
 			<PromoTermsProvider>
-				<WeeklyRatePlanCard {...args} />
+				<WeeklyRatePlanCard {...args} somePriorityPromotion={false} />
 			</PromoTermsProvider>
 		</div>
 	);

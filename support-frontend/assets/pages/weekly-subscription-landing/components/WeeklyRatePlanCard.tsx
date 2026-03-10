@@ -20,7 +20,9 @@ import {
 	strikethroughPriceStyle,
 } from './WeeklyRatePlanCardStyles';
 
-function WeeklyRatePlanCard(ratePlan: Product) {
+function WeeklyRatePlanCard(
+	ratePlan: Product & { somePriorityPromotion: boolean },
+) {
 	const {
 		title,
 		price,
@@ -31,14 +33,20 @@ function WeeklyRatePlanCard(ratePlan: Product) {
 		savingsText,
 		roundel,
 		hasPromotion,
+		isPriorityPromo,
 		href,
 		onClick,
 		onView,
+		somePriorityPromotion,
 	} = ratePlan;
 	const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
 		threshold: 0.5,
 		debounce: true,
 	});
+
+	const displayRoundel =
+		(isPriorityPromo && somePriorityPromotion) ??
+		(!somePriorityPromotion && !isPriorityPromo && hasPromotion);
 
 	/**
 	 * The first time this runs hasBeenSeen
@@ -64,9 +72,12 @@ function WeeklyRatePlanCard(ratePlan: Product) {
 	}, [hasPromotion, billingPeriod, discountedPrice]);
 
 	return (
-		<div ref={setElementToObserve} css={[card, roundel && cardWithLabel]}>
-			{roundel && (
-				<div css={[cardLabel, hasPromotion && roundelPromotionStyles]}>
+		<div
+			ref={setElementToObserve}
+			css={[card, displayRoundel && cardWithLabel]}
+		>
+			{displayRoundel && (
+				<div css={[cardLabel, isPriorityPromo && roundelPromotionStyles]}>
 					{roundel}
 				</div>
 			)}

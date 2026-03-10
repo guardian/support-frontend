@@ -4,10 +4,7 @@ import {
 	GBPCountries,
 } from '@modules/internationalisation/countryGroup';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import {
-	BillingPeriod,
-	type RecurringBillingPeriod,
-} from '@modules/product/billingPeriod';
+import { type RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type { Product } from 'components/product/productOption';
 import { featureFlagEnableWeeklyDigital } from 'helpers/featureFlags';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
@@ -206,11 +203,9 @@ export const getWeeklyDigitalRatePlans = ({
 				  })}`
 				: undefined;
 
-		// TODO: This value shuold be coming from the promo tool for a specific promotion, not all promotions.
-		// 		 This is a temporary solution until we have the ability to add custom copy for specific promotions in the promo tool.
-		const promotionRoundelText = promotion && 'Intro offer | 50% Off';
-		const defaultRoundelText =
-			billingPeriod === BillingPeriod.Annual ? 'Best value' : undefined;
+		const augmentedPromotion = promotion
+			? getAugmentedPromotion(promotion)
+			: undefined;
 
 		return {
 			title: getBillingPeriodTitle(billingPeriod),
@@ -228,10 +223,31 @@ export const getWeeklyDigitalRatePlans = ({
 				enableWeeklyDigitalPlans: true,
 				promotion,
 			}),
-			roundel: promotionRoundelText ?? defaultRoundelText,
+			roundel: augmentedPromotion?.roundelText,
 			hasPromotion: !!promotion,
+			isPriorityPromo: augmentedPromotion?.hasPriority,
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
 			buttonCopy: 'Subscribe now',
 		};
 	});
+
+const getAugmentedPromotion = (promotion: Promotion): Promotion => {
+	// TODO: This is a temporary function to augment the promotion with additional properties until we have the ability to add custom copy for specific promotions in the promo tool.
+	//       The keys in here must stay up to date with the one in promo tool in order to be able to augument the promotion correctly.
+	switch (promotion.promoCode) {
+		case 'GWPLUSDIGITAL':
+			return {
+				...promotion,
+				roundelText: 'Intro offer | 50% Off',
+				hasPriority: true,
+			};
+		case '20ANNUAL':
+			return {
+				...promotion,
+				roundelText: 'Best value',
+			};
+		default:
+			return promotion;
+	}
+};

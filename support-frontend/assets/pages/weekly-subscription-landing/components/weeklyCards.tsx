@@ -63,7 +63,11 @@ export function WeeklyCards({
 		productPrices,
 		weeklyBillingPeriods,
 	});
+
 	const hasSavingsText = ratePlans.some((ratePlan) => ratePlan.savingsText);
+	const somePriorityPromotion = ratePlans.some(
+		(ratePlan) => ratePlan.isPriorityPromo,
+	);
 
 	return (
 		<section css={pricesSection} id="subscribe">
@@ -76,7 +80,10 @@ export function WeeklyCards({
 				]}
 			>
 				{ratePlans.map((ratePlan) => (
-					<WeeklyRatePlanCard {...ratePlan} />
+					<WeeklyRatePlanCard
+						{...ratePlan}
+						somePriorityPromotion={somePriorityPromotion}
+					/>
 				))}
 			</div>
 		</section>
