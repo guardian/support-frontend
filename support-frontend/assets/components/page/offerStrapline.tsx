@@ -76,7 +76,7 @@ export default function OfferStrapline({
 }: {
 	copy: string;
 	size?: Size;
-	cssOverrides?: SerializedStyles;
+	cssOverrides?: SerializedStyles | SerializedStyles[];
 }) {
 	const text = preventWidow(copy);
 	const isLong = text.length > 32;
