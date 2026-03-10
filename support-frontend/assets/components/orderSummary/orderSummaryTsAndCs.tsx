@@ -165,7 +165,6 @@ export function OrderSummaryTsAndCs({
 	);
 	const orderSummaryTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
 		SupporterPlus: tierThreeSupporterPlusTsAndCs,
-		TierThree: tierThreeSupporterPlusTsAndCs,
 		GuardianWeeklyDomestic: tierThreeSupporterPlusTsAndCs,
 		GuardianWeeklyRestOfWorld: tierThreeSupporterPlusTsAndCs,
 		SubscriptionCard: paperPlusTsAndCs,
