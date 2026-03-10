@@ -234,7 +234,7 @@ export const getWeeklyDigitalRatePlans = ({
 
 const getAugmentedPromotion = (promotion: Promotion): Promotion => {
 	// TODO: This is a temporary function to augment the promotion with additional properties until we have the ability to add custom copy for specific promotions in the promo tool.
-	//       The keys in here must stay up to date with the one in promo tool in order to be able to augument the promotion correctly.
+	//       The keys in here must stay up to date with the one in promo tool in order to be able to augment the promotion correctly.
 	switch (promotion.promoCode) {
 		case 'GWPLUSDIGITAL':
 			return {
