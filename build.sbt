@@ -53,6 +53,7 @@ inThisBuild(
       case name if name.endsWith("execution.interceptors") => MergeStrategy.filterDistinctLines
       case PathList("javax", "annotation", _ @_*) => MergeStrategy.first
       case PathList("deriving.conf") => MergeStrategy.concat
+      case "META-INF/FastDoubleParser-NOTICE" => MergeStrategy.concat
       case y =>
         val oldStrategy = (assembly / assemblyMergeStrategy).value
         oldStrategy(y)

@@ -13,6 +13,7 @@ import {
 	Weekend,
 	WeekendPlus,
 } from '@modules/product/productOptions';
+import { getFeatureFlags } from './featureFlags';
 import type { ActiveProductKey, ActiveRatePlanKey } from './productCatalog';
 
 const ActivePaperProductTypes: PaperProductOptions[] = [
@@ -52,6 +53,7 @@ export const getProductOptionFromProductAndRatePlan = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): ProductOptions => {
+	const { enableWeeklyDigital } = getFeatureFlags();
 	switch (productKey) {
 		case 'SupporterPlus':
 		case 'GuardianAdLite':
@@ -60,7 +62,7 @@ export const getProductOptionFromProductAndRatePlan = (
 		case 'DigitalSubscription':
 		case 'GuardianWeeklyRestOfWorld':
 		case 'GuardianWeeklyDomestic':
-			return 'NoProductOptions';
+			return enableWeeklyDigital ? 'PlusDigital' : 'NoProductOptions';
 		case 'TierThree':
 			return ratePlanKey.endsWith('V2')
 				? 'NewspaperArchive'

@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import {
 	from,
 	headlineBold28,
+	palette,
 	space,
 	textSansBold17,
 } from '@guardian/source/foundations';
@@ -10,16 +11,14 @@ import GridPicture from 'components/gridPicture/gridPicture';
 import HeroHeader from 'components/hero/HeroHeader';
 import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
-import {
-	type PromotionCopy,
-	promotionHTML,
-} from 'helpers/productPrice/promotions';
+import { type PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { getRegionalTitle } from './contentHelpers';
+import { getFirstParagraph, getRegionalTitle } from './contentHelpers';
 
 const pageTitleSpacing = css`
-	padding-bottom: ${space[8]}px;
-
+	${from.tablet} {
+		padding-bottom: ${space[8]}px;
+	}
 	h2 {
 		${from.desktop} {
 			${headlineBold28};
@@ -35,6 +34,10 @@ const pageTitleSpacing = css`
 const roundelStyles = css`
 	${textSansBold17}
 `;
+const roundelPromotionStyles = css`
+	background-color: ${palette.lifestyle[400]};
+	color: ${palette.neutral[100]};
+`;
 
 export default function WeeklyDigitalHero({
 	promotion,
@@ -45,21 +48,28 @@ export default function WeeklyDigitalHero({
 	countryGroupId: CountryGroupId;
 	enableWeeklyDigital: boolean;
 }) {
-	const { roundel, title, description: promotionDescription } = promotion;
-
-	const roundelComponent = roundel && (
-		<OfferStrapline copy={roundel} cssOverrides={roundelStyles} />
-	);
-
-	const fallbackDescription = enableWeeklyDigital
-		? 'Discover our global print magazine, showcasing the best of our reporting, analysis, opinion and culture—beautifully designed for a more reflective read. With your subscription, you also get full digital access, including ad-free news, thousands of Feast recipes and more, all while supporting the Guardian’s independent journalism.'
-		: '';
-	const description = promotionDescription
-		? promotionHTML(promotionDescription, {
-				tag: 'p',
-		  })
-		: fallbackDescription;
+	const { roundel, title } = promotion;
+	const fallbackDescription = enableWeeklyDigital ? (
+		<>
+			'Discover our global print magazine, showcasing the best of our reporting,
+			analysis, opinion and culture—beautifully designed for a more reflective
+			read. With your subscription, you also get full digital access, including
+			ad-free news, thousands of Feast recipes and more, all while supporting
+			the Guardian’s independent journalism.'
+		</>
+	) : undefined;
 	const fallbackTitle = getRegionalTitle(countryGroupId, enableWeeklyDigital);
+	const description = getFirstParagraph(promotion) ?? fallbackDescription;
+
+	const roundelComponent = (
+		<OfferStrapline
+			copy={roundel ?? 'Includes unlimited digital access'}
+			cssOverrides={[
+				roundelStyles,
+				promotion.roundel ? roundelPromotionStyles : css``,
+			]}
+		/>
+	);
 
 	return (
 		<PageTitle
@@ -89,21 +99,21 @@ export default function WeeklyDigitalHero({
 								},
 								{
 									gridId: `weeklyDigitalLandingHeroDesktop_5x3`,
-									srcSizes: [420],
-									sizes: '420px',
+									srcSizes: [422],
+									sizes: '422px',
 									imgType: 'png',
 									media: '(min-width: 980px)',
 								},
 							]}
-							fallback={`weeklyDigitalLandingHeroDesktop_5x3p`}
-							fallbackSize={420}
+							fallback={`weeklyDigitalLandingHeroDesktop_5x3`}
+							fallbackSize={422}
 							altText="A collection of Guardian Weekly magazines"
 						/>
 					</>
 				}
 				roundel={roundelComponent}
 				title={title ?? fallbackTitle}
-				description={description ?? undefined}
+				description={description}
 				ctaText="See pricing options"
 				ctaLink="#subscribe"
 				onClick={() =>

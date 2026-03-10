@@ -51,6 +51,9 @@ export type Product = {
 	discountSummary?: string;
 	savingsText?: string | null;
 	showLabel?: boolean;
+	hasPromotion?: boolean;
+	isPriorityPromo?: boolean;
+	roundel?: string;
 	productLabel?: ProductLabelProps;
 	cssOverrides?: SerializedStyles;
 	billingPeriod?: BillingPeriod;
