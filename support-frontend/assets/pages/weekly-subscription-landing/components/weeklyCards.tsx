@@ -65,7 +65,7 @@ export function WeeklyCards({
 	});
 
 	const hasSavingsText = ratePlans.some((ratePlan) => ratePlan.savingsText);
-	const somePriorityPromotion = ratePlans.some(
+	const priorityPromotionExists = ratePlans.some(
 		(ratePlan) => ratePlan.isPriorityPromo,
 	);
 
@@ -82,7 +82,7 @@ export function WeeklyCards({
 				{ratePlans.map((ratePlan) => (
 					<WeeklyRatePlanCard
 						{...ratePlan}
-						somePriorityPromotion={somePriorityPromotion}
+						priorityPromotionExists={priorityPromotionExists}
 					/>
 				))}
 			</div>

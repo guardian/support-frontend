@@ -20,33 +20,32 @@ import {
 	strikethroughPriceStyle,
 } from './WeeklyRatePlanCardStyles';
 
-function WeeklyRatePlanCard(
-	ratePlan: Product & { somePriorityPromotion: boolean },
-) {
-	const {
-		title,
-		price,
-		discountedPrice,
-		billingPeriodNoun,
-		billingPeriod,
-		discountSummary,
-		savingsText,
-		roundel,
-		hasPromotion,
-		isPriorityPromo,
-		href,
-		onClick,
-		onView,
-		somePriorityPromotion,
-	} = ratePlan;
+function WeeklyRatePlanCard({
+	title,
+	price,
+	discountedPrice,
+	billingPeriodNoun,
+	billingPeriod,
+	discountSummary,
+	savingsText,
+	roundel,
+	hasPromotion,
+	isPriorityPromo,
+	href,
+	onClick,
+	onView,
+	priorityPromotionExists,
+}: Product & { priorityPromotionExists: boolean }) {
 	const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
 		threshold: 0.5,
 		debounce: true,
 	});
 
-	const displayRoundel =
-		(isPriorityPromo && somePriorityPromotion) ??
-		(!somePriorityPromotion && !isPriorityPromo && hasPromotion);
+	// If there is a priority promotion, only show the roundel on that one.
+	// If there isn't, show the roundel on all promotions.
+	const displayRoundel = priorityPromotionExists
+		? isPriorityPromo
+		: hasPromotion && !isPriorityPromo;
 
 	/**
 	 * The first time this runs hasBeenSeen
