@@ -20,25 +20,32 @@ import {
 	strikethroughPriceStyle,
 } from './WeeklyRatePlanCardStyles';
 
-function WeeklyRatePlanCard(ratePlan: Product) {
-	const {
-		title,
-		price,
-		discountedPrice,
-		billingPeriodNoun,
-		billingPeriod,
-		discountSummary,
-		savingsText,
-		roundel,
-		hasPromotion,
-		href,
-		onClick,
-		onView,
-	} = ratePlan;
+function WeeklyRatePlanCard({
+	title,
+	price,
+	discountedPrice,
+	billingPeriodNoun,
+	billingPeriod,
+	discountSummary,
+	savingsText,
+	roundel,
+	hasPromotion,
+	isPriorityPromo,
+	href,
+	onClick,
+	onView,
+	priorityPromotionExists,
+}: Product & { priorityPromotionExists: boolean }) {
 	const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
 		threshold: 0.5,
 		debounce: true,
 	});
+
+	// If there is a priority promotion, only show the roundel on that one.
+	// If there isn't, show the roundel on all promotions.
+	const displayRoundel = priorityPromotionExists
+		? isPriorityPromo
+		: hasPromotion && !isPriorityPromo;
 
 	/**
 	 * The first time this runs hasBeenSeen
@@ -53,7 +60,7 @@ function WeeklyRatePlanCard(ratePlan: Product) {
 
 	useEffect(() => {
 		const { setPromoTerms } = usePromoTerms();
-		if (hasPromotion && billingPeriod && discountedPrice) {
+		if (isPriorityPromo && billingPeriod && discountedPrice) {
 			const promoTerms = getWeeklyPromoTerms(
 				billingPeriod,
 				price,
@@ -61,12 +68,15 @@ function WeeklyRatePlanCard(ratePlan: Product) {
 			);
 			setPromoTerms(promoTerms);
 		}
-	}, [hasPromotion, billingPeriod, discountedPrice]);
+	}, [isPriorityPromo, billingPeriod, discountedPrice]);
 
 	return (
-		<div ref={setElementToObserve} css={[card, roundel && cardWithLabel]}>
-			{roundel && (
-				<div css={[cardLabel, hasPromotion && roundelPromotionStyles]}>
+		<div
+			ref={setElementToObserve}
+			css={[card, displayRoundel && cardWithLabel]}
+		>
+			{displayRoundel && (
+				<div css={[cardLabel, isPriorityPromo && roundelPromotionStyles]}>
 					{roundel}
 				</div>
 			)}

@@ -52,6 +52,7 @@ export type Product = {
 	savingsText?: string | null;
 	showLabel?: boolean;
 	hasPromotion?: boolean;
+	isPriorityPromo?: boolean;
 	roundel?: string;
 	productLabel?: ProductLabelProps;
 	cssOverrides?: SerializedStyles;
