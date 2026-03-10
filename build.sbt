@@ -4,7 +4,7 @@ import LibraryVersions._
 
 import scala.sys.process._
 
-val scalatest = "org.scalatest" %% "scalatest" % "3.2.16"
+val scalatest = "org.scalatest" %% "scalatest" % "3.2.19"
 
 lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
   IntegrationTest / scalaSource := baseDirectory.value / "src" / "test" / "scala",
@@ -83,10 +83,10 @@ lazy val releaseSettings = Seq(
 )
 
 lazy val commonDependencies = Seq(
-  "com.typesafe" % "config" % "1.4.2",
+  "com.typesafe" % "config" % "1.4.6",
   scalatest % "test",
-  "com.typesafe.scala-logging" % "scala-logging_2.13" % "3.9.5",
-  "ch.qos.logback" % "logback-classic" % "1.4.14",
+  "com.typesafe.scala-logging" % "scala-logging_2.13" % "3.9.6",
+  "ch.qos.logback" % "logback-classic" % "1.5.32",
 )
 
 lazy val root = (project in file("."))
