@@ -18,8 +18,9 @@ import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getRegionalTitle } from './contentHelpers';
 
 const pageTitleSpacing = css`
-	padding-bottom: ${space[8]}px;
-
+	${from.tablet} {
+		padding-bottom: ${space[8]}px;
+	}
 	h2 {
 		${from.desktop} {
 			${headlineBold28};
