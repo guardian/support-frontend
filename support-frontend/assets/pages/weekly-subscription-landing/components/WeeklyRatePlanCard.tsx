@@ -61,7 +61,7 @@ function WeeklyRatePlanCard(
 
 	useEffect(() => {
 		const { setPromoTerms } = usePromoTerms();
-		if (hasPromotion && billingPeriod && discountedPrice) {
+		if (isPriorityPromo && billingPeriod && discountedPrice) {
 			const promoTerms = getWeeklyPromoTerms(
 				billingPeriod,
 				price,
@@ -69,7 +69,7 @@ function WeeklyRatePlanCard(
 			);
 			setPromoTerms(promoTerms);
 		}
-	}, [hasPromotion, billingPeriod, discountedPrice]);
+	}, [isPriorityPromo, billingPeriod, discountedPrice]);
 
 	return (
 		<div
