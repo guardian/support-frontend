@@ -247,8 +247,6 @@ export default function CheckoutForm({
 		deliveryPostcodeIsOutsideM25,
 	)}. Payment method`;
 
-	const zipCodeIsMandatory = abParticipations.mandatoryZipCode === 'variant';
-
 	/**
 	 * Is It a Contribution? URL queryPrice supplied?
 	 *    If queryPrice above ratePlanPrice, in a upgrade to S+ country, invalid amount
@@ -913,7 +911,6 @@ export default function CheckoutForm({
 							isEmailAddressReadOnly={isSignedIn}
 							isSignedIn={isSignedIn}
 							isWeeklyGift={isWeeklyGift}
-							zipCodeIsMandatory={zipCodeIsMandatory}
 						/>
 
 						{/**
