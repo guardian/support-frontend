@@ -203,9 +203,7 @@ export const getWeeklyDigitalRatePlans = ({
 				  })}`
 				: undefined;
 
-		const augmentedPromotion = promotion
-			? getAugmentedPromotion(promotion)
-			: undefined;
+		const augmentedPromotion = promotion && getAugmentedPromotion(promotion);
 
 		return {
 			title: getBillingPeriodTitle(billingPeriod),
