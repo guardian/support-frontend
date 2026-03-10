@@ -16,8 +16,9 @@ import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getFirstParagraph, getRegionalTitle } from './contentHelpers';
 
 const pageTitleSpacing = css`
-	padding-bottom: ${space[8]}px;
-
+	${from.tablet} {
+		padding-bottom: ${space[8]}px;
+	}
 	h2 {
 		${from.desktop} {
 			${headlineBold28};
@@ -98,14 +99,14 @@ export default function WeeklyDigitalHero({
 								},
 								{
 									gridId: `weeklyDigitalLandingHeroDesktop_5x3`,
-									srcSizes: [420],
-									sizes: '420px',
+									srcSizes: [422],
+									sizes: '422px',
 									imgType: 'png',
 									media: '(min-width: 980px)',
 								},
 							]}
-							fallback={`weeklyDigitalLandingHeroDesktop_5x3p`}
-							fallbackSize={420}
+							fallback={`weeklyDigitalLandingHeroDesktop_5x3`}
+							fallbackSize={422}
 							altText="A collection of Guardian Weekly magazines"
 						/>
 					</>
