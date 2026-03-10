@@ -35,6 +35,15 @@ export const weeklyDigitalHeroCssOverrides = css`
 `;
 
 export const weeklyDigitalContainerCssOverrides = css`
+	${until.tablet} {
+		section {
+			padding: ${space[3]}px ${space[3]}px ${space[6]}px;
+		}
+		a {
+			width: 100%;
+		}
+	}
+
 	${from.desktop} {
 		width: calc(100% - 64px);
 
