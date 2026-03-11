@@ -190,18 +190,6 @@ describe('fetchAudienceMemberships', () => {
 		expect(mockFetch).not.toHaveBeenCalled();
 	});
 
-	it('should return empty array when consent check times out', async () => {
-		jest.useFakeTimers();
-		mockOnConsent.mockReturnValueOnce(new Promise(() => undefined));
-
-		const resultPromise = fetchAudienceMemberships();
-		await jest.advanceTimersByTimeAsync(2000);
-		const result = await resultPromise;
-
-		expect(result).toEqual([]);
-		expect(mockFetch).not.toHaveBeenCalled();
-	});
-
 	it('should return audience memberships when fetch succeeds', async () => {
 		const memberships = [123, 456, 789];
 		mockFetch.mockResolvedValueOnce({

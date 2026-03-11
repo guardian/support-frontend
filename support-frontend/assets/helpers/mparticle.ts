@@ -53,19 +53,13 @@ let cachedAudienceMemberships: Promise<number[]> | null = null;
  */
 const fetchAudienceMemberships = async (): Promise<number[]> => {
 	if (!getUser().isSignedIn) {
+		console.log('fetchAudienceMemberships: not signed in');
 		return [];
 	}
 
-	const consentTimeout = new Promise<boolean>((resolve) =>
-		window.setTimeout(() => {
-			resolve(false);
-		}, 2000),
-	);
-	const hasConsent = await Promise.race([
-		hasTargetingConsent(),
-		consentTimeout,
-	]);
+	const hasConsent = await hasTargetingConsent();
 	if (!hasConsent) {
+		console.log('fetchAudienceMemberships: not consented');
 		return [];
 	}
 
@@ -77,6 +71,7 @@ const fetchAudienceMemberships = async (): Promise<number[]> => {
 		window.setTimeout(() => reject(new Error('Request timed out')), 2000);
 	});
 
+	console.log('fetchAudienceMemberships: fetching...');
 	cachedAudienceMemberships = Promise.race([
 		fetchJson<{ audienceMemberships: number[] }>('/audience-memberships', {
 			mode: 'cors',

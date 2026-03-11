@@ -77,6 +77,9 @@ export async function getPageParticipations<Variant>(
 	const isUserInAudience = async (
 		test: PageTest<Variant>,
 	): Promise<boolean> => {
+		console.log(
+			`isUserInAudience: ${test.name} has mParticleAudience: ${test.mParticleAudience}`,
+		);
 		if (test.mParticleAudience === undefined) {
 			return true;
 		}
