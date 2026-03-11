@@ -65,6 +65,29 @@ export class SupporterProductDataTS extends GuStack {
                 `arn:aws:ssm:${this.region}:${this.account}:parameter/supporter-product-data/${this.stage}/*`,
               ],
             }),
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["s3:PutObject", "s3:GetObject"],
+              resources: [
+                `arn:aws:s3:::supporter-product-data-export-${this.stage.toLowerCase()}/*`,
+              ],
+            }),
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: [
+                "dynamodb:UpdateItem",
+                "dynamodb:PutItem",
+                "dynamodb:GetItem",
+              ],
+              resources: [
+                `arn:aws:dynamodb:${this.region}:${this.account}:table/SupporterProductData-${this.stage}`,
+              ],
+            }),
+            new PolicyStatement({
+              effect: Effect.ALLOW,
+              actions: ["cloudwatch:PutMetricData"],
+              resources: ["*"],
+            }),
           ],
         }),
       },
