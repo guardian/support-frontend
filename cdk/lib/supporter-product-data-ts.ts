@@ -25,19 +25,19 @@ import {
 } from "aws-cdk-lib/aws-stepfunctions";
 import { LambdaInvoke } from "aws-cdk-lib/aws-stepfunctions-tasks";
 
-export class SupporterProductDataTypescript extends GuStack {
+export class SupporterProductDataTS extends GuStack {
   constructor(scope: App, id: string, props: GuStackProps) {
     super(scope, id, props);
 
     const artifactBucket = Bucket.fromBucketName(
       this,
-      "SupporterProductDataTypescriptDistBucket",
-      "supporter-product-data-typescript-dist"
+      "SupporterProductDataTSDistBucket",
+      "supporter-product-data-ts-dist"
     );
 
     const lambdaArtifact = Code.fromBucket(
       artifactBucket,
-      `support/${this.stage}/supporter-product-data-typescript/supporter-product-data-typescript.zip`
+      `support/${this.stage}/supporter-product-data-ts/supporter-product-data-ts.zip`
     );
 
     const lambdaRole = new Role(this, "SupporterProductDataLambdaRole", {
@@ -71,7 +71,7 @@ export class SupporterProductDataTypescript extends GuStack {
     });
 
     const queryZuora = new Function(this, "QueryZuoraLambda", {
-      functionName: `support-SupporterProductDataTsQueryZuora-${this.stage}`,
+      functionName: `support-SupporterProductDataTSQueryZuora-${this.stage}`,
       runtime: Runtime.NODEJS_22_X,
       handler: "queryZuoraLambda.handler",
       code: lambdaArtifact,
@@ -82,7 +82,7 @@ export class SupporterProductDataTypescript extends GuStack {
     });
 
     const fetchResults = new Function(this, "FetchResultsLambda", {
-      functionName: `support-SupporterProductDataTsFetchResults-${this.stage}`,
+      functionName: `support-SupporterProductDataTSFetchResults-${this.stage}`,
       runtime: Runtime.NODEJS_22_X,
       handler: "fetchResultsLambda.handler",
       code: lambdaArtifact,
@@ -93,7 +93,7 @@ export class SupporterProductDataTypescript extends GuStack {
     });
 
     const queue = new Queue(this, "SupporterProductDataQueue", {
-      queueName: `supporter-product-data-typescript-${this.stage}`,
+      queueName: `supporter-product-data-ts-${this.stage}`,
       visibilityTimeout: Duration.seconds(300),
     });
 
@@ -173,7 +173,7 @@ export class SupporterProductDataTypescript extends GuStack {
       this,
       "SupporterProductDataStateMachine",
       {
-        stateMachineName: `supporter-product-data-typescript-${this.stage}`,
+        stateMachineName: `supporter-product-data-ts-${this.stage}`,
         definitionBody: DefinitionBody.fromChainable(definition),
       }
     );

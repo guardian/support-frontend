@@ -6,7 +6,7 @@ import { Frontend } from "../lib/frontend";
 import { PaymentApi } from "../lib/payment-api";
 import { StripePatronsData } from "../lib/stripe-patrons-data";
 import { SupportWorkers } from "../lib/support-workers";
-import { SupporterProductDataTypescript } from "../lib/supporter-product-data-typescript";
+import { SupporterProductDataTS } from "../lib/supporter-product-data-ts";
 
 const app = new App();
 const cloudFormationStackName = process.env.GU_CFN_STACK_NAME;
@@ -162,13 +162,13 @@ new SupportWorkers(app, "SupportWorkers-PROD", {
   ],
 });
 
-new SupporterProductDataTypescript(app, "SupporterProductDataTypescript-CODE", {
+new SupporterProductDataTS(app, "SupporterProductDataTS-CODE", {
   stack: "support",
   stage: "CODE",
   cloudFormationStackName,
 });
 
-new SupporterProductDataTypescript(app, "SupporterProductDataTypescript-PROD", {
+new SupporterProductDataTS(app, "SupporterProductDataTS-PROD", {
   stack: "support",
   stage: "PROD",
   cloudFormationStackName,
