@@ -109,14 +109,13 @@ function getPromotion(
 
 function getSanitisedPromoCopy(
 	promotionCopy?: PromotionCopy | null,
-	isGift?: boolean | null,
 ): PromotionCopy {
 	if (!promotionCopy) {
 		return {};
 	}
-	const msgFirstPerson = isGift ? 'their' : 'your';
+
 	return {
-		title: promotionCopy.title ?? `Open up ${msgFirstPerson} world view`,
+		title: promotionCopy.title ?? '',
 		description: getSanitisedHtml(promotionCopy.description ?? ''),
 		roundel: getSanitisedHtml(promotionCopy.roundel ?? ''),
 	};
