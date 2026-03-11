@@ -14,7 +14,10 @@ export class SqsService {
   async sendBatch(
     items: Array<[SupporterRatePlanItem, number]>
   ): Promise<void> {
-    console.info("Sending batch to SQS", { queueUrl: this.queueUrl, itemCount: items.length });
+    console.info("Sending batch to SQS", {
+      queueUrl: this.queueUrl,
+      itemCount: items.length,
+    });
 
     const result = await this.client.send(
       new SendMessageBatchCommand({
@@ -28,7 +31,11 @@ export class SqsService {
 
     const failedCount = (result.Failed ?? []).length;
     const succeededCount = (result.Successful ?? []).length;
-    console.info("SQS batch result", { queueUrl: this.queueUrl, succeededCount, failedCount });
+    console.info("SQS batch result", {
+      queueUrl: this.queueUrl,
+      succeededCount,
+      failedCount,
+    });
 
     if (failedCount > 0) {
       const failures = (result.Failed ?? [])

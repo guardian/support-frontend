@@ -24,7 +24,11 @@ export class S3Service {
     length: number
   ): Promise<void> {
     const bucket = bucketNameForStage(stage);
-    console.info("Uploading file to S3", { bucket, filename, contentLength: length });
+    console.info("Uploading file to S3", {
+      bucket,
+      filename,
+      contentLength: length,
+    });
     await this.s3Client.send(
       new PutObjectCommand({
         Bucket: bucket,
@@ -51,7 +55,11 @@ export class S3Service {
     }
 
     const content = await response.Body.transformToString();
-    console.info("Successfully downloaded file from S3", { bucket, filename, contentLength: content.length });
+    console.info("Successfully downloaded file from S3", {
+      bucket,
+      filename,
+      contentLength: content.length,
+    });
     return content;
   }
 }

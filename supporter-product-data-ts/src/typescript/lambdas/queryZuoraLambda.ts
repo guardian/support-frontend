@@ -48,7 +48,9 @@ const buildBatchQueryRequest = (
         incrementalTime = formatZuoraDateTime(parsed);
       }
     } else {
-      console.warn("No lastSuccessfulQueryTime found in config, running without incrementalTime filter");
+      console.warn(
+        "No lastSuccessfulQueryTime found in config, running without incrementalTime filter"
+      );
     }
   }
 

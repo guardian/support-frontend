@@ -127,15 +127,18 @@ export const fetchResults = async (
 
   const fileBytes = new Uint8Array(await fileResponse.arrayBuffer());
 
-  console.info("Uploading result file to S3", { stage, filename, contentLength });
+  console.info("Uploading result file to S3", {
+    stage,
+    filename,
+    contentLength,
+  });
 
   await resolvedDeps.uploadToS3(stage, filename, fileBytes, contentLength);
 
   if (batch.recordCount === 0) {
-    console.info(
-      "Record count is 0, updating lastSuccessfulQueryTime",
-      { attemptedQueryTime: event.attemptedQueryTime }
-    );
+    console.info("Record count is 0, updating lastSuccessfulQueryTime", {
+      attemptedQueryTime: event.attemptedQueryTime,
+    });
     await resolvedDeps.putLastSuccessfulQueryTime(event.attemptedQueryTime);
   }
 
