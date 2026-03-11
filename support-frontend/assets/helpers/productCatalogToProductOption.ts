@@ -60,6 +60,7 @@ export const getProductOptionFromProductAndRatePlan = (
 		case 'Contribution':
 		case 'OneTimeContribution':
 		case 'DigitalSubscription':
+			return 'NoProductOptions';
 		case 'GuardianWeeklyRestOfWorld':
 		case 'GuardianWeeklyDomestic':
 			return enableWeeklyDigital ? 'PlusDigital' : 'NoProductOptions';
