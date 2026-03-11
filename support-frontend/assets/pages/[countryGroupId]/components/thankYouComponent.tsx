@@ -9,7 +9,6 @@ import { observerThemeButton } from 'components/observer-layout/styles';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { Participations } from 'helpers/abTests/models';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import { Country } from 'helpers/internationalisation/classes/country';
 import {
@@ -38,6 +37,7 @@ import { isPaperPlusSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewsp
 import { getPrintPlusDigitalBenefits } from 'pages/paper-subscription-landing/planData';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import {
+	isGuardianWeeklyDigitalProduct,
 	isGuardianWeeklyProduct,
 	isPrintProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
@@ -101,8 +101,6 @@ export function ThankYouComponent({
 		);
 	}
 	const isPending = order.status === 'pending';
-
-	const { enableWeeklyDigital } = getFeatureFlags();
 
 	/**
 	 * contributionType is only applicable to SupporterPlus and Contributions.
@@ -174,9 +172,10 @@ export function ThankYouComponent({
 	const isGuardianPaperPlus = isPaperPlusSub(productKey, ratePlanKey); // Observer not a Plus plan
 	const isPrint = isPrintProduct(productKey);
 	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
-	const isNotGift = !ratePlanKey.includes('Gift');
-	const isGuardianWeeklyDigital =
-		isGuardianWeekly && enableWeeklyDigital && isNotGift;
+	const isGuardianWeeklyDigital = isGuardianWeeklyDigitalProduct(
+		productKey,
+		ratePlanKey,
+	);
 
 	const observerPrint = getObserver(productKey, ratePlanKey);
 	const isObserverSubDomain = isObserverSubdomain();
@@ -297,7 +296,10 @@ export function ThankYouComponent({
 			isOneOff || (!isTierThree && isSignedIn && !isGuardianAdLite && !isPrint),
 			'feedback',
 		),
-		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
+		...maybeThankYouModule(
+			isDigitalEdition || isGuardianWeeklyDigital,
+			'appDownloadEditions',
+		),
 		...maybeThankYouModule(
 			isDigitalEdition || isGuardianPaperPlus || isGuardianWeeklyDigital,
 			'newspaperArchiveBenefit',
