@@ -1,3 +1,8 @@
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
+
 export interface ContributionAmount {
   amount: string;
   currency: string;
@@ -14,11 +19,11 @@ export interface SupporterRatePlanItem {
 }
 
 const toIsoDate = (value: string): string => {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
+  const parsed = dayjs.utc(value);
+  if (!parsed.isValid()) {
     return value;
   }
-  return date.toISOString().slice(0, 10);
+  return parsed.format("YYYY-MM-DD");
 };
 
 const csvValue = (

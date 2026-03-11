@@ -1,4 +1,6 @@
 import type { Handler } from "aws-lambda";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import type { BatchQueryRequest, ZoqlExportQuery } from "../model/query";
 import { type Stage, stageFromEnvironment } from "../model/stage";
 import {
@@ -12,35 +14,40 @@ import {
 import { ZuoraQuerierService } from "../services/zuoraQuerierService";
 import type { FetchResultsState, QueryType, QueryZuoraState } from "./types";
 
-const formatZuoraDateTime = (date: Date): string => {
-  const pad = (value: number): string => value.toString().padStart(2, "0");
-  return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(
-    date.getUTCDate()
-  )} ${pad(date.getUTCHours())}:${pad(date.getUTCMinutes())}:${pad(
-    date.getUTCSeconds()
-  )}`;
-};
+dayjs.extend(utc);
 
-const localIsoForQueryName = (date: Date): string =>
-  date.toISOString().replace("Z", "");
+const ZUORA_DATETIME_FORMAT = "YYYY-MM-DD HH:mm:ss";
+
+const formatZuoraDateTime = (date: dayjs.Dayjs): string =>
+  date.utc().format(ZUORA_DATETIME_FORMAT);
+
+const localIsoForQueryName = (date: dayjs.Dayjs): string =>
+  date.utc().toISOString().replace("Z", "");
 
 const buildBatchQueryRequest = (
   queryType: QueryType,
   config: ZuoraQuerierConfig
 ): BatchQueryRequest => {
-  const now = new Date();
+  const now = dayjs.utc();
 
   let incrementalTime: string | undefined;
 
   if (queryType === "full") {
-    const twentyYearsAgo = new Date(now);
-    twentyYearsAgo.setUTCFullYear(twentyYearsAgo.getUTCFullYear() - 20);
-    incrementalTime = formatZuoraDateTime(twentyYearsAgo);
+    incrementalTime = formatZuoraDateTime(now.subtract(20, "year"));
   } else {
-    incrementalTime =
-      config.lastSuccessfulQueryTime === undefined
-        ? undefined
-        : formatZuoraDateTime(new Date(config.lastSuccessfulQueryTime));
+    if (config.lastSuccessfulQueryTime !== undefined) {
+      // Strip zone ID suffix e.g. [UTC] written by the Scala version's ISO_DATE_TIME formatter
+      const normalised = config.lastSuccessfulQueryTime.replace(/\[.*]$/, "");
+      const parsed = dayjs.utc(normalised);
+      if (!parsed.isValid()) {
+        console.warn(
+          "lastSuccessfulQueryTime could not be parsed as a date, ignoring",
+          { lastSuccessfulQueryTime: config.lastSuccessfulQueryTime }
+        );
+      } else {
+        incrementalTime = formatZuoraDateTime(parsed);
+      }
+    }
   }
 
   const queries: ZoqlExportQuery[] = [
@@ -65,11 +72,8 @@ const buildBatchQueryRequest = (
   };
 };
 
-const attemptedQueryTime = (): string => {
-  const time = new Date();
-  time.setUTCMinutes(time.getUTCMinutes() - 1);
-  return time.toISOString();
-};
+const attemptedQueryTime = (): string =>
+  dayjs.utc().subtract(1, "minute").toISOString();
 
 export const queryZuora = async (
   stage: Stage,

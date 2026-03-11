@@ -1,4 +1,6 @@
 import type { Handler } from "aws-lambda";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { stageFromEnvironment } from "../model/stage";
 import type { BatchQueryResponse } from "../model/zuora";
 import { ConfigService } from "../services/configService";
@@ -8,6 +10,8 @@ import type {
   AddSupporterRatePlanItemToQueueState,
   FetchResultsState,
 } from "./types";
+
+dayjs.extend(utc);
 
 interface FetchResultsDeps {
   getResults: (jobId: string) => Promise<BatchQueryResponse>;
@@ -22,11 +26,11 @@ interface FetchResultsDeps {
 }
 
 const toIsoLocalDateTimeUtc = (isoString: string): string => {
-  const date = new Date(isoString);
-  if (Number.isNaN(date.getTime())) {
+  const parsed = dayjs.utc(isoString);
+  if (!parsed.isValid()) {
     throw new Error(`Invalid attemptedQueryTime: ${isoString}`);
   }
-  return date.toISOString().replace("Z", "");
+  return parsed.toISOString().replace("Z", "");
 };
 
 const getValueOrThrow = <T>(value: T | undefined, errorMessage: string): T => {
