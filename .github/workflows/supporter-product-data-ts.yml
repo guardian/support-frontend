@@ -58,7 +58,7 @@ jobs:
               supporter-product-data-ts:
                 type: aws-lambda
                 parameters:
-                  bucket: supporter-product-data-ts-dist
+                  bucket: membership-dist
                   functionNames:
                     - "-SupporterProductDataTSQueryZuora-"
                     - "-SupporterProductDataTSFetchResults-"
