@@ -28,18 +28,17 @@ export default function HeroHeader({
 	enableWeeklyDigital,
 }: {
 	title: JSX.Element | string;
-	description?: JSX.Element | string;
 	ctaText: string;
 	ctaLink: string;
 	onClick: () => void;
 	heroImage: ReactElement<GridImg> | ReactElement<GridPictureProp>;
 	roundel?: JSX.Element | string;
+	description?: JSX.Element | string;
 	enableWeeklyDigital?: boolean;
 }) {
 	const heroCssOverrides = enableWeeklyDigital
 		? weeklyDigitalHeroCssOverrides
 		: printHeroCssOverrides;
-
 	return (
 		<CentredContainer
 			cssOverrides={
