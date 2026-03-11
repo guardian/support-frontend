@@ -181,7 +181,6 @@ export function SummaryTsAndCs({
 						autoRenewUtilCancelTsAndCs(countryGroupId)}
 				</>
 			),
-			TierThree: autoRenewUtilCancelTsAndCs(countryGroupId),
 			DigitalSubscription: autoRenewUtilCancelTsAndCs(countryGroupId),
 			GuardianAdLite: autoRenewUtilCancelTsAndCs(countryGroupId),
 		};

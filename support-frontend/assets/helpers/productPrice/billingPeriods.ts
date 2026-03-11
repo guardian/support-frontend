@@ -67,8 +67,6 @@ export function ratePlanToBillingPeriod(
 	switch (ratePlanKey) {
 		case 'Annual':
 		case 'AnnualPlus':
-		case 'RestOfWorldAnnual':
-		case 'DomesticAnnual':
 		case 'OneYearGift':
 		case 'OneYearStudent':
 		case 'V1DeprecatedAnnual':
@@ -79,8 +77,6 @@ export function ratePlanToBillingPeriod(
 			return BillingPeriod.Quarterly;
 		case 'Monthly':
 		case 'MonthlyPlus':
-		case 'RestOfWorldMonthly':
-		case 'DomesticMonthly':
 		case 'Everyday':
 		case 'Sixday':
 		case 'Weekend':
