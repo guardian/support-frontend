@@ -31,8 +31,8 @@ export class SupporterProductDataTS extends GuStack {
 
     const artifactBucket = Bucket.fromBucketName(
       this,
-      "SupporterProductDataTSDistBucket",
-      "supporter-product-data-ts-dist"
+      "SupporterProductDataTsDistBucket",
+      "membership-dist"
     );
 
     const lambdaArtifact = Code.fromBucket(
