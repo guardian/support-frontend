@@ -4,19 +4,18 @@ import {
   type UpdateItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { defaultProvider } from "@aws-sdk/credential-provider-node";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import type { Stage } from "../model/stage";
 import type { SupporterRatePlanItem } from "../model/supporterRatePlanItem";
 
-const epochSecondFromIsoDate = (isoDate: string): string => {
-  const atMidnight = new Date(`${isoDate}T00:00:00.000Z`);
-  return Math.floor(atMidnight.getTime() / 1000).toString();
-};
+dayjs.extend(utc);
 
-const nextDay = (isoDate: string): string => {
-  const date = new Date(`${isoDate}T00:00:00.000Z`);
-  date.setUTCDate(date.getUTCDate() + 1);
-  return date.toISOString().slice(0, 10);
-};
+const epochSecondFromIsoDate = (isoDate: string): string =>
+  dayjs.utc(isoDate).unix().toString();
+
+const nextDay = (isoDate: string): string =>
+  dayjs.utc(isoDate).add(1, "day").format("YYYY-MM-DD");
 
 export class DynamoService {
   constructor(

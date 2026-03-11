@@ -25,6 +25,7 @@
     "@aws-sdk/client-sqs": "catalog:",
     "@aws-sdk/client-ssm": "catalog:",
     "@aws-sdk/credential-provider-node": "catalog:",
+    "dayjs": "^1.11.19",
     "zod": "catalog:"
   },
   "devDependencies": {
