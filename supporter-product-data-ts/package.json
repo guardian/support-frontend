@@ -1,5 +1,5 @@
 {
-  "name": "supporter-product-data-typescript",
+  "name": "supporter-product-data-ts",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,9 +12,9 @@
     "build": "tsc --noEmit",
     "bundle": "node esbuild.config.mjs",
     "clean-target": "rm -rf target && mkdir -p target/typescript",
-    "zip": "cd target/typescript && zip -r supporter-product-data-typescript.zip ./* -x \".*\" -x \"__MACOSX\"",
+    "zip": "cd target/typescript && zip -r supporter-product-data-ts.zip ./* -x \".*\" -x \"__MACOSX\"",
     "bundle-and-zip": "pnpm clean-target && pnpm bundle && pnpm zip",
-    "cdk:synth": "pnpm --dir ../cdk synth SupporterProductDataTypescript-CODE SupporterProductDataTypescript-PROD",
+    "cdk:synth": "pnpm --dir ../cdk synth SupporterProductDataTS-CODE SupporterProductDataTS-PROD",
     "package": "pnpm check-formatting && pnpm build && pnpm test && pnpm bundle-and-zip && pnpm cdk:synth",
     "run:local": "tsx src/typescript/local/runQueryZuora.ts"
   },

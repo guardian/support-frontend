@@ -1,4 +1,4 @@
-name: Build supporter-product-data-typescript
+name: Build supporter-product-data-ts
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
       - main
 
 jobs:
-  supporter_product_data_typescript_build:
+  supporter_product_data_ts_build:
     if: >-
       (github.actor != 'dependabot[bot]') &&
         (github.repository_owner == 'guardian' ||
@@ -19,7 +19,7 @@ jobs:
       contents: read
       pull-requests: write
 
-    name: supporter-product-data-typescript build
+    name: supporter-product-data-ts build
     runs-on: ubuntu-latest
     steps:
       - name: Env
@@ -32,12 +32,12 @@ jobs:
         uses: ./.github/actions/setup-node-and-install
 
       - name: Build and test
-        run: pnpm --filter supporter-product-data-typescript package
+        run: pnpm --filter supporter-product-data-ts package
 
       - name: Upload to riff-raff
         uses: guardian/actions-riff-raff@v4
         with:
-          projectName: support:supporter-product-data-typescript
+          projectName: support:supporter-product-data-ts
           roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           buildNumberOffset: 12000
@@ -50,25 +50,25 @@ jobs:
             deployments:
               cfn:
                 type: cloud-formation
-                app: supporter-product-data-typescript
+                app: supporter-product-data-ts
                 parameters:
                   templateStagePaths:
-                    CODE: SupporterProductDataTypescript-CODE.template.json
-                    PROD: SupporterProductDataTypescript-PROD.template.json
-              supporter-product-data-typescript:
+                    CODE: SupporterProductDataTS-CODE.template.json
+                    PROD: SupporterProductDataTS-PROD.template.json
+              supporter-product-data-ts:
                 type: aws-lambda
                 parameters:
-                  bucket: supporter-product-data-typescript-dist
+                  bucket: supporter-product-data-ts-dist
                   functionNames:
-                    - "-SupporterProductDataTsQueryZuora-"
-                    - "-SupporterProductDataTsFetchResults-"
+                    - "-SupporterProductDataTSQueryZuora-"
+                    - "-SupporterProductDataTSFetchResults-"
                     - "-SPDTS-AddToQueue-"
                     - "-SPDTS-ProcessItem-"
-                  fileName: supporter-product-data-typescript.zip
+                  fileName: supporter-product-data-ts.zip
                 dependencies: [cfn]
           contentDirectories: |
             cfn:
-              - cdk/cdk.out/SupporterProductDataTypescript-CODE.template.json
-              - cdk/cdk.out/SupporterProductDataTypescript-PROD.template.json
-            supporter-product-data-typescript:
-              - supporter-product-data-typescript/target/typescript/supporter-product-data-typescript.zip
+              - cdk/cdk.out/SupporterProductDataTS-CODE.template.json
+              - cdk/cdk.out/SupporterProductDataTS-PROD.template.json
+            supporter-product-data-ts:
+              - supporter-product-data-ts/target/typescript/supporter-product-data-ts.zip
