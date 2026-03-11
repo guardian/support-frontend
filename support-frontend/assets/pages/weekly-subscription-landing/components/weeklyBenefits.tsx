@@ -27,7 +27,7 @@ const weeklyBenefitsContainer = css`
 	}
 `;
 const benefitsContainer = css`
-	padding: ${space[4]}px ${space[3]}px ${space[8]}px;
+	padding: ${space[3]}px ${space[3]}px ${space[8]}px ${space[4]}px;
 	width: 100%;
 	${from.desktop} {
 		padding-right: ${space[5]}px;
