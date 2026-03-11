@@ -30,20 +30,9 @@ const buildBatchQueryRequest = (
 ): BatchQueryRequest => {
   const now = new Date();
 
-  let queries: ZoqlExportQuery[] = [];
   let incrementalTime: string | undefined;
 
   if (queryType === "full") {
-    queries = [
-      {
-        name: `${selectActiveRatePlansQueryName}-${localIsoForQueryName(now)}`,
-        query: buildSelectActiveRatePlansQuery(
-          config.discountProductRatePlanIds
-        ),
-        type: "zoqlexport",
-      },
-    ];
-
     const twentyYearsAgo = new Date(now);
     twentyYearsAgo.setUTCFullYear(twentyYearsAgo.getUTCFullYear() - 20);
     incrementalTime = formatZuoraDateTime(twentyYearsAgo);
@@ -53,6 +42,14 @@ const buildBatchQueryRequest = (
         ? undefined
         : formatZuoraDateTime(new Date(config.lastSuccessfulQueryTime));
   }
+
+  const queries: ZoqlExportQuery[] = [
+    {
+      name: `${selectActiveRatePlansQueryName}-${localIsoForQueryName(now)}`,
+      query: buildSelectActiveRatePlansQuery(config.discountProductRatePlanIds),
+      type: "zoqlexport",
+    },
+  ];
 
   return {
     partner: config.partnerId,
