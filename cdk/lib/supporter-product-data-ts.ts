@@ -133,7 +133,7 @@ export class SupporterProductDataTS extends GuStack {
 
     const addToQueueAgainTask = new LambdaInvoke(this, "AddToQueueAgainTask", {
       lambdaFunction: addToQueue,
-      outputPath: "$.Payload",
+      payloadResponseOnly: true,
     });
 
     const moreToProcess = new Choice(this, "MoreToProcess");
@@ -148,7 +148,7 @@ export class SupporterProductDataTS extends GuStack {
 
     const definition = new LambdaInvoke(this, "QueryZuoraTask", {
       lambdaFunction: queryZuora,
-      outputPath: "$.Payload",
+      payloadResponseOnly: true,
     })
       .next(
         new Wait(this, "WaitForZuora", {
@@ -158,7 +158,7 @@ export class SupporterProductDataTS extends GuStack {
       .next(
         new LambdaInvoke(this, "FetchResultsTask", {
           lambdaFunction: fetchResults,
-          outputPath: "$.Payload",
+          payloadResponseOnly: true,
         }).addRetry({
           errors: ["States.ALL"],
           interval: Duration.seconds(60),
@@ -169,7 +169,7 @@ export class SupporterProductDataTS extends GuStack {
       .next(
         new LambdaInvoke(this, "AddToQueueTask", {
           lambdaFunction: addToQueue,
-          outputPath: "$.Payload",
+          payloadResponseOnly: true,
         })
       )
       .next(moreToProcess);
