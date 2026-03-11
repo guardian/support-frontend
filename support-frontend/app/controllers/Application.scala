@@ -326,7 +326,6 @@ class Application(
 
   def studentLanding(
       countryCode: String,
-      institution: String,
       campaignCode: String,
   ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
@@ -342,6 +341,40 @@ class Application(
         noIndexing,
       ),
     ).withSettingsSurrogateKey
+  }
+
+  def tooledStudentLanding(
+      countryCode: String,
+      institution: String,
+      campaignCode: String,
+  ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
+    val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
+    val noIndexing = countryCode == "au" // WHAT DOES THIS DO EXACTLY?
+
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    val studentTests = settings.studentLandingPageTests
+
+    val institutionList =
+      for (
+        test <- studentTests
+        if test.regionId.substring(0, 2).toLowerCase() == countryCode;
+        variant <- test.variants
+        if variant.institution.acronym == institution.toUpperCase()
+      )
+        yield variant
+
+    if (institutionList.size < 1) {
+      NotFound
+    } else
+      Ok(
+        contributionsPlusStudentHtml(
+          countryCode,
+          campaignCodeOption,
+          "student",
+          "https://support.theguardian.com/student",
+          noIndexing,
+        ),
+      ).withSettingsSurrogateKey
   }
 
   def downForMaintenance(): Action[AnyContent] = NoCacheAction() { implicit request =>
