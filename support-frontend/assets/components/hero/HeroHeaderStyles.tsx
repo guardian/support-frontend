@@ -7,6 +7,7 @@ import {
 	headlineBold34,
 	palette,
 	space,
+	until,
 } from '@guardian/source/foundations';
 
 export const printHeroCssOverrides = css`
@@ -16,11 +17,17 @@ export const printHeroCssOverrides = css`
 `;
 
 export const weeklyDigitalHeroCssOverrides = css`
-	background-color: ${palette.neutral[100]};
+	background-color: ${palette.neutral[97]};
 	color: ${palette.neutral[7]};
 	flex-direction: column-reverse;
 	& div:nth-child(2) {
 		align-self: center;
+		${until.tablet} {
+			background: linear-gradient(
+				${palette.neutral[97]},
+				${palette.neutral[86]}
+			);
+		}
 		${from.desktop} {
 			width: 50%;
 		}
@@ -28,6 +35,15 @@ export const weeklyDigitalHeroCssOverrides = css`
 `;
 
 export const weeklyDigitalContainerCssOverrides = css`
+	${until.tablet} {
+		section {
+			padding: ${space[3]}px ${space[3]}px ${space[6]}px;
+		}
+		a {
+			width: 100%;
+		}
+	}
+
 	${from.desktop} {
 		width: calc(100% - 64px);
 

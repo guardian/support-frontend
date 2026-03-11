@@ -4,10 +4,7 @@ import {
 	GBPCountries,
 } from '@modules/internationalisation/countryGroup';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import {
-	BillingPeriod,
-	type RecurringBillingPeriod,
-} from '@modules/product/billingPeriod';
+import { type RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type { Product } from 'components/product/productOption';
 import { featureFlagEnableWeeklyDigital } from 'helpers/featureFlags';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
@@ -38,7 +35,10 @@ import {
 } from 'helpers/productPrice/subscriptions';
 import type { OphanComponentType } from 'helpers/tracking/trackingOphan';
 import { addQueryParamsToURL, getOrigin } from 'helpers/urls/url';
-import { getDiscountSummary } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import {
+	getDiscountDuration,
+	getDiscountSummary,
+} from 'pages/[countryGroupId]/student/helpers/discountDetails';
 
 const getCheckoutUrl = ({
 	countryId,
@@ -193,17 +193,27 @@ export const getWeeklyDigitalRatePlans = ({
 						discountPriceWithCurrency,
 						durationInMonths,
 						billingPeriod,
+						shortFormat: true,
 				  })
 				: undefined;
+		const savingsText =
+			promotion?.discount?.amount && durationInMonths
+				? `${promotion.discount.amount}% off for ${getDiscountDuration({
+						durationInMonths,
+				  })}`
+				: undefined;
+
+		const augmentedPromotion = promotion && getAugmentedPromotion(promotion);
 
 		return {
 			title: getBillingPeriodTitle(billingPeriod),
 			price: fullPriceWithCurrency,
 			discountedPrice: discountPriceWithCurrency,
 			billingPeriodNoun: getBillingPeriodNoun(billingPeriod),
+			billingPeriod,
 			discountSummary,
 			priceCopy: '',
-			savingsText: promotion?.landingPage?.roundel ?? '',
+			savingsText,
 			href: getCheckoutUrl({
 				countryId,
 				billingPeriod,
@@ -211,9 +221,31 @@ export const getWeeklyDigitalRatePlans = ({
 				enableWeeklyDigitalPlans: true,
 				promotion,
 			}),
-			showLabel: billingPeriod === BillingPeriod.Quarterly,
+			roundel: augmentedPromotion?.roundelText,
+			hasPromotion: !!promotion,
+			isPriorityPromo: augmentedPromotion?.hasPriority,
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
 			buttonCopy: 'Subscribe now',
 		};
 	});
+
+const getAugmentedPromotion = (promotion: Promotion): Promotion => {
+	// TODO: This is a temporary function to augment the promotion with additional properties until we have the ability to add custom copy for specific promotions in the promo tool.
+	//       The keys in here must stay up to date with the one in promo tool in order to be able to augment the promotion correctly.
+	switch (promotion.promoCode) {
+		case 'GWPLUSDIGITAL':
+			return {
+				...promotion,
+				roundelText: 'Intro offer | 50% Off',
+				hasPriority: true,
+			};
+		case '20ANNUAL':
+			return {
+				...promotion,
+				roundelText: 'Best value',
+			};
+		default:
+			return promotion;
+	}
+};
