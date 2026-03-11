@@ -1,13 +1,8 @@
-import { type ConsentState, onConsent } from '@guardian/libs';
 import { getUser } from 'helpers/user/user';
 import { fetchJson } from './async/fetch';
+import { hasTargetingConsent } from './page/analyticsAndConsent';
 
 const PAST_CONTRIBUTOR_MPARTICLE_AUDIENCE_ID = 22994;
-
-const hasTargetingConsent = (): Promise<boolean> =>
-	onConsent()
-		.then(({ canTarget }: ConsentState) => canTarget)
-		.catch(() => false);
 
 /**
  * Returns true if user is in mparticle "past contributors" audience.
