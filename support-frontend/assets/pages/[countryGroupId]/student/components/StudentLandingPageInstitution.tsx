@@ -6,7 +6,6 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { StudentDiscount } from '../helpers/discountDetails';
-import LogoUTS from '../logos/uts';
 import StudentHeader from './StudentHeader';
 import { universityBadge } from './StudentHeaderStyles';
 import { StudentLandingPage } from './StudentLandingPage';
@@ -52,7 +51,11 @@ export function StudentLandingPageInstitution({
 					}
 					universityBadge={
 						<p css={universityBadge}>
-							<LogoUTS /> <span>Special offer for UTS students</span>
+							<img
+								src="https://uploads.guim.co.uk/2026/03/10/UTSLogo.svg"
+								alt="logo"
+							/>{' '}
+							<span>Special offer for UTS students</span>
 						</p>
 					}
 					heroImagePrefix="AuStudentLandingHero"
