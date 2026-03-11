@@ -94,7 +94,7 @@ export class SupporterProductDataTS extends GuStack {
 
     const queue = new Queue(this, "SupporterProductDataQueue", {
       queueName: `supporter-product-data-ts-${this.stage}`,
-      visibilityTimeout: Duration.seconds(300),
+      visibilityTimeout: Duration.seconds(600),
     });
 
     const addToQueue = new Function(
