@@ -183,12 +183,10 @@ export function Checkout({
 		);
 
 		const discountedPrice = promotion?.discountedPrice ?? undefined;
-
+		const price = discountedPrice ?? productPrice;
 		/** SupporterPlus can have an additional contribution bolted onto the base price */
 		const finalAmount =
-			discountedPrice ??
-			productPrice +
-				(productKey === 'SupporterPlus' ? contributionAmount ?? 0 : 0);
+			price + (productKey === 'SupporterPlus' ? contributionAmount ?? 0 : 0);
 
 		payment = {
 			originalAmount: productPrice,
