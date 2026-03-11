@@ -1,3 +1,5 @@
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+
 interface Image {
 	desktopUrl: string;
 	tabletUrl: string;
@@ -22,6 +24,6 @@ export interface StudentLandingPageVariant {
 export interface StudentLandingPageTest {
 	name: string;
 	status: 'Live' | 'Draft';
-	regionId: 'AUDCountries' | 'NZDCountries'; // TODO: is this correct - should we hard code?
+	regionId: CountryGroupId;
 	variants: StudentLandingPageVariant[];
 }
