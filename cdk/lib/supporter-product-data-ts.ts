@@ -169,6 +169,21 @@ export class SupporterProductDataTS extends GuStack {
 
     addToQueueAgainTask.next(moreToProcess);
 
+    const noNewSubscriptions = new Succeed(this, "NoNewSubscriptions");
+
+    const checkForNewSubscriptions = new Choice(
+      this,
+      "CheckForNewSubscriptions"
+    );
+    checkForNewSubscriptions
+      .when(Condition.numberEquals("$.recordCount", 0), noNewSubscriptions)
+      .otherwise(
+        new LambdaInvoke(this, "AddToQueueTask", {
+          lambdaFunction: addToQueue,
+          payloadResponseOnly: true,
+        }).next(moreToProcess)
+      );
+
     const definition = new LambdaInvoke(this, "QueryZuoraTask", {
       lambdaFunction: queryZuora,
       payloadResponseOnly: true,
@@ -189,13 +204,7 @@ export class SupporterProductDataTS extends GuStack {
           backoffRate: 1,
         })
       )
-      .next(
-        new LambdaInvoke(this, "AddToQueueTask", {
-          lambdaFunction: addToQueue,
-          payloadResponseOnly: true,
-        })
-      )
-      .next(moreToProcess);
+      .next(checkForNewSubscriptions);
 
     const stateMachine = new StateMachine(
       this,
