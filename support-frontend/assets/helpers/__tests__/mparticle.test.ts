@@ -19,7 +19,10 @@ jest.mock('helpers/user/user', () => ({
 describe('fetchIsPastSingleContributor', () => {
 	const mockFetch = jest.fn();
 	const mockOnConsent = onConsent as jest.MockedFunction<typeof onConsent>;
-	const mockWillShowPrivacyMessageSync = cmp.willShowPrivacyMessageSync as jest.MockedFunction<typeof cmp.willShowPrivacyMessageSync>;
+	const mockWillShowPrivacyMessageSync =
+		cmp.willShowPrivacyMessageSync as jest.MockedFunction<
+			typeof cmp.willShowPrivacyMessageSync
+		>;
 
 	beforeEach(() => {
 		global.fetch = mockFetch;
@@ -131,7 +134,10 @@ describe('fetchIsPastSingleContributor', () => {
 describe('fetchAudienceMemberships', () => {
 	const mockFetch = jest.fn();
 	const mockOnConsent = onConsent as jest.MockedFunction<typeof onConsent>;
-	const mockWillShowPrivacyMessageSync = cmp.willShowPrivacyMessageSync as jest.MockedFunction<typeof cmp.willShowPrivacyMessageSync>;
+	const mockWillShowPrivacyMessageSync =
+		cmp.willShowPrivacyMessageSync as jest.MockedFunction<
+			typeof cmp.willShowPrivacyMessageSync
+		>;
 	const mockGetUser = jest.mocked(getUser);
 
 	beforeEach(() => {
