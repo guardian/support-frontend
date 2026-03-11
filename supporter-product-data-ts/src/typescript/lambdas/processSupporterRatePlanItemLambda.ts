@@ -88,6 +88,14 @@ export const processItem = async (
   item: SupporterRatePlanItem,
   deps: ProcessItemDeps
 ): Promise<void> => {
+  console.info("Processing supporter rate plan item", {
+    subscriptionName: item.subscriptionName,
+    identityId: item.identityId,
+    productRatePlanId: item.productRatePlanId,
+    productRatePlanName: item.productRatePlanName,
+    termEndDate: item.termEndDate,
+  });
+
   if (deps.discountIds.includes(item.productRatePlanId)) {
     console.info("Supporter rate plan item is a discount and will be skipped", {
       subscriptionName: item.subscriptionName,
@@ -97,11 +105,27 @@ export const processItem = async (
   }
 
   try {
-    const itemWithContribution = await addContributionAmountIfNeeded(
-      item,
-      deps
-    );
+    const itemWithContribution = await addContributionAmountIfNeeded(item, deps);
+
+    if (itemWithContribution.contributionAmount !== undefined) {
+      console.info("Resolved contribution amount", {
+        subscriptionName: item.subscriptionName,
+        amount: itemWithContribution.contributionAmount.amount,
+        currency: itemWithContribution.contributionAmount.currency,
+      });
+    }
+
+    console.info("Writing item to DynamoDB", {
+      subscriptionName: item.subscriptionName,
+      identityId: item.identityId,
+    });
+
     await deps.writeItem(itemWithContribution);
+
+    console.info("Successfully wrote item to DynamoDB", {
+      subscriptionName: item.subscriptionName,
+      identityId: item.identityId,
+    });
   } catch (error) {
     console.error("Error writing item to Dynamo", {
       subscriptionName: item.subscriptionName,
@@ -126,12 +150,16 @@ export const processEvent = async (
   event: SQSEvent,
   deps: ProcessItemDeps
 ): Promise<void> => {
+  console.info("Processing SQS event", { recordCount: event.Records.length });
+
   await Promise.all(
     event.Records.map(async (record) => {
       const item = parseItem(record.body);
       await processItem(item, deps);
     })
   );
+
+  console.info("Finished processing SQS event", { recordCount: event.Records.length });
 };
 
 export const handler: Handler<SQSEvent, void> = (event) =>

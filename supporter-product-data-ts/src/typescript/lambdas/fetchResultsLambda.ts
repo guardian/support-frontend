@@ -65,9 +65,20 @@ export const fetchResults = async (
   const stage = stageFromEnvironment();
   const resolvedDeps = deps ?? (await buildDefaultDeps());
 
-  console.info("Attempting to fetch results", { jobId: event.jobId, stage });
+  console.info("Attempting to fetch results", {
+    jobId: event.jobId,
+    attemptedQueryTime: event.attemptedQueryTime,
+    stage,
+  });
 
   const result = await resolvedDeps.getResults(event.jobId);
+
+  console.info("Received job status from Zuora", {
+    jobId: event.jobId,
+    status: result.status,
+    batchCount: result.batches.length,
+  });
+
   if (result.status !== "completed") {
     throw new Error(
       `Job with id ${event.jobId} is still in status ${result.status}`
@@ -78,6 +89,14 @@ export const fetchResults = async (
     result.batches[0],
     `No batches were returned in the batch query response for jobId ${event.jobId}`
   );
+
+  console.info("Batch details", {
+    jobId: event.jobId,
+    fileId: batch.fileId,
+    recordCount: batch.recordCount,
+    full: batch.full,
+  });
+
   const fileId = getValueOrThrow(
     batch.fileId,
     `Batch.fileId was missing in jobId ${event.jobId}`
@@ -87,6 +106,8 @@ export const fetchResults = async (
     event.attemptedQueryTime
   )}.csv`;
 
+  console.info("Downloading result file from Zuora", { fileId, filename });
+
   const fileResponse = await resolvedDeps.getResultFileResponse(fileId);
   if (!fileResponse.ok) {
     throw new Error(
@@ -95,6 +116,9 @@ export const fetchResults = async (
   }
 
   const contentLength = Number(fileResponse.headers.get("content-length") ?? 0);
+
+  console.info("Downloaded result file", { filename, contentLength });
+
   if (contentLength <= 0) {
     throw new Error(
       `Content length of the file for job with id ${event.jobId} is not > 0`
@@ -102,9 +126,16 @@ export const fetchResults = async (
   }
 
   const fileBytes = new Uint8Array(await fileResponse.arrayBuffer());
+
+  console.info("Uploading result file to S3", { stage, filename, contentLength });
+
   await resolvedDeps.uploadToS3(stage, filename, fileBytes, contentLength);
 
   if (batch.recordCount === 0) {
+    console.info(
+      "Record count is 0, updating lastSuccessfulQueryTime",
+      { attemptedQueryTime: event.attemptedQueryTime }
+    );
     await resolvedDeps.putLastSuccessfulQueryTime(event.attemptedQueryTime);
   }
 

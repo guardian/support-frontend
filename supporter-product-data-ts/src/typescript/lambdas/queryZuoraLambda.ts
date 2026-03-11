@@ -47,8 +47,17 @@ const buildBatchQueryRequest = (
       } else {
         incrementalTime = formatZuoraDateTime(parsed);
       }
+    } else {
+      console.warn("No lastSuccessfulQueryTime found in config, running without incrementalTime filter");
     }
   }
+
+  console.info("Built batch query request", {
+    queryType,
+    incrementalTime,
+    partnerId: config.partnerId,
+    discountProductRatePlanIdCount: config.discountProductRatePlanIds.length,
+  });
 
   const queries: ZoqlExportQuery[] = [
     {

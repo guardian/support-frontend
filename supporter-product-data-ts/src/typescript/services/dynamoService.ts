@@ -31,6 +31,15 @@ export class DynamoService {
   async writeItem(item: SupporterRatePlanItem): Promise<void> {
     const expiryDate = nextDay(item.termEndDate);
 
+    console.info("Writing supporter rate plan item to DynamoDB", {
+      tableName: this.tableName,
+      identityId: item.identityId,
+      subscriptionName: item.subscriptionName,
+      termEndDate: item.termEndDate,
+      expiryDate,
+      hasContributionAmount: item.contributionAmount !== undefined,
+    });
+
     const expressionValues: NonNullable<
       UpdateItemCommandInput["ExpressionAttributeValues"]
     > = {
@@ -66,5 +75,11 @@ export class DynamoService {
         ExpressionAttributeValues: expressionValues,
       })
     );
+
+    console.info("Successfully wrote supporter rate plan item to DynamoDB", {
+      tableName: this.tableName,
+      identityId: item.identityId,
+      subscriptionName: item.subscriptionName,
+    });
   }
 }
