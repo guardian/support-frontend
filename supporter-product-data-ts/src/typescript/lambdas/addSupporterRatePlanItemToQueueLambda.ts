@@ -142,14 +142,20 @@ export const addToQueue = async (
   const csvContent = await deps.readCsv(state.filename);
   const rows = parseCsvWithHeader(csvContent);
 
-  console.info("Read CSV from S3", { filename: state.filename, rowCount: rows.length });
+  console.info("Read CSV from S3", {
+    filename: state.filename,
+    rowCount: rows.length,
+  });
 
   if (rows.length === 0) {
     await deps.triggerCsvReadAlarm();
     throw new Error(`The specified CSV file ${state.filename} was empty`);
   }
 
-  const { validRows, failedRowIndexes } = decodeRows(rows, state.processedCount);
+  const { validRows, failedRowIndexes } = decodeRows(
+    rows,
+    state.processedCount
+  );
 
   if (failedRowIndexes.length > 0) {
     await deps.triggerCsvReadAlarm();

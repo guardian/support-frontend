@@ -105,7 +105,10 @@ export const processItem = async (
   }
 
   try {
-    const itemWithContribution = await addContributionAmountIfNeeded(item, deps);
+    const itemWithContribution = await addContributionAmountIfNeeded(
+      item,
+      deps
+    );
 
     if (itemWithContribution.contributionAmount !== undefined) {
       console.info("Resolved contribution amount", {
@@ -159,7 +162,9 @@ export const processEvent = async (
     })
   );
 
-  console.info("Finished processing SQS event", { recordCount: event.Records.length });
+  console.info("Finished processing SQS event", {
+    recordCount: event.Records.length,
+  });
 };
 
 export const handler: Handler<SQSEvent, void> = (event) =>
