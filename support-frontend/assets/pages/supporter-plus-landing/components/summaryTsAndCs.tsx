@@ -156,7 +156,6 @@ export function SummaryTsAndCs({
 			<div css={containerSummaryTsCs}>
 				{productKey.startsWith('GuardianWeekly') ? '' : 'The '}
 				{productName} subscription
-				{productKey === 'TierThree' ? 's' : ''}
 				{productKey === 'SupporterPlus' ? ' and any contribution' : ''} will
 				auto-renew each {periodNoun}. You will be charged the subscription
 				{productKey === 'SupporterPlus' ? ' and contribution' : ''} amount
