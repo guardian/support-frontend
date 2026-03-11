@@ -45,6 +45,9 @@ case class StudentLandingPageTest(
     status: Status,
     priority: Int,
     regionId: String,
+    // TODO: does this need to be a proper RegionId - see PageTest<variant> interface in
+    // support-frontend/assets/helpers/abTests/models.ts/PageTest/regionTargeting
+    // it's optional tho
     variants: List[StudentLandingPageVariant],
 )
 
