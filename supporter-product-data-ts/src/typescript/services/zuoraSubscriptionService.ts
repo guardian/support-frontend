@@ -25,13 +25,20 @@ export class ZuoraSubscriptionService {
   }
 
   async getSubscription(id: string): Promise<MinimalZuoraSubscription> {
-    const response = await fetch(
-      `${this.config.url.replace(/\/$/, "")}/subscriptions/${id}`,
-      {
-        method: "GET",
-        headers: this.authHeaders(),
-      }
-    );
+    const url = `${this.config.url.replace(/\/$/, "")}/subscriptions/${id}`;
+    console.info("Zuora API request", { method: "GET", url });
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: this.authHeaders(),
+    });
+
+    console.info("Zuora API response", {
+      method: "GET",
+      url,
+      status: response.status,
+      ok: response.ok,
+    });
 
     if (!response.ok) {
       throw new Error(
@@ -39,6 +46,11 @@ export class ZuoraSubscriptionService {
       );
     }
 
-    return (await response.json()) as MinimalZuoraSubscription;
+    const body = (await response.json()) as MinimalZuoraSubscription;
+    console.info("Zuora getSubscription response body", {
+      subscriptionId: id,
+      ratePlanCount: body.ratePlans.length,
+    });
+    return body;
   }
 }

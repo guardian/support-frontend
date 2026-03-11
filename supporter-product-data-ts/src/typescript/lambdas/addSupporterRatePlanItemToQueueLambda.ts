@@ -58,9 +58,17 @@ const decodeRows = (
         supporterRatePlanItemFromCsvRow(row, itemIndex + 2),
         itemIndex,
       ]);
-    } catch {
+    } catch (error) {
+      console.warn("Failed to decode CSV row", { itemIndex, error });
       failedRowIndexes.push(itemIndex);
     }
+  });
+
+  console.info("Decoded CSV rows", {
+    totalRows: rows.length,
+    validRowCount: validRows.length,
+    failedRowCount: failedRowIndexes.length,
+    processedCount,
   });
 
   return { validRows, failedRowIndexes };
@@ -82,17 +90,29 @@ const writeBatchesUntilTimeout = async (
 ): Promise<number> => {
   let latestProcessedCount = processedCount;
 
+  console.info("Starting to write batches to SQS", {
+    batchCount: batches.length,
+    totalItems: batches.reduce((sum, b) => sum + b.length, 0),
+    startingProcessedCount: processedCount,
+  });
+
   for (const batch of batches) {
     if (getRemainingTimeInMillis() < timeoutBufferInMillis) {
       console.info("Aborting processing due to remaining lambda time", {
         remainingMillis: getRemainingTimeInMillis(),
         timeoutBufferInMillis,
+        latestProcessedCount,
       });
       return latestProcessedCount;
     }
 
     try {
       await deps.sendBatch(batch);
+      console.info("Successfully wrote SQS batch", {
+        batchSize: batch.length,
+        firstIndex: batch[0]?.[1],
+        lastIndex: batch[batch.length - 1]?.[1],
+      });
     } catch (error) {
       console.error("Failed to write SQS batch", error);
       await deps.triggerSqsWriteAlarm();
@@ -116,20 +136,20 @@ export const addToQueue = async (
     filename: state.filename,
     recordCount: state.recordCount,
     processedCount: state.processedCount,
+    remainingMillis: getRemainingTimeInMillis(),
   });
 
   const csvContent = await deps.readCsv(state.filename);
   const rows = parseCsvWithHeader(csvContent);
+
+  console.info("Read CSV from S3", { filename: state.filename, rowCount: rows.length });
 
   if (rows.length === 0) {
     await deps.triggerCsvReadAlarm();
     throw new Error(`The specified CSV file ${state.filename} was empty`);
   }
 
-  const { validRows, failedRowIndexes } = decodeRows(
-    rows,
-    state.processedCount
-  );
+  const { validRows, failedRowIndexes } = decodeRows(rows, state.processedCount);
 
   if (failedRowIndexes.length > 0) {
     await deps.triggerCsvReadAlarm();
@@ -148,7 +168,17 @@ export const addToQueue = async (
     deps
   );
 
+  console.info("Finished writing to SQS", {
+    filename: state.filename,
+    processedCount,
+    recordCount: state.recordCount,
+    complete: processedCount === state.recordCount,
+  });
+
   if (processedCount === state.recordCount) {
+    console.info("All records processed, updating lastSuccessfulQueryTime", {
+      attemptedQueryTime: state.attemptedQueryTime,
+    });
     await deps.putLastSuccessfulQueryTime(state.attemptedQueryTime);
   }
 

@@ -23,20 +23,25 @@ export class S3Service {
     body: Uint8Array,
     length: number
   ): Promise<void> {
+    const bucket = bucketNameForStage(stage);
+    console.info("Uploading file to S3", { bucket, filename, contentLength: length });
     await this.s3Client.send(
       new PutObjectCommand({
-        Bucket: bucketNameForStage(stage),
+        Bucket: bucket,
         Key: filename,
         Body: body,
         ContentLength: length,
       })
     );
+    console.info("Successfully uploaded file to S3", { bucket, filename });
   }
 
   async getObjectAsString(stage: Stage, filename: string): Promise<string> {
+    const bucket = bucketNameForStage(stage);
+    console.info("Downloading file from S3", { bucket, filename });
     const response = await this.s3Client.send(
       new GetObjectCommand({
-        Bucket: bucketNameForStage(stage),
+        Bucket: bucket,
         Key: filename,
       })
     );
@@ -45,6 +50,8 @@ export class S3Service {
       throw new Error(`Missing S3 body for ${filename}`);
     }
 
-    return response.Body.transformToString();
+    const content = await response.Body.transformToString();
+    console.info("Successfully downloaded file from S3", { bucket, filename, contentLength: content.length });
+    return content;
   }
 }
