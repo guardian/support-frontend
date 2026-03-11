@@ -8,7 +8,7 @@ import {
 jest.mock('@guardian/libs', () => ({
 	onConsent: jest.fn(),
 	cmp: {
-		willShowPrivacyMessageSync: jest.fn(),
+		willShowPrivacyMessage: jest.fn(),
 	},
 }));
 
@@ -19,9 +19,9 @@ jest.mock('helpers/user/user', () => ({
 describe('fetchIsPastSingleContributor', () => {
 	const mockFetch = jest.fn();
 	const mockOnConsent = onConsent as jest.MockedFunction<typeof onConsent>;
-	const mockWillShowPrivacyMessageSync =
-		cmp.willShowPrivacyMessageSync as jest.MockedFunction<
-			typeof cmp.willShowPrivacyMessageSync
+	const mockWillShowPrivacyMessage =
+		cmp.willShowPrivacyMessage as jest.MockedFunction<
+			typeof cmp.willShowPrivacyMessage
 		>;
 
 	beforeEach(() => {
@@ -31,8 +31,8 @@ describe('fetchIsPastSingleContributor', () => {
 		mockOnConsent.mockClear();
 		mockOnConsent.mockResolvedValue({ canTarget: true, framework: null });
 
-		mockWillShowPrivacyMessageSync.mockClear();
-		mockWillShowPrivacyMessageSync.mockReturnValue(false);
+		mockWillShowPrivacyMessage.mockClear();
+		mockWillShowPrivacyMessage.mockResolvedValue(false);
 	});
 
 	afterEach(() => {
@@ -63,7 +63,7 @@ describe('fetchIsPastSingleContributor', () => {
 	});
 
 	it('should return false when privacy message will be shown', async () => {
-		mockWillShowPrivacyMessageSync.mockReturnValue(true);
+		mockWillShowPrivacyMessage.mockResolvedValue(true);
 
 		const isSignedIn = true;
 		const result = await fetchIsPastSingleContributor(isSignedIn, true);
@@ -134,9 +134,9 @@ describe('fetchIsPastSingleContributor', () => {
 describe('fetchAudienceMemberships', () => {
 	const mockFetch = jest.fn();
 	const mockOnConsent = onConsent as jest.MockedFunction<typeof onConsent>;
-	const mockWillShowPrivacyMessageSync =
-		cmp.willShowPrivacyMessageSync as jest.MockedFunction<
-			typeof cmp.willShowPrivacyMessageSync
+	const mockWillShowPrivacyMessage =
+		cmp.willShowPrivacyMessage as jest.MockedFunction<
+			typeof cmp.willShowPrivacyMessage
 		>;
 	const mockGetUser = jest.mocked(getUser);
 
@@ -147,8 +147,8 @@ describe('fetchAudienceMemberships', () => {
 		mockGetUser.mockClear();
 		mockOnConsent.mockResolvedValue({ canTarget: true, framework: null });
 		mockGetUser.mockReturnValue({ isSignedIn: true });
-		mockWillShowPrivacyMessageSync.mockClear();
-		mockWillShowPrivacyMessageSync.mockReturnValue(false);
+		mockWillShowPrivacyMessage.mockClear();
+		mockWillShowPrivacyMessage.mockResolvedValue(false);
 		jest.clearAllTimers();
 	});
 
@@ -174,7 +174,7 @@ describe('fetchAudienceMemberships', () => {
 	});
 
 	it('should return empty array when privacy message will be shown', async () => {
-		mockWillShowPrivacyMessageSync.mockReturnValue(true);
+		mockWillShowPrivacyMessage.mockResolvedValue(true);
 
 		const result = await fetchAudienceMemberships();
 		expect(result).toEqual([]);

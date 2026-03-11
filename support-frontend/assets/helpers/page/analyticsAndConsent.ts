@@ -126,12 +126,13 @@ async function sendConsentToOphan(): Promise<void> {
 const hasTargetingConsent = async (): Promise<boolean> => {
 	try {
 		// If the consent banner is displayed then do not wait - just return false
-		if (cmp.willShowPrivacyMessageSync()) {
+		if (await cmp.willShowPrivacyMessage()) {
 			return false;
 		}
 		const { canTarget } = await onConsent();
 		return canTarget;
-	} catch {
+	} catch (error) {
+		console.error('Error getting targeting consent', error);
 		return false;
 	}
 };
