@@ -159,6 +159,11 @@ export class SupporterProductDataTS extends GuStack {
         new LambdaInvoke(this, "FetchResultsTask", {
           lambdaFunction: fetchResults,
           outputPath: "$.Payload",
+        }).addRetry({
+          errors: ["States.ALL"],
+          interval: Duration.seconds(60),
+          maxAttempts: 20,
+          backoffRate: 1,
         })
       )
       .next(
