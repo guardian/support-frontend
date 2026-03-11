@@ -89,6 +89,10 @@ function getBaseDomain(): Domain {
 	return DOMAINS.PROD;
 }
 
+function isDev(): boolean {
+	return getBaseDomain() === 'thegulocal.com';
+}
+
 function isProd(): boolean {
 	return getBaseDomain() === 'theguardian.com';
 }
@@ -114,4 +118,5 @@ export {
 	isProd,
 	isCode,
 	isCodeOrProd,
+	isDev,
 };
