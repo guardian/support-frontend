@@ -182,10 +182,13 @@ export function Checkout({
 			billingPeriod,
 		);
 
+		const discountedPrice = promotion?.discountedPrice ?? undefined;
+
 		/** SupporterPlus can have an additional contribution bolted onto the base price */
 		const finalAmount =
+			discountedPrice ??
 			productPrice +
-			(productKey === 'SupporterPlus' ? contributionAmount ?? 0 : 0);
+				(productKey === 'SupporterPlus' ? contributionAmount ?? 0 : 0);
 
 		payment = {
 			originalAmount: productPrice,
