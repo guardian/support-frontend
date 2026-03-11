@@ -37,10 +37,8 @@ interface LoaderData {
 }
 
 async function rootLoader(): Promise<LoaderData> {
-	// Setup consent first (without waiting for participations)
-	await setUpConsent();
+	void setUpConsent();
 
-	// Now get participations (consent is ready)
 	const [landing, oneTime] = await Promise.all([
 		getPageParticipations<LandingPageVariant>(getLandingPageTestConfig()),
 		getPageParticipations<OneTimeCheckoutVariant>(

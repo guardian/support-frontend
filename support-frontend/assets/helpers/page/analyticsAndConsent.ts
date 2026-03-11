@@ -123,6 +123,19 @@ async function sendConsentToOphan(): Promise<void> {
 	}
 }
 
+const hasTargetingConsent = async (): Promise<boolean> => {
+	try {
+		// If the consent banner is displayed then do not wait - just return false
+		if (cmp.willShowPrivacyMessageSync()) {
+			return false;
+		}
+		const { canTarget } = await onConsent();
+		return canTarget;
+	} catch {
+		return false;
+	}
+};
+
 // ----- Helpers ----- //
 
 function shouldInitCmp(): boolean {
@@ -136,4 +149,9 @@ function shouldInitCmp(): boolean {
 
 // ----- Exports ----- //
 
-export { analyticsInitialisation, consentInitialisation, sendConsentToOphan };
+export {
+	analyticsInitialisation,
+	consentInitialisation,
+	sendConsentToOphan,
+	hasTargetingConsent,
+};
