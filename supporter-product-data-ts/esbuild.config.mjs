@@ -6,6 +6,5 @@ await build({
   sourcemap: true,
   platform: "node",
   target: "node22",
-  format: "esm",
   outdir: "target/typescript",
 });
