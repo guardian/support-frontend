@@ -183,15 +183,6 @@ describe('thankYouComponent', () => {
 			]);
 		});
 
-		it('should display the correct thankyou cards for TierThree', () => {
-			testComponent({ productKey: 'TierThree', ratePlanKey: 'Monthly' }, [
-				'signIn',
-				'benefits',
-				'appsDownload',
-				'subscriptionStart',
-			]);
-		});
-
 		it('should display the correct thankyou cards for Guardian AdLite', () => {
 			testComponent({ productKey: 'GuardianAdLite', ratePlanKey: 'Monthly' }, [
 				'whatNext',
@@ -199,7 +190,7 @@ describe('thankYouComponent', () => {
 			]);
 		});
 
-		it('should display the correct thankyou cards for Digital Edition', () => {
+		it('should display the correct thankyou cards for DigitalPlus', () => {
 			testComponent(
 				{ productKey: 'DigitalSubscription', ratePlanKey: 'Monthly' },
 				[

@@ -214,37 +214,15 @@ SignUp.args = {
 	ctas: null,
 };
 
-export const SignUpTier3 = Template.bind({});
-SignUpTier3.args = {
-	moduleType: 'signUp',
-	isSignedIn: false,
-	icon: getThankYouModuleIcon('signUp'),
-	header: signUpHeader,
-	bodyCopy: <SignUpBodyCopy isTierThree={true} />,
-	ctas: null,
-};
-
 export const SignIn = Template.bind({});
 SignIn.args = {
 	moduleType: 'signIn',
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
 	header: signInHeader(),
-	bodyCopy: <SignInBodyCopy isGuardianPrint={false} isTierThree={false} />,
+	bodyCopy: <SignInBodyCopy isGuardianPrint={false} />,
 	ctas: (
 		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="Continue" />
-	),
-};
-
-export const SignInTier3 = Template.bind({});
-SignInTier3.args = {
-	moduleType: 'signIn',
-	isSignedIn: false,
-	icon: getThankYouModuleIcon('signIn'),
-	header: signInHeader(true),
-	bodyCopy: <SignInBodyCopy isTierThree={true} isGuardianPrint={false} />,
-	ctas: (
-		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="Sign in" />
 	),
 };
 
@@ -437,19 +415,6 @@ SubscriptionStartGuardianWeekly.args = {
 	bodyCopy: (
 		<SubscriptionStartItems
 			productKey={'GuardianWeeklyDomestic'}
-			startDate={'Friday, March 28, 2025'}
-		/>
-	),
-	ctas: null,
-};
-
-export const SubscriptionStartTierThree = Template.bind({});
-SubscriptionStartTierThree.args = {
-	icon: getThankYouModuleIcon('subscriptionStart'),
-	header: 'When will your subscription start?',
-	bodyCopy: (
-		<SubscriptionStartItems
-			productKey={'TierThree'}
 			startDate={'Friday, March 28, 2025'}
 		/>
 	),

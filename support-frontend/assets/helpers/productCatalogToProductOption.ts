@@ -64,10 +64,6 @@ export const getProductOptionFromProductAndRatePlan = (
 		case 'GuardianWeeklyRestOfWorld':
 		case 'GuardianWeeklyDomestic':
 			return enableWeeklyDigital ? 'PlusDigital' : 'NoProductOptions';
-		case 'TierThree':
-			return ratePlanKey.endsWith('V2')
-				? 'NewspaperArchive'
-				: 'NoProductOptions';
 		case 'SubscriptionCard':
 		case 'NationalDelivery':
 		case 'HomeDelivery':

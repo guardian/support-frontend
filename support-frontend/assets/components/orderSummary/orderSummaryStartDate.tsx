@@ -37,7 +37,6 @@ export function OrderSummaryStartDate({
 	) {
 		return (
 			<ul css={listStartDate}>
-				{productKey === 'TierThree' && <li>{digitalBenefitsCopy}</li>}
 				<li>{enableWeeklyDigital ? weeklyDigitalCopy : weeklyTierThreeCopy}</li>
 			</ul>
 		);

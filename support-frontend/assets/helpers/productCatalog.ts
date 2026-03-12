@@ -26,7 +26,6 @@ const activeProductKeys = [
 	'GuardianWeeklyDomestic',
 	'GuardianWeeklyRestOfWorld',
 	'GuardianAdLite',
-	'TierThree',
 	'DigitalSubscription',
 	'NationalDelivery',
 	'HomeDelivery',
@@ -46,7 +45,6 @@ export type ActiveProductKey = Extract<
  */
 type OneTimeContributionRatePlanKey = ProductRatePlanKey<'OneTimeContribution'>;
 type GuardianAdLiteRatePlanKey = ProductRatePlanKey<'GuardianAdLite'>;
-type TierThreeRatePlanKey = ProductRatePlanKey<'TierThree'>;
 type DigitalSubscriptionRatePlanKey = ProductRatePlanKey<'DigitalSubscription'>;
 type NationalDeliveryRatePlanKey = ProductRatePlanKey<'NationalDelivery'>;
 type HomeDeliveryRatePlanKey = ProductRatePlanKey<'HomeDelivery'>;
@@ -61,7 +59,6 @@ type ContributionRatePlanKey = ProductRatePlanKey<'Contribution'>;
 export type ActiveRatePlanKey = keyof Record<
 	| OneTimeContributionRatePlanKey
 	| GuardianAdLiteRatePlanKey
-	| TierThreeRatePlanKey
 	| DigitalSubscriptionRatePlanKey
 	| NationalDeliveryRatePlanKey
 	| HomeDeliveryRatePlanKey
@@ -369,28 +366,6 @@ export const productCatalogDescription: Record<
 		},
 		benefits: guardianAdLiteBenefits,
 	},
-	TierThree: {
-		label: ProductTierLabel.TierThree,
-		thankyouMessage: digitalThankyouMessage,
-		landingPagePath: '/contribute',
-		benefits: [guardianWeeklyBenefit],
-		/** These are just the SupporterPlus benefits */
-		deliverableTo: gwDeliverableCountries,
-		ratePlans: {
-			DomesticMonthly: {
-				billingPeriod: BillingPeriod.Monthly,
-			},
-			DomesticAnnual: {
-				billingPeriod: BillingPeriod.Annual,
-			},
-			RestOfWorldMonthly: {
-				billingPeriod: BillingPeriod.Monthly,
-			},
-			RestOfWorldAnnual: {
-				billingPeriod: BillingPeriod.Annual,
-			},
-		},
-	},
 	DigitalSubscription: {
 		label: 'Digital plus',
 		labelPill: 'New',
@@ -642,11 +617,7 @@ export function internationaliseProductAndRatePlan(
 } {
 	return {
 		productKey: internationaliseProduct(supportRegionId, productKey),
-		ratePlanKey: internationaliseRatePlan(
-			supportRegionId,
-			productKey,
-			ratePlanKey,
-		),
+		ratePlanKey: ratePlanKey,
 	};
 }
 
@@ -665,29 +636,4 @@ export function internationaliseProduct(
 		}
 	}
 	return productKey;
-}
-
-function internationaliseRatePlan(
-	supportRegionId: SupportRegionId,
-	productKey: ActiveProductKey,
-	ratePlanKey: ActiveRatePlanKey,
-): ActiveRatePlanKey {
-	if (productKey === 'TierThree') {
-		if (supportRegionId === SupportRegionId.INT) {
-			if (ratePlanKey === 'DomesticAnnual') {
-				return 'RestOfWorldAnnual';
-			}
-			if (ratePlanKey === 'DomesticMonthly') {
-				return 'RestOfWorldMonthly';
-			}
-		} else {
-			if (ratePlanKey === 'RestOfWorldAnnual') {
-				return 'DomesticAnnual';
-			}
-			if (ratePlanKey === 'RestOfWorldMonthly') {
-				return 'DomesticMonthly';
-			}
-		}
-	}
-	return ratePlanKey;
 }

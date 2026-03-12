@@ -118,7 +118,6 @@ type GetThankYouModuleDataParams = {
 	csrf: CsrfState;
 	isOneOff: boolean;
 	amountIsAboveThreshold: boolean;
-	isTierThree: boolean;
 	startDate?: string;
 	email?: string;
 	campaignCode?: string;
@@ -139,7 +138,6 @@ export const getThankYouModuleData = ({
 	csrf,
 	isOneOff,
 	amountIsAboveThreshold,
-	isTierThree,
 	startDate,
 	email,
 	campaignCode,
@@ -287,18 +285,13 @@ export const getThankYouModuleData = ({
 		},
 		signIn: {
 			icon: getThankYouModuleIcon('signIn'),
-			header: signInHeader(isTierThree, isGuardianPrint),
-			bodyCopy: (
-				<SignInBodyCopy
-					isTierThree={isTierThree}
-					isGuardianPrint={isGuardianPrint}
-				/>
-			),
+			header: signInHeader(isGuardianPrint),
+			bodyCopy: <SignInBodyCopy isGuardianPrint={isGuardianPrint} />,
 			ctas: (
 				<SignInCTA
 					email={email}
 					csrf={csrf}
-					buttonLabel={isTierThree || isGuardianPrint ? 'Sign in' : 'Continue'}
+					buttonLabel={isGuardianPrint ? 'Sign in' : 'Continue'}
 				/>
 			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SIGN_IN,
@@ -306,12 +299,7 @@ export const getThankYouModuleData = ({
 		signUp: {
 			icon: getThankYouModuleIcon('signUp'),
 			header: signUpHeader,
-			bodyCopy: (
-				<SignUpBodyCopy
-					isTierThree={isTierThree}
-					isGuardianPrint={isGuardianPrint}
-				/>
-			),
+			bodyCopy: <SignUpBodyCopy isGuardianPrint={isGuardianPrint} />,
 			ctas: null,
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SIGN_UP,
 		},

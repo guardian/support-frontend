@@ -10,7 +10,6 @@ import {
 	manageAccountLink,
 	observerLinks,
 	supporterPlusTermsLink,
-	tierThreeTermsLink,
 } from 'helpers/legal';
 import { productLegal } from 'helpers/legalCopy';
 import { getProductLabel } from 'helpers/productCatalog';
@@ -49,8 +48,6 @@ const container = css`
 		}
 	}
 `;
-
-const tierThreeLabel = getProductLabel('TierThree');
 
 function getStudentPrice(
 	isStudentOneYearRatePlan: boolean,
@@ -354,28 +351,6 @@ export function PaymentTsAndCs({
 				{isStudentOneYearRatePlan
 					? studentSupporterPlusTsAndCs
 					: supporterPlusTsAndCs(countryGroupId, promotion)}
-			</div>
-		),
-		TierThree: (
-			<div>
-				<p>
-					By signing up, you are taking out a {tierThreeLabel} subscription.
-					Your {tierThreeLabel} subscription will auto-renew each{' '}
-					{billingPeriodSingular} unless cancelled. Your first payment will be
-					taken on the publication date of your first Guardian Weekly magazine
-					(as shown in the checkout) but you will start to receive your digital
-					benefits when you sign up. Unless you cancel, subsequent{' '}
-					{billingPeriodPlural} payments will be taken on this date using your
-					chosen payment method. You can cancel your {tierThreeLabel}{' '}
-					subscription at any time before your next renewal date. If you cancel
-					your {tierThreeLabel} subscription within 14 days of signing up, your
-					subscription will stop immediately and we will not take the first
-					payment from you. Cancellation of your subscription after 14 days will
-					take effect at the end of your current {billingPeriodPlural} payment
-					period. To cancel go to&nbsp;
-					{ManageMyAccountLink} or see our {tierThreeLabel}{' '}
-					{textLink('Terms', tierThreeTermsLink)}.
-				</p>
 			</div>
 		),
 		NationalDelivery: paperTsAndCs('HomeDelivery', deliveryDate),

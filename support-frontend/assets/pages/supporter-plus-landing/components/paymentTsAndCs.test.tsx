@@ -20,16 +20,9 @@ const oneYearStudentDiscount = {
 };
 
 describe('Payment Ts&Cs Snapshot comparison', () => {
-	const promotionTierThreeUnitedStatesMonthly: Promotion = {
-		name: '$8 off for 12 months',
-		description: 'Tier Three United States Monthly',
-		promoCode: 'TIER_THREE_USA_MONTHLY',
-		numberOfDiscountedPeriods: 12,
-		discountedPrice: 37,
-	};
 	const promotionGuardianWeeklyUnitedStatesAnnual: Promotion = {
 		name: '10% off for 12 months',
-		description: 'Guardian Weekly United States Annual',
+		description: 'Guardian Weekly Digital United States Annual',
 		promoCode: 'ANNUAL10',
 		numberOfDiscountedPeriods: 12,
 		discountedPrice: 324,
@@ -94,13 +87,6 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 			amountWithCurrency: '£9',
 		},
 		{
-			paymentProductKey: 'TierThree',
-			ratePlanKey: 'RestOfWorldMonthly',
-			countryGroupId: 'UnitedStates',
-			amount: 45,
-			amountWithCurrency: '$45',
-		},
-		{
 			paymentProductKey: 'HomeDelivery',
 			ratePlanKey: 'EverydayPlus',
 			countryGroupId: 'GBPCountries',
@@ -123,14 +109,14 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 		},
 		{
 			paymentProductKey: 'GuardianWeeklyDomestic',
-			ratePlanKey: 'Monthly',
+			ratePlanKey: 'MonthlyPlus',
 			countryGroupId: 'GBPCountries',
 			amount: 16.5,
 			amountWithCurrency: '£16.5',
 		},
 		{
 			paymentProductKey: 'GuardianWeeklyRestOfWorld',
-			ratePlanKey: 'Annual',
+			ratePlanKey: 'AnnualPlus',
 			countryGroupId: 'International',
 			amount: 432,
 			amountWithCurrency: '$432',
@@ -141,13 +127,9 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 		`paymentTs&Cs render Product:$paymentProductKey Period:$ratePlanKey Region:$countryGroupId Amount:$amountWithCurrency`,
 		({ paymentProductKey, ratePlanKey, countryGroupId, amount }) => {
 			const promo: Promotion | undefined =
-				paymentProductKey === 'TierThree' &&
-				ratePlanKey === 'RestOfWorldMonthly' &&
+				paymentProductKey === 'GuardianWeeklyRestOfWorld' &&
+				ratePlanKey === 'AnnualPlus' &&
 				countryGroupId === 'UnitedStates'
-					? promotionTierThreeUnitedStatesMonthly
-					: paymentProductKey === 'GuardianWeeklyRestOfWorld' &&
-					  ratePlanKey === 'Annual' &&
-					  countryGroupId === 'UnitedStates'
 					? promotionGuardianWeeklyUnitedStatesAnnual
 					: undefined;
 			const { container } = render(
