@@ -111,7 +111,7 @@ export function WeeklyBenefits({ planData }: WeeklyBenefitsProps): JSX.Element {
 			</div>
 			<div css={imageContainerLeftCol}>
 				<GridImage
-					gridId={`weeklyBenefitHeroLeftCol_5x3`}
+					gridId={`weeklyBenefitHeroLeftCol_4x3`}
 					srcSizes={[530, 621]}
 					sizes="(min-width: 530px) 530px, (max-width: 621px) 621px"
 					imgType="png"
