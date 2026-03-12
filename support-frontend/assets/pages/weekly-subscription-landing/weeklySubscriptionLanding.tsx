@@ -67,7 +67,7 @@ const weeklyDigitalSpacing = css`
 	}
 `;
 
-const { enableWeeklyDigital } = getFeatureFlags();
+const { enableWeeklyDigital: enableWeeklyDigitalFlag } = getFeatureFlags();
 
 export type WeeklyLandingPageProps = {
 	countryId: IsoCountry;
@@ -113,6 +113,9 @@ export function WeeklyLandingPage({
 	const fulfilmentOption: PrintFulfilmentOptions =
 		countryGroupId === 'International' ? RestOfWorld : Domestic;
 	const planData = getPlanData('NoProductOptions', fulfilmentOption);
+
+	const enableWeeklyDigital = enableWeeklyDigitalFlag && !orderIsAGift;
+
 	return (
 		<PromoTermsProvider>
 			<PageScaffold
