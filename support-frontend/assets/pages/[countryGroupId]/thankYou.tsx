@@ -17,6 +17,7 @@ import type { UserType } from 'helpers/user/userType';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import type { Participations } from '../../helpers/abTests/models';
+import { AnalyticsProfileCacheProvider } from '../../helpers/customHooks/analyticsProfileCache';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { setHideSupportMessaginCookie } from '../../helpers/storage/contributionsCookies';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
@@ -161,16 +162,18 @@ export function ThankYou({
 		storage.session.get(SKIP_NEW_ONBOARDING_EXPERIENCE_KEY) !== 'true'
 	) {
 		return (
-			<OnboardingComponent
-				supportRegionId={supportRegionId}
-				csrf={csrf}
-				payment={payment}
-				productKey={productKey as OnboardingProductKey}
-				ratePlanKey={ratePlanKey ?? 'OneTime'}
-				promotion={promotion}
-				identityUserType={userType}
-				landingPageSettings={landingPageSettings}
-			/>
+			<AnalyticsProfileCacheProvider>
+				<OnboardingComponent
+					supportRegionId={supportRegionId}
+					csrf={csrf}
+					payment={payment}
+					productKey={productKey as OnboardingProductKey}
+					ratePlanKey={ratePlanKey ?? 'OneTime'}
+					promotion={promotion}
+					identityUserType={userType}
+					landingPageSettings={landingPageSettings}
+				/>
+			</AnalyticsProfileCacheProvider>
 		);
 	}
 
