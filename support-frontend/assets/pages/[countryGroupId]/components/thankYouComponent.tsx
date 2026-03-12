@@ -66,6 +66,7 @@ export type CheckoutComponentProps = {
 	csrf: CsrfState;
 	payment: {
 		originalAmount: number;
+		discountedAmount?: number;
 		contributionAmount?: number;
 		finalAmount: number;
 	};
