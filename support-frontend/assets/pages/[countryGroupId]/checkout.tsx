@@ -137,10 +137,12 @@ export function Checkout({
 
 	/**
 	 * - `originalAmount` the amount pre any discounts or contributions
+	 * - `discountedAmount` the amount with a discountApplied
 	 * - `finalAmount` is the amount a person will pay
 	 */
 	let payment: {
 		originalAmount: number;
+		discountedAmount?: number;
 		contributionAmount?: number;
 		finalAmount: number;
 	};
@@ -182,16 +184,26 @@ export function Checkout({
 			billingPeriod,
 		);
 
-		/** SupporterPlus can have an additional contribution bolted onto the base price */
-		const finalAmount =
-			productPrice +
-			(productKey === 'SupporterPlus' ? contributionAmount ?? 0 : 0);
+		const discountedPrice = promotion?.discountedPrice ?? undefined;
 
-		payment = {
-			originalAmount: productPrice,
-			contributionAmount,
-			finalAmount,
-		};
+		const price = discountedPrice ?? productPrice;
+
+		if (productKey === 'SupporterPlus') {
+			/** SupporterPlus can have an additional contribution bolted onto the base price */
+			payment = {
+				originalAmount: productPrice,
+				discountedAmount: discountedPrice,
+				contributionAmount,
+				finalAmount: price + (contributionAmount ?? 0),
+			};
+		} else {
+			payment = {
+				originalAmount: productPrice,
+				discountedAmount: discountedPrice,
+				contributionAmount,
+				finalAmount: price,
+			};
+		}
 	}
 
 	const isTestUser = !!cookie.get('_test_username');
