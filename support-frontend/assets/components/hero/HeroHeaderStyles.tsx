@@ -21,15 +21,11 @@ export const weeklyDigitalHeroCssOverrides = css`
 	color: ${palette.neutral[7]};
 	flex-direction: column-reverse;
 	& div:nth-child(2) {
-		align-self: center;
 		${until.tablet} {
 			background: linear-gradient(
 				${palette.neutral[97]},
 				${palette.neutral[86]}
 			);
-		}
-		${from.desktop} {
-			width: 50%;
 		}
 	}
 `;
