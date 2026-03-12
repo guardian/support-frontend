@@ -54,7 +54,7 @@ export const weeklyDigitalContainerCssOverrides = css`
 `;
 
 export const heroCopy = css`
-	padding: ${space[1]}px ${space[5]}px ${space[10]}px;
+	padding: ${space[3]}px ${space[5]}px ${space[10]}px;
 `;
 
 export const heroTitle = css`
