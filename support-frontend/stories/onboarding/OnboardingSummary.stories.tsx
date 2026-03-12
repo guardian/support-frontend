@@ -108,7 +108,6 @@ export const MonthlyWithPromotion = {
 		...defaultArgs,
 		payment: {
 			originalAmount: 15,
-			discountedAmount: 10,
 			finalAmount: 10,
 		},
 		promotion: {

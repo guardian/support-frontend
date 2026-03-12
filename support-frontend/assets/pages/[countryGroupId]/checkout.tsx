@@ -185,25 +185,16 @@ export function Checkout({
 		);
 
 		const discountedPrice = promotion?.discountedPrice ?? undefined;
-
 		const price = discountedPrice ?? productPrice;
+		/** SupporterPlus can have an additional contribution bolted onto the base price */
+		const finalAmount =
+			price + (productKey === 'SupporterPlus' ? contributionAmount ?? 0 : 0);
 
-		if (productKey === 'SupporterPlus') {
-			/** SupporterPlus can have an additional contribution bolted onto the base price */
-			payment = {
-				originalAmount: productPrice,
-				discountedAmount: discountedPrice,
-				contributionAmount,
-				finalAmount: price + (contributionAmount ?? 0),
-			};
-		} else {
-			payment = {
-				originalAmount: productPrice,
-				discountedAmount: discountedPrice,
-				contributionAmount,
-				finalAmount: price,
-			};
-		}
+		payment = {
+			originalAmount: productPrice,
+			contributionAmount,
+			finalAmount,
+		};
 	}
 
 	const isTestUser = !!cookie.get('_test_username');
