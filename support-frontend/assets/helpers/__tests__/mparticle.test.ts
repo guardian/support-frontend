@@ -1,9 +1,6 @@
 import { cmp, onConsent } from '@guardian/libs';
 import { getUser } from 'helpers/user/user';
-import {
-	fetchAudienceMemberships,
-	fetchIsPastSingleContributor,
-} from '../mparticle';
+import { fetchAudienceMemberships } from '../mparticle';
 
 jest.mock('@guardian/libs', () => ({
 	onConsent: jest.fn(),
@@ -15,121 +12,6 @@ jest.mock('@guardian/libs', () => ({
 jest.mock('helpers/user/user', () => ({
 	getUser: jest.fn(),
 }));
-
-describe('fetchIsPastSingleContributor', () => {
-	const mockFetch = jest.fn();
-	const mockOnConsent = onConsent as jest.MockedFunction<typeof onConsent>;
-	const mockWillShowPrivacyMessage =
-		cmp.willShowPrivacyMessage as jest.MockedFunction<
-			typeof cmp.willShowPrivacyMessage
-		>;
-
-	beforeEach(() => {
-		global.fetch = mockFetch;
-		mockFetch.mockClear();
-
-		mockOnConsent.mockClear();
-		mockOnConsent.mockResolvedValue({ canTarget: true, framework: null });
-
-		mockWillShowPrivacyMessage.mockClear();
-		mockWillShowPrivacyMessage.mockResolvedValue(false);
-	});
-
-	afterEach(() => {
-		jest.restoreAllMocks();
-	});
-
-	it('should return false when isSignedIn = false', async () => {
-		const isSignedIn = false;
-		const result = await fetchIsPastSingleContributor(isSignedIn, true);
-		expect(result).toBe(false);
-		expect(mockFetch).not.toHaveBeenCalled();
-	});
-
-	it('should return false when user is not in test', async () => {
-		const isSignedIn = true;
-		const result = await fetchIsPastSingleContributor(isSignedIn, false);
-		expect(result).toBe(false);
-		expect(mockFetch).not.toHaveBeenCalled();
-	});
-
-	it('should return false when user does not have targeting consent', async () => {
-		mockOnConsent.mockResolvedValue({ canTarget: false, framework: null });
-
-		const isSignedIn = true;
-		const result = await fetchIsPastSingleContributor(isSignedIn, true);
-		expect(result).toBe(false);
-		expect(mockFetch).not.toHaveBeenCalled();
-	});
-
-	it('should return false when privacy message will be shown', async () => {
-		mockWillShowPrivacyMessage.mockResolvedValue(true);
-
-		const isSignedIn = true;
-		const result = await fetchIsPastSingleContributor(isSignedIn, true);
-		expect(result).toBe(false);
-		expect(mockOnConsent).not.toHaveBeenCalled();
-		expect(mockFetch).not.toHaveBeenCalled();
-	});
-
-	it('should return true when mparticle returns isPastSingleContributor: true', async () => {
-		mockFetch.mockResolvedValueOnce({
-			ok: true,
-			json: () => ({ isAudienceMember: true }),
-		});
-
-		const isSignedIn = true;
-		const result = await fetchIsPastSingleContributor(isSignedIn, true);
-		expect(result).toBe(true);
-		expect(mockFetch).toHaveBeenCalledWith(
-			'/audience/22994/member',
-			expect.objectContaining({
-				mode: 'cors',
-				credentials: 'include',
-			}),
-		);
-	});
-
-	it('should return false when mparticle returns isPastSingleContributor: false', async () => {
-		mockFetch.mockResolvedValueOnce({
-			ok: true,
-			json: () => ({ isAudienceMember: false }),
-		});
-
-		const isSignedIn = true;
-		const result = await fetchIsPastSingleContributor(isSignedIn, true);
-		expect(result).toBe(false);
-		expect(mockFetch).toHaveBeenCalled();
-	});
-
-	it('should return false when fetch response is not ok', async () => {
-		mockFetch.mockResolvedValueOnce({
-			ok: false,
-			status: 500,
-		});
-
-		const isSignedIn = true;
-		const result = await fetchIsPastSingleContributor(isSignedIn, true);
-		expect(result).toBe(false);
-	});
-
-	it('should return false when fetch throws an error', async () => {
-		mockFetch.mockRejectedValueOnce(new Error('Network error'));
-
-		const isSignedIn = true;
-		const result = await fetchIsPastSingleContributor(isSignedIn, true);
-		expect(result).toBe(false);
-	});
-
-	it('should return false when consent check throws an error', async () => {
-		mockOnConsent.mockRejectedValueOnce(new Error('Consent error'));
-
-		const isSignedIn = true;
-		const result = await fetchIsPastSingleContributor(isSignedIn, true);
-		expect(result).toBe(false);
-		expect(mockFetch).not.toHaveBeenCalled();
-	});
-});
 
 describe('fetchAudienceMemberships', () => {
 	const mockFetch = jest.fn();

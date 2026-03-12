@@ -113,19 +113,6 @@ class MParticleClient(
     }
   }
 
-  def isAudienceMember(identityId: String, audienceId: Int): Future[Boolean] = {
-    if (mparticleEnabled) {
-      fetchAudienceMemberships(identityId)
-        .map(response => response.audience_memberships.exists(_.audience_id == audienceId))
-        .recover { case WebServiceClientError(CodeBody("404", _)) =>
-          logger.info("mParticle returned 404 for user")
-          false
-        }
-    } else {
-      Future.successful(false)
-    }
-  }
-
   private def parseUserProfile(profileResponse: ProfileResponse): MParticleUserProfile = {
     val hasMobileAppDownloaded = profileResponse.audience_memberships.exists(_.audience_id == 22581)
     val hasFeastMobileAppDownloaded = profileResponse.audience_memberships.exists(_.audience_id == 22582)
