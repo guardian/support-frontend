@@ -15,25 +15,32 @@ import {
 import { getReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { getSettings } from '../globalsAndSwitches/globals';
 
-function setUpTrackingAndConsents(participations: Participations): void {
-	console.log({ participations });
+async function setUpConsent(): Promise<void> {
 	const countryId: IsoCountry = Country.detect();
+	// Initialize CMP first
+	try {
+		const localeCode = await getLocale();
+		const country = localeCode ?? countryId;
+		// Initialise the consent management platform using the getLocale result
+		// If getLocale fails to determine a location, fall back to the country detected by the country module
+		consentInitialisation(country);
+	} catch (e) {
+		console.log(`An exception was thrown getting the localeCode: ${String(e)}`);
+		consentInitialisation(countryId);
+	}
+
+	return sendConsentToOphan();
+}
+
+function setUpTracking(participations: Participations): void {
+	console.log({ participations });
 	const acquisitionData = getReferrerAcquisitionData();
-
-	getLocale()
-		.then((localeCode) => {
-			const country = localeCode ?? countryId;
-			// Initialise the consent management platform using the getLocale result
-			// If getLocale fails to determine a location, fall back to the country detected by the country module
-			consentInitialisation(country);
-		})
-		.catch((e) => {
-			console.log(`An exception was thrown getting the localeCode: ${e}`);
-			consentInitialisation(countryId);
-		});
-
 	analyticsInitialisation(participations, acquisitionData);
-	sendConsentToOphan();
+}
+
+function setUpTrackingAndConsents(participations: Participations): void {
+	void setUpConsent();
+	setUpTracking(participations);
 }
 
 function getAbParticipations(): Participations {
@@ -56,4 +63,9 @@ function getAbParticipations(): Participations {
 }
 
 // ----- Exports ----- //
-export { getAbParticipations, setUpTrackingAndConsents };
+export {
+	getAbParticipations,
+	setUpConsent,
+	setUpTracking,
+	setUpTrackingAndConsents,
+};

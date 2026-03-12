@@ -95,6 +95,7 @@ case class LandingPageTest(
     status: Status,
     priority: Int,
     regionTargeting: Option[RegionTargeting],
+    mParticleAudience: Option[Int],
     variants: List[LandingPageVariant],
 )
 
