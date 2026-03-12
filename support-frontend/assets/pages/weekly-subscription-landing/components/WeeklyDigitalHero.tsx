@@ -98,15 +98,15 @@ export default function WeeklyDigitalHero({
 									media: '(max-width: 979px)',
 								},
 								{
-									gridId: `weeklyDigitalLandingHeroDesktop_5x3`,
-									srcSizes: [422],
-									sizes: '422px',
+									gridId: `weeklyDigitalLandingHeroDesktop_4x3`,
+									srcSizes: [435],
+									sizes: '435px',
 									imgType: 'png',
 									media: '(min-width: 980px)',
 								},
 							]}
-							fallback={`weeklyDigitalLandingHeroDesktop_5x3`}
-							fallbackSize={422}
+							fallback={`weeklyDigitalLandingHeroDesktop_4x3`}
+							fallbackSize={435}
 							altText="A collection of Guardian Weekly magazines"
 						/>
 					</>
