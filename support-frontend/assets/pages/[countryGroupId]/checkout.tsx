@@ -137,10 +137,12 @@ export function Checkout({
 
 	/**
 	 * - `originalAmount` the amount pre any discounts or contributions
+	 * - `discountedAmount` the amount with a discountApplied
 	 * - `finalAmount` is the amount a person will pay
 	 */
 	let payment: {
 		originalAmount: number;
+		discountedAmount?: number;
 		contributionAmount?: number;
 		finalAmount: number;
 	};

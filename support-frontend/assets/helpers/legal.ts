@@ -42,7 +42,7 @@ const paperTermsLink =
 const digitalPlusTermsLink =
 	'https://www.theguardian.com/info/2025/oct/31/guardian-subscription-terms-and-conditions';
 const guardianWeeklyTermsLink =
-	'https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions';
+	'https://www.theguardian.com/info/2026/mar/10/guardian-weekly-subscription-terms-and-conditions';
 const manageAccountLink = 'https://manage.theguardian.com';
 const observerLinks = {
 	TERMS: 'https://observer.co.uk/policy/terms',
