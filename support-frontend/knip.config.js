@@ -6,17 +6,7 @@ const flattenedEntryPoints = [...Object.keys(entryPoints)].map(
 
 module.exports = {
 	// ! signals that this is production code https://knip.dev/features/production-mode
-	entry: [
-		...flattenedEntryPoints,
-		'scripts/build-ssr-content.tsx!',
-		'assets/pages/[countryGroupId]/checkout.tsx!',
-		'assets/pages/[countryGroupId]/guardianAdLiteLanding/guardianAdLiteLanding.tsx!',
-		'assets/pages/[countryGroupId]/landingPage.tsx!',
-		'assets/pages/[countryGroupId]/oneTimeCheckout.tsx!',
-		'assets/pages/[countryGroupId]/student/StudentLandingPageGlobalContainer.tsx!',
-		'assets/pages/[countryGroupId]/student/StudentLandingPageUTSContainer.tsx!',
-		'assets/pages/[countryGroupId]/thankYou.tsx!',
-	],
+	entry: [...flattenedEntryPoints, 'scripts/build-ssr-content.tsx!'],
 	project: ['**/*.{js,jsx,ts,tsx}!'],
 	ignoreExportsUsedInFile: false,
 	ignore: ['**/knip.*.js'],

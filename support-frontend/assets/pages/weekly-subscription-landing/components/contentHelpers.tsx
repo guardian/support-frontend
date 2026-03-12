@@ -16,10 +16,12 @@ const showOnMobile = css`
 
 export const getFirstParagraph = (
 	promotionCopy: PromotionCopy,
-	orderIsAGift: boolean,
+	orderIsAGift: boolean = false,
 ): JSX.Element | null => {
 	if (promotionCopy.description) {
-		return promotionHTML(promotionCopy.description);
+		return promotionHTML(promotionCopy.description, {
+			tag: 'p',
+		});
 	}
 
 	if (orderIsAGift) {

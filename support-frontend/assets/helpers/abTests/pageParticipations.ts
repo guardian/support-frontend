@@ -1,5 +1,5 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { fetchAnalyticsUserProfile } from 'helpers/analytics/analyticsUserProfile';
+import { fetchAudienceMemberships } from 'helpers/mparticle';
 import { CountryGroup } from '../internationalisation/classes/countryGroup';
 import {
 	countryGroupMatches,
@@ -80,10 +80,8 @@ export async function getPageParticipations<Variant>(
 		if (test.mParticleAudience === undefined) {
 			return true;
 		}
-		const profile = await fetchAnalyticsUserProfile();
-		const inAudience = profile.audienceMemberships.includes(
-			test.mParticleAudience,
-		);
+		const audienceMemberships = await fetchAudienceMemberships();
+		const inAudience = audienceMemberships.includes(test.mParticleAudience);
 		return inAudience;
 	};
 

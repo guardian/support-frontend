@@ -1,6 +1,6 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { fetchAnalyticsUserProfile } from '../../analytics/analyticsUserProfile';
 import { CountryGroup } from '../../internationalisation/classes/countryGroup';
+import { fetchAudienceMemberships } from '../../mparticle';
 import {
 	countryGroupMatches,
 	getParticipationFromQueryString,
@@ -9,15 +9,15 @@ import {
 import type { PageParticipationsConfig, PageTest } from '../models';
 import { getMvtId } from '../mvt';
 import { getPageParticipations } from '../pageParticipations';
-import type { Key } from '../sessionStorage';
 import {
 	getSessionParticipations,
+	type Key,
 	setSessionParticipations,
 } from '../sessionStorage';
 
-jest.mock('../../analytics/analyticsUserProfile', () => ({
+jest.mock('../../mparticle', () => ({
 	__esModule: true,
-	fetchAnalyticsUserProfile: jest.fn(),
+	fetchAudienceMemberships: jest.fn(),
 }));
 
 jest.mock('../../internationalisation/classes/countryGroup', () => ({
@@ -56,7 +56,7 @@ const mockGetParticipationFromQueryString = jest.mocked(
 const mockRandomNumber = jest.mocked(randomNumber);
 const mockGetSessionParticipations = jest.mocked(getSessionParticipations);
 const mockSetSessionParticipations = jest.mocked(setSessionParticipations);
-const mockFetchAnalyticsUserProfile = jest.mocked(fetchAnalyticsUserProfile);
+const mockFetchAudienceMemberships = jest.mocked(fetchAudienceMemberships);
 
 interface TestVariant {
 	name: string;
@@ -122,11 +122,7 @@ describe('getPageParticipations', () => {
 		mockGetParticipationFromQueryString.mockReturnValue(undefined);
 		mockRandomNumber.mockReturnValue(0);
 		mockGetSessionParticipations.mockReturnValue(undefined);
-		mockFetchAnalyticsUserProfile.mockResolvedValue({
-			hasMobileAppDownloaded: false,
-			hasFeastMobileAppDownloaded: false,
-			audienceMemberships: [],
-		});
+		mockFetchAudienceMemberships.mockResolvedValue([]);
 	});
 
 	afterEach(() => {
@@ -608,11 +604,7 @@ describe('getPageParticipations', () => {
 			mockDetect.mockReturnValue('GBPCountries');
 			mockCountryGroupMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
-			mockFetchAnalyticsUserProfile.mockResolvedValue({
-				hasMobileAppDownloaded: false,
-				hasFeastMobileAppDownloaded: false,
-				audienceMemberships: [42],
-			});
+			mockFetchAudienceMemberships.mockResolvedValue([42]);
 
 			const result = await getPageParticipations(config);
 
@@ -635,11 +627,7 @@ describe('getPageParticipations', () => {
 			mockLocation('/test/page');
 			mockDetect.mockReturnValue('GBPCountries');
 			mockCountryGroupMatches.mockReturnValue(true);
-			mockFetchAnalyticsUserProfile.mockResolvedValue({
-				hasMobileAppDownloaded: false,
-				hasFeastMobileAppDownloaded: false,
-				audienceMemberships: [99],
-			});
+			mockFetchAudienceMemberships.mockResolvedValue([99]);
 
 			const result = await getPageParticipations(config);
 
@@ -665,7 +653,7 @@ describe('getPageParticipations', () => {
 			const result = await getPageParticipations(config);
 
 			expect(result.variant).toEqual(variant);
-			expect(mockFetchAnalyticsUserProfile).not.toHaveBeenCalled();
+			expect(mockFetchAudienceMemberships).not.toHaveBeenCalled();
 		});
 
 		it('bypasses audience check for URL-forced participations', async () => {
@@ -681,7 +669,7 @@ describe('getPageParticipations', () => {
 			const result = await getPageParticipations(config);
 
 			expect(result.participations).toEqual({ 'test-1': 'control' });
-			expect(mockFetchAnalyticsUserProfile).not.toHaveBeenCalled();
+			expect(mockFetchAudienceMemberships).not.toHaveBeenCalled();
 		});
 	});
 });

@@ -14,7 +14,8 @@ import type { OneTimeCheckoutVariant } from 'helpers/globalsAndSwitches/oneTimeC
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	getAbParticipations,
-	setUpTrackingAndConsents,
+	setUpConsent,
+	setUpTracking,
 } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import { getCheckoutNudgeParticipations } from '../../helpers/abTests/checkoutNudgeAbTests';
@@ -36,6 +37,8 @@ interface LoaderData {
 }
 
 async function rootLoader(): Promise<LoaderData> {
+	void setUpConsent();
+
 	const [landing, oneTime] = await Promise.all([
 		getPageParticipations<LandingPageVariant>(getLandingPageTestConfig()),
 		getPageParticipations<OneTimeCheckoutVariant>(
@@ -48,7 +51,8 @@ async function rootLoader(): Promise<LoaderData> {
 		...checkoutNudgeSettings?.participations,
 		...oneTime.participations,
 	};
-	setUpTrackingAndConsents(finalParticipations);
+	// Setup tracking (non-blocking)
+	setUpTracking(finalParticipations);
 	return { landing, oneTime, finalParticipations };
 }
 

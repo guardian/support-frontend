@@ -96,25 +96,4 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
 		excludeContributionsOnlyCountries: true,
 	},
-	mandatoryZipCode: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			US: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false,
-		seed: 5,
-		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
-		excludeContributionsOnlyCountries: true,
-	},
 };
