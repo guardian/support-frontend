@@ -19,6 +19,8 @@ export const hero = css`
 	justify-content: space-between;
 	color: ${neutral[100]};
 	border: none;
+	/* TODO : Remove */
+	padding-top: ${space[3]}px;
 	background-color: ${palette.brand[400]};
 	width: 100%;
 
