@@ -55,11 +55,14 @@ const imageContainerLeftCol = css`
 		justify-content: flex-end;
 		padding: ${space[8]}px 0 ${space[8]}px;
 	}
+	${between.leftCol.and.wide} {
+		img {
+			object-fit: contain;
+			max-width: 100%;
+		}
+	}
 	${from.wide} {
 		padding: 0;
-		img {
-			border-radius: 0 ${space[2]}px ${space[2]}px 0;
-		}
 	}
 `;
 const headingContainer = css`
@@ -111,7 +114,7 @@ export function WeeklyBenefits({ planData }: WeeklyBenefitsProps): JSX.Element {
 			</div>
 			<div css={imageContainerLeftCol}>
 				<GridImage
-					gridId={`weeklyBenefitHeroLeftCol_5x3`}
+					gridId={`weeklyBenefitHeroLeftCol_4x3`}
 					srcSizes={[530, 621]}
 					sizes="(min-width: 530px) 530px, (max-width: 621px) 621px"
 					imgType="png"

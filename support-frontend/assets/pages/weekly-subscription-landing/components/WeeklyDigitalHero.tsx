@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import {
 	from,
-	headlineBold28,
 	palette,
 	space,
 	textSansBold17,
@@ -19,11 +18,6 @@ import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 const pageTitleSpacing = css`
 	${from.tablet} {
 		padding-bottom: ${space[8]}px;
-	}
-	h2 {
-		${from.desktop} {
-			${headlineBold28};
-		}
 	}
 	p {
 		${from.desktop} {
@@ -93,8 +87,8 @@ export default function WeeklyDigitalHero({
 							sources={[
 								{
 									gridId: `weeklyDigitalLandingHeroMobile_16x9`,
-									srcSizes: [368],
-									sizes: '368px',
+									srcSizes: [331],
+									sizes: '331px',
 									imgType: 'png',
 									media: '(max-width: 739px)',
 								},
@@ -106,15 +100,15 @@ export default function WeeklyDigitalHero({
 									media: '(max-width: 979px)',
 								},
 								{
-									gridId: `weeklyDigitalLandingHeroDesktop_5x3`,
-									srcSizes: [422],
-									sizes: '422px',
+									gridId: `weeklyDigitalLandingHeroDesktop_4x3`,
+									srcSizes: [435],
+									sizes: '435px',
 									imgType: 'png',
 									media: '(min-width: 980px)',
 								},
 							]}
-							fallback={`weeklyDigitalLandingHeroDesktop_5x3`}
-							fallbackSize={422}
+							fallback={`weeklyDigitalLandingHeroDesktop_4x3`}
+							fallbackSize={435}
 							altText="A collection of Guardian Weekly magazines"
 						/>
 					</>
