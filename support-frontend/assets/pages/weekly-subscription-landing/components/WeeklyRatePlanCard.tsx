@@ -35,6 +35,7 @@ function WeeklyRatePlanCard({
 	onClick,
 	onView,
 	priorityPromotionExists,
+	buttonCopy,
 }: Product & { priorityPromotionExists: boolean }) {
 	const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
 		threshold: 0.5,
@@ -69,7 +70,7 @@ function WeeklyRatePlanCard({
 			setPromoTerms(promoTerms);
 		}
 	}, [isPriorityPromo, billingPeriod, discountedPrice]);
-
+	const buttonText = buttonCopy ? buttonCopy : 'Subscribe now';
 	return (
 		<div
 			ref={setElementToObserve}
@@ -99,10 +100,10 @@ function WeeklyRatePlanCard({
 				<LinkButton
 					href={href}
 					onClick={onClick}
-					aria-label={`subscribe ${title}`}
+					aria-label={`${title}- ${buttonText}`}
 					theme={themeButtonReaderRevenue}
 				>
-					Subscribe now
+					{buttonText}
 				</LinkButton>
 			</div>
 			{discountSummary && <p css={discountSummaryStyle}>{discountSummary}</p>}
