@@ -94,7 +94,7 @@ function isProd(): boolean {
 }
 
 function isCode(): boolean {
-	return getBaseDomain() === 'thegulocal.com';
+	return getBaseDomain() === 'code.dev-theguardian.com';
 }
 
 function isCodeOrProd(): boolean {
