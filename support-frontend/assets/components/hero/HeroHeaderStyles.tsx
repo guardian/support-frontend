@@ -11,12 +11,6 @@ import {
 } from '@guardian/source/foundations';
 
 export const printHeroCssOverrides = css`
-	background-color: ${palette.neutral[100]};
-	color: ${palette.neutral[7]};
-	flex-direction: column-reverse;
-`;
-
-export const weeklyDigitalHeroCssOverrides = css`
 	background-color: ${palette.neutral[97]};
 	color: ${palette.neutral[7]};
 	flex-direction: column-reverse;
@@ -26,6 +20,14 @@ export const weeklyDigitalHeroCssOverrides = css`
 				${palette.neutral[97]},
 				${palette.neutral[86]}
 			);
+		}
+	}
+`;
+
+export const weeklyDigitalHeroCssOverrides = css`
+	& div:nth-child(2) {
+		${from.desktop} {
+			align-self: center;
 		}
 	}
 `;
