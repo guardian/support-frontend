@@ -199,6 +199,7 @@ function guardianWeekly(
 		),
 		participations: participations,
 		cssOverrides: weeklySubscriptionProductCardStyle,
+		enableDigitalWeekly: enableWeeklyDigital,
 	};
 }
 

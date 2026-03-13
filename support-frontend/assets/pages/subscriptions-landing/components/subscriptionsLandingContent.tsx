@@ -66,7 +66,7 @@ function SubscriptionsLandingContent({
 							isFeature={isFeature(index)}
 							cssOverrides={product.cssOverrides}
 							benefits={product.benefits}
-							enableDigitalWeekly={enableWeeklyDigital}
+							enableDigitalWeekly={product.enableDigitalWeekly}
 						/>
 					),
 				)}

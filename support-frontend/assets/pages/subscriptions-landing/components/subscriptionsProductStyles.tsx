@@ -65,7 +65,9 @@ export const subscriptionsImageContainer = css`
 	}
 `;
 export const weeklyDigitalSubscriptionsImageContainer = css`
-	align-items: center;
+	${from.tablet} {
+		align-self: center;
+	}
 `;
 
 export const subscriptionsImageContainerFeature = css`
