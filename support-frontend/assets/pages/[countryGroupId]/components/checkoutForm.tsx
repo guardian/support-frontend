@@ -8,7 +8,6 @@ import {
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import {
 	ExpressCheckoutElement,
 	useElements,
@@ -35,11 +34,8 @@ import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
-	DirectDebit,
 	isPaymentMethod,
 	type PaymentMethod as LegacyPaymentMethod,
-	PayPal,
-	Stripe,
 	StripeHostedCheckout,
 	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
@@ -75,7 +71,9 @@ import { WeeklyDeliveryDates } from '../checkout/components/WeeklyDeliveryDates'
 import { WeeklyGiftPersonalFields } from '../checkout/components/WeeklyGiftPersonalFields';
 import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgents';
 import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
+import { getPaymentMethods } from '../checkout/helpers/getPaymentMethods';
 import { getProductFields } from '../checkout/helpers/getProductFields';
+import type { PaymentToken } from '../checkout/helpers/paypalCompletePayments';
 import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheckoutSession';
 import { countriesRequiringBillingState } from '../helpers/countriesRequiringBillingState';
@@ -110,20 +108,6 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 		`recurringPaymentMethods.${toPaymentMethodSwitchNaming(paymentMethod)}`,
 	);
 }
-
-const getPaymentMethods = (
-	countryId: IsoCountry,
-	productKey: ProductKey,
-	ratePlanKey: ActiveRatePlanKey,
-) => {
-	const maybeDirectDebit = countryId === 'GB' && DirectDebit;
-
-	if (isSundayOnlyNewspaperSub(productKey, ratePlanKey)) {
-		return [maybeDirectDebit, StripeHostedCheckout];
-	}
-
-	return [maybeDirectDebit, Stripe, PayPal];
-};
 
 const LEGEND_PREFIX_WEEKLY_GIFT = 4;
 const LEGEND_PREFIX_DEFAULT = 1;
@@ -164,7 +148,9 @@ type CheckoutFormProps = {
 	promotion?: Promotion;
 	checkoutSession?: CheckoutSession;
 	studentDiscount?: StudentDiscount;
+	paypalClientId: string;
 };
+
 export default function CheckoutForm({
 	supportRegionId,
 	appConfig,
@@ -186,6 +172,7 @@ export default function CheckoutForm({
 	promotion,
 	checkoutSession,
 	studentDiscount,
+	paypalClientId,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
@@ -338,6 +325,21 @@ export default function CheckoutForm({
 		}
 	}, [payPalBAID]);
 	/**
+	 * Payment method: PayPal Complete Payments
+	 * Payment Token = the new equivalent of a BAID
+	 */
+	const [payPalPaymentToken, setPayPalPaymentToken] = useState<PaymentToken>();
+	/**
+	 * payPalPaymentToken forces formOnSubmit
+	 */
+	useEffect(() => {
+		if (payPalPaymentToken !== undefined) {
+			// TODO - this might not meet our browser compatibility requirements (Safari)
+			// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
+			formRef.current?.requestSubmit();
+		}
+	}, [payPalPaymentToken]);
+	/**
 	 * Checkout session ID forces formOnSubmit
 	 * This happens when the user returns from the Stripe hosted checkout with a checkout session ID in the URL
 	 */
@@ -475,6 +477,7 @@ export default function CheckoutForm({
 		countryId,
 		productKey,
 		ratePlanKey,
+		abParticipations,
 	)
 		.filter(isPaymentMethod)
 		.filter(paymentMethodIsActive);
@@ -1149,12 +1152,17 @@ export default function CheckoutForm({
 								payPalLoaded={payPalLoaded}
 								payPalBAID={payPalBAID}
 								setPayPalBAID={setPayPalBAID}
+								payPalPaymentToken={payPalPaymentToken}
+								setPayPalPaymentToken={setPayPalPaymentToken}
 								formRef={formRef}
 								isTestUser={isTestUser}
 								finalAmount={finalAmount}
 								currencyKey={currencyKey}
 								billingPeriod={billingPeriod}
 								csrf={csrf.token ?? ''}
+								paypalClientId={paypalClientId}
+								setErrorMessage={setErrorMessage}
+								setErrorContext={setErrorContext}
 							/>
 						</div>
 						{errorMessage && (

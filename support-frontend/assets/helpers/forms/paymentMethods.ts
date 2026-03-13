@@ -2,6 +2,7 @@ import type { PaymentMethodSwitch } from './checkouts';
 
 const Stripe = 'Stripe';
 const PayPal = 'PayPal';
+const PayPalCompletePayments = 'PayPalCompletePayments';
 const DirectDebit = 'DirectDebit';
 const StripeHostedCheckout = 'StripeHostedCheckout';
 const Sepa = 'Sepa';
@@ -10,6 +11,7 @@ const None = 'None';
 export type PaymentMethod =
 	| typeof Stripe
 	| typeof PayPal
+	| typeof PayPalCompletePayments
 	| typeof DirectDebit
 	| typeof StripeHostedCheckout
 	| typeof Sepa
@@ -18,6 +20,7 @@ export type PaymentMethod =
 const paymentMethods = [
 	Stripe,
 	PayPal,
+	PayPalCompletePayments,
 	DirectDebit,
 	StripeHostedCheckout,
 	Sepa,
@@ -37,6 +40,7 @@ export function toPaymentMethodSwitchNaming(
 ): PaymentMethodSwitch | null {
 	switch (paymentMethod) {
 		case PayPal:
+		case PayPalCompletePayments:
 			return 'payPal';
 
 		case Stripe:
@@ -56,4 +60,11 @@ export function toPaymentMethodSwitchNaming(
 	}
 }
 
-export { Stripe, PayPal, DirectDebit, StripeHostedCheckout, Sepa };
+export {
+	Stripe,
+	PayPal,
+	PayPalCompletePayments,
+	DirectDebit,
+	StripeHostedCheckout,
+	Sepa,
+};
