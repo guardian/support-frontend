@@ -64,6 +64,9 @@ export const subscriptionsImageContainer = css`
 		width: 50%;
 	}
 `;
+export const weeklyDigitalSubscriptionsImageContainer = css`
+	align-items: center;
+`;
 
 export const subscriptionsImageContainerFeature = css`
 	padding: 10px 10px 0 10px;

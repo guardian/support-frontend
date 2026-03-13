@@ -54,6 +54,7 @@ export type ProductCopy = {
 	participations?: Participations;
 	benefits?: ProductBenefit[];
 	digitalPlusLayout?: boolean;
+	enableDigitalWeekly?: boolean;
 };
 
 const getDisplayPrice = (
