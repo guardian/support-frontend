@@ -70,7 +70,6 @@ function WeeklyRatePlanCard({
 			setPromoTerms(promoTerms);
 		}
 	}, [isPriorityPromo, billingPeriod, discountedPrice]);
-	const buttonText = buttonCopy ? buttonCopy : 'Subscribe now';
 	return (
 		<div
 			ref={setElementToObserve}
@@ -100,10 +99,10 @@ function WeeklyRatePlanCard({
 				<LinkButton
 					href={href}
 					onClick={onClick}
-					aria-label={`${title}- ${buttonText}`}
+					aria-label={`${title}- ${buttonCopy}`}
 					theme={themeButtonReaderRevenue}
 				>
-					{buttonText}
+					{buttonCopy}
 				</LinkButton>
 			</div>
 			{discountSummary && <p css={discountSummaryStyle}>{discountSummary}</p>}
