@@ -16,7 +16,7 @@ type RoundelNudgeDirection = 'up' | 'down';
 type PropTypes = {
 	image: ReactNode;
 	children: ReactNode;
-	cssOverrides?: SerializedStyles;
+	cssOverrides?: SerializedStyles | SerializedStyles[];
 	// You can pass either text content for the roundel, or a whole instance of a HeroRoundel component
 	roundelElement?: ReactNode;
 	roundelText?: ReactNode;

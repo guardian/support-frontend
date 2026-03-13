@@ -41,7 +41,7 @@ export function Hero(): JSX.Element {
 		>
 			<section
 				style={{
-					padding: '0 1rem',
+					padding: '12px 20px 40px',
 				}}
 			>
 				<h1

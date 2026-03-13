@@ -240,7 +240,7 @@ const getAugmentedPromotion = (promotion: Promotion): Promotion => {
 				roundelText: 'Intro offer | 50% Off',
 				hasPriority: true,
 			};
-		case '20ANNUAL':
+		case '25ANNUAL':
 			return {
 				...promotion,
 				roundelText: 'Best value',

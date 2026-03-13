@@ -54,6 +54,7 @@ export type ProductCopy = {
 	participations?: Participations;
 	benefits?: ProductBenefit[];
 	digitalPlusLayout?: boolean;
+	enableDigitalWeekly?: boolean;
 };
 
 const getDisplayPrice = (
@@ -198,6 +199,7 @@ function guardianWeekly(
 		),
 		participations: participations,
 		cssOverrides: weeklySubscriptionProductCardStyle,
+		enableDigitalWeekly: enableWeeklyDigital,
 	};
 }
 

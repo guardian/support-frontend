@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import {
 	LinkButton,
 	SvgArrowDownStraight,
@@ -36,10 +37,6 @@ export default function HeroHeader({
 	roundel?: JSX.Element | string;
 	enableWeeklyDigital?: boolean;
 }) {
-	const heroCssOverrides = enableWeeklyDigital
-		? weeklyDigitalHeroCssOverrides
-		: printHeroCssOverrides;
-
 	return (
 		<CentredContainer
 			cssOverrides={
@@ -50,7 +47,10 @@ export default function HeroHeader({
 			<Hero
 				image={heroImage}
 				hideRoundelBelow="mobileMedium"
-				cssOverrides={heroCssOverrides}
+				cssOverrides={[
+					printHeroCssOverrides,
+					enableWeeklyDigital ? weeklyDigitalHeroCssOverrides : css``,
+				]}
 			>
 				<section css={heroCopy}>
 					<h2 css={heroTitle}>{title}</h2>
