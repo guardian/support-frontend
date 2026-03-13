@@ -383,4 +383,69 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       }
     }
   }
+
+  "UserClaims.parser" when {
+    "fails when missing a required claim" in {
+      val unparsedClaims = UnparsedClaims(rawClaims = Map())
+
+      val result = UserClaims.parser.parse(unparsedClaims)
+
+      result mustBe Left(
+        MissingRequiredClaim(IdentityClaims.OKTA_ID_CLAIM_NAME),
+      )
+    }
+
+    "successfully parses when all required & no optional claims are present" in {
+      val unparsedClaims = UnparsedClaims(rawClaims =
+        Map[String, AnyRef](
+          IdentityClaims.OKTA_ID_CLAIM_NAME -> "oktaId",
+          IdentityClaims.EMAIL_CLAIM_NAME -> "email",
+          IdentityClaims.IDENTITY_ID_CLAIM_NAME -> "id",
+        ),
+      )
+
+      val result = UserClaims.parser.parse(
+        unparsedClaims,
+      )
+
+      result mustBe Right(
+        UserClaims(
+          oktaId = "oktaId",
+          primaryEmailAddress = "email",
+          identityId = "id",
+          firstName = None,
+          lastName = None,
+          iat = None,
+        ),
+      )
+    }
+
+    "successfully parses when all required & optional claims are present" in {
+      val unparsedClaims = UnparsedClaims(rawClaims =
+        Map[String, AnyRef](
+          IdentityClaims.OKTA_ID_CLAIM_NAME -> "oktaId",
+          IdentityClaims.EMAIL_CLAIM_NAME -> "email",
+          IdentityClaims.IDENTITY_ID_CLAIM_NAME -> "id",
+          "first_name" -> "First",
+          "last_name" -> "Last",
+          "iat" -> 1773405228.asInstanceOf[AnyRef],
+        ),
+      )
+
+      val result = UserClaims.parser.parse(
+        unparsedClaims,
+      )
+
+      result mustBe Right(
+        UserClaims(
+          oktaId = "oktaId",
+          primaryEmailAddress = "email",
+          identityId = "id",
+          firstName = Some("First"),
+          lastName = Some("Last"),
+          iat = Some(1773405228),
+        ),
+      )
+    }
+  }
 }
