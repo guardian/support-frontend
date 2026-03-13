@@ -15,7 +15,7 @@ const fontSizes: Record<Size, SerializedStyles> = {
 		${textSansBold17};
 		padding: ${space[1]}px ${space[3]}px;
 		${from.tablet} {
-			padding: ${space[2]}px ${space[5]}px;
+			padding: ${space[1]}px ${space[5]}px;
 			${textSansBold20};
 		}
 		${from.desktop} {

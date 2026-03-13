@@ -50,26 +50,16 @@ export const getFirstParagraph = (
 	);
 };
 
-export const getRegionalTitle = (
-	region: CountryGroupId,
-	enableWeeklyDigital?: boolean,
-): JSX.Element => {
-	const regionalTitle =
-		region === GBPCountries ? (
-			<span>
-				Find clarity
-				<br css={showOnMobile} /> with the Guardian&apos;s global magazine
-			</span>
-		) : (
-			<span>
-				Read The
-				<br css={showOnMobile} /> Guardian in print
-			</span>
-		);
-	const weeklyDigitalTitle = enableWeeklyDigital ? (
-		<span>A week in the life of the world</span>
+export const getRegionalTitle = (region: CountryGroupId): JSX.Element => {
+	return region === GBPCountries ? (
+		<span>
+			Find clarity
+			<br css={showOnMobile} /> with the Guardian&apos;s global magazine
+		</span>
 	) : (
-		regionalTitle
+		<span>
+			Read The
+			<br css={showOnMobile} /> Guardian in print
+		</span>
 	);
-	return weeklyDigitalTitle;
 };
