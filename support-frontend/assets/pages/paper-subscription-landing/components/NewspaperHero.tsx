@@ -31,9 +31,7 @@ export default function NewspaperHero({
 		tag: 'p',
 	});
 
-	const roundelComponent = roundel && (
-		<OfferStrapline copy={roundel} size="small" />
-	);
+	const roundelComponent = roundel && <OfferStrapline copy={roundel} />;
 
 	return (
 		<PageTitle title="Newspaper subscription" theme="weekly">
