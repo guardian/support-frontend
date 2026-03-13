@@ -4,7 +4,6 @@ import {
 	article17,
 	from,
 	headlineBold28,
-	headlineBold34,
 	palette,
 	space,
 	until,
@@ -60,7 +59,7 @@ export const heroTitle = css`
 	margin-bottom: ${space[3]}px;
 
 	${from.desktop} {
-		${headlineBold34};
+		${headlineBold28};
 	}
 `;
 

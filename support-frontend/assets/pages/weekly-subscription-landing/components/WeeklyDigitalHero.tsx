@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import {
 	from,
-	headlineBold28,
 	palette,
 	space,
 	textSansBold17,
@@ -18,11 +17,6 @@ import { getFirstParagraph, getRegionalTitle } from './contentHelpers';
 const pageTitleSpacing = css`
 	${from.tablet} {
 		padding-bottom: ${space[8]}px;
-	}
-	h2 {
-		${from.desktop} {
-			${headlineBold28};
-		}
 	}
 	p {
 		${from.desktop} {
