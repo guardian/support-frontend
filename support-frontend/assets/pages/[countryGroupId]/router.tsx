@@ -218,9 +218,7 @@ const router = createBrowserRouter([
 									<StudentLandingPageInstitutionContainer
 										supportRegionId={supportRegionId}
 										landingPageVariant={landing.variant}
-										studentLandingPageVariant={
-											studentLanding.variant
-										}
+										studentLandingPageVariant={studentLanding.variant}
 									/>
 								);
 							},
