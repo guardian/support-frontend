@@ -83,8 +83,12 @@ function GiftLinks({ productPrices, country, fulfillmentOption }: LinkTypes) {
 	return null;
 }
 
-function PromoTerms() {
+function PromoTerms(): JSX.Element | null {
 	const { promoTerms } = usePromoTerms();
+
+	if (!promoTerms) {
+		return null;
+	}
 
 	return (
 		<section>
