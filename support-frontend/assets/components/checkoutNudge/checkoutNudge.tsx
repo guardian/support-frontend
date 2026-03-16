@@ -30,6 +30,7 @@ import {
 	trackComponentClick,
 	trackComponentLoad,
 } from 'helpers/tracking/behaviour';
+import { getSanitisedHtml } from 'helpers/utilities/utilities';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import type {
@@ -162,10 +163,10 @@ export function CheckoutNudge({
 	return (
 		<Box cssOverrides={nudgeBoxOverrides}>
 			<BoxContents cssOverrides={innerBoxOverrides}>
-				<h3 css={headlineOverrides}>{heading}</h3>
+				<h3 css={headlineOverrides} dangerouslySetInnerHTML={{ __html: getSanitisedHtml(heading) }} />
 				{body && (
 					<div css={bodyCopyOverrides}>
-						<p>{body}</p>
+						<p dangerouslySetInnerHTML={{ __html: getSanitisedHtml(body) }} />
 					</div>
 				)}
 				<LinkButton
@@ -271,8 +272,8 @@ export function CheckoutNudgeThankYou({
 		<Box cssOverrides={thankYouBoxOverrides}>
 			<BoxContents cssOverrides={innerThankYouBoxOverrides}>
 				<div css={nudgeThankYouBox}>
-					<h3 css={headingOverride}>{heading}</h3>
-					{body && <p css={copyOverride}>{body}</p>}
+					<h3 css={headingOverride} dangerouslySetInnerHTML={{ __html: getSanitisedHtml(heading) }} />
+					{body && <p css={copyOverride} dangerouslySetInnerHTML={{ __html: getSanitisedHtml(body) }} />}
 					<img
 						css={imageOverride}
 						width="116px"
