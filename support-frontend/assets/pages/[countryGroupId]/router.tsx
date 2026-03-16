@@ -36,15 +36,19 @@ interface LoaderData {
 	finalParticipations: Participations;
 	landing: PageParticipationsResult<LandingPageVariant>;
 	oneTime: PageParticipationsResult<OneTimeCheckoutVariant>;
+	studentLanding: PageParticipationsResult<StudentLandingPageVariant>;
 }
 
 async function rootLoader(): Promise<LoaderData> {
 	void setUpConsent();
 
-	const [landing, oneTime] = await Promise.all([
+	const [landing, oneTime, studentLanding] = await Promise.all([
 		getPageParticipations<LandingPageVariant>(getLandingPageTestConfig()),
 		getPageParticipations<OneTimeCheckoutVariant>(
 			getOneTimeCheckoutTestConfig(),
+		),
+		getPageParticipations<StudentLandingPageVariant>(
+			getStudentLandingPageTestConfig(),
 		),
 	]);
 	const finalParticipations: Participations = {
@@ -52,10 +56,11 @@ async function rootLoader(): Promise<LoaderData> {
 		...landing.participations,
 		...checkoutNudgeSettings?.participations,
 		...oneTime.participations,
+		...studentLanding.participations,
 	};
 	// Setup tracking (non-blocking)
 	setUpTracking(finalParticipations);
-	return { landing, oneTime, finalParticipations };
+	return { landing, oneTime, studentLanding, finalParticipations };
 }
 
 function useRootLoaderData(): LoaderData {
@@ -193,6 +198,29 @@ const router = createBrowserRouter([
 									<StudentLandingPageGlobalContainer
 										supportRegionId={supportRegionId}
 										landingPageVariant={landing.variant}
+									/>
+								);
+							},
+						};
+					},
+				},
+				{
+					path: `/${supportRegionId}/student/:institution`,
+					lazy: async () => {
+						const { StudentLandingPageInstitutionContainer } = await import(
+							/* webpackChunkName: "StudentLandingPageInstitutionContainer" */ './student/StudentLandingPageInstitutionContainer'
+						);
+						return {
+							Component: function StudentRoute() {
+								const { landing, studentLanding } = useRootLoaderData();
+								console.log(studentLanding.variant.institution.acronym);
+								return (
+									<StudentLandingPageInstitutionContainer
+										supportRegionId={supportRegionId}
+										landingPageVariant={landing.variant}
+										studentLandingPageVariant={
+											studentLanding.variant
+										}
 									/>
 								);
 							},
