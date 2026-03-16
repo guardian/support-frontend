@@ -25,11 +25,11 @@ object AnalyticsUserProfileResponse {
   implicit val encoder: Encoder[AnalyticsUserProfileResponse] = deriveEncoder
 }
 
-case class IsAudienceMemberResponse(
-    isAudienceMember: Boolean,
+case class AudienceMembershipsResponse(
+    audienceMemberships: List[Int],
 )
-object IsAudienceMemberResponse {
-  implicit val encoder: Encoder[IsAudienceMemberResponse] = deriveEncoder
+object AudienceMembershipsResponse {
+  implicit val encoder: Encoder[AudienceMembershipsResponse] = deriveEncoder
 }
 
 class AnalyticsController(
@@ -43,7 +43,7 @@ class AnalyticsController(
 
   import actionRefiners._
   import AnalyticsUserProfileResponse._
-  import IsAudienceMemberResponse._
+  import AudienceMembershipsResponse._
 
   type AuthenticatedUserRequest[A] = AuthenticatedRequest[A, User]
 
@@ -79,17 +79,19 @@ class AnalyticsController(
         }
     }
 
-  /** Checks if the user is in the provided mparticle audience ID. This should only be used if the user has consented
-    * for targeting.
+  /** Gets all mparticle audience memberships for the user. This should only be used if the user has consented for
+    * targeting.
     */
-  def isAudienceMember(audienceId: Int): Action[AnyContent] =
+  def getAudienceMemberships(): Action[AnyContent] =
     (MaybeAuthenticatedAction andThen RequireAuthenticatedUser).async { implicit request =>
       mparticleClient
-        .isAudienceMember(request.user.id, audienceId)
-        .map(result => Ok(IsAudienceMemberResponse(result).asJson))
+        .getAudienceMemberships(request.user.id)
+        .map { response =>
+          Ok(AudienceMembershipsResponse(response).asJson)
+        }
         .recover { ex =>
-          logger.error(scrub"Failed to check mParticle audience: ${ex.getMessage}", ex)
-          InternalServerError("Error checking audience membership")
+          logger.error(scrub"Failed to get mParticle audience memberships: ${ex.getMessage}", ex)
+          InternalServerError("Error getting audience memberships")
         }
     }
 }

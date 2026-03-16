@@ -58,13 +58,13 @@ const useAnalyticsProfile = () => {
 
 			setHasMobileAppDownloaded(data.hasMobileAppDownloaded);
 			setHasFeastMobileAppDownloaded(data.hasFeastMobileAppDownloaded);
-			setDataLoaded(true);
 
 			// Store in cache for subsequent requests within this page load
 			cache.set(data);
 		} catch (error) {
 			console.error('Error calling Analytics endpoint:', error);
 		} finally {
+			setDataLoaded(true);
 			cache.clearPendingRequest();
 		}
 	}, [dataLoaded, cache]);
@@ -76,6 +76,7 @@ const useAnalyticsProfile = () => {
 	return {
 		hasMobileAppDownloaded,
 		hasFeastMobileAppDownloaded,
+		dataLoaded,
 		loadAnalyticsData,
 	};
 };

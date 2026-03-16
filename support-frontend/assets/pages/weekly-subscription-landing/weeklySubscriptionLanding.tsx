@@ -67,7 +67,7 @@ const weeklyDigitalSpacing = css`
 	}
 `;
 
-const { enableWeeklyDigital } = getFeatureFlags();
+const { enableWeeklyDigital: enableWeeklyDigitalFlag } = getFeatureFlags();
 
 export type WeeklyLandingPageProps = {
 	countryId: IsoCountry;
@@ -108,11 +108,14 @@ export function WeeklyLandingPage({
 		],
 		trackProduct: 'GuardianWeekly',
 	});
-	const promotion = getSanitisedPromoCopy(promotionCopy, orderIsAGift);
+	const promotion = getSanitisedPromoCopy(promotionCopy);
 
 	const fulfilmentOption: PrintFulfilmentOptions =
 		countryGroupId === 'International' ? RestOfWorld : Domestic;
 	const planData = getPlanData('NoProductOptions', fulfilmentOption);
+
+	const enableWeeklyDigital = enableWeeklyDigitalFlag && !orderIsAGift;
+
 	return (
 		<PromoTermsProvider>
 			<PageScaffold
@@ -131,7 +134,6 @@ export function WeeklyLandingPage({
 					<>
 						<WeeklyDigitalHero
 							promotion={promotion}
-							countryGroupId={countryGroupId}
 							enableWeeklyDigital={enableWeeklyDigital}
 						/>
 						<CentredContainer cssOverrides={weeklyDigitalSpacing}>

@@ -13,7 +13,7 @@ import {
 	Weekend,
 	WeekendPlus,
 } from '@modules/product/productOptions';
-import { getFeatureFlags } from './featureFlags';
+import { isGuardianWeeklyDigitalProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { ActiveProductKey, ActiveRatePlanKey } from './productCatalog';
 
 const ActivePaperProductTypes: PaperProductOptions[] = [
@@ -53,16 +53,18 @@ export const getProductOptionFromProductAndRatePlan = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): ProductOptions => {
-	const { enableWeeklyDigital } = getFeatureFlags();
 	switch (productKey) {
 		case 'SupporterPlus':
 		case 'GuardianAdLite':
 		case 'Contribution':
 		case 'OneTimeContribution':
 		case 'DigitalSubscription':
+			return 'NoProductOptions';
 		case 'GuardianWeeklyRestOfWorld':
 		case 'GuardianWeeklyDomestic':
-			return enableWeeklyDigital ? 'PlusDigital' : 'NoProductOptions';
+			return isGuardianWeeklyDigitalProduct(productKey, ratePlanKey)
+				? 'PlusDigital'
+				: 'NoProductOptions';
 		case 'SubscriptionCard':
 		case 'NationalDelivery':
 		case 'HomeDelivery':

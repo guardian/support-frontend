@@ -27,7 +27,7 @@ const weeklyBenefitsContainer = css`
 	}
 `;
 const benefitsContainer = css`
-	padding: ${space[3]}px 0 ${space[8]}px ${space[4]}px;
+	padding: ${space[3]}px ${space[3]}px ${space[8]}px ${space[4]}px;
 	width: 100%;
 	${from.desktop} {
 		padding-right: ${space[5]}px;
@@ -55,11 +55,14 @@ const imageContainerLeftCol = css`
 		justify-content: flex-end;
 		padding: ${space[8]}px 0 ${space[8]}px;
 	}
+	${between.leftCol.and.wide} {
+		img {
+			object-fit: contain;
+			max-width: 100%;
+		}
+	}
 	${from.wide} {
 		padding: 0;
-		img {
-			border-radius: 0 ${space[2]}px ${space[2]}px 0;
-		}
 	}
 `;
 const headingContainer = css`
@@ -103,7 +106,7 @@ export function WeeklyBenefits({ planData }: WeeklyBenefitsProps): JSX.Element {
 			<div css={imageContainerDesktop}>
 				<GridImage
 					gridId={`weeklyBenefitHeroDesktop_1x1`}
-					srcSizes={[400]}
+					srcSizes={[2000]}
 					sizes="400px"
 					imgType="png"
 					altText="Illustration of The Guardian Weekly benefits"
@@ -111,8 +114,8 @@ export function WeeklyBenefits({ planData }: WeeklyBenefitsProps): JSX.Element {
 			</div>
 			<div css={imageContainerLeftCol}>
 				<GridImage
-					gridId={`weeklyBenefitHeroLeftCol_5x3`}
-					srcSizes={[530, 621]}
+					gridId={`weeklyBenefitHeroLeftCol_4x3`}
+					srcSizes={[2000]}
 					sizes="(min-width: 530px) 530px, (max-width: 621px) 621px"
 					imgType="png"
 					altText="Illustration of The Guardian Weekly benefits"

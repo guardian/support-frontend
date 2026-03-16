@@ -100,16 +100,16 @@ class MParticleClient(
     }
   }
 
-  def isAudienceMember(identityId: String, audienceId: Int): Future[Boolean] = {
+  def getAudienceMemberships(identityId: String): Future[List[Int]] = {
     if (mparticleEnabled) {
       fetchAudienceMemberships(identityId)
-        .map(response => response.audience_memberships.exists(_.audience_id == audienceId))
+        .map(_.audience_memberships.map(_.audience_id))
         .recover { case WebServiceClientError(CodeBody("404", _)) =>
           logger.info("mParticle returned 404 for user")
-          false
+          List.empty
         }
     } else {
-      Future.successful(false)
+      Future.successful(List.empty)
     }
   }
 

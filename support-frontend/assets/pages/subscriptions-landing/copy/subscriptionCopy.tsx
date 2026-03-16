@@ -54,6 +54,7 @@ export type ProductCopy = {
 	participations?: Participations;
 	benefits?: ProductBenefit[];
 	digitalPlusLayout?: boolean;
+	enableDigitalWeekly?: boolean;
 };
 
 const getDisplayPrice = (
@@ -75,6 +76,22 @@ const getDigitalPlusDisplayPrice = (
 	const price = product?.ratePlans[billingPeriod]?.pricing[currencyKey];
 	if (!price) {
 		return null;
+	}
+
+	return getDisplayPrice(countryGroupId, price, billingPeriod);
+};
+
+const getWeeklyDigitalDisplayPrice = (
+	countryGroupId: CountryGroupId,
+	billingPeriod: BillingPeriod,
+): string => {
+	const currencyKey = detect(countryGroupId);
+	const ratePlan = `${billingPeriod}Plus`;
+
+	const product = getProductCatalog()['GuardianWeeklyDomestic'];
+	const price = product?.ratePlans[ratePlan]?.pricing[currencyKey];
+	if (!price) {
+		return '';
 	}
 
 	return getDisplayPrice(countryGroupId, price, billingPeriod);
@@ -187,9 +204,14 @@ function guardianWeekly(
 	const weeklyButtons = enableWeeklyDigital
 		? [weeklyFindButton]
 		: [weeklyFindButton, weeklyGiftButton];
+
+	const subtitle = enableWeeklyDigital
+		? getWeeklyDigitalDisplayPrice(countryGroupId, BillingPeriod.Monthly)
+		: getDisplayPrice(countryGroupId, priceCopy.price);
+
 	return {
 		title: weeklyTitle,
-		subtitle: getDisplayPrice(countryGroupId, priceCopy.price),
+		subtitle: subtitle,
 		description: weeklyDescription,
 		offer: priceCopy.discountCopy || '',
 		buttons: weeklyButtons,
@@ -198,6 +220,7 @@ function guardianWeekly(
 		),
 		participations: participations,
 		cssOverrides: weeklySubscriptionProductCardStyle,
+		enableDigitalWeekly: enableWeeklyDigital,
 	};
 }
 

@@ -43,6 +43,7 @@ trait Controllers {
     appConfig.supportUrl,
     tickerService,
     mparticleClient,
+    appConfig.payPalCompletePaymentsConfigProvider,
   )
 
   lazy val diagnosticsController = new DiagnosticsController(

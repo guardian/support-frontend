@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import {
 	LinkButton,
 	SvgArrowDownStraight,
@@ -28,17 +29,14 @@ export default function HeroHeader({
 	enableWeeklyDigital,
 }: {
 	title: JSX.Element | string;
+	description?: JSX.Element | string;
 	ctaText: string;
 	ctaLink: string;
 	onClick: () => void;
 	heroImage: ReactElement<GridImg> | ReactElement<GridPictureProp>;
 	roundel?: JSX.Element | string;
-	description?: JSX.Element | string;
 	enableWeeklyDigital?: boolean;
 }) {
-	const heroCssOverrides = enableWeeklyDigital
-		? weeklyDigitalHeroCssOverrides
-		: printHeroCssOverrides;
 	return (
 		<CentredContainer
 			cssOverrides={
@@ -49,17 +47,26 @@ export default function HeroHeader({
 			<Hero
 				image={heroImage}
 				hideRoundelBelow="mobileMedium"
-				cssOverrides={heroCssOverrides}
+				cssOverrides={[
+					printHeroCssOverrides,
+					enableWeeklyDigital ? weeklyDigitalHeroCssOverrides : css``,
+				]}
 			>
 				<section css={heroCopy}>
 					<h2 css={heroTitle}>{title}</h2>
 					{description && <p css={heroParagraph}>{description}</p>}
 					<LinkButton
-						onClick={onClick}
+						onClick={() => {
+							onClick();
+							scrollTo({
+								top: document.querySelector(ctaLink)?.getBoundingClientRect()
+									.top,
+								behavior: 'smooth',
+							});
+						}}
 						priority="tertiary"
 						iconSide="right"
 						icon={<SvgArrowDownStraight />}
-						href={ctaLink}
 						theme={themeButtonBrandAlt}
 					>
 						{ctaText}
