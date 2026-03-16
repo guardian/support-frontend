@@ -87,7 +87,7 @@ export default function WeeklyDigitalHero({
 							sources={[
 								{
 									gridId: `weeklyDigitalLandingHeroMobile_16x9`,
-									srcSizes: [2000],
+									srcSizes: [1000],
 									sizes: '331px',
 									imgType: 'png',
 									media: '(max-width: 739px)',
