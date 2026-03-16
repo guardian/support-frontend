@@ -360,15 +360,13 @@ class Application(
     val institutionList =
       for (
         test <- studentTests
-        if test.regionId.substring(0, 2).toLowerCase() == countryCode;
+        if test.regionId.substring(0, 2).equalsIgnoreCase(countryCode);
         variant <- test.variants
-        if variant.institution.acronym == institution.toUpperCase()
+        if variant.institution.acronym.equalsIgnoreCase(institution)
       )
         yield variant
 
-    if (institutionList.size < 1) {
-      NotFound
-    } else
+    if (institutionList.size == 1) {
       Ok(
         contributionsPlusStudentHtml(
           countryCode,
@@ -378,6 +376,9 @@ class Application(
           noIndexing,
         ),
       ).withSettingsSurrogateKey
+    } else {
+      NotFound
+    }
   }
 
   def downForMaintenance(): Action[AnyContent] = NoCacheAction() { implicit request =>
