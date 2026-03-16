@@ -41,8 +41,8 @@
 		"zod": "catalog:"
 	},
 	"devDependencies": {
-		"@aws-sdk/client-lambda": "^3.876.0",
-		"@aws-sdk/client-s3": "^3.876.0",
+		"@aws-sdk/client-lambda": "^3.995.0",
+		"@aws-sdk/client-s3": "^3.995.0",
 		"@guardian/prettier": "catalog:",
 		"@types/jest": "catalog:",
 		"@types/node": "catalog:",

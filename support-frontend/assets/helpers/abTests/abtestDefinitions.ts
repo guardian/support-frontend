@@ -75,48 +75,6 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeContributionsOnlyCountries: true,
 	},
-	landingPageMparticlePastContributor: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 2,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeContributionsOnlyCountries: true,
-	},
-	landingPageMparticleLatencyTest: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 2,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeContributionsOnlyCountries: true,
-	},
 	paypalMigrationRecurring: {
 		variants: [
 			{
@@ -135,27 +93,6 @@ export const tests: Tests = {
 		isActive: false,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 3,
-		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
-		excludeContributionsOnlyCountries: true,
-	},
-	mandatoryZipCode: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			US: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: false,
-		referrerControlled: false,
-		seed: 5,
 		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
 		excludeContributionsOnlyCountries: true,
 	},

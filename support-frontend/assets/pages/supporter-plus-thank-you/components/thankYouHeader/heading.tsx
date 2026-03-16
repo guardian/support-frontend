@@ -27,6 +27,7 @@ type HeadingProps = {
 	currency: IsoCurrency;
 	isObserverPrint: boolean;
 	promotion?: Promotion;
+	enableWeeklyDigital?: boolean;
 };
 function Heading({
 	name,
@@ -36,6 +37,7 @@ function Heading({
 	currency,
 	isObserverPrint,
 	promotion,
+	enableWeeklyDigital,
 }: HeadingProps) {
 	const isPremiumDigital = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
@@ -51,7 +53,11 @@ function Heading({
 
 	if (isGuardianPrint) {
 		return (
-			<GuardianPrintHeading productKey={productKey} ratePlanKey={ratePlanKey} />
+			<GuardianPrintHeading
+				productKey={productKey}
+				ratePlanKey={ratePlanKey}
+				enableWeeklyDigital={enableWeeklyDigital}
+			/>
 		);
 	}
 

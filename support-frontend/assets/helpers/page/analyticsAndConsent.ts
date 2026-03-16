@@ -76,15 +76,7 @@ function consentInitialisation(country: CountryCode): void {
 	}
 }
 
-function sendConsentToOphan(): void {
-	onConsent()
-		.then((consentState) => {
-			return record(getOphanConsentDetails(consentState));
-		})
-		.catch((error) => {
-			console.error(error);
-		});
-
+async function sendConsentToOphan(): Promise<void> {
 	const getOphanConsentDetails = (
 		consentState: ConsentState,
 	): {
@@ -122,7 +114,28 @@ function sendConsentToOphan(): void {
 			consent: '',
 		};
 	};
+
+	try {
+		const consentState = await onConsent();
+		record(getOphanConsentDetails(consentState));
+	} catch (error) {
+		console.error(error);
+	}
 }
+
+const hasTargetingConsent = async (): Promise<boolean> => {
+	try {
+		// If the consent banner is displayed then do not wait - just return false
+		if (await cmp.willShowPrivacyMessage()) {
+			return false;
+		}
+		const { canTarget } = await onConsent();
+		return canTarget;
+	} catch (error) {
+		console.error('Error getting targeting consent', error);
+		return false;
+	}
+};
 
 // ----- Helpers ----- //
 
@@ -137,4 +150,9 @@ function shouldInitCmp(): boolean {
 
 // ----- Exports ----- //
 
-export { analyticsInitialisation, consentInitialisation, sendConsentToOphan };
+export {
+	analyticsInitialisation,
+	consentInitialisation,
+	sendConsentToOphan,
+	hasTargetingConsent,
+};

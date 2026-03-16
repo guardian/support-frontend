@@ -34,7 +34,6 @@ type PersonalDetailsFieldsProps = {
 	isEmailAddressReadOnly?: boolean;
 	isSignedIn?: boolean;
 	isWeeklyGift?: boolean;
-	zipCodeIsMandatory?: boolean;
 };
 
 export function PersonalDetailsFields({
@@ -56,7 +55,6 @@ export function PersonalDetailsFields({
 	isEmailAddressReadOnly = false,
 	isSignedIn = false,
 	isWeeklyGift = false,
-	zipCodeIsMandatory = false,
 }: PersonalDetailsFieldsProps) {
 	const [billingStateError, setBillingStateError] = useState<string>();
 	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
@@ -141,7 +139,6 @@ export function PersonalDetailsFields({
 										value={billingStatePostcodeCountry.billingPostcode}
 										pattern={doesNotContainExtendedEmojiOrLeadingSpace}
 										error={billingPostcodeError}
-										optional={!zipCodeIsMandatory}
 										onInvalid={(event) => {
 											preventDefaultValidityMessage(event.currentTarget);
 											const validityState = event.currentTarget.validity;

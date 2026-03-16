@@ -8,6 +8,8 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import { observerThemeButton } from 'components/observer-layout/styles';
+import { getFeatureFlags } from 'helpers/featureFlags';
+import { getPaypalClientId } from 'helpers/forms/payPal';
 import {
 	getStripeKeyForCountry,
 	getStripeKeyForProduct,
@@ -30,6 +32,7 @@ import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { getOriginAndForceSubdomain } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import { getProductWeeklyDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
+import { isGuardianWeeklyDigitalProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
@@ -183,25 +186,16 @@ export function Checkout({
 		);
 
 		const discountedPrice = promotion?.discountedPrice ?? undefined;
-
 		const price = discountedPrice ?? productPrice;
+		/** SupporterPlus can have an additional contribution bolted onto the base price */
+		const finalAmount =
+			price + (productKey === 'SupporterPlus' ? contributionAmount ?? 0 : 0);
 
-		if (productKey === 'SupporterPlus') {
-			/** SupporterPlus can have an additional contribution bolted onto the base price */
-			payment = {
-				originalAmount: productPrice,
-				discountedAmount: discountedPrice,
-				contributionAmount,
-				finalAmount: price + (contributionAmount ?? 0),
-			};
-		} else {
-			payment = {
-				originalAmount: productPrice,
-				discountedAmount: discountedPrice,
-				contributionAmount,
-				finalAmount: price,
-			};
-		}
+		payment = {
+			originalAmount: productPrice,
+			contributionAmount,
+			finalAmount,
+		};
 	}
 
 	const isTestUser = !!cookie.get('_test_username');
@@ -209,6 +203,8 @@ export function Checkout({
 		getStripeKeyForProduct('REGULAR', productKey, ratePlanKey, isTestUser) ??
 		getStripeKeyForCountry('REGULAR', countryId, currencyKey, isTestUser);
 	const stripePromise = loadStripe(stripePublicKey);
+
+	const paypalClientId = getPaypalClientId(isTestUser);
 
 	const stripeExpressCheckoutSwitch =
 		window.guardian.settings.switches.recurringPaymentMethods
@@ -311,6 +307,14 @@ export function Checkout({
 		backButtonPathOverrideParam,
 	);
 
+	// ensure enableWeeklyDigital feature flag and Guardian Weekly Digital product purchased
+	const enableWeeklyDigital = isGuardianWeeklyDigitalProduct(
+		productKey,
+		ratePlanKey,
+	)
+		? getFeatureFlags().enableWeeklyDigital
+		: false;
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Elements stripe={stripePromise} options={elementsOptions}>
@@ -332,6 +336,7 @@ export function Checkout({
 						nudgeSettings={nudgeSettings}
 						backButtonOrigin={backButtonOrigin}
 						backButtonPathOverride={backButtonPathOverride}
+						enableWeeklyDigital={enableWeeklyDigital}
 					/>
 
 					<CheckoutForm
@@ -343,12 +348,10 @@ export function Checkout({
 						ratePlanKey={ratePlanKey}
 						promotion={promotion}
 						originalAmount={payment.originalAmount}
-						discountedAmount={payment.discountedAmount}
 						contributionAmount={payment.contributionAmount}
 						finalAmount={payment.finalAmount}
 						useStripeExpressCheckout={useStripeExpressCheckout}
 						countryId={countryId}
-						forcedCountry={forcedCountry}
 						abParticipations={abParticipations}
 						landingPageSettings={landingPageSettings}
 						checkoutSession={checkoutSession}
@@ -357,6 +360,8 @@ export function Checkout({
 						setWeeklyDeliveryDate={setWeeklyDeliveryDate}
 						thresholdAmount={thresholdAmount}
 						studentDiscount={studentDiscount}
+						enableWeeklyDigital={enableWeeklyDigital}
+						paypalClientId={paypalClientId}
 					/>
 				</PageLayout>
 			</Elements>

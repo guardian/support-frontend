@@ -4,19 +4,54 @@ import {
 	article17,
 	from,
 	headlineBold28,
-	headlineBold34,
 	palette,
 	space,
+	until,
 } from '@guardian/source/foundations';
 
-export const heroCssOverrides = css`
-	background-color: ${palette.neutral[100]};
+export const printHeroCssOverrides = css`
+	background-color: ${palette.neutral[97]};
 	color: ${palette.neutral[7]};
 	flex-direction: column-reverse;
+	& div:nth-child(2) {
+		${until.tablet} {
+			background: linear-gradient(
+				${palette.neutral[97]},
+				${palette.neutral[86]}
+			);
+		}
+	}
+`;
+
+export const weeklyDigitalHeroCssOverrides = css`
+	& div:nth-child(2) {
+		${from.desktop} {
+			align-self: center;
+		}
+	}
+`;
+
+export const weeklyDigitalContainerCssOverrides = css`
+	${until.tablet} {
+		section {
+			padding: ${space[3]}px ${space[3]}px ${space[6]}px;
+		}
+		a {
+			width: 100%;
+		}
+	}
+
+	${from.desktop} {
+		width: calc(100% - 64px);
+
+		h1 {
+			padding-left: 0px;
+		}
+	}
 `;
 
 export const heroCopy = css`
-	padding: ${space[1]}px ${space[5]}px ${space[10]}px;
+	padding: ${space[3]}px ${space[5]}px ${space[10]}px;
 `;
 
 export const heroTitle = css`
@@ -24,7 +59,7 @@ export const heroTitle = css`
 	margin-bottom: ${space[3]}px;
 
 	${from.desktop} {
-		${headlineBold34};
+		${headlineBold28};
 	}
 `;
 
@@ -39,7 +74,7 @@ export const heroParagraph = css`
 	}
 
 	${from.desktop} {
-		max-width: 75%;
+		max-width: min(550px, 75%);
 		margin-bottom: ${space[9]}px;
 	}
 `;

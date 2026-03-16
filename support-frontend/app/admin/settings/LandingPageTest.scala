@@ -30,6 +30,7 @@ case class LandingPageProductDescription(
     benefits: List[ProductBenefit],
     cta: Cta,
     titlePill: Option[String] = None,
+    billingPeriodsCopy: Option[String] = None,
 )
 
 case class Cta(
@@ -94,6 +95,7 @@ case class LandingPageTest(
     status: Status,
     priority: Int,
     regionTargeting: Option[RegionTargeting],
+    mParticleAudience: Option[Int],
     variants: List[LandingPageVariant],
 )
 

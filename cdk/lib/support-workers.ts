@@ -46,6 +46,7 @@ const PaymentProviders = {
   PayPal: "PayPal",
   StripeApplePay: "StripeApplePay",
   StripePaymentRequestButton: "StripePaymentRequestButton",
+  StripeHostedCheckout: "StripeHostedCheckout",
 } as const;
 
 type PaymentProvider = keyof typeof PaymentProviders;
@@ -575,6 +576,30 @@ export class SupportWorkers extends GuStack {
           ),
           m3: this.buildPaymentSuccessMetric(
             PaymentProviders.PayPal,
+            ProductTypes.Paper,
+            Duration.seconds(300)
+          ),
+        },
+      }),
+      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+      evaluationPeriods: 288,
+      treatMissingData: TreatMissingData.BREACHING,
+      threshold: 0,
+    }).node.addDependency(stateMachine);
+
+    // Paper StripeHostedCheckout (Observer) alarm
+    new GuAlarm(this, "NoPaperStripeHostedAcquisitionInPeriodAlarm", {
+      app,
+      actionsEnabled: isProd,
+      okAction: true,
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
+      alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful Paper StripeHostedCheckout (Observer) checkouts in 24h.`,
+      metric: new MathExpression({
+        expression: "SUM([FILL(m1,0)])",
+        label: "AllStripeHostedCheckoutPaperConversions",
+        usingMetrics: {
+          m1: this.buildPaymentSuccessMetric(
+            PaymentProviders.StripeHostedCheckout,
             ProductTypes.Paper,
             Duration.seconds(300)
           ),

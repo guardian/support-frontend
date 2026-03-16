@@ -24,14 +24,12 @@ import {
 } from '@modules/internationalisation/countryGroup';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
-import { useEffect } from 'react';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import type { Participations } from 'helpers/abTests/models';
@@ -44,7 +42,6 @@ import { getFeatureFlags } from 'helpers/featureFlags';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { glyph } from 'helpers/internationalisation/currency';
 import { guardianContactUsLink, guardianHelpCentreLink } from 'helpers/legal';
-import { fetchIsPastSingleContributor } from 'helpers/mparticle';
 import {
 	getProductDescription,
 	getProductLabel,
@@ -55,7 +52,6 @@ import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPer
 import { allProductPrices } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import { getUser } from 'helpers/user/user';
 import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
@@ -268,7 +264,6 @@ type ThreeTierLandingProps = {
 export function ThreeTierLanding({
 	supportRegionId,
 	settings,
-	abParticipations,
 }: ThreeTierLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const rawUrlSearchParamsProduct = urlSearchParams.get('product');
@@ -311,30 +306,6 @@ export function ThreeTierLanding({
 	const [countdownDaysLeft, setCountdownDaysLeft] = useState<
 		string | undefined
 	>();
-	const [isMparticleLoading, setIsMparticleLoading] = useState(true);
-
-	const { isSignedIn } = getUser();
-
-	useEffect(() => {
-		const variant =
-			abParticipations.landingPageMparticleLatencyTest?.toLowerCase();
-
-		const timeout = new Promise<void>((resolve) => {
-			setTimeout(() => {
-				setIsMparticleLoading(false);
-				resolve();
-			}, 2000);
-		});
-
-		const fetchRequest = fetchIsPastSingleContributor(
-			isSignedIn,
-			variant === 'variant',
-		).then(() => {
-			setIsMparticleLoading(false);
-		});
-
-		void Promise.race([fetchRequest, timeout]);
-	}, [isSignedIn, abParticipations.landingPageMparticleLatencyTest]);
 
 	const enableSingleContributionsTab =
 		campaignSettings?.enableSingleContributions ??
@@ -445,6 +416,7 @@ export function ThreeTierLanding({
 			),
 		cta:
 			settings.products.Contribution?.cta ?? fallbackProducts.Contribution!.cta,
+		billingPeriodsCopy: settings.products.Contribution?.billingPeriodsCopy,
 	};
 
 	/** Tier 2: SupporterPlus */
@@ -477,6 +449,7 @@ export function ThreeTierLanding({
 		cta:
 			settings.products.SupporterPlus?.cta ??
 			fallbackProducts.SupporterPlus!.cta,
+		billingPeriodsCopy: settings.products.SupporterPlus?.billingPeriodsCopy,
 	};
 
 	const tier2Card: CardContent = {
@@ -531,6 +504,8 @@ export function ThreeTierLanding({
 		cta:
 			settings.products.DigitalSubscription?.cta ??
 			fallbackProducts.DigitalSubscription!.cta,
+		billingPeriodsCopy:
+			settings.products.DigitalSubscription?.billingPeriodsCopy,
 	};
 	const tier3ProductPrice = allProductPrices.DigitalPack;
 	const tier3Promotion = tier3ProductPrice
@@ -552,9 +527,7 @@ export function ThreeTierLanding({
 		...tier3ProductDescription,
 	};
 
-	return isMparticleLoading ? (
-		<GuardianHoldingContent />
-	) : (
+	return (
 		<PageScaffold
 			header={
 				<>
@@ -655,7 +628,6 @@ export function ThreeTierLanding({
 					<ThreeTierLandingHeading
 						heading={headingOverride ?? settings.copy.heading}
 						countdownDaysLeft={countdownDaysLeft}
-						abParticipations={abParticipations}
 					/>
 
 					<p

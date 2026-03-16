@@ -8,7 +8,6 @@ import {
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import {
 	ExpressCheckoutElement,
 	useElements,
@@ -35,11 +34,8 @@ import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
-	DirectDebit,
 	isPaymentMethod,
 	type PaymentMethod as LegacyPaymentMethod,
-	PayPal,
-	Stripe,
 	StripeHostedCheckout,
 	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
@@ -75,7 +71,9 @@ import { WeeklyDeliveryDates } from '../checkout/components/WeeklyDeliveryDates'
 import { WeeklyGiftPersonalFields } from '../checkout/components/WeeklyGiftPersonalFields';
 import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgents';
 import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
+import { getPaymentMethods } from '../checkout/helpers/getPaymentMethods';
 import { getProductFields } from '../checkout/helpers/getProductFields';
+import type { PaymentToken } from '../checkout/helpers/paypalCompletePayments';
 import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheckoutSession';
 import { countriesRequiringBillingState } from '../helpers/countriesRequiringBillingState';
@@ -111,45 +109,6 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 	);
 }
 
-type CheckoutFormProps = {
-	supportRegionId: SupportRegionId;
-	appConfig: AppConfig;
-	stripePublicKey: string;
-	isTestUser: boolean;
-	productKey: ActiveProductKey;
-	ratePlanKey: ActiveRatePlanKey;
-	originalAmount: number;
-	discountedAmount?: number;
-	contributionAmount?: number;
-	finalAmount: number;
-	promotion?: Promotion;
-	useStripeExpressCheckout: boolean;
-	countryId: IsoCountry;
-	forcedCountry?: string;
-	abParticipations: Participations;
-	landingPageSettings: LandingPageVariant;
-	checkoutSession?: CheckoutSession;
-	clearCheckoutSession: () => void;
-	weeklyDeliveryDate: Date;
-	setWeeklyDeliveryDate: (value: Date) => void;
-	thresholdAmount: number;
-	studentDiscount?: StudentDiscount;
-};
-
-const getPaymentMethods = (
-	countryId: IsoCountry,
-	productKey: ProductKey,
-	ratePlanKey: ActiveRatePlanKey,
-) => {
-	const maybeDirectDebit = countryId === 'GB' && DirectDebit;
-
-	if (isSundayOnlyNewspaperSub(productKey, ratePlanKey)) {
-		return [maybeDirectDebit, StripeHostedCheckout];
-	}
-
-	return [maybeDirectDebit, Stripe, PayPal];
-};
-
 const LEGEND_PREFIX_WEEKLY_GIFT = 4;
 const LEGEND_PREFIX_DEFAULT = 1;
 const getPaymentLegendPrefix = (
@@ -167,6 +126,31 @@ const getPaymentLegendPrefix = (
 	return legendPrefix + 3;
 };
 
+type CheckoutFormProps = {
+	supportRegionId: SupportRegionId;
+	appConfig: AppConfig;
+	stripePublicKey: string;
+	isTestUser: boolean;
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
+	originalAmount: number;
+	finalAmount: number;
+	useStripeExpressCheckout: boolean;
+	countryId: IsoCountry;
+	abParticipations: Participations;
+	landingPageSettings: LandingPageVariant;
+	clearCheckoutSession: () => void;
+	weeklyDeliveryDate: Date;
+	setWeeklyDeliveryDate: (value: Date) => void;
+	thresholdAmount: number;
+	enableWeeklyDigital: boolean;
+	contributionAmount?: number;
+	promotion?: Promotion;
+	checkoutSession?: CheckoutSession;
+	studentDiscount?: StudentDiscount;
+	paypalClientId: string;
+};
+
 export default function CheckoutForm({
 	supportRegionId,
 	appConfig,
@@ -175,18 +159,20 @@ export default function CheckoutForm({
 	productKey,
 	ratePlanKey,
 	originalAmount,
-	contributionAmount,
 	finalAmount,
-	promotion,
 	useStripeExpressCheckout,
 	countryId,
 	abParticipations,
-	checkoutSession,
 	clearCheckoutSession,
 	weeklyDeliveryDate,
 	setWeeklyDeliveryDate,
 	thresholdAmount,
+	enableWeeklyDigital,
+	contributionAmount,
+	promotion,
+	checkoutSession,
 	studentDiscount,
+	paypalClientId,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
@@ -247,8 +233,6 @@ export default function CheckoutForm({
 		hasDeliveryAddress,
 		deliveryPostcodeIsOutsideM25,
 	)}. Payment method`;
-
-	const zipCodeIsMandatory = abParticipations.mandatoryZipCode === 'variant';
 
 	/**
 	 * Is It a Contribution? URL queryPrice supplied?
@@ -340,6 +324,21 @@ export default function CheckoutForm({
 			formRef.current?.requestSubmit();
 		}
 	}, [payPalBAID]);
+	/**
+	 * Payment method: PayPal Complete Payments
+	 * Payment Token = the new equivalent of a BAID
+	 */
+	const [payPalPaymentToken, setPayPalPaymentToken] = useState<PaymentToken>();
+	/**
+	 * payPalPaymentToken forces formOnSubmit
+	 */
+	useEffect(() => {
+		if (payPalPaymentToken !== undefined) {
+			// TODO - this might not meet our browser compatibility requirements (Safari)
+			// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
+			formRef.current?.requestSubmit();
+		}
+	}, [payPalPaymentToken]);
 	/**
 	 * Checkout session ID forces formOnSubmit
 	 * This happens when the user returns from the Stripe hosted checkout with a checkout session ID in the URL
@@ -478,6 +477,7 @@ export default function CheckoutForm({
 		countryId,
 		productKey,
 		ratePlanKey,
+		abParticipations,
 	)
 		.filter(isPaymentMethod)
 		.filter(paymentMethodIsActive);
@@ -623,6 +623,7 @@ export default function CheckoutForm({
 				)
 					? weeklyDeliveryDate
 					: undefined,
+				enableWeeklyDigital,
 			});
 			window.location.href = successUrl;
 			// It seems non-deterministic how much code is executed below setting
@@ -913,7 +914,6 @@ export default function CheckoutForm({
 							isEmailAddressReadOnly={isSignedIn}
 							isSignedIn={isSignedIn}
 							isWeeklyGift={isWeeklyGift}
-							zipCodeIsMandatory={zipCodeIsMandatory}
 						/>
 
 						{/**
@@ -1139,6 +1139,7 @@ export default function CheckoutForm({
 							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}
+							enableWeeklyDigital={enableWeeklyDigital}
 						/>
 						<div
 							css={css`
@@ -1151,12 +1152,17 @@ export default function CheckoutForm({
 								payPalLoaded={payPalLoaded}
 								payPalBAID={payPalBAID}
 								setPayPalBAID={setPayPalBAID}
+								payPalPaymentToken={payPalPaymentToken}
+								setPayPalPaymentToken={setPayPalPaymentToken}
 								formRef={formRef}
 								isTestUser={isTestUser}
 								finalAmount={finalAmount}
 								currencyKey={currencyKey}
 								billingPeriod={billingPeriod}
 								csrf={csrf.token ?? ''}
+								paypalClientId={paypalClientId}
+								setErrorMessage={setErrorMessage}
+								setErrorContext={setErrorContext}
 							/>
 						</div>
 						{errorMessage && (
@@ -1177,6 +1183,7 @@ export default function CheckoutForm({
 							studentDiscount={studentDiscount}
 							promotion={promotion}
 							thresholdAmount={thresholdAmount}
+							enableWeeklyDigital={enableWeeklyDigital}
 						/>
 					</BoxContents>
 				</Box>

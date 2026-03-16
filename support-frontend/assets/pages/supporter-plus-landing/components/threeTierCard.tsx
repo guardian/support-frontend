@@ -27,6 +27,10 @@ import {
 	discountSummaryCopy,
 	type Promotion,
 } from 'helpers/productPrice/promotions';
+import {
+	getSanitisedHtml,
+	parseBillingPeriodCopy,
+} from 'helpers/utilities/utilities';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { ThreeTierCardPill } from './threeTierCardPill';
 
@@ -85,10 +89,12 @@ const titleCss = css`
 	color: #606060;
 `;
 
-const priceCss = (hasPromotion: boolean) => css`
+const priceCss = (hasPromotion: boolean, hasBillingPeriodCopy: boolean) => css`
 	${textSansBold24};
 	position: relative;
-	margin-bottom: ${hasPromotion ? '0' : `${space[4]}px`};
+	margin-bottom: ${hasPromotion || hasBillingPeriodCopy
+		? '0'
+		: `${space[4]}px`};
 
 	${from.desktop} {
 		margin-bottom: ${space[6]}px;
@@ -184,6 +190,7 @@ export function ThreeTierCard({
 		link,
 		cta,
 		product,
+		billingPeriodsCopy,
 	} = cardContent;
 	const currency = getCurrencyInfo(currencyId);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -191,6 +198,12 @@ export function ThreeTierCard({
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	const pillCopy = promotion?.landingPage?.roundel ?? cardContent.label?.copy;
 	const inAdditionToAllAccessDigital = product === 'DigitalSubscription';
+	const parsedBillingPeriodsCopy = parseBillingPeriodCopy(
+		billingPeriodsCopy ?? '',
+		currency,
+		price,
+		billingPeriod,
+	);
 	return (
 		<section css={container(!!pillCopy, isUserSelected, isSubdued)}>
 			{isUserSelected && <ThreeTierCardPill title="Your selection" />}
@@ -204,7 +217,7 @@ export function ThreeTierCard({
 				{titlePill && <BenefitPill copy={titlePill} />}
 				<h2 css={[titleCss, checkListTextItemCss]}>{title}</h2>
 			</div>
-			<p css={priceCss(!!promotion)}>
+			<p css={priceCss(!!promotion, !!parsedBillingPeriodsCopy)}>
 				{promotion && (
 					<>
 						<span css={previousPriceStrikeThrough}>{formattedPrice}</span>{' '}
@@ -223,7 +236,22 @@ export function ThreeTierCard({
 						</span>
 					</>
 				)}
-				{!promotion && `${formattedPrice}/${periodNoun}`}
+				{parsedBillingPeriodsCopy && !promotion && (
+					<>
+						<span>
+							{formattedPrice}/{periodNoun}
+						</span>
+						<span
+							css={discountSummaryCss}
+							dangerouslySetInnerHTML={{
+								__html: getSanitisedHtml(parsedBillingPeriodsCopy),
+							}}
+						/>
+					</>
+				)}
+				{!promotion &&
+					!parsedBillingPeriodsCopy &&
+					`${formattedPrice}/${periodNoun}`}
 			</p>
 			<LinkButton
 				href={link}

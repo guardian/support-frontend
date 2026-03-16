@@ -16,10 +16,12 @@ const showOnMobile = css`
 
 export const getFirstParagraph = (
 	promotionCopy: PromotionCopy,
-	orderIsAGift: boolean,
+	orderIsAGift: boolean = false,
 ): JSX.Element | null => {
 	if (promotionCopy.description) {
-		return promotionHTML(promotionCopy.description);
+		return promotionHTML(promotionCopy.description, {
+			tag: 'p',
+		});
 	}
 
 	if (orderIsAGift) {
@@ -48,7 +50,7 @@ export const getFirstParagraph = (
 	);
 };
 
-export const getRegionalCopyFor = (region: CountryGroupId): JSX.Element => {
+export const getRegionalTitle = (region: CountryGroupId): JSX.Element => {
 	return region === GBPCountries ? (
 		<span>
 			Find clarity

@@ -21,6 +21,7 @@ import FullWidthContainer from 'components/containers/fullWidthContainer';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 import Block from 'components/page/block';
 import { PageScaffold } from 'components/page/pageScaffold';
+import { PromoTermsProvider } from 'contexts/PromoTermsContext';
 import { getFeatureFlags } from 'helpers/featureFlags';
 import {
 	getGlobal,
@@ -40,6 +41,7 @@ import Benefits from './components/content/benefits';
 import GiftBenefits from './components/content/giftBenefits';
 import { WeeklyBenefits } from './components/weeklyBenefits';
 import { WeeklyCards } from './components/weeklyCards';
+import WeeklyDigitalHero from './components/WeeklyDigitalHero';
 import { WeeklyGiftStudentSubs } from './components/weeklyGiftStudentSubs';
 import { WeeklyHero } from './components/weeklyHero';
 import { WeeklyPriceInfo } from './components/weeklyPriceInfo';
@@ -50,6 +52,7 @@ const weeklySpacing = css`
 		margin-top: 0;
 	}
 `;
+
 const weeklyDigitalSpacing = css`
 	padding: ${space[8]}px ${space[3]}px ${space[9]}px;
 	${from.desktop} {
@@ -64,7 +67,7 @@ const weeklyDigitalSpacing = css`
 	}
 `;
 
-const { enableWeeklyDigital } = getFeatureFlags();
+const { enableWeeklyDigital: enableWeeklyDigitalFlag } = getFeatureFlags();
 
 export type WeeklyLandingPageProps = {
 	countryId: IsoCountry;
@@ -105,62 +108,74 @@ export function WeeklyLandingPage({
 		],
 		trackProduct: 'GuardianWeekly',
 	});
-	const sanitisedPromoCopy = getSanitisedPromoCopy(promotionCopy, orderIsAGift);
+	const promotion = getSanitisedPromoCopy(promotionCopy);
 
 	const fulfilmentOption: PrintFulfilmentOptions =
 		countryGroupId === 'International' ? RestOfWorld : Domestic;
 	const planData = getPlanData('NoProductOptions', fulfilmentOption);
+
+	const enableWeeklyDigital = enableWeeklyDigitalFlag && !orderIsAGift;
+
 	return (
-		<PageScaffold
-			id={pageQaId}
-			header={<Header />}
-			footer={
-				<GuardianWeeklyFooter
-					productPrices={productPrices}
-					orderIsAGift={!!orderIsAGift}
-					country={countryId}
-					enableWeeklyDigital={enableWeeklyDigital}
-				/>
-			}
-		>
-			<WeeklyHero
-				isGift={orderIsAGift}
-				promotionCopy={sanitisedPromoCopy}
-				countryGroupId={countryGroupId}
-				enableWeeklyDigital={enableWeeklyDigital}
-			/>
-			{enableWeeklyDigital ? (
-				<FullWidthContainer theme="brand">
-					<CentredContainer cssOverrides={weeklyDigitalSpacing}>
-						<WeeklyCards countryId={countryId} productPrices={productPrices} />
-						<WeeklyBenefits planData={planData} />
-						<WeeklyPriceInfo />
-					</CentredContainer>
-				</FullWidthContainer>
-			) : (
-				<>
-					<FullWidthContainer>
-						<CentredContainer cssOverrides={weeklySpacing}>
-							<Block>{orderIsAGift ? <GiftBenefits /> : <Benefits />}</Block>
-						</CentredContainer>
-					</FullWidthContainer>
-					<FullWidthContainer theme="dark" hasOverlap>
-						<CentredContainer>
-							<WeeklyProductPrices
+		<PromoTermsProvider>
+			<PageScaffold
+				id={pageQaId}
+				header={<Header />}
+				footer={
+					<GuardianWeeklyFooter
+						productPrices={productPrices}
+						orderIsAGift={!!orderIsAGift}
+						country={countryId}
+						enableWeeklyDigital={enableWeeklyDigital}
+					/>
+				}
+			>
+				{enableWeeklyDigital ? (
+					<>
+						<WeeklyDigitalHero
+							promotion={promotion}
+							enableWeeklyDigital={enableWeeklyDigital}
+						/>
+						<CentredContainer cssOverrides={weeklyDigitalSpacing}>
+							<WeeklyCards
 								countryId={countryId}
 								productPrices={productPrices}
-								orderIsAGift={orderIsAGift}
 							/>
+							<WeeklyBenefits planData={planData} />
+							<WeeklyPriceInfo />
 						</CentredContainer>
-					</FullWidthContainer>
-				</>
-			)}
-			<WeeklyGiftStudentSubs
-				countryGroupId={countryGroupId}
-				orderIsAGift={orderIsAGift}
-				enableWeeklyDigital={enableWeeklyDigital}
-			/>
-		</PageScaffold>
+					</>
+				) : (
+					<>
+						<WeeklyHero
+							isGift={orderIsAGift}
+							promotionCopy={promotion}
+							countryGroupId={countryGroupId}
+							enableWeeklyDigital={enableWeeklyDigital}
+						/>
+						<FullWidthContainer>
+							<CentredContainer cssOverrides={weeklySpacing}>
+								<Block>{orderIsAGift ? <GiftBenefits /> : <Benefits />}</Block>
+							</CentredContainer>
+						</FullWidthContainer>
+						<FullWidthContainer theme="dark" hasOverlap>
+							<CentredContainer>
+								<WeeklyProductPrices
+									countryId={countryId}
+									productPrices={productPrices}
+									orderIsAGift={orderIsAGift}
+								/>
+							</CentredContainer>
+						</FullWidthContainer>
+					</>
+				)}
+				<WeeklyGiftStudentSubs
+					countryGroupId={countryGroupId}
+					orderIsAGift={orderIsAGift}
+					enableWeeklyDigital={enableWeeklyDigital}
+				/>
+			</PageScaffold>
+		</PromoTermsProvider>
 	);
 }
 
@@ -171,4 +186,5 @@ const weeklyLandingProps = (): WeeklyLandingPageProps => ({
 	productPrices: getProductPrices() ?? undefined,
 	promotionCopy: getPromotionCopy() ?? undefined,
 });
+
 renderPage(<WeeklyLandingPage {...weeklyLandingProps()} />);

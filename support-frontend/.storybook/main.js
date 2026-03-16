@@ -44,6 +44,10 @@ module.exports = {
 						replacement: path.resolve(__dirname, '../assets/helpers'),
 					},
 					{
+						find: 'contexts',
+						replacement: path.resolve(__dirname, '../assets/contexts'),
+					},
+					{
 						find: 'images',
 						replacement: path.resolve(__dirname, '../assets/images'),
 					},

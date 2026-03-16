@@ -6,6 +6,7 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
+import { isGuardianWeeklyDigitalProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 
 interface Benefits {
 	label?: JSX.Element;
@@ -58,26 +59,37 @@ const guardianDigitalRewards = [
 
 const weeklyDigitalRewards = [
 	<>
-		Unlimited access to the refreshed&nbsp;<strong>Guardian app</strong>
-		&nbsp;and&nbsp;<strong>Guardian Feast app</strong>
+		Uninterrupted <strong>ad-free reading</strong> on the Guardian app and
+		website, with fewer asks for support
 	</>,
 	<>
-		Unlimited access to the&nbsp;<strong>Guardian Editions app</strong>&nbsp;so
-		you can enjoy newspapers on your mobile and tablet
+		Unlimited access to the refreshed <strong>Guardian app</strong> and{' '}
+		<strong>Guardian Feast app</strong>
 	</>,
 	<>
-		Digital access to the Guardian’s 200 year&nbsp;
-		<strong>newspaper archive</strong>
+		<strong>Exclusive newsletter</strong>&nbsp;for supporters, and a weekly
+		newsletter from the Guardian Weekly editor
 	</>,
 	<>
-		<strong>Ad-free reading</strong>&nbsp;on the Guardian app and website
+		Access to the Guardian’s 200-year <strong>digital archive</strong>
 	</>,
 	<>
-		<strong>Exclusive newsletter</strong>&nbsp;for supporters, sent every week
-		from the Guardian newsroom
+		Access to the <strong>Guardian Editions app</strong> to enjoy digital
+		versions of the Guardian Weekly and Long Read magazines, and the daily
+		newspaper on your mobile or tablet
 	</>,
-	<>Far fewer asks for support</>,
 ];
+const weeklyDigitalRewardsSimplified = [
+	<>Unlimited access to the Guardian app and Guardian Feast app</>,
+	<>Unlimited access to the Guardian Editions app</>,
+	<>Digital access to the Guardian’s 200-year newspaper archive</>,
+	<>Ad-free reading</>,
+	<>Fewer asks for support</>,
+	<>Exclusive supporter newsletters</>,
+];
+const getWeeklyDigitalRewards = (simplify?: boolean) => {
+	return simplify ? weeklyDigitalRewardsSimplified : weeklyDigitalRewards;
+};
 
 const observerDigitalRewards = [
 	<>Access to The Observer digital subscription</>,
@@ -104,12 +116,16 @@ const benefitObserverSunday = (
 );
 const benefitWeekly = (
 	<>
-		<strong>Guardian Weekly</strong> magazine delivered to your door
+		<strong>The Guardian Weekly</strong> magazine, delivered to your door
 	</>
 );
+const getWeeklyBenefit = (simplify?: boolean) => {
+	return simplify ? <>The Guardian Weekly magazine</> : benefitWeekly;
+};
 
 const getPrintBenefitsMap = (
 	fulfilmentOption: PrintFulfilmentOptions,
+	simplify?: boolean,
 ): Partial<Record<PrintProductOptions, Benefits>> => ({
 	EverydayPlus: {
 		label: benefitsLabel[fulfilmentOption],
@@ -132,13 +148,13 @@ const getPrintBenefitsMap = (
 		items: [benefitObserverSunday],
 	},
 	NoProductOptions: {
-		items: [benefitWeekly],
+		items: [getWeeklyBenefit(simplify)],
 	},
 });
 
-const getPrintDigitalBenefitsMap = (): Partial<
-	Record<PrintProductOptions, Benefits>
-> => ({
+const getPrintDigitalBenefitsMap = (
+	simplify?: boolean,
+): Partial<Record<PrintProductOptions, Benefits>> => ({
 	EverydayPlus: {
 		label: digitalRewardsLabel,
 		items: baseDigitalRewards,
@@ -159,7 +175,7 @@ const getPrintDigitalBenefitsMap = (): Partial<
 		items: observerDigitalRewards,
 	},
 	NoProductOptions: {
-		items: weeklyDigitalRewards,
+		items: getWeeklyDigitalRewards(simplify),
 	},
 });
 
@@ -243,17 +259,21 @@ const printPlanDescriptions: Record<
 export default function getPlanData(
 	printProductOptions: PrintProductOptions,
 	fulfillmentOption: PrintFulfilmentOptions,
+	simplify?: boolean,
 ): PlanData | undefined {
 	const description =
 		printPlanDescriptions[fulfillmentOption][printProductOptions];
 	if (!description) {
 		return undefined;
 	}
-	const benefits = getPrintBenefitsMap(fulfillmentOption)[printProductOptions];
+	const benefits = getPrintBenefitsMap(fulfillmentOption, simplify)[
+		printProductOptions
+	];
 	if (!benefits) {
 		return undefined;
 	}
-	const digitalRewards = getPrintDigitalBenefitsMap()[printProductOptions];
+	const digitalRewards =
+		getPrintDigitalBenefitsMap(simplify)[printProductOptions];
 	return {
 		description,
 		benefits,
@@ -299,12 +319,12 @@ export function getPrintPlusDigitalBenefits(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): BenefitsCheckListData[] | undefined {
-	const isWeekly =
-		productKey === 'GuardianWeeklyDomestic' ||
-		productKey === 'GuardianWeeklyRestOfWorld';
-	const isNotGift = !ratePlanKey.includes('Gift');
-	const enableWeeklyDigital =
-		isWeekly && getFeatureFlags().enableWeeklyDigital && isNotGift;
+	const enableWeeklyDigital = isGuardianWeeklyDigitalProduct(
+		productKey,
+		ratePlanKey,
+	)
+		? getFeatureFlags().enableWeeklyDigital
+		: false;
 
 	const printProductOptions = getPrintProductOptions(
 		productKey,
@@ -323,7 +343,11 @@ export function getPrintPlusDigitalBenefits(
 		return undefined;
 	}
 
-	const ratePlanData = getPlanData(printProductOptions, fulfillmentOption);
+	const ratePlanData = getPlanData(
+		printProductOptions,
+		fulfillmentOption,
+		enableWeeklyDigital,
+	);
 	if (!ratePlanData) {
 		return undefined;
 	}

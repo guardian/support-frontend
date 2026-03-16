@@ -2,7 +2,6 @@ import { storage } from '@guardian/libs';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
-import { AnalyticsProfileCacheProvider } from 'helpers/customHooks/analyticsProfileCache';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
@@ -18,6 +17,7 @@ import type { UserType } from 'helpers/user/userType';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import type { Participations } from '../../helpers/abTests/models';
+import { AnalyticsProfileCacheProvider } from '../../helpers/customHooks/analyticsProfileCache';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { setHideSupportMessaginCookie } from '../../helpers/storage/contributionsCookies';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
@@ -142,25 +142,18 @@ export function ThankYou({
 						fulfilmentOption,
 				  )
 				: undefined;
-			const discountedPrice = promotion?.discountedPrice;
-			const price = discountedPrice ?? productPrice;
 
-			if (productKey === 'SupporterPlus') {
-				/** SupporterPlus can have an additional contribution bolted onto the base price */
-				payment = {
-					originalAmount: productPrice,
-					discountedAmount: discountedPrice,
-					contributionAmount,
-					finalAmount: price + (contributionAmount ?? 0),
-				};
-			} else {
-				payment = {
-					originalAmount: productPrice,
-					discountedAmount: discountedPrice,
-					contributionAmount,
-					finalAmount: price,
-				};
-			}
+			const discountedPrice = promotion?.discountedPrice ?? undefined;
+			const price = discountedPrice ?? productPrice;
+			/** SupporterPlus can have an additional contribution bolted onto the base price */
+			const finalAmount =
+				price + (productKey === 'SupporterPlus' ? contributionAmount ?? 0 : 0);
+
+			payment = {
+				originalAmount: productPrice,
+				contributionAmount,
+				finalAmount,
+			};
 		}
 	}
 

@@ -13,6 +13,7 @@ import {
 	Weekend,
 	WeekendPlus,
 } from '@modules/product/productOptions';
+import { isGuardianWeeklyDigitalProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { ActiveProductKey, ActiveRatePlanKey } from './productCatalog';
 
 const ActivePaperProductTypes: PaperProductOptions[] = [
@@ -58,9 +59,12 @@ export const getProductOptionFromProductAndRatePlan = (
 		case 'Contribution':
 		case 'OneTimeContribution':
 		case 'DigitalSubscription':
+			return 'NoProductOptions';
 		case 'GuardianWeeklyRestOfWorld':
 		case 'GuardianWeeklyDomestic':
-			return 'NoProductOptions';
+			return isGuardianWeeklyDigitalProduct(productKey, ratePlanKey)
+				? 'PlusDigital'
+				: 'NoProductOptions';
 		case 'TierThree':
 			return ratePlanKey.endsWith('V2')
 				? 'NewspaperArchive'

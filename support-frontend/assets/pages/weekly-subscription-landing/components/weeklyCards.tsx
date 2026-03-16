@@ -42,6 +42,15 @@ const priceCardsContainer = css`
 	}
 `;
 
+const priceCardsContainerWithSavings = css`
+	${from.desktop} {
+		> div {
+			display: grid;
+			grid-template-rows: 100px 64px;
+		}
+	}
+`;
+
 export function WeeklyCards({
 	countryId,
 	productPrices,
@@ -55,13 +64,26 @@ export function WeeklyCards({
 		weeklyBillingPeriods,
 	});
 
+	const hasSavingsText = ratePlans.some((ratePlan) => ratePlan.savingsText);
+	const priorityPromotionExists = ratePlans.some(
+		(ratePlan) => ratePlan.isPriorityPromo,
+	);
+
 	return (
-		<section css={pricesSection} id="subscribeWeekly">
+		<section css={pricesSection} id="subscribe">
 			<h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>
 			<p css={pricesSubHeadline}>Choose how you'd like to pay</p>
-			<div css={priceCardsContainer}>
+			<div
+				css={[
+					priceCardsContainer,
+					hasSavingsText && priceCardsContainerWithSavings,
+				]}
+			>
 				{ratePlans.map((ratePlan) => (
-					<WeeklyRatePlanCard {...ratePlan} />
+					<WeeklyRatePlanCard
+						{...ratePlan}
+						priorityPromotionExists={priorityPromotionExists}
+					/>
 				))}
 			</div>
 		</section>

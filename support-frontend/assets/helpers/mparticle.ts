@@ -1,50 +1,54 @@
-import { type ConsentState, onConsent } from '@guardian/libs';
+import { getUser } from 'helpers/user/user';
 import { fetchJson } from './async/fetch';
+import { hasTargetingConsent } from './page/analyticsAndConsent';
 
-const PAST_CONTRIBUTOR_MPARTICLE_AUDIENCE_ID = 22994;
-
-const hasTargetingConsent = (): Promise<boolean> =>
-	onConsent()
-		.then(({ canTarget }: ConsentState) => canTarget)
-		.catch(() => false);
+let cachedAudienceMemberships: Promise<number[]> | null = null;
 
 /**
- * Returns true if user is in mparticle "past contributors" audience.
+ * Fetches the mParticle audience memberships for the user.
  * Make a request to mparticle only if the user:
  * - is signed in
  * - has targeting consent
- * - is in the mparticle AB test
  */
-const fetchIsPastSingleContributor = async (
-	isSignedIn: boolean,
-	isVariantToFetch?: boolean,
-): Promise<boolean> => {
-	if (!isSignedIn) {
-		return false;
+const fetchAudienceMemberships = async (): Promise<number[]> => {
+	if (!getUser().isSignedIn) {
+		return [];
 	}
-	if (!isVariantToFetch) {
-		return false;
-	}
+
 	const hasConsent = await hasTargetingConsent();
 	if (!hasConsent) {
-		return false;
+		return [];
 	}
 
-	try {
-		const response = await fetchJson<{
-			isAudienceMember: boolean;
-		}>(`/audience/${PAST_CONTRIBUTOR_MPARTICLE_AUDIENCE_ID}/member`, {
+	if (cachedAudienceMemberships) {
+		return cachedAudienceMemberships;
+	}
+
+	const timeoutPromise = new Promise<never>((_, reject) => {
+		window.setTimeout(() => reject(new Error('Request timed out')), 2000);
+	});
+
+	cachedAudienceMemberships = Promise.race([
+		fetchJson<{ audienceMemberships: number[] }>('/audience-memberships', {
 			mode: 'cors',
 			credentials: 'include',
+		}),
+		timeoutPromise,
+	])
+		.then((response) => {
+			return response.audienceMemberships;
+		})
+		.catch((error) => {
+			console.error(
+				`Error fetching audience memberships from mparticle: ${String(error)}`,
+			);
+			return [];
+		})
+		.finally(() => {
+			cachedAudienceMemberships = null;
 		});
 
-		return response.isAudienceMember;
-	} catch (error) {
-		console.error(
-			`Error fetching audience data from mparticle: ${String(error)}`,
-		);
-		return false;
-	}
+	return cachedAudienceMemberships;
 };
 
-export { fetchIsPastSingleContributor };
+export { fetchAudienceMemberships };

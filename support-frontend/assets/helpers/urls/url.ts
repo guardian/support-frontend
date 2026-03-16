@@ -44,13 +44,18 @@ const getAllQueryParamsWithExclusions = (
 function addQueryParamsToURL(
 	urlString: string,
 	params: Record<string, string | null | undefined>,
+	featureFlag?: string,
 ): string {
 	const [baseUrl, ...oldParams] = urlString.split('?');
 	const searchParams = new URLSearchParams(oldParams.join('&'));
 	Object.keys(params).forEach(
 		(key) => params[key] && searchParams.set(key, params[key]),
 	);
-	return `${baseUrl}?${searchParams.toString()}`;
+	const allParams = searchParams.toString();
+	const featureFlagParam = featureFlag
+		? `${allParams.length > 0 ? '&' : ''}${featureFlag}`
+		: '';
+	return `${baseUrl}?${allParams}${featureFlagParam}`;
 }
 
 function getPaperOrigin(productOptions: ProductOptions): string {
