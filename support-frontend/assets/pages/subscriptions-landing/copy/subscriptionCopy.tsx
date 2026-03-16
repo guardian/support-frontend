@@ -81,6 +81,22 @@ const getDigitalPlusDisplayPrice = (
 	return getDisplayPrice(countryGroupId, price, billingPeriod);
 };
 
+const getWeeklyDigitalDisplayPrice = (
+	countryGroupId: CountryGroupId,
+	billingPeriod: BillingPeriod,
+): string => {
+	const currencyKey = detect(countryGroupId);
+	const ratePlan = `${billingPeriod}Plus`;
+
+	const product = getProductCatalog()['GuardianWeeklyDomestic'];
+	const price = product?.ratePlans[ratePlan]?.pricing[currencyKey];
+	if (!price) {
+		return '';
+	}
+
+	return getDisplayPrice(countryGroupId, price, billingPeriod);
+};
+
 function buildDigialPlusBenefits(): ProductBenefit[] {
 	const benefits = [
 		'<strong>The Guardian Editions app</strong> including Guardian newspaper, Guardian Weekly and the Long Read on your mobile and tablet',
@@ -188,9 +204,14 @@ function guardianWeekly(
 	const weeklyButtons = enableWeeklyDigital
 		? [weeklyFindButton]
 		: [weeklyFindButton, weeklyGiftButton];
+
+	const subtitle = enableWeeklyDigital
+		? getWeeklyDigitalDisplayPrice(countryGroupId, BillingPeriod.Monthly)
+		: getDisplayPrice(countryGroupId, priceCopy.price);
+
 	return {
 		title: weeklyTitle,
-		subtitle: getDisplayPrice(countryGroupId, priceCopy.price),
+		subtitle: subtitle,
 		description: weeklyDescription,
 		offer: priceCopy.discountCopy || '',
 		buttons: weeklyButtons,
