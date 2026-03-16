@@ -1,7 +1,6 @@
 import { storage } from '@guardian/libs';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
