@@ -25,7 +25,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
-  "org.playframework.anorm" %% "anorm" % "2.7.0",
+  "org.playframework.anorm" %% "anorm" % "2.11.0",
   "org.scalatest" %% "scalatest" % "3.0.9" % "test",
   "org.scalatestplus" %% "mockito-3-4" % "3.2.10.0" % "test",
   "org.mockito" % "mockito-core" % "4.11.0",
@@ -73,7 +73,7 @@ excludeDependencies ++= Seq(
 )
 
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
-dependencyOverrides += "commons-io" % "commons-io" % "2.14.0" % Test
+dependencyOverrides += "commons-io" % "commons-io" % "2.21.0" % Test
 dependencyOverrides += "commons-beanutils" % "commons-beanutils" % "1.11.0" % Test
 dependencyOverrides += "org.json" % "json" % "20231013"
 
