@@ -27,7 +27,10 @@ import {
 	discountSummaryCopy,
 	type Promotion,
 } from 'helpers/productPrice/promotions';
-import { parseBillingPeriodCopy } from 'helpers/utilities/utilities';
+import {
+	getSanitisedHtml,
+	parseBillingPeriodCopy,
+} from 'helpers/utilities/utilities';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { ThreeTierCardPill } from './threeTierCardPill';
 
@@ -238,7 +241,12 @@ export function ThreeTierCard({
 						<span>
 							{formattedPrice}/{periodNoun}
 						</span>
-						<span css={discountSummaryCss}>{parsedBillingPeriodsCopy}</span>
+						<span
+							css={discountSummaryCss}
+							dangerouslySetInnerHTML={{
+								__html: getSanitisedHtml(parsedBillingPeriodsCopy),
+							}}
+						/>
 					</>
 				)}
 				{!promotion &&

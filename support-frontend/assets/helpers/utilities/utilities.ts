@@ -50,7 +50,7 @@ function deserialiseJsonObject(
 function getSanitisedHtml(markdownString: string): string {
 	// ensure we don't accidentally inject dangerous html into the page
 	return DomPurify.sanitize(snarkdown(markdownString), {
-		ALLOWED_TAGS: ['em', 'strong', 'ul', 'li', 'a', 'p'],
+		ALLOWED_TAGS: ['em', 'strong', 'ul', 'li', 'a', 'p', 's'],
 	});
 }
 
