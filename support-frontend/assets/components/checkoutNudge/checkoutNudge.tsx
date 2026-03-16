@@ -163,7 +163,10 @@ export function CheckoutNudge({
 	return (
 		<Box cssOverrides={nudgeBoxOverrides}>
 			<BoxContents cssOverrides={innerBoxOverrides}>
-				<h3 css={headlineOverrides} dangerouslySetInnerHTML={{ __html: getSanitisedHtml(heading) }} />
+				<h3
+					css={headlineOverrides}
+					dangerouslySetInnerHTML={{ __html: getSanitisedHtml(heading) }}
+				/>
 				{body && (
 					<div css={bodyCopyOverrides}>
 						<p dangerouslySetInnerHTML={{ __html: getSanitisedHtml(body) }} />
@@ -272,8 +275,16 @@ export function CheckoutNudgeThankYou({
 		<Box cssOverrides={thankYouBoxOverrides}>
 			<BoxContents cssOverrides={innerThankYouBoxOverrides}>
 				<div css={nudgeThankYouBox}>
-					<h3 css={headingOverride} dangerouslySetInnerHTML={{ __html: getSanitisedHtml(heading) }} />
-					{body && <p css={copyOverride} dangerouslySetInnerHTML={{ __html: getSanitisedHtml(body) }} />}
+					<h3
+						css={headingOverride}
+						dangerouslySetInnerHTML={{ __html: getSanitisedHtml(heading) }}
+					/>
+					{body && (
+						<p
+							css={copyOverride}
+							dangerouslySetInnerHTML={{ __html: getSanitisedHtml(body) }}
+						/>
+					)}
 					<img
 						css={imageOverride}
 						width="116px"
