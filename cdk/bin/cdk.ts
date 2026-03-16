@@ -124,7 +124,7 @@ new SupportWorkers(app, "SupportWorkers-CODE", {
   ],
   parameterStorePaths: [
     "arn:aws:ssm:eu-west-1:865473395570:parameter/CODE/support/support-workers/*",
-    "arn:aws:ssm:eu-west-1:865473395570:parameter/PROD/support/support-workers/paper-round-config"
+    "arn:aws:ssm:eu-west-1:865473395570:parameter/PROD/support/support-workers/paper-round-config",
   ],
   secretsManagerPaths: [
     "arn:aws:secretsmanager:eu-west-1:865473395570:secret:CODE/Zuora-OAuth/SupportServiceLambdas-*",
