@@ -18,7 +18,7 @@ function WeeklyPackShot({
 			{enableDisplayWeeklyDigital ? (
 				<GridImage
 					gridId={'subscriptionGuardianWeeklyDigitalHero_16x9'}
-					srcSizes={[453]}
+					srcSizes={[2000]}
 					sizes="453px"
 					imgType="png"
 					altText="Illustration of The Guardian Weekly Subscription"
