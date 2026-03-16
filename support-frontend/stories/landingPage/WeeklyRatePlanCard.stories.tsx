@@ -43,5 +43,5 @@ DefaultWeeklyCard.args = {
 	href: 'https://support.theguardian.com',
 	onClick: () => {},
 	onView: () => {},
-	buttonCopy: 'Subscribe',
+	buttonCopy: 'Subscribe now',
 } satisfies Product;
