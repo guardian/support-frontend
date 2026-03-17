@@ -100,6 +100,7 @@ function WeeklyRatePlanCard({
 					href={href}
 					onClick={onClick}
 					data-testid={`${title}-cta`}
+					aria-label={`Subscribe ${title}`}
 					theme={themeButtonReaderRevenue}
 				>
 					{buttonCopy}
