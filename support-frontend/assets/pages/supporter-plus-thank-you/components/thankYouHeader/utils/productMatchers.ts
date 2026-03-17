@@ -59,11 +59,3 @@ export function isGuardianWeeklyDigitalProduct(
 ): boolean {
 	return isGuardianWeeklyProduct(productKey) && ratePlanKey.endsWith('Plus');
 }
-
-export function isGuardianWeeklyOrTierThreeProduct(
-	productKey: ActiveProductKey,
-): boolean {
-	return (
-		isGuardianWeeklyProduct(productKey) || ['TierThree'].includes(productKey)
-	);
-}

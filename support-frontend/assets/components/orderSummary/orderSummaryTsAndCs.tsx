@@ -20,7 +20,7 @@ import {
 } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import {
 	isGuardianWeeklyGiftProduct,
-	isGuardianWeeklyOrTierThreeProduct,
+	isGuardianWeeklyProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 
 const containerSummaryTsCs = css`
@@ -70,7 +70,7 @@ export function OrderSummaryTsAndCs({
 	const deliveryStartDate = deliveryStart ? formatUserDate(deliveryStart) : '';
 	const rateDescriptor = ratePlanDescription ?? ratePlanKey;
 
-	const tierThreeSupporterPlusTsAndCs = (
+	const supporterPlusTsAndCs = (
 		<div css={containerSummaryTsCs}>
 			{promotion && (
 				<p>
@@ -97,7 +97,7 @@ export function OrderSummaryTsAndCs({
 					)}
 				</>
 			)}
-			{isGuardianWeeklyOrTierThreeProduct(productKey) && (
+			{isGuardianWeeklyProduct(productKey) && (
 				<>
 					<p>
 						{isGuardianWeeklyGiftProduct(productKey, ratePlanKey) ? (
@@ -164,10 +164,9 @@ export function OrderSummaryTsAndCs({
 		</>
 	);
 	const orderSummaryTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
-		SupporterPlus: tierThreeSupporterPlusTsAndCs,
-		TierThree: tierThreeSupporterPlusTsAndCs,
-		GuardianWeeklyDomestic: tierThreeSupporterPlusTsAndCs,
-		GuardianWeeklyRestOfWorld: tierThreeSupporterPlusTsAndCs,
+		SupporterPlus: supporterPlusTsAndCs,
+		GuardianWeeklyDomestic: supporterPlusTsAndCs,
+		GuardianWeeklyRestOfWorld: supporterPlusTsAndCs,
 		SubscriptionCard: paperPlusTsAndCs,
 		HomeDelivery: paperPlusTsAndCs,
 	};
