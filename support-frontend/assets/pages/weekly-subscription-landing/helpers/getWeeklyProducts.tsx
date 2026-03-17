@@ -226,7 +226,7 @@ export const getWeeklyDigitalRatePlans = ({
 			isPriorityPromo: augmentedPromotion?.hasPriority,
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
-			buttonCopy: 'Subscribe now',
+			buttonCopy: 'Subscribe',
 		};
 	});
 

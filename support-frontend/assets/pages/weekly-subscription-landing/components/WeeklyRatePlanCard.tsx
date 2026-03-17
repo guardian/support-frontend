@@ -99,7 +99,7 @@ function WeeklyRatePlanCard({
 				<LinkButton
 					href={href}
 					onClick={onClick}
-					aria-label={`${title}- ${buttonCopy}`}
+					aria-label={`${title}-cta`}
 					theme={themeButtonReaderRevenue}
 				>
 					{buttonCopy}

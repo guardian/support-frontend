@@ -69,9 +69,7 @@ test.describe('Guardian Weekly Checkout', () =>
 					// Transition from landing page to checkout:
 
 					// Click through to the checkout (we use the aria-label to target the link)
-					await page
-						.getByLabel(`${ratePlan}- Subscribe now`, { exact: true })
-						.click();
+					await page.getByLabel(`${ratePlan}-cta`, { exact: true }).click();
 				},
 			);
 		});
