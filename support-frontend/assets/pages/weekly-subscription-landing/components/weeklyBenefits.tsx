@@ -89,7 +89,7 @@ export function WeeklyBenefits({ planData }: WeeklyBenefitsProps): JSX.Element {
 		<section css={weeklyBenefitsContainer} id="subscribeWeeklyBenefits">
 			<div css={benefitsContainer}>
 				<h2 css={headingContainer}>
-					What do you get with a Guardian Weekly subscription?
+					Included in a Guardian Weekly subscription
 				</h2>
 				<div css={benefitsBorder}>
 					<BenefitsList

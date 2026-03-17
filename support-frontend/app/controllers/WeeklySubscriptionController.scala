@@ -67,8 +67,7 @@ class WeeklySubscriptionController(
         canonicalLink = canonicalLink,
         hrefLangLinks = getWeeklyHrefLangLinks(orderIsAGift),
         shareImageUrl = Some(
-          "https://i.guim.co.uk/img/media/00cb294c1f1e5140c63008d7a55b105ef2a786e6/0_0_1200_1200/1200.jpg" +
-            "?width=1200&height=1200&quality=85&auto=format&fit=crop&s=0034a6a7408ca4d162620f2c8b6bf2b9",
+          "https://i.guim.co.uk/img/media/315599b90256ba9c5574037d94841edbe7f435c9/0_0_4740_3552/master/4740.png?dpr=1&s=none&width=1200",
         ),
         shareUrl = canonicalLink,
         noindex = stage != PROD,
