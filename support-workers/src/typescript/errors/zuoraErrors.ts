@@ -2,6 +2,7 @@ import type { ZuoraError } from '@guardian/support-service-lambdas/modules/zuora
 import { retryLimited, retryNone } from './retryError';
 
 const transactionDeclinedMessages = [
+	'Transaction declined.402 - [card_error/card_declined/call_issuer] Your card was declined. You can call your bank for details.',
 	'Transaction declined.402 - [card_error/card_declined/invalid_account] Invalid account.',
 	'Transaction declined.402 - [card_error/card_declined/do_not_honor] Your card was declined.',
 	'Transaction declined.402 - [card_error/card_declined/insufficient_funds] Your card has insufficient funds.',
