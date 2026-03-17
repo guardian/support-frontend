@@ -18,7 +18,6 @@ import { isObserverSubdomain } from './globalsAndSwitches/observer';
 export enum ProductTierLabel {
 	TierOne = 'Support',
 	TierTwo = 'All-access digital',
-	TierThree = 'Digital + print',
 	DigitalSubscription = 'Digital plus',
 }
 

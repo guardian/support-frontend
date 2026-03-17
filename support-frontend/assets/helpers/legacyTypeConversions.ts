@@ -10,7 +10,6 @@ import { subscriptionProductTypes } from './productPrice/subscriptions';
 // These product types match the ones defined on the server in src/main/scala/com/gu/support/catalog/Product.scala
 export const legacyProductTypes = [
 	...subscriptionProductTypes,
-	'TierThree',
 	'SupporterPlus',
 	'GuardianAdLite',
 	'Contribution',
