@@ -1,7 +1,6 @@
 import { storage } from '@guardian/libs';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
@@ -41,8 +40,7 @@ export function ThankYou({
 	landingPageSettings,
 }: ThankYouProps) {
 	const countryId = Country.detect();
-	const { currencyKey, countryGroupId } =
-		getSupportRegionIdConfig(supportRegionId);
+	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
 
 	const searchParams = new URLSearchParams(window.location.search);
 	const csrf = { token: window.guardian.csrf.token };
@@ -115,23 +113,11 @@ export function ThankYou({
 			}
 
 			const productPrices =
-				productKey === 'SupporterPlus' || productKey === 'TierThree'
+				productKey === 'SupporterPlus'
 					? appConfig.allProductPrices[productKey]
 					: undefined;
 			const billingPeriod =
 				toRegularBillingPeriod(ratePlan.billingPeriod) ?? BillingPeriod.Annual;
-
-			const getFulfilmentOptions = (productKey: string): FulfilmentOptions => {
-				switch (productKey) {
-					case 'TierThree':
-						return countryGroupId === 'International'
-							? 'RestOfWorld'
-							: 'Domestic';
-					default:
-						return 'NoFulfilmentOptions';
-				}
-			};
-			const fulfilmentOption = getFulfilmentOptions(productKey);
 
 			/** Get any promotions */
 			promotion = productPrices
@@ -139,7 +125,7 @@ export function ThankYou({
 						productPrices,
 						countryId,
 						billingPeriod,
-						fulfilmentOption,
+						'NoFulfilmentOptions',
 				  )
 				: undefined;
 

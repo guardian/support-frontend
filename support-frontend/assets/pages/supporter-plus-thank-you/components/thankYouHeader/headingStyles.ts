@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { from, titlepiece42 } from '@guardian/source/foundations';
 
-export const tier3LineBreak = css`
+export const premiumDigitalLineBreak = css`
 	display: none;
 	${from.tablet} {
 		display: inline-block;
