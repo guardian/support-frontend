@@ -3,7 +3,6 @@ import { neutral, space, textSans12 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import {
-	buildPromotionalTermsLink,
 	digitalPlusTermsLink,
 	guardianAdLiteTermsLink,
 	guardianWeeklyTermsLink,
