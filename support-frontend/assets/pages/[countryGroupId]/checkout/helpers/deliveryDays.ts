@@ -64,24 +64,6 @@ const getWeeklyDeliveryDate = (testDate?: number): Date => {
 	return result;
 };
 
-// For the Tier Three (t3) product we want users to be able to cancel within 14 days without being charged.
-// To do this we need the first delivery date of the Guardian Weekly part of the subscription, which is the date
-// on which the first payment will be taken, to be at least 14 (actually 15 to be safe) days from today.
-const getTierThreeDeliveryDate = (testDate?: number): Date => {
-	const firstValidDeliveryDate = addDays(
-		new Date(testDate ?? new Date().getTime()),
-		15,
-	);
-	const weeklyDays = getWeeklyDays(testDate);
-	const result = weeklyDays.find(
-		(date) => date.getTime() >= firstValidDeliveryDate.getTime(),
-	);
-	if (result === undefined) {
-		throw new Error('We couldn\t find a valid three tier delivery date');
-	}
-	return result;
-};
-
 const getProductFirstDeliveryDate = (
 	productKey: ActiveProductKey,
 	paperProductOptions?: ActivePaperProductOptions,
@@ -93,8 +75,6 @@ const getProductFirstDeliveryDate = (
 		case 'GuardianWeeklyRestOfWorld': {
 			return getWeeklyDeliveryDate();
 		}
-		case 'TierThree':
-			return getTierThreeDeliveryDate();
 		case 'NationalDelivery':
 		case 'HomeDelivery':
 			if (paperProductOptions === undefined) {
@@ -112,18 +92,9 @@ const getProductFirstDeliveryDate = (
 	}
 };
 
-const getProductWeeklyDeliveryDate = (productKey: ActiveProductKey): Date => {
-	if (productKey === 'TierThree') {
-		return getTierThreeDeliveryDate();
-	}
-	return getWeeklyDeliveryDate();
-};
-
 export {
 	addDays,
 	getWeeklyDays,
 	getWeeklyDeliveryDate,
-	getTierThreeDeliveryDate,
 	getProductFirstDeliveryDate,
-	getProductWeeklyDeliveryDate,
 };
