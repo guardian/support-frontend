@@ -45,7 +45,7 @@ export const getBenefitsChecklistFromLandingPageTool = (
 	landingPageSettings: LandingPageVariant,
 	countryGroupId: CountryGroupId,
 ): BenefitsCheckListData[] | undefined => {
-	// Three Tier products get their config from the Landing Page tool
+	// Tier products get their config from the Landing Page tool
 	if (productKey === 'Contribution') {
 		// Also show SupporterPlus benefits greyed out
 		return benefitsAsChecklist({
