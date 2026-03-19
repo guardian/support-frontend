@@ -76,10 +76,15 @@ describe('thankYouComponent', () => {
 			testComponent(
 				{
 					productKey: 'GuardianWeeklyDomestic',
-					ratePlanKey: 'Monthly',
+					ratePlanKey: 'MonthlyPlus',
 					identityUserType: 'new',
 				},
-				['signUp', 'whatNext'],
+				[
+					'signUp',
+					'whatNext',
+					'appDownloadEditions',
+					'newspaperArchiveBenefit',
+				],
 			);
 		});
 
@@ -90,7 +95,7 @@ describe('thankYouComponent', () => {
 					ratePlanKey: 'Everyday',
 					identityUserType: 'new',
 				},
-				['signUp', 'whatNext', 'appsDownload'],
+				['signUp', 'whatNext', 'appDownloadEditions'],
 			);
 		});
 
@@ -101,7 +106,7 @@ describe('thankYouComponent', () => {
 					ratePlanKey: 'Everyday',
 					identityUserType: 'new',
 				},
-				['signUp', 'whatNext', 'appsDownload'],
+				['signUp', 'whatNext', 'appDownloadEditions'],
 			);
 		});
 
@@ -142,21 +147,21 @@ describe('thankYouComponent', () => {
 		it('should display the correct thankyou cards for GuardianWeeklyDomestic', () => {
 			testComponent(
 				{ productKey: 'GuardianWeeklyDomestic', ratePlanKey: 'Monthly' },
-				['whatNext'],
+				['whatNext', 'appDownloadEditions'],
 			);
 		});
 
 		it('should display the correct thankyou cards for HomeDelivery', () => {
 			testComponent({ productKey: 'HomeDelivery', ratePlanKey: 'Everyday' }, [
 				'whatNext',
-				'appsDownload',
+				'appDownloadEditions',
 			]);
 		});
 
 		it('should display the correct thankyou cards for SubscriptionCard', () => {
 			testComponent(
 				{ productKey: 'SubscriptionCard', ratePlanKey: 'Everyday' },
-				['whatNext', 'appsDownload'],
+				['whatNext', 'appDownloadEditions'],
 			);
 		});
 
@@ -214,21 +219,21 @@ describe('thankYouComponent', () => {
 		it.skip('should display the correct thankyou cards for Everyday NationalDelivery Paper', () => {
 			testComponent(
 				{ productKey: 'NationalDelivery', ratePlanKey: 'Everyday' },
-				['subscriptionStart'],
+				['signIn', 'subscriptionStart', 'whatNext', 'appDownloadEditions'],
 			);
 		});
 
 		it('should display the correct thankyou cards for Everyday SubscriptionCard Paper', () => {
 			testComponent(
 				{ productKey: 'SubscriptionCard', ratePlanKey: 'Everyday' },
-				['signIn', 'whatNext', 'appsDownload'],
+				['signIn', 'whatNext', 'appDownloadEditions'],
 			);
 		});
 
 		it('should display the correct thankyou cards for GuardianWeeklyDomestic', () => {
 			testComponent(
 				{ productKey: 'GuardianWeeklyDomestic', ratePlanKey: 'Monthly' },
-				['signIn', 'whatNext'],
+				['signIn', 'whatNext', 'appDownloadEditions'],
 			);
 		});
 
@@ -236,14 +241,14 @@ describe('thankYouComponent', () => {
 			testComponent({ productKey: 'HomeDelivery', ratePlanKey: 'Everyday' }, [
 				'signIn',
 				'whatNext',
-				'appsDownload',
+				'appDownloadEditions',
 			]);
 		});
 
 		it('should display the correct thankyou cards for SubscriptionCard', () => {
 			testComponent(
 				{ productKey: 'SubscriptionCard', ratePlanKey: 'Everyday' },
-				['signIn', 'whatNext', 'appsDownload'],
+				['signIn', 'whatNext', 'appDownloadEditions'],
 			);
 		});
 
