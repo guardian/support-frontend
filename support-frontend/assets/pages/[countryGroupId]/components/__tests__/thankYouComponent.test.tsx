@@ -92,10 +92,15 @@ describe('thankYouComponent', () => {
 			testComponent(
 				{
 					productKey: 'HomeDelivery',
-					ratePlanKey: 'Everyday',
+					ratePlanKey: 'EverydayPlus',
 					identityUserType: 'new',
 				},
-				['signUp', 'whatNext', 'appDownloadEditions'],
+				[
+					'signUp',
+					'whatNext',
+					'appDownloadEditions',
+					'newspaperArchiveBenefit',
+				],
 			);
 		});
 
@@ -103,10 +108,15 @@ describe('thankYouComponent', () => {
 			testComponent(
 				{
 					productKey: 'SubscriptionCard',
-					ratePlanKey: 'Everyday',
+					ratePlanKey: 'EverydayPlus',
 					identityUserType: 'new',
 				},
-				['signUp', 'whatNext', 'appDownloadEditions'],
+				[
+					'signUp',
+					'whatNext',
+					'appDownloadEditions',
+					'newspaperArchiveBenefit',
+				],
 			);
 		});
 
@@ -152,16 +162,16 @@ describe('thankYouComponent', () => {
 		});
 
 		it('should display the correct thankyou cards for HomeDelivery', () => {
-			testComponent({ productKey: 'HomeDelivery', ratePlanKey: 'Everyday' }, [
-				'whatNext',
-				'appDownloadEditions',
-			]);
+			testComponent(
+				{ productKey: 'HomeDelivery', ratePlanKey: 'EverydayPlus' },
+				['whatNext', 'appDownloadEditions', 'newspaperArchiveBenefit'],
+			);
 		});
 
 		it('should display the correct thankyou cards for SubscriptionCard', () => {
 			testComponent(
-				{ productKey: 'SubscriptionCard', ratePlanKey: 'Everyday' },
-				['whatNext', 'appDownloadEditions'],
+				{ productKey: 'SubscriptionCard', ratePlanKey: 'EverydayPlus' },
+				['whatNext', 'appDownloadEditions', 'newspaperArchiveBenefit'],
 			);
 		});
 
@@ -218,15 +228,26 @@ describe('thankYouComponent', () => {
 
 		it.skip('should display the correct thankyou cards for Everyday NationalDelivery Paper', () => {
 			testComponent(
-				{ productKey: 'NationalDelivery', ratePlanKey: 'Everyday' },
-				['signIn', 'subscriptionStart', 'whatNext', 'appDownloadEditions'],
+				{ productKey: 'NationalDelivery', ratePlanKey: 'EverydayPlus' },
+				[
+					'signIn',
+					'subscriptionStart',
+					'whatNext',
+					'appDownloadEditions',
+					'newspaperArchiveBenefit',
+				],
 			);
 		});
 
 		it('should display the correct thankyou cards for Everyday SubscriptionCard Paper', () => {
 			testComponent(
-				{ productKey: 'SubscriptionCard', ratePlanKey: 'Everyday' },
-				['signIn', 'whatNext', 'appDownloadEditions'],
+				{ productKey: 'SubscriptionCard', ratePlanKey: 'EverydayPlus' },
+				[
+					'signIn',
+					'whatNext',
+					'appDownloadEditions',
+					'newspaperArchiveBenefit',
+				],
 			);
 		});
 
@@ -243,17 +264,26 @@ describe('thankYouComponent', () => {
 		});
 
 		it('should display the correct thankyou cards for HomeDelivery', () => {
-			testComponent({ productKey: 'HomeDelivery', ratePlanKey: 'Everyday' }, [
-				'signIn',
-				'whatNext',
-				'appDownloadEditions',
-			]);
+			testComponent(
+				{ productKey: 'HomeDelivery', ratePlanKey: 'EverydayPlus' },
+				[
+					'signIn',
+					'whatNext',
+					'appDownloadEditions',
+					'newspaperArchiveBenefit',
+				],
+			);
 		});
 
 		it('should display the correct thankyou cards for SubscriptionCard', () => {
 			testComponent(
-				{ productKey: 'SubscriptionCard', ratePlanKey: 'Everyday' },
-				['signIn', 'whatNext', 'appDownloadEditions'],
+				{ productKey: 'SubscriptionCard', ratePlanKey: 'EverydayPlus' },
+				[
+					'signIn',
+					'whatNext',
+					'appDownloadEditions',
+					'newspaperArchiveBenefit',
+				],
 			);
 		});
 

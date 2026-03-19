@@ -288,7 +288,7 @@ export function ThankYouComponent({
 			'feedback',
 		),
 		...maybeThankYouModule(
-			isDigitalEdition || isGuardianPrint || isGuardianWeeklyDigital,
+			isDigitalEdition || isGuardianPaperPlus || isGuardianWeeklyDigital,
 			'appDownloadEditions',
 		),
 		...maybeThankYouModule(
