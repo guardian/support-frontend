@@ -71,8 +71,8 @@ export function WeeklyCards({
 
 	return (
 		<section css={pricesSection} id="subscribe">
-			<h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>
-			<p css={pricesSubHeadline}>Choose how you'd like to pay</p>
+			<h2 css={pricesHeadline}>Subscribe today</h2>
+			<p css={pricesSubHeadline}>Choose a plan that best suits you</p>
 			<div
 				css={[
 					priceCardsContainer,

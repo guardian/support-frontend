@@ -2,6 +2,7 @@ import type { ZuoraError } from '@guardian/support-service-lambdas/modules/zuora
 import { retryLimited, retryNone } from './retryError';
 
 const transactionDeclinedMessages = [
+	'Transaction declined.402 - [card_error/card_declined/call_issuer] Your card was declined. You can call your bank for details.',
 	'Transaction declined.402 - [card_error/card_declined/invalid_account] Invalid account.',
 	'Transaction declined.402 - [card_error/card_declined/do_not_honor] Your card was declined.',
 	'Transaction declined.402 - [card_error/card_declined/insufficient_funds] Your card has insufficient funds.',
@@ -24,8 +25,6 @@ const transactionDeclinedMessages = [
 	'Error occurred while processing payment method.code=validation_failed,message=account_number is the wrong length (should be 8 characters)',
 	'Error occurred while processing payment method.code=validation_failed,message=account_number does not match sort code',
 	"Transaction declined.INSTRUMENT_DECLINED - The instrument presented  was either declined by the processor or bank, or it can't be used for this payment.",
-
-	// This list should be kept in sync with the list in src/main/scala/com/gu/support/workers/exceptions/CardDeclinedMessages.scala
 ];
 
 export const isTransactionDeclinedError = (errorMessage: string) =>
