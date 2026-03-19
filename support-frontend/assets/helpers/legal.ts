@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import type { Promotion } from './productPrice/promotions';
 // ----- Terms & Conditions ----- //
 const privacyLink = 'https://www.theguardian.com/help/privacy-policy';
 const guardianHelpCentreLink = 'https://www.theguardian.com/help';
@@ -53,9 +52,6 @@ enum MediaGroup {
 	TORTOISE = 'GC re Tortoise Media Ltd t/a The Observer',
 }
 
-const buildPromotionalTermsLink = (promotion: Promotion): string =>
-	`/p/${promotion.promoCode}/terms`;
-
 export {
 	guardianContactUsLink,
 	guardianHelpCentreLink,
@@ -74,5 +70,4 @@ export {
 	observerLinks,
 	manageAccountLink,
 	MediaGroup,
-	buildPromotionalTermsLink,
 };
