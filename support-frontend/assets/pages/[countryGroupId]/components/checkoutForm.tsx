@@ -383,44 +383,53 @@ export default function CheckoutForm({
 		'',
 	);
 
+	const onlyAvailableInsideGreaterLondon =
+		ratePlanKey === 'Saturday' ||
+		ratePlanKey === 'SaturdayPlus' ||
+		ratePlanKey === 'Sunday';
+
 	const fetchDeliveryAgentsIfRequired = async (postcode: string) => {
-		if (isValidPostcode(postcode)) {
-			if (postcodeIsWithinDeliveryArea(postcode)) {
-				// The user's postcode is inside the M25
-				setDeliveryPostcodeIsOutsideM25(false);
-			} else if (
-				ratePlanKey === 'Saturday' ||
-				ratePlanKey === 'SaturdayPlus' ||
-				ratePlanKey === 'Sunday'
-			) {
-				// The user's postcode is outside the M25 but they have selected a
-				// Saturday or Sunday only rate plan which is not supported
-				setDeliveryAddressErrors((prevState) => [
-					...prevState,
-					{
-						field: 'postCode',
-						message:
-							'Saturday or Sunday delivery is available for Greater London only. Go back and select Weekend delivery option or choose a Digital Voucher.',
-					},
-				]);
-			} else {
-				// The users postcode is outside the M25 and they have selected a valid rate plan
-				setDeliveryPostcodeIsOutsideM25(true);
-				const agents = await getDeliveryAgents(postcode);
-				if (agents.agents?.length === 1 && agents.agents[0]) {
-					setChosenDeliveryAgent(agents.agents[0].agentId);
-				}
-				setDeliveryAgents(agents);
-			}
-		} else {
-			// The postcode field does not contain a valid postcode, so reset to default state
+		if (!isValidPostcode(postcode)) {
 			setDeliveryPostcodeIsOutsideM25(false);
 			setDeliveryAgents(undefined);
 			setDeliveryAddressErrors((prevState) =>
 				prevState.filter((error) => error.field !== 'postCode'),
 			);
+			return;
+		}
+
+		const postCodeIsOutsideM25 = !postcodeIsWithinDeliveryArea(postcode);
+
+		if (!postCodeIsOutsideM25) {
+			setDeliveryPostcodeIsOutsideM25(false);
+			return;
+		}
+
+		if (onlyAvailableInsideGreaterLondon) {
+			// The user's postcode is outside the M25 but they have selected a
+			// Saturday or Sunday only rate plan which is not supported
+			setDeliveryPostcodeIsOutsideM25(true);
+			setDeliveryAddressErrors((prevState) => [
+				...prevState,
+				{
+					field: 'postCode',
+					message:
+						'Saturday or Sunday delivery is available for Greater London only. Go back and select Weekend delivery option or choose a Digital Voucher.',
+				},
+			]);
+		}
+
+		if (!onlyAvailableInsideGreaterLondon) {
+			// The users postcode is outside the M25 and they have selected a valid rate plan
+			setDeliveryPostcodeIsOutsideM25(true);
+			const agents = await getDeliveryAgents(postcode);
+			if (agents.agents?.length === 1 && agents.agents[0]) {
+				setChosenDeliveryAgent(agents.agents[0].agentId);
+			}
+			setDeliveryAgents(agents);
 		}
 	};
+
 	useEffect(() => {
 		if (productKey === 'HomeDelivery') {
 			void fetchDeliveryAgentsIfRequired(deliveryPostcode);
@@ -529,6 +538,13 @@ export default function CheckoutForm({
 	}, [errorMessage]);
 
 	const onFormSubmit = async (formData: FormData): Promise<boolean> => {
+		if (onlyAvailableInsideGreaterLondon && deliveryPostcodeIsOutsideM25) {
+			// We should be using a ref to avoid breaking this in the future,
+			// but TextInput doen not currently support refs, so we will scroll to the top of the postcode field using an id for now
+			document.getElementById('delivery-postcode')?.focus();
+			return false;
+		}
+
 		if (paymentMethod === undefined) {
 			setPaymentMethodError('Please select a payment method');
 			return false;
