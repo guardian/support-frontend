@@ -237,7 +237,7 @@ describe('thankYouComponent', () => {
 			);
 		});
 
-		it.skip('should display the correct thankyou cards for Everyday NationalDelivery Paper', () => {
+		it.skip('should display the correct thankyou cards for EverydayPlus NationalDelivery Paper', () => {
 			testComponent(
 				{ productKey: 'NationalDelivery', ratePlanKey: 'EverydayPlus' },
 				[
@@ -250,7 +250,7 @@ describe('thankYouComponent', () => {
 			);
 		});
 
-		it('should display the correct thankyou cards for Everyday SubscriptionCard Paper', () => {
+		it('should display the correct thankyou cards for EverydayPlus SubscriptionCard Paper', () => {
 			testComponent(
 				{ productKey: 'SubscriptionCard', ratePlanKey: 'EverydayPlus' },
 				[
