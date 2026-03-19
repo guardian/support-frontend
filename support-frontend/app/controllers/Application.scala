@@ -31,9 +31,11 @@ import services.{CachedProductCatalogServiceProvider, PaymentAPIService, TestUse
 import utils.FastlyGEOIP._
 import utils.{ObserverUtils, PaperValidation}
 import views.EmptyDiv
+import scala.concurrent.duration._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
+import actions.CacheControl
 
 case class AppConfig private (
     geoip: AppConfig.Geoip,
@@ -377,7 +379,16 @@ class Application(
         ),
       ).withSettingsSurrogateKey
     } else {
-      NotFound
+      NotFound(
+        views.html.main(
+          "Error 404",
+          EmptyDiv("error-404-page"),
+          RefPath("error404Page.js"),
+          None,
+        )()(assets, request, settingsProvider.getAllSettings()),
+      )
+        .withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*)
+        .withSettingsSurrogateKey
     }
   }
 
