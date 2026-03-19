@@ -37,7 +37,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
   val stage = Stages.DEV
 
   val parser = mock[BodyParser[AnyContent]]
-  val authService = mock[OktaAuthService]
+  val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
   val config = mock[Identity]
   val mockAuthActionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(
     parser,
