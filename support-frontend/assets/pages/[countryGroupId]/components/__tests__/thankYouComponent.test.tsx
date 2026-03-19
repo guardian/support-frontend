@@ -146,8 +146,8 @@ describe('thankYouComponent', () => {
 
 		it('should display the correct thankyou cards for GuardianWeeklyDomestic', () => {
 			testComponent(
-				{ productKey: 'GuardianWeeklyDomestic', ratePlanKey: 'Monthly' },
-				['whatNext', 'appDownloadEditions'],
+				{ productKey: 'GuardianWeeklyDomestic', ratePlanKey: 'MonthlyPlus' },
+				['whatNext', 'appDownloadEditions', 'newspaperArchiveBenefit'],
 			);
 		});
 
@@ -232,8 +232,13 @@ describe('thankYouComponent', () => {
 
 		it('should display the correct thankyou cards for GuardianWeeklyDomestic', () => {
 			testComponent(
-				{ productKey: 'GuardianWeeklyDomestic', ratePlanKey: 'Monthly' },
-				['signIn', 'whatNext', 'appDownloadEditions'],
+				{ productKey: 'GuardianWeeklyDomestic', ratePlanKey: 'MonthlyPlus' },
+				[
+					'signIn',
+					'whatNext',
+					'appDownloadEditions',
+					'newspaperArchiveBenefit',
+				],
 			);
 		});
 
