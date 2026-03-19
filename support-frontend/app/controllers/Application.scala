@@ -465,7 +465,7 @@ class Application(
       mainElement = mainElement,
       js = RefPath("[countryGroupId]/router.js"),
       description =
-        if (pageName.startsWith("student")) stringsConfig.studentLandingDescription // TODO: doesn't exist
+        if (pageName.startsWith("student")) stringsConfig.studentLandingDescription
         else stringsConfig.contributionsLandingDescription,
       paymentMethodConfigs = PaymentMethodConfigs(
         oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),

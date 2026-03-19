@@ -6,45 +6,53 @@ import { getSettings } from '../globalsAndSwitches/globals';
 import type { PageParticipationsConfig } from './models';
 import { STUDENT_LANDING_PAGE_PARTICIPATIONS_KEY } from './sessionStorage';
 
+// NOTE: this should never happen - we should get a 404 page instead if there is no live test that matches the path. This mimics the UTS existing page.
+// but since we can't remove the fallback at this point, it must be equivalent to the live UTS page.
 const fallBackStudentLandingPageSelection: Record<
 	string,
 	StudentLandingPageVariant
 > = {
 	AUDCountries: {
 		name: 'CONTROL',
-		heading: 'Subscribe to fearless and independent journalism ...backup', // TODO:
+		heading: 'Subscribe to fearless, independent and inspiring journalism',
 		subheading:
-			'For a limited time, students with a valid UTS email address can unlock the premium experience of Guardian journalism, including unmetered app access, ...backup.', // TODO:
+			'For a limited time, students with a valid UTS email address can unlock the premium experience of Guardian journalism, including unmetered app access, <b>free for two years</b>.',
 		institution: {
 			name: 'University of Technology Sidney',
 			acronym: 'UTS',
-			logoUrl: '', // TODO:
+			logoUrl: 'https://uploads.guim.co.uk/2026/03/10/UTSLogo.svg',
 		},
 		image: {
-			mobileUrl: '', // TODO: this doesn't work as expected so may need to be adapted
-			tabletUrl: '', // TODO:
-			desktopUrl: '', // TODO:
-			altText: '', // TODO:
+			mobileUrl:
+				'https://i.guim.co.uk/img/media/811f456e9786d119d766e55f2df821c056d415b0/0_0_2588_1276/master/2588.jpg',
+			tabletUrl:
+				'https://i.guim.co.uk/img/media/14e65d1ade49300434e31603dd5b43e25e98e6c2/0_0_1396_1632/master/1396.jpg',
+			desktopUrl:
+				'https://i.guim.co.uk/img/media/f58d5cf9b591f4ddb4ad7a4b9c7bd12ae80dd333/0_0_2295_1632/master/2295.jpg',
+			altText: 'Mobile apps for The Guardian and Feast',
 		},
 		promoCode: ['UTS_STUDENT'],
 	},
 	NZDCountries: {
 		name: 'CONTROL',
-		heading: 'Subscribe to fearless and independent journalism ...backup', // TODO:
+		heading: 'Subscribe to fearless, independent and inspiring journalism',
 		subheading:
-			'For a limited time, students with a valid UTS email address can unlock the premium experience of Guardian journalism, including unmetered app access, ...backup.', // TODO:
+			'For a limited time, students with a valid UTS email address can unlock the premium experience of Guardian journalism, including unmetered app access, <b>free for two years</b>.',
 		institution: {
 			name: 'University of Technology Sidney',
 			acronym: 'UTS',
-			logoUrl: '', // TODO:
+			logoUrl: 'https://uploads.guim.co.uk/2026/03/10/UTSLogo.svg',
 		},
 		image: {
-			mobileUrl: '', // TODO: this doesn't work as expected so may need to be adapted
-			tabletUrl: '', // TODO:
-			desktopUrl: '', // TODO:
-			altText: '', // TODO:
+			mobileUrl:
+				'https://i.guim.co.uk/img/media/811f456e9786d119d766e55f2df821c056d415b0/0_0_2588_1276/master/2588.jpg',
+			tabletUrl:
+				'https://i.guim.co.uk/img/media/14e65d1ade49300434e31603dd5b43e25e98e6c2/0_0_1396_1632/master/1396.jpg',
+			desktopUrl:
+				'https://i.guim.co.uk/img/media/f58d5cf9b591f4ddb4ad7a4b9c7bd12ae80dd333/0_0_2295_1632/master/2295.jpg',
+			altText: 'Mobile apps for The Guardian and Feast',
 		},
-		promoCode: ['NZ_STUDENT'],
+		promoCode: ['UTS_STUDENT'],
 	},
 };
 
