@@ -237,16 +237,10 @@ describe('thankYouComponent', () => {
 			);
 		});
 
-		it.skip('should display the correct thankyou cards for EverydayPlus NationalDelivery Paper', () => {
+		it('should display the correct thankyou cards for EverydayPlus NationalDelivery Paper', () => {
 			testComponent(
 				{ productKey: 'NationalDelivery', ratePlanKey: 'EverydayPlus' },
-				[
-					'signIn',
-					'subscriptionStart',
-					'whatNext',
-					'appDownloadEditions',
-					'newspaperArchiveBenefit',
-				],
+				['signIn', 'subscriptionStart', 'whatNext'],
 			);
 		});
 
