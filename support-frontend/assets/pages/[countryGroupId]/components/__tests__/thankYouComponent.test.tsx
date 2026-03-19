@@ -88,6 +88,17 @@ describe('thankYouComponent', () => {
 			);
 		});
 
+		it('should display the correct thankyou cards for GuardianWeeklyDomestic gift', () => {
+			testComponent(
+				{
+					productKey: 'GuardianWeeklyDomestic',
+					ratePlanKey: 'ThreeMonthGift',
+					identityUserType: 'new',
+				},
+				['signUp', 'whatNext'],
+			);
+		});
+
 		it('should display the correct thankyou cards for HomeDelivery', () => {
 			testComponent(
 				{
