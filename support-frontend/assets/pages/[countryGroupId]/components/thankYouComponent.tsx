@@ -38,7 +38,6 @@ import { getPrintPlusDigitalBenefits } from 'pages/paper-subscription-landing/pl
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import {
 	isGuardianWeeklyDigitalProduct,
-	isGuardianWeeklyProduct,
 	isPrintProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
@@ -170,7 +169,6 @@ export function ThankYouComponent({
 
 	const isGuardianPaperPlus = isPaperPlusSub(productKey, ratePlanKey); // Observer not a Plus plan
 	const isPrint = isPrintProduct(productKey);
-	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
 	const isGuardianWeeklyDigital = isGuardianWeeklyDigitalProduct(
 		productKey,
 		ratePlanKey,
@@ -278,19 +276,14 @@ export function ThankYouComponent({
 		),
 		...maybeThankYouModule(isNationalDelivery, 'subscriptionStart'),
 		...maybeThankYouModule(isGuardianAdLite || isPrint, 'whatNext'),
-		...maybeThankYouModule(
-			isSupporterPlus ||
-				isGuardianWeeklyDigital ||
-				(isGuardianPrint && !isGuardianWeekly),
-			'appsDownload',
-		),
+		...maybeThankYouModule(isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
 			isOneOff || (isSignedIn && !isGuardianAdLite && !isPrint),
 			'feedback',
 		),
 		...maybeThankYouModule(
-			isDigitalEdition || isGuardianWeeklyDigital,
+			isDigitalEdition || isGuardianPaperPlus || isGuardianWeeklyDigital,
 			'appDownloadEditions',
 		),
 		...maybeThankYouModule(
