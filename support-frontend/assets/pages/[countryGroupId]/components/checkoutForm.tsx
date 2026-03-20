@@ -540,7 +540,7 @@ export default function CheckoutForm({
 	const onFormSubmit = async (formData: FormData): Promise<boolean> => {
 		if (onlyAvailableInsideGreaterLondon && deliveryPostcodeIsOutsideM25) {
 			// We should be using a ref to avoid breaking this in the future,
-			// but TextInput doen not currently support refs, so we will scroll to the top of the postcode field using an id for now
+			// but TextInput does not currently support refs, so we will scroll to the top of the postcode field using an id for now
 			document.getElementById('delivery-postcode')?.focus();
 			return false;
 		}
