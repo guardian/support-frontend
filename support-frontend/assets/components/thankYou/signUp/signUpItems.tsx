@@ -13,15 +13,13 @@ export function SignUpBodyCopy({
 }: {
 	isGuardianPrint?: boolean;
 }): JSX.Element {
-	const topSignUpCopy = () => {
-		if (isGuardianPrint) {
-			return 'To finish creating your account, please check your inbox for an email from us. This step will complete your account setup and will allow you to manage your subscription.';
-		}
-		return 'Please validate your email address today so we can recognise you as a valued supporter when you visit our website or app. This means we will:';
-	};
+	const topSignUpCopyPrint =
+		'To finish creating your account, please check your inbox for an email from us. This step will complete your account setup and will allow you to manage your subscription.';
+	const topSignUpCopyDigital =
+		'Please validate your email address today so we can recognise you as a valued supporter when you visit our website or app. This means we will:';
 	return (
 		<>
-			<p>{topSignUpCopy()}</p>
+			<p>{isGuardianPrint ? topSignUpCopyPrint : topSignUpCopyDigital}</p>
 			{!isGuardianPrint && (
 				<>
 					<div css={signUpSpacing}>
