@@ -3,7 +3,6 @@ import { neutral, space, textSans12 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import {
-	buildPromotionalTermsLink,
 	digitalPlusTermsLink,
 	guardianAdLiteTermsLink,
 	guardianWeeklyTermsLink,
@@ -103,7 +102,7 @@ function paperTsAndCs(
 		</>
 	);
 }
-const rightReservation = `Offer subject to availability. Guardian News and Media Ltd ("GNM") reserves the right to withdraw this promotion at any time. `;
+
 function weeklyTsAndCs(
 	isWeeklyGift?: boolean,
 	promotion?: Promotion,
@@ -112,8 +111,12 @@ function weeklyTsAndCs(
 ): JSX.Element {
 	return (
 		<>
-			{isWeeklyGift && !promotion && <div>{rightReservation}</div>}
-			{promotion && <GuardianWeeklyPromoTerms promotion={promotion} />}
+			{isWeeklyGift && !promotion && (
+				<div>
+					Offer subject to availability. Guardian News and Media Ltd ("GNM")
+					reserves the right to withdraw this promotion at any time.
+				</div>
+			)}
 			{isWeeklyDigital && (
 				<>
 					<GuardianWeeklyPaymentTerms deliveryDate={deliveryDate} />
@@ -123,14 +126,7 @@ function weeklyTsAndCs(
 		</>
 	);
 }
-function GuardianWeeklyPromoTerms({ promotion }: { promotion: Promotion }) {
-	return (
-		<div>
-			{rightReservation}Full promotion terms and conditions for our{' '}
-			{textLink('offer', buildPromotionalTermsLink(promotion))}.
-		</div>
-	);
-}
+
 function GuardianWeeklyPaymentTerms({ deliveryDate }: { deliveryDate?: Date }) {
 	const deliveryTsAndCs = `Your first payment will be taken on ${
 		deliveryDate ? formatUserDate(deliveryDate) : 'the delivery date'
