@@ -6,6 +6,7 @@ import { Frontend } from "../lib/frontend";
 import { PaymentApi } from "../lib/payment-api";
 import { StripePatronsData } from "../lib/stripe-patrons-data";
 import { SupportWorkers } from "../lib/support-workers";
+import { SupporterProductDataTS } from "../lib/supporter-product-data-ts";
 
 const app = new App();
 const cloudFormationStackName = process.env.GU_CFN_STACK_NAME;
@@ -159,4 +160,16 @@ new SupportWorkers(app, "SupportWorkers-PROD", {
     "arn:aws:secretsmanager:eu-west-1:865473395570:secret:CODE/Zuora-OAuth/SupportServiceLambdas-*",
     "arn:aws:secretsmanager:eu-west-1:865473395570:secret:PROD/Zuora-OAuth/SupportServiceLambdas-*",
   ],
+});
+
+new SupporterProductDataTS(app, "SupporterProductDataTS-CODE", {
+  stack: "support",
+  stage: "CODE",
+  cloudFormationStackName,
+});
+
+new SupporterProductDataTS(app, "SupporterProductDataTS-PROD", {
+  stack: "support",
+  stage: "PROD",
+  cloudFormationStackName,
 });
