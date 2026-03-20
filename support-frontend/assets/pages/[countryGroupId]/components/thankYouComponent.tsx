@@ -181,7 +181,6 @@ export function ThankYouComponent({
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isSupporterPlus = productKey === 'SupporterPlus';
-	const isTierThree = productKey === 'TierThree';
 	const isNationalDelivery = productKey === 'NationalDelivery';
 	const { email } = order;
 	const validEmail = email !== '';
@@ -241,7 +240,6 @@ export function ThankYouComponent({
 		csrf,
 		isOneOff,
 		amountIsAboveThreshold: isSupporterPlus,
-		isTierThree,
 		startDate,
 		email,
 		campaignCode: undefined,
@@ -271,20 +269,17 @@ export function ThankYouComponent({
 			userNotSignedIn && !isGuardianAdLite && !isObserverSubDomain,
 			'signIn',
 		), // Sign in to access your benefits
-		...maybeThankYouModule(isTierThree || isDigitalEdition, 'benefits'),
+		...maybeThankYouModule(isDigitalEdition, 'benefits'),
 		...maybeThankYouModule(
 			!!isObserverSubDomain && !!observerPrint,
 			'observerAppDownload',
 		),
-		...maybeThankYouModule(
-			isTierThree || isNationalDelivery,
-			'subscriptionStart',
-		),
+		...maybeThankYouModule(isNationalDelivery, 'subscriptionStart'),
 		...maybeThankYouModule(isGuardianAdLite || isPrint, 'whatNext'),
-		...maybeThankYouModule(isTierThree || isSupporterPlus, 'appsDownload'),
+		...maybeThankYouModule(isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
-			isOneOff || (!isTierThree && isSignedIn && !isGuardianAdLite && !isPrint),
+			isOneOff || (isSignedIn && !isGuardianAdLite && !isPrint),
 			'feedback',
 		),
 		...maybeThankYouModule(
@@ -297,7 +292,7 @@ export function ThankYouComponent({
 		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(
-			!isTierThree && !isGuardianAdLite && !isPrint && !isDigitalEdition,
+			!isGuardianAdLite && !isPrint && !isDigitalEdition,
 			'socialShare',
 		),
 		...maybeThankYouModule(

@@ -4,10 +4,10 @@ import { expectedDefaultBenefits } from './__fixtures__/expectedDefaultBenefits'
 
 describe('getBenefitsChecklistFromLandingPageTool', () => {
 	const landingPageSettings = {
-		name: 'TierThree',
+		name: 'SupporterPlus',
 		copy: {
-			heading: 'TierThree heading',
-			subheading: 'TierThree subheading',
+			heading: 'SupporterPlus heading',
+			subheading: 'SupporterPlus subheading',
 		},
 		products: {
 			DigitalSubscription: {
@@ -133,7 +133,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 			},
 		]);
 	});
-	it('should return undefined for products other than T3, S+ & RC', () => {
+	it('should return undefined for products other than DigitalSubscription, SupporterPlus & Contribution', () => {
 		expect(
 			getBenefitsChecklistFromLandingPageTool(
 				'GuardianAdLite',

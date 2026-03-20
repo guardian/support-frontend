@@ -11,7 +11,6 @@ import {
 	paperTermsLink,
 	privacyLink,
 	supporterPlusTermsLink,
-	tierThreeTermsLink,
 } from 'helpers/legal';
 import { getProductLabel } from 'helpers/productCatalog';
 import type {
@@ -40,8 +39,6 @@ export function FooterTsAndCs({
 		switch (productKey) {
 			case 'GuardianAdLite':
 				return `the ${getProductLabel(productKey)}`;
-			case 'TierThree':
-				return getProductLabel(productKey);
 			default:
 				return 'our';
 		}
@@ -54,8 +51,6 @@ export function FooterTsAndCs({
 				return textLink('Terms and Conditions', digitalPlusTermsLink);
 			case 'SupporterPlus':
 				return textLink('Terms and Conditions', supporterPlusTermsLink);
-			case 'TierThree':
-				return textLink('Terms', tierThreeTermsLink);
 			case 'HomeDelivery':
 			case 'NationalDelivery':
 			case 'SubscriptionCard':

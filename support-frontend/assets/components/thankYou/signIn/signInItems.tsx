@@ -57,21 +57,16 @@ type CreateSignInUrlResponse = {
 	signInLink: string;
 };
 
-export const signInHeader = (isTier3?: boolean, isGuardianPrint?: boolean) => {
+export const signInHeader = (isGuardianPrint?: boolean) => {
 	if (isGuardianPrint) {
 		return 'Sign in to access to your account';
-	}
-	if (isTier3) {
-		return 'Sign in to access all your benefits';
 	}
 	return 'Continue to your account';
 };
 
 export function SignInBodyCopy({
-	isTierThree,
 	isGuardianPrint,
 }: {
-	isTierThree: boolean;
 	isGuardianPrint: boolean;
 }): JSX.Element {
 	const [isExpanded, setIsExpanded] = useState(false);
@@ -86,16 +81,6 @@ export function SignInBodyCopy({
 			<p>
 				Make sure you’re signed in on all your devices when browsing our website
 				and app. This will allow you to manage your subscription.
-			</p>
-		);
-	}
-
-	if (isTierThree) {
-		return (
-			<p>
-				Make sure you sign in on all your devices when browsing our website and
-				app. This helps us recognise you as a valued subscriber so you can enjoy
-				all the benefits included in your subscription.
 			</p>
 		);
 	}

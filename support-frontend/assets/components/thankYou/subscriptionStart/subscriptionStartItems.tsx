@@ -89,19 +89,6 @@ export function SubscriptionStartItems({
 		SubscriptionCard: paperCopy,
 		GuardianWeeklyRestOfWorld: guardianWeeklyCopy,
 		GuardianWeeklyDomestic: guardianWeeklyCopy,
-		TierThree: (
-			<span css={[downloadCopy, subscriptionItems]}>
-				{guardianWeeklyCopy}
-				<div>
-					<p css={boldText}>Your digital benefits start today.</p>
-					<p>
-						Please ensure you are signed in on all your devices to enjoy all
-						your benefits, including unlimited app access and uninterrupted
-						ad-free reading.
-					</p>
-				</div>
-			</span>
-		),
 	};
 	return copyContent[productKey] ?? null;
 }

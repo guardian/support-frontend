@@ -50,13 +50,24 @@ DigitalSubscription.args = {
 	amount: 28,
 };
 
-export const TierThree = Template.bind({});
-TierThree.args = {
-	productKey: 'TierThree',
-	ratePlanKey: 'Monthly',
+export const WeeklyDigitalGBP = Template.bind({});
+WeeklyDigitalGBP.args = {
+	productKey: 'GuardianWeeklyDomestic',
+	ratePlanKey: 'AnnualPlus',
 	countryGroupId: 'GBPCountries',
 	currency: 'GBP',
-	amount: 27,
+	amount: 158.4,
+	enableWeeklyDigital: true,
+};
+
+export const WeeklyDigitalUSD = Template.bind({});
+WeeklyDigitalUSD.args = {
+	productKey: 'GuardianWeeklyRestOfWorld',
+	ratePlanKey: 'MonthlyPlus',
+	countryGroupId: 'UnitedStates',
+	currency: 'USD',
+	amount: 30,
+	enableWeeklyDigital: true,
 };
 
 export const HomeDeliverySunday = Template.bind({});
