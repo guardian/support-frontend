@@ -31,9 +31,11 @@ import services.{CachedProductCatalogServiceProvider, PaymentAPIService, TestUse
 import utils.FastlyGEOIP._
 import utils.{ObserverUtils, PaperValidation}
 import views.EmptyDiv
+import scala.concurrent.duration._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
+import actions.CacheControl
 
 case class AppConfig private (
     geoip: AppConfig.Geoip,
@@ -344,6 +346,50 @@ class Application(
         noIndexing,
       ),
     ).withSettingsSurrogateKey
+  }
+
+  def tooledStudentLanding(
+      countryCode: String,
+      institution: String,
+      campaignCode: String,
+  ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
+    val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
+    val noIndexing = countryCode == "au" // WHAT DOES THIS DO EXACTLY?
+
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    val studentTests = settings.studentLandingPageTests
+
+    val institutionList =
+      for (
+        test <- studentTests
+        if test.regionId.substring(0, 2).equalsIgnoreCase(countryCode);
+        variant <- test.variants
+        if variant.institution.acronym.equalsIgnoreCase(institution)
+      )
+        yield variant
+
+    if (institutionList.size == 1) {
+      Ok(
+        contributionsPlusStudentHtml(
+          countryCode,
+          campaignCodeOption,
+          "student",
+          "https://support.theguardian.com/student",
+          noIndexing,
+        ),
+      ).withSettingsSurrogateKey
+    } else {
+      NotFound(
+        views.html.main(
+          "Error 404",
+          EmptyDiv("error-404-page"),
+          RefPath("error404Page.js"),
+          None,
+        )()(assets, request, settingsProvider.getAllSettings()),
+      )
+        .withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*)
+        .withSettingsSurrogateKey
+    }
   }
 
   def downForMaintenance(): Action[AnyContent] = NoCacheAction() { implicit request =>
