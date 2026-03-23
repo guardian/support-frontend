@@ -1,7 +1,7 @@
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuStack } from "@guardian/cdk/lib/constructs/core";
 import { type App, Duration } from "aws-cdk-lib";
-import { Rule, Schedule } from "aws-cdk-lib/aws-events";
+import { Rule, RuleTargetInput, Schedule } from "aws-cdk-lib/aws-events";
 import { SfnStateMachine } from "aws-cdk-lib/aws-events-targets";
 import {
   Effect,
@@ -216,11 +216,15 @@ export class SupporterProductDataTS extends GuStack {
     );
 
     const scheduleExpression =
-      this.stage === "PROD" ? "cron(*/5 * ? * * *)" : "cron(0 6 ? * MON-FRI *)";
+      this.stage === "PROD" ? "cron(*/5 * ? * * *)" : "cron(0 9 ? * MON-FRI *)";
 
     new Rule(this, "SupporterProductDataSchedule", {
       schedule: Schedule.expression(scheduleExpression),
-      targets: [new SfnStateMachine(stateMachine)],
+      targets: [
+        new SfnStateMachine(stateMachine, {
+          input: RuleTargetInput.fromObject({ queryType: "incremental" }),
+        }),
+      ],
     });
   }
 }
