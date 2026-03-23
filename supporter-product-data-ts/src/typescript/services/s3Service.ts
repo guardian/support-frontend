@@ -1,3 +1,4 @@
+import type { Readable } from "stream";
 import {
   GetObjectCommand,
   PutObjectCommand,
@@ -61,5 +62,39 @@ export class S3Service {
       contentLength: content.length,
     });
     return content;
+  }
+
+  async *streamObjectLines(
+    stage: Stage,
+    filename: string
+  ): AsyncGenerator<string> {
+    const bucket = bucketNameForStage(stage);
+    console.info("Streaming file from S3", { bucket, filename });
+
+    const response = await this.s3Client.send(
+      new GetObjectCommand({ Bucket: bucket, Key: filename })
+    );
+
+    if (response.Body === undefined) {
+      throw new Error(`Missing S3 body for ${filename}`);
+    }
+
+    const stream = response.Body as Readable;
+    let remainder = "";
+
+    for await (const chunk of stream) {
+      const text = (chunk as Buffer).toString("utf-8");
+      const lines = (remainder + text).split(/\r?\n/);
+      remainder = lines.pop() ?? "";
+      for (const line of lines) {
+        if (line.trim().length > 0) {
+          yield line;
+        }
+      }
+    }
+
+    if (remainder.trim().length > 0) {
+      yield remainder;
+    }
   }
 }

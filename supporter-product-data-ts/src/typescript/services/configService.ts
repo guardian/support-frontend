@@ -89,9 +89,6 @@ export class ConfigService {
 
     const parsed = zuoraConfigSchema.parse(values);
     const discountProductRatePlanIds = discountIdsByStage[this.stage];
-    if (discountProductRatePlanIds === undefined) {
-      throw new Error(`Unsupported stage: ${this.stage}`);
-    }
 
     return {
       ...parsed,

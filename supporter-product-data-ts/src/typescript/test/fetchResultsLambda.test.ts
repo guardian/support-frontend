@@ -1,4 +1,27 @@
 import { fetchResults } from "../lambdas/fetchResultsLambda";
+import type { BatchQueryResponse } from "../model/zuora";
+
+type UploadToS3 = (
+  stage: "CODE" | "PROD",
+  filename: string,
+  body: Uint8Array,
+  length: number
+) => Promise<void>;
+
+const makeGetResults =
+  (response: BatchQueryResponse) => (): Promise<BatchQueryResponse> =>
+    Promise.resolve(response);
+
+const makeGetResultFileResponse =
+  (body: string | null, contentLength: string) => (): Promise<Response> =>
+    Promise.resolve(
+      new Response(body, {
+        status: 200,
+        headers: { "content-length": contentLength },
+      })
+    );
+
+const noopAsync = (): Promise<void> => Promise.resolve();
 
 describe("fetchResults", () => {
   beforeEach(() => {
@@ -6,11 +29,12 @@ describe("fetchResults", () => {
   });
 
   test("returns AddSupporterRatePlanItemToQueueState and uploads file", async () => {
-    const uploadToS3 = jest.fn<
-      Promise<void>,
-      ["CODE" | "PROD", string, Uint8Array, number]
-    >(async () => undefined);
-    const putLastSuccessfulQueryTime = jest.fn(async () => undefined);
+    const uploadToS3 = jest.fn(
+      (): Promise<void> => Promise.resolve()
+    ) as unknown as jest.Mock<Promise<void>, Parameters<UploadToS3>>;
+    const putLastSuccessfulQueryTime = jest.fn(
+      (): Promise<void> => Promise.resolve()
+    ) as unknown as jest.Mock<Promise<void>, [string]>;
 
     const state = await fetchResults(
       {
@@ -18,7 +42,7 @@ describe("fetchResults", () => {
         attemptedQueryTime: "2026-03-09T10:30:00.000Z",
       },
       {
-        getResults: async () => ({
+        getResults: makeGetResults({
           id: "job-123",
           status: "completed",
           batches: [
@@ -30,11 +54,7 @@ describe("fetchResults", () => {
             },
           ],
         }),
-        getResultFileResponse: async () =>
-          new Response("csv-data", {
-            status: 200,
-            headers: { "content-length": "8" },
-          }),
+        getResultFileResponse: makeGetResultFileResponse("csv-data", "8"),
         uploadToS3,
         putLastSuccessfulQueryTime,
       }
@@ -56,7 +76,9 @@ describe("fetchResults", () => {
   });
 
   test("updates lastSuccessfulQueryTime when no records are returned", async () => {
-    const putLastSuccessfulQueryTime = jest.fn(async () => undefined);
+    const putLastSuccessfulQueryTime = jest.fn(
+      (): Promise<void> => Promise.resolve()
+    ) as unknown as jest.Mock<Promise<void>, [string]>;
 
     await fetchResults(
       {
@@ -64,7 +86,7 @@ describe("fetchResults", () => {
         attemptedQueryTime: "2026-03-09T11:00:00.000Z",
       },
       {
-        getResults: async () => ({
+        getResults: makeGetResults({
           id: "job-456",
           status: "completed",
           batches: [
@@ -76,12 +98,8 @@ describe("fetchResults", () => {
             },
           ],
         }),
-        getResultFileResponse: async () =>
-          new Response("csv-data", {
-            status: 200,
-            headers: { "content-length": "8" },
-          }),
-        uploadToS3: async () => undefined,
+        getResultFileResponse: makeGetResultFileResponse("csv-data", "8"),
+        uploadToS3: noopAsync as never,
         putLastSuccessfulQueryTime,
       }
     );
@@ -99,18 +117,14 @@ describe("fetchResults", () => {
           attemptedQueryTime: "2026-03-09T11:00:00.000Z",
         },
         {
-          getResults: async () => ({
+          getResults: makeGetResults({
             id: "job-789",
             status: "executing",
             batches: [],
           }),
-          getResultFileResponse: async () =>
-            new Response(null, {
-              status: 200,
-              headers: { "content-length": "1" },
-            }),
-          uploadToS3: async () => undefined,
-          putLastSuccessfulQueryTime: async () => undefined,
+          getResultFileResponse: makeGetResultFileResponse(null, "1"),
+          uploadToS3: noopAsync as never,
+          putLastSuccessfulQueryTime: noopAsync as never,
         }
       )
     ).rejects.toThrow("Job with id job-789 is still in status executing");
