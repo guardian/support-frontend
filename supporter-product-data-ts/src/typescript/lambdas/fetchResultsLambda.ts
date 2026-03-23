@@ -10,7 +10,6 @@ import type {
   FetchResultsState,
 } from "./types";
 
-
 interface FetchResultsDeps {
   getResults: (jobId: string) => Promise<BatchQueryResponse>;
   getResultFileResponse: (fileId: string) => Promise<Response>;
@@ -22,7 +21,6 @@ interface FetchResultsDeps {
   ) => Promise<void>;
   putLastSuccessfulQueryTime: (time: string) => Promise<void>;
 }
-
 
 const getValueOrThrow = <T>(value: T | undefined, errorMessage: string): T => {
   if (value === undefined) {

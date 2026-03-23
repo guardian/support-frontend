@@ -44,4 +44,3 @@ export const toIsoLocalDateTimeUtc = (isoString: string): string => {
   }
   return parsed.toISOString().replace("Z", "");
 };
-

@@ -40,7 +40,9 @@ const buildBatchQueryRequest = (
     incrementalTime = formatZuoraDateTime(now.subtract(20, "year"));
   } else {
     if (config.lastSuccessfulQueryTime !== undefined) {
-      const parsed = parseLastSuccessfulQueryTime(config.lastSuccessfulQueryTime);
+      const parsed = parseLastSuccessfulQueryTime(
+        config.lastSuccessfulQueryTime
+      );
       if (parsed === undefined) {
         console.warn(
           "lastSuccessfulQueryTime could not be parsed as a date, ignoring",
@@ -84,7 +86,6 @@ const buildBatchQueryRequest = (
     dateTimeUtc: "true",
   };
 };
-
 
 export const queryZuora = async (
   stage: Stage,
