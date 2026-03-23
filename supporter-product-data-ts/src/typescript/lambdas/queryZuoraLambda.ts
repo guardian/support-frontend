@@ -1,6 +1,5 @@
 import type { Handler } from "aws-lambda";
 import dayjs from "dayjs";
-import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import type { BatchQueryRequest, ZoqlExportQuery } from "../model/query";
 import { type Stage, stageFromEnvironment } from "../model/stage";
@@ -9,6 +8,10 @@ import {
   type ZuoraQuerierConfig,
 } from "../services/configService";
 import {
+  currentAttemptedQueryTime,
+  parseLastSuccessfulQueryTime,
+} from "../services/dateTimeService";
+import {
   buildSelectActiveRatePlansQuery,
   selectActiveRatePlansQueryName,
 } from "../services/selectActiveRatePlansQuery";
@@ -16,7 +19,6 @@ import { ZuoraQuerierService } from "../services/zuoraQuerierService";
 import type { FetchResultsState, QueryType, QueryZuoraState } from "./types";
 
 dayjs.extend(utc);
-dayjs.extend(timezone);
 
 const ZUORA_DATETIME_FORMAT = "YYYY-MM-DD HH:mm:ss";
 
@@ -38,10 +40,8 @@ const buildBatchQueryRequest = (
     incrementalTime = formatZuoraDateTime(now.subtract(20, "year"));
   } else {
     if (config.lastSuccessfulQueryTime !== undefined) {
-      // Strip zone ID suffix e.g. [UTC] written by the Scala version's ISO_DATE_TIME formatter
-      const normalised = config.lastSuccessfulQueryTime.replace(/\[.*]$/, "");
-      const parsed = dayjs.utc(normalised);
-      if (!parsed.isValid()) {
+      const parsed = parseLastSuccessfulQueryTime(config.lastSuccessfulQueryTime);
+      if (parsed === undefined) {
         console.warn(
           "lastSuccessfulQueryTime could not be parsed as a date, ignoring",
           { lastSuccessfulQueryTime: config.lastSuccessfulQueryTime }
@@ -85,8 +85,6 @@ const buildBatchQueryRequest = (
   };
 };
 
-const attemptedQueryTime = (): string =>
-  dayjs().tz("America/Los_Angeles").subtract(1, "minute").toISOString();
 
 export const queryZuora = async (
   stage: Stage,
@@ -109,7 +107,7 @@ export const queryZuora = async (
 
   return {
     jobId: result.id,
-    attemptedQueryTime: attemptedQueryTime(),
+    attemptedQueryTime: currentAttemptedQueryTime(),
   };
 };
 

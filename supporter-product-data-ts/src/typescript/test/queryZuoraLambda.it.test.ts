@@ -11,6 +11,8 @@ jest.mock("../services/configService", () => ({
       partnerId: "partner",
       username: "user",
       password: "pass",
+      lastSuccessfulQueryTime:
+        "2026-03-23T05:20:27.281403501-07:00[America/Los_Angeles]",
       discountProductRatePlanIds: [],
     }),
   })),
