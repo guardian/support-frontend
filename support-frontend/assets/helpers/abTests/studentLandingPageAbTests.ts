@@ -1,5 +1,8 @@
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { countryGroupBySupportRegionId, countryGroups } from '@modules/internationalisation/countryGroup';
+import {
+	countryGroupBySupportRegionId,
+	countryGroups,
+} from '@modules/internationalisation/countryGroup';
 import type {
 	StudentLandingPageTest,
 	StudentLandingPageVariant,
@@ -90,7 +93,9 @@ const filterTestsByURL = (
 	const urlInstitution = path.split('/')[3]?.trim();
 
 	return tests.filter((test: StudentLandingPageTest) => {
-		const regionMatches = countryGroups[test.regionId].supportRegionId === urlCountryGroup.supportRegionId;
+		const regionMatches =
+			countryGroups[test.regionId].supportRegionId ===
+			urlCountryGroup.supportRegionId;
 		const institutionMatches =
 			test.variants[0]?.institution.acronym.trim() === urlInstitution;
 		return regionMatches && institutionMatches;
