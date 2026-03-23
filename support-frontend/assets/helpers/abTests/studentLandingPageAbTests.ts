@@ -1,3 +1,5 @@
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { countryGroupBySupportRegionId, countryGroups } from '@modules/internationalisation/countryGroup';
 import type {
 	StudentLandingPageTest,
 	StudentLandingPageVariant,
@@ -83,13 +85,15 @@ const filterTestsByURL = (
 	}
 	const path: string = window.location.pathname;
 
-	const urlCountryGroupId = path.split('/')[1]?.trim(); // fingers-crossed the URL doesn't change!
+	const supportRegionId = path.split('/')[1]?.trim() as SupportRegionId; // fingers-crossed the URL doesn't change!
+	const urlCountryGroup = countryGroupBySupportRegionId(supportRegionId);
 	const urlInstitution = path.split('/')[3]?.trim();
 
-	return tests.filter((element: StudentLandingPageTest) => {
-		const region = element.regionId.substring(0, 2).toLowerCase().trim();
-		const institution = element.variants[0]?.institution.acronym.trim();
-		return region === urlCountryGroupId && institution === urlInstitution;
+	return tests.filter((test: StudentLandingPageTest) => {
+		const regionMatches = countryGroups[test.regionId].supportRegionId === urlCountryGroup.supportRegionId;
+		const institutionMatches =
+			test.variants[0]?.institution.acronym.trim() === urlInstitution;
+		return regionMatches && institutionMatches;
 	});
 };
 
