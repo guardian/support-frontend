@@ -75,7 +75,7 @@ export class ZuoraQuerierService {
     console.info("Zuora API request", {
       method: "POST",
       url,
-      body: request,
+      body: JSON.stringify(request),
     });
 
     const response = await fetch(url, {
