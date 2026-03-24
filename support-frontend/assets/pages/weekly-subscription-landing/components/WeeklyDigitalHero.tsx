@@ -9,17 +9,16 @@ import {
 } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import {
-	pageTitleSpacing,
+	pageTitleOverrides,
 	roundelPromotionStyles,
 	roundelStyles,
+	weeklyDigitalHeroOverrides,
 } from './weeklyDigitalHeroStyles';
 
 export default function WeeklyDigitalHero({
 	promotion,
-	enableWeeklyDigital,
 }: {
 	promotion: PromotionCopy;
-	enableWeeklyDigital: boolean;
 }) {
 	const {
 		roundel: promotionRoundel,
@@ -57,7 +56,7 @@ export default function WeeklyDigitalHero({
 		<PageTitle
 			title="The Guardian Weekly"
 			theme="weekly"
-			cssOverrides={pageTitleSpacing}
+			cssOverrides={pageTitleOverrides}
 		>
 			<HeroHeader
 				heroImage={
@@ -104,7 +103,7 @@ export default function WeeklyDigitalHero({
 						componentType: 'ACQUISITIONS_BUTTON',
 					})
 				}
-				enableWeeklyDigital={enableWeeklyDigital}
+				cssOverrides={weeklyDigitalHeroOverrides}
 			/>
 		</PageTitle>
 	);

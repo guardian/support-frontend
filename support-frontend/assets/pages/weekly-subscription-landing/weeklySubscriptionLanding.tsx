@@ -118,10 +118,7 @@ export function WeeklyLandingPage({
 				}
 			>
 				<>
-					<WeeklyDigitalHero
-						promotion={promotion}
-						enableWeeklyDigital={enableWeeklyDigital}
-					/>
+					<WeeklyDigitalHero promotion={promotion} />
 					<CentredContainer cssOverrides={weeklyDigitalSpacing}>
 						<WeeklyCards countryId={countryId} productPrices={productPrices} />
 						<WeeklyBenefits planData={planData} />

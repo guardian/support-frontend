@@ -23,33 +23,6 @@ export const printHeroCssOverrides = css`
 	}
 `;
 
-export const weeklyDigitalHeroCssOverrides = css`
-	& div:nth-child(2) {
-		${from.desktop} {
-			align-self: center;
-		}
-	}
-`;
-
-export const weeklyDigitalContainerCssOverrides = css`
-	${until.tablet} {
-		section {
-			padding: ${space[3]}px ${space[3]}px ${space[6]}px;
-		}
-		a {
-			width: 100%;
-		}
-	}
-
-	${from.desktop} {
-		width: calc(100% - 64px);
-
-		h1 {
-			padding-left: 0px;
-		}
-	}
-`;
-
 export const heroCopy = css`
 	padding: ${space[3]}px ${space[5]}px ${space[10]}px;
 `;
