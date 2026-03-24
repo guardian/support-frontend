@@ -12,7 +12,6 @@ import {
 	subscriptionsImageFeature,
 	subscriptionsProductContainer,
 	subscriptionsProductContainerFeature,
-	weeklyDigitalSubscriptionsImageContainer,
 } from './subscriptionsProductStyles';
 
 function SubscriptionsProduct({
@@ -20,7 +19,6 @@ function SubscriptionsProduct({
 	isFeature,
 	benefits,
 	cssOverrides,
-	enableDigitalWeekly,
 	...props
 }: ProductCopy & { isFeature: boolean }): JSX.Element {
 	return (
@@ -34,9 +32,6 @@ function SubscriptionsProduct({
 			<div
 				css={[
 					subscriptionsImageContainer,
-					enableDigitalWeekly
-						? weeklyDigitalSubscriptionsImageContainer
-						: undefined,
 					isFeature && subscriptionsImageContainerFeature,
 				]}
 			>
