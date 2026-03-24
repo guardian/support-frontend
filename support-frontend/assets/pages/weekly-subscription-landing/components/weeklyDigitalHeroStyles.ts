@@ -17,6 +17,7 @@ export const pageTitleSpacing = css`
 	}
 	div {
 		${from.desktop} {
+			width: calc(100% - 64px);
 			h1 {
 				padding-left: 0px;
 			}
