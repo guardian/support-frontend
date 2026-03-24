@@ -36,6 +36,7 @@ import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import actions.CacheControl
+import admin.settings.CountryGroupId.getCountryGroup
 
 case class AppConfig private (
     geoip: AppConfig.Geoip,
@@ -360,13 +361,12 @@ class Application(
     val studentTests = settings.studentLandingPageTests
 
     val institutionList =
-      for (
+      for {
         test <- studentTests
-        if test.regionId.substring(0, 2).equalsIgnoreCase(countryCode);
+        if getCountryGroup(test.regionId).id.equalsIgnoreCase(countryCode)
         variant <- test.variants
         if variant.institution.acronym.equalsIgnoreCase(institution)
-      )
-        yield variant
+      } yield variant
 
     if (institutionList.size == 1) {
       Ok(
