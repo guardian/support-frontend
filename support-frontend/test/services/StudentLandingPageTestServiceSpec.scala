@@ -8,6 +8,7 @@ import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
 
 import scala.jdk.CollectionConverters.{MapHasAsJava, SeqHasAsJava}
+import admin.settings.CountryGroupId.AUDCountries
 
 class StudentLandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
 
@@ -74,7 +75,7 @@ class StudentLandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
         name = "2026-02-09_SKB-REGION-FIX",
         status = Status.Live,
         priority = 1,
-        regionId = "AUDCountries",
+        regionId = AUDCountries,
         variants = List(
           StudentLandingPageVariant(
             name = "offer",
