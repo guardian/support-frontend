@@ -126,7 +126,6 @@ export function WeeklyLandingPage({
 						productPrices={productPrices}
 						orderIsAGift={!!orderIsAGift}
 						country={countryId}
-						enableWeeklyDigital={enableWeeklyDigital}
 					/>
 				}
 			>
