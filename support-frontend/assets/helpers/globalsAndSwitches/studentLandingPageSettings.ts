@@ -24,6 +24,6 @@ export interface StudentLandingPageVariant {
 export interface StudentLandingPageTest {
 	name: string;
 	status: 'Live' | 'Draft';
-	regionId: CountryGroupId;
+	countryGroupId: CountryGroupId;
 	variants: StudentLandingPageVariant[];
 }

@@ -30,7 +30,6 @@ object Institution {
 }
 
 // NOTE: only used here currently
-// TODO: consider renaming regionId to countryGroupId
 sealed trait CountryGroupId
 
 object CountryGroupId {
@@ -76,7 +75,7 @@ case class StudentLandingPageTest(
     name: String,
     status: Status,
     priority: Int,
-    regionId: CountryGroupId, // consider renaming to countryGroupId - SAC needs to be done first
+    countryGroupId: CountryGroupId,
     variants: List[StudentLandingPageVariant],
 )
 

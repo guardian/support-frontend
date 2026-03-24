@@ -363,7 +363,7 @@ class Application(
     val institutionList =
       for {
         test <- studentTests
-        if getCountryGroup(test.regionId).id.equalsIgnoreCase(countryCode)
+        if getCountryGroup(test.countryGroupId).id.equalsIgnoreCase(countryCode)
         variant <- test.variants
         if variant.institution.acronym.equalsIgnoreCase(institution)
       } yield variant

@@ -94,7 +94,7 @@ const filterTestsByURL = (
 
 	return tests.filter((test: StudentLandingPageTest) => {
 		const regionMatches =
-			countryGroups[test.regionId].supportRegionId ===
+			countryGroups[test.countryGroupId].supportRegionId ===
 			urlCountryGroup.supportRegionId;
 		const institutionMatches =
 			test.variants[0]?.institution.acronym.trim() === urlInstitution;
