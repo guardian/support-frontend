@@ -1,10 +1,4 @@
 import { css } from '@emotion/react';
-import {
-	from,
-	palette,
-	space,
-	textSansBold17,
-} from '@guardian/source/foundations';
 import GridPicture from 'components/gridPicture/gridPicture';
 import HeroHeader from 'components/hero/HeroHeader';
 import OfferStrapline from 'components/page/offerStrapline';
@@ -14,25 +8,11 @@ import {
 	promotionHTML,
 } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-
-const pageTitleSpacing = css`
-	${from.tablet} {
-		padding-bottom: ${space[8]}px;
-	}
-	p {
-		${from.desktop} {
-			max-width: 100%;
-		}
-	}
-`;
-
-const roundelStyles = css`
-	${textSansBold17}
-`;
-const roundelPromotionStyles = css`
-	background-color: ${palette.lifestyle[400]};
-	color: ${palette.neutral[100]};
-`;
+import {
+	pageTitleSpacing,
+	roundelPromotionStyles,
+	roundelStyles,
+} from './weeklyDigitalHeroStyles';
 
 export default function WeeklyDigitalHero({
 	promotion,
@@ -78,7 +58,6 @@ export default function WeeklyDigitalHero({
 			title="The Guardian Weekly"
 			theme="weekly"
 			cssOverrides={pageTitleSpacing}
-			enableWeeklyDigital={enableWeeklyDigital}
 		>
 			<HeroHeader
 				heroImage={
