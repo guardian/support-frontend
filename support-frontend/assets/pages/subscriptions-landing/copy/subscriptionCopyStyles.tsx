@@ -5,7 +5,7 @@ export const weeklySubscriptionProductCardStyle = css`
 	color: ${neutral[0]};
 	background-color: #cadbe8;
 	${from.tablet} {
-		div {
+		div:nth-child(1) {
 			align-self: center;
 		}
 	}
