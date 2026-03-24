@@ -16,7 +16,7 @@ export const pageTitleOverrides = css`
 			max-width: 100%;
 		}
 	}
-	div {
+	div:nth-child(1) {
 		${from.desktop} {
 			width: calc(100% - 64px);
 			h1 {
@@ -44,7 +44,6 @@ export const weeklyDigitalHeroOverrides = css`
 		}
 	}
 	${from.desktop} {
-		width: calc(100% - 64px);
 		div {
 			& div:nth-child(2) {
 				${from.desktop} {
