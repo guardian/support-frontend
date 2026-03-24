@@ -166,10 +166,12 @@ new SupporterProductDataTS(app, "SupporterProductDataTS-CODE", {
   stack: "support",
   stage: "CODE",
   cloudFormationStackName,
+  processItemMaxConcurrency: 30,
 });
 
 new SupporterProductDataTS(app, "SupporterProductDataTS-PROD", {
   stack: "support",
   stage: "PROD",
   cloudFormationStackName,
+  processItemMaxConcurrency: 50,
 });

@@ -25,9 +25,15 @@ import {
 } from "aws-cdk-lib/aws-stepfunctions";
 import { LambdaInvoke } from "aws-cdk-lib/aws-stepfunctions-tasks";
 
+interface SupporterProductDataTSProps extends GuStackProps {
+  processItemMaxConcurrency: number;
+}
+
 export class SupporterProductDataTS extends GuStack {
-  constructor(scope: App, id: string, props: GuStackProps) {
+  constructor(scope: App, id: string, props: SupporterProductDataTSProps) {
     super(scope, id, props);
+
+    const { processItemMaxConcurrency } = props;
 
     const artifactBucket = Bucket.fromBucketName(
       this,
@@ -94,7 +100,7 @@ export class SupporterProductDataTS extends GuStack {
     });
 
     const queryZuora = new Function(this, "QueryZuoraLambda", {
-      functionName: `support-SupporterProductDataTSQueryZuora-${this.stage}`,
+      functionName: `supporterProductDataTS-QueryZuora-${this.stage}`,
       runtime: Runtime.NODEJS_22_X,
       handler: "queryZuoraLambda.handler",
       code: lambdaArtifact,
@@ -105,7 +111,7 @@ export class SupporterProductDataTS extends GuStack {
     });
 
     const fetchResults = new Function(this, "FetchResultsLambda", {
-      functionName: `support-SupporterProductDataTSFetchResults-${this.stage}`,
+      functionName: `supporterProductDataTS-FetchResults-${this.stage}`,
       runtime: Runtime.NODEJS_22_X,
       handler: "fetchResultsLambda.handler",
       code: lambdaArtifact,
@@ -124,7 +130,7 @@ export class SupporterProductDataTS extends GuStack {
       this,
       "AddSupporterRatePlanItemToQueueLambda",
       {
-        functionName: `support-SPDTS-AddToQueue-${this.stage}`,
+        functionName: `supporterProductDataTS-AddToQueue-${this.stage}`,
         runtime: Runtime.NODEJS_22_X,
         handler: "addSupporterRatePlanItemToQueueLambda.handler",
         code: lambdaArtifact,
@@ -139,7 +145,7 @@ export class SupporterProductDataTS extends GuStack {
       this,
       "ProcessSupporterRatePlanItemLambda",
       {
-        functionName: `support-SPDTS-ProcessItem-${this.stage}`,
+        functionName: `supporterProductDataTS-ProcessItem-${this.stage}`,
         runtime: Runtime.NODEJS_22_X,
         handler: "processSupporterRatePlanItemLambda.handler",
         code: lambdaArtifact,
@@ -152,7 +158,17 @@ export class SupporterProductDataTS extends GuStack {
 
     queue.grantSendMessages(addToQueue);
     queue.grantConsumeMessages(processItem);
-    processItem.addEventSource(new SqsEventSource(queue, { batchSize: 10 }));
+    processItem.addEventSource(
+      new SqsEventSource(queue, {
+        batchSize: 10,
+        // Limit the number of concurrent Lambda invocations consuming from the
+        // queue to avoid hitting the account-level Lambda concurrency limit
+        // when there are hundreds of thousands of records to process.
+        // At batchSize 10 and maxConcurrency 50 this gives a throughput of
+        // 500 items/invocation-cycle whilst leaving headroom for other lambdas.
+        maxConcurrency: processItemMaxConcurrency,
+      })
+    );
 
     const addToQueueAgainTask = new LambdaInvoke(this, "AddToQueueAgainTask", {
       lambdaFunction: addToQueue,
