@@ -17,9 +17,7 @@ import {
 	RestOfWorld,
 } from '@modules/product/fulfilmentOptions';
 import CentredContainer from 'components/containers/centredContainer';
-import FullWidthContainer from 'components/containers/fullWidthContainer';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
-import Block from 'components/page/block';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PromoTermsProvider } from 'contexts/PromoTermsContext';
 import { getFeatureFlags } from 'helpers/featureFlags';
@@ -37,21 +35,11 @@ import { renderPage } from 'helpers/rendering/render';
 import { routes } from 'helpers/urls/routes';
 import getPlanData from 'pages/paper-subscription-landing/planData';
 import { GuardianWeeklyFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
-import Benefits from './components/content/benefits';
-import GiftBenefits from './components/content/giftBenefits';
 import { WeeklyBenefits } from './components/weeklyBenefits';
 import { WeeklyCards } from './components/weeklyCards';
 import WeeklyDigitalHero from './components/WeeklyDigitalHero';
 import { WeeklyGiftStudentSubs } from './components/weeklyGiftStudentSubs';
-import { WeeklyHero } from './components/weeklyHero';
 import { WeeklyPriceInfo } from './components/weeklyPriceInfo';
-import WeeklyProductPrices from './components/weeklyProductPrices';
-
-const weeklySpacing = css`
-	div {
-		margin-top: 0;
-	}
-`;
 
 const weeklyDigitalSpacing = css`
 	padding: ${space[8]}px ${space[3]}px ${space[9]}px;
@@ -129,50 +117,22 @@ export function WeeklyLandingPage({
 					/>
 				}
 			>
-				{enableWeeklyDigital ? (
-					<>
-						<WeeklyDigitalHero
-							promotion={promotion}
-							enableWeeklyDigital={enableWeeklyDigital}
-						/>
-						<CentredContainer cssOverrides={weeklyDigitalSpacing}>
-							<WeeklyCards
-								countryId={countryId}
-								productPrices={productPrices}
-							/>
-							<WeeklyBenefits planData={planData} />
-							<WeeklyPriceInfo />
-						</CentredContainer>
-					</>
-				) : (
-					<>
-						<WeeklyHero
-							isGift={orderIsAGift}
-							promotionCopy={promotion}
-							countryGroupId={countryGroupId}
-							enableWeeklyDigital={enableWeeklyDigital}
-						/>
-						<FullWidthContainer>
-							<CentredContainer cssOverrides={weeklySpacing}>
-								<Block>{orderIsAGift ? <GiftBenefits /> : <Benefits />}</Block>
-							</CentredContainer>
-						</FullWidthContainer>
-						<FullWidthContainer theme="dark" hasOverlap>
-							<CentredContainer>
-								<WeeklyProductPrices
-									countryId={countryId}
-									productPrices={productPrices}
-									orderIsAGift={orderIsAGift}
-								/>
-							</CentredContainer>
-						</FullWidthContainer>
-					</>
-				)}
-				<WeeklyGiftStudentSubs
-					countryGroupId={countryGroupId}
-					orderIsAGift={orderIsAGift}
-					enableWeeklyDigital={enableWeeklyDigital}
-				/>
+				<>
+					<WeeklyDigitalHero
+						promotion={promotion}
+						enableWeeklyDigital={enableWeeklyDigital}
+					/>
+					<CentredContainer cssOverrides={weeklyDigitalSpacing}>
+						<WeeklyCards countryId={countryId} productPrices={productPrices} />
+						<WeeklyBenefits planData={planData} />
+						<WeeklyPriceInfo />
+					</CentredContainer>
+					<WeeklyGiftStudentSubs
+						countryGroupId={countryGroupId}
+						orderIsAGift={orderIsAGift}
+						enableWeeklyDigital={enableWeeklyDigital}
+					/>
+				</>
 			</PageScaffold>
 		</PromoTermsProvider>
 	);
