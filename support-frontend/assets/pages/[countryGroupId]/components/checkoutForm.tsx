@@ -59,7 +59,7 @@ import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsM
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
-import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
+import { postcodeIsWithinM25 } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -398,7 +398,7 @@ export default function CheckoutForm({
 			return;
 		}
 
-		const postCodeIsOutsideM25 = !postcodeIsWithinDeliveryArea(postcode);
+		const postCodeIsOutsideM25 = !postcodeIsWithinM25(postcode);
 
 		setDeliveryPostcodeIsOutsideM25(postCodeIsOutsideM25);
 

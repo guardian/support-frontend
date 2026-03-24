@@ -2,6 +2,7 @@ import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 
 const M25_POSTCODE_PREFIXES =
 	getGlobal<string[]>('homeDeliveryPostcodes') ?? [];
+
 export const postcodeHasPrefix = (
 	postcode: string,
 	expectedPrefix: string,
@@ -18,4 +19,9 @@ const postcodeIsWithinDeliveryArea = (
 	allowedPrefixes.filter((prefix) => postcodeHasPrefix(postcode, prefix))
 		.length > 0;
 
-export { postcodeIsWithinDeliveryArea };
+const postcodeIsWithinM25 = (postcode: string): boolean => {
+	const [area = ''] = postcode.split(' ');
+	return M25_POSTCODE_PREFIXES.includes(area.toUpperCase());
+};
+
+export { postcodeIsWithinDeliveryArea, postcodeIsWithinM25 };
