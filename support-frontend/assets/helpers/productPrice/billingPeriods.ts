@@ -8,6 +8,10 @@ export const weeklyBillingPeriods: RecurringBillingPeriod[] = [
 	BillingPeriod.Quarterly,
 	BillingPeriod.Annual,
 ];
+export const weeklyGiftBillingPeriods: RecurringBillingPeriod[] = [
+	BillingPeriod.Quarterly,
+	BillingPeriod.Annual,
+];
 
 export function billingPeriodToRatePlan(
 	billingPeriod: BillingPeriod,
