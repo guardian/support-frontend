@@ -142,12 +142,7 @@ export function WeeklyLandingPage({
 					</>
 				) : (
 					<>
-						<WeeklyHero
-							isGift={orderIsAGift}
-							promotionCopy={promotion}
-							countryGroupId={countryGroupId}
-							enableWeeklyDigital={enableWeeklyDigital}
-						/>
+						<WeeklyHero promotionCopy={promotion} />
 						<FullWidthContainer>
 							<CentredContainer cssOverrides={weeklySpacing}>
 								<Block>{<GiftBenefits />}</Block>
