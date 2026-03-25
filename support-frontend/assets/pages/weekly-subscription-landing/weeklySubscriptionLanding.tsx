@@ -22,7 +22,6 @@ import headerWithCountrySwitcherContainer from 'components/headers/header/header
 import Block from 'components/page/block';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PromoTermsProvider } from 'contexts/PromoTermsContext';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import {
 	getGlobal,
 	getProductPrices,
@@ -37,13 +36,13 @@ import { renderPage } from 'helpers/rendering/render';
 import { routes } from 'helpers/urls/routes';
 import getPlanData from 'pages/paper-subscription-landing/planData';
 import { GuardianWeeklyFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
-import GiftBenefits from './components/content/giftBenefits';
+import WeeklyGiftBenefits from './components/content/weeklyGiftBenefits';
+import { WeeklyAlternativeSubs } from './components/weeklyAlternativeSubs';
 import { WeeklyBenefits } from './components/weeklyBenefits';
 import { WeeklyCards } from './components/weeklyCards';
 import WeeklyDigitalHero from './components/WeeklyDigitalHero';
 import { WeeklyGiftHero } from './components/weeklyGiftHero';
 import WeeklyGiftProductPrices from './components/weeklyGiftProductPrices';
-import { WeeklyGiftStudentSubs } from './components/weeklyGiftStudentSubs';
 import { WeeklyPriceInfo } from './components/weeklyPriceInfo';
 
 const weeklySpacing = css`
@@ -65,8 +64,6 @@ const weeklyDigitalSpacing = css`
 		width: calc(100% - 64px);
 	}
 `;
-
-const { enableWeeklyDigital: enableWeeklyDigitalFlag } = getFeatureFlags();
 
 export type WeeklyLandingPageProps = {
 	countryId: IsoCountry;
@@ -113,8 +110,6 @@ export function WeeklyLandingPage({
 		countryGroupId === 'International' ? RestOfWorld : Domestic;
 	const planData = getPlanData('NoProductOptions', fulfilmentOption);
 
-	const enableWeeklyDigital = enableWeeklyDigitalFlag && !orderIsAGift;
-
 	return (
 		<PromoTermsProvider>
 			<PageScaffold
@@ -133,7 +128,7 @@ export function WeeklyLandingPage({
 						<WeeklyGiftHero promotionCopy={promotion} />
 						<FullWidthContainer>
 							<CentredContainer cssOverrides={weeklySpacing}>
-								<Block>{<GiftBenefits />}</Block>
+								<Block>{<WeeklyGiftBenefits />}</Block>
 							</CentredContainer>
 						</FullWidthContainer>
 						<FullWidthContainer theme="dark" hasOverlap>
@@ -158,10 +153,9 @@ export function WeeklyLandingPage({
 						</CentredContainer>
 					</>
 				)}
-				<WeeklyGiftStudentSubs
+				<WeeklyAlternativeSubs
 					countryGroupId={countryGroupId}
 					orderIsAGift={orderIsAGift}
-					enableWeeklyDigital={enableWeeklyDigital}
 				/>
 			</PageScaffold>
 		</PromoTermsProvider>
