@@ -38,7 +38,6 @@ import { getPrintPlusDigitalBenefits } from 'pages/paper-subscription-landing/pl
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import {
 	isGuardianWeeklyDigitalProduct,
-	isGuardianWeeklyProduct,
 	isPrintProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
@@ -170,7 +169,6 @@ export function ThankYouComponent({
 
 	const isGuardianPaperPlus = isPaperPlusSub(productKey, ratePlanKey); // Observer not a Plus plan
 	const isPrint = isPrintProduct(productKey);
-	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
 	const isGuardianWeeklyDigital = isGuardianWeeklyDigitalProduct(
 		productKey,
 		ratePlanKey,
@@ -183,7 +181,6 @@ export function ThankYouComponent({
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isSupporterPlus = productKey === 'SupporterPlus';
-	const isTierThree = productKey === 'TierThree';
 	const isNationalDelivery = productKey === 'NationalDelivery';
 	const { email } = order;
 	const validEmail = email !== '';
@@ -243,7 +240,6 @@ export function ThankYouComponent({
 		csrf,
 		isOneOff,
 		amountIsAboveThreshold: isSupporterPlus,
-		isTierThree,
 		startDate,
 		email,
 		campaignCode: undefined,
@@ -273,30 +269,21 @@ export function ThankYouComponent({
 			userNotSignedIn && !isGuardianAdLite && !isObserverSubDomain,
 			'signIn',
 		), // Sign in to access your benefits
-		...maybeThankYouModule(isTierThree || isDigitalEdition, 'benefits'),
+		...maybeThankYouModule(isDigitalEdition, 'benefits'),
 		...maybeThankYouModule(
 			!!isObserverSubDomain && !!observerPrint,
 			'observerAppDownload',
 		),
-		...maybeThankYouModule(
-			isTierThree || isNationalDelivery,
-			'subscriptionStart',
-		),
+		...maybeThankYouModule(isNationalDelivery, 'subscriptionStart'),
 		...maybeThankYouModule(isGuardianAdLite || isPrint, 'whatNext'),
-		...maybeThankYouModule(
-			isTierThree ||
-				isSupporterPlus ||
-				isGuardianWeeklyDigital ||
-				(isGuardianPrint && !isGuardianWeekly),
-			'appsDownload',
-		),
+		...maybeThankYouModule(isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
-			isOneOff || (!isTierThree && isSignedIn && !isGuardianAdLite && !isPrint),
+			isOneOff || (isSignedIn && !isGuardianAdLite && !isPrint),
 			'feedback',
 		),
 		...maybeThankYouModule(
-			isDigitalEdition || isGuardianWeeklyDigital,
+			isDigitalEdition || isGuardianPaperPlus || isGuardianWeeklyDigital,
 			'appDownloadEditions',
 		),
 		...maybeThankYouModule(
@@ -305,7 +292,7 @@ export function ThankYouComponent({
 		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(
-			!isTierThree && !isGuardianAdLite && !isPrint && !isDigitalEdition,
+			!isGuardianAdLite && !isPrint && !isDigitalEdition,
 			'socialShare',
 		),
 		...maybeThankYouModule(

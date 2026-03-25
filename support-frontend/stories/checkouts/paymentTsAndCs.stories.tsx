@@ -93,21 +93,6 @@ SupporterPlusAUStudent.args = {
 	studentDiscount: auStudentDiscount,
 };
 
-export const TierThreeUS = Template.bind({});
-TierThreeUS.args = {
-	productKey: 'TierThree',
-	ratePlanKey: 'Monthly',
-	countryGroupId: 'UnitedStates',
-	thresholdAmount: 45,
-	promotion: {
-		name: '$8 off for 12 months',
-		description: 'Tier Three United States Monthly',
-		promoCode: 'TIER_THREE_USA_MONTHLY',
-		numberOfDiscountedPeriods: 12,
-		discountedPrice: 37,
-	},
-};
-
 export const HomeDelivery = Template.bind({});
 HomeDelivery.args = {
 	productKey: 'HomeDelivery',
@@ -129,21 +114,21 @@ SubscriptionCard.args = {
 	countryGroupId: 'GBPCountries',
 };
 
-export const GuardianWeeklyDomestic = Template.bind({});
-GuardianWeeklyDomestic.args = {
+export const WeeklyDigitalDomestic = Template.bind({});
+WeeklyDigitalDomestic.args = {
 	productKey: 'GuardianWeeklyDomestic',
-	ratePlanKey: 'Monthly',
+	ratePlanKey: 'MonthlyPlus',
 	countryGroupId: 'GBPCountries',
 };
 
-export const GuardianWeeklyRestOfWorldInclPromo = Template.bind({});
-GuardianWeeklyRestOfWorldInclPromo.args = {
+export const WeeklyDigitalRestOfWorldInclPromo = Template.bind({});
+WeeklyDigitalRestOfWorldInclPromo.args = {
 	productKey: 'GuardianWeeklyRestOfWorld',
-	ratePlanKey: 'Annual',
+	ratePlanKey: 'AnnualPlus',
 	countryGroupId: 'UnitedStates',
 	promotion: {
 		name: '10% off for 12 months',
-		description: 'Guardian Weekly United States Annual',
+		description: 'Guardian Weekly Digital United States Annual',
 		promoCode: 'ANNUAL10',
 		numberOfDiscountedPeriods: 12,
 		discountedPrice: 324,

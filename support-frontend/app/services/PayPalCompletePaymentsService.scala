@@ -28,6 +28,7 @@ object ExperienceContext {
 case class PayPalPaymentSource(
     usage_type: String,
     customer_type: String,
+    description: String,
     experience_context: ExperienceContext,
 )
 object PayPalPaymentSource {
@@ -123,10 +124,10 @@ class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client
         paypal = PayPalPaymentSource(
           usage_type = "MERCHANT",
           customer_type = "CONSUMER",
+          description = "The Guardian",
           experience_context = ExperienceContext(
             return_url = returnUrl,
             cancel_url = cancelUrl,
-            // TODO: Does this need to change for products which DO have a paper component?
             shipping_preference = "NO_SHIPPING",
           ),
         ),

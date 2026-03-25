@@ -31,7 +31,7 @@ import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsT
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { getOriginAndForceSubdomain } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
-import { getProductWeeklyDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
+import { getWeeklyDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import { isGuardianWeeklyDigitalProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { Participations } from '../../helpers/abTests/models';
@@ -264,7 +264,7 @@ export function Checkout({
 		useStripeHostedCheckoutSession(maybeCheckoutSessionId);
 
 	const [weeklyDeliveryDate, setWeeklyDeliveryDate] = useState<Date>(
-		getProductWeeklyDeliveryDate(productKey),
+		getWeeklyDeliveryDate(),
 	);
 
 	/**
@@ -275,7 +275,6 @@ export function Checkout({
 	const thresholdAmount = getLowerProductBenefitThreshold(
 		billingPeriod,
 		fromCountryGroupId(countryGroupId),
-		countryGroupId,
 		productKey,
 		ratePlanKey,
 	);
