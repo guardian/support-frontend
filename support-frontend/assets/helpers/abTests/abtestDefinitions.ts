@@ -21,6 +21,7 @@ export const pageUrlRegexes = {
 		oneTimeCheckoutOnly: '(uk|us|au|ca|eu|nz|int)/one-time-checkout$',
 	},
 	subscriptions: {
+		ukSubscriptionsLandingPageOnly: '/uk/subscribe$',
 		paper: {
 			// Requires /subscribe/paper, allows /checkout or /checkout/guest, allows any query string
 			paperLandingWithGuestCheckout:
@@ -94,6 +95,27 @@ export const tests: Tests = {
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 3,
 		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
+		excludeContributionsOnlyCountries: true,
+	},
+	guardianWeeklySubscriptionSubtitle: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 0,
+			},
+		},
+		isActive: true,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 3,
+		targetPage: pageUrlRegexes.subscriptions.ukSubscriptionsLandingPageOnly,
 		excludeContributionsOnlyCountries: true,
 	},
 };
