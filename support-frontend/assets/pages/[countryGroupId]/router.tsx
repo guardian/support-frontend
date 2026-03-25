@@ -205,6 +205,7 @@ const router = createBrowserRouter([
 					},
 				},
 				{
+					/* NOTE: the back end routing filters out invalid paths based on the RRCP tooling config */
 					path: `/${supportRegionId}/student/:institution`,
 					lazy: async () => {
 						const { StudentLandingPageInstitutionContainer } = await import(
