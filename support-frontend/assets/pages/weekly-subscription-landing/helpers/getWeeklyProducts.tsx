@@ -135,11 +135,10 @@ export const getWeeklyProducts = ({
 			? getSimplifiedPriceDescription(productPrice, billingPeriod)
 			: '';
 		const buttonCopy = isGift ? 'Subscribe now' : 'Subscribe';
-		const is12for12 =
-			(isGift && promotion?.promoCode.startsWith('12for12')) ?? false;
+		const is12for12 = promotion?.promoCode.startsWith('12for12') ?? false;
 		const isBlackFriday =
-			(isGift && promotion?.promoCode.startsWith('GWBLACKFRIDAY')) ?? false;
-		const isSpecialOffer = is12for12 || isBlackFriday;
+			promotion?.promoCode.startsWith('GWBLACKFRIDAY') ?? false;
+		const isSpecialOffer = isGift && (is12for12 || isBlackFriday);
 
 		const discountPriceWithCurrency = promotion?.discountedPrice
 			? getPriceWithSymbol(productPrice.currency, promotion.discountedPrice)
@@ -182,7 +181,7 @@ export const getWeeklyProducts = ({
 			discountSummary,
 			offerCopy,
 			savingsText,
-			hasPromotion: isGift && !!promotion,
+			hasPromotion: !isGift && !!promotion,
 			isPriorityPromo: isGift ? undefined : augmentedPromotion?.hasPriority,
 			roundel: isGift ? undefined : augmentedPromotion?.roundelText,
 			isSpecialOffer,
