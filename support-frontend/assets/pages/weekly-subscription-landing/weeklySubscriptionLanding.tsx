@@ -41,10 +41,10 @@ import GiftBenefits from './components/content/giftBenefits';
 import { WeeklyBenefits } from './components/weeklyBenefits';
 import { WeeklyCards } from './components/weeklyCards';
 import WeeklyDigitalHero from './components/WeeklyDigitalHero';
+import { WeeklyGiftHero } from './components/weeklyGiftHero';
+import WeeklyGiftProductPrices from './components/weeklyGiftProductPrices';
 import { WeeklyGiftStudentSubs } from './components/weeklyGiftStudentSubs';
-import { WeeklyHero } from './components/weeklyHero';
 import { WeeklyPriceInfo } from './components/weeklyPriceInfo';
-import WeeklyProductPrices from './components/weeklyProductPrices';
 
 const weeklySpacing = css`
 	div {
@@ -128,7 +128,24 @@ export function WeeklyLandingPage({
 					/>
 				}
 			>
-				{!orderIsAGift ? (
+				{orderIsAGift ? (
+					<>
+						<WeeklyGiftHero promotionCopy={promotion} />
+						<FullWidthContainer>
+							<CentredContainer cssOverrides={weeklySpacing}>
+								<Block>{<GiftBenefits />}</Block>
+							</CentredContainer>
+						</FullWidthContainer>
+						<FullWidthContainer theme="dark" hasOverlap>
+							<CentredContainer>
+								<WeeklyGiftProductPrices
+									countryId={countryId}
+									productPrices={productPrices}
+								/>
+							</CentredContainer>
+						</FullWidthContainer>
+					</>
+				) : (
 					<>
 						<WeeklyDigitalHero promotion={promotion} />
 						<CentredContainer cssOverrides={weeklyDigitalSpacing}>
@@ -139,24 +156,6 @@ export function WeeklyLandingPage({
 							<WeeklyBenefits planData={planData} />
 							<WeeklyPriceInfo />
 						</CentredContainer>
-					</>
-				) : (
-					<>
-						<WeeklyHero promotionCopy={promotion} />
-						<FullWidthContainer>
-							<CentredContainer cssOverrides={weeklySpacing}>
-								<Block>{<GiftBenefits />}</Block>
-							</CentredContainer>
-						</FullWidthContainer>
-						<FullWidthContainer theme="dark" hasOverlap>
-							<CentredContainer>
-								<WeeklyProductPrices
-									countryId={countryId}
-									productPrices={productPrices}
-									orderIsAGift={orderIsAGift}
-								/>
-							</CentredContainer>
-						</FullWidthContainer>
 					</>
 				)}
 				<WeeklyGiftStudentSubs

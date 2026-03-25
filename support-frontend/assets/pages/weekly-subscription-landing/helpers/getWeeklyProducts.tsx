@@ -91,17 +91,14 @@ const getDisplayPrice = (
 	return productPrice.price;
 };
 
-// TODO: Decomission this function after non digital weekly products are removed
-export const getProducts = ({
+export const getWeeklyGiftProduct = ({
 	countryId,
 	productPrices,
 	billingPeriods,
-	orderIsAGift,
 }: {
 	countryId: IsoCountry;
 	productPrices: ProductPrices;
 	billingPeriods: RecurringBillingPeriod[];
-	orderIsAGift: boolean;
 }): Product[] =>
 	billingPeriods.map((billingPeriod) => {
 		const productPrice = getProductPrice(
@@ -116,9 +113,7 @@ export const getProducts = ({
 		const displayPrice = getDisplayPrice(productPrice, promotion);
 		const offerCopy = promotion?.landingPage?.roundel ?? '';
 		const trackingProperties = {
-			id: orderIsAGift
-				? `subscribe_now_cta_gift-${billingPeriod}`
-				: `subscribe_now_cta-${billingPeriod}`,
+			id: `subscribe_now_cta_gift-${billingPeriod}`,
 			product: 'GuardianWeekly' as SubscriptionProduct,
 			componentType: 'ACQUISITIONS_BUTTON' as OphanComponentType,
 		};
@@ -128,19 +123,19 @@ export const getProducts = ({
 			promotion?.promoCode.startsWith('GWBLACKFRIDAY') ?? false;
 
 		return {
-			title: getBillingPeriodTitle(billingPeriod, orderIsAGift),
+			title: getBillingPeriodTitle(billingPeriod, true),
 			price: getPriceWithSymbol(productPrice.currency, displayPrice),
 			discountedPrice: promotion?.discountedPrice
 				? getPriceWithSymbol(productPrice.currency, promotion.discountedPrice)
 				: undefined,
-			billingPeriodNoun: getBillingPeriodNoun(billingPeriod, orderIsAGift),
+			billingPeriodNoun: getBillingPeriodNoun(billingPeriod, true),
 			offerCopy,
 			priceCopy: getSimplifiedPriceDescription(productPrice, billingPeriod),
 			buttonCopy: 'Subscribe now',
 			href: getCheckoutUrl({
 				countryId,
 				billingPeriod,
-				orderIsGift: orderIsAGift,
+				orderIsGift: true,
 				enableWeeklyDigitalPlans: false,
 				promotion,
 			}),
@@ -150,7 +145,7 @@ export const getProducts = ({
 		};
 	});
 
-export const getWeeklyDigitalRatePlans = ({
+export const getWeeklyDigitalProduct = ({
 	countryId,
 	productPrices,
 	weeklyBillingPeriods,
