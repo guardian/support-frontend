@@ -38,8 +38,5 @@ export const linkButtonColour = css`
 `;
 export const containerHero = css`
 	background-color: ${guardianWeeklyHeroBlue};
-	margin-bottom: 0;
-	${from.desktop} {
-		margin-bottom: 0px;
-	}
+	margin-bottom: 0px;
 `;
