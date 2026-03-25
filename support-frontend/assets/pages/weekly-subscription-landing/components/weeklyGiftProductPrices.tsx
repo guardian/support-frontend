@@ -1,7 +1,7 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
 import { weeklyGiftBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { getWeeklyGiftProducts } from '../helpers/getWeeklyProducts';
+import { getWeeklyProducts } from '../helpers/getWeeklyProducts';
 import Prices from './content/prices';
 
 function WeeklyGiftProductPrices({
@@ -11,10 +11,11 @@ function WeeklyGiftProductPrices({
 	countryId: IsoCountry;
 	productPrices: ProductPrices;
 }): JSX.Element | null {
-	const products = getWeeklyGiftProducts({
+	const products = getWeeklyProducts({
 		countryId,
 		productPrices,
 		billingPeriods: weeklyGiftBillingPeriods,
+		isGift: true,
 	});
 	return <Prices products={products} />;
 }
