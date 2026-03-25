@@ -7,9 +7,11 @@ import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
 import { PageTitle } from 'components/page/pageTitle';
-import type { PromotionCopy } from 'helpers/productPrice/promotions';
+import {
+	type PromotionCopy,
+	promotionHTML,
+} from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { getFirstParagraph } from './contentHelpers';
 import {
 	containerHero,
 	linkButtonColour,
@@ -17,6 +19,24 @@ import {
 	weeklyGiftHeroParagraph,
 	weeklyGiftHeroTitle,
 } from './weeklyGiftHeroStyles';
+
+const getFirstParagraph = (promotionCopy: PromotionCopy): JSX.Element => {
+	const defaultParagraph = (
+		<p>
+			Gift the Guardian Weekly magazine to someone today, so they can gain a
+			deeper understanding of the issues they care about. They’ll find in-depth
+			reporting, alongside news, opinion pieces and long reads from around the
+			globe. From unpicking the election results to debunking climate
+			misinformation, they can take time with the Guardian Weekly to help them
+			make sense of the world.
+		</p>
+	);
+	return (
+		promotionHTML(promotionCopy.description, {
+			tag: 'p',
+		}) ?? defaultParagraph
+	);
+};
 
 export function WeeklyGiftHero({
 	promotionCopy,
@@ -40,10 +60,10 @@ export function WeeklyGiftHero({
 					cssOverrides={containerHero}
 				>
 					<section css={weeklyGiftHeroCopy}>
-						<h2 css={weeklyGiftHeroTitle}>{promotionCopy.title}</h2>
-						<p css={weeklyGiftHeroParagraph}>
+						<h2 css={weeklyGiftHeroTitle}>{promotionCopy.title ?? ''}</h2>
+						<div css={weeklyGiftHeroParagraph}>
 							{getFirstParagraph(promotionCopy)}
-						</p>
+						</div>
 						<LinkButton
 							onClick={sendTrackingEventsOnClick({
 								id: 'options_cta_click',
