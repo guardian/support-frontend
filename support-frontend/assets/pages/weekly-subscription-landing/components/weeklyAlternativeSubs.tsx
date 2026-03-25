@@ -1,4 +1,7 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import {
+	type CountryGroupId,
+	countryGroups,
+} from '@modules/internationalisation/countryGroup';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
@@ -25,13 +28,14 @@ export function WeeklyAlternativeSubs({
 	const giftNonGiftLink = orderIsAGift
 		? routes.guardianWeeklySubscriptionLanding
 		: routes.guardianWeeklySubscriptionLandingGift;
+	const regionId = countryGroups[countryGroupId].supportRegionId;
 	return (
 		<FullWidthContainer>
 			<CentredContainer cssOverrides={centredContainerDigitalWeekly}>
 				<div css={displayRowEvenlyWeeklyDigital}>
 					<GiftNonGiftCta
 						product="Guardian Weekly"
-						href={giftNonGiftLink}
+						href={`/${regionId}${giftNonGiftLink}`}
 						isGift={orderIsAGift}
 					/>
 					{(countryGroupId === 'GBPCountries' ||
