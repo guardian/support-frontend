@@ -7,8 +7,10 @@ import FullWidthContainer from 'components/containers/fullWidthContainer';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import { routes } from 'helpers/urls/routes';
 import {
-	centredContainerDigitalWeekly,
+	centredContainerWeeklyDigital,
+	containerWeekly,
 	displayRowEvenlyWeeklyDigital,
+	displayRowEvenlyWeeklyGift,
 } from './weeklyAlternatveSubsStyles';
 
 function getStudentBeanLink(countryGroupId: CountryGroupId) {
@@ -28,11 +30,16 @@ export function WeeklyAlternativeSubs({
 	const giftNonGiftLink = orderIsAGift
 		? routes.guardianWeeklySubscriptionLanding
 		: routes.guardianWeeklySubscriptionLandingGift;
+	const displayRowEvenly = orderIsAGift
+		? displayRowEvenlyWeeklyGift
+		: displayRowEvenlyWeeklyDigital;
 	const regionId = countryGroups[countryGroupId].supportRegionId;
 	return (
-		<FullWidthContainer>
-			<CentredContainer cssOverrides={centredContainerDigitalWeekly}>
-				<div css={displayRowEvenlyWeeklyDigital}>
+		<FullWidthContainer cssOverrides={containerWeekly}>
+			<CentredContainer
+				cssOverrides={orderIsAGift ? undefined : centredContainerWeeklyDigital}
+			>
+				<div css={displayRowEvenly}>
 					<GiftNonGiftCta
 						product="Guardian Weekly"
 						href={`/${regionId}${giftNonGiftLink}`}

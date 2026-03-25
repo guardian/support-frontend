@@ -6,7 +6,20 @@ import {
 	until,
 } from '@guardian/source/foundations';
 
-export const centredContainerDigitalWeekly = css`
+export const containerWeekly = css`
+	background-color: white;
+	section {
+		border-top: none;
+		padding: ${space[3]}px ${space[3]}px ${space[12]}px;
+	}
+	section > div {
+		margin-bottom: ${space[9]}px;
+	}
+	section > a {
+		width: auto;
+	}
+`;
+export const centredContainerWeeklyDigital = css`
 	padding: ${space[5]}px ${space[3]}px ${space[10]}px;
 	${from.tablet} {
 		width: 100%;
@@ -15,6 +28,15 @@ export const centredContainerDigitalWeekly = css`
 	${from.wide} {
 		padding-left: ${space[8]}px;
 		padding-right: ${space[8]}px;
+	}
+`;
+export const displayRowEvenlyWeeklyGift = css`
+	background-color: white;
+	display: block;
+	${from.phablet} {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-evenly;
 	}
 `;
 export const displayRowEvenlyWeeklyDigital = css`
