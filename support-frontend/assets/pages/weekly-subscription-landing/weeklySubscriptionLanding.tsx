@@ -128,7 +128,9 @@ export function WeeklyLandingPage({
 						<WeeklyGiftHero promotionCopy={promotion} />
 						<FullWidthContainer>
 							<CentredContainer cssOverrides={weeklySpacing}>
-								<Block>{<WeeklyGiftBenefits />}</Block>
+								<Block>
+									<WeeklyGiftBenefits />
+								</Block>
 							</CentredContainer>
 						</FullWidthContainer>
 						<FullWidthContainer theme="dark" hasOverlap>
