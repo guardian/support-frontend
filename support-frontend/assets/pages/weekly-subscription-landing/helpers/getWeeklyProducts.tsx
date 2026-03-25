@@ -91,7 +91,7 @@ const getDisplayPrice = (
 	return productPrice.price;
 };
 
-export const getWeeklyGiftProduct = ({
+export const getWeeklyGiftProducts = ({
 	countryId,
 	productPrices,
 	billingPeriods,
@@ -145,7 +145,7 @@ export const getWeeklyGiftProduct = ({
 		};
 	});
 
-export const getWeeklyDigitalProduct = ({
+export const getWeeklyDigitalProducts = ({
 	countryId,
 	productPrices,
 	weeklyBillingPeriods,

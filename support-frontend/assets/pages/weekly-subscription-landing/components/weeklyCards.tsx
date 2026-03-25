@@ -9,7 +9,7 @@ import {
 import type { IsoCountry } from '@modules/internationalisation/country';
 import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { getWeeklyDigitalProduct } from '../helpers/getWeeklyProducts';
+import { getWeeklyDigitalProducts } from '../helpers/getWeeklyProducts';
 import WeeklyRatePlanCard from './WeeklyRatePlanCard';
 
 const pricesSection = css`
@@ -58,7 +58,7 @@ export function WeeklyCards({
 	countryId: IsoCountry;
 	productPrices: ProductPrices;
 }): JSX.Element {
-	const ratePlans = getWeeklyDigitalProduct({
+	const ratePlans = getWeeklyDigitalProducts({
 		countryId,
 		productPrices,
 		weeklyBillingPeriods,
