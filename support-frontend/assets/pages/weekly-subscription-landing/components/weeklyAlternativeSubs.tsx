@@ -8,7 +8,7 @@ import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import { routes } from 'helpers/urls/routes';
 import {
 	centredContainerWeeklyDigital,
-	containerWeekly,
+	containerWeeklyDigital,
 	displayRowEvenlyWeeklyDigital,
 	displayRowEvenlyWeeklyGift,
 } from './weeklyAlternatveSubsStyles';
@@ -35,7 +35,9 @@ export function WeeklyAlternativeSubs({
 		: displayRowEvenlyWeeklyDigital;
 	const regionId = countryGroups[countryGroupId].supportRegionId;
 	return (
-		<FullWidthContainer cssOverrides={containerWeekly}>
+		<FullWidthContainer
+			cssOverrides={orderIsAGift ? containerWeeklyDigital : undefined}
+		>
 			<CentredContainer
 				cssOverrides={orderIsAGift ? undefined : centredContainerWeeklyDigital}
 			>

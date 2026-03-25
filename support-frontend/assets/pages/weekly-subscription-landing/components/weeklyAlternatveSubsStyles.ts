@@ -6,7 +6,7 @@ import {
 	until,
 } from '@guardian/source/foundations';
 
-export const containerWeekly = css`
+export const containerWeeklyDigital = css`
 	background-color: white;
 	section {
 		border-top: none;
