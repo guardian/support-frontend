@@ -11,7 +11,7 @@ import {
 	containerWeeklyDigital,
 	displayRowEvenlyWeeklyDigital,
 	displayRowEvenlyWeeklyGift,
-} from './weeklyAlternatveSubsStyles';
+} from './weeklyAlternativeSubsStyles';
 
 function getStudentBeanLink(countryGroupId: CountryGroupId) {
 	if (countryGroupId === 'AUDCountries') {
