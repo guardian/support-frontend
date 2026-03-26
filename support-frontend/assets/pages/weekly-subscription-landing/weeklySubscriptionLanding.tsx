@@ -29,6 +29,10 @@ import {
 } from 'helpers/globalsAndSwitches/globals';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
+import {
+	getAbParticipations,
+	setUpTrackingAndConsents,
+} from 'helpers/page/page';
 import { type ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { getSanitisedPromoCopy } from 'helpers/productPrice/promotions';
@@ -171,5 +175,8 @@ const weeklyLandingProps = (): WeeklyLandingPageProps => ({
 	productPrices: getProductPrices() ?? undefined,
 	promotionCopy: getPromotionCopy() ?? undefined,
 });
+
+const abParticipations = getAbParticipations();
+setUpTrackingAndConsents(abParticipations);
 
 renderPage(<WeeklyLandingPage {...weeklyLandingProps()} />);
