@@ -873,7 +873,6 @@ export default function CheckoutForm({
 								/>
 							</div>
 						)}
-
 						{isWeeklyGift && (
 							<>
 								<WeeklyGiftPersonalFields
@@ -910,7 +909,6 @@ export default function CheckoutForm({
 								/>
 							</>
 						)}
-
 						<PersonalDetailsFields
 							countryId={countryId}
 							countries={productDescription.deliverableTo}
@@ -931,7 +929,6 @@ export default function CheckoutForm({
 							isSignedIn={isSignedIn}
 							isWeeklyGift={isWeeklyGift}
 						/>
-
 						{/**
 						 * We need the billing-country for all transactions, even non-deliverable ones
 						 * which we get from the GU_country cookie which comes from the Fastly geo client.
@@ -958,7 +955,6 @@ export default function CheckoutForm({
 								billingStatePostcodeCountry={billingStatePostcodeCountry}
 							/>
 						)}
-
 						<FormSection ref={paymentMethodRef}>
 							<Legend>
 								{legendPayment}
@@ -1198,7 +1194,6 @@ export default function CheckoutForm({
 							studentDiscount={studentDiscount}
 							promotion={promotion}
 							thresholdAmount={thresholdAmount}
-							enableWeeklyDigital={enableWeeklyDigital}
 						/>
 					</BoxContents>
 				</Box>
