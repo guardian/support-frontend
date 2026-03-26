@@ -234,7 +234,6 @@ export default function CheckoutSummary({
 									? weeklyDeliveryDate
 									: undefined
 							}
-							enableWeeklyDigital={enableWeeklyDigital}
 						/>
 					}
 					headerButton={
