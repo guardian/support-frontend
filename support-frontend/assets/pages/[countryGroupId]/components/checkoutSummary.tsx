@@ -55,7 +55,6 @@ type CheckoutSummaryProps = {
 	thresholdAmount: number;
 	backButtonOrigin: string;
 	backButtonPathOverride: string | null;
-	enableWeeklyDigital: boolean;
 	promotion?: Promotion;
 	forcedCountry?: string;
 	studentDiscount?: StudentDiscount;
@@ -75,7 +74,6 @@ export default function CheckoutSummary({
 	thresholdAmount,
 	backButtonOrigin,
 	backButtonPathOverride,
-	enableWeeklyDigital,
 	promotion,
 	forcedCountry,
 	studentDiscount,
@@ -245,7 +243,6 @@ export default function CheckoutSummary({
 					supportRegionId={supportRegionId}
 					nudgeSettings={nudgeSettings}
 					landingPageSettings={landingPageSettings}
-					enableWeeklyDigital={enableWeeklyDigital}
 				/>
 			</BoxContents>
 		</Box>
