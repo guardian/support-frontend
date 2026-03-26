@@ -219,7 +219,6 @@ export default function CheckoutSummary({
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
 							startDate={formatUserDate(weeklyDeliveryDate)}
-							enableWeeklyDigital={enableWeeklyDigital}
 						/>
 					}
 					tsAndCs={
