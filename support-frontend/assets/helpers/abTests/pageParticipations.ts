@@ -91,6 +91,7 @@ export async function getPageParticipations<Variant>(
 		return audienceMemberships.includes(test.mParticleAudience);
 	};
 
+	// Only track participation if user is on the target page
 	const trackParticipation = isTargetPage(path);
 
 	const makeFallbackResult = (): PageParticipationsResult<Variant> => {
