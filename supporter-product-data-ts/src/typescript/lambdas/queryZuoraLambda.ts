@@ -9,6 +9,7 @@ import {
 } from "../services/configService";
 import {
   currentAttemptedQueryTime,
+  formatZuoraDateTime,
   parseLastSuccessfulQueryTime,
 } from "../services/dateTimeService";
 import {
@@ -19,11 +20,6 @@ import { ZuoraQuerierService } from "../services/zuoraQuerierService";
 import type { FetchResultsState, QueryType, QueryZuoraState } from "./types";
 
 dayjs.extend(utc);
-
-const ZUORA_DATETIME_FORMAT = "YYYY-MM-DD HH:mm:ss";
-
-const formatZuoraDateTime = (date: dayjs.Dayjs): string =>
-  date.utc().format(ZUORA_DATETIME_FORMAT);
 
 const localIsoForQueryName = (date: dayjs.Dayjs): string =>
   date.utc().toISOString().replace("Z", "");

@@ -33,6 +33,15 @@ export const currentAttemptedQueryTime = (): string =>
   dayjs().tz(laTimezone).subtract(1, "minute").format();
 
 /**
+ * Formats a dayjs instance as a Zuora-compatible datetime string in the
+ * America/Los_Angeles timezone (e.g. '2026-03-23 05:29:27').
+ * Zuora interprets the incrementalTime field as an LA local time regardless of
+ * the dateTimeUtc flag (which only affects response output, not input parsing).
+ */
+export const formatZuoraDateTime = (date: dayjs.Dayjs): string =>
+  date.tz(laTimezone).format("YYYY-MM-DD HH:mm:ss");
+
+/**
  * Converts an ISO datetime string to a UTC local datetime string suitable for use
  * in S3 filenames (e.g. '2026-03-23T12:29:27.000' — no trailing Z).
  * Throws if the string cannot be parsed as a valid date.

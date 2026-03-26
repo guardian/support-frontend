@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import {
   currentAttemptedQueryTime,
+  formatZuoraDateTime,
   parseLastSuccessfulQueryTime,
   toIsoLocalDateTimeUtc,
 } from "../services/dateTimeService";
@@ -95,6 +96,28 @@ describe("dateTimeService", () => {
       const reParsed = parseLastSuccessfulQueryTime(tsWritten);
       expect(reParsed).toBeDefined();
       expect(reParsed!.isValid()).toBe(true);
+    });
+  });
+
+  describe("formatZuoraDateTime", () => {
+    test("formats a UTC instant as LA local time for Zuora", () => {
+      // 12:29:27 UTC == 05:29:27 LA (PDT, -07:00)
+      const utcInstant = dayjs.utc("2026-03-23T12:29:27.000Z");
+      expect(formatZuoraDateTime(utcInstant)).toBe("2026-03-23 05:29:27");
+    });
+
+    test("formats a UTC instant in PST (winter, -08:00) correctly", () => {
+      // 12:29:27 UTC in January == 04:29:27 LA (PST, -08:00)
+      const utcInstant = dayjs.utc("2026-01-15T12:29:27.000Z");
+      expect(formatZuoraDateTime(utcInstant)).toBe("2026-01-15 04:29:27");
+    });
+
+    test("round-trip: parse lastSuccessfulQueryTime then format for Zuora gives LA time", () => {
+      // The Scala code stores the LA wall-clock time with offset, e.g. 05:29:27-07:00.
+      // After parsing (→ UTC) and re-formatting for Zuora we should get the same LA wall-clock back.
+      const parsed = parseLastSuccessfulQueryTime(tsFormatLaTime); // 05:29:27 LA
+      expect(parsed).toBeDefined();
+      expect(formatZuoraDateTime(parsed!)).toBe("2026-03-23 05:29:27");
     });
   });
 });
