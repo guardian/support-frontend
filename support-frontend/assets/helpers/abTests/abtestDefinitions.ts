@@ -32,6 +32,9 @@ export const pageUrlRegexes = {
 		// Includes landing, original & generic checkout/thankyou pages
 		subsWeeklyGiftPages:
 			'(/subscribe/weekly/gift).*?|/(subscribe/weekly/checkout/gift).*?|((?:/(uk|us|ca|eu|nz|int))(?:/(checkout|thank-you))).*?(OneYearGift|ThreeMonthGift).*?',
+		// Uk weekly pages, including landing, original & generic checkout/thankyou pages
+		subsUkWeeklyPages:
+			'(uk/subscribe/weekly).*?|(?:uk/(checkout|thank-you))).*?(MonthlyPlus|QuarterlyPlus|AnnualPlus).*?',
 	},
 };
 
@@ -107,15 +110,16 @@ export const tests: Tests = {
 			},
 		],
 		audiences: {
-			ALL: {
+			GBPCountries: {
 				offset: 0,
-				size: 0,
+				size: 1,
 			},
 		},
 		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 3,
+		seed: 5,
 		targetPage: pageUrlRegexes.subscriptions.ukSubscriptionsLandingPageOnly,
+		persistPage: pageUrlRegexes.subscriptions.subsUkWeeklyPages,
 		excludeContributionsOnlyCountries: true,
 	},
 };
