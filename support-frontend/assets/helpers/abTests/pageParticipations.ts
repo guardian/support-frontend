@@ -153,6 +153,7 @@ export async function getPageParticipations<Variant>(
 	}
 
 	const participations = { [test.name]: getVariantName(variant) };
+	// Record the participation in session storage so that we can track it from other pages
 	setSessionParticipations(participations, sessionStorageKey);
 
 	return {
