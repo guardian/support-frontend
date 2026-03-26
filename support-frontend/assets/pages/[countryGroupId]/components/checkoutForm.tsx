@@ -1155,7 +1155,6 @@ export default function CheckoutForm({
 							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}
-							enableWeeklyDigital={enableWeeklyDigital}
 						/>
 						<div
 							css={css`
