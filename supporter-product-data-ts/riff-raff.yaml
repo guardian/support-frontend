@@ -13,12 +13,13 @@ deployments:
         PROD: SupporterProductDataTS-PROD.template.json
   supporter-product-data-ts:
     type: aws-lambda
+    app: supporter-product-data-ts
     parameters:
       bucket: membership-dist
       functionNames:
         - "-SupporterProductDataTSQueryZuora-"
         - "-SupporterProductDataTSFetchResults-"
-        - "-SPDTS-AddToQueue-"
-        - "-SPDTS-ProcessItem-"
+        - "-SupporterProductDataTSAddToQueue-"
+        - "-SupporterProductDataTSProcessItem-"
       fileName: supporter-product-data-ts.zip
     dependencies: [cfn]
