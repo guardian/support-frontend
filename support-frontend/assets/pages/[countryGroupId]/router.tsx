@@ -21,12 +21,13 @@ import {
 } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import { getCheckoutNudgeParticipations } from '../../helpers/abTests/checkoutNudgeAbTests';
-import { getLandingPageTestConfig } from '../../helpers/abTests/landingPageAbTests';
+import { getLandingPageParticipations } from '../../helpers/abTests/landingPageAbTests';
 import type { Participations } from '../../helpers/abTests/models';
-import { getOneTimeCheckoutTestConfig } from '../../helpers/abTests/oneTimeCheckoutAbTests';
+import { getOneTimeCheckoutParticipations } from '../../helpers/abTests/oneTimeCheckoutAbTests';
 import {
 	getPageParticipations,
 	type PageParticipationsResult,
+	type PageParticipationsResultWithFallback,
 } from '../../helpers/abTests/pageParticipations';
 
 const checkoutNudgeSettings = getCheckoutNudgeParticipations();
@@ -34,8 +35,8 @@ const appConfig = parseAppConfig(window.guardian);
 
 interface LoaderData {
 	finalParticipations: Participations;
-	landing: PageParticipationsResult<LandingPageVariant>;
-	oneTime: PageParticipationsResult<OneTimeCheckoutVariant>;
+	landing: PageParticipationsResultWithFallback<LandingPageVariant>;
+	oneTime: PageParticipationsResultWithFallback<OneTimeCheckoutVariant>;
 	studentLanding: PageParticipationsResult<StudentLandingPageVariant>;
 }
 
@@ -43,13 +44,9 @@ async function rootLoader(): Promise<LoaderData> {
 	void setUpConsent();
 
 	const [landing, oneTime, studentLanding] = await Promise.all([
-		getPageParticipations<LandingPageVariant>(getLandingPageTestConfig()),
-		getPageParticipations<OneTimeCheckoutVariant>(
-			getOneTimeCheckoutTestConfig(),
-		),
-		getPageParticipations<StudentLandingPageVariant>(
-			getStudentLandingPageTestConfig(),
-		),
+		getLandingPageParticipations(),
+		getOneTimeCheckoutParticipations(),
+		getPageParticipations(getStudentLandingPageTestConfig()),
 	]);
 	const finalParticipations: Participations = {
 		...getAbParticipations(),
@@ -214,7 +211,9 @@ const router = createBrowserRouter([
 						return {
 							Component: function StudentRoute() {
 								const { landing, studentLanding } = useRootLoaderData();
-								console.log(studentLanding.variant.institution.acronym);
+								if (!studentLanding.variant) {
+									return null;
+								}
 								return (
 									<StudentLandingPageInstitutionContainer
 										supportRegionId={supportRegionId}

@@ -18,6 +18,11 @@ import {
 } from './sessionStorage';
 
 export interface PageParticipationsResult<Variant> {
+	variant: Variant | undefined;
+	participations: Participations;
+}
+
+export interface PageParticipationsResultWithFallback<Variant> {
 	variant: Variant;
 	participations: Participations;
 }
@@ -25,8 +30,8 @@ export interface PageParticipationsResult<Variant> {
 /**
  * Generic function to get A/B test participations for any page type.
  *
- * This function will always return a variant, regardless of which page the user is on.
- * We sometimes need these settings on other pages as well.
+ * If a fallback is passed in then it will always return a variant, regardless of which page the user is on.
+ * This is because we sometimes need these settings on other pages as well.
  *
  * If the user is on the target page, or session storage contains a participation,
  * then it will also return the participations data for tracking.
@@ -39,6 +44,10 @@ export interface PageParticipationsResult<Variant> {
  */
 export async function getPageParticipations<Variant>(
 	config: PageParticipationsConfig<Variant>,
+	fallback?: {
+		variant: (countryGroupId: CountryGroupId) => Variant;
+		participationKey: string;
+	},
 ): Promise<PageParticipationsResult<Variant>> {
 	const countryGroupId: CountryGroupId = CountryGroup.detect();
 	const path: string = window.location.pathname;
@@ -49,8 +58,6 @@ export async function getPageParticipations<Variant>(
 		pageRegex,
 		forceParamName,
 		sessionStorageKey,
-		fallbackVariant,
-		fallbackParticipationKey,
 		getVariantName,
 	} = config;
 
@@ -59,7 +66,7 @@ export async function getPageParticipations<Variant>(
 	const getVariant = (
 		participations: Participations,
 		testList: Array<PageTest<Variant>>,
-	): Variant => {
+	): Variant | undefined => {
 		for (const test of testList) {
 			const variantName = participations[test.name];
 			if (variantName) {
@@ -71,7 +78,7 @@ export async function getPageParticipations<Variant>(
 				}
 			}
 		}
-		return fallbackVariant(countryGroupId);
+		return undefined;
 	};
 
 	const isUserInAudience = async (
@@ -81,20 +88,22 @@ export async function getPageParticipations<Variant>(
 			return true;
 		}
 		const audienceMemberships = await fetchAudienceMemberships();
-		const inAudience = audienceMemberships.includes(test.mParticleAudience);
-		return inAudience;
+		return audienceMemberships.includes(test.mParticleAudience);
 	};
 
 	// Only track participation if user is on the target page
 	const trackParticipation = isTargetPage(path);
 
-	const makeFallback = (): PageParticipationsResult<Variant> => {
-		const fallback = fallbackVariant(countryGroupId);
+	const makeFallbackResult = (): PageParticipationsResult<Variant> => {
+		if (!fallback) {
+			return { participations: {} as Participations, variant: undefined };
+		}
+		const variant = fallback.variant(countryGroupId);
 		return {
 			participations: trackParticipation
-				? { [fallbackParticipationKey]: getVariantName(fallback) }
+				? { [fallback.participationKey]: getVariantName(variant) }
 				: ({} as Participations),
-			variant: fallback,
+			variant,
 		};
 	};
 
@@ -105,10 +114,7 @@ export async function getPageParticipations<Variant>(
 	);
 	if (urlParticipations) {
 		const variant = getVariant(urlParticipations, tests);
-		return {
-			participations: urlParticipations,
-			variant,
-		};
+		return { participations: urlParticipations, variant };
 	}
 
 	// Is there already a participation in session storage?
@@ -118,10 +124,7 @@ export async function getPageParticipations<Variant>(
 		Object.entries(sessionParticipations).length > 0
 	) {
 		const variant = getVariant(sessionParticipations, tests);
-		return {
-			participations: sessionParticipations,
-			variant,
-		};
+		return { participations: sessionParticipations, variant };
 	}
 
 	// No participation in session storage, assign user to a test + variant
@@ -140,19 +143,17 @@ export async function getPageParticipations<Variant>(
 	}
 
 	if (!test) {
-		return makeFallback();
+		return makeFallbackResult();
 	}
 
 	const idx = randomNumber(mvtId, test.name) % test.variants.length;
 	const variant = test.variants[idx];
 
 	if (!variant) {
-		return makeFallback();
+		return makeFallbackResult();
 	}
 
-	const participations = {
-		[test.name]: getVariantName(variant),
-	};
+	const participations = { [test.name]: getVariantName(variant) };
 	// Record the participation in session storage so that we can track it from other pages
 	setSessionParticipations(participations, sessionStorageKey);
 
@@ -162,4 +163,19 @@ export async function getPageParticipations<Variant>(
 			: ({} as Participations),
 		variant,
 	};
+}
+
+/**
+ * Wraps getPageParticipations with a fallback variant guarantee.
+ * If no variant is assigned, the fallbackVariant is used instead.
+ */
+export async function getPageParticipationsWithFallback<Variant>(
+	config: PageParticipationsConfig<Variant>,
+	fallbackVariant: (countryGroupId: CountryGroupId) => Variant,
+	fallbackParticipationKey: string,
+): Promise<PageParticipationsResultWithFallback<Variant>> {
+	return getPageParticipations(config, {
+		variant: fallbackVariant,
+		participationKey: fallbackParticipationKey,
+	}) as Promise<PageParticipationsResultWithFallback<Variant>>;
 }

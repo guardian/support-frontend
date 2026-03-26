@@ -2,6 +2,7 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import { getSettings } from '../../globalsAndSwitches/globals';
 import type { OneTimeCheckoutTest } from '../../globalsAndSwitches/oneTimeCheckoutSettings';
 import {
+	fallBackOneTimeCheckoutSelection,
 	getOneTimeCheckoutTestConfig,
 	oneTimeCheckoutTestConfig,
 } from '../oneTimeCheckoutAbTests';
@@ -49,86 +50,96 @@ describe('oneTimeCheckoutTestConfig', () => {
 		);
 	});
 
-	it('has correct fallbackParticipationKey', () => {
-		expect(oneTimeCheckoutTestConfig.fallbackParticipationKey).toBe(
-			'FALLBACK_ONE_TIME_CHECKOUT',
+	it('extracts variant name correctly', () => {
+		const variant = {
+			name: 'TEST_VARIANT',
+			heading: 'Test',
+			subheading: 'Test',
+			amounts: {
+				amounts: [25, 50, 100, 250],
+				defaultAmount: 50,
+				hideChooseYourAmount: false,
+			},
+		};
+		expect(oneTimeCheckoutTestConfig.getVariantName(variant)).toBe(
+			'TEST_VARIANT',
 		);
 	});
+});
 
-	describe('fallbackVariant', () => {
-		it('returns GBP fallback variant for GBPCountries', () => {
-			const result = oneTimeCheckoutTestConfig.fallbackVariant('GBPCountries');
-			expect(result.name).toBe('CONTROL');
-			expect(result.amounts.amounts).toEqual([30, 60, 120, 240]);
-			expect(result.amounts.defaultAmount).toBe(60);
+describe('fallBackOneTimeCheckoutSelection', () => {
+	it('returns GBP fallback variant for GBPCountries', () => {
+		const result = fallBackOneTimeCheckoutSelection['GBPCountries'];
+		expect(result?.name).toBe('CONTROL');
+		expect(result?.amounts.amounts).toEqual([30, 60, 120, 240]);
+		expect(result?.amounts.defaultAmount).toBe(60);
+	});
+
+	it('returns USD fallback variant for UnitedStates', () => {
+		const result = fallBackOneTimeCheckoutSelection['UnitedStates'];
+		expect(result?.name).toBe('CONTROL');
+		expect(result?.amounts.amounts).toEqual([25, 50, 100, 250]);
+		expect(result?.amounts.defaultAmount).toBe(50);
+	});
+
+	it('returns EUR fallback variant for EURCountries', () => {
+		const result = fallBackOneTimeCheckoutSelection['EURCountries'];
+		expect(result?.name).toBe('CONTROL');
+		expect(result?.amounts.amounts).toEqual([25, 50, 100, 250]);
+		expect(result?.amounts.defaultAmount).toBe(50);
+	});
+
+	it('returns International fallback variant', () => {
+		const result = fallBackOneTimeCheckoutSelection['International'];
+		expect(result?.name).toBe('CONTROL');
+		expect(result?.amounts.amounts).toEqual([25, 50, 100, 250]);
+		expect(result?.amounts.defaultAmount).toBe(50);
+	});
+
+	it('returns Canada fallback variant', () => {
+		const result = fallBackOneTimeCheckoutSelection['Canada'];
+		expect(result?.name).toBe('CONTROL');
+		expect(result?.amounts.amounts).toEqual([25, 50, 100, 250]);
+		expect(result?.amounts.defaultAmount).toBe(50);
+	});
+
+	it('returns AUD fallback variant for AUDCountries', () => {
+		const result = fallBackOneTimeCheckoutSelection['AUDCountries'];
+		expect(result?.name).toBe('CONTROL');
+		expect(result?.amounts.amounts).toEqual([60, 100, 250, 500]);
+		expect(result?.amounts.defaultAmount).toBe(100);
+	});
+
+	it('returns NZD fallback variant for NZDCountries', () => {
+		const result = fallBackOneTimeCheckoutSelection['NZDCountries'];
+		expect(result?.name).toBe('CONTROL');
+		expect(result?.amounts.amounts).toEqual([50, 100, 250, 500]);
+		expect(result?.amounts.defaultAmount).toBe(100);
+	});
+
+	it('returns fallback with hideChooseYourAmount set to false', () => {
+		const countryGroups: CountryGroupId[] = [
+			'GBPCountries',
+			'UnitedStates',
+			'EURCountries',
+			'International',
+			'Canada',
+			'AUDCountries',
+			'NZDCountries',
+		];
+
+		countryGroups.forEach((countryGroup) => {
+			const result = fallBackOneTimeCheckoutSelection[countryGroup];
+			expect(result?.amounts.hideChooseYourAmount).toBe(false);
 		});
+	});
 
-		it('returns USD fallback variant for UnitedStates', () => {
-			const result = oneTimeCheckoutTestConfig.fallbackVariant('UnitedStates');
-			expect(result.name).toBe('CONTROL');
-			expect(result.amounts.amounts).toEqual([25, 50, 100, 250]);
-			expect(result.amounts.defaultAmount).toBe(50);
-		});
-
-		it('returns EUR fallback variant for EURCountries', () => {
-			const result = oneTimeCheckoutTestConfig.fallbackVariant('EURCountries');
-			expect(result.name).toBe('CONTROL');
-			expect(result.amounts.amounts).toEqual([25, 50, 100, 250]);
-			expect(result.amounts.defaultAmount).toBe(50);
-		});
-
-		it('returns International fallback variant', () => {
-			const result = oneTimeCheckoutTestConfig.fallbackVariant('International');
-			expect(result.name).toBe('CONTROL');
-			expect(result.amounts.amounts).toEqual([25, 50, 100, 250]);
-			expect(result.amounts.defaultAmount).toBe(50);
-		});
-
-		it('returns Canada fallback variant', () => {
-			const result = oneTimeCheckoutTestConfig.fallbackVariant('Canada');
-			expect(result.name).toBe('CONTROL');
-			expect(result.amounts.amounts).toEqual([25, 50, 100, 250]);
-			expect(result.amounts.defaultAmount).toBe(50);
-		});
-
-		it('returns AUD fallback variant for AUDCountries', () => {
-			const result = oneTimeCheckoutTestConfig.fallbackVariant('AUDCountries');
-			expect(result.name).toBe('CONTROL');
-			expect(result.amounts.amounts).toEqual([60, 100, 250, 500]);
-			expect(result.amounts.defaultAmount).toBe(100);
-		});
-
-		it('returns NZD fallback variant for NZDCountries', () => {
-			const result = oneTimeCheckoutTestConfig.fallbackVariant('NZDCountries');
-			expect(result.name).toBe('CONTROL');
-			expect(result.amounts.amounts).toEqual([50, 100, 250, 500]);
-			expect(result.amounts.defaultAmount).toBe(100);
-		});
-
-		it('returns fallback with hideChooseYourAmount set to false', () => {
-			const countryGroups: CountryGroupId[] = [
-				'GBPCountries',
-				'UnitedStates',
-				'EURCountries',
-				'International',
-				'Canada',
-				'AUDCountries',
-				'NZDCountries',
-			];
-
-			countryGroups.forEach((countryGroup) => {
-				const result = oneTimeCheckoutTestConfig.fallbackVariant(countryGroup);
-				expect(result.amounts.hideChooseYourAmount).toBe(false);
-			});
-		});
-
-		it('returns fallback with heading and subheading', () => {
-			const result = oneTimeCheckoutTestConfig.fallbackVariant('GBPCountries');
-			expect(result.heading).toBe('Support just once');
-			expect(result.subheading).toBe(
-				'Support us with the amount of your choice.',
-			);
-		});
+	it('returns fallback with heading and subheading', () => {
+		const result = fallBackOneTimeCheckoutSelection['GBPCountries'];
+		expect(result?.heading).toBe('Support just once');
+		expect(result?.subheading).toBe(
+			'Support us with the amount of your choice.',
+		);
 	});
 });
 
@@ -217,14 +228,8 @@ describe('getOneTimeCheckoutTestConfig', () => {
 		expect(config.sessionStorageKey).toBe(
 			oneTimeCheckoutTestConfig.sessionStorageKey,
 		);
-		expect(config.fallbackParticipationKey).toBe(
-			oneTimeCheckoutTestConfig.fallbackParticipationKey,
-		);
 		expect(config.getVariantName).toBe(
 			oneTimeCheckoutTestConfig.getVariantName,
-		);
-		expect(config.fallbackVariant).toBe(
-			oneTimeCheckoutTestConfig.fallbackVariant,
 		);
 	});
 
