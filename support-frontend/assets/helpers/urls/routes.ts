@@ -7,7 +7,6 @@ import type {
 	PaperFulfilmentOptions,
 } from '@modules/product/fulfilmentOptions';
 import type { ProductOptions } from '@modules/product/productOptions';
-import { featureFlagEnableWeeklyDigital } from 'helpers/featureFlags';
 import type { Option } from 'helpers/types/option';
 import {
 	addQueryParamsToURL,
@@ -162,16 +161,14 @@ function parameteriseUrl(
 	url: string,
 	promoCode?: Option<string>,
 	fulfilmentOption?: PaperFulfilmentOptions,
-	enableWeeklyDigital?: boolean,
 ) {
 	const params = {
 		promoCode,
 	};
-	const urlWithParamsWeeklyDigital = addQueryParamsToURL(
-		url,
-		params,
-		enableWeeklyDigital ? featureFlagEnableWeeklyDigital : undefined,
-	).replace(/\?$/, ''); // removes ? when no params
+	const urlWithParamsWeeklyDigital = addQueryParamsToURL(url, params).replace(
+		/\?$/,
+		'',
+	); // removes ? when no params
 	return fulfilmentOption
 		? `${urlWithParamsWeeklyDigital}#${fulfilmentOption}`
 		: urlWithParamsWeeklyDigital;
