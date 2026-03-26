@@ -355,7 +355,7 @@ class Application(
       campaignCode: String,
   ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
-    val noIndexing = countryCode == "au" // WHAT DOES THIS DO EXACTLY?
+    val noIndexing = true // we don't want these appearing in search engine results
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val studentTests = settings.studentLandingPageTests
