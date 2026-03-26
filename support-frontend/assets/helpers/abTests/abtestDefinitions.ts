@@ -34,7 +34,7 @@ export const pageUrlRegexes = {
 			'(/subscribe/weekly/gift).*?|/(subscribe/weekly/checkout/gift).*?|((?:/(uk|us|ca|eu|nz|int))(?:/(checkout|thank-you))).*?(OneYearGift|ThreeMonthGift).*?',
 		// Uk weekly pages, including landing, original & generic checkout/thankyou pages
 		subsUkWeeklyPages:
-			'(uk/subscribe/weekly).*?|(?:uk/(checkout|thank-you))).*?(MonthlyPlus|QuarterlyPlus|AnnualPlus).*?',
+			'(uk/subscribe/weekly).*?|(?:uk/(checkout|thank-you)).*?(MonthlyPlus|QuarterlyPlus|AnnualPlus).*?',
 	},
 };
 
