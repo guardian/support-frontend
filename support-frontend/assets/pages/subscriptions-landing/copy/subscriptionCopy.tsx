@@ -205,9 +205,10 @@ function guardianWeekly(
 		? [weeklyFindButton]
 		: [weeklyFindButton, weeklyGiftButton];
 
-	const subtitle = enableWeeklyDigital
-		? getWeeklyDigitalDisplayPrice(countryGroupId, BillingPeriod.Monthly)
-		: getDisplayPrice(countryGroupId, priceCopy.price);
+	const subtitle =
+		participations.guardianWeeklySubscriptionSubtitle === 'variant'
+			? 'Limited time intro offer - available now'
+			: getWeeklyDigitalDisplayPrice(countryGroupId, BillingPeriod.Monthly);
 
 	return {
 		title: weeklyTitle,
