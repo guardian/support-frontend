@@ -5,6 +5,7 @@ import com.gu.support.config.Stage
 import scala.concurrent.ExecutionContext
 import org.apache.pekko.actor.ActorSystem
 import com.gu.aws.AwsCloudWatchMetricSetup.getStudentLandingPageTestsError
+import admin.settings.Status.Live
 
 trait StudentLandingPageTestService {
   def getTests(): List[StudentLandingPageTest]
@@ -22,5 +23,5 @@ class StudentLandingPageTestServiceImpl(stage: Stage)(implicit ec: ExecutionCont
     with StudentLandingPageTestService {
 
   override protected def postProcess(tests: List[StudentLandingPageTest]): List[StudentLandingPageTest] =
-    tests.sortBy(_.priority)
+    tests.filter(_.status == Live).sortBy(_.priority)
 }
