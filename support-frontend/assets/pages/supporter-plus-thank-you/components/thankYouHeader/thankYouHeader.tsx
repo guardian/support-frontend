@@ -6,7 +6,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import getObserver from 'pages/[countryGroupId]/helpers/getObserver';
+import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import DirectDebitMessage from './DirectDebitMessage';
 import Heading from './heading';
 import LegitimateInterestMessage from './LegitimateInterestMessage';
@@ -43,6 +43,7 @@ type ThankYouHeaderProps = {
 	currency: IsoCurrency;
 	startDate?: string;
 	promotion?: Promotion;
+	observerPrint?: ObserverPrint;
 };
 
 function ThankYouHeader({
@@ -54,8 +55,8 @@ function ThankYouHeader({
 	currency,
 	startDate,
 	promotion,
+	observerPrint,
 }: ThankYouHeaderProps): JSX.Element {
-	const observerPrint = getObserver(productKey, ratePlanKey);
 	const isPrint = isPrintProduct(productKey);
 	const isSubscriptionCard = productKey === 'SubscriptionCard';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';

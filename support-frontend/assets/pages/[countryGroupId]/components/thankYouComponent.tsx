@@ -331,6 +331,7 @@ export function ThankYouComponent({
 							currency={currencyKey}
 							promotion={promotion}
 							startDate={startDate}
+							observerPrint={observerPrint}
 						/>
 					</div>
 
