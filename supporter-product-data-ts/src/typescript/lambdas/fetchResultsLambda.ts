@@ -105,7 +105,8 @@ export const fetchResults = async (
     );
   }
 
-  const contentLength = Number(fileResponse.headers.get("content-length") ?? 0);
+  const fileBytes = new Uint8Array(await fileResponse.arrayBuffer());
+  const contentLength = fileBytes.byteLength;
 
   console.info("Downloaded result file", { filename, contentLength });
 
@@ -114,8 +115,6 @@ export const fetchResults = async (
       `Content length of the file for job with id ${event.jobId} is not > 0`
     );
   }
-
-  const fileBytes = new Uint8Array(await fileResponse.arrayBuffer());
 
   console.info("Uploading result file to S3", {
     stage,
