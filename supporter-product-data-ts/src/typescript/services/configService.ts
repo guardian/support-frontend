@@ -8,10 +8,7 @@ import { z } from "zod";
 import type { Stage } from "../model/stage";
 
 const zuoraConfigSchema = z.object({
-  url: z.string().min(1),
   partnerId: z.string().min(1),
-  username: z.string().min(1),
-  password: z.string().min(1),
   lastSuccessfulQueryTime: z.string().optional(),
 });
 

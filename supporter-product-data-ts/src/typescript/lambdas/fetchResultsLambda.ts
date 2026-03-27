@@ -1,3 +1,4 @@
+import { ZuoraClient } from "@modules/zuora/zuoraClient";
 import type { Handler } from "aws-lambda";
 import { stageFromEnvironment } from "../model/stage";
 import type { BatchQueryResponse } from "../model/zuora";
@@ -32,8 +33,8 @@ const getValueOrThrow = <T>(value: T | undefined, errorMessage: string): T => {
 const buildDefaultDeps = async (): Promise<FetchResultsDeps> => {
   const stage = stageFromEnvironment();
   const configService = new ConfigService(stage);
-  const config = await configService.loadZuoraConfig();
-  const zuoraService = new ZuoraQuerierService(config);
+  const zuoraClient = await ZuoraClient.create(stage);
+  const zuoraService = new ZuoraQuerierService(zuoraClient);
   const s3Service = new S3Service();
 
   return {

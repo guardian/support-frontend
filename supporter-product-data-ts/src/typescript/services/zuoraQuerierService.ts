@@ -1,60 +1,45 @@
+import type { ZuoraClient } from "@modules/zuora/zuoraClient";
+import { z } from "zod";
 import type { BatchQueryRequest } from "../model/query";
 import type { BatchQueryResponse } from "../model/zuora";
-import type { ZuoraQuerierConfig } from "./configService";
+
+const batchQueryItemSchema = z.object({
+  name: z.string(),
+  fileId: z.string().optional(),
+  recordCount: z.number(),
+  full: z.boolean(),
+});
+
+const batchQueryResponseSchema = z.object({
+  id: z.string(),
+  status: z.union([
+    z.literal("submitted"),
+    z.literal("executing"),
+    z.literal("completed"),
+    z.literal("aborted"),
+    z.literal("error"),
+  ]),
+  batches: z.array(batchQueryItemSchema),
+});
 
 export class ZuoraQuerierService {
-  constructor(private readonly config: ZuoraQuerierConfig) {}
-
-  private baseUrl(): string {
-    return this.config.url.replace(/\/$/, "");
-  }
-
-  private authHeaders(): HeadersInit {
-    return {
-      apiSecretAccessKey: this.config.password,
-      apiAccessKeyId: this.config.username,
-      "Accept-Encoding": "identity",
-    };
-  }
+  constructor(private readonly zuoraClient: ZuoraClient) {}
 
   async getResults(jobId: string): Promise<BatchQueryResponse> {
-    const url = `${this.baseUrl()}/batch-query/jobs/${jobId}`;
-    console.info("Zuora API request", { method: "GET", url });
-
-    const response = await fetch(url, {
-      method: "GET",
-      headers: this.authHeaders(),
-    });
-
-    console.info("Zuora API response", {
-      method: "GET",
-      url,
-      status: response.status,
-      ok: response.ok,
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch Zuora results for job ${jobId}: ${response.status}`
-      );
-    }
-
-    const body = (await response.json()) as BatchQueryResponse;
-    console.info("Zuora getResults response body", {
-      jobId,
-      status: body.status,
-      batchCount: body.batches.length,
-    });
-    return body;
+    return await this.zuoraClient.get(
+      `/v1/batch-query/jobs/${jobId}`,
+      batchQueryResponseSchema
+    );
   }
 
   async getResultFileResponse(fileId: string): Promise<Response> {
-    const url = `${this.baseUrl()}/batch-query/file/${fileId}`;
+    const auth = await this.zuoraClient.tokenProvider.getAuthorisation();
+    const url = `${auth.baseUrl}/v1/batch-query/file/${fileId}`;
     console.info("Zuora API request", { method: "GET", url });
 
     const response = await fetch(url, {
       method: "GET",
-      headers: this.authHeaders(),
+      headers: auth.authHeaders,
     });
 
     console.info("Zuora API response", {
@@ -69,41 +54,10 @@ export class ZuoraQuerierService {
   }
 
   async postQuery(request: BatchQueryRequest): Promise<BatchQueryResponse> {
-    const url = `${this.baseUrl()}/batch-query/`;
-    console.info("Zuora API request", {
-      method: "POST",
-      url,
-      body: JSON.stringify(request),
-    });
-
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        ...this.authHeaders(),
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    });
-
-    console.info("Zuora API response", {
-      method: "POST",
-      url,
-      status: response.status,
-      ok: response.ok,
-    });
-
-    if (!response.ok) {
-      const errorBody = await response.text();
-      console.error("Zuora postQuery error response body", { errorBody });
-      throw new Error(`Failed to submit Zuora query: ${response.status}`);
-    }
-
-    const body = (await response.json()) as BatchQueryResponse;
-    console.info("Zuora postQuery response body", {
-      id: body.id,
-      status: body.status,
-      batchCount: body.batches.length,
-    });
-    return body;
+    return await this.zuoraClient.post(
+      `/v1/batch-query/`,
+      JSON.stringify(request),
+      batchQueryResponseSchema
+    );
   }
 }

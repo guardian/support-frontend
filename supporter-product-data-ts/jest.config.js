@@ -4,7 +4,12 @@ module.exports = {
   testEnvironment: "node",
   runner: "groups",
   testPathIgnorePatterns: ["/node_modules/", "target"],
+  transformIgnorePatterns: ["/node_modules/\\.pnpm/(?!@guardian)"],
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/typescript/$1",
+    "@modules/(.*)/(.*)/(.*)$":
+      "@guardian/support-service-lambdas/modules/$1/src/$2/$3",
+    "@modules/(.*)/(.*)$":
+      "@guardian/support-service-lambdas/modules/$1/src/$2",
+    "@modules/(.*)$": "@guardian/support-service-lambdas/modules/$1",
   },
 };

@@ -7,15 +7,30 @@ import { handler } from "../lambdas/queryZuoraLambda";
 jest.mock("../services/configService", () => ({
   ConfigService: jest.fn().mockImplementation(() => ({
     loadZuoraConfig: jest.fn().mockResolvedValue({
-      url: "https://example.com",
       partnerId: "partner",
-      username: "user",
-      password: "pass",
       lastSuccessfulQueryTime:
         "2026-03-23T05:20:27.281403501-07:00[America/Los_Angeles]",
       discountProductRatePlanIds: [],
     }),
   })),
+}));
+
+jest.mock("@modules/zuora/zuoraClient", () => ({
+  ZuoraClient: {
+    create: jest.fn().mockResolvedValue({
+      post: jest.fn().mockResolvedValue({
+        id: "mock-job-123",
+        status: "submitted",
+        batches: [],
+      }),
+      tokenProvider: {
+        getAuthorisation: jest.fn().mockResolvedValue({
+          baseUrl: "https://rest.apisandbox.zuora.com",
+          authHeaders: { Authorization: "Bearer mock-token" },
+        }),
+      },
+    }),
+  },
 }));
 
 describe("queryZuoraLambda integration", () => {

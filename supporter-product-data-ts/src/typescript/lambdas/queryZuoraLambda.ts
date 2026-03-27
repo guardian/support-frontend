@@ -1,3 +1,4 @@
+import { ZuoraClient } from "@modules/zuora/zuoraClient";
 import type { Handler } from "aws-lambda";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -89,7 +90,8 @@ export const queryZuora = async (
 ): Promise<FetchResultsState> => {
   const configService = new ConfigService(stage);
   const config = await configService.loadZuoraConfig();
-  const service = new ZuoraQuerierService(config);
+  const zuoraClient = await ZuoraClient.create(stage);
+  const service = new ZuoraQuerierService(zuoraClient);
 
   console.info("Attempting to submit query to Zuora", { stage, queryType });
 

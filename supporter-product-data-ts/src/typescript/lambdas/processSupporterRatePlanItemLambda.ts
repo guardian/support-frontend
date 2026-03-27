@@ -1,3 +1,4 @@
+import { ZuoraClient } from "@modules/zuora/zuoraClient";
 import type { Handler, SQSEvent } from "aws-lambda";
 import { type Stage, stageFromEnvironment } from "../model/stage";
 import type {
@@ -50,7 +51,8 @@ const buildDeps = async (): Promise<ProcessItemDeps> => {
   const configService = new ConfigService(stage);
   const config = await configService.loadZuoraConfig();
 
-  const subscriptionService = new ZuoraSubscriptionService(config);
+  const zuoraClient = await ZuoraClient.create(stage);
+  const subscriptionService = new ZuoraSubscriptionService(zuoraClient);
   const dynamoService = new DynamoService(stage);
   const alarmService = new AlarmService(stage);
 
