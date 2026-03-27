@@ -165,13 +165,13 @@ function parameteriseUrl(
 	const params = {
 		promoCode,
 	};
-	const urlWithParamsWeeklyDigital = addQueryParamsToURL(url, params).replace(
+	const urlWithParams = addQueryParamsToURL(url, params).replace(
 		/\?$/,
 		'',
 	); // removes ? when no params
 	return fulfilmentOption
-		? `${urlWithParamsWeeklyDigital}#${fulfilmentOption}`
-		: urlWithParamsWeeklyDigital;
+		? `${urlWithParams}#${fulfilmentOption}`
+		: urlWithParams;
 }
 
 // If the user cancels before completing the payment flow, send them back to the contribute page.
