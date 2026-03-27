@@ -1,5 +1,4 @@
 const featureFlagEnableDigitalAccess = 'enableDigitalAccess';
-export const featureFlagEnableWeeklyDigital = 'enableWeeklyDigital';
 
 interface FeatureFlags {
 	enableDigitalAccess: boolean;

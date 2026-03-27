@@ -143,7 +143,6 @@ type CheckoutFormProps = {
 	weeklyDeliveryDate: Date;
 	setWeeklyDeliveryDate: (value: Date) => void;
 	thresholdAmount: number;
-	enableWeeklyDigital: boolean;
 	contributionAmount?: number;
 	promotion?: Promotion;
 	checkoutSession?: CheckoutSession;
@@ -167,7 +166,6 @@ export default function CheckoutForm({
 	weeklyDeliveryDate,
 	setWeeklyDeliveryDate,
 	thresholdAmount,
-	enableWeeklyDigital,
 	contributionAmount,
 	promotion,
 	checkoutSession,
@@ -639,7 +637,6 @@ export default function CheckoutForm({
 				)
 					? weeklyDeliveryDate
 					: undefined,
-				enableWeeklyDigital,
 			});
 			window.location.href = successUrl;
 			// It seems non-deterministic how much code is executed below setting
