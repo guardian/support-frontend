@@ -5,6 +5,10 @@ import type { ZuoraQuerierConfig } from "./configService";
 export class ZuoraQuerierService {
   constructor(private readonly config: ZuoraQuerierConfig) {}
 
+  private baseUrl(): string {
+    return this.config.url.replace(/\/$/, "");
+  }
+
   private authHeaders(): HeadersInit {
     return {
       apiSecretAccessKey: this.config.password,
@@ -14,10 +18,7 @@ export class ZuoraQuerierService {
   }
 
   async getResults(jobId: string): Promise<BatchQueryResponse> {
-    const url = `${this.config.url.replace(
-      /\/$/,
-      ""
-    )}/batch-query/jobs/${jobId}`;
+    const url = `${this.baseUrl()}/batch-query/jobs/${jobId}`;
     console.info("Zuora API request", { method: "GET", url });
 
     const response = await fetch(url, {
@@ -48,10 +49,7 @@ export class ZuoraQuerierService {
   }
 
   async getResultFileResponse(fileId: string): Promise<Response> {
-    const url = `${this.config.url.replace(
-      /\/$/,
-      ""
-    )}/batch-query/file/${fileId}`;
+    const url = `${this.baseUrl()}/batch-query/file/${fileId}`;
     console.info("Zuora API request", { method: "GET", url });
 
     const response = await fetch(url, {
@@ -71,7 +69,7 @@ export class ZuoraQuerierService {
   }
 
   async postQuery(request: BatchQueryRequest): Promise<BatchQueryResponse> {
-    const url = `${this.config.url.replace(/\/$/, "")}/batch-query/`;
+    const url = `${this.baseUrl()}/batch-query/`;
     console.info("Zuora API request", {
       method: "POST",
       url,

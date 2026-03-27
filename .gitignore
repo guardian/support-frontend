@@ -1,6 +1,7 @@
 .DS_Store
 .bundle
 .idea
+.sfdx
 .idea_modules
 *.iml
 *.sublime-project
