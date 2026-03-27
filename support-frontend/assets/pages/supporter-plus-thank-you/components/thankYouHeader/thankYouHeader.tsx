@@ -109,7 +109,6 @@ function ThankYouHeader({
 				currency={currency}
 				isObserverPrint={!!observerPrint}
 				promotion={promotion}
-				enableWeeklyDigital={enableWeeklyDigital}
 			/>
 			<div css={headerSupportingText}>{renderSubHeading()}</div>
 		</header>
