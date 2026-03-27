@@ -165,10 +165,7 @@ function parameteriseUrl(
 	const params = {
 		promoCode,
 	};
-	const urlWithParams = addQueryParamsToURL(url, params).replace(
-		/\?$/,
-		'',
-	); // removes ? when no params
+	const urlWithParams = addQueryParamsToURL(url, params).replace(/\?$/, ''); // removes ? when no params
 	return fulfilmentOption
 		? `${urlWithParams}#${fulfilmentOption}`
 		: urlWithParams;
