@@ -823,7 +823,6 @@ export function OneTimeCheckoutComponent({
 										value={billingPostcode}
 										pattern={doesNotContainExtendedEmojiOrLeadingSpace}
 										error={billingPostcodeError}
-										optional
 										onInvalid={(event) => {
 											validate(
 												event,
