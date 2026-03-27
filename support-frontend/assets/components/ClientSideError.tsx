@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Component } from 'react';
+import { logException } from 'helpers/utilities/logger';
 import ErrorPage from 'pages/error/components/errorPage';
 
 type ClientSideErrorHandlerProps = {
@@ -37,11 +38,9 @@ export class ClientSideErrorHandler extends Component<
 		return { hasError: true };
 	}
 
-	// componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
-	//   // Optional: send error to monitoring service
-	//   // eslint-disable-next-line no-console
-	//   console.error('PageErrorHandler caught an error:', error, errorInfo);
-	// }
+	componentDidCatch(error: Error): void {
+		logException(error.message);
+	}
 
 	render() {
 		if (this.state.hasError) {
