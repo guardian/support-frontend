@@ -6,7 +6,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
+import getObserver from 'pages/[countryGroupId]/helpers/getObserver';
 import DirectDebitMessage from './DirectDebitMessage';
 import Heading from './heading';
 import LegitimateInterestMessage from './LegitimateInterestMessage';
@@ -41,10 +41,8 @@ type ThankYouHeaderProps = {
 	isDirectDebitPayment: boolean;
 	amount: number;
 	currency: IsoCurrency;
-	observerPrint?: ObserverPrint;
 	startDate?: string;
 	promotion?: Promotion;
-	enableWeeklyDigital?: boolean;
 };
 
 function ThankYouHeader({
@@ -54,11 +52,10 @@ function ThankYouHeader({
 	isDirectDebitPayment,
 	amount,
 	currency,
-	observerPrint,
 	startDate,
 	promotion,
-	enableWeeklyDigital,
 }: ThankYouHeaderProps): JSX.Element {
+	const observerPrint = getObserver(productKey, ratePlanKey);
 	const isPrint = isPrintProduct(productKey);
 	const isSubscriptionCard = productKey === 'SubscriptionCard';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
@@ -87,8 +84,9 @@ function ThankYouHeader({
 
 				{showLegitimateInterestMessage && (
 					<LegitimateInterestMessage
+						productKey={productKey}
+						ratePlanKey={ratePlanKey}
 						showPaymentStatus={!isDirectDebitPayment}
-						enableWeeklyDigital={enableWeeklyDigital}
 					/>
 				)}
 
