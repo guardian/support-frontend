@@ -16,6 +16,7 @@ import {
 	type PrintFulfilmentOptions,
 	RestOfWorld,
 } from '@modules/product/fulfilmentOptions';
+import { ClientSideErrorHandler } from 'components/ClientSideError';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
@@ -194,4 +195,8 @@ const weeklyLandingProps = (): WeeklyLandingPageProps => ({
 const abParticipations = getAbParticipations();
 setUpTrackingAndConsents(abParticipations);
 
-renderPage(<WeeklyLandingPage {...weeklyLandingProps()} />);
+renderPage(
+	<ClientSideErrorHandler>
+		<WeeklyLandingPage {...weeklyLandingProps()} />
+	</ClientSideErrorHandler>,
+);
