@@ -578,6 +578,23 @@ describe('init', () => {
 
 			expect(participations).toEqual({});
 		});
+
+		it('matches against the query string as well as the patch', () => {
+			const abTests = {
+				t1: buildTest({
+					targetPage: pageUrlRegexes.subscriptions.subsUkWeeklyPages,
+				}),
+			};
+
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				pathWithQueryString:
+					'/uk/checkout?product=GuardianWeeklyDomestic&ratePlan=QuarterlyPlus&enableWeeklyDigital',
+			});
+
+			expect(participations).toEqual({ t1: 'control' });
+		});
 	});
 });
 
