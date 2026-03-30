@@ -6,8 +6,7 @@ import type { Tests } from './models';
 // This is to ensure the participation is picked up by ophan. The client side
 // navigation from landing page to thank you page *won't* register any new
 // participations.
-// Note: These regexes are matched against the pathname only (i.e. no domain or
-// query string)
+// Note: These regexes are matched against the path and the querystring only (i.e. no domain)
 export const pageUrlRegexes = {
 	contributions: {
 		/*
@@ -21,7 +20,7 @@ export const pageUrlRegexes = {
 		oneTimeCheckoutOnly: '(uk|us|au|ca|eu|nz|int)/one-time-checkout$',
 	},
 	subscriptions: {
-		ukSubscriptionsLandingPageOnly: '/uk/subscribe$',
+		ukSubscriptionsLandingPageOnly: /\/uk\/subscribe$/,
 		paper: {
 			// Requires /subscribe/paper, allows /checkout or /checkout/guest, allows any query string
 			paperLandingWithGuestCheckout:
@@ -100,7 +99,7 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
 		excludeContributionsOnlyCountries: true,
 	},
-	guardianWeeklySubscriptionSubtitle: {
+	guardianWeeklySubscriptionSubtitle2: {
 		variants: [
 			{
 				id: 'control',
