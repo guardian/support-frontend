@@ -99,7 +99,7 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
 		excludeContributionsOnlyCountries: true,
 	},
-	guardianWeeklySubscriptionSubtitle: {
+	guardianWeeklySubscriptionSubtitle2: {
 		variants: [
 			{
 				id: 'control',
