@@ -50,7 +50,7 @@ function init({
 	abTests = tests,
 	mvt = getMvtId(),
 	acquisitionDataTests = getTestFromAcquisitionData() ?? [],
-	path = window.location.pathname,
+	path = window.location.href,
 }: ABtestInitalizerData): Participations {
 	const sessionParticipations = getSessionParticipations(PARTICIPATIONS_KEY);
 	const participations = getParticipations(
