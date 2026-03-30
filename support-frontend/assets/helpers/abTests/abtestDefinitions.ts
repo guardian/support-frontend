@@ -20,7 +20,7 @@ export const pageUrlRegexes = {
 		oneTimeCheckoutOnly: '(uk|us|au|ca|eu|nz|int)/one-time-checkout$',
 	},
 	subscriptions: {
-		ukSubscriptionsLandingPageOnly: '/uk/subscribe$',
+		ukSubscriptionsLandingPageOnly: /\/uk\/subscribe$/,
 		paper: {
 			// Requires /subscribe/paper, allows /checkout or /checkout/guest, allows any query string
 			paperLandingWithGuestCheckout:
