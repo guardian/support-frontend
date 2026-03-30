@@ -6,8 +6,7 @@ import type { Tests } from './models';
 // This is to ensure the participation is picked up by ophan. The client side
 // navigation from landing page to thank you page *won't* register any new
 // participations.
-// Note: These regexes are matched against the pathname only (i.e. no domain or
-// query string)
+// Note: These regexes are matched against the path and the querystring only (i.e. no domain)
 export const pageUrlRegexes = {
 	contributions: {
 		/*

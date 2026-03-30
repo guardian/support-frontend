@@ -513,7 +513,7 @@ describe('init', () => {
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
 				abTests,
-				path: '/uk/contribute',
+				pathWithQueryString: '/uk/contribute',
 			});
 
 			expect(participations).toEqual({});
@@ -529,7 +529,7 @@ describe('init', () => {
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
 				abTests,
-				path: '/uk/contribute',
+				pathWithQueryString: '/uk/contribute',
 			});
 
 			expect(participations).toEqual({ t1: 'control' });
@@ -551,7 +551,7 @@ describe('init', () => {
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
 				abTests,
-				path: '/uk/checkout',
+				pathWithQueryString: '/uk/checkout',
 			});
 
 			expect(participations).toEqual({ t1: 'control' });
@@ -573,7 +573,7 @@ describe('init', () => {
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
 				abTests,
-				path: '/uk/blah',
+				pathWithQueryString: '/uk/blah',
 			});
 
 			expect(participations).toEqual({});
