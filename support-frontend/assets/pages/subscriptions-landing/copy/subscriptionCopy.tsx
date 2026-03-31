@@ -10,9 +10,12 @@ import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type * as React from 'react';
 import { themeButtonLegacyGray } from 'components/button/theme';
+import type { GridPictureProp } from 'components/gridPicture/gridPicture';
 import DigitalPlusPackshot from 'components/packshots/digitalPlusPackshot';
 import PaperPackShot from 'components/packshots/paperPackshot';
+import PaperPackShots from 'components/packshots/paperPackshots';
 import WeeklyPackShot from 'components/packshots/weeklyPackshot';
+import WeeklyPackShots from 'components/packshots/weeklyPackShots';
 import type { Participations } from 'helpers/abTests/models';
 import { detect, glyph } from 'helpers/internationalisation/currency';
 import type { ProductBenefit } from 'helpers/productCatalog';
@@ -48,6 +51,7 @@ export type ProductCopy = {
 	subtitle: string;
 	description: string;
 	productImage: React.ReactNode;
+	packshotImage?: React.ReactElement<GridPictureProp>;
 	buttons: ProductButton[];
 	cssOverrides?: SerializedStyles;
 	offer?: string;
@@ -197,6 +201,7 @@ function guardianWeekly(
 		offer: priceCopy.discountCopy || '',
 		buttons: [weeklyFindButton],
 		productImage: <WeeklyPackShot />,
+		packshotImage: <WeeklyPackShots />,
 		participations: participations,
 		cssOverrides: weeklySubscriptionProductCardStyle,
 	};
@@ -225,6 +230,7 @@ const paper = (
 			},
 		],
 		productImage: <PaperPackShot />,
+		packshotImage: <PaperPackShots />,
 		offer: priceCopy.discountCopy,
 		cssOverrides: css``,
 	};
