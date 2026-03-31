@@ -1,0 +1,47 @@
+{
+  "name": "supporter-product-data-ts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "jest --group=-integration",
+    "it-test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --group=integration",
+    "lint": "eslint src/typescript/**/*.ts",
+    "lint:fix": "eslint --fix src/typescript/**/*.ts",
+    "check-formatting": "prettier --check **/*.ts",
+    "fix-formatting": "prettier --write **/*.ts",
+    "build": "tsc --noEmit",
+    "bundle": "node esbuild.config.mjs",
+    "clean-target": "rm -rf target && mkdir -p target/typescript",
+    "zip": "cd target/typescript && zip -r supporter-product-data-ts.zip ./* -x \".*\" -x \"__MACOSX\"",
+    "bundle-and-zip": "pnpm clean-target && pnpm bundle && pnpm zip",
+    "cdk:synth": "pnpm --dir ../cdk synth SupporterProductDataTS-CODE SupporterProductDataTS-PROD",
+    "package": "pnpm check-formatting && pnpm build && pnpm test && pnpm bundle-and-zip && pnpm cdk:synth",
+    "run:local": "tsx src/typescript/local/runQueryZuora.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cloudwatch": "catalog:",
+    "@aws-sdk/client-dynamodb": "^3.995.0",
+    "@aws-sdk/client-s3": "^3.995.0",
+    "@aws-sdk/client-sqs": "catalog:",
+    "@aws-sdk/client-ssm": "catalog:",
+    "@aws-sdk/credential-provider-node": "catalog:",
+    "@guardian/support-service-lambdas": "catalog:",
+    "dayjs": "^1.11.19",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@guardian/prettier": "catalog:",
+    "@types/aws-lambda": "^8.10.147",
+    "@types/jest": "catalog:",
+    "@types/node": "catalog:",
+    "esbuild": "catalog:",
+    "esbuild-ts-paths": "^1.1.3",
+    "eslint": "^9.38.0",
+    "jest": "catalog:",
+    "jest-runner-groups": "catalog:",
+    "prettier": "catalog:",
+    "ts-jest": "catalog:",
+    "tsx": "^4.20.6",
+    "typescript": "catalog:"
+  }
+}

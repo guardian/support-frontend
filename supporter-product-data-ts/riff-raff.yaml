@@ -1,0 +1,25 @@
+stacks: [support]
+regions: [eu-west-1]
+allowedStages:
+  - CODE
+  - PROD
+deployments:
+  cfn:
+    type: cloud-formation
+    app: supporter-product-data-ts
+    parameters:
+      templateStagePaths:
+        CODE: SupporterProductDataTS-CODE.template.json
+        PROD: SupporterProductDataTS-PROD.template.json
+  supporter-product-data-ts:
+    type: aws-lambda
+    app: supporter-product-data-ts
+    parameters:
+      bucket: membership-dist
+      functionNames:
+        - "-SupporterProductDataTSQueryZuora-"
+        - "-SupporterProductDataTSFetchResults-"
+        - "-SupporterProductDataTSAddToQueue-"
+        - "-SupporterProductDataTSProcessItem-"
+      fileName: supporter-product-data-ts.zip
+    dependencies: [cfn]

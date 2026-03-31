@@ -1,0 +1,50 @@
+name: Build supporter-product-data-ts
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  supporter_product_data_ts_build:
+    if: >-
+      (github.actor != 'dependabot[bot]') &&
+        (github.repository_owner == 'guardian' ||
+          github.event_name == 'push')
+
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+
+    name: supporter-product-data-ts build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Env
+        run: env
+
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - name: Setup Node and Install Dependencies
+        uses: ./.github/actions/setup-node-and-install
+
+      - name: Build and test
+        run: pnpm --filter supporter-product-data-ts package
+
+      - name: Upload to riff-raff
+        uses: guardian/actions-riff-raff@v4
+        with:
+          projectName: support:supporter-product-data-ts
+          roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          buildNumberOffset: 12000
+          configPath: supporter-product-data-ts/riff-raff.yaml
+          contentDirectories: |
+            cfn:
+              - cdk/cdk.out/SupporterProductDataTS-CODE.template.json
+              - cdk/cdk.out/SupporterProductDataTS-PROD.template.json
+            supporter-product-data-ts:
+              - supporter-product-data-ts/target/typescript/supporter-product-data-ts.zip
