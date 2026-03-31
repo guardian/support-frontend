@@ -86,8 +86,6 @@ interface PageParticipationsConfig<Variant> {
 	pageRegex: string;
 	forceParamName: string;
 	sessionStorageKey: Key;
-	fallbackVariant: (countryGroupId: CountryGroupId) => Variant;
-	fallbackParticipationKey: string;
 	getVariantName: (variant: Variant) => string;
 }
 

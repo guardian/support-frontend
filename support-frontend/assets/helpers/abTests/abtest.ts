@@ -40,7 +40,7 @@ type ABtestInitalizerData = {
 	abTests?: Tests;
 	mvt?: number;
 	acquisitionDataTests?: AcquisitionABTest[];
-	path?: string;
+	pathWithQueryString?: string;
 };
 
 function init({
@@ -50,7 +50,7 @@ function init({
 	abTests = tests,
 	mvt = getMvtId(),
 	acquisitionDataTests = getTestFromAcquisitionData() ?? [],
-	path = window.location.pathname,
+	pathWithQueryString = window.location.pathname + window.location.search,
 }: ABtestInitalizerData): Participations {
 	const sessionParticipations = getSessionParticipations(PARTICIPATIONS_KEY);
 	const participations = getParticipations(
@@ -58,7 +58,7 @@ function init({
 		mvt,
 		countryId,
 		countryGroupId,
-		path,
+		pathWithQueryString,
 		acquisitionDataTests,
 		selectedAmountsVariant,
 		sessionParticipations,
@@ -80,7 +80,7 @@ function getParticipations(
 	mvtId: number,
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
-	path: string,
+	pathWithQueryString: string,
 	acquisitionDataTests?: AcquisitionABTest[],
 	selectedAmountsVariant?: SelectedAmountsVariant,
 	sessionParticipations: Participations = {},
@@ -104,13 +104,13 @@ function getParticipations(
 		if (
 			test.persistPage &&
 			!!sessionParticipations[testId] &&
-			targetPageMatches(path, test.persistPage)
+			targetPageMatches(pathWithQueryString, test.persistPage)
 		) {
 			participations[testId] = sessionParticipations[testId];
 			return;
 		}
 
-		if (!targetPageMatches(path, test.targetPage)) {
+		if (!targetPageMatches(pathWithQueryString, test.targetPage)) {
 			return;
 		}
 

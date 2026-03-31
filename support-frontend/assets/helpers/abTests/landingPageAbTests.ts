@@ -5,6 +5,10 @@ import type {
 	LandingPageVariant,
 } from '../globalsAndSwitches/landingPageSettings';
 import type { PageParticipationsConfig } from './models';
+import {
+	getPageParticipationsWithFallback,
+	type PageParticipationsResultWithFallback,
+} from './pageParticipations';
 import { LANDING_PAGE_PARTICIPATIONS_KEY } from './sessionStorage';
 
 // Fallback config in case there's an issue getting it from the server
@@ -98,8 +102,6 @@ export const landingPageTestConfig: Omit<
 	pageRegex: '^/.*/contribute(/.*)?$',
 	forceParamName: 'force-landing-page',
 	sessionStorageKey: LANDING_PAGE_PARTICIPATIONS_KEY,
-	fallbackVariant: () => fallBackLandingPageSelection,
-	fallbackParticipationKey: 'FALLBACK_LANDING_PAGE',
 	getVariantName: (variant) => variant.name,
 };
 
@@ -111,4 +113,17 @@ export function getLandingPageTestConfig(): PageParticipationsConfig<LandingPage
 		...landingPageTestConfig,
 		tests: getSettings().landingPageTests ?? [],
 	};
+}
+
+/**
+ * Get landing page participations with a guaranteed fallback variant.
+ */
+export function getLandingPageParticipations(): Promise<
+	PageParticipationsResultWithFallback<LandingPageVariant>
+> {
+	return getPageParticipationsWithFallback(
+		getLandingPageTestConfig(),
+		() => fallBackLandingPageSelection,
+		'FALLBACK_LANDING_PAGE',
+	);
 }

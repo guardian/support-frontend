@@ -52,17 +52,6 @@ describe('landingPageTestConfig', () => {
 		);
 	});
 
-	it('has correct fallbackParticipationKey', () => {
-		expect(landingPageTestConfig.fallbackParticipationKey).toBe(
-			'FALLBACK_LANDING_PAGE',
-		);
-	});
-
-	it('returns fallback variant', () => {
-		const result = landingPageTestConfig.fallbackVariant('GBPCountries');
-		expect(result).toBe(fallBackLandingPageSelection);
-	});
-
 	it('extracts variant name correctly', () => {
 		const variant = {
 			name: 'TEST_VARIANT',
