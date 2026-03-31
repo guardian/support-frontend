@@ -5,6 +5,7 @@ import {
 	countryGroups,
 	GBPCountries,
 	NZDCountries,
+	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getPatronsLink } from 'helpers/urls/externalLinks';
@@ -75,7 +76,7 @@ const links: HeaderNavLink[] = [
 		text: 'Patrons',
 		trackAs: 'patrons',
 		opensInNewWindow: true,
-		exclude: [AUDCountries, NZDCountries],
+		exclude: [AUDCountries, NZDCountries, UnitedStates],
 		internal: false,
 	},
 ];
