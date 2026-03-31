@@ -4,15 +4,16 @@ import {
 	GBPCountries,
 } from '@modules/internationalisation/countryGroup';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { type RecurringBillingPeriod } from '@modules/product/billingPeriod';
+import {
+	BillingPeriod,
+	type RecurringBillingPeriod,
+} from '@modules/product/billingPeriod';
 import type { Product } from 'components/product/productOption';
-import { featureFlagEnableWeeklyDigital } from 'helpers/featureFlags';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { glyph } from 'helpers/internationalisation/currency';
 import { internationaliseProduct } from 'helpers/productCatalog';
 import { getWeeklyFulfilmentOption } from 'helpers/productCatalogToFulfilmentOption';
 import {
-	billingPeriodToRatePlan,
 	getBillingPeriodNoun,
 	getBillingPeriodTitle,
 } from 'helpers/productPrice/billingPeriods';
@@ -40,17 +41,27 @@ import {
 	getDiscountSummary,
 } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 
+function getWeeklyRatePlan(
+	billingPeriod: RecurringBillingPeriod,
+	isGift: boolean,
+): string {
+	if (isGift) {
+		return billingPeriod === BillingPeriod.Annual
+			? 'OneYearGift'
+			: 'ThreeMonthGift';
+	}
+	return billingPeriod.toString() + 'Plus';
+}
+
 const getCheckoutUrl = ({
 	countryId,
 	billingPeriod,
-	orderIsGift,
-	enableWeeklyDigitalPlans,
+	isGift,
 	promotion,
 }: {
 	countryId: IsoCountry;
 	billingPeriod: RecurringBillingPeriod;
-	orderIsGift: boolean;
-	enableWeeklyDigitalPlans: boolean;
+	isGift: boolean;
 	promotion?: Promotion;
 }) => {
 	const countryGroupId = CountryGroup.fromCountry(countryId) ?? GBPCountries;
@@ -61,19 +72,11 @@ const getCheckoutUrl = ({
 	const region = countryGroups[countryGroupId].supportRegionId;
 
 	const url = `${getOrigin()}/${region}/checkout`;
-	const urlWithParams = addQueryParamsToURL(
-		url,
-		{
-			promoCode: promotion?.promoCode,
-			product: productGuardianWeekly,
-			ratePlan: billingPeriodToRatePlan(
-				billingPeriod,
-				orderIsGift,
-				enableWeeklyDigitalPlans,
-			),
-		},
-		enableWeeklyDigitalPlans ? featureFlagEnableWeeklyDigital : undefined,
-	);
+	const urlWithParams = addQueryParamsToURL(url, {
+		promoCode: promotion?.promoCode,
+		product: productGuardianWeekly,
+		ratePlan: getWeeklyRatePlan(billingPeriod, isGift),
+	});
 	return urlWithParams;
 };
 
@@ -91,17 +94,16 @@ const getDisplayPrice = (
 	return productPrice.price;
 };
 
-// TODO: Decomission this function after non digital weekly products are removed
-export const getProducts = ({
+export const getWeeklyProducts = ({
 	countryId,
 	productPrices,
 	billingPeriods,
-	orderIsAGift,
+	isGift = false,
 }: {
 	countryId: IsoCountry;
 	productPrices: ProductPrices;
 	billingPeriods: RecurringBillingPeriod[];
-	orderIsAGift: boolean;
+	isGift?: boolean;
 }): Product[] =>
 	billingPeriods.map((billingPeriod) => {
 		const productPrice = getProductPrice(
@@ -109,85 +111,41 @@ export const getProducts = ({
 			countryId,
 			billingPeriod,
 			getWeeklyFulfilmentOption(countryId),
-			'NoProductOptions',
+			isGift ? 'NoProductOptions' : 'PlusDigital',
 		);
-
 		const promotion = getAppliedPromo(productPrice.promotions);
-		const displayPrice = getDisplayPrice(productPrice, promotion);
-		const offerCopy = promotion?.landingPage?.roundel ?? '';
 		const trackingProperties = {
-			id: orderIsAGift
-				? `subscribe_now_cta_gift-${billingPeriod}`
-				: `subscribe_now_cta-${billingPeriod}`,
+			id: `subscribe_now_cta_gift-${billingPeriod}`,
 			product: 'GuardianWeekly' as SubscriptionProduct,
 			componentType: 'ACQUISITIONS_BUTTON' as OphanComponentType,
 		};
+		const displayPrice = getDisplayPrice(
+			productPrice,
+			isGift ? promotion : null,
+		);
+		const fullPriceWithCurrency = getPriceWithSymbol(
+			productPrice.currency,
+			displayPrice,
+		);
 
+		const offerCopy = isGift
+			? promotion?.landingPage?.roundel ?? ''
+			: undefined;
+		const priceCopy = isGift
+			? getSimplifiedPriceDescription(productPrice, billingPeriod)
+			: '';
+		const buttonCopy = isGift ? 'Subscribe now' : 'Subscribe';
 		const is12for12 = promotion?.promoCode.startsWith('12for12') ?? false;
 		const isBlackFriday =
 			promotion?.promoCode.startsWith('GWBLACKFRIDAY') ?? false;
-
-		return {
-			title: getBillingPeriodTitle(billingPeriod, orderIsAGift),
-			price: getPriceWithSymbol(productPrice.currency, displayPrice),
-			discountedPrice: promotion?.discountedPrice
-				? getPriceWithSymbol(productPrice.currency, promotion.discountedPrice)
-				: undefined,
-			billingPeriodNoun: getBillingPeriodNoun(billingPeriod, orderIsAGift),
-			offerCopy,
-			priceCopy: getSimplifiedPriceDescription(productPrice, billingPeriod),
-			buttonCopy: 'Subscribe now',
-			href: getCheckoutUrl({
-				countryId,
-				billingPeriod,
-				orderIsGift: orderIsAGift,
-				enableWeeklyDigitalPlans: false,
-				promotion,
-			}),
-			onClick: sendTrackingEventsOnClick(trackingProperties),
-			onView: sendTrackingEventsOnView(trackingProperties),
-			isSpecialOffer: is12for12 || isBlackFriday,
-		};
-	});
-
-export const getWeeklyDigitalRatePlans = ({
-	countryId,
-	productPrices,
-	weeklyBillingPeriods,
-}: {
-	countryId: IsoCountry;
-	productPrices: ProductPrices;
-	weeklyBillingPeriods: RecurringBillingPeriod[];
-}): Product[] =>
-	weeklyBillingPeriods.map((billingPeriod) => {
-		const productPrice = getProductPrice(
-			productPrices,
-			countryId,
-			billingPeriod,
-			getWeeklyFulfilmentOption(countryId),
-			'PlusDigital',
-		);
-
-		const promotion = getAppliedPromo(productPrice.promotions);
-
-		const trackingProperties = {
-			id: `subscribe_now_cta-${billingPeriod}`,
-			product: 'GuardianWeekly' as SubscriptionProduct,
-			componentType: 'ACQUISITIONS_BUTTON' as OphanComponentType,
-		};
-		const fullPriceWithCurrency = getPriceWithSymbol(
-			productPrice.currency,
-			productPrice.price,
-		);
+		const isSpecialOffer = isGift && (is12for12 || isBlackFriday);
 
 		const discountPriceWithCurrency = promotion?.discountedPrice
 			? getPriceWithSymbol(productPrice.currency, promotion.discountedPrice)
 			: undefined;
-
 		const durationInMonths = promotion?.discount?.durationMonths;
-
 		const discountSummary =
-			durationInMonths && discountPriceWithCurrency
+			!isGift && durationInMonths && discountPriceWithCurrency
 				? getDiscountSummary({
 						fullPriceWithCurrency,
 						discountPriceWithCurrency,
@@ -197,36 +155,36 @@ export const getWeeklyDigitalRatePlans = ({
 				  })
 				: undefined;
 		const savingsText =
-			promotion?.discount?.amount && durationInMonths
+			!isGift && promotion?.discount?.amount && durationInMonths
 				? `${promotion.discount.amount}% off for ${getDiscountDuration({
 						durationInMonths,
 				  })}`
 				: undefined;
 
 		const augmentedPromotion = promotion && getAugmentedPromotion(promotion);
-
 		return {
-			title: getBillingPeriodTitle(billingPeriod),
+			title: getBillingPeriodTitle(billingPeriod, isGift),
 			price: fullPriceWithCurrency,
-			discountedPrice: discountPriceWithCurrency,
-			billingPeriodNoun: getBillingPeriodNoun(billingPeriod),
-			billingPeriod,
-			discountSummary,
-			priceCopy: '',
-			savingsText,
 			href: getCheckoutUrl({
 				countryId,
 				billingPeriod,
-				orderIsGift: false,
-				enableWeeklyDigitalPlans: true,
+				isGift,
 				promotion,
 			}),
-			roundel: augmentedPromotion?.roundelText,
-			hasPromotion: !!promotion,
-			isPriorityPromo: augmentedPromotion?.hasPriority,
+			priceCopy,
+			buttonCopy,
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
-			buttonCopy: 'Subscribe',
+			billingPeriodNoun: getBillingPeriodNoun(billingPeriod, isGift),
+			billingPeriod: isGift ? undefined : billingPeriod,
+			discountedPrice: discountPriceWithCurrency,
+			discountSummary,
+			offerCopy,
+			savingsText,
+			hasPromotion: !isGift && !!promotion,
+			isPriorityPromo: isGift ? undefined : augmentedPromotion?.hasPriority,
+			roundel: isGift ? undefined : augmentedPromotion?.roundelText,
+			isSpecialOffer,
 		};
 	});
 

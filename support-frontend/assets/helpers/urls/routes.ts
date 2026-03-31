@@ -116,14 +116,13 @@ function getDigitalPlusCheckoutDeepLink(
 function guardianWeeklyLanding(
 	countryGroupId: CountryGroupId,
 	gift: boolean,
-	enableWeeklyDigital?: boolean,
 ): string {
 	const url = `${getOrigin()}/${countryPath(countryGroupId)}${
 		gift
 			? routes.guardianWeeklySubscriptionLandingGift
 			: routes.guardianWeeklySubscriptionLanding
 	}`;
-	return enableWeeklyDigital ? `${url}?${featureFlagEnableWeeklyDigital}` : url;
+	return url;
 }
 
 const promotionTermsUrl = (promoCode: string) =>

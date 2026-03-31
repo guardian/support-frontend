@@ -45,10 +45,10 @@ export type Product = {
 	onClick: () => void;
 	onView: () => void;
 	billingPeriodNoun?: string;
+	billingPeriod?: BillingPeriod;
 	discountedPrice?: string;
-	children?: ReactNode;
-	offerCopy?: ReactNode;
 	discountSummary?: string;
+	offerCopy?: ReactNode;
 	savingsText?: string | null;
 	showLabel?: boolean;
 	hasPromotion?: boolean;
@@ -56,10 +56,10 @@ export type Product = {
 	roundel?: string;
 	productLabel?: ProductLabelProps;
 	cssOverrides?: SerializedStyles;
-	billingPeriod?: BillingPeriod;
 	isSpecialOffer?: boolean;
 	unavailableOutsideLondon?: boolean;
 	planData?: PlanData;
+	children?: ReactNode;
 };
 
 function ProductOption(props: Product): JSX.Element {

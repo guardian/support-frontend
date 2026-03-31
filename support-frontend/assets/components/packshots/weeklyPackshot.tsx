@@ -1,52 +1,16 @@
 import GridImage from 'components/gridImage/gridImage';
-import GridPicture from 'components/gridPicture/gridPicture';
-import {
-	weeklyDigitalContainer,
-	weeklyPackShotContainer,
-} from './weeklyPackshotStyle';
+import { weeklyDigitalContainer } from './weeklyPackshotStyle';
 
-function WeeklyPackShot({
-	enableDisplayWeeklyDigital,
-}: {
-	enableDisplayWeeklyDigital?: boolean;
-}): JSX.Element {
-	const weeklyContainer = enableDisplayWeeklyDigital
-		? weeklyDigitalContainer
-		: weeklyPackShotContainer;
+function WeeklyPackShot(): JSX.Element {
 	return (
-		<div css={weeklyContainer}>
-			{enableDisplayWeeklyDigital ? (
-				<GridImage
-					gridId={'subscriptionGuardianWeeklyDigitalHero_16x9'}
-					srcSizes={[2000]}
-					sizes="453px"
-					imgType="png"
-					altText="Illustration of The Guardian Weekly Subscription"
-				/>
-			) : (
-				<GridPicture
-					sources={[
-						{
-							gridId: 'subscriptionGuardianWeeklyHeroMobile',
-							srcSizes: [1000, 500],
-							sizes: '100vw',
-							imgType: 'png',
-							media: '(max-width: 739px)',
-						},
-						{
-							gridId: 'subscriptionGuardianWeeklyHeroTablet',
-							srcSizes: [1000, 500],
-							sizes: '100vw',
-							imgType: 'png',
-							media: '(max-width: 979px)',
-						},
-					]}
-					fallback={'subscriptionGuardianWeeklyHeroPackShot'}
-					fallbackSize={550}
-					altText=""
-					fallbackImgType="png"
-				/>
-			)}
+		<div css={weeklyDigitalContainer}>
+			<GridImage
+				gridId={'subscriptionGuardianWeeklyDigitalHero_16x9'}
+				srcSizes={[2000]}
+				sizes="453px"
+				imgType="png"
+				altText="Illustration of The Guardian Weekly Subscription"
+			/>
 		</div>
 	);
 }

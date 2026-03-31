@@ -1,4 +1,4 @@
-import { css } from '@emotion/react';
+import type { SerializedStyles } from '@emotion/react';
 import {
 	LinkButton,
 	SvgArrowDownStraight,
@@ -14,8 +14,6 @@ import {
 	heroParagraph,
 	heroTitle,
 	printHeroCssOverrides,
-	weeklyDigitalContainerCssOverrides,
-	weeklyDigitalHeroCssOverrides,
 } from './HeroHeaderStyles';
 
 export default function HeroHeader({
@@ -26,7 +24,7 @@ export default function HeroHeader({
 	ctaText,
 	ctaLink,
 	onClick,
-	enableWeeklyDigital,
+	cssOverrides,
 }: {
 	title: JSX.Element | string;
 	description?: JSX.Element | string;
@@ -35,22 +33,15 @@ export default function HeroHeader({
 	onClick: () => void;
 	heroImage: ReactElement<GridImg> | ReactElement<GridPictureProp>;
 	roundel?: JSX.Element | string;
-	enableWeeklyDigital?: boolean;
+	cssOverrides?: SerializedStyles;
 }) {
 	return (
-		<CentredContainer
-			cssOverrides={
-				enableWeeklyDigital ? weeklyDigitalContainerCssOverrides : undefined
-			}
-		>
+		<CentredContainer cssOverrides={cssOverrides}>
 			{roundel}
 			<Hero
 				image={heroImage}
 				hideRoundelBelow="mobileMedium"
-				cssOverrides={[
-					printHeroCssOverrides,
-					enableWeeklyDigital ? weeklyDigitalHeroCssOverrides : css``,
-				]}
+				cssOverrides={[printHeroCssOverrides]}
 			>
 				<section css={heroCopy}>
 					<h2 css={heroTitle}>{title}</h2>

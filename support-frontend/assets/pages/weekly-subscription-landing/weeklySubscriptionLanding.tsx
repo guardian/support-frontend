@@ -22,7 +22,6 @@ import headerWithCountrySwitcherContainer from 'components/headers/header/header
 import Block from 'components/page/block';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PromoTermsProvider } from 'contexts/PromoTermsContext';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import {
 	getGlobal,
 	getProductPrices,
@@ -41,15 +40,14 @@ import { renderPage } from 'helpers/rendering/render';
 import { routes } from 'helpers/urls/routes';
 import getPlanData from 'pages/paper-subscription-landing/planData';
 import { GuardianWeeklyFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
-import Benefits from './components/content/benefits';
-import GiftBenefits from './components/content/giftBenefits';
+import WeeklyGiftBenefits from './components/content/weeklyGiftBenefits';
+import { WeeklyAlternativeSubs } from './components/weeklyAlternativeSubs';
 import { WeeklyBenefits } from './components/weeklyBenefits';
 import { WeeklyCards } from './components/weeklyCards';
 import WeeklyDigitalHero from './components/WeeklyDigitalHero';
-import { WeeklyGiftStudentSubs } from './components/weeklyGiftStudentSubs';
-import { WeeklyHero } from './components/weeklyHero';
+import { WeeklyGiftHero } from './components/weeklyGiftHero';
+import WeeklyGiftProductPrices from './components/weeklyGiftProductPrices';
 import { WeeklyPriceInfo } from './components/weeklyPriceInfo';
-import WeeklyProductPrices from './components/weeklyProductPrices';
 
 const weeklySpacing = css`
 	div {
@@ -70,8 +68,6 @@ const weeklyDigitalSpacing = css`
 		width: calc(100% - 64px);
 	}
 `;
-
-const { enableWeeklyDigital: enableWeeklyDigitalFlag } = getFeatureFlags();
 
 export type WeeklyLandingPageProps = {
 	countryId: IsoCountry;
@@ -118,8 +114,6 @@ export function WeeklyLandingPage({
 		countryGroupId === 'International' ? RestOfWorld : Domestic;
 	const planData = getPlanData('NoProductOptions', fulfilmentOption);
 
-	const enableWeeklyDigital = enableWeeklyDigitalFlag && !orderIsAGift;
-
 	return (
 		<PromoTermsProvider>
 			<PageScaffold
@@ -130,16 +124,31 @@ export function WeeklyLandingPage({
 						productPrices={productPrices}
 						orderIsAGift={!!orderIsAGift}
 						country={countryId}
-						enableWeeklyDigital={enableWeeklyDigital}
 					/>
 				}
 			>
-				{enableWeeklyDigital ? (
+				{orderIsAGift ? (
 					<>
-						<WeeklyDigitalHero
-							promotion={promotion}
-							enableWeeklyDigital={enableWeeklyDigital}
-						/>
+						<WeeklyGiftHero promotionCopy={promotion} />
+						<FullWidthContainer>
+							<CentredContainer cssOverrides={weeklySpacing}>
+								<Block>
+									<WeeklyGiftBenefits />
+								</Block>
+							</CentredContainer>
+						</FullWidthContainer>
+						<FullWidthContainer theme="dark" hasOverlap>
+							<CentredContainer>
+								<WeeklyGiftProductPrices
+									countryId={countryId}
+									productPrices={productPrices}
+								/>
+							</CentredContainer>
+						</FullWidthContainer>
+					</>
+				) : (
+					<>
+						<WeeklyDigitalHero promotion={promotion} />
 						<CentredContainer cssOverrides={weeklyDigitalSpacing}>
 							<WeeklyCards
 								countryId={countryId}
@@ -149,34 +158,10 @@ export function WeeklyLandingPage({
 							<WeeklyPriceInfo />
 						</CentredContainer>
 					</>
-				) : (
-					<>
-						<WeeklyHero
-							isGift={orderIsAGift}
-							promotionCopy={promotion}
-							countryGroupId={countryGroupId}
-							enableWeeklyDigital={enableWeeklyDigital}
-						/>
-						<FullWidthContainer>
-							<CentredContainer cssOverrides={weeklySpacing}>
-								<Block>{orderIsAGift ? <GiftBenefits /> : <Benefits />}</Block>
-							</CentredContainer>
-						</FullWidthContainer>
-						<FullWidthContainer theme="dark" hasOverlap>
-							<CentredContainer>
-								<WeeklyProductPrices
-									countryId={countryId}
-									productPrices={productPrices}
-									orderIsAGift={orderIsAGift}
-								/>
-							</CentredContainer>
-						</FullWidthContainer>
-					</>
 				)}
-				<WeeklyGiftStudentSubs
+				<WeeklyAlternativeSubs
 					countryGroupId={countryGroupId}
 					orderIsAGift={orderIsAGift}
-					enableWeeklyDigital={enableWeeklyDigital}
 				/>
 			</PageScaffold>
 		</PromoTermsProvider>

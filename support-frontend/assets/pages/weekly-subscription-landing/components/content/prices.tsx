@@ -11,11 +11,6 @@ import type { Product } from 'components/product/productOption';
 import ProductOption from 'components/product/productOption';
 import { WeeklyPriceInfo } from '../weeklyPriceInfo';
 
-type PropTypes = {
-	orderIsAGift: boolean;
-	products: Product[];
-};
-
 const pricesSection = css`
 	padding: 0 ${space[3]}px ${space[12]}px;
 	color: ${neutral[100]};
@@ -71,13 +66,11 @@ const pricesSubHeadline = css`
 	padding-bottom: ${space[2]}px;
 `;
 
-function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
+function Prices({ products }: { products: Product[] }): JSX.Element {
 	return (
 		<section css={pricesSection} id="subscribe">
 			<h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>
-			<p css={pricesSubHeadline}>
-				{orderIsAGift ? 'Select a gift period' : "Choose how you'd like to pay"}
-			</p>
+			<p css={pricesSubHeadline}>Select a gift period</p>
 			<FlexContainer cssOverrides={priceBoxes}>
 				{products.map((product) => (
 					<ProductOption
@@ -97,7 +90,7 @@ function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
 					/>
 				))}
 			</FlexContainer>
-			<WeeklyPriceInfo isGift={orderIsAGift} showGift={true} />
+			<WeeklyPriceInfo isGift={true} showGift={true} />
 		</section>
 	);
 }

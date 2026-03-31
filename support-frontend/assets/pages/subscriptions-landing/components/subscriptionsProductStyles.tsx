@@ -64,11 +64,6 @@ export const subscriptionsImageContainer = css`
 		width: 50%;
 	}
 `;
-export const weeklyDigitalSubscriptionsImageContainer = css`
-	${from.tablet} {
-		align-self: center;
-	}
-`;
 
 export const subscriptionsImageContainerFeature = css`
 	padding: 10px 10px 0 10px;
