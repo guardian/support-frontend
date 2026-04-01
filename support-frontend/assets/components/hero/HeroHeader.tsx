@@ -40,6 +40,7 @@ export default function HeroHeader({
 	roundel?: JSX.Element | string;
 	cssOverrides?: SerializedStyles;
 }) {
+	const containsHashSelector = ctaLink.includes('#');
 	return (
 		<CentredContainer cssOverrides={cssOverrides}>
 			{roundel}
@@ -55,15 +56,18 @@ export default function HeroHeader({
 					<LinkButton
 						onClick={() => {
 							onClick();
-							scrollTo({
-								top: document.querySelector(ctaLink)?.getBoundingClientRect()
-									.top,
-								behavior: 'smooth',
-							});
+							if (containsHashSelector) {
+								scrollTo({
+									top: document.querySelector(ctaLink)?.getBoundingClientRect()
+										.top,
+									behavior: 'smooth',
+								});
+							}
 						}}
 						priority="tertiary"
 						iconSide="right"
 						icon={ctaIcon}
+						href={ctaLink}
 						theme={themeButtonBrandAlt}
 					>
 						{ctaText}
