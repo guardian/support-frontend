@@ -12,7 +12,7 @@ export const weeklySubscriptionProductCardStyle = css`
 			align-self: center;
 		}
 	}
-	${from.desktop} {
+	${from.tablet} {
 		background-color: #cadbe8;
 	}
 `;
