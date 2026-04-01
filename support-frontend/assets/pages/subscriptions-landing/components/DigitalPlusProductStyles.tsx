@@ -20,7 +20,7 @@ export const subscriptionsProductContainer = css`
 	}
 
 	${from.wide} {
-		margin: 0 auto;
+		margin: ${space[5]}px auto;
 	}
 `;
 

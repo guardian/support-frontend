@@ -1,5 +1,11 @@
 import { css } from '@emotion/react';
-import { from, neutral, palette, until } from '@guardian/source/foundations';
+import {
+	from,
+	neutral,
+	palette,
+	space,
+	until,
+} from '@guardian/source/foundations';
 
 export const weeklySubscriptionProductCardStyle = css`
 	color: ${neutral[0]};
@@ -19,8 +25,10 @@ export const weeklySubscriptionProductCardStyle = css`
 		}
 	}
 	${from.desktop} {
-		margin: 10px auto;
-		width: calc(100% - 20px);
+		width: calc(100% - ${space[5]}px);
+	}
+	${from.wide} {
+		width: 100%;
 	}
 `;
 
@@ -32,7 +40,9 @@ export const paperSubscriptionProductCardStyle = css`
 		}
 	}
 	${from.desktop} {
-		margin: 20px 10px auto 10px;
-		width: calc(100% - 20px);
+		width: calc(100% - ${space[5]}px);
+	}
+	${from.wide} {
+		width: 100%;
 	}
 `;
