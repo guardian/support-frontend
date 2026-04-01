@@ -30,7 +30,7 @@ export default function PaperPackShots(): React.ReactElement<GridPictureProp> {
 			]}
 			fallback={`newspaperLandingHeroDesktop`}
 			fallbackSize={2000}
-			altText="A collection of Guardian Weekly magazines"
+			altText="Guardian Newspaper Contents"
 		/>
 	);
 }
