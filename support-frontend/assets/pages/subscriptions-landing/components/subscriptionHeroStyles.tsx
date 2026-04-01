@@ -21,24 +21,14 @@ export const subscriptionsProductContainer = css`
 		color: white;
 	}
 
-	${from.desktop} {
-		margin: 20px auto;
-		width: calc(100% - 40px);
-		min-height: 0;
-	}
-
-	${from.mobileLandscape} {
-		width: calc(100% - 20px);
-	}
-
 	&:first-child {
 		margin-top: 0;
 	}
 
-	&:nth-child(odd) {
-		${from.tablet} {
-			flex-direction: row-reverse;
-		}
+	${from.desktop} {
+		margin: 20px auto;
+		width: calc(100% - 40px);
+		min-height: 0;
 	}
 `;
 
