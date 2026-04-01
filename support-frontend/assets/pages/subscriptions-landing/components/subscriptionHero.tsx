@@ -1,4 +1,5 @@
 import 'helpers/types/option';
+import { SvgArrowRightStraight } from '@guardian/source/react-components';
 import HeroHeader from 'components/hero/HeroHeader';
 import type {
 	ProductButton,
@@ -36,6 +37,7 @@ export default function SubscriptionHero({
 					ctaLink={button.link}
 					onClick={button.analyticsTracking}
 					cssOverrides={cssOverrides}
+					ctaIcon={<SvgArrowRightStraight />}
 				/>
 			)}
 		</div>

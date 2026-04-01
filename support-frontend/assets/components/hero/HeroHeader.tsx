@@ -23,6 +23,7 @@ export default function HeroHeader({
 	heroImage,
 	ctaText,
 	ctaLink,
+	ctaIcon = <SvgArrowDownStraight />,
 	onClick,
 	cssOverrides,
 }: {
@@ -30,6 +31,7 @@ export default function HeroHeader({
 	description?: JSX.Element | string;
 	ctaText: string;
 	ctaLink: string;
+	ctaIcon?: JSX.Element;
 	onClick: () => void;
 	heroImage: ReactElement<GridImg> | ReactElement<GridPictureProp>;
 	roundel?: JSX.Element | string;
@@ -57,7 +59,7 @@ export default function HeroHeader({
 						}}
 						priority="tertiary"
 						iconSide="right"
-						icon={<SvgArrowDownStraight />}
+						icon={ctaIcon}
 						theme={themeButtonBrandAlt}
 					>
 						{ctaText}
