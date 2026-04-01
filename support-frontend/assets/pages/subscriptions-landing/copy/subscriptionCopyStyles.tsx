@@ -23,10 +23,11 @@ export const paperSubscriptionProductCardStyle = css`
 	${from.tablet} {
 		div {
 			flex-direction: row-reverse;
+			margin-bottom: 0;
 		}
 	}
 	${from.desktop} {
-		margin: 10px 10px 0;
+		margin: 20px auto;
 		width: calc(100% - 20px);
 	}
 `;
