@@ -8,12 +8,14 @@ export const weeklySubscriptionProductCardStyle = css`
 		background-color: #cadbe8;
 	}
 	${from.tablet} {
+		background-color: #cadbe8;
 		div:nth-child(2) {
 			align-self: center;
 		}
 	}
-	${from.tablet} {
-		background-color: #cadbe8;
+	${from.desktop} {
+		margin: 10px auto;
+		width: calc(100% - 20px);
 	}
 `;
 
@@ -22,5 +24,9 @@ export const paperSubscriptionProductCardStyle = css`
 		div {
 			flex-direction: row-reverse;
 		}
+	}
+	${from.desktop} {
+		margin: 10px auto;
+		width: calc(100% - 20px);
 	}
 `;
