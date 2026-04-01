@@ -15,21 +15,21 @@ export default function WeeklyPackShots(): React.ReactElement<GridPictureProp> {
 				},
 				{
 					gridId: `subscriptionGuardianWeeklyDigitalHero_1x1`,
-					srcSizes: [2000],
+					srcSizes: [1000],
 					sizes: '340px',
 					imgType: 'png',
 					media: '(max-width: 979px)',
 				},
 				{
 					gridId: `subscriptionGuardianWeeklyDigitalHero_4x3`,
-					srcSizes: [2000],
+					srcSizes: [1000],
 					sizes: '435px',
 					imgType: 'png',
 					media: '(min-width: 980px)',
 				},
 			]}
 			fallback={`subscriptionGuardianWeeklyDigitalHero_4x3`}
-			fallbackSize={2000}
+			fallbackSize={1000}
 			altText="A collection of Guardian Weekly magazines"
 		/>
 	);
