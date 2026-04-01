@@ -52,7 +52,7 @@ export function StudentLandingPageInstitution({
 					universityBadge={
 						<p css={universityBadge}>
 							<img
-								src="https://uploads.guim.co.uk/2026/03/10/UTSLogo.svg"
+								src={studentLandingPageVariant.institution.logoUrl}
 								alt="logo"
 							/>{' '}
 							<span>Special offer for UTS students</span>
