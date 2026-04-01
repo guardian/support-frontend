@@ -15,21 +15,21 @@ export default function PaperPackShots(): React.ReactElement<GridPictureProp> {
 				},
 				{
 					gridId: `newspaperLandingHeroTablet`,
-					srcSizes: [2000],
+					srcSizes: [1000],
 					sizes: '340px',
 					imgType: 'png',
 					media: '(max-width: 979px)',
 				},
 				{
 					gridId: `newspaperLandingHeroDesktop`,
-					srcSizes: [2000],
+					srcSizes: [1000],
 					sizes: '435px',
 					imgType: 'png',
 					media: '(min-width: 980px)',
 				},
 			]}
 			fallback={`newspaperLandingHeroDesktop`}
-			fallbackSize={2000}
+			fallbackSize={1000}
 			altText="Guardian Newspaper Contents"
 		/>
 	);
