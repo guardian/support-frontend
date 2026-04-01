@@ -13,3 +13,9 @@ export const weeklySubscriptionProductCardStyle = css`
 		background-color: #cadbe8;
 	}
 `;
+
+export const paperSubscriptionProductCardStyle = css`
+	div {
+		flex-direction: row-reverse;
+	}
+`;

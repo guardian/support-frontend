@@ -1,4 +1,3 @@
-import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/utils';
 import type {
 	ButtonPriority,
@@ -33,7 +32,10 @@ import {
 	paperSubsUrl,
 } from 'helpers/urls/routes';
 import type { PriceCopy, PricingCopy } from '../subscriptionsLandingProps';
-import { weeklySubscriptionProductCardStyle } from './subscriptionCopyStyles';
+import {
+	paperSubscriptionProductCardStyle,
+	weeklySubscriptionProductCardStyle,
+} from './subscriptionCopyStyles';
 
 // types
 export type ProductButton = {
@@ -232,7 +234,7 @@ const paper = (
 		productImage: <PaperPackShot />,
 		packshotImage: <PaperPackShots />,
 		offer: priceCopy.discountCopy,
-		cssOverrides: css``,
+		cssOverrides: paperSubscriptionProductCardStyle,
 	};
 };
 
