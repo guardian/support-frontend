@@ -28,7 +28,7 @@ libraryDependencies ++= Seq(
   "com.gu" %% "identity-test-users" % "0.10.2",
   "com.google.guava" % "guava" % "32.1.1-jre",
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
-  "com.gu.play-googleauth" %% "play-v30" % "8.0.1",
+  "com.gu.play-googleauth" %% "play-v30" % "36.0.0-PREVIEW.twupgrade-jjwt.2026-04-01T0945.74def620",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
   "com.squareup.okhttp3" % "okhttp" % "4.11.0",
   "com.gocardless" % "gocardless-pro" % "2.10.0",
