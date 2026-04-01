@@ -15,12 +15,9 @@ export const weeklySubscriptionProductCardStyle = css`
 `;
 
 export const paperSubscriptionProductCardStyle = css`
-	div {
-		flex-direction: row-reverse;
-	}
 	${from.tablet} {
-		div:nth-child(2) {
-			align-self: center;
+		div {
+			flex-direction: row-reverse;
 		}
 	}
 `;
