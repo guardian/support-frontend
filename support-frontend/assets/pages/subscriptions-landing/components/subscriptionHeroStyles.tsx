@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, neutral, palette } from '@guardian/source/foundations';
+import { from, neutral, palette, until } from '@guardian/source/foundations';
 
 export const subscriptionsProductContainer = css`
 	position: relative;
@@ -19,6 +19,9 @@ export const subscriptionsProductContainer = css`
 	a {
 		background-color: black;
 		color: white;
+		${until.tablet} {
+			width: 100%;
+		}
 	}
 
 	&:first-child {
