@@ -1977,7 +1977,7 @@ object PaperValidation extends SafeLogging {
     "WD3",
     "WD5",
     "WD6",
-    "WD7"
+    "WD7",
   )
 
 }
