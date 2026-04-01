@@ -26,7 +26,7 @@ export const paperSubscriptionProductCardStyle = css`
 		}
 	}
 	${from.desktop} {
-		margin: 10px auto;
+		margin: 10px 10px 0;
 		width: calc(100% - 20px);
 	}
 `;
