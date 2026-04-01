@@ -12,12 +12,14 @@ import Hero from 'components/page/hero';
 import {
 	heroCopy,
 	heroParagraph,
+	heroSubTitle,
 	heroTitle,
 	printHeroCssOverrides,
 } from './HeroHeaderStyles';
 
 export default function HeroHeader({
 	title,
+	subTitle,
 	description,
 	roundel,
 	heroImage,
@@ -28,6 +30,7 @@ export default function HeroHeader({
 	cssOverrides,
 }: {
 	title: JSX.Element | string;
+	subTitle?: JSX.Element | string;
 	description?: JSX.Element | string;
 	ctaText: string;
 	ctaLink: string;
@@ -46,7 +49,8 @@ export default function HeroHeader({
 				cssOverrides={[printHeroCssOverrides]}
 			>
 				<section css={heroCopy}>
-					<h2 css={heroTitle}>{title}</h2>
+					<h2 css={heroTitle(!!subTitle)}>{title}</h2>
+					{subTitle && <p css={heroSubTitle}>{subTitle}</p>}
 					{description && <p css={heroParagraph}>{description}</p>}
 					<LinkButton
 						onClick={() => {

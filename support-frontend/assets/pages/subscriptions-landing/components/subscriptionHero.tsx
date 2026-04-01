@@ -15,11 +15,11 @@ export default function SubscriptionHero({
 	title,
 	description,
 	buttons,
+	subtitle,
 	packshotImage = undefined,
 	cssOverrides,
 }: ProductCopy & { isFeature: boolean }): JSX.Element {
 	const button = buttons[0] as ProductButton;
-	console.log('*** packshotImage', packshotImage);
 	return (
 		<div
 			css={[
@@ -33,6 +33,7 @@ export default function SubscriptionHero({
 					heroImage={packshotImage}
 					title={title}
 					description={description}
+					subTitle={subtitle}
 					ctaText={button.ctaButtonText}
 					ctaLink={button.link}
 					onClick={button.analyticsTracking}
