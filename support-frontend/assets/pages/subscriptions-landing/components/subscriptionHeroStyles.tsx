@@ -1,12 +1,17 @@
 import { css } from '@emotion/react';
-import { from, neutral, palette, until } from '@guardian/source/foundations';
+import {
+	from,
+	neutral,
+	palette,
+	space,
+	until,
+} from '@guardian/source/foundations';
 
 export const subscriptionsProductContainer = css`
 	position: relative;
 	z-index: 1;
 	display: flex;
 	max-width: 1290px;
-	margin-top: 40px;
 	background-color: ${neutral[97]};
 
 	align-items: stretch;
@@ -28,9 +33,13 @@ export const subscriptionsProductContainer = css`
 		margin-top: 0;
 	}
 
+	margin-top: ${space[4]}px;
+	${from.tablet} {
+		margin-top: ${space[5]}px;
+	}
 	${from.desktop} {
-		margin: 20px auto;
-		width: calc(100% - 40px);
+		margin: ${space[5]}px auto;
+		width: calc(100% - ${space[10]}px);
 		min-height: 0;
 	}
 `;
