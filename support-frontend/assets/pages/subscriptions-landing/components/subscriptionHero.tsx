@@ -37,7 +37,6 @@ export default function SubscriptionHero({
 					ctaText={button.ctaButtonText}
 					ctaLink={button.link}
 					onClick={button.analyticsTracking}
-					cssOverrides={cssOverrides}
 					ctaIcon={<SvgArrowRightStraight />}
 				/>
 			)}
