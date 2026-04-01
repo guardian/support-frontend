@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
-import { from, neutral } from '@guardian/source/foundations';
+import { from, neutral, palette } from '@guardian/source/foundations';
 
 export const weeklySubscriptionProductCardStyle = css`
 	color: ${neutral[0]};
-	background-color: #cadbe8;
+	background-color: ${palette.brandAlt[400]};
 	div {
 		background-color: #cadbe8;
 	}
@@ -11,6 +11,9 @@ export const weeklySubscriptionProductCardStyle = css`
 		div:nth-child(2) {
 			align-self: center;
 		}
+	}
+	${from.desktop} {
+		background-color: #cadbe8;
 	}
 `;
 
