@@ -98,9 +98,20 @@ interface RegionTargeting {
 	targetedCountryGroups: CountryGroupId[];
 }
 
+type Methodology =
+	| { name: 'ABTest'; testName?: string }
+	| {
+			name: 'EpsilonGreedyBandit';
+			epsilon: number;
+			testName?: string;
+			sampleCount?: number;
+	  }
+	| { name: 'Roulette'; testName?: string; sampleCount?: number };
+
 export interface LandingPageTest {
 	name: string;
 	status: 'Live' | 'Draft';
 	regionTargeting?: RegionTargeting;
 	variants: LandingPageVariant[];
+	methodologies?: Methodology[];
 }
