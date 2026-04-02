@@ -5,6 +5,7 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
+import { getSanitisedHtml } from 'helpers/utilities/utilities';
 import type { StudentDiscount } from '../helpers/discountDetails';
 import StudentHeader from './StudentHeader';
 import { universityBadge } from './StudentHeaderStyles';
@@ -25,6 +26,16 @@ export function StudentLandingPageInstitution({
 	ratePlanKey: ActiveRatePlanKey;
 	studentDiscount: StudentDiscount;
 }) {
+	const sanitisedHTMLHeading = getSanitisedHtml(
+		studentLandingPageVariant.heading,
+	);
+	const sanitisedHTMLSubHeading = getSanitisedHtml(
+		studentLandingPageVariant.subheading,
+	);
+	const sanitisedHTMLInstAcronym = getSanitisedHtml(
+		studentLandingPageVariant.institution.acronym,
+	);
+
 	return (
 		<StudentLandingPage
 			supportRegionId={supportRegionId}
@@ -35,12 +46,10 @@ export function StudentLandingPageInstitution({
 					ratePlanKey={ratePlanKey}
 					landingPageVariant={landingPageVariant}
 					studentDiscount={studentDiscount}
-					headingCopy={studentLandingPageVariant.heading}
+					headingCopy={<>{sanitisedHTMLHeading}</>}
 					subheadingCopy={
 						<>
-							For a limited time, students with a valid UTS email address can
-							unlock the premium experience of Guardian journalism, including
-							unmetered app access
+							{sanitisedHTMLSubHeading}
 							{studentDiscount.promoDuration && (
 								<>
 									, <strong>free for {studentDiscount.promoDuration}</strong>
@@ -55,7 +64,7 @@ export function StudentLandingPageInstitution({
 								src={studentLandingPageVariant.institution.logoUrl}
 								alt="logo"
 							/>{' '}
-							<span>Special offer for UTS students</span>
+							<span>Special offer for {sanitisedHTMLInstAcronym} students</span>
 						</p>
 					}
 					heroImagePrefix="AuStudentLandingHero"
