@@ -34,7 +34,7 @@ jobs:
         uses: ./.github/actions/setup-node-and-install
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.SUPPORT_WORKERS_IT_TEST_ROLE_ARN }}
           aws-region: eu-west-1
