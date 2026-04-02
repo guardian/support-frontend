@@ -9,14 +9,18 @@ export const subscriptionsProductContainer = css`
 	max-width: 1290px;
 	margin: 0 ${space[3]}px;
 	flex-grow: 1;
-	margin-top: 40px;
+	margin-top: ${space[4]}px;
+
+	${from.tablet} {
+		margin-top: ${space[5]}px;
+	}
 
 	${from.desktop} {
 		flex-direction: row-reverse;
 	}
 
 	${from.wide} {
-		margin: 0 auto;
+		margin: ${space[5]}px auto;
 	}
 `;
 

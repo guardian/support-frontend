@@ -4,6 +4,7 @@ import {
 	article17,
 	from,
 	headlineBold28,
+	headlineLight24,
 	palette,
 	space,
 	until,
@@ -27,13 +28,14 @@ export const heroCopy = css`
 	padding: ${space[3]}px ${space[5]}px ${space[10]}px;
 `;
 
-export const heroTitle = css`
+export const heroTitle = (skipMargin: boolean = false) => css`
 	${headlineBold28};
-	margin-bottom: ${space[3]}px;
+	margin-bottom: ${skipMargin ? 0 : space[3]}px;
+`;
 
-	${from.desktop} {
-		${headlineBold28};
-	}
+export const heroSubTitle = css`
+	${headlineLight24};
+	margin-bottom: ${space[3]}px;
 `;
 
 export const heroParagraph = css`

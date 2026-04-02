@@ -2,8 +2,8 @@ import { getSubscriptionCopy } from '../copy/subscriptionCopy';
 import type { SubscriptionsLandingProps } from '../subscriptionsLandingProps';
 import DigitalPlusProduct from './DigitalPlusProduct';
 import FeatureHeader from './featureHeader';
+import SubscriptionHero from './subscriptionHero';
 import { subscriptionsProductContainerStyle } from './subscriptionsLandingContentStyles';
-import SubscriptionsProduct from './subscriptionsProduct';
 
 const isFeature = (index: number) => index === 0 || index === 2; // make the first and third card a feature
 
@@ -45,7 +45,7 @@ function SubscriptionsLandingContent({
 					product.digitalPlusLayout === true ? (
 						<DigitalPlusProduct {...product} />
 					) : (
-						<SubscriptionsProduct
+						<SubscriptionHero
 							title={product.title}
 							subtitle={
 								validBlackFridayProduct(isBlackFriday, product.title)
@@ -54,6 +54,7 @@ function SubscriptionsLandingContent({
 							}
 							description={product.description}
 							productImage={product.productImage}
+							packshotImage={product.packshotImage}
 							buttons={product.buttons}
 							offer={
 								validBlackFridayProduct(isBlackFriday, product.title)
