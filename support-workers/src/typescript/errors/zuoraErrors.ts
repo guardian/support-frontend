@@ -18,6 +18,7 @@ const transactionDeclinedMessages = [
 	'Transaction declined.402 - [card_error/card_declined/revocation_of_all_authorizations] Your card was declined.',
 	'Transaction declined.402 - [card_error/authentication_required/authentication_required] Your card was declined. This transaction requires authentication.',
 	'Transaction declined.402 - [card_error/card_declined/fraudulent] Your card was declined.',
+	'Transaction declined.402 - [card_error/card_declined/reenter_transaction] Your card was declined.',
 	'Transaction declined.402 - [card_error/expired_card/expired_card] Your card has expired.',
 	'Transaction declined.402 - [card_error/processing_error/processing_error] An error occurred while processing your card. Try again in a little bit.',
 	'Transaction declined.10417 - Instruct the customer to retry the transaction using an alternative payment method from the customers PayPal wallet.',
