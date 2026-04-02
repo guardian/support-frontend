@@ -16,8 +16,8 @@ libraryDependencies ++= Seq(
   "software.amazon.awssdk" % "cloudwatch" % awsClientVersion2,
   "software.amazon.awssdk" % "sqs" % awsClientVersion2,
   "com.amazon.pay" % "amazon-pay-java-sdk" % "3.6.2",
-  "com.beachape" %% "enumeratum" % "1.7.3",
-  "com.beachape" %% "enumeratum-circe" % "1.7.3",
+  "com.beachape" %% "enumeratum" % "1.7.6",
+  "com.beachape" %% "enumeratum-circe" % "1.7.5",
   "com.dripower" %% "play-circe" % playCirceVersion,
   "org.typelevel" %% "simulacrum" % "1.0.1",
   "com.stripe" % "stripe-java" % stripeVersion,
@@ -61,7 +61,7 @@ libraryDependencies ++= Seq(
     */
   "com.sun.xml.bind" % "jaxb-core" % "2.3.0.1",
   "javax.xml.bind" % "jaxb-api" % "2.3.1",
-  "com.sun.xml.bind" % "jaxb-impl" % "2.3.1",
+  "com.sun.xml.bind" % "jaxb-impl" % "2.3.9",
 )
 
 excludeDependencies ++= Seq(
