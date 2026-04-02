@@ -5,6 +5,7 @@ import {
 	RouterProvider,
 	useRouteLoaderData,
 } from 'react-router-dom';
+import { ClientSideErrorPage } from 'components/ClientSideError';
 import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
 import { ObserverHoldingContent } from 'components/serverSideRendered/observerHoldingContent';
 import { getStudentLandingPageTestConfig } from 'helpers/abTests/studentLandingPageAbTests';
@@ -77,6 +78,7 @@ const router = createBrowserRouter([
 		id: 'root',
 		loader: rootLoader,
 		element: <RootLayout />,
+		errorElement: <ClientSideErrorPage />,
 		HydrateFallback: GuardianOrObserverHoldingContent,
 		children: [
 			...Object.values(SupportRegionId).flatMap((supportRegionId) => [
