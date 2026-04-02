@@ -55,7 +55,8 @@ function addQueryParamsToURL(
 	const featureFlagParam = featureFlag
 		? `${allParams.length > 0 ? '&' : ''}${featureFlag}`
 		: '';
-	return `${baseUrl}?${allParams}${featureFlagParam}`;
+	const url = `${baseUrl}?${allParams}${featureFlagParam}`;
+	return url.replace(/\?$/, ''); // removes ? when no params
 }
 
 function getPaperOrigin(productOptions: ProductOptions): string {

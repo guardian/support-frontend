@@ -1,5 +1,4 @@
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { featureFlagEnableWeeklyDigital } from 'helpers/featureFlags';
 import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
@@ -66,7 +65,6 @@ export const submitForm = async ({
 	promotion,
 	contributionAmount,
 	weeklyGiftDeliveryDate,
-	enableWeeklyDigital,
 }: {
 	supportRegionId: SupportRegionId;
 	productKey: ActiveProductKey;
@@ -80,7 +78,6 @@ export const submitForm = async ({
 	promotion: Promotion | undefined;
 	contributionAmount: number | undefined;
 	weeklyGiftDeliveryDate?: Date;
-	enableWeeklyDigital?: boolean;
 }): Promise<string> => {
 	const personalData = extractPersonalDataFromForm(formData);
 	const giftRecipient = extractGiftRecipientDataFromForm(formData);
@@ -181,7 +178,6 @@ export const submitForm = async ({
 			paymentRequest,
 			accountNumber: redactedAccountNumber,
 			weeklyGiftDeliveryDate,
-			enableWeeklyDigital,
 		});
 
 		// If Stripe hosted checkout, delete previously persisted form details
@@ -222,7 +218,6 @@ const processSubscription = async ({
 	paymentRequest,
 	accountNumber,
 	weeklyGiftDeliveryDate,
-	enableWeeklyDigital,
 }: {
 	personalData: FormPersonalFields;
 	appliedPromotion?: AppliedPromotion;
@@ -235,7 +230,6 @@ const processSubscription = async ({
 	deliveryDate?: Date;
 	accountNumber?: string;
 	weeklyGiftDeliveryDate?: Date;
-	enableWeeklyDigital?: boolean;
 }) => {
 	const createSubscriptionResult = await createSubscription(paymentRequest);
 
@@ -255,7 +249,6 @@ const processSubscription = async ({
 			supportRegionId,
 			accountNumber,
 			weeklyGiftDeliveryDate,
-			enableWeeklyDigital,
 		);
 	} else {
 		console.error(
@@ -283,7 +276,6 @@ const buildThankYouPageUrl = (
 	supportRegionId: SupportRegionId,
 	accountNumber?: string,
 	weeklyGiftDeliveryDate?: Date,
-	enableWeeklyDigital?: boolean,
 ) => {
 	const order = {
 		firstName: personalData.firstName,
@@ -301,7 +293,5 @@ const buildThankYouPageUrl = (
 	userType && thankYouUrlSearchParams.set('userType', userType);
 	contributionAmount &&
 		thankYouUrlSearchParams.set('contribution', contributionAmount.toString());
-	return `/${supportRegionId}/thank-you?${thankYouUrlSearchParams.toString()}${
-		enableWeeklyDigital ? `&${featureFlagEnableWeeklyDigital}` : ''
-	}`;
+	return `/${supportRegionId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 };

@@ -28,7 +28,10 @@ import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
-import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import {
+	isGuardianWeeklyDigitalProduct,
+	isGuardianWeeklyGiftProduct,
+} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { textLink } from '../../../helpers/utilities/textLink';
 import { FinePrint } from './finePrint';
 import { FooterTsAndCs } from './footerTsAndCs';
@@ -101,11 +104,16 @@ function paperTsAndCs(
 }
 
 function weeklyTsAndCs(
-	isWeeklyGift?: boolean,
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
 	promotion?: Promotion,
 	deliveryDate?: Date,
-	isWeeklyDigital?: boolean,
 ): JSX.Element {
+	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
+	const isWeeklyDigital = isGuardianWeeklyDigitalProduct(
+		productKey,
+		ratePlanKey,
+	);
 	return (
 		<>
 			{isWeeklyGift && !promotion && (
@@ -148,7 +156,6 @@ export interface PaymentTsAndCsProps {
 	studentDiscount?: StudentDiscount;
 	promotion?: Promotion;
 	thresholdAmount?: number;
-	enableWeeklyDigital?: boolean;
 }
 export function PaymentTsAndCs({
 	productKey,
@@ -157,7 +164,6 @@ export function PaymentTsAndCs({
 	studentDiscount,
 	promotion,
 	thresholdAmount = 0,
-	enableWeeklyDigital,
 }: PaymentTsAndCsProps): JSX.Element {
 	// Display for AUS Students who are on a subscription basis
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
@@ -173,7 +179,6 @@ export function PaymentTsAndCs({
 		productKey,
 		ratePlanKey as ActivePaperProductOptions,
 	);
-	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 
 	if (isSundayOnlyNewsletterSubscription) {
 		return (
@@ -353,16 +358,16 @@ export function PaymentTsAndCs({
 		HomeDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
 		SubscriptionCard: paperTsAndCs('Collection', deliveryDate),
 		GuardianWeeklyDomestic: weeklyTsAndCs(
-			isWeeklyGift,
+			productKey,
+			ratePlanKey,
 			promotion,
 			deliveryDate,
-			enableWeeklyDigital,
 		),
 		GuardianWeeklyRestOfWorld: weeklyTsAndCs(
-			isWeeklyGift,
+			productKey,
+			ratePlanKey,
 			promotion,
 			deliveryDate,
-			enableWeeklyDigital,
 		),
 	};
 	return (

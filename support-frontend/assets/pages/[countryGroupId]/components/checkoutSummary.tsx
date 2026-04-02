@@ -55,7 +55,6 @@ type CheckoutSummaryProps = {
 	thresholdAmount: number;
 	backButtonOrigin: string;
 	backButtonPathOverride: string | null;
-	enableWeeklyDigital: boolean;
 	promotion?: Promotion;
 	forcedCountry?: string;
 	studentDiscount?: StudentDiscount;
@@ -75,7 +74,6 @@ export default function CheckoutSummary({
 	thresholdAmount,
 	backButtonOrigin,
 	backButtonPathOverride,
-	enableWeeklyDigital,
 	promotion,
 	forcedCountry,
 	studentDiscount,
@@ -173,7 +171,6 @@ export default function CheckoutSummary({
 			`/${supportRegionId}${backButtonPath}`,
 			promotion?.promoCode,
 			getPaperFulfilmentOption(productKey),
-			enableWeeklyDigital,
 		);
 
 	return (
@@ -220,7 +217,6 @@ export default function CheckoutSummary({
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
 							startDate={formatUserDate(weeklyDeliveryDate)}
-							enableWeeklyDigital={enableWeeklyDigital}
 						/>
 					}
 					tsAndCs={
@@ -236,7 +232,6 @@ export default function CheckoutSummary({
 									? weeklyDeliveryDate
 									: undefined
 							}
-							enableWeeklyDigital={enableWeeklyDigital}
 						/>
 					}
 					headerButton={
@@ -248,7 +243,6 @@ export default function CheckoutSummary({
 					supportRegionId={supportRegionId}
 					nudgeSettings={nudgeSettings}
 					landingPageSettings={landingPageSettings}
-					enableWeeklyDigital={enableWeeklyDigital}
 				/>
 			</BoxContents>
 		</Box>

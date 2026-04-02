@@ -8,7 +8,6 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import { observerThemeButton } from 'components/observer-layout/styles';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import { getPaypalClientId } from 'helpers/forms/payPal';
 import {
 	getStripeKeyForCountry,
@@ -32,7 +31,6 @@ import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { getOriginAndForceSubdomain } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import { getWeeklyDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
-import { isGuardianWeeklyDigitalProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
@@ -306,14 +304,6 @@ export function Checkout({
 		backButtonPathOverrideParam,
 	);
 
-	// ensure enableWeeklyDigital feature flag and Guardian Weekly Digital product purchased
-	const enableWeeklyDigital = isGuardianWeeklyDigitalProduct(
-		productKey,
-		ratePlanKey,
-	)
-		? getFeatureFlags().enableWeeklyDigital
-		: false;
-
 	return (
 		<ThemeProvider theme={theme}>
 			<Elements stripe={stripePromise} options={elementsOptions}>
@@ -335,7 +325,6 @@ export function Checkout({
 						nudgeSettings={nudgeSettings}
 						backButtonOrigin={backButtonOrigin}
 						backButtonPathOverride={backButtonPathOverride}
-						enableWeeklyDigital={enableWeeklyDigital}
 					/>
 
 					<CheckoutForm
@@ -359,7 +348,6 @@ export function Checkout({
 						setWeeklyDeliveryDate={setWeeklyDeliveryDate}
 						thresholdAmount={thresholdAmount}
 						studentDiscount={studentDiscount}
-						enableWeeklyDigital={enableWeeklyDigital}
 						paypalClientId={paypalClientId}
 					/>
 				</PageLayout>
