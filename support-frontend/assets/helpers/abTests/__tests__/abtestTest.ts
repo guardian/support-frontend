@@ -506,7 +506,7 @@ describe('init', () => {
 		it('does not assign to test if targetPage does not match', () => {
 			const abTests = {
 				t1: buildTest({
-					targetPage: '/us/contribute$',
+					targetPage: /\/us\/contribute$/,
 				}),
 			};
 
@@ -522,7 +522,7 @@ describe('init', () => {
 		it('assign to test if targetPage matches', () => {
 			const abTests = {
 				t1: buildTest({
-					targetPage: '/uk/contribute$',
+					targetPage: /\/uk\/contribute$/,
 				}),
 			};
 
@@ -543,8 +543,8 @@ describe('init', () => {
 
 			const abTests = {
 				t1: buildTest({
-					targetPage: '/uk/contribute$',
-					persistPage: '/uk/checkout$',
+					targetPage: /\/uk\/contribute$/,
+					persistPage: /\/uk\/checkout$/,
 				}),
 			};
 
@@ -565,8 +565,8 @@ describe('init', () => {
 
 			const abTests = {
 				t1: buildTest({
-					targetPage: '/uk/contribute$',
-					persistPage: '/uk/checkout$',
+					targetPage: /\/uk\/contribute$/,
+					persistPage: /\/uk\/checkout$/,
 				}),
 			};
 
