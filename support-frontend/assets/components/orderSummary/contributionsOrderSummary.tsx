@@ -33,6 +33,7 @@ import {
 	isContributionOnlyProduct,
 	isGuardianWeeklyDigitalProduct,
 	isGuardianWeeklyGiftProduct,
+	isGuardianWeeklyProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
@@ -237,7 +238,7 @@ export function ContributionsOrderSummary({
 		productKey,
 		ratePlanKey,
 	);
-	const isWeekly = isWeeklyGift || isWeeklyDigital;
+	const isWeekly = isGuardianWeeklyProduct(productKey);
 	return (
 		<div css={componentStyles}>
 			<div css={[summaryRow, rowSpacing, headingRow]}>
