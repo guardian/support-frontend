@@ -12,7 +12,8 @@
   "pnpm": {
     "overrides": {
       "@typescript-eslint/typescript-estree": "^8.46.2",
-      "flatted": "3.4.2"
+      "flatted": "3.4.2",
+      "picomatch@4.0.3": "4.0.4"
     }
   },
   "packageManager": "pnpm@10.28.2+sha256.afa99b0b4b3d11c1dad2b472f9318ae2c78673829749ded527f89f09071479a7"
