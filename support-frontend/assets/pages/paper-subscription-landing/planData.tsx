@@ -1,12 +1,14 @@
 import type { PrintFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { type PrintProductOptions } from '@modules/product/productOptions';
 import type { BenefitsCheckListData } from 'components/checkoutBenefits/benefitsCheckList';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import { isGuardianWeeklyDigitalProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import {
+	isGuardianWeeklyDigitalProduct,
+	isGuardianWeeklyGiftProduct,
+} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 
 interface Benefits {
 	label?: JSX.Element;
@@ -284,7 +286,6 @@ export default function getPlanData(
 const getPrintProductOptions = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	enableWeeklyDigital?: boolean,
 ): PrintProductOptions | undefined => {
 	switch (productKey) {
 		case 'HomeDelivery':
@@ -292,15 +293,18 @@ const getPrintProductOptions = (
 			return ratePlanKey as PrintProductOptions;
 		case 'GuardianWeeklyDomestic':
 		case 'GuardianWeeklyRestOfWorld':
-			return enableWeeklyDigital ? 'NoProductOptions' : undefined;
+			return isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+				? undefined
+				: 'NoProductOptions';
 		default:
 			return undefined;
 	}
 };
 const getPrintFulfilmentOptions = (
 	productKey: ActiveProductKey,
-	enableWeeklyDigital?: boolean,
+	ratePlanKey: ActiveRatePlanKey,
 ): PrintFulfilmentOptions | undefined => {
+	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 	switch (productKey) {
 		case 'HomeDelivery':
 		case 'NationalDelivery':
@@ -308,9 +312,9 @@ const getPrintFulfilmentOptions = (
 		case 'SubscriptionCard':
 			return 'Collection';
 		case 'GuardianWeeklyDomestic':
-			return enableWeeklyDigital ? 'Domestic' : undefined;
+			return isWeeklyGift ? undefined : 'Domestic';
 		case 'GuardianWeeklyRestOfWorld':
-			return enableWeeklyDigital ? 'RestOfWorld' : undefined;
+			return isWeeklyGift ? undefined : 'RestOfWorld';
 		default:
 			return undefined;
 	}
@@ -319,26 +323,17 @@ export function getPrintPlusDigitalBenefits(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): BenefitsCheckListData[] | undefined {
-	const enableWeeklyDigital = isGuardianWeeklyDigitalProduct(
+	const isWeeklyDigital = isGuardianWeeklyDigitalProduct(
 		productKey,
 		ratePlanKey,
-	)
-		? getFeatureFlags().enableWeeklyDigital
-		: false;
-
-	const printProductOptions = getPrintProductOptions(
-		productKey,
-		ratePlanKey,
-		enableWeeklyDigital,
 	);
+
+	const printProductOptions = getPrintProductOptions(productKey, ratePlanKey);
 	if (!printProductOptions) {
 		return undefined;
 	}
 
-	const fulfillmentOption = getPrintFulfilmentOptions(
-		productKey,
-		enableWeeklyDigital,
-	);
+	const fulfillmentOption = getPrintFulfilmentOptions(productKey, ratePlanKey);
 	if (!fulfillmentOption) {
 		return undefined;
 	}
@@ -346,7 +341,7 @@ export function getPrintPlusDigitalBenefits(
 	const ratePlanData = getPlanData(
 		printProductOptions,
 		fulfillmentOption,
-		enableWeeklyDigital,
+		isWeeklyDigital,
 	);
 	if (!ratePlanData) {
 		return undefined;

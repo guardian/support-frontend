@@ -36,3 +36,9 @@ EveryDayHomeDelivery.args = {
 	productKey: 'HomeDelivery',
 	ratePlanKey: 'EverydayPlus',
 };
+
+export const WeeklyDigitalMonthly = Template.bind({});
+WeeklyDigitalMonthly.args = {
+	productKey: 'GuardianWeeklyDomestic',
+	ratePlanKey: 'MonthlyPlus',
+};

@@ -167,16 +167,15 @@ export function ThankYouComponent({
 	const [feedbackSurveyCompleted, setFeedbackSurveyCompleted] =
 		useState<boolean>(false);
 
-	const isGuardianPaperPlus = isPaperPlusSub(productKey, ratePlanKey); // Observer not a Plus plan
-	const isPrint = isPrintProduct(productKey);
-	const isGuardianWeeklyDigital = isGuardianWeeklyDigitalProduct(
-		productKey,
-		ratePlanKey,
-	);
-
 	const observerPrint = getObserver(productKey, ratePlanKey);
 	const isObserverSubDomain = isObserverSubdomain();
 
+	const isWeeklyDigital = isGuardianWeeklyDigitalProduct(
+		productKey,
+		ratePlanKey,
+	);
+	const isGuardianPaperPlus = isPaperPlusSub(productKey, ratePlanKey); // Observer not a Plus plan
+	const isPrint = isPrintProduct(productKey);
 	const isGuardianPrint = isPrint && !observerPrint;
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
@@ -218,7 +217,7 @@ export function ThankYouComponent({
 					: [];
 			return [...productBenefits, ...digitalSubscriptionAdditionalBenefits];
 		}
-		if (isGuardianPaperPlus || isGuardianWeeklyDigital || !!observerPrint) {
+		if (isGuardianPaperPlus || isWeeklyDigital) {
 			return getPrintPlusDigitalBenefits(productKey, ratePlanKey) ?? [];
 		}
 		return [];
@@ -283,11 +282,11 @@ export function ThankYouComponent({
 			'feedback',
 		),
 		...maybeThankYouModule(
-			isDigitalEdition || isGuardianPaperPlus || isGuardianWeeklyDigital,
+			isDigitalEdition || isGuardianPaperPlus || isWeeklyDigital,
 			'appDownloadEditions',
 		),
 		...maybeThankYouModule(
-			isDigitalEdition || isGuardianPaperPlus || isGuardianWeeklyDigital,
+			isDigitalEdition || isGuardianPaperPlus || isWeeklyDigital,
 			'newspaperArchiveBenefit',
 		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
@@ -331,9 +330,8 @@ export function ThankYouComponent({
 							isDirectDebitPayment={order.paymentMethod === 'DirectDebit'}
 							currency={currencyKey}
 							promotion={promotion}
-							observerPrint={observerPrint}
 							startDate={startDate}
-							enableWeeklyDigital={isGuardianWeeklyDigital}
+							observerPrint={observerPrint}
 						/>
 					</div>
 
