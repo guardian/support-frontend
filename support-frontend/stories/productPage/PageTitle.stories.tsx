@@ -1,6 +1,6 @@
 import CentredContainer from 'components/containers/centredContainer';
+import HeroSkeleton from 'components/page/hero';
 import { PageTitle } from 'components/page/pageTitle';
-import { Hero } from './Hero.stories';
 
 export default {
 	title: 'Product Page/Title',
@@ -21,7 +21,7 @@ export function Title(args: {
 	return (
 		<PageTitle title="Page Title" theme={args.theme}>
 			<CentredContainer>
-				<Hero />
+				<HeroSkeleton />
 			</CentredContainer>
 		</PageTitle>
 	);
