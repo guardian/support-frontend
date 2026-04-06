@@ -1,19 +1,10 @@
-import { Container } from '@guardian/source/react-components';
-import type { Meta, StoryObj } from '@storybook/react';
-import type React from 'react';
+import type { Meta, StoryObj } from '@storybook/preact-vite';
 import type { HeroPictureProps } from 'components/page/heroPicture';
 import HeroPicture from 'components/page/heroPicture';
 
 const meta: Meta<typeof HeroPicture> = {
 	title: 'Grid Images/HeroPicture',
 	component: HeroPicture,
-	decorators: [
-		(Story: React.FC): JSX.Element => (
-			<Container>
-				<Story />
-			</Container>
-		),
-	],
 	parameters: {
 		docs: {
 			description: {

@@ -2,10 +2,7 @@ import { css } from '@emotion/react';
 import CentredContainer from 'components/containers/centredContainer';
 import HeroSkeleton from 'components/page/hero';
 import HeroPicture from 'components/page/heroPicture';
-import {
-	HeroPictureData,
-	HeroPictureStory,
-} from '../images/HeroPicture.stories';
+import { HeroPictureData } from '../images/HeroPicture.stories';
 
 export default {
 	title: 'Hero Skeleton',
