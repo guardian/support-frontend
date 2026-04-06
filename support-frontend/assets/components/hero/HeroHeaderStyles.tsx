@@ -23,10 +23,6 @@ export const printHeroCssOverrides = css`
 	}
 `;
 
-export const heroCopy = css`
-	padding: ${space[3]}px ${space[5]}px ${space[10]}px;
-`;
-
 export const heroTitle = css`
 	${headlineBold28};
 	margin-bottom: ${space[3]}px;

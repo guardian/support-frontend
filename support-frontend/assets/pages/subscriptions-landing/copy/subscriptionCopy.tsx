@@ -230,7 +230,7 @@ const paper = (
 	};
 };
 
-const getSubscriptionCopy = (
+export const getSubscriptionProducts = (
 	countryGroupId: CountryGroupId,
 	pricingCopy: PricingCopy,
 	participations: Participations,
@@ -244,5 +244,3 @@ const getSubscriptionCopy = (
 	productcopy.push(digitalPlus(countryGroupId, pricingCopy[DigitalPack]));
 	return productcopy;
 };
-
-export { getSubscriptionCopy };

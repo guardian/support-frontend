@@ -2,6 +2,7 @@
 // This code is designed to work with multiple image sources and crops (different pictures)
 // If you want to work with a single image at different crops, maybe consider gridImage instead
 // ----- Imports ----- //
+import type { SerializedStyles } from '@emotion/utils/dist/declarations/src/types';
 import { gridSrcset, gridUrl } from 'helpers/images/theGrid';
 import type { ImageId, ImageType } from 'helpers/images/theGrid';
 // ----- Types ----- //
@@ -14,13 +15,14 @@ type GridSlot = {
 	sizes: string;
 	media: string;
 };
-type Source = GridImage & GridSlot;
+export type Source = GridImage & GridSlot;
 export type GridPictureProp = {
 	sources: Source[];
 	fallback: string;
 	fallbackSize: number;
 	altText: string;
 	fallbackImgType: ImageType;
+	cssOverrides?: SerializedStyles;
 }; // ----- Component ----- //
 
 export default function GridPicture(props: GridPictureProp) {
@@ -29,7 +31,7 @@ export default function GridPicture(props: GridPictureProp) {
 		return <source sizes={source.sizes} media={source.media} srcSet={srcSet} />;
 	});
 	return (
-		<picture className="component-grid-picture">
+		<picture css={props.cssOverrides}>
 			{sources}
 			<img
 				src={gridUrl(props.fallback, props.fallbackSize, props.fallbackImgType)}

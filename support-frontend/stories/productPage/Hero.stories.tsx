@@ -1,16 +1,22 @@
+import { css } from '@emotion/react';
 import CentredContainer from 'components/containers/centredContainer';
-import GridImage from 'components/gridImage/gridImage';
-import HeroComponent from 'components/page/hero';
-import HeroRoundel from 'components/page/heroRoundel';
+import HeroSkeleton from 'components/page/hero';
+import HeroPicture from 'components/page/heroPicture';
+import {
+	HeroPictureData,
+	HeroPictureStory,
+} from '../images/HeroPicture.stories';
 
 export default {
-	title: 'Product Page/Hero',
-	component: HeroComponent,
+	title: 'Hero Skeleton',
+	component: HeroSkeleton,
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<div
 				style={{
-					paddingTop: '100px',
+					marginTop: '100px',
+					padding: '50px 0',
+					backgroundColor: '#EDEDED',
 				}}
 			>
 				<CentredContainer>
@@ -19,50 +25,54 @@ export default {
 			</div>
 		),
 	],
+	argTypes: {
+		reverseHero: {
+			control: 'boolean',
+			description: 'Reverse the hero direction (image on the left)',
+		},
+		backgroundColor: {
+			control: 'color',
+			description: 'Hero background colour',
+		},
+		color: {
+			control: 'color',
+			description: 'Hero text colour',
+		},
+	},
+	args: {
+		reverseHero: false,
+		backgroundColor: '#052962',
+		color: '#fff',
+	},
 };
 
-export function Hero(): JSX.Element {
+export function Hero({
+	reverseHero,
+	backgroundColor,
+	color,
+}: {
+	reverseHero: boolean;
+	backgroundColor: string;
+	color: string;
+}): JSX.Element {
 	return (
-		<HeroComponent
-			image={
-				<GridImage
-					gridId="weeklyCampaignHeroImg"
-					srcSizes={[500]}
-					sizes="(max-width: 740px) 500px, 500px"
-					imgType="png"
-					altText="A collection of Guardian Weekly magazines"
-				/>
+		<HeroSkeleton
+			imageSlot={<HeroPicture {...HeroPictureData} />}
+			contentSlot={
+				<section>
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque id
+						justo at est elementum egestas rhoncus eu nulla. Proin pellentesque
+						massa at metus condimentum, a aliquam erat condimentum. Vivamus quis
+						rutrum nulla. Curabitur ut ullamcorper magna, eu ornare nunc.
+					</p>
+				</section>
 			}
-			roundelElement={
-				<HeroRoundel theme="base">
-					<div>Roundel</div>
-				</HeroRoundel>
-			}
-		>
-			<section
-				style={{
-					padding: '12px 20px 40px',
-				}}
-			>
-				<h1
-					style={{
-						fontSize: '42px',
-						fontFamily: 'GH Guardian Headline',
-					}}
-				>
-					Hero Heading
-				</h1>
-				<p
-					style={{
-						paddingTop: '1em',
-					}}
-				>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque id
-					justo at est elementum egestas rhoncus eu nulla. Proin pellentesque
-					massa at metus condimentum, a aliquam erat condimentum. Vivamus quis
-					rutrum nulla. Curabitur ut ullamcorper magna, eu ornare nunc.
-				</p>
-			</section>
-		</HeroComponent>
+			heroDirection={reverseHero ? 'row-reverse' : undefined}
+			cssOverrides={css`
+				background-color: ${backgroundColor};
+				color: ${color};
+			`}
+		/>
 	);
 }

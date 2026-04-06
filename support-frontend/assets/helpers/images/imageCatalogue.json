@@ -60,5 +60,8 @@
 	"onboardingGuardianAppHero": "2a458b160b0e607fa7e3fbdd6d6b650692489a17/0_0_2480_1654",
 	"onboardingFeastAppHeroMobile": "e1105e38b7a05d3f15e4f33129abad93f62b9907/0_0_1500_1000",
 	"onboardingFeastAppHero": "cf88c7c18af5d29d37136a0f1513b65f6d43836d/0_0_2480_1654",
-	"onboardingCompletedHero": "e7de12cb183df1268d3bd6f4f3bfb99bbb0b6051/0_0_2480_1063"
+	"onboardingCompletedHero": "e7de12cb183df1268d3bd6f4f3bfb99bbb0b6051/0_0_2480_1063",
+	"placeholder_16x9": "e8de6928023ef0a609876525d8467c240a92cf65/0_0_962_542",
+	"placeholder_4x3": "2d3e6e444c6506dd9706308bcce197ba5c5b7116/0_0_962_722",
+	"placeholder_1x1": "66000e54f37746085e8cdac09a46a8f1ce170ec1/0_0_802_802"
 }

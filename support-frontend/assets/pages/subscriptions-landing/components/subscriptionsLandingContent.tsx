@@ -1,11 +1,46 @@
-import { getSubscriptionCopy } from '../copy/subscriptionCopy';
+import { css } from '@emotion/react';
+import { from, neutral } from '@guardian/source/foundations';
+import HeroSkeleton from 'components/page/hero';
+import SubscriptionsProductDescription from 'components/subscriptionsProductDescription/subscriptionsProductDescription';
+import { getSubscriptionProducts } from '../copy/subscriptionCopy';
 import type { SubscriptionsLandingProps } from '../subscriptionsLandingProps';
 import DigitalPlusProduct from './DigitalPlusProduct';
 import FeatureHeader from './featureHeader';
 import { subscriptionsProductContainerStyle } from './subscriptionsLandingContentStyles';
-import SubscriptionsProduct from './subscriptionsProduct';
 
-const isFeature = (index: number) => index === 0 || index === 2; // make the first and third card a feature
+const heroCardContainer = css`
+	position: relative;
+	display: flex;
+	align-items: stretch;
+	width: 100%;
+	margin: 0 auto;
+	flex-wrap: wrap;
+	max-width: 1290px;
+	border: 1px solid ${neutral[86]};
+	min-height: 320px;
+	background-color: ${neutral[97]};
+	z-index: 1;
+
+	${from.desktop} {
+		margin: 20px auto;
+		width: calc(100% - 40px);
+		min-height: 0;
+	}
+
+	${from.mobileLandscape} {
+		width: calc(100% - 20px);
+	}
+
+	&:first-child {
+		margin-top: 0;
+	}
+
+	&:nth-child(odd) {
+		${from.tablet} {
+			flex-direction: row-reverse;
+		}
+	}
+`;
 
 function SubscriptionsLandingContent({
 	countryGroupId,
@@ -18,21 +53,11 @@ function SubscriptionsLandingContent({
 
 	const supportMsg = 'Support the Guardian with a print subscription';
 
-	const subscriptionCopy = getSubscriptionCopy(
+	const subscriptionCopy = getSubscriptionProducts(
 		countryGroupId,
 		pricingCopy,
 		participations,
 	);
-
-	const blackFridayPeriod = new Date(2023, 11, 1);
-	const isBlackFriday = new Date() < blackFridayPeriod;
-
-	const validBlackFridayProduct = (
-		isBlackFriday: boolean,
-		productTitle: string,
-	): boolean => {
-		return isBlackFriday && productTitle === 'Guardian Weekly';
-	};
 
 	return (
 		<div
@@ -41,31 +66,20 @@ function SubscriptionsLandingContent({
 		>
 			<FeatureHeader featureHeaderMsg={supportMsg} />
 			<div css={subscriptionsProductContainerStyle}>
-				{subscriptionCopy.map((product, index) =>
-					product.digitalPlusLayout === true ? (
+				{subscriptionCopy.map((product, index) => {
+					return product.digitalPlusLayout === true ? (
 						<DigitalPlusProduct {...product} />
 					) : (
-						<SubscriptionsProduct
-							title={product.title}
-							subtitle={
-								validBlackFridayProduct(isBlackFriday, product.title)
-									? 'Annual'
-									: product.subtitle
-							}
-							description={product.description}
-							productImage={product.productImage}
-							buttons={product.buttons}
-							offer={
-								validBlackFridayProduct(isBlackFriday, product.title)
-									? 'Black Friday Offer: 1/3 off'
-									: product.offer
-							}
-							isFeature={isFeature(index)}
-							cssOverrides={product.cssOverrides}
-							benefits={product.benefits}
-						/>
-					),
-				)}
+						<div css={heroCardContainer}>
+							<HeroSkeleton
+								imageSlot={product.productImage}
+								contentSlot={<SubscriptionsProductDescription {...product} />}
+								cssOverrides={product.cssOverrides}
+								heroDirection={index % 2 !== 0 ? 'row-reverse' : undefined}
+							/>
+						</div>
+					);
+				})}
 			</div>
 		</div>
 	);

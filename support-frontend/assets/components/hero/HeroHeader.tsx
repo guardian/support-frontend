@@ -8,9 +8,8 @@ import type { ReactElement } from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import type { GridImg } from 'components/gridImage/gridImage';
 import type { GridPictureProp } from 'components/gridPicture/gridPicture';
-import Hero from 'components/page/hero';
+import HeroSkeleton from 'components/page/hero';
 import {
-	heroCopy,
 	heroParagraph,
 	heroTitle,
 	printHeroCssOverrides,
@@ -38,32 +37,32 @@ export default function HeroHeader({
 	return (
 		<CentredContainer cssOverrides={cssOverrides}>
 			{roundel}
-			<Hero
-				image={heroImage}
-				hideRoundelBelow="mobileMedium"
+			<HeroSkeleton
+				imageSlot={heroImage}
+				contentSlot={
+					<section>
+						<h2 css={heroTitle}>{title}</h2>
+						{description && <p css={heroParagraph}>{description}</p>}
+						<LinkButton
+							onClick={() => {
+								onClick();
+								scrollTo({
+									top: document.querySelector(ctaLink)?.getBoundingClientRect()
+										.top,
+									behavior: 'smooth',
+								});
+							}}
+							priority="tertiary"
+							iconSide="right"
+							icon={<SvgArrowDownStraight />}
+							theme={themeButtonBrandAlt}
+						>
+							{ctaText}
+						</LinkButton>
+					</section>
+				}
 				cssOverrides={[printHeroCssOverrides]}
-			>
-				<section css={heroCopy}>
-					<h2 css={heroTitle}>{title}</h2>
-					{description && <p css={heroParagraph}>{description}</p>}
-					<LinkButton
-						onClick={() => {
-							onClick();
-							scrollTo({
-								top: document.querySelector(ctaLink)?.getBoundingClientRect()
-									.top,
-								behavior: 'smooth',
-							});
-						}}
-						priority="tertiary"
-						iconSide="right"
-						icon={<SvgArrowDownStraight />}
-						theme={themeButtonBrandAlt}
-					>
-						{ctaText}
-					</LinkButton>
-				</section>
-			</Hero>
+			/>
 		</CentredContainer>
 	);
 }
