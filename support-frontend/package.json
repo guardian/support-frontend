@@ -105,7 +105,7 @@
 		"babel-plugin-add-react-displayname": "^0.0.5",
 		"babel-plugin-dynamic-import-node": "^2.3.3",
 		"chromatic": "^13.0.1",
-		"concurrently": "^9.1.0",
+		"concurrently": "^9.2.1",
 		"dayjs": "^1.11.11",
 		"eslint-nibble": "^8.1.0",
 		"file-loader": "^6.2.0",
