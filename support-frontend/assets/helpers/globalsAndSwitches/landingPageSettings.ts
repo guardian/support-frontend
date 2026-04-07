@@ -114,4 +114,5 @@ export interface LandingPageTest {
 	regionTargeting?: RegionTargeting;
 	variants: LandingPageVariant[];
 	methodologies?: Methodology[];
+	selectedVariant?: LandingPageVariant;
 }

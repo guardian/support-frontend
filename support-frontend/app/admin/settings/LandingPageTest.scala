@@ -98,6 +98,7 @@ case class LandingPageTest(
     mParticleAudience: Option[Int],
     variants: List[LandingPageVariant],
     methodologies: List[Methodology] = Methodology.defaultMethodologies,
+    selectedVariant: Option[LandingPageVariant] = None,
 )
 
 object LandingPageTest {
@@ -114,5 +115,5 @@ object LandingPageTest {
         .downField("methodologies")
         .as[Option[List[Methodology]]]
         .map(_.getOrElse(Methodology.defaultMethodologies))
-    } yield LandingPageTest(name, status, priority, regionTargeting, mParticleAudience, variants, methodologies)
+    } yield LandingPageTest(name, status, priority, regionTargeting, mParticleAudience, variants, methodologies, None)
 }

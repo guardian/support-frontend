@@ -87,6 +87,10 @@ interface PageParticipationsConfig<Variant> {
 	forceParamName: string;
 	sessionStorageKey: Key;
 	getVariantName: (variant: Variant) => string;
+	selectVariant?: (
+		test: PageTest<Variant>,
+		mvtId: number,
+	) => Variant | undefined;
 }
 
 export type {
