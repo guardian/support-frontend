@@ -1,6 +1,6 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 
-export interface Image {
+interface Image {
 	desktopUrl: string;
 	tabletUrl: string;
 	mobileUrl: string;
