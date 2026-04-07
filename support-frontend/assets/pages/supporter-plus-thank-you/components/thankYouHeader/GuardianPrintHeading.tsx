@@ -10,6 +10,7 @@ import {
 } from './headingStyles';
 import HighlightText from './HighlightText';
 import {
+	isGuardianWeeklyDigitalProduct,
 	isGuardianWeeklyGiftProduct,
 	isGuardianWeeklyProduct,
 } from './utils/productMatchers';
@@ -17,16 +18,18 @@ import {
 export type GuardianPrintHeadingProps = {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
-	enableWeeklyDigital?: boolean;
 };
 
 export default function GuardianPrintHeading({
 	productKey,
 	ratePlanKey,
-	enableWeeklyDigital,
 }: GuardianPrintHeadingProps) {
 	const thankYouText = 'Thank you for supporting our journalism!';
-	const nowSubscribed = enableWeeklyDigital
+	const isWeeklyDigital = isGuardianWeeklyDigitalProduct(
+		productKey,
+		ratePlanKey,
+	);
+	const nowSubscribed = isWeeklyDigital
 		? 'You are subscribed to'
 		: 'You have now subscribed to';
 

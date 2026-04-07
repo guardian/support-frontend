@@ -35,7 +35,6 @@ export interface OrderSummaryTsAndCsProps {
 	promotion?: Promotion;
 	thresholdAmount?: number;
 	deliveryDate?: Date;
-	enableWeeklyDigital?: boolean;
 }
 export function OrderSummaryTsAndCs({
 	productKey,
@@ -45,7 +44,6 @@ export function OrderSummaryTsAndCs({
 	ratePlanDescription,
 	thresholdAmount = 0,
 	deliveryDate,
-	enableWeeklyDigital,
 }: OrderSummaryTsAndCsProps): JSX.Element | null {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -109,10 +107,9 @@ export function OrderSummaryTsAndCs({
 							</>
 						) : (
 							<>
-								Auto renews every {periodNoun}. Cancel anytime.
-								{enableWeeklyDigital
-									? ' If you cancel within the first 14 days, via Customer Service, you will receive a full refund.'
-									: ''}
+								Auto renews every {periodNoun}. Cancel anytime. If you cancel
+								within the first 14 days, via Customer Service, you will receive
+								a full refund.
 							</>
 						)}
 					</p>
