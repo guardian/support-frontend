@@ -197,7 +197,7 @@ export function getStudentFAQs(
 	institution?: Institution,
 ): FAQItem[] | undefined {
 	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
-console.log(`Institution is: ${institution?.acronym}`)
+
 	if (institution) {
 		return studentInstitutionFAQsConfig(countryGroupId, institution);
 	}
