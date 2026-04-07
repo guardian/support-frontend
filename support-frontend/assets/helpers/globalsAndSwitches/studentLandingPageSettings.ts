@@ -1,13 +1,13 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 
-interface Image {
+export interface Image {
 	desktopUrl: string;
 	tabletUrl: string;
 	mobileUrl: string;
 	altText: string;
 }
 
-interface Institution {
+export interface Institution {
 	name: string;
 	acronym: string;
 	logoUrl: string;
