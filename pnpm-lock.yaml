@@ -11193,7 +11193,7 @@ snapshots:
     dependencies:
       '@vitest/spy': 3.2.4
       estree-walker: 3.0.3
-      magic-string: 0.30.21
+      magic-string: 0.30.17
     optionalDependencies:
       vite: 6.4.1(@types/node@20.19.0)(jiti@2.4.2)(sass@1.89.0)(terser@5.46.0)(tsx@4.19.4)(yaml@2.8.0)
 
