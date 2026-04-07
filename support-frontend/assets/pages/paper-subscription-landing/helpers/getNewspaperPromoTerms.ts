@@ -1,13 +1,28 @@
+import type { Promotion } from 'helpers/productPrice/promotions';
 import { getDateString } from 'helpers/utilities/dateFormatting';
-import type { PaperPromotion } from './getPromotions';
 
-export default function getNewspaperPromoTerms(
-	promotion: PaperPromotion,
-): string {
-	if (!promotion.expires) {
+const numberString = [
+	'zero',
+	'one',
+	'two',
+	'three',
+	'four',
+	'five',
+	'six',
+	'seven',
+	'eight',
+	'nine',
+	'ten',
+	'eleven',
+	'twelve',
+];
+
+export default function getNewspaperPromoTerms(promotion: Promotion): string {
+	const { durationMonths } = promotion.discount ?? {};
+	if (!promotion.expires || !durationMonths) {
 		return '';
 	}
-	return `* Retail saving shown is the retail saving during the first six months. Offer ends ${getDateString(
-		new Date(promotion.expires),
-	)}`;
+	return `* Retail saving shown is the retail saving during the first ${
+		numberString[durationMonths]
+	} months. Offer ends ${getDateString(new Date(promotion.expires))}.`;
 }
