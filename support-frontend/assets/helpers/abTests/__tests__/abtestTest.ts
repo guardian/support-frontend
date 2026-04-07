@@ -26,6 +26,7 @@ const {
 	genericCheckoutOnly,
 	oneTimeCheckoutOnly,
 } = pageUrlRegexes.contributions;
+const { weeklyPages } = pageUrlRegexes.subscriptions;
 
 jest.mock('@guardian/ophan-tracker-js', () => ({
 	record: () => null,
@@ -582,7 +583,7 @@ describe('init', () => {
 		it('matches against the query string as well as the patch', () => {
 			const abTests = {
 				t1: buildTest({
-					targetPage: pageUrlRegexes.subscriptions.subsUkWeeklyPages,
+					targetPage: weeklyPages,
 				}),
 			};
 
