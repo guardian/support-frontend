@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, space } from '@guardian/source/foundations';
+import { from, palette, space, until } from '@guardian/source/foundations';
 
 export const hero = (direction: 'row-reverse' | undefined) => css`
 	position: relative;
@@ -25,6 +25,10 @@ export const ImageStyles = css`
 	justify-content: center;
 	align-items: flex-end;
 	width: 100%;
+
+	${until.tablet} {
+		background: linear-gradient(${palette.neutral[97]}, ${palette.neutral[86]});
+	}
 
 	${from.tablet} {
 		width: 45%;
