@@ -18,6 +18,7 @@ import io.circe.Encoder
 import io.circe.generic.semiauto._
 import io.circe.syntax._
 import lib.PlayImplicits._
+import models.GeoData
 import models.identity.responses.IdentityErrorResponse._
 import org.apache.pekko.actor.{ActorSystem, Scheduler}
 import org.joda.time.DateTime
@@ -38,6 +39,7 @@ import services.{
 }
 import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber, PaperValidation}
+import utils.FastlyGEOIP._
 
 import java.net.URLEncoder
 import scala.concurrent.{ExecutionContext, Future}
@@ -305,7 +307,12 @@ class CreateSubscriptionController(
       userDetails <- maybeLoggedInUserDetails match {
         case Some(userDetails) => EitherT.pure[Future, CreateSubscriptionError](userDetails)
         case None =>
-          getOrCreateIdentityUser(request.body, request.headers.get("Referer"), !inOnboardingExperiment)
+          getOrCreateIdentityUser(
+            request.body,
+            request.headers.get("Referer"),
+            !inOnboardingExperiment,
+            request.geoData,
+          )
             .map(userDetails => UserDetailsWithSignedInStatus(userDetails, isSignedIn = false))
             .leftMap(mapIdentityErrorToCreateSubscriptionError)
       }
@@ -372,6 +379,7 @@ class CreateSubscriptionController(
       body: CreateSupportWorkersRequest,
       referer: Option[String],
       sendIdentityVerificationEmail: Boolean,
+      geoData: GeoData,
   ): EitherT[Future, IdentityError, UserDetails] = {
     implicit val scheduler: Scheduler = system.scheduler
     identityService.getOrCreateUserFromEmail(
@@ -381,6 +389,7 @@ class CreateSubscriptionController(
       body.ophanIds.pageviewId,
       referer,
       sendIdentityVerificationEmail,
+      geoData,
     )
   }
 
