@@ -21,11 +21,9 @@ import { _, init as abInit, getAmountsTestVariant } from '../abtest';
 import type { Audience, Participations, Test, Variant } from '../models';
 
 const { targetPageMatches } = _;
-const {
-	allLandingPagesAndThankyouPages,
-	genericCheckoutOnly,
-	oneTimeCheckoutOnly,
-} = pageUrlRegexes.contributions;
+const { oneTimeCheckoutOnly } = pageUrlRegexes.contributions;
+const { genericCheckoutOnly } = pageUrlRegexes.subscriptions;
+const { allLandingAndThankyouPages } = pageUrlRegexes;
 
 jest.mock('@guardian/ophan-tracker-js', () => ({
 	record: () => null,
@@ -582,7 +580,7 @@ describe('init', () => {
 		it('matches against the query string as well as the patch', () => {
 			const abTests = {
 				t1: buildTest({
-					targetPage: pageUrlRegexes.subscriptions.subsUkWeeklyPages,
+					targetPage: pageUrlRegexes.subscriptions.weekly.weeklyUKPages,
 				}),
 			};
 
@@ -601,55 +599,43 @@ describe('init', () => {
 it('targetPage matching', () => {
 	// Test nonGiftLandingAndCheckout regex
 	expect(
-		targetPageMatches(
-			'/subscribe/weekly/checkout',
-			allLandingPagesAndThankyouPages,
-		),
+		targetPageMatches('/subscribe/weekly/checkout', allLandingAndThankyouPages),
 	).toEqual(false);
 	expect(
-		targetPageMatches(
-			'/subscribe/paper/checkout',
-			allLandingPagesAndThankyouPages,
-		),
+		targetPageMatches('/subscribe/paper/checkout', allLandingAndThankyouPages),
 	).toEqual(false);
 	expect(
-		targetPageMatches(
-			'/subscribe/digitaledition',
-			allLandingPagesAndThankyouPages,
-		),
+		targetPageMatches('/subscribe/digitaledition', allLandingAndThankyouPages),
 	).toEqual(false);
 	expect(
-		targetPageMatches('/subscribe/paper', allLandingPagesAndThankyouPages),
+		targetPageMatches('/subscribe/paper', allLandingAndThankyouPages),
 	).toEqual(false);
 	expect(
-		targetPageMatches('/subscribe/weekly', allLandingPagesAndThankyouPages),
+		targetPageMatches('/subscribe/weekly', allLandingAndThankyouPages),
 	).toEqual(false);
-	expect(
-		targetPageMatches('/subscribe', allLandingPagesAndThankyouPages),
-	).toEqual(false);
+	expect(targetPageMatches('/subscribe', allLandingAndThankyouPages)).toEqual(
+		false,
+	);
 	// Test 3-tier landing page
 	expect(
-		targetPageMatches('/uk/contribute', allLandingPagesAndThankyouPages),
+		targetPageMatches('/uk/contribute', allLandingAndThankyouPages),
 	).toEqual(true);
 	// Test 3-tier generic checkout
-	expect(
-		targetPageMatches('/uk/checkout', allLandingPagesAndThankyouPages),
-	).toEqual(true);
+	expect(targetPageMatches('/uk/checkout', allLandingAndThankyouPages)).toEqual(
+		true,
+	);
 	// Test 3-tier generic thankyou
 	expect(
-		targetPageMatches('/uk/thank-you', allLandingPagesAndThankyouPages),
+		targetPageMatches('/uk/thank-you', allLandingAndThankyouPages),
 	).toEqual(true);
 	// Test 3-tier non-generic checkout
 	expect(
-		targetPageMatches(
-			'/uk/contribute/checkout',
-			allLandingPagesAndThankyouPages,
-		),
+		targetPageMatches('/uk/contribute/checkout', allLandingAndThankyouPages),
 	).toEqual(true);
 	// Test 3-tier non-generic thankyou
-	expect(
-		targetPageMatches('/uk/thankyou', allLandingPagesAndThankyouPages),
-	).toEqual(true);
+	expect(targetPageMatches('/uk/thankyou', allLandingAndThankyouPages)).toEqual(
+		true,
+	);
 	// Generic checkout only targeting
 	expect(
 		targetPageMatches('/uk/contribute/checkout', genericCheckoutOnly),
