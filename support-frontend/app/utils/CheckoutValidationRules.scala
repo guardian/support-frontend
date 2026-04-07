@@ -633,7 +633,6 @@ object PaperValidation extends SafeLogging {
     "TW3",
     "TW4",
     "TW5",
-    "TW6",
     "TW7",
     "TW8",
     "TW9",
