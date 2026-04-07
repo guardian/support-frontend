@@ -60,10 +60,17 @@ export type ProductCopy = {
 const getDisplayPrice = (
 	countryGroupId: CountryGroupId,
 	price: number,
-	billingPeriod = BillingPeriod.Monthly,
 ): string => {
 	const currency = glyph(detect(countryGroupId));
-	return `${currency}${fixDecimals(price)}/${billingPeriod}`;
+	return `${currency}${fixDecimals(price)}`;
+};
+
+const getDisplayPricePeriod = (
+	countryGroupId: CountryGroupId,
+	price: number,
+	billingPeriod = BillingPeriod.Monthly,
+): string => {
+	return `${getDisplayPrice(countryGroupId, price)}/${billingPeriod}`;
 };
 
 const getDigitalPlusDisplayPrice = (
@@ -78,23 +85,18 @@ const getDigitalPlusDisplayPrice = (
 		return null;
 	}
 
-	return getDisplayPrice(countryGroupId, price, billingPeriod);
+	return getDisplayPricePeriod(countryGroupId, price, billingPeriod);
 };
 
-const getWeeklyDigitalDisplayPrice = (
-	countryGroupId: CountryGroupId,
-	billingPeriod: BillingPeriod,
-): string => {
-	const currencyKey = detect(countryGroupId);
-	const ratePlan = `${billingPeriod}Plus`;
-
+const getWeeklyPerCopyPrice = (countryGroupId: CountryGroupId): string => {
 	const product = getProductCatalog()['GuardianWeeklyDomestic'];
-	const price = product?.ratePlans[ratePlan]?.pricing[currencyKey];
+	const price =
+		product?.ratePlans[`AnnualPlus`]?.pricing[detect(countryGroupId)];
 	if (!price) {
 		return '';
 	}
-
-	return getDisplayPrice(countryGroupId, price, billingPeriod);
+	const perCopyPrice = Math.floor((price * 100) / 51) / 100;
+	return getDisplayPrice(countryGroupId, perCopyPrice);
 };
 
 function buildDigialPlusBenefits(): ProductBenefit[] {
@@ -186,10 +188,9 @@ function guardianWeekly(
 
 	return {
 		title: 'The Guardian Weekly',
-		subtitle: getWeeklyDigitalDisplayPrice(
+		subtitle: `Available now from ${getWeeklyPerCopyPrice(
 			countryGroupId,
-			BillingPeriod.Monthly,
-		),
+		)} per issue`,
 		description:
 			'A curated weekly news magazine featuring our best global journalism in print, delivered wherever you are in the world. Plus, enjoy unlimited access to our full suite of digital benefits for the complete Guardian experience.',
 		offer: priceCopy.discountCopy || '',
