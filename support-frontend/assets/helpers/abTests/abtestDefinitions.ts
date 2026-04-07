@@ -15,20 +15,19 @@ export const pageUrlRegexes = {
 	},
 	subscriptions: {
 		genericCheckoutOnly: /(uk|us|au|ca|eu|nz|int)\/checkout.*?/,
-		subscribeLandingPageOnly: /\/uk\/subscribe$/,
+		landingPageSubscribeOnly: /\/uk\/subscribe$/,
+		landingPagePaperOnly: /^\/uk\/subscribe\/paper?(\?.*)?$/,
 		paper: {
-			// Requires /subscribe/paper, allows /checkout or /checkout/guest, allows any query string
-			paperLandingWithGuestCheckout:
+			paperPages:
 				/\/subscribe\/paper(\/delivery|\/checkout|\/checkout\/guest)?(\?.*)?$/,
-			paperLandingPage: /^\/uk\/subscribe\/paper?(\?.*)?$/,
 		},
 		weekly: {
-			// Includes landing, original & generic checkout/thankyou pages
-			weeklyGiftPages:
-				/\/subscribe\/weekly\/gift.*?|\/subscribe\/weekly\/checkout\/gift.*?|((?:\/(uk|us|ca|eu|nz|int))(?:\/(checkout|thank-you))).*?(OneYearGift|ThreeMonthGift).*?/,
 			// Uk weekly pages, including landing, original & generic checkout/thankyou pages
 			weeklyUKPages:
 				/(uk\/subscribe\/weekly).*?|(?:uk\/(checkout|thank-you)).*?(MonthlyPlus|QuarterlyPlus|AnnualPlus).*?/,
+			// Includes landing, original & generic checkout/thankyou pages
+			weeklyGiftPages:
+				/\/subscribe\/weekly\/gift.*?|\/subscribe\/weekly\/checkout\/gift.*?|((?:\/(uk|us|ca|eu|nz|int))(?:\/(checkout|thank-you))).*?(OneYearGift|ThreeMonthGift).*?/,
 		},
 	},
 };
@@ -113,7 +112,7 @@ export const tests: Tests = {
 		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 5,
-		targetPage: pageUrlRegexes.subscriptions.subscribeLandingPageOnly,
+		targetPage: pageUrlRegexes.subscriptions.landingPageSubscribeOnly,
 		persistPage: pageUrlRegexes.subscriptions.weekly.weeklyUKPages,
 		excludeContributionsOnlyCountries: true,
 	},
