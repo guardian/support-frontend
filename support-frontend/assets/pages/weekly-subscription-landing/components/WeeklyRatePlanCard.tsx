@@ -70,6 +70,7 @@ function WeeklyRatePlanCard({
 			setPromoTerms(promoTerms);
 		}
 	}, [isPriorityPromo, billingPeriod, discountedPrice]);
+
 	return (
 		<div
 			ref={setElementToObserve}
