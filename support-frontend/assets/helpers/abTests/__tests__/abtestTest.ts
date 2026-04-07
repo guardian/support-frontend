@@ -633,10 +633,6 @@ it('targetPage matching', () => {
 	expect(
 		targetPageMatches('/uk/contribute/checkout', allLandingAndThankyouPages),
 	).toEqual(true);
-	// Test 3-tier non-generic thankyou
-	expect(targetPageMatches('/uk/thankyou', allLandingAndThankyouPages)).toEqual(
-		true,
-	);
 	// Generic checkout only targeting
 	expect(
 		targetPageMatches('/uk/contribute/checkout', genericCheckoutOnly),

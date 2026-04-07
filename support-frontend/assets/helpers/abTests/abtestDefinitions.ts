@@ -9,7 +9,7 @@ import type { Tests } from './models';
 // Note: These regexes are matched against the path and the querystring only (i.e. no domain)
 export const pageUrlRegexes = {
 	allLandingAndThankyouPages:
-		/^(?!(?:\/subscribe\/(paper|weekly)\/checkout$))(?:\/(uk|us|ca|eu|nz|int))?\/(checkout|one-time-checkout|contribute|thankyou|thank-you)(\/.*)?$/,
+		/((uk|us|ca|eu|nz|int)\/((subscribe\/weekly\/gift)|(subscribe\/weekly)|checkout|one-time-checkout|contribute|thank-you))|uk\/subscribe|uk\/subscribe\/paper|(uk|eu)\/guardian-ad-lite|(uk|us|ca|au)\/student/,
 	contributions: {
 		oneTimeCheckoutOnly: /(uk|us|au|ca|eu|nz|int)\/one-time-checkout/,
 	},
