@@ -185,7 +185,7 @@ function guardianWeekly(
 	} as ProductButton;
 
 	const subtitle =
-		participations.guardianWeeklySubscriptionSubtitle === 'variant'
+		participations.guardianWeeklySubscriptionSubtitle2 === 'variant'
 			? 'Limited time intro offer - available now'
 			: getWeeklyDigitalDisplayPrice(countryGroupId, BillingPeriod.Monthly);
 
