@@ -184,14 +184,12 @@ function guardianWeekly(
 		theme: themeButtonLegacyGray,
 	} as ProductButton;
 
-	const subtitle =
-		participations.guardianWeeklySubscriptionSubtitle2 === 'variant'
-			? 'Limited time intro offer - available now'
-			: getWeeklyDigitalDisplayPrice(countryGroupId, BillingPeriod.Monthly);
-
 	return {
 		title: 'The Guardian Weekly',
-		subtitle,
+		subtitle: getWeeklyDigitalDisplayPrice(
+			countryGroupId,
+			BillingPeriod.Monthly,
+		),
 		description:
 			'A curated weekly news magazine featuring our best global journalism in print, delivered wherever you are in the world. Plus, enjoy unlimited access to our full suite of digital benefits for the complete Guardian experience.',
 		offer: priceCopy.discountCopy || '',

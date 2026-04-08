@@ -14,8 +14,8 @@ export const pageUrlRegexes = {
 	genericCheckoutOnly: /(uk|us|au|ca|eu|nz|int)\/checkout/,
 	paperPages:
 		/(uk\/subscribe\/paper)|((uk\/(checkout|thank-you)).*?(SubscriptionCard|HomeDelivery|NationalDelivery))/,
-	weeklyUKPages:
-		/(uk\/subscribe\/weekly)|((uk\/(checkout|thank-you)).*?(MonthlyPlus|QuarterlyPlus|AnnualPlus))/,
+	weeklyPages:
+		/((uk|us|ca|eu|nz|int)\/subscribe\/weekly)|(((uk|us|ca|eu|nz|int)\/(checkout|thank-you)).*?(MonthlyPlus|QuarterlyPlus|AnnualPlus))/,
 	weeklyGiftPages:
 		/((uk|us|ca|eu|nz|int)\/subscribe\/weekly\/gift)|((uk|us|ca|eu|nz|int)(\/(checkout|thank-you))).*?(OneYearGift|ThreeMonthGift)/,
 };
@@ -78,28 +78,6 @@ export const tests: Tests = {
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 3,
 		targetPage: pageUrlRegexes.genericCheckoutOnly,
-		excludeContributionsOnlyCountries: true,
-	},
-	guardianWeeklySubscriptionSubtitle2: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			GBPCountries: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 5,
-		targetPage: pageUrlRegexes.landingPageSubscribeOnly,
-		persistPage: pageUrlRegexes.weeklyUKPages,
 		excludeContributionsOnlyCountries: true,
 	},
 };
