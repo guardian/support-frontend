@@ -75,7 +75,8 @@ function SubscriptionsLandingContent({
 								imageSlot={product.productImage}
 								contentSlot={<SubscriptionsProductDescription {...product} />}
 								cssOverrides={product.cssOverrides}
-								heroDirection={index % 2 !== 0 ? 'row-reverse' : undefined}
+								heroDirection={index % 2 !== 0 ? 'reverse' : 'default'}
+								imagePosition={product.imagePosition}
 							/>
 						</div>
 					);

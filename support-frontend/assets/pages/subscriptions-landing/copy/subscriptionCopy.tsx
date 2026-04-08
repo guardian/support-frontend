@@ -50,6 +50,7 @@ export type ProductCopy = {
 	productImage: React.ReactNode;
 	buttons: ProductButton[];
 	cssOverrides?: SerializedStyles;
+	imagePosition?: 'float' | 'bottom';
 	offer?: string;
 	participations?: Participations;
 	benefits?: ProductBenefit[];
@@ -225,6 +226,7 @@ const paper = (
 			},
 		],
 		productImage: <PaperPackShot />,
+		imagePosition: 'bottom',
 		offer: priceCopy.discountCopy,
 		cssOverrides: css``,
 	};

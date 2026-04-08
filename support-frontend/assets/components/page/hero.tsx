@@ -1,22 +1,28 @@
 import type { SerializedStyles } from '@emotion/react';
 import type { ReactElement, ReactNode } from 'react';
-import { contentStyles, hero, ImageStyles } from './heroStyles';
+import {
+	containerStyles,
+	contentSlotStyles,
+	imageSlotStyles,
+} from './heroStyles';
 
 function HeroContainer({
 	contentSlot,
 	imageSlot,
 	cssOverrides,
-	heroDirection,
+	heroDirection = 'default',
+	imagePosition = 'float',
 }: {
 	imageSlot: ReactNode;
 	contentSlot: ReactNode;
 	cssOverrides?: SerializedStyles | SerializedStyles[];
-	heroDirection?: 'row-reverse';
+	heroDirection?: 'reverse' | 'default';
+	imagePosition?: 'float' | 'bottom';
 }): ReactElement {
 	return (
-		<div css={[hero(heroDirection), cssOverrides]}>
-			<div css={contentStyles}>{contentSlot}</div>
-			<div css={ImageStyles}>{imageSlot}</div>
+		<div css={[containerStyles(heroDirection), cssOverrides]}>
+			<div css={contentSlotStyles}>{contentSlot}</div>
+			<div css={[imageSlotStyles(imagePosition)]}>{imageSlot}</div>
 		</div>
 	);
 }

@@ -93,7 +93,7 @@ export function Hero({
 					</p>
 				</section>
 			}
-			heroDirection={reverseHero ? 'row-reverse' : undefined}
+			heroDirection={reverseHero ? 'reverse' : 'default'}
 			cssOverrides={css`
 				background-color: ${backgroundColor};
 				color: ${color};

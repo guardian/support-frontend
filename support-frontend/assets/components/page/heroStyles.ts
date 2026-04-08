@@ -1,30 +1,26 @@
 import { css } from '@emotion/react';
 import { from, palette, space, until } from '@guardian/source/foundations';
 
-export const hero = (direction: 'row-reverse' | undefined) => css`
-	position: relative;
+export const containerStyles = (direction: 'reverse' | 'default') => css`
 	display: flex;
+	justify-content: center;
 	flex-direction: column-reverse;
-	justify-content: space-between;
-	border: none;
 	width: 100%;
 
 	${from.tablet} {
-		flex-direction: ${direction === 'row-reverse' ? 'row-reverse' : 'row'};
+		flex-direction: ${direction === 'reverse' ? 'row-reverse' : 'row'};
 	}
 `;
 
-export const contentStyles = css`
+export const contentSlotStyles = css`
 	padding: ${space[3]}px ${space[5]}px ${space[10]}px;
 `;
 
-export const ImageStyles = css`
-	align-self: flex-end;
-	flex-shrink: 0;
+export const imageSlotStyles = (imagePosition: 'float' | 'bottom') => css`
 	display: flex;
 	justify-content: center;
-	align-items: flex-end;
-	width: 100%;
+	align-items: ${imagePosition === 'bottom' ? 'flex-end' : 'center'};
+	flex-shrink: 0;
 
 	picture {
 		display: flex;
