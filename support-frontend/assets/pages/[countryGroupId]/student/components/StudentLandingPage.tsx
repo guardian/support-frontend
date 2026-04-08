@@ -39,7 +39,7 @@ export function StudentLandingPage({
 	institution,
 }: StudentLandingPageProps) {
 	const faqItems = getStudentFAQs(supportRegionId, institution);
-	const tsAndCsItem = getStudentTsAndCs(supportRegionId);
+	const tsAndCsItem = getStudentTsAndCs(supportRegionId, institution);
 
 	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
