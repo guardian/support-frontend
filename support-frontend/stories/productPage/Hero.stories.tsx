@@ -1,12 +1,12 @@
 import { css } from '@emotion/react';
 import CentredContainer from 'components/containers/centredContainer';
-import HeroSkeleton from 'components/page/hero';
+import HeroContainer from 'components/page/hero';
 import HeroPicture from 'components/page/heroPicture';
 import { HeroPictureData } from '../images/HeroPicture.stories';
 
 export default {
 	title: 'Hero Skeleton',
-	component: HeroSkeleton,
+	component: HeroContainer,
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<div
@@ -53,7 +53,7 @@ export function Hero({
 	color: string;
 }): JSX.Element {
 	return (
-		<HeroSkeleton
+		<HeroContainer
 			imageSlot={<HeroPicture {...HeroPictureData} />}
 			contentSlot={
 				<section>

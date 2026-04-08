@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { from, neutral } from '@guardian/source/foundations';
-import HeroSkeleton from 'components/page/hero';
+import HeroContainer from 'components/page/hero';
 import SubscriptionsProductDescription from 'components/subscriptionsProductDescription/subscriptionsProductDescription';
 import { getSubscriptionProducts } from '../copy/subscriptionCopy';
 import type { SubscriptionsLandingProps } from '../subscriptionsLandingProps';
@@ -71,7 +71,7 @@ function SubscriptionsLandingContent({
 						<DigitalPlusProduct {...product} />
 					) : (
 						<div css={heroCardContainer}>
-							<HeroSkeleton
+							<HeroContainer
 								imageSlot={product.productImage}
 								contentSlot={<SubscriptionsProductDescription {...product} />}
 								cssOverrides={product.cssOverrides}

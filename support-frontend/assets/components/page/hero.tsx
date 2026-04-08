@@ -2,7 +2,7 @@ import type { SerializedStyles } from '@emotion/react';
 import type { ReactElement, ReactNode } from 'react';
 import { contentStyles, hero, ImageStyles } from './heroStyles';
 
-function HeroSkeleton({
+function HeroContainer({
 	contentSlot,
 	imageSlot,
 	cssOverrides,
@@ -21,4 +21,4 @@ function HeroSkeleton({
 	);
 }
 
-export default HeroSkeleton;
+export default HeroContainer;

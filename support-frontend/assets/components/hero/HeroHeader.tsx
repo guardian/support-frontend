@@ -8,7 +8,7 @@ import type { ReactElement } from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import type { GridImg } from 'components/gridImage/gridImage';
 import type { GridPictureProp } from 'components/gridPicture/gridPicture';
-import HeroSkeleton from 'components/page/hero';
+import HeroContainer from 'components/page/hero';
 import {
 	heroParagraph,
 	heroTitle,
@@ -37,7 +37,7 @@ export default function HeroHeader({
 	return (
 		<CentredContainer cssOverrides={cssOverrides}>
 			{roundel}
-			<HeroSkeleton
+			<HeroContainer
 				imageSlot={heroImage}
 				contentSlot={
 					<section>

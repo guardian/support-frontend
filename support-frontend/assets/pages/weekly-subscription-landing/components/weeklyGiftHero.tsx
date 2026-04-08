@@ -5,7 +5,7 @@ import {
 } from '@guardian/source/react-components';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
-import HeroSkeleton from 'components/page/hero';
+import HeroContainer from 'components/page/hero';
 import { PageTitle } from 'components/page/pageTitle';
 import {
 	type PromotionCopy,
@@ -46,7 +46,7 @@ export function WeeklyGiftHero({
 	return (
 		<PageTitle title={'Give the Guardian Weekly'} theme="weekly">
 			<CentredContainer>
-				<HeroSkeleton
+				<HeroContainer
 					imageSlot={
 						<GridImage
 							gridId="weeklyCampaignHeroImg"
