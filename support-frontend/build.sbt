@@ -5,7 +5,7 @@ version := "1.0-SNAPSHOT"
 packageSummary := "Support Play APP"
 
 libraryDependencies ++= Seq(
-  "com.typesafe" % "config" % "1.4.2",
+  "com.typesafe" % "config" % "1.4.6",
   "com.gu" %% "simple-configuration-ssm" % "7.0.0",
   "org.mockito" % "mockito-core" % "2.28.2" % Test,
   "io.sentry" % "sentry-logback" % "6.29.0",
@@ -26,13 +26,13 @@ libraryDependencies ++= Seq(
   "com.okta.jwt" % "okta-jwt-verifier" % oktaJwtVerifierVersion,
   "com.okta.jwt" % "okta-jwt-verifier-impl" % oktaJwtVerifierVersion % Runtime,
   "com.gu" %% "identity-test-users" % "0.10.2",
-  "com.google.guava" % "guava" % "32.1.1-jre",
+  "com.google.guava" % "guava" % "32.1.3-jre",
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
   "com.gu.play-googleauth" %% "play-v30" % "36.0.0",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
   "com.squareup.okhttp3" % "okhttp" % "4.11.0",
   "com.gocardless" % "gocardless-pro" % "2.10.0",
-  "com.googlecode.libphonenumber" % "libphonenumber" % "8.13.20",
+  "com.googlecode.libphonenumber" % "libphonenumber" % "8.13.55",
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
