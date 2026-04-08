@@ -8,8 +8,6 @@ import type { Tests } from './models';
 // participations.
 // Note: These regexes are matched against the path and the querystring only (i.e. no domain)
 export const pageUrlRegexes = {
-	allLandingAndThankyouPages:
-		/((uk|us|ca|eu|nz|int)\/((subscribe\/weekly\/gift)|(subscribe\/weekly)|checkout|one-time-checkout|contribute|thank-you))|uk\/subscribe|uk\/subscribe\/paper|(uk|eu)\/guardian-ad-lite|(uk|us|ca|au)\/student/,
 	contributions: {
 		oneTimeCheckoutOnly: /(uk|us|au|ca|eu|nz|int)\/one-time-checkout/,
 	},
@@ -19,12 +17,11 @@ export const pageUrlRegexes = {
 		genericCheckoutOnly: /(uk|us|au|ca|eu|nz|int)\/checkout/,
 		paper: {
 			paperPages:
-				/(uk\/subscribe\/paper).*?|(uk\/(checkout|thank-you)).*?(SubscriptionCard|HomeDelivery|NationalDelivery)/,
+				/(uk\/subscribe\/paper)|((uk\/(checkout|thank-you)).*?(SubscriptionCard|HomeDelivery|NationalDelivery))/,
 		},
 		weekly: {
-			// Uk weekly pages, including landing, original & generic checkout/thankyou pages
-			weeklyUKPages:
-				/(uk\/subscribe\/weekly).*?|(uk\/(checkout|thank-you)).*?(MonthlyPlus|QuarterlyPlus|AnnualPlus)/,
+			weeklyPages:
+				/((uk|us|ca|eu|nz|int)\/subscribe\/weekly)|(((uk|us|ca|eu|nz|int)\/(checkout|thank-you)).*?(MonthlyPlus|QuarterlyPlus|AnnualPlus))/,
 			// Includes landing, original & generic checkout/thankyou pages
 			weeklyGiftPages:
 				/((uk|us|ca|eu|nz|int)\/subscribe\/weekly\/gift)|((uk|us|ca|eu|nz|int)(\/(checkout|thank-you))).*?(OneYearGift|ThreeMonthGift)/,
@@ -49,7 +46,6 @@ export const tests: Tests = {
 		isActive: true,
 		referrerControlled: true,
 		seed: 1,
-		targetPage: pageUrlRegexes.allLandingAndThankyouPages,
 		excludeContributionsOnlyCountries: true,
 	},
 	abandonedBasket: {
@@ -70,7 +66,6 @@ export const tests: Tests = {
 		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 1,
-		targetPage: pageUrlRegexes.allLandingAndThankyouPages,
 		excludeContributionsOnlyCountries: true,
 	},
 	paypalMigrationRecurring: {
@@ -113,7 +108,7 @@ export const tests: Tests = {
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 5,
 		targetPage: pageUrlRegexes.subscriptions.landingPageSubscribeOnly,
-		persistPage: pageUrlRegexes.subscriptions.weekly.weeklyUKPages,
+		persistPage: pageUrlRegexes.subscriptions.weekly.weeklyPages,
 		excludeContributionsOnlyCountries: true,
 	},
 };
