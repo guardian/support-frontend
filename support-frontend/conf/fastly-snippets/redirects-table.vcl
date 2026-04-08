@@ -74,4 +74,7 @@ table support_frontend_redirects {
   "/subscribe/paper": "/uk/subscribe/paper",
   # This was a legacy URL to differentiate between tabs on the page
   "/uk/subscribe/paper/delivery": "/uk/subscribe/paper",
+
+  # weekly, legacy URL redirect
+  "/subscribe/weekly/checkout": "/subscribe/weekly"
 }

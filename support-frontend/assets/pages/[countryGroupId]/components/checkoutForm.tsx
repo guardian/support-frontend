@@ -143,7 +143,6 @@ type CheckoutFormProps = {
 	weeklyDeliveryDate: Date;
 	setWeeklyDeliveryDate: (value: Date) => void;
 	thresholdAmount: number;
-	enableWeeklyDigital: boolean;
 	contributionAmount?: number;
 	promotion?: Promotion;
 	checkoutSession?: CheckoutSession;
@@ -167,7 +166,6 @@ export default function CheckoutForm({
 	weeklyDeliveryDate,
 	setWeeklyDeliveryDate,
 	thresholdAmount,
-	enableWeeklyDigital,
 	contributionAmount,
 	promotion,
 	checkoutSession,
@@ -639,7 +637,6 @@ export default function CheckoutForm({
 				)
 					? weeklyDeliveryDate
 					: undefined,
-				enableWeeklyDigital,
 			});
 			window.location.href = successUrl;
 			// It seems non-deterministic how much code is executed below setting
@@ -873,7 +870,6 @@ export default function CheckoutForm({
 								/>
 							</div>
 						)}
-
 						{isWeeklyGift && (
 							<>
 								<WeeklyGiftPersonalFields
@@ -910,7 +906,6 @@ export default function CheckoutForm({
 								/>
 							</>
 						)}
-
 						<PersonalDetailsFields
 							countryId={countryId}
 							countries={productDescription.deliverableTo}
@@ -931,7 +926,6 @@ export default function CheckoutForm({
 							isSignedIn={isSignedIn}
 							isWeeklyGift={isWeeklyGift}
 						/>
-
 						{/**
 						 * We need the billing-country for all transactions, even non-deliverable ones
 						 * which we get from the GU_country cookie which comes from the Fastly geo client.
@@ -958,7 +952,6 @@ export default function CheckoutForm({
 								billingStatePostcodeCountry={billingStatePostcodeCountry}
 							/>
 						)}
-
 						<FormSection ref={paymentMethodRef}>
 							<Legend>
 								{legendPayment}
@@ -1155,7 +1148,6 @@ export default function CheckoutForm({
 							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}
-							enableWeeklyDigital={enableWeeklyDigital}
 						/>
 						<div
 							css={css`
@@ -1199,7 +1191,6 @@ export default function CheckoutForm({
 							studentDiscount={studentDiscount}
 							promotion={promotion}
 							thresholdAmount={thresholdAmount}
-							enableWeeklyDigital={enableWeeklyDigital}
 						/>
 					</BoxContents>
 				</Box>

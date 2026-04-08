@@ -1,9 +1,7 @@
 const featureFlagEnableDigitalAccess = 'enableDigitalAccess';
-export const featureFlagEnableWeeklyDigital = 'enableWeeklyDigital';
 
 interface FeatureFlags {
 	enableDigitalAccess: boolean;
-	enableWeeklyDigital: boolean;
 }
 
 export function getFeatureFlags(): FeatureFlags {
@@ -11,6 +9,5 @@ export function getFeatureFlags(): FeatureFlags {
 
 	return {
 		enableDigitalAccess: urlParams.has(featureFlagEnableDigitalAccess),
-		enableWeeklyDigital: true,
 	};
 }

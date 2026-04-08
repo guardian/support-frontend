@@ -1,4 +1,3 @@
-import { getFeatureFlags } from 'helpers/featureFlags';
 import { getSubscriptionCopy } from '../copy/subscriptionCopy';
 import type { SubscriptionsLandingProps } from '../subscriptionsLandingProps';
 import DigitalPlusProduct from './DigitalPlusProduct';
@@ -19,12 +18,10 @@ function SubscriptionsLandingContent({
 
 	const supportMsg = 'Support the Guardian with a print subscription';
 
-	const { enableWeeklyDigital } = getFeatureFlags();
 	const subscriptionCopy = getSubscriptionCopy(
 		countryGroupId,
 		pricingCopy,
 		participations,
-		enableWeeklyDigital,
 	);
 
 	const blackFridayPeriod = new Date(2023, 11, 1);
@@ -66,7 +63,6 @@ function SubscriptionsLandingContent({
 							isFeature={isFeature(index)}
 							cssOverrides={product.cssOverrides}
 							benefits={product.benefits}
-							enableDigitalWeekly={product.enableDigitalWeekly}
 						/>
 					),
 				)}

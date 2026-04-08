@@ -1,4 +1,5 @@
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
+import { ClientSideErrorHandler } from 'components/ClientSideError';
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
 import { PageScaffold } from 'components/page/pageScaffold';
@@ -52,4 +53,8 @@ export function PaperLandingPage({
 
 const abParticipations = getAbParticipations();
 setUpTrackingAndConsents(abParticipations);
-renderPage(<PaperLandingPage {...paperLandingProps(abParticipations)} />);
+renderPage(
+	<ClientSideErrorHandler>
+		<PaperLandingPage {...paperLandingProps(abParticipations)} />
+	</ClientSideErrorHandler>,
+);

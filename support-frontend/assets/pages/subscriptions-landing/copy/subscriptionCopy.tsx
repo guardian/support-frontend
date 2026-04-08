@@ -171,17 +171,10 @@ function guardianWeekly(
 	countryGroupId: CountryGroupId,
 	priceCopy: PriceCopy,
 	participations: Participations,
-	enableWeeklyDigital: boolean,
 ): ProductCopy {
-	const weeklyDescription = enableWeeklyDigital
-		? 'A curated weekly news magazine featuring our best global journalism in print, delivered wherever you are in the world. Plus, enjoy unlimited access to our full suite of digital benefits for the complete Guardian experience.'
-		: 'Gain a deeper understanding of the issues that matter with the Guardian Weekly magazine. Every week, take your time over handpicked articles from the Guardian, delivered for free to wherever you are in the world.';
-	const weeklyTitle = enableWeeklyDigital
-		? 'The Guardian Weekly'
-		: 'Guardian Weekly';
 	const weeklyFindButton = {
 		ctaButtonText: 'Find out more',
-		link: guardianWeeklyLanding(countryGroupId, false, enableWeeklyDigital),
+		link: guardianWeeklyLanding(countryGroupId, false),
 		analyticsTracking: sendTrackingEventsOnClick({
 			id: 'weekly_cta',
 			product: 'GuardianWeekly',
@@ -190,20 +183,6 @@ function guardianWeekly(
 		priority: 'primary',
 		theme: themeButtonLegacyGray,
 	} as ProductButton;
-	const weeklyGiftButton = {
-		ctaButtonText: 'See gift options',
-		link: guardianWeeklyLanding(countryGroupId, true),
-		analyticsTracking: sendTrackingEventsOnClick({
-			id: 'weekly_cta_gift',
-			product: 'GuardianWeekly',
-			componentType: 'ACQUISITIONS_BUTTON',
-		}),
-		priority: 'tertiary',
-		theme: themeButtonLegacyGray,
-	} as ProductButton;
-	const weeklyButtons = enableWeeklyDigital
-		? [weeklyFindButton]
-		: [weeklyFindButton, weeklyGiftButton];
 
 	const subtitle =
 		participations.guardianWeeklySubscriptionSubtitle === 'variant'
@@ -211,17 +190,15 @@ function guardianWeekly(
 			: getWeeklyDigitalDisplayPrice(countryGroupId, BillingPeriod.Monthly);
 
 	return {
-		title: weeklyTitle,
-		subtitle: subtitle,
-		description: weeklyDescription,
+		title: 'The Guardian Weekly',
+		subtitle,
+		description:
+			'A curated weekly news magazine featuring our best global journalism in print, delivered wherever you are in the world. Plus, enjoy unlimited access to our full suite of digital benefits for the complete Guardian experience.',
 		offer: priceCopy.discountCopy || '',
-		buttons: weeklyButtons,
-		productImage: (
-			<WeeklyPackShot enableDisplayWeeklyDigital={enableWeeklyDigital} />
-		),
+		buttons: [weeklyFindButton],
+		productImage: <WeeklyPackShot />,
 		participations: participations,
 		cssOverrides: weeklySubscriptionProductCardStyle,
-		enableDigitalWeekly: enableWeeklyDigital,
 	};
 }
 
@@ -257,15 +234,9 @@ const getSubscriptionCopy = (
 	countryGroupId: CountryGroupId,
 	pricingCopy: PricingCopy,
 	participations: Participations,
-	enableWeeklyDigital: boolean,
 ): ProductCopy[] => {
 	const productcopy: ProductCopy[] = [
-		guardianWeekly(
-			countryGroupId,
-			pricingCopy[GuardianWeekly],
-			participations,
-			enableWeeklyDigital,
-		),
+		guardianWeekly(countryGroupId, pricingCopy[GuardianWeekly], participations),
 	];
 	if (countryGroupId === GBPCountries) {
 		productcopy.push(paper(countryGroupId, pricingCopy[Paper]));

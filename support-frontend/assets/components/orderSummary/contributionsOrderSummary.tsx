@@ -31,7 +31,9 @@ import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSunda
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import {
 	isContributionOnlyProduct,
+	isGuardianWeeklyDigitalProduct,
 	isGuardianWeeklyGiftProduct,
+	isGuardianWeeklyProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
@@ -173,7 +175,6 @@ export type ContributionsOrderSummaryProps = {
 	checkListData: BenefitsCheckListData[];
 	startDate: React.ReactNode;
 	landingPageSettings: LandingPageVariant;
-	enableWeeklyDigital?: boolean;
 	ratePlanLabel?: string;
 	promotion?: Promotion;
 	paymentFrequency?: string;
@@ -195,7 +196,6 @@ export function ContributionsOrderSummary({
 	checkListData,
 	startDate,
 	landingPageSettings,
-	enableWeeklyDigital,
 	ratePlanLabel,
 	promotion,
 	paymentFrequency,
@@ -229,12 +229,16 @@ export function ContributionsOrderSummary({
 	const discountPrice =
 		studentDiscount?.discountPriceWithCurrency ?? promoDiscountPrice;
 	const period = studentDiscount?.periodNoun ?? paymentFrequency;
-
-	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 	const title = `Your ${
 		isContributionOnlyProduct(productKey) ? 'support' : 'subscription'
 	}`;
 
+	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
+	const isWeeklyDigital = isGuardianWeeklyDigitalProduct(
+		productKey,
+		ratePlanKey,
+	);
+	const isWeekly = isGuardianWeeklyProduct(productKey);
 	return (
 		<div css={componentStyles}>
 			<div css={[summaryRow, rowSpacing, headingRow]}>
@@ -272,9 +276,7 @@ export function ContributionsOrderSummary({
 				{hasCheckList && showCheckList && (
 					<>
 						<div css={checklistContainer}>{checkList}</div>
-						{!enableWeeklyDigital && !isWeeklyGift && (
-							<div css={startDateList}>{startDate}</div>
-						)}
+						{!isWeekly && <div css={startDateList}>{startDate}</div>}
 					</>
 				)}
 			</div>
@@ -290,7 +292,7 @@ export function ContributionsOrderSummary({
 				/>
 			</div>
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
-			{enableWeeklyDigital && (
+			{isWeeklyDigital && (
 				<div css={startDateWeeklyDigitalList}>{startDate}</div>
 			)}
 			{nudgeSettings && (
