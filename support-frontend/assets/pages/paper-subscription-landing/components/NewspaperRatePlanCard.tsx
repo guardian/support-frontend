@@ -47,7 +47,6 @@ function NewspaperRatePlanCard({
 	productLabel,
 	unavailableOutsideLondon,
 }: Product) {
-	console.log('🚀 ~ NewspaperRatePlanCard ~ promotion:', promotion);
 	const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
 		threshold: 0.5,
 		debounce: true,
