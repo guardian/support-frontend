@@ -14,6 +14,7 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import { PageScaffold } from 'components/page/pageScaffold';
+import type { Institution } from 'helpers/globalsAndSwitches/studentLandingPageSettings';
 import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 import { AccordionFAQ } from '../../components/accordionFAQ';
 import { getStudentFAQs } from '../helpers/studentFAQs';
@@ -28,14 +29,16 @@ type StudentLandingPageProps = {
 	supportRegionId: SupportRegionId;
 	header: JSX.Element;
 	brandAwareness?: JSX.Element;
+	institution?: Institution;
 };
 
 export function StudentLandingPage({
 	supportRegionId,
 	header,
 	brandAwareness,
+	institution,
 }: StudentLandingPageProps) {
-	const faqItems = getStudentFAQs(supportRegionId);
+	const faqItems = getStudentFAQs(supportRegionId, institution);
 	const tsAndCsItem = getStudentTsAndCs(supportRegionId);
 
 	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
