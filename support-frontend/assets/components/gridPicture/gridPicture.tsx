@@ -15,7 +15,7 @@ type GridSlot = {
 	sizes: string;
 	media: string;
 };
-export type Source = GridImage & GridSlot;
+type Source = GridImage & GridSlot;
 export type GridPictureProp = {
 	sources: Source[];
 	fallback: string;

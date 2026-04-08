@@ -26,8 +26,16 @@ export const ImageStyles = css`
 	align-items: flex-end;
 	width: 100%;
 
+	picture {
+		display: flex;
+	}
+
 	${until.tablet} {
-		background: linear-gradient(${palette.neutral[97]}, ${palette.neutral[86]});
+		background: linear-gradient(
+			to bottom,
+			transparent,
+			${palette.neutral[86]} 50%
+		);
 	}
 
 	${from.tablet} {
