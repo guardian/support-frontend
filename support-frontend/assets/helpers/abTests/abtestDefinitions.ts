@@ -14,8 +14,8 @@ export const pageUrlRegexes = {
 	genericCheckoutOnly: /(uk|us|au|ca|eu|nz|int)\/checkout/,
 	paperPages:
 		/(uk\/subscribe\/paper)|((uk\/(checkout|thank-you)).*?(SubscriptionCard|HomeDelivery|NationalDelivery))/,
-	weeklyUKPages:
-		/(uk\/subscribe\/weekly)|((uk\/(checkout|thank-you)).*?(MonthlyPlus|QuarterlyPlus|AnnualPlus))/,
+	weeklyPages:
+		/((uk|us|ca|eu|nz|int)\/subscribe\/weekly)|(((uk|us|ca|eu|nz|int)\/(checkout|thank-you)).*?(MonthlyPlus|QuarterlyPlus|AnnualPlus))/,
 	weeklyGiftPages:
 		/((uk|us|ca|eu|nz|int)\/subscribe\/weekly\/gift)|((uk|us|ca|eu|nz|int)(\/(checkout|thank-you))).*?(OneYearGift|ThreeMonthGift)/,
 };

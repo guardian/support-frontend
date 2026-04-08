@@ -23,8 +23,6 @@ import type { Audience, Participations, Test, Variant } from '../models';
 const { targetPageMatches } = _;
 const {
 	oneTimeCheckoutOnly,
-
-const { weeklyPages } = pageUrlRegexes.subscriptions;
 	landingPageSubscribeOnly,
 	landingPagePaperOnly,
 	genericCheckoutOnly,
@@ -619,9 +617,7 @@ it('targetPage matching', () => {
 	).toEqual(true);
 	expect(targetPageMatches('/uk/subscribe/paper', paperPages)).toEqual(true);
 	expect(targetPageMatches('/uk/checkout', genericCheckoutOnly)).toEqual(true);
-	expect(targetPageMatches('/uk/subscribe/weekly', weeklyUKPages)).toEqual(
-		true,
-	);
+	expect(targetPageMatches('/eu/subscribe/weekly', weeklyPages)).toEqual(true);
 	expect(
 		targetPageMatches('/eu/subscribe/weekly/gift', weeklyGiftPages),
 	).toEqual(true);
