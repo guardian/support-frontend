@@ -55,11 +55,10 @@ type Test = {
 	// If another test participation is referrerControlled, exclude this test
 	excludeIfInReferrerControlledTest?: boolean;
 	seed: number;
-	// An optional regex that will be tested against the path of the current page
-	// before activating this test eg. '/(uk|us|au|ca|nz)/subscribe$'
-	targetPage?: string | RegExp;
-	// Persist this test participation across more pages using this regex
-	persistPage?: string | RegExp;
+	// Optional regex to initially target this test participation to pages eg. /\/(uk|us|au|ca|nz)\/subscribe$/
+	targetPage?: RegExp;
+	// Optional regex to persist this test participation across further pages
+	persistPage?: RegExp;
 	omitCountries?: IsoCountry[];
 	// Some users will see a version of the checkout that only offers
 	// the option to make contributions. We won't want to include these
