@@ -7,7 +7,7 @@ interface Image {
 	altText: string;
 }
 
-interface Institution {
+export interface Institution {
 	name: string;
 	acronym: string;
 	logoUrl: string;
