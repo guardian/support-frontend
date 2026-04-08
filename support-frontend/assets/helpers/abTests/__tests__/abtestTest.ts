@@ -21,11 +21,15 @@ import { _, init as abInit, getAmountsTestVariant } from '../abtest';
 import type { Audience, Participations, Test, Variant } from '../models';
 
 const { targetPageMatches } = _;
-const { oneTimeCheckoutOnly } = pageUrlRegexes.contributions;
-const { landingPageSubscribeOnly, landingPagePaperOnly, genericCheckoutOnly } =
-	pageUrlRegexes.subscriptions;
-const { paperPages } = pageUrlRegexes.subscriptions.paper;
-const { weeklyPages, weeklyGiftPages } = pageUrlRegexes.subscriptions.weekly;
+const {
+	oneTimeCheckoutOnly,
+	landingPageSubscribeOnly,
+	landingPagePaperOnly,
+	genericCheckoutOnly,
+	paperPages,
+	weeklyPages,
+	weeklyGiftPages,
+} = pageUrlRegexes;
 
 jest.mock('@guardian/ophan-tracker-js', () => ({
 	record: () => null,
