@@ -70,6 +70,7 @@ export function StudentLandingPageInstitution({
 					heroImagePrefix="AuStudentLandingHero"
 				/>
 			}
+			institution={studentLandingPageVariant.institution}
 		/>
 	);
 }
