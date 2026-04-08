@@ -1,11 +1,10 @@
 import { css } from '@emotion/react';
 import CentredContainer from 'components/containers/centredContainer';
+import GridPicture from 'components/gridPicture/gridPicture';
 import HeroContainer from 'components/page/hero';
-import HeroPicture from 'components/page/heroPicture';
-import { HeroPictureData } from '../images/HeroPicture.stories';
 
 export default {
-	title: 'Hero Skeleton',
+	title: 'Hero Container',
 	component: HeroContainer,
 	decorators: [
 		(Story: React.FC): JSX.Element => (
@@ -54,7 +53,36 @@ export function Hero({
 }): JSX.Element {
 	return (
 		<HeroContainer
-			imageSlot={<HeroPicture {...HeroPictureData} />}
+			imageSlot={
+				<GridPicture
+					sources={[
+						{
+							gridId: 'placeholder_16x9',
+							srcSizes: [962, 500],
+							sizes: '240px',
+							imgType: 'jpg',
+							media: '(max-width: 739px)',
+						},
+						{
+							gridId: 'placeholder_1x1',
+							srcSizes: [802, 500],
+							sizes: '200px',
+							imgType: 'jpg',
+							media: '(max-width: 979px)',
+						},
+						{
+							gridId: 'placeholder_4x3',
+							srcSizes: [962, 500],
+							sizes: '240px',
+							imgType: 'jpg',
+							media: '(min-width: 980px)',
+						},
+					]}
+					fallback="placeholder_4x3"
+					fallbackSize={240}
+					altText=""
+				/>
+			}
 			contentSlot={
 				<section>
 					<p>
