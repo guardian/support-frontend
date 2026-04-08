@@ -14,9 +14,8 @@ export const pageUrlRegexes = {
 	genericCheckoutOnly: /(uk|us|au|ca|eu|nz|int)\/checkout/,
 	paperPages:
 		/(uk\/subscribe\/paper)|((uk\/(checkout|thank-you)).*?(SubscriptionCard|HomeDelivery|NationalDelivery))/,
-	weeklyPages:
-		/((uk|us|ca|eu|nz|int)\/subscribe\/weekly)|(((uk|us|ca|eu|nz|int)\/(checkout|thank-you)).*?(MonthlyPlus|QuarterlyPlus|AnnualPlus))/,
-	// Includes landing, original & generic checkout/thankyou pages
+	weeklyUKPages:
+		/(uk\/subscribe\/weekly)|((uk\/(checkout|thank-you)).*?(MonthlyPlus|QuarterlyPlus|AnnualPlus))/,
 	weeklyGiftPages:
 		/((uk|us|ca|eu|nz|int)\/subscribe\/weekly\/gift)|((uk|us|ca|eu|nz|int)(\/(checkout|thank-you))).*?(OneYearGift|ThreeMonthGift)/,
 };
@@ -100,7 +99,7 @@ export const tests: Tests = {
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 5,
 		targetPage: pageUrlRegexes.landingPageSubscribeOnly,
-		persistPage: pageUrlRegexes.weeklyPages,
+		persistPage: pageUrlRegexes.weeklyUKPages,
 		excludeContributionsOnlyCountries: true,
 	},
 };

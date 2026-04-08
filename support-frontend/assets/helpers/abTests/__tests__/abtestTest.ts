@@ -27,7 +27,7 @@ const {
 	landingPagePaperOnly,
 	genericCheckoutOnly,
 	paperPages,
-	weeklyPages,
+	weeklyUKPages,
 	weeklyGiftPages,
 } = pageUrlRegexes;
 
@@ -586,7 +586,7 @@ describe('init', () => {
 		it('matches against the query string as well as the patch', () => {
 			const abTests = {
 				t1: buildTest({
-					targetPage: weeklyPages,
+					targetPage: weeklyUKPages,
 				}),
 			};
 
@@ -617,7 +617,9 @@ it('targetPage matching', () => {
 	).toEqual(true);
 	expect(targetPageMatches('/uk/subscribe/paper', paperPages)).toEqual(true);
 	expect(targetPageMatches('/uk/checkout', genericCheckoutOnly)).toEqual(true);
-	expect(targetPageMatches('/eu/subscribe/weekly', weeklyPages)).toEqual(true);
+	expect(targetPageMatches('/uk/subscribe/weekly', weeklyUKPages)).toEqual(
+		true,
+	);
 	expect(
 		targetPageMatches('/eu/subscribe/weekly/gift', weeklyGiftPages),
 	).toEqual(true);
