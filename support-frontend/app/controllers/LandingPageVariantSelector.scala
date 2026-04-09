@@ -27,26 +27,12 @@ class LandingPageVariantSelector(
       .getOrElse(0)
   }
 
-  /** Check if a variant is forced via URL parameter.
-    *
-    * Format: ?force-landing-page=TEST_NAME:VARIANT_NAME
-    */
-  private def getForcedVariant(request: RequestHeader, testName: String): Option[String] = {
-    request.getQueryString("force-landing-page").flatMap { param =>
-      param.split(":") match {
-        case Array(forcedTestName, variantName) if forcedTestName == testName =>
-          Some(variantName)
-        case _ => None
-      }
-    }
-  }
-
   /** Select a variant for a specific test.
     *
     * @param test
     *   The landing page test configuration
     * @param request
-    *   The HTTP request (used to get MVT ID and check for forced variants)
+    *   The HTTP request (used to get MVT ID)
     * @return
     *   The selected variant, or None if test has no variants
     */
@@ -59,28 +45,15 @@ class LandingPageVariantSelector(
       return None
     }
 
-    // Check for forced variant first
-    getForcedVariant(request, test.name) match {
-      case Some(forcedVariantName) =>
-        val forcedVariant = test.variants.find(_.name == forcedVariantName)
-        if (forcedVariant.isEmpty) {
-          logger.warn(s"Forced variant $forcedVariantName not found in test ${test.name}")
-        }
-        return forcedVariant
+    val mvtId = getMvtId(request)
+    val banditData = banditDataService.getBanditData()
 
-      case None =>
-        // No forced variant, proceed with normal selection
-        val mvtId = getMvtId(request)
-        val banditData = banditDataService.getBanditData()
-
-        try {
-          Some(VariantSelection.selectVariant(test, mvtId, banditData))
-        } catch {
-          case e: Exception =>
-            logger.error(s"Error selecting variant for test ${test.name}: ${e.getMessage}", e)
-            // Fallback to first variant
-            test.variants.headOption
-        }
+    try {
+      Some(VariantSelection.selectVariant(test, mvtId, banditData))
+    } catch {
+      case e: Exception =>
+        logger.error(s"Error selecting variant for test ${test.name}: ${e.getMessage}", e)
+        test.variants.headOption
     }
   }
 
