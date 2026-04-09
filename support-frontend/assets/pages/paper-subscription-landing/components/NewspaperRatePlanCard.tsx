@@ -53,6 +53,7 @@ function NewspaperRatePlanCard({
 	});
 
 	const { windowWidthIsGreaterThan } = useWindowWidth();
+	const { setPromoTerms } = usePromoTerms();
 
 	/**
 	 * The first time this runs hasBeenSeen
@@ -66,10 +67,11 @@ function NewspaperRatePlanCard({
 	}, [hasBeenSeen]);
 
 	useEffect(() => {
-		const { setPromoTerms } = usePromoTerms();
 		if (promotion?.expires) {
 			const promoTerms = getNewspaperPromoTerms(promotion);
 			setPromoTerms(promoTerms);
+		} else {
+			setPromoTerms(null);
 		}
 	}, [promotion]);
 
