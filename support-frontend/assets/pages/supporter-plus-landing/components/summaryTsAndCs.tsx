@@ -32,6 +32,7 @@ import {
 	isPaperPlusSub,
 	isSundayOnlyNewspaperSub,
 } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
+import { isGuardianWeeklyDigitalProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { textLink } from '../../../helpers/utilities/textLink';
 
 const containerSummaryTsCs = css`
@@ -73,7 +74,6 @@ export interface SummaryTsAndCsProps {
 	currency: IsoCurrency;
 	amount: number;
 	ratePlanDescription?: string;
-	enableWeeklyDigital?: boolean;
 }
 export function SummaryTsAndCs({
 	productKey,
@@ -82,7 +82,6 @@ export function SummaryTsAndCs({
 	currency,
 	amount,
 	ratePlanDescription,
-	enableWeeklyDigital,
 }: SummaryTsAndCsProps): JSX.Element | null {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -195,12 +194,17 @@ export function SummaryTsAndCs({
 
 	const getSummaryTsAndCs = (
 		productKey: ActiveProductKey,
-		enableWeeklyDigital?: boolean,
+		isWeeklyDigital: boolean,
 	): JSX.Element | null => {
-		const summaryTsAndCs = enableWeeklyDigital
+		const summaryTsAndCs = isWeeklyDigital
 			? weeklyDigitalSummaryTsAndCs[productKey]
 			: digitalSummaryTsAndCs[productKey];
 		return summaryTsAndCs ?? null;
 	};
-	return getSummaryTsAndCs(productKey, enableWeeklyDigital);
+
+	const isWeeklyDigital = isGuardianWeeklyDigitalProduct(
+		productKey,
+		ratePlanKey,
+	);
+	return getSummaryTsAndCs(productKey, isWeeklyDigital);
 }

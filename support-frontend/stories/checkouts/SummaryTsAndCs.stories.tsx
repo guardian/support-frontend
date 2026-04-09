@@ -56,8 +56,7 @@ WeeklyDigitalGBP.args = {
 	ratePlanKey: 'AnnualPlus',
 	countryGroupId: 'GBPCountries',
 	currency: 'GBP',
-	amount: 158.4,
-	enableWeeklyDigital: true,
+	amount: 171,
 };
 
 export const WeeklyDigitalUSD = Template.bind({});
@@ -66,8 +65,7 @@ WeeklyDigitalUSD.args = {
 	ratePlanKey: 'MonthlyPlus',
 	countryGroupId: 'UnitedStates',
 	currency: 'USD',
-	amount: 30,
-	enableWeeklyDigital: true,
+	amount: 108,
 };
 
 export const HomeDeliverySunday = Template.bind({});

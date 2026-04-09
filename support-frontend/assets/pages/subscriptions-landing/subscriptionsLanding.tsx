@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import { ClientSideErrorHandler } from 'components/ClientSideError';
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
 import { PageScaffold } from 'components/page/pageScaffold';
@@ -36,5 +37,10 @@ export function SubscriptionsLandingPage({
 const abParticipations = getAbParticipations();
 setUpTrackingAndConsents(abParticipations);
 renderPage(
-	<SubscriptionsLandingPage {...subscriptionsLandingProps(abParticipations)} />,
+	<ClientSideErrorHandler>
+		<SubscriptionsLandingPage
+			{...subscriptionsLandingProps(abParticipations)}
+		/>
+		,
+	</ClientSideErrorHandler>,
 );

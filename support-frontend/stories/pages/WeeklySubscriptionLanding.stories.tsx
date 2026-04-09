@@ -37,14 +37,14 @@ const ratePlansPrices = {
 	},
 	Quarterly: {
 		GBP: {
-			price: 49.5,
+			price: 57,
 			currency: 'GBP',
 			promotions: [
 				{
 					name: 'GW 50off3 Always-On',
 					description: '50% Off for 3 months',
-					promoCode: '50OFF3',
-					discountedPrice: 24.75,
+					promoCode: 'GWPLUSDIGITAL',
+					discountedPrice: 28.5,
 					numberOfDiscountedPeriods: 1,
 					discount: {
 						amount: 50,
@@ -61,22 +61,22 @@ const ratePlansPrices = {
 	},
 	Annual: {
 		GBP: {
-			price: 150,
+			price: 228,
 			currency: 'GBP',
 			promotions: [
 				{
-					name: 'GW 20% off annual',
-					description: '20% off a year',
-					promoCode: '20ANNUAL',
-					discountedPrice: 158.4,
+					name: 'GW 25% off annual',
+					description: '25% off a year',
+					promoCode: '25ANNUAL',
+					discountedPrice: 171,
 					numberOfDiscountedPeriods: 1,
 					discount: {
-						amount: 20,
+						amount: 25,
 						durationMonths: 12,
 					},
 					landingPage: {
 						description: `<p>The Guardian Weekly magazine is a round-up of the world news, opinion and long reads that have shaped the week, helping you digest our reporting in a more considered way, outside of busy, daily news feeds. Inside, the past seven days' most memorable stories are reframed with striking photography and insightful companion pieces, handpicked from across the Guardian's award-winning, independent journalism, from names you can trust, such as Emma Graham-Harrison, Patrick Wintour, Zoe Williams, Jonathan Freedland, Sonia Sodha and Simon Hattenstone.</p><p>Are you studying in the UK? Take advantage of our student offer - 70% off for 3 months. Scroll down to the bottom of the page and click 'Student subscriptions'.</p>`,
-						roundel: '20% off an annual subscription',
+						roundel: '25% off an annual subscription',
 						title: 'Open up your world view',
 					},
 				},

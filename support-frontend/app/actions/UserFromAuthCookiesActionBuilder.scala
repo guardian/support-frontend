@@ -27,7 +27,7 @@ import scala.concurrent.{ExecutionContext, Future}
   */
 class UserFromAuthCookiesActionBuilder(
     override val parser: BodyParser[AnyContent],
-    oktaAuthService: OktaAuthService[DefaultAccessClaims, UserClaims],
+    oktaAuthService: OktaAuthService,
     config: Identity,
 )(implicit val executionContext: ExecutionContext)
     extends ActionBuilder[OptionalAuthRequest, AnyContent]
@@ -42,7 +42,7 @@ class UserFromAuthCookiesActionBuilder(
   */
 class UserFromAuthCookiesOrAuthServerActionBuilder(
     override val parser: BodyParser[AnyContent],
-    oktaAuthService: OktaAuthService[DefaultAccessClaims, UserClaims],
+    oktaAuthService: OktaAuthService,
     config: Identity,
     isAuthServerUp: () => Future[Boolean],
 )(implicit val executionContext: ExecutionContext)
@@ -73,7 +73,7 @@ object UserFromAuthCookiesActionBuilder extends Logging {
   /** Provides an authenticated [[User]] to the given block if authentication is possible. Otherwise, processes the
     * given block without a user.
     */
-  def shouldValidateUser[A](config: Identity, oktaAuthService: OktaAuthService[DefaultAccessClaims, UserClaims])(
+  def shouldValidateUser[A](config: Identity, oktaAuthService: OktaAuthService)(
       request: Request[A],
       block: OptionalAuthRequest[A] => Future[Result],
       handleFailure: ValidationError => Future[Result],
@@ -95,7 +95,7 @@ object UserFromAuthCookiesActionBuilder extends Logging {
     */
   private def validateUserLocally[A](
       config: Identity,
-      oktaAuthService: OktaAuthService[DefaultAccessClaims, UserClaims],
+      oktaAuthService: OktaAuthService,
   )(request: Request[A]): Either[ValidationError, User] = {
     val accessScopes = config.oauthScopes.trim.split("\\s+").map(scope => ClientAccessScope(scope)).toList
     for {
@@ -105,7 +105,8 @@ object UserFromAuthCookiesActionBuilder extends Logging {
       accessTokenCookie <- request.cookies
         .get(config.accessTokenCookieName)
         .toRight(GenericValidationError("No access token cookie"))
-      userClaims <- oktaAuthService.validateIdTokenLocally(IdToken(idTokenCookie.value), nonce = None)
+      userClaims <- oktaAuthService
+        .validateIdTokenLocally(IdToken(idTokenCookie.value), nonce = None)(identityClaimsParser = UserClaims.parser)
       _ <- oktaAuthService.validateAccessTokenLocally(AccessToken(accessTokenCookie.value), accessScopes)
       // read the GU_SO cookie to get the timestamp for when a user last signed out,
       // and compare it to the iat claim in the id token
@@ -191,6 +192,7 @@ object UserFromAuthCookiesActionBuilder extends Logging {
   }
 
   case class UserClaims(
+      oktaId: String,
       primaryEmailAddress: String,
       identityId: String,
       firstName: Option[String],
@@ -202,28 +204,23 @@ object UserFromAuthCookiesActionBuilder extends Logging {
 
     val parser: IdentityClaimsParser[UserClaims] = new IdentityClaimsParser[UserClaims] {
 
-      // Not used
-      override protected def fromDefaultAndRaw(
-          defaultClaims: DefaultIdentityClaims,
-          rawClaims: JsonString,
-      ): Either[ValidationError, UserClaims] = throw new UnsupportedOperationException()
-
-      override protected def fromDefaultAndUnparsed(
-          defaultClaims: DefaultIdentityClaims,
-          unparsedClaims: UnparsedClaims,
-      ): Either[ValidationError, UserClaims] =
-        Right(
-          UserClaims(
-            primaryEmailAddress = defaultClaims.primaryEmailAddress,
-            identityId = defaultClaims.identityId,
-            firstName = unparsedClaims.getOptional("first_name"),
-            lastName = unparsedClaims.getOptional("last_name"),
-            iat = unparsedClaims.rawClaims.get("iat").map {
-              case iat: java.lang.Integer => iat.toLong
-              case iat: java.lang.Long => iat.toLong
-            },
-          ),
+      override def parse(unparsedClaims: UnparsedClaims): Either[ValidationError, UserClaims] = {
+        for {
+          oktaId <- IdentityClaimsParser.oktaId(unparsedClaims)
+          primaryEmailAddress <- IdentityClaimsParser.primaryEmailAddress(unparsedClaims)
+          identityId <- IdentityClaimsParser.identityId(unparsedClaims)
+        } yield UserClaims(
+          oktaId = oktaId,
+          primaryEmailAddress = primaryEmailAddress,
+          identityId = identityId,
+          firstName = unparsedClaims.getOptional("first_name"),
+          lastName = unparsedClaims.getOptional("last_name"),
+          iat = unparsedClaims.rawClaims.get("iat").map {
+            case iat: java.lang.Integer => iat.toLong
+            case iat: java.lang.Long => iat.toLong
+          },
         )
+      }
     }
 
     def toUser(claims: UserClaims): User = User(

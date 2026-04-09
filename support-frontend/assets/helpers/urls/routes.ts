@@ -7,7 +7,6 @@ import type {
 	PaperFulfilmentOptions,
 } from '@modules/product/fulfilmentOptions';
 import type { ProductOptions } from '@modules/product/productOptions';
-import { featureFlagEnableWeeklyDigital } from 'helpers/featureFlags';
 import type { Option } from 'helpers/types/option';
 import {
 	addQueryParamsToURL,
@@ -116,14 +115,13 @@ function getDigitalPlusCheckoutDeepLink(
 function guardianWeeklyLanding(
 	countryGroupId: CountryGroupId,
 	gift: boolean,
-	enableWeeklyDigital?: boolean,
 ): string {
 	const url = `${getOrigin()}/${countryPath(countryGroupId)}${
 		gift
 			? routes.guardianWeeklySubscriptionLandingGift
 			: routes.guardianWeeklySubscriptionLanding
 	}`;
-	return enableWeeklyDigital ? `${url}?${featureFlagEnableWeeklyDigital}` : url;
+	return url;
 }
 
 const promotionTermsUrl = (promoCode: string) =>
@@ -163,19 +161,14 @@ function parameteriseUrl(
 	url: string,
 	promoCode?: Option<string>,
 	fulfilmentOption?: PaperFulfilmentOptions,
-	enableWeeklyDigital?: boolean,
 ) {
 	const params = {
 		promoCode,
 	};
-	const urlWithParamsWeeklyDigital = addQueryParamsToURL(
-		url,
-		params,
-		enableWeeklyDigital ? featureFlagEnableWeeklyDigital : undefined,
-	).replace(/\?$/, ''); // removes ? when no params
+	const urlWithParams = addQueryParamsToURL(url, params);
 	return fulfilmentOption
-		? `${urlWithParamsWeeklyDigital}#${fulfilmentOption}`
-		: urlWithParamsWeeklyDigital;
+		? `${urlWithParams}#${fulfilmentOption}`
+		: urlWithParams;
 }
 
 // If the user cancels before completing the payment flow, send them back to the contribute page.

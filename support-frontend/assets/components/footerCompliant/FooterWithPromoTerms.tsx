@@ -108,7 +108,6 @@ function GuardianWeeklyFooter({
 	productPrices: ProductPrices;
 	country: IsoCountry;
 	orderIsAGift: boolean;
-	enableWeeklyDigital: boolean;
 }) {
 	const weeklyFulfillmentOption = Domestic;
 	return (

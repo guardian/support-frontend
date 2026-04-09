@@ -2,7 +2,7 @@ import { List } from 'components/list/list';
 import BenefitsContainer from './benefitsContainer';
 import BenefitsHeading from './benefitsHeading';
 
-function GiftBenefits() {
+function WeeklyGiftBenefits() {
 	return (
 		<BenefitsContainer
 			sections={[
@@ -56,4 +56,4 @@ function GiftBenefits() {
 	);
 }
 
-export default GiftBenefits;
+export default WeeklyGiftBenefits;

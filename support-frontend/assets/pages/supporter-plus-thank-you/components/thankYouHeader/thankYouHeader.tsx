@@ -41,10 +41,9 @@ type ThankYouHeaderProps = {
 	isDirectDebitPayment: boolean;
 	amount: number;
 	currency: IsoCurrency;
-	observerPrint?: ObserverPrint;
 	startDate?: string;
 	promotion?: Promotion;
-	enableWeeklyDigital?: boolean;
+	observerPrint?: ObserverPrint;
 };
 
 function ThankYouHeader({
@@ -54,10 +53,9 @@ function ThankYouHeader({
 	isDirectDebitPayment,
 	amount,
 	currency,
-	observerPrint,
 	startDate,
 	promotion,
-	enableWeeklyDigital,
+	observerPrint,
 }: ThankYouHeaderProps): JSX.Element {
 	const isPrint = isPrintProduct(productKey);
 	const isSubscriptionCard = productKey === 'SubscriptionCard';
@@ -87,8 +85,9 @@ function ThankYouHeader({
 
 				{showLegitimateInterestMessage && (
 					<LegitimateInterestMessage
+						productKey={productKey}
+						ratePlanKey={ratePlanKey}
 						showPaymentStatus={!isDirectDebitPayment}
-						enableWeeklyDigital={enableWeeklyDigital}
 					/>
 				)}
 
@@ -109,7 +108,6 @@ function ThankYouHeader({
 				currency={currency}
 				isObserverPrint={!!observerPrint}
 				promotion={promotion}
-				enableWeeklyDigital={enableWeeklyDigital}
 			/>
 			<div css={headerSupportingText}>{renderSubHeading()}</div>
 		</header>
