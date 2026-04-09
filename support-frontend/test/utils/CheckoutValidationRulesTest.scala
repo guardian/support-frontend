@@ -44,7 +44,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(Off),
-          sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
         SubscriptionsPaymentMethodSwitches(
@@ -73,31 +72,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(Off),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-      ),
-    ) shouldBe Invalid("Invalid Payment Method")
-  }
-  it should "return Invalid if a user tries to pay with Sepa but the Sepa switch in RRCP is off" in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
-      product = Contribution(0, GBP, Monthly),
-      paymentFields = SepaPaymentFields("", "", Some(""), Some("")),
-      switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(
-          stripe = Some(On),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
-          stripeExpressCheckout = Some(On),
-          payPal = Some(On),
-          directDebit = Some(On),
-          sepa = Some(Off),
           stripeHostedCheckout = Some(Off),
         ),
         SubscriptionsPaymentMethodSwitches(
@@ -122,7 +96,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(Off),
           directDebit = Some(On),
-          sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
         SubscriptionsPaymentMethodSwitches(
@@ -150,7 +123,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
         SubscriptionsPaymentMethodSwitches(
@@ -178,7 +150,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
         SubscriptionsPaymentMethodSwitches(
@@ -206,7 +177,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
         SubscriptionsPaymentMethodSwitches(
@@ -230,7 +200,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
         SubscriptionsPaymentMethodSwitches(
@@ -257,7 +226,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
         SubscriptionsPaymentMethodSwitches(
@@ -289,7 +257,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
         SubscriptionsPaymentMethodSwitches(
@@ -315,7 +282,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
         SubscriptionsPaymentMethodSwitches(
@@ -344,31 +310,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-      ),
-    ) shouldBe Valid
-  }
-  it should "return Valid if a user tries to pay with Sepa while the Sepa switch in RRCP is on" in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
-      product = Contribution(0, GBP, Monthly),
-      paymentFields = SepaPaymentFields("", "", Some(""), Some("")),
-      switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(
-          stripe = Some(On),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
-          stripeExpressCheckout = Some(On),
-          payPal = Some(On),
-          directDebit = Some(On),
-          sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
         SubscriptionsPaymentMethodSwitches(
@@ -393,7 +334,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
         SubscriptionsPaymentMethodSwitches(
@@ -421,7 +361,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
         SubscriptionsPaymentMethodSwitches(
@@ -449,7 +388,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
         SubscriptionsPaymentMethodSwitches(
@@ -477,7 +415,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
         SubscriptionsPaymentMethodSwitches(
@@ -501,7 +438,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
         SubscriptionsPaymentMethodSwitches(
@@ -528,7 +464,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
         SubscriptionsPaymentMethodSwitches(
@@ -560,7 +495,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
         SubscriptionsPaymentMethodSwitches(
@@ -983,7 +917,6 @@ object TestData {
         stripeExpressCheckout = Some(On),
         payPal = Some(On),
         directDebit = Some(On),
-        sepa = Some(On),
         stripeHostedCheckout = Some(Off),
       ),
       subscriptionsPaymentMethodSwitches: SubscriptionsPaymentMethodSwitches = SubscriptionsPaymentMethodSwitches(
