@@ -257,36 +257,4 @@ class BanditDataService(stage: Stage)(implicit ec: ExecutionContext, system: Act
     getBanditData().find(_.testName == testName)
 }
 
-object BanditDataService {
-
-  /** Extract bandit test configurations from methodologies.
-    *
-    * NOTE: This method mirrors SDC's getBanditTestConfigs function (banditData.ts:154). In SDC, it's used to determine
-    * which tests need bandit data fetching. In our implementation, we use a different approach (Scan to discover
-    * tests), but this method is kept for potential future use and API compatibility.
-    */
-  def getBanditTestConfigs(methodologies: List[Methodology], testName: String): List[BanditTestConfig] = {
-    methodologies.flatMap {
-      case eg: admin.settings.EpsilonGreedyBandit =>
-        Some(
-          BanditTestConfig(
-            testName = eg.testName.getOrElse(testName),
-            sampleCount = eg.sampleCount,
-          ),
-        )
-      case r: admin.settings.Roulette =>
-        Some(
-          BanditTestConfig(
-            testName = r.testName.getOrElse(testName),
-            sampleCount = r.sampleCount,
-          ),
-        )
-      case _ => None
-    }
-  }
-}
-
-case class BanditTestConfig(
-    testName: String,
-    sampleCount: Option[Int],
-)
+object BanditDataService
