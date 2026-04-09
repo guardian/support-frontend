@@ -27,10 +27,6 @@
 				"description": "Direct Debit",
 				"state": "On"
 			},
-			"sepa": {
-				"description": "SEPA",
-				"state": "On"
-			},
 			"payPal": {
 				"description": "PayPal",
 				"state": "On"
