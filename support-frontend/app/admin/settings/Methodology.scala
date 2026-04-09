@@ -18,22 +18,13 @@ case class EpsilonGreedyBandit(
     epsilon: Double,
     testName: Option[String] = None,
     sampleCount: Option[Int] = None,
-) extends Methodology {
-  require(epsilon >= 0.0 && epsilon <= 1.0, s"Epsilon must be between 0 and 1, got $epsilon")
-  sampleCount.foreach { count =>
-    require(count > 0, s"Sample count must be positive, got $count")
-  }
-}
+) extends Methodology
 
 case class Roulette(
     name: String = "Roulette",
     testName: Option[String] = None,
     sampleCount: Option[Int] = None,
-) extends Methodology {
-  sampleCount.foreach { count =>
-    require(count > 0, s"Sample count must be positive, got $count")
-  }
-}
+) extends Methodology
 
 object Methodology {
   val defaultMethodologies: List[Methodology] = List(ABTest())
