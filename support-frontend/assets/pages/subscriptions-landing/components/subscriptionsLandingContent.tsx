@@ -20,9 +20,9 @@ const heroCardContainer = css`
 	min-height: 320px;
 	background-color: ${neutral[97]};
 	z-index: 1;
+	margin: 20px auto;
 
 	${from.desktop} {
-		margin: 20px auto;
 		width: calc(100% - 40px);
 		min-height: 0;
 	}

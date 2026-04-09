@@ -9,7 +9,6 @@ export const subscriptionsProductContainer = css`
 	max-width: 1290px;
 	margin: 0 ${space[3]}px;
 	flex-grow: 1;
-	margin-top: 40px;
 
 	${from.desktop} {
 		flex-direction: row-reverse;
