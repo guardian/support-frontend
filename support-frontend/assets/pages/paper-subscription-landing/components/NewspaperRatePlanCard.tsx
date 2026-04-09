@@ -5,12 +5,14 @@ import {
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import { useEffect } from 'react';
+import { usePromoTerms } from 'contexts/PromoTermsContext';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { Channel } from 'pages/paper-subscription-landing/helpers/products';
 import BenefitsList from '../../../components/product/BenefitsList';
 import Collapsible from '../../../components/product/Collapsible';
 import { type Product } from '../../../components/product/productOption';
+import getNewspaperPromoTerms from '../helpers/getNewspaperPromoTerms';
 import {
 	badge,
 	badgeObserver,
@@ -36,6 +38,7 @@ function NewspaperRatePlanCard({
 	savingsText,
 	planData,
 	offerCopy,
+	promotion,
 	buttonCopy,
 	href,
 	onClick,
@@ -50,6 +53,7 @@ function NewspaperRatePlanCard({
 	});
 
 	const { windowWidthIsGreaterThan } = useWindowWidth();
+	const { setPromoTerms } = usePromoTerms();
 
 	/**
 	 * The first time this runs hasBeenSeen
@@ -59,10 +63,17 @@ function NewspaperRatePlanCard({
 	 * true.
 	 * */
 	useEffect(() => {
-		if (hasBeenSeen) {
-			onView();
-		}
+		hasBeenSeen && onView();
 	}, [hasBeenSeen]);
+
+	useEffect(() => {
+		if (promotion?.expires) {
+			const promoTerms = getNewspaperPromoTerms(promotion);
+			setPromoTerms(promoTerms);
+		} else {
+			setPromoTerms(null);
+		}
+	}, [promotion]);
 
 	const isObserverChannel = productLabel?.channel === Channel.Observer;
 
