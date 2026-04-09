@@ -7,6 +7,7 @@ import com.gu.support.config.{Stage, Stages}
 import com.typesafe.scalalogging.StrictLogging
 import com.gu.aws.AwsCloudWatchMetricPut.{MetricDimensionName, MetricDimensionValue, MetricName, MetricNamespace}
 import io.circe.{Decoder, HCursor}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import org.apache.pekko.actor.ActorSystem
 import software.amazon.awssdk.auth.credentials.{
   AwsCredentialsProviderChain,
@@ -34,13 +35,7 @@ case class VariantSample(
 )
 
 object VariantSample {
-  implicit val variantSampleDecoder: Decoder[VariantSample] = (c: HCursor) =>
-    for {
-      variantName <- c.downField("variantName").as[String]
-      annualisedValueInGBP <- c.downField("annualisedValueInGBP").as[Double]
-      annualisedValueInGBPPerView <- c.downField("annualisedValueInGBPPerView").as[Double]
-      views <- c.downField("views").as[Int]
-    } yield VariantSample(variantName, annualisedValueInGBP, annualisedValueInGBPPerView, views)
+  implicit val variantSampleDecoder: Decoder[VariantSample] = deriveDecoder[VariantSample]
 }
 
 /** A single hourly test sample from DynamoDB */
@@ -51,12 +46,7 @@ case class TestSample(
 )
 
 object TestSample {
-  implicit val testSampleDecoder: Decoder[TestSample] = (c: HCursor) =>
-    for {
-      testName <- c.downField("testName").as[String]
-      variants <- c.downField("variants").as[List[VariantSample]]
-      timestamp <- c.downField("timestamp").as[String]
-    } yield TestSample(testName, variants, timestamp)
+  implicit val testSampleDecoder: Decoder[TestSample] = deriveDecoder[TestSample]
 }
 
 /** Aggregated variant performance data */
