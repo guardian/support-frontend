@@ -19,10 +19,6 @@
 				"description": "Stripe - Payment Request Button",
 				"state": "On"
 			},
-			"existingCard": {
-				"description": "Existing card",
-				"state": "On"
-			},
 			"stripeApplePay": {
 				"description": "Stripe - Apple Pay",
 				"state": "On"
@@ -45,10 +41,6 @@
 			},
 			"stripeExpressCheckout": {
 				"description": "Stripe - Express Checkout",
-				"state": "On"
-			},
-			"existingDirectDebit": {
-				"description": "Existing Direct Debit",
 				"state": "On"
 			}
 		}
