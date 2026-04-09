@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
-import { from, neutral } from '@guardian/source/foundations';
+import { brandAlt, from, neutral } from '@guardian/source/foundations';
 import HeroContainer from 'components/page/hero';
+import { PageTitle } from 'components/page/pageTitle';
 import SubscriptionsProductDescription from 'components/subscriptionsProductDescription/subscriptionsProductDescription';
 import { getSubscriptionProducts } from '../copy/subscriptionCopy';
 import type { SubscriptionsLandingProps } from '../subscriptionsLandingProps';
 import DigitalPlusProduct from './DigitalPlusProduct';
-import FeatureHeader from './featureHeader';
 import { subscriptionsProductContainerStyle } from './subscriptionsLandingContentStyles';
 
 const heroCardContainer = css`
@@ -42,6 +42,10 @@ const heroCardContainer = css`
 	}
 `;
 
+const pageTitleStyles = css`
+	background-color: ${brandAlt[400]};
+`;
+
 function SubscriptionsLandingContent({
 	countryGroupId,
 	pricingCopy,
@@ -50,8 +54,6 @@ function SubscriptionsLandingContent({
 	if (!pricingCopy) {
 		return null;
 	}
-
-	const supportMsg = 'Support the Guardian with a print subscription';
 
 	const subscriptionCopy = getSubscriptionProducts(
 		countryGroupId,
@@ -64,24 +66,29 @@ function SubscriptionsLandingContent({
 			className="subscriptions-landing-page"
 			id="qa-subscriptions-landing-page"
 		>
-			<FeatureHeader featureHeaderMsg={supportMsg} />
-			<div css={subscriptionsProductContainerStyle}>
-				{subscriptionCopy.map((product, index) => {
-					return product.digitalPlusLayout === true ? (
-						<DigitalPlusProduct {...product} />
-					) : (
-						<div css={heroCardContainer}>
-							<HeroContainer
-								imageSlot={product.productImage}
-								contentSlot={<SubscriptionsProductDescription {...product} />}
-								cssOverrides={product.cssOverrides}
-								heroDirection={index % 2 !== 0 ? 'reverse' : 'default'}
-								imagePosition={product.imagePosition}
-							/>
-						</div>
-					);
-				})}
-			</div>
+			<PageTitle
+				title="Support the Guardian with a print subscription"
+				theme="weekly"
+				cssOverrides={pageTitleStyles}
+			>
+				<div css={subscriptionsProductContainerStyle}>
+					{subscriptionCopy.map((product, index) => {
+						return product.digitalPlusLayout === true ? (
+							<DigitalPlusProduct {...product} />
+						) : (
+							<div css={heroCardContainer}>
+								<HeroContainer
+									imageSlot={product.productImage}
+									contentSlot={<SubscriptionsProductDescription {...product} />}
+									cssOverrides={product.cssOverrides}
+									heroDirection={index % 2 !== 0 ? 'reverse' : 'default'}
+									imagePosition={product.imagePosition}
+								/>
+							</div>
+						);
+					})}
+				</div>
+			</PageTitle>
 		</div>
 	);
 }
