@@ -61,9 +61,6 @@ export const subscriptionBenefit = css`
 		display: block;
 		border-top: 1px solid ${neutral[86]};
 		margin-right: -${space[10]}px;
-		${from.desktop} {
-			margin-left: -${space[14]}px;
-		}
 	}
 `;
 
