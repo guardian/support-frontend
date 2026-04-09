@@ -22,9 +22,15 @@ export default {
 		),
 	],
 	argTypes: {
-		reverseHero: {
-			control: 'boolean',
+		heroDirection: {
+			control: 'radio',
+			options: ['default', 'reverse'],
 			description: 'Reverse the hero direction (image on the left)',
+		},
+		imagePosition: {
+			control: 'radio',
+			options: ['float', 'bottom'],
+			description: 'Position of the image slot',
 		},
 		backgroundColor: {
 			control: 'color',
@@ -36,18 +42,21 @@ export default {
 		},
 	},
 	args: {
-		reverseHero: false,
+		heroDirection: 'default',
+		imagePosition: 'float',
 		backgroundColor: '#052962',
 		color: '#fff',
 	},
 };
 
 export function Hero({
-	reverseHero,
+	heroDirection,
+	imagePosition,
 	backgroundColor,
 	color,
 }: {
-	reverseHero: boolean;
+	heroDirection: 'default' | 'reverse';
+	imagePosition: 'float' | 'bottom';
 	backgroundColor: string;
 	color: string;
 }): JSX.Element {
@@ -85,15 +94,21 @@ export function Hero({
 			}
 			contentSlot={
 				<section>
+					<h1>some title</h1>
 					<p>
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque id
 						justo at est elementum egestas rhoncus eu nulla. Proin pellentesque
 						massa at metus condimentum, a aliquam erat condimentum. Vivamus quis
+						rutrum nulla. Curabitur ut ullamcorper magna, eu ornare nunc. Lorem
+						ipsum dolor sit amet, consectetur adipiscing elit. Quisque id justo
+						at est elementum egestas rhoncus eu nulla. Proin pellentesque massa
+						at metus condimentum, a aliquam erat condimentum. Vivamus quis
 						rutrum nulla. Curabitur ut ullamcorper magna, eu ornare nunc.
 					</p>
 				</section>
 			}
-			heroDirection={reverseHero ? 'reverse' : 'default'}
+			heroDirection={heroDirection}
+			imagePosition={imagePosition}
 			cssOverrides={css`
 				background-color: ${backgroundColor};
 				color: ${color};
