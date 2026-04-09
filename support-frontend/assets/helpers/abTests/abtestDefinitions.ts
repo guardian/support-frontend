@@ -8,33 +8,16 @@ import type { Tests } from './models';
 // participations.
 // Note: These regexes are matched against the path and the querystring only (i.e. no domain)
 export const pageUrlRegexes = {
-	contributions: {
-		/*
-        We can revert to a simpler regex like below when subscription checkouts are deleted
-        /contribute|checkout|one-time-checkout|thankyou(/.*)?$
-      */
-		allLandingPagesAndThankyouPages:
-			'^(?!(?:/subscribe/(paper|weekly)/checkout$))(?:/(uk|us|ca|eu|nz|int))?/(checkout|one-time-checkout|contribute|thankyou|thank-you)(/.*)?$',
-		usLandingPageOnly: '/us/contribute$',
-		genericCheckoutOnly: '(uk|us|au|ca|eu|nz|int)/checkout$',
-		oneTimeCheckoutOnly: '(uk|us|au|ca|eu|nz|int)/one-time-checkout$',
-	},
-	subscriptions: {
-		ukSubscriptionsLandingPageOnly: /\/uk\/subscribe$/,
-		paper: {
-			// Requires /subscribe/paper, allows /checkout or /checkout/guest, allows any query string
-			paperLandingWithGuestCheckout:
-				/\/subscribe\/paper(\/delivery|\/checkout|\/checkout\/guest)?(\?.*)?$/,
-			paperLandingPage: /^\/uk\/subscribe\/paper?(\?.*)?$/,
-			weeklyLandingPage: /\/subscribe\/weekly\/checkout?(\?.*)?$/,
-		},
-		// Includes landing, original & generic checkout/thankyou pages
-		subsWeeklyGiftPages:
-			'(/subscribe/weekly/gift).*?|/(subscribe/weekly/checkout/gift).*?|((?:/(uk|us|ca|eu|nz|int))(?:/(checkout|thank-you))).*?(OneYearGift|ThreeMonthGift).*?',
-		// Uk weekly pages, including landing, original & generic checkout/thankyou pages
-		subsUkWeeklyPages:
-			'(uk/subscribe/weekly).*?|(?:uk/(checkout|thank-you)).*?(MonthlyPlus|QuarterlyPlus|AnnualPlus).*?',
-	},
+	oneTimeCheckoutOnly: /(uk|us|au|ca|eu|nz|int)\/one-time-checkout/,
+	landingPageSubscribeOnly: /uk\/subscribe/,
+	landingPagePaperOnly: /uk\/subscribe\/paper/,
+	genericCheckoutOnly: /(uk|us|au|ca|eu|nz|int)\/checkout/,
+	paperPages:
+		/(uk\/subscribe\/paper)|((uk\/(checkout|thank-you)).*?(SubscriptionCard|HomeDelivery|NationalDelivery))/,
+	weeklyPages:
+		/((uk|us|ca|eu|nz|int)\/subscribe\/weekly)|(((uk|us|ca|eu|nz|int)\/(checkout|thank-you)).*?(MonthlyPlus|QuarterlyPlus|AnnualPlus))/,
+	weeklyGiftPages:
+		/((uk|us|ca|eu|nz|int)\/subscribe\/weekly\/gift)|((uk|us|ca|eu|nz|int)(\/(checkout|thank-you))).*?(OneYearGift|ThreeMonthGift)/,
 };
 
 export const tests: Tests = {
@@ -54,7 +37,6 @@ export const tests: Tests = {
 		isActive: true,
 		referrerControlled: true,
 		seed: 1,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeContributionsOnlyCountries: true,
 	},
 	abandonedBasket: {
@@ -75,7 +57,6 @@ export const tests: Tests = {
 		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 1,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeContributionsOnlyCountries: true,
 	},
 	paypalMigrationRecurring: {
@@ -96,29 +77,7 @@ export const tests: Tests = {
 		isActive: false,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 3,
-		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
-		excludeContributionsOnlyCountries: true,
-	},
-	guardianWeeklySubscriptionSubtitle2: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			GBPCountries: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 5,
-		targetPage: pageUrlRegexes.subscriptions.ukSubscriptionsLandingPageOnly,
-		persistPage: pageUrlRegexes.subscriptions.subsUkWeeklyPages,
+		targetPage: pageUrlRegexes.genericCheckoutOnly,
 		excludeContributionsOnlyCountries: true,
 	},
 };
