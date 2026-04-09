@@ -97,23 +97,11 @@ case class LandingPageTest(
     regionTargeting: Option[RegionTargeting],
     mParticleAudience: Option[Int],
     variants: List[LandingPageVariant],
-    methodologies: List[Methodology] = Methodology.defaultMethodologies,
+    methodologies: Option[List[Methodology]] = None,
     selectedVariant: Option[LandingPageVariant] = None,
 )
 
 object LandingPageTest {
-  implicit val encoder: Encoder[LandingPageTest] = deriveEncoder
-  implicit val decoder: Decoder[LandingPageTest] = (c: io.circe.HCursor) =>
-    for {
-      name <- c.downField("name").as[String]
-      status <- c.downField("status").as[Status]
-      priority <- c.downField("priority").as[Int]
-      regionTargeting <- c.downField("regionTargeting").as[Option[RegionTargeting]]
-      mParticleAudience <- c.downField("mParticleAudience").as[Option[Int]]
-      variants <- c.downField("variants").as[List[LandingPageVariant]]
-      methodologies <- c
-        .downField("methodologies")
-        .as[Option[List[Methodology]]]
-        .map(_.getOrElse(Methodology.defaultMethodologies))
-    } yield LandingPageTest(name, status, priority, regionTargeting, mParticleAudience, variants, methodologies, None)
+  implicit val encoder: Encoder[LandingPageTest] = deriveEncoder[LandingPageTest]
+  implicit val decoder: Decoder[LandingPageTest] = deriveDecoder[LandingPageTest]
 }

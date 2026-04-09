@@ -40,7 +40,7 @@ class VariantSelectionSpec extends AnyFlatSpec with Matchers {
     regionTargeting = None,
     mParticleAudience = None,
     variants = testVariants,
-    methodologies = List(ABTest()),
+    methodologies = Some(List(ABTest())),
   )
 
   "selectVariantUsingMVT" should "be deterministic" in {

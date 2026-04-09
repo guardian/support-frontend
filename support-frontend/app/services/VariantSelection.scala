@@ -27,13 +27,10 @@ object VariantSelection extends StrictLogging {
       mvtId: Int,
       banditData: List[BanditData],
   ): LandingPageVariant = {
-    if (test.methodologies.isEmpty) {
-      // No methodologies configured, default to AB test
-      return selectVariantUsingMVT(test, mvtId)
-    }
+    val methodologies = test.methodologies.getOrElse(Methodology.defaultMethodologies)
 
     // Pick methodology (if multiple, use mvtId to select one deterministically)
-    val methodology = pickMethodology(test.methodologies, mvtId, test.name)
+    val methodology = pickMethodology(methodologies, mvtId, test.name)
 
     // Get test name with methodology override if specified
     val effectiveTestName = methodology.testName.getOrElse(test.name)
