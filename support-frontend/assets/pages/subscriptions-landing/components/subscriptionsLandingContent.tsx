@@ -44,6 +44,10 @@ const heroCardContainer = css`
 
 const pageTitleStyles = css`
 	background-color: ${brandAlt[400]};
+
+	h1 {
+		max-width: 900px;
+	}
 `;
 
 function SubscriptionsLandingContent({

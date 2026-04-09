@@ -14,6 +14,13 @@ export const containerStyles = (direction: 'reverse' | 'default') => css`
 
 export const contentSlotStyles = css`
 	padding: ${space[3]}px ${space[5]}px ${space[10]}px;
+
+	// all links in the content slot should be full width to make them easier to click on mobile
+	${until.tablet} {
+		a {
+			width: 100%;
+		}
+	}
 `;
 
 export const imageSlotStyles = (imagePosition: 'float' | 'bottom') => css`
