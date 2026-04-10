@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
 import type { Product } from 'components/product/productOption';
-import { PromoTermsProvider } from 'contexts/PromoTermsContext';
 import NewspaperRatePlanCard from 'pages/paper-subscription-landing/components/NewspaperRatePlanCard';
 import { Channel } from 'pages/paper-subscription-landing/helpers/products';
 
@@ -22,9 +21,7 @@ function Template(args: Product) {
 
 	return (
 		<div css={innerContentContainer}>
-			<PromoTermsProvider>
-				<NewspaperRatePlanCard {...args} />
-			</PromoTermsProvider>
+			<NewspaperRatePlanCard {...args} />
 		</div>
 	);
 }

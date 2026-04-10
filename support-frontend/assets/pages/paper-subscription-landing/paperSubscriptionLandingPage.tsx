@@ -3,7 +3,6 @@ import { ClientSideErrorHandler } from 'components/ClientSideError';
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { PromoTermsProvider } from 'contexts/PromoTermsContext';
 import {
 	getAbParticipations,
 	setUpTrackingAndConsents,
@@ -56,8 +55,6 @@ const abParticipations = getAbParticipations();
 setUpTrackingAndConsents(abParticipations);
 renderPage(
 	<ClientSideErrorHandler>
-		<PromoTermsProvider>
-			<PaperLandingPage {...paperLandingProps(abParticipations)} />
-		</PromoTermsProvider>
+		<PaperLandingPage {...paperLandingProps(abParticipations)} />
 	</ClientSideErrorHandler>,
 );

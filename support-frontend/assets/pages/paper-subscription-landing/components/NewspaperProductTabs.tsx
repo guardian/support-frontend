@@ -113,6 +113,7 @@ function NewspaperProductTabs({
 					paperFulfilment={selectedTab}
 					productPrices={productPrices}
 					activePaperProducts={ActivePaperProductTypes}
+					paperPromotions={promotions}
 				/>
 			</CentredContainer>
 		</FullWidthContainer>
