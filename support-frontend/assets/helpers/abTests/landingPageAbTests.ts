@@ -2,8 +2,10 @@ import { ProductTierLabel } from 'helpers/productCatalog';
 import { getSettings } from '../globalsAndSwitches/globals';
 import type {
 	DefaultProductSelection,
+	LandingPageTest,
 	LandingPageVariant,
 } from '../globalsAndSwitches/landingPageSettings';
+import { randomNumber } from './helpers';
 import type { PageParticipationsConfig } from './models';
 import {
 	getPageParticipationsWithFallback,
@@ -112,6 +114,13 @@ export function getLandingPageTestConfig(): PageParticipationsConfig<LandingPage
 	return {
 		...landingPageTestConfig,
 		tests: getSettings().landingPageTests ?? [],
+		selectVariant: (test, mvtId) => {
+			const landingPageTest = test as unknown as LandingPageTest;
+			return (
+				landingPageTest.selectedVariant ??
+				test.variants[randomNumber(mvtId, test.name) % test.variants.length]
+			);
+		},
 	};
 }
 

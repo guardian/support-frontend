@@ -92,6 +92,8 @@ trait Services {
   lazy val stripeCheckoutSessionService =
     new StripeCheckoutSessionService(appConfig.stripeConfigProvider, wsClient)
 
+  lazy val banditDataService = new BanditDataService(appConfig.stage)
+
   lazy val landingPageTestService = new LandingPageTestServiceImpl(appConfig.stage)
 
   lazy val checkoutNudgeTestService = new CheckoutNudgeTestServiceImpl(appConfig.stage)
@@ -99,6 +101,11 @@ trait Services {
   lazy val oneTimeCheckoutTestService = new OneTimeCheckoutTestServiceImpl(appConfig.stage)
 
   lazy val studentLandingPageTestService = new StudentLandingPageTestServiceImpl(appConfig.stage)
+
+  lazy val landingPageVariantSelector = new controllers.LandingPageVariantSelector(
+    landingPageTestService,
+    banditDataService,
+  )
 
   lazy val allSettingsProvider: AllSettingsProvider =
     AllSettingsProvider
