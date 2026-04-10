@@ -120,23 +120,6 @@
 			}
 		}
 	},
-	"subscriptionsPaymentMethods": {
-		"description": "Payment methods - subscriptions",
-		"switches": {
-			"directDebit": {
-				"description": "Direct Debit",
-				"state": "On"
-			},
-			"creditCard": {
-				"description": "Credit Card",
-				"state": "On"
-			},
-			"paypal": {
-				"description": "Paypal",
-				"state": "On"
-			}
-		}
-	},
 	"subscriptionsSwitches": {
 		"description": "Subscriptions",
 		"switches": {
