@@ -514,7 +514,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeHostedCheckout = Some(Off),
         ),
         SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
+          directDebit = Some(On),
           creditCard = Some(On),
           paypal = Some(On),
         ),

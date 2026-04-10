@@ -79,10 +79,6 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |        "description": "Paypal",
           |        "state": "On"
           |      },
-          |      "stripeHostedCheckout" : {
-          |        "description" : "Stripe - Hosted Checkout",
-          |        "state" : "Off"
-          |      }
           |    }
           |  },
           |  "subscriptionsSwitches": {
