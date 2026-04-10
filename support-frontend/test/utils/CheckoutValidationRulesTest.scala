@@ -175,7 +175,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
-  it should "return Invalid if a user tries to pay with Pay Pal but the Pay Pal switch in RRCP is off for Subscription Payment " in {
+  it should "return Invalid if a user tries to pay with Pay Pal but the Pay Pal switch in RRCP is off " in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = DigitalPack(GBP, Monthly),
       paymentFields = PayPalPaymentFields(""),
@@ -185,7 +185,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeApplePay = Some(On),
           stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
-          payPal = Some(On),
+          payPal = Some(Off),
           directDebit = Some(On),
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
@@ -193,7 +193,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
-  it should "return Invalid if a user tries to pay with Direct Debit but the Direct Debit switch in RRCP is off for Subscription Payment " in {
+  it should "return Invalid if a user tries to pay with Direct Debit but the Direct Debit switch in RRCP is off" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = DigitalPack(
         GBP,
@@ -207,7 +207,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
-          directDebit = Some(On),
+          directDebit = Some(Off),
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
@@ -215,7 +215,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
     ) shouldBe Invalid("Invalid Payment Method")
   }
 
-  it should "return Invalid if a user tries to pay with Credit card(Stripe) but the  switch in RRCP is off for Subscription Payment " in {
+  it should "return Invalid if a user tries to pay with Credit card(Stripe) but the  switch in RRCP is off" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = DigitalPack(
         GBP,
@@ -228,7 +228,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
-          stripe = Some(On),
+          stripe = Some(Off),
           stripeApplePay = Some(On),
           stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
@@ -386,7 +386,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       ),
     ) shouldBe Valid
   }
-  it should "return Valid if a user tries to pay with Pay Pal while the Pay Pal switch in RRCP is on for Subscription Payment " in {
+  it should "return Valid if a user tries to pay with Pay Pal while the Pay Pal switch in RRCP is on" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = SupporterPlus(0, GBP, Monthly),
       paymentFields = PayPalPaymentFields(""),
@@ -404,7 +404,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       ),
     ) shouldBe Valid
   }
-  it should "return Valid if a user tries to pay with Direct Debit while the Direct Debit switch in RRCP is on for Subscription Payment " in {
+  it should "return Valid if a user tries to pay with Direct Debit while the Direct Debit switch in RRCP is on" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = DigitalPack(
         GBP,
@@ -426,7 +426,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
     ) shouldBe Valid
   }
 
-  it should "return Valid if a user tries to pay with Credit card(Stripe) but while the  switch in RRCP is on for Subscription Payment " in {
+  it should "return Valid if a user tries to pay with Credit card(Stripe) but while the  switch in RRCP is on" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = DigitalPack(
         GBP,
