@@ -41,15 +41,23 @@ object CheckoutValidationRules {
   }
   case class Invalid(message: String) extends Result
   case object Valid extends Result
+  def checkSubscriptionPaymentMethodEnabled(
+      switches: SubscriptionsPaymentMethodSwitches,
+      paymentFields: PaymentFields,
+  ) = paymentFields match {
+    case _: PayPalPaymentFields | _: PayPalCompletePaymentsPaymentFields =>
+      if (switches.paypal.contains(On)) Valid else Invalid("Invalid Payment Method")
+    case _: StripePaymentFields =>
+      if (switches.creditCard.contains(On)) Valid else Invalid("Invalid Payment Method")
+    case _ => Invalid("Invalid Payment Method")
+  }
 
   def checkContributionPaymentMethodEnabled(
       switches: RecurringPaymentMethodSwitches,
       paymentFields: PaymentFields,
   ) = paymentFields match {
     case _: PayPalPaymentFields | _: PayPalCompletePaymentsPaymentFields =>
-      if (switches.payPal.contains(On)) Valid
-      else if (switches.paypal.contains(On)) Valid
-      else Invalid("Invalid Payment Method")
+      if (switches.payPal.contains(On)) Valid else Invalid("Invalid Payment Method")
     case _: DirectDebitPaymentFields =>
       if (switches.directDebit.contains(On)) Valid else Invalid("Invalid Payment Method")
     case _: SepaPaymentFields =>
@@ -75,9 +83,14 @@ object CheckoutValidationRules {
       switches: Switches,
   ) =
     product match {
-      case _ =>
+      case _: Contribution | _: SupporterPlus =>
         checkContributionPaymentMethodEnabled(
           switches.recurringPaymentMethods,
+          paymentFields,
+        )
+      case _ =>
+        checkSubscriptionPaymentMethodEnabled(
+          switches.subscriptionsPaymentMethods,
           paymentFields,
         )
     }
