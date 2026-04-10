@@ -1,13 +1,11 @@
 // ----- Imports ----- //
 import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { IsoCountry } from '@modules/internationalisation/country';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { ContributionType } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	DirectDebit,
 	PayPal,
-	Sepa,
 	Stripe,
 	StripeHostedCheckout,
 } from 'helpers/forms/paymentMethods';
@@ -16,7 +14,6 @@ import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 // ----- Types ----- //
 export type PaymentMethodSwitch =
 	| 'directDebit'
-	| 'sepa'
 	| 'payPal'
 	| 'payPalCompletePayments'
 	| 'stripe'
@@ -39,9 +36,6 @@ function toPaymentMethodSwitchNaming(
 		case StripeHostedCheckout:
 			return 'stripeHostedCheckout';
 
-		case Sepa:
-			return 'sepa';
-
 		default:
 			return null;
 	}
@@ -52,19 +46,12 @@ function toPaymentMethodSwitchNaming(
 function getPaymentMethods(
 	contributionType: ContributionType,
 	countryId: IsoCountry,
-	countryGroupId: CountryGroupId,
 ): PaymentMethod[] {
 	const nonRegionSpecificPaymentMethods: PaymentMethod[] = [Stripe, PayPal];
 
 	if (contributionType !== 'ONE_OFF' && countryId === 'GB') {
 		return [DirectDebit, ...nonRegionSpecificPaymentMethods];
-	} else if (
-		contributionType !== 'ONE_OFF' &&
-		countryGroupId === 'EURCountries'
-	) {
-		return [Sepa, ...nonRegionSpecificPaymentMethods];
 	}
-
 	return nonRegionSpecificPaymentMethods;
 }
 
@@ -79,10 +66,9 @@ function switchKeyForContributionType(
 function getValidPaymentMethods(
 	contributionType: ContributionType,
 	countryId: IsoCountry,
-	countryGroupId: CountryGroupId,
 ): PaymentMethod[] {
 	const switchKey = switchKeyForContributionType(contributionType);
-	return getPaymentMethods(contributionType, countryId, countryGroupId).filter(
+	return getPaymentMethods(contributionType, countryId).filter(
 		(paymentMethod) =>
 			isSwitchOn(
 				`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) ?? '-'}`,

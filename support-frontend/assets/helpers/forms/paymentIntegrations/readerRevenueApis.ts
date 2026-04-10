@@ -13,7 +13,6 @@ import type {
 	DirectDebit,
 	PayPal,
 	PayPalCompletePayments,
-	Sepa,
 	Stripe,
 	StripeHostedCheckout,
 } from 'helpers/forms/paymentMethods';
@@ -115,13 +114,6 @@ type RegularDirectDebitPaymentFields = {
 	accountNumber: string;
 	recaptchaToken?: string;
 };
-type RegularSepaPaymentFields = {
-	paymentType: typeof Sepa;
-	accountHolderName: string;
-	iban: string;
-	country?: Option<string>;
-	streetName?: Option<string>;
-};
 type RegularStripeHostedCheckoutPaymentFields = {
 	paymentType: typeof StripeHostedCheckout;
 	checkoutSessionId?: string;
@@ -132,7 +124,6 @@ export type RegularPaymentFields =
 	| RegularPayPalCompletePaymentsPaymentFields
 	| RegularStripePaymentIntentFields
 	| RegularDirectDebitPaymentFields
-	| RegularSepaPaymentFields
 	| RegularStripeHostedCheckoutPaymentFields;
 type RegularPaymentRequestAddress = {
 	country: IsoCountry;

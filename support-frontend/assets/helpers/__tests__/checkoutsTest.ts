@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
@@ -20,36 +19,33 @@ describe('checkouts', () => {
 		it('should return correct values for Monthly Recurring UK when switches are all on', () => {
 			const contributionType = 'MONTHLY';
 			const countryId = 'GB';
-			const countryGroupId: CountryGroupId = 'GBPCountries';
 			mock(isSwitchOn).mockImplementation(() => true);
 
-			expect(
-				getValidPaymentMethods(contributionType, countryId, countryGroupId),
-			).toEqual([DirectDebit, Stripe, PayPal]);
+			expect(getValidPaymentMethods(contributionType, countryId)).toEqual([
+				DirectDebit,
+				Stripe,
+				PayPal,
+			]);
 		});
 
 		it("should return en empty array/'None' for Monthly Recurring UK when switches are all off", () => {
 			const contributionType = 'MONTHLY';
 			const countryId = 'GB';
-			const countryGroupId: CountryGroupId = 'GBPCountries';
 			mock(isSwitchOn).mockImplementation(() => false);
 
-			expect(
-				getValidPaymentMethods(contributionType, countryId, countryGroupId),
-			).toEqual([]);
+			expect(getValidPaymentMethods(contributionType, countryId)).toEqual([]);
 		});
 
 		it('should return just Stripe for One Off US when only Stripe is on', () => {
 			const contributionType = 'ONE_OFF';
 			const countryId = 'US';
-			const countryGroupId: CountryGroupId = 'UnitedStates';
 			mock(isSwitchOn).mockImplementation(
 				(key) => key === 'oneOffPaymentMethods.stripe',
 			);
 
-			expect(
-				getValidPaymentMethods(contributionType, countryId, countryGroupId),
-			).toEqual([Stripe]);
+			expect(getValidPaymentMethods(contributionType, countryId)).toEqual([
+				Stripe,
+			]);
 		});
 	});
 
