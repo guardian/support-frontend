@@ -1,7 +1,6 @@
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Collection, HomeDelivery } from '@modules/product/fulfilmentOptions';
 import type { StoryObj } from '@storybook/preact-vite';
-import { PromoTermsProvider } from 'contexts/PromoTermsContext';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { PaperLandingPage } from 'pages/paper-subscription-landing/paperSubscriptionLandingPage';
 import type { PaperLandingPropTypes } from 'pages/paper-subscription-landing/paperSubscriptionLandingProps';
@@ -176,19 +175,11 @@ const collectionArgs = {
 };
 
 export const NewspaperHomeDelivery: Story = {
-	render: (args: PaperLandingPropTypes) => (
-		<PromoTermsProvider>
-			<PaperLandingPage {...args} />
-		</PromoTermsProvider>
-	),
+	render: (args: PaperLandingPropTypes) => <PaperLandingPage {...args} />,
 	args: homeDeliveryArgs,
 };
 
 export const NewspaperCollection: Story = {
-	render: (args: PaperLandingPropTypes) => (
-		<PromoTermsProvider>
-			<PaperLandingPage {...args} />
-		</PromoTermsProvider>
-	),
+	render: (args: PaperLandingPropTypes) => <PaperLandingPage {...args} />,
 	args: collectionArgs,
 };

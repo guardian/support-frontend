@@ -5,7 +5,10 @@ import { observerLinks } from 'helpers/legal';
 import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PaperPromotion } from '../helpers/getPromotions';
-import { productInfoWrapper } from './PaperLandingTsAndCsStyles';
+import {
+	productExpiryAdjust,
+	productInfoWrapper,
+} from './PaperLandingTsAndCsStyles';
 import PaperPromotionExpiries from './PaperPromotionExpiries';
 
 type PaperLandingTsAndCsProps = {
@@ -16,10 +19,21 @@ type PaperLandingTsAndCsProps = {
 };
 export default function PaperLandingTsAndCs({
 	paperFulfilment,
+	paperPromotions,
 }: PaperLandingTsAndCsProps): JSX.Element {
+	const paperPromosWithExpiry = paperPromotions?.filter(
+		(paperPromotion) => paperPromotion.expires,
+	);
+	const paperPromoContainsExpiry =
+		paperPromosWithExpiry && paperPromosWithExpiry.length > 0;
 	return (
 		<>
-			<div css={productInfoWrapper}>
+			<div
+				css={[
+					productInfoWrapper,
+					paperPromoContainsExpiry ? productExpiryAdjust : null,
+				]}
+			>
 				<SvgInfoRound size="medium" />
 				<p>
 					{paperFulfilment === HomeDelivery && 'Delivery is included. '}
@@ -30,8 +44,9 @@ export default function PaperLandingTsAndCs({
 					<a href={observerLinks.PRIVACY}>privacy policy</a> will apply.
 				</p>
 			</div>
-
-			<PaperPromotionExpiries />
+			{paperPromosWithExpiry && paperPromoContainsExpiry && (
+				<PaperPromotionExpiries paperPromotions={paperPromosWithExpiry} />
+			)}
 		</>
 	);
 }

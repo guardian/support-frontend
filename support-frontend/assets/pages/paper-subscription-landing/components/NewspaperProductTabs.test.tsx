@@ -1,17 +1,8 @@
 import { render, screen } from '@testing-library/react';
-import { PromoTermsProvider } from 'contexts/PromoTermsContext';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import * as subscriptionsModule from 'helpers/productPrice/subscriptions';
 import { getPlans } from '../helpers/getPlans';
 import NewspaperProductTabs from './NewspaperProductTabs';
-
-function renderWithPromoTermsProvider(productPrices: ProductPrices) {
-	return render(
-		<PromoTermsProvider>
-			<NewspaperProductTabs productPrices={productPrices} />
-		</PromoTermsProvider>,
-	);
-}
 
 jest.mock('../helpers/getPlans');
 jest.mock('pages/aus-moment-map/hooks/useWindowWidth', () => ({
@@ -33,7 +24,7 @@ describe('NewspaperProductTabs', () => {
 	});
 
 	it('should set the collect in store as the initial active tab', () => {
-		renderWithPromoTermsProvider(productPrices);
+		render(<NewspaperProductTabs productPrices={productPrices} />);
 
 		const tab = screen.getByRole('tab', { selected: true });
 
@@ -54,7 +45,7 @@ describe('NewspaperProductTabs', () => {
 			);
 
 			// Act
-			renderWithPromoTermsProvider(productPrices);
+			render(<NewspaperProductTabs productPrices={productPrices} />);
 
 			screen
 				.getByRole('tab', {
