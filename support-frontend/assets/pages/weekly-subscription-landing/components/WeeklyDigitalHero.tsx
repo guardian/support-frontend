@@ -1,6 +1,8 @@
 import { css } from '@emotion/react';
+import CentredContainer from 'components/containers/centredContainer';
 import GridPicture from 'components/gridPicture/gridPicture';
-import HeroHeader from 'components/hero/HeroHeader';
+import HeroContainer from 'components/hero/HeroContainer';
+import HeroContent from 'components/hero/HeroContent';
 import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
 import {
@@ -12,7 +14,6 @@ import {
 	pageTitleOverrides,
 	roundelPromotionStyles,
 	roundelStyles,
-	weeklyDigitalHeroOverrides,
 } from './weeklyDigitalHeroStyles';
 
 export default function WeeklyDigitalHero({
@@ -58,9 +59,10 @@ export default function WeeklyDigitalHero({
 			theme="weekly"
 			cssOverrides={pageTitleOverrides}
 		>
-			<HeroHeader
-				heroImage={
-					<>
+			<CentredContainer>
+				{roundel}
+				<HeroContainer
+					imageSlot={
 						<GridPicture
 							sources={[
 								{
@@ -89,22 +91,24 @@ export default function WeeklyDigitalHero({
 							fallbackSize={2000}
 							altText="A collection of Guardian Weekly magazines"
 						/>
-					</>
-				}
-				roundel={roundel}
-				title={title}
-				description={description}
-				ctaText="See pricing options"
-				ctaLink="#subscribe"
-				onClick={() =>
-					sendTrackingEventsOnClick({
-						id: 'options_cta_click',
-						product: 'GuardianWeekly',
-						componentType: 'ACQUISITIONS_BUTTON',
-					})
-				}
-				cssOverrides={weeklyDigitalHeroOverrides}
-			/>
+					}
+					contentSlot={
+						<HeroContent
+							title={title}
+							description={description}
+							ctaText="See pricing options"
+							ctaLink="#subscribe"
+							onClick={() =>
+								sendTrackingEventsOnClick({
+									id: 'options_cta_click',
+									product: 'GuardianWeekly',
+									componentType: 'ACQUISITIONS_BUTTON',
+								})
+							}
+						/>
+					}
+				/>
+			</CentredContainer>
 		</PageTitle>
 	);
 }

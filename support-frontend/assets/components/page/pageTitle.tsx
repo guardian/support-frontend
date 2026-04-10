@@ -78,7 +78,6 @@ const pageTitle = css`
 	${from.desktop} {
 		${titlepiece50};
 		font-weight: bold;
-		margin: 0 auto;
 		max-width: 1290px;
 	}
 

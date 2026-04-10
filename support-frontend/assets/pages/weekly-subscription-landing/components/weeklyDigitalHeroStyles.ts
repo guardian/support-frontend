@@ -4,7 +4,6 @@ import {
 	palette,
 	space,
 	textSansBold17,
-	until,
 } from '@guardian/source/foundations';
 
 export const pageTitleOverrides = css`
@@ -29,27 +28,8 @@ export const pageTitleOverrides = css`
 export const roundelStyles = css`
 	${textSansBold17}
 `;
+
 export const roundelPromotionStyles = css`
 	background-color: ${palette.lifestyle[400]};
 	color: ${palette.neutral[100]};
-`;
-
-export const weeklyDigitalHeroOverrides = css`
-	${until.tablet} {
-		section {
-			padding: ${space[3]}px ${space[3]}px ${space[6]}px;
-		}
-		a {
-			width: 100%;
-		}
-	}
-	${from.desktop} {
-		div {
-			& div:nth-child(2) {
-				${from.desktop} {
-					align-self: center;
-				}
-			}
-		}
-	}
 `;

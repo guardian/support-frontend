@@ -7,7 +7,6 @@ import {
 	headlineLight28,
 	neutral,
 	space,
-	textEgyptian14,
 	textEgyptian17,
 	until,
 } from '@guardian/source/foundations';
@@ -25,24 +24,18 @@ export const subscriptionDescription = css`
 		margin-top: -6px;
 	}
 
-	${textEgyptian14}
-	line-height: 16px;
 	margin: 16px 10px 18px 0;
 
 	${from.mobileMedium} {
 		margin: 16px 0 18px 0;
 	}
 	${from.mobileLandscape} {
-		font-size: 16px;
-		line-height: 18px;
 		margin: 27px 0 25px 0;
 	}
 	${until.tablet} {
 		max-width: 100%;
 	}
 	${from.desktop} {
-		font-size: 20px;
-		line-height: 28px;
 		margin: 45px 20px 25px 0;
 	}
 `;
@@ -68,9 +61,6 @@ export const subscriptionBenefit = css`
 		display: block;
 		border-top: 1px solid ${neutral[86]};
 		margin-right: -${space[10]}px;
-		${from.desktop} {
-			margin-left: -${space[14]}px;
-		}
 	}
 `;
 

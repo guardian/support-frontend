@@ -9,7 +9,6 @@ export const subscriptionsProductContainer = css`
 	max-width: 1290px;
 	margin: 0 ${space[3]}px;
 	flex-grow: 1;
-	margin-top: 40px;
 
 	${from.desktop} {
 		flex-direction: row-reverse;
@@ -55,8 +54,5 @@ export const subscriptionsDescription = css`
 	padding: ${space[2]}px ${space[6]}px ${space[3]}px;
 	${from.tablet} {
 		padding-top: ${space[3]}px;
-	}
-	${from.desktop} {
-		padding-left: ${space[14]}px;
 	}
 `;
