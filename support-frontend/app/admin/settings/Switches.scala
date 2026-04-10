@@ -93,6 +93,7 @@ object RecurringPaymentMethodSwitches {
 // Currently those are used on the client while these are used on the server, which means both switches
 // need to be enabled for a payment method to be used.
 case class SubscriptionsPaymentMethodSwitches(
+    directDebit: Option[SwitchState],
     creditCard: Option[SwitchState],
     paypal: Option[SwitchState],
 )

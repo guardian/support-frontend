@@ -47,6 +47,8 @@ object CheckoutValidationRules {
   ) = paymentFields match {
     case _: PayPalPaymentFields | _: PayPalCompletePaymentsPaymentFields =>
       if (switches.paypal.contains(On)) Valid else Invalid("Invalid Payment Method")
+    case _: DirectDebitPaymentFields =>
+      if (switches.directDebit.contains(On)) Valid else Invalid("Invalid Payment Method")
     case _: StripePaymentFields =>
       if (switches.creditCard.contains(On)) Valid else Invalid("Invalid Payment Method")
     case _ => Invalid("Invalid Payment Method")
@@ -71,9 +73,7 @@ object CheckoutValidationRules {
         case Some(StripePaymentType.StripePaymentRequestButton) =>
           if (switches.stripePaymentRequestButton.contains(On)) Valid else Invalid("Invalid Payment Method")
         case Some(StripePaymentType.StripeCheckout) =>
-          if (switches.stripe.contains(On)) Valid
-          else if (switches.creditCard.contains(On)) Valid
-          else Invalid("Invalid Payment Method")
+          if (switches.stripe.contains(On)) Valid else Invalid("Invalid Payment Method")
         case None => Invalid("Invalid Payment Method")
       }
   }
