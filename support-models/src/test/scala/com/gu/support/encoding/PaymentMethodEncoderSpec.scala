@@ -8,7 +8,6 @@ import com.gu.support.workers.{
   GatewayOption,
   GatewayOptionData,
   PaymentMethod,
-  SepaPaymentMethod,
 }
 import com.typesafe.scalalogging.LazyLogging
 import io.circe._
