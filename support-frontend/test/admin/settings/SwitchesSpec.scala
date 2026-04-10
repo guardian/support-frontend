@@ -78,7 +78,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "paypal": {
           |        "description": "Paypal",
           |        "state": "On"
-          |      },
+          |      }
           |    }
           |  },
           |  "subscriptionsSwitches": {
