@@ -79,6 +79,7 @@ interface PageTest<Variant> {
 	};
 	mParticleAudience?: number;
 	variants: Variant[];
+	selectedTestName?: string; // Methodology-specific test name for tracking
 }
 interface PageParticipationsConfig<Variant> {
 	tests: Array<PageTest<Variant>>;

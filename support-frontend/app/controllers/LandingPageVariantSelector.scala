@@ -34,12 +34,12 @@ class LandingPageVariantSelector(
     * @param request
     *   The HTTP request (used to get MVT ID)
     * @return
-    *   The selected variant, or None if test has no variants
+    *   A tuple of (selected variant, effective test name), or None if test has no variants
     */
   def selectVariantForTest(
       test: LandingPageTest,
       request: RequestHeader,
-  ): Option[LandingPageVariant] = {
+  ): Option[(LandingPageVariant, String)] = {
     if (test.variants.isEmpty) {
       logger.warn(s"Test ${test.name} has no variants")
       return None
@@ -49,11 +49,12 @@ class LandingPageVariantSelector(
     val banditData = banditDataService.getBanditData()
 
     try {
-      Some(VariantSelection.selectVariant(test, mvtId, banditData))
+      val (variant, effectiveTestName) = VariantSelection.selectVariant(test, mvtId, banditData)
+      Some((variant, effectiveTestName))
     } catch {
       case e: Exception =>
         logger.error(s"Error selecting variant for test ${test.name}: ${e.getMessage}", e)
-        test.variants.headOption
+        test.variants.headOption.map(v => (v, test.name))
     }
   }
 
@@ -70,7 +71,7 @@ class LandingPageVariantSelector(
       .filter(_.status == Status.Live)
 
     liveTests.flatMap { test =>
-      selectVariantForTest(test, request).map(variant => test.name -> variant)
+      selectVariantForTest(test, request).map { case (variant, _) => test.name -> variant }
     }.toMap
   }
 
@@ -87,7 +88,7 @@ class LandingPageVariantSelector(
     landingPageTestService
       .getTests()
       .find(test => test.name == testName && test.status == Status.Live)
-      .flatMap(test => selectVariantForTest(test, request))
+      .flatMap(test => selectVariantForTest(test, request).map { case (variant, _) => variant })
   }
 }
 

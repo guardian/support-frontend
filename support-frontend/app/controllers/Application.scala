@@ -321,8 +321,11 @@ class Application(
 
     val baseSettings = settingsProvider.getAllSettings()
     val enrichedTests = baseSettings.landingPageTests.map { test =>
-      val maybeVariant = landingPageVariantSelector.selectVariantForTest(test, request)
-      test.copy(selectedVariant = maybeVariant)
+      landingPageVariantSelector.selectVariantForTest(test, request) match {
+        case Some((variant, effectiveTestName)) =>
+          test.copy(selectedVariant = Some(variant), selectedTestName = Some(effectiveTestName))
+        case None => test
+      }
     }
     implicit val settings: AllSettings = baseSettings.copy(landingPageTests = enrichedTests)
     Ok(
@@ -345,8 +348,11 @@ class Application(
 
     val baseSettings = settingsProvider.getAllSettings()
     val enrichedTests = baseSettings.landingPageTests.map { test =>
-      val maybeVariant = landingPageVariantSelector.selectVariantForTest(test, request)
-      test.copy(selectedVariant = maybeVariant)
+      landingPageVariantSelector.selectVariantForTest(test, request) match {
+        case Some((variant, effectiveTestName)) =>
+          test.copy(selectedVariant = Some(variant), selectedTestName = Some(effectiveTestName))
+        case None => test
+      }
     }
     implicit val settings: AllSettings = baseSettings.copy(landingPageTests = enrichedTests)
     Ok(

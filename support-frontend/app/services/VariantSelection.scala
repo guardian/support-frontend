@@ -24,13 +24,13 @@ object VariantSelection extends StrictLogging {
     * @param banditData
     *   Performance data for bandit tests
     * @return
-    *   The selected variant
+    *   A tuple of (selected variant, effective test name for tracking)
     */
   def selectVariant(
       test: LandingPageTest,
       mvtId: Int,
       banditData: List[BanditData],
-  ): LandingPageVariant = {
+  ): (LandingPageVariant, String) = {
     val methodologies = test.methodologies.getOrElse(Methodology.defaultMethodologies)
 
     // Pick methodology (if multiple, use mvtId to select one deterministically)
@@ -40,7 +40,7 @@ object VariantSelection extends StrictLogging {
     val effectiveTestName = methodology.testName.getOrElse(test.name)
 
     // Select variant based on methodology
-    methodology match {
+    val variant = methodology match {
       case _: ABTest =>
         selectVariantUsingMVT(test, mvtId)
 
@@ -52,6 +52,8 @@ object VariantSelection extends StrictLogging {
         val testBanditData = banditData.find(_.testName == effectiveTestName)
         selectVariantUsingRoulette(test, testBanditData, mvtId)
     }
+
+    (variant, effectiveTestName)
   }
 
   /** Pick a methodology from the list.
