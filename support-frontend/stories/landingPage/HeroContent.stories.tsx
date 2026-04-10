@@ -1,8 +1,6 @@
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
-import GridImage from 'components/gridImage/gridImage';
 import HeroContent from 'components/hero/HeroContent';
-import OfferStrapline from 'components/page/offerStrapline';
 
 export default {
 	title: 'LandingPage/HeroHeader',
@@ -19,21 +17,6 @@ function Template() {
 	return (
 		<div css={innerContentContainer}>
 			<HeroContent
-				heroImage={
-					<GridImage
-						gridId="weeklyCampaignHeroImg"
-						srcSizes={[500, 140]}
-						sizes="(max-width: 740px) 100%, 500px"
-						imgType="png"
-						altText="A collection of Guardian Weekly magazines"
-					/>
-				}
-				roundel={
-					<OfferStrapline
-						copy="Includes unlimited digital access"
-						size="small"
-					/>
-				}
 				title={<span>Save with a Guardian print subscription</span>}
 				description={
 					<span>
