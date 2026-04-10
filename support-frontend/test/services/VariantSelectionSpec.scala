@@ -135,6 +135,36 @@ class VariantSelectionSpec extends AnyFlatSpec with Matchers {
     }
   }
 
+  it should "randomly select among tied best variants" in {
+    val banditData = BanditData(
+      testName = "TEST_NAME",
+      sortedVariants = List(
+        VariantMean("variant-b", 15.0), // Tied for best
+        VariantMean("variant-a", 15.0), // Tied for best
+        VariantMean("control", 5.0),
+      ),
+    )
+
+    // With epsilon=0, should exploit but randomly select among tied best variants
+    val results = (1 to 100).map { _ =>
+      VariantSelection.selectVariantUsingEpsilonGreedy(
+        testConfig,
+        epsilon = 0.0,
+        testBanditData = Some(banditData),
+        mvtId = 12345,
+      )
+    }
+
+    val counts = results.groupBy(_.name).view.mapValues(_.size).toMap
+
+    // Both tied variants should appear
+    counts("variant-b") should be > 0
+    counts("variant-a") should be > 0
+
+    // Control should never appear (not tied for best)
+    counts.get("control") shouldBe None
+  }
+
   "selectVariantUsingRoulette" should "fall back to random when no bandit data" in {
     val result = VariantSelection.selectVariantUsingRoulette(
       testConfig,

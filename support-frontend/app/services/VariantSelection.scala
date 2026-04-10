@@ -7,7 +7,11 @@ import scala.util.Random
 
 /** Service for selecting landing page variants based on test methodologies.
   *
-  * Implements ABTest (random), EpsilonGreedy, and Roulette selection algorithms.
+  * Implements ABTest (deterministic), EpsilonGreedy, and Roulette selection algorithms.
+  *
+  * Randomness approach (matching SDC):
+  *   - AB tests: deterministic selection based on mvtId for consistent user experience
+  *   - Bandit algorithms: non-deterministic randomness (Math.random) for explore/exploit decisions
   */
 object VariantSelection extends StrictLogging {
 
@@ -69,7 +73,8 @@ object VariantSelection extends StrictLogging {
 
   /** Standard AB test variant selection using MVT ID.
     *
-    * Uses deterministic random number generation based on test name and mvtId.
+    * Uses deterministic random number generation based on test name and mvtId to ensure consistent variant assignment
+    * for the same user across sessions.
     */
   def selectVariantUsingMVT(test: LandingPageTest, mvtId: Int): LandingPageVariant = {
     if (test.variants.isEmpty) {
@@ -84,7 +89,8 @@ object VariantSelection extends StrictLogging {
   /** Epsilon-greedy bandit selection.
     *
     * With probability epsilon, select a random variant (explore). With probability 1-epsilon, select the best
-    * performing variant (exploit).
+    * performing variant (exploit). Uses non-deterministic randomness for exploration decisions and tie-breaking,
+    * matching SDC implementation.
     */
   def selectVariantUsingEpsilonGreedy(
       test: LandingPageTest,
@@ -96,11 +102,11 @@ object VariantSelection extends StrictLogging {
     testBanditData match {
       case None =>
         logger.warn(s"No bandit data found for test ${test.name}, falling back to random selection")
-        return selectVariantUsingMVT(test, mvtId)
+        return selectRandomVariant(test)
 
       case Some(data) if data.sortedVariants.isEmpty =>
         logger.warn(s"Empty bandit data for test ${test.name}, falling back to random selection")
-        return selectVariantUsingMVT(test, mvtId)
+        return selectRandomVariant(test)
 
       case Some(data) =>
         // Check if all variants have zero mean (indicates insufficient samples)
@@ -109,31 +115,40 @@ object VariantSelection extends StrictLogging {
           logger.info(
             s"Insufficient hourly samples for test ${test.name} (all means are zero), falling back to random selection",
           )
-          return selectVariantUsingMVT(test, mvtId)
+          return selectRandomVariant(test)
         }
 
-        // Epsilon-greedy logic: explore with probability epsilon (deterministic based on mvtId)
-        val randomValue = (getRandomNumber(test.name + "-epsilon", mvtId) % 100) / 100.0
+        // Epsilon-greedy logic: explore with probability epsilon (non-deterministic)
+        val randomValue = Random.nextDouble()
         if (epsilon > randomValue) {
-          // Explore: select random variant (deterministic)
-          selectVariantUsingMVT(test, mvtId)
+          // Explore: select random variant
+          selectRandomVariant(test)
         } else {
           // Exploit: select best variant
           val validVariants = filterValidVariants(data.sortedVariants, test)
           if (validVariants.isEmpty) {
             logger.warn(s"No valid variants in bandit data for test ${test.name}, falling back to random selection")
-            return selectVariantUsingMVT(test, mvtId)
+            return selectRandomVariant(test)
           }
 
-          // sortedVariants is already sorted by mean descending, so first is best
-          val bestVariantName = validVariants.head.variantName
+          // If multiple variants have the same best mean, randomly select among them
+          val bestMean = validVariants.head.mean
+          val bestVariants = validVariants.takeWhile(_.mean == bestMean)
+
+          val selectedVariantName = if (bestVariants.length == 1) {
+            bestVariants.head.variantName
+          } else {
+            // Randomly select among tied best variants
+            bestVariants(Random.nextInt(bestVariants.length)).variantName
+          }
+
           test.variants
-            .find(_.name == bestVariantName)
+            .find(_.name == selectedVariantName)
             .getOrElse {
               logger.error(
-                s"Best variant $bestVariantName not found in test ${test.name} variants, falling back to random",
+                s"Best variant $selectedVariantName not found in test ${test.name} variants, falling back to random",
               )
-              selectVariantUsingMVT(test, mvtId)
+              selectRandomVariant(test)
             }
         }
     }
@@ -142,7 +157,7 @@ object VariantSelection extends StrictLogging {
   /** Roulette (weighted random) bandit selection.
     *
     * Select variants probabilistically based on their mean performance, with a minimum weight to avoid zero
-    * probability.
+    * probability. Uses non-deterministic randomness for wheel selection, matching SDC implementation.
     */
   def selectVariantUsingRoulette(
       test: LandingPageTest,
@@ -153,11 +168,11 @@ object VariantSelection extends StrictLogging {
     testBanditData match {
       case None =>
         logger.warn(s"No bandit data found for test ${test.name}, falling back to random selection")
-        return selectVariantUsingMVT(test, mvtId)
+        return selectRandomVariant(test)
 
       case Some(data) if data.sortedVariants.isEmpty =>
         logger.warn(s"Empty bandit data for test ${test.name}, falling back to random selection")
-        return selectVariantUsingMVT(test, mvtId)
+        return selectRandomVariant(test)
 
       case Some(data) =>
         // Check if all variants have zero mean (indicates insufficient samples)
@@ -166,19 +181,19 @@ object VariantSelection extends StrictLogging {
           logger.info(
             s"Insufficient hourly samples for test ${test.name} (all means are zero), falling back to random selection",
           )
-          return selectVariantUsingMVT(test, mvtId)
+          return selectRandomVariant(test)
         }
 
         val validVariants = filterValidVariants(data.sortedVariants, test)
         if (validVariants.isEmpty) {
           logger.warn(s"No valid variants in bandit data for test ${test.name}, falling back to random selection")
-          return selectVariantUsingMVT(test, mvtId)
+          return selectRandomVariant(test)
         }
 
         val sumOfMeans = validVariants.map(_.mean).sum
         if (sumOfMeans <= 0) {
           logger.warn(s"Sum of means is non-positive for test ${test.name}, falling back to random selection")
-          return selectVariantUsingMVT(test, mvtId)
+          return selectRandomVariant(test)
         }
 
         // Apply minimum weight to avoid zero probability variants
@@ -194,8 +209,8 @@ object VariantSelection extends StrictLogging {
           (name, weight / sumOfWeights)
         }
 
-        // Select variant using roulette wheel (deterministic based on mvtId)
-        val rand = (getRandomNumber(test.name + "-roulette", mvtId) % 10000) / 10000.0
+        // Select variant using roulette wheel (non-deterministic)
+        val rand = Random.nextDouble()
         var acc = 0.0
         val selectedVariantName = normalizedWeights
           .find { case (_, weight) =>
@@ -214,21 +229,15 @@ object VariantSelection extends StrictLogging {
             logger.error(
               s"Selected variant $selectedVariantName not found in test ${test.name} variants, falling back to random",
             )
-            selectVariantUsingMVT(test, mvtId)
+            selectRandomVariant(test)
           }
     }
   }
 
   /** Select a random variant using non-deterministic randomness.
     *
-    * NOTE: This method exists for reference to SDC's implementation, which uses Math.random(). Our implementation uses
-    * selectVariantUsingMVT instead for deterministic selection based on MVT ID, ensuring consistent user experience.
-    * This is a deliberate improvement over SDC's approach.
-    *
-    * @deprecated
-    *   Use selectVariantUsingMVT for deterministic selection
+    * Used by bandit algorithms for exploration and fallback cases. Matches SDC's implementation.
     */
-  @deprecated("Use selectVariantUsingMVT for deterministic selection", "1.0")
   private def selectRandomVariant(test: LandingPageTest): LandingPageVariant = {
     if (test.variants.isEmpty) {
       throw new IllegalArgumentException(s"Test ${test.name} has no variants")
