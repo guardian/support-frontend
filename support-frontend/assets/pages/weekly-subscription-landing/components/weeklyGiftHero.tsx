@@ -5,7 +5,7 @@ import {
 } from '@guardian/source/react-components';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
-import HeroContainer from 'components/page/hero';
+import HeroContainer from 'components/hero/HeroContainer';
 import { PageTitle } from 'components/page/pageTitle';
 import {
 	type PromotionCopy,

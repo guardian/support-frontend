@@ -4,14 +4,8 @@ import {
 	article17,
 	from,
 	headlineBold28,
-	palette,
 	space,
 } from '@guardian/source/foundations';
-
-export const printHeroCssOverrides = css`
-	background-color: ${palette.neutral[97]};
-	color: ${palette.neutral[7]};
-`;
 
 export const heroTitle = css`
 	${headlineBold28};

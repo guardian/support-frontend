@@ -1,4 +1,6 @@
-import HeroHeader from 'components/hero/HeroHeader';
+import CentredContainer from 'components/containers/centredContainer';
+import HeroContainer from 'components/hero/HeroContainer';
+import HeroContent from 'components/hero/HeroContent';
 import PaperPackShot from 'components/packshots/paperPackshot';
 import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
@@ -35,19 +37,26 @@ export default function NewspaperHero({
 
 	return (
 		<PageTitle title="Newspaper subscription" theme="weekly">
-			<HeroHeader
-				heroImage={<PaperPackShot />}
-				roundel={roundelComponent}
-				title={title ?? fallbackTitle}
-				description={description ?? fallbackDescription}
-				ctaLink="#HomeDelivery"
-				ctaText="See pricing options"
-				onClick={sendTrackingEventsOnClick({
-					id: 'options_cta_click',
-					product: 'Paper',
-					componentType: 'ACQUISITIONS_BUTTON',
-				})}
-			/>
+			<CentredContainer>
+				{roundelComponent}
+				<HeroContainer
+					imageSlot={<PaperPackShot />}
+					imagePosition="bottom"
+					contentSlot={
+						<HeroContent
+							title={title ?? fallbackTitle}
+							description={description ?? fallbackDescription}
+							ctaLink="#HomeDelivery"
+							ctaText="See pricing options"
+							onClick={sendTrackingEventsOnClick({
+								id: 'options_cta_click',
+								product: 'Paper',
+								componentType: 'ACQUISITIONS_BUTTON',
+							})}
+						/>
+					}
+				/>
+			</CentredContainer>
 		</PageTitle>
 	);
 }

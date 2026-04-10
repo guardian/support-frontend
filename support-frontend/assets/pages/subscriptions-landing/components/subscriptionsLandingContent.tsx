@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { brandAlt, from, neutral } from '@guardian/source/foundations';
-import HeroContainer from 'components/page/hero';
+import HeroContainer from 'components/hero/HeroContainer';
 import { PageTitle } from 'components/page/pageTitle';
 import SubscriptionsProductDescription from 'components/subscriptionsProductDescription/subscriptionsProductDescription';
 import { getSubscriptionProducts } from '../copy/subscriptionCopy';

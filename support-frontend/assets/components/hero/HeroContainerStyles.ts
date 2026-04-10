@@ -1,11 +1,13 @@
 import { css } from '@emotion/react';
-import { from, space, until } from '@guardian/source/foundations';
+import { from, palette, space, until } from '@guardian/source/foundations';
 
 export const containerStyles = (direction: 'reverse' | 'default') => css`
 	display: flex;
 	justify-content: center;
 	flex-direction: column-reverse;
 	width: 100%;
+	background-color: ${palette.neutral[97]};
+	color: ${palette.neutral[7]};
 
 	${from.tablet} {
 		flex-direction: ${direction === 'reverse' ? 'row-reverse' : 'row'};

@@ -4,7 +4,7 @@ import {
 	containerStyles,
 	contentSlotStyles,
 	imageSlotStyles,
-} from './heroStyles';
+} from './HeroContainerStyles';
 
 function HeroContainer({
 	contentSlot,

@@ -1,12 +1,12 @@
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
 import GridImage from 'components/gridImage/gridImage';
-import HeroHeader from 'components/hero/HeroHeader';
+import HeroContent from 'components/hero/HeroContent';
 import OfferStrapline from 'components/page/offerStrapline';
 
 export default {
 	title: 'LandingPage/HeroHeader',
-	component: HeroHeader,
+	component: HeroContent,
 };
 
 function Template() {
@@ -18,7 +18,7 @@ function Template() {
 
 	return (
 		<div css={innerContentContainer}>
-			<HeroHeader
+			<HeroContent
 				heroImage={
 					<GridImage
 						gridId="weeklyCampaignHeroImg"

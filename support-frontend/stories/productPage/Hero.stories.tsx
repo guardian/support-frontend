@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import CentredContainer from 'components/containers/centredContainer';
 import GridPicture from 'components/gridPicture/gridPicture';
-import HeroContainer from 'components/page/hero';
+import HeroContainer from 'components/hero/HeroContainer';
 
 export default {
 	title: 'Hero Container',
