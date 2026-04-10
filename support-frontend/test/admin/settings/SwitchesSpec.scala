@@ -64,23 +64,6 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      }
           |    }
           |  },
-          |  "subscriptionsPaymentMethods": {
-          |    "description": "Payment methods - subscriptions",
-          |    "switches": {
-          |      "directDebit": {
-          |        "description": "Direct Debit",
-          |        "state": "On"
-          |      },
-          |      "creditCard": {
-          |        "description": "Credit Card",
-          |        "state": "On"
-          |      },
-          |      "paypal": {
-          |        "description": "Paypal",
-          |        "state": "On"
-          |      }
-          |    }
-          |  },
           |  "subscriptionsSwitches": {
           |    "description": "Subscriptions",
           |    "switches": {
@@ -177,7 +160,6 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
             sepa = Some(Off),
             stripeHostedCheckout = Some(Off),
           ),
-          subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On)),
           subscriptionsSwitches = SubscriptionsSwitches(Some(On), Some(On), Some(On)),
           featureSwitches = FeatureSwitches(Some(On), Some(On), Some(Off), Some(On), Some(Off), Some(On), Some(On)),
           campaignSwitches = CampaignSwitches(Some(Off), Some(Off)),

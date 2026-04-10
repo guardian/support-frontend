@@ -89,23 +89,9 @@ object RecurringPaymentMethodSwitches {
   implicit val recurringPaymentMethodSwitchesCodec: Codec[RecurringPaymentMethodSwitches] = deriveCodec
 }
 
-// TODO: these should be consolidated with the above RecurringPaymentMethodSwitches.
-// Currently those are used on the client while these are used on the server, which means both switches
-// need to be enabled for a payment method to be used.
-case class SubscriptionsPaymentMethodSwitches(
-    directDebit: Option[SwitchState],
-    creditCard: Option[SwitchState],
-    paypal: Option[SwitchState],
-)
-
-object SubscriptionsPaymentMethodSwitches {
-  implicit val subscriptionsPaymentMethodSwitchesCodec: Codec[SubscriptionsPaymentMethodSwitches] = deriveCodec
-}
-
 case class Switches(
     oneOffPaymentMethods: OneOffPaymentMethodSwitches,
     recurringPaymentMethods: RecurringPaymentMethodSwitches,
-    subscriptionsPaymentMethods: SubscriptionsPaymentMethodSwitches,
     subscriptionsSwitches: SubscriptionsSwitches,
     featureSwitches: FeatureSwitches,
     campaignSwitches: CampaignSwitches,

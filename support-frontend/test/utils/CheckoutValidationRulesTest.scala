@@ -8,7 +8,6 @@ import admin.settings.{
   OneOffPaymentMethodSwitches,
   RecaptchaSwitches,
   RecurringPaymentMethodSwitches,
-  SubscriptionsPaymentMethodSwitches,
   SubscriptionsSwitches,
   Switches,
 }
@@ -47,11 +46,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
-          creditCard = Some(On),
-          paypal = Some(On),
-        ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
@@ -75,11 +69,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
-          creditCard = Some(On),
-          paypal = Some(On),
-        ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
@@ -97,11 +86,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           directDebit = Some(On),
           sepa = Some(Off),
           stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
-          creditCard = Some(On),
-          paypal = Some(On),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -121,11 +105,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           directDebit = Some(On),
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
-          creditCard = Some(On),
-          paypal = Some(On),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -149,11 +128,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
-          creditCard = Some(On),
-          paypal = Some(On),
-        ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
@@ -175,11 +149,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           directDebit = Some(On),
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
-          creditCard = Some(On),
-          paypal = Some(On),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -203,11 +172,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
-          creditCard = Some(On),
-          paypal = Some(On),
-        ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
@@ -225,11 +189,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           directDebit = Some(On),
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
-          creditCard = Some(On),
-          paypal = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -251,11 +210,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           directDebit = Some(On),
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
-          creditCard = Some(On),
-          paypal = Some(On),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -283,11 +237,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
-          creditCard = Some(Off),
-          paypal = Some(On),
-        ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
@@ -307,11 +256,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           directDebit = Some(On),
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
-          creditCard = Some(On),
-          paypal = Some(On),
         ),
       ),
     ) shouldBe Valid
@@ -336,11 +280,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
-          creditCard = Some(On),
-          paypal = Some(On),
-        ),
       ),
     ) shouldBe Valid
   }
@@ -358,11 +297,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           directDebit = Some(On),
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
-          creditCard = Some(On),
-          paypal = Some(On),
         ),
       ),
     ) shouldBe Valid
@@ -382,11 +316,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           directDebit = Some(On),
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
-          creditCard = Some(On),
-          paypal = Some(On),
         ),
       ),
     ) shouldBe Valid
@@ -410,11 +339,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
-          creditCard = Some(On),
-          paypal = Some(On),
-        ),
       ),
     ) shouldBe Valid
   }
@@ -436,11 +360,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           directDebit = Some(On),
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
-          creditCard = Some(On),
-          paypal = Some(On),
         ),
       ),
     ) shouldBe Valid
@@ -464,11 +383,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
-          creditCard = Some(On),
-          paypal = Some(On),
-        ),
       ),
     ) shouldBe Valid
   }
@@ -486,11 +400,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           directDebit = Some(On),
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
-          creditCard = Some(On),
-          paypal = Some(On),
         ),
       ),
     ) shouldBe Valid
@@ -512,11 +421,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           directDebit = Some(On),
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
         ),
       ),
     ) shouldBe Valid
@@ -543,11 +447,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           directDebit = Some(On),
           sepa = Some(On),
           stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(Off),
-          creditCard = Some(On),
-          paypal = Some(On),
         ),
       ),
     ) shouldBe Valid
@@ -966,15 +865,9 @@ object TestData {
         sepa = Some(On),
         stripeHostedCheckout = Some(Off),
       ),
-      subscriptionsPaymentMethodSwitches: SubscriptionsPaymentMethodSwitches = SubscriptionsPaymentMethodSwitches(
-        directDebit = Some(On),
-        creditCard = Some(On),
-        paypal = Some(On),
-      ),
   ): Switches = Switches(
     OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On)),
     recurringPaymentMethodSwitches,
-    subscriptionsPaymentMethodSwitches,
     SubscriptionsSwitches(Some(On), Some(On), Some(On)),
     FeatureSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
     CampaignSwitches(Some(On), Some(On)),
