@@ -12,7 +12,10 @@ import {
 } from '@guardian/source/foundations';
 
 export const subscriptionDescription = css`
+	${textEgyptian17}
+
 	position: relative;
+
 	&:before {
 		width: 200%;
 		right: 0;
