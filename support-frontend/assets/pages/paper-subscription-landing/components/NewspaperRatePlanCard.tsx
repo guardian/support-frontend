@@ -54,6 +54,7 @@ function NewspaperRatePlanCard({
 
 	const { windowWidthIsGreaterThan } = useWindowWidth();
 	const { setPromoTerms } = usePromoTerms();
+	const isObserver = productLabel?.channel === Channel.Observer;
 
 	/**
 	 * The first time this runs hasBeenSeen
@@ -67,11 +68,9 @@ function NewspaperRatePlanCard({
 	}, [hasBeenSeen]);
 
 	useEffect(() => {
-		if (promotion?.expires) {
+		if (promotion?.expires && !isObserver) {
 			const promoTerms = getNewspaperPromoTerms(promotion);
 			setPromoTerms(promoTerms);
-		} else {
-			setPromoTerms(null);
 		}
 	}, [promotion]);
 
@@ -153,7 +152,7 @@ function NewspaperRatePlanCard({
 				>
 					{buttonCopy}
 				</LinkButton>
-				<p css={cardOffer}>{offerCopy}</p>
+				{offerCopy && <p css={cardOffer}>{offerCopy}</p>}
 			</div>
 
 			<p css={planDescription}>{planData?.description}</p>
