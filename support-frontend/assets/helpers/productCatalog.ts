@@ -12,7 +12,6 @@ import type {
 } from '@modules/product-catalog/productCatalog';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { Participations } from './abTests/models';
-import { getFeatureFlags } from './featureFlags';
 import { isObserverSubdomain } from './globalsAndSwitches/observer';
 
 export enum ProductTierLabel {
@@ -528,11 +527,6 @@ export const productCatalogDescription: Record<
 	},
 };
 
-const productCatalogDescriptionDigitalAccess = {
-	...productCatalogDescription.SupporterPlus,
-	label: 'Digital access',
-};
-
 export function productCatalogGuardianAdLite(): Record<
 	ActiveProductKey | 'GuardianAdLiteGoBack',
 	ProductDescription
@@ -569,10 +563,6 @@ const productCatalogGuardianWeeklyGift = {
 };
 
 export const getProductLabel = (productKey: ActiveProductKey): string => {
-	const { enableDigitalAccess } = getFeatureFlags();
-	if (productKey === 'SupporterPlus' && enableDigitalAccess) {
-		return productCatalogDescriptionDigitalAccess.label;
-	}
 	return productCatalogDescription[productKey].label;
 };
 
@@ -580,10 +570,6 @@ export const getProductDescription = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): ProductDescription => {
-	const { enableDigitalAccess } = getFeatureFlags();
-	if (productKey === 'SupporterPlus' && enableDigitalAccess) {
-		return productCatalogDescriptionDigitalAccess;
-	}
 	if (isGuardianWeeklyGiftProduct(productKey, ratePlanKey)) {
 		return productCatalogGuardianWeeklyGift[productKey];
 	}
