@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { brandAlt, from, neutral } from '@guardian/source/foundations';
+import { brandAlt, from, neutral, until } from '@guardian/source/foundations';
 import HeroContainer from 'components/hero/HeroContainer';
 import { PageTitle } from 'components/page/pageTitle';
 import SubscriptionsProductDescription from 'components/subscriptionsProductDescription/subscriptionsProductDescription';
@@ -47,6 +47,9 @@ const pageTitleStyles = css`
 
 	h1 {
 		max-width: 900px;
+		${until.tablet} {
+			font-size: 32px;
+		}
 	}
 `;
 

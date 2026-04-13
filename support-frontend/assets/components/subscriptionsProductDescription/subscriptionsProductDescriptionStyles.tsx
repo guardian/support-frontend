@@ -30,14 +30,12 @@ export const subscriptionDescription = css`
 	margin: 16px 10px 18px 0;
 
 	${from.mobileMedium} {
-		margin: 16px 0 18px 0;
+		margin: 32px 0 20px 0;
 	}
 	${from.mobileLandscape} {
 		margin: 27px 0 25px 0;
 	}
-	${until.tablet} {
-		max-width: 100%;
-	}
+
 	${from.desktop} {
 		margin: 45px 20px 25px 0;
 	}
@@ -149,7 +147,6 @@ export const subscriptionSubtitleLarge = css`
 
 export const subscriptionButtonsContainer = css`
 	display: flex;
-	margin-bottom: ${space[6]}px;
 	gap: 10px;
 	flex-wrap: wrap;
 `;

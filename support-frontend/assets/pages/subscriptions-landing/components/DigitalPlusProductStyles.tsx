@@ -7,9 +7,10 @@ export const subscriptionsProductContainer = css`
 	background-color: ${palette.brand[400]};
 	color: ${neutral[100]};
 	max-width: 1290px;
-	margin: 0 ${space[3]}px;
 	flex-grow: 1;
-
+	${from.mobileLandscape} {
+		margin: 0 ${space[3]}px;
+	}
 	${from.desktop} {
 		flex-direction: row-reverse;
 	}
