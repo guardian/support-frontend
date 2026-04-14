@@ -81,7 +81,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs22.x",
+        "Runtime": "nodejs24.x",
         "Tags": [
           {
             "Key": "App",
@@ -328,7 +328,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs22.x",
+        "Runtime": "nodejs24.x",
         "Tags": [
           {
             "Key": "App",
@@ -575,7 +575,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs22.x",
+        "Runtime": "nodejs24.x",
         "Tags": [
           {
             "Key": "App",
@@ -907,7 +907,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs22.x",
+        "Runtime": "nodejs24.x",
         "Tags": [
           {
             "Key": "App",
@@ -3162,7 +3162,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs22.x",
+        "Runtime": "nodejs24.x",
         "Tags": [
           {
             "Key": "App",
@@ -3417,7 +3417,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs22.x",
+        "Runtime": "nodejs24.x",
         "Tags": [
           {
             "Key": "App",
@@ -4100,7 +4100,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs22.x",
+        "Runtime": "nodejs24.x",
         "Tags": [
           {
             "Key": "App",
