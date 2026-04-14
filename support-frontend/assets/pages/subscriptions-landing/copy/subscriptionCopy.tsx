@@ -12,7 +12,7 @@ import type * as React from 'react';
 import { themeButtonLegacyGray } from 'components/button/theme';
 import DigitalPlusPackshot from 'components/packshots/digitalPlusPackshot';
 import PaperPackShot from 'components/packshots/paperPackshot';
-import WeeklyPackShot from 'components/packshots/weeklyPackshot';
+import { WeeklySubscriptionPackShot } from 'components/packshots/weeklyPackshots';
 import type { Participations } from 'helpers/abTests/models';
 import { detect, glyph } from 'helpers/internationalisation/currency';
 import type { ProductBenefit } from 'helpers/productCatalog';
@@ -50,6 +50,7 @@ export type ProductCopy = {
 	productImage: React.ReactNode;
 	buttons: ProductButton[];
 	cssOverrides?: SerializedStyles;
+	imagePosition?: 'float' | 'bottom';
 	offer?: string;
 	participations?: Participations;
 	benefits?: ProductBenefit[];
@@ -194,7 +195,7 @@ function guardianWeekly(
 			'A curated weekly news magazine featuring our best global journalism in print, delivered wherever you are in the world. Plus, enjoy unlimited access to our full suite of digital benefits for the complete Guardian experience.',
 		offer: priceCopy.discountCopy || '',
 		buttons: [weeklyFindButton],
-		productImage: <WeeklyPackShot />,
+		productImage: <WeeklySubscriptionPackShot />,
 		participations: participations,
 		cssOverrides: weeklySubscriptionProductCardStyle,
 	};
@@ -223,12 +224,13 @@ const paper = (
 			},
 		],
 		productImage: <PaperPackShot />,
+		imagePosition: 'bottom',
 		offer: priceCopy.discountCopy,
 		cssOverrides: css``,
 	};
 };
 
-const getSubscriptionCopy = (
+export const getSubscriptionProducts = (
 	countryGroupId: CountryGroupId,
 	pricingCopy: PricingCopy,
 	participations: Participations,
@@ -242,5 +244,3 @@ const getSubscriptionCopy = (
 	productcopy.push(digitalPlus(countryGroupId, pricingCopy[DigitalPack]));
 	return productcopy;
 };
-
-export { getSubscriptionCopy };

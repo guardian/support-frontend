@@ -414,7 +414,7 @@ class CreateSubscriptionController(
     EitherT(
       validationResult.map(deliveryAgentValid => {
         val paymentMethodEnabledValidation = CheckoutValidationRules
-          .checkPaymentMethodEnabled(
+          .checkRecurringPaymentMethodEnabled(
             request.body.product,
             request.body.paymentFields,
             switches,

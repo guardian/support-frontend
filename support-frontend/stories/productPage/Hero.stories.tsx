@@ -1,16 +1,18 @@
+import { css } from '@emotion/react';
 import CentredContainer from 'components/containers/centredContainer';
-import GridImage from 'components/gridImage/gridImage';
-import HeroComponent from 'components/page/hero';
-import HeroRoundel from 'components/page/heroRoundel';
+import GridPicture from 'components/gridPicture/gridPicture';
+import HeroContainer from 'components/hero/HeroContainer';
 
 export default {
-	title: 'Product Page/Hero',
-	component: HeroComponent,
+	title: 'LandingPage/HeroContainer',
+	component: HeroContainer,
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<div
 				style={{
-					paddingTop: '100px',
+					marginTop: '100px',
+					padding: '50px 0',
+					backgroundColor: '#EDEDED',
 				}}
 			>
 				<CentredContainer>
@@ -19,50 +21,98 @@ export default {
 			</div>
 		),
 	],
+	argTypes: {
+		heroDirection: {
+			control: 'radio',
+			options: ['default', 'reverse'],
+			description: 'Reverse the hero direction (image on the left)',
+		},
+		imagePosition: {
+			control: 'radio',
+			options: ['float', 'bottom'],
+			description: 'Position of the image slot',
+		},
+		backgroundColor: {
+			control: 'color',
+			description: 'Hero background colour',
+		},
+		color: {
+			control: 'color',
+			description: 'Hero text colour',
+		},
+	},
+	args: {
+		heroDirection: 'default',
+		imagePosition: 'float',
+		backgroundColor: '#052962',
+		color: '#fff',
+	},
 };
 
-export function Hero(): JSX.Element {
+export function Hero({
+	heroDirection,
+	imagePosition,
+	backgroundColor,
+	color,
+}: {
+	heroDirection: 'default' | 'reverse';
+	imagePosition: 'float' | 'bottom';
+	backgroundColor: string;
+	color: string;
+}): JSX.Element {
 	return (
-		<HeroComponent
-			image={
-				<GridImage
-					gridId="weeklyCampaignHeroImg"
-					srcSizes={[500]}
-					sizes="(max-width: 740px) 500px, 500px"
-					imgType="png"
-					altText="A collection of Guardian Weekly magazines"
+		<HeroContainer
+			imageSlot={
+				<GridPicture
+					sources={[
+						{
+							gridId: 'placeholder_16x9',
+							srcSizes: [962, 500],
+							sizes: '240px',
+							imgType: 'jpg',
+							media: '(max-width: 739px)',
+						},
+						{
+							gridId: 'placeholder_1x1',
+							srcSizes: [802, 500],
+							sizes: '200px',
+							imgType: 'jpg',
+							media: '(max-width: 979px)',
+						},
+						{
+							gridId: 'placeholder_4x3',
+							srcSizes: [962, 500],
+							sizes: '240px',
+							imgType: 'jpg',
+							media: '(min-width: 980px)',
+						},
+					]}
+					fallback="placeholder_4x3"
+					fallbackSize={240}
+					altText=""
 				/>
 			}
-			roundelElement={
-				<HeroRoundel theme="base">
-					<div>Roundel</div>
-				</HeroRoundel>
+			contentSlot={
+				<section>
+					<h1>some title</h1>
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque id
+						justo at est elementum egestas rhoncus eu nulla. Proin pellentesque
+						massa at metus condimentum, a aliquam erat condimentum. Vivamus quis
+						rutrum nulla. Curabitur ut ullamcorper magna, eu ornare nunc. Lorem
+						ipsum dolor sit amet, consectetur adipiscing elit. Quisque id justo
+						at est elementum egestas rhoncus eu nulla. Proin pellentesque massa
+						at metus condimentum, a aliquam erat condimentum. Vivamus quis
+						rutrum nulla. Curabitur ut ullamcorper magna, eu ornare nunc.
+					</p>
+				</section>
 			}
-		>
-			<section
-				style={{
-					padding: '12px 20px 40px',
-				}}
-			>
-				<h1
-					style={{
-						fontSize: '42px',
-						fontFamily: 'GH Guardian Headline',
-					}}
-				>
-					Hero Heading
-				</h1>
-				<p
-					style={{
-						paddingTop: '1em',
-					}}
-				>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque id
-					justo at est elementum egestas rhoncus eu nulla. Proin pellentesque
-					massa at metus condimentum, a aliquam erat condimentum. Vivamus quis
-					rutrum nulla. Curabitur ut ullamcorper magna, eu ornare nunc.
-				</p>
-			</section>
-		</HeroComponent>
+			heroDirection={heroDirection}
+			imagePosition={imagePosition}
+			cssOverrides={css`
+				background-color: ${backgroundColor};
+				color: ${color};
+			`}
+		/>
 	);
 }

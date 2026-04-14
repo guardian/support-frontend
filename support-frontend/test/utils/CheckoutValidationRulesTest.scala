@@ -8,7 +8,6 @@ import admin.settings.{
   OneOffPaymentMethodSwitches,
   RecaptchaSwitches,
   RecurringPaymentMethodSwitches,
-  SubscriptionsPaymentMethodSwitches,
   SubscriptionsSwitches,
   Switches,
 }
@@ -33,7 +32,7 @@ import scala.concurrent.Future
 class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
 
   it should "return Invalid if a user tries to pay with direct debit but the Direct debit switch in RRCP is off" in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
+    CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = DirectDebitPaymentFields("Testuser", "", "", ""),
       switches = TestData.buildSwitches(
@@ -44,13 +43,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(Off),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
       ),
@@ -58,7 +50,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   }
 
   it should "return Invalid if a user tries to pay with Apple Pay but the  Apple Pay switch in RRCP is off" in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
+    CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = StripePaymentFields(
         paymentMethod = PaymentMethodId("testId").get,
@@ -73,37 +65,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(Off),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-      ),
-    ) shouldBe Invalid("Invalid Payment Method")
-  }
-  it should "return Invalid if a user tries to pay with Sepa but the Sepa switch in RRCP is off" in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
-      product = Contribution(0, GBP, Monthly),
-      paymentFields = SepaPaymentFields("", "", Some(""), Some("")),
-      switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(
-          stripe = Some(On),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
-          stripeExpressCheckout = Some(On),
-          payPal = Some(On),
-          directDebit = Some(On),
-          sepa = Some(Off),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
       ),
@@ -111,7 +72,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   }
 
   it should "return Invalid if a user tries to pay with PayPal but the Pay Pal switch in RRCP is off" in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
+    CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = PayPalPaymentFields(""),
       switches = TestData.buildSwitches(
@@ -122,20 +83,13 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(Off),
           directDebit = Some(On),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
   it should "return Invalid if a user tries to pay with Stripe but the switch in RRCP is off" in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
+    CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = StripePaymentFields(
         PaymentMethodId("testStripeToken").get,
@@ -150,20 +104,13 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
   it should "return Invalid if a user tries to pay with Stripe Payment Request Button but the switch in RRCP is off" in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
+    CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = StripePaymentFields(
         paymentMethod = PaymentMethodId("testId").get,
@@ -178,20 +125,13 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
   it should "return Invalid if a user tries to pay with Stripe Checkout but the switch  in RRCP is off" in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
+    CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = StripePaymentFields(
         paymentMethod = PaymentMethodId("testId").get,
@@ -206,20 +146,13 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
-  it should "return Invalid if a user tries to pay with Pay Pal but the Pay Pal switch in RRCP is off for Subscription Payment " in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
+  it should "return Invalid if a user tries to pay with Pay Pal but the Pay Pal switch in RRCP is off " in {
+    CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = DigitalPack(GBP, Monthly),
       paymentFields = PayPalPaymentFields(""),
       switches = TestData.buildSwitches(
@@ -228,22 +161,15 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeApplePay = Some(On),
           stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
-          payPal = Some(On),
+          payPal = Some(Off),
           directDebit = Some(On),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(Off),
           stripeHostedCheckout = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
-  it should "return Invalid if a user tries to pay with Direct Debit but the Direct Debit switch in RRCP is off for Subscription Payment " in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
+  it should "return Invalid if a user tries to pay with Direct Debit but the Direct Debit switch in RRCP is off" in {
+    CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = DigitalPack(
         GBP,
         Monthly,
@@ -256,22 +182,15 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
-          directDebit = Some(On),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
           directDebit = Some(Off),
-          creditCard = Some(On),
-          paypal = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
 
-  it should "return Invalid if a user tries to pay with Credit card(Stripe) but the  switch in RRCP is off for Subscription Payment " in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
+  it should "return Invalid if a user tries to pay with Credit card(Stripe) but the  switch in RRCP is off" in {
+    CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = DigitalPack(
         GBP,
         Monthly,
@@ -283,19 +202,12 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
-          stripe = Some(On),
+          stripe = Some(Off),
           stripeApplePay = Some(On),
           stripePaymentRequestButton = Some(On),
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(Off),
-          paypal = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
       ),
@@ -304,7 +216,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
 
   // Below are the test case for 'ON' state of  payment switches
   it should "return Valid if a user tries to pay with direct debit while the Direct debit switch in RRCP is on" in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
+    CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = DirectDebitPaymentFields("Testuser", "", "", ""),
       switches = TestData.buildSwitches(
@@ -315,13 +227,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
       ),
@@ -329,7 +234,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   }
 
   it should "return Valid if a user tries to pay with Apple Pay while the  Apple Pay switch in RRCP is on" in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
+    CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = StripePaymentFields(
         paymentMethod = PaymentMethodId("testId").get,
@@ -344,37 +249,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-      ),
-    ) shouldBe Valid
-  }
-  it should "return Valid if a user tries to pay with Sepa while the Sepa switch in RRCP is on" in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
-      product = Contribution(0, GBP, Monthly),
-      paymentFields = SepaPaymentFields("", "", Some(""), Some("")),
-      switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(
-          stripe = Some(On),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
-          stripeExpressCheckout = Some(On),
-          payPal = Some(On),
-          directDebit = Some(On),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
       ),
@@ -382,7 +256,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   }
 
   it should "return Valid if a user tries to pay with PayPal while the Pay Pal switch in RRCP is on" in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
+    CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = PayPalPaymentFields(""),
       switches = TestData.buildSwitches(
@@ -393,20 +267,13 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
       ),
     ) shouldBe Valid
   }
   it should "return Valid if a user tries to pay with Stripe  while the switch  in RRCP is on" in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
+    CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = StripePaymentFields(
         PaymentMethodId("testStripeToken").get,
@@ -421,20 +288,13 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
       ),
     ) shouldBe Valid
   }
   it should "return Valid if a user tries to pay with Stripe Payment Request Button while the switch  in RRCP is on" in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
+    CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = StripePaymentFields(
         paymentMethod = PaymentMethodId("testId").get,
@@ -449,20 +309,13 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
       ),
     ) shouldBe Valid
   }
   it should "return Valid if a user tries to pay with Stripe Checkout while the switch  in RRCP is on" in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
+    CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = StripePaymentFields(
         paymentMethod = PaymentMethodId("testId").get,
@@ -477,20 +330,13 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
       ),
     ) shouldBe Valid
   }
-  it should "return Valid if a user tries to pay with Pay Pal while the Pay Pal switch in RRCP is on for Subscription Payment " in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
+  it should "return Valid if a user tries to pay with Pay Pal while the Pay Pal switch in RRCP is on" in {
+    CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = SupporterPlus(0, GBP, Monthly),
       paymentFields = PayPalPaymentFields(""),
       switches = TestData.buildSwitches(
@@ -501,20 +347,13 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
       ),
     ) shouldBe Valid
   }
-  it should "return Valid if a user tries to pay with Direct Debit while the Direct Debit switch in RRCP is on for Subscription Payment " in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
+  it should "return Valid if a user tries to pay with Direct Debit while the Direct Debit switch in RRCP is on" in {
+    CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = DigitalPack(
         GBP,
         Monthly,
@@ -528,21 +367,14 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
       ),
     ) shouldBe Valid
   }
 
-  it should "return Valid if a user tries to pay with Credit card(Stripe) but while the  switch in RRCP is on for Subscription Payment " in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
+  it should "return Valid if a user tries to pay with Credit card(Stripe) but while the  switch in RRCP is on" in {
+    CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = DigitalPack(
         GBP,
         Monthly,
@@ -560,13 +392,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-        SubscriptionsPaymentMethodSwitches(
-          directDebit = Some(On),
-          creditCard = Some(On),
-          paypal = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
       ),
@@ -983,19 +808,11 @@ object TestData {
         stripeExpressCheckout = Some(On),
         payPal = Some(On),
         directDebit = Some(On),
-        sepa = Some(On),
-        stripeHostedCheckout = Some(Off),
-      ),
-      subscriptionsPaymentMethodSwitches: SubscriptionsPaymentMethodSwitches = SubscriptionsPaymentMethodSwitches(
-        directDebit = Some(On),
-        creditCard = Some(On),
-        paypal = Some(On),
         stripeHostedCheckout = Some(Off),
       ),
   ): Switches = Switches(
     OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On)),
     recurringPaymentMethodSwitches,
-    subscriptionsPaymentMethodSwitches,
     SubscriptionsSwitches(Some(On), Some(On), Some(On)),
     FeatureSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
     CampaignSwitches(Some(On), Some(On)),

@@ -1,6 +1,8 @@
 import { css } from '@emotion/react';
-import GridPicture from 'components/gridPicture/gridPicture';
-import HeroHeader from 'components/hero/HeroHeader';
+import CentredContainer from 'components/containers/centredContainer';
+import HeroContainer from 'components/hero/HeroContainer';
+import HeroContent from 'components/hero/HeroContent';
+import { WeeklyLandingPagePackShot } from 'components/packshots/weeklyPackshots';
 import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
 import {
@@ -12,7 +14,6 @@ import {
 	pageTitleOverrides,
 	roundelPromotionStyles,
 	roundelStyles,
-	weeklyDigitalHeroOverrides,
 } from './weeklyDigitalHeroStyles';
 
 export default function WeeklyDigitalHero({
@@ -58,53 +59,27 @@ export default function WeeklyDigitalHero({
 			theme="weekly"
 			cssOverrides={pageTitleOverrides}
 		>
-			<HeroHeader
-				heroImage={
-					<>
-						<GridPicture
-							sources={[
-								{
-									gridId: `weeklyDigitalLandingHeroMobile_16x9`,
-									srcSizes: [1000],
-									sizes: '331px',
-									imgType: 'png',
-									media: '(max-width: 739px)',
-								},
-								{
-									gridId: `weeklyDigitalLandingHeroTablet_1x1`,
-									srcSizes: [2000],
-									sizes: '340px',
-									imgType: 'png',
-									media: '(max-width: 979px)',
-								},
-								{
-									gridId: `weeklyDigitalLandingHeroDesktop_4x3`,
-									srcSizes: [2000],
-									sizes: '435px',
-									imgType: 'png',
-									media: '(min-width: 980px)',
-								},
-							]}
-							fallback={`weeklyDigitalLandingHeroDesktop_4x3`}
-							fallbackSize={2000}
-							altText="A collection of Guardian Weekly magazines"
+			<CentredContainer>
+				{roundel}
+				<HeroContainer
+					imageSlot={<WeeklyLandingPagePackShot />}
+					contentSlot={
+						<HeroContent
+							title={title}
+							description={description}
+							ctaText="See pricing options"
+							ctaLink="#subscribe"
+							onClick={() =>
+								sendTrackingEventsOnClick({
+									id: 'options_cta_click',
+									product: 'GuardianWeekly',
+									componentType: 'ACQUISITIONS_BUTTON',
+								})
+							}
 						/>
-					</>
-				}
-				roundel={roundel}
-				title={title}
-				description={description}
-				ctaText="See pricing options"
-				ctaLink="#subscribe"
-				onClick={() =>
-					sendTrackingEventsOnClick({
-						id: 'options_cta_click',
-						product: 'GuardianWeekly',
-						componentType: 'ACQUISITIONS_BUTTON',
-					})
-				}
-				cssOverrides={weeklyDigitalHeroOverrides}
-			/>
+					}
+				/>
+			</CentredContainer>
 		</PageTitle>
 	);
 }

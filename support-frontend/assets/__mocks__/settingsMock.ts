@@ -16,12 +16,6 @@ const mockSettings = {
 			stripeExpressCheckout: 'On',
 			payPal: 'On',
 			directDebit: 'Off',
-			sepa: 'On',
-		},
-		subscriptionsPaymentMethods: {
-			directDebit: 'On',
-			creditCard: 'On',
-			paypal: 'On',
 		},
 		subscriptionsSwitches: {
 			enableDigitalSubGifting: 'On',

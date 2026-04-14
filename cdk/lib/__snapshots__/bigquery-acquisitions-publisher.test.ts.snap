@@ -97,6 +97,24 @@ Logs: https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#
           ],
         },
         "State": "ENABLED",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
         "Targets": [
           {
             "Arn": {
@@ -147,6 +165,7 @@ Logs: https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#
             "eu-west-1",
           ],
         },
+        "KmsKeyIdentifier": "",
         "RetentionDays": 90,
         "SourceArn": {
           "Fn::GetAtt": [
@@ -255,6 +274,7 @@ Logs: https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#
                 ],
               ],
             },
+            "ReturnData": true,
           },
           {
             "Id": "m1",

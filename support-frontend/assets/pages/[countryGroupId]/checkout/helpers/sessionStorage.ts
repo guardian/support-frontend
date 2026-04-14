@@ -38,7 +38,6 @@ const OrderSchema = z.object({
 		'PayPal',
 		'PayPalCompletePayments',
 		'DirectDebit',
-		'Sepa',
 		'None',
 	]),
 	status: z.enum(['success', 'pending']),

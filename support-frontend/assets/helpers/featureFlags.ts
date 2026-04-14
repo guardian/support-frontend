@@ -1,13 +1,12 @@
-const featureFlagEnableDigitalAccess = 'enableDigitalAccess';
-
+// Usage : const { feature } = getFeatureFlags();
 interface FeatureFlags {
-	enableDigitalAccess: boolean;
+	feature: boolean;
 }
 
 export function getFeatureFlags(): FeatureFlags {
 	const urlParams = new URLSearchParams(window.location.search);
 
 	return {
-		enableDigitalAccess: urlParams.has(featureFlagEnableDigitalAccess),
+		feature: urlParams.has('feature'),
 	};
 }
