@@ -117,20 +117,6 @@ case class GatewayOptionData(GatewayOption: List[GatewayOption])
 object GatewayOptionData {
   implicit val codec: Codec[GatewayOptionData] = deriveCodec
 }
-
-case class SepaPaymentMethod(
-    BankTransferAccountName: String,
-    BankTransferAccountNumber: String,
-    Email: String,
-    IPAddress: String,
-    GatewayOptionData: GatewayOptionData,
-    BankTransferType: String = "SEPA",
-    `Type`: String = "BankTransfer",
-    PaymentGateway: PaymentGateway = SepaGateway,
-    Country: Option[String] = None,
-    StreetName: Option[String] = None,
-) extends PaymentMethod
-
 object PaymentMethod {
   import com.gu.support.encoding.CustomCodecs.{decodeCountry, encodeCountryAsAlpha2}
   implicit val payPalReferenceTransactionCodec: Codec[PayPalReferenceTransaction] = deriveCodec
@@ -141,7 +127,6 @@ object PaymentMethod {
     deriveCodec
   implicit val creditCardReferenceTransactionCodec: Codec[CreditCardReferenceTransaction] = deriveCodec
   implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = deriveCodec
-  implicit val sepaPaymentMethodCodec: Codec[SepaPaymentMethod] = deriveCodec
   implicit val clonedDirectDebitPaymentMethodCodec: Codec[ClonedDirectDebitPaymentMethod] = deriveCodec
 
   // Payment Methods are details from the payment provider
@@ -151,7 +136,6 @@ object PaymentMethod {
     case ppcpwb: PayPalCompletePaymentsWithBAIDReferenceTransaction => ppcpwb.asJson
     case card: CreditCardReferenceTransaction => card.asJson
     case dd: DirectDebitPaymentMethod => dd.asJson
-    case sepa: SepaPaymentMethod => sepa.asJson.deepDropNullValues
     case clonedDD: ClonedDirectDebitPaymentMethod => clonedDD.asJson
   }
 
@@ -163,6 +147,5 @@ object PaymentMethod {
       Decoder[CreditCardReferenceTransaction].widen,
       Decoder[ClonedDirectDebitPaymentMethod].widen, // ordering is significant (at least between direct debit variants)
       Decoder[DirectDebitPaymentMethod].widen,
-      Decoder[SepaPaymentMethod].widen,
     ).reduceLeft(_ or _)
 }

@@ -49,8 +49,6 @@ object CheckoutValidationRules {
       if (switches.payPal.contains(On)) Valid else Invalid("Invalid Payment Method")
     case _: DirectDebitPaymentFields =>
       if (switches.directDebit.contains(On)) Valid else Invalid("Invalid Payment Method")
-    case _: SepaPaymentFields =>
-      if (switches.sepa.contains(On)) Valid else Invalid("Invalid Payment Method")
     case _: StripeHostedPaymentFields =>
       if (switches.stripeHostedCheckout.contains(On)) Valid else Invalid("Invalid Payment Method")
     case s: StripePaymentFields =>
@@ -202,9 +200,6 @@ object PaidProductValidation {
     case payPalDetails: PayPalPaymentFields => payPalDetails.baid.nonEmpty.otherwise("paypal BAID missing")
     case payPalCPDetails: PayPalCompletePaymentsPaymentFields =>
       payPalCPDetails.paymentToken.nonEmpty.otherwise("paypal payment token missing")
-    case SepaPaymentFields(accountHolderName, iban, country, streetName) =>
-      accountHolderName.nonEmpty.otherwise("sepa account holder name missing") and
-        iban.nonEmpty.otherwise("sepa iban empty")
     case _: StripeHostedPaymentFields => Valid
   }
 

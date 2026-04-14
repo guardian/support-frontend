@@ -10,6 +10,7 @@ import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import {
 	Channel,
 	type ProductLabelProps,
@@ -60,6 +61,7 @@ export type Product = {
 	unavailableOutsideLondon?: boolean;
 	planData?: PlanData;
 	children?: ReactNode;
+	promotion?: Promotion;
 };
 
 function ProductOption(props: Product): JSX.Element {

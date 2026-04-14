@@ -81,7 +81,6 @@ case class RecurringPaymentMethodSwitches(
     stripeExpressCheckout: Option[SwitchState],
     payPal: Option[SwitchState],
     directDebit: Option[SwitchState],
-    sepa: Option[SwitchState],
     stripeHostedCheckout: Option[SwitchState],
 )
 
