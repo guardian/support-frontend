@@ -55,6 +55,7 @@ export const subscriptionsDescriptionContainer = css`
 
 export const subscriptionsDescription = css`
 	padding: ${space[2]}px ${space[6]}px ${space[3]}px;
+	margin-bottom: ${space[6]}px;
 	${from.tablet} {
 		padding-top: ${space[3]}px;
 	}
