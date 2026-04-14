@@ -1,5 +1,4 @@
 import { SvgDirectDebit } from '@guardian/source/react-components';
-import SvgSepa from 'components/svgs/sepa';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { CreditDebitIcons, SvgCreditCardWithTheme } from './creditDebitIcons';
 import { PaypalIcon } from './paypalIcon';
@@ -35,11 +34,6 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 		id: 'qa-direct-debit',
 		label: 'Direct debit',
 		icon: <SvgDirectDebit size="medium" />,
-	},
-	Sepa: {
-		id: 'qa-direct-debit-sepa',
-		label: 'Direct debit (SEPA)',
-		icon: <SvgSepa />,
 	},
 	None: {
 		id: 'qa-none',
