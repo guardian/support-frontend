@@ -69,7 +69,6 @@ export const emptySwitches = {
 	experiments: {},
 	oneOffPaymentMethods: {},
 	recurringPaymentMethods: {},
-	subscriptionsPaymentMethods: {},
 	subscriptionsSwitches: {},
 	featureSwitches: {},
 	campaignSwitches: {},

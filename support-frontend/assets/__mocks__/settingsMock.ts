@@ -17,11 +17,6 @@ const mockSettings = {
 			payPal: 'On',
 			directDebit: 'Off',
 		},
-		subscriptionsPaymentMethods: {
-			directDebit: 'On',
-			creditCard: 'On',
-			paypal: 'On',
-		},
 		subscriptionsSwitches: {
 			enableDigitalSubGifting: 'On',
 			useDotcomContactPage: 'On',
