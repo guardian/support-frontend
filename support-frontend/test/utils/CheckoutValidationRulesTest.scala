@@ -183,7 +183,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(Off),
-          sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
       ),
@@ -250,25 +249,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripeExpressCheckout = Some(On),
           payPal = Some(On),
           directDebit = Some(On),
-          sepa = Some(On),
-          stripeHostedCheckout = Some(Off),
-        ),
-      ),
-    ) shouldBe Valid
-  }
-  it should "return Valid if a user tries to pay with Sepa while the Sepa switch in RRCP is on" in {
-    CheckoutValidationRules.checkPaymentMethodEnabled(
-      product = Contribution(0, GBP, Monthly),
-      paymentFields = SepaPaymentFields("", "", Some(""), Some("")),
-      switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(
-          stripe = Some(On),
-          stripeApplePay = Some(On),
-          stripePaymentRequestButton = Some(On),
-          stripeExpressCheckout = Some(On),
-          payPal = Some(On),
-          directDebit = Some(On),
-          sepa = Some(On),
           stripeHostedCheckout = Some(Off),
         ),
       ),
