@@ -6,6 +6,7 @@ import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import Carousel from 'components/product/Carousel';
 import Tabs, { type TabProps } from 'components/tabs/tabs';
+import { usePromoTerms } from 'contexts/PromoTermsContext';
 import { ActivePaperProductTypes } from 'helpers/productCatalogToProductOption';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
@@ -51,6 +52,7 @@ function NewspaperProductTabs({
 		useState<PaperFulfilmentOptions>(paperFulfilment);
 
 	const { windowWidthIsGreaterThan } = useWindowWidth();
+	const { setPromoTerms } = usePromoTerms();
 
 	const promotions = useMemo(
 		() =>
@@ -76,6 +78,8 @@ function NewspaperProductTabs({
 			componentType: 'ACQUISITIONS_BUTTON',
 		})();
 		windowSetHashProperty(tabId);
+		// clean promo terms when switching tabs, as they are specific to each tab's offers
+		setPromoTerms(null);
 	};
 
 	const tabItems = Object.entries(tabs).map(([fulfilment, tab]) => {
