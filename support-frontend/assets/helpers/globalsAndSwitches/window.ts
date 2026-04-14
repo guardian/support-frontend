@@ -82,10 +82,6 @@ const PaymentConfigSchema = z.object({
 				z.string(),
 				z.optional(z.enum(['On', 'Off'])),
 			),
-			subscriptionsPaymentMethods: z.record(
-				z.string(),
-				z.optional(z.enum(['On', 'Off'])),
-			),
 			subscriptionsSwitches: z.record(
 				z.string(),
 				z.optional(z.enum(['On', 'Off'])),
