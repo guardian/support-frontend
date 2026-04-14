@@ -4,7 +4,7 @@ import GridPicture from 'components/gridPicture/gridPicture';
 import HeroContainer from 'components/hero/HeroContainer';
 
 export default {
-	title: 'Hero Container',
+	title: 'LandingPage/HeroContainer',
 	component: HeroContainer,
 	decorators: [
 		(Story: React.FC): JSX.Element => (

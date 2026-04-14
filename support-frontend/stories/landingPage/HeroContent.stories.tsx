@@ -3,7 +3,7 @@ import { palette, space } from '@guardian/source/foundations';
 import HeroContent from 'components/hero/HeroContent';
 
 export default {
-	title: 'LandingPage/HeroHeader',
+	title: 'LandingPage/HeroContent',
 	component: HeroContent,
 };
 
