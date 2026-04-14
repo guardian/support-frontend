@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import CentredContainer from 'components/containers/centredContainer';
-import GridPicture from 'components/gridPicture/gridPicture';
 import HeroContainer from 'components/hero/HeroContainer';
 import HeroContent from 'components/hero/HeroContent';
+import { WeeklyLandingPagePackShot } from 'components/packshots/weeklyPackshots';
 import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
 import {
@@ -62,36 +62,7 @@ export default function WeeklyDigitalHero({
 			<CentredContainer>
 				{roundel}
 				<HeroContainer
-					imageSlot={
-						<GridPicture
-							sources={[
-								{
-									gridId: `weeklyDigitalLandingHeroMobile_16x9`,
-									srcSizes: [1000],
-									sizes: '331px',
-									imgType: 'png',
-									media: '(max-width: 739px)',
-								},
-								{
-									gridId: `weeklyDigitalLandingHeroTablet_1x1`,
-									srcSizes: [2000],
-									sizes: '340px',
-									imgType: 'png',
-									media: '(max-width: 979px)',
-								},
-								{
-									gridId: `weeklyDigitalLandingHeroDesktop_4x3`,
-									srcSizes: [2000],
-									sizes: '435px',
-									imgType: 'png',
-									media: '(min-width: 980px)',
-								},
-							]}
-							fallback={`weeklyDigitalLandingHeroDesktop_4x3`}
-							fallbackSize={2000}
-							altText="A collection of Guardian Weekly magazines"
-						/>
-					}
+					imageSlot={<WeeklyLandingPagePackShot />}
 					contentSlot={
 						<HeroContent
 							title={title}
