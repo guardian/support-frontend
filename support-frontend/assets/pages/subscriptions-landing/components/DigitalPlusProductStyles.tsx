@@ -8,9 +8,11 @@ export const subscriptionsProductContainer = css`
 	color: ${neutral[100]};
 	max-width: 1290px;
 	flex-grow: 1;
+
 	${from.mobileLandscape} {
 		margin: 0 ${space[3]}px;
 	}
+
 	${from.desktop} {
 		flex-direction: row-reverse;
 	}

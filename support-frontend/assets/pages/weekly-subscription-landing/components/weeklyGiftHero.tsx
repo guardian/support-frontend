@@ -1,24 +1,14 @@
-import {
-	LinkButton,
-	SvgArrowDownStraight,
-	themeButton,
-} from '@guardian/source/react-components';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import HeroContainer from 'components/hero/HeroContainer';
+import HeroContent from 'components/hero/HeroContent';
 import { PageTitle } from 'components/page/pageTitle';
 import {
 	type PromotionCopy,
 	promotionHTML,
 } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import {
-	containerHero,
-	linkButtonColour,
-	weeklyGiftHeroCopy,
-	weeklyGiftHeroParagraph,
-	weeklyGiftHeroTitle,
-} from './weeklyGiftHeroStyles';
+import { containerHero } from './weeklyGiftHeroStyles';
 
 const getFirstParagraph = (promotionCopy: PromotionCopy): JSX.Element => {
 	const defaultParagraph = (
@@ -43,6 +33,9 @@ export function WeeklyGiftHero({
 }: {
 	promotionCopy: PromotionCopy;
 }): JSX.Element {
+	const { title = '' } = promotionCopy;
+	const description = getFirstParagraph(promotionCopy);
+
 	return (
 		<PageTitle title={'Give the Guardian Weekly'} theme="weekly">
 			<CentredContainer>
@@ -57,27 +50,19 @@ export function WeeklyGiftHero({
 						/>
 					}
 					contentSlot={
-						<section css={weeklyGiftHeroCopy}>
-							<h2 css={weeklyGiftHeroTitle}>{promotionCopy.title ?? ''}</h2>
-							<div css={weeklyGiftHeroParagraph}>
-								{getFirstParagraph(promotionCopy)}
-							</div>
-							<LinkButton
-								onClick={sendTrackingEventsOnClick({
+						<HeroContent
+							title={title}
+							description={description}
+							ctaText="See pricing options"
+							ctaLink="#subscribe"
+							onClick={() =>
+								sendTrackingEventsOnClick({
 									id: 'options_cta_click',
 									product: 'GuardianWeekly',
 									componentType: 'ACQUISITIONS_BUTTON',
-								})}
-								priority="tertiary"
-								iconSide="right"
-								icon={<SvgArrowDownStraight />}
-								href="#subscribe"
-								cssOverrides={linkButtonColour}
-								theme={themeButton}
-							>
-								See pricing options
-							</LinkButton>
-						</section>
+								})
+							}
+						/>
 					}
 					cssOverrides={containerHero}
 				/>
