@@ -62,18 +62,14 @@ object CheckoutValidationRules {
         case None => Invalid("Invalid Payment Method")
       }
   }
-  def checkPaymentMethodEnabled(
+  def checkRecurringPaymentMethodEnabled(
       product: ProductType,
       paymentFields: PaymentFields,
       switches: Switches,
-  ) =
-    product match {
-      case _ =>
-        checkContributionPaymentMethodEnabled(
-          switches.recurringPaymentMethods,
-          paymentFields,
-        )
-    }
+  ) = checkContributionPaymentMethodEnabled(
+    switches.recurringPaymentMethods,
+    paymentFields,
+  )
 
   def validate(createSupportWorkersRequest: CreateSupportWorkersRequest): Result =
     (createSupportWorkersRequest.product match {
