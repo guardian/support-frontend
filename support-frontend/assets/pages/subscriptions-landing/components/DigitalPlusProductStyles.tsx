@@ -7,9 +7,11 @@ export const subscriptionsProductContainer = css`
 	background-color: ${palette.brand[400]};
 	color: ${neutral[100]};
 	max-width: 1290px;
-	margin: 0 ${space[3]}px;
 	flex-grow: 1;
-	margin-top: 40px;
+
+	${from.mobileLandscape} {
+		margin: 0 ${space[3]}px;
+	}
 
 	${from.desktop} {
 		flex-direction: row-reverse;
@@ -53,10 +55,8 @@ export const subscriptionsDescriptionContainer = css`
 
 export const subscriptionsDescription = css`
 	padding: ${space[2]}px ${space[6]}px ${space[3]}px;
+	margin-bottom: ${space[6]}px;
 	${from.tablet} {
 		padding-top: ${space[3]}px;
-	}
-	${from.desktop} {
-		padding-left: ${space[14]}px;
 	}
 `;

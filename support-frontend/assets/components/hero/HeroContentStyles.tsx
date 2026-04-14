@@ -4,28 +4,8 @@ import {
 	article17,
 	from,
 	headlineBold28,
-	palette,
 	space,
-	until,
 } from '@guardian/source/foundations';
-
-export const printHeroCssOverrides = css`
-	background-color: ${palette.neutral[97]};
-	color: ${palette.neutral[7]};
-	flex-direction: column-reverse;
-	& div:nth-child(2) {
-		${until.tablet} {
-			background: linear-gradient(
-				${palette.neutral[97]},
-				${palette.neutral[86]}
-			);
-		}
-	}
-`;
-
-export const heroCopy = css`
-	padding: ${space[3]}px ${space[5]}px ${space[10]}px;
-`;
 
 export const heroTitle = css`
 	${headlineBold28};
