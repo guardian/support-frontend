@@ -1158,6 +1158,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "Expression": "SUM([FILL(m0,0),FILL(m1,0),FILL(m2,0),FILL(m3,0),FILL(m4,0),FILL(m5,0)])",
             "Id": "expr_1",
             "Label": "AllGuardianAdLiteConversions",
+            "ReturnData": true,
           },
           {
             "Id": "m0",
@@ -1391,6 +1392,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "Expression": "SUM([FILL(m0,0),FILL(m1,0),FILL(m2,0),FILL(m3,0),FILL(m4,0),FILL(m5,0)])",
             "Id": "expr_1",
             "Label": "AllRecurringApplePayPayments",
+            "ReturnData": true,
           },
           {
             "Id": "m0",
@@ -1800,6 +1802,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "Expression": "SUM([FILL(m0,0),FILL(m1,0),FILL(m2,0),FILL(m3,0),FILL(m4,0),FILL(m5,0)])",
             "Id": "expr_1",
             "Label": "AllRecurringGooglePayPayments",
+            "ReturnData": true,
           },
           {
             "Id": "m0",
@@ -2033,6 +2036,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "Expression": "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
             "Id": "expr_1",
             "Label": "AllPaperConversions",
+            "ReturnData": true,
           },
           {
             "Id": "m1",
@@ -2188,6 +2192,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "Expression": "SUM([FILL(m1,0)])",
             "Id": "expr_1",
             "Label": "AllStripeHostedCheckoutPaperConversions",
+            "ReturnData": true,
           },
           {
             "Id": "m1",
@@ -2995,6 +3000,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "Expression": "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
             "Id": "expr_1",
             "Label": "AllWeeklyConversions",
+            "ReturnData": true,
           },
           {
             "Id": "m1",
