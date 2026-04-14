@@ -1,15 +1,5 @@
 // ----- Imports ----- //
 import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
-import type { IsoCountry } from '@modules/internationalisation/country';
-import type { ContributionType } from 'helpers/contributions';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import {
-	DirectDebit,
-	PayPal,
-	Stripe,
-	StripeHostedCheckout,
-} from 'helpers/forms/paymentMethods';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 
 // ----- Types ----- //
 export type PaymentMethodSwitch =
@@ -18,63 +8,6 @@ export type PaymentMethodSwitch =
 	| 'payPalCompletePayments'
 	| 'stripe'
 	| 'stripeHostedCheckout';
-
-// ----- Functions ----- //
-function toPaymentMethodSwitchNaming(
-	paymentMethod: PaymentMethod,
-): PaymentMethodSwitch | null {
-	switch (paymentMethod) {
-		case PayPal:
-			return 'payPal';
-
-		case Stripe:
-			return 'stripe';
-
-		case DirectDebit:
-			return 'directDebit';
-
-		case StripeHostedCheckout:
-			return 'stripeHostedCheckout';
-
-		default:
-			return null;
-	}
-}
-
-// Returns an array of Payment Methods, in the order of preference,
-// i.e the first element in the array will be the default option
-function getPaymentMethods(
-	contributionType: ContributionType,
-	countryId: IsoCountry,
-): PaymentMethod[] {
-	const nonRegionSpecificPaymentMethods: PaymentMethod[] = [Stripe, PayPal];
-
-	if (contributionType !== 'ONE_OFF' && countryId === 'GB') {
-		return [DirectDebit, ...nonRegionSpecificPaymentMethods];
-	}
-	return nonRegionSpecificPaymentMethods;
-}
-
-function switchKeyForContributionType(
-	contributionType: ContributionType,
-): 'oneOffPaymentMethods' | 'recurringPaymentMethods' {
-	return contributionType === 'ONE_OFF'
-		? 'oneOffPaymentMethods'
-		: 'recurringPaymentMethods';
-}
-
-function getValidPaymentMethods(
-	contributionType: ContributionType,
-	countryId: IsoCountry,
-): PaymentMethod[] {
-	const switchKey = switchKeyForContributionType(contributionType);
-	return getPaymentMethods(contributionType, countryId).filter(
-		(paymentMethod) =>
-			isSwitchOn(
-				`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) ?? '-'}`,
-			),
-	);
-}
 
 function round(amount: number) {
 	/**
@@ -116,4 +49,4 @@ const formatAmount = (
 };
 
 // ----- Exports ----- //
-export { simpleFormatAmount, formatAmount, getValidPaymentMethods };
+export { simpleFormatAmount, formatAmount };
