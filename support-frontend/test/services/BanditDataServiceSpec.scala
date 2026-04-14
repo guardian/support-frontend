@@ -1,10 +1,14 @@
 package services
 
-import admin.settings.{EpsilonGreedyBandit, Roulette}
+import admin.settings._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.apache.pekko.actor.ActorSystem
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class BanditDataServiceSpec extends AnyFlatSpec with Matchers {
+
+  implicit val actorSystem: ActorSystem = ActorSystem("test")
 
   "BanditData.calculateOverallMeanForVariant" should "handle empty samples" in {
     val samples = List.empty[VariantSample]
@@ -113,6 +117,99 @@ class BanditDataServiceSpec extends AnyFlatSpec with Matchers {
     result.sortedVariants(0).mean shouldBe 15.0 +- 0.01
     result.sortedVariants(1).mean shouldBe 10.0 +- 0.01
     result.sortedVariants(2).mean shouldBe 5.0 +- 0.01
+  }
+
+  "getBanditTestConfigs" should "extract bandit methodologies from landing page tests" in {
+    // Create test data
+    val tests = List(
+      LandingPageTest(
+        name = "test-1",
+        status = Status.Live,
+        priority = 1,
+        regionTargeting = None,
+        mParticleAudience = None,
+        variants = List(
+          LandingPageVariant(
+            name = "control",
+            copy = LandingPageCopy("Control", "Control subheading"),
+            products = Products(None, None, None),
+            tickerSettings = None,
+            countdownSettings = None,
+            defaultProductSelection = None,
+          ),
+          LandingPageVariant(
+            name = "variant-a",
+            copy = LandingPageCopy("Variant A", "Variant A subheading"),
+            products = Products(None, None, None),
+            tickerSettings = None,
+            countdownSettings = None,
+            defaultProductSelection = None,
+          ),
+        ),
+        methodologies = Some(
+          List(
+            EpsilonGreedyBandit(epsilon = 0.1, testName = Some("test-1-epsilon")),
+            Roulette(testName = Some("test-1-roulette")),
+          ),
+        ),
+      ),
+      LandingPageTest(
+        name = "test-2",
+        status = Status.Live,
+        priority = 2,
+        regionTargeting = None,
+        mParticleAudience = None,
+        variants = List(
+          LandingPageVariant(
+            name = "control",
+            copy = LandingPageCopy("Control", "Control subheading"),
+            products = Products(None, None, None),
+            tickerSettings = None,
+            countdownSettings = None,
+            defaultProductSelection = None,
+          ),
+        ),
+        methodologies = Some(
+          List(
+            ABTest(), // This should be filtered out
+            EpsilonGreedyBandit(epsilon = 0.2, sampleCount = Some(10)),
+          ),
+        ),
+      ),
+    )
+
+    // Create a minimal BanditDataService instance just to test the methodology extraction
+    val mockTestService = new LandingPageTestService {
+      def getTests(): List[LandingPageTest] = tests
+    }
+
+    val service = new BanditDataService(com.gu.support.config.Stages.CODE, mockTestService) {
+      override def getBanditData(): List[BanditData] = Nil
+      override def getBanditDataForTest(testName: String): Option[BanditData] = None
+    }
+
+    // Test the methodology extraction
+    val configs = service.getBanditTestConfigs(tests)
+
+    configs should have size 3 // 2 epsilon greedy + 1 roulette (ABTest filtered out)
+
+    // First test - epsilon greedy with custom name
+    val epsilonConfig1 = configs.find(_.testName == "test-1-epsilon")
+    epsilonConfig1 should be(defined)
+    epsilonConfig1.get.variantNames shouldBe List("control", "variant-a")
+    epsilonConfig1.get.sampleCount shouldBe None
+
+    // First test - roulette with custom name
+    val rouletteConfig = configs.find(_.testName == "test-1-roulette")
+    rouletteConfig should be(defined)
+    rouletteConfig.get.variantNames shouldBe List("control", "variant-a")
+    rouletteConfig.get.sampleCount shouldBe None
+
+    // Second test - epsilon greedy with default name and sample count
+    val epsilonConfig2 = configs.find(_.testName == "test-2")
+    epsilonConfig2 should be(defined)
+    epsilonConfig2.get.variantNames shouldBe List("control")
+    epsilonConfig2.get.sampleCount shouldBe Some(10)
   }
 
 }

@@ -1,6 +1,6 @@
 package services
 
-import admin.settings.Methodology
+import admin.settings.{LandingPageTest, Methodology, EpsilonGreedyBandit, Roulette}
 import com.gu.aws.AwsCloudWatchMetricPut.{MetricRequest, client => cloudwatchClient}
 import com.gu.aws.{AwsCloudWatchMetricPut, ProfileName}
 import com.gu.support.config.{Stage, Stages}
@@ -53,6 +53,13 @@ object TestSample {
 case class VariantMean(
     variantName: String,
     mean: Double,
+)
+
+/** Configuration for a bandit test methodology */
+case class BanditTestConfig(
+    testName: String,
+    variantNames: List[String],
+    sampleCount: Option[Int] = None,
 )
 
 /** Final aggregated bandit data for a test */
@@ -110,7 +117,11 @@ object BanditData {
   *
   * Polls the support-bandit table every 5 minutes to get variant performance metrics.
   */
-class BanditDataService(stage: Stage)(implicit ec: ExecutionContext, system: ActorSystem) extends StrictLogging {
+class BanditDataService(
+    stage: Stage,
+    landingPageTestService: LandingPageTestService,
+)(implicit ec: ExecutionContext, system: ActorSystem)
+    extends StrictLogging {
 
   private val cachedBanditData = new AtomicReference[List[BanditData]](Nil)
 
@@ -142,25 +153,27 @@ class BanditDataService(stage: Stage)(implicit ec: ExecutionContext, system: Act
     ),
   )
 
-  /** Get unique test names from the table using Scan. This is done once per refresh to discover all tests.
-    */
-  private def getUniqueTestNames(): Future[Set[String]] = {
-    val scanRequest = ScanRequest
-      .builder()
-      .tableName(tableName)
-      .projectionExpression("testName") // Only fetch testName to minimize data transfer
-      .build()
-
-    dynamoClient
-      .scan(scanRequest)
-      .asScala
-      .map { result =>
-        result
-          .items()
-          .asScala
-          .flatMap(item => Option(item.get("testName")).map(_.s()))
-          .toSet
+  /** Extract bandit test configurations from landing page tests for each methodology */
+  def getBanditTestConfigs(tests: List[LandingPageTest]): List[BanditTestConfig] = {
+    tests.flatMap { test =>
+      val banditMethodologies = test.methodologies.getOrElse(List.empty).filter {
+        case _: EpsilonGreedyBandit => true
+        case _: Roulette => true
+        case _ => false
       }
+
+      banditMethodologies.map { methodology =>
+        BanditTestConfig(
+          testName = methodology.testName.getOrElse(test.name),
+          variantNames = test.variants.map(_.name),
+          sampleCount = methodology match {
+            case epsilon: EpsilonGreedyBandit => epsilon.sampleCount
+            case roulette: Roulette => roulette.sampleCount
+            case _ => None
+          },
+        )
+      }
+    }
   }
 
   /** Fetch hourly samples for a specific test using Query operation. Optionally limit the number of samples returned.
@@ -195,38 +208,34 @@ class BanditDataService(stage: Stage)(implicit ec: ExecutionContext, system: Act
       }
   }
 
-  /** Fetch and aggregate bandit data for all tests */
+  /** Fetch and aggregate bandit data for all bandit methodologies */
   private def fetchBanditData(): Future[List[BanditData]] = {
-    val fetchFuture = for {
-      // Step 1: Get all unique test names
-      testNames <- getUniqueTestNames()
+    // Step 1: Get all landing page tests and extract bandit methodologies (non-blocking operations)
+    val landingPageTests = landingPageTestService.getTests()
+    val banditTestConfigs = getBanditTestConfigs(landingPageTests)
 
-      // Step 2: Fetch samples for each test and build bandit data
-      banditDataList <- Future.traverse(testNames.toList) { testName =>
-        fetchSamplesForTest(testName, sampleCount = None)
-          .map { samples =>
-            // Extract variant names from samples
-            val variantNames = samples
-              .flatMap(_.variants.map(_.variantName))
-              .distinct
+    // Step 2: Fetch samples for each methodology and build bandit data
+    val fetchFuture = Future.traverse(banditTestConfigs) { config =>
+      fetchSamplesForTest(config.testName, config.sampleCount)
+        .map { samples =>
+          // Build aggregated bandit data using the config's variant names
+          val banditData = BanditData.buildBanditDataFromSamples(config.testName, samples, config.variantNames)
 
-            // Build aggregated bandit data
-            val banditData = BanditData.buildBanditDataFromSamples(testName, samples, variantNames)
+          logger.debug(
+            s"Built bandit data for methodology ${config.testName}: ${samples.length} samples, ${config.variantNames.length} variants",
+          )
 
-            logger.debug(
-              s"Built bandit data for test $testName: ${samples.length} samples, ${variantNames.length} variants",
-            )
+          banditData
+        }
+        .recover { case NonFatal(error) =>
+          logger.error(s"Error fetching samples for methodology ${config.testName}: ${error.getMessage}")
+          // Return empty bandit data for this methodology
+          BanditData(config.testName, Nil)
+        }
+    }
 
-            banditData
-          }
-          .recover { case NonFatal(error) =>
-            logger.error(s"Error fetching samples for test $testName: ${error.getMessage}")
-            // Return empty bandit data for this test
-            BanditData(testName, Nil)
-          }
-      }
-    } yield {
-      logger.info(s"Fetched bandit data for ${banditDataList.size} tests from DynamoDB")
+    fetchFuture.map { banditDataList =>
+      logger.info(s"Fetched bandit data for ${banditDataList.size} methodologies from DynamoDB")
       banditDataList
     }
 
