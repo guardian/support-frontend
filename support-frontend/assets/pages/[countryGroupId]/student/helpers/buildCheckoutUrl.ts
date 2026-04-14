@@ -34,5 +34,5 @@ export default function buildCheckoutUrl(
 	if (promoCode) {
 		urlSearchParams.set('promoCode', promoCode);
 	}
-	return `/${supportRegionId}/checkout`;
+	return `/${supportRegionId}/checkout?${urlSearchParams.toString()}`;
 }
