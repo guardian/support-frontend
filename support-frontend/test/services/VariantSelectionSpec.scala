@@ -48,6 +48,7 @@ class VariantSelectionSpec extends AnyFlatSpec with Matchers {
     val result1 = VariantSelection.selectVariantUsingMVT(testConfig, mvtId)
     val result2 = VariantSelection.selectVariantUsingMVT(testConfig, mvtId)
 
+    result1 shouldBe defined
     result1 shouldBe result2
   }
 
@@ -56,6 +57,10 @@ class VariantSelectionSpec extends AnyFlatSpec with Matchers {
     val result2 = VariantSelection.selectVariantUsingMVT(testConfig, 2)
     val result3 = VariantSelection.selectVariantUsingMVT(testConfig, 3)
 
+    result1 shouldBe defined
+    result2 shouldBe defined
+    result3 shouldBe defined
+
     // At least one should be different (probabilistically certain with 3 variants)
     Set(result1, result2, result3).size should be > 1
   }
@@ -63,7 +68,7 @@ class VariantSelectionSpec extends AnyFlatSpec with Matchers {
   it should "distribute variants across MVT IDs" in {
     val results = (1 to 1000).map { mvtId =>
       VariantSelection.selectVariantUsingMVT(testConfig, mvtId)
-    }
+    }.flatten
 
     // Each variant should appear at least once
     testVariants.foreach { variant =>
@@ -87,7 +92,8 @@ class VariantSelectionSpec extends AnyFlatSpec with Matchers {
       mvtId = mvtId,
     )
 
-    testVariants should contain(result)
+    result shouldBe defined
+    testVariants should contain(result.get)
   }
 
   it should "fall back to random when all means are zero" in {
@@ -107,7 +113,8 @@ class VariantSelectionSpec extends AnyFlatSpec with Matchers {
       mvtId = 12345,
     )
 
-    testVariants should contain(result)
+    result shouldBe defined
+    testVariants should contain(result.get)
   }
 
   it should "select best variant when epsilon=0" in {
@@ -128,7 +135,7 @@ class VariantSelectionSpec extends AnyFlatSpec with Matchers {
         testBanditData = Some(banditData),
         mvtId = mvtId,
       )
-    }
+    }.flatten
 
     results.foreach { result =>
       result.name shouldBe "variant-b"
@@ -153,7 +160,7 @@ class VariantSelectionSpec extends AnyFlatSpec with Matchers {
         testBanditData = Some(banditData),
         mvtId = 12345,
       )
-    }
+    }.flatten
 
     val counts = results.groupBy(_.name).view.mapValues(_.size).toMap
 
@@ -172,7 +179,8 @@ class VariantSelectionSpec extends AnyFlatSpec with Matchers {
       mvtId = 12345,
     )
 
-    testVariants should contain(result)
+    result shouldBe defined
+    testVariants should contain(result.get)
   }
 
   it should "weight variants by performance" in {
@@ -191,7 +199,7 @@ class VariantSelectionSpec extends AnyFlatSpec with Matchers {
         testBanditData = Some(banditData),
         mvtId = mvtId,
       )
-    }
+    }.flatten
 
     val counts = results.groupBy(_.name).view.mapValues(_.size).toMap
 

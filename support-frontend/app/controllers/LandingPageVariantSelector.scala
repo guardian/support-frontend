@@ -42,19 +42,11 @@ class LandingPageVariantSelector(
   ): Option[(LandingPageVariant, String)] = {
     if (test.variants.isEmpty) {
       logger.warn(s"Test ${test.name} has no variants")
-      return None
-    }
-
-    val mvtId = getMvtId(request)
-    val banditData = banditDataService.getBanditData()
-
-    try {
-      val (variant, effectiveTestName) = VariantSelection.selectVariant(test, mvtId, banditData)
-      Some((variant, effectiveTestName))
-    } catch {
-      case e: Exception =>
-        logger.error(s"Error selecting variant for test ${test.name}: ${e.getMessage}", e)
-        test.variants.headOption.map(v => (v, test.name))
+      None
+    } else {
+      val mvtId = getMvtId(request)
+      val banditData = banditDataService.getBanditData()
+      VariantSelection.selectVariant(test, mvtId, banditData)
     }
   }
 
