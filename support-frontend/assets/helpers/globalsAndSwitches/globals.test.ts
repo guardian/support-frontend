@@ -3,6 +3,7 @@ import {
 	emptyConfiguredRegionAmounts,
 	emptySwitches,
 	getGlobal,
+	isSwitchOn,
 } from './globals';
 
 const getSpecifiedRegionAmountsFromGlobal = (
@@ -141,5 +142,50 @@ describe('getGlobal', () => {
 		expect(
 			getGlobal('settings.switches.experiments.myLovelyExperiment'),
 		).toBeNull();
+	});
+});
+
+describe('isSwitchOn', () => {
+	beforeEach(() => {
+		sessionStorage.clear();
+		window.guardian = {
+			// @ts-expect-error -- incomplete type
+			settings: {
+				switches: {
+					...emptySwitches,
+					featureSwitches: {
+						myFeature: 'On',
+						myDisabledFeature: 'Off',
+					},
+				},
+			},
+		};
+	});
+
+	it('falls back to the global setting and returns true if no override is present in session storage', () => {
+		expect(isSwitchOn('featureSwitches.myFeature')).toBe(true);
+	});
+
+	it('returns true when the session storage override is "On"', () => {
+		sessionStorage.setItem('myFeature', 'On');
+		expect(isSwitchOn('featureSwitches.myFeature')).toBe(true);
+	});
+
+	it('returns false when the session storage override is "Off" for myFeature', () => {
+		sessionStorage.setItem('myFeature', 'Off');
+		expect(isSwitchOn('featureSwitches.myFeature')).toBe(false);
+	});
+
+	it('falls back to the global setting and returns false if no override is present in session storage', () => {
+		expect(isSwitchOn('featureSwitches.myDisabledFeature')).toBe(false);
+	});
+
+	it('returns true when the session storage override is "On" for myDisabledFeature', () => {
+		sessionStorage.setItem('myDisabledFeature', 'On');
+		expect(isSwitchOn('featureSwitches.myDisabledFeature')).toBe(true);
+	});
+
+	it('returns false when neither session storage nor globals have a value for the switch', () => {
+		expect(isSwitchOn('featureSwitches.nonExistentFeature')).toBe(false);
 	});
 });
