@@ -5,6 +5,7 @@ import {
 	emptySwitches,
 	getGlobal,
 	isSwitchOn,
+	isSwitchOn,
 } from './globals';
 
 const getSpecifiedRegionAmountsFromGlobal = (
