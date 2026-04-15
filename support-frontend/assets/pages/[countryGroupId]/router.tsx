@@ -8,6 +8,7 @@ import {
 import { ClientSideErrorPage } from 'components/ClientSideError';
 import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
 import { ObserverHoldingContent } from 'components/serverSideRendered/observerHoldingContent';
+import { FeatureSwitchesProvider } from 'contexts/FeatureFlagsContext';
 import { getStudentLandingPageTestConfig } from 'helpers/abTests/studentLandingPageAbTests';
 import { WithCoreWebVitals } from 'helpers/coreWebVitals/withCoreWebVitals';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
@@ -259,7 +260,11 @@ function GuardianOrObserverHoldingContent() {
 }
 
 function Router() {
-	return <RouterProvider router={router} />;
+	return (
+		<FeatureSwitchesProvider>
+			<RouterProvider router={router} />
+		</FeatureSwitchesProvider>
+	);
 }
 
 export default renderPage(<Router />);

@@ -18,6 +18,19 @@ import { isProductKey } from '../productCatalog';
  *
  * It will only error in NODE_ENV === 'development'.
  */
+
+const featureSwitchesSchema = z.object({
+	enableQuantumMetric: z.optional(z.enum(['On', 'Off'])),
+	usStripeAccountForSingle: z.optional(z.enum(['On', 'Off'])),
+	authenticateWithOkta: z.optional(z.enum(['On', 'Off'])),
+	enableCampaignCountdown: z.optional(z.enum(['On', 'Off'])),
+	enableThankYouOnboarding: z.optional(z.enum(['On', 'Off'])),
+	enableCheckoutNudge: z.optional(z.enum(['On', 'Off'])),
+	enableMParticle: z.optional(z.enum(['On', 'Off'])),
+});
+
+export type FeatureSwitches = z.infer<typeof featureSwitchesSchema>;
+
 const PaymentConfigSchema = z.object({
 	geoip: z.optional(
 		z.object({
@@ -86,7 +99,7 @@ const PaymentConfigSchema = z.object({
 				z.string(),
 				z.optional(z.enum(['On', 'Off'])),
 			),
-			featureSwitches: z.record(z.string(), z.optional(z.enum(['On', 'Off']))),
+			featureSwitches: featureSwitchesSchema,
 			campaignSwitches: z.record(z.string(), z.optional(z.enum(['On', 'Off']))),
 			recaptchaSwitches: z.record(
 				z.string(),
