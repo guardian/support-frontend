@@ -244,7 +244,9 @@ function OnboardingSummary({
 	}
 
 	const isDirectDebit = order?.paymentMethod === 'DirectDebit';
-	const isPaypal = order?.paymentMethod === 'PayPal';
+	const isPaypal =
+		order?.paymentMethod === 'PayPal' ||
+		order?.paymentMethod === 'PayPalCompletePayments';
 	const isStripeCard =
 		order?.paymentMethod === 'Stripe' ||
 		order?.paymentMethod === 'StripeExpressCheckoutElement' ||
