@@ -28,15 +28,13 @@ function getGlobal<T>(path = ''): T | null {
 }
 
 function getLocal<T>(path = ''): T | null {
+	// feature flags path is n the format 'featureSwitches.featureFlagName' and we want to
+	// extract the 'featureFlagName' part to check if there is an override in sessionStorage
+
+	const [flag] = path.split('.').slice(-1);
+
 	try {
-		const localSwitches = sessionStorage.getItem('switches');
-		const parsedSwitches = localSwitches ? JSON.parse(localSwitches) : {};
-		const value = path.split('.').reduce((config, key) => {
-			if (isRecord(config)) {
-				return config[key];
-			}
-			return config;
-		}, parsedSwitches);
+		const value = flag && sessionStorage.getItem(flag);
 		if (value) {
 			return value as T;
 		}
