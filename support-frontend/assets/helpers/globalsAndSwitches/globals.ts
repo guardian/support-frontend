@@ -157,14 +157,11 @@ const getPromotionCopy = (): PromotionCopy | null =>
 	getGlobal<PromotionCopy>('promotionCopy');
 
 const isSwitchOn = (switchName: string): boolean => {
-	let sw;
+	const sw =
+		getLocal<Status>(switchName) ??
+		getGlobal<Status>(`settings.switches.${switchName}`);
 
-	sw = getLocal<Status>(switchName);
-
-	if (!sw) {
-		sw = getGlobal<Status>(`settings.switches.${switchName}`);
-	}
-	return !!(sw && sw === 'On');
+	return sw === 'On';
 };
 
 export {
