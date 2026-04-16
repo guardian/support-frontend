@@ -1,7 +1,7 @@
 import { storage } from '@guardian/libs';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import {
@@ -41,6 +41,7 @@ export function ThankYou({
 }: ThankYouProps) {
 	const countryId = Country.detect();
 	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
+	const { enableThankYouOnboarding } = useFeatureSwitches();
 
 	const searchParams = new URLSearchParams(window.location.search);
 	const csrf = { token: window.guardian.csrf.token };
@@ -144,7 +145,7 @@ export function ThankYou({
 	}
 
 	if (
-		isSwitchOn('featureSwitches.enableThankYouOnboarding') &&
+		enableThankYouOnboarding &&
 		productKey !== undefined &&
 		appConfig.settings.productsWithThankYouOnboarding.includes(productKey) &&
 		storage.session.get(SKIP_NEW_ONBOARDING_EXPERIENCE_KEY) !== 'true'
