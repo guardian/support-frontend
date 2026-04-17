@@ -26,7 +26,7 @@ jobs:
           node-version-file: ".nvmrc"
 
       - name: Check compressed size of JS
-        uses: preactjs/compressed-size-action@v2
+        uses: preactjs/compressed-size-action@v3
         with:
           install-script: "pnpm install"
           build-script: "--filter support-frontend build-github-action"
