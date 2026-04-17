@@ -34,16 +34,18 @@ export async function findAddressesForPostcode(
 	const postcodeLookup = getGlobal('checkoutPostcodeLookup');
 	const { express } = getFeatureFlags(); // cd support-api + pnpm start
 	if (postcodeLookup) {
-		console.log(
-			`*** Calling ${
-				express ? 'express' : 'standard'
-			} postcode lookup API for postcode: ${postcode}`,
-		);
 		const url = express
 			? `http://localhost:3000/postcode-lookup/${postcode}`
 			: postcodeLookupUrl(postcode);
+		console.log(
+			`*** Calling ${
+				express ? 'express' : 'standard'
+			} postcode lookup API for postcode: ${postcode} url:${url}`,
+		);
 		const response = await fetch(url).then(handleErrors);
-		return response.json() as Promise<PostcodeFinderResult[]>;
+		const obj = response.json() as Promise<PostcodeFinderResult[]>;
+		console.log(`*** Response: ${JSON.stringify(obj)}`);
+		return obj;
 	}
 
 	return [];
