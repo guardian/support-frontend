@@ -112,6 +112,11 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |        "description" : "Enable mparticle",
           |        "state" : "On"
           |      }
+          |      },
+          |      "enableTooledStudentLandingPage" : {
+          |        "description" : "Enable tooled student landing page",
+          |        "state" : "On"
+          |      }
           |    }
           |  },
           |  "campaignSwitches" : {
