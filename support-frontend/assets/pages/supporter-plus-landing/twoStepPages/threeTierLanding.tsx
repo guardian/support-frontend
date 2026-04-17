@@ -38,7 +38,6 @@ import {
 	getCampaignSettings,
 } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { glyph } from 'helpers/internationalisation/currency';
 import { guardianContactUsLink, guardianHelpCentreLink } from 'helpers/legal';
@@ -273,7 +272,6 @@ export function ThreeTierLanding({
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
 	const urlSearchParamsPromoCode = urlSearchParams.get('promoCode');
-	const { enableDigitalAccess } = getFeatureFlags();
 
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -433,9 +431,6 @@ export function ThreeTierLanding({
 	);
 	if (tier2Promotion) {
 		tier2UrlParams.set('promoCode', tier2Promotion.promoCode);
-	}
-	if (enableDigitalAccess) {
-		tier2UrlParams.set('enableDigitalAccess', 'true');
 	}
 	const tier2ProductDescription = {
 		...settings.products.SupporterPlus,

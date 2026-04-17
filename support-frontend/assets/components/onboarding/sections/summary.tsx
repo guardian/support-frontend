@@ -243,9 +243,10 @@ function OnboardingSummary({
 		nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 3);
 	}
 
-	const isDirectDebit =
-		order?.paymentMethod === 'DirectDebit' || order?.paymentMethod === 'Sepa';
-	const isPaypal = order?.paymentMethod === 'PayPal';
+	const isDirectDebit = order?.paymentMethod === 'DirectDebit';
+	const isPaypal =
+		order?.paymentMethod === 'PayPal' ||
+		order?.paymentMethod === 'PayPalCompletePayments';
 	const isStripeCard =
 		order?.paymentMethod === 'Stripe' ||
 		order?.paymentMethod === 'StripeExpressCheckoutElement' ||

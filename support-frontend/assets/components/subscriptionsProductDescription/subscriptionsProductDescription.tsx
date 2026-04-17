@@ -57,9 +57,7 @@ function SubscriptionsProductDescription({
 					cssOverrides={subscriptionBenefit}
 				/>
 			) : (
-				<p className="subscriptions__description" css={subscriptionDescription}>
-					{description}
-				</p>
+				<p css={subscriptionDescription}>{description}</p>
 			)}
 			<div
 				css={[

@@ -19,7 +19,6 @@ type SwitchObject = Record<string, Status | undefined>;
 type SwitchesKeys =
 	| 'oneOffPaymentMethods'
 	| 'recurringPaymentMethods'
-	| 'subscriptionsPaymentMethods'
 	| 'subscriptionsSwitches'
 	| 'featureSwitches'
 	| 'campaignSwitches'

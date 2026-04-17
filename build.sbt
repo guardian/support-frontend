@@ -41,6 +41,8 @@ inThisBuild(
   Seq(
     organization := "com.gu",
     scalaVersion := "2.13.18",
+    // Force plexus-utils to 3.6.1 to avoid CVE in the version pulled in transitively by Play
+    dependencyOverrides += "org.codehaus.plexus" % "plexus-utils" % "3.6.1",
     // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
     updateOptions := updateOptions.value.withCachedResolution(true),
     assembly / assemblyMergeStrategy := {
