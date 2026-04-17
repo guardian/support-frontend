@@ -1,12 +1,11 @@
 import express from "express";
+import routerPostcode from "./routes/postcode";
 
 const app = express();
 
-app.get("/", (req, res) => {
-  res.send("Hello, World!");
-});
-
 const PORT = process.env.PORT || 3000;
+
+app.use("/postcode-lookup", routerPostcode);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
