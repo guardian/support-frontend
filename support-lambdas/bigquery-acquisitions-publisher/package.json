@@ -7,7 +7,7 @@
 		"tsc": "tsc --noEmit",
 		"test": "vitest --run",
 		"test-watch": "vitest",
-		"build": "esbuild --bundle --platform=node --target=node20 --outfile=target/typescript/index.js typescript/index.ts",
+		"build": "esbuild --bundle --platform=node --target=node24 --outfile=target/typescript/index.js typescript/index.ts",
 		"prettier": "prettier --check typescript/*.ts",
 		"lint": "eslint **/*.ts"
 	},
