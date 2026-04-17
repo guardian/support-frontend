@@ -1,3 +1,4 @@
+import { getFeatureFlags } from 'helpers/featureFlags';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import { postcodeLookupUrl } from 'helpers/urls/routes';
 
@@ -31,11 +32,17 @@ export async function findAddressesForPostcode(
 	postcode: string,
 ): Promise<PostcodeFinderResult[]> {
 	const postcodeLookup = getGlobal('checkoutPostcodeLookup');
-
+	const { express } = getFeatureFlags(); // cd support-api + pnpm start
 	if (postcodeLookup) {
-		const response = await fetch(postcodeLookupUrl(postcode)).then(
-			handleErrors,
+		console.log(
+			`*** Calling ${
+				express ? 'express' : 'standard'
+			} postcode lookup API for postcode: ${postcode}`,
 		);
+		const url = express
+			? `http://localhost:3000/postcode-lookup/${postcode}`
+			: postcodeLookupUrl(postcode);
+		const response = await fetch(url).then(handleErrors);
 		return response.json() as Promise<PostcodeFinderResult[]>;
 	}
 
