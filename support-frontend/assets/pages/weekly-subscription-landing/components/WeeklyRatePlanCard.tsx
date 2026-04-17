@@ -47,7 +47,7 @@ function WeeklyRatePlanCard({
 	// If there isn't, show the roundel on all promotions.
 	const displayRoundel = priorityPromotionExists
 		? isPriorityPromo
-		: hasPromotion && !isPriorityPromo;
+		: hasPromotion && roundel && !isPriorityPromo;
 
 	/**
 	 * The first time this runs hasBeenSeen

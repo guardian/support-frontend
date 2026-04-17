@@ -156,7 +156,7 @@ export const getWeeklyProducts = ({
 				: undefined;
 		const savingsText =
 			!isGift && promotion?.discount?.amount && durationInMonths
-				? `${promotion.discount.amount}% off for ${getDiscountDuration({
+				? `Save ${promotion.discount.amount}% for ${getDiscountDuration({
 						durationInMonths,
 				  })}`
 				: undefined;
