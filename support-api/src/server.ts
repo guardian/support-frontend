@@ -1,5 +1,5 @@
 import express from "express";
-import routerPostcode from "./routes/postcode";
+import routerPostcode from "./routes/postCode";
 
 const app = express();
 

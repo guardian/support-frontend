@@ -1,12 +1,12 @@
 import express from "express";
 
 type PostcodeFinderResult = {
-  lineOne: string;
-  lineTwo: string;
-  city: string;
+  lineOne?: string;
+  lineTwo?: string;
+  city?: string;
 };
 
-// Extend Express Request interface to include line1 property
+// Extend Express Request interface to include address property
 declare global {
   namespace Express {
     interface Request extends PostcodeFinderResult {}
@@ -19,12 +19,12 @@ const addresses = {
   RH27DP: {
     lineOne: `X Blanford Rd`,
     lineTwo: "",
-    city: "",
+    city: "Reigate",
   },
   N19GU: {
     lineOne: `X York Rd`,
     lineTwo: "",
-    city: "",
+    city: "London",
   },
   OTHER: {
     lineOne: `Cant Find`,
