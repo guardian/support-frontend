@@ -94,11 +94,18 @@ trait Services {
 
   lazy val landingPageTestService = new LandingPageTestServiceImpl(appConfig.stage)
 
+  lazy val banditDataService = new BanditDataService(appConfig.stage, landingPageTestService)
+
   lazy val checkoutNudgeTestService = new CheckoutNudgeTestServiceImpl(appConfig.stage)
 
   lazy val oneTimeCheckoutTestService = new OneTimeCheckoutTestServiceImpl(appConfig.stage)
 
   lazy val studentLandingPageTestService = new StudentLandingPageTestServiceImpl(appConfig.stage)
+
+  lazy val landingPageVariantSelector = new controllers.LandingPageVariantSelector(
+    landingPageTestService,
+    banditDataService,
+  )
 
   lazy val allSettingsProvider: AllSettingsProvider =
     AllSettingsProvider
