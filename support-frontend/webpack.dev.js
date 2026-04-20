@@ -9,6 +9,11 @@ module.exports = merge(common('[name].js'), {
 		allowedHosts: 'all',
 		proxy: [
 			{
+				context: ['/api/**'],
+				target: 'http://localhost:3000',
+				secure: false,
+			},
+			{
 				context: ['**'],
 				target: 'http://support.thegulocal.com:9210',
 				secure: false,
