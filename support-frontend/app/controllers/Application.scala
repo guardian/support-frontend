@@ -377,7 +377,10 @@ class Application(
         if variant.institution.acronym.equalsIgnoreCase(institution)
       } yield variant
 
-    if (institutionList.size == 1) {
+    val isSwitchedOn =
+      settingsProvider.getAllSettings().switches.featureSwitches.enableTooledStudentLandingPage.exists(_.isOn)
+
+    if (institutionList.size == 1 && isSwitchedOn) {
       Ok(
         contributionsPlusStudentHtml(
           countryCode,
