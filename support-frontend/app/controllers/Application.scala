@@ -346,15 +346,7 @@ class Application(
     val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
     val noIndexing = countryCode == "au"
 
-    val baseSettings = settingsProvider.getAllSettings()
-    val enrichedTests = baseSettings.landingPageTests.map { test =>
-      landingPageVariantSelector.selectVariantForTest(test, request) match {
-        case Some((variant, effectiveTestName)) =>
-          test.copy(selectedVariant = Some(variant), selectedTestName = Some(effectiveTestName))
-        case None => test
-      }
-    }
-    implicit val settings: AllSettings = baseSettings.copy(landingPageTests = enrichedTests)
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(
       contributionsPlusStudentHtml(
         countryCode,

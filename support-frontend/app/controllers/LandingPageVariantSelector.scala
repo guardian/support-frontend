@@ -50,38 +50,6 @@ class LandingPageVariantSelector(
     }
   }
 
-  /** Select variants for all live landing page tests.
-    *
-    * @param request
-    *   The HTTP request
-    * @return
-    *   Map of test name to selected variant
-    */
-  def selectVariantsForAllTests(request: RequestHeader): Map[String, LandingPageVariant] = {
-    val liveTests = landingPageTestService
-      .getTests()
-      .filter(_.status == Status.Live)
-
-    liveTests.flatMap { test =>
-      selectVariantForTest(test, request).map { case (variant, _) => test.name -> variant }
-    }.toMap
-  }
-
-  /** Get the selected variant for a specific test by name.
-    *
-    * @param testName
-    *   The name of the test
-    * @param request
-    *   The HTTP request
-    * @return
-    *   The selected variant, or None if test not found or has no variants
-    */
-  def getVariantForTest(testName: String, request: RequestHeader): Option[LandingPageVariant] = {
-    landingPageTestService
-      .getTests()
-      .find(test => test.name == testName && test.status == Status.Live)
-      .flatMap(test => selectVariantForTest(test, request).map { case (variant, _) => variant })
-  }
 }
 
 object LandingPageVariantSelector {

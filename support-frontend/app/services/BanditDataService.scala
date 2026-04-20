@@ -261,9 +261,6 @@ class BanditDataService(
   }(ec)
 
   def getBanditData(): List[BanditData] = cachedBanditData.get()
-
-  def getBanditDataForTest(testName: String): Option[BanditData] =
-    getBanditData().find(_.testName == testName)
 }
 
 object BanditDataService

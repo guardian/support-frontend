@@ -185,7 +185,6 @@ class BanditDataServiceSpec extends AnyFlatSpec with Matchers {
 
     val service = new BanditDataService(com.gu.support.config.Stages.CODE, mockTestService) {
       override def getBanditData(): List[BanditData] = Nil
-      override def getBanditDataForTest(testName: String): Option[BanditData] = None
     }
 
     // Test the methodology extraction

@@ -64,13 +64,13 @@ object VariantSelection extends StrictLogging {
       methodologies: List[Methodology],
       mvtId: Int,
       testName: String,
-  ): Methodology = {
-    if (methodologies.length == 1) {
-      methodologies.head
-    } else {
+  ): Methodology = methodologies match {
+    case Nil => ABTest()
+    case single :: Nil => single
+    case _ =>
+      // more than one
       val index = getRandomNumber(testName, mvtId) % methodologies.length
       methodologies(index)
-    }
   }
 
   /** Standard AB test variant selection using MVT ID.
