@@ -23,16 +23,16 @@ const testStudentLandingPageVariant = {
 	subheading: 'Subheading',
 	image: {
 		// TODO: complete this!
-		desktopUrl: "",
-		tabletUrl: "",
-		mobileUrl: "",
-		altText: ""
+		desktopUrl: '',
+		tabletUrl: '',
+		mobileUrl: '',
+		altText: '',
 	},
 	institution: {
 		// TODO: complete this!
-		name: "",
-		acronym: "",
-		logoUrl: ""
+		name: '',
+		acronym: '',
+		logoUrl: '',
 	},
 	promoCode: ['UTS_STUDENT'],
 };
