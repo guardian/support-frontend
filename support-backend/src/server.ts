@@ -1,11 +1,11 @@
 import express from "express";
-import routerPostcode from "./routes/postCode";
+import routerHealthCheck from "./routes/healthCheck";
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-app.use("/api/postcode-lookup", routerPostcode);
+app.use("/api/health-check", routerHealthCheck);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

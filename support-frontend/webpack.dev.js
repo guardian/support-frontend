@@ -10,7 +10,7 @@ module.exports = merge(common('[name].js'), {
 		proxy: [
 			{
 				context: ['/api/**'],
-				target: 'http://localhost:3000',
+				target: 'http://support.thegulocal.com:3000',
 				secure: false,
 			},
 			{
