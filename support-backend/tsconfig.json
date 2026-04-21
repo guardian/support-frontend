@@ -4,9 +4,7 @@
 		"types": ["node", "jest"],
 		"resolveJsonModule": true,
 	  "noEmit": true,
-		"ignoreDeprecations": "6.0",
     "outDir": "target",
-		"baseUrl": "./",
 		"paths": {
 			"@modules/internationalisation/*": [
 				"./node_modules/@guardian/support-service-lambdas/modules/internationalisation/src/*"
