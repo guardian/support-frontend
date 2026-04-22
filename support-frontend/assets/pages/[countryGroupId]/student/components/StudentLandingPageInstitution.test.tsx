@@ -5,9 +5,9 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import { StudentLandingPageUTS } from './StudentLandingPageUTS';
+import { StudentLandingPageInstitution } from './StudentLandingPageInstitution';
 
-const utsStudentDiscount = {
+const testStudentDiscount = {
 	amount: 0,
 	periodNoun: 'month',
 	discountPriceWithCurrency: '$0',
@@ -17,7 +17,25 @@ const utsStudentDiscount = {
 	discountSummary: '$0/month for two years, then $20/month',
 };
 
-describe('<StudentLandingPageUTS />', () => {
+const testStudentLandingPageVariant = {
+	name: 'offer',
+	heading: 'Heading',
+	subheading: 'Subheading',
+	image: {
+		desktopUrl: '',
+		tabletUrl: '',
+		mobileUrl: '',
+		altText: '',
+	},
+	institution: {
+		name: '',
+		acronym: '',
+		logoUrl: '',
+	},
+	promoCode: ['UTS_STUDENT'],
+};
+
+describe('<StudentLandingPageInstitution />', () => {
 	const supportRegionId = SupportRegionId.AU;
 	const productKey: ActiveProductKey = 'SupporterPlus';
 	const ratePlanKey: ActiveRatePlanKey = 'Monthly';
@@ -31,16 +49,17 @@ describe('<StudentLandingPageUTS />', () => {
 
 	it('shows promo duration in the subheading when provided', () => {
 		render(
-			<StudentLandingPageUTS
+			<StudentLandingPageInstitution
+				landingPageVariant={landingPageVariant}
+				studentLandingPageVariant={testStudentLandingPageVariant}
 				supportRegionId={supportRegionId}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
-				landingPageVariant={landingPageVariant}
-				studentDiscount={utsStudentDiscount}
+				studentDiscount={testStudentDiscount}
 			/>,
 		);
 		expect(
-			screen.getByText(`for ${utsStudentDiscount.promoDuration}`),
+			screen.getByText(`for ${testStudentDiscount.promoDuration}`),
 		).toBeInTheDocument();
 	});
 });
