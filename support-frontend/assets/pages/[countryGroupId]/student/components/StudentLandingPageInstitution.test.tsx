@@ -22,14 +22,12 @@ const testStudentLandingPageVariant = {
 	heading: 'Heading',
 	subheading: 'Subheading',
 	image: {
-		// TODO: complete this!
 		desktopUrl: '',
 		tabletUrl: '',
 		mobileUrl: '',
 		altText: '',
 	},
 	institution: {
-		// TODO: complete this!
 		name: '',
 		acronym: '',
 		logoUrl: '',
