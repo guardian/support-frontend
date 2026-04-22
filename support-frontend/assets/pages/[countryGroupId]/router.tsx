@@ -10,6 +10,7 @@ import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHo
 import { ObserverHoldingContent } from 'components/serverSideRendered/observerHoldingContent';
 import { getStudentLandingPageTestConfig } from 'helpers/abTests/studentLandingPageAbTests';
 import { WithCoreWebVitals } from 'helpers/coreWebVitals/withCoreWebVitals';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import type { OneTimeCheckoutVariant } from 'helpers/globalsAndSwitches/oneTimeCheckoutSettings';
@@ -213,7 +214,10 @@ const router = createBrowserRouter([
 						return {
 							Component: function StudentRoute() {
 								const { landing, studentLanding } = useRootLoaderData();
-								if (!studentLanding.variant) {
+								const isSwitchedOn = isSwitchOn(
+									'featureSwitches.enableTooledStudentLandingPage',
+								);
+								if (!studentLanding.variant || !isSwitchedOn) {
 									return null;
 								}
 								return (

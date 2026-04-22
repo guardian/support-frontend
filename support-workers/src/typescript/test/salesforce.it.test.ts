@@ -32,6 +32,9 @@ import {
 	uk,
 } from './fixtures/salesforce/integrationTests';
 
+const isSalesforceContact = (id: string) => id.startsWith('003');
+const isSalesforceAccount = (id: string) => id.startsWith('001');
+
 describe('AuthService', () => {
 	test('should be able to retrieve an auth token', async () => {
 		const config = await getSalesforceConfig('CODE');
@@ -132,12 +135,36 @@ describe('CreateSalesforceContatctLambda', () => {
 		expect(result.state.product.productType).toBe('Contribution');
 		// Need to check type here because Typescript can't infer it from the preceding check
 		if (result.state.productSpecificState.productType === 'Contribution') {
-			expect(result.state.productSpecificState.salesForceContact.Id).toBe(
-				'003UD00000bt0YfYAI',
-			);
 			expect(
-				result.state.productSpecificState.salesForceContact.AccountId,
-			).toBe('001UD00000KErfYYAT');
+				isSalesforceContact(
+					result.state.productSpecificState.salesForceContact.Id,
+				),
+			).toEqual(true);
+			console.log(result.state);
+			expect(
+				isSalesforceAccount(
+					result.state.productSpecificState.salesForceContact.AccountId,
+				),
+			).toEqual(true);
+		}
+
+		// A second invocation should re-use the same Salesforce contact
+		const anotherResult = await handler(
+			wrapState(inputState, {
+				testUser: false,
+				failed: false,
+				messages: [],
+			}),
+		);
+
+		expect(anotherResult.state.product.productType).toBe('Contribution');
+		// Need to check type here because Typescript can't infer it from the preceding check
+		if (
+			anotherResult.state.productSpecificState.productType === 'Contribution'
+		) {
+			expect(result.state.productSpecificState.salesForceContact.Id).toEqual(
+				anotherResult.state.productSpecificState.salesForceContact.Id,
+			);
 		}
 	});
 
