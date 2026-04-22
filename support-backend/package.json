@@ -1,5 +1,5 @@
 {
-  "name": "support-services-express",
+  "name": "support-backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -34,6 +34,7 @@
     "nodemon": "^3.1.14",
     "prettier": "catalog:",
     "ts-jest": "catalog:",
+    "ts-node": "10.9.2",
     "typescript": "catalog:"
   }
 }

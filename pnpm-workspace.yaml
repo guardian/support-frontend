@@ -1,5 +1,6 @@
 packages:
   - support-frontend
+  - support-backend
   - cdk
   - support-lambdas/bigquery-acquisitions-publisher
   - support-e2e
