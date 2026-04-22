@@ -9,7 +9,7 @@ module.exports = merge(common('[name].js'), {
 		allowedHosts: 'all',
 		proxy: [
 			{
-				context: ['/api/**'],
+				context: (pathname) => pathname === '/healthcheck-express',
 				target: 'http://support.thegulocal.com:3000',
 				secure: false,
 			},
