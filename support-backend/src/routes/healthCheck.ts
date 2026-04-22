@@ -3,7 +3,7 @@ import express from "express";
 const routerHealthCheck = express.Router();
 
 routerHealthCheck.route("/").get((req, res) => {
-  res.send(JSON.stringify({ status: "ok" }));
+  res.json({ status: "ok" });
 });
 routerHealthCheck.param("/", (req, res, next) => {
   console.log(
