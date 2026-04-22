@@ -157,8 +157,12 @@ const getPromotionCopy = (): PromotionCopy | null =>
 	getGlobal<PromotionCopy>('promotionCopy');
 
 const isSwitchOn = (switchName: string): boolean => {
+	const localOverride = switchName.startsWith('featureSwitches.')
+		? getLocal<Status>(switchName)
+		: null;
+
 	const sw =
-		getLocal<Status>(switchName) ??
+		localOverride ??
 		getGlobal<Status>(`settings.switches.${switchName}`);
 
 	return sw === 'On';
