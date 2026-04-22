@@ -588,12 +588,17 @@ export class SupportWorkers extends GuStack {
     }).node.addDependency(stateMachine);
 
     // Paper StripeHostedCheckout (Observer) alarm
+    const stripeHostedMetricDuration = Duration.minutes(5);
+    const stripeHostedEvaluationPeriods = 576; // The number of 5 minute periods in 15 hours
+    const stripeHostedAlarmPeriod = Duration.minutes(
+      stripeHostedMetricDuration.toMinutes() * stripeHostedEvaluationPeriods
+    );
     new GuAlarm(this, "NoPaperStripeHostedAcquisitionInPeriodAlarm", {
       app,
       actionsEnabled: isProd,
       okAction: true,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful Paper StripeHostedCheckout (Observer) checkouts in 24h.`,
+      alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful Paper StripeHostedCheckout (Observer) checkouts in ${stripeHostedAlarmPeriod.toHumanString()}.`,
       metric: new MathExpression({
         expression: "SUM([FILL(m1,0)])",
         label: "AllStripeHostedCheckoutPaperConversions",
@@ -601,12 +606,12 @@ export class SupportWorkers extends GuStack {
           m1: this.buildPaymentSuccessMetric(
             PaymentProviders.StripeHostedCheckout,
             ProductTypes.Paper,
-            Duration.seconds(300)
+            stripeHostedMetricDuration,
           ),
         },
       }),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 288,
+      evaluationPeriods: stripeHostedEvaluationPeriods,
       treatMissingData: TreatMissingData.BREACHING,
       threshold: 0,
     }).node.addDependency(stateMachine);
