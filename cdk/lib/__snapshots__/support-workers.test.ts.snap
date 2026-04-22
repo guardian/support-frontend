@@ -2186,7 +2186,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         ],
         "AlarmName": "URGENT 9-5 - PROD support-workers No successful Paper StripeHostedCheckout (Observer) checkouts in 2 days.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
-        "EvaluationPeriods": 576,
+        "EvaluationPeriods": 48,
         "Metrics": [
           {
             "Expression": "SUM([FILL(m1,0)])",

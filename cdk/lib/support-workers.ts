@@ -588,8 +588,8 @@ export class SupportWorkers extends GuStack {
     }).node.addDependency(stateMachine);
 
     // Paper StripeHostedCheckout (Observer) alarm
-    const stripeHostedMetricDuration = Duration.minutes(5);
-    const stripeHostedEvaluationPeriods = 576; // The number of 5 minute periods in 15 hours
+    const stripeHostedMetricDuration = Duration.hours(1);
+    const stripeHostedEvaluationPeriods = 48; // The number of 1 hour periods in 2 days
     const stripeHostedAlarmPeriod = Duration.minutes(
       stripeHostedMetricDuration.toMinutes() * stripeHostedEvaluationPeriods
     );
