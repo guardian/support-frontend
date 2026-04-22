@@ -148,8 +148,8 @@ describe('getGlobal', () => {
 describe('isSwitchOn', () => {
 	beforeEach(() => {
 		sessionStorage.clear();
-		// @ts-expect-error -- incomplete type
 		window.guardian = {
+			// @ts-expect-error -- incomplete type
 			settings: {
 				switches: {
 					...emptySwitches,
