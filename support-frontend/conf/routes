@@ -9,6 +9,10 @@ GET /cookies                                                       controllers.D
 
 GET /unsupported-browser                                           controllers.Application.unsupportedBrowser()
 
+# ----- Feature Switches override page ----- #
+
+GET /switches                                                      controllers.Application.switches()
+
 # ----- Down For Maintenance ----- #
 
 GET /maintenance                                                   controllers.Application.downForMaintenance()

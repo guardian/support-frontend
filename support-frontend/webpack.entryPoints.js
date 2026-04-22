@@ -14,8 +14,10 @@ module.exports = {
 		error404Page: 'pages/error/error404.tsx',
 		error500Page: 'pages/error/error500.tsx',
 		downForMaintenancePage: 'pages/error/maintenance.tsx',
-    unsupportedBrowserPage: 'pages/unsupported-browser/unsupportedBrowserRender.tsx',
+		unsupportedBrowserPage:
+			'pages/unsupported-browser/unsupportedBrowserRender.tsx',
 		promotionTerms: 'pages/promotion-terms/promotionTerms.tsx',
 		ausMomentMap: 'pages/aus-moment-map/ausMomentMap.tsx',
+		switchesPage: 'pages/switches/SwitchesPage.tsx',
 	},
 };

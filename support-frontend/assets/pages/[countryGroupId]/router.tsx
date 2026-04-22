@@ -233,6 +233,33 @@ const router = createBrowserRouter([
 					},
 				},
 			]),
+			{
+				path: `/au/student/UTS`,
+				lazy: async () => {
+					const { StudentLandingPageUTSContainer } = await import(
+						/* webpackChunkName: "StudentLandingPageUTSContainer" */ './student/StudentLandingPageUTSContainer'
+					);
+					return {
+						Component: function StudentUTSRoute() {
+							const { landing } = useRootLoaderData();
+							return (
+								<StudentLandingPageUTSContainer
+									landingPageVariant={landing.variant}
+								/>
+							);
+						},
+					};
+				},
+			},
+			{
+				path: '/switches',
+				lazy: async () => {
+					const { SwitchesPage } = await import(
+						/* webpackChunkName: "SwitchesPage" */ 'pages/switches/SwitchesPage'
+					);
+					return { Component: SwitchesPage };
+				},
+			},
 		],
 	},
 ]);
