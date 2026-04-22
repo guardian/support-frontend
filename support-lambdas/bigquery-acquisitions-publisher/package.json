@@ -7,7 +7,7 @@
 		"tsc": "tsc --noEmit",
 		"test": "vitest --run",
 		"test-watch": "vitest",
-		"build": "esbuild --bundle --platform=node --target=node20 --outfile=target/typescript/index.js typescript/index.ts",
+		"build": "esbuild --bundle --platform=node --target=node24 --outfile=target/typescript/index.js typescript/index.ts",
 		"prettier": "prettier --check typescript/*.ts",
 		"lint": "eslint **/*.ts"
 	},
@@ -24,8 +24,8 @@
 	"dependencies": {
 		"@aws-sdk/client-ssm": "catalog:",
 		"@aws-sdk/credential-provider-node": "catalog:",
-		"google-auth-library": "^9.0.0",
-		"@google-cloud/bigquery": "^7.9.2",
+		"google-auth-library": "10.6.2",
+		"@google-cloud/bigquery": "8.1.1",
 		"aws-lambda": "^1.0.7",
 		"zod": "^3.24.2"
 	}
