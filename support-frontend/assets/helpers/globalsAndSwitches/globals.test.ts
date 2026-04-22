@@ -1,3 +1,4 @@
+import { storage } from '@guardian/libs';
 import type { AmountsTest, AmountsTests } from 'helpers/contributions';
 import {
 	emptyConfiguredRegionAmounts,
@@ -147,7 +148,7 @@ describe('getGlobal', () => {
 
 describe('isSwitchOn', () => {
 	beforeEach(() => {
-		sessionStorage.clear();
+		storage.session.clear();
 		window.guardian = {
 			// @ts-expect-error -- incomplete type
 			settings: {
@@ -167,12 +168,12 @@ describe('isSwitchOn', () => {
 	});
 
 	it('returns true when the session storage override is "On"', () => {
-		sessionStorage.setItem('myFeature', 'On');
+		storage.session.set('myFeature', 'On');
 		expect(isSwitchOn('featureSwitches.myFeature')).toBe(true);
 	});
 
 	it('returns false when the session storage override is "Off" for myFeature', () => {
-		sessionStorage.setItem('myFeature', 'Off');
+		storage.session.set('myFeature', 'Off');
 		expect(isSwitchOn('featureSwitches.myFeature')).toBe(false);
 	});
 
@@ -181,7 +182,7 @@ describe('isSwitchOn', () => {
 	});
 
 	it('returns true when the session storage override is "On" for myDisabledFeature', () => {
-		sessionStorage.setItem('myDisabledFeature', 'On');
+		storage.session.set('myDisabledFeature', 'On');
 		expect(isSwitchOn('featureSwitches.myDisabledFeature')).toBe(true);
 	});
 

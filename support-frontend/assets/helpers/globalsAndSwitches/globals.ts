@@ -1,3 +1,4 @@
+import { storage } from '@guardian/libs';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { Settings, Status } from 'helpers/globalsAndSwitches/settings';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
@@ -34,7 +35,7 @@ function getLocal<T>(path = ''): T | null {
 	const [flag] = path.split('.').slice(-1);
 
 	try {
-		const value = flag && sessionStorage.getItem(flag);
+		const value = flag && storage.session.get(flag);
 		if (value) {
 			return value as T;
 		}
