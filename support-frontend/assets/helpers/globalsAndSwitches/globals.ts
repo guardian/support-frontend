@@ -162,8 +162,7 @@ const isSwitchOn = (switchName: string): boolean => {
 		: null;
 
 	const sw =
-		localOverride ??
-		getGlobal<Status>(`settings.switches.${switchName}`);
+		localOverride ?? getGlobal<Status>(`settings.switches.${switchName}`);
 
 	return sw === 'On';
 };
