@@ -2,6 +2,9 @@ const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
 
+// Routes to be handled by the new backend
+const expressRoutes = ['/healthcheck-express'];
+
 module.exports = merge(common('[name].js'), {
 	mode: 'development',
 	devtool: 'inline-source-map',
@@ -9,7 +12,7 @@ module.exports = merge(common('[name].js'), {
 		allowedHosts: 'all',
 		proxy: [
 			{
-				context: (pathname) => pathname === '/healthcheck-express',
+				context: (pathname) => expressRoutes.includes(pathname),
 				target: 'http://support.thegulocal.com:3000',
 				secure: false,
 			},
