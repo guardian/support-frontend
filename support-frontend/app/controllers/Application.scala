@@ -420,7 +420,6 @@ class Application(
   }
 
   def switches(): Action[AnyContent] = NoCacheAction() { implicit request =>
-    println("switches controller hit")
     Ok(
       views.html.main(
         "Feature Switches",

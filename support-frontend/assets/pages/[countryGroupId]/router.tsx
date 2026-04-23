@@ -233,15 +233,6 @@ const router = createBrowserRouter([
 					},
 				},
 			]),
-			{
-				path: '/switches',
-				lazy: async () => {
-					const { SwitchesPage } = await import(
-						/* webpackChunkName: "SwitchesPage" */ 'pages/switches/SwitchesPage'
-					);
-					return { Component: SwitchesPage };
-				},
-			},
 		],
 	},
 ]);

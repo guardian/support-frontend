@@ -18,6 +18,6 @@ module.exports = {
 			'pages/unsupported-browser/unsupportedBrowserRender.tsx',
 		promotionTerms: 'pages/promotion-terms/promotionTerms.tsx',
 		ausMomentMap: 'pages/aus-moment-map/ausMomentMap.tsx',
-		switchesPage: 'pages/switches/SwitchesPage.tsx',
+		switchesPage: 'pages/switches/switchesPage.tsx',
 	},
 };
