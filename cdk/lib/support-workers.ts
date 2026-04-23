@@ -604,7 +604,7 @@ export class SupportWorkers extends GuStack {
       metric: this.buildPaymentSuccessMetric(
         PaymentProviders.StripeHostedCheckout,
         ProductTypes.Paper,
-        Duration.hours(1)
+        stripeHostedMetricDuration
       ),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
       evaluationPeriods: stripeHostedEvaluationPeriods,
