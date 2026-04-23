@@ -598,18 +598,14 @@ export class SupportWorkers extends GuStack {
       actionsEnabled: isProd,
       okAction: true,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful Paper StripeHostedCheckout (Observer) checkouts in ${stripeHostedAlarmPeriod.toHumanString()}.`,
-      metric: new MathExpression({
-        expression: "SUM([FILL(m1,0)])",
-        label: "AllStripeHostedCheckoutPaperConversions",
-        usingMetrics: {
-          m1: this.buildPaymentSuccessMetric(
-            PaymentProviders.StripeHostedCheckout,
-            ProductTypes.Paper,
-            stripeHostedMetricDuration,
-          ),
-        },
-      }),
+      alarmName: `URGENT 9-5 - ${
+        this.stage
+      } support-workers No successful Paper StripeHostedCheckout (Observer) checkouts in ${stripeHostedAlarmPeriod.toHumanString()}.`,
+      metric: this.buildPaymentSuccessMetric(
+        PaymentProviders.StripeHostedCheckout,
+        ProductTypes.Paper,
+        Duration.hours(1)
+      ),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
       evaluationPeriods: stripeHostedEvaluationPeriods,
       treatMissingData: TreatMissingData.BREACHING,
