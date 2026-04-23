@@ -46,7 +46,10 @@ function getLocal<T>(path = ''): T | null {
 
 		return null;
 	} catch (e) {
-		console.error('Failed to read overrides:', e);
+		console.error(
+			`Failed to read overrides for flag "${flag}" from path "${path}":`,
+			e,
+		);
 		return null;
 	}
 }
