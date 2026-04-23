@@ -158,6 +158,9 @@ describe('isSwitchOn', () => {
 						myFeature: 'On',
 						myDisabledFeature: 'Off',
 					},
+					subscriptionsSwitches: {
+						useDotcomContactPage: 'On',
+					},
 				},
 			},
 		};
@@ -184,6 +187,11 @@ describe('isSwitchOn', () => {
 	it('returns true when the session storage override is "On" for myDisabledFeature', () => {
 		storage.session.set('myDisabledFeature', 'On');
 		expect(isSwitchOn('featureSwitches.myDisabledFeature')).toBe(true);
+	});
+
+	it('ignores session storage overrides for non-featureSwitches groups', () => {
+		sessionStorage.setItem('useDotcomContactPage', 'Off');
+		expect(isSwitchOn('subscriptionsSwitches.useDotcomContactPage')).toBe(true);
 	});
 
 	it('returns false when neither session storage nor globals have a value for the switch', () => {
