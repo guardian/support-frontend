@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { storage } from '@guardian/libs';
 import {
 	space,
 	textSans14,
@@ -100,7 +101,7 @@ function getFlags(): FlagState {
 function getActiveOverrides(flags: FlagState): Set<string> {
 	return new Set(
 		(Object.keys(flags) as FlagKey[]).filter(
-			(flag) => sessionStorage.getItem(flag) !== null,
+			(flag) => storage.session.get(flag) !== null,
 		),
 	);
 }
@@ -153,13 +154,13 @@ export function SwitchesPage() {
 
 	const toggle = (flag: FlagKey) => {
 		const next = !flags[flag];
-		sessionStorage.setItem(flag, next ? 'On' : 'Off');
+		storage.session.set(flag, next ? 'On' : 'Off');
 		setFlags((prev) => ({ ...prev, [flag]: next }));
 		setOverrides((prev) => new Set(prev).add(flag));
 	};
 
 	const reset = (flag: FlagKey) => {
-		sessionStorage.removeItem(flag);
+		storage.session.remove(flag);
 		setFlags((prev) => ({
 			...prev,
 			[flag]: isSwitchOn(`featureSwitches.${flag}`),
