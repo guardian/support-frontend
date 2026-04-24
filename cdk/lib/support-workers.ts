@@ -588,25 +588,26 @@ export class SupportWorkers extends GuStack {
     }).node.addDependency(stateMachine);
 
     // Paper StripeHostedCheckout (Observer) alarm
+    const stripeHostedMetricDuration = Duration.hours(1);
+    const stripeHostedEvaluationPeriods = 48; // The number of 1 hour periods in 2 days
+    const stripeHostedAlarmPeriod = Duration.minutes(
+      stripeHostedMetricDuration.toMinutes() * stripeHostedEvaluationPeriods
+    );
     new GuAlarm(this, "NoPaperStripeHostedAcquisitionInPeriodAlarm", {
       app,
       actionsEnabled: isProd,
       okAction: true,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful Paper StripeHostedCheckout (Observer) checkouts in 24h.`,
-      metric: new MathExpression({
-        expression: "SUM([FILL(m1,0)])",
-        label: "AllStripeHostedCheckoutPaperConversions",
-        usingMetrics: {
-          m1: this.buildPaymentSuccessMetric(
-            PaymentProviders.StripeHostedCheckout,
-            ProductTypes.Paper,
-            Duration.seconds(300)
-          ),
-        },
-      }),
+      alarmName: `URGENT 9-5 - ${
+        this.stage
+      } support-workers No successful Paper StripeHostedCheckout (Observer) checkouts in ${stripeHostedAlarmPeriod.toHumanString()}.`,
+      metric: this.buildPaymentSuccessMetric(
+        PaymentProviders.StripeHostedCheckout,
+        ProductTypes.Paper,
+        stripeHostedMetricDuration
+      ),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 288,
+      evaluationPeriods: stripeHostedEvaluationPeriods,
       treatMissingData: TreatMissingData.BREACHING,
       threshold: 0,
     }).node.addDependency(stateMachine);
