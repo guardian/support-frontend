@@ -14,8 +14,7 @@ function WeeklyGiftBenefits() {
 							<List
 								items={[
 									{
-										content:
-											'The Guardian Weekly delivered, wherever they are in the world',
+										content: 'The Guardian Weekly delivered to their door',
 									},
 									{
 										content:

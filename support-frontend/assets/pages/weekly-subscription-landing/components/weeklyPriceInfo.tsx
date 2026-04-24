@@ -49,7 +49,9 @@ export function WeeklyPriceInfo({
 	const deliveryCostInfo = (
 		<div>
 			Delivery cost included.{' '}
-			{!isGift && 'You can cancel your subscription at any time.'}
+			{isGift
+				? "Price may vary if the recipient's delivery address is in a different country to you."
+				: 'You can cancel your subscription at any time.'}
 		</div>
 	);
 	return (
