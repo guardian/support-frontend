@@ -33,14 +33,8 @@ jobs:
         run: ./script/ci
         working-directory: cdk
 
-      - uses: sbt/setup-sbt@v1
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: "corretto"
-          java-version: "21"
-          cache: sbt
+      - name: Setup Scala
+        uses: guardian/setup-scala@v1
 
       - name: Build
         run: |

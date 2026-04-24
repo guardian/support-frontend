@@ -42,14 +42,8 @@ jobs:
           role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
           aws-region: eu-west-1
 
-      - uses: sbt/setup-sbt@v1
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: "21"
-          distribution: "corretto"
-          cache: sbt
+      - name: Setup Scala
+        uses: guardian/setup-scala@v1
 
       - name: Build and upload to RiffRaff
         run: |
