@@ -2184,43 +2184,25 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "URGENT 9-5 - PROD support-workers No successful Paper StripeHostedCheckout (Observer) checkouts in 24h.",
+        "AlarmName": "URGENT 9-5 - PROD support-workers No successful Paper StripeHostedCheckout (Observer) checkouts in 2 days.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
-        "EvaluationPeriods": 288,
-        "Metrics": [
+        "Dimensions": [
           {
-            "Expression": "SUM([FILL(m1,0)])",
-            "Id": "expr_1",
-            "Label": "AllStripeHostedCheckoutPaperConversions",
-            "ReturnData": true,
+            "Name": "PaymentProvider",
+            "Value": "StripeHostedCheckout",
           },
           {
-            "Id": "m1",
-            "MetricStat": {
-              "Metric": {
-                "Dimensions": [
-                  {
-                    "Name": "PaymentProvider",
-                    "Value": "StripeHostedCheckout",
-                  },
-                  {
-                    "Name": "ProductType",
-                    "Value": "Paper",
-                  },
-                  {
-                    "Name": "Stage",
-                    "Value": "PROD",
-                  },
-                ],
-                "MetricName": "PaymentSuccess",
-                "Namespace": "support-frontend",
-              },
-              "Period": 300,
-              "Stat": "Sum",
-            },
-            "ReturnData": false,
+            "Name": "ProductType",
+            "Value": "Paper",
+          },
+          {
+            "Name": "Stage",
+            "Value": "PROD",
           },
         ],
+        "EvaluationPeriods": 48,
+        "MetricName": "PaymentSuccess",
+        "Namespace": "support-frontend",
         "OKActions": [
           {
             "Fn::Join": [
@@ -2239,6 +2221,8 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
+        "Period": 3600,
+        "Statistic": "Sum",
         "Tags": [
           {
             "Key": "gu:cdk:version",
