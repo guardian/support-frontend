@@ -419,18 +419,6 @@ class Application(
     ).withSettingsSurrogateKey
   }
 
-  def switches(): Action[AnyContent] = NoCacheAction() { implicit request =>
-    Ok(
-      views.html.main(
-        "Feature Switches",
-        views.EmptyDiv("switches-page"),
-        RefPath("switchesPage.js"),
-        None,
-        noindex = true,
-      )()(assets, request, settingsProvider.getAllSettings()),
-    ).withSettingsSurrogateKey
-  }
-
   private def shareImageUrl(settings: AllSettings): String = {
     // Autumn 2021 generic image
     "https://i.guim.co.uk/img/media/5366cacfd2081e5a4af259318238b3f82610d32e/0_0_1000_525/1000.png?quality=85&s=966978166c0983aef68828559ede40d8"

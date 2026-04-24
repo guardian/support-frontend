@@ -5,12 +5,16 @@ import play.api.mvc._
 import services.TestUserService
 import com.gu.googleauth.AuthAction
 import config.Configuration.GuardianDomain
+import assets.{AssetsResolver, RefPath}
+import admin.settings.{AllSettingsProvider}
 
 import scala.concurrent.ExecutionContext
 import views.html.{testUsers => testUsersView}
 
 class TestUsersManagement(
     authAction: AuthAction[AnyContent],
+    val assets: AssetsResolver,
+    settingsProvider: AllSettingsProvider,
     components: ControllerComponents,
     testUsers: TestUserService,
     supportUrl: String,
@@ -34,4 +38,17 @@ class TestUsersManagement(
         ),
       )
   }
+
+  def switches(): Action[AnyContent] = authAction { implicit request =>
+    Ok(
+      views.html.main(
+        "Feature Switches",
+        views.EmptyDiv("switches-page"),
+        RefPath("switchesPage.js"),
+        None,
+        noindex = true,
+      )()(assets, request, settingsProvider.getAllSettings()),
+    ).withHeaders(CacheControl.noCache)
+  }
+
 }
