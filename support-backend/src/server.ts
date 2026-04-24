@@ -1,11 +1,16 @@
 import express from "express";
-import routerHealthCheck from "./routes/healthCheck";
 
 const app = express();
 
 const PORT = process.env.PORT ?? 3000;
 
-app.use("/healthcheck-express", routerHealthCheck);
+app.get("/healthcheck-express", (req, res) => {
+  console.log(
+    `HealthCheck processed from port: ${req.socket.localPort}`
+  );
+  res.json({ status: "OK" });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
