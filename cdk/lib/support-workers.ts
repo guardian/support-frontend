@@ -485,8 +485,7 @@ export class SupportWorkers extends GuStack {
         `m${idx}`,
         this.buildPaymentSuccessMetric(
           PaymentProviders.StripeApplePay,
-          product,
-          applePayMetricDuration
+          product
         ),
       ])
     );
@@ -502,6 +501,7 @@ export class SupportWorkers extends GuStack {
         this.stage
       } No successful recurring Apple Pay payments in ${applePayAlarmPeriod.toHumanString()}.`,
       metric: new MathExpression({
+        period: applePayMetricDuration,
         expression: applePayExpression,
         label: "AllRecurringApplePayPayments",
         usingMetrics: applePayMetrics,
@@ -524,8 +524,7 @@ export class SupportWorkers extends GuStack {
         `m${idx}`,
         this.buildPaymentSuccessMetric(
           PaymentProviders.StripePaymentRequestButton,
-          product,
-          googlePayMetricDuration
+          product
         ),
       ])
     );
@@ -541,6 +540,7 @@ export class SupportWorkers extends GuStack {
         this.stage
       } No successful recurring Google Pay payments in ${googlePayAlarmPeriod.toHumanString()}.`,
       metric: new MathExpression({
+        period: googlePayMetricDuration,
         expression: googlePayExpression,
         label: "AllRecurringGooglePayPayments",
         usingMetrics: googlePayMetrics,
@@ -563,21 +563,19 @@ export class SupportWorkers extends GuStack {
       metric: new MathExpression({
         expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
         label: "AllPaperConversions",
+        period: Duration.minutes(5),
         usingMetrics: {
           m1: this.buildPaymentSuccessMetric(
             PaymentProviders.Stripe,
-            ProductTypes.Paper,
-            Duration.seconds(300)
+            ProductTypes.Paper
           ),
           m2: this.buildPaymentSuccessMetric(
             PaymentProviders.DirectDebit,
-            ProductTypes.Paper,
-            Duration.seconds(300)
+            ProductTypes.Paper
           ),
           m3: this.buildPaymentSuccessMetric(
             PaymentProviders.PayPal,
-            ProductTypes.Paper,
-            Duration.seconds(300)
+            ProductTypes.Paper
           ),
         },
       }),
@@ -621,21 +619,19 @@ export class SupportWorkers extends GuStack {
       metric: new MathExpression({
         label: "AllWeeklyConversions",
         expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
+        period: Duration.minutes(5),
         usingMetrics: {
           m1: this.buildPaymentSuccessMetric(
             PaymentProviders.Stripe,
-            ProductTypes.GuardianWeekly,
-            Duration.seconds(300)
+            ProductTypes.GuardianWeekly
           ),
           m2: this.buildPaymentSuccessMetric(
             PaymentProviders.DirectDebit,
-            ProductTypes.GuardianWeekly,
-            Duration.seconds(300)
+            ProductTypes.GuardianWeekly
           ),
           m3: this.buildPaymentSuccessMetric(
             PaymentProviders.PayPal,
-            ProductTypes.GuardianWeekly,
-            Duration.seconds(300)
+            ProductTypes.GuardianWeekly
           ),
         },
       }),
@@ -656,8 +652,7 @@ export class SupportWorkers extends GuStack {
         `m${idx}`,
         this.buildPaymentSuccessMetric(
           paymentProvider,
-          ProductTypes.GuardianAdLite,
-          adLiteMetricDuration
+          ProductTypes.GuardianAdLite
         ),
       ])
     );
@@ -673,6 +668,7 @@ export class SupportWorkers extends GuStack {
         this.stage
       } support-workers No successful Ad-Lite checkouts in ${adLiteAlarmPeriod.toHumanString()}.`,
       metric: new MathExpression({
+        period: adLiteMetricDuration,
         label: "AllGuardianAdLiteConversions",
         expression: adLiteExpression,
         usingMetrics: adLiteMetrics,
@@ -688,7 +684,7 @@ export class SupportWorkers extends GuStack {
   buildPaymentSuccessMetric = (
     paymentProvider: PaymentProvider,
     productType: ProductType,
-    period: Duration
+    period: Duration | undefined = undefined // Has no effect if Metric used by a MathExpression
   ) => {
     return new Metric({
       metricName: "PaymentSuccess",
