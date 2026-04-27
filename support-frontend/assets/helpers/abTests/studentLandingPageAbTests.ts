@@ -43,7 +43,7 @@ const filterTestsByURL = (
 			countryGroups[test.countryGroupId].supportRegionId ===
 			urlCountryGroup.supportRegionId;
 		const institutionMatches =
-			test.variants[0]?.institution.acronym.trim() === urlInstitution;
+			test.name.trim() === urlInstitution;
 		return regionMatches && institutionMatches;
 	});
 };
