@@ -10,6 +10,8 @@ import {
 	SvgInfoRound,
 	themeLinkBrand,
 } from '@guardian/source/react-components';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import ProductInfoChip from 'components/product/productInfoChip';
 import { guardianWeeklyTermsLink } from 'helpers/legal';
 
@@ -30,13 +32,21 @@ const termsLinkStyle = css`
 	margin-top: -12px;
 `;
 
-export function WeeklyGiftPriceInfo(): JSX.Element {
+type WeeklyGiftPriceInfoProps = {
+	countryGroupId: CountryGroupId;
+};
+
+export function WeeklyGiftPriceInfo({
+	countryGroupId,
+}: WeeklyGiftPriceInfoProps): JSX.Element {
 	const deliveryCostInfo = (
 		<div>
-			Delivery cost included. Price may vary if the recipient's delivery address
-			is in a different country to you.
+			Delivery cost included. Prices shown are for{' '}
+			{countryGroupId === GBPCountries ? 'UK' : 'local'} delivery. Price may
+			vary if the recipient's delivery address is in a different country to you.
 		</div>
 	);
+
 	return (
 		<div css={pricesInfo}>
 			<ProductInfoChip icon={<SvgInfoRound />}>
