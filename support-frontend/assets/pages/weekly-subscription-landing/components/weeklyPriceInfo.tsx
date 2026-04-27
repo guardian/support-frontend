@@ -4,20 +4,12 @@ import { SvgInfoRound } from '@guardian/source/react-components';
 import ProductInfoChip from 'components/product/productInfoChip';
 
 const pricesInfo = css`
-	margin-top: ${space[6]}px;
+	margin-top: ${space[4]}px;
 	color: ${neutral[100]};
 
 	div {
 		${textSans12};
 		font-size: 15px;
-	}
-	margin-top: ${space[4]}px;
-
-	& a {
-		color: ${neutral[100]};
-		:visited {
-			color: ${neutral[100]};
-		}
 	}
 `;
 
