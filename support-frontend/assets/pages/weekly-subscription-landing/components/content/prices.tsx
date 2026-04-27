@@ -9,7 +9,7 @@ import {
 import FlexContainer from 'components/containers/flexContainer';
 import type { Product } from 'components/product/productOption';
 import ProductOption from 'components/product/productOption';
-import { WeeklyPriceInfo } from '../weeklyPriceInfo';
+import { WeeklyGiftPriceInfo } from '../weeklyGiftPriceInfo';
 
 const pricesSection = css`
 	padding: 0 ${space[3]}px ${space[12]}px;
@@ -90,7 +90,7 @@ function Prices({ products }: { products: Product[] }): JSX.Element {
 					/>
 				))}
 			</FlexContainer>
-			<WeeklyPriceInfo isGift={true} showGift={true} />
+			<WeeklyGiftPriceInfo />
 		</section>
 	);
 }
