@@ -141,6 +141,7 @@ export function WeeklyLandingPage({
 						<FullWidthContainer theme="dark" hasOverlap>
 							<CentredContainer>
 								<WeeklyGiftProductPrices
+									countryGroupId={countryGroupId}
 									countryId={countryId}
 									productPrices={productPrices}
 								/>
