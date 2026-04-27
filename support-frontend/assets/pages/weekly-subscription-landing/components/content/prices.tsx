@@ -77,16 +77,7 @@ function Prices({ products }: { products: Product[] }): JSX.Element {
 						cssOverrides={
 							product.showLabel ? productOverrideWithLabel : productOverride
 						}
-						title={product.title}
-						price={product.price}
-						offerCopy={product.offerCopy}
-						priceCopy={product.priceCopy}
-						buttonCopy={product.buttonCopy}
-						href={product.href}
-						onClick={product.onClick}
-						onView={product.onView}
-						showLabel={product.showLabel}
-						isSpecialOffer={product.isSpecialOffer}
+						{...product}
 					/>
 				))}
 			</FlexContainer>
