@@ -18,8 +18,7 @@ import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { getAmountsTestVariant } from 'helpers/abTests/abtest';
-import { Country } from 'helpers/internationalisation/classes/country';
+import { vatComplianceAmounts } from 'helpers/contributions';
 import { guardianContactUsLink, guardianHelpCentreLink } from 'helpers/legal';
 import { billingPeriodToContributionType } from 'helpers/productPrice/billingPeriods';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
@@ -142,7 +141,6 @@ export function ContributionsOnlyLanding({
 
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
-	const countryId = Country.detect();
 
 	const getInitialBillingPeriod = () => {
 		// 1. Query Parameters take precedence
@@ -195,11 +193,7 @@ export function ContributionsOnlyLanding({
 		}
 	};
 
-	const { selectedAmountsVariant: amounts } = getAmountsTestVariant(
-		countryId,
-		countryGroupId,
-		window.guardian.settings,
-	);
+	const amounts = vatComplianceAmounts;
 
 	return (
 		<PageScaffold

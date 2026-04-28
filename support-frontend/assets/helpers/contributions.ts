@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import vatComplianceCountriesJson from '@modules/VATComplianceAmounts.json';
 
 // ----- Types ----- //
 type RegularContributionTypeMap<T> = {
@@ -29,7 +30,7 @@ export interface AmountsVariant {
 	amountsCardData: AmountsCardData;
 }
 
-export type AmountsTestTargeting =
+type AmountsTestTargeting =
 	| { targetingType: 'Region'; region: CountryGroupId }
 	| { targetingType: 'Country'; countries: IsoCountry[] };
 
@@ -44,7 +45,6 @@ export interface AmountsTest {
 }
 
 export type AmountsTests = AmountsTest[];
-
 export interface SelectedAmountsVariant extends AmountsVariant {
 	testName: string;
 }
@@ -209,14 +209,16 @@ const config: Record<CountryGroupId, Config> = {
 	},
 };
 
-const contributionsOnlyAmountsTestName = 'VAT_COMPLIANCE';
+const vatComplianceCountries = new Set(
+	vatComplianceCountriesJson.countries as IsoCountry[],
+);
 
-const isContributionsOnlyCountry = (
-	amountsVariant: SelectedAmountsVariant,
-): boolean => {
-	const { testName } = amountsVariant;
-	return testName === contributionsOnlyAmountsTestName;
-};
+const isVatComplianceCountry = (countryId: IsoCountry): boolean =>
+	vatComplianceCountries.has(countryId);
 
 // ----- Exports ----- //
-export { config, contributionsOnlyAmountsTestName, isContributionsOnlyCountry };
+export {
+	config,
+	isVatComplianceCountry,
+	vatComplianceCountriesJson as vatComplianceAmounts,
+};
