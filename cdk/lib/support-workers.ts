@@ -485,8 +485,7 @@ export class SupportWorkers extends GuStack {
         `m${idx}`,
         this.buildPaymentSuccessMetric(
           PaymentProviders.StripeApplePay,
-          product,
-          applePayMetricDuration
+          product
         ),
       ])
     );
@@ -502,6 +501,7 @@ export class SupportWorkers extends GuStack {
         this.stage
       } No successful recurring Apple Pay payments in ${applePayAlarmPeriod.toHumanString()}.`,
       metric: new MathExpression({
+        period: applePayMetricDuration,
         expression: applePayExpression,
         label: "AllRecurringApplePayPayments",
         usingMetrics: applePayMetrics,
@@ -524,8 +524,7 @@ export class SupportWorkers extends GuStack {
         `m${idx}`,
         this.buildPaymentSuccessMetric(
           PaymentProviders.StripePaymentRequestButton,
-          product,
-          googlePayMetricDuration
+          product
         ),
       ])
     );
@@ -541,6 +540,7 @@ export class SupportWorkers extends GuStack {
         this.stage
       } No successful recurring Google Pay payments in ${googlePayAlarmPeriod.toHumanString()}.`,
       metric: new MathExpression({
+        period: googlePayMetricDuration,
         expression: googlePayExpression,
         label: "AllRecurringGooglePayPayments",
         usingMetrics: googlePayMetrics,
@@ -563,21 +563,19 @@ export class SupportWorkers extends GuStack {
       metric: new MathExpression({
         expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
         label: "AllPaperConversions",
+        period: Duration.minutes(5),
         usingMetrics: {
           m1: this.buildPaymentSuccessMetric(
             PaymentProviders.Stripe,
-            ProductTypes.Paper,
-            Duration.seconds(300)
+            ProductTypes.Paper
           ),
           m2: this.buildPaymentSuccessMetric(
             PaymentProviders.DirectDebit,
-            ProductTypes.Paper,
-            Duration.seconds(300)
+            ProductTypes.Paper
           ),
           m3: this.buildPaymentSuccessMetric(
             PaymentProviders.PayPal,
-            ProductTypes.Paper,
-            Duration.seconds(300)
+            ProductTypes.Paper
           ),
         },
       }),
@@ -588,25 +586,26 @@ export class SupportWorkers extends GuStack {
     }).node.addDependency(stateMachine);
 
     // Paper StripeHostedCheckout (Observer) alarm
+    const stripeHostedMetricDuration = Duration.hours(1);
+    const stripeHostedEvaluationPeriods = 48; // The number of 1 hour periods in 2 days
+    const stripeHostedAlarmPeriod = Duration.minutes(
+      stripeHostedMetricDuration.toMinutes() * stripeHostedEvaluationPeriods
+    );
     new GuAlarm(this, "NoPaperStripeHostedAcquisitionInPeriodAlarm", {
       app,
       actionsEnabled: isProd,
       okAction: true,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful Paper StripeHostedCheckout (Observer) checkouts in 24h.`,
-      metric: new MathExpression({
-        expression: "SUM([FILL(m1,0)])",
-        label: "AllStripeHostedCheckoutPaperConversions",
-        usingMetrics: {
-          m1: this.buildPaymentSuccessMetric(
-            PaymentProviders.StripeHostedCheckout,
-            ProductTypes.Paper,
-            Duration.seconds(300)
-          ),
-        },
-      }),
+      alarmName: `URGENT 9-5 - ${
+        this.stage
+      } support-workers No successful Paper StripeHostedCheckout (Observer) checkouts in ${stripeHostedAlarmPeriod.toHumanString()}.`,
+      metric: this.buildPaymentSuccessMetric(
+        PaymentProviders.StripeHostedCheckout,
+        ProductTypes.Paper,
+        stripeHostedMetricDuration
+      ),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 288,
+      evaluationPeriods: stripeHostedEvaluationPeriods,
       treatMissingData: TreatMissingData.BREACHING,
       threshold: 0,
     }).node.addDependency(stateMachine);
@@ -620,21 +619,19 @@ export class SupportWorkers extends GuStack {
       metric: new MathExpression({
         label: "AllWeeklyConversions",
         expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
+        period: Duration.minutes(5),
         usingMetrics: {
           m1: this.buildPaymentSuccessMetric(
             PaymentProviders.Stripe,
-            ProductTypes.GuardianWeekly,
-            Duration.seconds(300)
+            ProductTypes.GuardianWeekly
           ),
           m2: this.buildPaymentSuccessMetric(
             PaymentProviders.DirectDebit,
-            ProductTypes.GuardianWeekly,
-            Duration.seconds(300)
+            ProductTypes.GuardianWeekly
           ),
           m3: this.buildPaymentSuccessMetric(
             PaymentProviders.PayPal,
-            ProductTypes.GuardianWeekly,
-            Duration.seconds(300)
+            ProductTypes.GuardianWeekly
           ),
         },
       }),
@@ -655,8 +652,7 @@ export class SupportWorkers extends GuStack {
         `m${idx}`,
         this.buildPaymentSuccessMetric(
           paymentProvider,
-          ProductTypes.GuardianAdLite,
-          adLiteMetricDuration
+          ProductTypes.GuardianAdLite
         ),
       ])
     );
@@ -672,6 +668,7 @@ export class SupportWorkers extends GuStack {
         this.stage
       } support-workers No successful Ad-Lite checkouts in ${adLiteAlarmPeriod.toHumanString()}.`,
       metric: new MathExpression({
+        period: adLiteMetricDuration,
         label: "AllGuardianAdLiteConversions",
         expression: adLiteExpression,
         usingMetrics: adLiteMetrics,
@@ -687,7 +684,7 @@ export class SupportWorkers extends GuStack {
   buildPaymentSuccessMetric = (
     paymentProvider: PaymentProvider,
     productType: ProductType,
-    period: Duration
+    period: Duration | undefined = undefined // Has no effect if Metric used by a MathExpression
   ) => {
     return new Metric({
       metricName: "PaymentSuccess",

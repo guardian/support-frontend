@@ -6,10 +6,11 @@ import {
 	space,
 	textEgyptian17,
 } from '@guardian/source/foundations';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import FlexContainer from 'components/containers/flexContainer';
 import type { Product } from 'components/product/productOption';
 import ProductOption from 'components/product/productOption';
-import { WeeklyPriceInfo } from '../weeklyPriceInfo';
+import { WeeklyGiftPriceInfo } from '../weeklyGiftPriceInfo';
 
 const pricesSection = css`
 	padding: 0 ${space[3]}px ${space[12]}px;
@@ -66,7 +67,13 @@ const pricesSubHeadline = css`
 	padding-bottom: ${space[2]}px;
 `;
 
-function Prices({ products }: { products: Product[] }): JSX.Element {
+function Prices({
+	products,
+	countryGroupId,
+}: {
+	products: Product[];
+	countryGroupId: CountryGroupId;
+}): JSX.Element {
 	return (
 		<section css={pricesSection} id="subscribe">
 			<h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>
@@ -90,7 +97,7 @@ function Prices({ products }: { products: Product[] }): JSX.Element {
 					/>
 				))}
 			</FlexContainer>
-			<WeeklyPriceInfo isGift={true} showGift={true} />
+			<WeeklyGiftPriceInfo countryGroupId={countryGroupId} />
 		</section>
 	);
 }

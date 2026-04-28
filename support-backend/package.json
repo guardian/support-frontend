@@ -1,0 +1,40 @@
+{
+  "name": "support-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/server.ts",
+    "test": "jest --group=-integration",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint --fix src/**/*.ts",
+    "check-formatting": "prettier --check **.ts",
+    "fix-formatting": "prettier --write **.ts",
+    "fix": "pnpm fix-formatting && pnpm lint:fix",
+    "build": "tsc --noEmit",
+    "clean-target": "rm -rf target && mkdir -p target"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.28.2",
+  "dependencies": {
+    "@guardian/support-service-lambdas": "catalog:",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@guardian/eslint-config": "^14.0.1",
+    "@guardian/prettier": "catalog:",
+    "@types/express": "^5.0.6",
+    "@types/jest": "catalog:",
+    "@types/node": "catalog:",
+    "eslint": "^9.38.0",
+    "jest": "catalog:",
+    "jest-runner-groups": "catalog:",
+    "nodemon": "^3.1.14",
+    "prettier": "catalog:",
+    "ts-jest": "catalog:",
+    "ts-node": "10.9.2",
+    "typescript": "catalog:"
+  }
+}
