@@ -38,15 +38,13 @@ export function getWeeklyGiftSavingsText(
 		}
 
 		const savingsVsQuarterly = quarterlyPrice * 4 - annualPrice;
+		const savingsPercentage = Math.round(
+			(savingsVsQuarterly / quarterlyPrice) * 100,
+		);
 
-		if (savingsVsQuarterly <= 0) {
-			return null;
+		if (savingsPercentage > 0) {
+			return `Save an extra ${savingsPercentage}% on a 12 month gift subscription`;
 		}
-
-		const savingsPercentage = savingsVsQuarterly
-			? Math.round((savingsVsQuarterly / quarterlyPrice) * 100)
-			: null;
-		return `Save an extra ${savingsPercentage}% on a 12 month gift subscription`;
 	}
 
 	return null;
