@@ -43,7 +43,7 @@ export function WeeklyGiftPriceInfo({
 		<div>
 			Delivery cost included. Prices shown are for{' '}
 			{countryGroupId === GBPCountries ? 'UK' : 'local'} delivery. Price may
-			vary if the recipient's delivery address is in a different country to you.
+			vary if the recipient is in another country.
 		</div>
 	);
 
