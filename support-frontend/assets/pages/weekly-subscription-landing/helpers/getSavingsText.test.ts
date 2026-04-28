@@ -102,11 +102,11 @@ describe('getWeeklyGiftSavingsText', () => {
 			// 50 * 4 - 190 = 10, savingsPercentage = round(10/50 * 100) = 20
 			const allPrices = {
 				[BillingPeriod.Quarterly]: makeProductPrice(50),
-				[BillingPeriod.Annual]: makeProductPrice(190),
+				[BillingPeriod.Annual]: makeProductPrice(150),
 			};
 			expect(
 				getWeeklyGiftSavingsText(BillingPeriod.Annual, undefined, allPrices),
-			).toBe('Save an extra 20% on a 12 month gift subscription');
+			).toBe('Save an extra 25% on a 12 month gift subscription');
 		});
 
 		it('rounds the savings percentage to the nearest integer', () => {
@@ -117,7 +117,7 @@ describe('getWeeklyGiftSavingsText', () => {
 			};
 			expect(
 				getWeeklyGiftSavingsText(BillingPeriod.Annual, undefined, allPrices),
-			).toBe('Save an extra 62% on a 12 month gift subscription');
+			).toBe('Save an extra 16% on a 12 month gift subscription');
 		});
 	});
 });

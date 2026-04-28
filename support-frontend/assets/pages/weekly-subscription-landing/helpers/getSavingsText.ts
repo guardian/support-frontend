@@ -36,10 +36,9 @@ export function getWeeklyGiftSavingsText(
 		if (!annualPrice || !quarterlyPrice) {
 			return null;
 		}
-
-		const savingsVsQuarterly = quarterlyPrice * 4 - annualPrice;
+		const quarterlyCostForYear = quarterlyPrice * 4;
 		const savingsPercentage = Math.round(
-			(savingsVsQuarterly / quarterlyPrice) * 100,
+			((quarterlyCostForYear - annualPrice) / quarterlyCostForYear) * 100,
 		);
 
 		if (savingsPercentage > 0) {
