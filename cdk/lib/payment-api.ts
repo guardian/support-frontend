@@ -376,7 +376,7 @@ export class PaymentApi extends GuStack {
       app,
       alarmName: `[CDK] ${app} ${this.stage} Paypal payment error for one-off contribution via the payment-api`,
       actionsEnabled: props.stage === "PROD",
-      threshold: 1,
+      threshold: 0,
       evaluationPeriods: 1,
       comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
       metric: new Metric({
@@ -396,7 +396,7 @@ export class PaymentApi extends GuStack {
       app,
       alarmName: `[CDK] ${app} ${this.stage} Stripe payment error for one-off contribution via the payment-api`,
       actionsEnabled: props.stage === "PROD",
-      threshold: 1,
+      threshold: 0,
       evaluationPeriods: 1,
       comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
       metric: new Metric({
@@ -416,7 +416,7 @@ export class PaymentApi extends GuStack {
       app,
       alarmName: `[CDK] ${app} ${this.stage} Failed post-payment task for one-off contribution via the payment-api`,
       actionsEnabled: props.stage === "PROD",
-      threshold: 1,
+      threshold: 0,
       evaluationPeriods: 1,
       comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
       metric: new Metric({
