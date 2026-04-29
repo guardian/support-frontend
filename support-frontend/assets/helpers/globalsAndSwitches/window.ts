@@ -1,4 +1,3 @@
-import { isoCountries } from '@modules/internationalisation/country';
 import { isoCurrencySchema } from '@modules/internationalisation/schemas';
 import {
 	billingPeriodSchema,
@@ -106,59 +105,6 @@ const PaymentConfigSchema = z.object({
 				z.optional(z.enum(['On', 'Off'])),
 			),
 		}),
-		amounts: z.array(
-			z.object({
-				testName: z.string(),
-				liveTestName: z.optional(z.string()),
-				isLive: z.boolean(),
-				order: z.number(),
-				seed: z.number(),
-				targeting: z.union([
-					z.object({
-						targetingType: z.literal('Region'),
-						region: z.enum([
-							'GBPCountries',
-							'UnitedStates',
-							'AUDCountries',
-							'EURCountries',
-							'NZDCountries',
-							'Canada',
-							'International',
-						]),
-					}),
-					z.object({
-						targetingType: z.literal('Country'),
-						countries: z.array(z.enum(isoCountries)),
-					}),
-				]),
-				variants: z.array(
-					z.object({
-						amountsCardData: z.object({
-							ANNUAL: z.object({
-								amounts: z.array(z.number()),
-								defaultAmount: z.number(),
-								hideChooseYourAmount: z.boolean(),
-							}),
-							MONTHLY: z.object({
-								amounts: z.array(z.number()),
-								defaultAmount: z.number(),
-								hideChooseYourAmount: z.boolean(),
-							}),
-							ONE_OFF: z.object({
-								amounts: z.array(z.number()),
-								defaultAmount: z.number(),
-								hideChooseYourAmount: z.boolean(),
-							}),
-						}),
-						defaultContributionType: z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
-						displayContributionType: z.array(
-							z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
-						),
-						variantName: z.string(),
-					}),
-				),
-			}),
-		),
 		contributionTypes: z.object({
 			AUDCountries: z.array(
 				z.object({
