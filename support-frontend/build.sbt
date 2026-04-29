@@ -22,7 +22,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % circeVersion,
   "io.circe" %% "circe-optics" % "0.15.1",
   "joda-time" % "joda-time" % "2.9.9",
-  "com.gu.identity" %% "identity-auth-play" % "7.0.0-PREVIEW.pvdeps2026-04-27.2026-04-28T0906.bac37723",
+  "com.gu.identity" %% "identity-auth-play" % "7.0.0",
   "com.okta.jwt" % "okta-jwt-verifier" % oktaJwtVerifierVersion,
   "com.okta.jwt" % "okta-jwt-verifier-impl" % oktaJwtVerifierVersion % Runtime,
   "com.gu" %% "identity-test-users" % "0.10.2",
