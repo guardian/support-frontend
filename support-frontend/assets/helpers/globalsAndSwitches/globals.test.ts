@@ -31,64 +31,6 @@ describe('getGlobal', () => {
 		window.guardian = {
 			settings: {
 				switches: emptySwitches,
-				amounts: [
-					{
-						...emptyConfiguredRegionAmounts,
-						testName: 'EMPTY_TEST__GBPCountries',
-						targeting: {
-							targetingType: 'Region',
-							region: 'GBPCountries',
-						},
-					},
-					{
-						...emptyConfiguredRegionAmounts,
-						testName: 'EMPTY_TEST__UnitedStates',
-						targeting: {
-							targetingType: 'Region',
-							region: 'UnitedStates',
-						},
-					},
-					{
-						...emptyConfiguredRegionAmounts,
-						testName: 'EMPTY_TEST__Canada',
-						targeting: {
-							targetingType: 'Region',
-							region: 'Canada',
-						},
-					},
-					{
-						...emptyConfiguredRegionAmounts,
-						testName: 'EMPTY_TEST__NZDCountries',
-						targeting: {
-							targetingType: 'Region',
-							region: 'NZDCountries',
-						},
-					},
-					{
-						...emptyConfiguredRegionAmounts,
-						testName: 'EMPTY_TEST__EURCountries',
-						targeting: {
-							targetingType: 'Region',
-							region: 'EURCountries',
-						},
-					},
-					{
-						...emptyConfiguredRegionAmounts,
-						testName: 'EMPTY_TEST__International',
-						targeting: {
-							targetingType: 'Region',
-							region: 'International',
-						},
-					},
-					{
-						...emptyConfiguredRegionAmounts,
-						testName: 'EMPTY_TEST__AUDCountries',
-						targeting: {
-							targetingType: 'Region',
-							region: 'AUDCountries',
-						},
-					},
-				],
 				contributionTypes: {
 					GBPCountries: [],
 					UnitedStates: [],
