@@ -7,7 +7,6 @@ import {
 	digitalPlusTermsLink,
 	guardianAdLiteTermsLink,
 	guardianWeeklyTermsLink,
-	manageAccountLink,
 	paperTermsLink,
 	privacyLink,
 	supporterPlusTermsLink,
@@ -17,6 +16,7 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
+import { getHelpCentreUrl } from 'helpers/urls/externalLinks';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { textLink } from '../../../helpers/utilities/textLink';
 
@@ -68,9 +68,10 @@ export function FooterTsAndCs({
 
 	const weeklyGiftTerms = (
 		<>
-			To cancel, go to {textLink('Manage My Account', manageAccountLink)} or see
-			our {textLink('Terms', guardianWeeklyTermsLink)}. This subscription does
-			not auto-renew.
+			This subscription does not auto-renew. If you cancel within 14 days of
+			sign-up, you’ll receive a full refund. To cancel within 14 days of sign-up
+			and receive a refund contact{' '}
+			{textLink('Customer Service', getHelpCentreUrl())}.
 		</>
 	);
 	const isWeeklyGift =
