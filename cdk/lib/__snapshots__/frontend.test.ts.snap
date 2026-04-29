@@ -1204,13 +1204,14 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         "AlarmDescription": "Impact - support-frontend failed to use the mparticle API because no valid oauth token was available. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
         "AlarmName": "Support-frontend MParticleTokenError",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 2,
         "Dimensions": [
           {
             "Name": "Stage",
             "Value": "PROD",
           },
         ],
-        "EvaluationPeriods": 1,
+        "EvaluationPeriods": 2,
         "MetricName": "MParticleTokenError",
         "Namespace": "support-frontend",
         "Period": 60,
