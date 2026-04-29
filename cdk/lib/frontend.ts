@@ -497,7 +497,8 @@ export class Frontend extends GuStack {
         ),
         actionsEnabled: shouldCreateAlarms,
         threshold: 1,
-        evaluationPeriods: 1,
+        evaluationPeriods: 2,
+        datapointsToAlarm: 2,
         comparisonOperator:
           ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
         metric: new Metric({
