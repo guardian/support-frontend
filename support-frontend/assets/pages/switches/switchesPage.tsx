@@ -23,12 +23,6 @@ import {
 type FlagKey = keyof FeatureSwitches;
 type FlagState = Record<FlagKey, boolean>;
 
-function getFlags(): FlagState {
-	const featureSwitches = useFeatureSwitches();
-
-	return featureSwitches;
-}
-
 function getOverrides(flags: FlagState): Set<string> {
 	return new Set(
 		(Object.keys(flags) as FlagKey[]).filter(
@@ -78,7 +72,7 @@ function SwitchRow({
 }
 
 export function SwitchesPage() {
-	const [flags, setFlags] = useState<FlagState>(getFlags);
+	const [flags, setFlags] = useState<FlagState>(useFeatureSwitches());
 	const [overrides, setOverrides] = useState<Set<string>>(() =>
 		getOverrides(flags),
 	);
