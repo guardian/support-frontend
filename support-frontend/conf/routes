@@ -104,6 +104,7 @@ GET  /login                                                        controllers.L
 GET  /loginAction                                                  controllers.Login.loginAction()
 GET  /oauth2callback                                               controllers.Login.oauth2Callback()
 GET  /test-users                                                   controllers.TestUsersManagement.createTestUser()
+GET /switches                                                      controllers.TestUsersManagement.switches()
 
 # ----- Okta auth ----- #
 
