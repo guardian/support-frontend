@@ -20,9 +20,6 @@ function WeeklyGiftBenefits() {
 										content:
 											"The Guardian's global journalism to keep them informed",
 									},
-									{
-										content: "The very best of the Guardian's puzzles",
-									},
 								]}
 							/>
 						</>
@@ -41,9 +38,6 @@ function WeeklyGiftBenefits() {
 									},
 									{
 										content: "Access to the magazine's digital archive",
-									},
-									{
-										content: '35% off the cover price',
 									},
 								]}
 							/>

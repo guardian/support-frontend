@@ -28,10 +28,7 @@ import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
-import {
-	isGuardianWeeklyDigitalProduct,
-	isGuardianWeeklyGiftProduct,
-} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import { isGuardianWeeklyDigitalProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { textLink } from '../../../helpers/utilities/textLink';
 import { FinePrint } from './finePrint';
 import { FooterTsAndCs } from './footerTsAndCs';
@@ -106,23 +103,11 @@ function paperTsAndCs(
 function weeklyTsAndCs(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	promotion?: Promotion,
 	deliveryDate?: Date,
 ): JSX.Element {
-	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
-	const isWeeklyDigital = isGuardianWeeklyDigitalProduct(
-		productKey,
-		ratePlanKey,
-	);
 	return (
 		<>
-			{isWeeklyGift && !promotion && (
-				<div>
-					Offer subject to availability. Guardian News and Media Ltd ("GNM")
-					reserves the right to withdraw this promotion at any time.
-				</div>
-			)}
-			{isWeeklyDigital && (
+			{isGuardianWeeklyDigitalProduct(productKey, ratePlanKey) && (
 				<>
 					<GuardianWeeklyPaymentTerms deliveryDate={deliveryDate} />
 					<div css={marginTop}>{printShareTsAndCs}</div>
@@ -360,13 +345,11 @@ export function PaymentTsAndCs({
 		GuardianWeeklyDomestic: weeklyTsAndCs(
 			productKey,
 			ratePlanKey,
-			promotion,
 			deliveryDate,
 		),
 		GuardianWeeklyRestOfWorld: weeklyTsAndCs(
 			productKey,
 			ratePlanKey,
-			promotion,
 			deliveryDate,
 		),
 	};
