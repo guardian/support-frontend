@@ -11,8 +11,9 @@
     "check-formatting": "prettier --check **.ts",
     "fix-formatting": "prettier --write **.ts",
     "fix": "pnpm fix-formatting && pnpm lint:fix",
-    "build": "tsc --noEmit",
-    "clean-target": "rm -rf target && mkdir -p target"
+    "prebuild": "rm -rf target",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
