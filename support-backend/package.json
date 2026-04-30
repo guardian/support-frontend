@@ -13,7 +13,9 @@
     "fix": "pnpm fix-formatting && pnpm lint:fix",
     "prebuild": "rm -rf target",
     "build": "tsc",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "predeploy-to-prod": "rm -rf target_node_modules",
+    "deploy-to-prod": "pnpm deploy --legacy target_node_modules"
   },
   "keywords": [],
   "author": "",
