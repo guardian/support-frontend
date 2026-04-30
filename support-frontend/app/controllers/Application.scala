@@ -364,8 +364,8 @@ class Application(
       for {
         test <- studentTests
         if getCountryGroup(test.countryGroupId).id.equalsIgnoreCase(countryCode)
+        if test.name.equalsIgnoreCase(institution)
         variant <- test.variants
-        if variant.institution.acronym.equalsIgnoreCase(institution)
       } yield variant
 
     val isSwitchedOn =
