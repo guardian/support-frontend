@@ -79,7 +79,7 @@ const emptyAmountsTestVariants: AmountsVariant[] = [
 	},
 ];
 
-export const emptyConfiguredRegionAmounts: AmountsTest = {
+const emptyConfiguredRegionAmounts: AmountsTest = {
 	testName: '',
 	liveTestName: '',
 	isLive: false,

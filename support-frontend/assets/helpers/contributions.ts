@@ -43,8 +43,6 @@ export interface AmountsTest {
 	seed: number;
 	variants: AmountsVariant[];
 }
-
-export type AmountsTests = AmountsTest[];
 export interface SelectedAmountsVariant extends AmountsVariant {
 	testName: string;
 }
