@@ -14,8 +14,8 @@
     "prebuild": "rm -rf target",
     "build": "tsc",
     "typecheck": "tsc --noEmit",
-    "predeploy-to-prod": "rm -rf target_node_modules",
-    "deploy-to-prod": "pnpm deploy --legacy target_node_modules"
+    "prebuild-prod-node-modules": "rm -rf target_node_modules",
+    "build-prod-node-modules": "pnpm --filter . deploy --prod --legacy target_node_modules"
   },
   "keywords": [],
   "author": "",
