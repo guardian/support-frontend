@@ -221,10 +221,4 @@ trait Controllers {
     mparticleClient,
   )
 
-  lazy val vatComplianceController = new VatComplianceController(
-    controllerComponents,
-    actionBuilders,
-    environment,
-  )
-
 }
