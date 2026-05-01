@@ -36,7 +36,7 @@ deployments:
       templateStagePaths:
         CODE: Backend-CODE.template.json
         PROD: Backend-PROD.template.json
-      amiParameter: AMIBackend
+      amiParameter: AMISupportbackend
       amiTags:
         Recipe: jammy-membership-node24
         AmigoStage: PROD
