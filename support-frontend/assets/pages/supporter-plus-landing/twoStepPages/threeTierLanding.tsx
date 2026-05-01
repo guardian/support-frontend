@@ -30,13 +30,9 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import type { Participations } from 'helpers/abTests/models';
-import {
-	countdownSwitchOn,
-	getCampaignSettings,
-} from 'helpers/campaigns/campaigns';
+import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { glyph } from 'helpers/internationalisation/currency';
@@ -59,7 +55,6 @@ import {
 } from '../../../helpers/utilities/utilities';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import Countdown from '../components/countdown';
-import { OneOffCard } from '../components/oneOffCard';
 import { StudentOffer } from '../components/studentOffer';
 import { SupportOnce } from '../components/supportOnce';
 import type { CardContent } from '../components/threeTierCard';
@@ -270,8 +265,6 @@ export function ThreeTierLanding({
 		? rawUrlSearchParamsProduct.toLowerCase()
 		: undefined;
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
-	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
-	const urlSearchParamsPromoCode = urlSearchParams.get('promoCode');
 
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -291,11 +284,6 @@ export function ThreeTierLanding({
 		subPath: '/contribute',
 	};
 
-	const campaignSettings = getCampaignSettings(
-		countryGroupId,
-		urlSearchParamsPromoCode,
-	);
-
 	const countdownSettings = countdownSwitchOn()
 		? settings.countdownSettings
 		: undefined;
@@ -305,17 +293,10 @@ export function ThreeTierLanding({
 		string | undefined
 	>();
 
-	const enableSingleContributionsTab =
-		campaignSettings?.enableSingleContributions ??
-		urlSearchParams.has('enableOneTime');
-
 	const enableStudentOffer = ['uk', 'us', 'ca'].includes(supportRegionId);
 
 	const getInitialContributionType = (): ContributionType => {
 		// 1. Query Parameters take precedence
-		if (enableSingleContributionsTab && urlSearchParamsOneTime) {
-			return 'ONE_OFF';
-		}
 		const ratePlanParam = urlSearchParamsRatePlan?.trim().toLowerCase();
 		if (ratePlanParam === 'annual') {
 			return 'ANNUAL';
@@ -330,9 +311,6 @@ export function ThreeTierLanding({
 		if (defaultBillingPeriod === 'Annual') {
 			return 'ANNUAL';
 		}
-		if (defaultBillingPeriod === 'OneTime' && enableSingleContributionsTab) {
-			return 'ONE_OFF';
-		}
 
 		// 3. Fallback
 		return 'MONTHLY';
@@ -346,20 +324,11 @@ export function ThreeTierLanding({
 	const billingPeriod = (tierPlanPeriod[0]?.toUpperCase() +
 		tierPlanPeriod.slice(1)) as BillingPeriod;
 
-	const paymentFrequencies: ContributionType[] = enableSingleContributionsTab
-		? ['ONE_OFF', 'MONTHLY', 'ANNUAL']
-		: ['MONTHLY', 'ANNUAL'];
+	const paymentFrequencies: ContributionType[] = ['MONTHLY', 'ANNUAL'];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
 		setContributionType(paymentFrequencies[buttonIndex] as ContributionType);
 	};
-
-	// We use the RRCP amounts tool for the one-off amounts only
-	const { selectedAmountsVariant: amounts } = getAmountsTestVariant(
-		countryId,
-		countryGroupId,
-		window.guardian.settings,
-	);
 
 	const ratePlanKey = getRatePlanKey(contributionType);
 
@@ -652,36 +621,23 @@ export function ThreeTierLanding({
 						buttonClickHandler={handlePaymentFrequencyBtnClick}
 						additionalStyles={paymentFrequencyButtonsCss}
 					/>
-					{contributionType === 'ONE_OFF' && (
-						<OneOffCard
-							amounts={amounts}
-							currencyGlyph={glyph(currencyId)}
-							countryGroupId={countryGroupId}
-							currencyId={currencyId}
-							heading={campaignSettings?.copy.oneTimeHeading}
-						/>
-					)}
-					{contributionType !== 'ONE_OFF' && (
-						<ThreeTierCards
-							cardsContent={[tier1Card, tier2Card, tier3Card]}
-							currencyId={currencyId}
-							billingPeriod={billingPeriod}
-						/>
-					)}
+					<ThreeTierCards
+						cardsContent={[tier1Card, tier2Card, tier3Card]}
+						currencyId={currencyId}
+						billingPeriod={billingPeriod}
+					/>
 				</div>
 			</Container>
-			{!enableSingleContributionsTab && (
-				<Container
-					sideBorders
-					borderColor="rgba(170, 170, 180, 0.5)"
-					cssOverrides={lightContainer}
-				>
-					<SupportOnce
-						currency={glyph(currencyId)}
-						countryGroupId={countryGroupId}
-					/>
-				</Container>
-			)}
+			<Container
+				sideBorders
+				borderColor="rgba(170, 170, 180, 0.5)"
+				cssOverrides={lightContainer}
+			>
+				<SupportOnce
+					currency={glyph(currencyId)}
+					countryGroupId={countryGroupId}
+				/>
+			</Container>
 			{enableStudentOffer && (
 				<Container
 					sideBorders
