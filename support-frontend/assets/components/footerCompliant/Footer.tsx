@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import { cmp } from '@guardian/libs';
+import { cmp } from '@guardian/consent-manager';
 import {
 	ButtonLink,
 	Link,

@@ -1,4 +1,4 @@
-import { getConsentFor, onConsent } from '@guardian/libs';
+import { getConsentFor, onConsent } from '@guardian/consent-manager';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
