@@ -74,8 +74,18 @@ riffRaffPackageName := "frontend"
 riffRaffAwsCredentialsProfile := Some("membership") // needed when running locally
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffArtifactResources += (file("cdk/cdk.out/Frontend-PROD.template.json"), "cfn/Frontend-PROD.template.json")
-riffRaffArtifactResources += (file("cdk/cdk.out/Frontend-CODE.template.json"), "cfn/Frontend-CODE.template.json")
+riffRaffArtifactResources += (file(
+  "cdk/cdk.out/Frontend-PROD.template.json",
+), "cfn-frontend/Frontend-PROD.template.json")
+riffRaffArtifactResources += (file(
+  "cdk/cdk.out/Frontend-CODE.template.json",
+), "cfn-frontend/Frontend-CODE.template.json")
+riffRaffArtifactResources += (file(
+  "cdk/cdk.out/Backend-PROD.template.json",
+), "cfn-backend/Backend-PROD.template.json")
+riffRaffArtifactResources += (file(
+  "cdk/cdk.out/Backend-CODE.template.json",
+), "cfn-backend/Backend-CODE.template.json")
 riffRaffArtifactResources ++= getFiles(file("support-frontend/public/compiled-assets"), "assets-static")
 riffRaffArtifactResources ++= getFiles(file("support-backend/support-backend.tar.gz"), "backend/support-backend.tar.gz")
 

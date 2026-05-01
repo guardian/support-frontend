@@ -12,7 +12,7 @@ deployments:
       prefixStack: false
       cacheControl: public, max-age=31536000
       publicReadAcl: true
-  cfn:
+  cfn-frontend:
     type: cloud-formation
     app: frontend
     parameters:
@@ -26,6 +26,23 @@ deployments:
       amiEncrypted: true
   frontend:
     type: autoscaling
-    dependencies: [cfn, assets-static]
+    dependencies: [cfn-frontend, assets-static]
+    parameters:
+      bucket: membership-dist
+  cfn-backend:
+    type: cloud-formation
+    app: support-backend
+    parameters:
+      templateStagePaths:
+        CODE: Backend-CODE.template.json
+        PROD: Backend-PROD.template.json
+      amiParameter: AMIBackend
+      amiTags:
+        Recipe: jammy-membership-node24
+        AmigoStage: PROD
+      amiEncrypted: true
+  support-backend:
+    type: autoscaling
+    dependencies: [cfn-backend]
     parameters:
       bucket: membership-dist
