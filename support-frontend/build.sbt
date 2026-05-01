@@ -87,7 +87,10 @@ riffRaffArtifactResources += (file(
   "cdk/cdk.out/Backend-CODE.template.json",
 ), "cfn-backend/Backend-CODE.template.json")
 riffRaffArtifactResources ++= getFiles(file("support-frontend/public/compiled-assets"), "assets-static")
-riffRaffArtifactResources ++= getFiles(file("support-backend/support-backend.tar.gz"), "backend/support-backend.tar.gz")
+riffRaffArtifactResources ++= getFiles(
+  file("support-backend/support-backend.tar.gz"),
+  "support-backend/support-backend.tar.gz",
+)
 
 def getFiles(rootFile: File, deployName: String): Seq[(File, String)] = {
   def getFiles0(f: File): Seq[(File, String)] = {
