@@ -76,7 +76,6 @@ class AppComponents(context: Context)
     promotionsController,
     pricesController,
     analyticsController,
-    vatComplianceController,
     newspaperArchiveController,
     assetController,
     faviconController,
