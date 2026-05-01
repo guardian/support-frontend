@@ -1,5 +1,4 @@
-{
-  "countries": [
+export const countries: string[] = [
     "RS",
     "EG",
     "PK",
@@ -195,45 +194,4 @@
     "UA",
     "CN",
     "QA"
-  ],
-  "defaultContributionType" : "MONTHLY",
-  "displayContributionType" : [
-      "ONE_OFF",
-      "MONTHLY",
-      "ANNUAL"
-  ],
-  "amountsCardData" : {
-    "ONE_OFF" : {
-      "amounts" : [
-        1,
-        2,
-        5,
-        10
-      ],
-      "defaultAmount" : 2,
-      "hideChooseYourAmount" : true
-    },
-    "MONTHLY" : {
-      "amounts" : [
-        2,
-        3,
-        5,
-        7,
-        9,
-        12
-      ],
-      "defaultAmount" : 5,
-      "hideChooseYourAmount" : true
-    },
-    "ANNUAL" : {
-      "amounts" : [
-        10,
-        15,
-        20,
-        30
-      ],
-      "defaultAmount" : 15,
-      "hideChooseYourAmount" : true
-    }
-  }
-}
+  ];

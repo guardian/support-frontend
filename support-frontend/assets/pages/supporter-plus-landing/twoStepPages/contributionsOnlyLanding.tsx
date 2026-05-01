@@ -18,7 +18,7 @@ import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { vatComplianceAmounts } from 'helpers/contributions';
+import { vatCompliantAmountsConfig } from 'helpers/contributions';
 import { guardianContactUsLink, guardianHelpCentreLink } from 'helpers/legal';
 import { billingPeriodToContributionType } from 'helpers/productPrice/billingPeriods';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
@@ -193,7 +193,7 @@ export function ContributionsOnlyLanding({
 		}
 	};
 
-	const amounts = vatComplianceAmounts;
+	const amounts = vatCompliantAmountsConfig;
 
 	return (
 		<PageScaffold
