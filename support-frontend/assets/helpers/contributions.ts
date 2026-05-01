@@ -237,8 +237,4 @@ const isVatComplianceCountry = (countryId: IsoCountry): boolean =>
 	countries.has(countryId);
 
 // ----- Exports ----- //
-export {
-	config,
-	isVatComplianceCountry,
-	vatCompliantAmountsConfig,
-};
+export { config, isVatComplianceCountry, vatCompliantAmountsConfig };
