@@ -1,6 +1,7 @@
 import "source-map-support/register";
 import { App } from "aws-cdk-lib";
 import { AcquisitionEventsApi } from "../lib/acquisition-events-api";
+import { Backend } from "../lib/backend";
 import { BigqueryAcquisitionsPublisher } from "../lib/bigquery-acquisitions-publisher";
 import { Frontend } from "../lib/frontend";
 import { PaymentApi } from "../lib/payment-api";
@@ -39,6 +40,26 @@ new Frontend(app, "Frontend-CODE", {
     maximumInstances: 2,
   },
   shouldCreateAlarms: false,
+});
+
+new Backend(app, "Backend-PROD", {
+  stack: "support",
+  stage: "PROD",
+  domainName: "backend.theguardian.com.origin.membership.guardianapis.com",
+  scaling: {
+    minimumInstances: 1,
+    maximumInstances: 2,
+  },
+});
+
+new Backend(app, "Backend-CODE", {
+  stack: "support",
+  stage: "CODE",
+  domainName: "backend.code.theguardian.com.origin.membership.guardianapis.com",
+  scaling: {
+    minimumInstances: 1,
+    maximumInstances: 2,
+  },
 });
 
 new StripePatronsData(app, "StripePatronsData-CODE", {
