@@ -47,8 +47,8 @@ jobs:
         run: |
           pnpm --filter support-backend test
           pnpm --filter support-backend build
-          pnpm --filter ../support-backend  --prod deploy --legacy ../support-backend/target_node_modules
-          pushd ../support-backend
+          pnpm --filter support-backend  --prod deploy --legacy ../support-backend/target_node_modules
+          pushd support-backend
           mv target_node_modules/node_modules ./target/
           tar -czf support-backend.tar.gz target
           popd
