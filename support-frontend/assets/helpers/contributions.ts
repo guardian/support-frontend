@@ -231,7 +231,7 @@ const vatCompliantAmountsConfig = {
 	},
 };
 
-const countries = new Set(vatComplianceCountries as IsoCountry[]);
+const countries = new Set(vatComplianceCountries);
 
 const isVatComplianceCountry = (countryId: IsoCountry): boolean =>
 	countries.has(countryId);

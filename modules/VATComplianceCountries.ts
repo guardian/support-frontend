@@ -1,4 +1,6 @@
-export const countries: string[] = [
+import type { IsoCountry } from '@guardian/support-service-lambdas/modules/internationalisation/src/country';
+
+export const countries: IsoCountry[] = [
 	'RS',
 	'EG',
 	'PK',
