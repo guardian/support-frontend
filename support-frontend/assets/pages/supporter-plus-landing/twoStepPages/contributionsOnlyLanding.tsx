@@ -194,6 +194,7 @@ export function ContributionsOnlyLanding({
 	};
 
 	const amounts = vatCompliantAmountsConfig;
+
 	return (
 		<PageScaffold
 			header={<Header></Header>}
