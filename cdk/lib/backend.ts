@@ -77,7 +77,7 @@ chown -R ${app}:support /var/log/${app}
 
     const ec2App = new GuEc2App(this, {
       applicationPort: 3000,
-      app: "backend",
+      app: app,
       access: { scope: AccessScope.PUBLIC },
       certificateProps: {
         domainName,

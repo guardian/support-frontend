@@ -30,19 +30,19 @@ exports[`The Backend stack matches the snapshot 1`] = `
     "gu:cdk:version": "TEST",
   },
   "Outputs": {
-    "LoadBalancerBackendDnsName": {
-      "Description": "DNS entry for LoadBalancerBackend",
+    "LoadBalancerSupportbackendDnsName": {
+      "Description": "DNS entry for LoadBalancerSupportbackend",
       "Value": {
         "Fn::GetAtt": [
-          "LoadBalancerBackend1F84D70A",
+          "LoadBalancerSupportbackend1445ECB4",
           "DNSName",
         ],
       },
     },
   },
   "Parameters": {
-    "AMIBackend": {
-      "Description": "Amazon Machine Image ID for the app backend. Use this in conjunction with AMIgo to keep AMIs up to date.",
+    "AMISupportbackend": {
+      "Description": "Amazon Machine Image ID for the app support-backend. Use this in conjunction with AMIgo to keep AMIs up to date.",
       "Type": "AWS::EC2::Image::Id",
     },
     "AccessLoggingBucket": {
@@ -65,29 +65,29 @@ exports[`The Backend stack matches the snapshot 1`] = `
       "Description": "Virtual Private Cloud to run EC2 instances within. Should NOT be the account default VPC.",
       "Type": "AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>",
     },
-    "backendPrivateSubnets": {
+    "supportbackendPrivateSubnets": {
       "Default": "/account/vpc/primary/subnets/private",
       "Description": "A list of private subnets",
       "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
     },
-    "backendPublicSubnets": {
+    "supportbackendPublicSubnets": {
       "Default": "/account/vpc/primary/subnets/public",
       "Description": "A list of public subnets",
       "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
     },
   },
   "Resources": {
-    "AutoScalingGroupBackendASGB1D158D5": {
+    "AutoScalingGroupSupportbackendASG65C4DDAF": {
       "Properties": {
         "HealthCheckGracePeriod": 120,
         "HealthCheckType": "ELB",
         "LaunchTemplate": {
           "LaunchTemplateId": {
-            "Ref": "supportPRODbackendBD1A8E55",
+            "Ref": "supportPRODsupportbackend61AF342F",
           },
           "Version": {
             "Fn::GetAtt": [
-              "supportPRODbackendBD1A8E55",
+              "supportPRODsupportbackend61AF342F",
               "LatestVersionNumber",
             ],
           },
@@ -103,7 +103,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
           {
             "Key": "App",
             "PropagateAtLaunch": true,
-            "Value": "backend",
+            "Value": "support-backend",
           },
           {
             "Key": "gu:cdk:version",
@@ -135,16 +135,16 @@ exports[`The Backend stack matches the snapshot 1`] = `
         ],
         "TargetGroupARNs": [
           {
-            "Ref": "TargetGroupBackendC3EC292C",
+            "Ref": "TargetGroupSupportbackendD03654E6",
           },
         ],
         "VPCZoneIdentifier": {
-          "Ref": "backendPrivateSubnets",
+          "Ref": "supportbackendPrivateSubnets",
         },
       },
       "Type": "AWS::AutoScaling::AutoScalingGroup",
     },
-    "CertificateBackend9FC3FA5C": {
+    "CertificateSupportbackend4B408C7C": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "DomainName": "backend.theguardian.com.origin.membership.guardianapis.com",
@@ -157,7 +157,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "backend",
+            "Value": "support-backend",
           },
           {
             "Key": "gu:cdk:version",
@@ -169,7 +169,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
           },
           {
             "Key": "Name",
-            "Value": "Backend-PROD/CertificateBackend",
+            "Value": "Backend-PROD/CertificateSupportbackend",
           },
           {
             "Key": "Stack",
@@ -205,7 +205,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
         "PolicyName": "CloudwatchMetricsC6F65856",
         "Roles": [
           {
-            "Ref": "InstanceRoleBackend58B60F1D",
+            "Ref": "InstanceRoleSupportbackend25B34CE1",
           },
         ],
       },
@@ -231,13 +231,13 @@ exports[`The Backend stack matches the snapshot 1`] = `
         "PolicyName": "describe-ec2-policy",
         "Roles": [
           {
-            "Ref": "InstanceRoleBackend58B60F1D",
+            "Ref": "InstanceRoleSupportbackend25B34CE1",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GetDistributablePolicyBackend429785EF": {
+    "GetDistributablePolicySupportbackendBD0B5465": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -252,7 +252,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
                     {
                       "Ref": "DistributionBucketName",
                     },
-                    "/support/PROD/backend/*",
+                    "/support/PROD/support-backend/*",
                   ],
                 ],
               },
@@ -260,16 +260,16 @@ exports[`The Backend stack matches the snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "GetDistributablePolicyBackend429785EF",
+        "PolicyName": "GetDistributablePolicySupportbackendBD0B5465",
         "Roles": [
           {
-            "Ref": "InstanceRoleBackend58B60F1D",
+            "Ref": "InstanceRoleSupportbackend25B34CE1",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GuHttpsEgressSecurityGroupBackendC84508E9": {
+    "GuHttpsEgressSecurityGroupSupportbackend8FCF5254": {
       "Properties": {
         "GroupDescription": "Allow all outbound HTTPS traffic",
         "SecurityGroupEgress": [
@@ -284,7 +284,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "backend",
+            "Value": "support-backend",
           },
           {
             "Key": "gu:cdk:version",
@@ -309,20 +309,20 @@ exports[`The Backend stack matches the snapshot 1`] = `
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "GuHttpsEgressSecurityGroupBackendfromBackendPRODLoadBalancerBackendSecurityGroup385015963000C1951001": {
+    "GuHttpsEgressSecurityGroupSupportbackendfromBackendPRODLoadBalancerSupportbackendSecurityGroupDEA3CD363000C7B97826": {
       "Properties": {
         "Description": "Load balancer to target",
         "FromPort": 3000,
         "GroupId": {
           "Fn::GetAtt": [
-            "GuHttpsEgressSecurityGroupBackendC84508E9",
+            "GuHttpsEgressSecurityGroupSupportbackend8FCF5254",
             "GroupId",
           ],
         },
         "IpProtocol": "tcp",
         "SourceSecurityGroupId": {
           "Fn::GetAtt": [
-            "LoadBalancerBackendSecurityGroupDACC7E60",
+            "LoadBalancerSupportbackendSecurityGroupB1CD6021",
             "GroupId",
           ],
         },
@@ -362,13 +362,13 @@ exports[`The Backend stack matches the snapshot 1`] = `
         "PolicyName": "GuLogShippingPolicy981BFE5A",
         "Roles": [
           {
-            "Ref": "InstanceRoleBackend58B60F1D",
+            "Ref": "InstanceRoleSupportbackend25B34CE1",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "InstanceRoleBackend58B60F1D": {
+    "InstanceRoleSupportbackend25B34CE1": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -386,7 +386,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "backend",
+            "Value": "support-backend",
           },
           {
             "Key": "gu:cdk:version",
@@ -408,25 +408,25 @@ exports[`The Backend stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "ListenerBackend2E191FF3": {
+    "ListenerSupportbackend28B0599A": {
       "Properties": {
         "Certificates": [
           {
             "CertificateArn": {
-              "Ref": "CertificateBackend9FC3FA5C",
+              "Ref": "CertificateSupportbackend4B408C7C",
             },
           },
         ],
         "DefaultActions": [
           {
             "TargetGroupArn": {
-              "Ref": "TargetGroupBackendC3EC292C",
+              "Ref": "TargetGroupSupportbackendD03654E6",
             },
             "Type": "forward",
           },
         ],
         "LoadBalancerArn": {
-          "Ref": "LoadBalancerBackend1F84D70A",
+          "Ref": "LoadBalancerSupportbackend1445ECB4",
         },
         "Port": 443,
         "Protocol": "HTTPS",
@@ -434,7 +434,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
       },
       "Type": "AWS::ElasticLoadBalancingV2::Listener",
     },
-    "LoadBalancerBackend1F84D70A": {
+    "LoadBalancerSupportbackend1445ECB4": {
       "Properties": {
         "LoadBalancerAttributes": [
           {
@@ -461,25 +461,25 @@ exports[`The Backend stack matches the snapshot 1`] = `
           },
           {
             "Key": "access_logs.s3.prefix",
-            "Value": "application-load-balancer/PROD/support/backend",
+            "Value": "application-load-balancer/PROD/support/support-backend",
           },
         ],
         "Scheme": "internet-facing",
         "SecurityGroups": [
           {
             "Fn::GetAtt": [
-              "LoadBalancerBackendSecurityGroupDACC7E60",
+              "LoadBalancerSupportbackendSecurityGroupB1CD6021",
               "GroupId",
             ],
           },
         ],
         "Subnets": {
-          "Ref": "backendPublicSubnets",
+          "Ref": "supportbackendPublicSubnets",
         },
         "Tags": [
           {
             "Key": "App",
-            "Value": "backend",
+            "Value": "support-backend",
           },
           {
             "Key": "gu:cdk:version",
@@ -502,9 +502,9 @@ exports[`The Backend stack matches the snapshot 1`] = `
       },
       "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
     },
-    "LoadBalancerBackendSecurityGroupDACC7E60": {
+    "LoadBalancerSupportbackendSecurityGroupB1CD6021": {
       "Properties": {
-        "GroupDescription": "Automatically created Security Group for ELB BackendPRODLoadBalancerBackend85C496F2",
+        "GroupDescription": "Automatically created Security Group for ELB BackendPRODLoadBalancerSupportbackendB4B9EB81",
         "SecurityGroupIngress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -517,7 +517,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "backend",
+            "Value": "support-backend",
           },
           {
             "Key": "gu:cdk:version",
@@ -542,19 +542,19 @@ exports[`The Backend stack matches the snapshot 1`] = `
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "LoadBalancerBackendSecurityGrouptoBackendPRODGuHttpsEgressSecurityGroupBackend328C115B300032E8E893": {
+    "LoadBalancerSupportbackendSecurityGrouptoBackendPRODGuHttpsEgressSecurityGroupSupportbackendCE98E34530001E6A9DD0": {
       "Properties": {
         "Description": "Load balancer to target",
         "DestinationSecurityGroupId": {
           "Fn::GetAtt": [
-            "GuHttpsEgressSecurityGroupBackendC84508E9",
+            "GuHttpsEgressSecurityGroupSupportbackend8FCF5254",
             "GroupId",
           ],
         },
         "FromPort": 3000,
         "GroupId": {
           "Fn::GetAtt": [
-            "LoadBalancerBackendSecurityGroupDACC7E60",
+            "LoadBalancerSupportbackendSecurityGroupB1CD6021",
             "GroupId",
           ],
         },
@@ -563,7 +563,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
       },
       "Type": "AWS::EC2::SecurityGroupEgress",
     },
-    "ParameterStoreReadBackendF50ADE99": {
+    "ParameterStoreReadSupportbackend5E429755": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -578,7 +578,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/backend",
+                    ":parameter/PROD/support/support-backend",
                   ],
                 ],
               },
@@ -597,7 +597,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/backend/*",
+                    ":parameter/PROD/support/support-backend/*",
                   ],
                 ],
               },
@@ -608,7 +608,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
         "PolicyName": "parameter-store-read-policy",
         "Roles": [
           {
-            "Ref": "InstanceRoleBackend58B60F1D",
+            "Ref": "InstanceRoleSupportbackend25B34CE1",
           },
         ],
       },
@@ -640,7 +640,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
         "PolicyName": "SSMGetF4C837D5",
         "Roles": [
           {
-            "Ref": "InstanceRoleBackend58B60F1D",
+            "Ref": "InstanceRoleSupportbackend25B34CE1",
           },
         ],
       },
@@ -676,13 +676,13 @@ exports[`The Backend stack matches the snapshot 1`] = `
         "PolicyName": "ssm-ssh-policy",
         "Roles": [
           {
-            "Ref": "InstanceRoleBackend58B60F1D",
+            "Ref": "InstanceRoleSupportbackend25B34CE1",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "TargetGroupBackendC3EC292C": {
+    "TargetGroupSupportbackendD03654E6": {
       "Properties": {
         "HealthCheckIntervalSeconds": 10,
         "HealthCheckPath": "/healthcheck",
@@ -694,7 +694,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "backend",
+            "Value": "support-backend",
           },
           {
             "Key": "gu:cdk:version",
@@ -731,22 +731,22 @@ exports[`The Backend stack matches the snapshot 1`] = `
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
-    "supportPRODbackendBD1A8E55": {
+    "supportPRODsupportbackend61AF342F": {
       "DependsOn": [
-        "InstanceRoleBackend58B60F1D",
+        "InstanceRoleSupportbackend25B34CE1",
       ],
       "Properties": {
         "LaunchTemplateData": {
           "IamInstanceProfile": {
             "Arn": {
               "Fn::GetAtt": [
-                "supportPRODbackendProfile41C287BA",
+                "supportPRODsupportbackendProfile185A0A36",
                 "Arn",
               ],
             },
           },
           "ImageId": {
-            "Ref": "AMIBackend",
+            "Ref": "AMISupportbackend",
           },
           "InstanceType": "t4g.small",
           "MetadataOptions": {
@@ -759,7 +759,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
           "SecurityGroupIds": [
             {
               "Fn::GetAtt": [
-                "GuHttpsEgressSecurityGroupBackendC84508E9",
+                "GuHttpsEgressSecurityGroupSupportbackend8FCF5254",
                 "GroupId",
               ],
             },
@@ -770,7 +770,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
               "Tags": [
                 {
                   "Key": "App",
-                  "Value": "backend",
+                  "Value": "support-backend",
                 },
                 {
                   "Key": "gu:cdk:version",
@@ -782,7 +782,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
                 },
                 {
                   "Key": "Name",
-                  "Value": "Backend-PROD/support-PROD-backend",
+                  "Value": "Backend-PROD/support-PROD-support-backend",
                 },
                 {
                   "Key": "Stack",
@@ -799,7 +799,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
               "Tags": [
                 {
                   "Key": "App",
-                  "Value": "backend",
+                  "Value": "support-backend",
                 },
                 {
                   "Key": "gu:cdk:version",
@@ -811,7 +811,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
                 },
                 {
                   "Key": "Name",
-                  "Value": "Backend-PROD/support-PROD-backend",
+                  "Value": "Backend-PROD/support-PROD-support-backend",
                 },
                 {
                   "Key": "Stack",
@@ -864,7 +864,7 @@ chown -R support-backend:support /var/log/support-backend
             "Tags": [
               {
                 "Key": "App",
-                "Value": "backend",
+                "Value": "support-backend",
               },
               {
                 "Key": "gu:cdk:version",
@@ -876,7 +876,7 @@ chown -R support-backend:support /var/log/support-backend
               },
               {
                 "Key": "Name",
-                "Value": "Backend-PROD/support-PROD-backend",
+                "Value": "Backend-PROD/support-PROD-support-backend",
               },
               {
                 "Key": "Stack",
@@ -892,11 +892,11 @@ chown -R support-backend:support /var/log/support-backend
       },
       "Type": "AWS::EC2::LaunchTemplate",
     },
-    "supportPRODbackendProfile41C287BA": {
+    "supportPRODsupportbackendProfile185A0A36": {
       "Properties": {
         "Roles": [
           {
-            "Ref": "InstanceRoleBackend58B60F1D",
+            "Ref": "InstanceRoleSupportbackend25B34CE1",
           },
         ],
       },
