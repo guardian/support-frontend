@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { countries as vatComplianceCountries } from '@modules/VATComplianceCountries';
 
 // ----- Types ----- //
 type RegularContributionTypeMap<T> = {
@@ -29,7 +30,7 @@ export interface AmountsVariant {
 	amountsCardData: AmountsCardData;
 }
 
-export type AmountsTestTargeting =
+type AmountsTestTargeting =
 	| { targetingType: 'Region'; region: CountryGroupId }
 	| { targetingType: 'Country'; countries: IsoCountry[] };
 
@@ -44,7 +45,6 @@ export interface AmountsTest {
 }
 
 export type AmountsTests = AmountsTest[];
-
 export interface SelectedAmountsVariant extends AmountsVariant {
 	testName: string;
 }
@@ -209,14 +209,32 @@ const config: Record<CountryGroupId, Config> = {
 	},
 };
 
-const contributionsOnlyAmountsTestName = 'VAT_COMPLIANCE';
-
-const isContributionsOnlyCountry = (
-	amountsVariant: SelectedAmountsVariant,
-): boolean => {
-	const { testName } = amountsVariant;
-	return testName === contributionsOnlyAmountsTestName;
+const vatCompliantAmountsConfig = {
+	defaultContributionType: 'MONTHLY',
+	displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
+	amountsCardData: {
+		ONE_OFF: {
+			amounts: [1, 2, 5, 10],
+			defaultAmount: 2,
+			hideChooseYourAmount: true,
+		},
+		MONTHLY: {
+			amounts: [2, 3, 5, 7, 9, 12],
+			defaultAmount: 5,
+			hideChooseYourAmount: true,
+		},
+		ANNUAL: {
+			amounts: [10, 15, 20, 30],
+			defaultAmount: 15,
+			hideChooseYourAmount: true,
+		},
+	},
 };
 
+const countries = new Set(vatComplianceCountries);
+
+const isVatComplianceCountry = (countryId: IsoCountry): boolean =>
+	countries.has(countryId);
+
 // ----- Exports ----- //
-export { config, contributionsOnlyAmountsTestName, isContributionsOnlyCountry };
+export { config, isVatComplianceCountry, vatCompliantAmountsConfig };

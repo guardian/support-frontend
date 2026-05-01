@@ -1,4 +1,4 @@
-import type { AmountsTests, ContributionTypes } from 'helpers/contributions';
+import type { ContributionTypes } from 'helpers/contributions';
 import 'helpers/contributions';
 import type { CheckoutNudgeTest } from './checkoutNudgeSettings';
 import type { LandingPageTest } from './landingPageSettings';
@@ -28,7 +28,6 @@ type Switches = Record<SwitchesKeys, SwitchObject>;
 
 export type Settings = {
 	switches: Switches;
-	amounts?: AmountsTests;
 	contributionTypes: ContributionTypes;
 	metricUrl: string;
 	landingPageTests?: LandingPageTest[];
