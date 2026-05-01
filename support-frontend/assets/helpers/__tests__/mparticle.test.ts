@@ -1,8 +1,8 @@
-import { cmp, onConsent } from '@guardian/libs';
+import { cmp, onConsent } from '@guardian/consent-manager';
 import { getUser } from 'helpers/user/user';
 import { fetchAudienceMemberships } from '../mparticle';
 
-jest.mock('@guardian/libs', () => ({
+jest.mock('@guardian/consent-manager', () => ({
 	onConsent: jest.fn(),
 	cmp: {
 		willShowPrivacyMessage: jest.fn(),
