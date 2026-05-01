@@ -105,7 +105,7 @@ export const productOptionLabelObserver = css`
 	background: #963c00;
 `;
 
-export const productOptionOfferCopy = css`
+export const productOptionSavingsText = css`
 	${textSans17};
 	${from.tablet} {
 		height: 100%;

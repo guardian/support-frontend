@@ -9,7 +9,7 @@ export default {
 	argTypes: {
 		title: { type: 'text' },
 		price: { type: 'text' },
-		offerCopy: { type: 'text' },
+		savingsText: { type: 'text' },
 		priceCopy: { type: 'text' },
 		buttonCopy: { type: 'text' },
 		showLabel: { type: 'boolean' },
@@ -47,7 +47,7 @@ function Template(args: Product) {
 		<ProductOptionComponent
 			title={args.title}
 			price={args.price}
-			offerCopy={args.offerCopy}
+			savingsText={args.savingsText}
 			priceCopy={args.priceCopy}
 			buttonCopy={args.buttonCopy}
 			showLabel={args.showLabel}
@@ -67,7 +67,7 @@ export const ProductOption = Template.bind({});
 ProductOption.args = {
 	title: '6 for 6',
 	price: '£6',
-	offerCopy: '£6 for the first 6 issues',
+	savingsText: '£6 for the first 6 issues',
 	priceCopy: 'then £37.50 per quarter',
 	buttonCopy: 'Subscribe now',
 	label: 'Best deal',
@@ -78,7 +78,7 @@ export const SpecialOfferProductOption = Template.bind({});
 SpecialOfferProductOption.args = {
 	title: '12 for 12',
 	price: '£12',
-	offerCopy: '£12 for the first 6 issues',
+	savingsText: '£12 for the first 6 issues',
 	priceCopy: 'then £13.50 per month',
 	buttonCopy: 'Subscribe now',
 	label: 'Special offer',
@@ -90,7 +90,7 @@ export const ProductOptionWithProductLabel = Template.bind({});
 ProductOptionWithProductLabel.args = {
 	title: '6 for 6',
 	price: '£6',
-	offerCopy: '£6 for the first 6 issues',
+	savingsText: '£6 for the first 6 issues',
 	priceCopy: 'then £37.50 per quarter',
 	buttonCopy: 'Subscribe now',
 	label: 'Best deal',

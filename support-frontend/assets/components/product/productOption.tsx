@@ -25,9 +25,9 @@ import {
 	productOptionInfo,
 	productOptionLabel,
 	productOptionLabelObserver,
-	productOptionOfferCopy,
 	productOptionPrice,
 	productOptionPriceCopy,
+	productOptionSavingsText,
 	productOptionTitle,
 	productOptionTitleHeading,
 	productOptionUnderline,
@@ -141,8 +141,8 @@ function ProductOption(props: Product): JSX.Element {
 				{props.children && props.children}
 			</div>
 			<div css={productOptionVerticalLine}>
-				<p css={[productOptionOfferCopy, productOptionUnderline]}>
-					{props.offerCopy}
+				<p css={[productOptionSavingsText, productOptionUnderline]}>
+					{props.savingsText}
 					{props.unavailableOutsideLondon && (
 						<div css={productOptionInfo}>
 							<SvgInfoRound />
@@ -176,7 +176,6 @@ function ProductOption(props: Product): JSX.Element {
 ProductOption.defaultProps = {
 	children: null,
 	label: '',
-	offerCopy: '',
 	cssOverrides: '',
 	billingPeriod: BillingPeriod.Monthly,
 };
