@@ -83,6 +83,9 @@ chown -R ${app}:support /var/log/${app}
         domainName,
         hostedZoneId: "Z1E4V12LQGXFEC",
       },
+      healthcheck: {
+        path: "/healthcheck-express"
+      },
       instanceMetricGranularity: "5Minute",
       monitoringConfiguration: { noMonitoring: true },
       userData,

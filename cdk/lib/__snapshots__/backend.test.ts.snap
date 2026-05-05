@@ -685,7 +685,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
     "TargetGroupSupportbackendD03654E6": {
       "Properties": {
         "HealthCheckIntervalSeconds": 10,
-        "HealthCheckPath": "/healthcheck",
+        "HealthCheckPath": "/healthcheck-express",
         "HealthCheckProtocol": "HTTP",
         "HealthCheckTimeoutSeconds": 5,
         "HealthyThresholdCount": 5,
