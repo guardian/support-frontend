@@ -99,7 +99,7 @@ describe('getWeeklyGiftSavingsText', () => {
 		});
 
 		it('returns savings text with correct percentage', () => {
-			// 50 * 4 - 190 = 10, savingsPercentage = round(10/50 * 100) = 20
+			// ((50 * 4) - 150) = 50, savingsPercentage = round(50/(50 * 4) * 100) = 25
 			const allPrices = {
 				[BillingPeriod.Quarterly]: makeProductPrice(50),
 				[BillingPeriod.Annual]: makeProductPrice(150),
@@ -110,7 +110,7 @@ describe('getWeeklyGiftSavingsText', () => {
 		});
 
 		it('rounds the savings percentage to the nearest integer', () => {
-			// 45 * 4 - 152 = 28, savingsPercentage = round(28/45 * 100) = round(62.2) = 62
+			// ((45 * 4) - 152) = 28, savingsPercentage = round(28/(45 * 4) * 100) = 15.556 = 16
 			const allPrices = {
 				[BillingPeriod.Quarterly]: makeProductPrice(45),
 				[BillingPeriod.Annual]: makeProductPrice(152),
