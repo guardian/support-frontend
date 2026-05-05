@@ -85,7 +85,7 @@ chown -R ${app}:support /var/log/${app}
       access: { scope: AccessScope.PUBLIC },
       certificateProps: {
         domainName,
-        hostedZoneId: "Z1E4V12LQGXFEC",
+        hostedZoneId,
       },
       healthcheck: {
         path: "/healthcheck-express",
