@@ -9,9 +9,8 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { OrderSummaryStartDate } from 'components/orderSummary/orderSummaryStartDate';
 import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
-import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
-import { isContributionsOnlyCountry } from 'helpers/contributions';
+import { isVatComplianceCountry } from 'helpers/contributions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	type ActiveProductKey,
@@ -100,16 +99,10 @@ export default function CheckoutSummary({
 			productCatalog.SupporterPlus?.ratePlans[ratePlanKey]?.pricing[
 				currencyKey
 			];
-
-		const { selectedAmountsVariant } = getAmountsTestVariant(
-			countryId,
-			countryGroupId,
-			appConfig.settings,
-		);
 		if (originalAmount < 1) {
 			isInvalidAmount = true;
 		}
-		if (!isContributionsOnlyCountry(selectedAmountsVariant)) {
+		if (!isVatComplianceCountry(countryId)) {
 			if (originalAmount >= (supporterPlusRatePlanPrice ?? 0)) {
 				isInvalidAmount = true;
 			}

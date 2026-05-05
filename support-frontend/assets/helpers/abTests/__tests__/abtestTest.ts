@@ -6,18 +6,8 @@ import {
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
 import { pageUrlRegexes } from 'helpers/abTests/abtestDefinitions';
-import { contributionsOnlyAmountsTestName } from 'helpers/contributions';
 import type { AcquisitionABTest } from 'helpers/tracking/acquisitions';
-import type {
-	AmountsTest,
-	AmountsTests,
-	AmountsTestTargeting,
-	AmountsVariant,
-	SelectedAmountsVariant,
-} from '../../contributions';
-import { emptySwitches, getSettings } from '../../globalsAndSwitches/globals';
-import type { Settings } from '../../globalsAndSwitches/settings';
-import { _, init as abInit, getAmountsTestVariant } from '../abtest';
+import { _, init as abInit } from '../abtest';
 import type { Audience, Participations, Test, Variant } from '../models';
 
 const { targetPageMatches } = _;
@@ -52,7 +42,6 @@ describe('init', () => {
 		countryId: country,
 		countryGroupId,
 		mvt,
-		settings: getSettings(),
 	};
 
 	afterEach(() => {
@@ -343,7 +332,7 @@ describe('init', () => {
 	});
 
 	describe('excludeContributionsOnlyCountries', () => {
-		it(`does not assign a user to a test if excludeContributionsOnlyCountries is true and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
+		it('does not assign a user in a VAT compliance country if excludeContributionsOnlyCountries is true', () => {
 			const abTests = {
 				t1: buildTest({
 					variants: [
@@ -355,15 +344,13 @@ describe('init', () => {
 			};
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
+				countryId: 'EG',
 				abTests,
-				selectedAmountsVariant: buildSelectedAmountsVariant(
-					contributionsOnlyAmountsTestName,
-				),
 			});
 			expect(participations.t1).toBeUndefined();
 		});
 
-		it(`does assign a user to a test if excludeContributionsOnlyCountries is false and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
+		it('does assign a user in a VAT compliance country if excludeContributionsOnlyCountries is false', () => {
 			const abTests = {
 				t1: buildTest({
 					variants: [
@@ -375,15 +362,13 @@ describe('init', () => {
 			};
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
+				countryId: 'EG',
 				abTests,
-				selectedAmountsVariant: buildSelectedAmountsVariant(
-					contributionsOnlyAmountsTestName,
-				),
 			});
 			expect(participations.t1).toBeDefined();
 		});
 
-		it(`does assign a user to the test if excludeContributionsOnlyCountries is true BUT selectedAmountsVariant test name is NOT ${contributionsOnlyAmountsTestName}`, () => {
+		it('does assign a user outside VAT compliance countries when excludeContributionsOnlyCountries is true', () => {
 			const abTests = {
 				t1: buildTest({
 					variants: [
@@ -396,14 +381,13 @@ describe('init', () => {
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
 				abTests,
-				selectedAmountsVariant: buildSelectedAmountsVariant('foo'),
 			});
 			expect(participations.t1).toBeDefined();
 		});
 	});
 
 	describe('CONTRIBUTIONS_ONLY audiences', () => {
-		it(`does assign a user to a test if audience is CONTRIBUTIONS_ONLY and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
+		it('does assign a user in a VAT compliance country to a CONTRIBUTIONS_ONLY audience test', () => {
 			const abTests = {
 				t1: buildTest({
 					variants: [
@@ -421,15 +405,13 @@ describe('init', () => {
 			};
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
+				countryId: 'EG',
 				abTests,
-				selectedAmountsVariant: buildSelectedAmountsVariant(
-					contributionsOnlyAmountsTestName,
-				),
 			});
 			expect(participations.t1).toBeDefined();
 		});
 
-		it(`does assign a user to a test if audiences is CONTRIBUTIONS_ONLY, excludeContributionsOnlyCountries is true and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
+		it('does assign a user in a VAT compliance country to CONTRIBUTIONS_ONLY even when excludeContributionsOnlyCountries is true', () => {
 			const abTests = {
 				t1: buildTest({
 					variants: [
@@ -447,15 +429,13 @@ describe('init', () => {
 			};
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
+				countryId: 'EG',
 				abTests,
-				selectedAmountsVariant: buildSelectedAmountsVariant(
-					contributionsOnlyAmountsTestName,
-				),
 			});
 			expect(participations.t1).toBeDefined();
 		});
 
-		it(`does not assign a user to a test if audiences is CONTRIBUTIONS_ONLY and selectedAmountsVariant test name is NOT ${contributionsOnlyAmountsTestName}`, () => {
+		it('does not assign a user outside VAT compliance countries to a CONTRIBUTIONS_ONLY audience test', () => {
 			const abTests = {
 				t1: buildTest({
 					variants: [
@@ -473,30 +453,6 @@ describe('init', () => {
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
 				abTests,
-				selectedAmountsVariant: buildSelectedAmountsVariant('foo'),
-			});
-			expect(participations.t1).toBeUndefined();
-		});
-
-		it(`does not assign a user to a test if audiences is CONTRIBUTIONS_ONLY and selectedAmountsVariant is undefined`, () => {
-			const abTests = {
-				t1: buildTest({
-					variants: [
-						buildVariant({ id: 'control' }),
-						buildVariant({ id: 'variant' }),
-					],
-					audiences: {
-						CONTRIBUTIONS_ONLY: {
-							offset: 0,
-							size: 1,
-						},
-					},
-				}),
-			};
-			const participations: Participations = abInit({
-				...abtestInitalizerData,
-				abTests,
-				selectedAmountsVariant: undefined,
 			});
 			expect(participations.t1).toBeUndefined();
 		});
@@ -623,302 +579,6 @@ it('targetPage matching', () => {
 	).toEqual(true);
 });
 
-describe('getAmountsTestVariant', () => {
-	const mvt = 123456;
-	const country = 'GB';
-	const countryGroupId = GBPCountries;
-	const path = '/uk/contribute';
-
-	const buildAmountsTest = (
-		testName: string,
-		targeting: AmountsTestTargeting,
-		withVariant: boolean,
-	): AmountsTest => {
-		const variants: AmountsVariant[] = [
-			{
-				variantName: 'CONTROL',
-				defaultContributionType: 'MONTHLY',
-				displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
-				amountsCardData: {
-					ONE_OFF: {
-						amounts: [50, 100, 250, 500],
-						defaultAmount: 100,
-						hideChooseYourAmount: false,
-					},
-					MONTHLY: {
-						amounts: [10, 20, 50],
-						defaultAmount: 20,
-						hideChooseYourAmount: false,
-					},
-					ANNUAL: {
-						amounts: [50, 100, 250, 500],
-						defaultAmount: 50,
-						hideChooseYourAmount: false,
-					},
-				},
-			},
-		];
-		if (withVariant) {
-			variants.push({
-				variantName: 'V1',
-				defaultContributionType: 'MONTHLY',
-				displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
-				amountsCardData: {
-					ONE_OFF: {
-						amounts: [50, 100, 250, 500],
-						defaultAmount: 100,
-						hideChooseYourAmount: false,
-					},
-					MONTHLY: {
-						amounts: [10, 20, 50],
-						defaultAmount: 20,
-						hideChooseYourAmount: false,
-					},
-					ANNUAL: {
-						amounts: [50, 100, 250, 500],
-						defaultAmount: 50,
-						hideChooseYourAmount: false,
-					},
-				},
-			});
-		}
-		return {
-			testName,
-			liveTestName: `${testName}_LIVE`,
-			isLive: withVariant,
-			targeting,
-			order: 0,
-			seed: 0,
-			variants,
-		};
-	};
-
-	const buildSettings = (amounts: AmountsTests): Settings => ({
-		switches: emptySwitches,
-		amounts,
-		contributionTypes: {
-			GBPCountries: [],
-			UnitedStates: [],
-			AUDCountries: [],
-			EURCountries: [],
-			NZDCountries: [],
-			Canada: [],
-			International: [],
-		},
-		metricUrl: '',
-	});
-
-	it('uses amounts test from url, and returns no participation because there is no variant', () => {
-		const testName = 'AMOUNTS_TEST';
-		const acquisitionAbTests = [
-			{
-				name: testName,
-				variant: 'CONTROL',
-				testType: 'AMOUNTS_TEST',
-			},
-		];
-		const test = buildAmountsTest(
-			testName,
-			{
-				targetingType: 'Region',
-				region: 'GBPCountries',
-			},
-			false,
-		);
-
-		const result = getAmountsTestVariant(
-			country,
-			countryGroupId,
-			buildSettings([test]),
-			path,
-			mvt,
-			acquisitionAbTests,
-		);
-
-		expect(result.amountsParticipation).toBeUndefined();
-		expect(result.selectedAmountsVariant.testName).toEqual(testName);
-	});
-
-	it('uses amounts test from url, and returns a participation because there is a variant', () => {
-		const testName = 'AMOUNTS_TEST';
-		const acquisitionAbTests = [
-			{
-				name: testName,
-				variant: 'CONTROL',
-			},
-		];
-		const test = buildAmountsTest(
-			testName,
-			{
-				targetingType: 'Region',
-				region: 'GBPCountries',
-			},
-			true,
-		);
-
-		const result = getAmountsTestVariant(
-			country,
-			countryGroupId,
-			buildSettings([test]),
-			path,
-			mvt,
-			acquisitionAbTests,
-		);
-
-		expect(result.amountsParticipation).toEqual({ [`${testName}_LIVE`]: 'V1' });
-		expect(result.selectedAmountsVariant.testName).toEqual(`${testName}_LIVE`);
-	});
-
-	it('targets amounts test based on region, and returns a participation because there is a variant', () => {
-		const acquisitionAbTests: AcquisitionABTest[] = [];
-		const tests = [
-			buildAmountsTest(
-				'AUD_TEST',
-				{
-					targetingType: 'Region',
-					region: 'AUDCountries',
-				},
-				true,
-			),
-			buildAmountsTest(
-				'GBP_TEST',
-				{
-					targetingType: 'Region',
-					region: 'GBPCountries',
-				},
-				true,
-			),
-			buildAmountsTest(
-				'USD_TEST',
-				{
-					targetingType: 'Region',
-					region: 'UnitedStates',
-				},
-				true,
-			),
-		];
-
-		const result = getAmountsTestVariant(
-			country,
-			countryGroupId,
-			buildSettings(tests),
-			path,
-			mvt,
-			acquisitionAbTests,
-		);
-
-		expect(result.amountsParticipation).toEqual({ GBP_TEST_LIVE: 'V1' });
-		expect(result.selectedAmountsVariant.testName).toEqual('GBP_TEST_LIVE');
-	});
-
-	it('targets amounts test based on region, and returns no participation because there is no variant', () => {
-		const acquisitionAbTests: AcquisitionABTest[] = [];
-		const tests = [
-			buildAmountsTest(
-				'AUD_TEST',
-				{
-					targetingType: 'Region',
-					region: 'AUDCountries',
-				},
-				true,
-			),
-			buildAmountsTest(
-				'GBP_TEST',
-				{
-					targetingType: 'Region',
-					region: 'GBPCountries',
-				},
-				false,
-			),
-			buildAmountsTest(
-				'USD_TEST',
-				{
-					targetingType: 'Region',
-					region: 'UnitedStates',
-				},
-				true,
-			),
-		];
-
-		const result = getAmountsTestVariant(
-			country,
-			countryGroupId,
-			buildSettings(tests),
-			path,
-			mvt,
-			acquisitionAbTests,
-		);
-
-		expect(result.amountsParticipation).toBeUndefined();
-		expect(result.selectedAmountsVariant.testName).toEqual('GBP_TEST');
-	});
-
-	it('targets amounts test based on region, and returns no participation because test is not live', () => {
-		const acquisitionAbTests: AcquisitionABTest[] = [];
-		const test = buildAmountsTest(
-			'GBP_TEST',
-			{
-				targetingType: 'Region',
-				region: 'GBPCountries',
-			},
-			true,
-		);
-		const tests = [
-			{
-				...test,
-				isLive: false, // test has a variant, but is not live
-			},
-		];
-
-		const result = getAmountsTestVariant(
-			country,
-			countryGroupId,
-			buildSettings(tests),
-			path,
-			mvt,
-			acquisitionAbTests,
-		);
-
-		expect(result.amountsParticipation).toBeUndefined();
-		expect(result.selectedAmountsVariant.testName).toEqual('GBP_TEST');
-		expect(result.selectedAmountsVariant.variantName).toEqual('CONTROL');
-	});
-
-	it('targets amounts test based on country, and returns a participation because there is a variant', () => {
-		const acquisitionAbTests: AcquisitionABTest[] = [];
-		const tests = [
-			buildAmountsTest(
-				'GBP_TEST',
-				{
-					targetingType: 'Region',
-					region: 'GBPCountries',
-				},
-				false,
-			),
-			buildAmountsTest(
-				'COUNTRY_TEST',
-				{
-					targetingType: 'Country',
-					countries: ['GB'],
-				},
-				true,
-			),
-		];
-
-		const result = getAmountsTestVariant(
-			country,
-			countryGroupId,
-			buildSettings(tests),
-			path,
-			mvt,
-			acquisitionAbTests,
-		);
-
-		expect(result.amountsParticipation).toEqual({ COUNTRY_TEST_LIVE: 'V1' });
-		expect(result.selectedAmountsVariant.testName).toEqual('COUNTRY_TEST_LIVE');
-	});
-});
-
 // ----- Helpers ----- //
 
 function buildVariant({ id = 'control' }: Partial<Variant>): Variant {
@@ -964,33 +624,5 @@ function buildAcquisitionAbTest({
 	return {
 		name,
 		variant,
-	};
-}
-
-function buildSelectedAmountsVariant(
-	amountsTestName: string,
-): SelectedAmountsVariant {
-	return {
-		testName: amountsTestName,
-		variantName: 'CONTROL',
-		defaultContributionType: 'MONTHLY',
-		displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
-		amountsCardData: {
-			ONE_OFF: {
-				amounts: [1, 2, 5, 10],
-				defaultAmount: 2,
-				hideChooseYourAmount: true,
-			},
-			MONTHLY: {
-				amounts: [2, 3, 5, 7, 9, 12],
-				defaultAmount: 5,
-				hideChooseYourAmount: true,
-			},
-			ANNUAL: {
-				amounts: [10, 15, 20, 30],
-				defaultAmount: 15,
-				hideChooseYourAmount: true,
-			},
-		},
 	};
 }
