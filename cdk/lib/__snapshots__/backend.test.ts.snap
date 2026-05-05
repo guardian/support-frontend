@@ -77,6 +77,36 @@ exports[`The Backend stack matches the snapshot 1`] = `
     },
   },
   "Resources": {
+    "AliasRecord851000D2": {
+      "Properties": {
+        "AliasTarget": {
+          "DNSName": {
+            "Fn::Join": [
+              "",
+              [
+                "dualstack.",
+                {
+                  "Fn::GetAtt": [
+                    "LoadBalancerSupportbackend1445ECB4",
+                    "DNSName",
+                  ],
+                },
+              ],
+            ],
+          },
+          "HostedZoneId": {
+            "Fn::GetAtt": [
+              "LoadBalancerSupportbackend1445ECB4",
+              "CanonicalHostedZoneID",
+            ],
+          },
+        },
+        "HostedZoneId": "Z1E4V12LQGXFEC",
+        "Name": "backend.theguardian.com.origin.membership.guardianapis.com.",
+        "Type": "A",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
     "AutoScalingGroupSupportbackendASG65C4DDAF": {
       "Properties": {
         "HealthCheckGracePeriod": 120,

@@ -8,6 +8,7 @@ import {
 import { GuAllowPolicy } from "@guardian/cdk/lib/constructs/iam";
 import type { GuAsgCapacity } from "@guardian/cdk/lib/types";
 import type { App } from "aws-cdk-lib";
+import { aws_route53_targets } from "aws-cdk-lib";
 import {
   InstanceClass,
   InstanceSize,
@@ -16,6 +17,7 @@ import {
 } from "aws-cdk-lib/aws-ec2";
 import { SslPolicy } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import type { CfnListener } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import { ARecord, HostedZone, RecordTarget } from "aws-cdk-lib/aws-route53";
 
 interface BackendProps extends GuStackProps {
   domainName: string;
@@ -33,6 +35,8 @@ export class Backend extends GuStack {
     });
 
     const app = "support-backend";
+
+    const hostedZoneId = "Z1E4V12LQGXFEC";
 
     const userData = UserData.custom(`#!/bin/bash
 groupadd support
@@ -84,7 +88,7 @@ chown -R ${app}:support /var/log/${app}
         hostedZoneId: "Z1E4V12LQGXFEC",
       },
       healthcheck: {
-        path: "/healthcheck-express"
+        path: "/healthcheck-express",
       },
       instanceMetricGranularity: "5Minute",
       monitoringConfiguration: { noMonitoring: true },
@@ -98,5 +102,16 @@ chown -R ${app}:support /var/log/${app}
 
     (ec2App.listener.node.defaultChild as CfnListener).sslPolicy =
       SslPolicy.TLS13_RES;
+
+    new ARecord(this, "AliasRecord", {
+      zone: HostedZone.fromHostedZoneAttributes(this, "hosted-zone", {
+        zoneName: "membership.guardianapis.com",
+        hostedZoneId,
+      }),
+      recordName: domainName,
+      target: RecordTarget.fromAlias(
+        new aws_route53_targets.LoadBalancerTarget(ec2App.loadBalancer)
+      ),
+    });
   }
 }
