@@ -11,15 +11,17 @@
     "check-formatting": "prettier --check **.ts",
     "fix-formatting": "prettier --write **.ts",
     "fix": "pnpm fix-formatting && pnpm lint:fix",
-    "build": "tsc --noEmit",
-    "clean-target": "rm -rf target && mkdir -p target"
+    "prebuild": "rm -rf target",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "prebuild-prod-node-modules": "rm -rf target_node_modules",
+    "build-prod-node-modules": "pnpm --filter . deploy --prod --legacy target_node_modules"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.28.2",
   "dependencies": {
-    "@guardian/support-service-lambdas": "catalog:",
     "express": "^5.2.1"
   },
   "devDependencies": {

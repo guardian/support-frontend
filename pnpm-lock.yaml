@@ -159,9 +159,6 @@ importers:
 
   support-backend:
     dependencies:
-      '@guardian/support-service-lambdas':
-        specifier: 'catalog:'
-        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/4b496e4b2c38743a45fc4535ca1da83476bb473a
       express:
         specifier: ^5.2.1
         version: 5.2.1
