@@ -882,6 +882,7 @@ export stage=PROD
 mkdir /var/log/support-backend
 chown -R support-backend:support /var/log/support-backend
 
+cd target
 /usr/local/node/pm2 start --uid support-backend --gid support server.js",
                 ],
               ],

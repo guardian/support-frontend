@@ -59,6 +59,7 @@ export stage=${this.stage}
 mkdir /var/log/${app}
 chown -R ${app}:support /var/log/${app}
 
+cd target
 /usr/local/node/pm2 start --uid ${app} --gid support server.js`);
 
     const policies = [
