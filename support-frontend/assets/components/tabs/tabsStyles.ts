@@ -2,65 +2,50 @@ import { css } from '@emotion/react';
 import {
 	brandAlt,
 	from,
-	headlineBold17,
-	headlineBold20,
 	neutral,
 	palette,
 	space,
+	textSansBold17,
 } from '@guardian/source/foundations';
 
-const tabList = css`
+export const tabList = css`
 	display: flex;
 	align-items: flex-end;
 	justify-content: flex-start;
+	margin-top: ${space[5]}px;
 `;
-const tabButton = css`
-	background-color: ${neutral[100]};
-	${headlineBold17};
-	position: relative;
-	display: block;
+export const tabButton = css`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: ${palette.brand[400]};
+	${textSansBold17};
 	text-decoration: none;
-	appearance: none;
 	width: 100%;
-	height: ${space[12]}px;
+	height: 80px;
 	text-align: left;
-	color: ${neutral[7]};
-	padding: ${space[2]}px ${space[3]}px;
-	border: 1px solid ${palette.neutral[86]};
-	border-bottom: none;
-	box-shadow: inset 0 ${space[1]}px 0 0 ${brandAlt[400]};
+	color: ${palette.neutral[100]};
+	box-shadow: inset 0 ${space[2]}px 0 0 ${brandAlt[400]};
 	transition: box-shadow 0.2s;
+	border-bottom: none;
 	cursor: pointer;
 
 	${from.phablet} {
-		${headlineBold20};
-		width: 210px;
+		width: 200px;
 	}
 
 	&[aria-selected='false'] {
-		background-color: ${neutral[97]};
+		background-color: ${neutral[100]};
+		color: ${palette.brand[100]};
 		box-shadow: none;
+		border: 1px solid ${neutral[73]};
 		&:hover {
-			box-shadow: inset 0 ${space[1]}px 0 0 ${neutral[86]};
+			box-shadow: inset 0 ${space[2]}px 0 0 ${brandAlt[400]};
 		}
 	}
-
-	/* Pseudo-element that covers the tab panel top border for the active tab */
-	&[aria-selected='true']::after {
-		position: absolute;
-		z-index: 2;
-		bottom: -1px;
-		right: 0;
-		left: 0;
-		height: 1px;
-		background: inherit;
-		content: '';
-	}
 `;
-const tabPanel = css`
-	position: relative;
+export const tabPanel = css`
+	background-color: ${palette.brand[400]};
+	color: ${palette.neutral[100]};
 	padding: ${space[2]}px;
-	border: 1px solid ${palette.neutral[86]};
 `;
-
-export default { tabList, tabButton, tabPanel };

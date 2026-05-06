@@ -104,7 +104,6 @@ function NewspaperProductTabs({
 					tabElement="a"
 					tabs={tabItems}
 					onTabChange={handleTabChange}
-					theme="paperTabs"
 				/>
 				<section css={cardsContainer}>
 					{windowWidthIsGreaterThan('tablet') ? (
