@@ -43,8 +43,6 @@ export interface AmountsTest {
 	seed: number;
 	variants: AmountsVariant[];
 }
-
-export type AmountsTests = AmountsTest[];
 export interface SelectedAmountsVariant extends AmountsVariant {
 	testName: string;
 }
@@ -232,7 +230,6 @@ const vatCompliantAmountsConfig = {
 };
 
 const countries = new Set(vatComplianceCountries);
-
 const isVatComplianceCountry = (countryId: IsoCountry): boolean =>
 	countries.has(countryId);
 
