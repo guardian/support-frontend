@@ -149,7 +149,7 @@ type CheckoutFormProps = {
 	paypalClientId: string;
 };
 
-export default function CheckoutForm({
+  export default function CheckoutForm({
 	supportRegionId,
 	appConfig,
 	stripePublicKey,
