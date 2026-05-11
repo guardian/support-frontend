@@ -14,7 +14,7 @@ interface Address {
 apiRouter.get('/postcode-lookup/:postcode', (req, res) => {
 	const postcode = decodeURIComponent(req.params.postcode);
 	if (postcode.length > 10) {
-		res.status(400).json({ error: 'Bad Request' });
+		res.status(400).send();
 		return;
 	}
 	const addresses: Address[] = [];
