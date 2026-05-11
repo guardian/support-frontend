@@ -54,7 +54,7 @@ tar -xzf ${app}.tar.gz
 
 export TERM=xterm-256color
 export NODE_ENV=production
-export stage=${this.stage}
+export STAGE=${this.stage}
 
 mkdir /var/log/${app}
 chown -R ${app}:support /var/log/${app}
