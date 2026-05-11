@@ -1,10 +1,10 @@
 import express from 'express';
-import { apiRouter } from './routers/apiRouter';
+import { buildApiRouter } from './routers/apiRouter';
 
-export function buildApp() {
+export const buildApp = async () => {
 	const app = express();
 
-	app.use('/api', apiRouter);
+	app.use('/api', await buildApiRouter());
 
 	app.get('/healthcheck-express', (req, res) => {
 		console.log(`HealthCheck processed from port: ${req.socket.localPort}`);
@@ -12,4 +12,4 @@ export function buildApp() {
 	});
 
 	return app;
-}
+};
