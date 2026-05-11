@@ -22,7 +22,8 @@
 	"license": "ISC",
 	"packageManager": "pnpm@10.28.2",
 	"dependencies": {
-		"express": "^5.2.1"
+		"express": "^5.2.1",
+		"zod": "catalog:"
 	},
 	"devDependencies": {
 		"@guardian/eslint-config": "^14.0.1",

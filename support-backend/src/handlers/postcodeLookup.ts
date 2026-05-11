@@ -1,25 +1,23 @@
 import type { RequestHandler } from 'express';
+import type { IdealPostcodeService } from '../services/idealPostcodeService';
 
-interface Address {
-	lineOne?: string;
-	lineTwo?: string;
-	city?: string;
-	state?: string;
-	postCode?: string;
-	country?: string;
-}
+export const buildPostcodeLookupHandler =
+	(
+		idealPostcodeService: IdealPostcodeService,
+	): RequestHandler<{ postcode: string }> =>
+	async (req, res) => {
+		const postcode = decodeURIComponent(req.params.postcode);
 
-export const postcodeLookupHandler: RequestHandler<{ postcode: string }> = (
-	req,
-	res,
-) => {
-	const postcode = decodeURIComponent(req.params.postcode);
+		if (postcode.length > 10) {
+			res.status(400).send();
+			return;
+		}
 
-	if (postcode.length > 10) {
-		res.status(400).send();
-		return;
-	}
-
-	const addresses: Address[] = [];
-	res.json(addresses);
-};
+		try {
+			const addresses = await idealPostcodeService.find(postcode);
+			res.json(addresses);
+		} catch (error) {
+			console.error(error);
+			res.status(500).send();
+		}
+	};
