@@ -15,6 +15,7 @@ async function getIdealPostcodeApiKey(): Promise<string> {
 	});
 	const response = await ssmClient.send(command);
 	if (!response.Parameter?.Value) {
+		// TODO: This will need to be surfaced in some way if it ever happened in PROD.
 		throw new Error('Ideal Postcodes API key not found in SSM');
 	}
 	return response.Parameter.Value;
