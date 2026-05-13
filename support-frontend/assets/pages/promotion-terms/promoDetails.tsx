@@ -1,7 +1,10 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
-import { themeButtonReaderRevenueBrand } from '@guardian/source/react-components';
-import AnchorButton from 'components/button/anchorButton';
+import {
+	LinkButton,
+	SvgArrowRightStraight,
+	themeButtonReaderRevenueBrand,
+} from '@guardian/source/react-components';
 import Content from 'components/content/content';
 import { List } from 'components/list/list';
 import { LargeParagraph, Title } from 'components/text/text';
@@ -55,11 +58,14 @@ export default function PromoDetails(props: PromotionTerms): JSX.Element {
 				/>
 			</LargeParagraph>
 			<div css={buttonStyle}>
-				<AnchorButton
-					link={`${landingPageForProduct(props)}?promoCode=${props.promoCode}`}
-					ctaButtonText="Get this offer"
+				<LinkButton
+					href={`${landingPageForProduct(props)}?promoCode=${props.promoCode}`}
 					theme={themeButtonReaderRevenueBrand}
-				/>
+					icon={<SvgArrowRightStraight />}
+					iconSide="right"
+				>
+					Get this offer
+				</LinkButton>
 			</div>
 		</Content>
 	);
