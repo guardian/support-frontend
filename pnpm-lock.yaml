@@ -159,6 +159,9 @@ importers:
 
   support-backend:
     dependencies:
+      '@aws-sdk/client-ssm':
+        specifier: 'catalog:'
+        version: 3.1036.0
       express:
         specifier: ^5.2.1
         version: 5.2.1
