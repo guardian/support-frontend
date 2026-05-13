@@ -1,10 +1,27 @@
+import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 import { Router } from 'express';
 import { buildPostcodeLookupHandler } from '../handlers/postcodeLookup';
 import { IdealPostcodeService } from '../services/idealPostcodeService';
+import { stageFromEnvironment } from '../utils/stage';
+
+async function getIdealPostcodeApiKey(): Promise<string> {
+	const stage = stageFromEnvironment();
+	const ssmClient = new SSMClient({
+		region: 'eu-west-1',
+	});
+	const command = new GetParameterCommand({
+		Name: `/support/frontend/${stage}/ideal-postcodes-api.key`,
+		WithDecryption: true,
+	});
+	const response = await ssmClient.send(command);
+	if (!response.Parameter?.Value) {
+		throw new Error('Ideal Postcodes API key not found in SSM');
+	}
+	return response.Parameter.Value;
+}
 
 export const buildApiRouterWithServices = async () => {
-	// TODO: Get this from SSM instead of an env var
-	const apiKey = await Promise.resolve(process.env.IDEAL_API_KEY as string);
+	const apiKey = await getIdealPostcodeApiKey();
 
 	const idealPostcodeService = new IdealPostcodeService(apiKey);
 
