@@ -35,7 +35,13 @@ export class IdealPostcodeService {
 		});
 
 		if (!response.ok) {
-			throw new Error('Received error response from Ideal Postcodes');
+			if (response.status === 404) {
+				return [];
+			}
+
+			throw new Error(
+				'Received error response from Ideal Postcodes: ' + response.status,
+			);
 		}
 
 		const parsed = postcodeResponseSchema.safeParse(await response.json());
