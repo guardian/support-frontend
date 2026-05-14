@@ -129,3 +129,40 @@ PromotionWithBillingPeriodsCopy.args = {
 			'From %%PRICE_PRODUCT_WEEKLY%% per week, billed monthly or annually.',
 	},
 };
+
+export const WeeklyPricing = Template.bind({});
+
+WeeklyPricing.args = {
+	isSubdued: false,
+	currencyId: 'GBP',
+	paymentFrequency: 'MONTHLY',
+	cardTier: 2,
+	showWeeklyPrice: true,
+	cardContent: {
+		...fallBackLandingPageSelection.products.SupporterPlus,
+		product: 'SupporterPlus',
+		isUserSelected: false,
+		price: 12,
+		cta: { copy: 'Support' },
+		label: { copy: 'Highest impact' },
+	},
+};
+
+export const WeeklyPricingWithPromotion = Template.bind({});
+
+WeeklyPricingWithPromotion.args = {
+	isSubdued: false,
+	currencyId: 'EUR',
+	paymentFrequency: 'MONTHLY',
+	cardTier: 3,
+	showWeeklyPrice: true,
+	cardContent: {
+		...fallBackLandingPageSelection.products.DigitalSubscription,
+		product: 'DigitalSubscription',
+		isUserSelected: false,
+		price: 38.5,
+		cta: { copy: 'Support' },
+		label: { copy: 'Highest impact' },
+		promotion: promotionEURCountries,
+	},
+};

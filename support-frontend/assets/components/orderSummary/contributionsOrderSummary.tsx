@@ -15,6 +15,7 @@ import {
 } from '@guardian/source/react-components';
 import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'react';
 import {
 	BenefitsCheckList,
@@ -37,6 +38,7 @@ import {
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
+import { calculateWeeklyPrice } from '../../helpers/utilities/utilities';
 import { PriceSummary } from './priceSummary';
 
 const componentStyles = css`
@@ -47,7 +49,7 @@ const summaryRow = css`
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
-	padding-top: 4px;
+	padding: 4px 0 8px 0;
 `;
 
 const rowSpacing = css`
@@ -165,6 +167,18 @@ const startDateList = css`
 	}
 `;
 
+const savingTextCss = css`
+	color: ${palette.lifestyle[400]};
+	${textSans15};
+	margin-top: ${space[1]}px;
+`;
+
+const weeklyPricingSummary = css`
+	display: flex;
+	flex-direction: column;
+	margin-bottom: ${space[5]}px;
+`;
+
 export type ContributionsOrderSummaryProps = {
 	productKey: ActiveProductKey;
 	productLabel: string;
@@ -239,6 +253,46 @@ export function ContributionsOrderSummary({
 		ratePlanKey,
 	);
 	const isWeekly = isGuardianWeeklyProduct(productKey);
+
+	const forceWeeklyPricing =
+		window.location.search.includes('force-weekly=true');
+	const isWeeklyPricing =
+		forceWeeklyPricing || landingPageSettings.name.includes('WEEKLY_PRICE');
+
+	const getDiscountDurationText = (durationMonths: number) => {
+		if (durationMonths === 12) {
+			return '1 year';
+		}
+		if (durationMonths === 1) {
+			return '1 month';
+		}
+		return `${durationMonths} months`;
+	};
+
+	const savingText = promotion?.discount
+		? `You're saving ${
+				promotion.discount.amount
+		  }% for ${getDiscountDurationText(promotion.discount.durationMonths ?? 0)}`
+		: null;
+
+	const billingPeriodObj =
+		period === 'year'
+			? BillingPeriod.Annual
+			: period === 'quarter'
+			? BillingPeriod.Quarterly
+			: BillingPeriod.Monthly;
+
+	const weeklyPrice =
+		isWeeklyPricing && !isWeeklyGift && !isWeeklyDigital && !isWeekly
+			? simpleFormatAmount(
+					currency,
+					calculateWeeklyPrice(
+						promotion?.discountedPrice ?? amount,
+						billingPeriodObj,
+					),
+			  )
+			: undefined;
+
 	return (
 		<div css={componentStyles}>
 			<div css={[summaryRow, rowSpacing, headingRow]}>
@@ -282,15 +336,34 @@ export function ContributionsOrderSummary({
 			</div>
 
 			<hr css={hrCss} />
-			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
-				<p>Total</p>
-				<PriceSummary
-					fullPrice={fullPrice}
-					period={period}
-					discountPrice={discountPrice}
-					isWeeklyGift={isWeeklyGift}
-				/>
-			</div>
+			{weeklyPrice ? (
+				<div css={weeklyPricingSummary}>
+					<div css={summaryRow}>
+						<p>Weekly price</p>
+						<p>{weeklyPrice}</p>
+					</div>
+					<div css={[summaryRow, boldText]}>
+						<p>Total due every {period}</p>
+						<p>{discountPrice ?? fullPrice}</p>
+					</div>
+					{savingText && (
+						<>
+							<hr css={hrCss} />
+							<p css={savingTextCss}>{savingText}</p>
+						</>
+					)}
+				</div>
+			) : (
+				<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
+					<p>Total</p>
+					<PriceSummary
+						fullPrice={fullPrice}
+						period={period}
+						discountPrice={discountPrice}
+						isWeeklyGift={isWeeklyGift}
+					/>
+				</div>
+			)}
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
 			{isWeeklyDigital && (
 				<div css={startDateWeeklyDigitalList}>{startDate}</div>
