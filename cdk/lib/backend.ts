@@ -36,7 +36,7 @@ export class Backend extends GuStack {
 
     const app = "support-backend";
 
-    const hostedZoneId = "Z1E4V12LQGXFEC";
+    const hostedZoneId = "Z3KO35ELNWZMSX";
 
     const userData = UserData.custom(`#!/bin/bash
 groupadd support
