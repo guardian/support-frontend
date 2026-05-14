@@ -45,7 +45,7 @@ new Frontend(app, "Frontend-CODE", {
 new Backend(app, "Backend-PROD", {
   stack: "support",
   stage: "PROD",
-  domainName: "backend.theguardian.com.origin.membership.guardianapis.com",
+  domainName: "backend.theguardian.com.origin.support.guardianapis.com",
   scaling: {
     minimumInstances: 1,
     maximumInstances: 2,
