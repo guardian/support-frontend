@@ -101,8 +101,8 @@ exports[`The Backend stack matches the snapshot 1`] = `
             ],
           },
         },
-        "HostedZoneId": "Z1E4V12LQGXFEC",
-        "Name": "backend.theguardian.com.origin.membership.guardianapis.com.",
+        "HostedZoneId": "Z3KO35ELNWZMSX",
+        "Name": "backend.theguardian.com.origin.support.guardianapis.com.",
         "Type": "A",
       },
       "Type": "AWS::Route53::RecordSet",
@@ -177,11 +177,11 @@ exports[`The Backend stack matches the snapshot 1`] = `
     "CertificateSupportbackend4B408C7C": {
       "DeletionPolicy": "Retain",
       "Properties": {
-        "DomainName": "backend.theguardian.com.origin.membership.guardianapis.com",
+        "DomainName": "backend.theguardian.com.origin.support.guardianapis.com",
         "DomainValidationOptions": [
           {
-            "DomainName": "backend.theguardian.com.origin.membership.guardianapis.com",
-            "HostedZoneId": "Z1E4V12LQGXFEC",
+            "DomainName": "backend.theguardian.com.origin.support.guardianapis.com",
+            "HostedZoneId": "Z3KO35ELNWZMSX",
           },
         ],
         "Tags": [
@@ -860,6 +860,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
                 "",
                 [
                   "#!/bin/bash
+set -e
 groupadd support
 useradd -r -m -s /usr/bin/nologin -g support support-backend
 cd /home/support-backend
@@ -875,7 +876,6 @@ aws --region eu-west-1 s3 cp s3://",
                   "/support/PROD/support-backend/support-backend.tar.gz ./
 tar -xzf support-backend.tar.gz
 
-export TERM=xterm-256color
 export NODE_ENV=production
 export STAGE=PROD
 
