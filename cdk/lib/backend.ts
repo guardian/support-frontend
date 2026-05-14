@@ -106,7 +106,7 @@ cd target
 
     new ARecord(this, "AliasRecord", {
       zone: HostedZone.fromHostedZoneAttributes(this, "hosted-zone", {
-        zoneName: "membership.guardianapis.com",
+        zoneName: "support.guardianapis.com",
         hostedZoneId,
       }),
       recordName: domainName,
