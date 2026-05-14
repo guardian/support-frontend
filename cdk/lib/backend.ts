@@ -52,7 +52,6 @@ aws --region eu-west-1 s3 cp s3://${
     }/support/${this.stage}/${app}/${app}.tar.gz ./
 tar -xzf ${app}.tar.gz
 
-export TERM=xterm-256color
 export NODE_ENV=production
 export STAGE=${this.stage}
 
