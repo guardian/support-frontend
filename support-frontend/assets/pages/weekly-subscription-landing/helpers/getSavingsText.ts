@@ -42,7 +42,7 @@ export function getWeeklyGiftSavingsText(
 		);
 
 		if (savingsPercentage > 0) {
-			return `Save an extra ${savingsPercentage}% on a 12 month gift subscription`;
+			return `Save ${savingsPercentage}% with a 12 month gift subscription`;
 		}
 	}
 

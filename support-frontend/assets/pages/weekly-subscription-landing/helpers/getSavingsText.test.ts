@@ -106,7 +106,7 @@ describe('getWeeklyGiftSavingsText', () => {
 			};
 			expect(
 				getWeeklyGiftSavingsText(BillingPeriod.Annual, undefined, allPrices),
-			).toBe('Save an extra 25% on a 12 month gift subscription');
+			).toBe('Save 25% with a 12 month gift subscription');
 		});
 
 		it('rounds the savings percentage to the nearest integer', () => {
@@ -117,7 +117,7 @@ describe('getWeeklyGiftSavingsText', () => {
 			};
 			expect(
 				getWeeklyGiftSavingsText(BillingPeriod.Annual, undefined, allPrices),
-			).toBe('Save an extra 16% on a 12 month gift subscription');
+			).toBe('Save 16% with a 12 month gift subscription');
 		});
 	});
 });
