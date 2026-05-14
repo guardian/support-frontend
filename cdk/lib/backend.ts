@@ -39,6 +39,7 @@ export class Backend extends GuStack {
     const hostedZoneId = "Z3KO35ELNWZMSX";
 
     const userData = UserData.custom(`#!/bin/bash
+set -e
 groupadd support
 useradd -r -m -s /usr/bin/nologin -g support ${app}
 cd /home/${app}
