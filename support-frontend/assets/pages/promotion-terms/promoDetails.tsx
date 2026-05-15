@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, space } from '@guardian/source/foundations';
+import { space, until } from '@guardian/source/foundations';
 import {
 	LinkButton,
 	SvgArrowRightStraight,
@@ -30,9 +30,10 @@ const landingPageForProduct = (props: PromotionTerms) => {
 
 const buttonStyle = css`
 	margin: ${space[6]}px 0 ${space[4]}px;
-	${from.tablet} {
+
+	${until.tablet} {
 		> a {
-			width: fit-content;
+			width: 100%;
 		}
 	}
 `;
