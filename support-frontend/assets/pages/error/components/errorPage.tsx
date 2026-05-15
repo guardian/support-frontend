@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { palette, space } from '@guardian/source/foundations';
+import { from, palette, space } from '@guardian/source/foundations';
 import {
 	LinkButton,
 	SvgArrowRightStraight,
@@ -46,8 +46,10 @@ const buttonRow = css`
 	flex-direction: column;
 	gap: ${space[3]}px;
 
-	> a {
-		width: fit-content;
+	${from.tablet} {
+		> a {
+			width: fit-content;
+		}
 	}
 `;
 
