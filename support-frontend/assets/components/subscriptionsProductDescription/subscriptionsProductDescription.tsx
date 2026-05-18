@@ -1,5 +1,8 @@
 import { brandAlt } from '@guardian/source/foundations';
-import AnchorButton from 'components/button/anchorButton';
+import {
+	LinkButton,
+	SvgArrowRightStraight,
+} from '@guardian/source/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import type { ProductBenefit } from 'helpers/productCatalog';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
@@ -66,14 +69,17 @@ function SubscriptionsProductDescription({
 				]}
 			>
 				{buttons.map((button) => (
-					<AnchorButton
+					<LinkButton
+						href={button.link}
 						onClick={button.analyticsTracking}
-						ariaLabel={button.ariaLabel}
+						aria-label={button.ariaLabel}
 						priority={button.priority}
 						theme={button.theme}
-						link={button.link}
-						ctaButtonText={button.ctaButtonText}
-					/>
+						icon={<SvgArrowRightStraight />}
+						iconSide="right"
+					>
+						{button.ctaButtonText}
+					</LinkButton>
 				))}
 			</div>
 		</div>
