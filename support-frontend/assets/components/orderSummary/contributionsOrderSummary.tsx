@@ -15,7 +15,6 @@ import {
 } from '@guardian/source/react-components';
 import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'react';
 import {
 	BenefitsCheckList,
@@ -27,6 +26,7 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
+import { ratePlanToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
@@ -275,12 +275,7 @@ export function ContributionsOrderSummary({
 		  }% for ${getDiscountDurationText(promotion.discount.durationMonths ?? 0)}`
 		: null;
 
-	const billingPeriodObj =
-		period === 'year'
-			? BillingPeriod.Annual
-			: period === 'quarter'
-			? BillingPeriod.Quarterly
-			: BillingPeriod.Monthly;
+	const billingPeriodObj = ratePlanToBillingPeriod(ratePlanKey);
 
 	const weeklyPrice =
 		isWeeklyPricing && !isWeeklyGift && !isWeeklyDigital && !isWeekly
