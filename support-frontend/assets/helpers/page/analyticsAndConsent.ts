@@ -1,12 +1,12 @@
 // ----- Imports ----- //
 
-import type { CountryCode } from '@guardian/libs';
 import {
 	cmp,
 	getConsentDetailsForOphan,
-	getCookie,
 	onConsent,
-} from '@guardian/libs';
+} from '@guardian/consent-manager';
+import type { CountryCode } from '@guardian/libs';
+import { getCookie } from '@guardian/libs';
 import { init, record, viewId } from '@guardian/ophan-tracker-js/support';
 import type { Participations } from 'helpers/abTests/models';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
