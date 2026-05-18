@@ -9,6 +9,7 @@ export type ThreeTierCardsProps = {
 	cardsContent: CardContent[];
 	currencyId: IsoCurrency;
 	billingPeriod: BillingPeriod;
+	showWeeklyPrice?: boolean;
 };
 
 const container = (cardCount: number) => css`
@@ -47,6 +48,7 @@ export function ThreeTierCards({
 	cardsContent,
 	currencyId,
 	billingPeriod,
+	showWeeklyPrice,
 }: ThreeTierCardsProps): JSX.Element {
 	const haveLabelAndSelectedCards =
 		cardsContent.filter((card) => !!card.label || card.isUserSelected).length >
@@ -72,6 +74,7 @@ export function ThreeTierCards({
 						isSubdued={haveLabelAndSelectedCards}
 						currencyId={currencyId}
 						billingPeriod={billingPeriod}
+						showWeeklyPrice={showWeeklyPrice}
 					/>
 				);
 			})}
