@@ -103,6 +103,4 @@ export interface LandingPageTest {
 	status: 'Live' | 'Draft';
 	regionTargeting?: RegionTargeting;
 	variants: LandingPageVariant[];
-	selectedVariant?: LandingPageVariant;
-	selectedTestName?: string; // Methodology-specific test name for tracking
 }

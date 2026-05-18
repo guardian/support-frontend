@@ -235,7 +235,6 @@ class Application(
     tickerService: TickerService,
     mparticleClient: MParticleClient,
     payPalCompletePaymentsConfigProvider: PayPalCompletePaymentsConfigProvider,
-    landingPageVariantSelector: LandingPageVariantSelector,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with SettingsSurrogateKeySyntax
@@ -319,15 +318,7 @@ class Application(
   ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
 
-    val baseSettings = settingsProvider.getAllSettings()
-    val enrichedTests = baseSettings.landingPageTests.map { test =>
-      landingPageVariantSelector.selectVariantForTest(test, request) match {
-        case Some((variant, effectiveTestName)) =>
-          test.copy(selectedVariant = Some(variant), selectedTestName = Some(effectiveTestName))
-        case None => test
-      }
-    }
-    implicit val settings: AllSettings = baseSettings.copy(landingPageTests = enrichedTests)
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(
       contributionsPlusStudentHtml(
         countryCode,
