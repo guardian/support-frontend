@@ -7,9 +7,10 @@
 	"devDependencies": {
 		"@guardian/eslint-config": "^11.0.0",
 		"@guardian/prettier": "catalog:",
-		"prettier": "catalog:",
+		"@types/jest": "catalog:",
 		"eslint": "^9.38.0",
-		"husky": "^9.0.11"
+		"husky": "^9.0.11",
+		"prettier": "catalog:"
 	},
 	"pnpm": {
 		"overrides": {
