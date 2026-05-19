@@ -20,7 +20,7 @@ import {
 	visuallyHidden,
 } from '@guardian/source/foundations';
 import { Button, SvgCross } from '@guardian/source/react-components';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { InfoRound } from './InfoRound';
 
 const buttonAndTooltipContainer = css`
@@ -191,6 +191,7 @@ export default function Tooltip({
 	desktopOnly,
 }: TooltipProps): JSX.Element {
 	const [open, setOpen] = useState(false);
+	const tooltipId = useId();
 
 	const { x, y, refs, strategy, context } = useFloating({
 		open,
@@ -231,6 +232,9 @@ export default function Tooltip({
 			<div css={buttonAndTooltipContainer}>
 				<div>
 					<Button
+						aria-controls={tooltipId}
+						aria-describedby={open ? tooltipId : undefined}
+						aria-expanded={open}
 						hideLabel
 						icon={<InfoRound />}
 						priority="tertiary"
@@ -241,7 +245,9 @@ export default function Tooltip({
 				</div>
 				<FloatingPortal>
 					<div
-						role="status"
+						id={tooltipId}
+						role="tooltip"
+						aria-hidden={!open}
 						css={[tooltipContainer, tooltipContainerDisplay(open, desktopOnly)]}
 						ref={refs.setFloating}
 						style={{
