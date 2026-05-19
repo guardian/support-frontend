@@ -17,6 +17,7 @@ const errorReasons = [
 	'incomplete_payment_request_details',
 	'email_provider_rejected',
 	'invalid_email_address',
+	'email_invalid', // Stripe error code
 	'recaptcha_validation_failed',
 	'guardian_ad_lite_purchase_not_allowed',
 	'guardian_ad_lite_purchase_not_allowed_signed_in',
@@ -74,6 +75,9 @@ function appropriateErrorMessage(errorReason: string): string {
 			case 'invalid_email_address':
 				return 'Please enter a valid email address';
 
+			case 'email_invalid':
+				return 'Please enter a stripe valid email address';
+
 			case 'recaptcha_validation_failed':
 				return 'Please prove you are not a robot';
 
@@ -91,6 +95,7 @@ function appropriateErrorMessage(errorReason: string): string {
 				return 'Please check your billing ZIP code to ensure it is correct';
 		}
 	}
+	console.log('*** Unrecognised error reason: ', errorReason);
 	return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';
 }
 

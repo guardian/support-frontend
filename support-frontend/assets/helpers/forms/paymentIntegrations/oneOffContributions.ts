@@ -202,6 +202,7 @@ const processStripePaymentIntentRequest = (
 				}
 
 				// No 3DS auth required
+				console.log('*** _createIntentResponse: ', _createIntentResponse);
 				return _createIntentResponse;
 			},
 		),

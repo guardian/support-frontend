@@ -15,6 +15,7 @@ object CheckoutFailureReasons {
     PaymentRecentlyTaken,
     AccountMismatch,
     StripePaymentMethodDisabled,
+    EmailInvalid,
     Unknown,
   )
 
@@ -26,6 +27,10 @@ object CheckoutFailureReasons {
 
   case object StripePaymentMethodDisabled extends CheckoutFailureReason {
     override def asString: String = "Stripe payments are currently disabled"
+  }
+
+  case object EmailInvalid extends CheckoutFailureReason {
+    override def asString: String = "email_invalid"
   }
 
   case object InsufficientFunds extends CheckoutFailureReason {
@@ -104,6 +109,7 @@ object CheckoutFailureReasons {
     case "try_again_later" => PaymentMethodTemporarilyDeclined
     case "withdrawal_count_limit_exceeded" => PaymentMethodUnacceptable
     case "Stripe payments are currently disabled" => StripePaymentMethodDisabled
+    case "email_invalid" => EmailInvalid
   }
 
   implicit val encodeFailureReason: Encoder[CheckoutFailureReason] =
