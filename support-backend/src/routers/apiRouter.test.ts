@@ -3,9 +3,17 @@ import request from 'supertest';
 import { IdealPostcodeService } from '../services/idealPostcodeService';
 import { buildApiRouter } from './apiRouter';
 
-class FakeIdealPostcodeService extends IdealPostcodeService {
-	find() {
-		return Promise.resolve([
+const service = new IdealPostcodeService('fake_api_key');
+const app = express();
+app.use(buildApiRouter(service));
+
+afterEach(() => {
+	jest.restoreAllMocks();
+});
+
+describe('GET /postcode-lookup/:postcode', () => {
+	it('returns 200 and an array for a valid postcode', async () => {
+		const findSpy = jest.spyOn(service, 'find').mockResolvedValueOnce([
 			{
 				lineOne: 'The Guardian Media Group',
 				lineTwo: 'Kings Place',
@@ -15,19 +23,6 @@ class FakeIdealPostcodeService extends IdealPostcodeService {
 				country: 'UK',
 			},
 		]);
-	}
-}
-const app = express();
-const fakeIdealPostcodeService = new FakeIdealPostcodeService('fake_api_key');
-app.use(buildApiRouter(fakeIdealPostcodeService));
-
-afterEach(() => {
-	jest.restoreAllMocks();
-});
-
-describe('GET /postcode-lookup/:postcode', () => {
-	it('returns 200 and an array for a valid postcode', async () => {
-		const findSpy = jest.spyOn(fakeIdealPostcodeService, 'find');
 
 		const response = await request(app).get('/postcode-lookup/N1%209GU');
 
@@ -45,8 +40,18 @@ describe('GET /postcode-lookup/:postcode', () => {
 		expect(findSpy).toHaveBeenCalledWith('N1 9GU');
 	});
 
+	it('returns 200 and an empty array when no results are found', async () => {
+		const findSpy = jest.spyOn(service, 'find').mockResolvedValueOnce([]);
+
+		const response = await request(app).get('/postcode-lookup/XXX');
+
+		expect(response.status).toBe(200);
+		expect(response.body).toEqual([]);
+		expect(findSpy).toHaveBeenCalledWith('XXX');
+	});
+
 	it('returns 400 for a postcode longer than 10 characters', async () => {
-		const findSpy = jest.spyOn(fakeIdealPostcodeService, 'find');
+		const findSpy = jest.spyOn(service, 'find');
 
 		const response = await request(app).get('/postcode-lookup/TOOLONGPOSTCODE');
 
