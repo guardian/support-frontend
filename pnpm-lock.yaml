@@ -86,6 +86,9 @@ importers:
       '@guardian/prettier':
         specifier: 'catalog:'
         version: 2.1.5(prettier@2.8.8)
+      '@types/jest':
+        specifier: 'catalog:'
+        version: 29.5.14
       eslint:
         specifier: ^9.38.0
         version: 9.38.0(jiti@2.4.2)
