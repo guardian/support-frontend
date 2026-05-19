@@ -45,7 +45,9 @@ test.describe('Three Tier Checkout', () =>
 					await page.getByRole('tab', { name: billingFrequency }).click();
 
 					// 2. Click through to the checkout (we use the aria-label to target the link)
-					await page.getByRole('link', { name: productLabel, exact: false }).click();
+					await page
+						.getByRole('link', { name: new RegExp(`^${productLabel},`) })
+						.click();
 				},
 			);
 		});
