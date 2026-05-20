@@ -34,7 +34,7 @@ jobs:
           role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
           aws-region: eu-west-1
 
-      - uses: sbt/setup-sbt@v1
+      - uses: sbt/setup-sbt@v1.1.23
 
       - name: Setup Scala
         uses: guardian/setup-scala@v1
