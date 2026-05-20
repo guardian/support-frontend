@@ -1,5 +1,5 @@
-import { onConsentChange } from '@guardian/libs';
-import type { ConsentState } from '@guardian/libs';
+import { onConsentChange } from '@guardian/consent-manager';
+import type { ConsentState } from '@guardian/consent-manager';
 import { logException } from 'helpers/utilities/logger';
 
 const onConsentChangeEvent = async (
@@ -14,7 +14,7 @@ const onConsentChangeEvent = async (
 	);
 
 	/**
-	 * @guardian/libs exports a function
+	 * @guardian/consent-manager exports a function
 	 * onConsentChange, this takes a callback, which is called
 	 * each time consent changes. EG. if a user consents via the CMP.
 	 * The callback will receive the user's consent as the parameter

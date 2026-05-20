@@ -234,7 +234,6 @@ export const buildOutputState = (
 		),
 	);
 
-	// TODO: this needs extensive testing for all products
 	return {
 		state: {
 			sendThankYouEmailState: buildSendThankYouEmailState(

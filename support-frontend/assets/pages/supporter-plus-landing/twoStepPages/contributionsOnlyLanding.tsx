@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { cmp } from '@guardian/libs';
+import { cmp } from '@guardian/consent-manager';
 import {
 	from,
 	headlineBold24,

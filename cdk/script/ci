@@ -4,6 +4,7 @@ set -e
 
 pnpm install --frozen-lockfile
 
+pnpm check-formatting
 pnpm lint
 pnpm test
 pnpm synth
