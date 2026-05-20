@@ -190,6 +190,9 @@ importers:
       eslint:
         specifier: ^9.38.0
         version: 9.38.0(jiti@2.4.2)
+      fetch-mock:
+        specifier: ^12.6.0
+        version: 12.6.0
       jest:
         specifier: 'catalog:'
         version: 29.7.0(@types/node@20.19.0)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@20.19.0)(typescript@5.8.3))
