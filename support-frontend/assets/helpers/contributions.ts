@@ -1,7 +1,7 @@
 // ----- Imports ----- //
+import { contributionsOnlyCountries } from '@modules/internationalisation/contributionsOnlyCountries';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { countries as vatComplianceCountries } from '@modules/VATComplianceCountries';
 
 // ----- Types ----- //
 type RegularContributionTypeMap<T> = {
@@ -209,7 +209,7 @@ const config: Record<CountryGroupId, Config> = {
 	},
 };
 
-const vatCompliantAmountsConfig = {
+const contributionsOnlyCountriesAmountsConfig = {
 	defaultContributionType: 'MONTHLY',
 	displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
 	amountsCardData: {
@@ -231,10 +231,10 @@ const vatCompliantAmountsConfig = {
 	},
 };
 
-const countries = new Set(vatComplianceCountries);
+const countries = new Set(contributionsOnlyCountries);
 
-const isVatComplianceCountry = (countryId: IsoCountry): boolean =>
+const isContributionsOnlyCountry = (countryId: IsoCountry): boolean =>
 	countries.has(countryId);
 
 // ----- Exports ----- //
-export { config, isVatComplianceCountry, vatCompliantAmountsConfig };
+export { config, isContributionsOnlyCountry, contributionsOnlyCountriesAmountsConfig };

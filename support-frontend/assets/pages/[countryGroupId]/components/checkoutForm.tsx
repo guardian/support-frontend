@@ -29,7 +29,7 @@ import { SecureTransactionIndicator } from 'components/secureTransactionIndicato
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
 import type { Participations } from 'helpers/abTests/models';
-import { isVatComplianceCountry } from 'helpers/contributions';
+import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
@@ -244,7 +244,7 @@ export default function CheckoutForm({
 		if (originalAmount < 1) {
 			isInvalidAmount = true;
 		}
-		if (isVatComplianceCountry(countryId)) {
+		if (isContributionsOnlyCountry(countryId)) {
 			if (originalAmount >= (supporterPlusRatePlanPrice ?? 0)) {
 				isInvalidAmount = true;
 			}
