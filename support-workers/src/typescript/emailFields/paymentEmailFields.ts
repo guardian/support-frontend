@@ -1,8 +1,8 @@
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import minMax from 'dayjs/plugin/minMax';
-import type { PaymentMethod } from '../model/paymentMethod';
 import { getIfDefined } from '../util/nullAndUndefined';
+import type { EmailPaymentMethod } from './types';
 
 dayjs.extend(minMax);
 
@@ -37,7 +37,7 @@ export type EmailPaymentFields =
 
 export function getPaymentFields(
 	today: Dayjs,
-	paymentMethod: PaymentMethod,
+	paymentMethod: EmailPaymentMethod,
 	firstZuoraPaymentDate: Dayjs,
 	mandateId?: string,
 ): EmailPaymentFields {
@@ -62,8 +62,6 @@ export function getPaymentFields(
 				first_payment_date: formatDate(firstZuoraPaymentDate),
 			};
 		case 'PayPal':
-		case 'PayPalCompletePaymentsWithBAID':
-		case 'PayPalCompletePayments':
 			return {
 				payment_method: 'PayPal',
 				first_payment_date: formatDate(firstZuoraPaymentDate),
@@ -72,7 +70,7 @@ export function getPaymentFields(
 }
 
 export function getPaymentMethodFieldsSupporterPlus(
-	paymentMethod: PaymentMethod,
+	paymentMethod: EmailPaymentMethod,
 	created: Dayjs,
 	mandateId?: string,
 ):
@@ -110,8 +108,6 @@ export function getPaymentMethodFieldsSupporterPlus(
 				first_payment_date: formatDate(created),
 			};
 		case 'PayPal':
-		case 'PayPalCompletePayments':
-		case 'PayPalCompletePaymentsWithBAID':
 			return {
 				payment_method: 'PayPal',
 				first_payment_date: formatDate(created),

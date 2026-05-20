@@ -3,15 +3,17 @@ import type {
 	DataExtensionName,
 	EmailMessageWithIdentityUserId,
 } from '@modules/email/email';
-import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
-import type { PaymentMethod } from '../model/paymentMethod';
-import type { PaymentSchedule } from '../model/paymentSchedule';
-import type { User } from '../model/stateSchemas';
 import { describePayments, firstPayment } from './paymentDescription';
 import type { EmailPaymentFields } from './paymentEmailFields';
 import { getPaymentFields } from './paymentEmailFields';
+import type {
+	EmailBillingPeriod,
+	EmailPaymentMethod,
+	EmailPaymentSchedule,
+	EmailUser,
+} from './types';
 
 type EmailCommonFields = {
 	first_name: string;
@@ -34,12 +36,12 @@ export function buildNonDeliveryEmailFields({
 	mandateId,
 }: {
 	today: Dayjs;
-	user: User;
+	user: EmailUser;
 	subscriptionNumber: string;
 	currency: IsoCurrency;
-	billingPeriod: RecurringBillingPeriod;
-	paymentMethod: PaymentMethod;
-	paymentSchedule: PaymentSchedule;
+	billingPeriod: EmailBillingPeriod;
+	paymentMethod: EmailPaymentMethod;
+	paymentSchedule: EmailPaymentSchedule;
 	isFixedTerm: boolean;
 	mandateId?: string;
 }): NonDeliveryEmailFields {
@@ -65,7 +67,7 @@ export function buildNonDeliveryEmailFields({
 }
 
 export function buildEmailFields(
-	user: User,
+	user: EmailUser,
 	dataExtensionName: DataExtensionName,
 	productSpecificFields: Record<string, string>,
 	sfContactId?: string,

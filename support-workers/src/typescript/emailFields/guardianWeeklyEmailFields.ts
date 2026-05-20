@@ -1,16 +1,19 @@
 import type { EmailMessageWithIdentityUserId } from '@modules/email/email';
 import { DataExtensionNames } from '@modules/email/email';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
-import type { PaymentMethod } from '../model/paymentMethod';
-import type { PaymentSchedule } from '../model/paymentSchedule';
-import type { GiftRecipient, User } from '../model/stateSchemas';
 import { buildDeliveryEmailFields } from './deliveryEmailFields';
 import { buildEmailFields } from './emailFields';
 import { formatDate } from './paymentEmailFields';
+import type {
+	EmailBillingPeriod,
+	EmailGiftRecipient,
+	EmailPaymentMethod,
+	EmailPaymentSchedule,
+	EmailUser,
+} from './types';
 
 export type GuardianWeeklyProductPurchase = Extract<
 	ProductPurchase,
@@ -30,15 +33,15 @@ export function buildGuardianWeeklyEmailFields({
 	giftRecipient,
 }: {
 	today: Dayjs;
-	user: User;
+	user: EmailUser;
 	currency: IsoCurrency;
-	billingPeriod: RecurringBillingPeriod;
+	billingPeriod: EmailBillingPeriod;
 	subscriptionNumber: string;
-	paymentSchedule: PaymentSchedule;
-	paymentMethod: PaymentMethod;
+	paymentSchedule: EmailPaymentSchedule;
+	paymentMethod: EmailPaymentMethod;
 	isFixedTerm: boolean;
 	mandateId?: string;
-	giftRecipient?: GiftRecipient;
+	giftRecipient?: EmailGiftRecipient;
 }): EmailMessageWithIdentityUserId {
 	const gifteeFields = giftRecipient
 		? {

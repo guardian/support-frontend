@@ -2,18 +2,18 @@ import { partition } from '@modules/arrayFunctions';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { isNonEmpty } from '@modules/nullAndUndefined';
-import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
-import { BillingPeriod } from '@modules/product/billingPeriod';
 import dayjs from 'dayjs';
-import type { Payment, PaymentSchedule } from '../model/paymentSchedule';
+import type { EmailBillingPeriod, EmailPaymentSchedule } from './types';
 
-function billingPeriodNoun(period: RecurringBillingPeriod): string {
+type Payment = EmailPaymentSchedule['payments'][number];
+
+function billingPeriodNoun(period: EmailBillingPeriod): string {
 	switch (period) {
-		case BillingPeriod.Monthly:
+		case 'Monthly':
 			return 'month';
-		case BillingPeriod.Quarterly:
+		case 'Quarterly':
 			return 'quarter';
-		case BillingPeriod.Annual:
+		case 'Annual':
 			return 'year';
 	}
 }
@@ -29,7 +29,7 @@ export function priceWithCurrency(
 	return `${getCurrencyInfo(currency).glyph}${formatPrice(amount)}`;
 }
 
-export function firstPayment(paymentSchedule: PaymentSchedule): Payment {
+export function firstPayment(paymentSchedule: EmailPaymentSchedule): Payment {
 	if (isNonEmpty(paymentSchedule.payments)) {
 		return earliestPayment(paymentSchedule.payments);
 	}
@@ -50,7 +50,7 @@ export function pluralise(num: number, thing: string): string {
 
 export function introductoryPeriod(
 	introductoryBillingPeriods: number,
-	billingPeriod: RecurringBillingPeriod,
+	billingPeriod: EmailBillingPeriod,
 ): string {
 	return pluralise(
 		introductoryBillingPeriods,
@@ -58,11 +58,11 @@ export function introductoryPeriod(
 	);
 }
 
-export function fixedTermNoun(billingPeriod: RecurringBillingPeriod): string {
+export function fixedTermNoun(billingPeriod: EmailBillingPeriod): string {
 	switch (billingPeriod) {
-		case BillingPeriod.Quarterly:
+		case 'Quarterly':
 			return '3 months';
-		case BillingPeriod.Annual:
+		case 'Annual':
 			return '12 months';
 		default:
 			return billingPeriodNoun(billingPeriod);
@@ -76,8 +76,8 @@ function monthsBetween(start: Date, end: Date): number {
 }
 
 export function describePayments(
-	paymentSchedule: PaymentSchedule,
-	billingPeriod: RecurringBillingPeriod,
+	paymentSchedule: EmailPaymentSchedule,
+	billingPeriod: EmailBillingPeriod,
 	currency: IsoCurrency,
 	isFixedTerm: boolean,
 ): string {
@@ -125,7 +125,7 @@ function descriptionWithSingleIntroductoryPeriod(
 	paymentsWithDifferentPrice: [Payment, ...Payment[]],
 	currency: IsoCurrency,
 	initialPrice: number,
-	billingPeriod: RecurringBillingPeriod,
+	billingPeriod: EmailBillingPeriod,
 ) {
 	const firstDifferent = paymentsWithDifferentPrice[0];
 	return `${priceWithCurrency(
@@ -144,7 +144,7 @@ function descriptionWithMultipleIntroductoryPeriods(
 	paymentsWithDifferentPrice: Payment[],
 	currency: IsoCurrency,
 	initialPrice: number,
-	billingPeriod: RecurringBillingPeriod,
+	billingPeriod: EmailBillingPeriod,
 ) {
 	const firstIntroductoryPayment = earliestPayment(paymentsWithInitialPrice);
 	const firstDifferentPayment = earliestPayment(
@@ -156,19 +156,19 @@ function descriptionWithMultipleIntroductoryPeriods(
 	);
 	let timespan: string;
 	switch (billingPeriod) {
-		case BillingPeriod.Annual:
+		case 'Annual':
 			timespan = introductoryPeriod(
 				monthsAtIntroductoryPrice / 12,
 				billingPeriod,
 			);
 			break;
-		case BillingPeriod.Quarterly:
+		case 'Quarterly':
 			timespan = introductoryPeriod(
 				monthsAtIntroductoryPrice / 3,
 				billingPeriod,
 			);
 			break;
-		case BillingPeriod.Monthly:
+		case 'Monthly':
 			timespan = introductoryPeriod(monthsAtIntroductoryPrice, billingPeriod);
 			break;
 		default:

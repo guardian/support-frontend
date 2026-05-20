@@ -1,12 +1,14 @@
 import type { EmailMessageWithIdentityUserId } from '@modules/email/email';
 import { DataExtensionNames } from '@modules/email/email';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type { Dayjs } from 'dayjs';
-import type { PaymentMethod } from '../model/paymentMethod';
-import type { PaymentSchedule } from '../model/paymentSchedule';
-import type { User } from '../model/stateSchemas';
 import { buildEmailFields, buildNonDeliveryEmailFields } from './emailFields';
+import type {
+	EmailBillingPeriod,
+	EmailPaymentMethod,
+	EmailPaymentSchedule,
+	EmailUser,
+} from './types';
 
 export function buildContributionEmailFields({
 	today,
@@ -20,13 +22,13 @@ export function buildContributionEmailFields({
 	mandateId,
 }: {
 	today: Dayjs;
-	user: User;
+	user: EmailUser;
 	amount: number;
 	currency: IsoCurrency;
-	billingPeriod: RecurringBillingPeriod;
+	billingPeriod: EmailBillingPeriod;
 	subscriptionNumber: string;
-	paymentSchedule: PaymentSchedule;
-	paymentMethod: PaymentMethod;
+	paymentSchedule: EmailPaymentSchedule;
+	paymentMethod: EmailPaymentMethod;
 	mandateId?: string;
 }): EmailMessageWithIdentityUserId {
 	const nonDeliveryEmailFields = buildNonDeliveryEmailFields({

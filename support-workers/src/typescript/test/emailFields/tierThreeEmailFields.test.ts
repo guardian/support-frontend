@@ -1,5 +1,4 @@
 import { DataExtensionNames } from '@modules/email/email';
-import { BillingPeriod } from '@modules/product/billingPeriod';
 import dayjs from 'dayjs';
 import { formatDate } from '../../emailFields/paymentEmailFields';
 import { buildTierThreeEmailFields } from '../../emailFields/tierThreeEmailFields';
@@ -19,7 +18,7 @@ describe('Tier three thank you email fields', () => {
 			today: today,
 			user: emailUser,
 			currency: 'GBP',
-			billingPeriod: BillingPeriod.Monthly,
+			billingPeriod: 'Monthly',
 			subscriptionNumber: subscriptionNumber,
 			paymentSchedule: paperPaymentSchedule,
 			paymentMethod: creditCardPaymentMethod,

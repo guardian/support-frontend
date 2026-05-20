@@ -1,6 +1,5 @@
 import type { EmailMessageWithIdentityUserId } from '@modules/email/email';
 import { sendEmail } from '@modules/email/email';
-import { BillingPeriod } from '@modules/product/billingPeriod';
 import { getProductCatalogFromApi } from '@modules/product-catalog/api';
 import type { ProductCatalog } from '@modules/product-catalog/productCatalog';
 import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
@@ -18,14 +17,23 @@ import type { PaperProductPurchase } from '../emailFields/paperEmailFields';
 import { buildPaperEmailFields } from '../emailFields/paperEmailFields';
 import { buildSupporterPlusEmailFields } from '../emailFields/supporterPlusEmailFields';
 import { buildTierThreeEmailFields } from '../emailFields/tierThreeEmailFields';
-import type { PaymentMethodType } from '../model/paymentMethod';
+import type {
+	EmailBillingPeriod,
+	EmailDeliveryAgentDetails,
+	EmailGiftRecipient,
+	EmailPaymentMethod,
+	EmailPaymentSchedule,
+	EmailUser,
+} from '../emailFields/types';
+import type { PaymentMethod, PaymentMethodType } from '../model/paymentMethod';
+import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { ProductType } from '../model/productType';
 import type {
 	SendAcquisitionEventState,
 	SendThankYouEmailState,
 } from '../model/sendAcquisitionEventState';
 import { stageFromEnvironment } from '../model/stage';
-import type { WrappedState } from '../model/stateSchemas';
+import type { GiftRecipient, User, WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
 import type { DeliveryAgentDetails } from '../services/paperRound';
 import { getPaperRoundConfig, PaperRoundService } from '../services/paperRound';
@@ -47,6 +55,67 @@ const zuoraServiceProvider = new ServiceProvider(stage, async (stage) => {
 	return ZuoraClient.create(stage);
 });
 
+function toEmailUser(user: User): EmailUser {
+	return {
+		id: user.id,
+		primaryEmailAddress: user.primaryEmailAddress,
+		firstName: user.firstName,
+		lastName: user.lastName,
+		billingAddress: user.billingAddress,
+		deliveryAddress: user.deliveryAddress ?? undefined,
+	};
+}
+
+function toEmailPaymentMethod(
+	paymentMethod: PaymentMethod,
+): EmailPaymentMethod {
+	switch (paymentMethod.Type) {
+		case 'BankTransfer':
+			return {
+				Type: 'BankTransfer',
+				BankTransferAccountName: paymentMethod.BankTransferAccountName,
+				BankTransferAccountNumber: paymentMethod.BankTransferAccountNumber,
+				BankCode: paymentMethod.BankCode,
+			};
+		case 'CreditCardReferenceTransaction':
+			return { Type: 'CreditCardReferenceTransaction' };
+		case 'PayPal':
+		case 'PayPalCompletePayments':
+		case 'PayPalCompletePaymentsWithBAID':
+			return { Type: 'PayPal' };
+	}
+}
+
+function toEmailPaymentSchedule(
+	paymentSchedule: PaymentSchedule,
+): EmailPaymentSchedule {
+	return { payments: paymentSchedule.payments };
+}
+
+function toEmailGiftRecipient(
+	giftRecipient: GiftRecipient,
+): EmailGiftRecipient {
+	return {
+		firstName: giftRecipient.firstName,
+		lastName: giftRecipient.lastName,
+	};
+}
+
+function toEmailDeliveryAgentDetails(
+	agent: DeliveryAgentDetails,
+): EmailDeliveryAgentDetails {
+	return {
+		agentname: agent.agentname,
+		telephone: agent.telephone,
+		email: agent.email,
+		address1: agent.address1,
+		address2: agent.address2,
+		town: agent.town,
+		county: agent.county,
+		postcode: agent.postcode,
+	};
+}
+
 async function getFieldsFromState(
 	sendThankYouEmailState: SendThankYouEmailState,
 ) {
@@ -58,12 +127,14 @@ async function getFieldsFromState(
 	);
 	return {
 		today: dayjs(),
-		user: sendThankYouEmailState.user,
+		user: toEmailUser(sendThankYouEmailState.user),
 		currency: sendThankYouEmailState.product.currency,
 		billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
 		subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
-		paymentSchedule: sendThankYouEmailState.paymentSchedule,
-		paymentMethod: sendThankYouEmailState.paymentMethod,
+		paymentSchedule: toEmailPaymentSchedule(
+			sendThankYouEmailState.paymentSchedule,
+		),
+		paymentMethod: toEmailPaymentMethod(sendThankYouEmailState.paymentMethod),
 		mandateId: await getMandateId(
 			sendThankYouEmailState.user.isTestUser,
 			sendThankYouEmailState.paymentMethod.Type,
@@ -122,7 +193,9 @@ async function sendPaperEmail(
 		buildPaperEmailFields({
 			...(await getFieldsFromState(sendThankYouEmailState)),
 			productInformation: productInformation,
-			deliveryAgentDetails: deliveryAgent,
+			deliveryAgentDetails: deliveryAgent
+				? toEmailDeliveryAgentDetails(deliveryAgent)
+				: undefined,
 		}),
 	);
 }
@@ -161,7 +234,9 @@ async function sendGuardianWeeklyEmail(
 		await sendEmailWithStage(
 			buildGuardianWeeklyEmailFields({
 				...(await getFieldsFromState(sendThankYouEmailState)),
-				giftRecipient: sendThankYouEmailState.giftRecipient,
+				giftRecipient: sendThankYouEmailState.giftRecipient
+					? toEmailGiftRecipient(sendThankYouEmailState.giftRecipient)
+					: undefined,
 			}),
 		);
 	}
@@ -232,9 +307,9 @@ function isFixedTerm(
 	return productRatePlan.termType === 'FixedTerm';
 }
 
-export function getBillingPeriod(productType: ProductType) {
+export function getBillingPeriod(productType: ProductType): EmailBillingPeriod {
 	if (productType.productType === 'GuardianAdLite') {
-		return BillingPeriod.Monthly;
+		return 'Monthly';
 	}
 	return productType.billingPeriod;
 }

@@ -1,10 +1,9 @@
 import dayjs from 'dayjs';
 import type {
-	DirectDebitPaymentMethod,
-	StripePaymentMethod,
-} from '../../../model/paymentMethod';
-import type { User } from '../../../model/stateSchemas';
-import type { DeliveryAgentDetails } from '../../../services/paperRound';
+	EmailDeliveryAgentDetails,
+	EmailPaymentMethod,
+	EmailUser,
+} from '../../../emailFields/types';
 
 export const today = '2025-11-11';
 export const emailAddress = 'test@thegulocal.com';
@@ -13,7 +12,6 @@ export const mandateId = 'MANDATE_ID';
 export const address = {
 	lineOne: '90 York Way',
 	city: 'London',
-	state: '',
 	postCode: 'N1 9GU',
 	country: 'GB' as const,
 };
@@ -28,12 +26,8 @@ export const deliveryContact = {
 	postalCode: 'N1 9GU',
 };
 
-export const deliveryAgentDetails: DeliveryAgentDetails = {
+export const deliveryAgentDetails: EmailDeliveryAgentDetails = {
 	agentname: 'Test Agent',
-	refid: 123,
-	refgroupid: 0,
-	startdate: '10/10/1989',
-	enddate: '2100-01-01',
 	address1: '1 Test Street',
 	address2: '',
 	town: 'Croydon',
@@ -43,40 +37,23 @@ export const deliveryAgentDetails: DeliveryAgentDetails = {
 	email: 'test-agent@thegulocal.com',
 };
 
-export const emailUser: User = {
+export const emailUser: EmailUser = {
 	id: '1234',
 	primaryEmailAddress: emailAddress,
 	firstName: 'Mickey',
 	lastName: 'Mouse',
 	billingAddress: address,
-	isTestUser: false,
 };
 
-export const directDebitPaymentMethod: DirectDebitPaymentMethod = {
-	FirstName: emailUser.firstName,
-	LastName: emailUser.lastName,
-	StreetNumber: emailUser.billingAddress.lineOne,
-	StreetName: emailUser.billingAddress.lineTwo,
-	City: emailUser.billingAddress.city,
-	PostalCode: emailUser.billingAddress.postCode,
-	State: emailUser.billingAddress.state,
-	Country: emailUser.billingAddress.country,
+export const directDebitPaymentMethod: EmailPaymentMethod = {
+	Type: 'BankTransfer',
 	BankTransferAccountName: `${emailUser.firstName} ${emailUser.lastName}`,
 	BankCode: '20-20-20',
-	Type: 'BankTransfer',
 	BankTransferAccountNumber: '11111111',
-	BankTransferType: 'DirectDebitUK',
-	PaymentGateway: 'GoCardless',
 };
 
-export const creditCardPaymentMethod: StripePaymentMethod = {
-	TokenId: 'tok_1N4mX2L3a9j5f6gH7i8j9k0l',
-	SecondTokenId: 'cus_J5k6l7m8n9o0p1q2r3s4t5u6',
-	CreditCardNumber: '4242',
-	CreditCardExpirationMonth: 12,
-	CreditCardExpirationYear: 2026,
-	Type: 'CreditCardReferenceTransaction' as const,
-	PaymentGateway: 'Stripe PaymentIntents GNM Membership',
+export const creditCardPaymentMethod: EmailPaymentMethod = {
+	Type: 'CreditCardReferenceTransaction',
 };
 
 export const paymentSchedule = {

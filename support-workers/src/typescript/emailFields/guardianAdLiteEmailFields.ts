@@ -1,12 +1,13 @@
 import type { EmailMessageWithIdentityUserId } from '@modules/email/email';
 import { DataExtensionNames } from '@modules/email/email';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { Dayjs } from 'dayjs';
-import type { PaymentMethod } from '../model/paymentMethod';
-import type { PaymentSchedule } from '../model/paymentSchedule';
-import type { User } from '../model/stateSchemas';
 import { buildEmailFields, buildNonDeliveryEmailFields } from './emailFields';
+import type {
+	EmailPaymentMethod,
+	EmailPaymentSchedule,
+	EmailUser,
+} from './types';
 
 export function buildGuardianAdLiteEmailFields({
 	today,
@@ -18,11 +19,11 @@ export function buildGuardianAdLiteEmailFields({
 	mandateId,
 }: {
 	today: Dayjs;
-	user: User;
+	user: EmailUser;
 	subscriptionNumber: string;
 	currency: IsoCurrency;
-	paymentMethod: PaymentMethod;
-	paymentSchedule: PaymentSchedule;
+	paymentMethod: EmailPaymentMethod;
+	paymentSchedule: EmailPaymentSchedule;
 	mandateId?: string;
 }): EmailMessageWithIdentityUserId {
 	const nonDeliveryEmailFields = buildNonDeliveryEmailFields({
@@ -30,7 +31,7 @@ export function buildGuardianAdLiteEmailFields({
 		user,
 		subscriptionNumber,
 		currency,
-		billingPeriod: BillingPeriod.Monthly, // Guardian Ad Lite is always billed monthly
+		billingPeriod: 'Monthly', // Guardian Ad Lite is always billed monthly
 		paymentMethod,
 		paymentSchedule,
 		mandateId: mandateId,

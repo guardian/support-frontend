@@ -1,12 +1,14 @@
 import type { IsoCurrency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import { getCountryNameByIsoCode } from '@modules/internationalisation/country';
-import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type { Dayjs } from 'dayjs';
-import type { PaymentMethod } from '../model/paymentMethod';
-import type { PaymentSchedule } from '../model/paymentSchedule';
-import type { User } from '../model/stateSchemas';
 import type { NonDeliveryEmailFields } from './emailFields';
 import { buildNonDeliveryEmailFields } from './emailFields';
+import type {
+	EmailBillingPeriod,
+	EmailPaymentMethod,
+	EmailPaymentSchedule,
+	EmailUser,
+} from './types';
 
 type DeliveryFields = {
 	delivery_address_line_1: string;
@@ -30,12 +32,12 @@ export function buildDeliveryEmailFields({
 	mandateId,
 }: {
 	today: Dayjs;
-	user: User;
+	user: EmailUser;
 	subscriptionNumber: string;
 	currency: IsoCurrency;
-	billingPeriod: RecurringBillingPeriod;
-	paymentMethod: PaymentMethod;
-	paymentSchedule: PaymentSchedule;
+	billingPeriod: EmailBillingPeriod;
+	paymentMethod: EmailPaymentMethod;
+	paymentSchedule: EmailPaymentSchedule;
 	isFixedTerm: boolean;
 	mandateId?: string;
 }): DeliveryEmailFields {

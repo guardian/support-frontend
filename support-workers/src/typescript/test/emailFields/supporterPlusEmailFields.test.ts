@@ -1,7 +1,7 @@
 import { DataExtensionNames } from '@modules/email/email';
-import { BillingPeriod } from '@modules/product/billingPeriod';
 import dayjs from 'dayjs';
 import { buildSupporterPlusEmailFields } from '../../emailFields/supporterPlusEmailFields';
+import type { EmailPaymentMethod } from '../../emailFields/types';
 import {
 	creditCardPaymentMethod,
 	directDebitPaymentMethod,
@@ -20,7 +20,7 @@ describe('Supporter plus thank you email fields', () => {
 			today: dayjs(today),
 			user: emailUser,
 			currency: 'GBP',
-			billingPeriod: BillingPeriod.Monthly,
+			billingPeriod: 'Monthly',
 			subscriptionNumber: subscriptionNumber,
 			paymentSchedule: paymentSchedule,
 			paymentMethod: directDebitPaymentMethod,
@@ -34,9 +34,19 @@ describe('Supporter plus thank you email fields', () => {
 				ContactAttributes: {
 					SubscriberAttributes: {
 						first_name: emailUser.firstName,
-						account_name: directDebitPaymentMethod.BankTransferAccountName,
+						account_name: (
+							directDebitPaymentMethod as Extract<
+								EmailPaymentMethod,
+								{ Type: 'BankTransfer' }
+							>
+						).BankTransferAccountName,
 						Mandate_ID: mandateId,
-						sort_code: directDebitPaymentMethod.BankCode,
+						sort_code: (
+							directDebitPaymentMethod as Extract<
+								EmailPaymentMethod,
+								{ Type: 'BankTransfer' }
+							>
+						).BankCode,
 						payment_method: 'Direct Debit',
 						first_payment_date: 'Thursday, 11 December 2025',
 						last_name: emailUser.lastName,
@@ -65,7 +75,7 @@ describe('Supporter plus thank you email fields', () => {
 			today: dayjs(today),
 			user: emailUser,
 			currency: 'GBP',
-			billingPeriod: BillingPeriod.Annual,
+			billingPeriod: 'Annual',
 			subscriptionNumber: subscriptionNumber,
 			paymentSchedule: paymentSchedule,
 			paymentMethod: creditCardPaymentMethod,
@@ -100,7 +110,7 @@ describe('Supporter plus thank you email fields', () => {
 			today: dayjs(today),
 			user: emailUser,
 			currency: 'GBP',
-			billingPeriod: BillingPeriod.Annual,
+			billingPeriod: 'Annual',
 			subscriptionNumber: subscriptionNumber,
 			paymentSchedule: fixedTermPaymentSchedule,
 			paymentMethod: directDebitPaymentMethod,

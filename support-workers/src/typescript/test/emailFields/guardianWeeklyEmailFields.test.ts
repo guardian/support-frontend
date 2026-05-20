@@ -1,5 +1,4 @@
 import { DataExtensionNames } from '@modules/email/email';
-import { BillingPeriod } from '@modules/product/billingPeriod';
 import dayjs from 'dayjs';
 import { buildGuardianWeeklyEmailFields } from '../../emailFields/guardianWeeklyEmailFields';
 import { formatDate } from '../../emailFields/paymentEmailFields';
@@ -20,7 +19,7 @@ describe('Guardian weekly thank you email fields', () => {
 			today: today,
 			user: emailUser,
 			currency: 'GBP',
-			billingPeriod: BillingPeriod.Monthly,
+			billingPeriod: 'Monthly',
 			subscriptionNumber: subscriptionNumber,
 			paymentSchedule: paperPaymentSchedule,
 			paymentMethod: creditCardPaymentMethod,
@@ -67,7 +66,7 @@ describe('Guardian weekly thank you email fields', () => {
 			today: today,
 			user: emailUser,
 			currency: 'USD',
-			billingPeriod: BillingPeriod.Annual,
+			billingPeriod: 'Annual',
 			subscriptionNumber: subscriptionNumber,
 			paymentSchedule: paperPaymentSchedule,
 			paymentMethod: creditCardPaymentMethod,

@@ -4,15 +4,16 @@ import type {
 } from '@modules/email/email';
 import { DataExtensionNames } from '@modules/email/email';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
 import type { Dayjs } from 'dayjs';
-import type { PaymentMethod } from '../model/paymentMethod';
-import type { PaymentSchedule } from '../model/paymentSchedule';
-import type { User } from '../model/stateSchemas';
-import type { DeliveryAgentDetails } from '../services/paperRound';
 import { buildDeliveryEmailFields } from './deliveryEmailFields';
 import { buildEmailFields } from './emailFields';
+import type {
+	EmailDeliveryAgentDetails,
+	EmailPaymentMethod,
+	EmailPaymentSchedule,
+	EmailUser,
+} from './types';
 
 export type PaperProductPurchase = Extract<
 	ProductPurchase,
@@ -31,14 +32,14 @@ export function buildPaperEmailFields({
 	deliveryAgentDetails,
 }: {
 	today: Dayjs;
-	user: User;
+	user: EmailUser;
 	currency: IsoCurrency;
 	subscriptionNumber: string;
-	paymentSchedule: PaymentSchedule;
-	paymentMethod: PaymentMethod;
+	paymentSchedule: EmailPaymentSchedule;
+	paymentMethod: EmailPaymentMethod;
 	mandateId?: string;
 	productInformation: PaperProductPurchase;
-	deliveryAgentDetails?: DeliveryAgentDetails;
+	deliveryAgentDetails?: EmailDeliveryAgentDetails;
 }): EmailMessageWithIdentityUserId {
 	const deliveryAgentFields =
 		productInformation.product === 'NationalDelivery' && deliveryAgentDetails
@@ -59,7 +60,7 @@ export function buildPaperEmailFields({
 		user: user,
 		subscriptionNumber: subscriptionNumber,
 		currency: currency,
-		billingPeriod: BillingPeriod.Monthly, // Paper products are always monthly
+		billingPeriod: 'Monthly', // Paper products are always monthly
 		paymentMethod: paymentMethod,
 		paymentSchedule: paymentSchedule,
 		isFixedTerm: false, // There are no fixed term paper rate plans

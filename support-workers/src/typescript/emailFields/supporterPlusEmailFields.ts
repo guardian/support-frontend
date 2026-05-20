@@ -1,12 +1,14 @@
 import { DataExtensionNames } from '@modules/email/email';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type dayjs from 'dayjs';
-import type { PaymentMethod } from '../model/paymentMethod';
-import type { PaymentSchedule } from '../model/paymentSchedule';
-import type { User } from '../model/stateSchemas';
 import { buildEmailFields, buildNonDeliveryEmailFields } from './emailFields';
 import { getPaymentMethodFieldsSupporterPlus } from './paymentEmailFields';
+import type {
+	EmailBillingPeriod,
+	EmailPaymentMethod,
+	EmailPaymentSchedule,
+	EmailUser,
+} from './types';
 
 export function buildSupporterPlusEmailFields({
 	today,
@@ -20,12 +22,12 @@ export function buildSupporterPlusEmailFields({
 	mandateId,
 }: {
 	today: dayjs.Dayjs;
-	user: User;
+	user: EmailUser;
 	currency: IsoCurrency;
-	billingPeriod: RecurringBillingPeriod;
+	billingPeriod: EmailBillingPeriod;
 	subscriptionNumber: string;
-	paymentSchedule: PaymentSchedule;
-	paymentMethod: PaymentMethod;
+	paymentSchedule: EmailPaymentSchedule;
+	paymentMethod: EmailPaymentMethod;
 	isFixedTerm: boolean;
 	mandateId?: string;
 }) {

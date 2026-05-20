@@ -1,5 +1,4 @@
 import { DataExtensionNames } from '@modules/email/email';
-import { BillingPeriod } from '@modules/product/billingPeriod';
 import dayjs from 'dayjs';
 import { buildContributionEmailFields } from '../../emailFields/contributionEmailFields';
 import {
@@ -17,7 +16,7 @@ describe('contributionEmailFields', () => {
 			user: emailUser,
 			amount: 5,
 			currency: 'GBP',
-			billingPeriod: BillingPeriod.Monthly,
+			billingPeriod: 'Monthly',
 			subscriptionNumber: 'SUBSCRIPTION123',
 			paymentSchedule: {
 				payments: [
