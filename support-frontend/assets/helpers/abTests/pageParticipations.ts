@@ -68,7 +68,11 @@ export async function getPageParticipations<Variant>(
 		testList: Array<PageTest<Variant>>,
 	): Variant | undefined => {
 		for (const test of testList) {
-			const variantName = participations[test.name];
+			const variantName =
+				participations[test.name] ??
+				(test.selectedTestName
+					? participations[test.selectedTestName]
+					: undefined);
 			if (variantName) {
 				const variant = test.variants.find(
 					(v) => getVariantName(v) === variantName,
@@ -124,7 +128,11 @@ export async function getPageParticipations<Variant>(
 		Object.entries(sessionParticipations).length > 0
 	) {
 		// Check if session storage participations match available tests
-		const testNames = new Set(tests.map((t) => t.name));
+		// Include selectedTestName (methodology-specific tracking name) alongside test.name
+		const testNames = new Set([
+			...tests.map((t) => t.name),
+			...tests.flatMap((t) => (t.selectedTestName ? [t.selectedTestName] : [])),
+		]);
 		const hasMatchingParticipation = Object.keys(sessionParticipations).some(
 			(key) => testNames.has(key),
 		);

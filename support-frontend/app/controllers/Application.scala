@@ -319,15 +319,10 @@ class Application(
   ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
 
-    val baseSettings = settingsProvider.getAllSettings()
-    val enrichedTests = baseSettings.landingPageTests.map { test =>
-      landingPageVariantSelector.selectVariantForTest(test, request) match {
-        case Some((variant, effectiveTestName)) =>
-          test.copy(selectedVariant = Some(variant), selectedTestName = Some(effectiveTestName))
-        case None => test
-      }
-    }
-    implicit val settings: AllSettings = baseSettings.copy(landingPageTests = enrichedTests)
+    implicit val settings: AllSettings = enrichLandingPageTests(
+      settingsProvider.getAllSettings(),
+      request,
+    )
     Ok(
       contributionsPlusStudentHtml(
         countryCode,
@@ -619,7 +614,10 @@ class Application(
   }
 
   def productCheckoutRouter(countryGroupId: String) = MaybeAuthenticatedAction { implicit request =>
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    implicit val settings: AllSettings = enrichLandingPageTests(
+      settingsProvider.getAllSettings(),
+      request,
+    )
     val geoData = request.geoData
     val serversideTests = generateParticipations(Nil)
     val isTestUser = testUserService.isTestUser(request)
@@ -720,5 +718,19 @@ class Application(
       settings = settings,
     )
     Ok(appConfig.asJson)
+  }
+
+  private def enrichLandingPageTests(
+      baseSettings: AllSettings,
+      request: OptionalAuthRequest[_],
+  ): AllSettings = {
+    val enrichedTests = baseSettings.landingPageTests.map { test =>
+      landingPageVariantSelector.selectVariantForTest(test, request) match {
+        case Some((variant, effectiveTestName)) =>
+          test.copy(selectedVariant = Some(variant), selectedTestName = Some(effectiveTestName))
+        case None => test
+      }
+    }
+    baseSettings.copy(landingPageTests = enrichedTests)
   }
 }
