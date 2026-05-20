@@ -237,4 +237,8 @@ const isContributionsOnlyCountry = (countryId: IsoCountry): boolean =>
 	countries.has(countryId);
 
 // ----- Exports ----- //
-export { config, isContributionsOnlyCountry, contributionsOnlyCountriesAmountsConfig };
+export {
+	config,
+	isContributionsOnlyCountry,
+	contributionsOnlyCountriesAmountsConfig,
+};
