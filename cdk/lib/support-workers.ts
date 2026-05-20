@@ -610,16 +610,23 @@ export class SupportWorkers extends GuStack {
       threshold: 0,
     }).node.addDependency(stateMachine);
 
-    new GuAlarm(this, "NoWeeklyAcquisitionInOneDayAlarm", {
+    // Guardian Weekly alarm for all payment providers combined (Stripe, Gocardless, Paypal)
+    const weeklyMetricDuration = Duration.minutes(5);
+    const weeklyEvaluationPeriods = 144; // The number of 5 minute periods in 12 hours
+    const weeklyAlarmPeriod = Duration.minutes(
+      weeklyMetricDuration.toMinutes() * weeklyEvaluationPeriods
+    );
+
+    new GuAlarm(this, "NoWeeklyAcquisitionForPeriodAlarm", {
       app,
       actionsEnabled: isProd,
       okAction: true,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful guardian weekly checkouts in 8h.`,
+      alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful guardian weekly checkouts in ${weeklyAlarmPeriod.toHumanString()}.`,
       metric: new MathExpression({
         label: "AllWeeklyConversions",
         expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
-        period: Duration.minutes(5),
+        period: weeklyMetricDuration,
         usingMetrics: {
           m1: this.buildPaymentSuccessMetric(
             PaymentProviders.Stripe,
@@ -636,7 +643,7 @@ export class SupportWorkers extends GuStack {
         },
       }),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 96,
+      evaluationPeriods: weeklyEvaluationPeriods,
       treatMissingData: TreatMissingData.BREACHING,
       threshold: 0,
     }).node.addDependency(stateMachine);
