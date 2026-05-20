@@ -1,9 +1,10 @@
 {
 	"extends": "../tsconfig.json",
+	"files": ["./src/server.ts"],
 	"compilerOptions": {
-	  "types": ["node", "jest"],
-	  "resolveJsonModule": true,
-	  "noEmit": true,
-    "outDir": "target"
+		"types": ["node", "jest"],
+		"resolveJsonModule": true,
+		"rootDir": "src",
+		"outDir":	"./target"
 	}
 }

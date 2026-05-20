@@ -108,12 +108,17 @@ function ChecklistItemIcon({
 	style: CheckListStyle;
 }): JSX.Element {
 	const styleSize = style === 'standard' ? 'small' : 'xsmall';
+	const statusLabel = checked ? 'Included' : 'Not included';
 	return style === 'bullet' ? (
 		<BulletSvg />
-	) : checked ? (
-		<SvgTickRound isAnnouncedByScreenReader size={styleSize} />
 	) : (
-		<SvgCrossRoundFilled isAnnouncedByScreenReader size={styleSize} />
+		<span role="img" aria-label={statusLabel}>
+			{checked ? (
+				<SvgTickRound size={styleSize} />
+			) : (
+				<SvgCrossRoundFilled size={styleSize} />
+			)}
+		</span>
 	);
 }
 

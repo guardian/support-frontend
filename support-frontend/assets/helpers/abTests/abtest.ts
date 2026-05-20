@@ -1,17 +1,10 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import seedrandom from 'seedrandom';
-import { contributionsOnlyAmountsTestName } from 'helpers/contributions';
-import type { Settings } from 'helpers/globalsAndSwitches/settings';
+import { isVatComplianceCountry } from 'helpers/contributions';
 import * as cookie from 'helpers/storage/cookie';
 import { getQueryParameter } from 'helpers/urls/url';
-import type {
-	AmountsTest,
-	AmountsVariant,
-	SelectedAmountsVariant,
-} from '../contributions';
 import { tests } from './abtestDefinitions';
-import { getFallbackAmounts } from './helpers';
 import type {
 	AcquisitionABTest,
 	Audience,
@@ -36,7 +29,6 @@ export const testIsActive = (
 type ABtestInitalizerData = {
 	countryId: IsoCountry;
 	countryGroupId: CountryGroupId;
-	selectedAmountsVariant?: SelectedAmountsVariant;
 	abTests?: Tests;
 	mvt?: number;
 	acquisitionDataTests?: AcquisitionABTest[];
@@ -46,21 +38,21 @@ type ABtestInitalizerData = {
 function init({
 	countryId,
 	countryGroupId,
-	selectedAmountsVariant,
 	abTests = tests,
 	mvt = getMvtId(),
 	acquisitionDataTests = getTestFromAcquisitionData() ?? [],
 	pathWithQueryString = window.location.pathname + window.location.search,
 }: ABtestInitalizerData): Participations {
+	const inContributionsOnlyCountry = isVatComplianceCountry(countryId);
 	const sessionParticipations = getSessionParticipations(PARTICIPATIONS_KEY);
 	const participations = getParticipations(
 		abTests,
 		mvt,
 		countryId,
 		countryGroupId,
+		inContributionsOnlyCountry,
 		pathWithQueryString,
 		acquisitionDataTests,
-		selectedAmountsVariant,
 		sessionParticipations,
 	);
 
@@ -80,9 +72,9 @@ function getParticipations(
 	mvtId: number,
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
+	inContributionsOnlyCountry: boolean,
 	pathWithQueryString: string,
 	acquisitionDataTests?: AcquisitionABTest[],
-	selectedAmountsVariant?: SelectedAmountsVariant,
 	sessionParticipations: Participations = {},
 ): Participations {
 	const participations: Participations = {};
@@ -118,12 +110,12 @@ function getParticipations(
 			!!test.audiences.CONTRIBUTIONS_ONLY;
 
 		/**
-		 * Exclude any users assigned to the contributions only amounts test
+		 * Exclude users in VAT compliance countries
 		 * from an ab test if the ab test definition has excludeContributionsOnlyCountries as true
 		 * AND includeOnlyContributionsOnlyCountries is not true
 		 */
 		if (
-			selectedAmountsVariant?.testName === contributionsOnlyAmountsTestName &&
+			inContributionsOnlyCountry &&
 			test.excludeContributionsOnlyCountries &&
 			!includeOnlyContributionsOnlyCountries
 		) {
@@ -131,13 +123,10 @@ function getParticipations(
 		}
 
 		/**
-		 * Exclude defined users NOT assigned to the contributions only amounts test
+		 * Exclude users outside VAT compliance countries
 		 * if the  the ab test definition has includeOnlyContributionsOnlyCountries as true
 		 */
-		if (
-			selectedAmountsVariant?.testName !== contributionsOnlyAmountsTestName &&
-			includeOnlyContributionsOnlyCountries
-		) {
+		if (!inContributionsOnlyCountry && includeOnlyContributionsOnlyCountries) {
 			return;
 		}
 
@@ -210,191 +199,6 @@ function getServerSideParticipations(): Participations | null | undefined {
 	return null;
 }
 
-function getAmountsTestFromURL(
-	data: AcquisitionABTest[],
-): AcquisitionABTest | undefined {
-	const amountTests = data.filter((t) => t.testType === 'AMOUNTS_TEST');
-	return amountTests[0];
-}
-
-interface GetAmountsTestVariantResult {
-	selectedAmountsVariant: SelectedAmountsVariant; // Always return an AmountsVariant, even if it's a fallback
-	amountsParticipation?: Participations; // Optional because we only add participation if we want to track an amounts test that has multiple variants
-}
-function getAmountsTestVariant(
-	country: IsoCountry,
-	countryGroupId: CountryGroupId,
-	settings: Settings,
-	path: string = window.location.pathname,
-	mvt: number = getMvtId(),
-	acquisitionDataTests: AcquisitionABTest[] = getTestFromAcquisitionData() ??
-		[],
-): GetAmountsTestVariantResult {
-	const { amounts } = settings;
-
-	if (!amounts) {
-		return {
-			selectedAmountsVariant: getFallbackAmounts(countryGroupId),
-		};
-	}
-
-	const buildParticipation = (
-		test: AmountsTest,
-		testName: string,
-		variantName: string,
-	): Participations | undefined => {
-		// Check if we actually want to track this test
-		const pathMatches = targetPageMatches(
-			path,
-			'/??/checkout|one-time-checkout|contribute|thankyou(/.*)?$',
-		);
-
-		if (pathMatches && test.variants.length > 1 && test.isLive) {
-			return {
-				[testName]: variantName,
-			};
-		}
-
-		return;
-	};
-
-	const contribOnlyAmounts = amounts.find((t) => {
-		return (
-			t.isLive &&
-			t.testName === contributionsOnlyAmountsTestName &&
-			t.targeting.targetingType === 'Country' &&
-			t.targeting.countries.includes(country)
-		);
-	});
-	if (contribOnlyAmounts?.variants[0]) {
-		const amountsParticipation = buildParticipation(
-			contribOnlyAmounts,
-			contributionsOnlyAmountsTestName,
-			contribOnlyAmounts.variants[0].variantName,
-		);
-		return {
-			selectedAmountsVariant: {
-				...contribOnlyAmounts.variants[0],
-				testName: contributionsOnlyAmountsTestName,
-			},
-			amountsParticipation,
-		};
-	}
-
-	// Is an amounts test defined in the url?
-	const urlTest = getAmountsTestFromURL(acquisitionDataTests);
-	if (urlTest) {
-		// Attempt to find urlTest in the configured amounts tests
-		const candidate = amounts.find((t) => {
-			if (t.isLive) {
-				return t.liveTestName === urlTest.name;
-			} else {
-				return t.testName === urlTest.name;
-			}
-		});
-		if (candidate) {
-			const variants = candidate.variants;
-			if (variants.length) {
-				const variant =
-					variants.find((variant) => variant.variantName === urlTest.variant) ??
-					variants[0];
-
-				if (variant) {
-					const amountsParticipation = buildParticipation(
-						candidate,
-						urlTest.name,
-						variant.variantName,
-					);
-					return {
-						selectedAmountsVariant: {
-							...variant,
-							testName: urlTest.name,
-						},
-						amountsParticipation,
-					};
-				}
-			}
-		}
-	}
-
-	// No url test was found, use targeting
-	let targetedTest: AmountsTest | undefined;
-
-	// First try country-targeted tests
-	const source = getSourceFromAcquisitionData() ?? '';
-	const enableCountryTargetedTests = !['APPLE_NEWS', 'GOOGLE_AMP'].includes(
-		source,
-	);
-	if (enableCountryTargetedTests) {
-		const countryTargetedTests = amounts
-			.filter(
-				(t) =>
-					t.isLive &&
-					t.targeting.targetingType === 'Country' &&
-					t.targeting.countries.includes(country),
-			)
-			.sort((a, b) => a.order - b.order);
-
-		if (countryTargetedTests[0]) {
-			targetedTest = countryTargetedTests[0];
-		}
-	}
-
-	// Then try region-targeted tests
-	if (!targetedTest) {
-		targetedTest = amounts.find(
-			(t) =>
-				t.targeting.targetingType === 'Region' &&
-				t.targeting.region === countryGroupId,
-		);
-	}
-
-	if (!targetedTest) {
-		return {
-			selectedAmountsVariant: getFallbackAmounts(countryGroupId),
-		};
-	}
-
-	const { testName, liveTestName, seed, variants, isLive } = targetedTest;
-
-	const selectVariant = (
-		isLive: boolean,
-		variants: AmountsVariant[],
-	): AmountsVariant | undefined => {
-		if (isLive && variants.length > 1) {
-			const assignmentIndex = randomNumber(mvt, seed) % variants.length;
-
-			return variants[assignmentIndex];
-		}
-		// For regional AmountsTests, if the test is not live then we use the control
-
-		return variants[0];
-	};
-
-	const currentTestName = isLive && liveTestName ? liveTestName : testName;
-	const variant = selectVariant(isLive, variants);
-
-	const amountsParticipation = buildParticipation(
-		targetedTest,
-		currentTestName,
-		variant?.variantName ?? '',
-	);
-
-	if (!variant) {
-		return {
-			selectedAmountsVariant: getFallbackAmounts(countryGroupId),
-		};
-	}
-
-	return {
-		selectedAmountsVariant: {
-			...variant,
-			testName: currentTestName,
-		},
-		amountsParticipation,
-	};
-}
-
 function getTestFromAcquisitionData(): AcquisitionABTest[] | undefined {
 	const acquisitionDataParam = getQueryParameter('acquisitionData');
 
@@ -411,25 +215,6 @@ function getTestFromAcquisitionData(): AcquisitionABTest[] | undefined {
 		return acquisitionData.abTest
 			? [acquisitionData.abTest]
 			: acquisitionData.abTests;
-	} catch {
-		console.error('Cannot parse acquisition data from query string');
-		return undefined;
-	}
-}
-
-function getSourceFromAcquisitionData(): string | undefined {
-	const acquisitionDataParam = getQueryParameter('acquisitionData');
-
-	if (!acquisitionDataParam) {
-		return undefined;
-	}
-
-	try {
-		const acquisitionData = JSON.parse(acquisitionDataParam) as {
-			source?: string;
-		};
-
-		return acquisitionData.source;
 	} catch {
 		console.error('Cannot parse acquisition data from query string');
 		return undefined;
@@ -587,7 +372,7 @@ function targetPageMatches(
 	return locationPath.match(targetPage) != null;
 }
 
-export { init, getAmountsTestVariant };
+export { init };
 
 // Exported for testing only
 export const _ = {

@@ -59,7 +59,7 @@ export function PersonalEmailFields({
 							if (validityState.valueMissing) {
 								setEmailError(`Please enter ${endUser} email address.`);
 							} else {
-								setEmailError(`Please enter a valid ${endUser} email address.`);
+								setEmailError(`Please enter a valid email address.`);
 							}
 						}
 					}}

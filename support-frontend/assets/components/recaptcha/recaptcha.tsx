@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { palette, textSans12, until } from '@guardian/source/foundations';
+import { until } from '@guardian/source/foundations';
 import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
 
 const container = css`
@@ -15,18 +15,6 @@ const container = css`
 	}
 `;
 
-const terms = css`
-	color: ${palette.neutral[46]};
-	${textSans12};
-
-	margin-top: 5px;
-
-	a {
-		color: ${palette.brand[500]};
-		text-decoration: none;
-	}
-`;
-
 type RecaptchaProps = {
 	id?: string;
 	onRecaptchaCompleted: (token: string) => void;
@@ -39,30 +27,9 @@ export function Recaptcha({
 	onRecaptchaExpired,
 }: RecaptchaProps): JSX.Element {
 	useRecaptchaV2(id, onRecaptchaCompleted, onRecaptchaExpired);
-
 	return (
 		<>
 			<div id={id} css={container} />
-			<p css={terms}>
-				By ticking this box, you agree to let Google perform a security check to
-				confirm you are a human. Please refer to their{' '}
-				<a
-					target="_blank"
-					rel="noopener noreferrer"
-					href="https://policies.google.com/terms"
-				>
-					terms
-				</a>{' '}
-				and{' '}
-				<a
-					target="_blank"
-					rel="noopener noreferrer"
-					href="https://policies.google.com/privacy"
-				>
-					privacy
-				</a>{' '}
-				policies.
-			</p>
 		</>
 	);
 }

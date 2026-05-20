@@ -28,7 +28,7 @@ jobs:
         run: env
 
       - name: Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup Node and Install Dependencies
         uses: ./.github/actions/setup-node-and-install
@@ -42,6 +42,16 @@ jobs:
       - name: Build CFN from CDK
         run: ./script/ci
         working-directory: cdk
+
+      - name: TypeScript support-backend test and build
+        run: |
+          pnpm --filter support-backend test
+          pnpm --filter support-backend build
+          pnpm --filter support-backend build-prod-node-modules
+          pushd support-backend
+          mv target_node_modules/node_modules ./target/
+          tar -czf support-backend.tar.gz target
+          popd
 
       # Required by sbt riffRaffUpload
       - name: Configure AWS credentials

@@ -28,9 +28,8 @@ import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
-import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
-import { isContributionsOnlyCountry } from 'helpers/contributions';
+import { isVatComplianceCountry } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
@@ -242,16 +241,10 @@ export default function CheckoutForm({
 			productCatalog.SupporterPlus?.ratePlans[ratePlanKey]?.pricing[
 				currencyKey
 			];
-
-		const { selectedAmountsVariant } = getAmountsTestVariant(
-			countryId,
-			countryGroupId,
-			appConfig.settings,
-		);
 		if (originalAmount < 1) {
 			isInvalidAmount = true;
 		}
-		if (!isContributionsOnlyCountry(selectedAmountsVariant)) {
+		if (isVatComplianceCountry(countryId)) {
 			if (originalAmount >= (supporterPlusRatePlanPrice ?? 0)) {
 				isInvalidAmount = true;
 			}

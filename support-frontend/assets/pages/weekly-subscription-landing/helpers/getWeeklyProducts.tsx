@@ -36,10 +36,11 @@ import {
 } from 'helpers/productPrice/subscriptions';
 import type { OphanComponentType } from 'helpers/tracking/trackingOphan';
 import { addQueryParamsToURL, getOrigin } from 'helpers/urls/url';
+import { getDiscountSummary } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import {
-	getDiscountDuration,
-	getDiscountSummary,
-} from 'pages/[countryGroupId]/student/helpers/discountDetails';
+	getWeeklyGiftSavingsText,
+	getWeeklySavingsText,
+} from './getSavingsText';
 
 function getWeeklyRatePlan(
 	billingPeriod: RecurringBillingPeriod,
@@ -104,15 +105,26 @@ export const getWeeklyProducts = ({
 	productPrices: ProductPrices;
 	billingPeriods: RecurringBillingPeriod[];
 	isGift?: boolean;
-}): Product[] =>
-	billingPeriods.map((billingPeriod) => {
-		const productPrice = getProductPrice(
-			productPrices,
-			countryId,
+}): Product[] => {
+	// Pre-compute prices for all billing periods
+	const priceByBillingPeriod = Object.fromEntries(
+		billingPeriods.map((billingPeriod) => [
 			billingPeriod,
-			getWeeklyFulfilmentOption(countryId),
-			isGift ? 'NoProductOptions' : 'PlusDigital',
-		);
+			getProductPrice(
+				productPrices,
+				countryId,
+				billingPeriod,
+				getWeeklyFulfilmentOption(countryId),
+				isGift ? 'NoProductOptions' : 'PlusDigital',
+			),
+		]),
+	) as Partial<Record<RecurringBillingPeriod, ProductPrice>>;
+
+	return billingPeriods.map((billingPeriod) => {
+		const productPrice = priceByBillingPeriod[billingPeriod];
+		if (!productPrice) {
+			throw new Error(`No price found for billing period ${billingPeriod}`);
+		}
 		const promotion = getAppliedPromo(productPrice.promotions);
 		const trackingProperties = {
 			id: `subscribe_now_cta_gift-${billingPeriod}`,
@@ -128,9 +140,6 @@ export const getWeeklyProducts = ({
 			displayPrice,
 		);
 
-		const offerCopy = isGift
-			? promotion?.landingPage?.roundel ?? ''
-			: undefined;
 		const priceCopy = isGift
 			? getSimplifiedPriceDescription(productPrice, billingPeriod)
 			: '';
@@ -154,12 +163,10 @@ export const getWeeklyProducts = ({
 						shortFormat: true,
 				  })
 				: undefined;
-		const savingsText =
-			!isGift && promotion?.discount?.amount && durationInMonths
-				? `Save ${promotion.discount.amount}% for ${getDiscountDuration({
-						durationInMonths,
-				  })}`
-				: undefined;
+
+		const savingsText = isGift
+			? getWeeklyGiftSavingsText(billingPeriod, promotion, priceByBillingPeriod)
+			: getWeeklySavingsText(promotion);
 
 		const augmentedPromotion = promotion && getAugmentedPromotion(promotion);
 		return {
@@ -179,7 +186,6 @@ export const getWeeklyProducts = ({
 			billingPeriod: isGift ? undefined : billingPeriod,
 			discountedPrice: discountPriceWithCurrency,
 			discountSummary,
-			offerCopy,
 			savingsText,
 			hasPromotion: !isGift && !!promotion,
 			isPriorityPromo: isGift ? undefined : augmentedPromotion?.hasPriority,
@@ -187,6 +193,7 @@ export const getWeeklyProducts = ({
 			isSpecialOffer,
 		};
 	});
+};
 
 const getAugmentedPromotion = (promotion: Promotion): Promotion => {
 	// TODO: This is a temporary function to augment the promotion with additional properties until we have the ability to add custom copy for specific promotions in the promo tool.
