@@ -204,7 +204,7 @@ export function ThreeTierCard({
 		? simpleFormatAmount(currency, mainDiscountedPrice)
 		: undefined;
 	const periodLabel = showWeeklyPrice ? 'week' : periodNoun;
-
+	const linkAriaLabel = `${title}, ${formattedMainDiscountedPrice} per ${periodLabel}`;
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	const pillCopy = promotion?.landingPage?.roundel ?? cardContent.label?.copy;
 	const inAdditionToAllAccessDigital = product === 'DigitalSubscription';
@@ -288,7 +288,7 @@ export function ThreeTierCard({
 				href={link}
 				cssOverrides={btnStyleOverrides}
 				data-qm-trackable={quantumMetricButtonRef}
-				aria-label={title}
+				aria-label={linkAriaLabel}
 				theme={themeButtonReaderRevenueBrand}
 			>
 				{cta.copy}

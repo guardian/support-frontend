@@ -146,17 +146,14 @@ export async function getPageParticipations<Variant>(
 		return makeFallbackResult();
 	}
 
-	const variant = config.selectVariant
-		? config.selectVariant(test, mvtId)
-		: test.variants[randomNumber(mvtId, test.name) % test.variants.length];
+	const idx = randomNumber(mvtId, test.name) % test.variants.length;
+	const variant = test.variants[idx];
 
 	if (!variant) {
 		return makeFallbackResult();
 	}
 
-	// Use selectedTestName if available (for methodology-specific tracking), otherwise use test.name
-	const trackingTestName: string = test.selectedTestName ?? test.name;
-	const participations = { [trackingTestName]: getVariantName(variant) };
+	const participations = { [test.name]: getVariantName(variant) };
 	// Record the participation in session storage so that we can track it from other pages
 	setSessionParticipations(participations, sessionStorageKey);
 

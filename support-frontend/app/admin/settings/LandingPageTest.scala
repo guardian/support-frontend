@@ -97,12 +97,9 @@ case class LandingPageTest(
     regionTargeting: Option[RegionTargeting],
     mParticleAudience: Option[Int],
     variants: List[LandingPageVariant],
-    methodologies: Option[List[Methodology]] = None,
-    selectedVariant: Option[LandingPageVariant] = None,
-    selectedTestName: Option[String] = None,
 )
 
 object LandingPageTest {
-  implicit val encoder: Encoder[LandingPageTest] = deriveEncoder[LandingPageTest]
-  implicit val decoder: Decoder[LandingPageTest] = deriveDecoder[LandingPageTest]
+  implicit val encoder: Encoder[LandingPageTest] = deriveEncoder
+  implicit val decoder: Decoder[LandingPageTest] = deriveDecoder
 }
