@@ -10,14 +10,10 @@ import { buildSupporterPlusEmailFields } from '@modules/email/dataFields/dayZero
 import { buildTierThreeEmailFields } from '@modules/email/dataFields/dayZero/tierThreeEmailFields';
 import type {
 	EmailBillingPeriod,
-	EmailDeliveryAgentDetails,
-	EmailGiftRecipient,
 	EmailPaymentMethod,
-	EmailPaymentSchedule,
-	EmailUser,
 } from '@modules/email/dataFields/dayZero/types';
-import { sendEmail } from '@modules/email/email';
 import type { EmailMessageWithIdentityUserId } from '@modules/email/email';
+import { sendEmail } from '@modules/email/email';
 import { getProductCatalogFromApi } from '@modules/product-catalog/api';
 import type { ProductCatalog } from '@modules/product-catalog/productCatalog';
 import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
@@ -26,14 +22,13 @@ import { getPaymentMethods } from '@modules/zuora/paymentMethod';
 import { ZuoraClient } from '@modules/zuora/zuoraClient';
 import dayjs from 'dayjs';
 import type { PaymentMethod, PaymentMethodType } from '../model/paymentMethod';
-import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { ProductType } from '../model/productType';
 import type {
 	SendAcquisitionEventState,
 	SendThankYouEmailState,
 } from '../model/sendAcquisitionEventState';
 import { stageFromEnvironment } from '../model/stage';
-import type { GiftRecipient, User, WrappedState } from '../model/stateSchemas';
+import type { WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
 import type { DeliveryAgentDetails } from '../services/paperRound';
 import { getPaperRoundConfig, PaperRoundService } from '../services/paperRound';
@@ -55,17 +50,6 @@ const zuoraServiceProvider = new ServiceProvider(stage, async (stage) => {
 	return ZuoraClient.create(stage);
 });
 
-function toEmailUser(user: User): EmailUser {
-	return {
-		id: user.id,
-		primaryEmailAddress: user.primaryEmailAddress,
-		firstName: user.firstName,
-		lastName: user.lastName,
-		billingAddress: user.billingAddress,
-		deliveryAddress: user.deliveryAddress ?? undefined,
-	};
-}
-
 function toEmailPaymentMethod(
 	paymentMethod: PaymentMethod,
 ): EmailPaymentMethod {
@@ -86,36 +70,6 @@ function toEmailPaymentMethod(
 	}
 }
 
-function toEmailPaymentSchedule(
-	paymentSchedule: PaymentSchedule,
-): EmailPaymentSchedule {
-	return { payments: paymentSchedule.payments };
-}
-
-function toEmailGiftRecipient(
-	giftRecipient: GiftRecipient,
-): EmailGiftRecipient {
-	return {
-		firstName: giftRecipient.firstName,
-		lastName: giftRecipient.lastName,
-	};
-}
-
-function toEmailDeliveryAgentDetails(
-	agent: DeliveryAgentDetails,
-): EmailDeliveryAgentDetails {
-	return {
-		agentname: agent.agentname,
-		telephone: agent.telephone,
-		email: agent.email,
-		address1: agent.address1,
-		address2: agent.address2,
-		town: agent.town,
-		county: agent.county,
-		postcode: agent.postcode,
-	};
-}
-
 async function getFieldsFromState(
 	sendThankYouEmailState: SendThankYouEmailState,
 ) {
@@ -127,13 +81,11 @@ async function getFieldsFromState(
 	);
 	return {
 		today: dayjs(),
-		user: toEmailUser(sendThankYouEmailState.user),
+		user: sendThankYouEmailState.user,
 		currency: sendThankYouEmailState.product.currency,
 		billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
 		subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
-		paymentSchedule: toEmailPaymentSchedule(
-			sendThankYouEmailState.paymentSchedule,
-		),
+		paymentSchedule: sendThankYouEmailState.paymentSchedule,
 		paymentMethod: toEmailPaymentMethod(sendThankYouEmailState.paymentMethod),
 		mandateId: await getMandateId(
 			sendThankYouEmailState.user.isTestUser,
@@ -193,9 +145,7 @@ async function sendPaperEmail(
 		buildPaperEmailFields({
 			...(await getFieldsFromState(sendThankYouEmailState)),
 			productInformation: productInformation,
-			deliveryAgentDetails: deliveryAgent
-				? toEmailDeliveryAgentDetails(deliveryAgent)
-				: undefined,
+			deliveryAgentDetails: deliveryAgent,
 		}),
 	);
 }
@@ -234,9 +184,7 @@ async function sendGuardianWeeklyEmail(
 		await sendEmailWithStage(
 			buildGuardianWeeklyEmailFields({
 				...(await getFieldsFromState(sendThankYouEmailState)),
-				giftRecipient: sendThankYouEmailState.giftRecipient
-					? toEmailGiftRecipient(sendThankYouEmailState.giftRecipient)
-					: undefined,
+				giftRecipient: sendThankYouEmailState.giftRecipient,
 			}),
 		);
 	}
