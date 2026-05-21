@@ -30,7 +30,7 @@ object CheckoutFailureReasons {
   }
 
   case object EmailInvalid extends CheckoutFailureReason {
-    override def asString: String = "email_invalid"
+    override def asString: String = "invalid_email_address"
   }
 
   case object InsufficientFunds extends CheckoutFailureReason {

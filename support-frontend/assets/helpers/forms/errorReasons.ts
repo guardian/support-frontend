@@ -17,7 +17,6 @@ const errorReasons = [
 	'incomplete_payment_request_details',
 	'email_provider_rejected',
 	'invalid_email_address',
-	'email_invalid', // Stripe error code
 	'recaptcha_validation_failed',
 	'guardian_ad_lite_purchase_not_allowed',
 	'guardian_ad_lite_purchase_not_allowed_signed_in',
@@ -73,7 +72,6 @@ function appropriateErrorMessage(errorReason: string): string {
 				return 'Please use an email address from a different provider';
 
 			case 'invalid_email_address':
-			case 'email_invalid':
 				return 'Please enter a valid email address';
 
 			case 'recaptcha_validation_failed':
