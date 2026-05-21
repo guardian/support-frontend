@@ -561,7 +561,6 @@ export function OneTimeCheckoutComponent({
 						'paymentStatus' in paymentResult &&
 						paymentResult.paymentStatus === 'failure'
 					) {
-						console.log('*** Payment failed: ', paymentResult);
 						setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
 					}
 					setIsProcessingPayment(false);

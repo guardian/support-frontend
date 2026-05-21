@@ -93,7 +93,6 @@ function appropriateErrorMessage(errorReason: string): string {
 				return 'Please check your billing ZIP code to ensure it is correct';
 		}
 	}
-	console.log('*** Unrecognised error reason: ', errorReason);
 	return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';
 }
 
