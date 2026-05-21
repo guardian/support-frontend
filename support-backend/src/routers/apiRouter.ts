@@ -10,7 +10,7 @@ async function getIdealPostcodeApiKey(): Promise<string> {
 		region: 'eu-west-1',
 	});
 	const command = new GetParameterCommand({
-		Name: `/support/frontend/${stage}/ideal-postcodes-api.key`,
+		Name: `/support/support-backend/${stage}/ideal-postcodes-api.key`,
 		WithDecryption: true,
 	});
 	const response = await ssmClient.send(command);
