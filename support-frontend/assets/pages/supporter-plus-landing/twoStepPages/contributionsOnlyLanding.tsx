@@ -194,7 +194,7 @@ export function ContributionsOnlyLanding({
 	};
 
 	const amounts = contributionsOnlyCountriesAmountsConfig;
-	
+
 	return (
 		<PageScaffold
 			header={<Header></Header>}

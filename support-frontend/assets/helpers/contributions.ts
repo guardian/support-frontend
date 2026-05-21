@@ -232,7 +232,6 @@ const contributionsOnlyCountriesAmountsConfig = {
 const countries = new Set(contributionsOnlyCountries);
 
 const isContributionsOnlyCountry = (countryId: IsoCountry): boolean =>
-
 	countries.has(countryId);
 
 // ----- Exports ----- //
