@@ -326,14 +326,17 @@ export function OneTimeCheckoutComponent({
 
 	const elements = useElements();
 	useEffect(() => {
-		if (useStripeExpressCheckout && finalAmount && elements) {
-			// valid elements and final amount, set amount, enable Express checkout
-			elements.update({ amount: finalAmount * 100 });
-			setStripeExpressCheckoutEnable(true);
-		} else {
-			// invalid elements and final amount, disable Express checkout
-			setStripeExpressCheckoutEnable(false);
-		}
+		const initialiseStripeExpress = async () => {
+			if (useStripeExpressCheckout && finalAmount && elements) {
+				// valid elements and final amount, set amount, enable Express checkout
+				await elements.update({ amount: finalAmount * 100 });
+				setStripeExpressCheckoutEnable(true);
+			} else {
+				// invalid elements and final amount, disable Express checkout
+				setStripeExpressCheckoutEnable(false);
+			}
+		};
+		void initialiseStripeExpress();
 	}, [finalAmount, elements, useStripeExpressCheckout]);
 
 	useEffect(() => {
