@@ -19,7 +19,7 @@ catalog:
   '@aws-sdk/credential-provider-node': 3.972.25
   '@aws-sdk/util-dynamodb': ^3.995.0
   '@guardian/prettier': ^2.1.5
-  '@guardian/support-service-lambdas': github:guardian/support-service-lambdas#d59ec4d7950679d2d561c59bb96fd93e192e3c63
+  '@guardian/support-service-lambdas': github:guardian/support-service-lambdas#1cada065808ecef3e81731400dbcd6f4c4c930d2
   '@types/jest': ^29.5.14
   '@types/node': ^20.19.0
   esbuild: ^0.25.5

@@ -40,7 +40,7 @@ catalogs:
       specifier: ^2.1.5
       version: 2.1.5
     '@guardian/support-service-lambdas':
-      specifier: github:guardian/support-service-lambdas#d59ec4d7950679d2d561c59bb96fd93e192e3c63
+      specifier: github:guardian/support-service-lambdas#1cada065808ecef3e81731400dbcd6f4c4c930d2
       version: 1.0.0
     '@types/jest':
       specifier: ^29.5.14
@@ -152,7 +152,7 @@ importers:
     devDependencies:
       '@guardian/support-service-lambdas':
         specifier: 'catalog:'
-        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/d59ec4d7950679d2d561c59bb96fd93e192e3c63
+        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/1cada065808ecef3e81731400dbcd6f4c4c930d2
       '@types/node':
         specifier: 'catalog:'
         version: 20.19.0
@@ -256,7 +256,7 @@ importers:
         version: 18.1.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@32.0.0(@guardian/ophan-tracker-js@3.1.0)(tslib@2.8.1)(typescript@5.5.4))(@guardian/source@10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/support-service-lambdas':
         specifier: 'catalog:'
-        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/d59ec4d7950679d2d561c59bb96fd93e192e3c63
+        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/1cada065808ecef3e81731400dbcd6f4c4c930d2
       '@guardian/tsconfig':
         specifier: ^0.2.0
         version: 0.2.0
@@ -558,7 +558,7 @@ importers:
         version: 3.995.0(@aws-sdk/client-dynamodb@3.1015.0)
       '@guardian/support-service-lambdas':
         specifier: 'catalog:'
-        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/d59ec4d7950679d2d561c59bb96fd93e192e3c63
+        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/1cada065808ecef3e81731400dbcd6f4c4c930d2
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
@@ -2260,8 +2260,8 @@ packages:
       typescript:
         optional: true
 
-  '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/d59ec4d7950679d2d561c59bb96fd93e192e3c63':
-    resolution: {tarball: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/d59ec4d7950679d2d561c59bb96fd93e192e3c63}
+  '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/1cada065808ecef3e81731400dbcd6f4c4c930d2':
+    resolution: {tarball: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/1cada065808ecef3e81731400dbcd6f4c4c930d2}
     version: 1.0.0
 
   '@guardian/tsconfig@0.2.0':
@@ -10784,7 +10784,7 @@ snapshots:
       react: 18.2.0
       typescript: 5.5.4
 
-  '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/d59ec4d7950679d2d561c59bb96fd93e192e3c63': {}
+  '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/1cada065808ecef3e81731400dbcd6f4c4c930d2': {}
 
   '@guardian/tsconfig@0.2.0': {}
 
