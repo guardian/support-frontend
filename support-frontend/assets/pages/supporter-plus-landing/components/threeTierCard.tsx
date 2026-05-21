@@ -204,7 +204,9 @@ export function ThreeTierCard({
 		? simpleFormatAmount(currency, mainDiscountedPrice)
 		: undefined;
 	const periodLabel = showWeeklyPrice ? 'week' : periodNoun;
-	const linkAriaLabel = `${title}, ${formattedMainDiscountedPrice} per ${periodLabel}`;
+	const linkAriaLabel = `${title}, ${
+		formattedMainDiscountedPrice ?? formattedMainPrice
+	} per ${periodLabel}`;
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	const pillCopy = promotion?.landingPage?.roundel ?? cardContent.label?.copy;
 	const inAdditionToAllAccessDigital = product === 'DigitalSubscription';
