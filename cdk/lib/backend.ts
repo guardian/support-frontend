@@ -60,7 +60,11 @@ mkdir /var/log/${app}
 chown -R ${app}:support /var/log/${app}
 
 cd target
-/usr/local/node/pm2 start --uid ${app} --gid support server.js`);
+/usr/local/node/pm2 start --uid ${app} --gid support --output ~/.pm2/logs/application.log --error ~/.pm2/logs/application.log server.js
+
+/opt/cloudwatch-logs/configure-logs application ${this.stack} ${
+			this.stage
+		} ${app} ~/.pm2/logs/application.log`);
 
 		const policies = [
 			new GuAllowPolicy(this, 'SSMGet', {
