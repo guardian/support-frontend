@@ -96,11 +96,7 @@ const priceCss = (hasPromotion: boolean, hasBillingPeriodCopy: boolean) => css`
 	position: relative;
 	margin-bottom: ${hasPromotion || hasBillingPeriodCopy
 		? '0'
-		: `${space[4]}px`};
-
-	${from.desktop} {
-		margin-bottom: ${space[10]}px;
-	}
+		: `${space[2]}px`};
 `;
 
 const discountSummaryCss = css`
@@ -108,15 +104,11 @@ const discountSummaryCss = css`
 	font-size: ${space[3]}px;
 	font-weight: 400;
 	color: #606060;
-	margin-bottom: ${space[2]}px;
 
 	${from.desktop} {
-		position: absolute;
-		top: 100%;
-		left: 0;
+		min-height: ${space[8]}px;
 		width: 100%;
 		text-align: center;
-		margin-bottom: 0;
 	}
 `;
 
@@ -235,51 +227,63 @@ export function ThreeTierCard({
 				{titlePill && <BenefitPill copy={titlePill} />}
 				<h2 css={[titleCss, checkListTextItemCss]}>{title}</h2>
 			</div>
-			<p css={priceCss(!!promotion, !!parsedBillingPeriodsCopy)}>
+			<div css={priceCss(!!promotion, !!parsedBillingPeriodsCopy)}>
 				{promotion && (
 					<>
-						<span css={previousPriceStrikeThrough}>{formattedMainPrice}</span>{' '}
-						{`${formattedMainDiscountedPrice}/${periodLabel}`}
-						<span css={discountSummaryCss}>
-							{showWeeklyPrice ? 'Billed as ' : ''}
-							{discountSummaryCopy(
-								currency,
-								promoCount,
-								price,
-								promotion,
-								billingPeriod,
-							)}
-						</span>
+						<p>
+							<span css={previousPriceStrikeThrough}>{formattedMainPrice}</span>{' '}
+							{`${formattedMainDiscountedPrice}/${periodLabel}`}
+						</p>
+						<p>
+							<span css={discountSummaryCss}>
+								{showWeeklyPrice ? 'Billed as ' : ''}
+								{discountSummaryCopy(
+									currency,
+									promoCount,
+									price,
+									promotion,
+									billingPeriod,
+								)}
+							</span>
+						</p>
 					</>
 				)}
 				{parsedBillingPeriodsCopy && !promotion && (
 					<>
-						<span>
-							{formattedMainPrice}/{periodLabel}
-						</span>
-						<span
-							css={discountSummaryCss}
-							dangerouslySetInnerHTML={{
-								__html: showWeeklyPrice
-									? `Billed as ${getSanitisedHtml(parsedBillingPeriodsCopy)}`
-									: getSanitisedHtml(parsedBillingPeriodsCopy),
-							}}
-						/>
+						<p>
+							<span>
+								{formattedMainPrice}/{periodLabel}
+							</span>
+						</p>
+						<p>
+							<span
+								css={discountSummaryCss}
+								dangerouslySetInnerHTML={{
+									__html: showWeeklyPrice
+										? `Billed as ${getSanitisedHtml(parsedBillingPeriodsCopy)}`
+										: getSanitisedHtml(parsedBillingPeriodsCopy),
+								}}
+							/>
+						</p>
 					</>
 				)}
 				{!promotion && !parsedBillingPeriodsCopy && (
 					<>
-						<span>
-							{formattedMainPrice}/{periodLabel}
-						</span>
-						{showWeeklyPrice && (
-							<span css={discountSummaryCss}>
-								Billed as {simpleFormatAmount(currency, price)}/{periodNoun}
+						<p>
+							<span>
+								{formattedMainPrice}/{periodLabel}
 							</span>
+						</p>
+						{showWeeklyPrice && (
+							<p>
+								<span css={discountSummaryCss}>
+									Billed as {simpleFormatAmount(currency, price)}/{periodNoun}
+								</span>
+							</p>
 						)}
 					</>
 				)}
-			</p>
+			</div>
 			<LinkButton
 				href={link}
 				cssOverrides={btnStyleOverrides}

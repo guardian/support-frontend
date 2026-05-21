@@ -169,14 +169,20 @@ const startDateList = css`
 
 const savingTextCss = css`
 	color: ${palette.lifestyle[400]};
-	${textSans15};
+	${textSans17};
 	margin-top: ${space[1]}px;
 `;
 
 const weeklyPricingSummary = css`
 	display: flex;
 	flex-direction: column;
+	gap: ${space[1]}px;
 	margin-bottom: ${space[5]}px;
+	padding: ${space[1]}px 0;
+
+	& div {
+		padding: 0;
+	}
 `;
 
 export type ContributionsOrderSummaryProps = {
