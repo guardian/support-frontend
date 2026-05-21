@@ -73,10 +73,8 @@ function appropriateErrorMessage(errorReason: string): string {
 				return 'Please use an email address from a different provider';
 
 			case 'invalid_email_address':
-				return 'Please enter a valid email address';
-
 			case 'email_invalid':
-				return 'Please enter a stripe valid email address';
+				return 'Please enter a valid email address';
 
 			case 'recaptcha_validation_failed':
 				return 'Please prove you are not a robot';
