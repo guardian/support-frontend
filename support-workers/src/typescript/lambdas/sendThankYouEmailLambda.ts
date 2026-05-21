@@ -1,22 +1,13 @@
-import type { EmailMessageWithIdentityUserId } from '@modules/email/email';
-import { sendEmail } from '@modules/email/email';
-import { getProductCatalogFromApi } from '@modules/product-catalog/api';
-import type { ProductCatalog } from '@modules/product-catalog/productCatalog';
-import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
-import { getProductRatePlan } from '@modules/zuora/createSubscription/getProductRatePlan';
-import { getPaymentMethods } from '@modules/zuora/paymentMethod';
-import { ZuoraClient } from '@modules/zuora/zuoraClient';
-import dayjs from 'dayjs';
-import { buildContributionEmailFields } from '../emailFields/contributionEmailFields';
-import { buildDigitalSubscriptionEmailFields } from '../emailFields/digitalSubscriptionEmailFields';
-import { buildGuardianAdLiteEmailFields } from '../emailFields/guardianAdLiteEmailFields';
-import type { GuardianWeeklyProductPurchase } from '../emailFields/guardianWeeklyEmailFields';
-import { buildGuardianWeeklyEmailFields } from '../emailFields/guardianWeeklyEmailFields';
-import { buildGuardianWeeklyPlusEmailFields } from '../emailFields/guardianWeeklyPlusEmailFields';
-import type { PaperProductPurchase } from '../emailFields/paperEmailFields';
-import { buildPaperEmailFields } from '../emailFields/paperEmailFields';
-import { buildSupporterPlusEmailFields } from '../emailFields/supporterPlusEmailFields';
-import { buildTierThreeEmailFields } from '../emailFields/tierThreeEmailFields';
+import { buildContributionEmailFields } from '@modules/email/dataFields/dayZero/contributionEmailFields';
+import { buildDigitalSubscriptionEmailFields } from '@modules/email/dataFields/dayZero/digitalSubscriptionEmailFields';
+import { buildGuardianAdLiteEmailFields } from '@modules/email/dataFields/dayZero/guardianAdLiteEmailFields';
+import type { GuardianWeeklyProductPurchase } from '@modules/email/dataFields/dayZero/guardianWeeklyEmailFields';
+import { buildGuardianWeeklyEmailFields } from '@modules/email/dataFields/dayZero/guardianWeeklyEmailFields';
+import { buildGuardianWeeklyPlusEmailFields } from '@modules/email/dataFields/dayZero/guardianWeeklyPlusEmailFields';
+import type { PaperProductPurchase } from '@modules/email/dataFields/dayZero/paperEmailFields';
+import { buildPaperEmailFields } from '@modules/email/dataFields/dayZero/paperEmailFields';
+import { buildSupporterPlusEmailFields } from '@modules/email/dataFields/dayZero/supporterPlusEmailFields';
+import { buildTierThreeEmailFields } from '@modules/email/dataFields/dayZero/tierThreeEmailFields';
 import type {
 	EmailBillingPeriod,
 	EmailDeliveryAgentDetails,
@@ -24,7 +15,16 @@ import type {
 	EmailPaymentMethod,
 	EmailPaymentSchedule,
 	EmailUser,
-} from '../emailFields/types';
+} from '@modules/email/dataFields/dayZero/types';
+import { sendEmail } from '@modules/email/email';
+import type { EmailMessageWithIdentityUserId } from '@modules/email/email';
+import { getProductCatalogFromApi } from '@modules/product-catalog/api';
+import type { ProductCatalog } from '@modules/product-catalog/productCatalog';
+import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
+import { getProductRatePlan } from '@modules/zuora/createSubscription/getProductRatePlan';
+import { getPaymentMethods } from '@modules/zuora/paymentMethod';
+import { ZuoraClient } from '@modules/zuora/zuoraClient';
+import dayjs from 'dayjs';
 import type { PaymentMethod, PaymentMethodType } from '../model/paymentMethod';
 import type { PaymentSchedule } from '../model/paymentSchedule';
 import type { ProductType } from '../model/productType';
