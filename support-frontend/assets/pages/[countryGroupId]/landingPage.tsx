@@ -1,7 +1,7 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { Participations } from 'helpers/abTests/models';
-import { isVatComplianceCountry } from 'helpers/contributions';
+import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { ContributionsOnlyLanding } from 'pages/supporter-plus-landing/twoStepPages/contributionsOnlyLanding';
 import { ThreeTierLanding } from 'pages/supporter-plus-landing/twoStepPages/threeTierLanding';
@@ -20,7 +20,7 @@ export function LandingPage({
 	abParticipations,
 	landingPageSettings,
 }: Props) {
-	const inThreeTier = !isVatComplianceCountry(countryId);
+	const inThreeTier = !isContributionsOnlyCountry(countryId);
 
 	if (inThreeTier) {
 		return (

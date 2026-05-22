@@ -1,6 +1,19 @@
+import { buildContributionEmailFields } from '@modules/email/dataFields/dayZero/contributionEmailFields';
+import { buildDigitalSubscriptionEmailFields } from '@modules/email/dataFields/dayZero/digitalSubscriptionEmailFields';
+import { buildGuardianAdLiteEmailFields } from '@modules/email/dataFields/dayZero/guardianAdLiteEmailFields';
+import type { GuardianWeeklyProductPurchase } from '@modules/email/dataFields/dayZero/guardianWeeklyEmailFields';
+import { buildGuardianWeeklyEmailFields } from '@modules/email/dataFields/dayZero/guardianWeeklyEmailFields';
+import { buildGuardianWeeklyPlusEmailFields } from '@modules/email/dataFields/dayZero/guardianWeeklyPlusEmailFields';
+import type { PaperProductPurchase } from '@modules/email/dataFields/dayZero/paperEmailFields';
+import { buildPaperEmailFields } from '@modules/email/dataFields/dayZero/paperEmailFields';
+import { buildSupporterPlusEmailFields } from '@modules/email/dataFields/dayZero/supporterPlusEmailFields';
+import { buildTierThreeEmailFields } from '@modules/email/dataFields/dayZero/tierThreeEmailFields';
+import type {
+	EmailBillingPeriod,
+	EmailPaymentMethod,
+} from '@modules/email/dataFields/dayZero/types';
 import type { EmailMessageWithIdentityUserId } from '@modules/email/email';
 import { sendEmail } from '@modules/email/email';
-import { BillingPeriod } from '@modules/product/billingPeriod';
 import { getProductCatalogFromApi } from '@modules/product-catalog/api';
 import type { ProductCatalog } from '@modules/product-catalog/productCatalog';
 import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
@@ -8,17 +21,7 @@ import { getProductRatePlan } from '@modules/zuora/createSubscription/getProduct
 import { getPaymentMethods } from '@modules/zuora/paymentMethod';
 import { ZuoraClient } from '@modules/zuora/zuoraClient';
 import dayjs from 'dayjs';
-import { buildContributionEmailFields } from '../emailFields/contributionEmailFields';
-import { buildDigitalSubscriptionEmailFields } from '../emailFields/digitalSubscriptionEmailFields';
-import { buildGuardianAdLiteEmailFields } from '../emailFields/guardianAdLiteEmailFields';
-import type { GuardianWeeklyProductPurchase } from '../emailFields/guardianWeeklyEmailFields';
-import { buildGuardianWeeklyEmailFields } from '../emailFields/guardianWeeklyEmailFields';
-import { buildGuardianWeeklyPlusEmailFields } from '../emailFields/guardianWeeklyPlusEmailFields';
-import type { PaperProductPurchase } from '../emailFields/paperEmailFields';
-import { buildPaperEmailFields } from '../emailFields/paperEmailFields';
-import { buildSupporterPlusEmailFields } from '../emailFields/supporterPlusEmailFields';
-import { buildTierThreeEmailFields } from '../emailFields/tierThreeEmailFields';
-import type { PaymentMethodType } from '../model/paymentMethod';
+import type { PaymentMethod, PaymentMethodType } from '../model/paymentMethod';
 import type { ProductType } from '../model/productType';
 import type {
 	SendAcquisitionEventState,
@@ -47,6 +50,26 @@ const zuoraServiceProvider = new ServiceProvider(stage, async (stage) => {
 	return ZuoraClient.create(stage);
 });
 
+function toEmailPaymentMethod(
+	paymentMethod: PaymentMethod,
+): EmailPaymentMethod {
+	switch (paymentMethod.Type) {
+		case 'BankTransfer':
+			return {
+				Type: 'BankTransfer',
+				BankTransferAccountName: paymentMethod.BankTransferAccountName,
+				BankTransferAccountNumber: paymentMethod.BankTransferAccountNumber,
+				BankCode: paymentMethod.BankCode,
+			};
+		case 'CreditCardReferenceTransaction':
+			return { Type: 'CreditCardReferenceTransaction' };
+		case 'PayPal':
+		case 'PayPalCompletePayments':
+		case 'PayPalCompletePaymentsWithBAID':
+			return { Type: 'PayPal' };
+	}
+}
+
 async function getFieldsFromState(
 	sendThankYouEmailState: SendThankYouEmailState,
 ) {
@@ -63,7 +86,7 @@ async function getFieldsFromState(
 		billingPeriod: getBillingPeriod(sendThankYouEmailState.product),
 		subscriptionNumber: sendThankYouEmailState.subscriptionNumber,
 		paymentSchedule: sendThankYouEmailState.paymentSchedule,
-		paymentMethod: sendThankYouEmailState.paymentMethod,
+		paymentMethod: toEmailPaymentMethod(sendThankYouEmailState.paymentMethod),
 		mandateId: await getMandateId(
 			sendThankYouEmailState.user.isTestUser,
 			sendThankYouEmailState.paymentMethod.Type,
@@ -232,9 +255,9 @@ function isFixedTerm(
 	return productRatePlan.termType === 'FixedTerm';
 }
 
-export function getBillingPeriod(productType: ProductType) {
+export function getBillingPeriod(productType: ProductType): EmailBillingPeriod {
 	if (productType.productType === 'GuardianAdLite') {
-		return BillingPeriod.Monthly;
+		return 'Monthly';
 	}
 	return productType.billingPeriod;
 }

@@ -10,7 +10,7 @@ import { ContributionsOrderSummary } from 'components/orderSummary/contributions
 import { OrderSummaryStartDate } from 'components/orderSummary/orderSummaryStartDate';
 import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
 import type { Participations } from 'helpers/abTests/models';
-import { isVatComplianceCountry } from 'helpers/contributions';
+import { isContributionsOnlyCountry } from 'helpers/contributions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	type ActiveProductKey,
@@ -102,7 +102,7 @@ export default function CheckoutSummary({
 		if (originalAmount < 1) {
 			isInvalidAmount = true;
 		}
-		if (!isVatComplianceCountry(countryId)) {
+		if (!isContributionsOnlyCountry(countryId)) {
 			if (originalAmount >= (supporterPlusRatePlanPrice ?? 0)) {
 				isInvalidAmount = true;
 			}
