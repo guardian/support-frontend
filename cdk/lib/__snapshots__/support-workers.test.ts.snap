@@ -3626,6 +3626,33 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
+    "SupportWorkersLogGroup3988AB33": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LogGroupName": "/aws/states/support-workers-PROD",
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
     "SupportWorkersPROD": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
@@ -3717,6 +3744,22 @@ exports[`The support-workers stack matches the snapshot 1`] = `
               "","Payload.$":"$"}},"SucceedOrFailChoice":{"Type":"Choice","Choices":[{"Variable":"$.requestInfo.testUser","BooleanEquals":true,"Next":"CheckoutFailure"},{"Variable":"$.requestInfo.failed","BooleanEquals":true,"Next":"FailState"}],"Default":"CheckoutFailure"},"CheckoutFailure":{"Type":"Pass","End":true},"FailState":{"Type":"Fail"}},"TimeoutSeconds":86400}",
             ],
           ],
+        },
+        "LoggingConfiguration": {
+          "Destinations": [
+            {
+              "CloudWatchLogsLogGroup": {
+                "LogGroupArn": {
+                  "Fn::GetAtt": [
+                    "SupportWorkersLogGroup3988AB33",
+                    "Arn",
+                  ],
+                },
+              },
+            },
+          ],
+          "IncludeExecutionData": true,
+          "Level": "ALL",
         },
         "RoleArn": {
           "Fn::GetAtt": [
@@ -3967,6 +4010,33 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": [
+                "logs:CreateLogDelivery",
+                "logs:GetLogDelivery",
+                "logs:UpdateLogDelivery",
+                "logs:DeleteLogDelivery",
+                "logs:ListLogDeliveries",
+                "logs:PutResourcePolicy",
+                "logs:DescribeResourcePolicies",
+                "logs:DescribeLogGroups",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "SupportWorkersLogGroup3988AB33",
+                  "Arn",
+                ],
+              },
             },
           ],
           "Version": "2012-10-17",
