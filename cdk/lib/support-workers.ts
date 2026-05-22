@@ -285,14 +285,10 @@ export class SupportWorkers extends GuStack {
 			.next(createSalesforceContactLambda)
 			.next(createZuoraSubscriptionTS.next(parallelSteps));
 
-		const stateMachineLogGroup = new LogGroup(
-			this,
-			'SupportWorkersLogGroup',
-			{
-				logGroupName: `/aws/states/support-workers-${this.stage}`,
-				retention: RetentionDays.TWO_WEEKS,
-			},
-		);
+		const stateMachineLogGroup = new LogGroup(this, 'SupportWorkersLogGroup', {
+			logGroupName: `/aws/states/support-workers-${this.stage}`,
+			retention: RetentionDays.TWO_WEEKS,
+		});
 
 		const stateMachine = new StateMachine(this, 'SupportWorkers', {
 			stateMachineName: `${app}-${this.stage}`, // Used by support-frontend to find the state machine
