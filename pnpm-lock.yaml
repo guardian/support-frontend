@@ -40,7 +40,7 @@ catalogs:
       specifier: ^2.1.5
       version: 2.1.5
     '@guardian/support-service-lambdas':
-      specifier: github:guardian/support-service-lambdas#4b496e4b2c38743a45fc4535ca1da83476bb473a
+      specifier: github:guardian/support-service-lambdas#1533432fc5bab3b75fb01765bc978ddce4934501
       version: 1.0.0
     '@types/jest':
       specifier: ^29.5.14
@@ -155,7 +155,7 @@ importers:
     devDependencies:
       '@guardian/support-service-lambdas':
         specifier: 'catalog:'
-        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/4b496e4b2c38743a45fc4535ca1da83476bb473a
+        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/1533432fc5bab3b75fb01765bc978ddce4934501
       '@types/node':
         specifier: 'catalog:'
         version: 20.19.0
@@ -239,24 +239,27 @@ importers:
       '@floating-ui/react':
         specifier: ^0.27.6
         version: 0.27.9(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@guardian/consent-manager':
+        specifier: 1.0.0
+        version: 1.0.0(@guardian/ophan-tracker-js@3.1.0)(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/core-web-vitals':
         specifier: ^11.1.0
-        version: 11.1.0(@guardian/libs@31.0.0(@guardian/ophan-tracker-js@0.0.0-canary-20251117102231)(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)(web-vitals@4.2.4)
+        version: 11.1.0(@guardian/libs@32.0.0(@guardian/ophan-tracker-js@3.1.0)(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)(web-vitals@4.2.4)
       '@guardian/libs':
-        specifier: ^31.0.0
-        version: 31.0.0(@guardian/ophan-tracker-js@0.0.0-canary-20251117102231)(tslib@2.8.1)(typescript@5.5.4)
+        specifier: 32.0.0
+        version: 32.0.0(@guardian/ophan-tracker-js@3.1.0)(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/ophan-tracker-js':
-        specifier: 0.0.0-canary-20251117102231
-        version: 0.0.0-canary-20251117102231
+        specifier: 3.1.0
+        version: 3.1.0
       '@guardian/source':
         specifier: 10.2.0
         version: 10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/source-development-kitchen':
         specifier: 18.1.1
-        version: 18.1.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@31.0.0(@guardian/ophan-tracker-js@0.0.0-canary-20251117102231)(tslib@2.8.1)(typescript@5.5.4))(@guardian/source@10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
+        version: 18.1.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@32.0.0(@guardian/ophan-tracker-js@3.1.0)(tslib@2.8.1)(typescript@5.5.4))(@guardian/source@10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/support-service-lambdas':
         specifier: 'catalog:'
-        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/4b496e4b2c38743a45fc4535ca1da83476bb473a
+        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/1533432fc5bab3b75fb01765bc978ddce4934501
       '@guardian/tsconfig':
         specifier: ^0.2.0
         version: 0.2.0
@@ -270,11 +273,11 @@ importers:
         specifier: ^8.33.1
         version: 8.55.0
       '@stripe/react-stripe-js':
-        specifier: ^2.7.3
-        version: 2.9.0(@stripe/stripe-js@4.10.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        specifier: ^6.4.0
+        version: 6.4.0(@stripe/stripe-js@9.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@stripe/stripe-js':
-        specifier: ^4.1.0
-        version: 4.10.0
+        specifier: ^9.6.0
+        version: 9.6.0
       '@types/seedrandom':
         specifier: ^3.0.8
         version: 3.0.8
@@ -558,7 +561,7 @@ importers:
         version: 3.995.0(@aws-sdk/client-dynamodb@3.1015.0)
       '@guardian/support-service-lambdas':
         specifier: 'catalog:'
-        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/4b496e4b2c38743a45fc4535ca1da83476bb473a
+        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/1533432fc5bab3b75fb01765bc978ddce4934501
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
@@ -2209,6 +2212,16 @@ packages:
       aws-cdk-lib: ^2.241.0
       constructs: ^10.5.1
 
+  '@guardian/consent-manager@1.0.0':
+    resolution: {integrity: sha512-uWqoSbynx0DA0fYGDleYoBm72jauoqnT9nPY8ExNaP+ebLS4TD4taVkwac/NTXUofMKzdo1Ja0DmlNRYHaf2Tg==}
+    peerDependencies:
+      '@guardian/ophan-tracker-js': ^2.2.10
+      tslib: ^2.8.1
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
   '@guardian/core-web-vitals@11.1.0':
     resolution: {integrity: sha512-akfJvMoLhBZOxG9QetNz9L1ywgJZjkioNiS6u88uGv9yr3eQFBATcFVRr9B/najj4jv2oEaaHbEhyd8w8Tp4oQ==}
     peerDependencies:
@@ -2234,8 +2247,8 @@ packages:
       eslint-plugin-storybook:
         optional: true
 
-  '@guardian/libs@31.0.0':
-    resolution: {integrity: sha512-AWA2tfQY023E5412FuURsEXgl82MnsklOC2AcSbrOjdmvHbnugCeNiSNHsm6tAkzLZeumRJ+k72b/rhUIMOL0A==}
+  '@guardian/libs@32.0.0':
+    resolution: {integrity: sha512-SyXJuZNoEby9e6qMGSjxbVPZ5FfFqjwimaSINu+I48qFj1RSny4Xc+ufuRLg80p85GaRl4jHOSnZ6QZCkqUAvQ==}
     peerDependencies:
       '@guardian/ophan-tracker-js': ^2.2.10
       tslib: ^2.8.1
@@ -2244,8 +2257,8 @@ packages:
       typescript:
         optional: true
 
-  '@guardian/ophan-tracker-js@0.0.0-canary-20251117102231':
-    resolution: {integrity: sha512-lmRhvSt402QguBsFdVs6uXQJgXSNKtJw9fxdFXWQ6FloGaIDdIkkT03re665EwHxld3Nrp5A2PlpsPpKQjaZjA==}
+  '@guardian/ophan-tracker-js@3.1.0':
+    resolution: {integrity: sha512-3KCZ9leh1171Q6kdiBWRb0f+Nb8Ab5uweMehjTM7OMGvLY+9kUjATNBSeIYvHwrDlqqi1nR+657wckXK4b0MUQ==}
     engines: {node: '>=16'}
 
   '@guardian/prettier@2.1.5':
@@ -2303,8 +2316,8 @@ packages:
       typescript:
         optional: true
 
-  '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/4b496e4b2c38743a45fc4535ca1da83476bb473a':
-    resolution: {tarball: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/4b496e4b2c38743a45fc4535ca1da83476bb473a}
+  '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/1533432fc5bab3b75fb01765bc978ddce4934501':
+    resolution: {tarball: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/1533432fc5bab3b75fb01765bc978ddce4934501}
     version: 1.0.0
 
   '@guardian/tsconfig@0.2.0':
@@ -3226,15 +3239,15 @@ packages:
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
       storybook: ^9.1.20
 
-  '@stripe/react-stripe-js@2.9.0':
-    resolution: {integrity: sha512-+/j2g6qKAKuWSurhgRMfdlIdKM+nVVJCy/wl0US2Ccodlqx0WqfIIBhUkeONkCG+V/b+bZzcj4QVa3E/rXtT4Q==}
+  '@stripe/react-stripe-js@6.4.0':
+    resolution: {integrity: sha512-5cAf7GAqf8VHPoPLVnJQ2MHtDWLdiEPs5GW/loU7iDEue3xf620v11skrk5HICUraDOhODPYpttgFC5N579NxA==}
     peerDependencies:
-      '@stripe/stripe-js': ^1.44.1 || ^2.0.0 || ^3.0.0 || ^4.0.0
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      '@stripe/stripe-js': '>=9.5.0 <10.0.0'
+      react: '>=16.8.0 <20.0.0'
+      react-dom: '>=16.8.0 <20.0.0'
 
-  '@stripe/stripe-js@4.10.0':
-    resolution: {integrity: sha512-KrMOL+sH69htCIXCaZ4JluJ35bchuCCznyPyrbN8JXSGQfwBI1SuIEMZNwvy8L8ykj29t6sa5BAAiL7fNoLZ8A==}
+  '@stripe/stripe-js@9.6.0':
+    resolution: {integrity: sha512-v5MebYvJbddSRn15fknxTVwypJPzjeIXI1Q2HBxCBrQieWna8PC+RXEVUZ3F4ANAeILEj97HzFlr0r7CXvG7ZA==}
     engines: {node: '>=12.16'}
 
   '@stylistic/eslint-plugin@2.11.0':
@@ -10865,9 +10878,17 @@ snapshots:
       read-pkg-up: 7.0.1
       yargs: 17.7.2
 
-  '@guardian/core-web-vitals@11.1.0(@guardian/libs@31.0.0(@guardian/ophan-tracker-js@0.0.0-canary-20251117102231)(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)(web-vitals@4.2.4)':
+  '@guardian/consent-manager@1.0.0(@guardian/ophan-tracker-js@3.1.0)(tslib@2.8.1)(typescript@5.5.4)':
     dependencies:
-      '@guardian/libs': 31.0.0(@guardian/ophan-tracker-js@0.0.0-canary-20251117102231)(tslib@2.8.1)(typescript@5.5.4)
+      '@guardian/libs': 32.0.0(@guardian/ophan-tracker-js@3.1.0)(tslib@2.8.1)(typescript@5.5.4)
+      '@guardian/ophan-tracker-js': 3.1.0
+      tslib: 2.8.1
+    optionalDependencies:
+      typescript: 5.5.4
+
+  '@guardian/core-web-vitals@11.1.0(@guardian/libs@32.0.0(@guardian/ophan-tracker-js@3.1.0)(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)(web-vitals@4.2.4)':
+    dependencies:
+      '@guardian/libs': 32.0.0(@guardian/ophan-tracker-js@3.1.0)(tslib@2.8.1)(typescript@5.5.4)
       tslib: 2.8.1
       web-vitals: 4.2.4
     optionalDependencies:
@@ -10916,14 +10937,14 @@ snapshots:
       - supports-color
       - typescript
 
-  '@guardian/libs@31.0.0(@guardian/ophan-tracker-js@0.0.0-canary-20251117102231)(tslib@2.8.1)(typescript@5.5.4)':
+  '@guardian/libs@32.0.0(@guardian/ophan-tracker-js@3.1.0)(tslib@2.8.1)(typescript@5.5.4)':
     dependencies:
-      '@guardian/ophan-tracker-js': 0.0.0-canary-20251117102231
+      '@guardian/ophan-tracker-js': 3.1.0
       tslib: 2.8.1
     optionalDependencies:
       typescript: 5.5.4
 
-  '@guardian/ophan-tracker-js@0.0.0-canary-20251117102231':
+  '@guardian/ophan-tracker-js@3.1.0':
     dependencies:
       '@guardian/tsconfig': 1.0.0
 
@@ -10941,9 +10962,9 @@ snapshots:
       prettier: 3.5.3
       tslib: 2.8.1
 
-  '@guardian/source-development-kitchen@18.1.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@31.0.0(@guardian/ophan-tracker-js@0.0.0-canary-20251117102231)(tslib@2.8.1)(typescript@5.5.4))(@guardian/source@10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)':
+  '@guardian/source-development-kitchen@18.1.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@32.0.0(@guardian/ophan-tracker-js@3.1.0)(tslib@2.8.1)(typescript@5.5.4))(@guardian/source@10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)':
     dependencies:
-      '@guardian/libs': 31.0.0(@guardian/ophan-tracker-js@0.0.0-canary-20251117102231)(tslib@2.8.1)(typescript@5.5.4)
+      '@guardian/libs': 32.0.0(@guardian/ophan-tracker-js@3.1.0)(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/source': 10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
       tslib: 2.8.1
     optionalDependencies:
@@ -10962,7 +10983,7 @@ snapshots:
       react: 18.2.0
       typescript: 5.5.4
 
-  '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/4b496e4b2c38743a45fc4535ca1da83476bb473a': {}
+  '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/1533432fc5bab3b75fb01765bc978ddce4934501': {}
 
   '@guardian/tsconfig@0.2.0': {}
 
@@ -12155,14 +12176,14 @@ snapshots:
       react-dom: 18.2.0(react@18.2.0)
       storybook: 9.1.20(@testing-library/dom@10.4.0)(prettier@3.5.3)(vite@6.4.2(@types/node@20.19.0)(jiti@2.4.2)(sass@1.89.0)(terser@5.46.0)(tsx@4.19.4)(yaml@2.8.0))
 
-  '@stripe/react-stripe-js@2.9.0(@stripe/stripe-js@4.10.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+  '@stripe/react-stripe-js@6.4.0(@stripe/stripe-js@9.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
-      '@stripe/stripe-js': 4.10.0
+      '@stripe/stripe-js': 9.6.0
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
 
-  '@stripe/stripe-js@4.10.0': {}
+  '@stripe/stripe-js@9.6.0': {}
 
   '@stylistic/eslint-plugin@2.11.0(eslint@9.38.0(jiti@2.4.2))(typescript@5.8.3)':
     dependencies:
