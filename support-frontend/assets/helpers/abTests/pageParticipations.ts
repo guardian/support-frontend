@@ -127,21 +127,11 @@ export async function getPageParticipations<Variant>(
 		sessionParticipations &&
 		Object.entries(sessionParticipations).length > 0
 	) {
-		// Check if session storage participations match available tests
-		// Include selectedTestName (methodology-specific tracking name) alongside test.name
-		const testNames = new Set([
-			...tests.map((t) => t.name),
-			...tests.flatMap((t) => (t.selectedTestName ? [t.selectedTestName] : [])),
-		]);
-		const hasMatchingParticipation = Object.keys(sessionParticipations).some(
-			(key) => testNames.has(key),
-		);
-
-		if (!hasMatchingParticipation) {
+		const variant = getVariant(sessionParticipations, tests);
+		if (!variant) {
 			// Session storage has stale test names, clear cache to re-assign
 			sessionStorage.removeItem(sessionStorageKey);
 		} else {
-			const variant = getVariant(sessionParticipations, tests);
 			return { participations: sessionParticipations, variant };
 		}
 	}
