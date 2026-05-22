@@ -226,21 +226,26 @@ describe('getPageParticipations', () => {
 			expect(mockCountryGroupMatches).toHaveBeenCalled();
 		});
 
-		it('returns undefined variant when session storage variant not found', async () => {
+		it('clears cache and re-assigns when session storage variant not found', async () => {
 			const variant = createTestVariant('control', 'control-value');
-			const test = createPageTest('test-1', [variant]);
+			const test = createPageTest('test-1', [variant], 'Live', [
+				'GBPCountries',
+			]);
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
 			mockGetSessionParticipations.mockReturnValue({
 				'test-1': 'non-existent-variant',
 			});
+			mockCountryGroupMatches.mockReturnValue(true);
+			mockRandomNumber.mockReturnValue(0);
 
 			const result = await getPageParticipations(config);
 
+			// Should clear stale cache and assign new variant
 			expect(result).toEqual({
-				participations: { 'test-1': 'non-existent-variant' },
-				variant: undefined,
+				participations: { 'test-1': 'control' },
+				variant: variant,
 			});
 		});
 	});
