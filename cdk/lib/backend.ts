@@ -68,9 +68,9 @@ cd target
 
 		const policies = [
 			new GuAllowPolicy(this, 'SSMGet', {
-				actions: ['ssm:GetParametersByPath'],
+				actions: ['ssm:GetParameter'],
 				resources: [
-					`arn:aws:ssm:${this.region}:${this.account}:parameter/${this.stack}/${app}/${this.stage}`,
+					`arn:aws:ssm:${this.region}:${this.account}:parameter/${this.stack}/${app}/${this.stage}/*`,
 				],
 			}),
 			new GuAllowPolicy(this, 'CloudwatchMetrics', {
