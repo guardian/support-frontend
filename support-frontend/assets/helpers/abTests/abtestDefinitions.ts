@@ -12,6 +12,7 @@ export const pageUrlRegexes = {
 	landingPageSubscribeOnly: /uk\/subscribe/,
 	landingPagePaperOnly: /uk\/subscribe\/paper/,
 	genericCheckoutOnly: /(uk|us|au|ca|eu|nz|int)\/checkout/,
+	genericCheckoutPages: /(uk|us|au|ca|eu|nz|int)\/(checkout|thank-you)/,
 	paperPages:
 		/(uk\/subscribe\/paper)|((uk\/(checkout|thank-you)).*?(SubscriptionCard|HomeDelivery|NationalDelivery))/,
 	weeklyPages:
@@ -70,14 +71,14 @@ export const tests: Tests = {
 		],
 		audiences: {
 			ALL: {
-				offset: 0,
-				size: 0,
+				offset: 0.1,
+				size: 1,
 			},
 		},
-		isActive: false,
+		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 3,
-		targetPage: pageUrlRegexes.genericCheckoutOnly,
+		targetPage: pageUrlRegexes.genericCheckoutPages,
 		excludeContributionsOnlyCountries: true,
 	},
 };
