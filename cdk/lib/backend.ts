@@ -41,7 +41,7 @@ export class Backend extends GuStack {
 		const userData = UserData.custom(`#!/bin/bash
 set -e
 groupadd support
-useradd -r -m -s /usr/bin/nologin -g support ${app}
+useradd -r -m -s /sbin/nologin -g support ${app}
 cd /home/${app}
 mkdir ${app}
 chown -R ${app}:support ${app}

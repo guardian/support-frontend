@@ -862,7 +862,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
                   "#!/bin/bash
 set -e
 groupadd support
-useradd -r -m -s /usr/bin/nologin -g support support-backend
+useradd -r -m -s /sbin/nologin -g support support-backend
 cd /home/support-backend
 mkdir support-backend
 chown -R support-backend:support support-backend
