@@ -114,8 +114,8 @@ export const showSimilarProductsConsentForRatePlan = (
 	ratePlanKey: ActiveRatePlanKey,
 	emailMarketing: boolean,
 ) =>
-	!productDescription.ratePlans[ratePlanKey]?.hideSimilarProductsConsent ||
-	emailMarketing;
+	!productDescription.ratePlans[ratePlanKey]?.hideSimilarProductsConsent &&
+	!emailMarketing;
 
 export function filterBenefitByRegion(
 	benefit: {

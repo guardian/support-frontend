@@ -686,6 +686,12 @@ export default function CheckoutForm({
 		isWeeklyGift,
 	)}`;
 
+	const consent = showSimilarProductsConsentForRatePlan(
+		productDescription,
+		ratePlanKey,
+		emailMarketing,
+	);
+	console.log('*** consent display=', consent);
 	return (
 		<>
 			<form
