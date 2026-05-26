@@ -176,10 +176,7 @@ export default function CheckoutForm({
 	const isSignedIn = !!user?.email;
 
 	const urlParams = new URLSearchParams(window.location.search);
-	// Only show the similar products consent if the user is not coming from a marketing campaign (as determined by the absence of utm_medium and utm_source query params).
-	const showSimilarProductsConsent =
-		urlParams.get('utm_medium') === null &&
-		urlParams.get('utm_source') === null;
+	const showSimilarProductsConsent = urlParams.get('showConsent') === 'true';
 
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } =
