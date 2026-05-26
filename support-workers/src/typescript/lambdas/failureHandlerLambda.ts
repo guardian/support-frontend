@@ -1,7 +1,7 @@
+import { buildEmailFields } from '@modules/email/dataFields/dayZero/emailFields';
 import type { DataExtensionName } from '@modules/email/email';
 import { DataExtensionNames, sendEmail } from '@modules/email/email';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
-import { buildEmailFields } from '../emailFields/emailFields';
 import { checkoutFailureReasonFromErrorMessage } from '../errors/checkoutFailureReasons';
 import { errorFromStateSchema } from '../errors/errorFromStateSchema';
 import { isTransactionDeclinedError } from '../errors/zuoraErrors';
