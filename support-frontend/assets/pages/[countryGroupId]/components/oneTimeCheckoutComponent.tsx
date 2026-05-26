@@ -266,6 +266,7 @@ export function OneTimeCheckoutComponent({
 	const urlSearchParams = new URLSearchParams(window.location.search);
 
 	const preSelectedAmountParam = urlSearchParams.get('contribution');
+	const showSimilarProductsConsent = urlSearchParams.get('showConsent') === 'true';
 
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
@@ -929,7 +930,7 @@ export function OneTimeCheckoutComponent({
 						/>
 
 						<div css={similarProductsConsentCheckboxContainer}>
-							<SimilarProductsConsent />
+							{ showSimilarProductsConsent && <SimilarProductsConsent /> }
 						</div>
 
 						<div

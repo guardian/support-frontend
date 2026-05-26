@@ -644,6 +644,7 @@ export function ThreeTierLanding({
 				<SupportOnce
 					currency={glyph(currencyId)}
 					countryGroupId={countryGroupId}
+					showConsent={showSimilarProductsConsent}
 				/>
 			</Container>
 			{enableStudentOffer && (

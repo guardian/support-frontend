@@ -60,11 +60,13 @@ const btnStyleOverrides = css`
 interface SupportOnceProps {
 	currency: string;
 	countryGroupId: CountryGroupId;
+	showConsent: boolean;
 }
 
 export function SupportOnce({
 	currency,
 	countryGroupId,
+	showConsent,
 }: SupportOnceProps): JSX.Element {
 	return (
 		<div css={container}>
@@ -75,7 +77,7 @@ export function SupportOnce({
 				{currency}1 or more.
 			</p>
 			<LinkButton
-				href={`/${countryGroups[countryGroupId].supportRegionId}/one-time-checkout`}
+				href={`/${countryGroups[countryGroupId].supportRegionId}/one-time-checkout?showConsent=${showConsent}`}
 				iconSide="left"
 				priority="primary"
 				size="default"
