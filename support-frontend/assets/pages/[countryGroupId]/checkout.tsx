@@ -203,6 +203,11 @@ export function Checkout({
 	}
 
 	const isTestUser = !!cookie.get('_test_username');
+	const isMarketingEmail =
+		urlSearchParams.get('utm_source') === 'EMAIL' &&
+		(urlSearchParams.get('utm_medium') === 'email_editorial' ||
+			urlSearchParams.get('utm_medium') === 'email_marketing');
+	console.log('*** Email Marketing:', isMarketingEmail);
 	const stripePublicKey =
 		getStripeKeyForProduct('REGULAR', productKey, ratePlanKey, isTestUser) ??
 		getStripeKeyForCountry('REGULAR', countryId, currencyKey, isTestUser);
@@ -355,6 +360,7 @@ export function Checkout({
 						thresholdAmount={thresholdAmount}
 						studentDiscount={studentDiscount}
 						paypalClientId={paypalClientId}
+						emailMarketing={isMarketingEmail}
 					/>
 				</PageLayout>
 			</Elements>

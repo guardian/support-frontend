@@ -112,7 +112,10 @@ export type ProductDescription = {
 export const showSimilarProductsConsentForRatePlan = (
 	productDescription: ProductDescription,
 	ratePlanKey: ActiveRatePlanKey,
-) => !productDescription.ratePlans[ratePlanKey]?.hideSimilarProductsConsent;
+	emailMarketing: boolean,
+) =>
+	!productDescription.ratePlans[ratePlanKey]?.hideSimilarProductsConsent ||
+	emailMarketing;
 
 export function filterBenefitByRegion(
 	benefit: {

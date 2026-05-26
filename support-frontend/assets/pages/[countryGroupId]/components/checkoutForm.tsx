@@ -147,6 +147,7 @@ type CheckoutFormProps = {
 	checkoutSession?: CheckoutSession;
 	studentDiscount?: StudentDiscount;
 	paypalClientId: string;
+	emailMarketing: boolean;
 };
 
 export default function CheckoutForm({
@@ -170,6 +171,7 @@ export default function CheckoutForm({
 	checkoutSession,
 	studentDiscount,
 	paypalClientId,
+	emailMarketing,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
@@ -1132,6 +1134,7 @@ export default function CheckoutForm({
 							{showSimilarProductsConsentForRatePlan(
 								productDescription,
 								ratePlanKey,
+								emailMarketing,
 							) && <SimilarProductsConsent />}
 						</div>
 						<SummaryTsAndCs
