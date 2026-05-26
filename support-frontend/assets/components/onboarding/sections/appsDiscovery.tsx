@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
 import { Button, Stack, SvgTickRound } from '@guardian/source/react-components';
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { HandleStepNavigationFunction } from 'pages/[countryGroupId]/components/onboardingComponent';
 import { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
@@ -52,7 +53,7 @@ const FEAST_APP_BENEFITS = [
 	{
 		title: 'Home',
 		description:
-			'Choose from over 7,000 curated recipes from our Guardian cooks.',
+			'Get inspired with over 7,000 recipes from our world-class cooks - and app exclusive recipes, just for you.',
 	},
 	{
 		title: 'Search',
@@ -61,8 +62,7 @@ const FEAST_APP_BENEFITS = [
 	},
 	{
 		title: 'My Feast',
-		description:
-			'Save your favourite recipes and curate your own recipe collections.',
+		description: 'Save your favourite recipes to your own curated collection.',
 	},
 	{
 		title: 'Cook mode',
@@ -71,20 +71,33 @@ const FEAST_APP_BENEFITS = [
 	},
 	{
 		title: 'Shopping list',
-		description: 'Add recipe ingredients to your weekly shop.',
+		description: 'Add recipe ingredients and tick them off as you shop.',
 	},
+];
+
+const FEAST_APP_UNITS_BENEFIT = {
+	title: 'Recipes',
+	description: 'Convert any recipe from metric to standard US units.',
+};
+
+const FEAST_APP_BENEFITS_US = [
+	...FEAST_APP_BENEFITS.slice(0, 1),
+	FEAST_APP_UNITS_BENEFIT,
+	...FEAST_APP_BENEFITS.slice(1),
 ];
 
 export function OnboardingAppsDiscovery({
 	hasMobileAppDownloaded,
 	hasFeastMobileAppDownloaded,
 	onboardingStep,
+	supporterRegion,
 	handleStepNavigation,
 }: {
 	hasMobileAppDownloaded: boolean;
 	hasFeastMobileAppDownloaded: boolean;
 	onboardingStep: OnboardingSteps;
 	handleStepNavigation: HandleStepNavigationFunction;
+	supporterRegion: SupportRegionId;
 }) {
 	const { windowWidthIsGreaterThan } = useWindowWidth();
 
@@ -93,9 +106,14 @@ export function OnboardingAppsDiscovery({
 		? hasMobileAppDownloaded
 		: hasFeastMobileAppDownloaded;
 
+	const FEAST_APP_BENEFITS_REGION =
+		supporterRegion === SupportRegionId.US
+			? FEAST_APP_BENEFITS_US
+			: FEAST_APP_BENEFITS;
+
 	const appBenefits = isGuardianApp
 		? GUARDIAN_APP_BENEFITS
-		: FEAST_APP_BENEFITS;
+		: FEAST_APP_BENEFITS_REGION;
 
 	const isTabledOrLarger = windowWidthIsGreaterThan('tablet');
 
@@ -118,12 +136,8 @@ export function OnboardingAppsDiscovery({
 					<p css={descriptions}>
 						{isGuardianApp
 							? 'Get the stuff you want, when you want it — news, sport, podcasts, puzzles and more.'
-							: 'Level up your cooking with more than 6,000 recipes and smart, exclusive cooking features.'}
+							: 'Rated 4 out of 5 stars by our Feast community.'}
 					</p>
-
-					{!hasAppDownloaded && (
-						<OnboardingAppBadgesDownload onboardingStep={onboardingStep} />
-					)}
 
 					<div css={separator}></div>
 					<ul>
@@ -143,6 +157,10 @@ export function OnboardingAppsDiscovery({
 							</li>
 						))}
 					</ul>
+
+					{!hasAppDownloaded && (
+						<OnboardingAppBadgesDownload onboardingStep={onboardingStep} />
+					)}
 
 					<Stack
 						space={0}

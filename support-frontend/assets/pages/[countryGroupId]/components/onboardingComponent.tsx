@@ -318,6 +318,7 @@ function OnboardingComponent({
 					hasMobileAppDownloaded={hasMobileAppDownloaded}
 					hasFeastMobileAppDownloaded={hasFeastMobileAppDownloaded}
 					onboardingStep={currentStep}
+					supporterRegion={supportRegionId}
 					handleStepNavigation={handleStepNavigation}
 				/>
 			)}
