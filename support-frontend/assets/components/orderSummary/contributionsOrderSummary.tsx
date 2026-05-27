@@ -185,6 +185,10 @@ const weeklyPricingSummary = css`
 	}
 `;
 
+const savingTextContainer = css`
+	padding-top: ${space[0.5]}px;
+`;
+
 export type ContributionsOrderSummaryProps = {
 	productKey: ActiveProductKey;
 	productLabel: string;
@@ -348,8 +352,8 @@ export function ContributionsOrderSummary({
 						<p>{discountPrice ?? fullPrice}</p>
 					</div>
 					{savingText && (
-						<div>
-							<hr css={hrCss} style="padding-top: 2px;"/>
+						<div css={savingTextContainer}>
+							<hr css={hrCss}/>
 							<p css={savingTextCss}>{savingText}</p>
 						</div>
 					)}
