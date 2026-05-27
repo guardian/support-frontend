@@ -186,7 +186,7 @@ const weeklyPricingSummary = css`
 `;
 
 const savingTextContainer = css`
-	padding-top: ${space[0.5]}px;
+	padding-top: ${space[0]}px;
 `;
 
 export type ContributionsOrderSummaryProps = {
