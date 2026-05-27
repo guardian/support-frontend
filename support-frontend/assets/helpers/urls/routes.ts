@@ -63,9 +63,9 @@ const countryPath = (countryGroupId: CountryGroupId) =>
 	countryGroups[countryGroupId].supportRegionId;
 
 function postcodeLookupUrl(postcode: string, useExpress?: boolean): string {
-	return `${getOrigin() + routes.postcodeLookup}/${
-		useExpress ? 'api/' : ''
-	}${postcode}`;
+	return `${getOrigin()}${useExpress ? '/api' : ''}${
+		routes.postcodeLookup
+	}/${postcode}`;
 }
 
 function paperSubsUrl(
