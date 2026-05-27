@@ -23,25 +23,11 @@ export interface AmountValuesObject {
 
 type AmountsCardData = Record<ContributionType, AmountValuesObject>;
 
-export interface AmountsVariant {
+interface AmountsVariant {
 	variantName: string;
 	defaultContributionType: ContributionType;
 	displayContributionType: ContributionType[];
 	amountsCardData: AmountsCardData;
-}
-
-type AmountsTestTargeting =
-	| { targetingType: 'Region'; region: CountryGroupId }
-	| { targetingType: 'Country'; countries: IsoCountry[] };
-
-export interface AmountsTest {
-	testName: string;
-	liveTestName?: string;
-	isLive: boolean;
-	targeting: AmountsTestTargeting;
-	order: number;
-	seed: number;
-	variants: AmountsVariant[];
 }
 export interface SelectedAmountsVariant extends AmountsVariant {
 	testName: string;
