@@ -348,10 +348,10 @@ export function ContributionsOrderSummary({
 						<p>{discountPrice ?? fullPrice}</p>
 					</div>
 					{savingText && (
-						<>
+						<div>
 							<hr css={hrCss} />
 							<p css={savingTextCss}>{savingText}</p>
-						</>
+						</div>
 					)}
 				</div>
 			) : (
