@@ -24,7 +24,7 @@ type DeliveryRecipientAddressProps = {
 	setAddressErrors: React.Dispatch<
 		React.SetStateAction<AddressFormFieldError[]>
 	>;
-	useExpress?: boolean;
+	useExpress: boolean;
 };
 
 export function DeliveryRecipientAddress({

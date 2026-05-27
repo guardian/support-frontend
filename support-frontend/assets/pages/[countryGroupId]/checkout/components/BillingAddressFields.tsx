@@ -13,7 +13,6 @@ export type BillingStatePostcodeCountry = {
 	setBillingPostcode: (value: string) => void;
 	billingCountry: IsoCountry;
 	setBillingCountry: (value: IsoCountry) => void;
-	useExpress?: boolean;
 };
 
 type BillingAddressFieldsProps = BillingAddressProps & {

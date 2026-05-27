@@ -27,9 +27,9 @@ type PersonalAddressFieldsProps = {
 	setDeliveryAddressErrors: React.Dispatch<
 		React.SetStateAction<AddressFormFieldError[]>
 	>;
+	useExpress: boolean;
 	billingStatePostcodeCountry?: BillingStatePostcodeCountry;
 	isWeeklyGift?: boolean;
-	useExpress?: boolean;
 };
 
 export function PersonalAddressFields({
@@ -47,9 +47,9 @@ export function PersonalAddressFields({
 	setDeliveryAgentError,
 	deliveryAddressErrors,
 	setDeliveryAddressErrors,
+	useExpress,
 	billingStatePostcodeCountry,
 	isWeeklyGift = false,
-	useExpress = false,
 }: PersonalAddressFieldsProps) {
 	const legendDelivery = billingStatePostcodeCountry
 		? `2. Delivery address`

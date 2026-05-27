@@ -11,7 +11,7 @@ export type BillingAddressProps = {
 	countries?: Record<string, string>;
 	checkoutSession?: CheckoutSession;
 	billingStatePostcodeCountry: BillingStatePostcodeCountry;
-	useExpress?: boolean;
+	useExpress: boolean;
 };
 
 export function BillingAddress({
