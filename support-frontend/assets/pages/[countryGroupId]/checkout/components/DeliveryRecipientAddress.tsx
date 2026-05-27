@@ -24,6 +24,7 @@ type DeliveryRecipientAddressProps = {
 	setAddressErrors: React.Dispatch<
 		React.SetStateAction<AddressFormFieldError[]>
 	>;
+	useExpress?: boolean;
 };
 
 export function DeliveryRecipientAddress({
@@ -36,6 +37,7 @@ export function DeliveryRecipientAddress({
 	showInstructions,
 	addressErrors,
 	setAddressErrors,
+	useExpress,
 }: DeliveryRecipientAddressProps) {
 	/** Delivery address */
 	const [deliveryLineOne, setDeliveryLineOne] =
@@ -115,7 +117,7 @@ export function DeliveryRecipientAddress({
 					onFindAddress={(postcode) => {
 						setDeliveryPostcodeStateLoading(true);
 
-						void findAddressesForPostcode(postcode)
+						void findAddressesForPostcode(postcode, useExpress)
 							.then((results) => {
 								setDeliveryPostcodeStateResults(results);
 								setPostcodeLookupError(null);

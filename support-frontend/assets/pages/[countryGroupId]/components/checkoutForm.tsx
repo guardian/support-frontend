@@ -684,6 +684,8 @@ export default function CheckoutForm({
 		isWeeklyGift,
 	)}`;
 
+	const useExpress = abParticipations.postCodeLookupExpress === 'variant';
+
 	return (
 		<>
 			<form
@@ -943,6 +945,7 @@ export default function CheckoutForm({
 								deliveryAddressErrors={deliveryAddressErrors}
 								setDeliveryAddressErrors={setDeliveryAddressErrors}
 								billingStatePostcodeCountry={billingStatePostcodeCountry}
+								useExpress={useExpress}
 							/>
 						)}
 						<FormSection ref={paymentMethodRef}>

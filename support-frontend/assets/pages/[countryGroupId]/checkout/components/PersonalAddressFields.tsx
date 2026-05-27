@@ -29,6 +29,7 @@ type PersonalAddressFieldsProps = {
 	>;
 	billingStatePostcodeCountry?: BillingStatePostcodeCountry;
 	isWeeklyGift?: boolean;
+	useExpress?: boolean;
 };
 
 export function PersonalAddressFields({
@@ -48,6 +49,7 @@ export function PersonalAddressFields({
 	setDeliveryAddressErrors,
 	billingStatePostcodeCountry,
 	isWeeklyGift = false,
+	useExpress = false,
 }: PersonalAddressFieldsProps) {
 	const legendDelivery = billingStatePostcodeCountry
 		? `2. Delivery address`
@@ -68,6 +70,7 @@ export function PersonalAddressFields({
 				showInstructions={productKey === 'HomeDelivery'}
 				addressErrors={deliveryAddressErrors}
 				setAddressErrors={setDeliveryAddressErrors}
+				useExpress={useExpress}
 			/>
 			{billingStatePostcodeCountry && (
 				<BillingAddressFields
