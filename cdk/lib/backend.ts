@@ -41,7 +41,7 @@ export class Backend extends GuStack {
 		const userData = UserData.custom(`#!/bin/bash
 set -e
 groupadd support
-useradd -r -m -s /usr/bin/nologin -g support ${app}
+useradd -r -m -s /sbin/nologin -g support ${app}
 cd /home/${app}
 mkdir ${app}
 chown -R ${app}:support ${app}
@@ -60,13 +60,17 @@ mkdir /var/log/${app}
 chown -R ${app}:support /var/log/${app}
 
 cd target
-/usr/local/node/pm2 start --uid ${app} --gid support server.js`);
+/usr/local/node/pm2 start --uid ${app} --gid support --output /var/log/${app}/application.log --error /var/log/${app}/application.log server.js
+
+/opt/cloudwatch-logs/configure-logs application ${this.stack} ${
+			this.stage
+		} ${app} /var/log/${app}/application.log`);
 
 		const policies = [
 			new GuAllowPolicy(this, 'SSMGet', {
-				actions: ['ssm:GetParametersByPath'],
+				actions: ['ssm:GetParameter'],
 				resources: [
-					`arn:aws:ssm:${this.region}:${this.account}:parameter/${this.stack}/${app}/${this.stage}`,
+					`arn:aws:ssm:${this.region}:${this.account}:parameter/${this.stack}/${app}/${this.stage}/*`,
 				],
 			}),
 			new GuAllowPolicy(this, 'CloudwatchMetrics', {

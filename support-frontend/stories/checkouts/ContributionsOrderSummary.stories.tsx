@@ -21,6 +21,11 @@ const boldText = css`
 
 const landingPageSettings = fallBackLandingPageSelection;
 
+const weeklyPricingLandingPageSettings = {
+	...fallBackLandingPageSelection,
+	name: 'WEEKLY_PRICE_TEST',
+};
+
 const checkListData = [
 	{
 		isChecked: true,
@@ -284,4 +289,88 @@ StudentOneYear.args = {
 	studentDiscount: oneYearStudentDiscount,
 	supportRegionId: SupportRegionId.UK,
 	landingPageSettings,
+};
+
+export const WeeklyPricing = Template.bind({});
+WeeklyPricing.args = {
+	productKey: ProductKeys.SupporterPlusKey,
+	ratePlanKey: 'Monthly',
+	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
+	paymentFrequency: 'month',
+	enableCheckList: true,
+	amount: 12,
+	currency: {
+		glyph: '£',
+		extendedGlyph: '£',
+		spokenCurrency: 'pound',
+	},
+	checkListData: [
+		...productCatalogDescription.SupporterPlus.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'SupporterPlus'}
+			ratePlanKey={'Monthly'}
+			countryGroupId={GBPCountries}
+			thresholdAmount={12}
+		/>
+	),
+	startDate: null,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+	supportRegionId: SupportRegionId.UK,
+	landingPageSettings: weeklyPricingLandingPageSettings,
+};
+
+export const WeeklyPricingWithPromotion = Template.bind({});
+WeeklyPricingWithPromotion.args = {
+	productKey: ProductKeys.SupporterPlusKey,
+	ratePlanKey: 'Monthly',
+	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
+	paymentFrequency: 'month',
+	enableCheckList: true,
+	amount: 12,
+	currency: {
+		glyph: '£',
+		extendedGlyph: '£',
+		spokenCurrency: 'pound',
+	},
+	checkListData: [
+		...productCatalogDescription.SupporterPlus.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+	],
+	promotion: {
+		name: 'SupportPlusAndGuardianWeekly',
+		description: 'Supporter Plus and Guardian Weekly',
+		promoCode: 'TEST_PROMO',
+		discountedPrice: 8,
+		discount: {
+			amount: 33,
+			durationMonths: 6,
+		},
+	},
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'SupporterPlus'}
+			ratePlanKey={'Monthly'}
+			countryGroupId={GBPCountries}
+			thresholdAmount={12}
+		/>
+	),
+	startDate: null,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+	supportRegionId: SupportRegionId.UK,
+	landingPageSettings: weeklyPricingLandingPageSettings,
 };

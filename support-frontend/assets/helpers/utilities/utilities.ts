@@ -98,17 +98,26 @@ function parseBillingPeriodCopy(
 	price: number,
 	billingPeriod: BillingPeriod,
 ): string {
-	const pricePerDay =
-		billingPeriod === BillingPeriod.Annual
-			? price / 365
-			: billingPeriod === BillingPeriod.Monthly
-			? (price * 12) / 365
-			: price;
-	const weeklyPrice = pricePerDay * 7;
+	const weeklyPrice = calculateWeeklyPrice(price, billingPeriod);
 	const formattedWeeklyPrice = simpleFormatAmount(currency, weeklyPrice);
 	return copy
 		.replaceAll('%%PRICE_PRODUCT_WEEKLY%%', formattedWeeklyPrice)
 		.trim();
+}
+
+function calculateWeeklyPrice(
+	price: number,
+	billingPeriod: BillingPeriod,
+): number {
+	const pricePerDay =
+		billingPeriod === BillingPeriod.Annual
+			? price / 365
+			: billingPeriod === BillingPeriod.Quarterly
+			? (price * 4) / 365
+			: billingPeriod === BillingPeriod.Monthly
+			? (price * 12) / 365
+			: price;
+	return pricePerDay * 7;
 }
 
 // ----- Exports ----- //
@@ -121,4 +130,5 @@ export {
 	parseCustomAmounts,
 	parseBillingPeriodCopy,
 	replaceDatePlaceholder,
+	calculateWeeklyPrice,
 };

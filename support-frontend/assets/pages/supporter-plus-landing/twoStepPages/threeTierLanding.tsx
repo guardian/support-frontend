@@ -491,6 +491,10 @@ export function ThreeTierLanding({
 		...tier3ProductDescription,
 	};
 
+	const forceWeeklyPricing = urlSearchParams.get('force-weekly') === 'true';
+	const showWeeklyPrice =
+		forceWeeklyPricing || settings.name.includes('WEEKLY_PRICE');
+
 	return (
 		<PageScaffold
 			header={
@@ -625,6 +629,7 @@ export function ThreeTierLanding({
 						cardsContent={[tier1Card, tier2Card, tier3Card]}
 						currencyId={currencyId}
 						billingPeriod={billingPeriod}
+						showWeeklyPrice={showWeeklyPrice}
 					/>
 				</div>
 			</Container>
