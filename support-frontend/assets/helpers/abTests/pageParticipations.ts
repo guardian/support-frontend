@@ -114,6 +114,7 @@ export async function getPageParticipations<Variant>(
 	);
 	if (urlParticipations) {
 		const variant = getVariant(urlParticipations, tests);
+		setSessionParticipations(urlParticipations, sessionStorageKey);
 		return { participations: urlParticipations, variant };
 	}
 
