@@ -13,6 +13,7 @@ export type BillingStatePostcodeCountry = {
 	setBillingPostcode: (value: string) => void;
 	billingCountry: IsoCountry;
 	setBillingCountry: (value: IsoCountry) => void;
+	useExpress?: boolean;
 };
 
 type BillingAddressFieldsProps = BillingAddressProps & {
@@ -24,6 +25,7 @@ export function BillingAddressFields({
 	checkoutSession,
 	billingStatePostcodeCountry,
 	isWeeklyGift,
+	useExpress,
 }: BillingAddressFieldsProps) {
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
 		useStateWithCheckoutSession<boolean>(
@@ -57,6 +59,7 @@ export function BillingAddressFields({
 					countries={countries}
 					checkoutSession={checkoutSession}
 					billingStatePostcodeCountry={billingStatePostcodeCountry}
+					useExpress={useExpress}
 				/>
 			)}
 		</>

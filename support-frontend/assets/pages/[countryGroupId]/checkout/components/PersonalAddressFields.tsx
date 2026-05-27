@@ -78,6 +78,7 @@ export function PersonalAddressFields({
 					checkoutSession={checkoutSession}
 					billingStatePostcodeCountry={billingStatePostcodeCountry}
 					isWeeklyGift={isWeeklyGift}
+					useExpress={useExpress}
 				/>
 			)}
 			{deliveryPostcodeIsOutsideM25 && (
