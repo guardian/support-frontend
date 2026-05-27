@@ -91,12 +91,14 @@ const titleCss = css`
 	color: #606060;
 `;
 
-const priceCss = (hasPromotion: boolean, hasBillingPeriodCopy: boolean) => css`
+const priceCss = css`
 	${textSansBold24};
 	position: relative;
-	margin-bottom: ${hasPromotion || hasBillingPeriodCopy
-		? '0'
-		: `${space[2]}px`};
+	margin-bottom: ${space[2]}px;
+
+	${from.desktop} {
+		min-height: ${space[16]}px;
+	}
 `;
 
 const discountSummaryCss = css`
@@ -229,7 +231,7 @@ export function ThreeTierCard({
 				{titlePill && <BenefitPill copy={titlePill} />}
 				<h2 css={[titleCss, checkListTextItemCss]}>{title}</h2>
 			</div>
-			<div css={priceCss(!!promotion, !!parsedBillingPeriodsCopy)}>
+			<div css={priceCss}>
 				{promotion && (
 					<>
 						<p>
