@@ -349,7 +349,7 @@ export function ContributionsOrderSummary({
 					</div>
 					{savingText && (
 						<div>
-							<hr css={hrCss} />
+							<hr css={hrCss} style="padding-top: 2px;"/>
 							<p css={savingTextCss}>{savingText}</p>
 						</div>
 					)}
