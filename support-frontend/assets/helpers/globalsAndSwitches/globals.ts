@@ -1,9 +1,7 @@
 import { storage } from '@guardian/libs';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { Settings, Status } from 'helpers/globalsAndSwitches/settings';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
-import type { AmountsTest, AmountsVariant } from '../contributions';
 
 function isRecord(item: unknown): item is Record<string, unknown> {
 	return item != null && !Array.isArray(item) && typeof item === 'object';
@@ -54,44 +52,6 @@ function getLocal<T>(path = ''): T | null {
 	}
 }
 
-const emptyAmountsTestVariants: AmountsVariant[] = [
-	{
-		variantName: 'CONTROL',
-		defaultContributionType: 'MONTHLY',
-		displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
-		amountsCardData: {
-			ONE_OFF: {
-				amounts: [],
-				defaultAmount: 0,
-				hideChooseYourAmount: false,
-			},
-			MONTHLY: {
-				amounts: [],
-				defaultAmount: 0,
-				hideChooseYourAmount: false,
-			},
-			ANNUAL: {
-				amounts: [],
-				defaultAmount: 0,
-				hideChooseYourAmount: false,
-			},
-		},
-	},
-];
-
-const emptyConfiguredRegionAmounts: AmountsTest = {
-	testName: '',
-	liveTestName: '',
-	isLive: false,
-	targeting: {
-		targetingType: 'Region',
-		region: 'GBPCountries',
-	},
-	order: 0,
-	seed: 0,
-	variants: emptyAmountsTestVariants,
-};
-
 export const emptySwitches = {
 	experiments: {},
 	oneOffPaymentMethods: {},
@@ -107,43 +67,6 @@ const getSettings = (): Settings => {
 
 	const defaultSettings = {
 		switches: emptySwitches,
-		amounts: [
-			{
-				...emptyConfiguredRegionAmounts,
-				testName: 'EMPTY_TEST__GBPCountries',
-				target: 'GBPCountries' as CountryGroupId,
-			},
-			{
-				...emptyConfiguredRegionAmounts,
-				testName: 'EMPTY_TEST__UnitedStates',
-				target: 'UnitedStates' as CountryGroupId,
-			},
-			{
-				...emptyConfiguredRegionAmounts,
-				testName: 'EMPTY_TEST__Canada',
-				target: 'Canada' as CountryGroupId,
-			},
-			{
-				...emptyConfiguredRegionAmounts,
-				testName: 'EMPTY_TEST__NZDCountries',
-				target: 'NZDCountries' as CountryGroupId,
-			},
-			{
-				...emptyConfiguredRegionAmounts,
-				testName: 'EMPTY_TEST__EURCountries',
-				target: 'EURCountries' as CountryGroupId,
-			},
-			{
-				...emptyConfiguredRegionAmounts,
-				testName: 'EMPTY_TEST__International',
-				target: 'International' as CountryGroupId,
-			},
-			{
-				...emptyConfiguredRegionAmounts,
-				testName: 'EMPTY_TEST__AUDCountries',
-				target: 'AUDCountries' as CountryGroupId,
-			},
-		],
 		contributionTypes: {
 			GBPCountries: [],
 			UnitedStates: [],
