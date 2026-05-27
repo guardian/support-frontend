@@ -182,7 +182,10 @@ const weeklyPricingSummary = css`
 	& div {
 		padding: 0;
 	}
-	& div:last-child hr {
+`;
+
+const savingTextContainer = css`
+	& hr {
 		margin-top: ${space[0]}px;
 	}
 `;
@@ -350,7 +353,7 @@ export function ContributionsOrderSummary({
 						<p>{discountPrice ?? fullPrice}</p>
 					</div>
 					{savingText && (
-						<div>
+						<div css={savingTextContainer}>
 							<hr css={hrCss} />
 							<p css={savingTextCss}>{savingText}</p>
 						</div>
