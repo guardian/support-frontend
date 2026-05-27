@@ -28,6 +28,7 @@ import {
 	type Promotion,
 } from 'helpers/productPrice/promotions';
 import {
+	calculateWeeklyPrice,
 	getSanitisedHtml,
 	parseBillingPeriodCopy,
 } from 'helpers/utilities/utilities';
@@ -49,6 +50,7 @@ export type ThreeTierCardProps = {
 	isSubdued: boolean;
 	currencyId: IsoCurrency;
 	billingPeriod: BillingPeriod;
+	showWeeklyPrice?: boolean;
 };
 
 const container = (
@@ -89,15 +91,13 @@ const titleCss = css`
 	color: #606060;
 `;
 
-const priceCss = (hasPromotion: boolean, hasBillingPeriodCopy: boolean) => css`
+const priceCss = css`
 	${textSansBold24};
 	position: relative;
-	margin-bottom: ${hasPromotion || hasBillingPeriodCopy
-		? '0'
-		: `${space[4]}px`};
+	margin-bottom: ${space[2]}px;
 
 	${from.desktop} {
-		margin-bottom: ${space[6]}px;
+		min-height: ${space[16]}px;
 	}
 `;
 
@@ -106,15 +106,11 @@ const discountSummaryCss = css`
 	font-size: ${space[3]}px;
 	font-weight: 400;
 	color: #606060;
-	margin-bottom: ${space[4]}px;
 
 	${from.desktop} {
-		position: absolute;
-		top: 100%;
-		left: 0;
+		min-height: ${space[8]}px;
 		width: 100%;
 		text-align: center;
-		margin-bottom: 0;
 	}
 `;
 
@@ -179,6 +175,7 @@ export function ThreeTierCard({
 	isSubdued,
 	currencyId,
 	billingPeriod,
+	showWeeklyPrice = false,
 }: ThreeTierCardProps): JSX.Element {
 	const {
 		title,
@@ -194,12 +191,24 @@ export function ThreeTierCard({
 	} = cardContent;
 	const currency = getCurrencyInfo(currencyId);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
-	const formattedPrice = simpleFormatAmount(currency, price);
-	const ariaLabelPrice = simpleFormatAmount(
-		currency,
-		promotion?.discountedPrice ?? price,
-	);
-	const linkAriaLabel = `${title}, ${ariaLabelPrice} per ${periodNoun}`;
+
+	const mainPrice = showWeeklyPrice
+		? calculateWeeklyPrice(price, billingPeriod)
+		: price;
+	const mainDiscountedPrice = promotion
+		? showWeeklyPrice
+			? calculateWeeklyPrice(promotion.discountedPrice ?? price, billingPeriod)
+			: promotion.discountedPrice ?? price
+		: undefined;
+
+	const formattedMainPrice = simpleFormatAmount(currency, mainPrice);
+	const formattedMainDiscountedPrice = mainDiscountedPrice
+		? simpleFormatAmount(currency, mainDiscountedPrice)
+		: undefined;
+	const periodLabel = showWeeklyPrice ? 'week' : periodNoun;
+	const linkAriaLabel = `${title}, ${
+		formattedMainDiscountedPrice ?? formattedMainPrice
+	} per ${periodLabel}`;
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	const pillCopy = promotion?.landingPage?.roundel ?? cardContent.label?.copy;
 	const inAdditionToAllAccessDigital = product === 'DigitalSubscription';
@@ -222,42 +231,63 @@ export function ThreeTierCard({
 				{titlePill && <BenefitPill copy={titlePill} />}
 				<h2 css={[titleCss, checkListTextItemCss]}>{title}</h2>
 			</div>
-			<p css={priceCss(!!promotion, !!parsedBillingPeriodsCopy)}>
+			<div css={priceCss}>
 				{promotion && (
 					<>
-						<span css={previousPriceStrikeThrough}>{formattedPrice}</span>{' '}
-						{`${simpleFormatAmount(
-							currency,
-							promotion.discountedPrice ?? price,
-						)}/${periodNoun}`}
-						<span css={discountSummaryCss}>
-							{discountSummaryCopy(
-								currency,
-								promoCount,
-								price,
-								promotion,
-								billingPeriod,
-							)}
-						</span>
+						<p>
+							<span css={previousPriceStrikeThrough}>{formattedMainPrice}</span>{' '}
+							{`${formattedMainDiscountedPrice}/${periodLabel}`}
+						</p>
+						<p>
+							<span css={discountSummaryCss}>
+								{showWeeklyPrice ? 'Billed as ' : ''}
+								{discountSummaryCopy(
+									currency,
+									promoCount,
+									price,
+									promotion,
+									billingPeriod,
+								)}
+							</span>
+						</p>
 					</>
 				)}
 				{parsedBillingPeriodsCopy && !promotion && (
 					<>
-						<span>
-							{formattedPrice}/{periodNoun}
-						</span>
-						<span
-							css={discountSummaryCss}
-							dangerouslySetInnerHTML={{
-								__html: getSanitisedHtml(parsedBillingPeriodsCopy),
-							}}
-						/>
+						<p>
+							<span>
+								{formattedMainPrice}/{periodLabel}
+							</span>
+						</p>
+						<p>
+							<span
+								css={discountSummaryCss}
+								dangerouslySetInnerHTML={{
+									__html: showWeeklyPrice
+										? `Billed as ${getSanitisedHtml(parsedBillingPeriodsCopy)}`
+										: getSanitisedHtml(parsedBillingPeriodsCopy),
+								}}
+							/>
+						</p>
 					</>
 				)}
-				{!promotion &&
-					!parsedBillingPeriodsCopy &&
-					`${formattedPrice}/${periodNoun}`}
-			</p>
+				{!promotion && !parsedBillingPeriodsCopy && (
+					<>
+						<p>
+							<span>
+								{formattedMainPrice}/{periodLabel}
+							</span>
+						</p>
+						{showWeeklyPrice && (
+							<p>
+								<span css={discountSummaryCss}>
+									Billed as {simpleFormatAmount(currency, price)}/{periodNoun}
+								</span>
+							</p>
+						)}
+					</>
+				)}
+			</div>
 			<LinkButton
 				href={link}
 				cssOverrides={btnStyleOverrides}
