@@ -266,7 +266,10 @@ export function OneTimeCheckoutComponent({
 	const urlSearchParams = new URLSearchParams(window.location.search);
 
 	const preSelectedAmountParam = urlSearchParams.get('contribution');
-	const showSimilarProductsConsent = urlSearchParams.get('showConsent') === 'true';
+	// Only show the similar products consent if the user is not coming from a marketing campaign (as determined by the absence of utm_medium and utm_source query params).
+	const showSimilarProductsConsent =
+		urlSearchParams.get('utm_medium') === null &&
+		urlSearchParams.get('utm_source') === null;
 
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;

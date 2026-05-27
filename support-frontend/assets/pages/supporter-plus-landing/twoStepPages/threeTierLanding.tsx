@@ -266,10 +266,28 @@ export function ThreeTierLanding({
 		: undefined;
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 
-	// Only show the similar products consent if the user is not coming from a marketing campaign (as determined by the absence of utm_medium and utm_source query params).
-	const showSimilarProductsConsent =
-		urlSearchParams.get('utm_medium') === null &&
-		urlSearchParams.get('utm_source') === null;
+	const getMarketingParams = (): string => {
+		const utmSource = urlSearchParams.get('utm_source');
+		const utmMedium = urlSearchParams.get('utm_medium');
+		const marketingParams = new URLSearchParams();
+
+		if (utmSource?.toUpperCase() === 'EMAIL') {
+			marketingParams.set('utm_source', 'EMAIL');
+		}
+
+		if (utmMedium?.toLowerCase() === 'email_marketing') {
+			marketingParams.set('utm_medium', 'email_marketing');
+		}
+
+		if (utmMedium?.toLowerCase() === 'email_editorial') {
+			marketingParams.set('utm_medium', 'email_editorial');
+		}
+
+		return marketingParams.toString();
+	};
+
+	const marketingParams = getMarketingParams();
+	const marketingSearchParams = new URLSearchParams(marketingParams);
 
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -349,7 +367,9 @@ export function ThreeTierLanding({
 		product: 'Contribution',
 		ratePlan: getRatePlanKey(contributionType),
 		contribution: tier1Pricing.toString(),
-		showConsent: showSimilarProductsConsent.toString(),
+	});
+	marketingSearchParams.forEach((value, key) => {
+		tier1UrlParams.set(key, value);
 	});
 	const tier1Url = `checkout?${tier1UrlParams.toString()}`;
 
@@ -398,7 +418,9 @@ export function ThreeTierLanding({
 	const tier2UrlParams = new URLSearchParams({
 		product: 'SupporterPlus',
 		ratePlan: ratePlanKey,
-		showConsent: showSimilarProductsConsent.toString(),
+	});
+	marketingSearchParams.forEach((value, key) => {
+		tier2UrlParams.set(key, value);
 	});
 	const tier2Promotion = getPromotion(
 		allProductPrices.SupporterPlus,
@@ -458,7 +480,9 @@ export function ThreeTierLanding({
 	const tier3UrlParams = new URLSearchParams({
 		product: tier3Product,
 		ratePlan: ratePlanKey,
-		showConsent: showSimilarProductsConsent.toString(),
+	});
+	marketingSearchParams.forEach((value, key) => {
+		tier3UrlParams.set(key, value);
 	});
 	const { label: title, labelPill: titlePill } = getProductDescription(
 		'DigitalSubscription',
@@ -644,7 +668,7 @@ export function ThreeTierLanding({
 				<SupportOnce
 					currency={glyph(currencyId)}
 					countryGroupId={countryGroupId}
-					showConsent={showSimilarProductsConsent}
+					marketingParams={marketingParams}
 				/>
 			</Container>
 			{enableStudentOffer && (
