@@ -30,6 +30,7 @@ import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
+import useEmailMarketingUtmSession from 'helpers/customHooks/useEmailMarketingUtmSession';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
@@ -175,11 +176,7 @@ export default function CheckoutForm({
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
 
-	const urlParams = new URLSearchParams(window.location.search);
-	// Only show the similar products consent if the user is not coming from a marketing campaign (as determined by the absence of utm_medium and utm_source query params).
-	const showSimilarProductsConsent =
-		urlParams.get('utm_medium') === null &&
-		urlParams.get('utm_source') === null;
+	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
 
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } =
@@ -1135,7 +1132,7 @@ export default function CheckoutForm({
 								margin: ${space[6]}px 0;
 							`}
 						>
-							{showSimilarProductsConsent &&
+							{!isMarketingEmailSession &&
 								showSimilarProductsConsentForRatePlan(
 									productDescription,
 									ratePlanKey,

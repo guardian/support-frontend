@@ -266,29 +266,6 @@ export function ThreeTierLanding({
 		: undefined;
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 
-	const getMarketingParams = (): string => {
-		const utmSource = urlSearchParams.get('utm_source');
-		const utmMedium = urlSearchParams.get('utm_medium');
-		const marketingParams = new URLSearchParams();
-
-		if (utmSource?.toUpperCase() === 'EMAIL') {
-			marketingParams.set('utm_source', 'EMAIL');
-		}
-
-		if (utmMedium?.toLowerCase() === 'email_marketing') {
-			marketingParams.set('utm_medium', 'email_marketing');
-		}
-
-		if (utmMedium?.toLowerCase() === 'email_editorial') {
-			marketingParams.set('utm_medium', 'email_editorial');
-		}
-
-		return marketingParams.toString();
-	};
-
-	const marketingParams = getMarketingParams();
-	const marketingSearchParams = new URLSearchParams(marketingParams);
-
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const countryId = Country.detect();
@@ -368,9 +345,6 @@ export function ThreeTierLanding({
 		ratePlan: getRatePlanKey(contributionType),
 		contribution: tier1Pricing.toString(),
 	});
-	marketingSearchParams.forEach((value, key) => {
-		tier1UrlParams.set(key, value);
-	});
 	const tier1Url = `checkout?${tier1UrlParams.toString()}`;
 
 	const getDefaultSelectedProduct = () => {
@@ -418,9 +392,6 @@ export function ThreeTierLanding({
 	const tier2UrlParams = new URLSearchParams({
 		product: 'SupporterPlus',
 		ratePlan: ratePlanKey,
-	});
-	marketingSearchParams.forEach((value, key) => {
-		tier2UrlParams.set(key, value);
 	});
 	const tier2Promotion = getPromotion(
 		allProductPrices.SupporterPlus,
@@ -480,9 +451,6 @@ export function ThreeTierLanding({
 	const tier3UrlParams = new URLSearchParams({
 		product: tier3Product,
 		ratePlan: ratePlanKey,
-	});
-	marketingSearchParams.forEach((value, key) => {
-		tier3UrlParams.set(key, value);
 	});
 	const { label: title, labelPill: titlePill } = getProductDescription(
 		'DigitalSubscription',
@@ -668,7 +636,6 @@ export function ThreeTierLanding({
 				<SupportOnce
 					currency={glyph(currencyId)}
 					countryGroupId={countryGroupId}
-					marketingParams={marketingParams}
 				/>
 			</Container>
 			{enableStudentOffer && (
