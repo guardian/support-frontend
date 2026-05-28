@@ -13,6 +13,8 @@ class PromotionService(config: PromotionsConfig, maybeCollection: Option[Promoti
     with LazyLogging {
   private val promotionCollection = maybeCollection.getOrElse(new CachedDynamoPromotionCollection(config.tables))
   private def allPromotions = promotionCollection.all.toList
+  private lazy val promotionsByCode: Map[PromoCode, Promotion] =
+    allPromotions.iterator.map(promo => promo.promoCode -> promo).toMap
 
   def environment = if (config.tables.promotions.contains("PROD")) { "PROD" }
   else { "CODE" }
@@ -28,13 +30,8 @@ class PromotionService(config: PromotionsConfig, maybeCollection: Option[Promoti
 
   // promoCodes here is expected to be a small list of default promos plus one from the querystring
   def findPromotions(promoCodes: List[PromoCode]): List[PromotionWithCode] = {
-    val promosByCode: Map[PromoCode, Promotion] =
-      allPromotions
-        .map(promo => promo.promoCode -> promo)
-        .toMap
-
     promoCodes.flatMap { promoCode =>
-      promosByCode.get(promoCode).map(PromotionWithCode(promoCode, _))
+      promotionsByCode.get(promoCode).map(PromotionWithCode(promoCode, _))
     }
   }
 
