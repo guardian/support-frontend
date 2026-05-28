@@ -22,26 +22,25 @@ import {
 const GUARDIAN_APP_BENEFITS = [
 	{
 		title: 'Home',
-		description: 'Choose the sections that matter to you.',
+		description: 'Stay connected with the latest live events.',
 	},
 	{
 		title: 'My Guardian',
 		description:
-			'Personalise your feed, listen to articles, or save them for later.',
+			'Follow topics, save articles for later and view your reading history.',
 	},
 	{
 		title: 'Podcasts',
-		description: 'All your favourites in one place.',
+		description: 'Play all our latest episodes from one place.',
 	},
 	{
 		title: 'Puzzles',
-		description:
-			'Upgrade your downtime with daily word, number and quiz puzzles.',
+		description: 'Play our daily word, logic and quiz games.',
 	},
 	{
 		title: 'Settings',
 		description:
-			'Customise your experience with stories for offline reading, dark mode and notifications.',
+			'Set up your live events feed, notifications, offline reading and more.',
 	},
 	{
 		title: 'Ad-free reading',
@@ -135,9 +134,13 @@ export function OnboardingAppsDiscovery({
 					</h1>
 					<p css={descriptions}>
 						{isGuardianApp
-							? 'Get the stuff you want, when you want it — news, sport, podcasts, puzzles and more.'
+							? 'Get the stuff you want, when you want it - news, sport, podcasts, puzzles and more.'
 							: 'Rated 4 out of 5 stars by our Feast community.'}
 					</p>
+
+					{!hasAppDownloaded && (
+						<OnboardingAppBadgesDownload onboardingStep={onboardingStep} />
+					)}
 
 					<div css={separator}></div>
 					<ul>
@@ -157,10 +160,6 @@ export function OnboardingAppsDiscovery({
 							</li>
 						))}
 					</ul>
-
-					{!hasAppDownloaded && (
-						<OnboardingAppBadgesDownload onboardingStep={onboardingStep} />
-					)}
 
 					<Stack
 						space={0}
