@@ -7,6 +7,7 @@ import type {
 const useEmailMarketingSession = (): { isMarketingEmailSession: boolean } => {
 	const acquisitionData = getSession('acquisitionData');
 	let queryParams: AcquisitionQueryParameters = [];
+
 	if (acquisitionData) {
 		try {
 			const parsedAcquisitionData = JSON.parse(
@@ -24,19 +25,18 @@ const useEmailMarketingSession = (): { isMarketingEmailSession: boolean } => {
 	}
 
 	const isMarketingEmailSession = queryParams
-		.map((param: { name: string; value: string }) => {
-			if (param.name === 'utm_source' && param.value === 'EMAIL') {
+		.map(({ name, value }: { name: string; value: string }) => {
+			if (
+				(name === 'utm_source' && value === 'EMAIL') ||
+				(name === 'utm_medium' && value === 'email_editorial') ||
+				(name === 'utm_medium' && value === 'email_marketing')
+			) {
 				return true;
 			}
-			if (param.name === 'utm_medium' && param.value === 'email_editorial') {
-				return true;
-			}
-			if (param.name === 'utm_medium' && param.value === 'email_marketing') {
-				return true;
-			}
+
 			return false;
 		})
-		.some((isEmailUtm: boolean) => isEmailUtm);
+		.some(Boolean);
 
 	return { isMarketingEmailSession };
 };
