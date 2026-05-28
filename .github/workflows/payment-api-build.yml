@@ -36,19 +36,25 @@ jobs:
       - name: Build CFN from CDK
         run: ./script/ci
         working-directory: cdk
-
-      # Required by sbt riffRaffUpload
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
-          aws-region: eu-west-1
-
       - name: Setup Scala
         uses: guardian/setup-scala@v1
 
-      - name: Build and upload to RiffRaff
-        run: |
-          export LAST_TEAMCITY_BUILD=6000
-          export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
-          sbt "project support-payment-api" clean riffRaffUpload
+      - name: Build deb package
+        run: sbt "project support-payment-api" clean debian:packageBin
+
+
+      - name: Upload to Riff-Raff
+        uses: guardian/actions-riff-raff@v4.3.2
+        with:
+          projectName: support:payment-api-mono
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          buildNumberOffset: 6000
+          commentingEnabled: 'false'
+          configPath: ./support-payment-api/src/main/resources/riff-raff.yaml
+          contentDirectories: |
+            payment-api:
+              - support-payment-api/target/payment-api_0.1_all.deb
+            cfn:
+              - cdk/cdk.out/Payment-API-CODE.template.json
+              - cdk/cdk.out/Payment-API-PROD.template.json
