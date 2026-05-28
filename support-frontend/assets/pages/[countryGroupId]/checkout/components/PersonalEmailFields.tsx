@@ -41,7 +41,7 @@ export function PersonalEmailFields({
 					optional={optional}
 					autoComplete="email"
 					onChange={(event) => {
-						setEmail(event.currentTarget.value);
+						setEmail(event.currentTarget.value.trim());
 					}}
 					onBlur={(event) => {
 						event.target.checkValidity();
@@ -77,7 +77,7 @@ export function PersonalEmailFields({
 							type="email"
 							autoComplete="email"
 							onChange={(event) => {
-								setConfirmedEmail(event.currentTarget.value);
+								setConfirmedEmail(event.currentTarget.value.trim());
 							}}
 							onBlur={(event) => {
 								// Delay to allow the state to update before checking validity.
