@@ -40,8 +40,14 @@ export function PersonalEmailFields({
 					type="email"
 					optional={optional}
 					autoComplete="email"
+					onKeyDown={(event) => {
+						// removes the ability to enter spaces in the email field as these will be stripped out on change
+						if (event.key === ' ') {
+							event.preventDefault();
+						}
+					}}
 					onChange={(event) => {
-						setEmail(event.currentTarget.value.trim());
+						setEmail(event.currentTarget.value.replace(/\s/g, ''));
 					}}
 					onBlur={(event) => {
 						event.target.checkValidity();
@@ -76,8 +82,14 @@ export function PersonalEmailFields({
 							value={confirmedEmail}
 							type="email"
 							autoComplete="email"
+							onKeyDown={(event) => {
+								// removes the ability to enter spaces in the email field as these will be stripped out on change
+								if (event.key === ' ') {
+									event.preventDefault();
+								}
+							}}
 							onChange={(event) => {
-								setConfirmedEmail(event.currentTarget.value.trim());
+								setConfirmedEmail(event.currentTarget.value.replace(/\s/g, ''));
 							}}
 							onBlur={(event) => {
 								// Delay to allow the state to update before checking validity.
