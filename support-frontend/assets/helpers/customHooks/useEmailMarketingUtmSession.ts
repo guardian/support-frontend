@@ -13,6 +13,7 @@ const useEmailMarketingSession = (): { isMarketingEmailSession: boolean } => {
 			const parsedAcquisitionData = JSON.parse(
 				acquisitionData,
 			) as ReferrerAcquisitionData;
+
 			if (parsedAcquisitionData.queryParameters) {
 				queryParams = parsedAcquisitionData.queryParameters;
 			}
@@ -24,19 +25,12 @@ const useEmailMarketingSession = (): { isMarketingEmailSession: boolean } => {
 		}
 	}
 
-	const isMarketingEmailSession = queryParams
-		.map(({ name, value }: { name: string; value: string }) => {
-			if (
-				(name === 'utm_source' && value === 'EMAIL') ||
-				(name === 'utm_medium' && value === 'email_editorial') ||
-				(name === 'utm_medium' && value === 'email_marketing')
-			) {
-				return true;
-			}
-
-			return false;
-		})
-		.some(Boolean);
+	const isMarketingEmailSession = queryParams.some(
+		({ name, value }) =>
+			(name === 'utm_source' && value === 'EMAIL') ||
+			(name === 'utm_medium' && value === 'email_editorial') ||
+			(name === 'utm_medium' && value === 'email_marketing'),
+	);
 
 	return { isMarketingEmailSession };
 };
