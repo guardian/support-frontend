@@ -1022,9 +1022,9 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "[CDK] payment-api PROD No successful stripe express payments via payment-api for 2 hours",
+        "AlarmName": "[CDK] payment-api PROD No successful stripe express payments via payment-api for 3 hours",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
-        "EvaluationPeriods": 24,
+        "EvaluationPeriods": 36,
         "Metrics": [
           {
             "Expression": "SUM(METRICS())",
