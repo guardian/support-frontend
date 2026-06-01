@@ -28,6 +28,7 @@ export function PersonalEmailFields({
 	const [confirmedEmailError, setConfirmedEmailError] = useState<string>();
 	const optional = endUser === 'recipient';
 	const emailNameId = endUser === 'recipient' ? 'recipientEmail' : 'email';
+	const regexLeadingTrailingSpace = /\s/g;
 	return (
 		<>
 			<div>
@@ -47,7 +48,9 @@ export function PersonalEmailFields({
 						}
 					}}
 					onChange={(event) => {
-						setEmail(event.currentTarget.value.replace(/\s/g, ''));
+						setEmail(
+							event.currentTarget.value.replace(regexLeadingTrailingSpace, ''),
+						);
 					}}
 					onBlur={(event) => {
 						event.target.checkValidity();
