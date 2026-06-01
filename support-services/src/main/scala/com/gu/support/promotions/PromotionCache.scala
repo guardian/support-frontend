@@ -14,7 +14,7 @@ class PromotionCache {
 
   def getMap: Option[Map[PromoCode, Promotion]] = promotionsRef.single().filter(_.isFresh).map(_.promotionsByCode)
 
-  def set(promotions: Iterable[Promotion], fetched: DateTime = DateTime.now): Unit = atomic { implicit txn =>
-    promotionsRef() = Some(PromotionCacheResponse(fetched, promotions.map(p => p.promoCode -> p).toMap))
+  def set(promotions: Map[PromoCode, Promotion], fetched: DateTime = DateTime.now): Unit = atomic { implicit txn =>
+    promotionsRef() = Some(PromotionCacheResponse(fetched, promotions))
   }
 }

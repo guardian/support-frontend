@@ -23,7 +23,7 @@ class CachedDynamoPromotionCollection(config: PromotionsTablesConfig) extends Dy
   override def allByCode: Map[PromoCode, Promotion] = cache.getMap.getOrElse(fetchAndCache)
 
   private def fetchAndCache: Map[PromoCode, Promotion] = {
-    val promotions = super.allByCode.values
+    val promotions = super.allByCode
     cache.set(promotions)
     cache.getMap.get
   }
