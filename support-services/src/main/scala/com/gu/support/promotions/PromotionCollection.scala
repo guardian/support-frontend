@@ -7,6 +7,7 @@ trait PromotionCollection {
   def allByCode: Map[PromoCode, Promotion]
 }
 
+// Used by the tests
 class SimplePromotionCollection(promotions: List[Promotion]) extends PromotionCollection {
   override def allByCode: Map[PromoCode, Promotion] = promotions.map(p => p.promoCode -> p).toMap
 }
