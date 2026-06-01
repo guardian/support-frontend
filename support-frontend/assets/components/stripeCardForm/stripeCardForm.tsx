@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
-import { Stack } from '@guardian/source/react-components';
+import { Checkbox, Stack } from '@guardian/source/react-components';
 import {
 	CardCvcElement,
 	CardExpiryElement,
@@ -82,6 +82,7 @@ export function StripeCardForm({
 						)}
 					/>
 				</div>
+				<Checkbox id="test" label="test textbox" checked={false} name="test" />
 				{recaptcha && (
 					<ElementDecorator
 						id="robot-checkbox"
