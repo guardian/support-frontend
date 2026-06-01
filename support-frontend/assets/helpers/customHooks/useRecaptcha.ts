@@ -16,6 +16,7 @@ export function useRecaptchaV2(
 						sitekey: window.guardian.v2recaptchaPublicKey,
 						callback: onCompletionCallback,
 						'expired-callback': onExpireCallback,
+						tabindex: 0,
 					});
 
 					setRecaptchaId(id);
