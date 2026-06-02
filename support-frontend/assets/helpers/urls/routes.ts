@@ -63,9 +63,14 @@ const createRecurringReminderEndpoint = isProd()
 const countryPath = (countryGroupId: CountryGroupId) =>
 	countryGroups[countryGroupId].supportRegionId;
 
-function postcodeLookupUrl(postcode: string, useExpress: boolean): string {
+function postcodeLookupUrl(
+	postcode: string,
+	useExpressPostcodeLookup: boolean,
+): string {
 	return `${getOrigin()}${
-		useExpress ? routes.expressPostcodeLookup : routes.postcodeLookup
+		useExpressPostcodeLookup
+			? routes.expressPostcodeLookup
+			: routes.postcodeLookup
 	}/${postcode}`;
 }
 

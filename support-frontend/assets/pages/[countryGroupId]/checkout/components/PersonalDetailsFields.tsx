@@ -29,7 +29,7 @@ type PersonalDetailsFieldsProps = {
 	setConfirmedEmail: (value: string) => void;
 	phoneNumber: string;
 	setPhoneNumber: (value: string) => void;
-	useExpress: boolean;
+	useExpressPostcodeLookup: boolean;
 	billingStatePostcodeCountry?: BillingStatePostcodeCountry;
 	hasDeliveryAddress?: boolean;
 	isEmailAddressReadOnly?: boolean;
@@ -52,7 +52,7 @@ export function PersonalDetailsFields({
 	phoneNumber,
 	setPhoneNumber,
 	billingStatePostcodeCountry,
-	useExpress,
+	useExpressPostcodeLookup,
 	hasDeliveryAddress = false,
 	isEmailAddressReadOnly = false,
 	isSignedIn = false,
@@ -164,7 +164,7 @@ export function PersonalDetailsFields({
 						billingStatePostcodeCountry={billingStatePostcodeCountry}
 						countries={countries}
 						isWeeklyGift={isWeeklyGift}
-						useExpress={useExpress}
+						useExpressPostcodeLookup={useExpressPostcodeLookup}
 					/>
 				)}
 			</FormSection>

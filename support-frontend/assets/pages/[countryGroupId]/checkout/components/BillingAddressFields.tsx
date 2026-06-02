@@ -24,7 +24,7 @@ export function BillingAddressFields({
 	checkoutSession,
 	billingStatePostcodeCountry,
 	isWeeklyGift,
-	useExpress,
+	useExpressPostcodeLookup,
 }: BillingAddressFieldsProps) {
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
 		useStateWithCheckoutSession<boolean>(
@@ -58,7 +58,7 @@ export function BillingAddressFields({
 					countries={countries}
 					checkoutSession={checkoutSession}
 					billingStatePostcodeCountry={billingStatePostcodeCountry}
-					useExpress={useExpress}
+					useExpressPostcodeLookup={useExpressPostcodeLookup}
 				/>
 			)}
 		</>

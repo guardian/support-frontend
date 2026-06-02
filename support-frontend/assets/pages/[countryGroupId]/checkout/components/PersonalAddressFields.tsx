@@ -27,7 +27,7 @@ type PersonalAddressFieldsProps = {
 	setDeliveryAddressErrors: React.Dispatch<
 		React.SetStateAction<AddressFormFieldError[]>
 	>;
-	useExpress: boolean;
+	useExpressPostcodeLookup: boolean;
 	billingStatePostcodeCountry?: BillingStatePostcodeCountry;
 	isWeeklyGift?: boolean;
 };
@@ -47,7 +47,7 @@ export function PersonalAddressFields({
 	setDeliveryAgentError,
 	deliveryAddressErrors,
 	setDeliveryAddressErrors,
-	useExpress,
+	useExpressPostcodeLookup,
 	billingStatePostcodeCountry,
 	isWeeklyGift = false,
 }: PersonalAddressFieldsProps) {
@@ -70,7 +70,7 @@ export function PersonalAddressFields({
 				showInstructions={productKey === 'HomeDelivery'}
 				addressErrors={deliveryAddressErrors}
 				setAddressErrors={setDeliveryAddressErrors}
-				useExpress={useExpress}
+				useExpressPostcodeLookup={useExpressPostcodeLookup}
 			/>
 			{billingStatePostcodeCountry && (
 				<BillingAddressFields
@@ -78,7 +78,7 @@ export function PersonalAddressFields({
 					checkoutSession={checkoutSession}
 					billingStatePostcodeCountry={billingStatePostcodeCountry}
 					isWeeklyGift={isWeeklyGift}
-					useExpress={useExpress}
+					useExpressPostcodeLookup={useExpressPostcodeLookup}
 				/>
 			)}
 			{deliveryPostcodeIsOutsideM25 && (
