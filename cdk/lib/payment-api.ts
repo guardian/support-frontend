@@ -239,11 +239,9 @@ export class PaymentApi extends GuStack {
 
 		// ---- Alarms ---- //
 
-		const noHealthyInstancesDescriptor = 'No healthy instances';
 		new GuAlarm(this, 'NoHealthyInstancesAlarm', {
 			app,
-			alarmName: `[CDK] ${this.stage} ${noHealthyInstancesDescriptor}`,
-			alarmDescription: `[CDK] ${app} ${this.stage} ${noHealthyInstancesDescriptor}`,
+			alarmName: `[CDK] ${app} ${this.stage} No healthy instances`,
 			actionsEnabled: props.stage === 'PROD',
 			threshold: 0.5,
 			evaluationPeriods: 2,
@@ -261,11 +259,9 @@ export class PaymentApi extends GuStack {
 			snsTopicName: `alarms-handler-topic-${this.stage}`,
 		});
 
-		const high5XXRateDescriptor = 'High 5XX rate';
 		new GuAlarm(this, 'High5XXRateAlarm', {
 			app,
-			alarmName: `[CDK] ${this.stage} ${high5XXRateDescriptor}`,
-			alarmDescription: `[CDK]  ${app} ${this.stage} ${high5XXRateDescriptor}`,
+			alarmName: `[CDK] ${app} ${this.stage} High 5XX rate`,
 			actionsEnabled: props.stage === 'PROD',
 			threshold: 3,
 			evaluationPeriods: 2,
@@ -283,8 +279,7 @@ export class PaymentApi extends GuStack {
 			snsTopicName: `alarms-handler-topic-${this.stage}`,
 		});
 
-		const paypalDescriptor =
-			'No successful paypal payments via payment-api for';
+		const paypalDescriptor = 'No successful paypal payments for';
 		const paypalMetricDuration = Duration.minutes(5);
 		const paypalEvaluationPeriods = 18; // The number of 5 minute periods in 90 minutes
 		const paypalAlarmPeriod = Duration.minutes(
@@ -292,10 +287,8 @@ export class PaymentApi extends GuStack {
 		);
 		new GuAlarm(this, 'NoPaypalPaymentsInPeriodAlarm', {
 			app,
-			alarmName: `[CDK] ${this.stage} ${paypalDescriptor} period`,
-			alarmDescription: `[CDK] ${app} ${
-				this.stage
-			} ${paypalDescriptor} ${paypalAlarmPeriod.toHumanString()}`,
+			alarmName: `[CDK] ${app} ${this.stage} ${paypalDescriptor} period`,
+			alarmDescription: `${paypalDescriptor} ${paypalAlarmPeriod.toHumanString()}`,
 			actionsEnabled: props.stage === 'PROD',
 			okAction: true,
 			threshold: 0,
@@ -314,8 +307,7 @@ export class PaymentApi extends GuStack {
 			snsTopicName: `alarms-handler-topic-${this.stage}`,
 		});
 
-		const stripePaymentsDescriptor =
-			'No successful stripe payments via payment-api for';
+		const stripePaymentsDescriptor = 'No successful stripe payments for';
 		const stripePaymentsMetricDuration = Duration.minutes(5);
 		const stripePaymentsEvaluationPeriods = 12; // The number of 5 minute periods in 1 hour
 		const stripePaymentsAlarmPeriod = Duration.minutes(
@@ -324,10 +316,8 @@ export class PaymentApi extends GuStack {
 		);
 		new GuAlarm(this, 'NoStripePaymentsInOneHourAlarm', {
 			app,
-			alarmName: `[CDK] ${this.stage} ${stripePaymentsDescriptor} period`,
-			alarmDescription: `[CDK] ${app} ${
-				this.stage
-			} ${stripePaymentsDescriptor} ${stripePaymentsAlarmPeriod.toHumanString()}`,
+			alarmName: `[CDK] ${app} ${this.stage} ${stripePaymentsDescriptor} period`,
+			alarmDescription: `${stripePaymentsDescriptor} ${stripePaymentsAlarmPeriod.toHumanString()}`,
 			actionsEnabled: props.stage === 'PROD',
 			okAction: true,
 			threshold: 0,
@@ -346,7 +336,7 @@ export class PaymentApi extends GuStack {
 			snsTopicName: `alarms-handler-topic-${this.stage}`,
 		});
 
-		const stripeExpressAlarmDescriptor = `No successful stripe express payments via payment-api for`;
+		const stripeExpressAlarmDescriptor = `No successful stripe express payments for`;
 		const stripeExpressMetricDuration = Duration.minutes(5);
 		const stripeExpressEvaluationPeriods = 36; // The number of 5 minute periods in 3 hours
 		const stripeExpressAlarmPeriod = Duration.minutes(
@@ -378,10 +368,8 @@ export class PaymentApi extends GuStack {
 			});
 		new GuAlarm(this, 'NoStripeExpressPaymentsInOneHourAlarm', {
 			app,
-			alarmName: `[CDK] ${this.stage} ${stripeExpressAlarmDescriptor} period`,
-			alarmDescription: `[CDK] ${app} ${
-				this.stage
-			} ${stripeExpressAlarmDescriptor} ${stripeExpressAlarmPeriod.toHumanString()}`,
+			alarmName: `[CDK] ${app} ${this.stage} ${stripeExpressAlarmDescriptor} period`,
+			alarmDescription: `${stripeExpressAlarmDescriptor} ${stripeExpressAlarmPeriod.toHumanString()}`,
 			actionsEnabled: props.stage === 'PROD',
 			okAction: true,
 			threshold: 0,
@@ -393,14 +381,12 @@ export class PaymentApi extends GuStack {
 		});
 
 		const stripeRateLimitingDescriptor =
-			'One or more requests have exceeded the rate limit for Stripe one-off contribution via the payment-api for';
+			'One or more requests have exceeded the rate limit for Stripe one-off contribution for';
 		const stripeRateLimitingMetricDuration = Duration.minutes(15);
 		new GuAlarm(this, 'StripeRateLimitingAlarm', {
 			app,
-			alarmName: `[CDK] ${this.stage} ${stripeRateLimitingDescriptor} period`,
-			alarmDescription: `[CDK] ${app} ${
-				this.stage
-			} ${stripeRateLimitingDescriptor} ${stripeRateLimitingMetricDuration.toHumanString()}`,
+			alarmName: `[CDK] ${app} ${this.stage} ${stripeRateLimitingDescriptor} period`,
+			alarmDescription: `${stripeRateLimitingDescriptor} ${stripeRateLimitingMetricDuration.toHumanString()}`,
 			actionsEnabled: props.stage === 'PROD',
 			threshold: 0,
 			evaluationPeriods: 1,
