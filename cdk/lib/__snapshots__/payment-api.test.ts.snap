@@ -947,7 +947,8 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "[CDK] payment-api PROD No successful paypal payments via payment-api for 1 hour 30 minutes",
+        "AlarmDescription": "No successful paypal payments via payment-api for 1 hour 30 minutes",
+        "AlarmName": "[CDK] payment-api PROD No successful paypal payments via payment-api for period",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -1131,7 +1132,8 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "[CDK] payment-api PROD No successful stripe payments via payment-api for an hour",
+        "AlarmDescription": "No successful stripe payments via payment-api for 1 hour",
+        "AlarmName": "[CDK] payment-api PROD No successful stripe payments via payment-api for period",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
