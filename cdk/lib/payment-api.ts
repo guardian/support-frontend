@@ -242,8 +242,8 @@ export class PaymentApi extends GuStack {
 		const noHealthyInstancesDescriptor = 'No healthy instances';
 		new GuAlarm(this, 'NoHealthyInstancesAlarm', {
 			app,
-			alarmName: `[CDK] ${noHealthyInstancesDescriptor} in ${this.stage}`,
-			alarmDescription: `[CDK] ${noHealthyInstancesDescriptor} for ${app} in ${this.stage}`,
+			alarmName: `[CDK] ${this.stage} ${noHealthyInstancesDescriptor}`,
+			alarmDescription: `[CDK] ${app} ${this.stage} ${noHealthyInstancesDescriptor}`,
 			actionsEnabled: props.stage === 'PROD',
 			threshold: 0.5,
 			evaluationPeriods: 2,
@@ -264,8 +264,8 @@ export class PaymentApi extends GuStack {
 		const high5XXRateDescriptor = 'High 5XX rate';
 		new GuAlarm(this, 'High5XXRateAlarm', {
 			app,
-			alarmName: `[CDK] ${high5XXRateDescriptor} in ${this.stage}`,
-			alarmDescription: `[CDK] ${high5XXRateDescriptor} for ${app} in ${this.stage}`,
+			alarmName: `[CDK] ${this.stage} ${high5XXRateDescriptor}`,
+			alarmDescription: `[CDK]  ${app} ${this.stage} ${high5XXRateDescriptor}`,
 			actionsEnabled: props.stage === 'PROD',
 			threshold: 3,
 			evaluationPeriods: 2,
@@ -292,8 +292,10 @@ export class PaymentApi extends GuStack {
 		);
 		new GuAlarm(this, 'NoPaypalPaymentsInPeriodAlarm', {
 			app,
-			alarmName: `[CDK] ${app} ${this.stage} ${paypalDescriptor} period`,
-			alarmDescription: `${paypalDescriptor} ${paypalAlarmPeriod.toHumanString()}`,
+			alarmName: `[CDK] ${this.stage} ${paypalDescriptor} period`,
+			alarmDescription: `[CDK] ${app} ${
+				this.stage
+			} ${paypalDescriptor} ${paypalAlarmPeriod.toHumanString()}`,
 			actionsEnabled: props.stage === 'PROD',
 			okAction: true,
 			threshold: 0,
@@ -322,8 +324,10 @@ export class PaymentApi extends GuStack {
 		);
 		new GuAlarm(this, 'NoStripePaymentsInOneHourAlarm', {
 			app,
-			alarmName: `[CDK] ${app} ${this.stage} ${stripePaymentsDescriptor} period`,
-			alarmDescription: `${stripePaymentsDescriptor} ${stripePaymentsAlarmPeriod.toHumanString()}`,
+			alarmName: `[CDK] ${this.stage} ${stripePaymentsDescriptor} period`,
+			alarmDescription: `[CDK] ${app} ${
+				this.stage
+			} ${stripePaymentsDescriptor} ${stripePaymentsAlarmPeriod.toHumanString()}`,
 			actionsEnabled: props.stage === 'PROD',
 			okAction: true,
 			threshold: 0,
@@ -374,8 +378,10 @@ export class PaymentApi extends GuStack {
 			});
 		new GuAlarm(this, 'NoStripeExpressPaymentsInOneHourAlarm', {
 			app,
-			alarmName: `[CDK] ${app} ${this.stage} ${stripeExpressAlarmDescriptor} period`,
-			alarmDescription: `${stripeExpressAlarmDescriptor} ${stripeExpressAlarmPeriod.toHumanString()}`,
+			alarmName: `[CDK] ${this.stage} ${stripeExpressAlarmDescriptor} period`,
+			alarmDescription: `[CDK] ${app} ${
+				this.stage
+			} ${stripeExpressAlarmDescriptor} ${stripeExpressAlarmPeriod.toHumanString()}`,
 			actionsEnabled: props.stage === 'PROD',
 			okAction: true,
 			threshold: 0,
@@ -391,7 +397,7 @@ export class PaymentApi extends GuStack {
 		const stripeRateLimitingMetricDuration = Duration.minutes(15);
 		new GuAlarm(this, 'StripeRateLimitingAlarm', {
 			app,
-			alarmName: `[CDK] ${app} ${this.stage} ${stripeRateLimitingDescriptor} period`,
+			alarmName: `[CDK] ${this.stage} ${stripeRateLimitingDescriptor} period`,
 			alarmDescription: `[CDK] ${app} ${
 				this.stage
 			} ${stripeRateLimitingDescriptor} ${stripeRateLimitingMetricDuration.toHumanString()}`,
