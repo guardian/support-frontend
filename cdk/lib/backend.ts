@@ -61,7 +61,8 @@ chown -R ${app}:support /var/log/${app}
 
 cat << 'EOF' > /etc/logrotate.d/pm2
 /var/log/support-backend/*.log {
-	Hourly
+	daily
+	maxsize 10M
     rotate 5
     missingok
     notifempty
