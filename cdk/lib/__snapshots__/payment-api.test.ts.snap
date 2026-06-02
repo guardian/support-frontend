@@ -599,7 +599,8 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "[CDK] High 5XX rate for payment-api in PROD",
+        "AlarmDescription": "[CDK] High 5XX rate for payment-api in PROD",
+        "AlarmName": "[CDK] High 5XX rate in PROD",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": [
           {

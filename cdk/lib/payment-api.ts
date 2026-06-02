@@ -261,9 +261,11 @@ export class PaymentApi extends GuStack {
 			snsTopicName: `alarms-handler-topic-${this.stage}`,
 		});
 
+		const high5XXRateDescriptor = 'High 5XX rate';
 		new GuAlarm(this, 'High5XXRateAlarm', {
 			app,
-			alarmName: `[CDK] High 5XX rate for ${app} in ${this.stage}`,
+			alarmName: `[CDK] ${high5XXRateDescriptor} in ${this.stage}`,
+			alarmDescription: `[CDK] ${high5XXRateDescriptor} for ${app} in ${this.stage}`,
 			actionsEnabled: props.stage === 'PROD',
 			threshold: 3,
 			evaluationPeriods: 2,
