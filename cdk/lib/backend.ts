@@ -59,6 +59,22 @@ export STAGE=${this.stage}
 mkdir /var/log/${app}
 chown -R ${app}:support /var/log/${app}
 
+cat << 'EOF' > /etc/logrotate.d/pm2
+/var/log/support-backend/*.log {
+	Hourly
+    rotate 5
+    missingok
+    notifempty
+    compress
+    delaycompress
+    sharedscripts
+    postrotate
+        # Forces PM2 to safely flush logs and open fresh file descriptors
+        /usr/local/node/pm2 reloadLogs > /dev/null 2>&1
+    endscript
+}
+EOF
+
 cd target
 /usr/local/node/pm2 start --uid ${app} --gid support --output /var/log/${app}/application.log --error /var/log/${app}/application.log server.js
 
