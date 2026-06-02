@@ -279,6 +279,8 @@ export class PaymentApi extends GuStack {
 			snsTopicName: `alarms-handler-topic-${this.stage}`,
 		});
 
+		const paypalDescriptor =
+			'No successful paypal payments via payment-api for';
 		const paypalMetricDuration = Duration.minutes(5);
 		const paypalEvaluationPeriods = 18; // The number of 5 minute periods in 90 minutes
 		const paypalAlarmPeriod = Duration.minutes(
@@ -286,9 +288,8 @@ export class PaymentApi extends GuStack {
 		);
 		new GuAlarm(this, 'NoPaypalPaymentsInPeriodAlarm', {
 			app,
-			alarmName: `[CDK] ${app} ${
-				this.stage
-			} No successful paypal payments via payment-api for ${paypalAlarmPeriod.toHumanString()}`,
+			alarmName: `[CDK] ${app} ${this.stage} ${paypalDescriptor} period`,
+			alarmDescription: `${paypalDescriptor} ${paypalAlarmPeriod.toHumanString()}`,
 			actionsEnabled: props.stage === 'PROD',
 			okAction: true,
 			threshold: 0,
