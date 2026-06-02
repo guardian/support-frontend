@@ -386,6 +386,32 @@ export class PaymentApi extends GuStack {
 			snsTopicName: `alarms-handler-topic-${this.stage}`,
 		});
 
+		const stripeRateLimitingDescriptor =
+			'One or more requests have exceeded the rate limit for Stripe one-off contribution via the payment-api for';
+		const stripeRateLimitingMetricDuration = Duration.minutes(15);
+		new GuAlarm(this, 'StripeRateLimitingAlarm', {
+			app,
+			alarmName: `[CDK] ${app} ${this.stage} ${stripeRateLimitingDescriptor} period`,
+			alarmDescription: `[CDK] ${app} ${
+				this.stage
+			} ${stripeRateLimitingDescriptor} ${stripeRateLimitingMetricDuration.toHumanString()}`,
+			actionsEnabled: props.stage === 'PROD',
+			threshold: 0,
+			evaluationPeriods: 1,
+			comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
+			metric: new Metric({
+				metricName: 'stripe-rate-limit-exceeded',
+				namespace: `support-payment-api-${this.stage}`,
+				dimensionsMap: {
+					'payment-provider': 'Stripe',
+				},
+				statistic: 'Sum',
+				period: stripeRateLimitingMetricDuration,
+			}),
+			treatMissingData: TreatMissingData.NOT_BREACHING,
+			snsTopicName: `alarms-handler-topic-${this.stage}`,
+		});
+
 		new GuAlarm(this, 'PaypalPaymentError', {
 			app,
 			alarmName: `[CDK] ${app} ${this.stage} Paypal payment error for one-off contribution via the payment-api`,
@@ -438,26 +464,6 @@ export class PaymentApi extends GuStack {
 				namespace: 'post-payment-tasks-error',
 				statistic: 'Sum',
 				period: Duration.seconds(60),
-			}),
-			treatMissingData: TreatMissingData.NOT_BREACHING,
-			snsTopicName: `alarms-handler-topic-${this.stage}`,
-		});
-
-		new GuAlarm(this, 'StripeRateLimitingAlarm', {
-			app,
-			alarmName: `[CDK] ${app} ${this.stage} One or more requests have exceeded the rate limit for Stripe one-off contribution via the payment-api in the last 15 mins`,
-			actionsEnabled: props.stage === 'PROD',
-			threshold: 0,
-			evaluationPeriods: 1,
-			comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
-			metric: new Metric({
-				metricName: 'stripe-rate-limit-exceeded',
-				namespace: `support-payment-api-${this.stage}`,
-				dimensionsMap: {
-					'payment-provider': 'Stripe',
-				},
-				statistic: 'Sum',
-				period: Duration.seconds(900),
 			}),
 			treatMissingData: TreatMissingData.NOT_BREACHING,
 			snsTopicName: `alarms-handler-topic-${this.stage}`,

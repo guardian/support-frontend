@@ -1635,7 +1635,8 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "[CDK] payment-api PROD One or more requests have exceeded the rate limit for Stripe one-off contribution via the payment-api in the last 15 mins",
+        "AlarmDescription": "[CDK] payment-api PROD One or more requests have exceeded the rate limit for Stripe one-off contribution via the payment-api for 15 minutes",
+        "AlarmName": "[CDK] payment-api PROD One or more requests have exceeded the rate limit for Stripe one-off contribution via the payment-api for period",
         "ComparisonOperator": "GreaterThanThreshold",
         "Dimensions": [
           {
