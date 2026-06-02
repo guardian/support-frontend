@@ -16,15 +16,6 @@ class PromotionServiceSpec extends AsyncFlatSpec with Matchers {
   "PromotionService" should "find a PromoCode" in {
     serviceWithFixtures.findPromotion(freeTrialPromoCode) should be(Right(freeTrialWithCode))
     serviceWithFixtures.findPromotion(invalidPromoCode) should be(Left(NoSuchCode))
-    serviceWithFixtures
-      .findPromotion(duplicatedPromoCode)
-      .left
-      .map({
-        case code: DuplicateCode => code.copy(debug = "")
-        case _ => fail()
-      }) should be(
-      Left(DuplicateCode("")),
-    )
   }
 
   it should "find multiple promo codes, in correct order" in {
@@ -142,8 +133,6 @@ object PromotionServiceSpec {
           renewal.promotion,
           guardianWeeklyAnnual,
           freeTrial,
-          duplicate1,
-          duplicate2,
         ),
       ),
     ),

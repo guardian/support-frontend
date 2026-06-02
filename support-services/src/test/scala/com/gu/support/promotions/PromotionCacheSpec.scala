@@ -8,13 +8,13 @@ class PromotionCacheSpec extends AsyncFlatSpec with Matchers {
 
   "PromotionCache" should "return cached promotions when they are fresh" in {
     val cache = new PromotionCache
-    cache.set(Nil)
+    cache.set(Map.empty)
     cache.getMap shouldBe Some(Map.empty)
   }
 
   it should "return None if they are stale" in {
     val cache = new PromotionCache
-    cache.set(Nil, DateTime.now().minusSeconds(61))
+    cache.set(Map.empty, DateTime.now().minusSeconds(61))
     cache.getMap shouldBe None
   }
 }
