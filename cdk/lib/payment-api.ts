@@ -239,9 +239,11 @@ export class PaymentApi extends GuStack {
 
 		// ---- Alarms ---- //
 
+		const noHealthyInstancesDescriptor = 'No healthy instances';
 		new GuAlarm(this, 'NoHealthyInstancesAlarm', {
 			app,
-			alarmName: `[CDK] No healthy instances for ${app} in ${this.stage}`,
+			alarmName: `[CDK] ${noHealthyInstancesDescriptor} in ${this.stage}`,
+			alarmDescription: `[CDK] ${noHealthyInstancesDescriptor} for ${app} in ${this.stage}`,
 			actionsEnabled: props.stage === 'PROD',
 			threshold: 0.5,
 			evaluationPeriods: 2,

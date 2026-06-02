@@ -877,7 +877,8 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "[CDK] No healthy instances for payment-api in PROD",
+        "AlarmDescription": "[CDK] No healthy instances for payment-api in PROD",
+        "AlarmName": "[CDK] No healthy instances in PROD",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
