@@ -1,6 +1,5 @@
 package admin.settings
 
-import admin.settings.AmountsTests.AmountsTests
 import io.circe
 import io.circe.parser.decode
 import org.scalatest.EitherValues

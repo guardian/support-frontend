@@ -20,10 +20,6 @@ case object NoSuchCode extends PromoError {
   override val msg = "Unknown or expired promo code"
 }
 
-case class DuplicateCode(debug: String) extends PromoError {
-  override val msg = s"Duplicate promo codes: $debug"
-}
-
 case object ExpiredPromotion extends PromoError {
   override val msg = "The promo code you supplied has expired"
 }
