@@ -357,10 +357,11 @@ export class PaymentApi extends GuStack {
 					m2: paymentRequestButtonSuccessMetric,
 				},
 			});
+		const stripeExpressAlarmDescriptor = `No successful stripe express payments via payment-api for`;
 		new GuAlarm(this, 'NoStripeExpressPaymentsInOneHourAlarm', {
 			app,
-			alarmName: `[CDK] ${app} ${this.stage} No successful stripe express payments via payment-api for period`,
-			alarmDescription: `No successful stripe express payments via payment-api for ${stripeExpressAlarmPeriod.toHumanString()}`,
+			alarmName: `[CDK] ${app} ${this.stage} ${stripeExpressAlarmDescriptor} period`,
+			alarmDescription: `${stripeExpressAlarmDescriptor} ${stripeExpressAlarmPeriod.toHumanString()}`,
 			actionsEnabled: props.stage === 'PROD',
 			okAction: true,
 			threshold: 0,
