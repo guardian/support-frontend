@@ -60,6 +60,7 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
       {
         Future {
           val params = PaymentIntentCreateParams.builder
+            .addAllPaymentMethodType(List("paypal", "card").asJava)
             .setPaymentMethod(data.paymentMethodId)
             .setAmount((data.paymentData.amount * 100).toLong) // Stripe amount must be in pence
             .setCurrency(data.paymentData.currency.entryName)
