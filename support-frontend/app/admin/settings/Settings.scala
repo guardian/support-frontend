@@ -16,7 +16,6 @@ import io.circe.{Decoder, Encoder}
 import scala.io.Source
 import scala.util.Try
 import com.gu.aws.AwsS3Client.S3Location
-import com.gu.support.workers.SupporterPlus
 
 case class AllSettings(
     switches: Switches,
@@ -26,15 +25,14 @@ case class AllSettings(
     checkoutNudgeTests: List[CheckoutNudgeTest],
     oneTimeCheckoutTests: List[OneTimeCheckoutTest],
     studentLandingPageTests: List[StudentLandingPageTest],
-    productsWithThankYouOnboarding: List[String] =
-      AllSettings.productsWithThankYouOnboarding.toList.map(_.getClass.getSimpleName.stripSuffix("$")),
+    productsWithThankYouOnboarding: List[String] = AllSettings.productsWithThankYouOnboarding,
 )
 
 object AllSettings {
   implicit val metricUrlEncoder: Encoder[MetricUrl] = Encoder.encodeString.contramap(_.value)
   implicit val metricUrlDecoder: Decoder[MetricUrl] = Decoder.decodeString.map(MetricUrl)
   implicit val allSettingsCodec: Codec[AllSettings] = deriveCodec[AllSettings]
-  val productsWithThankYouOnboarding: Set[SupporterPlus.type] = Set(SupporterPlus)
+  val productsWithThankYouOnboarding: List[String] = List("SupporterPlus", "DigitalSubscription")
 
 }
 
