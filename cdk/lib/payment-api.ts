@@ -307,13 +307,22 @@ export class PaymentApi extends GuStack {
 			snsTopicName: `alarms-handler-topic-${this.stage}`,
 		});
 
+		const stripePaymentsDescriptor =
+			'No successful stripe payments via payment-api for';
+		const stripePaymentsMetricDuration = Duration.minutes(5);
+		const stripePaymentsEvaluationPeriods = 12; // The number of 5 minute periods in 1 hour
+		const stripePaymentsAlarmPeriod = Duration.minutes(
+			stripePaymentsMetricDuration.toMinutes() *
+				stripePaymentsEvaluationPeriods,
+		);
 		new GuAlarm(this, 'NoStripePaymentsInOneHourAlarm', {
 			app,
-			alarmName: `[CDK] ${app} ${this.stage} No successful stripe payments via payment-api for an hour`,
+			alarmName: `[CDK] ${app} ${this.stage} ${stripePaymentsDescriptor} period`,
+			alarmDescription: `${stripePaymentsDescriptor} ${stripePaymentsAlarmPeriod.toHumanString()}`,
 			actionsEnabled: props.stage === 'PROD',
 			okAction: true,
 			threshold: 0,
-			evaluationPeriods: 12,
+			evaluationPeriods: stripePaymentsEvaluationPeriods,
 			comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
 			metric: new Metric({
 				metricName: 'payment-success',
@@ -322,12 +331,13 @@ export class PaymentApi extends GuStack {
 					'payment-provider': 'Stripe',
 				},
 				statistic: 'Sum',
-				period: Duration.seconds(300),
+				period: stripePaymentsMetricDuration,
 			}),
 			treatMissingData: TreatMissingData.BREACHING,
 			snsTopicName: `alarms-handler-topic-${this.stage}`,
 		});
 
+		const stripeExpressAlarmDescriptor = `No successful stripe express payments via payment-api for`;
 		const stripeExpressMetricDuration = Duration.minutes(5);
 		const stripeExpressEvaluationPeriods = 36; // The number of 5 minute periods in 3 hours
 		const stripeExpressAlarmPeriod = Duration.minutes(
@@ -357,7 +367,6 @@ export class PaymentApi extends GuStack {
 					m2: paymentRequestButtonSuccessMetric,
 				},
 			});
-		const stripeExpressAlarmDescriptor = `No successful stripe express payments via payment-api for`;
 		new GuAlarm(this, 'NoStripeExpressPaymentsInOneHourAlarm', {
 			app,
 			alarmName: `[CDK] ${app} ${this.stage} ${stripeExpressAlarmDescriptor} period`,
