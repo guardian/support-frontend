@@ -309,11 +309,11 @@ export class PaymentApi extends GuStack {
 
 		new GuAlarm(this, 'NoStripePaymentsInOneHourAlarm', {
 			app,
-			alarmName: `[CDK] ${app} ${this.stage} No successful stripe payments via payment-api for an hour`,
+			alarmName: `[CDK] ${app} ${this.stage} No successful stripe payments via payment-api for 90mins`,
 			actionsEnabled: props.stage === 'PROD',
 			okAction: true,
 			threshold: 0,
-			evaluationPeriods: 12,
+			evaluationPeriods: 18,
 			comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
 			metric: new Metric({
 				metricName: 'payment-success',
