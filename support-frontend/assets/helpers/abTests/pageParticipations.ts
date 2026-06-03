@@ -68,7 +68,11 @@ export async function getPageParticipations<Variant>(
 		testList: Array<PageTest<Variant>>,
 	): Variant | undefined => {
 		for (const test of testList) {
-			const variantName = participations[test.name];
+			const variantName =
+				participations[test.name] ??
+				(test.selectedTestName
+					? participations[test.selectedTestName]
+					: undefined);
 			if (variantName) {
 				const variant = test.variants.find(
 					(v) => getVariantName(v) === variantName,
@@ -125,7 +129,12 @@ export async function getPageParticipations<Variant>(
 		Object.entries(sessionParticipations).length > 0
 	) {
 		const variant = getVariant(sessionParticipations, tests);
-		return { participations: sessionParticipations, variant };
+		if (!variant) {
+			// Session storage has stale test names, clear cache to re-assign
+			sessionStorage.removeItem(sessionStorageKey);
+		} else {
+			return { participations: sessionParticipations, variant };
+		}
 	}
 
 	// No participation in session storage, assign user to a test + variant
@@ -147,14 +156,17 @@ export async function getPageParticipations<Variant>(
 		return makeFallbackResult();
 	}
 
-	const idx = randomNumber(mvtId, test.name) % test.variants.length;
-	const variant = test.variants[idx];
+	const variant = config.selectVariant
+		? config.selectVariant(test, mvtId)
+		: test.variants[randomNumber(mvtId, test.name) % test.variants.length];
 
 	if (!variant) {
 		return makeFallbackResult();
 	}
 
-	const participations = { [test.name]: getVariantName(variant) };
+	// Use selectedTestName if available (for methodology-specific tracking), otherwise use test.name
+	const trackingTestName: string = test.selectedTestName ?? test.name;
+	const participations = { [trackingTestName]: getVariantName(variant) };
 	// Record the participation in session storage so that we can track it from other pages
 	setSessionParticipations(participations, sessionStorageKey);
 
