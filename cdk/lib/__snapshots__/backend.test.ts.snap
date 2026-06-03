@@ -649,7 +649,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "ssm:GetParametersByPath",
+              "Action": "ssm:GetParameter",
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
@@ -659,7 +659,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/support/support-backend/PROD",
+                    ":parameter/support/support-backend/PROD/*",
                   ],
                 ],
               },
@@ -862,7 +862,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
                   "#!/bin/bash
 set -e
 groupadd support
-useradd -r -m -s /usr/bin/nologin -g support support-backend
+useradd -r -m -s /sbin/nologin -g support support-backend
 cd /home/support-backend
 mkdir support-backend
 chown -R support-backend:support support-backend
@@ -882,8 +882,27 @@ export STAGE=PROD
 mkdir /var/log/support-backend
 chown -R support-backend:support /var/log/support-backend
 
+cat << 'EOF' > /etc/logrotate.d/pm2
+/var/log/support-backend/*.log {
+    daily
+    maxsize 10M
+    rotate 5
+    missingok
+    notifempty
+    compress
+    delaycompress
+    sharedscripts
+    postrotate
+        # Forces PM2 to safely flush logs and open fresh file descriptors
+        /usr/local/node/pm2 reloadLogs > /dev/null 2>&1
+    endscript
+}
+EOF
+
 cd target
-/usr/local/node/pm2 start --uid support-backend --gid support server.js",
+/usr/local/node/pm2 start --uid support-backend --gid support --output /var/log/support-backend/application.log --error /var/log/support-backend/application.log server.js
+
+/opt/cloudwatch-logs/configure-logs application support PROD support-backend /var/log/support-backend/application.log",
                 ],
               ],
             },

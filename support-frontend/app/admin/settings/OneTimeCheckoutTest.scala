@@ -5,6 +5,16 @@ import com.gu.support.encoding.Codec.deriveCodec
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 
+case class AmountsSelection(
+    amounts: List[Int],
+    defaultAmount: Int,
+    hideChooseYourAmount: Option[Boolean],
+)
+
+object AmountsSelection {
+  implicit val codec: Codec[AmountsSelection] = deriveCodec
+}
+
 case class OneTimeCheckoutVariant(
     name: String,
     heading: String,

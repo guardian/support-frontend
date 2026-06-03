@@ -150,6 +150,24 @@ describe('getPageParticipations', () => {
 			);
 		});
 
+		it('stores forced participation in session storage', async () => {
+			const variant = createTestVariant('control', 'control-value');
+			const test = createPageTest('test-1', [variant]);
+			const config = createConfig([test]);
+
+			mockLocation('/test/page', '?force-test=test-1:control');
+			mockGetParticipationFromQueryString.mockReturnValue({
+				'test-1': 'control',
+			});
+
+			await getPageParticipations(config);
+
+			expect(mockSetSessionParticipations).toHaveBeenCalledWith(
+				{ 'test-1': 'control' },
+				'landingPageParticipations',
+			);
+		});
+
 		it('returns undefined variant when forced participation test not found', async () => {
 			const test = createPageTest('test-1', [
 				createTestVariant('control', 'control-value'),

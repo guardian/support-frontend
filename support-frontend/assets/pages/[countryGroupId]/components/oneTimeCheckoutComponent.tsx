@@ -86,6 +86,7 @@ import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/footerTsA
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { CheckoutNudgeSelector } from '../../../components/checkoutNudge/checkoutNudge';
 import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
+import useEmailMarketingUtmSession from '../../../helpers/customHooks/useEmailMarketingUtmSession';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import type { OneTimeCheckoutVariant } from '../../../helpers/globalsAndSwitches/oneTimeCheckoutSettings';
 import {
@@ -266,6 +267,7 @@ export function OneTimeCheckoutComponent({
 	const urlSearchParams = new URLSearchParams(window.location.search);
 
 	const preSelectedAmountParam = urlSearchParams.get('contribution');
+	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
 
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
@@ -928,9 +930,11 @@ export function OneTimeCheckoutComponent({
 							)}
 						/>
 
-						<div css={similarProductsConsentCheckboxContainer}>
-							<SimilarProductsConsent />
-						</div>
+						{!isMarketingEmailSession && (
+							<div css={similarProductsConsentCheckboxContainer}>
+								<SimilarProductsConsent />
+							</div>
+						)}
 
 						<div
 							css={css`
