@@ -17,7 +17,7 @@ import model.acquisition.{AcquisitionDataRowBuilder, StripeAcquisition}
 import model.db.ContributionData
 import model.email.ContributorRow
 import model.stripe.StripeApiError.{recaptchaErrorText, stripeDisabledErrorText}
-import model.stripe.StripePaymentMethod.{StripeApplePay, StripeCheckout, StripePaymentRequestButton}
+import model.stripe.StripePaymentMethod.{StripeApplePay, StripeCheckout, StripePaymentRequestButton, StripePaypal}
 import model.stripe._
 import org.apache.pekko.actor.ActorSystem
 import play.api.libs.ws.WSClient
@@ -63,6 +63,7 @@ class StripeBackend(
       case Some(StripeCheckout) => stripeCheckoutEnabled
       case Some(StripeApplePay) => stripeExpressCheckoutEnabled
       case Some(StripePaymentRequestButton) => stripeExpressCheckoutEnabled
+      case Some(StripePaypal) => stripeCheckoutEnabled
       case None => stripeCheckoutEnabled
     }
 
