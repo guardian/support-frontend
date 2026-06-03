@@ -49,6 +49,7 @@ const routes = {
 	supporterPlusStudentBeansCa:
 		'https://www.studentbeans.com/en-ca/ca/beansid-connect/hosted/the-guardian-digital/student/362bcbd6-b491-4adf-8ca1-9f0c9f69c3b7',
 	postcodeLookup: '/postcode-lookup',
+	expressPostcodeLookup: '/api/postcode-lookup',
 	createSignInUrl: '/identity/signin-url',
 	stripeSetupIntentRecaptcha: '/stripe/create-setup-intent/recaptcha',
 } as const;
@@ -62,8 +63,15 @@ const createRecurringReminderEndpoint = isProd()
 const countryPath = (countryGroupId: CountryGroupId) =>
 	countryGroups[countryGroupId].supportRegionId;
 
-function postcodeLookupUrl(postcode: string): string {
-	return `${getOrigin() + routes.postcodeLookup}/${postcode}`;
+function postcodeLookupUrl(
+	postcode: string,
+	useExpressPostcodeLookup: boolean,
+): string {
+	return `${getOrigin()}${
+		useExpressPostcodeLookup
+			? routes.expressPostcodeLookup
+			: routes.postcodeLookup
+	}/${postcode}`;
 }
 
 function paperSubsUrl(

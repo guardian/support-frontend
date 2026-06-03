@@ -241,7 +241,7 @@ export class PaymentApi extends GuStack {
 
 		new GuAlarm(this, 'NoHealthyInstancesAlarm', {
 			app,
-			alarmName: `[CDK] No healthy instances for ${app} in ${this.stage}`,
+			alarmName: `[CDK] ${app} ${this.stage} No healthy instances`,
 			actionsEnabled: props.stage === 'PROD',
 			threshold: 0.5,
 			evaluationPeriods: 2,
@@ -261,7 +261,7 @@ export class PaymentApi extends GuStack {
 
 		new GuAlarm(this, 'High5XXRateAlarm', {
 			app,
-			alarmName: `[CDK] High 5XX rate for ${app} in ${this.stage}`,
+			alarmName: `[CDK] ${app} ${this.stage} High 5XX rate`,
 			actionsEnabled: props.stage === 'PROD',
 			threshold: 3,
 			evaluationPeriods: 2,
@@ -279,16 +279,16 @@ export class PaymentApi extends GuStack {
 			snsTopicName: `alarms-handler-topic-${this.stage}`,
 		});
 
+		const paypalDescriptor = 'No successful paypal payments for';
 		const paypalMetricDuration = Duration.minutes(5);
-		const paypalEvaluationPeriods = 18; // The number of 5 minute periods in 90 minutes
+		const paypalEvaluationPeriods = 24; // The number of 5 minute periods in 120 minutes
 		const paypalAlarmPeriod = Duration.minutes(
 			paypalMetricDuration.toMinutes() * paypalEvaluationPeriods,
 		);
 		new GuAlarm(this, 'NoPaypalPaymentsInPeriodAlarm', {
 			app,
-			alarmName: `[CDK] ${app} ${
-				this.stage
-			} No successful paypal payments via payment-api for ${paypalAlarmPeriod.toHumanString()}`,
+			alarmName: `[CDK] ${app} ${this.stage} ${paypalDescriptor} period`,
+			alarmDescription: `${paypalDescriptor} ${paypalAlarmPeriod.toHumanString()}`,
 			actionsEnabled: props.stage === 'PROD',
 			okAction: true,
 			threshold: 0,
@@ -307,13 +307,21 @@ export class PaymentApi extends GuStack {
 			snsTopicName: `alarms-handler-topic-${this.stage}`,
 		});
 
+		const stripePaymentsDescriptor = 'No successful stripe payments for';
+		const stripePaymentsMetricDuration = Duration.minutes(5);
+		const stripePaymentsEvaluationPeriods = 18; // The number of 5 minute periods in 90mins
+		const stripePaymentsAlarmPeriod = Duration.minutes(
+			stripePaymentsMetricDuration.toMinutes() *
+				stripePaymentsEvaluationPeriods,
+		);
 		new GuAlarm(this, 'NoStripePaymentsInOneHourAlarm', {
 			app,
-			alarmName: `[CDK] ${app} ${this.stage} No successful stripe payments via payment-api for an hour`,
+			alarmName: `[CDK] ${app} ${this.stage} ${stripePaymentsDescriptor} period`,
+			alarmDescription: `${stripePaymentsDescriptor} ${stripePaymentsAlarmPeriod.toHumanString()}`,
 			actionsEnabled: props.stage === 'PROD',
 			okAction: true,
 			threshold: 0,
-			evaluationPeriods: 12,
+			evaluationPeriods: stripePaymentsEvaluationPeriods,
 			comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
 			metric: new Metric({
 				metricName: 'payment-success',
@@ -322,14 +330,15 @@ export class PaymentApi extends GuStack {
 					'payment-provider': 'Stripe',
 				},
 				statistic: 'Sum',
-				period: Duration.seconds(300),
+				period: stripePaymentsMetricDuration,
 			}),
 			treatMissingData: TreatMissingData.BREACHING,
 			snsTopicName: `alarms-handler-topic-${this.stage}`,
 		});
 
+		const stripeExpressAlarmDescriptor = `No successful stripe express payments for`;
 		const stripeExpressMetricDuration = Duration.minutes(5);
-		const stripeExpressEvaluationPeriods = 36; // The number of 5 minute periods in 3 hours
+		const stripeExpressEvaluationPeriods = 48; // The number of 5 minute periods in 4 hours
 		const stripeExpressAlarmPeriod = Duration.minutes(
 			stripeExpressMetricDuration.toMinutes() * stripeExpressEvaluationPeriods,
 		);
@@ -359,9 +368,8 @@ export class PaymentApi extends GuStack {
 			});
 		new GuAlarm(this, 'NoStripeExpressPaymentsInOneHourAlarm', {
 			app,
-			alarmName: `[CDK] ${app} ${
-				this.stage
-			} No successful stripe express payments via payment-api for ${stripeExpressAlarmPeriod.toHumanString()}`,
+			alarmName: `[CDK] ${app} ${this.stage} ${stripeExpressAlarmDescriptor} period`,
+			alarmDescription: `${stripeExpressAlarmDescriptor} ${stripeExpressAlarmPeriod.toHumanString()}`,
 			actionsEnabled: props.stage === 'PROD',
 			okAction: true,
 			threshold: 0,
@@ -369,6 +377,30 @@ export class PaymentApi extends GuStack {
 			comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
 			metric: combinedApplePayAndPaymentRequestButtonSuccessMetric,
 			treatMissingData: TreatMissingData.BREACHING,
+			snsTopicName: `alarms-handler-topic-${this.stage}`,
+		});
+
+		const stripeRateLimitingDescriptor =
+			'One or more requests have exceeded the rate limit for Stripe one-off contribution for';
+		const stripeRateLimitingMetricDuration = Duration.minutes(15);
+		new GuAlarm(this, 'StripeRateLimitingAlarm', {
+			app,
+			alarmName: `[CDK] ${app} ${this.stage} ${stripeRateLimitingDescriptor} period`,
+			alarmDescription: `${stripeRateLimitingDescriptor} ${stripeRateLimitingMetricDuration.toHumanString()}`,
+			actionsEnabled: props.stage === 'PROD',
+			threshold: 0,
+			evaluationPeriods: 1,
+			comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
+			metric: new Metric({
+				metricName: 'stripe-rate-limit-exceeded',
+				namespace: `support-payment-api-${this.stage}`,
+				dimensionsMap: {
+					'payment-provider': 'Stripe',
+				},
+				statistic: 'Sum',
+				period: stripeRateLimitingMetricDuration,
+			}),
+			treatMissingData: TreatMissingData.NOT_BREACHING,
 			snsTopicName: `alarms-handler-topic-${this.stage}`,
 		});
 
@@ -424,26 +456,6 @@ export class PaymentApi extends GuStack {
 				namespace: 'post-payment-tasks-error',
 				statistic: 'Sum',
 				period: Duration.seconds(60),
-			}),
-			treatMissingData: TreatMissingData.NOT_BREACHING,
-			snsTopicName: `alarms-handler-topic-${this.stage}`,
-		});
-
-		new GuAlarm(this, 'StripeRateLimitingAlarm', {
-			app,
-			alarmName: `[CDK] ${app} ${this.stage} One or more requests have exceeded the rate limit for Stripe one-off contribution via the payment-api in the last 15 mins`,
-			actionsEnabled: props.stage === 'PROD',
-			threshold: 0,
-			evaluationPeriods: 1,
-			comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
-			metric: new Metric({
-				metricName: 'stripe-rate-limit-exceeded',
-				namespace: `support-payment-api-${this.stage}`,
-				dimensionsMap: {
-					'payment-provider': 'Stripe',
-				},
-				statistic: 'Sum',
-				period: Duration.seconds(900),
 			}),
 			treatMissingData: TreatMissingData.NOT_BREACHING,
 			snsTopicName: `alarms-handler-topic-${this.stage}`,
