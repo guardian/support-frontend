@@ -8,6 +8,8 @@ export const buildPostcodeLookupHandler =
 	async (req, res) => {
 		const postcode = decodeURIComponent(req.params.postcode);
 
+		console.log(`Postcode lookup handler called with ${postcode}`);
+
 		if (postcode.length > 10) {
 			res.status(400).send();
 			return;

@@ -882,6 +882,23 @@ export STAGE=PROD
 mkdir /var/log/support-backend
 chown -R support-backend:support /var/log/support-backend
 
+cat << 'EOF' > /etc/logrotate.d/pm2
+/var/log/support-backend/*.log {
+    daily
+    maxsize 10M
+    rotate 5
+    missingok
+    notifempty
+    compress
+    delaycompress
+    sharedscripts
+    postrotate
+        # Forces PM2 to safely flush logs and open fresh file descriptors
+        /usr/local/node/pm2 reloadLogs > /dev/null 2>&1
+    endscript
+}
+EOF
+
 cd target
 /usr/local/node/pm2 start --uid support-backend --gid support --output /var/log/support-backend/application.log --error /var/log/support-backend/application.log server.js
 
