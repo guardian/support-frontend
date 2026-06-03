@@ -61,7 +61,7 @@ new Backend(app, 'Backend-CODE', {
 		minimumInstances: 1,
 		maximumInstances: 2,
 	},
-	shouldCreateAlarms: false,
+	shouldCreateAlarms: true,
 });
 
 new StripePatronsData(app, 'StripePatronsData-CODE', {
