@@ -302,11 +302,14 @@ class CreateSubscriptionController(
 
     logDetailedMessage("createSubscription")
 
+    val onboardingProductKey = CreateSubscriptionController.frontendProductKey(request.body.product)
+    val digitalPlusGateOpen =
+      onboardingProductKey != "DigitalSubscription" ||
+        settings.switches.featureSwitches.enableDigitalPlusThankYouOnboarding.exists(_.isOn)
     val inOnboardingExperiment =
       settings.switches.featureSwitches.enableThankYouOnboarding.exists(_.isOn) &&
-        settings.productsWithThankYouOnboarding.contains(
-          CreateSubscriptionController.frontendProductKey(request.body.product),
-        )
+        settings.productsWithThankYouOnboarding.contains(onboardingProductKey) &&
+        digitalPlusGateOpen
 
     for {
       _ <- validate(request, settings.switches)

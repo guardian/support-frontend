@@ -26,6 +26,7 @@ case class FeatureSwitches(
     authenticateWithOkta: Option[SwitchState],
     enableCampaignCountdown: Option[SwitchState],
     enableThankYouOnboarding: Option[SwitchState],
+    enableDigitalPlusThankYouOnboarding: Option[SwitchState],
     enableCheckoutNudge: Option[SwitchState],
     enableMParticle: Option[SwitchState],
     enableTooledStudentLandingPage: Option[SwitchState],

@@ -30,6 +30,7 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
       authenticateWithOkta = Some(Off),
       enableCampaignCountdown = Some(On),
       enableThankYouOnboarding = Some(On),
+      enableDigitalPlusThankYouOnboarding = Some(On),
       enableCheckoutNudge = Some(On),
       enableMParticle = Some(On),
       enableTooledStudentLandingPage = Some(On),
