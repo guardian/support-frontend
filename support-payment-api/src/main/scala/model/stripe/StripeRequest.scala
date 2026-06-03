@@ -51,6 +51,8 @@ object StripePaymentMethod extends Enum[StripePaymentMethod] with CirceEnum[Stri
 
   case object StripePaymentRequestButton extends StripePaymentMethod
 
+  case object StripePaypal extends StripePaymentMethod
+
 }
 
 case class StripePublicKey(value: String) extends AnyVal

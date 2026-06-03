@@ -58,21 +58,41 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
       Left(StripeApiError.fromString("Amount is outside the allowed range ", Some(config.publicKey))).toEitherT[Future]
     } else
       {
-        Future {
-          val params = PaymentIntentCreateParams.builder
-            .addAllPaymentMethodType(List("paypal", "card").asJava)
-            .setPaymentMethod(data.paymentMethodId)
-            .setAmount((data.paymentData.amount * 100).toLong) // Stripe amount must be in pence
-            .setCurrency(data.paymentData.currency.entryName)
-            .setReceiptEmail(data.paymentData.email.value)
-            .setConfirmationMethod(
-              ConfirmationMethod.MANUAL,
-            ) // Allows us to do 3DS auth and final confirmation as separate steps
-            .setConfirm(true) // If 3DS is not required then it will go ahead and complete the payment
-            .build
+        data.paymentData.stripePaymentMethod match {
+          case Some(StripePaymentMethod.StripePaypal) =>
+            Future {
+              val params = PaymentIntentCreateParams.builder
+                .addPaymentMethodType("paypal")
+                .setPaymentMethod(data.paymentMethodId)
+                .setAmount((data.paymentData.amount * 100).toLong) // Stripe amount must be in pence
+                .setCurrency(data.paymentData.currency.entryName)
+                .setReceiptEmail(data.paymentData.email.value)
+                .setConfirmationMethod(
+                  ConfirmationMethod.MANUAL,
+                ) // Allows us to do 3DS auth and final confirmation as separate steps
+                .setConfirm(false) // If 3DS is not required then it will go ahead and complete the payment
+                .build
 
-          PaymentIntent.create(params, requestOptions)
+              PaymentIntent.create(params, requestOptions)
+            }
+          case _ =>
+            Future {
+              val params = PaymentIntentCreateParams.builder
+                .addPaymentMethodType("card")
+                .setPaymentMethod(data.paymentMethodId)
+                .setAmount((data.paymentData.amount * 100).toLong) // Stripe amount must be in pence
+                .setCurrency(data.paymentData.currency.entryName)
+                .setReceiptEmail(data.paymentData.email.value)
+                .setConfirmationMethod(
+                  ConfirmationMethod.MANUAL,
+                ) // Allows us to do 3DS auth and final confirmation as separate steps
+                .setConfirm(true) // If 3DS is not required then it will go ahead and complete the payment
+                .build
+
+              PaymentIntent.create(params, requestOptions)
+            }
         }
+
       }.attemptT
         .bimap(
           err => StripeApiError.fromThrowable(err, Some(config.publicKey)),
