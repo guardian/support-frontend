@@ -194,7 +194,8 @@ function paymentProviderFromPaymentMethod(
 	}
 	if (
 		paymentMethod.Type === 'PayPal' ||
-		paymentMethod.Type === 'PayPalCompletePaymentsWithBAID'
+		paymentMethod.Type === 'PayPalCompletePaymentsWithBAID' ||
+		paymentMethod.Type === 'PayPalCompletePayments'
 	) {
 		return 'PAYPAL';
 	}
