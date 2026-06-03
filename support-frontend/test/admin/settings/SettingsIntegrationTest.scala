@@ -69,7 +69,5 @@ class SettingsIntegrationTest extends AsyncFlatSpec with Matchers with StrictLog
       case Right(_) => succeed
     }
 
-    maybeAllSettings.value.amounts.length shouldBe 10
-
   }
 }

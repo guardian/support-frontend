@@ -1,1 +1,3 @@
-// setup file for future use
+import fetchMock from 'fetch-mock';
+
+fetchMock.mockGlobal();

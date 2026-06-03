@@ -1,14 +1,13 @@
-import express from 'express';
-
-const app = express();
+import { buildApp } from './buildApp';
 
 const PORT = process.env.PORT ?? 3000;
 
-app.get('/healthcheck-express', (req, res) => {
-	console.log(`HealthCheck processed from port: ${req.socket.localPort}`);
-	res.json({ status: 'OK' });
-});
-
-app.listen(PORT, () => {
-	console.log(`Server is running on port ${PORT}`);
-});
+buildApp()
+	.then((app) => {
+		app.listen(PORT, () => {
+			console.log(`Server is running on port ${PORT}`);
+		});
+	})
+	.catch((error) => {
+		console.error("Couldn't start server: ", error);
+	});

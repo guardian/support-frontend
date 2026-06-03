@@ -16,12 +16,14 @@ import {
 	WebIdentityPrincipal,
 } from 'aws-cdk-lib/aws-iam';
 import { Architecture, LoggingFormat, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import {
 	Choice,
 	Condition,
 	DefinitionBody,
 	Errors,
 	Fail,
+	LogLevel,
 	Parallel,
 	Pass,
 	StateMachine,
@@ -283,16 +285,28 @@ export class SupportWorkers extends GuStack {
 			.next(createSalesforceContactLambda)
 			.next(createZuoraSubscriptionTS.next(parallelSteps));
 
+		const stateMachineLogGroup = new LogGroup(this, 'SupportWorkersLogGroup', {
+			logGroupName: `/aws/states/support-workers-${this.stage}`,
+			retention: RetentionDays.TWO_WEEKS,
+		});
+
 		const stateMachine = new StateMachine(this, 'SupportWorkers', {
 			stateMachineName: `${app}-${this.stage}`, // Used by support-frontend to find the state machine
 			timeout: Duration.hours(24),
 			definitionBody: DefinitionBody.fromChainable(allSteps),
+			logs: {
+				destination: stateMachineLogGroup,
+				level: LogLevel.ALL,
+				includeExecutionData: true,
+			},
 		});
 
 		this.overrideLogicalId(stateMachine, {
 			logicalId: `SupportWorkers${this.stage}`,
 			reason: 'Moving existing step function to CDK',
 		});
+
+		stateMachineLogGroup.grantWrite(stateMachine);
 
 		// Alarms
 		const isProd = this.stage === 'PROD';
