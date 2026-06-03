@@ -22,11 +22,12 @@ import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 interface BackendProps extends GuStackProps {
 	domainName: string;
 	scaling: GuAsgCapacity;
+	shouldCreateAlarms: boolean;
 }
 
 export class Backend extends GuStack {
 	constructor(scope: App, id: string, props: BackendProps) {
-		const { domainName, scaling } = props;
+		const { domainName, scaling, shouldCreateAlarms } = props;
 
 		super(scope, id, {
 			...props,
@@ -101,6 +102,16 @@ cd target
 			}),
 		];
 
+		const http5xxAlarm = shouldCreateAlarms
+			? {
+					alarmName: `support-backend ${this.stage} is returning 5XX errors`,
+					alarmDescription:
+						'Some or all actions in support-backend are failing',
+					actionsEnabled: shouldCreateAlarms,
+					tolerated5xxPercentage: 5,
+			  }
+			: false;
+
 		const ec2App = new GuEc2App(this, {
 			applicationPort: 3000,
 			app: app,
@@ -113,7 +124,11 @@ cd target
 				path: '/healthcheck-express',
 			},
 			instanceMetricGranularity: '5Minute',
-			monitoringConfiguration: { noMonitoring: true },
+			monitoringConfiguration: {
+				snsTopicName: `alarms-handler-topic-${this.stage}`,
+				http5xxAlarm: http5xxAlarm,
+				unhealthyInstancesAlarm: shouldCreateAlarms,
+			},
 			userData,
 			roleConfiguration: {
 				additionalPolicies: policies,
