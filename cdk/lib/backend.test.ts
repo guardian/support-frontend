@@ -13,6 +13,7 @@ describe('The Backend stack', () => {
 				minimumInstances: 1,
 				maximumInstances: 2,
 			},
+			shouldCreateAlarms: true,
 		});
 
 		const template = Template.fromStack(stack);
