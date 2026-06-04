@@ -129,10 +129,7 @@ export async function getPageParticipations<Variant>(
 		Object.entries(sessionParticipations).length > 0
 	) {
 		const variant = getVariant(sessionParticipations, tests);
-		if (!variant) {
-			// Session storage has stale test names, clear cache to re-assign
-			sessionStorage.removeItem(sessionStorageKey);
-		} else {
+		if (variant) {
 			return { participations: sessionParticipations, variant };
 		}
 	}
@@ -166,7 +163,10 @@ export async function getPageParticipations<Variant>(
 
 	// Use selectedTestName if available (for methodology-specific tracking), otherwise use test.name
 	const trackingTestName: string = test.selectedTestName ?? test.name;
-	const participations = { [trackingTestName]: getVariantName(variant) };
+	const participations = {
+		...sessionParticipations,
+		[trackingTestName]: getVariantName(variant),
+	};
 	// Record the participation in session storage so that we can track it from other pages
 	setSessionParticipations(participations, sessionStorageKey);
 

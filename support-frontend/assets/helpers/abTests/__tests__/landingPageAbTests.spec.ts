@@ -39,7 +39,9 @@ const mockTest: LandingPageTest = {
 
 describe('landingPageTestConfig', () => {
 	it('has correct pageRegex for contribute pages', () => {
-		expect(landingPageTestConfig.pageRegex).toBe('^/.*/contribute(/.*)?$');
+		expect(landingPageTestConfig.pageRegex).toBe(
+			'^/.*/(contribute|checkout|one-time-checkout)(/.*)?$',
+		);
 	});
 
 	it('has correct forceParamName', () => {
@@ -79,7 +81,9 @@ describe('getLandingPageTestConfig', () => {
 		const config = getLandingPageTestConfig();
 
 		expect(config.tests).toEqual([mockTest]);
-		expect(config.pageRegex).toBe('^/.*/contribute(/.*)?$');
+		expect(config.pageRegex).toBe(
+			'^/.*/(contribute|checkout|one-time-checkout)(/.*)?$',
+		);
 		expect(config.forceParamName).toBe('force-landing-page');
 		expect(config.sessionStorageKey).toBe(LANDING_PAGE_PARTICIPATIONS_KEY);
 	});

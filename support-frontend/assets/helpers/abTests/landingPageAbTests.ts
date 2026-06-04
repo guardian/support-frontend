@@ -101,7 +101,7 @@ export const landingPageTestConfig: Omit<
 	PageParticipationsConfig<LandingPageVariant>,
 	'tests'
 > = {
-	pageRegex: '^/.*/contribute(/.*)?$',
+	pageRegex: '^/.*/(contribute|checkout|one-time-checkout)(/.*)?$',
 	forceParamName: 'force-landing-page',
 	sessionStorageKey: LANDING_PAGE_PARTICIPATIONS_KEY,
 	getVariantName: (variant) => variant.name,

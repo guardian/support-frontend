@@ -614,10 +614,7 @@ class Application(
   }
 
   def productCheckoutRouter(countryGroupId: String) = MaybeAuthenticatedAction { implicit request =>
-    implicit val settings: AllSettings = enrichLandingPageTests(
-      settingsProvider.getAllSettings(),
-      request,
-    )
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val geoData = request.geoData
     val serversideTests = generateParticipations(Nil)
     val isTestUser = testUserService.isTestUser(request)
