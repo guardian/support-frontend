@@ -72,7 +72,7 @@ const FEAST_APP_BENEFITS = [
 		title: 'Shopping list',
 		description: 'Add recipe ingredients and tick them off as you shop.',
 	},
-];
+] as const;
 
 const FEAST_APP_UNITS_BENEFIT = {
 	title: 'Recipes',
@@ -80,7 +80,7 @@ const FEAST_APP_UNITS_BENEFIT = {
 };
 
 const FEAST_APP_BENEFITS_US = [
-	...FEAST_APP_BENEFITS.slice(0, 1),
+	FEAST_APP_BENEFITS[0],
 	FEAST_APP_UNITS_BENEFIT,
 	...FEAST_APP_BENEFITS.slice(1),
 ];
