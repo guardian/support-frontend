@@ -104,6 +104,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |        "description" : "Enables the new Thank You Onboarding flow",
           |        "state" : "Off"
           |      },
+          |      "enableDigitalPlusThankYouOnboarding" : {
+          |        "description" : "Enables the Thank You Onboarding flow for Digital+",
+          |        "state" : "On"
+          |      },
           |      "enableCheckoutNudge" : {
           |        "description" : "Enable checkout nudge",
           |        "state" : "On"
@@ -161,7 +165,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           ),
           subscriptionsSwitches = SubscriptionsSwitches(Some(On), Some(On), Some(On)),
           featureSwitches =
-            FeatureSwitches(Some(On), Some(On), Some(Off), Some(On), Some(Off), Some(On), Some(On), Some(On)),
+            FeatureSwitches(Some(On), Some(On), Some(Off), Some(On), Some(Off), Some(On), Some(On), Some(On), Some(On)),
           campaignSwitches = CampaignSwitches(Some(Off), Some(Off)),
           recaptchaSwitches = RecaptchaSwitches(Some(On), Some(On)),
         ),

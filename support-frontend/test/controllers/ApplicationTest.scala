@@ -54,7 +54,8 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     checkToken = csrfCheck,
     csrfConfig = csrfConfig,
     stage = stage,
-    featureSwitches = FeatureSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
+    featureSwitches =
+      FeatureSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
     testUsersService = TestUserService("secret"),
   )
 

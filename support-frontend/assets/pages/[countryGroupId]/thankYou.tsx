@@ -41,7 +41,8 @@ export function ThankYou({
 }: ThankYouProps) {
 	const countryId = Country.detect();
 	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
-	const { enableThankYouOnboarding } = useFeatureSwitches();
+	const { enableThankYouOnboarding, enableDigitalPlusThankYouOnboarding } =
+		useFeatureSwitches();
 
 	const searchParams = new URLSearchParams(window.location.search);
 	const csrf = { token: window.guardian.csrf.token };
@@ -148,6 +149,8 @@ export function ThankYou({
 		enableThankYouOnboarding &&
 		productKey !== undefined &&
 		appConfig.settings.productsWithThankYouOnboarding.includes(productKey) &&
+		(productKey !== 'DigitalSubscription' ||
+			enableDigitalPlusThankYouOnboarding) &&
 		storage.session.get(SKIP_NEW_ONBOARDING_EXPERIENCE_KEY) !== 'true'
 	) {
 		return (

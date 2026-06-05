@@ -58,7 +58,10 @@ export type HandleStepNavigationFunction = (
 	targetStep: OnboardingSteps,
 ) => void;
 
-export type OnboardingProductKey = Extract<ActiveProductKey, 'SupporterPlus'>;
+export type OnboardingProductKey = Extract<
+	ActiveProductKey,
+	'SupporterPlus' | 'DigitalSubscription'
+>;
 
 export interface OnboardingProps {
 	supportRegionId: SupportRegionId;

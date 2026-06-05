@@ -24,6 +24,7 @@ const featureSwitchesSchema = z.object({
 	authenticateWithOkta: z.optional(z.enum(['On', 'Off'])),
 	enableCampaignCountdown: z.optional(z.enum(['On', 'Off'])),
 	enableThankYouOnboarding: z.optional(z.enum(['On', 'Off'])),
+	enableDigitalPlusThankYouOnboarding: z.optional(z.enum(['On', 'Off'])),
 	enableCheckoutNudge: z.optional(z.enum(['On', 'Off'])),
 	enableMParticle: z.optional(z.enum(['On', 'Off'])),
 });
