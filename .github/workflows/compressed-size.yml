@@ -29,7 +29,7 @@ jobs:
         uses: preactjs/compressed-size-action@v3
         with:
           install-script: "pnpm install"
-          build-script: "--filter support-frontend build-github-action"
+          build-script: "pnpm --filter support-frontend build-github-action"
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           pattern: "./support-frontend/public/compiled-assets/{javascripts,webpack}/**/*.js"
           minimum-change-threshold: 500
