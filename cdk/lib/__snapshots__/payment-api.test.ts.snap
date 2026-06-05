@@ -947,7 +947,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmDescription": "No successful paypal payments for 2 hours",
+        "AlarmDescription": "No successful paypal payments for 4 hours",
         "AlarmName": "[CDK] payment-api PROD No successful paypal payments for period",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
@@ -956,7 +956,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Value": "Paypal",
           },
         ],
-        "EvaluationPeriods": 24,
+        "EvaluationPeriods": 48,
         "MetricName": "payment-success",
         "Namespace": "support-payment-api-PROD",
         "OKActions": [
@@ -1023,10 +1023,10 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmDescription": "No successful stripe express payments for 4 hours",
+        "AlarmDescription": "No successful stripe express payments for 6 hours",
         "AlarmName": "[CDK] payment-api PROD No successful stripe express payments for period",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
-        "EvaluationPeriods": 48,
+        "EvaluationPeriods": 72,
         "Metrics": [
           {
             "Expression": "SUM(METRICS())",
@@ -1132,7 +1132,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmDescription": "No successful stripe payments for 1 hour 30 minutes",
+        "AlarmDescription": "No successful stripe payments for 3 hours",
         "AlarmName": "[CDK] payment-api PROD No successful stripe payments for period",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
@@ -1141,7 +1141,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Value": "Stripe",
           },
         ],
-        "EvaluationPeriods": 18,
+        "EvaluationPeriods": 36,
         "MetricName": "payment-success",
         "Namespace": "support-payment-api-PROD",
         "OKActions": [

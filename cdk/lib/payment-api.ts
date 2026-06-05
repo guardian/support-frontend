@@ -281,7 +281,7 @@ export class PaymentApi extends GuStack {
 
 		const paypalDescriptor = 'No successful paypal payments for';
 		const paypalMetricDuration = Duration.minutes(5);
-		const paypalEvaluationPeriods = 24; // The number of 5 minute periods in 120 minutes
+		const paypalEvaluationPeriods = 48; // The number of 5 minute periods in 4 hours
 		const paypalAlarmPeriod = Duration.minutes(
 			paypalMetricDuration.toMinutes() * paypalEvaluationPeriods,
 		);
@@ -309,7 +309,7 @@ export class PaymentApi extends GuStack {
 
 		const stripePaymentsDescriptor = 'No successful stripe payments for';
 		const stripePaymentsMetricDuration = Duration.minutes(5);
-		const stripePaymentsEvaluationPeriods = 18; // The number of 5 minute periods in 90mins
+		const stripePaymentsEvaluationPeriods = 36; // The number of 5 minute periods in 3 hours
 		const stripePaymentsAlarmPeriod = Duration.minutes(
 			stripePaymentsMetricDuration.toMinutes() *
 				stripePaymentsEvaluationPeriods,
@@ -338,7 +338,7 @@ export class PaymentApi extends GuStack {
 
 		const stripeExpressAlarmDescriptor = `No successful stripe express payments for`;
 		const stripeExpressMetricDuration = Duration.minutes(5);
-		const stripeExpressEvaluationPeriods = 48; // The number of 5 minute periods in 4 hours
+		const stripeExpressEvaluationPeriods = 72; // The number of 5 minute periods in 6 hours
 		const stripeExpressAlarmPeriod = Duration.minutes(
 			stripeExpressMetricDuration.toMinutes() * stripeExpressEvaluationPeriods,
 		);
