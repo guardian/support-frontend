@@ -34,7 +34,7 @@ jobs:
         uses: guardian/setup-scala@v1
 
       - name: Build jar
-        run:   sbt "project supporter-product-data" clean assembly
+        run:  sbt "project supporter-product-data" clean assembly
 
       - name: Upload to Riff-Raff
         uses: guardian/actions-riff-raff@v4.3.2
