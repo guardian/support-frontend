@@ -126,6 +126,9 @@ class StripeBackend(
             case "requires_action" =>
               // 3DS required, return the clientSecret to the client
               EitherT.fromEither(Right(StripePaymentIntentsApiResponse.RequiresAction(paymentIntent.getClientSecret)))
+            case "requires_confirmation" =>
+              // Used for paypal
+              EitherT.fromEither(Right(StripePaymentIntentsApiResponse.RequiresAction(paymentIntent.getClientSecret)))
 
             case "succeeded" =>
               // Payment complete without the need for 3DS - do post-payment tasks and return success to client
@@ -189,6 +192,15 @@ class StripeBackend(
             EitherT.fromEither(Left(error))
         }
       }
+  }
+
+  def completeStripePaypalPayment(
+      request: StripePaymentIntentRequest.CompleteStripePaypalPayment,
+      clientBrowserInfo: ClientBrowserInfo,
+  ): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse.Success] = {
+    stripeService
+      .getPaymentIntent(request.paymentIntentId, request.publicKey)
+      .flatMap(paymentIntent => EitherT.liftF(paymentIntentSucceeded(request, paymentIntent, clientBrowserInfo)))
   }
 
   private def paymentIntentSucceeded(
