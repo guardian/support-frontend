@@ -15,6 +15,7 @@ import {
 	getPaperOrigin,
 	isProd,
 } from './url';
+import { IsoCurrency } from '@modules/internationalisation/currency';
 
 const routes = {
 	recurringContribCheckout: '/contribute/recurring',
@@ -186,6 +187,19 @@ function payPalReturnUrl(
 	)}${route}?email=${encodeURIComponent(email)}`;
 }
 
+function stripePayPalReturnUrl(
+	cgId: CountryGroupId,
+	email: string,
+	stripePublicKey: String,
+	currency: IsoCurrency,
+	amount: number,
+
+): string {
+	return `${getOrigin()}/${countryPath(
+		cgId,
+	)}/stripe/paypal/returnOneTime?email=${encodeURIComponent(email)}&stripePublicKey=${stripePublicKey}&currency=${currency}&amount=${amount}`;
+}
+
 // ----- Exports ----- //
 export {
 	routes,
@@ -194,6 +208,7 @@ export {
 	postcodeLookupUrl,
 	payPalCancelUrl,
 	payPalReturnUrl,
+	stripePayPalReturnUrl,
 	paperSubsUrl,
 	paperCheckoutUrl,
 	parameteriseUrl,

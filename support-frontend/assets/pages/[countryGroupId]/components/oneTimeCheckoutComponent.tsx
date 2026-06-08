@@ -46,6 +46,7 @@ import type {
 import {
 	postOneOffPayPalCreatePaymentRequest,
 	processStripePaymentIntentRequest,
+	processStripePaymentIntentRequestForPaypal,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import type {
 	PaymentResult,
@@ -71,7 +72,7 @@ import {
 	sendEventOneTimeCheckoutValue,
 	sendEventPaymentMethodSelected,
 } from 'helpers/tracking/quantumMetric';
-import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
+import { payPalCancelUrl, payPalReturnUrl, stripePayPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import {
 	getSanitisedHtml,
@@ -111,6 +112,7 @@ import {
 	PaymentMethodSelector,
 } from './paymentMethod';
 import SimilarProductsConsent, { CONSENT_ID } from './SimilarProductsConsent';
+import { PaymentElement } from '@stripe/react-stripe-js';
 
 /**
  * We have not added StripeExpressCheckoutElement to the old PaymentMethod
@@ -269,6 +271,8 @@ export function OneTimeCheckoutComponent({
 
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
+	const inStripePaymentElementVariant = abParticipations.stripePaymentElementTest === 'variant';
+
 
 	let customAmountsData;
 	const customAmountsParam = urlSearchParams.get('amounts');
@@ -349,6 +353,7 @@ export function OneTimeCheckoutComponent({
 	/** Payment methods: Stripe */
 	const stripe = useStripe();
 	const cardElement = elements?.getElement(CardNumberElement);
+	const paymentElement = elements?.getElement(PaymentElement);
 	const [
 		stripeExpressCheckoutPaymentType,
 		setStripeExpressCheckoutPaymentType,
@@ -482,12 +487,37 @@ export function OneTimeCheckoutComponent({
 					},
 				});
 			}
-			if (paymentMethodResult && stripe) {
+
+			if (paymentMethod === 'Stripe' && stripe && paymentElement && recaptchaToken && elements) {
+				await elements.submit();
+				paymentMethodResult = await stripe.createPaymentMethod({
+					elements,
+					params: {
+						billing_details: {
+							address: {
+								postal_code: billingPostcode,
+							},
+						},
+					},
+				});
+			}
+			if (paymentMethodResult && stripe && elements) {
 				// Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
 				const handle3DS = (clientSecret: string) => {
 					trackComponentLoad('stripe-3ds');
 					return stripe.handleCardAction(clientSecret);
 				};
+
+				const handlePaypal = (clientSecret: string) => {
+					trackComponentLoad('stripe-Paypal');
+					return stripe.confirmPayment({
+						elements,
+						clientSecret,
+						confirmParams: {
+							return_url: stripePayPalReturnUrl(countryGroupId, email, stripePublicKey, currencyKey, finalAmount),
+						},
+					});
+				}
 
 				if (paymentMethodResult.error) {
 					logException(
@@ -508,12 +538,23 @@ export function OneTimeCheckoutComponent({
 						);
 					}
 				} else {
+
+					const getStripePaymentMethod = (): StripePaymentMethod => {
+						if (paymentMethod === 'StripeExpressCheckoutElement') {
+							if (stripeExpressCheckoutPaymentType === 'apple_pay') {
+								return 'StripeApplePay';
+							} else {
+								return 'StripePaymentRequestButton';
+							}
+						}
+						if (paymentMethodResult.paymentMethod.paypal) {
+							return 'StripePaypal';
+						}
+						return 'StripeCheckout';
+					};
+
 					const stripePaymentMethod: StripePaymentMethod =
-						paymentMethod === 'StripeExpressCheckoutElement'
-							? stripeExpressCheckoutPaymentType === 'apple_pay'
-								? 'StripeApplePay'
-								: 'StripePaymentRequestButton'
-							: 'StripeCheckout';
+						getStripePaymentMethod();
 
 					const stripeData: CreateStripePaymentIntentRequest = {
 						paymentData: {
@@ -527,15 +568,26 @@ export function OneTimeCheckoutComponent({
 							billingPostcode,
 							coverTransactionCost,
 						),
+
 						publicKey: stripePublicKey,
 						recaptchaToken: recaptchaToken ?? '',
 						paymentMethodId: paymentMethodResult.paymentMethod.id,
 						similarProductsConsent,
 					};
-					paymentResult = await processStripePaymentIntentRequest(
-						stripeData,
-						handle3DS,
-					);
+					if (stripePaymentMethod === 'StripePaypal') {
+						cookie.set(
+							'acquisition_data',
+							encodeURIComponent(JSON.stringify(stripeData.acquisitionData)),
+						);
+						paymentResult = await processStripePaymentIntentRequestForPaypal(stripeData, handlePaypal);
+
+					} else {
+						paymentResult = await processStripePaymentIntentRequest(
+
+							stripeData,
+							handle3DS,
+						);
+					}
 				}
 			}
 
@@ -843,75 +895,95 @@ export function OneTimeCheckoutComponent({
 								2. Payment method
 								<SecureTransactionIndicator hideText={true} />
 							</Legend>
-							<RadioGroup
-								role="radiogroup"
-								label="Select payment method"
-								hideLabel
-								error={paymentMethodError}
-							>
-								{validPaymentMethods.map((validPaymentMethod) => {
-									const selected = paymentMethod === validPaymentMethod;
-									const { label, icon } = paymentMethodData[validPaymentMethod];
+							{inStripePaymentElementVariant && (
+								<>
+									<PaymentElement 
+									//options= {{fields:{billingDetails: 'never'}}} 
+									onFocus={() => {
+										setPaymentMethod(Stripe);
+									}}
+									/>
+									<Recaptcha
+										onRecaptchaCompleted={(token) => {
+											setRecaptchaToken(token);
+										}}
+										onRecaptchaExpired={() => {
+											setRecaptchaToken(undefined);
+										}}
+									/>
+								</>
+							)}
+							{!inStripePaymentElementVariant &&
+								<RadioGroup
+									role="radiogroup"
+									label="Select payment method"
+									hideLabel
+									error={paymentMethodError}
+								>
+									{validPaymentMethods.map((validPaymentMethod) => {
+										const selected = paymentMethod === validPaymentMethod;
+										const { label, icon } = paymentMethodData[validPaymentMethod];
 
-									return (
-										<PaymentMethodSelector selected={selected}>
-											<PaymentMethodRadio selected={selected}>
-												<Radio
-													label={
-														<>
-															{label} <div>{icon}</div>
-														</>
-													}
-													name="paymentMethod"
-													value={validPaymentMethod}
-													cssOverrides={
-														selected
-															? checkedRadioLabelColour
-															: defaultRadioLabelColour
-													}
-													onChange={() => {
-														setPaymentMethod(validPaymentMethod);
-														setPaymentMethodError(undefined);
-														// Track payment method selection with QM
-														sendEventPaymentMethodSelected(validPaymentMethod);
-													}}
-												/>
-											</PaymentMethodRadio>
-											{validPaymentMethod === 'Stripe' && selected && (
-												<div css={paymentMethodBody}>
-													<input
-														type="hidden"
-														name="recaptchaToken"
-														value={recaptchaToken}
-													/>
-													<StripeCardForm
-														onCardNumberChange={() => {
-															// no-op
-														}}
-														onExpiryChange={() => {
-															// no-op
-														}}
-														onCvcChange={() => {
-															// no-op
-														}}
-														errors={{}}
-														recaptcha={
-															<Recaptcha
-																onRecaptchaCompleted={(token) => {
-																	setRecaptchaToken(token);
-																}}
-																onRecaptchaExpired={() => {
-																	setRecaptchaToken(undefined);
-																}}
-															/>
+										return (
+											<PaymentMethodSelector selected={selected}>
+												<PaymentMethodRadio selected={selected}>
+													<Radio
+														label={
+															<>
+																{label} <div>{icon}</div>
+															</>
 														}
+														name="paymentMethod"
+														value={validPaymentMethod}
+														cssOverrides={
+															selected
+																? checkedRadioLabelColour
+																: defaultRadioLabelColour
+														}
+														onChange={() => {
+															setPaymentMethod(validPaymentMethod);
+															setPaymentMethodError(undefined);
+															// Track payment method selection with QM
+															sendEventPaymentMethodSelected(validPaymentMethod);
+														}}
 													/>
-												</div>
-											)}
-										</PaymentMethodSelector>
-									);
-								})}
-							</RadioGroup>
+												</PaymentMethodRadio>
+												{validPaymentMethod === 'Stripe' && selected && (
+													<div css={paymentMethodBody}>
+														<input
+															type="hidden"
+															name="recaptchaToken"
+															value={recaptchaToken}
+														/>
+														<StripeCardForm
+															onCardNumberChange={() => {
+																// no-op
+															}}
+															onExpiryChange={() => {
+																// no-op
+															}}
+															onCvcChange={() => {
+																// no-op
+															}}
+															errors={{}}
+															recaptcha={
+																<Recaptcha
+																	onRecaptchaCompleted={(token) => {
+																		setRecaptchaToken(token);
+																	}}
+																	onRecaptchaExpired={() => {
+																		setRecaptchaToken(undefined);
+																	}}
+																/>
+															}
+														/>
+													</div>
+												)}
+											</PaymentMethodSelector>
+										);
+									})}
+								</RadioGroup>
+							}
 						</FormSection>
 						<CoverTransactionCost
 							transactionCost={coverTransactionCost}

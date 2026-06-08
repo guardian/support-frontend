@@ -207,6 +207,45 @@ const processStripePaymentIntentRequest = (
 		),
 	);
 
+// Create a Stripe Payment Intent Request for Paypal
+const processStripePaymentIntentRequestForPaypal = (
+	data: CreateStripePaymentIntentRequest,
+	handleStripePaypal: (clientSecret: string) => Promise<PaymentIntentResult>,
+): Promise<PaymentResult> =>
+	handleOneOffExecution(
+		postToPaymentApi(data, '/contribute/one-off/stripe/create-payment').then(
+			(createIntentResponse) => {
+				const _createIntentResponse =
+					createIntentResponse as CreateIntentResponse;
+				if (_createIntentResponse.type === 'requiresaction') {
+					// Do 3DS auth and then send back to payment-api for payment confirmation
+					return handleStripePaypal(_createIntentResponse.data.clientSecret).then(
+						(authResult: PaymentIntentResult) => {
+							if (authResult.error) {
+								trackComponentClick('stripe-3ds-failure');
+								return {
+									type: 'error',
+									error: {
+										failureReason: 'card_authentication_error',
+									},
+								};
+							}
+
+							trackComponentClick('stripe-3ds-success');
+							return postToPaymentApi(
+								{ ...data, paymentIntentId: authResult.paymentIntent.id },
+								'/contribute/one-off/stripe/confirm-payment',
+							);
+						},
+					);
+				}
+
+				// No 3DS auth required
+				return _createIntentResponse;
+			},
+		),
+	);
+
 // Object is expected to have structure:
 // { type: "error", error: PayPalApiError }, or
 // { type: "success", data: CreatePayPalPaymentSuccess }
@@ -265,4 +304,5 @@ async function postOneOffPayPalCreatePaymentRequest(
 export {
 	postOneOffPayPalCreatePaymentRequest,
 	processStripePaymentIntentRequest,
+	processStripePaymentIntentRequestForPaypal,
 };

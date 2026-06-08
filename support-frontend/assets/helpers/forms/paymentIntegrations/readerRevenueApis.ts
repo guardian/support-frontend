@@ -45,7 +45,8 @@ export type StripePaymentMethod =
 	// non-Apple-Pay payment method (wallet) that uses the payment request
 	// button”
 	| 'StripeApplePay'
-	| 'StripePaymentRequestButton';
+	| 'StripePaymentRequestButton'
+	| 'StripePaypal';
 type RegularContribution = {
 	productType: 'Contribution';
 	amount: number;
