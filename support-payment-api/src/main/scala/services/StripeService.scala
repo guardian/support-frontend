@@ -2,13 +2,12 @@ package services
 
 import cats.data.EitherT
 import cats.implicits._
-import com.stripe.model.{Charge, Event, PaymentIntent}
+import com.stripe.model.{Event, PaymentIntent}
 import com.stripe.net.RequestOptions
 import com.stripe.param.PaymentIntentCreateParams
 import com.stripe.param.PaymentIntentCreateParams.ConfirmationMethod
 import com.typesafe.scalalogging.StrictLogging
 
-import scala.jdk.CollectionConverters._
 import scala.concurrent.Future
 import conf.{StripeAccountConfig, StripeConfig}
 import model._
@@ -23,6 +22,10 @@ trait StripeService {
   ): EitherT[Future, StripeApiError, PaymentIntent]
   def confirmPaymentIntent(
       request: StripePaymentIntentRequest.ConfirmPaymentIntent,
+  ): EitherT[Future, StripeApiError, PaymentIntent]
+  def getPaymentIntent(
+      paymentIntentId: String,
+      publicKey: StripePublicKey,
   ): EitherT[Future, StripeApiError, PaymentIntent]
 }
 
@@ -58,20 +61,41 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
       Left(StripeApiError.fromString("Amount is outside the allowed range ", Some(config.publicKey))).toEitherT[Future]
     } else
       {
-        Future {
-          val params = PaymentIntentCreateParams.builder
-            .setPaymentMethod(data.paymentMethodId)
-            .setAmount((data.paymentData.amount * 100).toLong) // Stripe amount must be in pence
-            .setCurrency(data.paymentData.currency.entryName)
-            .setReceiptEmail(data.paymentData.email.value)
-            .setConfirmationMethod(
-              ConfirmationMethod.MANUAL,
-            ) // Allows us to do 3DS auth and final confirmation as separate steps
-            .setConfirm(true) // If 3DS is not required then it will go ahead and complete the payment
-            .build
+        data.paymentData.stripePaymentMethod match {
+          case Some(StripePaymentMethod.StripePaypal) =>
+            Future {
+              val params = PaymentIntentCreateParams.builder
+                .addPaymentMethodType("paypal")
+                .setPaymentMethod(data.paymentMethodId)
+                .setAmount((data.paymentData.amount * 100).toLong) // Stripe amount must be in pence
+                .setCurrency(data.paymentData.currency.entryName)
+                .setReceiptEmail(data.paymentData.email.value)
+                .setConfirmationMethod(
+                  ConfirmationMethod.AUTOMATIC,
+                ) // Paypal has automatic redirection
+                .setConfirm(false) // Confirmation happens client side
+                .build
 
-          PaymentIntent.create(params, requestOptions)
+              PaymentIntent.create(params, requestOptions)
+            }
+          case _ =>
+            Future {
+              val params = PaymentIntentCreateParams.builder
+                .addPaymentMethodType("card")
+                .setPaymentMethod(data.paymentMethodId)
+                .setAmount((data.paymentData.amount * 100).toLong) // Stripe amount must be in pence
+                .setCurrency(data.paymentData.currency.entryName)
+                .setReceiptEmail(data.paymentData.email.value)
+                .setConfirmationMethod(
+                  ConfirmationMethod.MANUAL,
+                ) // Allows us to do 3DS auth and final confirmation as separate steps
+                .setConfirm(true) // If 3DS is not required then it will go ahead and complete the payment
+                .build
+
+              PaymentIntent.create(params, requestOptions)
+            }
         }
+
       }.attemptT
         .bimap(
           err => StripeApiError.fromThrowable(err, Some(config.publicKey)),
@@ -102,6 +126,15 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
   }
 
   def iAmForThisPublicKey(publicKey: StripePublicKey): Boolean = config.publicKey == publicKey.value
+
+  def getPaymentIntent(
+      paymentIntentId: String,
+      publicKey: StripePublicKey,
+  ): EitherT[Future, StripeApiError, PaymentIntent] =
+    Future(PaymentIntent.retrieve(paymentIntentId, requestOptions)).attemptT.bimap(
+      err => StripeApiError.fromThrowable(err, Some(config.publicKey)),
+      identity,
+    )
 }
 
 // Create charges against out default Stripe account
@@ -146,6 +179,12 @@ class CountryBasedStripeService(
       data: StripePaymentIntentRequest.ConfirmPaymentIntent,
   ): EitherT[Future, StripeApiError, PaymentIntent] =
     getAccountForPublicKey(data.publicKey).confirmPaymentIntent(data)
+
+  override def getPaymentIntent(
+      paymentIntentId: String,
+      publicKey: StripePublicKey,
+  ): EitherT[Future, StripeApiError, PaymentIntent] =
+    getAccountForPublicKey(publicKey).getPaymentIntent(paymentIntentId, publicKey)
 
   override def validateRefundHook(stripeHook: StripeRefundHook): EitherT[Future, StripeApiError, Unit] = {
     val stripeCurrency = stripeHook.data.`object`.currency.toUpperCase

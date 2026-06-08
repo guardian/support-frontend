@@ -89,6 +89,24 @@ class StripeController(
     }
     .withLogging(this.getClass.getCanonicalName, "confirmPayment")
 
+  def completeStripePaypalPayment: Action[StripePaymentIntentRequest.CompleteStripePaypalPayment] =
+    CorsAndRateLimitAction
+      .async(circe.json[StripePaymentIntentRequest.CompleteStripePaypalPayment]) { request =>
+        stripeBackendProvider
+          .getInstanceFor(request)
+          .completeStripePaypalPayment(
+            request.body,
+            ClientBrowserInfo.fromRequest(request, request.body.acquisitionData.gaId),
+          )
+          .fold(
+            err => {
+              val errorResponse = CheckoutErrorResponse.fromStripeApiError(err)
+              new Status(errorResponse.statusCode)(ResultBody.Error(errorResponse.checkoutError))
+            },
+            response => Ok(ResultBody.Success(response)),
+          )
+      }
+
   override implicit val controllerComponents: ControllerComponents = cc
   override implicit val corsUrls: List[String] = allowedCorsUrls
 
