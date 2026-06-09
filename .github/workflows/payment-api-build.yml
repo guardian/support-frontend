@@ -41,7 +41,7 @@ jobs:
         uses: guardian/setup-scala@v1
 
       - name: Build deb package
-        run: sbt "project support-payment-api" clean debian:packageBin
+        run: sbt "project support-payment-api" clean test debian:packageBin
 
       - name: Upload to Riff-Raff
         uses: guardian/actions-riff-raff@v4.3.2

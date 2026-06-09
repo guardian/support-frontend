@@ -40,7 +40,7 @@ jobs:
 
       - name: Build jar
         run: |
-          sbt "project support-lambdas" clean assembly
+          sbt "project support-lambdas" clean test assembly
 
       - name: Upload Acquisition Events API to Riff-Raff
         uses: guardian/actions-riff-raff@v4
