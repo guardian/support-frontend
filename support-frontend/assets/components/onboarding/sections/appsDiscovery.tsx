@@ -44,7 +44,7 @@ const GUARDIAN_APP_BENEFITS = [
 	},
 	{
 		title: 'Ad-free reading',
-		description: 'For an uninterrupted experience.',
+		description: 'Enjoy an uninterrupted experience.',
 	},
 ];
 
@@ -134,7 +134,7 @@ export function OnboardingAppsDiscovery({
 					</h1>
 					<p css={descriptions}>
 						{isGuardianApp
-							? 'Get the stuff you want, when you want it - news, sport, podcasts, puzzles and more.'
+							? 'News, sport, podcasts, puzzles and more.'
 							: 'Rated 4 out of 5 stars by our Feast community.'}
 					</p>
 
