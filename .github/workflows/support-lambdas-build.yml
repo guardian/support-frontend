@@ -53,10 +53,10 @@ jobs:
           commentingEnabled: "false"
           contentDirectories: |
             acquisition-events-api:
-              - ./support-lambdas/acquisition-events-api/target/scala-2.13/acquisition-events-api.jar
+              - support-lambdas/acquisition-events-api/target/scala-2.13/acquisition-events-api.jar
             cfn:
-              - ./cdk/cdk.out/Acquisition-Events-API-CODE.template.json
-              - ./cdk/cdk.out/Acquisition-Events-API-PROD.template.json
+              - cdk/cdk.out/Acquisition-Events-API-CODE.template.json
+              - cdk/cdk.out/Acquisition-Events-API-PROD.template.json
 
       - name: Upload Stripe Intent to Riff-Raff
         uses: guardian/actions-riff-raff@v4
@@ -69,9 +69,9 @@ jobs:
           commentingEnabled: "false"
           contentDirectories: |
             stripe-intent:
-              - ./support-lambdas/stripe-intent/target/scala-2.13/stripe-intent.jar
+              - support-lambdas/stripe-intent/target/scala-2.13/stripe-intent.jar
             cfn:
-              - ./support-lambdas/stripe-intent/cfn.yaml
+              - support-lambdas/stripe-intent/cfn.yaml
 
   support_lambdas_typescripts_bigquery_acquisition_publisher:
     if: >-

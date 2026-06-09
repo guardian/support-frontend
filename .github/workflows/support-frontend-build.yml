@@ -57,11 +57,10 @@ jobs:
         uses: guardian/setup-scala@v1
 
       - name: Build, test, and package
-        run: |
-          sbt "project support-frontend" clean test debian:packageBin
+        run: sbt "project support-frontend" clean test debian:packageBin
 
       - name: Upload to Riff-Raff
-        uses: guardian/actions-riff-raff@v4.3.2
+        uses: guardian/actions-riff-raff@v4
         with:
           projectName: support:frontend-mono
           githubToken: ${{ secrets.GITHUB_TOKEN }}
@@ -73,12 +72,12 @@ jobs:
             frontend:
               - support-frontend/target/support-frontend_1.0-SNAPSHOT_all.deb
             support-backend:
-              - ./support-backend/support-backend.tar.gz
+              - support-backend/support-backend.tar.gz
             cfn-backend:
-              - ./cdk/cdk.out/Backend-CODE.template.json
-              - ./cdk/cdk.out/Backend-PROD.template.json
+              - cdk/cdk.out/Backend-CODE.template.json
+              - cdk/cdk.out/Backend-PROD.template.json
             cfn-frontend:
-              - ./cdk/cdk.out/Frontend-CODE.template.json
-              - ./cdk/cdk.out/Frontend-PROD.template.json
+              - cdk/cdk.out/Frontend-CODE.template.json
+              - cdk/cdk.out/Frontend-PROD.template.json
             assets-static:
-              - ./support-frontend/public/compiled-assets
+              - support-frontend/public/compiled-assets

@@ -37,7 +37,7 @@ jobs:
         run:  sbt "project supporter-product-data" clean test assembly
 
       - name: Upload to Riff-Raff
-        uses: guardian/actions-riff-raff@v4.3.2
+        uses: guardian/actions-riff-raff@v4
         with:
           projectName: support:supporter-product-data
           githubToken: ${{ secrets.GITHUB_TOKEN }}
@@ -47,6 +47,6 @@ jobs:
           configPath: ./supporter-product-data/riff-raff.yaml
           contentDirectories: |
             cfn:
-              - ./supporter-product-data/cloudformation/cfn.yaml
+              - supporter-product-data/cloudformation/cfn.yaml
             supporter-product-data:
               - supporter-product-data/target/scala-2.13/supporter-product-data.jar
