@@ -5,6 +5,7 @@ import type {
 	LandingPageTest,
 	LandingPageVariant,
 } from '../globalsAndSwitches/landingPageSettings';
+import { selectVariantForTest } from './banditSelection';
 import { randomNumber } from './helpers';
 import type { PageParticipationsConfig } from './models';
 import {
@@ -116,10 +117,31 @@ export function getLandingPageTestConfig(): PageParticipationsConfig<LandingPage
 		tests: getSettings().landingPageTests ?? [],
 		selectVariant: (test, mvtId) => {
 			const landingPageTest = test as unknown as LandingPageTest;
-			return (
-				landingPageTest.selectedVariant ??
-				test.variants[randomNumber(mvtId, test.name) % test.variants.length]
-			);
+			const banditData = getSettings().banditData ?? [];
+
+			// Use new client-side bandit selection logic
+			const result = selectVariantForTest(landingPageTest, mvtId, banditData);
+
+			if (result) {
+				return result;
+			}
+
+			// Fallback to server-side selectedVariant if available (for rollback safety)
+			if (landingPageTest.selectedVariant) {
+				return {
+					variant: landingPageTest.selectedVariant,
+					trackingTestName: landingPageTest.selectedTestName ?? test.name,
+				};
+			}
+
+			// Final fallback to MVT-based selection
+			const variant =
+				test.variants[randomNumber(mvtId, test.name) % test.variants.length];
+			if (variant) {
+				return { variant, trackingTestName: test.name };
+			}
+
+			return;
 		},
 	};
 }

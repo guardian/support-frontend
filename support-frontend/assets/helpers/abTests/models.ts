@@ -79,6 +79,7 @@ interface PageTest<Variant> {
 	};
 	mParticleAudience?: number;
 	variants: Variant[];
+	methodologies?: Array<{ name: string; testName?: string }>;
 	selectedTestName?: string; // Methodology-specific test name for tracking
 }
 interface PageParticipationsConfig<Variant> {
@@ -90,7 +91,7 @@ interface PageParticipationsConfig<Variant> {
 	selectVariant?: (
 		test: PageTest<Variant>,
 		mvtId: number,
-	) => Variant | undefined;
+	) => { variant: Variant; trackingTestName: string } | undefined;
 }
 
 export type {

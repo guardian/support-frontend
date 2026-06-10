@@ -68,6 +68,31 @@ case class BanditData(
     sortedVariants: List[VariantMean],
 )
 
+/** Client-safe bandit data with normalised weights (not raw GBP means) */
+case class ClientBanditVariant(
+    name: String,
+    weight: Double,
+)
+
+case class ClientBanditData(
+    testName: String,
+    variants: List[ClientBanditVariant],
+)
+
+object ClientBanditVariant {
+  implicit val clientBanditVariantEncoder: io.circe.Encoder[ClientBanditVariant] =
+    io.circe.generic.semiauto.deriveEncoder[ClientBanditVariant]
+  implicit val clientBanditVariantDecoder: io.circe.Decoder[ClientBanditVariant] =
+    io.circe.generic.semiauto.deriveDecoder[ClientBanditVariant]
+}
+
+object ClientBanditData {
+  implicit val clientBanditDataEncoder: io.circe.Encoder[ClientBanditData] =
+    io.circe.generic.semiauto.deriveEncoder[ClientBanditData]
+  implicit val clientBanditDataDecoder: io.circe.Decoder[ClientBanditData] =
+    io.circe.generic.semiauto.deriveDecoder[ClientBanditData]
+}
+
 object BanditData {
   private val MINIMUM_SAMPLES = 6 // Minimum number of hourly samples required
 
@@ -261,6 +286,25 @@ class BanditDataService(
   }(ec)
 
   def getBanditData(): List[BanditData] = cachedBanditData.get()
+
+  /** Get client-safe bandit data with normalised weights (not raw GBP means) */
+  def getClientBanditData(): List[ClientBanditData] = {
+    cachedBanditData.get().map { banditData =>
+      val sumOfMeans = banditData.sortedVariants.map(_.mean).sum
+
+      val variants = if (sumOfMeans <= 0) {
+        // All means are zero or negative, return all zero weights
+        banditData.sortedVariants.map(vm => ClientBanditVariant(vm.variantName, 0.0))
+      } else {
+        // Normalise weights to sum to 1.0
+        banditData.sortedVariants.map { vm =>
+          ClientBanditVariant(vm.variantName, vm.mean / sumOfMeans)
+        }
+      }
+
+      ClientBanditData(banditData.testName, variants)
+    }
+  }
 }
 
 object BanditDataService

@@ -115,6 +115,7 @@ trait Services {
         checkoutNudgeTestService,
         oneTimeCheckoutTestService,
         studentLandingPageTestService,
+        banditDataService,
       )
       .valueOr(throw _)
 

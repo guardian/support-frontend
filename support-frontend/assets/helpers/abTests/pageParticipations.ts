@@ -68,11 +68,25 @@ export async function getPageParticipations<Variant>(
 		testList: Array<PageTest<Variant>>,
 	): Variant | undefined => {
 		for (const test of testList) {
-			const variantName =
-				participations[test.name] ??
-				(test.selectedTestName
-					? participations[test.selectedTestName]
-					: undefined);
+			// Check test.name first
+			let variantName = participations[test.name];
+
+			// If not found, check methodology.testName overrides
+			if (!variantName && test.methodologies) {
+				for (const methodology of test.methodologies) {
+					const testName = methodology.testName;
+					if (testName && participations[testName]) {
+						variantName = participations[testName];
+						break;
+					}
+				}
+			}
+
+			// Fallback to selectedTestName for backward compatibility during transition
+			if (!variantName && test.selectedTestName) {
+				variantName = participations[test.selectedTestName];
+			}
+
 			if (variantName) {
 				const variant = test.variants.find(
 					(v) => getVariantName(v) === variantName,
@@ -128,9 +142,35 @@ export async function getPageParticipations<Variant>(
 		sessionParticipations &&
 		Object.entries(sessionParticipations).length > 0
 	) {
-		const variant = getVariant(sessionParticipations, tests);
-		if (variant) {
-			return { participations: sessionParticipations, variant };
+		// Validate and prune session participations: drop entries whose key matches no current test name or methodology testName override
+		const validParticipations: Participations = {};
+		for (const [key, value] of Object.entries(sessionParticipations)) {
+			const isValid = tests.some((test) => {
+				// Check if key matches test.name
+				if (key === test.name) {
+					return true;
+				}
+				// Check if key matches any methodology.testName override
+				if (test.methodologies?.some((m) => m.testName === key)) {
+					return true;
+				}
+				// Check if key matches selectedTestName (for backward compatibility)
+				if (test.selectedTestName === key) {
+					return true;
+				}
+				return false;
+			});
+			if (isValid) {
+				validParticipations[key] = value;
+			}
+		}
+
+		// If nothing valid remains, continue to re-selection
+		if (Object.entries(validParticipations).length > 0) {
+			const variant = getVariant(validParticipations, tests);
+			if (variant) {
+				return { participations: validParticipations, variant };
+			}
 		}
 	}
 
@@ -153,18 +193,23 @@ export async function getPageParticipations<Variant>(
 		return makeFallbackResult();
 	}
 
-	const variant = config.selectVariant
+	const selectionResult = config.selectVariant
 		? config.selectVariant(test, mvtId)
+		: undefined;
+
+	const variant = selectionResult?.variant
+		? selectionResult.variant
 		: test.variants[randomNumber(mvtId, test.name) % test.variants.length];
 
 	if (!variant) {
 		return makeFallbackResult();
 	}
 
-	// Use selectedTestName if available (for methodology-specific tracking), otherwise use test.name
-	const trackingTestName: string = test.selectedTestName ?? test.name;
-	const participations = {
-		...sessionParticipations,
+	// Use trackingTestName from selection result if available, otherwise use test.selectedTestName or test.name
+	const trackingTestName: string =
+		selectionResult?.trackingTestName ?? test.selectedTestName ?? test.name;
+	// Store only the fresh participation (no merge needed once every page runs identical selection)
+	const participations: Participations = {
 		[trackingTestName]: getVariantName(variant),
 	};
 	// Record the participation in session storage so that we can track it from other pages
