@@ -98,8 +98,6 @@ case class LandingPageTest(
     mParticleAudience: Option[Int],
     variants: List[LandingPageVariant],
     methodologies: Option[List[Methodology]] = None,
-    selectedVariant: Option[LandingPageVariant] = None,
-    selectedTestName: Option[String] = None,
 )
 
 object LandingPageTest {

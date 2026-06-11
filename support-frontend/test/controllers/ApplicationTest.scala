@@ -95,7 +95,6 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     mock[TickerService],
     mock[MParticleClient],
     mock[PayPalCompletePaymentsConfigProvider],
-    mock[LandingPageVariantSelector],
   )(mock[ExecutionContext])
 
   "/healthcheck" should {

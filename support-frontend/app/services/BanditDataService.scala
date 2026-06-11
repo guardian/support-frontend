@@ -148,7 +148,7 @@ class BanditDataService(
 )(implicit ec: ExecutionContext, system: ActorSystem)
     extends StrictLogging {
 
-  private val cachedBanditData = new AtomicReference[List[BanditData]](Nil)
+  private[services] val cachedBanditData = new AtomicReference[List[BanditData]](Nil)
 
   private val credentialsProvider = AwsCredentialsProviderChain.builder
     .credentialsProviders(
@@ -290,14 +290,17 @@ class BanditDataService(
   /** Get client-safe bandit data with normalised weights (not raw GBP means) */
   def getClientBanditData(): List[ClientBanditData] = {
     cachedBanditData.get().map { banditData =>
-      val sumOfMeans = banditData.sortedVariants.map(_.mean).sum
+      // Clamp negative means to zero before normalisation to ensure 0-1 weights
+      val clampedVariants = banditData.sortedVariants.map(vm => vm.copy(mean = Math.max(vm.mean, 0.0)))
+
+      val sumOfMeans = clampedVariants.map(_.mean).sum
 
       val variants = if (sumOfMeans <= 0) {
         // All means are zero or negative, return all zero weights
-        banditData.sortedVariants.map(vm => ClientBanditVariant(vm.variantName, 0.0))
+        clampedVariants.map(vm => ClientBanditVariant(vm.variantName, 0.0))
       } else {
         // Normalise weights to sum to 1.0
-        banditData.sortedVariants.map { vm =>
+        clampedVariants.map { vm =>
           ClientBanditVariant(vm.variantName, vm.mean / sumOfMeans)
         }
       }
