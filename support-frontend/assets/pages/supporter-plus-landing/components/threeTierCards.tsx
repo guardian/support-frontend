@@ -50,7 +50,7 @@ export function ThreeTierCards({
 	billingPeriod,
 	showWeeklyPrice,
 }: ThreeTierCardsProps): JSX.Element {
-	const shouldForcePriceMinHeight =
+	const shouldUseLargePriceMinHeight =
 		!!showWeeklyPrice ||
 		cardsContent.some((card) => !!card.promotion || !!card.billingPeriodsCopy);
 	const haveLabelAndSelectedCards =
@@ -78,7 +78,7 @@ export function ThreeTierCards({
 						currencyId={currencyId}
 						billingPeriod={billingPeriod}
 						showWeeklyPrice={showWeeklyPrice}
-						forcePriceMinHeight={shouldForcePriceMinHeight}
+						useLargePriceMinHeight={shouldUseLargePriceMinHeight}
 					/>
 				);
 			})}
