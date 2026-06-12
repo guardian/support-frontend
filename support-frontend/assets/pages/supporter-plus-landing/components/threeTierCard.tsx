@@ -51,6 +51,7 @@ export type ThreeTierCardProps = {
 	currencyId: IsoCurrency;
 	billingPeriod: BillingPeriod;
 	showWeeklyPrice?: boolean;
+	forcePriceMinHeight?: boolean;
 };
 
 const container = (
@@ -91,13 +92,13 @@ const titleCss = css`
 	color: #606060;
 `;
 
-const priceCss = css`
+const priceCss = (useMinHeight: boolean) => css`
 	${textSansBold24};
 	position: relative;
 	margin-bottom: ${space[2]}px;
 
 	${from.desktop} {
-		min-height: ${space[16]}px;
+		min-height: ${useMinHeight ? `${space[16]}px` : '0'};
 	}
 `;
 
@@ -176,6 +177,7 @@ export function ThreeTierCard({
 	currencyId,
 	billingPeriod,
 	showWeeklyPrice = false,
+	forcePriceMinHeight = false,
 }: ThreeTierCardProps): JSX.Element {
 	const {
 		title,
@@ -231,7 +233,7 @@ export function ThreeTierCard({
 				{titlePill && <BenefitPill copy={titlePill} />}
 				<h2 css={[titleCss, checkListTextItemCss]}>{title}</h2>
 			</div>
-			<div css={priceCss}>
+			<div css={priceCss(forcePriceMinHeight)}>
 				{promotion && (
 					<>
 						<p>

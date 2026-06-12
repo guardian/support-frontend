@@ -65,13 +65,6 @@ Default.args = {
 			price: 25,
 			product: 'DigitalSubscription',
 			...fallBackLandingPageSelection.products.DigitalSubscription,
-			promotion: {
-				discountedPrice: 16,
-				discount: {
-					amount: 16,
-					durationMonths: 12,
-				},
-			},
 		},
 	],
 	currencyId: 'GBP',
