@@ -211,4 +211,201 @@ class BanditDataServiceSpec extends AnyFlatSpec with Matchers {
     epsilonConfig2.get.sampleCount shouldBe Some(10)
   }
 
+  "getClientBanditData" should "normalise weights to sum to 1.0" in {
+    val mockTestService = new LandingPageTestService {
+      def getTests(): List[LandingPageTest] = Nil
+    }
+
+    val service = new BanditDataService(com.gu.support.config.Stages.CODE, mockTestService) {
+      override def getBanditData(): List[BanditData] = List(
+        BanditData(
+          testName = "test-1",
+          sortedVariants = List(
+            VariantMean("v1", 10.0),
+            VariantMean("v2", 20.0),
+            VariantMean("v3", 30.0),
+          ),
+        ),
+      )
+    }
+
+    // Set cached data directly since getClientBanditData reads from cache
+    service.cachedBanditData.set(
+      List(
+        BanditData(
+          testName = "test-1",
+          sortedVariants = List(
+            VariantMean("v1", 10.0),
+            VariantMean("v2", 20.0),
+            VariantMean("v3", 30.0),
+          ),
+        ),
+      ),
+    )
+
+    val clientData = service.getClientBanditData()
+
+    clientData should have size 1
+    val test1Data = clientData.head
+    test1Data.testName shouldBe "test-1"
+    test1Data.variants should have size 3
+
+    // Weights should be normalised: 10/60=0.1667, 20/60=0.3333, 30/60=0.5
+    val weights = test1Data.variants.map(_.weight)
+    weights.sum shouldBe 1.0 +- 0.0001
+    weights(0) shouldBe 0.1667 +- 0.0001
+    weights(1) shouldBe 0.3333 +- 0.0001
+    weights(2) shouldBe 0.5 +- 0.0001
+  }
+
+  it should "return all zero weights when sumOfMeans is zero" in {
+    val mockTestService = new LandingPageTestService {
+      def getTests(): List[LandingPageTest] = Nil
+    }
+
+    val service = new BanditDataService(com.gu.support.config.Stages.CODE, mockTestService)
+
+    service.cachedBanditData.set(
+      List(
+        BanditData(
+          testName = "test-1",
+          sortedVariants = List(
+            VariantMean("v1", 0.0),
+            VariantMean("v2", 0.0),
+          ),
+        ),
+      ),
+    )
+
+    val clientData = service.getClientBanditData()
+
+    clientData should have size 1
+    val test1Data = clientData.head
+    test1Data.variants.foreach(_.weight shouldBe 0.0)
+  }
+
+  it should "clamp all negative means to zero weights" in {
+    val mockTestService = new LandingPageTestService {
+      def getTests(): List[LandingPageTest] = Nil
+    }
+
+    val service = new BanditDataService(com.gu.support.config.Stages.CODE, mockTestService)
+
+    service.cachedBanditData.set(
+      List(
+        BanditData(
+          testName = "test-1",
+          sortedVariants = List(
+            VariantMean("v1", -10.0),
+            VariantMean("v2", -5.0),
+          ),
+        ),
+      ),
+    )
+
+    val clientData = service.getClientBanditData()
+
+    clientData should have size 1
+    val test1Data = clientData.head
+    test1Data.variants.foreach(_.weight shouldBe 0.0)
+  }
+
+  it should "handle empty bandit data" in {
+    val mockTestService = new LandingPageTestService {
+      def getTests(): List[LandingPageTest] = Nil
+    }
+
+    val service = new BanditDataService(com.gu.support.config.Stages.CODE, mockTestService)
+
+    service.cachedBanditData.set(Nil)
+
+    val clientData = service.getClientBanditData()
+
+    clientData shouldBe empty
+  }
+
+  it should "handle single variant" in {
+    val mockTestService = new LandingPageTestService {
+      def getTests(): List[LandingPageTest] = Nil
+    }
+
+    val service = new BanditDataService(com.gu.support.config.Stages.CODE, mockTestService)
+
+    service.cachedBanditData.set(
+      List(
+        BanditData(
+          testName = "test-1",
+          sortedVariants = List(
+            VariantMean("v1", 100.0),
+          ),
+        ),
+      ),
+    )
+
+    val clientData = service.getClientBanditData()
+
+    clientData should have size 1
+    val test1Data = clientData.head
+    test1Data.variants should have size 1
+    test1Data.variants.head.weight shouldBe 1.0
+  }
+
+  it should "preserve variant names from bandit data" in {
+    val mockTestService = new LandingPageTestService {
+      def getTests(): List[LandingPageTest] = Nil
+    }
+
+    val service = new BanditDataService(com.gu.support.config.Stages.CODE, mockTestService)
+
+    service.cachedBanditData.set(
+      List(
+        BanditData(
+          testName = "test-1",
+          sortedVariants = List(
+            VariantMean("control", 10.0),
+            VariantMean("variant-a", 20.0),
+          ),
+        ),
+      ),
+    )
+
+    val clientData = service.getClientBanditData()
+
+    clientData.head.variants.map(_.name) shouldBe List("control", "variant-a")
+  }
+
+  it should "clamp negative means to zero before normalising weights" in {
+    val mockTestService = new LandingPageTestService {
+      def getTests(): List[LandingPageTest] = Nil
+    }
+
+    val service = new BanditDataService(com.gu.support.config.Stages.CODE, mockTestService)
+
+    service.cachedBanditData.set(
+      List(
+        BanditData(
+          testName = "test-1",
+          sortedVariants = List(
+            VariantMean("v1", 2.0),
+            VariantMean("v2", -1.0),
+            VariantMean("v3", 1.0),
+          ),
+        ),
+      ),
+    )
+
+    val clientData = service.getClientBanditData()
+
+    clientData should have size 1
+    val test1Data = clientData.head
+    test1Data.testName shouldBe "test-1"
+    test1Data.variants should have size 3
+
+    val weights = test1Data.variants.map(_.weight)
+    weights.sum shouldBe 1.0 +- 0.0001
+    weights(0) shouldBe 0.6667 +- 0.0001
+    weights(1) shouldBe 0.0 +- 0.0001
+    weights(2) shouldBe 0.3333 +- 0.0001
+  }
+
 }

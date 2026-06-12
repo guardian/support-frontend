@@ -82,11 +82,6 @@ export async function getPageParticipations<Variant>(
 				}
 			}
 
-			// Fallback to selectedTestName for backward compatibility during transition
-			if (!variantName && test.selectedTestName) {
-				variantName = participations[test.selectedTestName];
-			}
-
 			if (variantName) {
 				const variant = test.variants.find(
 					(v) => getVariantName(v) === variantName,
@@ -154,10 +149,6 @@ export async function getPageParticipations<Variant>(
 				if (test.methodologies?.some((m) => m.testName === key)) {
 					return true;
 				}
-				// Check if key matches selectedTestName (for backward compatibility)
-				if (test.selectedTestName === key) {
-					return true;
-				}
 				return false;
 			});
 			if (isValid) {
@@ -205,9 +196,9 @@ export async function getPageParticipations<Variant>(
 		return makeFallbackResult();
 	}
 
-	// Use trackingTestName from selection result if available, otherwise use test.selectedTestName or test.name
+	// Use trackingTestName from selection result if available, otherwise use test.name
 	const trackingTestName: string =
-		selectionResult?.trackingTestName ?? test.selectedTestName ?? test.name;
+		selectionResult?.trackingTestName ?? test.name;
 	// Store only the fresh participation (no merge needed once every page runs identical selection)
 	const participations: Participations = {
 		[trackingTestName]: getVariantName(variant),

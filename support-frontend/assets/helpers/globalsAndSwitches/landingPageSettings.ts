@@ -104,8 +104,6 @@ export interface LandingPageTest {
 	regionTargeting?: RegionTargeting;
 	variants: LandingPageVariant[];
 	methodologies?: Methodology[];
-	selectedVariant?: LandingPageVariant;
-	selectedTestName?: string; // Methodology-specific test name for tracking
 }
 
 export type Methodology = ABTest | EpsilonGreedyBandit | Roulette;

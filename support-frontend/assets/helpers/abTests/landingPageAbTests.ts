@@ -126,15 +126,7 @@ export function getLandingPageTestConfig(): PageParticipationsConfig<LandingPage
 				return result;
 			}
 
-			// Fallback to server-side selectedVariant if available (for rollback safety)
-			if (landingPageTest.selectedVariant) {
-				return {
-					variant: landingPageTest.selectedVariant,
-					trackingTestName: landingPageTest.selectedTestName ?? test.name,
-				};
-			}
-
-			// Final fallback to MVT-based selection
+			// Fallback to MVT-based selection
 			const variant =
 				test.variants[randomNumber(mvtId, test.name) % test.variants.length];
 			if (variant) {

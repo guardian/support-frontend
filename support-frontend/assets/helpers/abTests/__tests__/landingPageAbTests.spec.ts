@@ -161,3 +161,66 @@ describe('fallBackLandingPageSelection', () => {
 		});
 	});
 });
+
+describe('bandit selection integration', () => {
+	const mockGetSettings = getSettings as jest.MockedFunction<
+		typeof getSettings
+	>;
+
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
+
+	it('uses selectVariantForTest when banditData is available in settings', () => {
+		const testWithMethodology: LandingPageTest = {
+			...mockTest,
+			methodologies: [
+				{
+					name: 'EpsilonGreedyBandit',
+					epsilon: 0.1,
+					testName: 'TEST_LP_ABTest',
+				},
+			],
+		};
+
+		mockGetSettings.mockReturnValue({
+			landingPageTests: [testWithMethodology],
+			banditData: [
+				{
+					testName: 'TEST_LP_ABTest',
+					variants: [
+						{ name: 'VARIANT_A', weight: 0.7 },
+						{ name: 'VARIANT_B', weight: 0.3 },
+					],
+				},
+			],
+		} as ReturnType<typeof getSettings>);
+
+		const config = getLandingPageTestConfig();
+
+		expect(config.tests).toEqual([testWithMethodology]);
+		expect(config.selectVariant).toBeDefined();
+
+		// Actually call selectVariant and verify it returns expected structure
+		const result = config.selectVariant?.(testWithMethodology, 12345);
+
+		expect(result).toBeDefined();
+		expect(result?.variant).toBeDefined();
+		expect(result?.trackingTestName).toBe('TEST_LP_ABTest');
+	});
+
+	it('handles tests without banditData', () => {
+		const testWithoutBandit: LandingPageTest = {
+			...mockTest,
+		};
+
+		mockGetSettings.mockReturnValue({
+			landingPageTests: [testWithoutBandit],
+			banditData: undefined,
+		} as ReturnType<typeof getSettings>);
+
+		const config = getLandingPageTestConfig();
+
+		expect(config.tests).toEqual([testWithoutBandit]);
+	});
+});

@@ -44,7 +44,6 @@ trait Controllers {
     tickerService,
     mparticleClient,
     appConfig.payPalCompletePaymentsConfigProvider,
-    landingPageVariantSelector,
   )
 
   lazy val diagnosticsController = new DiagnosticsController(

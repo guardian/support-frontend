@@ -1,21 +1,6 @@
 import type { Methodology } from 'helpers/globalsAndSwitches/landingPageSettings';
 import type { ClientBanditData } from 'helpers/globalsAndSwitches/settings';
-
-/**
- * Deterministic random number generator for AB tests (consistent across page loads for same mvtId)
- */
-function getRandomNumber(seed: string, mvtId: number): number {
-	// Simple hash function for deterministic selection
-	// Note: order must match Scala implementation (seed + mvtId)
-	let hash = 0;
-	const str = `${seed}${mvtId}`;
-	for (let i = 0; i < str.length; i++) {
-		const char = str.charCodeAt(i);
-		hash = (hash << 5) - hash + char;
-		hash = hash & hash; // Convert to 32bit integer
-	}
-	return Math.abs(hash);
-}
+import { randomNumber } from './helpers';
 
 /**
  * Select variant using MVT (deterministic AB test)
@@ -28,7 +13,7 @@ function selectVariantUsingMVT<VariantType extends { name: string }>(
 		return;
 	}
 
-	const randomIndex = getRandomNumber(test.name, mvtId) % test.variants.length;
+	const randomIndex = randomNumber(mvtId, test.name) % test.variants.length;
 	return test.variants[randomIndex];
 }
 
@@ -165,17 +150,10 @@ export function selectVariantForTest<VariantType extends { name: string }>(
 	mvtId: number,
 	banditData: ClientBanditData[],
 ): { variant: VariantType; trackingTestName: string } | undefined {
-	console.log('[banditSelection] selectVariantForTest called', {
-		testName: test.name,
-		mvtId,
-		banditDataCount: banditData.length,
-	});
 	const methodologies = test.methodologies;
-	console.log('[banditSelection] methodologies', methodologies);
 
 	if (!methodologies || methodologies.length === 0) {
 		// No configured methodology, default to AB test
-		console.log('[banditSelection] No methodologies, using MVT selection');
 		const variant = selectVariantUsingMVT(test, mvtId);
 		if (variant) {
 			return { variant, trackingTestName: test.name };
@@ -187,51 +165,38 @@ export function selectVariantForTest<VariantType extends { name: string }>(
 	const methodology =
 		methodologies.length === 1
 			? methodologies[0]!
-			: methodologies[getRandomNumber(test.name, mvtId) % methodologies.length];
-
-	console.log('[banditSelection] Selected methodology', methodology);
+			: methodologies[randomNumber(mvtId, test.name) % methodologies.length];
 
 	if (!methodology) {
-		console.log(
-			'[banditSelection] No methodology selected, returning undefined',
-		);
 		return;
 	}
 
 	// Get effective test name with methodology override if specified
 	const trackingTestName = methodology.testName ?? test.name;
-	console.log('[banditSelection] trackingTestName', trackingTestName);
 
 	// Find bandit data for this test (using effective test name)
 	const testBanditData = banditData.find(
 		(bd) => bd.testName === trackingTestName,
 	);
-	console.log('[banditSelection] testBanditData', testBanditData);
 
 	// Select variant based on methodology
 	let variant: VariantType | undefined;
 	if (methodology.name === 'EpsilonGreedyBandit') {
-		console.log('[banditSelection] Using EpsilonGreedyBandit selection');
 		variant = selectVariantUsingEpsilonGreedy(
 			test,
 			methodology.epsilon,
 			testBanditData,
 		);
 	} else if (methodology.name === 'Roulette') {
-		console.log('[banditSelection] Using Roulette selection');
 		variant = selectVariantUsingRoulette(test, testBanditData);
 	} else {
 		// ABTest
-		console.log('[banditSelection] Using ABTest (MVT) selection');
 		variant = selectVariantUsingMVT(test, mvtId);
 	}
-
-	console.log('[banditSelection] Selected variant', variant);
 
 	if (variant) {
 		return { variant, trackingTestName };
 	}
 
-	console.log('[banditSelection] No variant selected, returning undefined');
 	return;
 }
