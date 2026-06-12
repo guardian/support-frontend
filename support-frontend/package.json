@@ -46,7 +46,7 @@
     "@guardian/consent-manager": "1.0.0",
 		"@guardian/core-web-vitals": "^11.1.0",
 		"@guardian/libs": "32.0.0",
-		"@guardian/ophan-tracker-js": "3.1.0",
+		"@guardian/ophan-tracker-js": "4.0.2",
 		"@guardian/source": "10.2.0",
 		"@guardian/source-development-kitchen": "18.1.1",
 		"@guardian/support-service-lambdas": "catalog:",
