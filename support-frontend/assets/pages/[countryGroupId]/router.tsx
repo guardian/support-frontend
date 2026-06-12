@@ -4,7 +4,7 @@ import {
 	Outlet,
 	RouterProvider,
 	useRouteLoaderData,
-} from 'react-router-dom';
+} from 'react-router';
 import { ClientSideErrorPage } from 'components/ClientSideError';
 import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
 import { ObserverHoldingContent } from 'components/serverSideRendered/observerHoldingContent';
