@@ -20,7 +20,7 @@ libraryDependencies += "org.vafer" % "jdeb" % "1.10" artifacts (Artifact("jdeb",
 
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.2")
 
-addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.14.5")
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.14.6")
 
 addSbtPlugin("com.github.sbt" % "sbt-native-packager" % "1.9.16")
 //Fix for sbt-native-packager 1.9.11 upgrade errors
