@@ -82,6 +82,7 @@ export function StripeCardForm({
 						)}
 					/>
 				</div>
+				{/* <Checkbox id="test" label="test textbox" checked={false} name="test" /> */}
 				{recaptcha && (
 					<ElementDecorator
 						id="robot-checkbox"
