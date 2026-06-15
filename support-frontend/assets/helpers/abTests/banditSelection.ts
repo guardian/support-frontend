@@ -1,4 +1,3 @@
-import type { Methodology } from 'helpers/globalsAndSwitches/landingPageSettings';
 import type { ClientBanditData } from 'helpers/globalsAndSwitches/settings';
 import { randomNumber } from './helpers';
 
@@ -145,7 +144,7 @@ export function selectVariantForTest<VariantType extends { name: string }>(
 	test: {
 		name: string;
 		variants: VariantType[];
-		methodologies?: Methodology[];
+		methodologies?: Array<{ name: string; testName?: string }>;
 	},
 	mvtId: number,
 	banditData: ClientBanditData[],
@@ -182,11 +181,8 @@ export function selectVariantForTest<VariantType extends { name: string }>(
 	// Select variant based on methodology
 	let variant: VariantType | undefined;
 	if (methodology.name === 'EpsilonGreedyBandit') {
-		variant = selectVariantUsingEpsilonGreedy(
-			test,
-			methodology.epsilon,
-			testBanditData,
-		);
+		const epsilon = (methodology as { epsilon?: number }).epsilon ?? 0;
+		variant = selectVariantUsingEpsilonGreedy(test, epsilon, testBanditData);
 	} else if (methodology.name === 'Roulette') {
 		variant = selectVariantUsingRoulette(test, testBanditData);
 	} else {

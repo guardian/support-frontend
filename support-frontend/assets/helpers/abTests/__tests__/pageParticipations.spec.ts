@@ -757,10 +757,7 @@ describe('getPageParticipations', () => {
 			test.methodologies = [
 				{ name: 'EpsilonGreedyBandit', testName: 'test-1-ABTest' },
 			];
-			const config = createConfig(
-				[test],
-				'^/.*/(contribute|checkout|one-time-checkout)(/.*)?$',
-			);
+			const config = createConfig([test], '^/.*/contribute(/.*)?$');
 
 			// Simulate landing page visit
 			mockLocation('/uk/contribute');
@@ -780,11 +777,9 @@ describe('getPageParticipations', () => {
 
 			const checkoutResult = await getPageParticipations(config);
 
-			// Should return same variant and tracking name from session storage
+			// Should return same variant from session storage but not track on checkout
 			expect(checkoutResult.variant).toEqual(landingResult.variant);
-			expect(checkoutResult.participations).toEqual(
-				landingResult.participations,
-			);
+			expect(checkoutResult.participations).toEqual({});
 		});
 	});
 
@@ -797,10 +792,7 @@ describe('getPageParticipations', () => {
 			test.methodologies = [
 				{ name: 'EpsilonGreedyBandit', testName: 'test-1-ABTest' },
 			];
-			const config = createConfig(
-				[test],
-				'^/.*/(contribute|checkout|one-time-checkout)(/.*)?$',
-			);
+			const config = createConfig([test], '^/.*/contribute(/.*)?$');
 
 			// Direct checkout entry (no session storage)
 			mockLocation('/uk/checkout');
@@ -810,10 +802,9 @@ describe('getPageParticipations', () => {
 
 			const result = await getPageParticipations(config);
 
-			// Should select variant and track it
-			// Note: without a custom selectVariant function, it falls back to test.name
+			// Should select variant but not track on checkout
 			expect(result.variant).toBeDefined();
-			expect(result.participations).toEqual({ 'test-1': 'control' });
+			expect(result.participations).toEqual({});
 			expect(mockSetSessionParticipations).toHaveBeenCalledWith(
 				{ 'test-1': 'control' },
 				'landingPageParticipations',

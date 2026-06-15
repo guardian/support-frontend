@@ -2,7 +2,6 @@ import { ProductTierLabel } from 'helpers/productCatalog';
 import { getSettings } from '../globalsAndSwitches/globals';
 import type {
 	DefaultProductSelection,
-	LandingPageTest,
 	LandingPageVariant,
 } from '../globalsAndSwitches/landingPageSettings';
 import { selectVariantForTest } from './banditSelection';
@@ -102,7 +101,7 @@ export const landingPageTestConfig: Omit<
 	PageParticipationsConfig<LandingPageVariant>,
 	'tests'
 > = {
-	pageRegex: '^/.*/(contribute|checkout|one-time-checkout)(/.*)?$',
+	pageRegex: '^/.*/contribute(/.*)?$',
 	forceParamName: 'force-landing-page',
 	sessionStorageKey: LANDING_PAGE_PARTICIPATIONS_KEY,
 	getVariantName: (variant) => variant.name,
@@ -116,11 +115,10 @@ export function getLandingPageTestConfig(): PageParticipationsConfig<LandingPage
 		...landingPageTestConfig,
 		tests: getSettings().landingPageTests ?? [],
 		selectVariant: (test, mvtId) => {
-			const landingPageTest = test as unknown as LandingPageTest;
 			const banditData = getSettings().banditData ?? [];
 
 			// Use new client-side bandit selection logic
-			const result = selectVariantForTest(landingPageTest, mvtId, banditData);
+			const result = selectVariantForTest(test, mvtId, banditData);
 
 			if (result) {
 				return result;

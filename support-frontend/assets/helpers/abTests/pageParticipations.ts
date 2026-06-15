@@ -128,7 +128,12 @@ export async function getPageParticipations<Variant>(
 	if (urlParticipations) {
 		const variant = getVariant(urlParticipations, tests);
 		setSessionParticipations(urlParticipations, sessionStorageKey);
-		return { participations: urlParticipations, variant };
+		return {
+			participations: trackParticipation
+				? urlParticipations
+				: ({} as Participations),
+			variant,
+		};
 	}
 
 	// Is there already a participation in session storage?
@@ -137,10 +142,12 @@ export async function getPageParticipations<Variant>(
 		sessionParticipations &&
 		Object.entries(sessionParticipations).length > 0
 	) {
-		// Validate and prune session participations: drop entries whose key matches no current test name or methodology testName override
+		// Validate and prune session participations: drop entries whose key
+		// matches no current test name or methodology testName override, or whose
+		// variant name does not exist in that test's variants.
 		const validParticipations: Participations = {};
 		for (const [key, value] of Object.entries(sessionParticipations)) {
-			const isValid = tests.some((test) => {
+			const matchingTest = tests.find((test) => {
 				// Check if key matches test.name
 				if (key === test.name) {
 					return true;
@@ -151,7 +158,7 @@ export async function getPageParticipations<Variant>(
 				}
 				return false;
 			});
-			if (isValid) {
+			if (matchingTest?.variants.some((v) => getVariantName(v) === value)) {
 				validParticipations[key] = value;
 			}
 		}
@@ -159,9 +166,12 @@ export async function getPageParticipations<Variant>(
 		// If nothing valid remains, continue to re-selection
 		if (Object.entries(validParticipations).length > 0) {
 			const variant = getVariant(validParticipations, tests);
-			if (variant) {
-				return { participations: validParticipations, variant };
-			}
+			return {
+				participations: trackParticipation
+					? validParticipations
+					: ({} as Participations),
+				variant,
+			};
 		}
 	}
 
