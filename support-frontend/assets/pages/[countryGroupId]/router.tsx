@@ -172,6 +172,26 @@ const router = createBrowserRouter([
 					},
 				},
 				{
+					path: `/${supportRegionId}/join`,
+					lazy: async () => {
+						const { Join } = await import(
+							/* webpackChunkName: "Join" */ './join'
+						);
+						return {
+							Component: function JoinRoute() {
+								const { landing } = useRootLoaderData();
+								console.debug("landing", landing);
+								return (
+									<Join
+										supportRegionId={supportRegionId}
+										landingPageSettings={landing.variant}
+									/>
+								);
+							},
+						};
+					},
+				},
+				{
 					path: `/${supportRegionId}/guardian-ad-lite`,
 					lazy: async () => {
 						const { GuardianAdLiteLanding } = await import(

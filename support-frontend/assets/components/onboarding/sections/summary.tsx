@@ -11,6 +11,11 @@ import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
 import { useEffect } from 'react';
+import { OnboardingSteps } from 'components/onboarding/onboardingSteps';
+import type {
+	CurrentUserState,
+	HandleStepNavigationFunction,
+} from 'components/onboarding/onboardingTypes';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
 	getNewsletterSubscriptionById,
@@ -25,12 +30,7 @@ import {
 } from 'helpers/productPrice/billingPeriods';
 import type { CsrfState } from 'helpers/types/csrf';
 import { getThankYouOrder } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
-import type {
-	CurrentUserState,
-	HandleStepNavigationFunction,
-	OnboardingProps,
-} from 'pages/[countryGroupId]/components/onboardingComponent';
-import { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
+import type { OnboardingProps } from 'pages/[countryGroupId]/components/onboardingComponent';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import ContentBox from '../contentBox';
@@ -68,8 +68,10 @@ const paymentMethodContainer = css`
 	gap: ${space[1]}px;
 `;
 
+type OnboardingSummaryUserState = CurrentUserState | 'inviteeUserRegistered';
+
 const onboardingSummaryCopyMapping: Record<
-	CurrentUserState,
+	OnboardingSummaryUserState,
 	{ title: string; description: string }
 > = {
 	existingUserSignedIn: {
@@ -86,6 +88,11 @@ const onboardingSummaryCopyMapping: Record<
 		description:
 			'Your account is set up and ready to go. Now you can explore your exclusive benefits.',
 	},
+	inviteeUserRegistered: {
+		title: 'You’re all set!',
+		description:
+			'You can now enjoy all the benefits and access of Digital plus.',
+	},
 };
 
 export function OnboardingSummarySuccessfulSignIn({
@@ -95,7 +102,7 @@ export function OnboardingSummarySuccessfulSignIn({
 	csrf,
 }: {
 	handleStepNavigation: HandleStepNavigationFunction;
-	userState: CurrentUserState;
+	userState: OnboardingSummaryUserState;
 	userNewslettersSubscriptions: NewsletterSubscription[] | null;
 	csrf: CsrfState;
 }) {
@@ -255,10 +262,10 @@ function OnboardingSummary({
 	const paymentMethodCopy = isDirectDebit
 		? 'Direct Debit'
 		: isPaypal
-		? 'PayPal'
-		: isStripeCard
-		? 'Credit/Debit card'
-		: 'Your selected payment method';
+			? 'PayPal'
+			: isStripeCard
+				? 'Credit/Debit card'
+				: 'Your selected payment method';
 
 	const paymentMethod =
 		order?.accountNumber && isDirectDebit

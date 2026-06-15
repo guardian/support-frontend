@@ -83,6 +83,7 @@ export {
 	androidAppUrl,
 	getDailyEditionUrl,
 	getSignoutUrl,
+	getManageUrl,
 	getManageSubsUrl,
 	getHelpCentreUrl,
 	feastAppUrl,

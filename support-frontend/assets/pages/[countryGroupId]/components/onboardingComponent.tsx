@@ -5,6 +5,12 @@ import type { SupportRegionId } from '@modules/internationalisation/countryGroup
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { useSearchParams } from 'react-router-dom';
 import ContentBox from 'components/onboarding/contentBox';
+import { OnboardingSteps } from 'components/onboarding/onboardingSteps';
+import type {
+	CurrentUserState,
+	HandleStepNavigationFunction,
+	OnboardingMessageEventData,
+} from 'components/onboarding/onboardingTypes';
 import { OnboardingAppsDiscovery } from 'components/onboarding/sections/appsDiscovery';
 import { OnboardingCompleted } from 'components/onboarding/sections/completed';
 import OnboardingSummary, {
@@ -25,38 +31,16 @@ import { getUser } from 'helpers/user/user';
 import type { UserType } from 'helpers/user/userType';
 import OnboardingLayout from '../../../components/onboarding/layout';
 import { getThankYouOrder } from '../checkout/helpers/sessionStorage';
-import { OnboardingSteps } from './onboardingSteps';
 
 const identityFrameStyles = css`
 	overflow: hidden;
 	border-radius: ${space[2]}px;
 `;
 
-type UserStateChange = 'userSignedIn' | 'userRegistered';
-type HrefIframeAllowList = 'recaptchaPrivacyPolicy' | 'recaptchaTerms';
-
-type MessageEventData =
-	| {
-			type: 'iframeHeightChange';
-			context: 'supporterOnboarding';
-			value: number;
-	  }
-	| {
-			type: 'userStateChange';
-			context: 'supporterOnboarding';
-			value: UserStateChange;
-	  }
-	| {
-			type: 'iframedLinkClicked';
-			context: 'supporterOnboarding';
-			value: HrefIframeAllowList;
-	  };
-
-export type CurrentUserState = UserStateChange | 'existingUserSignedIn';
-
-export type HandleStepNavigationFunction = (
-	targetStep: OnboardingSteps,
-) => void;
+export type {
+	CurrentUserState,
+	HandleStepNavigationFunction,
+} from 'components/onboarding/onboardingTypes';
 
 export type OnboardingProductKey = Extract<ActiveProductKey, 'SupporterPlus'>;
 
@@ -127,14 +111,12 @@ function OnboardingComponent({
 	const guestUser = !isSignedIn && identityUserType === 'new';
 
 	const documentLocation = document.location;
-	const iframeOrigin = `${
-		documentLocation.protocol
-	}//${documentLocation.hostname.replace('support', 'profile')}`;
+	const iframeOrigin = `${documentLocation.protocol
+		}//${documentLocation.hostname.replace('support', 'profile')}`;
 
 	const getIframeTargetUrl = (email: string) => {
 		const iframeTargetUrl = new URL(
-			`${iframeOrigin}${
-				guestUser ? '/iframed/register/email' : '/iframed/signin'
+			`${iframeOrigin}${guestUser ? '/iframed/register/email' : '/iframed/signin'
 			}`,
 		);
 
@@ -221,7 +203,9 @@ function OnboardingComponent({
 
 	// Handle iframe message from the identity iframe
 	useEffect(() => {
-		const receiveIframeMessage = (event: MessageEvent<MessageEventData>) => {
+		const receiveIframeMessage = (
+			event: MessageEvent<OnboardingMessageEventData>,
+		) => {
 			if (event.origin !== iframeOrigin) {
 				return;
 			}
@@ -266,16 +250,11 @@ function OnboardingComponent({
 
 	return (
 		<OnboardingLayout
+			flow="supporter"
 			scrollToTopRef={scrollToTopRef}
 			onboardingStep={currentStep ?? OnboardingSteps.Summary}
-			supportRegionId={supportRegionId}
-			csrf={csrf}
-			payment={payment}
-			productKey={productKey}
-			ratePlanKey={ratePlanKey}
-			promotion={promotion}
 			landingPageSettings={landingPageSettings}
-			identityUserType={identityUserType}
+			productKey={productKey}
 		>
 			{currentStep === OnboardingSteps.Summary && (
 				<>
@@ -314,13 +293,13 @@ function OnboardingComponent({
 			)}
 			{(currentStep === OnboardingSteps.GuardianApp ||
 				currentStep === OnboardingSteps.FeastApp) && (
-				<OnboardingAppsDiscovery
-					hasMobileAppDownloaded={hasMobileAppDownloaded}
-					hasFeastMobileAppDownloaded={hasFeastMobileAppDownloaded}
-					onboardingStep={currentStep}
-					handleStepNavigation={handleStepNavigation}
-				/>
-			)}
+					<OnboardingAppsDiscovery
+						hasMobileAppDownloaded={hasMobileAppDownloaded}
+						hasFeastMobileAppDownloaded={hasFeastMobileAppDownloaded}
+						onboardingStep={currentStep}
+						handleStepNavigation={handleStepNavigation}
+					/>
+				)}
 			{currentStep === OnboardingSteps.Completed && (
 				<OnboardingCompleted
 					productKey={productKey}
