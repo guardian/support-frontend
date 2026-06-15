@@ -3,7 +3,7 @@ import { storage } from '@guardian/libs';
 import { space } from '@guardian/source/foundations';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import ContentBox from 'components/onboarding/contentBox';
 import { OnboardingAppsDiscovery } from 'components/onboarding/sections/appsDiscovery';
 import { OnboardingCompleted } from 'components/onboarding/sections/completed';
@@ -318,6 +318,7 @@ function OnboardingComponent({
 					hasMobileAppDownloaded={hasMobileAppDownloaded}
 					hasFeastMobileAppDownloaded={hasFeastMobileAppDownloaded}
 					onboardingStep={currentStep}
+					supporterRegion={supportRegionId}
 					handleStepNavigation={handleStepNavigation}
 				/>
 			)}

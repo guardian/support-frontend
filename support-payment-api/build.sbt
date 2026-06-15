@@ -81,10 +81,3 @@ Debian / packageName := name.value
 packageSummary := "Payment API Play App"
 packageDescription := """API for reader revenue payments"""
 maintainer := "Reader Revenue <reader.revenue.dev@theguardian.com>"
-
-riffRaffUploadArtifactBucket := Option("riffraff-artifact")
-riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffManifestProjectName := "support:payment-api-mono"
-riffRaffPackageType := (Debian / packageBin).value
-riffRaffArtifactResources += (file("cdk/cdk.out/Payment-API-PROD.template.json"), "cfn/Payment-API-PROD.template.json")
-riffRaffArtifactResources += (file("cdk/cdk.out/Payment-API-CODE.template.json"), "cfn/Payment-API-CODE.template.json")

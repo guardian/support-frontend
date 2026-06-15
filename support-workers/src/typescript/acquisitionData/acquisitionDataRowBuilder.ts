@@ -183,22 +183,22 @@ function paymentFrequencyFromBillingPeriod(
 function paymentProviderFromPaymentMethod(
 	paymentMethod: PaymentMethod,
 ): AcquisitionPaymentProvider {
-	if (paymentMethod.Type === 'CreditCardReferenceTransaction') {
-		if (paymentMethod.StripePaymentType === 'StripeApplePay') {
-			return 'STRIPE_APPLE_PAY';
-		}
-		if (paymentMethod.StripePaymentType === 'StripePaymentRequestButton') {
-			return 'STRIPE_PAYMENT_REQUEST_BUTTON';
-		}
-		return 'STRIPE';
+	switch (paymentMethod.Type) {
+		case 'CreditCardReferenceTransaction':
+			if (paymentMethod.StripePaymentType === 'StripeApplePay') {
+				return 'STRIPE_APPLE_PAY';
+			}
+			if (paymentMethod.StripePaymentType === 'StripePaymentRequestButton') {
+				return 'STRIPE_PAYMENT_REQUEST_BUTTON';
+			}
+			return 'STRIPE';
+		case 'PayPal':
+		case 'PayPalCompletePaymentsWithBAID':
+		case 'PayPalCompletePayments':
+			return 'PAYPAL';
+		case 'BankTransfer':
+			return 'GOCARDLESS';
 	}
-	if (
-		paymentMethod.Type === 'PayPal' ||
-		paymentMethod.Type === 'PayPalCompletePaymentsWithBAID'
-	) {
-		return 'PAYPAL';
-	}
-	return 'GOCARDLESS';
 }
 
 function getAbTests(data: AcquisitionData): AbTest[] {

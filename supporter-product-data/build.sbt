@@ -1,5 +1,4 @@
 import LibraryVersions.{awsClientVersion2, circeVersion}
-import com.gu.riffraff.artifact.RiffRaffArtifact.autoImport.riffRaffManifestProjectName
 import sbt.Keys.libraryDependencies
 
 version := "0.1-SNAPSHOT"
@@ -19,11 +18,6 @@ libraryDependencies ++= Seq(
   "com.jayway.jsonpath" % "json-path" % "2.8.0",
 )
 
-riffRaffPackageType := assembly.value
-riffRaffManifestProjectName := s"support:supporter-product-data"
-riffRaffUploadArtifactBucket := Option("riffraff-artifact")
-riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffArtifactResources += (file("supporter-product-data/cloudformation/cfn.yaml"), "cfn/cfn.yaml")
 assemblyJarName := s"${name.value}.jar"
 
 lazy val deployToCode =
