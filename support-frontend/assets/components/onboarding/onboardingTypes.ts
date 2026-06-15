@@ -7,7 +7,7 @@ export type OnboardingFlow = 'supporter' | 'invitee';
 
 export type OnboardingFlowStep = OnboardingSteps | OnboardingInviteeSteps;
 
-export type UserStateChange = 'userSignedIn' | 'userRegistered';
+type UserStateChange = 'userSignedIn' | 'userRegistered';
 
 type HrefIframeAllowList = 'recaptchaPrivacyPolicy' | 'recaptchaTerms';
 

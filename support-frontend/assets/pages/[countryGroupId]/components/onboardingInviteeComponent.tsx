@@ -23,7 +23,7 @@ import * as cookie from 'helpers/storage/cookie';
 import type { CsrfState } from 'helpers/types/csrf';
 import { getUser } from 'helpers/user/user';
 
-export interface OnboardingInviteeProps {
+interface OnboardingInviteeProps {
 	supportRegionId: SupportRegionId;
 	csrf: CsrfState;
 	invitation: OnboardingInviteeInvitation;

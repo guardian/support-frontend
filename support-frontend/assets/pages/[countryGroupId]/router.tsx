@@ -180,7 +180,6 @@ const router = createBrowserRouter([
 						return {
 							Component: function JoinRoute() {
 								const { landing } = useRootLoaderData();
-								console.debug("landing", landing);
 								return (
 									<Join
 										supportRegionId={supportRegionId}

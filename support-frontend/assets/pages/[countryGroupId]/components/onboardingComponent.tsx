@@ -37,11 +37,6 @@ const identityFrameStyles = css`
 	border-radius: ${space[2]}px;
 `;
 
-export type {
-	CurrentUserState,
-	HandleStepNavigationFunction,
-} from 'components/onboarding/onboardingTypes';
-
 export type OnboardingProductKey = Extract<ActiveProductKey, 'SupporterPlus'>;
 
 export interface OnboardingProps {
