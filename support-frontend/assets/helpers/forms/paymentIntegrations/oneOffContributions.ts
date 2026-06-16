@@ -11,10 +11,15 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { addQueryParamsToURL } from 'helpers/urls/url';
 import { userTypeSchema } from 'helpers/user/userType';
 import { logException } from 'helpers/utilities/logger';
-import type { PaymentResult, StripePaymentMethod } from './readerRevenueApis';
+import type { StripePaymentMethod, StripePaymentResult } from './readerRevenueApis';
 import { PaymentSuccess } from './readerRevenueApis';
 
 // ----- Types ----- //
+type PaymentResult =
+	| { type: 'stripe'; result: StripePaymentResult }
+	| { type: 'stripe-paypal'; result: StripePaymentResult }
+	| { type: 'paypal'; result: CreatePayPalPaymentResponse };
+
 type UnexpectedError = {
 	type: 'unexpectedError';
 	error: string;
@@ -132,7 +137,7 @@ const responseSchema = z.discriminatedUnion('type', [
 
 function paymentResultFromObject(
 	json: Record<string, unknown>,
-): Promise<PaymentResult> {
+): Promise<StripePaymentResult> {
 	const response = responseSchema.parse(json);
 	if (response.type === 'error') {
 		const failureReason: ErrorReason = isErrorReason(
@@ -166,7 +171,7 @@ const postToPaymentApi = (
 // https://github.com/guardian/payment-api/blob/master/src/main/resources/routes#L17
 const handleOneOffExecution = (
 	result: Promise<Record<string, unknown>>,
-): Promise<PaymentResult> => logPromise(result).then(paymentResultFromObject);
+): Promise<StripePaymentResult> => logPromise(result).then(paymentResultFromObject);
 
 // Create a Stripe Payment Request, and if necessary perform 3DS auth and confirmation steps
 const processStripePaymentIntentRequest = (
@@ -205,46 +210,26 @@ const processStripePaymentIntentRequest = (
 				return _createIntentResponse;
 			},
 		),
-	);
+	).then(result => ({type: 'stripe', result }));
 
 // Create a Stripe Payment Intent Request for Paypal
 const processStripePaymentIntentRequestForPaypal = (
 	data: CreateStripePaymentIntentRequest,
-	handleStripePaypal: (clientSecret: string) => Promise<PaymentIntentResult>,
+	// handleStripePaypal: (clientSecret: string) => Promise<PaymentIntentResult>,
 ): Promise<PaymentResult> =>
 	handleOneOffExecution(
 		postToPaymentApi(data, '/contribute/one-off/stripe/create-payment').then(
 			(createIntentResponse) => {
 				const _createIntentResponse =
 					createIntentResponse as CreateIntentResponse;
+				// TODO - handle error here?
 				if (_createIntentResponse.type === 'requiresconfirmation') {
-					return handleStripePaypal(
-						_createIntentResponse.data.clientSecret,
-					).then((authResult: PaymentIntentResult) => {
-						if (authResult.error) {
-							trackComponentClick('stripe-paypal-failure');
-							console.log(authResult.error);
-							console.log('stripe-paypal-failure');
-							return {
-								type: 'error',
-								error: {
-									failureReason: 'card_authentication_error',
-								},
-							};
-						}
-
-						trackComponentClick('stripe-paypal-success');
-						return postToPaymentApi(
-							{ ...data, paymentIntentId: authResult.paymentIntent.id },
-							'/contribute/one-off/stripe/confirm-payment',
-						);
-					});
 				}
 
 				return _createIntentResponse;
 			},
 		),
-	);
+	).then((result) => ({ type: 'stripe', result }));
 
 // Object is expected to have structure:
 // { type: "error", error: PayPalApiError }, or
@@ -287,7 +272,7 @@ function createPayPalPaymentResponseFromObject(
 
 async function postOneOffPayPalCreatePaymentRequest(
 	data: CreatePaypalPaymentData,
-): Promise<CreatePayPalPaymentResponse> {
+): Promise<PaymentResult> {
 	try {
 		const res = await logPromise(
 			fetchJson(
@@ -295,9 +280,9 @@ async function postOneOffPayPalCreatePaymentRequest(
 				requestOptions(data, 'omit', 'POST', null),
 			),
 		);
-		return createPayPalPaymentResponseFromObject(res);
+		return { type: 'paypal', result: createPayPalPaymentResponseFromObject(res) };
 	} catch (err) {
-		return unexpectedError(`error creating a PayPal payment: ${err as string}`);
+		return { type: 'paypal', result: unexpectedError(`error creating a PayPal payment: ${err as string}`) };
 	}
 }
 
@@ -305,4 +290,5 @@ export {
 	postOneOffPayPalCreatePaymentRequest,
 	processStripePaymentIntentRequest,
 	processStripePaymentIntentRequestForPaypal,
+	type PaymentResult,
 };

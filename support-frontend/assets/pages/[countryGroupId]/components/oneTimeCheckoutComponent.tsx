@@ -28,6 +28,7 @@ import { PaymentElement } from '@stripe/react-stripe-js';
 import type {
 	ExpressPaymentType,
 	PaymentMethodResult,
+	StripeError,
 } from '@stripe/stripe-js';
 import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
@@ -46,6 +47,7 @@ import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import type {
 	CreatePayPalPaymentResponse,
 	CreateStripePaymentIntentRequest,
+	PaymentResult,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import {
 	postOneOffPayPalCreatePaymentRequest,
@@ -53,7 +55,7 @@ import {
 	processStripePaymentIntentRequestForPaypal,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import type {
-	PaymentResult,
+	StripePaymentResult,
 	StripePaymentMethod,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod as LegacyPaymentMethod } from 'helpers/forms/paymentMethods';
@@ -440,7 +442,7 @@ export function OneTimeCheckoutComponent({
 				setPaymentMethodError('Please select a payment method');
 			}
 
-			let paymentResult;
+			let paymentResult: PaymentResult | undefined;
 			if (paymentMethod === 'PayPal') {
 				paymentResult = await postOneOffPayPalCreatePaymentRequest({
 					currency: currencyKey,
@@ -526,7 +528,9 @@ export function OneTimeCheckoutComponent({
 					return stripe.handleCardAction(clientSecret);
 				};
 
-				const handlePaypal = (clientSecret: string) => {
+				const handlePaypal = (
+					clientSecret: string,
+				): Promise<{ error: StripeError }> => {
 					trackComponentLoad('stripe-Paypal');
 					return stripe.confirmPayment({
 						elements,
@@ -610,9 +614,10 @@ export function OneTimeCheckoutComponent({
 							status: 'success', // retry pending mechanism not applied to one-time payments
 						});
 
+						// do not call handlePaypal and do not redirect to paypal yet
 						paymentResult = await processStripePaymentIntentRequestForPaypal(
 							stripeData,
-							handlePaypal,
+							// handlePaypal,
 						);
 					} else {
 						paymentResult = await processStripePaymentIntentRequest(
@@ -623,6 +628,7 @@ export function OneTimeCheckoutComponent({
 				}
 			}
 
+			// paymentResult could be the result of Stripe or Paypal
 			if (paymentResult) {
 				setThankYouOrder({
 					firstName: '',
@@ -641,14 +647,17 @@ export function OneTimeCheckoutComponent({
 					thankYouUrlSearchParams,
 				);
 				if (nextStepRoute) {
+					// call the stripe paypal redirect function instead
 					window.location.href = nextStepRoute;
 				} else {
 					setErrorMessage('Sorry, something went wrong.');
 					if (
-						'paymentStatus' in paymentResult &&
-						paymentResult.paymentStatus === 'failure'
+						paymentResult.type === 'stripe' &&
+						paymentResult.result.paymentStatus === 'failure'
+						// 'paymentStatus' in paymentResult &&
+						// paymentResult.paymentStatus === 'failure'
 					) {
-						setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
+						setErrorContext(appropriateErrorMessage(paymentResult.result.error ?? ''));
 					}
 					setIsProcessingPayment(false);
 				}
@@ -659,20 +668,28 @@ export function OneTimeCheckoutComponent({
 	};
 
 	function paymentResultThankyouRoute(
-		paymentResult: PaymentResult | CreatePayPalPaymentResponse | undefined,
+		paymentResult: PaymentResult,
+		// paymentResult: StripePaymentResult | CreatePayPalPaymentResponse | undefined,
 		supportRegionId: SupportRegionId,
 		thankYouUrlSearchParams: URLSearchParams,
 	): string | undefined {
-		if (paymentResult) {
-			if ('type' in paymentResult && paymentResult.type === 'success') {
-				return paymentResult.data.approvalUrl;
-			} else if (
-				'paymentStatus' in paymentResult &&
-				paymentResult.paymentStatus === 'success'
-			) {
-				return `/${supportRegionId}/thank-you?${thankYouUrlSearchParams.toString()}`;
-			}
+		if (paymentResult.type === 'paypal' && paymentResult.result.type === 'success') {
+			// redirect to paypal approval url
+			return paymentResult.result.data.approvalUrl;
+		} else if (paymentResult.type === 'stripe' && paymentResult.result.paymentStatus === 'success') {
+			return `/${supportRegionId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 		}
+		// if (paymentResult) {
+			// if ('type' in paymentResult && paymentResult.type === 'success') {
+			// 	// Paypal redirect
+			// 	return paymentResult.data.approvalUrl;
+			// } else if (
+			// 	'paymentStatus' in paymentResult &&
+			// 	paymentResult.paymentStatus === 'success'
+			// ) {
+			// 	return `/${supportRegionId}/thank-you?${thankYouUrlSearchParams.toString()}`;
+			// }
+		// }
 
 		return;
 	}
