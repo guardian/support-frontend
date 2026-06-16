@@ -69,6 +69,8 @@ class StripeController(
             case response: StripePaymentIntentsApiResponse.Success => Ok(ResultBody.Success(response))
             case requiresAction: StripePaymentIntentsApiResponse.RequiresAction =>
               Ok(ResultBody.RequiresAction(requiresAction))
+            case requiresConfirmation: StripePaymentIntentsApiResponse.RequiresConfirmation =>
+              Ok(ResultBody.RequiresConfirmation(requiresConfirmation))
           },
         )
     }

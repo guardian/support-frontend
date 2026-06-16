@@ -128,7 +128,9 @@ class StripeBackend(
               EitherT.fromEither(Right(StripePaymentIntentsApiResponse.RequiresAction(paymentIntent.getClientSecret)))
             case "requires_confirmation" =>
               // Used for paypal
-              EitherT.fromEither(Right(StripePaymentIntentsApiResponse.RequiresAction(paymentIntent.getClientSecret)))
+              EitherT.fromEither(
+                Right(StripePaymentIntentsApiResponse.RequiresConfirmation(paymentIntent.getClientSecret)),
+              )
 
             case "succeeded" =>
               // Payment complete without the need for 3DS - do post-payment tasks and return success to client
@@ -274,6 +276,7 @@ class StripeBackend(
       charge,
       clientBrowserInfo.countrySubdivisionCode,
       data.acquisitionData.postalCode,
+      data.acquisitionData.countryId,
       PaymentProvider.fromStripePaymentMethod(data.paymentData.stripePaymentMethod),
     )
 
