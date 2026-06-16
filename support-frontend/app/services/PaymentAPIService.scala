@@ -82,7 +82,7 @@ class PaymentAPIService(wsClient: WSClient, val paymentAPIUrl: String)(implicit 
     val queryStringParameters = if (isTestUser) Seq("mode" -> "test") else Seq()
 
     wsClient
-      .url(payPalExecutePaymentEndpoint)
+      .url(url)
       .withQueryStringParameters(queryStringParameters: _*)
       .withHttpHeaders(headers: _*)
       .withBody(Json.toJson(data))
