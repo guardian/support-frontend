@@ -115,6 +115,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "enableTooledStudentLandingPage" : {
           |        "description" : "Enable tooled student landing page",
           |        "state" : "On"
+          |      },
+          |      "enableCanadaTaxExclusion" : {
+          |        "description" : "Canada Tax Exclusive Rate Plans",
+          |        "state" : "Off"
           |      }
           |    }
           |  },
