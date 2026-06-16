@@ -13,6 +13,7 @@ import { userTypeSchema } from 'helpers/user/userType';
 import { logException } from 'helpers/utilities/logger';
 import type { PaymentResult, StripePaymentMethod } from './readerRevenueApis';
 import { PaymentSuccess } from './readerRevenueApis';
+import { Stripe } from '../paymentMethods';
 
 // ----- Types ----- //
 type UnexpectedError = {
@@ -217,12 +218,13 @@ const processStripePaymentIntentRequestForPaypal = (
 			(createIntentResponse) => {
 				const _createIntentResponse =
 					createIntentResponse as CreateIntentResponse;
-				if (_createIntentResponse.type === 'requiresaction') {
-					// Do 3DS auth and then send back to payment-api for payment confirmation
+				if (_createIntentResponse.type === 'requiresconfirmation') {
 					return handleStripePaypal(_createIntentResponse.data.clientSecret).then(
 						(authResult: PaymentIntentResult) => {
 							if (authResult.error) {
-								trackComponentClick('stripe-3ds-failure');
+								trackComponentClick('stripe-paypal-failure');
+								console.log(authResult.error);
+								console.log('stripe-paypal-failure')
 								return {
 									type: 'error',
 									error: {
@@ -231,7 +233,7 @@ const processStripePaymentIntentRequestForPaypal = (
 								};
 							}
 
-							trackComponentClick('stripe-3ds-success');
+							trackComponentClick('stripe-paypal-success');
 							return postToPaymentApi(
 								{ ...data, paymentIntentId: authResult.paymentIntent.id },
 								'/contribute/one-off/stripe/confirm-payment',
@@ -240,7 +242,6 @@ const processStripePaymentIntentRequestForPaypal = (
 					);
 				}
 
-				// No 3DS auth required
 				return _createIntentResponse;
 			},
 		),

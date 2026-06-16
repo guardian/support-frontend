@@ -24,6 +24,7 @@ import {
 	useElements,
 	useStripe,
 } from '@stripe/react-stripe-js';
+import { PaymentElement } from '@stripe/react-stripe-js';
 import type { ExpressPaymentType } from '@stripe/stripe-js';
 import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
@@ -112,7 +113,6 @@ import {
 	PaymentMethodSelector,
 } from './paymentMethod';
 import SimilarProductsConsent, { CONSENT_ID } from './SimilarProductsConsent';
-import { PaymentElement } from '@stripe/react-stripe-js';
 
 /**
  * We have not added StripeExpressCheckoutElement to the old PaymentMethod
@@ -236,6 +236,7 @@ function getAcquisitionData(
 	abParticipations: Participations,
 	billingPostcode: string,
 	coverTransactionCost: boolean,
+	countryId : IsoCountry,
 ): PaymentAPIAcquisitionData {
 	const referrerAcquisitionData = getReferrerAcquisitionData();
 	return derivePaymentApiAcquisitionData(
@@ -249,6 +250,7 @@ function getAcquisitionData(
 		},
 		abParticipations,
 		billingPostcode,
+		countryId,
 	);
 }
 
@@ -445,6 +447,7 @@ export function OneTimeCheckoutComponent({
 					abParticipations,
 					billingPostcode,
 					coverTransactionCost,
+					countryId,
 				);
 				// We've only created a payment at this point, and the user has to get through
 				// the PayPal flow on their site before we can actually try and execute the payment.
@@ -567,6 +570,7 @@ export function OneTimeCheckoutComponent({
 							abParticipations,
 							billingPostcode,
 							coverTransactionCost,
+							countryId,
 						),
 
 						publicKey: stripePublicKey,
@@ -579,6 +583,13 @@ export function OneTimeCheckoutComponent({
 							'acquisition_data',
 							encodeURIComponent(JSON.stringify(stripeData.acquisitionData)),
 						);
+						setThankYouOrder({
+							firstName: '',
+							email: email,
+							paymentMethod: paymentMethod,
+							status: 'success', // retry pending mechanism not applied to one-time payments
+						});
+
 						paymentResult = await processStripePaymentIntentRequestForPaypal(stripeData, handlePaypal);
 
 					} else {
@@ -658,6 +669,7 @@ export function OneTimeCheckoutComponent({
 			? `Pay ${simpleFormatAmount(currency, finalAmount)} with PayPal`
 			: `Support us with ${simpleFormatAmount(currency, finalAmount)}`
 		: 'Pay now';
+
 
 	return (
 		<GuardianPageLayout borderBox>
@@ -897,11 +909,14 @@ export function OneTimeCheckoutComponent({
 							</Legend>
 							{inStripePaymentElementVariant && (
 								<>
-									<PaymentElement 
-									//options= {{fields:{billingDetails: 'never'}}} 
-									onFocus={() => {
-										setPaymentMethod(Stripe);
-									}}
+									<PaymentElement
+										options={{
+											fields: { billingDetails: {address: 'if_required' } },
+											layout: { type: 'accordion', radios: 'always', spacedAccordionItems: true }
+										}}
+										onFocus={() => {
+											setPaymentMethod(Stripe);
+										}}
 									/>
 									<Recaptcha
 										onRecaptchaCompleted={(token) => {

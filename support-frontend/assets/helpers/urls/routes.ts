@@ -1,6 +1,7 @@
 // ----- Routes ----- //
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type {
 	FulfilmentOptions,
@@ -15,7 +16,6 @@ import {
 	getPaperOrigin,
 	isProd,
 } from './url';
-import { IsoCurrency } from '@modules/internationalisation/currency';
 
 const routes = {
 	recurringContribCheckout: '/contribute/recurring',
@@ -190,7 +190,7 @@ function payPalReturnUrl(
 function stripePayPalReturnUrl(
 	cgId: CountryGroupId,
 	email: string,
-	stripePublicKey: String,
+	stripePublicKey: string,
 	currency: IsoCurrency,
 	amount: number,
 
