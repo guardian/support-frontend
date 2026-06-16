@@ -13,7 +13,6 @@ import type { OneTimeCheckoutVariant } from '../../helpers/globalsAndSwitches/on
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
 import { OneTimeCheckoutComponent } from './components/oneTimeCheckoutComponent';
 
-
 const countryId = Country.detect();
 
 type OneTimeCheckoutProps = {

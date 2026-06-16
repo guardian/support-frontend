@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 
 import { viewId } from '@guardian/ophan-tracker-js/support';
-import { IsoCountry } from '@modules/internationalisation/country';
+import type { IsoCountry } from '@modules/internationalisation/country';
 import { testIsActive } from 'helpers/abTests/abtest';
 import { type Participations } from 'helpers/abTests/models';
 import { get as getCookie } from 'helpers/storage/cookie';
@@ -63,7 +63,7 @@ export type PaymentAPIAcquisitionData = {
 	queryParameters?: AcquisitionQueryParameters;
 	labels?: string[];
 	postalCode: string | null;
-	countryId: IsoCountry,
+	countryId: IsoCountry;
 };
 
 // ----- Setup ----- //

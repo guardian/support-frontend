@@ -25,7 +25,10 @@ import {
 	useStripe,
 } from '@stripe/react-stripe-js';
 import { PaymentElement } from '@stripe/react-stripe-js';
-import type { ExpressPaymentType } from '@stripe/stripe-js';
+import type {
+	ExpressPaymentType,
+	PaymentMethodResult,
+} from '@stripe/stripe-js';
 import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
@@ -73,7 +76,11 @@ import {
 	sendEventOneTimeCheckoutValue,
 	sendEventPaymentMethodSelected,
 } from 'helpers/tracking/quantumMetric';
-import { payPalCancelUrl, payPalReturnUrl, stripePayPalReturnUrl } from 'helpers/urls/routes';
+import {
+	payPalCancelUrl,
+	payPalReturnUrl,
+	stripePayPalReturnUrl,
+} from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import {
 	getSanitisedHtml,
@@ -236,7 +243,7 @@ function getAcquisitionData(
 	abParticipations: Participations,
 	billingPostcode: string,
 	coverTransactionCost: boolean,
-	countryId : IsoCountry,
+	countryId: IsoCountry,
 ): PaymentAPIAcquisitionData {
 	const referrerAcquisitionData = getReferrerAcquisitionData();
 	return derivePaymentApiAcquisitionData(
@@ -273,8 +280,8 @@ export function OneTimeCheckoutComponent({
 
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
-	const inStripePaymentElementVariant = abParticipations.stripePaymentElementTest === 'variant';
-
+	const inStripePaymentElementVariant =
+		abParticipations.stripePaymentElementTest === 'variant';
 
 	let customAmountsData;
 	const customAmountsParam = urlSearchParams.get('amounts');
@@ -464,7 +471,7 @@ export function OneTimeCheckoutComponent({
 				);
 			}
 
-			let paymentMethodResult;
+			let paymentMethodResult: PaymentMethodResult | undefined;
 			if (
 				paymentMethod === 'StripeExpressCheckoutElement' &&
 				stripe &&
@@ -491,7 +498,13 @@ export function OneTimeCheckoutComponent({
 				});
 			}
 
-			if (paymentMethod === 'Stripe' && stripe && paymentElement && recaptchaToken && elements) {
+			if (
+				paymentMethod === 'Stripe' &&
+				stripe &&
+				paymentElement &&
+				recaptchaToken &&
+				elements
+			) {
 				await elements.submit();
 				paymentMethodResult = await stripe.createPaymentMethod({
 					elements,
@@ -517,10 +530,16 @@ export function OneTimeCheckoutComponent({
 						elements,
 						clientSecret,
 						confirmParams: {
-							return_url: stripePayPalReturnUrl(countryGroupId, email, stripePublicKey, currencyKey, finalAmount),
+							return_url: stripePayPalReturnUrl(
+								countryGroupId,
+								email,
+								stripePublicKey,
+								currencyKey,
+								finalAmount,
+							),
 						},
 					});
-				}
+				};
 
 				if (paymentMethodResult.error) {
 					logException(
@@ -541,7 +560,6 @@ export function OneTimeCheckoutComponent({
 						);
 					}
 				} else {
-
 					const getStripePaymentMethod = (): StripePaymentMethod => {
 						if (paymentMethod === 'StripeExpressCheckoutElement') {
 							if (stripeExpressCheckoutPaymentType === 'apple_pay') {
@@ -590,11 +608,12 @@ export function OneTimeCheckoutComponent({
 							status: 'success', // retry pending mechanism not applied to one-time payments
 						});
 
-						paymentResult = await processStripePaymentIntentRequestForPaypal(stripeData, handlePaypal);
-
+						paymentResult = await processStripePaymentIntentRequestForPaypal(
+							stripeData,
+							handlePaypal,
+						);
 					} else {
 						paymentResult = await processStripePaymentIntentRequest(
-
 							stripeData,
 							handle3DS,
 						);
@@ -669,7 +688,6 @@ export function OneTimeCheckoutComponent({
 			? `Pay ${simpleFormatAmount(currency, finalAmount)} with PayPal`
 			: `Support us with ${simpleFormatAmount(currency, finalAmount)}`
 		: 'Pay now';
-
 
 	return (
 		<GuardianPageLayout borderBox>
@@ -911,8 +929,12 @@ export function OneTimeCheckoutComponent({
 								<>
 									<PaymentElement
 										options={{
-											fields: { billingDetails: {address: 'if_required' } },
-											layout: { type: 'accordion', radios: 'always', spacedAccordionItems: true }
+											fields: { billingDetails: { address: 'if_required' } },
+											layout: {
+												type: 'accordion',
+												radios: 'always',
+												spacedAccordionItems: true,
+											},
 										}}
 										onFocus={() => {
 											setPaymentMethod(Stripe);
@@ -928,7 +950,7 @@ export function OneTimeCheckoutComponent({
 									/>
 								</>
 							)}
-							{!inStripePaymentElementVariant &&
+							{!inStripePaymentElementVariant && (
 								<RadioGroup
 									role="radiogroup"
 									label="Select payment method"
@@ -937,7 +959,8 @@ export function OneTimeCheckoutComponent({
 								>
 									{validPaymentMethods.map((validPaymentMethod) => {
 										const selected = paymentMethod === validPaymentMethod;
-										const { label, icon } = paymentMethodData[validPaymentMethod];
+										const { label, icon } =
+											paymentMethodData[validPaymentMethod];
 
 										return (
 											<PaymentMethodSelector selected={selected}>
@@ -959,7 +982,9 @@ export function OneTimeCheckoutComponent({
 															setPaymentMethod(validPaymentMethod);
 															setPaymentMethodError(undefined);
 															// Track payment method selection with QM
-															sendEventPaymentMethodSelected(validPaymentMethod);
+															sendEventPaymentMethodSelected(
+																validPaymentMethod,
+															);
 														}}
 													/>
 												</PaymentMethodRadio>
@@ -998,7 +1023,7 @@ export function OneTimeCheckoutComponent({
 										);
 									})}
 								</RadioGroup>
-							}
+							)}
 						</FormSection>
 						<CoverTransactionCost
 							transactionCost={coverTransactionCost}

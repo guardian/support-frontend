@@ -13,7 +13,6 @@ import { userTypeSchema } from 'helpers/user/userType';
 import { logException } from 'helpers/utilities/logger';
 import type { PaymentResult, StripePaymentMethod } from './readerRevenueApis';
 import { PaymentSuccess } from './readerRevenueApis';
-import { Stripe } from '../paymentMethods';
 
 // ----- Types ----- //
 type UnexpectedError = {
@@ -219,27 +218,27 @@ const processStripePaymentIntentRequestForPaypal = (
 				const _createIntentResponse =
 					createIntentResponse as CreateIntentResponse;
 				if (_createIntentResponse.type === 'requiresconfirmation') {
-					return handleStripePaypal(_createIntentResponse.data.clientSecret).then(
-						(authResult: PaymentIntentResult) => {
-							if (authResult.error) {
-								trackComponentClick('stripe-paypal-failure');
-								console.log(authResult.error);
-								console.log('stripe-paypal-failure')
-								return {
-									type: 'error',
-									error: {
-										failureReason: 'card_authentication_error',
-									},
-								};
-							}
+					return handleStripePaypal(
+						_createIntentResponse.data.clientSecret,
+					).then((authResult: PaymentIntentResult) => {
+						if (authResult.error) {
+							trackComponentClick('stripe-paypal-failure');
+							console.log(authResult.error);
+							console.log('stripe-paypal-failure');
+							return {
+								type: 'error',
+								error: {
+									failureReason: 'card_authentication_error',
+								},
+							};
+						}
 
-							trackComponentClick('stripe-paypal-success');
-							return postToPaymentApi(
-								{ ...data, paymentIntentId: authResult.paymentIntent.id },
-								'/contribute/one-off/stripe/confirm-payment',
-							);
-						},
-					);
+						trackComponentClick('stripe-paypal-success');
+						return postToPaymentApi(
+							{ ...data, paymentIntentId: authResult.paymentIntent.id },
+							'/contribute/one-off/stripe/confirm-payment',
+						);
+					});
 				}
 
 				return _createIntentResponse;

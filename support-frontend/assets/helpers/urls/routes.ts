@@ -193,11 +193,12 @@ function stripePayPalReturnUrl(
 	stripePublicKey: string,
 	currency: IsoCurrency,
 	amount: number,
-
 ): string {
 	return `${getOrigin()}/${countryPath(
 		cgId,
-	)}/stripe/paypal/returnOneTime?email=${encodeURIComponent(email)}&stripePublicKey=${stripePublicKey}&currency=${currency}&amount=${amount}`;
+	)}/stripe/paypal/returnOneTime?email=${encodeURIComponent(
+		email,
+	)}&stripePublicKey=${stripePublicKey}&currency=${currency}&amount=${amount}`;
 }
 
 // ----- Exports ----- //
