@@ -27,7 +27,13 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.mparticle.MParticleClient
 import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
-import services.{CachedProductCatalogServiceProvider, PaymentAPIService, TestUserService, TickerService}
+import services.{
+  CachedProductCatalogServiceProvider,
+  CachedTaxRateService,
+  PaymentAPIService,
+  TestUserService,
+  TickerService,
+}
 import utils.FastlyGEOIP._
 import utils.{ObserverUtils, PaperValidation}
 import views.EmptyDiv
@@ -193,6 +199,11 @@ case class PaymentMethodConfigs(
     regularTestPayPalCompletePaymentsConfig: PayPalCompletePaymentsConfig,
 )
 
+case class PaymentApiConfig(
+    paymentApiUrl: String,
+    paymentApiPayPalEndpoint: String,
+)
+
 /** This class is only needed because you can't pass more than 22 arguments to a twirl template and passing both types
   * of product prices to the contributions template would exceed that limit.
   *
@@ -231,6 +242,7 @@ class Application(
     stage: Stage,
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
     cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
+    cachedTaxRateService: CachedTaxRateService,
     val supportUrl: String,
     tickerService: TickerService,
     mparticleClient: MParticleClient,
@@ -459,6 +471,9 @@ class Application(
     val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
 
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
+
+    val taxRates = cachedTaxRateService.get()
+
     // We want the canonical link to point to the geo-redirect page so that users arriving from
     // search will be redirected to the correct version of the page
     val canonicalLink = s"$canonicalUrl"
@@ -480,8 +495,10 @@ class Application(
         regularDefaultPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(false),
         regularTestPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(true),
       ),
-      paymentApiUrl = paymentAPIService.paymentAPIUrl,
-      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+      paymentApiConfig = PaymentApiConfig(
+        paymentApiUrl = paymentAPIService.paymentAPIUrl,
+        paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+      ),
       membersDataApiUrl = membersDataApiUrl,
       idUser = idUser,
       guestAccountCreationToken = guestAccountCreationToken,
@@ -491,6 +508,7 @@ class Application(
       serversideTests = serversideTests,
       allProductPrices = allProductPrices,
       productCatalog = productCatalog,
+      taxRates = taxRates,
       noIndex = noIndexing,
       canonicalLink = canonicalLink,
       tickerData = tickerService.getTickers(),
@@ -617,6 +635,7 @@ class Application(
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
+    val taxRates = cachedTaxRateService.get()
 
     val queryPromos =
       request.queryString
@@ -654,6 +673,7 @@ class Application(
         allProductPrices = allProductPrices,
         allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
         productCatalog = productCatalog,
+        taxRates = taxRates,
         user = request.user,
         tickerData = tickerService.getTickers(),
         homeDeliveryPostcodes = Some(PaperValidation.M25_POSTCODE_PREFIXES),

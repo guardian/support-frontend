@@ -142,4 +142,14 @@ trait Services {
       prodCachedProductCatalogService = new CachedProductCatalogService(actorSystem, prodProductCatalogService),
     )
 
+  lazy val cachedTaxRateService: CachedTaxRateService =
+    new CachedTaxRateService(
+      actorSystem,
+      new TaxRateService(
+        RequestRunners.futureRunner,
+        appConfig.taxRateConfig.baseUrl,
+        appConfig.taxRateConfig.apiKey,
+      ),
+    )
+
 }

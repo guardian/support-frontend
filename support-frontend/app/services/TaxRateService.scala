@@ -2,8 +2,6 @@ package services
 
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
-import com.gu.support.config.Stage
-import com.gu.support.config.Stages.{CODE, DEV}
 import io.circe.{Decoder, Json, JsonObject}
 import io.circe.generic.semiauto.deriveDecoder
 import org.apache.pekko.actor.ActorSystem
@@ -13,36 +11,32 @@ import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.util.control.NonFatal
 
-case class ProductCatalogServiceError(message: String) extends Throwable
-object ProductCatalogServiceError {
-  implicit val decoder: Decoder[ProductCatalogServiceError] = deriveDecoder
+case class TaxRateServiceError(message: String) extends Throwable
+object TaxRateServiceError {
+  implicit val decoder: Decoder[TaxRateServiceError] = deriveDecoder
 }
 
-trait ProductCatalogService extends WebServiceHelper[ProductCatalogServiceError] {
-  val client: FutureHttpClient
-  override val wsUrl: String
+class TaxRateService(client: FutureHttpClient, val wsUrl: String, apiKey: String)
+    extends WebServiceHelper[TaxRateServiceError] {
   override val httpClient: FutureHttpClient = client
   override val verboseLogging: Boolean = false
 
   def get(): Future[JsonObject] = {
-    get[JsonObject](endpoint = "product-catalog.json")
+    // TODO: replace hardcoded productKey/country with dynamic values
+    val body = Json.obj(
+      "productKey" -> Json.fromString("SupporterPlus"),
+      "country" -> Json.fromString("CA"),
+    )
+    postJson[JsonObject](endpoint = "tax-rates", data = body, headers = Map("x-api-key" -> apiKey))
   }
 }
 
-class ProdProductCatalogService(val client: FutureHttpClient) extends ProductCatalogService {
-  val wsUrl: String = "https://product-catalog.guardianapis.com"
-}
-
-class CodeProductCatalogService(val client: FutureHttpClient) extends ProductCatalogService {
-  val wsUrl: String = "https://product-catalog.code.dev-guardianapis.com"
-}
-
-class CachedProductCatalogService(system: ActorSystem, productCatalogService: ProductCatalogService)(implicit
+class CachedTaxRateService(system: ActorSystem, taxRateService: TaxRateService)(implicit
     ec: ExecutionContext,
 ) {
   private val json = new AtomicReference[JsonObject](JsonObject())
   private def update(): Future[Unit] = {
-    productCatalogService.get().map(json.set)
+    taxRateService.get().map(json.set)
   }
   def get(): JsonObject = json.get()
 
@@ -63,14 +57,4 @@ class CachedProductCatalogService(system: ActorSystem, productCatalogService: Pr
       update()
     }
   }
-}
-
-class CachedProductCatalogServiceProvider(
-    codeCachedProductCatalogService: CachedProductCatalogService,
-    prodCachedProductCatalogService: CachedProductCatalogService,
-) {
-  def fromStage(stage: Stage, isTestUser: Boolean): CachedProductCatalogService =
-    if (stage == DEV || stage == CODE || isTestUser)
-      codeCachedProductCatalogService
-    else prodCachedProductCatalogService
 }

@@ -21,6 +21,7 @@
   allProductPrices: AllProductPrices,
   allCheckoutNudgeProductPrices: AllProductPrices,
   productCatalog: JsonObject,
+  taxRates: JsonObject,
   user: Option[User],
   tickerData: Option[Tickers],
   homeDeliveryPostcodes: Option[List[String]] = None,
@@ -63,6 +64,7 @@
     membersDataApiUrl = membersDataApiUrl,
     guestAccountCreationToken = guestAccountCreationToken,
     productCatalog = productCatalog,
+    taxRates = taxRates,
     user = user
   )
 }

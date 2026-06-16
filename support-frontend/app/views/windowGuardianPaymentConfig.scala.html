@@ -13,6 +13,7 @@
   v2recaptchaConfigPublicKey: String,
   guestAccountCreationToken: Option[String],
   productCatalog: JsonObject,
+  taxRates: JsonObject,
   user: Option[User],
   settings: AllSettings
 )(implicit request: RequestHeader)
@@ -94,5 +95,6 @@
   window.guardian.checkoutPostcodeLookup = @settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.contains(On)
 
   window.guardian.productCatalog = @Html(outputJson(productCatalog))
+  window.guardian.taxRates = @Html(outputJson(taxRates))
 </script>
 @windowGuardianUser(user)
