@@ -117,7 +117,7 @@ lazy val root = (project in file("."))
   )
 
 lazy val `support-frontend` = (project in file("support-frontend"))
-  .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging)
+  .enablePlugins(PlayScala, BuildInfoPlugin, JDebPackaging)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .configs(IntegrationTest)
   .settings(
@@ -145,7 +145,6 @@ lazy val `support-frontend` = (project in file("support-frontend"))
   )
 
 lazy val `supporter-product-data` = (project in file("supporter-product-data"))
-  .enablePlugins(RiffRaffArtifact)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .configs(IntegrationTest)
   .settings(
@@ -164,7 +163,6 @@ lazy val `supporter-product-data-dynamo` = (project in file("support-modules/sup
   )
 
 lazy val `stripe-patrons-data` = (project in file("stripe-patrons-data"))
-  .enablePlugins(RiffRaffArtifact)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .configs(IntegrationTest)
   .settings(
@@ -176,7 +174,7 @@ lazy val `stripe-patrons-data` = (project in file("stripe-patrons-data"))
   .aggregate(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
 
 lazy val `support-payment-api` = (project in file("support-payment-api"))
-  .enablePlugins(RiffRaffArtifact, SystemdPlugin, PlayService, RoutesCompiler, JDebPackaging, BuildInfoPlugin)
+  .enablePlugins(SystemdPlugin, PlayService, RoutesCompiler, JDebPackaging, BuildInfoPlugin)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .settings(
     buildInfoKeys := BuildInfoSettings.buildInfoKeys,
@@ -277,7 +275,6 @@ lazy val `support-internationalisation` = (project in file("support-internationa
   )
 
 lazy val `stripe-intent` = (project in file("support-lambdas/stripe-intent"))
-  .enablePlugins(RiffRaffArtifact)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .configs(IntegrationTest)
   .settings(
@@ -289,7 +286,6 @@ lazy val `stripe-intent` = (project in file("support-lambdas/stripe-intent"))
   .aggregate(`module-rest`, `support-config`, `module-aws`)
 
 lazy val `acquisition-events-api` = (project in file("support-lambdas/acquisition-events-api"))
-  .enablePlugins(RiffRaffArtifact)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .settings(
     scalafmtSettings,

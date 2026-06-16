@@ -1,7 +1,7 @@
 // ----- Imports ----- //
+import { contributionsOnlyCountries } from '@modules/internationalisation/contributionsOnlyCountries';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { countries as vatComplianceCountries } from '@modules/VATComplianceCountries';
 
 // ----- Types ----- //
 type RegularContributionTypeMap<T> = {
@@ -23,28 +23,12 @@ export interface AmountValuesObject {
 
 type AmountsCardData = Record<ContributionType, AmountValuesObject>;
 
-export interface AmountsVariant {
+interface AmountsVariant {
 	variantName: string;
 	defaultContributionType: ContributionType;
 	displayContributionType: ContributionType[];
 	amountsCardData: AmountsCardData;
 }
-
-type AmountsTestTargeting =
-	| { targetingType: 'Region'; region: CountryGroupId }
-	| { targetingType: 'Country'; countries: IsoCountry[] };
-
-export interface AmountsTest {
-	testName: string;
-	liveTestName?: string;
-	isLive: boolean;
-	targeting: AmountsTestTargeting;
-	order: number;
-	seed: number;
-	variants: AmountsVariant[];
-}
-
-export type AmountsTests = AmountsTest[];
 export interface SelectedAmountsVariant extends AmountsVariant {
 	testName: string;
 }
@@ -209,7 +193,7 @@ const config: Record<CountryGroupId, Config> = {
 	},
 };
 
-const vatCompliantAmountsConfig = {
+const contributionsOnlyCountriesAmountsConfig = {
 	defaultContributionType: 'MONTHLY',
 	displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
 	amountsCardData: {
@@ -231,10 +215,14 @@ const vatCompliantAmountsConfig = {
 	},
 };
 
-const countries = new Set(vatComplianceCountries);
+const countries = new Set(contributionsOnlyCountries);
 
-const isVatComplianceCountry = (countryId: IsoCountry): boolean =>
+const isContributionsOnlyCountry = (countryId: IsoCountry): boolean =>
 	countries.has(countryId);
 
 // ----- Exports ----- //
-export { config, isVatComplianceCountry, vatCompliantAmountsConfig };
+export {
+	config,
+	isContributionsOnlyCountry,
+	contributionsOnlyCountriesAmountsConfig,
+};

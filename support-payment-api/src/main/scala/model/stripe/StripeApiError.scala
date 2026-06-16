@@ -53,17 +53,11 @@ object StripeApiError {
         case _: InvalidRequestException => "InvalidRequestException"
       }
     }
-
-    val declineCode: Option[String] = condOpt(err) {
-      case e: CardException => {
-        // If the decline_code is present then use that (happens for e.g. 'insufficient_funds')
-        // If decline_code is not present then just use the code (happens for e.g. 'incorrect_cvc').
-        // Despite this inconsistency, these are all valid decline codes: // https://stripe.com/docs/declines/codes
-        Option(e.getDeclineCode).getOrElse(e.getCode)
-      }
-    }
+    // If the decline_code is present then use that (happens for e.g. 'insufficient_funds')
+    // If decline_code is not present then just use the code (happens for e.g. 'incorrect_cvc','email_invalid').
+    // Despite this inconsistency, these are all valid decline codes: // https://stripe.com/docs/declines/codes
+    val declineCode: Option[String] = Option(err.getStripeError.getDeclineCode()).orElse(Option(err.getCode))
 
     StripeApiError(exceptionType, Option(err.getStatusCode), declineCode, err.getMessage, publicKey)
-
   }
 }

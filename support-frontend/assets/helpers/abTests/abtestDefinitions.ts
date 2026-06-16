@@ -12,6 +12,8 @@ export const pageUrlRegexes = {
 	landingPageSubscribeOnly: /uk\/subscribe/,
 	landingPagePaperOnly: /uk\/subscribe\/paper/,
 	genericCheckoutOnly: /(uk|us|au|ca|eu|nz|int)\/checkout/,
+	ukPrintCheckoutOnly:
+		/((uk\/checkout).*?(SubscriptionCard|HomeDelivery|NationalDelivery|MonthlyPlus|QuarterlyPlus|AnnualPlus|OneYearGift|ThreeMonthGift))/,
 	paperPages:
 		/(uk\/subscribe\/paper)|((uk\/(checkout|thank-you)).*?(SubscriptionCard|HomeDelivery|NationalDelivery))/,
 	weeklyPages:
@@ -71,13 +73,34 @@ export const tests: Tests = {
 		audiences: {
 			ALL: {
 				offset: 0,
-				size: 0,
+				size: 0.1,
 			},
 		},
-		isActive: false,
+		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 3,
 		targetPage: pageUrlRegexes.genericCheckoutOnly,
+		excludeContributionsOnlyCountries: true,
+	},
+	postCodeLookupExpress: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			GBPCountries: {
+				offset: 0,
+				size: 0.1,
+			},
+		},
+		isActive: true,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 9,
+		targetPage: pageUrlRegexes.ukPrintCheckoutOnly,
 		excludeContributionsOnlyCountries: true,
 	},
 	stripePaymentElementTest: {

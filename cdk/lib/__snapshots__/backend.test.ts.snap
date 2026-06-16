@@ -26,6 +26,8 @@ exports[`The Backend stack matches the snapshot 1`] = `
       "GuAccessLoggingBucketParameter",
       "GuApplicationTargetGroup",
       "GuHttpsApplicationListener",
+      "GuAlb5xxPercentageAlarm",
+      "GuUnhealthyInstancesAlarm",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -398,6 +400,127 @@ exports[`The Backend stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
+    "High5xxPercentageAlarmSupportbackendD49EEB40": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:eu-west-1:",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "Some or all actions in support-backend are failing",
+        "AlarmName": "support-backend PROD is returning 5XX errors",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "100*(m1+m2)/m3",
+            "Id": "expr_1",
+            "Label": "% of 5XX responses served for support-backend (load balancer and instances combined)",
+            "ReturnData": true,
+          },
+          {
+            "Id": "m1",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "LoadBalancer",
+                    "Value": {
+                      "Fn::GetAtt": [
+                        "LoadBalancerSupportbackend1445ECB4",
+                        "LoadBalancerFullName",
+                      ],
+                    },
+                  },
+                ],
+                "MetricName": "HTTPCode_ELB_5XX_Count",
+                "Namespace": "AWS/ApplicationELB",
+              },
+              "Period": 60,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m2",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "LoadBalancer",
+                    "Value": {
+                      "Fn::GetAtt": [
+                        "LoadBalancerSupportbackend1445ECB4",
+                        "LoadBalancerFullName",
+                      ],
+                    },
+                  },
+                ],
+                "MetricName": "HTTPCode_Target_5XX_Count",
+                "Namespace": "AWS/ApplicationELB",
+              },
+              "Period": 60,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m3",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "LoadBalancer",
+                    "Value": {
+                      "Fn::GetAtt": [
+                        "LoadBalancerSupportbackend1445ECB4",
+                        "LoadBalancerFullName",
+                      ],
+                    },
+                  },
+                ],
+                "MetricName": "RequestCount",
+                "Namespace": "AWS/ApplicationELB",
+              },
+              "Period": 60,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 5,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
     "InstanceRoleSupportbackend25B34CE1": {
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -649,7 +772,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "ssm:GetParametersByPath",
+              "Action": "ssm:GetParameter",
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
@@ -659,7 +782,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/support/support-backend/PROD",
+                    ":parameter/support/support-backend/PROD/*",
                   ],
                 ],
               },
@@ -760,6 +883,121 @@ exports[`The Backend stack matches the snapshot 1`] = `
         },
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "UnhealthyInstancesAlarmSupportbackendF59534CB": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:eu-west-1:",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "support-backend's instances have failed healthchecks several times over the last 1 hour.
+      This typically results in the AutoScaling Group cycling instances and can lead to problems with deployment,
+      scaling or handling traffic spikes.
+
+      Check support-backend's application logs or ssh onto an unhealthy instance in order to debug these problems.",
+        "AlarmName": "Unhealthy instances for support-backend in PROD",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 30,
+        "Dimensions": [
+          {
+            "Name": "LoadBalancer",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Fn::Select": [
+                      1,
+                      {
+                        "Fn::Split": [
+                          "/",
+                          {
+                            "Ref": "ListenerSupportbackend28B0599A",
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  "/",
+                  {
+                    "Fn::Select": [
+                      2,
+                      {
+                        "Fn::Split": [
+                          "/",
+                          {
+                            "Ref": "ListenerSupportbackend28B0599A",
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  "/",
+                  {
+                    "Fn::Select": [
+                      3,
+                      {
+                        "Fn::Split": [
+                          "/",
+                          {
+                            "Ref": "ListenerSupportbackend28B0599A",
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              ],
+            },
+          },
+          {
+            "Name": "TargetGroup",
+            "Value": {
+              "Fn::GetAtt": [
+                "TargetGroupSupportbackendD03654E6",
+                "TargetGroupFullName",
+              ],
+            },
+          },
+        ],
+        "EvaluationPeriods": 60,
+        "MetricName": "UnHealthyHostCount",
+        "Namespace": "AWS/ApplicationELB",
+        "Period": 60,
+        "Statistic": "Maximum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
     },
     "supportPRODsupportbackend61AF342F": {
       "DependsOn": [
@@ -862,7 +1100,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
                   "#!/bin/bash
 set -e
 groupadd support
-useradd -r -m -s /usr/bin/nologin -g support support-backend
+useradd -r -m -s /sbin/nologin -g support support-backend
 cd /home/support-backend
 mkdir support-backend
 chown -R support-backend:support support-backend
@@ -882,8 +1120,27 @@ export STAGE=PROD
 mkdir /var/log/support-backend
 chown -R support-backend:support /var/log/support-backend
 
+cat << 'EOF' > /etc/logrotate.d/pm2
+/var/log/support-backend/*.log {
+    daily
+    maxsize 10M
+    rotate 5
+    missingok
+    notifempty
+    compress
+    delaycompress
+    sharedscripts
+    postrotate
+        # Forces PM2 to safely flush logs and open fresh file descriptors
+        /usr/local/node/pm2 reloadLogs > /dev/null 2>&1
+    endscript
+}
+EOF
+
 cd target
-/usr/local/node/pm2 start --uid support-backend --gid support server.js",
+/usr/local/node/pm2 start --uid support-backend --gid support --output /var/log/support-backend/application.log --error /var/log/support-backend/application.log server.js
+
+/opt/cloudwatch-logs/configure-logs application support PROD support-backend /var/log/support-backend/application.log",
                 ],
               ],
             },

@@ -29,7 +29,8 @@ import { SecureTransactionIndicator } from 'components/secureTransactionIndicato
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
 import type { Participations } from 'helpers/abTests/models';
-import { isVatComplianceCountry } from 'helpers/contributions';
+import { isContributionsOnlyCountry } from 'helpers/contributions';
+import useEmailMarketingUtmSession from 'helpers/customHooks/useEmailMarketingUtmSession';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
@@ -175,6 +176,8 @@ export default function CheckoutForm({
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
 
+	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
+
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -244,7 +247,7 @@ export default function CheckoutForm({
 		if (originalAmount < 1) {
 			isInvalidAmount = true;
 		}
-		if (isVatComplianceCountry(countryId)) {
+		if (isContributionsOnlyCountry(countryId)) {
 			if (originalAmount >= (supporterPlusRatePlanPrice ?? 0)) {
 				isInvalidAmount = true;
 			}
@@ -684,6 +687,9 @@ export default function CheckoutForm({
 		isWeeklyGift,
 	)}`;
 
+	const useExpressPostcodeLookup =
+		abParticipations.postCodeLookupExpress === 'variant';
+
 	return (
 		<>
 			<form
@@ -896,6 +902,7 @@ export default function CheckoutForm({
 									deliveryAddressErrors={deliveryAddressErrors}
 									setDeliveryAddressErrors={setDeliveryAddressErrors}
 									isWeeklyGift={isWeeklyGift}
+									useExpressPostcodeLookup={useExpressPostcodeLookup}
 								/>
 							</>
 						)}
@@ -913,6 +920,7 @@ export default function CheckoutForm({
 							setConfirmedEmail={setConfirmedEmail}
 							phoneNumber={phoneNumber}
 							setPhoneNumber={setPhoneNumber}
+							useExpressPostcodeLookup={useExpressPostcodeLookup}
 							billingStatePostcodeCountry={billingStatePostcodeCountry}
 							hasDeliveryAddress={hasDeliveryAddress}
 							isEmailAddressReadOnly={isSignedIn}
@@ -943,6 +951,7 @@ export default function CheckoutForm({
 								deliveryAddressErrors={deliveryAddressErrors}
 								setDeliveryAddressErrors={setDeliveryAddressErrors}
 								billingStatePostcodeCountry={billingStatePostcodeCountry}
+								useExpressPostcodeLookup={useExpressPostcodeLookup}
 							/>
 						)}
 						<FormSection ref={paymentMethodRef}>
@@ -1129,10 +1138,11 @@ export default function CheckoutForm({
 								margin: ${space[6]}px 0;
 							`}
 						>
-							{showSimilarProductsConsentForRatePlan(
-								productDescription,
-								ratePlanKey,
-							) && <SimilarProductsConsent />}
+							{!isMarketingEmailSession &&
+								showSimilarProductsConsentForRatePlan(
+									productDescription,
+									ratePlanKey,
+								) && <SimilarProductsConsent />}
 						</div>
 						<SummaryTsAndCs
 							productKey={productKey}

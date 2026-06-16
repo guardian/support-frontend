@@ -1,7 +1,7 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import seedrandom from 'seedrandom';
-import { isVatComplianceCountry } from 'helpers/contributions';
+import { isContributionsOnlyCountry } from 'helpers/contributions';
 import * as cookie from 'helpers/storage/cookie';
 import { getQueryParameter } from 'helpers/urls/url';
 import { tests } from './abtestDefinitions';
@@ -43,7 +43,7 @@ function init({
 	acquisitionDataTests = getTestFromAcquisitionData() ?? [],
 	pathWithQueryString = window.location.pathname + window.location.search,
 }: ABtestInitalizerData): Participations {
-	const inContributionsOnlyCountry = isVatComplianceCountry(countryId);
+	const inContributionsOnlyCountry = isContributionsOnlyCountry(countryId);
 	const sessionParticipations = getSessionParticipations(PARTICIPATIONS_KEY);
 	const participations = getParticipations(
 		abTests,
