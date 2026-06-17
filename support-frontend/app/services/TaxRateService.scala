@@ -58,10 +58,6 @@ class CachedTaxRateService(
   private def updateAll(): Future[Unit] =
     Future.traverse(combinations) { case (product, country) => update(product, country) }.map(_ => ())
 
-//  /** Returns the cached tax rates for a single (product, country) combination. */
-//  def get(product: Product, country: Country): JsonObject =
-//    cache.get().getOrElse((product, country), JsonObject.empty)
-//
   /** Returns the cached tax rates for every product in `combinations` for the given country, combined into a single
     * JSON object keyed by product key, e.g.
     * {{{
