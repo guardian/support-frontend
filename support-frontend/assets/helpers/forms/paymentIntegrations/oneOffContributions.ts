@@ -227,33 +227,29 @@ const processStripePaymentIntentRequestForPaypal = (
 					createIntentResponse as CreateIntentResponse;
 				if (_createIntentResponse.type === 'requiresconfirmation') {
 					try {
+						// Calling handleStripePaypal should trigger a redirect to Paypal confirmation page
 						const { error } = await handleStripePaypal(
 							_createIntentResponse.data.clientSecret,
 						);
 
 						// If we reach here, the redirect didn't happen — which means it failed
 						if (error) {
-							return {
-								type: 'error',
-								error: { failureReason: 'payment_provider_unavailable' },
-							};
+							logException(
+								`Error confirming Paypal Stripe payment: ${error.message}`,
+							);
 						}
 					} catch (error) {
-						return {
-							type: 'error',
-							error: { failureReason: 'payment_provider_unavailable' },
-						};
+						logException(
+							`Error confirming Paypal Stripe payment: ${String(error)}`,
+						);
 					}
-
-					// Shouldn't reach here in practice (successful confirmPayment redirects),
-					// but defend against it:
-					return {
-						type: 'error',
-						error: { failureReason: 'unknown' },
-					};
 				}
 
-				return _createIntentResponse;
+				// If for any reason the redirect to Paypal confirmation page did not happen then we show an error to the user
+				return {
+					type: 'error',
+					error: { failureReason: 'unknown' },
+				};
 			},
 		),
 	).then((result) => ({ type: 'stripe', result }));
