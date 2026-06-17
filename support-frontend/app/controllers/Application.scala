@@ -8,8 +8,9 @@ import admin.settings.Status.Live
 import assets.{AssetsResolver, RefPath}
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
+import com.gu.i18n.Country
 import com.gu.identity.model.{User => IdUser}
-import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper, SupporterPlus, TierThree}
+import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper, Product, SupporterPlus, TierThree}
 import com.gu.support.config.Stages.PROD
 import com.gu.support.config._
 import com.gu.support.encoding.InternationalisationCodecs
@@ -472,7 +473,10 @@ class Application(
 
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
 
-    val taxRates = cachedTaxRateService.get()
+    val taxRates = countryCode match {
+      case "ca" => cachedTaxRateService.get(Country.Canada)
+      case _ => JsonObject.empty
+    }
 
     // We want the canonical link to point to the geo-redirect page so that users arriving from
     // search will be redirected to the correct version of the page
@@ -635,7 +639,11 @@ class Application(
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
-    val taxRates = cachedTaxRateService.get()
+
+    val taxRates = countryGroupId match {
+      case "ca" => cachedTaxRateService.get(Country.Canada)
+      case _ => JsonObject.empty
+    }
 
     val queryPromos =
       request.queryString

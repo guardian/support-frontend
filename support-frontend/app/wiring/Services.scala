@@ -5,8 +5,10 @@ import actions.{UserFromAuthCookiesActionBuilder, UserFromAuthCookiesOrAuthServe
 import admin.settings.AllSettingsProvider
 import cats.syntax.either._
 import com.gu.aws.AwsS3Client
+import com.gu.i18n.Country
 import com.gu.identity.auth._
 import com.gu.okhttp.RequestRunners
+import com.gu.support.catalog.{DigitalPack, Product, SupporterPlus, TierThree}
 import com.gu.support.getaddressio.GetAddressIOService
 import com.gu.support.idealpostcodes.IdealPostcodesService
 import com.gu.support.paperround.PaperRoundServiceProvider
@@ -142,7 +144,16 @@ trait Services {
       prodCachedProductCatalogService = new CachedProductCatalogService(actorSystem, prodProductCatalogService),
     )
 
-  lazy val cachedTaxRateService: CachedTaxRateService =
+  lazy val cachedTaxRateService: CachedTaxRateService = {
+    // The (product, country) combinations to pre-fetch and keep cached. Tax (sales tax / GST) only applies in
+    // the US and Canada, so we limit the combinations to those countries and the tax-applicable products.
+    val taxApplicableProducts: Seq[Product] = Seq(SupporterPlus, DigitalPack)
+    val taxApplicableCountries: Seq[Country] = Seq(Country.Canada)
+    val taxRateCombinations: Seq[(Product, Country)] = for {
+      product <- taxApplicableProducts
+      country <- taxApplicableCountries
+    } yield (product, country)
+
     new CachedTaxRateService(
       actorSystem,
       new TaxRateService(
@@ -150,6 +161,8 @@ trait Services {
         appConfig.taxRateConfig.baseUrl,
         appConfig.taxRateConfig.apiKey,
       ),
+      taxRateCombinations,
     )
+  }
 
 }

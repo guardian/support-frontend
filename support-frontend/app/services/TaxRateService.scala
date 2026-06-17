@@ -1,7 +1,9 @@
 package services
 
 import com.gu.okhttp.RequestRunners.FutureHttpClient
+import com.gu.i18n.Country
 import com.gu.rest.WebServiceHelper
+import com.gu.support.catalog.Product
 import io.circe.{Decoder, Json, JsonObject}
 import io.circe.generic.semiauto.deriveDecoder
 import org.apache.pekko.actor.ActorSystem
@@ -21,30 +23,72 @@ class TaxRateService(client: FutureHttpClient, val wsUrl: String, apiKey: String
   override val httpClient: FutureHttpClient = client
   override val verboseLogging: Boolean = false
 
-  def get(): Future[JsonObject] = {
-    // TODO: replace hardcoded productKey/country with dynamic values
+  def get(productKey: Product, country: Country): Future[JsonObject] = {
     val body = Json.obj(
-      "productKey" -> Json.fromString("SupporterPlus"),
-      "country" -> Json.fromString("CA"),
+      // `Product.toString` yields the catalog ProductKey (e.g. "SupporterPlus") and `Country.alpha2` the
+      // ISO 3166 alpha-2 code (e.g. "CA"), which are the values the tax rate API expects.
+      "productKey" -> Json.fromString(productKey.toString),
+      "country" -> Json.fromString(country.alpha2),
     )
     postJson[JsonObject](endpoint = "tax-rates", data = body, headers = Map("x-api-key" -> apiKey))
   }
 }
 
-class CachedTaxRateService(system: ActorSystem, taxRateService: TaxRateService)(implicit
+/** Caches tax rates per (product, country) combination.
+  *
+  * @param combinations
+  *   the (product, country) combinations to fetch on startup and keep refreshed.
+  */
+class CachedTaxRateService(
+    system: ActorSystem,
+    taxRateService: TaxRateService,
+    combinations: Seq[(Product, Country)],
+)(implicit
     ec: ExecutionContext,
 ) {
-  private val json = new AtomicReference[JsonObject](JsonObject())
-  private def update(): Future[Unit] = {
-    taxRateService.get().map(json.set)
+  private val cache = new AtomicReference[Map[(Product, Country), JsonObject]](Map.empty)
+
+  /** Fetches the tax rates for a single (product, country) combination and updates the cache. */
+  private def update(product: Product, country: Country): Future[Unit] = {
+    taxRateService.get(product, country).map { rates =>
+      cache.updateAndGet(_.updated((product, country), rates))
+    }
   }
-  def get(): JsonObject = json.get()
+
+  private def updateAll(): Future[Unit] =
+    Future.traverse(combinations) { case (product, country) => update(product, country) }.map(_ => ())
+
+//  /** Returns the cached tax rates for a single (product, country) combination. */
+//  def get(product: Product, country: Country): JsonObject =
+//    cache.get().getOrElse((product, country), JsonObject.empty)
+//
+  /** Returns the cached tax rates for every product in `combinations` for the given country, combined into a single
+    * JSON object keyed by product key, e.g.
+    * {{{
+    *   {
+    *     "SupporterPlus": { "BC": 0.07, ... },
+    *     "DigitalPack": { "BC": 0.07, ... }
+    *   }
+    * }}}
+    */
+  def get(country: Country): JsonObject = {
+    val currentCache = cache.get()
+    combinations
+      .collect { case (product, `country`) => product }
+      .distinct
+      .foldLeft(JsonObject.empty) { (acc, product) =>
+        currentCache.get((product, country)) match {
+          case Some(rates) => acc.add(product.toString, Json.fromJsonObject(rates))
+          case None => acc
+        }
+      }
+  }
 
   // Populate the cache synchronously on startup so that the very first request doesn't see an empty value.
   // Without this there's a race condition: the service is instantiated lazily and the scheduled refresh runs
   // asynchronously, so the first read can happen before the initial fetch completes.
   try {
-    Await.result(update(), 30.seconds)
+    Await.result(updateAll(), 30.seconds)
   } catch {
     case NonFatal(_) =>
     // Swallow startup failures so the app can still boot; the scheduled refresh below will retry.
@@ -52,9 +96,9 @@ class CachedTaxRateService(system: ActorSystem, taxRateService: TaxRateService)(
 
   // Subsequent refreshes happen in the background. The initial delay is 1 minute because the cache has
   // already been populated synchronously above.
-  system.scheduler.scheduleWithFixedDelay(1.minute, 1.minute) { () =>
+  system.scheduler.scheduleWithFixedDelay(1.minute, 10.minute) { () =>
     {
-      update()
+      updateAll()
     }
   }
 }
