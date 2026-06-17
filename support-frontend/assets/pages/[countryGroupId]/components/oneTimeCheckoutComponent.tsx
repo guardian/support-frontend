@@ -610,8 +610,8 @@ export function OneTimeCheckoutComponent({
 							status: 'success', // retry pending mechanism not applied to one-time payments
 						});
 
-						// If we successfully create a Payment Intent then this call will redirect to the paypal confirmation page
-						// In this case paymentResult will not be set
+						// If we successfully create a Payment Intent then this call will redirect to the paypal confirmation page.
+						// In this case paymentResult will not be set and it will not continue past this point.
 						paymentResult = await processStripePaymentIntentRequestForPaypal(
 							stripeData,
 							handlePaypal,
@@ -625,7 +625,6 @@ export function OneTimeCheckoutComponent({
 				}
 			}
 
-			// paymentResult could be the result of Stripe or Paypal
 			if (paymentResult) {
 				setThankYouOrder({
 					firstName: '',
