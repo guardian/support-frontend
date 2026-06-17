@@ -59,7 +59,7 @@ type PayPalApiError = {
 	message: string;
 };
 
-export type CreatePayPalPaymentResponse = PaymentApiResponse<
+type CreatePayPalPaymentResponse = PaymentApiResponse<
 	PayPalApiError,
 	CreatePayPalPaymentSuccess
 >;
