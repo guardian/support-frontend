@@ -45,7 +45,6 @@ import { config } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import type {
-	CreatePayPalPaymentResponse,
 	CreateStripePaymentIntentRequest,
 	PaymentResult,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
@@ -54,10 +53,7 @@ import {
 	processStripePaymentIntentRequest,
 	processStripePaymentIntentRequestForPaypal,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
-import type {
-	StripePaymentResult,
-	StripePaymentMethod,
-} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod as LegacyPaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	isPaymentMethod,
@@ -614,10 +610,11 @@ export function OneTimeCheckoutComponent({
 							status: 'success', // retry pending mechanism not applied to one-time payments
 						});
 
-						// do not call handlePaypal and do not redirect to paypal yet
+						// If we successfully create a Payment Intent then this call will redirect to the paypal confirmation page
+						// In this case paymentResult will not be set
 						paymentResult = await processStripePaymentIntentRequestForPaypal(
 							stripeData,
-							// handlePaypal,
+							handlePaypal,
 						);
 					} else {
 						paymentResult = await processStripePaymentIntentRequest(
@@ -638,26 +635,28 @@ export function OneTimeCheckoutComponent({
 				});
 				const thankYouUrlSearchParams = new URLSearchParams();
 				thankYouUrlSearchParams.set('contribution', finalAmount.toString());
-				'userType' in paymentResult &&
-					paymentResult.userType &&
-					thankYouUrlSearchParams.set('userType', paymentResult.userType);
+				paymentResult.type === 'stripe' &&
+					paymentResult.result.userType &&
+					thankYouUrlSearchParams.set(
+						'userType',
+						paymentResult.result.userType,
+					);
 				const nextStepRoute = paymentResultThankyouRoute(
 					paymentResult,
 					supportRegionId,
 					thankYouUrlSearchParams,
 				);
 				if (nextStepRoute) {
-					// call the stripe paypal redirect function instead
 					window.location.href = nextStepRoute;
 				} else {
 					setErrorMessage('Sorry, something went wrong.');
 					if (
 						paymentResult.type === 'stripe' &&
 						paymentResult.result.paymentStatus === 'failure'
-						// 'paymentStatus' in paymentResult &&
-						// paymentResult.paymentStatus === 'failure'
 					) {
-						setErrorContext(appropriateErrorMessage(paymentResult.result.error ?? ''));
+						setErrorContext(
+							appropriateErrorMessage(paymentResult.result.error ?? ''),
+						);
 					}
 					setIsProcessingPayment(false);
 				}
@@ -669,29 +668,22 @@ export function OneTimeCheckoutComponent({
 
 	function paymentResultThankyouRoute(
 		paymentResult: PaymentResult,
-		// paymentResult: StripePaymentResult | CreatePayPalPaymentResponse | undefined,
 		supportRegionId: SupportRegionId,
 		thankYouUrlSearchParams: URLSearchParams,
 	): string | undefined {
-		if (paymentResult.type === 'paypal' && paymentResult.result.type === 'success') {
+		if (
+			paymentResult.type === 'paypal' &&
+			paymentResult.result.type === 'success'
+		) {
 			// redirect to paypal approval url
 			return paymentResult.result.data.approvalUrl;
-		} else if (paymentResult.type === 'stripe' && paymentResult.result.paymentStatus === 'success') {
+		} else if (
+			paymentResult.type === 'stripe' &&
+			paymentResult.result.paymentStatus === 'success'
+		) {
 			return `/${supportRegionId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 		}
-		// if (paymentResult) {
-			// if ('type' in paymentResult && paymentResult.type === 'success') {
-			// 	// Paypal redirect
-			// 	return paymentResult.data.approvalUrl;
-			// } else if (
-			// 	'paymentStatus' in paymentResult &&
-			// 	paymentResult.paymentStatus === 'success'
-			// ) {
-			// 	return `/${supportRegionId}/thank-you?${thankYouUrlSearchParams.toString()}`;
-			// }
-		// }
-
-		return;
+		return undefined;
 	}
 
 	useAbandonedBasketCookie(

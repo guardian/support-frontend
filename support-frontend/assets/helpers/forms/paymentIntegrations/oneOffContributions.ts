@@ -11,13 +11,15 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { addQueryParamsToURL } from 'helpers/urls/url';
 import { userTypeSchema } from 'helpers/user/userType';
 import { logException } from 'helpers/utilities/logger';
-import type { StripePaymentMethod, StripePaymentResult } from './readerRevenueApis';
+import type {
+	StripePaymentMethod,
+	StripePaymentResult,
+} from './readerRevenueApis';
 import { PaymentSuccess } from './readerRevenueApis';
 
 // ----- Types ----- //
 type PaymentResult =
 	| { type: 'stripe'; result: StripePaymentResult }
-	| { type: 'stripe-paypal'; result: StripePaymentResult }
 	| { type: 'paypal'; result: CreatePayPalPaymentResponse };
 
 type UnexpectedError = {
@@ -171,7 +173,8 @@ const postToPaymentApi = (
 // https://github.com/guardian/payment-api/blob/master/src/main/resources/routes#L17
 const handleOneOffExecution = (
 	result: Promise<Record<string, unknown>>,
-): Promise<StripePaymentResult> => logPromise(result).then(paymentResultFromObject);
+): Promise<StripePaymentResult> =>
+	logPromise(result).then(paymentResultFromObject);
 
 // Create a Stripe Payment Request, and if necessary perform 3DS auth and confirmation steps
 const processStripePaymentIntentRequest = (
@@ -210,20 +213,44 @@ const processStripePaymentIntentRequest = (
 				return _createIntentResponse;
 			},
 		),
-	).then(result => ({type: 'stripe', result }));
+	).then((result) => ({ type: 'stripe', result }));
 
 // Create a Stripe Payment Intent Request for Paypal
 const processStripePaymentIntentRequestForPaypal = (
 	data: CreateStripePaymentIntentRequest,
-	// handleStripePaypal: (clientSecret: string) => Promise<PaymentIntentResult>,
+	handleStripePaypal: (clientSecret: string) => Promise<PaymentIntentResult>,
 ): Promise<PaymentResult> =>
 	handleOneOffExecution(
 		postToPaymentApi(data, '/contribute/one-off/stripe/create-payment').then(
-			(createIntentResponse) => {
+			async (createIntentResponse) => {
 				const _createIntentResponse =
 					createIntentResponse as CreateIntentResponse;
-				// TODO - handle error here?
 				if (_createIntentResponse.type === 'requiresconfirmation') {
+					try {
+						const { error } = await handleStripePaypal(
+							_createIntentResponse.data.clientSecret,
+						);
+
+						// If we reach here, the redirect didn't happen — which means it failed
+						if (error) {
+							return {
+								type: 'error',
+								error: { failureReason: 'payment_provider_unavailable' },
+							};
+						}
+					} catch (error) {
+						return {
+							type: 'error',
+							error: { failureReason: 'payment_provider_unavailable' },
+						};
+					}
+
+					// Shouldn't reach here in practice (successful confirmPayment redirects),
+					// but defend against it:
+					return {
+						type: 'error',
+						error: { failureReason: 'unknown' },
+					};
 				}
 
 				return _createIntentResponse;
@@ -280,9 +307,17 @@ async function postOneOffPayPalCreatePaymentRequest(
 				requestOptions(data, 'omit', 'POST', null),
 			),
 		);
-		return { type: 'paypal', result: createPayPalPaymentResponseFromObject(res) };
+		return {
+			type: 'paypal',
+			result: createPayPalPaymentResponseFromObject(res),
+		};
 	} catch (err) {
-		return { type: 'paypal', result: unexpectedError(`error creating a PayPal payment: ${err as string}`) };
+		return {
+			type: 'paypal',
+			result: unexpectedError(
+				`error creating a PayPal payment: ${err as string}`,
+			),
+		};
 	}
 }
 
