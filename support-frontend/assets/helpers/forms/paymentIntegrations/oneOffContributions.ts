@@ -11,10 +11,17 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { addQueryParamsToURL } from 'helpers/urls/url';
 import { userTypeSchema } from 'helpers/user/userType';
 import { logException } from 'helpers/utilities/logger';
-import type { PaymentResult, StripePaymentMethod } from './readerRevenueApis';
+import type {
+	StripePaymentMethod,
+	StripePaymentResult,
+} from './readerRevenueApis';
 import { PaymentSuccess } from './readerRevenueApis';
 
 // ----- Types ----- //
+type PaymentResult =
+	| { type: 'stripe'; result: StripePaymentResult }
+	| { type: 'paypal'; result: CreatePayPalPaymentResponse };
+
 type UnexpectedError = {
 	type: 'unexpectedError';
 	error: string;
@@ -52,7 +59,7 @@ type PayPalApiError = {
 	message: string;
 };
 
-export type CreatePayPalPaymentResponse = PaymentApiResponse<
+type CreatePayPalPaymentResponse = PaymentApiResponse<
 	PayPalApiError,
 	CreatePayPalPaymentSuccess
 >;
@@ -132,7 +139,7 @@ const responseSchema = z.discriminatedUnion('type', [
 
 function paymentResultFromObject(
 	json: Record<string, unknown>,
-): Promise<PaymentResult> {
+): Promise<StripePaymentResult> {
 	const response = responseSchema.parse(json);
 	if (response.type === 'error') {
 		const failureReason: ErrorReason = isErrorReason(
@@ -166,7 +173,8 @@ const postToPaymentApi = (
 // https://github.com/guardian/payment-api/blob/master/src/main/resources/routes#L17
 const handleOneOffExecution = (
 	result: Promise<Record<string, unknown>>,
-): Promise<PaymentResult> => logPromise(result).then(paymentResultFromObject);
+): Promise<StripePaymentResult> =>
+	logPromise(result).then(paymentResultFromObject);
 
 // Create a Stripe Payment Request, and if necessary perform 3DS auth and confirmation steps
 const processStripePaymentIntentRequest = (
@@ -205,7 +213,7 @@ const processStripePaymentIntentRequest = (
 				return _createIntentResponse;
 			},
 		),
-	);
+	).then((result) => ({ type: 'stripe', result }));
 
 // Create a Stripe Payment Intent Request for Paypal
 const processStripePaymentIntentRequestForPaypal = (
@@ -214,37 +222,37 @@ const processStripePaymentIntentRequestForPaypal = (
 ): Promise<PaymentResult> =>
 	handleOneOffExecution(
 		postToPaymentApi(data, '/contribute/one-off/stripe/create-payment').then(
-			(createIntentResponse) => {
+			async (createIntentResponse) => {
 				const _createIntentResponse =
 					createIntentResponse as CreateIntentResponse;
 				if (_createIntentResponse.type === 'requiresconfirmation') {
-					return handleStripePaypal(
-						_createIntentResponse.data.clientSecret,
-					).then((authResult: PaymentIntentResult) => {
-						if (authResult.error) {
-							trackComponentClick('stripe-paypal-failure');
-							console.log(authResult.error);
-							console.log('stripe-paypal-failure');
-							return {
-								type: 'error',
-								error: {
-									failureReason: 'card_authentication_error',
-								},
-							};
-						}
-
-						trackComponentClick('stripe-paypal-success');
-						return postToPaymentApi(
-							{ ...data, paymentIntentId: authResult.paymentIntent.id },
-							'/contribute/one-off/stripe/confirm-payment',
+					try {
+						// Calling handleStripePaypal should trigger a redirect to Paypal confirmation page
+						const { error } = await handleStripePaypal(
+							_createIntentResponse.data.clientSecret,
 						);
-					});
+
+						// If we reach here, the redirect didn't happen — which means it failed
+						if (error) {
+							logException(
+								`Error confirming Paypal Stripe payment: ${error.message}`,
+							);
+						}
+					} catch (error) {
+						logException(
+							`Error confirming Paypal Stripe payment: ${String(error)}`,
+						);
+					}
 				}
 
-				return _createIntentResponse;
+				// If for any reason the redirect to Paypal confirmation page did not happen then we show an error to the user
+				return {
+					type: 'error',
+					error: { failureReason: 'unknown' },
+				};
 			},
 		),
-	);
+	).then((result) => ({ type: 'stripe', result }));
 
 // Object is expected to have structure:
 // { type: "error", error: PayPalApiError }, or
@@ -287,7 +295,7 @@ function createPayPalPaymentResponseFromObject(
 
 async function postOneOffPayPalCreatePaymentRequest(
 	data: CreatePaypalPaymentData,
-): Promise<CreatePayPalPaymentResponse> {
+): Promise<PaymentResult> {
 	try {
 		const res = await logPromise(
 			fetchJson(
@@ -295,9 +303,17 @@ async function postOneOffPayPalCreatePaymentRequest(
 				requestOptions(data, 'omit', 'POST', null),
 			),
 		);
-		return createPayPalPaymentResponseFromObject(res);
+		return {
+			type: 'paypal',
+			result: createPayPalPaymentResponseFromObject(res),
+		};
 	} catch (err) {
-		return unexpectedError(`error creating a PayPal payment: ${err as string}`);
+		return {
+			type: 'paypal',
+			result: unexpectedError(
+				`error creating a PayPal payment: ${err as string}`,
+			),
+		};
 	}
 }
 
@@ -305,4 +321,5 @@ export {
 	postOneOffPayPalCreatePaymentRequest,
 	processStripePaymentIntentRequest,
 	processStripePaymentIntentRequestForPaypal,
+	type PaymentResult,
 };

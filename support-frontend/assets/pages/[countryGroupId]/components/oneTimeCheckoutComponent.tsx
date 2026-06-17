@@ -28,6 +28,7 @@ import { PaymentElement } from '@stripe/react-stripe-js';
 import type {
 	ExpressPaymentType,
 	PaymentMethodResult,
+	StripeError,
 } from '@stripe/stripe-js';
 import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
@@ -44,18 +45,15 @@ import { config } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import type {
-	CreatePayPalPaymentResponse,
 	CreateStripePaymentIntentRequest,
+	PaymentResult,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import {
 	postOneOffPayPalCreatePaymentRequest,
 	processStripePaymentIntentRequest,
 	processStripePaymentIntentRequestForPaypal,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
-import type {
-	PaymentResult,
-	StripePaymentMethod,
-} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod as LegacyPaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	isPaymentMethod,
@@ -440,7 +438,7 @@ export function OneTimeCheckoutComponent({
 				setPaymentMethodError('Please select a payment method');
 			}
 
-			let paymentResult;
+			let paymentResult: PaymentResult | undefined;
 			if (paymentMethod === 'PayPal') {
 				paymentResult = await postOneOffPayPalCreatePaymentRequest({
 					currency: currencyKey,
@@ -526,7 +524,9 @@ export function OneTimeCheckoutComponent({
 					return stripe.handleCardAction(clientSecret);
 				};
 
-				const handlePaypal = (clientSecret: string) => {
+				const handlePaypal = (
+					clientSecret: string,
+				): Promise<{ error: StripeError }> => {
 					trackComponentLoad('stripe-Paypal');
 					return stripe.confirmPayment({
 						elements,
@@ -610,6 +610,8 @@ export function OneTimeCheckoutComponent({
 							status: 'success', // retry pending mechanism not applied to one-time payments
 						});
 
+						// If we successfully create a Payment Intent then this call will redirect to the paypal confirmation page.
+						// In this case paymentResult will not be set and it will not continue past this point.
 						paymentResult = await processStripePaymentIntentRequestForPaypal(
 							stripeData,
 							handlePaypal,
@@ -632,9 +634,12 @@ export function OneTimeCheckoutComponent({
 				});
 				const thankYouUrlSearchParams = new URLSearchParams();
 				thankYouUrlSearchParams.set('contribution', finalAmount.toString());
-				'userType' in paymentResult &&
-					paymentResult.userType &&
-					thankYouUrlSearchParams.set('userType', paymentResult.userType);
+				paymentResult.type === 'stripe' &&
+					paymentResult.result.userType &&
+					thankYouUrlSearchParams.set(
+						'userType',
+						paymentResult.result.userType,
+					);
 				const nextStepRoute = paymentResultThankyouRoute(
 					paymentResult,
 					supportRegionId,
@@ -645,10 +650,12 @@ export function OneTimeCheckoutComponent({
 				} else {
 					setErrorMessage('Sorry, something went wrong.');
 					if (
-						'paymentStatus' in paymentResult &&
-						paymentResult.paymentStatus === 'failure'
+						paymentResult.type === 'stripe' &&
+						paymentResult.result.paymentStatus === 'failure'
 					) {
-						setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
+						setErrorContext(
+							appropriateErrorMessage(paymentResult.result.error ?? ''),
+						);
 					}
 					setIsProcessingPayment(false);
 				}
@@ -659,22 +666,23 @@ export function OneTimeCheckoutComponent({
 	};
 
 	function paymentResultThankyouRoute(
-		paymentResult: PaymentResult | CreatePayPalPaymentResponse | undefined,
+		paymentResult: PaymentResult,
 		supportRegionId: SupportRegionId,
 		thankYouUrlSearchParams: URLSearchParams,
 	): string | undefined {
-		if (paymentResult) {
-			if ('type' in paymentResult && paymentResult.type === 'success') {
-				return paymentResult.data.approvalUrl;
-			} else if (
-				'paymentStatus' in paymentResult &&
-				paymentResult.paymentStatus === 'success'
-			) {
-				return `/${supportRegionId}/thank-you?${thankYouUrlSearchParams.toString()}`;
-			}
+		if (
+			paymentResult.type === 'paypal' &&
+			paymentResult.result.type === 'success'
+		) {
+			// redirect to paypal approval url
+			return paymentResult.result.data.approvalUrl;
+		} else if (
+			paymentResult.type === 'stripe' &&
+			paymentResult.result.paymentStatus === 'success'
+		) {
+			return `/${supportRegionId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 		}
-
-		return;
+		return undefined;
 	}
 
 	useAbandonedBasketCookie(
