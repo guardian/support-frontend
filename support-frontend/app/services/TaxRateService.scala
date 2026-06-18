@@ -3,7 +3,7 @@ package services
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.i18n.Country
 import com.gu.rest.WebServiceHelper
-import com.gu.support.catalog.Product
+import com.gu.support.catalog.{DigitalPack, Product}
 import io.circe.{Decoder, Json, JsonObject}
 import io.circe.generic.semiauto.deriveDecoder
 import org.apache.pekko.actor.ActorSystem
@@ -27,10 +27,18 @@ class TaxRateService(client: FutureHttpClient, val wsUrl: String, apiKey: String
     val body = Json.obj(
       // `Product.toString` yields the catalog ProductKey (e.g. "SupporterPlus") and `Country.alpha2` the
       // ISO 3166 alpha-2 code (e.g. "CA"), which are the values the tax rate API expects.
-      "productKey" -> Json.fromString(productKey.toString),
+      "productKey" -> Json.fromString(TaxRateService.productKeyForApi(productKey)),
       "country" -> Json.fromString(country.alpha2),
     )
     postJson[JsonObject](endpoint = "tax-rates", data = body, headers = Map("x-api-key" -> apiKey))
+  }
+}
+
+// In other systems DigitalPack is referred to as "DigitalSubscription"
+object TaxRateService {
+  def productKeyForApi(product: Product): String = product match {
+    case DigitalPack => "DigitalSubscription"
+    case other => other.toString
   }
 }
 
@@ -74,7 +82,7 @@ class CachedTaxRateService(
       .distinct
       .foldLeft(JsonObject.empty) { (acc, product) =>
         currentCache.get((product, country)) match {
-          case Some(rates) => acc.add(product.toString, Json.fromJsonObject(rates))
+          case Some(rates) => acc.add(TaxRateService.productKeyForApi(product), Json.fromJsonObject(rates))
           case None => acc
         }
       }
