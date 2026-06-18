@@ -4,6 +4,7 @@ import {
 	from,
 	palette,
 	space,
+	textSans12,
 	textSans17,
 	textSansBold20,
 } from '@guardian/source/foundations';
@@ -167,6 +168,11 @@ const disclaimerContainer = css`
 	}
 `;
 
+const taxExclusionDisclaimer = css`
+	${textSans12};
+	color: ${palette.neutral[100]};
+`;
+
 const links = [
 	{
 		href: 'https://www.theguardian.com/info/privacy',
@@ -323,10 +329,8 @@ export function ThreeTierLanding({
 		setContributionType(paymentFrequencies[buttonIndex] as ContributionType);
 	};
 
-	const maybeTaxExclusiveRatePlanKey = useRatePlanKey(
-		contributionType,
-		supportRegionId,
-	);
+	const { maybeTaxExclusiveRatePlanKey, taxExclusionEnabled } =
+		useMaybeTaxExclusiveRatePlanKey(contributionType, supportRegionId);
 
 	const ratePlanKey = getRatePlanKey(contributionType);
 
@@ -573,6 +577,11 @@ export function ThreeTierLanding({
 							]}
 							currency={glyph(currencyId)}
 						></ThreeTierTsAndCs>
+						{taxExclusionEnabled && (
+							<p css={taxExclusionDisclaimer}>
+								For All-access digital and Digital plus, taxes may apply.
+							</p>
+						)}
 					</Container>
 					<FooterWithContents>
 						<FooterLinks links={links}></FooterLinks>
