@@ -336,10 +336,6 @@ export function ThreeTierLanding({
 		contributionType,
 		supportRegionId,
 	);
-	console.log(
-		'🚀 ~ ThreeTierLanding ~ maybeTaxExclusiveRatePlanKey:',
-		maybeTaxExclusiveRatePlanKey,
-	);
 
 	const ratePlanKey = getRatePlanKey(contributionType);
 
