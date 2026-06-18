@@ -394,10 +394,10 @@ export function ThreeTierLanding({
 	};
 
 	/** Tier 2: SupporterPlus */
-	const productRatePlan =
-		productCatalog.SupporterPlus?.ratePlans[maybeTaxExclusiveRatePlanKey];
 
-	const tier2Pricing = productRatePlan?.pricing[currencyId] as number;
+	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[
+		maybeTaxExclusiveRatePlanKey
+	]?.pricing[currencyId] as number;
 	const tier2UrlParams = new URLSearchParams({
 		product: 'SupporterPlus',
 		ratePlan: maybeTaxExclusiveRatePlanKey,
