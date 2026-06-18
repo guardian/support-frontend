@@ -12,7 +12,7 @@ libraryDependencies ++= Seq(
 
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
-  "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonAnnotationsVersion,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
   "com.google.protobuf" % "protobuf-java" % "3.25.5",
 )
