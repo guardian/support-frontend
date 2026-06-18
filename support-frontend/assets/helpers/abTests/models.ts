@@ -1,5 +1,6 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { Key } from './sessionStorage';
 
 export const breakpoints = {
 	mobile: 320,
@@ -54,11 +55,10 @@ type Test = {
 	// If another test participation is referrerControlled, exclude this test
 	excludeIfInReferrerControlledTest?: boolean;
 	seed: number;
-	// An optional regex that will be tested against the path of the current page
-	// before activating this test eg. '/(uk|us|au|ca|nz)/subscribe$'
-	targetPage?: string | RegExp;
-	// Persist this test participation across more pages using this regex
-	persistPage?: string | RegExp;
+	// Optional regex to initially target this test participation to pages eg. /\/(uk|us|au|ca|nz)\/subscribe$/
+	targetPage?: RegExp;
+	// Optional regex to persist this test participation across further pages
+	persistPage?: RegExp;
 	omitCountries?: IsoCountry[];
 	// Some users will see a version of the checkout that only offers
 	// the option to make contributions. We won't want to include these
@@ -70,6 +70,24 @@ type Tests = Record<string, Test>;
 
 type Participations = Record<string, string | undefined>;
 
+interface PageTest<Variant> {
+	name: string;
+	status: 'Live' | 'Draft';
+	priority?: number;
+	regionTargeting?: {
+		targetedCountryGroups?: CountryGroupId[];
+	};
+	mParticleAudience?: number;
+	variants: Variant[];
+}
+interface PageParticipationsConfig<Variant> {
+	tests: Array<PageTest<Variant>>;
+	pageRegex: string;
+	forceParamName: string;
+	sessionStorageKey: Key;
+	getVariantName: (variant: Variant) => string;
+}
+
 export type {
 	AcquisitionABTest,
 	Audience,
@@ -77,4 +95,6 @@ export type {
 	Test,
 	Tests,
 	Variant,
+	PageParticipationsConfig,
+	PageTest,
 };

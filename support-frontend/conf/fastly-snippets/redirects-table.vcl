@@ -9,7 +9,20 @@ table support_frontend_redirects {
   "/nz/support": "/nz/contribute",
   "/ca/support": "/ca/contribute",
   "/showcase": "/contribute",
-  "/uk": "/contribute",
+  "/us": "/us/contribute",
+  "/uk": "/uk/contribute",
+  "/au": "/au/contribute",
+  "/eu": "/eu/contribute",
+  "/int": "/int/contribute",
+  "/nz": "/nz/contribute",
+  "/ca": "/ca/contribute",
+  "/us/contribute/checkout": "/us/contribute",
+  "/uk/contribute/checkout": "/uk/contribute",
+  "/au/contribute/checkout": "/au/contribute",
+  "/eu/contribute/checkout": "/eu/contribute",
+  "/in/contribute/checkoutt": "/int/contribute",
+  "/nz/contribute/checkout": "/nz/contribute",
+  "/ca/contribute/checkout": "/ca/contribute",
   "/digital": "/contribute",
   "/subscribe/digital": "/contribute",
   "/subscribe/digital/gift": "/contribute",
@@ -43,16 +56,25 @@ table support_frontend_redirects {
   "/int/subscribe/digital/checkout/gift": "/int/contribute",
   "/nz/subscribe/digital/checkout/gift": "/nz/contribute",
   "/ca/subscribe/digital/checkout/gift": "/ca/contribute",
+  "/monthly-contributions": "/contribute",
   "/us/subscribe": "/us/subscribe/weekly",
   "/au/subscribe": "/au/subscribe/weekly",
   "/eu/subscribe": "/eu/subscribe/weekly",
   "/int/subscribe": "/int/subscribe/weekly",
   "/nz/subscribe": "/nz/subscribe/weekly",
   "/ca/subscribe": "/ca/subscribe/weekly",
+  "/us/guardian-ad-lite": "/us/contribute",
+  "/au/guardian-ad-lite": "/au/contribute",
+  "/int/guardian-ad-lite": "/int/contribute",
+  "/nz/guardian-ad-lite": "/nz/contribute",
+  "/ca/guardian-ad-lite": "/ca/contribute",
 
   # paper
   "/paper": "/uk/subscribe/paper",
   "/subscribe/paper": "/uk/subscribe/paper",
   # This was a legacy URL to differentiate between tabs on the page
   "/uk/subscribe/paper/delivery": "/uk/subscribe/paper",
+
+  # weekly, legacy URL redirect
+  "/subscribe/weekly/checkout": "/subscribe/weekly"
 }

@@ -1,0 +1,162 @@
+{
+  "state": {
+    "productSpecificState": {
+      "productType": "Contribution",
+      "product": {
+        "amount": 5,
+        "currency": "CAD",
+        "billingPeriod": "Monthly",
+        "productType": "Contribution"
+      },
+      "productInformation": {
+        "product": "Contribution",
+        "ratePlan": "Monthly",
+        "amount": 5
+      },
+      "paymentMethod": {
+        "TokenId": "pm_tok_12345",
+        "SecondTokenId": "cus_12345",
+        "CreditCardNumber": "4242",
+        "CreditCardExpirationMonth": 4,
+        "CreditCardExpirationYear": 2030,
+        "CreditCardType": "MasterCard",
+        "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+        "Type": "CreditCardReferenceTransaction",
+        "StripePaymentType": "StripeCheckout"
+      },
+      "salesForceContact": {
+        "Id": "003xxxxxxxxxxxxxxx",
+        "AccountId": "001xxxxxxxxxxxxxxx"
+      },
+      "similarProductsConsent": true
+    },
+    "requestId": "7a477a3f-d593-c570-0000-00000001a5ee",
+    "user": {
+      "id": "100000001",
+      "primaryEmailAddress": "test.user@example.com",
+      "title": null,
+      "firstName": "Test",
+      "lastName": "User",
+      "billingAddress": {
+        "lineOne": null,
+        "lineTwo": null,
+        "city": null,
+        "state": "QC",
+        "postCode": null,
+        "country": "CA"
+      },
+      "deliveryAddress": null,
+      "telephoneNumber": null,
+      "isTestUser": false,
+      "deliveryInstructions": null
+    },
+    "giftRecipient": null,
+    "product": {
+      "amount": 5,
+      "currency": "CAD",
+      "billingPeriod": "Monthly",
+      "productType": "Contribution"
+    },
+    "productInformation": {
+      "product": "Contribution",
+      "ratePlan": "Monthly",
+      "amount": 5
+    },
+    "analyticsInfo": {
+      "isGiftPurchase": false,
+      "paymentProvider": "Stripe"
+    },
+    "firstDeliveryDate": null,
+    "appliedPromotion": null,
+    "csrUsername": null,
+    "salesforceCaseId": null,
+    "acquisitionData": {
+      "ophanIds": {
+        "pageviewId": "pageview_id",
+        "browserId": "browser_id"
+      },
+      "referrerAcquisitionData": {
+        "campaignCode": null,
+        "referrerPageviewId": "referrer_pageview_id",
+        "referrerUrl": "https://www.theguardian.com/commentisfree/2025/dec/29/american-reckoning",
+        "componentId": "gdnwb_copts_memco_2025-01-01_NEW_YEAR_EPIC__EU_ROW_CONTROL",
+        "componentType": "ACQUISITIONS_EPIC",
+        "source": "GUARDIAN_WEB",
+        "abTests": [
+          {
+            "name": "2025-01-01_NEW_YEAR_EPIC__EU_ROW",
+            "variant": "CONTROL"
+          },
+          {
+            "name": "2025_12_18_HIGHER_SINGLES__CA",
+            "variant": "CONTROL"
+          }
+        ],
+        "queryParameters": [
+          {
+            "name": "product",
+            "value": "SupporterPlus"
+          },
+          {
+            "name": "ratePlan",
+            "value": "Monthly"
+          }
+        ],
+        "hostname": "support.theguardian.com",
+        "gaClientId": null,
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:146.0) Gecko/20100101 Firefox/146.0",
+        "ipAddress": "127.0.0.1",
+        "labels": [
+          "generic-checkout"
+        ]
+      },
+      "supportAbTests": [
+        {
+          "name": "paypalCompletePaymentsWithBAID",
+          "variant": "variant"
+        },
+        {
+          "name": "LP_DEFAULT",
+          "variant": "CONTROL"
+        },
+        {
+          "name": "landingPageMparticlePastContributor",
+          "variant": "control"
+        },
+        {
+          "name": "2025_12_16_SUPPORTERPLUS_TO_DIGITALPLUS",
+          "variant": "control"
+        },
+        {
+          "name": "2025_12_18_HIGHER_SINGLES__CA",
+          "variant": "CONTROL"
+        },
+        {
+          "name": "abandonedBasket",
+          "variant": "variant"
+        }
+      ]
+    },
+    "similarProductsConsent": true,
+    "paymentMethod": {
+      "TokenId": "pm_tok_12345",
+      "SecondTokenId": "cus_12345",
+      "CreditCardNumber": "4242",
+      "CreditCardExpirationMonth": 4,
+      "CreditCardExpirationYear": 2030,
+      "CreditCardType": "MasterCard",
+      "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+      "Type": "CreditCardReferenceTransaction",
+    "StripePaymentType": "StripeCheckout"
+    }
+  },
+  "error": {
+    "Error": "RetryLimited",
+    "Cause": "{\"errorType\":\"RetryLimited\",\"errorMessage\":\"Transaction declined.402 - [card_error/card_declined/call_issuer] Your card was declined. You can call your bank for details.\",\"trace\":[\"RetryLimited: Transaction declined.402 - [card_error/card_declined/call_issuer] Your card was declined. You can call your bank for details.\",\"    at retryLimited (/var/task/createZuoraSubscriptionTSLambda.js:101214:33)\",\"    at mapZuoraError (/var/task/createZuoraSubscriptionTSLambda.js:101248:10)\",\"    at asRetryError (/var/task/createZuoraSubscriptionTSLambda.js:101266:12)\",\"    at Runtime.handler (/var/task/createZuoraSubscriptionTSLambda.js:102092:11)\",\"    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\"]}"
+  },
+  "requestInfo": {
+    "testUser": false,
+    "failed": false,
+    "messages": []
+  }
+}

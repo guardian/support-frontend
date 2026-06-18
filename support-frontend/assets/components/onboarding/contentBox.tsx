@@ -1,22 +1,45 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { neutral, space } from '@guardian/source/foundations';
+import { from, neutral, space } from '@guardian/source/foundations';
 
 const contentBoxMainStyle = css`
 	overflow: hidden;
 	background-color: ${neutral[100]};
 	border: 1px solid ${neutral[100]};
 	border-radius: ${space[3]}px;
+`;
+
+const contentBoxPaddingStyle = css`
 	padding: ${space[3]}px;
-	padding-bottom: ${space[6]}px;
-	margin: ${space[3]}px 0;
+
+	${from.tablet} {
+		padding: ${space[8]}px;
+		padding-top: ${space[6]}px;
+	}
 `;
 
 interface ContentBoxProps {
 	children: React.ReactNode;
+	removePadding?: boolean;
+	cssOverrides?: SerializedStyles;
 }
 
-function ContentBox({ children }: ContentBoxProps) {
-	return <div css={contentBoxMainStyle}>{children}</div>;
+function ContentBox({
+	children,
+	cssOverrides,
+	removePadding = false,
+}: ContentBoxProps) {
+	return (
+		<div
+			css={[
+				cssOverrides,
+				contentBoxMainStyle,
+				!removePadding ? contentBoxPaddingStyle : css``,
+			]}
+		>
+			{children}
+		</div>
+	);
 }
 
 export default ContentBox;

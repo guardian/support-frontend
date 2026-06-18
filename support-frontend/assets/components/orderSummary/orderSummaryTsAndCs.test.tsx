@@ -17,12 +17,12 @@ afterAll(() => {
 });
 
 describe('orderSummaryTs&Cs Snapshot comparison', () => {
-	const promotionTierThreeUnitedStatesMonthly: Promotion = {
-		name: '$8 off for 12 months',
-		description: 'Tier Three United States Monthly',
-		promoCode: 'TIER_THREE_USA_MONTHLY',
-		numberOfDiscountedPeriods: 12,
-		discountedPrice: 37,
+	const promotionWeeklyDigitalUnitedStatesQuarterly: Promotion = {
+		name: '50% off for 3 months',
+		description: 'Guardian Weekly United States Quarterly',
+		promoCode: 'GUARDIAN_WEEKLY_DIGITAL_USA_QUARTERLY',
+		numberOfDiscountedPeriods: 3,
+		discountedPrice: 54,
 	};
 
 	type OrderSummaryTestParams = [
@@ -38,7 +38,13 @@ describe('orderSummaryTs&Cs Snapshot comparison', () => {
 		['Contribution', 'AUDCountries', 'Annual', undefined, 0],
 		['SupporterPlus', 'GBPCountries', 'Monthly', undefined, 12],
 		['SupporterPlus', 'GBPCountries', 'OneYearStudent', undefined, 9],
-		['TierThree', 'UnitedStates', 'RestOfWorldMonthly', undefined, 45],
+		[
+			'GuardianWeeklyRestOfWorld',
+			'UnitedStates',
+			'QuarterlyPlus',
+			undefined,
+			45,
+		],
 		['SubscriptionCard', 'GBPCountries', 'WeekendPlus', 'Weekend', 69.99],
 		['HomeDelivery', 'GBPCountries', 'SixdayPlus', 'Six day', 83.99],
 		['SubscriptionCard', 'GBPCountries', 'Sunday', 'Observer', 15.99],
@@ -54,10 +60,10 @@ describe('orderSummaryTs&Cs Snapshot comparison', () => {
 			amount,
 		) => {
 			const promo: Promotion | undefined =
-				paymentProductKey === 'TierThree' &&
-				activeRatePlanKey === 'RestOfWorldMonthly' &&
+				paymentProductKey === 'GuardianWeeklyRestOfWorld' &&
+				activeRatePlanKey === 'QuarterlyPlus' &&
 				countryGroupId === 'UnitedStates'
-					? promotionTierThreeUnitedStatesMonthly
+					? promotionWeeklyDigitalUnitedStatesQuarterly
 					: undefined;
 			const { container } = render(
 				<OrderSummaryTsAndCs

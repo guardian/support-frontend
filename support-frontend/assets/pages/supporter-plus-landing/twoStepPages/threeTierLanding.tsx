@@ -1,8 +1,7 @@
 import { css } from '@emotion/react';
-import { cmp } from '@guardian/libs';
+import { cmp } from '@guardian/consent-manager';
 import {
 	from,
-	headlineBold24,
 	palette,
 	space,
 	textSans17,
@@ -13,10 +12,7 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
-import type {
-	CountryGroupId,
-	SupportRegionId,
-} from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
@@ -34,21 +30,18 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import type { Participations } from 'helpers/abTests/models';
-import {
-	countdownSwitchOn,
-	getCampaignSettings,
-} from 'helpers/campaigns/campaigns';
+import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { glyph } from 'helpers/internationalisation/currency';
+import { guardianContactUsLink, guardianHelpCentreLink } from 'helpers/legal';
 import {
 	getProductDescription,
 	getProductLabel,
 	productCatalog,
-	productCatalogDescriptionPremiumDigital,
+	productCatalogDescription,
 } from 'helpers/productCatalog';
 import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { allProductPrices } from 'helpers/productPrice/productPrices';
@@ -56,15 +49,18 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
-import { getSanitisedHtml } from '../../../helpers/utilities/utilities';
+import {
+	getSanitisedHtml,
+	replaceDatePlaceholder,
+} from '../../../helpers/utilities/utilities';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import Countdown from '../components/countdown';
-import { OneOffCard } from '../components/oneOffCard';
 import { StudentOffer } from '../components/studentOffer';
 import { SupportOnce } from '../components/supportOnce';
 import type { CardContent } from '../components/threeTierCard';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
+import { ThreeTierLandingHeading } from './threeTierLandingHeading';
 import { TickerContainer } from './tickerContainer';
 
 const recurringContainer = css`
@@ -107,19 +103,6 @@ const innerContentContainer = css`
 	max-width: 940px;
 	margin: 0 auto;
 	text-align: center;
-`;
-
-const heading = css`
-	text-wrap: balance;
-	text-align: left;
-	color: ${palette.neutral[100]};
-	${headlineBold24}
-	${from.tablet} {
-		text-align: center;
-	}
-	${from.desktop} {
-		font-size: 2.625rem;
-	}
 `;
 
 const standFirst = css`
@@ -195,12 +178,12 @@ const links = [
 		},
 	},
 	{
-		href: 'https://www.theguardian.com/help/contact-us',
+		href: guardianContactUsLink,
 		text: 'Contact us',
 		isExternal: true,
 	},
 	{
-		href: 'https://www.theguardian.com/help',
+		href: guardianHelpCentreLink,
 		text: 'Help centre',
 		isExternal: true,
 	},
@@ -266,20 +249,6 @@ function getRatePlanKey(contributionType: ContributionType) {
 			return 'Monthly';
 	}
 }
-const getTierThreeRatePlanKey = (
-	contributionType: ContributionType,
-	countryGroupId: CountryGroupId,
-) => {
-	const ratePlanKey =
-		countryGroupId === 'International'
-			? contributionType === 'ANNUAL'
-				? 'RestOfWorldAnnual'
-				: 'RestOfWorldMonthly'
-			: contributionType === 'ANNUAL'
-			? 'DomesticAnnual'
-			: 'DomesticMonthly';
-	return ratePlanKey;
-};
 
 type ThreeTierLandingProps = {
 	supportRegionId: SupportRegionId;
@@ -291,11 +260,11 @@ export function ThreeTierLanding({
 	settings,
 }: ThreeTierLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
-	const urlSearchParamsProduct = urlSearchParams.get('product');
+	const rawUrlSearchParamsProduct = urlSearchParams.get('product');
+	const urlSearchParamsProduct = rawUrlSearchParamsProduct
+		? rawUrlSearchParamsProduct.toLowerCase()
+		: undefined;
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
-	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
-	const urlSearchParamsPromoCode = urlSearchParams.get('promoCode');
-	const { enablePremiumDigital, enableDigitalAccess } = getFeatureFlags();
 
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -315,28 +284,36 @@ export function ThreeTierLanding({
 		subPath: '/contribute',
 	};
 
-	const campaignSettings = getCampaignSettings(
-		countryGroupId,
-		urlSearchParamsPromoCode,
-	);
-
 	const countdownSettings = countdownSwitchOn()
 		? settings.countdownSettings
 		: undefined;
 	// We override the heading when there's a live countdown
 	const [headingOverride, setHeadingOverride] = useState<string | undefined>();
-
-	const enableSingleContributionsTab =
-		campaignSettings?.enableSingleContributions ??
-		urlSearchParams.has('enableOneTime');
+	const [countdownDaysLeft, setCountdownDaysLeft] = useState<
+		string | undefined
+	>();
 
 	const enableStudentOffer = ['uk', 'us', 'ca'].includes(supportRegionId);
 
-	const getInitialContributionType = () => {
-		if (enableSingleContributionsTab && urlSearchParamsOneTime) {
-			return 'ONE_OFF';
+	const getInitialContributionType = (): ContributionType => {
+		// 1. Query Parameters take precedence
+		const ratePlanParam = urlSearchParamsRatePlan?.trim().toLowerCase();
+		if (ratePlanParam === 'annual') {
+			return 'ANNUAL';
+		} else if (ratePlanParam === 'monthly') {
+			return 'MONTHLY';
 		}
-		return urlSearchParamsRatePlan === 'Annual' ? 'ANNUAL' : 'MONTHLY';
+
+		// 2. Default Selection from Settings
+		const defaultBillingPeriod =
+			settings.defaultProductSelection?.billingPeriod;
+
+		if (defaultBillingPeriod === 'Annual') {
+			return 'ANNUAL';
+		}
+
+		// 3. Fallback
+		return 'MONTHLY';
 	};
 
 	const [contributionType, setContributionType] = useState<ContributionType>(
@@ -347,22 +324,15 @@ export function ThreeTierLanding({
 	const billingPeriod = (tierPlanPeriod[0]?.toUpperCase() +
 		tierPlanPeriod.slice(1)) as BillingPeriod;
 
-	const paymentFrequencies: ContributionType[] = enableSingleContributionsTab
-		? ['ONE_OFF', 'MONTHLY', 'ANNUAL']
-		: ['MONTHLY', 'ANNUAL'];
+	const paymentFrequencies: ContributionType[] = ['MONTHLY', 'ANNUAL'];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
 		setContributionType(paymentFrequencies[buttonIndex] as ContributionType);
 	};
 
-	// We use the RRCP amounts tool for the one-off amounts only
-	const { selectedAmountsVariant: amounts } = getAmountsTestVariant(
-		countryId,
-		countryGroupId,
-		window.guardian.settings,
-	);
-
 	const ratePlanKey = getRatePlanKey(contributionType);
+
+	const fallbackProducts = fallBackLandingPageSelection.products;
 
 	/**
 	 * Tier 1: Contributions
@@ -376,14 +346,44 @@ export function ThreeTierLanding({
 		contribution: tier1Pricing.toString(),
 	});
 	const tier1Url = `checkout?${tier1UrlParams.toString()}`;
+
+	const getDefaultSelectedProduct = () => {
+		if (urlSearchParamsProduct) {
+			return urlSearchParamsProduct;
+		}
+
+		if (
+			isCardUserSelected(tier1Pricing) ||
+			isCardUserSelected(tier2Pricing, tier2Promotion?.discount?.amount) ||
+			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount)
+		) {
+			return undefined;
+		}
+		return settings.defaultProductSelection?.productType.toLowerCase();
+	};
+
+	const defaultSelectedProduct = getDefaultSelectedProduct();
+
 	const tier1Card: CardContent = {
 		product: 'Contribution',
 		price: tier1Pricing,
 		link: tier1Url,
 		isUserSelected:
-			urlSearchParamsProduct === 'Contribution' ||
-			isCardUserSelected(tier1Pricing),
+			urlSearchParamsProduct === 'contribution' ||
+			isCardUserSelected(tier1Pricing) ||
+			(!urlSearchParamsProduct && defaultSelectedProduct === 'contribution'),
 		...settings.products.Contribution,
+		title:
+			settings.products.Contribution?.title ?? getProductLabel('Contribution'),
+		benefits:
+			settings.products.Contribution?.benefits ??
+			filterProductDescriptionBenefits(
+				productCatalogDescription.Contribution,
+				countryGroupId,
+			),
+		cta:
+			settings.products.Contribution?.cta ?? fallbackProducts.Contribution!.cta,
+		billingPeriodsCopy: settings.products.Contribution?.billingPeriodsCopy,
 	};
 
 	/** Tier 2: SupporterPlus */
@@ -401,12 +401,19 @@ export function ThreeTierLanding({
 	if (tier2Promotion) {
 		tier2UrlParams.set('promoCode', tier2Promotion.promoCode);
 	}
-	if (enableDigitalAccess) {
-		tier2UrlParams.set('enableDigitalAccess', 'true');
-	}
 	const tier2ProductDescription = {
 		...settings.products.SupporterPlus,
 		title: getProductLabel('SupporterPlus'),
+		benefits:
+			settings.products.SupporterPlus?.benefits ??
+			filterProductDescriptionBenefits(
+				productCatalogDescription.SupporterPlus,
+				countryGroupId,
+			),
+		cta:
+			settings.products.SupporterPlus?.cta ??
+			fallbackProducts.SupporterPlus!.cta,
+		billingPeriodsCopy: settings.products.SupporterPlus?.billingPeriodsCopy,
 	};
 
 	const tier2Card: CardContent = {
@@ -416,8 +423,9 @@ export function ThreeTierLanding({
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion: tier2Promotion,
 		isUserSelected:
-			urlSearchParamsProduct === 'SupporterPlus' ||
-			isCardUserSelected(tier2Pricing, tier2Promotion?.discount?.amount),
+			urlSearchParamsProduct === 'supporterplus' ||
+			isCardUserSelected(tier2Pricing, tier2Promotion?.discount?.amount) ||
+			(!urlSearchParamsProduct && defaultSelectedProduct === 'supporterplus'),
 		...tier2ProductDescription,
 	};
 
@@ -437,53 +445,38 @@ export function ThreeTierLanding({
 	 *
 	 * This should only exist as long as the Tier three hack is in place.
 	 */
-	const tier3Product = enablePremiumDigital
-		? 'DigitalSubscription'
-		: 'TierThree';
-	const tier3RatePlanKey = enablePremiumDigital
-		? ratePlanKey
-		: getTierThreeRatePlanKey(contributionType, countryGroupId);
-	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[tier3RatePlanKey]
+	const tier3Product = 'DigitalSubscription';
+	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[ratePlanKey]
 		?.pricing[currencyId] as number;
 	const tier3UrlParams = new URLSearchParams({
 		product: tier3Product,
-		ratePlan: tier3RatePlanKey,
+		ratePlan: ratePlanKey,
 	});
 	const { label: title, labelPill: titlePill } = getProductDescription(
 		'DigitalSubscription',
 		ratePlanKey,
 	);
-	const premiumDigitalProductDescription = {
-		title,
-		titlePill,
-		benefits: filterProductDescriptionBenefits(
-			productCatalogDescriptionPremiumDigital,
-			countryGroupId,
-		),
-		cta: {
-			copy: settings.products.TierThree.cta.copy,
-		},
+	const tier3ProductDescription = {
+		title: settings.products.DigitalSubscription?.title ?? title,
+		titlePill: settings.products.DigitalSubscription?.titlePill ?? titlePill,
+		benefits:
+			settings.products.DigitalSubscription?.benefits ??
+			filterProductDescriptionBenefits(
+				productCatalogDescription.DigitalSubscription,
+				countryGroupId,
+			),
+		cta:
+			settings.products.DigitalSubscription?.cta ??
+			fallbackProducts.DigitalSubscription!.cta,
+		billingPeriodsCopy:
+			settings.products.DigitalSubscription?.billingPeriodsCopy,
 	};
-	const tier3ProductDescription = enablePremiumDigital
-		? premiumDigitalProductDescription
-		: settings.products.TierThree;
-	const tier3ProductPrice = enablePremiumDigital
-		? allProductPrices.DigitalPack
-		: allProductPrices.TierThree;
+	const tier3ProductPrice = allProductPrices.DigitalPack;
 	const tier3Promotion = tier3ProductPrice
-		? getPromotion(
-				tier3ProductPrice,
-				countryId,
-				billingPeriod,
-				countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
-				enablePremiumDigital ? 'NewspaperArchive' : 'NoProductOptions',
-		  )
+		? getPromotion(tier3ProductPrice, countryId, billingPeriod)
 		: undefined;
 	if (tier3Promotion) {
 		tier3UrlParams.set('promoCode', tier3Promotion.promoCode);
-	}
-	if (enablePremiumDigital) {
-		tier3UrlParams.set('enablePremiumDigital', 'true');
 	}
 	const tier3Card: CardContent = {
 		product: tier3Product,
@@ -491,13 +484,16 @@ export function ThreeTierLanding({
 		link: `checkout?${tier3UrlParams.toString()}`,
 		promotion: tier3Promotion,
 		isUserSelected:
-			urlSearchParamsProduct === tier3Product ||
-			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount),
+			urlSearchParamsProduct === tier3Product.toLowerCase() ||
+			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount) ||
+			(!urlSearchParamsProduct &&
+				defaultSelectedProduct === tier3Product.toLowerCase()),
 		...tier3ProductDescription,
 	};
 
-	const sanitisedHeading = getSanitisedHtml(settings.copy.heading);
-	const sanitisedSubheading = getSanitisedHtml(settings.copy.subheading);
+	const forceWeeklyPricing = urlSearchParams.get('force-weekly') === 'true';
+	const showWeeklyPrice =
+		forceWeeklyPricing || settings.name.includes('WEEKLY_PRICE');
 
 	return (
 		<PageScaffold
@@ -593,26 +589,25 @@ export function ThreeTierLanding({
 						<Countdown
 							countdownSettings={countdownSettings}
 							setHeadingOverride={setHeadingOverride}
+							setDaysTillDeadline={setCountdownDaysLeft}
 						/>
 					)}
 
-					{headingOverride && (
-						<h1 css={heading}>
-							<span
-								dangerouslySetInnerHTML={{
-									__html: getSanitisedHtml(headingOverride),
-								}}
-							/>
-						</h1>
-					)}
-					{!headingOverride && (
-						<h1 css={heading}>
-							<span dangerouslySetInnerHTML={{ __html: sanitisedHeading }} />
-						</h1>
-					)}
+					<ThreeTierLandingHeading
+						heading={headingOverride ?? settings.copy.heading}
+						countdownDaysLeft={countdownDaysLeft}
+					/>
+
 					<p
 						css={standFirst}
-						dangerouslySetInnerHTML={{ __html: sanitisedSubheading }}
+						dangerouslySetInnerHTML={{
+							__html: getSanitisedHtml(
+								replaceDatePlaceholder(
+									settings.copy.subheading,
+									countdownDaysLeft,
+								),
+							),
+						}}
 					/>
 
 					{settings.tickerSettings && (
@@ -630,36 +625,24 @@ export function ThreeTierLanding({
 						buttonClickHandler={handlePaymentFrequencyBtnClick}
 						additionalStyles={paymentFrequencyButtonsCss}
 					/>
-					{contributionType === 'ONE_OFF' && (
-						<OneOffCard
-							amounts={amounts}
-							currencyGlyph={glyph(currencyId)}
-							countryGroupId={countryGroupId}
-							currencyId={currencyId}
-							heading={campaignSettings?.copy.oneTimeHeading}
-						/>
-					)}
-					{contributionType !== 'ONE_OFF' && (
-						<ThreeTierCards
-							cardsContent={[tier1Card, tier2Card, tier3Card]}
-							currencyId={currencyId}
-							billingPeriod={billingPeriod}
-						/>
-					)}
+					<ThreeTierCards
+						cardsContent={[tier1Card, tier2Card, tier3Card]}
+						currencyId={currencyId}
+						billingPeriod={billingPeriod}
+						showWeeklyPrice={showWeeklyPrice}
+					/>
 				</div>
 			</Container>
-			{!enableSingleContributionsTab && (
-				<Container
-					sideBorders
-					borderColor="rgba(170, 170, 180, 0.5)"
-					cssOverrides={lightContainer}
-				>
-					<SupportOnce
-						currency={glyph(currencyId)}
-						countryGroupId={countryGroupId}
-					/>
-				</Container>
-			)}
+			<Container
+				sideBorders
+				borderColor="rgba(170, 170, 180, 0.5)"
+				cssOverrides={lightContainer}
+			>
+				<SupportOnce
+					currency={glyph(currencyId)}
+					countryGroupId={countryGroupId}
+				/>
+			</Container>
 			{enableStudentOffer && (
 				<Container
 					sideBorders

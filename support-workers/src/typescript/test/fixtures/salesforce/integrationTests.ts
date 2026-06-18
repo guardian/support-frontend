@@ -3,8 +3,8 @@ import type { PrintContactRecordRequest } from 'src/typescript/services/salesfor
 import type { Title } from '../../../model/stateSchemas';
 
 export const idId = '9999999';
-export const salesforceId = '003UD00000VZnteYAD';
-export const salesforceAccountId = '001UD00000Gk8XeYAJ';
+export const salesforceId = '003UD00000xXDLGYA4';
+export const salesforceAccountId = '001UD00000TN1lyYAD';
 export const emailAddress = 'integration-test@thegulocal.com';
 export const telephoneNumber = '0123456789';
 export const title: Title = 'Mrs';
@@ -20,16 +20,7 @@ export const customer: PrintContactRecordRequest = {
 	Email: emailAddress,
 	FirstName: name,
 	LastName: name,
-	OtherStreet: null,
-	OtherCity: null,
-	OtherState: undefined,
-	OtherPostalCode: undefined,
 	OtherCountry: uk,
-	MailingStreet: null,
-	MailingCity: null,
-	MailingState: undefined,
-	MailingPostalCode: undefined,
-	MailingCountry: null,
 };
 
 const address = {
@@ -50,5 +41,4 @@ export const user = {
 	billingAddress: address,
 	deliveryAddress: address,
 	isTestUser: false,
-	deliveryInstructions: null,
 };

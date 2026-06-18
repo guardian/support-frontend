@@ -1,7 +1,5 @@
-import {
-	PaymentTsAndCs,
-	PaymentTsAndCsProps,
-} from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import type { PaymentTsAndCsProps } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 
 export default {
 	title: 'Checkouts/Ts&Cs Payment',
@@ -46,8 +44,16 @@ DigitalSubscription.args = {
 	countryGroupId: 'GBPCountries',
 };
 
-export const Contribution = Template.bind({});
-Contribution.args = {
+export const DigitalSubscriptionUS = Template.bind({});
+DigitalSubscriptionUS.args = {
+	productKey: 'DigitalSubscription',
+	ratePlanKey: 'Monthly',
+	countryGroupId: 'UnitedStates',
+	thresholdAmount: 28,
+};
+
+export const ContributionAU = Template.bind({});
+ContributionAU.args = {
 	productKey: 'Contribution',
 	ratePlanKey: 'Annual',
 	countryGroupId: 'AUDCountries',
@@ -59,6 +65,14 @@ SupporterPlus.args = {
 	ratePlanKey: 'Monthly',
 	countryGroupId: 'GBPCountries',
 	thresholdAmount: 12,
+};
+
+export const SupporterPlusUS = Template.bind({});
+SupporterPlusUS.args = {
+	productKey: 'SupporterPlus',
+	ratePlanKey: 'Monthly',
+	countryGroupId: 'UnitedStates',
+	thresholdAmount: 15,
 };
 
 export const SupporterPlusOneYearStudent = Template.bind({});
@@ -77,21 +91,6 @@ SupporterPlusAUStudent.args = {
 	countryGroupId: 'AUDCountries',
 	thresholdAmount: 120,
 	studentDiscount: auStudentDiscount,
-};
-
-export const TierThree = Template.bind({});
-TierThree.args = {
-	productKey: 'TierThree',
-	ratePlanKey: 'Monthly',
-	countryGroupId: 'UnitedStates',
-	thresholdAmount: 45,
-	promotion: {
-		name: '$8 off for 12 months',
-		description: 'Tier Three United States Monthly',
-		promoCode: 'TIER_THREE_USA_MONTHLY',
-		numberOfDiscountedPeriods: 12,
-		discountedPrice: 37,
-	},
 };
 
 export const HomeDelivery = Template.bind({});
@@ -115,21 +114,21 @@ SubscriptionCard.args = {
 	countryGroupId: 'GBPCountries',
 };
 
-export const GuardianWeeklyDomestic = Template.bind({});
-GuardianWeeklyDomestic.args = {
+export const WeeklyDigitalDomestic = Template.bind({});
+WeeklyDigitalDomestic.args = {
 	productKey: 'GuardianWeeklyDomestic',
-	ratePlanKey: 'Monthly',
+	ratePlanKey: 'MonthlyPlus',
 	countryGroupId: 'GBPCountries',
 };
 
-export const GuardianWeeklyRestOfWorldInclPromo = Template.bind({});
-GuardianWeeklyRestOfWorldInclPromo.args = {
+export const WeeklyDigitalRestOfWorldInclPromo = Template.bind({});
+WeeklyDigitalRestOfWorldInclPromo.args = {
 	productKey: 'GuardianWeeklyRestOfWorld',
-	ratePlanKey: 'Annual',
+	ratePlanKey: 'AnnualPlus',
 	countryGroupId: 'UnitedStates',
 	promotion: {
 		name: '10% off for 12 months',
-		description: 'Guardian Weekly United States Annual',
+		description: 'Guardian Weekly Digital United States Annual',
 		promoCode: 'ANNUAL10',
 		numberOfDiscountedPeriods: 12,
 		discountedPrice: 324,

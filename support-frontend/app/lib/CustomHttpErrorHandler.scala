@@ -42,7 +42,7 @@ class CustomHttpErrorHandler(
           "Error 404",
           EmptyDiv("error-404-page"),
           RefPath("error404Page.js"),
-          Some(RefPath("error404Page.css")),
+          None,
         )()(assets, request, settingsProvider.getAllSettings()),
       )
         .withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*)
@@ -58,7 +58,7 @@ class CustomHttpErrorHandler(
           "Error 500",
           EmptyDiv("error-500-page"),
           RefPath("error500Page.js"),
-          Some(RefPath("error500Page.css")),
+          None,
         )()(assets, request, settingsProvider.getAllSettings()),
       )
         .withHeaders(CacheControl.noCache)

@@ -21,11 +21,11 @@ describe('validateRegex', () => {
 	});
 
 	it('does not match a string consisting of only a Pictographic', () => {
-		expect('★').not.toMatch(regexToValidate);
+		expect('♠').not.toMatch(regexToValidate);
 	});
 
 	it('does not match a string containing a Pictographic', () => {
-		expect('hello ★ hello').not.toMatch(regexToValidate);
+		expect('hello ♠ hello').not.toMatch(regexToValidate);
 	});
 
 	it('does not match a string containing only an emoji', () => {

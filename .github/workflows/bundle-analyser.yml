@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup Node and Install Dependencies
         uses: ./.github/actions/setup-node-and-install
@@ -23,7 +23,7 @@ jobs:
         run: pnpm build-github-action
 
       - name: Run Bundle Analyser
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bundle-analyser-report
           path: support-frontend/public/compiled-assets/webpack-stats.html

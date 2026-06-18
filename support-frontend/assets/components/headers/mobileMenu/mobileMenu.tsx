@@ -1,8 +1,12 @@
-// ----- Imports ----- //
 import type { ReactNode } from 'react';
 import SvgClose from 'components/svgs/close';
 import VeggieBurgerButton from '../veggieBurgerButton/veggieBurgerButton';
-import './mobileMenu.scss';
+import {
+	buttonClose,
+	menuContainer,
+	menuLinksContainer,
+	menuUtilityContainer,
+} from './mobileMenuStyles';
 
 export type Position = {
 	x: number;
@@ -25,18 +29,16 @@ function MobileMenu({
 }: PropTypes): JSX.Element {
 	return (
 		<div
-			className="component-header-mobile-menu"
+			css={menuContainer}
 			style={
 				closeButtonAt && {
 					width: closeButtonAt.x,
 				}
 			}
 		>
-			<div className="component-header-mobile-menu__scroll">
+			<div css={menuLinksContainer}>
 				{links}
-				{utility && (
-					<div className="component-header-mobile-menu__utility">{utility}</div>
-				)}
+				{utility && <div css={menuUtilityContainer}>{utility}</div>}
 			</div>
 			<VeggieBurgerButton
 				style={
@@ -44,8 +46,9 @@ function MobileMenu({
 						top: closeButtonAt.y,
 					}
 				}
-				label="close"
+				aria-label="close"
 				onClick={onClose}
+				cssOverride={buttonClose}
 			>
 				<SvgClose />
 			</VeggieBurgerButton>

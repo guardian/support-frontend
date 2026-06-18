@@ -59,6 +59,7 @@ export interface ProductBenefit {
 export interface LandingPageProductDescription {
 	title: string;
 	titlePill?: string;
+	billingPeriodsCopy?: string;
 	label?: {
 		copy: string;
 	};
@@ -68,10 +69,15 @@ export interface LandingPageProductDescription {
 	};
 }
 
+export interface DefaultProductSelection {
+	productType: 'Contribution' | 'SupporterPlus' | 'DigitalSubscription';
+	billingPeriod: 'OneTime' | 'Monthly' | 'Annual';
+}
+
 interface LandingPageProducts {
-	Contribution: LandingPageProductDescription;
-	SupporterPlus: LandingPageProductDescription;
-	TierThree: LandingPageProductDescription;
+	Contribution?: LandingPageProductDescription;
+	SupporterPlus?: LandingPageProductDescription;
+	DigitalSubscription?: LandingPageProductDescription;
 }
 
 interface LandingPageCopy {
@@ -85,6 +91,7 @@ export interface LandingPageVariant {
 	products: LandingPageProducts;
 	tickerSettings?: TickerSettings;
 	countdownSettings?: CountdownSettings;
+	defaultProductSelection?: DefaultProductSelection;
 }
 
 interface RegionTargeting {

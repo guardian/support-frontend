@@ -5,7 +5,13 @@ import com.gu.i18n.Country
 import com.gu.i18n.Country.UK
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
-import com.gu.support.zuora.api.{DirectDebitGateway, PayPalGateway, PaymentGateway, SepaGateway}
+import com.gu.support.zuora.api.{
+  DirectDebitGateway,
+  PayPalCompletePaymentsGateway,
+  PayPalGateway,
+  PaymentGateway,
+  SepaGateway,
+}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 
@@ -54,6 +60,20 @@ case class PayPalReferenceTransaction(
     PaymentGateway: PaymentGateway = PayPalGateway,
 ) extends PaymentMethod
 
+case class PayPalCompletePaymentsReferenceTransaction(
+    PaypalPaymentToken: String,
+    PaypalEmail: String,
+    Type: String = "PayPalCompletePayments",
+    PaymentGateway: PaymentGateway = PayPalCompletePaymentsGateway,
+) extends PaymentMethod
+
+case class PayPalCompletePaymentsWithBAIDReferenceTransaction(
+    PaypalBaid: String,
+    PaypalEmail: String,
+    Type: String = "PayPalCompletePaymentsWithBAID",
+    PaymentGateway: PaymentGateway = PayPalCompletePaymentsGateway,
+) extends PaymentMethod
+
 case class DirectDebitPaymentMethod(
     FirstName: String,
     LastName: String,
@@ -97,43 +117,35 @@ case class GatewayOptionData(GatewayOption: List[GatewayOption])
 object GatewayOptionData {
   implicit val codec: Codec[GatewayOptionData] = deriveCodec
 }
-
-case class SepaPaymentMethod(
-    BankTransferAccountName: String,
-    BankTransferAccountNumber: String,
-    Email: String,
-    IPAddress: String,
-    GatewayOptionData: GatewayOptionData,
-    BankTransferType: String = "SEPA",
-    `Type`: String = "BankTransfer",
-    PaymentGateway: PaymentGateway = SepaGateway,
-    Country: Option[String] = None,
-    StreetName: Option[String] = None,
-) extends PaymentMethod
-
 object PaymentMethod {
   import com.gu.support.encoding.CustomCodecs.{decodeCountry, encodeCountryAsAlpha2}
   implicit val payPalReferenceTransactionCodec: Codec[PayPalReferenceTransaction] = deriveCodec
+  implicit val payPalCompletePaymentsReferenceTransactionCodec: Codec[PayPalCompletePaymentsReferenceTransaction] =
+    deriveCodec
+  implicit val payPalCompletePaymentsWithBAIDReferenceTransactionCodec
+      : Codec[PayPalCompletePaymentsWithBAIDReferenceTransaction] =
+    deriveCodec
   implicit val creditCardReferenceTransactionCodec: Codec[CreditCardReferenceTransaction] = deriveCodec
   implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = deriveCodec
-  implicit val sepaPaymentMethodCodec: Codec[SepaPaymentMethod] = deriveCodec
   implicit val clonedDirectDebitPaymentMethodCodec: Codec[ClonedDirectDebitPaymentMethod] = deriveCodec
 
   // Payment Methods are details from the payment provider
   implicit val encodePaymentMethod: Encoder[PaymentMethod] = Encoder.instance {
     case pp: PayPalReferenceTransaction => pp.asJson
+    case ppcp: PayPalCompletePaymentsReferenceTransaction => ppcp.asJson
+    case ppcpwb: PayPalCompletePaymentsWithBAIDReferenceTransaction => ppcpwb.asJson
     case card: CreditCardReferenceTransaction => card.asJson
     case dd: DirectDebitPaymentMethod => dd.asJson
-    case sepa: SepaPaymentMethod => sepa.asJson.deepDropNullValues
     case clonedDD: ClonedDirectDebitPaymentMethod => clonedDD.asJson
   }
 
   implicit val decodePaymentMethod: Decoder[PaymentMethod] =
     List[Decoder[PaymentMethod]](
       Decoder[PayPalReferenceTransaction].widen,
+      Decoder[PayPalCompletePaymentsWithBAIDReferenceTransaction].widen,
+      Decoder[PayPalCompletePaymentsReferenceTransaction].widen,
       Decoder[CreditCardReferenceTransaction].widen,
       Decoder[ClonedDirectDebitPaymentMethod].widen, // ordering is significant (at least between direct debit variants)
       Decoder[DirectDebitPaymentMethod].widen,
-      Decoder[SepaPaymentMethod].widen,
     ).reduceLeft(_ or _)
 }

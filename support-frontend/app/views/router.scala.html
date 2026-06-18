@@ -2,10 +2,13 @@
 @import assets.RefPath
 @import assets.AssetsResolver
 @import admin.settings.AllSettings
+@import controllers.AllProductPrices
 @import io.circe.JsonObject
+@import services.Tickers
 
 @import com.gu.identity.model.User
 @import views.ViewHelpers.outputJson
+@import _root_.utils.ObserverUtils
 @(
   geoData: GeoData,
   serversideTests: Map[String,Participation],
@@ -16,14 +19,16 @@
   guestAccountCreationToken: Option[String],
   v2recaptchaConfigPublicKey: String,
   allProductPrices: AllProductPrices,
+  allCheckoutNudgeProductPrices: AllProductPrices,
   productCatalog: JsonObject,
   user: Option[User],
+  tickerData: Option[Tickers],
   homeDeliveryPostcodes: Option[List[String]] = None,
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 @main(
-  title = "Support the Guardian | Checkout",
-  mainElement = assets.getSsrCacheContentsAsHtml(divId = "router", file = "ssr-holding-content.html"),
+  title =  if (ObserverUtils.isObserverSubdomain(request.host)) "The Observer, digital & print | Checkout" else "Support the Guardian | Checkout",
+  mainElement = assets.getSsrCacheContentsAsHtml(divId = "router", file = if (ObserverUtils.isObserverSubdomain(request.host)) "ssr-observer-holding-content.html" else "ssr-holding-content.html"),
   mainJsBundle = RefPath("[countryGroupId]/router.js"),
   mainStyleBundle = None,
   description = Some("Help us deliver the independent journalism the world needs. Support the Guardian by making a contribution."),
@@ -38,6 +43,8 @@
   <script type="text/javascript">
     window.guardian = window.guardian || {};
     window.guardian.allProductPrices = @Html(outputJson(allProductPrices))
+    window.guardian.allCheckoutNudgeProductPrices = @Html(outputJson(allCheckoutNudgeProductPrices))
+    window.guardian.tickerData = @Html(outputJson(tickerData))
   </script>
 
   @homeDeliveryPostcodes.map { postcodes =>

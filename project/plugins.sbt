@@ -7,10 +7,10 @@ addSbtPlugin("com.github.sbt" % "sbt-pgp" % "2.2.1")
 addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.9.21")
 
 addSbtPlugin(
-  "org.playframework" % "sbt-plugin" % "3.0.1",
+  "org.playframework" % "sbt-plugin" % "3.0.10",
 ) // when updating major version, also update play-circe version
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.4")
+addSbtPlugin("com.github.sbt" % "sbt-digest" % "2.1.0")
 
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.11.0")
 
@@ -20,9 +20,7 @@ libraryDependencies += "org.vafer" % "jdeb" % "1.10" artifacts (Artifact("jdeb",
 
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.2")
 
-addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.13.0")
-
-addSbtPlugin("com.gu" % "sbt-riffraff-artifact" % "1.1.18")
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.14.5")
 
 addSbtPlugin("com.github.sbt" % "sbt-native-packager" % "1.9.16")
 //Fix for sbt-native-packager 1.9.11 upgrade errors

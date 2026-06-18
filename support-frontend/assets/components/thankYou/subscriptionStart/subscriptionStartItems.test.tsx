@@ -9,7 +9,6 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 		'SubscriptionCard',
 		'GuardianWeeklyRestOfWorld',
 		'GuardianWeeklyDomestic',
-		'TierThree',
 	];
 	it.each(summaryProductKeys)(
 		`summaryTs&Cs render product %s correctly`,

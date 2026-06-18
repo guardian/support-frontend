@@ -5,7 +5,7 @@ import {
 	SvgArrowRightStraight,
 } from '@guardian/source/react-components';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { helpCentreUrl, manageSubsUrl } from 'helpers/urls/externalLinks';
+import { getHelpCentreUrl, getManageSubsUrl } from 'helpers/urls/externalLinks';
 
 const btnStyleOverrides = css`
 	justify-content: left;
@@ -18,12 +18,12 @@ const neutralFontColor = css`
 
 type AddressCtaProp = {
 	copy: string;
-	address: string;
+	getAddress: () => string;
 	hasArrow?: boolean;
 };
 
 export function AddressCta({
-	address,
+	getAddress,
 	copy,
 	hasArrow = false,
 }: AddressCtaProp): JSX.Element {
@@ -32,7 +32,7 @@ export function AddressCta({
 			{hasArrow ? (
 				<LinkButton
 					cssOverrides={btnStyleOverrides}
-					href={address}
+					href={getAddress()}
 					size="default"
 					icon={<SvgArrowRightStraight />}
 					iconSide="right"
@@ -44,7 +44,7 @@ export function AddressCta({
 			) : (
 				<LinkButton
 					cssOverrides={btnStyleOverrides}
-					href={address}
+					href={getAddress()}
 					size="default"
 					aria-label={copy}
 				>
@@ -58,7 +58,7 @@ export function AddressCta({
 export const myAccountCta = (
 	<a
 		css={neutralFontColor}
-		href={manageSubsUrl}
+		href={getManageSubsUrl()}
 		onClick={sendTrackingEventsOnClick({
 			id: 'checkout_my_account',
 			product: 'Paper',
@@ -72,7 +72,7 @@ export const myAccountCta = (
 export const helpCenterCta = (linkCopy: string) => (
 	<a
 		css={neutralFontColor}
-		href={helpCentreUrl}
+		href={getHelpCentreUrl()}
 		onClick={sendTrackingEventsOnClick({
 			id: 'checkout_help_centre',
 			product: 'Paper',

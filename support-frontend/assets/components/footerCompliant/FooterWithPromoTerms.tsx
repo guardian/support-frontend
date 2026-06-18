@@ -1,28 +1,32 @@
+import { css } from '@emotion/react';
+import { neutral } from '@guardian/source/foundations';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Domestic } from '@modules/product/fulfilmentOptions';
 import { NoProductOptions } from '@modules/product/productOptions';
-import type { ReactNode } from 'react';
+import { usePromoTerms } from 'contexts/PromoTermsContext';
+import { guardianWeeklyTermsLink } from 'helpers/legal';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import type { Option } from 'helpers/types/option';
 import { promotionTermsUrl } from 'helpers/urls/routes';
 import Footer from './Footer';
 import { footerTextHeading } from './footerStyles';
 
-type FooterWithPromoTermsProps = {
-	productPrices: ProductPrices;
-	country: IsoCountry;
-	orderIsAGift: boolean;
-};
+const promoOfferLink = css`
+	& a {
+		:visited {
+			color: ${neutral[100]};
+		}
+	}
+`;
 
 const getPromoUrl = (
 	productPrices: ProductPrices,
 	country: IsoCountry,
 	billingPeriod: BillingPeriod,
 	fulfillmentOption: FulfilmentOptions,
-): Option<string> => {
+): string | undefined => {
 	const promotion = getPromotion(
 		productPrices,
 		country,
@@ -30,8 +34,12 @@ const getPromoUrl = (
 		fulfillmentOption,
 		NoProductOptions,
 	);
-	return promotion ? promotionTermsUrl(promotion.promoCode) : null;
+	return promotion ? promotionTermsUrl(promotion.promoCode) : undefined;
 };
+
+function MaybeLink({ href, text }: { text: string; href?: string }) {
+	return href ? <a href={href}>{text}</a> : null;
+}
 
 type LinkTypes = {
 	productPrices: ProductPrices;
@@ -39,114 +47,56 @@ type LinkTypes = {
 	fulfillmentOption: FulfilmentOptions;
 };
 
-function MaybeLink(props: { href: Option<string>; text: string }) {
-	return props.href ? <a href={props.href}>{props.text}</a> : null;
-}
-
-function RegularLinks(props: LinkTypes) {
+function GiftLinks({ productPrices, country, fulfillmentOption }: LinkTypes) {
 	const annualUrl = getPromoUrl(
-		props.productPrices,
-		props.country,
+		productPrices,
+		country,
 		BillingPeriod.Annual,
-		props.fulfillmentOption,
-	);
-	const monthlyUrl = getPromoUrl(
-		props.productPrices,
-		props.country,
-		BillingPeriod.Monthly,
-		props.fulfillmentOption,
-	);
-	const multipleOffers = !!(annualUrl && monthlyUrl);
-
-	if (annualUrl ?? monthlyUrl) {
-		return (
-			<PromoTerms>
-				<span>
-					<MaybeLink href={monthlyUrl} text="monthly" />
-					{multipleOffers ? ' and ' : ''}
-					<MaybeLink href={annualUrl} text="annual" />
-					&nbsp;offer{multipleOffers ? 's' : ''}
-				</span>
-			</PromoTerms>
-		);
-	}
-	return null;
-}
-
-function GiftLinks(props: LinkTypes) {
-	const annualUrl = getPromoUrl(
-		props.productPrices,
-		props.country,
-		BillingPeriod.Annual,
-		props.fulfillmentOption,
+		fulfillmentOption,
 	);
 	const quarterlyUrl = getPromoUrl(
-		props.productPrices,
-		props.country,
+		productPrices,
+		country,
 		BillingPeriod.Quarterly,
-		props.fulfillmentOption,
+		fulfillmentOption,
 	);
 	const multipleOffers = !!(annualUrl && quarterlyUrl);
 	if (annualUrl ?? quarterlyUrl) {
 		return (
-			<PromoTerms>
-				<span>
+			<section>
+				<p id="qa-component-customer-service" css={footerTextHeading}>
+					Promotion terms and conditions
+				</p>
+				<p>
+					Offer subject to availability. Guardian News and Media Ltd ("GNM")
+					reserves the right to withdraw this promotion at any time. Full
+					promotion terms and conditions for our{' '}
 					<MaybeLink href={quarterlyUrl} text="quarterly" />
 					{multipleOffers ? ' and ' : ''}
 					<MaybeLink href={annualUrl} text="annual" />
-					&nbsp;offer{multipleOffers ? 's' : ''}
-				</span>
-			</PromoTerms>
+					&nbsp;offer{multipleOffers ? 's' : ''}.
+				</p>
+			</section>
 		);
 	}
+
 	return null;
 }
 
-interface PromoTermsProps {
-	children: ReactNode;
-}
-function PromoTerms({ children }: PromoTermsProps) {
-	return (
-		<>
-			<h3 id="qa-component-customer-service" css={footerTextHeading}>
-				Promotion terms and conditions
-			</h3>
-			<p>
-				Offer subject to availability. Guardian News and Media Ltd
-				(&quot;GNM&quot;) reserves the right to withdraw this promotion at any
-				time. Full promotion terms and conditions for our&nbsp;
-				{children}.
-			</p>
-		</>
-	);
-}
+function PromoTerms(): JSX.Element | null {
+	const { promoTerms } = usePromoTerms();
 
-function FooterWithPromoTerms({
-	productPrices,
-	orderIsAGift,
-	country,
-	fulfillmentOption,
-	termsConditionsLink,
-}: FooterWithPromoTermsProps & {
-	fulfillmentOption: FulfilmentOptions;
-	termsConditionsLink: string;
-}) {
+	if (!promoTerms) {
+		return null;
+	}
+
 	return (
-		<Footer termsConditionsLink={termsConditionsLink}>
-			{orderIsAGift ? (
-				<GiftLinks
-					productPrices={productPrices}
-					country={country}
-					fulfillmentOption={fulfillmentOption}
-				/>
-			) : (
-				<RegularLinks
-					productPrices={productPrices}
-					country={country}
-					fulfillmentOption={fulfillmentOption}
-				/>
-			)}
-		</Footer>
+		<section>
+			<p id="qa-component-customer-service" css={footerTextHeading}>
+				Promotion terms and conditions
+			</p>
+			<p css={promoOfferLink}>{promoTerms}</p>
+		</section>
 	);
 }
 
@@ -154,17 +104,24 @@ function GuardianWeeklyFooter({
 	productPrices,
 	orderIsAGift,
 	country,
-}: FooterWithPromoTermsProps): JSX.Element {
-	const termsConditionsLink =
-		'https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions';
+}: {
+	productPrices: ProductPrices;
+	country: IsoCountry;
+	orderIsAGift: boolean;
+}) {
+	const weeklyFulfillmentOption = Domestic;
 	return (
-		<FooterWithPromoTerms
-			productPrices={productPrices}
-			orderIsAGift={orderIsAGift}
-			country={country}
-			fulfillmentOption={Domestic}
-			termsConditionsLink={termsConditionsLink}
-		/>
+		<Footer termsConditionsLink={guardianWeeklyTermsLink} fullWidth>
+			{orderIsAGift ? (
+				<GiftLinks
+					productPrices={productPrices}
+					country={country}
+					fulfillmentOption={weeklyFulfillmentOption}
+				/>
+			) : (
+				<PromoTerms />
+			)}
+		</Footer>
 	);
 }
 

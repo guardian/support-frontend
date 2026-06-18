@@ -35,6 +35,23 @@
     "deliveryAgent": null,
     "productType": "Paper"
   },
+  "productInformation": {
+    "product": "SubscriptionCard",
+    "ratePlan": "EverydayPlus",
+    "deliveryInstructions": "",
+    "deliveryContact": {
+      "firstName": "support.e2e.firstName+JM5v7",
+      "lastName": "support.e2e.lastName+rinuk",
+      "workEmail": "support.e2e+OQF_dDiNSLCACLB5CRLbh@thegulocal.com",
+      "country": "GB",
+      "state": null,
+      "city": "London",
+      "address1": "90 York Way",
+      "address2": "",
+      "postalCode": "BN44 3QG"
+    },
+    "firstDeliveryDate": "2026-01-28T00:00:00.000Z"
+  },
   "analyticsInfo": {
     "isGiftPurchase": false,
     "paymentProvider": "DirectDebit"

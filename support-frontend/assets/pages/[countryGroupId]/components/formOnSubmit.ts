@@ -14,12 +14,12 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from '../../../helpers/productCatalog';
-import type { UserType } from '../../../helpers/redux/checkout/personalDetails/state';
 import {
 	getOphanIds,
 	getReferrerAcquisitionData,
 	getSupportAbTests,
 } from '../../../helpers/tracking/acquisitions';
+import type { UserType } from '../../../helpers/user/userType';
 import { getProductFirstDeliveryDate } from '../checkout/helpers/deliveryDays';
 import type { FormPersonalFields } from '../checkout/helpers/formDataExtractors';
 import {
@@ -41,6 +41,17 @@ import type { PaymentMethod } from './paymentFields';
 import { FormSubmissionError } from './paymentFields';
 import { CONSENT_ID } from './SimilarProductsConsent';
 
+function getFirstDeliveryDate(
+	productKey: ActiveProductKey,
+	ratePlanKey: ActivePaperProductOptions,
+	weeklyGiftDeliveryDate?: Date,
+): string | null {
+	const firstDelivery =
+		weeklyGiftDeliveryDate ??
+		getProductFirstDeliveryDate(productKey, ratePlanKey);
+	return firstDelivery ? formatMachineDate(firstDelivery) : null;
+}
+
 export const submitForm = async ({
 	supportRegionId,
 	productKey,
@@ -53,7 +64,7 @@ export const submitForm = async ({
 	abParticipations,
 	promotion,
 	contributionAmount,
-	deliveryDate,
+	weeklyGiftDeliveryDate,
 }: {
 	supportRegionId: SupportRegionId;
 	productKey: ActiveProductKey;
@@ -66,7 +77,7 @@ export const submitForm = async ({
 	abParticipations: Participations;
 	promotion: Promotion | undefined;
 	contributionAmount: number | undefined;
-	deliveryDate?: Date;
+	weeklyGiftDeliveryDate?: Date;
 }): Promise<string> => {
 	const personalData = extractPersonalDataFromForm(formData);
 	const giftRecipient = extractGiftRecipientDataFromForm(formData);
@@ -80,13 +91,11 @@ export const submitForm = async ({
 		labels: ['generic-checkout'], // Shall we get rid of this now?
 	};
 
-	const firstDelivery = getProductFirstDeliveryDate(
+	const firstDeliveryDate = getFirstDeliveryDate(
 		productKey,
 		ratePlanKey as ActivePaperProductOptions,
+		weeklyGiftDeliveryDate,
 	);
-	const firstDeliveryDate = firstDelivery
-		? formatMachineDate(firstDelivery)
-		: null;
 
 	const promoCode = promotion?.promoCode;
 	const appliedPromotion =
@@ -99,6 +108,10 @@ export const submitForm = async ({
 	const supportAbTests = getSupportAbTests(abParticipations);
 	const deliveryInstructions = formData.get('deliveryInstructions') as string;
 	const similarProductsConsent = getConsentValue(formData, CONSENT_ID);
+	let redactedAccountNumber = '';
+	if (paymentFields.paymentType === 'DirectDebit') {
+		redactedAccountNumber = `******${paymentFields.accountNumber.slice(-2)}`;
+	}
 
 	const productInformation = buildProductInformation({
 		productFields: productFields,
@@ -128,7 +141,6 @@ export const submitForm = async ({
 		similarProductsConsent,
 		giftRecipient,
 	};
-
 	if (
 		paymentFields.paymentType === 'StripeHostedCheckout' &&
 		!paymentFields.checkoutSessionId
@@ -164,7 +176,8 @@ export const submitForm = async ({
 			paymentMethod,
 			supportRegionId,
 			paymentRequest,
-			deliveryDate,
+			accountNumber: redactedAccountNumber,
+			weeklyGiftDeliveryDate,
 		});
 
 		// If Stripe hosted checkout, delete previously persisted form details
@@ -203,7 +216,8 @@ const processSubscription = async ({
 	paymentMethod,
 	supportRegionId,
 	paymentRequest,
-	deliveryDate,
+	accountNumber,
+	weeklyGiftDeliveryDate,
 }: {
 	personalData: FormPersonalFields;
 	appliedPromotion?: AppliedPromotion;
@@ -214,6 +228,8 @@ const processSubscription = async ({
 	supportRegionId: SupportRegionId;
 	paymentRequest: RegularPaymentRequest;
 	deliveryDate?: Date;
+	accountNumber?: string;
+	weeklyGiftDeliveryDate?: Date;
 }) => {
 	const createSubscriptionResult = await createSubscription(paymentRequest);
 
@@ -231,7 +247,8 @@ const processSubscription = async ({
 			paymentMethod,
 			createSubscriptionResult.status,
 			supportRegionId,
-			deliveryDate,
+			accountNumber,
+			weeklyGiftDeliveryDate,
 		);
 	} else {
 		console.error(
@@ -257,14 +274,16 @@ const buildThankYouPageUrl = (
 	paymentMethod: PaymentMethod,
 	status: 'success' | 'pending',
 	supportRegionId: SupportRegionId,
-	deliveryDate?: Date,
+	accountNumber?: string,
+	weeklyGiftDeliveryDate?: Date,
 ) => {
 	const order = {
 		firstName: personalData.firstName,
 		email: personalData.email,
-		paymentMethod: paymentMethod,
-		status: status,
-		deliveryDate: deliveryDate,
+		accountNumber,
+		paymentMethod,
+		status,
+		deliveryDate: weeklyGiftDeliveryDate,
 	};
 	setThankYouOrder(order);
 	const thankYouUrlSearchParams = new URLSearchParams();

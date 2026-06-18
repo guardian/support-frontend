@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import {
 	neutral,
@@ -5,14 +6,17 @@ import {
 	space,
 	textSans15,
 } from '@guardian/source/foundations';
+import type { ThemeIcon } from '@guardian/source/react-components';
 import { SvgTickRound } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 
-const benefitsContainer = css`
-	${textSans15};
-	margin: ${space[5]}px 0 ${space[2]}px;
+const benefitsContainerTitle = css`
 	padding-top: ${space[2]}px;
 	border-top: 1px solid ${neutral[86]};
+`;
+
+const benefitsContainer = css`
+	${textSans15};
 `;
 
 const benefitsList = css`
@@ -36,23 +40,31 @@ const benefitsItem = css`
 export default function BenefitsList({
 	title,
 	listItems = [],
+	theme,
+	cssOverrides,
 }: {
 	title?: ReactNode;
 	listItems?: JSX.Element[];
+	theme?: Partial<ThemeIcon>;
+	cssOverrides?: SerializedStyles;
 }) {
 	if (listItems.length === 0) {
 		return null;
 	}
-
 	return (
-		<section css={benefitsContainer}>
+		<section
+			css={[benefitsContainer, title && benefitsContainerTitle, cssOverrides]}
+		>
 			{title && <h4>{title}</h4>}
-
 			<ul css={benefitsList}>
-				{listItems.map((item) => (
-					<li css={benefitsItem}>
-						<SvgTickRound isAnnouncedByScreenReader size="xsmall" />
-						{item}
+				{listItems.map((item, index) => (
+					<li key={`benefit${index}`} css={benefitsItem}>
+						<SvgTickRound
+							isAnnouncedByScreenReader
+							size="xsmall"
+							theme={theme}
+						/>
+						<p>{item}</p>
 					</li>
 				))}
 			</ul>

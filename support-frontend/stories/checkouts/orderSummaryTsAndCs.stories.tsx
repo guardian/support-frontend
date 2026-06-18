@@ -36,18 +36,18 @@ SupporterPlus.args = {
 	thresholdAmount: 12,
 };
 
-export const TierThree = Template.bind({});
-TierThree.args = {
-	productKey: 'TierThree',
-	ratePlanKey: 'Monthly',
+export const WeeklyDigital = Template.bind({});
+WeeklyDigital.args = {
+	productKey: 'GuardianWeeklyRestOfWorld',
+	ratePlanKey: 'QuarterlyPlus',
 	countryGroupId: 'UnitedStates',
 	thresholdAmount: 45,
 	promotion: {
-		name: '$8 off for 12 months',
-		description: 'Tier Three United States Monthly',
-		promoCode: 'TIER_THREE_USA_MONTHLY',
-		numberOfDiscountedPeriods: 12,
-		discountedPrice: 37,
+		name: '50% off for 3 months',
+		description: 'Guardian Weekly United States Quarterly',
+		promoCode: 'GUARDIAN_WEEKLY_DIGITAL_USA_QUARTERLY',
+		numberOfDiscountedPeriods: 3,
+		discountedPrice: 54,
 	},
 };
 

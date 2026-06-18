@@ -1,0 +1,154 @@
+{
+  "state": {
+    "productSpecificState": {
+      "productType": "Contribution",
+      "product": {
+        "amount": 5,
+        "currency": "USD",
+        "billingPeriod": "Monthly",
+        "productType": "Contribution"
+      },
+      "productInformation": {
+        "amount": 5,
+        "product": "Contribution",
+        "ratePlan": "Monthly"
+      },
+      "paymentMethod": {
+        "TokenId": "pm_000000000000000000000000",
+        "SecondTokenId": "cus_00000000000000",
+        "CreditCardNumber": "4242",
+        "CreditCardExpirationMonth": 1,
+        "CreditCardExpirationYear": 2030,
+        "CreditCardType": "MasterCard",
+        "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+        "Type": "CreditCardReferenceTransaction",
+        "StripePaymentType": "StripeCheckout"
+      },
+      "salesForceContact": {
+        "Id": "003000000000000000",
+        "AccountId": "001000000000000000"
+      },
+      "similarProductsConsent": true
+    },
+    "requestId": "00000000-0000-0000-0000-000000000000",
+    "user": {
+      "id": "11111111",
+      "primaryEmailAddress": "test.user@thegulocal.com",
+      "title": null,
+      "firstName": "Test",
+      "lastName": "User",
+      "billingAddress": {
+        "lineOne": null,
+        "lineTwo": null,
+        "city": null,
+        "state": "MO",
+        "postCode": "63110",
+        "country": "US"
+      },
+      "deliveryAddress": null,
+      "telephoneNumber": null,
+      "isTestUser": false,
+      "deliveryInstructions": null
+    },
+    "giftRecipient": null,
+    "product": {
+      "amount": 5,
+      "currency": "USD",
+      "billingPeriod": "Monthly",
+      "productType": "Contribution"
+    },
+    "productInformation": {
+      "amount": 5,
+      "product": "Contribution",
+      "ratePlan": "Monthly"
+    },
+    "analyticsInfo": {
+      "isGiftPurchase": false,
+      "paymentProvider": "Stripe"
+    },
+    "firstDeliveryDate": null,
+    "appliedPromotion": null,
+    "csrUsername": null,
+    "salesforceCaseId": null,
+    "acquisitionData": {
+      "ophanIds": {
+        "pageviewId": "mkqsgj39pjyfu49zvt3f",
+        "browserId": null
+      },
+      "referrerAcquisitionData": {
+        "campaignCode": null,
+        "referrerPageviewId": "mkqsgj39pjyfu49zvt3f",
+        "referrerUrl": "https://www.theguardian.com/us-news/2026/jan/14/some-news-story",
+        "componentId": "2026-01-08_NY_BANNER1_MOBILE__US_V2_HYBRID",
+        "componentType": "ACQUISITIONS_ENGAGEMENT_BANNER",
+        "source": "GUARDIAN_WEB",
+        "abTests": [
+          {
+            "name": "2026-01-08_NY_BANNER1_MOBILE__US",
+            "variant": "V2_HYBRID"
+          }
+        ],
+        "queryParameters": [
+          {
+            "name": "product",
+            "value": "SupporterPlus"
+          },
+          {
+            "name": "ratePlan",
+            "value": "Monthly"
+          }
+        ],
+        "hostname": "support.theguardian.com",
+        "gaClientId": null,
+        "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Mobile Safari/537.36",
+        "ipAddress": "127.0.0.1",
+        "labels": [
+          "generic-checkout"
+        ]
+      },
+      "supportAbTests": [
+        {
+          "name": "2026_13_01_RECURRING_TO_SUPPORTERPLUS_ROWUS",
+          "variant": "V2"
+        },
+        {
+          "name": "LP_DEFAULT_US",
+          "variant": "CONTROL"
+        },
+        {
+          "name": "2025_12_18_HIGHER_SINGLES__US",
+          "variant": "V1_HIGHER_SINGLES"
+        },
+        {
+          "name": "abandonedBasket",
+          "variant": "control"
+        },
+        {
+          "name": "landingPageMparticlePastContributor",
+          "variant": "variant"
+        }
+      ]
+    },
+    "similarProductsConsent": true,
+    "paymentMethod": {
+      "TokenId": "pm_000000000000000000000000",
+      "SecondTokenId": "cus_00000000000000",
+      "CreditCardNumber": "4242",
+      "CreditCardExpirationMonth": 1,
+      "CreditCardExpirationYear": 2030,
+      "CreditCardType": "MasterCard",
+      "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+      "Type": "CreditCardReferenceTransaction",
+      "StripePaymentType": "StripeCheckout"
+    }
+  },
+  "error": {
+    "Error": "RetryNone",
+    "Cause": "{\"errorType\":\"RetryNone\",\"errorMessage\":\"Transaction declined.402 - [card_error/expired_card/expired_card] Your card has expired.\",\"trace\":[\"RetryNone: Transaction declined.402 - [card_error/expired_card/expired_card] Your card has expired.\",\"    at retryNone (/var/task/createZuoraSubscriptionTSLambda.js:101364:30)\",\"    at mapZuoraError (/var/task/createZuoraSubscriptionTSLambda.js:101397:12)\",\"    at asRetryError (/var/task/createZuoraSubscriptionTSLambda.js:101417:12)\",\"    at Runtime.handler (/var/task/createZuoraSubscriptionTSLambda.js:102245:11)\",\"    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\"]}"
+  },
+  "requestInfo": {
+    "testUser": false,
+    "failed": false,
+    "messages": []
+  }
+}

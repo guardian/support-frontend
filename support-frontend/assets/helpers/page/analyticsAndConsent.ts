@@ -1,7 +1,12 @@
 // ----- Imports ----- //
 
-import type { ConsentState, CountryCode } from '@guardian/libs';
-import { cmp, getCookie, onConsent } from '@guardian/libs';
+import {
+	cmp,
+	getConsentDetailsForOphan,
+	onConsent,
+} from '@guardian/consent-manager';
+import type { CountryCode } from '@guardian/libs';
+import { getCookie } from '@guardian/libs';
 import { init, record, viewId } from '@guardian/ophan-tracker-js/support';
 import type { Participations } from 'helpers/abTests/models';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -76,53 +81,28 @@ function consentInitialisation(country: CountryCode): void {
 	}
 }
 
-function sendConsentToOphan(): void {
-	onConsent()
-		.then((consentState) => {
-			return record(getOphanConsentDetails(consentState));
-		})
-		.catch((error) => {
-			console.error(error);
-		});
-
-	const getOphanConsentDetails = (
-		consentState: ConsentState,
-	): {
-		consentJurisdiction: 'TCF' | 'USNAT' | 'AUS' | 'OTHER';
-		consentUUID: string;
-		consent: string;
-	} => {
-		if (consentState.tcfv2) {
-			return {
-				consentJurisdiction: 'TCF',
-				consentUUID: getCookie({ name: 'consentUUID' }) ?? '',
-				consent: consentState.tcfv2.tcString,
-			};
-		}
-		if (consentState.usnat) {
-			// Users who interacted with the CCPA banner before the migration to usnat will still have a ccpaUUID cookie. The usnatUUID cookie is set when the USNAT banner is interacted with. We need to check both cookies to ensure we have the correct consentUUID.
-			const consentUUID =
-				getCookie({ name: 'usnatUUID' }) ?? getCookie({ name: 'ccpaUUID' });
-			return {
-				consentJurisdiction: 'USNAT',
-				consentUUID: consentUUID ?? '',
-				consent: consentState.usnat.doNotSell ? 'false' : 'true',
-			};
-		}
-		if (consentState.aus) {
-			return {
-				consentJurisdiction: 'AUS',
-				consentUUID: getCookie({ name: 'ccpaUUID' }) ?? '',
-				consent: consentState.aus.personalisedAdvertising ? 'true' : 'false',
-			};
-		}
-		return {
-			consentJurisdiction: 'OTHER',
-			consentUUID: '',
-			consent: '',
-		};
-	};
+async function sendConsentToOphan(): Promise<void> {
+	try {
+		const consentState = await onConsent();
+		record(getConsentDetailsForOphan(consentState));
+	} catch (error) {
+		console.error(error);
+	}
 }
+
+const hasTargetingConsent = async (): Promise<boolean> => {
+	try {
+		// If the consent banner is displayed then do not wait - just return false
+		if (await cmp.willShowPrivacyMessage()) {
+			return false;
+		}
+		const { canTarget } = await onConsent();
+		return canTarget;
+	} catch (error) {
+		console.error('Error getting targeting consent', error);
+		return false;
+	}
+};
 
 // ----- Helpers ----- //
 
@@ -137,4 +117,9 @@ function shouldInitCmp(): boolean {
 
 // ----- Exports ----- //
 
-export { analyticsInitialisation, consentInitialisation, sendConsentToOphan };
+export {
+	analyticsInitialisation,
+	consentInitialisation,
+	sendConsentToOphan,
+	hasTargetingConsent,
+};

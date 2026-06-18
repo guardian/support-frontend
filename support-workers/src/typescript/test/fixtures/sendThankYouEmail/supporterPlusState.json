@@ -1,0 +1,135 @@
+{
+  "state": {
+    "sendThankYouEmailState": {
+      "user": {
+        "id": "21841960",
+        "primaryEmailAddress": "test.user@thegulocal.com",
+        "firstName": "Test",
+        "lastName": "User",
+        "billingAddress": {
+          "country": "GB"
+        },
+        "isTestUser": false
+      },
+      "product": {
+        "amount": 12,
+        "currency": "GBP",
+        "billingPeriod": "Monthly",
+        "productType": "SupporterPlus"
+      },
+      "productInformation": {
+        "amount": 12,
+        "product": "SupporterPlus",
+        "ratePlan": "Monthly"
+      },
+      "paymentMethod": {
+        "PaypalBaid": "B-81M54065TB6970351",
+        "PaypalEmail": "membership.paypal-buyer@theguardian.com",
+        "Type": "PayPalCompletePaymentsWithBAID",
+        "PaymentGateway": "PayPal Complete Payments"
+      },
+      "paymentSchedule": {
+        "payments": [
+          {
+            "date": "2026-01-20",
+            "amount": 12
+          },
+          {
+            "date": "2026-02-20",
+            "amount": 12
+          },
+          {
+            "date": "2026-03-20",
+            "amount": 12
+          },
+          {
+            "date": "2026-04-20",
+            "amount": 12
+          },
+          {
+            "date": "2026-05-20",
+            "amount": 12
+          },
+          {
+            "date": "2026-06-20",
+            "amount": 12
+          },
+          {
+            "date": "2026-07-20",
+            "amount": 12
+          },
+          {
+            "date": "2026-08-20",
+            "amount": 12
+          },
+          {
+            "date": "2026-09-20",
+            "amount": 12
+          },
+          {
+            "date": "2026-10-20",
+            "amount": 12
+          },
+          {
+            "date": "2026-11-20",
+            "amount": 12
+          },
+          {
+            "date": "2026-12-20",
+            "amount": 12
+          },
+          {
+            "date": "2027-01-20",
+            "amount": 12
+          },
+          {
+            "date": "2027-02-20",
+            "amount": 12
+          }
+        ]
+      },
+      "accountNumber": "A01089211",
+      "subscriptionNumber": "A-S05555555",
+      "productType": "SupporterPlus"
+    },
+    "requestId": "c1cd21ae-bd89-4e78-0000-000000000a1f",
+    "analyticsInfo": {
+      "isGiftPurchase": false,
+      "paymentProvider": "PayPal"
+    },
+    "acquisitionData": {
+      "ophanIds": {
+        "pageviewId": "mkmpgv3w9xtctrr0s9mw"
+      },
+      "referrerAcquisitionData": {
+        "referrerPageviewId": "",
+        "queryParameters": [],
+        "hostname": "support.code.dev-theguardian.com",
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:146.0) Gecko/20100101 Firefox/146.0",
+        "ipAddress": "10.248.135.81",
+        "labels": [
+          "generic-checkout"
+        ]
+      },
+      "supportAbTests": [
+        {
+          "name": "abandonedBasket",
+          "variant": "variant"
+        },
+        {
+          "name": "landingPageMparticlePastContributor",
+          "variant": "variant"
+        },
+        {
+          "name": "LP_COUNTDOWN",
+          "variant": "CONTROL"
+        }
+      ]
+    }
+  },
+  "requestInfo": {
+    "testUser": false,
+    "failed": false,
+    "messages": []
+  }
+}

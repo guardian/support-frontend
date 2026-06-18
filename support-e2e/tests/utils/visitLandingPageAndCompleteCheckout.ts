@@ -11,6 +11,7 @@ type TestDetails = {
 	internationalisationId: string;
 	postCode?: string;
 	ratePlan?: string;
+	billingCountry?: string;
 };
 
 export const visitLandingPageAndCompleteCheckout = async (
@@ -26,6 +27,7 @@ export const visitLandingPageAndCompleteCheckout = async (
 		internationalisationId,
 		postCode,
 		ratePlan,
+		billingCountry,
 	} = testDetails;
 	const page = await context.newPage();
 	await setupPage(page, context, baseURL, landingPagePath);
@@ -34,9 +36,8 @@ export const visitLandingPageAndCompleteCheckout = async (
 	await landingPageToCheckoutFn(page);
 
 	// Wait for the checkout page to load
-	await expect(
-		page.getByRole('heading', { name: 'Your subscription' }),
-	).toBeVisible({
+	const title = `Your ${product === 'Contribution' ? 'support' : 'subscription'}`;
+	await expect(page.getByRole('heading', { name: title })).toBeVisible({
 		timeout: 100000,
 	});
 
@@ -46,5 +47,6 @@ export const visitLandingPageAndCompleteCheckout = async (
 		internationalisationId,
 		postCode,
 		ratePlan,
+		billingCountry,
 	});
 };

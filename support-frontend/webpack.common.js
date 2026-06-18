@@ -1,39 +1,13 @@
 'use-strict';
 
 const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const autoprefixer = require('autoprefixer');
-const pxtorem = require('postcss-pxtorem');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const { paletteAsSass } = require('./scripts/pasteup-sass');
-const { getClassName } = require('./scripts/css');
-const entryPoints = require('./webpack.entryPoints');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-
-const cssLoaders = [
-	{
-		loader: 'postcss-loader',
-		options: {
-			postcssOptions: {
-				plugins: [pxtorem({ propList: ['*'] }), autoprefixer()],
-			},
-		},
-	},
-	{
-		loader: 'fast-sass-loader',
-		options: {
-			includePaths: [
-				path.resolve(__dirname, 'assets'),
-				path.resolve(__dirname),
-			],
-		},
-	},
-];
+const entryPoints = require('./webpack.entryPoints');
 
 // Hide mini-css-extract-plugin spam logs
 class CleanUpStatsPlugin {
-	// eslint-disable-next-line class-methods-use-this
 	shouldPickStatChild(child) {
 		return child.name.indexOf('mini-css-extract-plugin') !== 0;
 	}
@@ -42,7 +16,6 @@ class CleanUpStatsPlugin {
 		compiler.hooks.done.tap('CleanUpStatsPlugin', (stats) => {
 			const { children } = stats.compilation;
 			if (Array.isArray(children)) {
-				// eslint-disable-next-line no-param-reassign
 				stats.compilation.children = children.filter((child) =>
 					this.shouldPickStatChild(child),
 				);
@@ -51,7 +24,7 @@ class CleanUpStatsPlugin {
 	}
 }
 
-module.exports = (cssFilename, jsFilename, minimizeCss) => ({
+module.exports = (jsFilename) => ({
 	plugins: [
 		new WebpackManifestPlugin({
 			fileName: '../../conf/assets.json',
@@ -67,10 +40,6 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 					}),
 			  ]
 			: []),
-		new MiniCssExtractPlugin({
-			filename: path.join('stylesheets', cssFilename),
-		}),
-		...(minimizeCss ? [new CssMinimizerPlugin()] : []),
 		new CleanUpStatsPlugin(),
 	],
 
@@ -87,15 +56,11 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 	},
 
 	resolve: {
+		plugins: [new TsconfigPathsPlugin()],
 		alias: {
 			react: 'preact/compat',
 			'react-dom': 'preact/compat',
 			ophan: 'ophan-tracker-js/build/ophan.support',
-			'@modules/internationalisation': path.resolve(
-				__dirname,
-				'./node_modules/@guardian/support-service-lambdas/modules/internationalisation/src',
-			),
-			'@modules': path.resolve(__dirname, '../modules'),
 		},
 		modules: [
 			path.resolve(__dirname, 'assets'),
@@ -146,46 +111,6 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 				options: {
 					name: '[path][name].[ext]',
 				},
-			},
-			{
-				test: /\.scss$/,
-				exclude: /\.module.scss$/,
-				use: [
-					MiniCssExtractPlugin.loader,
-					{
-						loader: 'css-loader',
-					},
-					...cssLoaders,
-				],
-			},
-			{
-				test: /\.module.scss$/,
-				use: [
-					MiniCssExtractPlugin.loader,
-					{
-						loader: 'css-loader',
-						options: {
-							modules: {
-								getLocalIdent: (context, localIdentName, localName) =>
-									getClassName(
-										path.relative(__dirname, context.resourcePath),
-										localName,
-									),
-							},
-						},
-					},
-					...cssLoaders,
-				],
-			},
-			{
-				test: /\.css$/,
-				use: [
-					MiniCssExtractPlugin.loader,
-					{
-						loader: 'css-loader',
-					},
-					...cssLoaders,
-				],
 			},
 		],
 	},

@@ -3,26 +3,14 @@ import {
 	from,
 	headlineBold24,
 	neutral,
-	palette,
 	space,
 	textEgyptian17,
-	textSans12,
 } from '@guardian/source/foundations';
-import {
-	Link,
-	SvgGift,
-	SvgInfoRound,
-	themeLinkBrand,
-} from '@guardian/source/react-components';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import FlexContainer from 'components/containers/flexContainer';
-import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';
 import ProductOption from 'components/product/productOption';
-
-type PropTypes = {
-	orderIsAGift: boolean;
-	products: Product[];
-};
+import { WeeklyGiftPriceInfo } from '../weeklyGiftPriceInfo';
 
 const pricesSection = css`
 	padding: 0 ${space[3]}px ${space[12]}px;
@@ -79,66 +67,28 @@ const pricesSubHeadline = css`
 	padding-bottom: ${space[2]}px;
 `;
 
-const pricesInfo = css`
-	margin-top: ${space[6]}px;
-`;
-
-const termsLink = css`
-	${textSans12};
-	color: ${palette.brand[500]};
-	margin-left: ${space[9]}px;
-	margin-top: -12px;
-`;
-
-const termsConditionsLink =
-	'https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions';
-
-function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
+function Prices({
+	products,
+	countryGroupId,
+}: {
+	products: Product[];
+	countryGroupId: CountryGroupId;
+}): JSX.Element {
 	return (
 		<section css={pricesSection} id="subscribe">
 			<h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>
-			<p css={pricesSubHeadline}>
-				{orderIsAGift ? 'Select a gift period' : "Choose how you'd like to pay"}
-			</p>
+			<p css={pricesSubHeadline}>Select a gift period</p>
 			<FlexContainer cssOverrides={priceBoxes}>
 				{products.map((product) => (
 					<ProductOption
 						cssOverrides={
 							product.showLabel ? productOverrideWithLabel : productOverride
 						}
-						title={product.title}
-						price={product.price}
-						offerCopy={product.offerCopy}
-						priceCopy={product.priceCopy}
-						buttonCopy={product.buttonCopy}
-						href={product.href}
-						onClick={product.onClick}
-						onView={product.onView}
-						showLabel={product.showLabel}
-						isSpecialOffer={product.isSpecialOffer}
+						{...product}
 					/>
 				))}
 			</FlexContainer>
-			<div css={pricesInfo}>
-				{!orderIsAGift && (
-					<ProductInfoChip icon={<SvgGift />}>
-						Gifting is available
-					</ProductInfoChip>
-				)}
-				<ProductInfoChip icon={<SvgInfoRound />}>
-					Delivery cost included.{' '}
-					{!orderIsAGift && 'You can cancel your subscription at any time'}
-				</ProductInfoChip>
-				<ProductInfoChip>
-					<Link
-						href={termsConditionsLink}
-						cssOverrides={termsLink}
-						theme={themeLinkBrand}
-					>
-						Click here to see full Terms and Conditions
-					</Link>
-				</ProductInfoChip>
-			</div>
+			<WeeklyGiftPriceInfo countryGroupId={countryGroupId} />
 		</section>
 	);
 }

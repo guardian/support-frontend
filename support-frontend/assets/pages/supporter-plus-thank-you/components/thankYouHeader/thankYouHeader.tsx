@@ -41,9 +41,9 @@ type ThankYouHeaderProps = {
 	isDirectDebitPayment: boolean;
 	amount: number;
 	currency: IsoCurrency;
-	observerPrint?: ObserverPrint;
 	startDate?: string;
 	promotion?: Promotion;
+	observerPrint?: ObserverPrint;
 };
 
 function ThankYouHeader({
@@ -53,9 +53,9 @@ function ThankYouHeader({
 	isDirectDebitPayment,
 	amount,
 	currency,
-	observerPrint,
 	startDate,
 	promotion,
+	observerPrint,
 }: ThankYouHeaderProps): JSX.Element {
 	const isPrint = isPrintProduct(productKey);
 	const isSubscriptionCard = productKey === 'SubscriptionCard';
@@ -63,6 +63,40 @@ function ThankYouHeader({
 	const showLegitimateInterestMessage = !(isGuardianAdLite || observerPrint);
 	const showProductCatalogMessage = isGuardianAdLite && !observerPrint;
 	const showStartDateMessage = isPrint && !isSubscriptionCard;
+
+	function renderSubHeading() {
+		if (observerPrint) {
+			return (
+				<ObserverMessage observerPrint={observerPrint} startDate={startDate} />
+			);
+		}
+
+		return (
+			<>
+				{showStartDateMessage && (
+					<StartDateMessage
+						productKey={productKey}
+						ratePlanKey={ratePlanKey}
+						startDate={startDate}
+					/>
+				)}
+
+				{isDirectDebitPayment && <DirectDebitMessage />}
+
+				{showLegitimateInterestMessage && (
+					<LegitimateInterestMessage
+						productKey={productKey}
+						ratePlanKey={ratePlanKey}
+						showPaymentStatus={!isDirectDebitPayment}
+					/>
+				)}
+
+				{showProductCatalogMessage && (
+					<ProductCatalogMessage productKey={productKey} />
+				)}
+			</>
+		);
+	}
 
 	return (
 		<header css={header}>
@@ -75,34 +109,7 @@ function ThankYouHeader({
 				isObserverPrint={!!observerPrint}
 				promotion={promotion}
 			/>
-
-			<div css={headerSupportingText}>
-				{showStartDateMessage && (
-					<StartDateMessage
-						productKey={productKey}
-						ratePlanKey={ratePlanKey}
-						startDate={startDate}
-					/>
-				)}
-
-				{isDirectDebitPayment && (
-					<DirectDebitMessage
-						mediaGroup={observerPrint ? 'The Observer' : 'Guardian Media Group'}
-					/>
-				)}
-
-				{showLegitimateInterestMessage && (
-					<LegitimateInterestMessage
-						showPaymentStatus={!isDirectDebitPayment}
-					/>
-				)}
-
-				{observerPrint && <ObserverMessage observerPrint={observerPrint} />}
-
-				{showProductCatalogMessage && (
-					<ProductCatalogMessage productKey={productKey} />
-				)}
-			</div>
+			<div css={headerSupportingText}>{renderSubHeading()}</div>
 		</header>
 	);
 }

@@ -42,16 +42,12 @@ trait Controllers {
     cachedProductCatalogServiceProvider,
     appConfig.supportUrl,
     tickerService,
+    mparticleClient,
+    appConfig.payPalCompletePaymentsConfigProvider,
   )
 
   lazy val diagnosticsController = new DiagnosticsController(
     actionBuilders,
-  )
-
-  lazy val articleShareController = new ArticleShare(
-    actionBuilders,
-    controllerComponents,
-    capiService,
   )
 
   lazy val subscriptionsController = new SubscriptionsController(
@@ -95,20 +91,6 @@ trait Controllers {
     appConfig.stage,
   )
 
-  lazy val digitalPackFormController = new DigitalSubscriptionFormController(
-    priceSummaryServiceProvider,
-    assetsResolver,
-    actionBuilders,
-    testUsers,
-    appConfig.regularStripeConfigProvider,
-    appConfig.regularPayPalConfigProvider,
-    controllerComponents,
-    allSettingsProvider,
-    appConfig.recaptchaConfigProvider,
-    cachedProductCatalogServiceProvider,
-    appConfig.stage,
-  )
-
   lazy val createSubscriptionController = new CreateSubscriptionController(
     supportWorkersClient,
     actionBuilders,
@@ -149,6 +131,15 @@ trait Controllers {
     allSettingsProvider,
   )
 
+  lazy val payPalCompletePaymentsController = new PayPalCompletePaymentsController(
+    actionBuilders,
+    assetsResolver,
+    payPalCompletePaymentsServiceProvider,
+    testUsers,
+    controllerComponents,
+    allSettingsProvider,
+  )
+
   lazy val payPalOneOffController = new PayPalOneOff(
     actionBuilders,
     assetsResolver,
@@ -160,6 +151,8 @@ trait Controllers {
 
   lazy val testUsersController = new TestUsersManagement(
     authAction,
+    assetsResolver,
+    allSettingsProvider,
     controllerComponents,
     testUsers,
     appConfig.supportUrl,
@@ -192,6 +185,8 @@ trait Controllers {
   lazy val getAddressController = new GetAddress(
     controllerComponents,
     getAddressIOService,
+    idealPostcodesService,
+    allSettingsProvider,
     actionBuilders,
   )
 

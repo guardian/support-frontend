@@ -1,9 +1,7 @@
 import { css } from '@emotion/react';
 import { from, space, sport } from '@guardian/source/foundations';
 import { Column, Columns, Container } from '@guardian/source/react-components';
-import React from 'react';
-import { Provider } from 'react-redux';
-import { createTestStoreForContributions } from '__test-utils__/testStore';
+import type React from 'react';
 import AppDownloadBadges from 'components/thankYou/appDownload/AppDownloadBadges';
 import {
 	AppDownloadBodyCopy,
@@ -38,6 +36,7 @@ import {
 	socialShareHeader,
 	SocialShareIcons,
 } from 'components/thankYou/socialShare/SocialShareItems';
+import { SubscriptionStartItems } from 'components/thankYou/subscriptionStart/subscriptionStartItems';
 import {
 	SupportReminderBodyCopy,
 	SupportReminderCTAandPrivacy,
@@ -45,7 +44,6 @@ import {
 import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
-import { SubscriptionStartItems } from 'components/thankYou/subscriptionStart/subscriptionStartItems';
 import { WhatNext } from 'components/thankYou/whatNext/whatNext';
 import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
@@ -205,17 +203,6 @@ Feedback.args = {
 		/>
 	),
 };
-Feedback.decorators = [
-	(Story: React.FC): JSX.Element => {
-		const store = createTestStoreForContributions();
-
-		return (
-			<Provider store={store}>
-				<Story />
-			</Provider>
-		);
-	},
-];
 
 export const SignUp = Template.bind({});
 SignUp.args = {
@@ -227,79 +214,17 @@ SignUp.args = {
 	ctas: null,
 };
 
-export const SignUpTier3 = Template.bind({});
-SignUpTier3.args = {
-	moduleType: 'signUp',
-	isSignedIn: false,
-	icon: getThankYouModuleIcon('signUp'),
-	header: signUpHeader,
-	bodyCopy: <SignUpBodyCopy isTierThree={true} />,
-	ctas: null,
-};
-
-export const SignUpObserver = Template.bind({});
-SignUpObserver.args = {
-	moduleType: 'signUp',
-	isSignedIn: false,
-	icon: getThankYouModuleIcon('signUp'),
-	header: signUpHeader,
-	bodyCopy: <SignUpBodyCopy observerPrint={ObserverPrint.Paper} />,
-	ctas: null,
-};
-
 export const SignIn = Template.bind({});
 SignIn.args = {
 	moduleType: 'signIn',
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
 	header: signInHeader(),
-	bodyCopy: <SignInBodyCopy isGuardianPrint={false} isTierThree={false} />,
+	bodyCopy: <SignInBodyCopy isGuardianPrint={false} />,
 	ctas: (
 		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="Continue" />
 	),
 };
-
-export const SignInTier3 = Template.bind({});
-SignInTier3.args = {
-	moduleType: 'signIn',
-	isSignedIn: false,
-	icon: getThankYouModuleIcon('signIn'),
-	header: signInHeader(true),
-	bodyCopy: <SignInBodyCopy isTierThree={true} isGuardianPrint={false} />,
-	ctas: (
-		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="Sign in" />
-	),
-};
-
-export const SignInObserver = Template.bind({});
-SignInObserver.args = {
-	moduleType: 'signIn',
-	isSignedIn: false,
-	icon: getThankYouModuleIcon('signIn'),
-	header: signInHeader(true, ObserverPrint.Paper),
-	bodyCopy: (
-		<SignInBodyCopy
-			observerPrint={ObserverPrint.Paper}
-			isTierThree={false}
-			isGuardianPrint={false}
-		/>
-	),
-	ctas: (
-		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="Sign in" />
-	),
-};
-
-SignIn.decorators = [
-	(Story: React.FC): JSX.Element => {
-		const store = createTestStoreForContributions();
-
-		return (
-			<Provider store={store}>
-				<Story />
-			</Provider>
-		);
-	},
-];
 
 export const AusMap = Template.bind({});
 AusMap.args = {
@@ -495,28 +420,3 @@ SubscriptionStartGuardianWeekly.args = {
 	),
 	ctas: null,
 };
-
-export const SubscriptionStartTierThree = Template.bind({});
-SubscriptionStartTierThree.args = {
-	icon: getThankYouModuleIcon('subscriptionStart'),
-	header: 'When will your subscription start?',
-	bodyCopy: (
-		<SubscriptionStartItems
-			productKey={'TierThree'}
-			startDate={'Friday, March 28, 2025'}
-		/>
-	),
-	ctas: null,
-};
-
-SupportReminder.decorators = [
-	(Story: React.FC): JSX.Element => {
-		const store = createTestStoreForContributions();
-
-		return (
-			<Provider store={store}>
-				<Story />
-			</Provider>
-		);
-	},
-];

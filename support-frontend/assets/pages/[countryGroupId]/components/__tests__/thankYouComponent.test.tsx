@@ -10,6 +10,11 @@ import {
 	ThankYouComponent,
 } from '../thankYouComponent';
 
+jest.mock('pages/aus-moment-map/hooks/useWindowWidth', () => ({
+	useWindowWidth: () => ({
+		windowWidthIsGreaterThan: () => true,
+	}),
+}));
 jest.mock('../../checkout/helpers/sessionStorage', () => ({
 	getThankYouOrder: () => 'order',
 	getReturnAddress: () => 'adress',
@@ -71,7 +76,23 @@ describe('thankYouComponent', () => {
 			testComponent(
 				{
 					productKey: 'GuardianWeeklyDomestic',
-					ratePlanKey: 'Monthly',
+					ratePlanKey: 'MonthlyPlus',
+					identityUserType: 'new',
+				},
+				[
+					'signUp',
+					'whatNext',
+					'appDownloadEditions',
+					'newspaperArchiveBenefit',
+				],
+			);
+		});
+
+		it('should display the correct thankyou cards for GuardianWeeklyDomestic gift', () => {
+			testComponent(
+				{
+					productKey: 'GuardianWeeklyDomestic',
+					ratePlanKey: 'ThreeMonthGift',
 					identityUserType: 'new',
 				},
 				['signUp', 'whatNext'],
@@ -82,10 +103,15 @@ describe('thankYouComponent', () => {
 			testComponent(
 				{
 					productKey: 'HomeDelivery',
-					ratePlanKey: 'Everyday',
+					ratePlanKey: 'EverydayPlus',
 					identityUserType: 'new',
 				},
-				['signUp', 'whatNext', 'appsDownload'],
+				[
+					'signUp',
+					'whatNext',
+					'appDownloadEditions',
+					'newspaperArchiveBenefit',
+				],
 			);
 		});
 
@@ -93,10 +119,15 @@ describe('thankYouComponent', () => {
 			testComponent(
 				{
 					productKey: 'SubscriptionCard',
-					ratePlanKey: 'Everyday',
+					ratePlanKey: 'EverydayPlus',
 					identityUserType: 'new',
 				},
-				['signUp', 'whatNext', 'appsDownload'],
+				[
+					'signUp',
+					'whatNext',
+					'appDownloadEditions',
+					'newspaperArchiveBenefit',
+				],
 			);
 		});
 
@@ -136,22 +167,22 @@ describe('thankYouComponent', () => {
 
 		it('should display the correct thankyou cards for GuardianWeeklyDomestic', () => {
 			testComponent(
-				{ productKey: 'GuardianWeeklyDomestic', ratePlanKey: 'Monthly' },
-				['whatNext'],
+				{ productKey: 'GuardianWeeklyDomestic', ratePlanKey: 'MonthlyPlus' },
+				['whatNext', 'appDownloadEditions', 'newspaperArchiveBenefit'],
 			);
 		});
 
 		it('should display the correct thankyou cards for HomeDelivery', () => {
-			testComponent({ productKey: 'HomeDelivery', ratePlanKey: 'Everyday' }, [
-				'whatNext',
-				'appsDownload',
-			]);
+			testComponent(
+				{ productKey: 'HomeDelivery', ratePlanKey: 'EverydayPlus' },
+				['whatNext', 'appDownloadEditions', 'newspaperArchiveBenefit'],
+			);
 		});
 
 		it('should display the correct thankyou cards for SubscriptionCard', () => {
 			testComponent(
-				{ productKey: 'SubscriptionCard', ratePlanKey: 'Everyday' },
-				['whatNext', 'appsDownload'],
+				{ productKey: 'SubscriptionCard', ratePlanKey: 'EverydayPlus' },
+				['whatNext', 'appDownloadEditions', 'newspaperArchiveBenefit'],
 			);
 		});
 
@@ -178,15 +209,6 @@ describe('thankYouComponent', () => {
 			]);
 		});
 
-		it('should display the correct thankyou cards for TierThree', () => {
-			testComponent({ productKey: 'TierThree', ratePlanKey: 'Monthly' }, [
-				'signIn',
-				'benefits',
-				'appsDownload',
-				'subscriptionStart',
-			]);
-		});
-
 		it('should display the correct thankyou cards for Guardian AdLite', () => {
 			testComponent({ productKey: 'GuardianAdLite', ratePlanKey: 'Monthly' }, [
 				'whatNext',
@@ -194,46 +216,70 @@ describe('thankYouComponent', () => {
 			]);
 		});
 
-		it('should display the correct thankyou cards for Digital Edition', () => {
+		it('should display the correct thankyou cards for DigitalPlus', () => {
 			testComponent(
 				{ productKey: 'DigitalSubscription', ratePlanKey: 'Monthly' },
-				['signIn', 'appDownloadEditions', 'socialShare'],
+				[
+					'signIn',
+					'benefits',
+					'appDownloadEditions',
+					'newspaperArchiveBenefit',
+				],
 			);
 		});
 
-		it.skip('should display the correct thankyou cards for Everyday NationalDelivery Paper', () => {
+		it('should display the correct thankyou cards for EverydayPlus NationalDelivery Paper', () => {
 			testComponent(
-				{ productKey: 'NationalDelivery', ratePlanKey: 'Everyday' },
-				['subscriptionStart'],
+				{ productKey: 'NationalDelivery', ratePlanKey: 'EverydayPlus' },
+				['signIn', 'subscriptionStart', 'whatNext'],
 			);
 		});
 
-		it('should display the correct thankyou cards for Everyday SubscriptionCard Paper', () => {
+		it('should display the correct thankyou cards for EverydayPlus SubscriptionCard Paper', () => {
 			testComponent(
-				{ productKey: 'SubscriptionCard', ratePlanKey: 'Everyday' },
-				['signIn', 'whatNext', 'appsDownload'],
+				{ productKey: 'SubscriptionCard', ratePlanKey: 'EverydayPlus' },
+				[
+					'signIn',
+					'whatNext',
+					'appDownloadEditions',
+					'newspaperArchiveBenefit',
+				],
 			);
 		});
 
 		it('should display the correct thankyou cards for GuardianWeeklyDomestic', () => {
 			testComponent(
-				{ productKey: 'GuardianWeeklyDomestic', ratePlanKey: 'Monthly' },
-				['signIn', 'whatNext'],
+				{ productKey: 'GuardianWeeklyDomestic', ratePlanKey: 'MonthlyPlus' },
+				[
+					'signIn',
+					'whatNext',
+					'appDownloadEditions',
+					'newspaperArchiveBenefit',
+				],
 			);
 		});
 
 		it('should display the correct thankyou cards for HomeDelivery', () => {
-			testComponent({ productKey: 'HomeDelivery', ratePlanKey: 'Everyday' }, [
-				'signIn',
-				'whatNext',
-				'appsDownload',
-			]);
+			testComponent(
+				{ productKey: 'HomeDelivery', ratePlanKey: 'EverydayPlus' },
+				[
+					'signIn',
+					'whatNext',
+					'appDownloadEditions',
+					'newspaperArchiveBenefit',
+				],
+			);
 		});
 
 		it('should display the correct thankyou cards for SubscriptionCard', () => {
 			testComponent(
-				{ productKey: 'SubscriptionCard', ratePlanKey: 'Everyday' },
-				['signIn', 'whatNext', 'appsDownload'],
+				{ productKey: 'SubscriptionCard', ratePlanKey: 'EverydayPlus' },
+				[
+					'signIn',
+					'whatNext',
+					'appDownloadEditions',
+					'newspaperArchiveBenefit',
+				],
 			);
 		});
 

@@ -1,3 +1,4 @@
+import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { PaperProductOptions } from '@modules/product/productOptions';
@@ -13,7 +14,11 @@ import {
 	showPrice,
 } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { finalPrice, getAppliedPromo } from 'helpers/productPrice/promotions';
+import {
+	discountSummaryCopy,
+	finalPrice,
+	getAppliedPromo,
+} from 'helpers/productPrice/promotions';
 import type { TrackingProperties } from 'helpers/productPrice/subscriptions';
 import {
 	sendTrackingEventsOnClick,
@@ -22,6 +27,7 @@ import {
 import { paperCheckoutUrl } from 'helpers/urls/routes';
 import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import getPlanData from '../planData';
+import type { PaperPromotion } from './getPromotions';
 import { getProductLabel, getTitle } from './products';
 
 const getPriceCopyString = (
@@ -42,25 +48,48 @@ const getPriceCopyString = (
 	return <>per month{productCopy}</>;
 };
 
-const getOfferText = (price: ProductPrice, promo?: Promotion) => {
+// Show promo summary if there's a promo, otherwise show savings vs retail if any
+const getOfferText = (
+	price: ProductPrice,
+	promo?: Promotion,
+	promotionIndex?: number,
+) => {
+	if (promo?.discount?.amount && promotionIndex !== undefined) {
+		return discountSummaryCopy(
+			getCurrencyInfo(price.currency),
+			promotionIndex >= 0 ? 1 : 0, // if promotionIndex is 0 or higher, we want to show one "*",
+			price.price,
+			promo,
+			BillingPeriod.Monthly,
+		);
+	}
+
+	return '';
+};
+
+const getSavingsText = (
+	price: ProductPrice,
+	promo?: Promotion,
+): string | null => {
 	if (promo?.discount?.amount) {
 		const discount = getDiscountVsRetail(
 			price.price,
 			price.savingVsRetail ?? 0,
 			promo.discount.amount,
 		);
+
 		if (discount > 0) {
 			return `Save ${discount}% on retail price`;
-		} else {
-			return '';
 		}
+
+		return null;
 	}
 
 	if (price.savingVsRetail && price.savingVsRetail > 0) {
 		return `Save ${Math.floor(price.savingVsRetail)}% on retail price`;
 	}
 
-	return '';
+	return null;
 };
 
 const getUnavailableOutsideLondon = (
@@ -199,6 +228,7 @@ export const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
 	activePaperProductTypes: ActivePaperProductOptions[],
+	promotions: PaperPromotion[],
 ): Product[] =>
 	activePaperProductTypes
 		.filter(
@@ -213,7 +243,13 @@ export const getPlans = (
 				fulfilmentOption,
 				productOption,
 			);
+
 			const promotion = getAppliedPromo(priceAfterPromosApplied.promotions);
+
+			const promotionIndex = promotions.findIndex((promo) =>
+				promo.activePaperProducts.includes(productOption),
+			);
+
 			const promoCode = promotion ? promotion.promoCode : null;
 			const trackingProperties: TrackingProperties = {
 				id: `subscribe_now_cta-${[productOption, fulfilmentOption].join()}`,
@@ -229,6 +265,10 @@ export const getPlans = (
 			);
 			const showLabel = productOption === 'SixdayPlus';
 			const productLabel = getProductLabel(productOption);
+			const savingsText =
+				productOption !== 'Sunday'
+					? getSavingsText(nonDiscountedPrice, promotion)
+					: null;
 
 			return {
 				title: getTitle(productOption),
@@ -242,9 +282,11 @@ export const getPlans = (
 					copy[fulfilmentOption][productOption],
 				),
 				planData: getPlanData(productOption, fulfilmentOption),
-				offerCopy: getOfferText(priceAfterPromosApplied, promotion),
+				offerCopy: getOfferText(nonDiscountedPrice, promotion, promotionIndex),
+				savingsText,
 				showLabel,
 				productLabel,
+				promotion,
 				unavailableOutsideLondon: getUnavailableOutsideLondon(
 					fulfilmentOption,
 					productOption,

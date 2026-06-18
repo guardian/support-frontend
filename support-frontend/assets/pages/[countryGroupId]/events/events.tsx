@@ -10,7 +10,7 @@ import {
 import { Column, Columns, Container } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
@@ -49,16 +49,11 @@ const narrowBoxMarginAndPadding = css`
 		margin-bottom: ${space[4]}px;
 	}
 
-	> div {
-		padding: 0;
-	}
-
-	// Ticket Tailor widget itself contains a margin & border
-	// not accessible directly (class:box-color-background)
-	// We can reduce its container box to hide
-	// the margin & border
-	> div div div {
-		margin: -2px -2px -8px -2px;
+	// From tablet, slightly offset the spacing added by the Ticket Tailor widget itself.
+	${from.tablet} {
+		> div div div {
+			margin: -8px;
+		}
 	}
 `;
 
@@ -89,7 +84,7 @@ export function Events({ supportRegionId }: Props) {
 	const isTestUser = !!cookie.get('_test_username');
 	const shouldUseCode = isTestUser || !isProd();
 	const ticketTailorUrl = shouldUseCode
-		? 'https://www.tickettailor.com/events/guardianlivecode'
+		? 'https://tickets-code.theguardian.live/events/guardianlivecode'
 		: 'https://tickets.theguardian.live/events/guardianlive';
 
 	const params = useParams();

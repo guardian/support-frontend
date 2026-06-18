@@ -3,11 +3,11 @@ import { space } from '@guardian/source/foundations';
 import { TextArea } from '@guardian/source/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import { useState } from 'react';
+import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import { Legend } from 'pages/[countryGroupId]/components/form';
 import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSession';
@@ -24,6 +24,7 @@ type DeliveryRecipientAddressProps = {
 	setAddressErrors: React.Dispatch<
 		React.SetStateAction<AddressFormFieldError[]>
 	>;
+	useExpressPostcodeLookup: boolean;
 };
 
 export function DeliveryRecipientAddress({
@@ -36,6 +37,7 @@ export function DeliveryRecipientAddress({
 	showInstructions,
 	addressErrors,
 	setAddressErrors,
+	useExpressPostcodeLookup,
 }: DeliveryRecipientAddressProps) {
 	/** Delivery address */
 	const [deliveryLineOne, setDeliveryLineOne] =
@@ -71,6 +73,10 @@ export function DeliveryRecipientAddress({
 			'',
 		);
 
+	const [postcodeLookupError, setPostcodeLookupError] = useState<string | null>(
+		null,
+	);
+
 	const countryGroupId = CountryGroup.fromCountry(countryId) ?? 'International';
 
 	return (
@@ -103,16 +109,26 @@ export function DeliveryRecipientAddress({
 					setPostcodeForFinder={() => {
 						// no-op
 					}}
-					setPostcodeErrorForFinder={() => {
-						// no-op
+					setPostcodeErrorForFinder={(message) => {
+						setPostcodeLookupError(message);
 					}}
+					postcodeErrorForFinder={postcodeLookupError}
 					setErrors={setAddressErrors}
 					onFindAddress={(postcode) => {
 						setDeliveryPostcodeStateLoading(true);
-						void findAddressesForPostcode(postcode).then((results) => {
-							setDeliveryPostcodeStateLoading(false);
-							setDeliveryPostcodeStateResults(results);
-						});
+
+						void findAddressesForPostcode(postcode, useExpressPostcodeLookup)
+							.then((results) => {
+								setDeliveryPostcodeStateResults(results);
+								setPostcodeLookupError(null);
+							})
+							.catch(() => {
+								setDeliveryPostcodeStateResults([]);
+								setPostcodeLookupError('Postcode not found');
+							})
+							.finally(() => {
+								setDeliveryPostcodeStateLoading(false);
+							});
 					}}
 				/>
 			</fieldset>

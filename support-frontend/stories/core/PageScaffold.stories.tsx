@@ -1,4 +1,4 @@
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 import type { PageScaffoldProps } from 'components/page/pageScaffold';
 import { PageScaffold } from 'components/page/pageScaffold';
 

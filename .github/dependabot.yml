@@ -14,7 +14,16 @@ updates:
       - dependency-name: "@aws-cdk/*"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 7
+    groups:
+      storybook:
+        patterns:
+          - "storybook"
+          - "@storybook/*"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 7

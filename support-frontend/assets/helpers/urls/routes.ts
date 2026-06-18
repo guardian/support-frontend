@@ -12,6 +12,7 @@ import {
 	addQueryParamsToURL,
 	getAllQueryParams,
 	getOrigin,
+	getPaperOrigin,
 	isProd,
 } from './url';
 
@@ -48,6 +49,7 @@ const routes = {
 	supporterPlusStudentBeansCa:
 		'https://www.studentbeans.com/en-ca/ca/beansid-connect/hosted/the-guardian-digital/student/362bcbd6-b491-4adf-8ca1-9f0c9f69c3b7',
 	postcodeLookup: '/postcode-lookup',
+	expressPostcodeLookup: '/api/postcode-lookup',
 	createSignInUrl: '/identity/signin-url',
 	stripeSetupIntentRecaptcha: '/stripe/create-setup-intent/recaptcha',
 } as const;
@@ -61,8 +63,15 @@ const createRecurringReminderEndpoint = isProd()
 const countryPath = (countryGroupId: CountryGroupId) =>
 	countryGroups[countryGroupId].supportRegionId;
 
-function postcodeLookupUrl(postcode: string): string {
-	return `${getOrigin() + routes.postcodeLookup}/${postcode}`;
+function postcodeLookupUrl(
+	postcode: string,
+	useExpressPostcodeLookup: boolean,
+): string {
+	return `${getOrigin()}${
+		useExpressPostcodeLookup
+			? routes.expressPostcodeLookup
+			: routes.postcodeLookup
+	}/${postcode}`;
 }
 
 function paperSubsUrl(
@@ -87,24 +96,40 @@ function paperSubsUrl(
 	return baseURL;
 }
 
-function digitalSubscriptionLanding(
+function getDigitalPlusCheckoutDeepLink(
 	countryGroupId: CountryGroupId,
 	billingPeriod?: BillingPeriod,
 ) {
-	const routeDigitalSubscription = `${
-		routes.checkout
-	}?product=DigitalSubscription&ratePlan=${billingPeriod ?? 'Monthly'}`;
-	return `${getOrigin()}/${countryPath(
-		countryGroupId,
-	)}${routeDigitalSubscription}`;
+	const urlParams = {
+		product: 'DigitalSubscription',
+		ratePlan: billingPeriod ?? 'Monthly',
+		utm_medium: 'ACQUISITIONS_SUPPORT_SITE',
+		utm_campaign: 'digitalplus',
+		utm_content: `acquisition_${billingPeriod?.toLowerCase()}`,
+		utm_term: 'printcheckout',
+		utm_source: 'GUARDIAN_WEB',
+		backLocation: 'subscribe',
+	};
+
+	const domain = getOrigin();
+	const localePath = countryPath(countryGroupId);
+	const checkoutRoute = routes.checkout;
+
+	const queryParams = new URLSearchParams(Object.entries(urlParams)).toString();
+
+	return `${domain}/${localePath}${checkoutRoute}?${queryParams}`;
 }
 
-function guardianWeeklyLanding(countryGroupId: CountryGroupId, gift: boolean) {
-	return `${getOrigin()}/${countryPath(countryGroupId)}${
+function guardianWeeklyLanding(
+	countryGroupId: CountryGroupId,
+	gift: boolean,
+): string {
+	const url = `${getOrigin()}/${countryPath(countryGroupId)}${
 		gift
 			? routes.guardianWeeklySubscriptionLandingGift
 			: routes.guardianWeeklySubscriptionLanding
 	}`;
+	return url;
 }
 
 const promotionTermsUrl = (promoCode: string) =>
@@ -116,7 +141,7 @@ function paperCheckoutUrl(
 	promoCode?: Option<string>,
 	abTestName?: string,
 ) {
-	const url = `${getOrigin()}/uk/checkout`;
+	const url = `${getPaperOrigin(productOptions)}/uk/checkout`;
 
 	const params = abTestName
 		? {
@@ -148,7 +173,7 @@ function parameteriseUrl(
 	const params = {
 		promoCode,
 	};
-	const urlWithParams = addQueryParamsToURL(url, params).replace(/\?$/, ''); // removes ? when no params
+	const urlWithParams = addQueryParamsToURL(url, params);
 	return fulfilmentOption
 		? `${urlWithParams}#${fulfilmentOption}`
 		: urlWithParams;
@@ -180,7 +205,7 @@ export {
 	paperSubsUrl,
 	paperCheckoutUrl,
 	parameteriseUrl,
-	digitalSubscriptionLanding,
+	getDigitalPlusCheckoutDeepLink,
 	guardianWeeklyLanding,
 	promotionTermsUrl,
 };

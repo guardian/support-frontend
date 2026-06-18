@@ -12,7 +12,7 @@ jobs:
       PAYPAL_TEST_PASSWORD: ${{ secrets.PAYPAL_TEST_PASSWORD }}
       GOOGLE_CHAT_WEB_HOOK: ${{ secrets.GOOGLE_CHAT_WEB_HOOK }}
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - name: Setup Node and Install Dependencies
       uses: ./.github/actions/setup-node-and-install
@@ -23,7 +23,7 @@ jobs:
     - name: Run Playwright tests
       run: pnpm --filter support-e2e test-cron
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       if: ${{ !cancelled() }}
       with:
         name: playwright-report

@@ -12,19 +12,18 @@ import type {
 } from '@modules/product-catalog/productCatalog';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { Participations } from './abTests/models';
-import { getFeatureFlags } from './featureFlags';
+import { isObserverSubdomain } from './globalsAndSwitches/observer';
 
 export enum ProductTierLabel {
 	TierOne = 'Support',
 	TierTwo = 'All-access digital',
-	TierThree = 'Digital + print',
+	DigitalSubscription = 'Digital plus',
 }
 
 const activeProductKeys = [
 	'GuardianWeeklyDomestic',
 	'GuardianWeeklyRestOfWorld',
 	'GuardianAdLite',
-	'TierThree',
 	'DigitalSubscription',
 	'NationalDelivery',
 	'HomeDelivery',
@@ -44,7 +43,6 @@ export type ActiveProductKey = Extract<
  */
 type OneTimeContributionRatePlanKey = ProductRatePlanKey<'OneTimeContribution'>;
 type GuardianAdLiteRatePlanKey = ProductRatePlanKey<'GuardianAdLite'>;
-type TierThreeRatePlanKey = ProductRatePlanKey<'TierThree'>;
 type DigitalSubscriptionRatePlanKey = ProductRatePlanKey<'DigitalSubscription'>;
 type NationalDeliveryRatePlanKey = ProductRatePlanKey<'NationalDelivery'>;
 type HomeDeliveryRatePlanKey = ProductRatePlanKey<'HomeDelivery'>;
@@ -59,19 +57,22 @@ type ContributionRatePlanKey = ProductRatePlanKey<'Contribution'>;
 export type ActiveRatePlanKey = keyof Record<
 	| OneTimeContributionRatePlanKey
 	| GuardianAdLiteRatePlanKey
-	| TierThreeRatePlanKey
 	| DigitalSubscriptionRatePlanKey
 	| NationalDeliveryRatePlanKey
 	| HomeDeliveryRatePlanKey
 	| SupporterPlusRatePlanKey
 	| GuardianWeeklyRestOfWorldRatePlanKey
+	// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents -- we need to investigate how to avoid this duplication, but for now it's easier to maintain the types separately across products
 	| GuardianWeeklyDomesticRatePlanKey
+	// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents -- we need to investigate how to avoid this duplication, but for now it's easier to maintain the types separately across products
 	| SubscriptionCardRatePlanKey
 	| ContributionRatePlanKey,
 	true
 >;
 
 export const productCatalog = window.guardian.productCatalog;
+// TODO: we should probably move into using this function so we can acess the an updated version of the product catalog
+export const getProductCatalog = () => window.guardian.productCatalog;
 
 export type ProductBenefit = {
 	copy: string;
@@ -162,11 +163,6 @@ function displayBenefitByABTestVariant(
 export function isProductKey(val: unknown): val is ActiveProductKey {
 	return activeProductKeys.includes(val as ActiveProductKey);
 }
-
-const digitalEditionBenefit = {
-	copy: 'Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
-	copyBoldStart: 'The Digital Edition app. ',
-};
 
 const appBenefit = {
 	copy: 'Unlimited access to the Guardian app',
@@ -283,6 +279,7 @@ const nationalPaperPlusRatePlans: RatePlanDetails = {
 	},
 };
 
+const isObserverSubDomain = isObserverSubdomain();
 const paperPlusRatePlans: RatePlanDetails = {
 	...nationalPaperPlusRatePlans,
 	Saturday: {
@@ -297,18 +294,58 @@ const paperPlusRatePlans: RatePlanDetails = {
 	},
 	Sunday: {
 		billingPeriod: BillingPeriod.Monthly,
-		displayName: 'The Observer, digital & print',
+		displayName: `The Observer${
+			isObserverSubDomain ? ', digital & print' : ''
+		}`,
 		label: 'Observer',
 
 		hideSimilarProductsConsent: true,
 	},
 	SundayPlus: {
 		billingPeriod: BillingPeriod.Monthly,
-		displayName: 'The Observer, digital & print',
+		displayName: `The Observer${
+			isObserverSubDomain ? ', digital & print' : ''
+		}`,
 		label: 'Observer',
 
 		hideSimilarProductsConsent: true,
 	},
+};
+
+const digitalPaperBenefitUK = {
+	copy: 'Daily digital Guardian newspaper',
+	specificToRegions: ['GBPCountries'] as CountryGroupId[],
+};
+
+const paperArchiveDigitalBenefitUK = {
+	copy: `Digital access to the Guardian’s 200 year newspaper archive`,
+	tooltip:
+		'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was in the UK, since 1821.',
+	specificToRegions: ['GBPCountries'] as CountryGroupId[],
+};
+
+const weeklyDigitalBenefit = {
+	copy: `Guardian Weekly e-magazine`,
+	tooltip: `Accessed through the Guardian Editions app, the Guardian Weekly e-magazine features a handpicked and carefully curated selection of in-depth articles, global news, opinion and more. Enjoy wherever you are, on your favourite device.`,
+};
+
+const editionsDigitalBenefit = {
+	copy: `The Long Read e-magazine`,
+	tooltip: `Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.`,
+};
+
+const paperArchiveDigitalBenefit = {
+	copy: `Digital access to the Guardian’s 200 year newspaper archive`,
+	tooltip:
+		'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was, since 1821.',
+	specificToRegions: [
+		'UnitedStates',
+		'EURCountries',
+		'AUDCountries',
+		'NZDCountries',
+		'Canada',
+		'International',
+	] as CountryGroupId[],
 };
 
 export const productCatalogDescription: Record<
@@ -327,43 +364,17 @@ export const productCatalogDescription: Record<
 		},
 		benefits: guardianAdLiteBenefits,
 	},
-	TierThree: {
-		label: ProductTierLabel.TierThree,
+	DigitalSubscription: {
+		label: 'Digital plus',
+		labelPill: 'New',
 		thankyouMessage: digitalThankyouMessage,
 		landingPagePath: '/contribute',
-		benefits: [guardianWeeklyBenefit],
-		/** These are just the SupporterPlus benefits */
-		deliverableTo: gwDeliverableCountries,
-		ratePlans: {
-			DomesticMonthly: {
-				billingPeriod: BillingPeriod.Monthly,
-			},
-			DomesticAnnual: {
-				billingPeriod: BillingPeriod.Annual,
-			},
-			RestOfWorldMonthly: {
-				billingPeriod: BillingPeriod.Monthly,
-			},
-			RestOfWorldAnnual: {
-				billingPeriod: BillingPeriod.Annual,
-			},
-		},
-	},
-	DigitalSubscription: {
-		label: 'The Guardian Digital Edition',
-		thankyouMessage: `You have now unlocked access to the Guardian and Observer newspapers, which you can enjoy across all your devices, wherever you are in the world.
-            Soon, you will receive weekly newsletters from our supporter editor. We'll also be in touch with other ways to get closer to our journalism. ${' '}`,
-		landingPagePath: '/subscribe',
 		benefits: [
-			digitalEditionBenefit,
-			{
-				copy: 'Read our reporting on the go',
-				copyBoldStart: 'Full access to the Guardian app. ',
-			},
-			{
-				copy: 'Enjoy a free trial of your subscription, before you pay',
-				copyBoldStart: 'Free 14 day trial. ',
-			},
+			weeklyDigitalBenefit,
+			editionsDigitalBenefit,
+			paperArchiveDigitalBenefit,
+			paperArchiveDigitalBenefitUK,
+			digitalPaperBenefitUK,
 		],
 		ratePlans: {
 			Monthly: {
@@ -406,6 +417,9 @@ export const productCatalogDescription: Record<
 			Monthly: {
 				billingPeriod: BillingPeriod.Monthly,
 			},
+			MonthlyPlus: {
+				billingPeriod: BillingPeriod.Monthly,
+			},
 			OneYearGift: {
 				billingPeriod: BillingPeriod.Annual,
 				hideSimilarProductsConsent: true,
@@ -414,7 +428,13 @@ export const productCatalogDescription: Record<
 			Annual: {
 				billingPeriod: BillingPeriod.Annual,
 			},
+			AnnualPlus: {
+				billingPeriod: BillingPeriod.Annual,
+			},
 			Quarterly: {
+				billingPeriod: BillingPeriod.Quarterly,
+			},
+			QuarterlyPlus: {
 				billingPeriod: BillingPeriod.Quarterly,
 			},
 			ThreeMonthGift: {
@@ -433,6 +453,9 @@ export const productCatalogDescription: Record<
 			Monthly: {
 				billingPeriod: BillingPeriod.Monthly,
 			},
+			MonthlyPlus: {
+				billingPeriod: BillingPeriod.Monthly,
+			},
 			OneYearGift: {
 				billingPeriod: BillingPeriod.Annual,
 				hideSimilarProductsConsent: true,
@@ -441,7 +464,13 @@ export const productCatalogDescription: Record<
 			Annual: {
 				billingPeriod: BillingPeriod.Annual,
 			},
+			AnnualPlus: {
+				billingPeriod: BillingPeriod.Annual,
+			},
 			Quarterly: {
+				billingPeriod: BillingPeriod.Quarterly,
+			},
+			QuarterlyPlus: {
 				billingPeriod: BillingPeriod.Quarterly,
 			},
 			ThreeMonthGift: {
@@ -498,60 +527,6 @@ export const productCatalogDescription: Record<
 	},
 };
 
-const paperArchiveDigitalBenefit = {
-	copy: `Digital access to the Guardian’s 200 year newspaper archive`,
-	isNew: true,
-	tooltip:
-		'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was, since 1821.',
-	specificToRegions: [
-		'UnitedStates',
-		'EURCountries',
-		'AUDCountries',
-		'NZDCountries',
-		'Canada',
-		'International',
-	] as CountryGroupId[],
-};
-
-const paperArchiveDigitalBenefitUK = {
-	copy: `Digital access to the Guardian’s 200 year newspaper archive`,
-	isNew: true,
-	tooltip:
-		'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was in the UK, since 1821.',
-	specificToRegions: ['GBPCountries'] as CountryGroupId[],
-};
-
-const weeklyDigitalBenefit = {
-	copy: `Guardian Weekly e-magazine`,
-	isNew: true,
-	tooltip: `Accessed through the Guardian Editions app, the Guardian Weekly e-magazine features a handpicked and carefully curated selection of in-depth articles, global news, opinion and more. Enjoy wherever you are, on your favourite device.`,
-};
-
-const editionsDigitalBenefit = {
-	copy: `The Long Read e-magazine`,
-	isNew: true,
-	tooltip: `Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.`,
-};
-
-const productCatalogDescriptionDigitalAccess = {
-	...productCatalogDescription.SupporterPlus,
-	label: 'Digital access',
-};
-
-export const productCatalogDescriptionPremiumDigital = {
-	...productCatalogDescription.DigitalSubscription,
-	label: 'Digital plus',
-	labelPill: 'New',
-	thankyouMessage: digitalThankyouMessage,
-	landingPagePath: '/contribute',
-	benefits: [
-		weeklyDigitalBenefit,
-		editionsDigitalBenefit,
-		paperArchiveDigitalBenefit,
-		paperArchiveDigitalBenefitUK,
-	],
-};
-
 export function productCatalogGuardianAdLite(): Record<
 	ActiveProductKey | 'GuardianAdLiteGoBack',
 	ProductDescription
@@ -588,13 +563,6 @@ const productCatalogGuardianWeeklyGift = {
 };
 
 export const getProductLabel = (productKey: ActiveProductKey): string => {
-	const { enablePremiumDigital, enableDigitalAccess } = getFeatureFlags();
-	if (productKey === 'DigitalSubscription' && enablePremiumDigital) {
-		return productCatalogDescriptionPremiumDigital.label;
-	}
-	if (productKey === 'SupporterPlus' && enableDigitalAccess) {
-		return productCatalogDescriptionDigitalAccess.label;
-	}
 	return productCatalogDescription[productKey].label;
 };
 
@@ -602,13 +570,6 @@ export const getProductDescription = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): ProductDescription => {
-	const { enablePremiumDigital, enableDigitalAccess } = getFeatureFlags();
-	if (productKey === 'DigitalSubscription' && enablePremiumDigital) {
-		return productCatalogDescriptionPremiumDigital;
-	}
-	if (productKey === 'SupporterPlus' && enableDigitalAccess) {
-		return productCatalogDescriptionDigitalAccess;
-	}
 	if (isGuardianWeeklyGiftProduct(productKey, ratePlanKey)) {
 		return productCatalogGuardianWeeklyGift[productKey];
 	}
@@ -641,11 +602,7 @@ export function internationaliseProductAndRatePlan(
 } {
 	return {
 		productKey: internationaliseProduct(supportRegionId, productKey),
-		ratePlanKey: internationaliseRatePlan(
-			supportRegionId,
-			productKey,
-			ratePlanKey,
-		),
+		ratePlanKey: ratePlanKey,
 	};
 }
 
@@ -664,29 +621,4 @@ export function internationaliseProduct(
 		}
 	}
 	return productKey;
-}
-
-function internationaliseRatePlan(
-	supportRegionId: SupportRegionId,
-	productKey: ActiveProductKey,
-	ratePlanKey: ActiveRatePlanKey,
-): ActiveRatePlanKey {
-	if (productKey === 'TierThree') {
-		if (supportRegionId === SupportRegionId.INT) {
-			if (ratePlanKey === 'DomesticAnnual') {
-				return 'RestOfWorldAnnual';
-			}
-			if (ratePlanKey === 'DomesticMonthly') {
-				return 'RestOfWorldMonthly';
-			}
-		} else {
-			if (ratePlanKey === 'RestOfWorldAnnual') {
-				return 'DomesticAnnual';
-			}
-			if (ratePlanKey === 'RestOfWorldMonthly') {
-				return 'DomesticMonthly';
-			}
-		}
-	}
-	return ratePlanKey;
 }

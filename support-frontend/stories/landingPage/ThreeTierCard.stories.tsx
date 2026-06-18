@@ -82,8 +82,83 @@ Promotion.args = {
 	paymentFrequency: 'MONTHLY',
 	cardTier: 3,
 	cardContent: {
-		...fallBackLandingPageSelection.products.TierThree,
-		product: 'TierThree',
+		...fallBackLandingPageSelection.products.DigitalSubscription,
+		product: 'DigitalSubscription',
+		isUserSelected: false,
+		price: 38.5,
+		cta: { copy: 'Support' },
+		label: { copy: 'Highest impact' },
+		promotion: promotionEURCountries,
+	},
+};
+
+export const BillingPeriodsCopy = Template.bind({});
+BillingPeriodsCopy.args = {
+	isSubdued: false,
+	currencyId: 'GBP',
+	cardTier: 2,
+	billingPeriod: 'Monthly',
+	cardContent: {
+		...fallBackLandingPageSelection.products.SupporterPlus,
+		product: 'SupporterPlus',
+		isUserSelected: false,
+		price: 12,
+		cta: { copy: 'Support' },
+		label: { copy: 'Highest impact' },
+		billingPeriodsCopy:
+			'From %%PRICE_PRODUCT_WEEKLY%% per week, billed monthly or annually.',
+	},
+};
+
+export const PromotionWithBillingPeriodsCopy = Template.bind({});
+
+PromotionWithBillingPeriodsCopy.args = {
+	isSubdued: false,
+	currencyId: 'EUR',
+	billingPeriod: 'Monthly',
+	cardTier: 3,
+	cardContent: {
+		...fallBackLandingPageSelection.products.DigitalSubscription,
+		product: 'DigitalSubscription',
+		isUserSelected: false,
+		price: 38.5,
+		cta: { copy: 'Support' },
+		label: { copy: 'Highest impact' },
+		promotion: promotionEURCountries,
+		billingPeriodsCopy:
+			'From %%PRICE_PRODUCT_WEEKLY%% per week, billed monthly or annually.',
+	},
+};
+
+export const WeeklyPricing = Template.bind({});
+
+WeeklyPricing.args = {
+	isSubdued: false,
+	currencyId: 'GBP',
+	paymentFrequency: 'MONTHLY',
+	cardTier: 2,
+	showWeeklyPrice: true,
+	cardContent: {
+		...fallBackLandingPageSelection.products.SupporterPlus,
+		product: 'SupporterPlus',
+		isUserSelected: false,
+		price: 12,
+		cta: { copy: 'Support' },
+		label: { copy: 'Highest impact' },
+	},
+};
+
+export const WeeklyPricingWithPromotion = Template.bind({});
+
+WeeklyPricingWithPromotion.args = {
+	isSubdued: false,
+	currencyId: 'EUR',
+	paymentFrequency: 'MONTHLY',
+	cardTier: 3,
+	showWeeklyPrice: true,
+	cardContent: {
+		...fallBackLandingPageSelection.products.DigitalSubscription,
+		product: 'DigitalSubscription',
 		isUserSelected: false,
 		price: 38.5,
 		cta: { copy: 'Support' },

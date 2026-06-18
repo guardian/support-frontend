@@ -1,37 +1,26 @@
 import type { PaymentMethodSwitch } from './checkouts';
-import type { StripePaymentMethod } from './paymentIntegrations/readerRevenueApis';
 
 const Stripe = 'Stripe';
 const PayPal = 'PayPal';
+const PayPalCompletePayments = 'PayPalCompletePayments';
 const DirectDebit = 'DirectDebit';
 const StripeHostedCheckout = 'StripeHostedCheckout';
-const Sepa = 'Sepa';
 const None = 'None';
 
 export type PaymentMethod =
 	| typeof Stripe
 	| typeof PayPal
+	| typeof PayPalCompletePayments
 	| typeof DirectDebit
 	| typeof StripeHostedCheckout
-	| typeof Sepa
 	| typeof None;
-
-export type FullPaymentMethod = {
-	paymentMethod: PaymentMethod;
-	stripePaymentMethod?: StripePaymentMethod;
-};
-
-export const recaptchaRequiredPaymentMethods: PaymentMethod[] = [
-	DirectDebit,
-	Stripe,
-];
 
 const paymentMethods = [
 	Stripe,
 	PayPal,
+	PayPalCompletePayments,
 	DirectDebit,
 	StripeHostedCheckout,
-	Sepa,
 	None,
 ];
 
@@ -48,6 +37,7 @@ export function toPaymentMethodSwitchNaming(
 ): PaymentMethodSwitch | null {
 	switch (paymentMethod) {
 		case PayPal:
+		case PayPalCompletePayments:
 			return 'payPal';
 
 		case Stripe:
@@ -59,12 +49,15 @@ export function toPaymentMethodSwitchNaming(
 		case StripeHostedCheckout:
 			return 'stripeHostedCheckout';
 
-		case Sepa:
-			return 'sepa';
-
 		case None:
 			return null;
 	}
 }
 
-export { Stripe, PayPal, DirectDebit, StripeHostedCheckout, Sepa };
+export {
+	Stripe,
+	PayPal,
+	PayPalCompletePayments,
+	DirectDebit,
+	StripeHostedCheckout,
+};

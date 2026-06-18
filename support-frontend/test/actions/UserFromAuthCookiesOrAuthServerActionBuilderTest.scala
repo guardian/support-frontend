@@ -29,8 +29,16 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
   private val accessToken = AccessToken("accessToken")
   private val idToken = IdToken("idToken")
   private val idClaims =
-    UserClaims(primaryEmailAddress = "email", identityId = "id", firstName = None, lastName = None, iat = None)
-  private val accessClaims = DefaultAccessClaims(primaryEmailAddress = "email", identityId = "id", username = None)
+    UserClaims(
+      primaryEmailAddress = "email",
+      identityId = "id",
+      firstName = None,
+      lastName = None,
+      iat = None,
+      oktaId = "oktaId",
+    )
+  private val accessClaims =
+    DefaultAccessClaims(primaryEmailAddress = "email", identityId = "id", username = None, oktaId = "oktaId")
   private val accessScopes = "scope1 scope2 scope3"
   private val accessScopeList =
     List(ClientAccessScope("scope1"), ClientAccessScope("scope2"), ClientAccessScope("scope3"))
@@ -44,7 +52,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has recently-signed-out cookie" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+      val authService = mock[OktaAuthService]
       val config = mock[Identity]
       when(config.signedInCookieName).thenReturn(signedInCookieName)
       when(config.signedOutCookieName).thenReturn(signedOutCookieName)
@@ -69,7 +77,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has no signed-in cookie" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+      val authService = mock[OktaAuthService]
       val config = mock[Identity]
       when(config.signedInCookieName).thenReturn(signedInCookieName)
       when(config.signedOutCookieName).thenReturn(signedOutCookieName)
@@ -93,7 +101,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has no token cookies" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+      val authService = mock[OktaAuthService]
       val config = mock[Identity]
       when(config.oauthScopes).thenReturn(accessScopes)
       when(config.signedInCookieName).thenReturn(signedInCookieName)
@@ -126,7 +134,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has no ID token cookie" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+      val authService = mock[OktaAuthService]
       val config = mock[Identity]
       when(config.oauthScopes).thenReturn(accessScopes)
       when(config.signedInCookieName).thenReturn(signedInCookieName)
@@ -164,8 +172,8 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has no access token cookie" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
-      when(authService.validateIdTokenLocally(idToken, nonce = None)).thenReturn(Right(idClaims))
+      val authService = mock[OktaAuthService]
+      when(authService.validateIdTokenLocally(idToken, nonce = None)(UserClaims.parser)).thenReturn(Right(idClaims))
       val config = mock[Identity]
       when(config.oauthScopes).thenReturn(accessScopes)
       when(config.signedInCookieName).thenReturn(signedInCookieName)
@@ -203,8 +211,8 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has both ID and access token cookies and they contain valid tokens" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
-      when(authService.validateIdTokenLocally(idToken, nonce = None)).thenReturn(Right(idClaims))
+      val authService = mock[OktaAuthService]
+      when(authService.validateIdTokenLocally(idToken, nonce = None)((UserClaims.parser))).thenReturn(Right(idClaims))
       when(authService.validateAccessTokenLocally(accessToken, accessScopeList)).thenReturn(Right(accessClaims))
       val config = mock[Identity]
       when(config.oauthScopes).thenReturn(accessScopes)
@@ -236,8 +244,8 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has both ID and access token cookies but one is invalid" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
-      when(authService.validateIdTokenLocally(idToken, nonce = None)).thenReturn(Right(idClaims))
+      val authService = mock[OktaAuthService]
+      when(authService.validateIdTokenLocally(idToken, nonce = None)(UserClaims.parser)).thenReturn(Right(idClaims))
       when(authService.validateAccessTokenLocally(accessToken, accessScopeList)).thenReturn(Left(InvalidOrExpiredToken))
       val config = mock[Identity]
       when(config.oauthScopes).thenReturn(accessScopes)
@@ -277,7 +285,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has both ID and access token cookies but both are invalid and we've already tried to authenticate" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+      val authService = mock[OktaAuthService]
       when(authService.validateIdTokenLocally(idToken, nonce = None)).thenReturn(Left(InvalidOrExpiredToken))
       when(authService.validateAccessTokenLocally(accessToken, Nil)).thenReturn(Left(InvalidOrExpiredToken))
       val config = mock[Identity]
@@ -312,7 +320,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "auth server is down" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+      val authService = mock[OktaAuthService]
       when(authService.validateIdTokenLocally(idToken, nonce = None)).thenReturn(Left(InvalidOrExpiredToken))
       when(authService.validateAccessTokenLocally(accessToken, Nil)).thenReturn(Left(InvalidOrExpiredToken))
       val config = mock[Identity]
@@ -346,7 +354,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has no referrer" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+      val authService = mock[OktaAuthService]
       val config = mock[Identity]
       when(config.oauthScopes).thenReturn(accessScopes)
       when(config.signedInCookieName).thenReturn(signedInCookieName)
@@ -376,50 +384,68 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
     }
   }
 
-  "UserClaims.fromDefaultAndUnparsed" when {
-    "no raw claims" must {
-      "fail with missing required claim" in {
-        UserClaims.parser.fromUnparsed(UnparsedClaims(rawClaims = Map())) mustBe Left(MissingRequiredClaim("email"))
-      }
+  "UserClaims.parser" when {
+    "fails when missing a required claim" in {
+      val unparsedClaims = UnparsedClaims(rawClaims = Map())
+
+      val result = UserClaims.parser.parse(unparsedClaims)
+
+      result mustBe Left(
+        MissingRequiredClaim(IdentityClaims.OKTA_ID_CLAIM_NAME),
+      )
     }
-    "all required raw claims" must {
-      "give partially filled UserClaims" in {
-        UserClaims.parser.fromUnparsed(
-          UnparsedClaims(rawClaims = Map("email" -> "eml", "legacy_identity_id" -> "idid")),
-        ) mustBe Right(
-          UserClaims(
-            primaryEmailAddress = "eml",
-            identityId = "idid",
-            firstName = None,
-            lastName = None,
-            iat = None,
-          ),
-        )
-      }
+
+    "successfully parses when all required & no optional claims are present" in {
+      val unparsedClaims = UnparsedClaims(rawClaims =
+        Map[String, AnyRef](
+          IdentityClaims.OKTA_ID_CLAIM_NAME -> "oktaId",
+          IdentityClaims.EMAIL_CLAIM_NAME -> "email",
+          IdentityClaims.IDENTITY_ID_CLAIM_NAME -> "id",
+        ),
+      )
+
+      val result = UserClaims.parser.parse(
+        unparsedClaims,
+      )
+
+      result mustBe Right(
+        UserClaims(
+          oktaId = "oktaId",
+          primaryEmailAddress = "email",
+          identityId = "id",
+          firstName = None,
+          lastName = None,
+          iat = None,
+        ),
+      )
     }
-    "all raw claims" must {
-      "give complete UserClaims" in {
-        UserClaims.parser.fromUnparsed(
-          UnparsedClaims(rawClaims =
-            Map(
-              "email" -> "eml",
-              "legacy_identity_id" -> "idid",
-              "username" -> "un",
-              "first_name" -> "fn",
-              "last_name" -> "sn",
-              "iat" -> 123456.asInstanceOf[AnyRef],
-            ),
-          ),
-        ) mustBe Right(
-          UserClaims(
-            primaryEmailAddress = "eml",
-            identityId = "idid",
-            firstName = Some("fn"),
-            lastName = Some("sn"),
-            iat = Some(123456),
-          ),
-        )
-      }
+
+    "successfully parses when all required & optional claims are present" in {
+      val unparsedClaims = UnparsedClaims(rawClaims =
+        Map[String, AnyRef](
+          IdentityClaims.OKTA_ID_CLAIM_NAME -> "oktaId",
+          IdentityClaims.EMAIL_CLAIM_NAME -> "email",
+          IdentityClaims.IDENTITY_ID_CLAIM_NAME -> "id",
+          "first_name" -> "First",
+          "last_name" -> "Last",
+          "iat" -> 1773405228.asInstanceOf[AnyRef],
+        ),
+      )
+
+      val result = UserClaims.parser.parse(
+        unparsedClaims,
+      )
+
+      result mustBe Right(
+        UserClaims(
+          oktaId = "oktaId",
+          primaryEmailAddress = "email",
+          identityId = "id",
+          firstName = Some("First"),
+          lastName = Some("Last"),
+          iat = Some(1773405228),
+        ),
+      )
     }
   }
 }

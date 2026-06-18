@@ -10,6 +10,7 @@ import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import {
 	Channel,
 	type ProductLabelProps,
@@ -24,9 +25,9 @@ import {
 	productOptionInfo,
 	productOptionLabel,
 	productOptionLabelObserver,
-	productOptionOfferCopy,
 	productOptionPrice,
 	productOptionPriceCopy,
+	productOptionSavingsText,
 	productOptionTitle,
 	productOptionTitleHeading,
 	productOptionUnderline,
@@ -39,20 +40,28 @@ import {
 export type Product = {
 	title: string;
 	price: string;
-	children?: ReactNode;
-	offerCopy?: ReactNode;
+	href: string;
 	priceCopy: ReactNode;
 	buttonCopy: string;
-	href: string;
 	onClick: () => void;
 	onView: () => void;
+	billingPeriodNoun?: string;
+	billingPeriod?: BillingPeriod;
+	discountedPrice?: string;
+	discountSummary?: string;
+	offerCopy?: ReactNode;
+	savingsText?: string | null;
 	showLabel?: boolean;
+	hasPromotion?: boolean;
+	isPriorityPromo?: boolean;
+	roundel?: string;
 	productLabel?: ProductLabelProps;
 	cssOverrides?: SerializedStyles;
-	billingPeriod?: BillingPeriod;
 	isSpecialOffer?: boolean;
 	unavailableOutsideLondon?: boolean;
 	planData?: PlanData;
+	children?: ReactNode;
+	promotion?: Promotion;
 };
 
 function ProductOption(props: Product): JSX.Element {
@@ -132,8 +141,8 @@ function ProductOption(props: Product): JSX.Element {
 				{props.children && props.children}
 			</div>
 			<div css={productOptionVerticalLine}>
-				<p css={[productOptionOfferCopy, productOptionUnderline]}>
-					{props.offerCopy}
+				<p css={[productOptionSavingsText, productOptionUnderline]}>
+					{props.savingsText}
 					{props.unavailableOutsideLondon && (
 						<div css={productOptionInfo}>
 							<SvgInfoRound />
@@ -167,7 +176,6 @@ function ProductOption(props: Product): JSX.Element {
 ProductOption.defaultProps = {
 	children: null,
 	label: '',
-	offerCopy: '',
 	cssOverrides: '',
 	billingPeriod: BillingPeriod.Monthly,
 };

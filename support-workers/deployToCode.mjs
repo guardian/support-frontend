@@ -1,12 +1,12 @@
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { createReadStream } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 import {
 	LambdaClient,
 	UpdateFunctionCodeCommand,
 } from '@aws-sdk/client-lambda';
-import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm';
-import { createReadStream } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -16,6 +16,9 @@ const LAMBDA_FUNCTIONS = [
 	'CreatePaymentMethodLambda',
 	'CreateSalesforceContactLambda',
 	'CreateZuoraSubscriptionTSLambda',
+	'SendThankYouEmailLambda',
+	'UpdateSupporterProductDataLambda',
+	'SendAcquisitionEventLambda',
 ];
 
 const ssmClient = new SSMClient({

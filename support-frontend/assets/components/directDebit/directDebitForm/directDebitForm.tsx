@@ -10,7 +10,7 @@ import * as styles from './directDebitFormStyles';
 import LegalNotice from './legalNotice';
 import type { DirectDebitFormDisplayErrors } from './selectors';
 
-export type DirectDebitFormProps = {
+type DirectDebitFormProps = {
 	countryGroupId: CountryGroupId;
 	accountHolderName: string;
 	accountNumber: string;

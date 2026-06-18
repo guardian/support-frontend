@@ -99,36 +99,3 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product Subscript
   </span>
 </div>
 `;
-
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product TierThree correctly 1`] = `
-<div>
-  <span
-    class="css-1p5gon9"
-  >
-    <span
-      class="css-1p5gon9"
-    >
-      <div>
-        <p
-          class="css-1378exm"
-        >
-          Your first issue of Guardian Weekly will be published on 01-01-25
-        </p>
-        <p>
-          Please allow one to seven days after the publication date for your copy to be delivered to your door, depending on postal services.
-        </p>
-      </div>
-    </span>
-    <div>
-      <p
-        class="css-1378exm"
-      >
-        Your digital benefits start today.
-      </p>
-      <p>
-        Please ensure you are signed in on all your devices to enjoy all your benefits, including unlimited app access and uninterrupted ad-free reading.
-      </p>
-    </div>
-  </span>
-</div>
-`;

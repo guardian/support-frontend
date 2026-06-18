@@ -1,166 +1,255 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { lazy, Suspense } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { HoldingContent } from 'components/serverSideRendered/holdingContent';
+import {
+	createBrowserRouter,
+	Outlet,
+	RouterProvider,
+	useRouteLoaderData,
+} from 'react-router';
+import { ClientSideErrorPage } from 'components/ClientSideError';
+import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
+import { ObserverHoldingContent } from 'components/serverSideRendered/observerHoldingContent';
+import { FeatureSwitchesProvider } from 'contexts/FeatureSwitchesContext';
+import { getStudentLandingPageTestConfig } from 'helpers/abTests/studentLandingPageAbTests';
 import { WithCoreWebVitals } from 'helpers/coreWebVitals/withCoreWebVitals';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
+import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
+import type { OneTimeCheckoutVariant } from 'helpers/globalsAndSwitches/oneTimeCheckoutSettings';
+import type { StudentLandingPageVariant } from 'helpers/globalsAndSwitches/studentLandingPageSettings';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	getAbParticipations,
-	setUpTrackingAndConsents,
+	setUpConsent,
+	setUpTracking,
 } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import { getCheckoutNudgeParticipations } from '../../helpers/abTests/checkoutNudgeAbTests';
 import { getLandingPageParticipations } from '../../helpers/abTests/landingPageAbTests';
+import type { Participations } from '../../helpers/abTests/models';
+import { getOneTimeCheckoutParticipations } from '../../helpers/abTests/oneTimeCheckoutAbTests';
+import {
+	getPageParticipations,
+	type PageParticipationsResult,
+	type PageParticipationsResultWithFallback,
+} from '../../helpers/abTests/pageParticipations';
 
-const landingPageParticipations = getLandingPageParticipations();
 const checkoutNudgeSettings = getCheckoutNudgeParticipations();
-const abParticipations = {
-	...getAbParticipations(),
-	...landingPageParticipations.participations,
-	...checkoutNudgeSettings?.participations,
-};
-setUpTrackingAndConsents(abParticipations);
 const appConfig = parseAppConfig(window.guardian);
 
-const Checkout = lazy(() => {
-	return import(/* webpackChunkName: "checkout" */ './checkout').then((mod) => {
-		return { default: mod.Checkout };
-	});
-});
-const OneTimeCheckout = lazy(() => {
-	return import(
-		/* webpackChunkName: "oneTimeCheckout" */ './oneTimeCheckout'
-	).then((mod) => {
-		return { default: mod.OneTimeCheckout };
-	});
-});
-const ThankYou = lazy(() => {
-	return import(/* webpackChunkName: "ThankYou" */ './thankYou').then((mod) => {
-		return { default: mod.ThankYou };
-	});
-});
-const GuardianAdLiteLanding = lazy(() => {
-	return import(
-		/* webpackChunkName: "GuardianAdLiteLanding" */ './guardianAdLiteLanding/guardianAdLiteLanding'
-	).then((mod) => {
-		return { default: mod.GuardianAdLiteLanding };
-	});
-});
+interface LoaderData {
+	finalParticipations: Participations;
+	landing: PageParticipationsResultWithFallback<LandingPageVariant>;
+	oneTime: PageParticipationsResultWithFallback<OneTimeCheckoutVariant>;
+	studentLanding: PageParticipationsResult<StudentLandingPageVariant>;
+}
 
-const LandingPage = lazy(() => {
-	return import(/* webpackChunkName: "LandingPage" */ './landingPage').then(
-		(mod) => {
-			return { default: mod.LandingPage };
-		},
+async function rootLoader(): Promise<LoaderData> {
+	void setUpConsent();
+
+	const [landing, oneTime, studentLanding] = await Promise.all([
+		getLandingPageParticipations(),
+		getOneTimeCheckoutParticipations(),
+		getPageParticipations(getStudentLandingPageTestConfig()),
+	]);
+	const finalParticipations: Participations = {
+		...getAbParticipations(),
+		...landing.participations,
+		...checkoutNudgeSettings?.participations,
+		...oneTime.participations,
+		...studentLanding.participations,
+	};
+	// Setup tracking (non-blocking)
+	setUpTracking(finalParticipations);
+	return { landing, oneTime, studentLanding, finalParticipations };
+}
+
+function useRootLoaderData(): LoaderData {
+	return useRouteLoaderData('root') as LoaderData;
+}
+
+function RootLayout() {
+	return (
+		<WithCoreWebVitals>
+			<Outlet />
+		</WithCoreWebVitals>
 	);
-});
-const StudentLandingPageUTSContainer = lazy(() => {
-	return import(
-		/* webpackChunkName: "StudentLandingPageUTSContainer" */ './student/StudentLandingPageUTSContainer'
-	).then((mod) => {
-		return { default: mod.StudentLandingPageUTSContainer };
-	});
-});
-const StudentLandingPageGlobalContainer = lazy(() => {
-	return import(
-		/* webpackChunkName: "StudentLandingPageGlobalContainer" */ './student/StudentLandingPageGlobalContainer'
-	).then((mod) => {
-		return { default: mod.StudentLandingPageGlobalContainer };
-	});
-});
+}
 
 const router = createBrowserRouter([
-	...Object.values(SupportRegionId).flatMap((supportRegionId) => [
-		{
-			path: `/${supportRegionId}/contribute/:campaignCode?`,
-			element: (
-				<Suspense fallback={<HoldingContent />}>
-					<LandingPage
-						supportRegionId={supportRegionId}
-						abParticipations={abParticipations}
-						landingPageSettings={landingPageParticipations.variant}
-					/>
-				</Suspense>
-			),
-		},
-		{
-			path: `/${supportRegionId}/checkout`,
-			element: (
-				<Suspense fallback={<HoldingContent />}>
-					<Checkout
-						supportRegionId={supportRegionId}
-						appConfig={appConfig}
-						abParticipations={abParticipations}
-						landingPageSettings={landingPageParticipations.variant}
-						nudgeSettings={checkoutNudgeSettings}
-					/>
-				</Suspense>
-			),
-		},
-		{
-			path: `/${supportRegionId}/one-time-checkout`,
-			element: (
-				<Suspense fallback={<HoldingContent />}>
-					<OneTimeCheckout
-						supportRegionId={supportRegionId}
-						appConfig={appConfig}
-						abParticipations={abParticipations}
-						nudgeSettings={checkoutNudgeSettings}
-						landingPageSettings={landingPageParticipations.variant}
-					/>
-				</Suspense>
-			),
-		},
-		{
-			path: `/${supportRegionId}/thank-you`,
-			element: (
-				<Suspense fallback={<HoldingContent />}>
-					<ThankYou
-						supportRegionId={supportRegionId}
-						appConfig={appConfig}
-						abParticipations={abParticipations}
-						landingPageSettings={landingPageParticipations.variant}
-					/>
-				</Suspense>
-			),
-		},
-		{
-			path: `/${supportRegionId}/guardian-ad-lite`,
-			element: (
-				<Suspense fallback={<HoldingContent />}>
-					<GuardianAdLiteLanding supportRegionId={supportRegionId} />
-				</Suspense>
-			),
-		},
-		{
-			path: `/${supportRegionId}/student`,
-			element: (
-				<Suspense fallback={<HoldingContent />}>
-					<StudentLandingPageGlobalContainer
-						supportRegionId={supportRegionId}
-						landingPageVariant={landingPageParticipations.variant}
-					/>
-				</Suspense>
-			),
-		},
-	]),
 	{
-		path: '/au/student/UTS',
-		element: (
-			<Suspense fallback={<HoldingContent />}>
-				<StudentLandingPageUTSContainer
-					landingPageVariant={landingPageParticipations.variant}
-				/>
-			</Suspense>
-		),
+		id: 'root',
+		loader: rootLoader,
+		element: <RootLayout />,
+		errorElement: <ClientSideErrorPage />,
+		HydrateFallback: GuardianOrObserverHoldingContent,
+		children: [
+			...Object.values(SupportRegionId).flatMap((supportRegionId) => [
+				{
+					path: `/${supportRegionId}/contribute/:campaignCode?`,
+					lazy: async () => {
+						const { LandingPage } = await import(
+							/* webpackChunkName: "LandingPage" */ './landingPage'
+						);
+						return {
+							Component: function LandingPageRoute() {
+								const { finalParticipations, landing } = useRootLoaderData();
+								return (
+									<LandingPage
+										supportRegionId={supportRegionId}
+										abParticipations={finalParticipations}
+										landingPageSettings={landing.variant}
+									/>
+								);
+							},
+						};
+					},
+				},
+				{
+					path: `/${supportRegionId}/checkout`,
+					lazy: async () => {
+						const { Checkout } = await import(
+							/* webpackChunkName: "checkout" */ './checkout'
+						);
+						return {
+							Component: function CheckoutRoute() {
+								const { finalParticipations, landing } = useRootLoaderData();
+								return (
+									<Checkout
+										supportRegionId={supportRegionId}
+										appConfig={appConfig}
+										abParticipations={finalParticipations}
+										landingPageSettings={landing.variant}
+										nudgeSettings={checkoutNudgeSettings}
+									/>
+								);
+							},
+						};
+					},
+				},
+				{
+					path: `/${supportRegionId}/one-time-checkout`,
+					lazy: async () => {
+						const { OneTimeCheckout } = await import(
+							/* webpackChunkName: "oneTimeCheckout" */ './oneTimeCheckout'
+						);
+						return {
+							Component: function OneTimeCheckoutRoute() {
+								const { finalParticipations, landing, oneTime } =
+									useRootLoaderData();
+								return (
+									<OneTimeCheckout
+										supportRegionId={supportRegionId}
+										appConfig={appConfig}
+										abParticipations={finalParticipations}
+										nudgeSettings={checkoutNudgeSettings}
+										landingPageSettings={landing.variant}
+										oneTimeCheckoutSettings={oneTime.variant}
+									/>
+								);
+							},
+						};
+					},
+				},
+				{
+					path: `/${supportRegionId}/thank-you`,
+					lazy: async () => {
+						const { ThankYou } = await import(
+							/* webpackChunkName: "ThankYou" */ './thankYou'
+						);
+						return {
+							Component: function ThankYouRoute() {
+								const { finalParticipations, landing } = useRootLoaderData();
+								return (
+									<ThankYou
+										supportRegionId={supportRegionId}
+										appConfig={appConfig}
+										abParticipations={finalParticipations}
+										landingPageSettings={landing.variant}
+									/>
+								);
+							},
+						};
+					},
+				},
+				{
+					path: `/${supportRegionId}/guardian-ad-lite`,
+					lazy: async () => {
+						const { GuardianAdLiteLanding } = await import(
+							/* webpackChunkName: "GuardianAdLiteLanding" */ './guardianAdLiteLanding/guardianAdLiteLanding'
+						);
+						return {
+							Component: function GuardianAdLiteRoute() {
+								return (
+									<GuardianAdLiteLanding supportRegionId={supportRegionId} />
+								);
+							},
+						};
+					},
+				},
+				{
+					path: `/${supportRegionId}/student`,
+					lazy: async () => {
+						const { StudentLandingPageGlobalContainer } = await import(
+							/* webpackChunkName: "StudentLandingPageGlobalContainer" */ './student/StudentLandingPageGlobalContainer'
+						);
+						return {
+							Component: function StudentRoute() {
+								const { landing } = useRootLoaderData();
+								return (
+									<StudentLandingPageGlobalContainer
+										supportRegionId={supportRegionId}
+										landingPageVariant={landing.variant}
+									/>
+								);
+							},
+						};
+					},
+				},
+				{
+					/* NOTE: the back end routing filters out invalid paths based on the RRCP tooling config */
+					path: `/${supportRegionId}/student/:institution`,
+					lazy: async () => {
+						const { StudentLandingPageInstitutionContainer } = await import(
+							/* webpackChunkName: "StudentLandingPageInstitutionContainer" */ './student/StudentLandingPageInstitutionContainer'
+						);
+						return {
+							Component: function StudentRoute() {
+								const { landing, studentLanding } = useRootLoaderData();
+								const isSwitchedOn = isSwitchOn(
+									'featureSwitches.enableTooledStudentLandingPage',
+								);
+								if (!studentLanding.variant || !isSwitchedOn) {
+									return null;
+								}
+								return (
+									<StudentLandingPageInstitutionContainer
+										supportRegionId={supportRegionId}
+										landingPageVariant={landing.variant}
+										studentLandingPageVariant={studentLanding.variant}
+									/>
+								);
+							},
+						};
+					},
+				},
+			]),
+		],
 	},
 ]);
 
+function GuardianOrObserverHoldingContent() {
+	if (isObserverSubdomain()) {
+		return <ObserverHoldingContent />;
+	}
+
+	return <GuardianHoldingContent />;
+}
+
 function Router() {
 	return (
-		<WithCoreWebVitals>
+		<FeatureSwitchesProvider>
 			<RouterProvider router={router} />
-		</WithCoreWebVitals>
+		</FeatureSwitchesProvider>
 	);
 }
 

@@ -5,7 +5,7 @@ import {
 	themeRadioBrand,
 } from '@guardian/source/react-components';
 import { useEffect, useState } from 'react';
-import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
+import type { UserType } from 'helpers/user/userType';
 
 const selectorStyles = css`
 	display: flex;

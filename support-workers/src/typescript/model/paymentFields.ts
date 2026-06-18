@@ -1,3 +1,4 @@
+import { optionalDropNulls } from '@modules/schemaUtils';
 import { z } from 'zod';
 // Payment fields are the details entered by the user into the checkout as opposed to
 // payment methods which are the activated payment details which are passed into Zuora
@@ -9,6 +10,9 @@ const stripePaymentRequestButtonProviderSchema = z.literal(
 	'StripePaymentRequestButton',
 );
 const payPalPaymentProviderSchema = z.literal('PayPal');
+const payPalCompletePaymentsPaymentProviderSchema = z.literal(
+	'PayPalCompletePayments',
+);
 const directDebitPaymentProviderSchema = z.literal('DirectDebit');
 const existingPaymentProviderSchema = z.literal('Existing');
 
@@ -18,6 +22,7 @@ export const paymentProviderSchema = z.union([
 	stripeApplePayPaymentProviderSchema,
 	stripePaymentRequestButtonProviderSchema,
 	payPalPaymentProviderSchema,
+	payPalCompletePaymentsPaymentProviderSchema,
 	directDebitPaymentProviderSchema,
 	existingPaymentProviderSchema,
 ]);
@@ -26,6 +31,16 @@ const payPalPaymentFieldsSchema = z.object({
 	baid: z.string(),
 });
 export type PayPalPaymentFields = z.infer<typeof payPalPaymentFieldsSchema>;
+
+const payPalCompletePaymentsPaymentFieldsSchema = z.object({
+	paymentType: payPalCompletePaymentsPaymentProviderSchema,
+	paymentToken: z.string(),
+	email: z.string(),
+});
+export type PayPalCompletePaymentsPaymentFields = z.infer<
+	typeof payPalCompletePaymentsPaymentFieldsSchema
+>;
+
 export const stripePaymentTypeSchema = z.union([
 	stripePaymentRequestButtonProviderSchema,
 	stripeApplePayPaymentProviderSchema,
@@ -41,7 +56,7 @@ const stripePaymentFieldsSchema = z.object({
 export type StripePaymentFields = z.infer<typeof stripePaymentFieldsSchema>;
 const stripeHostedPaymentFieldsSchema = z.object({
 	paymentType: stripeHostedPaymentProviderSchema,
-	checkoutSessionId: z.string().nullable(),
+	checkoutSessionId: optionalDropNulls(z.string()),
 	stripePublicKey: z.string(),
 });
 export type StripeHostedPaymentFields = z.infer<
@@ -67,5 +82,6 @@ export const paymentFieldsSchema = z.discriminatedUnion('paymentType', [
 	stripeHostedPaymentFieldsSchema,
 	directDebitPaymentFieldsSchema,
 	existingPaymentFieldsSchema,
+	payPalCompletePaymentsPaymentFieldsSchema,
 ]);
 export type PaymentFields = z.infer<typeof paymentFieldsSchema>;

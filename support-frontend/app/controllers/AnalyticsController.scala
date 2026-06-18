@@ -4,13 +4,14 @@ import actions.CustomActionBuilders
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import com.gu.identity.model.User
 import com.gu.monitoring.SafeLogging
+import com.gu.rest.{CodeBody, WebServiceClientError}
 import io.circe.{Encoder, Json}
 import io.circe.generic.semiauto.deriveEncoder
 import io.circe.syntax._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import play.api.mvc.Security.AuthenticatedRequest
-import services.{MParticleClient, MParticleUserProfile}
+import services.mparticle.{MParticleClient, MParticleUserProfile}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -24,6 +25,13 @@ object AnalyticsUserProfileResponse {
   implicit val encoder: Encoder[AnalyticsUserProfileResponse] = deriveEncoder
 }
 
+case class AudienceMembershipsResponse(
+    audienceMemberships: List[Int],
+)
+object AudienceMembershipsResponse {
+  implicit val encoder: Encoder[AudienceMembershipsResponse] = deriveEncoder
+}
+
 class AnalyticsController(
     components: ControllerComponents,
     actionRefiners: CustomActionBuilders,
@@ -35,6 +43,7 @@ class AnalyticsController(
 
   import actionRefiners._
   import AnalyticsUserProfileResponse._
+  import AudienceMembershipsResponse._
 
   type AuthenticatedUserRequest[A] = AuthenticatedRequest[A, User]
 
@@ -54,18 +63,35 @@ class AnalyticsController(
 
   def getAnalyticsUserProfile(): Action[AnyContent] =
     (MaybeAuthenticatedAction andThen RequireAuthenticatedUser).async { implicit request =>
-      for {
-        userProfile <- mparticleClient.getUserProfile(request.user.id).recover { case ex =>
-          logger.error(scrub"Failed to get mParticle user profile: ${ex.getMessage}", ex)
-          MParticleUserProfile(hasMobileAppDownloaded = false, hasFeastMobileAppDownloaded = false)
+      mparticleClient
+        .getUserProfile(request.user.id)
+        .map { userProfile =>
+          val response = AnalyticsUserProfileResponse(
+            identityId = request.user.id,
+            hasMobileAppDownloaded = userProfile.hasMobileAppDownloaded,
+            hasFeastMobileAppDownloaded = userProfile.hasFeastMobileAppDownloaded,
+          )
+          Ok(response.asJson)
         }
-      } yield {
-        val response = AnalyticsUserProfileResponse(
-          identityId = request.user.id,
-          hasMobileAppDownloaded = userProfile.hasMobileAppDownloaded,
-          hasFeastMobileAppDownloaded = userProfile.hasFeastMobileAppDownloaded,
-        )
-        Ok(response.asJson)
-      }
+        .recover { ex =>
+          logger.error(scrub"Failed to get mParticle user profile: ${ex.getMessage}", ex)
+          InternalServerError("Error getting user profile")
+        }
+    }
+
+  /** Gets all mparticle audience memberships for the user. This should only be used if the user has consented for
+    * targeting.
+    */
+  def getAudienceMemberships(): Action[AnyContent] =
+    (MaybeAuthenticatedAction andThen RequireAuthenticatedUser).async { implicit request =>
+      mparticleClient
+        .getAudienceMemberships(request.user.id)
+        .map { response =>
+          Ok(AudienceMembershipsResponse(response).asJson)
+        }
+        .recover { ex =>
+          logger.error(scrub"Failed to get mParticle audience memberships: ${ex.getMessage}", ex)
+          InternalServerError("Error getting audience memberships")
+        }
     }
 }

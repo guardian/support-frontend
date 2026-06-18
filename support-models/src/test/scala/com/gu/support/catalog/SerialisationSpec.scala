@@ -30,8 +30,8 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
         catalog.prices.length shouldBe numberOfPriceLists
         checkPrice(catalog, supporterPlusMonthlyId, GBP, 12)
         checkPrice(catalog, supporterPlusAnnualId, GBP, 120)
-        checkPrice(catalog, digitalPackId, GBP, 14.99)
-        checkPrice(catalog, guardianWeeklyAnnualDomesticId, GBP, 180)
+        checkPrice(catalog, digitalPackId, GBP, 18)
+        checkPrice(catalog, guardianWeeklyAnnualDomesticId, GBP, 198)
       },
     )
     testDecodingFailed[ZuoraCatalog](

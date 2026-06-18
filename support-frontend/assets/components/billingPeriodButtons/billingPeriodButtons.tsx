@@ -7,7 +7,7 @@ import {
 	textSansBold17,
 } from '@guardian/source/foundations';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
-import { useState } from 'react';
+import { useEffect, useState } from 'preact/hooks';
 import { getBillingPeriodTitle } from 'helpers/productPrice/billingPeriods';
 
 export interface BillingPeriodButtonsProps {
@@ -60,6 +60,13 @@ export function BillingPeriodButtons({
 	const [selectedBillingPeriod, setSelectedBillingPeriod] = useState(
 		preselectedBillingPeriod ?? billingPeriods[0],
 	);
+
+	useEffect(() => {
+		if (preselectedBillingPeriod) {
+			setSelectedBillingPeriod(preselectedBillingPeriod);
+		}
+	}, [preselectedBillingPeriod]);
+
 	return (
 		<div
 			css={[container(billingPeriods.length), additionalStyles]}

@@ -28,7 +28,7 @@ jobs:
         run: env
 
       - name: Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup Node and Install Dependencies
         uses: ./.github/actions/setup-node-and-install
@@ -43,24 +43,41 @@ jobs:
         run: ./script/ci
         working-directory: cdk
 
-      # Required by sbt riffRaffUpload
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
-          aws-region: eu-west-1
-
-      - uses: sbt/setup-sbt@v1
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: "21"
-          distribution: "corretto"
-          cache: sbt
-
-      - name: Build, test, and upload to RiffRaff
+      - name: TypeScript support-backend test and build
         run: |
-          export LAST_TEAMCITY_BUILD=10000
-          export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
-          sbt "project support-frontend" test riffRaffUpload
+          pnpm --filter support-backend test
+          pnpm --filter support-backend build
+          pnpm --filter support-backend build-prod-node-modules
+          pushd support-backend
+          mv target_node_modules/node_modules ./target/
+          tar -czf support-backend.tar.gz target
+          popd
+
+      - name: Setup Scala
+        uses: guardian/setup-scala@v1
+
+      - name: Build, test, and package
+        run: sbt "project support-frontend" clean test debian:packageBin
+
+      - name: Upload to Riff-Raff
+        uses: guardian/actions-riff-raff@v4
+        with:
+          projectName: support:frontend-mono
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          buildNumberOffset: 10000
+          commentingEnabled: 'false'
+          configPath: ./support-frontend/conf/riff-raff.yaml
+          contentDirectories: |
+            frontend:
+              - support-frontend/target/support-frontend_1.0-SNAPSHOT_all.deb
+            support-backend:
+              - support-backend/support-backend.tar.gz
+            cfn-backend:
+              - cdk/cdk.out/Backend-CODE.template.json
+              - cdk/cdk.out/Backend-PROD.template.json
+            cfn-frontend:
+              - cdk/cdk.out/Frontend-CODE.template.json
+              - cdk/cdk.out/Frontend-PROD.template.json
+            assets-static:
+              - support-frontend/public/compiled-assets

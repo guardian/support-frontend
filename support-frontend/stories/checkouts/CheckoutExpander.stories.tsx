@@ -1,16 +1,9 @@
 import CheckoutExpanderComponent from 'components/checkoutExpander/checkoutExpander';
-import { FormSection } from 'components/checkoutForm/checkoutForm';
 
 export default {
 	title: 'Checkouts/Checkout Expander',
 	component: CheckoutExpanderComponent,
-	decorators: [
-		(Story: React.FC): JSX.Element => (
-			<FormSection>
-				<Story />
-			</FormSection>
-		),
-	],
+	decorators: [(Story: React.FC): JSX.Element => <Story />],
 };
 
 export function CheckoutExpander(args: { copy: string }): JSX.Element {

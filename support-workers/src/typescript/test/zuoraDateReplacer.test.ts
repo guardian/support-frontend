@@ -1,35 +1,37 @@
-import { zuoraDateReplacer } from '../util/zuoraDateReplacer';
+import { replaceDatesWithZuoraFormat } from '../util/zuoraDateReplacer';
 
-describe('zuoraDateReplacer', () => {
+describe('replaceDatesWithZuoraFormatDeep', () => {
 	const realDate = new Date('2025-09-01T12:25:09Z');
+	const isoString = '2025-10-15T08:30:00Z';
 
-	it('replaces Date objects with formatted string', () => {
-		const obj = { date: realDate };
-		const result = JSON.stringify(obj, zuoraDateReplacer);
-		expect(result).toEqual('{"date":"2025-09-01"}');
+	it('formats Date instances at root without changing the input', () => {
+		const original = { date: realDate };
+		const result = replaceDatesWithZuoraFormat(original);
+		expect(result.date).toBe('2025-09-01');
+		expect(original.date).toBeInstanceOf(Date);
 	});
 
-	it('leaves non-Date values unchanged', () => {
-		const obj = { num: 42, str: 'test', bool: true, nil: null };
-		const result = JSON.stringify(obj, zuoraDateReplacer);
-		expect(result).toBe(JSON.stringify(obj));
+	it('leaves date strings unchanged', () => {
+		const result = replaceDatesWithZuoraFormat({ d: isoString }) as {
+			d: string;
+		};
+		expect(result.d).toBe(isoString);
 	});
 
-	it('replaces nested Date objects', () => {
-		const obj = { nested: { date: realDate } };
-		const result = JSON.stringify(obj, zuoraDateReplacer);
-		expect(result).toEqual('{"nested":{"date":"2025-09-01"}}');
+	it('formats deeply nested dates', () => {
+		const original = {
+			level1: {
+				arr: [realDate, 'test'],
+			},
+		};
+		const result = replaceDatesWithZuoraFormat(original);
+		expect(result.level1.arr[0]).toBe('2025-09-01');
+		expect(result.level1.arr[1]).toBe('test');
 	});
 
-	it('handles arrays with Date objects', () => {
-		const obj = { dates: [realDate, 'not a date', 123] };
-		const result = JSON.stringify(obj, zuoraDateReplacer);
-		expect(result).toEqual('{"dates":["2025-09-01","not a date",123]}');
-	});
-
-	it('ignores invalid date strings', () => {
-		const obj = { invalidDate: '2025-13-01T12:00:00Z' }; // Invalid month
-		const result = JSON.stringify(obj, zuoraDateReplacer);
-		expect(result).toEqual('{"invalidDate":"2025-13-01T12:00:00Z"}');
+	it('handles arrays of dates', () => {
+		const original = ['test', realDate, isoString];
+		const result = replaceDatesWithZuoraFormat(original);
+		expect(result).toEqual(['test', '2025-09-01', isoString]);
 	});
 });

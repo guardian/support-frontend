@@ -1,374 +1,357 @@
-import { GuAlarm } from "@guardian/cdk/lib/constructs/cloudwatch";
-import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
-import { GuStack } from "@guardian/cdk/lib/constructs/core";
-import { GuLambdaFunction } from "@guardian/cdk/lib/constructs/lambda";
-import { type App, Duration, Fn } from "aws-cdk-lib";
+import { GuAlarm } from '@guardian/cdk/lib/constructs/cloudwatch';
+import type { GuStackProps } from '@guardian/cdk/lib/constructs/core';
+import { GuStack } from '@guardian/cdk/lib/constructs/core';
+import { GuLambdaFunction } from '@guardian/cdk/lib/constructs/lambda';
+import { type App, CfnOutput, Duration, Fn } from 'aws-cdk-lib';
 import {
-  ComparisonOperator,
-  MathExpression,
-  Metric,
-  TreatMissingData,
-} from "aws-cdk-lib/aws-cloudwatch";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { Architecture, LoggingFormat, Runtime } from "aws-cdk-lib/aws-lambda";
+	ComparisonOperator,
+	MathExpression,
+	Metric,
+	TreatMissingData,
+} from 'aws-cdk-lib/aws-cloudwatch';
 import {
-  Choice,
-  Condition,
-  DefinitionBody,
-  Errors,
-  Fail,
-  Parallel,
-  Pass,
-  StateMachine,
-  Succeed,
-} from "aws-cdk-lib/aws-stepfunctions";
-import { LambdaInvoke } from "aws-cdk-lib/aws-stepfunctions-tasks";
+	Effect,
+	PolicyStatement,
+	Role,
+	WebIdentityPrincipal,
+} from 'aws-cdk-lib/aws-iam';
+import { Architecture, LoggingFormat, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
+import {
+	Choice,
+	Condition,
+	DefinitionBody,
+	Errors,
+	Fail,
+	LogLevel,
+	Parallel,
+	Pass,
+	StateMachine,
+	Succeed,
+} from 'aws-cdk-lib/aws-stepfunctions';
+import { LambdaInvoke } from 'aws-cdk-lib/aws-stepfunctions-tasks';
 
 const ProductTypes = {
-  Contribution: "Contribution",
-  Paper: "Paper",
-  GuardianWeekly: "GuardianWeekly",
-  SupporterPlus: "SupporterPlus",
-  TierThree: "TierThree",
-  GuardianAdLite: "GuardianAdLite",
+	Contribution: 'Contribution',
+	Paper: 'Paper',
+	GuardianWeekly: 'GuardianWeekly',
+	SupporterPlus: 'SupporterPlus',
+	TierThree: 'TierThree',
+	GuardianAdLite: 'GuardianAdLite',
 } as const;
 
 type ProductType = keyof typeof ProductTypes;
 
 const PaymentProviders = {
-  Stripe: "Stripe",
-  DirectDebit: "DirectDebit",
-  PayPal: "PayPal",
-  StripeApplePay: "StripeApplePay",
-  StripePaymentRequestButton: "StripePaymentRequestButton",
+	Stripe: 'Stripe',
+	DirectDebit: 'DirectDebit',
+	PayPal: 'PayPal',
+	StripeApplePay: 'StripeApplePay',
+	StripePaymentRequestButton: 'StripePaymentRequestButton',
+	StripeHostedCheckout: 'StripeHostedCheckout',
 } as const;
 
 type PaymentProvider = keyof typeof PaymentProviders;
 
 interface SupportWorkersProps extends GuStackProps {
-  promotionsDynamoTables: string[];
-  s3Files: string[];
-  supporterProductDataTables: string[];
-  eventBusArns: string[];
-  parameterStorePaths: string[];
-  secretsManagerPaths: string[];
+	promotionsDynamoTables: string[];
+	s3Files: string[];
+	supporterProductDataQueueArns: string[];
+	eventBusArns: string[];
+	parameterStorePaths: string[];
+	secretsManagerPaths: string[];
 }
 
 export class SupportWorkers extends GuStack {
-  constructor(scope: App, id: string, props: SupportWorkersProps) {
-    super(scope, id, props);
+	constructor(scope: App, id: string, props: SupportWorkersProps) {
+		super(scope, id, props);
 
-    const app = "support-workers";
+		const app = 'support-workers';
 
-    // Define the policies
-    const s3Policy = new PolicyStatement({
-      actions: ["s3:GetObject"],
-      resources: props.s3Files,
-    });
-    const emailSqsPolicy = new PolicyStatement({
-      actions: ["sqs:GetQueueUrl", "sqs:SendMessage"],
-      resources: [Fn.importValue(`comms-${this.stage}-EmailQueueArn`)],
-    });
-    const eventBusPolicy = new PolicyStatement({
-      actions: ["events:PutEvents"],
-      resources: props.eventBusArns,
-    });
-    const cloudWatchLoggingPolicy = new PolicyStatement({
-      actions: [
-        "logs:Create*",
-        "logs:PutLogEvents",
-        "logs:DescribeLogStreams",
-        "cloudwatch:putMetricData",
-      ],
-      resources: ["*"],
-    });
-    const promotionsDynamoTablePolicy = new PolicyStatement({
-      actions: [
-        "dynamodb:GetItem",
-        "dynamodb:Scan",
-        "dynamodb:Query",
-        "dynamodb:DescribeTable",
-      ],
-      resources: props.promotionsDynamoTables,
-    });
-    const supporterProductDataTablePolicy = new PolicyStatement({
-      actions: ["dynamodb:PutItem", "dynamodb:UpdateItem"],
-      resources: props.supporterProductDataTables.map((table) =>
-        Fn.importValue(table)
-      ),
-    });
-    const parameterStorePolicy = new PolicyStatement({
-      actions: ["ssm:GetParameter"],
-      resources: props.parameterStorePaths,
-    });
-    const secretsManagerPolicy = new PolicyStatement({
-      effect: Effect.ALLOW,
-      actions: ["secretsmanager:GetSecretValue"],
-      resources: props.secretsManagerPaths,
-    });
+		// Define the policies
+		const s3Policy = new PolicyStatement({
+			actions: ['s3:GetObject'],
+			resources: props.s3Files,
+		});
+		const emailSqsPolicy = new PolicyStatement({
+			actions: ['sqs:GetQueueUrl', 'sqs:SendMessage'],
+			resources: [Fn.importValue(`comms-${this.stage}-EmailQueueArn`)],
+		});
+		const eventBusPolicy = new PolicyStatement({
+			actions: ['events:PutEvents'],
+			resources: props.eventBusArns,
+		});
+		const cloudWatchLoggingPolicy = new PolicyStatement({
+			actions: [
+				'logs:Create*',
+				'logs:PutLogEvents',
+				'logs:DescribeLogStreams',
+				'cloudwatch:putMetricData',
+			],
+			resources: ['*'],
+		});
+		const promotionsDynamoTablePolicy = new PolicyStatement({
+			actions: [
+				'dynamodb:GetItem',
+				'dynamodb:Scan',
+				'dynamodb:Query',
+				'dynamodb:DescribeTable',
+			],
+			resources: props.promotionsDynamoTables,
+		});
+		const supporterProductDataSqsPolicy = new PolicyStatement({
+			actions: ['sqs:GetQueueUrl', 'sqs:SendMessage'],
+			resources: props.supporterProductDataQueueArns,
+		});
+		const parameterStorePolicy = new PolicyStatement({
+			actions: ['ssm:GetParameter'],
+			resources: props.parameterStorePaths,
+		});
+		const secretsManagerPolicy = new PolicyStatement({
+			effect: Effect.ALLOW,
+			actions: ['secretsmanager:GetSecretValue'],
+			resources: props.secretsManagerPaths,
+		});
 
-    // Lambdas
-    const lambdaDefaultConfig = {
-      memorySize: 1536,
-      timeout: Duration.seconds(300),
-      architecture: Architecture.ARM_64,
-      environment: {
-        APP: app,
-        STACK: this.stack,
-        STAGE: this.stage,
-        SENTRY_DSN:
-          "https://55945d73ad654abd856d1523de4f9d56:cf9b33aaff3c483899dfa986abce55df@sentry.io/1212214",
-        SENTRY_ENVIRONMENT: this.stage,
-        GU_SUPPORT_WORKERS_STAGE: this.stage,
-        EMAIL_QUEUE_NAME: Fn.importValue(`comms-${this.stage}-EmailQueueName`),
-      },
-    };
+		if (this.stage === 'CODE') {
+			// --- Integration Test Role ---
+			// This role allows GitHub Actions to assume a role with all the permissions
+			// assigned to the various Lambdas in this stack. This facilitates running
+			// integration tests that execute the Lambda logic locally but interact with
+			// real AWS resources. We only create this role in the CODE stage
 
-    const createScalaLambda = (
-      lambdaName: string,
-      additionalPolicies: PolicyStatement[] = []
-    ) => {
-      const lambdaId = `${lambdaName}Lambda`;
-      const lambda = new GuLambdaFunction(this, lambdaId, {
-        ...lambdaDefaultConfig,
-        app: "support-workers-scala",
-        fileName: `support-workers.jar`,
-        runtime: Runtime.JAVA_21,
-        handler: `com.gu.support.workers.lambdas.${lambdaName}::handleRequest`,
-        functionName: `${this.stack}-${lambdaName}Lambda-${this.stage}`,
-        initialPolicy: [
-          s3Policy,
-          cloudWatchLoggingPolicy,
-          ...additionalPolicies,
-        ],
-      });
-      this.overrideLogicalId(lambda, {
-        logicalId: lambdaId,
-        reason: "Moving existing lambda to CDK",
-      });
-      return new LambdaInvoke(this, lambdaName, {
-        lambdaFunction: lambda,
-        outputPath: "$.Payload", // Without this, LambdaInvoke wraps the output state as described here: https://github.com/aws/aws-cdk/issues/29473
-      })
-        .addRetry({
-          errors: ["com.gu.support.workers.exceptions.RetryNone"],
-          maxAttempts: 0,
-        })
-        .addRetry({
-          errors: ["com.gu.support.workers.exceptions.RetryLimited"],
-          maxAttempts: 5,
-          interval: Duration.seconds(1),
-          backoffRate: 10, // Retry after 1 sec, 10 sec, 100 sec, 16 mins and 2 hours 46 mins
-        })
-        .addRetry({
-          errors: ["com.gu.support.workers.exceptions.RetryUnlimited"],
-          maxAttempts: 999999, //If we don't provide a value here it defaults to 3
-          interval: Duration.seconds(1),
-          backoffRate: 2,
-        })
-        .addRetry({
-          errors: [Errors.ALL], // Wildcard to capture any error which originates from outside of our code (e.g. an exception from AWS)
-          maxAttempts: 999999,
-          interval: Duration.seconds(3),
-          backoffRate: 2,
-        });
-    };
+			const integrationTestRole = new Role(this, 'IntegrationTestRole', {
+				roleName: `support-workers-it-test-role-${this.stage}`,
+				assumedBy: new WebIdentityPrincipal(
+					`arn:aws:iam::${this.account}:oidc-provider/token.actions.githubusercontent.com`,
+					{
+						StringLike: {
+							// Allows any branch in the support-frontend repo to assume this role
+							'token.actions.githubusercontent.com:sub':
+								'repo:guardian/support-frontend:*',
+							'token.actions.githubusercontent.com:aud': 'sts.amazonaws.com',
+						},
+					},
+				),
+				description:
+					'Role assumed by GitHub Actions to run integration tests with full stack permissions',
+			});
 
-    const createTypescriptLambda = (
-      lambdaName: string,
-      additionalPolicies: PolicyStatement[] = []
-    ) => {
-      const lambdaId = `${lambdaName}Lambda`;
-      const lambdaTSFile = lambdaId.charAt(0).toLowerCase() + lambdaId.slice(1);
-      const lambda = new GuLambdaFunction(this, lambdaId, {
-        ...lambdaDefaultConfig,
-        app: "support-workers-typescript",
-        fileName: `support-workers.zip`,
-        runtime: Runtime.NODEJS_22_X,
-        handler: `${lambdaTSFile}.handler`,
-        functionName: `${this.stack}-${lambdaName}Lambda-${this.stage}`,
-        initialPolicy: [
-          s3Policy,
-          cloudWatchLoggingPolicy,
-          parameterStorePolicy,
-          ...additionalPolicies,
-        ],
-        loggingFormat: LoggingFormat.TEXT,
-      });
-      this.overrideLogicalId(lambda, {
-        logicalId: lambdaId,
-        reason: "Moving existing lambda to CDK",
-      });
-      return new LambdaInvoke(this, lambdaName, {
-        lambdaFunction: lambda,
-        outputPath: "$.Payload", // Without this, LambdaInvoke wraps the output state as described here: https://github.com/aws/aws-cdk/issues/29473
-      })
-        .addRetry({
-          errors: ["RetryNone"],
-          maxAttempts: 0,
-        })
-        .addRetry({
-          errors: ["RetryLimited"],
-          maxAttempts: 5,
-          interval: Duration.seconds(1),
-          backoffRate: 10, // Retry after 1 sec, 10 sec, 100 sec, 16 mins and 2 hours 46 mins
-        })
-        .addRetry({
-          errors: ["RetryUnlimited"],
-          maxAttempts: 999999, //If we don't provide a value here it defaults to 3
-          interval: Duration.seconds(1),
-          backoffRate: 2,
-        })
-        .addRetry({
-          errors: [Errors.ALL], // Wildcard to capture any error which originates from outside of our code (e.g. an exception from AWS)
-          maxAttempts: 999999,
-          interval: Duration.seconds(3),
-          backoffRate: 2,
-        });
-    };
+			// Attach all policies used by the Lambdas, if you add a new policy to a Lambda
+			// please also add it here to ensure the integration test role has the same permissions
+			[
+				s3Policy,
+				emailSqsPolicy,
+				eventBusPolicy,
+				cloudWatchLoggingPolicy,
+				promotionsDynamoTablePolicy,
+				supporterProductDataSqsPolicy,
+				parameterStorePolicy,
+				secretsManagerPolicy,
+			].forEach((policy) => integrationTestRole.addToPolicy(policy));
 
-    // State Machine
-    const checkoutFailure = new Pass(this, "CheckoutFailure"); // This is a failed execution we don't want to alert on
-    const failState = new Fail(this, "FailState"); // This is a failed execution we do want to alert on
+			new CfnOutput(this, 'IntegrationTestRoleOutput', {
+				value: integrationTestRole.roleArn,
+				description: 'ARN of the role to use in GitHub Actions for IT tests',
+			});
+		}
 
-    const succeedOrFailChoice = new Choice(this, "SucceedOrFailChoice")
-      .when(
-        Condition.booleanEquals("$.requestInfo.testUser", true),
-        checkoutFailure
-      )
-      .when(Condition.booleanEquals("$.requestInfo.failed", true), failState)
-      .otherwise(checkoutFailure);
+		// Lambdas
+		const lambdaDefaultConfig = {
+			memorySize: 1536,
+			timeout: Duration.seconds(300),
+			architecture: Architecture.ARM_64,
+			environment: {
+				APP: app,
+				STACK: this.stack,
+				STAGE: this.stage,
+				SENTRY_DSN:
+					'https://55945d73ad654abd856d1523de4f9d56:cf9b33aaff3c483899dfa986abce55df@sentry.io/1212214',
+				SENTRY_ENVIRONMENT: this.stage,
+				GU_SUPPORT_WORKERS_STAGE: this.stage,
+				EMAIL_QUEUE_NAME: Fn.importValue(`comms-${this.stage}-EmailQueueName`),
+			},
+		};
 
-    const failureHandler = createScalaLambda("FailureHandler", [
-      emailSqsPolicy,
-    ]).next(succeedOrFailChoice);
+		const createTypescriptLambda = (
+			lambdaName: string,
+			additionalPolicies: PolicyStatement[] = [],
+		) => {
+			const lambdaId = `${lambdaName}Lambda`;
+			const lambdaTSFile = lambdaId.charAt(0).toLowerCase() + lambdaId.slice(1);
+			const lambda = new GuLambdaFunction(this, lambdaId, {
+				...lambdaDefaultConfig,
+				app: 'support-workers-typescript',
+				fileName: `support-workers.zip`,
+				runtime: Runtime.NODEJS_24_X,
+				handler: `${lambdaTSFile}.handler`,
+				functionName: `${this.stack}-${lambdaName}Lambda-${this.stage}`,
+				initialPolicy: [
+					s3Policy,
+					cloudWatchLoggingPolicy,
+					parameterStorePolicy,
+					...additionalPolicies,
+				],
+				loggingFormat: LoggingFormat.TEXT,
+			});
+			this.overrideLogicalId(lambda, {
+				logicalId: lambdaId,
+				reason: 'Moving existing lambda to CDK',
+			});
+			return new LambdaInvoke(this, lambdaName, {
+				lambdaFunction: lambda,
+				outputPath: '$.Payload', // Without this, LambdaInvoke wraps the output state as described here: https://github.com/aws/aws-cdk/issues/29473
+			})
+				.addRetry({
+					errors: ['RetryNone'],
+					maxAttempts: 0,
+				})
+				.addRetry({
+					errors: ['RetryLimited'],
+					maxAttempts: 5,
+					interval: Duration.seconds(1),
+					backoffRate: 10, // Retry after 1 sec, 10 sec, 100 sec, 16 mins and 2 hours 46 mins
+				})
+				.addRetry({
+					errors: ['RetryUnlimited'],
+					maxAttempts: 999999, //If we don't provide a value here it defaults to 3
+					interval: Duration.seconds(1),
+					backoffRate: 2,
+				})
+				.addRetry({
+					errors: [Errors.ALL], // Wildcard to capture any error which originates from outside of our code (e.g. an exception from AWS)
+					maxAttempts: 999999,
+					interval: Duration.seconds(3),
+					backoffRate: 2,
+				});
+		};
 
-    const catchProps = {
-      resultPath: "$.error",
-      errors: ["States.TaskFailed"],
-    };
+		// State Machine
+		const checkoutFailure = new Pass(this, 'CheckoutFailure'); // This is a failed execution we don't want to alert on
+		const failState = new Fail(this, 'FailState'); // This is a failed execution we do want to alert on
 
-    const createPaymentMethodLambda = createTypescriptLambda(
-      "CreatePaymentMethod"
-    ).addCatch(failureHandler, catchProps);
+		const succeedOrFailChoice = new Choice(this, 'SucceedOrFailChoice')
+			.when(
+				Condition.booleanEquals('$.requestInfo.testUser', true),
+				checkoutFailure,
+			)
+			.when(Condition.booleanEquals('$.requestInfo.failed', true), failState)
+			.otherwise(checkoutFailure);
 
-    const createSalesforceContactLambda = createTypescriptLambda(
-      "CreateSalesforceContact"
-    ).addCatch(failureHandler, catchProps);
+		const failureHandler = createTypescriptLambda('FailureHandler', [
+			emailSqsPolicy,
+		]).next(succeedOrFailChoice);
 
-    const createZuoraSubscriptionScala = createScalaLambda(
-      "CreateZuoraSubscription",
-      [promotionsDynamoTablePolicy]
-    ).addCatch(failureHandler, catchProps);
+		const catchProps = {
+			resultPath: '$.error',
+			errors: ['States.TaskFailed'],
+		};
 
-    const createZuoraSubscriptionTS = createTypescriptLambda(
-      "CreateZuoraSubscriptionTS",
-      [promotionsDynamoTablePolicy, secretsManagerPolicy]
-    ).addCatch(failureHandler, catchProps);
+		const createPaymentMethodLambda = createTypescriptLambda(
+			'CreatePaymentMethod',
+		).addCatch(failureHandler, catchProps);
 
-    const sendThankYouEmail = createScalaLambda("SendThankYouEmail", [
-      emailSqsPolicy,
-    ]);
-    const updateSupporterProductData = createScalaLambda(
-      "UpdateSupporterProductData",
-      [supporterProductDataTablePolicy]
-    );
-    const sendAcquisitionEvent = createScalaLambda("SendAcquisitionEvent", [
-      eventBusPolicy,
-    ]);
+		const createSalesforceContactLambda = createTypescriptLambda(
+			'CreateSalesforceContact',
+		).addCatch(failureHandler, catchProps);
 
-    const checkoutSuccess = new Succeed(this, "CheckoutSuccess");
+		const createZuoraSubscriptionTS = createTypescriptLambda(
+			'CreateZuoraSubscriptionTS',
+			[promotionsDynamoTablePolicy, secretsManagerPolicy],
+		).addCatch(failureHandler, catchProps);
 
-    const parallelSteps = new Parallel(this, "Parallel")
-      .branch(sendThankYouEmail)
-      .branch(updateSupporterProductData)
-      .branch(sendAcquisitionEvent)
-      .branch(checkoutSuccess);
+		const sendThankYouEmail = createTypescriptLambda('SendThankYouEmail', [
+			emailSqsPolicy,
+			secretsManagerPolicy,
+		]);
+		const updateSupporterProductData = createTypescriptLambda(
+			'UpdateSupporterProductData',
+			[supporterProductDataSqsPolicy],
+		);
+		const sendAcquisitionEvent = createTypescriptLambda(
+			'SendAcquisitionEvent',
+			[eventBusPolicy],
+		);
 
-    // Choice state to choose between the Scala and Typescript S+ lambdas
-    const isProductType = (product: string) =>
-      Condition.stringEquals("$.state.productInformation.product", product);
-    const isGuardianAdLite = isProductType("GuardianAdLite");
-    const isContribution = isProductType("Contribution");
-    const isSupporterPLus = isProductType("SupporterPlus");
-    const isTierThree = isProductType("TierThree");
+		const checkoutSuccess = new Succeed(this, 'CheckoutSuccess');
 
-    const shouldUseTSLambda = Condition.and(
-      Condition.isNotNull("$.state.productInformation"),
-      Condition.or(
-        isGuardianAdLite,
-        isContribution,
-        isSupporterPLus,
-        isTierThree
-      )
-    );
+		const parallelSteps = new Parallel(this, 'Parallel')
+			.branch(sendThankYouEmail)
+			.branch(updateSupporterProductData)
+			.branch(sendAcquisitionEvent)
+			.branch(checkoutSuccess);
 
-    const createZuoraSubscriptionChoice = new Choice(
-      this,
-      "CreateZuoraSubscriptionChoice"
-    )
-      .when(shouldUseTSLambda, createZuoraSubscriptionTS.next(parallelSteps))
-      .otherwise(createZuoraSubscriptionScala.next(parallelSteps));
+		const allSteps = createPaymentMethodLambda
+			.next(createSalesforceContactLambda)
+			.next(createZuoraSubscriptionTS.next(parallelSteps));
 
-    const allSteps = createPaymentMethodLambda
-      .next(createSalesforceContactLambda)
-      .next(createZuoraSubscriptionChoice);
+		const stateMachineLogGroup = new LogGroup(this, 'SupportWorkersLogGroup', {
+			logGroupName: `/aws/states/support-workers-${this.stage}`,
+			retention: RetentionDays.TWO_WEEKS,
+		});
 
-    const stateMachine = new StateMachine(this, "SupportWorkers", {
-      stateMachineName: `${app}-${this.stage}`, // Used by support-frontend to find the state machine
-      timeout: Duration.hours(24),
-      definitionBody: DefinitionBody.fromChainable(allSteps),
-    });
+		const stateMachine = new StateMachine(this, 'SupportWorkers', {
+			stateMachineName: `${app}-${this.stage}`, // Used by support-frontend to find the state machine
+			timeout: Duration.hours(24),
+			definitionBody: DefinitionBody.fromChainable(allSteps),
+			logs: {
+				destination: stateMachineLogGroup,
+				level: LogLevel.ALL,
+				includeExecutionData: true,
+			},
+		});
 
-    this.overrideLogicalId(stateMachine, {
-      logicalId: `SupportWorkers${this.stage}`,
-      reason: "Moving existing step function to CDK",
-    });
+		this.overrideLogicalId(stateMachine, {
+			logicalId: `SupportWorkers${this.stage}`,
+			reason: 'Moving existing step function to CDK',
+		});
 
-    // Alarms
-    const isProd = this.stage === "PROD";
+		stateMachineLogGroup.grantWrite(stateMachine);
 
-    new GuAlarm(this, "ExecutionFailureAlarm", {
-      app,
-      actionsEnabled: isProd,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `Support Workers Execution Failure in ${this.stage} (Recurring Contributions or Subscriptions Checkout).`,
-      alarmDescription: `There was a failure whilst setting up recurring payments after the user attempted to complete a checkout process. Check https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:support-workers-${this.stage}?statusFilter=FAILED`,
-      metric: new Metric({
-        metricName: "ExecutionsFailed",
-        namespace: "AWS/States",
-        dimensionsMap: {
-          StateMachineArn: stateMachine.stateMachineArn,
-        },
-        statistic: "Sum",
-        period: Duration.seconds(60),
-      }),
-      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 1,
-      threshold: 1,
-    }).node.addDependency(stateMachine);
+		// Alarms
+		const isProd = this.stage === 'PROD';
 
-    new GuAlarm(this, "TimeoutAlarm", {
-      app,
-      actionsEnabled: isProd,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `Support Workers Timeout in ${this.stage} (Recurring Contributions or Subscriptions Checkout).`,
-      alarmDescription: `There was a timeout whilst setting up recurring payments after the user attempted to complete a checkout process. Check https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:support-workers-${this.stage}?statusFilter=TIMED_OUT`,
-      metric: new Metric({
-        metricName: "ExecutionsTimedOut",
-        namespace: "AWS/States",
-        dimensionsMap: {
-          StateMachineArn: stateMachine.stateMachineArn,
-        },
-        statistic: "Sum",
-        period: Duration.seconds(60),
-      }),
-      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 1,
-      threshold: 1,
-    }).node.addDependency(stateMachine);
+		new GuAlarm(this, 'ExecutionFailureAlarm', {
+			app,
+			actionsEnabled: isProd,
+			snsTopicName: `alarms-handler-topic-${this.stage}`,
+			alarmName: `Support Workers Execution Failure in ${this.stage} (Recurring Contributions or Subscriptions Checkout).`,
+			alarmDescription: `There was a failure whilst setting up recurring payments after the user attempted to complete a checkout process. Check https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:support-workers-${this.stage}?statusFilter=FAILED`,
+			metric: new Metric({
+				metricName: 'ExecutionsFailed',
+				namespace: 'AWS/States',
+				dimensionsMap: {
+					StateMachineArn: stateMachine.stateMachineArn,
+				},
+				statistic: 'Sum',
+				period: Duration.seconds(60),
+			}),
+			comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+			evaluationPeriods: 1,
+			threshold: 1,
+		}).node.addDependency(stateMachine);
 
-    /*
+		new GuAlarm(this, 'TimeoutAlarm', {
+			app,
+			actionsEnabled: isProd,
+			snsTopicName: `alarms-handler-topic-${this.stage}`,
+			alarmName: `Support Workers Timeout in ${this.stage} (Recurring Contributions or Subscriptions Checkout).`,
+			alarmDescription: `There was a timeout whilst setting up recurring payments after the user attempted to complete a checkout process. Check https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:support-workers-${this.stage}?statusFilter=TIMED_OUT`,
+			metric: new Metric({
+				metricName: 'ExecutionsTimedOut',
+				namespace: 'AWS/States',
+				dimensionsMap: {
+					StateMachineArn: stateMachine.stateMachineArn,
+				},
+				statistic: 'Sum',
+				period: Duration.seconds(60),
+			}),
+			comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+			evaluationPeriods: 1,
+			threshold: 1,
+		}).node.addDependency(stateMachine);
+
+		/*
      This query is useful to check what a reasonable interval is for each product if you
      want the alarm to go off less than once a month.  Update the date range to get more current figures.
 
@@ -394,358 +377,348 @@ export class SupportWorkers extends GuStack {
       group by 1,2,3
       order by 1,2,3
     */
-    // Begin recurring contribution alarms (by payment method)
-    const contributionAlarmConfig: Array<{
-      paymentProvider: PaymentProvider;
-      evaluationPeriods: number;
-      periodDuration: Duration;
-    }> = [
-      {
-        paymentProvider: PaymentProviders.PayPal,
-        evaluationPeriods: 4,
-        periodDuration: Duration.seconds(3600),
-      },
-      {
-        paymentProvider: PaymentProviders.Stripe,
-        evaluationPeriods: 3,
-        periodDuration: Duration.seconds(3600),
-      },
-      {
-        paymentProvider: PaymentProviders.DirectDebit,
-        evaluationPeriods: 18,
-        periodDuration: Duration.seconds(3600),
-      },
-      {
-        paymentProvider: PaymentProviders.StripeApplePay,
-        evaluationPeriods: 8,
-        periodDuration: Duration.seconds(3600),
-      },
-      {
-        paymentProvider: PaymentProviders.StripePaymentRequestButton,
-        evaluationPeriods: 24,
-        periodDuration: Duration.seconds(3600),
-      },
-    ];
+		// Begin recurring contribution alarms (by payment method)
+		const contributionAlarmConfig: Array<{
+			paymentProvider: PaymentProvider;
+			evaluationPeriods: number;
+			periodDuration: Duration;
+		}> = [
+			{
+				paymentProvider: PaymentProviders.PayPal,
+				evaluationPeriods: 4,
+				periodDuration: Duration.seconds(3600),
+			},
+			{
+				paymentProvider: PaymentProviders.Stripe,
+				evaluationPeriods: 3,
+				periodDuration: Duration.seconds(3600),
+			},
+			{
+				paymentProvider: PaymentProviders.DirectDebit,
+				evaluationPeriods: 18,
+				periodDuration: Duration.seconds(3600),
+			},
+			{
+				paymentProvider: PaymentProviders.StripeApplePay,
+				evaluationPeriods: 8,
+				periodDuration: Duration.seconds(3600),
+			},
+			{
+				paymentProvider: PaymentProviders.StripePaymentRequestButton,
+				evaluationPeriods: 24,
+				periodDuration: Duration.seconds(3600),
+			},
+		];
 
-    contributionAlarmConfig.forEach(
-      ({ paymentProvider, evaluationPeriods, periodDuration }) => {
-        new GuAlarm(this, `No${paymentProvider}ContributionsAlarm`, {
-          app,
-          actionsEnabled: isProd,
-          okAction: true,
-          snsTopicName: `alarms-handler-topic-${this.stage}`,
-          alarmName: `support-workers ${this.stage} No successful recurring ${paymentProvider} contributions recently.`,
-          metric: this.buildPaymentSuccessMetric(
-            paymentProvider,
-            ProductTypes.Contribution,
-            periodDuration
-          ),
-          comparisonOperator:
-            ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-          evaluationPeriods,
-          treatMissingData: TreatMissingData.BREACHING,
-          threshold: 0,
-        }).node.addDependency(stateMachine);
-      }
-    );
-    // End recurring contribution alarms (by payment method)
+		contributionAlarmConfig.forEach(
+			({ paymentProvider, evaluationPeriods, periodDuration }) => {
+				new GuAlarm(this, `No${paymentProvider}ContributionsAlarm`, {
+					app,
+					actionsEnabled: isProd,
+					okAction: true,
+					snsTopicName: `alarms-handler-topic-${this.stage}`,
+					alarmName: `support-workers ${this.stage} No successful recurring ${paymentProvider} contributions recently.`,
+					metric: this.buildPaymentSuccessMetric(
+						paymentProvider,
+						ProductTypes.Contribution,
+						periodDuration,
+					),
+					comparisonOperator:
+						ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+					evaluationPeriods,
+					treatMissingData: TreatMissingData.BREACHING,
+					threshold: 0,
+				}).node.addDependency(stateMachine);
+			},
+		);
+		// End recurring contribution alarms (by payment method)
 
-    // Begin S+ alarms (by payment method)
-    const supporterPlusAlarmConfig: Array<{
-      paymentProvider: PaymentProvider;
-      evaluationPeriods: number;
-      periodDuration: Duration;
-    }> = [
-      {
-        paymentProvider: PaymentProviders.PayPal,
-        evaluationPeriods: 6,
-        periodDuration: Duration.seconds(3600),
-      },
-      {
-        paymentProvider: PaymentProviders.Stripe,
-        evaluationPeriods: 3,
-        periodDuration: Duration.seconds(3600),
-      },
-      {
-        paymentProvider: PaymentProviders.DirectDebit,
-        evaluationPeriods: 18,
-        periodDuration: Duration.seconds(3600),
-      },
-      {
-        paymentProvider: PaymentProviders.StripeApplePay,
-        evaluationPeriods: 12,
-        periodDuration: Duration.seconds(3600),
-      },
-      {
-        paymentProvider: PaymentProviders.StripePaymentRequestButton,
-        evaluationPeriods: 24,
-        periodDuration: Duration.seconds(3600),
-      },
-    ];
-    supporterPlusAlarmConfig.forEach(
-      ({ paymentProvider, evaluationPeriods, periodDuration }) => {
-        new GuAlarm(this, `No${paymentProvider}SupporterPlusAlarm`, {
-          app,
-          actionsEnabled: isProd,
-          okAction: true,
-          snsTopicName: `alarms-handler-topic-${this.stage}`,
-          alarmName: `support-workers ${this.stage} No successful ${paymentProvider} supporter plus subscriptions recently.`,
-          metric: this.buildPaymentSuccessMetric(
-            paymentProvider,
-            ProductTypes.SupporterPlus,
-            periodDuration
-          ),
-          comparisonOperator:
-            ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-          evaluationPeriods,
-          treatMissingData: TreatMissingData.BREACHING,
-          threshold: 0,
-        }).node.addDependency(stateMachine);
-      }
-    );
-    // End S+ alarms (by payment method)
+		// Begin S+ alarms (by payment method)
+		const supporterPlusAlarmConfig: Array<{
+			paymentProvider: PaymentProvider;
+			evaluationPeriods: number;
+			periodDuration: Duration;
+		}> = [
+			{
+				paymentProvider: PaymentProviders.PayPal,
+				evaluationPeriods: 6,
+				periodDuration: Duration.seconds(3600),
+			},
+			{
+				paymentProvider: PaymentProviders.Stripe,
+				evaluationPeriods: 3,
+				periodDuration: Duration.seconds(3600),
+			},
+			{
+				paymentProvider: PaymentProviders.DirectDebit,
+				evaluationPeriods: 18,
+				periodDuration: Duration.seconds(3600),
+			},
+			{
+				paymentProvider: PaymentProviders.StripeApplePay,
+				evaluationPeriods: 12,
+				periodDuration: Duration.seconds(3600),
+			},
+			{
+				paymentProvider: PaymentProviders.StripePaymentRequestButton,
+				evaluationPeriods: 24,
+				periodDuration: Duration.seconds(3600),
+			},
+		];
+		supporterPlusAlarmConfig.forEach(
+			({ paymentProvider, evaluationPeriods, periodDuration }) => {
+				new GuAlarm(this, `No${paymentProvider}SupporterPlusAlarm`, {
+					app,
+					actionsEnabled: isProd,
+					okAction: true,
+					snsTopicName: `alarms-handler-topic-${this.stage}`,
+					alarmName: `support-workers ${this.stage} No successful ${paymentProvider} supporter plus subscriptions recently.`,
+					metric: this.buildPaymentSuccessMetric(
+						paymentProvider,
+						ProductTypes.SupporterPlus,
+						periodDuration,
+					),
+					comparisonOperator:
+						ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+					evaluationPeriods,
+					treatMissingData: TreatMissingData.BREACHING,
+					threshold: 0,
+				}).node.addDependency(stateMachine);
+			},
+		);
+		// End S+ alarms (by payment method)
 
-    // Begin Apple Pay alarm
-    const applePayMetricDuration = Duration.minutes(5);
-    const applePayEvaluationPeriods = 96; // The number of 5 minute periods in 8 hours
-    const applePayAlarmPeriod = Duration.minutes(
-      applePayMetricDuration.toMinutes() * applePayEvaluationPeriods
-    );
-    const applePayMetrics = Object.fromEntries(
-      Object.values(ProductTypes).map((product, idx) => [
-        `m${idx}`,
-        this.buildPaymentSuccessMetric(
-          PaymentProviders.StripeApplePay,
-          product,
-          applePayMetricDuration
-        ),
-      ])
-    );
-    const applePayExpression = `SUM([${Object.keys(applePayMetrics)
-      .map((m) => `FILL(${m},0)`)
-      .join(",")}])`;
-    new GuAlarm(this, "NoApplePayRecurringAlarm", {
-      app,
-      actionsEnabled: isProd,
-      okAction: true,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${
-        this.stage
-      } No successful recurring Apple Pay payments in ${applePayAlarmPeriod.toHumanString()}.`,
-      metric: new MathExpression({
-        expression: applePayExpression,
-        label: "AllRecurringApplePayPayments",
-        usingMetrics: applePayMetrics,
-      }),
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: applePayEvaluationPeriods,
-      treatMissingData: TreatMissingData.BREACHING,
-      threshold: 0,
-    }).node.addDependency(stateMachine);
-    // End Apple Pay alarm
+		// Begin Apple Pay alarm
+		const applePayMetricDuration = Duration.minutes(5);
+		const applePayEvaluationPeriods = 96; // The number of 5 minute periods in 8 hours
+		const applePayAlarmPeriod = Duration.minutes(
+			applePayMetricDuration.toMinutes() * applePayEvaluationPeriods,
+		);
+		const applePayMetrics = Object.fromEntries(
+			Object.values(ProductTypes).map((product, idx) => [
+				`m${idx}`,
+				this.buildPaymentSuccessMetric(
+					PaymentProviders.StripeApplePay,
+					product,
+				),
+			]),
+		);
+		const applePayExpression = `SUM([${Object.keys(applePayMetrics)
+			.map((m) => `FILL(${m},0)`)
+			.join(',')}])`;
+		new GuAlarm(this, 'NoApplePayRecurringAlarm', {
+			app,
+			actionsEnabled: isProd,
+			okAction: true,
+			snsTopicName: `alarms-handler-topic-${this.stage}`,
+			alarmName: `support-workers ${
+				this.stage
+			} No successful recurring Apple Pay payments in ${applePayAlarmPeriod.toHumanString()}.`,
+			metric: new MathExpression({
+				period: applePayMetricDuration,
+				expression: applePayExpression,
+				label: 'AllRecurringApplePayPayments',
+				usingMetrics: applePayMetrics,
+			}),
+			comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+			evaluationPeriods: applePayEvaluationPeriods,
+			treatMissingData: TreatMissingData.BREACHING,
+			threshold: 0,
+		}).node.addDependency(stateMachine);
+		// End Apple Pay alarm
 
-    // Begin Google Pay alarm
-    const googlePayMetricDuration = Duration.minutes(5);
-    const googlePayEvaluationPeriods = 180; // The number of 5 minute periods in 15 hours
-    const googlePayAlarmPeriod = Duration.minutes(
-      googlePayMetricDuration.toMinutes() * googlePayEvaluationPeriods
-    );
-    const googlePayMetrics = Object.fromEntries(
-      Object.values(ProductTypes).map((product, idx) => [
-        `m${idx}`,
-        this.buildPaymentSuccessMetric(
-          PaymentProviders.StripePaymentRequestButton,
-          product,
-          googlePayMetricDuration
-        ),
-      ])
-    );
-    const googlePayExpression = `SUM([${Object.keys(googlePayMetrics)
-      .map((m) => `FILL(${m},0)`)
-      .join(",")}])`;
-    new GuAlarm(this, "NoGooglePayRecurringAlarm", {
-      app,
-      actionsEnabled: isProd,
-      okAction: true,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${
-        this.stage
-      } No successful recurring Google Pay payments in ${googlePayAlarmPeriod.toHumanString()}.`,
-      metric: new MathExpression({
-        expression: googlePayExpression,
-        label: "AllRecurringGooglePayPayments",
-        usingMetrics: googlePayMetrics,
-      }),
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: googlePayEvaluationPeriods,
-      treatMissingData: TreatMissingData.BREACHING,
-      threshold: 0,
-    }).node.addDependency(stateMachine);
-    // End Google Pay alarm
+		// Begin Google Pay alarm
+		const googlePayMetricDuration = Duration.minutes(5);
+		const googlePayEvaluationPeriods = 180; // The number of 5 minute periods in 15 hours
+		const googlePayAlarmPeriod = Duration.minutes(
+			googlePayMetricDuration.toMinutes() * googlePayEvaluationPeriods,
+		);
+		const googlePayMetrics = Object.fromEntries(
+			Object.values(ProductTypes).map((product, idx) => [
+				`m${idx}`,
+				this.buildPaymentSuccessMetric(
+					PaymentProviders.StripePaymentRequestButton,
+					product,
+				),
+			]),
+		);
+		const googlePayExpression = `SUM([${Object.keys(googlePayMetrics)
+			.map((m) => `FILL(${m},0)`)
+			.join(',')}])`;
+		new GuAlarm(this, 'NoGooglePayRecurringAlarm', {
+			app,
+			actionsEnabled: isProd,
+			okAction: true,
+			snsTopicName: `alarms-handler-topic-${this.stage}`,
+			alarmName: `support-workers ${
+				this.stage
+			} No successful recurring Google Pay payments in ${googlePayAlarmPeriod.toHumanString()}.`,
+			metric: new MathExpression({
+				period: googlePayMetricDuration,
+				expression: googlePayExpression,
+				label: 'AllRecurringGooglePayPayments',
+				usingMetrics: googlePayMetrics,
+			}),
+			comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+			evaluationPeriods: googlePayEvaluationPeriods,
+			treatMissingData: TreatMissingData.BREACHING,
+			threshold: 0,
+		}).node.addDependency(stateMachine);
+		// End Google Pay alarm
 
-    // This alarm is for the PaymentSuccess metric where
-    // ProductType == Paper AND PaymentProvider in [Stripe, Gocardless, Paypal]
-    new GuAlarm(this, "NoPaperAcquisitionInOneDayAlarm", {
-      app,
-      actionsEnabled: isProd,
-      okAction: true,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful paper checkouts in 24h.`,
-      metric: new MathExpression({
-        expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
-        label: "AllPaperConversions",
-        usingMetrics: {
-          m1: this.buildPaymentSuccessMetric(
-            PaymentProviders.Stripe,
-            ProductTypes.Paper,
-            Duration.seconds(300)
-          ),
-          m2: this.buildPaymentSuccessMetric(
-            PaymentProviders.DirectDebit,
-            ProductTypes.Paper,
-            Duration.seconds(300)
-          ),
-          m3: this.buildPaymentSuccessMetric(
-            PaymentProviders.PayPal,
-            ProductTypes.Paper,
-            Duration.seconds(300)
-          ),
-        },
-      }),
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 288,
-      treatMissingData: TreatMissingData.BREACHING,
-      threshold: 0,
-    }).node.addDependency(stateMachine);
+		// This alarm is for the PaymentSuccess metric where
+		// ProductType == Paper AND PaymentProvider in [Stripe, Gocardless, Paypal]
+		new GuAlarm(this, 'NoPaperAcquisitionInOneDayAlarm', {
+			app,
+			actionsEnabled: isProd,
+			okAction: true,
+			snsTopicName: `alarms-handler-topic-${this.stage}`,
+			alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful paper checkouts in 24h.`,
+			metric: new MathExpression({
+				expression: 'SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])',
+				label: 'AllPaperConversions',
+				period: Duration.minutes(5),
+				usingMetrics: {
+					m1: this.buildPaymentSuccessMetric(
+						PaymentProviders.Stripe,
+						ProductTypes.Paper,
+					),
+					m2: this.buildPaymentSuccessMetric(
+						PaymentProviders.DirectDebit,
+						ProductTypes.Paper,
+					),
+					m3: this.buildPaymentSuccessMetric(
+						PaymentProviders.PayPal,
+						ProductTypes.Paper,
+					),
+				},
+			}),
+			comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+			evaluationPeriods: 288,
+			treatMissingData: TreatMissingData.BREACHING,
+			threshold: 0,
+		}).node.addDependency(stateMachine);
 
-    new GuAlarm(this, "NoWeeklyAcquisitionInOneDayAlarm", {
-      app,
-      actionsEnabled: isProd,
-      okAction: true,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful guardian weekly checkouts in 8h.`,
-      metric: new MathExpression({
-        label: "AllWeeklyConversions",
-        expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
-        usingMetrics: {
-          m1: this.buildPaymentSuccessMetric(
-            PaymentProviders.Stripe,
-            ProductTypes.GuardianWeekly,
-            Duration.seconds(300)
-          ),
-          m2: this.buildPaymentSuccessMetric(
-            PaymentProviders.DirectDebit,
-            ProductTypes.GuardianWeekly,
-            Duration.seconds(300)
-          ),
-          m3: this.buildPaymentSuccessMetric(
-            PaymentProviders.PayPal,
-            ProductTypes.GuardianWeekly,
-            Duration.seconds(300)
-          ),
-        },
-      }),
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 96,
-      treatMissingData: TreatMissingData.BREACHING,
-      threshold: 0,
-    }).node.addDependency(stateMachine);
+		// Paper StripeHostedCheckout (Observer) alarm
+		const stripeHostedMetricDuration = Duration.hours(1);
+		const stripeHostedEvaluationPeriods = 48; // The number of 1 hour periods in 2 days
+		const stripeHostedAlarmPeriod = Duration.minutes(
+			stripeHostedMetricDuration.toMinutes() * stripeHostedEvaluationPeriods,
+		);
+		new GuAlarm(this, 'NoPaperStripeHostedAcquisitionInPeriodAlarm', {
+			app,
+			actionsEnabled: isProd,
+			okAction: true,
+			snsTopicName: `alarms-handler-topic-${this.stage}`,
+			alarmName: `URGENT 9-5 - ${
+				this.stage
+			} support-workers No successful Paper StripeHostedCheckout (Observer) checkouts in ${stripeHostedAlarmPeriod.toHumanString()}.`,
+			metric: this.buildPaymentSuccessMetric(
+				PaymentProviders.StripeHostedCheckout,
+				ProductTypes.Paper,
+				stripeHostedMetricDuration,
+			),
+			comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+			evaluationPeriods: stripeHostedEvaluationPeriods,
+			treatMissingData: TreatMissingData.BREACHING,
+			threshold: 0,
+		}).node.addDependency(stateMachine);
 
-    const tierThreeMetricDuration = Duration.minutes(5);
-    const tierThreeEvaluationPeriods = 288; // The number of 5 minute periods in 24 hours
-    const tierThreeAlarmPeriod = Duration.minutes(
-      tierThreeMetricDuration.toMinutes() * tierThreeEvaluationPeriods
-    );
-    new GuAlarm(this, `NoTierThreeAcquisitionInPeriodAlarm`, {
-      app,
-      actionsEnabled: isProd,
-      okAction: true,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `URGENT 9-5 - ${
-        this.stage
-      } support-workers No successful Tier Three checkouts in ${tierThreeAlarmPeriod.toHumanString()}.`,
-      metric: new MathExpression({
-        label: "AllTierThreeConversions",
-        expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
-        usingMetrics: {
-          m1: this.buildPaymentSuccessMetric(
-            PaymentProviders.Stripe,
-            ProductTypes.TierThree,
-            tierThreeMetricDuration
-          ),
-          m2: this.buildPaymentSuccessMetric(
-            PaymentProviders.DirectDebit,
-            ProductTypes.TierThree,
-            tierThreeMetricDuration
-          ),
-          m3: this.buildPaymentSuccessMetric(
-            PaymentProviders.PayPal,
-            ProductTypes.TierThree,
-            tierThreeMetricDuration
-          ),
-        },
-      }),
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: tierThreeEvaluationPeriods,
-      treatMissingData: TreatMissingData.BREACHING,
-      threshold: 0,
-    }).node.addDependency(stateMachine);
+		// Guardian Weekly alarm for all payment providers combined (Stripe, Gocardless, Paypal)
+		const weeklyMetricDuration = Duration.minutes(5);
+		const weeklyEvaluationPeriods = 144; // The number of 5 minute periods in 12 hours
+		const weeklyAlarmPeriod = Duration.minutes(
+			weeklyMetricDuration.toMinutes() * weeklyEvaluationPeriods,
+		);
 
-    // Begining of Ad-Lite
-    const adLiteMetricDuration = Duration.minutes(5);
-    const adLiteEvaluationPeriods = 144; // The number of 5 minute periods in 12 hours
-    const adLiteAlarmPeriod = Duration.minutes(
-      adLiteMetricDuration.toMinutes() * adLiteEvaluationPeriods
-    );
-    const adLiteMetrics = Object.fromEntries(
-      Object.values(PaymentProviders).map((paymentProvider, idx) => [
-        `m${idx}`,
-        this.buildPaymentSuccessMetric(
-          paymentProvider,
-          ProductTypes.GuardianAdLite,
-          adLiteMetricDuration
-        ),
-      ])
-    );
-    const adLiteExpression = `SUM([${Object.keys(adLiteMetrics)
-      .map((m) => `FILL(${m},0)`)
-      .join(",")}])`;
-    new GuAlarm(this, `NoAdLiteAcquisitionInPeriodAlarm`, {
-      app,
-      actionsEnabled: isProd,
-      okAction: true,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `URGENT 9-5 - ${
-        this.stage
-      } support-workers No successful Ad-Lite checkouts in ${adLiteAlarmPeriod.toHumanString()}.`,
-      metric: new MathExpression({
-        label: "AllGuardianAdLiteConversions",
-        expression: adLiteExpression,
-        usingMetrics: adLiteMetrics,
-      }),
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: adLiteEvaluationPeriods,
-      treatMissingData: TreatMissingData.BREACHING,
-      threshold: 0,
-    }).node.addDependency(stateMachine);
-  }
-  // End of Ad-Lite
+		new GuAlarm(this, 'NoWeeklyAcquisitionForPeriodAlarm', {
+			app,
+			actionsEnabled: isProd,
+			okAction: true,
+			snsTopicName: `alarms-handler-topic-${this.stage}`,
+			alarmName: `URGENT 9-5 - ${
+				this.stage
+			} support-workers No successful guardian weekly checkouts in ${weeklyAlarmPeriod.toHumanString()}.`,
+			metric: new MathExpression({
+				label: 'AllWeeklyConversions',
+				expression: 'SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])',
+				period: weeklyMetricDuration,
+				usingMetrics: {
+					m1: this.buildPaymentSuccessMetric(
+						PaymentProviders.Stripe,
+						ProductTypes.GuardianWeekly,
+					),
+					m2: this.buildPaymentSuccessMetric(
+						PaymentProviders.DirectDebit,
+						ProductTypes.GuardianWeekly,
+					),
+					m3: this.buildPaymentSuccessMetric(
+						PaymentProviders.PayPal,
+						ProductTypes.GuardianWeekly,
+					),
+				},
+			}),
+			comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+			evaluationPeriods: weeklyEvaluationPeriods,
+			treatMissingData: TreatMissingData.BREACHING,
+			threshold: 0,
+		}).node.addDependency(stateMachine);
 
-  buildPaymentSuccessMetric = (
-    paymentProvider: PaymentProvider,
-    productType: ProductType,
-    period: Duration
-  ) => {
-    return new Metric({
-      metricName: "PaymentSuccess",
-      namespace: "support-frontend",
-      dimensionsMap: {
-        PaymentProvider: paymentProvider,
-        ProductType: productType,
-        Stage: this.stage,
-      },
-      statistic: "Sum",
-      period: period,
-    });
-  };
+		// Begining of Ad-Lite
+		const adLiteMetricDuration = Duration.minutes(5);
+		const adLiteEvaluationPeriods = 144; // The number of 5 minute periods in 12 hours
+		const adLiteAlarmPeriod = Duration.minutes(
+			adLiteMetricDuration.toMinutes() * adLiteEvaluationPeriods,
+		);
+		const adLiteMetrics = Object.fromEntries(
+			Object.values(PaymentProviders).map((paymentProvider, idx) => [
+				`m${idx}`,
+				this.buildPaymentSuccessMetric(
+					paymentProvider,
+					ProductTypes.GuardianAdLite,
+				),
+			]),
+		);
+		const adLiteExpression = `SUM([${Object.keys(adLiteMetrics)
+			.map((m) => `FILL(${m},0)`)
+			.join(',')}])`;
+		new GuAlarm(this, `NoAdLiteAcquisitionInPeriodAlarm`, {
+			app,
+			actionsEnabled: isProd,
+			okAction: true,
+			snsTopicName: `alarms-handler-topic-${this.stage}`,
+			alarmName: `URGENT 9-5 - ${
+				this.stage
+			} support-workers No successful Ad-Lite checkouts in ${adLiteAlarmPeriod.toHumanString()}.`,
+			metric: new MathExpression({
+				period: adLiteMetricDuration,
+				label: 'AllGuardianAdLiteConversions',
+				expression: adLiteExpression,
+				usingMetrics: adLiteMetrics,
+			}),
+			comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+			evaluationPeriods: adLiteEvaluationPeriods,
+			treatMissingData: TreatMissingData.BREACHING,
+			threshold: 0,
+		}).node.addDependency(stateMachine);
+	}
+	// End of Ad-Lite
+
+	buildPaymentSuccessMetric = (
+		paymentProvider: PaymentProvider,
+		productType: ProductType,
+		period: Duration | undefined = undefined, // Has no effect if Metric used by a MathExpression
+	) => {
+		return new Metric({
+			metricName: 'PaymentSuccess',
+			namespace: 'support-frontend',
+			dimensionsMap: {
+				PaymentProvider: paymentProvider,
+				ProductType: productType,
+				Stage: this.stage,
+			},
+			statistic: 'Sum',
+			period: period,
+		});
+	};
 }

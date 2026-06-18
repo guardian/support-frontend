@@ -9,11 +9,13 @@ import com.gu.retry.EitherTRetry.retry
 import config.Identity
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
+import models.GeoData
+import models.identity.RegistrationLocation
 import models.identity.requests.CreateGuestAccountRequestBody
 import models.identity.responses.IdentityErrorResponse.{GuestEndpoint, IdentityError, OtherIdentityError, UserEndpoint}
 import models.identity.responses.{GuestRegistrationResponse, IdentityErrorResponse, UserResponse}
 import org.apache.pekko.actor.Scheduler
-import play.api.libs.json.{JsPath, Json, JsonValidationError, Reads}
+import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
 
@@ -80,6 +82,33 @@ object CreateSignInTokenResponse {
   implicit val readCreateSignInTokenResponse: Reads[CreateSignInTokenResponse] = Json.reads[CreateSignInTokenResponse]
 }
 
+case class Newsletter(
+    listId: String,
+)
+
+object Newsletter {
+  implicit val newsletterReads: Reads[Newsletter] = Json.reads[Newsletter]
+}
+
+case class NewsletterApiResult(
+    htmlPreference: String,
+    subscriptions: List[Newsletter],
+    globalSubscriptionStatus: String,
+)
+
+object NewsletterApiResult {
+  implicit val newsletterApiResultReads: Reads[NewsletterApiResult] = Json.reads[NewsletterApiResult]
+}
+
+case class NewsletterApiResponse(
+    result: NewsletterApiResult,
+    status: String,
+)
+
+object NewsletterApiResponse {
+  implicit val newsletterApiResponseReads: Reads[NewsletterApiResponse] = Json.reads[NewsletterApiResponse]
+}
+
 object IdentityService {
   def apply(config: Identity)(implicit wsClient: WSClient): IdentityService =
     new IdentityService(apiUrl = config.apiUrl, apiClientToken = config.apiClientToken)
@@ -95,17 +124,14 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .withHttpHeaders("Authorization" -> s"Bearer $apiClientToken")
   }
 
-  def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean] = {
-    val payload = Json.obj("email" -> email, "set-consents" -> Json.arr("supporter"))
-    request(s"consent-email").post(payload).map { response =>
-      val validResponse = response.status >= 200 && response.status < 300
-      if (validResponse) logger.info("Successful response from Identity Consent API")
-      else logger.error(scrub"Failure response from Identity Consent API: ${response.toString}")
-      validResponse
-    } recover { case e: Exception =>
-      logger.error(scrub"Failed to update the user's marketing preferences $e")
-      false
-    }
+  private def requestWithAccessToken(path: String, accessToken: String, origin: String): WSRequest = {
+    wsClient
+      .url(s"$apiUrl/$path")
+      .withHttpHeaders(
+        "Authorization" -> s"Bearer $accessToken",
+        "Origin" -> origin,
+        "x-gu-is-oauth" -> "true",
+      )
   }
 
   def getUserType(
@@ -135,12 +161,55 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       .subflatMap(resp => resp.json.validate[CreateSignInTokenResponse].asEither.leftMap(_.mkString(",")))
   }
 
+  def getNewslettersSubscriptions(accessToken: String, origin: String)(implicit
+      ec: ExecutionContext,
+  ): Future[Either[String, List[Newsletter]]] = {
+    requestWithAccessToken("users/me/newsletters", accessToken, origin)
+      .get()
+      .map { response =>
+        if (response.status >= 200 && response.status < 300) {
+          response.json.validate[NewsletterApiResponse] match {
+            case JsSuccess(apiResponse, _) => Right(apiResponse.result.subscriptions)
+            case JsError(errors) =>
+              Left(s"Failed to parse newsletters response: ${errors.mkString(", ")}")
+          }
+        } else {
+          Left(s"Failed to fetch newsletters")
+        }
+      }
+      .recover { case e: Exception =>
+        Left(s"Exception fetching newsletters: ${e.toString}")
+      }
+  }
+
+  def updateNewsletterSubscription(accessToken: String, id: String, subscribed: Boolean, origin: String)(implicit
+      ec: ExecutionContext,
+  ): Future[Either[String, Unit]] = {
+    val payload = Json.obj("id" -> id, "subscribed" -> subscribed)
+    requestWithAccessToken("users/me/newsletters", accessToken, origin)
+      .patch(payload)
+      .map { response =>
+        if (response.status >= 200 && response.status < 300) {
+          Right(())
+        } else {
+          val errorMsg = s"Failed to update newsletter: ${response.status} ${response.body}"
+          Left(errorMsg)
+        }
+      }
+      .recover { case e: Exception =>
+        val errorMsg = s"Exception updating newsletter: ${e.getMessage}"
+        Left(errorMsg)
+      }
+  }
+
   def getOrCreateUserFromEmail(
       email: String,
       firstName: String,
       lastName: String,
       pageViewId: Option[String],
       referer: Option[String],
+      sendIdentityVerificationEmail: Boolean,
+      geoData: GeoData,
   )(implicit ec: ExecutionContext, scheduler: Scheduler): EitherT[Future, IdentityError, UserDetails] = {
     // Try to fetch the user's information with their email address and if it does not exist
     // or there is an error try again up to a total of 3 times with a 500 millisecond delay between
@@ -148,9 +217,21 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     // We try to fetch the user information at the start of each attempt in case a previous `createUser`
     // call succeeded but timed out before returning a valid response
     retry(
-      getUserDetailsFromEmail(email).leftFlatMap(_ =>
-        createUserIdFromEmailUser(email, firstName, lastName, pageViewId, referer),
-      ),
+      getUserDetailsFromEmail(email).leftFlatMap(_ => {
+        val registrationLocation = RegistrationLocation.registrationLocationFromGeoData(geoData)
+        val registrationLocationState = RegistrationLocation.registrationLocationStateFromGeoData(geoData)
+
+        createUserIdFromEmailUser(
+          email = email,
+          firstName = firstName,
+          lastName = lastName,
+          pageViewId = pageViewId,
+          referer = referer,
+          sendIdentityVerificationEmail = sendIdentityVerificationEmail,
+          registrationLocation = registrationLocation,
+          registrationLocationState = registrationLocationState,
+        )
+      }),
       delay = 500.milliseconds,
       retries = 2,
     )
@@ -186,12 +267,17 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       lastName: String,
       pageViewId: Option[String],
       referer: Option[String],
+      sendIdentityVerificationEmail: Boolean,
+      registrationLocation: Option[String] = None,
+      registrationLocationState: Option[String] = None,
   )(implicit ec: ExecutionContext, scheduler: Scheduler): EitherT[Future, IdentityError, UserDetails] = {
     val body = CreateGuestAccountRequestBody(
       email,
       PrivateFields(
         firstName = Some(firstName).filter(_.nonEmpty),
         secondName = Some(lastName).filter(_.nonEmpty),
+        registrationLocation = registrationLocation,
+        registrationLocationState = registrationLocationState,
       ),
     )
     execute(
@@ -208,7 +294,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
         .withMethod("POST")
         .withQueryStringParameters(
           List(
-            Some(("accountVerificationEmail", "true")),
+            Some(("accountVerificationEmail", s"$sendIdentityVerificationEmail")),
             pageViewId.map(viewId => ("refViewId", viewId)),
             referer.map(refUrl => ("ref", refUrl)),
           ).flatten: _*,

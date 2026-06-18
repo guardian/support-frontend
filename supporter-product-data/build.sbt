@@ -1,5 +1,4 @@
 import LibraryVersions.{awsClientVersion2, circeVersion}
-import com.gu.riffraff.artifact.RiffRaffArtifact.autoImport.riffRaffManifestProjectName
 import sbt.Keys.libraryDependencies
 
 version := "0.1-SNAPSHOT"
@@ -9,21 +8,16 @@ libraryDependencies ++= Seq(
   "software.amazon.awssdk" % "ssm" % awsClientVersion2,
   "software.amazon.awssdk" % "s3" % awsClientVersion2,
   "software.amazon.awssdk" % "sqs" % awsClientVersion2,
-  "com.amazonaws" % "aws-lambda-java-core" % "1.2.3",
+  "com.amazonaws" % "aws-lambda-java-core" % "1.4.0",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
   "org.scala-lang.modules" %% "scala-java8-compat" % "1.0.2",
-  "com.nrinaudo" %% "kantan.csv-generic" % "0.7.0",
-  "com.nrinaudo" %% "kantan.csv-java8" % "0.7.0",
+  "com.nrinaudo" %% "kantan.csv-generic" % "0.8.0",
+  "com.nrinaudo" %% "kantan.csv-java8" % "0.8.0",
   "com.jayway.jsonpath" % "json-path" % "2.8.0",
 )
 
-riffRaffPackageType := assembly.value
-riffRaffManifestProjectName := s"support:supporter-product-data"
-riffRaffUploadArtifactBucket := Option("riffraff-artifact")
-riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffArtifactResources += (file("supporter-product-data/cloudformation/cfn.yaml"), "cfn/cfn.yaml")
 assemblyJarName := s"${name.value}.jar"
 
 lazy val deployToCode =

@@ -1,4 +1,3 @@
-import React from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import Footer from 'components/footerCompliant/Footer';
@@ -21,7 +20,10 @@ export default {
 
 export function PageFooter(args: { showContents: boolean }): JSX.Element {
 	return (
-		<Footer termsConditionsLink="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions">
+		<Footer
+			termsConditionsLink="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions"
+			fullWidth
+		>
 			{args.showContents && <>Terms and conditions may apply</>}
 		</Footer>
 	);

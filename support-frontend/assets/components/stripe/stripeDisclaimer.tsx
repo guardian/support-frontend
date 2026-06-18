@@ -1,14 +1,3 @@
-import { css } from '@emotion/react';
-import { palette, space, textSans14 } from '@guardian/source/foundations';
-
-export const DisclaimerOnSubscribeStyles = css`
-	margin-top: ${space[3]}px;
-	${textSans14};
-	a {
-		color: ${palette.neutral[0]};
-	}
-`;
-
 export function StripeDisclaimer() {
 	return (
 		<>

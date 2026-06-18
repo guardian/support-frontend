@@ -1,18 +1,14 @@
-import type { DirectDebitState } from 'helpers/redux/checkout/payment/directDebit/state';
-import type { ContributionsState } from 'helpers/redux/contributionsStore';
+import type { SliceErrors } from 'helpers/types/SliceErrors';
 
-export type DirectDebitFormDisplayErrors = DirectDebitState['errors'] & {
-	recaptcha?: string[];
+type DirectDebitValidateableState = {
+	sortCode: string;
+	accountNumber: string;
+	accountHolderName: string;
+	accountHolderConfirmation: boolean;
 };
 
-export function getDirectDebitFormErrors(
-	state: ContributionsState,
-): DirectDebitFormDisplayErrors {
-	const recaptchaErrors = state.page.checkoutForm.recaptcha.errors;
-	const formErrors = state.page.checkoutForm.payment.directDebit.errors;
+type DirectDebitErrors = SliceErrors<DirectDebitValidateableState>;
 
-	return {
-		...formErrors,
-		recaptcha: recaptchaErrors,
-	};
-}
+export type DirectDebitFormDisplayErrors = DirectDebitErrors & {
+	recaptcha?: string[];
+};

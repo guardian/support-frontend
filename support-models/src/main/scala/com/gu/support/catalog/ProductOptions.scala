@@ -30,6 +30,8 @@ case object Everyday extends PaperProductOptions(false)
 
 case object NewspaperArchive extends ProductOptions
 
+case object PlusDigital extends ProductOptions
+
 object ProductOptions {
   val allProductOptions =
     NoProductOptions :: NewspaperArchive :: PaperProductOptions.productOptions

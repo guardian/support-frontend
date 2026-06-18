@@ -8,7 +8,6 @@ import {
 	accordionRowOverride,
 	copyWidthStyle,
 	flexContainerOverride,
-	imageHeightStyle,
 	paragraphStyle,
 } from './NewspaperTabHeroStyles';
 import { TabAccordionRow } from './tabAccordionRow';
@@ -38,15 +37,13 @@ export default function NewspaperTabHero({
 					</Accordion>
 				))}
 			</div>
-			<div css={imageHeightStyle}>
-				<GridImage
-					gridId={`paperLandingTab${tab}`}
-					srcSizes={[1000, 500]}
-					sizes="(max-width: 1139px) 244px, (min-width: 1140px) 300px"
-					imgType="png"
-					altText="Illustration of The Guardian subscription card"
-				/>
-			</div>
+			<GridImage
+				gridId={`paperLandingTab${tab}`}
+				srcSizes={[1000, 500]}
+				sizes="(max-width: 375px) 300px, (min-width: 375px) 353px"
+				imgType="png"
+				altText="Illustration of The Guardian subscription card"
+			/>
 		</FlexContainer>
 	);
 }

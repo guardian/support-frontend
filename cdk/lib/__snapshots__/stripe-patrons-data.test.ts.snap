@@ -77,6 +77,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
             "Expression": "100*m1/m2",
             "Id": "expr_1",
             "Label": "% of 5XX responses served for stripe-patrons-data",
+            "ReturnData": true,
           },
           {
             "Id": "m1",
@@ -240,6 +241,9 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         "RestApipatronsubscriptioncreateC44D8A79",
         "RestApipatronsubscriptionAE58DC90",
       ],
+      "Metadata": {
+        "aws:cdk:do-not-refactor": true,
+      },
       "Properties": {
         "Description": "Automatically created by the RestApi construct",
         "RestApiId": {
@@ -651,6 +655,9 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       "Type": "AWS::Lambda::Alias",
     },
     "StripePatronsDataPRODCurrentVersion700541B4b1d2d8a58d99ba71fb5ad59d50569516": {
+      "Metadata": {
+        "aws:cdk:do-not-refactor": true,
+      },
       "Properties": {
         "FunctionName": {
           "Ref": "StripePatronsDataPROD61F45521",
@@ -698,6 +705,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
                 ],
               ],
             },
+            "ReturnData": true,
           },
           {
             "Id": "m1",
@@ -952,6 +960,28 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       "Properties": {
         "ScheduleExpression": "rate(30 minutes)",
         "State": "ENABLED",
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "stripe-patrons-data",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
         "Targets": [
           {
             "Arn": {
@@ -1056,6 +1086,9 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       "Type": "AWS::Lambda::Alias",
     },
     "stripepatronsdatacancelledCurrentVersion23EC801Ebaa302193dd1e54115b09f3ea1a6bcc7": {
+      "Metadata": {
+        "aws:cdk:do-not-refactor": true,
+      },
       "Properties": {
         "FunctionName": {
           "Ref": "stripepatronsdatacancelled2E3CED96",
@@ -1325,6 +1358,9 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       "Type": "AWS::Lambda::Alias",
     },
     "stripepatronsdatasignupCurrentVersionCB0F0BAAc41971ff7e0c47681d13f4df990e0037": {
+      "Metadata": {
+        "aws:cdk:do-not-refactor": true,
+      },
       "Properties": {
         "FunctionName": {
           "Ref": "stripepatronsdatasignup4E7F0A3F",

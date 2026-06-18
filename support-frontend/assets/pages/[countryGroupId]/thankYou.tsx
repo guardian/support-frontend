@@ -1,12 +1,10 @@
 import { storage } from '@guardian/libs';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import {
-	type ActiveProductKey,
 	type ActiveRatePlanKey,
 	isProductKey,
 	productCatalog,
@@ -14,20 +12,19 @@ import {
 import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
+import type { UserType } from 'helpers/user/userType';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import type { Participations } from '../../helpers/abTests/models';
+import { AnalyticsProfileCacheProvider } from '../../helpers/customHooks/analyticsProfileCache';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { setHideSupportMessaginCookie } from '../../helpers/storage/contributionsCookies';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
+import type { OnboardingProductKey } from './components/onboardingComponent';
 import OnboardingComponent from './components/onboardingComponent';
 import { ThankYouComponent } from './components/thankYouComponent';
 
 const SKIP_NEW_ONBOARDING_EXPERIENCE_KEY = 'gu.skipNewOnboardingExperience';
-
-const PRODUCTS_WITH_THANK_YOU_ONBOARDING: Array<ActiveProductKey | undefined> =
-	['SupporterPlus'];
 
 type ThankYouProps = {
 	supportRegionId: SupportRegionId;
@@ -43,8 +40,8 @@ export function ThankYou({
 	landingPageSettings,
 }: ThankYouProps) {
 	const countryId = Country.detect();
-	const { currencyKey, countryGroupId } =
-		getSupportRegionIdConfig(supportRegionId);
+	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
+	const { enableThankYouOnboarding } = useFeatureSwitches();
 
 	const searchParams = new URLSearchParams(window.location.search);
 	const csrf = { token: window.guardian.csrf.token };
@@ -117,23 +114,11 @@ export function ThankYou({
 			}
 
 			const productPrices =
-				productKey === 'SupporterPlus' || productKey === 'TierThree'
+				productKey === 'SupporterPlus'
 					? appConfig.allProductPrices[productKey]
 					: undefined;
 			const billingPeriod =
 				toRegularBillingPeriod(ratePlan.billingPeriod) ?? BillingPeriod.Annual;
-
-			const getFulfilmentOptions = (productKey: string): FulfilmentOptions => {
-				switch (productKey) {
-					case 'TierThree':
-						return countryGroupId === 'International'
-							? 'RestOfWorld'
-							: 'Domestic';
-					default:
-						return 'NoFulfilmentOptions';
-				}
-			};
-			const fulfilmentOption = getFulfilmentOptions(productKey);
 
 			/** Get any promotions */
 			promotion = productPrices
@@ -141,47 +126,43 @@ export function ThankYou({
 						productPrices,
 						countryId,
 						billingPeriod,
-						fulfilmentOption,
+						'NoFulfilmentOptions',
 				  )
 				: undefined;
-			const discountedPrice = promotion?.discountedPrice;
-			const price = discountedPrice ?? productPrice;
 
-			if (productKey === 'SupporterPlus') {
-				/** SupporterPlus can have an additional contribution bolted onto the base price */
-				payment = {
-					originalAmount: productPrice,
-					discountedAmount: discountedPrice,
-					contributionAmount,
-					finalAmount: price + (contributionAmount ?? 0),
-				};
-			} else {
-				payment = {
-					originalAmount: productPrice,
-					discountedAmount: discountedPrice,
-					contributionAmount,
-					finalAmount: price,
-				};
-			}
+			const discountedPrice = promotion?.discountedPrice ?? undefined;
+			const price = discountedPrice ?? productPrice;
+			/** SupporterPlus can have an additional contribution bolted onto the base price */
+			const finalAmount =
+				price + (productKey === 'SupporterPlus' ? contributionAmount ?? 0 : 0);
+
+			payment = {
+				originalAmount: productPrice,
+				contributionAmount,
+				finalAmount,
+			};
 		}
 	}
 
 	if (
-		isSwitchOn('featureSwitches.enableThankYouOnboarding') &&
-		PRODUCTS_WITH_THANK_YOU_ONBOARDING.includes(productKey) &&
+		enableThankYouOnboarding &&
+		productKey !== undefined &&
+		appConfig.settings.productsWithThankYouOnboarding.includes(productKey) &&
 		storage.session.get(SKIP_NEW_ONBOARDING_EXPERIENCE_KEY) !== 'true'
 	) {
 		return (
-			<OnboardingComponent
-				supportRegionId={supportRegionId}
-				csrf={csrf}
-				payment={payment}
-				productKey={productKey}
-				ratePlanKey={ratePlanKey}
-				promotion={promotion}
-				identityUserType={userType}
-				landingPageSettings={landingPageSettings}
-			/>
+			<AnalyticsProfileCacheProvider>
+				<OnboardingComponent
+					supportRegionId={supportRegionId}
+					csrf={csrf}
+					payment={payment}
+					productKey={productKey as OnboardingProductKey}
+					ratePlanKey={ratePlanKey ?? 'OneTime'}
+					promotion={promotion}
+					identityUserType={userType}
+					landingPageSettings={landingPageSettings}
+				/>
+			</AnalyticsProfileCacheProvider>
 		);
 	}
 

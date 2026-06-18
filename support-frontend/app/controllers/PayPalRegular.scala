@@ -48,17 +48,6 @@ class PayPalRegular(
       }
     }
 
-  def createAgreement: Action[Token] = MaybeAuthenticatedActionOnFormSubmission.async(circe.json[Token]) {
-    implicit request =>
-      withPaypalServiceForRequest(request) { service =>
-        service.createBillingAgreement(request.body)
-      }.map { maybeString =>
-        maybeString
-          .map(s => Ok(Token(s).asJson))
-          .getOrElse(BadRequest("We were unable to create an agreement for this request (missing PayPal token)"))
-      }
-  }
-
   def createAgreementAndRetrieveUser: Action[Token] =
     MaybeAuthenticatedActionOnFormSubmission.async(circe.json[Token]) { implicit request =>
       withPaypalServiceForRequest(request) { service =>
@@ -88,7 +77,7 @@ class PayPalRegular(
         "Support the Guardian | PayPal Error",
         EmptyDiv("paypal-error-page"),
         RefPath("payPalErrorPage.js"),
-        Some(RefPath("payPalErrorPageStyles.css")),
+        None,
       )(),
     ).withSettingsSurrogateKey
   }
@@ -103,7 +92,7 @@ class PayPalRegular(
         "Support the Guardian | PayPal Error",
         EmptyDiv("paypal-error-page"),
         RefPath("payPalErrorPage.js"),
-        Some(RefPath("payPalErrorPageStyles.css")),
+        None,
       )(),
     ).withSettingsSurrogateKey
   }

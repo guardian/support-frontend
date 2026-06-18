@@ -1,6 +1,6 @@
-// ----- Imports ----- //
 import { css } from '@emotion/react';
-import { from } from '@guardian/source/foundations';
+import { from, space } from '@guardian/source/foundations';
+import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -11,127 +11,79 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
+import {
+	Domestic,
+	type PrintFulfilmentOptions,
+	RestOfWorld,
+} from '@modules/product/fulfilmentOptions';
+import { ClientSideErrorHandler } from 'components/ClientSideError';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 import Block from 'components/page/block';
-import Page from 'components/page/page';
-import GiftNonGiftCta from 'components/product/giftNonGiftCta';
+import { PageScaffold } from 'components/page/pageScaffold';
+import { PromoTermsProvider } from 'contexts/PromoTermsContext';
+import {
+	getGlobal,
+	getProductPrices,
+	getPromotionCopy,
+} from 'helpers/globalsAndSwitches/globals';
+import { Country } from 'helpers/internationalisation/classes/country';
+import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import {
 	getAbParticipations,
 	setUpTrackingAndConsents,
 } from 'helpers/page/page';
-import { getPromotionCopy } from 'helpers/productPrice/promotions';
+import { type ProductPrices } from 'helpers/productPrice/productPrices';
+import type { PromotionCopy } from 'helpers/productPrice/promotions';
+import { getSanitisedPromoCopy } from 'helpers/productPrice/promotions';
 import { renderPage } from 'helpers/rendering/render';
 import { routes } from 'helpers/urls/routes';
-import 'stylesheets/skeleton/skeleton.scss';
+import getPlanData from 'pages/paper-subscription-landing/planData';
 import { GuardianWeeklyFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
-import Benefits from './components/content/benefits';
-import GiftBenefits from './components/content/giftBenefits';
-import { WeeklyHero } from './components/hero/hero';
-import WeeklyProductPrices from './components/weeklyProductPrices';
-import './weeklySubscriptionLanding.scss';
-import type {
-	WeeklyLandingPropTypes,
-	WeeklyLPContentPropTypes,
-} from './weeklySubscriptionLandingProps';
-import { weeklyLandingProps } from './weeklySubscriptionLandingProps';
+import WeeklyGiftBenefits from './components/content/weeklyGiftBenefits';
+import { WeeklyAlternativeSubs } from './components/weeklyAlternativeSubs';
+import { WeeklyBenefits } from './components/weeklyBenefits';
+import { WeeklyCards } from './components/weeklyCards';
+import WeeklyDigitalHero from './components/WeeklyDigitalHero';
+import { WeeklyGiftHero } from './components/weeklyGiftHero';
+import WeeklyGiftProductPrices from './components/weeklyGiftProductPrices';
+import { WeeklyPriceInfo } from './components/weeklyPriceInfo';
 
-const styles = {
-	closeGapAfterPageTitle: css`
+const weeklySpacing = css`
+	div {
 		margin-top: 0;
-	`,
-	displayRowEvenly: css`
-		${from.phablet} {
-			display: flex;
-			flex-direction: row;
-			justify-content: space-evenly;
-		}
-	`,
-	weeklyHeroContainerOverrides: css`
-		display: flex;
-	`,
-};
-
-function WeeklyLPContent({
-	countryId,
-	productPrices,
-	promotionCopy,
-	orderIsAGift,
-	countryGroupId,
-	pageQaId,
-	header,
-	giftNonGiftLink,
-}: WeeklyLPContentPropTypes) {
-	return (
-		<Page
-			id={pageQaId}
-			header={header}
-			footer={
-				<GuardianWeeklyFooter
-					productPrices={productPrices}
-					orderIsAGift={!!orderIsAGift}
-					country={countryId}
-				/>
-			}
-		>
-			<WeeklyHero orderIsAGift={orderIsAGift} promotionCopy={promotionCopy} />
-			<FullWidthContainer>
-				<CentredContainer>
-					<Block cssOverrides={styles.closeGapAfterPageTitle}>
-						{orderIsAGift ? <GiftBenefits /> : <Benefits />}
-					</Block>
-				</CentredContainer>
-			</FullWidthContainer>
-			<FullWidthContainer theme="dark" hasOverlap>
-				<CentredContainer>
-					<WeeklyProductPrices
-						countryId={countryId}
-						productPrices={productPrices}
-						orderIsAGift={orderIsAGift}
-					/>
-				</CentredContainer>
-			</FullWidthContainer>
-			<FullWidthContainer theme="white">
-				<CentredContainer>
-					<div css={styles.displayRowEvenly}>
-						<GiftNonGiftCta
-							product="Guardian Weekly"
-							href={giftNonGiftLink}
-							orderIsAGift={orderIsAGift}
-						/>
-						{(countryGroupId === 'GBPCountries' ||
-							countryGroupId === 'AUDCountries') && (
-							<GiftNonGiftCta
-								product="Student"
-								href={getStudentBeanLink(countryGroupId)}
-								orderIsAGift={orderIsAGift}
-								isStudent={true}
-							/>
-						)}
-					</div>
-				</CentredContainer>
-			</FullWidthContainer>
-		</Page>
-	);
-}
-
-function getStudentBeanLink(countryGroupId: CountryGroupId) {
-	if (countryGroupId === 'AUDCountries') {
-		return routes.guardianWeeklyStudentAU;
 	}
-	return routes.guardianWeeklyStudentUK;
-}
+`;
 
-// ----- Render ----- //
-function WeeklyLandingPage({
+const weeklyDigitalSpacing = css`
+	padding: ${space[8]}px ${space[3]}px ${space[9]}px;
+	${from.desktop} {
+		width: calc(100% - 32px);
+		padding: ${space[8]}px 0 ${space[9]}px;
+	}
+	${from.leftCol} {
+		width: calc(100% - 40px);
+	}
+	${from.wide} {
+		width: calc(100% - 64px);
+	}
+`;
+
+export type WeeklyLandingPageProps = {
+	countryId: IsoCountry;
+	countryGroupId: CountryGroupId;
+	orderIsAGift: boolean;
+	productPrices?: ProductPrices;
+	promotionCopy?: PromotionCopy;
+};
+export function WeeklyLandingPage({
 	countryId,
+	countryGroupId,
 	productPrices,
 	promotionCopy,
 	orderIsAGift,
-	countryGroupId,
-	participations,
-}: WeeklyLandingPropTypes) {
+}: WeeklyLandingPageProps) {
 	if (!productPrices) {
 		return null;
 	}
@@ -139,11 +91,7 @@ function WeeklyLandingPage({
 	const path = orderIsAGift
 		? routes.guardianWeeklySubscriptionLandingGift
 		: routes.guardianWeeklySubscriptionLanding;
-	const giftNonGiftLink = orderIsAGift
-		? routes.guardianWeeklySubscriptionLanding
-		: routes.guardianWeeklySubscriptionLandingGift;
 
-	const sanitisedPromoCopy = getPromotionCopy(promotionCopy, orderIsAGift);
 	// ID for Selenium tests
 	const pageQaId = `qa-guardian-weekly${orderIsAGift ? '-gift' : ''}`;
 
@@ -161,22 +109,80 @@ function WeeklyLandingPage({
 		],
 		trackProduct: 'GuardianWeekly',
 	});
+	const promotion = getSanitisedPromoCopy(promotionCopy);
+
+	const fulfilmentOption: PrintFulfilmentOptions =
+		countryGroupId === 'International' ? RestOfWorld : Domestic;
+	const planData = getPlanData('NoProductOptions', fulfilmentOption);
 
 	return (
-		<WeeklyLPContent
-			countryId={countryId}
-			countryGroupId={countryGroupId}
-			productPrices={productPrices}
-			promotionCopy={sanitisedPromoCopy}
-			orderIsAGift={orderIsAGift ?? false}
-			participations={participations}
-			pageQaId={pageQaId}
-			header={<Header />}
-			giftNonGiftLink={giftNonGiftLink}
-		/>
+		<PromoTermsProvider>
+			<PageScaffold
+				id={pageQaId}
+				header={<Header />}
+				footer={
+					<GuardianWeeklyFooter
+						productPrices={productPrices}
+						orderIsAGift={!!orderIsAGift}
+						country={countryId}
+					/>
+				}
+			>
+				{orderIsAGift ? (
+					<>
+						<WeeklyGiftHero promotionCopy={promotion} />
+						<FullWidthContainer>
+							<CentredContainer cssOverrides={weeklySpacing}>
+								<Block>
+									<WeeklyGiftBenefits />
+								</Block>
+							</CentredContainer>
+						</FullWidthContainer>
+						<FullWidthContainer theme="dark" hasOverlap>
+							<CentredContainer>
+								<WeeklyGiftProductPrices
+									countryGroupId={countryGroupId}
+									countryId={countryId}
+									productPrices={productPrices}
+								/>
+							</CentredContainer>
+						</FullWidthContainer>
+					</>
+				) : (
+					<>
+						<WeeklyDigitalHero promotion={promotion} />
+						<CentredContainer cssOverrides={weeklyDigitalSpacing}>
+							<WeeklyCards
+								countryId={countryId}
+								productPrices={productPrices}
+							/>
+							<WeeklyBenefits planData={planData} />
+							<WeeklyPriceInfo />
+						</CentredContainer>
+					</>
+				)}
+				<WeeklyAlternativeSubs
+					countryGroupId={countryGroupId}
+					orderIsAGift={orderIsAGift}
+				/>
+			</PageScaffold>
+		</PromoTermsProvider>
 	);
 }
 
+const weeklyLandingProps = (): WeeklyLandingPageProps => ({
+	countryGroupId: CountryGroup.detect(),
+	countryId: Country.detect(),
+	orderIsAGift: getGlobal('orderIsAGift') ?? false,
+	productPrices: getProductPrices() ?? undefined,
+	promotionCopy: getPromotionCopy() ?? undefined,
+});
+
 const abParticipations = getAbParticipations();
 setUpTrackingAndConsents(abParticipations);
-renderPage(<WeeklyLandingPage {...weeklyLandingProps(abParticipations)} />);
+
+renderPage(
+	<ClientSideErrorHandler>
+		<WeeklyLandingPage {...weeklyLandingProps()} />
+	</ClientSideErrorHandler>,
+);

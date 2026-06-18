@@ -1,0 +1,139 @@
+{
+  "state": {
+    "sendThankYouEmailState": {
+      "productType": "GuardianAdLite",
+      "user": {
+        "id": "200500775",
+        "primaryEmailAddress": "test@thegulocal.com",
+        "title": null,
+        "firstName": "support.e2e.firstName+uGaRH",
+        "lastName": "support.e2e.lastName+jkP1B",
+        "billingAddress": {
+          "lineOne": null,
+          "lineTwo": null,
+          "city": null,
+          "state": null,
+          "postCode": null,
+          "country": "GB"
+        },
+        "deliveryAddress": null,
+        "telephoneNumber": null,
+        "isTestUser": true,
+        "deliveryInstructions": null
+      },
+      "product": {
+        "currency": "GBP",
+        "productType": "GuardianAdLite"
+      },
+      "productInformation": {
+        "product": "GuardianAdLite",
+        "ratePlan": "Monthly"
+      },
+      "paymentMethod": {
+        "TokenId": "pm_0STOf2ItVxyc3Q6ngmwjuNCa",
+        "SecondTokenId": "cus_TQF9DfOCL3VGIv",
+        "CreditCardNumber": "4242",
+        "CreditCardExpirationMonth": 1,
+        "CreditCardExpirationYear": 2050,
+        "CreditCardType": "Visa",
+        "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+        "Type": "CreditCardReferenceTransaction",
+        "StripePaymentType": "StripeCheckout"
+      },
+      "paymentSchedule": {
+        "payments": [
+          {
+            "date": "2025-11-29",
+            "amount": 5
+          },
+          {
+            "date": "2025-12-29",
+            "amount": 5
+          },
+          {
+            "date": "2026-01-29",
+            "amount": 5
+          },
+          {
+            "date": "2026-02-28",
+            "amount": 5
+          },
+          {
+            "date": "2026-03-29",
+            "amount": 5
+          },
+          {
+            "date": "2026-04-29",
+            "amount": 5
+          },
+          {
+            "date": "2026-05-29",
+            "amount": 5
+          },
+          {
+            "date": "2026-06-29",
+            "amount": 5
+          },
+          {
+            "date": "2026-07-29",
+            "amount": 5
+          },
+          {
+            "date": "2026-08-29",
+            "amount": 5
+          },
+          {
+            "date": "2026-09-29",
+            "amount": 5
+          },
+          {
+            "date": "2026-10-29",
+            "amount": 2.58
+          }
+        ]
+      },
+      "accountNumber": "A01063053",
+      "subscriptionNumber": "A-S03333333"
+    },
+    "requestId": "009eb789-4744-c520-0000-00000000004d",
+    "analyticsInfo": {
+      "isGiftPurchase": false,
+      "paymentProvider": "Stripe"
+    },
+    "acquisitionData": {
+      "ophanIds": {
+        "pageviewId": "mhyzx8tb69th51ma0yka",
+        "browserId": null
+      },
+      "referrerAcquisitionData": {
+        "campaignCode": null,
+        "referrerPageviewId": "",
+        "referrerUrl": null,
+        "componentId": null,
+        "componentType": null,
+        "source": null,
+        "abTests": null,
+        "queryParameters": [],
+        "hostname": "support.thegulocal.com",
+        "gaClientId": null,
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36",
+        "ipAddress": "127.0.0.1",
+        "labels": [
+          "generic-checkout"
+        ]
+      },
+      "supportAbTests": [
+        {
+          "name": "LP_COUNTDOWN",
+          "variant": "V1"
+        }
+      ]
+    }
+  },
+  "requestInfo": {
+    "testUser": true,
+    "failed": false,
+    "messages": []
+  },
+  "error": null
+}

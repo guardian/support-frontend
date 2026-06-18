@@ -28,7 +28,6 @@ const headingContentContainer = css`
 `;
 
 export interface CheckoutHeadingProps extends CSSOverridable {
-	heading?: React.ReactNode;
 	children?: React.ReactNode;
 	image?: React.ReactNode;
 	withTopBorder?: boolean;
@@ -37,7 +36,6 @@ export interface CheckoutHeadingProps extends CSSOverridable {
 }
 
 export function CheckoutHeading({
-	heading,
 	children,
 	image,
 	withTopBorder = true,
@@ -56,7 +54,6 @@ export function CheckoutHeading({
 					<Column span={[1, 2, 5]}>
 						<div css={[cssOverrides, headingContentContainer]}>
 							<Hide until="desktop">
-								{heading}
 								{children}
 								{image}
 							</Hide>

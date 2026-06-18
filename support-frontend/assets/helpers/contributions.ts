@@ -1,11 +1,9 @@
 // ----- Imports ----- //
+import { contributionsOnlyCountries } from '@modules/internationalisation/contributionsOnlyCountries';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 
 // ----- Types ----- //
-export const contributionTypes = ['ONE_OFF', 'MONTHLY', 'ANNUAL'];
-
 type RegularContributionTypeMap<T> = {
 	MONTHLY: T;
 	ANNUAL: T;
@@ -25,29 +23,12 @@ export interface AmountValuesObject {
 
 type AmountsCardData = Record<ContributionType, AmountValuesObject>;
 
-export interface AmountsVariant {
+interface AmountsVariant {
 	variantName: string;
 	defaultContributionType: ContributionType;
 	displayContributionType: ContributionType[];
 	amountsCardData: AmountsCardData;
 }
-
-export type AmountsTestTargeting =
-	| { targetingType: 'Region'; region: CountryGroupId }
-	| { targetingType: 'Country'; countries: IsoCountry[] };
-
-export interface AmountsTest {
-	testName: string;
-	liveTestName?: string;
-	isLive: boolean;
-	targeting: AmountsTestTargeting;
-	order: number;
-	seed: number;
-	variants: AmountsVariant[];
-}
-
-export type AmountsTests = AmountsTest[];
-
 export interface SelectedAmountsVariant extends AmountsVariant {
 	testName: string;
 }
@@ -72,45 +53,6 @@ type Config = Record<
 		default: number; // TODO - remove this field once old payment flow has gone
 	}
 >;
-
-export type OtherAmounts = Record<
-	ContributionType,
-	{
-		amount: string | null;
-	}
->;
-
-export type SelectedAmounts = Record<ContributionType, number | 'other'>;
-
-const getAmount = (
-	selectedAmounts: SelectedAmounts,
-	otherAmounts: OtherAmounts,
-	contributionType: ContributionType,
-	coverTransactionCostSelected?: boolean,
-): number => {
-	const selectedChoiceCardAmount = selectedAmounts[contributionType];
-	/**
-	 * TODO: otherAmount falls back to zero if no other amount
-	 * entered by user. This prevents the function returning NaN.
-	 * Ideally it would return undefined and we'd handle that, but the
-	 * impact of doing so was deemed too great, considering most use cases
-	 * are in the soon to be deprecated 2-step checkout.
-	 */
-	const otherAmount = otherAmounts[contributionType].amount ?? '0';
-
-	const selectedAmount =
-		selectedChoiceCardAmount === 'other'
-			? parseFloat(otherAmount)
-			: selectedChoiceCardAmount;
-
-	// Only cover transaction costs for one off contributions
-	const coverTransactionCost =
-		coverTransactionCostSelected && contributionType === 'ONE_OFF';
-
-	return coverTransactionCost
-		? roundToDecimalPlaces(selectedAmount * 1.04)
-		: selectedAmount;
-};
 
 // ----- Setup ----- //
 
@@ -251,19 +193,36 @@ const config: Record<CountryGroupId, Config> = {
 	},
 };
 
-const contributionsOnlyAmountsTestName = 'VAT_COMPLIANCE';
-
-const isContributionsOnlyCountry = (
-	amountsVariant: SelectedAmountsVariant,
-): boolean => {
-	const { testName } = amountsVariant;
-	return testName === contributionsOnlyAmountsTestName;
+const contributionsOnlyCountriesAmountsConfig = {
+	defaultContributionType: 'MONTHLY',
+	displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
+	amountsCardData: {
+		ONE_OFF: {
+			amounts: [1, 2, 5, 10],
+			defaultAmount: 2,
+			hideChooseYourAmount: true,
+		},
+		MONTHLY: {
+			amounts: [2, 3, 5, 7, 9, 12],
+			defaultAmount: 5,
+			hideChooseYourAmount: true,
+		},
+		ANNUAL: {
+			amounts: [10, 15, 20, 30],
+			defaultAmount: 15,
+			hideChooseYourAmount: true,
+		},
+	},
 };
+
+const countries = new Set(contributionsOnlyCountries);
+
+const isContributionsOnlyCountry = (countryId: IsoCountry): boolean =>
+	countries.has(countryId);
 
 // ----- Exports ----- //
 export {
 	config,
-	getAmount,
-	contributionsOnlyAmountsTestName,
 	isContributionsOnlyCountry,
+	contributionsOnlyCountriesAmountsConfig,
 };

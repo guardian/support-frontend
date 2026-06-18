@@ -599,7 +599,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "[CDK] High 5XX rate for payment-api in PROD",
+        "AlarmName": "[CDK] payment-api PROD High 5XX rate",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -752,6 +752,10 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Key": "routing.http.drop_invalid_header_fields.enabled",
             "Value": "true",
           },
+          {
+            "Key": "access_logs.s3.enabled",
+            "Value": "false",
+          },
         ],
         "Scheme": "internet-facing",
         "SecurityGroups": [
@@ -873,7 +877,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "[CDK] No healthy instances for payment-api in PROD",
+        "AlarmName": "[CDK] payment-api PROD No healthy instances",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -943,7 +947,8 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "[CDK] payment-api PROD No successful paypal payments via payment-api for 1 hour 30 minutes",
+        "AlarmDescription": "No successful paypal payments for 4 hours",
+        "AlarmName": "[CDK] payment-api PROD No successful paypal payments for period",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -951,9 +956,27 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Value": "Paypal",
           },
         ],
-        "EvaluationPeriods": 18,
+        "EvaluationPeriods": 48,
         "MetricName": "payment-success",
         "Namespace": "support-payment-api-PROD",
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Period": 300,
         "Statistic": "Sum",
         "Tags": [
@@ -1000,13 +1023,15 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "[CDK] payment-api PROD No successful stripe express payments via payment-api for 1 hour 30 minutes",
+        "AlarmDescription": "No successful stripe express payments for 6 hours",
+        "AlarmName": "[CDK] payment-api PROD No successful stripe express payments for period",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
-        "EvaluationPeriods": 18,
+        "EvaluationPeriods": 72,
         "Metrics": [
           {
             "Expression": "SUM(METRICS())",
             "Id": "expr_1",
+            "ReturnData": true,
           },
           {
             "Id": "m1",
@@ -1043,6 +1068,24 @@ exports[`The Payment API stack matches the snapshot 1`] = `
               "Stat": "Sum",
             },
             "ReturnData": false,
+          },
+        ],
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
           },
         ],
         "Tags": [
@@ -1089,7 +1132,8 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "[CDK] payment-api PROD No successful stripe payments via payment-api for an hour",
+        "AlarmDescription": "No successful stripe payments for 3 hours",
+        "AlarmName": "[CDK] payment-api PROD No successful stripe payments for period",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -1097,9 +1141,27 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Value": "Stripe",
           },
         ],
-        "EvaluationPeriods": 12,
+        "EvaluationPeriods": 36,
         "MetricName": "payment-success",
         "Namespace": "support-payment-api-PROD",
+        "OKActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
         "Period": 300,
         "Statistic": "Sum",
         "Tags": [
@@ -1236,7 +1298,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Value": "PROD",
           },
         ],
-        "Threshold": 1,
+        "Threshold": 0,
         "TreatMissingData": "notBreaching",
       },
       "Type": "AWS::CloudWatch::Alarm",
@@ -1287,7 +1349,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Value": "PROD",
           },
         ],
-        "Threshold": 1,
+        "Threshold": 0,
         "TreatMissingData": "notBreaching",
       },
       "Type": "AWS::CloudWatch::Alarm",
@@ -1545,7 +1607,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Value": "PROD",
           },
         ],
-        "Threshold": 1,
+        "Threshold": 0,
         "TreatMissingData": "notBreaching",
       },
       "Type": "AWS::CloudWatch::Alarm",
@@ -1571,7 +1633,8 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "[CDK] payment-api PROD One or more requests have exceeded the rate limit for Stripe one-off contribution via the payment-api in the last 15 mins",
+        "AlarmDescription": "One or more requests have exceeded the rate limit for Stripe one-off contribution for 15 minutes",
+        "AlarmName": "[CDK] payment-api PROD One or more requests have exceeded the rate limit for Stripe one-off contribution for period",
         "ComparisonOperator": "GreaterThanThreshold",
         "Dimensions": [
           {

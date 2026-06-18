@@ -1,0 +1,174 @@
+{
+  "state": {
+    "productSpecificState": {
+      "productType": "GuardianWeekly",
+      "user": {
+        "id": "200511982",
+        "primaryEmailAddress": "support.e2e+aPFBg6OjZ2P4YwHrhx7Yq@thegulocal.com",
+        "title": null,
+        "firstName": "support.e2e.firstName+pxkV6",
+        "lastName": "support.e2e.lastName+aE88D",
+        "billingAddress": {
+          "lineOne": "3 Cross Street",
+          "lineTwo": "",
+          "city": "Manchester",
+          "state": null,
+          "postCode": "M1 1PW",
+          "country": "GB"
+        },
+        "deliveryAddress": {
+          "lineOne": "90 York Way",
+          "lineTwo": "",
+          "city": "London",
+          "state": null,
+          "postCode": "N1 9GU",
+          "country": "GB"
+        },
+        "telephoneNumber": null,
+        "isTestUser": true,
+        "deliveryInstructions": null
+      },
+      "giftRecipient": null,
+      "product": {
+        "currency": "GBP",
+        "billingPeriod": "Monthly",
+        "fulfilmentOptions": "Domestic",
+        "productType": "GuardianWeekly"
+      },
+      "productInformation": {
+        "product": "GuardianWeeklyDomestic",
+        "ratePlan": "Monthly",
+        "firstDeliveryDate": "2025-12-12",
+        "deliveryContact": {
+          "firstName": "support.e2e.firstName+pxkV6",
+          "lastName": "support.e2e.lastName+aE88D",
+          "workEmail": "support.e2e+aPFBg6OjZ2P4YwHrhx7Yq@thegulocal.com",
+          "country": "GB",
+          "state": null,
+          "city": "London",
+          "address1": "90 York Way",
+          "address2": "",
+          "postalCode": "N1 9GU"
+        }
+      },
+      "paymentMethod": {
+        "TokenId": "pm_0SaKZ0ItVxyc3Q6n2BPnBvSw",
+        "SecondTokenId": "cus_TXPNzY1889IAYB",
+        "CreditCardNumber": "4242",
+        "CreditCardExpirationMonth": 1,
+        "CreditCardExpirationYear": 2050,
+        "CreditCardType": "Visa",
+        "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+        "Type": "CreditCardReferenceTransaction",
+        "StripePaymentType": "StripeCheckout"
+      },
+      "firstDeliveryDate": "2025-12-12",
+      "appliedPromotion": null,
+      "salesForceContact": {
+        "Id": "003UD00000r97HIYAY",
+        "AccountId": "001UD00000QMLC4YAP"
+      },
+      "similarProductsConsent": true
+    },
+    "requestId": "9cad7d7a-2ac9-a8cf-0000-000000000dd1",
+    "user": {
+      "id": "200511982",
+      "primaryEmailAddress": "support.e2e+aPFBg6OjZ2P4YwHrhx7Yq@thegulocal.com",
+      "title": null,
+      "firstName": "support.e2e.firstName+pxkV6",
+      "lastName": "support.e2e.lastName+aE88D",
+      "billingAddress": {
+        "lineOne": "3 Cross Street",
+        "lineTwo": "",
+        "city": "Manchester",
+        "state": null,
+        "postCode": "M1 1PW",
+        "country": "GB"
+      },
+      "deliveryAddress": {
+        "lineOne": "90 York Way",
+        "lineTwo": "",
+        "city": "London",
+        "state": null,
+        "postCode": "N1 9GU",
+        "country": "GB"
+      },
+      "telephoneNumber": null,
+      "isTestUser": true,
+      "deliveryInstructions": null
+    },
+    "giftRecipient": null,
+    "product": {
+      "currency": "GBP",
+      "billingPeriod": "Monthly",
+      "fulfilmentOptions": "Domestic",
+      "productType": "GuardianWeekly"
+    },
+    "productInformation": {
+      "product": "GuardianWeeklyDomestic",
+      "ratePlan": "Monthly",
+      "firstDeliveryDate": "2025-12-12T00:00:00.000Z",
+      "deliveryContact": {
+        "firstName": "support.e2e.firstName+pxkV6",
+        "lastName": "support.e2e.lastName+aE88D",
+        "workEmail": "support.e2e+aPFBg6OjZ2P4YwHrhx7Yq@thegulocal.com",
+        "country": "GB",
+        "state": null,
+        "city": "London",
+        "address1": "90 York Way",
+        "address2": "",
+        "postalCode": "N1 9GU"
+      }
+    },
+    "analyticsInfo": {
+      "isGiftPurchase": false,
+      "paymentProvider": "Stripe"
+    },
+    "firstDeliveryDate": "2025-12-12",
+    "appliedPromotion": null,
+    "csrUsername": null,
+    "salesforceCaseId": null,
+    "acquisitionData": {
+      "ophanIds": {
+        "pageviewId": "miqbsyqq97klc8ajmhyq",
+        "browserId": null
+      },
+      "referrerAcquisitionData": {
+        "campaignCode": null,
+        "referrerPageviewId": "",
+        "referrerUrl": null,
+        "componentId": null,
+        "componentType": null,
+        "source": null,
+        "abTests": null,
+        "queryParameters": [],
+        "hostname": "support.code.dev-theguardian.com",
+        "gaClientId": null,
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.7390.37 Safari/537.36",
+        "ipAddress": "10.248.135.125",
+        "labels": [
+          "generic-checkout"
+        ]
+      },
+      "supportAbTests": []
+    },
+    "similarProductsConsent": true,
+    "paymentMethod": {
+      "TokenId": "pm_0SaKZ0ItVxyc3Q6n2BPnBvSw",
+      "SecondTokenId": "cus_TXPNzY1889IAYB",
+      "CreditCardNumber": "4242",
+      "CreditCardExpirationMonth": 1,
+      "CreditCardExpirationYear": 2050,
+      "CreditCardType": "Visa",
+      "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+      "Type": "CreditCardReferenceTransaction",
+      "StripePaymentType": "StripeCheckout"
+    }
+  },
+  "error": null,
+  "requestInfo": {
+    "testUser": true,
+    "failed": false,
+    "messages": []
+  }
+}

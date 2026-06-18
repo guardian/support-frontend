@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import * as cookie from 'helpers/storage/cookie';
-import { getSignoutUrl } from 'helpers/urls/externalLinks';
 
 export type User = {
 	firstName?: string;
@@ -39,9 +38,5 @@ function isTestUser(): boolean {
 const isPostDeployUser = (): boolean =>
 	cookie.get('_post_deploy_user') === 'true';
 
-const signOut = (): void => {
-	window.location.href = getSignoutUrl();
-};
-
 // ----- Exports ----- //
-export { getUser, isTestUser, isPostDeployUser, signOut };
+export { getUser, isTestUser, isPostDeployUser };

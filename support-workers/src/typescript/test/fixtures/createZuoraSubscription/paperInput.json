@@ -1,0 +1,194 @@
+{
+  "state": {
+    "productSpecificState": {
+      "productType": "Paper",
+      "user": {
+        "id": "200610906",
+        "primaryEmailAddress": "test.user+u237mfsh4lsp8itcbua@guardian.co.uk",
+        "title": null,
+        "firstName": "test3",
+        "lastName": "test3",
+        "billingAddress": {
+          "lineOne": "90 York Way",
+          "lineTwo": "",
+          "city": "London",
+          "state": null,
+          "postCode": "N1 9GU",
+          "country": "GB"
+        },
+        "deliveryAddress": {
+          "lineOne": "90 York Way",
+          "lineTwo": "",
+          "city": "London",
+          "state": null,
+          "postCode": "N1 9GU",
+          "country": "GB"
+        },
+        "telephoneNumber": null,
+        "isTestUser": true,
+        "deliveryInstructions": null
+      },
+      "product": {
+        "currency": "GBP",
+        "billingPeriod": "Monthly",
+        "fulfilmentOptions": "Collection",
+        "productOptions": "SixdayPlus",
+        "productType": "Paper",
+        "deliveryAgent": null
+      },
+      "productInformation": {
+        "product": "SubscriptionCard",
+        "ratePlan": "SixdayPlus",
+        "firstDeliveryDate": "2026-01-12",
+        "deliveryContact": {
+          "firstName": "test3",
+          "lastName": "test3",
+          "workEmail": "test.user+u237mfsh4lsp8itcbua@guardian.co.uk",
+          "country": "GB",
+          "state": null,
+          "city": "London",
+          "address1": "90 York Way",
+          "address2": "",
+          "postalCode": "N1 9GU"
+        }
+      },
+      "paymentMethod": {
+        "TokenId": "pm_0Sl5COItVxyc3Q6ndEOykOeX",
+        "SecondTokenId": "cus_TiWECwfrzXVqOM",
+        "CreditCardNumber": "4242",
+        "CreditCardExpirationMonth": 1,
+        "CreditCardExpirationYear": 2050,
+        "CreditCardType": "Visa",
+        "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+        "Type": "CreditCardReferenceTransaction",
+        "StripePaymentType": "StripeCheckout"
+      },
+      "firstDeliveryDate": "2026-01-12",
+      "appliedPromotion": null,
+      "salesForceContact": {
+        "Id": "003UD00000tbDXPYA2",
+        "AccountId": "001UD00000RLuA2YAL"
+      },
+      "similarProductsConsent": true
+    },
+    "requestId": "d299f1ef-ea8d-b6e2-0000-000000013029",
+    "user": {
+      "id": "200610906",
+      "primaryEmailAddress": "test.user+u237mfsh4lsp8itcbua@guardian.co.uk",
+      "title": null,
+      "firstName": "test3",
+      "lastName": "test3",
+      "billingAddress": {
+        "lineOne": "90 York Way",
+        "lineTwo": "",
+        "city": "London",
+        "state": null,
+        "postCode": "N1 9GU",
+        "country": "GB"
+      },
+      "deliveryAddress": {
+        "lineOne": "90 York Way",
+        "lineTwo": "",
+        "city": "London",
+        "state": null,
+        "postCode": "N1 9GU",
+        "country": "GB"
+      },
+      "telephoneNumber": null,
+      "isTestUser": true,
+      "deliveryInstructions": null
+    },
+    "giftRecipient": null,
+    "product": {
+      "currency": "GBP",
+      "billingPeriod": "Monthly",
+      "fulfilmentOptions": "Collection",
+      "productOptions": "SixdayPlus",
+      "productType": "Paper",
+      "deliveryAgent": null
+    },
+    "productInformation": {
+      "product": "SubscriptionCard",
+      "ratePlan": "SixdayPlus",
+      "firstDeliveryDate": "2026-01-12",
+      "deliveryContact": {
+        "firstName": "test3",
+        "lastName": "test3",
+        "workEmail": "test.user+u237mfsh4lsp8itcbua@guardian.co.uk",
+        "country": "GB",
+        "state": null,
+        "city": "London",
+        "address1": "90 York Way",
+        "address2": "",
+        "postalCode": "N1 9GU"
+      }
+    },
+    "analyticsInfo": {
+      "isGiftPurchase": false,
+      "paymentProvider": "Stripe"
+    },
+    "firstDeliveryDate": "2026-01-12",
+    "appliedPromotion": null,
+    "csrUsername": null,
+    "salesforceCaseId": null,
+    "acquisitionData": {
+      "ophanIds": {
+        "pageviewId": "mjwpgign18o5qhzpoiou",
+        "browserId": null
+      },
+      "referrerAcquisitionData": {
+        "campaignCode": null,
+        "referrerPageviewId": "",
+        "referrerUrl": null,
+        "componentId": null,
+        "componentType": null,
+        "source": null,
+        "abTests": null,
+        "queryParameters": [],
+        "hostname": "support.code.dev-theguardian.com",
+        "gaClientId": null,
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "ipAddress": "10.248.135.153",
+        "labels": [
+          "generic-checkout"
+        ]
+      },
+      "supportAbTests": [
+        {
+          "name": "abandonedBasket",
+          "variant": "control"
+        },
+        {
+          "name": "paypalCompletePaymentsWithBAID",
+          "variant": "variant"
+        },
+        {
+          "name": "landingPageMparticlePastContributor",
+          "variant": "variant"
+        },
+        {
+          "name": "LP_COUNTDOWN",
+          "variant": "V1"
+        }
+      ]
+    },
+    "similarProductsConsent": true,
+    "paymentMethod": {
+      "TokenId": "pm_0Sl5COItVxyc3Q6ndEOykOeX",
+      "SecondTokenId": "cus_TiWECwfrzXVqOM",
+      "CreditCardNumber": "4242",
+      "CreditCardExpirationMonth": 1,
+      "CreditCardExpirationYear": 2050,
+      "CreditCardType": "Visa",
+      "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+      "Type": "CreditCardReferenceTransaction",
+      "StripePaymentType": "StripeCheckout"
+    }
+  },
+  "error": null,
+  "requestInfo": {
+    "testUser": true,
+    "failed": false,
+    "messages": []
+  }
+}

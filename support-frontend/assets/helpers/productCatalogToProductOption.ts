@@ -13,19 +13,9 @@ import {
 	Weekend,
 	WeekendPlus,
 } from '@modules/product/productOptions';
+import { isGuardianWeeklyDigitalProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { ActiveProductKey, ActiveRatePlanKey } from './productCatalog';
 
-const ActivePaperProductNoTestTypes: PaperProductOptions[] = [
-	EverydayPlus,
-	SixdayPlus,
-	WeekendPlus,
-	SaturdayPlus,
-	Everyday,
-	Sixday,
-	Weekend,
-	Saturday,
-	Sunday,
-] as const;
 const ActivePaperProductTypes: PaperProductOptions[] = [
 	SixdayPlus,
 	SaturdayPlus,
@@ -39,32 +29,6 @@ const ActivePaperProductTypes: PaperProductOptions[] = [
 ] as const;
 export type ActivePaperProductOptions =
 	(typeof ActivePaperProductTypes)[number];
-const paperProductsWithDigital = {
-	Saturday: SaturdayPlus,
-	Weekend: WeekendPlus,
-	Sixday: SixdayPlus,
-	Everyday: EverydayPlus,
-} as Record<ProductOptions, ProductOptions>;
-const paperProductsWithoutDigital = {
-	SaturdayPlus: Saturday,
-	WeekendPlus: Weekend,
-	SixdayPlus: Sixday,
-	EverydayPlus: Everyday,
-} as Record<ProductOptions, ProductOptions>;
-// Returns the product option with the opposite 'add digital' option to the one passed
-// e.g. SaturdayPlus -> Saturday
-function productOptionIfDigiAddOnChanged(
-	selectedOption: ProductOptions,
-): ProductOptions {
-	if (selectedOption === 'NoProductOptions') {
-		return selectedOption;
-	}
-	const matchingProducLookup = {
-		...paperProductsWithDigital,
-		...paperProductsWithoutDigital,
-	};
-	return matchingProducLookup[selectedOption];
-}
 
 const getPaperProductOptions = (
 	ratePlanKey: ActiveRatePlanKey,
@@ -95,12 +59,11 @@ export const getProductOptionFromProductAndRatePlan = (
 		case 'Contribution':
 		case 'OneTimeContribution':
 		case 'DigitalSubscription':
+			return 'NoProductOptions';
 		case 'GuardianWeeklyRestOfWorld':
 		case 'GuardianWeeklyDomestic':
-			return 'NoProductOptions';
-		case 'TierThree':
-			return ratePlanKey.endsWith('V2')
-				? 'NewspaperArchive'
+			return isGuardianWeeklyDigitalProduct(productKey, ratePlanKey)
+				? 'PlusDigital'
 				: 'NoProductOptions';
 		case 'SubscriptionCard':
 		case 'NationalDelivery':
@@ -108,10 +71,4 @@ export const getProductOptionFromProductAndRatePlan = (
 			return getPaperProductOptions(ratePlanKey);
 	}
 };
-export {
-	productOptionIfDigiAddOnChanged,
-	paperProductsWithoutDigital,
-	paperProductsWithDigital,
-	ActivePaperProductTypes,
-	ActivePaperProductNoTestTypes,
-};
+export { ActivePaperProductTypes };

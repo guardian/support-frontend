@@ -40,10 +40,11 @@ lazy val release = Seq[ReleaseStep](
 inThisBuild(
   Seq(
     organization := "com.gu",
-    scalaVersion := "2.13.13",
+    scalaVersion := "2.13.18",
+    // Force plexus-utils to 3.6.1 to avoid CVE in the version pulled in transitively by Play
+    dependencyOverrides += "org.codehaus.plexus" % "plexus-utils" % "3.6.1",
     // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
     updateOptions := updateOptions.value.withCachedResolution(true),
-    resolvers ++= Resolver.sonatypeOssRepos("releases"), // libraries that haven't yet synced to maven central
     assembly / assemblyMergeStrategy := {
       case PathList("models", xs @ _*) => MergeStrategy.discard
       case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
@@ -54,6 +55,7 @@ inThisBuild(
       case name if name.endsWith("execution.interceptors") => MergeStrategy.filterDistinctLines
       case PathList("javax", "annotation", _ @_*) => MergeStrategy.first
       case PathList("deriving.conf") => MergeStrategy.concat
+      case "META-INF/FastDoubleParser-NOTICE" => MergeStrategy.concat
       case y =>
         val oldStrategy = (assembly / assemblyMergeStrategy).value
         oldStrategy(y)
@@ -99,7 +101,6 @@ lazy val root = (project in file("."))
   )
   .aggregate(
     `support-frontend`,
-    `support-workers`,
     `supporter-product-data`,
     `supporter-product-data-dynamo`,
     `stripe-patrons-data`,
@@ -108,7 +109,6 @@ lazy val root = (project in file("."))
     `support-internationalisation`,
     `support-services`,
     `stripe-intent`,
-    `it-test-runner`,
     `module-aws`,
     `module-acquisition-events`,
     `module-rest`,
@@ -117,7 +117,7 @@ lazy val root = (project in file("."))
   )
 
 lazy val `support-frontend` = (project in file("support-frontend"))
-  .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging)
+  .enablePlugins(PlayScala, BuildInfoPlugin, JDebPackaging)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .configs(IntegrationTest)
   .settings(
@@ -144,33 +144,7 @@ lazy val `support-frontend` = (project in file("support-frontend"))
     `module-retry`,
   )
 
-lazy val `support-workers` = (project in file("support-workers"))
-  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
-  .configs(IntegrationTest)
-  .settings(
-    integrationTestSettings,
-    scalafmtSettings,
-    libraryDependencies ++= commonDependencies,
-    scalacOptions += "-Ytasty-reader",
-  )
-  .dependsOn(
-    `support-services` % "test->test;it->test;compile->compile",
-    `support-models` % "test->test;it->test;compile->compile",
-    `support-config`,
-    `support-internationalisation`,
-    `module-acquisition-events`,
-    `supporter-product-data-dynamo`,
-  )
-  .aggregate(
-    `support-services`,
-    `support-models`,
-    `support-config`,
-    `support-internationalisation`,
-    `supporter-product-data-dynamo`,
-  )
-
 lazy val `supporter-product-data` = (project in file("supporter-product-data"))
-  .enablePlugins(RiffRaffArtifact)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .configs(IntegrationTest)
   .settings(
@@ -189,7 +163,6 @@ lazy val `supporter-product-data-dynamo` = (project in file("support-modules/sup
   )
 
 lazy val `stripe-patrons-data` = (project in file("stripe-patrons-data"))
-  .enablePlugins(RiffRaffArtifact)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .configs(IntegrationTest)
   .settings(
@@ -201,7 +174,7 @@ lazy val `stripe-patrons-data` = (project in file("stripe-patrons-data"))
   .aggregate(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
 
 lazy val `support-payment-api` = (project in file("support-payment-api"))
-  .enablePlugins(RiffRaffArtifact, SystemdPlugin, PlayService, RoutesCompiler, JDebPackaging, BuildInfoPlugin)
+  .enablePlugins(SystemdPlugin, PlayService, RoutesCompiler, JDebPackaging, BuildInfoPlugin)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .settings(
     buildInfoKeys := BuildInfoSettings.buildInfoKeys,
@@ -302,7 +275,6 @@ lazy val `support-internationalisation` = (project in file("support-internationa
   )
 
 lazy val `stripe-intent` = (project in file("support-lambdas/stripe-intent"))
-  .enablePlugins(RiffRaffArtifact)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .configs(IntegrationTest)
   .settings(
@@ -313,13 +285,7 @@ lazy val `stripe-intent` = (project in file("support-lambdas/stripe-intent"))
   .dependsOn(`module-rest`, `support-config`, `module-aws`)
   .aggregate(`module-rest`, `support-config`, `module-aws`)
 
-lazy val `it-test-runner` = (project in file("support-lambdas/it-test-runner"))
-  .enablePlugins(RiffRaffArtifact)
-  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
-  .dependsOn(`module-aws`)
-
 lazy val `acquisition-events-api` = (project in file("support-lambdas/acquisition-events-api"))
-  .enablePlugins(RiffRaffArtifact)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .settings(
     scalafmtSettings,
@@ -333,6 +299,5 @@ lazy val `support-lambdas` = (project in file("support-lambdas"))
   .settings(scalafmtSettings)
   .aggregate(
     `stripe-intent`,
-    `it-test-runner`,
     `acquisition-events-api`,
   )

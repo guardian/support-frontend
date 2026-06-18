@@ -1,6 +1,7 @@
 import { email, firstName, lastName, userName } from './users';
 
 export interface TestAddress {
+	billingCountry?: string;
 	postCode?: string;
 	state?: string;
 	firstLine?: string;
@@ -41,10 +42,12 @@ const userDetails: Record<string, TestFields> = {
 				city: 'London',
 			},
 			{
-				postCode: 'M1 1PW',
-				firstLine: '3 Cross Street',
-				city: 'Manchester',
-			},
+				billingCountry: 'United States',
+				postCode: '10006',
+				state: 'New York',
+				firstLine: '61 Broadway',
+				city: 'New York',
+			}, // Optional billing region differs from delivery
 		],
 	},
 	EU: {
@@ -88,6 +91,12 @@ const userDetails: Record<string, TestFields> = {
 				firstLine: '19 Foster Street',
 				city: 'Sydney',
 			},
+			{
+				billingCountry: 'United Kingdom',
+				postCode: 'N1 9GU',
+				firstLine: '90 York Way',
+				city: 'London',
+			}, // Billing region differs from delivery
 		],
 	},
 	NZ: {
@@ -108,6 +117,13 @@ const userDetails: Record<string, TestFields> = {
 				firstLine: '0C Heerengracht Street',
 				city: 'Cape Town',
 			},
+			{
+				billingCountry: 'United States',
+				postCode: '10006',
+				state: 'New York',
+				firstLine: '61 Broadway',
+				city: 'New York',
+			}, // Billing region differs from delivery
 		],
 	},
 };
@@ -115,8 +131,15 @@ const userDetails: Record<string, TestFields> = {
 export const getUserFields = (
 	country: string,
 	postCode?: string,
+	billingCountry?: string,
 ): TestFields => {
-	const validUserDetails = userDetails[country];
+	const countryUserDetails = userDetails[country];
+	const validUserDetails = billingCountry
+		? countryUserDetails
+		: {
+				...countryUserDetails,
+				addresses: countryUserDetails.addresses?.slice(0, 1),
+			}; // Remove billing address if not specified
 	const userDetailsCopy = structuredClone(validUserDetails); // Create a deep copy
 	if (
 		postCode &&

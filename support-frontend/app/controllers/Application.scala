@@ -4,6 +4,7 @@ import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.CustomActionBuilders
 import admin.ServersideAbTest.{Participation, generateParticipations}
 import admin.settings.{AllSettings, AllSettingsProvider, On, SettingsSurrogateKeySyntax}
+import admin.settings.Status.Live
 import assets.{AssetsResolver, RefPath}
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
@@ -24,14 +25,18 @@ import lib.RedirectWithEncodedQueryString
 import models.GeoData
 import play.api.libs.circe.Circe
 import play.api.mvc._
+import services.mparticle.MParticleClient
 import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
 import services.{CachedProductCatalogServiceProvider, PaymentAPIService, TestUserService, TickerService}
 import utils.FastlyGEOIP._
 import utils.{ObserverUtils, PaperValidation}
 import views.EmptyDiv
+import scala.concurrent.duration._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
+import actions.CacheControl
+import admin.settings.CountryGroupId.getCountryGroup
 
 case class AppConfig private (
     geoip: AppConfig.Geoip,
@@ -50,6 +55,7 @@ case class AppConfig private (
     checkoutPostcodeLookup: Boolean,
     productCatalog: JsonObject,
     allProductPrices: AllProductPrices,
+    allCheckoutNudgeProductPrices: AllProductPrices,
     serversideTests: Map[String, Participation],
     user: Option[AppConfig.User],
     settings: AllSettings,
@@ -78,6 +84,7 @@ object AppConfig extends InternationalisationCodecs {
       productCatalog: JsonObject,
       serversideTests: Map[String, Participation],
       allProductPrices: AllProductPrices,
+      allCheckoutNudgeProductPrices: AllProductPrices,
       user: Option[IdUser],
       isTestUser: Boolean,
       settings: AllSettings,
@@ -156,6 +163,7 @@ object AppConfig extends InternationalisationCodecs {
       productCatalog = productCatalog,
       serversideTests = serversideTests,
       allProductPrices = allProductPrices,
+      allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
       user = user.map(user =>
         User(
           id = user.id,
@@ -181,6 +189,8 @@ case class PaymentMethodConfigs(
     regularTestStripeConfig: StripePublicConfig,
     regularDefaultPayPalConfig: PayPalConfig,
     regularTestPayPalConfig: PayPalConfig,
+    regularDefaultPayPalCompletePaymentsConfig: PayPalCompletePaymentsConfig,
+    regularTestPayPalCompletePaymentsConfig: PayPalCompletePaymentsConfig,
 )
 
 /** This class is only needed because you can't pass more than 22 arguments to a twirl template and passing both types
@@ -223,6 +233,8 @@ class Application(
     cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
     val supportUrl: String,
     tickerService: TickerService,
+    mparticleClient: MParticleClient,
+    payPalCompletePaymentsConfigProvider: PayPalCompletePaymentsConfigProvider,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with SettingsSurrogateKeySyntax
@@ -260,20 +272,6 @@ class Application(
     RedirectWithEncodedQueryString(redirectUrl, request.queryString, status = FOUND)
   }
 
-  def supportGeoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val supportPageVariant = request.geoData.countryGroup match {
-      case Some(US) => "us"
-      case Some(Australia) => "au"
-      case _ => "uk"
-    }
-
-    RedirectWithEncodedQueryString(
-      buildRegionalisedContributeLink(supportPageVariant),
-      request.queryString,
-      status = FOUND,
-    )
-  }
-
   def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val url = getGeoPath(request, campaignCode, "contribute")
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
@@ -300,10 +298,6 @@ class Application(
       .mkString("/")
   }
 
-  def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
-    RedirectWithEncodedQueryString(location, request.queryString, status = FOUND)
-  }
-
   def permanentRedirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
     RedirectWithEncodedQueryString(location, request.queryString, status = MOVED_PERMANENTLY)
   }
@@ -316,10 +310,6 @@ class Application(
 
   def redirectPath(location: String, path: String): Action[AnyContent] = CachedAction() { implicit request =>
     RedirectWithEncodedQueryString(location + path, request.queryString)
-  }
-
-  def unsupportedBrowser: Action[AnyContent] = NoCacheAction() { implicit request =>
-    Ok(views.html.unsupportedBrowserPage())
   }
 
   def contributionsLanding(
@@ -359,13 +349,71 @@ class Application(
     ).withSettingsSurrogateKey
   }
 
+  def tooledStudentLanding(
+      countryCode: String,
+      institution: String,
+      campaignCode: String,
+  ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
+    val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
+    val noIndexing = true // we don't want these appearing in search engine results
+
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    val studentTests = settings.studentLandingPageTests
+
+    val institutionList =
+      for {
+        test <- studentTests
+        if getCountryGroup(test.countryGroupId).id.equalsIgnoreCase(countryCode)
+        if test.name.equalsIgnoreCase(institution)
+        variant <- test.variants
+      } yield variant
+
+    val isSwitchedOn =
+      settingsProvider.getAllSettings().switches.featureSwitches.enableTooledStudentLandingPage.exists(_.isOn)
+
+    if (institutionList.size == 1 && isSwitchedOn) {
+      Ok(
+        contributionsPlusStudentHtml(
+          countryCode,
+          campaignCodeOption,
+          "student",
+          "https://support.theguardian.com/student",
+          noIndexing,
+        ),
+      ).withSettingsSurrogateKey
+    } else {
+      NotFound(
+        views.html.main(
+          "Error 404",
+          EmptyDiv("error-404-page"),
+          RefPath("error404Page.js"),
+          None,
+        )()(assets, request, settingsProvider.getAllSettings()),
+      )
+        .withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*)
+        .withSettingsSurrogateKey
+    }
+  }
+
   def downForMaintenance(): Action[AnyContent] = NoCacheAction() { implicit request =>
     Ok(
       views.html.main(
         "Support the Guardian | Down for essential maintenance",
         views.EmptyDiv("down-for-maintenance-page"),
         RefPath("downForMaintenancePage.js"),
-        Some(RefPath("downForMaintenancePage.css")),
+        None,
+        noindex = stage != PROD,
+      )()(assets, request, settingsProvider.getAllSettings()),
+    ).withSettingsSurrogateKey
+  }
+
+  def unsupportedBrowser(): Action[AnyContent] = NoCacheAction() { implicit request =>
+    Ok(
+      views.html.main(
+        "Support the Guardian | Un-supported browser",
+        views.EmptyDiv("unsupported-browser-page"),
+        RefPath("unsupportedBrowserPage.js"),
+        None,
         noindex = stage != PROD,
       )()(assets, request, settingsProvider.getAllSettings()),
     ).withSettingsSurrogateKey
@@ -429,6 +477,8 @@ class Application(
         regularTestStripeConfig = regularStripeConfigProvider.get(true),
         regularDefaultPayPalConfig = payPalConfigProvider.get(false),
         regularTestPayPalConfig = payPalConfigProvider.get(true),
+        regularDefaultPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(false),
+        regularTestPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(true),
       ),
       paymentApiUrl = paymentAPIService.paymentAPIUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
@@ -457,7 +507,7 @@ class Application(
         title = "Guardian Supporters Map",
         mainElement = EmptyDiv("aus-moment-map"),
         mainJsBundle = RefPath("ausMomentMap.js"),
-        mainStyleBundle = Some(RefPath("ausMomentMap.css")),
+        mainStyleBundle = None,
         description = stringsConfig.contributionsLandingDescription,
         canonicalLink = Some("https://support.theguardian.com/aus-map"),
         shareImageUrl = Some(
@@ -469,6 +519,7 @@ class Application(
   }
 
   def healthcheck: Action[AnyContent] = PrivateAction {
+    mparticleClient.initialise()
     if (priceSummaryServiceProvider.forUser(false).getPrices(SupporterPlus, List()).isEmpty)
       InternalServerError("no prices in catalog")
     else
@@ -536,37 +587,6 @@ class Application(
     }
   }
 
-  def redirectContributionsCheckout(countryGroupId: String) = MaybeAuthenticatedAction { implicit request =>
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
-
-    val isTestUser = testUserService.isTestUser(request)
-    val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
-
-    val (product, ratePlan, maybeSelectedAmount) =
-      getProductParamsFromContributionParams(countryGroupId, productCatalog, request.queryString)
-
-    val qsWithoutTypeAndAmount = request.queryString - "selected-contribution-type" - "selected-amount"
-
-    if (product == "OneOff") {
-      val queryStringMaybeWithContributionAmount = maybeSelectedAmount
-        .map(selectedAmount => qsWithoutTypeAndAmount + ("contribution" -> Seq(selectedAmount.toString)))
-        .getOrElse(qsWithoutTypeAndAmount)
-
-      Redirect(s"/$countryGroupId/one-time-checkout", queryStringMaybeWithContributionAmount, MOVED_PERMANENTLY)
-    } else {
-      val queryString = qsWithoutTypeAndAmount ++ Map(
-        "product" -> Seq(product),
-        "ratePlan" -> Seq(ratePlan),
-      )
-
-      val queryStringMaybeWithContributionAmount = maybeSelectedAmount
-        .map(selectedAmount => queryString + ("contribution" -> Seq(selectedAmount.toString)))
-        .getOrElse(queryString)
-
-      Redirect(s"/$countryGroupId/checkout", queryStringMaybeWithContributionAmount, MOVED_PERMANENTLY)
-    }
-  }
-
   def redirectContributionsCheckoutDigital(countryGroupId: String) = {
     redirectToCheckout(countryGroupId, "DigitalSubscription", "Monthly")
   }
@@ -605,9 +625,17 @@ class Application(
 
     val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
 
+    val checkoutNudgePromoCodes = settings.checkoutNudgeTests
+      .filter(_.status == Live)
+      .flatMap(_.variants)
+      .flatMap(_.promoCodes.getOrElse(Nil))
+      .distinct
+    val allCheckoutNudgeProductPrices = getAllProductPrices(isTestUser, checkoutNudgePromoCodes)
+
     Ok(
       views.html.router(
         geoData = geoData,
+        serversideTests = serversideTests,
         paymentMethodConfigs = PaymentMethodConfigs(
           oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
           oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
@@ -615,16 +643,19 @@ class Application(
           regularTestStripeConfig = regularStripeConfigProvider.get(true),
           regularDefaultPayPalConfig = payPalConfigProvider.get(false),
           regularTestPayPalConfig = payPalConfigProvider.get(true),
+          regularDefaultPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(false),
+          regularTestPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(true),
         ),
-        v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
-        serversideTests = serversideTests,
         paymentApiUrl = paymentAPIService.paymentAPIUrl,
         paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
         membersDataApiUrl = membersDataApiUrl,
         guestAccountCreationToken = guestAccountCreationToken,
-        productCatalog = productCatalog,
+        v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
         allProductPrices = allProductPrices,
+        allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
+        productCatalog = productCatalog,
         user = request.user,
+        tickerData = tickerService.getTickers(),
         homeDeliveryPostcodes = Some(PaperValidation.M25_POSTCODE_PREFIXES),
       ),
     ).withSettingsSurrogateKey
@@ -646,6 +677,13 @@ class Application(
     val queryPromos = request.queryString.getOrElse("promoCode", Nil).toList
     val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
 
+    val checkoutNudgePromoCodes = settings.checkoutNudgeTests
+      .filter(_.status == Live)
+      .flatMap(_.variants)
+      .flatMap(_.promoCodes.getOrElse(Nil))
+      .distinct
+    val allCheckoutNudgeProductPrices = getAllProductPrices(isTestUser, checkoutNudgePromoCodes)
+
     val appConfig = AppConfig.fromConfig(
       geoData = request.geoData,
       paymentMethodConfigs = PaymentMethodConfigs(
@@ -655,6 +693,8 @@ class Application(
         regularTestStripeConfig = regularStripeConfigProvider.get(true),
         regularDefaultPayPalConfig = payPalConfigProvider.get(false),
         regularTestPayPalConfig = payPalConfigProvider.get(true),
+        regularDefaultPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(false),
+        regularTestPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(true),
       ),
       paymentAPIService = paymentAPIService,
       membersDataApiUrl = membersDataApiUrl,
@@ -665,6 +705,7 @@ class Application(
       productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get(),
       serversideTests = generateParticipations(Nil),
       allProductPrices = allProductPrices,
+      allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
       user = request.user,
       isTestUser = isTestUser,
       settings = settings,

@@ -74,6 +74,7 @@ const timeLabelStyle = css`
 export type CountdownProps = {
 	countdownSettings: CountdownSettings;
 	setHeadingOverride: (headingOverride: string | undefined) => void;
+	setDaysTillDeadline: (countDownDaysLeft: string | undefined) => void;
 };
 
 // create countdown logic
@@ -93,6 +94,7 @@ const ensureRoundedDoubleDigits = (timeSection: number): string => {
 export default function Countdown({
 	countdownSettings,
 	setHeadingOverride,
+	setDaysTillDeadline,
 }: CountdownProps): JSX.Element {
 	const [canShow, setCanShow] = useState<boolean>(false);
 	// one for each timepart to reduce DOM updates where unnecessary.
@@ -158,6 +160,10 @@ export default function Countdown({
 
 		return;
 	}, [countdownSettings]);
+
+	useEffect(() => {
+		setDaysTillDeadline(days);
+	}, [days]);
 
 	return (
 		<>

@@ -4,6 +4,7 @@ import type {
 } from 'helpers/productCatalog';
 import { messageBold, messageMargin } from './MessageStyles';
 import {
+	isGuardianWeeklyDigitalProduct,
 	isGuardianWeeklyGiftProduct,
 	isGuardianWeeklyProduct,
 } from './utils/productMatchers';
@@ -27,10 +28,13 @@ export default function StartDateMessage({
 	const deliveryMessage = isGuardianWeeklyProduct(productKey)
 		? weeklyMessage
 		: 'You will receive your newspapers from';
-
+	const digitalMessage = isGuardianWeeklyDigitalProduct(productKey, ratePlanKey)
+		? ' and you can access your digital benefits immediately'
+		: '';
 	return (
 		<p css={messageMargin}>
-			{deliveryMessage} <strong css={messageBold}>{startDate}</strong>.
+			{deliveryMessage} <strong css={messageBold}>{startDate}</strong>
+			{digitalMessage}.
 		</p>
 	);
 }

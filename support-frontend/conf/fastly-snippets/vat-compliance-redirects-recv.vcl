@@ -1,5 +1,5 @@
 # type: recv
-# fiddle: https://fiddle.fastly.dev/fiddle/6db36311
+# fiddle: https://fiddle.fastly.dev/fiddle/1842847b
 if (
     client.geo.country_code == "AD" ||
     client.geo.country_code == "AF" ||
@@ -197,8 +197,7 @@ if (
     client.geo.country_code == "ZM" ||
     client.geo.country_code == "ZW"
 ) {
-    if (req.url ~ "^\/[a-z]{2}/subscribe/digitaledition" || req.url == "/subscribe/digitaledition") {
+    if (req.url ~ "^(/(uk|us|au|int|nz|ca|eu))?/subscribe/weekly(/gift)?" || req.url ~ "^(/(uk|us|au|int|nz|ca|eu))?/subscribe/digitaledition") {
         error 619;
     }
 }
-

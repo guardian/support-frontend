@@ -36,12 +36,13 @@ const OrderSchema = z.object({
 		'StripeExpressCheckoutElement',
 		'StripeHostedCheckout',
 		'PayPal',
+		'PayPalCompletePayments',
 		'DirectDebit',
-		'Sepa',
 		'None',
 	]),
 	status: z.enum(['success', 'pending']),
 	deliveryDate: dateTimeSchema.optional(),
+	accountNumber: z.string().optional(),
 });
 type OrderSchemaType = z.infer<typeof OrderSchema>;
 export function setThankYouOrder(order: OrderSchemaType) {

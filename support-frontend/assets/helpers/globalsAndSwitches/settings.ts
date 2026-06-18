@@ -1,6 +1,9 @@
-import type { AmountsTests, ContributionTypes } from 'helpers/contributions';
+import type { ContributionTypes } from 'helpers/contributions';
 import 'helpers/contributions';
+import type { CheckoutNudgeTest } from './checkoutNudgeSettings';
 import type { LandingPageTest } from './landingPageSettings';
+import type { OneTimeCheckoutTest } from './oneTimeCheckoutSettings';
+import type { StudentLandingPageTest } from './studentLandingPageSettings';
 
 export type Status = 'On' | 'Off';
 
@@ -16,7 +19,6 @@ type SwitchObject = Record<string, Status | undefined>;
 type SwitchesKeys =
 	| 'oneOffPaymentMethods'
 	| 'recurringPaymentMethods'
-	| 'subscriptionsPaymentMethods'
 	| 'subscriptionsSwitches'
 	| 'featureSwitches'
 	| 'campaignSwitches'
@@ -26,8 +28,10 @@ type Switches = Record<SwitchesKeys, SwitchObject>;
 
 export type Settings = {
 	switches: Switches;
-	amounts?: AmountsTests;
 	contributionTypes: ContributionTypes;
 	metricUrl: string;
 	landingPageTests?: LandingPageTest[];
+	checkoutNudgeTests?: CheckoutNudgeTest[];
+	oneTimeCheckoutTests?: OneTimeCheckoutTest[];
+	studentLandingPageTests?: StudentLandingPageTest[];
 };

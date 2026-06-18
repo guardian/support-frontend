@@ -8,16 +8,17 @@ import com.gu.aws.AwsS3Client
 import com.gu.identity.auth._
 import com.gu.okhttp.RequestRunners
 import com.gu.support.getaddressio.GetAddressIOService
+import com.gu.support.idealpostcodes.IdealPostcodesService
 import com.gu.support.paperround.PaperRoundServiceProvider
 import com.gu.support.promotions.PromotionServiceProvider
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSComponents
 import services._
-import services.paypal.PayPalNvpServiceProvider
+import services.paypal.{PayPalCompletePaymentsServiceProvider, PayPalNvpServiceProvider}
 import services.pricing.{DefaultPromotionServiceS3, PriceSummaryServiceProvider}
 import services.stepfunctions.{StateWrapper, SupportWorkersClient}
-import services.MParticleClient
+import services.mparticle.MParticleClient
 
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
@@ -26,6 +27,12 @@ trait Services {
   implicit private val s3Client: AwsS3Client = AwsS3Client
 
   lazy val payPalNvpServiceProvider = new PayPalNvpServiceProvider(appConfig.regularPayPalConfigProvider, wsClient)
+
+  lazy val payPalCompletePaymentsServiceProvider =
+    new PayPalCompletePaymentsServiceProvider(
+      appConfig.payPalCompletePaymentsConfigProvider,
+      RequestRunners.futureRunner,
+    )
 
   lazy val identityService = IdentityService(appConfig.identity)
 
@@ -43,19 +50,16 @@ trait Services {
     )
   }
 
-  lazy val capiService = new CapiService(wsClient, appConfig.capiKey)
-
   lazy val testUsers = TestUserService(appConfig.identity.testUserSecret)
 
   lazy val asyncAuthenticationService = AsyncAuthenticationService(appConfig.identity, wsClient)
 
-  lazy val oktaAuthService = OktaAuthService[DefaultAccessClaims, UserClaims](
+  lazy val oktaAuthService = OktaAuthService(
     config = OktaTokenValidationConfig(
       issuerUrl = OktaIssuerUrl(appConfig.identity.oauthIssuerUrl),
       audience = Some(OktaAudience(appConfig.identity.oauthAudience)),
       clientId = Some(OktaClientId(appConfig.identity.oauthClientId)),
     ),
-    defaultIdentityClaimsParser = UserClaims.parser,
   )
 
   lazy val userFromAuthCookiesOrAuthServerActionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(
@@ -73,7 +77,13 @@ trait Services {
 
   lazy val paymentAPIService = new PaymentAPIService(wsClient, appConfig.paymentApiUrl)
 
-  lazy val mparticleClient = new MParticleClient(RequestRunners.futureRunner, appConfig.mparticleConfigProvider)
+  lazy val mparticleClient =
+    new MParticleClient(
+      RequestRunners.futureRunner,
+      appConfig.mparticleConfigProvider,
+      appConfig.stage,
+      allSettingsProvider,
+    )
 
   lazy val recaptchaService = new RecaptchaService(wsClient)
 
@@ -84,8 +94,22 @@ trait Services {
 
   lazy val landingPageTestService = new LandingPageTestServiceImpl(appConfig.stage)
 
+  lazy val checkoutNudgeTestService = new CheckoutNudgeTestServiceImpl(appConfig.stage)
+
+  lazy val oneTimeCheckoutTestService = new OneTimeCheckoutTestServiceImpl(appConfig.stage)
+
+  lazy val studentLandingPageTestService = new StudentLandingPageTestServiceImpl(appConfig.stage)
+
   lazy val allSettingsProvider: AllSettingsProvider =
-    AllSettingsProvider.fromConfig(appConfig, landingPageTestService).valueOr(throw _)
+    AllSettingsProvider
+      .fromConfig(
+        appConfig,
+        landingPageTestService,
+        checkoutNudgeTestService,
+        oneTimeCheckoutTestService,
+        studentLandingPageTestService,
+      )
+      .valueOr(throw _)
 
   lazy val defaultPromotionService = new DefaultPromotionServiceS3(s3Client, appConfig.stage, actorSystem)
 
@@ -96,6 +120,9 @@ trait Services {
 
   lazy val getAddressIOService: GetAddressIOService =
     new GetAddressIOService(appConfig.getAddressIOConfig, RequestRunners.futureRunner)
+
+  lazy val idealPostcodesService: IdealPostcodesService =
+    new IdealPostcodesService(appConfig.idealPostcodesConfig, RequestRunners.futureRunner)
 
   lazy val paperRoundServiceProvider: PaperRoundServiceProvider =
     new PaperRoundServiceProvider(appConfig.paperRoundConfigProvider)

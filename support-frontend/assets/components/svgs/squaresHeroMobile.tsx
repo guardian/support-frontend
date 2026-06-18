@@ -1,3 +1,18 @@
+import { css } from '@emotion/react';
+import { from } from '@guardian/source/foundations';
+
+const mobileSvg = css`
+	position: absolute;
+	top: 0;
+	min-height: 100%;
+	display: inline;
+	width: 100%;
+
+	${from.mobileLandscape} {
+		display: none;
+	}
+`;
+
 export default function SvgSquaresHeroMobile() {
 	return (
 		<svg
@@ -5,6 +20,7 @@ export default function SvgSquaresHeroMobile() {
 			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 375 321"
 			preserveAspectRatio="xMinYMid slice"
+			css={mobileSvg}
 		>
 			<g fill="none" fillRule="evenodd">
 				<path d="M396 241h-87v87h87z" fill="#5CC9F8" />

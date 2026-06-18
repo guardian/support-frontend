@@ -12,20 +12,26 @@ import {
 	LinkButton,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
-import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
-import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { BenefitPill } from 'components/checkoutBenefits/benefitPill';
 import {
 	BenefitsCheckList,
 	checkListTextItemCss,
 } from 'components/checkoutBenefits/benefitsCheckList';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { getProductLabel } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
-import type { Promotion } from 'helpers/productPrice/promotions';
+import {
+	discountSummaryCopy,
+	type Promotion,
+} from 'helpers/productPrice/promotions';
+import {
+	calculateWeeklyPrice,
+	getSanitisedHtml,
+	parseBillingPeriodCopy,
+} from 'helpers/utilities/utilities';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { ThreeTierCardPill } from './threeTierCardPill';
 
@@ -34,11 +40,7 @@ export type CardContent = LandingPageProductDescription & {
 	link: string;
 	price: number;
 	promotion?: Promotion;
-	product:
-		| 'TierThree'
-		| 'SupporterPlus'
-		| 'Contribution'
-		| 'DigitalSubscription';
+	product: 'SupporterPlus' | 'Contribution' | 'DigitalSubscription';
 };
 
 export type ThreeTierCardProps = {
@@ -48,6 +50,8 @@ export type ThreeTierCardProps = {
 	isSubdued: boolean;
 	currencyId: IsoCurrency;
 	billingPeriod: BillingPeriod;
+	showWeeklyPrice?: boolean;
+	useLargePriceMinHeight?: boolean;
 };
 
 const container = (
@@ -88,13 +92,13 @@ const titleCss = css`
 	color: #606060;
 `;
 
-const priceCss = (hasPromotion: boolean) => css`
+const priceCss = (useLargeMinHeight: boolean) => css`
 	${textSansBold24};
 	position: relative;
-	margin-bottom: ${hasPromotion ? '0' : `${space[4]}px`};
+	margin-bottom: ${space[2]}px;
 
 	${from.desktop} {
-		margin-bottom: ${space[6]}px;
+		min-height: ${useLargeMinHeight ? `${space[16]}px` : `${space[10]}px`};
 	}
 `;
 
@@ -103,15 +107,11 @@ const discountSummaryCss = css`
 	font-size: ${space[3]}px;
 	font-weight: 400;
 	color: #606060;
-	margin-bottom: ${space[4]}px;
 
 	${from.desktop} {
-		position: absolute;
-		top: 100%;
-		left: 0;
+		min-height: ${space[8]}px;
 		width: 100%;
 		text-align: center;
-		margin-bottom: 0;
 	}
 `;
 
@@ -169,38 +169,6 @@ const benefitsPrefixPlus = css`
 	}
 `;
 
-const discountSummaryCopy = (
-	currency: CurrencyInfo,
-	promoCount: number,
-	price: number,
-	promotion: Promotion,
-	billingPeriod: BillingPeriod,
-) => {
-	/**
-	 * EXAMPLE:
-	 * - £6/month for the first month, then £10/month
-	 * - £6.5/month for 6 months, then £10/month
-	 * - £173/year for the first year, then £275/year
-	 */
-	const durationMonths = promotion.discount?.durationMonths ?? 0;
-	const formattedPrice = simpleFormatAmount(currency, price);
-	const formattedPromotionPrice = simpleFormatAmount(
-		currency,
-		promotion.discountedPrice ?? 0,
-	);
-	const periodNoun = getBillingPeriodNoun(billingPeriod);
-	const duration =
-		billingPeriod === BillingPeriod.Annual
-			? durationMonths / 12
-			: durationMonths;
-
-	return `${formattedPromotionPrice}/${periodNoun} for ${
-		periodNoun === 'year' || duration === 1 ? 'the first' : ''
-	}${duration > 1 ? duration : ''} ${periodNoun}${
-		duration > 1 ? 's' : ''
-	}, then ${formattedPrice}/${periodNoun}${'*'.repeat(promoCount)}`;
-};
-
 export function ThreeTierCard({
 	cardContent,
 	cardTier,
@@ -208,6 +176,8 @@ export function ThreeTierCard({
 	isSubdued,
 	currencyId,
 	billingPeriod,
+	showWeeklyPrice = false,
+	useLargePriceMinHeight = false,
 }: ThreeTierCardProps): JSX.Element {
 	const {
 		title,
@@ -219,17 +189,37 @@ export function ThreeTierCard({
 		link,
 		cta,
 		product,
+		billingPeriodsCopy,
 	} = cardContent;
-	const { enablePremiumDigital } = getFeatureFlags();
 	const currency = getCurrencyInfo(currencyId);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
-	const formattedPrice = simpleFormatAmount(currency, price);
+
+	const mainPrice = showWeeklyPrice
+		? calculateWeeklyPrice(price, billingPeriod)
+		: price;
+	const mainDiscountedPrice = promotion
+		? showWeeklyPrice
+			? calculateWeeklyPrice(promotion.discountedPrice ?? price, billingPeriod)
+			: promotion.discountedPrice ?? price
+		: undefined;
+
+	const formattedMainPrice = simpleFormatAmount(currency, mainPrice);
+	const formattedMainDiscountedPrice = mainDiscountedPrice
+		? simpleFormatAmount(currency, mainDiscountedPrice)
+		: undefined;
+	const periodLabel = showWeeklyPrice ? 'week' : periodNoun;
+	const linkAriaLabel = `${title}, ${
+		formattedMainDiscountedPrice ?? formattedMainPrice
+	} per ${periodLabel}`;
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	const pillCopy = promotion?.landingPage?.roundel ?? cardContent.label?.copy;
-	const isPremiumDigitalProduct =
-		product === 'DigitalSubscription' && enablePremiumDigital;
-	const inAdditionToAllAccessDigital =
-		product === 'TierThree' || isPremiumDigitalProduct;
+	const inAdditionToAllAccessDigital = product === 'DigitalSubscription';
+	const parsedBillingPeriodsCopy = parseBillingPeriodCopy(
+		billingPeriodsCopy ?? '',
+		currency,
+		price,
+		billingPeriod,
+	);
 	return (
 		<section css={container(!!pillCopy, isUserSelected, isSubdued)}>
 			{isUserSelected && <ThreeTierCardPill title="Your selection" />}
@@ -243,32 +233,68 @@ export function ThreeTierCard({
 				{titlePill && <BenefitPill copy={titlePill} />}
 				<h2 css={[titleCss, checkListTextItemCss]}>{title}</h2>
 			</div>
-			<p css={priceCss(!!promotion)}>
+			<div css={priceCss(useLargePriceMinHeight)}>
 				{promotion && (
 					<>
-						<span css={previousPriceStrikeThrough}>{formattedPrice}</span>{' '}
-						{`${simpleFormatAmount(
-							currency,
-							promotion.discountedPrice ?? price,
-						)}/${periodNoun}`}
-						<span css={discountSummaryCss}>
-							{discountSummaryCopy(
-								currency,
-								promoCount,
-								price,
-								promotion,
-								billingPeriod,
-							)}
-						</span>
+						<p>
+							<span css={previousPriceStrikeThrough}>{formattedMainPrice}</span>{' '}
+							{`${formattedMainDiscountedPrice}/${periodLabel}`}
+						</p>
+						<p>
+							<span css={discountSummaryCss}>
+								{showWeeklyPrice ? 'Billed as ' : ''}
+								{discountSummaryCopy(
+									currency,
+									promoCount,
+									price,
+									promotion,
+									billingPeriod,
+								)}
+							</span>
+						</p>
 					</>
 				)}
-				{!promotion && `${formattedPrice}/${periodNoun}`}
-			</p>
+				{parsedBillingPeriodsCopy && !promotion && (
+					<>
+						<p>
+							<span>
+								{formattedMainPrice}/{periodLabel}
+							</span>
+						</p>
+						<p>
+							<span
+								css={discountSummaryCss}
+								dangerouslySetInnerHTML={{
+									__html: showWeeklyPrice
+										? `Billed as ${getSanitisedHtml(parsedBillingPeriodsCopy)}`
+										: getSanitisedHtml(parsedBillingPeriodsCopy),
+								}}
+							/>
+						</p>
+					</>
+				)}
+				{!promotion && !parsedBillingPeriodsCopy && (
+					<>
+						<p>
+							<span>
+								{formattedMainPrice}/{periodLabel}
+							</span>
+						</p>
+						{showWeeklyPrice && (
+							<p>
+								<span css={discountSummaryCss}>
+									Billed as {simpleFormatAmount(currency, price)}/{periodNoun}
+								</span>
+							</p>
+						)}
+					</>
+				)}
+			</div>
 			<LinkButton
 				href={link}
 				cssOverrides={btnStyleOverrides}
 				data-qm-trackable={quantumMetricButtonRef}
-				aria-label={title}
+				aria-label={linkAriaLabel}
 				theme={themeButtonReaderRevenueBrand}
 			>
 				{cta.copy}
@@ -290,7 +316,7 @@ export function ThreeTierCard({
 						isChecked: true,
 						toolTip: benefit.tooltip,
 						pill: benefit.label?.copy,
-						hideBullet: benefits.length <= 1 && product !== 'TierThree',
+						hideBullet: benefits.length <= 1,
 					};
 				})}
 				style={'compact'}

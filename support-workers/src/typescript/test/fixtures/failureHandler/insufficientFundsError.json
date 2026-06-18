@@ -1,0 +1,145 @@
+{
+  "state": {
+    "productSpecificState": {
+      "productType": "Contribution",
+      "product": {
+        "amount": 5,
+        "currency": "USD",
+        "billingPeriod": "Monthly",
+        "productType": "Contribution"
+      },
+      "productInformation": {
+        "amount": 5,
+        "product": "Contribution",
+        "ratePlan": "Monthly"
+      },
+      "paymentMethod": {
+        "TokenId": "pm_000000000000000000000000",
+        "SecondTokenId": "cus_00000000000000",
+        "CreditCardNumber": "4242",
+        "CreditCardExpirationMonth": 8,
+        "CreditCardExpirationYear": 2030,
+        "CreditCardType": "Visa",
+        "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+        "Type": "CreditCardReferenceTransaction",
+        "StripePaymentType": "StripeCheckout"
+      },
+      "salesForceContact": {
+        "Id": "003000000000000000",
+        "AccountId": "001000000000000000"
+      },
+      "similarProductsConsent": true
+    },
+    "requestId": "00000000-0000-0000-0000-000000000000",
+    "user": {
+      "id": "11111111",
+      "primaryEmailAddress": "test.user@thegulocal.com",
+      "title": null,
+      "firstName": "Test",
+      "lastName": "User",
+      "billingAddress": {
+        "lineOne": null,
+        "lineTwo": null,
+        "city": null,
+        "state": "ID",
+        "postCode": "83204",
+        "country": "US"
+      },
+      "deliveryAddress": null,
+      "telephoneNumber": null,
+      "isTestUser": false,
+      "deliveryInstructions": null
+    },
+    "giftRecipient": null,
+    "product": {
+      "amount": 5,
+      "currency": "USD",
+      "billingPeriod": "Monthly",
+      "productType": "Contribution"
+    },
+    "productInformation": {
+      "amount": 5,
+      "product": "Contribution",
+      "ratePlan": "Monthly"
+    },
+    "analyticsInfo": {
+      "isGiftPurchase": false,
+      "paymentProvider": "Stripe"
+    },
+    "firstDeliveryDate": null,
+    "appliedPromotion": null,
+    "csrUsername": null,
+    "salesforceCaseId": null,
+    "acquisitionData": {
+      "ophanIds": {
+        "pageviewId": "mkbnejqe3185xj7noan6",
+        "browserId": null
+      },
+      "referrerAcquisitionData": {
+        "campaignCode": null,
+        "referrerPageviewId": "",
+        "referrerUrl": null,
+        "componentId": null,
+        "componentType": null,
+        "source": null,
+        "abTests": null,
+        "queryParameters": [
+          {
+            "name": "product",
+            "value": "Contribution"
+          },
+          {
+            "name": "ratePlan",
+            "value": "Monthly"
+          },
+          {
+            "name": "contribution",
+            "value": "5"
+          }
+        ],
+        "hostname": "support.theguardian.com",
+        "gaClientId": null,
+        "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.3 Mobile/15E148 Safari/604.1",
+        "ipAddress": "127.0.0.1",
+        "labels": [
+          "generic-checkout"
+        ]
+      },
+      "supportAbTests": [
+        {
+          "name": "abandonedBasket",
+          "variant": "control"
+        },
+        {
+          "name": "landingPageMparticlePastContributor",
+          "variant": "variant"
+        },
+        {
+          "name": "2025_12_18_HIGHER_SINGLES__US",
+          "variant": "CONTROL"
+        }
+      ]
+    },
+    "similarProductsConsent": true,
+    "paymentMethod": {
+      "TokenId": "pm_000000000000000000000000",
+      "SecondTokenId": "cus_00000000000000",
+      "CreditCardNumber": "4242",
+      "CreditCardExpirationMonth": 8,
+      "CreditCardExpirationYear": 2030,
+      "CreditCardType": "Visa",
+      "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+      "Type": "CreditCardReferenceTransaction",
+      "StripePaymentType": "StripeCheckout"
+    }
+  },
+  "error": {
+    "Error": "RetryNone",
+    "Cause": "{\"errorType\":\"RetryNone\",\"errorMessage\":\"Transaction declined.402 - [card_error/card_declined/insufficient_funds] Your card has insufficient funds.\",\"trace\":[\"RetryNone: Transaction declined.402 - [card_error/card_declined/insufficient_funds] Your card has insufficient funds.\",\"    at retryNone (/var/task/createZuoraSubscriptionTSLambda.js:101364:30)\",\"    at mapZuoraError (/var/task/createZuoraSubscriptionTSLambda.js:101397:12)\",\"    at asRetryError (/var/task/createZuoraSubscriptionTSLambda.js:101417:12)\",\"    at Runtime.handler (/var/task/createZuoraSubscriptionTSLambda.js:102245:11)\",\"    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\"]}"
+  },
+  "requestInfo": {
+    "testUser": false,
+    "failed": false,
+    "messages": []
+  }
+}

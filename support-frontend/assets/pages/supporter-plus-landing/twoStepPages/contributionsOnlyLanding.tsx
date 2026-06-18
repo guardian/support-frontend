@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { cmp } from '@guardian/libs';
+import { cmp } from '@guardian/consent-manager';
 import {
 	from,
 	headlineBold24,
@@ -18,13 +18,9 @@ import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { getAmountsTestVariant } from 'helpers/abTests/abtest';
-import { Country } from 'helpers/internationalisation/classes/country';
-import type { ActiveRatePlanKey } from 'helpers/productCatalog';
-import {
-	billingPeriodToContributionType,
-	ratePlanToBillingPeriod,
-} from 'helpers/productPrice/billingPeriods';
+import { contributionsOnlyCountriesAmountsConfig } from 'helpers/contributions';
+import { guardianContactUsLink, guardianHelpCentreLink } from 'helpers/legal';
+import { billingPeriodToContributionType } from 'helpers/productPrice/billingPeriods';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import { AmountsCard } from '../components/amountsCard';
 
@@ -123,12 +119,12 @@ const links = [
 		},
 	},
 	{
-		href: 'https://www.theguardian.com/help/contact-us',
+		href: guardianContactUsLink,
 		text: 'Contact us',
 		isExternal: true,
 	},
 	{
-		href: 'https://www.theguardian.com/help',
+		href: guardianHelpCentreLink,
 		text: 'Help centre',
 		isExternal: true,
 	},
@@ -145,18 +141,41 @@ export function ContributionsOnlyLanding({
 
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
-	const countryId = Country.detect();
 
 	const getInitialBillingPeriod = () => {
+		// 1. Query Parameters take precedence
 		if (urlSearchParams.has('oneTime')) {
 			return BillingPeriod.OneTime;
 		}
-		if (['Annual', 'OneTime'].includes(ratePlanParam)) {
-			return ratePlanToBillingPeriod(ratePlanParam as ActiveRatePlanKey);
-		} else {
+
+		const ratePlanParamLower = ratePlanParam.trim().toLowerCase();
+		if (ratePlanParamLower === 'onetime') {
+			return BillingPeriod.OneTime;
+		} else if (ratePlanParamLower === 'annual') {
+			return BillingPeriod.Annual;
+		} else if (ratePlanParamLower === 'monthly') {
 			return BillingPeriod.Monthly;
 		}
+
+		// 2. Default Selection from Settings
+		const settings = window.guardian.settings;
+		const defaultSelection =
+			settings.landingPageTests?.[0]?.variants?.[0]?.defaultProductSelection;
+
+		const isContributionDefault =
+			defaultSelection?.productType === 'Contribution';
+
+		if (isContributionDefault && defaultSelection.billingPeriod === 'Annual') {
+			return BillingPeriod.Annual;
+		}
+		if (isContributionDefault && defaultSelection.billingPeriod === 'OneTime') {
+			return BillingPeriod.OneTime;
+		}
+
+		// 3. Fallback
+		return BillingPeriod.Monthly;
 	};
+
 	const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>(
 		getInitialBillingPeriod(),
 	);
@@ -174,11 +193,7 @@ export function ContributionsOnlyLanding({
 		}
 	};
 
-	const { selectedAmountsVariant: amounts } = getAmountsTestVariant(
-		countryId,
-		countryGroupId,
-		window.guardian.settings,
-	);
+	const amounts = contributionsOnlyCountriesAmountsConfig;
 
 	return (
 		<PageScaffold

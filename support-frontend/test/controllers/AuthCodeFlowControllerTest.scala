@@ -63,6 +63,25 @@ class AuthCodeFlowControllerTest extends AnyWordSpec with Matchers {
       val locationHeader = headers(result).get(LOCATION).get
       locationHeader must include("redirect_uri=eventsRedirectUrl")
     }
+
+    "return auth redirect from the observer subdomain to the correct location" in {
+      val authService = mock[AsyncAuthenticationService]
+      val config = mock[Identity]
+      when(config.oauthClientId).thenReturn("clientId")
+      when(config.oauthAuthorizeUrl).thenReturn("authServerUrl")
+      when(config.oauthScopes).thenReturn("a b c")
+      when(config.oauthCallbackUrl).thenReturn("https://support.theguardian.com/oauth/callback")
+      when(config.oauthEventsCallbackUrl).thenReturn("https://live.theguardian.com/oauth/callback")
+      when(config.oauthObserverCallbackUrl).thenReturn("https://observer.theguardian.com/oauth/callback")
+      val controller = new AuthCodeFlowController(stubControllerComponents(), authService, config)
+
+      val result =
+        controller.authorize()(FakeRequest().withHeaders(("Host", "observer.theguardian.com")))
+
+      status(result) mustEqual 303
+      val locationHeader = headers(result).get(LOCATION).get
+      locationHeader must include("redirect_uri=https%3A%2F%2Fobserver.theguardian.com%2Foauth%2Fcallback")
+    }
   }
 
   "callback" should {

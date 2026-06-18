@@ -8,7 +8,6 @@ import {
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import {
 	ExpressCheckoutElement,
 	useElements,
@@ -28,18 +27,15 @@ import { paymentMethodData } from 'components/paymentMethodSelector/paymentMetho
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
-import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
-import { getFeatureFlags } from 'helpers/featureFlags';
+import useEmailMarketingUtmSession from 'helpers/customHooks/useEmailMarketingUtmSession';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
-	DirectDebit,
 	isPaymentMethod,
 	type PaymentMethod as LegacyPaymentMethod,
-	PayPal,
-	Stripe,
 	StripeHostedCheckout,
 	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
@@ -49,15 +45,13 @@ import {
 	type ActiveProductKey,
 	type ActiveRatePlanKey,
 	productCatalogDescription,
-	productCatalogDescriptionPremiumDigital,
 	showSimilarProductsConsentForRatePlan,
 } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
-import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
+import type { CsrfState } from 'helpers/types/csrf';
 import { logException } from 'helpers/utilities/logger';
 import { getWeeklyDays } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
@@ -65,18 +59,21 @@ import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsM
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
-import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
+import { postcodeIsWithinM25 } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
+import type { BillingStatePostcodeCountry } from '../checkout/components/BillingAddressFields';
 import { PersonalAddressFields } from '../checkout/components/PersonalAddressFields';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
 import { WeeklyDeliveryDates } from '../checkout/components/WeeklyDeliveryDates';
 import { WeeklyGiftPersonalFields } from '../checkout/components/WeeklyGiftPersonalFields';
 import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgents';
 import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
+import { getPaymentMethods } from '../checkout/helpers/getPaymentMethods';
 import { getProductFields } from '../checkout/helpers/getProductFields';
+import type { PaymentToken } from '../checkout/helpers/paypalCompletePayments';
 import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheckoutSession';
 import { countriesRequiringBillingState } from '../helpers/countriesRequiringBillingState';
@@ -112,45 +109,6 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 	);
 }
 
-type CheckoutFormProps = {
-	supportRegionId: SupportRegionId;
-	appConfig: AppConfig;
-	stripePublicKey: string;
-	isTestUser: boolean;
-	productKey: ActiveProductKey;
-	ratePlanKey: ActiveRatePlanKey;
-	originalAmount: number;
-	discountedAmount?: number;
-	contributionAmount?: number;
-	finalAmount: number;
-	promotion?: Promotion;
-	useStripeExpressCheckout: boolean;
-	countryId: IsoCountry;
-	forcedCountry?: string;
-	abParticipations: Participations;
-	landingPageSettings: LandingPageVariant;
-	checkoutSession?: CheckoutSession;
-	clearCheckoutSession: () => void;
-	weeklyDeliveryDate: Date;
-	setWeeklyDeliveryDate: (value: Date) => void;
-	thresholdAmount: number;
-	studentDiscount?: StudentDiscount;
-};
-
-const getPaymentMethods = (
-	countryId: IsoCountry,
-	productKey: ProductKey,
-	ratePlanKey: ActiveRatePlanKey,
-) => {
-	const maybeDirectDebit = countryId === 'GB' && DirectDebit;
-
-	if (isSundayOnlyNewspaperSub(productKey, ratePlanKey)) {
-		return [maybeDirectDebit, StripeHostedCheckout];
-	}
-
-	return [maybeDirectDebit, Stripe, PayPal];
-};
-
 const LEGEND_PREFIX_WEEKLY_GIFT = 4;
 const LEGEND_PREFIX_DEFAULT = 1;
 const getPaymentLegendPrefix = (
@@ -168,6 +126,30 @@ const getPaymentLegendPrefix = (
 	return legendPrefix + 3;
 };
 
+type CheckoutFormProps = {
+	supportRegionId: SupportRegionId;
+	appConfig: AppConfig;
+	stripePublicKey: string;
+	isTestUser: boolean;
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
+	originalAmount: number;
+	finalAmount: number;
+	useStripeExpressCheckout: boolean;
+	countryId: IsoCountry;
+	abParticipations: Participations;
+	landingPageSettings: LandingPageVariant;
+	clearCheckoutSession: () => void;
+	weeklyDeliveryDate: Date;
+	setWeeklyDeliveryDate: (value: Date) => void;
+	thresholdAmount: number;
+	contributionAmount?: number;
+	promotion?: Promotion;
+	checkoutSession?: CheckoutSession;
+	studentDiscount?: StudentDiscount;
+	paypalClientId: string;
+};
+
 export default function CheckoutForm({
 	supportRegionId,
 	appConfig,
@@ -176,34 +158,31 @@ export default function CheckoutForm({
 	productKey,
 	ratePlanKey,
 	originalAmount,
-	contributionAmount,
 	finalAmount,
-	promotion,
 	useStripeExpressCheckout,
 	countryId,
 	abParticipations,
-	checkoutSession,
 	clearCheckoutSession,
 	weeklyDeliveryDate,
 	setWeeklyDeliveryDate,
 	thresholdAmount,
+	contributionAmount,
+	promotion,
+	checkoutSession,
 	studentDiscount,
+	paypalClientId,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
 
+	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
+
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 
-	const { enablePremiumDigital } = getFeatureFlags();
-	const isPremiumDigitalProduct =
-		enablePremiumDigital && productKey === 'DigitalSubscription';
-
-	const productDescription = isPremiumDigitalProduct
-		? productCatalogDescriptionPremiumDigital
-		: productCatalogDescription[productKey];
+	const productDescription = productCatalogDescription[productKey];
 	const hasDeliveryAddress = !!productDescription.deliverableTo;
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
@@ -265,16 +244,10 @@ export default function CheckoutForm({
 			productCatalog.SupporterPlus?.ratePlans[ratePlanKey]?.pricing[
 				currencyKey
 			];
-
-		const { selectedAmountsVariant } = getAmountsTestVariant(
-			countryId,
-			countryGroupId,
-			appConfig.settings,
-		);
 		if (originalAmount < 1) {
 			isInvalidAmount = true;
 		}
-		if (!isContributionsOnlyCountry(selectedAmountsVariant)) {
+		if (isContributionsOnlyCountry(countryId)) {
 			if (originalAmount >= (supporterPlusRatePlanPrice ?? 0)) {
 				isInvalidAmount = true;
 			}
@@ -284,14 +257,6 @@ export default function CheckoutForm({
 	if (isInvalidAmount) {
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
-
-	const validPaymentMethods = getPaymentMethods(
-		countryId,
-		productKey,
-		ratePlanKey,
-	)
-		.filter(isPaymentMethod)
-		.filter(paymentMethodIsActive);
 
 	const [paymentMethod, setPaymentMethod] = useStateWithCheckoutSession<
 		PaymentMethod | undefined
@@ -354,6 +319,21 @@ export default function CheckoutForm({
 		}
 	}, [payPalBAID]);
 	/**
+	 * Payment method: PayPal Complete Payments
+	 * Payment Token = the new equivalent of a BAID
+	 */
+	const [payPalPaymentToken, setPayPalPaymentToken] = useState<PaymentToken>();
+	/**
+	 * payPalPaymentToken forces formOnSubmit
+	 */
+	useEffect(() => {
+		if (payPalPaymentToken !== undefined) {
+			// TODO - this might not meet our browser compatibility requirements (Safari)
+			// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
+			formRef.current?.requestSubmit();
+		}
+	}, [payPalPaymentToken]);
+	/**
 	 * Checkout session ID forces formOnSubmit
 	 * This happens when the user returns from the Stripe hosted checkout with a checkout session ID in the URL
 	 */
@@ -397,44 +377,53 @@ export default function CheckoutForm({
 		'',
 	);
 
+	const onlyAvailableInsideGreaterLondon =
+		ratePlanKey === 'Saturday' ||
+		ratePlanKey === 'SaturdayPlus' ||
+		ratePlanKey === 'Sunday';
+
 	const fetchDeliveryAgentsIfRequired = async (postcode: string) => {
-		if (isValidPostcode(postcode)) {
-			if (postcodeIsWithinDeliveryArea(postcode)) {
-				// The user's postcode is inside the M25
-				setDeliveryPostcodeIsOutsideM25(false);
-			} else if (
-				ratePlanKey === 'Saturday' ||
-				ratePlanKey === 'SaturdayPlus' ||
-				ratePlanKey === 'Sunday'
-			) {
-				// The user's postcode is outside the M25 but they have selected a
-				// Saturday or Sunday only rate plan which is not supported
-				setDeliveryAddressErrors((prevState) => [
-					...prevState,
-					{
-						field: 'postCode',
-						message:
-							'Saturday or Sunday delivery is available for Greater London only. Go back and select Weekend delivery option or choose a Digital Voucher.',
-					},
-				]);
-			} else {
-				// The users postcode is outside the M25 and they have selected a valid rate plan
-				setDeliveryPostcodeIsOutsideM25(true);
-				const agents = await getDeliveryAgents(postcode);
-				if (agents.agents?.length === 1 && agents.agents[0]) {
-					setChosenDeliveryAgent(agents.agents[0].agentId);
-				}
-				setDeliveryAgents(agents);
-			}
-		} else {
-			// The postcode field does not contain a valid postcode, so reset to default state
+		if (!isValidPostcode(postcode)) {
 			setDeliveryPostcodeIsOutsideM25(false);
 			setDeliveryAgents(undefined);
 			setDeliveryAddressErrors((prevState) =>
 				prevState.filter((error) => error.field !== 'postCode'),
 			);
+			return;
+		}
+
+		const postCodeIsOutsideM25 = !postcodeIsWithinM25(postcode);
+
+		setDeliveryPostcodeIsOutsideM25(postCodeIsOutsideM25);
+
+		if (!postCodeIsOutsideM25) {
+			setDeliveryAddressErrors((prevState) =>
+				prevState.filter((error) => error.field !== 'postCode'),
+			);
+			return;
+		}
+
+		if (onlyAvailableInsideGreaterLondon) {
+			// The user's postcode is outside the M25 but they have selected a
+			// Saturday or Sunday only rate plan which is not supported
+			setDeliveryAddressErrors((prevState) => [
+				...prevState,
+				{
+					field: 'postCode',
+					message:
+						'Saturday or Sunday delivery is available for Greater London only. Go back and select Weekend delivery option or choose a Digital Voucher.',
+				},
+			]);
+		} else {
+			// The users postcode is outside the M25 and they have selected a valid rate plan
+			const agents = await getDeliveryAgents(postcode);
+			if (agents.agents?.length === 1 && agents.agents[0]) {
+				setChosenDeliveryAgent(agents.agents[0].agentId);
+			}
+			setDeliveryAgents(agents);
 		}
 	};
+
 	useEffect(() => {
 		if (productKey === 'HomeDelivery') {
 			void fetchDeliveryAgentsIfRequired(deliveryPostcode);
@@ -479,6 +468,22 @@ export default function CheckoutForm({
 		checkoutSession?.formFields.addressFields.billingAddress.state,
 		'',
 	);
+
+	// billingCountry selector used to determine available payment methods
+	const [billingCountry, setBillingCountry] =
+		useStateWithCheckoutSession<IsoCountry>(
+			checkoutSession?.formFields.addressFields.billingAddress.country,
+			countryId,
+		);
+
+	const validPaymentMethods = getPaymentMethods(
+		countryId,
+		productKey,
+		ratePlanKey,
+		abParticipations,
+	)
+		.filter(isPaymentMethod)
+		.filter(paymentMethodIsActive);
 
 	/** Gift recipient details */
 	// Session storage unavailable yet, using state
@@ -526,10 +531,17 @@ export default function CheckoutForm({
 		}
 	}, [errorMessage]);
 
-	const onFormSubmit = async (formData: FormData) => {
+	const onFormSubmit = async (formData: FormData): Promise<boolean> => {
+		if (onlyAvailableInsideGreaterLondon && deliveryPostcodeIsOutsideM25) {
+			// We should be using a ref to avoid breaking this in the future,
+			// but TextInput does not currently support refs, so we will scroll to the top of the postcode field using an id for now
+			document.getElementById('delivery-postcode')?.focus();
+			return false;
+		}
+
 		if (paymentMethod === undefined) {
 			setPaymentMethodError('Please select a payment method');
-			return;
+			return false;
 		}
 
 		if (paymentMethod === 'Stripe') {
@@ -551,7 +563,7 @@ export default function CheckoutForm({
 			if (Object.values(newStripeFieldError).some((value) => value)) {
 				setStripeFieldError(newStripeFieldError);
 				paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
-				return;
+				return false;
 			}
 		}
 
@@ -560,7 +572,7 @@ export default function CheckoutForm({
 				recaptcha: 'Please complete security check',
 			});
 			paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
-			return;
+			return false;
 		}
 
 		const finalProductKey =
@@ -569,7 +581,7 @@ export default function CheckoutForm({
 				: productKey;
 		if (finalProductKey == 'NationalDelivery' && !chosenDeliveryAgent) {
 			setDeliveryAgentError('Please select a delivery agent');
-			return;
+			return false;
 		}
 		if (paymentMethod === 'DirectDebit') {
 			const response = await checkAccount(
@@ -583,10 +595,9 @@ export default function CheckoutForm({
 				setErrorContext(
 					'The transaction was temporarily declined. Please try entering you payment details again. Alternatively try another payment method.',
 				);
-				return;
+				return false;
 			}
 		}
-		setIsProcessingPayment(true);
 		try {
 			const paymentFields = await getPaymentFieldsForPaymentMethod(
 				paymentMethod,
@@ -616,11 +627,17 @@ export default function CheckoutForm({
 				abParticipations,
 				promotion,
 				contributionAmount,
-				deliveryDate: isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+				weeklyGiftDeliveryDate: isGuardianWeeklyGiftProduct(
+					productKey,
+					ratePlanKey,
+				)
 					? weeklyDeliveryDate
 					: undefined,
 			});
 			window.location.href = successUrl;
+			// It seems non-deterministic how much code is executed below setting
+			// window.location.href, but we return true here for completeness.
+			return true;
 		} catch (error) {
 			if (error instanceof FormSubmissionError) {
 				setErrorMessage(error.message);
@@ -634,13 +651,8 @@ export default function CheckoutForm({
 					`An error occurred in checkoutComponent.tsx while trying to submit the form: ${errorMessage}`,
 				);
 			}
-			// This state update is in the catch block because it has the effect
-			// of removing the processing overlay. If it was outside of the
-			// try/catch then in the case where the submitForm is successful the
-			// overlay would be removed before the redirect has completed
-			// resulting in a flash of the checkout with no overlay before the
-			// redirect to the thank you page.
-			setIsProcessingPayment(false);
+
+			return false;
 		}
 	};
 
@@ -653,11 +665,13 @@ export default function CheckoutForm({
 	);
 
 	const billingPeriod = productFields.billingPeriod;
-	const billingStatePostcode = {
+	const billingStatePostcodeCountry: BillingStatePostcodeCountry = {
 		billingState: billingState,
 		setBillingState: setBillingState,
 		billingPostcode: billingPostcode,
 		setBillingPostcode: setBillingPostcode,
+		billingCountry: billingCountry,
+		setBillingCountry: setBillingCountry,
 	};
 
 	const billingPreposition = productDescription.ratePlans[ratePlanKey]
@@ -673,6 +687,9 @@ export default function CheckoutForm({
 		isWeeklyGift,
 	)}`;
 
+	const useExpressPostcodeLookup =
+		abParticipations.postCodeLookupExpress === 'variant';
+
 	return (
 		<>
 			<form
@@ -681,7 +698,26 @@ export default function CheckoutForm({
 					event.preventDefault();
 					const form = event.currentTarget;
 					const formData = new FormData(form);
-					void onFormSubmit(formData);
+
+					// This shouldn't happen as the overlay which is displayed when
+					// isProcessingPayment is true should prevent button clicks. But this gives
+					// a little extra defence just in case.
+					if (isProcessingPayment) {
+						return;
+					}
+
+					setIsProcessingPayment(true);
+
+					void onFormSubmit(formData).then((success) => {
+						// If the onFormSubmit was not successful the promise resolves with
+						// false. In this case we need to remove the overlay so that the
+						// user can interact with the form again.
+						// If the onFormSubmit was successful the promise resolves with true
+						// and does a client side redirect, so there's nothing to do.
+						if (!success) {
+							setIsProcessingPayment(false);
+						}
+					});
 				}}
 			>
 				<Box
@@ -833,7 +869,6 @@ export default function CheckoutForm({
 								/>
 							</div>
 						)}
-
 						{isWeeklyGift && (
 							<>
 								<WeeklyGiftPersonalFields
@@ -867,10 +902,10 @@ export default function CheckoutForm({
 									deliveryAddressErrors={deliveryAddressErrors}
 									setDeliveryAddressErrors={setDeliveryAddressErrors}
 									isWeeklyGift={isWeeklyGift}
+									useExpressPostcodeLookup={useExpressPostcodeLookup}
 								/>
 							</>
 						)}
-
 						<PersonalDetailsFields
 							countryId={countryId}
 							countries={productDescription.deliverableTo}
@@ -885,13 +920,13 @@ export default function CheckoutForm({
 							setConfirmedEmail={setConfirmedEmail}
 							phoneNumber={phoneNumber}
 							setPhoneNumber={setPhoneNumber}
-							billingStatePostcode={billingStatePostcode}
+							useExpressPostcodeLookup={useExpressPostcodeLookup}
+							billingStatePostcodeCountry={billingStatePostcodeCountry}
 							hasDeliveryAddress={hasDeliveryAddress}
 							isEmailAddressReadOnly={isSignedIn}
 							isSignedIn={isSignedIn}
 							isWeeklyGift={isWeeklyGift}
 						/>
-
 						{/**
 						 * We need the billing-country for all transactions, even non-deliverable ones
 						 * which we get from the GU_country cookie which comes from the Fastly geo client.
@@ -915,10 +950,10 @@ export default function CheckoutForm({
 								setDeliveryAgentError={setDeliveryAgentError}
 								deliveryAddressErrors={deliveryAddressErrors}
 								setDeliveryAddressErrors={setDeliveryAddressErrors}
-								billingStatePostcode={billingStatePostcode}
+								billingStatePostcodeCountry={billingStatePostcodeCountry}
+								useExpressPostcodeLookup={useExpressPostcodeLookup}
 							/>
 						)}
-
 						<FormSection ref={paymentMethodRef}>
 							<Legend>
 								{legendPayment}
@@ -1103,14 +1138,16 @@ export default function CheckoutForm({
 								margin: ${space[6]}px 0;
 							`}
 						>
-							{showSimilarProductsConsentForRatePlan(
-								productDescription,
-								ratePlanKey,
-							) && <SimilarProductsConsent />}
+							{!isMarketingEmailSession &&
+								showSimilarProductsConsentForRatePlan(
+									productDescription,
+									ratePlanKey,
+								) && <SimilarProductsConsent />}
 						</div>
 						<SummaryTsAndCs
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
+							countryGroupId={countryGroupId}
 							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}
@@ -1126,12 +1163,17 @@ export default function CheckoutForm({
 								payPalLoaded={payPalLoaded}
 								payPalBAID={payPalBAID}
 								setPayPalBAID={setPayPalBAID}
+								payPalPaymentToken={payPalPaymentToken}
+								setPayPalPaymentToken={setPayPalPaymentToken}
 								formRef={formRef}
 								isTestUser={isTestUser}
 								finalAmount={finalAmount}
 								currencyKey={currencyKey}
 								billingPeriod={billingPeriod}
 								csrf={csrf.token ?? ''}
+								paypalClientId={paypalClientId}
+								setErrorMessage={setErrorMessage}
+								setErrorContext={setErrorContext}
 							/>
 						</div>
 						{errorMessage && (

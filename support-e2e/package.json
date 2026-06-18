@@ -10,24 +10,22 @@
 		"test-smoke-code": "playwright test --project=smoke --config=playwright.code.config.ts",
 		"test-smoke-ui-code": "playwright test --project=smoke --config=playwright.code.config.ts --ui",
 		"test-smoke-dev": "playwright test --project=smoke --config=playwright.dev.config.ts --ui",
-		"test-cron": "playwright test --project=cron --config=playwright.config.ts",
+		"test-cron": "playwright test --project=cron --config=playwright.config.ts --workers 1",
 		"test-cron-ui": "playwright test --project=cron --config=playwright.config.ts --ui",
 		"test-cron-ui-code": "playwright test --project=cron --config=playwright.code.config.ts --ui",
 		"test-cron-dev": "playwright test --project=cron --config=playwright.dev.config.ts --ui",
 		"lint": "eslint ./tests/**/*.ts",
-    "build": "tsc --noEmit"
+		"build": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@playwright/test": "^1.55.1",
 		"nanoid": "^3.3.11"
 	},
 	"devDependencies": {
-		"@guardian/prettier": "^8.0.0",
 		"@types/node": "^22.10.1",
 		"dotenv": "^17.2.1",
 		"husky": "^9.0.11",
 		"lint-staged": "^15.2.2",
-		"prettier": "^3.0.3",
 		"typescript": "^5.7.2"
 	},
 	"lint-staged": {

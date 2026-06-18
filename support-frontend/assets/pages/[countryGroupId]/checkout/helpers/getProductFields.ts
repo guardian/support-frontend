@@ -59,15 +59,6 @@ export const getProductFields = ({
 				billingPeriod: billingPeriod,
 			};
 
-		case 'TierThree':
-			return {
-				productType: 'TierThree',
-				currency: currencyKey,
-				billingPeriod: billingPeriod,
-				fulfilmentOptions: fulfilmentOption,
-				productOptions: productOption,
-			};
-
 		case 'Contribution':
 			return {
 				productType: 'Contribution',

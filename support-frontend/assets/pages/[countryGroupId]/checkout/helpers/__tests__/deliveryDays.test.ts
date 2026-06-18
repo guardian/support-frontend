@@ -4,12 +4,7 @@ import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 // import type { ActiveProductKey } from 'helpers/productCatalog';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
-import {
-	addDays,
-	getTierThreeDeliveryDate,
-	getWeeklyDays,
-	getWeeklyDeliveryDate,
-} from '../deliveryDays';
+import { addDays, getWeeklyDays, getWeeklyDeliveryDate } from '../deliveryDays';
 
 function getDaysBetween(start: Dayjs, end: Dayjs) {
 	const range = [];
@@ -97,25 +92,6 @@ describe('getWeeklyDeliveryDate', () => {
 			const deliveryDate = dayjs(getWeeklyDeliveryDate(day.toDate().getTime()));
 			const eightDaysTime = day.add(8, 'day'); // earliest is before wednesday midnight, it delivers the Weekly on Friday week
 			expect(deliveryDate.isAfter(eightDaysTime)).toBe(true);
-		});
-	});
-});
-
-describe('getTierThreeDeliveryDate', () => {
-	it('will always find a delivery date at least 15 days from today', () => {
-		const startDate = dayjs('2024-01-01');
-		const endDate = dayjs('2024-12-31');
-		const daysIn2024 = getDaysBetween(startDate, endDate);
-
-		daysIn2024.map((day) => {
-			const deliveryDate = dayjs(
-				getTierThreeDeliveryDate(day.toDate().getTime()),
-			);
-			const fifteenDaysTime = day.add(15, 'day');
-			expect(
-				deliveryDate.isSame(fifteenDaysTime) ||
-					deliveryDate.isAfter(fifteenDaysTime),
-			).toBe(true);
 		});
 	});
 });

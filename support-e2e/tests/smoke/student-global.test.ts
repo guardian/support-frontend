@@ -25,6 +25,8 @@ import { email, firstName, lastName } from '../utils/users';
 		country: 'us',
 		state: 'California',
 		stateLabel: 'State',
+		zipCode: '90210',
+		zipCodeLabel: 'ZIP code',
 		paymentMethod: 'Card',
 		product: 'SupporterPlus',
 		ratePlan: 'OneYearStudent',
@@ -111,7 +113,9 @@ import { email, firstName, lastName } from '../utils/users';
 				.getByLabel(testDetails.stateLabel)
 				.selectOption({ label: testDetails.state });
 		}
-
+		if (testDetails.zipCode !== undefined) {
+			await page.getByLabel(testDetails.zipCodeLabel).fill(testDetails.zipCode);
+		}
 		if (testDetails.paymentMethod === 'DirectDebit') {
 			await page.getByRole('radio', { name: 'Direct Debit' }).check();
 			await fillInDirectDebitDetails(page);

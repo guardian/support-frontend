@@ -7,14 +7,10 @@ import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
-import {
-	OrderSummaryStartDate,
-	OrderSummaryTsAndCs,
-} from 'components/orderSummary/orderSummaryTsAndCs';
-import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import { OrderSummaryStartDate } from 'components/orderSummary/orderSummaryStartDate';
+import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
-import { getFeatureFlags } from 'helpers/featureFlags';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	type ActiveProductKey,
@@ -25,16 +21,16 @@ import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { parameteriseUrl } from 'helpers/urls/routes';
+import { getPrintPlusDigitalBenefits } from 'pages/paper-subscription-landing/planData';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
+import { buildBackButtonPath } from '../checkout/helpers/backButton';
 import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
-	getPaperPlusDigitalBenefits,
-	getPremiumDigitalAllBenefits,
 } from '../checkout/helpers/benefitsChecklist';
 import { ukSpecificAdditionalBenefit } from '../student/components/StudentHeader';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
@@ -51,13 +47,15 @@ type CheckoutSummaryProps = {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	originalAmount: number;
-	promotion?: Promotion;
 	countryId: IsoCountry;
-	forcedCountry?: string;
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
+	backButtonOrigin: string;
+	backButtonPathOverride: string | null;
+	promotion?: Promotion;
+	forcedCountry?: string;
 	studentDiscount?: StudentDiscount;
 	nudgeSettings?: CheckoutNudgeSettings;
 };
@@ -68,13 +66,15 @@ export default function CheckoutSummary({
 	productKey,
 	ratePlanKey,
 	originalAmount,
-	promotion,
 	countryId,
-	forcedCountry,
 	abParticipations,
 	landingPageSettings,
 	weeklyDeliveryDate,
 	thresholdAmount,
+	backButtonOrigin,
+	backButtonPathOverride,
+	promotion,
+	forcedCountry,
 	studentDiscount,
 	nudgeSettings,
 }: CheckoutSummaryProps) {
@@ -83,7 +83,6 @@ export default function CheckoutSummary({
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
-	const { enablePremiumDigital } = getFeatureFlags();
 	const productDescription = getProductDescription(productKey, ratePlanKey);
 	const ratePlanDetail = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
@@ -100,16 +99,10 @@ export default function CheckoutSummary({
 			productCatalog.SupporterPlus?.ratePlans[ratePlanKey]?.pricing[
 				currencyKey
 			];
-
-		const { selectedAmountsVariant } = getAmountsTestVariant(
-			countryId,
-			countryGroupId,
-			appConfig.settings,
-		);
 		if (originalAmount < 1) {
 			isInvalidAmount = true;
 		}
-		if (!isContributionsOnlyCountry(selectedAmountsVariant)) {
+		if (!isContributionsOnlyCountry(countryId)) {
 			if (originalAmount >= (supporterPlusRatePlanPrice ?? 0)) {
 				isInvalidAmount = true;
 			}
@@ -120,14 +113,13 @@ export default function CheckoutSummary({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
-	const premiumDigitalBenefits =
-		productKey === 'DigitalSubscription' && enablePremiumDigital
-			? getPremiumDigitalAllBenefits(countryGroupId)
-			: undefined;
 	const benefitsCheckListData =
-		premiumDigitalBenefits ??
-		getPaperPlusDigitalBenefits(productKey, ratePlanKey) ??
-		getBenefitsChecklistFromLandingPageTool(productKey, landingPageSettings) ??
+		getPrintPlusDigitalBenefits(productKey, ratePlanKey) ??
+		getBenefitsChecklistFromLandingPageTool(
+			productKey,
+			landingPageSettings,
+			countryGroupId,
+		) ??
 		getBenefitsChecklistFromProductDescription(
 			productDescription,
 			countryGroupId,
@@ -157,11 +149,22 @@ export default function CheckoutSummary({
 				return undefined;
 		}
 	};
-	const backUrl = parameteriseUrl(
-		`/${supportRegionId}${productDescription.landingPagePath}`,
-		promotion?.promoCode,
-		getPaperFulfilmentOption(productKey),
+
+	const backButtonPath = buildBackButtonPath(
+		productDescription.landingPagePath,
+		backButtonPathOverride,
 	);
+
+	// We need to force the subdomain to support in case we're on the Observer
+	// subdomain which can't serve the subscribe/paper landing page. This is for
+	// Sunday paper subs.
+	const backUrl =
+		backButtonOrigin +
+		parameteriseUrl(
+			`/${supportRegionId}${backButtonPath}`,
+			promotion?.promoCode,
+			getPaperFulfilmentOption(productKey),
+		);
 
 	return (
 		<Box cssOverrides={shorterBoxMargin}>

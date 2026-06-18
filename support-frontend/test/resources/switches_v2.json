@@ -19,20 +19,12 @@
 				"description": "Stripe - Payment Request Button",
 				"state": "On"
 			},
-			"existingCard": {
-				"description": "Existing card",
-				"state": "On"
-			},
 			"stripeApplePay": {
 				"description": "Stripe - Apple Pay",
 				"state": "On"
 			},
 			"directDebit": {
 				"description": "Direct Debit",
-				"state": "On"
-			},
-			"sepa": {
-				"description": "SEPA",
 				"state": "On"
 			},
 			"payPal": {
@@ -45,10 +37,6 @@
 			},
 			"stripeExpressCheckout": {
 				"description": "Stripe - Express Checkout",
-				"state": "On"
-			},
-			"existingDirectDebit": {
-				"description": "Existing Direct Debit",
 				"state": "On"
 			}
 		}
@@ -116,23 +104,6 @@
 			},
 			"enableSoftOptInsForSingle": {
 				"description": "Turns on soft opt-ins for single contributors",
-				"state": "On"
-			}
-		}
-	},
-	"subscriptionsPaymentMethods": {
-		"description": "Payment methods - subscriptions",
-		"switches": {
-			"directDebit": {
-				"description": "Direct Debit",
-				"state": "On"
-			},
-			"creditCard": {
-				"description": "Credit Card",
-				"state": "On"
-			},
-			"paypal": {
-				"description": "Paypal",
 				"state": "On"
 			}
 		}

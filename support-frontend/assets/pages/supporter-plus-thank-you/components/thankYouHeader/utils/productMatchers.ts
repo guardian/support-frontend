@@ -29,6 +29,12 @@ export function isPrintProduct(productKey: ActiveProductKey): boolean {
 	return printProductsKeys.includes(productKey);
 }
 
+export function isContributionOnlyProduct(
+	productKey: ActiveProductKey,
+): boolean {
+	return productKey === 'Contribution';
+}
+
 export function isContributionProduct(productKey: ActiveProductKey): boolean {
 	return contributionProductKeys.includes(productKey);
 }
@@ -47,10 +53,9 @@ export function isGuardianWeeklyGiftProduct(
 	);
 }
 
-export function isGuardianWeeklyOrTierThreeProduct(
+export function isGuardianWeeklyDigitalProduct(
 	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
 ): boolean {
-	return (
-		isGuardianWeeklyProduct(productKey) || ['TierThree'].includes(productKey)
-	);
+	return isGuardianWeeklyProduct(productKey) && ratePlanKey.endsWith('Plus');
 }

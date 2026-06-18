@@ -1,0 +1,150 @@
+{
+  "state": {
+    "productSpecificState": {
+      "productType": "Contribution",
+      "product": {
+        "amount": 5,
+        "currency": "USD",
+        "billingPeriod": "Monthly",
+        "productType": "Contribution"
+      },
+      "productInformation": {
+        "amount": 5,
+        "product": "Contribution",
+        "ratePlan": "Monthly"
+      },
+      "paymentMethod": {
+        "TokenId": "pm_12345",
+        "SecondTokenId": "cus_12345",
+        "CreditCardNumber": "1574",
+        "CreditCardExpirationMonth": 12,
+        "CreditCardExpirationYear": 2029,
+        "CreditCardType": "Discover",
+        "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+        "Type": "CreditCardReferenceTransaction",
+        "StripePaymentType": "StripeCheckout"
+      },
+      "salesForceContact": {
+        "Id": "003Qv0000000000",
+        "AccountId": "001Qv00000000000"
+      },
+      "similarProductsConsent": false
+    },
+    "requestId": "95f7e80e-e132-6e6e-0000-0000000201e4",
+    "user": {
+      "id": "12345",
+      "primaryEmailAddress": "test.user@thegulocal.com",
+      "title": null,
+      "firstName": "Test",
+      "lastName": "User",
+      "billingAddress": {
+        "lineOne": null,
+        "lineTwo": null,
+        "city": null,
+        "state": "IL",
+        "postCode": "60453",
+        "country": "US"
+      },
+      "deliveryAddress": null,
+      "telephoneNumber": null,
+      "isTestUser": false,
+      "deliveryInstructions": null
+    },
+    "giftRecipient": null,
+    "product": {
+      "amount": 5,
+      "currency": "USD",
+      "billingPeriod": "Monthly",
+      "productType": "Contribution"
+    },
+    "productInformation": {
+      "amount": 5,
+      "product": "Contribution",
+      "ratePlan": "Monthly"
+    },
+    "analyticsInfo": {
+      "isGiftPurchase": false,
+      "paymentProvider": "Stripe"
+    },
+    "firstDeliveryDate": null,
+    "appliedPromotion": null,
+    "csrUsername": null,
+    "salesforceCaseId": null,
+    "acquisitionData": {
+      "ophanIds": {
+        "pageviewId": "mkbfrstsvwmazy8ppq1u",
+        "browserId": "idFromPV_gAvIuCfcjG5Bp4IMgJKXvQ"
+      },
+      "referrerAcquisitionData": {
+        "campaignCode": null,
+        "referrerPageviewId": "mkbfpj3pxt5rbx6iv84c",
+        "referrerUrl": "https://www.theguardian.com/us-news/live/2026/jan/12/donald-trump-ice-minnesota-fed-jerome-powell-iran-cuba-venezuela-greenland-us-politics-live-news-updates",
+        "componentId": "gdnwb_copts_memco_2025-07-03_NUDGE_LIVEBLOG_EPIC_ABTest__US_V1_NUDGE",
+        "componentType": "ACQUISITIONS_EPIC",
+        "source": "GUARDIAN_WEB",
+        "abTests": [
+          {
+            "name": "2025-07-03_NUDGE_LIVEBLOG_EPIC_ABTest__US",
+            "variant": "V1_NUDGE"
+          }
+        ],
+        "queryParameters": [
+          {
+            "name": "product",
+            "value": "Contribution"
+          },
+          {
+            "name": "ratePlan",
+            "value": "Monthly"
+          }
+        ],
+        "hostname": "support.theguardian.com",
+        "gaClientId": null,
+        "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+        "ipAddress": "10.248.135.168",
+        "labels": [
+          "generic-checkout"
+        ]
+      },
+      "supportAbTests": [
+        {
+          "name": "abandonedBasket",
+          "variant": "variant"
+        },
+        {
+          "name": "landingPageMparticlePastContributor",
+          "variant": "control"
+        },
+        {
+          "name": "2025_12_18_HIGHER_SINGLES__US",
+          "variant": "CONTROL"
+        },
+        {
+          "name": "LP_DEFAULT_US",
+          "variant": "CONTROL"
+        }
+      ]
+    },
+    "similarProductsConsent": false,
+    "paymentMethod": {
+      "TokenId": "pm_0SoovEItVxyc3Q6nC8cIt7fL",
+      "SecondTokenId": "cus_TmNgYj5WiKXbKM",
+      "CreditCardNumber": "1574",
+      "CreditCardExpirationMonth": 12,
+      "CreditCardExpirationYear": 2029,
+      "CreditCardType": "Discover",
+      "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+      "Type": "CreditCardReferenceTransaction",
+      "StripePaymentType": "StripeCheckout"
+    }
+  },
+  "error": {
+    "Error": "RetryNone",
+    "Cause": "{\"errorType\":\"RetryNone\",\"errorMessage\":\"Transaction declined.402 - [card_error/card_declined/do_not_honor] Your card was declined.\",\"trace\":[\"RetryNone: Transaction declined.402 - [card_error/card_declined/do_not_honor] Your card was declined.\",\"    at retryNone (/var/task/createZuoraSubscriptionTSLambda.js:101364:30)\",\"    at mapZuoraError (/var/task/createZuoraSubscriptionTSLambda.js:101397:12)\",\"    at asRetryError (/var/task/createZuoraSubscriptionTSLambda.js:101417:12)\",\"    at Runtime.handler (/var/task/createZuoraSubscriptionTSLambda.js:102245:11)\",\"    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\"]}"
+  },
+  "requestInfo": {
+    "testUser": false,
+    "failed": false,
+    "messages": []
+  }
+}

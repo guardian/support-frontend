@@ -1,0 +1,103 @@
+{
+  "state": {
+    "requestId": "06b397b0-e9f6-d452-0000-0000000007b1",
+    "user": {
+      "id": "200388244",
+      "primaryEmailAddress": "test.user@thegulocal.com",
+      "title": null,
+      "firstName": "Test",
+      "lastName": "User",
+      "billingAddress": {
+        "lineOne": null,
+        "lineTwo": null,
+        "city": null,
+        "state": null,
+        "postCode": null,
+        "country": "DE"
+      },
+      "deliveryAddress": null,
+      "telephoneNumber": null,
+      "isTestUser": false,
+      "deliveryInstructions": null
+    },
+    "giftRecipient": null,
+    "product": {
+      "amount": 12,
+      "currency": "EUR",
+      "billingPeriod": "Monthly",
+      "productType": "SupporterPlus"
+    },
+    "productInformation": {
+      "product": "SupporterPlus",
+      "ratePlan": "Monthly",
+      "amount": 12,
+      "deliveryAgent": null,
+      "deliveryInstructions": null,
+      "deliveryContact": null,
+      "firstDeliveryDate": null
+    },
+    "analyticsInfo": {
+      "isGiftPurchase": false,
+      "paymentProvider": "Stripe"
+    },
+    "paymentFields": {
+      "paymentMethod": "pm_0SsMEzItVxyc3Q6ncq1dwFJE",
+      "stripePaymentType": "StripeCheckout",
+      "stripePublicKey": "pk_test_Qm3CGRdrV4WfGYCpm0sftR0f",
+      "paymentType": "Stripe"
+    },
+    "firstDeliveryDate": null,
+    "appliedPromotion": null,
+    "csrUsername": null,
+    "salesforceCaseId": null,
+    "acquisitionData": {
+      "ophanIds": {
+        "pageviewId": "mkpdqgv8kmugrpd15y7x",
+        "browserId": null
+      },
+      "referrerAcquisitionData": {
+        "campaignCode": null,
+        "referrerPageviewId": "",
+        "referrerUrl": null,
+        "componentId": null,
+        "componentType": null,
+        "source": null,
+        "abTests": null,
+        "queryParameters": [],
+        "hostname": "support.code.dev-theguardian.com",
+        "gaClientId": null,
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "ipAddress": "10.248.135.81",
+        "labels": [
+          "generic-checkout"
+        ]
+      },
+      "supportAbTests": [
+        {
+          "name": "abandonedBasket",
+          "variant": "control"
+        },
+        {
+          "name": "landingPageMparticlePastContributor",
+          "variant": "control"
+        },
+        {
+          "name": "LP_TICKER",
+          "variant": "CONTROL"
+        }
+      ]
+    },
+    "ipAddress": "94.132.197.112",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+    "similarProductsConsent": false
+  },
+  "error": {
+    "Error": "RetryNone",
+    "Cause": "{\"errorType\":\"RetryNone\",\"errorMessage\":\"The payment method you provided has already been attached to a customer.\",\"trace\":[\"RetryNone: The payment method you provided has already been attached to a customer.\",\" at retryNone (/var/task/createPaymentMethodLambda.js:82504:30)\",\" at mapStripeError (/var/task/createPaymentMethodLambda.js:82576:14)\",\" at asRetryError (/var/task/createPaymentMethodLambda.js:82549:12)\",\" at Runtime.handler (/var/task/createPaymentMethodLambda.js:83434:11)\",\" at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\"]}"
+  },
+  "requestInfo": {
+    "testUser": false,
+    "failed": false,
+    "messages": []
+  }
+}

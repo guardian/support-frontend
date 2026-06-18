@@ -1,4 +1,3 @@
-import { isoCountries } from '@modules/internationalisation/country';
 import { isoCurrencySchema } from '@modules/internationalisation/schemas';
 import {
 	billingPeriodSchema,
@@ -9,6 +8,8 @@ import { optional, z } from 'zod';
 import type { LegacyProductType } from 'helpers/legacyTypeConversions';
 import { legacyProductTypes } from 'helpers/legacyTypeConversions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { ActiveProductKey } from '../productCatalog';
+import { isProductKey } from '../productCatalog';
 
 /**
  * This file is used to validate data that gets injected from
@@ -16,6 +17,19 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
  *
  * It will only error in NODE_ENV === 'development'.
  */
+
+const featureSwitchesSchema = z.object({
+	enableQuantumMetric: z.optional(z.enum(['On', 'Off'])),
+	usStripeAccountForSingle: z.optional(z.enum(['On', 'Off'])),
+	authenticateWithOkta: z.optional(z.enum(['On', 'Off'])),
+	enableCampaignCountdown: z.optional(z.enum(['On', 'Off'])),
+	enableThankYouOnboarding: z.optional(z.enum(['On', 'Off'])),
+	enableCheckoutNudge: z.optional(z.enum(['On', 'Off'])),
+	enableMParticle: z.optional(z.enum(['On', 'Off'])),
+});
+
+export type FeatureSwitches = z.infer<typeof featureSwitchesSchema>;
+
 const PaymentConfigSchema = z.object({
 	geoip: z.optional(
 		z.object({
@@ -40,6 +54,10 @@ const PaymentConfigSchema = z.object({
 		REGULAR: z.object({ default: z.string(), test: z.string() }),
 	}),
 	payPalEnvironment: z.object({
+		default: z.string(),
+		test: z.string(),
+	}),
+	payPalClientId: z.object({
 		default: z.string(),
 		test: z.string(),
 	}),
@@ -76,74 +94,17 @@ const PaymentConfigSchema = z.object({
 				z.string(),
 				z.optional(z.enum(['On', 'Off'])),
 			),
-			subscriptionsPaymentMethods: z.record(
-				z.string(),
-				z.optional(z.enum(['On', 'Off'])),
-			),
 			subscriptionsSwitches: z.record(
 				z.string(),
 				z.optional(z.enum(['On', 'Off'])),
 			),
-			featureSwitches: z.record(z.string(), z.optional(z.enum(['On', 'Off']))),
+			featureSwitches: featureSwitchesSchema,
 			campaignSwitches: z.record(z.string(), z.optional(z.enum(['On', 'Off']))),
 			recaptchaSwitches: z.record(
 				z.string(),
 				z.optional(z.enum(['On', 'Off'])),
 			),
 		}),
-		amounts: z.array(
-			z.object({
-				testName: z.string(),
-				liveTestName: z.optional(z.string()),
-				isLive: z.boolean(),
-				order: z.number(),
-				seed: z.number(),
-				targeting: z.union([
-					z.object({
-						targetingType: z.literal('Region'),
-						region: z.enum([
-							'GBPCountries',
-							'UnitedStates',
-							'AUDCountries',
-							'EURCountries',
-							'NZDCountries',
-							'Canada',
-							'International',
-						]),
-					}),
-					z.object({
-						targetingType: z.literal('Country'),
-						countries: z.array(z.enum(isoCountries)),
-					}),
-				]),
-				variants: z.array(
-					z.object({
-						amountsCardData: z.object({
-							ANNUAL: z.object({
-								amounts: z.array(z.number()),
-								defaultAmount: z.number(),
-								hideChooseYourAmount: z.boolean(),
-							}),
-							MONTHLY: z.object({
-								amounts: z.array(z.number()),
-								defaultAmount: z.number(),
-								hideChooseYourAmount: z.boolean(),
-							}),
-							ONE_OFF: z.object({
-								amounts: z.array(z.number()),
-								defaultAmount: z.number(),
-								hideChooseYourAmount: z.boolean(),
-							}),
-						}),
-						defaultContributionType: z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
-						displayContributionType: z.array(
-							z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
-						),
-						variantName: z.string(),
-					}),
-				),
-			}),
-		),
 		contributionTypes: z.object({
 			AUDCountries: z.array(
 				z.object({
@@ -189,6 +150,9 @@ const PaymentConfigSchema = z.object({
 			),
 		}),
 		metricUrl: z.string(),
+		productsWithThankYouOnboarding: z.array(
+			z.string().refine<ActiveProductKey>(isProductKey),
+		),
 	}),
 	isObserverSubdomain: z.boolean(),
 });

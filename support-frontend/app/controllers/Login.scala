@@ -36,10 +36,6 @@ class Login(
     processOauth2Callback()
   }
 
-  def logout: Action[AnyContent] = Action { implicit request =>
-    Redirect("/").withNewSession
-  }
-
   override val failureRedirectTarget: Call = routes.Login.login()
 
   override val defaultRedirectTarget: Call =

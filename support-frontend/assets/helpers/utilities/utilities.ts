@@ -1,5 +1,8 @@
+import type { CurrencyInfo } from '@modules/internationalisation/currency';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import DomPurify from 'dompurify';
 import snarkdown from 'snarkdown';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
 
 // A series of general purpose helper functions.
 // ----- Functions ----- //
@@ -27,10 +30,6 @@ function classNameWithModifiers(
 	);
 }
 
-function hiddenIf(shouldHide: boolean, className: string): string {
-	return shouldHide ? classNameWithModifiers(className, ['hidden']) : className;
-}
-
 // Deserialises a JSON object from a string.
 function deserialiseJsonObject(
 	serialised: string,
@@ -51,8 +50,36 @@ function deserialiseJsonObject(
 function getSanitisedHtml(markdownString: string): string {
 	// ensure we don't accidentally inject dangerous html into the page
 	return DomPurify.sanitize(snarkdown(markdownString), {
-		ALLOWED_TAGS: ['em', 'strong', 'ul', 'li', 'a', 'p'],
+		ALLOWED_TAGS: ['em', 'strong', 'ul', 'li', 'a', 'p', 's'],
 	});
+}
+
+// Automate days remaining copy where campaign has a countdown in the page
+// relies on the countdown updating state in the 3 tier landing page component
+const DEADLINE_PLACEHOLDER_TEMPLATE = '%%CAMPAIGN_DEADLINE%%';
+function replaceDatePlaceholder(copy: string, deadline?: string): string {
+	if (!copy.includes(DEADLINE_PLACEHOLDER_TEMPLATE)) {
+		return copy;
+	}
+
+	if (!deadline) {
+		return copy.replaceAll(DEADLINE_PLACEHOLDER_TEMPLATE, '');
+	}
+
+	const daysLeft = parseInt(deadline, 10);
+
+	if (isNaN(daysLeft)) {
+		return copy.replaceAll(DEADLINE_PLACEHOLDER_TEMPLATE, '');
+	}
+
+	const replacement =
+		daysLeft === 0
+			? 'Final day'
+			: daysLeft === 1
+			? '1 day left'
+			: `${daysLeft} days left`;
+
+	return copy.replaceAll(DEADLINE_PLACEHOLDER_TEMPLATE, replacement);
 }
 
 // Parses a comma-separated string of amounts and returns an array of valid, unique numbers.
@@ -65,13 +92,43 @@ function parseCustomAmounts(customAmountsParam: string): number[] {
 		.filter((amount, index, array) => array.indexOf(amount) === index);
 }
 
+function parseBillingPeriodCopy(
+	copy: string,
+	currency: CurrencyInfo,
+	price: number,
+	billingPeriod: BillingPeriod,
+): string {
+	const weeklyPrice = calculateWeeklyPrice(price, billingPeriod);
+	const formattedWeeklyPrice = simpleFormatAmount(currency, weeklyPrice);
+	return copy
+		.replaceAll('%%PRICE_PRODUCT_WEEKLY%%', formattedWeeklyPrice)
+		.trim();
+}
+
+function calculateWeeklyPrice(
+	price: number,
+	billingPeriod: BillingPeriod,
+): number {
+	const pricePerDay =
+		billingPeriod === BillingPeriod.Annual
+			? price / 365
+			: billingPeriod === BillingPeriod.Quarterly
+			? (price * 4) / 365
+			: billingPeriod === BillingPeriod.Monthly
+			? (price * 12) / 365
+			: price;
+	return pricePerDay * 7;
+}
+
 // ----- Exports ----- //
 export {
 	ascending,
 	getSanitisedHtml,
 	roundToDecimalPlaces,
 	classNameWithModifiers,
-	hiddenIf,
 	deserialiseJsonObject,
 	parseCustomAmounts,
+	parseBillingPeriodCopy,
+	replaceDatePlaceholder,
+	calculateWeeklyPrice,
 };

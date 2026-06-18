@@ -20,6 +20,8 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val getAddressIOConfig = GetAddressIOConfig.fromConfig(config)
 
+  lazy val idealPostcodesConfig = IdealPostcodesConfig.fromConfig(config)
+
   lazy val paperRoundConfigProvider = new PaperRoundConfigProvider(config, stage)
 
   lazy val guardianDomain = GuardianDomain(config.getString("guardianDomain"))
@@ -37,6 +39,8 @@ class Configuration(config: TypesafeConfig) {
   lazy val goCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
 
   lazy val regularPayPalConfigProvider = new PayPalConfigProvider(config, stage)
+
+  lazy val payPalCompletePaymentsConfigProvider = new PayPalCompletePaymentsConfigProvider(config, stage)
 
   lazy val regularStripeConfigProvider = new StripePublicConfigProvider(config, stage)
 
@@ -57,8 +61,6 @@ class Configuration(config: TypesafeConfig) {
   lazy val recaptchaConfigProvider = new RecaptchaConfigProvider(config, stage)
 
   lazy val mparticleConfigProvider = new MparticleConfigProvider(config, stage)
-
-  lazy val capiKey = config.getString("capi-key")
 
   lazy val zuoraConfigProvider = new ZuoraConfigProvider(config, stage)
 }

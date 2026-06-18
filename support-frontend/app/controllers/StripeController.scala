@@ -104,11 +104,4 @@ class StripeController(
         response => Ok(response.asJson),
       )
   }
-
-  // This endpoint is deprecated
-  def createSetupIntentWithAuth: Action[AnyContent] = Action.async { implicit request =>
-    val cloudwatchEvent = AwsCloudWatchMetricSetup.createSetupIntentRequest(stage, "Deprecated-AuthorisedEndpoint");
-    AwsCloudWatchMetricPut(client)(cloudwatchEvent)
-    Future.successful(Gone)
-  }
 }

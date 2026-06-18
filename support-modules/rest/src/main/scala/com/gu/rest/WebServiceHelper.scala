@@ -45,6 +45,7 @@ trait WebServiceHelper[Error <: Throwable] extends SafeLogging {
   val wsUrl: String
   val httpClient: FutureHttpClient
   val verboseLogging: Boolean = true
+  val requestLogging: Boolean = true
 
   private type ParamMap = Map[String, String]
 
@@ -85,6 +86,7 @@ trait WebServiceHelper[Error <: Throwable] extends SafeLogging {
   }
 
   private def maybeLog(message: String): Unit = if (verboseLogging) logger.info(message) else ()
+  private def logRequest(message: String): Unit = if (requestLogging) logger.info(message) else ()
 
   protected def getResponse(rb: Request.Builder): Future[Response] =
     for {
@@ -154,7 +156,7 @@ trait WebServiceHelper[Error <: Throwable] extends SafeLogging {
       params: ParamMap = empty,
   )(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val json = data.printWith(Printer.noSpaces.copy(dropNullValues = true))
-    logger.info(s"Issuing request POST $endpoint $json")
+    logRequest(s"Issuing request POST $endpoint $json")
     val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
     request[A](buildRequest(endpoint, headers, params).post(body))
   }
@@ -166,7 +168,7 @@ trait WebServiceHelper[Error <: Throwable] extends SafeLogging {
       params: ParamMap = empty,
   )(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val json = data.printWith(Printer.noSpaces.copy(dropNullValues = true))
-    logger.info(s"Issuing request PUT $endpoint $json")
+    logRequest(s"Issuing request PUT $endpoint $json")
     val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
     request[A](buildRequest(endpoint, headers, params).put(body))
   }

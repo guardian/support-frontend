@@ -1,3 +1,5 @@
+import type { ProductOptions } from '@modules/product/productOptions';
+
 // ----- Types ----- //
 type Domain = 'thegulocal.com' | 'code.dev-theguardian.com' | 'theguardian.com';
 type Env = 'DEV' | 'CODE' | 'PROD';
@@ -42,21 +44,37 @@ const getAllQueryParamsWithExclusions = (
 function addQueryParamsToURL(
 	urlString: string,
 	params: Record<string, string | null | undefined>,
+	featureFlag?: string,
 ): string {
 	const [baseUrl, ...oldParams] = urlString.split('?');
 	const searchParams = new URLSearchParams(oldParams.join('&'));
 	Object.keys(params).forEach(
 		(key) => params[key] && searchParams.set(key, params[key]),
 	);
-	return `${baseUrl}?${searchParams.toString()}`;
+	const allParams = searchParams.toString();
+	const featureFlagParam = featureFlag
+		? `${allParams.length > 0 ? '&' : ''}${featureFlag}`
+		: '';
+	const url = `${baseUrl}?${allParams}${featureFlagParam}`;
+	return url.replace(/\?$/, ''); // removes ? when no params
 }
 
+function getPaperOrigin(productOptions: ProductOptions): string {
+	return productOptions === 'Sunday'
+		? getOriginAndForceSubdomain('observer')
+		: getOrigin();
+}
 function getOrigin(): string {
 	const loc = window.location;
 	return (
 		window.location.origin ||
 		`${loc.protocol}//${loc.hostname}${loc.port ? `:${loc.port}` : ''}`
 	);
+}
+
+function getOriginAndForceSubdomain(subdomain: string): string {
+	const origin = getOrigin();
+	return origin.replace(/^https:\/\/[\w-]*?\./, `https://${subdomain}.`);
 }
 
 // Retrieves the domain for the given env, e.g. guardian.com/gulocal.com.
@@ -89,7 +107,9 @@ export {
 	getQueryParameter,
 	getAllQueryParams,
 	getAllQueryParamsWithExclusions,
+	getPaperOrigin,
 	getOrigin,
+	getOriginAndForceSubdomain,
 	getBaseDomain,
 	addQueryParamsToURL,
 	isProd,

@@ -1,5 +1,4 @@
 import LibraryVersions.{awsClientVersion2, circeVersion}
-import com.gu.riffraff.artifact.RiffRaffArtifact.autoImport.riffRaffManifestProjectName
 import sbt.Keys.libraryDependencies
 
 version := "0.1-SNAPSHOT"
@@ -11,24 +10,14 @@ scalacOptions ++= Seq(
 libraryDependencies ++= Seq(
   "software.amazon.awssdk" % "dynamodb" % awsClientVersion2,
   "software.amazon.awssdk" % "ssm" % awsClientVersion2,
-  "com.amazonaws" % "aws-lambda-java-core" % "1.2.3",
-  "com.amazonaws" % "aws-lambda-java-events" % "3.11.5",
+  "com.amazonaws" % "aws-lambda-java-core" % "1.4.0",
+  "com.amazonaws" % "aws-lambda-java-events" % "3.11.6",
   "com.stripe" % "stripe-java" % "20.136.0",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
 )
 
-riffRaffPackageType := assembly.value
-riffRaffManifestProjectName := s"support:stripe-patrons-data"
-riffRaffUploadArtifactBucket := Option("riffraff-artifact")
-riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffArtifactResources += (
-  file("cdk/cdk.out/StripePatronsData-PROD.template.json"), "cfn/StripePatronsData-PROD.template.json"
-)
-riffRaffArtifactResources += (
-  file("cdk/cdk.out/StripePatronsData-CODE.template.json"), "cfn/StripePatronsData-CODE.template.json"
-)
 // We use the buildNumber to set the lambda fileName, because lambda versioning requires a new fileName each time
 val buildNumber = sys.env.getOrElse("GITHUB_RUN_NUMBER", "DEV")
 assemblyJarName := s"${name.value}-$buildNumber.jar"

@@ -8,30 +8,30 @@ import {
 	longHeaderTitleText,
 	weeklyGiftLineBreak,
 } from './headingStyles';
-import { isGuardianWeeklyGiftProduct } from './utils/productMatchers';
-import YellowHighlightText from './YellowHighlightText';
+import HighlightText from './HighlightText';
+import {
+	isGuardianWeeklyDigitalProduct,
+	isGuardianWeeklyGiftProduct,
+	isGuardianWeeklyProduct,
+} from './utils/productMatchers';
+
+export type GuardianPrintHeadingProps = {
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
+};
 
 export default function GuardianPrintHeading({
 	productKey,
 	ratePlanKey,
-}: {
-	productKey: ActiveProductKey;
-	ratePlanKey: ActiveRatePlanKey;
-}) {
+}: GuardianPrintHeadingProps) {
 	const thankYouText = 'Thank you for supporting our journalism!';
-	const guardianWeekly = ['Monthly', 'Annual', 'Quarterly'].includes(
+	const isWeeklyDigital = isGuardianWeeklyDigitalProduct(
+		productKey,
 		ratePlanKey,
 	);
-	if (guardianWeekly) {
-		return (
-			<h1 css={headerTitleText}>
-				{thankYouText}
-				<br />
-				You have now subscribed to{' '}
-				<YellowHighlightText>the Guardian Weekly</YellowHighlightText>
-			</h1>
-		);
-	}
+	const nowSubscribed = isWeeklyDigital
+		? 'You are subscribed to'
+		: 'You have now subscribed to';
 
 	if (isGuardianWeeklyGiftProduct(productKey, ratePlanKey)) {
 		return (
@@ -40,17 +40,24 @@ export default function GuardianPrintHeading({
 				<br />
 				<div css={weeklyGiftLineBreak}>
 					<span>You have now purchased a </span>
-					<YellowHighlightText>
-						Guardian Weekly gift subscription
-					</YellowHighlightText>
+					<HighlightText>Guardian Weekly gift subscription</HighlightText>
 				</div>
+			</h1>
+		);
+	}
+	if (isGuardianWeeklyProduct(productKey)) {
+		return (
+			<h1 css={headerTitleText}>
+				{thankYouText}
+				<br />
+				{nowSubscribed} <HighlightText>the Guardian Weekly</HighlightText>
 			</h1>
 		);
 	}
 
 	const maybeRatePlanDetails =
 		productCatalogDescription[productKey].ratePlans[ratePlanKey];
-	const maybeRatePlanDisplayName = maybeRatePlanDetails?.label;
+	const maybeRatePlanDisplayName = maybeRatePlanDetails?.displayName;
 	// This will be something like "Six day package"
 	const ratePlanDisplayName =
 		maybeRatePlanDisplayName ?? `${ratePlanKey} package`;
@@ -60,7 +67,7 @@ export default function GuardianPrintHeading({
 			{thankYouText}
 			<br />
 			You have now subscribed to the{' '}
-			<YellowHighlightText>{ratePlanDisplayName}</YellowHighlightText>
+			<HighlightText>{ratePlanDisplayName}</HighlightText>
 		</h1>
 	);
 }

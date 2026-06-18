@@ -14,6 +14,8 @@ sealed trait PaymentFields {
 
 case class PayPalPaymentFields(baid: String) extends PaymentFields
 
+case class PayPalCompletePaymentsPaymentFields(paymentToken: String, email: String) extends PaymentFields
+
 case class StripeHostedPaymentFields(
     checkoutSessionId: Option[String],
     stripePublicKey: StripePublicKey,
@@ -108,34 +110,27 @@ case class DirectDebitPaymentFields(
     accountNumber: String,
     recaptchaToken: String,
 ) extends PaymentFields
-
-case class SepaPaymentFields(
-    accountHolderName: String,
-    iban: String,
-    country: Option[String],
-    streetName: Option[String],
-) extends PaymentFields
-
 object PaymentFields {
   val discriminatedType = new DiscriminatedType[PaymentFields]("paymentType")
 
   // Payment fields are input from support-frontend
   implicit val payPalPaymentFieldsCodec: discriminatedType.VariantCodec[PayPalPaymentFields] =
     discriminatedType.variant[PayPalPaymentFields]("PayPal")
+  implicit val payPalCompletePaymentsPaymentFieldsCodec
+      : discriminatedType.VariantCodec[PayPalCompletePaymentsPaymentFields] =
+    discriminatedType.variant[PayPalCompletePaymentsPaymentFields]("PayPalCompletePayments")
   implicit val stripePaymentMethodPaymentFieldsCodec: discriminatedType.VariantCodec[StripePaymentFields] =
     discriminatedType.variant[StripePaymentFields]("Stripe")
   implicit val stripeHostedPaymentFieldsCodec: discriminatedType.VariantCodec[StripeHostedPaymentFields] =
     discriminatedType.variant[StripeHostedPaymentFields]("StripeHostedCheckout")
   implicit val directDebitPaymentFieldsCodec: discriminatedType.VariantCodec[DirectDebitPaymentFields] =
     discriminatedType.variant[DirectDebitPaymentFields]("DirectDebit")
-  implicit val sepapaymentFieldsCodec: discriminatedType.VariantCodec[SepaPaymentFields] =
-    discriminatedType.variant[SepaPaymentFields]("Sepa")
   implicit val paymentFieldsCodec: Codec[PaymentFields] = discriminatedType.codec(
     List(
       payPalPaymentFieldsCodec,
+      payPalCompletePaymentsPaymentFieldsCodec,
       stripePaymentMethodPaymentFieldsCodec,
       directDebitPaymentFieldsCodec,
-      sepapaymentFieldsCodec,
       stripeHostedPaymentFieldsCodec,
     ),
   )

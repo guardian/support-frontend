@@ -1,33 +1,28 @@
-// ----- Imports ----- //
+import { css } from '@emotion/react';
 import type { ReactNode } from 'react';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
-import './rows.scss';
+import { gu_v_spacing } from 'stylesheets/emotion/layout';
 
-// ----- Types ----- //
-type PropTypes = {
-	gap: 'small' | 'normal' | 'large';
-	children: ReactNode;
-	className: string | null | undefined;
-};
-
-// ----- Component ----- //
-function Rows({ children, className, gap, ...props }: PropTypes): JSX.Element {
-	return (
-		<div
-			className={[
-				className,
-				classNameWithModifiers('component-base-rows', [gap]),
-			].join(' ')}
-			{...props}
-		>
-			{children}
-		</div>
-	);
+function marginTop(multiplier: number) {
+	return css`
+		> * + * {
+			margin-top: ${gu_v_spacing * multiplier}px;
+		}
+	`;
 }
 
-Rows.defaultProps = {
-	gap: 'normal',
-	className: null,
-}; // ----- Exports ----- //
+type Gap = 'normal' | 'large';
+const gapSizing: Record<Gap, number> = {
+	normal: 1,
+	large: 2,
+};
 
-export default Rows;
+type RowsProps = {
+	gap?: Gap;
+	children: ReactNode;
+};
+export default function Rows({
+	gap = 'normal',
+	children,
+}: RowsProps): JSX.Element {
+	return <div css={marginTop(gapSizing[gap])}>{children}</div>;
+}

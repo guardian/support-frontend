@@ -5,8 +5,6 @@ import {
 	nonEmptyString,
 	notLongerThan,
 	notNull,
-	requiredDeliveryAgentChosen,
-	validate,
 	zuoraCompatibleString,
 } from '../validation';
 
@@ -70,65 +68,6 @@ describe('validation', () => {
 		});
 	});
 
-	describe('requiredDeliveryAgentChosen', () => {
-		it('should return true if the fulfilment option is not HomeDelivery', () => {
-			expect(
-				requiredDeliveryAgentChosen('Collection', { isLoading: false }),
-			).toBe(true);
-		});
-
-		it('should return true if the fulfilment option is HomeDelivery and no agents are available', () => {
-			expect(
-				requiredDeliveryAgentChosen('HomeDelivery', { isLoading: false }),
-			).toBe(true);
-		});
-
-		it('should return true if the fulfilment option is HomeDelivery and agents are available and an agent is chosen', () => {
-			expect(
-				requiredDeliveryAgentChosen('HomeDelivery', {
-					isLoading: false,
-					response: {
-						type: 'Covered',
-						agents: [
-							{
-								agentId: 1,
-								agentName: 'Delivery Company',
-								deliveryMethod: 'Car',
-								nbrDeliveryDays: 7,
-								postcode: '',
-								refGroupId: 1,
-								summary: '',
-							},
-						],
-					},
-					chosenAgent: 1,
-				}),
-			).toBe(true);
-		});
-
-		it('should return false if the fulfilment option is HomeDelivery and agents are available but no agent is chosen', () => {
-			expect(
-				requiredDeliveryAgentChosen('HomeDelivery', {
-					isLoading: false,
-					response: {
-						type: 'Covered',
-						agents: [
-							{
-								agentId: 1,
-								agentName: 'Delivery Company',
-								deliveryMethod: 'Car',
-								nbrDeliveryDays: 7,
-								postcode: '',
-								refGroupId: 1,
-								summary: '',
-							},
-						],
-					},
-				}),
-			).toBe(false);
-		});
-	});
-
 	describe('firstError', () => {
 		const someErrors = [
 			{
@@ -164,26 +103,6 @@ describe('validation', () => {
 				field: 'foo',
 				message: 'bar',
 			});
-		});
-	});
-
-	describe('validate', () => {
-		it('should return a list of validation errors', () => {
-			const rules = [
-				{
-					rule: false,
-					error: 'foo',
-				},
-				{
-					rule: true,
-					error: 'bar',
-				},
-				{
-					rule: false,
-					error: 'baz',
-				},
-			];
-			expect(validate(rules)).toEqual(['foo', 'baz']);
 		});
 	});
 });

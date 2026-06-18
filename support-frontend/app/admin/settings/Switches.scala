@@ -2,6 +2,7 @@ package admin.settings
 
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
+import com.gu.support.workers.SupporterPlus
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.optics.JsonPath.root
 import io.circe.{Decoder, Encoder, Json}
@@ -26,6 +27,8 @@ case class FeatureSwitches(
     enableCampaignCountdown: Option[SwitchState],
     enableThankYouOnboarding: Option[SwitchState],
     enableCheckoutNudge: Option[SwitchState],
+    enableMParticle: Option[SwitchState],
+    enableTooledStudentLandingPage: Option[SwitchState],
 )
 
 object FeatureSwitches {
@@ -44,6 +47,7 @@ object CampaignSwitches {
 case class SubscriptionsSwitches(
     useDotcomContactPage: Option[SwitchState],
     checkoutPostcodeLookup: Option[SwitchState],
+    useIdealPostcodes: Option[SwitchState],
 )
 
 object SubscriptionsSwitches {
@@ -78,7 +82,6 @@ case class RecurringPaymentMethodSwitches(
     stripeExpressCheckout: Option[SwitchState],
     payPal: Option[SwitchState],
     directDebit: Option[SwitchState],
-    sepa: Option[SwitchState],
     stripeHostedCheckout: Option[SwitchState],
 )
 
@@ -86,24 +89,9 @@ object RecurringPaymentMethodSwitches {
   implicit val recurringPaymentMethodSwitchesCodec: Codec[RecurringPaymentMethodSwitches] = deriveCodec
 }
 
-// TODO: these should be consolidated with the above RecurringPaymentMethodSwitches.
-// Currently those are used on the client while these are used on the server, which means both switches
-// need to be enabled for a payment method to be used.
-case class SubscriptionsPaymentMethodSwitches(
-    directDebit: Option[SwitchState],
-    creditCard: Option[SwitchState],
-    paypal: Option[SwitchState],
-    stripeHostedCheckout: Option[SwitchState],
-)
-
-object SubscriptionsPaymentMethodSwitches {
-  implicit val subscriptionsPaymentMethodSwitchesCodec: Codec[SubscriptionsPaymentMethodSwitches] = deriveCodec
-}
-
 case class Switches(
     oneOffPaymentMethods: OneOffPaymentMethodSwitches,
     recurringPaymentMethods: RecurringPaymentMethodSwitches,
-    subscriptionsPaymentMethods: SubscriptionsPaymentMethodSwitches,
     subscriptionsSwitches: SubscriptionsSwitches,
     featureSwitches: FeatureSwitches,
     campaignSwitches: CampaignSwitches,

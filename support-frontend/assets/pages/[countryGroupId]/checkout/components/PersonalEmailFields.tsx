@@ -28,6 +28,7 @@ export function PersonalEmailFields({
 	const [confirmedEmailError, setConfirmedEmailError] = useState<string>();
 	const optional = endUser === 'recipient';
 	const emailNameId = endUser === 'recipient' ? 'recipientEmail' : 'email';
+	const regexLeadingTrailingSpacing = /\s/g;
 	return (
 		<>
 			<div>
@@ -40,8 +41,19 @@ export function PersonalEmailFields({
 					type="email"
 					optional={optional}
 					autoComplete="email"
+					onKeyDown={(event) => {
+						// removes the ability to enter spaces in the email field as these will be stripped out on change
+						if (event.key === ' ') {
+							event.preventDefault();
+						}
+					}}
 					onChange={(event) => {
-						setEmail(event.currentTarget.value);
+						setEmail(
+							event.currentTarget.value.replace(
+								regexLeadingTrailingSpacing,
+								'',
+							),
+						);
 					}}
 					onBlur={(event) => {
 						event.target.checkValidity();
@@ -59,7 +71,7 @@ export function PersonalEmailFields({
 							if (validityState.valueMissing) {
 								setEmailError(`Please enter ${endUser} email address.`);
 							} else {
-								setEmailError(`Please enter a valid ${endUser} email address.`);
+								setEmailError(`Please enter a valid email address.`);
 							}
 						}
 					}}
@@ -76,8 +88,14 @@ export function PersonalEmailFields({
 							value={confirmedEmail}
 							type="email"
 							autoComplete="email"
+							onKeyDown={(event) => {
+								// removes the ability to enter spaces in the email field as these will be stripped out on change
+								if (event.key === ' ') {
+									event.preventDefault();
+								}
+							}}
 							onChange={(event) => {
-								setConfirmedEmail(event.currentTarget.value);
+								setConfirmedEmail(event.currentTarget.value.replace(/\s/g, ''));
 							}}
 							onBlur={(event) => {
 								// Delay to allow the state to update before checking validity.

@@ -13,6 +13,10 @@ export type GuardianWeeklyFulfilmentOptions =
 
 export type PaperFulfilmentOptions = typeof Collection | typeof HomeDelivery;
 
+export type PrintFulfilmentOptions =
+	| GuardianWeeklyFulfilmentOptions
+	| PaperFulfilmentOptions;
+
 export type FulfilmentOptions =
 	| typeof HomeDelivery
 	| typeof NationalDelivery

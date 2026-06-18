@@ -8,7 +8,7 @@ This pr adds a widget to the doogle so that we can buy a sub from any page in on
 For detailed changes see the inline self-review comments.
 -->
 
-[**Trello Card**](https://trello.com)
+[**Asana Card**](https://app.asana.com)
 
 ## Why are you doing this?
 

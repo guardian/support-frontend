@@ -5,10 +5,8 @@ import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { ContributionsOrderSummaryProps } from 'components/orderSummary/contributionsOrderSummary';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
-import {
-	OrderSummaryStartDate,
-	OrderSummaryTsAndCs,
-} from 'components/orderSummary/orderSummaryTsAndCs';
+import { OrderSummaryStartDate } from 'components/orderSummary/orderSummaryStartDate';
+import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
 import {
 	getProductLabel,
 	productCatalogDescription,
@@ -22,6 +20,11 @@ const boldText = css`
 `;
 
 const landingPageSettings = fallBackLandingPageSelection;
+
+const weeklyPricingLandingPageSettings = {
+	...fallBackLandingPageSelection,
+	name: 'WEEKLY_PRICE_TEST',
+};
 
 const checkListData = [
 	{
@@ -63,7 +66,7 @@ const oneYearStudentDiscount = {
 enum ProductKeys {
 	Contribution = 'Contribution',
 	SupporterPlusKey = 'SupporterPlus',
-	TierThreeKey = 'TierThree',
+	DigitalSubscription = 'DigitalSubscription',
 }
 
 export default {
@@ -206,11 +209,11 @@ SupporterPlus.args = {
 	landingPageSettings,
 };
 
-export const TierThree = Template.bind({});
-TierThree.args = {
-	productKey: ProductKeys.TierThreeKey,
+export const DigitalSubscription = Template.bind({});
+DigitalSubscription.args = {
+	productKey: ProductKeys.DigitalSubscription,
 	ratePlanKey: 'Monthly',
-	productLabel: getProductLabel(ProductKeys.TierThreeKey),
+	productLabel: getProductLabel(ProductKeys.DigitalSubscription),
 	enableCheckList: true,
 	amount: 27,
 	currency: {
@@ -219,18 +222,16 @@ TierThree.args = {
 		spokenCurrency: 'pound',
 	},
 	checkListData: [
-		...productCatalogDescription.SupporterPlus.benefits.map((benefit) => ({
-			isChecked: true,
-			text: benefit.copy,
-		})),
-		...productCatalogDescription.TierThree.benefits.map((benefit) => ({
-			isChecked: true,
-			text: benefit.copy,
-		})),
+		...productCatalogDescription.DigitalSubscription.benefits.map(
+			(benefit) => ({
+				isChecked: true,
+				text: benefit.copy,
+			}),
+		),
 	],
 	tsAndCs: (
 		<OrderSummaryTsAndCs
-			productKey={'TierThree'}
+			productKey={'DigitalSubscription'}
 			ratePlanKey={'Monthly'}
 			countryGroupId={GBPCountries}
 			thresholdAmount={27}
@@ -238,7 +239,7 @@ TierThree.args = {
 	),
 	startDate: (
 		<OrderSummaryStartDate
-			productKey="TierThree"
+			productKey="DigitalSubscription"
 			ratePlanKey={'Monthly'}
 			startDate={'Friday, April 11, 2025'}
 		/>
@@ -288,4 +289,88 @@ StudentOneYear.args = {
 	studentDiscount: oneYearStudentDiscount,
 	supportRegionId: SupportRegionId.UK,
 	landingPageSettings,
+};
+
+export const WeeklyPricing = Template.bind({});
+WeeklyPricing.args = {
+	productKey: ProductKeys.SupporterPlusKey,
+	ratePlanKey: 'Monthly',
+	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
+	paymentFrequency: 'month',
+	enableCheckList: true,
+	amount: 12,
+	currency: {
+		glyph: '£',
+		extendedGlyph: '£',
+		spokenCurrency: 'pound',
+	},
+	checkListData: [
+		...productCatalogDescription.SupporterPlus.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'SupporterPlus'}
+			ratePlanKey={'Monthly'}
+			countryGroupId={GBPCountries}
+			thresholdAmount={12}
+		/>
+	),
+	startDate: null,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+	supportRegionId: SupportRegionId.UK,
+	landingPageSettings: weeklyPricingLandingPageSettings,
+};
+
+export const WeeklyPricingWithPromotion = Template.bind({});
+WeeklyPricingWithPromotion.args = {
+	productKey: ProductKeys.SupporterPlusKey,
+	ratePlanKey: 'Monthly',
+	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
+	paymentFrequency: 'month',
+	enableCheckList: true,
+	amount: 12,
+	currency: {
+		glyph: '£',
+		extendedGlyph: '£',
+		spokenCurrency: 'pound',
+	},
+	checkListData: [
+		...productCatalogDescription.SupporterPlus.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+	],
+	promotion: {
+		name: 'SupportPlusAndGuardianWeekly',
+		description: 'Supporter Plus and Guardian Weekly',
+		promoCode: 'TEST_PROMO',
+		discountedPrice: 8,
+		discount: {
+			amount: 33,
+			durationMonths: 6,
+		},
+	},
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'SupporterPlus'}
+			ratePlanKey={'Monthly'}
+			countryGroupId={GBPCountries}
+			thresholdAmount={12}
+		/>
+	),
+	startDate: null,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+	supportRegionId: SupportRegionId.UK,
+	landingPageSettings: weeklyPricingLandingPageSettings,
 };

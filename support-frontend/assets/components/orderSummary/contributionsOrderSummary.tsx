@@ -26,12 +26,19 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
+import { ratePlanToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
-import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import {
+	isContributionOnlyProduct,
+	isGuardianWeeklyDigitalProduct,
+	isGuardianWeeklyGiftProduct,
+	isGuardianWeeklyProduct,
+} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
+import { calculateWeeklyPrice } from '../../helpers/utilities/utilities';
 import { PriceSummary } from './priceSummary';
 
 const componentStyles = css`
@@ -42,7 +49,7 @@ const summaryRow = css`
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
-	padding-top: 4px;
+	padding: 4px 0 8px 0;
 `;
 
 const rowSpacing = css`
@@ -128,7 +135,7 @@ const termsAndConditions = css`
 	${textSans15};
 	color: ${neutral[7]};
 	border: 1px solid ${neutral[46]};
-	border-radius: ${space[4]}px;
+	border-radius: ${space[3]}px;
 	background-color: ${neutral[97]};
 	padding: ${space[2]}px ${space[3]}px;
 	& div:nth-child(2) {
@@ -137,47 +144,87 @@ const termsAndConditions = css`
 	}
 `;
 
+const startDateWeeklyDigitalList = css`
+	${textSans15};
+	color: ${neutral[7]};
+	border: 1px solid ${neutral[46]};
+	border-radius: ${space[3]}px;
+	background-color: ${neutral[97]};
+	padding: ${space[2]}px ${space[3]}px;
+	margin-top: ${space[3]}px;
+`;
+
+const startDateList = css`
+	display: block;
+	${textSans14};
+	color: #606060;
+	background-color: ${palette.neutral[97]};
+	border-radius: ${space[3]}px;
+	padding: ${space[3]}px;
+	margin-top: ${space[2]}px;
+	${from.desktop} {
+		margin-top: ${space[4]}px;
+	}
+`;
+
+const savingTextCss = css`
+	color: ${palette.lifestyle[400]};
+	${textSans17};
+	margin-top: ${space[1]}px;
+`;
+
+const weeklyPricingSummary = css`
+	display: flex;
+	flex-direction: column;
+	gap: ${space[1]}px;
+	margin-bottom: ${space[5]}px;
+	padding: ${space[1]}px 0;
+
+	& div {
+		padding: 0;
+	}
+`;
+
 export type ContributionsOrderSummaryProps = {
 	productKey: ActiveProductKey;
 	productLabel: string;
 	ratePlanKey: ActiveRatePlanKey;
-	ratePlanLabel?: string;
 	amount: number;
-	promotion?: Promotion;
 	currency: CurrencyInfo;
 	enableCheckList: boolean;
 	checkListData: BenefitsCheckListData[];
 	startDate: React.ReactNode;
+	landingPageSettings: LandingPageVariant;
+	ratePlanLabel?: string;
+	promotion?: Promotion;
 	paymentFrequency?: string;
 	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
-	tsAndCsTier3?: React.ReactNode;
 	studentDiscount?: StudentDiscount;
 	supportRegionId: SupportRegionId;
 	nudgeSettings?: CheckoutNudgeSettings;
-	landingPageSettings: LandingPageVariant;
 };
 
 export function ContributionsOrderSummary({
 	productKey,
 	productLabel,
 	ratePlanKey,
-	ratePlanLabel,
 	amount,
-	promotion,
 	currency,
-	paymentFrequency,
+	enableCheckList,
 	checkListData,
+	startDate,
+	landingPageSettings,
+	ratePlanLabel,
+	promotion,
+	paymentFrequency,
 	onCheckListToggle,
 	headerButton,
 	tsAndCs,
-	startDate,
-	enableCheckList,
 	studentDiscount,
 	supportRegionId,
 	nudgeSettings,
-	landingPageSettings,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -202,13 +249,55 @@ export function ContributionsOrderSummary({
 	const discountPrice =
 		studentDiscount?.discountPriceWithCurrency ?? promoDiscountPrice;
 	const period = studentDiscount?.periodNoun ?? paymentFrequency;
+	const title = `Your ${
+		isContributionOnlyProduct(productKey) ? 'support' : 'subscription'
+	}`;
 
 	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
+	const isWeeklyDigital = isGuardianWeeklyDigitalProduct(
+		productKey,
+		ratePlanKey,
+	);
+	const isWeekly = isGuardianWeeklyProduct(productKey);
+
+	const forceWeeklyPricing =
+		window.location.search.includes('force-weekly=true');
+	const isWeeklyPricing =
+		forceWeeklyPricing || landingPageSettings.name.includes('WEEKLY_PRICE');
+
+	const getDiscountDurationText = (durationMonths: number) => {
+		if (durationMonths === 12) {
+			return '1 year';
+		}
+		if (durationMonths === 1) {
+			return '1 month';
+		}
+		return `${durationMonths} months`;
+	};
+
+	const savingText = promotion?.discount
+		? `You're saving ${
+				promotion.discount.amount
+		  }% for ${getDiscountDurationText(promotion.discount.durationMonths ?? 0)}`
+		: null;
+
+	const billingPeriodObj = ratePlanToBillingPeriod(ratePlanKey);
+
+	const weeklyPrice =
+		isWeeklyPricing && !isWeeklyGift && !isWeeklyDigital && !isWeekly
+			? simpleFormatAmount(
+					currency,
+					calculateWeeklyPrice(
+						promotion?.discountedPrice ?? amount,
+						billingPeriodObj,
+					),
+			  )
+			: undefined;
 
 	return (
 		<div css={componentStyles}>
 			<div css={[summaryRow, rowSpacing, headingRow]}>
-				<h2 css={headingCss}>Your subscription</h2>
+				<h2 css={headingCss}>{title}</h2>
 				{headerButton}
 			</div>
 			<hr css={hrCss} />
@@ -242,22 +331,44 @@ export function ContributionsOrderSummary({
 				{hasCheckList && showCheckList && (
 					<>
 						<div css={checklistContainer}>{checkList}</div>
-						{startDate}
+						{!isWeekly && <div css={startDateList}>{startDate}</div>}
 					</>
 				)}
 			</div>
 
 			<hr css={hrCss} />
-			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
-				<p>Total</p>
-				<PriceSummary
-					fullPrice={fullPrice}
-					period={period}
-					discountPrice={discountPrice}
-					isWeeklyGift={isWeeklyGift}
-				/>
-			</div>
+			{weeklyPrice ? (
+				<div css={weeklyPricingSummary}>
+					<div css={summaryRow}>
+						<p>Weekly price</p>
+						<p>{weeklyPrice}</p>
+					</div>
+					<div css={[summaryRow, boldText]}>
+						<p>Total due every {period}</p>
+						<p>{discountPrice ?? fullPrice}</p>
+					</div>
+					{savingText && (
+						<div>
+							<hr css={hrCss} />
+							<p css={savingTextCss}>{savingText}</p>
+						</div>
+					)}
+				</div>
+			) : (
+				<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
+					<p>Total</p>
+					<PriceSummary
+						fullPrice={fullPrice}
+						period={period}
+						discountPrice={discountPrice}
+						isWeeklyGift={isWeeklyGift}
+					/>
+				</div>
+			)}
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
+			{isWeeklyDigital && (
+				<div css={startDateWeeklyDigitalList}>{startDate}</div>
+			)}
 			{nudgeSettings && (
 				<CheckoutNudgeSelector
 					nudgeSettings={nudgeSettings}

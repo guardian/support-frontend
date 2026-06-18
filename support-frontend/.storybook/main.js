@@ -1,12 +1,14 @@
 const path = require('path');
-const vite = require('vite');
 const preact = require('@preact/preset-vite');
+const vite = require('vite');
+
 module.exports = {
 	stories: ['../stories/**/*.stories.@(js|jsx|ts|tsx)'],
 	addons: [
 		'@storybook/addon-a11y',
 		'@storybook/addon-links',
 		'@storybook/addon-docs',
+		'@chromatic-com/storybook',
 	],
 	core: {
 		builder: '@storybook/builder-vite',
@@ -42,6 +44,10 @@ module.exports = {
 						replacement: path.resolve(__dirname, '../assets/helpers'),
 					},
 					{
+						find: 'contexts',
+						replacement: path.resolve(__dirname, '../assets/contexts'),
+					},
+					{
 						find: 'images',
 						replacement: path.resolve(__dirname, '../assets/images'),
 					},
@@ -73,15 +79,22 @@ module.exports = {
 						),
 					},
 					{
+						find: '@modules/arrayFunctions',
+						replacement: path.resolve(
+							__dirname,
+							'../node_modules/@guardian/support-service-lambdas/modules/arrayFunctions',
+						),
+					},
+					{
+						find: '@modules/objectFunctions',
+						replacement: path.resolve(
+							__dirname,
+							'../node_modules/@guardian/support-service-lambdas/modules/objectFunctions',
+						),
+					},
+					{
 						find: '@modules',
 						replacement: path.resolve(__dirname, '../../modules'),
-					},
-					// This is needed because the build needs the node_modules in the path
-					// when sass-mq/mq is imported but storybook errors with it there, so
-					// fix the storybook side with an alias.
-					{
-						find: 'node_modules/sass-mq/mq',
-						replacement: path.resolve(__dirname, '../node_modules/sass-mq/mq'),
 					},
 				],
 			},

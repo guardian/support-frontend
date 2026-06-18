@@ -8,10 +8,12 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import { observerThemeButton } from 'components/observer-layout/styles';
+import { getPaypalClientId } from 'helpers/forms/payPal';
 import {
 	getStripeKeyForCountry,
 	getStripeKeyForProduct,
 } from 'helpers/forms/stripe';
+import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
@@ -26,8 +28,9 @@ import { getPromotion } from 'helpers/productPrice/promotions';
 import * as cookie from 'helpers/storage/cookie';
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
+import { getOriginAndForceSubdomain } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
-import { getProductWeeklyDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
+import { getWeeklyDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
@@ -63,6 +66,12 @@ const getPromotionFromProductPrices = (
 	 * Get any promotions.
 	 * These come from the productPrices object for the particular product on window.guardian.
 	 */
+
+	// exclude one year student promotion as it's mapped to the annual billing period and we don't to apply regualr annual promotions to it
+	if (productKey === 'SupporterPlus' && ratePlanKey === 'OneYearStudent') {
+		return undefined;
+	}
+
 	const productPriceKey: LegacyProductType = getLegacyProductType(
 		productKey,
 		ratePlanKey,
@@ -181,25 +190,16 @@ export function Checkout({
 		);
 
 		const discountedPrice = promotion?.discountedPrice ?? undefined;
-
 		const price = discountedPrice ?? productPrice;
+		/** SupporterPlus can have an additional contribution bolted onto the base price */
+		const finalAmount =
+			price + (productKey === 'SupporterPlus' ? contributionAmount ?? 0 : 0);
 
-		if (productKey === 'SupporterPlus') {
-			/** SupporterPlus can have an additional contribution bolted onto the base price */
-			payment = {
-				originalAmount: productPrice,
-				discountedAmount: discountedPrice,
-				contributionAmount,
-				finalAmount: price + (contributionAmount ?? 0),
-			};
-		} else {
-			payment = {
-				originalAmount: productPrice,
-				discountedAmount: discountedPrice,
-				contributionAmount,
-				finalAmount: price,
-			};
-		}
+		payment = {
+			originalAmount: productPrice,
+			contributionAmount,
+			finalAmount,
+		};
 	}
 
 	const isTestUser = !!cookie.get('_test_username');
@@ -207,6 +207,8 @@ export function Checkout({
 		getStripeKeyForProduct('REGULAR', productKey, ratePlanKey, isTestUser) ??
 		getStripeKeyForCountry('REGULAR', countryId, currencyKey, isTestUser);
 	const stripePromise = loadStripe(stripePublicKey);
+
+	const paypalClientId = getPaypalClientId(isTestUser);
 
 	const stripeExpressCheckoutSwitch =
 		window.guardian.settings.switches.recurringPaymentMethods
@@ -266,7 +268,7 @@ export function Checkout({
 		useStripeHostedCheckoutSession(maybeCheckoutSessionId);
 
 	const [weeklyDeliveryDate, setWeeklyDeliveryDate] = useState<Date>(
-		getProductWeeklyDeliveryDate(productKey),
+		getWeeklyDeliveryDate(),
 	);
 
 	/**
@@ -277,7 +279,6 @@ export function Checkout({
 	const thresholdAmount = getLowerProductBenefitThreshold(
 		billingPeriod,
 		fromCountryGroupId(countryGroupId),
-		countryGroupId,
 		productKey,
 		ratePlanKey,
 	);
@@ -295,19 +296,24 @@ export function Checkout({
 		true,
 	);
 
-	const { isObserverSubdomain } = window.guardian;
-	const PageLayout = isObserverSubdomain
+	const PageLayout = isObserverSubdomain()
 		? ObserverPageLayout
 		: GuardianPageLayout;
 
 	const theme = {
-		...(isObserverSubdomain && { observerThemeButton }),
+		...(isObserverSubdomain() && { observerThemeButton }),
 	};
+
+	const backButtonOrigin = getOriginAndForceSubdomain('support');
+	const backButtonPathOverrideParam = 'backLocation';
+	const backButtonPathOverride = urlSearchParams.get(
+		backButtonPathOverrideParam,
+	);
 
 	return (
 		<ThemeProvider theme={theme}>
 			<Elements stripe={stripePromise} options={elementsOptions}>
-				<PageLayout>
+				<PageLayout borderBox>
 					<CheckoutSummary
 						supportRegionId={supportRegionId}
 						appConfig={appConfig}
@@ -323,6 +329,8 @@ export function Checkout({
 						thresholdAmount={thresholdAmount}
 						studentDiscount={studentDiscount}
 						nudgeSettings={nudgeSettings}
+						backButtonOrigin={backButtonOrigin}
+						backButtonPathOverride={backButtonPathOverride}
 					/>
 
 					<CheckoutForm
@@ -334,12 +342,10 @@ export function Checkout({
 						ratePlanKey={ratePlanKey}
 						promotion={promotion}
 						originalAmount={payment.originalAmount}
-						discountedAmount={payment.discountedAmount}
 						contributionAmount={payment.contributionAmount}
 						finalAmount={payment.finalAmount}
 						useStripeExpressCheckout={useStripeExpressCheckout}
 						countryId={countryId}
-						forcedCountry={forcedCountry}
 						abParticipations={abParticipations}
 						landingPageSettings={landingPageSettings}
 						checkoutSession={checkoutSession}
@@ -348,6 +354,7 @@ export function Checkout({
 						setWeeklyDeliveryDate={setWeeklyDeliveryDate}
 						thresholdAmount={thresholdAmount}
 						studentDiscount={studentDiscount}
+						paypalClientId={paypalClientId}
 					/>
 				</PageLayout>
 			</Elements>

@@ -1,9 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type {
-	FactAcquisitionEventRow} from './acquisitions';
-import {
-	transformAcquisitionProductForBigQuery,
-} from './acquisitions';
+import type { FactAcquisitionEventRow } from './acquisitions';
+import { transformAcquisitionProductForBigQuery } from './acquisitions';
 import type { AcquisitionProduct } from './schemas';
 
 const baseAcquisitionProduct: AcquisitionProduct = {

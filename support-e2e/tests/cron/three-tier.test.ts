@@ -1,4 +1,5 @@
 import test from '@playwright/test';
+import { forceSkipNewOnboardingExperience } from '../utils/forceSkipNewOnboardingExperience';
 import { ProductTierLabel } from '../utils/products';
 import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAndCompleteCheckout';
 
@@ -12,7 +13,7 @@ const tests = [
 	},
 	{
 		productLabel: ProductTierLabel.TierThree,
-		product: 'TierThree',
+		product: 'DigitalSubscription',
 		billingFrequency: 'Monthly',
 		paymentType: 'PayPal',
 		internationalisationId: 'UK',
@@ -38,12 +39,15 @@ test.describe('Three Tier Checkout', () =>
 				{ context, baseURL, product, paymentType, internationalisationId },
 				async (page) => {
 					// Transition from landing page to checkout:
+					await forceSkipNewOnboardingExperience(page);
 
 					// 1. Select the billing frequency
 					await page.getByRole('tab', { name: billingFrequency }).click();
 
 					// 2. Click through to the checkout (we use the aria-label to target the link)
-					await page.getByLabel(productLabel, { exact: true }).click();
+					await page
+						.getByRole('link', { name: new RegExp(`^${productLabel},`) })
+						.click();
 				},
 			);
 		});

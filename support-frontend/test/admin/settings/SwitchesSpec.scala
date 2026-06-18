@@ -54,31 +54,6 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |        "description" : "Direct Debit",
           |        "state" : "On"
           |      },
-          |      "sepa" : {
-          |        "description" : "SEPA",
-          |        "state" : "Off"
-          |      },
-          |      "stripeHostedCheckout" : {
-          |        "description" : "Stripe - Hosted Checkout",
-          |        "state" : "Off"
-          |      }
-          |    }
-          |  },
-          |  "subscriptionsPaymentMethods": {
-          |    "description": "Payment methods - subscriptions",
-          |    "switches": {
-          |      "directDebit": {
-          |        "description": "Direct Debit",
-          |        "state": "On"
-          |      },
-          |      "creditCard": {
-          |        "description": "Credit Card",
-          |        "state": "On"
-          |      },
-          |      "paypal": {
-          |        "description": "Paypal",
-          |        "state": "On"
-          |      },
           |      "stripeHostedCheckout" : {
           |        "description" : "Stripe - Hosted Checkout",
           |        "state" : "Off"
@@ -90,6 +65,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |    "switches": {
           |      "checkoutPostcodeLookup" : {
           |        "description" : "Enable external service postcode lookup in checkout form",
+          |        "state" : "On"
+          |      },
+          |      "useIdealPostcodes" : {
+          |        "description" : "Use Ideal Postcodes to handle postcode lookups",
           |        "state" : "On"
           |      },
           |      "enableDigitalSubGifting" : {
@@ -127,6 +106,14 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      },
           |      "enableCheckoutNudge" : {
           |        "description" : "Enable checkout nudge",
+          |        "state" : "On"
+          |      },
+          |      "enableMParticle" : {
+          |        "description" : "Enable mparticle",
+          |        "state" : "On"
+          |      },
+          |      "enableTooledStudentLandingPage" : {
+          |        "description" : "Enable tooled student landing page",
           |        "state" : "On"
           |      }
           |    }
@@ -170,12 +157,11 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
             stripeExpressCheckout = Some(On),
             payPal = Some(On),
             directDebit = Some(On),
-            sepa = Some(Off),
             stripeHostedCheckout = Some(Off),
           ),
-          subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(Off)),
-          subscriptionsSwitches = SubscriptionsSwitches(Some(On), Some(On)),
-          featureSwitches = FeatureSwitches(Some(On), Some(On), Some(Off), Some(On), Some(Off), Some(On)),
+          subscriptionsSwitches = SubscriptionsSwitches(Some(On), Some(On), Some(On)),
+          featureSwitches =
+            FeatureSwitches(Some(On), Some(On), Some(Off), Some(On), Some(Off), Some(On), Some(On), Some(On)),
           campaignSwitches = CampaignSwitches(Some(Off), Some(Off)),
           recaptchaSwitches = RecaptchaSwitches(Some(On), Some(On)),
         ),

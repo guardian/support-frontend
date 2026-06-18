@@ -63,8 +63,98 @@ Default.args = {
 		{
 			isUserSelected: true,
 			price: 25,
-			product: 'TierThree',
-			...fallBackLandingPageSelection.products.TierThree,
+			product: 'DigitalSubscription',
+			...fallBackLandingPageSelection.products.DigitalSubscription,
+		},
+	],
+	currencyId: 'GBP',
+	paymentFrequency: 'MONTHLY',
+};
+
+export const BillingPeriodsCopy = Template.bind({});
+
+BillingPeriodsCopy.args = {
+	cardsContent: [
+		{
+			isUserSelected: false,
+			price: 5,
+			product: 'Contribution',
+			...fallBackLandingPageSelection.products.Contribution,
+		},
+		{
+			isUserSelected: false,
+			price: 10,
+			product: 'SupporterPlus',
+			...fallBackLandingPageSelection.products.SupporterPlus,
+			billingPeriodsCopy: 'From %%PRICE_PRODUCT_WEEKLY%% per week',
+		},
+		{
+			isUserSelected: true,
+			price: 25,
+			product: 'DigitalSubscription',
+			...fallBackLandingPageSelection.products.DigitalSubscription,
+			promotion: {
+				discountedPrice: 16,
+				discount: {
+					amount: 16,
+					durationMonths: 12,
+				},
+			},
+		},
+	],
+	currencyId: 'GBP',
+	billingPeriod: 'Monthly',
+};
+
+export const WeeklyPricing = Template.bind({});
+
+WeeklyPricing.args = {
+	cardsContent: [
+		{
+			isUserSelected: false,
+			price: 5,
+			product: 'Contribution',
+			...fallBackLandingPageSelection.products.Contribution,
+		},
+		{
+			isUserSelected: false,
+			price: 10,
+			product: 'SupporterPlus',
+			...fallBackLandingPageSelection.products.SupporterPlus,
+		},
+		{
+			isUserSelected: true,
+			price: 25,
+			product: 'DigitalSubscription',
+			...fallBackLandingPageSelection.products.DigitalSubscription,
+		},
+	],
+	currencyId: 'GBP',
+	paymentFrequency: 'MONTHLY',
+	showWeeklyPrice: true,
+};
+
+export const WeeklyPricingWithPromotion = Template.bind({});
+
+WeeklyPricingWithPromotion.args = {
+	cardsContent: [
+		{
+			isUserSelected: false,
+			price: 5,
+			product: 'Contribution',
+			...fallBackLandingPageSelection.products.Contribution,
+		},
+		{
+			isUserSelected: false,
+			price: 10,
+			product: 'SupporterPlus',
+			...fallBackLandingPageSelection.products.SupporterPlus,
+		},
+		{
+			isUserSelected: true,
+			price: 25,
+			product: 'DigitalSubscription',
+			...fallBackLandingPageSelection.products.DigitalSubscription,
 			promotion: {
 				discountedPrice: 16,
 				discount: {
@@ -76,4 +166,5 @@ Default.args = {
 	],
 	currencyId: 'GBP',
 	paymentFrequency: 'MONTHLY',
+	showWeeklyPrice: true,
 };

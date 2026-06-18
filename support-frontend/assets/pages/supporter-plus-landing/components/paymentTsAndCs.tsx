@@ -2,18 +2,13 @@ import { css } from '@emotion/react';
 import { neutral, space, textSans12 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
-import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import {
-	buildPromotionalTermsLink,
-	contributionsTermsLinks,
-	digitalSubscriptionTermsLink,
+	digitalPlusTermsLink,
 	guardianAdLiteTermsLink,
 	guardianWeeklyTermsLink,
+	manageAccountLink,
 	observerLinks,
-	paperTermsLink,
-	privacyLink,
 	supporterPlusTermsLink,
-	tierThreeTermsLink,
 } from 'helpers/legal';
 import { productLegal } from 'helpers/legalCopy';
 import { getProductLabel } from 'helpers/productCatalog';
@@ -28,21 +23,20 @@ import {
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { helpCentreUrl } from 'helpers/urls/externalLinks';
+import { getHelpCentreUrl } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
-import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import { isGuardianWeeklyDigitalProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import { textLink } from '../../../helpers/utilities/textLink';
 import { FinePrint } from './finePrint';
+import { FooterTsAndCs } from './footerTsAndCs';
 import { ManageMyAccountLink } from './manageMyAccountLink';
 
-const tierThreeLabel = getProductLabel('TierThree');
-
 const marginTop = css`
-	margin-top: 4px;
+	margin-top: ${space[1]}px;
 `;
-
 const container = css`
 	${textSans12};
 	color: ${neutral[20]};
@@ -54,83 +48,6 @@ const container = css`
 	}
 `;
 
-const termsLink = (linkText: string, url: string) => (
-	<a target="_blank" rel="noopener noreferrer" href={url}>
-		{linkText}
-	</a>
-);
-const manageMyAccountLink = () =>
-	termsLink('Manage My Account', 'http://manage.theguardian.com/');
-
-export function FooterTsAndCs({
-	productKey,
-	countryGroupId,
-	ratePlanKey,
-}: {
-	productKey: ActiveProductKey;
-	countryGroupId: CountryGroupId;
-	ratePlanKey?: ActiveRatePlanKey;
-}) {
-	const privacy = <a href={privacyLink}>Privacy Policy</a>;
-	const getProductNameSummary = (): string => {
-		switch (productKey) {
-			case 'GuardianAdLite':
-				return `the ${getProductLabel('GuardianAdLite')}`;
-			case 'TierThree':
-				return tierThreeLabel;
-			default:
-				return 'our';
-		}
-	};
-	const getProductTerms = (): JSX.Element => {
-		switch (productKey) {
-			case 'GuardianAdLite':
-				return termsLink('Terms', guardianAdLiteTermsLink);
-			case 'DigitalSubscription':
-				return termsLink('Terms and Conditions', digitalSubscriptionTermsLink);
-			case 'SupporterPlus':
-				return termsLink('Terms and Conditions', supporterPlusTermsLink);
-			case 'TierThree':
-				return termsLink('Terms', tierThreeTermsLink);
-			case 'HomeDelivery':
-			case 'NationalDelivery':
-			case 'SubscriptionCard':
-				return termsLink('Terms & Conditions', paperTermsLink);
-			case 'GuardianWeeklyDomestic':
-			case 'GuardianWeeklyRestOfWorld':
-				return termsLink('Terms & Conditions', guardianWeeklyTermsLink);
-			default:
-				return termsLink(
-					'Terms and Conditions',
-					contributionsTermsLinks[countryGroupId],
-				);
-		}
-	};
-
-	const weeklyGiftTerms = (
-		<>
-			To cancel, go to {manageMyAccountLink()} or see our{' '}
-			{termsLink('Terms', guardianWeeklyTermsLink)}. This subscription does not
-			auto-renew.
-		</>
-	);
-	const isWeeklyGift =
-		ratePlanKey && isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
-	return (
-		<div css={marginTop}>
-			By proceeding, you are agreeing to {getProductNameSummary()}{' '}
-			{getProductTerms()}. {isWeeklyGift && weeklyGiftTerms}
-			<p css={marginTop}>
-				To find out what personal data we collect and how we use it, please
-				visit our {privacy}.
-			</p>
-			<p css={marginTop}>
-				<StripeDisclaimer />
-			</p>
-		</div>
-	);
-}
-
 function getStudentPrice(
 	isStudentOneYearRatePlan: boolean,
 	studentDiscount: StudentDiscount,
@@ -141,7 +58,7 @@ function getStudentPrice(
 		: studentPricePeriod;
 }
 
-const paperShareTsAndCs =
+const printShareTsAndCs =
 	'We will share your contact and subscription details with our fulfilment partners';
 function paperTsAndCs(
 	paperFulfilmentOption: PaperFulfilmentOptions,
@@ -170,16 +87,50 @@ function paperTsAndCs(
 				{deliveryTsAndCs} You can cancel your subscription at any time before
 				your next renewal date. Cancellation will take effect at the end of your
 				current payment period. To cancel, use the contact details listed on our{' '}
-				{termsLink('Help Centre', helpCentreUrl)}.{' '}
+				{textLink('Help Centre', getHelpCentreUrl())}.{' '}
 			</div>
 			<div>
-				{paperShareTsAndCs}
+				{printShareTsAndCs}
 				{paperFulfilmentOption === 'Collection'
 					? ' to provide you with your subscription card'
 					: ''}
 				.
 			</div>
 		</>
+	);
+}
+
+function weeklyTsAndCs(
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
+	deliveryDate?: Date,
+): JSX.Element {
+	return (
+		<>
+			{isGuardianWeeklyDigitalProduct(productKey, ratePlanKey) && (
+				<>
+					<GuardianWeeklyPaymentTerms deliveryDate={deliveryDate} />
+					<div css={marginTop}>{printShareTsAndCs}</div>
+				</>
+			)}
+		</>
+	);
+}
+
+function GuardianWeeklyPaymentTerms({ deliveryDate }: { deliveryDate?: Date }) {
+	const deliveryTsAndCs = `Your first payment will be taken on ${
+		deliveryDate ? formatUserDate(deliveryDate) : 'the delivery date'
+	}.`;
+	return (
+		<div css={marginTop}>
+			{deliveryTsAndCs} You can cancel your subscription at any time before your
+			next renewal date. If you cancel within 14 days of sign-up, you’ll receive
+			a full refund. To cancel within 14 days of sign-up and receive a refund
+			contact: Customer Service. Cancellation of your subscription after 14 days
+			will take effect at the end of your current payment period. To cancel,
+			contact Customer Service or see our{' '}
+			{textLink('Terms', guardianWeeklyTermsLink)}.
+		</div>
 	);
 }
 
@@ -191,25 +142,6 @@ export interface PaymentTsAndCsProps {
 	promotion?: Promotion;
 	thresholdAmount?: number;
 }
-
-const rightReservation = `Offer subject to availability. Guardian News and Media Ltd ("GNM") reserves the right to withdraw this promotion at any time. `;
-function weeklyTsAndCs(isWeeklyGift?: boolean, promotion?: Promotion) {
-	return (
-		<>
-			{isWeeklyGift && !promotion && <div>{rightReservation}</div>}
-			{promotion && <GuardianWeeklyPromoTerms promotion={promotion} />}
-		</>
-	);
-}
-function GuardianWeeklyPromoTerms({ promotion }: { promotion: Promotion }) {
-	return (
-		<div>
-			{rightReservation}Full promotion terms and conditions for our{' '}
-			{termsLink('offer', buildPromotionalTermsLink(promotion))}.
-		</div>
-	);
-}
-
 export function PaymentTsAndCs({
 	productKey,
 	ratePlanKey,
@@ -232,63 +164,96 @@ export function PaymentTsAndCs({
 		productKey,
 		ratePlanKey as ActivePaperProductOptions,
 	);
-	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 
 	if (isSundayOnlyNewsletterSubscription) {
 		return (
 			<div css={container}>
 				The Observer is owned by Tortoise Media. By proceeding, you agree to
-				Tortoise Media’s {termsLink('Terms & Conditions', observerLinks.TERMS)}.
+				Tortoise Media’s {textLink('Terms & Conditions', observerLinks.TERMS)}.
 				We will share your contact and subscription details with our fulfilment
 				partners to provide you with your subscription card. To find out more
 				about what personal data Tortoise Media will collect and how it will be
 				used, please visit Tortoise Media’s{' '}
-				{termsLink('Privacy Policy', observerLinks.PRIVACY)}.
+				{textLink('Privacy Policy', observerLinks.PRIVACY)}.
 			</div>
 		);
 	}
 
-	const legalPrice = studentDiscount
-		? getStudentPrice(isStudentOneYearRatePlan, studentDiscount)
-		: productLegal(
-				countryGroupId,
-				billingPeriod,
-				' per ',
-				thresholdAmount,
-				promotion,
-		  );
+	const legalPrice = (divider: string) =>
+		studentDiscount
+			? getStudentPrice(isStudentOneYearRatePlan, studentDiscount)
+			: productLegal(
+					countryGroupId,
+					billingPeriod,
+					divider,
+					thresholdAmount,
+					promotion,
+			  );
 
 	const productLabel = getProductLabel(productKey);
-	const subscriptionBasis = !isStudentOneYearRatePlan
-		? 'on a subscription basis'
-		: '';
 
 	const accountAndTermsLCopyAndLinks = (
 		<>
 			To cancel, go to {ManageMyAccountLink} or see our{' '}
-			{termsLink('Terms', supporterPlusTermsLink)}
+			{textLink('Terms', supporterPlusTermsLink)}
 		</>
 	);
-	const supporterPlusTsAndCs: JSX.Element = (
-		<>
-			If you pay at least {legalPrice}, you will receive the {productLabel}{' '}
-			benefits {subscriptionBasis}. If you increase your payments per{' '}
-			{billingPeriodSingular}, these additional amounts will be separate{' '}
-			{billingPeriodPlural} voluntary financial contributions to the Guardian.
-			The {productLabel} subscription and any contributions will auto-renew each{' '}
-			{billingPeriodSingular}. You will be charged the subscription and
-			contribution amounts using your chosen payment method at each renewal
-			unless you cancel. You can cancel your subscription or change your
-			contributions at any time before your next renewal date. If you cancel
-			within 14 days of taking out a {productLabel} subscription, you’ll receive
-			a full refund (including of any contributions) and your subscription and
-			any contribution will stop immediately. Cancellation of your subscription
-			(which will also cancel any contribution) or cancellation of your
-			contribution made after 14 days will take effect at the end of your
-			current {billingPeriodPlural} payment period.{' '}
-			{accountAndTermsLCopyAndLinks}.
-		</>
-	);
+
+	const prefixBasis = (
+		countryGroupId: CountryGroupId,
+		promotion?: Promotion,
+	) => {
+		const startPhrase = `If you pay at least ${legalPrice(' per ')}`;
+		const midPhrase =
+			countryGroupId === 'UnitedStates' && !!promotion ? ' thereafter,' : ',';
+		return `${startPhrase}${midPhrase} you will receive the ${productLabel} benefits on a subscription basis.`;
+	};
+	const supportBasis = `For support of ${legalPrice(
+		' or more per ',
+	)}, you will receive the ${productLabel} benefits`;
+
+	const supporterPlusTsAndCs = (
+		countryGroupId: CountryGroupId,
+		promotion?: Promotion,
+	): JSX.Element => {
+		return countryGroupId === 'UnitedStates' ? (
+			promotion ? (
+				<div>
+					{prefixBasis(countryGroupId, promotion)} If you give additional
+					support beyond {productLabel}, that amount will be charged separately
+					as voluntary contributions to the Guardian. If you cancel within 14
+					days of subscribing, you’ll receive a full refund (including any
+					contributions) and your subscription will immediately stop.
+				</div>
+			) : (
+				<div>
+					{supportBasis} on a subscription basis. If you increase your support,
+					the additional amount will be charged separately as voluntary
+					contributions to the Guardian. If you cancel within 14 days of
+					subscribing, you’ll receive a full refund (including any
+					contributions) and your subscription will immediately stop.
+				</div>
+			)
+		) : (
+			<div>
+				{prefixBasis(countryGroupId)} If you increase your payments per{' '}
+				{billingPeriodSingular}, these additional amounts will be separate{' '}
+				{billingPeriodPlural} voluntary financial contributions to the Guardian.
+				The {productLabel} subscription and any contributions will auto-renew
+				each {billingPeriodSingular}. You will be charged the subscription and
+				contribution amounts using your chosen payment method at each renewal
+				unless you cancel. You can cancel your subscription or change your
+				contributions at any time before your next renewal date. If you cancel
+				within 14 days of taking out a {productLabel} subscription, you’ll
+				receive a full refund (including of any contributions) and your
+				subscription and any contribution will stop immediately. Cancellation of
+				your subscription (which will also cancel any contribution) or
+				cancellation of your contribution made after 14 days will take effect at
+				the end of your current {billingPeriodPlural} payment period.{' '}
+				{accountAndTermsLCopyAndLinks}.
+			</div>
+		);
+	};
 
 	const studentSupporterPlusTsAndCs: JSX.Element = (
 		<>
@@ -299,8 +264,40 @@ export function PaymentTsAndCs({
 		</>
 	);
 
-	const paymentTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
-		DigitalSubscription: (
+	const digitalSubscriptionTsAndCs = (
+		countryGroupId: CountryGroupId,
+		promotion?: Promotion,
+	): JSX.Element => {
+		return countryGroupId === 'UnitedStates' ? (
+			promotion ? (
+				<div>
+					{prefixBasis(countryGroupId, promotion)} Your first payment will be
+					taken on day 15 after signing up but you can access your benefits
+					straight away. Unless you cancel, each {billingPeriodPlural} payment
+					will be taken on this date using your chosen payment method. You can
+					cancel your subscription at any time before your next renewal date. If
+					you cancel your subscription within 14 days of signing up, your
+					subscription will stop immediately and we will not take the first
+					payment from you. Cancellation of your subscription after 14 days will
+					take effect at the end of your current {billingPeriodPlural} payment
+					period. To cancel, go to Manage My Account or see our Terms.
+				</div>
+			) : (
+				<div>
+					{supportBasis}. Your first payment will be taken on day 15 after
+					signing up but you can access your benefits straight away. Unless you
+					cancel, each {billingPeriodPlural} payment will be taken on this date
+					using your chosen payment method. You can cancel your subscription at
+					any time before your next renewal date. If you cancel your
+					subscription within 14 days of signing up, your subscription will stop
+					immediately and we will not take the first payment from you.
+					Cancellation of your subscription after 14 days will take effect at
+					the end of your current {billingPeriodPlural} payment period. To
+					cancel, go to {textLink('Manage My Account', manageAccountLink)} or
+					see our {textLink('Terms', digitalPlusTermsLink)}.
+				</div>
+			)
+		) : (
 			<div>
 				Your first payment will be taken on day 15 after signing up but you can
 				access your benefits straight away. Unless you cancel, each{' '}
@@ -311,10 +308,14 @@ export function PaymentTsAndCs({
 				and we will not take the first payment from you. Cancellation of your
 				subscription after 14 days will take effect at the end of your current{' '}
 				{billingPeriod.toLocaleLowerCase()} payment period. To cancel, go to{' '}
-				{manageMyAccountLink()} or see our{' '}
-				{termsLink('Terms', digitalSubscriptionTermsLink)}.
+				{textLink('Manage My Account', manageAccountLink)} or see our{' '}
+				{textLink('Terms', digitalPlusTermsLink)}.
 			</div>
-		),
+		);
+	};
+
+	const paymentTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
+		DigitalSubscription: digitalSubscriptionTsAndCs(countryGroupId, promotion),
 		GuardianAdLite: (
 			<div>
 				Your Guardian Ad-Lite subscription will auto-renew each{' '}
@@ -328,43 +329,29 @@ export function PaymentTsAndCs({
 				and we will not take the first payment from you. Cancellation of your
 				subscription after 14 days will take effect at the end of your current
 				monthly payment period. To cancel, go to {ManageMyAccountLink} or see
-				our Guardian Ad-Lite {termsLink('Terms', guardianAdLiteTermsLink)}.
+				our Guardian Ad-Lite {textLink('Terms', guardianAdLiteTermsLink)}.
 			</div>
 		),
 		SupporterPlus: (
 			<div>
 				{isStudentOneYearRatePlan
 					? studentSupporterPlusTsAndCs
-					: supporterPlusTsAndCs}
-			</div>
-		),
-		TierThree: (
-			<div>
-				<p>
-					By signing up, you are taking out a {tierThreeLabel} subscription.
-					Your {tierThreeLabel} subscription will auto-renew each{' '}
-					{billingPeriodSingular} unless cancelled. Your first payment will be
-					taken on the publication date of your first Guardian Weekly magazine
-					(as shown in the checkout) but you will start to receive your digital
-					benefits when you sign up. Unless you cancel, subsequent{' '}
-					{billingPeriodPlural} payments will be taken on this date using your
-					chosen payment method. You can cancel your {tierThreeLabel}{' '}
-					subscription at any time before your next renewal date. If you cancel
-					your {tierThreeLabel} subscription within 14 days of signing up, your
-					subscription will stop immediately and we will not take the first
-					payment from you. Cancellation of your subscription after 14 days will
-					take effect at the end of your current {billingPeriodPlural} payment
-					period. To cancel go to&nbsp;
-					{ManageMyAccountLink} or see our {tierThreeLabel}{' '}
-					{termsLink('Terms', tierThreeTermsLink)}.
-				</p>
+					: supporterPlusTsAndCs(countryGroupId, promotion)}
 			</div>
 		),
 		NationalDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
 		HomeDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
 		SubscriptionCard: paperTsAndCs('Collection', deliveryDate),
-		GuardianWeeklyDomestic: weeklyTsAndCs(isWeeklyGift, promotion),
-		GuardianWeeklyRestOfWorld: weeklyTsAndCs(isWeeklyGift, promotion),
+		GuardianWeeklyDomestic: weeklyTsAndCs(
+			productKey,
+			ratePlanKey,
+			deliveryDate,
+		),
+		GuardianWeeklyRestOfWorld: weeklyTsAndCs(
+			productKey,
+			ratePlanKey,
+			deliveryDate,
+		),
 	};
 	return (
 		<div css={container}>

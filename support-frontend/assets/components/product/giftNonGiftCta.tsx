@@ -1,6 +1,8 @@
 import { css } from '@emotion/react';
 import {
+	from,
 	headlineBold34,
+	neutral,
 	space,
 	textEgyptian17,
 } from '@guardian/source/foundations';
@@ -14,27 +16,42 @@ type SubscriptionProduct = 'digital' | 'Guardian Weekly' | 'Student';
 type PropTypes = {
 	href: string;
 	product: SubscriptionProduct;
-	orderIsAGift: boolean;
+	isGift: boolean;
 	isStudent?: boolean;
 };
 const giftOrPersonal = css`
-	padding: ${space[3]}px ${space[3]}px ${space[12]}px;
+	border-top: 1px solid ${neutral[73]};
+	padding: ${space[5]}px ${space[3]}px ${space[8]}px;
+	${from.phablet} {
+		border-top: none;
+		padding: ${space[8]}px ${space[3]}px ${space[12]}px;
+	}
+	${from.desktop} {
+		padding-left: 0;
+		padding-right: ${space[9]}px;
+	}
 `;
 const giftOrPersonalCopy = css`
 	${textEgyptian17};
-	margin-bottom: ${space[9]}px;
+	margin-bottom: ${space[6]}px;
 `;
 const giftOrPersonalHeading = css`
 	${headlineBold34};
+`;
+const linkButtonWidth = css`
+	width: 100%;
+	${from.tablet} {
+		width: auto;
+	}
 `;
 
 function GiftOrPersonalOrStudent({
 	href,
 	product,
-	orderIsAGift,
+	isGift,
 	isStudent,
 }: PropTypes) {
-	if (isStudent && orderIsAGift) {
+	if (isStudent && isGift) {
 		return null;
 	}
 	return (
@@ -43,14 +60,14 @@ function GiftOrPersonalOrStudent({
 				<h2 css={giftOrPersonalHeading}>
 					{isStudent
 						? 'Student subscriptions'
-						: orderIsAGift
+						: isGift
 						? 'Looking for a subscription for yourself?'
 						: 'Gift subscriptions'}
 				</h2>
 				{isStudent ? (
 					<p>{product}s get 50% off a Guardian Weekly subscription.</p>
 				) : (
-					!orderIsAGift && <p>A {product} subscription makes a great gift.</p>
+					!isGift && <p>A {product} subscription makes a great gift.</p>
 				)}
 			</div>
 			<LinkButton
@@ -62,15 +79,16 @@ function GiftOrPersonalOrStudent({
 				onClick={() => {
 					sendTrackingEventsOnClick({
 						id: `${
-							isStudent ? 'student' : orderIsAGift ? 'personal' : 'gift'
+							isStudent ? 'student' : isGift ? 'personal' : 'gift'
 						}_subscriptions_cta`,
 						componentType: 'ACQUISITIONS_BUTTON',
 					});
 				}}
+				cssOverrides={linkButtonWidth}
 			>
 				{isStudent
 					? `I'm a student`
-					: orderIsAGift
+					: isGift
 					? 'See personal subscriptions'
 					: 'See gift subscriptions'}
 			</LinkButton>

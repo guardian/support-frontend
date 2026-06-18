@@ -1,11 +1,14 @@
+import { createZuoraSubscriptionStateSchema } from '../model/createZuoraSubscriptionState';
 import type {
 	DirectDebitPaymentFields,
 	StripePaymentFields,
 } from '../model/paymentFields';
+import { sendAcquisitionEventStateSchema } from '../model/sendAcquisitionEventState';
 import type { CreatePaymentMethodState } from '../model/stateSchemas';
 import {
 	createPaymentMethodStateSchema,
 	createSalesforceContactStateSchema,
+	wrapperSchemaForState,
 } from '../model/stateSchemas';
 import createPaymentContribution from './fixtures/createPaymentMethod/contributionMonthlyUSD.json';
 import contributionWithPayPal from './fixtures/createPaymentMethod/contributionWithPayPal.json';
@@ -13,6 +16,8 @@ import createPaymentPaper from './fixtures/createPaymentMethod/paperDirectDebit.
 import createPaymentSupporterPlus from './fixtures/createPaymentMethod/supporterPlusAnnualEUR.json';
 import createSalesforceContactContribution from './fixtures/createSalesforceContact/contributionMonthlyUSD.json';
 import createSalesforceContactPaper from './fixtures/createSalesforceContact/paperDirectDebit.json';
+import createDigitalPackSubscription from './fixtures/createZuoraSubscription/digitalSubscriptionInput.json';
+import sendThankYouDigitalPackJson from './fixtures/sendThankYouEmail/digitalSubscriptionState.json';
 
 describe('stateSchemas', () => {
 	test('createPaymentMethodStateSchema works for supporter plus', () => {
@@ -56,7 +61,7 @@ describe('stateSchemas', () => {
 		const paper: CreatePaymentMethodState =
 			createPaymentMethodStateSchema.parse(createPaymentPaper);
 		expect(paper.product.productType).toBe('Paper');
-		expect(paper.firstDeliveryDate).toBe('2024-10-17');
+		expect(paper.firstDeliveryDate).toEqual(new Date('2024-10-17'));
 		expect(paper.user.deliveryAddress?.lineOne).toBe('123 Test Street');
 		const ddPaymentFields = paper.paymentFields as DirectDebitPaymentFields;
 		expect(ddPaymentFields.accountNumber).toBe('00000000');
@@ -85,5 +90,19 @@ describe('stateSchemas', () => {
 		if (paper.paymentMethod.Type === 'BankTransfer') {
 			expect(paper.paymentMethod.PaymentGateway).toBe('GoCardless');
 		}
+	});
+	test('createZuoraSubscriptionStateSchema works for digital subscription', () => {
+		const digitalSubscription = wrapperSchemaForState(
+			createZuoraSubscriptionStateSchema,
+		).parse(createDigitalPackSubscription);
+		expect(digitalSubscription.state.product.currency).toBe('EUR');
+	});
+	test('sendThankYouEmailStateSchema works for digital subscription', () => {
+		const digitalSubscription = wrapperSchemaForState(
+			sendAcquisitionEventStateSchema,
+		).parse(sendThankYouDigitalPackJson);
+		expect(
+			digitalSubscription.state.sendThankYouEmailState.product.currency,
+		).toBe('EUR');
 	});
 });

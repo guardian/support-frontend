@@ -1,25 +1,27 @@
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { getBenefitsChecklistFromLandingPageTool } from '../benefitsChecklist';
+import { expectedDefaultBenefits } from './__fixtures__/expectedDefaultBenefits';
 
 describe('getBenefitsChecklistFromLandingPageTool', () => {
 	const landingPageSettings = {
-		name: 'TierThree',
+		name: 'SupporterPlus',
 		copy: {
-			heading: 'TierThree heading',
-			subheading: 'TierThree subheading',
+			heading: 'SupporterPlus heading',
+			subheading: 'SupporterPlus subheading',
 		},
 		products: {
-			TierThree: {
-				title: 'TierThree title',
+			DigitalSubscription: {
+				title: 'DigitalSubscription title',
 				benefits: [
 					{
-						copy: 'TierThree benefit 1',
+						copy: 'DigitalSubscription benefit 1',
 					},
 					{
-						copy: 'TierThree benefit 2',
+						copy: 'DigitalSubscription benefit 2',
 					},
 				],
 				cta: {
-					copy: 'TierThree cta',
+					copy: 'DigitalSubscription cta',
 				},
 			},
 			SupporterPlus: {
@@ -52,17 +54,22 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 			},
 		},
 	};
-	it('should return the correct benefits checklist for TierThree', () => {
+	const GBP = 'GBPCountries';
+	it('should return the correct benefits checklist for DigitalSubscription', () => {
 		expect(
-			getBenefitsChecklistFromLandingPageTool('TierThree', landingPageSettings),
+			getBenefitsChecklistFromLandingPageTool(
+				'DigitalSubscription',
+				landingPageSettings,
+				GBP,
+			),
 		).toEqual([
 			{
 				isChecked: true,
-				text: 'TierThree benefit 1',
+				text: 'DigitalSubscription benefit 1',
 			},
 			{
 				isChecked: true,
-				text: 'TierThree benefit 2',
+				text: 'DigitalSubscription benefit 2',
 			},
 			{
 				isChecked: true,
@@ -79,6 +86,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 			getBenefitsChecklistFromLandingPageTool(
 				'Contribution',
 				landingPageSettings,
+				GBP,
 			),
 		).toMatchObject([
 			{
@@ -112,6 +120,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 			getBenefitsChecklistFromLandingPageTool(
 				'SupporterPlus',
 				landingPageSettings,
+				GBP,
 			),
 		).toEqual([
 			{
@@ -124,12 +133,44 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 			},
 		]);
 	});
-	it('should return undefined for products other than T3, S+ & RC', () => {
+	it('should return undefined for products other than DigitalSubscription, SupporterPlus & Contribution', () => {
 		expect(
 			getBenefitsChecklistFromLandingPageTool(
 				'GuardianAdLite',
 				landingPageSettings,
+				GBP,
 			),
 		).toBeUndefined();
+	});
+
+	describe('getBenefitsChecklistFromLandingPageTool with missing benefits in landing page tool', () => {
+		const countryGroups = [
+			'GBPCountries',
+			'AUDCountries',
+			'EURCountries',
+			'UnitedStates',
+			'International',
+			'NZDCountries',
+			'Canada',
+		];
+		const products = ['Contribution', 'SupporterPlus', 'DigitalSubscription'];
+		const landingPageSettingsWithoutProducts = {
+			...landingPageSettings,
+			products: {},
+		};
+		products.forEach((product) => {
+			countryGroups.forEach((countryGroup) => {
+				it(`should return default benefits if none are defined in landing page tool for ${product} in ${countryGroup}`, () => {
+					const result = getBenefitsChecklistFromLandingPageTool(
+						product as 'Contribution' | 'SupporterPlus' | 'DigitalSubscription',
+						landingPageSettingsWithoutProducts,
+						countryGroup as CountryGroupId,
+					);
+					expect(result).toEqual(
+						expectedDefaultBenefits[product]?.[countryGroup],
+					);
+				});
+			});
+		});
 	});
 });

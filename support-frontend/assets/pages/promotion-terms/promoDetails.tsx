@@ -1,5 +1,10 @@
 import { css } from '@emotion/react';
-import AnchorButton from 'components/button/anchorButton';
+import { space, until } from '@guardian/source/foundations';
+import {
+	LinkButton,
+	SvgArrowRightStraight,
+	themeButtonReaderRevenueBrand,
+} from '@guardian/source/react-components';
 import Content from 'components/content/content';
 import { List } from 'components/list/list';
 import { LargeParagraph, Title } from 'components/text/text';
@@ -23,6 +28,16 @@ const landingPageForProduct = (props: PromotionTerms) => {
 	}
 };
 
+const buttonStyle = css`
+	margin: ${space[6]}px 0 ${space[4]}px;
+
+	${until.tablet} {
+		> a {
+			width: 100%;
+		}
+	}
+`;
+
 export default function PromoDetails(props: PromotionTerms): JSX.Element {
 	const validUntil = props.expires ? (
 		<LargeParagraph>
@@ -31,7 +46,7 @@ export default function PromoDetails(props: PromotionTerms): JSX.Element {
 	) : null;
 	return (
 		<Content>
-			<Title size={1}>Promotional code: {props.promoCode}</Title>
+			<Title>Promotional code: {props.promoCode}</Title>
 			<LargeParagraph>
 				<strong>Promotion details:</strong> {props.description}
 			</LargeParagraph>
@@ -48,11 +63,16 @@ export default function PromoDetails(props: PromotionTerms): JSX.Element {
 					}))}
 				/>
 			</LargeParagraph>
-			<AnchorButton
-				href={`${landingPageForProduct(props)}?promoCode=${props.promoCode}`}
-			>
-				Get this offer
-			</AnchorButton>
+			<div css={buttonStyle}>
+				<LinkButton
+					href={`${landingPageForProduct(props)}?promoCode=${props.promoCode}`}
+					theme={themeButtonReaderRevenueBrand}
+					icon={<SvgArrowRightStraight />}
+					iconSide="right"
+				>
+					Get this offer
+				</LinkButton>
+			</div>
 		</Content>
 	);
 }

@@ -35,7 +35,6 @@ import { PriceCards } from 'components/priceCards/priceCards';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
-import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { config } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
@@ -59,7 +58,7 @@ import {
 	Stripe,
 	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
-import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import * as cookie from 'helpers/storage/cookie';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -75,6 +74,7 @@ import {
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import {
+	getSanitisedHtml,
 	parseCustomAmounts,
 	roundToDecimalPlaces,
 } from 'helpers/utilities/utilities';
@@ -82,11 +82,13 @@ import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkou
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
 import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/coverTransactionCost';
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
+import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/footerTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
-import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { CheckoutNudgeSelector } from '../../../components/checkoutNudge/checkoutNudge';
 import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
+import useEmailMarketingUtmSession from '../../../helpers/customHooks/useEmailMarketingUtmSession';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
+import type { OneTimeCheckoutVariant } from '../../../helpers/globalsAndSwitches/oneTimeCheckoutSettings';
 import {
 	updateAbandonedBasketCookie,
 	useAbandonedBasketCookie,
@@ -171,6 +173,7 @@ type OneTimeCheckoutComponentProps = {
 	useStripeExpressCheckout: boolean;
 	nudgeSettings?: CheckoutNudgeSettings;
 	landingPageSettings: LandingPageVariant;
+	oneTimeCheckoutSettings: OneTimeCheckoutVariant;
 };
 
 function paymentMethodIsActive(paymentMethod: PaymentMethod) {
@@ -257,22 +260,17 @@ export function OneTimeCheckoutComponent({
 	useStripeExpressCheckout,
 	nudgeSettings,
 	landingPageSettings,
+	oneTimeCheckoutSettings,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
 
 	const preSelectedAmountParam = urlSearchParams.get('contribution');
+	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
 
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
-
-	const settings = getSettings();
-	const { selectedAmountsVariant } = getAmountsTestVariant(
-		countryId,
-		countryGroupId,
-		settings,
-	);
 
 	let customAmountsData;
 	const customAmountsParam = urlSearchParams.get('amounts');
@@ -285,9 +283,10 @@ export function OneTimeCheckoutComponent({
 		};
 	}
 
-	const { amountsCardData } = selectedAmountsVariant;
+	const amountsDataFromOneTimeCheckoutSettings =
+		oneTimeCheckoutSettings.amounts;
 	const { amounts, defaultAmount, hideChooseYourAmount } =
-		customAmountsData ?? amountsCardData['ONE_OFF'];
+		customAmountsData ?? amountsDataFromOneTimeCheckoutSettings;
 
 	const { preSelectedPriceCard, preSelectedOtherAmount } = getPreSelectedAmount(
 		preSelectedAmountParam,
@@ -329,14 +328,17 @@ export function OneTimeCheckoutComponent({
 
 	const elements = useElements();
 	useEffect(() => {
-		if (useStripeExpressCheckout && finalAmount && elements) {
-			// valid elements and final amount, set amount, enable Express checkout
-			elements.update({ amount: finalAmount * 100 });
-			setStripeExpressCheckoutEnable(true);
-		} else {
-			// invalid elements and final amount, disable Express checkout
-			setStripeExpressCheckoutEnable(false);
-		}
+		const initialiseStripeExpress = async () => {
+			if (useStripeExpressCheckout && finalAmount && elements) {
+				// valid elements and final amount, set amount, enable Express checkout
+				await elements.update({ amount: finalAmount * 100 });
+				setStripeExpressCheckoutEnable(true);
+			} else {
+				// invalid elements and final amount, disable Express checkout
+				setStripeExpressCheckoutEnable(false);
+			}
+		};
+		void initialiseStripeExpress();
 	}, [finalAmount, elements, useStripeExpressCheckout]);
 
 	useEffect(() => {
@@ -608,7 +610,7 @@ export function OneTimeCheckoutComponent({
 		: 'Pay now';
 
 	return (
-		<GuardianPageLayout>
+		<GuardianPageLayout borderBox>
 			<Box>
 				<BoxContents>
 					<div
@@ -617,13 +619,25 @@ export function OneTimeCheckoutComponent({
 						`}
 					>
 						<div css={titleAndButtonContainer}>
-							<h2 css={title}>Support just once</h2>
+							<h2 css={title}>
+								<span
+									dangerouslySetInnerHTML={{
+										__html: getSanitisedHtml(oneTimeCheckoutSettings.heading),
+									}}
+								/>
+							</h2>
 							<BackButton
 								path={`/${supportRegionId}/contribute`}
 								buttonText="back"
 							/>
 						</div>
-						<p css={standFirst}>Support us with the amount of your choice.</p>
+						<p css={standFirst}>
+							<span
+								dangerouslySetInnerHTML={{
+									__html: getSanitisedHtml(oneTimeCheckoutSettings.subheading),
+								}}
+							/>
+						</p>
 						<PriceCards
 							amounts={amounts}
 							selectedAmount={selectedPriceCard}
@@ -814,7 +828,6 @@ export function OneTimeCheckoutComponent({
 										value={billingPostcode}
 										pattern={doesNotContainExtendedEmojiOrLeadingSpace}
 										error={billingPostcodeError}
-										optional
 										onInvalid={(event) => {
 											validate(
 												event,
@@ -917,9 +930,11 @@ export function OneTimeCheckoutComponent({
 							)}
 						/>
 
-						<div css={similarProductsConsentCheckboxContainer}>
-							<SimilarProductsConsent />
-						</div>
+						{!isMarketingEmailSession && (
+							<div css={similarProductsConsentCheckboxContainer}>
+								<SimilarProductsConsent />
+							</div>
+						)}
 
 						<div
 							css={css`

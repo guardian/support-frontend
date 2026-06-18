@@ -1,14 +1,14 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
+import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import { FormSection, Legend } from 'pages/[countryGroupId]/components/form';
 import { DeliveryAgentsSelect } from 'pages/paper-subscription-checkout/components/deliveryAgentsSelect';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import type { DeliveryAgentsResponse } from '../helpers/getDeliveryAgents';
 import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
+import type { BillingStatePostcodeCountry } from './BillingAddressFields';
 import { BillingAddressFields } from './BillingAddressFields';
 import { DeliveryRecipientAddress } from './DeliveryRecipientAddress';
-import type { BillingStatePostcode } from './PersonalDetailsFields';
 
 type PersonalAddressFieldsProps = {
 	countryId: IsoCountry;
@@ -27,7 +27,8 @@ type PersonalAddressFieldsProps = {
 	setDeliveryAddressErrors: React.Dispatch<
 		React.SetStateAction<AddressFormFieldError[]>
 	>;
-	billingStatePostcode?: BillingStatePostcode;
+	useExpressPostcodeLookup: boolean;
+	billingStatePostcodeCountry?: BillingStatePostcodeCountry;
 	isWeeklyGift?: boolean;
 };
 
@@ -46,13 +47,16 @@ export function PersonalAddressFields({
 	setDeliveryAgentError,
 	deliveryAddressErrors,
 	setDeliveryAddressErrors,
-	billingStatePostcode,
+	useExpressPostcodeLookup,
+	billingStatePostcodeCountry,
 	isWeeklyGift = false,
 }: PersonalAddressFieldsProps) {
-	const legendDelivery = billingStatePostcode
+	const legendDelivery = billingStatePostcodeCountry
 		? `2. Delivery address`
 		: `3. Gift recipient's address`;
-	const legendOutsideM25 = `${billingStatePostcode ? 3 : 4}. Delivery Agent`;
+	const legendOutsideM25 = `${
+		billingStatePostcodeCountry ? 3 : 4
+	}. Delivery Agent`;
 
 	return (
 		<>
@@ -66,14 +70,15 @@ export function PersonalAddressFields({
 				showInstructions={productKey === 'HomeDelivery'}
 				addressErrors={deliveryAddressErrors}
 				setAddressErrors={setDeliveryAddressErrors}
+				useExpressPostcodeLookup={useExpressPostcodeLookup}
 			/>
-			{billingStatePostcode && (
+			{billingStatePostcodeCountry && (
 				<BillingAddressFields
-					countryId={countryId}
 					countries={countries}
 					checkoutSession={checkoutSession}
-					billingStatePostcode={billingStatePostcode}
+					billingStatePostcodeCountry={billingStatePostcodeCountry}
 					isWeeklyGift={isWeeklyGift}
+					useExpressPostcodeLookup={useExpressPostcodeLookup}
 				/>
 			)}
 			{deliveryPostcodeIsOutsideM25 && (

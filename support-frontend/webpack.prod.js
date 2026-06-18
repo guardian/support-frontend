@@ -1,7 +1,7 @@
 const webpack = require('webpack');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = (
 	env = {
@@ -12,7 +12,7 @@ module.exports = (
 	const isGithubAction = ci === 'github';
 	const jsFileName = isGithubAction ? '[name].js' : '[name].[chunkhash].js';
 
-	return merge(common('[name].[chunkhash].css', jsFileName, true), {
+	return merge(common(jsFileName), {
 		mode: 'production',
 		devtool: 'source-map',
 		plugins: [
