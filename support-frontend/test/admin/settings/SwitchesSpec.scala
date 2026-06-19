@@ -115,10 +115,6 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "enableTooledStudentLandingPage" : {
           |        "description" : "Enable tooled student landing page",
           |        "state" : "On"
-          |      },
-          |      "enableCanadaTaxExclusion" : {
-          |        "description" : "Canada Tax Exclusive Rate Plans",
-          |        "state" : "Off"
           |      }
           |    }
           |  },
@@ -164,17 +160,8 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
             stripeHostedCheckout = Some(Off),
           ),
           subscriptionsSwitches = SubscriptionsSwitches(Some(On), Some(On), Some(On)),
-          featureSwitches = FeatureSwitches(
-            Some(On),
-            Some(On),
-            Some(Off),
-            Some(On),
-            Some(Off),
-            Some(On),
-            Some(On),
-            Some(On),
-            Some(Off),
-          ),
+          featureSwitches =
+            FeatureSwitches(Some(On), Some(On), Some(Off), Some(On), Some(Off), Some(On), Some(On), Some(On)),
           campaignSwitches = CampaignSwitches(Some(Off), Some(Off)),
           recaptchaSwitches = RecaptchaSwitches(Some(On), Some(On)),
         ),

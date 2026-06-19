@@ -62,7 +62,6 @@ import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
 import { ThreeTierLandingHeading } from './threeTierLandingHeading';
 import { TickerContainer } from './tickerContainer';
-import { useRatePlanKey } from './useRatePlanKey';
 
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
@@ -331,11 +330,6 @@ export function ThreeTierLanding({
 		setContributionType(paymentFrequencies[buttonIndex] as ContributionType);
 	};
 
-	const maybeTaxExclusiveRatePlanKey = useRatePlanKey(
-		contributionType,
-		supportRegionId,
-	);
-
 	const ratePlanKey = getRatePlanKey(contributionType);
 
 	const fallbackProducts = fallBackLandingPageSelection.products;
@@ -344,12 +338,11 @@ export function ThreeTierLanding({
 	 * Tier 1: Contributions
 	 * We use the product catalog for the recurring Contribution tier amount
 	 */
-
 	const tier1Pricing = productCatalog.Contribution?.ratePlans[ratePlanKey]
 		?.pricing[currencyId] as number;
 	const tier1UrlParams = new URLSearchParams({
 		product: 'Contribution',
-		ratePlanKey,
+		ratePlan: getRatePlanKey(contributionType),
 		contribution: tier1Pricing.toString(),
 	});
 	const tier1Url = `checkout?${tier1UrlParams.toString()}`;
@@ -394,13 +387,11 @@ export function ThreeTierLanding({
 	};
 
 	/** Tier 2: SupporterPlus */
-
-	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[
-		maybeTaxExclusiveRatePlanKey
-	]?.pricing[currencyId] as number;
+	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[ratePlanKey]
+		?.pricing[currencyId] as number;
 	const tier2UrlParams = new URLSearchParams({
 		product: 'SupporterPlus',
-		ratePlan: maybeTaxExclusiveRatePlanKey,
+		ratePlan: ratePlanKey,
 	});
 	const tier2Promotion = getPromotion(
 		allProductPrices.SupporterPlus,
@@ -455,12 +446,11 @@ export function ThreeTierLanding({
 	 * This should only exist as long as the Tier three hack is in place.
 	 */
 	const tier3Product = 'DigitalSubscription';
-	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[
-		maybeTaxExclusiveRatePlanKey
-	]?.pricing[currencyId] as number;
+	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[ratePlanKey]
+		?.pricing[currencyId] as number;
 	const tier3UrlParams = new URLSearchParams({
 		product: tier3Product,
-		ratePlan: maybeTaxExclusiveRatePlanKey,
+		ratePlan: ratePlanKey,
 	});
 	const { label: title, labelPill: titlePill } = getProductDescription(
 		'DigitalSubscription',
