@@ -64,7 +64,10 @@
     membersDataApiUrl = membersDataApiUrl,
     guestAccountCreationToken = guestAccountCreationToken,
     productCatalog = productCatalog,
-    taxRates = taxRates,
     user = user
   )
+
+  <script type="text/javascript">
+    window.guardian.taxRates = @Html(outputJson(taxRates))
+  </script>
 }

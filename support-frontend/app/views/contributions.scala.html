@@ -26,7 +26,6 @@
   serversideTests: Map[String, Participation] = Map(),
   allProductPrices: AllProductPrices,
   productCatalog: JsonObject,
-  taxRates: JsonObject,
   noIndex: Boolean,
   canonicalLink: String,
   tickerData: Option[Tickers]
@@ -80,7 +79,6 @@
     membersDataApiUrl = membersDataApiUrl,
     guestAccountCreationToken = guestAccountCreationToken,
     productCatalog = productCatalog,
-    taxRates = taxRates,
     // We explicitly set None as we have this set above
     user = None,
   )

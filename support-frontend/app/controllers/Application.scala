@@ -512,7 +512,6 @@ class Application(
       serversideTests = serversideTests,
       allProductPrices = allProductPrices,
       productCatalog = productCatalog,
-      taxRates = taxRates,
       noIndex = noIndexing,
       canonicalLink = canonicalLink,
       tickerData = tickerService.getTickers(),
