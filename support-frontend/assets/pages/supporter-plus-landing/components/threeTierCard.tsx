@@ -295,6 +295,7 @@ export function ThreeTierCard({
 				cssOverrides={btnStyleOverrides}
 				data-qm-trackable={quantumMetricButtonRef}
 				aria-label={linkAriaLabel}
+				data-test-id={`${product}-cta`}
 				theme={themeButtonReaderRevenueBrand}
 			>
 				{cta.copy}
