@@ -123,39 +123,43 @@ class PayPalOneOff(
       country: String,
       email: String,
       payment_intent: String,
+      redirect_status: String,
       stripePublicKey: String,
       currency: String,
       amount: Double,
   ): Action[AnyContent] =
     MaybeAuthenticatedActionOnFormSubmission.async { implicit request =>
-      val acquisitionData = getAquisitionData(request.cookies)
+      if (redirect_status != "succeeded") {
+        logger.info(s"Stripe paypal payment redirect status=$redirect_status")
+        Future.successful(Redirect(routes.PayPalOneOff.paypalError()))
+      } else {
+        val acquisitionData = getAquisitionData(request.cookies)
 
-      val paymentDataJSON = Json.obj(
-        "email" -> email,
-        "currency" -> currency,
-        "amount" -> amount,
-      )
-
-      val similarProductsConsentCookie = request.cookies.get("gu_similar_products_consent")
-
-      val similarProductsConsent = similarProductsConsentCookie.flatMap(_.value.toBooleanOption)
-
-      val isTestUser = testUsers.isTestUser(request)
-
-      val userAgent = request.headers.get("user-agent")
-
-      logger.info(s"stripeReturnURL ${request.uri}")
-
-      paymentAPIService
-        .completeStripePaypalPayment(
-          payment_intent,
-          paymentDataJSON,
-          acquisitionData,
-          stripePublicKey,
-          isTestUser,
-          userAgent,
-          similarProductsConsent,
+        val paymentDataJSON = Json.obj(
+          "email" -> email,
+          "currency" -> currency,
+          "amount" -> amount,
         )
-        .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country, "thank-you"))
+
+        val similarProductsConsentCookie = request.cookies.get("gu_similar_products_consent")
+
+        val similarProductsConsent = similarProductsConsentCookie.flatMap(_.value.toBooleanOption)
+
+        val isTestUser = testUsers.isTestUser(request)
+
+        val userAgent = request.headers.get("user-agent")
+
+        paymentAPIService
+          .completeStripePaypalPayment(
+            payment_intent,
+            paymentDataJSON,
+            acquisitionData,
+            stripePublicKey,
+            isTestUser,
+            userAgent,
+            similarProductsConsent,
+          )
+          .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country, "thank-you"))
+      }
     }
 }
