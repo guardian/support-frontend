@@ -88,9 +88,9 @@ class CachedTaxRateService(
       }
   }
 
-  // Populate the cache synchronously on startup so that the very first request doesn't see an empty value.
-  // Without this there's a race condition: the service is instantiated lazily and the scheduled refresh runs
-  // asynchronously, so the first read can happen before the initial fetch completes.
+  // Populate the cache when the service is created. This is an attempt to avoid a race condition where because the
+  // service is instantiated lazily and the scheduled refresh runs asynchronously, the first read can happen before the
+  // initial fetch completes.
   try {
     Await.result(updateAll(), 30.seconds)
   } catch {
