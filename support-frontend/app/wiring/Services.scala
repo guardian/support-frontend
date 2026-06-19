@@ -145,8 +145,8 @@ trait Services {
     )
 
   lazy val cachedTaxRateService: CachedTaxRateService = {
-    // The (product, country) combinations to pre-fetch and keep cached. Tax (sales tax / GST) only applies in
-    // the US and Canada, so we limit the combinations to those countries and the tax-applicable products.
+    // The (product, country) combinations to pre-fetch and keep cached. We currently only need tax
+    // rates for Canada, so we limit the combinations to Canada and the tax-applicable products.
     val taxApplicableProducts: Seq[Product] = Seq(SupporterPlus, DigitalPack)
     val taxApplicableCountries: Seq[Country] = Seq(Country.Canada)
     val taxRateCombinations: Seq[(Product, Country)] = for {
