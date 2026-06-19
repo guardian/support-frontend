@@ -10,8 +10,7 @@ import org.apache.pekko.actor.ActorSystem
 
 import java.util.concurrent.atomic.AtomicReference
 import scala.concurrent.duration.DurationInt
-import scala.concurrent.{Await, ExecutionContext, Future}
-import scala.util.control.NonFatal
+import scala.concurrent.{ExecutionContext, Future}
 
 case class ProductCatalogServiceError(message: String) extends Throwable
 object ProductCatalogServiceError {
@@ -41,24 +40,12 @@ class CachedProductCatalogService(system: ActorSystem, productCatalogService: Pr
     ec: ExecutionContext,
 ) {
   private val json = new AtomicReference[JsonObject](JsonObject())
-  private def update(): Future[Unit] = {
+  private def update() = {
     productCatalogService.get().map(json.set)
   }
   def get(): JsonObject = json.get()
 
-  // Populate the cache synchronously on startup so that the very first request doesn't see an empty value.
-  // Without this there's a race condition: the service is instantiated lazily and the scheduled refresh runs
-  // asynchronously, so the first read can happen before the initial fetch completes.
-  try {
-    Await.result(update(), 30.seconds)
-  } catch {
-    case NonFatal(_) =>
-    // Swallow startup failures so the app can still boot; the scheduled refresh below will retry.
-  }
-
-  // Subsequent refreshes happen in the background. The initial delay is 1 minute because the cache has
-  // already been populated synchronously above.
-  system.scheduler.scheduleWithFixedDelay(1.minute, 1.minute) { () =>
+  system.scheduler.scheduleWithFixedDelay(0.minutes, 1.minutes) { () =>
     {
       update()
     }
