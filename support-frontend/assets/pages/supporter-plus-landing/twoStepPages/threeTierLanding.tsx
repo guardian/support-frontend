@@ -171,6 +171,7 @@ const disclaimerContainer = css`
 const taxExclusionDisclaimer = css`
 	${textSans12};
 	color: ${palette.neutral[100]};
+	margin-bottom: ${space[2]}px;
 `;
 
 const links = [
@@ -540,6 +541,11 @@ export function ThreeTierLanding({
 						borderColor="rgba(170, 170, 180, 0.5)"
 						cssOverrides={disclaimerContainer}
 					>
+						{taxExclusionEnabled && (
+							<p css={taxExclusionDisclaimer}>
+								For All-access digital and Digital plus, taxes may apply.
+							</p>
+						)}
 						<ThreeTierTsAndCs
 							tsAndCsContent={[
 								{
@@ -577,11 +583,6 @@ export function ThreeTierLanding({
 							]}
 							currency={glyph(currencyId)}
 						></ThreeTierTsAndCs>
-						{taxExclusionEnabled && (
-							<p css={taxExclusionDisclaimer}>
-								For All-access digital and Digital plus, taxes may apply.
-							</p>
-						)}
 					</Container>
 					<FooterWithContents>
 						<FooterLinks links={links}></FooterLinks>
