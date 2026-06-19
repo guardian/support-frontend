@@ -349,7 +349,7 @@ export function ThreeTierLanding({
 		?.pricing[currencyId] as number;
 	const tier1UrlParams = new URLSearchParams({
 		product: 'Contribution',
-		ratePlanKey,
+		ratePlan: ratePlanKey,
 		contribution: tier1Pricing.toString(),
 	});
 	const tier1Url = `checkout?${tier1UrlParams.toString()}`;
