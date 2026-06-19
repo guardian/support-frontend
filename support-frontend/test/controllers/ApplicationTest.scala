@@ -91,6 +91,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     mock[Stage],
     priceSummaryServiceProvider,
     productCatalog,
+    mock[CachedTaxRateService],
     "support.thegulocal.com",
     mock[TickerService],
     mock[MParticleClient],
