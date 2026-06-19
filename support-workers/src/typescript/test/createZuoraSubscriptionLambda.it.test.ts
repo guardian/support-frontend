@@ -29,7 +29,7 @@ describe('createZuoraSubscriptionLambda integration', () => {
 			} catch (error) {
 				if (error instanceof RetryError) {
 					expect(error.name).toBe(RetryErrorType.RetryNone);
-					expect(error.message).toContain('Ghostbusters!');
+					expect(error.message).toContain('Transaction declined');
 				} else {
 					fail('Error is not an instance of RetryError');
 				}
