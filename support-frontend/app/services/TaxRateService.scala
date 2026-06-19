@@ -7,6 +7,7 @@ import com.gu.support.catalog.{DigitalPack, Product}
 import io.circe.{Decoder, Json, JsonObject}
 import io.circe.generic.semiauto.deriveDecoder
 import org.apache.pekko.actor.ActorSystem
+import play.api.Logging
 
 import java.util.concurrent.atomic.AtomicReference
 import scala.concurrent.duration.DurationInt
@@ -53,7 +54,7 @@ class CachedTaxRateService(
     combinations: Seq[(Product, Country)],
 )(implicit
     ec: ExecutionContext,
-) {
+) extends Logging {
   private val cache = new AtomicReference[Map[(Product, Country), JsonObject]](Map.empty)
 
   /** Fetches the tax rates for a single (product, country) combination and updates the cache. */
@@ -92,10 +93,13 @@ class CachedTaxRateService(
   // service is instantiated lazily and the scheduled refresh runs asynchronously, the first read can happen before the
   // initial fetch completes.
   try {
+    logger.info("Fetching tax rates on startup")
     Await.result(updateAll(), 30.seconds)
+    logger.info("Successfully fetched tax rates on startup")
   } catch {
-    case NonFatal(_) =>
-    // Swallow startup failures so the app can still boot; the scheduled refresh below will retry.
+    case NonFatal(e) =>
+      // Swallow startup failures so the app can still boot; the scheduled refresh below will retry.
+      logger.error(s"Failed to fetch tax rates on startup", e)
   }
 
   // Subsequent refreshes happen in the background. The initial delay is 1 minute because the cache has
