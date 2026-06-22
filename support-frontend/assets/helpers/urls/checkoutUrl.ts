@@ -1,41 +1,30 @@
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog';
+import type {
+	ProductKey,
+	ProductRatePlanKey,
+} from '@modules/product-catalog/productCatalog';
 
-type ContributionCheckoutParams = {
-	product: 'Contribution';
-	ratePlan: ProductRatePlanKey<'Contribution'>;
-	contribution: number;
-};
-
-type SupporterPlusCheckoutParams = {
-	product: 'SupporterPlus';
-	ratePlan: ProductRatePlanKey<'SupporterPlus'>;
+type CheckoutUrlParams<T extends ProductKey> = {
+	product: T;
+	ratePlan: ProductRatePlanKey<T>;
 	promoCode?: string;
+	contribution?: number;
 };
 
-type DigitalSubscriptionCheckoutParams = {
-	product: 'DigitalSubscription';
-	ratePlan: ProductRatePlanKey<'DigitalSubscription'>;
-	promoCode?: string;
-};
-
-type CheckoutUrlParams =
-	| ContributionCheckoutParams
-	| SupporterPlusCheckoutParams
-	| DigitalSubscriptionCheckoutParams;
-
-export function buildCheckoutUrl(
+export function buildCheckoutUrl<T extends ProductKey>(
 	supportRegionId: SupportRegionId,
-	params: CheckoutUrlParams,
+	params: CheckoutUrlParams<T>,
 ): string {
 	const urlParams = new URLSearchParams({
 		product: params.product,
 		ratePlan: params.ratePlan,
 	});
 
-	if (params.product === 'Contribution') {
+	if (params.contribution) {
 		urlParams.set('contribution', params.contribution.toString());
-	} else if (params.promoCode) {
+	}
+
+	if (params.promoCode) {
 		urlParams.set('promoCode', params.promoCode);
 	}
 
