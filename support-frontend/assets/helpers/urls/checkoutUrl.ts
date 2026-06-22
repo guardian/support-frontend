@@ -4,24 +4,27 @@ import type {
 	ProductRatePlanKey,
 } from '@modules/product-catalog/productCatalog';
 
-type CheckoutUrlParams<T extends ProductKey> = {
+type ProductUrlParams<T extends ProductKey> = {
 	product: T;
 	ratePlan: ProductRatePlanKey<T>;
 	promoCode?: string;
-	contribution?: number;
+};
+
+type ContributionUrlParams = ProductUrlParams<'Contribution'> & {
+	contribution: number;
 };
 
 export function buildCheckoutUrl<T extends ProductKey>(
 	supportRegionId: SupportRegionId,
-	params: CheckoutUrlParams<T>,
+	params: ProductUrlParams<T> | ContributionUrlParams,
 ): string {
 	const urlParams = new URLSearchParams({
 		product: params.product,
 		ratePlan: params.ratePlan,
 	});
 
-	if (params.contribution) {
-		urlParams.set('contribution', params.contribution.toString());
+	if ('contribution' in params) {
+		urlParams.set('contribution', String(params.contribution));
 	}
 
 	if (params.promoCode) {
