@@ -341,7 +341,7 @@ export function ThreeTierLanding({
 	 */
 	const tier1Pricing = productCatalog.Contribution?.ratePlans[ratePlanKey]
 		?.pricing[currencyId] as number;
-	const tier1checkoutUrl = buildCheckoutUrl({
+	const tier1checkoutUrl = buildCheckoutUrl(supportRegionId, {
 		product: 'Contribution',
 		ratePlan: getRatePlanKey(contributionType),
 		contribution: tier1Pricing,
@@ -389,12 +389,13 @@ export function ThreeTierLanding({
 	/** Tier 2: SupporterPlus */
 	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[ratePlanKey]
 		?.pricing[currencyId] as number;
+	console.log('🚀 ~ ThreeTierLanding ~ countryId:', countryId);
 	const tier2Promotion = getPromotion(
 		allProductPrices.SupporterPlus,
 		countryId,
 		billingPeriod,
 	);
-	const tier2CheckoutURL = buildCheckoutUrl({
+	const tier2CheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: 'SupporterPlus',
 		ratePlan: ratePlanKey,
 		promoCode: tier2Promotion?.promoCode,
@@ -471,7 +472,7 @@ export function ThreeTierLanding({
 		? getPromotion(tier3ProductPrice, countryId, billingPeriod)
 		: undefined;
 
-	const tier3CheckoutURL = buildCheckoutUrl({
+	const tier3CheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: tier3Product,
 		ratePlan: ratePlanKey,
 		promoCode: tier3Promotion?.promoCode,

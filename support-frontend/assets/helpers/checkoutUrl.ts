@@ -1,3 +1,4 @@
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog';
 
 type ContributionCheckoutParams = {
@@ -23,7 +24,10 @@ type CheckoutUrlParams =
 	| SupporterPlusCheckoutParams
 	| DigitalSubscriptionCheckoutParams;
 
-export function buildCheckoutUrl(params: CheckoutUrlParams): string {
+export function buildCheckoutUrl(
+	supportRegionId: SupportRegionId,
+	params: CheckoutUrlParams,
+): string {
 	const urlParams = new URLSearchParams({
 		product: params.product,
 		ratePlan: params.ratePlan,
@@ -35,5 +39,5 @@ export function buildCheckoutUrl(params: CheckoutUrlParams): string {
 		urlParams.set('promoCode', params.promoCode);
 	}
 
-	return `checkout?${urlParams.toString()}`;
+	return `/${supportRegionId}/checkout?${urlParams.toString()}`;
 }
