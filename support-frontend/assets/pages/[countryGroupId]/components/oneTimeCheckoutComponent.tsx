@@ -30,6 +30,11 @@ import type {
 	PaymentMethodResult,
 	StripeError,
 } from '@stripe/stripe-js';
+import type {
+	StripeCardCvcElementChangeEvent,
+	StripeCardExpiryElementChangeEvent,
+	StripeCardNumberElementChangeEvent,
+} from '@stripe/stripe-js';
 import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
@@ -104,6 +109,7 @@ import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import { PersonalEmailFields } from '../checkout/components/PersonalEmailFields';
 import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
 import getConsentValue from '../helpers/getConsentValue';
+import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -400,6 +406,7 @@ export function OneTimeCheckoutComponent({
 
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('None');
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
+	type StripeOnlyField = 'cardNumber' | 'expiry' | 'cvc';
 	useEffect(() => {
 		if (paymentMethodError) {
 			paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -408,6 +415,14 @@ export function OneTimeCheckoutComponent({
 
 	const formRef = useRef<HTMLFormElement>(null);
 	const paymentMethodRef = useRef<HTMLFieldSetElement>(null);
+
+	const [stripeFieldsAreEmpty, setStripeFieldsAreEmpty] = useState<
+		Record<StripeOnlyField, boolean>
+	>({ cardNumber: true, expiry: true, cvc: true });
+	type StripeField = StripeOnlyField | 'recaptcha';
+	const [stripeFieldError, setStripeFieldError] = useState<
+		Partial<Record<StripeField, string>>
+	>({});
 
 	const validate = (
 		event: React.FormEvent<HTMLInputElement>,
@@ -428,15 +443,84 @@ export function OneTimeCheckoutComponent({
 		}
 	};
 
+	useEffect(() => {
+		// Return to the default state when payment method changes
+		setStripeFieldsAreEmpty({
+			cardNumber: true,
+			expiry: true,
+			cvc: true,
+		});
+		setStripeFieldError({});
+	}, [paymentMethod]);
+
+	// Reset recaptcha error when recaptcha token changes
+	useEffect(() => {
+		setStripeFieldError((previousState) => ({
+			...previousState,
+			recaptcha: undefined,
+		}));
+	}, [recaptchaToken]);
+
 	const formOnSubmit = async (formData: FormData) => {
 		const similarProductsConsent = getConsentValue(formData, CONSENT_ID);
 
 		if (finalAmount) {
-			setIsProcessingPayment(true);
-
 			if (paymentMethod === 'None') {
 				setPaymentMethodError('Please select a payment method');
+				return;
 			}
+
+			if (paymentMethod === 'Stripe') {
+				const newStripeFieldError = {
+					...(stripeFieldsAreEmpty.cardNumber && {
+						cardNumber: 'Please enter card number',
+					}),
+					...(stripeFieldsAreEmpty.expiry && {
+						expiry: 'Please enter expiry',
+					}),
+					...(stripeFieldsAreEmpty.cvc && {
+						cvc: 'Please enter CVC',
+					}),
+					// Recaptcha works slightly differently because we own the state
+					...(!recaptchaToken && {
+						recaptcha: 'Please complete security check',
+					}),
+				};
+
+				// Don't go any further if there are errors for any Stripe fields
+				if (Object.values(newStripeFieldError).some((value) => value)) {
+					setStripeFieldError(newStripeFieldError);
+					paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
+					return;
+				}
+			}
+			setIsProcessingPayment(true);
+
+			if (paymentMethod === 'Stripe') {
+				const newStripeFieldError = {
+					...(stripeFieldsAreEmpty.cardNumber && {
+						cardNumber: 'Please enter card number',
+					}),
+					...(stripeFieldsAreEmpty.expiry && {
+						expiry: 'Please enter expiry',
+					}),
+					...(stripeFieldsAreEmpty.cvc && {
+						cvc: 'Please enter CVC',
+					}),
+					// Recaptcha works slightly differently because we own the state
+					...(!recaptchaToken && {
+						recaptcha: 'Please complete security check',
+					}),
+				};
+
+				// Don't go any further if there are errors for any Stripe fields
+				if (Object.values(newStripeFieldError).some((value) => value)) {
+					setStripeFieldError(newStripeFieldError);
+					paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
+					return;
+				}
+			}
+			setIsProcessingPayment(true);
 
 			let paymentResult: PaymentResult | undefined;
 			if (paymentMethod === 'PayPal') {
@@ -1006,16 +1090,58 @@ export function OneTimeCheckoutComponent({
 															value={recaptchaToken}
 														/>
 														<StripeCardForm
-															onCardNumberChange={() => {
-																// no-op
+															onCardNumberChange={(
+																event: StripeCardNumberElementChangeEvent,
+															) => {
+																setStripeFieldsAreEmpty((prevState) => ({
+																	...prevState,
+																	cardNumber: event.empty,
+																}));
+
+																// Clear errors when the field changes, we'll (re) show errors, if any, on submit
+																setStripeFieldError((prevState) => ({
+																	...prevState,
+																	cardNumber: undefined,
+																}));
 															}}
-															onExpiryChange={() => {
-																// no-op
+															onExpiryChange={(
+																event: StripeCardExpiryElementChangeEvent,
+															) => {
+																setStripeFieldsAreEmpty((prevState) => ({
+																	...prevState,
+																	expiry: event.empty,
+																}));
+
+																// Clear errors when the field changes, we'll (re) show errors, if any, on submit
+																setStripeFieldError((prevState) => ({
+																	...prevState,
+																	expiry: undefined,
+																}));
 															}}
-															onCvcChange={() => {
-																// no-op
+															onCvcChange={(
+																event: StripeCardCvcElementChangeEvent,
+															) => {
+																setStripeFieldsAreEmpty((prevState) => ({
+																	...prevState,
+																	cvc: event.empty,
+																}));
+
+																// Clear errors when the field changes, we'll (re) show errors, if any, on submit
+																setStripeFieldError((prevState) => ({
+																	...prevState,
+																	cvc: undefined,
+																}));
 															}}
-															errors={{}}
+															errors={{
+																cardNumber: maybeArrayWrap(
+																	stripeFieldError.cardNumber,
+																),
+																expiry: maybeArrayWrap(stripeFieldError.expiry),
+																cvc: maybeArrayWrap(stripeFieldError.cvc),
+																recaptcha: maybeArrayWrap(
+																	stripeFieldError.recaptcha,
+																),
+															}}
 															recaptcha={
 																<Recaptcha
 																	onRecaptchaCompleted={(token) => {
