@@ -47,6 +47,7 @@ import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPer
 import { allProductPrices } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
+import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
 import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
@@ -340,12 +341,11 @@ export function ThreeTierLanding({
 	 */
 	const tier1Pricing = productCatalog.Contribution?.ratePlans[ratePlanKey]
 		?.pricing[currencyId] as number;
-	const tier1UrlParams = new URLSearchParams({
+	const tier1checkoutUrl = buildCheckoutUrl(supportRegionId, {
 		product: 'Contribution',
 		ratePlan: getRatePlanKey(contributionType),
-		contribution: tier1Pricing.toString(),
+		contribution: tier1Pricing,
 	});
-	const tier1Url = `checkout?${tier1UrlParams.toString()}`;
 
 	const getDefaultSelectedProduct = () => {
 		if (urlSearchParamsProduct) {
@@ -367,7 +367,7 @@ export function ThreeTierLanding({
 	const tier1Card: CardContent = {
 		product: 'Contribution',
 		price: tier1Pricing,
-		link: tier1Url,
+		link: tier1checkoutUrl,
 		isUserSelected:
 			urlSearchParamsProduct === 'contribution' ||
 			isCardUserSelected(tier1Pricing) ||
@@ -389,18 +389,18 @@ export function ThreeTierLanding({
 	/** Tier 2: SupporterPlus */
 	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[ratePlanKey]
 		?.pricing[currencyId] as number;
-	const tier2UrlParams = new URLSearchParams({
-		product: 'SupporterPlus',
-		ratePlan: ratePlanKey,
-	});
+	console.log('🚀 ~ ThreeTierLanding ~ countryId:', countryId);
 	const tier2Promotion = getPromotion(
 		allProductPrices.SupporterPlus,
 		countryId,
 		billingPeriod,
 	);
-	if (tier2Promotion) {
-		tier2UrlParams.set('promoCode', tier2Promotion.promoCode);
-	}
+	const tier2CheckoutURL = buildCheckoutUrl(supportRegionId, {
+		product: 'SupporterPlus',
+		ratePlan: ratePlanKey,
+		promoCode: tier2Promotion?.promoCode,
+	});
+
 	const tier2ProductDescription = {
 		...settings.products.SupporterPlus,
 		title: getProductLabel('SupporterPlus'),
@@ -419,7 +419,7 @@ export function ThreeTierLanding({
 	const tier2Card: CardContent = {
 		product: 'SupporterPlus',
 		price: tier2Pricing,
-		link: `checkout?${tier2UrlParams.toString()}`,
+		link: tier2CheckoutURL,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion: tier2Promotion,
 		isUserSelected:
@@ -448,10 +448,6 @@ export function ThreeTierLanding({
 	const tier3Product = 'DigitalSubscription';
 	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[ratePlanKey]
 		?.pricing[currencyId] as number;
-	const tier3UrlParams = new URLSearchParams({
-		product: tier3Product,
-		ratePlan: ratePlanKey,
-	});
 	const { label: title, labelPill: titlePill } = getProductDescription(
 		'DigitalSubscription',
 		ratePlanKey,
@@ -475,13 +471,17 @@ export function ThreeTierLanding({
 	const tier3Promotion = tier3ProductPrice
 		? getPromotion(tier3ProductPrice, countryId, billingPeriod)
 		: undefined;
-	if (tier3Promotion) {
-		tier3UrlParams.set('promoCode', tier3Promotion.promoCode);
-	}
+
+	const tier3CheckoutURL = buildCheckoutUrl(supportRegionId, {
+		product: tier3Product,
+		ratePlan: ratePlanKey,
+		promoCode: tier3Promotion?.promoCode,
+	});
+
 	const tier3Card: CardContent = {
 		product: tier3Product,
 		price: tier3Pricing,
-		link: `checkout?${tier3UrlParams.toString()}`,
+		link: tier3CheckoutURL,
 		promotion: tier3Promotion,
 		isUserSelected:
 			urlSearchParamsProduct === tier3Product.toLowerCase() ||
