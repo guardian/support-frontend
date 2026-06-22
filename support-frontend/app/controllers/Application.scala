@@ -473,11 +473,6 @@ class Application(
 
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
 
-    val taxRates = countryCode match {
-      case "ca" => cachedTaxRateService.get(Country.Canada)
-      case _ => JsonObject.empty
-    }
-
     // We want the canonical link to point to the geo-redirect page so that users arriving from
     // search will be redirected to the correct version of the page
     val canonicalLink = s"$canonicalUrl"
