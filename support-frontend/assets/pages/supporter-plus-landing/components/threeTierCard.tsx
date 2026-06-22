@@ -98,7 +98,7 @@ const priceCss = (useLargeMinHeight: boolean) => css`
 	margin-bottom: ${space[2]}px;
 
 	${from.desktop} {
-		min-height: ${useLargeMinHeight ? `${space[16]}px` : `${space[12]}px`};
+		min-height: ${useLargeMinHeight ? `${space[16]}px` : `${space[10]}px`};
 	}
 `;
 
