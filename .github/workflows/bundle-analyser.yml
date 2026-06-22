@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - pd/vulnerability-update-ws-package
 
 jobs:
   build_check:
