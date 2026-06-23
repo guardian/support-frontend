@@ -63,7 +63,7 @@ import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
 import { ThreeTierLandingHeading } from './threeTierLandingHeading';
 import { TickerContainer } from './tickerContainer';
-import { useRatePlanKey } from './useRatePlanKey';
+import { getRatePlanKey, useRatePlanKey } from './useRatePlanKey';
 
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
@@ -243,15 +243,6 @@ function getPlanCost(
 	};
 }
 
-function getRatePlanKey(contributionType: ContributionType) {
-	switch (contributionType) {
-		case 'ANNUAL':
-			return 'Annual';
-		default:
-			return 'Monthly';
-	}
-}
-
 type ThreeTierLandingProps = {
 	supportRegionId: SupportRegionId;
 	settings: LandingPageVariant;
@@ -350,7 +341,7 @@ export function ThreeTierLanding({
 		?.pricing[currencyId] as number;
 	const tier1checkoutUrl = buildCheckoutUrl(supportRegionId, {
 		product: 'Contribution',
-		ratePlan: getRatePlanKey(contributionType),
+		ratePlan: ratePlanKey,
 		contribution: tier1Pricing,
 	});
 
@@ -398,10 +389,7 @@ export function ThreeTierLanding({
 	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[
 		maybeTaxExclusiveRatePlanKey
 	]?.pricing[currencyId] as number;
-	const tier2UrlParams = new URLSearchParams({
-		product: 'SupporterPlus',
-		ratePlan: maybeTaxExclusiveRatePlanKey,
-	});
+
 	const tier2Promotion = getPromotion(
 		allProductPrices.SupporterPlus,
 		countryId,
@@ -461,10 +449,7 @@ export function ThreeTierLanding({
 	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[
 		maybeTaxExclusiveRatePlanKey
 	]?.pricing[currencyId] as number;
-	const tier3UrlParams = new URLSearchParams({
-		product: tier3Product,
-		ratePlan: maybeTaxExclusiveRatePlanKey,
-	});
+
 	const { label: title, labelPill: titlePill } = getProductDescription(
 		'DigitalSubscription',
 		ratePlanKey,

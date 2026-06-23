@@ -2,16 +2,23 @@ import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { useEffect, useState } from 'react';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import type { ContributionType } from 'helpers/contributions';
-import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 
-const TAX_EXCLUSIVE_RATE_PLAN_SUFFIX = 'TaxExclusive';
+export function getRatePlanKey(contributionType: ContributionType) {
+	switch (contributionType) {
+		case 'ANNUAL':
+			return 'Annual';
+		default:
+			return 'Monthly';
+	}
+}
 
 export function useRatePlanKey(
 	contributionType: ContributionType,
 	supportRegionId: SupportRegionId,
-) {
-	const [ratePlanKey, setRatePlanKey] = useState<string>(
-		contributionTypeToBillingPeriod(contributionType),
+): ActiveRatePlanKey {
+	const [ratePlanKey, setRatePlanKey] = useState<ActiveRatePlanKey>(
+		getRatePlanKey(contributionType),
 	);
 
 	const { enableCanadaTaxExclusion } = useFeatureSwitches();
@@ -19,10 +26,13 @@ export function useRatePlanKey(
 	const taxExclusionEnabled = isCanada && enableCanadaTaxExclusion;
 
 	useEffect(() => {
-		setRatePlanKey(contributionTypeToBillingPeriod(contributionType));
+		setRatePlanKey(getRatePlanKey(contributionType));
 	}, [contributionType]);
 
-	return taxExclusionEnabled
-		? `${ratePlanKey}${TAX_EXCLUSIVE_RATE_PLAN_SUFFIX}`
-		: ratePlanKey;
+	if (taxExclusionEnabled) {
+		return ratePlanKey === 'Monthly'
+			? 'MonthlyTaxExclusive'
+			: 'AnnualTaxExclusive';
+	}
+	return ratePlanKey;
 }
