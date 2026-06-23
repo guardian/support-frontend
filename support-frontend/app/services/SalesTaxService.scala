@@ -4,6 +4,10 @@ import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.i18n.Country
 import com.gu.rest.WebServiceHelper
 import com.gu.support.catalog.{DigitalPack, Product}
+import com.gu.aws.AwsCloudWatchMetricPut
+import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
+import com.gu.aws.AwsCloudWatchMetricSetup.salesTaxApiFailure
+import com.gu.support.config.Stage
 import io.circe.{Decoder, Json, JsonObject}
 import io.circe.generic.semiauto.deriveDecoder
 import org.apache.pekko.actor.ActorSystem
@@ -52,6 +56,7 @@ class CachedSalesTaxService(
     system: ActorSystem,
     salesTaxService: SalesTaxService,
     combinations: Seq[(Product, Country)],
+    stage: Stage,
 )(implicit
     ec: ExecutionContext,
 ) extends Logging {
@@ -59,9 +64,18 @@ class CachedSalesTaxService(
 
   /** Fetches the tax rates for a single (product, country) combination and updates the cache. */
   private def update(product: Product, country: Country): Future[Unit] = {
-    salesTaxService.get(product, country).map { rates =>
-      cache.updateAndGet(_.updated((product, country), rates))
-    }
+    salesTaxService
+      .get(product, country)
+      .map { rates =>
+        cache.updateAndGet(_.updated((product, country), rates))
+      }
+      .recoverWith { case NonFatal(e) =>
+        // Send a CloudWatch metric whenever a call to the sales-tax-api fails, so we can alarm on it. This covers
+        // both the fatal startup fetch and the scheduled background refreshes, since both go through `update`.
+        AwsCloudWatchMetricPut(cloudwatchClient)(salesTaxApiFailure(stage))
+        logger.error(s"Failed to fetch sales tax rates for $product in $country", e)
+        Future.failed(e)
+      }
   }
 
   private def updateAll(): Future[Unit] =

@@ -162,6 +162,7 @@ trait Services {
         appConfig.salesTaxConfig.apiKey,
       ),
       taxRateCombinations,
+      appConfig.stage,
     )
   }
 
