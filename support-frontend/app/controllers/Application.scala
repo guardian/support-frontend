@@ -200,11 +200,6 @@ case class PaymentMethodConfigs(
     regularTestPayPalCompletePaymentsConfig: PayPalCompletePaymentsConfig,
 )
 
-case class PaymentApiConfig(
-    paymentApiUrl: String,
-    paymentApiPayPalEndpoint: String,
-)
-
 /** This class is only needed because you can't pass more than 22 arguments to a twirl template and passing both types
   * of product prices to the contributions template would exceed that limit.
   *
@@ -494,10 +489,8 @@ class Application(
         regularDefaultPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(false),
         regularTestPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(true),
       ),
-      paymentApiConfig = PaymentApiConfig(
-        paymentApiUrl = paymentAPIService.paymentAPIUrl,
-        paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
-      ),
+      paymentApiUrl = paymentAPIService.paymentAPIUrl,
+      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       membersDataApiUrl = membersDataApiUrl,
       idUser = idUser,
       guestAccountCreationToken = guestAccountCreationToken,
