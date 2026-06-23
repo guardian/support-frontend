@@ -667,7 +667,7 @@ describe('getPageParticipations', () => {
 			expect(result.variant).toEqual(variant);
 		});
 
-		it('prunes participations that do not match methodology testName overrides', async () => {
+		it('prunes participations that do not match any test name', async () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live', [
 				'GBPCountries',
@@ -675,24 +675,23 @@ describe('getPageParticipations', () => {
 			test.methodologies = [
 				{
 					name: 'EpsilonGreedyBandit',
-					testName: 'test-1-ABTest',
 				},
 			];
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
-			// Session has participation for an old methodology that no longer exists
+			// Session has participation for an old test that no longer exists
 			mockGetSessionParticipations.mockReturnValue({
-				'test-1-old-methodology': 'variant-a',
-				'test-1-ABTest': 'control',
+				'test-1-old': 'variant-a',
+				'test-1': 'control',
 			});
 			mockCountryGroupMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 
 			const result = await getPageParticipations(config);
 
-			// Should prune old methodology and keep current one
-			expect(result.participations).toEqual({ 'test-1-ABTest': 'control' });
+			// Should prune old test and keep current one
+			expect(result.participations).toEqual({ 'test-1': 'control' });
 			expect(result.variant).toEqual(variant);
 		});
 
@@ -723,26 +722,24 @@ describe('getPageParticipations', () => {
 			);
 		});
 
-		it('preserves methodology testName participations', async () => {
+		it('preserves participations keyed by test name', async () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live', [
 				'GBPCountries',
 			]);
-			test.methodologies = [
-				{ name: 'EpsilonGreedyBandit', testName: 'test-1-ABTest' },
-			];
+			test.methodologies = [{ name: 'EpsilonGreedyBandit' }];
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
 			mockGetSessionParticipations.mockReturnValue({
-				'test-1-ABTest': 'control',
+				'test-1': 'control',
 			});
 			mockCountryGroupMatches.mockReturnValue(true);
 
 			const result = await getPageParticipations(config);
 
-			// Should preserve participation keyed by methodology testName
-			expect(result.participations).toEqual({ 'test-1-ABTest': 'control' });
+			// Should preserve participation keyed by test name
+			expect(result.participations).toEqual({ 'test-1': 'control' });
 			expect(result.variant).toEqual(variant);
 		});
 	});
@@ -754,9 +751,7 @@ describe('getPageParticipations', () => {
 			const test = createPageTest('test-1', [variant1, variant2], 'Live', [
 				'GBPCountries',
 			]);
-			test.methodologies = [
-				{ name: 'EpsilonGreedyBandit', testName: 'test-1-ABTest' },
-			];
+			test.methodologies = [{ name: 'EpsilonGreedyBandit' }];
 			const config = createConfig([test], '^/.*/contribute(/.*)?$');
 
 			// Simulate landing page visit
@@ -789,9 +784,7 @@ describe('getPageParticipations', () => {
 			const test = createPageTest('test-1', [variant], 'Live', [
 				'GBPCountries',
 			]);
-			test.methodologies = [
-				{ name: 'EpsilonGreedyBandit', testName: 'test-1-ABTest' },
-			];
+			test.methodologies = [{ name: 'EpsilonGreedyBandit' }];
 			const config = createConfig([test], '^/.*/contribute(/.*)?$');
 
 			// Direct checkout entry (no session storage)

@@ -148,8 +148,8 @@ class BanditDataServiceSpec extends AnyFlatSpec with Matchers {
         ),
         methodologies = Some(
           List(
-            EpsilonGreedyBandit(epsilon = 0.1, testName = Some("test-1-epsilon")),
-            Roulette(testName = Some("test-1-roulette")),
+            EpsilonGreedyBandit(epsilon = 0.1),
+            Roulette(),
           ),
         ),
       ),
@@ -171,7 +171,7 @@ class BanditDataServiceSpec extends AnyFlatSpec with Matchers {
         ),
         methodologies = Some(
           List(
-            ABTest(), // This should be filtered out
+            ABTest(), // First methodology is ABTest, so no bandit data needed for this test
             EpsilonGreedyBandit(epsilon = 0.2, sampleCount = Some(10)),
           ),
         ),
@@ -190,25 +190,17 @@ class BanditDataServiceSpec extends AnyFlatSpec with Matchers {
     // Test the methodology extraction
     val configs = service.getBanditTestConfigs(tests)
 
-    configs should have size 3 // 2 epsilon greedy + 1 roulette (ABTest filtered out)
+    configs should have size 1 // Only test-1 needs bandit data (first methodology is EpsilonGreedyBandit)
 
-    // First test - epsilon greedy with custom name
-    val epsilonConfig1 = configs.find(_.testName == "test-1-epsilon")
-    epsilonConfig1 should be(defined)
-    epsilonConfig1.get.variantNames shouldBe List("control", "variant-a")
-    epsilonConfig1.get.sampleCount shouldBe None
+    // First test - uses first bandit methodology (EpsilonGreedyBandit), testName is test.name
+    val config1 = configs.find(_.testName == "test-1")
+    config1 should be(defined)
+    config1.get.variantNames shouldBe List("control", "variant-a")
+    config1.get.sampleCount shouldBe None
 
-    // First test - roulette with custom name
-    val rouletteConfig = configs.find(_.testName == "test-1-roulette")
-    rouletteConfig should be(defined)
-    rouletteConfig.get.variantNames shouldBe List("control", "variant-a")
-    rouletteConfig.get.sampleCount shouldBe None
-
-    // Second test - epsilon greedy with default name and sample count
-    val epsilonConfig2 = configs.find(_.testName == "test-2")
-    epsilonConfig2 should be(defined)
-    epsilonConfig2.get.variantNames shouldBe List("control")
-    epsilonConfig2.get.sampleCount shouldBe Some(10)
+    // Second test - first methodology is ABTest, so no bandit data config is generated
+    val config2 = configs.find(_.testName == "test-2")
+    config2 should be(empty)
   }
 
   "getClientBanditData" should "normalise weights to sum to 1.0" in {

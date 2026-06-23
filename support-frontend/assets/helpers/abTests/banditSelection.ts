@@ -137,62 +137,39 @@ function selectVariantUsingRoulette<VariantType extends { name: string }>(
 }
 
 /**
- * Select variant for a test with methodology picking
- * Returns both the variant and the effective test name for tracking
+ * Select variant for a test using its configured methodology.
+ * Always uses the first methodology if configured, otherwise defaults to AB test.
  */
 export function selectVariantForTest<VariantType extends { name: string }>(
 	test: {
 		name: string;
 		variants: VariantType[];
-		methodologies?: Array<{ name: string; testName?: string }>;
+		methodologies?: Array<{ name: string }>;
 	},
 	mvtId: number,
 	banditData: ClientBanditData[],
-): { variant: VariantType; trackingTestName: string } | undefined {
+): VariantType | undefined {
 	const methodologies = test.methodologies;
 
 	if (!methodologies || methodologies.length === 0) {
 		// No configured methodology, default to AB test
-		const variant = selectVariantUsingMVT(test, mvtId);
-		if (variant) {
-			return { variant, trackingTestName: test.name };
-		}
-		return;
+		return selectVariantUsingMVT(test, mvtId);
 	}
 
-	// Pick methodology (if multiple, use mvtId to select one deterministically)
-	const methodology =
-		methodologies.length === 1
-			? methodologies[0]!
-			: methodologies[randomNumber(mvtId, test.name) % methodologies.length];
+	// Always use the first methodology
+	const methodology = methodologies[0]!;
 
-	if (!methodology) {
-		return;
-	}
-
-	// Get effective test name with methodology override if specified
-	const trackingTestName = methodology.testName ?? test.name;
-
-	// Find bandit data for this test (using effective test name)
-	const testBanditData = banditData.find(
-		(bd) => bd.testName === trackingTestName,
-	);
+	// Find bandit data for this test
+	const testBanditData = banditData.find((bd) => bd.testName === test.name);
 
 	// Select variant based on methodology
-	let variant: VariantType | undefined;
 	if (methodology.name === 'EpsilonGreedyBandit') {
 		const epsilon = (methodology as { epsilon?: number }).epsilon ?? 0;
-		variant = selectVariantUsingEpsilonGreedy(test, epsilon, testBanditData);
+		return selectVariantUsingEpsilonGreedy(test, epsilon, testBanditData);
 	} else if (methodology.name === 'Roulette') {
-		variant = selectVariantUsingRoulette(test, testBanditData);
+		return selectVariantUsingRoulette(test, testBanditData);
 	} else {
 		// ABTest
-		variant = selectVariantUsingMVT(test, mvtId);
+		return selectVariantUsingMVT(test, mvtId);
 	}
-
-	if (variant) {
-		return { variant, trackingTestName };
-	}
-
-	return;
 }

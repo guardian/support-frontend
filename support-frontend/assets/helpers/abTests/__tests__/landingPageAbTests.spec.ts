@@ -174,7 +174,6 @@ describe('bandit selection integration', () => {
 				{
 					name: 'EpsilonGreedyBandit',
 					epsilon: 0.1,
-					testName: 'TEST_LP_ABTest',
 				},
 			],
 		};
@@ -183,7 +182,7 @@ describe('bandit selection integration', () => {
 			landingPageTests: [testWithMethodology],
 			banditData: [
 				{
-					testName: 'TEST_LP_ABTest',
+					testName: 'TEST_LP',
 					variants: [
 						{ name: 'VARIANT_A', weight: 0.7 },
 						{ name: 'VARIANT_B', weight: 0.3 },
@@ -201,8 +200,7 @@ describe('bandit selection integration', () => {
 		const result = config.selectVariant?.(testWithMethodology, 12345);
 
 		expect(result).toBeDefined();
-		expect(result?.variant).toBeDefined();
-		expect(result?.trackingTestName).toBe('TEST_LP_ABTest');
+		expect(result?.name).toBeDefined();
 	});
 
 	it('handles tests without banditData', () => {

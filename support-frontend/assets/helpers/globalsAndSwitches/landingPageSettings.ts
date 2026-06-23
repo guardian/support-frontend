@@ -110,18 +110,15 @@ export type Methodology = ABTest | EpsilonGreedyBandit | Roulette;
 
 interface ABTest {
 	name: 'ABTest';
-	testName?: string;
 }
 
 interface EpsilonGreedyBandit {
 	name: 'EpsilonGreedyBandit';
 	epsilon: number;
-	testName?: string;
 	sampleCount?: number;
 }
 
 interface Roulette {
 	name: 'Roulette';
-	testName?: string;
 	sampleCount?: number;
 }

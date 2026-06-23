@@ -68,19 +68,7 @@ export async function getPageParticipations<Variant>(
 		testList: Array<PageTest<Variant>>,
 	): Variant | undefined => {
 		for (const test of testList) {
-			// Check test.name first
-			let variantName = participations[test.name];
-
-			// If not found, check methodology.testName overrides
-			if (!variantName && test.methodologies) {
-				for (const methodology of test.methodologies) {
-					const testName = methodology.testName;
-					if (testName && participations[testName]) {
-						variantName = participations[testName];
-						break;
-					}
-				}
-			}
+			const variantName = participations[test.name];
 
 			if (variantName) {
 				const variant = test.variants.find(
@@ -143,21 +131,11 @@ export async function getPageParticipations<Variant>(
 		Object.entries(sessionParticipations).length > 0
 	) {
 		// Validate and prune session participations: drop entries whose key
-		// matches no current test name or methodology testName override, or whose
-		// variant name does not exist in that test's variants.
+		// does not match any current test name, or whose variant name does not
+		// exist in that test's variants.
 		const validParticipations: Participations = {};
 		for (const [key, value] of Object.entries(sessionParticipations)) {
-			const matchingTest = tests.find((test) => {
-				// Check if key matches test.name
-				if (key === test.name) {
-					return true;
-				}
-				// Check if key matches any methodology.testName override
-				if (test.methodologies?.some((m) => m.testName === key)) {
-					return true;
-				}
-				return false;
-			});
+			const matchingTest = tests.find((test) => key === test.name);
 			if (matchingTest?.variants.some((v) => getVariantName(v) === value)) {
 				validParticipations[key] = value;
 			}
@@ -198,20 +176,17 @@ export async function getPageParticipations<Variant>(
 		? config.selectVariant(test, mvtId)
 		: undefined;
 
-	const variant = selectionResult?.variant
-		? selectionResult.variant
-		: test.variants[randomNumber(mvtId, test.name) % test.variants.length];
+	const variant =
+		selectionResult ??
+		test.variants[randomNumber(mvtId, test.name) % test.variants.length];
 
 	if (!variant) {
 		return makeFallbackResult();
 	}
 
-	// Use trackingTestName from selection result if available, otherwise use test.name
-	const trackingTestName: string =
-		selectionResult?.trackingTestName ?? test.name;
-	// Store only the fresh participation (no merge needed once every page runs identical selection)
+	// Store only the fresh participation
 	const participations: Participations = {
-		[trackingTestName]: getVariantName(variant),
+		[test.name]: getVariantName(variant),
 	};
 	// Record the participation in session storage so that we can track it from other pages
 	setSessionParticipations(participations, sessionStorageKey);
