@@ -92,14 +92,17 @@ class CachedSalesTaxService(
   // Populate the cache when the service is created. This is an attempt to avoid a race condition where because the
   // service is instantiated lazily and the scheduled refresh runs asynchronously, the first read can happen before the
   // initial fetch completes.
+  // If this initial fetch fails we deliberately let the exception propagate. This makes app startup fail, so the
+  // instance fails its healthcheck and is never rotated into service rather than serving requests with missing tax
+  // rate data.
   try {
     logger.info("Fetching tax rates on startup")
     Await.result(updateAll(), 30.seconds)
     logger.info("Successfully fetched tax rates on startup")
   } catch {
     case NonFatal(e) =>
-      // Swallow startup failures so the app can still boot; the scheduled refresh below will retry.
-      logger.error(s"Failed to fetch tax rates on startup", e)
+      logger.error("Failed to fetch tax rates on startup, aborting app boot", e)
+      throw SalesTaxServiceError(s"Failed to fetch tax rates on startup: ${e.getMessage}")
   }
 
   // Subsequent refreshes happen in the background. The initial delay is 1 minute because the cache has
