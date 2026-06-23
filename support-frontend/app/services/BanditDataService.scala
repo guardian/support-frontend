@@ -178,25 +178,24 @@ class BanditDataService(
     ),
   )
 
-  /** Extract bandit test configurations from landing page tests for each methodology */
+  /** Extract bandit test configurations from landing page tests using the first methodology. Only generates a config if
+    * the first methodology requires bandit data (EpsilonGreedyBandit or Roulette).
+    */
   def getBanditTestConfigs(tests: List[LandingPageTest]): List[BanditTestConfig] = {
     tests.flatMap { test =>
-      val banditMethodologies = test.methodologies.getOrElse(List.empty).filter {
-        case _: EpsilonGreedyBandit => true
-        case _: Roulette => true
-        case _ => false
-      }
-
-      banditMethodologies.map { methodology =>
-        BanditTestConfig(
-          testName = methodology.testName.getOrElse(test.name),
-          variantNames = test.variants.map(_.name),
-          sampleCount = methodology match {
-            case epsilon: EpsilonGreedyBandit => epsilon.sampleCount
-            case roulette: Roulette => roulette.sampleCount
-            case _ => None
-          },
-        )
+      test.methodologies.getOrElse(List.empty).headOption.collect {
+        case e: EpsilonGreedyBandit =>
+          BanditTestConfig(
+            testName = test.name,
+            variantNames = test.variants.map(_.name),
+            sampleCount = e.sampleCount,
+          )
+        case r: Roulette =>
+          BanditTestConfig(
+            testName = test.name,
+            variantNames = test.variants.map(_.name),
+            sampleCount = r.sampleCount,
+          )
       }
     }
   }
