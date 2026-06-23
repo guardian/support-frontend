@@ -144,7 +144,7 @@ trait Services {
       prodCachedProductCatalogService = new CachedProductCatalogService(actorSystem, prodProductCatalogService),
     )
 
-  lazy val cachedTaxRateService: CachedTaxRateService = {
+  lazy val cachedSalesTaxService: CachedSalesTaxService = {
     // The (product, country) combinations to pre-fetch and keep cached. We currently only need tax
     // rates for Canada, so we limit the combinations to Canada and the tax-applicable products.
     val taxApplicableProducts: Seq[Product] = Seq(SupporterPlus, DigitalPack)
@@ -154,12 +154,12 @@ trait Services {
       country <- taxApplicableCountries
     } yield (product, country)
 
-    new CachedTaxRateService(
+    new CachedSalesTaxService(
       actorSystem,
-      new TaxRateService(
+      new SalesTaxService(
         RequestRunners.futureRunner,
-        appConfig.taxRateConfig.baseUrl,
-        appConfig.taxRateConfig.apiKey,
+        appConfig.salesTaxConfig.baseUrl,
+        appConfig.salesTaxConfig.apiKey,
       ),
       taxRateCombinations,
     )

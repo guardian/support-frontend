@@ -14,13 +14,13 @@ import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.util.control.NonFatal
 
-case class TaxRateServiceError(message: String) extends Throwable
-object TaxRateServiceError {
-  implicit val decoder: Decoder[TaxRateServiceError] = deriveDecoder
+case class SalesTaxServiceError(message: String) extends Throwable
+object SalesTaxServiceError {
+  implicit val decoder: Decoder[SalesTaxServiceError] = deriveDecoder
 }
 
-class TaxRateService(client: FutureHttpClient, val wsUrl: String, apiKey: String)
-    extends WebServiceHelper[TaxRateServiceError] {
+class SalesTaxService(client: FutureHttpClient, val wsUrl: String, apiKey: String)
+    extends WebServiceHelper[SalesTaxServiceError] {
   override val httpClient: FutureHttpClient = client
   override val verboseLogging: Boolean = false
 
@@ -28,7 +28,7 @@ class TaxRateService(client: FutureHttpClient, val wsUrl: String, apiKey: String
     val body = Json.obj(
       // `Product.toString` yields the catalog ProductKey (e.g. "SupporterPlus") and `Country.alpha2` the
       // ISO 3166 alpha-2 code (e.g. "CA"), which are the values the tax rate API expects.
-      "productKey" -> Json.fromString(TaxRateService.productKeyForApi(productKey)),
+      "productKey" -> Json.fromString(SalesTaxService.productKeyForApi(productKey)),
       "country" -> Json.fromString(country.alpha2),
     )
     postJson[JsonObject](endpoint = "tax-rates", data = body, headers = Map("x-api-key" -> apiKey))
@@ -36,7 +36,7 @@ class TaxRateService(client: FutureHttpClient, val wsUrl: String, apiKey: String
 }
 
 // In other systems DigitalPack is referred to as "DigitalSubscription"
-object TaxRateService {
+object SalesTaxService {
   def productKeyForApi(product: Product): String = product match {
     case DigitalPack => "DigitalSubscription"
     case other => other.toString
@@ -48,9 +48,9 @@ object TaxRateService {
   * @param combinations
   *   the (product, country) combinations to fetch on startup and keep refreshed.
   */
-class CachedTaxRateService(
+class CachedSalesTaxService(
     system: ActorSystem,
-    taxRateService: TaxRateService,
+    salesTaxService: SalesTaxService,
     combinations: Seq[(Product, Country)],
 )(implicit
     ec: ExecutionContext,
@@ -59,7 +59,7 @@ class CachedTaxRateService(
 
   /** Fetches the tax rates for a single (product, country) combination and updates the cache. */
   private def update(product: Product, country: Country): Future[Unit] = {
-    taxRateService.get(product, country).map { rates =>
+    salesTaxService.get(product, country).map { rates =>
       cache.updateAndGet(_.updated((product, country), rates))
     }
   }
@@ -83,7 +83,7 @@ class CachedTaxRateService(
       .distinct
       .foldLeft(JsonObject.empty) { (acc, product) =>
         currentCache.get((product, country)) match {
-          case Some(rates) => acc.add(TaxRateService.productKeyForApi(product), Json.fromJsonObject(rates))
+          case Some(rates) => acc.add(SalesTaxService.productKeyForApi(product), Json.fromJsonObject(rates))
           case None => acc
         }
       }

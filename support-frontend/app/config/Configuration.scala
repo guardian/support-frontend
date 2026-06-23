@@ -22,7 +22,7 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val idealPostcodesConfig = IdealPostcodesConfig.fromConfig(config)
 
-  lazy val taxRateConfig = TaxRateConfig.fromConfig(config)
+  lazy val salesTaxConfig = SalesTaxApiConfig.fromConfig(config)
 
   lazy val paperRoundConfigProvider = new PaperRoundConfigProvider(config, stage)
 

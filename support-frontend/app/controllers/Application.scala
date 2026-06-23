@@ -30,7 +30,7 @@ import services.mparticle.MParticleClient
 import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
 import services.{
   CachedProductCatalogServiceProvider,
-  CachedTaxRateService,
+  CachedSalesTaxService,
   PaymentAPIService,
   TestUserService,
   TickerService,
@@ -243,7 +243,7 @@ class Application(
     stage: Stage,
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
     cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
-    cachedTaxRateService: CachedTaxRateService,
+    cachedTaxRateService: CachedSalesTaxService,
     val supportUrl: String,
     tickerService: TickerService,
     mparticleClient: MParticleClient,

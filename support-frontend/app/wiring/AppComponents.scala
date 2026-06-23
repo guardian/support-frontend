@@ -86,5 +86,5 @@ class AppComponents(context: Context)
 
   // Force the creation of cachedTaxRateService on startup so that it can pre-fetch the tax rates and populate the
   // cache. This avoids a race condition when the first request arrives before the initial fetch completes.
-  val _ = cachedTaxRateService
+  val _ = cachedSalesTaxService
 }
