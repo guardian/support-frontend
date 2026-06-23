@@ -68,6 +68,7 @@ class CachedSalesTaxService(
       .get(product, country)
       .map { rates =>
         cache.updateAndGet(_.updated((product, country), rates))
+        ()
       }
       .recoverWith { case NonFatal(e) =>
         // Send a CloudWatch metric whenever a call to the sales-tax-api fails, so we can alarm on it. This covers
