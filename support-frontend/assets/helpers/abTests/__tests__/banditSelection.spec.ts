@@ -63,8 +63,7 @@ describe('banditSelection', () => {
 
 			const result = selectVariantForTest(test, 0, [banditData]);
 
-			expect(result?.variant.name).toBe('v1');
-			expect(result?.trackingTestName).toBe('test-1');
+			expect(result?.name).toBe('v1');
 		});
 
 		it('selects random variant when exploring (epsilon probability)', () => {
@@ -92,8 +91,7 @@ describe('banditSelection', () => {
 
 			const result = selectVariantForTest(test, 0, [banditData]);
 
-			expect(result?.variant.name).toBe('v3');
-			expect(result?.trackingTestName).toBe('test-1');
+			expect(result?.name).toBe('v3');
 		});
 
 		it('selects randomly when all weights are zero', () => {
@@ -119,7 +117,7 @@ describe('banditSelection', () => {
 
 			const result = selectVariantForTest(test, 0, [banditData]);
 
-			expect(result?.variant.name).toBe('v2');
+			expect(result?.name).toBe('v2');
 		});
 
 		it('selects randomly when no bandit data available', () => {
@@ -137,7 +135,7 @@ describe('banditSelection', () => {
 
 			const result = selectVariantForTest(test, 0, []);
 
-			expect(result?.variant.name).toBe('v2');
+			expect(result?.name).toBe('v2');
 		});
 
 		it('randomly picks from tied best variants', () => {
@@ -166,7 +164,7 @@ describe('banditSelection', () => {
 
 			const result = selectVariantForTest(test, 0, [banditData]);
 
-			expect(result?.variant.name).toBe('v2');
+			expect(result?.name).toBe('v2');
 		});
 
 		it('ignores variants in bandit data that are not in test configuration', () => {
@@ -190,33 +188,7 @@ describe('banditSelection', () => {
 
 			const result = selectVariantForTest(test, 0, [banditData]);
 
-			expect(result?.variant.name).toBe('v1');
-		});
-
-		it('uses methodology testName override for tracking', () => {
-			const methodologyWithOverride: Methodology = {
-				name: 'EpsilonGreedyBandit',
-				epsilon: 0.1,
-				testName: 'LP_TEST_ABTest',
-			};
-
-			const test = createTest(
-				'LP_TEST',
-				[createTestVariant('v1', 'value-1')],
-				[methodologyWithOverride],
-			);
-
-			const banditData = createBanditData('LP_TEST_ABTest', [
-				{ name: 'v1', weight: 1.0 },
-			]);
-
-			// Mock Math.random to not explore
-			jest.spyOn(Math, 'random').mockReturnValue(0.5);
-
-			const result = selectVariantForTest(test, 0, [banditData]);
-
-			expect(result?.variant.name).toBe('v1');
-			expect(result?.trackingTestName).toBe('LP_TEST_ABTest');
+			expect(result?.name).toBe('v1');
 		});
 	});
 
@@ -244,19 +216,13 @@ describe('banditSelection', () => {
 			]);
 
 			jest.spyOn(Math, 'random').mockReturnValueOnce(0.15);
-			expect(selectVariantForTest(test, 0, [banditData])?.variant.name).toBe(
-				'v1',
-			);
+			expect(selectVariantForTest(test, 0, [banditData])?.name).toBe('v1');
 
 			jest.spyOn(Math, 'random').mockReturnValueOnce(0.49);
-			expect(selectVariantForTest(test, 0, [banditData])?.variant.name).toBe(
-				'v2',
-			);
+			expect(selectVariantForTest(test, 0, [banditData])?.name).toBe('v2');
 
 			jest.spyOn(Math, 'random').mockReturnValueOnce(0.5);
-			expect(selectVariantForTest(test, 0, [banditData])?.variant.name).toBe(
-				'v3',
-			);
+			expect(selectVariantForTest(test, 0, [banditData])?.name).toBe('v3');
 		});
 
 		it('applies minimum weight floor of 10%', () => {
@@ -282,19 +248,13 @@ describe('banditSelection', () => {
 			// v2≈0.0833, v3≈0.0833, v1≈0.8333
 			// Cumulative: v2≈0.0833, v3≈0.1666, v1=1.0
 			jest.spyOn(Math, 'random').mockReturnValueOnce(0.08);
-			expect(selectVariantForTest(test, 0, [banditData])?.variant.name).toBe(
-				'v2',
-			);
+			expect(selectVariantForTest(test, 0, [banditData])?.name).toBe('v2');
 
 			jest.spyOn(Math, 'random').mockReturnValueOnce(0.16);
-			expect(selectVariantForTest(test, 0, [banditData])?.variant.name).toBe(
-				'v3',
-			);
+			expect(selectVariantForTest(test, 0, [banditData])?.name).toBe('v3');
 
 			jest.spyOn(Math, 'random').mockReturnValueOnce(0.2);
-			expect(selectVariantForTest(test, 0, [banditData])?.variant.name).toBe(
-				'v1',
-			);
+			expect(selectVariantForTest(test, 0, [banditData])?.name).toBe('v1');
 		});
 
 		it('selects randomly when all weights are zero', () => {
@@ -318,7 +278,7 @@ describe('banditSelection', () => {
 
 			const result = selectVariantForTest(test, 0, [banditData]);
 
-			expect(result?.variant.name).toBe('v3');
+			expect(result?.name).toBe('v3');
 		});
 
 		it('selects randomly when no bandit data available', () => {
@@ -336,7 +296,7 @@ describe('banditSelection', () => {
 
 			const result = selectVariantForTest(test, 0, []);
 
-			expect(result?.variant.name).toBe('v3');
+			expect(result?.name).toBe('v3');
 		});
 
 		it('ignores variants in bandit data that are not in test configuration', () => {
@@ -356,29 +316,7 @@ describe('banditSelection', () => {
 
 			const result = selectVariantForTest(test, 0, [banditData]);
 
-			expect(result?.variant.name).toBe('v1');
-		});
-
-		it('uses methodology testName override for tracking', () => {
-			const methodologyWithOverride: Methodology = {
-				name: 'Roulette',
-				testName: 'LP_TEST_ABTest',
-			};
-
-			const test = createTest(
-				'LP_TEST',
-				[createTestVariant('v1', 'value-1')],
-				[methodologyWithOverride],
-			);
-
-			const banditData = createBanditData('LP_TEST_ABTest', [
-				{ name: 'v1', weight: 1.0 },
-			]);
-
-			const result = selectVariantForTest(test, 0, [banditData]);
-
-			expect(result?.variant.name).toBe('v1');
-			expect(result?.trackingTestName).toBe('LP_TEST_ABTest');
+			expect(result?.name).toBe('v1');
 		});
 
 		it('selects variants correctly with five weighted variants', () => {
@@ -405,24 +343,16 @@ describe('banditSelection', () => {
 			]);
 
 			jest.spyOn(Math, 'random').mockReturnValueOnce(0.15);
-			expect(selectVariantForTest(test, 0, [banditData])?.variant.name).toBe(
-				'v5',
-			);
+			expect(selectVariantForTest(test, 0, [banditData])?.name).toBe('v5');
 
 			jest.spyOn(Math, 'random').mockReturnValueOnce(0.25);
-			expect(selectVariantForTest(test, 0, [banditData])?.variant.name).toBe(
-				'v2',
-			);
+			expect(selectVariantForTest(test, 0, [banditData])?.name).toBe('v2');
 
 			jest.spyOn(Math, 'random').mockReturnValueOnce(0.9999);
-			expect(selectVariantForTest(test, 0, [banditData])?.variant.name).toBe(
-				'v4',
-			);
+			expect(selectVariantForTest(test, 0, [banditData])?.name).toBe('v4');
 
 			jest.spyOn(Math, 'random').mockReturnValueOnce(0.65);
-			expect(selectVariantForTest(test, 0, [banditData])?.variant.name).toBe(
-				'v3',
-			);
+			expect(selectVariantForTest(test, 0, [banditData])?.name).toBe('v3');
 		});
 	});
 
@@ -445,58 +375,40 @@ describe('banditSelection', () => {
 			const result2 = selectVariantForTest(test, 0, []);
 
 			// Same mvtId should produce same result
-			expect(result1?.variant.name).toBe(result2?.variant.name);
-		});
-
-		it('uses methodology testName override for tracking', () => {
-			const methodologyWithOverride: Methodology = {
-				name: 'ABTest',
-				testName: 'LP_TEST_ABTest',
-			};
-
-			const test = createTest(
-				'LP_TEST',
-				[createTestVariant('v1', 'value-1')],
-				[methodologyWithOverride],
-			);
-
-			const result = selectVariantForTest(test, 0, []);
-
-			expect(result?.variant.name).toBe('v1');
-			expect(result?.trackingTestName).toBe('LP_TEST_ABTest');
+			expect(result1?.name).toBe(result2?.name);
 		});
 	});
 
-	describe('selectVariantForTest - Multiple methodologies', () => {
-		const methodology1: Methodology = {
-			name: 'EpsilonGreedyBandit',
-			epsilon: 0.1,
-			testName: 'test-1-eg',
-		};
+	describe('selectVariantForTest - Multiple methodologies uses first', () => {
+		it('always uses the first methodology regardless of mvtId', () => {
+			const methodology1: Methodology = {
+				name: 'EpsilonGreedyBandit',
+				epsilon: 0.1,
+			};
 
-		const methodology2: Methodology = {
-			name: 'Roulette',
-			testName: 'test-1-roulette',
-		};
+			const methodology2: Methodology = {
+				name: 'Roulette',
+			};
 
-		it('picks methodology based on mvtId when multiple configured', () => {
 			const test = createTest(
 				'test-1',
 				[createTestVariant('v1', 'value-1')],
 				[methodology1, methodology2],
 			);
 
-			const banditData = createBanditData('test-1-eg', [
+			const banditData = createBanditData('test-1', [
 				{ name: 'v1', weight: 1.0 },
 			]);
+
+			// Mock Math.random to not explore
+			jest.spyOn(Math, 'random').mockReturnValue(0.5);
 
 			const result1 = selectVariantForTest(test, 0, [banditData]);
 			const result2 = selectVariantForTest(test, 1, [banditData]);
 
-			// These mvtIds are intentionally chosen because the deterministic hash maps
-			// them to different methodology indexes (using the seedrandom-based randomNumber).
-			expect(result1?.trackingTestName).toBe('test-1-roulette');
-			expect(result2?.trackingTestName).toBe('test-1-eg');
+			// Both should use the first methodology (EpsilonGreedyBandit) and return v1
+			expect(result1?.name).toBe('v1');
+			expect(result2?.name).toBe('v1');
 		});
 	});
 
@@ -509,8 +421,7 @@ describe('banditSelection', () => {
 
 			const result = selectVariantForTest(test, 0, []);
 
-			expect(result?.variant).toBeDefined();
-			expect(result?.trackingTestName).toBe('test-1');
+			expect(result).toBeDefined();
 		});
 	});
 

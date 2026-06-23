@@ -125,13 +125,9 @@ export function getLandingPageTestConfig(): PageParticipationsConfig<LandingPage
 			}
 
 			// Fallback to MVT-based selection
-			const variant =
-				test.variants[randomNumber(mvtId, test.name) % test.variants.length];
-			if (variant) {
-				return { variant, trackingTestName: test.name };
-			}
-
-			return;
+			return test.variants[
+				randomNumber(mvtId, test.name) % test.variants.length
+			];
 		},
 	};
 }
