@@ -15,7 +15,7 @@
 		"@guardian/prettier": "^8.0.1",
 		"@types/aws-lambda": "^8.10.147",
 		"@types/node": "^22.13.4",
-		"esbuild": "^0.28.1",
+		"esbuild": "catalog:",
 		"prettier": "^3.5.1",
 		"tslib": "^2.6.2",
 		"typescript": "^5.7.3",
