@@ -424,6 +424,10 @@ export function OneTimeCheckoutComponent({
 		Partial<Record<StripeField, string>>
 	>({});
 
+	const [isPaymentElementComplete, setIsPaymentElementComplete] =
+		useState(false);
+	const [recaptchaError, setRecaptchaError] = useState<string>();
+
 	const validate = (
 		event: React.FormEvent<HTMLInputElement>,
 		setAction: React.Dispatch<React.SetStateAction<string | undefined>>,
@@ -470,7 +474,7 @@ export function OneTimeCheckoutComponent({
 				return;
 			}
 
-			if (paymentMethod === 'Stripe') {
+			if (!inStripePaymentElementVariant && paymentMethod === 'Stripe') {
 				const newStripeFieldError = {
 					...(stripeFieldsAreEmpty.cardNumber && {
 						cardNumber: 'Please enter card number',
@@ -486,7 +490,6 @@ export function OneTimeCheckoutComponent({
 						recaptcha: 'Please complete security check',
 					}),
 				};
-
 				// Don't go any further if there are errors for any Stripe fields
 				if (Object.values(newStripeFieldError).some((value) => value)) {
 					setStripeFieldError(newStripeFieldError);
@@ -494,28 +497,14 @@ export function OneTimeCheckoutComponent({
 					return;
 				}
 			}
-			setIsProcessingPayment(true);
-
-			if (paymentMethod === 'Stripe') {
-				const newStripeFieldError = {
-					...(stripeFieldsAreEmpty.cardNumber && {
-						cardNumber: 'Please enter card number',
-					}),
-					...(stripeFieldsAreEmpty.expiry && {
-						expiry: 'Please enter expiry',
-					}),
-					...(stripeFieldsAreEmpty.cvc && {
-						cvc: 'Please enter CVC',
-					}),
-					// Recaptcha works slightly differently because we own the state
-					...(!recaptchaToken && {
-						recaptcha: 'Please complete security check',
-					}),
-				};
-
-				// Don't go any further if there are errors for any Stripe fields
-				if (Object.values(newStripeFieldError).some((value) => value)) {
-					setStripeFieldError(newStripeFieldError);
+			if (inStripePaymentElementVariant && paymentMethod === 'Stripe') {
+				if (!isPaymentElementComplete || !recaptchaToken) {
+					if (!isPaymentElementComplete) {
+						setPaymentMethodError('Please complete missing payment details');
+					}
+					if (!recaptchaToken) {
+						setRecaptchaError('Please complete security check');
+					}
 					paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
 					return;
 				}
@@ -1021,6 +1010,17 @@ export function OneTimeCheckoutComponent({
 							</Legend>
 							{inStripePaymentElementVariant && (
 								<>
+									{paymentMethodError && (
+										<div role="alert" data-qm-error>
+											<ErrorSummary
+												cssOverrides={css`
+													margin-bottom: ${space[6]}px;
+												`}
+												message={paymentMethodError}
+												context={errorContext}
+											/>
+										</div>
+									)}
 									<PaymentElement
 										options={{
 											fields: { billingDetails: { address: 'if_required' } },
@@ -1033,13 +1033,30 @@ export function OneTimeCheckoutComponent({
 										onFocus={() => {
 											setPaymentMethod(Stripe);
 										}}
+										onChange={(event) => {
+											setIsPaymentElementComplete(event.complete);
+											setPaymentMethodError(undefined);
+										}}
 									/>
+									{recaptchaError && (
+										<div role="alert" data-qm-error>
+											<ErrorSummary
+												cssOverrides={css`
+													margin-bottom: ${space[6]}px;
+												`}
+												message={recaptchaError}
+												context={errorContext}
+											/>
+										</div>
+									)}
 									<Recaptcha
 										onRecaptchaCompleted={(token) => {
 											setRecaptchaToken(token);
+											setRecaptchaError(undefined);
 										}}
 										onRecaptchaExpired={() => {
 											setRecaptchaToken(undefined);
+											setRecaptchaError(undefined);
 										}}
 									/>
 								</>
