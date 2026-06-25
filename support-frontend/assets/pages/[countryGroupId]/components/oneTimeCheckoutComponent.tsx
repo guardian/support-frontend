@@ -1031,7 +1031,7 @@ export function OneTimeCheckoutComponent({
 											},
 											wallets: {
 												link: 'never',
-											}
+											},
 										}}
 										onFocus={() => {
 											setPaymentMethod(Stripe);
