@@ -1029,6 +1029,9 @@ export function OneTimeCheckoutComponent({
 												radios: 'always',
 												spacedAccordionItems: true,
 											},
+											wallets: {
+												link: 'never',
+											}
 										}}
 										onFocus={() => {
 											setPaymentMethod(Stripe);
