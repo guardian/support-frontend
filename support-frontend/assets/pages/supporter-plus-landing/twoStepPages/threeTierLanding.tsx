@@ -330,8 +330,8 @@ export function ThreeTierLanding({
 		setContributionType(paymentFrequencies[buttonIndex] as ContributionType);
 	};
 
-	const { maybeTaxExclusiveRatePlanKey, taxExclusionEnabled } =
-		useMaybeTaxExclusiveRatePlanKey(contributionType, supportRegionId);
+	const { ratePlanKey: maybeTaxExclusiveRatePlanKey, taxExclusionEnabled } =
+		useRatePlanKey(contributionType, supportRegionId);
 
 	const ratePlanKey = getRatePlanKey(contributionType);
 
@@ -393,7 +393,7 @@ export function ThreeTierLanding({
 
 	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[
 		maybeTaxExclusiveRatePlanKey
-	]?.pricing[currencyId] as number;
+	].pricing[currencyId] as number;
 
 	const tier2Promotion = getPromotion(
 		allProductPrices.SupporterPlus,
@@ -402,7 +402,7 @@ export function ThreeTierLanding({
 	);
 	const tier2CheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: 'SupporterPlus',
-		ratePlan: ratePlanKey,
+		ratePlan: maybeTaxExclusiveRatePlanKey,
 		promoCode: tier2Promotion?.promoCode,
 	});
 
@@ -453,7 +453,7 @@ export function ThreeTierLanding({
 	const tier3Product = 'DigitalSubscription';
 	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[
 		maybeTaxExclusiveRatePlanKey
-	]?.pricing[currencyId] as number;
+	].pricing[currencyId] as number;
 
 	const { label: title, labelPill: titlePill } = getProductDescription(
 		'DigitalSubscription',
@@ -481,7 +481,7 @@ export function ThreeTierLanding({
 
 	const tier3CheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: tier3Product,
-		ratePlan: ratePlanKey,
+		ratePlan: maybeTaxExclusiveRatePlanKey,
 		promoCode: tier3Promotion?.promoCode,
 	});
 
