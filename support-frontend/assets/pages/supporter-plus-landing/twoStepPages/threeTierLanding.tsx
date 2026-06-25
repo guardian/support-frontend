@@ -63,6 +63,7 @@ import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
 import { ThreeTierLandingHeading } from './threeTierLandingHeading';
 import { TickerContainer } from './tickerContainer';
+import { getRatePlanKey, useRatePlanKey } from './useRatePlanKey';
 
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
@@ -242,15 +243,6 @@ function getPlanCost(
 	};
 }
 
-function getRatePlanKey(contributionType: ContributionType) {
-	switch (contributionType) {
-		case 'ANNUAL':
-			return 'Annual';
-		default:
-			return 'Monthly';
-	}
-}
-
 type ThreeTierLandingProps = {
 	supportRegionId: SupportRegionId;
 	settings: LandingPageVariant;
@@ -331,6 +323,11 @@ export function ThreeTierLanding({
 		setContributionType(paymentFrequencies[buttonIndex] as ContributionType);
 	};
 
+	const maybeTaxExclusiveRatePlanKey = useRatePlanKey(
+		contributionType,
+		supportRegionId,
+	);
+
 	const ratePlanKey = getRatePlanKey(contributionType);
 
 	const fallbackProducts = fallBackLandingPageSelection.products;
@@ -339,11 +336,12 @@ export function ThreeTierLanding({
 	 * Tier 1: Contributions
 	 * We use the product catalog for the recurring Contribution tier amount
 	 */
+
 	const tier1Pricing = productCatalog.Contribution?.ratePlans[ratePlanKey]
 		?.pricing[currencyId] as number;
 	const tier1checkoutUrl = buildCheckoutUrl(supportRegionId, {
 		product: 'Contribution',
-		ratePlan: getRatePlanKey(contributionType),
+		ratePlan: ratePlanKey,
 		contribution: tier1Pricing,
 	});
 
@@ -387,9 +385,11 @@ export function ThreeTierLanding({
 	};
 
 	/** Tier 2: SupporterPlus */
-	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[ratePlanKey]
-		?.pricing[currencyId] as number;
-	console.log('🚀 ~ ThreeTierLanding ~ countryId:', countryId);
+
+	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[
+		maybeTaxExclusiveRatePlanKey
+	]?.pricing[currencyId] as number;
+
 	const tier2Promotion = getPromotion(
 		allProductPrices.SupporterPlus,
 		countryId,
@@ -446,8 +446,10 @@ export function ThreeTierLanding({
 	 * This should only exist as long as the Tier three hack is in place.
 	 */
 	const tier3Product = 'DigitalSubscription';
-	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[ratePlanKey]
-		?.pricing[currencyId] as number;
+	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[
+		maybeTaxExclusiveRatePlanKey
+	]?.pricing[currencyId] as number;
+
 	const { label: title, labelPill: titlePill } = getProductDescription(
 		'DigitalSubscription',
 		ratePlanKey,
