@@ -8,8 +8,9 @@ import admin.settings.Status.Live
 import assets.{AssetsResolver, RefPath}
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
+import com.gu.i18n.Country
 import com.gu.identity.model.{User => IdUser}
-import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper, SupporterPlus, TierThree}
+import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper, Product, SupporterPlus, TierThree}
 import com.gu.support.config.Stages.PROD
 import com.gu.support.config._
 import com.gu.support.encoding.InternationalisationCodecs
@@ -27,7 +28,13 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.mparticle.MParticleClient
 import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
-import services.{CachedProductCatalogServiceProvider, PaymentAPIService, TestUserService, TickerService}
+import services.{
+  CachedProductCatalogServiceProvider,
+  CachedSalesTaxService,
+  PaymentAPIService,
+  TestUserService,
+  TickerService,
+}
 import utils.FastlyGEOIP._
 import utils.{ObserverUtils, PaperValidation}
 import views.EmptyDiv
@@ -231,6 +238,7 @@ class Application(
     stage: Stage,
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
     cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
+    cachedTaxRateService: CachedSalesTaxService,
     val supportUrl: String,
     tickerService: TickerService,
     mparticleClient: MParticleClient,
@@ -459,6 +467,7 @@ class Application(
     val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
 
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
+
     // We want the canonical link to point to the geo-redirect page so that users arriving from
     // search will be redirected to the correct version of the page
     val canonicalLink = s"$canonicalUrl"
@@ -618,6 +627,11 @@ class Application(
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
 
+    val taxRates = countryGroupId match {
+      case "ca" => cachedTaxRateService.get(Country.Canada)
+      case _ => JsonObject.empty
+    }
+
     val queryPromos =
       request.queryString
         .getOrElse("promoCode", Nil)
@@ -654,6 +668,7 @@ class Application(
         allProductPrices = allProductPrices,
         allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
         productCatalog = productCatalog,
+        taxRates = taxRates,
         user = request.user,
         tickerData = tickerService.getTickers(),
         homeDeliveryPostcodes = Some(PaperValidation.M25_POSTCODE_PREFIXES),
