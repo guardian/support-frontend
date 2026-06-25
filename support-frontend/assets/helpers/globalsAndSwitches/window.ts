@@ -8,7 +8,6 @@ import { optional, z } from 'zod';
 import type { LegacyProductType } from 'helpers/legacyTypeConversions';
 import { legacyProductTypes } from 'helpers/legacyTypeConversions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import type { ActiveProductKey } from '../productCatalog';
 import { isProductKey } from '../productCatalog';
 
 /**
@@ -150,9 +149,7 @@ const PaymentConfigSchema = z.object({
 			),
 		}),
 		metricUrl: z.string(),
-		productsWithThankYouOnboarding: z.array(
-			z.string().refine<ActiveProductKey>(isProductKey),
-		),
+		productsWithThankYouOnboarding: z.array(z.string().refine(isProductKey)),
 	}),
 	isObserverSubdomain: z.boolean(),
 });
