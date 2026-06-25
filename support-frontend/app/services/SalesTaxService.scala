@@ -120,9 +120,9 @@ class CachedSalesTaxService(
       throw SalesTaxServiceError(s"Failed to fetch tax rates on startup: ${e.getMessage}")
   }
 
-  // Subsequent refreshes happen in the background. The initial delay is 1 minute because the cache has
+  // Subsequent refreshes happen in the background. The initial delay is 1 day because the cache has
   // already been populated synchronously above.
-  system.scheduler.scheduleWithFixedDelay(1.minute, 10.minute) { () =>
+  system.scheduler.scheduleWithFixedDelay(1.day, 1.day) { () =>
     {
       updateAll()
     }
