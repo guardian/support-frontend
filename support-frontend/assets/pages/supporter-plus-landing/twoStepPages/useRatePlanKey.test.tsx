@@ -2,7 +2,7 @@ import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { renderHook, waitFor } from '@testing-library/react';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import type { ContributionType } from 'helpers/contributions';
-import { useMaybeTaxExclusiveRatePlanKey } from './useRatePlanKey';
+import { useRatePlanKey } from './useRatePlanKey';
 
 jest.mock('contexts/FeatureSwitchesContext', () => ({
 	useFeatureSwitches: jest.fn(),
@@ -31,11 +31,11 @@ describe('useRatePlanKey', () => {
 
 	it('returns the billing period key for non-Canada regions', () => {
 		const { result } = renderHook(() =>
-			useMaybeTaxExclusiveRatePlanKey('MONTHLY', SupportRegionId.UK),
+			useRatePlanKey('MONTHLY', SupportRegionId.UK),
 		);
 
 		expect(result.current).toEqual({
-			maybeTaxExclusiveRatePlanKey: 'Monthly',
+			ratePlanKey: 'Monthly',
 			taxExclusionEnabled: false,
 		});
 	});
@@ -44,22 +44,22 @@ describe('useRatePlanKey', () => {
 		setCanadaTaxExclusionFlag(true);
 
 		const { result } = renderHook(() =>
-			useMaybeTaxExclusiveRatePlanKey('ANNUAL', SupportRegionId.CA),
+			useRatePlanKey('ANNUAL', SupportRegionId.CA),
 		);
 
 		expect(result.current).toEqual({
-			maybeTaxExclusiveRatePlanKey: 'AnnualTaxExclusive',
+			ratePlanKey: 'AnnualTaxExclusive',
 			taxExclusionEnabled: true,
 		});
 	});
 
 	it('does not append TaxExclusive for Canada when the switch is disabled', () => {
 		const { result } = renderHook(() =>
-			useMaybeTaxExclusiveRatePlanKey('ANNUAL', SupportRegionId.CA),
+			useRatePlanKey('ANNUAL', SupportRegionId.CA),
 		);
 
 		expect(result.current).toEqual({
-			maybeTaxExclusiveRatePlanKey: 'Annual',
+			ratePlanKey: 'Annual',
 			taxExclusionEnabled: false,
 		});
 	});
@@ -69,7 +69,7 @@ describe('useRatePlanKey', () => {
 
 		const { result, rerender } = renderHook(
 			({ contributionType, supportRegionId }: HookProbeProps) =>
-				useMaybeTaxExclusiveRatePlanKey(contributionType, supportRegionId),
+				useRatePlanKey(contributionType, supportRegionId),
 			{
 				initialProps: {
 					contributionType: 'MONTHLY',
@@ -79,7 +79,7 @@ describe('useRatePlanKey', () => {
 		);
 
 		expect(result.current).toEqual({
-			maybeTaxExclusiveRatePlanKey: 'MonthlyTaxExclusive',
+			ratePlanKey: 'MonthlyTaxExclusive',
 			taxExclusionEnabled: true,
 		});
 
@@ -90,7 +90,7 @@ describe('useRatePlanKey', () => {
 
 		await waitFor(() => {
 			expect(result.current).toEqual({
-				maybeTaxExclusiveRatePlanKey: 'AnnualTaxExclusive',
+				ratePlanKey: 'AnnualTaxExclusive',
 				taxExclusionEnabled: true,
 			});
 		});
