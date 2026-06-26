@@ -1,3 +1,4 @@
+import { caStateSchema } from '@modules/internationalisation/country';
 import { isoCurrencySchema } from '@modules/internationalisation/schemas';
 import {
 	billingPeriodSchema,
@@ -239,8 +240,18 @@ export const ProductPricesSchema = z.object({
 	),
 });
 
-const AppConfigSchema =
-	PaymentConfigSchema.merge(ProductCatalogSchema).merge(ProductPricesSchema);
+const TaxRatesSchema = z.object({
+	taxRates: z
+		.partialRecord(
+			z.enum(['SupporterPlus', 'DigitalSubscription']),
+			z.record(caStateSchema, z.number()),
+		)
+		.optional(), // This isn't made available on every page
+});
+
+const AppConfigSchema = PaymentConfigSchema.merge(ProductCatalogSchema)
+	.merge(ProductPricesSchema)
+	.merge(TaxRatesSchema);
 
 export type AppConfig = z.infer<typeof AppConfigSchema> & {
 	allProductPrices: Partial<
