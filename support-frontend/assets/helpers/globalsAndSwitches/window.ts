@@ -213,15 +213,15 @@ export const ProductPricesSchema = z.object({
 	allProductPrices: z.record(
 		z.enum([...legacyProductTypes, 'GuardianWeeklyGift']),
 		optional(
-			z.record(
+			z.partialRecord(
 				countryKeySchema,
-				z.record(
+				z.partialRecord(
 					fulfilmentOptionsSchema,
-					z.record(
+					z.partialRecord(
 						productOptionsSchema,
-						z.record(
+						z.partialRecord(
 							billingPeriodSchema,
-							z.record(
+							z.partialRecord(
 								isoCurrencySchema,
 								z.object({
 									price: z.number(),
