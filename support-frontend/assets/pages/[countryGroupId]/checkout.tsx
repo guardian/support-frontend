@@ -108,6 +108,8 @@ export function Checkout({
 	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
 
+	console.log('taxRates', appConfig.taxRates);
+
 	/** 👇 a lot of this is copy/pasted into the thank you page */
 	/** Get and validate product */
 	const productParam = urlSearchParams.get('product');

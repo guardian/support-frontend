@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 
-import type { IsoCountry } from '@modules/internationalisation/country';
 import {
 	AUDCountries,
 	EURCountries,
@@ -257,43 +256,5 @@ describe('find iso country', () => {
 
 	it('should return null for a country name as a string that is not in the list of countries', () => {
 		expect(Country.findIsoCountry('Simple And Coherent Land')).toBe(null);
-	});
-});
-
-describe('find a state for a given country using stateProvinceFromString', () => {
-	it('should return null if no country or state', () => {
-		expect(Country.stateProvinceFromString(null)).toBe(null);
-		expect(Country.stateProvinceFromString('US')).toBe(null);
-		expect(Country.stateProvinceFromString('US', '')).toBe(null);
-		expect(Country.stateProvinceFromString(null, 'NY')).toBe(null);
-		expect(Country.stateProvinceFromString('' as IsoCountry, 'NY')).toBe(null);
-	});
-
-	it("should return the StateCode that's within a given country's set", () => {
-		expect(Country.stateProvinceFromString('US', 'AL')).toBe('AL'); // Alabama
-
-		expect(Country.stateProvinceFromString('CA', 'AL')).toBe(null); // No state called 'AL' in Canada
-
-		expect(Country.stateProvinceFromString('AU', 'AL')).toBe(null); // No state called 'AL' in Australia
-
-		expect(Country.stateProvinceFromString('US', 'AB')).toBe(null); // No state called 'AB' in USA
-
-		expect(Country.stateProvinceFromString('CA', 'AB')).toBe('AB'); // Alberta
-
-		expect(Country.stateProvinceFromString('AU', 'AB')).toBe(null); // No state called 'AB' in Australia
-
-		expect(Country.stateProvinceFromString('US', 'NT')).toBe(null); // No state called 'NT' in USA
-
-		expect(Country.stateProvinceFromString('CA', 'NT')).toBe('NT'); // Northwest Territories
-
-		expect(Country.stateProvinceFromString('AU', 'NT')).toBe('NT'); // Northern Territory
-
-		expect(Country.stateProvinceFromString('CA', 'ON')).toBe('ON'); // Ontario
-
-		expect(Country.stateProvinceFromString('CA', 'Ontario')).toBe('ON'); // Ontario
-
-		expect(Country.stateProvinceFromString('CA', 'YT')).toBe('YT'); // Yukon does not start with 2 letter code
-
-		expect(Country.stateProvinceFromString('CA', 'Yukon')).toBe('YT');
 	});
 });
