@@ -13,6 +13,7 @@ import views.EmptyDiv
 
 import scala.concurrent.ExecutionContext
 import scala.util.Try
+import scala.concurrent.Future
 
 class PayPalOneOff(
     actionBuilders: CustomActionBuilders,
@@ -77,6 +78,20 @@ class PayPalOneOff(
     }
   }
 
+  def getAquisitionData(cookies: Cookies): JsValue = {
+    (for {
+      cookie <- cookies.get("acquisition_data")
+      cookieAcquisitionData <- Try {
+        val parsed = Json.parse(java.net.URLDecoder.decode(cookie.value, "UTF-8"))
+
+        cookies.get("_ga") match {
+          case Some(gaId) => parsed.as[JsObject] + ("gaId" -> Json.toJson(gaId.value))
+          case None => parsed
+        }
+      }.toOption
+    } yield cookieAcquisitionData).getOrElse(fallbackAcquisitionData)
+  }
+
   def returnURL(
       paymentId: String,
       PayerID: String,
@@ -85,17 +100,7 @@ class PayPalOneOff(
       thankyou: String,
   ): Action[AnyContent] =
     MaybeAuthenticatedActionOnFormSubmission.async { implicit request =>
-      val acquisitionData = (for {
-        cookie <- request.cookies.get("acquisition_data")
-        cookieAcquisitionData <- Try {
-          val parsed = Json.parse(java.net.URLDecoder.decode(cookie.value, "UTF-8"))
-
-          request.cookies.get("_ga") match {
-            case Some(gaId) => parsed.as[JsObject] + ("gaId" -> Json.toJson(gaId.value))
-            case None => parsed
-          }
-        }.toOption
-      } yield cookieAcquisitionData).getOrElse(fallbackAcquisitionData)
+      val acquisitionData = getAquisitionData(request.cookies)
 
       val paymentJSON = Json.obj(
         "paymentId" -> paymentId,
@@ -112,5 +117,49 @@ class PayPalOneOff(
       paymentAPIService
         .executePaypalPayment(paymentJSON, acquisitionData, email, isTestUser, userAgent, similarProductsConsent)
         .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country, thankyou))
+    }
+
+  def stripeReturnURL(
+      country: String,
+      email: String,
+      payment_intent: String,
+      redirect_status: String,
+      stripePublicKey: String,
+      currency: String,
+      amount: Double,
+  ): Action[AnyContent] =
+    MaybeAuthenticatedActionOnFormSubmission.async { implicit request =>
+      if (redirect_status != "succeeded") {
+        logger.info(s"Stripe paypal payment redirect status=$redirect_status")
+        Future.successful(Redirect(routes.PayPalOneOff.paypalError()))
+      } else {
+        val acquisitionData = getAquisitionData(request.cookies)
+
+        val paymentDataJSON = Json.obj(
+          "email" -> email,
+          "currency" -> currency,
+          "amount" -> amount,
+        )
+
+        val similarProductsConsentCookie = request.cookies.get("gu_similar_products_consent")
+
+        val similarProductsConsent = similarProductsConsentCookie.flatMap(_.value.toBooleanOption)
+
+        val isTestUser = testUsers.isTestUser(request)
+
+        val userAgent = request.headers.get("user-agent")
+
+        paymentAPIService
+          .completeStripePaypalPayment(
+            payment_intent,
+            paymentDataJSON,
+            acquisitionData,
+            stripePublicKey,
+            isTestUser,
+            userAgent,
+            similarProductsConsent,
+          )
+          .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country, "thank-you"))
+      }
     }
 }

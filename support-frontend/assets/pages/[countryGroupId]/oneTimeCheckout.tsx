@@ -1,5 +1,6 @@
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { Elements } from '@stripe/react-stripe-js';
+import type { StripeElementsOptions } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { config } from 'helpers/contributions';
 import { getStripeKeyForCountry } from 'helpers/forms/stripe';
@@ -49,7 +50,7 @@ export function OneTimeCheckout({
 	const stripePromise = loadStripe(stripePublicKey);
 
 	const minAmount = config[countryGroupId]['ONE_OFF'].min;
-	const elementsOptions = {
+	const elementsOptions: StripeElementsOptions = {
 		mode: 'payment',
 		/**
 		 * Stripe amounts are in the "smallest currency unit"
@@ -59,6 +60,11 @@ export function OneTimeCheckout({
 		amount: minAmount * 100,
 		currency: currencyKey.toLowerCase(),
 		paymentMethodCreation: 'manual',
+
+		// appearance: {
+		// 	theme: 'St'
+
+		// }
 	} as const;
 
 	return (
