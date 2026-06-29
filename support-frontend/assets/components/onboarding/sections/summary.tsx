@@ -205,6 +205,7 @@ function OnboardingSummary({
 	ratePlanKey,
 	promotion,
 }: OnboardingProps) {
+	console.log('🚀 ~ OnboardingSummary ~ payment:', payment);
 	const order = getThankYouOrder();
 	const productSettings =
 		productKey && landingPageSettings.products[productKey];
@@ -279,7 +280,7 @@ function OnboardingSummary({
 		>
 			<ContentBox>
 				<Stack space={2}>
-					<h1 css={headings}>Purchase summary</h1>
+					<h1 css={headings}>Purchase confirmation</h1>
 					<p css={descriptions}>
 						{`Thanks for your payment. We've sent a payment confirmation email to
                     `}
