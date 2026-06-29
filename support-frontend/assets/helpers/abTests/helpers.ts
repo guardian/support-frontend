@@ -33,3 +33,19 @@ export function randomNumber(mvtId: number, seed: string): number {
 	const rng = seedrandom(mvtId + seed);
 	return Math.abs(rng.int32());
 }
+
+export function isWithinSchedule(
+	scheduler: { start?: string; end?: string } | undefined,
+): boolean {
+	if (!scheduler) {
+		return true;
+	}
+	const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+	if (scheduler.start !== undefined && today < scheduler.start) {
+		return false;
+	}
+	if (scheduler.end !== undefined && today > scheduler.end) {
+		return false;
+	}
+	return true;
+}

@@ -77,6 +77,7 @@ case class StudentLandingPageTest(
     priority: Int,
     countryGroupId: CountryGroupId,
     variants: List[StudentLandingPageVariant],
+    scheduler: Option[Scheduler] = None,
 )
 
 object StudentLandingPageTest {
