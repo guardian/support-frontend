@@ -10,8 +10,8 @@
 			"name": "Debug Frontend in Chrome",
 			"url": "https://support.thegulocal.com/contribute",
 			"webRoot": "${workspaceFolder}/support-frontend/assets",
+			"skipFiles": ["**/node_modules/**"],
 			"sourceMapPathOverrides": {
-				"webpack:///./~/*": "${workspaceFolder}/support-frontend/node_modules/*",
 				"webpack:///./*": "${workspaceFolder}/support-frontend/assets/*",
 				"webpack:///*": "*"
 			}
