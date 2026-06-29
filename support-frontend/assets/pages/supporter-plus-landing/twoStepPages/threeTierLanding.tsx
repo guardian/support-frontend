@@ -393,7 +393,7 @@ export function ThreeTierLanding({
 
 	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[
 		maybeTaxExclusiveRatePlanKey
-	].pricing[currencyId] as number;
+	]?.pricing[currencyId] as number;
 
 	const tier2Promotion = getPromotion(
 		allProductPrices.SupporterPlus,
@@ -453,7 +453,7 @@ export function ThreeTierLanding({
 	const tier3Product = 'DigitalSubscription';
 	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[
 		maybeTaxExclusiveRatePlanKey
-	].pricing[currencyId] as number;
+	]?.pricing[currencyId] as number;
 
 	const { label: title, labelPill: titlePill } = getProductDescription(
 		'DigitalSubscription',
