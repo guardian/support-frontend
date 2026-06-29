@@ -4,6 +4,7 @@ import {
 	from,
 	palette,
 	space,
+	textSans12,
 	textSans17,
 	textSansBold20,
 } from '@guardian/source/foundations';
@@ -23,6 +24,7 @@ import {
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -165,6 +167,12 @@ const disclaimerContainer = css`
 			padding: ${space[5]}px ${space[5]}px;
 		}
 	}
+`;
+
+const taxExclusionDisclaimer = css`
+	${textSans12};
+	color: ${palette.neutral[100]};
+	margin-bottom: ${space[2]}px;
 `;
 
 const links = [
@@ -323,10 +331,8 @@ export function ThreeTierLanding({
 		setContributionType(paymentFrequencies[buttonIndex] as ContributionType);
 	};
 
-	const maybeTaxExclusiveRatePlanKey = useRatePlanKey(
-		contributionType,
-		supportRegionId,
-	);
+	const { ratePlanKey: maybeTaxExclusiveRatePlanKey, taxExclusionEnabled } =
+		useRatePlanKey(contributionType, supportRegionId);
 
 	const ratePlanKey = getRatePlanKey(contributionType);
 
@@ -395,9 +401,11 @@ export function ThreeTierLanding({
 		countryId,
 		billingPeriod,
 	);
+
 	const tier2CheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: 'SupporterPlus',
-		ratePlan: ratePlanKey,
+		ratePlan:
+			maybeTaxExclusiveRatePlanKey as ProductRatePlanKey<'SupporterPlus'>,
 		promoCode: tier2Promotion?.promoCode,
 	});
 
@@ -476,7 +484,8 @@ export function ThreeTierLanding({
 
 	const tier3CheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: tier3Product,
-		ratePlan: ratePlanKey,
+		ratePlan:
+			maybeTaxExclusiveRatePlanKey as ProductRatePlanKey<'DigitalSubscription'>,
 		promoCode: tier3Promotion?.promoCode,
 	});
 
@@ -536,6 +545,11 @@ export function ThreeTierLanding({
 						borderColor="rgba(170, 170, 180, 0.5)"
 						cssOverrides={disclaimerContainer}
 					>
+						{taxExclusionEnabled && (
+							<p css={taxExclusionDisclaimer}>
+								For All-access digital and Digital plus, taxes may apply.
+							</p>
+						)}
 						<ThreeTierTsAndCs
 							tsAndCsContent={[
 								{
