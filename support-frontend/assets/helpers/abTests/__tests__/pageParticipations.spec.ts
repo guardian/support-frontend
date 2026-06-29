@@ -714,9 +714,7 @@ describe('getPageParticipations', () => {
 			});
 			mockCountryGroupMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
-
 			const result = await getPageParticipations(config);
-
 			// Should re-select and store fresh participation
 			expect(result.participations).toEqual({ 'test-1': 'control' });
 			expect(result.variant).toEqual(variant);
