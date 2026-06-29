@@ -24,6 +24,7 @@ import {
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -400,9 +401,11 @@ export function ThreeTierLanding({
 		countryId,
 		billingPeriod,
 	);
+
 	const tier2CheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: 'SupporterPlus',
-		ratePlan: maybeTaxExclusiveRatePlanKey,
+		ratePlan:
+			maybeTaxExclusiveRatePlanKey as ProductRatePlanKey<'SupporterPlus'>,
 		promoCode: tier2Promotion?.promoCode,
 	});
 
@@ -481,7 +484,8 @@ export function ThreeTierLanding({
 
 	const tier3CheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: tier3Product,
-		ratePlan: maybeTaxExclusiveRatePlanKey,
+		ratePlan:
+			maybeTaxExclusiveRatePlanKey as ProductRatePlanKey<'DigitalSubscription'>,
 		promoCode: tier3Promotion?.promoCode,
 	});
 
