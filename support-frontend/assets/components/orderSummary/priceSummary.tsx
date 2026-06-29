@@ -31,22 +31,20 @@ export function PriceSummary({
 	discountPrice,
 	isWeeklyGift,
 }: PriceSummaryProps): JSX.Element {
-	const displayPricePeriod = () => {
-		const divider = isWeeklyGift ? ' for ' : '/';
-		if (discountPrice) {
-			return (
-				<>
-					<span css={originalPriceStrikeThrough}>
-						<span css={visuallyHiddenCss}>Was </span>
-						{fullPrice}
-						<span css={visuallyHiddenCss}>, now</span>
-					</span>{' '}
-					{displayPeriod(discountPrice, divider, period)}
-				</>
-			);
-		}
-		return displayPeriod(fullPrice, divider, period);
-	};
+	const divider = isWeeklyGift ? ' for ' : '/';
 
-	return <p>{displayPricePeriod()}</p>;
+	if (discountPrice) {
+		return (
+			<p>
+				<span css={originalPriceStrikeThrough}>
+					<span css={visuallyHiddenCss}>Was </span>
+					{fullPrice}
+					<span css={visuallyHiddenCss}>, now</span>
+				</span>{' '}
+				{displayPeriod(discountPrice, divider, period)}
+			</p>
+		);
+	}
+
+	return <p>{displayPeriod(fullPrice, divider, period)}</p>;
 }
