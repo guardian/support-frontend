@@ -69,7 +69,8 @@ export async function getPageParticipations<Variant>(
 	): Variant | undefined => {
 		for (const test of testList) {
 			const variantName = participations[test.name];
-			if (variantName) { // should scheduler be checked here?
+			if (variantName) {
+				// should scheduler be checked here?
 				const variant = test.variants.find(
 					(v) => getVariantName(v) === variantName,
 				);
