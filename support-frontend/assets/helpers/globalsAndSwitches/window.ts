@@ -1,3 +1,4 @@
+import { caStateCodes } from '@modules/internationalisation/country';
 import { isoCurrencySchema } from '@modules/internationalisation/schemas';
 import {
 	billingPeriodSchema,
@@ -243,24 +244,7 @@ const TaxRatesSchema = z.object({
 	taxRates: z
 		.partialRecord(
 			z.enum(['SupporterPlus', 'DigitalSubscription']),
-			z.record(
-				z.enum([
-					'AB',
-					'BC',
-					'MB',
-					'NB',
-					'NL',
-					'NT',
-					'NS',
-					'NU',
-					'ON',
-					'PE',
-					'QC',
-					'SK',
-					'YT',
-				]),
-				z.number(),
-			),
+			z.record(z.enum(caStateCodes), z.number()),
 		)
 		.optional(), // This isn't made available on every page
 });
