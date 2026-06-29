@@ -102,7 +102,8 @@ export function getCheckoutNudgeParticipations(
 				countryGroupMatches(
 					test.regionTargeting?.targetedCountryGroups,
 					countryGroupId,
-				) && productMatches(test, path, queryString)
+				) &&
+				productMatches(test, path, queryString)
 			);
 		});
 

@@ -645,7 +645,9 @@ describe('getPageParticipations', () => {
 	describe('Scheduler gating', () => {
 		it('skips a live test that is outside its schedule when assigning new participation', async () => {
 			const variant = createTestVariant('control', 'control-value');
-			const test = createPageTest('test-1', [variant], 'Live', ['GBPCountries']);
+			const test = createPageTest('test-1', [variant], 'Live', [
+				'GBPCountries',
+			]);
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
@@ -661,15 +663,17 @@ describe('getPageParticipations', () => {
 		it('selects the second test when the first is outside its schedule', async () => {
 			const variant1 = createTestVariant('control-1', 'value-1');
 			const variant2 = createTestVariant('control-2', 'value-2');
-			const test1 = createPageTest('test-1', [variant1], 'Live', ['GBPCountries']);
-			const test2 = createPageTest('test-2', [variant2], 'Live', ['GBPCountries']);
+			const test1 = createPageTest('test-1', [variant1], 'Live', [
+				'GBPCountries',
+			]);
+			const test2 = createPageTest('test-2', [variant2], 'Live', [
+				'GBPCountries',
+			]);
 			const config = createConfig([test1, test2]);
 
 			mockLocation('/test/page');
 			mockCountryGroupMatches.mockReturnValue(true);
-			mockIsWithinSchedule
-				.mockReturnValueOnce(false)
-				.mockReturnValueOnce(true);
+			mockIsWithinSchedule.mockReturnValueOnce(false).mockReturnValueOnce(true);
 			mockRandomNumber.mockReturnValue(0);
 
 			const result = await getPageParticipations(config);
@@ -712,7 +716,9 @@ describe('getPageParticipations', () => {
 
 		it('assigns a test that is within its schedule', async () => {
 			const variant = createTestVariant('control', 'control-value');
-			const test = createPageTest('test-1', [variant], 'Live', ['GBPCountries']);
+			const test = createPageTest('test-1', [variant], 'Live', [
+				'GBPCountries',
+			]);
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
