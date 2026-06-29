@@ -16,7 +16,7 @@ export function getRatePlanKey(contributionType: ContributionType) {
 export function useRatePlanKey(
 	contributionType: ContributionType,
 	supportRegionId: SupportRegionId,
-): ActiveRatePlanKey {
+): { ratePlanKey: ActiveRatePlanKey; taxExclusionEnabled: boolean } {
 	const [ratePlanKey, setRatePlanKey] = useState<ActiveRatePlanKey>(
 		getRatePlanKey(contributionType),
 	);
@@ -30,9 +30,13 @@ export function useRatePlanKey(
 	}, [contributionType]);
 
 	if (taxExclusionEnabled) {
-		return ratePlanKey === 'Monthly'
-			? 'MonthlyTaxExclusive'
-			: 'AnnualTaxExclusive';
+		return {
+			ratePlanKey:
+				ratePlanKey === 'Monthly'
+					? 'MonthlyTaxExclusive'
+					: 'AnnualTaxExclusive',
+			taxExclusionEnabled,
+		};
 	}
-	return ratePlanKey;
+	return { ratePlanKey, taxExclusionEnabled };
 }

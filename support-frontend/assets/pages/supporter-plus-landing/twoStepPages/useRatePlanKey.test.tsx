@@ -34,7 +34,10 @@ describe('useRatePlanKey', () => {
 			useRatePlanKey('MONTHLY', SupportRegionId.UK),
 		);
 
-		expect(result.current).toBe('Monthly');
+		expect(result.current).toEqual({
+			ratePlanKey: 'Monthly',
+			taxExclusionEnabled: false,
+		});
 	});
 
 	it('appends TaxExclusive for Canada when the switch is enabled', () => {
@@ -44,7 +47,10 @@ describe('useRatePlanKey', () => {
 			useRatePlanKey('ANNUAL', SupportRegionId.CA),
 		);
 
-		expect(result.current).toBe('AnnualTaxExclusive');
+		expect(result.current).toEqual({
+			ratePlanKey: 'AnnualTaxExclusive',
+			taxExclusionEnabled: true,
+		});
 	});
 
 	it('does not append TaxExclusive for Canada when the switch is disabled', () => {
@@ -52,7 +58,10 @@ describe('useRatePlanKey', () => {
 			useRatePlanKey('ANNUAL', SupportRegionId.CA),
 		);
 
-		expect(result.current).toBe('Annual');
+		expect(result.current).toEqual({
+			ratePlanKey: 'Annual',
+			taxExclusionEnabled: false,
+		});
 	});
 
 	it('updates the key when contribution type changes', async () => {
@@ -69,7 +78,10 @@ describe('useRatePlanKey', () => {
 			},
 		);
 
-		expect(result.current).toBe('MonthlyTaxExclusive');
+		expect(result.current).toEqual({
+			ratePlanKey: 'MonthlyTaxExclusive',
+			taxExclusionEnabled: true,
+		});
 
 		rerender({
 			contributionType: 'ANNUAL',
@@ -77,7 +89,10 @@ describe('useRatePlanKey', () => {
 		});
 
 		await waitFor(() => {
-			expect(result.current).toBe('AnnualTaxExclusive');
+			expect(result.current).toEqual({
+				ratePlanKey: 'AnnualTaxExclusive',
+				taxExclusionEnabled: true,
+			});
 		});
 	});
 });
