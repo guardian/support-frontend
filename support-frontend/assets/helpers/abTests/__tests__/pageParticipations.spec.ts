@@ -4,6 +4,7 @@ import { fetchAudienceMemberships } from '../../mparticle';
 import {
 	countryGroupMatches,
 	getParticipationFromQueryString,
+	isWithinSchedule,
 	randomNumber,
 } from '../helpers';
 import type { PageParticipationsConfig, PageTest } from '../models';
@@ -39,6 +40,7 @@ jest.mock('../helpers', () => ({
 	__esModule: true,
 	countryGroupMatches: jest.fn(),
 	getParticipationFromQueryString: jest.fn(),
+	isWithinSchedule: jest.fn(),
 	randomNumber: jest.fn(),
 }));
 
@@ -56,6 +58,7 @@ const mockCountryGroupMatches = jest.mocked(countryGroupMatches);
 const mockGetParticipationFromQueryString = jest.mocked(
 	getParticipationFromQueryString,
 );
+const mockIsWithinSchedule = jest.mocked(isWithinSchedule);
 const mockRandomNumber = jest.mocked(randomNumber);
 const mockGetSessionParticipations = jest.mocked(getSessionParticipations);
 const mockSetSessionParticipations = jest.mocked(setSessionParticipations);
@@ -117,6 +120,7 @@ describe('getPageParticipations', () => {
 		mockGetMvtId.mockReturnValue(0);
 		mockCountryGroupMatches.mockReturnValue(false);
 		mockGetParticipationFromQueryString.mockReturnValue(undefined);
+		mockIsWithinSchedule.mockReturnValue(true);
 		mockRandomNumber.mockReturnValue(0);
 		mockGetSessionParticipations.mockReturnValue(undefined);
 		mockFetchAudienceMemberships.mockResolvedValue([]);
