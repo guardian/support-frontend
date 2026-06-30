@@ -16,10 +16,6 @@ type TaxRateResult =
 	  }
 	| {
 			type: 'not_applicable';
-	  }
-	| {
-			type: 'error';
-			message: string;
 	  };
 
 export function getEstimatedSalesTaxRate(
