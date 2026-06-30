@@ -1,9 +1,9 @@
+import { parseOrUndefined } from '@guardian/support-service-lambdas/modules/schemaUtils';
 import type { CountryCode } from '@modules/internationalisation/country';
 import { countryCodeSchema } from '@modules/internationalisation/country';
 import type { StateCode } from '@modules/internationalisation/state';
 import { stateCodeSchema } from '@modules/internationalisation/state';
 import type { GiftRecipientType } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import { parseOrUndefined } from '../../../../../../../support-service-lambdas/modules/schemaUtils';
 
 export type FormPersonalFields = {
 	firstName: string;
