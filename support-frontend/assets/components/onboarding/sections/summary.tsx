@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { palette, space } from '@guardian/source/foundations';
+import { from, palette, space } from '@guardian/source/foundations';
 import {
 	Button,
 	Stack,
@@ -50,20 +50,17 @@ import {
 
 const purchaseSummaryDetailsContainer = css`
 	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-`;
-
-const purchaseSummaryDetailsPriceText = css`
-	text-align: end;
-	text-wrap: balance;
-	max-width: 80%;
+	flex-direction: column;
+	gap: ${space[1]}px;
+	${from.tablet} {
+		flex-direction: row;
+		justify-content: space-between;
+	}
 `;
 
 const paymentMethodContainer = css`
 	display: flex;
 	flex-direction: row;
-	justify-content: flex-end;
 	align-items: center;
 	gap: ${space[1]}px;
 `;
@@ -205,7 +202,6 @@ function OnboardingSummary({
 	ratePlanKey,
 	promotion,
 }: OnboardingProps) {
-	console.log('🚀 ~ OnboardingSummary ~ payment:', payment);
 	const order = getThankYouOrder();
 	const productSettings =
 		productKey && landingPageSettings.products[productKey];
@@ -297,9 +293,7 @@ function OnboardingSummary({
 							</div>
 							<div css={purchaseSummaryDetailsContainer}>
 								<p css={boldDescriptions}>Price</p>
-								<p css={[descriptions, purchaseSummaryDetailsPriceText]}>
-									{promoMessage || fullAmount}
-								</p>
+								<p css={descriptions}>{promoMessage || fullAmount}</p>
 							</div>
 							<div css={purchaseSummaryDetailsContainer}>
 								<p css={boldDescriptions}>Payment method</p>
