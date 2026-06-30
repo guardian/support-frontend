@@ -1,5 +1,5 @@
 import { useTheme } from '@emotion/react';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import {
 	type ActiveProductKey,
@@ -24,7 +24,7 @@ type HeadingProps = {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	amount: number;
-	currency: IsoCurrency;
+	currency: CurrencyCode;
 	isObserverPrint: boolean;
 	promotion?: Promotion;
 };
@@ -61,7 +61,7 @@ function Heading({
 				name={contributorName}
 				ratePlanKey={ratePlanKey}
 				promotion={promotion}
-				isoCurrency={currency}
+				CurrencyCode={currency}
 			/>
 		);
 	}

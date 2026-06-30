@@ -1,4 +1,4 @@
-import { isoCurrencySchema } from '@modules/internationalisation/schemas';
+import { currencyCodeSchema } from '@modules/internationalisation/schemas';
 import {
 	billingPeriodSchema,
 	fulfilmentOptionsSchema,
@@ -222,11 +222,11 @@ export const ProductPricesSchema = z.object({
 						z.partialRecord(
 							billingPeriodSchema,
 							z.partialRecord(
-								isoCurrencySchema,
+								currencyCodeSchema,
 								z.object({
 									price: z.number(),
 									savingVsRetail: z.number().optional(),
-									currency: isoCurrencySchema,
+									currency: currencyCodeSchema,
 									fixedTerm: z.boolean(),
 									promotions: z.array(promotionSchema),
 								}),

@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { Column, Columns } from '@guardian/source/react-components';
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutNudge } from 'components/checkoutNudge/checkoutNudge';
 import type { CheckoutNudgeProps } from 'components/checkoutNudge/checkoutNudge';
@@ -42,7 +41,7 @@ Template.args = {} as CheckoutNudgeProps;
 export const Default = Template.bind({});
 
 Default.args = {
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	heading: 'Make a bigger impact',
 	body: 'The reliability of recurring support powers our journalism in perpetuity. Could you make a small monthly contribution instead? Cancel anytime.',
 	product: 'Contribution',
@@ -53,7 +52,7 @@ Default.args = {
 export const Annual = Template.bind({});
 
 Annual.args = {
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	heading: 'Make a bigger impact',
 	body: 'The reliability of recurring support powers our journalism in perpetuity. Could you make an annual contribution instead? Cancel anytime.',
 	product: 'Contribution',
@@ -64,7 +63,7 @@ Annual.args = {
 export const BenefitsList = Template.bind({});
 
 BenefitsList.args = {
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	heading: 'Make the biggest impact',
 	product: 'SupporterPlus',
 	ratePlan: 'Monthly',
@@ -81,7 +80,7 @@ BenefitsList.args = {
 export const WithPromotion = Template.bind({});
 
 WithPromotion.args = {
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	heading: 'Support us and save',
 	body: 'Get all-access digital for less. Your support powers our independent journalism.',
 	product: 'SupporterPlus',
@@ -115,7 +114,7 @@ WithPromotion.args = {
 export const WithPromotionAnnual = Template.bind({});
 
 WithPromotionAnnual.args = {
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	heading: 'Support us and save',
 	body: 'Get all-access digital for less. Your support powers our independent journalism.',
 	product: 'SupporterPlus',

@@ -1,8 +1,6 @@
-import { isoCountries } from '@modules/internationalisation/country';
+import { countryCodeSchema } from '@modules/internationalisation/schemas';
 import { optionalDropNulls } from '@modules/schemaUtils';
 import { z } from 'zod';
-
-export const countrySchema = z.enum(isoCountries);
 
 export const addressSchema = z.object({
 	lineOne: optionalDropNulls(z.string()),
@@ -10,7 +8,7 @@ export const addressSchema = z.object({
 	city: optionalDropNulls(z.string()),
 	state: optionalDropNulls(z.string()),
 	postCode: optionalDropNulls(z.string()),
-	country: countrySchema,
+	country: countryCodeSchema,
 });
 
 export type Address = z.infer<typeof addressSchema>;

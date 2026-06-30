@@ -1,9 +1,9 @@
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 
 export const setupPayPalPayment = async (
 	amount: number,
-	currency: IsoCurrency,
+	currency: CurrencyCode,
 	billingPeriod: BillingPeriod,
 	csrfToken: string,
 ): Promise<string> => {

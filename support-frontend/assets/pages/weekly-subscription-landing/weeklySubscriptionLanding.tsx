@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { from, space } from '@guardian/source/foundations';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -71,7 +71,7 @@ const weeklyDigitalSpacing = css`
 `;
 
 export type WeeklyLandingPageProps = {
-	countryId: IsoCountry;
+	countryId: CountryCode;
 	countryGroupId: CountryGroupId;
 	orderIsAGift: boolean;
 	productPrices?: ProductPrices;

@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { InfoSummary } from '@guardian/source-development-kitchen/react-components';
-import type { IsoCountry } from '@modules/internationalisation/country';
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { CountryCode } from '@modules/internationalisation/country';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
@@ -47,7 +47,7 @@ type CheckoutSummaryProps = {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	originalAmount: number;
-	countryId: IsoCountry;
+	countryId: CountryCode;
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 	weeklyDeliveryDate: Date;
@@ -126,10 +126,7 @@ export default function CheckoutSummary({
 			abParticipations,
 		);
 
-	if (
-		ratePlanKey === 'OneYearStudent' &&
-		supportRegionId === SupportRegionId.UK
-	) {
+	if (ratePlanKey === 'OneYearStudent' && supportRegionId === 'uk') {
 		benefitsCheckListData.unshift({
 			isChecked: true,
 			text: ukSpecificAdditionalBenefit.copy,
@@ -177,7 +174,7 @@ export default function CheckoutSummary({
 						/>
 					</div>
 				)}
-				{supportRegionId === SupportRegionId.CA &&
+				{supportRegionId === 'ca' &&
 					productKey === 'GuardianWeeklyDomestic' && (
 						<div role="alert" css={alertStyles}>
 							<InfoSummary

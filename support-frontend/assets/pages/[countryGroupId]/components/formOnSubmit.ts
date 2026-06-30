@@ -1,4 +1,4 @@
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';

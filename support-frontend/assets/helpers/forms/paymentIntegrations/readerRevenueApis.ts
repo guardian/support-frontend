@@ -1,9 +1,7 @@
 import type { ProductPurchase } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
-import type {
-	IsoCountry,
-	UsState,
-} from '@modules/internationalisation/country';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { CountryCode } from '@modules/internationalisation/country';
+import type { StateCode } from '@modules/internationalisation/state';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { ProductOptions } from '@modules/product/productOptions';
@@ -126,8 +124,8 @@ export type RegularPaymentFields =
 	| RegularDirectDebitPaymentFields
 	| RegularStripeHostedCheckoutPaymentFields;
 type RegularPaymentRequestAddress = {
-	country: IsoCountry;
-	state?: UsState | null;
+	country: CountryCode;
+	state?: StateCode | null;
 	lineOne?: Option<string>;
 	lineTwo?: Option<string>;
 	postCode?: Option<string>;

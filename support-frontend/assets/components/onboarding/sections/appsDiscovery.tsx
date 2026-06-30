@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
 import { Button, Stack, SvgTickRound } from '@guardian/source/react-components';
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { HandleStepNavigationFunction } from 'pages/[countryGroupId]/components/onboardingComponent';
 import { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
@@ -106,9 +106,7 @@ export function OnboardingAppsDiscovery({
 		: hasFeastMobileAppDownloaded;
 
 	const FEAST_APP_BENEFITS_REGION =
-		supporterRegion === SupportRegionId.US
-			? FEAST_APP_BENEFITS_US
-			: FEAST_APP_BENEFITS;
+		supporterRegion === 'us' ? FEAST_APP_BENEFITS_US : FEAST_APP_BENEFITS;
 
 	const appBenefits = isGuardianApp
 		? GUARDIAN_APP_BENEFITS

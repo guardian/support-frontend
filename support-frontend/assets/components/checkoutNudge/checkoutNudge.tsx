@@ -14,7 +14,7 @@ import {
 	LinkButton,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useEffect } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';

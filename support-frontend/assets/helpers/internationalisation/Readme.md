@@ -19,8 +19,8 @@ type CountryGroupId = 'GBPCountries' | 'UnitedStates' | AUDCountries | EURCountr
 
 type CountryGroup = {
   name: string,
-  currency: IsoCurrency,
-  countries: IsoCountry[],
+  currency: CurrencyCode,
+  countries: CountryCode[],
   supportRegionId: SupportRegionId,
 };
 ```

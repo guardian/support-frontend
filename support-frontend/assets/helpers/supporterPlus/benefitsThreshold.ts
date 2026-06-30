@@ -1,4 +1,4 @@
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type {
 	ActiveProductKey,
@@ -9,7 +9,7 @@ import { getBillingPeriodTitle } from 'helpers/productPrice/billingPeriods';
 
 export function getLowerProductBenefitThreshold(
 	billingPeriod: BillingPeriod,
-	currencyId: IsoCurrency,
+	currencyId: CurrencyCode,
 	product: ActiveProductKey,
 	ratePlan: ActiveRatePlanKey,
 ): number {

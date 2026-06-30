@@ -163,4 +163,4 @@ export const IsoCurrencySchema = z.enum([
 	'ZWL',
 ]);
 
-export type IsoCurrency = z.infer<typeof IsoCurrencySchema>;
+export type CurrencyCode = z.infer<typeof IsoCurrencySchema>;

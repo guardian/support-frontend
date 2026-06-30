@@ -1,4 +1,8 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import { parseOrUndefined } from '@guardian/support-service-lambdas/modules/schemaUtils';
+import type { CountryCode } from '@modules/internationalisation/country';
+import { countryCodeSchema } from '@modules/internationalisation/schemas';
+import { stateCodeSchema } from '@modules/internationalisation/schemas';
+import type { StateCode } from '@modules/internationalisation/state';
 import type { GiftRecipientType } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 
 export type FormPersonalFields = {
@@ -34,9 +38,9 @@ export type FormAddress = {
 	lineOne?: string | null;
 	lineTwo?: string | null;
 	city?: string | null;
-	state?: string | null;
+	state?: StateCode | null;
 	postCode?: string | null;
-	country: IsoCountry;
+	country: CountryCode;
 };
 
 type FormAddressFields = {
@@ -47,23 +51,37 @@ type FormAddressFields = {
 export const extractDeliverableAddressDataFromForm = (
 	formData: FormData,
 ): FormAddressFields => {
+	const deliveryCountry =
+		parseOrUndefined(countryCodeSchema, formData.get('delivery-country')) ??
+		'GB';
+	const deliveryState = parseOrUndefined(
+		stateCodeSchema,
+		formData.get('delivery-stateProvince'),
+	);
 	const deliveryAddress = {
 		lineOne: formData.get('delivery-lineOne') as string,
 		lineTwo: formData.get('delivery-lineTwo') as string,
 		city: formData.get('delivery-city') as string,
-		state: formData.get('delivery-stateProvince') as string,
+		state: deliveryState ?? null,
 		postCode: formData.get('delivery-postcode') as string,
-		country: formData.get('delivery-country') as IsoCountry,
+		country: deliveryCountry,
 	};
 
+	const billingCountry =
+		parseOrUndefined(countryCodeSchema, formData.get('billing-country')) ??
+		'GB';
+	const billingState = parseOrUndefined(
+		stateCodeSchema,
+		formData.get('billing-stateProvince'),
+	);
 	const billingAddress = !extractBillingAddressMatchesDeliveryFromForm(formData)
 		? {
 				lineOne: formData.get('billing-lineOne') as string,
 				lineTwo: formData.get('billing-lineTwo') as string,
 				city: formData.get('billing-city') as string,
-				state: formData.get('billing-stateProvince') as string,
+				state: billingState ?? null,
 				postCode: formData.get('billing-postcode') as string,
-				country: formData.get('billing-country') as IsoCountry,
+				country: billingCountry,
 		  }
 		: deliveryAddress;
 
@@ -77,9 +95,15 @@ export const extractNonDeliverableAddressDataFromForm = (
 	formData: FormData,
 ): FormAddressFields => ({
 	billingAddress: {
-		state: formData.get('billing-state') as string,
+		state:
+			parseOrUndefined(
+				stateCodeSchema,
+				formData.get('billing-stateProvince'),
+			) ?? null,
 		postCode: formData.get('billing-postcode') as string,
-		country: formData.get('billing-country') as IsoCountry,
+		country:
+			parseOrUndefined(countryCodeSchema, formData.get('billing-country')) ??
+			'GB',
 	},
 	deliveryAddress: undefined,
 });

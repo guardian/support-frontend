@@ -1,7 +1,7 @@
-import type {
-	IsoCountry,
-	UsState,
-} from '@modules/internationalisation/country';
+import { parseOrUndefined } from '@guardian/support-service-lambdas/modules/schemaUtils';
+import type { CountryCode } from '@modules/internationalisation/country';
+import { stateCodeSchema } from '@modules/internationalisation/schemas';
+import type { StateCode } from '@modules/internationalisation/state';
 import { useEffect } from 'react';
 import { Country } from 'helpers/internationalisation/classes/country';
 
@@ -49,9 +49,9 @@ export type CsrCustomerData = {
 		email?: string;
 		street?: string;
 		city?: string;
-		state?: UsState;
+		state?: StateCode;
 		postcode?: string;
-		country?: IsoCountry;
+		country?: CountryCode;
 	};
 	csr: { lastName: string; firstName: string };
 	caseId: string;
@@ -67,12 +67,14 @@ const isSalesforceDomain = (domain: string): boolean =>
 
 const parseCustomerData = (data: string): CsrCustomerData => {
 	const salesforceData: SalesforceData = JSON.parse(data) as SalesforceData;
-	const isoCountry = Country.findIsoCountry(salesforceData.customer.country);
+	const CountryCode = Country.findCountryCode(salesforceData.customer.country);
 	const { salutation, ...otherData } = salesforceData.customer;
+	const state = parseOrUndefined(stateCodeSchema, otherData.state);
 	const customer = {
 		...otherData,
 		title: salutation,
-		country: isoCountry ?? undefined,
+		state,
+		country: CountryCode ?? undefined,
 	};
 	return {
 		csr: salesforceData.csr,

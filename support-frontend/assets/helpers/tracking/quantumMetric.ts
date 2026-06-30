@@ -1,6 +1,6 @@
 import { loadScript } from '@guardian/libs';
 import { viewId } from '@guardian/ophan-tracker-js/support';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { Participations } from 'helpers/abTests/models';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
@@ -187,7 +187,7 @@ function sendEventAcquisitionDataFromQueryParamEvent(
 
 function sendEventOneTimeCheckoutValue(
 	amount: number,
-	sourceCurrency: IsoCurrency,
+	sourceCurrency: CurrencyCode,
 	isConversion?: boolean,
 ): void {
 	void ifQmPermitted(() => {
@@ -216,7 +216,7 @@ function sendEventCheckoutValue(
 	amount: number,
 	product: ActiveProductKey,
 	billingPeriod: BillingPeriod,
-	sourceCurrency: IsoCurrency,
+	sourceCurrency: CurrencyCode,
 	isConversion?: boolean,
 ): void {
 	void ifQmPermitted(() => {
@@ -248,7 +248,7 @@ function sendEventCheckoutValue(
 function sendEventContributionCheckoutConversion(
 	amount: number,
 	billingPeriod: BillingPeriod,
-	sourceCurrency: IsoCurrency,
+	sourceCurrency: CurrencyCode,
 ): void {
 	void ifQmPermitted(() => {
 		const sendEventWhenReady = () => {

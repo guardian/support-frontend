@@ -1,5 +1,5 @@
-import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { Currency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
+import type { CountryCode } from '@modules/internationalisation/country';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { NoFulfilmentOptions } from '@modules/product/fulfilmentOptions';
@@ -82,7 +82,7 @@ function getAppliedPromo(promotions?: Promotion[]): Promotion | undefined {
 
 function getPromotion(
 	productPrices: ProductPrices,
-	country: IsoCountry,
+	country: CountryCode,
 	billingPeriod: BillingPeriod,
 	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
 	productOption: ProductOptions = NoProductOptions,
@@ -147,7 +147,7 @@ function promotionHTML(
 
 function finalPrice(
 	productPrices: ProductPrices,
-	country: IsoCountry,
+	country: CountryCode,
 	billingPeriod: BillingPeriod,
 	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
 	productOption: ProductOptions = NoProductOptions,
@@ -171,7 +171,7 @@ function finalPrice(
 }
 
 const discountSummaryCopy = (
-	currency: CurrencyInfo,
+	currency: Currency,
 	promoCount: number,
 	price: number,
 	promotion: Promotion,

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { from, space, titlepiece42 } from '@guardian/source/foundations';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { getCurrencyInfo } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
+import { getCurrency } from '@modules/internationalisation/currency';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -44,24 +44,24 @@ export default function ContributionHeading({
 	name,
 	amount,
 	ratePlanKey,
-	isoCurrency,
+	CurrencyCode,
 	promotion,
 }: {
 	name: string;
 	amount: number;
 	ratePlanKey: ActiveRatePlanKey;
-	isoCurrency: IsoCurrency;
+	CurrencyCode: CurrencyCode;
 	promotion?: Promotion;
 }) {
 	const frequency = getFrequencyFromRatePlanKey(ratePlanKey);
 	const amountWithCurrency = simpleFormatAmount(
-		getCurrencyInfo(isoCurrency),
+		getCurrency(CurrencyCode),
 		amount,
 	);
 	const promotionPrice = promotion?.discountedPrice ?? 0;
 	const promotionDuration = promotion?.discount?.durationMonths ?? 0;
 	const promotionPriceWithCurrency = simpleFormatAmount(
-		getCurrencyInfo(isoCurrency),
+		getCurrency(CurrencyCode),
 		promotionPrice,
 	);
 

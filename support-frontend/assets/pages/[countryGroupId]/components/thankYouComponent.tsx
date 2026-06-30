@@ -1,7 +1,7 @@
 import { css, ThemeProvider } from '@emotion/react';
 import { storage } from '@guardian/libs';
 import { from } from '@guardian/source/foundations';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useEffect, useState } from 'react';
 import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';

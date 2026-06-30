@@ -1,4 +1,4 @@
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -16,11 +16,11 @@ export default function buildCheckoutUrl(
 		// If the supportRegionId isn't one of these we'll fall through to linking to the
 		// normal checkout page
 		switch (supportRegionId) {
-			case SupportRegionId.UK:
+			case 'uk':
 				return routes.supporterPlusStudentBeansUk;
-			case SupportRegionId.US:
+			case 'us':
 				return routes.supporterPlusStudentBeansUs;
-			case SupportRegionId.CA:
+			case 'ca':
 				return routes.supporterPlusStudentBeansCa;
 		}
 	}

@@ -1,4 +1,4 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
@@ -68,7 +68,7 @@ type AcquisitionTypeDetails = {
 
 type PrintOptions = {
 	product: AcquisitionPrintProduct;
-	deliveryCountry: IsoCountry;
+	deliveryCountry: CountryCode;
 };
 
 const PURCHASE = 'Purchase';
@@ -231,7 +231,7 @@ function productTypeAndAmount(product: ProductType): {
 
 function printOptionsFromProduct(
 	productInformation: ProductPurchase,
-	deliveryCountry?: IsoCountry,
+	deliveryCountry?: CountryCode,
 ): PrintOptions | undefined {
 	if (
 		productInformation.product === 'HomeDelivery' ||

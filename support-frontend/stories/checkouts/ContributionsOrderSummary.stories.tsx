@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { Button, Column, Columns } from '@guardian/source/react-components';
-import { SupportRegionId } from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { ContributionsOrderSummaryProps } from 'components/orderSummary/contributionsOrderSummary';
@@ -134,7 +133,7 @@ Default.args = {
 			Change
 		</Button>
 	),
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	landingPageSettings,
 };
 
@@ -169,7 +168,7 @@ RecurringContribution.args = {
 			Change
 		</Button>
 	),
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	landingPageSettings,
 };
 
@@ -205,7 +204,7 @@ SupporterPlus.args = {
 			Change
 		</Button>
 	),
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	landingPageSettings,
 };
 
@@ -249,7 +248,7 @@ DigitalSubscription.args = {
 			Change
 		</Button>
 	),
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	landingPageSettings,
 };
 
@@ -287,7 +286,7 @@ StudentOneYear.args = {
 		</Button>
 	),
 	studentDiscount: oneYearStudentDiscount,
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	landingPageSettings,
 };
 
@@ -324,7 +323,7 @@ WeeklyPricing.args = {
 			Change
 		</Button>
 	),
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	landingPageSettings: weeklyPricingLandingPageSettings,
 };
 
@@ -371,6 +370,6 @@ WeeklyPricingWithPromotion.args = {
 			Change
 		</Button>
 	),
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	landingPageSettings: weeklyPricingLandingPageSettings,
 };

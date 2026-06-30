@@ -1,10 +1,7 @@
 import { css } from '@emotion/react';
-import {
-	StudentTsAndCs,
-	StudentTsAndCsProps,
-} from 'pages/[countryGroupId]/student/components/studentTsAndCs';
+import type { StudentTsAndCsProps } from 'pages/[countryGroupId]/student/components/studentTsAndCs';
+import { StudentTsAndCs } from 'pages/[countryGroupId]/student/components/studentTsAndCs';
 import { getStudentTsAndCs } from 'pages/[countryGroupId]/student/helpers/studentTsAndCsCopy';
-import { SupportRegionId } from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
 
 export default {
 	title: 'LandingPage/StudentTsAndCs',
@@ -31,5 +28,5 @@ Template.args = {} as Record<string, unknown>;
 
 export const DefaultAUD = Template.bind({});
 DefaultAUD.args = {
-	tsAndCsItem: getStudentTsAndCs(SupportRegionId.AU),
+	tsAndCsItem: getStudentTsAndCs('au'),
 };

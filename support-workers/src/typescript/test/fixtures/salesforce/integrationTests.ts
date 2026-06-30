@@ -1,4 +1,4 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { PrintContactRecordRequest } from 'src/typescript/services/salesforce';
 import type { Title } from '../../../model/stateSchemas';
 
@@ -12,7 +12,7 @@ export const name = 'integration-test';
 export const street = '123 trash alley';
 export const city = 'London';
 export const postCode = 'n1 9gu';
-export const uk: IsoCountry = 'GB';
+export const uk: CountryCode = 'GB';
 export const state = 'CA';
 
 export const customer: PrintContactRecordRequest = {

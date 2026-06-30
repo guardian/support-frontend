@@ -1,5 +1,5 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { CountryCode } from '@modules/internationalisation/country';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import type { StudentLandingPageVariant } from 'helpers/globalsAndSwitches/studentLandingPageSettings';
 import { Country } from 'helpers/internationalisation/classes/country';
@@ -25,7 +25,7 @@ export function StudentLandingPageInstitutionContainer({
 	const productKey: ActiveProductKey = 'SupporterPlus';
 	const ratePlanKey: ActiveRatePlanKey = 'Monthly';
 
-	const countryId: IsoCountry = Country.detect();
+	const countryId: CountryCode = Country.detect();
 	const maybePromo = getPromotion(
 		allProductPrices.SupporterPlus,
 		countryId,
