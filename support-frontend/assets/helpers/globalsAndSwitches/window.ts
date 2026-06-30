@@ -8,7 +8,6 @@ import { optional, z } from 'zod';
 import type { LegacyProductType } from 'helpers/legacyTypeConversions';
 import { legacyProductTypes } from 'helpers/legacyTypeConversions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import type { ActiveProductKey } from '../productCatalog';
 import { isProductKey } from '../productCatalog';
 
 /**
@@ -26,6 +25,7 @@ const featureSwitchesSchema = z.object({
 	enableThankYouOnboarding: z.optional(z.enum(['On', 'Off'])),
 	enableCheckoutNudge: z.optional(z.enum(['On', 'Off'])),
 	enableMParticle: z.optional(z.enum(['On', 'Off'])),
+	enableCanadaTaxExclusion: z.optional(z.enum(['On', 'Off'])),
 });
 
 export type FeatureSwitches = z.infer<typeof featureSwitchesSchema>;
@@ -150,9 +150,7 @@ const PaymentConfigSchema = z.object({
 			),
 		}),
 		metricUrl: z.string(),
-		productsWithThankYouOnboarding: z.array(
-			z.string().refine<ActiveProductKey>(isProductKey),
-		),
+		productsWithThankYouOnboarding: z.array(z.string().refine(isProductKey)),
 	}),
 	isObserverSubdomain: z.boolean(),
 });
@@ -215,15 +213,15 @@ export const ProductPricesSchema = z.object({
 	allProductPrices: z.record(
 		z.enum([...legacyProductTypes, 'GuardianWeeklyGift']),
 		optional(
-			z.record(
+			z.partialRecord(
 				countryKeySchema,
-				z.record(
+				z.partialRecord(
 					fulfilmentOptionsSchema,
-					z.record(
+					z.partialRecord(
 						productOptionsSchema,
-						z.record(
+						z.partialRecord(
 							billingPeriodSchema,
-							z.record(
+							z.partialRecord(
 								isoCurrencySchema,
 								z.object({
 									price: z.number(),

@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
 import { Button, Stack, SvgTickRound } from '@guardian/source/react-components';
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { OnboardingSteps } from 'components/onboarding/onboardingSteps';
 import type {
 	HandleStepNavigationFunction,
@@ -27,30 +28,29 @@ import {
 const GUARDIAN_APP_BENEFITS = [
 	{
 		title: 'Home',
-		description: 'Choose the sections that matter to you.',
+		description: 'Stay connected with the latest live events.',
 	},
 	{
 		title: 'My Guardian',
 		description:
-			'Personalise your feed, listen to articles, or save them for later.',
+			'Follow topics, save articles for later and view your reading history.',
 	},
 	{
 		title: 'Podcasts',
-		description: 'All your favourites in one place.',
+		description: 'Play all our latest episodes from one place.',
 	},
 	{
 		title: 'Puzzles',
-		description:
-			'Upgrade your downtime with daily word, number and quiz puzzles.',
+		description: 'Play our daily word, logic and quiz games.',
 	},
 	{
 		title: 'Settings',
 		description:
-			'Customise your experience with stories for offline reading, dark mode and notifications.',
+			'Set up your live events feed, notifications, offline reading and more.',
 	},
 	{
 		title: 'Ad-free reading',
-		description: 'For an uninterrupted experience.',
+		description: 'Enjoy an uninterrupted experience.',
 	},
 ];
 
@@ -58,7 +58,7 @@ const FEAST_APP_BENEFITS = [
 	{
 		title: 'Home',
 		description:
-			'Choose from over 7,000 curated recipes from our Guardian cooks.',
+			'Get inspired with over 7,000 recipes from our world-class cooks - and app exclusive recipes, just for you.',
 	},
 	{
 		title: 'Search',
@@ -67,8 +67,7 @@ const FEAST_APP_BENEFITS = [
 	},
 	{
 		title: 'My Feast',
-		description:
-			'Save your favourite recipes and curate your own recipe collections.',
+		description: 'Save your favourite recipes to your own curated collection.',
 	},
 	{
 		title: 'Cook mode',
@@ -77,14 +76,26 @@ const FEAST_APP_BENEFITS = [
 	},
 	{
 		title: 'Shopping list',
-		description: 'Add recipe ingredients to your weekly shop.',
+		description: 'Add recipe ingredients and tick them off as you shop.',
 	},
+] as const;
+
+const FEAST_APP_UNITS_BENEFIT = {
+	title: 'Recipes',
+	description: 'Convert any recipe from metric to standard US units.',
+};
+
+const FEAST_APP_BENEFITS_US = [
+	FEAST_APP_BENEFITS[0],
+	FEAST_APP_UNITS_BENEFIT,
+	...FEAST_APP_BENEFITS.slice(1),
 ];
 
 export function OnboardingAppsDiscovery({
 	hasMobileAppDownloaded,
 	hasFeastMobileAppDownloaded,
 	onboardingStep,
+	supporterRegion,
 	handleStepNavigation,
 	nextStep,
 	backStep,
@@ -95,6 +106,7 @@ export function OnboardingAppsDiscovery({
 	handleStepNavigation: HandleStepNavigationFunction;
 	nextStep?: OnboardingFlowStep;
 	backStep?: OnboardingFlowStep;
+	supporterRegion: SupportRegionId;
 }) {
 	const { windowWidthIsGreaterThan } = useWindowWidth();
 
@@ -103,9 +115,14 @@ export function OnboardingAppsDiscovery({
 		? hasMobileAppDownloaded
 		: hasFeastMobileAppDownloaded;
 
+	const FEAST_APP_BENEFITS_REGION =
+		supporterRegion === SupportRegionId.US
+			? FEAST_APP_BENEFITS_US
+			: FEAST_APP_BENEFITS;
+
 	const appBenefits = isGuardianApp
 		? GUARDIAN_APP_BENEFITS
-		: FEAST_APP_BENEFITS;
+		: FEAST_APP_BENEFITS_REGION;
 
 	const isTabledOrLarger = windowWidthIsGreaterThan('tablet');
 
@@ -127,8 +144,8 @@ export function OnboardingAppsDiscovery({
 					</h1>
 					<p css={descriptions}>
 						{isGuardianApp
-							? 'Get the stuff you want, when you want it — news, sport, podcasts, puzzles and more.'
-							: 'Level up your cooking with more than 6,000 recipes and smart, exclusive cooking features.'}
+							? 'News, sport, podcasts, puzzles and more.'
+							: 'Rated 4 out of 5 stars by our Feast community.'}
 					</p>
 
 					{!hasAppDownloaded && (
@@ -166,9 +183,9 @@ export function OnboardingAppsDiscovery({
 							onClick={() =>
 								handleStepNavigation(
 									nextStep ??
-										(isGuardianApp
-											? OnboardingSteps.FeastApp
-											: OnboardingSteps.Completed),
+									(isGuardianApp
+										? OnboardingSteps.FeastApp
+										: OnboardingSteps.Completed),
 								)
 							}
 						>
@@ -180,9 +197,9 @@ export function OnboardingAppsDiscovery({
 							onClick={() =>
 								handleStepNavigation(
 									backStep ??
-										(isGuardianApp
-											? OnboardingSteps.Summary
-											: OnboardingSteps.GuardianApp),
+									(isGuardianApp
+										? OnboardingSteps.Summary
+										: OnboardingSteps.GuardianApp),
 								)
 							}
 						>

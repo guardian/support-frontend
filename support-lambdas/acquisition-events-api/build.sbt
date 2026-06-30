@@ -10,13 +10,7 @@ libraryDependencies ++= Seq(
 )
 
 assemblyJarName := s"${name.value}.jar"
-riffRaffPackageType := assembly.value
-riffRaffUploadArtifactBucket := Option("riffraff-artifact")
-riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffManifestProjectName := s"support:lambdas:${name.value}"
-riffRaffArtifactResources += (file(
-  "cdk/cdk.out/Acquisition-Events-API-PROD.template.json",
-), "cfn/Acquisition-Events-API-PROD.template.json")
-riffRaffArtifactResources += (file(
-  "cdk/cdk.out/Acquisition-Events-API-CODE.template.json",
-), "cfn/Acquisition-Events-API-CODE.template.json")
+
+// simple-configuration-ssm:7.0.0 transitively pulls in apache-client:2.32.27 which
+// conflicts with apache5-client:2.46.5 during assembly
+excludeDependencies += ExclusionRule("software.amazon.awssdk", "apache-client")

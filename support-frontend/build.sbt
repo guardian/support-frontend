@@ -35,7 +35,7 @@ libraryDependencies ++= Seq(
   "com.googlecode.libphonenumber" % "libphonenumber" % "8.13.20",
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
-  "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonAnnotationsVersion,
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
   filters,
   ws,
@@ -67,30 +67,6 @@ enablePlugins(SystemdPlugin)
 packageSummary := "Support Frontend Play App"
 packageDescription := """Frontend for the new supporter platform"""
 maintainer := "Membership <membership.dev@theguardian.com>"
-
-riffRaffPackageType := (Debian / packageBin).value
-riffRaffManifestProjectName := "support:frontend-mono"
-riffRaffPackageName := "frontend"
-riffRaffAwsCredentialsProfile := Some("membership") // needed when running locally
-riffRaffUploadArtifactBucket := Option("riffraff-artifact")
-riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffArtifactResources += (file(
-  "cdk/cdk.out/Frontend-PROD.template.json",
-), "cfn-frontend/Frontend-PROD.template.json")
-riffRaffArtifactResources += (file(
-  "cdk/cdk.out/Frontend-CODE.template.json",
-), "cfn-frontend/Frontend-CODE.template.json")
-riffRaffArtifactResources += (file(
-  "cdk/cdk.out/Backend-PROD.template.json",
-), "cfn-backend/Backend-PROD.template.json")
-riffRaffArtifactResources += (file(
-  "cdk/cdk.out/Backend-CODE.template.json",
-), "cfn-backend/Backend-CODE.template.json")
-riffRaffArtifactResources ++= getFiles(file("support-frontend/public/compiled-assets"), "assets-static")
-riffRaffArtifactResources ++= getFiles(
-  file("support-backend/support-backend.tar.gz"),
-  "support-backend/support-backend.tar.gz",
-)
 
 def getFiles(rootFile: File, deployName: String): Seq[(File, String)] = {
   def getFiles0(f: File): Seq[(File, String)] = {

@@ -35,21 +35,43 @@ jobs:
         run: ./script/ci
         working-directory: cdk
 
-      # Required by sbt riffRaffUpload
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
-          aws-region: eu-west-1
-
       - name: Setup Scala
         uses: guardian/setup-scala@v1
 
-      - name: Build and upload to RiffRaff
+      - name: Build jar
         run: |
-          export LAST_TEAMCITY_BUILD=15000
-          export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
-          sbt "project support-lambdas" riffRaffUpload
+          sbt "project support-lambdas" clean test assembly
+
+      - name: Upload Acquisition Events API to Riff-Raff
+        uses: guardian/actions-riff-raff@v4
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          projectName: "support:lambdas:acquisition-events-api"
+          buildNumberOffset: 15000
+          configPath: ./support-lambdas/acquisition-events-api/riff-raff.yaml
+          commentingEnabled: "false"
+          contentDirectories: |
+            acquisition-events-api:
+              - support-lambdas/acquisition-events-api/target/scala-2.13/acquisition-events-api.jar
+            cfn:
+              - cdk/cdk.out/Acquisition-Events-API-CODE.template.json
+              - cdk/cdk.out/Acquisition-Events-API-PROD.template.json
+
+      - name: Upload Stripe Intent to Riff-Raff
+        uses: guardian/actions-riff-raff@v4
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          projectName: "support:lambdas:Stripe Intent"
+          buildNumberOffset: 15000
+          configPath: ./support-lambdas/stripe-intent/riff-raff.yaml
+          commentingEnabled: "false"
+          contentDirectories: |
+            stripe-intent:
+              - support-lambdas/stripe-intent/target/scala-2.13/stripe-intent.jar
+            cfn:
+              - support-lambdas/stripe-intent/cfn.yaml
 
   support_lambdas_typescripts_bigquery_acquisition_publisher:
     if: >-
@@ -85,12 +107,6 @@ jobs:
 
       - run: zip -qr index.zip ./*.js
         working-directory: support-lambdas/bigquery-acquisitions-publisher/target/typescript
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
-          aws-region: eu-west-1
 
       - name: Upload to Riff-Raff
         uses: guardian/actions-riff-raff@v4

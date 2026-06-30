@@ -4,6 +4,7 @@ import {
 	from,
 	palette,
 	space,
+	textSans12,
 	textSans17,
 	textSansBold20,
 } from '@guardian/source/foundations';
@@ -23,6 +24,7 @@ import {
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -47,6 +49,7 @@ import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPer
 import { allProductPrices } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
+import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
 import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
@@ -62,6 +65,7 @@ import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
 import { ThreeTierLandingHeading } from './threeTierLandingHeading';
 import { TickerContainer } from './tickerContainer';
+import { getRatePlanKey, useRatePlanKey } from './useRatePlanKey';
 
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
@@ -165,6 +169,12 @@ const disclaimerContainer = css`
 	}
 `;
 
+const taxExclusionDisclaimer = css`
+	${textSans12};
+	color: ${palette.neutral[100]};
+	margin-bottom: ${space[2]}px;
+`;
+
 const links = [
 	{
 		href: 'https://www.theguardian.com/info/privacy',
@@ -239,15 +249,6 @@ function getPlanCost(
 				  }
 				: undefined,
 	};
-}
-
-function getRatePlanKey(contributionType: ContributionType) {
-	switch (contributionType) {
-		case 'ANNUAL':
-			return 'Annual';
-		default:
-			return 'Monthly';
-	}
 }
 
 type ThreeTierLandingProps = {
@@ -330,6 +331,9 @@ export function ThreeTierLanding({
 		setContributionType(paymentFrequencies[buttonIndex] as ContributionType);
 	};
 
+	const { ratePlanKey: maybeTaxExclusiveRatePlanKey, taxExclusionEnabled } =
+		useRatePlanKey(contributionType, supportRegionId);
+
 	const ratePlanKey = getRatePlanKey(contributionType);
 
 	const fallbackProducts = fallBackLandingPageSelection.products;
@@ -338,14 +342,14 @@ export function ThreeTierLanding({
 	 * Tier 1: Contributions
 	 * We use the product catalog for the recurring Contribution tier amount
 	 */
+
 	const tier1Pricing = productCatalog.Contribution?.ratePlans[ratePlanKey]
 		?.pricing[currencyId] as number;
-	const tier1UrlParams = new URLSearchParams({
+	const tier1checkoutUrl = buildCheckoutUrl(supportRegionId, {
 		product: 'Contribution',
-		ratePlan: getRatePlanKey(contributionType),
-		contribution: tier1Pricing.toString(),
+		ratePlan: ratePlanKey,
+		contribution: tier1Pricing,
 	});
-	const tier1Url = `checkout?${tier1UrlParams.toString()}`;
 
 	const getDefaultSelectedProduct = () => {
 		if (urlSearchParamsProduct) {
@@ -367,7 +371,7 @@ export function ThreeTierLanding({
 	const tier1Card: CardContent = {
 		product: 'Contribution',
 		price: tier1Pricing,
-		link: tier1Url,
+		link: tier1checkoutUrl,
 		isUserSelected:
 			urlSearchParamsProduct === 'contribution' ||
 			isCardUserSelected(tier1Pricing) ||
@@ -387,20 +391,24 @@ export function ThreeTierLanding({
 	};
 
 	/** Tier 2: SupporterPlus */
-	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[ratePlanKey]
-		?.pricing[currencyId] as number;
-	const tier2UrlParams = new URLSearchParams({
-		product: 'SupporterPlus',
-		ratePlan: ratePlanKey,
-	});
+
+	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[
+		maybeTaxExclusiveRatePlanKey
+	]?.pricing[currencyId] as number;
+
 	const tier2Promotion = getPromotion(
 		allProductPrices.SupporterPlus,
 		countryId,
 		billingPeriod,
 	);
-	if (tier2Promotion) {
-		tier2UrlParams.set('promoCode', tier2Promotion.promoCode);
-	}
+
+	const tier2CheckoutURL = buildCheckoutUrl(supportRegionId, {
+		product: 'SupporterPlus',
+		ratePlan:
+			maybeTaxExclusiveRatePlanKey as ProductRatePlanKey<'SupporterPlus'>,
+		promoCode: tier2Promotion?.promoCode,
+	});
+
 	const tier2ProductDescription = {
 		...settings.products.SupporterPlus,
 		title: getProductLabel('SupporterPlus'),
@@ -419,7 +427,7 @@ export function ThreeTierLanding({
 	const tier2Card: CardContent = {
 		product: 'SupporterPlus',
 		price: tier2Pricing,
-		link: `checkout?${tier2UrlParams.toString()}`,
+		link: tier2CheckoutURL,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion: tier2Promotion,
 		isUserSelected:
@@ -446,12 +454,10 @@ export function ThreeTierLanding({
 	 * This should only exist as long as the Tier three hack is in place.
 	 */
 	const tier3Product = 'DigitalSubscription';
-	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[ratePlanKey]
-		?.pricing[currencyId] as number;
-	const tier3UrlParams = new URLSearchParams({
-		product: tier3Product,
-		ratePlan: ratePlanKey,
-	});
+	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[
+		maybeTaxExclusiveRatePlanKey
+	]?.pricing[currencyId] as number;
+
 	const { label: title, labelPill: titlePill } = getProductDescription(
 		'DigitalSubscription',
 		ratePlanKey,
@@ -475,13 +481,18 @@ export function ThreeTierLanding({
 	const tier3Promotion = tier3ProductPrice
 		? getPromotion(tier3ProductPrice, countryId, billingPeriod)
 		: undefined;
-	if (tier3Promotion) {
-		tier3UrlParams.set('promoCode', tier3Promotion.promoCode);
-	}
+
+	const tier3CheckoutURL = buildCheckoutUrl(supportRegionId, {
+		product: tier3Product,
+		ratePlan:
+			maybeTaxExclusiveRatePlanKey as ProductRatePlanKey<'DigitalSubscription'>,
+		promoCode: tier3Promotion?.promoCode,
+	});
+
 	const tier3Card: CardContent = {
 		product: tier3Product,
 		price: tier3Pricing,
-		link: `checkout?${tier3UrlParams.toString()}`,
+		link: tier3CheckoutURL,
 		promotion: tier3Promotion,
 		isUserSelected:
 			urlSearchParamsProduct === tier3Product.toLowerCase() ||
@@ -534,6 +545,11 @@ export function ThreeTierLanding({
 						borderColor="rgba(170, 170, 180, 0.5)"
 						cssOverrides={disclaimerContainer}
 					>
+						{taxExclusionEnabled && (
+							<p css={taxExclusionDisclaimer}>
+								For All-access digital and Digital plus, taxes may apply.
+							</p>
+						)}
 						<ThreeTierTsAndCs
 							tsAndCsContent={[
 								{

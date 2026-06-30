@@ -10,7 +10,7 @@ import {
 import { Column, Columns, Container } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';

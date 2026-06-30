@@ -135,7 +135,7 @@ export function OnboardingAppBadgesDownload({
 					<div css={separator} />
 					<div css={qrContainer}>
 						{qrCode}
-						<p>Scan to get the App</p>
+						<p>Scan to get the app</p>
 					</div>
 				</>
 			) : null}

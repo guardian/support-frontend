@@ -1,6 +1,6 @@
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import OnboardingLayout from 'components/onboarding/layout';
 import {
 	OnboardingInviteeSteps,
@@ -212,6 +212,7 @@ function OnboardingInviteeComponent({
 					handleStepNavigation={handleStepNavigation}
 					nextStep={OnboardingInviteeSteps.DigitalPlus}
 					backStep={OnboardingInviteeSteps.CreateAccount}
+					supporterRegion={supportRegionId}
 				/>
 			)}
 			{currentStep === OnboardingInviteeSteps.DigitalPlus && (

@@ -23,6 +23,7 @@ const defaultArgs = {
 	handleStepNavigation: () => {},
 	hasMobileAppDownloaded: false,
 	hasFeastMobileAppDownloaded: false,
+	supporterRegion: 'uk' as const,
 };
 
 export const GuardianAppNotDownloaded = {
@@ -52,5 +53,13 @@ export const FeastAppAlreadyDownloaded = {
 		...defaultArgs,
 		onboardingStep: OnboardingSteps.FeastApp,
 		hasFeastMobileAppDownloaded: true,
+	},
+};
+
+export const FeastAppNotDownloadedUS = {
+	args: {
+		...defaultArgs,
+		onboardingStep: OnboardingSteps.FeastApp,
+		supporterRegion: 'us' as const,
 	},
 };
