@@ -15,7 +15,10 @@ import {
 } from 'components/onboarding/onboardingSteps';
 import type { HandleStepNavigationFunction } from 'components/onboarding/onboardingTypes';
 import { getBaseDomain } from 'helpers/urls/url';
-import { ONBOARDING_EDITIONS_APP, OnboardingAppBadgesDownload } from '../appBadgesDownload/badgesDownload';
+import {
+	ONBOARDING_EDITIONS_APP,
+	OnboardingAppBadgesDownload,
+} from '../appBadgesDownload/badgesDownload';
 import ContentBox from '../contentBox';
 import {
 	buttonOverrides,
@@ -92,7 +95,14 @@ export function OnboardingDigitalPlusDiscovery({
 						Long Read, Guardian Weekly, and the Guardian Archives.
 					</p>
 
-					<div css={[benefitCard, css`margin-top: ${space[8]}px;`]}>
+					<div
+						css={[
+							benefitCard,
+							css`
+								margin-top: ${space[8]}px;
+							`,
+						]}
+					>
 						<div css={[heroContainer, benefitCardImage, feastCard]}>
 							<GridImage
 								gridId="onboardingFeastAppHeroMobile"
@@ -126,10 +136,12 @@ export function OnboardingDigitalPlusDiscovery({
 							/>
 						</div>
 						<div css={benefitCardContent}>
-							<h2 css={benefitCardHeading}>Explore the Guardian Editions app</h2>
+							<h2 css={benefitCardHeading}>
+								Explore the Guardian Editions app
+							</h2>
 							<p css={descriptions}>
-								Read the digital newspaper every day, plus access to The Long Read
-								and Guardian Weekly e-magazines.
+								Read the digital newspaper every day, plus access to The Long
+								Read and Guardian Weekly e-magazines.
 							</p>
 							<OnboardingAppBadgesDownload
 								onboardingStep={ONBOARDING_EDITIONS_APP}
@@ -153,8 +165,8 @@ export function OnboardingDigitalPlusDiscovery({
 								Journey through the Guardian Archives
 							</h2>
 							<p css={descriptions}>
-								Explore over 200 years of history as reported by the Guardian and
-								Observer. You can find the Archives in{' '}
+								Explore over 200 years of history as reported by the Guardian
+								and Observer. You can find the Archives in{' '}
 								<a
 									href={`https://manage.${getBaseDomain()}`}
 									css={archivesLink}

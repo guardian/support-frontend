@@ -56,13 +56,17 @@ function OnboardingInviteeComponent({
 	}, []);
 
 	const { isSignedIn } = getUser();
-	const { hasMobileAppDownloaded, hasFeastMobileAppDownloaded, loadAnalyticsData } =
-		useAnalyticsProfile();
+	const {
+		hasMobileAppDownloaded,
+		hasFeastMobileAppDownloaded,
+		loadAnalyticsData,
+	} = useAnalyticsProfile();
 	const searchParams = useSearchParams();
 
 	const documentLocation = document.location;
-	const iframeOrigin = `${documentLocation.protocol
-		}//${documentLocation.hostname.replace('support', 'profile')}`;
+	const iframeOrigin = `${
+		documentLocation.protocol
+	}//${documentLocation.hostname.replace('support', 'profile')}`;
 
 	// This might need tweaking since we don't have the guestUser URL Param
 	const getIframeTargetUrl = (email: string) => {
@@ -82,9 +86,7 @@ function OnboardingInviteeComponent({
 	const [showIdentityIframe, setShowIdentityIframe] = useState(!isSignedIn);
 	const identityIframeRef = useRef<HTMLIFrameElement>(null);
 
-	const handleStepNavigation: HandleStepNavigationFunction = (
-		targetStep,
-	) => {
+	const handleStepNavigation: HandleStepNavigationFunction = (targetStep) => {
 		searchParams[1]((prev) => {
 			prev.set('step', targetStep);
 			return prev;

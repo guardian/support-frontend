@@ -1,3 +1,4 @@
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type React from 'react';
 import { OnboardingInviteeCompleted } from 'components/onboarding/sections/onboardingInviteeCompleted';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
@@ -23,7 +24,7 @@ export default {
 export const Default = {
 	args: {
 		invitation: resolveInvitation('test-invitation'),
-		productKey: 'DigitalSubscription',
 		landingPageSettings: fallBackLandingPageSelection,
+		supportRegionId: SupportRegionId.UK,
 	},
 };

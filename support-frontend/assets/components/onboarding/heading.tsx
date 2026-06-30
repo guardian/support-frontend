@@ -133,52 +133,52 @@ function OnboardingHeading({
 
 	const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
 
-	const supporterStepContentMap = useMemo<Record<OnboardingSteps, StepContent>>(
-		() => {
-			const allAccessTitle =
-				productSettings?.title === 'All-access digital'
-					? `All\u2011access digital`
-					: productSettings?.title;
+	const supporterStepContentMap = useMemo<
+		Record<OnboardingSteps, StepContent>
+	>(() => {
+		const allAccessTitle =
+			productSettings?.title === 'All-access digital'
+				? `All\u2011access digital`
+				: productSettings?.title;
 
-			return {
-				[OnboardingSteps.Summary]: {
-					heading: `Thank you ${order?.firstName && order.firstName + ' '
-						}for subscribing to ${allAccessTitle}`,
-					subtext:
-						"You've just joined over 1.3m others who support independent journalism.",
-					gridId: 'onboardingSummaryHero',
-					altText: 'Onboarding summary hero holding The Guardian logo',
-					aspectRatio: css`
-						aspect-ratio: 25 / 9;
-					`,
-				},
-				[OnboardingSteps.GuardianApp]: {
-					gridId: windowWidthIsGreaterThan('tablet')
-						? 'onboardingGuardianAppHero'
-						: 'onboardingGuardianAppHeroMobile',
-					altText: 'Onboarding guardian app hero showing multiple articles',
-					aspectRatio: css`
-						aspect-ratio: 3 / 2;
-					`,
-				},
-				[OnboardingSteps.FeastApp]: {
-					gridId: windowWidthIsGreaterThan('tablet')
-						? 'onboardingFeastAppHero'
-						: 'onboardingFeastAppHeroMobile',
-					altText: 'Onboarding feast app hero showing multiple articles',
-					aspectRatio: css`
-						aspect-ratio: 3 / 2;
-					`,
-				},
-				[OnboardingSteps.Completed]: {
-					aspectRatio: css`
-						aspect-ratio: 3 / 2;
-					`,
-				},
-			};
-		},
-		[order, windowWidthIsGreaterThan, productSettings?.title],
-	);
+		return {
+			[OnboardingSteps.Summary]: {
+				heading: `Thank you ${
+					order?.firstName && order.firstName + ' '
+				}for subscribing to ${allAccessTitle}`,
+				subtext:
+					"You've just joined over 1.3m others who support independent journalism.",
+				gridId: 'onboardingSummaryHero',
+				altText: 'Onboarding summary hero holding The Guardian logo',
+				aspectRatio: css`
+					aspect-ratio: 25 / 9;
+				`,
+			},
+			[OnboardingSteps.GuardianApp]: {
+				gridId: windowWidthIsGreaterThan('tablet')
+					? 'onboardingGuardianAppHero'
+					: 'onboardingGuardianAppHeroMobile',
+				altText: 'Onboarding guardian app hero showing multiple articles',
+				aspectRatio: css`
+					aspect-ratio: 3 / 2;
+				`,
+			},
+			[OnboardingSteps.FeastApp]: {
+				gridId: windowWidthIsGreaterThan('tablet')
+					? 'onboardingFeastAppHero'
+					: 'onboardingFeastAppHeroMobile',
+				altText: 'Onboarding feast app hero showing multiple articles',
+				aspectRatio: css`
+					aspect-ratio: 3 / 2;
+				`,
+			},
+			[OnboardingSteps.Completed]: {
+				aspectRatio: css`
+					aspect-ratio: 3 / 2;
+				`,
+			},
+		};
+	}, [order, windowWidthIsGreaterThan, productSettings?.title]);
 
 	const inviteeStepContentMap = useMemo<
 		Record<OnboardingInviteeSteps, StepContent>

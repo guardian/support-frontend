@@ -42,7 +42,8 @@ export function OnboardingCreateAccount({
 					<Stack space={2}>
 						<h1 css={headings}>Create your account</h1>
 						<p css={descriptions}>
-							Redeem your invitation and start exploring your full Guardian access.
+							Redeem your invitation and start exploring your full Guardian
+							access.
 						</p>
 						<iframe
 							ref={iframeRef}

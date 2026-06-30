@@ -106,12 +106,14 @@ function OnboardingComponent({
 	const guestUser = !isSignedIn && identityUserType === 'new';
 
 	const documentLocation = document.location;
-	const iframeOrigin = `${documentLocation.protocol
-		}//${documentLocation.hostname.replace('support', 'profile')}`;
+	const iframeOrigin = `${
+		documentLocation.protocol
+	}//${documentLocation.hostname.replace('support', 'profile')}`;
 
 	const getIframeTargetUrl = (email: string) => {
 		const iframeTargetUrl = new URL(
-			`${iframeOrigin}${guestUser ? '/iframed/register/email' : '/iframed/signin'
+			`${iframeOrigin}${
+				guestUser ? '/iframed/register/email' : '/iframed/signin'
 			}`,
 		);
 
@@ -288,14 +290,14 @@ function OnboardingComponent({
 			)}
 			{(currentStep === OnboardingSteps.GuardianApp ||
 				currentStep === OnboardingSteps.FeastApp) && (
-					<OnboardingAppsDiscovery
-						hasMobileAppDownloaded={hasMobileAppDownloaded}
-						hasFeastMobileAppDownloaded={hasFeastMobileAppDownloaded}
-						onboardingStep={currentStep}
-						handleStepNavigation={handleStepNavigation}
-						supporterRegion={supportRegionId}
-					/>
-				)}
+				<OnboardingAppsDiscovery
+					hasMobileAppDownloaded={hasMobileAppDownloaded}
+					hasFeastMobileAppDownloaded={hasFeastMobileAppDownloaded}
+					onboardingStep={currentStep}
+					handleStepNavigation={handleStepNavigation}
+					supporterRegion={supportRegionId}
+				/>
+			)}
 			{currentStep === OnboardingSteps.Completed && (
 				<OnboardingCompleted
 					productKey={productKey}

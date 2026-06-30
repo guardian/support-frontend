@@ -183,9 +183,9 @@ export function OnboardingAppsDiscovery({
 							onClick={() =>
 								handleStepNavigation(
 									nextStep ??
-									(isGuardianApp
-										? OnboardingSteps.FeastApp
-										: OnboardingSteps.Completed),
+										(isGuardianApp
+											? OnboardingSteps.FeastApp
+											: OnboardingSteps.Completed),
 								)
 							}
 						>
@@ -197,9 +197,9 @@ export function OnboardingAppsDiscovery({
 							onClick={() =>
 								handleStepNavigation(
 									backStep ??
-									(isGuardianApp
-										? OnboardingSteps.Summary
-										: OnboardingSteps.GuardianApp),
+										(isGuardianApp
+											? OnboardingSteps.Summary
+											: OnboardingSteps.GuardianApp),
 								)
 							}
 						>
