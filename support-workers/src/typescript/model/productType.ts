@@ -1,4 +1,4 @@
-import { isoCurrencySchema } from '@modules/internationalisation/schemas';
+import { isoCurrencySchema } from '@modules/internationalisation/currency';
 import {
 	fulfilmentOptionsSchema,
 	productOptionsSchema,
