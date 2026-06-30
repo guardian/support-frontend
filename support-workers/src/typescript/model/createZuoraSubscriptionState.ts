@@ -1,4 +1,4 @@
-import { countryCodeSchema } from '@modules/internationalisation/country';
+import { countryCodeSchema } from '@modules/internationalisation/schemas';
 import { productPurchaseSchema } from '@modules/product-catalog/productPurchaseSchema';
 import { appliedPromotionSchema } from '@modules/promotions/v1/schema';
 import { optionalDropNulls } from '@modules/schemaUtils';

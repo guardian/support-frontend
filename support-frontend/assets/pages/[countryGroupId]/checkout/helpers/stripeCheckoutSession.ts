@@ -1,5 +1,5 @@
 import { storage } from '@guardian/libs';
-import { countryCodeSchema } from '@modules/internationalisation/country';
+import { countryCodeSchema } from '@modules/internationalisation/schemas';
 import { z } from 'zod';
 
 const formDetailsSchema = z.object({

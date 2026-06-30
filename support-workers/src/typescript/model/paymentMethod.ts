@@ -1,4 +1,4 @@
-import { countryCodeSchema } from '@modules/internationalisation/country';
+import { countryCodeSchema } from '@modules/internationalisation/schemas';
 import { optionalDropNulls } from '@modules/schemaUtils';
 import { z } from 'zod';
 import { stripePaymentTypeSchema } from './paymentFields';
