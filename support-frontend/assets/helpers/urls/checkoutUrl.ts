@@ -1,4 +1,4 @@
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type {
 	ProductKey,
 	ProductRatePlanKey,

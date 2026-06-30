@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import { from, space, until } from '@guardian/source/foundations';
 import { ChoiceCardGroup } from '@guardian/source/react-components';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { getCurrencyInfo } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
+import { getCurrency } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
@@ -64,7 +64,7 @@ function getChoiceCardGroupStyles(lastButtonFullWidth: boolean) {
 export type PriceCardsProps = {
 	amounts: number[];
 	selectedAmount: number | 'other';
-	currency: IsoCurrency;
+	currency: CurrencyCode;
 	onAmountChange: (newAmount: string) => void;
 	billingPeriod: BillingPeriod;
 	otherAmountField?: React.ReactNode;
@@ -101,7 +101,7 @@ export function PriceCards({
 							amount={amount}
 							isSelected={amount === selectedAmount}
 							onClick={onAmountChange}
-							label={`${simpleFormatAmount(getCurrencyInfo(currency), amount)}${
+							label={`${simpleFormatAmount(getCurrency(currency), amount)}${
 								billingPeriod !== BillingPeriod.OneTime
 									? ' per ' + getBillingPeriodNoun(billingPeriod)
 									: ''

@@ -275,7 +275,7 @@ export const IsoCountrySchema = z.enum([
 	'SH',
 	'IC',
 ]);
-export type IsoCountry = z.infer<typeof IsoCountrySchema>;
+export type CountryCode = z.infer<typeof IsoCountrySchema>;
 
 export const PaymentProviderSchema = z.enum([
 	'STRIPE',

@@ -1,4 +1,4 @@
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { supportRegionIds } from '@guardian/support-service-lambdas/modules/internationalisation/src/supportRegion';
 import {
 	createBrowserRouter,
 	Outlet,
@@ -83,7 +83,7 @@ const router = createBrowserRouter([
 		errorElement: <ClientSideErrorPage />,
 		HydrateFallback: GuardianOrObserverHoldingContent,
 		children: [
-			...Object.values(SupportRegionId).flatMap((supportRegionId) => [
+			...supportRegionIds.flatMap((supportRegionId) => [
 				{
 					path: `/${supportRegionId}/contribute/:campaignCode?`,
 					lazy: async () => {

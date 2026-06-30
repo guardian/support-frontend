@@ -1,9 +1,9 @@
+import { countryCodeSchema } from '@modules/internationalisation/country';
 import { productPurchaseSchema } from '@modules/product-catalog/productPurchaseSchema';
 import { appliedPromotionSchema } from '@modules/promotions/v1/schema';
 import { optionalDropNulls } from '@modules/schemaUtils';
 import { z } from 'zod';
 import { salesforceContactRecordSchema } from '../services/salesforce';
-import { countrySchema } from './address';
 import { paymentMethodSchema } from './paymentMethod';
 import {
 	contributionProductSchema,
@@ -40,7 +40,7 @@ export type ContributionState = z.infer<typeof contributionStateSchema>;
 export const supporterPlusStateSchema = z
 	.object({
 		productType: z.literal('SupporterPlus'),
-		billingCountry: countrySchema,
+		billingCountry: countryCodeSchema,
 		product: supporterPlusProductSchema,
 		appliedPromotion: optionalDropNulls(appliedPromotionSchema),
 		similarProductsConsent: optionalDropNulls(z.boolean()),
@@ -71,7 +71,7 @@ export type GuardianAdLiteState = z.infer<typeof guardianAdLiteStateSchema>;
 export const digitalSubscriptionStateSchema = z
 	.object({
 		productType: z.literal('DigitalSubscription'),
-		billingCountry: countrySchema,
+		billingCountry: countryCodeSchema,
 		product: digitalPackProductSchema,
 		appliedPromotion: optionalDropNulls(appliedPromotionSchema),
 		similarProductsConsent: optionalDropNulls(z.boolean()),

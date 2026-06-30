@@ -1,9 +1,9 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import {
 	countryGroups,
 	GBPCountries,
 } from '@modules/internationalisation/countryGroup';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import {
 	BillingPeriod,
 	type RecurringBillingPeriod,
@@ -60,7 +60,7 @@ const getCheckoutUrl = ({
 	isGift,
 	promotion,
 }: {
-	countryId: IsoCountry;
+	countryId: CountryCode;
 	billingPeriod: RecurringBillingPeriod;
 	isGift: boolean;
 	promotion?: Promotion;
@@ -81,7 +81,7 @@ const getCheckoutUrl = ({
 	return urlWithParams;
 };
 
-const getPriceWithSymbol = (currencyId: IsoCurrency, price: number): string =>
+const getPriceWithSymbol = (currencyId: CurrencyCode, price: number): string =>
 	`${glyph(currencyId)}${fixDecimals(price)}`;
 
 const getDisplayPrice = (
@@ -101,7 +101,7 @@ export const getWeeklyProducts = ({
 	billingPeriods,
 	isGift = false,
 }: {
-	countryId: IsoCountry;
+	countryId: CountryCode;
 	productPrices: ProductPrices;
 	billingPeriods: RecurringBillingPeriod[];
 	isGift?: boolean;

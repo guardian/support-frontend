@@ -5,8 +5,8 @@ import {
 	Divider,
 	ErrorSummary,
 } from '@guardian/source-development-kitchen/react-components';
-import type { IsoCountry } from '@modules/internationalisation/country';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { CountryCode } from '@modules/internationalisation/country';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import {
 	ExpressCheckoutElement,
@@ -136,7 +136,7 @@ type CheckoutFormProps = {
 	originalAmount: number;
 	finalAmount: number;
 	useStripeExpressCheckout: boolean;
-	countryId: IsoCountry;
+	countryId: CountryCode;
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 	clearCheckoutSession: () => void;
@@ -471,7 +471,7 @@ export default function CheckoutForm({
 
 	// billingCountry selector used to determine available payment methods
 	const [billingCountry, setBillingCountry] =
-		useStateWithCheckoutSession<IsoCountry>(
+		useStateWithCheckoutSession<CountryCode>(
 			checkoutSession?.formFields.addressFields.billingAddress.country,
 			countryId,
 		);

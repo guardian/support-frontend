@@ -1,7 +1,5 @@
-import type {
-	CountryGroupId,
-	SupportRegionId,
-} from '@modules/internationalisation/countryGroup';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { Institution } from 'helpers/globalsAndSwitches/studentLandingPageSettings';
 import { privacyLink } from 'helpers/legal';
 import { getProductLabel } from 'helpers/productCatalog';

@@ -1,6 +1,6 @@
 import { ThemeProvider } from '@emotion/react';
-import type { IsoCountry } from '@modules/internationalisation/country';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { CountryCode } from '@modules/internationalisation/country';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { type ProductOptions } from '@modules/product/productOptions';
 import { Elements } from '@stripe/react-stripe-js';
@@ -53,13 +53,13 @@ type Props = {
 	nudgeSettings?: CheckoutNudgeSettings;
 };
 
-const countryId: IsoCountry = Country.detect();
+const countryId: CountryCode = Country.detect();
 
 const getPromotionFromProductPrices = (
 	appConfig: AppConfig,
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	countryId: IsoCountry,
+	countryId: CountryCode,
 	billingPeriod: BillingPeriod,
 ) => {
 	/**

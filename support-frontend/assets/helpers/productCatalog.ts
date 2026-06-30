@@ -1,9 +1,7 @@
 import { newspaperCountries } from '@modules/internationalisation/country';
-import {
-	type CountryGroupId,
-	SupportRegionId,
-} from '@modules/internationalisation/countryGroup';
+import { type CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { gwDeliverableCountries } from '@modules/internationalisation/gwDeliverableCountries';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type {
@@ -614,7 +612,7 @@ export function internationaliseProduct(
 		productKey === 'GuardianWeeklyDomestic' ||
 		productKey === 'GuardianWeeklyRestOfWorld'
 	) {
-		if (supportRegionId === SupportRegionId.INT) {
+		if (supportRegionId === 'int') {
 			return 'GuardianWeeklyRestOfWorld';
 		} else {
 			return 'GuardianWeeklyDomestic';

@@ -1,5 +1,4 @@
 import { storage } from '@guardian/libs';
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type React from 'react';
 import OnboardingSummary from 'components/onboarding/sections/summary';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
@@ -46,7 +45,7 @@ export default {
 const defaultArgs = {
 	productKey: 'SupporterPlus' as const,
 	landingPageSettings: fallBackLandingPageSelection,
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	csrf: { token: 'mock-csrf-token' },
 	identityUserType: 'new' as const,
 	ratePlanKey: 'Monthly' as const,
@@ -130,7 +129,7 @@ export const MonthlyWithPromotion = {
 export const USRegionMonthly = {
 	args: {
 		...defaultArgs,
-		supportRegionId: SupportRegionId.US,
+		supportRegionId: 'us',
 		payment: {
 			originalAmount: 13,
 			finalAmount: 13,

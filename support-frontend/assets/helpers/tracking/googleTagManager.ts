@@ -1,4 +1,4 @@
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { v4 as uuidv4 } from 'uuid';
 import type { ContributionType } from 'helpers/contributions';
@@ -17,7 +17,7 @@ type ConversionData = ContributionConversionData | SubscriptionConversionData;
 
 type ContributionConversionData = {
 	value: number;
-	currency: IsoCurrency;
+	currency: CurrencyCode;
 	paymentMethod: PaymentMethod;
 	contributionType: ContributionType;
 	productType: ActiveProductKey;
@@ -25,7 +25,7 @@ type ContributionConversionData = {
 
 type SubscriptionConversionData = {
 	value: number;
-	currency: IsoCurrency;
+	currency: CurrencyCode;
 	paymentMethod: PaymentMethod;
 	billingPeriod: BillingPeriod;
 	productType: SubscriptionProduct;
@@ -254,7 +254,7 @@ async function init(): Promise<void> {
 function successfulContributionConversion(
 	amount: number,
 	contributionType: ContributionType,
-	sourceCurrency: IsoCurrency,
+	sourceCurrency: CurrencyCode,
 	paymentMethod: PaymentMethod,
 	productKey: ActiveProductKey,
 ): void {

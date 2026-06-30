@@ -1,8 +1,8 @@
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import {
 	countryGroupBySupportRegionId,
 	countryGroups,
 } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type {
 	StudentLandingPageTest,
 	StudentLandingPageVariant,

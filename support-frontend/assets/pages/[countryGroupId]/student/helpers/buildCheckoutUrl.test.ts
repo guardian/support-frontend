@@ -1,10 +1,9 @@
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { routes } from 'helpers/urls/routes';
 import buildCheckoutUrl from './buildCheckoutUrl';
 
 describe('buildCheckoutUrl', () => {
 	describe('when the rate plan is Monthly', () => {
-		const supportRegionId = SupportRegionId.UK;
+		const supportRegionId = 'uk';
 		const productKey = 'SupporterPlus';
 		const ratePlanKey = 'Monthly';
 
@@ -31,11 +30,7 @@ describe('buildCheckoutUrl', () => {
 	describe('when the rate plan is OneYearStudent', () => {
 		describe('and the supportRegionId is uk', () => {
 			it('returns the correct Student Beans landing page URL', () => {
-				const url = buildCheckoutUrl(
-					SupportRegionId.UK,
-					'SupporterPlus',
-					'OneYearStudent',
-				);
+				const url = buildCheckoutUrl('uk', 'SupporterPlus', 'OneYearStudent');
 
 				expect(url).toBe(routes.supporterPlusStudentBeansUk);
 			});
@@ -43,11 +38,7 @@ describe('buildCheckoutUrl', () => {
 
 		describe('and the supportRegionId is us', () => {
 			it('returns the correct Student Beans landing page URL', () => {
-				const url = buildCheckoutUrl(
-					SupportRegionId.US,
-					'SupporterPlus',
-					'OneYearStudent',
-				);
+				const url = buildCheckoutUrl('us', 'SupporterPlus', 'OneYearStudent');
 
 				expect(url).toBe(routes.supporterPlusStudentBeansUs);
 			});
@@ -55,11 +46,7 @@ describe('buildCheckoutUrl', () => {
 
 		describe('and the supportRegionId is ca', () => {
 			it('returns the correct Student Beans landing page URL', () => {
-				const url = buildCheckoutUrl(
-					SupportRegionId.CA,
-					'SupporterPlus',
-					'OneYearStudent',
-				);
+				const url = buildCheckoutUrl('ca', 'SupporterPlus', 'OneYearStudent');
 
 				expect(url).toBe(routes.supporterPlusStudentBeansCa);
 			});
@@ -67,11 +54,7 @@ describe('buildCheckoutUrl', () => {
 
 		describe('and the supportRegionId is not one we have a Student Beans link for', () => {
 			it('returns the checkout URL', () => {
-				const url = buildCheckoutUrl(
-					SupportRegionId.EU,
-					'SupporterPlus',
-					'OneYearStudent',
-				);
+				const url = buildCheckoutUrl('eu', 'SupporterPlus', 'OneYearStudent');
 
 				expect(url).toBe(
 					'/eu/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false',

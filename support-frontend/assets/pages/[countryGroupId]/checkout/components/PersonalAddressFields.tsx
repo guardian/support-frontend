@@ -1,4 +1,4 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import { FormSection, Legend } from 'pages/[countryGroupId]/components/form';
@@ -11,7 +11,7 @@ import { BillingAddressFields } from './BillingAddressFields';
 import { DeliveryRecipientAddress } from './DeliveryRecipientAddress';
 
 type PersonalAddressFieldsProps = {
-	countryId: IsoCountry;
+	countryId: CountryCode;
 	countries?: Record<string, string>;
 	checkoutSession?: CheckoutSession;
 	productKey: ActiveProductKey;

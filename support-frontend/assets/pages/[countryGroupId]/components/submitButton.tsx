@@ -1,4 +1,4 @@
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { useEffect, useState } from 'react';
@@ -32,7 +32,7 @@ type SubmitButtonProps = {
 	setPayPalPaymentToken: (paymentToken: PaymentToken) => void;
 	isTestUser: boolean;
 	finalAmount: number;
-	currencyKey: IsoCurrency;
+	currencyKey: CurrencyCode;
 	billingPeriod: BillingPeriod;
 	csrf: string;
 	formRef: React.RefObject<HTMLFormElement>;

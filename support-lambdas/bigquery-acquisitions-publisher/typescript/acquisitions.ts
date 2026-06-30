@@ -1,7 +1,7 @@
-import type { IsoCurrency } from './currencySchema';
+import type { CurrencyCode } from './currencySchema';
 import type {
 	AcquisitionProduct,
-	IsoCountry,
+	CountryCode,
 	PaymentFrequency,
 	PaymentProvider,
 	PrintOptions,
@@ -13,8 +13,8 @@ export type FactAcquisitionEventRow = {
 	event_timestamp: string;
 	product: Product;
 	amount?: number | null;
-	currency: IsoCurrency;
-	country_code: IsoCountry;
+	currency: CurrencyCode;
+	country_code: CountryCode;
 	component_id?: string | null;
 	component_type?: string | null;
 	campaign_codes: [string] | [];

@@ -1,5 +1,5 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CountryCode } from '@modules/internationalisation/country';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -9,8 +9,8 @@ type StripeAccountType = 'ONE_OFF' | 'REGULAR';
 
 function getStripeKeyForCountry(
 	stripeAccountType: StripeAccountType,
-	country: IsoCountry,
-	currency: IsoCurrency,
+	country: CountryCode,
+	currency: CurrencyCode,
 	isTestUser: boolean,
 ): string {
 	let account;

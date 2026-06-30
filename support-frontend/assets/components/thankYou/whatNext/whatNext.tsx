@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { neutral, palette } from '@guardian/source/foundations';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import OrderedList from 'components/list/orderedList';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import type {
@@ -35,7 +35,7 @@ export function WhatNext({
 }: {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
-	currency: IsoCurrency;
+	currency: CurrencyCode;
 	amount: string;
 	startDate?: string;
 	isSignedIn?: boolean;

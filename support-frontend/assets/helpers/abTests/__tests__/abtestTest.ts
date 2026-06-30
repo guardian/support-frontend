@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	GBPCountries,
@@ -36,7 +36,7 @@ describe('init', () => {
 
 	// Common arguments to init
 	const mvt = 123456;
-	const country: IsoCountry = 'GB';
+	const country: CountryCode = 'GB';
 	const countryGroupId: CountryGroupId = GBPCountries;
 	const abtestInitalizerData = {
 		countryId: country,

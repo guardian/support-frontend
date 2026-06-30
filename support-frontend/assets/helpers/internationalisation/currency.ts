@@ -3,19 +3,19 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
 import {
-	getCurrencyInfo,
-	type IsoCurrency,
+	type CurrencyCode,
+	getCurrency,
 } from '@modules/internationalisation/currency';
 import { getQueryParameter } from 'helpers/urls/url';
 
 // ----- Functions ----- //
-function fromCountryGroupId(countryGroupId: CountryGroupId): IsoCurrency {
+function fromCountryGroupId(countryGroupId: CountryGroupId): CurrencyCode {
 	const countryGroup = countryGroups[countryGroupId];
 
 	return countryGroup.currency;
 }
 
-function fromString(s: string): IsoCurrency | null | undefined {
+function fromString(s: string): CurrencyCode | null | undefined {
 	switch (s.toLowerCase()) {
 		case 'gbp':
 			return 'GBP';
@@ -40,7 +40,7 @@ function fromString(s: string): IsoCurrency | null | undefined {
 	}
 }
 
-function fromQueryParameter(): IsoCurrency | null | undefined {
+function fromQueryParameter(): CurrencyCode | null | undefined {
 	const currency = getQueryParameter('currency');
 
 	if (currency) {
@@ -50,14 +50,13 @@ function fromQueryParameter(): IsoCurrency | null | undefined {
 	return null;
 }
 
-function detect(countryGroup: CountryGroupId): IsoCurrency {
+function detect(countryGroup: CountryGroupId): CurrencyCode {
 	return fromQueryParameter() ?? fromCountryGroupId(countryGroup);
 }
 
-const glyph = (c: IsoCurrency): string => getCurrencyInfo(c).glyph;
+const glyph = (c: CurrencyCode): string => getCurrency(c).glyph;
 
-const extendedGlyph = (c: IsoCurrency): string =>
-	getCurrencyInfo(c).extendedGlyph;
+const extendedGlyph = (c: CurrencyCode): string => getCurrency(c).extendedGlyph;
 
 // ----- Exports ----- //
 export { detect, fromCountryGroupId, glyph, extendedGlyph };

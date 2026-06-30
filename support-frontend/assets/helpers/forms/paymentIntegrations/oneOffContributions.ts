@@ -1,4 +1,4 @@
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { PaymentIntentResult, PaymentMethod } from '@stripe/stripe-js';
 import { z } from 'zod';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
@@ -62,7 +62,7 @@ export type CreatePayPalPaymentResponse = PaymentApiResponse<
 // TODO: are we deprecating signed-in email?
 type StripeChargeData = {
 	paymentData: {
-		currency: IsoCurrency;
+		currency: CurrencyCode;
 		amount: number;
 		email: string;
 		stripePaymentMethod: StripePaymentMethod;
@@ -81,7 +81,7 @@ export type CreateStripePaymentIntentRequest = StripeChargeData & {
 // where the user is redirected to so that they can authorize the payment.
 // https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalPaymentData.scala#L74
 type CreatePaypalPaymentData = {
-	currency: IsoCurrency;
+	currency: CurrencyCode;
 	amount: number;
 	// Specifies the url that PayPal should make a GET request to, should the user authorize the payment.
 	// Path of url should be /paypal/rest/return (see routes file)

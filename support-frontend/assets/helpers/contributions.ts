@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import { contributionsOnlyCountries } from '@modules/internationalisation/contributionsOnlyCountries';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 
 // ----- Types ----- //
@@ -217,7 +217,7 @@ const contributionsOnlyCountriesAmountsConfig = {
 
 const countries = new Set(contributionsOnlyCountries);
 
-const isContributionsOnlyCountry = (countryId: IsoCountry): boolean =>
+const isContributionsOnlyCountry = (countryId: CountryCode): boolean =>
 	countries.has(countryId);
 
 // ----- Exports ----- //

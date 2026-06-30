@@ -5,9 +5,9 @@ import {
 import {
 	Canada,
 	GBPCountries,
-	SupportRegionId,
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
@@ -48,8 +48,7 @@ export function StudentLandingPage({
 		subPath: '/student',
 	};
 	const showCountrySwitcher =
-		supportRegionId !== SupportRegionId.AU &&
-		countrySwitcherProps.countryGroupIds.length > 1;
+		supportRegionId !== 'au' && countrySwitcherProps.countryGroupIds.length > 1;
 
 	return (
 		<PageScaffold

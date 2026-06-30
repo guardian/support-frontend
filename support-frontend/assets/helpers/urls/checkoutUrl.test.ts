@@ -1,10 +1,9 @@
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { buildCheckoutUrl } from './checkoutUrl';
 
 describe('buildCheckoutUrl', () => {
 	describe('Contribution', () => {
 		it('builds the correct URL with product, ratePlan and contribution amount', () => {
-			const url = buildCheckoutUrl(SupportRegionId.UK, {
+			const url = buildCheckoutUrl('uk', {
 				product: 'Contribution',
 				ratePlan: 'Monthly',
 				contribution: 5,
@@ -15,7 +14,7 @@ describe('buildCheckoutUrl', () => {
 		});
 
 		it('encodes the contribution amount as a string', () => {
-			const url = buildCheckoutUrl(SupportRegionId.UK, {
+			const url = buildCheckoutUrl('uk', {
 				product: 'Contribution',
 				ratePlan: 'Annual',
 				contribution: 120,
@@ -26,7 +25,7 @@ describe('buildCheckoutUrl', () => {
 
 	describe('SupporterPlus', () => {
 		it('builds the correct URL without a promo code', () => {
-			const url = buildCheckoutUrl(SupportRegionId.US, {
+			const url = buildCheckoutUrl('us', {
 				product: 'SupporterPlus',
 				ratePlan: 'Monthly',
 			});
@@ -34,7 +33,7 @@ describe('buildCheckoutUrl', () => {
 		});
 
 		it('includes promoCode when provided', () => {
-			const url = buildCheckoutUrl(SupportRegionId.US, {
+			const url = buildCheckoutUrl('us', {
 				product: 'SupporterPlus',
 				ratePlan: 'Annual',
 				promoCode: 'SPROMO',
@@ -45,7 +44,7 @@ describe('buildCheckoutUrl', () => {
 		});
 
 		it('omits promoCode when undefined', () => {
-			const url = buildCheckoutUrl(SupportRegionId.US, {
+			const url = buildCheckoutUrl('us', {
 				product: 'SupporterPlus',
 				ratePlan: 'Monthly',
 				promoCode: undefined,
@@ -56,7 +55,7 @@ describe('buildCheckoutUrl', () => {
 
 	describe('DigitalSubscription', () => {
 		it('builds the correct URL without a promo code', () => {
-			const url = buildCheckoutUrl(SupportRegionId.CA, {
+			const url = buildCheckoutUrl('ca', {
 				product: 'DigitalSubscription',
 				ratePlan: 'Monthly',
 			});
@@ -66,7 +65,7 @@ describe('buildCheckoutUrl', () => {
 		});
 
 		it('includes promoCode when provided', () => {
-			const url = buildCheckoutUrl(SupportRegionId.CA, {
+			const url = buildCheckoutUrl('ca', {
 				product: 'DigitalSubscription',
 				ratePlan: 'Annual',
 				promoCode: 'DIGISUB20',
@@ -79,7 +78,7 @@ describe('buildCheckoutUrl', () => {
 
 	describe('URL format', () => {
 		it('always starts with support Region Id?', () => {
-			const url = buildCheckoutUrl(SupportRegionId.EU, {
+			const url = buildCheckoutUrl('eu', {
 				product: 'Contribution',
 				ratePlan: 'Monthly',
 				contribution: 5,
@@ -88,7 +87,7 @@ describe('buildCheckoutUrl', () => {
 		});
 
 		it('does not include contribution for SupporterPlus', () => {
-			const url = buildCheckoutUrl(SupportRegionId.EU, {
+			const url = buildCheckoutUrl('eu', {
 				product: 'SupporterPlus',
 				ratePlan: 'Monthly',
 				promoCode: 'TEST',
@@ -97,7 +96,7 @@ describe('buildCheckoutUrl', () => {
 		});
 
 		it('does not include contribution for DigitalSubscription', () => {
-			const url = buildCheckoutUrl(SupportRegionId.UK, {
+			const url = buildCheckoutUrl('uk', {
 				product: 'DigitalSubscription',
 				ratePlan: 'Annual',
 			});

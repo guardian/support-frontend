@@ -1,5 +1,5 @@
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { getUser } from 'helpers/user/user';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
