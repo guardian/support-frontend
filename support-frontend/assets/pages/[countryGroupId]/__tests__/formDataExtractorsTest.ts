@@ -28,14 +28,12 @@ describe('extractDeliverableAddressDataFromForm', () => {
 		formData.append('billing-lineOne', 'The Guardian');
 		formData.append('billing-lineTwo', '1 Main Street');
 		formData.append('billing-city', 'London');
-		formData.append('billing-stateProvince', 'London');
 		formData.append('billing-postcode', 'N91GU');
-		formData.append('billing-country', 'UK');
+		formData.append('billing-country', 'GB');
 		formData.append('billingAddressMatchesDelivery', 'no');
 		formData.append('delivery-lineOne', 'Somewhere else');
 		formData.append('delivery-lineTwo', 'The Avenue');
 		formData.append('delivery-city', 'Manchester');
-		formData.append('delivery-stateProvince', 'Manchester');
 		formData.append('delivery-postcode', 'MU123');
 		formData.append('delivery-country', 'UK');
 
@@ -46,17 +44,17 @@ describe('extractDeliverableAddressDataFromForm', () => {
 			lineOne: 'The Guardian',
 			lineTwo: '1 Main Street',
 			city: 'London',
-			state: 'London',
+			state: null,
 			postCode: 'N91GU',
-			country: 'UK',
+			country: 'GB',
 		});
 		expect(deliveryAddress).toEqual({
 			lineOne: 'Somewhere else',
 			lineTwo: 'The Avenue',
 			city: 'Manchester',
-			state: 'Manchester',
+			state: null,
 			postCode: 'MU123',
-			country: 'UK',
+			country: 'GB',
 		});
 	});
 
@@ -77,17 +75,17 @@ describe('extractDeliverableAddressDataFromForm', () => {
 			lineOne: 'The Guardian',
 			lineTwo: '1 Main Street',
 			city: 'London',
-			state: 'London',
+			state: null,
 			postCode: 'N91GU',
-			country: 'UK',
+			country: 'GB',
 		});
 		expect(deliveryAddress).toEqual({
 			lineOne: 'The Guardian',
 			lineTwo: '1 Main Street',
 			city: 'London',
-			state: 'London',
+			state: null,
 			postCode: 'N91GU',
-			country: 'UK',
+			country: 'GB',
 		});
 	});
 });
@@ -95,7 +93,6 @@ describe('extractDeliverableAddressDataFromForm', () => {
 describe('extractNonDeliverableAddressDataFromForm', () => {
 	it('returns the billing address but the delivery address is null', () => {
 		const formData = new FormData();
-		formData.append('billing-state', 'London');
 		formData.append('billing-postcode', 'N91GU');
 		formData.append('billing-country', 'UK');
 
@@ -103,9 +100,9 @@ describe('extractNonDeliverableAddressDataFromForm', () => {
 			extractNonDeliverableAddressDataFromForm(formData);
 
 		expect(billingAddress).toEqual({
-			state: 'London',
+			state: null,
 			postCode: 'N91GU',
-			country: 'UK',
+			country: 'GB',
 		});
 		expect(deliveryAddress).toBeUndefined();
 	});

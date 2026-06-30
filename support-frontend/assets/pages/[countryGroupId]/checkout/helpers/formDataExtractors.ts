@@ -62,7 +62,7 @@ export const extractDeliverableAddressDataFromForm = (
 		lineOne: formData.get('delivery-lineOne') as string,
 		lineTwo: formData.get('delivery-lineTwo') as string,
 		city: formData.get('delivery-city') as string,
-		state: deliveryState,
+		state: deliveryState ?? null,
 		postCode: formData.get('delivery-postcode') as string,
 		country: deliveryCountry,
 	};
@@ -79,7 +79,7 @@ export const extractDeliverableAddressDataFromForm = (
 				lineOne: formData.get('billing-lineOne') as string,
 				lineTwo: formData.get('billing-lineTwo') as string,
 				city: formData.get('billing-city') as string,
-				state: billingState,
+				state: billingState ?? null,
 				postCode: formData.get('billing-postcode') as string,
 				country: billingCountry,
 		  }
@@ -95,10 +95,11 @@ export const extractNonDeliverableAddressDataFromForm = (
 	formData: FormData,
 ): FormAddressFields => ({
 	billingAddress: {
-		state: parseOrUndefined(
-			stateCodeSchema,
-			formData.get('billing-stateProvince'),
-		),
+		state:
+			parseOrUndefined(
+				stateCodeSchema,
+				formData.get('billing-stateProvince'),
+			) ?? null,
 		postCode: formData.get('billing-postcode') as string,
 		country:
 			parseOrUndefined(countryCodeSchema, formData.get('billing-country')) ??
