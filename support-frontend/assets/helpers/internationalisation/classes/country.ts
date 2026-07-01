@@ -1,17 +1,8 @@
-import type {
-	AuState,
-	CaState,
-	IsoCountry,
-	StateProvince,
-	UsState,
-} from '@modules/internationalisation/country';
+import type { IsoCountry } from '@modules/internationalisation/country';
 import {
-	auStates,
-	caStates,
 	countries,
 	isoCountries,
 	isoCountrySet,
-	usStates,
 } from '@modules/internationalisation/country';
 import {
 	AUDCountries,
@@ -35,78 +26,6 @@ type TargetCountryGroups =
 	| typeof AUDCountries;
 
 export class Country {
-	static stateProvinceFromMap(
-		search: string,
-		states: Record<string, string>,
-	): StateProvince | null | undefined {
-		const searchUppercase = search.toUpperCase();
-		return states[searchUppercase]
-			? searchUppercase
-			: Object.keys(states).find(
-					(key) =>
-						states[key]?.toUpperCase() === searchUppercase ||
-						(searchUppercase.length === 3 && searchUppercase.startsWith(key)),
-			  );
-	}
-
-	static usStateFromString(search: string): UsState | null {
-		return this.stateProvinceFromMap(search, usStates) ?? null;
-	}
-
-	static caStateFromString(search: string): CaState | null {
-		return this.stateProvinceFromMap(search, caStates) ?? null;
-	}
-
-	static auStateFromString(search: string): AuState | null {
-		return this.stateProvinceFromMap(search, auStates) ?? null;
-	}
-
-	static stateProvinceFieldFromString(
-		countryGroupId: CountryGroupId | null | undefined,
-		search?: string,
-	): StateProvince | null {
-		if (!search) {
-			return null;
-		}
-
-		switch (countryGroupId) {
-			case UnitedStates:
-				return this.usStateFromString(search);
-
-			case Canada:
-				return this.caStateFromString(search);
-
-			case AUDCountries:
-				return this.auStateFromString(search);
-
-			default:
-				return null;
-		}
-	}
-
-	static stateProvinceFromString(
-		country: IsoCountry | null,
-		search?: string,
-	): StateProvince | null {
-		if (!search) {
-			return null;
-		}
-
-		switch (country) {
-			case 'US':
-				return this.usStateFromString(search);
-
-			case 'CA':
-				return this.caStateFromString(search);
-
-			case 'AU':
-				return this.auStateFromString(search);
-
-			default:
-				return null;
-		}
-	}
-
 	static fromString(search: string): IsoCountry | null | undefined {
 		const candidateIso = search.toUpperCase();
 		if (candidateIso === 'UK') {
