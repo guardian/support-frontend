@@ -63,15 +63,8 @@ export function getEstimatedSalesTaxRate(
 		throw new Error('Missing tax rate data for product');
 	}
 
-	const maybeRate = maybeProductTaxRates[maybeProvinceCode] as
-		| number
-		| undefined;
-	if (maybeRate === undefined) {
-		throw new Error('Missing tax rate date for province');
-	}
-
 	return {
 		type: 'tax_exclusive',
-		rate: maybeRate,
+		rate: maybeProductTaxRates[maybeProvinceCode],
 	};
 }
