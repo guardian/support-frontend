@@ -7,7 +7,6 @@ import {
 	SvgTickRound,
 } from '@guardian/source/react-components';
 import { ToggleSwitch } from '@guardian/source-development-kitchen/react-components';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
@@ -49,6 +48,7 @@ import {
 	paymentDetailsBox,
 	separator,
 } from './sectionsStyles';
+import { getTodaysPaymentWithTaxExclusion } from './summaryHelpers';
 
 const purchaseSummaryDetailsContainer = css`
 	display: flex;
@@ -194,34 +194,6 @@ export function OnboardingSummarySuccessfulSignIn({
 			</div>
 		</Stack>
 	);
-}
-
-function getTodaysPaymentWithTaxExclusion(
-	finalAmount: number,
-	currencyKey: IsoCurrency,
-	taxConfig: { type: string; rate?: number } | undefined,
-): string | undefined {
-	if (!taxConfig) {
-		return;
-	}
-
-	const { type, rate } = taxConfig;
-
-	if (type !== 'tax_exclusive' || !rate) {
-		return;
-	}
-
-	const finalAmountWithCurrency = simpleFormatAmount(
-		getCurrencyInfo(currencyKey),
-		finalAmount,
-	);
-
-	const taxAmountWithCurrency = simpleFormatAmount(
-		getCurrencyInfo(currencyKey),
-		finalAmount * rate,
-	);
-
-	return `${finalAmountWithCurrency} + ${taxAmountWithCurrency} estimated tax`;
 }
 
 function OnboardingSummary({

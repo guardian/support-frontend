@@ -55,7 +55,7 @@ const OrderSchema = z.object({
 		])
 		.optional(),
 });
-type OrderSchemaType = z.infer<typeof OrderSchema>;
+export type OrderSchemaType = z.infer<typeof OrderSchema>;
 export function setThankYouOrder(order: OrderSchemaType) {
 	storage.session.set(orderKey, order);
 }
