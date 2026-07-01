@@ -25,6 +25,7 @@ import {
 } from 'helpers/productCatalog';
 import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getPromotion } from 'helpers/productPrice/promotions';
+import { getEstimatedSalesTaxRate } from 'helpers/salesTax/getEstimatedSalesTaxRate';
 import * as cookie from 'helpers/storage/cookie';
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
@@ -320,6 +321,17 @@ export function Checkout({
 	const backButtonPathOverride = urlSearchParams.get(
 		backButtonPathOverrideParam,
 	);
+
+	const taxRateResult = getEstimatedSalesTaxRate(
+		appConfig.productCatalog,
+		appConfig.taxRates,
+		productKey,
+		ratePlanKey,
+		billingState,
+		supportRegionId,
+	);
+
+	console.log({ taxRateResult });
 
 	return (
 		<ThemeProvider theme={theme}>
