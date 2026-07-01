@@ -1,6 +1,9 @@
 import type { CaState } from '@modules/internationalisation/country';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import type { AppConfig } from 'helpers/globalsAndSwitches/window';
+import type {
+	WindowProductCatalog,
+	WindowTaxRates,
+} from 'helpers/globalsAndSwitches/window';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -8,27 +11,26 @@ import type {
 
 type TaxRateResult =
 	| {
-			type: 'rate';
+			type: 'tax_exclusive';
 			rate: number;
 	  }
 	| {
 			type: 'not_enough_information';
 	  }
 	| {
-			type: 'not_applicable';
+			type: 'tax_inclusive';
 	  };
 
 export function getEstimatedSalesTaxRate(
+	productCatalog: WindowProductCatalog,
+	taxRates: WindowTaxRates,
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	appConfig: AppConfig,
 	maybeProvinceCode: CaState | undefined,
 	supportRegionId: SupportRegionId,
 ): TaxRateResult {
-	const { productCatalog, taxRates } = appConfig;
-
 	if (supportRegionId !== SupportRegionId.CA) {
-		return { type: 'not_applicable' };
+		return { type: 'tax_inclusive' };
 	}
 
 	if (
@@ -36,13 +38,13 @@ export function getEstimatedSalesTaxRate(
 		'TaxExclusive'
 	) {
 		return {
-			type: 'not_applicable',
+			type: 'tax_inclusive',
 		};
 	}
 
 	if (productKey !== 'DigitalSubscription' && productKey !== 'SupporterPlus') {
 		return {
-			type: 'not_applicable',
+			type: 'tax_inclusive',
 		};
 	}
 
@@ -69,7 +71,7 @@ export function getEstimatedSalesTaxRate(
 	}
 
 	return {
-		type: 'rate',
+		type: 'tax_exclusive',
 		rate: maybeRate,
 	};
 }

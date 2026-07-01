@@ -260,6 +260,9 @@ export type AppConfig = z.infer<typeof AppConfigSchema> & {
 	>;
 };
 
+export type WindowTaxRates = AppConfig['taxRates'];
+export type WindowProductCatalog = AppConfig['productCatalog'];
+
 export const parseAppConfig = (obj: unknown): AppConfig => {
 	const appConfig = AppConfigSchema.safeParse(obj);
 	if (appConfig.success) {
