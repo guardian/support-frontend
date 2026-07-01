@@ -58,6 +58,7 @@ case class VariantMean(
 /** Configuration for a bandit test methodology */
 case class BanditTestConfig(
     testName: String,
+    banditTableTestName: String,
     variantNames: List[String],
     sampleCount: Option[Int] = None,
 )
@@ -187,12 +188,14 @@ class BanditDataService(
         case e: EpsilonGreedyBandit =>
           BanditTestConfig(
             testName = test.name,
+            banditTableTestName = s"${landingPageTestService.channelName}_${test.name}",
             variantNames = test.variants.map(_.name),
             sampleCount = e.sampleCount,
           )
         case r: Roulette =>
           BanditTestConfig(
             testName = test.name,
+            banditTableTestName = s"${landingPageTestService.channelName}_${test.name}",
             variantNames = test.variants.map(_.name),
             sampleCount = r.sampleCount,
           )
@@ -202,14 +205,17 @@ class BanditDataService(
 
   /** Fetch hourly samples for a specific test using Query operation. Optionally limit the number of samples returned.
     */
-  private def fetchSamplesForTest(testName: String, sampleCount: Option[Int]): Future[List[TestSample]] = {
+  private def fetchSamplesForTest(
+      banditTableTestName: String,
+      sampleCount: Option[Int],
+  ): Future[List[TestSample]] = {
     val queryBuilder = QueryRequest
       .builder()
       .tableName(tableName)
       .keyConditionExpression("testName = :testName")
       .expressionAttributeValues(
         Map(
-          ":testName" -> AttributeValue.builder().s(testName).build(),
+          ":testName" -> AttributeValue.builder().s(banditTableTestName).build(),
         ).asJava,
       )
       .scanIndexForward(false) // Newest first
@@ -240,7 +246,7 @@ class BanditDataService(
 
     // Step 2: Fetch samples for each methodology and build bandit data
     val fetchFuture = Future.traverse(banditTestConfigs) { config =>
-      fetchSamplesForTest(config.testName, config.sampleCount)
+      fetchSamplesForTest(config.banditTableTestName, config.sampleCount)
         .map { samples =>
           // Build aggregated bandit data using the config's variant names
           val banditData = BanditData.buildBanditDataFromSamples(config.testName, samples, config.variantNames)

@@ -181,6 +181,7 @@ class BanditDataServiceSpec extends AnyFlatSpec with Matchers {
     // Create a minimal BanditDataService instance just to test the methodology extraction
     val mockTestService = new LandingPageTestService {
       def getTests(): List[LandingPageTest] = tests
+      def channelName: String = "SupportLandingPage"
     }
 
     val service = new BanditDataService(com.gu.support.config.Stages.CODE, mockTestService) {
@@ -195,6 +196,7 @@ class BanditDataServiceSpec extends AnyFlatSpec with Matchers {
     // First test - uses first bandit methodology (EpsilonGreedyBandit), testName is test.name
     val config1 = configs.find(_.testName == "test-1")
     config1 should be(defined)
+    config1.get.banditTableTestName shouldBe "SupportLandingPage_test-1"
     config1.get.variantNames shouldBe List("control", "variant-a")
     config1.get.sampleCount shouldBe None
 
@@ -206,6 +208,7 @@ class BanditDataServiceSpec extends AnyFlatSpec with Matchers {
   "getClientBanditData" should "normalise weights to sum to 1.0" in {
     val mockTestService = new LandingPageTestService {
       def getTests(): List[LandingPageTest] = Nil
+      def channelName: String = "SupportLandingPage"
     }
 
     val service = new BanditDataService(com.gu.support.config.Stages.CODE, mockTestService) {
@@ -253,6 +256,7 @@ class BanditDataServiceSpec extends AnyFlatSpec with Matchers {
   it should "return all zero weights when sumOfMeans is zero" in {
     val mockTestService = new LandingPageTestService {
       def getTests(): List[LandingPageTest] = Nil
+      def channelName: String = "SupportLandingPage"
     }
 
     val service = new BanditDataService(com.gu.support.config.Stages.CODE, mockTestService)
@@ -279,6 +283,7 @@ class BanditDataServiceSpec extends AnyFlatSpec with Matchers {
   it should "clamp all negative means to zero weights" in {
     val mockTestService = new LandingPageTestService {
       def getTests(): List[LandingPageTest] = Nil
+      def channelName: String = "SupportLandingPage"
     }
 
     val service = new BanditDataService(com.gu.support.config.Stages.CODE, mockTestService)
@@ -305,6 +310,7 @@ class BanditDataServiceSpec extends AnyFlatSpec with Matchers {
   it should "handle empty bandit data" in {
     val mockTestService = new LandingPageTestService {
       def getTests(): List[LandingPageTest] = Nil
+      def channelName: String = "SupportLandingPage"
     }
 
     val service = new BanditDataService(com.gu.support.config.Stages.CODE, mockTestService)
@@ -319,6 +325,7 @@ class BanditDataServiceSpec extends AnyFlatSpec with Matchers {
   it should "handle single variant" in {
     val mockTestService = new LandingPageTestService {
       def getTests(): List[LandingPageTest] = Nil
+      def channelName: String = "SupportLandingPage"
     }
 
     val service = new BanditDataService(com.gu.support.config.Stages.CODE, mockTestService)
@@ -345,6 +352,7 @@ class BanditDataServiceSpec extends AnyFlatSpec with Matchers {
   it should "preserve variant names from bandit data" in {
     val mockTestService = new LandingPageTestService {
       def getTests(): List[LandingPageTest] = Nil
+      def channelName: String = "SupportLandingPage"
     }
 
     val service = new BanditDataService(com.gu.support.config.Stages.CODE, mockTestService)
@@ -369,6 +377,7 @@ class BanditDataServiceSpec extends AnyFlatSpec with Matchers {
   it should "clamp negative means to zero before normalising weights" in {
     val mockTestService = new LandingPageTestService {
       def getTests(): List[LandingPageTest] = Nil
+      def channelName: String = "SupportLandingPage"
     }
 
     val service = new BanditDataService(com.gu.support.config.Stages.CODE, mockTestService)

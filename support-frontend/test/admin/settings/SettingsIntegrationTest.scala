@@ -38,6 +38,7 @@ class SettingsIntegrationTest extends AsyncFlatSpec with Matchers with StrictLog
 
     val mockLandingPageTestService = new LandingPageTestService {
       def getTests(): List[LandingPageTest] = Nil
+      def channelName: String = "SupportLandingPage"
     }
 
     val mockCheckoutNudgeTestService = new CheckoutNudgeTestService {
