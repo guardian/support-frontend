@@ -63,4 +63,19 @@ describe('getEstimatedSalesTaxRate', () => {
 			expect(result).toEqual({ type: 'tax_exclusive', rate: 0.05 });
 		});
 	});
+
+	describe('when tax rate data is missing', () => {
+		it('throws an error', () => {
+			expect(() =>
+				getEstimatedSalesTaxRate(
+					productCatalogFixture,
+					{},
+					'SupporterPlus',
+					'MonthlyTaxExclusive',
+					'AB',
+					SupportRegionId.CA,
+				),
+			).toThrow('Missing tax rate data for product');
+		});
+	});
 });
