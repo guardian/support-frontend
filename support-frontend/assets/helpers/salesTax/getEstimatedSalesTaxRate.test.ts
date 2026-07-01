@@ -19,7 +19,7 @@ describe('getEstimatedSalesTaxRate', () => {
 		});
 	});
 
-	describe('when not a tax inclusive product', () => {
+	describe('when not a possibly tax exclusive product', () => {
 		it('returns a tax_inclusive result', () => {
 			const result = getEstimatedSalesTaxRate(
 				productCatalogFixture,
