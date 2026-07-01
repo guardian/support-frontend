@@ -34,6 +34,16 @@ const simpleFormatAmount = (currency: CurrencyInfo, amount: number): string => {
 	return `${currency.glyph}${amountText}`.trim();
 };
 
+const simpleFormatTaxAmount = (
+	currency: CurrencyInfo,
+	amount: number,
+	taxRate: number, // A decimal, e.g. 0.15
+): string => {
+	const taxAmount = amount * taxRate;
+
+	return simpleFormatAmount(currency, taxAmount);
+};
+
 const formatAmount = (
 	currency: CurrencyInfo,
 	amount: number,
@@ -49,4 +59,4 @@ const formatAmount = (
 };
 
 // ----- Exports ----- //
-export { simpleFormatAmount, formatAmount };
+export { simpleFormatAmount, simpleFormatTaxAmount, formatAmount };
