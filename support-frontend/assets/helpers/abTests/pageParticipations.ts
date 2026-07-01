@@ -4,6 +4,7 @@ import { CountryGroup } from '../internationalisation/classes/countryGroup';
 import {
 	countryGroupMatches,
 	getParticipationFromQueryString,
+	isWithinSchedule,
 	randomNumber,
 } from './helpers';
 import type {
@@ -60,7 +61,6 @@ export async function getPageParticipations<Variant>(
 		sessionStorageKey,
 		getVariantName,
 	} = config;
-
 	const isTargetPage = (path: string) => !!path && !!path.match(pageRegex);
 
 	const getVariant = (
@@ -70,6 +70,7 @@ export async function getPageParticipations<Variant>(
 		for (const test of testList) {
 			const variantName = participations[test.name];
 			if (variantName) {
+				// should scheduler be checked here?
 				const variant = test.variants.find(
 					(v) => getVariantName(v) === variantName,
 				);
@@ -132,6 +133,7 @@ export async function getPageParticipations<Variant>(
 	let test: PageTest<Variant> | undefined;
 	for (const currentTest of tests.filter((test) => test.status === 'Live')) {
 		if (
+			isWithinSchedule(currentTest.scheduler) &&
 			countryGroupMatches(
 				currentTest.regionTargeting?.targetedCountryGroups,
 				countryGroupId,

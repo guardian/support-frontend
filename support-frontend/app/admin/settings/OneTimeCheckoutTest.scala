@@ -33,6 +33,7 @@ case class OneTimeCheckoutTest(
     priority: Int,
     regionTargeting: Option[RegionTargeting],
     variants: List[OneTimeCheckoutVariant],
+    scheduler: Option[Scheduler] = None,
 )
 
 object OneTimeCheckoutTest {

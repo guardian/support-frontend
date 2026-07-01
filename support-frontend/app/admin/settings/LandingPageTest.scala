@@ -97,6 +97,7 @@ case class LandingPageTest(
     regionTargeting: Option[RegionTargeting],
     mParticleAudience: Option[Int],
     variants: List[LandingPageVariant],
+    scheduler: Option[Scheduler] = None,
 )
 
 object LandingPageTest {
