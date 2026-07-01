@@ -354,6 +354,7 @@ export function Checkout({
 						nudgeSettings={nudgeSettings}
 						backButtonOrigin={backButtonOrigin}
 						backButtonPathOverride={backButtonPathOverride}
+						taxRateResult={taxRateResult}
 					/>
 
 					<CheckoutForm

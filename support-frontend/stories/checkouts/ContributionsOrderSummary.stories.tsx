@@ -136,6 +136,7 @@ Default.args = {
 	),
 	supportRegionId: SupportRegionId.UK,
 	landingPageSettings,
+	taxRateResult: { type: 'tax_inclusive' },
 };
 
 export const RecurringContribution = Template.bind({});
@@ -171,6 +172,7 @@ RecurringContribution.args = {
 	),
 	supportRegionId: SupportRegionId.UK,
 	landingPageSettings,
+	taxRateResult: { type: 'tax_inclusive' },
 };
 
 export const SupporterPlus = Template.bind({});
@@ -207,6 +209,7 @@ SupporterPlus.args = {
 	),
 	supportRegionId: SupportRegionId.UK,
 	landingPageSettings,
+	taxRateResult: { type: 'tax_inclusive' },
 };
 
 export const DigitalSubscription = Template.bind({});
@@ -251,6 +254,7 @@ DigitalSubscription.args = {
 	),
 	supportRegionId: SupportRegionId.UK,
 	landingPageSettings,
+	taxRateResult: { type: 'tax_inclusive' },
 };
 
 export const StudentOneYear = Template.bind({});
@@ -289,6 +293,7 @@ StudentOneYear.args = {
 	studentDiscount: oneYearStudentDiscount,
 	supportRegionId: SupportRegionId.UK,
 	landingPageSettings,
+	taxRateResult: { type: 'tax_inclusive' },
 };
 
 export const WeeklyPricing = Template.bind({});
@@ -326,6 +331,7 @@ WeeklyPricing.args = {
 	),
 	supportRegionId: SupportRegionId.UK,
 	landingPageSettings: weeklyPricingLandingPageSettings,
+	taxRateResult: { type: 'tax_inclusive' },
 };
 
 export const WeeklyPricingWithPromotion = Template.bind({});
@@ -373,4 +379,5 @@ WeeklyPricingWithPromotion.args = {
 	),
 	supportRegionId: SupportRegionId.UK,
 	landingPageSettings: weeklyPricingLandingPageSettings,
+	taxRateResult: { type: 'tax_inclusive' },
 };

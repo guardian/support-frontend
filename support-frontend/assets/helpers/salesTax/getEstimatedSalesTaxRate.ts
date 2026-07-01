@@ -10,7 +10,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 
-type TaxRateResult =
+export type TaxRateResult =
 	| {
 			type: 'tax_exclusive';
 			rate: number;
