@@ -40,6 +40,7 @@ import {
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { calculateWeeklyPrice } from '../../helpers/utilities/utilities';
+import { MaybeEstimatedTax } from './maybeEstimatedTax';
 import { PriceSummary } from './priceSummary';
 
 const componentStyles = css`
@@ -358,16 +359,25 @@ export function ContributionsOrderSummary({
 					)}
 				</div>
 			) : (
-				<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
-					<p>Total</p>
-					<PriceSummary
-						fullPrice={fullPrice}
-						period={period}
-						discountPrice={discountPrice}
-						isWeeklyGift={isWeeklyGift}
-						taxRateResult={taxRateResult}
-					/>
-				</div>
+				<>
+					<div css={[totalRow(!!tsAndCs)]}>
+						<div css={[summaryRow, rowSpacing, boldText]}>
+							<p>Total</p>
+							<PriceSummary
+								fullPrice={fullPrice}
+								period={period}
+								discountPrice={discountPrice}
+								isWeeklyGift={isWeeklyGift}
+							/>
+						</div>
+						<MaybeEstimatedTax
+							currency={currency}
+							// TODO: Factor in discounted price, I think amount is always the full amount
+							amount={amount}
+							taxRateResult={taxRateResult}
+						/>
+					</div>
+				</>
 			)}
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
 			{isWeeklyDigital && (

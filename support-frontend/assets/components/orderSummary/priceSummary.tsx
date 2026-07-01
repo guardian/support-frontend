@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { visuallyHidden } from '@guardian/source/foundations';
-import type { TaxRateResult } from 'helpers/salesTax/getEstimatedSalesTaxRate';
 
 const originalPriceStrikeThrough = css`
 	font-weight: 400;
@@ -21,7 +20,6 @@ function displayPeriod(
 
 type PriceSummaryProps = {
 	fullPrice: string;
-	taxRateResult: TaxRateResult;
 	period?: string;
 	discountPrice?: string;
 	isWeeklyGift?: boolean;
