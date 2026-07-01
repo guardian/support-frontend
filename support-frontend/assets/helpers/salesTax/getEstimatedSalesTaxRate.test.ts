@@ -64,7 +64,7 @@ describe('getEstimatedSalesTaxRate', () => {
 		});
 	});
 
-	describe('when tax rate data is missing', () => {
+	describe('when tax rate data is missing product information', () => {
 		it('throws an error', () => {
 			expect(() =>
 				getEstimatedSalesTaxRate(
@@ -76,6 +76,21 @@ describe('getEstimatedSalesTaxRate', () => {
 					SupportRegionId.CA,
 				),
 			).toThrow('Missing tax rate data for product');
+		});
+	});
+
+	describe('when tax rate data is undefined', () => {
+		it('throws an error', () => {
+			expect(() =>
+				getEstimatedSalesTaxRate(
+					productCatalogFixture,
+					undefined,
+					'SupporterPlus',
+					'MonthlyTaxExclusive',
+					'AB',
+					SupportRegionId.CA,
+				),
+			).toThrow('Missing tax rate data');
 		});
 	});
 });
