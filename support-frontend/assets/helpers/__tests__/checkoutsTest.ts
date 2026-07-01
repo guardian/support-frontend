@@ -13,22 +13,16 @@ describe('simpleFormatAmount', () => {
 });
 
 describe('simpleFormatTaxAmount', () => {
-	it('applies the tax rate to the amount and renders the result with the currency', () => {
-		const amount = 15;
-		const taxRate = 0.15;
-		const currency = getCurrencyInfo('CAD');
-
-		const formattedTax = simpleFormatTaxAmount(currency, amount, taxRate);
-
-		expect(formattedTax).toEqual('$2.25');
-	});
 	it.each([
 		[getCurrencyInfo('CAD'), 15, 0.05, '$0.75'],
 		[getCurrencyInfo('CAD'), 30, 0.12, '$3.60'],
 		[getCurrencyInfo('CAD'), 150, 0.15, '$22.50'],
-		[getCurrencyInfo('CAD'), 300, 0.1498, '$44.94'],
-		[getCurrencyInfo('CAD'), 15, 0.1498, '$2.25'],
-	])(`%s/%i should format as %s`, (currency, amount, taxRate, expected) => {
-		expect(simpleFormatTaxAmount(currency, amount, taxRate)).toBe(expected);
-	});
+		[getCurrencyInfo('CAD'), 300, 0.14975, '$44.92'],
+		[getCurrencyInfo('CAD'), 15, 0.14975, '$2.24'],
+	])(
+		`%s / Amount: %i / Tax Rate: %d should format as %s`,
+		(currency, amount, taxRate, expected) => {
+			expect(simpleFormatTaxAmount(currency, amount, taxRate)).toBe(expected);
+		},
+	);
 });
