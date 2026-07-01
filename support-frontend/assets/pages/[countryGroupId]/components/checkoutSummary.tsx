@@ -19,6 +19,7 @@ import {
 } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import type { TaxRateResult } from 'helpers/salesTax/getEstimatedSalesTaxRate';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { parameteriseUrl } from 'helpers/urls/routes';
 import { getPrintPlusDigitalBenefits } from 'pages/paper-subscription-landing/planData';
@@ -54,6 +55,7 @@ type CheckoutSummaryProps = {
 	thresholdAmount: number;
 	backButtonOrigin: string;
 	backButtonPathOverride: string | null;
+	taxRateResult: TaxRateResult;
 	promotion?: Promotion;
 	forcedCountry?: string;
 	studentDiscount?: StudentDiscount;
@@ -73,6 +75,7 @@ export default function CheckoutSummary({
 	thresholdAmount,
 	backButtonOrigin,
 	backButtonPathOverride,
+	taxRateResult,
 	promotion,
 	forcedCountry,
 	studentDiscount,
@@ -182,6 +185,7 @@ export default function CheckoutSummary({
 					productLabel={productDescription.label}
 					ratePlanKey={ratePlanKey}
 					ratePlanLabel={ratePlanDetail.displayName ?? ratePlanDetail.label}
+					taxRateResult={taxRateResult}
 					paymentFrequency={getBillingPeriodNoun(
 						ratePlanDetail.billingPeriod,
 						isGuardianWeeklyGiftProduct(productKey, ratePlanKey),

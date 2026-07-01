@@ -28,6 +28,7 @@ import type {
 } from 'helpers/productCatalog';
 import { ratePlanToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import type { TaxRateResult } from 'helpers/salesTax/getEstimatedSalesTaxRate';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import {
@@ -195,6 +196,7 @@ export type ContributionsOrderSummaryProps = {
 	checkListData: BenefitsCheckListData[];
 	startDate: React.ReactNode;
 	landingPageSettings: LandingPageVariant;
+	taxRateResult: TaxRateResult;
 	ratePlanLabel?: string;
 	promotion?: Promotion;
 	paymentFrequency?: string;
@@ -216,6 +218,7 @@ export function ContributionsOrderSummary({
 	checkListData,
 	startDate,
 	landingPageSettings,
+	taxRateResult,
 	ratePlanLabel,
 	promotion,
 	paymentFrequency,
@@ -362,6 +365,7 @@ export function ContributionsOrderSummary({
 						period={period}
 						discountPrice={discountPrice}
 						isWeeklyGift={isWeeklyGift}
+						taxRateResult={taxRateResult}
 					/>
 				</div>
 			)}
