@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Checkout branch
         id: checkout
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v4.2.1
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v4.2.1
       - name: Setup Scala
         uses: guardian/setup-scala@v1
       - name: Submit dependencies
