@@ -103,4 +103,22 @@ export interface LandingPageTest {
 	status: 'Live' | 'Draft';
 	regionTargeting?: RegionTargeting;
 	variants: LandingPageVariant[];
+	methodologies?: Methodology[];
+}
+
+export type Methodology = ABTest | EpsilonGreedyBandit | Roulette;
+
+interface ABTest {
+	name: 'ABTest';
+}
+
+interface EpsilonGreedyBandit {
+	name: 'EpsilonGreedyBandit';
+	epsilon: number;
+	sampleCount?: number;
+}
+
+interface Roulette {
+	name: 'Roulette';
+	sampleCount?: number;
 }

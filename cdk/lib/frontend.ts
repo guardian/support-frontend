@@ -127,6 +127,10 @@ export class Frontend extends GuStack {
 					`arn:aws:dynamodb:*:*:table/support-admin-console-channel-tests-${this.stage}`,
 				],
 			}),
+			new GuAllowPolicy(this, 'DynamoBanditData', {
+				actions: ['dynamodb:Query'],
+				resources: [`arn:aws:dynamodb:*:*:table/support-bandit-${this.stage}`],
+			}),
 		];
 
 		const alarmName = (shortDescription: string) =>

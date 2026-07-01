@@ -79,6 +79,7 @@ interface PageTest<Variant> {
 	};
 	mParticleAudience?: number;
 	variants: Variant[];
+	methodologies?: Array<{ name: string }>;
 }
 interface PageParticipationsConfig<Variant> {
 	tests: Array<PageTest<Variant>>;
@@ -86,6 +87,10 @@ interface PageParticipationsConfig<Variant> {
 	forceParamName: string;
 	sessionStorageKey: Key;
 	getVariantName: (variant: Variant) => string;
+	selectVariant?: (
+		test: PageTest<Variant>,
+		mvtId: number,
+	) => Variant | undefined;
 }
 
 export type {
