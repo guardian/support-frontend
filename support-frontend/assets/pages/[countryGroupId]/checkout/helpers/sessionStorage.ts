@@ -44,10 +44,15 @@ const OrderSchema = z.object({
 	deliveryDate: dateTimeSchema.optional(),
 	accountNumber: z.string().optional(),
 	taxConfig: z
-		.object({
-			type: z.string(),
-			rate: z.number().optional(),
-		})
+		.union([
+			z.object({
+				type: z.literal('tax_exclusive'),
+				rate: z.number(),
+			}),
+			z.object({
+				type: z.literal('tax_inclusive'),
+			}),
+		])
 		.optional(),
 });
 type OrderSchemaType = z.infer<typeof OrderSchema>;
