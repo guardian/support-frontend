@@ -1,6 +1,9 @@
 import { css } from '@emotion/react';
 import { Button, Column, Columns } from '@guardian/source/react-components';
-import { SupportRegionId } from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
+import {
+	Canada,
+	SupportRegionId,
+} from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { ContributionsOrderSummaryProps } from 'components/orderSummary/contributionsOrderSummary';
@@ -210,6 +213,43 @@ SupporterPlus.args = {
 	supportRegionId: SupportRegionId.UK,
 	landingPageSettings,
 	taxRateResult: { type: 'tax_inclusive' },
+};
+
+export const SupporterPlusWithTax = Template.bind({});
+SupporterPlusWithTax.args = {
+	productKey: ProductKeys.SupporterPlusKey,
+	ratePlanKey: 'MonthlyTaxExclusive',
+	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
+	enableCheckList: true,
+	amount: 15,
+	currency: {
+		glyph: '$',
+		extendedGlyph: 'CA$',
+		spokenCurrency: 'dollar',
+	},
+	checkListData: [
+		...productCatalogDescription.SupporterPlus.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'SupporterPlus'}
+			ratePlanKey={'Monthly'}
+			countryGroupId={Canada}
+			thresholdAmount={15}
+		/>
+	),
+	startDate: null,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+	supportRegionId: SupportRegionId.CA,
+	landingPageSettings,
+	taxRateResult: { type: 'tax_exclusive', rate: 0.15 },
 };
 
 export const DigitalSubscription = Template.bind({});
