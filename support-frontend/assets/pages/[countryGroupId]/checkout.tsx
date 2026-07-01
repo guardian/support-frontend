@@ -39,6 +39,7 @@ import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
 import { getFulfilmentOptionFromProductKey } from '../../helpers/productCatalogToFulfilmentOption';
 import { getProductOptionFromProductAndRatePlan } from '../../helpers/productCatalogToProductOption';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
+import { useStateWithCheckoutSession } from './checkout/hooks/useStateWithCheckoutSession';
 import { useStripeHostedCheckoutSession } from './checkout/hooks/useStripeHostedCheckoutSession';
 import CheckoutForm from './components/checkoutForm';
 import CheckoutSummary from './components/checkoutSummary';
@@ -272,6 +273,16 @@ export function Checkout({
 	);
 
 	/**
+	 * BillingState selector initialised to undefined to hide
+	 * billingStateError message. formOnSubmit checks and converts to
+	 * empty string to display billingStateError message.
+	 */
+	const [billingState, setBillingState] = useStateWithCheckoutSession<string>(
+		checkoutSession?.formFields.addressFields.billingAddress.state,
+		'',
+	);
+
+	/**
 	 * Passed down because minimum product prices are unavailable in the paymentTsAndCs story
 	 * and shared across summary and form checkout sub-components
 	 */
@@ -355,6 +366,8 @@ export function Checkout({
 						thresholdAmount={thresholdAmount}
 						studentDiscount={studentDiscount}
 						paypalClientId={paypalClientId}
+						billingState={billingState}
+						setBillingState={setBillingState}
 					/>
 				</PageLayout>
 			</Elements>
