@@ -7,10 +7,12 @@ import {
 	SvgTickRound,
 } from '@guardian/source/react-components';
 import { ToggleSwitch } from '@guardian/source-development-kitchen/react-components';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
 import { useEffect } from 'react';
+import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
 	getNewsletterSubscriptionById,
@@ -194,6 +196,34 @@ export function OnboardingSummarySuccessfulSignIn({
 	);
 }
 
+function getTodaysPaymentWithTaxExclusion(
+	finalAmount: number,
+	currencyKey: IsoCurrency,
+	taxConfig: { type: string; rate?: number } | undefined,
+): string | undefined {
+	if (!taxConfig) {
+		return;
+	}
+
+	const { type, rate } = taxConfig;
+
+	if (type !== 'tax_exclusive' || !rate) {
+		return;
+	}
+
+	const finalAmountWithCurrency = simpleFormatAmount(
+		getCurrencyInfo(currencyKey),
+		finalAmount,
+	);
+
+	const taxAmountWithCurrency = simpleFormatAmount(
+		getCurrencyInfo(currencyKey),
+		finalAmount * rate,
+	);
+
+	return `${finalAmountWithCurrency} + ${taxAmountWithCurrency} estimated tax`;
+}
+
 function OnboardingSummary({
 	productKey,
 	landingPageSettings,
@@ -206,6 +236,8 @@ function OnboardingSummary({
 	const productSettings =
 		productKey && landingPageSettings.products[productKey];
 	const { windowWidthIsLessThan } = useWindowWidth();
+
+	const { enableCanadaTaxExclusion } = useFeatureSwitches();
 
 	const { currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -248,6 +280,14 @@ function OnboardingSummary({
 		order?.paymentMethod === 'Stripe' ||
 		order?.paymentMethod === 'StripeExpressCheckoutElement' ||
 		order?.paymentMethod === 'StripeHostedCheckout';
+
+	const todaysPayment =
+		enableCanadaTaxExclusion &&
+		getTodaysPaymentWithTaxExclusion(
+			payment.finalAmount,
+			currencyKey,
+			order?.taxConfig,
+		);
 
 	const paymentMethodCopy = isDirectDebit
 		? 'Direct Debit'
@@ -295,6 +335,12 @@ function OnboardingSummary({
 								<p css={boldDescriptions}>Price</p>
 								<p css={descriptions}>{promoMessage || fullAmount}</p>
 							</div>
+							{todaysPayment && (
+								<div css={purchaseSummaryDetailsContainer}>
+									<p css={boldDescriptions}>Today's payment</p>
+									<p css={descriptions}>{todaysPayment}</p>
+								</div>
+							)}
 							<div css={purchaseSummaryDetailsContainer}>
 								<p css={boldDescriptions}>Payment method</p>
 								<div css={paymentMethodContainer}>
