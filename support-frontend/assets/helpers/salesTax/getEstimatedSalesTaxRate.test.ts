@@ -40,7 +40,7 @@ describe('getEstimatedSalesTaxRate', () => {
 				productCatalogFixture,
 				taxRatesFixture,
 				'SupporterPlus',
-				'MonthlyTaxExclusive', // This rate plan is tax inclusive
+				'MonthlyTaxExclusive',
 				undefined,
 				SupportRegionId.CA,
 			);
@@ -55,7 +55,7 @@ describe('getEstimatedSalesTaxRate', () => {
 				productCatalogFixture,
 				taxRatesFixture,
 				'SupporterPlus',
-				'MonthlyTaxExclusive', // This rate plan is tax inclusive
+				'MonthlyTaxExclusive',
 				'AB',
 				SupportRegionId.CA,
 			);
