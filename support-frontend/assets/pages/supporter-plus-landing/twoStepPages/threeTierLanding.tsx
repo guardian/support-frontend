@@ -4,6 +4,7 @@ import {
 	from,
 	palette,
 	space,
+	textSans12,
 	textSans17,
 	textSansBold20,
 } from '@guardian/source/foundations';
@@ -23,6 +24,7 @@ import {
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -63,6 +65,7 @@ import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
 import { ThreeTierLandingHeading } from './threeTierLandingHeading';
 import { TickerContainer } from './tickerContainer';
+import { getRatePlanKey, useRatePlanKey } from './useRatePlanKey';
 
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
@@ -166,6 +169,12 @@ const disclaimerContainer = css`
 	}
 `;
 
+const taxExclusionDisclaimer = css`
+	${textSans12};
+	color: ${palette.neutral[100]};
+	margin-bottom: ${space[2]}px;
+`;
+
 const links = [
 	{
 		href: 'https://www.theguardian.com/info/privacy',
@@ -240,15 +249,6 @@ function getPlanCost(
 				  }
 				: undefined,
 	};
-}
-
-function getRatePlanKey(contributionType: ContributionType) {
-	switch (contributionType) {
-		case 'ANNUAL':
-			return 'Annual';
-		default:
-			return 'Monthly';
-	}
 }
 
 type ThreeTierLandingProps = {
@@ -331,6 +331,9 @@ export function ThreeTierLanding({
 		setContributionType(paymentFrequencies[buttonIndex] as ContributionType);
 	};
 
+	const { ratePlanKey: maybeTaxExclusiveRatePlanKey, taxExclusionEnabled } =
+		useRatePlanKey(contributionType, supportRegionId);
+
 	const ratePlanKey = getRatePlanKey(contributionType);
 
 	const fallbackProducts = fallBackLandingPageSelection.products;
@@ -339,11 +342,12 @@ export function ThreeTierLanding({
 	 * Tier 1: Contributions
 	 * We use the product catalog for the recurring Contribution tier amount
 	 */
+
 	const tier1Pricing = productCatalog.Contribution?.ratePlans[ratePlanKey]
 		?.pricing[currencyId] as number;
 	const tier1checkoutUrl = buildCheckoutUrl(supportRegionId, {
 		product: 'Contribution',
-		ratePlan: getRatePlanKey(contributionType),
+		ratePlan: ratePlanKey,
 		contribution: tier1Pricing,
 	});
 
@@ -387,17 +391,21 @@ export function ThreeTierLanding({
 	};
 
 	/** Tier 2: SupporterPlus */
-	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[ratePlanKey]
-		?.pricing[currencyId] as number;
-	console.log('🚀 ~ ThreeTierLanding ~ countryId:', countryId);
+
+	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[
+		maybeTaxExclusiveRatePlanKey
+	]?.pricing[currencyId] as number;
+
 	const tier2Promotion = getPromotion(
 		allProductPrices.SupporterPlus,
 		countryId,
 		billingPeriod,
 	);
+
 	const tier2CheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: 'SupporterPlus',
-		ratePlan: ratePlanKey,
+		ratePlan:
+			maybeTaxExclusiveRatePlanKey as ProductRatePlanKey<'SupporterPlus'>,
 		promoCode: tier2Promotion?.promoCode,
 	});
 
@@ -446,8 +454,10 @@ export function ThreeTierLanding({
 	 * This should only exist as long as the Tier three hack is in place.
 	 */
 	const tier3Product = 'DigitalSubscription';
-	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[ratePlanKey]
-		?.pricing[currencyId] as number;
+	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[
+		maybeTaxExclusiveRatePlanKey
+	]?.pricing[currencyId] as number;
+
 	const { label: title, labelPill: titlePill } = getProductDescription(
 		'DigitalSubscription',
 		ratePlanKey,
@@ -474,7 +484,8 @@ export function ThreeTierLanding({
 
 	const tier3CheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: tier3Product,
-		ratePlan: ratePlanKey,
+		ratePlan:
+			maybeTaxExclusiveRatePlanKey as ProductRatePlanKey<'DigitalSubscription'>,
 		promoCode: tier3Promotion?.promoCode,
 	});
 
@@ -534,6 +545,11 @@ export function ThreeTierLanding({
 						borderColor="rgba(170, 170, 180, 0.5)"
 						cssOverrides={disclaimerContainer}
 					>
+						{taxExclusionEnabled && (
+							<p css={taxExclusionDisclaimer}>
+								For All-access digital and Digital plus, taxes may apply.
+							</p>
+						)}
 						<ThreeTierTsAndCs
 							tsAndCsContent={[
 								{

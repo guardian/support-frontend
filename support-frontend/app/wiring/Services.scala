@@ -5,8 +5,10 @@ import actions.{UserFromAuthCookiesActionBuilder, UserFromAuthCookiesOrAuthServe
 import admin.settings.AllSettingsProvider
 import cats.syntax.either._
 import com.gu.aws.AwsS3Client
+import com.gu.i18n.Country
 import com.gu.identity.auth._
 import com.gu.okhttp.RequestRunners
+import com.gu.support.catalog.{DigitalPack, Product, SupporterPlus, TierThree}
 import com.gu.support.getaddressio.GetAddressIOService
 import com.gu.support.idealpostcodes.IdealPostcodesService
 import com.gu.support.paperround.PaperRoundServiceProvider
@@ -144,5 +146,27 @@ trait Services {
       codeCachedProductCatalogService = new CachedProductCatalogService(actorSystem, codeProductCatalogService),
       prodCachedProductCatalogService = new CachedProductCatalogService(actorSystem, prodProductCatalogService),
     )
+
+  lazy val cachedSalesTaxService: CachedSalesTaxService = {
+    // The (product, country) combinations to pre-fetch and keep cached. We currently only need tax
+    // rates for Canada, so we limit the combinations to Canada and the tax-applicable products.
+    val taxApplicableProducts: Seq[Product] = Seq(SupporterPlus, DigitalPack)
+    val taxApplicableCountries: Seq[Country] = Seq(Country.Canada)
+    val taxRateCombinations: Seq[(Product, Country)] = for {
+      product <- taxApplicableProducts
+      country <- taxApplicableCountries
+    } yield (product, country)
+
+    new CachedSalesTaxService(
+      actorSystem,
+      new SalesTaxService(
+        RequestRunners.futureRunner,
+        appConfig.salesTaxConfig.baseUrl,
+        appConfig.salesTaxConfig.apiKey,
+      ),
+      taxRateCombinations,
+      appConfig.stage,
+    )
+  }
 
 }

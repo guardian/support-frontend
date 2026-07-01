@@ -1,3 +1,4 @@
+import { caStateCodes } from '@modules/internationalisation/country';
 import { isoCurrencySchema } from '@modules/internationalisation/schemas';
 import {
 	billingPeriodSchema,
@@ -8,7 +9,6 @@ import { optional, z } from 'zod';
 import type { LegacyProductType } from 'helpers/legacyTypeConversions';
 import { legacyProductTypes } from 'helpers/legacyTypeConversions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import type { ActiveProductKey } from '../productCatalog';
 import { isProductKey } from '../productCatalog';
 
 /**
@@ -26,6 +26,7 @@ const featureSwitchesSchema = z.object({
 	enableThankYouOnboarding: z.optional(z.enum(['On', 'Off'])),
 	enableCheckoutNudge: z.optional(z.enum(['On', 'Off'])),
 	enableMParticle: z.optional(z.enum(['On', 'Off'])),
+	enableCanadaTaxExclusion: z.optional(z.enum(['On', 'Off'])),
 });
 
 export type FeatureSwitches = z.infer<typeof featureSwitchesSchema>;
@@ -150,9 +151,7 @@ const PaymentConfigSchema = z.object({
 			),
 		}),
 		metricUrl: z.string(),
-		productsWithThankYouOnboarding: z.array(
-			z.string().refine<ActiveProductKey>(isProductKey),
-		),
+		productsWithThankYouOnboarding: z.array(z.string().refine(isProductKey)),
 	}),
 	isObserverSubdomain: z.boolean(),
 });
@@ -215,15 +214,15 @@ export const ProductPricesSchema = z.object({
 	allProductPrices: z.record(
 		z.enum([...legacyProductTypes, 'GuardianWeeklyGift']),
 		optional(
-			z.record(
+			z.partialRecord(
 				countryKeySchema,
-				z.record(
+				z.partialRecord(
 					fulfilmentOptionsSchema,
-					z.record(
+					z.partialRecord(
 						productOptionsSchema,
-						z.record(
+						z.partialRecord(
 							billingPeriodSchema,
-							z.record(
+							z.partialRecord(
 								isoCurrencySchema,
 								z.object({
 									price: z.number(),
@@ -241,8 +240,18 @@ export const ProductPricesSchema = z.object({
 	),
 });
 
-const AppConfigSchema =
-	PaymentConfigSchema.merge(ProductCatalogSchema).merge(ProductPricesSchema);
+const TaxRatesSchema = z.object({
+	taxRates: z
+		.partialRecord(
+			z.enum(['SupporterPlus', 'DigitalSubscription']),
+			z.record(z.enum(caStateCodes), z.number()),
+		)
+		.optional(), // This isn't made available on every page
+});
+
+const AppConfigSchema = PaymentConfigSchema.merge(ProductCatalogSchema)
+	.merge(ProductPricesSchema)
+	.merge(TaxRatesSchema);
 
 export type AppConfig = z.infer<typeof AppConfigSchema> & {
 	allProductPrices: Partial<

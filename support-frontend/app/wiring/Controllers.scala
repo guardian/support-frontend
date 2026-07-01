@@ -40,6 +40,7 @@ trait Controllers {
     appConfig.stage,
     priceSummaryServiceProvider,
     cachedProductCatalogServiceProvider,
+    cachedSalesTaxService,
     appConfig.supportUrl,
     tickerService,
     mparticleClient,
