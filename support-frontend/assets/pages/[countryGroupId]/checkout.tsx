@@ -331,8 +331,6 @@ export function Checkout({
 		supportRegionId,
 	);
 
-	console.log({ taxRateResult });
-
 	return (
 		<ThemeProvider theme={theme}>
 			<Elements stripe={stripePromise} options={elementsOptions}>
