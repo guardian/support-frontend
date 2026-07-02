@@ -252,6 +252,54 @@ SupporterPlusWithTax.args = {
 	taxRateResult: { type: 'tax_exclusive', rate: 0.15 },
 };
 
+export const DigitalPlusWithTaxAndDiscount = Template.bind({});
+DigitalPlusWithTaxAndDiscount.args = {
+	productKey: ProductKeys.DigitalSubscription,
+	ratePlanKey: 'MonthlyTaxExclusive',
+	productLabel: getProductLabel(ProductKeys.DigitalSubscription),
+	enableCheckList: true,
+	amount: 30,
+	currency: {
+		glyph: '$',
+		extendedGlyph: 'CA$',
+		spokenCurrency: 'dollar',
+	},
+	promotion: {
+		name: 'Digital Plus Promo',
+		description: '50% off for six months',
+		promoCode: 'TEST_PROMO',
+		discountedPrice: 15,
+		discount: {
+			amount: 50,
+			durationMonths: 6,
+		},
+	},
+	checkListData: [
+		...productCatalogDescription.DigitalSubscription.benefits.map(
+			(benefit) => ({
+				isChecked: true,
+				text: benefit.copy,
+			}),
+		),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'DigitalSubscription'}
+			ratePlanKey={'Monthly'}
+			countryGroupId={Canada}
+		/>
+	),
+	startDate: null,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+	supportRegionId: SupportRegionId.CA,
+	landingPageSettings,
+	taxRateResult: { type: 'tax_exclusive', rate: 0.15 },
+};
+
 export const DigitalSubscription = Template.bind({});
 DigitalSubscription.args = {
 	productKey: ProductKeys.DigitalSubscription,
