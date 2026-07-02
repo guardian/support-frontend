@@ -375,8 +375,10 @@ export function ContributionsOrderSummary({
 						</div>
 						<MaybeEstimatedTax
 							currency={currency}
-							// TODO: Factor in discounted price, I think amount is always the full amount
-							amount={amount}
+							// This doesn't handle student discounts currently
+							// because they're never tax exclusive, but if this
+							// changes we'll need to revisit this amount prop.
+							amount={promotion?.discountedPrice ?? amount}
 							taxRateResult={taxRateResult}
 						/>
 					</div>
