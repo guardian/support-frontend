@@ -5,6 +5,7 @@ import {
 	SupportRegionId,
 } from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { ContributionsOrderSummaryProps } from 'components/orderSummary/contributionsOrderSummary';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
@@ -113,7 +114,7 @@ Default.args = {
 	productKey: 'SupporterPlus',
 	ratePlanKey: 'Monthly',
 	productLabel: 'Monthly support',
-	paymentFrequency: 'month',
+	billingPeriod: BillingPeriod.Monthly,
 	enableCheckList: true,
 	amount: 10,
 	currency: {
@@ -147,6 +148,7 @@ RecurringContribution.args = {
 	productKey: ProductKeys.Contribution,
 	ratePlanKey: 'Monthly',
 	productLabel: getProductLabel(ProductKeys.Contribution),
+	billingPeriod: BillingPeriod.Monthly,
 	enableCheckList: true,
 	amount: 3,
 	currency: {
@@ -182,6 +184,7 @@ export const SupporterPlus = Template.bind({});
 SupporterPlus.args = {
 	productKey: ProductKeys.SupporterPlusKey,
 	ratePlanKey: 'Monthly',
+	billingPeriod: BillingPeriod.Monthly,
 	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
 	enableCheckList: true,
 	amount: 12,
@@ -219,6 +222,7 @@ export const SupporterPlusWithTax = Template.bind({});
 SupporterPlusWithTax.args = {
 	productKey: ProductKeys.SupporterPlusKey,
 	ratePlanKey: 'MonthlyTaxExclusive',
+	billingPeriod: BillingPeriod.Monthly,
 	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
 	enableCheckList: true,
 	amount: 15,
@@ -256,6 +260,7 @@ export const DigitalPlusWithTaxAndDiscount = Template.bind({});
 DigitalPlusWithTaxAndDiscount.args = {
 	productKey: ProductKeys.DigitalSubscription,
 	ratePlanKey: 'MonthlyTaxExclusive',
+	billingPeriod: BillingPeriod.Monthly,
 	productLabel: getProductLabel(ProductKeys.DigitalSubscription),
 	enableCheckList: true,
 	amount: 30,
@@ -304,6 +309,7 @@ export const DigitalSubscription = Template.bind({});
 DigitalSubscription.args = {
 	productKey: ProductKeys.DigitalSubscription,
 	ratePlanKey: 'Monthly',
+	billingPeriod: BillingPeriod.Monthly,
 	productLabel: getProductLabel(ProductKeys.DigitalSubscription),
 	enableCheckList: true,
 	amount: 27,
@@ -350,7 +356,7 @@ StudentOneYear.args = {
 	productKey: ProductKeys.SupporterPlusKey,
 	ratePlanKey: 'OneYearStudent',
 	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
-	paymentFrequency: 'year',
+	billingPeriod: BillingPeriod.Annual,
 	enableCheckList: true,
 	amount: 120,
 	currency: {
@@ -389,7 +395,7 @@ WeeklyPricing.args = {
 	productKey: ProductKeys.SupporterPlusKey,
 	ratePlanKey: 'Monthly',
 	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
-	paymentFrequency: 'month',
+	billingPeriod: BillingPeriod.Monthly,
 	enableCheckList: true,
 	amount: 12,
 	currency: {
@@ -427,7 +433,7 @@ WeeklyPricingWithPromotion.args = {
 	productKey: ProductKeys.SupporterPlusKey,
 	ratePlanKey: 'Monthly',
 	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
-	paymentFrequency: 'month',
+	billingPeriod: BillingPeriod.Monthly,
 	enableCheckList: true,
 	amount: 12,
 	currency: {

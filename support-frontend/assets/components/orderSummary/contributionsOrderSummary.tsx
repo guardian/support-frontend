@@ -15,6 +15,7 @@ import {
 } from '@guardian/source/react-components';
 import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'react';
 import {
 	BenefitsCheckList,
@@ -40,8 +41,7 @@ import {
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { calculateWeeklyPrice } from '../../helpers/utilities/utilities';
-import { MaybeEstimatedTax } from './maybeEstimatedTax';
-import { PriceSummary } from './priceSummary';
+import { PriceBreakdown } from './priceBreakdown';
 
 const componentStyles = css`
 	${textSans17}
@@ -62,10 +62,6 @@ const rowSpacing = css`
 			margin-bottom: ${space[6]}px;
 		}
 	}
-`;
-
-const boldText = css`
-	font-weight: 700;
 `;
 
 const headingRow = css`
@@ -161,24 +157,6 @@ const startDateList = css`
 	}
 `;
 
-const savingTextCss = css`
-	color: ${palette.lifestyle[400]};
-	${textSans17};
-	margin-top: ${space[1]}px;
-`;
-
-const weeklyPricingSummary = css`
-	display: flex;
-	flex-direction: column;
-	gap: ${space[1]}px;
-	margin-bottom: ${space[5]}px;
-	padding: ${space[1]}px 0;
-
-	& div {
-		padding: 0;
-	}
-`;
-
 export type ContributionsOrderSummaryProps = {
 	productKey: ActiveProductKey;
 	productLabel: string;
@@ -192,7 +170,7 @@ export type ContributionsOrderSummaryProps = {
 	taxRateResult: TaxRateResult;
 	ratePlanLabel?: string;
 	promotion?: Promotion;
-	paymentFrequency?: string;
+	billingPeriod: BillingPeriod;
 	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
 	tsAndCs: React.ReactNode;
@@ -214,7 +192,7 @@ export function ContributionsOrderSummary({
 	taxRateResult,
 	ratePlanLabel,
 	promotion,
-	paymentFrequency,
+	billingPeriod,
 	onCheckListToggle,
 	headerButton,
 	tsAndCs,
@@ -244,7 +222,6 @@ export function ContributionsOrderSummary({
 		simpleFormatAmount(currency, promotion.discountedPrice ?? amount);
 	const discountPrice =
 		studentDiscount?.discountPriceWithCurrency ?? promoDiscountPrice;
-	const period = studentDiscount?.periodNoun ?? paymentFrequency;
 	const title = `Your ${
 		isContributionOnlyProduct(productKey) ? 'support' : 'subscription'
 	}`;
@@ -333,47 +310,18 @@ export function ContributionsOrderSummary({
 			</div>
 
 			<hr css={hrCss} />
-			{/* Ignore tax calculation for weekly pricing, we'll revisit this if
-			we want to show weekly prices for tax exclusive rate plans in Canada
-			*/}
-			{weeklyPrice ? (
-				<div css={weeklyPricingSummary}>
-					<div css={summaryRow}>
-						<p>Weekly price</p>
-						<p>{weeklyPrice}</p>
-					</div>
-					<div css={[summaryRow, boldText]}>
-						<p>Total due every {period}</p>
-						<p>{discountPrice ?? fullPrice}</p>
-					</div>
-					{savingText && (
-						<div>
-							<hr css={hrCss} />
-							<p css={savingTextCss}>{savingText}</p>
-						</div>
-					)}
-				</div>
-			) : (
-				<>
-					<div css={[summaryRow, rowSpacing, boldText]}>
-						<p>Total</p>
-						<PriceSummary
-							fullPrice={fullPrice}
-							period={period}
-							discountPrice={discountPrice}
-							isWeeklyGift={isWeeklyGift}
-						/>
-					</div>
-					<MaybeEstimatedTax
-						currency={currency}
-						// This doesn't handle student discounts currently
-						// because they're never tax exclusive, but if this
-						// changes we'll need to revisit this amount prop.
-						amount={promotion?.discountedPrice ?? amount}
-						taxRateResult={taxRateResult}
-					/>
-				</>
-			)}
+			<PriceBreakdown
+				weeklyPrice={weeklyPrice}
+				fullPrice={fullPrice}
+				discountPrice={discountPrice}
+				savingText={savingText}
+				isWeeklyGift={isWeeklyGift}
+				currency={currency}
+				amount={promotion?.discountedPrice ?? amount}
+				taxRateResult={taxRateResult}
+				studentDiscount={studentDiscount}
+				billingPeriod={billingPeriod}
+			/>
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
 			{isWeeklyDigital && (
 				<div css={startDateWeeklyDigitalList}>{startDate}</div>
