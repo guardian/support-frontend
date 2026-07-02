@@ -172,6 +172,44 @@ const router = createBrowserRouter([
 					},
 				},
 				{
+					path: `/${supportRegionId}/join`,
+					lazy: async () => {
+						const { Join } = await import(
+							/* webpackChunkName: "Join" */ './join'
+						);
+						return {
+							Component: function JoinRoute() {
+								const { landing } = useRootLoaderData();
+								return (
+									<Join
+										supportRegionId={supportRegionId}
+										landingPageSettings={landing.variant}
+									/>
+								);
+							},
+						};
+					},
+				},
+				{
+					path: `/${supportRegionId}/invitation-decline`,
+					lazy: async () => {
+						const { default: OnboardingDeclineComponent } = await import(
+							/* webpackChunkName: "OnboardingDecline" */ './components/onboardingDeclineComponent'
+						);
+						return {
+							Component: function InvitationDeclineRoute() {
+								const { landing } = useRootLoaderData();
+								return (
+									<OnboardingDeclineComponent
+										supportRegionId={supportRegionId}
+										landingPageSettings={landing.variant}
+									/>
+								);
+							},
+						};
+					},
+				},
+				{
 					path: `/${supportRegionId}/guardian-ad-lite`,
 					lazy: async () => {
 						const { GuardianAdLiteLanding } = await import(

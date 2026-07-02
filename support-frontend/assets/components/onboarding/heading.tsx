@@ -14,10 +14,16 @@ import {
 import { Column, Columns, Container } from '@guardian/source/react-components';
 import { useMemo } from 'preact/hooks';
 import GridImage from 'components/gridImage/gridImage';
+import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { getThankYouOrder } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
-import type { OnboardingProps } from 'pages/[countryGroupId]/components/onboardingComponent';
-import { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
+import type { OnboardingProductKey } from 'pages/[countryGroupId]/components/onboardingComponent';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
+import {
+	OnboardingDeclineSteps,
+	OnboardingInviteeSteps,
+	OnboardingSteps,
+} from './onboardingSteps';
+import type { OnboardingFlow, OnboardingFlowStep } from './onboardingTypes';
 import { heroContainer } from './sections/sectionsStyles';
 
 const contentColumnStyles = css`
@@ -104,34 +110,38 @@ const thankYouSubtext = css`
 	}
 `;
 
-interface OnboardingHeadingProps extends OnboardingProps {
-	onboardingStep: OnboardingSteps;
+interface StepContent {
+	heading?: string;
+	subtext?: string;
+	gridId?: string;
+	altText?: string;
+	aspectRatio: SerializedStyles;
+	/** Renders the hero inside the white card, with the blue bar behind it. */
+	contentInHeader?: boolean;
+}
+
+interface OnboardingHeadingProps {
+	onboardingStep: OnboardingFlowStep;
+	flow: OnboardingFlow;
+	landingPageSettings?: LandingPageVariant;
+	productKey?: OnboardingProductKey;
 }
 
 function OnboardingHeading({
 	onboardingStep,
+	flow,
 	landingPageSettings,
 	productKey,
 }: OnboardingHeadingProps) {
 	const order = getThankYouOrder();
 	const productSettings =
-		productKey && landingPageSettings.products[productKey];
+		productKey && landingPageSettings?.products[productKey];
 
 	const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
 
-	const ONBOARDING_STEP_CONTENT_MAP = useMemo<
-		Record<
-			OnboardingSteps,
-			{
-				heading?: string;
-				subtext?: string;
-				gridId?: string;
-				altText?: string;
-				aspectRatio: SerializedStyles;
-			}
-		>
+	const supporterStepContentMap = useMemo<
+		Record<OnboardingSteps, StepContent>
 	>(() => {
-		// Non breaking hyphen
 		const allAccessTitle =
 			productSettings?.title === 'All-access digital'
 				? `All\u2011access digital`
@@ -172,14 +182,96 @@ function OnboardingHeading({
 				aspectRatio: css`
 					aspect-ratio: 3 / 2;
 				`,
+				contentInHeader: true,
 			},
 		};
-	}, [order, windowWidthIsGreaterThan]);
+	}, [order, windowWidthIsGreaterThan, productSettings?.title]);
 
-	if (
-		onboardingStep === OnboardingSteps.Completed &&
-		windowWidthIsLessThan('tablet')
-	) {
+	const inviteeStepContentMap = useMemo<
+		Record<OnboardingInviteeSteps, StepContent>
+	>(
+		() => ({
+			[OnboardingInviteeSteps.CreateAccount]: {
+				aspectRatio: css`
+					aspect-ratio: 16 / 9;
+
+					${from.tablet} {
+						aspect-ratio: 20 / 9;
+					}
+				`,
+				contentInHeader: true,
+			},
+			[OnboardingInviteeSteps.GuardianApp]: {
+				gridId: windowWidthIsGreaterThan('tablet')
+					? 'onboardingGuardianAppHero'
+					: 'onboardingGuardianAppHeroMobile',
+				altText: 'Onboarding guardian app hero showing multiple articles',
+				aspectRatio: css`
+					aspect-ratio: 3 / 2;
+				`,
+			},
+			[OnboardingInviteeSteps.DigitalPlus]: {
+				// TODO: replace with final asset when available
+				gridId: 'onboardingFeastAppHero',
+				altText: 'Onboarding invitee digital plus hero',
+				aspectRatio: css`
+					aspect-ratio: 3 / 2;
+				`,
+			},
+			[OnboardingInviteeSteps.Completed]: {
+				aspectRatio: css`
+					aspect-ratio: 3 / 2;
+				`,
+			},
+		}),
+		[windowWidthIsGreaterThan],
+	);
+
+	const declineStepContentMap = useMemo<
+		Record<OnboardingDeclineSteps, StepContent>
+	>(() => {
+		const declineAspectRatio = css`
+			aspect-ratio: 16 / 9;
+
+			${from.tablet} {
+				aspect-ratio: 20 / 9;
+			}
+		`;
+
+		return {
+			[OnboardingDeclineSteps.Decline]: {
+				aspectRatio: declineAspectRatio,
+				contentInHeader: true,
+			},
+			[OnboardingDeclineSteps.Declined]: {
+				aspectRatio: declineAspectRatio,
+				contentInHeader: true,
+			},
+			[OnboardingDeclineSteps.Save]: {
+				aspectRatio: declineAspectRatio,
+				contentInHeader: true,
+			},
+		};
+	}, []);
+
+	const stepContentByFlow: Record<
+		OnboardingFlow,
+		Partial<Record<string, StepContent>>
+	> = {
+		supporter: supporterStepContentMap,
+		invitee: inviteeStepContentMap,
+		decline: declineStepContentMap,
+	};
+
+	const stepContent = stepContentByFlow[flow][onboardingStep];
+
+	if (!stepContent) {
+		return null;
+	}
+
+	const isContentInHeaderStep = stepContent.contentInHeader ?? false;
+
+	if (isContentInHeaderStep && windowWidthIsLessThan('tablet')) {
 		return null;
 	}
 
@@ -191,39 +283,28 @@ function OnboardingHeading({
 			backgroundColor={palette.brand[400]}
 			cssOverrides={[
 				containerNoPaddingStyles,
-				...(onboardingStep === OnboardingSteps.Completed
-					? [containerAbsolute]
-					: []),
+				...(isContentInHeaderStep ? [containerAbsolute] : []),
 			]}
 		>
 			<Columns collapseUntil="tablet">
 				<Column cssOverrides={contentColumnStyles} span={[1, 10, 8]}>
 					<div css={headerSpacerDiv}>
-						<div
-							css={[
-								heroContainer,
-								ONBOARDING_STEP_CONTENT_MAP[onboardingStep].aspectRatio,
-							]}
-						>
-							{ONBOARDING_STEP_CONTENT_MAP[onboardingStep].gridId && (
+						<div css={[heroContainer, stepContent.aspectRatio]}>
+							{stepContent.gridId && (
 								<GridImage
-									gridId={ONBOARDING_STEP_CONTENT_MAP[onboardingStep].gridId}
+									gridId={stepContent.gridId}
 									srcSizes={[2000]}
 									sizes="(max-width: 739px) 140px, 422px"
 									imgType="png"
-									altText={ONBOARDING_STEP_CONTENT_MAP[onboardingStep].altText}
+									altText={stepContent.altText}
 								/>
 							)}
 						</div>
-						{ONBOARDING_STEP_CONTENT_MAP[onboardingStep].heading && (
-							<h1 css={thankYouHeading}>
-								{ONBOARDING_STEP_CONTENT_MAP[onboardingStep].heading}
-							</h1>
+						{stepContent.heading && (
+							<h1 css={thankYouHeading}>{stepContent.heading}</h1>
 						)}
-						{ONBOARDING_STEP_CONTENT_MAP[onboardingStep].subtext && (
-							<p css={thankYouSubtext}>
-								{ONBOARDING_STEP_CONTENT_MAP[onboardingStep].subtext}
-							</p>
+						{stepContent.subtext && (
+							<p css={thankYouSubtext}>{stepContent.subtext}</p>
 						)}
 					</div>
 				</Column>

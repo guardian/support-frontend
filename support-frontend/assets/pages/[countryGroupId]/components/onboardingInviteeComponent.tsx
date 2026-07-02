@@ -1,82 +1,43 @@
-import { css } from '@emotion/react';
-import { storage } from '@guardian/libs';
-import { space } from '@guardian/source/foundations';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { useSearchParams } from 'react-router';
-import ContentBox from 'components/onboarding/contentBox';
-import { OnboardingSteps } from 'components/onboarding/onboardingSteps';
+import OnboardingLayout from 'components/onboarding/layout';
+import {
+	OnboardingInviteeSteps,
+	OnboardingSteps,
+} from 'components/onboarding/onboardingSteps';
 import type {
-	CurrentUserState,
 	HandleStepNavigationFunction,
 	OnboardingMessageEventData,
 } from 'components/onboarding/onboardingTypes';
 import { OnboardingAppsDiscovery } from 'components/onboarding/sections/appsDiscovery';
-import { OnboardingCompleted } from 'components/onboarding/sections/completed';
-import OnboardingSummary, {
-	OnboardingSummarySuccessfulSignIn,
-} from 'components/onboarding/sections/summary';
+import { OnboardingCreateAccount } from 'components/onboarding/sections/createAccount';
+import { OnboardingDigitalPlusDiscovery } from 'components/onboarding/sections/digitalPlusDiscovery';
+import { OnboardingInviteeCompleted } from 'components/onboarding/sections/onboardingInviteeCompleted';
 import useAnalyticsProfile from 'helpers/customHooks/useAnalyticsProfile';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import type { NewsletterSubscription } from 'helpers/identity/newsletters';
 import { getNewslettersSubscriptions } from 'helpers/identity/newsletters';
-import type {
-	ActiveProductKey,
-	ActiveRatePlanKey,
-} from 'helpers/productCatalog';
-import type { Promotion } from 'helpers/productPrice/promotions';
+import type { OnboardingInviteeInvitation } from 'helpers/onboardingInvitee/invitation';
 import * as cookie from 'helpers/storage/cookie';
 import type { CsrfState } from 'helpers/types/csrf';
 import { getUser } from 'helpers/user/user';
-import type { UserType } from 'helpers/user/userType';
-import OnboardingLayout from '../../../components/onboarding/layout';
-import { getThankYouOrder } from '../checkout/helpers/sessionStorage';
 
-const identityFrameStyles = css`
-	overflow: hidden;
-	border-radius: ${space[2]}px;
-`;
-
-export type OnboardingProductKey = Extract<ActiveProductKey, 'SupporterPlus'>;
-
-export interface OnboardingProps {
+interface OnboardingInviteeProps {
 	supportRegionId: SupportRegionId;
 	csrf: CsrfState;
-	payment: {
-		originalAmount: number;
-		contributionAmount?: number;
-		finalAmount: number;
-	};
-	productKey?: OnboardingProductKey;
-	ratePlanKey: ActiveRatePlanKey;
-	promotion?: Promotion;
+	invitation: OnboardingInviteeInvitation;
 	landingPageSettings: LandingPageVariant;
-	identityUserType: UserType;
 }
 
-function OnboardingComponent({
-	supportRegionId,
+function OnboardingInviteeComponent({
+	invitation,
 	csrf,
-	payment,
-	productKey,
-	ratePlanKey,
-	promotion,
 	landingPageSettings,
-	identityUserType,
-}: OnboardingProps) {
-	const order = getThankYouOrder();
-
-	if (!order) {
-		const sessionStorageOrder = storage.session.get('thankYouOrder');
-		return (
-			<div>Unable to read your order {JSON.stringify(sessionStorageOrder)}</div>
-		);
-	}
-
+	supportRegionId,
+}: OnboardingInviteeProps) {
 	const scrollToTopRef = useRef<HTMLDivElement>(null);
 
-	// -------------
-	// Fetch newsletters from Identity API
 	const [userNewslettersSubscriptions, setUserNewslettersSubscriptions] =
 		useState<NewsletterSubscription[] | null>(null);
 
@@ -102,20 +63,14 @@ function OnboardingComponent({
 	} = useAnalyticsProfile();
 	const searchParams = useSearchParams();
 
-	const userNotSignedIn = !isSignedIn && identityUserType === 'current';
-	const guestUser = !isSignedIn && identityUserType === 'new';
-
 	const documentLocation = document.location;
 	const iframeOrigin = `${
 		documentLocation.protocol
 	}//${documentLocation.hostname.replace('support', 'profile')}`;
 
+	// This might need tweaking since we don't have the guestUser URL Param
 	const getIframeTargetUrl = (email: string) => {
-		const iframeTargetUrl = new URL(
-			`${iframeOrigin}${
-				guestUser ? '/iframed/register/email' : '/iframed/signin'
-			}`,
-		);
+		const iframeTargetUrl = new URL(`${iframeOrigin}/iframed/register/email`);
 
 		if (email) {
 			iframeTargetUrl.searchParams.set(
@@ -127,16 +82,10 @@ function OnboardingComponent({
 		return iframeTargetUrl.toString();
 	};
 
-	const [currentStep, setCurrentStep] = useState<OnboardingSteps>();
-	const [showIdentityIframe, setShowIdentityIframe] = useState(
-		userNotSignedIn || guestUser,
-	);
-	const [userState, setUserState] = useState<CurrentUserState>(
-		'existingUserSignedIn',
-	);
+	const [currentStep, setCurrentStep] = useState<OnboardingInviteeSteps>();
+	const [showIdentityIframe, setShowIdentityIframe] = useState(!isSignedIn);
 	const identityIframeRef = useRef<HTMLIFrameElement>(null);
 
-	// Handle URL params and set the current step from navigation
 	const handleStepNavigation: HandleStepNavigationFunction = (targetStep) => {
 		searchParams[1]((prev) => {
 			prev.set('step', targetStep);
@@ -146,25 +95,23 @@ function OnboardingComponent({
 
 	useEffect(() => {
 		if (searchParams[0].has('step')) {
-			const urlStep = searchParams[0].get('step') as OnboardingSteps;
+			const urlStep = searchParams[0].get('step') as OnboardingInviteeSteps;
 			setCurrentStep(urlStep);
 
 			requestAnimationFrame(() => {
 				scrollToTopRef.current?.scrollIntoView({ behavior: 'smooth' });
 			});
 		} else {
-			setCurrentStep(OnboardingSteps.Summary);
+			setCurrentStep(OnboardingInviteeSteps.CreateAccount);
 			searchParams[1]((prev) => {
-				prev.set('step', OnboardingSteps.Summary);
+				prev.set('step', OnboardingInviteeSteps.CreateAccount);
 				return prev;
 			});
 		}
-	}, [searchParams]);
+	}, [searchParams, isSignedIn]);
 
 	const triggerOAuthFlow = () => {
 		try {
-			// Hidden iframe to trigger the OAuth flow. This will set the GU_ACCESS_TOKEN and GU_ID_TOKEN cookies.
-			// Poll for the access token cookie until it is available.
 			const iframe = document.createElement('iframe');
 			iframe.style.display = 'none';
 			iframe.src = '/oauth/authorize';
@@ -198,7 +145,6 @@ function OnboardingComponent({
 		}
 	};
 
-	// Handle iframe message from the identity iframe
 	useEffect(() => {
 		const receiveIframeMessage = (
 			event: MessageEvent<OnboardingMessageEventData>,
@@ -219,7 +165,6 @@ function OnboardingComponent({
 
 			if (data.type === 'userStateChange') {
 				if (['userSignedIn', 'userRegistered'].includes(data.value)) {
-					setUserState(data.value);
 					setShowIdentityIframe(false);
 
 					triggerOAuthFlow();
@@ -247,65 +192,45 @@ function OnboardingComponent({
 
 	return (
 		<OnboardingLayout
-			flow="supporter"
+			flow="invitee"
 			scrollToTopRef={scrollToTopRef}
-			onboardingStep={currentStep ?? OnboardingSteps.Summary}
-			landingPageSettings={landingPageSettings}
-			productKey={productKey}
+			onboardingStep={currentStep ?? OnboardingInviteeSteps.CreateAccount}
 		>
-			{currentStep === OnboardingSteps.Summary && (
-				<>
-					<ContentBox
-						cssOverrides={css`
-							margin-top: ${space[5]}px;
-						`}
-					>
-						{showIdentityIframe ? (
-							<iframe
-								ref={identityIframeRef}
-								src={getIframeTargetUrl(order.email)}
-								width="100%"
-								css={identityFrameStyles}
-							/>
-						) : (
-							<OnboardingSummarySuccessfulSignIn
-								handleStepNavigation={handleStepNavigation}
-								userState={userState}
-								userNewslettersSubscriptions={userNewslettersSubscriptions}
-								csrf={csrf}
-							/>
-						)}
-					</ContentBox>
-					<OnboardingSummary
-						productKey={productKey}
-						landingPageSettings={landingPageSettings}
-						supportRegionId={supportRegionId}
-						csrf={csrf}
-						payment={payment}
-						identityUserType={identityUserType}
-						ratePlanKey={ratePlanKey}
-						promotion={promotion}
-					/>
-				</>
+			{currentStep === OnboardingInviteeSteps.CreateAccount && (
+				<OnboardingCreateAccount
+					iframeRef={identityIframeRef}
+					iframeSrc={getIframeTargetUrl(invitation.email)}
+					showIframe={showIdentityIframe}
+					handleStepNavigation={handleStepNavigation}
+					csrf={csrf}
+					userNewslettersSubscriptions={userNewslettersSubscriptions}
+				/>
 			)}
-			{(currentStep === OnboardingSteps.GuardianApp ||
-				currentStep === OnboardingSteps.FeastApp) && (
+			{currentStep === OnboardingInviteeSteps.GuardianApp && (
 				<OnboardingAppsDiscovery
 					hasMobileAppDownloaded={hasMobileAppDownloaded}
 					hasFeastMobileAppDownloaded={hasFeastMobileAppDownloaded}
-					onboardingStep={currentStep}
+					onboardingStep={OnboardingSteps.GuardianApp}
 					handleStepNavigation={handleStepNavigation}
+					nextStep={OnboardingInviteeSteps.DigitalPlus}
+					backStep={OnboardingInviteeSteps.CreateAccount}
 					supporterRegion={supportRegionId}
 				/>
 			)}
-			{currentStep === OnboardingSteps.Completed && (
-				<OnboardingCompleted
-					productKey={productKey}
+			{currentStep === OnboardingInviteeSteps.DigitalPlus && (
+				<OnboardingDigitalPlusDiscovery
+					handleStepNavigation={handleStepNavigation}
+				/>
+			)}
+			{currentStep === OnboardingInviteeSteps.Completed && (
+				<OnboardingInviteeCompleted
+					invitation={invitation}
 					landingPageSettings={landingPageSettings}
+					supportRegionId={supportRegionId}
 				/>
 			)}
 		</OnboardingLayout>
 	);
 }
 
-export default OnboardingComponent;
+export default OnboardingInviteeComponent;
