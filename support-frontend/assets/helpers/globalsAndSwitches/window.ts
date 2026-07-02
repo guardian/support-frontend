@@ -1,5 +1,5 @@
-import { caStateCodes } from '@modules/internationalisation/country';
 import { isoCurrencySchema } from '@modules/internationalisation/schemas';
+import { caStateCodes } from '@modules/internationalisation/state';
 import {
 	billingPeriodSchema,
 	fulfilmentOptionsSchema,
