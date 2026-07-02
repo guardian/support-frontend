@@ -1,4 +1,4 @@
-import type { AbTestRegister } from '@guardian/ophan-tracker-js/support';
+import type { AbTestRegister } from '@guardian/ophan-tracker-js';
 import type { Participations } from '../../abTests/models';
 import { buildAbTestRegister, buildOphanPayload } from '../trackingOphan';
 

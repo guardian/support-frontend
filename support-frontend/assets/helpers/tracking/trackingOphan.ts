@@ -4,8 +4,8 @@ import type {
 	ComponentEvent,
 	TAction,
 	TComponentType,
-} from '@guardian/ophan-tracker-js/support';
-import { record, viewId } from '@guardian/ophan-tracker-js/support';
+} from '@guardian/ophan-tracker-js';
+import { getViewId, record } from '@guardian/ophan-tracker-js';
 import { testIsActive } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { getLocal, setLocal } from 'helpers/storage/storage';
@@ -90,7 +90,7 @@ const setReferrerDataInLocalStorage = (
 	}
 };
 
-const getPageViewId = (): string => viewId;
+const getPageViewId = (): string => getViewId();
 
 export {
 	trackComponentEvents,
