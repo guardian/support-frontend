@@ -1,17 +1,26 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source/foundations';
+import { from, space } from '@guardian/source/foundations';
 import { Stack } from '@guardian/source/react-components';
 import type { RefObject } from 'react';
+import GridImage from 'components/gridImage/gridImage';
 import type { NewsletterSubscription } from 'helpers/identity/newsletters';
 import type { CsrfState } from 'helpers/types/csrf';
 import ContentBox from '../contentBox';
 import type { HandleStepNavigationFunction } from '../onboardingTypes';
-import { completedStack, descriptions, headings } from './sectionsStyles';
+import { completedStack, descriptions, headings, heroContainer, separator } from './sectionsStyles';
 import { OnboardingSummarySuccessfulSignIn } from './summary';
 
 const identityFrameStyles = css`
 	overflow: hidden;
 	border-radius: ${space[2]}px;
+`;
+
+const heroAspectRatio = css`
+	aspect-ratio: 16 / 9;
+
+	${from.tablet} {
+		aspect-ratio: 20 / 9;
+	}
 `;
 
 interface OnboardingCreateAccountProps {
@@ -53,12 +62,24 @@ export function OnboardingCreateAccount({
 						/>
 					</Stack>
 				) : (
-					<OnboardingSummarySuccessfulSignIn
-						handleStepNavigation={handleStepNavigation}
-						userState={'inviteeUserRegistered'}
-						userNewslettersSubscriptions={userNewslettersSubscriptions}
-						csrf={csrf}
-					/>
+					<>
+						<div css={[heroContainer, heroAspectRatio]}>
+							<GridImage
+								gridId={'onboardingInviteeCreateAccountHero'}
+								srcSizes={[442]}
+								sizes="442px"
+								imgType="png"
+								altText={'Onboarding invitee create account hero'}
+							/>
+						</div>
+						<div css={separator} />
+						<OnboardingSummarySuccessfulSignIn
+							handleStepNavigation={handleStepNavigation}
+							userState={'inviteeUserRegistered'}
+							userNewslettersSubscriptions={userNewslettersSubscriptions}
+							csrf={csrf}
+						/>
+					</>
 				)}
 			</ContentBox>
 		</Stack>

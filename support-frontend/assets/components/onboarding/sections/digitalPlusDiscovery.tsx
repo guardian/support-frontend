@@ -65,7 +65,11 @@ const benefitCardHeading = css`
 `;
 
 const benefitCardImage = css`
-	aspect-ratio: 16 / 9;
+	aspect-ratio: 20 / 9;
+
+	${from.tablet} {
+		aspect-ratio: 25 / 9;
+	}
 `;
 
 const archivesLink = css`
@@ -87,7 +91,9 @@ export function OnboardingDigitalPlusDiscovery({
 				margin-top: ${space[5]}px;
 			`}
 		>
-			<ContentBox>
+			<ContentBox cssOverrides={css`
+				margin-bottom: ${space[10]}px;
+			`}>
 				<Stack space={2}>
 					<h1 css={headings}>More of the Guardian with Digital plus</h1>
 					<p css={descriptions}>
@@ -105,7 +111,7 @@ export function OnboardingDigitalPlusDiscovery({
 					>
 						<div css={[heroContainer, benefitCardImage, feastCard]}>
 							<GridImage
-								gridId="onboardingFeastAppHeroMobile"
+								gridId="onboardingFeastShortFormat"
 								srcSizes={[1000]}
 								sizes="100vw"
 								imgType="png"

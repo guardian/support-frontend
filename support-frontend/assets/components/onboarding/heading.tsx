@@ -186,7 +186,11 @@ function OnboardingHeading({
 		() => ({
 			[OnboardingInviteeSteps.CreateAccount]: {
 				aspectRatio: css`
-					aspect-ratio: 25 / 9;
+					aspect-ratio: 16 / 9;
+
+					${from.tablet} {
+						aspect-ratio: 20 / 9;
+					}
 				`,
 			},
 			[OnboardingInviteeSteps.GuardianApp]: {
