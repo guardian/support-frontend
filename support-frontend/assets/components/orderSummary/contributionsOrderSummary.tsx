@@ -334,7 +334,7 @@ export function ContributionsOrderSummary({
 
 			<hr css={hrCss} />
 			{/* Ignore tax calculation for weekly pricing, we'll revisit this if
-			we want to show weekly prices for tax exclusive rate plans in Candad
+			we want to show weekly prices for tax exclusive rate plans in Canada
 			*/}
 			{weeklyPrice ? (
 				<div css={weeklyPricingSummary}>
