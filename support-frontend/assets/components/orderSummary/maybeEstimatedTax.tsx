@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, neutral, space, textSans12 } from '@guardian/source/foundations';
+import { neutral, space, textSans12 } from '@guardian/source/foundations';
 import type { CurrencyInfo } from '@modules/internationalisation/currency';
 import { simpleFormatTaxAmount } from 'helpers/forms/checkouts';
 import type { TaxRateResult } from 'helpers/salesTax/getEstimatedSalesTaxRate';
@@ -15,21 +15,10 @@ const summaryRow = css`
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
-	padding: 4px 0 8px 0;
-`;
-
-const rowSpacing = css`
-	&:not(:last-child) {
-		margin-bottom: ${space[5]}px;
-
-		${from.desktop} {
-			margin-bottom: ${space[6]}px;
-		}
-	}
 `;
 
 const tsAndCsContainer = css`
-	padding: ${space[3]}px 0 ${space[6]}px 0;
+	padding: ${space[3]}px 0 0 0;
 `;
 
 const tsAndCsText = css`
@@ -55,7 +44,7 @@ export function MaybeEstimatedTax({ currency, amount, taxRateResult }: Props) {
 		case 'not_enough_information':
 			return (
 				<>
-					<div css={[summaryRow, rowSpacing]}>
+					<div css={summaryRow}>
 						<p>Estimated tax</p>
 						<p>Calculated with province</p>
 					</div>
@@ -65,7 +54,7 @@ export function MaybeEstimatedTax({ currency, amount, taxRateResult }: Props) {
 		case 'tax_exclusive':
 			return (
 				<>
-					<div css={[summaryRow, rowSpacing]}>
+					<div css={summaryRow}>
 						<p>Estimated tax</p>
 						<p>{simpleFormatTaxAmount(currency, amount, taxRateResult.rate)}</p>
 					</div>
