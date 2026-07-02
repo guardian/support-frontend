@@ -111,24 +111,26 @@ export function PriceBreakdown({
 
 	return (
 		<>
-			<div css={[summaryRow, rowSpacing, boldText]}>
-				<p>{priceLabel}</p>
-				<PriceSummary
-					fullPrice={fullPrice}
-					period={period}
-					discountPrice={discountPrice}
-					isWeeklyGift={isWeeklyGift}
+			<div css={[rowSpacing]}>
+				<div css={[summaryRow, boldText]}>
+					<p>{priceLabel}</p>
+					<PriceSummary
+						fullPrice={fullPrice}
+						period={period}
+						discountPrice={discountPrice}
+						isWeeklyGift={isWeeklyGift}
+					/>
+				</div>
+				<MaybeEstimatedTax
+					currency={currency}
+					// The amount to use for tax calculations. This is the discounted price
+					// when a promotion applies, otherwise the full amount. This doesn't handle
+					// student discounts currently because they're never tax exclusive, but if
+					// this changes we'll need to revisit this amount prop.
+					amount={amount}
+					taxRateResult={taxRateResult}
 				/>
 			</div>
-			<MaybeEstimatedTax
-				currency={currency}
-				// The amount to use for tax calculations. This is the discounted price
-				// when a promotion applies, otherwise the full amount. This doesn't handle
-				// student discounts currently because they're never tax exclusive, but if
-				// this changes we'll need to revisit this amount prop.
-				amount={amount}
-				taxRateResult={taxRateResult}
-			/>
 		</>
 	);
 }
