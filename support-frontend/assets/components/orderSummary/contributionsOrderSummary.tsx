@@ -76,14 +76,6 @@ const headingRow = css`
 	}
 `;
 
-const totalRow = (hasTsAncCs: boolean) => css`
-	${!hasTsAncCs ? `margin-bottom: ${space[3]}px;` : 'margin-bottom: 0;'}
-
-	${from.desktop} {
-		margin-bottom: 0;
-	}
-`;
-
 const headingCss = css`
 	${headlineBold24}
 	${from.tablet} {
@@ -203,7 +195,7 @@ export type ContributionsOrderSummaryProps = {
 	paymentFrequency?: string;
 	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
-	tsAndCs?: React.ReactNode;
+	tsAndCs: React.ReactNode;
 	studentDiscount?: StudentDiscount;
 	supportRegionId: SupportRegionId;
 	nudgeSettings?: CheckoutNudgeSettings;
@@ -363,25 +355,23 @@ export function ContributionsOrderSummary({
 				</div>
 			) : (
 				<>
-					<div css={[totalRow(!!tsAndCs)]}>
-						<div css={[summaryRow, rowSpacing, boldText]}>
-							<p>Total</p>
-							<PriceSummary
-								fullPrice={fullPrice}
-								period={period}
-								discountPrice={discountPrice}
-								isWeeklyGift={isWeeklyGift}
-							/>
-						</div>
-						<MaybeEstimatedTax
-							currency={currency}
-							// This doesn't handle student discounts currently
-							// because they're never tax exclusive, but if this
-							// changes we'll need to revisit this amount prop.
-							amount={promotion?.discountedPrice ?? amount}
-							taxRateResult={taxRateResult}
+					<div css={[summaryRow, rowSpacing, boldText]}>
+						<p>Total</p>
+						<PriceSummary
+							fullPrice={fullPrice}
+							period={period}
+							discountPrice={discountPrice}
+							isWeeklyGift={isWeeklyGift}
 						/>
 					</div>
+					<MaybeEstimatedTax
+						currency={currency}
+						// This doesn't handle student discounts currently
+						// because they're never tax exclusive, but if this
+						// changes we'll need to revisit this amount prop.
+						amount={promotion?.discountedPrice ?? amount}
+						taxRateResult={taxRateResult}
+					/>
 				</>
 			)}
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
