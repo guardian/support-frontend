@@ -28,5 +28,5 @@ export const getPaymentMethods = (
 			? PayPalCompletePayments
 			: PayPal;
 
-	return [maybeDirectDebit, Stripe, payPalDependingOnABTest];
+	return [Stripe, maybeDirectDebit, payPalDependingOnABTest];
 };
