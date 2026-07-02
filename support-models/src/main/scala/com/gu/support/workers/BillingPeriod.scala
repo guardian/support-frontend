@@ -9,7 +9,9 @@ sealed trait BillingPeriod {
 
 object BillingPeriod {
   def fromString(code: String): Option[BillingPeriod] = {
-    List(Monthly, Annual, Quarterly).find(_.getClass.getSimpleName == s"$code$$")
+    List(Monthly, MonthlyTaxExclusive, Annual, AnnualTaxExclusive, Quarterly).find(
+      _.getClass.getSimpleName == s"$code$$",
+    )
   }
 
   implicit val decodePeriod: Decoder[BillingPeriod] =
@@ -27,6 +29,11 @@ case object Monthly extends BillingPeriod {
   override val monthsInPeriod = 1
 }
 
+case object MonthlyTaxExclusive extends BillingPeriod {
+  override val noun = "month"
+  override val monthsInPeriod = 1
+}
+
 case object Quarterly extends BillingPeriod {
   override val noun = "quarter"
   override val monthsInPeriod = 3
@@ -35,4 +42,9 @@ case object Quarterly extends BillingPeriod {
 case object Annual extends BillingPeriod {
   override val noun = "year"
   override val monthsInPeriod = 12
+}
+
+case object AnnualTaxExclusive extends BillingPeriod {
+  override val noun = "month"
+  override val monthsInPeriod = 1
 }
