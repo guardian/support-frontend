@@ -17,7 +17,6 @@ import {
 	type ActiveRatePlanKey,
 	getProductDescription,
 } from 'helpers/productCatalog';
-import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { TaxRateResult } from 'helpers/salesTax/getEstimatedSalesTaxRate';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -195,10 +194,7 @@ export default function CheckoutSummary({
 					ratePlanKey={ratePlanKey}
 					ratePlanLabel={ratePlanDetail.displayName ?? ratePlanDetail.label}
 					taxRateResult={taxRateResult}
-					paymentFrequency={getBillingPeriodNoun(
-						ratePlanDetail.billingPeriod,
-						isGuardianWeeklyGiftProduct(productKey, ratePlanKey),
-					)}
+					billingPeriod={ratePlanDetail.billingPeriod}
 					amount={originalAmount}
 					promotion={promotion}
 					currency={currency}
