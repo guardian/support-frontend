@@ -10,8 +10,7 @@ type Props = {
 	currency: CurrencyInfo;
 };
 
-// TODO: these are duplicated from ContributionsOrderSummary
-const summaryRow = css`
+const rowContainer = css`
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
@@ -44,7 +43,7 @@ export function MaybeEstimatedTax({ currency, amount, taxRateResult }: Props) {
 		case 'not_enough_information':
 			return (
 				<>
-					<div css={summaryRow}>
+					<div css={rowContainer}>
 						<p>Estimated tax</p>
 						<p>Calculated with province</p>
 					</div>
@@ -54,7 +53,7 @@ export function MaybeEstimatedTax({ currency, amount, taxRateResult }: Props) {
 		case 'tax_exclusive':
 			return (
 				<>
-					<div css={summaryRow}>
+					<div css={rowContainer}>
 						<p>Estimated tax</p>
 						<p>{simpleFormatTaxAmount(currency, amount, taxRateResult.rate)}</p>
 					</div>
