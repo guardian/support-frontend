@@ -241,7 +241,8 @@ export const createDigitalOnlyContactRecordRequest = (
 		Email: user.primaryEmailAddress,
 		FirstName: user.firstName,
 		LastName: user.lastName,
-		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
+		OtherCountry:
+			getCountryNameByIsoCode(user.billingAddress.country) ?? undefined,
 		...(user.billingAddress.state
 			? { OtherState: user.billingAddress.state }
 			: {}),
@@ -308,7 +309,8 @@ export const createBillingAddressFields = (user: User) => {
 		OtherCity: user.billingAddress.city,
 		OtherState: user.billingAddress.state,
 		OtherPostalCode: user.billingAddress.postCode,
-		OtherCountry: getCountryNameByIsoCode(user.billingAddress.country),
+		OtherCountry:
+			getCountryNameByIsoCode(user.billingAddress.country) ?? undefined,
 	};
 };
 
