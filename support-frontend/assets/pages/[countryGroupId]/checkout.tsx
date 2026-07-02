@@ -25,6 +25,7 @@ import {
 } from 'helpers/productCatalog';
 import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getPromotion } from 'helpers/productPrice/promotions';
+import { getEstimatedSalesTaxRate } from 'helpers/salesTax/getEstimatedSalesTaxRate';
 import * as cookie from 'helpers/storage/cookie';
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
@@ -39,6 +40,7 @@ import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
 import { getFulfilmentOptionFromProductKey } from '../../helpers/productCatalogToFulfilmentOption';
 import { getProductOptionFromProductAndRatePlan } from '../../helpers/productCatalogToProductOption';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
+import { useStateWithCheckoutSession } from './checkout/hooks/useStateWithCheckoutSession';
 import { useStripeHostedCheckoutSession } from './checkout/hooks/useStripeHostedCheckoutSession';
 import CheckoutForm from './components/checkoutForm';
 import CheckoutSummary from './components/checkoutSummary';
@@ -272,6 +274,16 @@ export function Checkout({
 	);
 
 	/**
+	 * BillingState selector initialised to undefined to hide
+	 * billingStateError message. formOnSubmit checks and converts to
+	 * empty string to display billingStateError message.
+	 */
+	const [billingState, setBillingState] = useStateWithCheckoutSession<string>(
+		checkoutSession?.formFields.addressFields.billingAddress.state,
+		'',
+	);
+
+	/**
 	 * Passed down because minimum product prices are unavailable in the paymentTsAndCs story
 	 * and shared across summary and form checkout sub-components
 	 */
@@ -310,6 +322,17 @@ export function Checkout({
 		backButtonPathOverrideParam,
 	);
 
+	const taxRateResult = getEstimatedSalesTaxRate(
+		appConfig.productCatalog,
+		appConfig.taxRates,
+		productKey,
+		ratePlanKey,
+		billingState,
+		supportRegionId,
+	);
+
+	console.log({ taxRateResult });
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Elements stripe={stripePromise} options={elementsOptions}>
@@ -331,6 +354,7 @@ export function Checkout({
 						nudgeSettings={nudgeSettings}
 						backButtonOrigin={backButtonOrigin}
 						backButtonPathOverride={backButtonPathOverride}
+						taxRateResult={taxRateResult}
 					/>
 
 					<CheckoutForm
@@ -355,6 +379,8 @@ export function Checkout({
 						thresholdAmount={thresholdAmount}
 						studentDiscount={studentDiscount}
 						paypalClientId={paypalClientId}
+						billingState={billingState}
+						setBillingState={setBillingState}
 					/>
 				</PageLayout>
 			</Elements>

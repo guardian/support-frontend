@@ -19,12 +19,26 @@ function round(amount: number) {
 	return Math.round(amount * 1e2) / 1e2;
 }
 
-const simpleFormatAmount = (currency: CurrencyInfo, amount: number): string => {
+function roundDown(amount: number) {
+	/**
+	 * This rounds a `number` down to the second decimal.
+	 *
+	 * `Number.toFixed` returns a string which is not useful for calculations
+	 * and would need unnecessary type conversions
+	 */
+	return Math.floor(amount * 1e2) / 1e2;
+}
+
+const simpleFormatAmount = (
+	currency: CurrencyInfo,
+	amount: number,
+	roundFn: (value: number) => number = round,
+): string => {
 	/**
 	 * We need to round the amount before checking if it is an Int for the edge case of something like 12.0001
 	 * which would not be an int, but then format as 12.00, whereas we'd like 12.
 	 */
-	const roundedAmount = round(amount);
+	const roundedAmount = roundFn(amount);
 	const isInt = roundedAmount % 1 === 0;
 	/** only add the percentile amount if it's not a round integer */
 	const amountText = isInt
@@ -32,6 +46,18 @@ const simpleFormatAmount = (currency: CurrencyInfo, amount: number): string => {
 		: roundedAmount.toFixed(2);
 
 	return `${currency.glyph}${amountText}`.trim();
+};
+
+const simpleFormatTaxAmount = (
+	currency: CurrencyInfo,
+	amount: number,
+	taxRate: number, // A decimal, e.g. 0.15
+): string => {
+	// Multiply to avoid floating point precision issues. Should we be using a
+	// library for this?
+	const taxAmount = (amount * (taxRate * 100000)) / 100000;
+
+	return simpleFormatAmount(currency, taxAmount, roundDown);
 };
 
 const formatAmount = (
@@ -49,4 +75,4 @@ const formatAmount = (
 };
 
 // ----- Exports ----- //
-export { simpleFormatAmount, formatAmount };
+export { simpleFormatAmount, simpleFormatTaxAmount, formatAmount };

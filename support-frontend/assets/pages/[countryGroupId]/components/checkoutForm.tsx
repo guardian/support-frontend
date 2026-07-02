@@ -148,6 +148,8 @@ type CheckoutFormProps = {
 	checkoutSession?: CheckoutSession;
 	studentDiscount?: StudentDiscount;
 	paypalClientId: string;
+	billingState: string;
+	setBillingState: (value: string) => void;
 };
 
 export default function CheckoutForm({
@@ -171,6 +173,8 @@ export default function CheckoutForm({
 	checkoutSession,
 	studentDiscount,
 	paypalClientId,
+	billingState,
+	setBillingState,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
@@ -458,16 +462,6 @@ export default function CheckoutForm({
 			checkoutSession?.formFields.addressFields.billingAddress.postCode,
 			'',
 		);
-
-	/**
-	 * BillingState selector initialised to undefined to hide
-	 * billingStateError message. formOnSubmit checks and converts to
-	 * empty string to display billingStateError message.
-	 */
-	const [billingState, setBillingState] = useStateWithCheckoutSession<string>(
-		checkoutSession?.formFields.addressFields.billingAddress.state,
-		'',
-	);
 
 	// billingCountry selector used to determine available payment methods
 	const [billingCountry, setBillingCountry] =

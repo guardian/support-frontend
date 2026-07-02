@@ -1,4 +1,5 @@
 import type { CaState } from '@modules/internationalisation/country';
+import { caStateCodes } from '@modules/internationalisation/country';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type {
 	WindowProductCatalog,
@@ -9,7 +10,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 
-type TaxRateResult =
+export type TaxRateResult =
 	| {
 			type: 'tax_exclusive';
 			rate: number;
@@ -21,12 +22,16 @@ type TaxRateResult =
 			type: 'tax_inclusive';
 	  };
 
+function isCaState(value: string): value is CaState {
+	return caStateCodes.includes(value as CaState);
+}
+
 export function getEstimatedSalesTaxRate(
 	productCatalog: WindowProductCatalog,
 	taxRates: WindowTaxRates,
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	maybeProvinceCode: CaState | undefined,
+	maybeProvinceCode: string | undefined,
 	supportRegionId: SupportRegionId,
 ): TaxRateResult {
 	if (supportRegionId !== SupportRegionId.CA) {
@@ -52,6 +57,12 @@ export function getEstimatedSalesTaxRate(
 		return {
 			type: 'not_enough_information',
 		};
+	}
+
+	if (!isCaState(maybeProvinceCode)) {
+		throw new Error(
+			`Province code was an unexpected value: ${maybeProvinceCode}`,
+		);
 	}
 
 	if (!taxRates) {

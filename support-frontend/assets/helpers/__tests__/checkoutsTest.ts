@@ -1,5 +1,5 @@
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
-import { simpleFormatAmount } from '../forms/checkouts';
+import { simpleFormatAmount, simpleFormatTaxAmount } from '../forms/checkouts';
 
 describe('simpleFormatAmount', () => {
 	it.each([
@@ -10,4 +10,19 @@ describe('simpleFormatAmount', () => {
 	])(`%s/%i should format as %s`, (currency, amount, expected) => {
 		expect(simpleFormatAmount(currency, amount)).toBe(expected);
 	});
+});
+
+describe('simpleFormatTaxAmount', () => {
+	it.each([
+		[getCurrencyInfo('CAD'), 15, 0.05, '$0.75'],
+		[getCurrencyInfo('CAD'), 30, 0.12, '$3.60'],
+		[getCurrencyInfo('CAD'), 150, 0.15, '$22.50'],
+		[getCurrencyInfo('CAD'), 300, 0.14975, '$44.92'],
+		[getCurrencyInfo('CAD'), 15, 0.14975, '$2.24'],
+	])(
+		`%s / Amount: %i / Tax Rate: %d should format as %s`,
+		(currency, amount, taxRate, expected) => {
+			expect(simpleFormatTaxAmount(currency, amount, taxRate)).toBe(expected);
+		},
+	);
 });
