@@ -105,6 +105,7 @@ export function PriceBreakdown({
 		);
 	}
 
+	// When the tax is shown separately the label is e.g. "Monthly price"
 	const priceLabel =
 		taxRateResult.type === 'tax_inclusive' ? 'Total' : `${billingPeriod} price`;
 
