@@ -15,6 +15,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
       "GuAllowPolicy",
       "GuAllowPolicy",
       "GuAllowPolicy",
+      "GuAllowPolicy",
       "GuVpcParameter",
       "GuSubnetListParameter",
       "GuSubnetListParameter",
@@ -379,6 +380,27 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           "Version": "2012-10-17",
         },
         "PolicyName": "describe-ec2-policy",
+        "Roles": [
+          {
+            "Ref": "InstanceRoleFrontend9A970131",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "DynamoBanditDataD5D7D3F6": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "dynamodb:Query",
+              "Effect": "Allow",
+              "Resource": "arn:aws:dynamodb:*:*:table/support-bandit-PROD",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "DynamoBanditDataD5D7D3F6",
         "Roles": [
           {
             "Ref": "InstanceRoleFrontend9A970131",

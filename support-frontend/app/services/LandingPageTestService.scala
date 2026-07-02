@@ -9,6 +9,7 @@ import scala.concurrent.ExecutionContext
 
 trait LandingPageTestService {
   def getTests(): List[LandingPageTest]
+  def channelName: String
 }
 
 /** A service for polling DynamoDB for landing page tests config
@@ -23,6 +24,8 @@ class LandingPageTestServiceImpl(stage: Stage)(implicit ec: ExecutionContext, sy
       ),
     )
     with LandingPageTestService {
+
+  override val channelName: String = config.channelName
 
   override protected def postProcess(tests: List[LandingPageTest]): List[LandingPageTest] =
     tests.sortBy(_.priority)

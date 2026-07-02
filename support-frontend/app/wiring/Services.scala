@@ -96,6 +96,8 @@ trait Services {
 
   lazy val landingPageTestService = new LandingPageTestServiceImpl(appConfig.stage)
 
+  lazy val banditDataService = new BanditDataService(appConfig.stage, landingPageTestService)
+
   lazy val checkoutNudgeTestService = new CheckoutNudgeTestServiceImpl(appConfig.stage)
 
   lazy val oneTimeCheckoutTestService = new OneTimeCheckoutTestServiceImpl(appConfig.stage)
@@ -110,6 +112,7 @@ trait Services {
         checkoutNudgeTestService,
         oneTimeCheckoutTestService,
         studentLandingPageTestService,
+        banditDataService,
       )
       .valueOr(throw _)
 
