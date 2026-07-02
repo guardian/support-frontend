@@ -237,7 +237,6 @@ const processSubscription = async ({
 		createSubscriptionResult.status === 'success' ||
 		createSubscriptionResult.status === 'pending'
 	) {
-		const { billingAddress } = paymentRequest;
 		return buildThankYouPageUrl(
 			productKey,
 			ratePlanKey,
@@ -248,7 +247,6 @@ const processSubscription = async ({
 			paymentMethod,
 			createSubscriptionResult.status,
 			supportRegionId,
-			billingAddress,
 			accountNumber,
 			weeklyGiftDeliveryDate,
 		);
@@ -276,19 +274,16 @@ const buildThankYouPageUrl = (
 	paymentMethod: PaymentMethod,
 	status: 'success' | 'pending',
 	supportRegionId: SupportRegionId,
-	billingAddress?: RegularPaymentRequest['billingAddress'],
 	accountNumber?: string,
 	weeklyGiftDeliveryDate?: Date,
 ) => {
 	const order = {
 		firstName: personalData.firstName,
 		email: personalData.email,
-		supportRegionId,
 		accountNumber,
 		paymentMethod,
 		status,
 		deliveryDate: weeklyGiftDeliveryDate,
-		billingAddress,
 	};
 	setThankYouOrder(order);
 	const thankYouUrlSearchParams = new URLSearchParams();
