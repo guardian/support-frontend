@@ -7,7 +7,13 @@ import type { NewsletterSubscription } from 'helpers/identity/newsletters';
 import type { CsrfState } from 'helpers/types/csrf';
 import ContentBox from '../contentBox';
 import type { HandleStepNavigationFunction } from '../onboardingTypes';
-import { completedStack, descriptions, headings, heroContainer, separator } from './sectionsStyles';
+import {
+	completedStack,
+	descriptions,
+	headings,
+	heroContainer,
+	separator,
+} from './sectionsStyles';
 import { OnboardingSummarySuccessfulSignIn } from './summary';
 
 const identityFrameStyles = css`

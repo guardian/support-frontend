@@ -1,11 +1,15 @@
 import type {
+	OnboardingDeclineSteps,
 	OnboardingInviteeSteps,
 	OnboardingSteps,
 } from './onboardingSteps';
 
-export type OnboardingFlow = 'supporter' | 'invitee';
+export type OnboardingFlow = 'supporter' | 'invitee' | 'decline';
 
-export type OnboardingFlowStep = OnboardingSteps | OnboardingInviteeSteps;
+export type OnboardingFlowStep =
+	| OnboardingSteps
+	| OnboardingInviteeSteps
+	| OnboardingDeclineSteps;
 
 type UserStateChange = 'userSignedIn' | 'userRegistered';
 

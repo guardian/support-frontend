@@ -91,9 +91,11 @@ export function OnboardingDigitalPlusDiscovery({
 				margin-top: ${space[5]}px;
 			`}
 		>
-			<ContentBox cssOverrides={css`
-				margin-bottom: ${space[10]}px;
-			`}>
+			<ContentBox
+				cssOverrides={css`
+					margin-bottom: ${space[10]}px;
+				`}
+			>
 				<Stack space={2}>
 					<h1 css={headings}>More of the Guardian with Digital plus</h1>
 					<p css={descriptions}>

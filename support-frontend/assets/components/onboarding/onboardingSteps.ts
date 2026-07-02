@@ -11,3 +11,9 @@ export enum OnboardingInviteeSteps {
 	DigitalPlus = 'digital-plus',
 	Completed = 'completed',
 }
+
+export enum OnboardingDeclineSteps {
+	Decline = 'decline',
+	Declined = 'declined',
+	Save = 'save',
+}

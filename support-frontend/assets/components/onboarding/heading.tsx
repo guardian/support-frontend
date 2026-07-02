@@ -18,7 +18,11 @@ import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageS
 import { getThankYouOrder } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
 import type { OnboardingProductKey } from 'pages/[countryGroupId]/components/onboardingComponent';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
-import { OnboardingInviteeSteps, OnboardingSteps } from './onboardingSteps';
+import {
+	OnboardingDeclineSteps,
+	OnboardingInviteeSteps,
+	OnboardingSteps,
+} from './onboardingSteps';
 import type { OnboardingFlow, OnboardingFlowStep } from './onboardingTypes';
 import { heroContainer } from './sections/sectionsStyles';
 
@@ -112,6 +116,8 @@ interface StepContent {
 	gridId?: string;
 	altText?: string;
 	aspectRatio: SerializedStyles;
+	/** Renders the hero inside the white card, with the blue bar behind it. */
+	contentInHeader?: boolean;
 }
 
 interface OnboardingHeadingProps {
@@ -176,6 +182,7 @@ function OnboardingHeading({
 				aspectRatio: css`
 					aspect-ratio: 3 / 2;
 				`,
+				contentInHeader: true,
 			},
 		};
 	}, [order, windowWidthIsGreaterThan, productSettings?.title]);
@@ -192,6 +199,7 @@ function OnboardingHeading({
 						aspect-ratio: 20 / 9;
 					}
 				`,
+				contentInHeader: true,
 			},
 			[OnboardingInviteeSteps.GuardianApp]: {
 				gridId: windowWidthIsGreaterThan('tablet')
@@ -219,14 +227,49 @@ function OnboardingHeading({
 		[windowWidthIsGreaterThan],
 	);
 
-	const stepContent =
-		flow === 'supporter'
-			? supporterStepContentMap[onboardingStep as OnboardingSteps]
-			: inviteeStepContentMap[onboardingStep as OnboardingInviteeSteps];
+	const declineStepContentMap = useMemo<
+		Record<OnboardingDeclineSteps, StepContent>
+	>(() => {
+		const declineAspectRatio = css`
+			aspect-ratio: 16 / 9;
 
-	const isContentInHeaderStep =
-		onboardingStep === OnboardingSteps.Completed ||
-		onboardingStep === OnboardingInviteeSteps.CreateAccount;
+			${from.tablet} {
+				aspect-ratio: 20 / 9;
+			}
+		`;
+
+		return {
+			[OnboardingDeclineSteps.Decline]: {
+				aspectRatio: declineAspectRatio,
+				contentInHeader: true,
+			},
+			[OnboardingDeclineSteps.Declined]: {
+				aspectRatio: declineAspectRatio,
+				contentInHeader: true,
+			},
+			[OnboardingDeclineSteps.Save]: {
+				aspectRatio: declineAspectRatio,
+				contentInHeader: true,
+			},
+		};
+	}, []);
+
+	const stepContentByFlow: Record<
+		OnboardingFlow,
+		Partial<Record<string, StepContent>>
+	> = {
+		supporter: supporterStepContentMap,
+		invitee: inviteeStepContentMap,
+		decline: declineStepContentMap,
+	};
+
+	const stepContent = stepContentByFlow[flow][onboardingStep];
+
+	if (!stepContent) {
+		return null;
+	}
+
+	const isContentInHeaderStep = stepContent.contentInHeader ?? false;
 
 	if (isContentInHeaderStep && windowWidthIsLessThan('tablet')) {
 		return null;
