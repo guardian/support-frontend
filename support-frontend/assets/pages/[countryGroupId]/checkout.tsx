@@ -379,6 +379,7 @@ export function Checkout({
 						paypalClientId={paypalClientId}
 						billingState={billingState}
 						setBillingState={setBillingState}
+						taxRateResult={taxRateResult}
 					/>
 				</PageLayout>
 			</Elements>

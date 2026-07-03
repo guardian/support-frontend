@@ -49,6 +49,7 @@ import {
 } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import type { TaxRateResult } from 'helpers/salesTax/getEstimatedSalesTaxRate';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import type { CsrfState } from 'helpers/types/csrf';
@@ -150,6 +151,7 @@ type CheckoutFormProps = {
 	paypalClientId: string;
 	billingState: string;
 	setBillingState: (value: string) => void;
+	taxRateResult: TaxRateResult;
 };
 
 export default function CheckoutForm({
@@ -175,6 +177,7 @@ export default function CheckoutForm({
 	paypalClientId,
 	billingState,
 	setBillingState,
+	taxRateResult,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
@@ -673,13 +676,19 @@ export default function CheckoutForm({
 		? `for${isWeeklyGift ? '' : ' a'}`
 		: 'per';
 
-	const buttonText = `Pay ${simpleFormatAmount(
-		currency,
-		finalAmount,
-	)} ${billingPreposition} ${getBillingPeriodNoun(
-		billingPeriod,
-		isWeeklyGift,
-	)}`;
+	// When we can't display a tax-inclusive price we don't want the button to
+	// imply an exact amount, so we fall back to a generic "Pay now".
+	const buttonText =
+		taxRateResult.type === 'tax_exclusive' ||
+		taxRateResult.type === 'not_enough_information'
+			? 'Pay now'
+			: `Pay ${simpleFormatAmount(
+					currency,
+					finalAmount,
+			  )} ${billingPreposition} ${getBillingPeriodNoun(
+					billingPeriod,
+					isWeeklyGift,
+			  )}`;
 
 	const useExpressPostcodeLookup =
 		abParticipations.postCodeLookupExpress === 'variant';
