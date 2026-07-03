@@ -67,7 +67,7 @@ export const getPromotionFromProductPrices = (
 	 * These come from the productPrices object for the particular product on window.guardian.
 	 */
 
-	// exclude one year student promotion as it's mapped to the annual billing period and we don't to apply regualr annual promotions to it
+	// exclude one year student promotion as it's mapped to the annual billing period and we don't to apply regular annual promotions to it
 	if (productKey === 'SupporterPlus' && ratePlanKey === 'OneYearStudent') {
 		return undefined;
 	}
