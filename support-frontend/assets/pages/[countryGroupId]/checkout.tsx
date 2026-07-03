@@ -55,7 +55,7 @@ type Props = {
 
 const countryId: IsoCountry = Country.detect();
 
-const getPromotionFromProductPrices = (
+export const getPromotionFromProductPrices = (
 	appConfig: AppConfig,
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
