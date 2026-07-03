@@ -43,20 +43,20 @@ describe('isWithinSchedule', () => {
 	});
 
 	it('returns true when current date is within start and end range', () => {
-		expect(isWithinSchedule({ start: '2026-06-01T00:00', end: '2026-06-30T00:00' })).toBe(
-			true,
-		);
+		expect(
+			isWithinSchedule({ start: '2026-06-01T00:00', end: '2026-06-30T00:00' }),
+		).toBe(true);
 	});
 
 	it('returns false when current date is before the range', () => {
-		expect(isWithinSchedule({ start: '2026-07-01T00:00', end: '2026-07-31T00:00' })).toBe(
-			false,
-		);
+		expect(
+			isWithinSchedule({ start: '2026-07-01T00:00', end: '2026-07-31T00:00' }),
+		).toBe(false);
 	});
 
 	it('returns false when current date is after the range', () => {
-		expect(isWithinSchedule({ start: '2026-05-01T00:00', end: '2026-06-01T00:00' })).toBe(
-			false,
-		);
+		expect(
+			isWithinSchedule({ start: '2026-05-01T00:00', end: '2026-06-01T00:00' }),
+		).toBe(false);
 	});
 });
