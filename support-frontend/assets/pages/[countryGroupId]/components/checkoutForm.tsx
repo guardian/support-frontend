@@ -23,6 +23,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import { checkAccount } from 'components/directDebit/helpers/ajax';
+import { MaybeEstimatedTaxSummary } from 'components/orderSummary/maybeEstimatedTaxSummary';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
@@ -1154,6 +1155,11 @@ export default function CheckoutForm({
 							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}
+						/>
+						<MaybeEstimatedTaxSummary
+							amount={finalAmount}
+							taxRateResult={taxRateResult}
+							currency={currency}
 						/>
 						<div
 							css={css`

@@ -7,6 +7,7 @@ import type { TaxRateResult } from 'helpers/salesTax/getEstimatedSalesTaxRate';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import { MaybeEstimatedTax } from './maybeEstimatedTax';
 import { PriceSummary } from './priceSummary';
+import { TaxTsAndCs } from './taxTsAndCs';
 
 const summaryRow = css`
 	display: flex;
@@ -129,7 +130,9 @@ export function PriceBreakdown({
 					// this changes we'll need to revisit this amount prop.
 					amount={amount}
 					taxRateResult={taxRateResult}
-				/>
+				>
+					<TaxTsAndCs />
+				</MaybeEstimatedTax>
 			</div>
 		</>
 	);
