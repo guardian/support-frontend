@@ -10,6 +10,8 @@ import {
 	Sixday,
 	SixdayPlus,
 	Sunday,
+	TaxExclusive,
+	TaxInclusive,
 	Weekend,
 	WeekendPlus,
 } from '@modules/product/productOptions';
@@ -49,17 +51,26 @@ const getPaperProductOptions = (
 		`Paper product option not defined for ratePlan ${ratePlanKey}`,
 	);
 };
+const getTaxRelatedProductOption = (ratePlanKey: ActiveRatePlanKey) => {
+	switch (ratePlanKey) {
+		case 'MonthlyTaxExclusive':
+		case 'AnnualTaxExclusive':
+			return TaxExclusive;
+	}
+	return TaxInclusive;
+};
 export const getProductOptionFromProductAndRatePlan = (
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 ): ProductOptions => {
 	switch (productKey) {
-		case 'SupporterPlus':
 		case 'GuardianAdLite':
 		case 'Contribution':
 		case 'OneTimeContribution':
-		case 'DigitalSubscription':
 			return 'NoProductOptions';
+		case 'SupporterPlus':
+		case 'DigitalSubscription':
+			return getTaxRelatedProductOption(ratePlanKey);
 		case 'GuardianWeeklyRestOfWorld':
 		case 'GuardianWeeklyDomestic':
 			return isGuardianWeeklyDigitalProduct(productKey, ratePlanKey)

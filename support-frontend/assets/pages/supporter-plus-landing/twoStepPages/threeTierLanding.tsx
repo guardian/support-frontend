@@ -13,7 +13,7 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
@@ -24,8 +24,12 @@ import {
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
-import { getThreeTierProductOption } from '@modules/product/productOptions';
-import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog';
+import type { ProductOptions } from '@modules/product/productOptions';
+import { TaxExclusive, TaxInclusive } from '@modules/product/productOptions';
+import type {
+	ProductKey,
+	ProductRatePlanKey,
+} from '@modules/product-catalog/productCatalog';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -250,6 +254,19 @@ function getPlanCost(
 				  }
 				: undefined,
 	};
+}
+
+function getThreeTierProductOption(
+	productKey: ProductKey,
+	supportRegionId: SupportRegionId,
+): ProductOptions {
+	if (
+		supportRegionId == SupportRegionId.CA &&
+		(productKey === 'DigitalSubscription' || productKey === 'SupporterPlus')
+	) {
+		return TaxExclusive;
+	}
+	return TaxInclusive;
 }
 
 type ThreeTierLandingProps = {

@@ -1,8 +1,5 @@
 // describes options relating to a product itself - only relevant for paper currently
 
-import { SupportRegionId } from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
-import type { ProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
-
 const NoProductOptions = 'NoProductOptions';
 const Saturday = 'Saturday';
 const SaturdayPlus = 'SaturdayPlus';
@@ -56,19 +53,6 @@ export type PrintProductOptions =
 	| typeof WeekendPlus
 	| typeof SixdayPlus
 	| typeof EverydayPlus;
-
-export function getThreeTierProductOption(
-	productKey: ProductKey,
-	supportRegionId: SupportRegionId,
-): ProductOptions {
-	if (
-		supportRegionId == SupportRegionId.CA &&
-		(productKey === 'DigitalSubscription' || productKey === 'SupporterPlus')
-	) {
-		return TaxExclusive;
-	}
-	return TaxInclusive;
-}
 
 export {
 	NoProductOptions,
