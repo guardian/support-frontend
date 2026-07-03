@@ -36,7 +36,7 @@ case class ChannelTestConfig(
   */
 abstract class ChannelTestService[T: Decoder](
     stage: Stage,
-    config: ChannelTestConfig,
+    protected val config: ChannelTestConfig,
 )(implicit ec: ExecutionContext, system: ActorSystem)
     extends StrictLogging {
 

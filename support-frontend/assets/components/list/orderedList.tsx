@@ -26,8 +26,10 @@ type PropTypes = {
 function OrderedList({ items }: PropTypes): JSX.Element {
 	return (
 		<ol>
-			{items.map((item) => (
-				<li css={orderedListItem}>{item}</li>
+			{items.map((item, index) => (
+				<li key={index} css={orderedListItem}>
+					{item}
+				</li>
 			))}
 		</ol>
 	);

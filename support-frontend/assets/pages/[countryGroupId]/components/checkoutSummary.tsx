@@ -177,15 +177,6 @@ export default function CheckoutSummary({
 						/>
 					</div>
 				)}
-				{supportRegionId === SupportRegionId.CA &&
-					productKey === 'GuardianWeeklyDomestic' && (
-						<div role="alert" css={alertStyles}>
-							<InfoSummary
-								message="For Canadian residents only"
-								context="Please note that Canada Post is currently undergoing a period of industrial action. If you start a Guardian Weekly subscription today, the delivery of your copies may be subject to delays. We apologise for any inconvenience this may cause."
-							/>
-						</div>
-					)}
 				<ContributionsOrderSummary
 					productKey={productKey}
 					productLabel={productDescription.label}
