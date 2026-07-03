@@ -186,7 +186,7 @@ describe('getPageParticipations', () => {
 			const result = await getPageParticipations(config);
 
 			expect(result).toEqual({
-				participations: { 'test-2': 'control' },
+				participations: {},
 				variant: undefined,
 			});
 		});
@@ -204,7 +204,7 @@ describe('getPageParticipations', () => {
 			const result = await getPageParticipations(config);
 
 			expect(result).toEqual({
-				participations: { 'test-1': 'variant-b' },
+				participations: {},
 				variant: undefined,
 			});
 		});
