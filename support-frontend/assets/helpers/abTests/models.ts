@@ -71,8 +71,8 @@ type Tests = Record<string, Test>;
 type Participations = Record<string, string | undefined>;
 
 interface Scheduler {
-	start?: string; // ISO date "YYYY-MM-DD", inclusive
-	end?: string; // ISO date "YYYY-MM-DD", inclusive
+	start?: string; // UTC datetime "YYYY-MM-DDTHH:MM", inclusive
+	end?: string; // UTC datetime "YYYY-MM-DDTHH:MM", inclusive
 }
 
 interface PageTest<Variant> {

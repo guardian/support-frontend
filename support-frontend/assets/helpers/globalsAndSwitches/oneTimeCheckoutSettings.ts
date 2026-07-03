@@ -14,15 +14,9 @@ interface RegionTargeting {
 	targetedCountryGroups: CountryGroupId[];
 }
 
-interface Scheduler {
-	start?: string; // ISO date "YYYY-MM-DD", inclusive
-	end?: string; // ISO date "YYYY-MM-DD", inclusive
-}
-
 export interface OneTimeCheckoutTest {
 	name: string;
 	status: 'Live' | 'Draft';
 	regionTargeting?: RegionTargeting;
 	variants: OneTimeCheckoutVariant[];
-	scheduler?: Scheduler;
 }

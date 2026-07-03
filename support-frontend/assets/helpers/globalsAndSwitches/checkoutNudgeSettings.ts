@@ -31,8 +31,8 @@ interface RegionTargeting {
 }
 
 interface Scheduler {
-	start?: string; // ISO date "YYYY-MM-DD", inclusive
-	end?: string; // ISO date "YYYY-MM-DD", inclusive
+	start?: string; // UTC datetime "YYYY-MM-DDTHH:MM", inclusive
+	end?: string; // UTC datetime "YYYY-MM-DDTHH:MM", inclusive
 }
 
 export interface CheckoutNudgeTest {

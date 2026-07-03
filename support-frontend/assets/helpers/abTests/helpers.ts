@@ -40,11 +40,11 @@ export function isWithinSchedule(
 	if (!scheduler) {
 		return true;
 	}
-	const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
-	if (scheduler.start !== undefined && today < scheduler.start) {
+	const now = new Date().toISOString().slice(0, 16); // "YYYY-MM-DDTHH:MM" UTC
+	if (scheduler.start !== undefined && now < scheduler.start) {
 		return false;
 	}
-	if (scheduler.end !== undefined && today > scheduler.end) {
+	if (scheduler.end !== undefined && now > scheduler.end) {
 		return false;
 	}
 	return true;
