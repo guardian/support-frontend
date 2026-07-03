@@ -60,6 +60,12 @@ const purchaseSummaryDetailsContainer = css`
 	}
 `;
 
+const purchaseSummaryDetailsPriceText = css`
+	text-align: end;
+	text-wrap: balance;
+	max-width: 80%;
+`;
+
 const paymentMethodContainer = css`
 	display: flex;
 	flex-direction: row;
@@ -305,7 +311,9 @@ function OnboardingSummary({
 							</div>
 							<div css={purchaseSummaryDetailsContainer}>
 								<p css={boldDescriptions}>Price</p>
-								<p css={descriptions}>{promoMessage || fullAmount}</p>
+								<p css={[descriptions, purchaseSummaryDetailsPriceText]}>
+									{promoMessage || fullAmount}
+								</p>
 							</div>
 							{todaysPayment && (
 								<div css={purchaseSummaryDetailsContainer}>
