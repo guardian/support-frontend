@@ -70,7 +70,9 @@ export async function getPageParticipations<Variant>(
 		for (const test of testList) {
 			const variantName = participations[test.name];
 			if (variantName) {
-				// should scheduler be checked here?
+				if (!isWithinSchedule(test.scheduler)) {
+					return undefined;
+				}
 				const variant = test.variants.find(
 					(v) => getVariantName(v) === variantName,
 				);
@@ -115,6 +117,9 @@ export async function getPageParticipations<Variant>(
 	);
 	if (urlParticipations) {
 		const variant = getVariant(urlParticipations, tests);
+		if (!variant) {
+			return makeFallbackResult();
+		}
 		setSessionParticipations(urlParticipations, sessionStorageKey);
 		return {
 			participations: trackParticipation
@@ -144,6 +149,9 @@ export async function getPageParticipations<Variant>(
 		// If nothing valid remains, continue to re-selection
 		if (Object.entries(validParticipations).length > 0) {
 			const variant = getVariant(validParticipations, tests);
+			if (!variant) {
+				return makeFallbackResult();
+			}
 			return {
 				participations: trackParticipation
 					? validParticipations
