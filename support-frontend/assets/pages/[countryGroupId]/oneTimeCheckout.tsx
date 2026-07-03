@@ -61,10 +61,91 @@ export function OneTimeCheckout({
 		currency: currencyKey.toLowerCase(),
 		paymentMethodCreation: 'manual',
 
-		// appearance: {
-		// 	theme: 'St'
+		appearance: {
+			theme: 'stripe',
+			variables: {
+				fontFamily: 'GuardianTextSans',
+				accordionItemSpacing: '8px',
+				iconCardCvcColor: '#707070',
+				iconCardErrorColor: 'rgba(199, 0, 0, 0.75)',
+				colorDanger: '#C70000',
+			},
+			rules: {
+				'.AccordionItem': {
+					fontSize: '17px',
+					fontWeight: '700',
+					border: '1px solid #707070',
+					padding: '16px',
+					color: '#707070',
+				},
+				'.AccordionItem:hover': {
+					color: '#121212',
+				},
+				'.AccordionIcon': {
+					height: '13.5px',
+					width: '18px',
+					fill: '#707070',
+				},
+				'.AccordionItem--selected': {
+					border: '2px solid #0077B6',
+					color: '#052962',
+				},
+				'.RadioIcon': {
+					width: '24px',
+					height: '24px',
+				},
+				'.RadioIconOuter': {
+					r: '11.5',
+					fill: 'none',
+					stroke: '#707070',
+					strokeWidth: '2',
+				},
+				'.RadioIconOuter--hovered': {
+					stroke: '#0077B6',
+					strokeWidth: '6',
+				},
+				'.RadioIconOuter--checked': {
+					r: '11',
+					fill: 'white',
+					stroke: '#0077B6',
+					strokeWidth: '6',
+				},
 
-		// }
+				'.RadioIconInner--checked': {
+					fill: '#0077B6',
+				},
+				'.Label': {
+					fontSize: '15px',
+					color: '#121212',
+				},
+				'.Input': {
+					fontSize: '17px',
+					color: '#707070',
+					border: '1px solid #707070',
+					borderRadius: '4px',
+				},
+				'.Input:focus': {
+					fontSize: '17px',
+					color: '#121212',
+					border: '2px solid #0077B6',
+					borderRadius: '4px',
+					boxShadow: 'none',
+				},
+				'.Input--invalid': {
+					color: '#C70000',
+					border: '2px solid #C70000',
+					boxShadow: 'none',
+				},
+				'.Input--empty': {
+					color: '#707070',
+				},
+				'.Error': {
+					fontSize: '15px',
+					color: '#C70000',
+					lineHeight: '19.5px',
+				},
+			},
+		},
 	} as const;
 
 	return (

@@ -5,8 +5,10 @@ import {
 	neutral,
 	space,
 	textSans17,
+	until,
 } from '@guardian/source/foundations';
 import {
+	InlineError,
 	Radio,
 	RadioGroup,
 	TextInput,
@@ -175,6 +177,10 @@ const similarProductsConsentCheckboxContainer = css`
 	> div > input {
 		background-color: ${neutral[100]};
 	}
+`;
+
+const recaptchaContainer = css`
+	margin-top: 0 !important;
 `;
 
 type OneTimeCheckoutComponentProps = {
@@ -500,7 +506,9 @@ export function OneTimeCheckoutComponent({
 			if (inStripePaymentElementVariant && paymentMethod === 'Stripe') {
 				if (!isPaymentElementComplete || !recaptchaToken) {
 					if (!isPaymentElementComplete) {
-						setPaymentMethodError('Please complete missing payment details');
+						setPaymentMethodError(
+							'Please check your payment details and try again',
+						);
 					}
 					if (!recaptchaToken) {
 						setRecaptchaError('Please complete security check');
@@ -1010,60 +1018,88 @@ export function OneTimeCheckoutComponent({
 							</Legend>
 							{inStripePaymentElementVariant && (
 								<>
-									{paymentMethodError && (
-										<div role="alert" data-qm-error>
-											<ErrorSummary
-												cssOverrides={css`
-													margin-bottom: ${space[6]}px;
+									<div
+										css={css`
+											padding-top: 12px;
+											padding-bottom: 24px;
+											${until.tablet} {
+												padding-top: 4px;
+												padding-bottom: 16px;
+											}
+										`}
+									>
+										{paymentMethodError && (
+											<div
+												role="alert"
+												data-qm-error
+												css={css`
+													margin-bottom: 8px;
 												`}
-												message={paymentMethodError}
-												context={errorContext}
-											/>
-										</div>
-									)}
-									<PaymentElement
-										options={{
-											fields: { billingDetails: { address: 'if_required' } },
-											layout: {
-												type: 'accordion',
-												radios: 'always',
-												spacedAccordionItems: true,
-											},
-											wallets: {
-												link: 'never',
-											},
-										}}
-										onFocus={() => {
-											setPaymentMethod(Stripe);
-										}}
-										onChange={(event) => {
-											setIsPaymentElementComplete(event.complete);
-											setPaymentMethodError(undefined);
-										}}
-									/>
+											>
+												<InlineError>{paymentMethodError}</InlineError>
+											</div>
+										)}
+										<PaymentElement
+											options={{
+												fields: { billingDetails: { address: 'if_required' } },
+												layout: {
+													type: 'accordion',
+													radios: 'always',
+													spacedAccordionItems: true,
+												},
+												wallets: {
+													link: 'never',
+												},
+											}}
+											onFocus={() => {
+												setPaymentMethod(Stripe);
+											}}
+											onChange={(event) => {
+												setIsPaymentElementComplete(event.complete);
+												setPaymentMethodError(undefined);
+											}}
+										/>
+									</div>
 									{recaptchaError && (
-										<div role="alert" data-qm-error>
-											<ErrorSummary
-												cssOverrides={css`
-													margin-bottom: ${space[6]}px;
-												`}
-												message={recaptchaError}
-												context={errorContext}
-											/>
+										<div
+											role="alert"
+											data-qm-error
+											css={css`
+												margin-top: 0px !important;
+												margin-bottom: 8px;
+											`}
+										>
+											<InlineError>{recaptchaError}</InlineError>
 										</div>
 									)}
-									<Recaptcha
-										onRecaptchaCompleted={(token) => {
-											setRecaptchaToken(token);
-											setRecaptchaError(undefined);
-										}}
-										onRecaptchaExpired={() => {
-											setRecaptchaToken(undefined);
-											setRecaptchaError(undefined);
-										}}
+									<div css={recaptchaContainer}>
+										<Recaptcha
+											onRecaptchaCompleted={(token) => {
+												setRecaptchaToken(token);
+												setRecaptchaError(undefined);
+											}}
+											onRecaptchaExpired={() => {
+												setRecaptchaToken(undefined);
+												setRecaptchaError(undefined);
+											}}
+										/>
+									</div>
+									<Divider
+										size="full"
+										cssOverrides={css`
+											margin-left: 0;
+											width: 100%;
+											margin-top: 40px;
+											margin-bottom: 24px;
+											${until.tablet} {
+												margin-top: 36px;
+												margin-bottom: 20px;
+											}
+										`}
 									/>
 								</>
 							)}
+
 							{!inStripePaymentElementVariant && (
 								<RadioGroup
 									role="radiogroup"
