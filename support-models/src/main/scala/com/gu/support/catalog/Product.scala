@@ -86,25 +86,26 @@ case object SupporterPlus extends Product {
   private def productRatePlan(
       id: String,
       billingPeriod: BillingPeriod,
+      productOptions: ProductOptions,
       fulfilmentOptions: FulfilmentOptions = NoFulfilmentOptions,
   ) =
     ProductRatePlan(
       id,
       billingPeriod,
       fulfilmentOptions,
-      NoProductOptions,
+      productOptions,
       s"Supporter Plus ${billingPeriod.getClass.getSimpleName}",
     )
 
   lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[SupporterPlus.type]]] =
     Map(
       PROD -> List(
-        productRatePlan("8a128ed885fc6ded018602296ace3eb8", Monthly),
-        productRatePlan("8a128ed885fc6ded01860228f77e3d5a", Annual),
+        productRatePlan("8a128ed885fc6ded018602296ace3eb8", Monthly, TaxInclusive),
+        productRatePlan("8a128ed885fc6ded01860228f77e3d5a", Annual, TaxInclusive),
       ),
       CODE -> List(
-        productRatePlan("8ad08cbd8586721c01858804e3275376", Monthly),
-        productRatePlan("8ad08e1a8586721801858805663f6fab", Annual),
+        productRatePlan("8ad08cbd8586721c01858804e3275376", Monthly, TaxInclusive),
+        productRatePlan("8ad08e1a8586721801858805663f6fab", Annual, TaxInclusive),
       ),
     )
 }
@@ -134,19 +135,64 @@ case object DigitalPack extends Product {
   private def productRatePlan(
       id: String,
       billingPeriod: BillingPeriod,
+      productOptions: ProductOptions,
       description: String,
   ) =
-    ProductRatePlan(id, billingPeriod, NoFulfilmentOptions, NoProductOptions, description)
+    ProductRatePlan(id, billingPeriod, NoFulfilmentOptions, productOptions, description)
 
   lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[DigitalPack.type]]] =
     Map(
       PROD -> List(
-        productRatePlan("2c92a0fb4edd70c8014edeaa4eae220a", Monthly, "Digital Subscription Monthly"),
-        productRatePlan("2c92a0fb4edd70c8014edeaa4e972204", Annual, "Digital Subscription Annual"),
+        productRatePlan(
+          "2c92a0fb4edd70c8014edeaa4eae220a",
+          Monthly,
+          TaxInclusive,
+          "Digital Subscription Monthly Inclusive",
+        ),
+        productRatePlan(
+          "8a129dff9e981ec8019ea80a4c9e5b24",
+          Monthly,
+          TaxExclusive,
+          "Digital Subscription Monthly Exclusive",
+        ),
+        productRatePlan(
+          "2c92a0fb4edd70c8014edeaa4e972204",
+          Annual,
+          TaxInclusive,
+          "Digital Subscription Annual Inclusive",
+        ),
+        productRatePlan(
+          "8a129aae9e981ec4019eab88633c78ab",
+          Annual,
+          TaxExclusive,
+          "Digital Subscription Annual Exclusive",
+        ),
       ),
       CODE -> List(
-        productRatePlan("2c92c0f84bbfec8b014bc655f4852d9d", Monthly, "Digital Subscription Monthly"),
-        productRatePlan("2c92c0f94bbffaaa014bc6a4212e205b", Annual, "Digital Subscription Annual"),
+        productRatePlan(
+          "2c92c0f84bbfec8b014bc655f4852d9d",
+          Monthly,
+          TaxInclusive,
+          "Digital Subscription Monthly Inclusive",
+        ),
+        productRatePlan(
+          "71a1889a1579daf14eedb5c64fe800c9",
+          Monthly,
+          TaxExclusive,
+          "Digital Subscription Monthly Exclusive",
+        ),
+        productRatePlan(
+          "2c92c0f94bbffaaa014bc6a4212e205b",
+          Annual,
+          TaxInclusive,
+          "Digital Subscription Annual Inclusive",
+        ),
+        productRatePlan(
+          "14253478e8ca41888a2742f139823b51",
+          Annual,
+          TaxExclusive,
+          "Digital Subscription Annual Exclusive",
+        ),
       ),
     )
 }
