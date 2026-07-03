@@ -101,11 +101,15 @@ case object SupporterPlus extends Product {
     Map(
       PROD -> List(
         productRatePlan("8a128ed885fc6ded018602296ace3eb8", Monthly, TaxInclusive),
+        productRatePlan("8a1296cc9e981ec9019eab9092864ae0", Monthly, TaxExclusive),
         productRatePlan("8a128ed885fc6ded01860228f77e3d5a", Annual, TaxInclusive),
+        productRatePlan("8a128e579e9807b1019eab92efee3f74", Annual, TaxExclusive),
       ),
       CODE -> List(
         productRatePlan("8ad08cbd8586721c01858804e3275376", Monthly, TaxInclusive),
+        productRatePlan("7a825d4a79bb49ec9a36883cad075fde", Monthly, TaxExclusive),
         productRatePlan("8ad08e1a8586721801858805663f6fab", Annual, TaxInclusive),
+        productRatePlan("f59be1a754254cf7bff266358fa14e7b", Annual, TaxExclusive),
       ),
     )
 }
