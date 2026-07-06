@@ -140,6 +140,9 @@ function getCheckoutTestVariant(
 		// Is the user in this test?
 		const variantName = participations[test.name];
 		if (variantName) {
+			if (!isWithinSchedule(test.scheduler)) {
+				return undefined;
+			}
 			const variant = test.variants.find(
 				(variant) => variant.name === variantName,
 			);
