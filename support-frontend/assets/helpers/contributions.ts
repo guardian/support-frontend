@@ -48,7 +48,6 @@ type Config = Record<
 	{
 		min: number;
 		max: number;
-		default: number; // TODO - remove this field once old payment flow has gone
 	}
 >;
 
@@ -56,17 +55,14 @@ const defaultConfig: Config = {
 	ANNUAL: {
 		min: 10,
 		max: 2000,
-		default: 50,
 	},
 	MONTHLY: {
 		min: 2,
 		max: 166,
-		default: 5,
 	},
 	ONE_OFF: {
 		min: 1,
 		max: 2000,
-		default: 50,
 	},
 };
 
@@ -77,12 +73,10 @@ const config: Record<CountryGroupId, Config> = {
 		MONTHLY: {
 			min: 2,
 			max: 200,
-			default: 20,
 		},
 		ONE_OFF: {
 			min: 1,
 			max: 25000,
-			default: 50,
 		},
 	},
 	EURCountries: {
@@ -90,7 +84,6 @@ const config: Record<CountryGroupId, Config> = {
 		MONTHLY: {
 			min: 2,
 			max: 166,
-			default: 10,
 		},
 		ONE_OFF: defaultConfig.ONE_OFF,
 	},
@@ -102,7 +95,6 @@ const config: Record<CountryGroupId, Config> = {
 		MONTHLY: {
 			min: 2,
 			max: 800,
-			default: 15,
 		},
 		ONE_OFF: {
 			...defaultConfig.ONE_OFF,
@@ -114,7 +106,6 @@ const config: Record<CountryGroupId, Config> = {
 		MONTHLY: {
 			min: 2,
 			max: 166,
-			default: 10,
 		},
 		ONE_OFF: defaultConfig.ONE_OFF,
 	},
@@ -123,7 +114,6 @@ const config: Record<CountryGroupId, Config> = {
 		MONTHLY: {
 			min: 2,
 			max: 200,
-			default: 20,
 		},
 		ONE_OFF: defaultConfig.ONE_OFF,
 	},
@@ -132,7 +122,6 @@ const config: Record<CountryGroupId, Config> = {
 		MONTHLY: {
 			min: 2,
 			max: 166,
-			default: 10,
 		},
 		ONE_OFF: defaultConfig.ONE_OFF,
 	},
