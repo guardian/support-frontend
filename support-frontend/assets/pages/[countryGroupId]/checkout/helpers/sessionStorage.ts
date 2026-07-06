@@ -43,8 +43,19 @@ const OrderSchema = z.object({
 	status: z.enum(['success', 'pending']),
 	deliveryDate: dateTimeSchema.optional(),
 	accountNumber: z.string().optional(),
+	taxConfig: z
+		.union([
+			z.object({
+				type: z.literal('tax_exclusive'),
+				rate: z.number(),
+			}),
+			z.object({
+				type: z.literal('tax_inclusive'),
+			}),
+		])
+		.optional(),
 });
-type OrderSchemaType = z.infer<typeof OrderSchema>;
+export type OrderSchemaType = z.infer<typeof OrderSchema>;
 export function setThankYouOrder(order: OrderSchemaType) {
 	storage.session.set(orderKey, order);
 }
