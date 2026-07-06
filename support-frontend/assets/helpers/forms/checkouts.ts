@@ -63,25 +63,10 @@ function simpleFormatTaxAmount(
 	return simpleFormatAmount(currency, taxAmount, roundTaxAmount);
 }
 
-const formatAmount = (
-	currency: CurrencyInfo,
-	amount: number,
-	verbose: boolean,
-): string => {
-	if (verbose) {
-		return `${amount} ${
-			amount === 1 ? currency.spokenCurrency : `${currency.spokenCurrency}s`
-		}`;
-	}
-
-	return simpleFormatAmount(currency, amount);
-};
-
 // ----- Exports ----- //
 export {
 	simpleFormatAmount,
 	simpleFormatTaxAmount,
-	formatAmount,
 	roundAmount,
 	roundTaxAmount,
 	calculateTax,
