@@ -4,6 +4,7 @@ import { CountryGroup } from '../internationalisation/classes/countryGroup';
 import {
 	countryGroupMatches,
 	getParticipationFromQueryString,
+	isWithinSchedule,
 	randomNumber,
 } from './helpers';
 import type {
@@ -60,7 +61,6 @@ export async function getPageParticipations<Variant>(
 		sessionStorageKey,
 		getVariantName,
 	} = config;
-
 	const isTargetPage = (path: string) => !!path && !!path.match(pageRegex);
 
 	const getVariant = (
@@ -69,8 +69,10 @@ export async function getPageParticipations<Variant>(
 	): Variant | undefined => {
 		for (const test of testList) {
 			const variantName = participations[test.name];
-
 			if (variantName) {
+				if (!isWithinSchedule(test.scheduler)) {
+					return undefined;
+				}
 				const variant = test.variants.find(
 					(v) => getVariantName(v) === variantName,
 				);
@@ -115,6 +117,9 @@ export async function getPageParticipations<Variant>(
 	);
 	if (urlParticipations) {
 		const variant = getVariant(urlParticipations, tests);
+		if (!variant) {
+			return makeFallbackResult();
+		}
 		setSessionParticipations(urlParticipations, sessionStorageKey);
 		return {
 			participations: trackParticipation
@@ -144,6 +149,9 @@ export async function getPageParticipations<Variant>(
 		// If nothing valid remains, continue to re-selection
 		if (Object.entries(validParticipations).length > 0) {
 			const variant = getVariant(validParticipations, tests);
+			if (!variant) {
+				return makeFallbackResult();
+			}
 			return {
 				participations: trackParticipation
 					? validParticipations
@@ -157,6 +165,7 @@ export async function getPageParticipations<Variant>(
 	let test: PageTest<Variant> | undefined;
 	for (const currentTest of tests.filter((test) => test.status === 'Live')) {
 		if (
+			isWithinSchedule(currentTest.scheduler) &&
 			countryGroupMatches(
 				currentTest.regionTargeting?.targetedCountryGroups,
 				countryGroupId,

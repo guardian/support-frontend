@@ -70,6 +70,11 @@ type Tests = Record<string, Test>;
 
 type Participations = Record<string, string | undefined>;
 
+interface Scheduler {
+	start?: string; // UTC datetime "YYYY-MM-DDTHH:MM", inclusive
+	end?: string; // UTC datetime "YYYY-MM-DDTHH:MM", inclusive
+}
+
 interface PageTest<Variant> {
 	name: string;
 	status: 'Live' | 'Draft';
@@ -80,6 +85,7 @@ interface PageTest<Variant> {
 	mParticleAudience?: number;
 	variants: Variant[];
 	methodologies?: Array<{ name: string }>;
+	scheduler?: Scheduler;
 }
 interface PageParticipationsConfig<Variant> {
 	tests: Array<PageTest<Variant>>;
