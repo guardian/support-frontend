@@ -15,6 +15,7 @@ const rowContainer = css`
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
+	padding-top: 4px;
 `;
 
 export function MaybeEstimatedTax({

@@ -17,7 +17,7 @@ const summaryRow = css`
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
-	padding: 4px 0 8px 0;
+	padding-top: 4px;
 `;
 
 const taxSummaryContainer = css`
@@ -100,13 +100,11 @@ export function MaybeEstimatedTaxSummary({
 							isWeeklyGift={isWeeklyGift}
 						/>
 					</div>
-					<div>
-						<MaybeEstimatedTax
-							amount={amount}
-							taxRateResult={taxRateResult}
-							currency={currency}
-						/>
-					</div>
+					<MaybeEstimatedTax
+						amount={amount}
+						taxRateResult={taxRateResult}
+						currency={currency}
+					/>
 					<div css={[summaryRow, boldText]}>
 						<p>Due today</p>
 						<p>{calculateAndFormatTotal(taxRateResult, currency, amount)}</p>

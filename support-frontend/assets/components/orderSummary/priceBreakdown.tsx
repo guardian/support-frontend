@@ -13,7 +13,7 @@ const summaryRow = css`
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
-	padding: 4px 0 8px 0;
+	padding-top: 4px;
 `;
 
 const rowSpacing = css`
