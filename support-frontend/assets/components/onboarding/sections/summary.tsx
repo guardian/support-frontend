@@ -61,9 +61,11 @@ const purchaseSummaryDetailsContainer = css`
 `;
 
 const purchaseSummaryDetailsPriceText = css`
-	text-align: end;
 	text-wrap: balance;
 	max-width: 80%;
+	${from.tablet} {
+		text-align: end;
+	}
 `;
 
 const paymentMethodContainer = css`
