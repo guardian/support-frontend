@@ -9,7 +9,7 @@ export type PaymentMethodSwitch =
 	| 'stripe'
 	| 'stripeHostedCheckout';
 
-function round(amount: number) {
+function roundAmount(amount: number) {
 	/**
 	 * This rounds a `number` to the second decimal.
 	 *
@@ -19,7 +19,7 @@ function round(amount: number) {
 	return Math.round(amount * 1e2) / 1e2;
 }
 
-function roundDown(amount: number) {
+function roundTaxAmount(amount: number) {
 	/**
 	 * This rounds a `number` down to the second decimal.
 	 *
@@ -32,7 +32,7 @@ function roundDown(amount: number) {
 const simpleFormatAmount = (
 	currency: CurrencyInfo,
 	amount: number,
-	roundFn: (value: number) => number = round,
+	roundFn: (value: number) => number = roundAmount,
 ): string => {
 	/**
 	 * We need to round the amount before checking if it is an Int for the edge case of something like 12.0001
@@ -48,17 +48,20 @@ const simpleFormatAmount = (
 	return `${currency.glyph}${amountText}`.trim();
 };
 
-const simpleFormatTaxAmount = (
+function calculateTax(amount: number, taxRate: number): number {
+	// Multiply to avoid floating point precision issues. Should we be using a
+	// library for this?
+	return (amount * (taxRate * 100000)) / 100000;
+}
+
+function simpleFormatTaxAmount(
 	currency: CurrencyInfo,
 	amount: number,
 	taxRate: number, // A decimal, e.g. 0.15
-): string => {
-	// Multiply to avoid floating point precision issues. Should we be using a
-	// library for this?
-	const taxAmount = (amount * (taxRate * 100000)) / 100000;
-
-	return simpleFormatAmount(currency, taxAmount, roundDown);
-};
+): string {
+	const taxAmount = calculateTax(amount, taxRate);
+	return simpleFormatAmount(currency, taxAmount, roundTaxAmount);
+}
 
 const formatAmount = (
 	currency: CurrencyInfo,
@@ -75,4 +78,11 @@ const formatAmount = (
 };
 
 // ----- Exports ----- //
-export { simpleFormatAmount, simpleFormatTaxAmount, formatAmount };
+export {
+	simpleFormatAmount,
+	simpleFormatTaxAmount,
+	formatAmount,
+	roundAmount,
+	roundTaxAmount,
+	calculateTax,
+};

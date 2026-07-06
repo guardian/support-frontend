@@ -1160,6 +1160,13 @@ export default function CheckoutForm({
 							amount={finalAmount}
 							taxRateResult={taxRateResult}
 							currency={currency}
+							billingPeriod={billingPeriod}
+							fullPrice={simpleFormatAmount(currency, originalAmount)}
+							discountPrice={
+								promotion
+									? simpleFormatAmount(currency, finalAmount)
+									: undefined
+							}
 						/>
 						<div
 							css={css`
