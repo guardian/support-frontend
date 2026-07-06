@@ -83,6 +83,7 @@ const numbersInWords = {
 	'2000': 'two thousand',
 	'10000': 'ten thousand',
 	'16000': 'sixteen thousand',
+	'25000': 'twenty five thousand',
 } as const;
 
 const defaultConfig: Config = {
@@ -123,8 +124,8 @@ const config: Record<CountryGroupId, Config> = {
 		ONE_OFF: {
 			min: 1,
 			minInWords: numbersInWords['1'],
-			max: 16000,
-			maxInWords: numbersInWords['16000'],
+			max: 25000,
+			maxInWords: numbersInWords['25000'],
 			default: 50,
 		},
 	},
