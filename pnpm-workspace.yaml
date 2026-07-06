@@ -21,7 +21,7 @@ catalog:
   '@guardian/prettier': ^2.1.5
   '@guardian/support-service-lambdas': github:guardian/support-service-lambdas#168e05673883971b21c75cb04c778c6da56dbbca
   '@types/jest': ^29.5.14
-  '@types/node': ^20.19.0
+  '@types/node': ^20.19.43
   esbuild: ^0.28.1
   jest: ^29.7.0
   jest-runner-groups: ^2.2.0
