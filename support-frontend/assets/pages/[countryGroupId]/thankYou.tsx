@@ -11,7 +11,6 @@ import {
 } from 'helpers/productCatalog';
 import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { getPromotion } from 'helpers/productPrice/promotions';
 import type { UserType } from 'helpers/user/userType';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
@@ -20,6 +19,7 @@ import { AnalyticsProfileCacheProvider } from '../../helpers/customHooks/analyti
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { setHideSupportMessaginCookie } from '../../helpers/storage/contributionsCookies';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
+import { getPromotionFromProductPrices } from './checkout';
 import type { OnboardingProductKey } from './components/onboardingComponent';
 import OnboardingComponent from './components/onboardingComponent';
 import { ThankYouComponent } from './components/thankYouComponent';
@@ -86,11 +86,11 @@ export function ThankYou({
 		setHideSupportMessaginCookie();
 	} else {
 		/** Recurring product must have product & ratePlan */
-		if (!product) {
+		if (!productKey || !product) {
 			logException('Product not found');
 			return <div>Product not found</div>;
 		}
-		if (!ratePlan) {
+		if (!ratePlanKey || !ratePlan) {
 			logException('Rate plan not found');
 			return <div>Rate plan not found</div>;
 		}
@@ -113,22 +113,17 @@ export function ThankYou({
 				return <div>Price not found in product catalog</div>;
 			}
 
-			const productPrices =
-				productKey === 'SupporterPlus'
-					? appConfig.allProductPrices[productKey]
-					: undefined;
 			const billingPeriod =
 				toRegularBillingPeriod(ratePlan.billingPeriod) ?? BillingPeriod.Annual;
 
 			/** Get any promotions */
-			promotion = productPrices
-				? getPromotion(
-						productPrices,
-						countryId,
-						billingPeriod,
-						'NoFulfilmentOptions',
-				  )
-				: undefined;
+			promotion = getPromotionFromProductPrices(
+				appConfig,
+				productKey,
+				ratePlanKey,
+				countryId,
+				billingPeriod,
+			);
 
 			const discountedPrice = promotion?.discountedPrice ?? undefined;
 			const price = discountedPrice ?? productPrice;
