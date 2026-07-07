@@ -10,8 +10,8 @@ import {
 } from 'helpers/forms/checkouts';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { TaxRateResult } from 'helpers/salesTax/getEstimatedSalesTaxRate';
+import { PriceSummary } from '../priceSummary/priceSummary';
 import { MaybeEstimatedTax } from './maybeEstimatedTax';
-import { PriceSummary } from './priceSummary';
 
 const summaryRow = css`
 	display: flex;

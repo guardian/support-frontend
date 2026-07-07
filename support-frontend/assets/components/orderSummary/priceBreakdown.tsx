@@ -2,11 +2,11 @@ import { css } from '@emotion/react';
 import { from, palette, space, textSans17 } from '@guardian/source/foundations';
 import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
+import { PriceSummary } from 'components/priceSummary/priceSummary';
+import { MaybeEstimatedTax } from 'components/salesTax/maybeEstimatedTax';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { TaxRateResult } from 'helpers/salesTax/getEstimatedSalesTaxRate';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
-import { MaybeEstimatedTax } from './maybeEstimatedTax';
-import { PriceSummary } from './priceSummary';
 import { TaxTsAndCs } from './taxTsAndCs';
 
 const summaryRow = css`
