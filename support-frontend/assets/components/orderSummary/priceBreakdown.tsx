@@ -124,6 +124,7 @@ export function PriceBreakdown({
 						period={period}
 						discountPrice={discountPrice}
 						isWeeklyGift={isWeeklyGift}
+						showPeriod={taxRateConfig.type === 'tax_inclusive'}
 					/>
 				</div>
 				<MaybeEstimatedTax

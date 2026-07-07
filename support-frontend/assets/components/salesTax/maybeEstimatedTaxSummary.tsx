@@ -101,6 +101,7 @@ export function MaybeEstimatedTaxSummary({
 							period={paymentFrequency}
 							discountPrice={discountPrice}
 							isWeeklyGift={isWeeklyGift}
+							showPeriod={false}
 						/>
 					</div>
 					<MaybeEstimatedTax
