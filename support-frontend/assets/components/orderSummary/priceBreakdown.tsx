@@ -18,10 +18,10 @@ const summaryRow = css`
 
 const rowSpacing = css`
 	&:not(:last-child) {
-		margin-bottom: ${space[5]}px;
+		margin-bottom: ${space[6]}px;
 
 		${from.desktop} {
-			margin-bottom: ${space[6]}px;
+			margin-bottom: ${space[8]}px;
 		}
 	}
 `;
