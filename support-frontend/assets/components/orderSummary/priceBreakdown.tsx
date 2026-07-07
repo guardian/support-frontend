@@ -5,7 +5,7 @@ import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { PriceSummary } from 'components/priceSummary/priceSummary';
 import { MaybeEstimatedTax } from 'components/salesTax/maybeEstimatedTax';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
-import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxRate';
+import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import { TaxTsAndCs } from './taxTsAndCs';
 

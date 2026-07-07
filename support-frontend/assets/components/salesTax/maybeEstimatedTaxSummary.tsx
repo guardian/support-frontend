@@ -9,7 +9,7 @@ import {
 	simpleFormatAmount,
 } from 'helpers/forms/checkouts';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
-import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxRate';
+import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { PriceSummary } from '../priceSummary/priceSummary';
 import { MaybeEstimatedTax } from './maybeEstimatedTax';
 

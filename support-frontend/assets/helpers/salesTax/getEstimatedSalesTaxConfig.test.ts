@@ -1,7 +1,7 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { productCatalogFixture } from 'fixtures/productCatalogFixture';
 import { taxRatesFixture } from 'fixtures/taxRatesFixture';
-import { getEstimatedSalesTaxConfig } from './getEstimatedSalesTaxRate';
+import { getEstimatedSalesTaxConfig } from './getEstimatedSalesTaxConfig';
 
 describe('getEstimatedSalesTaxRate', () => {
 	describe('when not in the CA region', () => {
