@@ -26,7 +26,7 @@ function isCaState(value: string): value is CaState {
 	return caStateCodes.includes(value as CaState);
 }
 
-export function getEstimatedSalesTaxRate(
+export function getEstimatedSalesTaxConfig(
 	productCatalog: WindowProductCatalog,
 	taxRates: WindowTaxRates,
 	productKey: ActiveProductKey,

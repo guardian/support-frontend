@@ -1,12 +1,12 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { productCatalogFixture } from 'fixtures/productCatalogFixture';
 import { taxRatesFixture } from 'fixtures/taxRatesFixture';
-import { getEstimatedSalesTaxRate } from './getEstimatedSalesTaxRate';
+import { getEstimatedSalesTaxConfig } from './getEstimatedSalesTaxRate';
 
 describe('getEstimatedSalesTaxRate', () => {
 	describe('when not in the CA region', () => {
 		it('returns a tax_inclusive result', () => {
-			const result = getEstimatedSalesTaxRate(
+			const result = getEstimatedSalesTaxConfig(
 				productCatalogFixture,
 				taxRatesFixture,
 				'SupporterPlus',
@@ -21,7 +21,7 @@ describe('getEstimatedSalesTaxRate', () => {
 
 	describe('when not a tax exclusive rate plan', () => {
 		it('returns a tax_inclusive result', () => {
-			const result = getEstimatedSalesTaxRate(
+			const result = getEstimatedSalesTaxConfig(
 				productCatalogFixture,
 				taxRatesFixture,
 				'SupporterPlus',
@@ -36,7 +36,7 @@ describe('getEstimatedSalesTaxRate', () => {
 
 	describe('when the province is missing', () => {
 		it('returns a not_enough_information result', () => {
-			const result = getEstimatedSalesTaxRate(
+			const result = getEstimatedSalesTaxConfig(
 				productCatalogFixture,
 				taxRatesFixture,
 				'SupporterPlus',
@@ -51,7 +51,7 @@ describe('getEstimatedSalesTaxRate', () => {
 
 	describe('when all data is provided and tax is exclusive', () => {
 		it('returns a tax_exlcusive result with a rate', () => {
-			const result = getEstimatedSalesTaxRate(
+			const result = getEstimatedSalesTaxConfig(
 				productCatalogFixture,
 				taxRatesFixture,
 				'SupporterPlus',
@@ -67,7 +67,7 @@ describe('getEstimatedSalesTaxRate', () => {
 	describe('when tax rate data is missing product information', () => {
 		it('throws an error', () => {
 			expect(() =>
-				getEstimatedSalesTaxRate(
+				getEstimatedSalesTaxConfig(
 					productCatalogFixture,
 					{},
 					'SupporterPlus',
@@ -82,7 +82,7 @@ describe('getEstimatedSalesTaxRate', () => {
 	describe('when tax rate data is undefined', () => {
 		it('throws an error', () => {
 			expect(() =>
-				getEstimatedSalesTaxRate(
+				getEstimatedSalesTaxConfig(
 					productCatalogFixture,
 					undefined,
 					'SupporterPlus',
