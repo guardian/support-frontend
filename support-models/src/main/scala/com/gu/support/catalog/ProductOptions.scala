@@ -30,6 +30,10 @@ case object Everyday extends PaperProductOptions(false)
 
 case object NewspaperArchive extends ProductOptions
 
+case object TaxInclusive extends ProductOptions
+
+case object TaxExclusive extends ProductOptions
+
 case object PlusDigital extends ProductOptions
 
 object ProductOptions {

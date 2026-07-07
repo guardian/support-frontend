@@ -13,7 +13,7 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
@@ -24,7 +24,12 @@ import {
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
-import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog';
+import type { ProductOptions } from '@modules/product/productOptions';
+import { TaxExclusive, TaxInclusive } from '@modules/product/productOptions';
+import type {
+	ProductKey,
+	ProductRatePlanKey,
+} from '@modules/product-catalog/productCatalog';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -251,6 +256,19 @@ function getPlanCost(
 	};
 }
 
+function getThreeTierProductOption(
+	productKey: ProductKey,
+	supportRegionId: SupportRegionId,
+): ProductOptions {
+	if (
+		supportRegionId == SupportRegionId.CA &&
+		(productKey === 'DigitalSubscription' || productKey === 'SupporterPlus')
+	) {
+		return TaxExclusive;
+	}
+	return TaxInclusive;
+}
+
 type ThreeTierLandingProps = {
 	supportRegionId: SupportRegionId;
 	settings: LandingPageVariant;
@@ -396,10 +414,17 @@ export function ThreeTierLanding({
 		maybeTaxExclusiveRatePlanKey
 	]?.pricing[currencyId] as number;
 
+	const tierTwoProductOption = getThreeTierProductOption(
+		'SupporterPlus',
+		supportRegionId,
+	);
+
 	const tier2Promotion = getPromotion(
 		allProductPrices.SupporterPlus,
 		countryId,
 		billingPeriod,
+		'NoFulfilmentOptions',
+		tierTwoProductOption,
 	);
 
 	const tier2CheckoutURL = buildCheckoutUrl(supportRegionId, {
@@ -478,10 +503,19 @@ export function ThreeTierLanding({
 			settings.products.DigitalSubscription?.billingPeriodsCopy,
 	};
 	const tier3ProductPrice = allProductPrices.DigitalPack;
+	const tierThreeProductOption = getThreeTierProductOption(
+		tier3Product,
+		supportRegionId,
+	);
 	const tier3Promotion = tier3ProductPrice
-		? getPromotion(tier3ProductPrice, countryId, billingPeriod)
+		? getPromotion(
+				tier3ProductPrice,
+				countryId,
+				billingPeriod,
+				'NoFulfilmentOptions',
+				tierThreeProductOption,
+		  )
 		: undefined;
-
 	const tier3CheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: tier3Product,
 		ratePlan:
