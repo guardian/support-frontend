@@ -677,8 +677,8 @@ export default function CheckoutForm({
 		? `for${isWeeklyGift ? '' : ' a'}`
 		: 'per';
 
-	// When we can't display a tax-inclusive price we don't want the button to
-	// imply an exact amount, so we fall back to a generic "Pay now".
+	// When pricing is tax exclusive the button copy is simply "Pay now" because
+	// there's a summary of the price just above.
 	const buttonText =
 		taxRateConfig.type === 'tax_exclusive' ||
 		taxRateConfig.type === 'not_enough_information'
