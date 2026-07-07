@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, space } from '@guardian/source/foundations';
+import { from, space, textSans17 } from '@guardian/source/foundations';
 import type { CurrencyInfo } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import {
@@ -21,6 +21,7 @@ const summaryRow = css`
 `;
 
 const taxSummaryContainer = css`
+	${textSans17}
 	margin-top: ${space[6]}px;
 	margin-bottom: ${space[5]}px;
 
@@ -33,7 +34,7 @@ const boldText = css`
 	font-weight: 700;
 `;
 
-type Props = {
+export type Props = {
 	amount: number;
 	taxRateResult: TaxRateResult;
 	currency: CurrencyInfo;
