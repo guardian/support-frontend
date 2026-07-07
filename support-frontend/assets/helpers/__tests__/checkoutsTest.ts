@@ -1,5 +1,10 @@
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
-import { simpleFormatAmount, simpleFormatTaxAmount } from '../forms/checkouts';
+import {
+	calculateTax,
+	roundTaxAmount,
+	simpleFormatAmount,
+	simpleFormatTaxAmount,
+} from '../forms/checkouts';
 
 describe('simpleFormatAmount', () => {
 	it.each([
@@ -25,4 +30,25 @@ describe('simpleFormatTaxAmount', () => {
 			expect(simpleFormatTaxAmount(currency, amount, taxRate)).toBe(expected);
 		},
 	);
+});
+
+describe('roundTaxAmount', () => {
+	it('rounds down to 2 decimal places', () => {
+		const taxAmount = 44.929;
+
+		const roundedTaxAmount = roundTaxAmount(taxAmount);
+
+		expect(roundedTaxAmount).toEqual(44.92);
+	});
+});
+
+describe('calculateTax', () => {
+	it('calculates tax based on a rate and an amount', () => {
+		const amount = 30;
+		const taxRate = 0.12;
+
+		const taxAmount = calculateTax(amount, taxRate);
+
+		expect(taxAmount).toEqual(3.6);
+	});
 });
