@@ -28,8 +28,8 @@ import { getThankYouOrder } from '../checkout/helpers/sessionStorage';
 import { OnboardingSteps } from './onboardingSteps';
 
 const identityFrameStyles = css`
+	overflow: hidden;
 	border-radius: ${space[2]}px;
-	zoom: 0.85;
 `;
 
 type UserStateChange = 'userSignedIn' | 'userRegistered';
@@ -232,7 +232,7 @@ function OnboardingComponent({
 				const iframeEl = identityIframeRef.current;
 
 				if (iframeEl) {
-					iframeEl.style.height = `${data.value + 200}px`;
+					iframeEl.style.height = `${data.value}px`;
 				}
 			}
 
