@@ -17,11 +17,13 @@ const summaryRow = css`
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
-	padding-top: 4px;
 `;
 
 const taxSummaryContainer = css`
 	${textSans17}
+	display: flex;
+	flex-direction: column;
+	gap: ${space[1]}px;
 	margin-top: ${space[6]}px;
 	margin-bottom: ${space[5]}px;
 

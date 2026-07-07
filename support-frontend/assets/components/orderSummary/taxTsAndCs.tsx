@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { neutral, space, textSans12 } from '@guardian/source/foundations';
 
 const tsAndCsContainer = css`
-	padding: ${space[3]}px 0 0 0;
+	padding: ${space[2]}px 0 0 0;
 `;
 
 const tsAndCsText = css`

@@ -13,10 +13,14 @@ const summaryRow = css`
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
-	padding-top: ${space[1]}px;
 `;
 
 const rowSpacing = css`
+	display: flex;
+	flex-direction: column;
+	gap: ${space[1]}px;
+	margin-top: ${space[1]}px;
+
 	&:not(:last-child) {
 		margin-bottom: ${space[6]}px;
 
