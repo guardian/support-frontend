@@ -1,14 +1,6 @@
 // ----- Imports ----- //
 import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 
-// ----- Types ----- //
-export type PaymentMethodSwitch =
-	| 'directDebit'
-	| 'payPal'
-	| 'payPalCompletePayments'
-	| 'stripe'
-	| 'stripeHostedCheckout';
-
 function roundAmount(amount: number) {
 	/**
 	 * This rounds a `number` to the second decimal.
