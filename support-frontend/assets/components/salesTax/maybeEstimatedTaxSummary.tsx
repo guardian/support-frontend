@@ -9,7 +9,7 @@ import {
 	simpleFormatAmount,
 } from 'helpers/forms/checkouts';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
-import type { TaxRateResult } from 'helpers/salesTax/getEstimatedSalesTaxRate';
+import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxRate';
 import { PriceSummary } from '../priceSummary/priceSummary';
 import { MaybeEstimatedTax } from './maybeEstimatedTax';
 
@@ -36,7 +36,7 @@ const boldText = css`
 
 export type Props = {
 	amount: number;
-	taxRateResult: TaxRateResult;
+	taxRateConfig: TaxRateConfig;
 	currency: CurrencyInfo;
 	billingPeriod: BillingPeriod;
 	fullPrice: string;
@@ -44,11 +44,11 @@ export type Props = {
 };
 
 function calculateAndFormatTotal(
-	taxRateResult: TaxRateResult,
+	taxRateConfig: TaxRateConfig,
 	currency: CurrencyInfo,
 	amount: number,
 ): string {
-	switch (taxRateResult.type) {
+	switch (taxRateConfig.type) {
 		case 'tax_inclusive':
 		case 'not_enough_information':
 			return simpleFormatAmount(currency, amount);
@@ -61,7 +61,7 @@ function calculateAndFormatTotal(
 
 			// Tax amounts are rounded down:
 			const roundedDownTaxAmount = roundTaxAmount(
-				calculateTax(amount, taxRateResult.rate),
+				calculateTax(amount, taxRateConfig.rate),
 			);
 
 			return simpleFormatAmount(currency, roundedTotal + roundedDownTaxAmount);
@@ -72,7 +72,7 @@ function calculateAndFormatTotal(
 export function MaybeEstimatedTaxSummary({
 	currency,
 	amount,
-	taxRateResult,
+	taxRateConfig,
 	billingPeriod,
 	fullPrice,
 	discountPrice,
@@ -80,7 +80,7 @@ export function MaybeEstimatedTaxSummary({
 	// Note: we'll have to revisit this if weekly gift is ever tax exclusive
 	const isWeeklyGift = false;
 
-	switch (taxRateResult.type) {
+	switch (taxRateConfig.type) {
 		case 'tax_inclusive':
 			return null;
 		case 'not_enough_information':
@@ -103,12 +103,12 @@ export function MaybeEstimatedTaxSummary({
 					</div>
 					<MaybeEstimatedTax
 						amount={amount}
-						taxRateResult={taxRateResult}
+						taxRateConfig={taxRateConfig}
 						currency={currency}
 					/>
 					<div css={[summaryRow, boldText]}>
 						<p>Due today</p>
-						<p>{calculateAndFormatTotal(taxRateResult, currency, amount)}</p>
+						<p>{calculateAndFormatTotal(taxRateConfig, currency, amount)}</p>
 					</div>
 				</div>
 			);

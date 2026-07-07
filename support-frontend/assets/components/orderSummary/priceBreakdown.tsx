@@ -5,7 +5,7 @@ import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { PriceSummary } from 'components/priceSummary/priceSummary';
 import { MaybeEstimatedTax } from 'components/salesTax/maybeEstimatedTax';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
-import type { TaxRateResult } from 'helpers/salesTax/getEstimatedSalesTaxRate';
+import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxRate';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import { TaxTsAndCs } from './taxTsAndCs';
 
@@ -63,7 +63,7 @@ type PriceBreakdownProps = {
 	isWeeklyGift: boolean;
 	currency: CurrencyInfo;
 	amount: number;
-	taxRateResult: TaxRateResult;
+	taxRateConfig: TaxRateConfig;
 	studentDiscount?: StudentDiscount;
 	billingPeriod: BillingPeriod;
 };
@@ -76,7 +76,7 @@ export function PriceBreakdown({
 	isWeeklyGift,
 	currency,
 	amount,
-	taxRateResult,
+	taxRateConfig,
 	billingPeriod,
 	studentDiscount,
 }: PriceBreakdownProps): JSX.Element {
@@ -108,7 +108,7 @@ export function PriceBreakdown({
 
 	// When the tax is shown separately the label is e.g. "Monthly price"
 	const priceLabel =
-		taxRateResult.type === 'tax_inclusive' ? 'Total' : `${billingPeriod} price`;
+		taxRateConfig.type === 'tax_inclusive' ? 'Total' : `${billingPeriod} price`;
 
 	return (
 		<>
@@ -129,7 +129,7 @@ export function PriceBreakdown({
 					// student discounts currently because they're never tax exclusive, but if
 					// this changes we'll need to revisit this amount prop.
 					amount={amount}
-					taxRateResult={taxRateResult}
+					taxRateConfig={taxRateConfig}
 				>
 					<TaxTsAndCs />
 				</MaybeEstimatedTax>

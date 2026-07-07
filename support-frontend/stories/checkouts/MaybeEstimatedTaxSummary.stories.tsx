@@ -39,7 +39,7 @@ export const TaxExclusive = Template.bind({});
 TaxExclusive.args = {
 	currency: getCurrencyInfo('CAD'),
 	amount: 120,
-	taxRateResult: {
+	taxRateConfig: {
 		type: 'tax_exclusive',
 		rate: 0.13,
 	},
@@ -52,7 +52,7 @@ export const NotEnoughInformation = Template.bind({});
 NotEnoughInformation.args = {
 	currency: getCurrencyInfo('CAD'),
 	amount: 20,
-	taxRateResult: {
+	taxRateConfig: {
 		type: 'not_enough_information',
 	},
 	billingPeriod: BillingPeriod.Monthly,
@@ -64,7 +64,7 @@ export const WithDiscount = Template.bind({});
 WithDiscount.args = {
 	currency: getCurrencyInfo('CAD'),
 	amount: 60,
-	taxRateResult: {
+	taxRateConfig: {
 		type: 'tax_exclusive',
 		rate: 0.13,
 	},

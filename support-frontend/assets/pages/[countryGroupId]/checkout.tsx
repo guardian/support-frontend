@@ -322,7 +322,7 @@ export function Checkout({
 		backButtonPathOverrideParam,
 	);
 
-	const taxRateResult = getEstimatedSalesTaxRate(
+	const taxRateConfig = getEstimatedSalesTaxRate(
 		appConfig.productCatalog,
 		appConfig.taxRates,
 		productKey,
@@ -352,7 +352,7 @@ export function Checkout({
 						nudgeSettings={nudgeSettings}
 						backButtonOrigin={backButtonOrigin}
 						backButtonPathOverride={backButtonPathOverride}
-						taxRateResult={taxRateResult}
+						taxRateConfig={taxRateConfig}
 					/>
 
 					<CheckoutForm
@@ -379,7 +379,7 @@ export function Checkout({
 						paypalClientId={paypalClientId}
 						billingState={billingState}
 						setBillingState={setBillingState}
-						taxRateResult={taxRateResult}
+						taxRateConfig={taxRateConfig}
 					/>
 				</PageLayout>
 			</Elements>

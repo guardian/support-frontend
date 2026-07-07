@@ -10,7 +10,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 
-export type TaxRateResult =
+export type TaxRateConfig =
 	| {
 			type: 'tax_exclusive';
 			rate: number;
@@ -33,7 +33,7 @@ export function getEstimatedSalesTaxRate(
 	ratePlanKey: ActiveRatePlanKey,
 	maybeProvinceCode: string | undefined,
 	supportRegionId: SupportRegionId,
-): TaxRateResult {
+): TaxRateConfig {
 	if (supportRegionId !== SupportRegionId.CA) {
 		return { type: 'tax_inclusive' };
 	}
