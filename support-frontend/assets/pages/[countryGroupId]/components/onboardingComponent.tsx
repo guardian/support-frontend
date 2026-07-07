@@ -29,15 +29,8 @@ import { OnboardingSteps } from './onboardingSteps';
 
 const identityFrameStyles = css`
 	border-radius: ${space[2]}px;
-	transform: scale(0.85);
-	transform-origin: top center;
-	width: calc(100% / 0.85); /* compensate so it still fills its container */
-	margin-left: calc((100% - 100% / 0.85) / 2); /* re-center after scaling */
+	zoom: 0.85;
 `;
-// const identityFrameStyles = css`
-//     border-radius: ${space[2]}px;
-//     zoom: 0.85;
-// `;
 
 type UserStateChange = 'userSignedIn' | 'userRegistered';
 type HrefIframeAllowList = 'recaptchaPrivacyPolicy' | 'recaptchaTerms';
@@ -239,7 +232,7 @@ function OnboardingComponent({
 				const iframeEl = identityIframeRef.current;
 
 				if (iframeEl) {
-					iframeEl.style.height = `${data.value}px`;
+					iframeEl.style.height = `${data.value + 200}px`;
 				}
 			}
 
