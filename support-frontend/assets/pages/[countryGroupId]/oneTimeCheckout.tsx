@@ -67,7 +67,7 @@ export function OneTimeCheckout({
 				fontFamily: 'GuardianTextSans',
 				accordionItemSpacing: '8px',
 				iconCardCvcColor: '#707070',
-				iconCardErrorColor: 'rgba(199, 0, 0, 0.75)',
+				iconCardErrorColor: '#C70000',
 				colorDanger: '#C70000',
 			},
 			rules: {
@@ -91,24 +91,20 @@ export function OneTimeCheckout({
 					color: '#052962',
 				},
 				'.RadioIcon': {
-					width: '24px',
-					height: '24px',
+					width: '28px',
+					height: '28px',
 				},
 				'.RadioIconOuter': {
-					r: '11.5',
-					fill: 'none',
 					stroke: '#707070',
-					strokeWidth: '2',
+					strokeWidth: '4',
 				},
 				'.RadioIconOuter--hovered': {
 					stroke: '#0077B6',
-					strokeWidth: '6',
+					strokeWidth: '2',
 				},
 				'.RadioIconOuter--checked': {
-					r: '11',
-					fill: 'white',
 					stroke: '#0077B6',
-					strokeWidth: '6',
+					strokeWidth: '7',
 				},
 
 				'.RadioIconInner--checked': {
