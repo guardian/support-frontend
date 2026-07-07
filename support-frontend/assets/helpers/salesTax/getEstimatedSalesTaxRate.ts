@@ -1,5 +1,5 @@
-import type { CaState } from '@modules/internationalisation/country';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { CaStateCode } from '@modules/internationalisation/state';
 import type {
 	WindowProductCatalog,
 	WindowTaxRates,
@@ -26,7 +26,7 @@ export function getEstimatedSalesTaxRate(
 	taxRates: WindowTaxRates,
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	maybeProvinceCode: CaState | undefined,
+	maybeProvinceCode: CaStateCode | undefined,
 	supportRegionId: SupportRegionId,
 ): TaxRateResult {
 	if (supportRegionId !== SupportRegionId.CA) {
