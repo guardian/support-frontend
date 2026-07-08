@@ -1,15 +1,8 @@
 // ----- Imports ----- //
 import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
+import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 
-// ----- Types ----- //
-export type PaymentMethodSwitch =
-	| 'directDebit'
-	| 'payPal'
-	| 'payPalCompletePayments'
-	| 'stripe'
-	| 'stripeHostedCheckout';
-
-function round(amount: number) {
+function roundAmount(amount: number) {
 	/**
 	 * This rounds a `number` to the second decimal.
 	 *
@@ -19,12 +12,26 @@ function round(amount: number) {
 	return Math.round(amount * 1e2) / 1e2;
 }
 
-const simpleFormatAmount = (currency: CurrencyInfo, amount: number): string => {
+function roundTaxAmount(amount: number) {
+	/**
+	 * This rounds a `number` down to the second decimal.
+	 *
+	 * `Number.toFixed` returns a string which is not useful for calculations
+	 * and would need unnecessary type conversions
+	 */
+	return Math.floor(amount * 1e2) / 1e2;
+}
+
+const simpleFormatAmount = (
+	currency: CurrencyInfo,
+	amount: number,
+	roundFn: (value: number) => number = roundAmount,
+): string => {
 	/**
 	 * We need to round the amount before checking if it is an Int for the edge case of something like 12.0001
 	 * which would not be an int, but then format as 12.00, whereas we'd like 12.
 	 */
-	const roundedAmount = round(amount);
+	const roundedAmount = roundFn(amount);
 	const isInt = roundedAmount % 1 === 0;
 	/** only add the percentile amount if it's not a round integer */
 	const amountText = isInt
@@ -34,19 +41,51 @@ const simpleFormatAmount = (currency: CurrencyInfo, amount: number): string => {
 	return `${currency.glyph}${amountText}`.trim();
 };
 
-const formatAmount = (
+function calculateTax(amount: number, taxRate: number): number {
+	// Multiply to avoid floating point precision issues. Should we be using a
+	// library for this?
+	return (amount * (taxRate * 100000)) / 100000;
+}
+
+function simpleFormatTaxAmount(
 	currency: CurrencyInfo,
 	amount: number,
-	verbose: boolean,
-): string => {
-	if (verbose) {
-		return `${amount} ${
-			amount === 1 ? currency.spokenCurrency : `${currency.spokenCurrency}s`
-		}`;
-	}
+	taxRate: number, // A decimal, e.g. 0.15
+): string {
+	const taxAmount = calculateTax(amount, taxRate);
+	return simpleFormatAmount(currency, taxAmount, roundTaxAmount);
+}
 
-	return simpleFormatAmount(currency, amount);
-};
+function calculateAndFormatTotal(
+	taxRateConfig: TaxRateConfig,
+	currency: CurrencyInfo,
+	amount: number,
+): string {
+	switch (taxRateConfig.type) {
+		case 'tax_inclusive':
+		case 'not_enough_information':
+			return simpleFormatAmount(currency, amount);
+		case 'tax_exclusive': {
+			// It's important that the rounding here reflects the individual amounts
+			// otherwise we may show the user a calculation which doesn't add up:
+			// Amounts are rounded the usual way:
+			const roundedTotal = roundAmount(amount);
+
+			// Tax amounts are rounded down:
+			const roundedDownTaxAmount = roundTaxAmount(
+				calculateTax(amount, taxRateConfig.rate),
+			);
+
+			return simpleFormatAmount(currency, roundedTotal + roundedDownTaxAmount);
+		}
+	}
+}
 
 // ----- Exports ----- //
-export { simpleFormatAmount, formatAmount };
+export {
+	simpleFormatAmount,
+	simpleFormatTaxAmount,
+	roundTaxAmount,
+	calculateTax,
+	calculateAndFormatTotal,
+};
