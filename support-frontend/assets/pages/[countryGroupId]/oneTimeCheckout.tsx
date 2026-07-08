@@ -100,7 +100,6 @@ export function OneTimeCheckout({
 				},
 				'.RadioIconOuter--hovered': {
 					stroke: '#0077B6',
-					strokeWidth: '2',
 				},
 				'.RadioIconOuter--checked': {
 					stroke: '#0077B6',
@@ -112,6 +111,7 @@ export function OneTimeCheckout({
 				},
 				'.Label': {
 					fontSize: '15px',
+					fontWeight: '600',
 					color: '#121212',
 				},
 				'.Input': {
