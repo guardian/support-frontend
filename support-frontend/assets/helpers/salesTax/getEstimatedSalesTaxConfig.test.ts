@@ -93,4 +93,19 @@ describe('getEstimatedSalesTaxRate', () => {
 			).toThrow('Missing tax rate data');
 		});
 	});
+
+	describe("when province passed isn't valid", () => {
+		it('throws an error', () => {
+			expect(() =>
+				getEstimatedSalesTaxConfig(
+					productCatalogFixture,
+					undefined,
+					'SupporterPlus',
+					'MonthlyTaxExclusive',
+					'XX',
+					SupportRegionId.CA,
+				),
+			).toThrow('Province code was an unexpected value: XX');
+		});
+	});
 });
