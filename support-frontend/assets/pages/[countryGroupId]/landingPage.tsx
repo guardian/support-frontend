@@ -1,4 +1,4 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
@@ -13,7 +13,7 @@ type Props = {
 	landingPageSettings: LandingPageVariant;
 };
 
-const countryId: IsoCountry = Country.detect();
+const countryId: CountryCode = Country.detect();
 
 export function LandingPage({
 	supportRegionId,

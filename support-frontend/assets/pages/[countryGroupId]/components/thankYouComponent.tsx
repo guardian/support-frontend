@@ -86,7 +86,7 @@ export function ThankYouComponent({
 	identityUserType,
 	landingPageSettings,
 }: CheckoutComponentProps) {
-	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
+	const countryId = Country.codeFromString(get('GU_country') ?? 'GB') ?? 'GB';
 
 	const { countryGroupId, currencyKey } =
 		getSupportRegionIdConfig(supportRegionId);

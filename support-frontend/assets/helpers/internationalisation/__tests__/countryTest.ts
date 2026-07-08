@@ -251,10 +251,10 @@ describe('detect country', () => {
 
 describe('find iso country', () => {
 	it('should return the isoCountry for a country name as a string, if it is in the list of countries', () => {
-		expect(Country.findIsoCountry('France')).toBe('FR');
+		expect(Country.findCountryCode('France')).toBe('FR');
 	});
 
 	it('should return null for a country name as a string that is not in the list of countries', () => {
-		expect(Country.findIsoCountry('Simple And Coherent Land')).toBe(null);
+		expect(Country.findCountryCode('Simple And Coherent Land')).toBe(null);
 	});
 });
