@@ -1,12 +1,15 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
-import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import type { OrderSchemaType } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
+import {
+	simpleFormatAmount,
+	simpleFormatTaxAmount,
+} from 'helpers/forms/checkouts';
+import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 
 export function getTodaysPaymentWithTaxExclusion(
 	finalAmount: number,
 	currencyKey: IsoCurrency,
-	taxConfig: OrderSchemaType['taxConfig'] | undefined,
+	taxConfig: TaxRateConfig | undefined,
 ): string | undefined {
 	if (!taxConfig || taxConfig.type !== 'tax_exclusive') {
 		return;
@@ -17,9 +20,10 @@ export function getTodaysPaymentWithTaxExclusion(
 		finalAmount,
 	);
 
-	const taxAmountWithCurrency = simpleFormatAmount(
+	const taxAmountWithCurrency = simpleFormatTaxAmount(
 		getCurrencyInfo(currencyKey),
-		finalAmount * taxConfig.rate,
+		finalAmount,
+		taxConfig.rate,
 	);
 
 	return `${finalAmountWithCurrency} + ${taxAmountWithCurrency} estimated tax`;
