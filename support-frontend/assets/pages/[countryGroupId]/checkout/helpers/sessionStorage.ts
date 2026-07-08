@@ -52,10 +52,13 @@ const OrderSchema = z.object({
 			z.object({
 				type: z.literal('tax_inclusive'),
 			}),
+			z.object({
+				type: z.literal('not_enough_information'),
+			}),
 		])
 		.optional(),
 });
-export type OrderSchemaType = z.infer<typeof OrderSchema>;
+type OrderSchemaType = z.infer<typeof OrderSchema>;
 export function setThankYouOrder(order: OrderSchemaType) {
 	storage.session.set(orderKey, order);
 }
