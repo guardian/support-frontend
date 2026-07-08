@@ -22,8 +22,8 @@ export type TaxRateConfig =
 			type: 'tax_inclusive';
 	  };
 
-function isCaState(value: string): value is CaState {
-	return caStateCodes.includes(value as CaState);
+function isCaState(value: string): value is CaStateCode {
+	return caStateCodes.includes(value as CaStateCode);
 }
 
 export function getEstimatedSalesTaxConfig(
