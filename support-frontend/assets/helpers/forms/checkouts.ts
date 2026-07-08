@@ -1,5 +1,6 @@
 // ----- Imports ----- //
 import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
+import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 
 function roundAmount(amount: number) {
 	/**
@@ -55,11 +56,36 @@ function simpleFormatTaxAmount(
 	return simpleFormatAmount(currency, taxAmount, roundTaxAmount);
 }
 
+function calculateAndFormatTotal(
+	taxRateConfig: TaxRateConfig,
+	currency: CurrencyInfo,
+	amount: number,
+): string {
+	switch (taxRateConfig.type) {
+		case 'tax_inclusive':
+		case 'not_enough_information':
+			return simpleFormatAmount(currency, amount);
+		case 'tax_exclusive': {
+			// It's important that the rounding here reflects the individual amounts
+			// otherwise we may show the user a calculation which doesn't add up:
+			// Amounts are rounded the usual way:
+			const roundedTotal = roundAmount(amount);
+
+			// Tax amounts are rounded down:
+			const roundedDownTaxAmount = roundTaxAmount(
+				calculateTax(amount, taxRateConfig.rate),
+			);
+
+			return simpleFormatAmount(currency, roundedTotal + roundedDownTaxAmount);
+		}
+	}
+}
+
 // ----- Exports ----- //
 export {
 	simpleFormatAmount,
 	simpleFormatTaxAmount,
-	roundAmount,
 	roundTaxAmount,
 	calculateTax,
+	calculateAndFormatTotal,
 };

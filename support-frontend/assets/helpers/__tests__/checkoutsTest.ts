@@ -1,5 +1,6 @@
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import {
+	calculateAndFormatTotal,
 	calculateTax,
 	roundTaxAmount,
 	simpleFormatAmount,
@@ -50,5 +51,67 @@ describe('calculateTax', () => {
 		const taxAmount = calculateTax(amount, taxRate);
 
 		expect(taxAmount).toEqual(3.6);
+	});
+});
+
+describe('calculateAndFormatTotal', () => {
+	it.each([
+		[
+			{ type: 'tax_exclusive', rate: 0.05 } as const,
+			getCurrencyInfo('CAD'),
+			15,
+			'$15.75',
+		],
+		[
+			{ type: 'tax_exclusive', rate: 0.12 } as const,
+			getCurrencyInfo('CAD'),
+			30,
+			'$33.60',
+		],
+		[
+			{ type: 'tax_exclusive', rate: 0.15 } as const,
+			getCurrencyInfo('CAD'),
+			150,
+			'$172.50',
+		],
+		[
+			{ type: 'tax_exclusive', rate: 0.14975 } as const,
+			getCurrencyInfo('CAD'),
+			300,
+			'$344.92',
+		],
+		[
+			{ type: 'tax_exclusive', rate: 0.14975 } as const,
+			getCurrencyInfo('CAD'),
+			15,
+			'$17.24',
+		],
+	])(
+		`%s / Amount: %i / Tax Rate: %d should return %s`,
+		(taxRateConfig, currency, amount, expected) => {
+			expect(calculateAndFormatTotal(taxRateConfig, currency, amount)).toBe(
+				expected,
+			);
+		},
+	);
+
+	it('returns the total when the tax config is not_enough_information', () => {
+		const taxConfig = { type: 'not_enough_information' } as const;
+		const currency = getCurrencyInfo('CAD');
+		const amount = 15;
+
+		const result = calculateAndFormatTotal(taxConfig, currency, amount);
+
+		expect(result).toEqual('$15');
+	});
+
+	it('returns the total when the tax config is tax_inclusive', () => {
+		const taxConfig = { type: 'tax_inclusive' } as const;
+		const currency = getCurrencyInfo('CAD');
+		const amount = 15;
+
+		const result = calculateAndFormatTotal(taxConfig, currency, amount);
+
+		expect(result).toEqual('$15');
 	});
 });

@@ -2,12 +2,7 @@ import { css } from '@emotion/react';
 import { from, space, textSans17 } from '@guardian/source/foundations';
 import type { CurrencyInfo } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
-import {
-	calculateTax,
-	roundAmount,
-	roundTaxAmount,
-	simpleFormatAmount,
-} from 'helpers/forms/checkouts';
+import { calculateAndFormatTotal } from 'helpers/forms/checkouts';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { PriceSummary } from '../priceSummary/priceSummary';
@@ -44,32 +39,6 @@ export type Props = {
 	fullPrice: string;
 	discountPrice: string | undefined;
 };
-
-function calculateAndFormatTotal(
-	taxRateConfig: TaxRateConfig,
-	currency: CurrencyInfo,
-	amount: number,
-): string {
-	switch (taxRateConfig.type) {
-		case 'tax_inclusive':
-		case 'not_enough_information':
-			return simpleFormatAmount(currency, amount);
-		case 'tax_exclusive': {
-			// It's important that the rounding here reflects the individual amounts
-			// otherwise we may show the user a calculation which doens't add up:
-
-			// Amounts are rounded the usual way:
-			const roundedTotal = roundAmount(amount);
-
-			// Tax amounts are rounded down:
-			const roundedDownTaxAmount = roundTaxAmount(
-				calculateTax(amount, taxRateConfig.rate),
-			);
-
-			return simpleFormatAmount(currency, roundedTotal + roundedDownTaxAmount);
-		}
-	}
-}
 
 export function MaybeEstimatedTaxSummary({
 	currency,
