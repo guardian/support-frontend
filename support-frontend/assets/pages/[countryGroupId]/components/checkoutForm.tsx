@@ -625,6 +625,7 @@ export default function CheckoutForm({
 				abParticipations,
 				promotion,
 				contributionAmount,
+				taxRateConfig,
 				weeklyGiftDeliveryDate: isGuardianWeeklyGiftProduct(
 					productKey,
 					ratePlanKey,
