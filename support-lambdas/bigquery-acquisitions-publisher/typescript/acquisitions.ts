@@ -1,7 +1,7 @@
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { IsoCurrency } from './currencySchema';
 import type {
 	AcquisitionProduct,
-	CountryCode,
 	PaymentFrequency,
 	PaymentProvider,
 	PrintOptions,
