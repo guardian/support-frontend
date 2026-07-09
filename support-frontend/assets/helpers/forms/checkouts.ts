@@ -60,6 +60,7 @@ function calculateAndFormatTotal(
 	taxRateConfig: TaxRateConfig,
 	currency: CurrencyInfo,
 	amount: number,
+	amountExclDiscount?: number,
 ): string {
 	switch (taxRateConfig.type) {
 		case 'tax_inclusive':
@@ -70,13 +71,28 @@ function calculateAndFormatTotal(
 			// otherwise we may show the user a calculation which doesn't add up:
 			// Amounts are rounded the usual way:
 			const roundedTotal = roundAmount(amount);
-
-			// Tax amounts are rounded down:
 			const roundedDownTaxAmount = roundTaxAmount(
 				calculateTax(amount, taxRateConfig.rate),
 			);
+			const totalWithTax = roundedTotal + roundedDownTaxAmount;
 
-			return simpleFormatAmount(currency, roundedTotal + roundedDownTaxAmount);
+			if (amountExclDiscount === undefined || amountExclDiscount === amount) {
+				return simpleFormatAmount(currency, totalWithTax);
+			} else {
+				const roundedExclDiscountTotal = roundAmount(amountExclDiscount);
+				const roundedDownTaxExclDiscountAmount = roundTaxAmount(
+					calculateTax(amountExclDiscount, taxRateConfig.rate),
+				);
+				const totalExclDiscountWithTax =
+					roundedExclDiscountTotal + roundedDownTaxExclDiscountAmount;
+
+				// This reflects the Zuora invoice calculation
+				// Due Today = Total Excl Discount With Tax - Total Incl Discount With Tax
+				return simpleFormatAmount(
+					currency,
+					totalExclDiscountWithTax - totalWithTax,
+				);
+			}
 		}
 	}
 }

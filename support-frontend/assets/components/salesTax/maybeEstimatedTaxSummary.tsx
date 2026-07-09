@@ -33,6 +33,7 @@ const boldText = css`
 
 export type Props = {
 	amount: number;
+	amountExclDiscount?: number;
 	taxRateConfig: TaxRateConfig;
 	currency: CurrencyInfo;
 	billingPeriod: BillingPeriod;
@@ -43,6 +44,7 @@ export type Props = {
 export function MaybeEstimatedTaxSummary({
 	currency,
 	amount,
+	amountExclDiscount,
 	taxRateConfig,
 	billingPeriod,
 	fullPrice,
@@ -80,7 +82,14 @@ export function MaybeEstimatedTaxSummary({
 					/>
 					<div css={[summaryRow, boldText]}>
 						<p>Due today</p>
-						<p>{calculateAndFormatTotal(taxRateConfig, currency, amount)}</p>
+						<p>
+							{calculateAndFormatTotal(
+								taxRateConfig,
+								currency,
+								amount,
+								amountExclDiscount,
+							)}
+						</p>
 					</div>
 				</div>
 			);

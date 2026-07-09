@@ -1249,6 +1249,7 @@ export default function CheckoutForm({
 						/>
 						<MaybeEstimatedTaxSummary
 							amount={finalAmount}
+							amountExclDiscount={originalAmount}
 							taxRateConfig={taxRateConfig}
 							currency={currency}
 							billingPeriod={billingPeriod}
