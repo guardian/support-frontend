@@ -234,4 +234,55 @@ describe('getCheckoutNudgeParticipations', () => {
 		);
 		expect(result).toBeUndefined();
 	});
+
+	it('uses the preview-checkout-nudge url querystring parameter to force participation', () => {
+		const result = getCheckoutNudgeParticipations(
+			'GBPCountries',
+			'/uk/one-time-checkout',
+			tests,
+			0,
+			`preview-checkout-nudge=${oneTimeToRecurring__US.name}:control`,
+		);
+		expect(result).toEqual({
+			variant: oneTimeToRecurring__US.variants[0],
+			fromProduct: oneTimeToRecurring__US.nudgeFromProduct,
+			participations: { [oneTimeToRecurring__US.name]: 'control' },
+		});
+	});
+
+	it('bypasses scheduler check when using preview-checkout-nudge param', () => {
+		const expiredTest: CheckoutNudgeTest = {
+			...oneTimeToRecurring__US,
+			name: 'expiredTest',
+			scheduler: { end: '2020-01-01T00:00' },
+		};
+		const result = getCheckoutNudgeParticipations(
+			'GBPCountries',
+			'/uk/one-time-checkout',
+			[expiredTest],
+			0,
+			`preview-checkout-nudge=${expiredTest.name}:control`,
+		);
+		expect(result).toEqual({
+			variant: expiredTest.variants[0],
+			fromProduct: expiredTest.nudgeFromProduct,
+			participations: { [expiredTest.name]: 'control' },
+		});
+	});
+
+	it('does not bypass scheduler check when using force-checkout-nudge param with expired scheduler', () => {
+		const expiredTest: CheckoutNudgeTest = {
+			...oneTimeToRecurring__US,
+			name: 'expiredTest',
+			scheduler: { end: '2020-01-01T00:00' },
+		};
+		const result = getCheckoutNudgeParticipations(
+			'GBPCountries',
+			'/uk/one-time-checkout',
+			[expiredTest],
+			0,
+			`force-checkout-nudge=${expiredTest.name}:control`,
+		);
+		expect(result).toBeUndefined();
+	});
 });
