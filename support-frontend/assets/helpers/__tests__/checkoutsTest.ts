@@ -23,8 +23,8 @@ describe('simpleFormatTaxAmount', () => {
 		[getCurrencyInfo('CAD'), 15, 0.05, '$0.75'],
 		[getCurrencyInfo('CAD'), 30, 0.12, '$3.60'],
 		[getCurrencyInfo('CAD'), 150, 0.15, '$22.50'],
-		[getCurrencyInfo('CAD'), 300, 0.14975, '$44.92'],
-		[getCurrencyInfo('CAD'), 15, 0.14975, '$2.24'],
+		[getCurrencyInfo('CAD'), 300, 0.14975, '$44.93'],
+		[getCurrencyInfo('CAD'), 15, 0.14975, '$2.25'],
 	])(
 		`%s / Amount: %i / Tax Rate: %d should format as %s`,
 		(currency, amount, taxRate, expected) => {
@@ -39,7 +39,7 @@ describe('roundTaxAmount', () => {
 
 		const roundedTaxAmount = roundTaxAmount(taxAmount);
 
-		expect(roundedTaxAmount).toEqual(44.92);
+		expect(roundedTaxAmount).toEqual(44.93);
 	});
 });
 
@@ -78,13 +78,13 @@ describe('calculateAndFormatTotal', () => {
 			{ type: 'tax_exclusive', rate: 0.14975 } as const,
 			getCurrencyInfo('CAD'),
 			300,
-			'$344.92',
+			'$344.93',
 		],
 		[
 			{ type: 'tax_exclusive', rate: 0.14975 } as const,
 			getCurrencyInfo('CAD'),
 			15,
-			'$17.24',
+			'$17.25',
 		],
 	])(
 		`%s / Amount: %i / Tax Rate: %d should return %s`,
