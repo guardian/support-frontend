@@ -19,7 +19,7 @@ function roundTaxAmount(amount: number) {
 	 * `Number.toFixed` returns a string which is not useful for calculations
 	 * and would need unnecessary type conversions
 	 */
-	return Math.floor(amount * 1e2) / 1e2;
+	return Math.round(amount * 1e2) / 1e2;
 }
 
 const simpleFormatAmount = (
