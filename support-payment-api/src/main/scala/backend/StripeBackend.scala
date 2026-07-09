@@ -315,11 +315,16 @@ class StripeBackend(
       data: StripeRequest,
       identityId: String,
   ): EitherT[Future, BackendError, SendMessageResponse] = {
+    logger.info(s"payment method: ${data.paymentData.stripePaymentMethod}")
+    val paymentProvider = data.paymentData.stripePaymentMethod match {
+      case Some(StripePaymentMethod.StripePaypal) => PaymentProvider.Paypal
+      case _ => PaymentProvider.Stripe
+    }
     val contributorRow = ContributorRow(
       email,
       data.paymentData.currency.toString,
       identityId,
-      PaymentProvider.Stripe,
+      paymentProvider,
       None,
       data.paymentData.amount,
     )

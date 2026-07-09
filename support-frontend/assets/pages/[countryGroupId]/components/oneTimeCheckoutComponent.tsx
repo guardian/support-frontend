@@ -179,10 +179,6 @@ const similarProductsConsentCheckboxContainer = css`
 	}
 `;
 
-const recaptchaContainer = css`
-	margin-top: 0 !important;
-`;
-
 type OneTimeCheckoutComponentProps = {
 	supportRegionId: SupportRegionId;
 	appConfig: AppConfig;
@@ -432,7 +428,8 @@ export function OneTimeCheckoutComponent({
 
 	const [isPaymentElementComplete, setIsPaymentElementComplete] =
 		useState(false);
-	const [recaptchaError, setRecaptchaError] = useState<string>();
+	const [paymentElementRecaptchaError, setPaymentElementRecaptchaError] =
+		useState<string>();
 
 	const validate = (
 		event: React.FormEvent<HTMLInputElement>,
@@ -511,7 +508,7 @@ export function OneTimeCheckoutComponent({
 						);
 					}
 					if (!recaptchaToken) {
-						setRecaptchaError('Please complete security check');
+						setPaymentElementRecaptchaError('Please complete security check');
 					}
 					paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
 					return;
@@ -1017,7 +1014,7 @@ export function OneTimeCheckoutComponent({
 								<SecureTransactionIndicator hideText={true} />
 							</Legend>
 							{inStripePaymentElementVariant && (
-								<>
+								<div>
 									<div
 										css={css`
 											padding-top: 12px;
@@ -1060,30 +1057,27 @@ export function OneTimeCheckoutComponent({
 											}}
 										/>
 									</div>
-									{recaptchaError && (
+									{paymentElementRecaptchaError && (
 										<div
 											role="alert"
 											data-qm-error
 											css={css`
-												margin-top: 0px !important;
 												margin-bottom: 8px;
 											`}
 										>
-											<InlineError>{recaptchaError}</InlineError>
+											<InlineError>{paymentElementRecaptchaError}</InlineError>
 										</div>
 									)}
-									<div css={recaptchaContainer}>
-										<Recaptcha
-											onRecaptchaCompleted={(token) => {
-												setRecaptchaToken(token);
-												setRecaptchaError(undefined);
-											}}
-											onRecaptchaExpired={() => {
-												setRecaptchaToken(undefined);
-												setRecaptchaError(undefined);
-											}}
-										/>
-									</div>
+									<Recaptcha
+										onRecaptchaCompleted={(token) => {
+											setRecaptchaToken(token);
+											setPaymentElementRecaptchaError(undefined);
+										}}
+										onRecaptchaExpired={() => {
+											setRecaptchaToken(undefined);
+											setPaymentElementRecaptchaError(undefined);
+										}}
+									/>
 									<Divider
 										size="full"
 										cssOverrides={css`
@@ -1097,7 +1091,7 @@ export function OneTimeCheckoutComponent({
 											}
 										`}
 									/>
-								</>
+								</div>
 							)}
 
 							{!inStripePaymentElementVariant && (

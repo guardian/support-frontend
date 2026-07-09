@@ -139,6 +139,7 @@ class PayPalOneOff(
           "email" -> email,
           "currency" -> currency,
           "amount" -> amount,
+          "stripePaymentMethod" -> "StripePaypal",
         )
 
         val similarProductsConsentCookie = request.cookies.get("gu_similar_products_consent")

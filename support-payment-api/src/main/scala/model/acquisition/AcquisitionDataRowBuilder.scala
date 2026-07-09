@@ -126,7 +126,7 @@ object AcquisitionDataRowBuilder {
 
   def mapStripePaymentProvider(stripePaymentMethod: Option[StripePaymentMethod]): PaymentProvider =
     stripePaymentMethod match {
-      case Some(StripePaymentMethod.StripeCheckout) | None => Stripe
+      case Some(StripePaymentMethod.StripeCheckout) | Some(StripePaymentMethod.StripePaypal) | None => Stripe
       case Some(StripePaymentMethod.StripeApplePay) => StripeApplePay
       case Some(StripePaymentMethod.StripePaymentRequestButton) => StripePaymentRequestButton
     }
