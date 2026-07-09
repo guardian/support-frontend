@@ -1,4 +1,4 @@
-import { countryCodeSchema } from '@guardian/support-service-lambdas/modules/internationalisation/src/schemas';
+import { countryCodeSchema } from '@modules/internationalisation/schemas';
 import { z } from 'zod';
 import { IsoCurrencySchema } from './currencySchema';
 
