@@ -46,7 +46,7 @@ function calculateAndFormatTotal(
 	taxRateConfig: TaxRateConfig,
 	currency: CurrencyInfo,
 	amount: number,
-	amountExclDiscount?: number,
+	amountExclDiscount: number,
 ): string {
 	switch (taxRateConfig.type) {
 		case 'tax_inclusive':
@@ -62,7 +62,7 @@ function calculateAndFormatTotal(
 			);
 			const totalWithTax = roundedTotal + roundedDownTaxAmount;
 
-			if (amountExclDiscount === undefined || amountExclDiscount === amount) {
+			if (amountExclDiscount === amount) {
 				return simpleFormatAmount(currency, totalWithTax);
 			} else {
 				const roundedExclDiscountTotal = roundAmount(amountExclDiscount);

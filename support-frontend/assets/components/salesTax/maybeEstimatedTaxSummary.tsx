@@ -33,7 +33,7 @@ const boldText = css`
 
 export type Props = {
 	amount: number;
-	amountExclDiscount?: number;
+	amountExclDiscount: number;
 	taxRateConfig: TaxRateConfig;
 	currency: CurrencyInfo;
 	billingPeriod: BillingPeriod;

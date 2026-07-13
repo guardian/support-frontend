@@ -49,11 +49,13 @@ describe('calculateAndFormatTotal', () => {
 			{ type: 'tax_exclusive', rate: 0.05 } as const,
 			getCurrencyInfo('CAD'),
 			15,
+			15,
 			'$15.75',
 		],
 		[
 			{ type: 'tax_exclusive', rate: 0.12 } as const,
 			getCurrencyInfo('CAD'),
+			30,
 			30,
 			'$33.60',
 		],
@@ -61,11 +63,13 @@ describe('calculateAndFormatTotal', () => {
 			{ type: 'tax_exclusive', rate: 0.15 } as const,
 			getCurrencyInfo('CAD'),
 			150,
+			150,
 			'$172.50',
 		],
 		[
 			{ type: 'tax_exclusive', rate: 0.14975 } as const,
 			getCurrencyInfo('CAD'),
+			300,
 			300,
 			'$344.93',
 		],
@@ -73,14 +77,15 @@ describe('calculateAndFormatTotal', () => {
 			{ type: 'tax_exclusive', rate: 0.14975 } as const,
 			getCurrencyInfo('CAD'),
 			15,
+			15,
 			'$17.25',
 		],
 	])(
 		`%s / Amount: %i / Tax Rate: %d should return %s`,
-		(taxRateConfig, currency, amount, expected) => {
-			expect(calculateAndFormatTotal(taxRateConfig, currency, amount)).toBe(
-				expected,
-			);
+		(taxRateConfig, currency, amount, fullAmount, expected) => {
+			expect(
+				calculateAndFormatTotal(taxRateConfig, currency, amount, fullAmount),
+			).toBe(expected);
 		},
 	);
 
@@ -89,7 +94,7 @@ describe('calculateAndFormatTotal', () => {
 		const currency = getCurrencyInfo('CAD');
 		const amount = 15;
 
-		const result = calculateAndFormatTotal(taxConfig, currency, amount);
+		const result = calculateAndFormatTotal(taxConfig, currency, amount, amount);
 
 		expect(result).toEqual('$15');
 	});
@@ -99,7 +104,7 @@ describe('calculateAndFormatTotal', () => {
 		const currency = getCurrencyInfo('CAD');
 		const amount = 15;
 
-		const result = calculateAndFormatTotal(taxConfig, currency, amount);
+		const result = calculateAndFormatTotal(taxConfig, currency, amount, amount);
 
 		expect(result).toEqual('$15');
 	});
