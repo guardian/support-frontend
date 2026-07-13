@@ -80,6 +80,20 @@ describe('calculateAndFormatTotal', () => {
 			15,
 			'$17.25',
 		],
+		[
+			{ type: 'tax_exclusive', rate: 0.14975 } as const,
+			getCurrencyInfo('CAD'),
+			12, // This has a discount applied
+			15, // This is the full amount
+			'$13.80',
+		],
+		[
+			{ type: 'tax_exclusive', rate: 0.14975 } as const,
+			getCurrencyInfo('CAD'),
+			7.5, // This has a discount applied
+			15, // This is the full amount
+			'$8.63',
+		],
 	])(
 		`%s / Amount: %i / Tax Rate: %d should return %s`,
 		(taxRateConfig, currency, amount, fullAmount, expected) => {
