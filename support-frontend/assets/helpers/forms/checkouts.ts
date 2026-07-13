@@ -12,26 +12,12 @@ function roundAmount(amount: number) {
 	return Math.round(amount * 1e2) / 1e2;
 }
 
-function roundTaxAmount(amount: number) {
-	/**
-	 * This rounds a `number` down to the second decimal.
-	 *
-	 * `Number.toFixed` returns a string which is not useful for calculations
-	 * and would need unnecessary type conversions
-	 */
-	return Math.round(amount * 1e2) / 1e2;
-}
-
-const simpleFormatAmount = (
-	currency: CurrencyInfo,
-	amount: number,
-	roundFn: (value: number) => number = roundAmount,
-): string => {
+const simpleFormatAmount = (currency: CurrencyInfo, amount: number): string => {
 	/**
 	 * We need to round the amount before checking if it is an Int for the edge case of something like 12.0001
 	 * which would not be an int, but then format as 12.00, whereas we'd like 12.
 	 */
-	const roundedAmount = roundFn(amount);
+	const roundedAmount = roundAmount(amount);
 	const isInt = roundedAmount % 1 === 0;
 	/** only add the percentile amount if it's not a round integer */
 	const amountText = isInt
@@ -53,7 +39,7 @@ function simpleFormatTaxAmount(
 	taxRate: number, // A decimal, e.g. 0.15
 ): string {
 	const taxAmount = calculateTax(amount, taxRate);
-	return simpleFormatAmount(currency, taxAmount, roundTaxAmount);
+	return simpleFormatAmount(currency, taxAmount);
 }
 
 function calculateAndFormatTotal(
@@ -71,7 +57,7 @@ function calculateAndFormatTotal(
 			// otherwise we may show the user a calculation which doesn't add up:
 			// Amounts are rounded the usual way:
 			const roundedTotal = roundAmount(amount);
-			const roundedDownTaxAmount = roundTaxAmount(
+			const roundedDownTaxAmount = roundAmount(
 				calculateTax(amount, taxRateConfig.rate),
 			);
 			const totalWithTax = roundedTotal + roundedDownTaxAmount;
@@ -80,7 +66,7 @@ function calculateAndFormatTotal(
 				return simpleFormatAmount(currency, totalWithTax);
 			} else {
 				const roundedExclDiscountTotal = roundAmount(amountExclDiscount);
-				const roundedDownTaxExclDiscountAmount = roundTaxAmount(
+				const roundedDownTaxExclDiscountAmount = roundAmount(
 					calculateTax(amountExclDiscount, taxRateConfig.rate),
 				);
 				const totalExclDiscountWithTax =
@@ -101,7 +87,6 @@ function calculateAndFormatTotal(
 export {
 	simpleFormatAmount,
 	simpleFormatTaxAmount,
-	roundTaxAmount,
 	calculateTax,
 	calculateAndFormatTotal,
 };

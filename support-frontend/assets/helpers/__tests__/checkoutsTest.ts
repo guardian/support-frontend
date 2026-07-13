@@ -2,7 +2,6 @@ import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import {
 	calculateAndFormatTotal,
 	calculateTax,
-	roundTaxAmount,
 	simpleFormatAmount,
 	simpleFormatTaxAmount,
 } from '../forms/checkouts';
@@ -31,16 +30,6 @@ describe('simpleFormatTaxAmount', () => {
 			expect(simpleFormatTaxAmount(currency, amount, taxRate)).toBe(expected);
 		},
 	);
-});
-
-describe('roundTaxAmount', () => {
-	it('rounds down to 2 decimal places', () => {
-		const taxAmount = 44.929;
-
-		const roundedTaxAmount = roundTaxAmount(taxAmount);
-
-		expect(roundedTaxAmount).toEqual(44.93);
-	});
 });
 
 describe('calculateTax', () => {
