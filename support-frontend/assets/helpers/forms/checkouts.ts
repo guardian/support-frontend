@@ -75,28 +75,32 @@ function calculateAndFormatTotal(
 			// otherwise we may show the user a calculation which doesn't add up:
 			// Amounts are rounded the usual way:
 			const roundedTotal = roundAmount(finalAmount);
-			const roundedDownTaxAmount = roundAmount(
-				calculateTax(originalAmount, finalAmount, taxRateConfig.rate),
-			);
-			const totalWithTax = roundedTotal + roundedDownTaxAmount;
 
-			if (originalAmount === finalAmount) {
-				return simpleFormatAmount(currency, totalWithTax);
-			} else {
-				const roundedExclDiscountTotal = roundAmount(originalAmount);
-				const roundedDownTaxExclDiscountAmount = roundAmount(
-					calculateTax(originalAmount, finalAmount, taxRateConfig.rate),
-				);
-				const totalExclDiscountWithTax =
-					roundedExclDiscountTotal + roundedDownTaxExclDiscountAmount;
+			const tax = calculateTax(originalAmount, finalAmount, taxRateConfig.rate);
 
-				// This reflects the Zuora invoice calculation
-				// Due Today = Total Excl Discount With Tax - Total Incl Discount With Tax
-				return simpleFormatAmount(
-					currency,
-					totalExclDiscountWithTax - totalWithTax,
-				);
-			}
+			return simpleFormatAmount(currency, roundedTotal + tax);
+			// const roundedDownTaxAmount = roundAmount(
+			// 	calculateTax(originalAmount, finalAmount, taxRateConfig.rate),
+			// );
+			// const totalWithTax = roundedTotal + roundedDownTaxAmount;
+
+			// if (originalAmount === finalAmount) {
+			// 	return simpleFormatAmount(currency, totalWithTax);
+			// } else {
+			// 	const roundedExclDiscountTotal = roundAmount(originalAmount);
+			// 	const roundedDownTaxExclDiscountAmount = roundAmount(
+			// 		calculateTax(originalAmount, finalAmount, taxRateConfig.rate),
+			// 	);
+			// 	const totalExclDiscountWithTax =
+			// 		roundedExclDiscountTotal + roundedDownTaxExclDiscountAmount;
+
+			// 	// This reflects the Zuora invoice calculation
+			// 	// Due Today = Total Excl Discount With Tax - Total Incl Discount With Tax
+			// 	return simpleFormatAmount(
+			// 		currency,
+			// 		totalExclDiscountWithTax - totalWithTax,
+			// 	);
+			// }
 		}
 	}
 }

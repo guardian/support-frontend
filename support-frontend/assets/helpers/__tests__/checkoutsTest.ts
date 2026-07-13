@@ -106,19 +106,19 @@ describe('calculateAndFormatTotal', () => {
 		[
 			{ type: 'tax_exclusive', rate: 0.14975 } as const,
 			getCurrencyInfo('CAD'),
-			12, // This has a discount applied
 			15, // This is the full amount
+			12, // This has a discount applied
 			'$13.80',
 		],
 		[
 			{ type: 'tax_exclusive', rate: 0.14975 } as const,
 			getCurrencyInfo('CAD'),
-			7.5, // This has a discount applied
 			15, // This is the full amount
+			7.5, // This has a discount applied
 			'$8.63',
 		],
 	])(
-		`%s / Amount: %i / Tax Rate: %d should return %s`,
+		`%s / Currency %s / Original amount: %i / Final amount: %i should return %s`,
 		(taxRateConfig, currency, originalAmount, finalAmount, expected) => {
 			expect(
 				calculateAndFormatTotal(
