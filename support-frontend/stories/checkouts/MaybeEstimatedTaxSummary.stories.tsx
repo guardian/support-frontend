@@ -38,7 +38,8 @@ Template.args = {} as MaybeEstimatedTaxSummaryProps;
 export const TaxExclusive = Template.bind({});
 TaxExclusive.args = {
 	currency: getCurrencyInfo('CAD'),
-	amount: 120,
+	finalAmount: 120,
+	originalAmount: 120,
 	taxRateConfig: {
 		type: 'tax_exclusive',
 		rate: 0.13,
@@ -51,7 +52,8 @@ TaxExclusive.args = {
 export const NotEnoughInformation = Template.bind({});
 NotEnoughInformation.args = {
 	currency: getCurrencyInfo('CAD'),
-	amount: 20,
+	finalAmount: 20,
+	originalAmount: 20,
 	taxRateConfig: {
 		type: 'not_enough_information',
 	},
@@ -63,7 +65,8 @@ NotEnoughInformation.args = {
 export const WithDiscount = Template.bind({});
 WithDiscount.args = {
 	currency: getCurrencyInfo('CAD'),
-	amount: 60,
+	finalAmount: 60,
+	originalAmount: 60,
 	taxRateConfig: {
 		type: 'tax_exclusive',
 		rate: 0.13,

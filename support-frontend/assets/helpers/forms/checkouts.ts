@@ -27,47 +27,56 @@ const simpleFormatAmount = (currency: CurrencyInfo, amount: number): string => {
 	return `${currency.glyph}${amountText}`.trim();
 };
 
-function calculateTax(amount: number, taxRate: number): number {
+function calculateTax(
+	originalAmount: number,
+	finalAmount: number,
+	taxRate: number,
+): number {
 	// Multiply to avoid floating point precision issues. Should we be using a
 	// library for this?
-	return (amount * (taxRate * 100000)) / 100000;
+	if (originalAmount === finalAmount) {
+		return (finalAmount * (taxRate * 100000)) / 100000;
+	}
+
+	throw new Error('not implemented yet');
 }
 
 function simpleFormatTaxAmount(
 	currency: CurrencyInfo,
-	amount: number,
+	originalAmount: number,
+	finalAmount: number,
 	taxRate: number, // A decimal, e.g. 0.15
 ): string {
-	const taxAmount = calculateTax(amount, taxRate);
+	const taxAmount = calculateTax(originalAmount, finalAmount, taxRate);
 	return simpleFormatAmount(currency, taxAmount);
 }
 
 function calculateAndFormatTotal(
 	taxRateConfig: TaxRateConfig,
 	currency: CurrencyInfo,
-	amount: number,
-	amountExclDiscount: number,
+	originalAmount: number,
+	finalAmount: number,
 ): string {
 	switch (taxRateConfig.type) {
 		case 'tax_inclusive':
 		case 'not_enough_information':
-			return simpleFormatAmount(currency, amount);
+			return simpleFormatAmount(currency, finalAmount);
 		case 'tax_exclusive': {
 			// It's important that the rounding here reflects the individual amounts
 			// otherwise we may show the user a calculation which doesn't add up:
 			// Amounts are rounded the usual way:
-			const roundedTotal = roundAmount(amount);
+			const roundedTotal = roundAmount(finalAmount);
 			const roundedDownTaxAmount = roundAmount(
-				calculateTax(amount, taxRateConfig.rate),
+				calculateTax(originalAmount, finalAmount, taxRateConfig.rate),
 			);
 			const totalWithTax = roundedTotal + roundedDownTaxAmount;
 
-			if (amountExclDiscount === amount) {
+			if (originalAmount === finalAmount) {
 				return simpleFormatAmount(currency, totalWithTax);
 			} else {
-				const roundedExclDiscountTotal = roundAmount(amountExclDiscount);
+				const roundedExclDiscountTotal = roundAmount(originalAmount);
 				const roundedDownTaxExclDiscountAmount = roundAmount(
-					calculateTax(amountExclDiscount, taxRateConfig.rate),
+					calculateTax(originalAmount, finalAmount, taxRateConfig.rate),
 				);
 				const totalExclDiscountWithTax =
 					roundedExclDiscountTotal + roundedDownTaxExclDiscountAmount;

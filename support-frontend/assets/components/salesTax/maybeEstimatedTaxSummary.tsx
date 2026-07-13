@@ -32,8 +32,8 @@ const boldText = css`
 `;
 
 export type Props = {
-	amount: number;
-	amountExclDiscount: number;
+	finalAmount: number;
+	originalAmount: number;
 	taxRateConfig: TaxRateConfig;
 	currency: CurrencyInfo;
 	billingPeriod: BillingPeriod;
@@ -43,8 +43,8 @@ export type Props = {
 
 export function MaybeEstimatedTaxSummary({
 	currency,
-	amount,
-	amountExclDiscount,
+	finalAmount,
+	originalAmount,
 	taxRateConfig,
 	billingPeriod,
 	fullPrice,
@@ -76,7 +76,8 @@ export function MaybeEstimatedTaxSummary({
 						/>
 					</div>
 					<MaybeEstimatedTax
-						amount={amount}
+						finalAmount={finalAmount}
+						originalAmount={originalAmount}
 						taxRateConfig={taxRateConfig}
 						currency={currency}
 					/>
@@ -86,8 +87,8 @@ export function MaybeEstimatedTaxSummary({
 							{calculateAndFormatTotal(
 								taxRateConfig,
 								currency,
-								amount,
-								amountExclDiscount,
+								finalAmount,
+								originalAmount,
 							)}
 						</p>
 					</div>

@@ -47,6 +47,7 @@ type CheckoutSummaryProps = {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	originalAmount: number;
+	finalAmount: number;
 	countryId: CountryCode;
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
@@ -67,6 +68,7 @@ export default function CheckoutSummary({
 	productKey,
 	ratePlanKey,
 	originalAmount,
+	finalAmount,
 	countryId,
 	abParticipations,
 	landingPageSettings,
@@ -186,7 +188,8 @@ export default function CheckoutSummary({
 					ratePlanLabel={ratePlanDetail.displayName ?? ratePlanDetail.label}
 					taxRateConfig={taxRateConfig}
 					billingPeriod={ratePlanDetail.billingPeriod}
-					amount={originalAmount}
+					originalAmount={originalAmount}
+					finalAmount={finalAmount}
 					promotion={promotion}
 					currency={currency}
 					checkListData={benefitsCheckListData}

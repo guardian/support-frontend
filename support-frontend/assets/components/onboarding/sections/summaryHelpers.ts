@@ -22,6 +22,7 @@ export function getTodaysPaymentWithTaxExclusion(
 
 	const taxAmountWithCurrency = simpleFormatTaxAmount(
 		getCurrencyInfo(currencyKey),
+		finalAmount, // TODO: this should be originalAmount
 		finalAmount,
 		taxConfig.rate,
 	);

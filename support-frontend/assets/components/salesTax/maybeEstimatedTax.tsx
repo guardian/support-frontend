@@ -5,7 +5,8 @@ import { simpleFormatTaxAmount } from 'helpers/forms/checkouts';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 
 type Props = {
-	amount: number;
+	finalAmount: number;
+	originalAmount: number;
 	taxRateConfig: TaxRateConfig;
 	currency: CurrencyInfo;
 	children?: ReactNode;
@@ -19,7 +20,8 @@ const rowContainer = css`
 
 export function MaybeEstimatedTax({
 	currency,
-	amount,
+	originalAmount,
+	finalAmount,
 	taxRateConfig,
 	children,
 }: Props) {
@@ -41,7 +43,14 @@ export function MaybeEstimatedTax({
 				<>
 					<div css={rowContainer}>
 						<p>Estimated tax</p>
-						<p>{simpleFormatTaxAmount(currency, amount, taxRateConfig.rate)}</p>
+						<p>
+							{simpleFormatTaxAmount(
+								currency,
+								originalAmount,
+								finalAmount,
+								taxRateConfig.rate,
+							)}
+						</p>
 					</div>
 					{children}
 				</>

@@ -66,7 +66,8 @@ type PriceBreakdownProps = {
 	savingText: string | null;
 	isWeeklyGift: boolean;
 	currency: CurrencyInfo;
-	amount: number;
+	finalAmount: number;
+	originalAmount: number;
 	taxRateConfig: TaxRateConfig;
 	studentDiscount?: StudentDiscount;
 	billingPeriod: BillingPeriod;
@@ -79,7 +80,8 @@ export function PriceBreakdown({
 	savingText,
 	isWeeklyGift,
 	currency,
-	amount,
+	finalAmount,
+	originalAmount,
 	taxRateConfig,
 	billingPeriod,
 	studentDiscount,
@@ -133,7 +135,8 @@ export function PriceBreakdown({
 					// when a promotion applies, otherwise the full amount. This doesn't handle
 					// student discounts currently because they're never tax exclusive, but if
 					// this changes we'll need to revisit this amount prop.
-					amount={amount}
+					finalAmount={finalAmount}
+					originalAmount={originalAmount}
 					taxRateConfig={taxRateConfig}
 				>
 					<TaxTsAndCs />

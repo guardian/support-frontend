@@ -351,6 +351,7 @@ export function Checkout({
 						ratePlanKey={ratePlanKey}
 						promotion={promotion}
 						originalAmount={payment.originalAmount}
+						finalAmount={payment.finalAmount}
 						countryId={countryId}
 						forcedCountry={forcedCountry}
 						abParticipations={abParticipations}
