@@ -2,7 +2,9 @@ import { css } from '@emotion/react';
 import { neutral, space, textSans12 } from '@guardian/source/foundations';
 
 const tsAndCsContainer = css`
-	padding: ${space[2]}px 0 0 0;
+	// In the weekly pricing context, child divs are given a padding of 0, we
+	// need to override that here.
+	padding: ${space[2]}px 0 0 0 !important;
 `;
 
 const tsAndCsText = css`

@@ -88,9 +88,12 @@ export function PriceBreakdown({
 	const paymentFrequency = getBillingPeriodNoun(billingPeriod, isWeeklyGift);
 	const period = studentDiscount?.periodNoun ?? paymentFrequency;
 
-	// Ignore tax calculation for weekly pricing, we'll revisit this if
-	// we want to show weekly prices for tax exclusive rate plans in Canada
 	if (weeklyPrice) {
+		const billingPeriodLabel =
+			taxRateConfig.type === 'tax_inclusive'
+				? `Total due every ${period}`
+				: `Billed each ${period}`;
+
 		return (
 			<div css={weeklyPricingSummary}>
 				<div css={summaryRow}>
@@ -98,9 +101,19 @@ export function PriceBreakdown({
 					<p>{weeklyPrice}</p>
 				</div>
 				<div css={[summaryRow, boldText]}>
-					<p>Total due every {period}</p>
+					<p>{billingPeriodLabel}</p>
 					<p>{discountPrice ?? fullPrice}</p>
 				</div>
+				<MaybeEstimatedTax
+					currency={currency}
+					// This doesn't handle student discounts currently because
+					// they're never tax exclusive, but if this changes we'll
+					// need to revisit this payment prop.
+					payment={payment}
+					taxRateConfig={taxRateConfig}
+				>
+					<TaxTsAndCs />
+				</MaybeEstimatedTax>
 				{savingText && (
 					<div>
 						<hr css={hrCss} />
