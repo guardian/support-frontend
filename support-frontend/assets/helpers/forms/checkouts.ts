@@ -34,11 +34,20 @@ function calculateTax(
 ): number {
 	// Multiply to avoid floating point precision issues. Should we be using a
 	// library for this?
+	const taxOnOriginalAmount = roundAmount(
+		(originalAmount * (taxRate * 100000)) / 100000,
+	);
+
 	if (originalAmount === finalAmount) {
-		return (finalAmount * (taxRate * 100000)) / 100000;
+		return taxOnOriginalAmount;
 	}
 
-	throw new Error('not implemented yet');
+	const discountAmount = originalAmount - finalAmount;
+	const taxOnDiscountAmount = roundAmount(
+		(discountAmount * (taxRate * 100000)) / 100000,
+	);
+
+	return taxOnOriginalAmount - taxOnDiscountAmount;
 }
 
 function simpleFormatTaxAmount(

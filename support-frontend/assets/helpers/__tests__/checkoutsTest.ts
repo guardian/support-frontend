@@ -44,6 +44,26 @@ describe('calculateTax', () => {
 
 		expect(taxAmount).toEqual(3.6);
 	});
+
+	it('calculates tax when there is a discount', () => {
+		const originalAmount = 15;
+		const finalAmount = 12;
+		const taxRate = 0.14975;
+
+		const taxAmount = calculateTax(originalAmount, finalAmount, taxRate);
+
+		expect(taxAmount).toEqual(1.8);
+	});
+
+	it('calculates tax when there is a different discount', () => {
+		const originalAmount = 15;
+		const finalAmount = 7.5;
+		const taxRate = 0.14975;
+
+		const taxAmount = calculateTax(originalAmount, finalAmount, taxRate);
+
+		expect(taxAmount).toEqual(1.13);
+	});
 });
 
 describe('calculateAndFormatTotal', () => {
