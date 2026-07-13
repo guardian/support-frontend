@@ -6,7 +6,7 @@ import {
 	ErrorSummary,
 } from '@guardian/source-development-kitchen/react-components';
 import type { CountryCode } from '@modules/internationalisation/country';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import {
 	ExpressCheckoutElement,
@@ -32,7 +32,7 @@ import type { AddressFormFieldError } from 'components/subscriptionCheckouts/add
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import useEmailMarketingUtmSession from 'helpers/customHooks/useEmailMarketingUtmSession';
-import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import { calculateTax, simpleFormatAmount } from 'helpers/forms/checkouts';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
 	isPaymentMethod,
@@ -51,6 +51,7 @@ import {
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
+import { getEstimatedSalesTaxConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import type { CsrfState } from 'helpers/types/csrf';
@@ -751,9 +752,45 @@ export default function CheckoutForm({
 									}}
 									onClick={({ resolve }) => {
 										/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
-										const options = {
-											emailRequired: true,
-										};
+										const isTaxExclusive =
+											taxRateConfig.type === 'tax_exclusive' ||
+											taxRateConfig.type === 'not_enough_information';
+
+										const options: NonNullable<Parameters<typeof resolve>[0]> =
+											{
+												emailRequired: true,
+											};
+
+										/**
+										 * For Canadian users, request an address inside the
+										 * payment sheet so we can calculate tax dynamically
+										 * via onShippingAddressChange before confirmation.
+										 * shippingRates is required by Stripe whenever
+										 * shippingAddressRequired is true.
+										 */
+										if (supportRegionId === SupportRegionId.CA) {
+											options.shippingAddressRequired = true;
+											options.shippingRates = [
+												{ id: 'free', displayName: 'Free', amount: 0 },
+											];
+										}
+
+										/**
+										 * When pricing is tax-exclusive (and we don't yet know
+										 * the province), show placeholder line items.
+										 */
+										if (isTaxExclusive) {
+											options.lineItems = [
+												{
+													name: 'Subtotal (excl. tax)',
+													amount: Math.round(finalAmount * 100),
+												},
+												{
+													name: 'Tax (to be calculated)',
+													amount: 0,
+												},
+											];
+										}
 
 										// Track payment method selection with QM
 										sendEventPaymentMethodSelected(
@@ -761,6 +798,51 @@ export default function CheckoutForm({
 										);
 
 										resolve(options);
+									}}
+									onShippingAddressChange={({ address, resolve, reject }) => {
+										/**
+										 * The "shipping" address is being used here as a proxy
+										 * for billing address, solely to obtain the Canadian
+										 * province before confirmation so that we can calculate
+										 * the tax and update the payment sheet total in real time.
+										 */
+										try {
+											const updatedTaxConfig = getEstimatedSalesTaxConfig(
+												productCatalog,
+												appConfig.taxRates,
+												productKey,
+												ratePlanKey,
+												address.state,
+												supportRegionId,
+											);
+
+											const taxAmount =
+												updatedTaxConfig.type === 'tax_exclusive'
+													? calculateTax(originalAmount, updatedTaxConfig.rate)
+													: 0;
+
+											const totalWithTax = originalAmount + taxAmount;
+
+											// Update the Elements amount so the sheet total reflects tax
+											void elements?.update({
+												amount: Math.round(totalWithTax * 100),
+											});
+
+											resolve({
+												lineItems: [
+													{
+														name: 'Subtotal (excl. tax)',
+														amount: Math.round(originalAmount * 100),
+													},
+													{
+														name: 'Estimated tax',
+														amount: Math.round(taxAmount * 100),
+													},
+												],
+											});
+										} catch {
+											reject();
+										}
 									}}
 									onConfirm={async (event) => {
 										if (!(stripe && elements)) {
