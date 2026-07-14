@@ -7,6 +7,7 @@ import {
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 
 export function getTodaysPaymentWithTaxExclusion(
+	originalAmount: number,
 	finalAmount: number,
 	currencyKey: IsoCurrency,
 	taxConfig: TaxRateConfig | undefined,
@@ -22,7 +23,7 @@ export function getTodaysPaymentWithTaxExclusion(
 
 	const taxAmountWithCurrency = simpleFormatTaxAmount(
 		getCurrencyInfo(currencyKey),
-		finalAmount, // TODO: this should be originalAmount
+		originalAmount,
 		finalAmount,
 		taxConfig.rate,
 	);

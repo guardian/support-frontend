@@ -264,6 +264,7 @@ function OnboardingSummary({
 	const todaysPayment =
 		enableCanadaTaxExclusion &&
 		getTodaysPaymentWithTaxExclusion(
+			payment.originalAmount,
 			payment.finalAmount,
 			currencyKey,
 			order?.taxConfig,
