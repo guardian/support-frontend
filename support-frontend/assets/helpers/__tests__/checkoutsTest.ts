@@ -37,6 +37,7 @@ describe('simpleFormatTaxAmount', () => {
 describe('calculateAndRoundTax', () => {
 	it.each([
 		[30, 30, 0.12, 3.6],
+		[15, 15, 0.14975, 2.25],
 		[15, 12, 0.14975, 1.8],
 		[15, 7.5, 0.14975, 1.13],
 	])(
