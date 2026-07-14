@@ -24,8 +24,6 @@ export function MaybeEstimatedTax({
 	taxRateConfig,
 	children,
 }: Props) {
-	const { originalAmount, finalAmount } = payment;
-
 	switch (taxRateConfig.type) {
 		case 'tax_inclusive':
 			return null;
@@ -45,12 +43,7 @@ export function MaybeEstimatedTax({
 					<div css={rowContainer}>
 						<p>Estimated tax</p>
 						<p>
-							{simpleFormatTaxAmount(
-								currency,
-								originalAmount,
-								finalAmount,
-								taxRateConfig.rate,
-							)}
+							{simpleFormatTaxAmount(currency, payment, taxRateConfig.rate)}
 						</p>
 					</div>
 					{children}

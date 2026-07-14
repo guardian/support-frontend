@@ -263,12 +263,7 @@ function OnboardingSummary({
 
 	const todaysPayment =
 		enableCanadaTaxExclusion &&
-		getTodaysPaymentWithTaxExclusion(
-			payment.originalAmount,
-			payment.finalAmount,
-			currencyKey,
-			order?.taxConfig,
-		);
+		getTodaysPaymentWithTaxExclusion(payment, currencyKey, order?.taxConfig);
 
 	const paymentMethodCopy = isDirectDebit
 		? 'Direct Debit'

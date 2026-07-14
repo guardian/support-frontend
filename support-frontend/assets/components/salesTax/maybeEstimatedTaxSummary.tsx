@@ -51,7 +51,6 @@ export function MaybeEstimatedTaxSummary({
 }: Props) {
 	// Note: we'll have to revisit this if weekly gift is ever tax exclusive
 	const isWeeklyGift = false;
-	const { originalAmount, finalAmount } = payment;
 
 	switch (taxRateConfig.type) {
 		case 'tax_inclusive':
@@ -82,14 +81,7 @@ export function MaybeEstimatedTaxSummary({
 					/>
 					<div css={[summaryRow, boldText]}>
 						<p>Due today</p>
-						<p>
-							{calculateAndFormatTotal(
-								taxRateConfig,
-								currency,
-								originalAmount,
-								finalAmount,
-							)}
-						</p>
+						<p>{calculateAndFormatTotal(taxRateConfig, currency, payment)}</p>
 					</div>
 				</div>
 			);

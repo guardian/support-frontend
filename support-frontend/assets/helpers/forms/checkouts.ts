@@ -39,11 +39,9 @@ const simpleFormatAmount = (currency: CurrencyInfo, amount: number): string => {
 	return `${currency.glyph}${amountText}`.trim();
 };
 
-function calculateAndRoundTax(
-	originalAmount: number,
-	finalAmount: number,
-	taxRate: number,
-): number {
+function calculateAndRoundTax(payment: Payment, taxRate: number): number {
+	const { originalAmount, finalAmount } = payment;
+
 	// Multiply to avoid floating point precision issues. Should we be using a
 	// library for this?
 	const taxOnOriginalAmount = roundAmount(
@@ -64,20 +62,20 @@ function calculateAndRoundTax(
 
 function simpleFormatTaxAmount(
 	currency: CurrencyInfo,
-	originalAmount: number,
-	finalAmount: number,
+	payment: Payment,
 	taxRate: number, // A decimal, e.g. 0.15
 ): string {
-	const taxAmount = calculateAndRoundTax(originalAmount, finalAmount, taxRate);
+	const taxAmount = calculateAndRoundTax(payment, taxRate);
 	return simpleFormatAmount(currency, taxAmount);
 }
 
 function calculateAndFormatTotal(
 	taxRateConfig: TaxRateConfig,
 	currency: CurrencyInfo,
-	originalAmount: number,
-	finalAmount: number,
+	payment: Payment,
 ): string {
+	const { finalAmount } = payment;
+
 	switch (taxRateConfig.type) {
 		case 'tax_inclusive':
 		case 'not_enough_information':
@@ -88,11 +86,7 @@ function calculateAndFormatTotal(
 			// Amounts are rounded the usual way:
 			const roundedTotal = roundAmount(finalAmount);
 
-			const tax = calculateAndRoundTax(
-				originalAmount,
-				finalAmount,
-				taxRateConfig.rate,
-			);
+			const tax = calculateAndRoundTax(payment, taxRateConfig.rate);
 
 			return simpleFormatAmount(currency, roundedTotal + tax);
 		}
