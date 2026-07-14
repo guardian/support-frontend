@@ -17,8 +17,8 @@ import {
 	type ActiveRatePlanKey,
 	getProductDescription,
 } from 'helpers/productCatalog';
-import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { parameteriseUrl } from 'helpers/urls/routes';
 import { getPrintPlusDigitalBenefits } from 'pages/paper-subscription-landing/planData';
@@ -54,6 +54,7 @@ type CheckoutSummaryProps = {
 	thresholdAmount: number;
 	backButtonOrigin: string;
 	backButtonPathOverride: string | null;
+	taxRateConfig: TaxRateConfig;
 	promotion?: Promotion;
 	forcedCountry?: string;
 	studentDiscount?: StudentDiscount;
@@ -73,6 +74,7 @@ export default function CheckoutSummary({
 	thresholdAmount,
 	backButtonOrigin,
 	backButtonPathOverride,
+	taxRateConfig,
 	promotion,
 	forcedCountry,
 	studentDiscount,
@@ -177,24 +179,13 @@ export default function CheckoutSummary({
 						/>
 					</div>
 				)}
-				{supportRegionId === SupportRegionId.CA &&
-					productKey === 'GuardianWeeklyDomestic' && (
-						<div role="alert" css={alertStyles}>
-							<InfoSummary
-								message="For Canadian residents only"
-								context="Please note that Canada Post is currently undergoing a period of industrial action. If you start a Guardian Weekly subscription today, the delivery of your copies may be subject to delays. We apologise for any inconvenience this may cause."
-							/>
-						</div>
-					)}
 				<ContributionsOrderSummary
 					productKey={productKey}
 					productLabel={productDescription.label}
 					ratePlanKey={ratePlanKey}
 					ratePlanLabel={ratePlanDetail.displayName ?? ratePlanDetail.label}
-					paymentFrequency={getBillingPeriodNoun(
-						ratePlanDetail.billingPeriod,
-						isGuardianWeeklyGiftProduct(productKey, ratePlanKey),
-					)}
+					taxRateConfig={taxRateConfig}
+					billingPeriod={ratePlanDetail.billingPeriod}
 					amount={originalAmount}
 					promotion={promotion}
 					currency={currency}

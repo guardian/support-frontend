@@ -25,6 +25,7 @@ import {
 } from 'helpers/productCatalog';
 import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getPromotion } from 'helpers/productPrice/promotions';
+import { getEstimatedSalesTaxConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import * as cookie from 'helpers/storage/cookie';
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
@@ -39,6 +40,7 @@ import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
 import { getFulfilmentOptionFromProductKey } from '../../helpers/productCatalogToFulfilmentOption';
 import { getProductOptionFromProductAndRatePlan } from '../../helpers/productCatalogToProductOption';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
+import { useStateWithCheckoutSession } from './checkout/hooks/useStateWithCheckoutSession';
 import { useStripeHostedCheckoutSession } from './checkout/hooks/useStripeHostedCheckoutSession';
 import CheckoutForm from './components/checkoutForm';
 import CheckoutSummary from './components/checkoutSummary';
@@ -55,7 +57,7 @@ type Props = {
 
 const countryId: IsoCountry = Country.detect();
 
-const getPromotionFromProductPrices = (
+export const getPromotionFromProductPrices = (
 	appConfig: AppConfig,
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
@@ -67,7 +69,7 @@ const getPromotionFromProductPrices = (
 	 * These come from the productPrices object for the particular product on window.guardian.
 	 */
 
-	// exclude one year student promotion as it's mapped to the annual billing period and we don't to apply regualr annual promotions to it
+	// exclude one year student promotion as it's mapped to the annual billing period and we don't to apply regular annual promotions to it
 	if (productKey === 'SupporterPlus' && ratePlanKey === 'OneYearStudent') {
 		return undefined;
 	}
@@ -272,6 +274,16 @@ export function Checkout({
 	);
 
 	/**
+	 * BillingState selector initialised to undefined to hide
+	 * billingStateError message. formOnSubmit checks and converts to
+	 * empty string to display billingStateError message.
+	 */
+	const [billingState, setBillingState] = useStateWithCheckoutSession<string>(
+		checkoutSession?.formFields.addressFields.billingAddress.state,
+		'',
+	);
+
+	/**
 	 * Passed down because minimum product prices are unavailable in the paymentTsAndCs story
 	 * and shared across summary and form checkout sub-components
 	 */
@@ -310,6 +322,15 @@ export function Checkout({
 		backButtonPathOverrideParam,
 	);
 
+	const taxRateConfig = getEstimatedSalesTaxConfig(
+		appConfig.productCatalog,
+		appConfig.taxRates,
+		productKey,
+		ratePlanKey,
+		billingState,
+		supportRegionId,
+	);
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Elements stripe={stripePromise} options={elementsOptions}>
@@ -331,6 +352,7 @@ export function Checkout({
 						nudgeSettings={nudgeSettings}
 						backButtonOrigin={backButtonOrigin}
 						backButtonPathOverride={backButtonPathOverride}
+						taxRateConfig={taxRateConfig}
 					/>
 
 					<CheckoutForm
@@ -355,6 +377,9 @@ export function Checkout({
 						thresholdAmount={thresholdAmount}
 						studentDiscount={studentDiscount}
 						paypalClientId={paypalClientId}
+						billingState={billingState}
+						setBillingState={setBillingState}
+						taxRateConfig={taxRateConfig}
 					/>
 				</PageLayout>
 			</Elements>

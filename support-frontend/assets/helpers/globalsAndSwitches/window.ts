@@ -1,5 +1,5 @@
-import { caStateCodes } from '@modules/internationalisation/country';
 import { isoCurrencySchema } from '@modules/internationalisation/schemas';
+import { caStateCodes } from '@modules/internationalisation/state';
 import {
 	billingPeriodSchema,
 	fulfilmentOptionsSchema,
@@ -174,6 +174,7 @@ const ProductCatalogSchema = z.object({
 					billingPeriod: z.optional(
 						z.enum(['Quarter', 'Month', 'Annual', 'OneTime']),
 					),
+					taxMode: z.enum(['TaxExclusive', 'TaxInclusive']).nullish(),
 				}),
 			),
 		}),
@@ -258,6 +259,9 @@ export type AppConfig = z.infer<typeof AppConfigSchema> & {
 		Record<LegacyProductType | 'GuardianWeeklyGift', ProductPrices>
 	>;
 };
+
+export type WindowTaxRates = AppConfig['taxRates'];
+export type WindowProductCatalog = AppConfig['productCatalog'];
 
 export const parseAppConfig = (obj: unknown): AppConfig => {
 	const appConfig = AppConfigSchema.safeParse(obj);

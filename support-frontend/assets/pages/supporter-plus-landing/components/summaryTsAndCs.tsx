@@ -9,7 +9,7 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import { formatAmount } from 'helpers/forms/checkouts';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
 	digitalPlusTermsLink,
 	manageAccountLink,
@@ -115,10 +115,9 @@ export function SummaryTsAndCs({
 		);
 	}
 
-	const amountWithCurrency = formatAmount(
+	const amountWithCurrency = simpleFormatAmount(
 		getCurrencyInfo(currency),
 		amount,
-		false,
 	);
 
 	const autoRenewUtilCancelTsAndCs = (countryGroupId: CountryGroupId) => {
