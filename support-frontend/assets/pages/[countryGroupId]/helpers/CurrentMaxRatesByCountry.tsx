@@ -32,7 +32,7 @@ export default function CurrentMaxRatesByCountry({
 		case UnitedStates:
 			return (
 				<p css={maxRateDisclaimer}>
-					U.S regular rates are currently: All-access digital is $18 per month
+					U.S. regular rates are currently: All-access digital is $18 per month
 					and $180 per year. Digital plus is $28 per month and $280 per year.
 				</p>
 			);
