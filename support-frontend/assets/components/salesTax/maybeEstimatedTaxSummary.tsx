@@ -87,8 +87,8 @@ export function MaybeEstimatedTaxSummary({
 							{calculateAndFormatTotal(
 								taxRateConfig,
 								currency,
-								finalAmount,
 								originalAmount,
+								finalAmount,
 							)}
 						</p>
 					</div>
