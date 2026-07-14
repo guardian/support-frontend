@@ -32,7 +32,11 @@ import type { AddressFormFieldError } from 'components/subscriptionCheckouts/add
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import useEmailMarketingUtmSession from 'helpers/customHooks/useEmailMarketingUtmSession';
-import { calculateTax, simpleFormatAmount } from 'helpers/forms/checkouts';
+import {
+	calculateAndRoundTax,
+	type Payment,
+	simpleFormatAmount,
+} from 'helpers/forms/checkouts';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
 	isPaymentMethod,
@@ -139,8 +143,7 @@ type CheckoutFormProps = {
 	isTestUser: boolean;
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
-	originalAmount: number;
-	finalAmount: number;
+	payment: Payment;
 	useStripeExpressCheckout: boolean;
 	countryId: CountryCode;
 	abParticipations: Participations;
@@ -149,7 +152,6 @@ type CheckoutFormProps = {
 	weeklyDeliveryDate: Date;
 	setWeeklyDeliveryDate: (value: Date) => void;
 	thresholdAmount: number;
-	contributionAmount?: number;
 	promotion?: Promotion;
 	checkoutSession?: CheckoutSession;
 	studentDiscount?: StudentDiscount;
@@ -166,8 +168,7 @@ export default function CheckoutForm({
 	isTestUser,
 	productKey,
 	ratePlanKey,
-	originalAmount,
-	finalAmount,
+	payment,
 	useStripeExpressCheckout,
 	countryId,
 	abParticipations,
@@ -175,7 +176,6 @@ export default function CheckoutForm({
 	weeklyDeliveryDate,
 	setWeeklyDeliveryDate,
 	thresholdAmount,
-	contributionAmount,
 	promotion,
 	checkoutSession,
 	studentDiscount,
@@ -184,6 +184,7 @@ export default function CheckoutForm({
 	setBillingState,
 	taxRateConfig,
 }: CheckoutFormProps) {
+	const { originalAmount, finalAmount, contributionAmount } = payment;
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
@@ -824,7 +825,11 @@ export default function CheckoutForm({
 
 											const taxAmount =
 												updatedTaxConfig.type === 'tax_exclusive'
-													? calculateTax(finalAmount, updatedTaxConfig.rate)
+													? calculateAndRoundTax(
+															originalAmount,
+															finalAmount,
+															updatedTaxConfig.rate,
+													  )
 													: 0;
 
 											const totalWithTax = finalAmount + taxAmount;

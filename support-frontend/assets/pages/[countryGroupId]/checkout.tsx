@@ -341,8 +341,7 @@ export function Checkout({
 						productKey={productKey}
 						ratePlanKey={ratePlanKey}
 						promotion={promotion}
-						originalAmount={payment.originalAmount}
-						finalAmount={payment.finalAmount}
+						payment={payment}
 						countryId={countryId}
 						forcedCountry={forcedCountry}
 						abParticipations={abParticipations}
@@ -364,9 +363,7 @@ export function Checkout({
 						productKey={productKey}
 						ratePlanKey={ratePlanKey}
 						promotion={promotion}
-						originalAmount={payment.originalAmount}
-						contributionAmount={payment.contributionAmount}
-						finalAmount={payment.finalAmount}
+						payment={payment}
 						useStripeExpressCheckout={useStripeExpressCheckout}
 						countryId={countryId}
 						abParticipations={abParticipations}
