@@ -338,7 +338,10 @@ export function Checkout({
 				<PageLayout
 					borderBox
 					footerDisclaimer={
-						<CurrentMaxRatesByCountry countryGroupId={countryGroupId} />
+						<CurrentMaxRatesByCountry
+							countryGroupId={countryGroupId}
+							productKey={productKey}
+						/>
 					}
 				>
 					<CheckoutSummary

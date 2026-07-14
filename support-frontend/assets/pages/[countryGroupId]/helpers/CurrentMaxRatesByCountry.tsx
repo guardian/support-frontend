@@ -5,6 +5,7 @@ import {
 	type CountryGroupId,
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
+import type { ActiveProductKey } from '../../../helpers/productCatalog';
 
 const maxRateDisclaimer = css`
 	${textSans17};
@@ -14,9 +15,19 @@ const maxRateDisclaimer = css`
 
 export default function CurrentMaxRatesByCountry({
 	countryGroupId,
+	productKey,
 }: {
 	countryGroupId: CountryGroupId;
+	productKey?: ActiveProductKey;
 }): JSX.Element | null {
+	if (
+		productKey &&
+		productKey !== 'DigitalSubscription' &&
+		productKey !== 'SupporterPlus'
+	) {
+		return null;
+	}
+
 	switch (countryGroupId) {
 		case UnitedStates:
 			return (
