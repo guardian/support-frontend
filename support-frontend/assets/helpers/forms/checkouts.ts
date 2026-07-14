@@ -2,6 +2,18 @@
 import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 
+/**
+ * - `originalAmount` the amount pre any discounts or contributions
+ * - `discountedAmount` the amount with a discountApplied
+ * - `finalAmount` is the amount a person will pay
+ */
+export type Payment = {
+	originalAmount: number;
+	discountedAmount?: number;
+	contributionAmount?: number;
+	finalAmount: number;
+};
+
 function roundAmount(amount: number) {
 	/**
 	 * This rounds a `number` to the second decimal.
