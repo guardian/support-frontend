@@ -84,9 +84,9 @@ function calculateAndFormatTotal(
 			// Amounts are rounded the usual way:
 			const roundedTotal = roundAmount(finalAmount);
 
-			const tax = calculateAndRoundTax(payment, taxRateConfig.rate);
+			const roundedTax = calculateAndRoundTax(payment, taxRateConfig.rate);
 
-			return simpleFormatAmount(currency, roundedTotal + tax);
+			return simpleFormatAmount(currency, roundedTotal + roundedTax);
 		}
 	}
 }
