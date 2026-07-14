@@ -48,10 +48,8 @@ function calculateAndRoundTax(payment: Payment, taxRate: number): number {
 		(originalAmount * (taxRate * 100000)) / 100000,
 	);
 
-	if (originalAmount === finalAmount) {
-		return taxOnOriginalAmount;
-	}
-
+	// If originalAmount and finalAmount are the same (no discount) then this
+	// will result in a taxOnDiscountAmount of zero - so no affect.
 	const discountAmount = originalAmount - finalAmount;
 	const taxOnDiscountAmount = roundAmount(
 		(discountAmount * (taxRate * 100000)) / 100000,
