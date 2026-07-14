@@ -56,7 +56,7 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
 import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
-import getCurrentMaxRatesByCountry from 'pages/[countryGroupId]/helpers/getCurrentMaxRatesByCountry';
+import CurrentMaxRatesByCountry from 'pages/[countryGroupId]/helpers/CurrentMaxRatesByCountry';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
 	getSanitisedHtml,
@@ -177,12 +177,6 @@ const disclaimerContainer = css`
 
 const taxExclusionDisclaimer = css`
 	${textSans12};
-	color: ${palette.neutral[100]};
-	margin-bottom: ${space[2]}px;
-`;
-
-const maxRatesDisclaimer = css`
-	${textSans17};
 	color: ${palette.neutral[100]};
 	margin-bottom: ${space[2]}px;
 `;
@@ -547,8 +541,6 @@ export function ThreeTierLanding({
 	const showWeeklyPrice =
 		forceWeeklyPricing || settings.name.includes('WEEKLY_PRICE');
 
-	const currentMaxRates = getCurrentMaxRatesByCountry(countryGroupId);
-
 	return (
 		<PageScaffold
 			header={
@@ -588,9 +580,7 @@ export function ThreeTierLanding({
 						borderColor="rgba(170, 170, 180, 0.5)"
 						cssOverrides={disclaimerContainer}
 					>
-						{currentMaxRates && (
-							<p css={maxRatesDisclaimer}>{currentMaxRates}</p>
-						)}
+						<CurrentMaxRatesByCountry countryGroupId={countryGroupId} />
 						{taxExclusionEnabled && (
 							<p css={taxExclusionDisclaimer}>
 								For All-access digital and Digital plus, taxes may apply.

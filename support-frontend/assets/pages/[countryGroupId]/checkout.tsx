@@ -45,6 +45,7 @@ import { useStripeHostedCheckoutSession } from './checkout/hooks/useStripeHosted
 import CheckoutForm from './components/checkoutForm';
 import CheckoutSummary from './components/checkoutSummary';
 import GuardianPageLayout from './components/GuardianPageLayout';
+import CurrentMaxRatesByCountry from './helpers/CurrentMaxRatesByCountry';
 import { getStudentDiscount } from './student/helpers/discountDetails';
 
 type Props = {
@@ -334,7 +335,12 @@ export function Checkout({
 	return (
 		<ThemeProvider theme={theme}>
 			<Elements stripe={stripePromise} options={elementsOptions}>
-				<PageLayout borderBox>
+				<PageLayout
+					borderBox
+					footerDisclaimer={
+						<CurrentMaxRatesByCountry countryGroupId={countryGroupId} />
+					}
+				>
 					<CheckoutSummary
 						supportRegionId={supportRegionId}
 						appConfig={appConfig}
