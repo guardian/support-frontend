@@ -200,7 +200,7 @@ export function ContributionsOrderSummary({
 	supportRegionId,
 	nudgeSettings,
 }: ContributionsOrderSummaryProps): JSX.Element {
-	const { originalAmount, finalAmount } = payment;
+	const { originalAmount } = payment;
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
 		productKey,
@@ -318,8 +318,7 @@ export function ContributionsOrderSummary({
 				savingText={savingText}
 				isWeeklyGift={isWeeklyGift}
 				currency={currency}
-				originalAmount={originalAmount}
-				finalAmount={finalAmount}
+				payment={payment}
 				taxRateConfig={taxRateConfig}
 				studentDiscount={studentDiscount}
 				billingPeriod={billingPeriod}

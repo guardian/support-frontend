@@ -1,12 +1,12 @@
 import { css } from '@emotion/react';
 import type { CurrencyInfo } from '@modules/internationalisation/currency';
 import type { ReactNode } from 'react';
+import type { Payment } from 'helpers/forms/checkouts';
 import { simpleFormatTaxAmount } from 'helpers/forms/checkouts';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 
 type Props = {
-	finalAmount: number;
-	originalAmount: number;
+	payment: Payment;
 	taxRateConfig: TaxRateConfig;
 	currency: CurrencyInfo;
 	children?: ReactNode;
@@ -19,12 +19,13 @@ const rowContainer = css`
 `;
 
 export function MaybeEstimatedTax({
+	payment,
 	currency,
-	originalAmount,
-	finalAmount,
 	taxRateConfig,
 	children,
 }: Props) {
+	const { originalAmount, finalAmount } = payment;
+
 	switch (taxRateConfig.type) {
 		case 'tax_inclusive':
 			return null;

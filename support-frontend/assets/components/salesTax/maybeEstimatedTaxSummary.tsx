@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { from, space, textSans17 } from '@guardian/source/foundations';
 import type { CurrencyInfo } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { Payment } from 'helpers/forms/checkouts';
 import { calculateAndFormatTotal } from 'helpers/forms/checkouts';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
@@ -32,8 +33,7 @@ const boldText = css`
 `;
 
 export type Props = {
-	finalAmount: number;
-	originalAmount: number;
+	payment: Payment;
 	taxRateConfig: TaxRateConfig;
 	currency: CurrencyInfo;
 	billingPeriod: BillingPeriod;
@@ -43,8 +43,7 @@ export type Props = {
 
 export function MaybeEstimatedTaxSummary({
 	currency,
-	finalAmount,
-	originalAmount,
+	payment,
 	taxRateConfig,
 	billingPeriod,
 	fullPrice,
@@ -52,6 +51,7 @@ export function MaybeEstimatedTaxSummary({
 }: Props) {
 	// Note: we'll have to revisit this if weekly gift is ever tax exclusive
 	const isWeeklyGift = false;
+	const { originalAmount, finalAmount } = payment;
 
 	switch (taxRateConfig.type) {
 		case 'tax_inclusive':
@@ -76,8 +76,7 @@ export function MaybeEstimatedTaxSummary({
 						/>
 					</div>
 					<MaybeEstimatedTax
-						finalAmount={finalAmount}
-						originalAmount={originalAmount}
+						payment={payment}
 						taxRateConfig={taxRateConfig}
 						currency={currency}
 					/>
