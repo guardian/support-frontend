@@ -8,6 +8,7 @@ import { CountryGroup } from '../internationalisation/classes/countryGroup';
 import {
 	countryGroupMatches,
 	getParticipationFromQueryString,
+	isWithinSchedule,
 	randomNumber,
 } from './helpers';
 import type { Participations } from './models';
@@ -97,10 +98,12 @@ export function getCheckoutNudgeParticipations(
 		.filter((test) => test.status === 'Live')
 		.find((test) => {
 			return (
+				isWithinSchedule(test.scheduler) &&
 				countryGroupMatches(
 					test.regionTargeting?.targetedCountryGroups,
 					countryGroupId,
-				) && productMatches(test, path, queryString)
+				) &&
+				productMatches(test, path, queryString)
 			);
 		});
 
@@ -137,6 +140,9 @@ function getCheckoutTestVariant(
 		// Is the user in this test?
 		const variantName = participations[test.name];
 		if (variantName) {
+			if (!isWithinSchedule(test.scheduler)) {
+				return undefined;
+			}
 			const variant = test.variants.find(
 				(variant) => variant.name === variantName,
 			);

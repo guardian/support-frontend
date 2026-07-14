@@ -19,16 +19,16 @@ catalog:
   '@aws-sdk/credential-provider-node': 3.972.25
   '@aws-sdk/util-dynamodb': ^3.995.0
   '@guardian/prettier': ^2.1.5
-  '@guardian/support-service-lambdas': github:guardian/support-service-lambdas#916dc794742245307bfb53ed4f2212badedb6d5e
+  '@guardian/support-service-lambdas': github:guardian/support-service-lambdas#948d1e1b071554aa49d5b8217805d0efac1adc48
   '@types/jest': ^29.5.14
   '@types/node': ^20.19.0
-  esbuild: ^0.25.5
+  esbuild: ^0.28.1
   jest: ^29.7.0
   jest-runner-groups: ^2.2.0
   prettier: ^2.8.8
   ts-jest: ^29.3.4
   typescript: ^5.8.3
-  zod: ^3.25.30
+  zod: ^4.4.3
 
 onlyBuiltDependencies:
   - '@guardian/support-service-lambdas'

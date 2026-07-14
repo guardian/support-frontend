@@ -30,6 +30,7 @@ case class FeatureSwitches(
     enableMParticle: Option[SwitchState],
     enableTooledStudentLandingPage: Option[SwitchState],
     enableStripePaymentElement: Option[SwitchState],
+    enableCanadaTaxExclusion: Option[SwitchState],
 )
 
 object FeatureSwitches {

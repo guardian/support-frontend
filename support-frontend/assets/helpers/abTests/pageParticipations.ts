@@ -4,6 +4,7 @@ import { CountryGroup } from '../internationalisation/classes/countryGroup';
 import {
 	countryGroupMatches,
 	getParticipationFromQueryString,
+	isWithinSchedule,
 	randomNumber,
 } from './helpers';
 import type {
@@ -60,7 +61,6 @@ export async function getPageParticipations<Variant>(
 		sessionStorageKey,
 		getVariantName,
 	} = config;
-
 	const isTargetPage = (path: string) => !!path && !!path.match(pageRegex);
 
 	const getVariant = (
@@ -70,6 +70,9 @@ export async function getPageParticipations<Variant>(
 		for (const test of testList) {
 			const variantName = participations[test.name];
 			if (variantName) {
+				if (!isWithinSchedule(test.scheduler)) {
+					return undefined;
+				}
 				const variant = test.variants.find(
 					(v) => getVariantName(v) === variantName,
 				);
@@ -114,8 +117,16 @@ export async function getPageParticipations<Variant>(
 	);
 	if (urlParticipations) {
 		const variant = getVariant(urlParticipations, tests);
+		if (!variant) {
+			return makeFallbackResult();
+		}
 		setSessionParticipations(urlParticipations, sessionStorageKey);
-		return { participations: urlParticipations, variant };
+		return {
+			participations: trackParticipation
+				? urlParticipations
+				: ({} as Participations),
+			variant,
+		};
 	}
 
 	// Is there already a participation in session storage?
@@ -124,14 +135,37 @@ export async function getPageParticipations<Variant>(
 		sessionParticipations &&
 		Object.entries(sessionParticipations).length > 0
 	) {
-		const variant = getVariant(sessionParticipations, tests);
-		return { participations: sessionParticipations, variant };
+		// Validate and prune session participations: drop entries whose key
+		// does not match any current test name, or whose variant name does not
+		// exist in that test's variants.
+		const validParticipations: Participations = {};
+		for (const [key, value] of Object.entries(sessionParticipations)) {
+			const matchingTest = tests.find((test) => key === test.name);
+			if (matchingTest?.variants.some((v) => getVariantName(v) === value)) {
+				validParticipations[key] = value;
+			}
+		}
+
+		// If nothing valid remains, continue to re-selection
+		if (Object.entries(validParticipations).length > 0) {
+			const variant = getVariant(validParticipations, tests);
+			if (!variant) {
+				return makeFallbackResult();
+			}
+			return {
+				participations: trackParticipation
+					? validParticipations
+					: ({} as Participations),
+				variant,
+			};
+		}
 	}
 
 	// No participation in session storage, assign user to a test + variant
 	let test: PageTest<Variant> | undefined;
 	for (const currentTest of tests.filter((test) => test.status === 'Live')) {
 		if (
+			isWithinSchedule(currentTest.scheduler) &&
 			countryGroupMatches(
 				currentTest.regionTargeting?.targetedCountryGroups,
 				countryGroupId,
@@ -147,14 +181,22 @@ export async function getPageParticipations<Variant>(
 		return makeFallbackResult();
 	}
 
-	const idx = randomNumber(mvtId, test.name) % test.variants.length;
-	const variant = test.variants[idx];
+	const selectionResult = config.selectVariant
+		? config.selectVariant(test, mvtId)
+		: undefined;
+
+	const variant =
+		selectionResult ??
+		test.variants[randomNumber(mvtId, test.name) % test.variants.length];
 
 	if (!variant) {
 		return makeFallbackResult();
 	}
 
-	const participations = { [test.name]: getVariantName(variant) };
+	// Store only the fresh participation
+	const participations: Participations = {
+		[test.name]: getVariantName(variant),
+	};
 	// Record the participation in session storage so that we can track it from other pages
 	setSessionParticipations(participations, sessionStorageKey);
 

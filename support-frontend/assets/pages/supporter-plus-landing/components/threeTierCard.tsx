@@ -204,9 +204,10 @@ export function ThreeTierCard({
 		: undefined;
 
 	const formattedMainPrice = simpleFormatAmount(currency, mainPrice);
-	const formattedMainDiscountedPrice = mainDiscountedPrice
-		? simpleFormatAmount(currency, mainDiscountedPrice)
-		: undefined;
+	const formattedMainDiscountedPrice =
+		mainDiscountedPrice !== undefined
+			? simpleFormatAmount(currency, mainDiscountedPrice)
+			: undefined;
 	const periodLabel = showWeeklyPrice ? 'week' : periodNoun;
 	const linkAriaLabel = `${title}, ${
 		formattedMainDiscountedPrice ?? formattedMainPrice

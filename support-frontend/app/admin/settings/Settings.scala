@@ -26,6 +26,7 @@ case class AllSettings(
     checkoutNudgeTests: List[CheckoutNudgeTest],
     oneTimeCheckoutTests: List[OneTimeCheckoutTest],
     studentLandingPageTests: List[StudentLandingPageTest],
+    banditData: List[services.ClientBanditData] = Nil,
     productsWithThankYouOnboarding: List[String] =
       AllSettings.productsWithThankYouOnboarding.toList.map(_.getClass.getSimpleName.stripSuffix("$")),
 )

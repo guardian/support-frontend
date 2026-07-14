@@ -4,6 +4,7 @@ import { fetchAudienceMemberships } from '../../mparticle';
 import {
 	countryGroupMatches,
 	getParticipationFromQueryString,
+	isWithinSchedule,
 	randomNumber,
 } from '../helpers';
 import type { PageParticipationsConfig, PageTest } from '../models';
@@ -39,6 +40,7 @@ jest.mock('../helpers', () => ({
 	__esModule: true,
 	countryGroupMatches: jest.fn(),
 	getParticipationFromQueryString: jest.fn(),
+	isWithinSchedule: jest.fn(),
 	randomNumber: jest.fn(),
 }));
 
@@ -56,6 +58,7 @@ const mockCountryGroupMatches = jest.mocked(countryGroupMatches);
 const mockGetParticipationFromQueryString = jest.mocked(
 	getParticipationFromQueryString,
 );
+const mockIsWithinSchedule = jest.mocked(isWithinSchedule);
 const mockRandomNumber = jest.mocked(randomNumber);
 const mockGetSessionParticipations = jest.mocked(getSessionParticipations);
 const mockSetSessionParticipations = jest.mocked(setSessionParticipations);
@@ -117,6 +120,7 @@ describe('getPageParticipations', () => {
 		mockGetMvtId.mockReturnValue(0);
 		mockCountryGroupMatches.mockReturnValue(false);
 		mockGetParticipationFromQueryString.mockReturnValue(undefined);
+		mockIsWithinSchedule.mockReturnValue(true);
 		mockRandomNumber.mockReturnValue(0);
 		mockGetSessionParticipations.mockReturnValue(undefined);
 		mockFetchAudienceMemberships.mockResolvedValue([]);
@@ -182,7 +186,7 @@ describe('getPageParticipations', () => {
 			const result = await getPageParticipations(config);
 
 			expect(result).toEqual({
-				participations: { 'test-2': 'control' },
+				participations: {},
 				variant: undefined,
 			});
 		});
@@ -200,7 +204,7 @@ describe('getPageParticipations', () => {
 			const result = await getPageParticipations(config);
 
 			expect(result).toEqual({
-				participations: { 'test-1': 'variant-b' },
+				participations: {},
 				variant: undefined,
 			});
 		});
@@ -244,21 +248,26 @@ describe('getPageParticipations', () => {
 			expect(mockCountryGroupMatches).toHaveBeenCalled();
 		});
 
-		it('returns undefined variant when session storage variant not found', async () => {
+		it('clears cache and re-assigns when session storage variant not found', async () => {
 			const variant = createTestVariant('control', 'control-value');
-			const test = createPageTest('test-1', [variant]);
+			const test = createPageTest('test-1', [variant], 'Live', [
+				'GBPCountries',
+			]);
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
 			mockGetSessionParticipations.mockReturnValue({
 				'test-1': 'non-existent-variant',
 			});
+			mockCountryGroupMatches.mockReturnValue(true);
+			mockRandomNumber.mockReturnValue(0);
 
 			const result = await getPageParticipations(config);
 
+			// Should clear stale cache and assign new variant
 			expect(result).toEqual({
-				participations: { 'test-1': 'non-existent-variant' },
-				variant: undefined,
+				participations: { 'test-1': 'control' },
+				variant: variant,
 			});
 		});
 	});
@@ -635,6 +644,166 @@ describe('getPageParticipations', () => {
 
 			expect(result.participations).toEqual({ 'test-1': 'control' });
 			expect(mockFetchAudienceMemberships).not.toHaveBeenCalled();
+		});
+	});
+
+	describe('Session storage validation and pruning (validate-and-prune logic)', () => {
+		it('prunes stale participations that do not match current test names', async () => {
+			const variant = createTestVariant('control', 'control-value');
+			const test = createPageTest('test-1', [variant], 'Live', [
+				'GBPCountries',
+			]);
+			const config = createConfig([test]);
+
+			mockLocation('/test/page');
+			// Session has participation for a test that no longer exists
+			mockGetSessionParticipations.mockReturnValue({
+				'stale-test': 'variant-a',
+				'test-1': 'control',
+			});
+			mockCountryGroupMatches.mockReturnValue(true);
+			mockRandomNumber.mockReturnValue(0);
+
+			const result = await getPageParticipations(config);
+
+			// Should prune stale-test and keep test-1
+			expect(result.participations).toEqual({ 'test-1': 'control' });
+			expect(result.variant).toEqual(variant);
+		});
+
+		it('prunes participations that do not match any test name', async () => {
+			const variant = createTestVariant('control', 'control-value');
+			const test = createPageTest('test-1', [variant], 'Live', [
+				'GBPCountries',
+			]);
+			test.methodologies = [
+				{
+					name: 'EpsilonGreedyBandit',
+				},
+			];
+			const config = createConfig([test]);
+
+			mockLocation('/test/page');
+			// Session has participation for an old test that no longer exists
+			mockGetSessionParticipations.mockReturnValue({
+				'test-1-old': 'variant-a',
+				'test-1': 'control',
+			});
+			mockCountryGroupMatches.mockReturnValue(true);
+			mockRandomNumber.mockReturnValue(0);
+
+			const result = await getPageParticipations(config);
+
+			// Should prune old test and keep current one
+			expect(result.participations).toEqual({ 'test-1': 'control' });
+			expect(result.variant).toEqual(variant);
+		});
+
+		it('re-selects when all session participations are stale', async () => {
+			const variant = createTestVariant('control', 'control-value');
+			const test = createPageTest('test-1', [variant], 'Live', [
+				'GBPCountries',
+			]);
+			const config = createConfig([test]);
+
+			mockLocation('/test/page');
+			// Session has only stale participations
+			mockGetSessionParticipations.mockReturnValue({
+				'stale-test-1': 'variant-a',
+				'stale-test-2': 'variant-b',
+			});
+			mockCountryGroupMatches.mockReturnValue(true);
+			mockRandomNumber.mockReturnValue(0);
+			const result = await getPageParticipations(config);
+			// Should re-select and store fresh participation
+			expect(result.participations).toEqual({ 'test-1': 'control' });
+			expect(result.variant).toEqual(variant);
+			expect(mockSetSessionParticipations).toHaveBeenCalledWith(
+				{ 'test-1': 'control' },
+				'landingPageParticipations',
+			);
+		});
+
+		it('preserves participations keyed by test name', async () => {
+			const variant = createTestVariant('control', 'control-value');
+			const test = createPageTest('test-1', [variant], 'Live', [
+				'GBPCountries',
+			]);
+			test.methodologies = [{ name: 'EpsilonGreedyBandit' }];
+			const config = createConfig([test]);
+
+			mockLocation('/test/page');
+			mockGetSessionParticipations.mockReturnValue({
+				'test-1': 'control',
+			});
+			mockCountryGroupMatches.mockReturnValue(true);
+
+			const result = await getPageParticipations(config);
+
+			// Should preserve participation keyed by test name
+			expect(result.participations).toEqual({ 'test-1': 'control' });
+			expect(result.variant).toEqual(variant);
+		});
+	});
+
+	describe('Cross-page consistency (landing → checkout)', () => {
+		it('maintains same variant and tracking name across page navigation', async () => {
+			const variant1 = createTestVariant('control', 'control-value');
+			const variant2 = createTestVariant('variant-a', 'variant-a-value');
+			const test = createPageTest('test-1', [variant1, variant2], 'Live', [
+				'GBPCountries',
+			]);
+			test.methodologies = [{ name: 'EpsilonGreedyBandit' }];
+			const config = createConfig([test], '^/.*/contribute(/.*)?$');
+
+			// Simulate landing page visit
+			mockLocation('/uk/contribute');
+			mockCountryGroupMatches.mockReturnValue(true);
+			mockRandomNumber.mockReturnValue(0);
+			mockGetSessionParticipations.mockReturnValue(undefined);
+
+			const landingResult = await getPageParticipations(config);
+
+			// Store the participation that was set
+			const storedParticipation =
+				mockSetSessionParticipations.mock.calls[0]?.[0];
+
+			// Simulate checkout page visit (same session)
+			mockLocation('/uk/checkout');
+			mockGetSessionParticipations.mockReturnValue(storedParticipation);
+
+			const checkoutResult = await getPageParticipations(config);
+
+			// Should return same variant from session storage but not track on checkout
+			expect(checkoutResult.variant).toEqual(landingResult.variant);
+			expect(checkoutResult.participations).toEqual({});
+		});
+	});
+
+	describe('Direct checkout entry', () => {
+		it('runs selection when user enters directly on checkout page', async () => {
+			const variant = createTestVariant('control', 'control-value');
+			const test = createPageTest('test-1', [variant], 'Live', [
+				'GBPCountries',
+			]);
+			test.methodologies = [{ name: 'EpsilonGreedyBandit' }];
+			const config = createConfig([test], '^/.*/contribute(/.*)?$');
+
+			// Direct checkout entry (no session storage)
+			mockLocation('/uk/checkout');
+			mockGetSessionParticipations.mockReturnValue(undefined);
+			mockCountryGroupMatches.mockReturnValue(true);
+			mockRandomNumber.mockReturnValue(0);
+
+			const result = await getPageParticipations(config);
+
+			// Should select variant but not track on checkout
+			expect(result.variant).toBeDefined();
+			expect(result.participations).toEqual({});
+			expect(mockSetSessionParticipations).toHaveBeenCalledWith(
+				{ 'test-1': 'control' },
+				'landingPageParticipations',
+			);
 		});
 	});
 });

@@ -15,6 +15,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
       "GuAllowPolicy",
       "GuAllowPolicy",
       "GuAllowPolicy",
+      "GuAllowPolicy",
       "GuVpcParameter",
       "GuSubnetListParameter",
       "GuSubnetListParameter",
@@ -37,6 +38,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
       "GuHttpsApplicationListener",
       "GuAlb5xxPercentageAlarm",
       "GuUnhealthyInstancesAlarm",
+      "GuAlarm",
       "GuAlarm",
       "GuAlarm",
       "GuAlarm",
@@ -378,6 +380,27 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           "Version": "2012-10-17",
         },
         "PolicyName": "describe-ec2-policy",
+        "Roles": [
+          {
+            "Ref": "InstanceRoleFrontend9A970131",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "DynamoBanditDataD5D7D3F6": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "dynamodb:Query",
+              "Effect": "Allow",
+              "Resource": "arn:aws:dynamodb:*:*:table/support-bandit-PROD",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "DynamoBanditDataD5D7D3F6",
         "Roles": [
           {
             "Ref": "InstanceRoleFrontend9A970131",
@@ -1500,6 +1523,61 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "SalesTaxApiError45F675E8": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:eu-west-1:",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "Impact - support-frontend failed to fetch data from the Sales Tax API. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
+        "AlarmName": "Support-frontend SalesTaxApiError",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 1,
+        "Dimensions": [
+          {
+            "Name": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "SalesTaxApiError",
+        "Namespace": "support-frontend",
+        "Period": 60,
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
     },
     "ServerSideCreateFailureAlarm3FA2BA71": {
       "Properties": {

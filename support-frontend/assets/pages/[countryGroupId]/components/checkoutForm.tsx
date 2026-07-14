@@ -25,6 +25,7 @@ import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitF
 import { checkAccount } from 'components/directDebit/helpers/ajax';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
+import { MaybeEstimatedTaxSummary } from 'components/salesTax/maybeEstimatedTaxSummary';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
@@ -49,6 +50,7 @@ import {
 } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import type { CsrfState } from 'helpers/types/csrf';
@@ -148,6 +150,9 @@ type CheckoutFormProps = {
 	checkoutSession?: CheckoutSession;
 	studentDiscount?: StudentDiscount;
 	paypalClientId: string;
+	billingState: string;
+	setBillingState: (value: string) => void;
+	taxRateConfig: TaxRateConfig;
 };
 
 export default function CheckoutForm({
@@ -171,6 +176,9 @@ export default function CheckoutForm({
 	checkoutSession,
 	studentDiscount,
 	paypalClientId,
+	billingState,
+	setBillingState,
+	taxRateConfig,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
@@ -459,16 +467,6 @@ export default function CheckoutForm({
 			'',
 		);
 
-	/**
-	 * BillingState selector initialised to undefined to hide
-	 * billingStateError message. formOnSubmit checks and converts to
-	 * empty string to display billingStateError message.
-	 */
-	const [billingState, setBillingState] = useStateWithCheckoutSession<string>(
-		checkoutSession?.formFields.addressFields.billingAddress.state,
-		'',
-	);
-
 	// billingCountry selector used to determine available payment methods
 	const [billingCountry, setBillingCountry] =
 		useStateWithCheckoutSession<IsoCountry>(
@@ -627,6 +625,7 @@ export default function CheckoutForm({
 				abParticipations,
 				promotion,
 				contributionAmount,
+				taxRateConfig,
 				weeklyGiftDeliveryDate: isGuardianWeeklyGiftProduct(
 					productKey,
 					ratePlanKey,
@@ -679,13 +678,19 @@ export default function CheckoutForm({
 		? `for${isWeeklyGift ? '' : ' a'}`
 		: 'per';
 
-	const buttonText = `Pay ${simpleFormatAmount(
-		currency,
-		finalAmount,
-	)} ${billingPreposition} ${getBillingPeriodNoun(
-		billingPeriod,
-		isWeeklyGift,
-	)}`;
+	// When pricing is tax exclusive the button copy is simply "Pay now" because
+	// there's a summary of the price just above.
+	const buttonText =
+		taxRateConfig.type === 'tax_exclusive' ||
+		taxRateConfig.type === 'not_enough_information'
+			? 'Pay now'
+			: `Pay ${simpleFormatAmount(
+					currency,
+					finalAmount,
+			  )} ${billingPreposition} ${getBillingPeriodNoun(
+					billingPeriod,
+					isWeeklyGift,
+			  )}`;
 
 	const useExpressPostcodeLookup =
 		abParticipations.postCodeLookupExpress === 'variant';
@@ -1151,6 +1156,18 @@ export default function CheckoutForm({
 							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}
+						/>
+						<MaybeEstimatedTaxSummary
+							amount={finalAmount}
+							taxRateConfig={taxRateConfig}
+							currency={currency}
+							billingPeriod={billingPeriod}
+							fullPrice={simpleFormatAmount(currency, originalAmount)}
+							discountPrice={
+								promotion
+									? simpleFormatAmount(currency, finalAmount)
+									: undefined
+							}
 						/>
 						<div
 							css={css`
