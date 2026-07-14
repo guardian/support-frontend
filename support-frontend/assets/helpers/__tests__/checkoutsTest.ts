@@ -35,47 +35,22 @@ describe('simpleFormatTaxAmount', () => {
 });
 
 describe('calculateAndRoundTax', () => {
-	it('calculates tax based on a rate and an amount', () => {
-		const originalAmount = 30;
-		const finalAmount = 30;
-		const taxRate = 0.12;
+	it.each([
+		[30, 30, 0.12, 3.6],
+		[15, 12, 0.14975, 1.8],
+		[15, 7.5, 0.14975, 1.13],
+	])(
+		`Original amount: %d / Final amount: %d / Tax rate: %d should return %d`,
+		(originalAmount, finalAmount, taxRate, expected) => {
+			const taxAmount = calculateAndRoundTax(
+				originalAmount,
+				finalAmount,
+				taxRate,
+			);
 
-		const taxAmount = calculateAndRoundTax(
-			originalAmount,
-			finalAmount,
-			taxRate,
-		);
-
-		expect(taxAmount).toEqual(3.6);
-	});
-
-	it('calculates tax when there is a discount', () => {
-		const originalAmount = 15;
-		const finalAmount = 12;
-		const taxRate = 0.14975;
-
-		const taxAmount = calculateAndRoundTax(
-			originalAmount,
-			finalAmount,
-			taxRate,
-		);
-
-		expect(taxAmount).toEqual(1.8);
-	});
-
-	it('calculates tax when there is a different discount', () => {
-		const originalAmount = 15;
-		const finalAmount = 7.5;
-		const taxRate = 0.14975;
-
-		const taxAmount = calculateAndRoundTax(
-			originalAmount,
-			finalAmount,
-			taxRate,
-		);
-
-		expect(taxAmount).toEqual(1.13);
-	});
+			expect(taxAmount).toEqual(expected);
+		},
+	);
 });
 
 describe('calculateAndFormatTotal', () => {
