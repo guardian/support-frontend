@@ -1,7 +1,11 @@
 import { css } from '@emotion/react';
 import { Button, Column, Columns } from '@guardian/source/react-components';
-import { SupportRegionId } from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
+import {
+	Canada,
+	SupportRegionId,
+} from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { ContributionsOrderSummaryProps } from 'components/orderSummary/contributionsOrderSummary';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
@@ -110,7 +114,7 @@ Default.args = {
 	productKey: 'SupporterPlus',
 	ratePlanKey: 'Monthly',
 	productLabel: 'Monthly support',
-	paymentFrequency: 'month',
+	billingPeriod: BillingPeriod.Monthly,
 	enableCheckList: true,
 	amount: 10,
 	currency: {
@@ -136,6 +140,7 @@ Default.args = {
 	),
 	supportRegionId: SupportRegionId.UK,
 	landingPageSettings,
+	taxRateConfig: { type: 'tax_inclusive' },
 };
 
 export const RecurringContribution = Template.bind({});
@@ -143,6 +148,7 @@ RecurringContribution.args = {
 	productKey: ProductKeys.Contribution,
 	ratePlanKey: 'Monthly',
 	productLabel: getProductLabel(ProductKeys.Contribution),
+	billingPeriod: BillingPeriod.Monthly,
 	enableCheckList: true,
 	amount: 3,
 	currency: {
@@ -171,12 +177,14 @@ RecurringContribution.args = {
 	),
 	supportRegionId: SupportRegionId.UK,
 	landingPageSettings,
+	taxRateConfig: { type: 'tax_inclusive' },
 };
 
 export const SupporterPlus = Template.bind({});
 SupporterPlus.args = {
 	productKey: ProductKeys.SupporterPlusKey,
 	ratePlanKey: 'Monthly',
+	billingPeriod: BillingPeriod.Monthly,
 	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
 	enableCheckList: true,
 	amount: 12,
@@ -207,12 +215,101 @@ SupporterPlus.args = {
 	),
 	supportRegionId: SupportRegionId.UK,
 	landingPageSettings,
+	taxRateConfig: { type: 'tax_inclusive' },
+};
+
+export const SupporterPlusWithTax = Template.bind({});
+SupporterPlusWithTax.args = {
+	productKey: ProductKeys.SupporterPlusKey,
+	ratePlanKey: 'MonthlyTaxExclusive',
+	billingPeriod: BillingPeriod.Monthly,
+	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
+	enableCheckList: true,
+	amount: 15,
+	currency: {
+		glyph: '$',
+		extendedGlyph: 'CA$',
+		spokenCurrency: 'dollar',
+	},
+	checkListData: [
+		...productCatalogDescription.SupporterPlus.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'SupporterPlus'}
+			ratePlanKey={'Monthly'}
+			countryGroupId={Canada}
+			thresholdAmount={15}
+		/>
+	),
+	startDate: null,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+	supportRegionId: SupportRegionId.CA,
+	landingPageSettings,
+	taxRateConfig: { type: 'tax_exclusive', rate: 0.15 },
+};
+
+export const DigitalPlusWithTaxAndDiscount = Template.bind({});
+DigitalPlusWithTaxAndDiscount.args = {
+	productKey: ProductKeys.DigitalSubscription,
+	ratePlanKey: 'MonthlyTaxExclusive',
+	billingPeriod: BillingPeriod.Monthly,
+	productLabel: getProductLabel(ProductKeys.DigitalSubscription),
+	enableCheckList: true,
+	amount: 30,
+	currency: {
+		glyph: '$',
+		extendedGlyph: 'CA$',
+		spokenCurrency: 'dollar',
+	},
+	promotion: {
+		name: 'Digital Plus Promo',
+		description: '50% off for six months',
+		promoCode: 'TEST_PROMO',
+		discountedPrice: 15,
+		discount: {
+			amount: 50,
+			durationMonths: 6,
+		},
+	},
+	checkListData: [
+		...productCatalogDescription.DigitalSubscription.benefits.map(
+			(benefit) => ({
+				isChecked: true,
+				text: benefit.copy,
+			}),
+		),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'DigitalSubscription'}
+			ratePlanKey={'Monthly'}
+			countryGroupId={Canada}
+		/>
+	),
+	startDate: null,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+	supportRegionId: SupportRegionId.CA,
+	landingPageSettings,
+	taxRateConfig: { type: 'tax_exclusive', rate: 0.15 },
 };
 
 export const DigitalSubscription = Template.bind({});
 DigitalSubscription.args = {
 	productKey: ProductKeys.DigitalSubscription,
 	ratePlanKey: 'Monthly',
+	billingPeriod: BillingPeriod.Monthly,
 	productLabel: getProductLabel(ProductKeys.DigitalSubscription),
 	enableCheckList: true,
 	amount: 27,
@@ -251,6 +348,7 @@ DigitalSubscription.args = {
 	),
 	supportRegionId: SupportRegionId.UK,
 	landingPageSettings,
+	taxRateConfig: { type: 'tax_inclusive' },
 };
 
 export const StudentOneYear = Template.bind({});
@@ -258,7 +356,7 @@ StudentOneYear.args = {
 	productKey: ProductKeys.SupporterPlusKey,
 	ratePlanKey: 'OneYearStudent',
 	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
-	paymentFrequency: 'year',
+	billingPeriod: BillingPeriod.Annual,
 	enableCheckList: true,
 	amount: 120,
 	currency: {
@@ -289,6 +387,7 @@ StudentOneYear.args = {
 	studentDiscount: oneYearStudentDiscount,
 	supportRegionId: SupportRegionId.UK,
 	landingPageSettings,
+	taxRateConfig: { type: 'tax_inclusive' },
 };
 
 export const WeeklyPricing = Template.bind({});
@@ -296,7 +395,7 @@ WeeklyPricing.args = {
 	productKey: ProductKeys.SupporterPlusKey,
 	ratePlanKey: 'Monthly',
 	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
-	paymentFrequency: 'month',
+	billingPeriod: BillingPeriod.Monthly,
 	enableCheckList: true,
 	amount: 12,
 	currency: {
@@ -326,6 +425,7 @@ WeeklyPricing.args = {
 	),
 	supportRegionId: SupportRegionId.UK,
 	landingPageSettings: weeklyPricingLandingPageSettings,
+	taxRateConfig: { type: 'tax_inclusive' },
 };
 
 export const WeeklyPricingWithPromotion = Template.bind({});
@@ -333,7 +433,7 @@ WeeklyPricingWithPromotion.args = {
 	productKey: ProductKeys.SupporterPlusKey,
 	ratePlanKey: 'Monthly',
 	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
-	paymentFrequency: 'month',
+	billingPeriod: BillingPeriod.Monthly,
 	enableCheckList: true,
 	amount: 12,
 	currency: {
@@ -373,4 +473,5 @@ WeeklyPricingWithPromotion.args = {
 	),
 	supportRegionId: SupportRegionId.UK,
 	landingPageSettings: weeklyPricingLandingPageSettings,
+	taxRateConfig: { type: 'tax_inclusive' },
 };
