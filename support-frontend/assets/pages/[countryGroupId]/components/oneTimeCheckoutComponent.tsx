@@ -289,7 +289,8 @@ export function OneTimeCheckoutComponent({
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
 	const inStripePaymentElementVariant =
-		abParticipations.stripePaymentElementTest === 'variant';
+		abParticipations.stripePaymentElementTest === 'variant' &&
+		isSwitchOn('featureSwitches.enableStripePaymentElement');
 
 	let customAmountsData;
 	const customAmountsParam = urlSearchParams.get('amounts');

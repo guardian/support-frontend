@@ -29,6 +29,7 @@ case class FeatureSwitches(
     enableCheckoutNudge: Option[SwitchState],
     enableMParticle: Option[SwitchState],
     enableTooledStudentLandingPage: Option[SwitchState],
+    enableStripePaymentElement: Option[SwitchState],
 )
 
 object FeatureSwitches {
