@@ -19,6 +19,15 @@ const tests = [
 		internationalisationId: 'CA',
 	},
 	{
+		productLabel: ProductTierLabel.TierTwo,
+		product: 'SupporterPlus',
+		billingFrequency: 'Monthly',
+		paymentType: 'Credit/Debit card',
+		internationalisationId: 'CA',
+		stateId: 'QC',
+		promoCode: 'TAX_EXCLUSIVE_SP',
+	},
+	{
 		productLabel: ProductTierLabel.TierThree,
 		product: 'DigitalSubscription',
 		billingFrequency: 'Monthly',
@@ -42,16 +51,28 @@ test.describe('Three Tier Tax Exclusive Checkout', () =>
 			paymentType,
 			internationalisationId,
 			productLabel,
+			stateId,
+			promoCode,
 		} = testDetails;
 
-		test(`Three Tier - ${product} - ${billingFrequency} - ${paymentType} - ${internationalisationId}`, async ({
+		const promoUrlParam = promoCode ? `?promoCode=${promoCode}` : '';
+		const promoCodeDescription = promoCode ? ` - ${promoCode}` : '';
+		const stateDescription = stateId ? `/${stateId}` : '';
+		test(`Three Tier - ${product} - ${billingFrequency} - ${paymentType}${promoCodeDescription} - ${internationalisationId}${stateDescription}`, async ({
 			context,
 			baseURL,
 		}) => {
 			await enableCanadaTaxExclusion(context);
 			await visitLandingPageAndCompleteCheckout(
-				`/${internationalisationId.toLowerCase()}/contribute`,
-				{ context, baseURL, product, paymentType, internationalisationId },
+				`/${internationalisationId.toLowerCase()}/contribute${promoUrlParam}`,
+				{
+					context,
+					baseURL,
+					product,
+					paymentType,
+					internationalisationId,
+					stateId,
+				},
 				async (page) => {
 					// 1. Select the billing frequency
 					await page.getByRole('tab', { name: billingFrequency }).click();

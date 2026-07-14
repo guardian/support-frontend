@@ -9,6 +9,7 @@ type TestDetails = {
 	product: string;
 	paymentType: string;
 	internationalisationId: string;
+	stateId?: string;
 	postCode?: string;
 	ratePlan?: string;
 	billingCountry?: string;
@@ -25,6 +26,7 @@ export const visitLandingPageAndCompleteCheckout = async (
 		product,
 		paymentType,
 		internationalisationId,
+		stateId,
 		postCode,
 		ratePlan,
 		billingCountry,
@@ -36,7 +38,9 @@ export const visitLandingPageAndCompleteCheckout = async (
 	await landingPageToCheckoutFn(page);
 
 	// Wait for the checkout page to load
-	const title = `Your ${product === 'Contribution' ? 'support' : 'subscription'}`;
+	const title = `Your ${
+		product === 'Contribution' ? 'support' : 'subscription'
+	}`;
 	await expect(page.getByRole('heading', { name: title })).toBeVisible({
 		timeout: 100000,
 	});
@@ -45,6 +49,7 @@ export const visitLandingPageAndCompleteCheckout = async (
 		product,
 		paymentType,
 		internationalisationId,
+		stateId,
 		postCode,
 		ratePlan,
 		billingCountry,
