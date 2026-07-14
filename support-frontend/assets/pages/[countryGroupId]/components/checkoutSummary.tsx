@@ -81,7 +81,7 @@ export default function CheckoutSummary({
 	studentDiscount,
 	nudgeSettings,
 }: CheckoutSummaryProps) {
-	const { originalAmount, finalAmount } = payment;
+	const { originalAmount } = payment;
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
 	const productCatalog = appConfig.productCatalog;
@@ -188,8 +188,7 @@ export default function CheckoutSummary({
 					ratePlanLabel={ratePlanDetail.displayName ?? ratePlanDetail.label}
 					taxRateConfig={taxRateConfig}
 					billingPeriod={ratePlanDetail.billingPeriod}
-					originalAmount={originalAmount}
-					finalAmount={finalAmount}
+					payment={payment}
 					promotion={promotion}
 					currency={currency}
 					checkListData={benefitsCheckListData}

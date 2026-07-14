@@ -22,7 +22,7 @@ import {
 	type BenefitsCheckListData,
 } from 'components/checkoutBenefits/benefitsCheckList';
 import { CheckoutNudgeSelector } from 'components/checkoutNudge/checkoutNudge';
-import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import { type Payment, simpleFormatAmount } from 'helpers/forms/checkouts';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -161,8 +161,7 @@ export type ContributionsOrderSummaryProps = {
 	productKey: ActiveProductKey;
 	productLabel: string;
 	ratePlanKey: ActiveRatePlanKey;
-	originalAmount: number;
-	finalAmount: number;
+	payment: Payment;
 	currency: CurrencyInfo;
 	enableCheckList: boolean;
 	checkListData: BenefitsCheckListData[];
@@ -184,8 +183,7 @@ export function ContributionsOrderSummary({
 	productKey,
 	productLabel,
 	ratePlanKey,
-	originalAmount,
-	finalAmount,
+	payment,
 	currency,
 	enableCheckList,
 	checkListData,
@@ -202,6 +200,7 @@ export function ContributionsOrderSummary({
 	supportRegionId,
 	nudgeSettings,
 }: ContributionsOrderSummaryProps): JSX.Element {
+	const { originalAmount, finalAmount } = payment;
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
 		productKey,
