@@ -1,7 +1,7 @@
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import {
 	calculateAndFormatTotal,
-	calculateTax,
+	calculateAndRoundTax,
 	simpleFormatAmount,
 	simpleFormatTaxAmount,
 } from '../forms/checkouts';
@@ -34,13 +34,17 @@ describe('simpleFormatTaxAmount', () => {
 	);
 });
 
-describe('calculateTax', () => {
+describe('calculateAndRoundTax', () => {
 	it('calculates tax based on a rate and an amount', () => {
 		const originalAmount = 30;
 		const finalAmount = 30;
 		const taxRate = 0.12;
 
-		const taxAmount = calculateTax(originalAmount, finalAmount, taxRate);
+		const taxAmount = calculateAndRoundTax(
+			originalAmount,
+			finalAmount,
+			taxRate,
+		);
 
 		expect(taxAmount).toEqual(3.6);
 	});
@@ -50,7 +54,11 @@ describe('calculateTax', () => {
 		const finalAmount = 12;
 		const taxRate = 0.14975;
 
-		const taxAmount = calculateTax(originalAmount, finalAmount, taxRate);
+		const taxAmount = calculateAndRoundTax(
+			originalAmount,
+			finalAmount,
+			taxRate,
+		);
 
 		expect(taxAmount).toEqual(1.8);
 	});
@@ -60,7 +68,11 @@ describe('calculateTax', () => {
 		const finalAmount = 7.5;
 		const taxRate = 0.14975;
 
-		const taxAmount = calculateTax(originalAmount, finalAmount, taxRate);
+		const taxAmount = calculateAndRoundTax(
+			originalAmount,
+			finalAmount,
+			taxRate,
+		);
 
 		expect(taxAmount).toEqual(1.13);
 	});

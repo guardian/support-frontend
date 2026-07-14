@@ -27,7 +27,7 @@ const simpleFormatAmount = (currency: CurrencyInfo, amount: number): string => {
 	return `${currency.glyph}${amountText}`.trim();
 };
 
-function calculateTax(
+function calculateAndRoundTax(
 	originalAmount: number,
 	finalAmount: number,
 	taxRate: number,
@@ -56,7 +56,7 @@ function simpleFormatTaxAmount(
 	finalAmount: number,
 	taxRate: number, // A decimal, e.g. 0.15
 ): string {
-	const taxAmount = calculateTax(originalAmount, finalAmount, taxRate);
+	const taxAmount = calculateAndRoundTax(originalAmount, finalAmount, taxRate);
 	return simpleFormatAmount(currency, taxAmount);
 }
 
@@ -76,7 +76,11 @@ function calculateAndFormatTotal(
 			// Amounts are rounded the usual way:
 			const roundedTotal = roundAmount(finalAmount);
 
-			const tax = calculateTax(originalAmount, finalAmount, taxRateConfig.rate);
+			const tax = calculateAndRoundTax(
+				originalAmount,
+				finalAmount,
+				taxRateConfig.rate,
+			);
 
 			return simpleFormatAmount(currency, roundedTotal + tax);
 			// const roundedDownTaxAmount = roundAmount(
@@ -109,6 +113,6 @@ function calculateAndFormatTotal(
 export {
 	simpleFormatAmount,
 	simpleFormatTaxAmount,
-	calculateTax,
+	calculateAndRoundTax,
 	calculateAndFormatTotal,
 };
