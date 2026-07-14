@@ -5,7 +5,7 @@ import {
 	type CountryGroupId,
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
-import type { ActiveProductKey } from '../../../helpers/productCatalog';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 
 const maxRateDisclaimer = css`
 	${textSans17};

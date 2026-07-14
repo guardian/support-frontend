@@ -84,13 +84,15 @@ export default function GuardianPageLayout({
 			header={<Header />}
 			footer={
 				<>
-					<Container
-						sideBorders
-						borderColor="rgba(170, 170, 180, 0.5)"
-						cssOverrides={footerDisclaimerStyles}
-					>
-						{footerDisclaimer}
-					</Container>
+					{footerDisclaimer ? (
+						<Container
+							sideBorders
+							borderColor="rgba(170, 170, 180, 0.5)"
+							cssOverrides={footerDisclaimerStyles}
+						>
+							{footerDisclaimer}
+						</Container>
+					) : null}
 					<FooterWithContents>
 						{noFooterLinks ? (
 							<ThankYouFooter observerPrint={observerPrint} />
