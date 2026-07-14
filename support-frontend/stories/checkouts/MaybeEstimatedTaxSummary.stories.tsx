@@ -70,8 +70,8 @@ export const WithDiscount = Template.bind({});
 WithDiscount.args = {
 	currency: getCurrencyInfo('CAD'),
 	payment: {
+		originalAmount: 120,
 		finalAmount: 60,
-		originalAmount: 60,
 	},
 	taxRateConfig: {
 		type: 'tax_exclusive',
