@@ -48,6 +48,7 @@ import {
 const nudgeBoxOverrides = css`
 	border: none;
 	margin-top: ${space[3]}px;
+	overflow: visible; // allows nudge cta content to overflow during tab selection
 `;
 
 const innerBoxOverrides = css`
