@@ -6,7 +6,7 @@ import {
 	ErrorSummary,
 } from '@guardian/source-development-kitchen/react-components';
 import type { CountryCode } from '@modules/internationalisation/country';
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import {
 	ExpressCheckoutElement,
@@ -51,7 +51,10 @@ import {
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
-import { getEstimatedSalesTaxConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
+import {
+	getEstimatedSalesTaxConfig,
+	isCaState,
+} from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import type { CsrfState } from 'helpers/types/csrf';
@@ -752,7 +755,7 @@ export default function CheckoutForm({
 									}}
 									onClick={({ resolve }) => {
 										/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
-										const isTaxExclusive =
+										const taxExclusive =
 											taxRateConfig.type === 'tax_exclusive' ||
 											taxRateConfig.type === 'not_enough_information';
 
@@ -762,24 +765,17 @@ export default function CheckoutForm({
 											};
 
 										/**
-										 * For Canadian users, request an address inside the
+										 * For tax exclusive rate plans, request an address inside the
 										 * payment sheet so we can calculate tax dynamically
 										 * via onShippingAddressChange before confirmation.
 										 * shippingRates is required by Stripe whenever
 										 * shippingAddressRequired is true.
 										 */
-										if (supportRegionId === SupportRegionId.CA) {
+										if (taxExclusive) {
 											options.shippingAddressRequired = true;
 											options.shippingRates = [
 												{ id: 'free', displayName: 'Free', amount: 0 },
 											];
-										}
-
-										/**
-										 * When pricing is tax-exclusive (and we don't yet know
-										 * the province), show placeholder line items.
-										 */
-										if (isTaxExclusive) {
 											options.lineItems = [
 												{
 													name: 'Subtotal (excl. tax)',
@@ -804,9 +800,16 @@ export default function CheckoutForm({
 										 * The "shipping" address is being used here as a proxy
 										 * for billing address, solely to obtain the Canadian
 										 * province before confirmation so that we can calculate
-										 * the tax and update the payment sheet total in real time.
+										 * the tax and update the payment total in real time.
 										 */
 										try {
+											// Currently this will only work for Canada because of a
+											// similar check in getEstimatedSalesTaxConfig
+											if (!isCaState(address.state)) {
+												return;
+											}
+
+											setBillingState(address.state);
 											const updatedTaxConfig = getEstimatedSalesTaxConfig(
 												productCatalog,
 												appConfig.taxRates,
@@ -872,13 +875,13 @@ export default function CheckoutForm({
 										setFirstName(firstName);
 										setLastName(lastName);
 
-										event.billingDetails?.address.postal_code &&
+										event.shippingAddress?.address.postal_code &&
 											setBillingPostcode(
-												event.billingDetails.address.postal_code,
+												event.shippingAddress.address.postal_code,
 											);
 
 										if (
-											!event.billingDetails?.address.state &&
+											!event.shippingAddress?.address.state &&
 											countriesRequiringBillingState.includes(countryId)
 										) {
 											logException(
@@ -886,8 +889,8 @@ export default function CheckoutForm({
 												{ supportRegionId, countryGroupId, countryId },
 											);
 										}
-										event.billingDetails?.address.state &&
-											setBillingState(event.billingDetails.address.state);
+										event.shippingAddress?.address.state &&
+											setBillingState(event.shippingAddress.address.state);
 
 										event.billingDetails?.email &&
 											setEmail(event.billingDetails.email);
