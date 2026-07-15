@@ -825,11 +825,7 @@ export default function CheckoutForm({
 
 											const taxAmount =
 												updatedTaxConfig.type === 'tax_exclusive'
-													? calculateAndRoundTax(
-															originalAmount,
-															finalAmount,
-															updatedTaxConfig.rate,
-													  )
+													? calculateAndRoundTax(payment, updatedTaxConfig.rate)
 													: 0;
 
 											const totalWithTax = finalAmount + taxAmount;
