@@ -1019,9 +1019,11 @@ export default function CheckoutForm({
 														onCardNumberChange={(
 															event: StripeCardNumberElementChangeEvent,
 														) => {
+															const isNotEmptyAndComplete =
+																!event.empty && event.complete;
 															setStripeFieldsAreEmpty((prevState) => ({
 																...prevState,
-																cardNumber: event.empty,
+																cardNumber: !isNotEmptyAndComplete,
 															}));
 
 															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
@@ -1033,9 +1035,11 @@ export default function CheckoutForm({
 														onExpiryChange={(
 															event: StripeCardExpiryElementChangeEvent,
 														) => {
+															const isNotEmptyAndComplete =
+																!event.empty && event.complete;
 															setStripeFieldsAreEmpty((prevState) => ({
 																...prevState,
-																expiry: event.empty,
+																expiry: !isNotEmptyAndComplete,
 															}));
 
 															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
@@ -1047,9 +1051,11 @@ export default function CheckoutForm({
 														onCvcChange={(
 															event: StripeCardCvcElementChangeEvent,
 														) => {
+															const isNotEmptyAndComplete =
+																!event.empty && event.complete;
 															setStripeFieldsAreEmpty((prevState) => ({
 																...prevState,
-																cvc: event.empty,
+																cvc: !isNotEmptyAndComplete,
 															}));
 
 															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
