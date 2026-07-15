@@ -1,8 +1,7 @@
 import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import {
 	calculateAndFormatTotal,
-	calculateTax,
-	roundTaxAmount,
+	calculateAndRoundTax,
 	simpleFormatAmount,
 	simpleFormatTaxAmount,
 } from '../forms/checkouts';
@@ -20,38 +19,61 @@ describe('simpleFormatAmount', () => {
 
 describe('simpleFormatTaxAmount', () => {
 	it.each([
-		[getCurrencyInfo('CAD'), 15, 0.05, '$0.75'],
-		[getCurrencyInfo('CAD'), 30, 0.12, '$3.60'],
-		[getCurrencyInfo('CAD'), 150, 0.15, '$22.50'],
-		[getCurrencyInfo('CAD'), 300, 0.14975, '$44.92'],
-		[getCurrencyInfo('CAD'), 15, 0.14975, '$2.24'],
+		[
+			getCurrencyInfo('CAD'),
+			{ originalAmount: 15, finalAmount: 15 },
+			0.05,
+			'$0.75',
+		],
+		[
+			getCurrencyInfo('CAD'),
+			{ originalAmount: 30, finalAmount: 30 },
+			0.12,
+			'$3.60',
+		],
+		[
+			getCurrencyInfo('CAD'),
+			{ originalAmount: 150, finalAmount: 150 },
+			0.15,
+			'$22.50',
+		],
+		[
+			getCurrencyInfo('CAD'),
+			{ originalAmount: 300, finalAmount: 300 },
+			0.14975,
+			'$44.93',
+		],
+		[
+			getCurrencyInfo('CAD'),
+			{ originalAmount: 15, finalAmount: 15 },
+			0.14975,
+			'$2.25',
+		],
 	])(
-		`%s / Amount: %i / Tax Rate: %d should format as %s`,
-		(currency, amount, taxRate, expected) => {
-			expect(simpleFormatTaxAmount(currency, amount, taxRate)).toBe(expected);
+		`Currenct: %s / Payment: %s / Tax Rate: %d should format as %s`,
+		(currency, payment, taxRate, expected) => {
+			expect(simpleFormatTaxAmount(currency, payment, taxRate)).toBe(expected);
 		},
 	);
 });
 
-describe('roundTaxAmount', () => {
-	it('rounds down to 2 decimal places', () => {
-		const taxAmount = 44.929;
+describe('calculateAndRoundTax', () => {
+	it.each([
+		[{ originalAmount: 30, finalAmount: 30 }, 0.12, 3.6],
+		[{ originalAmount: 30, finalAmount: 15 }, 0.14975, 2.24],
+		[{ originalAmount: 30, finalAmount: 15 }, 0.12, 1.8],
+		[{ originalAmount: 15, finalAmount: 15 }, 0.14975, 2.25],
+		[{ originalAmount: 15, finalAmount: 12 }, 0.14975, 1.8],
+		[{ originalAmount: 15, finalAmount: 7.5 }, 0.14975, 1.13],
+		[{ originalAmount: 15, finalAmount: 15 }, 0.05, 0.75],
+	])(
+		`Payment: %s / Tax rate: %d should return %d`,
+		(payment, taxRate, expected) => {
+			const taxAmount = calculateAndRoundTax(payment, taxRate);
 
-		const roundedTaxAmount = roundTaxAmount(taxAmount);
-
-		expect(roundedTaxAmount).toEqual(44.92);
-	});
-});
-
-describe('calculateTax', () => {
-	it('calculates tax based on a rate and an amount', () => {
-		const amount = 30;
-		const taxRate = 0.12;
-
-		const taxAmount = calculateTax(amount, taxRate);
-
-		expect(taxAmount).toEqual(3.6);
-	});
+			expect(taxAmount).toEqual(expected);
+		},
+	);
 });
 
 describe('calculateAndFormatTotal', () => {
@@ -59,37 +81,55 @@ describe('calculateAndFormatTotal', () => {
 		[
 			{ type: 'tax_exclusive', rate: 0.05 } as const,
 			getCurrencyInfo('CAD'),
-			15,
+			{ originalAmount: 15, finalAmount: 15 },
 			'$15.75',
 		],
 		[
 			{ type: 'tax_exclusive', rate: 0.12 } as const,
 			getCurrencyInfo('CAD'),
-			30,
+			{ originalAmount: 30, finalAmount: 30 },
 			'$33.60',
 		],
 		[
 			{ type: 'tax_exclusive', rate: 0.15 } as const,
 			getCurrencyInfo('CAD'),
-			150,
+			{ originalAmount: 150, finalAmount: 150 },
 			'$172.50',
 		],
 		[
 			{ type: 'tax_exclusive', rate: 0.14975 } as const,
 			getCurrencyInfo('CAD'),
-			300,
-			'$344.92',
+			{ originalAmount: 300, finalAmount: 300 },
+			'$344.93',
 		],
 		[
 			{ type: 'tax_exclusive', rate: 0.14975 } as const,
 			getCurrencyInfo('CAD'),
-			15,
-			'$17.24',
+			{ originalAmount: 15, finalAmount: 15 },
+			'$17.25',
+		],
+		[
+			{ type: 'tax_exclusive', rate: 0.14975 } as const,
+			getCurrencyInfo('CAD'),
+			{ originalAmount: 15, finalAmount: 12 },
+			'$13.80',
+		],
+		[
+			{ type: 'tax_exclusive', rate: 0.14975 } as const,
+			getCurrencyInfo('CAD'),
+			{ originalAmount: 15, finalAmount: 7.5 },
+			'$8.63',
+		],
+		[
+			{ type: 'tax_exclusive', rate: 0.12 } as const,
+			getCurrencyInfo('CAD'),
+			{ originalAmount: 30, finalAmount: 15 },
+			'$16.80',
 		],
 	])(
-		`%s / Amount: %i / Tax Rate: %d should return %s`,
-		(taxRateConfig, currency, amount, expected) => {
-			expect(calculateAndFormatTotal(taxRateConfig, currency, amount)).toBe(
+		`%s / Currency %s / Payment: %s should return %s`,
+		(taxRateConfig, currency, payment, expected) => {
+			expect(calculateAndFormatTotal(taxRateConfig, currency, payment)).toBe(
 				expected,
 			);
 		},
@@ -98,9 +138,9 @@ describe('calculateAndFormatTotal', () => {
 	it('returns the total when the tax config is not_enough_information', () => {
 		const taxConfig = { type: 'not_enough_information' } as const;
 		const currency = getCurrencyInfo('CAD');
-		const amount = 15;
+		const payment = { originalAmount: 15, finalAmount: 15 };
 
-		const result = calculateAndFormatTotal(taxConfig, currency, amount);
+		const result = calculateAndFormatTotal(taxConfig, currency, payment);
 
 		expect(result).toEqual('$15');
 	});
@@ -108,9 +148,9 @@ describe('calculateAndFormatTotal', () => {
 	it('returns the total when the tax config is tax_inclusive', () => {
 		const taxConfig = { type: 'tax_inclusive' } as const;
 		const currency = getCurrencyInfo('CAD');
-		const amount = 15;
+		const payment = { originalAmount: 15, finalAmount: 15 };
 
-		const result = calculateAndFormatTotal(taxConfig, currency, amount);
+		const result = calculateAndFormatTotal(taxConfig, currency, payment);
 
 		expect(result).toEqual('$15');
 	});

@@ -1,11 +1,12 @@
 import { css } from '@emotion/react';
 import type { CurrencyInfo } from '@modules/internationalisation/currency';
 import type { ReactNode } from 'react';
+import type { Payment } from 'helpers/forms/checkouts';
 import { simpleFormatTaxAmount } from 'helpers/forms/checkouts';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 
 type Props = {
-	amount: number;
+	payment: Payment;
 	taxRateConfig: TaxRateConfig;
 	currency: CurrencyInfo;
 	children?: ReactNode;
@@ -18,8 +19,8 @@ const rowContainer = css`
 `;
 
 export function MaybeEstimatedTax({
+	payment,
 	currency,
-	amount,
 	taxRateConfig,
 	children,
 }: Props) {
@@ -41,7 +42,9 @@ export function MaybeEstimatedTax({
 				<>
 					<div css={rowContainer}>
 						<p>Estimated tax</p>
-						<p>{simpleFormatTaxAmount(currency, amount, taxRateConfig.rate)}</p>
+						<p>
+							{simpleFormatTaxAmount(currency, payment, taxRateConfig.rate)}
+						</p>
 					</div>
 					{children}
 				</>

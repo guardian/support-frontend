@@ -4,6 +4,7 @@ import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/int
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { PriceSummary } from 'components/priceSummary/priceSummary';
 import { MaybeEstimatedTax } from 'components/salesTax/maybeEstimatedTax';
+import type { Payment } from 'helpers/forms/checkouts';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
@@ -66,7 +67,7 @@ type PriceBreakdownProps = {
 	savingText: string | null;
 	isWeeklyGift: boolean;
 	currency: CurrencyInfo;
-	amount: number;
+	payment: Payment;
 	taxRateConfig: TaxRateConfig;
 	studentDiscount?: StudentDiscount;
 	billingPeriod: BillingPeriod;
@@ -79,7 +80,7 @@ export function PriceBreakdown({
 	savingText,
 	isWeeklyGift,
 	currency,
-	amount,
+	payment,
 	taxRateConfig,
 	billingPeriod,
 	studentDiscount,
@@ -129,11 +130,10 @@ export function PriceBreakdown({
 				</div>
 				<MaybeEstimatedTax
 					currency={currency}
-					// The amount to use for tax calculations. This is the discounted price
-					// when a promotion applies, otherwise the full amount. This doesn't handle
-					// student discounts currently because they're never tax exclusive, but if
-					// this changes we'll need to revisit this amount prop.
-					amount={amount}
+					// This doesn't handle student discounts currently because
+					// they're never tax exclusive, but if this changes we'll
+					// need to revisit this payment prop.
+					payment={payment}
 					taxRateConfig={taxRateConfig}
 				>
 					<TaxTsAndCs />

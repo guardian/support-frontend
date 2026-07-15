@@ -116,7 +116,7 @@ Default.args = {
 	productLabel: 'Monthly support',
 	billingPeriod: BillingPeriod.Monthly,
 	enableCheckList: true,
-	amount: 10,
+	payment: { originalAmount: 10, finalAmount: 10 },
 	currency: {
 		glyph: '£',
 		extendedGlyph: '£',
@@ -150,7 +150,7 @@ RecurringContribution.args = {
 	productLabel: getProductLabel(ProductKeys.Contribution),
 	billingPeriod: BillingPeriod.Monthly,
 	enableCheckList: true,
-	amount: 3,
+	payment: { originalAmount: 3, finalAmount: 3 },
 	currency: {
 		glyph: '£',
 		extendedGlyph: '£',
@@ -187,7 +187,7 @@ SupporterPlus.args = {
 	billingPeriod: BillingPeriod.Monthly,
 	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
 	enableCheckList: true,
-	amount: 12,
+	payment: { originalAmount: 12, finalAmount: 12 },
 	currency: {
 		glyph: '£',
 		extendedGlyph: '£',
@@ -225,7 +225,7 @@ SupporterPlusWithTax.args = {
 	billingPeriod: BillingPeriod.Monthly,
 	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
 	enableCheckList: true,
-	amount: 15,
+	payment: { originalAmount: 15, finalAmount: 15 },
 	currency: {
 		glyph: '$',
 		extendedGlyph: 'CA$',
@@ -263,7 +263,7 @@ DigitalPlusWithTaxAndDiscount.args = {
 	billingPeriod: BillingPeriod.Monthly,
 	productLabel: getProductLabel(ProductKeys.DigitalSubscription),
 	enableCheckList: true,
-	amount: 30,
+	payment: { finalAmount: 15, originalAmount: 30 },
 	currency: {
 		glyph: '$',
 		extendedGlyph: 'CA$',
@@ -312,7 +312,7 @@ DigitalSubscription.args = {
 	billingPeriod: BillingPeriod.Monthly,
 	productLabel: getProductLabel(ProductKeys.DigitalSubscription),
 	enableCheckList: true,
-	amount: 27,
+	payment: { originalAmount: 27, finalAmount: 27 },
 	currency: {
 		glyph: '£',
 		extendedGlyph: '£',
@@ -358,7 +358,7 @@ StudentOneYear.args = {
 	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
 	billingPeriod: BillingPeriod.Annual,
 	enableCheckList: true,
-	amount: 120,
+	payment: { originalAmount: 9, finalAmount: 9 },
 	currency: {
 		glyph: '£',
 		extendedGlyph: '£',
@@ -397,7 +397,7 @@ WeeklyPricing.args = {
 	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
 	billingPeriod: BillingPeriod.Monthly,
 	enableCheckList: true,
-	amount: 12,
+	payment: { originalAmount: 12, finalAmount: 12 },
 	currency: {
 		glyph: '£',
 		extendedGlyph: '£',
@@ -435,7 +435,7 @@ WeeklyPricingWithPromotion.args = {
 	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
 	billingPeriod: BillingPeriod.Monthly,
 	enableCheckList: true,
-	amount: 12,
+	payment: { originalAmount: 12, finalAmount: 8 },
 	currency: {
 		glyph: '£',
 		extendedGlyph: '£',

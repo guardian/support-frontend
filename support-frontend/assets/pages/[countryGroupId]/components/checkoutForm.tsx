@@ -32,7 +32,11 @@ import type { AddressFormFieldError } from 'components/subscriptionCheckouts/add
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import useEmailMarketingUtmSession from 'helpers/customHooks/useEmailMarketingUtmSession';
-import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import {
+	calculateAndRoundTax,
+	type Payment,
+	simpleFormatAmount,
+} from 'helpers/forms/checkouts';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
 	isPaymentMethod,
@@ -51,6 +55,10 @@ import {
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
+import {
+	getEstimatedSalesTaxConfig,
+	isCaState,
+} from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import type { CsrfState } from 'helpers/types/csrf';
@@ -135,8 +143,7 @@ type CheckoutFormProps = {
 	isTestUser: boolean;
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
-	originalAmount: number;
-	finalAmount: number;
+	payment: Payment;
 	useStripeExpressCheckout: boolean;
 	countryId: CountryCode;
 	abParticipations: Participations;
@@ -145,7 +152,6 @@ type CheckoutFormProps = {
 	weeklyDeliveryDate: Date;
 	setWeeklyDeliveryDate: (value: Date) => void;
 	thresholdAmount: number;
-	contributionAmount?: number;
 	promotion?: Promotion;
 	checkoutSession?: CheckoutSession;
 	studentDiscount?: StudentDiscount;
@@ -162,8 +168,7 @@ export default function CheckoutForm({
 	isTestUser,
 	productKey,
 	ratePlanKey,
-	originalAmount,
-	finalAmount,
+	payment,
 	useStripeExpressCheckout,
 	countryId,
 	abParticipations,
@@ -171,7 +176,6 @@ export default function CheckoutForm({
 	weeklyDeliveryDate,
 	setWeeklyDeliveryDate,
 	thresholdAmount,
-	contributionAmount,
 	promotion,
 	checkoutSession,
 	studentDiscount,
@@ -180,6 +184,7 @@ export default function CheckoutForm({
 	setBillingState,
 	taxRateConfig,
 }: CheckoutFormProps) {
+	const { originalAmount, finalAmount, contributionAmount } = payment;
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
@@ -678,19 +683,21 @@ export default function CheckoutForm({
 		? `for${isWeeklyGift ? '' : ' a'}`
 		: 'per';
 
+	const taxExclusive =
+		taxRateConfig.type === 'tax_exclusive' ||
+		taxRateConfig.type === 'not_enough_information';
+
 	// When pricing is tax exclusive the button copy is simply "Pay now" because
 	// there's a summary of the price just above.
-	const buttonText =
-		taxRateConfig.type === 'tax_exclusive' ||
-		taxRateConfig.type === 'not_enough_information'
-			? 'Pay now'
-			: `Pay ${simpleFormatAmount(
-					currency,
-					finalAmount,
-			  )} ${billingPreposition} ${getBillingPeriodNoun(
-					billingPeriod,
-					isWeeklyGift,
-			  )}`;
+	const buttonText = taxExclusive
+		? 'Pay now'
+		: `Pay ${simpleFormatAmount(
+				currency,
+				finalAmount,
+		  )} ${billingPreposition} ${getBillingPeriodNoun(
+				billingPeriod,
+				isWeeklyGift,
+		  )}`;
 
 	const useExpressPostcodeLookup =
 		abParticipations.postCodeLookupExpress === 'variant';
@@ -751,9 +758,37 @@ export default function CheckoutForm({
 									}}
 									onClick={({ resolve }) => {
 										/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
-										const options = {
-											emailRequired: true,
-										};
+										const options: NonNullable<Parameters<typeof resolve>[0]> =
+											{
+												emailRequired: true,
+											};
+
+										/**
+										 * For tax exclusive rate plans, request an address inside the
+										 * payment sheet so we can calculate tax dynamically
+										 * via onShippingAddressChange before confirmation.
+										 * shippingRates is required by Stripe whenever
+										 * shippingAddressRequired is true.
+										 */
+										if (taxExclusive) {
+											options.shippingAddressRequired = true;
+											options.shippingRates = [
+												{ id: 'free', displayName: 'Free', amount: 0 },
+											];
+											// The breakdown of pricing shown in the payment dialog
+											// Until the user selects a shipping address the tax
+											// shows as 'to be calculated'
+											options.lineItems = [
+												{
+													name: 'Subtotal (excl. tax)',
+													amount: Math.round(finalAmount * 100),
+												},
+												{
+													name: 'Tax (to be calculated)',
+													amount: 0,
+												},
+											];
+										}
 
 										// Track payment method selection with QM
 										sendEventPaymentMethodSelected(
@@ -761,6 +796,62 @@ export default function CheckoutForm({
 										);
 
 										resolve(options);
+									}}
+									onShippingAddressChange={({ address, resolve, reject }) => {
+										/**
+										 * The "shipping" address is being used here as a proxy
+										 * for billing address, solely to obtain the Canadian
+										 * province before confirmation so that we can calculate
+										 * the tax and update the payment total in real time.
+										 */
+										try {
+											// Currently this will only work for Canada because of a
+											// similar check in getEstimatedSalesTaxConfig
+											if (!isCaState(address.state)) {
+												return;
+											}
+
+											setBillingState(address.state);
+
+											// Get the correct tax config now that we have a province to calculate tax with
+											const updatedTaxConfig = getEstimatedSalesTaxConfig(
+												productCatalog,
+												appConfig.taxRates,
+												productKey,
+												ratePlanKey,
+												address.state,
+												supportRegionId,
+											);
+
+											const taxAmount =
+												updatedTaxConfig.type === 'tax_exclusive'
+													? calculateAndRoundTax(payment, updatedTaxConfig.rate)
+													: 0;
+
+											const totalWithTax = finalAmount + taxAmount;
+
+											// Update the Elements amount so the sheet total reflects tax
+											void elements?.update({
+												amount: Math.round(totalWithTax * 100),
+											});
+
+											resolve({
+												// Now that we have a tax amount we can
+												// show the correct pricing information
+												lineItems: [
+													{
+														name: 'Subtotal (excl. tax)',
+														amount: Math.round(finalAmount * 100),
+													},
+													{
+														name: 'Estimated tax',
+														amount: Math.round(taxAmount * 100),
+													},
+												],
+											});
+										} catch {
+											reject();
+										}
 									}}
 									onConfirm={async (event) => {
 										if (!(stripe && elements)) {
@@ -790,13 +881,13 @@ export default function CheckoutForm({
 										setFirstName(firstName);
 										setLastName(lastName);
 
-										event.billingDetails?.address.postal_code &&
+										event.shippingAddress?.address.postal_code &&
 											setBillingPostcode(
-												event.billingDetails.address.postal_code,
+												event.shippingAddress.address.postal_code,
 											);
 
 										if (
-											!event.billingDetails?.address.state &&
+											!event.shippingAddress?.address.state &&
 											countriesRequiringBillingState.includes(countryId)
 										) {
 											logException(
@@ -804,8 +895,8 @@ export default function CheckoutForm({
 												{ supportRegionId, countryGroupId, countryId },
 											);
 										}
-										event.billingDetails?.address.state &&
-											setBillingState(event.billingDetails.address.state);
+										event.shippingAddress?.address.state &&
+											setBillingState(event.shippingAddress.address.state);
 
 										event.billingDetails?.email &&
 											setEmail(event.billingDetails.email);
@@ -1164,7 +1255,7 @@ export default function CheckoutForm({
 							amount={originalAmount}
 						/>
 						<MaybeEstimatedTaxSummary
-							amount={finalAmount}
+							payment={payment}
 							taxRateConfig={taxRateConfig}
 							currency={currency}
 							billingPeriod={billingPeriod}
