@@ -279,9 +279,9 @@ export default function CheckoutForm({
 	const [stripeFieldsAreEmpty, setStripeFieldsAreEmpty] = useState<
 		Record<StripeOnlyField, boolean>
 	>({ cardNumber: true, expiry: true, cvc: true });
-const [stripeFieldsAreComplete, setStripeFieldsAreComplete] = useState<
-	Record<StripeOnlyField, boolean>
->({ cardNumber: false, expiry: false, cvc: false });
+	const [stripeFieldsAreComplete, setStripeFieldsAreComplete] = useState<
+		Record<StripeOnlyField, boolean>
+	>({ cardNumber: false, expiry: false, cvc: false });
 	type StripeField = StripeOnlyField | 'recaptcha';
 	const [stripeFieldError, setStripeFieldError] = useState<
 		Partial<Record<StripeField, string>>
@@ -1128,7 +1128,7 @@ const [stripeFieldsAreComplete, setStripeFieldsAreComplete] = useState<
 																cardNumber: event.complete,
 															}));
 
-// Clear errors when the field changes and is complete; we'll (re) show errors, if any, on submit
+															// Clear errors when the field changes and is complete; we'll (re) show errors, if any, on submit
 															setStripeFieldError((prevState) => ({
 																...prevState,
 																cardNumber: event.complete
@@ -1148,7 +1148,7 @@ const [stripeFieldsAreComplete, setStripeFieldsAreComplete] = useState<
 																expiry: event.complete,
 															}));
 
-// Clear errors when the field changes and is complete; we'll (re) show errors, if any, on submit
+															// Clear errors when the field changes and is complete; we'll (re) show errors, if any, on submit
 															setStripeFieldError((prevState) => ({
 																...prevState,
 																expiry: event.complete
@@ -1168,7 +1168,7 @@ const [stripeFieldsAreComplete, setStripeFieldsAreComplete] = useState<
 																cvc: event.complete,
 															}));
 
-// Clear errors when the field changes and is complete; we'll (re) show errors, if any, on submit
+															// Clear errors when the field changes and is complete; we'll (re) show errors, if any, on submit
 															setStripeFieldError((prevState) => ({
 																...prevState,
 																cvc: event.complete ? undefined : prevState.cvc,
