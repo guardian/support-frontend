@@ -61,9 +61,11 @@ describe('calculateAndRoundTax', () => {
 	it.each([
 		[{ originalAmount: 30, finalAmount: 30 }, 0.12, 3.6],
 		[{ originalAmount: 30, finalAmount: 15 }, 0.14975, 2.24],
+		[{ originalAmount: 30, finalAmount: 15 }, 0.12, 1.8],
 		[{ originalAmount: 15, finalAmount: 15 }, 0.14975, 2.25],
 		[{ originalAmount: 15, finalAmount: 12 }, 0.14975, 1.8],
 		[{ originalAmount: 15, finalAmount: 7.5 }, 0.14975, 1.13],
+		[{ originalAmount: 15, finalAmount: 15 }, 0.05, 0.75],
 	])(
 		`Payment: %s / Tax rate: %d should return %d`,
 		(payment, taxRate, expected) => {
@@ -117,6 +119,12 @@ describe('calculateAndFormatTotal', () => {
 			getCurrencyInfo('CAD'),
 			{ originalAmount: 15, finalAmount: 7.5 },
 			'$8.63',
+		],
+		[
+			{ type: 'tax_exclusive', rate: 0.12 } as const,
+			getCurrencyInfo('CAD'),
+			{ originalAmount: 30, finalAmount: 15 },
+			'$16.80',
 		],
 	])(
 		`%s / Currency %s / Payment: %s should return %s`,
