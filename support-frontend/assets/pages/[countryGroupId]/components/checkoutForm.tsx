@@ -279,9 +279,9 @@ export default function CheckoutForm({
 	const [stripeFieldsAreEmpty, setStripeFieldsAreEmpty] = useState<
 		Record<StripeOnlyField, boolean>
 	>({ cardNumber: true, expiry: true, cvc: true });
-	const [stripeFieldsAreComplete, setStripeFieldsAreComplete] = useState<
-		Record<StripeOnlyField, boolean>
-	>({ cardNumber: true, expiry: true, cvc: true });
+const [stripeFieldsAreComplete, setStripeFieldsAreComplete] = useState<
+	Record<StripeOnlyField, boolean>
+>({ cardNumber: false, expiry: false, cvc: false });
 	type StripeField = StripeOnlyField | 'recaptcha';
 	const [stripeFieldError, setStripeFieldError] = useState<
 		Partial<Record<StripeField, string>>
