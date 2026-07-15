@@ -250,7 +250,7 @@ function getAcquisitionData(
 	abParticipations: Participations,
 	billingPostcode: string,
 	coverTransactionCost: boolean,
-	countryId: IsoCountry,
+	countryId: CountryCode,
 ): PaymentAPIAcquisitionData {
 	const referrerAcquisitionData = getReferrerAcquisitionData();
 	return derivePaymentApiAcquisitionData(

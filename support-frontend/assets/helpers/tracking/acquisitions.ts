@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 
 import { viewId } from '@guardian/ophan-tracker-js/support';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import { testIsActive } from 'helpers/abTests/abtest';
 import { type Participations } from 'helpers/abTests/models';
 import { get as getCookie } from 'helpers/storage/cookie';
@@ -63,7 +63,7 @@ export type PaymentAPIAcquisitionData = {
 	queryParameters?: AcquisitionQueryParameters;
 	labels?: string[];
 	postalCode: string | null;
-	countryId: IsoCountry;
+	countryId: CountryCode;
 };
 
 // ----- Setup ----- //
@@ -188,7 +188,7 @@ function derivePaymentApiAcquisitionData(
 	referrerAcquisitionData: ReferrerAcquisitionData,
 	nativeAbParticipations: Participations,
 	postalCode: string | null,
-	countryId: IsoCountry,
+	countryId: CountryCode,
 ): PaymentAPIAcquisitionData {
 	const ophanIds: OphanIds = getOphanIds();
 	const abTests = getAbTests(referrerAcquisitionData, nativeAbParticipations);
