@@ -570,12 +570,10 @@ export default function CheckoutForm({
 				// Recaptcha works slightly differently because we own the state
 				...(!recaptchaToken && { recaptcha: 'Please complete security check' }),
 			};
-			console.log('*** newStripeFieldError', newStripeFieldError);
 
 			// Don't go any further if there are errors for any Stripe fields
 			if (Object.values(newStripeFieldError).some((value) => value)) {
 				setStripeFieldError(newStripeFieldError);
-				console.log('*** stripeFieldError set to ', stripeFieldError);
 				paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
 				return false;
 			}
