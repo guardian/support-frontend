@@ -279,6 +279,9 @@ export default function CheckoutForm({
 	const [stripeFieldsAreEmpty, setStripeFieldsAreEmpty] = useState<
 		Record<StripeOnlyField, boolean>
 	>({ cardNumber: true, expiry: true, cvc: true });
+	const [stripeFieldsAreComplete, setStripeFieldsAreComplete] = useState<
+		Record<StripeOnlyField, boolean>
+	>({ cardNumber: true, expiry: true, cvc: true });
 	type StripeField = StripeOnlyField | 'recaptcha';
 	const [stripeFieldError, setStripeFieldError] = useState<
 		Partial<Record<StripeField, string>>
@@ -548,23 +551,31 @@ export default function CheckoutForm({
 		}
 
 		if (paymentMethod === 'Stripe') {
-			const newStripeFieldError = {
-				...(stripeFieldsAreEmpty.cardNumber && {
-					cardNumber: 'Please enter card number',
+			const newStripeFieldError: Partial<Record<StripeField, string>> = {
+				...((stripeFieldsAreEmpty.cardNumber ||
+					!stripeFieldsAreComplete.cardNumber) && {
+					cardNumber: `Please enter ${
+						!stripeFieldsAreEmpty.cardNumber ? 'a valid ' : ''
+					}card number`,
 				}),
-				...(stripeFieldsAreEmpty.expiry && {
-					expiry: 'Please enter expiry',
+				...((stripeFieldsAreEmpty.expiry ||
+					!stripeFieldsAreComplete.expiry) && {
+					expiry: `Please enter ${
+						!stripeFieldsAreEmpty.expiry ? 'a valid ' : ''
+					}expiry`,
 				}),
-				...(stripeFieldsAreEmpty.cvc && {
-					cvc: 'Please enter CVC',
+				...((stripeFieldsAreEmpty.cvc || !stripeFieldsAreComplete.cvc) && {
+					cvc: `Please enter ${!stripeFieldsAreEmpty.cvc ? 'a valid ' : ''}CVC`,
 				}),
 				// Recaptcha works slightly differently because we own the state
 				...(!recaptchaToken && { recaptcha: 'Please complete security check' }),
 			};
+			console.log('*** newStripeFieldError', newStripeFieldError);
 
 			// Don't go any further if there are errors for any Stripe fields
 			if (Object.values(newStripeFieldError).some((value) => value)) {
 				setStripeFieldError(newStripeFieldError);
+				console.log('*** stripeFieldError set to ', stripeFieldError);
 				paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
 				return false;
 			}
@@ -1110,11 +1121,13 @@ export default function CheckoutForm({
 														onCardNumberChange={(
 															event: StripeCardNumberElementChangeEvent,
 														) => {
-															const isNotEmptyAndComplete =
-																!event.empty && event.complete;
 															setStripeFieldsAreEmpty((prevState) => ({
 																...prevState,
-																cardNumber: !isNotEmptyAndComplete,
+																cardNumber: event.empty,
+															}));
+															setStripeFieldsAreComplete((prevState) => ({
+																...prevState,
+																cardNumber: event.complete,
 															}));
 
 															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
@@ -1126,11 +1139,13 @@ export default function CheckoutForm({
 														onExpiryChange={(
 															event: StripeCardExpiryElementChangeEvent,
 														) => {
-															const isNotEmptyAndComplete =
-																!event.empty && event.complete;
 															setStripeFieldsAreEmpty((prevState) => ({
 																...prevState,
-																expiry: !isNotEmptyAndComplete,
+																expiry: event.empty,
+															}));
+															setStripeFieldsAreComplete((prevState) => ({
+																...prevState,
+																expiry: event.complete,
 															}));
 
 															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
@@ -1142,11 +1157,13 @@ export default function CheckoutForm({
 														onCvcChange={(
 															event: StripeCardCvcElementChangeEvent,
 														) => {
-															const isNotEmptyAndComplete =
-																!event.empty && event.complete;
 															setStripeFieldsAreEmpty((prevState) => ({
 																...prevState,
-																cvc: !isNotEmptyAndComplete,
+																cvc: event.empty,
+															}));
+															setStripeFieldsAreComplete((prevState) => ({
+																...prevState,
+																cvc: event.complete,
 															}));
 
 															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
