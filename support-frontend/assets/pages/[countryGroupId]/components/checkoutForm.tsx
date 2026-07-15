@@ -1128,7 +1128,7 @@ const [stripeFieldsAreComplete, setStripeFieldsAreComplete] = useState<
 																cardNumber: event.complete,
 															}));
 
-															// Clear errors when the field changes and complete, we'll (re) show errors, if any, on submit
+// Clear errors when the field changes and is complete; we'll (re) show errors, if any, on submit
 															setStripeFieldError((prevState) => ({
 																...prevState,
 																cardNumber: event.complete
