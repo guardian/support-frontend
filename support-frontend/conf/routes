@@ -38,7 +38,6 @@ GET  /one-time-checkout                                            controllers.A
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/one-time-checkout   controllers.Application.productCheckoutRouter(countryGroupId: String)
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/thank-you           controllers.Application.productCheckoutRouter(countryGroupId: String)
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/join               controllers.Application.productCheckoutRouter(countryGroupId: String)
-GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/invitation-decline  controllers.Application.productCheckoutRouter(countryGroupId: String)
 
 GET  /$countryGroupId<(uk|eu)>/guardian-ad-lite                         controllers.Application.productCheckoutRouter(countryGroupId: String)
 GET /guardian-ad-lite                                                controllers.Application.geoRedirectToPath(path = "guardian-ad-lite")

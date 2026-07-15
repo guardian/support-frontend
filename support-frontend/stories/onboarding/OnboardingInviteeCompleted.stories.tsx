@@ -2,8 +2,14 @@ import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type React from 'react';
 import { OnboardingInviteeCompleted } from 'components/onboarding/sections/onboardingInviteeCompleted';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
-import { resolveInvitation } from 'helpers/onboardingInvitee/invitation';
+import type { OnboardingInviteeInvitation } from 'helpers/onboardingInvitee/invitation';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
+
+const mockInvitation: OnboardingInviteeInvitation = {
+	invitationId: 'test-invitation',
+	email: 'jonathan.ruda@gmail.com',
+	inviterFirstName: 'Jontho',
+};
 
 export default {
 	title: 'Onboarding/OnboardingInviteeCompleted',
@@ -23,7 +29,7 @@ export default {
 
 export const Default = {
 	args: {
-		invitation: resolveInvitation('test-invitation'),
+		invitation: mockInvitation,
 		landingPageSettings: fallBackLandingPageSelection,
 		supportRegionId: SupportRegionId.UK,
 	},
