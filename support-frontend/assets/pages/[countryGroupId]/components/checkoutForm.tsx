@@ -682,19 +682,21 @@ export default function CheckoutForm({
 		? `for${isWeeklyGift ? '' : ' a'}`
 		: 'per';
 
+	const taxExclusive =
+		taxRateConfig.type === 'tax_exclusive' ||
+		taxRateConfig.type === 'not_enough_information';
+
 	// When pricing is tax exclusive the button copy is simply "Pay now" because
 	// there's a summary of the price just above.
-	const buttonText =
-		taxRateConfig.type === 'tax_exclusive' ||
-		taxRateConfig.type === 'not_enough_information'
-			? 'Pay now'
-			: `Pay ${simpleFormatAmount(
-					currency,
-					finalAmount,
-			  )} ${billingPreposition} ${getBillingPeriodNoun(
-					billingPeriod,
-					isWeeklyGift,
-			  )}`;
+	const buttonText = taxExclusive
+		? 'Pay now'
+		: `Pay ${simpleFormatAmount(
+				currency,
+				finalAmount,
+		  )} ${billingPreposition} ${getBillingPeriodNoun(
+				billingPeriod,
+				isWeeklyGift,
+		  )}`;
 
 	const useExpressPostcodeLookup =
 		abParticipations.postCodeLookupExpress === 'variant';
@@ -755,10 +757,6 @@ export default function CheckoutForm({
 									}}
 									onClick={({ resolve }) => {
 										/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
-										const taxExclusive =
-											taxRateConfig.type === 'tax_exclusive' ||
-											taxRateConfig.type === 'not_enough_information';
-
 										const options: NonNullable<Parameters<typeof resolve>[0]> =
 											{
 												emailRequired: true,
