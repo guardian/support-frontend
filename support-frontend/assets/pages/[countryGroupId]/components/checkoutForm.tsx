@@ -774,6 +774,9 @@ export default function CheckoutForm({
 											options.shippingRates = [
 												{ id: 'free', displayName: 'Free', amount: 0 },
 											];
+											// The breakdown of pricing shown in the payment dialog
+											// Until the user selects a shipping address the tax
+											// shows as 'to be calculated'
 											options.lineItems = [
 												{
 													name: 'Subtotal (excl. tax)',
@@ -808,6 +811,8 @@ export default function CheckoutForm({
 											}
 
 											setBillingState(address.state);
+
+											// Get the correct tax config now that we have a province to calculate tax with
 											const updatedTaxConfig = getEstimatedSalesTaxConfig(
 												productCatalog,
 												appConfig.taxRates,
@@ -819,10 +824,10 @@ export default function CheckoutForm({
 
 											const taxAmount =
 												updatedTaxConfig.type === 'tax_exclusive'
-													? calculateTax(originalAmount, updatedTaxConfig.rate)
+													? calculateTax(finalAmount, updatedTaxConfig.rate)
 													: 0;
 
-											const totalWithTax = originalAmount + taxAmount;
+											const totalWithTax = finalAmount + taxAmount;
 
 											// Update the Elements amount so the sheet total reflects tax
 											void elements?.update({
@@ -830,10 +835,12 @@ export default function CheckoutForm({
 											});
 
 											resolve({
+												// Now that we have a tax amount we can
+												// show the correct pricing information
 												lineItems: [
 													{
 														name: 'Subtotal (excl. tax)',
-														amount: Math.round(originalAmount * 100),
+														amount: Math.round(finalAmount * 100),
 													},
 													{
 														name: 'Estimated tax',
