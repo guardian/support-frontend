@@ -11,6 +11,7 @@ import { OrderSummaryStartDate } from 'components/orderSummary/orderSummaryStart
 import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
+import type { Payment } from 'helpers/forms/checkouts';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	type ActiveProductKey,
@@ -46,7 +47,7 @@ type CheckoutSummaryProps = {
 	appConfig: AppConfig;
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
-	originalAmount: number;
+	payment: Payment;
 	countryId: CountryCode;
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
@@ -66,7 +67,7 @@ export default function CheckoutSummary({
 	appConfig,
 	productKey,
 	ratePlanKey,
-	originalAmount,
+	payment,
 	countryId,
 	abParticipations,
 	landingPageSettings,
@@ -80,6 +81,7 @@ export default function CheckoutSummary({
 	studentDiscount,
 	nudgeSettings,
 }: CheckoutSummaryProps) {
+	const { originalAmount } = payment;
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
 	const productCatalog = appConfig.productCatalog;
@@ -186,7 +188,7 @@ export default function CheckoutSummary({
 					ratePlanLabel={ratePlanDetail.displayName ?? ratePlanDetail.label}
 					taxRateConfig={taxRateConfig}
 					billingPeriod={ratePlanDetail.billingPeriod}
-					amount={originalAmount}
+					payment={payment}
 					promotion={promotion}
 					currency={currency}
 					checkListData={benefitsCheckListData}

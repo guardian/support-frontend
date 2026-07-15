@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { from, space, textSans17 } from '@guardian/source/foundations';
 import type { CurrencyInfo } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { Payment } from 'helpers/forms/checkouts';
 import { calculateAndFormatTotal } from 'helpers/forms/checkouts';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
@@ -32,7 +33,7 @@ const boldText = css`
 `;
 
 export type Props = {
-	amount: number;
+	payment: Payment;
 	taxRateConfig: TaxRateConfig;
 	currency: CurrencyInfo;
 	billingPeriod: BillingPeriod;
@@ -42,7 +43,7 @@ export type Props = {
 
 export function MaybeEstimatedTaxSummary({
 	currency,
-	amount,
+	payment,
 	taxRateConfig,
 	billingPeriod,
 	fullPrice,
@@ -74,13 +75,13 @@ export function MaybeEstimatedTaxSummary({
 						/>
 					</div>
 					<MaybeEstimatedTax
-						amount={amount}
+						payment={payment}
 						taxRateConfig={taxRateConfig}
 						currency={currency}
 					/>
 					<div css={[summaryRow, boldText]}>
 						<p>Due today</p>
-						<p>{calculateAndFormatTotal(taxRateConfig, currency, amount)}</p>
+						<p>{calculateAndFormatTotal(taxRateConfig, currency, payment)}</p>
 					</div>
 				</div>
 			);

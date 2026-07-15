@@ -8,6 +8,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import { observerThemeButton } from 'components/observer-layout/styles';
+import type { Payment } from 'helpers/forms/checkouts';
 import { getPaypalClientId } from 'helpers/forms/payPal';
 import {
 	getStripeKeyForCountry,
@@ -143,17 +144,7 @@ export function Checkout({
 	 * - any contributions made
 	 */
 
-	/**
-	 * - `originalAmount` the amount pre any discounts or contributions
-	 * - `discountedAmount` the amount with a discountApplied
-	 * - `finalAmount` is the amount a person will pay
-	 */
-	let payment: {
-		originalAmount: number;
-		discountedAmount?: number;
-		contributionAmount?: number;
-		finalAmount: number;
-	};
+	let payment: Payment;
 
 	const contributionParam = urlSearchParams.get('contribution');
 	const contributionAmount = contributionParam
@@ -350,7 +341,7 @@ export function Checkout({
 						productKey={productKey}
 						ratePlanKey={ratePlanKey}
 						promotion={promotion}
-						originalAmount={payment.originalAmount}
+						payment={payment}
 						countryId={countryId}
 						forcedCountry={forcedCountry}
 						abParticipations={abParticipations}
@@ -372,9 +363,7 @@ export function Checkout({
 						productKey={productKey}
 						ratePlanKey={ratePlanKey}
 						promotion={promotion}
-						originalAmount={payment.originalAmount}
-						contributionAmount={payment.contributionAmount}
-						finalAmount={payment.finalAmount}
+						payment={payment}
 						useStripeExpressCheckout={useStripeExpressCheckout}
 						countryId={countryId}
 						abParticipations={abParticipations}
