@@ -1168,7 +1168,7 @@ const [stripeFieldsAreComplete, setStripeFieldsAreComplete] = useState<
 																cvc: event.complete,
 															}));
 
-															// Clear errors when the field changes and complete, we'll (re) show errors, if any, on submit
+// Clear errors when the field changes and is complete; we'll (re) show errors, if any, on submit
 															setStripeFieldError((prevState) => ({
 																...prevState,
 																cvc: event.complete ? undefined : prevState.cvc,
