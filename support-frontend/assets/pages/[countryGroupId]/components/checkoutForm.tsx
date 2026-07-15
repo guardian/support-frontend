@@ -1128,7 +1128,7 @@ export default function CheckoutForm({
 																cardNumber: event.complete,
 															}));
 
-															// Clear errors when the field changes and is complete; we'll (re) show errors, if any, on submit
+															// Clear errors when the field changes and is complete, we'll (re) show errors, if any, on submit
 															setStripeFieldError((prevState) => ({
 																...prevState,
 																cardNumber: event.complete
@@ -1148,7 +1148,7 @@ export default function CheckoutForm({
 																expiry: event.complete,
 															}));
 
-															// Clear errors when the field changes and is complete; we'll (re) show errors, if any, on submit
+															// Clear errors when the field changes and is complete, we'll (re) show errors, if any, on submit
 															setStripeFieldError((prevState) => ({
 																...prevState,
 																expiry: event.complete
@@ -1168,7 +1168,7 @@ export default function CheckoutForm({
 																cvc: event.complete,
 															}));
 
-															// Clear errors when the field changes and is complete; we'll (re) show errors, if any, on submit
+															// Clear errors when the field changes and is complete, we'll (re) show errors, if any, on submit
 															setStripeFieldError((prevState) => ({
 																...prevState,
 																cvc: event.complete ? undefined : prevState.cvc,
