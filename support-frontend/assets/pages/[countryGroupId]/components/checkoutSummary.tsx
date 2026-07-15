@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { InfoSummary } from '@guardian/source-development-kitchen/react-components';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
@@ -47,7 +47,7 @@ type CheckoutSummaryProps = {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	originalAmount: number;
-	countryId: IsoCountry;
+	countryId: CountryCode;
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 	weeklyDeliveryDate: Date;

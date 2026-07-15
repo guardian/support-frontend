@@ -17,7 +17,7 @@ import {
 	Divider,
 	ErrorSummary,
 } from '@guardian/source-development-kitchen/react-components';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import {
@@ -183,7 +183,7 @@ type OneTimeCheckoutComponentProps = {
 	supportRegionId: SupportRegionId;
 	appConfig: AppConfig;
 	stripePublicKey: string;
-	countryId: IsoCountry;
+	countryId: CountryCode;
 	abParticipations: Participations;
 	useStripeExpressCheckout: boolean;
 	nudgeSettings?: CheckoutNudgeSettings;

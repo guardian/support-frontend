@@ -1,4 +1,4 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { Key } from './sessionStorage';
 
@@ -26,7 +26,7 @@ type Audience = {
 	breakpoint?: BreakpointRange;
 };
 
-type AudienceType = IsoCountry | CountryGroupId | 'ALL' | 'CONTRIBUTIONS_ONLY';
+type AudienceType = CountryCode | CountryGroupId | 'ALL' | 'CONTRIBUTIONS_ONLY';
 
 type Audiences = Partial<Record<AudienceType, Audience>>;
 
@@ -59,7 +59,7 @@ type Test = {
 	targetPage?: RegExp;
 	// Optional regex to persist this test participation across further pages
 	persistPage?: RegExp;
-	omitCountries?: IsoCountry[];
+	omitCountries?: CountryCode[];
 	// Some users will see a version of the checkout that only offers
 	// the option to make contributions. We won't want to include these
 	// users in some AB tests

@@ -6,7 +6,7 @@ import {
 	space,
 	textEgyptian17,
 } from '@guardian/source/foundations';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getWeeklyProducts } from '../helpers/getWeeklyProducts';
@@ -55,7 +55,7 @@ export function WeeklyCards({
 	countryId,
 	productPrices,
 }: {
-	countryId: IsoCountry;
+	countryId: CountryCode;
 	productPrices: ProductPrices;
 }): JSX.Element {
 	const ratePlans = getWeeklyProducts({

@@ -1,4 +1,4 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import seedrandom from 'seedrandom';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
@@ -27,7 +27,7 @@ export const testIsActive = (
 // ----- Init ----- //
 
 type ABtestInitalizerData = {
-	countryId: IsoCountry;
+	countryId: CountryCode;
 	countryGroupId: CountryGroupId;
 	abTests?: Tests;
 	mvt?: number;
@@ -70,7 +70,7 @@ function init({
 function getParticipations(
 	abTests: Tests,
 	mvtId: number,
-	country: IsoCountry,
+	country: CountryCode,
 	countryGroupId: CountryGroupId,
 	inContributionsOnlyCountry: boolean,
 	pathWithQueryString: string,
@@ -265,7 +265,7 @@ function getUserParticipation(
 	test: Test,
 	testId: string,
 	mvtId: number,
-	country: IsoCountry,
+	country: CountryCode,
 	countryGroupId: CountryGroupId,
 	acquisitionDataTests: AcquisitionABTest[] | undefined,
 ): UserParticipation {

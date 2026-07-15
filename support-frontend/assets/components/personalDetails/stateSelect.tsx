@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { Option, Select } from '@guardian/source/react-components';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	auStates,
@@ -11,7 +11,7 @@ import type { FormEventHandler } from 'react';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 
 type StateSelectProps = {
-	countryId: IsoCountry;
+	countryId: CountryCode;
 	state: string;
 	onStateChange: FormEventHandler<HTMLSelectElement>;
 	onBlur?: FormEventHandler<HTMLSelectElement>;
