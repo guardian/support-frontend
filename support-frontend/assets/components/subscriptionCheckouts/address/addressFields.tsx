@@ -6,7 +6,7 @@ import {
 	Select,
 	TextInput,
 } from '@guardian/source/react-components';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
 import {
@@ -37,7 +37,7 @@ import type { PostcodeFinderResult } from './postcodeLookup';
 type AddressFieldsValidatedState = {
 	state: string;
 	postCode: string;
-	country: IsoCountry;
+	country: CountryCode;
 };
 
 type AddressFieldsType = AddressFieldsValidatedState & {
@@ -69,7 +69,7 @@ type PropTypes = StatePropTypes & {
 	setTownCity: (city: string) => void;
 	setState: (state: string) => void;
 	setPostcode: (postCode: string) => void;
-	setCountry: (countryRaw: IsoCountry) => void;
+	setCountry: (countryRaw: CountryCode) => void;
 	setPostcodeForFinder: (postcode: string) => void;
 	setPostcodeErrorForFinder: (error: string) => void;
 	postcodeErrorForFinder: string | null;
@@ -111,15 +111,15 @@ function MaybeInput(props: MaybeInputProps) {
 	return isShown ? <TextInput {...rest} /> : null;
 }
 
-function shouldShowStateDropdown(country: Option<IsoCountry>): boolean {
+function shouldShowStateDropdown(country: Option<CountryCode>): boolean {
 	return country === 'US' || country === 'CA' || country === 'AU';
 }
 
-function shouldShowStateInput(country: Option<IsoCountry>): boolean {
+function shouldShowStateInput(country: Option<CountryCode>): boolean {
 	return country !== 'GB' && !shouldShowStateDropdown(country);
 }
 
-function statesForCountry(country: Option<IsoCountry>): React.ReactNode {
+function statesForCountry(country: Option<CountryCode>): React.ReactNode {
 	switch (country) {
 		case 'US':
 			return sortedOptions(usStates);
@@ -135,7 +135,7 @@ function statesForCountry(country: Option<IsoCountry>): React.ReactNode {
 	}
 }
 
-const isPostcodeOptional = (country: IsoCountry | null): boolean =>
+const isPostcodeOptional = (country: CountryCode | null): boolean =>
 	country !== 'GB' && country !== 'AU' && country !== 'US' && country !== 'CA';
 
 type ValidityStateError = 'valueMissing' | 'patternMismatch';
@@ -258,7 +258,7 @@ export function AddressFields({
 				label="Country"
 				value={country}
 				onChange={(event) => {
-					const selectedCountry = Country.fromString(event.target.value);
+					const selectedCountry = Country.codeFromString(event.target.value);
 
 					if (selectedCountry && countryGroupId) {
 						const selectedCountryGroup = Object.entries(countryGroups).find(

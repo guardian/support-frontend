@@ -1,6 +1,6 @@
+import { countryCodeSchema } from '@modules/internationalisation/schemas';
 import { optionalDropNulls } from '@modules/schemaUtils';
 import { z } from 'zod';
-import { countrySchema } from './address';
 import { stripePaymentTypeSchema } from './paymentFields';
 import {
 	guardianDirectDebitGateway,
@@ -70,7 +70,7 @@ const directDebitPaymentMethodSchema = z.object({
 	BankTransferAccountName: z.string(),
 	BankCode: z.string(),
 	BankTransferAccountNumber: z.string(),
-	Country: countrySchema,
+	Country: countryCodeSchema,
 	City: optionalDropNulls(z.string()),
 	PostalCode: optionalDropNulls(z.string()),
 	State: optionalDropNulls(z.string()),

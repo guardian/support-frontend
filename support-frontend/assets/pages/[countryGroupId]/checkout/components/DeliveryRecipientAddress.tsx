@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { TextArea } from '@guardian/source/react-components';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import { useState } from 'react';
 import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
@@ -13,7 +13,7 @@ import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSession';
 
 type DeliveryRecipientAddressProps = {
-	countryId: IsoCountry;
+	countryId: CountryCode;
 	countries?: Record<string, string>;
 	checkoutSession?: CheckoutSession;
 	postcode: string;
@@ -63,7 +63,7 @@ export function DeliveryRecipientAddress({
 	const [deliveryPostcodeStateLoading, setDeliveryPostcodeStateLoading] =
 		useState(false);
 	const [deliveryCountry, setDeliveryCountry] =
-		useStateWithCheckoutSession<IsoCountry>(
+		useStateWithCheckoutSession<CountryCode>(
 			checkoutSession?.formFields.addressFields.deliveryAddress?.country,
 			countryId,
 		);

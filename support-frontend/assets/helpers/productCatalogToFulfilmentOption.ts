@@ -1,4 +1,4 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
 import type {
 	FulfilmentOptions,
@@ -8,7 +8,7 @@ import { Domestic, RestOfWorld } from '@modules/product/fulfilmentOptions';
 import type { ActiveProductKey } from './productCatalog';
 
 export const getWeeklyFulfilmentOption = (
-	country: IsoCountry,
+	country: CountryCode,
 ): GuardianWeeklyFulfilmentOptions =>
 	countryGroups.International.countries.includes(country)
 		? RestOfWorld

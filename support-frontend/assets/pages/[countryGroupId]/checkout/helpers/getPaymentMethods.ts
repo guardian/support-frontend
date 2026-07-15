@@ -1,4 +1,4 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import type { Participations } from 'helpers/abTests/models';
 import {
@@ -12,7 +12,7 @@ import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 
 export const getPaymentMethods = (
-	countryId: IsoCountry,
+	countryId: CountryCode,
 	productKey: ProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	participations: Participations,

@@ -1,4 +1,4 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import {
 	countryGroups,
 	GBPCountries,
@@ -60,7 +60,7 @@ const getCheckoutUrl = ({
 	isGift,
 	promotion,
 }: {
-	countryId: IsoCountry;
+	countryId: CountryCode;
 	billingPeriod: RecurringBillingPeriod;
 	isGift: boolean;
 	promotion?: Promotion;
@@ -101,7 +101,7 @@ export const getWeeklyProducts = ({
 	billingPeriods,
 	isGift = false,
 }: {
-	countryId: IsoCountry;
+	countryId: CountryCode;
 	productPrices: ProductPrices;
 	billingPeriods: RecurringBillingPeriod[];
 	isGift?: boolean;
