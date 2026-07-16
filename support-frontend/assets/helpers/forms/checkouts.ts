@@ -67,17 +67,16 @@ function simpleFormatTaxAmount(
 	return simpleFormatAmount(currency, taxAmount);
 }
 
-function calculateAndFormatTotal(
+function calculateTotal(
 	taxRateConfig: TaxRateConfig,
-	currency: CurrencyInfo,
 	payment: Payment,
-): string {
+): number {
 	const { finalAmount } = payment;
 
 	switch (taxRateConfig.type) {
 		case 'tax_inclusive':
 		case 'not_enough_information':
-			return simpleFormatAmount(currency, finalAmount);
+			return finalAmount;
 		case 'tax_exclusive': {
 			// It's important that the rounding here reflects the individual amounts
 			// otherwise we may show the user a calculation which doesn't add up:
@@ -86,9 +85,17 @@ function calculateAndFormatTotal(
 
 			const roundedTax = calculateAndRoundTax(payment, taxRateConfig.rate);
 
-			return simpleFormatAmount(currency, roundedTotal + roundedTax);
+			return roundedTotal + roundedTax;
 		}
 	}
+}
+
+function calculateAndFormatTotal(
+	taxRateConfig: TaxRateConfig,
+	currency: CurrencyInfo,
+	payment: Payment,
+): string {
+	return simpleFormatAmount(currency, calculateTotal(taxRateConfig, payment));
 }
 
 // ----- Exports ----- //
@@ -96,5 +103,6 @@ export {
 	simpleFormatAmount,
 	simpleFormatTaxAmount,
 	calculateAndRoundTax,
+	calculateTotal,
 	calculateAndFormatTotal,
 };

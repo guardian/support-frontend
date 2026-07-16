@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
 import type { Payment } from 'helpers/forms/checkouts';
-import { calculateAndRoundTax } from 'helpers/forms/checkouts';
+import { calculateTotal } from 'helpers/forms/checkouts';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { isProd } from 'helpers/urls/url';
 import {
@@ -175,13 +175,9 @@ export function SubmitButton({
 						}}
 						/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
 						payment={(resolve, reject) => {
-							const taxAmount =
-								taxRateConfig.type === 'tax_exclusive'
-									? calculateAndRoundTax(payment, taxRateConfig.rate)
-									: 0;
-
+							const totalPaymentAmount = calculateTotal(taxRateConfig, payment);
 							setupPayPalPayment(
-								payment.finalAmount + taxAmount,
+								totalPaymentAmount,
 								currencyKey,
 								billingPeriod,
 								csrf,
