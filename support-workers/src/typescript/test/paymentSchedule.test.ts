@@ -24,6 +24,8 @@ describe('buildPaymentSchedule', () => {
 				{
 					date: new Date('2025-01-01'),
 					amount: 12.0,
+					amountWithoutTax: 10.0,
+					taxAmount: 2.0,
 				},
 			],
 		});
@@ -50,6 +52,8 @@ describe('buildPaymentSchedule', () => {
 				{
 					date: new Date('2025-01-01'),
 					amount: 18.0,
+					amountWithoutTax: 15.0,
+					taxAmount: 3.0,
 				},
 			],
 		});
@@ -76,10 +80,14 @@ describe('buildPaymentSchedule', () => {
 				{
 					date: new Date('2025-01-01'),
 					amount: 12.0,
+					amountWithoutTax: 10.0,
+					taxAmount: 2.0,
 				},
 				{
 					date: new Date('2025-02-01'),
 					amount: 18.0,
+					amountWithoutTax: 15.0,
+					taxAmount: 3.0,
 				},
 			],
 		});
@@ -110,19 +118,25 @@ describe('buildPaymentSchedule', () => {
 			{
 				date: new Date('2025-01-01'),
 				amount: 12.0,
+				amountWithoutTax: 10.0,
+				taxAmount: 2.0,
 			},
 			{
 				date: new Date('2025-02-01'),
 				amount: 18.0,
+				amountWithoutTax: 15.0,
+				taxAmount: 3.0,
 			},
 			{
 				date: new Date('2025-03-01'),
 				amount: 24.0,
+				amountWithoutTax: 20.0,
+				taxAmount: 4.0,
 			},
 		]);
 	});
 
-	test('should round amounts to 2 decimal places', () => {
+	test('should round the total amount to 2 decimal places', () => {
 		const invoiceItems: InvoiceItem[] = [
 			{
 				serviceStartDate: new Date('2025-01-01'),
@@ -138,6 +152,8 @@ describe('buildPaymentSchedule', () => {
 				{
 					date: new Date('2025-01-01'),
 					amount: 13.0,
+					amountWithoutTax: 10.333,
+					taxAmount: 2.666,
 				},
 			],
 		});
@@ -159,6 +175,8 @@ describe('buildPaymentSchedule', () => {
 				{
 					date: new Date('2025-01-01'),
 					amount: 0,
+					amountWithoutTax: 0,
+					taxAmount: 0,
 				},
 			],
 		});
