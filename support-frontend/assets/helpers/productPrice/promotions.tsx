@@ -46,6 +46,7 @@ export type Promotion = {
 	landingPage?: PromotionCopy;
 	starts?: string;
 	expires?: string;
+	isIntroductoryPricing?: boolean;
 	roundelText?: string;
 	hasPriority?: boolean;
 };
