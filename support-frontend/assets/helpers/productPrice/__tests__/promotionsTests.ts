@@ -91,6 +91,7 @@ describe('applyDiscount', () => {
 				description: '25% off',
 				promoCode: 'GH86H9J',
 				discountedPrice: 8.99,
+				isIntroductoryPricing: false,
 			},
 		],
 	};

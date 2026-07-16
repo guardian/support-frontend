@@ -7,12 +7,14 @@ export const baseHomeDeliveryPromotion = {
 	name: 'Home delivery promo',
 	promoCode: 'PROMO10',
 	description: '10% off',
+	isIntroductoryPricing: false,
 };
 
 export const baseCollectionPromotion = {
 	name: 'Collection promo',
 	promoCode: 'PROMO20',
 	description: '20% off',
+	isIntroductoryPricing: false,
 };
 
 const baseProductOption: Omit<ProductPrice, 'promotions'> = {
@@ -49,6 +51,7 @@ export const productPrices: ProductPrices = {
 								name: 'First promo',
 								promoCode: 'FIRST',
 								description: 'First promo',
+								isIntroductoryPricing: false,
 							},
 							baseHomeDeliveryPromotion,
 						],

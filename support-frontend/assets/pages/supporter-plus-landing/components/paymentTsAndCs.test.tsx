@@ -26,6 +26,7 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 		promoCode: 'ANNUAL10',
 		numberOfDiscountedPeriods: 12,
 		discountedPrice: 324,
+		isIntroductoryPricing: false,
 	};
 
 	type PaymentProductTestParams = {
