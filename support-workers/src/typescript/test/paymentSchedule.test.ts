@@ -1,5 +1,8 @@
 import type { InvoiceItem } from '../model/paymentSchedule';
-import { buildPaymentSchedule } from '../model/paymentSchedule';
+import {
+	buildPaymentSchedule,
+	paymentScheduleSchema,
+} from '../model/paymentSchedule';
 
 describe('buildPaymentSchedule', () => {
 	test('should throw if we have no invoice items', () => {
@@ -180,5 +183,26 @@ describe('buildPaymentSchedule', () => {
 				},
 			],
 		});
+	});
+});
+
+describe('paymentScheduleSchema', () => {
+	it("ignores fields it doesn't know about", () => {
+		const payments = {
+			payments: [
+				{
+					date: new Date('2025-01-01'),
+					amount: 10.0,
+					amountWithoutTax: 8.0,
+					taxAmount: 2.0,
+					unexpectedField: 'hi',
+				},
+			],
+		};
+
+		const result = paymentScheduleSchema.safeParse(payments);
+
+		expect(result.success).toEqual(true);
+		console.log(result.error);
 	});
 });
