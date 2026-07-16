@@ -475,3 +475,41 @@ WeeklyPricingWithPromotion.args = {
 	landingPageSettings: weeklyPricingLandingPageSettings,
 	taxRateConfig: { type: 'tax_inclusive' },
 };
+
+export const WeeklyPricingWithTax = Template.bind({});
+WeeklyPricingWithTax.args = {
+	productKey: ProductKeys.SupporterPlusKey,
+	ratePlanKey: 'Monthly',
+	productLabel: getProductLabel(ProductKeys.SupporterPlusKey),
+	billingPeriod: BillingPeriod.Monthly,
+	enableCheckList: true,
+	payment: { originalAmount: 15, finalAmount: 15 },
+	currency: {
+		glyph: '$',
+		extendedGlyph: 'CA$',
+		spokenCurrency: 'dollar',
+	},
+	checkListData: [
+		...productCatalogDescription.SupporterPlus.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'SupporterPlus'}
+			ratePlanKey={'Monthly'}
+			countryGroupId={Canada}
+			thresholdAmount={15}
+		/>
+	),
+	startDate: null,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+	supportRegionId: SupportRegionId.CA,
+	landingPageSettings: weeklyPricingLandingPageSettings,
+	taxRateConfig: { type: 'tax_exclusive', rate: 0.15 },
+};
