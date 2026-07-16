@@ -4,6 +4,9 @@ import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { useEffect, useState } from 'react';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
+import type { Payment } from 'helpers/forms/checkouts';
+import { calculateAndRoundTax } from 'helpers/forms/checkouts';
+import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { isProd } from 'helpers/urls/url';
 import {
 	paypalOneClickCheckout,
@@ -14,8 +17,10 @@ import {
 	createSetupToken,
 	exchangeSetupTokenForPaymentToken,
 } from '../checkout/helpers/paypalCompletePayments';
-import { getPayPalEnv } from '../checkout/helpers/payPalSdkOptions';
-import { paypalSdkFundingBlocklist } from '../checkout/helpers/payPalSdkOptions';
+import {
+	getPayPalEnv,
+	paypalSdkFundingBlocklist,
+} from '../checkout/helpers/payPalSdkOptions';
 import type { PaymentMethod } from './paymentFields';
 
 type ApprovedSetupToken = {
@@ -31,7 +36,8 @@ type SubmitButtonProps = {
 	payPalPaymentToken: PaymentToken | undefined;
 	setPayPalPaymentToken: (paymentToken: PaymentToken) => void;
 	isTestUser: boolean;
-	finalAmount: number;
+	payment: Payment;
+	taxRateConfig: TaxRateConfig;
 	currencyKey: IsoCurrency;
 	billingPeriod: BillingPeriod;
 	csrf: string;
@@ -97,7 +103,8 @@ export function SubmitButton({
 	setPayPalPaymentToken,
 	formRef,
 	isTestUser,
-	finalAmount,
+	payment,
+	taxRateConfig,
 	currencyKey,
 	billingPeriod,
 	csrf,
@@ -168,7 +175,17 @@ export function SubmitButton({
 						}}
 						/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
 						payment={(resolve, reject) => {
-							setupPayPalPayment(finalAmount, currencyKey, billingPeriod, csrf)
+							const taxAmount =
+								taxRateConfig.type === 'tax_exclusive'
+									? calculateAndRoundTax(payment, taxRateConfig.rate)
+									: 0;
+
+							setupPayPalPayment(
+								payment.finalAmount + taxAmount,
+								currencyKey,
+								billingPeriod,
+								csrf,
+							)
 								.then((token) => {
 									resolve(token);
 								})
