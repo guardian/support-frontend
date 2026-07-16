@@ -203,6 +203,5 @@ describe('paymentScheduleSchema', () => {
 		const result = paymentScheduleSchema.safeParse(payments);
 
 		expect(result.success).toEqual(true);
-		console.log(result.error);
 	});
 });
