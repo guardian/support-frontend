@@ -25,6 +25,7 @@ type PriceSummaryProps = {
 	discountPrice?: string;
 	isWeeklyGift?: boolean;
 	showPeriod: boolean;
+	isIntroductoryPricing?: boolean;
 };
 
 export function PriceSummary({
@@ -33,17 +34,20 @@ export function PriceSummary({
 	discountPrice,
 	isWeeklyGift,
 	showPeriod,
+	isIntroductoryPricing,
 }: PriceSummaryProps): JSX.Element {
 	const divider = isWeeklyGift ? ' for ' : '/';
 
 	if (discountPrice) {
 		return (
 			<p>
-				<span css={originalPriceStrikeThrough}>
-					<span css={visuallyHiddenCss}>Was </span>
-					{fullPrice}
-					<span css={visuallyHiddenCss}>, now</span>
-				</span>{' '}
+				{!isIntroductoryPricing && (
+					<span css={originalPriceStrikeThrough}>
+						<span css={visuallyHiddenCss}>Was </span>
+						{fullPrice}
+						<span css={visuallyHiddenCss}>, now</span>
+					</span>
+				)}{' '}
 				{displayPeriod(discountPrice, divider, period, showPeriod)}
 			</p>
 		);

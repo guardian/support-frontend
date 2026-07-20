@@ -92,6 +92,24 @@ Promotion.args = {
 	},
 };
 
+export const IntroductoryPromotion = Template.bind({});
+
+IntroductoryPromotion.args = {
+	isSubdued: false,
+	currencyId: 'EUR',
+	paymentFrequency: 'MONTHLY',
+	cardTier: 3,
+	cardContent: {
+		...fallBackLandingPageSelection.products.DigitalSubscription,
+		product: 'DigitalSubscription',
+		isUserSelected: false,
+		price: 38.5,
+		cta: { copy: 'Support' },
+		label: { copy: 'Highest impact' },
+		promotion: { ...promotionEURCountries, isIntroductoryPricing: true },
+	},
+};
+
 export const BillingPeriodsCopy = Template.bind({});
 BillingPeriodsCopy.args = {
 	isSubdued: false,
