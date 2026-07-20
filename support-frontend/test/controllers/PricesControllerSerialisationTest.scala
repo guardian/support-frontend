@@ -33,7 +33,7 @@ class PricesControllerSerialisationTest extends AnyFlatSpec with Matchers {
       None,
       new DateTime("2020-01-01"),
       None,
-      None,
+      false,
     )
     val priceSummary = PriceSummary(BigDecimal(1.2), Some(50), Currency.GBP, false, List(promotionSummary))
     val ratePlanPriceData = RatePlanPriceData("pr", "cur", Some(priceSummary))

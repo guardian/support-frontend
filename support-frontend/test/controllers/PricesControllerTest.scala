@@ -47,7 +47,7 @@ class PricesControllerTest extends AnyWordSpec with Matchers {
                           ),
                           new DateTime("2020-01-01"),
                           None,
-                          None,
+                          false,
                         ),
                       ),
                     ),
@@ -134,7 +134,7 @@ class PricesControllerTest extends AnyWordSpec with Matchers {
                   None, // no landing page text
                   new DateTime("2020-01-01"),
                   None,
-                  None,
+                  false,
                 ),
               ),
             ),
@@ -163,7 +163,7 @@ class PricesControllerTest extends AnyWordSpec with Matchers {
                   None, // no landing page text
                   new DateTime("2020-01-01"),
                   None,
-                  None,
+                  false,
                 ),
               ),
             ),
