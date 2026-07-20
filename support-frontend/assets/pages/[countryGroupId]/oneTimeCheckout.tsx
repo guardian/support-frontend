@@ -87,7 +87,8 @@ export function OneTimeCheckout({
 					fill: '#707070',
 				},
 				'.AccordionItem--selected': {
-					border: '2px solid #0077B6',
+					border: '1px solid #0077B6',
+					boxShadow: 'inset 0 0 0 1px #0077B6',
 					color: '#052962',
 				},
 				'.RadioIcon': {
@@ -123,13 +124,17 @@ export function OneTimeCheckout({
 				'.Input:focus': {
 					fontSize: '17px',
 					color: '#121212',
-					border: '2px solid #0077B6',
+					border: '1px solid #0077B6',
+					outline: '2px solid #0077B6',
+					outlineOffset: '-2px',
 					borderRadius: '4px',
 					boxShadow: 'none',
 				},
 				'.Input--invalid': {
 					color: '#C70000',
-					border: '2px solid #C70000',
+					border: '1px solid #C70000',
+					outline: '2px solid #C70000',
+					outlineOffset: '-2px',
 					boxShadow: 'none',
 				},
 				'.Input--empty': {
