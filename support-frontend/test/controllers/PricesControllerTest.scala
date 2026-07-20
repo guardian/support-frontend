@@ -47,6 +47,7 @@ class PricesControllerTest extends AnyWordSpec with Matchers {
                           ),
                           new DateTime("2020-01-01"),
                           None,
+                          false,
                         ),
                       ),
                     ),
@@ -72,6 +73,7 @@ class PricesControllerTest extends AnyWordSpec with Matchers {
                           Some(PromotionCopy(None, None, Some("Subscribe for 12 months and save 10%"))),
                           new DateTime("2020-01-01"),
                           None,
+                          false,
                         ),
                       ),
                     ),
@@ -132,6 +134,7 @@ class PricesControllerTest extends AnyWordSpec with Matchers {
                   None, // no landing page text
                   new DateTime("2020-01-01"),
                   None,
+                  false,
                 ),
               ),
             ),
@@ -160,6 +163,7 @@ class PricesControllerTest extends AnyWordSpec with Matchers {
                   None, // no landing page text
                   new DateTime("2020-01-01"),
                   None,
+                  false,
                 ),
               ),
             ),

@@ -40,6 +40,7 @@ export type Promotion = {
 	name: string;
 	description: string;
 	promoCode: string;
+	isIntroductoryPricing: boolean;
 	discountedPrice?: number;
 	numberOfDiscountedPeriods?: number;
 	discount?: DiscountBenefit;

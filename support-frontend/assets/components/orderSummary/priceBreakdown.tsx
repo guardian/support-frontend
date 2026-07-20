@@ -71,6 +71,7 @@ type PriceBreakdownProps = {
 	taxRateConfig: TaxRateConfig;
 	studentDiscount?: StudentDiscount;
 	billingPeriod: BillingPeriod;
+	isIntroductoryPricing: boolean;
 };
 
 export function PriceBreakdown({
@@ -84,6 +85,7 @@ export function PriceBreakdown({
 	taxRateConfig,
 	billingPeriod,
 	studentDiscount,
+	isIntroductoryPricing,
 }: PriceBreakdownProps): JSX.Element {
 	const paymentFrequency = getBillingPeriodNoun(billingPeriod, isWeeklyGift);
 	const period = studentDiscount?.periodNoun ?? paymentFrequency;
@@ -139,6 +141,7 @@ export function PriceBreakdown({
 						discountPrice={discountPrice}
 						isWeeklyGift={isWeeklyGift}
 						showPeriod={taxRateConfig.type === 'tax_inclusive'}
+						isIntroductoryPricing={isIntroductoryPricing}
 					/>
 				</div>
 				<MaybeEstimatedTax

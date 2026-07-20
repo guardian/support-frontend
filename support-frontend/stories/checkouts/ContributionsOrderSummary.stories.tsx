@@ -278,6 +278,7 @@ DigitalPlusWithTaxAndDiscount.args = {
 			amount: 50,
 			durationMonths: 6,
 		},
+		isIntroductoryPricing: false,
 	},
 	checkListData: [
 		...productCatalogDescription.DigitalSubscription.benefits.map(
@@ -456,6 +457,7 @@ WeeklyPricingWithPromotion.args = {
 			amount: 33,
 			durationMonths: 6,
 		},
+		isIntroductoryPricing: false,
 	},
 	tsAndCs: (
 		<OrderSummaryTsAndCs

@@ -322,6 +322,7 @@ export function ContributionsOrderSummary({
 				taxRateConfig={taxRateConfig}
 				studentDiscount={studentDiscount}
 				billingPeriod={billingPeriod}
+				isIntroductoryPricing={promotion?.isIntroductoryPricing ?? false}
 			/>
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
 			{isWeeklyDigital && (

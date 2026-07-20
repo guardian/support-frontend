@@ -23,6 +23,7 @@ describe('orderSummaryTs&Cs Snapshot comparison', () => {
 		promoCode: 'GUARDIAN_WEEKLY_DIGITAL_USA_QUARTERLY',
 		numberOfDiscountedPeriods: 3,
 		discountedPrice: 54,
+		isIntroductoryPricing: false,
 	};
 
 	type OrderSummaryTestParams = [
