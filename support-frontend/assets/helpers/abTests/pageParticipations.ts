@@ -66,11 +66,12 @@ export async function getPageParticipations<Variant>(
 	const getVariant = (
 		participations: Participations,
 		testList: Array<PageTest<Variant>>,
+		bypassScheduler = false,
 	): Variant | undefined => {
 		for (const test of testList) {
 			const variantName = participations[test.name];
 			if (variantName) {
-				if (!isWithinSchedule(test.scheduler)) {
+				if (!bypassScheduler && !isWithinSchedule(test.scheduler)) {
 					return undefined;
 				}
 				const variant = test.variants.find(
@@ -110,6 +111,8 @@ export async function getPageParticipations<Variant>(
 		};
 	};
 
+	const previewParamName = forceParamName.replace('force-', 'preview-');
+
 	// Is the participation forced in the url querystring? (bypass audience check)
 	const urlParticipations = getParticipationFromQueryString(
 		queryString,
@@ -124,6 +127,25 @@ export async function getPageParticipations<Variant>(
 		return {
 			participations: trackParticipation
 				? urlParticipations
+				: ({} as Participations),
+			variant,
+		};
+	}
+
+	// Is the participation requested via preview param? (bypass scheduler + audience check)
+	const previewParticipations = getParticipationFromQueryString(
+		queryString,
+		previewParamName,
+	);
+	if (previewParticipations) {
+		const variant = getVariant(previewParticipations, tests, true);
+		if (!variant) {
+			return makeFallbackResult();
+		}
+		setSessionParticipations(previewParticipations, sessionStorageKey);
+		return {
+			participations: trackParticipation
+				? previewParticipations
 				: ({} as Participations),
 			variant,
 		};

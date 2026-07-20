@@ -76,6 +76,26 @@ export function getCheckoutNudgeParticipations(
 		}
 	}
 
+	// Is the participation requested via preview param? (bypass scheduler)
+	const previewParticipations = getParticipationFromQueryString(
+		queryString,
+		'preview-checkout-nudge',
+	);
+	if (previewParticipations) {
+		const variantData = getCheckoutTestVariant(
+			previewParticipations,
+			tests,
+			true,
+		);
+		if (variantData) {
+			return {
+				participations: previewParticipations,
+				fromProduct: variantData.test.nudgeFromProduct,
+				variant: variantData.variant,
+			};
+		}
+	}
+
 	// Is there already a participation in session storage?
 	const sessionParticipations = getSessionParticipations(
 		CHECKOUT_NUDGE_PARTICIPATIONS_KEY,
@@ -135,12 +155,13 @@ export function getCheckoutNudgeParticipations(
 function getCheckoutTestVariant(
 	participations: Participations,
 	checkoutNudgeTests: CheckoutNudgeTest[] = [],
+	bypassScheduler = false,
 ): { variant: CheckoutNudgeVariant; test: CheckoutNudgeTest } | undefined {
 	for (const test of checkoutNudgeTests) {
 		// Is the user in this test?
 		const variantName = participations[test.name];
 		if (variantName) {
-			if (!isWithinSchedule(test.scheduler)) {
+			if (!bypassScheduler && !isWithinSchedule(test.scheduler)) {
 				return undefined;
 			}
 			const variant = test.variants.find(
