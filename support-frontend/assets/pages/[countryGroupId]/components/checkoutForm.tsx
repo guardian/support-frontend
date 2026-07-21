@@ -1262,7 +1262,7 @@ export default function CheckoutForm({
 						/>
 						<div
 							css={css`
-								margin: ${space[8]}px 0;
+								margin: ${space[taxExclusive ? 0 : 8]}px 0 ${space[8]}px;
 							`}
 						>
 							<SubmitButton
