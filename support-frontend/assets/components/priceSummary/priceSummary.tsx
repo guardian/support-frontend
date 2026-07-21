@@ -16,7 +16,7 @@ function displayPeriod(
 	period: string,
 	showPeriod: boolean,
 ): string {
-	return `${price}${showPeriod ? `${divider}${period}` : ''}`;
+	return showPeriod ? `${price}${divider}${period}` : price;
 }
 
 type PriceSummaryProps = {
