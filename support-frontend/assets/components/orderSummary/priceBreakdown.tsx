@@ -16,7 +16,7 @@ const summaryRow = css`
 	align-items: baseline;
 `;
 
-const rowSpacing = css`
+const rowSpacing = (isTaxInclusive: boolean) => css`
 	display: flex;
 	flex-direction: column;
 	gap: ${space[1]}px;
@@ -26,7 +26,7 @@ const rowSpacing = css`
 		margin-bottom: ${space[6]}px;
 
 		${from.desktop} {
-			margin-bottom: ${space[8]}px;
+			margin-bottom: ${space[isTaxInclusive ? 8 : 6]}px;
 		}
 	}
 `;
@@ -127,12 +127,12 @@ export function PriceBreakdown({
 	}
 
 	// When the tax is shown separately the label is e.g. "Monthly price"
-	const priceLabel =
-		taxRateConfig.type === 'tax_inclusive' ? 'Total' : `${billingPeriod} price`;
+	const isTaxInclusive = taxRateConfig.type === 'tax_inclusive';
+	const priceLabel = isTaxInclusive ? 'Total' : `${billingPeriod} price`;
 
 	return (
 		<>
-			<div css={[rowSpacing]}>
+			<div css={rowSpacing(isTaxInclusive)}>
 				<div css={[summaryRow, boldText]}>
 					<p>{priceLabel}</p>
 					<PriceSummary
@@ -140,7 +140,7 @@ export function PriceBreakdown({
 						period={period}
 						discountPrice={discountPrice}
 						isWeeklyGift={isWeeklyGift}
-						showPeriod={taxRateConfig.type === 'tax_inclusive'}
+						showPeriod={isTaxInclusive}
 						isIntroductoryPricing={isIntroductoryPricing}
 					/>
 				</div>
