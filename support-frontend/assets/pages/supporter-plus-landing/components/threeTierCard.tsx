@@ -238,7 +238,13 @@ export function ThreeTierCard({
 				{promotion && (
 					<>
 						<p>
-							<span css={previousPriceStrikeThrough}>{formattedMainPrice}</span>{' '}
+							{!promotion.isIntroductoryPricing && (
+								<>
+									<span css={previousPriceStrikeThrough}>
+										{formattedMainPrice}
+									</span>{' '}
+								</>
+							)}
 							{`${formattedMainDiscountedPrice}/${periodLabel}`}
 						</p>
 						<p>

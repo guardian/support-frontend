@@ -209,6 +209,7 @@ const promotionSchema = z.object({
 	),
 	starts: dateTimeSchema,
 	expires: dateTimeSchema.optional(),
+	isIntroductoryPricing: z.boolean(),
 });
 
 export const ProductPricesSchema = z.object({

@@ -1,5 +1,5 @@
 import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { NoFulfilmentOptions } from '@modules/product/fulfilmentOptions';
@@ -40,6 +40,7 @@ export type Promotion = {
 	name: string;
 	description: string;
 	promoCode: string;
+	isIntroductoryPricing: boolean;
 	discountedPrice?: number;
 	numberOfDiscountedPeriods?: number;
 	discount?: DiscountBenefit;
@@ -82,7 +83,7 @@ function getAppliedPromo(promotions?: Promotion[]): Promotion | undefined {
 
 function getPromotion(
 	productPrices: ProductPrices,
-	country: IsoCountry,
+	country: CountryCode,
 	billingPeriod: BillingPeriod,
 	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
 	productOption: ProductOptions = NoProductOptions,
@@ -147,7 +148,7 @@ function promotionHTML(
 
 function finalPrice(
 	productPrices: ProductPrices,
-	country: IsoCountry,
+	country: CountryCode,
 	billingPeriod: BillingPeriod,
 	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
 	productOption: ProductOptions = NoProductOptions,

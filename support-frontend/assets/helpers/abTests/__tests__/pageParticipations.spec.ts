@@ -127,7 +127,7 @@ describe('getPageParticipations', () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		jest.resetAllMocks();
 	});
 
 	describe('URL query string forced participation', () => {
@@ -206,6 +206,126 @@ describe('getPageParticipations', () => {
 			expect(result).toEqual({
 				participations: {},
 				variant: undefined,
+			});
+		});
+	});
+
+	describe('URL query string preview participation (preview-* params)', () => {
+		it('returns preview participation from query string', async () => {
+			const variant1 = createTestVariant('control', 'control-value');
+			const test = createPageTest('test-1', [variant1]);
+			const config = createConfig([test]);
+
+			mockLocation('/test/page', '?preview-test=test-1:control');
+			mockGetParticipationFromQueryString
+				.mockReturnValueOnce(undefined) // force-* returns nothing
+				.mockReturnValueOnce({ 'test-1': 'control' }); // preview-* returns
+
+			const result = await getPageParticipations(config);
+
+			expect(result).toEqual({
+				participations: { 'test-1': 'control' },
+				variant: variant1,
+			});
+			expect(mockGetParticipationFromQueryString).toHaveBeenCalledWith(
+				'?preview-test=test-1:control',
+				'preview-test',
+			);
+		});
+
+		it('bypasses scheduler check for preview participations', async () => {
+			const variant = createTestVariant('control', 'control-value');
+			const test = createPageTest('test-1', [variant]);
+			const config = createConfig([test]);
+
+			mockLocation('/test/page', '?preview-test=test-1:control');
+			mockGetParticipationFromQueryString
+				.mockReturnValueOnce(undefined) // force-* returns nothing
+				.mockReturnValueOnce({ 'test-1': 'control' }); // preview-* returns
+			mockIsWithinSchedule.mockReturnValue(false); // scheduler says expired
+
+			const result = await getPageParticipations(config);
+
+			expect(result).toEqual({
+				participations: { 'test-1': 'control' },
+				variant: variant,
+			});
+		});
+
+		it('stores preview participation in session storage', async () => {
+			const variant = createTestVariant('control', 'control-value');
+			const test = createPageTest('test-1', [variant]);
+			const config = createConfig([test]);
+
+			mockLocation('/test/page', '?preview-test=test-1:control');
+			mockGetParticipationFromQueryString
+				.mockReturnValueOnce(undefined)
+				.mockReturnValueOnce({ 'test-1': 'control' });
+
+			await getPageParticipations(config);
+
+			expect(mockSetSessionParticipations).toHaveBeenCalledWith(
+				{ 'test-1': 'control' },
+				'landingPageParticipations',
+			);
+		});
+
+		it('returns fallback when preview participation test not found', async () => {
+			const test = createPageTest('test-1', [
+				createTestVariant('control', 'control-value'),
+			]);
+			const config = createConfig([test]);
+
+			mockLocation('/test/page', '?preview-test=test-2:control');
+			mockGetParticipationFromQueryString
+				.mockReturnValueOnce(undefined)
+				.mockReturnValueOnce({ 'test-2': 'control' });
+
+			const result = await getPageParticipations(config);
+
+			expect(result).toEqual({
+				participations: {},
+				variant: undefined,
+			});
+		});
+
+		it('returns fallback when preview variant name not found in test', async () => {
+			const variant = createTestVariant('control', 'control-value');
+			const test = createPageTest('test-1', [variant]);
+			const config = createConfig([test]);
+
+			mockLocation('/test/page', '?preview-test=test-1:variant-b');
+			mockGetParticipationFromQueryString
+				.mockReturnValueOnce(undefined)
+				.mockReturnValueOnce({ 'test-1': 'variant-b' });
+
+			const result = await getPageParticipations(config);
+
+			expect(result).toEqual({
+				participations: {},
+				variant: undefined,
+			});
+		});
+
+		it('prefers force-* over preview-* when both are present', async () => {
+			const variant1 = createTestVariant('control', 'control-value');
+			const variant2 = createTestVariant('variant-a', 'variant-a-value');
+			const test = createPageTest('test-1', [variant1, variant2]);
+			const config = createConfig([test]);
+
+			mockLocation(
+				'/test/page',
+				'?force-test=test-1:control&preview-test=test-1:variant-a',
+			);
+			mockGetParticipationFromQueryString
+				.mockReturnValueOnce({ 'test-1': 'control' }) // force-* matched first
+				.mockReturnValueOnce({ 'test-1': 'variant-a' }); // preview-* (should not be reached)
+
+			const result = await getPageParticipations(config);
+
+			expect(result).toEqual({
+				participations: { 'test-1': 'control' },
+				variant: variant1,
 			});
 		});
 	});

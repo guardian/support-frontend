@@ -1,4 +1,4 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { StateCode } from '@modules/internationalisation/state';
 import type { GiftRecipientType } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 
@@ -37,7 +37,7 @@ export type FormAddress = {
 	city?: string | null;
 	state?: StateCode | null;
 	postCode?: string | null;
-	country: IsoCountry;
+	country: CountryCode;
 };
 
 type FormAddressFields = {
@@ -54,7 +54,7 @@ export const extractDeliverableAddressDataFromForm = (
 		city: formData.get('delivery-city') as string,
 		state: formData.get('delivery-stateProvince') as StateCode,
 		postCode: formData.get('delivery-postcode') as string,
-		country: formData.get('delivery-country') as IsoCountry,
+		country: formData.get('delivery-country') as CountryCode,
 	};
 
 	const billingAddress = !extractBillingAddressMatchesDeliveryFromForm(formData)
@@ -64,7 +64,7 @@ export const extractDeliverableAddressDataFromForm = (
 				city: formData.get('billing-city') as string,
 				state: formData.get('billing-stateProvince') as StateCode,
 				postCode: formData.get('billing-postcode') as string,
-				country: formData.get('billing-country') as IsoCountry,
+				country: formData.get('billing-country') as CountryCode,
 		  }
 		: deliveryAddress;
 
@@ -80,7 +80,7 @@ export const extractNonDeliverableAddressDataFromForm = (
 	billingAddress: {
 		state: formData.get('billing-state') as StateCode,
 		postCode: formData.get('billing-postcode') as string,
-		country: formData.get('billing-country') as IsoCountry,
+		country: formData.get('billing-country') as CountryCode,
 	},
 	deliveryAddress: undefined,
 });

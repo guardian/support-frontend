@@ -1,4 +1,4 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type {
 	CountryGroupName,
 	CountryGroup as CountryGroupType,
@@ -48,13 +48,13 @@ function getFirstValidPrice(
 	return prices.find(isNumeric) ?? 0;
 }
 
-function getCountryGroup(country: IsoCountry): CountryGroupType {
+function getCountryGroup(country: CountryCode): CountryGroupType {
 	return countryGroups[CountryGroup.fromCountry(country) ?? GBPCountries];
 }
 
 function getProductPrice(
 	productPrices: ProductPrices,
-	country: IsoCountry,
+	country: CountryCode,
 	billingPeriod: BillingPeriod,
 	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
 	productOption: ProductOptions = NoProductOptions,
@@ -78,7 +78,7 @@ const showPrice = (p: ProductPrice, isExtended = true): string => {
 	return `${showGlyph(p.currency)}${fixDecimals(p.price)}`;
 };
 
-function getCurrency(country: IsoCountry): IsoCurrency {
+function getCurrency(country: CountryCode): IsoCurrency {
 	const { currency } = getCountryGroup(country);
 	return currency;
 }

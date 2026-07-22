@@ -22,7 +22,7 @@ export type TaxRateConfig =
 			type: 'tax_inclusive';
 	  };
 
-function isCaState(value: string): value is CaStateCode {
+export function isCaState(value: string): value is CaStateCode {
 	return caStateCodes.includes(value as CaStateCode);
 }
 

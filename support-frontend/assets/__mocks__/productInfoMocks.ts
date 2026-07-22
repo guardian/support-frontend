@@ -238,6 +238,7 @@ export const weeklyProducts: ProductPrices = {
 								landingPage: {
 									roundel: 'Subscribe for 12 months and save 10%',
 								},
+								isIntroductoryPricing: false,
 							},
 						],
 					},
@@ -273,6 +274,7 @@ export const weeklyProducts: ProductPrices = {
 								landingPage: {
 									roundel: 'Subscribe for 12 months and save 10%',
 								},
+								isIntroductoryPricing: false,
 							},
 						],
 					},
@@ -318,6 +320,7 @@ export const weeklyProducts: ProductPrices = {
 								landingPage: {
 									roundel: 'Subscribe for 12 months and save 10%',
 								},
+								isIntroductoryPricing: false,
 							},
 						],
 					},
@@ -353,6 +356,7 @@ export const weeklyProducts: ProductPrices = {
 								landingPage: {
 									roundel: 'Subscribe for 12 months and save 10%',
 								},
+								isIntroductoryPricing: false,
 							},
 						],
 					},
@@ -406,6 +410,7 @@ export const weeklyProducts: ProductPrices = {
 								landingPage: {
 									roundel: 'Subscribe for 12 months and save 10%',
 								},
+								isIntroductoryPricing: false,
 							},
 						],
 					},
@@ -441,6 +446,7 @@ export const weeklyProducts: ProductPrices = {
 								landingPage: {
 									roundel: 'Subscribe for 12 months and save 10%',
 								},
+								isIntroductoryPricing: false,
 							},
 						],
 					},
@@ -486,6 +492,7 @@ export const weeklyProducts: ProductPrices = {
 								landingPage: {
 									roundel: 'Subscribe for 12 months and save 10%',
 								},
+								isIntroductoryPricing: false,
 							},
 						],
 					},
@@ -521,6 +528,7 @@ export const weeklyProducts: ProductPrices = {
 								landingPage: {
 									roundel: 'Subscribe for 12 months and save 10%',
 								},
+								isIntroductoryPricing: false,
 							},
 						],
 					},
@@ -566,6 +574,7 @@ export const weeklyProducts: ProductPrices = {
 								landingPage: {
 									roundel: 'Subscribe for 12 months and save 10%',
 								},
+								isIntroductoryPricing: false,
 							},
 						],
 					},
@@ -601,6 +610,7 @@ export const weeklyProducts: ProductPrices = {
 								landingPage: {
 									roundel: 'Subscribe for 12 months and save 10%',
 								},
+								isIntroductoryPricing: false,
 							},
 						],
 					},
@@ -654,6 +664,7 @@ export const weeklyProducts: ProductPrices = {
 								landingPage: {
 									roundel: 'Subscribe for 12 months and save 10%',
 								},
+								isIntroductoryPricing: false,
 							},
 						],
 					},
@@ -689,6 +700,7 @@ export const weeklyProducts: ProductPrices = {
 								landingPage: {
 									roundel: 'Subscribe for 12 months and save 10%',
 								},
+								isIntroductoryPricing: false,
 							},
 						],
 					},
@@ -746,6 +758,7 @@ export const weeklyProducts: ProductPrices = {
 								landingPage: {
 									roundel: 'Subscribe for 12 months and save 10%',
 								},
+								isIntroductoryPricing: false,
 							},
 						],
 					},
@@ -767,6 +780,7 @@ export const weeklyProducts: ProductPrices = {
 								landingPage: {
 									roundel: 'Subscribe for 12 months and save 10%',
 								},
+								isIntroductoryPricing: false,
 							},
 						],
 					},
@@ -808,6 +822,7 @@ export const weeklyProducts: ProductPrices = {
 								landingPage: {
 									roundel: 'Subscribe for 12 months and save 10%',
 								},
+								isIntroductoryPricing: false,
 							},
 						],
 					},
@@ -829,6 +844,7 @@ export const weeklyProducts: ProductPrices = {
 								landingPage: {
 									roundel: 'Subscribe for 12 months and save 10%',
 								},
+								isIntroductoryPricing: false,
 							},
 						],
 					},

@@ -1,5 +1,5 @@
 import { ThemeProvider } from '@emotion/react';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { type ProductOptions } from '@modules/product/productOptions';
@@ -8,6 +8,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import { observerThemeButton } from 'components/observer-layout/styles';
+import type { Payment } from 'helpers/forms/checkouts';
 import { getPaypalClientId } from 'helpers/forms/payPal';
 import {
 	getStripeKeyForCountry,
@@ -45,6 +46,7 @@ import { useStripeHostedCheckoutSession } from './checkout/hooks/useStripeHosted
 import CheckoutForm from './components/checkoutForm';
 import CheckoutSummary from './components/checkoutSummary';
 import GuardianPageLayout from './components/GuardianPageLayout';
+import CurrentMaxRatesByCountry from './helpers/CurrentMaxRatesByCountry';
 import { getStudentDiscount } from './student/helpers/discountDetails';
 
 type Props = {
@@ -55,13 +57,13 @@ type Props = {
 	nudgeSettings?: CheckoutNudgeSettings;
 };
 
-const countryId: IsoCountry = Country.detect();
+const countryId: CountryCode = Country.detect();
 
 export const getPromotionFromProductPrices = (
 	appConfig: AppConfig,
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	countryId: IsoCountry,
+	countryId: CountryCode,
 	billingPeriod: BillingPeriod,
 ) => {
 	/**
@@ -142,17 +144,7 @@ export function Checkout({
 	 * - any contributions made
 	 */
 
-	/**
-	 * - `originalAmount` the amount pre any discounts or contributions
-	 * - `discountedAmount` the amount with a discountApplied
-	 * - `finalAmount` is the amount a person will pay
-	 */
-	let payment: {
-		originalAmount: number;
-		discountedAmount?: number;
-		contributionAmount?: number;
-		finalAmount: number;
-	};
+	let payment: Payment;
 
 	const contributionParam = urlSearchParams.get('contribution');
 	const contributionAmount = contributionParam
@@ -334,14 +326,22 @@ export function Checkout({
 	return (
 		<ThemeProvider theme={theme}>
 			<Elements stripe={stripePromise} options={elementsOptions}>
-				<PageLayout borderBox>
+				<PageLayout
+					borderBox
+					footerDisclaimer={
+						<CurrentMaxRatesByCountry
+							countryGroupId={countryGroupId}
+							productKey={productKey}
+						/>
+					}
+				>
 					<CheckoutSummary
 						supportRegionId={supportRegionId}
 						appConfig={appConfig}
 						productKey={productKey}
 						ratePlanKey={ratePlanKey}
 						promotion={promotion}
-						originalAmount={payment.originalAmount}
+						payment={payment}
 						countryId={countryId}
 						forcedCountry={forcedCountry}
 						abParticipations={abParticipations}
@@ -363,9 +363,7 @@ export function Checkout({
 						productKey={productKey}
 						ratePlanKey={ratePlanKey}
 						promotion={promotion}
-						originalAmount={payment.originalAmount}
-						contributionAmount={payment.contributionAmount}
-						finalAmount={payment.finalAmount}
+						payment={payment}
 						useStripeExpressCheckout={useStripeExpressCheckout}
 						countryId={countryId}
 						abParticipations={abParticipations}

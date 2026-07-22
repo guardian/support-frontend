@@ -51,11 +51,25 @@ const columns = css`
 	padding-top: ${space[2]}px;
 `;
 
+const footerDisclaimerStyles = css`
+	background-color: ${palette.brand[400]};
+	> div {
+		border-bottom: 1px solid ${palette.brand[600]};
+		padding: ${space[4]}px 10px;
+	}
+	${from.mobileLandscape} {
+		> div {
+			padding: ${space[5]}px ${space[5]}px;
+		}
+	}
+`;
+
 export type PageLayoutProps = {
 	children: ReactNode;
 	borderBox: boolean;
 	observerPrint?: ObserverPrint;
 	noFooterLinks?: boolean;
+	footerDisclaimer?: JSX.Element;
 };
 
 export default function GuardianPageLayout({
@@ -63,18 +77,30 @@ export default function GuardianPageLayout({
 	observerPrint,
 	borderBox,
 	noFooterLinks = false,
+	footerDisclaimer,
 }: PageLayoutProps) {
 	return (
 		<PageScaffold
 			header={<Header />}
 			footer={
-				<FooterWithContents>
-					{noFooterLinks ? (
-						<ThankYouFooter observerPrint={observerPrint} />
-					) : (
-						<FooterLinks />
+				<>
+					{footerDisclaimer && (
+						<Container
+							sideBorders
+							borderColor="rgba(170, 170, 180, 0.5)"
+							cssOverrides={footerDisclaimerStyles}
+						>
+							{footerDisclaimer}
+						</Container>
 					)}
-				</FooterWithContents>
+					<FooterWithContents>
+						{noFooterLinks ? (
+							<ThankYouFooter observerPrint={observerPrint} />
+						) : (
+							<FooterLinks />
+						)}
+					</FooterWithContents>
+				</>
 			}
 		>
 			{borderBox ? (
