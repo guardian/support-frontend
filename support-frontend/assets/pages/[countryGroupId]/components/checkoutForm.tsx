@@ -551,23 +551,20 @@ export default function CheckoutForm({
 		}
 
 		if (paymentMethod === 'Stripe') {
+			const stripeErrorMessageStart = `Please enter ${
+				stripeFieldsAreIncomplete.cardNumber ? 'a valid ' : ''
+			}`;
 			const newStripeFieldError: Partial<Record<StripeField, string>> = {
 				...((stripeFieldsAreEmpty.cardNumber ||
 					stripeFieldsAreIncomplete.cardNumber) && {
-					cardNumber: `Please enter ${
-						stripeFieldsAreIncomplete.cardNumber ? 'a valid ' : ''
-					}card number`,
+					cardNumber: `${stripeErrorMessageStart}card number`,
 				}),
 				...((stripeFieldsAreEmpty.expiry ||
 					stripeFieldsAreIncomplete.expiry) && {
-					expiry: `Please enter ${
-						stripeFieldsAreIncomplete.expiry ? 'a valid ' : ''
-					}expiry`,
+					expiry: `${stripeErrorMessageStart}expiry`,
 				}),
 				...((stripeFieldsAreEmpty.cvc || stripeFieldsAreIncomplete.cvc) && {
-					cvc: `Please enter ${
-						stripeFieldsAreIncomplete.cvc ? 'a valid ' : ''
-					}CVC`,
+					cvc: `${stripeErrorMessageStart}CVC`,
 				}),
 				// Recaptcha works slightly differently because we own the state
 				...(!recaptchaToken && { recaptcha: 'Please complete security check' }),
