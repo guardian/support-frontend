@@ -553,19 +553,21 @@ export default function CheckoutForm({
 		if (paymentMethod === 'Stripe') {
 			const newStripeFieldError: Partial<Record<StripeField, string>> = {
 				...((stripeFieldsAreEmpty.cardNumber ||
-					!stripeFieldsAreComplete.cardNumber) && {
+					stripeFieldsAreIncomplete.cardNumber) && {
 					cardNumber: `Please enter ${
-						!stripeFieldsAreEmpty.cardNumber ? 'a valid ' : ''
+						stripeFieldsAreIncomplete.cardNumber ? 'a valid ' : ''
 					}card number`,
 				}),
 				...((stripeFieldsAreEmpty.expiry ||
-					!stripeFieldsAreComplete.expiry) && {
+					stripeFieldsAreIncomplete.expiry) && {
 					expiry: `Please enter ${
-						!stripeFieldsAreEmpty.expiry ? 'a valid ' : ''
+						stripeFieldsAreIncomplete.expiry ? 'a valid ' : ''
 					}expiry`,
 				}),
-				...((stripeFieldsAreEmpty.cvc || !stripeFieldsAreComplete.cvc) && {
-					cvc: `Please enter ${!stripeFieldsAreEmpty.cvc ? 'a valid ' : ''}CVC`,
+				...((stripeFieldsAreEmpty.cvc || stripeFieldsAreIncomplete.cvc) && {
+					cvc: `Please enter ${
+						stripeFieldsAreIncomplete.cvc ? 'a valid ' : ''
+					}CVC`,
 				}),
 				// Recaptcha works slightly differently because we own the state
 				...(!recaptchaToken && { recaptcha: 'Please complete security check' }),
@@ -1123,9 +1125,9 @@ export default function CheckoutForm({
 																...prevState,
 																cardNumber: event.empty,
 															}));
-															setStripeFieldsAreComplete((prevState) => ({
+															setStripeFieldsAreIncomplete((prevState) => ({
 																...prevState,
-																cardNumber: event.complete,
+																cardNumber: !event.complete,
 															}));
 
 															// Clear errors when the field changes and is complete, we'll (re) show errors, if any, on submit
@@ -1143,9 +1145,9 @@ export default function CheckoutForm({
 																...prevState,
 																expiry: event.empty,
 															}));
-															setStripeFieldsAreComplete((prevState) => ({
+															setStripeFieldsAreIncomplete((prevState) => ({
 																...prevState,
-																expiry: event.complete,
+																expiry: !event.complete,
 															}));
 
 															// Clear errors when the field changes and is complete, we'll (re) show errors, if any, on submit
@@ -1163,9 +1165,9 @@ export default function CheckoutForm({
 																...prevState,
 																cvc: event.empty,
 															}));
-															setStripeFieldsAreComplete((prevState) => ({
+															setStripeFieldsAreIncomplete((prevState) => ({
 																...prevState,
-																cvc: event.complete,
+																cvc: !event.complete,
 															}));
 
 															// Clear errors when the field changes and is complete, we'll (re) show errors, if any, on submit
