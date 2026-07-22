@@ -7,7 +7,7 @@ import {
 } from '@guardian/consent-manager';
 import type { CountryCode } from '@guardian/libs';
 import { getCookie } from '@guardian/libs';
-import { init, record, viewId } from '@guardian/ophan-tracker-js/support';
+import { getViewId, init, record } from '@guardian/ophan-tracker-js';
 import type { Participations } from 'helpers/abTests/models';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
@@ -46,7 +46,7 @@ function analyticsInitialisation(
 ): void {
 	setReferrerDataInLocalStorage(acquisitionData);
 	void googleTagManager.init();
-	init();
+	init('support');
 	registerBFCacheTracking();
 	initQuantumMetric(participations, acquisitionData);
 	trackAbTests(participations);
@@ -62,7 +62,7 @@ function consentInitialisation(country: CountryCode): void {
 			const browserId = getCookie({ name: 'bwid', shouldMemoize: true });
 			cmp.init({
 				pubData: {
-					pageViewId: viewId,
+					pageViewId: getViewId(),
 					browserId: browserId ?? undefined,
 					platform: 'support',
 				},
