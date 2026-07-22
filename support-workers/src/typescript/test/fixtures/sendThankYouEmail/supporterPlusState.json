@@ -32,59 +32,87 @@
         "payments": [
           {
             "date": "2026-01-20",
-            "amount": 12
+            "amount": 12,
+            "amountWithoutTax": 10,
+            "taxAmount": 2
           },
           {
             "date": "2026-02-20",
-            "amount": 12
+            "amount": 12,
+            "amountWithoutTax": 10,
+            "taxAmount": 2
           },
           {
             "date": "2026-03-20",
-            "amount": 12
+            "amount": 12,
+            "amountWithoutTax": 10,
+            "taxAmount": 2
           },
           {
             "date": "2026-04-20",
-            "amount": 12
+            "amount": 12,
+            "amountWithoutTax": 10,
+            "taxAmount": 2
           },
           {
             "date": "2026-05-20",
-            "amount": 12
+            "amount": 12,
+            "amountWithoutTax": 10,
+            "taxAmount": 2
           },
           {
             "date": "2026-06-20",
-            "amount": 12
+            "amount": 12,
+            "amountWithoutTax": 10,
+            "taxAmount": 2
           },
           {
             "date": "2026-07-20",
-            "amount": 12
+            "amount": 12,
+            "amountWithoutTax": 10,
+            "taxAmount": 2
           },
           {
             "date": "2026-08-20",
-            "amount": 12
+            "amount": 12,
+            "amountWithoutTax": 10,
+            "taxAmount": 2
           },
           {
             "date": "2026-09-20",
-            "amount": 12
+            "amount": 12,
+            "amountWithoutTax": 10,
+            "taxAmount": 2
           },
           {
             "date": "2026-10-20",
-            "amount": 12
+            "amount": 12,
+            "amountWithoutTax": 10,
+            "taxAmount": 2
           },
           {
             "date": "2026-11-20",
-            "amount": 12
+            "amount": 12,
+            "amountWithoutTax": 10,
+            "taxAmount": 2
           },
           {
             "date": "2026-12-20",
-            "amount": 12
+            "amount": 12,
+            "amountWithoutTax": 10,
+            "taxAmount": 2
           },
           {
             "date": "2027-01-20",
-            "amount": 12
+            "amount": 12,
+            "amountWithoutTax": 10,
+            "taxAmount": 2
           },
           {
             "date": "2027-02-20",
-            "amount": 12
+            "amount": 12,
+            "amountWithoutTax": 10,
+            "taxAmount": 2
           }
         ]
       },
