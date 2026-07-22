@@ -10,8 +10,8 @@ export type InvoiceItem = {
 const paymentSchema = z.object({
 	date: dateOrDateStringSchema,
 	amount: z.number(),
-	amountWithoutTax: z.number().optional(),
-	taxAmount: z.number().optional(),
+	amountWithoutTax: z.number(),
+	taxAmount: z.number(),
 });
 export type Payment = z.infer<typeof paymentSchema>;
 

@@ -4,7 +4,7 @@
       "productType": "SupporterPlus",
       "billingCountry": "GB",
       "product": {
-        "amount": 12,
+        "amount": 14,
         "currency": "GBP",
         "billingPeriod": "Monthly",
         "productType": "SupporterPlus"
@@ -12,7 +12,7 @@
       "productInformation": {
         "product": "SupporterPlus",
         "ratePlan": "Monthly",
-        "amount": 12
+        "amount": 14
       },
       "paymentMethod": {
         "TokenId": "pm_0S1SrNItVxyc3Q6ntB3yRwJ9",
@@ -54,7 +54,7 @@
     },
     "giftRecipient": null,
     "product": {
-      "amount": 12,
+      "amount": 14,
       "currency": "GBP",
       "billingPeriod": "Monthly",
       "productType": "SupporterPlus"
@@ -62,7 +62,7 @@
     "productInformation": {
       "product": "SupporterPlus",
       "ratePlan": "Monthly",
-      "amount": 12
+      "amount": 14
     },
     "analyticsInfo": {
       "isGiftPurchase": false,
