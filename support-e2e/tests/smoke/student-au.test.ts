@@ -12,11 +12,11 @@ import { email, firstName, lastName } from '../utils/users';
 		frequency: 'Monthly',
 		promoCode: 'UTS_STUDENT',
 		expectedCardHeading: ProductTierLabel.TierTwo,
-		expectedPromoText: '$0/month for two years, then $20/month',
-		expectedCheckoutTotalText: 'Was $20, now $0/month',
+		expectedPromoText: '$0/month for two years, then $25/month',
+		expectedCheckoutTotalText: 'Was $25, now $0/month',
 		accessibleCtaText: 'Sign up for free',
 		expectedThankYouText:
-			"You'll pay $0/month for the first 24 months, then $20/month afterwards unless you cancel",
+			"You'll pay $0/month for the first 24 months, then $25/month afterwards unless you cancel",
 	},
 ].forEach((testDetails) => {
 	test(`${testDetails.expectedCardHeading} ${testDetails.frequency} ${testDetails.promoCode} Promo`, async ({
