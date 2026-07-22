@@ -1300,7 +1300,8 @@ export default function CheckoutForm({
 								setPayPalPaymentToken={setPayPalPaymentToken}
 								formRef={formRef}
 								isTestUser={isTestUser}
-								finalAmount={finalAmount}
+								payment={payment}
+								taxRateConfig={taxRateConfig}
 								currencyKey={currencyKey}
 								billingPeriod={billingPeriod}
 								csrf={csrf.token ?? ''}

@@ -137,6 +137,7 @@ describe('Discount Details', () => {
 				discount: { amount: 100, durationMonths: 24 },
 				discountedPrice: 0,
 				numberOfDiscountedPeriods: 24,
+				isIntroductoryPricing: false,
 			};
 
 			const result = getStudentDiscount(

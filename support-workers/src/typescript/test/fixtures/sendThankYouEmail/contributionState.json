@@ -52,7 +52,9 @@
         "payments": [
           {
             "date": "2025-12-05",
-            "amount": 412.8
+            "amount": 412.8,
+            "amountWithoutTax": 412.8,
+            "taxAmount": 0
           }
         ]
       },

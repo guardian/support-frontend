@@ -16,6 +16,7 @@ describe('Quantum Metric Helpers', () => {
 					discountedPrice: 5.99,
 					numberOfDiscountedPeriods: 3,
 					discount: { amount: 50, durationMonths: 3 },
+					isIntroductoryPricing: false,
 				},
 			],
 		};
@@ -46,6 +47,7 @@ describe('Quantum Metric Helpers', () => {
 					discountedPrice: 99,
 					numberOfDiscountedPeriods: 1,
 					discount: { amount: 16.81, durationMonths: 12 },
+					isIntroductoryPricing: false,
 				},
 			],
 		};

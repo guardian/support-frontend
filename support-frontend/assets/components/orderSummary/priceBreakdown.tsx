@@ -71,6 +71,7 @@ type PriceBreakdownProps = {
 	taxRateConfig: TaxRateConfig;
 	studentDiscount?: StudentDiscount;
 	billingPeriod: BillingPeriod;
+	isIntroductoryPricing: boolean;
 };
 
 export function PriceBreakdown({
@@ -84,13 +85,17 @@ export function PriceBreakdown({
 	taxRateConfig,
 	billingPeriod,
 	studentDiscount,
+	isIntroductoryPricing,
 }: PriceBreakdownProps): JSX.Element {
 	const paymentFrequency = getBillingPeriodNoun(billingPeriod, isWeeklyGift);
 	const period = studentDiscount?.periodNoun ?? paymentFrequency;
 
-	// Ignore tax calculation for weekly pricing, we'll revisit this if
-	// we want to show weekly prices for tax exclusive rate plans in Canada
 	if (weeklyPrice) {
+		const billingPeriodLabel =
+			taxRateConfig.type === 'tax_inclusive'
+				? `Total due every ${period}`
+				: `Billed each ${period}`;
+
 		return (
 			<div css={weeklyPricingSummary}>
 				<div css={summaryRow}>
@@ -98,9 +103,19 @@ export function PriceBreakdown({
 					<p>{weeklyPrice}</p>
 				</div>
 				<div css={[summaryRow, boldText]}>
-					<p>Total due every {period}</p>
+					<p>{billingPeriodLabel}</p>
 					<p>{discountPrice ?? fullPrice}</p>
 				</div>
+				<MaybeEstimatedTax
+					currency={currency}
+					// This doesn't handle student discounts currently because
+					// they're never tax exclusive, but if this changes we'll
+					// need to revisit this payment prop.
+					payment={payment}
+					taxRateConfig={taxRateConfig}
+				>
+					<TaxTsAndCs />
+				</MaybeEstimatedTax>
 				{savingText && (
 					<div>
 						<hr css={hrCss} />
@@ -126,6 +141,7 @@ export function PriceBreakdown({
 						discountPrice={discountPrice}
 						isWeeklyGift={isWeeklyGift}
 						showPeriod={taxRateConfig.type === 'tax_inclusive'}
+						isIntroductoryPricing={isIntroductoryPricing}
 					/>
 				</div>
 				<MaybeEstimatedTax

@@ -132,5 +132,6 @@ WeeklyDigitalRestOfWorldInclPromo.args = {
 		promoCode: 'ANNUAL10',
 		numberOfDiscountedPeriods: 12,
 		discountedPrice: 324,
+		isIntroductoryPricing: false,
 	},
 };

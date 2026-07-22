@@ -10,6 +10,8 @@ export type InvoiceItem = {
 const paymentSchema = z.object({
 	date: dateOrDateStringSchema,
 	amount: z.number(),
+	amountWithoutTax: z.number(),
+	taxAmount: z.number(),
 });
 export type Payment = z.infer<typeof paymentSchema>;
 
@@ -26,22 +28,30 @@ export const buildPaymentSchedule = (
 	if (invoiceItems.length == 0) {
 		throw new Error('No invoice items provided to buildPaymentSchedule');
 	}
-	const paymentMap = new Map<string, number>();
+	const paymentMap = new Map<
+		string,
+		{ amountWithoutTax: number; taxAmount: number }
+	>();
 
 	for (const charge of invoiceItems) {
 		const dateKey = charge.serviceStartDate.toISOString();
-		const currentAmount = paymentMap.get(dateKey) ?? 0;
-		paymentMap.set(
-			dateKey,
-			currentAmount + charge.amountWithoutTax + charge.taxAmount,
-		);
+		const current = paymentMap.get(dateKey) ?? {
+			amountWithoutTax: 0,
+			taxAmount: 0,
+		};
+		paymentMap.set(dateKey, {
+			amountWithoutTax: current.amountWithoutTax + charge.amountWithoutTax,
+			taxAmount: current.taxAmount + charge.taxAmount,
+		});
 	}
 
 	const payments: Payment[] = [];
-	for (const [dateKey, amount] of paymentMap) {
+	for (const [dateKey, { amountWithoutTax, taxAmount }] of paymentMap) {
 		payments.push({
 			date: new Date(dateKey),
-			amount: round(amount),
+			amount: round(amountWithoutTax + taxAmount),
+			amountWithoutTax: amountWithoutTax,
+			taxAmount: taxAmount,
 		});
 	}
 
