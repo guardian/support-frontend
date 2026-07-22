@@ -19,8 +19,8 @@ import { email, firstName, lastName } from '../utils/users';
 		expectedCardHeading: ProductTierLabel.TierTwo,
 		expectedPromoText:
 			/£(\d|\.)+\/month for (\d|\.) months, then £(\d|\.)+\/month/,
-		expectedCheckoutTotalText: 'Was £12, now £9.60/month',
-		expectedPaymentButtonText: 'Pay £9.60 per month',
+		expectedCheckoutTotalText: 'Was £14, now £11.20/month',
+		expectedPaymentButtonText: 'Pay £11.20 per month',
 		expectedThankYouText:
 			/You'll pay £(\d|\.)+\/month for the first (\d|\.)+ months, then £(\d|\.)+\/month afterwards unless you cancel\./,
 		accessibleCtaText: ProductTierLabel.TierTwo,
