@@ -194,6 +194,7 @@ export function OnboardingSummarySuccessfulSignIn({
 				</Button>
 			</Stack>
 
+			{/* This needs to be hidden for invitee */}
 			<div css={newsletterContainer}>
 				<Stack space={1}>
 					<h2 css={boldDescriptions}>Saturday Edition newsletter</h2>

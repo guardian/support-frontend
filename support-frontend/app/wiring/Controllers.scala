@@ -168,6 +168,12 @@ trait Controllers {
     controllerComponents,
   )
 
+  lazy val invitationController = new InvitationController(
+    controllerComponents,
+    actionBuilders,
+    multipleAccountApiService,
+  )
+
   lazy val identityController = new IdentityController(
     identityService,
     controllerComponents,

@@ -68,6 +68,9 @@ POST /identity/signin-url                                          controllers.I
 GET  /identity/newsletters                                         controllers.IdentityController.getNewslettersSubscriptions()
 PATCH /identity/newsletters                                        controllers.IdentityController.updateNewsletterSubscription()
 
+# ------ Multiple accounts ------ #
+GET  /api/invitation/:invitationId                                 controllers.InvitationController.getInvitation(invitationId: String)
+
 # ----- Subscriptions ----- #
 
 GET  /subscribe                                                    controllers.SubscriptionsController.geoRedirect()

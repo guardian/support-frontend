@@ -222,6 +222,7 @@ function OnboardingHeading({
 				aspectRatio: css`
 					aspect-ratio: 3 / 2;
 				`,
+				contentInHeader: true,
 			},
 		}),
 		[windowWidthIsGreaterThan],

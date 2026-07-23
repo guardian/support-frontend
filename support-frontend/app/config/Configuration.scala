@@ -24,6 +24,8 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val salesTaxConfig = SalesTaxApiConfig.fromConfig(config)
 
+  lazy val multipleAccountApiConfig = MultipleAccountApiConfig.fromConfig(config)
+
   lazy val paperRoundConfigProvider = new PaperRoundConfigProvider(config, stage)
 
   lazy val guardianDomain = GuardianDomain(config.getString("guardianDomain"))
