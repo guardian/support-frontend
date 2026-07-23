@@ -249,9 +249,6 @@ importers:
       '@emotion/utils':
         specifier: ^1.1.0
         version: 1.4.2
-      '@floating-ui/react':
-        specifier: ^0.27.6
-        version: 0.27.9(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@guardian/consent-manager':
         specifier: 1.0.0
         version: 1.0.0(@guardian/ophan-tracker-js@4.0.2)(tslib@2.8.1)(typescript@5.5.4)
@@ -265,11 +262,11 @@ importers:
         specifier: 4.0.2
         version: 4.0.2
       '@guardian/source':
-        specifier: 10.2.0
-        version: 10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
+        specifier: 13.1.0
+        version: 13.1.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/source-development-kitchen':
-        specifier: 18.1.1
-        version: 18.1.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@32.0.0(@guardian/ophan-tracker-js@4.0.2)(tslib@2.8.1)(typescript@5.5.4))(@guardian/source@10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
+        specifier: 29.0.1
+        version: 29.0.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@32.0.0(@guardian/ophan-tracker-js@4.0.2)(tslib@2.8.1)(typescript@5.5.4))(@guardian/source@13.1.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/support-service-lambdas':
         specifier: 'catalog:'
         version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/1152744344505d8612ae5fa436c2b3e5bf2bf4e6
@@ -2267,27 +2264,6 @@ packages:
       '@jest/globals': '*'
       jest: '*'
 
-  '@floating-ui/core@1.7.0':
-    resolution: {integrity: sha512-FRdBLykrPPA6P76GGGqlex/e7fbe0F1ykgxHYNXQsH/iTEtjMj/f9bpY5oQqbjt5VgZvgz/uKXbGuROijh3VLA==}
-
-  '@floating-ui/dom@1.7.0':
-    resolution: {integrity: sha512-lGTor4VlXcesUMh1cupTUTDoCxMb0V6bm3CnxHzQcw8Eaf1jQbgQX4i02fYgT0vJ82tb5MZ4CZk1LRGkktJCzg==}
-
-  '@floating-ui/react-dom@2.1.2':
-    resolution: {integrity: sha512-06okr5cgPzMNBy+Ycse2A6udMi4bqwW/zgBF/rwjcNqWkyr82Mcg8b0vjX8OJpZFy/FKjJmw6wV7t44kK6kW7A==}
-    peerDependencies:
-      react: '>=16.8.0'
-      react-dom: '>=16.8.0'
-
-  '@floating-ui/react@0.27.9':
-    resolution: {integrity: sha512-Y0aCJBNtfVF6ikI1kVzA0WzSAhVBz79vFWOhvb5MLCRNODZ1ylGSLTuncchR7JsLyn9QzV6JD44DyZhhOtvpRw==}
-    peerDependencies:
-      react: '>=17.0.0'
-      react-dom: '>=17.0.0'
-
-  '@floating-ui/utils@0.2.9':
-    resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
-
   '@google-cloud/bigquery@8.1.1':
     resolution: {integrity: sha512-2GHlohfA/VJffTvibMazMsZi6jPRx8MmaMberyDTL8rnhVs/frKSXVVRtLU83uSAy2j/5SD4mOs4jMQgJPON2g==}
     engines: {node: '>=18'}
@@ -2396,16 +2372,16 @@ packages:
       prettier: ^3.2.2
       tslib: ^2.6.2
 
-  '@guardian/source-development-kitchen@18.1.1':
-    resolution: {integrity: sha512-wuMULnVjValyEz6YjrOPt054tXJkutkAbPdeV/KQHoSCSjAJnd0Cp3SZeoVog77HE/iZ0mnKaiVkK+QXpRVtCQ==}
+  '@guardian/source-development-kitchen@29.0.1':
+    resolution: {integrity: sha512-0Yah7mT6Lx6xx75TZ3ZY2KDE7HV4gaFn+SX8keom+9gutSu72pPiZQ0peh22e95Zsgnw4ZlfdFgc/+yX4HK6tg==}
     peerDependencies:
       '@emotion/react': ^11.11.4
-      '@guardian/libs': ^22.0.0
-      '@guardian/source': ^10.0.0
+      '@guardian/libs': ^33.0.0
+      '@guardian/source': ^13.0.0
       '@types/react': ^18.2.79
       react: ^18.2.0
-      tslib: ^2.6.2
-      typescript: ~5.5.2
+      tslib: ^2.8.1
+      typescript: ~6.0.3
     peerDependenciesMeta:
       '@emotion/react':
         optional: true
@@ -2416,14 +2392,14 @@ packages:
       typescript:
         optional: true
 
-  '@guardian/source@10.2.0':
-    resolution: {integrity: sha512-mPozNtjGe0ykOjyFPuMS76CAPqafV9oJpHaX1ptx+h5wAMnu6csqKLwkALd6plDM9Y5vfWM8S/UERRlFg/rnzw==}
+  '@guardian/source@13.1.0':
+    resolution: {integrity: sha512-iAp4bahKNiB5j4zlqAU+Us1MCnX7U/KaZbTnap8VbcJHKPBO6sV65aj20cSfCglJcgYxGLFtssBs/nlwCWsDeQ==}
     peerDependencies:
       '@emotion/react': ^11.11.4
       '@types/react': ^18.2.79
       react: ^18.2.0
-      tslib: ^2.6.2
-      typescript: ~5.5.2
+      tslib: ^2.8.1
+      typescript: ~6.0.3
     peerDependenciesMeta:
       '@emotion/react':
         optional: true
@@ -7877,9 +7853,6 @@ packages:
   symbol-tree@3.2.4:
     resolution: {integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==}
 
-  tabbable@6.2.0:
-    resolution: {integrity: sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==}
-
   tagged-tag@1.0.0:
     resolution: {integrity: sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng==}
     engines: {node: '>=20'}
@@ -11047,31 +11020,6 @@ snapshots:
       fetch-mock: 12.6.0
       jest: 29.7.0(@types/node@20.19.0)(babel-plugin-macros@3.1.0)
 
-  '@floating-ui/core@1.7.0':
-    dependencies:
-      '@floating-ui/utils': 0.2.9
-
-  '@floating-ui/dom@1.7.0':
-    dependencies:
-      '@floating-ui/core': 1.7.0
-      '@floating-ui/utils': 0.2.9
-
-  '@floating-ui/react-dom@2.1.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
-    dependencies:
-      '@floating-ui/dom': 1.7.0
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-
-  '@floating-ui/react@0.27.9(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
-    dependencies:
-      '@floating-ui/react-dom': 2.1.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      '@floating-ui/utils': 0.2.9
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      tabbable: 6.2.0
-
-  '@floating-ui/utils@0.2.9': {}
-
   '@google-cloud/bigquery@8.1.1':
     dependencies:
       '@google-cloud/common': 6.0.0
@@ -11219,10 +11167,10 @@ snapshots:
       prettier: 3.5.3
       tslib: 2.8.1
 
-  '@guardian/source-development-kitchen@18.1.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@32.0.0(@guardian/ophan-tracker-js@4.0.2)(tslib@2.8.1)(typescript@5.5.4))(@guardian/source@10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)':
+  '@guardian/source-development-kitchen@29.0.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@32.0.0(@guardian/ophan-tracker-js@4.0.2)(tslib@2.8.1)(typescript@5.5.4))(@guardian/source@13.1.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)':
     dependencies:
       '@guardian/libs': 32.0.0(@guardian/ophan-tracker-js@4.0.2)(tslib@2.8.1)(typescript@5.5.4)
-      '@guardian/source': 10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
+      '@guardian/source': 13.1.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
       tslib: 2.8.1
     optionalDependencies:
       '@emotion/react': 11.14.0(@types/react@18.2.0)(react@18.2.0)
@@ -11230,7 +11178,7 @@ snapshots:
       react: 18.2.0
       typescript: 5.5.4
 
-  '@guardian/source@10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)':
+  '@guardian/source@13.1.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)':
     dependencies:
       mini-svg-data-uri: 1.4.4
       tslib: 2.8.1
@@ -18138,8 +18086,6 @@ snapshots:
   supports-preserve-symlinks-flag@1.0.0: {}
 
   symbol-tree@3.2.4: {}
-
-  tabbable@6.2.0: {}
 
   tagged-tag@1.0.0: {}
 

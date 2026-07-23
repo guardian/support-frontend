@@ -161,19 +161,11 @@ export function BenefitsCheckList({
 						)}
 						<div css={[checkListTextCss, item.maybeGreyedOut]}>
 							{typeof item.text === 'string' ? (
-								<span css={checkListTextItemCss}>
+								<>
 									{pillCopy && <BenefitPill copy={pillCopy} />}{' '}
 									{item.strong ? <strong>{item.text}</strong> : item.text}
-									{item.toolTip && (
-										<Tooltip
-											children={<p>{item.toolTip}</p>}
-											xAxisOffset={108}
-											yAxisOffset={12}
-											placement="bottom"
-											desktopOnly={true}
-										></Tooltip>
-									)}
-								</span>
+									{item.toolTip && <Tooltip content={item.toolTip} />}
+								</>
 							) : (
 								item.text
 							)}
