@@ -1,5 +1,5 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { render } from '@testing-library/react';
 import type {
 	ActiveProductKey,
@@ -54,7 +54,7 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 					ratePlanDescription={
 						ratePlanDescription[activeRatePlanKey as ActiveRatePlanKey]
 					}
-					currency={currency as IsoCurrency}
+					currency={currency as CurrencyCode}
 					amount={0}
 				/>,
 			);

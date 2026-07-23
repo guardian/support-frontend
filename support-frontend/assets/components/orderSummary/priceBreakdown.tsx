@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { palette, space, textSans17 } from '@guardian/source/foundations';
-import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
+import type { Currency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { PriceSummary } from 'components/priceSummary/priceSummary';
 import { MaybeEstimatedTax } from 'components/salesTax/maybeEstimatedTax';
@@ -62,7 +62,7 @@ type PriceBreakdownProps = {
 	discountPrice?: string;
 	savingText: string | null;
 	isWeeklyGift: boolean;
-	currency: CurrencyInfo;
+	currency: Currency;
 	payment: Payment;
 	taxRateConfig: TaxRateConfig;
 	studentDiscount?: StudentDiscount;

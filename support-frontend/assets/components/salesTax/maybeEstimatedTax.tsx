@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import type { CurrencyInfo } from '@modules/internationalisation/currency';
+import type { Currency } from '@modules/internationalisation/currency';
 import type { ReactNode } from 'react';
 import type { Payment } from 'helpers/forms/checkouts';
 import { simpleFormatTaxAmount } from 'helpers/forms/checkouts';
@@ -8,7 +8,7 @@ import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig'
 type Props = {
 	payment: Payment;
 	taxRateConfig: TaxRateConfig;
-	currency: CurrencyInfo;
+	currency: Currency;
 	children?: ReactNode;
 };
 

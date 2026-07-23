@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { Column, Columns } from '@guardian/source/react-components';
-import { getCurrencyInfo } from '@modules/internationalisation/currency';
+import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { Props as MaybeEstimatedTaxSummaryProps } from 'components/salesTax/maybeEstimatedTaxSummary';
 import { MaybeEstimatedTaxSummary } from 'components/salesTax/maybeEstimatedTaxSummary';
@@ -37,7 +37,7 @@ Template.args = {} as MaybeEstimatedTaxSummaryProps;
 
 export const TaxExclusive = Template.bind({});
 TaxExclusive.args = {
-	currency: getCurrencyInfo('CAD'),
+	currency: getCurrencyByCode('CAD'),
 	payment: {
 		finalAmount: 120,
 		originalAmount: 120,
@@ -53,7 +53,7 @@ TaxExclusive.args = {
 
 export const NotEnoughInformation = Template.bind({});
 NotEnoughInformation.args = {
-	currency: getCurrencyInfo('CAD'),
+	currency: getCurrencyByCode('CAD'),
 	payment: {
 		finalAmount: 20,
 		originalAmount: 20,
@@ -68,7 +68,7 @@ NotEnoughInformation.args = {
 
 export const WithDiscount = Template.bind({});
 WithDiscount.args = {
-	currency: getCurrencyInfo('CAD'),
+	currency: getCurrencyByCode('CAD'),
 	payment: {
 		originalAmount: 120,
 		finalAmount: 60,
