@@ -1,4 +1,4 @@
-import * as React from 'preact/compat';
+import { useEffect, useState } from 'react';
 
 const breakpoints = {
 	mobile: 320,
@@ -18,8 +18,8 @@ export const useWindowWidth = () => {
 		return window.innerWidth;
 	}
 
-	const [windowWidth, setWindowWidth] = React.useState(getWindowWidth);
-	React.useEffect(() => {
+	const [windowWidth, setWindowWidth] = useState(getWindowWidth);
+	useEffect(() => {
 		function handleResize() {
 			setWindowWidth(getWindowWidth());
 		}
