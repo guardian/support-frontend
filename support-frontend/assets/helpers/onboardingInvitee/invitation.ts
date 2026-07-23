@@ -4,7 +4,7 @@ export interface OnboardingInviteeInvitation {
 	inviterFirstName?: string;
 }
 
-export type InvitationStatus = 'valid' | 'expired' | 'invalid';
+type InvitationStatus = 'valid' | 'expired' | 'invalid';
 
 export interface VerifyInvitationResult {
 	status: InvitationStatus;

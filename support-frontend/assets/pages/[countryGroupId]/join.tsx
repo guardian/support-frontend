@@ -24,7 +24,7 @@ function InvalidInvitation() {
 	);
 }
 
-export function InvitationExpired() {
+function InvitationExpired() {
 	return (
 		<ErrorPage
 			headings={['This invitation', 'has expired']}
