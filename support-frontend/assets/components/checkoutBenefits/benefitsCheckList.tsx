@@ -12,6 +12,7 @@ import {
 	SvgTickRound,
 } from '@guardian/source/react-components';
 import Tooltip from 'components/tooltip/Tooltip';
+import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { BenefitPill } from './benefitPill';
 import BulletSvg from './bulletSvg';
 
@@ -129,6 +130,7 @@ export function BenefitsCheckList({
 	cssOverrides,
 	benefitsHeading,
 }: BenefitsCheckListProps): JSX.Element {
+	const { windowWidthIsGreaterThan } = useWindowWidth();
 	return (
 		<ul css={[listCss(style), cssOverrides]}>
 			{benefitsHeading && <p css={benefitHeadingCss}>{benefitsHeading}</p>}
@@ -164,7 +166,9 @@ export function BenefitsCheckList({
 								<>
 									{pillCopy && <BenefitPill copy={pillCopy} />}{' '}
 									{item.strong ? <strong>{item.text}</strong> : item.text}
-									{item.toolTip && <Tooltip content={item.toolTip} />}
+									{item.toolTip && windowWidthIsGreaterThan('desktop') && (
+										<Tooltip content={item.toolTip} />
+									)}
 								</>
 							) : (
 								item.text
