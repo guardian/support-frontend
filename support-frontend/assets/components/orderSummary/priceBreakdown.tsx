@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, palette, space, textSans17 } from '@guardian/source/foundations';
+import { palette, space, textSans17 } from '@guardian/source/foundations';
 import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { PriceSummary } from 'components/priceSummary/priceSummary';
@@ -16,18 +16,14 @@ const summaryRow = css`
 	align-items: baseline;
 `;
 
-const rowSpacing = (isTaxInclusive: boolean) => css`
+const rowSpacing = css`
 	display: flex;
 	flex-direction: column;
 	gap: ${space[1]}px;
 	margin-top: ${space[1]}px;
 
 	&:not(:last-child) {
-		margin-bottom: ${space[6]}px;
-
-		${from.desktop} {
-			margin-bottom: ${space[isTaxInclusive ? 8 : 6]}px;
-		}
+		margin-bottom: ${space[8]}px;
 	}
 `;
 
@@ -132,7 +128,7 @@ export function PriceBreakdown({
 
 	return (
 		<>
-			<div css={rowSpacing(isTaxInclusive)}>
+			<div css={rowSpacing}>
 				<div css={[summaryRow, boldText]}>
 					<p>{priceLabel}</p>
 					<PriceSummary
