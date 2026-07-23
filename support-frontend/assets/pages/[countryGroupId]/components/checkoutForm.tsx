@@ -279,6 +279,9 @@ export default function CheckoutForm({
 	const [stripeFieldsAreEmpty, setStripeFieldsAreEmpty] = useState<
 		Record<StripeOnlyField, boolean>
 	>({ cardNumber: true, expiry: true, cvc: true });
+	const [stripeFieldsAreIncomplete, setStripeFieldsAreIncomplete] = useState<
+		Record<StripeOnlyField, boolean>
+	>({ cardNumber: true, expiry: true, cvc: true });
 	type StripeField = StripeOnlyField | 'recaptcha';
 	const [stripeFieldError, setStripeFieldError] = useState<
 		Partial<Record<StripeField, string>>
@@ -548,15 +551,20 @@ export default function CheckoutForm({
 		}
 
 		if (paymentMethod === 'Stripe') {
-			const newStripeFieldError = {
-				...(stripeFieldsAreEmpty.cardNumber && {
-					cardNumber: 'Please enter card number',
+			const stripeErrorMessageStart = `Please enter ${
+				stripeFieldsAreIncomplete.cardNumber ? 'a valid ' : ''
+			}`;
+			const newStripeFieldError: Partial<Record<StripeField, string>> = {
+				...((stripeFieldsAreEmpty.cardNumber ||
+					stripeFieldsAreIncomplete.cardNumber) && {
+					cardNumber: `${stripeErrorMessageStart}card number`,
 				}),
-				...(stripeFieldsAreEmpty.expiry && {
-					expiry: 'Please enter expiry',
+				...((stripeFieldsAreEmpty.expiry ||
+					stripeFieldsAreIncomplete.expiry) && {
+					expiry: `${stripeErrorMessageStart}expiry`,
 				}),
-				...(stripeFieldsAreEmpty.cvc && {
-					cvc: 'Please enter CVC',
+				...((stripeFieldsAreEmpty.cvc || stripeFieldsAreIncomplete.cvc) && {
+					cvc: `${stripeErrorMessageStart}CVC`,
 				}),
 				// Recaptcha works slightly differently because we own the state
 				...(!recaptchaToken && { recaptcha: 'Please complete security check' }),
@@ -1114,11 +1122,17 @@ export default function CheckoutForm({
 																...prevState,
 																cardNumber: event.empty,
 															}));
+															setStripeFieldsAreIncomplete((prevState) => ({
+																...prevState,
+																cardNumber: !event.complete,
+															}));
 
-															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
+															// Clear errors when the field changes and is complete, we'll (re) show errors, if any, on submit
 															setStripeFieldError((prevState) => ({
 																...prevState,
-																cardNumber: undefined,
+																cardNumber: event.complete
+																	? undefined
+																	: prevState.cardNumber,
 															}));
 														}}
 														onExpiryChange={(
@@ -1128,11 +1142,17 @@ export default function CheckoutForm({
 																...prevState,
 																expiry: event.empty,
 															}));
+															setStripeFieldsAreIncomplete((prevState) => ({
+																...prevState,
+																expiry: !event.complete,
+															}));
 
-															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
+															// Clear errors when the field changes and is complete, we'll (re) show errors, if any, on submit
 															setStripeFieldError((prevState) => ({
 																...prevState,
-																expiry: undefined,
+																expiry: event.complete
+																	? undefined
+																	: prevState.expiry,
 															}));
 														}}
 														onCvcChange={(
@@ -1142,11 +1162,15 @@ export default function CheckoutForm({
 																...prevState,
 																cvc: event.empty,
 															}));
+															setStripeFieldsAreIncomplete((prevState) => ({
+																...prevState,
+																cvc: !event.complete,
+															}));
 
-															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
+															// Clear errors when the field changes and is complete, we'll (re) show errors, if any, on submit
 															setStripeFieldError((prevState) => ({
 																...prevState,
-																cvc: undefined,
+																cvc: event.complete ? undefined : prevState.cvc,
 															}));
 														}}
 														errors={{
