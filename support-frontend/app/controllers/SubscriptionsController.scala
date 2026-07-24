@@ -117,7 +117,7 @@ class SubscriptionsController(
       ) {
         Html(s"""<script type="text/javascript">
               window.guardian.pricingCopy = ${outputJson(pricingCopy)};
-              window.guardian.productCatalog = ${outputJson(productCatalog)}
+              window.guardian.productCatalog = ${outputJson(productCatalog, dropNullValues = false)}
             </script>""")
       },
     ).withSettingsSurrogateKey

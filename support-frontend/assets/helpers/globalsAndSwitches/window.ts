@@ -174,7 +174,7 @@ const ProductCatalogSchema = z.object({
 					billingPeriod: z.optional(
 						z.enum(['Quarter', 'Month', 'Annual', 'OneTime']),
 					),
-					taxMode: z.enum(['TaxExclusive', 'TaxInclusive']).nullish(),
+					taxMode: z.enum(['TaxExclusive', 'TaxInclusive']).nullable(),
 				}),
 			),
 		}),
