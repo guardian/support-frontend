@@ -127,6 +127,7 @@ GET  /paypal/cancel                                                controllers.P
 # This endpoint is the return URL we supply to PayPal.
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/paypal/rest/return         controllers.PayPalOneOff.returnURL(paymentId: String, PayerID: String, email: String, country: String, thankyou = "thankyou")
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/paypal/rest/returnOneTime  controllers.PayPalOneOff.returnURL(paymentId: String, PayerID: String, email: String, country: String, thankyou = "thank-you")
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/stripe/paypal/returnOneTime controllers.PayPalOneOff.stripeReturnURL(country: String, email: String, payment_intent: String, redirect_status: String, stripePublicKey: String, currency: String, amount: Double)
 
 # If we get an error back from the execute-payment request to PayPal,
 # we need to redirect the user to a page that tells them their payment failed.
