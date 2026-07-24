@@ -2,10 +2,16 @@ import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
 import { Button, Stack, SvgTickRound } from '@guardian/source/react-components';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import type { HandleStepNavigationFunction } from 'pages/[countryGroupId]/components/onboardingComponent';
-import { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
+import { OnboardingSteps } from 'components/onboarding/onboardingSteps';
+import type {
+	HandleStepNavigationFunction,
+	OnboardingFlowStep,
+} from 'components/onboarding/onboardingTypes';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
-import { OnboardingAppBadgesDownload } from '../appBadgesDownload/badgesDownload';
+import {
+	OnboardingAppBadgesDownload,
+	type OnboardingAppBadgesDownloadStep,
+} from '../appBadgesDownload/badgesDownload';
 import ContentBox from '../contentBox';
 import {
 	benefitsItem,
@@ -91,11 +97,15 @@ export function OnboardingAppsDiscovery({
 	onboardingStep,
 	supporterRegion,
 	handleStepNavigation,
+	nextStep,
+	backStep,
 }: {
 	hasMobileAppDownloaded: boolean;
 	hasFeastMobileAppDownloaded: boolean;
-	onboardingStep: OnboardingSteps;
+	onboardingStep: OnboardingAppBadgesDownloadStep;
 	handleStepNavigation: HandleStepNavigationFunction;
+	nextStep?: OnboardingFlowStep;
+	backStep?: OnboardingFlowStep;
 	supporterRegion: SupportRegionId;
 }) {
 	const { windowWidthIsGreaterThan } = useWindowWidth();
@@ -172,9 +182,10 @@ export function OnboardingAppsDiscovery({
 							cssOverrides={buttonOverrides}
 							onClick={() =>
 								handleStepNavigation(
-									isGuardianApp
-										? OnboardingSteps.FeastApp
-										: OnboardingSteps.Completed,
+									nextStep ??
+										(isGuardianApp
+											? OnboardingSteps.FeastApp
+											: OnboardingSteps.Completed),
 								)
 							}
 						>
@@ -185,9 +196,10 @@ export function OnboardingAppsDiscovery({
 							cssOverrides={buttonOverrides}
 							onClick={() =>
 								handleStepNavigation(
-									isGuardianApp
-										? OnboardingSteps.Summary
-										: OnboardingSteps.GuardianApp,
+									backStep ??
+										(isGuardianApp
+											? OnboardingSteps.Summary
+											: OnboardingSteps.GuardianApp),
 								)
 							}
 						>

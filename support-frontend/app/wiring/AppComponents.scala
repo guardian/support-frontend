@@ -61,6 +61,7 @@ class AppComponents(context: Context)
     supportWorkersStatusController,
     stripeController,
     identityController,
+    invitationController,
     subscriptionsController,
     weeklyController,
     paperController,
