@@ -6,7 +6,7 @@ import play.api.mvc.RequestHeader
 
 object ViewHelpers {
   def doNotTrack(implicit request: RequestHeader): Boolean = request.headers.get("DNT").contains("1")
-  def outputJson[T: Encoder](value: T): String =
+  def outputJson[T: Encoder](value: T, dropNullValues: Boolean = true): String =
     value.asJson
-      .printWith(Printer.noSpaces.copy(dropNullValues = true))
+      .printWith(Printer.noSpaces.copy(dropNullValues))
 }
