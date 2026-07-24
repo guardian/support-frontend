@@ -11,7 +11,7 @@ import {
 import { LinkButton } from '@guardian/source/react-components';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { getProductLabel, productCatalog } from 'helpers/productCatalog';
 import { glyph } from '../../../helpers/internationalisation/currency';
 
@@ -95,7 +95,7 @@ const dividerCopy = css`
 `;
 
 interface StudentOfferProps {
-	currencyKey: IsoCurrency;
+	currencyKey: CurrencyCode;
 	countryGroupId: CountryGroupId;
 }
 

@@ -1,4 +1,4 @@
-import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
+import type { Currency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { CountryCode } from '@modules/internationalisation/country';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
@@ -172,7 +172,7 @@ function finalPrice(
 }
 
 const discountSummaryCopy = (
-	currency: CurrencyInfo,
+	currency: Currency,
 	promoCount: number,
 	price: number,
 	promotion: Promotion,

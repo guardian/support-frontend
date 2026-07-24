@@ -12,7 +12,7 @@ import {
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'react';
 import { billingPeriodToContributionType } from 'helpers/productPrice/billingPeriods';
@@ -63,7 +63,7 @@ const buttonContainer = css`
 interface AmountsCardProps {
 	amountsData: AmountValuesObject;
 	countryGroupId: CountryGroupId;
-	currencyId: IsoCurrency;
+	currencyId: CurrencyCode;
 	heading?: JSX.Element;
 	standFirst?: JSX.Element;
 	billingPeriod: BillingPeriod;

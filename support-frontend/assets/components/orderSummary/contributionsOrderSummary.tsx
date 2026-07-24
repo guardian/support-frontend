@@ -13,7 +13,7 @@ import {
 	Button,
 	SvgChevronDownSingle,
 } from '@guardian/source/react-components';
-import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
+import type { Currency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'react';
@@ -162,7 +162,7 @@ export type ContributionsOrderSummaryProps = {
 	productLabel: string;
 	ratePlanKey: ActiveRatePlanKey;
 	payment: Payment;
-	currency: CurrencyInfo;
+	currency: Currency;
 	enableCheckList: boolean;
 	checkListData: BenefitsCheckListData[];
 	startDate: React.ReactNode;

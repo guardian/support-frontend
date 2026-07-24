@@ -1,4 +1,4 @@
-import { getCurrencyInfo } from '@modules/internationalisation/currency';
+import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import {
 	calculateAndFormatTotal,
 	calculateAndRoundTax,
@@ -8,10 +8,10 @@ import {
 
 describe('simpleFormatAmount', () => {
 	it.each([
-		[getCurrencyInfo('GBP'), 12, '£12'],
-		[getCurrencyInfo('NZD'), 12.5, '$12.50'],
-		[getCurrencyInfo('CAD'), 12.0005, '$12'],
-		[getCurrencyInfo('CAD'), 12.015, '$12.02'],
+		[getCurrencyByCode('GBP'), 12, '£12'],
+		[getCurrencyByCode('NZD'), 12.5, '$12.50'],
+		[getCurrencyByCode('CAD'), 12.0005, '$12'],
+		[getCurrencyByCode('CAD'), 12.015, '$12.02'],
 	])(`%s/%i should format as %s`, (currency, amount, expected) => {
 		expect(simpleFormatAmount(currency, amount)).toBe(expected);
 	});
@@ -20,31 +20,31 @@ describe('simpleFormatAmount', () => {
 describe('simpleFormatTaxAmount', () => {
 	it.each([
 		[
-			getCurrencyInfo('CAD'),
+			getCurrencyByCode('CAD'),
 			{ originalAmount: 15, finalAmount: 15 },
 			0.05,
 			'$0.75',
 		],
 		[
-			getCurrencyInfo('CAD'),
+			getCurrencyByCode('CAD'),
 			{ originalAmount: 30, finalAmount: 30 },
 			0.12,
 			'$3.60',
 		],
 		[
-			getCurrencyInfo('CAD'),
+			getCurrencyByCode('CAD'),
 			{ originalAmount: 150, finalAmount: 150 },
 			0.15,
 			'$22.50',
 		],
 		[
-			getCurrencyInfo('CAD'),
+			getCurrencyByCode('CAD'),
 			{ originalAmount: 300, finalAmount: 300 },
 			0.14975,
 			'$44.93',
 		],
 		[
-			getCurrencyInfo('CAD'),
+			getCurrencyByCode('CAD'),
 			{ originalAmount: 15, finalAmount: 15 },
 			0.14975,
 			'$2.25',
@@ -80,49 +80,49 @@ describe('calculateAndFormatTotal', () => {
 	it.each([
 		[
 			{ type: 'tax_exclusive', rate: 0.05 } as const,
-			getCurrencyInfo('CAD'),
+			getCurrencyByCode('CAD'),
 			{ originalAmount: 15, finalAmount: 15 },
 			'$15.75',
 		],
 		[
 			{ type: 'tax_exclusive', rate: 0.12 } as const,
-			getCurrencyInfo('CAD'),
+			getCurrencyByCode('CAD'),
 			{ originalAmount: 30, finalAmount: 30 },
 			'$33.60',
 		],
 		[
 			{ type: 'tax_exclusive', rate: 0.15 } as const,
-			getCurrencyInfo('CAD'),
+			getCurrencyByCode('CAD'),
 			{ originalAmount: 150, finalAmount: 150 },
 			'$172.50',
 		],
 		[
 			{ type: 'tax_exclusive', rate: 0.14975 } as const,
-			getCurrencyInfo('CAD'),
+			getCurrencyByCode('CAD'),
 			{ originalAmount: 300, finalAmount: 300 },
 			'$344.93',
 		],
 		[
 			{ type: 'tax_exclusive', rate: 0.14975 } as const,
-			getCurrencyInfo('CAD'),
+			getCurrencyByCode('CAD'),
 			{ originalAmount: 15, finalAmount: 15 },
 			'$17.25',
 		],
 		[
 			{ type: 'tax_exclusive', rate: 0.14975 } as const,
-			getCurrencyInfo('CAD'),
+			getCurrencyByCode('CAD'),
 			{ originalAmount: 15, finalAmount: 12 },
 			'$13.80',
 		],
 		[
 			{ type: 'tax_exclusive', rate: 0.14975 } as const,
-			getCurrencyInfo('CAD'),
+			getCurrencyByCode('CAD'),
 			{ originalAmount: 15, finalAmount: 7.5 },
 			'$8.63',
 		],
 		[
 			{ type: 'tax_exclusive', rate: 0.12 } as const,
-			getCurrencyInfo('CAD'),
+			getCurrencyByCode('CAD'),
 			{ originalAmount: 30, finalAmount: 15 },
 			'$16.80',
 		],
@@ -137,7 +137,7 @@ describe('calculateAndFormatTotal', () => {
 
 	it('returns the total when the tax config is not_enough_information', () => {
 		const taxConfig = { type: 'not_enough_information' } as const;
-		const currency = getCurrencyInfo('CAD');
+		const currency = getCurrencyByCode('CAD');
 		const payment = { originalAmount: 15, finalAmount: 15 };
 
 		const result = calculateAndFormatTotal(taxConfig, currency, payment);
@@ -147,7 +147,7 @@ describe('calculateAndFormatTotal', () => {
 
 	it('returns the total when the tax config is tax_inclusive', () => {
 		const taxConfig = { type: 'tax_inclusive' } as const;
-		const currency = getCurrencyInfo('CAD');
+		const currency = getCurrencyByCode('CAD');
 		const payment = { originalAmount: 15, finalAmount: 15 };
 
 		const result = calculateAndFormatTotal(taxConfig, currency, payment);

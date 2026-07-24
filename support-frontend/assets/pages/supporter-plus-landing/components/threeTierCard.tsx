@@ -12,8 +12,8 @@ import {
 	LinkButton,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { getCurrencyInfo } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
+import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { BenefitPill } from 'components/checkoutBenefits/benefitPill';
 import {
@@ -48,7 +48,7 @@ export type ThreeTierCardProps = {
 	cardTier: 1 | 2 | 3;
 	promoCount: number;
 	isSubdued: boolean;
-	currencyId: IsoCurrency;
+	currencyId: CurrencyCode;
 	billingPeriod: BillingPeriod;
 	showWeeklyPrice?: boolean;
 	useLargePriceMinHeight?: boolean;
@@ -191,7 +191,7 @@ export function ThreeTierCard({
 		product,
 		billingPeriodsCopy,
 	} = cardContent;
-	const currency = getCurrencyInfo(currencyId);
+	const currency = getCurrencyByCode(currencyId);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 
 	const mainPrice = showWeeklyPrice
