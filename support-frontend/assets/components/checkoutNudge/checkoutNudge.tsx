@@ -16,11 +16,14 @@ import {
 } from '@guardian/source/react-components';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { ProductOptions } from '@modules/product/productOptions';
 import { useEffect } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { getLegacyProductType } from 'helpers/legacyTypeConversions';
+import { getFulfilmentOptionFromProductKey } from 'helpers/productCatalogToFulfilmentOption';
+import { getProductOptionFromProductAndRatePlan } from 'helpers/productCatalogToProductOption';
 import {
 	allCheckoutNudgeProductPrices,
 	getProductPrice,
@@ -44,6 +47,7 @@ import {
 	BenefitsCheckList,
 	type BenefitsCheckListData,
 } from '../checkoutBenefits/benefitsCheckList';
+
 
 const nudgeBoxOverrides = css`
 	border: none;
@@ -346,11 +350,19 @@ function getNudgePromotion(
 		return undefined;
 	}
 
+	const fulfilmentOption = getFulfilmentOptionFromProductKey(legacyProductKey);
+	const productOptions: ProductOptions = getProductOptionFromProductAndRatePlan(
+		legacyProductKey,
+		ratePlan as ActiveRatePlanKey,
+	);
+
 	try {
 		const productPrice = getProductPrice(
 			productPrices,
 			Country.detect(),
 			billingPeriod,
+			fulfilmentOption,
+			productOptions,
 		);
 		return productPrice.promotions?.find((p) =>
 			promoCodes.includes(p.promoCode),
