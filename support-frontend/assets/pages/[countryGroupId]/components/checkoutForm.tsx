@@ -360,14 +360,8 @@ export default function CheckoutForm({
 			formRef.current?.requestSubmit();
 		}
 	}, [checkoutSession?.checkoutSessionId]);
-	let payPalStatus = `paymentMethod:${paymentMethod} payPalLoaded:${payPalLoaded}`;
 	useEffect(() => {
-		payPalStatus = `paymentMethod:${paymentMethod} payPalLoaded:${payPalLoaded}`;
-		if (
-			(paymentMethod === 'PayPal' ||
-				paymentMethod === 'PayPalCompletePayments') &&
-			!payPalLoaded
-		) {
+		if (paymentMethod === 'PayPal' && !payPalLoaded) {
 			void loadPayPalRecurring().then(() => setPayPalLoaded(true));
 		}
 	}, [paymentMethod, payPalLoaded]);
@@ -1071,7 +1065,6 @@ export default function CheckoutForm({
 									cssOverrides={css``}
 								/>
 							</Legend>
-							<div>{payPalStatus}</div>
 							<RadioGroup
 								role="radiogroup"
 								label="Select payment method"

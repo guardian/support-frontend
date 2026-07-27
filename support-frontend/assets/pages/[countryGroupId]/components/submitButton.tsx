@@ -231,6 +231,7 @@ export function SubmitButton({
 							/>
 						</>
 					)}
+					<div>PayPalCompletePayments</div>
 					<PayPalScriptProvider
 						options={{
 							clientId: paypalClientId,
