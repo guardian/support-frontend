@@ -20,15 +20,13 @@ const oneDayInMillis = 24 * 60 * 60 * 1000;
 
 function invitationResponse(expiryDate: number) {
 	return {
-		invitation: {
-			subscriptionName: 'A-S00974337',
-			invitationCode: invitationId,
-			primaryIdentityId: '112809589',
-			secondaryUserEmail: 'invitee@example.com',
-			secondaryIdentityId: '21841960',
-			invitedDate: '2026-07-22',
-			expiryDate,
-		},
+		subscriptionName: 'A-S00974337',
+		invitationCode: invitationId,
+		primaryIdentityId: '112809589',
+		secondaryUserEmail: 'invitee@example.com',
+		secondaryIdentityId: '21841960',
+		invitedDate: '2026-07-22',
+		expiryDate,
 	};
 }
 

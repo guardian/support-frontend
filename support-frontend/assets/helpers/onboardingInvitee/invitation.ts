@@ -12,15 +12,13 @@ export interface VerifyInvitationResult {
 }
 
 interface InvitationResponse {
-	invitation: {
-		subscriptionName: string;
-		invitationCode: string;
-		primaryIdentityId: string;
-		secondaryUserEmail: string;
-		secondaryIdentityId: string;
-		invitedDate: string;
-		expiryDate: number;
-	};
+	subscriptionName: string;
+	invitationCode: string;
+	primaryIdentityId: string;
+	secondaryUserEmail: string;
+	secondaryIdentityId: string;
+	invitedDate: string;
+	expiryDate: number;
 }
 
 // Verifies an invitation via the Play server, which proxies the multiple-account
@@ -40,7 +38,7 @@ export async function verifyInvitation(
 			return { status: 'invalid' };
 		}
 
-		const { invitation } = (await response.json()) as InvitationResponse;
+		const invitation = (await response.json()) as InvitationResponse;
 
 		if (invitation.expiryDate <= Date.now()) {
 			return { status: 'expired' };
