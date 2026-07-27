@@ -41,11 +41,11 @@ const contentPadding = css`
 export function OnboardingDeclineSave({
 	supportRegionId,
 	landingPageSettings,
-	invitationId,
+	invitationCode,
 }: {
 	supportRegionId: SupportRegionId;
 	landingPageSettings: LandingPageVariant;
-	invitationId: string;
+	invitationCode: string;
 }) {
 	const navigate = useNavigate();
 	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
@@ -106,7 +106,7 @@ export function OnboardingDeclineSave({
 						cssOverrides={buttonOverrides}
 						onClick={() => {
 							void navigate(
-								`/${supportRegionId}/join?invitationId=${invitationId}`,
+								`/${supportRegionId}/join?invitationCode=${invitationCode}`,
 							);
 						}}
 					>

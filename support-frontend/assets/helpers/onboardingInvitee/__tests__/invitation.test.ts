@@ -13,15 +13,15 @@ beforeEach(() => {
 	fetchMock.removeRoutes();
 });
 
-const invitationId = 'twT95D1SFKBd';
-const endpoint = `/api/invitation/${invitationId}`;
+const invitationCode = 'twT95D1SFKBd';
+const endpoint = `/api/invitation/${invitationCode}`;
 
 const oneDayInMillis = 24 * 60 * 60 * 1000;
 
 function invitationResponse(expiryDate: number) {
 	return {
 		subscriptionName: 'A-S00974337',
-		invitationCode: invitationId,
+		invitationCode,
 		primaryIdentityId: '112809589',
 		secondaryUserEmail: 'invitee@example.com',
 		secondaryIdentityId: '21841960',
@@ -37,12 +37,12 @@ describe('verifyInvitation', () => {
 			headers: { 'Content-Type': 'application/json' },
 		});
 
-		const result = await verifyInvitation(invitationId);
+		const result = await verifyInvitation(invitationCode);
 
 		expect(result).toEqual({
 			status: 'valid',
 			invitation: {
-				invitationId,
+				invitationCode,
 				email: 'invitee@example.com',
 			},
 		});
@@ -54,7 +54,7 @@ describe('verifyInvitation', () => {
 			headers: { 'Content-Type': 'application/json' },
 		});
 
-		const result = await verifyInvitation(invitationId);
+		const result = await verifyInvitation(invitationCode);
 
 		expect(result).toEqual({ status: 'expired' });
 	});
@@ -62,7 +62,7 @@ describe('verifyInvitation', () => {
 	it('returns invalid when the invitation does not exist (404)', async () => {
 		fetchMock.get(endpoint, { status: 404 });
 
-		const result = await verifyInvitation(invitationId);
+		const result = await verifyInvitation(invitationCode);
 
 		expect(result).toEqual({ status: 'invalid' });
 	});
@@ -76,7 +76,7 @@ describe('verifyInvitation', () => {
 			headers: { 'Content-Type': 'application/json' },
 		});
 
-		const result = await verifyInvitation(invitationId);
+		const result = await verifyInvitation(invitationCode);
 
 		expect(result).toEqual({ status: 'invalid' });
 	});
@@ -84,7 +84,7 @@ describe('verifyInvitation', () => {
 	it('returns invalid when the request fails', async () => {
 		fetchMock.get(endpoint, { throws: new Error('network failure') });
 
-		const result = await verifyInvitation(invitationId);
+		const result = await verifyInvitation(invitationCode);
 
 		expect(result).toEqual({ status: 'invalid' });
 	});

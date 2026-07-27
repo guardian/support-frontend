@@ -69,7 +69,7 @@ GET  /identity/newsletters                                         controllers.I
 PATCH /identity/newsletters                                        controllers.IdentityController.updateNewsletterSubscription()
 
 # ------ Multiple accounts ------ #
-GET  /api/invitation/:invitationId                                 controllers.InvitationController.getInvitation(invitationId: String)
+GET  /api/invitation/:invitationCode                                 controllers.InvitationController.getInvitation(invitationCode: String)
 
 # ----- Subscriptions ----- #
 

@@ -21,7 +21,7 @@ function OnboardingDeclineComponent({
 }: OnboardingDeclineComponentProps) {
 	const scrollToTopRef = useRef<HTMLDivElement>(null);
 	const searchParams = useSearchParams();
-	const invitationId = searchParams[0].get('invitationId');
+	const invitationCode = searchParams[0].get('invitationCode');
 
 	const [currentStep, setCurrentStep] = useState<OnboardingDeclineSteps>();
 
@@ -49,7 +49,7 @@ function OnboardingDeclineComponent({
 		}
 	}, [searchParams]);
 
-	if (!invitationId) {
+	if (!invitationCode) {
 		return (
 			<ErrorPage
 				headings={['This invitation', 'link is invalid']}
@@ -79,7 +79,7 @@ function OnboardingDeclineComponent({
 				<OnboardingDeclineSave
 					supportRegionId={supportRegionId}
 					landingPageSettings={landingPageSettings}
-					invitationId={invitationId}
+					invitationCode={invitationCode}
 				/>
 			)}
 		</OnboardingLayout>

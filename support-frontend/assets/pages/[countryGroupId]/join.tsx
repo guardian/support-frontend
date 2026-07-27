@@ -36,20 +36,20 @@ function InvitationExpired() {
 
 export function Join({ supportRegionId, landingPageSettings }: JoinProps) {
 	const searchParams = new URLSearchParams(window.location.search);
-	const invitationId = searchParams.get('invitationId');
+	const invitationCode = searchParams.get('invitationCode');
 	const isDecline = searchParams.has('decline');
 
 	const [verification, setVerification] = useState<VerifyInvitationResult>();
 
 	useEffect(() => {
-		if (!invitationId) {
+		if (!invitationCode) {
 			return;
 		}
 
-		void verifyInvitation(invitationId).then(setVerification);
-	}, [invitationId]);
+		void verifyInvitation(invitationCode).then(setVerification);
+	}, [invitationCode]);
 
-	if (!invitationId) {
+	if (!invitationCode) {
 		return <InvalidInvitation />;
 	}
 

@@ -6,7 +6,7 @@ import type { OnboardingInviteeInvitation } from 'helpers/onboardingInvitee/invi
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
 const mockInvitation: OnboardingInviteeInvitation = {
-	invitationId: 'test-invitation',
+	invitationCode: 'test-invitation',
 	email: 'jonathan.ruda@gmail.com',
 	inviterFirstName: 'Jontho',
 };

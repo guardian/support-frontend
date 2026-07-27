@@ -7,9 +7,9 @@ import scala.concurrent.Future
 
 class MultipleAccountApiService(config: MultipleAccountApiConfig)(implicit wsClient: WSClient) {
 
-  def getInvitation(invitationId: String): Future[WSResponse] =
+  def getInvitation(invitationCode: String): Future[WSResponse] =
     wsClient
-      .url(s"${config.baseUrl}/invitation/$invitationId")
+      .url(s"${config.baseUrl}/invitation/$invitationCode")
       .withHttpHeaders("x-api-key" -> config.apiKey)
       .get()
 }

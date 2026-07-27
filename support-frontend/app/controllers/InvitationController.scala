@@ -21,9 +21,9 @@ class InvitationController(
     * to the client (404 = unknown invitation code, 400 = invitation cancelled), so they are passed through along with
     * the response body.
     */
-  def getInvitation(invitationId: String): Action[AnyContent] = NoCacheAction().async {
+  def getInvitation(invitationCode: String): Action[AnyContent] = NoCacheAction().async {
     multipleAccountApiService
-      .getInvitation(invitationId)
+      .getInvitation(invitationCode)
       .map(response => Status(response.status)(response.body).as(JSON))
       .recover { case err =>
         logger.error(scrub"Failed to fetch invitation from the multiple-account API", err)

@@ -1,5 +1,5 @@
 export interface OnboardingInviteeInvitation {
-	invitationId: string;
+	invitationCode: string;
 	email: string;
 	inviterFirstName?: string;
 }
@@ -27,11 +27,11 @@ interface InvitationResponse {
 // failure) are surfaced as 'invalid'. Expiry is derived from the expiryDate
 // epoch-millis in the response.
 export async function verifyInvitation(
-	invitationId: string,
+	invitationCode: string,
 ): Promise<VerifyInvitationResult> {
 	try {
 		const response = await fetch(
-			`/api/invitation/${encodeURIComponent(invitationId)}`,
+			`/api/invitation/${encodeURIComponent(invitationCode)}`,
 		);
 
 		if (!response.ok) {
@@ -47,7 +47,7 @@ export async function verifyInvitation(
 		return {
 			status: 'valid',
 			invitation: {
-				invitationId,
+				invitationCode: invitation.invitationCode,
 				email: invitation.secondaryUserEmail,
 			},
 		};
