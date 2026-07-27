@@ -24,6 +24,7 @@ const taxSummaryContainer = css`
 	margin-bottom: ${space[5]}px;
 
 	${from.desktop} {
+		margin-top: ${space[8]}px;
 		margin-bottom: ${space[6]}px;
 	}
 `;
