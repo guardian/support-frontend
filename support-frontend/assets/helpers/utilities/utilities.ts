@@ -1,4 +1,4 @@
-import type { CurrencyInfo } from '@modules/internationalisation/currency';
+import type { Currency } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import DomPurify from 'dompurify';
 import snarkdown from 'snarkdown';
@@ -94,7 +94,7 @@ function parseCustomAmounts(customAmountsParam: string): number[] {
 
 function parseBillingPeriodCopy(
 	copy: string,
-	currency: CurrencyInfo,
+	currency: Currency,
 	price: number,
 	billingPeriod: BillingPeriod,
 ): string {

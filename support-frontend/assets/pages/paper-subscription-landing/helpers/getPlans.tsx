@@ -1,4 +1,4 @@
-import { getCurrencyInfo } from '@modules/internationalisation/currency';
+import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { PaperProductOptions } from '@modules/product/productOptions';
@@ -56,7 +56,7 @@ const getOfferText = (
 ) => {
 	if (promo?.discount?.amount && promotionIndex !== undefined) {
 		return discountSummaryCopy(
-			getCurrencyInfo(price.currency),
+			getCurrencyByCode(price.currency),
 			promotionIndex >= 0 ? 1 : 0, // if promotionIndex is 0 or higher, we want to show one "*",
 			price.price,
 			promo,

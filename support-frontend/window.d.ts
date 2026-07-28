@@ -1,3 +1,5 @@
+import type { TickerData } from '@guardian/source-development-kitchen/dist/react-components/ticker/Ticker';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { ComponentType, React } from 'react';
 import type { Participations } from 'helpers/abTests/models';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
@@ -5,9 +7,7 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { SendEventId } from 'helpers/tracking/quantumMetric';
 import type { User } from 'helpers/user/user';
-import { IsoCurrency } from '@modules/internationalisation/currency';
 import type { TickerName } from './assets/helpers/globalsAndSwitches/landingPageSettings';
-import type { TickerData } from '@guardian/source-development-kitchen/dist/react-components/ticker/Ticker';
 
 declare global {
 	/* ~ Here, declare things that go in the global namespace, or augment
@@ -53,9 +53,7 @@ declare global {
 			settings: Settings;
 			testMode?: boolean;
 			user?: User;
-			tickerData?: {
-				[key in TickerName]: TickerData;
-			};
+			tickerData?: Record<TickerName, TickerData>;
 		};
 
 		disablePayPalButton?: () => void;
@@ -76,8 +74,8 @@ declare global {
 			) => void;
 			currencyConvertFromToValue: (
 				value: number,
-				sourceCurrency: IsoCurrency,
-				targetCurrency: IsoCurrency,
+				sourceCurrency: CurrencyCode,
+				targetCurrency: CurrencyCode,
 			) => number;
 		};
 		v2OnloadCallback: () => void;

@@ -21,6 +21,8 @@ object ResultBody {
 
   case class RequiresAction[A](data: A)
 
+  case class RequiresConfirmation[A](data: A)
+
   private def typeDiscriminatorEncoder[A: ClassTag](encoder: Encoder.AsObject[A]): Encoder.AsObject[A] =
     encoder.mapJsonObject { obj =>
       obj.add("type", Json.fromString(classTag[A].runtimeClass.getSimpleName.toLowerCase))
@@ -32,5 +34,9 @@ object ResultBody {
 
   implicit def requiresActionEncoder[A: Encoder]: Encoder[RequiresAction[A]] = typeDiscriminatorEncoder(
     deriveEncoder[RequiresAction[A]],
+  )
+
+  implicit def requiresConfirmationEncoder[A: Encoder]: Encoder[RequiresConfirmation[A]] = typeDiscriminatorEncoder(
+    deriveEncoder[RequiresConfirmation[A]],
   )
 }

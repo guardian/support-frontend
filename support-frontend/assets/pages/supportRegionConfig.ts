@@ -1,12 +1,12 @@
-import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
+import type { Currency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { getCurrencyInfo } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
+import { getCurrencyByCode } from '@modules/internationalisation/currency';
 
 type SupportRegionConfig = {
-	currency: CurrencyInfo;
-	currencyKey: IsoCurrency;
+	currency: Currency;
+	currencyKey: CurrencyCode;
 	countryGroupId: CountryGroupId;
 };
 
@@ -24,49 +24,49 @@ export const getSupportRegionIdConfig = (
 	switch (supportRegionId) {
 		case SupportRegionId.UK:
 			return {
-				currency: getCurrencyInfo('GBP'),
+				currency: getCurrencyByCode('GBP'),
 				currencyKey: 'GBP',
 				countryGroupId: 'GBPCountries',
 			};
 
 		case SupportRegionId.US:
 			return {
-				currency: getCurrencyInfo('USD'),
+				currency: getCurrencyByCode('USD'),
 				currencyKey: 'USD',
 				countryGroupId: 'UnitedStates',
 			};
 
 		case SupportRegionId.AU:
 			return {
-				currency: getCurrencyInfo('AUD'),
+				currency: getCurrencyByCode('AUD'),
 				currencyKey: 'AUD',
 				countryGroupId: 'AUDCountries',
 			};
 
 		case SupportRegionId.EU:
 			return {
-				currency: getCurrencyInfo('EUR'),
+				currency: getCurrencyByCode('EUR'),
 				currencyKey: 'EUR',
 				countryGroupId: 'EURCountries',
 			};
 
 		case SupportRegionId.NZ:
 			return {
-				currency: getCurrencyInfo('NZD'),
+				currency: getCurrencyByCode('NZD'),
 				currencyKey: 'NZD',
 				countryGroupId: 'NZDCountries',
 			};
 
 		case SupportRegionId.CA:
 			return {
-				currency: getCurrencyInfo('CAD'),
+				currency: getCurrencyByCode('CAD'),
 				currencyKey: 'CAD',
 				countryGroupId: 'Canada',
 			};
 
 		case SupportRegionId.INT:
 			return {
-				currency: getCurrencyInfo('USD'),
+				currency: getCurrencyByCode('USD'),
 				currencyKey: 'USD',
 				countryGroupId: 'International',
 			};

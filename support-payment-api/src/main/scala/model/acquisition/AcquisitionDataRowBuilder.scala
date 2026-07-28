@@ -32,8 +32,11 @@ object AcquisitionDataRowBuilder {
       eventTimeStamp = DateTime.now(DateTimeZone.UTC),
       product = AcquisitionProduct.Contribution,
       amount = Some(paymentData.amount),
-      country =
-        StripeCharge.getCountryCode(acquisition.charge).flatMap(CountryGroup.countryByCode).getOrElse(Country.UK),
+      country = StripeCharge
+        .getCountryCode(acquisition.charge)
+        .orElse(contributionData.countryCode)
+        .flatMap(CountryGroup.countryByCode)
+        .getOrElse(Country.UK),
       currency = mapCurrency(paymentData.currency),
       componentId = acquisitionData.componentId,
       componentType = acquisitionData.componentType,
@@ -123,7 +126,7 @@ object AcquisitionDataRowBuilder {
 
   def mapStripePaymentProvider(stripePaymentMethod: Option[StripePaymentMethod]): PaymentProvider =
     stripePaymentMethod match {
-      case Some(StripePaymentMethod.StripeCheckout) | None => Stripe
+      case Some(StripePaymentMethod.StripeCheckout) | Some(StripePaymentMethod.StripePaypal) | None => Stripe
       case Some(StripePaymentMethod.StripeApplePay) => StripeApplePay
       case Some(StripePaymentMethod.StripePaymentRequestButton) => StripePaymentRequestButton
     }

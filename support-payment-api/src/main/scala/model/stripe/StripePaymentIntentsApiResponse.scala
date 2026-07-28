@@ -11,6 +11,9 @@ object StripePaymentIntentsApiResponse {
 
   case class RequiresAction(clientSecret: String) extends StripePaymentIntentsApiResponse
 
+  case class RequiresConfirmation(clientSecret: String) extends StripePaymentIntentsApiResponse
+
   implicit val successEncoder: Encoder.AsObject[Success] = deriveEncoder[Success]
   implicit val requiresActionEncoder: Encoder.AsObject[RequiresAction] = deriveEncoder[RequiresAction]
+  implicit val requiresConfirmationEncoder: Encoder.AsObject[RequiresConfirmation] = deriveEncoder[RequiresConfirmation]
 }

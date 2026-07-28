@@ -16,11 +16,14 @@ import {
 } from '@guardian/source/react-components';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { ProductOptions } from '@modules/product/productOptions';
 import { useEffect } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { getLegacyProductType } from 'helpers/legacyTypeConversions';
+import { getFulfilmentOptionFromProductKey } from 'helpers/productCatalogToFulfilmentOption';
+import { getProductOptionFromProductAndRatePlan } from 'helpers/productCatalogToProductOption';
 import {
 	allCheckoutNudgeProductPrices,
 	getProductPrice,
@@ -325,13 +328,10 @@ function isValidCheckoutNudgeProductKey(
  */
 function getNudgePromotion(
 	promoCodes: string[] | undefined,
-	product: string,
-	ratePlan: string,
+	product: ActiveProductKey,
+	ratePlan: ActiveRatePlanKey,
 ): Promotion | undefined {
-	const legacyProductKey = getLegacyProductType(
-		product as ActiveProductKey,
-		ratePlan as ActiveRatePlanKey,
-	);
+	const legacyProductKey = getLegacyProductType(product, ratePlan);
 	if (
 		!promoCodes?.length ||
 		!isValidCheckoutNudgeProductKey(legacyProductKey) ||
@@ -341,16 +341,24 @@ function getNudgePromotion(
 	}
 
 	const productPrices = allCheckoutNudgeProductPrices[legacyProductKey];
-	const billingPeriod = ratePlanToBillingPeriod[ratePlan as ActiveRatePlanKey];
+	const billingPeriod = ratePlanToBillingPeriod[ratePlan];
 	if (!billingPeriod) {
 		return undefined;
 	}
+
+	const fulfilmentOption = getFulfilmentOptionFromProductKey(product);
+	const productOptions: ProductOptions = getProductOptionFromProductAndRatePlan(
+		product,
+		ratePlan,
+	);
 
 	try {
 		const productPrice = getProductPrice(
 			productPrices,
 			Country.detect(),
 			billingPeriod,
+			fulfilmentOption,
+			productOptions,
 		);
 		return productPrice.promotions?.find((p) =>
 			promoCodes.includes(p.promoCode),

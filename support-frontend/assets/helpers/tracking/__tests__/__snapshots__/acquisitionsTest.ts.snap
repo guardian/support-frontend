@@ -26,6 +26,7 @@ exports[`acquisitions derivePaymentApiAcquisitionData should return a PaymentAPI
   ],
   "componentId": "exampleComponentId",
   "componentType": "exampleComponentType",
+  "countryId": "GB",
   "gaId": null,
   "labels": undefined,
   "pageviewId": "123456",
