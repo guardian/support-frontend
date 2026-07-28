@@ -6,8 +6,8 @@ import {
 	textSans15,
 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { getCurrencyInfo } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
+import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
@@ -71,7 +71,7 @@ export interface SummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	countryGroupId: CountryGroupId;
-	currency: IsoCurrency;
+	currency: CurrencyCode;
 	amount: number;
 	ratePlanDescription?: string;
 }
@@ -116,7 +116,7 @@ export function SummaryTsAndCs({
 	}
 
 	const amountWithCurrency = simpleFormatAmount(
-		getCurrencyInfo(currency),
+		getCurrencyByCode(currency),
 		amount,
 	);
 

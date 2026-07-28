@@ -7,7 +7,7 @@ import {
 	SvgTickRound,
 } from '@guardian/source/react-components';
 import { ToggleSwitch } from '@guardian/source-development-kitchen/react-components';
-import { getCurrencyInfo } from '@modules/internationalisation/currency';
+import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
 import { useEffect } from 'react';
@@ -223,7 +223,7 @@ function OnboardingSummary({
 		getSupportRegionIdConfig(supportRegionId);
 
 	const amountPaidToday = simpleFormatAmount(
-		getCurrencyInfo(currencyKey),
+		getCurrencyByCode(currencyKey),
 		payment.finalAmount,
 	);
 

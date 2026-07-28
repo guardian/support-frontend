@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
+import type { Currency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 
 /**
@@ -24,7 +24,7 @@ function roundAmount(amount: number) {
 	return Math.round(amount * 1e2) / 1e2;
 }
 
-const simpleFormatAmount = (currency: CurrencyInfo, amount: number): string => {
+const simpleFormatAmount = (currency: Currency, amount: number): string => {
 	/**
 	 * We need to round the amount before checking if it is an Int for the edge case of something like 12.0001
 	 * which would not be an int, but then format as 12.00, whereas we'd like 12.
@@ -59,7 +59,7 @@ function calculateAndRoundTax(payment: Payment, taxRate: number): number {
 }
 
 function simpleFormatTaxAmount(
-	currency: CurrencyInfo,
+	currency: Currency,
 	payment: Payment,
 	taxRate: number, // A decimal, e.g. 0.15
 ): string {
@@ -92,7 +92,7 @@ function calculateTotal(
 
 function calculateAndFormatTotal(
 	taxRateConfig: TaxRateConfig,
-	currency: CurrencyInfo,
+	currency: Currency,
 	payment: Payment,
 ): string {
 	return simpleFormatAmount(currency, calculateTotal(taxRateConfig, payment));

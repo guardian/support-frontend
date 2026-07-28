@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { from, space, textSans17 } from '@guardian/source/foundations';
-import type { CurrencyInfo } from '@modules/internationalisation/currency';
+import type { Currency } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type { Payment } from 'helpers/forms/checkouts';
 import { calculateAndFormatTotal } from 'helpers/forms/checkouts';
@@ -36,7 +36,7 @@ const boldText = css`
 export type Props = {
 	payment: Payment;
 	taxRateConfig: TaxRateConfig;
-	currency: CurrencyInfo;
+	currency: Currency;
 	billingPeriod: BillingPeriod;
 	fullPrice: string;
 	discountPrice: string | undefined;
