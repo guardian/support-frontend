@@ -328,13 +328,10 @@ function isValidCheckoutNudgeProductKey(
  */
 function getNudgePromotion(
 	promoCodes: string[] | undefined,
-	product: string,
-	ratePlan: string,
+	product: ActiveProductKey,
+	ratePlan: ActiveRatePlanKey,
 ): Promotion | undefined {
-	const legacyProductKey = getLegacyProductType(
-		product as ActiveProductKey,
-		ratePlan as ActiveRatePlanKey,
-	);
+	const legacyProductKey = getLegacyProductType(product, ratePlan);
 	if (
 		!promoCodes?.length ||
 		!isValidCheckoutNudgeProductKey(legacyProductKey) ||
@@ -344,15 +341,15 @@ function getNudgePromotion(
 	}
 
 	const productPrices = allCheckoutNudgeProductPrices[legacyProductKey];
-	const billingPeriod = ratePlanToBillingPeriod[ratePlan as ActiveRatePlanKey];
+	const billingPeriod = ratePlanToBillingPeriod[ratePlan];
 	if (!billingPeriod) {
 		return undefined;
 	}
 
-	const fulfilmentOption = getFulfilmentOptionFromProductKey(legacyProductKey);
+	const fulfilmentOption = getFulfilmentOptionFromProductKey(product);
 	const productOptions: ProductOptions = getProductOptionFromProductAndRatePlan(
-		legacyProductKey,
-		ratePlan as ActiveRatePlanKey,
+		product,
+		ratePlan,
 	);
 
 	try {
