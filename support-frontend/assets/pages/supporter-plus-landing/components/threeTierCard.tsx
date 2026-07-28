@@ -327,7 +327,9 @@ export function ThreeTierCard({
 					};
 				})}
 				style={'compact'}
-				iconColor={palette.brand[500]}
+				iconColor={
+					!!pillCopy && !isUserSelected ? palette.news[400] : palette.brand[500]
+				}
 				cssOverrides={checkmarkBenefitList}
 			/>
 		</section>
