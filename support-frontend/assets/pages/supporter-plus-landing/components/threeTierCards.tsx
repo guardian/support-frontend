@@ -17,6 +17,7 @@ export type ThreeTierCardsProps = {
 	currencyId: IsoCurrency;
 	billingPeriod: BillingPeriod;
 	showWeeklyPrice?: boolean;
+	showCardColors?: boolean;
 };
 
 const container = (cardCount: number) => css`
@@ -56,6 +57,7 @@ export function ThreeTierCards({
 	currencyId,
 	billingPeriod,
 	showWeeklyPrice,
+	showCardColors = false,
 }: ThreeTierCardsProps): JSX.Element {
 	const shouldUseLargePriceMinHeight =
 		!!showWeeklyPrice ||
@@ -65,12 +67,15 @@ export function ThreeTierCards({
 		1;
 	let promoCount = 0;
 
-	const cardColors: CardColors = {
-		titlePillColor: palette.brand[500],
-		highlightedTitlePillColor: palette.news[400],
-		highlightedBenefitIconColor: palette.news[400],
-		highlightedBackColor: palette.news[800],
-	};
+	const cardColors = showCardColors
+		? {
+				titlePillColor: palette.brand[500],
+				highlightedTitlePillColor: palette.news[400],
+				highlightedBenefitIconColor: palette.news[400],
+				highlightedBackColor: palette.news[800],
+		  }
+		: undefined;
+
 	return (
 		<div
 			css={container(cardsContent.length)}

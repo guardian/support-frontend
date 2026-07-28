@@ -278,7 +278,9 @@ type ThreeTierLandingProps = {
 export function ThreeTierLanding({
 	supportRegionId,
 	settings,
+	abParticipations,
 }: ThreeTierLandingProps): JSX.Element {
+	const showCardColors = abParticipations.tierCardColors === 'variant';
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const rawUrlSearchParamsProduct = urlSearchParams.get('product');
 	const urlSearchParamsProduct = rawUrlSearchParamsProduct
@@ -682,6 +684,7 @@ export function ThreeTierLanding({
 						currencyId={currencyId}
 						billingPeriod={billingPeriod}
 						showWeeklyPrice={showWeeklyPrice}
+						showCardColors={showCardColors}
 					/>
 				</div>
 			</Container>
