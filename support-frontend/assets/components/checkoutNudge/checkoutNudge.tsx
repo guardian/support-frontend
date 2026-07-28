@@ -331,10 +331,7 @@ function getNudgePromotion(
 	product: ActiveProductKey,
 	ratePlan: ActiveRatePlanKey,
 ): Promotion | undefined {
-	const legacyProductKey = getLegacyProductType(
-		product,
-		ratePlan,
-	);
+	const legacyProductKey = getLegacyProductType(product, ratePlan);
 	if (
 		!promoCodes?.length ||
 		!isValidCheckoutNudgeProductKey(legacyProductKey) ||
