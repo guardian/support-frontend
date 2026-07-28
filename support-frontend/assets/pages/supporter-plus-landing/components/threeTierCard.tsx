@@ -231,7 +231,7 @@ export function ThreeTierCard({
 				/>
 			)}
 			<div css={titleContainer}>
-				{titlePill && <BenefitPill copy={titlePill} />}
+				{titlePill && <BenefitPill copy={titlePill} isTitlePill={true} />}
 				<h2 css={[titleCss, checkListTextItemCss]}>{title}</h2>
 			</div>
 			<div css={priceCss(useLargePriceMinHeight)}>
