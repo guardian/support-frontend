@@ -68,7 +68,7 @@ const container = (
 	return css`
 		position: ${hasPill || isUserSelected ? 'relative' : 'static'};
 		background-color: ${(hasPill && !subdueHighlight) || isUserSelected
-			? '#F1FBFF'
+			? palette.news[800]
 			: palette.neutral[100]};
 		border-radius: ${space[3]}px;
 		padding: 32px ${space[3]}px ${space[6]}px ${space[3]}px;

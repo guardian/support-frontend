@@ -14,9 +14,9 @@ const container = (isSubdued?: boolean) => css`
 	white-space: nowrap;
 	padding: ${space[1]}px ${space[4]}px;
 	border-radius: ${space[1]}px;
-	background-color: ${isSubdued ? palette.neutral[100] : palette.brand[500]};
+	background-color: ${isSubdued ? palette.neutral[100] : palette.news[400]};
 	color: ${isSubdued ? '#606060' : palette.neutral[100]};
-	border: 1px solid ${isSubdued ? palette.neutral[60] : palette.brand[500]};
+	border: 1px solid ${isSubdued ? palette.neutral[60] : palette.news[400]};
 	${textSansBold15};
 `;
 
