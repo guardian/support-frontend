@@ -1,15 +1,22 @@
 import { css } from '@emotion/react';
-import { between, from, space } from '@guardian/source/foundations';
+import { between, from, palette, space } from '@guardian/source/foundations';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type { CardContent } from './threeTierCard';
 import { ThreeTierCard } from './threeTierCard';
+
+export type CardColorOverrides = {
+	titlePillColor?: string;
+	benefitIconColor?: string;
+	backColor?: string;
+};
 
 export type ThreeTierCardsProps = {
 	cardsContent: CardContent[];
 	currencyId: IsoCurrency;
 	billingPeriod: BillingPeriod;
 	showWeeklyPrice?: boolean;
+	cardColorOverrides?: CardColorOverrides;
 };
 
 const container = (cardCount: number) => css`
@@ -57,6 +64,12 @@ export function ThreeTierCards({
 		cardsContent.filter((card) => !!card.label || card.isUserSelected).length >
 		1;
 	let promoCount = 0;
+
+	const cardColorOverrides: CardColorOverrides = {
+		titlePillColor: palette.brand[500], // title pill color flips from red to blue for all cards, TODO: not on highlighted card
+		benefitIconColor: palette.news[400],
+		backColor: palette.news[800],
+	};
 	return (
 		<div
 			css={container(cardsContent.length)}
@@ -79,6 +92,7 @@ export function ThreeTierCards({
 						billingPeriod={billingPeriod}
 						showWeeklyPrice={showWeeklyPrice}
 						useLargePriceMinHeight={shouldUseLargePriceMinHeight}
+						cardColorOverrides={cardColorOverrides}
 					/>
 				);
 			})}

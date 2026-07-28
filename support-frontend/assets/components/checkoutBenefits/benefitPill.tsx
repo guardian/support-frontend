@@ -6,8 +6,8 @@ import {
 	textSansBold14,
 } from '@guardian/source/foundations';
 
-const benefitPillCss = (isTitlePill: boolean) => css`
-	background-color: ${isTitlePill ? palette.brand[500] : palette.news[400]};
+const benefitPillCss = (pillColor?: string) => css`
+	background-color: ${pillColor ?? palette.news[400]};
 	color: ${neutral[100]};
 	${textSansBold14};
 	border-radius: 4px;
@@ -17,9 +17,9 @@ const benefitPillCss = (isTitlePill: boolean) => css`
 
 interface BenefitPillProps {
 	copy: string;
-	isTitlePill?: boolean;
+	pillColor?: string;
 }
 
-export function BenefitPill({ copy, isTitlePill = false }: BenefitPillProps) {
-	return <span css={benefitPillCss(isTitlePill)}>{copy}</span>;
+export function BenefitPill({ copy, pillColor }: BenefitPillProps) {
+	return <span css={benefitPillCss(pillColor)}>{copy}</span>;
 }

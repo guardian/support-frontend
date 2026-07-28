@@ -34,6 +34,7 @@ import {
 } from 'helpers/utilities/utilities';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { ThreeTierCardPill } from './threeTierCardPill';
+import type { CardColorOverrides } from './threeTierCards';
 
 export type CardContent = LandingPageProductDescription & {
 	isUserSelected: boolean;
@@ -52,12 +53,14 @@ export type ThreeTierCardProps = {
 	billingPeriod: BillingPeriod;
 	showWeeklyPrice?: boolean;
 	useLargePriceMinHeight?: boolean;
+	cardColorOverrides?: CardColorOverrides;
 };
 
 const container = (
 	hasPill: boolean,
 	isUserSelected: boolean,
 	subdueHighlight: boolean,
+	cardBackColor: string,
 ) => {
 	let cardOrder = 2;
 	if (hasPill) {
@@ -68,7 +71,7 @@ const container = (
 	return css`
 		position: ${hasPill || isUserSelected ? 'relative' : 'static'};
 		background-color: ${(hasPill && !subdueHighlight) || isUserSelected
-			? palette.news[800]
+			? cardBackColor
 			: palette.neutral[100]};
 		border-radius: ${space[3]}px;
 		padding: 32px ${space[3]}px ${space[6]}px ${space[3]}px;
@@ -178,6 +181,7 @@ export function ThreeTierCard({
 	billingPeriod,
 	showWeeklyPrice = false,
 	useLargePriceMinHeight = false,
+	cardColorOverrides,
 }: ThreeTierCardProps): JSX.Element {
 	const {
 		title,
@@ -221,8 +225,15 @@ export function ThreeTierCard({
 		price,
 		billingPeriod,
 	);
+	const cardBackColor = cardColorOverrides?.backColor ?? palette.neutral[100];
+	const titlePillColor =
+		cardColorOverrides?.titlePillColor ?? palette.news[400];
+	const benefitIconColor =
+		cardColorOverrides?.benefitIconColor ?? palette.brand[500];
 	return (
-		<section css={container(!!pillCopy, isUserSelected, isSubdued)}>
+		<section
+			css={container(!!pillCopy, isUserSelected, isSubdued, cardBackColor)}
+		>
 			{isUserSelected && <ThreeTierCardPill title="Your selection" />}
 			{!!pillCopy && !isUserSelected && (
 				<ThreeTierCardPill
@@ -231,7 +242,9 @@ export function ThreeTierCard({
 				/>
 			)}
 			<div css={titleContainer}>
-				{titlePill && <BenefitPill copy={titlePill} isTitlePill={true} />}
+				{titlePill && (
+					<BenefitPill copy={titlePill} pillColor={titlePillColor} />
+				)}
 				<h2 css={[titleCss, checkListTextItemCss]}>{title}</h2>
 			</div>
 			<div css={priceCss(useLargePriceMinHeight)}>
@@ -328,7 +341,7 @@ export function ThreeTierCard({
 				})}
 				style={'compact'}
 				iconColor={
-					!!pillCopy && !isUserSelected ? palette.news[400] : palette.brand[500]
+					!!pillCopy && !isUserSelected ? benefitIconColor : palette.brand[500]
 				}
 				cssOverrides={checkmarkBenefitList}
 			/>
