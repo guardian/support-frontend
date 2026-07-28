@@ -231,6 +231,11 @@ export function ThreeTierCard({
 		: cardColors?.titlePillColor;
 	const titlePillColor = titlePillColorSelection ?? palette.news[400];
 
+	const cardPillColorSelection = isHighlightedCard
+		? cardColors?.highlightedCardPillColor
+		: cardColors?.cardPillColor;
+	const cardPillColor = cardPillColorSelection ?? palette.brand[500];
+
 	const cardBackColor = isHighlightedCard
 		? cardColors?.highlightedBackColor ?? '#F1FBFF'
 		: palette.neutral[100];
@@ -242,11 +247,14 @@ export function ThreeTierCard({
 		<section
 			css={container(!!pillCopy, isUserSelected, isSubdued, cardBackColor)}
 		>
-			{isUserSelected && <ThreeTierCardPill title="Your selection" />}
+			{isUserSelected && (
+				<ThreeTierCardPill title="Your selection" color={cardPillColor} />
+			)}
 			{!!pillCopy && !isUserSelected && (
 				<ThreeTierCardPill
-					subdue={isSubdued}
 					title={promotion?.landingPage?.roundel ?? pillCopy}
+					color={cardPillColor}
+					subdue={isSubdued}
 				/>
 			)}
 			<div css={titleContainer}>

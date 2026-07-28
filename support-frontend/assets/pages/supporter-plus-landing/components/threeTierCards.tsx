@@ -8,6 +8,8 @@ import { ThreeTierCard } from './threeTierCard';
 export type CardColors = {
 	titlePillColor: string;
 	highlightedTitlePillColor: string;
+	cardPillColor: string;
+	highlightedCardPillColor: string;
 	highlightedBenefitIconColor: string;
 	highlightedBackColor: string;
 };
@@ -71,6 +73,8 @@ export function ThreeTierCards({
 		? {
 				titlePillColor: palette.brand[500],
 				highlightedTitlePillColor: palette.news[400],
+				cardPillColor: palette.brand[500],
+				highlightedCardPillColor: palette.news[400],
 				highlightedBenefitIconColor: palette.news[400],
 				highlightedBackColor: palette.news[800],
 		  }
