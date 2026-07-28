@@ -232,7 +232,7 @@ export function ThreeTierCard({
 	const titlePillColor = titlePillColorSelection ?? palette.news[400];
 
 	const cardBackColor = isHighlightedCard
-		? cardColors?.highlightedBackColor ?? palette.neutral[100]
+		? cardColors?.highlightedBackColor ?? '#F1FBFF'
 		: palette.neutral[100];
 
 	const benefitIconColor = isHighlightedCard
