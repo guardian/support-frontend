@@ -38,8 +38,10 @@ const mockTest: LandingPageTest = {
 };
 
 describe('landingPageTestConfig', () => {
-	it('has correct pageRegex for contribute pages', () => {
-		expect(landingPageTestConfig.pageRegex).toBe('^/.*/contribute(/.*)?$');
+	it('has correct pageRegex for contribute and checkout pages', () => {
+		expect(landingPageTestConfig.pageRegex).toBe(
+			'^/[^/]*/(contribute|checkout)(/.*)?$',
+		);
 	});
 
 	it('has correct forceParamName', () => {
@@ -50,6 +52,30 @@ describe('landingPageTestConfig', () => {
 		expect(landingPageTestConfig.sessionStorageKey).toBe(
 			LANDING_PAGE_PARTICIPATIONS_KEY,
 		);
+	});
+
+	it('pageRegex matches contribute pages', () => {
+		const contributeRegex = new RegExp(landingPageTestConfig.pageRegex);
+		expect(contributeRegex.test('/uk/contribute')).toBe(true);
+		expect(contributeRegex.test('/au/contribute')).toBe(true);
+		expect(contributeRegex.test('/us/contribute')).toBe(true);
+		expect(contributeRegex.test('/eu/contribute')).toBe(true);
+	});
+
+	it('pageRegex matches checkout pages', () => {
+		const checkoutRegex = new RegExp(landingPageTestConfig.pageRegex);
+		expect(checkoutRegex.test('/uk/checkout')).toBe(true);
+		expect(checkoutRegex.test('/au/checkout')).toBe(true);
+		expect(checkoutRegex.test('/us/checkout')).toBe(true);
+		expect(checkoutRegex.test('/eu/checkout')).toBe(true);
+	});
+
+	it('pageRegex does not match non-target pages', () => {
+		const nonTargetRegex = new RegExp(landingPageTestConfig.pageRegex);
+		expect(nonTargetRegex.test('/uk/thank-you')).toBe(false);
+		expect(nonTargetRegex.test('/au/thank-you')).toBe(false);
+		expect(nonTargetRegex.test('/uk/student')).toBe(false);
+		expect(nonTargetRegex.test('/au/student')).toBe(false);
 	});
 
 	it('extracts variant name correctly', () => {
@@ -79,7 +105,7 @@ describe('getLandingPageTestConfig', () => {
 		const config = getLandingPageTestConfig();
 
 		expect(config.tests).toEqual([mockTest]);
-		expect(config.pageRegex).toBe('^/.*/contribute(/.*)?$');
+		expect(config.pageRegex).toBe('^/[^/]*/(contribute|checkout)(/.*)?$');
 		expect(config.forceParamName).toBe('force-landing-page');
 		expect(config.sessionStorageKey).toBe(LANDING_PAGE_PARTICIPATIONS_KEY);
 	});
