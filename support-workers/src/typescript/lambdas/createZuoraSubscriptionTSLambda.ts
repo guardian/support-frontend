@@ -1,4 +1,4 @@
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { getProductCatalogFromApi } from '@modules/product-catalog/api';
 import { getPromotion } from '@modules/promotions/v2/getPromotion';
 import type { Promo } from '@modules/promotions/v2/schema';
@@ -68,7 +68,8 @@ export const handler = async (
 			createZuoraSubscriptionState.productSpecificState;
 
 		const user = createZuoraSubscriptionState.user;
-		const currency: IsoCurrency = createZuoraSubscriptionState.product.currency;
+		const currency: CurrencyCode =
+			createZuoraSubscriptionState.product.currency;
 		const zuoraPaymentMethod = getZuoraPaymentMethod(
 			productSpecificState.paymentMethod,
 		);

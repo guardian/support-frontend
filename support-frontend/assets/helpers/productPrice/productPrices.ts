@@ -7,7 +7,7 @@ import {
 	countryGroups,
 	GBPCountries,
 } from '@modules/internationalisation/countryGroup';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { NoFulfilmentOptions } from '@modules/product/fulfilmentOptions';
@@ -22,13 +22,13 @@ import { fixDecimals } from 'helpers/productPrice/subscriptions';
 export type ProductPrice = {
 	price: number;
 	savingVsRetail?: number;
-	currency: IsoCurrency;
+	currency: CurrencyCode;
 	fixedTerm: boolean;
 	promotions?: Promotion[];
 };
 
 type BillingPeriods = Partial<
-	Record<BillingPeriod, Partial<Record<IsoCurrency, ProductPrice>>>
+	Record<BillingPeriod, Partial<Record<CurrencyCode, ProductPrice>>>
 >;
 
 export type CountryGroupPrices = Partial<
@@ -78,7 +78,7 @@ const showPrice = (p: ProductPrice, isExtended = true): string => {
 	return `${showGlyph(p.currency)}${fixDecimals(p.price)}`;
 };
 
-function getCurrency(country: CountryCode): IsoCurrency {
+function getCurrency(country: CountryCode): CurrencyCode {
 	const { currency } = getCountryGroup(country);
 	return currency;
 }

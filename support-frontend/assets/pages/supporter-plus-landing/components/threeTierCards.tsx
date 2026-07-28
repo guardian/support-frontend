@@ -1,13 +1,13 @@
 import { css } from '@emotion/react';
 import { between, from, space } from '@guardian/source/foundations';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type { CardContent } from './threeTierCard';
 import { ThreeTierCard } from './threeTierCard';
 
 export type ThreeTierCardsProps = {
 	cardsContent: CardContent[];
-	currencyId: IsoCurrency;
+	currencyId: CurrencyCode;
 	billingPeriod: BillingPeriod;
 	showWeeklyPrice?: boolean;
 };

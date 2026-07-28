@@ -1,6 +1,7 @@
 // ----- Routes ----- //
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type {
 	FulfilmentOptions,
@@ -194,6 +195,20 @@ function payPalReturnUrl(
 	)}${route}?email=${encodeURIComponent(email)}`;
 }
 
+function stripePayPalReturnUrl(
+	cgId: CountryGroupId,
+	email: string,
+	stripePublicKey: string,
+	currency: IsoCurrency,
+	amount: number,
+): string {
+	return `${getOrigin()}/${countryPath(
+		cgId,
+	)}/stripe/paypal/returnOneTime?email=${encodeURIComponent(
+		email,
+	)}&stripePublicKey=${stripePublicKey}&currency=${currency}&amount=${amount}`;
+}
+
 // ----- Exports ----- //
 export {
 	routes,
@@ -202,6 +217,7 @@ export {
 	postcodeLookupUrl,
 	payPalCancelUrl,
 	payPalReturnUrl,
+	stripePayPalReturnUrl,
 	paperSubsUrl,
 	paperCheckoutUrl,
 	parameteriseUrl,

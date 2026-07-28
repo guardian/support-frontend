@@ -116,6 +116,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |        "description" : "Enable tooled student landing page",
           |        "state" : "On"
           |      },
+          |      "enableStripePaymentElement" : {
+          |        "description" : "Enable Stripe Payment Element",
+          |        "state" : "Off"
+          |      },
           |      "enableCanadaTaxExclusion" : {
           |        "description" : "Canada Tax Exclusive Rate Plans",
           |        "state" : "Off"
@@ -173,6 +177,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
             Some(On),
             Some(On),
             Some(On),
+            Some(Off),
             Some(Off),
           ),
           campaignSwitches = CampaignSwitches(Some(Off), Some(Off)),

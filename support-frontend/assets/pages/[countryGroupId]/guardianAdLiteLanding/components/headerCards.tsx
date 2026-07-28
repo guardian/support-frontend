@@ -9,7 +9,7 @@ import {
 	textSans17,
 } from '@guardian/source/foundations';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { getCurrencyInfo } from '@modules/internationalisation/currency';
+import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import { Container } from 'components/layout/container';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
@@ -97,7 +97,7 @@ export function HeaderCards({
 }: HeaderCardsProps): JSX.Element {
 	const contributionType = 'Monthly';
 	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
-	const currency = getCurrencyInfo(currencyKey);
+	const currency = getCurrencyByCode(currencyKey);
 	const price =
 		productCatalog.GuardianAdLite?.ratePlans[contributionType]?.pricing[
 			currencyKey
