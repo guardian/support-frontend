@@ -11,7 +11,8 @@ object PaymentProvider extends Enum[PaymentProvider] with CirceEnum[PaymentProvi
 
   def fromStripePaymentMethod(stripePaymentMethod: Option[StripePaymentMethod]): PaymentProvider = {
     stripePaymentMethod match {
-      case Some(StripePaymentMethod.StripeCheckout) | None => PaymentProvider.Stripe
+      case Some(StripePaymentMethod.StripeCheckout) | Some(StripePaymentMethod.StripePaypal) | None =>
+        PaymentProvider.Stripe
       case Some(StripePaymentMethod.StripeApplePay) => PaymentProvider.StripeApplePay
       case Some(StripePaymentMethod.StripePaymentRequestButton) => PaymentProvider.StripePaymentRequestButton
     }
