@@ -30,5 +30,18 @@ catalog:
   typescript: ^5.8.3
   zod: ^4.4.3
 
+overrides:
+  '@typescript-eslint/typescript-estree': ^8.46.2
+  flatted: 3.4.2
+  picomatch@2.3.1: 2.3.2
+  picomatch@4.0.3: 4.0.4
+  shell-quote: 1.9.0
+  brace-expansion@1: ^1.1.16
+  brace-expansion@2: ^2.1.2
+  brace-expansion@5: ^5.0.8
+  js-yaml@3: ^3.15.0
+  js-yaml@4: ^4.3.0
+  postcss: ^8.5.18
+
 onlyBuiltDependencies:
   - '@guardian/support-service-lambdas'
