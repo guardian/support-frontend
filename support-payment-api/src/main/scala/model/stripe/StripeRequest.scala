@@ -51,6 +51,8 @@ object StripePaymentMethod extends Enum[StripePaymentMethod] with CirceEnum[Stri
 
   case object StripePaymentRequestButton extends StripePaymentMethod
 
+  case object StripePaypal extends StripePaymentMethod
+
 }
 
 case class StripePublicKey(value: String) extends AnyVal
@@ -88,7 +90,17 @@ object StripePaymentIntentRequest {
       similarProductsConsent: Option[Boolean],
   ) extends StripeRequest
 
+  case class CompleteStripePaypalPayment(
+      paymentIntentId: String,
+      paymentData: StripePaymentData,
+      acquisitionData: AcquisitionData,
+      publicKey: StripePublicKey,
+      similarProductsConsent: Option[Boolean],
+  ) extends StripeRequest
+
   import controllers.JsonReadableOps._
   implicit val createPaymentIntentDecoder: Codec[CreatePaymentIntent] = deriveCodec[CreatePaymentIntent]
   implicit val confirmPaymentIntent: Decoder[ConfirmPaymentIntent] = deriveDecoder[ConfirmPaymentIntent]
+  implicit val completeStripePaypalPayment: Decoder[CompleteStripePaypalPayment] =
+    deriveDecoder[CompleteStripePaypalPayment]
 }

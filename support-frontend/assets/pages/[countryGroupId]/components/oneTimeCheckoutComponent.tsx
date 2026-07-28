@@ -5,8 +5,10 @@ import {
 	neutral,
 	space,
 	textSans17,
+	until,
 } from '@guardian/source/foundations';
 import {
+	InlineError,
 	Radio,
 	RadioGroup,
 	TextInput,
@@ -24,7 +26,12 @@ import {
 	useElements,
 	useStripe,
 } from '@stripe/react-stripe-js';
-import type { ExpressPaymentType } from '@stripe/stripe-js';
+import { PaymentElement } from '@stripe/react-stripe-js';
+import type {
+	ExpressPaymentType,
+	PaymentMethodResult,
+	StripeError,
+} from '@stripe/stripe-js';
 import type {
 	StripeCardCvcElementChangeEvent,
 	StripeCardExpiryElementChangeEvent,
@@ -45,17 +52,15 @@ import { config } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import type {
-	CreatePayPalPaymentResponse,
 	CreateStripePaymentIntentRequest,
+	PaymentResult,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import {
 	postOneOffPayPalCreatePaymentRequest,
 	processStripePaymentIntentRequest,
+	processStripePaymentIntentRequestForPaypal,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
-import type {
-	PaymentResult,
-	StripePaymentMethod,
-} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod as LegacyPaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	isPaymentMethod,
@@ -76,7 +81,11 @@ import {
 	sendEventOneTimeCheckoutValue,
 	sendEventPaymentMethodSelected,
 } from 'helpers/tracking/quantumMetric';
-import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
+import {
+	payPalCancelUrl,
+	payPalReturnUrl,
+	stripePayPalReturnUrl,
+} from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import {
 	getSanitisedHtml,
@@ -241,6 +250,7 @@ function getAcquisitionData(
 	abParticipations: Participations,
 	billingPostcode: string,
 	coverTransactionCost: boolean,
+	countryId: CountryCode,
 ): PaymentAPIAcquisitionData {
 	const referrerAcquisitionData = getReferrerAcquisitionData();
 	return derivePaymentApiAcquisitionData(
@@ -254,6 +264,7 @@ function getAcquisitionData(
 		},
 		abParticipations,
 		billingPostcode,
+		countryId,
 	);
 }
 
@@ -277,6 +288,9 @@ export function OneTimeCheckoutComponent({
 
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
+	const inStripePaymentElementVariant =
+		abParticipations.stripePaymentElementTest === 'variant' &&
+		isSwitchOn('featureSwitches.enableStripePaymentElement');
 
 	let customAmountsData;
 	const customAmountsParam = urlSearchParams.get('amounts');
@@ -357,6 +371,7 @@ export function OneTimeCheckoutComponent({
 	/** Payment methods: Stripe */
 	const stripe = useStripe();
 	const cardElement = elements?.getElement(CardNumberElement);
+	const paymentElement = elements?.getElement(PaymentElement);
 	const [
 		stripeExpressCheckoutPaymentType,
 		setStripeExpressCheckoutPaymentType,
@@ -412,6 +427,11 @@ export function OneTimeCheckoutComponent({
 		Partial<Record<StripeField, string>>
 	>({});
 
+	const [isPaymentElementComplete, setIsPaymentElementComplete] =
+		useState(false);
+	const [paymentElementRecaptchaError, setPaymentElementRecaptchaError] =
+		useState<string>();
+
 	const validate = (
 		event: React.FormEvent<HTMLInputElement>,
 		setAction: React.Dispatch<React.SetStateAction<string | undefined>>,
@@ -458,7 +478,7 @@ export function OneTimeCheckoutComponent({
 				return;
 			}
 
-			if (paymentMethod === 'Stripe') {
+			if (!inStripePaymentElementVariant && paymentMethod === 'Stripe') {
 				const newStripeFieldError = {
 					...(stripeFieldsAreEmpty.cardNumber && {
 						cardNumber: 'Please enter card number',
@@ -474,7 +494,6 @@ export function OneTimeCheckoutComponent({
 						recaptcha: 'Please complete security check',
 					}),
 				};
-
 				// Don't go any further if there are errors for any Stripe fields
 				if (Object.values(newStripeFieldError).some((value) => value)) {
 					setStripeFieldError(newStripeFieldError);
@@ -482,9 +501,23 @@ export function OneTimeCheckoutComponent({
 					return;
 				}
 			}
+			if (inStripePaymentElementVariant && paymentMethod === 'Stripe') {
+				if (!isPaymentElementComplete || !recaptchaToken) {
+					if (!isPaymentElementComplete) {
+						setPaymentMethodError(
+							'Please check your payment details and try again',
+						);
+					}
+					if (!recaptchaToken) {
+						setPaymentElementRecaptchaError('Please complete security check');
+					}
+					paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
+					return;
+				}
+			}
 			setIsProcessingPayment(true);
 
-			let paymentResult;
+			let paymentResult: PaymentResult | undefined;
 			if (paymentMethod === 'PayPal') {
 				paymentResult = await postOneOffPayPalCreatePaymentRequest({
 					currency: currencyKey,
@@ -500,6 +533,7 @@ export function OneTimeCheckoutComponent({
 					abParticipations,
 					billingPostcode,
 					coverTransactionCost,
+					countryId,
 				);
 				// We've only created a payment at this point, and the user has to get through
 				// the PayPal flow on their site before we can actually try and execute the payment.
@@ -516,7 +550,7 @@ export function OneTimeCheckoutComponent({
 				);
 			}
 
-			let paymentMethodResult;
+			let paymentMethodResult: PaymentMethodResult | undefined;
 			if (
 				paymentMethod === 'StripeExpressCheckoutElement' &&
 				stripe &&
@@ -542,11 +576,50 @@ export function OneTimeCheckoutComponent({
 					},
 				});
 			}
-			if (paymentMethodResult && stripe) {
+
+			if (
+				paymentMethod === 'Stripe' &&
+				stripe &&
+				paymentElement &&
+				recaptchaToken &&
+				elements
+			) {
+				await elements.submit();
+				paymentMethodResult = await stripe.createPaymentMethod({
+					elements,
+					params: {
+						billing_details: {
+							address: {
+								postal_code: billingPostcode,
+							},
+						},
+					},
+				});
+			}
+			if (paymentMethodResult && stripe && elements) {
 				// Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
 				const handle3DS = (clientSecret: string) => {
 					trackComponentLoad('stripe-3ds');
 					return stripe.handleCardAction(clientSecret);
+				};
+
+				const handlePaypal = (
+					clientSecret: string,
+				): Promise<{ error: StripeError }> => {
+					trackComponentLoad('stripe-Paypal');
+					return stripe.confirmPayment({
+						elements,
+						clientSecret,
+						confirmParams: {
+							return_url: stripePayPalReturnUrl(
+								countryGroupId,
+								email,
+								stripePublicKey,
+								currencyKey,
+								finalAmount,
+							),
+						},
+					});
 				};
 
 				if (paymentMethodResult.error) {
@@ -568,12 +641,22 @@ export function OneTimeCheckoutComponent({
 						);
 					}
 				} else {
+					const getStripePaymentMethod = (): StripePaymentMethod => {
+						if (paymentMethod === 'StripeExpressCheckoutElement') {
+							if (stripeExpressCheckoutPaymentType === 'apple_pay') {
+								return 'StripeApplePay';
+							} else {
+								return 'StripePaymentRequestButton';
+							}
+						}
+						if (paymentMethodResult.paymentMethod.paypal) {
+							return 'StripePaypal';
+						}
+						return 'StripeCheckout';
+					};
+
 					const stripePaymentMethod: StripePaymentMethod =
-						paymentMethod === 'StripeExpressCheckoutElement'
-							? stripeExpressCheckoutPaymentType === 'apple_pay'
-								? 'StripeApplePay'
-								: 'StripePaymentRequestButton'
-							: 'StripeCheckout';
+						getStripePaymentMethod();
 
 					const stripeData: CreateStripePaymentIntentRequest = {
 						paymentData: {
@@ -586,16 +669,38 @@ export function OneTimeCheckoutComponent({
 							abParticipations,
 							billingPostcode,
 							coverTransactionCost,
+							countryId,
 						),
+
 						publicKey: stripePublicKey,
 						recaptchaToken: recaptchaToken ?? '',
 						paymentMethodId: paymentMethodResult.paymentMethod.id,
 						similarProductsConsent,
 					};
-					paymentResult = await processStripePaymentIntentRequest(
-						stripeData,
-						handle3DS,
-					);
+					if (stripePaymentMethod === 'StripePaypal') {
+						cookie.set(
+							'acquisition_data',
+							encodeURIComponent(JSON.stringify(stripeData.acquisitionData)),
+						);
+						setThankYouOrder({
+							firstName: '',
+							email: email,
+							paymentMethod: paymentMethod,
+							status: 'success', // retry pending mechanism not applied to one-time payments
+						});
+
+						// If we successfully create a Payment Intent then this call will redirect to the paypal confirmation page.
+						// In this case paymentResult will not be set and it will not continue past this point.
+						paymentResult = await processStripePaymentIntentRequestForPaypal(
+							stripeData,
+							handlePaypal,
+						);
+					} else {
+						paymentResult = await processStripePaymentIntentRequest(
+							stripeData,
+							handle3DS,
+						);
+					}
 				}
 			}
 
@@ -608,9 +713,12 @@ export function OneTimeCheckoutComponent({
 				});
 				const thankYouUrlSearchParams = new URLSearchParams();
 				thankYouUrlSearchParams.set('contribution', finalAmount.toString());
-				'userType' in paymentResult &&
-					paymentResult.userType &&
-					thankYouUrlSearchParams.set('userType', paymentResult.userType);
+				paymentResult.type === 'stripe' &&
+					paymentResult.result.userType &&
+					thankYouUrlSearchParams.set(
+						'userType',
+						paymentResult.result.userType,
+					);
 				const nextStepRoute = paymentResultThankyouRoute(
 					paymentResult,
 					supportRegionId,
@@ -621,10 +729,12 @@ export function OneTimeCheckoutComponent({
 				} else {
 					setErrorMessage('Sorry, something went wrong.');
 					if (
-						'paymentStatus' in paymentResult &&
-						paymentResult.paymentStatus === 'failure'
+						paymentResult.type === 'stripe' &&
+						paymentResult.result.paymentStatus === 'failure'
 					) {
-						setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
+						setErrorContext(
+							appropriateErrorMessage(paymentResult.result.error ?? ''),
+						);
 					}
 					setIsProcessingPayment(false);
 				}
@@ -635,22 +745,23 @@ export function OneTimeCheckoutComponent({
 	};
 
 	function paymentResultThankyouRoute(
-		paymentResult: PaymentResult | CreatePayPalPaymentResponse | undefined,
+		paymentResult: PaymentResult,
 		supportRegionId: SupportRegionId,
 		thankYouUrlSearchParams: URLSearchParams,
 	): string | undefined {
-		if (paymentResult) {
-			if ('type' in paymentResult && paymentResult.type === 'success') {
-				return paymentResult.data.approvalUrl;
-			} else if (
-				'paymentStatus' in paymentResult &&
-				paymentResult.paymentStatus === 'success'
-			) {
-				return `/${supportRegionId}/thank-you?${thankYouUrlSearchParams.toString()}`;
-			}
+		if (
+			paymentResult.type === 'paypal' &&
+			paymentResult.result.type === 'success'
+		) {
+			// redirect to paypal approval url
+			return paymentResult.result.data.approvalUrl;
+		} else if (
+			paymentResult.type === 'stripe' &&
+			paymentResult.result.paymentStatus === 'success'
+		) {
+			return `/${supportRegionId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 		}
-
-		return;
+		return undefined;
 	}
 
 	useAbandonedBasketCookie(
@@ -903,117 +1014,203 @@ export function OneTimeCheckoutComponent({
 								2. Payment method
 								<SecureTransactionIndicator hideText={true} />
 							</Legend>
-							<RadioGroup
-								role="radiogroup"
-								label="Select payment method"
-								hideLabel
-								error={paymentMethodError}
-							>
-								{validPaymentMethods.map((validPaymentMethod) => {
-									const selected = paymentMethod === validPaymentMethod;
-									const { label, icon } = paymentMethodData[validPaymentMethod];
+							{inStripePaymentElementVariant && (
+								<div>
+									<div
+										css={css`
+											padding-top: 12px;
+											padding-bottom: 24px;
+											${until.tablet} {
+												padding-top: 4px;
+												padding-bottom: 16px;
+											}
+										`}
+									>
+										{paymentMethodError && (
+											<div
+												role="alert"
+												data-qm-error
+												css={css`
+													margin-bottom: 8px;
+												`}
+											>
+												<InlineError>{paymentMethodError}</InlineError>
+											</div>
+										)}
+										<PaymentElement
+											options={{
+												fields: { billingDetails: { address: 'if_required' } },
+												layout: {
+													type: 'accordion',
+													radios: 'always',
+													spacedAccordionItems: true,
+												},
+												wallets: {
+													link: 'never',
+												},
+											}}
+											onFocus={() => {
+												setPaymentMethod(Stripe);
+											}}
+											onChange={(event) => {
+												setIsPaymentElementComplete(event.complete);
+												setPaymentMethodError(undefined);
+											}}
+										/>
+									</div>
+									{paymentElementRecaptchaError && (
+										<div
+											role="alert"
+											data-qm-error
+											css={css`
+												margin-bottom: 8px;
+											`}
+										>
+											<InlineError>{paymentElementRecaptchaError}</InlineError>
+										</div>
+									)}
+									<Recaptcha
+										onRecaptchaCompleted={(token) => {
+											setRecaptchaToken(token);
+											setPaymentElementRecaptchaError(undefined);
+										}}
+										onRecaptchaExpired={() => {
+											setRecaptchaToken(undefined);
+											setPaymentElementRecaptchaError(undefined);
+										}}
+									/>
+									<Divider
+										size="full"
+										cssOverrides={css`
+											margin-left: 0;
+											width: 100%;
+											margin-top: 40px;
+											margin-bottom: 24px;
+											${until.tablet} {
+												margin-top: 36px;
+												margin-bottom: 20px;
+											}
+										`}
+									/>
+								</div>
+							)}
 
-									return (
-										<PaymentMethodSelector selected={selected}>
-											<PaymentMethodRadio selected={selected}>
-												<Radio
-													label={
-														<>
-															{label} <div>{icon}</div>
-														</>
-													}
-													name="paymentMethod"
-													value={validPaymentMethod}
-													cssOverrides={
-														selected
-															? checkedRadioLabelColour
-															: defaultRadioLabelColour
-													}
-													onChange={() => {
-														setPaymentMethod(validPaymentMethod);
-														setPaymentMethodError(undefined);
-														// Track payment method selection with QM
-														sendEventPaymentMethodSelected(validPaymentMethod);
-													}}
-												/>
-											</PaymentMethodRadio>
-											{validPaymentMethod === 'Stripe' && selected && (
-												<div css={paymentMethodBody}>
-													<input
-														type="hidden"
-														name="recaptchaToken"
-														value={recaptchaToken}
-													/>
-													<StripeCardForm
-														onCardNumberChange={(
-															event: StripeCardNumberElementChangeEvent,
-														) => {
-															setStripeFieldsAreEmpty((prevState) => ({
-																...prevState,
-																cardNumber: event.empty,
-															}));
+							{!inStripePaymentElementVariant && (
+								<RadioGroup
+									role="radiogroup"
+									label="Select payment method"
+									hideLabel
+									error={paymentMethodError}
+								>
+									{validPaymentMethods.map((validPaymentMethod) => {
+										const selected = paymentMethod === validPaymentMethod;
+										const { label, icon } =
+											paymentMethodData[validPaymentMethod];
 
-															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
-															setStripeFieldError((prevState) => ({
-																...prevState,
-																cardNumber: undefined,
-															}));
-														}}
-														onExpiryChange={(
-															event: StripeCardExpiryElementChangeEvent,
-														) => {
-															setStripeFieldsAreEmpty((prevState) => ({
-																...prevState,
-																expiry: event.empty,
-															}));
-
-															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
-															setStripeFieldError((prevState) => ({
-																...prevState,
-																expiry: undefined,
-															}));
-														}}
-														onCvcChange={(
-															event: StripeCardCvcElementChangeEvent,
-														) => {
-															setStripeFieldsAreEmpty((prevState) => ({
-																...prevState,
-																cvc: event.empty,
-															}));
-
-															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
-															setStripeFieldError((prevState) => ({
-																...prevState,
-																cvc: undefined,
-															}));
-														}}
-														errors={{
-															cardNumber: maybeArrayWrap(
-																stripeFieldError.cardNumber,
-															),
-															expiry: maybeArrayWrap(stripeFieldError.expiry),
-															cvc: maybeArrayWrap(stripeFieldError.cvc),
-															recaptcha: maybeArrayWrap(
-																stripeFieldError.recaptcha,
-															),
-														}}
-														recaptcha={
-															<Recaptcha
-																onRecaptchaCompleted={(token) => {
-																	setRecaptchaToken(token);
-																}}
-																onRecaptchaExpired={() => {
-																	setRecaptchaToken(undefined);
-																}}
-															/>
+										return (
+											<PaymentMethodSelector selected={selected}>
+												<PaymentMethodRadio selected={selected}>
+													<Radio
+														label={
+															<>
+																{label} <div>{icon}</div>
+															</>
 														}
+														name="paymentMethod"
+														value={validPaymentMethod}
+														cssOverrides={
+															selected
+																? checkedRadioLabelColour
+																: defaultRadioLabelColour
+														}
+														onChange={() => {
+															setPaymentMethod(validPaymentMethod);
+															setPaymentMethodError(undefined);
+															// Track payment method selection with QM
+															sendEventPaymentMethodSelected(
+																validPaymentMethod,
+															);
+														}}
 													/>
-												</div>
-											)}
-										</PaymentMethodSelector>
-									);
-								})}
-							</RadioGroup>
+												</PaymentMethodRadio>
+												{validPaymentMethod === 'Stripe' && selected && (
+													<div css={paymentMethodBody}>
+														<input
+															type="hidden"
+															name="recaptchaToken"
+															value={recaptchaToken}
+														/>
+														<StripeCardForm
+															onCardNumberChange={(
+																event: StripeCardNumberElementChangeEvent,
+															) => {
+																setStripeFieldsAreEmpty((prevState) => ({
+																	...prevState,
+																	cardNumber: event.empty,
+																}));
+
+																// Clear errors when the field changes, we'll (re) show errors, if any, on submit
+																setStripeFieldError((prevState) => ({
+																	...prevState,
+																	cardNumber: undefined,
+																}));
+															}}
+															onExpiryChange={(
+																event: StripeCardExpiryElementChangeEvent,
+															) => {
+																setStripeFieldsAreEmpty((prevState) => ({
+																	...prevState,
+																	expiry: event.empty,
+																}));
+
+																// Clear errors when the field changes, we'll (re) show errors, if any, on submit
+																setStripeFieldError((prevState) => ({
+																	...prevState,
+																	expiry: undefined,
+																}));
+															}}
+															onCvcChange={(
+																event: StripeCardCvcElementChangeEvent,
+															) => {
+																setStripeFieldsAreEmpty((prevState) => ({
+																	...prevState,
+																	cvc: event.empty,
+																}));
+
+																// Clear errors when the field changes, we'll (re) show errors, if any, on submit
+																setStripeFieldError((prevState) => ({
+																	...prevState,
+																	cvc: undefined,
+																}));
+															}}
+															errors={{
+																cardNumber: maybeArrayWrap(
+																	stripeFieldError.cardNumber,
+																),
+																expiry: maybeArrayWrap(stripeFieldError.expiry),
+																cvc: maybeArrayWrap(stripeFieldError.cvc),
+																recaptcha: maybeArrayWrap(
+																	stripeFieldError.recaptcha,
+																),
+															}}
+															recaptcha={
+																<Recaptcha
+																	onRecaptchaCompleted={(token) => {
+																		setRecaptchaToken(token);
+																	}}
+																	onRecaptchaExpired={() => {
+																		setRecaptchaToken(undefined);
+																	}}
+																/>
+															}
+														/>
+													</div>
+												)}
+											</PaymentMethodSelector>
+										);
+									})}
+								</RadioGroup>
+							)}
 						</FormSection>
 						<CoverTransactionCost
 							transactionCost={coverTransactionCost}
