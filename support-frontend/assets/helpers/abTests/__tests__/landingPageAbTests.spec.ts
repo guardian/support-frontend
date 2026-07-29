@@ -38,7 +38,7 @@ const mockTest: LandingPageTest = {
 };
 
 describe('landingPageTestConfig', () => {
-	it('has correct pageRegex for contribute and checkout pages', () => {
+	it('has correct pageRegex for contribute pages', () => {
 		expect(landingPageTestConfig.pageRegex).toBe('^/.*/contribute(/.*)?$');
 	});
 
