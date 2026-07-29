@@ -1,5 +1,5 @@
 import type { CountryCode } from '@modules/internationalisation/country';
-import type { IsoCurrency } from './currencySchema';
+import type { CurrencyCode } from './currencySchema';
 import type {
 	AcquisitionProduct,
 	PaymentFrequency,
@@ -13,7 +13,7 @@ export type FactAcquisitionEventRow = {
 	event_timestamp: string;
 	product: Product;
 	amount?: number | null;
-	currency: IsoCurrency;
+	currency: CurrencyCode;
 	country_code: CountryCode;
 	component_id?: string | null;
 	component_type?: string | null;

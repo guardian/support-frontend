@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const IsoCurrencySchema = z.enum([
+export const CurrencyCodeSchema = z.enum([
 	// Currencies we support on the website:
 	'GBP',
 	'USD',
@@ -163,4 +163,4 @@ export const IsoCurrencySchema = z.enum([
 	'ZWL',
 ]);
 
-export type IsoCurrency = z.infer<typeof IsoCurrencySchema>;
+export type CurrencyCode = z.infer<typeof CurrencyCodeSchema>;

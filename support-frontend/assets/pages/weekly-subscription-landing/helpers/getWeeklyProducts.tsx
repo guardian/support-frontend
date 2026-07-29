@@ -3,7 +3,7 @@ import {
 	countryGroups,
 	GBPCountries,
 } from '@modules/internationalisation/countryGroup';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import {
 	BillingPeriod,
 	type RecurringBillingPeriod,
@@ -81,7 +81,7 @@ const getCheckoutUrl = ({
 	return urlWithParams;
 };
 
-const getPriceWithSymbol = (currencyId: IsoCurrency, price: number): string =>
+const getPriceWithSymbol = (currencyId: CurrencyCode, price: number): string =>
 	`${glyph(currencyId)}${fixDecimals(price)}`;
 
 const getDisplayPrice = (

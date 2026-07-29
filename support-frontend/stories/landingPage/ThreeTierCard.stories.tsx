@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
-import { CurrencyValues } from '@modules/internationalisation/currency';
+import { currencyCodes } from '@modules/internationalisation/currency';
 import type { ThreeTierCardProps } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { ThreeTierCard } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
@@ -26,7 +26,7 @@ export default {
 		promoCount: 1,
 		linkCtaClickHandler: { action: 'tier card clicked' },
 		currencyId: {
-			options: CurrencyValues,
+			options: currencyCodes,
 			control: { type: 'radio' },
 		},
 	},
