@@ -93,6 +93,6 @@
 
   window.guardian.checkoutPostcodeLookup = @settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.contains(On)
 
-  window.guardian.productCatalog = @Html(outputJson(productCatalog))
+  window.guardian.productCatalog = @Html(outputJson(productCatalog, dropNullValues = false))
 </script>
 @windowGuardianUser(user)
