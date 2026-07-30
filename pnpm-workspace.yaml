@@ -43,9 +43,6 @@ overrides:
   js-yaml@4: ^4.3.0
   postcss: ^8.5.18
 
-onlyBuiltDependencies:
-  - '@guardian/support-service-lambdas'
-
 allowBuilds:
   '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/27aca68f2d5dde99f9db7e2487f064541d8176bb': true
   '@parcel/watcher': true
