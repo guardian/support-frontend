@@ -14,20 +14,33 @@ import { OnboardingAppsDiscovery } from 'components/onboarding/sections/appsDisc
 import { OnboardingCreateAccount } from 'components/onboarding/sections/createAccount';
 import { OnboardingDigitalPlusDiscovery } from 'components/onboarding/sections/digitalPlusDiscovery';
 import { OnboardingInviteeCompleted } from 'components/onboarding/sections/onboardingInviteeCompleted';
+import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
 import useAnalyticsProfile from 'helpers/customHooks/useAnalyticsProfile';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
-import type { NewsletterSubscription } from 'helpers/identity/newsletters';
-import { getNewslettersSubscriptions } from 'helpers/identity/newsletters';
 import type { OnboardingInviteeInvitation } from 'helpers/onboardingInvitee/invitation';
+import { acceptInvitation } from 'helpers/onboardingInvitee/invitation';
 import * as cookie from 'helpers/storage/cookie';
 import type { CsrfState } from 'helpers/types/csrf';
 import { getUser } from 'helpers/user/user';
+import ErrorPage from 'pages/error/components/errorPage';
+
+type AcceptStatus = 'pending' | 'accepted' | 'failed';
 
 interface OnboardingInviteeProps {
 	supportRegionId: SupportRegionId;
 	csrf: CsrfState;
 	invitation: OnboardingInviteeInvitation;
 	landingPageSettings: LandingPageVariant;
+}
+
+function AcceptInvitationFailed() {
+	return (
+		<ErrorPage
+			headings={['We couldn’t redeem', 'your invitation']}
+			copy="Please try again later. If the problem persists, "
+			reportLink={true}
+		/>
+	);
 }
 
 function OnboardingInviteeComponent({
@@ -37,23 +50,7 @@ function OnboardingInviteeComponent({
 	supportRegionId,
 }: OnboardingInviteeProps) {
 	const scrollToTopRef = useRef<HTMLDivElement>(null);
-
-	const [userNewslettersSubscriptions, setUserNewslettersSubscriptions] =
-		useState<NewsletterSubscription[] | null>(null);
-
-	const fetchUserNewslettersSubscriptions = async () => {
-		try {
-			const newslettersData = await getNewslettersSubscriptions(csrf);
-			setUserNewslettersSubscriptions(newslettersData);
-			console.debug('User Newsletters Subscriptions fetched:', newslettersData);
-		} catch (error) {
-			console.error('Error fetching User Newsletters Subscriptions:', error);
-		}
-	};
-
-	useEffect(() => {
-		void fetchUserNewslettersSubscriptions();
-	}, []);
+	const acceptStartedRef = useRef(false);
 
 	const { isSignedIn } = getUser();
 	const {
@@ -64,19 +61,15 @@ function OnboardingInviteeComponent({
 	const searchParams = useSearchParams();
 
 	const documentLocation = document.location;
-	const iframeOrigin = `${
-		documentLocation.protocol
-	}//${documentLocation.hostname.replace('support', 'profile')}`;
+	const iframeOrigin = `${documentLocation.protocol
+		}//${documentLocation.hostname.replace('support', 'profile')}`;
 
-	// This might need tweaking since we don't have the guestUser URL Param
 	const getIframeTargetUrl = (email: string) => {
 		const iframeTargetUrl = new URL(`${iframeOrigin}/iframed/register/email`);
+		iframeTargetUrl.searchParams.set('appClientId', 'maj');
 
 		if (email) {
-			iframeTargetUrl.searchParams.set(
-				'prepopulateEmail',
-				encodeURIComponent(email),
-			);
+			iframeTargetUrl.searchParams.set('prepopulateEmail', email);
 		}
 
 		return iframeTargetUrl.toString();
@@ -84,6 +77,7 @@ function OnboardingInviteeComponent({
 
 	const [currentStep, setCurrentStep] = useState<OnboardingInviteeSteps>();
 	const [showIdentityIframe, setShowIdentityIframe] = useState(!isSignedIn);
+	const [acceptStatus, setAcceptStatus] = useState<AcceptStatus>('pending');
 	const identityIframeRef = useRef<HTMLIFrameElement>(null);
 
 	const handleStepNavigation: HandleStepNavigationFunction = (targetStep) => {
@@ -110,7 +104,29 @@ function OnboardingInviteeComponent({
 		}
 	}, [searchParams, isSignedIn]);
 
-	const triggerOAuthFlow = () => {
+	const redeemInvitation = async () => {
+		if (acceptStartedRef.current) {
+			return;
+		}
+		acceptStartedRef.current = true;
+
+		// Figure out how to handle if the invitation is already accepted
+		const accepted = await acceptInvitation(invitation.invitationCode, csrf);
+		void loadAnalyticsData();
+
+		if (accepted) {
+			setAcceptStatus('accepted');
+		} else {
+			setAcceptStatus('failed');
+		}
+	};
+
+	const ensureAccessTokenThenAccept = () => {
+		if (cookie.get('GU_ACCESS_TOKEN')) {
+			void redeemInvitation();
+			return;
+		}
+
 		try {
 			const iframe = document.createElement('iframe');
 			iframe.style.display = 'none';
@@ -129,21 +145,27 @@ function OnboardingInviteeComponent({
 
 				if (hasAccessToken) {
 					document.body.removeChild(iframe);
-
-					void fetchUserNewslettersSubscriptions();
-					void loadAnalyticsData();
+					void redeemInvitation();
 				} else if (attempts < MAX_ATTEMPTS) {
 					setTimeout(pollForAccessToken, POLL_INTERVAL);
 				} else {
 					document.body.removeChild(iframe);
+					setAcceptStatus('failed');
 				}
 			};
 
 			setTimeout(pollForAccessToken, POLL_INTERVAL);
 		} catch (error) {
 			console.error('Failed to trigger OAuth flow:', error);
+			setAcceptStatus('failed');
 		}
 	};
+
+	useEffect(() => {
+		if (isSignedIn) {
+			ensureAccessTokenThenAccept();
+		}
+	}, []);
 
 	useEffect(() => {
 		const receiveIframeMessage = (
@@ -166,8 +188,7 @@ function OnboardingInviteeComponent({
 			if (data.type === 'userStateChange') {
 				if (['userSignedIn', 'userRegistered'].includes(data.value)) {
 					setShowIdentityIframe(false);
-
-					triggerOAuthFlow();
+					ensureAccessTokenThenAccept();
 				}
 			}
 
@@ -190,45 +211,63 @@ function OnboardingInviteeComponent({
 		};
 	}, []);
 
+	if (acceptStatus === 'failed') {
+		return <AcceptInvitationFailed />;
+	}
+
+	const invitationAccepted = acceptStatus === 'accepted';
+
+	if (!invitationAccepted && !showIdentityIframe) {
+		return <GuardianHoldingContent />;
+	}
+
 	return (
 		<OnboardingLayout
 			flow="invitee"
 			scrollToTopRef={scrollToTopRef}
-			onboardingStep={currentStep ?? OnboardingInviteeSteps.CreateAccount}
+			onboardingStep={
+				invitationAccepted
+					? currentStep ?? OnboardingInviteeSteps.CreateAccount
+					: OnboardingInviteeSteps.CreateAccount
+			}
 		>
-			{currentStep === OnboardingInviteeSteps.CreateAccount && (
-				<OnboardingCreateAccount
-					iframeRef={identityIframeRef}
-					iframeSrc={getIframeTargetUrl(invitation.email)}
-					showIframe={showIdentityIframe}
-					handleStepNavigation={handleStepNavigation}
-					csrf={csrf}
-					userNewslettersSubscriptions={userNewslettersSubscriptions}
-				/>
-			)}
-			{currentStep === OnboardingInviteeSteps.GuardianApp && (
-				<OnboardingAppsDiscovery
-					hasMobileAppDownloaded={hasMobileAppDownloaded}
-					hasFeastMobileAppDownloaded={hasFeastMobileAppDownloaded}
-					onboardingStep={OnboardingSteps.GuardianApp}
-					handleStepNavigation={handleStepNavigation}
-					nextStep={OnboardingInviteeSteps.DigitalPlus}
-					backStep={OnboardingInviteeSteps.CreateAccount}
-					supporterRegion={supportRegionId}
-				/>
-			)}
-			{currentStep === OnboardingInviteeSteps.DigitalPlus && (
-				<OnboardingDigitalPlusDiscovery
-					handleStepNavigation={handleStepNavigation}
-				/>
-			)}
-			{currentStep === OnboardingInviteeSteps.Completed && (
-				<OnboardingInviteeCompleted
-					invitation={invitation}
-					landingPageSettings={landingPageSettings}
-					supportRegionId={supportRegionId}
-				/>
-			)}
+			{(currentStep === OnboardingInviteeSteps.CreateAccount ||
+				!invitationAccepted) && (
+					<OnboardingCreateAccount
+						iframeRef={identityIframeRef}
+						iframeSrc={getIframeTargetUrl(invitation.email)}
+						showIframe={showIdentityIframe}
+						handleStepNavigation={handleStepNavigation}
+						csrf={csrf}
+						userNewslettersSubscriptions={null}
+					/>
+				)}
+			{invitationAccepted &&
+				currentStep === OnboardingInviteeSteps.GuardianApp && (
+					<OnboardingAppsDiscovery
+						hasMobileAppDownloaded={hasMobileAppDownloaded}
+						hasFeastMobileAppDownloaded={hasFeastMobileAppDownloaded}
+						onboardingStep={OnboardingSteps.GuardianApp}
+						handleStepNavigation={handleStepNavigation}
+						nextStep={OnboardingInviteeSteps.DigitalPlus}
+						backStep={OnboardingInviteeSteps.CreateAccount}
+						supporterRegion={supportRegionId}
+					/>
+				)}
+			{invitationAccepted &&
+				currentStep === OnboardingInviteeSteps.DigitalPlus && (
+					<OnboardingDigitalPlusDiscovery
+						handleStepNavigation={handleStepNavigation}
+					/>
+				)}
+			{invitationAccepted &&
+				currentStep === OnboardingInviteeSteps.Completed && (
+					<OnboardingInviteeCompleted
+						invitation={invitation}
+						landingPageSettings={landingPageSettings}
+						supportRegionId={supportRegionId}
+					/>
+				)}
 		</OnboardingLayout>
 	);
 }

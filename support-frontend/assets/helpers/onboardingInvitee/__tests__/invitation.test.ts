@@ -1,5 +1,8 @@
 import fetchMock from '@fetch-mock/jest';
-import { verifyInvitation } from 'helpers/onboardingInvitee/invitation';
+import {
+	acceptInvitation,
+	verifyInvitation,
+} from 'helpers/onboardingInvitee/invitation';
 
 beforeAll(() => {
 	fetchMock.mockGlobal();
@@ -15,6 +18,8 @@ beforeEach(() => {
 
 const invitationCode = 'twT95D1SFKBd';
 const endpoint = `/api/invitation/${invitationCode}`;
+const acceptEndpoint = `/api/invitation/${invitationCode}/accept`;
+const csrf = { token: 'test-csrf-token' };
 
 const oneDayInMillis = 24 * 60 * 60 * 1000;
 
@@ -87,5 +92,31 @@ describe('verifyInvitation', () => {
 		const result = await verifyInvitation(invitationCode);
 
 		expect(result).toEqual({ status: 'invalid' });
+	});
+});
+
+describe('acceptInvitation', () => {
+	it('returns true when the invitation is accepted successfully', async () => {
+		fetchMock.post(acceptEndpoint, { status: 200 });
+
+		const result = await acceptInvitation(invitationCode, csrf);
+
+		expect(result).toBe(true);
+	});
+
+	it('returns false when the accept request is not ok', async () => {
+		fetchMock.post(acceptEndpoint, { status: 500 });
+
+		const result = await acceptInvitation(invitationCode, csrf);
+
+		expect(result).toBe(false);
+	});
+
+	it('returns false when the request fails', async () => {
+		fetchMock.post(acceptEndpoint, { throws: new Error('network failure') });
+
+		const result = await acceptInvitation(invitationCode, csrf);
+
+		expect(result).toBe(false);
 	});
 });

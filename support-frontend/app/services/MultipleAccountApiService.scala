@@ -12,4 +12,19 @@ class MultipleAccountApiService(config: MultipleAccountApiConfig)(implicit wsCli
       .url(s"${config.baseUrl}/invitation/$invitationCode")
       .withHttpHeaders("x-api-key" -> config.apiKey)
       .get()
+
+  def acceptInvitation(
+      invitationCode: String,
+      identityId: String,
+      accessToken: String,
+  ): Future[WSResponse] =
+    wsClient
+      .url(s"${config.baseUrl}/invitation/$invitationCode/accept")
+      .withHttpHeaders(
+        "x-api-key" -> config.apiKey,
+        "x-identity-id" -> identityId,
+        "Authorization" -> s"Bearer $accessToken",
+        "Content-Type" -> "application/json",
+      )
+      .execute("POST")
 }

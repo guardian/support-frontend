@@ -9,8 +9,6 @@ import ContentBox from '../contentBox';
 import type { HandleStepNavigationFunction } from '../onboardingTypes';
 import {
 	completedStack,
-	descriptions,
-	headings,
 	heroContainer,
 	separator,
 } from './sectionsStyles';
@@ -51,41 +49,33 @@ export function OnboardingCreateAccount({
 			<ContentBox
 				cssOverrides={css`
 					margin-top: ${space[5]}px;
+					margin-bottom: ${space[10]}px;
 				`}
 			>
+				<div css={[heroContainer, heroAspectRatio]}>
+					<GridImage
+						gridId={'onboardingInviteeCreateAccountHero'}
+						srcSizes={[442]}
+						sizes="442px"
+						imgType="png"
+						altText={'Onboarding invitee create account hero'}
+					/>
+				</div>
+				<div css={separator} />
 				{showIframe ? (
-					<Stack space={2}>
-						<h1 css={headings}>Create your account</h1>
-						<p css={descriptions}>
-							Redeem your invitation and start exploring your full Guardian
-							access.
-						</p>
-						<iframe
-							ref={iframeRef}
-							src={iframeSrc}
-							width="100%"
-							css={identityFrameStyles}
-						/>
-					</Stack>
+					<iframe
+						ref={iframeRef}
+						src={iframeSrc}
+						width="100%"
+						css={identityFrameStyles}
+					/>
 				) : (
-					<>
-						<div css={[heroContainer, heroAspectRatio]}>
-							<GridImage
-								gridId={'onboardingInviteeCreateAccountHero'}
-								srcSizes={[442]}
-								sizes="442px"
-								imgType="png"
-								altText={'Onboarding invitee create account hero'}
-							/>
-						</div>
-						<div css={separator} />
-						<OnboardingSummarySuccessfulSignIn
-							handleStepNavigation={handleStepNavigation}
-							userState={'inviteeUserRegistered'}
-							userNewslettersSubscriptions={userNewslettersSubscriptions}
-							csrf={csrf}
-						/>
-					</>
+					<OnboardingSummarySuccessfulSignIn
+						handleStepNavigation={handleStepNavigation}
+						userState={'inviteeUserRegistered'}
+						userNewslettersSubscriptions={userNewslettersSubscriptions}
+						csrf={csrf}
+					/>
 				)}
 			</ContentBox>
 		</Stack>

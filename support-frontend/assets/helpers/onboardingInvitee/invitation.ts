@@ -1,3 +1,6 @@
+import { requestOptions } from 'helpers/async/fetch';
+import type { CsrfState } from 'helpers/types/csrf';
+
 export interface OnboardingInviteeInvitation {
 	invitationCode: string;
 	email: string;
@@ -53,5 +56,22 @@ export async function verifyInvitation(
 		};
 	} catch {
 		return { status: 'invalid' };
+	}
+}
+
+// Accepts an invitation via the Play server, which authenticates the user from
+// Okta cookies and forwards x-api-key + x-identity-id upstream.
+export async function acceptInvitation(
+	invitationCode: string,
+	csrf: CsrfState,
+): Promise<boolean> {
+	try {
+		const response = await fetch(
+			`/api/invitation/${encodeURIComponent(invitationCode)}/accept`,
+			requestOptions({}, 'same-origin', 'POST', csrf),
+		);
+		return response.ok;
+	} catch {
+		return false;
 	}
 }

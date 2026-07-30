@@ -7,7 +7,6 @@ import {
 	SvgTickRound,
 } from '@guardian/source/react-components';
 import { ToggleSwitch } from '@guardian/source-development-kitchen/react-components';
-import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
 import { useEffect } from 'react';
@@ -123,21 +122,24 @@ export function OnboardingSummarySuccessfulSignIn({
 		setIsUpdatingNewsletterSubscription,
 	] = useState(false);
 
-	useEffect(() => {
-		if (userNewslettersSubscriptions) {
-			// Find the Saturday Edition newsletter using the type-safe helper
-			const saturdayEditionNewsletterSubscription =
-				getNewsletterSubscriptionById(
-					userNewslettersSubscriptions,
-					NewslettersIds.SaturdayEdition,
-				);
+	const isInvitee = userState === 'inviteeUserRegistered';
 
-			if (!saturdayEditionNewsletterSubscription) {
-				// If not found, default to subscribed (will be auto-subscribed)
-				void handleNewsletterToggle(true);
-			}
+	useEffect(() => {
+		if (isInvitee || !userNewslettersSubscriptions) {
+			return;
 		}
-	}, [userNewslettersSubscriptions]);
+
+		// Find the Saturday Edition newsletter using the type-safe helper
+		const saturdayEditionNewsletterSubscription = getNewsletterSubscriptionById(
+			userNewslettersSubscriptions,
+			NewslettersIds.SaturdayEdition,
+		);
+
+		if (!saturdayEditionNewsletterSubscription) {
+			// If not found, default to subscribed (will be auto-subscribed)
+			void handleNewsletterToggle(true);
+		}
+	}, [userNewslettersSubscriptions, isInvitee]);
 
 	const handleNewsletterToggle = async (newSubscribeState?: boolean) => {
 		// Prevent multiple simultaneous requests
@@ -194,20 +196,21 @@ export function OnboardingSummarySuccessfulSignIn({
 				</Button>
 			</Stack>
 
-			{/* This needs to be hidden for invitee */}
-			<div css={newsletterContainer}>
-				<Stack space={1}>
-					<h2 css={boldDescriptions}>Saturday Edition newsletter</h2>
-					<p css={descriptions}>
-						An exclusive email highlighting the week’s best Guardian journalism
-						from our editor-in-chief, Katharine Viner
-					</p>
-				</Stack>
-				<ToggleSwitch
-					checked={switchNewsletterEnabled}
-					onClick={() => void handleNewsletterToggle()}
-				/>
-			</div>
+			{!isInvitee && (
+				<div css={newsletterContainer}>
+					<Stack space={1}>
+						<h2 css={boldDescriptions}>Saturday Edition newsletter</h2>
+						<p css={descriptions}>
+							An exclusive email highlighting the week’s best Guardian
+							journalism from our editor-in-chief, Katharine Viner
+						</p>
+					</Stack>
+					<ToggleSwitch
+						checked={switchNewsletterEnabled}
+						onClick={() => void handleNewsletterToggle()}
+					/>
+				</div>
+			)}
 		</Stack>
 	);
 }
@@ -227,13 +230,10 @@ function OnboardingSummary({
 
 	const { enableCanadaTaxExclusion } = useFeatureSwitches();
 
-	const { currencyKey, countryGroupId } =
+	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 
-	const amountPaidToday = simpleFormatAmount(
-		getCurrencyByCode(currencyKey),
-		payment.finalAmount,
-	);
+	const amountPaidToday = simpleFormatAmount(currency, payment.finalAmount);
 
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -276,10 +276,10 @@ function OnboardingSummary({
 	const paymentMethodCopy = isDirectDebit
 		? 'Direct Debit'
 		: isPaypal
-		? 'PayPal'
-		: isStripeCard
-		? 'Credit/Debit card'
-		: 'Your selected payment method';
+			? 'PayPal'
+			: isStripeCard
+				? 'Credit/Debit card'
+				: 'Your selected payment method';
 
 	const paymentMethod =
 		order?.accountNumber && isDirectDebit
