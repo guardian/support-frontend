@@ -61,8 +61,9 @@ function OnboardingInviteeComponent({
 	const searchParams = useSearchParams();
 
 	const documentLocation = document.location;
-	const iframeOrigin = `${documentLocation.protocol
-		}//${documentLocation.hostname.replace('support', 'profile')}`;
+	const iframeOrigin = `${
+		documentLocation.protocol
+	}//${documentLocation.hostname.replace('support', 'profile')}`;
 
 	const getIframeTargetUrl = (email: string) => {
 		const iframeTargetUrl = new URL(`${iframeOrigin}/iframed/register/email`);
@@ -233,15 +234,15 @@ function OnboardingInviteeComponent({
 		>
 			{(currentStep === OnboardingInviteeSteps.CreateAccount ||
 				!invitationAccepted) && (
-					<OnboardingCreateAccount
-						iframeRef={identityIframeRef}
-						iframeSrc={getIframeTargetUrl(invitation.email)}
-						showIframe={showIdentityIframe}
-						handleStepNavigation={handleStepNavigation}
-						csrf={csrf}
-						userNewslettersSubscriptions={null}
-					/>
-				)}
+				<OnboardingCreateAccount
+					iframeRef={identityIframeRef}
+					iframeSrc={getIframeTargetUrl(invitation.email)}
+					showIframe={showIdentityIframe}
+					handleStepNavigation={handleStepNavigation}
+					csrf={csrf}
+					userNewslettersSubscriptions={null}
+				/>
+			)}
 			{invitationAccepted &&
 				currentStep === OnboardingInviteeSteps.GuardianApp && (
 					<OnboardingAppsDiscovery
