@@ -90,7 +90,6 @@ cd target
 				resources: [
 					// TODO: remove this entry once we've migrated to the version with stage first:
 					`arn:aws:ssm:${this.region}:${this.account}:parameter/${this.stack}/${app}/${this.stage}/*`,
-					`arn:aws:ssm:${this.region}:${this.account}:parameter/${this.stage}/${app}/${this.stack}/*`,
 				],
 			}),
 			new GuAllowPolicy(this, 'CloudwatchMetrics', {
