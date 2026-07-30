@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import { expect } from '@playwright/test';
 import type { Page } from '@playwright/test';
 
 const paypalUsernamePrefixes = [
@@ -32,30 +33,30 @@ export const fillInPayPalDetails = async (page: Page) => {
 	}
 
 	const emailInput = page.locator('#email');
-
 	await emailInput.fill(`${paypalUsernamePrefix}@personal.example.com`);
 
-	const nextButton = page.locator('#btnNext');
-
+	// Sometimes the email and password inputs are split across two screens and
+	// sometimes they're on the same screen. The playwright tests seem to always
+	// get the two step experience, but just in case let's keep this flexible so
+	// that playwright can handle the case where they appear on the same screen.
+	// I.e. we only need to click the next button if it's there.
+	const nextButton = page.getByRole('button', { name: 'Next' });
 	if (await nextButton.isVisible()) {
 		await nextButton.click();
 	}
-
-	const passwordInput = page.locator('#password');
 
 	const password = `${paypalUsernamePrefix}-${getEnvVarOrThrow(
 		'PAYPAL_TEST_PASSWORD',
 	)}`;
 
+	const passwordInput = page.getByRole('textbox', { name: 'Password' });
+	await passwordInput.waitFor({ state: 'visible' });
+	await expect(passwordInput).toBeInViewport();
 	await passwordInput.fill(password);
 
-	const loginButton = page.locator('#btnLogin');
+	const loginButton = page.getByRole('button', { name: 'Log In' });
+	await loginButton.click();
 
-	if (await loginButton.isVisible()) {
-		await loginButton.click();
-	}
-
-	const submitButton = page.locator('[data-id=payment-submit-btn]');
-
+	const submitButton = page.getByRole('button', { name: 'Agree and Continue' });
 	await submitButton.click();
 };
