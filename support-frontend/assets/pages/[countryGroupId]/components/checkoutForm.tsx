@@ -1065,6 +1065,7 @@ export default function CheckoutForm({
 									cssOverrides={css``}
 								/>
 							</Legend>
+
 							<RadioGroup
 								role="radiogroup"
 								label="Select payment method"
