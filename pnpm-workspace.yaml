@@ -45,3 +45,10 @@ overrides:
 
 onlyBuiltDependencies:
   - '@guardian/support-service-lambdas'
+
+allowBuilds:
+  '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/27aca68f2d5dde99f9db7e2487f064541d8176bb': true
+  '@parcel/watcher': true
+  aws-sdk: true
+  esbuild: true
+  unrs-resolver: true
