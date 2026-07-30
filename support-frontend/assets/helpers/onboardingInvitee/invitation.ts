@@ -34,7 +34,7 @@ export async function verifyInvitation(
 ): Promise<VerifyInvitationResult> {
 	try {
 		const response = await fetch(
-			`/api/invitation/${encodeURIComponent(invitationCode)}`,
+			`/invitation/${encodeURIComponent(invitationCode)}`,
 		);
 
 		if (!response.ok) {
@@ -67,7 +67,7 @@ export async function acceptInvitation(
 ): Promise<boolean> {
 	try {
 		const response = await fetch(
-			`/api/invitation/${encodeURIComponent(invitationCode)}/accept`,
+			`/invitation/${encodeURIComponent(invitationCode)}/accept`,
 			requestOptions({}, 'same-origin', 'POST', csrf),
 		);
 		return response.ok;

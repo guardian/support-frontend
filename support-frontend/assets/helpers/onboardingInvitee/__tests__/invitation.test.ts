@@ -17,8 +17,8 @@ beforeEach(() => {
 });
 
 const invitationCode = 'twT95D1SFKBd';
-const endpoint = `/api/invitation/${invitationCode}`;
-const acceptEndpoint = `/api/invitation/${invitationCode}/accept`;
+const endpoint = `/invitation/${invitationCode}`;
+const acceptEndpoint = `/invitation/${invitationCode}/accept`;
 const csrf = { token: 'test-csrf-token' };
 
 const oneDayInMillis = 24 * 60 * 60 * 1000;
