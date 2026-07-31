@@ -2,7 +2,7 @@
 # Edit this file to configure your project's devcontainer
 # and then run `devenv generate` to create the devcontainer.json files
 
-name: "support-frontend"
+name: 'support-frontend'
 
 # Modules: Built-in functionality
 # - mise: Install and configure mise for dev tools management (https://mise.jdx.dev/)
@@ -19,9 +19,9 @@ modules:
 
 # Optional: Ports to forward
 forwardPorts:
-  - "9211"  # same port on host and container
-  - "9210"  # same port on host and container
-  - "9001"  # same port on host and container
+  - '9211' # same port on host and container
+  - '9210' # same port on host and container
+  - '9001' # same port on host and container
 #   - "8000:9000"  # hostPort:containerPort
 
 # Optional: Mount directories from host to container
@@ -37,8 +37,10 @@ forwardPorts:
 # Each command has a 'cmd' field and a 'workingDirectory' field
 # e.g.
 postCreateCommand:
-  - cmd: "pnpm install"
-    workingDirectory: "."
+  - cmd: 'mise exec -- corepack enable'
+    workingDirectory: '.'
+  - cmd: 'mise exec -- pnpm install'
+    workingDirectory: '.'
 #   - cmd: "make setup"
 #     workingDirectory: "/workspaces/project"
 # postStartCommand:
