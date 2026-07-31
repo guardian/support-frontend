@@ -60,3 +60,12 @@ describe('GET /postcode-lookup/:postcode', () => {
 		expect(findSpy).not.toHaveBeenCalled();
 	});
 });
+
+describe('GET /delivery-agents/:postcode', () => {
+	it('returns a 200 with type NotCovered for a postcode within the M25', async () => {
+		const response = await request(app).get('/delivery-agents/N19GU');
+
+		expect(response.status).toBe(200);
+		expect(response.body).toEqual({ type: 'NotCovered' });
+	});
+});
