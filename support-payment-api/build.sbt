@@ -70,6 +70,9 @@ excludeDependencies ++= Seq(
   // newer version by specifying it in the dependencies.
   ExclusionRule("net.sourceforge.htmlunit", "htmlunit"),
   ExclusionRule("commons-beanutils", "commons-beanutils"), // Also exclude commons-beanutils due to a vulnerability
+  // Exclude io.appium:java-client due to a high severity vulnerability. It's pulled in via org.playframework:play-test
+  // > io.fluentlenium:fluentlenium-core, but I don't think it's used/needed.
+  ExclusionRule("io.appium", "java-client"),
 )
 
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
