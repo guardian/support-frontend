@@ -1,7 +1,7 @@
 import type { RequestHandler } from 'express';
 
 export const buildDeliveryAgentsHandler =
-	(): RequestHandler<{ postcode: string }> => async (req, res) => {
+	(): RequestHandler<{ postcode: string }> => (req, res) => {
 		const postcode = decodeURIComponent(req.params.postcode);
 
 		console.log(`Delivery agents handler called with ${postcode}`);
