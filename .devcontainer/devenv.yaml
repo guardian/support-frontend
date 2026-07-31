@@ -36,9 +36,9 @@ forwardPorts:
 # Optional: Commands to run after container creation
 # Each command has a 'cmd' field and a 'workingDirectory' field
 # e.g.
-# postCreateCommand:
-#   - cmd: "npm install"
-#     workingDirectory: "."
+postCreateCommand:
+  - cmd: "pnpm install"
+    workingDirectory: "."
 #   - cmd: "make setup"
 #     workingDirectory: "/workspaces/project"
 # postStartCommand:
