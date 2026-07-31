@@ -67,10 +67,6 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |        "description" : "Enable external service postcode lookup in checkout form",
           |        "state" : "On"
           |      },
-          |      "useIdealPostcodes" : {
-          |        "description" : "Use Ideal Postcodes to handle postcode lookups",
-          |        "state" : "On"
-          |      },
           |      "enableDigitalSubGifting" : {
           |        "description" : "Enable Digital Sub gifting",
           |        "state" : "On"
