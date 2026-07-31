@@ -167,7 +167,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
             directDebit = Some(On),
             stripeHostedCheckout = Some(Off),
           ),
-          subscriptionsSwitches = SubscriptionsSwitches(Some(On), Some(On), Some(On)),
+          subscriptionsSwitches = SubscriptionsSwitches(Some(On), Some(On)),
           featureSwitches = FeatureSwitches(
             Some(On),
             Some(On),
