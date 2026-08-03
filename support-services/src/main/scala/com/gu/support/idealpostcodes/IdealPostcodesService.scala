@@ -4,11 +4,11 @@ import com.gu.i18n.Country
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
 import com.gu.support.config.IdealPostcodesConfig
-import com.gu.support.encoding.StringExtensions.ExtendedString
-import com.gu.support.getaddressio.{FindAddressAPIResult, FindAddressResultError}
+import com.gu.support.encoding.Codec
+import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.workers.Address
-
 import scala.concurrent.{ExecutionContext, Future}
+
 case class IdealPostcodesAddress(
     line_1: String,
     line_2: String,
@@ -20,6 +20,12 @@ case class IdealPostcodesAddress(
 case class IdealPostcodesAddressResponse(
     result: List[IdealPostcodesAddress],
 )
+
+case class FindAddressResultError(Message: String) extends Throwable(s"$Message")
+
+object FindAddressResultError {
+  implicit val codec: Codec[FindAddressResultError] = deriveCodec
+}
 
 object IdealPostcodesAddress {
   import com.gu.support.encoding.Codec
