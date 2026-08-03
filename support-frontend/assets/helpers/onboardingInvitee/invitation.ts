@@ -75,3 +75,28 @@ export async function acceptInvitation(
 		return false;
 	}
 }
+
+// Declines an invitation via the Play server. Play looks up the invitation and
+// attaches the secondary user's identity id upstream; no login required. CSRF
+// is still enforced.
+export async function declineInvitation(
+	invitationCode: string,
+	csrf: CsrfState,
+): Promise<boolean> {
+	try {
+		const response = await fetch(
+			`/invitation/${encodeURIComponent(invitationCode)}`,
+			{
+				method: 'DELETE',
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/json',
+					'Csrf-Token': csrf.token ?? '',
+				},
+			},
+		);
+		return response.ok;
+	} catch {
+		return false;
+	}
+}

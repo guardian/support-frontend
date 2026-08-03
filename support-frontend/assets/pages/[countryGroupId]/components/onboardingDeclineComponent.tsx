@@ -7,8 +7,8 @@ import type { HandleStepNavigationFunction } from 'components/onboarding/onboard
 import { OnboardingDeclineInvitation } from 'components/onboarding/sections/declineInvitation';
 import { OnboardingDeclineSave } from 'components/onboarding/sections/declineSave';
 import { OnboardingInvitationDeclined } from 'components/onboarding/sections/invitationDeclined';
+import { InvitationUnavailable } from 'components/onboarding/sections/invitationUnavailable';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
-import ErrorPage from 'pages/error/components/errorPage';
 
 interface OnboardingDeclineComponentProps {
 	supportRegionId: SupportRegionId;
@@ -24,6 +24,7 @@ function OnboardingDeclineComponent({
 	const invitationCode = searchParams[0].get('invitationCode');
 
 	const [currentStep, setCurrentStep] = useState<OnboardingDeclineSteps>();
+	const [declineFailed, setDeclineFailed] = useState(false);
 
 	const handleStepNavigation: HandleStepNavigationFunction = (targetStep) => {
 		searchParams[1]((prev) => {
@@ -50,14 +51,14 @@ function OnboardingDeclineComponent({
 	}, [searchParams]);
 
 	if (!invitationCode) {
-		return (
-			<ErrorPage
-				headings={['This invitation', 'link is invalid']}
-				copy="Please check the link in your email and try again. If the problem persists, "
-				reportLink={true}
-			/>
-		);
+		return <InvitationUnavailable />;
 	}
+
+	if (declineFailed) {
+		return <InvitationUnavailable />;
+	}
+
+	const csrf = { token: window.guardian.csrf.token };
 
 	return (
 		<OnboardingLayout
@@ -70,6 +71,11 @@ function OnboardingDeclineComponent({
 					supportRegionId={supportRegionId}
 					landingPageSettings={landingPageSettings}
 					handleStepNavigation={handleStepNavigation}
+					invitationCode={invitationCode}
+					csrf={csrf}
+					onDeclineFailed={() => {
+						setDeclineFailed(true);
+					}}
 				/>
 			)}
 			{currentStep === OnboardingDeclineSteps.Declined && (

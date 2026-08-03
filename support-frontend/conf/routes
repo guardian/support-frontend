@@ -70,6 +70,7 @@ PATCH /identity/newsletters                                        controllers.I
 
 # ------ Multiple accounts ------ #
 GET  /invitation/:invitationCode                                     controllers.InvitationController.getInvitation(invitationCode: String)
+DELETE /invitation/:invitationCode                                   controllers.InvitationController.deleteInvitation(invitationCode: String)
 POST /invitation/:invitationCode/accept                              controllers.InvitationController.acceptInvitation(invitationCode: String)
 
 # ----- Subscriptions ----- #

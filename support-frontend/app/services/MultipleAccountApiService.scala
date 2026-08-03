@@ -27,4 +27,13 @@ class MultipleAccountApiService(config: MultipleAccountApiConfig)(implicit wsCli
         "Content-Type" -> "application/json",
       )
       .execute("POST")
+
+  def deleteInvitation(invitationCode: String, identityId: String): Future[WSResponse] =
+    wsClient
+      .url(s"${config.baseUrl}/invitation/$invitationCode")
+      .withHttpHeaders(
+        "x-api-key" -> config.apiKey,
+        "x-identity-id" -> identityId,
+      )
+      .execute("DELETE")
 }

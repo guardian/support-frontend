@@ -2,10 +2,13 @@ import { css } from '@emotion/react';
 import { from, palette, space } from '@guardian/source/foundations';
 import { Button, Stack, SvgTickRound } from '@guardian/source/react-components';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { useRef, useState } from 'preact/hooks';
 import GridImage from 'components/gridImage/gridImage';
 import { OnboardingDeclineSteps } from 'components/onboarding/onboardingSteps';
 import type { HandleStepNavigationFunction } from 'components/onboarding/onboardingTypes';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
+import { declineInvitation as submitDeclineInvitation } from 'helpers/onboardingInvitee/invitation';
+import type { CsrfState } from 'helpers/types/csrf';
 import { getBenefitsChecklistFromLandingPageTool } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
@@ -43,13 +46,21 @@ export function OnboardingDeclineInvitation({
 	supportRegionId,
 	landingPageSettings,
 	handleStepNavigation,
+	invitationCode,
+	csrf,
+	onDeclineFailed,
 }: {
 	supportRegionId: SupportRegionId;
 	landingPageSettings: LandingPageVariant;
 	handleStepNavigation: HandleStepNavigationFunction;
+	invitationCode: string;
+	csrf: CsrfState;
+	onDeclineFailed: () => void;
 }) {
 	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 	const { windowWidthIsLessThan } = useWindowWidth();
+	const [isDeclining, setIsDeclining] = useState(false);
+	const declineStartedRef = useRef(false);
 
 	const benefitsChecklist =
 		getBenefitsChecklistFromLandingPageTool(
@@ -57,6 +68,22 @@ export function OnboardingDeclineInvitation({
 			landingPageSettings,
 			countryGroupId,
 		) ?? [];
+
+	const confirmDecline = async () => {
+		if (declineStartedRef.current) {
+			return;
+		}
+		declineStartedRef.current = true;
+		setIsDeclining(true);
+
+		const declined = await submitDeclineInvitation(invitationCode, csrf);
+
+		if (declined) {
+			handleStepNavigation(OnboardingDeclineSteps.Declined);
+		} else {
+			onDeclineFailed();
+		}
+	};
 
 	return (
 		<Stack space={5} cssOverrides={completedStack}>
@@ -117,15 +144,18 @@ export function OnboardingDeclineInvitation({
 						<Button
 							priority="primary"
 							cssOverrides={buttonOverrides}
-							onClick={() =>
-								handleStepNavigation(OnboardingDeclineSteps.Declined)
-							}
+							isLoading={isDeclining}
+							disabled={isDeclining}
+							onClick={() => {
+								void confirmDecline();
+							}}
 						>
 							Confirm decline invitation
 						</Button>
 						<Button
 							priority="tertiary"
 							cssOverrides={buttonOverrides}
+							disabled={isDeclining}
 							onClick={() => handleStepNavigation(OnboardingDeclineSteps.Save)}
 						>
 							Cancel

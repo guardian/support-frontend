@@ -1,6 +1,7 @@
 import fetchMock from '@fetch-mock/jest';
 import {
 	acceptInvitation,
+	declineInvitation,
 	verifyInvitation,
 } from 'helpers/onboardingInvitee/invitation';
 
@@ -116,6 +117,32 @@ describe('acceptInvitation', () => {
 		fetchMock.post(acceptEndpoint, { throws: new Error('network failure') });
 
 		const result = await acceptInvitation(invitationCode, csrf);
+
+		expect(result).toBe(false);
+	});
+});
+
+describe('declineInvitation', () => {
+	it('returns true when the invitation is declined successfully', async () => {
+		fetchMock.delete(endpoint, { status: 204 });
+
+		const result = await declineInvitation(invitationCode, csrf);
+
+		expect(result).toBe(true);
+	});
+
+	it('returns false when the decline request is not ok', async () => {
+		fetchMock.delete(endpoint, { status: 404 });
+
+		const result = await declineInvitation(invitationCode, csrf);
+
+		expect(result).toBe(false);
+	});
+
+	it('returns false when the request fails', async () => {
+		fetchMock.delete(endpoint, { throws: new Error('network failure') });
+
+		const result = await declineInvitation(invitationCode, csrf);
 
 		expect(result).toBe(false);
 	});

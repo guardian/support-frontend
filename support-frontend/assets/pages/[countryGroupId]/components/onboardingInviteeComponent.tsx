@@ -13,6 +13,7 @@ import type {
 import { OnboardingAppsDiscovery } from 'components/onboarding/sections/appsDiscovery';
 import { OnboardingCreateAccount } from 'components/onboarding/sections/createAccount';
 import { OnboardingDigitalPlusDiscovery } from 'components/onboarding/sections/digitalPlusDiscovery';
+import { InvitationUnavailable } from 'components/onboarding/sections/invitationUnavailable';
 import { OnboardingInviteeCompleted } from 'components/onboarding/sections/onboardingInviteeCompleted';
 import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
 import useAnalyticsProfile from 'helpers/customHooks/useAnalyticsProfile';
@@ -22,7 +23,6 @@ import { acceptInvitation } from 'helpers/onboardingInvitee/invitation';
 import * as cookie from 'helpers/storage/cookie';
 import type { CsrfState } from 'helpers/types/csrf';
 import { getUser } from 'helpers/user/user';
-import ErrorPage from 'pages/error/components/errorPage';
 
 type AcceptStatus = 'pending' | 'accepted' | 'failed';
 
@@ -31,16 +31,6 @@ interface OnboardingInviteeProps {
 	csrf: CsrfState;
 	invitation: OnboardingInviteeInvitation;
 	landingPageSettings: LandingPageVariant;
-}
-
-function AcceptInvitationFailed() {
-	return (
-		<ErrorPage
-			headings={['We couldn’t redeem', 'your invitation']}
-			copy="Please try again later. If the problem persists, "
-			reportLink={true}
-		/>
-	);
 }
 
 function OnboardingInviteeComponent({
@@ -213,7 +203,7 @@ function OnboardingInviteeComponent({
 	}, []);
 
 	if (acceptStatus === 'failed') {
-		return <AcceptInvitationFailed />;
+		return <InvitationUnavailable />;
 	}
 
 	const invitationAccepted = acceptStatus === 'accepted';
