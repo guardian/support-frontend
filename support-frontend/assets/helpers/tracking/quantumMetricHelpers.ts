@@ -1,5 +1,5 @@
 import { getConsentFor, onConsent } from '@guardian/consent-manager';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
@@ -51,7 +51,7 @@ export function getSubscriptionAnnualValue(
 export function getConvertedAnnualValue(
 	billingPeriod: BillingPeriod,
 	amount: number,
-	sourceCurrency: IsoCurrency,
+	sourceCurrency: CurrencyCode,
 ): number | undefined {
 	const annualAmount = amount * periodMultipliers[billingPeriod];
 	return getConvertedValue(annualAmount, sourceCurrency);
@@ -59,10 +59,10 @@ export function getConvertedAnnualValue(
 
 export function getConvertedValue(
 	annualAmount: number,
-	sourceCurrency: IsoCurrency,
+	sourceCurrency: CurrencyCode,
 ): number | undefined {
 	const valueInPence = annualAmount * 100;
-	const targetCurrency: IsoCurrency = 'GBP';
+	const targetCurrency: CurrencyCode = 'GBP';
 	if (window.QuantumMetricAPI?.isOn()) {
 		const convertedValue: number =
 			window.QuantumMetricAPI.currencyConvertFromToValue(
@@ -79,10 +79,10 @@ export function getConvertedValue(
 export function getContributionAnnualValue(
 	billingPeriod: BillingPeriod,
 	amount: number,
-	sourceCurrency: IsoCurrency,
+	sourceCurrency: CurrencyCode,
 ): number | undefined {
 	const valueInPence = amount * 100 * periodMultipliers[billingPeriod];
-	const targetCurrency: IsoCurrency = 'GBP';
+	const targetCurrency: CurrencyCode = 'GBP';
 
 	if (window.QuantumMetricAPI?.isOn()) {
 		const convertedValue: number =

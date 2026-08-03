@@ -1,6 +1,6 @@
 import { countryCodeSchema } from '@modules/internationalisation/schemas';
 import { z } from 'zod';
-import { IsoCurrencySchema } from './currencySchema';
+import { CurrencyCodeSchema } from './currencySchema';
 
 export const ProductTypeSchema = z.enum([
 	'CONTRIBUTION',
@@ -102,7 +102,7 @@ export const AcquisitionProductSchema = z.object({
 	paymentId: z.string().nullish(),
 	product: ProductTypeSchema,
 	amount: z.number().nullish(),
-	currency: IsoCurrencySchema,
+	currency: CurrencyCodeSchema,
 	source: z.string().nullish(),
 	platform: z.string().nullish(),
 	labels: z.string().array(),

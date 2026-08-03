@@ -43,7 +43,8 @@ export type StripePaymentMethod =
 	// non-Apple-Pay payment method (wallet) that uses the payment request
 	// button”
 	| 'StripeApplePay'
-	| 'StripePaymentRequestButton';
+	| 'StripePaymentRequestButton'
+	| 'StripePaypal';
 type RegularContribution = {
 	productType: 'Contribution';
 	amount: number;
@@ -175,7 +176,7 @@ type Status = 'failure' | 'pending' | 'success';
 // standardised across payment methods & contribution types.
 // The only method/type combination which will not make use of this PayPal one-off,
 // because the end of that checkout happens on the backend after the user is redirected to our site.
-export type PaymentResult = {
+export type StripePaymentResult = {
 	paymentStatus: Status;
 	subscriptionCreationPending?: true;
 	error?: ErrorReason;
@@ -189,7 +190,7 @@ export type StatusResponse = {
 };
 
 // ----- Setup ----- //
-const PaymentSuccess: PaymentResult = {
+const PaymentSuccess: StripePaymentResult = {
 	paymentStatus: 'success',
 };
 

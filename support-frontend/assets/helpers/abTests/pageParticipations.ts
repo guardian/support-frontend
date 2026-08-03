@@ -175,9 +175,7 @@ export async function getPageParticipations<Variant>(
 				return makeFallbackResult();
 			}
 			return {
-				participations: trackParticipation
-					? validParticipations
-					: ({} as Participations),
+				participations: validParticipations,
 				variant,
 			};
 		}

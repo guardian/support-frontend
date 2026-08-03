@@ -19,7 +19,8 @@ catalog:
   '@aws-sdk/credential-provider-node': 3.972.25
   '@aws-sdk/util-dynamodb': ^3.995.0
   '@guardian/prettier': ^2.1.5
-  '@guardian/support-service-lambdas': github:guardian/support-service-lambdas#0c4dec1f4142fce673dbd5216d9afbfa7c66ab9f
+  # When bumping this sha, also update the sha in the matching allowBuilds value below.
+  '@guardian/support-service-lambdas': github:guardian/support-service-lambdas#27aca68f2d5dde99f9db7e2487f064541d8176bb
   '@types/jest': ^29.5.14
   '@types/node': ^20.19.0
   esbuild: ^0.28.1
@@ -30,5 +31,22 @@ catalog:
   typescript: ^5.8.3
   zod: ^4.4.3
 
-onlyBuiltDependencies:
-  - '@guardian/support-service-lambdas'
+overrides:
+  '@typescript-eslint/typescript-estree': ^8.46.2
+  flatted: 3.4.2
+  picomatch@2.3.1: 2.3.2
+  picomatch@4.0.3: 4.0.4
+  shell-quote: 1.9.0
+  brace-expansion@1: ^1.1.16
+  brace-expansion@2: ^2.1.2
+  brace-expansion@5: ^5.0.8
+  js-yaml@3: ^3.15.0
+  js-yaml@4: ^4.3.0
+  postcss: ^8.5.18
+
+allowBuilds:
+  '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/27aca68f2d5dde99f9db7e2487f064541d8176bb': true
+  '@parcel/watcher': true
+  aws-sdk: true
+  esbuild: true
+  unrs-resolver: true

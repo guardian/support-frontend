@@ -20,7 +20,6 @@
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
-	"packageManager": "pnpm@10.28.2",
 	"dependencies": {
 		"@aws-sdk/client-ssm": "catalog:",
 		"express": "^5.2.1",

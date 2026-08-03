@@ -88,6 +88,7 @@ cd target
 			new GuAllowPolicy(this, 'SSMGet', {
 				actions: ['ssm:GetParameter'],
 				resources: [
+					// TODO: remove this entry once we've migrated to the version with stage first:
 					`arn:aws:ssm:${this.region}:${this.account}:parameter/${this.stack}/${app}/${this.stage}/*`,
 				],
 			}),
