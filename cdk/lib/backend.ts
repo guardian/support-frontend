@@ -85,13 +85,6 @@ cd target
 		} ${app} /var/log/${app}/application.log`);
 
 		const policies = [
-			new GuAllowPolicy(this, 'SSMGet', {
-				actions: ['ssm:GetParameter'],
-				resources: [
-					// TODO: remove this entry once we've migrated to the version with stage first:
-					`arn:aws:ssm:${this.region}:${this.account}:parameter/${this.stack}/${app}/${this.stage}/*`,
-				],
-			}),
 			new GuAllowPolicy(this, 'CloudwatchMetrics', {
 				actions: [
 					'logs:CreateLogGroup',
