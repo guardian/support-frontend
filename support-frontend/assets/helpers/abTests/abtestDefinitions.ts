@@ -11,7 +11,6 @@ export const pageUrlRegexes = {
 	oneTimeCheckoutOnly: /(uk|us|au|ca|eu|nz|int)\/one-time-checkout/,
 	landingPageSubscribeOnly: /uk\/subscribe/,
 	landingPagePaperOnly: /uk\/subscribe\/paper/,
-	landingPageContribute: /(uk|us|au|ca|eu|nz|int)\/contribute/,
 	genericCheckoutOnly: /(uk|us|au|ca|eu|nz|int)\/checkout/,
 	ukPrintCheckoutOnly:
 		/((uk\/checkout).*?(SubscriptionCard|HomeDelivery|NationalDelivery|MonthlyPlus|QuarterlyPlus|AnnualPlus|OneYearGift|ThreeMonthGift))/,
@@ -103,26 +102,5 @@ export const tests: Tests = {
 		seed: 4,
 		targetPage: pageUrlRegexes.oneTimeCheckoutOnly,
 		excludeContributionsOnlyCountries: false,
-	},
-	tierCardColors: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: false,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 8,
-		targetPage: pageUrlRegexes.landingPageContribute,
-		excludeContributionsOnlyCountries: true,
 	},
 };
