@@ -6,7 +6,6 @@ exports[`The Backend stack matches the snapshot 1`] = `
     "gu:cdk:constructs": [
       "GuDistributionBucketParameter",
       "GuAllowPolicy",
-      "GuAllowPolicy",
       "GuVpcParameter",
       "GuSubnetListParameter",
       "GuSubnetListParameter",
@@ -759,38 +758,6 @@ exports[`The Backend stack matches the snapshot 1`] = `
           "Version": "2012-10-17",
         },
         "PolicyName": "parameter-store-read-policy",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleSupportbackend25B34CE1",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "SSMGetF4C837D5": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "ssm:GetParameter",
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:aws:ssm:eu-west-1:",
-                    {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":parameter/support/support-backend/PROD/*",
-                  ],
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "SSMGetF4C837D5",
         "Roles": [
           {
             "Ref": "InstanceRoleSupportbackend25B34CE1",
