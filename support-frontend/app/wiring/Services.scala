@@ -20,6 +20,7 @@ import services.paypal.{PayPalCompletePaymentsServiceProvider, PayPalNvpServiceP
 import services.pricing.{DefaultPromotionServiceS3, PriceSummaryServiceProvider}
 import services.stepfunctions.{StateWrapper, SupportWorkersClient}
 import services.mparticle.MParticleClient
+import cats.effect.unsafe.implicits.global
 
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>

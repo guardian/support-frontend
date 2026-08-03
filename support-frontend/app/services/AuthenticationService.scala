@@ -1,5 +1,6 @@
 package services
 
+import cats.effect.unsafe.implicits.global
 import com.gu.identity.auth.IdentityClient.Error
 import com.gu.identity.auth.{IdapiAuthConfig, IdentityClient}
 import com.gu.identity.model.User
