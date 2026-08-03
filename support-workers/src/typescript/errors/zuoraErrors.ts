@@ -27,6 +27,7 @@ const transactionDeclinedMessages = [
 	'Error occurred while processing payment method.code=validation_failed,message=account_number is the wrong length (should be 8 characters)',
 	'Error occurred while processing payment method.code=validation_failed,message=account_number does not match sort code',
 	"Transaction declined.INSTRUMENT_DECLINED - The instrument presented  was either declined by the processor or bank, or it can't be used for this payment.",
+	'Transaction declined.TRANSACTION_REFUSED - The request was refused',
 ];
 
 export const isTransactionDeclinedError = (errorMessage: string) =>

@@ -894,9 +894,11 @@ describe('getPageParticipations', () => {
 
 			const checkoutResult = await getPageParticipations(config);
 
-			// Should return same variant from session storage but not track on checkout
+			// Should return same variant and participations from session storage
 			expect(checkoutResult.variant).toEqual(landingResult.variant);
-			expect(checkoutResult.participations).toEqual({});
+			expect(checkoutResult.participations).toEqual(
+				landingResult.participations,
+			);
 		});
 	});
 
