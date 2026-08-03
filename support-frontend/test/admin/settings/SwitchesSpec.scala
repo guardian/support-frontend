@@ -123,7 +123,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "enableAlternativeSupporterPlusCardColors" : {
           |        "description" : "Enable alternative SupporterPlus card colours",
           |        "state" : "Off"
-          |      },
+          |      }
           |    }
           |  },
           |  "campaignSwitches" : {
