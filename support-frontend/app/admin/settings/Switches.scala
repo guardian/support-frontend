@@ -49,7 +49,6 @@ object CampaignSwitches {
 case class SubscriptionsSwitches(
     useDotcomContactPage: Option[SwitchState],
     checkoutPostcodeLookup: Option[SwitchState],
-    useIdealPostcodes: Option[SwitchState],
 )
 
 object SubscriptionsSwitches {
