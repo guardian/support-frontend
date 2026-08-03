@@ -57,6 +57,9 @@ excludeDependencies ++= Seq(
   // the server JAR is not needed in this Play application. A fix requires upgrading to 0.23.x which is a
   // Cats Effect 3 migration incompatible with the CE2-based identity-auth-core 7.0.0.
   ExclusionRule("org.http4s", "http4s-blaze-server_2.13"),
+  // Exclude io.appium:java-client due to a high severity vulnerability. It's pulled in via org.playframework:play-test
+  // > io.fluentlenium:fluentlenium-core, but I don't think it's used/needed.
+  ExclusionRule("io.appium", "java-client"),
 )
 
 ThisBuild / libraryDependencySchemes ++= Seq(
