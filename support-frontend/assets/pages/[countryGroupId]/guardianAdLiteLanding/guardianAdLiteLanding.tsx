@@ -1,8 +1,6 @@
-import { GBPCountries } from '@modules/internationalisation/countryGroup';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { getUser } from 'helpers/user/user';
-import { getSupportRegionIdConfig } from '../../supportRegionConfig';
+import type { SupportRegionSwitcherProps } from '../../../components/supportRegionSwitcher/supportRegionSwitcher';
 import {
 	getReturnAddress,
 	setReturnAddress,
@@ -21,10 +19,9 @@ export function GuardianAdLiteLanding({
 	supportRegionId,
 }: GuardianAdLiteLandingProps): JSX.Element {
 	const user = getUser();
-	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
-	const countrySwitcherProps: CountryGroupSwitcherProps = {
-		countryGroupIds: [GBPCountries],
-		selectedCountryGroup: countryGroupId,
+	const countrySwitcherProps: SupportRegionSwitcherProps = {
+		supportRegionIds: ['uk'],
+		selectedSupportRegion: supportRegionId,
 		subPath: '/guardian-ad-lite',
 	}; // hidden initially, will display with more regions
 

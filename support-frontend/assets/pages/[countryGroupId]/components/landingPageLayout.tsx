@@ -5,11 +5,11 @@ import {
 } from '@guardian/source-development-kitchen/react-components';
 import type { ReactNode } from 'react';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
-import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
-import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
+import SupportRegionSwitcher from '../../../components/supportRegionSwitcher/supportRegionSwitcher';
+import type { SupportRegionSwitcherProps } from '../../../components/supportRegionSwitcher/supportRegionSwitcher';
 
 const checkoutHeadingHeight = css`
 	max-height: 332px;
@@ -18,14 +18,14 @@ const checkoutHeadingHeight = css`
 
 type LandingPageLayoutProps = {
 	children: ReactNode;
-	countrySwitcherProps: CountryGroupSwitcherProps;
+	countrySwitcherProps: SupportRegionSwitcherProps;
 };
 
 export function LandingPageLayout({
 	children,
 	countrySwitcherProps,
 }: LandingPageLayoutProps) {
-	const multipleCountries = countrySwitcherProps.countryGroupIds.length > 1;
+	const multipleCountries = countrySwitcherProps.supportRegionIds.length > 1;
 	return (
 		<PageScaffold
 			header={
@@ -33,7 +33,7 @@ export function LandingPageLayout({
 					<Header>
 						{multipleCountries && (
 							<CountrySwitcherContainer>
-								<CountryGroupSwitcher {...countrySwitcherProps} />
+								<SupportRegionSwitcher {...countrySwitcherProps} />
 							</CountrySwitcherContainer>
 						)}
 					</Header>

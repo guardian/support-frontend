@@ -1,15 +1,15 @@
-import type { CountryGroupId } from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type {
 	CheckoutNudgeTest,
 	CheckoutNudgeVariant,
 } from '../globalsAndSwitches/checkoutNudgeSettings';
 import { getSettings, isSwitchOn } from '../globalsAndSwitches/globals';
-import { CountryGroup } from '../internationalisation/classes/countryGroup';
+import { DetectSupportRegion } from '../internationalisation/classes/detectSupportRegion';
 import {
-	countryGroupMatches,
 	getParticipationFromQueryString,
 	isWithinSchedule,
 	randomNumber,
+	supportRegionMatches,
 } from './helpers';
 import type { Participations } from './models';
 import { getMvtId } from './mvt';
@@ -45,7 +45,7 @@ export interface CheckoutNudgeSettings {
 	participations: Participations;
 }
 export function getCheckoutNudgeParticipations(
-	countryGroupId: CountryGroupId = CountryGroup.detect(),
+	supportRegionId: SupportRegionId = DetectSupportRegion.detect(),
 	path: string = window.location.pathname,
 	tests: CheckoutNudgeTest[] = getSettings().checkoutNudgeTests ?? [],
 	mvtId: number = getMvtId(),
@@ -119,9 +119,9 @@ export function getCheckoutNudgeParticipations(
 		.find((test) => {
 			return (
 				isWithinSchedule(test.scheduler) &&
-				countryGroupMatches(
+				supportRegionMatches(
 					test.regionTargeting?.targetedCountryGroups,
-					countryGroupId,
+					supportRegionId,
 				) &&
 				productMatches(test, path, queryString)
 			);

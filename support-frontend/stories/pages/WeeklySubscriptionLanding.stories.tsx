@@ -1,4 +1,3 @@
-import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import type { StoryObj } from '@storybook/preact-vite';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { WeeklyLandingPageProps } from 'pages/weekly-subscription-landing/weeklySubscriptionLanding';
@@ -98,7 +97,7 @@ type Story = StoryObj<WeeklyLandingPageProps>;
 
 const defaultArgs: WeeklyLandingPageProps = {
 	countryId: 'GB',
-	countryGroupId: GBPCountries,
+	supportRegionId: 'uk',
 	productPrices: weeklyProductPrices,
 	promotionCopy: undefined,
 	orderIsAGift: false,

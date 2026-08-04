@@ -1,4 +1,3 @@
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { render, screen } from '@testing-library/react';
 import { type LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import type {
@@ -25,7 +24,7 @@ const utsStudentDiscount = {
 };
 
 describe('<StudentHeader />', () => {
-	const supportRegionId = SupportRegionId.US;
+	const supportRegionId = 'us';
 	const productKey: ActiveProductKey = 'SupporterPlus';
 	const ratePlanKey: ActiveRatePlanKey = 'Monthly';
 	const landingPageVariant = {

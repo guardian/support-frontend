@@ -1,4 +1,4 @@
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import GridPicture from 'components/gridPicture/gridPicture';
 import { Container } from 'components/layout/container';
 import type {
@@ -69,7 +69,7 @@ export default function StudentHeader({
 		.SupporterPlus ?? { benefits: [] };
 
 	const benefits =
-		supportRegionId === SupportRegionId.UK
+		supportRegionId === 'uk'
 			? [ukSpecificAdditionalBenefit, ...configuredBenefits]
 			: configuredBenefits;
 

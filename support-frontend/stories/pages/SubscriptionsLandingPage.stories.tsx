@@ -32,7 +32,7 @@ export default meta;
 type Story = StoryObj<SubscriptionsLandingProps>;
 
 const defaultArgs: SubscriptionsLandingProps = {
-	countryGroupId: 'GBPCountries',
+	supportRegionId: 'uk',
 	participations: {},
 	pricingCopy: {
 		GuardianWeekly: {

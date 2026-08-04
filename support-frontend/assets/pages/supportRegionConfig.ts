@@ -1,13 +1,12 @@
 import type { Currency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { getCurrencyByCode } from '@modules/internationalisation/currency';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 
 type SupportRegionConfig = {
 	currency: Currency;
 	currencyKey: CurrencyCode;
-	countryGroupId: CountryGroupId;
+	supportRegionId: SupportRegionId;
 };
 
 /**
@@ -22,53 +21,53 @@ export const getSupportRegionIdConfig = (
 	supportRegionId: SupportRegionId,
 ): SupportRegionConfig => {
 	switch (supportRegionId) {
-		case SupportRegionId.UK:
+		case 'uk':
 			return {
 				currency: getCurrencyByCode('GBP'),
 				currencyKey: 'GBP',
-				countryGroupId: 'GBPCountries',
+				supportRegionId: 'uk',
 			};
 
-		case SupportRegionId.US:
+		case 'us':
 			return {
 				currency: getCurrencyByCode('USD'),
 				currencyKey: 'USD',
-				countryGroupId: 'UnitedStates',
+				supportRegionId: 'us',
 			};
 
-		case SupportRegionId.AU:
+		case 'au':
 			return {
 				currency: getCurrencyByCode('AUD'),
 				currencyKey: 'AUD',
-				countryGroupId: 'AUDCountries',
+				supportRegionId: 'au',
 			};
 
-		case SupportRegionId.EU:
+		case 'eu':
 			return {
 				currency: getCurrencyByCode('EUR'),
 				currencyKey: 'EUR',
-				countryGroupId: 'EURCountries',
+				supportRegionId: 'eu',
 			};
 
-		case SupportRegionId.NZ:
+		case 'nz':
 			return {
 				currency: getCurrencyByCode('NZD'),
 				currencyKey: 'NZD',
-				countryGroupId: 'NZDCountries',
+				supportRegionId: 'nz',
 			};
 
-		case SupportRegionId.CA:
+		case 'ca':
 			return {
 				currency: getCurrencyByCode('CAD'),
 				currencyKey: 'CAD',
-				countryGroupId: 'Canada',
+				supportRegionId: 'ca',
 			};
 
-		case SupportRegionId.INT:
+		case 'int':
 			return {
 				currency: getCurrencyByCode('USD'),
 				currencyKey: 'USD',
-				countryGroupId: 'International',
+				supportRegionId: 'int',
 			};
 	}
 };

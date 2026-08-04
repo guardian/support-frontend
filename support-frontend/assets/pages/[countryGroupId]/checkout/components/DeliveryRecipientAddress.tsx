@@ -2,12 +2,15 @@ import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { TextArea } from '@guardian/source/react-components';
 import type { CountryCode } from '@modules/internationalisation/country';
+import {
+	supportRegionIds,
+	supportRegions,
+} from '@modules/internationalisation/supportRegion';
 import { useState } from 'react';
 import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
-import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { Legend } from 'pages/[countryGroupId]/components/form';
 import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSession';
@@ -77,7 +80,10 @@ export function DeliveryRecipientAddress({
 		null,
 	);
 
-	const countryGroupId = CountryGroup.fromCountry(countryId) ?? 'International';
+	const supportRegionId =
+		supportRegionIds.find((id) =>
+			supportRegions[id].countries.includes(countryId),
+		) ?? 'int';
 
 	return (
 		<>
@@ -91,7 +97,7 @@ export function DeliveryRecipientAddress({
 					country={deliveryCountry}
 					state={deliveryState}
 					postCode={postcode}
-					countryGroupId={countryGroupId}
+					supportRegionId={supportRegionId}
 					countries={countries ?? {}}
 					errors={addressErrors}
 					postcodeState={{

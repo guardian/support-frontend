@@ -1,13 +1,9 @@
-import type {
-	CountryGroupId,
-	SupportRegionId,
-} from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { Institution } from 'helpers/globalsAndSwitches/studentLandingPageSettings';
 import { privacyLink, supporterPlusTermsLink } from 'helpers/legal';
 import { getProductLabel } from 'helpers/productCatalog';
 import { getHelpCentreUrl } from 'helpers/urls/externalLinks';
 import type { FAQItem } from 'pages/[countryGroupId]/components/accordionFAQ';
-import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 
 const supporterPlusLabel = getProductLabel('SupporterPlus');
 const supporterPlusBodyAccess: JSX.Element = (
@@ -162,20 +158,20 @@ interface StudentFAQsConfig {
 	regionName: string;
 }
 
-const studentFAQsConfig: Partial<Record<CountryGroupId, StudentFAQsConfig>> = {
-	GBPCountries: {
+const studentFAQsConfig: Partial<Record<SupportRegionId, StudentFAQsConfig>> = {
+	'uk': {
 		getCopy: otherSupporterPlusFAQ,
 		regionName: 'the UK',
 	},
-	UnitedStates: {
+	'us': {
 		getCopy: otherSupporterPlusFAQ,
 		regionName: 'the USA',
 	},
-	Canada: {
+	'ca': {
 		getCopy: otherSupporterPlusFAQ,
 		regionName: 'Canada',
 	},
-	AUDCountries: {
+	'au': {
 		getCopy: auSupporterPlusFAQ,
 		// Not actually used
 		regionName: 'Australia',
@@ -183,10 +179,10 @@ const studentFAQsConfig: Partial<Record<CountryGroupId, StudentFAQsConfig>> = {
 };
 
 const studentInstitutionFAQsConfig = (
-	regionId: CountryGroupId,
+	regionId: SupportRegionId,
 	institution: Institution,
 ): FAQItem[] | undefined => {
-	if (regionId === 'AUDCountries' || regionId === 'NZDCountries') {
+	if (regionId === 'au' || regionId === 'nz') {
 		return institutionSupporterPlusFAQ(institution);
 	}
 	return undefined;
@@ -196,13 +192,12 @@ export function getStudentFAQs(
 	supportRegionId: SupportRegionId,
 	institution?: Institution,
 ): FAQItem[] | undefined {
-	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 
 	if (institution) {
-		return studentInstitutionFAQsConfig(countryGroupId, institution);
+		return studentInstitutionFAQsConfig(supportRegionId, institution);
 	}
 
-	const faqConfig = studentFAQsConfig[countryGroupId];
+	const faqConfig = studentFAQsConfig[supportRegionId];
 
 	if (faqConfig) {
 		return faqConfig.getCopy(faqConfig.regionName, institution);

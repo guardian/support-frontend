@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { countryGroups } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { getBaseDomain } from 'helpers/urls/url';
 
 // ----- Types ----- //
@@ -24,19 +23,17 @@ const getHelpCentreUrl = () => `${getManageUrl()}/help-centre`;
 
 function getPatronsLink(
 	intCmp?: string,
-	countryGroupId?: CountryGroupId,
+	supportRegionId?: SupportRegionId,
 ): string {
 	const params = new URLSearchParams();
 	params.append('INTCMP', intCmp ?? defaultIntCmp);
 
-	const url = countryGroupId === 'UnitedStates' ? patronsUrlUS : patronsUrl;
+	const url = supportRegionId === 'us' ? patronsUrlUS : patronsUrl;
 	return `${url}?${params.toString()}`;
 }
 
-function convertCountryGroupIdToAppStoreCountryCode(cgId: CountryGroupId) {
-	const groupFromId = countryGroups[cgId];
-
-	switch (groupFromId.supportRegionId.toLowerCase()) {
+function convertSupportRegionIdToAppStoreCountryCode(cgId: SupportRegionId) {
+	switch (cgId) {
 		case 'uk':
 			return 'gb';
 
@@ -47,24 +44,24 @@ function convertCountryGroupIdToAppStoreCountryCode(cgId: CountryGroupId) {
 			return 'us';
 
 		default:
-			return groupFromId.supportRegionId.toLowerCase();
+			return cgId;
 	}
 }
 
-function getAppleStoreUrl(product: string, countryGroupId: CountryGroupId) {
+function getAppleStoreUrl(product: string, supportRegionId: SupportRegionId) {
 	const appStoreCountryCode =
-		convertCountryGroupIdToAppStoreCountryCode(countryGroupId);
+		convertSupportRegionIdToAppStoreCountryCode(supportRegionId);
 	return `https://apps.apple.com/${appStoreCountryCode}/app/${product}`;
 }
 
-function getIosAppUrl(countryGroupId: CountryGroupId): string {
-	return getAppleStoreUrl('the-guardian/id409128287', countryGroupId);
+function getIosAppUrl(supportRegionId: SupportRegionId): string {
+	return getAppleStoreUrl('the-guardian/id409128287', supportRegionId);
 }
 
-function getDailyEditionUrl(countryGroupId: CountryGroupId): string {
+function getDailyEditionUrl(supportRegionId: SupportRegionId): string {
 	return getAppleStoreUrl(
 		'the-guardian-daily-edition/id452707806',
-		countryGroupId,
+		supportRegionId,
 	);
 }
 

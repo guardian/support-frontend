@@ -8,8 +8,8 @@ import {
 	textSans15,
 	textSans17,
 } from '@guardian/source/foundations';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { getCurrencyByCode } from '@modules/internationalisation/currency';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { Container } from 'components/layout/container';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {

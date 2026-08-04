@@ -1,4 +1,4 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 
 interface Image {
 	desktopUrl: string;
@@ -24,6 +24,6 @@ export interface StudentLandingPageVariant {
 export interface StudentLandingPageTest {
 	name: string;
 	status: 'Live' | 'Draft';
-	countryGroupId: CountryGroupId;
+	countryGroupId: SupportRegionId;
 	variants: StudentLandingPageVariant[];
 }

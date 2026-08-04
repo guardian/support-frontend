@@ -1,15 +1,11 @@
 import type { CountryCode } from '@modules/internationalisation/country';
-import {
-	countryGroups,
-	GBPCountries,
-} from '@modules/internationalisation/countryGroup';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
+import { supportRegionIdFromCountryCode } from '@modules/internationalisation/supportRegion';
 import {
 	BillingPeriod,
 	type RecurringBillingPeriod,
 } from '@modules/product/billingPeriod';
 import type { Product } from 'components/product/productOption';
-import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { glyph } from 'helpers/internationalisation/currency';
 import { internationaliseProduct } from 'helpers/productCatalog';
 import { getWeeklyFulfilmentOption } from 'helpers/productCatalogToFulfilmentOption';
@@ -65,14 +61,13 @@ const getCheckoutUrl = ({
 	isGift: boolean;
 	promotion?: Promotion;
 }) => {
-	const countryGroupId = CountryGroup.fromCountry(countryId) ?? GBPCountries;
+	const supportRegionId = supportRegionIdFromCountryCode(countryId);
+
 	const productGuardianWeekly = internationaliseProduct(
-		countryGroups[countryGroupId].supportRegionId,
+		supportRegionId,
 		'GuardianWeeklyDomestic',
 	);
-	const region = countryGroups[countryGroupId].supportRegionId;
-
-	const url = `${getOrigin()}/${region}/checkout`;
+	const url = `${getOrigin()}/${supportRegionId}/checkout`;
 	const urlWithParams = addQueryParamsToURL(url, {
 		promoCode: promotion?.promoCode,
 		product: productGuardianWeekly,

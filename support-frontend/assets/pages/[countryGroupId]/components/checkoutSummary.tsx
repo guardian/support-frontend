@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { InfoSummary } from '@guardian/source-development-kitchen/react-components';
 import type { CountryCode } from '@modules/internationalisation/country';
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
@@ -85,7 +85,7 @@ export default function CheckoutSummary({
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
 	const productCatalog = appConfig.productCatalog;
-	const { currency, currencyKey, countryGroupId } =
+	const { currency, currencyKey } =
 		getSupportRegionIdConfig(supportRegionId);
 	const productDescription = getProductDescription(productKey, ratePlanKey);
 	const ratePlanDetail = productDescription.ratePlans[ratePlanKey] ?? {
@@ -122,17 +122,17 @@ export default function CheckoutSummary({
 		getBenefitsChecklistFromLandingPageTool(
 			productKey,
 			landingPageSettings,
-			countryGroupId,
+			supportRegionId,
 		) ??
 		getBenefitsChecklistFromProductDescription(
 			productDescription,
-			countryGroupId,
+			supportRegionId,
 			abParticipations,
 		);
 
 	if (
 		ratePlanKey === 'OneYearStudent' &&
-		supportRegionId === SupportRegionId.UK
+		supportRegionId === 'uk'
 	) {
 		benefitsCheckListData.unshift({
 			isChecked: true,
@@ -210,7 +210,7 @@ export default function CheckoutSummary({
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
 							ratePlanDescription={ratePlanDetail.label}
-							countryGroupId={countryGroupId}
+							supportRegionId={supportRegionId}
 							thresholdAmount={thresholdAmount}
 							promotion={promotion}
 							deliveryDate={

@@ -1,16 +1,7 @@
 import type { ReactNode } from 'react';
-import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
-import {
-	AUDCountries,
-	Canada,
-	EURCountries,
-	GBPCountries,
-	International,
-	NZDCountries,
-	UnitedStates,
-} from '@modules/internationalisation/countryGroup';
+import SupportRegionSwitcher from '../../assets/components/supportRegionSwitcher/supportRegionSwitcher';
 
 export default {
 	title: 'Core/Simple Header',
@@ -30,17 +21,9 @@ export const WithCountrySwitcher = Template.bind({});
 WithCountrySwitcher.args = {
 	children: (
 		<CountrySwitcherContainer>
-			<CountryGroupSwitcher
-				countryGroupIds={[
-					GBPCountries,
-					UnitedStates,
-					AUDCountries,
-					EURCountries,
-					NZDCountries,
-					Canada,
-					International,
-				]}
-				selectedCountryGroup={GBPCountries}
+			<SupportRegionSwitcher
+				supportRegionIds={['uk', 'us', 'au', 'eu', 'nz', 'ca', 'int']}
+				selectedSupportRegion={'uk'}
 				subPath="/"
 			/>
 		</CountrySwitcherContainer>

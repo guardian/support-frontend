@@ -4,9 +4,9 @@ import Header from 'components/headers/header/header';
 import { PageScaffold } from 'components/page/pageScaffold';
 import PageSection from 'components/pageSection/pageSection';
 import QuestionsContact from 'components/questionsContact/questionsContact';
-import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
+import { DetectSupportRegion } from '../../helpers/internationalisation/classes/detectSupportRegion';
 import {
 	mainContentStyles,
 	pageSectionBodyOverrides,
@@ -20,7 +20,7 @@ setUpTrackingAndConsents({});
 
 export const PayPalError = (
 	<PageScaffold
-		header={<Header countryGroupId={CountryGroup.detect()} />}
+		header={<Header supportRegionId={DetectSupportRegion.detect()} />}
 		footer={<Footer />}
 	>
 		<div css={mainContentStyles}>

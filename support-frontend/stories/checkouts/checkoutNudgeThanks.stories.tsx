@@ -1,12 +1,13 @@
+import { css } from '@emotion/react';
 import { Column, Columns } from '@guardian/source/react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
+import type {
+	CheckoutNudgeThankYouProps} from 'components/checkoutNudge/checkoutNudge';
 import {
-	CheckoutNudgeThankYou,
-	CheckoutNudgeThankYouProps,
+	CheckoutNudgeThankYou
 } from 'components/checkoutNudge/checkoutNudge';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
-import { css } from '@emotion/react';
 
 export default {
 	title: 'Checkouts/Checkout Nudge Thank You',

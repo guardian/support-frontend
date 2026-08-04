@@ -1,9 +1,6 @@
 import { newspaperCountries } from '@modules/internationalisation/country';
-import {
-	type CountryGroupId,
-	SupportRegionId,
-} from '@modules/internationalisation/countryGroup';
 import { gwDeliverableCountries } from '@modules/internationalisation/gwDeliverableCountries';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type {
@@ -78,7 +75,7 @@ export type ProductBenefit = {
 	copy: string;
 	copyBoldStart?: string;
 	tooltip?: string;
-	specificToRegions?: CountryGroupId[];
+	specificToRegions?: SupportRegionId[];
 	specificToAbTest?: Array<{
 		name: string;
 		variants: string[];
@@ -116,12 +113,12 @@ export const showSimilarProductsConsentForRatePlan = (
 
 export function filterBenefitByRegion(
 	benefit: {
-		specificToRegions?: CountryGroupId[];
+		specificToRegions?: SupportRegionId[];
 	},
-	countryGroupId: CountryGroupId,
+	supportRegionId: SupportRegionId,
 ) {
 	if (benefit.specificToRegions !== undefined) {
-		return benefit.specificToRegions.includes(countryGroupId);
+		return benefit.specificToRegions.includes(supportRegionId);
 	}
 
 	return true;
@@ -172,32 +169,18 @@ const addFreeBenefit = {
 	copy: 'Ad-free reading on all your devices',
 };
 
-const supportBenefit = {
+const supportBenefit: ProductBenefit = {
 	copy: 'Give to the Guardian every month with Support',
-	specificToRegions: [
-		'GBPCountries',
-		'EURCountries',
-		'AUDCountries',
-		'NZDCountries',
-		'Canada',
-		'International',
-	] as CountryGroupId[],
+	specificToRegions: ['uk', 'eu', 'au', 'nz', 'ca', 'int'],
 	hideBullet: true,
 };
-const newsletterBenefitUS = {
+const newsletterBenefitUS: ProductBenefit = {
 	copy: 'Regular dispatches from the newsroom to see the impact of your support',
-	specificToRegions: ['UnitedStates'] as CountryGroupId[],
+	specificToRegions: ['us'],
 };
-const newsletterBenefit = {
+const newsletterBenefit: ProductBenefit = {
 	copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
-	specificToRegions: [
-		'GBPCountries',
-		'EURCountries',
-		'AUDCountries',
-		'NZDCountries',
-		'Canada',
-		'International',
-	] as CountryGroupId[],
+	specificToRegions: ['uk', 'eu', 'au', 'nz', 'ca', 'int'],
 };
 const fewerAsksBenefit = {
 	copy: 'Far fewer asks for support',
@@ -207,7 +190,7 @@ const partnerOffersBenefit = {
 	copy: 'Exclusive access to partner offers',
 	tooltip:
 		'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
-	specificToRegions: ['AUDCountries'],
+	specificToRegions: ['au'],
 };
 const guardianWeeklyBenefit = {
 	copy: 'Guardian Weekly print magazine delivered to your door every week',
@@ -312,40 +295,33 @@ const paperPlusRatePlans: RatePlanDetails = {
 	},
 };
 
-const digitalPaperBenefitUK = {
+const digitalPaperBenefitUK: ProductBenefit = {
 	copy: 'Daily digital Guardian newspaper',
-	specificToRegions: ['GBPCountries'] as CountryGroupId[],
+	specificToRegions: ['uk'],
 };
 
-const paperArchiveDigitalBenefitUK = {
+const paperArchiveDigitalBenefitUK: ProductBenefit = {
 	copy: `Digital access to the Guardian’s 200 year newspaper archive`,
 	tooltip:
 		'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was in the UK, since 1821.',
-	specificToRegions: ['GBPCountries'] as CountryGroupId[],
+	specificToRegions: ['uk'],
 };
 
-const weeklyDigitalBenefit = {
+const weeklyDigitalBenefit: ProductBenefit = {
 	copy: `Guardian Weekly e-magazine`,
 	tooltip: `Accessed through the Guardian Editions app, the Guardian Weekly e-magazine features a handpicked and carefully curated selection of in-depth articles, global news, opinion and more. Enjoy wherever you are, on your favourite device.`,
 };
 
-const editionsDigitalBenefit = {
+const editionsDigitalBenefit: ProductBenefit = {
 	copy: `The Long Read e-magazine`,
 	tooltip: `Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.`,
 };
 
-const paperArchiveDigitalBenefit = {
+const paperArchiveDigitalBenefit: ProductBenefit = {
 	copy: `Digital access to the Guardian’s 200 year newspaper archive`,
 	tooltip:
 		'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was, since 1821.',
-	specificToRegions: [
-		'UnitedStates',
-		'EURCountries',
-		'AUDCountries',
-		'NZDCountries',
-		'Canada',
-		'International',
-	] as CountryGroupId[],
+	specificToRegions: ['us', 'eu', 'au', 'nz', 'ca', 'int'],
 };
 
 export const productCatalogDescription: Record<
@@ -626,7 +602,7 @@ export function internationaliseProduct(
 		productKey === 'GuardianWeeklyDomestic' ||
 		productKey === 'GuardianWeeklyRestOfWorld'
 	) {
-		if (supportRegionId === SupportRegionId.INT) {
+		if (supportRegionId === 'int') {
 			return 'GuardianWeeklyRestOfWorld';
 		} else {
 			return 'GuardianWeeklyDomestic';

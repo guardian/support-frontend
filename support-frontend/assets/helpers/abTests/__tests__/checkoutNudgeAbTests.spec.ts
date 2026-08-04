@@ -17,7 +17,7 @@ const oneTimeToRecurring__US: CheckoutNudgeTest = {
 	name: 'oneTimeToRecurring__US',
 	status: 'Live',
 	regionTargeting: {
-		targetedCountryGroups: ['UnitedStates'],
+		targetedCountryGroups: ['us'],
 	},
 	nudgeFromProduct: {
 		product: 'OneTimeContribution',
@@ -42,12 +42,12 @@ const oneTimeToRecurring__NON_US: CheckoutNudgeTest = {
 	status: 'Live',
 	regionTargeting: {
 		targetedCountryGroups: [
-			'GBPCountries',
-			'AUDCountries',
-			'Canada',
-			'EURCountries',
-			'NZDCountries',
-			'International',
+			'uk',
+			'au',
+			'ca',
+			'eu',
+			'nz',
+			'int',
 		],
 	},
 	nudgeFromProduct: {
@@ -109,7 +109,7 @@ describe('getCheckoutNudgeParticipations', () => {
 
 	it('assigns a user to oneTimeToRecurring__NON_US on UK one-time checkout', () => {
 		const result = getCheckoutNudgeParticipations(
-			'GBPCountries',
+			'uk',
 			'/uk/one-time-checkout',
 			tests,
 			0,
@@ -124,7 +124,7 @@ describe('getCheckoutNudgeParticipations', () => {
 
 	it('assigns a user to oneTimeToRecurring__US on US one-time checkout', () => {
 		const result = getCheckoutNudgeParticipations(
-			'UnitedStates',
+			'us',
 			'/us/one-time-checkout',
 			tests,
 			0,
@@ -139,7 +139,7 @@ describe('getCheckoutNudgeParticipations', () => {
 
 	it('does not assign a user to a test if on landing page and nothing in session storage', () => {
 		const result = getCheckoutNudgeParticipations(
-			'GBPCountries',
+			'uk',
 			'/uk/contribute',
 			tests,
 			0,
@@ -155,7 +155,7 @@ describe('getCheckoutNudgeParticipations', () => {
 		);
 
 		const result = getCheckoutNudgeParticipations(
-			'GBPCountries',
+			'uk',
 			'/uk/contribute',
 			tests,
 			0,
@@ -170,7 +170,7 @@ describe('getCheckoutNudgeParticipations', () => {
 
 	it('uses the force-checkout-nudge url querystring parameter to force participation of US test', () => {
 		const result = getCheckoutNudgeParticipations(
-			'GBPCountries',
+			'uk',
 			'/uk/one-time-checkout',
 			tests,
 			0,
@@ -185,7 +185,7 @@ describe('getCheckoutNudgeParticipations', () => {
 
 	it('does not assign a user to a test if on recurring checkout with monthly ratePlan', () => {
 		const result = getCheckoutNudgeParticipations(
-			'GBPCountries',
+			'uk',
 			'/uk/checkout',
 			tests,
 			0,
@@ -196,7 +196,7 @@ describe('getCheckoutNudgeParticipations', () => {
 
 	it('assigns a user to a test if on recurring checkout with annual ratePlan', () => {
 		const result = getCheckoutNudgeParticipations(
-			'GBPCountries',
+			'uk',
 			'/uk/checkout',
 			tests,
 			0,
@@ -215,7 +215,7 @@ describe('getCheckoutNudgeParticipations', () => {
 			(key: string) => key !== 'featureSwitches.enableCheckoutNudge',
 		);
 		const result = getCheckoutNudgeParticipations(
-			'GBPCountries',
+			'uk',
 			'/uk/checkout',
 			tests,
 			0,
@@ -226,7 +226,7 @@ describe('getCheckoutNudgeParticipations', () => {
 
 	it('does not assign a user to a test if disable-nudge query parameter is present', () => {
 		const result = getCheckoutNudgeParticipations(
-			'GBPCountries',
+			'uk',
 			'/uk/checkout',
 			tests,
 			0,
@@ -237,7 +237,7 @@ describe('getCheckoutNudgeParticipations', () => {
 
 	it('uses the preview-checkout-nudge url querystring parameter to force participation', () => {
 		const result = getCheckoutNudgeParticipations(
-			'GBPCountries',
+			'uk',
 			'/uk/one-time-checkout',
 			tests,
 			0,
@@ -257,7 +257,7 @@ describe('getCheckoutNudgeParticipations', () => {
 			scheduler: { end: '2020-01-01T00:00' },
 		};
 		const result = getCheckoutNudgeParticipations(
-			'GBPCountries',
+			'uk',
 			'/uk/one-time-checkout',
 			[expiredTest],
 			0,
@@ -277,7 +277,7 @@ describe('getCheckoutNudgeParticipations', () => {
 			scheduler: { end: '2020-01-01T00:00' },
 		};
 		const result = getCheckoutNudgeParticipations(
-			'GBPCountries',
+			'uk',
 			'/uk/one-time-checkout',
 			[expiredTest],
 			0,

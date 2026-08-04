@@ -14,7 +14,7 @@ import {
 	SvgChevronDownSingle,
 } from '@guardian/source/react-components';
 import type { Currency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'react';
 import {

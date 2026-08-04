@@ -6,14 +6,14 @@ import {
 	Select,
 	TextInput,
 } from '@guardian/source/react-components';
+import { supportRegionIdFromCountryCode } from '@guardian/support-service-lambdas/modules/internationalisation/src/supportRegion';
 import type { CountryCode } from '@modules/internationalisation/country';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { countryGroups } from '@modules/internationalisation/countryGroup';
 import {
 	auStates,
 	caStates,
 	usStates,
 } from '@modules/internationalisation/state';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type React from 'react';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { PostcodeFinder } from 'components/subscriptionCheckouts/address/postcodeFinder';
@@ -58,7 +58,7 @@ type AddressFieldsState = AddressFieldsType & {
 
 type StatePropTypes = AddressFieldsState & {
 	scope: AddressType;
-	countryGroupId?: CountryGroupId;
+	supportRegionId?: SupportRegionId;
 	countries: Record<string, string>;
 	postcodeState: PostcodeFinderState;
 };
@@ -142,7 +142,7 @@ type ValidityStateError = 'valueMissing' | 'patternMismatch';
 
 export function AddressFields({
 	scope,
-	countryGroupId,
+	supportRegionId,
 	country,
 	lineOne,
 	lineTwo,
@@ -260,22 +260,17 @@ export function AddressFields({
 				onChange={(event) => {
 					const selectedCountry = Country.codeFromString(event.target.value);
 
-					if (selectedCountry && countryGroupId) {
-						const selectedCountryGroup = Object.entries(countryGroups).find(
-							([, countryGroup]) =>
-								countryGroup.countries.includes(selectedCountry),
-						)?.[0];
+					if (selectedCountry && supportRegionId) {
+						const selectedSupportRegionId: SupportRegionId =
+							supportRegionIdFromCountryCode(selectedCountry);
 
-						if (countryGroupId !== selectedCountryGroup) {
+						if (supportRegionId !== selectedSupportRegionId) {
 							const pathname = window.location.pathname;
 							const currentInternationalisationId =
 								pathname.split('/')[1] ?? '';
-							const selectedInternationalisationId =
-								countryGroups[selectedCountryGroup as CountryGroupId]
-									.supportRegionId;
 							const redirectPathname = pathname.replace(
 								currentInternationalisationId,
-								selectedInternationalisationId,
+								selectedSupportRegionId,
 							);
 
 							const urlSearchParams = new URLSearchParams(
@@ -290,7 +285,7 @@ export function AddressFields({
 							) as ActiveRatePlanKey;
 							const { productKey, ratePlanKey } =
 								internationaliseProductAndRatePlan(
-									selectedInternationalisationId,
+									selectedSupportRegionId,
 									product,
 									ratePlan,
 								);

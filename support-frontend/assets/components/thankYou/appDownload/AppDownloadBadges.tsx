@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { from, space } from '@guardian/source/foundations';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import {
 	OPHAN_COMPONENT_ID_APP_STORE_BADGE,
 	OPHAN_COMPONENT_ID_GOOGLE_PLAY_BADGE,
@@ -42,17 +42,17 @@ const responsiveLayoutStyles = css`
 `;
 
 function AppDownloadBadges({
-	countryGroupId,
+	supportRegionId,
 	isFeast,
 }: {
-	countryGroupId: CountryGroupId;
+	supportRegionId: SupportRegionId;
 	isFeast?: boolean;
 }): JSX.Element {
 	return (
 		<div css={container}>
 			{/* App Store */}
 			<a
-				href={isFeast ? feastAppUrl : getIosAppUrl(countryGroupId)}
+				href={isFeast ? feastAppUrl : getIosAppUrl(supportRegionId)}
 				target="blank"
 				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_APP_STORE_BADGE)}
 				aria-label="Download on the Apple App Store"

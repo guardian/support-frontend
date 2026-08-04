@@ -1,13 +1,4 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import {
-	AUDCountries,
-	Canada,
-	EURCountries,
-	GBPCountries,
-	International,
-	NZDCountries,
-	UnitedStates,
-} from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import Header from 'components/headers/header/header';
 
 export default {
@@ -20,25 +11,25 @@ export default {
 				options: ['navigation', 'checkout', 'guardianLogo'],
 			},
 		},
-		countryGroupId: {
+		supportRegionId: {
 			control: {
 				type: 'select',
 				options: [
-					GBPCountries,
-					UnitedStates,
-					AUDCountries,
-					EURCountries,
-					NZDCountries,
-					Canada,
-					International,
+					'uk',
+					'us',
+					'au',
+					'eu',
+					'nz',
+					'ca',
+					'int',
 				],
 			},
 		},
 	},
 };
 
-function Template(args: { countryGroupId: CountryGroupId }): JSX.Element {
-	return <Header countryGroupId={args.countryGroupId} />;
+function Template(args: { supportRegionId: SupportRegionId }): JSX.Element {
+	return <Header supportRegionId={args.supportRegionId} />;
 }
 
 Template.args = {} as Record<string, unknown>;
@@ -46,5 +37,5 @@ Template.args = {} as Record<string, unknown>;
 export const Navigation = Template.bind({});
 
 Navigation.args = {
-	countryGroupId: GBPCountries,
+	supportRegionId: 'uk',
 };

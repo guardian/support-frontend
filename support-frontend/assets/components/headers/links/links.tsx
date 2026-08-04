@@ -1,12 +1,5 @@
 import type { SerializedStyles } from '@emotion/react';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import {
-	AUDCountries,
-	countryGroups,
-	GBPCountries,
-	NZDCountries,
-	UnitedStates,
-} from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getPatronsLink } from 'helpers/urls/externalLinks';
 import { routes } from 'helpers/urls/routes';
@@ -26,14 +19,14 @@ type HeaderNavLink = {
 	trackAs: string;
 	internal: boolean;
 	opensInNewWindow?: boolean;
-	include?: CountryGroupId[];
-	exclude?: CountryGroupId[];
+	include?: SupportRegionId[];
+	exclude?: SupportRegionId[];
 	additionalStyles?: SerializedStyles;
 };
 
 type PropTypes = {
 	location: 'desktop' | 'mobile';
-	countryGroupId?: CountryGroupId;
+	supportRegionId?: SupportRegionId;
 	getRef?: (element: Element | null) => void;
 	cssOverride?: SerializedStyles;
 };
@@ -62,7 +55,7 @@ const links: HeaderNavLink[] = [
 		href: routes.paperSubscriptionLanding,
 		text: 'Newspaper',
 		trackAs: 'subscriptions:paper',
-		include: [GBPCountries],
+		include: ['uk'],
 		internal: true,
 	},
 	{
@@ -76,17 +69,16 @@ const links: HeaderNavLink[] = [
 		text: 'Patrons',
 		trackAs: 'patrons',
 		opensInNewWindow: true,
-		exclude: [AUDCountries, NZDCountries, UnitedStates],
+		exclude: ['au', 'nz', 'us'],
 		internal: false,
 	},
 ];
 
 function internationalisationID(
-	countryGroupId?: CountryGroupId,
+	supportRegionId?: SupportRegionId,
 ): string | null {
-	if (countryGroupId != null) {
-		const group = countryGroups[countryGroupId];
-		return group.supportRegionId;
+	if (supportRegionId != null) {
+		return supportRegionId;
 	}
 
 	return null;
@@ -103,12 +95,12 @@ function isActiveLink(urlWithoutParams: string, href: string): boolean {
 function Links({
 	location,
 	getRef,
-	countryGroupId,
+	supportRegionId,
 	cssOverride,
 }: PropTypes): JSX.Element {
 	const { protocol, host, pathname } = window.location;
 	const urlWithoutParams = `${protocol}//${host}${pathname}`;
-	const internationalisationIDValue = internationalisationID(countryGroupId);
+	const internationalisationIDValue = internationalisationID(supportRegionId);
 	const isNotUk = internationalisationIDValue !== 'uk';
 	return (
 		<nav css={[linksNav, cssOverride]}>
@@ -128,17 +120,17 @@ function Links({
 					})
 					.filter(({ include, exclude }) => {
 						// If there is no country group ID for the link, return true and include the link in the rendering.
-						if (!countryGroupId) {
+						if (!supportRegionId) {
 							return true;
 						}
 
-						// If the link is not meant to be included for a specific CountryGroupID, do not include in array.
-						if (include && !include.includes(countryGroupId)) {
+						// If the link is not meant to be included for a specific SupportRegionId, do not include in array.
+						if (include && !include.includes(supportRegionId)) {
 							return false;
 						}
 
-						// If the link is meant to be excluded for a specific CountryGroupID, exclude from array.
-						if (exclude?.includes(countryGroupId)) {
+						// If the link is meant to be excluded for a specific SupportRegionId, exclude from array.
+						if (exclude?.includes(supportRegionId)) {
 							return false;
 						}
 

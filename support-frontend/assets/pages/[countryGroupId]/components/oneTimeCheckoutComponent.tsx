@@ -18,7 +18,7 @@ import {
 	ErrorSummary,
 } from '@guardian/source-development-kitchen/react-components';
 import type { CountryCode } from '@modules/internationalisation/country';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import {
 	CardNumberElement,
@@ -279,7 +279,7 @@ export function OneTimeCheckoutComponent({
 	landingPageSettings,
 	oneTimeCheckoutSettings,
 }: OneTimeCheckoutComponentProps) {
-	const { currency, currencyKey, countryGroupId } =
+	const { currency, currencyKey } =
 		getSupportRegionIdConfig(supportRegionId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
 
@@ -313,8 +313,8 @@ export function OneTimeCheckoutComponent({
 		amounts,
 	);
 
-	const minAmount = config[countryGroupId]['ONE_OFF'].min;
-	const maxAmount = config[countryGroupId]['ONE_OFF'].max;
+	const minAmount = config[supportRegionId]['ONE_OFF'].min;
+	const maxAmount = config[supportRegionId]['ONE_OFF'].max;
 
 	const [selectedPriceCard, setSelectedPriceCard] = useState<number | 'other'>(
 		preSelectedPriceCard ?? defaultAmount,
@@ -523,11 +523,11 @@ export function OneTimeCheckoutComponent({
 					currency: currencyKey,
 					amount: finalAmount,
 					returnURL: payPalReturnUrl(
-						countryGroupId,
+						supportRegionId,
 						email,
 						'/paypal/rest/returnOneTime',
 					),
-					cancelURL: payPalCancelUrl(countryGroupId),
+					cancelURL: payPalCancelUrl(supportRegionId),
 				});
 				const acquisitionData = getAcquisitionData(
 					abParticipations,
@@ -612,7 +612,7 @@ export function OneTimeCheckoutComponent({
 						clientSecret,
 						confirmParams: {
 							return_url: stripePayPalReturnUrl(
-								countryGroupId,
+								supportRegionId,
 								email,
 								stripePublicKey,
 								currencyKey,
@@ -1262,14 +1262,14 @@ export function OneTimeCheckoutComponent({
 							<FinePrint mobileTheme={'dark'}>
 								<FooterTsAndCs
 									productKey={'OneTimeContribution'}
-									countryGroupId={countryGroupId}
+									supportRegionId={supportRegionId}
 								/>
 							</FinePrint>
 						</div>
 					</BoxContents>
 				</Box>
 			</form>
-			<PatronsMessage countryGroupId={countryGroupId} mobileTheme={'light'} />
+			<PatronsMessage supportRegionId={supportRegionId} mobileTheme={'light'} />
 			<ContributionCheckoutFinePrint mobileTheme={'light'} />
 			{isProcessingPayment && (
 				<LoadingOverlay>

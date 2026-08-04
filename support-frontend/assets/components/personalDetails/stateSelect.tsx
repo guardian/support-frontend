@@ -1,14 +1,14 @@
 import { css } from '@emotion/react';
 import { Option, Select } from '@guardian/source/react-components';
 import type { CountryCode } from '@modules/internationalisation/country';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	auStates,
 	caStates,
 	usStates,
 } from '@modules/internationalisation/state';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
+import { supportRegionIdFromCountryCode } from '@modules/internationalisation/supportRegion';
 import type { FormEventHandler } from 'react';
-import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 
 type StateSelectProps = {
 	countryId: CountryCode;
@@ -19,16 +19,16 @@ type StateSelectProps = {
 	error?: string;
 };
 
-const stateDescriptors: Partial<Record<CountryGroupId, string>> = {
-	UnitedStates: 'State',
-	Canada: 'Province',
-	AUDCountries: 'State / Territory',
+const stateDescriptors: Partial<Record<SupportRegionId, string>> = {
+	us: 'State',
+	ca: 'Province',
+	au: 'State / Territory',
 };
 
-const stateLists: Partial<Record<CountryGroupId, Record<string, string>>> = {
-	UnitedStates: usStates,
-	Canada: caStates,
-	AUDCountries: auStates,
+const stateLists: Partial<Record<SupportRegionId, Record<string, string>>> = {
+	us: usStates,
+	ca: caStates,
+	au: auStates,
 };
 
 export function StateSelect({
@@ -39,10 +39,9 @@ export function StateSelect({
 	onInvalid,
 	error,
 }: StateSelectProps): JSX.Element | null {
-	const countryGroupId = CountryGroup.fromCountry(countryId);
-	const statesList = (countryGroupId ? stateLists[countryGroupId] : {}) ?? {};
-	const stateDescriptor =
-		(countryGroupId ? stateDescriptors[countryGroupId] : 'State') ?? 'State';
+	const supportRegionId = supportRegionIdFromCountryCode(countryId);
+	const statesList = stateLists[supportRegionId] ?? {};
+	const stateDescriptor = stateDescriptors[supportRegionId] ?? 'State';
 
 	return (
 		<div>

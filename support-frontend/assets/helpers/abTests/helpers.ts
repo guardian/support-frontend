@@ -1,4 +1,4 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import seedrandom from 'seedrandom';
 import type { Participations } from './models';
 
@@ -17,15 +17,15 @@ export function getParticipationFromQueryString(
 	return;
 }
 
-export const countryGroupMatches = (
-	targetedCountryGroups: CountryGroupId[] = [],
-	countryGroupId: CountryGroupId,
+export const supportRegionMatches = (
+	targetedCountryGroups: SupportRegionId[] = [],
+	supportRegionId: SupportRegionId,
 ): boolean => {
 	if (targetedCountryGroups.length === 0) {
 		return true;
 	} // no targeting
 	else {
-		return targetedCountryGroups.includes(countryGroupId);
+		return targetedCountryGroups.includes(supportRegionId);
 	}
 };
 

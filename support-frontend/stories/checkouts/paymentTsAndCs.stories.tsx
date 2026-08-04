@@ -34,21 +34,21 @@ export const GuardianAdLite = Template.bind({});
 GuardianAdLite.args = {
 	productKey: 'GuardianAdLite',
 	ratePlanKey: 'Monthly',
-	countryGroupId: 'GBPCountries',
+	supportRegionId: 'uk',
 };
 
 export const DigitalSubscription = Template.bind({});
 DigitalSubscription.args = {
 	productKey: 'DigitalSubscription',
 	ratePlanKey: 'Monthly',
-	countryGroupId: 'GBPCountries',
+	supportRegionId: 'uk',
 };
 
 export const DigitalSubscriptionUS = Template.bind({});
 DigitalSubscriptionUS.args = {
 	productKey: 'DigitalSubscription',
 	ratePlanKey: 'Monthly',
-	countryGroupId: 'UnitedStates',
+	supportRegionId: 'us',
 	thresholdAmount: 28,
 };
 
@@ -56,14 +56,14 @@ export const ContributionAU = Template.bind({});
 ContributionAU.args = {
 	productKey: 'Contribution',
 	ratePlanKey: 'Annual',
-	countryGroupId: 'AUDCountries',
+	supportRegionId: 'au',
 };
 
 export const SupporterPlus = Template.bind({});
 SupporterPlus.args = {
 	productKey: 'SupporterPlus',
 	ratePlanKey: 'Monthly',
-	countryGroupId: 'GBPCountries',
+	supportRegionId: 'uk',
 	thresholdAmount: 12,
 };
 
@@ -71,7 +71,7 @@ export const SupporterPlusUS = Template.bind({});
 SupporterPlusUS.args = {
 	productKey: 'SupporterPlus',
 	ratePlanKey: 'Monthly',
-	countryGroupId: 'UnitedStates',
+	supportRegionId: 'us',
 	thresholdAmount: 15,
 };
 
@@ -79,7 +79,7 @@ export const SupporterPlusOneYearStudent = Template.bind({});
 SupporterPlusOneYearStudent.args = {
 	productKey: 'SupporterPlus',
 	ratePlanKey: 'OneYearStudent',
-	countryGroupId: 'GBPCountries',
+	supportRegionId: 'uk',
 	thresholdAmount: 120,
 	studentDiscount: oneYearStudentDiscount,
 };
@@ -88,7 +88,7 @@ export const SupporterPlusAUStudent = Template.bind({});
 SupporterPlusAUStudent.args = {
 	productKey: 'SupporterPlus',
 	ratePlanKey: 'Monthly',
-	countryGroupId: 'AUDCountries',
+	supportRegionId: 'au',
 	thresholdAmount: 120,
 	studentDiscount: auStudentDiscount,
 };
@@ -97,35 +97,35 @@ export const HomeDelivery = Template.bind({});
 HomeDelivery.args = {
 	productKey: 'HomeDelivery',
 	ratePlanKey: 'EverydayPlus',
-	countryGroupId: 'GBPCountries',
+	supportRegionId: 'uk',
 };
 
 export const NationalDelivery = Template.bind({});
 NationalDelivery.args = {
 	productKey: 'NationalDelivery',
 	ratePlanKey: 'EverydayPlus',
-	countryGroupId: 'GBPCountries',
+	supportRegionId: 'uk',
 };
 
 export const SubscriptionCard = Template.bind({});
 SubscriptionCard.args = {
 	productKey: 'SubscriptionCard',
 	ratePlanKey: 'EverydayPlus',
-	countryGroupId: 'GBPCountries',
+	supportRegionId: 'uk',
 };
 
 export const WeeklyDigitalDomestic = Template.bind({});
 WeeklyDigitalDomestic.args = {
 	productKey: 'GuardianWeeklyDomestic',
 	ratePlanKey: 'MonthlyPlus',
-	countryGroupId: 'GBPCountries',
+	supportRegionId: 'uk',
 };
 
 export const WeeklyDigitalRestOfWorldInclPromo = Template.bind({});
 WeeklyDigitalRestOfWorldInclPromo.args = {
 	productKey: 'GuardianWeeklyRestOfWorld',
 	ratePlanKey: 'AnnualPlus',
-	countryGroupId: 'UnitedStates',
+	supportRegionId: 'us',
 	promotion: {
 		name: '10% off for 12 months',
 		description: 'Guardian Weekly Digital United States Annual',

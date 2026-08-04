@@ -1,10 +1,5 @@
 import { css } from '@emotion/react';
 import { Button, Column, Columns } from '@guardian/source/react-components';
-import {
-	Canada,
-	SupportRegionId,
-} from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
-import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { ContributionsOrderSummaryProps } from 'components/orderSummary/contributionsOrderSummary';
@@ -118,6 +113,7 @@ Default.args = {
 	enableCheckList: true,
 	payment: { originalAmount: 10, finalAmount: 10 },
 	currency: {
+		code: 'GBP',
 		glyph: '£',
 		extendedGlyph: '£',
 		spokenCurrency: 'pound',
@@ -138,7 +134,7 @@ Default.args = {
 			Change
 		</Button>
 	),
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	landingPageSettings,
 	taxRateConfig: { type: 'tax_inclusive' },
 };
@@ -152,6 +148,7 @@ RecurringContribution.args = {
 	enableCheckList: true,
 	payment: { originalAmount: 3, finalAmount: 3 },
 	currency: {
+		code: 'GBP',
 		glyph: '£',
 		extendedGlyph: '£',
 		spokenCurrency: 'pound',
@@ -166,7 +163,7 @@ RecurringContribution.args = {
 		<OrderSummaryTsAndCs
 			productKey={'Contribution'}
 			ratePlanKey={'Monthly'}
-			countryGroupId={GBPCountries}
+			supportRegionId={'uk'}
 		/>
 	),
 	startDate: null,
@@ -175,7 +172,7 @@ RecurringContribution.args = {
 			Change
 		</Button>
 	),
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	landingPageSettings,
 	taxRateConfig: { type: 'tax_inclusive' },
 };
@@ -189,6 +186,7 @@ SupporterPlus.args = {
 	enableCheckList: true,
 	payment: { originalAmount: 12, finalAmount: 12 },
 	currency: {
+		code: 'GBP',
 		glyph: '£',
 		extendedGlyph: '£',
 		spokenCurrency: 'pound',
@@ -203,7 +201,7 @@ SupporterPlus.args = {
 		<OrderSummaryTsAndCs
 			productKey={'SupporterPlus'}
 			ratePlanKey={'Monthly'}
-			countryGroupId={GBPCountries}
+			supportRegionId={'uk'}
 			thresholdAmount={12}
 		/>
 	),
@@ -213,7 +211,7 @@ SupporterPlus.args = {
 			Change
 		</Button>
 	),
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	landingPageSettings,
 	taxRateConfig: { type: 'tax_inclusive' },
 };
@@ -227,6 +225,7 @@ SupporterPlusWithTax.args = {
 	enableCheckList: true,
 	payment: { originalAmount: 15, finalAmount: 15 },
 	currency: {
+		code: 'CAD',
 		glyph: '$',
 		extendedGlyph: 'CA$',
 		spokenCurrency: 'dollar',
@@ -241,7 +240,7 @@ SupporterPlusWithTax.args = {
 		<OrderSummaryTsAndCs
 			productKey={'SupporterPlus'}
 			ratePlanKey={'Monthly'}
-			countryGroupId={Canada}
+			supportRegionId={'ca'}
 			thresholdAmount={15}
 		/>
 	),
@@ -251,7 +250,7 @@ SupporterPlusWithTax.args = {
 			Change
 		</Button>
 	),
-	supportRegionId: SupportRegionId.CA,
+	supportRegionId: 'ca',
 	landingPageSettings,
 	taxRateConfig: { type: 'tax_exclusive', rate: 0.15 },
 };
@@ -265,6 +264,7 @@ DigitalPlusWithTaxAndDiscount.args = {
 	enableCheckList: true,
 	payment: { finalAmount: 15, originalAmount: 30 },
 	currency: {
+		code: 'CAD',
 		glyph: '$',
 		extendedGlyph: 'CA$',
 		spokenCurrency: 'dollar',
@@ -292,7 +292,7 @@ DigitalPlusWithTaxAndDiscount.args = {
 		<OrderSummaryTsAndCs
 			productKey={'DigitalSubscription'}
 			ratePlanKey={'Monthly'}
-			countryGroupId={Canada}
+			supportRegionId={'ca'}
 		/>
 	),
 	startDate: null,
@@ -301,7 +301,7 @@ DigitalPlusWithTaxAndDiscount.args = {
 			Change
 		</Button>
 	),
-	supportRegionId: SupportRegionId.CA,
+	supportRegionId: 'ca',
 	landingPageSettings,
 	taxRateConfig: { type: 'tax_exclusive', rate: 0.15 },
 };
@@ -315,6 +315,7 @@ DigitalSubscription.args = {
 	enableCheckList: true,
 	payment: { originalAmount: 27, finalAmount: 27 },
 	currency: {
+		code: 'GBP',
 		glyph: '£',
 		extendedGlyph: '£',
 		spokenCurrency: 'pound',
@@ -331,7 +332,7 @@ DigitalSubscription.args = {
 		<OrderSummaryTsAndCs
 			productKey={'DigitalSubscription'}
 			ratePlanKey={'Monthly'}
-			countryGroupId={GBPCountries}
+			supportRegionId={'uk'}
 			thresholdAmount={27}
 		/>
 	),
@@ -347,7 +348,7 @@ DigitalSubscription.args = {
 			Change
 		</Button>
 	),
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	landingPageSettings,
 	taxRateConfig: { type: 'tax_inclusive' },
 };
@@ -361,6 +362,7 @@ StudentOneYear.args = {
 	enableCheckList: true,
 	payment: { originalAmount: 9, finalAmount: 9 },
 	currency: {
+		code: 'GBP',
 		glyph: '£',
 		extendedGlyph: '£',
 		spokenCurrency: 'pound',
@@ -375,7 +377,7 @@ StudentOneYear.args = {
 		<OrderSummaryTsAndCs
 			productKey={'SupporterPlus'}
 			ratePlanKey={'OneYearStudent'}
-			countryGroupId={GBPCountries}
+			supportRegionId={'uk'}
 			thresholdAmount={9}
 		/>
 	),
@@ -386,7 +388,7 @@ StudentOneYear.args = {
 		</Button>
 	),
 	studentDiscount: oneYearStudentDiscount,
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	landingPageSettings,
 	taxRateConfig: { type: 'tax_inclusive' },
 };
@@ -400,6 +402,7 @@ WeeklyPricing.args = {
 	enableCheckList: true,
 	payment: { originalAmount: 12, finalAmount: 12 },
 	currency: {
+		code: 'GBP',
 		glyph: '£',
 		extendedGlyph: '£',
 		spokenCurrency: 'pound',
@@ -414,7 +417,7 @@ WeeklyPricing.args = {
 		<OrderSummaryTsAndCs
 			productKey={'SupporterPlus'}
 			ratePlanKey={'Monthly'}
-			countryGroupId={GBPCountries}
+			supportRegionId={'uk'}
 			thresholdAmount={12}
 		/>
 	),
@@ -424,7 +427,7 @@ WeeklyPricing.args = {
 			Change
 		</Button>
 	),
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	landingPageSettings: weeklyPricingLandingPageSettings,
 	taxRateConfig: { type: 'tax_inclusive' },
 };
@@ -438,6 +441,7 @@ WeeklyPricingWithPromotion.args = {
 	enableCheckList: true,
 	payment: { originalAmount: 12, finalAmount: 8 },
 	currency: {
+		code: 'GBP',
 		glyph: '£',
 		extendedGlyph: '£',
 		spokenCurrency: 'pound',
@@ -463,7 +467,7 @@ WeeklyPricingWithPromotion.args = {
 		<OrderSummaryTsAndCs
 			productKey={'SupporterPlus'}
 			ratePlanKey={'Monthly'}
-			countryGroupId={GBPCountries}
+			supportRegionId={'uk'}
 			thresholdAmount={12}
 		/>
 	),
@@ -473,7 +477,7 @@ WeeklyPricingWithPromotion.args = {
 			Change
 		</Button>
 	),
-	supportRegionId: SupportRegionId.UK,
+	supportRegionId: 'uk',
 	landingPageSettings: weeklyPricingLandingPageSettings,
 	taxRateConfig: { type: 'tax_inclusive' },
 };
@@ -487,6 +491,7 @@ WeeklyPricingWithTax.args = {
 	enableCheckList: true,
 	payment: { originalAmount: 15, finalAmount: 15 },
 	currency: {
+		code: 'CAD',
 		glyph: '$',
 		extendedGlyph: 'CA$',
 		spokenCurrency: 'dollar',
@@ -501,7 +506,7 @@ WeeklyPricingWithTax.args = {
 		<OrderSummaryTsAndCs
 			productKey={'SupporterPlus'}
 			ratePlanKey={'Monthly'}
-			countryGroupId={Canada}
+			supportRegionId={'ca'}
 			thresholdAmount={15}
 		/>
 	),
@@ -511,7 +516,7 @@ WeeklyPricingWithTax.args = {
 			Change
 		</Button>
 	),
-	supportRegionId: SupportRegionId.CA,
+	supportRegionId: 'ca',
 	landingPageSettings: weeklyPricingLandingPageSettings,
 	taxRateConfig: { type: 'tax_exclusive', rate: 0.15 },
 };

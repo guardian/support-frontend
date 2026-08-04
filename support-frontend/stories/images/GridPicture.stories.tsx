@@ -1,5 +1,5 @@
 import { Container } from '@guardian/source/react-components';
-import React from 'react';
+import type React from 'react';
 import type { GridPictureProp } from 'components/gridPicture/gridPicture';
 import GridPicture from 'components/gridPicture/gridPicture';
 

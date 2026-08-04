@@ -1,11 +1,11 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { CountryGroup } from '../../internationalisation/classes/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
+import { DetectSupportRegion } from '../../internationalisation/classes/detectSupportRegion';
 import { fetchAudienceMemberships } from '../../mparticle';
 import {
-	countryGroupMatches,
 	getParticipationFromQueryString,
 	isWithinSchedule,
 	randomNumber,
+	supportRegionMatches,
 } from '../helpers';
 import type { PageParticipationsConfig, PageTest } from '../models';
 import { getMvtId } from '../mvt';
@@ -24,9 +24,9 @@ jest.mock('../../mparticle', () => ({
 	fetchAudienceMemberships: jest.fn(),
 }));
 
-jest.mock('../../internationalisation/classes/countryGroup', () => ({
+jest.mock('../../internationalisation/classes/detectSupportRegion', () => ({
 	__esModule: true,
-	CountryGroup: {
+	DetectSupportRegion: {
 		detect: jest.fn(),
 	},
 }));
@@ -38,7 +38,7 @@ jest.mock('../mvt', () => ({
 
 jest.mock('../helpers', () => ({
 	__esModule: true,
-	countryGroupMatches: jest.fn(),
+	supportRegionMatches: jest.fn(),
 	getParticipationFromQueryString: jest.fn(),
 	isWithinSchedule: jest.fn(),
 	randomNumber: jest.fn(),
@@ -51,10 +51,10 @@ jest.mock('../sessionStorage', () => ({
 }));
 
 // Store mock references - safe to use in test context
-// eslint-disable-next-line @typescript-eslint/unbound-method -- CountryGroup.detect is mocked and doesn't use 'this'
-const mockDetect = jest.mocked(CountryGroup.detect);
+// eslint-disable-next-line @typescript-eslint/unbound-method -- DetectSupportRegion.detect is mocked and doesn't use 'this'
+const mockDetect = jest.mocked(DetectSupportRegion.detect);
 const mockGetMvtId = jest.mocked(getMvtId);
-const mockCountryGroupMatches = jest.mocked(countryGroupMatches);
+const mockSupportRegionMatches = jest.mocked(supportRegionMatches);
 const mockGetParticipationFromQueryString = jest.mocked(
 	getParticipationFromQueryString,
 );
@@ -90,7 +90,7 @@ const createPageTest = (
 	name: string,
 	variants: TestVariant[],
 	status: 'Live' | 'Draft' = 'Live',
-	targetedCountryGroups?: CountryGroupId[],
+	targetedCountryGroups?: SupportRegionId[],
 ): PageTest<TestVariant> => ({
 	name,
 	status,
@@ -116,9 +116,9 @@ const createConfig = (
 
 describe('getPageParticipations', () => {
 	beforeEach(() => {
-		mockDetect.mockReturnValue('GBPCountries');
+		mockDetect.mockReturnValue('uk');
 		mockGetMvtId.mockReturnValue(0);
-		mockCountryGroupMatches.mockReturnValue(false);
+		mockSupportRegionMatches.mockReturnValue(false);
 		mockGetParticipationFromQueryString.mockReturnValue(undefined);
 		mockIsWithinSchedule.mockReturnValue(true);
 		mockRandomNumber.mockReturnValue(0);
@@ -354,24 +354,24 @@ describe('getPageParticipations', () => {
 		it('ignores empty session storage participations', async () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live', [
-				'GBPCountries',
+				'uk',
 			]);
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
 			mockGetSessionParticipations.mockReturnValue({});
-			mockCountryGroupMatches.mockReturnValue(true);
+			mockSupportRegionMatches.mockReturnValue(true);
 
 			const result = await getPageParticipations(config);
 
 			expect(result.variant).toEqual(variant);
-			expect(mockCountryGroupMatches).toHaveBeenCalled();
+			expect(mockSupportRegionMatches).toHaveBeenCalled();
 		});
 
 		it('clears cache and re-assigns when session storage variant not found', async () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live', [
-				'GBPCountries',
+				'uk',
 			]);
 			const config = createConfig([test]);
 
@@ -379,7 +379,7 @@ describe('getPageParticipations', () => {
 			mockGetSessionParticipations.mockReturnValue({
 				'test-1': 'non-existent-variant',
 			});
-			mockCountryGroupMatches.mockReturnValue(true);
+			mockSupportRegionMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 
 			const result = await getPageParticipations(config);
@@ -397,13 +397,13 @@ describe('getPageParticipations', () => {
 			const variant1 = createTestVariant('control', 'control-value');
 			const variant2 = createTestVariant('variant-a', 'variant-a-value');
 			const test = createPageTest('test-1', [variant1, variant2], 'Live', [
-				'GBPCountries',
+				'uk',
 			]);
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
-			mockDetect.mockReturnValue('GBPCountries');
-			mockCountryGroupMatches.mockReturnValue(true);
+			mockDetect.mockReturnValue('uk');
+			mockSupportRegionMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(1);
 
 			const result = await getPageParticipations(config);
@@ -422,33 +422,33 @@ describe('getPageParticipations', () => {
 		it('filters out draft tests', async () => {
 			const draftVariant = createTestVariant('draft', 'draft-value');
 			const draftTest = createPageTest('draft-test', [draftVariant], 'Draft', [
-				'GBPCountries',
+				'uk',
 			]);
 			const config = createConfig([draftTest]);
 
 			mockLocation('/test/page');
-			mockDetect.mockReturnValue('GBPCountries');
+			mockDetect.mockReturnValue('uk');
 
 			const result = await getPageParticipations(config);
 
 			expect(result.variant).toBeUndefined();
-			expect(mockCountryGroupMatches).not.toHaveBeenCalled();
+			expect(mockSupportRegionMatches).not.toHaveBeenCalled();
 		});
 
 		it('returns first matching live test', async () => {
 			const variant1 = createTestVariant('control-1', 'control-1-value');
 			const variant2 = createTestVariant('control-2', 'control-2-value');
 			const test1 = createPageTest('test-1', [variant1], 'Live', [
-				'GBPCountries',
+				'uk',
 			]);
 			const test2 = createPageTest('test-2', [variant2], 'Live', [
-				'GBPCountries',
+				'uk',
 			]);
 			const config = createConfig([test1, test2]);
 
 			mockLocation('/test/page');
-			mockDetect.mockReturnValue('GBPCountries');
-			mockCountryGroupMatches
+			mockDetect.mockReturnValue('uk');
+			mockSupportRegionMatches
 				.mockReturnValueOnce(false)
 				.mockReturnValueOnce(true);
 			mockRandomNumber.mockReturnValue(0);
@@ -464,13 +464,13 @@ describe('getPageParticipations', () => {
 		it('stores participation in session storage', async () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live', [
-				'GBPCountries',
+				'uk',
 			]);
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
-			mockDetect.mockReturnValue('GBPCountries');
-			mockCountryGroupMatches.mockReturnValue(true);
+			mockDetect.mockReturnValue('uk');
+			mockSupportRegionMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 
 			await getPageParticipations(config);
@@ -486,14 +486,14 @@ describe('getPageParticipations', () => {
 		it('returns fallback when no test matches country group', async () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live', [
-				'UnitedStates',
+				'us',
 			]);
 			const fallback = createFallbackVariant();
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
-			mockDetect.mockReturnValue('GBPCountries');
-			mockCountryGroupMatches.mockReturnValue(false);
+			mockDetect.mockReturnValue('uk');
+			mockSupportRegionMatches.mockReturnValue(false);
 
 			const result = await getPageParticipationsWithFallback(
 				config,
@@ -526,13 +526,13 @@ describe('getPageParticipations', () => {
 		});
 
 		it('passes country group ID to fallback variant function', async () => {
-			const fallbackFn = jest.fn((countryGroupId: CountryGroupId) =>
-				createFallbackVariant(countryGroupId),
+			const fallbackFn = jest.fn((supportRegionId: SupportRegionId) =>
+				createFallbackVariant(supportRegionId),
 			);
 			const config = createConfig([]);
 
 			mockLocation('/test/page');
-			mockDetect.mockReturnValue('AUDCountries');
+			mockDetect.mockReturnValue('au');
 
 			const result = await getPageParticipationsWithFallback(
 				config,
@@ -540,20 +540,20 @@ describe('getPageParticipations', () => {
 				'FALLBACK_TEST',
 			);
 
-			expect(fallbackFn).toHaveBeenCalledWith('AUDCountries');
-			expect(result.variant.name).toBe('variant-AUDCountries');
+			expect(fallbackFn).toHaveBeenCalledWith('au');
+			expect(result.variant.name).toBe('variant-au');
 		});
 
 		it('returns undefined when no fallback and no test matches', async () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live', [
-				'UnitedStates',
+				'us',
 			]);
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
-			mockDetect.mockReturnValue('GBPCountries');
-			mockCountryGroupMatches.mockReturnValue(false);
+			mockDetect.mockReturnValue('uk');
+			mockSupportRegionMatches.mockReturnValue(false);
 
 			const result = await getPageParticipations(config);
 
@@ -566,7 +566,7 @@ describe('getPageParticipations', () => {
 		it('uses custom getVariantName function', async () => {
 			const variant = createTestVariant('control', 'custom-name');
 			const test = createPageTest('test-1', [variant], 'Live', [
-				'GBPCountries',
+				'uk',
 			]);
 			const config = createConfig(
 				[test],
@@ -577,8 +577,8 @@ describe('getPageParticipations', () => {
 			);
 
 			mockLocation('/test/page');
-			mockDetect.mockReturnValue('GBPCountries');
-			mockCountryGroupMatches.mockReturnValue(true);
+			mockDetect.mockReturnValue('uk');
+			mockSupportRegionMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 
 			const result = await getPageParticipations(config);
@@ -606,7 +606,7 @@ describe('getPageParticipations', () => {
 		it('uses custom session storage key', async () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live', [
-				'GBPCountries',
+				'uk',
 			]);
 			const config = createConfig(
 				[test],
@@ -616,8 +616,8 @@ describe('getPageParticipations', () => {
 			);
 
 			mockLocation('/test/page');
-			mockDetect.mockReturnValue('GBPCountries');
-			mockCountryGroupMatches.mockReturnValue(true);
+			mockDetect.mockReturnValue('uk');
+			mockSupportRegionMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 
 			await getPageParticipations(config);
@@ -636,13 +636,13 @@ describe('getPageParticipations', () => {
 		it('handles variant with null/undefined properties gracefully', async () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live', [
-				'GBPCountries',
+				'uk',
 			]);
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
-			mockDetect.mockReturnValue('GBPCountries');
-			mockCountryGroupMatches.mockReturnValue(true);
+			mockDetect.mockReturnValue('uk');
+			mockSupportRegionMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 
 			const result = await getPageParticipations(config);
@@ -657,7 +657,7 @@ describe('getPageParticipations', () => {
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
-			mockCountryGroupMatches.mockReturnValue(true);
+			mockSupportRegionMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 
 			const result = await getPageParticipations(config);
@@ -666,12 +666,12 @@ describe('getPageParticipations', () => {
 		});
 
 		it('returns undefined variant when variant is undefined in test', async () => {
-			const test = createPageTest('test-1', [], 'Live', ['GBPCountries']);
+			const test = createPageTest('test-1', [], 'Live', ['uk']);
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
-			mockDetect.mockReturnValue('GBPCountries');
-			mockCountryGroupMatches.mockReturnValue(true);
+			mockDetect.mockReturnValue('uk');
+			mockSupportRegionMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 
 			const result = await getPageParticipations(config);
@@ -709,8 +709,8 @@ describe('getPageParticipations', () => {
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
-			mockDetect.mockReturnValue('GBPCountries');
-			mockCountryGroupMatches.mockReturnValue(true);
+			mockDetect.mockReturnValue('uk');
+			mockSupportRegionMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 			mockFetchAudienceMemberships.mockResolvedValue([42]);
 
@@ -726,8 +726,8 @@ describe('getPageParticipations', () => {
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
-			mockDetect.mockReturnValue('GBPCountries');
-			mockCountryGroupMatches.mockReturnValue(true);
+			mockDetect.mockReturnValue('uk');
+			mockSupportRegionMatches.mockReturnValue(true);
 			mockFetchAudienceMemberships.mockResolvedValue([99]);
 
 			const result = await getPageParticipations(config);
@@ -771,7 +771,7 @@ describe('getPageParticipations', () => {
 		it('prunes stale participations that do not match current test names', async () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live', [
-				'GBPCountries',
+				'uk',
 			]);
 			const config = createConfig([test]);
 
@@ -781,7 +781,7 @@ describe('getPageParticipations', () => {
 				'stale-test': 'variant-a',
 				'test-1': 'control',
 			});
-			mockCountryGroupMatches.mockReturnValue(true);
+			mockSupportRegionMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 
 			const result = await getPageParticipations(config);
@@ -794,7 +794,7 @@ describe('getPageParticipations', () => {
 		it('prunes participations that do not match any test name', async () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live', [
-				'GBPCountries',
+				'uk',
 			]);
 			test.methodologies = [
 				{
@@ -809,7 +809,7 @@ describe('getPageParticipations', () => {
 				'test-1-old': 'variant-a',
 				'test-1': 'control',
 			});
-			mockCountryGroupMatches.mockReturnValue(true);
+			mockSupportRegionMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 
 			const result = await getPageParticipations(config);
@@ -822,7 +822,7 @@ describe('getPageParticipations', () => {
 		it('re-selects when all session participations are stale', async () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live', [
-				'GBPCountries',
+				'uk',
 			]);
 			const config = createConfig([test]);
 
@@ -832,7 +832,7 @@ describe('getPageParticipations', () => {
 				'stale-test-1': 'variant-a',
 				'stale-test-2': 'variant-b',
 			});
-			mockCountryGroupMatches.mockReturnValue(true);
+			mockSupportRegionMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 			const result = await getPageParticipations(config);
 			// Should re-select and store fresh participation
@@ -847,7 +847,7 @@ describe('getPageParticipations', () => {
 		it('preserves participations keyed by test name', async () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live', [
-				'GBPCountries',
+				'uk',
 			]);
 			test.methodologies = [{ name: 'EpsilonGreedyBandit' }];
 			const config = createConfig([test]);
@@ -856,7 +856,7 @@ describe('getPageParticipations', () => {
 			mockGetSessionParticipations.mockReturnValue({
 				'test-1': 'control',
 			});
-			mockCountryGroupMatches.mockReturnValue(true);
+			mockSupportRegionMatches.mockReturnValue(true);
 
 			const result = await getPageParticipations(config);
 
@@ -871,14 +871,14 @@ describe('getPageParticipations', () => {
 			const variant1 = createTestVariant('control', 'control-value');
 			const variant2 = createTestVariant('variant-a', 'variant-a-value');
 			const test = createPageTest('test-1', [variant1, variant2], 'Live', [
-				'GBPCountries',
+				'uk',
 			]);
 			test.methodologies = [{ name: 'EpsilonGreedyBandit' }];
 			const config = createConfig([test], '^/.*/contribute(/.*)?$');
 
 			// Simulate landing page visit
 			mockLocation('/uk/contribute');
-			mockCountryGroupMatches.mockReturnValue(true);
+			mockSupportRegionMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 			mockGetSessionParticipations.mockReturnValue(undefined);
 
@@ -906,7 +906,7 @@ describe('getPageParticipations', () => {
 		it('runs selection when user enters directly on checkout page', async () => {
 			const variant = createTestVariant('control', 'control-value');
 			const test = createPageTest('test-1', [variant], 'Live', [
-				'GBPCountries',
+				'uk',
 			]);
 			test.methodologies = [{ name: 'EpsilonGreedyBandit' }];
 			const config = createConfig([test], '^/.*/contribute(/.*)?$');
@@ -914,7 +914,7 @@ describe('getPageParticipations', () => {
 			// Direct checkout entry (no session storage)
 			mockLocation('/uk/checkout');
 			mockGetSessionParticipations.mockReturnValue(undefined);
-			mockCountryGroupMatches.mockReturnValue(true);
+			mockSupportRegionMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
 
 			const result = await getPageParticipations(config);

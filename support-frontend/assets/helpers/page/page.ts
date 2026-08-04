@@ -1,17 +1,17 @@
 // ----- Imports ----- //
 import { getLocale } from '@guardian/libs';
 import type { CountryCode } from '@modules/internationalisation/country';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import * as abTest from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { Country } from 'helpers/internationalisation/classes/country';
-import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import {
 	analyticsInitialisation,
 	consentInitialisation,
 	sendConsentToOphan,
 } from 'helpers/page/analyticsAndConsent';
 import { getReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { DetectSupportRegion } from '../internationalisation/classes/detectSupportRegion';
 
 async function setUpConsent(): Promise<void> {
 	const countryId: CountryCode = Country.detect();
@@ -43,10 +43,10 @@ function setUpTrackingAndConsents(participations: Participations): void {
 
 function getAbParticipations(): Participations {
 	const countryId: CountryCode = Country.detect();
-	const countryGroupId: CountryGroupId = CountryGroup.detect();
+	const supportRegionId: SupportRegionId = DetectSupportRegion.detect();
 	const abtestInitalizerData = {
 		countryId,
-		countryGroupId,
+		supportRegionId,
 	};
 	const participations: Participations = abTest.init(abtestInitalizerData);
 

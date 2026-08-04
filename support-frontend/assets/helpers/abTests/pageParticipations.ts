@@ -1,11 +1,11 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { fetchAudienceMemberships } from 'helpers/mparticle';
-import { CountryGroup } from '../internationalisation/classes/countryGroup';
+import { DetectSupportRegion } from '../internationalisation/classes/detectSupportRegion';
 import {
-	countryGroupMatches,
 	getParticipationFromQueryString,
 	isWithinSchedule,
 	randomNumber,
+	supportRegionMatches,
 } from './helpers';
 import type {
 	PageParticipationsConfig,
@@ -46,11 +46,11 @@ export interface PageParticipationsResultWithFallback<Variant> {
 export async function getPageParticipations<Variant>(
 	config: PageParticipationsConfig<Variant>,
 	fallback?: {
-		variant: (countryGroupId: CountryGroupId) => Variant;
+		variant: (supportRegionId: SupportRegionId) => Variant;
 		participationKey: string;
 	},
 ): Promise<PageParticipationsResult<Variant>> {
-	const countryGroupId: CountryGroupId = CountryGroup.detect();
+	const supportRegionId: SupportRegionId = DetectSupportRegion.detect();
 	const path: string = window.location.pathname;
 	const mvtId: number = getMvtId();
 	const queryString: string = window.location.search;
@@ -102,7 +102,7 @@ export async function getPageParticipations<Variant>(
 		if (!fallback) {
 			return { participations: {} as Participations, variant: undefined };
 		}
-		const variant = fallback.variant(countryGroupId);
+		const variant = fallback.variant(supportRegionId);
 		return {
 			participations: trackParticipation
 				? { [fallback.participationKey]: getVariantName(variant) }
@@ -186,9 +186,9 @@ export async function getPageParticipations<Variant>(
 	for (const currentTest of tests.filter((test) => test.status === 'Live')) {
 		if (
 			isWithinSchedule(currentTest.scheduler) &&
-			countryGroupMatches(
+			supportRegionMatches(
 				currentTest.regionTargeting?.targetedCountryGroups,
-				countryGroupId,
+				supportRegionId,
 			) &&
 			(await isUserInAudience(currentTest))
 		) {
@@ -234,7 +234,7 @@ export async function getPageParticipations<Variant>(
  */
 export async function getPageParticipationsWithFallback<Variant>(
 	config: PageParticipationsConfig<Variant>,
-	fallbackVariant: (countryGroupId: CountryGroupId) => Variant,
+	fallbackVariant: (supportRegionId: SupportRegionId) => Variant,
 	fallbackParticipationKey: string,
 ): Promise<PageParticipationsResultWithFallback<Variant>> {
 	return getPageParticipations(config, {

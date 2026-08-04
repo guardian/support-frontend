@@ -68,13 +68,13 @@ const getSettings = (): Settings => {
 	const defaultSettings = {
 		switches: emptySwitches,
 		contributionTypes: {
-			GBPCountries: [],
-			UnitedStates: [],
-			EURCountries: [],
-			AUDCountries: [],
-			International: [],
-			NZDCountries: [],
-			Canada: [],
+			uk: [],
+			us: [],
+			eu: [],
+			au: [],
+			int: [],
+			nz: [],
+			ca: [],
 		},
 		metricUrl: '',
 	};

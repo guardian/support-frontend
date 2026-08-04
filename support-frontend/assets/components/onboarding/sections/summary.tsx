@@ -219,7 +219,7 @@ function OnboardingSummary({
 
 	const { enableCanadaTaxExclusion } = useFeatureSwitches();
 
-	const { currencyKey, countryGroupId } =
+	const { currencyKey } =
 		getSupportRegionIdConfig(supportRegionId);
 
 	const amountPaidToday = simpleFormatAmount(
@@ -235,7 +235,7 @@ function OnboardingSummary({
 	if (promotion) {
 		promoMessage =
 			productLegal(
-				countryGroupId,
+				supportRegionId,
 				billingPeriod,
 				' per ',
 				payment.originalAmount,

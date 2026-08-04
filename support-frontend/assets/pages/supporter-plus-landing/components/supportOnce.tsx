@@ -8,10 +8,7 @@ import {
 	textSans17,
 } from '@guardian/source/foundations';
 import { LinkButton } from '@guardian/source/react-components';
-import {
-	type CountryGroupId,
-	countryGroups,
-} from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@guardian/support-service-lambdas/modules/internationalisation/src/supportRegion';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 const container = css`
@@ -59,12 +56,12 @@ const btnStyleOverrides = css`
 
 interface SupportOnceProps {
 	currency: string;
-	countryGroupId: CountryGroupId;
+	supportRegionId: SupportRegionId;
 }
 
 export function SupportOnce({
 	currency,
-	countryGroupId,
+	supportRegionId,
 }: SupportOnceProps): JSX.Element {
 	return (
 		<div css={container}>
@@ -75,14 +72,14 @@ export function SupportOnce({
 				{currency}1 or more.
 			</p>
 			<LinkButton
-				href={`/${countryGroups[countryGroupId].supportRegionId}/one-time-checkout`}
+				href={`/${supportRegionId}/one-time-checkout`}
 				iconSide="left"
 				priority="primary"
 				size="default"
 				cssOverrides={btnStyleOverrides}
 				onClick={() => {
 					trackComponentClick(
-						`npf-contribution-amount-toggle-${countryGroupId}-ONE_OFF`,
+						`npf-contribution-amount-toggle-${supportRegionId}-ONE_OFF`,
 					);
 				}}
 				data-qm-trackable="support-once-button"

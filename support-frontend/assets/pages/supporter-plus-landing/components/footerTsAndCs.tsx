@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import {
 	contributionsTermsLinks,
@@ -26,12 +26,12 @@ const marginTop = css`
 
 interface FooterTsAndCsProps {
 	productKey: ActiveProductKey;
-	countryGroupId: CountryGroupId;
+	supportRegionId: SupportRegionId;
 	ratePlanKey?: ActiveRatePlanKey;
 }
 export function FooterTsAndCs({
 	productKey,
-	countryGroupId,
+	supportRegionId,
 	ratePlanKey,
 }: FooterTsAndCsProps) {
 	const privacy = <a href={privacyLink}>Privacy Policy</a>;
@@ -61,7 +61,7 @@ export function FooterTsAndCs({
 			default:
 				return textLink(
 					'Terms and Conditions',
-					contributionsTermsLinks[countryGroupId],
+					contributionsTermsLinks[supportRegionId],
 				);
 		}
 	};

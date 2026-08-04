@@ -1,16 +1,16 @@
 import { css } from '@emotion/react';
+import type {
+	StudentTsAndCsProps} from 'pages/[countryGroupId]/student/components/studentTsAndCs';
 import {
-	StudentTsAndCs,
-	StudentTsAndCsProps,
+	StudentTsAndCs
 } from 'pages/[countryGroupId]/student/components/studentTsAndCs';
 import { getStudentTsAndCs } from 'pages/[countryGroupId]/student/helpers/studentTsAndCsCopy';
-import { SupportRegionId } from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
 
 export default {
 	title: 'LandingPage/StudentTsAndCs',
 	component: StudentTsAndCs,
 	argTypes: {
-		countryGroupId: 'AUDCountries',
+		supportRegionId: 'au',
 		tsAndCsItem: { table: { disable: true } },
 	},
 };
@@ -31,5 +31,5 @@ Template.args = {} as Record<string, unknown>;
 
 export const DefaultAUD = Template.bind({});
 DefaultAUD.args = {
-	tsAndCsItem: getStudentTsAndCs(SupportRegionId.AU),
+	tsAndCsItem: getStudentTsAndCs('au'),
 };

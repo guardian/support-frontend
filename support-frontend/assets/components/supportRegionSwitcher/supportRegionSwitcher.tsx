@@ -4,19 +4,18 @@ import {
 	textSans17,
 	visuallyHidden,
 } from '@guardian/source/foundations';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { countryGroups } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
+import { supportRegions } from '@modules/internationalisation/supportRegion';
 import { useRef, useState } from 'react';
 import Dialog from 'components/dialog/dialog';
 import Menu, { LinkItem } from 'components/menu/menu';
 import SvgDropdownArrow from 'components/svgs/dropdownArrow';
 import { clearParticipationsFromSession } from 'helpers/abTests/sessionStorage';
-import { extendedGlyph } from 'helpers/internationalisation/currency';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
 
-const countryGroupSwitcherButton = css`
+const supportRegionSwitcherButton = css`
 	appearance: none;
 	border: 0;
 	padding: 0;
@@ -39,19 +38,19 @@ const countryGroupSwitcherButton = css`
 	}
 `;
 
-export type CountryGroupSwitcherProps = {
-	countryGroupIds: CountryGroupId[];
-	selectedCountryGroup: CountryGroupId;
+export type SupportRegionSwitcherProps = {
+	supportRegionIds: SupportRegionId[];
+	selectedSupportRegion: SupportRegionId;
 	trackProduct?: Option<SubscriptionProduct>;
 	subPath: string;
 };
 
-function CountryGroupSwitcher({
+function SupportRegionSwitcher({
 	subPath,
-	selectedCountryGroup,
-	countryGroupIds,
+	selectedSupportRegion,
+	supportRegionIds,
 	trackProduct,
-}: CountryGroupSwitcherProps): JSX.Element {
+}: SupportRegionSwitcherProps): JSX.Element {
 	const buttonRef = useRef<HTMLButtonElement>(null);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [bounds, setBounds] = useState({
@@ -59,9 +58,9 @@ function CountryGroupSwitcher({
 		left: 0,
 	});
 
-	function onCountryGroupSelect(cgId: CountryGroupId): void {
+	function onSupportRegionSelect(supportRegionId: SupportRegionId): void {
 		sendTrackingEventsOnClick({
-			id: `toggle_country_${cgId}`,
+			id: `toggle_country_${supportRegionId}`,
 			...(trackProduct
 				? {
 						product: trackProduct,
@@ -79,7 +78,7 @@ function CountryGroupSwitcher({
 		>
 			<button
 				aria-label="Select a country"
-				css={countryGroupSwitcherButton}
+				css={supportRegionSwitcherButton}
 				ref={buttonRef}
 				onClick={() => {
 					if (buttonRef.current) {
@@ -89,9 +88,9 @@ function CountryGroupSwitcher({
 					setMenuOpen(true);
 				}}
 			>
-				{countryGroups[selectedCountryGroup].name}{' '}
+				{supportRegions[selectedSupportRegion].name}{' '}
 				<strong>
-					{extendedGlyph(countryGroups[selectedCountryGroup].currency)}
+					{supportRegions[selectedSupportRegion].currency.extendedGlyph}
 				</strong>
 				<SvgDropdownArrow />
 			</button>
@@ -111,25 +110,25 @@ function CountryGroupSwitcher({
 						position: 'absolute',
 					}}
 				>
-					{countryGroupIds.map((countryGroupId: CountryGroupId) => (
+					{supportRegionIds.map((supportRegionId: SupportRegionId) => (
 						<LinkItem
-							href={`/${countryGroups[countryGroupId].supportRegionId}${subPath}${window.location.search}`}
+							href={`/${supportRegionId}${subPath}${window.location.search}`}
 							onClick={() => {
 								sendTrackingEventsOnClick({
-									id: `toggle_country: ${countryGroupId}`,
+									id: `toggle_country: ${supportRegionId}`,
 									componentType: 'ACQUISITIONS_BUTTON',
 								})();
 
-								onCountryGroupSelect(countryGroupId);
+								onSupportRegionSelect(supportRegionId);
 
-								if (countryGroupId !== selectedCountryGroup) {
+								if (supportRegionId !== selectedSupportRegion) {
 									clearParticipationsFromSession();
 								}
 							}}
-							isSelected={countryGroupId === selectedCountryGroup}
+							isSelected={supportRegionId === selectedSupportRegion}
 						>
-							{countryGroups[countryGroupId].name}{' '}
-							{extendedGlyph(countryGroups[countryGroupId].currency)}
+							{supportRegions[supportRegionId].name}{' '}
+							{supportRegions[supportRegionId].currency.extendedGlyph}
 						</LinkItem>
 					))}
 					<button
@@ -148,8 +147,8 @@ function CountryGroupSwitcher({
 	);
 }
 
-CountryGroupSwitcher.defaultProps = {
+SupportRegionSwitcher.defaultProps = {
 	trackProduct: null,
 };
 
-export default CountryGroupSwitcher;
+export default SupportRegionSwitcher;

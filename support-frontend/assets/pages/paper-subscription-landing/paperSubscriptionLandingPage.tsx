@@ -1,4 +1,3 @@
-import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { ClientSideErrorHandler } from 'components/ClientSideError';
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
@@ -37,7 +36,7 @@ export function PaperLandingPage({
 	return (
 		<PageScaffold
 			id={pageQaId}
-			header={<Header countryGroupId={GBPCountries} />}
+			header={<Header supportRegionId={'uk'} />}
 			footer={paperSubsFooter}
 		>
 			<NewspaperHero

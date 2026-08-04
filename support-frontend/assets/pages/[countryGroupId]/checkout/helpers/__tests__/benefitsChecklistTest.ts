@@ -1,4 +1,4 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { getBenefitsChecklistFromLandingPageTool } from '../benefitsChecklist';
 import { expectedDefaultBenefits } from './__fixtures__/expectedDefaultBenefits';
 
@@ -54,7 +54,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 			},
 		},
 	};
-	const GBP = 'GBPCountries';
+	const GBP = 'uk';
 	it('should return the correct benefits checklist for DigitalSubscription', () => {
 		expect(
 			getBenefitsChecklistFromLandingPageTool(
@@ -144,14 +144,14 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 	});
 
 	describe('getBenefitsChecklistFromLandingPageTool with missing benefits in landing page tool', () => {
-		const countryGroups = [
-			'GBPCountries',
-			'AUDCountries',
-			'EURCountries',
-			'UnitedStates',
-			'International',
-			'NZDCountries',
-			'Canada',
+		const supportRegionIds = [
+			'uk',
+			'au',
+			'eu',
+			'us',
+			'int',
+			'nz',
+			'ca',
 		];
 		const products = ['Contribution', 'SupporterPlus', 'DigitalSubscription'];
 		const landingPageSettingsWithoutProducts = {
@@ -159,15 +159,15 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 			products: {},
 		};
 		products.forEach((product) => {
-			countryGroups.forEach((countryGroup) => {
-				it(`should return default benefits if none are defined in landing page tool for ${product} in ${countryGroup}`, () => {
+			supportRegionIds.forEach((supportRegionId) => {
+				it(`should return default benefits if none are defined in landing page tool for ${product} in ${supportRegionId}`, () => {
 					const result = getBenefitsChecklistFromLandingPageTool(
 						product as 'Contribution' | 'SupporterPlus' | 'DigitalSubscription',
 						landingPageSettingsWithoutProducts,
-						countryGroup as CountryGroupId,
+						supportRegionId as SupportRegionId,
 					);
 					expect(result).toEqual(
-						expectedDefaultBenefits[product]?.[countryGroup],
+						expectedDefaultBenefits[product]?.[supportRegionId],
 					);
 				});
 			});

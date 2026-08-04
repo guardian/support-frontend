@@ -6,7 +6,7 @@ import {
 	textEgyptian17,
 } from '@guardian/source/foundations';
 import type { CountryCode } from '@modules/internationalisation/country';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { useState } from 'react';
 import {
 	BenefitsCheckList,
@@ -113,7 +113,7 @@ interface ThankYouSupportReminderState {
 type GetThankYouModuleDataParams = {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
-	countryGroupId: CountryGroupId;
+	supportRegionId: SupportRegionId;
 	countryId: CountryCode;
 	csrf: CsrfState;
 	isOneOff: boolean;
@@ -133,7 +133,7 @@ type GetThankYouModuleDataParams = {
 export const getThankYouModuleData = ({
 	productKey,
 	ratePlanKey,
-	countryGroupId,
+	supportRegionId,
 	countryId,
 	csrf,
 	isOneOff,
@@ -179,7 +179,7 @@ export const getThankYouModuleData = ({
 					<AppNewsDownloadBodyCopy />
 				</>
 			),
-			ctas: <AppDownloadBadges countryGroupId={countryGroupId} />,
+			ctas: <AppDownloadBadges supportRegionId={supportRegionId} />,
 			bodyCopySecond: (
 				<>
 					<h2 css={headingCss}>{appFeastDownloadHeader}</h2>
@@ -187,14 +187,14 @@ export const getThankYouModuleData = ({
 				</>
 			),
 			ctasSecond: (
-				<AppDownloadBadges countryGroupId={countryGroupId} isFeast={true} />
+				<AppDownloadBadges supportRegionId={supportRegionId} isFeast={true} />
 			),
 		},
 		appDownload: {
 			icon: getThankYouModuleIcon('appDownload'),
 			header: appDownloadHeader,
 			bodyCopy: <AppDownloadBodyCopy />,
-			ctas: <AppDownloadBadges countryGroupId={countryGroupId} />,
+			ctas: <AppDownloadBadges supportRegionId={supportRegionId} />,
 		},
 		observerAppDownload: {
 			icon: getThankYouModuleIcon('appsDownload'),
@@ -202,7 +202,7 @@ export const getThankYouModuleData = ({
 			bodyCopy: (
 				<AppDownloadWithQRCode
 					apps={getDownloadApps(['observer'])}
-					countryGroupId={countryGroupId}
+					supportRegionId={supportRegionId}
 				/>
 			),
 			ctas: null,
@@ -217,7 +217,7 @@ export const getThankYouModuleData = ({
 						'guardianFeast',
 						'guardianEditions',
 					])}
-					countryGroupId={countryGroupId}
+					supportRegionId={supportRegionId}
 				/>
 			),
 			ctas: null,

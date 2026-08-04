@@ -1,10 +1,6 @@
 // ----- Imports ----- //
 import type { CountryCode } from '@modules/internationalisation/country';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import {
-	GBPCountries,
-	UnitedStates,
-} from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { pageUrlRegexes } from 'helpers/abTests/abtestDefinitions';
 import type { AcquisitionABTest } from 'helpers/tracking/acquisitions';
 import { _, init as abInit } from '../abtest';
@@ -37,10 +33,10 @@ describe('init', () => {
 	// Common arguments to init
 	const mvt = 123456;
 	const country: CountryCode = 'GB';
-	const countryGroupId: CountryGroupId = GBPCountries;
+	const supportRegionId: SupportRegionId = 'uk';
 	const abtestInitalizerData = {
 		countryId: country,
-		countryGroupId,
+		supportRegionId,
 		mvt,
 	};
 
@@ -178,11 +174,11 @@ describe('init', () => {
 		};
 
 		const countryId = 'US';
-		const countryGroupId = UnitedStates;
+		const supportRegionId = 'us';
 		const participations: Participations = abInit({
 			...abtestInitalizerData,
 			countryId,
-			countryGroupId,
+			supportRegionId,
 			abTests,
 		});
 
@@ -191,15 +187,15 @@ describe('init', () => {
 
 	it('does not assign a user to a test in another country group', () => {
 		const abTests = {
-			t: buildTest({ audiences: { GBPCountries: buildAudience({}) } }),
+			t: buildTest({ audiences: { 'uk': buildAudience({}) } }),
 		};
 
 		const countryId = 'US';
-		const countryGroupId = UnitedStates;
+		const supportRegionId = 'us';
 		const participations: Participations = abInit({
 			...abtestInitalizerData,
 			countryId,
-			countryGroupId,
+			supportRegionId,
 			abTests,
 		});
 

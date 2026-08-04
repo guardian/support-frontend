@@ -1,7 +1,6 @@
 // ----- Routes ----- //
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { countryGroups } from '@modules/internationalisation/countryGroup';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type {
 	FulfilmentOptions,
@@ -61,8 +60,7 @@ const createRecurringReminderEndpoint = isProd()
 	? 'https://support.theguardian.com/reminders/create/recurring'
 	: 'https://support.code.dev-theguardian.com/reminders/create/recurring';
 
-const countryPath = (countryGroupId: CountryGroupId) =>
-	countryGroups[countryGroupId].supportRegionId;
+const countryPath = (supportRegionId: SupportRegionId) => supportRegionId;
 
 function postcodeLookupUrl(
 	postcode: string,
@@ -98,7 +96,7 @@ function paperSubsUrl(
 }
 
 function getDigitalPlusCheckoutDeepLink(
-	countryGroupId: CountryGroupId,
+	supportRegionId: SupportRegionId,
 	billingPeriod?: BillingPeriod,
 ) {
 	const urlParams = {
@@ -113,7 +111,7 @@ function getDigitalPlusCheckoutDeepLink(
 	};
 
 	const domain = getOrigin();
-	const localePath = countryPath(countryGroupId);
+	const localePath = countryPath(supportRegionId);
 	const checkoutRoute = routes.checkout;
 
 	const queryParams = new URLSearchParams(Object.entries(urlParams)).toString();
@@ -122,10 +120,10 @@ function getDigitalPlusCheckoutDeepLink(
 }
 
 function guardianWeeklyLanding(
-	countryGroupId: CountryGroupId,
+	supportRegionId: SupportRegionId,
 	gift: boolean,
 ): string {
-	const url = `${getOrigin()}/${countryPath(countryGroupId)}${
+	const url = `${getOrigin()}/${countryPath(supportRegionId)}${
 		gift
 			? routes.guardianWeeklySubscriptionLandingGift
 			: routes.guardianWeeklySubscriptionLanding
@@ -181,12 +179,12 @@ function parameteriseUrl(
 }
 
 // If the user cancels before completing the payment flow, send them back to the contribute page.
-function payPalCancelUrl(cgId: CountryGroupId): string {
+function payPalCancelUrl(cgId: SupportRegionId): string {
 	return `${getOrigin()}/${countryPath(cgId)}/contribute`;
 }
 
 function payPalReturnUrl(
-	cgId: CountryGroupId,
+	cgId: SupportRegionId,
 	email: string,
 	route: string = '/paypal/rest/return',
 ): string {
@@ -196,7 +194,7 @@ function payPalReturnUrl(
 }
 
 function stripePayPalReturnUrl(
-	cgId: CountryGroupId,
+	cgId: SupportRegionId,
 	email: string,
 	stripePublicKey: string,
 	currency: CurrencyCode,

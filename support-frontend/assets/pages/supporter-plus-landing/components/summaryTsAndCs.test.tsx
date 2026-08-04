@@ -1,5 +1,5 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { render } from '@testing-library/react';
 import type {
 	ActiveProductKey,
@@ -27,30 +27,30 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 	});
 
 	it.each`
-		productKey               | activeRatePlanKey | countryGroupId    | currency
-		${'Contribution'}        | ${'Monthly'}      | ${'GBPCountries'} | ${'GBP'}
-		${'Contribution'}        | ${'Annual'}       | ${'GBPCountries'} | ${'GBP'}
-		${'SupporterPlus'}       | ${'Monthly'}      | ${'GBPCountries'} | ${'GBP'}
-		${'SupporterPlus'}       | ${'Monthly'}      | ${'UnitedStates'} | ${'USD'}
-		${'SupporterPlus'}       | ${'Annual'}       | ${'GBPCountries'} | ${'GBP'}
-		${'OneTimeContribution'} | ${'OneTime'}      | ${'GBPCountries'} | ${'GBP'}
-		${'GuardianAdLite'}      | ${'Monthly'}      | ${'GBPCountries'} | ${'GBP'}
-		${'GuardianAdLite'}      | ${'Annual'}       | ${'GBPCountries'} | ${'GBP'}
-		${'DigitalSubscription'} | ${'Monthly'}      | ${'UnitedStates'} | ${'USD'}
-		${'DigitalSubscription'} | ${'Annual'}       | ${'GBPCountries'} | ${'GBP'}
-		${'SubscriptionCard'}    | ${'WeekendPlus'}  | ${'GBPCountries'} | ${'GBP'}
-		${'HomeDelivery'}        | ${'SixdayPlus'}   | ${'GBPCountries'} | ${'GBP'}
-		${'SubscriptionCard'}    | ${'Sunday'}       | ${'GBPCountries'} | ${'GBP'}
-		${'HomeDelivery'}        | ${'Sunday'}       | ${'GBPCountries'} | ${'GBP'}
+		productKey               | activeRatePlanKey | supportRegionId    | currency
+		${'Contribution'}        | ${'Monthly'}      | ${'uk'} | ${'GBP'}
+		${'Contribution'}        | ${'Annual'}       | ${'uk'} | ${'GBP'}
+		${'SupporterPlus'}       | ${'Monthly'}      | ${'uk'} | ${'GBP'}
+		${'SupporterPlus'}       | ${'Monthly'}      | ${'us'} | ${'USD'}
+		${'SupporterPlus'}       | ${'Annual'}       | ${'uk'} | ${'GBP'}
+		${'OneTimeContribution'} | ${'OneTime'}      | ${'uk'} | ${'GBP'}
+		${'GuardianAdLite'}      | ${'Monthly'}      | ${'uk'} | ${'GBP'}
+		${'GuardianAdLite'}      | ${'Annual'}       | ${'uk'} | ${'GBP'}
+		${'DigitalSubscription'} | ${'Monthly'}      | ${'us'} | ${'USD'}
+		${'DigitalSubscription'} | ${'Annual'}       | ${'uk'} | ${'GBP'}
+		${'SubscriptionCard'}    | ${'WeekendPlus'}  | ${'uk'} | ${'GBP'}
+		${'HomeDelivery'}        | ${'SixdayPlus'}   | ${'uk'} | ${'GBP'}
+		${'SubscriptionCard'}    | ${'Sunday'}       | ${'uk'} | ${'GBP'}
+		${'HomeDelivery'}        | ${'Sunday'}       | ${'uk'} | ${'GBP'}
 	`(
-		`summaryTs&Cs for $productKey With ratePlanKey $activeRatePlanKey ($countryGroupId / $currency) renders correctly`,
-		({ productKey, activeRatePlanKey, countryGroupId, currency }) => {
+		`summaryTs&Cs for $productKey With ratePlanKey $activeRatePlanKey ($supportRegionId / $currency) renders correctly`,
+		({ productKey, activeRatePlanKey, supportRegionId, currency }) => {
 			// Act
 			const { container } = render(
 				<SummaryTsAndCs
 					productKey={productKey as ActiveProductKey}
 					ratePlanKey={activeRatePlanKey as ActiveRatePlanKey}
-					countryGroupId={countryGroupId as CountryGroupId}
+					supportRegionId={supportRegionId as SupportRegionId}
 					ratePlanDescription={
 						ratePlanDescription[activeRatePlanKey as ActiveRatePlanKey]
 					}

@@ -12,7 +12,8 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { supportRegions } from '@modules/internationalisation/supportRegion';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
@@ -21,7 +22,6 @@ import { PageScaffold } from 'components/page/pageScaffold';
 import { contributionsOnlyCountriesAmountsConfig } from 'helpers/contributions';
 import { guardianContactUsLink, guardianHelpCentreLink } from 'helpers/legal';
 import { billingPeriodToContributionType } from 'helpers/productPrice/billingPeriods';
-import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import { AmountsCard } from '../components/amountsCard';
 
 const recurringContainer = css`
@@ -139,8 +139,7 @@ export function ContributionsOnlyLanding({
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const ratePlanParam = urlSearchParams.get('ratePlan') ?? '';
 
-	const { currencyKey: currencyId, countryGroupId } =
-		getSupportRegionIdConfig(supportRegionId);
+	const currencyCode = supportRegions[supportRegionId].currency.code;
 
 	const getInitialBillingPeriod = () => {
 		// 1. Query Parameters take precedence
@@ -236,8 +235,8 @@ export function ContributionsOnlyLanding({
 								billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY'
 							]
 						}
-						countryGroupId={countryGroupId}
-						currencyId={currencyId}
+						supportRegionId={supportRegionId}
+						currencyCode={currencyCode}
 						billingPeriod={billingPeriod}
 					/>
 				</div>

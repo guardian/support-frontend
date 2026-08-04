@@ -1,6 +1,6 @@
 import { ThemeProvider } from '@emotion/react';
 import type { CountryCode } from '@modules/internationalisation/country';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { type ProductOptions } from '@modules/product/productOptions';
 import { Elements } from '@stripe/react-stripe-js';
@@ -17,7 +17,7 @@ import {
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
-import { fromCountryGroupId } from 'helpers/internationalisation/currency';
+import { fromSupportRegionId } from 'helpers/internationalisation/currency';
 import {
 	type ActiveProductKey,
 	type ActiveRatePlanKey,
@@ -239,7 +239,7 @@ export function Checkout({
 	/**
 	 * We use the country ULRSearchParam to force a person into a country.
 	 * Where this is currently used is in the addressFields when someone selects
-	 * a country that doesn't correspond to the countryGroup a product is in.
+	 * a country that doesn't correspond to the supportRegion a product is in.
 	 */
 	const forcedCountry = urlSearchParams.get('country') ?? undefined;
 
@@ -279,10 +279,9 @@ export function Checkout({
 	 * Passed down because minimum product prices are unavailable in the paymentTsAndCs story
 	 * and shared across summary and form checkout sub-components
 	 */
-	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 	const thresholdAmount = getLowerProductBenefitThreshold(
 		billingPeriod,
-		fromCountryGroupId(countryGroupId),
+		fromSupportRegionId(supportRegionId),
 		productKey,
 		ratePlanKey,
 	);
@@ -330,7 +329,7 @@ export function Checkout({
 					borderBox
 					footerDisclaimer={
 						<CurrentMaxRatesByCountry
-							countryGroupId={countryGroupId}
+							supportRegionId={supportRegionId}
 							productKey={productKey}
 						/>
 					}

@@ -13,7 +13,7 @@ export default {
 	},
 };
 
-export const Template = () => {
+export function Template() {
 	const contentContainer = css`
 		max-width: 1300px;
 	`;
@@ -23,4 +23,4 @@ export const Template = () => {
 			<StudentBrandAwareness />
 		</div>
 	);
-};
+}

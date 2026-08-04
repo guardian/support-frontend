@@ -14,18 +14,18 @@ import { subscriptionsLandingProps } from './subscriptionsLandingProps';
 
 // ----- Render ----- //
 export function SubscriptionsLandingPage({
-	countryGroupId,
+	supportRegionId,
 	participations,
 	pricingCopy,
 	referrerAcquisitions,
 }: SubscriptionsLandingProps) {
 	return (
 		<PageScaffold
-			header={<Header countryGroupId={countryGroupId} />}
+			header={<Header supportRegionId={supportRegionId} />}
 			footer={<Footer centred fullWidth />}
 		>
 			<SubscriptionLandingContent
-				countryGroupId={countryGroupId}
+				supportRegionId={supportRegionId}
 				participations={participations}
 				pricingCopy={pricingCopy}
 				referrerAcquisitions={referrerAcquisitions}

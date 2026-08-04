@@ -1,4 +1,3 @@
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { render, screen } from '@testing-library/react';
 import { type LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import type {
@@ -36,7 +35,7 @@ const testStudentLandingPageVariant = {
 };
 
 describe('<StudentLandingPageInstitution />', () => {
-	const supportRegionId = SupportRegionId.AU;
+	const supportRegionId = 'au';
 	const productKey: ActiveProductKey = 'SupporterPlus';
 	const ratePlanKey: ActiveRatePlanKey = 'Monthly';
 	const landingPageVariant = {

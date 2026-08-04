@@ -7,7 +7,7 @@ import {
 	textEgyptian15,
 	textEgyptian17,
 } from '@guardian/source/foundations';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { AppStoreBadges } from './AppDownloadBadges';
 import { type AppDownload } from './appDownloadItems';
 
@@ -63,10 +63,10 @@ const appIconContainer = css`
 
 export default function AppDownload({
 	apps,
-	countryGroupId,
+	supportRegionId,
 }: {
 	apps: AppDownload[];
-	countryGroupId: CountryGroupId;
+	supportRegionId: SupportRegionId;
 }): JSX.Element {
 	return (
 		<>
@@ -82,7 +82,7 @@ export default function AppDownload({
 							<div css={appStoreBadges}>
 								<AppStoreBadges
 									playStoreUrl={playStoreUrl}
-									appStoreUrl={getAppStoreUrl(countryGroupId)}
+									appStoreUrl={getAppStoreUrl(supportRegionId)}
 								/>
 							</div>
 						</div>

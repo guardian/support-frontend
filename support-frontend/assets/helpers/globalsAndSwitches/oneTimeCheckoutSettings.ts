@@ -1,4 +1,4 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { AmountValuesObject } from 'helpers/contributions';
 import type { TickerSettings } from './landingPageSettings';
 
@@ -11,7 +11,7 @@ export interface OneTimeCheckoutVariant {
 }
 
 interface RegionTargeting {
-	targetedCountryGroups: CountryGroupId[];
+	targetedCountryGroups: SupportRegionId[];
 }
 
 export interface OneTimeCheckoutTest {

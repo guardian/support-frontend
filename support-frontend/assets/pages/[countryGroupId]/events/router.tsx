@@ -1,4 +1,4 @@
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { supportRegionIds } from '@modules/internationalisation/supportRegion';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import {
 	getAbParticipations,
@@ -9,7 +9,7 @@ import { Events } from './events';
 
 setUpTrackingAndConsents(getAbParticipations());
 const router = createBrowserRouter(
-	Object.values(SupportRegionId).flatMap((supportRegionId) => [
+	supportRegionIds.flatMap((supportRegionId) => [
 		{
 			path: `/${supportRegionId}/events/:eventId`,
 			element: <Events supportRegionId={supportRegionId} />,

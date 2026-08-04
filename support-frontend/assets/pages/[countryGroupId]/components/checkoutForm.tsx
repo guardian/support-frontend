@@ -6,7 +6,7 @@ import {
 	ErrorSummary,
 } from '@guardian/source-development-kitchen/react-components';
 import type { CountryCode } from '@modules/internationalisation/country';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import {
 	ExpressCheckoutElement,
@@ -192,7 +192,7 @@ export default function CheckoutForm({
 	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
 
 	const productCatalog = appConfig.productCatalog;
-	const { currency, currencyKey, countryGroupId } =
+	const { currency, currencyKey } =
 		getSupportRegionIdConfig(supportRegionId);
 
 	const productDescription = productCatalogDescription[productKey];
@@ -899,7 +899,7 @@ export default function CheckoutForm({
 										) {
 											logException(
 												"Could not find state from Stripe's billingDetails",
-												{ supportRegionId, countryGroupId, countryId },
+												{ supportRegionId, countryId },
 											);
 										}
 										event.shippingAddress?.address.state &&
@@ -1203,7 +1203,7 @@ export default function CheckoutForm({
 													`}
 												>
 													<DirectDebitForm
-														countryGroupId={countryGroupId}
+														supportRegionId={supportRegionId}
 														accountHolderName={accountHolderName}
 														accountNumber={accountNumber}
 														accountHolderConfirmation={
@@ -1266,7 +1266,7 @@ export default function CheckoutForm({
 						<SummaryTsAndCs
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
-							countryGroupId={countryGroupId}
+							supportRegionId={supportRegionId}
 							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}
@@ -1322,7 +1322,7 @@ export default function CheckoutForm({
 						<PaymentTsAndCs
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
-							countryGroupId={countryGroupId}
+							supportRegionId={supportRegionId}
 							studentDiscount={studentDiscount}
 							promotion={promotion}
 							thresholdAmount={thresholdAmount}
@@ -1333,7 +1333,7 @@ export default function CheckoutForm({
 			{isRecurringContribution && (
 				<>
 					<PatronsMessage
-						countryGroupId={countryGroupId}
+						supportRegionId={supportRegionId}
 						mobileTheme={'light'}
 					/>
 					<ContributionCheckoutFinePrint mobileTheme={'light'} />

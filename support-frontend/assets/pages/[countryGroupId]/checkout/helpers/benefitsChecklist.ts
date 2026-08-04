@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import type { BenefitsCheckListData } from '../../../../components/checkoutBenefits/benefitsCheckList';
 import type { Participations } from '../../../../helpers/abTests/models';
@@ -43,7 +43,7 @@ const benefitsAsChecklist = ({
 export const getBenefitsChecklistFromLandingPageTool = (
 	productKey: ProductKey,
 	landingPageSettings: LandingPageVariant,
-	countryGroupId: CountryGroupId,
+	supportRegionId: SupportRegionId,
 ): BenefitsCheckListData[] | undefined => {
 	// Tier products get their config from the Landing Page tool
 	if (productKey === 'Contribution') {
@@ -53,13 +53,13 @@ export const getBenefitsChecklistFromLandingPageTool = (
 				landingPageSettings.products.Contribution?.benefits ??
 				filterProductDescriptionBenefits(
 					productCatalogDescription.Contribution,
-					countryGroupId,
+					supportRegionId,
 				),
 			unchecked:
 				landingPageSettings.products.SupporterPlus?.benefits ??
 				filterProductDescriptionBenefits(
 					productCatalogDescription.SupporterPlus,
-					countryGroupId,
+					supportRegionId,
 				),
 		});
 	} else if (productKey === 'SupporterPlus') {
@@ -68,7 +68,7 @@ export const getBenefitsChecklistFromLandingPageTool = (
 				landingPageSettings.products.SupporterPlus?.benefits ??
 				filterProductDescriptionBenefits(
 					productCatalogDescription.SupporterPlus,
-					countryGroupId,
+					supportRegionId,
 				),
 			unchecked: [],
 		});
@@ -78,12 +78,12 @@ export const getBenefitsChecklistFromLandingPageTool = (
 				...(landingPageSettings.products.DigitalSubscription?.benefits ??
 					filterProductDescriptionBenefits(
 						productCatalogDescription.DigitalSubscription,
-						countryGroupId,
+						supportRegionId,
 					)),
 				...(landingPageSettings.products.SupporterPlus?.benefits ??
 					filterProductDescriptionBenefits(
 						productCatalogDescription.SupporterPlus,
-						countryGroupId,
+						supportRegionId,
 					)),
 			],
 			unchecked: [],
@@ -94,11 +94,11 @@ export const getBenefitsChecklistFromLandingPageTool = (
 
 export const getBenefitsChecklistFromProductDescription = (
 	productDescription: ProductDescription,
-	countryGroupId: CountryGroupId,
+	supportRegionId: SupportRegionId,
 	abParticipations: Participations,
 ): BenefitsCheckListData[] => {
 	return productDescription.benefits
-		.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
+		.filter((benefit) => filterBenefitByRegion(benefit, supportRegionId))
 		.filter((benefit) => filterBenefitByABTest(benefit, abParticipations))
 		.map((benefit) => ({
 			isChecked: true,
@@ -108,9 +108,9 @@ export const getBenefitsChecklistFromProductDescription = (
 
 export const filterProductDescriptionBenefits = (
 	productDescription: ProductDescription,
-	countryGroupId: CountryGroupId,
+	supportRegionId: SupportRegionId,
 ): ProductBenefit[] => {
 	return productDescription.benefits.filter((benefit) =>
-		filterBenefitByRegion(benefit, countryGroupId),
+		filterBenefitByRegion(benefit, supportRegionId),
 	);
 };

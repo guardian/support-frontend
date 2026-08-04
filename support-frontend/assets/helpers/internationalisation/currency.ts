@@ -1,18 +1,14 @@
 // ----- Imports ----- //
 
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { countryGroups } from '@modules/internationalisation/countryGroup';
-import {
-	type CurrencyCode,
-	getCurrencyByCode,
-} from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
+import { getCurrencyByCode } from '@modules/internationalisation/currency';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
+import { supportRegions } from '@modules/internationalisation/supportRegion';
 import { getQueryParameter } from 'helpers/urls/url';
 
 // ----- Functions ----- //
-function fromCountryGroupId(countryGroupId: CountryGroupId): CurrencyCode {
-	const countryGroup = countryGroups[countryGroupId];
-
-	return countryGroup.currency;
+function fromSupportRegionId(supportRegionId: SupportRegionId): CurrencyCode {
+	return supportRegions[supportRegionId].currency.code;
 }
 
 function fromString(s: string): CurrencyCode | null | undefined {
@@ -50,8 +46,8 @@ function fromQueryParameter(): CurrencyCode | null | undefined {
 	return null;
 }
 
-function detect(countryGroup: CountryGroupId): CurrencyCode {
-	return fromQueryParameter() ?? fromCountryGroupId(countryGroup);
+function detect(supportRegionId: SupportRegionId): CurrencyCode {
+	return fromQueryParameter() ?? fromSupportRegionId(supportRegionId);
 }
 
 const glyph = (c: CurrencyCode): string => getCurrencyByCode(c).glyph;
@@ -60,4 +56,4 @@ const extendedGlyph = (c: CurrencyCode): string =>
 	getCurrencyByCode(c).extendedGlyph;
 
 // ----- Exports ----- //
-export { detect, fromCountryGroupId, glyph, extendedGlyph };
+export { detect, fromSupportRegionId, glyph, extendedGlyph };

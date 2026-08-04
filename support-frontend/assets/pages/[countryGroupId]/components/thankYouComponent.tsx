@@ -1,7 +1,7 @@
 import { css, ThemeProvider } from '@emotion/react';
 import { storage } from '@guardian/libs';
 import { from } from '@guardian/source/foundations';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useEffect, useState } from 'react';
 import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
@@ -88,7 +88,7 @@ export function ThankYouComponent({
 }: CheckoutComponentProps) {
 	const countryId = Country.codeFromString(get('GU_country') ?? 'GB') ?? 'GB';
 
-	const { countryGroupId, currencyKey } =
+	const { currencyKey } =
 		getSupportRegionIdConfig(supportRegionId);
 	// Session storage order (from Checkout)
 	const order = getThankYouOrder();
@@ -196,7 +196,7 @@ export function ThankYouComponent({
 				landingPageSettings.products[productKey]?.benefits ??
 				filterProductDescriptionBenefits(
 					productCatalogDescription[productKey],
-					countryGroupId,
+					supportRegionId,
 				)
 			).map((benefit) => ({
 				isChecked: true,
@@ -208,7 +208,7 @@ export function ThankYouComponent({
 							landingPageSettings.products.SupporterPlus?.benefits ??
 							filterProductDescriptionBenefits(
 								productCatalogDescription.SupporterPlus,
-								countryGroupId,
+								supportRegionId,
 							)
 					  ).map((benefit) => ({
 							isChecked: true,
@@ -234,7 +234,7 @@ export function ThankYouComponent({
 	const thankYouModuleData = getThankYouModuleData({
 		productKey,
 		ratePlanKey,
-		countryGroupId,
+		supportRegionId,
 		countryId,
 		csrf,
 		isOneOff,

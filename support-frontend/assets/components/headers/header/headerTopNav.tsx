@@ -9,9 +9,9 @@ import {
 	utilityContainer,
 } from './headerTopNavStyles';
 
-export function HeaderTopNav({ utility, countryGroupId }: HeaderProps) {
+export function HeaderTopNav({ utility, supportRegionId }: HeaderProps) {
 	const logoContainerRegion =
-		countryGroupId === 'GBPCountries' ? logoContainerGBP : logoContainerROW;
+		supportRegionId === 'uk' ? logoContainerGBP : logoContainerROW;
 
 	return (
 		<div css={topNavContainer}>

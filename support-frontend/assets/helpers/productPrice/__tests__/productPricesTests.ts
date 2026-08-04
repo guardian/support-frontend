@@ -1,14 +1,15 @@
 // ----- Imports ----- //
+import { supportRegions } from '@modules/internationalisation/supportRegion';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type {
 	ProductPrice,
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
 import {
-	getCountryGroup,
 	getCurrency,
 	getFirstValidPrice,
 	getProductPrice,
+	getSupportRegion,
 	isNumeric,
 	showPrice,
 } from 'helpers/productPrice/productPrices';
@@ -213,21 +214,11 @@ describe('getCurrency', () => {
 	});
 });
 
-describe('getCountryGroup', () => {
+describe('getSupportRegion', () => {
 	it('should return a country group given a valid ISO country code', () => {
-		expect(getCountryGroup('GB')).toEqual({
-			countries: ['GB', 'FK', 'GI', 'GG', 'IM', 'JE', 'SH'],
-			currency: 'GBP',
-			name: 'United Kingdom',
-			supportRegionId: 'uk',
-		});
+		expect(getSupportRegion('GB')).toEqual(supportRegions.uk);
 
-		expect(getCountryGroup('CA')).toEqual({
-			countries: ['CA'],
-			currency: 'CAD',
-			name: 'Canada',
-			supportRegionId: 'ca',
-		});
+		expect(getSupportRegion('CA')).toEqual(supportRegions.ca);
 	});
 });
 

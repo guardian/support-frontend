@@ -14,7 +14,7 @@ import {
 	LinkButton,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductOptions } from '@modules/product/productOptions';
 import { useEffect } from 'react';
@@ -397,7 +397,7 @@ export function CheckoutNudgeSelector({
 	}
 
 	const { nudgeToProduct } = nudge;
-	const { currencyKey, countryGroupId } =
+	const { currencyKey } =
 		getSupportRegionIdConfig(supportRegionId);
 
 	// Handle "Thank You" State
@@ -445,7 +445,7 @@ export function CheckoutNudgeSelector({
 		getBenefitsChecklistFromLandingPageTool(
 			nudgeToProduct.product,
 			landingPageSettings,
-			countryGroupId,
+			supportRegionId,
 		) ?? [];
 
 	return (

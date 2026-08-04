@@ -11,8 +11,8 @@ import {
 	LinkButton,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'react';
 import { billingPeriodToContributionType } from 'helpers/productPrice/billingPeriods';
@@ -62,17 +62,17 @@ const buttonContainer = css`
 
 interface AmountsCardProps {
 	amountsData: AmountValuesObject;
-	countryGroupId: CountryGroupId;
-	currencyId: CurrencyCode;
+	supportRegionId: SupportRegionId;
+	currencyCode: CurrencyCode;
 	heading?: JSX.Element;
 	standFirst?: JSX.Element;
 	billingPeriod: BillingPeriod;
 }
 
 export function AmountsCard({
-	countryGroupId,
+	supportRegionId,
 	amountsData,
-	currencyId,
+	currencyCode,
 	heading,
 	standFirst,
 	billingPeriod,
@@ -99,7 +99,7 @@ export function AmountsCard({
 				<PriceCards
 					amounts={amountsData.amounts}
 					selectedAmount={selectedAmount}
-					currency={currencyId}
+					currency={currencyCode}
 					billingPeriod={billingPeriod}
 					onAmountChange={(amount: string) => {
 						if (amount === 'other') {
@@ -114,7 +114,7 @@ export function AmountsCard({
 					hideChooseYourAmount={amountsData.hideChooseYourAmount}
 					otherAmountField={
 						<OtherAmount
-							currency={currencyId}
+							currency={currencyCode}
 							selectedAmount={selectedAmount}
 							otherAmount={otherAmount}
 							onOtherAmountChange={(otherAmount) => {
@@ -131,7 +131,7 @@ export function AmountsCard({
 					cssOverrides={btnStyleOverrides}
 					onClick={() => {
 						trackComponentClick(
-							`npf-contribution-amount-toggle-${countryGroupId}-${billingPeriodToContributionType(
+							`npf-contribution-amount-toggle-${supportRegionId}-${billingPeriodToContributionType(
 								billingPeriod,
 							)}`,
 						);

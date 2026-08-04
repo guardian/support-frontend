@@ -1,6 +1,6 @@
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { CaStateCode } from '@modules/internationalisation/state';
 import { caStateCodes } from '@modules/internationalisation/state';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type {
 	WindowProductCatalog,
 	WindowTaxRates,
@@ -34,7 +34,7 @@ export function getEstimatedSalesTaxConfig(
 	maybeProvinceCode: string | undefined,
 	supportRegionId: SupportRegionId,
 ): TaxRateConfig {
-	if (supportRegionId !== SupportRegionId.CA) {
+	if (supportRegionId !== 'ca') {
 		return { type: 'tax_inclusive' };
 	}
 

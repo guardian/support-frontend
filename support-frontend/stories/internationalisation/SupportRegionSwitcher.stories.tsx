@@ -1,32 +1,15 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import {
-	AUDCountries,
-	Canada,
-	EURCountries,
-	GBPCountries,
-	International,
-	NZDCountries,
-	UnitedStates,
-} from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type React from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
-import CountryGroupSwitcherComponent from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import SupportRegionSwitcherComponent from '../../assets/components/supportRegionSwitcher/supportRegionSwitcher';
 
 export default {
 	title: 'Internationalisation/Country Group Switcher',
-	component: CountryGroupSwitcherComponent,
+	component: SupportRegionSwitcherComponent,
 	argTypes: {
-		countryGroup: {
+		supportRegionId: {
 			type: 'select',
-			options: [
-				AUDCountries,
-				Canada,
-				EURCountries,
-				GBPCountries,
-				International,
-				NZDCountries,
-				UnitedStates,
-			],
+			options: ['au', 'ca', 'eu', 'uk', 'int', 'nz', 'us'],
 		},
 	},
 	decorators: [
@@ -45,32 +28,24 @@ export default {
 	],
 };
 
-export function CountryGroupSwitcher(args: {
-	countryGroup: CountryGroupId;
+export function SupportRegionSwitcher(args: {
+	supportRegionId: SupportRegionId;
 }): JSX.Element {
 	return (
-		<CountryGroupSwitcherComponent
-			countryGroupIds={[
-				GBPCountries,
-				UnitedStates,
-				AUDCountries,
-				EURCountries,
-				NZDCountries,
-				Canada,
-				International,
-			]}
-			selectedCountryGroup={args.countryGroup}
+		<SupportRegionSwitcherComponent
+			supportRegionIds={['uk', 'us', 'au', 'eu', 'nz', 'ca', 'int']}
+			selectedSupportRegion={args.supportRegionId}
 			subPath={window.location.search}
 		/>
 	);
 }
 
-CountryGroupSwitcher.args = {
-	countryGroup: GBPCountries,
+SupportRegionSwitcher.args = {
+	supportRegionId: 'uk',
 };
 
 // Test opening and closing the country group switcher
-CountryGroupSwitcher.play = async ({
+SupportRegionSwitcher.play = async ({
 	canvasElement,
 }: {
 	canvasElement: HTMLCanvasElement;
@@ -93,32 +68,24 @@ CountryGroupSwitcher.play = async ({
 	});
 };
 
-export function ExpandedCountryGroupSwitcher(args: {
-	countryGroup: CountryGroupId;
+export function ExpandedSupportRegionSwitcher(args: {
+	supportRegionId: SupportRegionId;
 }): JSX.Element {
 	return (
-		<CountryGroupSwitcherComponent
-			countryGroupIds={[
-				GBPCountries,
-				UnitedStates,
-				AUDCountries,
-				EURCountries,
-				NZDCountries,
-				Canada,
-				International,
-			]}
-			selectedCountryGroup={args.countryGroup}
+		<SupportRegionSwitcherComponent
+			supportRegionIds={['uk', 'us', 'au', 'eu', 'nz', 'ca', 'int']}
+			selectedSupportRegion={args.supportRegionId}
 			subPath={window.location.search}
 		/>
 	);
 }
 
-ExpandedCountryGroupSwitcher.args = {
-	countryGroup: GBPCountries,
+ExpandedSupportRegionSwitcher.args = {
+	supportRegionId: 'uk',
 };
 
 // Put the country group switcher into an expanded state before taking the snapshot
-ExpandedCountryGroupSwitcher.play = async ({
+ExpandedSupportRegionSwitcher.play = async ({
 	canvasElement,
 }: {
 	canvasElement: HTMLCanvasElement;

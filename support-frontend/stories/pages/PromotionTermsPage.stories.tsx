@@ -1,4 +1,3 @@
-import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import type { StoryObj } from '@storybook/preact-vite';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
@@ -54,7 +53,7 @@ const digitalPackArgs: PromotionTermsPropTypes = {
 		product: DigitalPack,
 		productRatePlans: ['Digital Pack Monthly', 'Digital Pack Annual'],
 	},
-	countryGroupId: GBPCountries,
+	supportRegionId: 'uk',
 };
 
 const guardianWeeklyArgs: PromotionTermsPropTypes = {
@@ -64,7 +63,7 @@ const guardianWeeklyArgs: PromotionTermsPropTypes = {
 		product: GuardianWeekly,
 		productRatePlans: ['Guardian Weekly Annual', 'Guardian Weekly Quarterly'],
 	},
-	countryGroupId: GBPCountries,
+	supportRegionId: 'uk',
 };
 
 export const DigitalPackPromotion: Story = {

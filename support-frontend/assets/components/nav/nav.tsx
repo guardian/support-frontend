@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
 import { Column, Columns, Hide } from '@guardian/source/react-components';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { Container } from 'components/layout/container';
+import SupportRegionSwitcher from '../supportRegionSwitcher/supportRegionSwitcher';
 
 const switcherContainer = css`
 	height: 28px;
@@ -12,15 +12,15 @@ const switcherContainer = css`
 	margin-bottom: ${space[3]}px;
 `;
 interface NavProps {
-	countryGroupIds: CountryGroupId[];
-	selectedCountryGroup: CountryGroupId;
+	supportRegionIds: SupportRegionId[];
+	selectedSupportRegion: SupportRegionId;
 	subPath: string;
 	countryIsAffectedByVATStatus?: boolean;
 }
 
 function Nav({
-	countryGroupIds,
-	selectedCountryGroup,
+	supportRegionIds,
+	selectedSupportRegion,
 	subPath,
 	countryIsAffectedByVATStatus = false,
 }: NavProps): JSX.Element {
@@ -39,9 +39,9 @@ function Nav({
 					{!countryIsAffectedByVATStatus && (
 						<Column>
 							<div css={switcherContainer} data-test="xxx">
-								<CountryGroupSwitcher
-									countryGroupIds={countryGroupIds}
-									selectedCountryGroup={selectedCountryGroup}
+								<SupportRegionSwitcher
+									supportRegionIds={supportRegionIds}
+									selectedSupportRegion={selectedSupportRegion}
 									subPath={subPath}
 								/>
 							</div>

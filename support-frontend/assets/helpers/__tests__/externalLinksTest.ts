@@ -1,14 +1,5 @@
 // ----- Imports ----- //
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import {
-	AUDCountries,
-	Canada,
-	EURCountries,
-	GBPCountries,
-	International,
-	NZDCountries,
-	UnitedStates,
-} from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import {
 	androidAppUrl,
 	getDailyEditionUrl,
@@ -19,11 +10,11 @@ jest.mock('@guardian/ophan-tracker-js', () => ({
 	viewId: '123456',
 }));
 describe('externalLinks', () => {
-	const uk: CountryGroupId = GBPCountries;
-	const us: CountryGroupId = UnitedStates;
-	const au: CountryGroupId = AUDCountries;
-	const ca: CountryGroupId = Canada;
-	const nz: CountryGroupId = NZDCountries;
+	const uk: SupportRegionId = 'uk';
+	const us: SupportRegionId = 'us';
+	const au: SupportRegionId = 'au';
+	const ca: SupportRegionId = 'ca';
+	const nz: SupportRegionId = 'nz';
 	const appStoreRoot = 'https://itunes.apple.com';
 	const iosPremiumAppProduct = 'app/the-guardian/id409128287';
 	const iosDailyEditionProduct =
@@ -53,7 +44,7 @@ describe('externalLinks', () => {
 		});
 		const usDefaultLink = `${appStoreRoot}/us/${iosPremiumAppProduct}${iosPremiumTail}`;
 		it('should return default /us/ app store link for EU and International countries', () => {
-			([EURCountries, International] as CountryGroupId[]).forEach((c) =>
+			(['eu', 'int'] as SupportRegionId[]).forEach((c) =>
 				expect(getIosAppUrl(c).startsWith(usDefaultLink)),
 			);
 		});
@@ -82,7 +73,7 @@ describe('externalLinks', () => {
 		});
 		const usDefaultLink = `${appStoreRoot}/us/${iosDailyEditionProduct}${iosPremiumTail}`;
 		it('should return default /us/ app store link for EU and International countries', () => {
-			([EURCountries, International] as CountryGroupId[]).forEach((c) =>
+			(['eu', 'int'] as SupportRegionId[]).forEach((c) =>
 				expect(getDailyEditionUrl(c).startsWith(usDefaultLink)),
 			);
 		});

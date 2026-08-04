@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { storage } from '@guardian/libs';
 import { space } from '@guardian/source/foundations';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { useSearchParams } from 'react-router';
 import ContentBox from 'components/onboarding/contentBox';

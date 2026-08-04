@@ -1,4 +1,4 @@
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { Elements } from '@stripe/react-stripe-js';
 import type { StripeElementsOptions } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
@@ -36,7 +36,7 @@ export function OneTimeCheckout({
 	landingPageSettings,
 	oneTimeCheckoutSettings,
 }: OneTimeCheckoutProps) {
-	const { currencyKey, countryGroupId } =
+	const { currencyKey } =
 		getSupportRegionIdConfig(supportRegionId);
 	const isTestUser = !!cookie.get('_test_username');
 
@@ -49,7 +49,7 @@ export function OneTimeCheckout({
 
 	const stripePromise = loadStripe(stripePublicKey);
 
-	const minAmount = config[countryGroupId]['ONE_OFF'].min;
+	const minAmount = config[supportRegionId]['ONE_OFF'].min;
 	const elementsOptions: StripeElementsOptions = {
 		mode: 'payment',
 		/**

@@ -2,20 +2,14 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
-import {
-	Canada,
-	GBPCountries,
-	SupportRegionId,
-	UnitedStates,
-} from '@modules/internationalisation/countryGroup';
-import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
-import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { Institution } from 'helpers/globalsAndSwitches/studentLandingPageSettings';
-import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
+import SupportRegionSwitcher from '../../../../components/supportRegionSwitcher/supportRegionSwitcher';
+import type { SupportRegionSwitcherProps } from '../../../../components/supportRegionSwitcher/supportRegionSwitcher';
 import { AccordionFAQ } from '../../components/accordionFAQ';
 import { getStudentFAQs } from '../helpers/studentFAQs';
 import { getStudentTsAndCs } from '../helpers/studentTsAndCsCopy';
@@ -41,15 +35,14 @@ export function StudentLandingPage({
 	const faqItems = getStudentFAQs(supportRegionId, institution);
 	const tsAndCsItem = getStudentTsAndCs(supportRegionId, institution);
 
-	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
-	const countrySwitcherProps: CountryGroupSwitcherProps = {
-		countryGroupIds: [GBPCountries, UnitedStates, Canada],
-		selectedCountryGroup: countryGroupId,
+	const countrySwitcherProps: SupportRegionSwitcherProps = {
+		supportRegionIds: ['uk', 'us', 'ca'],
+		selectedSupportRegion: supportRegionId,
 		subPath: '/student',
 	};
 	const showCountrySwitcher =
-		supportRegionId !== SupportRegionId.AU &&
-		countrySwitcherProps.countryGroupIds.length > 1;
+		supportRegionId !== 'au' &&
+		countrySwitcherProps.supportRegionIds.length > 1;
 
 	return (
 		<PageScaffold
@@ -57,7 +50,7 @@ export function StudentLandingPage({
 				<Header>
 					{showCountrySwitcher && (
 						<CountrySwitcherContainer>
-							<CountryGroupSwitcher {...countrySwitcherProps} />
+							<SupportRegionSwitcher {...countrySwitcherProps} />
 						</CountrySwitcherContainer>
 					)}
 				</Header>

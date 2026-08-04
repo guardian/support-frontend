@@ -11,7 +11,7 @@ export const fallBackOneTimeCheckoutSelection: Record<
 	string,
 	OneTimeCheckoutVariant
 > = {
-	GBPCountries: {
+	uk: {
 		name: 'CONTROL',
 		heading: 'Support just once',
 		subheading: 'Support us with the amount of your choice.',
@@ -21,7 +21,7 @@ export const fallBackOneTimeCheckoutSelection: Record<
 			hideChooseYourAmount: false,
 		},
 	},
-	UnitedStates: {
+	us: {
 		name: 'CONTROL',
 		heading: 'Support just once',
 		subheading: 'Support us with the amount of your choice.',
@@ -31,7 +31,7 @@ export const fallBackOneTimeCheckoutSelection: Record<
 			hideChooseYourAmount: false,
 		},
 	},
-	EURCountries: {
+	eu: {
 		name: 'CONTROL',
 		heading: 'Support just once',
 		subheading: 'Support us with the amount of your choice.',
@@ -41,7 +41,7 @@ export const fallBackOneTimeCheckoutSelection: Record<
 			hideChooseYourAmount: false,
 		},
 	},
-	International: {
+	int: {
 		name: 'CONTROL',
 		heading: 'Support just once',
 		subheading: 'Support us with the amount of your choice.',
@@ -51,7 +51,7 @@ export const fallBackOneTimeCheckoutSelection: Record<
 			hideChooseYourAmount: false,
 		},
 	},
-	Canada: {
+	ca: {
 		name: 'CONTROL',
 		heading: 'Support just once',
 		subheading: 'Support us with the amount of your choice.',
@@ -61,7 +61,7 @@ export const fallBackOneTimeCheckoutSelection: Record<
 			hideChooseYourAmount: false,
 		},
 	},
-	AUDCountries: {
+	au: {
 		name: 'CONTROL',
 		heading: 'Support just once',
 		subheading: 'Support us with the amount of your choice.',
@@ -71,7 +71,7 @@ export const fallBackOneTimeCheckoutSelection: Record<
 			hideChooseYourAmount: false,
 		},
 	},
-	NZDCountries: {
+	nz: {
 		name: 'CONTROL',
 		heading: 'Support just once',
 		subheading: 'Support us with the amount of your choice.',
@@ -115,9 +115,9 @@ export function getOneTimeCheckoutParticipations(): Promise<
 > {
 	return getPageParticipationsWithFallback(
 		getOneTimeCheckoutTestConfig(),
-		(countryGroupId) =>
+		(supportRegionId) =>
 			fallBackOneTimeCheckoutSelection[
-				countryGroupId
+				supportRegionId
 			] as OneTimeCheckoutVariant,
 		'FALLBACK_ONE_TIME_CHECKOUT',
 	);

@@ -1,4 +1,4 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import Links from '../links/links';
 import { linksNavHide } from '../links/linksStyles';
 import {
@@ -12,28 +12,28 @@ import { HeaderTopNav } from './headerTopNav';
 import MobileMenuToggler from './mobileMenuToggler';
 
 export type HeaderProps = {
-	countryGroupId: CountryGroupId;
+	supportRegionId: SupportRegionId;
 	utility?: JSX.Element;
 };
 
-export default function Header({ utility, countryGroupId }: HeaderProps) {
+export default function Header({ utility, supportRegionId }: HeaderProps) {
 	const headerLinksContainerRegion =
-		countryGroupId === 'GBPCountries'
+		supportRegionId === 'uk'
 			? headerLinksContainerGBP
 			: headerLinksContainerROW;
 	return (
 		<header css={headerContainer}>
 			<div css={headerWrapper}>
 				<div css={[headerLinksContainer]}>
-					<HeaderTopNav countryGroupId={countryGroupId} utility={utility} />
+					<HeaderTopNav supportRegionId={supportRegionId} utility={utility} />
 					<MobileMenuToggler
-						links={<Links countryGroupId={countryGroupId} location="mobile" />}
+						links={<Links supportRegionId={supportRegionId} location="mobile" />}
 						utility={utility}
 					/>
 				</div>
 				<div css={[headerLinksContainer, headerLinksContainerRegion]}>
 					<Links
-						countryGroupId={countryGroupId}
+						supportRegionId={supportRegionId}
 						location="desktop"
 						cssOverride={linksNavHide}
 					/>

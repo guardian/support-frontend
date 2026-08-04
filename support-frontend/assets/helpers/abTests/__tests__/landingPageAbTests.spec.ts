@@ -15,7 +15,7 @@ jest.mock('../../globalsAndSwitches/globals', () => ({
 const mockTest: LandingPageTest = {
 	name: 'TEST_LP',
 	status: 'Live',
-	regionTargeting: { targetedCountryGroups: ['GBPCountries'] },
+	regionTargeting: { targetedCountryGroups: ['uk'] },
 	variants: [
 		{
 			name: 'VARIANT_A',
@@ -108,7 +108,7 @@ describe('getLandingPageTestConfig', () => {
 		const test2: LandingPageTest = {
 			name: 'TEST_LP_2',
 			status: 'Live',
-			regionTargeting: { targetedCountryGroups: ['UnitedStates'] },
+			regionTargeting: { targetedCountryGroups: ['us'] },
 			variants: [
 				{
 					name: 'VARIANT_B',

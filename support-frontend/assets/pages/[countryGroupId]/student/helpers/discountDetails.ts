@@ -1,5 +1,5 @@
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { getCurrencyByCode } from '@modules/internationalisation/currency';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type {
