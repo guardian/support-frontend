@@ -77,13 +77,9 @@ export function ThreeTierCards({
 					highlightedBackColor: palette.news[800],
 			  }
 			: undefined,
-		showCardColors
-			? {
-					titlePillColor: palette.brand[500],
-			  }
-			: {
-					titlePillColor: palette.news[400],
-			  },
+		{
+			titlePillColor: showCardColors ? palette.brand[500] : palette.news[400],
+		},
 	];
 
 	return (
