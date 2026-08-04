@@ -67,6 +67,7 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
               val params = PaymentIntentCreateParams.builder
                 .addPaymentMethodType("paypal")
                 .setPaymentMethod(data.paymentMethodId)
+                .setDescription("Contribution to the Guardian")
                 .setAmount((data.paymentData.amount * 100).toLong) // Stripe amount must be in pence
                 .setCurrency(data.paymentData.currency.entryName)
                 .setReceiptEmail(data.paymentData.email.value)
