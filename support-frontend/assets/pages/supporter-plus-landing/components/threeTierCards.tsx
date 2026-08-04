@@ -7,11 +7,9 @@ import { ThreeTierCard } from './threeTierCard';
 
 export type CardColors = {
 	titlePillColor: string;
-	highlightedTitlePillColor: string;
-	cardPillColor: string;
-	highlightedCardPillColor: string;
-	highlightedBenefitIconColor: string;
-	highlightedBackColor: string;
+	cardPillColor?: string;
+	highlightedBenefitIconColor?: string;
+	highlightedBackColor?: string;
 };
 
 export type ThreeTierCardsProps = {
@@ -69,20 +67,24 @@ export function ThreeTierCards({
 		1;
 	let promoCount = 0;
 
-	const cardColors = showCardColors
-		? [
-				undefined,
-				{
-					titlePillColor: palette.brand[500],
-					highlightedTitlePillColor: palette.news[400],
-					cardPillColor: palette.brand[500],
-					highlightedCardPillColor: palette.news[400],
+	const cardColors = [
+		undefined,
+		showCardColors
+			? {
+					titlePillColor: palette.news[400],
+					cardPillColor: palette.news[400],
 					highlightedBenefitIconColor: palette.news[400],
 					highlightedBackColor: palette.news[800],
-				},
-				undefined,
-		  ]
-		: [undefined, undefined, undefined];
+			  }
+			: undefined,
+		showCardColors
+			? {
+					titlePillColor: palette.brand[500],
+			  }
+			: {
+					titlePillColor: palette.news[400],
+			  },
+	];
 
 	return (
 		<div

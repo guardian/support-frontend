@@ -225,18 +225,20 @@ export function ThreeTierCard({
 	);
 
 	// user selected from banner/epic or pill visible without subdued styling
-	const isHighlightedCard = (!!pillCopy && !isSubdued) || isUserSelected;
+	const isPillVisible = !!pillCopy && !isSubdued;
+	const isHighlightedCard = isPillVisible || isUserSelected;
 
-	const titlePillColorSelection = isHighlightedCard
-		? cardColors?.highlightedTitlePillColor
+	const titlePillColorSelection = isUserSelected
+		? palette.news[400]
 		: cardColors?.titlePillColor;
 	const titlePillColor = titlePillColorSelection ?? palette.news[400];
 
-	const cardPillColorSelection = isHighlightedCard
-		? cardColors?.highlightedCardPillColor
-		: cardColors?.cardPillColor;
-	const cardPillColor = cardPillColorSelection ?? palette.brand[500];
+	// ToDo : Possible add subdued here and remove further down?
+	const cardPillColor = isHighlightedCard
+		? cardColors?.cardPillColor ?? palette.brand[500]
+		: palette.brand[500];
 
+	// ToDo : Possible add subdued here and remove further down?
 	const cardBackColor = isHighlightedCard
 		? cardColors?.highlightedBackColor ?? '#F1FBFF'
 		: palette.neutral[100];
@@ -245,6 +247,7 @@ export function ThreeTierCard({
 	console.log(`*** tier-${cardTier} isUserSelected`, isUserSelected);
 	console.log(`*** tier-${cardTier} pillCopy`, pillCopy);
 	console.log(`*** tier-${cardTier} isSubdued`, isSubdued);
+	console.log(`*** tier-${cardTier} cardColors`, cardColors);
 	console.log(`*** tier-${cardTier} titlePillColor`, titlePillColor);
 	console.log(`*** tier-${cardTier} cardPillColor`, cardPillColor);
 	console.log(`*** tier-${cardTier} cardBackColor`, cardBackColor);
@@ -263,7 +266,7 @@ export function ThreeTierCard({
 				<ThreeTierCardPill
 					title={promotion?.landingPage?.roundel ?? pillCopy}
 					color={cardPillColor}
-					subdue={isHighlightedCard ? false : isSubdued}
+					subdue={isSubdued}
 				/>
 			)}
 			<div css={titleContainer}>
