@@ -224,9 +224,6 @@ export function ThreeTierCard({
 		billingPeriod,
 	);
 
-	console.log('*** isUserSelected', isUserSelected);
-	console.log('*** pillCopy', pillCopy);
-	console.log('*** isSubdued', isSubdued);
 	// user selected from banner/epic or pill visible without subdued styling
 	const isHighlightedCard = (!!pillCopy && !isSubdued) || isUserSelected;
 
@@ -243,8 +240,14 @@ export function ThreeTierCard({
 	const cardBackColor = isHighlightedCard
 		? cardColors?.highlightedBackColor ?? '#F1FBFF'
 		: palette.neutral[100];
-	console.log('*** isHighlightedCard', isHighlightedCard);
-	console.log('*** cardBackColor', cardBackColor);
+
+	console.log(`*** tier-${cardTier} isHighlightedCard`, isHighlightedCard);
+	console.log(`*** tier-${cardTier} isUserSelected`, isUserSelected);
+	console.log(`*** tier-${cardTier} pillCopy`, pillCopy);
+	console.log(`*** tier-${cardTier} isSubdued`, isSubdued);
+	console.log(`*** tier-${cardTier} titlePillColor`, titlePillColor);
+	console.log(`*** tier-${cardTier} cardPillColor`, cardPillColor);
+	console.log(`*** tier-${cardTier} cardBackColor`, cardBackColor);
 
 	const benefitIconColor = isHighlightedCard
 		? cardColors?.highlightedBenefitIconColor ?? palette.brand[500]
