@@ -70,15 +70,19 @@ export function ThreeTierCards({
 	let promoCount = 0;
 
 	const cardColors = showCardColors
-		? {
-				titlePillColor: palette.brand[500],
-				highlightedTitlePillColor: palette.news[400],
-				cardPillColor: palette.brand[500],
-				highlightedCardPillColor: palette.news[400],
-				highlightedBenefitIconColor: palette.news[400],
-				highlightedBackColor: palette.news[800],
-		  }
-		: undefined;
+		? [
+				undefined,
+				{
+					titlePillColor: palette.brand[500],
+					highlightedTitlePillColor: palette.news[400],
+					cardPillColor: palette.brand[500],
+					highlightedCardPillColor: palette.news[400],
+					highlightedBenefitIconColor: palette.news[400],
+					highlightedBackColor: palette.news[800],
+				},
+				undefined,
+		  ]
+		: [undefined, undefined, undefined];
 
 	return (
 		<div
@@ -102,7 +106,7 @@ export function ThreeTierCards({
 						billingPeriod={billingPeriod}
 						showWeeklyPrice={showWeeklyPrice}
 						useLargePriceMinHeight={shouldUseLargePriceMinHeight}
-						cardColors={cardColors}
+						cardColors={cardColors[cardIndex]}
 					/>
 				);
 			})}
