@@ -1,11 +1,11 @@
 // ----- Imports ----- //
 
+import { storage } from '@guardian/libs';
 import { viewId } from '@guardian/ophan-tracker-js/support';
 import type { CountryCode } from '@modules/internationalisation/country';
 import { testIsActive } from 'helpers/abTests/abtest';
 import { type Participations } from 'helpers/abTests/models';
 import { get as getCookie } from 'helpers/storage/cookie';
-import * as storage from 'helpers/storage/storage';
 import {
 	getAllQueryParams,
 	getAllQueryParamsWithExclusions,
@@ -78,8 +78,7 @@ function storeReferrerAcquisitionDataInSessionStorage(
 	referrerAcquisitionData: ReferrerAcquisitionData,
 ): boolean {
 	try {
-		const serialised = JSON.stringify(referrerAcquisitionData);
-		storage.setSession(ACQUISITIONS_STORAGE_KEY, serialised);
+		storage.session.set(ACQUISITIONS_STORAGE_KEY, referrerAcquisitionData);
 		return true;
 	} catch (err) {
 		return false;
@@ -220,11 +219,9 @@ function getReferrerAcquisitionDataFromSessionStorage():
 	| ReferrerAcquisitionData
 	| null
 	| undefined {
-	const stored = storage.getSession(ACQUISITIONS_STORAGE_KEY);
-
-	return stored
-		? (deserialiseJsonObject(stored) as ReferrerAcquisitionData)
-		: null;
+	return storage.session.get(
+		ACQUISITIONS_STORAGE_KEY,
+	) as ReferrerAcquisitionData;
 }
 
 function getAcquisitionDataFromUtmParams():

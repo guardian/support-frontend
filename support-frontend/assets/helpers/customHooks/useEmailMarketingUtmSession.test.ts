@@ -1,11 +1,17 @@
-import { getSession } from 'helpers/storage/storage';
+import { storage } from '@guardian/libs';
 import useEmailMarketingSession from './useEmailMarketingUtmSession';
 
-jest.mock('helpers/storage/storage', () => ({
-	getSession: jest.fn(),
+jest.mock('@guardian/libs', () => ({
+	storage: {
+		session: {
+			get: jest.fn(),
+		},
+	},
 }));
 
-const mockedGetSession = getSession as jest.MockedFunction<typeof getSession>;
+const mockedGetSession = storage.session.get as jest.MockedFunction<
+	typeof storage.session.get
+>;
 
 describe('useEmailMarketingSession', () => {
 	beforeEach(() => {
@@ -27,9 +33,7 @@ describe('useEmailMarketingSession', () => {
 	])(
 		'returns true when query parameters include a supported email utm marker: %p',
 		(queryParameter) => {
-			mockedGetSession.mockReturnValue(
-				JSON.stringify({ queryParameters: [queryParameter] }),
-			);
+			mockedGetSession.mockReturnValue({ queryParameters: [queryParameter] });
 
 			expect(useEmailMarketingSession()).toEqual({
 				isMarketingEmailSession: true,
@@ -55,22 +59,5 @@ describe('useEmailMarketingSession', () => {
 		expect(useEmailMarketingSession()).toEqual({
 			isMarketingEmailSession: false,
 		});
-	});
-
-	it('returns false and logs an error when acquisition data is invalid json', () => {
-		const consoleErrorSpy = jest
-			.spyOn(console, 'error')
-			.mockImplementation(() => undefined);
-		mockedGetSession.mockReturnValue('not-json');
-
-		expect(useEmailMarketingSession()).toEqual({
-			isMarketingEmailSession: false,
-		});
-		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			'Failed to parse acquisitionData from session storage',
-			expect.any(SyntaxError),
-		);
-
-		consoleErrorSpy.mockRestore();
 	});
 });
