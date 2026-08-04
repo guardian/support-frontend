@@ -37,12 +37,10 @@ forwardPorts:
 # Each command has a 'cmd' field and a 'workingDirectory' field
 # e.g.
 postCreateCommand:
-  - cmd: 'mise exec -- corepack enable'
+  - cmd: 'mise install'
     workingDirectory: '.'
-  - cmd: 'mise exec -- pnpm install'
+  - cmd: 'pnpm install'
     workingDirectory: '.'
-#   - cmd: "make setup"
-#     workingDirectory: "/workspaces/project"
 # postStartCommand:
 #   - cmd: "echo 'Container started successfully'"
 #     workingDirectory: "."
