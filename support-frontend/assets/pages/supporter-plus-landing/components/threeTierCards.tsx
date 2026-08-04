@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { between, from, palette, space } from '@guardian/source/foundations';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
+import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import type { CardContent } from './threeTierCard';
 import { ThreeTierCard } from './threeTierCard';
 
@@ -57,8 +58,8 @@ export function ThreeTierCards({
 	currencyId,
 	billingPeriod,
 	showWeeklyPrice,
-	showCardColors = false,
 }: ThreeTierCardsProps): JSX.Element {
+	const { enableAlternativeSupporterPlusCardColors } = useFeatureSwitches();
 	const shouldUseLargePriceMinHeight =
 		!!showWeeklyPrice ||
 		cardsContent.some((card) => !!card.promotion || !!card.billingPeriodsCopy);
@@ -69,7 +70,7 @@ export function ThreeTierCards({
 
 	const cardColors = [
 		undefined,
-		showCardColors
+		enableAlternativeSupporterPlusCardColors
 			? {
 					titlePillColor: palette.news[400],
 					cardPillColor: palette.news[400],
@@ -78,7 +79,9 @@ export function ThreeTierCards({
 			  }
 			: undefined,
 		{
-			titlePillColor: showCardColors ? palette.brand[500] : palette.news[400],
+			titlePillColor: enableAlternativeSupporterPlusCardColors
+				? palette.brand[500]
+				: palette.news[400],
 		},
 	];
 

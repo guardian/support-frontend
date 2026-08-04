@@ -37,7 +37,6 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import type { Participations } from 'helpers/abTests/models';
 import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
@@ -280,7 +279,6 @@ export function ThreeTierLanding({
 	supportRegionId,
 	settings,
 }: ThreeTierLandingProps): JSX.Element {
-	const { enableAlternativeSupporterPlusCardColors } = useFeatureSwitches();
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const rawUrlSearchParamsProduct = urlSearchParams.get('product');
 	const urlSearchParamsProduct = rawUrlSearchParamsProduct
@@ -684,7 +682,6 @@ export function ThreeTierLanding({
 						currencyId={currencyId}
 						billingPeriod={billingPeriod}
 						showWeeklyPrice={showWeeklyPrice}
-						showCardColors={enableAlternativeSupporterPlusCardColors}
 					/>
 				</div>
 			</Container>
