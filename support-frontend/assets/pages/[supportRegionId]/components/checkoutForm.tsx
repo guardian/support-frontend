@@ -63,7 +63,7 @@ import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import type { CsrfState } from 'helpers/types/csrf';
 import { logException } from 'helpers/utilities/logger';
-import { getWeeklyDays } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
+import { getWeeklyDays } from 'pages/[supportRegionId]/checkout/helpers/deliveryDays';
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';

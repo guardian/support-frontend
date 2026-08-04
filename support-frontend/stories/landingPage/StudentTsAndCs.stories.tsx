@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
 import type {
-	StudentTsAndCsProps} from 'pages/[countryGroupId]/student/components/studentTsAndCs';
+	StudentTsAndCsProps} from 'pages/[supportRegionId]/student/components/studentTsAndCs';
 import {
 	StudentTsAndCs
-} from 'pages/[countryGroupId]/student/components/studentTsAndCs';
-import { getStudentTsAndCs } from 'pages/[countryGroupId]/student/helpers/studentTsAndCsCopy';
+} from 'pages/[supportRegionId]/student/components/studentTsAndCs';
+import { getStudentTsAndCs } from 'pages/[supportRegionId]/student/helpers/studentTsAndCsCopy';
 
 export default {
 	title: 'LandingPage/StudentTsAndCs',

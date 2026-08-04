@@ -1,4 +1,4 @@
-import { doesNotContainExtendedEmojiOrLeadingSpace } from 'pages/[countryGroupId]/validation';
+import { doesNotContainExtendedEmojiOrLeadingSpace } from 'pages/[supportRegionId]/validation';
 
 const regexToValidate = new RegExp(
 	doesNotContainExtendedEmojiOrLeadingSpace,

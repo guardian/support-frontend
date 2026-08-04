@@ -48,11 +48,6 @@ describe('detect supportRegion', () => {
 		expect(DetectSupportRegion.detect()).toEqual('eu');
 		document.cookie = 'GU_country=CI';
 		expect(DetectSupportRegion.detect()).toEqual('int');
-		jsdom.reconfigure({
-			url: 'https://support.theguardian.com/examplePath?countryGroup=42',
-		});
-		document.cookie = 'GU_country=BR';
-		expect(DetectSupportRegion.detect()).toEqual('int');
 	});
 
 	it('should return the correct country group from GU_geo_country cookie', () => {
@@ -72,9 +67,6 @@ describe('detect supportRegion', () => {
 		expect(DetectSupportRegion.detect()).toEqual('eu');
 		document.cookie = 'GU_geo_country=CI';
 		expect(DetectSupportRegion.detect()).toEqual('int');
-		jsdom.reconfigure({
-			url: 'https://support.theguardian.com/examplePath?countryGroup=42',
-		});
 		document.cookie = 'GU_geo_country=BR';
 		expect(DetectSupportRegion.detect()).toEqual('int');
 	});

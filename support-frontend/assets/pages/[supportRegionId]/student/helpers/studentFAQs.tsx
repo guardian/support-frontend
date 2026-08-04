@@ -3,7 +3,7 @@ import type { Institution } from 'helpers/globalsAndSwitches/studentLandingPageS
 import { privacyLink, supporterPlusTermsLink } from 'helpers/legal';
 import { getProductLabel } from 'helpers/productCatalog';
 import { getHelpCentreUrl } from 'helpers/urls/externalLinks';
-import type { FAQItem } from 'pages/[countryGroupId]/components/accordionFAQ';
+import type { FAQItem } from 'pages/[supportRegionId]/components/accordionFAQ';
 
 const supporterPlusLabel = getProductLabel('SupporterPlus');
 const supporterPlusBodyAccess: JSX.Element = (

@@ -5,7 +5,7 @@ import { useState } from 'react';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
-} from 'pages/[countryGroupId]/validation';
+} from 'pages/[supportRegionId]/validation';
 
 type PersonalPhoneFieldProps = {
 	phoneNumber: string;

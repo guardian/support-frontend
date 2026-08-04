@@ -9,7 +9,7 @@ import {
 import { Column, Columns, Container } from '@guardian/source/react-components';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
-import type { PageLayoutProps } from 'pages/[countryGroupId]/components/GuardianPageLayout';
+import type { PageLayoutProps } from 'pages/[supportRegionId]/components/GuardianPageLayout';
 import ObserverFooter from './ObserverFooter';
 import ObserverHeader from './ObserverHeader';
 import { observerColours } from './styles';

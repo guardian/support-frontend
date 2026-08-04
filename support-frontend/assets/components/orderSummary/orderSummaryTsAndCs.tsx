@@ -13,11 +13,11 @@ import {
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
-import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
+import { getProductFirstDeliveryDate } from 'pages/[supportRegionId]/checkout/helpers/deliveryDays';
 import {
 	isPaperPlusSub,
 	isSundayOnlyNewspaperSub,
-} from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
+} from 'pages/[supportRegionId]/helpers/isSundayOnlyNewspaperSub';
 import {
 	isGuardianWeeklyGiftProduct,
 	isGuardianWeeklyProduct,

@@ -25,9 +25,9 @@ import {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getHelpCentreUrl } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
-import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
-import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
-import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import { getProductFirstDeliveryDate } from 'pages/[supportRegionId]/checkout/helpers/deliveryDays';
+import { isSundayOnlyNewspaperSub } from 'pages/[supportRegionId]/helpers/isSundayOnlyNewspaperSub';
+import type { StudentDiscount } from 'pages/[supportRegionId]/student/helpers/discountDetails';
 import { isGuardianWeeklyDigitalProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { textLink } from '../../../helpers/utilities/textLink';
 import { FinePrint } from './finePrint';

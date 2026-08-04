@@ -2,12 +2,12 @@ import { TextInput } from '@guardian/source/react-components';
 import type { CountryCode } from '@modules/internationalisation/country';
 import { useState } from 'react';
 import { StateSelect } from 'components/personalDetails/stateSelect';
-import { FormSection, Legend } from 'pages/[countryGroupId]/components/form';
-import { countriesRequiringBillingState } from 'pages/[countryGroupId]/helpers/countriesRequiringBillingState';
+import { FormSection, Legend } from 'pages/[supportRegionId]/components/form';
+import { countriesRequiringBillingState } from 'pages/[supportRegionId]/helpers/countriesRequiringBillingState';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
-} from 'pages/[countryGroupId]/validation';
+} from 'pages/[supportRegionId]/validation';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import type { BillingStatePostcodeCountry } from './BillingAddressFields';
 import { BillingAddressFields } from './BillingAddressFields';

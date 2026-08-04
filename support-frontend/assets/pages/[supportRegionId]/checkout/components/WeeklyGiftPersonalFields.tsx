@@ -1,4 +1,4 @@
-import { FormSection, Legend } from 'pages/[countryGroupId]/components/form';
+import { FormSection, Legend } from 'pages/[supportRegionId]/components/form';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { PersonalEmailFields } from './PersonalEmailFields';
 import { PersonalFields } from './PersonalFields';

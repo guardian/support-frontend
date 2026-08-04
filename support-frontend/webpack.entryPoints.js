@@ -1,8 +1,8 @@
 module.exports = {
 	common: {
-		'[countryGroupId]/router': 'pages/[countryGroupId]/router.tsx',
+		'[countryGroupId]/router': 'pages/[supportRegionId]/router.tsx',
 		'[countryGroupId]/events/router':
-			'pages/[countryGroupId]/events/router.tsx',
+			'pages/[supportRegionId]/events/router.tsx',
 		favicons: 'images/favicons.ts',
 		subscriptionsLandingPage:
 			'pages/subscriptions-landing/subscriptionsLanding.tsx',

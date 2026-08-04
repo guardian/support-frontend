@@ -5,7 +5,7 @@ import {
 	space,
 	textSansBold14,
 } from '@guardian/source/foundations';
-import { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
+import { OnboardingSteps } from 'pages/[supportRegionId]/components/onboardingSteps';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { AppStoreMobile } from './appStore';
 import { FeastAppsQrCode } from './feastAppsQrCode';

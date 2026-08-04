@@ -14,9 +14,9 @@ import {
 import { Column, Columns, Container } from '@guardian/source/react-components';
 import { useMemo } from 'preact/hooks';
 import GridImage from 'components/gridImage/gridImage';
-import { getThankYouOrder } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
-import type { OnboardingProps } from 'pages/[countryGroupId]/components/onboardingComponent';
-import { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
+import { getThankYouOrder } from 'pages/[supportRegionId]/checkout/helpers/sessionStorage';
+import type { OnboardingProps } from 'pages/[supportRegionId]/components/onboardingComponent';
+import { OnboardingSteps } from 'pages/[supportRegionId]/components/onboardingSteps';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { heroContainer } from './sections/sectionsStyles';
 

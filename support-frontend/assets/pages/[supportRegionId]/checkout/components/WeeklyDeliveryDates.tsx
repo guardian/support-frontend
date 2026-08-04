@@ -6,14 +6,14 @@ import {
 	formatMachineDate,
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
-import { FormSection, Legend } from 'pages/[countryGroupId]/components/form';
+import { FormSection, Legend } from 'pages/[supportRegionId]/components/form';
 import {
 	checkedRadioBox,
 	checkedRadioLabelColour,
 	defaultRadioBox,
 	defaultRadioLabelColour,
 	radioPadding,
-} from 'pages/[countryGroupId]/components/paymentMethod';
+} from 'pages/[supportRegionId]/components/paymentMethod';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 
 const weeklyInfo = css`

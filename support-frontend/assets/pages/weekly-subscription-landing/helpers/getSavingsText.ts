@@ -2,7 +2,7 @@ import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { getDiscountDuration } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import { getDiscountDuration } from 'pages/[supportRegionId]/student/helpers/discountDetails';
 
 export function getWeeklySavingsText(
 	promotion: Promotion | undefined,

@@ -18,14 +18,14 @@ export function getParticipationFromQueryString(
 }
 
 export const supportRegionMatches = (
-	targetedCountryGroups: SupportRegionId[] = [],
+	targetedSupportRegions: SupportRegionId[] = [],
 	supportRegionId: SupportRegionId,
 ): boolean => {
-	if (targetedCountryGroups.length === 0) {
+	if (targetedSupportRegions.length === 0) {
 		return true;
 	} // no targeting
 	else {
-		return targetedCountryGroups.includes(supportRegionId);
+		return targetedSupportRegions.includes(supportRegionId);
 	}
 };
 

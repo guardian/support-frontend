@@ -32,7 +32,7 @@ import {
 } from 'helpers/productPrice/subscriptions';
 import type { OphanComponentType } from 'helpers/tracking/trackingOphan';
 import { addQueryParamsToURL, getOrigin } from 'helpers/urls/url';
-import { getDiscountSummary } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import { getDiscountSummary } from 'pages/[supportRegionId]/student/helpers/discountDetails';
 import {
 	getWeeklyGiftSavingsText,
 	getWeeklySavingsText,

@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
 import type {
-	AccordionFAQProps} from 'pages/[countryGroupId]/components/accordionFAQ';
+	AccordionFAQProps} from 'pages/[supportRegionId]/components/accordionFAQ';
 import {
 	AccordionFAQ
-} from 'pages/[countryGroupId]/components/accordionFAQ';
-import { adLiteFAQs } from 'pages/[countryGroupId]/guardianAdLiteLanding/helpers/adLiteFAQs';
-import { getStudentFAQs } from 'pages/[countryGroupId]/student/helpers/studentFAQs';
+} from 'pages/[supportRegionId]/components/accordionFAQ';
+import { adLiteFAQs } from 'pages/[supportRegionId]/guardianAdLiteLanding/helpers/adLiteFAQs';
+import { getStudentFAQs } from 'pages/[supportRegionId]/student/helpers/studentFAQs';
 
 export default {
 	title: 'LandingPage/Accordian FAQ',

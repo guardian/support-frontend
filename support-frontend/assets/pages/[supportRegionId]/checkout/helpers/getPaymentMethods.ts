@@ -7,7 +7,7 @@ import {
 	StripeHostedCheckout,
 } from 'helpers/forms/paymentMethods';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
-import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
+import { isSundayOnlyNewspaperSub } from 'pages/[supportRegionId]/helpers/isSundayOnlyNewspaperSub';
 
 export const getPaymentMethods = (
 	countryId: CountryCode,

@@ -1,7 +1,7 @@
 import { guardianAdLiteTermsLink } from 'helpers/legal';
 import { getProductLabel } from 'helpers/productCatalog';
 import { getHelpCentreUrl } from 'helpers/urls/externalLinks';
-import type { FAQItem } from 'pages/[countryGroupId]/components/accordionFAQ';
+import type { FAQItem } from 'pages/[supportRegionId]/components/accordionFAQ';
 
 export const adLiteFAQs: FAQItem[] = [
 	{

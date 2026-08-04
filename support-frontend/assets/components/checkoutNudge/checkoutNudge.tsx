@@ -41,7 +41,7 @@ import type {
 	ActiveRatePlanKey,
 } from '../../helpers/productCatalog';
 import { productCatalog } from '../../helpers/productCatalog';
-import { getBenefitsChecklistFromLandingPageTool } from '../../pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
+import { getBenefitsChecklistFromLandingPageTool } from '../../pages/[supportRegionId]/checkout/helpers/benefitsChecklist';
 import { getSupportRegionIdConfig } from '../../pages/supportRegionConfig';
 import {
 	BenefitsCheckList,

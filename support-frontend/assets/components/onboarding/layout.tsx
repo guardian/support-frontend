@@ -8,8 +8,8 @@ import {
 import type { ReactNode } from 'react';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import type { OnboardingProps } from 'pages/[countryGroupId]/components/onboardingComponent';
-import type { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
+import type { OnboardingProps } from 'pages/[supportRegionId]/components/onboardingComponent';
+import type { OnboardingSteps } from 'pages/[supportRegionId]/components/onboardingSteps';
 import OnboardingHeading from './heading';
 
 const greyBackgroundContainer = css`

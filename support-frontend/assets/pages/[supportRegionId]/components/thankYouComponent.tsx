@@ -32,8 +32,8 @@ import { type CsrfState } from 'helpers/types/csrf';
 import { getUser } from 'helpers/user/user';
 import type { UserType } from 'helpers/user/userType';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
-import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
-import { isPaperPlusSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
+import { getProductFirstDeliveryDate } from 'pages/[supportRegionId]/checkout/helpers/deliveryDays';
+import { isPaperPlusSub } from 'pages/[supportRegionId]/helpers/isSundayOnlyNewspaperSub';
 import { getPrintPlusDigitalBenefits } from 'pages/paper-subscription-landing/planData';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import {

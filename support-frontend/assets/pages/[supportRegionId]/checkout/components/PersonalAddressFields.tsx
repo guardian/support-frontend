@@ -1,7 +1,7 @@
 import type { CountryCode } from '@modules/internationalisation/country';
 import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import { FormSection, Legend } from 'pages/[countryGroupId]/components/form';
+import { FormSection, Legend } from 'pages/[supportRegionId]/components/form';
 import { DeliveryAgentsSelect } from 'pages/paper-subscription-checkout/components/deliveryAgentsSelect';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import type { DeliveryAgentsResponse } from '../helpers/getDeliveryAgents';

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
-} from 'pages/[countryGroupId]/validation';
+} from 'pages/[supportRegionId]/validation';
 
 export type EndUserType = 'your' | 'recipient';
 type PersonalDetailsFieldsProps = {

@@ -13,7 +13,7 @@ import { firstError } from 'helpers/subscriptionsForms/validation';
 import type {
 	DeliveryAgentOption,
 	DeliveryAgentsResponse,
-} from '../../[countryGroupId]/checkout/helpers/getDeliveryAgents';
+} from '../../[supportRegionId]/checkout/helpers/getDeliveryAgents';
 import { CheckoutDivider } from '../../supporter-plus-landing/components/checkoutDivider';
 
 const marginBottom = css`

@@ -31,7 +31,7 @@ import {
 import {
 	isPaperPlusSub,
 	isSundayOnlyNewspaperSub,
-} from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
+} from 'pages/[supportRegionId]/helpers/isSundayOnlyNewspaperSub';
 import { isGuardianWeeklyDigitalProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { textLink } from '../../../helpers/utilities/textLink';
 

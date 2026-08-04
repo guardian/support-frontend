@@ -31,7 +31,7 @@ import type { SliceErrors } from 'helpers/types/SliceErrors';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
-} from '../../../pages/[countryGroupId]/validation';
+} from '../../../pages/[supportRegionId]/validation';
 import type { PostcodeFinderResult } from './postcodeLookup';
 
 type AddressFieldsValidatedState = {

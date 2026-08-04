@@ -2,7 +2,7 @@ import { TextInput } from '@guardian/source/react-components';
 import escapeStringRegexp from 'escape-string-regexp';
 import { useState } from 'react';
 import Signout from 'components/signout/signout';
-import { preventDefaultValidityMessage } from 'pages/[countryGroupId]/validation';
+import { preventDefaultValidityMessage } from 'pages/[supportRegionId]/validation';
 import type { EndUserType } from './PersonalFields';
 
 type PersonalEmailFieldsProps = {

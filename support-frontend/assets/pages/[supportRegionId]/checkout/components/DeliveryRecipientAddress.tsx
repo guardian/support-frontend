@@ -11,7 +11,7 @@ import type { AddressFormFieldError } from 'components/subscriptionCheckouts/add
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
-import { Legend } from 'pages/[countryGroupId]/components/form';
+import { Legend } from 'pages/[supportRegionId]/components/form';
 import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSession';
 

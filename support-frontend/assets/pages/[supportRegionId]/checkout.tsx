@@ -32,7 +32,7 @@ import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsT
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { getOriginAndForceSubdomain } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
-import { getWeeklyDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
+import { getWeeklyDeliveryDate } from 'pages/[supportRegionId]/checkout/helpers/deliveryDays';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
