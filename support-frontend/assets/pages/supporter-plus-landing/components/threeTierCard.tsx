@@ -21,6 +21,10 @@ import {
 	checkListTextItemCss,
 } from 'components/checkoutBenefits/benefitsCheckList';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import {
+	regularTierCardColor,
+	type TierCardColors,
+} from 'helpers/landingPage/tierCardColors';
 import { getProductLabel } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import {
@@ -34,7 +38,6 @@ import {
 } from 'helpers/utilities/utilities';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { ThreeTierCardPill } from './threeTierCardPill';
-import type { CardColors } from './threeTierCards';
 
 export type CardContent = LandingPageProductDescription & {
 	isUserSelected: boolean;
@@ -46,6 +49,7 @@ export type CardContent = LandingPageProductDescription & {
 
 export type ThreeTierCardProps = {
 	cardContent: CardContent;
+	cardColors?: TierCardColors;
 	cardTier: 1 | 2 | 3;
 	promoCount: number;
 	isSubdued: boolean;
@@ -53,7 +57,6 @@ export type ThreeTierCardProps = {
 	billingPeriod: BillingPeriod;
 	showWeeklyPrice?: boolean;
 	useLargePriceMinHeight?: boolean;
-	cardColors?: CardColors;
 };
 
 const container = (
@@ -224,24 +227,28 @@ export function ThreeTierCard({
 		billingPeriod,
 	);
 
+	const { titlePillColor, cardPillColor, cardBackColor, benefitIconColor } =
+		cardColors ?? regularTierCardColor;
+
 	// if user selected from banner/epic title pill defaults to red
 	const titlePillColorSelection = isUserSelected
 		? palette.news[400]
-		: cardColors?.titlePillColor;
-	const titlePillColor = titlePillColorSelection ?? palette.news[400];
-	const cardPillColor = cardColors?.cardPillColor ?? palette.brand[500];
+		: titlePillColor;
 
 	// if pill visible without subdued styling or user selected from banner/epic use highlight colors if available
 	const isHighlightedCard = (!!pillCopy && !isSubdued) || isUserSelected;
-	const cardBackColor = isHighlightedCard
-		? cardColors?.highlightedBackColor ?? '#F1FBFF'
+	const cardBackColorSelection = isHighlightedCard
+		? cardBackColor
 		: palette.neutral[100];
-	const benefitIconColor = isHighlightedCard
-		? cardColors?.highlightedBenefitIconColor ?? palette.brand[500]
-		: palette.brand[500];
+
 	return (
 		<section
-			css={container(!!pillCopy, isUserSelected, isSubdued, cardBackColor)}
+			css={container(
+				!!pillCopy,
+				isUserSelected,
+				isSubdued,
+				cardBackColorSelection,
+			)}
 		>
 			{isUserSelected && (
 				<ThreeTierCardPill title="Your selection" color={cardPillColor} />
@@ -255,7 +262,7 @@ export function ThreeTierCard({
 			)}
 			<div css={titleContainer}>
 				{titlePill && (
-					<BenefitPill copy={titlePill} pillColor={titlePillColor} />
+					<BenefitPill copy={titlePill} pillColor={titlePillColorSelection} />
 				)}
 				<h2 css={[titleCss, checkListTextItemCss]}>{title}</h2>
 			</div>

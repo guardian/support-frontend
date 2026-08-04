@@ -1,17 +1,15 @@
 import { css } from '@emotion/react';
-import { between, from, palette, space } from '@guardian/source/foundations';
+import { between, from, space } from '@guardian/source/foundations';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
+import {
+	highlightTierCardColors,
+	regularTierCardColor,
+	regularTierCardColors,
+} from 'helpers/landingPage/tierCardColors';
 import type { CardContent } from './threeTierCard';
 import { ThreeTierCard } from './threeTierCard';
-
-export type CardColors = {
-	titlePillColor: string;
-	cardPillColor?: string;
-	highlightedBenefitIconColor?: string;
-	highlightedBackColor?: string;
-};
 
 export type ThreeTierCardsProps = {
 	cardsContent: CardContent[];
@@ -68,22 +66,9 @@ export function ThreeTierCards({
 		1;
 	let promoCount = 0;
 
-	const cardColors = [
-		undefined,
-		enableAlternativeSupporterPlusCardColors
-			? {
-					titlePillColor: palette.news[400],
-					cardPillColor: palette.news[400],
-					highlightedBenefitIconColor: palette.news[400],
-					highlightedBackColor: palette.news[800],
-			  }
-			: undefined,
-		{
-			titlePillColor: enableAlternativeSupporterPlusCardColors
-				? palette.brand[500]
-				: palette.news[400],
-		},
-	];
+	const cardColors = enableAlternativeSupporterPlusCardColors
+		? highlightTierCardColors
+		: regularTierCardColors;
 
 	return (
 		<div
@@ -99,6 +84,7 @@ export function ThreeTierCards({
 				return (
 					<ThreeTierCard
 						cardContent={cardContent}
+						cardColors={cardColors[cardIndex] ?? regularTierCardColor}
 						cardTier={cardIndexToTier(cardIndex)}
 						key={`threeTierCard${cardIndex}`}
 						promoCount={promoCount}
@@ -107,7 +93,6 @@ export function ThreeTierCards({
 						billingPeriod={billingPeriod}
 						showWeeklyPrice={showWeeklyPrice}
 						useLargePriceMinHeight={shouldUseLargePriceMinHeight}
-						cardColors={cardColors[cardIndex]}
 					/>
 				);
 			})}
