@@ -237,10 +237,13 @@ export function ThreeTierCard({
 
 	// if pill visible without subdued styling or user selected from banner/epic use highlight colors if available
 	const isHighlightedCard = (!!pillCopy && !isSubdued) || isUserSelected;
+
 	const cardBackColorSelection = isHighlightedCard
 		? cardBackColor
 		: palette.neutral[100];
-
+	const benefitIconColorSelection = isHighlightedCard
+		? benefitIconColor
+		: palette.brand[500];
 	return (
 		<section
 			css={container(
@@ -359,7 +362,7 @@ export function ThreeTierCard({
 					};
 				})}
 				style={'compact'}
-				iconColor={benefitIconColor}
+				iconColor={benefitIconColorSelection}
 				cssOverrides={checkmarkBenefitList}
 			/>
 		</section>
