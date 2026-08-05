@@ -18,13 +18,14 @@ export const regularTierCardColors = [
 	regularTierCardColor,
 	regularTierCardColor,
 ];
-export const highlightTierCardColors = [
+export const alternativeTierCardColor = {
+	titlePillColor: palette.news[400],
+	cardPillColor: palette.news[400],
+	cardBackColor: palette.news[800],
+	benefitIconColor: palette.news[400],
+};
+export const alternativeTierCardColors = [
 	regularTierCardColor,
-	{
-		titlePillColor: palette.news[400],
-		cardPillColor: palette.news[400],
-		cardBackColor: palette.news[800],
-		benefitIconColor: palette.news[400],
-	},
+	alternativeTierCardColor,
 	{ ...regularTierCardColor, titlePillColor: palette.brand[500] },
 ];

@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
 import { currencyCodes } from '@modules/internationalisation/currency';
+import { alternativeTierCardColor } from 'helpers/landingPage/tierCardColors';
 import type { ThreeTierCardProps } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { ThreeTierCard } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
@@ -57,9 +58,9 @@ function Template(args: ThreeTierCardProps) {
 
 Template.args = {} as Record<string, unknown>;
 
-export const Default = Template.bind({});
+export const Regular = Template.bind({});
 
-Default.args = {
+Regular.args = {
 	isSubdued: false,
 	currencyId: 'GBP',
 	paymentFrequency: 'MONTHLY',
@@ -72,6 +73,24 @@ Default.args = {
 		cta: { copy: 'Support' },
 		label: { copy: 'Highest impact' },
 	},
+};
+
+export const Alternative = Template.bind({});
+
+Alternative.args = {
+	isSubdued: false,
+	currencyId: 'GBP',
+	paymentFrequency: 'MONTHLY',
+	cardTier: 2,
+	cardContent: {
+		...fallBackLandingPageSelection.products.SupporterPlus,
+		product: 'SupporterPlus',
+		isUserSelected: false,
+		price: 12,
+		cta: { copy: 'Support' },
+		label: { copy: 'Highest impact' },
+	},
+	cardColors: alternativeTierCardColor,
 };
 
 export const Promotion = Template.bind({});

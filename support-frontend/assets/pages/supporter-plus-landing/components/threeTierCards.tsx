@@ -4,8 +4,7 @@ import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import {
-	highlightTierCardColors,
-	regularTierCardColor,
+	alternativeTierCardColors,
 	regularTierCardColors,
 } from 'helpers/landingPage/tierCardColors';
 import type { CardContent } from './threeTierCard';
@@ -66,8 +65,8 @@ export function ThreeTierCards({
 		1;
 	let promoCount = 0;
 
-	const cardColors = enableAlternativeSupporterPlusCardColors
-		? highlightTierCardColors
+	const tierCardColors = enableAlternativeSupporterPlusCardColors
+		? alternativeTierCardColors
 		: regularTierCardColors;
 
 	return (
@@ -84,7 +83,7 @@ export function ThreeTierCards({
 				return (
 					<ThreeTierCard
 						cardContent={cardContent}
-						cardColors={cardColors[cardIndex] ?? regularTierCardColor}
+						cardColors={tierCardColors[cardIndex]}
 						cardTier={cardIndexToTier(cardIndex)}
 						key={`threeTierCard${cardIndex}`}
 						promoCount={promoCount}
