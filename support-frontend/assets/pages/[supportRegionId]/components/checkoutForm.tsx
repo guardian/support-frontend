@@ -192,8 +192,7 @@ export default function CheckoutForm({
 	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
 
 	const productCatalog = appConfig.productCatalog;
-	const { currency, currencyKey } =
-		getSupportRegionIdConfig(supportRegionId);
+	const { currency, currencyKey } = getSupportRegionIdConfig(supportRegionId);
 
 	const productDescription = productCatalogDescription[productKey];
 	const hasDeliveryAddress = !!productDescription.deliverableTo;

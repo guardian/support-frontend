@@ -279,8 +279,7 @@ export function OneTimeCheckoutComponent({
 	landingPageSettings,
 	oneTimeCheckoutSettings,
 }: OneTimeCheckoutComponentProps) {
-	const { currency, currencyKey } =
-		getSupportRegionIdConfig(supportRegionId);
+	const { currency, currencyKey } = getSupportRegionIdConfig(supportRegionId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
 
 	const preSelectedAmountParam = urlSearchParams.get('contribution');

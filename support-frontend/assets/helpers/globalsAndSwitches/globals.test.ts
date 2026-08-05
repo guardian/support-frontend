@@ -23,9 +23,7 @@ describe('getGlobal', () => {
 	});
 
 	it('returns any item reached in traversal that is not an object', () => {
-		expect(getGlobal('settings.contributionTypes.ca.something')).toEqual(
-			[],
-		);
+		expect(getGlobal('settings.contributionTypes.ca.something')).toEqual([]);
 	});
 
 	it('returns null if nothing is found at a particular path', () => {

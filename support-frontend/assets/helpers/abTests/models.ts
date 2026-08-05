@@ -26,7 +26,11 @@ type Audience = {
 	breakpoint?: BreakpointRange;
 };
 
-type AudienceType = CountryCode | SupportRegionId | 'ALL' | 'CONTRIBUTIONS_ONLY';
+type AudienceType =
+	| CountryCode
+	| SupportRegionId
+	| 'ALL'
+	| 'CONTRIBUTIONS_ONLY';
 
 type Audiences = Partial<Record<AudienceType, Audience>>;
 

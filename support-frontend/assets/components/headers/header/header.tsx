@@ -27,7 +27,9 @@ export default function Header({ utility, supportRegionId }: HeaderProps) {
 				<div css={[headerLinksContainer]}>
 					<HeaderTopNav supportRegionId={supportRegionId} utility={utility} />
 					<MobileMenuToggler
-						links={<Links supportRegionId={supportRegionId} location="mobile" />}
+						links={
+							<Links supportRegionId={supportRegionId} location="mobile" />
+						}
 						utility={utility}
 					/>
 				</div>

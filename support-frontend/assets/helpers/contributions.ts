@@ -67,8 +67,8 @@ const defaultConfig: Config = {
 };
 
 const config: Record<SupportRegionId, Config> = {
-	'uk': defaultConfig,
-	'au': {
+	uk: defaultConfig,
+	au: {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
 			min: 2,
@@ -79,7 +79,7 @@ const config: Record<SupportRegionId, Config> = {
 			max: 25000,
 		},
 	},
-	'eu': {
+	eu: {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
 			min: 2,
@@ -87,7 +87,7 @@ const config: Record<SupportRegionId, Config> = {
 		},
 		ONE_OFF: defaultConfig.ONE_OFF,
 	},
-	'us': {
+	us: {
 		ANNUAL: {
 			...defaultConfig.ANNUAL,
 			max: 10000,
@@ -101,7 +101,7 @@ const config: Record<SupportRegionId, Config> = {
 			max: 10000,
 		},
 	},
-	'int': {
+	int: {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
 			min: 2,
@@ -109,7 +109,7 @@ const config: Record<SupportRegionId, Config> = {
 		},
 		ONE_OFF: defaultConfig.ONE_OFF,
 	},
-	'nz': {
+	nz: {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
 			min: 2,
@@ -117,7 +117,7 @@ const config: Record<SupportRegionId, Config> = {
 		},
 		ONE_OFF: defaultConfig.ONE_OFF,
 	},
-	'ca': {
+	ca: {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
 			min: 2,

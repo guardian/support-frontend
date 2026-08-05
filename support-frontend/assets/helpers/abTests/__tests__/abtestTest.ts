@@ -187,7 +187,7 @@ describe('init', () => {
 
 	it('does not assign a user to a test in another country group', () => {
 		const abTests = {
-			t: buildTest({ audiences: { 'uk': buildAudience({}) } }),
+			t: buildTest({ audiences: { uk: buildAudience({}) } }),
 		};
 
 		const countryId = 'US';

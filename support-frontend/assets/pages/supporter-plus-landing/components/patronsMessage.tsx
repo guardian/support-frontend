@@ -28,12 +28,12 @@ export function PatronsMessage({
 	mobileTheme?: FinePrintTheme;
 }): JSX.Element {
 	const patronageAmountsWithGlyph = {
-		'uk': '£100',
-		'au': '$185',
-		'eu': '€117',
-		'int': '$135',
-		'nz': '$200',
-		'ca': '$167',
+		uk: '£100',
+		au: '$185',
+		eu: '€117',
+		int: '$135',
+		nz: '$200',
+		ca: '$167',
 	};
 
 	const isUSA = supportRegionId === 'us';

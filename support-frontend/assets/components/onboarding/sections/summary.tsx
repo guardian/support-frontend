@@ -219,8 +219,7 @@ function OnboardingSummary({
 
 	const { enableCanadaTaxExclusion } = useFeatureSwitches();
 
-	const { currencyKey } =
-		getSupportRegionIdConfig(supportRegionId);
+	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
 
 	const amountPaidToday = simpleFormatAmount(
 		getCurrencyByCode(currencyKey),

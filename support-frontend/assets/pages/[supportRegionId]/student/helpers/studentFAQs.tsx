@@ -159,19 +159,19 @@ interface StudentFAQsConfig {
 }
 
 const studentFAQsConfig: Partial<Record<SupportRegionId, StudentFAQsConfig>> = {
-	'uk': {
+	uk: {
 		getCopy: otherSupporterPlusFAQ,
 		regionName: 'the UK',
 	},
-	'us': {
+	us: {
 		getCopy: otherSupporterPlusFAQ,
 		regionName: 'the USA',
 	},
-	'ca': {
+	ca: {
 		getCopy: otherSupporterPlusFAQ,
 		regionName: 'Canada',
 	},
-	'au': {
+	au: {
 		getCopy: auSupporterPlusFAQ,
 		// Not actually used
 		regionName: 'Australia',
@@ -192,7 +192,6 @@ export function getStudentFAQs(
 	supportRegionId: SupportRegionId,
 	institution?: Institution,
 ): FAQItem[] | undefined {
-
 	if (institution) {
 		return studentInstitutionFAQsConfig(supportRegionId, institution);
 	}

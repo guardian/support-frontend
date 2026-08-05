@@ -144,15 +144,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 	});
 
 	describe('getBenefitsChecklistFromLandingPageTool with missing benefits in landing page tool', () => {
-		const supportRegionIds = [
-			'uk',
-			'au',
-			'eu',
-			'us',
-			'int',
-			'nz',
-			'ca',
-		];
+		const supportRegionIds = ['uk', 'au', 'eu', 'us', 'int', 'nz', 'ca'];
 		const products = ['Contribution', 'SupporterPlus', 'DigitalSubscription'];
 		const landingPageSettingsWithoutProducts = {
 			...landingPageSettings,

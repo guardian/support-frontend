@@ -106,9 +106,7 @@ export function OnboardingAppsDiscovery({
 		: hasFeastMobileAppDownloaded;
 
 	const FEAST_APP_BENEFITS_REGION =
-		supporterRegion === 'us'
-			? FEAST_APP_BENEFITS_US
-			: FEAST_APP_BENEFITS;
+		supporterRegion === 'us' ? FEAST_APP_BENEFITS_US : FEAST_APP_BENEFITS;
 
 	const appBenefits = isGuardianApp
 		? GUARDIAN_APP_BENEFITS

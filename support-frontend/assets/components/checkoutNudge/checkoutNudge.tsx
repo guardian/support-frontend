@@ -397,8 +397,7 @@ export function CheckoutNudgeSelector({
 	}
 
 	const { nudgeToProduct } = nudge;
-	const { currencyKey } =
-		getSupportRegionIdConfig(supportRegionId);
+	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
 
 	// Handle "Thank You" State
 	const isFromNudge = new URLSearchParams(window.location.search).get(

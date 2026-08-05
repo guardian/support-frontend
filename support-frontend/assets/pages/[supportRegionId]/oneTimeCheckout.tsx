@@ -36,8 +36,7 @@ export function OneTimeCheckout({
 	landingPageSettings,
 	oneTimeCheckoutSettings,
 }: OneTimeCheckoutProps) {
-	const { currencyKey } =
-		getSupportRegionIdConfig(supportRegionId);
+	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
 	const isTestUser = !!cookie.get('_test_username');
 
 	const stripePublicKey = getStripeKeyForCountry(

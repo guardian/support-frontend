@@ -235,7 +235,11 @@ export const getSubscriptionProducts = (
 	participations: Participations,
 ): ProductCopy[] => {
 	const productcopy: ProductCopy[] = [
-		guardianWeekly(supportRegionId, pricingCopy[GuardianWeekly], participations),
+		guardianWeekly(
+			supportRegionId,
+			pricingCopy[GuardianWeekly],
+			participations,
+		),
 	];
 	if (supportRegionId === 'uk') {
 		productcopy.push(paper(supportRegionId, pricingCopy[Paper]));

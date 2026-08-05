@@ -41,14 +41,7 @@ const oneTimeToRecurring__NON_US: CheckoutNudgeTest = {
 	name: 'oneTimeToRecurring__NON_US',
 	status: 'Live',
 	regionTargeting: {
-		targetedCountryGroups: [
-			'uk',
-			'au',
-			'ca',
-			'eu',
-			'nz',
-			'int',
-		],
+		targetedCountryGroups: ['uk', 'au', 'ca', 'eu', 'nz', 'int'],
 	},
 	nudgeFromProduct: {
 		product: 'OneTimeContribution',

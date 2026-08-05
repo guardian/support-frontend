@@ -71,9 +71,9 @@ function getProductPrice(
 	const supportRegion = getSupportRegion(country);
 
 	const productPrice =
-		productPrices[supportRegion.name as SupportRegionName]?.[fulfilmentOption]?.[
-			productOption
-		]?.[billingPeriod]?.[supportRegion.currency.code];
+		productPrices[supportRegion.name as SupportRegionName]?.[
+			fulfilmentOption
+		]?.[productOption]?.[billingPeriod]?.[supportRegion.currency.code];
 
 	if (productPrice) {
 		return productPrice;

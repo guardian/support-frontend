@@ -1,5 +1,1 @@
-
-export const SPECIFIC_DISCOUNTED_UNI_COUNTRYCODES = [
-	'au',
-	'nz',
-];
+export const SPECIFIC_DISCOUNTED_UNI_COUNTRYCODES = ['au', 'nz'];

@@ -353,9 +353,7 @@ describe('getPageParticipations', () => {
 
 		it('ignores empty session storage participations', async () => {
 			const variant = createTestVariant('control', 'control-value');
-			const test = createPageTest('test-1', [variant], 'Live', [
-				'uk',
-			]);
+			const test = createPageTest('test-1', [variant], 'Live', ['uk']);
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
@@ -370,9 +368,7 @@ describe('getPageParticipations', () => {
 
 		it('clears cache and re-assigns when session storage variant not found', async () => {
 			const variant = createTestVariant('control', 'control-value');
-			const test = createPageTest('test-1', [variant], 'Live', [
-				'uk',
-			]);
+			const test = createPageTest('test-1', [variant], 'Live', ['uk']);
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
@@ -438,12 +434,8 @@ describe('getPageParticipations', () => {
 		it('returns first matching live test', async () => {
 			const variant1 = createTestVariant('control-1', 'control-1-value');
 			const variant2 = createTestVariant('control-2', 'control-2-value');
-			const test1 = createPageTest('test-1', [variant1], 'Live', [
-				'uk',
-			]);
-			const test2 = createPageTest('test-2', [variant2], 'Live', [
-				'uk',
-			]);
+			const test1 = createPageTest('test-1', [variant1], 'Live', ['uk']);
+			const test2 = createPageTest('test-2', [variant2], 'Live', ['uk']);
 			const config = createConfig([test1, test2]);
 
 			mockLocation('/test/page');
@@ -463,9 +455,7 @@ describe('getPageParticipations', () => {
 
 		it('stores participation in session storage', async () => {
 			const variant = createTestVariant('control', 'control-value');
-			const test = createPageTest('test-1', [variant], 'Live', [
-				'uk',
-			]);
+			const test = createPageTest('test-1', [variant], 'Live', ['uk']);
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
@@ -485,9 +475,7 @@ describe('getPageParticipations', () => {
 	describe('Fallback behavior (getPageParticipationsWithFallback)', () => {
 		it('returns fallback when no test matches country group', async () => {
 			const variant = createTestVariant('control', 'control-value');
-			const test = createPageTest('test-1', [variant], 'Live', [
-				'us',
-			]);
+			const test = createPageTest('test-1', [variant], 'Live', ['us']);
 			const fallback = createFallbackVariant();
 			const config = createConfig([test]);
 
@@ -546,9 +534,7 @@ describe('getPageParticipations', () => {
 
 		it('returns undefined when no fallback and no test matches', async () => {
 			const variant = createTestVariant('control', 'control-value');
-			const test = createPageTest('test-1', [variant], 'Live', [
-				'us',
-			]);
+			const test = createPageTest('test-1', [variant], 'Live', ['us']);
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
@@ -565,9 +551,7 @@ describe('getPageParticipations', () => {
 	describe('Config properties', () => {
 		it('uses custom getVariantName function', async () => {
 			const variant = createTestVariant('control', 'custom-name');
-			const test = createPageTest('test-1', [variant], 'Live', [
-				'uk',
-			]);
+			const test = createPageTest('test-1', [variant], 'Live', ['uk']);
 			const config = createConfig(
 				[test],
 				'^/test/page$',
@@ -605,9 +589,7 @@ describe('getPageParticipations', () => {
 
 		it('uses custom session storage key', async () => {
 			const variant = createTestVariant('control', 'control-value');
-			const test = createPageTest('test-1', [variant], 'Live', [
-				'uk',
-			]);
+			const test = createPageTest('test-1', [variant], 'Live', ['uk']);
 			const config = createConfig(
 				[test],
 				'^/test/page$',
@@ -635,9 +617,7 @@ describe('getPageParticipations', () => {
 	describe('Edge cases', () => {
 		it('handles variant with null/undefined properties gracefully', async () => {
 			const variant = createTestVariant('control', 'control-value');
-			const test = createPageTest('test-1', [variant], 'Live', [
-				'uk',
-			]);
+			const test = createPageTest('test-1', [variant], 'Live', ['uk']);
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
@@ -770,9 +750,7 @@ describe('getPageParticipations', () => {
 	describe('Session storage validation and pruning (validate-and-prune logic)', () => {
 		it('prunes stale participations that do not match current test names', async () => {
 			const variant = createTestVariant('control', 'control-value');
-			const test = createPageTest('test-1', [variant], 'Live', [
-				'uk',
-			]);
+			const test = createPageTest('test-1', [variant], 'Live', ['uk']);
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
@@ -793,9 +771,7 @@ describe('getPageParticipations', () => {
 
 		it('prunes participations that do not match any test name', async () => {
 			const variant = createTestVariant('control', 'control-value');
-			const test = createPageTest('test-1', [variant], 'Live', [
-				'uk',
-			]);
+			const test = createPageTest('test-1', [variant], 'Live', ['uk']);
 			test.methodologies = [
 				{
 					name: 'EpsilonGreedyBandit',
@@ -821,9 +797,7 @@ describe('getPageParticipations', () => {
 
 		it('re-selects when all session participations are stale', async () => {
 			const variant = createTestVariant('control', 'control-value');
-			const test = createPageTest('test-1', [variant], 'Live', [
-				'uk',
-			]);
+			const test = createPageTest('test-1', [variant], 'Live', ['uk']);
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
@@ -846,9 +820,7 @@ describe('getPageParticipations', () => {
 
 		it('preserves participations keyed by test name', async () => {
 			const variant = createTestVariant('control', 'control-value');
-			const test = createPageTest('test-1', [variant], 'Live', [
-				'uk',
-			]);
+			const test = createPageTest('test-1', [variant], 'Live', ['uk']);
 			test.methodologies = [{ name: 'EpsilonGreedyBandit' }];
 			const config = createConfig([test]);
 
@@ -905,9 +877,7 @@ describe('getPageParticipations', () => {
 	describe('Direct checkout entry', () => {
 		it('runs selection when user enters directly on checkout page', async () => {
 			const variant = createTestVariant('control', 'control-value');
-			const test = createPageTest('test-1', [variant], 'Live', [
-				'uk',
-			]);
+			const test = createPageTest('test-1', [variant], 'Live', ['uk']);
 			test.methodologies = [{ name: 'EpsilonGreedyBandit' }];
 			const config = createConfig([test], '^/.*/contribute(/.*)?$');
 

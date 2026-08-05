@@ -85,8 +85,7 @@ export default function CheckoutSummary({
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
 	const productCatalog = appConfig.productCatalog;
-	const { currency, currencyKey } =
-		getSupportRegionIdConfig(supportRegionId);
+	const { currency, currencyKey } = getSupportRegionIdConfig(supportRegionId);
 	const productDescription = getProductDescription(productKey, ratePlanKey);
 	const ratePlanDetail = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
@@ -130,10 +129,7 @@ export default function CheckoutSummary({
 			abParticipations,
 		);
 
-	if (
-		ratePlanKey === 'OneYearStudent' &&
-		supportRegionId === 'uk'
-	) {
+	if (ratePlanKey === 'OneYearStudent' && supportRegionId === 'uk') {
 		benefitsCheckListData.unshift({
 			isChecked: true,
 			text: ukSpecificAdditionalBenefit.copy,

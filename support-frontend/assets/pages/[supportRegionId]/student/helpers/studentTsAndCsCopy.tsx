@@ -4,7 +4,7 @@ import { privacyLink } from 'helpers/legal';
 import { getProductLabel } from 'helpers/productCatalog';
 
 const studentTsAndCs: Partial<Record<SupportRegionId, JSX.Element>> = {
-	'au': (
+	au: (
 		<div>
 			Access to the {getProductLabel('SupporterPlus')} subscription offered
 			under this agreement is strictly limited to currently enrolled students of
@@ -22,21 +22,21 @@ const studentTsAndCs: Partial<Record<SupportRegionId, JSX.Element>> = {
 			that the subscriber does not meet the eligibility criteria.
 		</div>
 	),
-	'us': (
+	us: (
 		<>
 			Access to this offer is strictly limited to verified full time students
 			18+ in the USA. You must have a Student Beans account to access this
 			offer. Subscription is for 1 year and does not auto renew.
 		</>
 	),
-	'uk': (
+	uk: (
 		<>
 			Access to this offer is strictly limited to verified full time students
 			18+ in the UK. You must have a Student Beans account to access this offer.
 			Subscription is for 1 year and does not auto renew.
 		</>
 	),
-	'ca': (
+	ca: (
 		<>
 			Access to this offer is strictly limited to verified full time students
 			18+ in Canada. You must have a Student Beans account to access this offer.

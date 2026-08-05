@@ -10,9 +10,7 @@ import type { ActiveProductKey } from './productCatalog';
 export const getWeeklyFulfilmentOption = (
 	country: CountryCode,
 ): GuardianWeeklyFulfilmentOptions =>
-	supportRegions.int.countries.includes(country)
-		? RestOfWorld
-		: Domestic;
+	supportRegions.int.countries.includes(country) ? RestOfWorld : Domestic;
 export const getFulfilmentOptionFromProductKey = (
 	productKey: ActiveProductKey,
 ): FulfilmentOptions => {

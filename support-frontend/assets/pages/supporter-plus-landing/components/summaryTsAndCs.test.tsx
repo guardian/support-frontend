@@ -27,21 +27,21 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 	});
 
 	it.each`
-		productKey               | activeRatePlanKey | supportRegionId    | currency
-		${'Contribution'}        | ${'Monthly'}      | ${'uk'} | ${'GBP'}
-		${'Contribution'}        | ${'Annual'}       | ${'uk'} | ${'GBP'}
-		${'SupporterPlus'}       | ${'Monthly'}      | ${'uk'} | ${'GBP'}
-		${'SupporterPlus'}       | ${'Monthly'}      | ${'us'} | ${'USD'}
-		${'SupporterPlus'}       | ${'Annual'}       | ${'uk'} | ${'GBP'}
-		${'OneTimeContribution'} | ${'OneTime'}      | ${'uk'} | ${'GBP'}
-		${'GuardianAdLite'}      | ${'Monthly'}      | ${'uk'} | ${'GBP'}
-		${'GuardianAdLite'}      | ${'Annual'}       | ${'uk'} | ${'GBP'}
-		${'DigitalSubscription'} | ${'Monthly'}      | ${'us'} | ${'USD'}
-		${'DigitalSubscription'} | ${'Annual'}       | ${'uk'} | ${'GBP'}
-		${'SubscriptionCard'}    | ${'WeekendPlus'}  | ${'uk'} | ${'GBP'}
-		${'HomeDelivery'}        | ${'SixdayPlus'}   | ${'uk'} | ${'GBP'}
-		${'SubscriptionCard'}    | ${'Sunday'}       | ${'uk'} | ${'GBP'}
-		${'HomeDelivery'}        | ${'Sunday'}       | ${'uk'} | ${'GBP'}
+		productKey               | activeRatePlanKey | supportRegionId | currency
+		${'Contribution'}        | ${'Monthly'}      | ${'uk'}         | ${'GBP'}
+		${'Contribution'}        | ${'Annual'}       | ${'uk'}         | ${'GBP'}
+		${'SupporterPlus'}       | ${'Monthly'}      | ${'uk'}         | ${'GBP'}
+		${'SupporterPlus'}       | ${'Monthly'}      | ${'us'}         | ${'USD'}
+		${'SupporterPlus'}       | ${'Annual'}       | ${'uk'}         | ${'GBP'}
+		${'OneTimeContribution'} | ${'OneTime'}      | ${'uk'}         | ${'GBP'}
+		${'GuardianAdLite'}      | ${'Monthly'}      | ${'uk'}         | ${'GBP'}
+		${'GuardianAdLite'}      | ${'Annual'}       | ${'uk'}         | ${'GBP'}
+		${'DigitalSubscription'} | ${'Monthly'}      | ${'us'}         | ${'USD'}
+		${'DigitalSubscription'} | ${'Annual'}       | ${'uk'}         | ${'GBP'}
+		${'SubscriptionCard'}    | ${'WeekendPlus'}  | ${'uk'}         | ${'GBP'}
+		${'HomeDelivery'}        | ${'SixdayPlus'}   | ${'uk'}         | ${'GBP'}
+		${'SubscriptionCard'}    | ${'Sunday'}       | ${'uk'}         | ${'GBP'}
+		${'HomeDelivery'}        | ${'Sunday'}       | ${'uk'}         | ${'GBP'}
 	`(
 		`summaryTs&Cs for $productKey With ratePlanKey $activeRatePlanKey ($supportRegionId / $currency) renders correctly`,
 		({ productKey, activeRatePlanKey, supportRegionId, currency }) => {

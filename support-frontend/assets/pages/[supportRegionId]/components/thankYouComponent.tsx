@@ -88,8 +88,7 @@ export function ThankYouComponent({
 }: CheckoutComponentProps) {
 	const countryId = Country.codeFromString(get('GU_country') ?? 'GB') ?? 'GB';
 
-	const { currencyKey } =
-		getSupportRegionIdConfig(supportRegionId);
+	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
 	// Session storage order (from Checkout)
 	const order = getThankYouOrder();
 	if (!order) {
