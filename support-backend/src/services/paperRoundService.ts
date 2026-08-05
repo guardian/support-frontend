@@ -18,6 +18,8 @@ const agentsCoverageSchema = z.object({
 	summary: z.string(),
 });
 
+export type AgentCoverage = z.infer<typeof agentsCoverageSchema>;
+
 const postcodeCoverageSchema = z.object({
 	agents: z.array(agentsCoverageSchema),
 	message: z.string(),

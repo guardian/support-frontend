@@ -30,12 +30,12 @@ export async function getIdealPostcodeApiKey(): Promise<string> {
 	return response.Parameter.Value;
 }
 
-export async function getPaperroundApiConfig(): Promise<{
-	key: string;
-	url: string;
+export async function getPaperRoundApiConfig(): Promise<{
+	apiKey: string;
+	baseUrl: string;
 }> {
 	const stage = stageFromEnvironment();
-	const path = `/${stage}/support/support-backend/paperround-api`;
+	const path = `/${stage}/support/support-backend/paper-round-api`;
 	const ssmClient = new SSMClient({
 		region: 'eu-west-1',
 	});
@@ -44,12 +44,12 @@ export async function getPaperroundApiConfig(): Promise<{
 		WithDecryption: true,
 	});
 	const response = await ssmClient.send(command);
-	const key = findValue(`${path}/key`, response.Parameters);
-	const url = findValue(`${path}/url`, response.Parameters);
+	const apiKey = findValue(`${path}/key`, response.Parameters);
+	const baseUrl = findValue(`${path}/url`, response.Parameters);
 
-	if (!key || !url) {
+	if (!apiKey || !baseUrl) {
 		// TODO: This will need to be surfaced in some way if it ever happened in PROD.
 		throw new Error('Paperround API config not found in SSM');
 	}
-	return { key, url };
+	return { apiKey, baseUrl };
 }
