@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import { storage } from '@guardian/libs';
 import type {
 	AbTestRegister,
 	ComponentEvent,
@@ -8,7 +9,6 @@ import type {
 import { record, viewId } from '@guardian/ophan-tracker-js/support';
 import { testIsActive } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
-import { getLocal, setLocal } from 'helpers/storage/storage';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 // Re-export types for backward compatibility
@@ -78,15 +78,15 @@ const setReferrerDataInLocalStorage = (
 	acquisitionData: ReferrerAcquisitionData,
 ): void => {
 	const { referrerUrl, referrerPageviewId } = acquisitionData;
+	const ophanFollow =
+		storage.local.isAvailable() && storage.local.get('ophan_follow');
 
-	if (!getLocal('ophan_follow') && referrerUrl && referrerPageviewId) {
-		setLocal(
-			'ophan_follow',
-			JSON.stringify({
+	if (!ophanFollow && referrerUrl && referrerPageviewId) {
+		storage.local.isAvailable() &&
+			storage.local.set('ophan_follow', {
 				refViewId: referrerPageviewId,
 				ref: referrerUrl,
-			}),
-		);
+			});
 	}
 };
 

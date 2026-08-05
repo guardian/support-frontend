@@ -1,10 +1,10 @@
+import { storage } from '@guardian/libs';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { v4 as uuidv4 } from 'uuid';
 import type { ContributionType } from 'helpers/contributions';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import * as storage from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
 import type { PaymentMethod } from '../forms/paymentMethods';
 import { DirectDebit, PayPal } from '../forms/paymentMethods';
@@ -67,11 +67,11 @@ const googleAnalyticsEventQueue: Array<() => void> = [];
 
 // ----- Functions ----- //
 function getOrderId() {
-	let value: string | null | undefined = storage.getSession('orderId');
+	let value: string | null | undefined = storage.session.get('orderId');
 
 	if (value === null) {
 		value = uuidv4();
-		storage.setSession('orderId', value);
+		storage.session.isAvailable() && storage.session.set('orderId', value);
 	}
 
 	return value;
