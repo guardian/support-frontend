@@ -1,11 +1,11 @@
-import { storage } from '@guardian/libs';
+import { getSession } from 'helpers/storage/storage';
 import type {
 	AcquisitionQueryParameters,
 	ReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
 
 const useEmailMarketingSession = (): { isMarketingEmailSession: boolean } => {
-	const acquisitionData = storage.session.get(
+	const acquisitionData = getSession(
 		'acquisitionData',
 	) as ReferrerAcquisitionData | null;
 	let queryParams: AcquisitionQueryParameters = [];

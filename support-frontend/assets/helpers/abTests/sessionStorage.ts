@@ -1,4 +1,4 @@
-import { storage } from '@guardian/libs';
+import { getSession, setSession } from 'helpers/storage/storage';
 import type { Participations } from './models';
 
 // For participation in tests defined in abtestDefinitions.ts
@@ -19,7 +19,7 @@ export type Key =
 
 function getSessionParticipations(key: Key): Participations | undefined {
 	try {
-		return storage.session.get(key) as Participations;
+		return getSession(key) as Participations | undefined;
 	} catch (error) {
 		console.error(`Failed to fetch ${key} from session storage`, error);
 		return undefined;
@@ -27,14 +27,14 @@ function getSessionParticipations(key: Key): Participations | undefined {
 }
 
 function setSessionParticipations(participations: Participations, key: Key) {
-	storage.session.isAvailable() && storage.session.set(key, participations);
+	setSession(key, participations);
 }
 
 function clearParticipationsFromSession(): void {
-	storage.session.remove(LANDING_PAGE_PARTICIPATIONS_KEY);
-	storage.session.remove(CHECKOUT_NUDGE_PARTICIPATIONS_KEY);
-	storage.session.remove(ONE_TIME_CHECKOUT_PARTICIPATIONS_KEY);
-	storage.session.remove(STUDENT_LANDING_PAGE_PARTICIPATIONS_KEY);
+	setSession(PARTICIPATIONS_KEY, JSON.stringify({}));
+	setSession(LANDING_PAGE_PARTICIPATIONS_KEY, JSON.stringify({}));
+	setSession(ONE_TIME_CHECKOUT_PARTICIPATIONS_KEY, JSON.stringify({}));
+	setSession(STUDENT_LANDING_PAGE_PARTICIPATIONS_KEY, JSON.stringify({}));
 }
 
 export {
