@@ -67,14 +67,14 @@ const googleAnalyticsEventQueue: Array<() => void> = [];
 
 // ----- Functions ----- //
 function getOrderId() {
-	let value: string | null | undefined = storage.session.get('orderId');
+	let orderId = storage.session.get('orderId');
 
-	if (value === null) {
-		value = uuidv4();
-		storage.session.isAvailable() && storage.session.set('orderId', value);
+	if (orderId === null) {
+		orderId = uuidv4();
+		storage.session.isAvailable() && storage.session.set('orderId', orderId);
 	}
 
-	return value;
+	return orderId;
 }
 
 function ophanPaymentMethod(paymentMethod: PaymentMethod | null | undefined) {
