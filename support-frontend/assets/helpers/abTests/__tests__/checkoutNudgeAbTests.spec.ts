@@ -1,3 +1,4 @@
+import { storage } from '@guardian/libs';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { CheckoutNudgeTest } from '../../globalsAndSwitches/checkoutNudgeSettings';
 import { getCheckoutNudgeParticipations } from '../checkoutNudgeAbTests';
@@ -104,7 +105,7 @@ describe('getCheckoutNudgeParticipations', () => {
 		mockIsSwitchOn.mockImplementation(() => true);
 	});
 	afterEach(() => {
-		window.sessionStorage.clear();
+		storage.session.remove(CHECKOUT_NUDGE_PARTICIPATIONS_KEY);
 	});
 
 	it('assigns a user to oneTimeToRecurring__NON_US on UK one-time checkout', () => {
@@ -149,10 +150,9 @@ describe('getCheckoutNudgeParticipations', () => {
 	});
 
 	it('assigns a user to a test if on landing page but test is in session storage', () => {
-		window.sessionStorage.setItem(
-			CHECKOUT_NUDGE_PARTICIPATIONS_KEY,
-			JSON.stringify({ [oneTimeToRecurring__NON_US.name]: 'control' }),
-		);
+		storage.session.set(CHECKOUT_NUDGE_PARTICIPATIONS_KEY, {
+			[oneTimeToRecurring__NON_US.name]: 'control',
+		});
 
 		const result = getCheckoutNudgeParticipations(
 			'GBPCountries',
