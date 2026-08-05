@@ -112,7 +112,7 @@ describe('GET /postcode-lookup/:postcode', () => {
 		expect(coverageSpy).toHaveBeenCalledWith('12345');
 	});
 
-	it('returns the expected response for a bad postcode', async () => {
+	it('returns the expected response for an error from PaperRound', async () => {
 		const coverageSpy = jest.spyOn(service, 'coverage').mockResolvedValueOnce({
 			status_code: 200,
 			data: {
