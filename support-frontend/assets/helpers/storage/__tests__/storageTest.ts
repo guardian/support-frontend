@@ -2,96 +2,142 @@
 import { storage } from '@guardian/libs';
 import { getLocal, getSession, setLocal, setSession } from '../storage';
 
-jest.mock('@guardian/libs', () => ({
-	storage: {
-		local: {
-			isAvailable: jest.fn(),
-			get: jest.fn(),
-			set: jest.fn(),
-		},
-		session: {
-			isAvailable: jest.fn(),
-			get: jest.fn(),
-			set: jest.fn(),
-		},
-	},
-}));
-
-const mockLocal = storage.local as jest.Mocked<typeof storage.local>;
-const mockSession = storage.session as jest.Mocked<typeof storage.session>;
-
 // ----- Tests ----- //
 describe('storage', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
+		window.localStorage.clear();
+		window.sessionStorage.clear();
 	});
 
 	describe('setLocal', () => {
+		afterEach(() => {
+			jest.restoreAllMocks();
+		});
 		it('sets a value in local storage when available', () => {
-			mockLocal.isAvailable.mockReturnValue(true);
+			const setSpy = jest.spyOn(storage.local, 'set');
 			setLocal('myKey', 'myValue');
-			expect(mockLocal.set).toHaveBeenCalledWith('myKey', 'myValue');
+			expect(setSpy).toHaveBeenCalledWith('myKey', 'myValue');
 		});
 
 		it('does not set a value when local storage is unavailable', () => {
-			mockLocal.isAvailable.mockReturnValue(false);
+			jest.spyOn(storage.local, 'isAvailable').mockReturnValue(false);
+			const setSpy = jest.spyOn(storage.local, 'set');
 			setLocal('myKey', 'myValue');
-			expect(mockLocal.set).not.toHaveBeenCalled();
+			expect(setSpy).not.toHaveBeenCalled();
 		});
 	});
 
 	describe('getLocal', () => {
-		it('returns the value from local storage when available', () => {
-			mockLocal.isAvailable.mockReturnValue(true);
-			mockLocal.get.mockReturnValue('storedValue');
-			expect(getLocal('myKey')).toBe('storedValue');
-			expect(mockLocal.get).toHaveBeenCalledWith('myKey');
+		afterEach(() => {
+			jest.restoreAllMocks();
 		});
 
-		it('returns null when local storage is unavailable', () => {
-			mockLocal.isAvailable.mockReturnValue(false);
+		it('returns value from @guardian/libs storage when present', () => {
+			setLocal('myKey', { foo: 'bar' });
+			expect(getLocal('myKey')).toEqual({ foo: 'bar' });
+		});
+
+		it('falls back to window.localStorage when @guardian/libs returns falsy', () => {
+			// Arrange
+			window.localStorage.setItem('myKey', JSON.stringify({ fallback: true }));
+
+			// Act & Assert
+			expect(getLocal('myKey')).toEqual({ fallback: true });
+		});
+
+		it('parses a JSON string from window.localStorage', () => {
+			window.localStorage.setItem('myKey', '"plainString"');
+			expect(getLocal('myKey')).toBe('plainString');
+		});
+
+		it('returns null when window.localStorage has invalid JSON', () => {
+			const consoleSpy = jest
+				.spyOn(console, 'error')
+				.mockImplementation(() => {});
+
+			window.localStorage.setItem('myKey', 'not-json');
 			expect(getLocal('myKey')).toBeNull();
-			expect(mockLocal.get).not.toHaveBeenCalled();
+			expect(consoleSpy).toHaveBeenCalled();
+			consoleSpy.mockRestore();
 		});
 
-		it('returns null when the key does not exist', () => {
-			mockLocal.isAvailable.mockReturnValue(true);
-			mockLocal.get.mockReturnValue(null);
+		it('returns null when neither source has the key', () => {
 			expect(getLocal('missing')).toBeNull();
 		});
 	});
 
 	describe('setSession', () => {
+		afterEach(() => {
+			jest.restoreAllMocks();
+		});
+
 		it('sets a value in session storage when available', () => {
-			mockSession.isAvailable.mockReturnValue(true);
+			const setSpy = jest.spyOn(storage.session, 'set');
+			jest.spyOn(storage.session, 'isAvailable').mockReturnValue(true);
 			setSession('myKey', 'myValue');
-			expect(mockSession.set).toHaveBeenCalledWith('myKey', 'myValue');
+			expect(setSpy).toHaveBeenCalledWith('myKey', 'myValue');
 		});
 
 		it('does not set a value when session storage is unavailable', () => {
-			mockSession.isAvailable.mockReturnValue(false);
+			jest.spyOn(storage.session, 'isAvailable').mockReturnValue(false);
+			const setSpy = jest.spyOn(storage.session, 'set');
 			setSession('myKey', 'myValue');
-			expect(mockSession.set).not.toHaveBeenCalled();
+			expect(setSpy).not.toHaveBeenCalled();
 		});
 	});
 
 	describe('getSession', () => {
-		it('returns the value from session storage when available', () => {
-			mockSession.isAvailable.mockReturnValue(true);
-			mockSession.get.mockReturnValue('sessionValue');
-			expect(getSession('myKey')).toBe('sessionValue');
-			expect(mockSession.get).toHaveBeenCalledWith('myKey');
+		afterEach(() => {
+			jest.restoreAllMocks();
+		});
+
+		it('returns value from @guardian/libs storage when present', () => {
+			const getSpy = jest.spyOn(storage.session, 'get');
+			setSession('myKey', { session: 'data' });
+			expect(getSession('myKey')).toEqual({ session: 'data' });
+			expect(getSpy).toHaveBeenCalledWith('myKey');
+		});
+
+		it('returns a string value from @guardian/libs storage', () => {
+			storage.session.set('myKey', 'sessionString');
+			expect(getSession('myKey')).toBe('sessionString');
+		});
+
+		it('falls back to window.sessionStorage when @guardian/libs returns falsy', () => {
+			window.sessionStorage.setItem(
+				'myKey',
+				JSON.stringify({ fallback: true }),
+			);
+			expect(getSession('myKey')).toEqual({ fallback: true });
+		});
+
+		it('parses a JSON string from window.sessionStorage', () => {
+			window.sessionStorage.setItem('myKey', '"plainString"');
+			expect(getSession('myKey')).toBe('plainString');
+		});
+
+		it('returns null when window.sessionStorage has invalid JSON', () => {
+			const consoleSpy = jest
+				.spyOn(console, 'error')
+				.mockImplementation(() => {});
+
+			window.sessionStorage.setItem('myKey', 'not-json');
+			expect(getSession('myKey')).toBeNull();
+			expect(consoleSpy).toHaveBeenCalled();
+			consoleSpy.mockRestore();
 		});
 
 		it('returns null when session storage is unavailable', () => {
-			mockSession.isAvailable.mockReturnValue(false);
+			jest.spyOn(storage.session, 'isAvailable').mockReturnValue(false);
+			const getSpy = jest.spyOn(storage.session, 'get');
 			expect(getSession('myKey')).toBeNull();
-			expect(mockSession.get).not.toHaveBeenCalled();
+			expect(getSpy).not.toHaveBeenCalled();
 		});
 
-		it('returns null when the key does not exist', () => {
-			mockSession.isAvailable.mockReturnValue(true);
-			mockSession.get.mockReturnValue(null);
+		it('returns null when neither source has the key', () => {
+			jest.spyOn(storage.session, 'isAvailable').mockReturnValue(true);
+			jest.spyOn(storage.session, 'get').mockReturnValue(null);
 			expect(getSession('missing')).toBeNull();
 		});
 	});
