@@ -8,9 +8,10 @@ import {
 import type { ReactNode } from 'react';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import type { OnboardingProps } from 'pages/[countryGroupId]/components/onboardingComponent';
-import type { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
+import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
+import type { OnboardingProductKey } from 'pages/[countryGroupId]/components/onboardingComponent';
 import OnboardingHeading from './heading';
+import type { OnboardingFlow, OnboardingFlowStep } from './onboardingTypes';
 
 const greyBackgroundContainer = css`
 	display: flex;
@@ -21,17 +22,22 @@ const contentColumnStyles = css`
 	margin: auto;
 `;
 
-interface OnboardingLayoutProps extends OnboardingProps {
+interface OnboardingLayoutProps {
 	children: ReactNode;
-	onboardingStep: OnboardingSteps;
+	onboardingStep: OnboardingFlowStep;
+	flow: OnboardingFlow;
 	scrollToTopRef: React.RefObject<HTMLDivElement>;
+	landingPageSettings?: LandingPageVariant;
+	productKey?: OnboardingProductKey;
 }
 
 function OnboardingLayout({
 	children,
 	onboardingStep,
+	flow,
 	scrollToTopRef,
-	...onboardingProps
+	landingPageSettings,
+	productKey,
 }: OnboardingLayoutProps) {
 	return (
 		<>
@@ -46,7 +52,9 @@ function OnboardingLayout({
 			>
 				<OnboardingHeading
 					onboardingStep={onboardingStep}
-					{...onboardingProps}
+					flow={flow}
+					landingPageSettings={landingPageSettings}
+					productKey={productKey}
 				/>
 				<Container sideBorders cssOverrides={greyBackgroundContainer}>
 					<Columns collapseUntil="tablet">

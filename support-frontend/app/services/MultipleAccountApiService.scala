@@ -1,0 +1,39 @@
+package services
+
+import config.MultipleAccountApiConfig
+import play.api.libs.ws.{WSClient, WSResponse}
+
+import scala.concurrent.Future
+
+class MultipleAccountApiService(config: MultipleAccountApiConfig)(implicit wsClient: WSClient) {
+
+  def getInvitation(invitationCode: String): Future[WSResponse] =
+    wsClient
+      .url(s"${config.baseUrl}/invitation/$invitationCode")
+      .withHttpHeaders("x-api-key" -> config.apiKey)
+      .get()
+
+  def acceptInvitation(
+      invitationCode: String,
+      identityId: String,
+      accessToken: String,
+  ): Future[WSResponse] =
+    wsClient
+      .url(s"${config.baseUrl}/invitation/$invitationCode/accept")
+      .withHttpHeaders(
+        "x-api-key" -> config.apiKey,
+        "x-identity-id" -> identityId,
+        "Authorization" -> s"Bearer $accessToken",
+        "Content-Type" -> "application/json",
+      )
+      .execute("POST")
+
+  def deleteInvitation(invitationCode: String, identityId: String): Future[WSResponse] =
+    wsClient
+      .url(s"${config.baseUrl}/invitation/$invitationCode")
+      .withHttpHeaders(
+        "x-api-key" -> config.apiKey,
+        "x-identity-id" -> identityId,
+      )
+      .execute("DELETE")
+}

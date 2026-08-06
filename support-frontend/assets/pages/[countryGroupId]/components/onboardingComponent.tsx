@@ -5,6 +5,12 @@ import type { SupportRegionId } from '@modules/internationalisation/countryGroup
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { useSearchParams } from 'react-router';
 import ContentBox from 'components/onboarding/contentBox';
+import { OnboardingSteps } from 'components/onboarding/onboardingSteps';
+import type {
+	CurrentUserState,
+	HandleStepNavigationFunction,
+	OnboardingMessageEventData,
+} from 'components/onboarding/onboardingTypes';
 import { OnboardingAppsDiscovery } from 'components/onboarding/sections/appsDiscovery';
 import { OnboardingCompleted } from 'components/onboarding/sections/completed';
 import OnboardingSummary, {
@@ -25,38 +31,11 @@ import { getUser } from 'helpers/user/user';
 import type { UserType } from 'helpers/user/userType';
 import OnboardingLayout from '../../../components/onboarding/layout';
 import { getThankYouOrder } from '../checkout/helpers/sessionStorage';
-import { OnboardingSteps } from './onboardingSteps';
 
 const identityFrameStyles = css`
 	overflow: hidden;
 	border-radius: ${space[2]}px;
 `;
-
-type UserStateChange = 'userSignedIn' | 'userRegistered';
-type HrefIframeAllowList = 'recaptchaPrivacyPolicy' | 'recaptchaTerms';
-
-type MessageEventData =
-	| {
-			type: 'iframeHeightChange';
-			context: 'supporterOnboarding';
-			value: number;
-	  }
-	| {
-			type: 'userStateChange';
-			context: 'supporterOnboarding';
-			value: UserStateChange;
-	  }
-	| {
-			type: 'iframedLinkClicked';
-			context: 'supporterOnboarding';
-			value: HrefIframeAllowList;
-	  };
-
-export type CurrentUserState = UserStateChange | 'existingUserSignedIn';
-
-export type HandleStepNavigationFunction = (
-	targetStep: OnboardingSteps,
-) => void;
 
 export type OnboardingProductKey = Extract<ActiveProductKey, 'SupporterPlus'>;
 
@@ -221,7 +200,9 @@ function OnboardingComponent({
 
 	// Handle iframe message from the identity iframe
 	useEffect(() => {
-		const receiveIframeMessage = (event: MessageEvent<MessageEventData>) => {
+		const receiveIframeMessage = (
+			event: MessageEvent<OnboardingMessageEventData>,
+		) => {
 			if (event.origin !== iframeOrigin) {
 				return;
 			}
@@ -266,16 +247,11 @@ function OnboardingComponent({
 
 	return (
 		<OnboardingLayout
+			flow="supporter"
 			scrollToTopRef={scrollToTopRef}
 			onboardingStep={currentStep ?? OnboardingSteps.Summary}
-			supportRegionId={supportRegionId}
-			csrf={csrf}
-			payment={payment}
-			productKey={productKey}
-			ratePlanKey={ratePlanKey}
-			promotion={promotion}
 			landingPageSettings={landingPageSettings}
-			identityUserType={identityUserType}
+			productKey={productKey}
 		>
 			{currentStep === OnboardingSteps.Summary && (
 				<>
@@ -318,8 +294,8 @@ function OnboardingComponent({
 					hasMobileAppDownloaded={hasMobileAppDownloaded}
 					hasFeastMobileAppDownloaded={hasFeastMobileAppDownloaded}
 					onboardingStep={currentStep}
-					supporterRegion={supportRegionId}
 					handleStepNavigation={handleStepNavigation}
+					supporterRegion={supportRegionId}
 				/>
 			)}
 			{currentStep === OnboardingSteps.Completed && (
