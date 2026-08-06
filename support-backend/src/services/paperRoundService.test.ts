@@ -8,7 +8,7 @@ afterEach(() => {
 	fetchMock.clearHistory();
 });
 
-describe('PaperRoundServic', () => {
+describe('PaperRoundService', () => {
 	describe('coverage', () => {
 		it('returns a parsed valid response', async () => {
 			fetchMock.post(`${BASE_URL}/coverage`, {
