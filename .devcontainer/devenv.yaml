@@ -41,9 +41,9 @@ postCreateCommand:
     workingDirectory: '.'
   - cmd: 'mise exec -- node --version'
     workingDirectory: '.'
-  - cmd: 'mise exec -- corepack enable'
+  - cmd: 'COREPACK_ENABLE_DOWNLOAD_PROMPT=0 mise exec -- corepack enable'
     workingDirectory: '.'
-  - cmd: 'mise exec -- pnpm install'
+  - cmd: 'yes | mise exec -- pnpm install'
     workingDirectory: '.'
 # postStartCommand:
 #   - cmd: "echo 'Container started successfully'"
