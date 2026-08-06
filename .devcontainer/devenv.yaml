@@ -39,7 +39,11 @@ forwardPorts:
 postCreateCommand:
   - cmd: 'mise install'
     workingDirectory: '.'
-  - cmd: 'pnpm install'
+  - cmd: 'mise exec -- node --version'
+    workingDirectory: '.'
+  - cmd: 'mise exec -- corepack enable'
+    workingDirectory: '.'
+  - cmd: 'mise exec -- pnpm install'
     workingDirectory: '.'
 # postStartCommand:
 #   - cmd: "echo 'Container started successfully'"
