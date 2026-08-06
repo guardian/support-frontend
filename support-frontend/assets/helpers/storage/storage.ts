@@ -6,25 +6,24 @@ function setLocal(key: string, value: unknown): void {
 }
 
 function getLocal(key: string): unknown {
-	let data;
-
 	if (!storage.local.isAvailable()) {
 		return null;
 	}
 
-	data = storage.local.get(key);
+	const data = storage.local.get(key);
 
-	if (!data) {
-		const item = window.localStorage.getItem(key);
-		try {
-			data = item && (JSON.parse(item) as unknown);
-		} catch (error) {
-			console.error(`Failed to parse ${key} from local storage`, error);
-			return null;
-		}
+	if (data !== null && data !== undefined) {
+		return data;
 	}
 
-	return data;
+	try {
+		const item = window.localStorage.getItem(key);
+		const data = item && (JSON.parse(item) as unknown);
+		return data ?? null;
+	} catch (error) {
+		console.error(`Failed to parse ${key} from local storage`, error);
+		return null;
+	}
 }
 
 function setSession(key: string, value: unknown): void {
@@ -32,25 +31,24 @@ function setSession(key: string, value: unknown): void {
 }
 
 function getSession(key: string): unknown {
-	let data;
-
 	if (!storage.session.isAvailable()) {
 		return null;
 	}
 
-	data = storage.session.get(key);
+	const data = storage.session.get(key);
 
-	if (!data) {
-		const item = window.sessionStorage.getItem(key);
-		try {
-			data = item && (JSON.parse(item) as unknown);
-		} catch (error) {
-			console.error(`Failed to parse ${key} from session storage`, error);
-			return null;
-		}
+	if (data !== null && data !== undefined) {
+		return data;
 	}
 
-	return data;
+	try {
+		const item = window.sessionStorage.getItem(key);
+		const data = item && (JSON.parse(item) as unknown);
+		return data ?? null;
+	} catch (error) {
+		console.error(`Failed to parse ${key} from session storage`, error);
+		return null;
+	}
 }
 
 // ----- Exports ----- //
