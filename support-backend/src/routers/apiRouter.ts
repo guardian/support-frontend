@@ -7,14 +7,16 @@ import { IdealPostcodeService } from '../services/idealPostcodeService';
 import { PaperRoundService } from '../services/paperRoundService';
 
 export const buildApiRouterWithServices = async () => {
-	const idealPostcodesApiKey = await getIdealPostcodeApiKey();
+	const [idealPostcodesApiKey, paperRoundConfig] = await Promise.all([
+		getIdealPostcodeApiKey(),
+		getPaperRoundApiConfig(),
+	]);
+
 	const idealPostcodeService = new IdealPostcodeService(idealPostcodesApiKey);
 
-	const { baseUrl: paperRoundBaseUrl, apiKey: paperRoundApiKey } =
-		await getPaperRoundApiConfig();
 	const paperRoundService = new PaperRoundService(
-		paperRoundBaseUrl,
-		paperRoundApiKey,
+		paperRoundConfig.baseUrl,
+		paperRoundConfig.apiKey,
 	);
 
 	return buildApiRouter(idealPostcodeService, paperRoundService);
