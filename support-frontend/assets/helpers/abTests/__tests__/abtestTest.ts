@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import { storage } from '@guardian/libs';
 import type { CountryCode } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
@@ -7,6 +6,7 @@ import {
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
 import { pageUrlRegexes } from 'helpers/abTests/abtestDefinitions';
+import { setSession } from 'helpers/storage/storage';
 import type { AcquisitionABTest } from 'helpers/tracking/acquisitions';
 import { _, init as abInit } from '../abtest';
 import type { Audience, Participations, Test, Variant } from '../models';
@@ -497,7 +497,7 @@ describe('init', () => {
 		});
 
 		it('assign to test if persistPage matches and test is in session storage', () => {
-			storage.session.set('abParticipations', { t1: 'control' });
+			setSession('abParticipations', { t1: 'control' });
 
 			const abTests = {
 				t1: buildTest({
@@ -516,7 +516,7 @@ describe('init', () => {
 		});
 
 		it('does not assign to test if persistPage does not match and test is in session storage', () => {
-			storage.session.set('abParticipations', { t1: 'control' });
+			setSession('abParticipations', { t1: 'control' });
 
 			const abTests = {
 				t1: buildTest({

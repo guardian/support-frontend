@@ -1,5 +1,5 @@
-import { storage } from '@guardian/libs';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { setSession } from 'helpers/storage/storage';
 import type { CheckoutNudgeTest } from '../../globalsAndSwitches/checkoutNudgeSettings';
 import { getCheckoutNudgeParticipations } from '../checkoutNudgeAbTests';
 import { CHECKOUT_NUDGE_PARTICIPATIONS_KEY } from '../sessionStorage';
@@ -105,7 +105,7 @@ describe('getCheckoutNudgeParticipations', () => {
 		mockIsSwitchOn.mockImplementation(() => true);
 	});
 	afterEach(() => {
-		storage.session.remove(CHECKOUT_NUDGE_PARTICIPATIONS_KEY);
+		window.sessionStorage.clear();
 	});
 
 	it('assigns a user to oneTimeToRecurring__NON_US on UK one-time checkout', () => {
@@ -150,7 +150,7 @@ describe('getCheckoutNudgeParticipations', () => {
 	});
 
 	it('assigns a user to a test if on landing page but test is in session storage', () => {
-		storage.session.set(CHECKOUT_NUDGE_PARTICIPATIONS_KEY, {
+		setSession(CHECKOUT_NUDGE_PARTICIPATIONS_KEY, {
 			[oneTimeToRecurring__NON_US.name]: 'control',
 		});
 
