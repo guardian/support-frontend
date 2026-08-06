@@ -5,15 +5,10 @@ import { getLocal, getSession, setLocal, setSession } from '../storage';
 // ----- Tests ----- //
 describe('storage', () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
-		window.localStorage.clear();
-		window.sessionStorage.clear();
+		jest.restoreAllMocks();
 	});
 
 	describe('setLocal', () => {
-		afterEach(() => {
-			jest.restoreAllMocks();
-		});
 		it('sets a value in local storage when available', () => {
 			const setSpy = jest.spyOn(storage.local, 'set');
 			setLocal('myKey', 'myValue');
@@ -29,20 +24,13 @@ describe('storage', () => {
 	});
 
 	describe('getLocal', () => {
-		afterEach(() => {
-			jest.restoreAllMocks();
-		});
-
 		it('returns value from @guardian/libs storage when present', () => {
 			setLocal('myKey', { foo: 'bar' });
 			expect(getLocal('myKey')).toEqual({ foo: 'bar' });
 		});
 
 		it('falls back to window.localStorage when @guardian/libs returns falsy', () => {
-			// Arrange
 			window.localStorage.setItem('myKey', JSON.stringify({ fallback: true }));
-
-			// Act & Assert
 			expect(getLocal('myKey')).toEqual({ fallback: true });
 		});
 
@@ -59,7 +47,6 @@ describe('storage', () => {
 			window.localStorage.setItem('myKey', 'not-json');
 			expect(getLocal('myKey')).toBeNull();
 			expect(consoleSpy).toHaveBeenCalled();
-			consoleSpy.mockRestore();
 		});
 
 		it('returns null when neither source has the key', () => {
@@ -68,10 +55,6 @@ describe('storage', () => {
 	});
 
 	describe('setSession', () => {
-		afterEach(() => {
-			jest.restoreAllMocks();
-		});
-
 		it('sets a value in session storage when available', () => {
 			const setSpy = jest.spyOn(storage.session, 'set');
 			jest.spyOn(storage.session, 'isAvailable').mockReturnValue(true);
@@ -88,10 +71,6 @@ describe('storage', () => {
 	});
 
 	describe('getSession', () => {
-		afterEach(() => {
-			jest.restoreAllMocks();
-		});
-
 		it('returns value from @guardian/libs storage when present', () => {
 			const getSpy = jest.spyOn(storage.session, 'get');
 			setSession('myKey', { session: 'data' });
@@ -125,7 +104,6 @@ describe('storage', () => {
 			window.sessionStorage.setItem('myKey', 'not-json');
 			expect(getSession('myKey')).toBeNull();
 			expect(consoleSpy).toHaveBeenCalled();
-			consoleSpy.mockRestore();
 		});
 
 		it('returns null when session storage is unavailable', () => {
