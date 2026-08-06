@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { getIdealPostcodeApiKey, getPaperRoundApiConfig } from '../aws/ssm';
 import { buildDeliveryAgentsHandler } from '../handlers/deliveryAgents';
 import { buildPostcodeLookupHandler } from '../handlers/postcodeLookup';
+import { noCache } from '../middlewares/noCache';
 import { IdealPostcodeService } from '../services/idealPostcodeService';
 import { PaperRoundService } from '../services/paperRoundService';
 
@@ -27,15 +28,13 @@ export const buildApiRouter = (
 
 	apiRouter.get(
 		'/postcode-lookup/:postcode',
-		(req, res, next) => {
-			res.set('Cache-Control', 'no-cache, private');
-			next();
-		},
+		noCache,
 		buildPostcodeLookupHandler(idealPostcodeService),
 	);
 
 	apiRouter.get(
 		'/delivery-agents/:postcode',
+		noCache,
 		buildDeliveryAgentsHandler(paperRoundService),
 	);
 
