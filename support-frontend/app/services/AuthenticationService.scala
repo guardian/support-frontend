@@ -1,6 +1,6 @@
 package services
 
-import cats.effect.unsafe.implicits.global
+import cats.effect.unsafe.IORuntime
 import com.gu.identity.auth.IdentityClient.Error
 import com.gu.identity.auth.{IdapiAuthConfig, IdentityClient}
 import com.gu.identity.model.User
@@ -18,6 +18,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AsyncAuthenticationService(identityPlayAuthService: IdapiPlayAuthService, ws: WSClient, config: Identity)(implicit
     ec: ExecutionContext,
+    runtime: IORuntime,
 ) extends SafeLogging {
 
   def tryAuthenticateUser(requestHeader: RequestHeader): Future[Option[User]] =
@@ -60,7 +61,10 @@ object AsyncAuthenticationService {
 
   case class IdentityIdAndEmail(id: String, primaryEmailAddress: String)
 
-  def apply(config: Identity, ws: WSClient)(implicit ec: ExecutionContext): AsyncAuthenticationService = {
+  def apply(config: Identity, ws: WSClient)(implicit
+      ec: ExecutionContext,
+      runtime: IORuntime,
+  ): AsyncAuthenticationService = {
     val apiUrl = Uri.unsafeFromString(config.apiUrl)
     val identityPlayAuthService =
       IdapiPlayAuthService.unsafeInit(IdapiAuthConfig(identityApiUri = apiUrl, accessToken = config.apiClientToken))

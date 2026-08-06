@@ -20,13 +20,27 @@ import services.paypal.{PayPalCompletePaymentsServiceProvider, PayPalNvpServiceP
 import services.pricing.{DefaultPromotionServiceS3, PriceSummaryServiceProvider}
 import services.stepfunctions.{StateWrapper, SupportWorkersClient}
 import services.mparticle.MParticleClient
-import cats.effect.unsafe.implicits.global
+import cats.effect.unsafe.{IORuntime, IORuntimeConfig}
 
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
 
   implicit val implicitWs: WSClient = wsClient
   implicit private val s3Client: AwsS3Client = AwsS3Client
+
+  // Provide an explicit cats-effect IORuntime that executes IO programs on Play's existing
+  // (Pekko-backed) thread pool, rather than importing `cats.effect.unsafe.implicits.global`
+  // which would spin up a second, separate set of compute/blocking thread pools.
+  implicit val ioRuntime: IORuntime = {
+    val (scheduler, _) = IORuntime.createDefaultScheduler()
+    IORuntime(
+      compute = executionContext,
+      blocking = executionContext,
+      scheduler = scheduler,
+      shutdown = () => (),
+      config = IORuntimeConfig(),
+    )
+  }
 
   lazy val payPalNvpServiceProvider = new PayPalNvpServiceProvider(appConfig.regularPayPalConfigProvider, wsClient)
 
