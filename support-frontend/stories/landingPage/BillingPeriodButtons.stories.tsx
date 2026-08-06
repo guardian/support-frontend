@@ -1,14 +1,14 @@
 import { css } from '@emotion/react';
 import { from, palette, space } from '@guardian/source/foundations';
 import { Column, Columns } from '@guardian/source/react-components';
-import React from 'react';
-import { Box } from 'components/checkoutBox/checkoutBox';
+import { BillingPeriod } from '@modules/product/billingPeriod';
+import type React from 'react';
 import type { BillingPeriodButtonsProps } from 'components/billingPeriodButtons/billingPeriodButtons';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
+import { Box } from 'components/checkoutBox/checkoutBox';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
-import { BillingPeriod } from '@modules/product/billingPeriod';
 
 export default {
 	title: 'LandingPage/Billing Period Buttons',

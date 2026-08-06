@@ -5,9 +5,9 @@ import {
 	space,
 	textSans15,
 } from '@guardian/source/foundations';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { getCurrencyByCode } from '@modules/internationalisation/currency';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
@@ -31,7 +31,7 @@ import {
 import {
 	isPaperPlusSub,
 	isSundayOnlyNewspaperSub,
-} from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
+} from 'pages/[supportRegionId]/helpers/isSundayOnlyNewspaperSub';
 import { isGuardianWeeklyDigitalProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { textLink } from '../../../helpers/utilities/textLink';
 
@@ -70,7 +70,7 @@ const containerRoundUS = css`
 export interface SummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
-	countryGroupId: CountryGroupId;
+	supportRegionId: SupportRegionId;
 	currency: CurrencyCode;
 	amount: number;
 	ratePlanDescription?: string;
@@ -78,7 +78,7 @@ export interface SummaryTsAndCsProps {
 export function SummaryTsAndCs({
 	productKey,
 	ratePlanKey,
-	countryGroupId,
+	supportRegionId,
 	currency,
 	amount,
 	ratePlanDescription,
@@ -120,7 +120,7 @@ export function SummaryTsAndCs({
 		amount,
 	);
 
-	const autoRenewUtilCancelTsAndCs = (countryGroupId: CountryGroupId) => {
+	const autoRenewUtilCancelTsAndCs = (supportRegionId: SupportRegionId) => {
 		const usChargePeriodCopy = `automatically charged the amount shown each ${periodNoun} `;
 		const usChargePeriod = productKey.startsWith('GuardianWeekly') ? (
 			usChargePeriodCopy
@@ -135,7 +135,7 @@ export function SummaryTsAndCs({
 			'DigitalSubscription',
 			'GuardianWeeklyDomestic',
 			'GuardianWeeklyRestOfWorld',
-		].includes(productKey) && countryGroupId === 'UnitedStates' ? (
+		].includes(productKey) && supportRegionId === 'us' ? (
 			<div css={[containerSummaryTsCs, containerUS, containerShapeUS]}>
 				<p>
 					By clicking the Pay button below, you agree to enroll in your selected
@@ -176,19 +176,19 @@ export function SummaryTsAndCs({
 			SupporterPlus: (
 				<>
 					{!isStudentOneYearRatePlan &&
-						autoRenewUtilCancelTsAndCs(countryGroupId)}
+						autoRenewUtilCancelTsAndCs(supportRegionId)}
 				</>
 			),
-			DigitalSubscription: autoRenewUtilCancelTsAndCs(countryGroupId),
-			GuardianAdLite: autoRenewUtilCancelTsAndCs(countryGroupId),
+			DigitalSubscription: autoRenewUtilCancelTsAndCs(supportRegionId),
+			GuardianAdLite: autoRenewUtilCancelTsAndCs(supportRegionId),
 		};
 
 	const weeklyDigitalSummaryTsAndCs: Partial<
 		Record<ActiveProductKey, JSX.Element>
 	> = {
 		...digitalSummaryTsAndCs,
-		GuardianWeeklyDomestic: autoRenewUtilCancelTsAndCs(countryGroupId),
-		GuardianWeeklyRestOfWorld: autoRenewUtilCancelTsAndCs(countryGroupId),
+		GuardianWeeklyDomestic: autoRenewUtilCancelTsAndCs(supportRegionId),
+		GuardianWeeklyRestOfWorld: autoRenewUtilCancelTsAndCs(supportRegionId),
 	};
 
 	const getSummaryTsAndCs = (

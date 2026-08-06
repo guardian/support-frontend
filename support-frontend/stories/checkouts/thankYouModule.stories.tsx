@@ -131,7 +131,7 @@ DownloadTheAppSignedIn.args = {
 	icon: getThankYouModuleIcon('appDownload'),
 	header: appDownloadHeader,
 	bodyCopy: <AppDownloadBodyCopy />,
-	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
+	ctas: <AppDownloadBadges supportRegionId={'uk'} />,
 };
 
 export const DownloadTheAppSignedOut = Template.bind({});
@@ -141,7 +141,7 @@ DownloadTheAppSignedOut.args = {
 	icon: getThankYouModuleIcon('appDownload'),
 	header: appDownloadHeader,
 	bodyCopy: <AppDownloadBodyCopy />,
-	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
+	ctas: <AppDownloadBadges supportRegionId={'uk'} />,
 };
 
 export const NewsFeastApps = Template.bind({});
@@ -156,7 +156,7 @@ NewsFeastApps.args = {
 			<AppNewsDownloadBodyCopy />
 		</>
 	),
-	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
+	ctas: <AppDownloadBadges supportRegionId={'uk'} />,
 	bodyCopySecond: (
 		<>
 			<h2>{appFeastDownloadHeader}</h2>
@@ -164,7 +164,7 @@ NewsFeastApps.args = {
 		</>
 	),
 	ctasSecond: (
-		<AppDownloadBadges countryGroupId={'GBPCountries'} isFeast={true} />
+		<AppDownloadBadges supportRegionId={'uk'} isFeast={true} />
 	),
 };
 

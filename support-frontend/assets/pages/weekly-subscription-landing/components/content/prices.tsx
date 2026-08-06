@@ -6,7 +6,7 @@ import {
 	space,
 	textEgyptian17,
 } from '@guardian/source/foundations';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import FlexContainer from 'components/containers/flexContainer';
 import type { Product } from 'components/product/productOption';
 import ProductOption from 'components/product/productOption';
@@ -69,10 +69,10 @@ const pricesSubHeadline = css`
 
 function Prices({
 	products,
-	countryGroupId,
+	supportRegionId,
 }: {
 	products: Product[];
-	countryGroupId: CountryGroupId;
+	supportRegionId: SupportRegionId;
 }): JSX.Element {
 	return (
 		<section css={pricesSection} id="subscribe">
@@ -88,7 +88,7 @@ function Prices({
 					/>
 				))}
 			</FlexContainer>
-			<WeeklyGiftPriceInfo countryGroupId={countryGroupId} />
+			<WeeklyGiftPriceInfo supportRegionId={supportRegionId} />
 		</section>
 	);
 }

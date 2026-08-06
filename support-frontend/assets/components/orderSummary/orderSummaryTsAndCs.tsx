@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { neutral, space } from '@guardian/source/foundations';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { productLegal } from 'helpers/legalCopy';
 import {
 	type ActiveProductKey,
@@ -13,11 +13,11 @@ import {
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
-import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
+import { getProductFirstDeliveryDate } from 'pages/[supportRegionId]/checkout/helpers/deliveryDays';
 import {
 	isPaperPlusSub,
 	isSundayOnlyNewspaperSub,
-} from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
+} from 'pages/[supportRegionId]/helpers/isSundayOnlyNewspaperSub';
 import {
 	isGuardianWeeklyGiftProduct,
 	isGuardianWeeklyProduct,
@@ -30,7 +30,7 @@ const containerSummaryTsCs = css`
 export interface OrderSummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
-	countryGroupId: CountryGroupId;
+	supportRegionId: SupportRegionId;
 	ratePlanDescription?: string;
 	promotion?: Promotion;
 	thresholdAmount?: number;
@@ -39,7 +39,7 @@ export interface OrderSummaryTsAndCsProps {
 export function OrderSummaryTsAndCs({
 	productKey,
 	ratePlanKey,
-	countryGroupId,
+	supportRegionId,
 	promotion,
 	ratePlanDescription,
 	thresholdAmount = 0,
@@ -53,7 +53,7 @@ export function OrderSummaryTsAndCs({
 	const isPaperSundayOrPlus =
 		isPaperPlus || isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const promoMessage = productLegal(
-		countryGroupId,
+		supportRegionId,
 		billingPeriod,
 		'/',
 		thresholdAmount,

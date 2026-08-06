@@ -1,4 +1,4 @@
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { renderHook, waitFor } from '@testing-library/react';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import type { ContributionType } from 'helpers/contributions';
@@ -30,9 +30,7 @@ describe('useRatePlanKey', () => {
 	});
 
 	it('returns the billing period key for non-Canada regions', () => {
-		const { result } = renderHook(() =>
-			useRatePlanKey('MONTHLY', SupportRegionId.UK),
-		);
+		const { result } = renderHook(() => useRatePlanKey('MONTHLY', 'uk'));
 
 		expect(result.current).toEqual({
 			ratePlanKey: 'Monthly',
@@ -43,9 +41,7 @@ describe('useRatePlanKey', () => {
 	it('appends TaxExclusive for Canada when the switch is enabled', () => {
 		setCanadaTaxExclusionFlag(true);
 
-		const { result } = renderHook(() =>
-			useRatePlanKey('ANNUAL', SupportRegionId.CA),
-		);
+		const { result } = renderHook(() => useRatePlanKey('ANNUAL', 'ca'));
 
 		expect(result.current).toEqual({
 			ratePlanKey: 'AnnualTaxExclusive',
@@ -54,9 +50,7 @@ describe('useRatePlanKey', () => {
 	});
 
 	it('does not append TaxExclusive for Canada when the switch is disabled', () => {
-		const { result } = renderHook(() =>
-			useRatePlanKey('ANNUAL', SupportRegionId.CA),
-		);
+		const { result } = renderHook(() => useRatePlanKey('ANNUAL', 'ca'));
 
 		expect(result.current).toEqual({
 			ratePlanKey: 'Annual',
@@ -73,7 +67,7 @@ describe('useRatePlanKey', () => {
 			{
 				initialProps: {
 					contributionType: 'MONTHLY',
-					supportRegionId: SupportRegionId.CA,
+					supportRegionId: 'ca',
 				},
 			},
 		);
@@ -85,7 +79,7 @@ describe('useRatePlanKey', () => {
 
 		rerender({
 			contributionType: 'ANNUAL',
-			supportRegionId: SupportRegionId.CA,
+			supportRegionId: 'ca',
 		});
 
 		await waitFor(() => {

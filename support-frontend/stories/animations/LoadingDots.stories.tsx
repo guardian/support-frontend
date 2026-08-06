@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import AnimatedDots from 'components/spinners/animatedDots';
 
 export default {

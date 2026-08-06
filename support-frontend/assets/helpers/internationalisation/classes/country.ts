@@ -1,26 +1,15 @@
 import type { CountryCode } from '@modules/internationalisation/country';
-import { countries, countryCodes } from '@modules/internationalisation/country';
-import { countryCodeFromString } from '@modules/internationalisation/country';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
-	AUDCountries,
-	Canada,
-	countryGroups,
-	EURCountries,
-	GBPCountries,
-	International,
-	NZDCountries,
-	UnitedStates,
-} from '@modules/internationalisation/countryGroup';
+	countries,
+	countryCodeFromString,
+	countryCodes,
+} from '@modules/internationalisation/country';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
+import { supportRegions } from '@modules/internationalisation/supportRegion';
 import * as cookie from 'helpers/storage/cookie';
 import { getQueryParameter } from 'helpers/urls/url';
 
-type TargetCountryGroups =
-	| typeof International
-	| typeof EURCountries
-	| typeof NZDCountries
-	| typeof GBPCountries
-	| typeof AUDCountries;
+type TargetSupportRegions = 'int' | 'eu' | 'nz' | 'uk' | 'au';
 
 export class Country {
 	static codeFromString(search: string): CountryCode | null {
@@ -44,14 +33,14 @@ export class Country {
 		);
 	}
 
-	static fromCountryGroup(
-		countryGroupId: CountryGroupId | null | undefined = null,
+	static fromSupportRegionId(
+		supportRegionId: SupportRegionId | null | undefined = null,
 	): CountryCode | null | undefined {
-		switch (countryGroupId) {
-			case UnitedStates:
+		switch (supportRegionId) {
+			case 'us':
 				return 'US';
 
-			case Canada:
+			case 'ca':
 				return 'CA';
 
 			default:
@@ -109,30 +98,30 @@ export class Country {
 		cookie.set('GU_country', country, 7);
 	}
 
-	static handleCountryForCountryGroup(
-		targetCountryGroup: TargetCountryGroups,
-		countryGroupId: CountryGroupId | null | undefined = null,
+	static handleCountryForSupportRegion(
+		targetSupportRegion: TargetSupportRegions,
+		supportRegionId: SupportRegionId | null | undefined = null,
 	): CountryCode | null {
-		const paths: Record<TargetCountryGroups, string[]> = {
-			International: ['/int', '/int/'],
-			EURCountries: ['/eu', '/eu/'],
-			NZDCountries: ['/nz', '/nz/'],
-			GBPCountries: ['/uk', '/uk/'],
-			AUDCountries: ['/au', '/au/'],
+		const paths: Record<TargetSupportRegions, string[]> = {
+			int: ['/int', '/int/'],
+			eu: ['/eu', '/eu/'],
+			nz: ['/nz', '/nz/'],
+			uk: ['/uk', '/uk/'],
+			au: ['/au', '/au/'],
 		};
-		const defaultCountry: Record<TargetCountryGroups, CountryCode> = {
-			International: 'IN',
-			EURCountries: 'DE',
-			NZDCountries: 'NZ',
-			GBPCountries: 'GB',
-			AUDCountries: 'AU',
+		const defaultCountry: Record<TargetSupportRegions, CountryCode> = {
+			int: 'IN',
+			eu: 'DE',
+			nz: 'NZ',
+			uk: 'GB',
+			au: 'AU',
 		};
 		const path = window.location.pathname;
 
 		if (
-			path !== paths[targetCountryGroup][0] &&
-			!path.startsWith(paths[targetCountryGroup][1] ?? '') &&
-			countryGroupId !== targetCountryGroup
+			path !== paths[targetSupportRegion][0] &&
+			!path.startsWith(paths[targetSupportRegion][1] ?? '') &&
+			supportRegionId !== targetSupportRegion
 		) {
 			return null;
 		}
@@ -142,30 +131,30 @@ export class Country {
 
 		if (
 			candidateCountry &&
-			countryGroups[targetCountryGroup].countries.includes(candidateCountry)
+			supportRegions[targetSupportRegion].countries.includes(candidateCountry)
 		) {
 			return candidateCountry;
 		}
 
-		return defaultCountry[targetCountryGroup];
+		return defaultCountry[targetSupportRegion];
 	}
 
 	static detect(
-		countryGroupId: CountryGroupId | null | undefined = null,
+		supportRegionId: SupportRegionId | null | undefined = null,
 	): CountryCode {
-		const targetCountryGroups: TargetCountryGroups[] = [
-			International,
-			EURCountries,
-			NZDCountries,
-			GBPCountries,
-			AUDCountries,
+		const targetSupportRegions: TargetSupportRegions[] = [
+			'int',
+			'eu',
+			'nz',
+			'uk',
+			'au',
 		];
 		let country: CountryCode | null = null;
 
-		for (const targetCountryGroupId of targetCountryGroups) {
-			const candidateCountry = this.handleCountryForCountryGroup(
-				targetCountryGroupId,
-				countryGroupId,
+		for (const targetSupportRegionId of targetSupportRegions) {
+			const candidateCountry = this.handleCountryForSupportRegion(
+				targetSupportRegionId,
+				supportRegionId,
 			);
 
 			if (candidateCountry !== null) {
@@ -176,7 +165,7 @@ export class Country {
 
 		if (country === null) {
 			country =
-				this.fromCountryGroup(countryGroupId) ??
+				this.fromSupportRegionId(supportRegionId) ??
 				this.fromPath() ??
 				this.fromQueryParameter() ??
 				this.fromCookie() ??

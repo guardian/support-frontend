@@ -1,7 +1,4 @@
-import {
-	type CountryGroupId,
-	countryGroups,
-} from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
@@ -13,18 +10,18 @@ import {
 	displayRowEvenlyWeeklyGift,
 } from './weeklyAlternativeSubsStyles';
 
-function getStudentBeanLink(countryGroupId: CountryGroupId) {
-	if (countryGroupId === 'AUDCountries') {
+function getStudentBeanLink(supportRegionId: SupportRegionId) {
+	if (supportRegionId === 'au') {
 		return routes.guardianWeeklyStudentAU;
 	}
 	return routes.guardianWeeklyStudentUK;
 }
 
 export function WeeklyAlternativeSubs({
-	countryGroupId,
+	supportRegionId,
 	orderIsAGift,
 }: {
-	countryGroupId: CountryGroupId;
+	supportRegionId: SupportRegionId;
 	orderIsAGift: boolean;
 }): JSX.Element {
 	const giftNonGiftLink = orderIsAGift
@@ -33,7 +30,7 @@ export function WeeklyAlternativeSubs({
 	const displayRowEvenly = orderIsAGift
 		? displayRowEvenlyWeeklyGift
 		: displayRowEvenlyWeeklyDigital;
-	const regionId = countryGroups[countryGroupId].supportRegionId;
+
 	return (
 		<FullWidthContainer
 			cssOverrides={orderIsAGift ? containerWeeklyDigital : undefined}
@@ -44,14 +41,13 @@ export function WeeklyAlternativeSubs({
 				<div css={displayRowEvenly}>
 					<GiftNonGiftCta
 						product="Guardian Weekly"
-						href={`/${regionId}${giftNonGiftLink}`}
+						href={`/${supportRegionId}${giftNonGiftLink}`}
 						isGift={orderIsAGift}
 					/>
-					{(countryGroupId === 'GBPCountries' ||
-						countryGroupId === 'AUDCountries') && (
+					{(supportRegionId === 'uk' || supportRegionId === 'au') && (
 						<GiftNonGiftCta
 							product="Student"
-							href={getStudentBeanLink(countryGroupId)}
+							href={getStudentBeanLink(supportRegionId)}
 							isGift={orderIsAGift}
 							isStudent={true}
 						/>

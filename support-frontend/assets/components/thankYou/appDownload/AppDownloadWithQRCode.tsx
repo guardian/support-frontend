@@ -7,7 +7,7 @@ import {
 	textEgyptian17,
 	textSansBold12,
 } from '@guardian/source/foundations';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { AppStoreBadges } from './AppDownloadBadges';
 import { type AppDownload } from './appDownloadItems';
@@ -70,10 +70,10 @@ const verticalSeparator = css`
 
 export default function AppDownloadWithQRCode({
 	apps,
-	countryGroupId,
+	supportRegionId,
 }: {
 	apps: AppDownload[];
-	countryGroupId: CountryGroupId;
+	supportRegionId: SupportRegionId;
 }): JSX.Element {
 	const { windowWidthIsGreaterThan } = useWindowWidth();
 	const instructions = windowWidthIsGreaterThan('tablet')
@@ -94,7 +94,7 @@ export default function AppDownloadWithQRCode({
 						<div css={downloadLinks}>
 							<AppStoreBadges
 								playStoreUrl={playStoreUrl}
-								appStoreUrl={getAppStoreUrl(countryGroupId)}
+								appStoreUrl={getAppStoreUrl(supportRegionId)}
 								responsiveLayout={true}
 							/>
 

@@ -1,5 +1,5 @@
 import type { CountryCode } from '@modules/internationalisation/country';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { Key } from './sessionStorage';
 
 export const breakpoints = {
@@ -26,7 +26,11 @@ type Audience = {
 	breakpoint?: BreakpointRange;
 };
 
-type AudienceType = CountryCode | CountryGroupId | 'ALL' | 'CONTRIBUTIONS_ONLY';
+type AudienceType =
+	| CountryCode
+	| SupportRegionId
+	| 'ALL'
+	| 'CONTRIBUTIONS_ONLY';
 
 type Audiences = Partial<Record<AudienceType, Audience>>;
 
@@ -80,7 +84,7 @@ interface PageTest<Variant> {
 	status: 'Live' | 'Draft';
 	priority?: number;
 	regionTargeting?: {
-		targetedCountryGroups?: CountryGroupId[];
+		targetedCountryGroups?: SupportRegionId[];
 	};
 	mParticleAudience?: number;
 	variants: Variant[];

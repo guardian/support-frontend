@@ -1,4 +1,4 @@
-import type { CountryGroupId } from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { ActiveProductKey, ActiveRatePlanKey } from '../productCatalog';
 
 interface Product {
@@ -27,7 +27,7 @@ export interface CheckoutNudgeVariant {
 }
 
 interface RegionTargeting {
-	targetedCountryGroups: CountryGroupId[];
+	targetedCountryGroups: SupportRegionId[];
 }
 
 interface Scheduler {

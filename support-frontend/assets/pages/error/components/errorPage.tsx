@@ -13,9 +13,9 @@ import Header from 'components/headers/header/header';
 import { PageScaffold } from 'components/page/pageScaffold';
 import PageSection from 'components/pageSection/pageSection';
 import Text, { LargeParagraph } from 'components/text/text';
-import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { contributionsEmail } from 'helpers/legal';
 import { gu_v_spacing } from 'stylesheets/emotion/layout';
+import { DetectSupportRegion } from '../../../helpers/internationalisation/classes/detectSupportRegion';
 import SquaresIntroduction from './introduction/squaresIntroduction';
 
 // ----- Types ----- //
@@ -27,7 +27,7 @@ export type ErrorPageProps = {
 	supportLink?: boolean;
 };
 
-const countryGroupId = CountryGroup.detect();
+const supportRegionId = DetectSupportRegion.detect();
 
 const mainContentStyles = css`
 	background-color: ${palette.neutral[93]};
@@ -56,7 +56,7 @@ const buttonRow = css`
 export default function ErrorPage(props: ErrorPageProps): JSX.Element {
 	return (
 		<PageScaffold
-			header={<Header countryGroupId={countryGroupId} />}
+			header={<Header supportRegionId={supportRegionId} />}
 			footer={<Footer />}
 		>
 			<div css={mainContentStyles}>
@@ -109,7 +109,7 @@ function ReportLink(props: { show: boolean }) {
 		return (
 			<span className="error-copy__text">
 				please{' '}
-				<a className="error-copy__link" href={contributionsEmail.GBPCountries}>
+				<a className="error-copy__link" href={contributionsEmail.uk}>
 					report it
 				</a>
 				.

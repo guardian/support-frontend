@@ -5,7 +5,6 @@ import {
 	getGlobal,
 	getProductPrices,
 } from 'helpers/globalsAndSwitches/globals';
-import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import {
 	getAbParticipations,
 	setUpTrackingAndConsents,
@@ -19,6 +18,7 @@ import {
 import { renderPage } from 'helpers/rendering/render';
 import LegalTerms from 'pages/promotion-terms/legalTerms';
 import PromoDetails from 'pages/promotion-terms/promoDetails';
+import { DetectSupportRegion } from '../../helpers/internationalisation/classes/detectSupportRegion';
 import type { PromotionTermsPropTypes } from './promotionTermsPropTypes';
 
 setUpTrackingAndConsents(getAbParticipations());
@@ -38,11 +38,11 @@ function getPromotionTermsProps(): PromotionTermsPropTypes {
 	const terms = getGlobal<PromotionTerms>('promotionTerms');
 	const expires = terms?.expires ? new Date(terms.expires) : null;
 	const starts = terms ? new Date(terms.starts) : new Date();
-	const countryGroupId = CountryGroup.detect();
+	const supportRegionId = DetectSupportRegion.detect();
 	return {
 		productPrices,
 		promotionTerms: { ...terms, starts, expires } as PromotionTerms,
-		countryGroupId,
+		supportRegionId,
 	};
 }
 
@@ -50,7 +50,7 @@ function getPromotionTermsProps(): PromotionTermsPropTypes {
 export function PromotionTermsPage(props: PromotionTermsPropTypes) {
 	return (
 		<PageScaffold
-			header={<Header countryGroupId={CountryGroup.detect()} />}
+			header={<Header supportRegionId={DetectSupportRegion.detect()} />}
 			footer={
 				<Footer
 					termsConditionsLink={getTermsConditionsLink(props.promotionTerms)}

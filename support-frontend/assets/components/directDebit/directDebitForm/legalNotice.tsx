@@ -1,10 +1,10 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
 import { contributionsEmail, MediaGroup } from 'helpers/legal';
 import * as styles from './legalNoticeStyles';
 
 function LegalNotice(props: {
-	countryGroupId: CountryGroupId;
+	supportRegionId: SupportRegionId;
 	isSundayOnly?: boolean;
 }) {
 	if (props.isSundayOnly) {
@@ -72,8 +72,8 @@ function LegalNotice(props: {
 				Tel: 0330 333 6767 (within UK). Lines are open 8am-8pm on weekdays,
 				9am-6pm at weekends (GMT/BST)
 				<br />
-				<a href={contributionsEmail[props.countryGroupId]}>
-					{contributionsEmail[props.countryGroupId].replace('mailto:', '')}
+				<a href={contributionsEmail[props.supportRegionId]}>
+					{contributionsEmail[props.supportRegionId].replace('mailto:', '')}
 				</a>
 			</p>
 			<br />

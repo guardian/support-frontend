@@ -1,33 +1,33 @@
 // ----- Imports ----- //
 
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
+import SupportRegionSwitcher from '../../supportRegionSwitcher/supportRegionSwitcher';
 import Header from './header';
 
 // ------ Component ----- //
 
 export default function ({
 	path,
-	countryGroupId,
-	listOfCountryGroups,
+	supportRegionId,
+	listOfSupportRegions,
 	trackProduct,
 }: {
 	path: string;
-	countryGroupId: CountryGroupId;
-	listOfCountryGroups: CountryGroupId[];
+	supportRegionId: SupportRegionId;
+	listOfSupportRegions: SupportRegionId[];
 	trackProduct?: Option<SubscriptionProduct>;
 	hideDigiSub?: boolean;
 }) {
 	return function (): JSX.Element {
 		return (
 			<Header
-				countryGroupId={countryGroupId}
+				supportRegionId={supportRegionId}
 				utility={
-					<CountryGroupSwitcher
-						countryGroupIds={listOfCountryGroups}
-						selectedCountryGroup={countryGroupId}
+					<SupportRegionSwitcher
+						supportRegionIds={listOfSupportRegions}
+						selectedSupportRegion={supportRegionId}
 						subPath={path}
 						trackProduct={trackProduct}
 					/>

@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { neutral, space, textSans12 } from '@guardian/source/foundations';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import {
 	digitalPlusTermsLink,
@@ -25,9 +25,9 @@ import {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getHelpCentreUrl } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
-import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
-import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
-import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import { getProductFirstDeliveryDate } from 'pages/[supportRegionId]/checkout/helpers/deliveryDays';
+import { isSundayOnlyNewspaperSub } from 'pages/[supportRegionId]/helpers/isSundayOnlyNewspaperSub';
+import type { StudentDiscount } from 'pages/[supportRegionId]/student/helpers/discountDetails';
 import { isGuardianWeeklyDigitalProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { textLink } from '../../../helpers/utilities/textLink';
 import { FinePrint } from './finePrint';
@@ -137,7 +137,7 @@ function GuardianWeeklyPaymentTerms({ deliveryDate }: { deliveryDate?: Date }) {
 export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
-	countryGroupId: CountryGroupId;
+	supportRegionId: SupportRegionId;
 	studentDiscount?: StudentDiscount;
 	promotion?: Promotion;
 	thresholdAmount?: number;
@@ -145,7 +145,7 @@ export interface PaymentTsAndCsProps {
 export function PaymentTsAndCs({
 	productKey,
 	ratePlanKey,
-	countryGroupId,
+	supportRegionId,
 	studentDiscount,
 	promotion,
 	thresholdAmount = 0,
@@ -183,7 +183,7 @@ export function PaymentTsAndCs({
 		studentDiscount
 			? getStudentPrice(isStudentOneYearRatePlan, studentDiscount)
 			: productLegal(
-					countryGroupId,
+					supportRegionId,
 					billingPeriod,
 					divider,
 					thresholdAmount,
@@ -200,12 +200,12 @@ export function PaymentTsAndCs({
 	);
 
 	const prefixBasis = (
-		countryGroupId: CountryGroupId,
+		supportRegionId: SupportRegionId,
 		promotion?: Promotion,
 	) => {
 		const startPhrase = `If you pay at least ${legalPrice(' per ')}`;
 		const midPhrase =
-			countryGroupId === 'UnitedStates' && !!promotion ? ' thereafter,' : ',';
+			supportRegionId === 'us' && !!promotion ? ' thereafter,' : ',';
 		return `${startPhrase}${midPhrase} you will receive the ${productLabel} benefits on a subscription basis.`;
 	};
 	const supportBasis = `For support of ${legalPrice(
@@ -213,13 +213,13 @@ export function PaymentTsAndCs({
 	)}, you will receive the ${productLabel} benefits`;
 
 	const supporterPlusTsAndCs = (
-		countryGroupId: CountryGroupId,
+		supportRegionId: SupportRegionId,
 		promotion?: Promotion,
 	): JSX.Element => {
-		return countryGroupId === 'UnitedStates' ? (
+		return supportRegionId === 'us' ? (
 			promotion ? (
 				<div>
-					{prefixBasis(countryGroupId, promotion)} If you give additional
+					{prefixBasis(supportRegionId, promotion)} If you give additional
 					support beyond {productLabel}, that amount will be charged separately
 					as voluntary contributions to the Guardian. If you cancel within 14
 					days of subscribing, you’ll receive a full refund (including any
@@ -236,7 +236,7 @@ export function PaymentTsAndCs({
 			)
 		) : (
 			<div>
-				{prefixBasis(countryGroupId)} If you increase your payments per{' '}
+				{prefixBasis(supportRegionId)} If you increase your payments per{' '}
 				{billingPeriodSingular}, these additional amounts will be separate{' '}
 				{billingPeriodPlural} voluntary financial contributions to the Guardian.
 				The {productLabel} subscription and any contributions will auto-renew
@@ -265,13 +265,13 @@ export function PaymentTsAndCs({
 	);
 
 	const digitalSubscriptionTsAndCs = (
-		countryGroupId: CountryGroupId,
+		supportRegionId: SupportRegionId,
 		promotion?: Promotion,
 	): JSX.Element => {
-		return countryGroupId === 'UnitedStates' ? (
+		return supportRegionId === 'us' ? (
 			promotion ? (
 				<div>
-					{prefixBasis(countryGroupId, promotion)} Your first payment will be
+					{prefixBasis(supportRegionId, promotion)} Your first payment will be
 					taken on day 15 after signing up but you can access your benefits
 					straight away. Unless you cancel, each {billingPeriodPlural} payment
 					will be taken on this date using your chosen payment method. You can
@@ -315,7 +315,7 @@ export function PaymentTsAndCs({
 	};
 
 	const paymentTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
-		DigitalSubscription: digitalSubscriptionTsAndCs(countryGroupId, promotion),
+		DigitalSubscription: digitalSubscriptionTsAndCs(supportRegionId, promotion),
 		GuardianAdLite: (
 			<div>
 				Your Guardian Ad-Lite subscription will auto-renew each{' '}
@@ -336,7 +336,7 @@ export function PaymentTsAndCs({
 			<div>
 				{isStudentOneYearRatePlan
 					? studentSupporterPlusTsAndCs
-					: supporterPlusTsAndCs(countryGroupId, promotion)}
+					: supporterPlusTsAndCs(supportRegionId, promotion)}
 			</div>
 		),
 		NationalDelivery: paperTsAndCs('HomeDelivery', deliveryDate),
@@ -360,7 +360,7 @@ export function PaymentTsAndCs({
 				<FooterTsAndCs
 					productKey={productKey}
 					ratePlanKey={ratePlanKey}
-					countryGroupId={countryGroupId}
+					supportRegionId={supportRegionId}
 				/>
 			</FinePrint>
 		</div>

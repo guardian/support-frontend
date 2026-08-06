@@ -71,7 +71,7 @@ export const tests: Tests = {
 			},
 		],
 		audiences: {
-			GBPCountries: {
+			uk: {
 				offset: 0,
 				size: 0.1,
 			},

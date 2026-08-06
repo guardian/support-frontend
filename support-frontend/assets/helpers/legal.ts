@@ -1,5 +1,5 @@
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 // ----- Imports ----- //
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 // ----- Terms & Conditions ----- //
 const privacyLink = 'https://www.theguardian.com/help/privacy-policy';
 const guardianHelpCentreLink = 'https://www.theguardian.com/help';
@@ -7,27 +7,25 @@ const guardianContactUsLink = 'https://www.theguardian.com/help/contact-us';
 const defaultContributionEmail = 'mailto:contribution.support@theguardian.com';
 const copyrightNotice = `\u00A9 ${new Date().getFullYear()} Guardian News and Media Limited or its
   affiliated companies. All rights reserved.`;
-const contributionsEmail: Record<CountryGroupId, string> = {
-	AUDCountries: 'mailto:apac.help@theguardian.com',
-	GBPCountries: defaultContributionEmail,
-	UnitedStates: defaultContributionEmail,
-	EURCountries: defaultContributionEmail,
-	International: defaultContributionEmail,
-	NZDCountries: defaultContributionEmail,
-	Canada: defaultContributionEmail,
+const contributionsEmail: Record<SupportRegionId, string> = {
+	au: 'mailto:apac.help@theguardian.com',
+	uk: defaultContributionEmail,
+	us: defaultContributionEmail,
+	eu: defaultContributionEmail,
+	int: defaultContributionEmail,
+	nz: defaultContributionEmail,
+	ca: defaultContributionEmail,
 };
 const defaultContributionTermsLink =
 	'https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions';
-const contributionsTermsLinks: Record<CountryGroupId, string> = {
-	GBPCountries: defaultContributionTermsLink,
-	UnitedStates:
-		'https://www.theguardian.com/info/2016/apr/07/us-contribution-terms-and-conditions',
-	AUDCountries:
-		'https://www.theguardian.com/info/2016/apr/08/australia-contribution-terms-and-conditions',
-	EURCountries: defaultContributionTermsLink,
-	International: defaultContributionTermsLink,
-	NZDCountries: defaultContributionTermsLink,
-	Canada: defaultContributionTermsLink,
+const contributionsTermsLinks: Record<SupportRegionId, string> = {
+	uk: defaultContributionTermsLink,
+	us: 'https://www.theguardian.com/info/2016/apr/07/us-contribution-terms-and-conditions',
+	au: 'https://www.theguardian.com/info/2016/apr/08/australia-contribution-terms-and-conditions',
+	eu: defaultContributionTermsLink,
+	int: defaultContributionTermsLink,
+	nz: defaultContributionTermsLink,
+	ca: defaultContributionTermsLink,
 };
 const guardianLiveTermsLink =
 	'https://www.theguardian.com/info/2014/sep/09/guardian-live-events-terms-and-conditions';

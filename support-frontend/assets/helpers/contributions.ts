@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 import { contributionsOnlyCountries } from '@modules/internationalisation/contributionsOnlyCountries';
 import type { CountryCode } from '@modules/internationalisation/country';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 
 // ----- Types ----- //
 type RegularContributionTypeMap<T> = {
@@ -39,7 +39,7 @@ type ContributionTypeSetting = {
 };
 
 export type ContributionTypes = Record<
-	CountryGroupId,
+	SupportRegionId,
 	ContributionTypeSetting[]
 >;
 
@@ -66,9 +66,9 @@ const defaultConfig: Config = {
 	},
 };
 
-const config: Record<CountryGroupId, Config> = {
-	GBPCountries: defaultConfig,
-	AUDCountries: {
+const config: Record<SupportRegionId, Config> = {
+	uk: defaultConfig,
+	au: {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
 			min: 2,
@@ -79,7 +79,7 @@ const config: Record<CountryGroupId, Config> = {
 			max: 25000,
 		},
 	},
-	EURCountries: {
+	eu: {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
 			min: 2,
@@ -87,7 +87,7 @@ const config: Record<CountryGroupId, Config> = {
 		},
 		ONE_OFF: defaultConfig.ONE_OFF,
 	},
-	UnitedStates: {
+	us: {
 		ANNUAL: {
 			...defaultConfig.ANNUAL,
 			max: 10000,
@@ -101,7 +101,7 @@ const config: Record<CountryGroupId, Config> = {
 			max: 10000,
 		},
 	},
-	International: {
+	int: {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
 			min: 2,
@@ -109,7 +109,7 @@ const config: Record<CountryGroupId, Config> = {
 		},
 		ONE_OFF: defaultConfig.ONE_OFF,
 	},
-	NZDCountries: {
+	nz: {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
 			min: 2,
@@ -117,7 +117,7 @@ const config: Record<CountryGroupId, Config> = {
 		},
 		ONE_OFF: defaultConfig.ONE_OFF,
 	},
-	Canada: {
+	ca: {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
 			min: 2,

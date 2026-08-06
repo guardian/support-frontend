@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { between } from '@guardian/source/foundations';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import AppImageGuardianEditions from 'components/svgs/appGuardianEditions';
 import AppImageGuardianNews from 'components/svgs/appGuardianNews';
 import AppImageFeast from 'components/svgs/appImageFeast';
@@ -58,7 +58,7 @@ export type AppDownload = {
 	description: string;
 	appIcon: JSX.Element | null;
 	playStoreUrl: string;
-	getAppStoreUrl: (arg: CountryGroupId) => string;
+	getAppStoreUrl: (arg: SupportRegionId) => string;
 	qrCodeImage?: JSX.Element;
 };
 
@@ -75,8 +75,8 @@ const downloadApps: Record<AppDownloadKey, AppDownload> = {
 			'Unlock limitless Guardian journalism in our quality news app today.',
 		appIcon: <AppImageGuardianNews />,
 		playStoreUrl: androidAppUrl,
-		getAppStoreUrl: (countryGroupId: CountryGroupId) =>
-			getIosAppUrl(countryGroupId),
+		getAppStoreUrl: (supportRegionId: SupportRegionId) =>
+			getIosAppUrl(supportRegionId),
 	},
 	guardianFeast: {
 		title: 'The Guardian Feast app',
@@ -93,8 +93,8 @@ const downloadApps: Record<AppDownloadKey, AppDownload> = {
 		appIcon: <AppImageGuardianEditions />,
 		playStoreUrl:
 			'https://play.google.com/store/apps/details?id=com.guardian.editions&hl=en_GB&gl=US',
-		getAppStoreUrl: (countryGroupId: CountryGroupId) =>
-			getDailyEditionUrl(countryGroupId),
+		getAppStoreUrl: (supportRegionId: SupportRegionId) =>
+			getDailyEditionUrl(supportRegionId),
 	},
 	observer: {
 		title: null,

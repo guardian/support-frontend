@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
+import type {
+	AccordionFAQProps} from 'pages/[supportRegionId]/components/accordionFAQ';
 import {
-	AccordionFAQ,
-	AccordionFAQProps,
-} from 'pages/[countryGroupId]/components/accordionFAQ';
-import { adLiteFAQs } from 'pages/[countryGroupId]/guardianAdLiteLanding/helpers/adLiteFAQs';
-import { getStudentFAQs } from 'pages/[countryGroupId]/student/helpers/studentFAQs';
-import { SupportRegionId } from '@guardian/support-service-lambdas/modules/internationalisation/src/countryGroup';
+	AccordionFAQ
+} from 'pages/[supportRegionId]/components/accordionFAQ';
+import { adLiteFAQs } from 'pages/[supportRegionId]/guardianAdLiteLanding/helpers/adLiteFAQs';
+import { getStudentFAQs } from 'pages/[supportRegionId]/student/helpers/studentFAQs';
 
 export default {
 	title: 'LandingPage/Accordian FAQ',
@@ -33,9 +33,9 @@ GuardianAdLite.args = {
 };
 export const StudentAud = Template.bind({});
 StudentAud.args = {
-	faqItems: getStudentFAQs(SupportRegionId.AU),
+	faqItems: getStudentFAQs('au'),
 };
 export const StudentGbp = Template.bind({});
 StudentGbp.args = {
-	faqItems: getStudentFAQs(SupportRegionId.UK),
+	faqItems: getStudentFAQs('uk'),
 };

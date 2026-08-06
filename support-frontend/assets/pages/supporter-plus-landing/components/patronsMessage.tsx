@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { headlineBold17, space } from '@guardian/source/foundations';
 import { Link } from '@guardian/source/react-components';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { getPatronsLink } from 'helpers/urls/externalLinks';
 import { CheckoutDivider } from './checkoutDivider';
 import type { FinePrintTheme } from './finePrint';
@@ -21,22 +21,22 @@ const linkStyles = css`
 const intCMPParameter = 'gdnwb_copts_support_contributions_referral';
 
 export function PatronsMessage({
-	countryGroupId,
+	supportRegionId,
 	mobileTheme = 'dark',
 }: {
-	countryGroupId: CountryGroupId;
+	supportRegionId: SupportRegionId;
 	mobileTheme?: FinePrintTheme;
 }): JSX.Element {
 	const patronageAmountsWithGlyph = {
-		GBPCountries: '£100',
-		AUDCountries: '$185',
-		EURCountries: '€117',
-		International: '$135',
-		NZDCountries: '$200',
-		Canada: '$167',
+		uk: '£100',
+		au: '$185',
+		eu: '€117',
+		int: '$135',
+		nz: '$200',
+		ca: '$167',
 	};
 
-	const isUSA = countryGroupId === 'UnitedStates';
+	const isUSA = supportRegionId === 'us';
 
 	return (
 		<>
@@ -47,12 +47,12 @@ export function PatronsMessage({
 						<h2 css={headingStyles}>{'Guardian Patrons programme'}</h2>
 						<p>
 							If you would like to support us at a higher level, from{' '}
-							{patronageAmountsWithGlyph[countryGroupId]} a month, you can join
+							{patronageAmountsWithGlyph[supportRegionId]} a month, you can join
 							us as a Guardian Patron.{' '}
 							<Link
 								cssOverrides={linkStyles}
 								priority="secondary"
-								href={getPatronsLink(intCMPParameter, countryGroupId)}
+								href={getPatronsLink(intCMPParameter, supportRegionId)}
 							>
 								Find out more today.
 							</Link>

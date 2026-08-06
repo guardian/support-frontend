@@ -1,56 +1,47 @@
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import NavComponent from 'components/nav/nav';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import {
-	AUDCountries,
-	Canada,
-	EURCountries,
-	GBPCountries,
-	International,
-	NZDCountries,
-	UnitedStates,
-} from '@modules/internationalisation/countryGroup';
 
 export default {
 	title: 'Checkout Layout/Nav',
 	component: NavComponent,
 	argTypes: {
-		countryGroup: {
+		supportRegionId: {
 			type: 'select',
 			options: [
-				AUDCountries,
-				Canada,
-				EURCountries,
-				GBPCountries,
-				International,
-				NZDCountries,
-				UnitedStates,
+				'au',
+				'ca',
+				'eu',
+				'uk',
+				'int',
+				'nz',
+				'us',
 			],
 		},
 	},
 	decorators: [(Story: React.FC): JSX.Element => <Story />],
 };
 
-export function Nav(args: { countryGroup: CountryGroupId }): JSX.Element {
+export function Nav(args: { supportRegionId: SupportRegionId }): JSX.Element {
 	return (
 		<NavComponent
-			countryGroupIds={[
-				GBPCountries,
-				UnitedStates,
-				AUDCountries,
-				EURCountries,
-				NZDCountries,
-				Canada,
-				International,
+			supportRegionIds={[
+				'uk',
+				'us',
+				'au',
+				'eu',
+				'nz',
+				'ca',
+				'int',
 			]}
-			selectedCountryGroup={args.countryGroup}
+			selectedSupportRegion={args.supportRegionId}
 			subPath={window.location.search}
 		/>
 	);
 }
 
 Nav.args = {
-	countryGroup: GBPCountries,
+	supportRegionId: 'uk',
 };
 
 Nav.play = async ({ canvasElement }: { canvasElement: HTMLCanvasElement }) => {

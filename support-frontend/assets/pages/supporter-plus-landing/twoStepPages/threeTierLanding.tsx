@@ -13,16 +13,8 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import {
-	AUDCountries,
-	Canada,
-	EURCountries,
-	GBPCountries,
-	International,
-	NZDCountries,
-	UnitedStates,
-} from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
+import { supportRegions } from '@modules/internationalisation/supportRegion';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductOptions } from '@modules/product/productOptions';
 import { TaxExclusive, TaxInclusive } from '@modules/product/productOptions';
@@ -32,8 +24,6 @@ import type {
 } from '@modules/product-catalog/productCatalog';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
-import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
-import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
@@ -42,7 +32,6 @@ import type { Participations } from 'helpers/abTests/models';
 import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
-import { glyph } from 'helpers/internationalisation/currency';
 import { guardianContactUsLink, guardianHelpCentreLink } from 'helpers/legal';
 import {
 	getProductDescription,
@@ -55,14 +44,15 @@ import { allProductPrices } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
-import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
-import CurrentMaxRatesByCountry from 'pages/[countryGroupId]/helpers/CurrentMaxRatesByCountry';
+import { filterProductDescriptionBenefits } from 'pages/[supportRegionId]/checkout/helpers/benefitsChecklist';
+import CurrentMaxRatesByCountry from 'pages/[supportRegionId]/helpers/CurrentMaxRatesByCountry';
+import SupportRegionSwitcher from '../../../components/supportRegionSwitcher/supportRegionSwitcher';
+import type { SupportRegionSwitcherProps } from '../../../components/supportRegionSwitcher/supportRegionSwitcher';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
 	getSanitisedHtml,
 	replaceDatePlaceholder,
 } from '../../../helpers/utilities/utilities';
-import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import Countdown from '../components/countdown';
 import { StudentOffer } from '../components/studentOffer';
 import { SupportOnce } from '../components/supportOnce';
@@ -262,7 +252,7 @@ function getThreeTierProductOption(
 	supportRegionId: SupportRegionId,
 ): ProductOptions {
 	if (
-		supportRegionId == SupportRegionId.CA &&
+		supportRegionId == 'ca' &&
 		(productKey === 'DigitalSubscription' || productKey === 'SupporterPlus')
 	) {
 		return TaxExclusive;
@@ -286,21 +276,13 @@ export function ThreeTierLanding({
 		: undefined;
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 
-	const { currencyKey: currencyId, countryGroupId } =
-		getSupportRegionIdConfig(supportRegionId);
+	const currency = supportRegions[supportRegionId].currency;
+
 	const countryId = Country.detect();
 
-	const countrySwitcherProps: CountryGroupSwitcherProps = {
-		countryGroupIds: [
-			GBPCountries,
-			UnitedStates,
-			AUDCountries,
-			EURCountries,
-			NZDCountries,
-			Canada,
-			International,
-		],
-		selectedCountryGroup: countryGroupId,
+	const countrySwitcherProps: SupportRegionSwitcherProps = {
+		supportRegionIds: ['uk', 'us', 'au', 'eu', 'nz', 'ca', 'int'],
+		selectedSupportRegion: supportRegionId,
 		subPath: '/contribute',
 	};
 
@@ -363,7 +345,7 @@ export function ThreeTierLanding({
 	 */
 
 	const tier1Pricing = productCatalog.Contribution?.ratePlans[ratePlanKey]
-		?.pricing[currencyId] as number;
+		?.pricing[currency.code] as number;
 	const tier1checkoutUrl = buildCheckoutUrl(supportRegionId, {
 		product: 'Contribution',
 		ratePlan: ratePlanKey,
@@ -402,7 +384,7 @@ export function ThreeTierLanding({
 			settings.products.Contribution?.benefits ??
 			filterProductDescriptionBenefits(
 				productCatalogDescription.Contribution,
-				countryGroupId,
+				supportRegionId,
 			),
 		cta:
 			settings.products.Contribution?.cta ?? fallbackProducts.Contribution!.cta,
@@ -413,7 +395,7 @@ export function ThreeTierLanding({
 
 	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[
 		maybeTaxExclusiveRatePlanKey
-	]?.pricing[currencyId] as number;
+	]?.pricing[currency.code] as number;
 
 	const tierTwoProductOption = getThreeTierProductOption(
 		'SupporterPlus',
@@ -442,7 +424,7 @@ export function ThreeTierLanding({
 			settings.products.SupporterPlus?.benefits ??
 			filterProductDescriptionBenefits(
 				productCatalogDescription.SupporterPlus,
-				countryGroupId,
+				supportRegionId,
 			),
 		cta:
 			settings.products.SupporterPlus?.cta ??
@@ -482,7 +464,7 @@ export function ThreeTierLanding({
 	const tier3Product = 'DigitalSubscription';
 	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[
 		maybeTaxExclusiveRatePlanKey
-	]?.pricing[currencyId] as number;
+	]?.pricing[currency.code] as number;
 
 	const { label: title, labelPill: titlePill } = getProductDescription(
 		'DigitalSubscription',
@@ -495,7 +477,7 @@ export function ThreeTierLanding({
 			settings.products.DigitalSubscription?.benefits ??
 			filterProductDescriptionBenefits(
 				productCatalogDescription.DigitalSubscription,
-				countryGroupId,
+				supportRegionId,
 			),
 		cta:
 			settings.products.DigitalSubscription?.cta ??
@@ -547,14 +529,14 @@ export function ThreeTierLanding({
 				<>
 					<Header>
 						<CountrySwitcherContainer>
-							<CountryGroupSwitcher {...countrySwitcherProps} />
+							<SupportRegionSwitcher {...countrySwitcherProps} />
 						</CountrySwitcherContainer>
 					</Header>
 				</>
 			}
 			footer={
 				<>
-					{countryGroupId === UnitedStates && (
+					{supportRegionId === 'us' && (
 						<Container
 							sideBorders
 							borderColor="rgba(170, 170, 180, 0.5)"
@@ -580,7 +562,7 @@ export function ThreeTierLanding({
 						borderColor="rgba(170, 170, 180, 0.5)"
 						cssOverrides={disclaimerContainer}
 					>
-						<CurrentMaxRatesByCountry countryGroupId={countryGroupId} />
+						<CurrentMaxRatesByCountry supportRegionId={supportRegionId} />
 						{taxExclusionEnabled && (
 							<p css={taxExclusionDisclaimer}>
 								For All-access digital and Digital plus, taxes may apply.
@@ -621,7 +603,7 @@ export function ThreeTierLanding({
 										: undefined,
 								},
 							]}
-							currency={glyph(currencyId)}
+							currency={currency.glyph}
 						></ThreeTierTsAndCs>
 					</Container>
 					<FooterWithContents>
@@ -679,7 +661,7 @@ export function ThreeTierLanding({
 					/>
 					<ThreeTierCards
 						cardsContent={[tier1Card, tier2Card, tier3Card]}
-						currencyId={currencyId}
+						currencyId={currency.code}
 						billingPeriod={billingPeriod}
 						showWeeklyPrice={showWeeklyPrice}
 					/>
@@ -691,8 +673,8 @@ export function ThreeTierLanding({
 				cssOverrides={lightContainer}
 			>
 				<SupportOnce
-					currency={glyph(currencyId)}
-					countryGroupId={countryGroupId}
+					currency={currency.glyph}
+					supportRegionId={supportRegionId}
 				/>
 			</Container>
 			{enableStudentOffer && (
@@ -702,8 +684,8 @@ export function ThreeTierLanding({
 					cssOverrides={lightContainer}
 				>
 					<StudentOffer
-						currencyKey={currencyId}
-						countryGroupId={countryGroupId}
+						currencyKey={currency.code}
+						supportRegionId={supportRegionId}
 					/>
 				</Container>
 			)}

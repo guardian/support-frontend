@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import { Column, Columns } from '@guardian/source/react-components';
-import React from 'react';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { countryGroups } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
+import { supportRegions } from '@modules/internationalisation/supportRegion';
+import type React from 'react';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
@@ -11,8 +11,8 @@ export default {
 	title: 'Checkouts/Patrons Message',
 	component: PatronsMessage,
 	argTypes: {
-		countryGroup: {
-			options: Object.keys(countryGroups) as CountryGroupId[],
+		supportRegionId: {
+			options: Object.keys(supportRegions) as SupportRegionId[],
 			control: { type: 'radio' },
 		},
 	},
@@ -34,8 +34,8 @@ export default {
 	],
 };
 
-function Template(args: { countryGroup: CountryGroupId }) {
-	return <PatronsMessage countryGroupId={args.countryGroup} />;
+function Template(args: { supportRegionId: SupportRegionId }) {
+	return <PatronsMessage supportRegionId={args.supportRegionId} />;
 }
 
 Template.args = {} as Record<string, unknown>;
@@ -43,5 +43,5 @@ Template.args = {} as Record<string, unknown>;
 export const Default = Template.bind({});
 
 Default.args = {
-	countryGroup: 'GBPCountries',
+	supportRegionId: 'uk',
 };

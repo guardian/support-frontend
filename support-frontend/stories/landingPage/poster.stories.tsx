@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { PosterComponent } from 'pages/[countryGroupId]/guardianAdLiteLanding/components/posterComponent';
+import { PosterComponent } from 'pages/[supportRegionId]/guardianAdLiteLanding/components/posterComponent';
 
 export default {
 	title: 'LandingPage/GuardianAdLite Poster',

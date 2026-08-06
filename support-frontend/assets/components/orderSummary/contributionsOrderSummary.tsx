@@ -14,7 +14,7 @@ import {
 	SvgChevronDownSingle,
 } from '@guardian/source/react-components';
 import type { Currency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'react';
 import {
@@ -30,8 +30,8 @@ import type {
 import { ratePlanToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
-import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
-import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import { isSundayOnlyNewspaperSub } from 'pages/[supportRegionId]/helpers/isSundayOnlyNewspaperSub';
+import type { StudentDiscount } from 'pages/[supportRegionId]/student/helpers/discountDetails';
 import {
 	isContributionOnlyProduct,
 	isGuardianWeeklyDigitalProduct,

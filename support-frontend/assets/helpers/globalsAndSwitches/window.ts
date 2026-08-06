@@ -107,43 +107,43 @@ const PaymentConfigSchema = z.object({
 			),
 		}),
 		contributionTypes: z.object({
-			AUDCountries: z.array(
+			au: z.array(
 				z.object({
 					contributionType: z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
 					isDefault: z.optional(z.boolean()),
 				}),
 			),
-			Canada: z.array(
+			ca: z.array(
 				z.object({
 					contributionType: z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
 					isDefault: z.optional(z.boolean()),
 				}),
 			),
-			EURCountries: z.array(
+			eu: z.array(
 				z.object({
 					contributionType: z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
 					isDefault: z.optional(z.boolean()),
 				}),
 			),
-			GBPCountries: z.array(
+			uk: z.array(
 				z.object({
 					contributionType: z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
 					isDefault: z.optional(z.boolean()),
 				}),
 			),
-			International: z.array(
+			int: z.array(
 				z.object({
 					contributionType: z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
 					isDefault: z.optional(z.boolean()),
 				}),
 			),
-			NZDCountries: z.array(
+			nz: z.array(
 				z.object({
 					contributionType: z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
 					isDefault: z.optional(z.boolean()),
 				}),
 			),
-			UnitedStates: z.array(
+			us: z.array(
 				z.object({
 					contributionType: z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
 					isDefault: z.optional(z.boolean()),

@@ -1,4 +1,4 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 
 export type TickerName = 'US' | 'AU' | 'global';
 
@@ -95,7 +95,7 @@ export interface LandingPageVariant {
 }
 
 interface RegionTargeting {
-	targetedCountryGroups: CountryGroupId[];
+	targetedCountryGroups: SupportRegionId[];
 }
 
 interface Scheduler {

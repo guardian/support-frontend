@@ -9,7 +9,7 @@ import GridImage from 'components/gridImage/gridImage';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { getHelpCentreUrl, getManageSubsUrl } from 'helpers/urls/externalLinks';
 import { getBaseDomain } from 'helpers/urls/url';
-import type { OnboardingProductKey } from 'pages/[countryGroupId]/components/onboardingComponent';
+import type { OnboardingProductKey } from 'pages/[supportRegionId]/components/onboardingComponent';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import ContentBox from '../contentBox';
 import {

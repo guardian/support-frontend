@@ -1,5 +1,5 @@
 import type { CountryCode } from '@modules/internationalisation/country';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import seedrandom from 'seedrandom';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import * as cookie from 'helpers/storage/cookie';
@@ -28,7 +28,7 @@ export const testIsActive = (
 
 type ABtestInitalizerData = {
 	countryId: CountryCode;
-	countryGroupId: CountryGroupId;
+	supportRegionId: SupportRegionId;
 	abTests?: Tests;
 	mvt?: number;
 	acquisitionDataTests?: AcquisitionABTest[];
@@ -37,7 +37,7 @@ type ABtestInitalizerData = {
 
 function init({
 	countryId,
-	countryGroupId,
+	supportRegionId,
 	abTests = tests,
 	mvt = getMvtId(),
 	acquisitionDataTests = getTestFromAcquisitionData() ?? [],
@@ -49,7 +49,7 @@ function init({
 		abTests,
 		mvt,
 		countryId,
-		countryGroupId,
+		supportRegionId,
 		inContributionsOnlyCountry,
 		pathWithQueryString,
 		acquisitionDataTests,
@@ -71,7 +71,7 @@ function getParticipations(
 	abTests: Tests,
 	mvtId: number,
 	country: CountryCode,
-	countryGroupId: CountryGroupId,
+	supportRegionId: SupportRegionId,
 	inContributionsOnlyCountry: boolean,
 	pathWithQueryString: string,
 	acquisitionDataTests?: AcquisitionABTest[],
@@ -135,7 +135,7 @@ function getParticipations(
 			testId,
 			mvtId,
 			country,
-			countryGroupId,
+			supportRegionId,
 			acquisitionDataTests,
 		);
 
@@ -266,7 +266,7 @@ function getUserParticipation(
 	testId: string,
 	mvtId: number,
 	country: CountryCode,
-	countryGroupId: CountryGroupId,
+	supportRegionId: SupportRegionId,
 	acquisitionDataTests: AcquisitionABTest[] | undefined,
 ): UserParticipation {
 	const { audiences, referrerControlled } = test;
@@ -277,7 +277,7 @@ function getUserParticipation(
 
 	const audience =
 		audiences[country] ??
-		audiences[countryGroupId] ??
+		audiences[supportRegionId] ??
 		audiences.ALL ??
 		audiences.CONTRIBUTIONS_ONLY;
 

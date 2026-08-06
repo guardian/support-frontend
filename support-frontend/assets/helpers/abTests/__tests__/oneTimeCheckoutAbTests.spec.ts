@@ -1,4 +1,4 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { getSettings } from '../../globalsAndSwitches/globals';
 import type { OneTimeCheckoutTest } from '../../globalsAndSwitches/oneTimeCheckoutSettings';
 import {
@@ -16,7 +16,7 @@ jest.mock('../../globalsAndSwitches/globals', () => ({
 const mockTest: OneTimeCheckoutTest = {
 	name: 'TEST_ONE_TIME_CHECKOUT',
 	status: 'Live',
-	regionTargeting: { targetedCountryGroups: ['GBPCountries'] },
+	regionTargeting: { targetedCountryGroups: ['uk'] },
 	variants: [
 		{
 			name: 'VARIANT_A',
@@ -69,73 +69,73 @@ describe('oneTimeCheckoutTestConfig', () => {
 
 describe('fallBackOneTimeCheckoutSelection', () => {
 	it('returns GBP fallback variant for GBPCountries', () => {
-		const result = fallBackOneTimeCheckoutSelection['GBPCountries'];
+		const result = fallBackOneTimeCheckoutSelection['uk'];
 		expect(result?.name).toBe('CONTROL');
 		expect(result?.amounts.amounts).toEqual([30, 60, 120, 240]);
 		expect(result?.amounts.defaultAmount).toBe(60);
 	});
 
 	it('returns USD fallback variant for UnitedStates', () => {
-		const result = fallBackOneTimeCheckoutSelection['UnitedStates'];
+		const result = fallBackOneTimeCheckoutSelection['us'];
 		expect(result?.name).toBe('CONTROL');
 		expect(result?.amounts.amounts).toEqual([25, 50, 100, 250]);
 		expect(result?.amounts.defaultAmount).toBe(50);
 	});
 
 	it('returns EUR fallback variant for EURCountries', () => {
-		const result = fallBackOneTimeCheckoutSelection['EURCountries'];
+		const result = fallBackOneTimeCheckoutSelection['eu'];
 		expect(result?.name).toBe('CONTROL');
 		expect(result?.amounts.amounts).toEqual([25, 50, 100, 250]);
 		expect(result?.amounts.defaultAmount).toBe(50);
 	});
 
 	it('returns International fallback variant', () => {
-		const result = fallBackOneTimeCheckoutSelection['International'];
+		const result = fallBackOneTimeCheckoutSelection['int'];
 		expect(result?.name).toBe('CONTROL');
 		expect(result?.amounts.amounts).toEqual([25, 50, 100, 250]);
 		expect(result?.amounts.defaultAmount).toBe(50);
 	});
 
 	it('returns Canada fallback variant', () => {
-		const result = fallBackOneTimeCheckoutSelection['Canada'];
+		const result = fallBackOneTimeCheckoutSelection['ca'];
 		expect(result?.name).toBe('CONTROL');
 		expect(result?.amounts.amounts).toEqual([25, 50, 100, 250]);
 		expect(result?.amounts.defaultAmount).toBe(50);
 	});
 
 	it('returns AUD fallback variant for AUDCountries', () => {
-		const result = fallBackOneTimeCheckoutSelection['AUDCountries'];
+		const result = fallBackOneTimeCheckoutSelection['au'];
 		expect(result?.name).toBe('CONTROL');
 		expect(result?.amounts.amounts).toEqual([60, 100, 250, 500]);
 		expect(result?.amounts.defaultAmount).toBe(100);
 	});
 
 	it('returns NZD fallback variant for NZDCountries', () => {
-		const result = fallBackOneTimeCheckoutSelection['NZDCountries'];
+		const result = fallBackOneTimeCheckoutSelection['nz'];
 		expect(result?.name).toBe('CONTROL');
 		expect(result?.amounts.amounts).toEqual([50, 100, 250, 500]);
 		expect(result?.amounts.defaultAmount).toBe(100);
 	});
 
 	it('returns fallback with hideChooseYourAmount set to false', () => {
-		const countryGroups: CountryGroupId[] = [
-			'GBPCountries',
-			'UnitedStates',
-			'EURCountries',
-			'International',
-			'Canada',
-			'AUDCountries',
-			'NZDCountries',
+		const supportRegions: SupportRegionId[] = [
+			'uk',
+			'us',
+			'eu',
+			'int',
+			'ca',
+			'au',
+			'nz',
 		];
 
-		countryGroups.forEach((countryGroup) => {
-			const result = fallBackOneTimeCheckoutSelection[countryGroup];
+		supportRegions.forEach((supportRegion) => {
+			const result = fallBackOneTimeCheckoutSelection[supportRegion];
 			expect(result?.amounts.hideChooseYourAmount).toBe(false);
 		});
 	});
 
 	it('returns fallback with heading and subheading', () => {
-		const result = fallBackOneTimeCheckoutSelection['GBPCountries'];
+		const result = fallBackOneTimeCheckoutSelection['uk'];
 		expect(result?.heading).toBe('Support just once');
 		expect(result?.subheading).toBe(
 			'Support us with the amount of your choice.',
@@ -189,7 +189,7 @@ describe('getOneTimeCheckoutTestConfig', () => {
 		const test2: OneTimeCheckoutTest = {
 			name: 'TEST_ONE_TIME_CHECKOUT_2',
 			status: 'Live',
-			regionTargeting: { targetedCountryGroups: ['UnitedStates'] },
+			regionTargeting: { targetedCountryGroups: ['us'] },
 			variants: [
 				{
 					name: 'VARIANT_B',

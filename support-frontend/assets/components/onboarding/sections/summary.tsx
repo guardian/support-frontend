@@ -25,13 +25,13 @@ import {
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { CsrfState } from 'helpers/types/csrf';
-import { getThankYouOrder } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
+import { getThankYouOrder } from 'pages/[supportRegionId]/checkout/helpers/sessionStorage';
 import type {
 	CurrentUserState,
 	HandleStepNavigationFunction,
 	OnboardingProps,
-} from 'pages/[countryGroupId]/components/onboardingComponent';
-import { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
+} from 'pages/[supportRegionId]/components/onboardingComponent';
+import { OnboardingSteps } from 'pages/[supportRegionId]/components/onboardingSteps';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import ContentBox from '../contentBox';
@@ -219,8 +219,7 @@ function OnboardingSummary({
 
 	const { enableCanadaTaxExclusion } = useFeatureSwitches();
 
-	const { currencyKey, countryGroupId } =
-		getSupportRegionIdConfig(supportRegionId);
+	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
 
 	const amountPaidToday = simpleFormatAmount(
 		getCurrencyByCode(currencyKey),
@@ -235,7 +234,7 @@ function OnboardingSummary({
 	if (promotion) {
 		promoMessage =
 			productLegal(
-				countryGroupId,
+				supportRegionId,
 				billingPeriod,
 				' per ',
 				payment.originalAmount,

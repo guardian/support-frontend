@@ -1,5 +1,5 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { getCurrencyByCode } from '@modules/internationalisation/currency';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { detect } from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -7,13 +7,13 @@ import { simpleFormatAmount } from './forms/checkouts';
 import { getBillingPeriodNoun } from './productPrice/billingPeriods';
 
 export const productLegal = (
-	countryGroupId: CountryGroupId,
+	supportRegionId: SupportRegionId,
 	billingPeriod: BillingPeriod,
 	divider: string,
 	thresholdAmount: number,
 	promotion?: Promotion,
 ) => {
-	const currencyCode = detect(countryGroupId);
+	const currencyCode = detect(supportRegionId);
 	const currency = getCurrencyByCode(currencyCode);
 	const amountFormatted = simpleFormatAmount(currency, thresholdAmount);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);

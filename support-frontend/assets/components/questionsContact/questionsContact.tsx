@@ -1,5 +1,4 @@
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { GBPCountries } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import PageSection from 'components/pageSection/pageSection';
 import { contributionsEmail } from 'helpers/legal';
 import {
@@ -13,18 +12,18 @@ import {
 } from './questionsContactStyles';
 
 type QuestionsContactProps = {
-	countryGroupId?: CountryGroupId;
+	supportRegionId?: SupportRegionId;
 };
 
 export default function QuestionsContact({
-	countryGroupId,
+	supportRegionId,
 }: QuestionsContactProps): JSX.Element {
 	const contactUs = useDotcomContactPage() ? (
 		<ContactPageLink linkText="contact us" />
 	) : (
 		<a
 			css={componentQuestionsContactLink}
-			href={contributionsEmail[countryGroupId ?? GBPCountries]}
+			href={contributionsEmail[supportRegionId ?? 'uk']}
 		>
 			contact us
 		</a>

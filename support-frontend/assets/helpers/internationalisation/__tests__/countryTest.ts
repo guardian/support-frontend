@@ -1,11 +1,5 @@
 // ----- Imports ----- //
 
-import {
-	AUDCountries,
-	EURCountries,
-	GBPCountries,
-	UnitedStates,
-} from '@modules/internationalisation/countryGroup';
 import type { JSDOM } from 'jsdom';
 import { Country } from '../classes/country';
 
@@ -79,23 +73,23 @@ describe('detect country', () => {
 		jsdom.reconfigure({
 			url: 'https://support.theguardian.com/example?country=FR',
 		});
-		expect(Country.detect(EURCountries)).toEqual('FR');
+		expect(Country.detect('eu')).toEqual('FR');
 		jsdom.reconfigure({
 			url: 'https://support.theguardian.com/example?country=be',
 		});
-		expect(Country.detect(EURCountries)).toEqual('BE');
+		expect(Country.detect('eu')).toEqual('BE');
 		jsdom.reconfigure({
 			url: 'https://support.theguardian.com/example?country=IE',
 		});
-		expect(Country.detect(EURCountries)).toEqual('IE');
+		expect(Country.detect('eu')).toEqual('IE');
 		jsdom.reconfigure({
 			url: 'https://support.theguardian.com/example?country=DE',
 		});
-		expect(Country.detect(EURCountries)).toEqual('DE');
+		expect(Country.detect('eu')).toEqual('DE');
 		jsdom.reconfigure({
 			url: 'https://support.theguardian.com/example?country=AR',
 		});
-		expect(Country.detect(EURCountries)).toEqual('DE');
+		expect(Country.detect('eu')).toEqual('DE');
 	});
 
 	it('should return, under eu case (country group), the correct country from GU_country cookie', () => {
@@ -103,15 +97,15 @@ describe('detect country', () => {
 			url: 'https://support.theguardian.com/example',
 		});
 		document.cookie = 'GU_country=FR';
-		expect(Country.detect(EURCountries)).toEqual('FR');
+		expect(Country.detect('eu')).toEqual('FR');
 		document.cookie = 'GU_country=be';
-		expect(Country.detect(EURCountries)).toEqual('BE');
+		expect(Country.detect('eu')).toEqual('BE');
 		document.cookie = 'GU_country=IE';
-		expect(Country.detect(EURCountries)).toEqual('IE');
+		expect(Country.detect('eu')).toEqual('IE');
 		document.cookie = 'GU_country=DE';
-		expect(Country.detect(EURCountries)).toEqual('DE');
+		expect(Country.detect('eu')).toEqual('DE');
 		document.cookie = 'GU_country=AR';
-		expect(Country.detect(EURCountries)).toEqual('DE');
+		expect(Country.detect('eu')).toEqual('DE');
 	});
 
 	it('should return, under eu case (country group), the correct country from GU_geo_country cookie', () => {
@@ -120,25 +114,25 @@ describe('detect country', () => {
 		});
 		document.cookie = 'GU_country=42';
 		document.cookie = 'GU_geo_country=FR';
-		expect(Country.detect(EURCountries)).toEqual('FR');
+		expect(Country.detect('eu')).toEqual('FR');
 		document.cookie = 'GU_country=42';
 		document.cookie = 'GU_geo_country=BE';
-		expect(Country.detect(EURCountries)).toEqual('BE');
+		expect(Country.detect('eu')).toEqual('BE');
 		document.cookie = 'GU_country=42';
 		document.cookie = 'GU_geo_country=IE';
-		expect(Country.detect(EURCountries)).toEqual('IE');
+		expect(Country.detect('eu')).toEqual('IE');
 		document.cookie = 'GU_country=42';
 		document.cookie = 'GU_geo_country=DE';
-		expect(Country.detect(EURCountries)).toEqual('DE');
+		expect(Country.detect('eu')).toEqual('DE');
 		document.cookie = 'GU_country=42';
 		document.cookie = 'GU_geo_country=AR';
-		expect(Country.detect(EURCountries)).toEqual('DE');
+		expect(Country.detect('eu')).toEqual('DE');
 	});
 
 	it('should return the correct country from the country group (non EU case)', () => {
-		expect(Country.detect(GBPCountries)).toEqual('GB');
-		expect(Country.detect(UnitedStates)).toEqual('US');
-		expect(Country.detect(AUDCountries)).toEqual('AU');
+		expect(Country.detect('uk')).toEqual('GB');
+		expect(Country.detect('us')).toEqual('US');
+		expect(Country.detect('au')).toEqual('AU');
 	});
 
 	it('should return the correct country from path (non EU case)', () => {

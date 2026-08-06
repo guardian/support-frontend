@@ -19,7 +19,7 @@ const getTermsForProduct = (props: PromotionTermsPropTypes) => {
 			return (
 				<DigitalPackTerms
 					{...props.promotionTerms}
-					countryGroupId={props.countryGroupId}
+					supportRegionId={props.supportRegionId}
 				/>
 			);
 

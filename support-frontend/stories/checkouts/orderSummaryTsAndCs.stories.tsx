@@ -18,21 +18,21 @@ export const GuardianAdLite = Template.bind({});
 GuardianAdLite.args = {
 	productKey: 'GuardianAdLite',
 	ratePlanKey: 'Monthly',
-	countryGroupId: 'GBPCountries',
+	supportRegionId: 'uk',
 };
 
 export const Contribution = Template.bind({});
 Contribution.args = {
 	productKey: 'Contribution',
 	ratePlanKey: 'Annual',
-	countryGroupId: 'AUDCountries',
+	supportRegionId: 'au',
 };
 
 export const SupporterPlus = Template.bind({});
 SupporterPlus.args = {
 	productKey: 'SupporterPlus',
 	ratePlanKey: 'Monthly',
-	countryGroupId: 'GBPCountries',
+	supportRegionId: 'uk',
 	thresholdAmount: 12,
 };
 
@@ -40,7 +40,7 @@ export const WeeklyDigital = Template.bind({});
 WeeklyDigital.args = {
 	productKey: 'GuardianWeeklyRestOfWorld',
 	ratePlanKey: 'QuarterlyPlus',
-	countryGroupId: 'UnitedStates',
+	supportRegionId: 'us',
 	thresholdAmount: 45,
 	promotion: {
 		name: '50% off for 3 months',
@@ -57,7 +57,7 @@ SubscriptionCardWeekend.args = {
 	productKey: 'SubscriptionCard',
 	ratePlanKey: 'WeekendPlus',
 	ratePlanDescription: 'Weekend',
-	countryGroupId: 'GBPCountries',
+	supportRegionId: 'uk',
 };
 
 export const HomeDeliverySixday = Template.bind({});
@@ -65,5 +65,5 @@ HomeDeliverySixday.args = {
 	productKey: 'HomeDelivery',
 	ratePlanKey: 'SixdayPlus',
 	ratePlanDescription: 'Six day',
-	countryGroupId: 'GBPCountries',
+	supportRegionId: 'uk',
 };

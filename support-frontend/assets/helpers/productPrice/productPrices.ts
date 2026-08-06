@@ -1,19 +1,15 @@
 import type { CountryCode } from '@modules/internationalisation/country';
-import type {
-	CountryGroupName,
-	CountryGroup as CountryGroupType,
-} from '@modules/internationalisation/countryGroup';
-import {
-	countryGroups,
-	GBPCountries,
-} from '@modules/internationalisation/countryGroup';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
+import {
+	type SupportRegion,
+	supportRegionIds,
+	supportRegions,
+} from '@modules/internationalisation/supportRegion';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { NoFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { ProductOptions } from '@modules/product/productOptions';
 import { NoProductOptions } from '@modules/product/productOptions';
-import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { extendedGlyph, glyph } from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { fixDecimals } from 'helpers/productPrice/subscriptions';
@@ -31,12 +27,21 @@ type BillingPeriods = Partial<
 	Record<BillingPeriod, Partial<Record<CurrencyCode, ProductPrice>>>
 >;
 
-export type CountryGroupPrices = Partial<
+export type SupportRegionPrices = Partial<
 	Record<FulfilmentOptions, Partial<Record<ProductOptions, BillingPeriods>>>
 >;
 
+type SupportRegionName =
+	| 'United Kingdom'
+	| 'United States'
+	| 'Australia'
+	| 'Europe'
+	| 'International'
+	| 'New Zealand'
+	| 'Canada';
+
 export type ProductPrices = Partial<
-	Record<CountryGroupName, CountryGroupPrices>
+	Record<SupportRegionName, SupportRegionPrices>
 >;
 
 const isNumeric = (num?: number | null): num is number =>
@@ -48,8 +53,12 @@ function getFirstValidPrice(
 	return prices.find(isNumeric) ?? 0;
 }
 
-function getCountryGroup(country: CountryCode): CountryGroupType {
-	return countryGroups[CountryGroup.fromCountry(country) ?? GBPCountries];
+function getSupportRegion(country: CountryCode): SupportRegion {
+	const regionId =
+		supportRegionIds.find((id) =>
+			supportRegions[id].countries.includes(country),
+		) ?? 'uk';
+	return supportRegions[regionId];
 }
 
 function getProductPrice(
@@ -59,12 +68,12 @@ function getProductPrice(
 	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
 	productOption: ProductOptions = NoProductOptions,
 ): ProductPrice {
-	const countryGroup = getCountryGroup(country);
+	const supportRegion = getSupportRegion(country);
 
 	const productPrice =
-		productPrices[countryGroup.name]?.[fulfilmentOption]?.[productOption]?.[
-			billingPeriod
-		]?.[countryGroup.currency];
+		productPrices[supportRegion.name as SupportRegionName]?.[
+			fulfilmentOption
+		]?.[productOption]?.[billingPeriod]?.[supportRegion.currency.code];
 
 	if (productPrice) {
 		return productPrice;
@@ -79,8 +88,7 @@ const showPrice = (p: ProductPrice, isExtended = true): string => {
 };
 
 function getCurrency(country: CountryCode): CurrencyCode {
-	const { currency } = getCountryGroup(country);
-	return currency;
+	return getSupportRegion(country).currency.code;
 }
 
 function hackRemoveMeDiscount(discountPercentage: number) {
@@ -124,7 +132,7 @@ export {
 	getProductPrice,
 	getFirstValidPrice,
 	getCurrency,
-	getCountryGroup,
+	getSupportRegion,
 	showPrice,
 	isNumeric,
 	getDiscountVsRetail,

@@ -1,8 +1,4 @@
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import {
-	countryGroupBySupportRegionId,
-	countryGroups,
-} from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type {
 	StudentLandingPageTest,
 	StudentLandingPageVariant,
@@ -35,13 +31,10 @@ const filterTestsByURL = (
 	const path: string = window.location.pathname;
 
 	const supportRegionId = path.split('/')[1]?.trim() as SupportRegionId; // fingers-crossed the URL doesn't change!
-	const urlCountryGroup = countryGroupBySupportRegionId(supportRegionId);
 	const urlInstitution = path.split('/')[3]?.trim();
 
 	return tests.filter((test: StudentLandingPageTest) => {
-		const regionMatches =
-			countryGroups[test.countryGroupId].supportRegionId ===
-			urlCountryGroup.supportRegionId;
+		const regionMatches = test.countryGroupId === supportRegionId;
 		const institutionMatches = test.name.trim() === urlInstitution;
 		return regionMatches && institutionMatches;
 	});

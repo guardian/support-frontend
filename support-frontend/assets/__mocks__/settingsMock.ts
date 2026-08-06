@@ -36,37 +36,37 @@ const mockSettings = {
 		},
 	},
 	contributionTypes: {
-		GBPCountries: [
+		uk: [
 			{ contributionType: 'ONE_OFF' },
 			{ contributionType: 'MONTHLY', isDefault: true },
 			{ contributionType: 'ANNUAL' },
 		],
-		UnitedStates: [
+		us: [
 			{ contributionType: 'ONE_OFF' },
 			{ contributionType: 'MONTHLY', isDefault: true },
 			{ contributionType: 'ANNUAL' },
 		],
-		EURCountries: [
+		eu: [
 			{ contributionType: 'ONE_OFF' },
 			{ contributionType: 'MONTHLY', isDefault: true },
 			{ contributionType: 'ANNUAL' },
 		],
-		International: [
+		int: [
 			{ contributionType: 'ONE_OFF' },
 			{ contributionType: 'MONTHLY', isDefault: true },
 			{ contributionType: 'ANNUAL' },
 		],
-		Canada: [
+		ca: [
 			{ contributionType: 'ONE_OFF' },
 			{ contributionType: 'MONTHLY', isDefault: true },
 			{ contributionType: 'ANNUAL' },
 		],
-		AUDCountries: [
+		au: [
 			{ contributionType: 'ONE_OFF' },
 			{ contributionType: 'MONTHLY', isDefault: true },
 			{ contributionType: 'ANNUAL' },
 		],
-		NZDCountries: [
+		nz: [
 			{ contributionType: 'ONE_OFF' },
 			{ contributionType: 'MONTHLY', isDefault: true },
 			{ contributionType: 'ANNUAL' },

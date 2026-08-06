@@ -9,10 +9,10 @@ The internationalisation helper functions uses three main types:
 
 ## Country Group
 
-The `CountryGroup` defines a grouping of countries with a single currency.
+The `DetectSupportRegion` defines a grouping of countries with a single currency.
 This is used throughout the site to provide region specific versions of pages such as the three tier landing page or the checkout.
 
-`CountryGroup` is defined as follows:
+`DetectSupportRegion` is defined as follows:
 
 ```
 type CountryGroupId = 'GBPCountries' | 'UnitedStates' | AUDCountries | EURCountries | International;

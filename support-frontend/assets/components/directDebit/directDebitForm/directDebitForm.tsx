@@ -3,7 +3,7 @@ import {
 	InlineError,
 	TextInput,
 } from '@guardian/source/react-components';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import type { ReactNode } from 'react';
 import { ElementDecorator } from 'components/stripeCardForm/elementDecorator';
 import * as styles from './directDebitFormStyles';
@@ -11,7 +11,7 @@ import LegalNotice from './legalNotice';
 import type { DirectDebitFormDisplayErrors } from './selectors';
 
 type DirectDebitFormProps = {
-	countryGroupId: CountryGroupId;
+	supportRegionId: SupportRegionId;
 	accountHolderName: string;
 	accountNumber: string;
 	accountHolderConfirmation: boolean;
@@ -117,7 +117,7 @@ export default function DirectDebitForm(
 			)}
 
 			<LegalNotice
-				countryGroupId={props.countryGroupId}
+				supportRegionId={props.supportRegionId}
 				isSundayOnly={props.isSundayOnly}
 			/>
 		</div>

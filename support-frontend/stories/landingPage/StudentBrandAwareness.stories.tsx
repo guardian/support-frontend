@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { StudentBrandAwareness } from 'pages/[countryGroupId]/student/components/StudentBrandAwareness';
+import { StudentBrandAwareness } from 'pages/[supportRegionId]/student/components/StudentBrandAwareness';
 
 export default {
 	title: 'LandingPage/StudentBrandAwareness',
@@ -13,7 +13,7 @@ export default {
 	},
 };
 
-export const Template = () => {
+export function Template() {
 	const contentContainer = css`
 		max-width: 1300px;
 	`;
@@ -23,4 +23,4 @@ export const Template = () => {
 			<StudentBrandAwareness />
 		</div>
 	);
-};
+}

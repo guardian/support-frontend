@@ -27,7 +27,7 @@ test('ProductPricesSchema', () => {
 						},
 					},
 				},
-				International: {
+				int: {
 					NoFulfilmentOptions: {
 						NoProductOptions: {
 							Annual: {
@@ -127,7 +127,7 @@ test('ProductPricesSchema', () => {
 						},
 					},
 				},
-				Canada: {
+				ca: {
 					NoFulfilmentOptions: {
 						NoProductOptions: {
 							Annual: {

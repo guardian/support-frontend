@@ -5,8 +5,7 @@ import type {
 	ThemeButton,
 } from '@guardian/source/react-components';
 import { themeButtonReaderRevenueBrand } from '@guardian/source/react-components';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { GBPCountries } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/supportRegion';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type * as React from 'react';
 import { themeButtonLegacyGray } from 'components/button/theme';
@@ -59,19 +58,19 @@ export type ProductCopy = {
 };
 
 const getDisplayPrice = (
-	countryGroupId: CountryGroupId,
+	supportRegionId: SupportRegionId,
 	price: number,
 	billingPeriod = BillingPeriod.Monthly,
 ): string => {
-	const currency = glyph(detect(countryGroupId));
+	const currency = glyph(detect(supportRegionId));
 	return `${currency}${fixDecimals(price)}/${billingPeriod}`;
 };
 
 const getDigitalPlusDisplayPrice = (
-	countryGroupId: CountryGroupId,
+	supportRegionId: SupportRegionId,
 	billingPeriod: BillingPeriod,
 ): string | null => {
-	const currencyKey = detect(countryGroupId);
+	const currencyKey = detect(supportRegionId);
 
 	const product = getProductCatalog()['DigitalSubscription'];
 	const price = product?.ratePlans[billingPeriod]?.pricing[currencyKey];
@@ -79,14 +78,14 @@ const getDigitalPlusDisplayPrice = (
 		return null;
 	}
 
-	return getDisplayPrice(countryGroupId, price, billingPeriod);
+	return getDisplayPrice(supportRegionId, price, billingPeriod);
 };
 
 const getWeeklyDigitalDisplayPrice = (
-	countryGroupId: CountryGroupId,
+	supportRegionId: SupportRegionId,
 	billingPeriod: BillingPeriod,
 ): string => {
-	const currencyKey = detect(countryGroupId);
+	const currencyKey = detect(supportRegionId);
 	const ratePlan = `${billingPeriod}Plus`;
 
 	const product = getProductCatalog()['GuardianWeeklyDomestic'];
@@ -95,7 +94,7 @@ const getWeeklyDigitalDisplayPrice = (
 		return '';
 	}
 
-	return getDisplayPrice(countryGroupId, price, billingPeriod);
+	return getDisplayPrice(supportRegionId, price, billingPeriod);
 };
 
 function buildDigialPlusBenefits(): ProductBenefit[] {
@@ -109,15 +108,15 @@ function buildDigialPlusBenefits(): ProductBenefit[] {
 }
 
 function getDigitalPlusButtonsForBillingPeriods(
-	countryGroupId: CountryGroupId,
+	supportRegionId: SupportRegionId,
 	billingPeriods: BillingPeriod[],
 ): ProductButton[] {
 	return billingPeriods.reduce<ProductButton[]>((buttons, billingPeriod) => {
-		const price = getDigitalPlusDisplayPrice(countryGroupId, billingPeriod);
+		const price = getDigitalPlusDisplayPrice(supportRegionId, billingPeriod);
 		if (price) {
 			buttons.push({
 				ctaButtonText: price,
-				link: getDigitalPlusCheckoutDeepLink(countryGroupId, billingPeriod),
+				link: getDigitalPlusCheckoutDeepLink(supportRegionId, billingPeriod),
 				analyticsTracking: sendTrackingEventsOnClick({
 					id: `digital_plus_${billingPeriod.toLowerCase()}_cta`,
 					product: 'DigitalPack',
@@ -134,12 +133,12 @@ function getDigitalPlusButtonsForBillingPeriods(
 }
 
 function getDigitalPlusSubtitleForBillingPeriods(
-	countryGroupId: CountryGroupId,
+	supportRegionId: SupportRegionId,
 	billingPeriods: BillingPeriod[],
 ): string {
 	const prices = billingPeriods
 		.map((billingPeriod) =>
-			getDigitalPlusDisplayPrice(countryGroupId, billingPeriod),
+			getDigitalPlusDisplayPrice(supportRegionId, billingPeriod),
 		)
 		.filter(Boolean);
 
@@ -147,17 +146,17 @@ function getDigitalPlusSubtitleForBillingPeriods(
 }
 
 function digitalPlus(
-	countryGroupId: CountryGroupId,
+	supportRegionId: SupportRegionId,
 	priceCopy: PriceCopy,
 ): ProductCopy {
 	return {
 		title: 'Enjoy our suite of editions with&nbsp;<mark>Digital Plus</mark>',
-		subtitle: getDigitalPlusSubtitleForBillingPeriods(countryGroupId, [
+		subtitle: getDigitalPlusSubtitleForBillingPeriods(supportRegionId, [
 			BillingPeriod.Monthly,
 			BillingPeriod.Annual,
 		]),
 		description: 'Enjoy our suite of editions with Digital Plus',
-		buttons: getDigitalPlusButtonsForBillingPeriods(countryGroupId, [
+		buttons: getDigitalPlusButtonsForBillingPeriods(supportRegionId, [
 			BillingPeriod.Monthly,
 			BillingPeriod.Annual,
 		]),
@@ -169,13 +168,13 @@ function digitalPlus(
 }
 
 function guardianWeekly(
-	countryGroupId: CountryGroupId,
+	supportRegionId: SupportRegionId,
 	priceCopy: PriceCopy,
 	participations: Participations,
 ): ProductCopy {
 	const weeklyFindButton = {
 		ctaButtonText: 'Find out more',
-		link: guardianWeeklyLanding(countryGroupId, false),
+		link: guardianWeeklyLanding(supportRegionId, false),
 		analyticsTracking: sendTrackingEventsOnClick({
 			id: 'weekly_cta',
 			product: 'GuardianWeekly',
@@ -188,7 +187,7 @@ function guardianWeekly(
 	return {
 		title: 'The Guardian Weekly',
 		subtitle: getWeeklyDigitalDisplayPrice(
-			countryGroupId,
+			supportRegionId,
 			BillingPeriod.Monthly,
 		),
 		description:
@@ -202,12 +201,12 @@ function guardianWeekly(
 }
 
 const paper = (
-	countryGroupId: CountryGroupId,
+	supportRegionId: SupportRegionId,
 	priceCopy: PriceCopy,
 ): ProductCopy => {
 	return {
 		title: 'Newspaper',
-		subtitle: `from ${getDisplayPrice(countryGroupId, priceCopy.price)}`,
+		subtitle: `from ${getDisplayPrice(supportRegionId, priceCopy.price)}`,
 		description:
 			'Save on the Guardian newspaper retail price and enjoy full digital access',
 		buttons: [
@@ -231,16 +230,20 @@ const paper = (
 };
 
 export const getSubscriptionProducts = (
-	countryGroupId: CountryGroupId,
+	supportRegionId: SupportRegionId,
 	pricingCopy: PricingCopy,
 	participations: Participations,
 ): ProductCopy[] => {
 	const productcopy: ProductCopy[] = [
-		guardianWeekly(countryGroupId, pricingCopy[GuardianWeekly], participations),
+		guardianWeekly(
+			supportRegionId,
+			pricingCopy[GuardianWeekly],
+			participations,
+		),
 	];
-	if (countryGroupId === GBPCountries) {
-		productcopy.push(paper(countryGroupId, pricingCopy[Paper]));
+	if (supportRegionId === 'uk') {
+		productcopy.push(paper(supportRegionId, pricingCopy[Paper]));
 	}
-	productcopy.push(digitalPlus(countryGroupId, pricingCopy[DigitalPack]));
+	productcopy.push(digitalPlus(supportRegionId, pricingCopy[DigitalPack]));
 	return productcopy;
 };

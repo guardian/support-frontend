@@ -1,4 +1,3 @@
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { productCatalogFixture } from 'fixtures/productCatalogFixture';
 import { taxRatesFixture } from 'fixtures/taxRatesFixture';
 import { getEstimatedSalesTaxConfig } from './getEstimatedSalesTaxConfig';
@@ -12,7 +11,7 @@ describe('getEstimatedSalesTaxRate', () => {
 				'SupporterPlus',
 				'Monthly',
 				undefined,
-				SupportRegionId.UK,
+				'uk',
 			);
 
 			expect(result).toEqual({ type: 'tax_inclusive' });
@@ -27,7 +26,7 @@ describe('getEstimatedSalesTaxRate', () => {
 				'SupporterPlus',
 				'Monthly', // This rate plan is tax inclusive
 				undefined,
-				SupportRegionId.CA,
+				'ca',
 			);
 
 			expect(result).toEqual({ type: 'tax_inclusive' });
@@ -42,7 +41,7 @@ describe('getEstimatedSalesTaxRate', () => {
 				'SupporterPlus',
 				'MonthlyTaxExclusive',
 				undefined,
-				SupportRegionId.CA,
+				'ca',
 			);
 
 			expect(result).toEqual({ type: 'not_enough_information' });
@@ -57,7 +56,7 @@ describe('getEstimatedSalesTaxRate', () => {
 				'SupporterPlus',
 				'MonthlyTaxExclusive',
 				'AB',
-				SupportRegionId.CA,
+				'ca',
 			);
 
 			expect(result).toEqual({ type: 'tax_exclusive', rate: 0.05 });
@@ -73,7 +72,7 @@ describe('getEstimatedSalesTaxRate', () => {
 					'SupporterPlus',
 					'MonthlyTaxExclusive',
 					'AB',
-					SupportRegionId.CA,
+					'ca',
 				),
 			).toThrow('Missing tax rate data for product');
 		});
@@ -88,7 +87,7 @@ describe('getEstimatedSalesTaxRate', () => {
 					'SupporterPlus',
 					'MonthlyTaxExclusive',
 					'AB',
-					SupportRegionId.CA,
+					'ca',
 				),
 			).toThrow('Missing tax rate data');
 		});
@@ -103,7 +102,7 @@ describe('getEstimatedSalesTaxRate', () => {
 					'SupporterPlus',
 					'MonthlyTaxExclusive',
 					'XX',
-					SupportRegionId.CA,
+					'ca',
 				),
 			).toThrow('Province code was an unexpected value: XX');
 		});

@@ -7,7 +7,7 @@ import { MaybeEstimatedTax } from 'components/salesTax/maybeEstimatedTax';
 import type { Payment } from 'helpers/forms/checkouts';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
-import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import type { StudentDiscount } from 'pages/[supportRegionId]/student/helpers/discountDetails';
 import { TaxTsAndCs } from './taxTsAndCs';
 
 const summaryRow = css`

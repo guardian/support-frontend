@@ -1,6 +1,6 @@
 import type React from 'react';
 import { OnboardingAppsDiscovery } from 'components/onboarding/sections/appsDiscovery';
-import { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
+import { OnboardingSteps } from 'pages/[supportRegionId]/components/onboardingSteps';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
 export default {

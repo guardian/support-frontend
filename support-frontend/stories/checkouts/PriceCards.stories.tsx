@@ -1,12 +1,12 @@
 import { css } from '@emotion/react';
 import { Column, Columns } from '@guardian/source/react-components';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { PriceCardsProps } from 'components/priceCards/priceCards';
 import { PriceCards } from 'components/priceCards/priceCards';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
-import { BillingPeriod } from '@modules/product/billingPeriod';
 
 export default {
 	title: 'Checkouts/Price Cards',

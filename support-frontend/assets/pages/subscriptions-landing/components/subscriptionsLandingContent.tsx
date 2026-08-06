@@ -11,7 +11,7 @@ import {
 } from './subscriptionsLandingContentStyles';
 
 function SubscriptionsLandingContent({
-	countryGroupId,
+	supportRegionId,
 	pricingCopy,
 	participations,
 }: SubscriptionsLandingProps): JSX.Element | null {
@@ -20,7 +20,7 @@ function SubscriptionsLandingContent({
 	}
 
 	const subscriptionCopy = getSubscriptionProducts(
-		countryGroupId,
+		supportRegionId,
 		pricingCopy,
 		participations,
 	);
