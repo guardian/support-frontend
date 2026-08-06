@@ -31,10 +31,10 @@ function setSessionParticipations(participations: Participations, key: Key) {
 }
 
 function clearParticipationsFromSession(): void {
-	setSession(PARTICIPATIONS_KEY, JSON.stringify({}));
-	setSession(LANDING_PAGE_PARTICIPATIONS_KEY, JSON.stringify({}));
-	setSession(ONE_TIME_CHECKOUT_PARTICIPATIONS_KEY, JSON.stringify({}));
-	setSession(STUDENT_LANDING_PAGE_PARTICIPATIONS_KEY, JSON.stringify({}));
+	setSession(PARTICIPATIONS_KEY, {});
+	setSession(LANDING_PAGE_PARTICIPATIONS_KEY, {});
+	setSession(ONE_TIME_CHECKOUT_PARTICIPATIONS_KEY, {});
+	setSession(STUDENT_LANDING_PAGE_PARTICIPATIONS_KEY, {});
 }
 
 export {
