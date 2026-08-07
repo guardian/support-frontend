@@ -34,6 +34,10 @@ export const buildApiRouter = (idealPostcodeService: IdealPostcodeService) => {
 
 	apiRouter.get(
 		'/postcode-lookup/:postcode',
+		(req, res, next) => {
+			res.set('Cache-Control', 'no-cache, private');
+			next();
+		},
 		buildPostcodeLookupHandler(idealPostcodeService),
 	);
 

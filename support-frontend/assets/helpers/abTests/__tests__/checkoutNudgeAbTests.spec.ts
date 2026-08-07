@@ -1,4 +1,5 @@
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { setSession } from 'helpers/storage/storage';
 import type { CheckoutNudgeTest } from '../../globalsAndSwitches/checkoutNudgeSettings';
 import { getCheckoutNudgeParticipations } from '../checkoutNudgeAbTests';
 import { CHECKOUT_NUDGE_PARTICIPATIONS_KEY } from '../sessionStorage';
@@ -149,10 +150,9 @@ describe('getCheckoutNudgeParticipations', () => {
 	});
 
 	it('assigns a user to a test if on landing page but test is in session storage', () => {
-		window.sessionStorage.setItem(
-			CHECKOUT_NUDGE_PARTICIPATIONS_KEY,
-			JSON.stringify({ [oneTimeToRecurring__NON_US.name]: 'control' }),
-		);
+		setSession(CHECKOUT_NUDGE_PARTICIPATIONS_KEY, {
+			[oneTimeToRecurring__NON_US.name]: 'control',
+		});
 
 		const result = getCheckoutNudgeParticipations(
 			'GBPCountries',

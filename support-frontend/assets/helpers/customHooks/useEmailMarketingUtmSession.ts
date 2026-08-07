@@ -5,17 +5,15 @@ import type {
 } from 'helpers/tracking/acquisitions';
 
 const useEmailMarketingSession = (): { isMarketingEmailSession: boolean } => {
-	const acquisitionData = getSession('acquisitionData');
+	const acquisitionData = getSession(
+		'acquisitionData',
+	) as ReferrerAcquisitionData | null;
 	let queryParams: AcquisitionQueryParameters = [];
 
 	if (acquisitionData) {
 		try {
-			const parsedAcquisitionData = JSON.parse(
-				acquisitionData,
-			) as ReferrerAcquisitionData;
-
-			if (parsedAcquisitionData.queryParameters) {
-				queryParams = parsedAcquisitionData.queryParameters;
+			if (acquisitionData.queryParameters) {
+				queryParams = acquisitionData.queryParameters;
 			}
 		} catch (error) {
 			console.error(

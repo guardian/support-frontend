@@ -80,13 +80,10 @@ const setReferrerDataInLocalStorage = (
 	const { referrerUrl, referrerPageviewId } = acquisitionData;
 
 	if (!getLocal('ophan_follow') && referrerUrl && referrerPageviewId) {
-		setLocal(
-			'ophan_follow',
-			JSON.stringify({
-				refViewId: referrerPageviewId,
-				ref: referrerUrl,
-			}),
-		);
+		setLocal('ophan_follow', {
+			refViewId: referrerPageviewId,
+			ref: referrerUrl,
+		});
 	}
 };
 
