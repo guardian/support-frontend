@@ -27,7 +27,7 @@ export const redCardTheme: CardTheme = {
 	benefitIconColor: palette.news[400],
 };
 export const redCardThemes: CardThemes = [
-	redCardTheme,
 	defaultCardTheme,
+	redCardTheme,
 	{ ...defaultCardTheme, titlePillColor: palette.brand[500] },
 ];
