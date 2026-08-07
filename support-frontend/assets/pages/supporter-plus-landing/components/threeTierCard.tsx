@@ -24,7 +24,7 @@ import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
 	type CardTheme,
 	defaultCardTheme,
-} from 'helpers/landingPage/cardThemes';
+} from 'helpers/landingPage/cardTheme';
 import { getProductLabel } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import {
@@ -230,11 +230,6 @@ export function ThreeTierCard({
 	const { titlePillColor, cardPillColor, cardBackColor, benefitIconColor } =
 		cardTheme ?? defaultCardTheme;
 
-	// if user selected from banner/epic title pill defaults to red
-	const titlePillColorSelection = isUserSelected
-		? palette.news[400]
-		: titlePillColor;
-
 	// if pill visible without subdued styling or user selected from banner/epic use highlight colors if available
 	const isHighlightedCard = (!!pillCopy && !isSubdued) || isUserSelected;
 
@@ -265,7 +260,7 @@ export function ThreeTierCard({
 			)}
 			<div css={titleContainer}>
 				{titlePill && (
-					<BenefitPill copy={titlePill} pillColor={titlePillColorSelection} />
+					<BenefitPill copy={titlePill} pillColor={titlePillColor} />
 				)}
 				<h2 css={[titleCss, checkListTextItemCss]}>{title}</h2>
 			</div>

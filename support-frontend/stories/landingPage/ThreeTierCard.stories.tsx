@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
 import { currencyCodes } from '@modules/internationalisation/currency';
-import { redCardTheme } from 'helpers/landingPage/cardThemes';
+import { redCardTheme } from 'helpers/landingPage/cardTheme';
 import type { ThreeTierCardProps } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { ThreeTierCard } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
