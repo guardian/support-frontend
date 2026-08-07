@@ -12,15 +12,15 @@ const noCache: RequestHandler = (_req, res, next) => {
 };
 
 export const buildApiRouterWithServices = async () => {
-	const apiKey = await getIdealPostcodeApiKey();
+	const [idealPostcodesApiKey, paperRoundConfig] = await Promise.all([
+		getIdealPostcodeApiKey(),
+		getPaperRoundApiConfig(),
+	]);
 
-	const idealPostcodeService = new IdealPostcodeService(apiKey);
-
-	const { baseUrl: paperRoundBaseUrl, apiKey: paperRoundApiKey } =
-		await getPaperRoundApiConfig();
+	const idealPostcodeService = new IdealPostcodeService(idealPostcodesApiKey);
 	const paperRoundService = new PaperRoundService(
-		paperRoundBaseUrl,
-		paperRoundApiKey,
+		paperRoundConfig.baseUrl,
+		paperRoundConfig.apiKey,
 	);
 
 	return buildApiRouter(idealPostcodeService, paperRoundService);
