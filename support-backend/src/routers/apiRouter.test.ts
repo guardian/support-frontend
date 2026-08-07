@@ -37,6 +37,7 @@ describe('GET /postcode-lookup/:postcode', () => {
 				country: 'UK',
 			},
 		]);
+		expect(response.headers['cache-control']).toBe('no-cache, private');
 		expect(findSpy).toHaveBeenCalledWith('N1 9GU');
 	});
 
