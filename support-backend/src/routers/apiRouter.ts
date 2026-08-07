@@ -1,5 +1,6 @@
 import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 import { Router } from 'express';
+import { buildDeliveryAgentsHandler } from '../handlers/deliveryAgents';
 import { buildPostcodeLookupHandler } from '../handlers/postcodeLookup';
 import { IdealPostcodeService } from '../services/idealPostcodeService';
 import { stageFromEnvironment } from '../utils/stage';
@@ -36,6 +37,8 @@ export const buildApiRouter = (idealPostcodeService: IdealPostcodeService) => {
 		'/postcode-lookup/:postcode',
 		buildPostcodeLookupHandler(idealPostcodeService),
 	);
+
+	apiRouter.get('/delivery-agents/:postcode', buildDeliveryAgentsHandler());
 
 	return apiRouter;
 };
