@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
 import { currencyCodes } from '@modules/internationalisation/currency';
-import { alternativeTierCardColor } from 'helpers/landingPage/tierCardColors';
+import { redCardTheme } from 'helpers/landingPage/cardThemes';
 import type { ThreeTierCardProps } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { ThreeTierCard } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
@@ -58,9 +58,9 @@ function Template(args: ThreeTierCardProps) {
 
 Template.args = {} as Record<string, unknown>;
 
-export const Regular = Template.bind({});
+export const DefaultTheme = Template.bind({});
 
-Regular.args = {
+DefaultTheme.args = {
 	isSubdued: false,
 	currencyId: 'GBP',
 	paymentFrequency: 'MONTHLY',
@@ -75,9 +75,9 @@ Regular.args = {
 	},
 };
 
-export const Alternative = Template.bind({});
+export const RedTheme = Template.bind({});
 
-Alternative.args = {
+RedTheme.args = {
 	isSubdued: false,
 	currencyId: 'GBP',
 	paymentFrequency: 'MONTHLY',
@@ -90,7 +90,7 @@ Alternative.args = {
 		cta: { copy: 'Support' },
 		label: { copy: 'Highest impact' },
 	},
-	cardColors: alternativeTierCardColor,
+	cardTheme: redCardTheme,
 };
 
 export const Promotion = Template.bind({});

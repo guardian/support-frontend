@@ -22,9 +22,9 @@ import {
 } from 'components/checkoutBenefits/benefitsCheckList';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
-	regularTierCardColor,
-	type TierCardColors,
-} from 'helpers/landingPage/tierCardColors';
+	type CardTheme,
+	defaultCardTheme,
+} from 'helpers/landingPage/cardThemes';
 import { getProductLabel } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import {
@@ -49,7 +49,7 @@ export type CardContent = LandingPageProductDescription & {
 
 export type ThreeTierCardProps = {
 	cardContent: CardContent;
-	cardColors?: TierCardColors;
+	cardTheme?: CardTheme;
 	cardTier: 1 | 2 | 3;
 	promoCount: number;
 	isSubdued: boolean;
@@ -175,6 +175,7 @@ const benefitsPrefixPlus = css`
 
 export function ThreeTierCard({
 	cardContent,
+	cardTheme,
 	cardTier,
 	promoCount,
 	isSubdued,
@@ -182,7 +183,6 @@ export function ThreeTierCard({
 	billingPeriod,
 	showWeeklyPrice = false,
 	useLargePriceMinHeight = false,
-	cardColors,
 }: ThreeTierCardProps): JSX.Element {
 	const {
 		title,
@@ -228,7 +228,7 @@ export function ThreeTierCard({
 	);
 
 	const { titlePillColor, cardPillColor, cardBackColor, benefitIconColor } =
-		cardColors ?? regularTierCardColor;
+		cardTheme ?? defaultCardTheme;
 
 	// if user selected from banner/epic title pill defaults to red
 	const titlePillColorSelection = isUserSelected

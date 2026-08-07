@@ -3,10 +3,11 @@ import { between, from, space } from '@guardian/source/foundations';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
+import type { CardThemes } from 'helpers/landingPage/cardThemes';
 import {
-	alternativeTierCardColors,
-	regularTierCardColors,
-} from 'helpers/landingPage/tierCardColors';
+	defaultCardThemes,
+	redCardThemes,
+} from 'helpers/landingPage/cardThemes';
 import type { CardContent } from './threeTierCard';
 import { ThreeTierCard } from './threeTierCard';
 
@@ -15,7 +16,6 @@ export type ThreeTierCardsProps = {
 	currencyId: CurrencyCode;
 	billingPeriod: BillingPeriod;
 	showWeeklyPrice?: boolean;
-	showCardColors?: boolean;
 };
 
 const container = (cardCount: number) => css`
@@ -65,9 +65,9 @@ export function ThreeTierCards({
 			.length > 1;
 	let promoCount = 0;
 
-	const tierCardColors = enableAlternativeSupporterPlusCardColors
-		? alternativeTierCardColors
-		: regularTierCardColors;
+	const cardThemes: CardThemes = enableAlternativeSupporterPlusCardColors
+		? redCardThemes
+		: defaultCardThemes;
 
 	return (
 		<div
@@ -83,7 +83,7 @@ export function ThreeTierCards({
 				return (
 					<ThreeTierCard
 						cardContent={cardContent}
-						cardColors={tierCardColors[cardIndex]}
+						cardTheme={cardThemes[cardIndex]}
 						cardTier={cardIndexToTier(cardIndex)}
 						key={`threeTierCard${cardIndex}`}
 						promoCount={promoCount}
