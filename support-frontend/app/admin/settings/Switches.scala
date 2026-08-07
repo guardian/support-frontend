@@ -31,6 +31,7 @@ case class FeatureSwitches(
     enableTooledStudentLandingPage: Option[SwitchState],
     enableStripePaymentElement: Option[SwitchState],
     enableCanadaTaxExclusion: Option[SwitchState],
+    enableAlternativeSupporterPlusCardColors: Option[SwitchState],
 )
 
 object FeatureSwitches {

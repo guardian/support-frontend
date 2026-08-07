@@ -1,13 +1,13 @@
 import { css } from '@emotion/react';
 import {
 	neutral,
-	news,
+	palette,
 	space,
 	textSansBold14,
 } from '@guardian/source/foundations';
 
-const benefitPillCss = css`
-	background-color: ${news[400]};
+const benefitPillCss = (pillColor?: string) => css`
+	background-color: ${pillColor ?? palette.news[400]};
 	color: ${neutral[100]};
 	${textSansBold14};
 	border-radius: 4px;
@@ -17,8 +17,9 @@ const benefitPillCss = css`
 
 interface BenefitPillProps {
 	copy: string;
+	pillColor?: string;
 }
 
-export function BenefitPill({ copy }: BenefitPillProps) {
-	return <span css={benefitPillCss}>{copy}</span>;
+export function BenefitPill({ copy, pillColor }: BenefitPillProps) {
+	return <span css={benefitPillCss(pillColor)}>{copy}</span>;
 }
