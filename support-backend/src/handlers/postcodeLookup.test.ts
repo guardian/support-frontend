@@ -1,11 +1,11 @@
 import express from 'express';
 import request from 'supertest';
 import { IdealPostcodeService } from '../services/idealPostcodeService';
-import { buildApiRouter } from './apiRouter';
+import { buildPostcodeLookupHandler } from './postcodeLookup';
 
 const service = new IdealPostcodeService('fake_api_key');
 const app = express();
-app.use(buildApiRouter(service));
+app.get('/postcode-lookup/:postcode', buildPostcodeLookupHandler(service));
 
 afterEach(() => {
 	jest.restoreAllMocks();
