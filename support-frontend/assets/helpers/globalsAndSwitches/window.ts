@@ -27,7 +27,7 @@ const featureSwitchesSchema = z.object({
 	enableCheckoutNudge: z.optional(z.enum(['On', 'Off'])),
 	enableMParticle: z.optional(z.enum(['On', 'Off'])),
 	enableCanadaTaxExclusion: z.optional(z.enum(['On', 'Off'])),
-	enableAlternativeSupporterPlusCardColors: z.optional(z.enum(['On', 'Off'])),
+	enableRedCardTheme: z.optional(z.enum(['On', 'Off'])),
 });
 
 export type FeatureSwitches = z.infer<typeof featureSwitchesSchema>;

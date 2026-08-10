@@ -41,7 +41,7 @@ export default {
 	decorators: [
 		withCenterAlignment,
 		withSourceReset,
-		withFeatureSwitches({ enableAlternativeSupporterPlusCardColors: 'Off' }),
+		withFeatureSwitches({ enableRedCardTheme: 'Off' }),
 	],
 	parameters: {
 		docs: {

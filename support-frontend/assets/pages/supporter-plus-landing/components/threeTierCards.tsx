@@ -53,7 +53,7 @@ export function ThreeTierCards({
 	billingPeriod,
 	showWeeklyPrice,
 }: ThreeTierCardsProps): JSX.Element {
-	const { enableAlternativeSupporterPlusCardColors } = useFeatureSwitches();
+	const { enableRedCardTheme } = useFeatureSwitches();
 	const shouldUseLargePriceMinHeight =
 		!!showWeeklyPrice ||
 		cardsContent.some((card) => !!card.promotion || !!card.billingPeriodsCopy);
@@ -62,7 +62,7 @@ export function ThreeTierCards({
 			.length > 1;
 	let promoCount = 0;
 
-	const cardTheme: CardTheme = enableAlternativeSupporterPlusCardColors
+	const cardTheme: CardTheme = enableRedCardTheme
 		? redCardTheme
 		: defaultCardTheme;
 
