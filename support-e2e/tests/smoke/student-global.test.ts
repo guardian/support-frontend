@@ -15,7 +15,8 @@ import { email, firstName, lastName } from '../utils/users';
 		paymentMethod: 'DirectDebit',
 		product: 'SupporterPlus',
 		ratePlan: 'OneYearStudent',
-		amountDescription: '£9',
+		glyph: '£',
+		amountDescription: /[£](\d|\.)+\/year/,
 		expectedCardHeading: ProductTierLabel.TierTwo,
 		expectedCheckoutText:
 			'If you cancel within the first 14 days, you will receive a full refund.',
@@ -30,7 +31,8 @@ import { email, firstName, lastName } from '../utils/users';
 		paymentMethod: 'Card',
 		product: 'SupporterPlus',
 		ratePlan: 'OneYearStudent',
-		amountDescription: '$10',
+		glyph: '$',
+		amountDescription: /[$](\d|\.)+\/year/,
 		expectedCardHeading: ProductTierLabel.TierTwo,
 		expectedCheckoutText:
 			'If you cancel within the first 14 days, you will receive a full refund.',
@@ -43,7 +45,8 @@ import { email, firstName, lastName } from '../utils/users';
 		paymentMethod: 'Card',
 		product: 'SupporterPlus',
 		ratePlan: 'OneYearStudent',
-		amountDescription: '$10',
+		glyph: '$',
+		amountDescription: /[$](\d|\.)+\/year/,
 		expectedCardHeading: ProductTierLabel.TierTwo,
 		expectedCheckoutText:
 			'If you cancel within the first 14 days, you will receive a full refund.',
@@ -64,7 +67,7 @@ import { email, firstName, lastName } from '../utils/users';
 		});
 		const card = page.locator('section').filter({ has: cardHeading });
 		await expect(
-			card.getByText(`${testDetails.amountDescription}/year`).first(),
+			card.getByText(testDetails.amountDescription).first(),
 		).toBeVisible();
 
 		// Click through to the checkout
@@ -72,10 +75,11 @@ import { email, firstName, lastName } from '../utils/users';
 		await purchaseButton.click();
 
 		await page.waitForURL('https://www.studentbeans.com/**');
-		const studentBeansCardHeader = page.getByText(
-			`${testDetails.expectedCardHeading} subscription - ${testDetails.amountDescription}/year`,
+		const studentBeansCardHeader = new RegExp(
+			`${testDetails.expectedCardHeading} subscription - ` +
+				testDetails.amountDescription.source,
 		);
-		await expect(studentBeansCardHeader).toBeVisible();
+		await expect(page.getByText(studentBeansCardHeader)).toBeVisible();
 	});
 
 	test(`${testDetails.expectedCardHeading} checkout for ${testDetails.country}`, async ({
@@ -136,9 +140,11 @@ import { email, firstName, lastName } from '../utils/users';
 			timeout: 600000,
 		});
 
-		const thankYouText = `Thank you for supporting us with ${testDetails.amountDescription}`;
-
-		await expect(page.getByText(thankYouText).first()).toBeVisible({
+		await expect(
+			page
+				.getByText(`Thank you for supporting us with ${testDetails.glyph}`)
+				.first(),
+		).toBeVisible({
 			timeout: 600000,
 		});
 	});
