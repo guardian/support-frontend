@@ -4,7 +4,7 @@ import { DataExtensionNames, sendEmail } from '@modules/email/email';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { checkoutFailureReasonFromErrorMessage } from '../errors/checkoutFailureReasons';
 import { errorFromStateSchema } from '../errors/errorFromStateSchema';
-import { isTransactionDeclinedError } from '../errors/zuoraErrors';
+import { isTransactionDeclinedError } from '../errors/transactionDeclinedErrors';
 import type { CheckoutFailureState } from '../model/checkoutFailureState';
 import type { FailureHandlerState } from '../model/failureHandlerState';
 import { stageFromEnvironment } from '../model/stage';
