@@ -567,7 +567,7 @@ export function ThreeTierLanding({
 									fund, foundation or retirement account, or by mailing a check,{' '}
 									<br />
 									please visit our{' '}
-									<a href="https://manage.theguardian.com/help-centre/article/contribute-another-way?INTCMP=gdnwb_copts_support_contributions_referral">
+									<a href="https://help.theguardian.com/article/how-else-can-i-contribute-or-become-a-supporter">
 										help page
 									</a>{' '}
 									to learn how.

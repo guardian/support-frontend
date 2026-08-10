@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import type { ContributionType } from 'helpers/contributions';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import * as storage from 'helpers/storage/storage';
+import { getSession, setSession } from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
 import type { PaymentMethod } from '../forms/paymentMethods';
 import { DirectDebit, PayPal } from '../forms/paymentMethods';
@@ -67,14 +67,14 @@ const googleAnalyticsEventQueue: Array<() => void> = [];
 
 // ----- Functions ----- //
 function getOrderId() {
-	let value: string | null | undefined = storage.getSession('orderId');
+	let orderId = getSession('orderId');
 
-	if (value === null) {
-		value = uuidv4();
-		storage.setSession('orderId', value);
+	if (orderId === null) {
+		orderId = uuidv4();
+		setSession('orderId', orderId);
 	}
 
-	return value;
+	return orderId;
 }
 
 function ophanPaymentMethod(paymentMethod: PaymentMethod | null | undefined) {
