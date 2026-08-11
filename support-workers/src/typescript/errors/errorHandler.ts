@@ -1,4 +1,4 @@
-import { ValidationError } from '@guardian/support-service-lambdas/modules/errors';
+import { ValidationError } from '@modules/errors';
 import type { ZuoraError } from '@modules/zuora/errors/zuoraError';
 import Stripe from 'stripe';
 import { SalesforceError, salesforceErrorCodes } from '../services/salesforce';
