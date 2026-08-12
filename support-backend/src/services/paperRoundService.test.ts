@@ -8,23 +8,25 @@ afterEach(() => {
 	fetchMock.clearHistory();
 });
 
+const validAgent = [
+	{
+		agentid: 1,
+		agentname: 'Example Delivery Agent',
+		deliverymethod: '',
+		nbrdeliverydays: 7,
+		postcode: 'N1 9GU',
+		refgroupid: 1,
+		summary: '',
+	},
+];
+
 describe('PaperRoundService', () => {
 	describe('coverage', () => {
 		it('returns a parsed valid response', async () => {
 			fetchMock.post(`${BASE_URL}/coverage`, {
 				status_code: 200,
 				data: {
-					agents: [
-						{
-							agentid: 1,
-							agentname: 'Example Delivery Agent',
-							deliverymethod: '',
-							nbrdeliverydays: 7,
-							postcode: 'N1 9GU',
-							refgroupid: 1,
-							summary: '',
-						},
-					],
+					agents: validAgent,
 					message: '',
 					status: 'CO',
 				},
@@ -36,17 +38,7 @@ describe('PaperRoundService', () => {
 			expect(result).toEqual({
 				status_code: 200,
 				data: {
-					agents: [
-						{
-							agentid: 1,
-							agentname: 'Example Delivery Agent',
-							deliverymethod: '',
-							nbrdeliverydays: 7,
-							postcode: 'N1 9GU',
-							refgroupid: 1,
-							summary: '',
-						},
-					],
+					agents: validAgent,
 					message: '',
 					status: 'CO',
 				},
