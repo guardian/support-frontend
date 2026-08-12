@@ -119,6 +119,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "enableCanadaTaxExclusion" : {
           |        "description" : "Canada Tax Exclusive Rate Plans",
           |        "state" : "Off"
+          |      },
+          |      "enableRedCardTheme" : {
+          |        "description" : "Enable alternative SupporterPlus card colours",
+          |        "state" : "Off"
           |      }
           |    }
           |  },
@@ -173,6 +177,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
             Some(On),
             Some(On),
             Some(On),
+            Some(Off),
             Some(Off),
             Some(Off),
           ),
