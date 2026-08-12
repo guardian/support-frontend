@@ -249,7 +249,10 @@ export function ThreeTierCard({
 			)}
 		>
 			{isUserSelected && (
-				<ThreeTierCardPill title="Your selection" color={cardPillColor} />
+				<ThreeTierCardPill
+					title={pillCopy ?? 'Your selection'}
+					color={cardPillColor}
+				/>
 			)}
 			{!!pillCopy && !isUserSelected && (
 				<ThreeTierCardPill
