@@ -649,7 +649,14 @@ export function OneTimeCheckoutComponent({
 								return 'StripePaymentRequestButton';
 							}
 						}
-						if (paymentMethodResult.paymentMethod.paypal) {
+						if (
+							paymentMethodResult.paymentMethod.type.toLowerCase() === 'paypal'
+						) {
+							if (paymentMethodResult.paymentMethod.paypal === undefined) {
+								logException(
+									'Stripe paymentMethod type is paypal but no paypal field exists',
+								);
+							}
 							return 'StripePaypal';
 						}
 						return 'StripeCheckout';
