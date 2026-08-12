@@ -256,7 +256,7 @@ export function ThreeTierCard({
 			)}
 			{!!pillCopy && !isUserSelected && (
 				<ThreeTierCardPill
-					title={promotion?.landingPage?.roundel ?? pillCopy}
+					title={pillCopy}
 					color={cardPillColor}
 					subdue={isSubdued}
 				/>
