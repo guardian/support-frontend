@@ -1,11 +1,16 @@
 import { css } from '@emotion/react';
-import { Button, themeButtonBrand } from '@guardian/source/react-components';
+import { Button } from '@guardian/source/react-components';
 import { Popover } from '@guardian/source-development-kitchen/react-components';
 import { useState } from 'react';
 import { InfoRound } from './InfoRound';
 
 const popoverStyles = css`
 	display: inline-block;
+`;
+
+const buttonStyles = css`
+	background: none;
+	border: none;
 `;
 
 export default function Tooltip({ content }: { content: string }): JSX.Element {
@@ -30,12 +35,12 @@ export default function Tooltip({ content }: { content: string }): JSX.Element {
 						id="info-icon"
 						icon={<InfoRound />}
 						size="xsmall"
-						priority="primary"
+						priority="tertiary"
 						hideLabel={true}
 						onClick={handlePopoverClick}
 						aria-haspopup="dialog"
 						data-testid="popover-trigger"
-						theme={themeButtonBrand}
+						cssOverrides={buttonStyles}
 					>
 						More information
 					</Button>
