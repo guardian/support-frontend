@@ -676,6 +676,10 @@ class Application(
     ).withSettingsSurrogateKey
   }
 
+  /** Serves the SPA shell for invitation accept/reject pages. The invitation code is only needed by the client router.
+    */
+  def invitationPageRouter(countryGroupId: String, code: String) = productCheckoutRouter(countryGroupId)
+
   def eventsRouter(countryGroupId: String, eventId: String) = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(

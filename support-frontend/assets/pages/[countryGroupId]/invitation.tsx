@@ -1,5 +1,6 @@
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { useEffect, useState } from 'preact/hooks';
+import { useParams } from 'react-router';
 import { InvitationUnavailable } from 'components/onboarding/sections/invitationUnavailable';
 import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
 import { AnalyticsProfileCacheProvider } from 'helpers/customHooks/analyticsProfileCache';
@@ -9,15 +10,20 @@ import { verifyInvitation } from 'helpers/onboardingInvitee/invitation';
 import OnboardingDeclineComponent from './components/onboardingDeclineComponent';
 import OnboardingInviteeComponent from './components/onboardingInviteeComponent';
 
-type JoinProps = {
+type InvitationMode = 'accept' | 'reject';
+
+type InvitationProps = {
 	supportRegionId: SupportRegionId;
 	landingPageSettings: LandingPageVariant;
+	mode: InvitationMode;
 };
 
-export function Join({ supportRegionId, landingPageSettings }: JoinProps) {
-	const searchParams = new URLSearchParams(window.location.search);
-	const invitationCode = searchParams.get('invitationCode');
-	const isDecline = searchParams.has('decline');
+export function Invitation({
+	supportRegionId,
+	landingPageSettings,
+	mode,
+}: InvitationProps) {
+	const { code: invitationCode } = useParams<{ code: string }>();
 
 	const [verification, setVerification] = useState<VerifyInvitationResult>();
 
@@ -45,11 +51,12 @@ export function Join({ supportRegionId, landingPageSettings }: JoinProps) {
 		return <InvitationUnavailable />;
 	}
 
-	if (isDecline) {
+	if (mode === 'reject') {
 		return (
 			<OnboardingDeclineComponent
 				supportRegionId={supportRegionId}
 				landingPageSettings={landingPageSettings}
+				invitationCode={invitationCode}
 			/>
 		);
 	}

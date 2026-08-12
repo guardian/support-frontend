@@ -13,15 +13,16 @@ import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageS
 interface OnboardingDeclineComponentProps {
 	supportRegionId: SupportRegionId;
 	landingPageSettings: LandingPageVariant;
+	invitationCode: string;
 }
 
 function OnboardingDeclineComponent({
 	supportRegionId,
 	landingPageSettings,
+	invitationCode,
 }: OnboardingDeclineComponentProps) {
 	const scrollToTopRef = useRef<HTMLDivElement>(null);
 	const searchParams = useSearchParams();
-	const invitationCode = searchParams[0].get('invitationCode');
 
 	const [currentStep, setCurrentStep] = useState<OnboardingDeclineSteps>();
 	const [declineFailed, setDeclineFailed] = useState(false);
@@ -49,10 +50,6 @@ function OnboardingDeclineComponent({
 			});
 		}
 	}, [searchParams]);
-
-	if (!invitationCode) {
-		return <InvitationUnavailable />;
-	}
 
 	if (declineFailed) {
 		return <InvitationUnavailable />;

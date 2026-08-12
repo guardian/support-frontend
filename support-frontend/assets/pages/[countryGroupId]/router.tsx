@@ -172,18 +172,39 @@ const router = createBrowserRouter([
 					},
 				},
 				{
-					path: `/${supportRegionId}/join`,
+					path: `/${supportRegionId}/invitation/accept/:code`,
 					lazy: async () => {
-						const { Join } = await import(
-							/* webpackChunkName: "Join" */ './join'
+						const { Invitation } = await import(
+							/* webpackChunkName: "Invitation" */ './invitation'
 						);
 						return {
-							Component: function JoinRoute() {
+							Component: function InvitationAcceptRoute() {
 								const { landing } = useRootLoaderData();
 								return (
-									<Join
+									<Invitation
 										supportRegionId={supportRegionId}
 										landingPageSettings={landing.variant}
+										mode="accept"
+									/>
+								);
+							},
+						};
+					},
+				},
+				{
+					path: `/${supportRegionId}/invitation/reject/:code`,
+					lazy: async () => {
+						const { Invitation } = await import(
+							/* webpackChunkName: "Invitation" */ './invitation'
+						);
+						return {
+							Component: function InvitationRejectRoute() {
+								const { landing } = useRootLoaderData();
+								return (
+									<Invitation
+										supportRegionId={supportRegionId}
+										landingPageSettings={landing.variant}
+										mode="reject"
 									/>
 								);
 							},

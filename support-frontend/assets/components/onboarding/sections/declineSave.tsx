@@ -106,7 +106,9 @@ export function OnboardingDeclineSave({
 						cssOverrides={buttonOverrides}
 						onClick={() => {
 							void navigate(
-								`/${supportRegionId}/join?invitationCode=${invitationCode}`,
+								`/${supportRegionId}/invitation/accept/${encodeURIComponent(
+									invitationCode,
+								)}`,
 							);
 						}}
 					>
