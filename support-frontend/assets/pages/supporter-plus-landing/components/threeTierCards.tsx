@@ -54,8 +54,8 @@ export function ThreeTierCards({
 		!!showWeeklyPrice ||
 		cardsContent.some((card) => !!card.promotion || !!card.billingPeriodsCopy);
 	const haveLabelAndSelectedCards =
-		cardsContent.filter((card) => !!card.label || card.isUserSelected).length >
-		1;
+		cardsContent.filter((card) => !!card.label?.copy || card.isUserSelected)
+			.length > 1;
 	let promoCount = 0;
 	return (
 		<div

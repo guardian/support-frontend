@@ -2,6 +2,7 @@ import type { ZuoraError } from '@guardian/support-service-lambdas/modules/zuora
 import { retryLimited, retryNone } from './retryError';
 
 const transactionDeclinedMessages = [
+	//Errors from Stripe which come via Zuora when we try to charge the card
 	'Transaction declined.402 - [card_error/card_declined/invalid_pin] Your card was declined.',
 	'Transaction declined.402 - [card_error/card_declined/call_issuer] Your card was declined. You can call your bank for details.',
 	'Transaction declined.402 - [card_error/card_declined/invalid_account] Invalid account.',
@@ -22,12 +23,15 @@ const transactionDeclinedMessages = [
 	'Transaction declined.402 - [card_error/card_declined/reenter_transaction] Your card was declined.',
 	'Transaction declined.402 - [card_error/expired_card/expired_card] Your card has expired.',
 	'Transaction declined.402 - [card_error/processing_error/processing_error] An error occurred while processing your card. Try again in a little bit.',
+	'Transaction declined.402 - [card_error/authentication_required/authentication_required] This PaymentIntent requires an on-session action. Please get your customer back on session and re-confirm the PaymentIntent with a payment method when the customer is on session.',
+	'Your card was declined.', // The same Stripe error as above but coming directly from Stripe rather than via Zuora
 	'Transaction declined.10417 - Instruct the customer to retry the transaction using an alternative payment method from the customers PayPal wallet.',
 	'Error occurred while processing payment method.code=validation_failed,message=account_number did not pass modulus check',
 	'Error occurred while processing payment method.code=validation_failed,message=account_number is the wrong length (should be 8 characters)',
 	'Error occurred while processing payment method.code=validation_failed,message=account_number does not match sort code',
 	"Transaction declined.INSTRUMENT_DECLINED - The instrument presented  was either declined by the processor or bank, or it can't be used for this payment.",
 	'Transaction declined.TRANSACTION_REFUSED - The request was refused',
+	'The payment method you provided has already been attached to a customer.', // Caused by duplicate executions being triggered, the first will succeed and the second will fail with this error.
 ];
 
 export const isTransactionDeclinedError = (errorMessage: string) =>

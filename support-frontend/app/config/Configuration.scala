@@ -18,8 +18,6 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val googleAuth = new GoogleAuth(config.getConfig("googleAuth"))
 
-  lazy val getAddressIOConfig = GetAddressIOConfig.fromConfig(config)
-
   lazy val idealPostcodesConfig = IdealPostcodesConfig.fromConfig(config)
 
   lazy val salesTaxConfig = SalesTaxApiConfig.fromConfig(config)

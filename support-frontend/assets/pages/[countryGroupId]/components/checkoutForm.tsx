@@ -486,7 +486,6 @@ export default function CheckoutForm({
 		countryId,
 		productKey,
 		ratePlanKey,
-		abParticipations,
 	)
 		.filter(isPaymentMethod)
 		.filter(paymentMethodIsActive);

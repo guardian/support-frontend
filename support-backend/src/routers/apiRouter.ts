@@ -10,7 +10,7 @@ async function getIdealPostcodeApiKey(): Promise<string> {
 		region: 'eu-west-1',
 	});
 	const command = new GetParameterCommand({
-		Name: `/support/support-backend/${stage}/ideal-postcodes-api.key`,
+		Name: `/${stage}/support/support-backend/ideal-postcodes-api.key`,
 		WithDecryption: true,
 	});
 	const response = await ssmClient.send(command);
@@ -34,6 +34,10 @@ export const buildApiRouter = (idealPostcodeService: IdealPostcodeService) => {
 
 	apiRouter.get(
 		'/postcode-lookup/:postcode',
+		(req, res, next) => {
+			res.set('Cache-Control', 'no-cache, private');
+			next();
+		},
 		buildPostcodeLookupHandler(idealPostcodeService),
 	);
 
