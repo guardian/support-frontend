@@ -15,8 +15,7 @@ import { email, firstName, lastName } from '../utils/users';
 		paymentMethod: 'DirectDebit',
 		product: 'SupporterPlus',
 		ratePlan: 'OneYearStudent',
-		glyph: '£',
-		amountDescription: /[£](\d|\.)+\/year/,
+		priceDescriptionFormat: /[£](\d|\.)+\/year/,
 		expectedCardHeading: ProductTierLabel.TierTwo,
 		expectedCheckoutText:
 			'If you cancel within the first 14 days, you will receive a full refund.',
@@ -31,8 +30,7 @@ import { email, firstName, lastName } from '../utils/users';
 		paymentMethod: 'Card',
 		product: 'SupporterPlus',
 		ratePlan: 'OneYearStudent',
-		glyph: '$',
-		amountDescription: /[$](\d|\.)+\/year/,
+		priceDescriptionFormat: /[$](\d|\.)+\/year/,
 		expectedCardHeading: ProductTierLabel.TierTwo,
 		expectedCheckoutText:
 			'If you cancel within the first 14 days, you will receive a full refund.',
@@ -45,8 +43,7 @@ import { email, firstName, lastName } from '../utils/users';
 		paymentMethod: 'Card',
 		product: 'SupporterPlus',
 		ratePlan: 'OneYearStudent',
-		glyph: '$',
-		amountDescription: /[$](\d|\.)+\/year/,
+		priceDescriptionFormat: /[$](\d|\.)+\/year/,
 		expectedCardHeading: ProductTierLabel.TierTwo,
 		expectedCheckoutText:
 			'If you cancel within the first 14 days, you will receive a full refund.',
@@ -67,7 +64,7 @@ import { email, firstName, lastName } from '../utils/users';
 		});
 		const card = page.locator('section').filter({ has: cardHeading });
 		await expect(
-			card.getByText(testDetails.amountDescription).first(),
+			card.getByText(testDetails.priceDescriptionFormat).first(),
 		).toBeVisible();
 
 		// Click through to the checkout
@@ -77,7 +74,7 @@ import { email, firstName, lastName } from '../utils/users';
 		await page.waitForURL('https://www.studentbeans.com/**');
 		const studentBeansCardHeader = new RegExp(
 			`${testDetails.expectedCardHeading} subscription - ` +
-				testDetails.amountDescription.source,
+				testDetails.priceDescriptionFormat.source,
 		);
 		await expect(page.getByText(studentBeansCardHeader)).toBeVisible();
 	});
@@ -141,9 +138,7 @@ import { email, firstName, lastName } from '../utils/users';
 		});
 
 		await expect(
-			page
-				.getByText(`Thank you for supporting us with ${testDetails.glyph}`)
-				.first(),
+			page.getByText(`Thank you for supporting us`).first(),
 		).toBeVisible({
 			timeout: 600000,
 		});
