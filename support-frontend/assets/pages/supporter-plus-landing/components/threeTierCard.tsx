@@ -41,6 +41,7 @@ import { ThreeTierCardPill } from './threeTierCardPill';
 
 export type CardContent = LandingPageProductDescription & {
 	isUserSelected: boolean;
+	isDefaultSelectedProduct: boolean;
 	link: string;
 	price: number;
 	promotion?: Promotion;
@@ -189,6 +190,7 @@ export function ThreeTierCard({
 		titlePill,
 		benefits,
 		isUserSelected,
+		isDefaultSelectedProduct,
 		promotion,
 		price,
 		link,
@@ -239,6 +241,11 @@ export function ThreeTierCard({
 	const benefitIconColorSelection = isHighlightedCard
 		? benefitIconColor
 		: palette.brand[500];
+
+	const isDefaultCardTheme = cardTheme === defaultCardTheme;
+	const defaultSelectedProductTitlePill = isDefaultCardTheme
+		? 'BAU OFFER'
+		: 'DEEP-DISCOUNT OFFER';
 	return (
 		<section
 			css={container(
@@ -250,7 +257,11 @@ export function ThreeTierCard({
 		>
 			{isUserSelected && (
 				<ThreeTierCardPill
-					title={pillCopy ?? 'Your selection'}
+					title={
+						isDefaultSelectedProduct
+							? defaultSelectedProductTitlePill
+							: 'Your selection'
+					}
 					color={cardPillColor}
 				/>
 			)}
