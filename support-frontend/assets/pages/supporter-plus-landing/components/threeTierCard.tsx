@@ -246,6 +246,9 @@ export function ThreeTierCard({
 	const defaultSelectedProductTitlePill = isDefaultCardTheme
 		? 'BAU OFFER'
 		: 'DEEP-DISCOUNT OFFER';
+	console.log(
+		`*** TierCard${cardTier} - isDefaultSelectedProduct ${isDefaultSelectedProduct} - isUserSelected ${isUserSelected} - isHighlightedCard ${isHighlightedCard}`,
+	);
 	return (
 		<section
 			css={container(

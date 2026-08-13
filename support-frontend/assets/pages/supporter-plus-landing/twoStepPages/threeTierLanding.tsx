@@ -370,6 +370,10 @@ export function ThreeTierLanding({
 		contribution: tier1Pricing,
 	});
 
+	// RRCP LandingPage Test Page / Default Product Selection
+	const defaultProductSelection =
+		settings.defaultProductSelection?.productType.toLowerCase();
+	console.log('*** defaultProductSelection', defaultProductSelection);
 	const getDefaultSelectedProduct = () => {
 		if (urlSearchParamsProduct) {
 			return urlSearchParamsProduct;
@@ -382,7 +386,7 @@ export function ThreeTierLanding({
 		) {
 			return undefined;
 		}
-		return settings.defaultProductSelection?.productType.toLowerCase();
+		return defaultProductSelection;
 	};
 
 	const defaultSelectedProduct = getDefaultSelectedProduct();
@@ -391,7 +395,7 @@ export function ThreeTierLanding({
 		product: 'Contribution',
 		price: tier1Pricing,
 		link: tier1checkoutUrl,
-		isDefaultSelectedProduct: defaultSelectedProduct === 'contribution',
+		isDefaultSelectedProduct: defaultProductSelection === 'contribution',
 		isUserSelected:
 			// does product in searchParam matches contribution,
 			// does selected-price in searchParam match price
@@ -460,7 +464,7 @@ export function ThreeTierLanding({
 		link: tier2CheckoutURL,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion: tier2Promotion,
-		isDefaultSelectedProduct: defaultSelectedProduct === 'supporterplus',
+		isDefaultSelectedProduct: defaultProductSelection === 'supporterplus',
 		isUserSelected:
 			// does product in searchParam match supporterplus,
 			// does selected-price in searchParam match price or discounted price
@@ -538,7 +542,7 @@ export function ThreeTierLanding({
 		link: tier3CheckoutURL,
 		promotion: tier3Promotion,
 		isDefaultSelectedProduct:
-			defaultSelectedProduct === tier3Product.toLowerCase(),
+			defaultProductSelection === tier3Product.toLowerCase(),
 		isUserSelected:
 			// does product in searchParam match Tier3 product,
 			// does selected-price in searchParam match price or discounted price
