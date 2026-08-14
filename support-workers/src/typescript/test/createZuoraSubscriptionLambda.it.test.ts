@@ -15,6 +15,7 @@ import transactionDeclinedJson from './fixtures/createZuoraSubscription/transact
 
 const testTimeout = 20000;
 const agnosticMonthlySupporterPlusUkPrice = 1000;
+const negativeAmountSupporterPlusUkPrice = 12;
 
 describe('createZuoraSubscriptionLambda integration', () => {
 	test(
@@ -46,6 +47,44 @@ describe('createZuoraSubscriptionLambda integration', () => {
 				if (error instanceof RetryError) {
 					expect(error.name).toBe(RetryErrorType.RetryNone);
 					expect(error.message).toContain('Transaction declined');
+				} else {
+					fail('Error is not an instance of RetryError');
+				}
+			}
+		},
+		testTimeout,
+	);
+	test(
+		'we handle a negative amount error from Stripe appropriately',
+		async () => {
+			try {
+				const input = wrapperSchemaForState(
+					createZuoraSubscriptionStateSchema,
+				).parse(transactionDeclinedJson);
+
+				// An agnostic price to ensure we always get a Stripe transaction declined error over a Stripe negative amount error
+				const inputPriceAgnostic = {
+					...input,
+					state: {
+						...input.state,
+						productSpecificState: {
+							...input.state.productSpecificState,
+							productInformation: {
+								...input.state.productSpecificState.productInformation,
+								amount: negativeAmountSupporterPlusUkPrice,
+							},
+						},
+					},
+				};
+
+				await handler(inputPriceAgnostic);
+				fail('Expected handler to throw');
+			} catch (error) {
+				if (error instanceof RetryError) {
+					expect(error.name).toBe(RetryErrorType.RetryNone);
+					expect(error.message).toContain(
+						'The contribution amount of a supporter plus subscription cannot be less than zero',
+					);
 				} else {
 					fail('Error is not an instance of RetryError');
 				}
