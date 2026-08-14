@@ -242,12 +242,8 @@ export function ThreeTierCard({
 		? benefitIconColor
 		: palette.brand[500];
 
-	const isDefaultCardTheme = cardTheme === defaultCardTheme;
-	const defaultSelectedProductTitlePill = isDefaultCardTheme
-		? 'BAU OFFER'
-		: 'DEEP-DISCOUNT OFFER';
 	console.log(
-		`*** TierCard${cardTier} - isDefaultSelectedProduct ${isDefaultSelectedProduct} - isUserSelected ${isUserSelected} - isHighlightedCard ${isHighlightedCard}`,
+		`*** TierCard${cardTier} - isDefaultSelectedProduct ${isDefaultSelectedProduct} - isUserSelected ${isUserSelected}`,
 	);
 	return (
 		<section
@@ -260,11 +256,7 @@ export function ThreeTierCard({
 		>
 			{isUserSelected && (
 				<ThreeTierCardPill
-					title={
-						isDefaultSelectedProduct
-							? defaultSelectedProductTitlePill
-							: 'Your selection'
-					}
+					title={isDefaultSelectedProduct ? pillCopy ?? '' : 'Your selection'}
 					color={cardPillColor}
 				/>
 			)}
