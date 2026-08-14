@@ -14,17 +14,35 @@ import paperJson from './fixtures/createZuoraSubscription/paperInput.json';
 import transactionDeclinedJson from './fixtures/createZuoraSubscription/transactionDeclinedInput.json';
 
 const testTimeout = 20000;
+const amountMax = 1000000;
 
 describe('createZuoraSubscriptionLambda integration', () => {
 	test(
 		'we handle a transaction declined error from Stripe appropriately',
 		async () => {
 			try {
-				await handler(
-					wrapperSchemaForState(createZuoraSubscriptionStateSchema).parse(
-						transactionDeclinedJson,
-					),
-				);
+				const input = wrapperSchemaForState(
+					createZuoraSubscriptionStateSchema,
+				).parse(transactionDeclinedJson);
+
+				// we're testing for a transaction declined error
+				// amount is taken from the current price,
+				// this must be greater than current price or will cause a negative amount error instead
+				const inputPriceIndependent = {
+					...input,
+					state: {
+						...input.state,
+						productSpecificState: {
+							...input.state.productSpecificState,
+							productInformation: {
+								...input.state.productSpecificState.productInformation,
+								amount: amountMax,
+							},
+						},
+					},
+				};
+
+				await handler(inputPriceIndependent);
 				fail('Expected handler to throw');
 			} catch (error) {
 				if (error instanceof RetryError) {
