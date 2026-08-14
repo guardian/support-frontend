@@ -28,7 +28,6 @@ type PersonalAddressFieldsProps = {
 		React.SetStateAction<AddressFormFieldError[]>
 	>;
 	useExpressPostcodeLookup: boolean;
-	useExpressDeliveryAgentsLookup: boolean;
 	billingStatePostcodeCountry?: BillingStatePostcodeCountry;
 	isWeeklyGift?: boolean;
 };
@@ -49,7 +48,6 @@ export function PersonalAddressFields({
 	deliveryAddressErrors,
 	setDeliveryAddressErrors,
 	useExpressPostcodeLookup,
-	useExpressDeliveryAgentsLookup,
 	billingStatePostcodeCountry,
 	isWeeklyGift = false,
 }: PersonalAddressFieldsProps) {
@@ -104,7 +102,6 @@ export function PersonalAddressFields({
 								: []
 						}
 						deliveryAddressErrors={[]}
-						useExpressDeliveryAgentsLookup={useExpressDeliveryAgentsLookup}
 					/>
 				</FormSection>
 			)}

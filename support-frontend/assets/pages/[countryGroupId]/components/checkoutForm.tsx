@@ -432,7 +432,10 @@ export default function CheckoutForm({
 			]);
 		} else {
 			// The users postcode is outside the M25 and they have selected a valid rate plan
-			const agents = await getDeliveryAgents(postcode);
+			const agents = await getDeliveryAgents(
+				postcode,
+				useExpressDeliveryAgentsLookup,
+			);
 			if (agents.agents?.length === 1 && agents.agents[0]) {
 				setChosenDeliveryAgent(agents.agents[0].agentId);
 			}
@@ -1009,9 +1012,6 @@ export default function CheckoutForm({
 									setDeliveryAddressErrors={setDeliveryAddressErrors}
 									isWeeklyGift={isWeeklyGift}
 									useExpressPostcodeLookup={useExpressPostcodeLookup}
-									useExpressDeliveryAgentsLookup={
-										useExpressDeliveryAgentsLookup
-									}
 								/>
 							</>
 						)}
@@ -1061,7 +1061,6 @@ export default function CheckoutForm({
 								setDeliveryAddressErrors={setDeliveryAddressErrors}
 								billingStatePostcodeCountry={billingStatePostcodeCountry}
 								useExpressPostcodeLookup={useExpressPostcodeLookup}
-								useExpressDeliveryAgentsLookup={useExpressDeliveryAgentsLookup}
 							/>
 						)}
 						<FormSection ref={paymentMethodRef}>

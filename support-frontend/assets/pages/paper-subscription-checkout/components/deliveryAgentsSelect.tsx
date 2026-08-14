@@ -31,7 +31,6 @@ interface DeliveryAgentsSelectProps {
 	setDeliveryAgent: (agent: number) => void;
 	formErrors: Array<FormError<string>>;
 	deliveryAddressErrors: Array<FormError<string>>;
-	useExpressDeliveryAgentsLookup: boolean;
 }
 
 export function DeliveryAgentsSelect(
