@@ -584,7 +584,7 @@ export function ThreeTierLanding({
 									fund, foundation or retirement account, or by mailing a check,{' '}
 									<br />
 									please visit our{' '}
-									<a href="https://help.theguardian.com/article/how-else-can-i-contribute-or-become-a-supporter">
+									<a href="https://help.theguardian.com/article/how-can-i-make-a-tax-deductible-contribution-us-only">
 										help page
 									</a>{' '}
 									to learn how.

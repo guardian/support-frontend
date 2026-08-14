@@ -85,6 +85,12 @@ cd target
 		} ${app} /var/log/${app}/application.log`);
 
 		const policies = [
+			new GuAllowPolicy(this, 'SSMGet', {
+				actions: ['ssm:GetParametersByPath'],
+				resources: [
+					`arn:aws:ssm:${this.region}:${this.account}:parameter/${this.stage}/${this.stack}/${app}/*`,
+				],
+			}),
 			new GuAllowPolicy(this, 'CloudwatchMetrics', {
 				actions: [
 					'logs:CreateLogGroup',
