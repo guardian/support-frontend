@@ -709,6 +709,12 @@ export default function CheckoutForm({
 	const useExpressPostcodeLookup =
 		abParticipations.postCodeLookupExpress === 'variant';
 
+	const useExpressDeliveryAgentsLookup =
+		abParticipations.deliveryAgentsLookupExpress === 'variant';
+	console.log(
+		`useExpressDeliveryAgentsLookup: ${useExpressDeliveryAgentsLookup}`,
+	);
+
 	return (
 		<>
 			<form

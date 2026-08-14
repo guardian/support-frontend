@@ -99,7 +99,7 @@ export const tests: Tests = {
 		},
 		isActive: false,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 9,
+		seed: 7,
 		targetPage: pageUrlRegexes.ukPrintCheckoutOnly,
 		excludeContributionsOnlyCountries: true,
 	},
