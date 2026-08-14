@@ -711,9 +711,6 @@ export default function CheckoutForm({
 
 	const useExpressDeliveryAgentsLookup =
 		abParticipations.deliveryAgentsLookupExpress === 'variant';
-	console.log(
-		`useExpressDeliveryAgentsLookup: ${useExpressDeliveryAgentsLookup}`,
-	);
 
 	return (
 		<>
@@ -1012,6 +1009,9 @@ export default function CheckoutForm({
 									setDeliveryAddressErrors={setDeliveryAddressErrors}
 									isWeeklyGift={isWeeklyGift}
 									useExpressPostcodeLookup={useExpressPostcodeLookup}
+									useExpressDeliveryAgentsLookup={
+										useExpressDeliveryAgentsLookup
+									}
 								/>
 							</>
 						)}
@@ -1061,6 +1061,7 @@ export default function CheckoutForm({
 								setDeliveryAddressErrors={setDeliveryAddressErrors}
 								billingStatePostcodeCountry={billingStatePostcodeCountry}
 								useExpressPostcodeLookup={useExpressPostcodeLookup}
+								useExpressDeliveryAgentsLookup={useExpressDeliveryAgentsLookup}
 							/>
 						)}
 						<FormSection ref={paymentMethodRef}>
