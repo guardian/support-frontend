@@ -62,7 +62,7 @@ describe('createZuoraSubscriptionLambda integration', () => {
 					createZuoraSubscriptionStateSchema,
 				).parse(transactionDeclinedJson);
 
-				// An agnostic price to ensure we always get a Stripe transaction declined error over a Stripe negative amount error
+				// A negative price to ensure we get a Stripe negative amount error over a Stripe transaction declined error
 				const inputPriceAgnostic = {
 					...input,
 					state: {
