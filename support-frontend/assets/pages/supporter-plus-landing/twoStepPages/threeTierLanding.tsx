@@ -373,7 +373,6 @@ export function ThreeTierLanding({
 	// RRCP LandingPage Test Page / Default Product Selection
 	const defaultProductSelection =
 		settings.defaultProductSelection?.productType.toLowerCase();
-	console.log('*** defaultProductSelection', defaultProductSelection);
 	const getDefaultSelectedProduct = () => {
 		if (urlSearchParamsProduct) {
 			return urlSearchParamsProduct;
