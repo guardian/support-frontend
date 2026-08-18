@@ -7,7 +7,7 @@ import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
 const mockInvitation: OnboardingInviteeInvitation = {
 	invitationCode: 'test-invitation',
-	email: 'jonathan.ruda@gmail.com',
+	email: 'invitee@jontho.com',
 	inviterFirstName: 'Jontho',
 };
 

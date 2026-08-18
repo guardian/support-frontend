@@ -58,9 +58,6 @@ class InvitationController(
     (MaybeAuthenticatedActionOnFormSubmission andThen RequireAuthenticatedUser).async { implicit request =>
       request.cookies.get("GU_ACCESS_TOKEN") match {
         case Some(cookie) =>
-          logger.info(
-            s"acceptInvitation debug — identityId=${request.user.id}, accessToken=${cookie.value}",
-          )
           multipleAccountApiService
             .acceptInvitation(invitationCode, request.user.id, cookie.value)
             .map(response => Status(response.status)(response.body))
