@@ -431,6 +431,9 @@ export default function CheckoutForm({
 				},
 			]);
 		} else {
+			const useExpressDeliveryAgentsLookup =
+				abParticipations.deliveryAgentsLookupExpress === 'variant';
+
 			// The users postcode is outside the M25 and they have selected a valid rate plan
 			const agents = await getDeliveryAgents(
 				postcode,
@@ -711,9 +714,6 @@ export default function CheckoutForm({
 
 	const useExpressPostcodeLookup =
 		abParticipations.postCodeLookupExpress === 'variant';
-
-	const useExpressDeliveryAgentsLookup =
-		abParticipations.deliveryAgentsLookupExpress === 'variant';
 
 	return (
 		<>
