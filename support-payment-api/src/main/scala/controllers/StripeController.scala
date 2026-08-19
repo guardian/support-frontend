@@ -108,7 +108,6 @@ class StripeController(
             response => Ok(ResultBody.Success(response)),
           )
       }
-      .withLogging(this.getClass.getCanonicalName, "completeStripePaypalPayment")
 
   override implicit val controllerComponents: ControllerComponents = cc
   override implicit val corsUrls: List[String] = allowedCorsUrls
