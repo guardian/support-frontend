@@ -54,8 +54,9 @@ describe('verifyInvitation', () => {
 		});
 	});
 
-	it('returns expired when the expiryDate is in the past', async () => {
+	it('returns expired when the server reports the invitation has expired (410)', async () => {
 		fetchMock.get(endpoint, {
+			status: 410,
 			body: invitationResponse(Date.now() - oneDayInMillis),
 			headers: { 'Content-Type': 'application/json' },
 		});
@@ -89,6 +90,17 @@ describe('verifyInvitation', () => {
 
 	it('returns invalid when the request fails', async () => {
 		fetchMock.get(endpoint, { throws: new Error('network failure') });
+
+		const result = await verifyInvitation(invitationCode);
+
+		expect(result).toEqual({ status: 'invalid' });
+	});
+
+	it('returns invalid when the response body does not match the invitation shape', async () => {
+		fetchMock.get(endpoint, {
+			body: { message: 'not an invitation' },
+			headers: { 'Content-Type': 'application/json' },
+		});
 
 		const result = await verifyInvitation(invitationCode);
 

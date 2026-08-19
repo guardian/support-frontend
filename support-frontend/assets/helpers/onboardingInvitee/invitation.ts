@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { requestOptions } from 'helpers/async/fetch';
 import type { CsrfState } from 'helpers/types/csrf';
 
@@ -14,21 +15,22 @@ export interface VerifyInvitationResult {
 	invitation?: OnboardingInviteeInvitation;
 }
 
-interface InvitationResponse {
-	subscriptionName: string;
-	invitationCode: string;
-	primaryIdentityId: string;
-	secondaryUserEmail: string;
-	secondaryIdentityId: string;
-	invitedDate: string;
-	expiryDate: number;
-}
+const invitationResponseSchema = z.object({
+	subscriptionName: z.string(),
+	invitationCode: z.string(),
+	primaryIdentityId: z.string(),
+	secondaryUserEmail: z.string(),
+	secondaryIdentityId: z.string(),
+	invitedDate: z.string(),
+	expiryDate: z.number(),
+});
 
 // Verifies an invitation via the Play server, which proxies the multiple-account
-// API and attaches the API key server side. A 404 means the code doesn't exist
-// and a 400 means it has been cancelled; both (along with any unexpected
-// failure) are surfaced as 'invalid'. Expiry is derived from the expiryDate
-// epoch-millis in the response.
+// API and attaches the API key server side. A 404 means the code doesn't exist,
+// a 400 means it has been cancelled, and a 410 means it has expired. Those
+// statuses (along with any unexpected failure or a response that doesn't match
+// the expected shape) are surfaced as 'invalid' or 'expired'. Expiry is decided
+// on the server using the expiryDate in the upstream response.
 export async function verifyInvitation(
 	invitationCode: string,
 ): Promise<VerifyInvitationResult> {
@@ -37,15 +39,23 @@ export async function verifyInvitation(
 			`/invitation/${encodeURIComponent(invitationCode)}`,
 		);
 
+		if (response.status === 410) {
+			return { status: 'expired' };
+		}
+
 		if (!response.ok) {
 			return { status: 'invalid' };
 		}
 
-		const invitation = (await response.json()) as InvitationResponse;
+		const parsedInvitation = invitationResponseSchema.safeParse(
+			await response.json(),
+		);
 
-		if (invitation.expiryDate <= Date.now()) {
-			return { status: 'expired' };
+		if (!parsedInvitation.success) {
+			return { status: 'invalid' };
 		}
+
+		const invitation = parsedInvitation.data;
 
 		return {
 			status: 'valid',
