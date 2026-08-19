@@ -676,6 +676,8 @@ class Application(
     ).withSettingsSurrogateKey
   }
 
+  def invitationPageRouter(countryGroupId: String, code: String) = productCheckoutRouter(countryGroupId)
+
   def eventsRouter(countryGroupId: String, eventId: String) = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(
