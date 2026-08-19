@@ -14,22 +14,77 @@ import paperJson from './fixtures/createZuoraSubscription/paperInput.json';
 import transactionDeclinedJson from './fixtures/createZuoraSubscription/transactionDeclinedInput.json';
 
 const testTimeout = 20000;
+const agnosticMonthlySupporterPlusUkPrice = 1000;
+const negativeAmountSupporterPlusUkPrice = 12;
 
 describe('createZuoraSubscriptionLambda integration', () => {
 	test(
 		'we handle a transaction declined error from Stripe appropriately',
 		async () => {
 			try {
-				await handler(
-					wrapperSchemaForState(createZuoraSubscriptionStateSchema).parse(
-						transactionDeclinedJson,
-					),
-				);
+				const input = wrapperSchemaForState(
+					createZuoraSubscriptionStateSchema,
+				).parse(transactionDeclinedJson);
+
+				// An agnostic price to ensure we always get a Stripe transaction declined error over a Stripe negative amount error
+				const inputPriceAgnostic = {
+					...input,
+					state: {
+						...input.state,
+						productSpecificState: {
+							...input.state.productSpecificState,
+							productInformation: {
+								...input.state.productSpecificState.productInformation,
+								amount: agnosticMonthlySupporterPlusUkPrice,
+							},
+						},
+					},
+				};
+
+				await handler(inputPriceAgnostic);
 				fail('Expected handler to throw');
 			} catch (error) {
 				if (error instanceof RetryError) {
 					expect(error.name).toBe(RetryErrorType.RetryNone);
 					expect(error.message).toContain('Transaction declined');
+				} else {
+					fail('Error is not an instance of RetryError');
+				}
+			}
+		},
+		testTimeout,
+	);
+	test(
+		'we handle a negative amount error from Stripe appropriately',
+		async () => {
+			try {
+				const input = wrapperSchemaForState(
+					createZuoraSubscriptionStateSchema,
+				).parse(transactionDeclinedJson);
+
+				// A negative price to ensure we get a Stripe negative amount error over a Stripe transaction declined error
+				const inputPriceAgnostic = {
+					...input,
+					state: {
+						...input.state,
+						productSpecificState: {
+							...input.state.productSpecificState,
+							productInformation: {
+								...input.state.productSpecificState.productInformation,
+								amount: negativeAmountSupporterPlusUkPrice,
+							},
+						},
+					},
+				};
+
+				await handler(inputPriceAgnostic);
+				fail('Expected handler to throw');
+			} catch (error) {
+				if (error instanceof RetryError) {
+					expect(error.name).toBe(RetryErrorType.RetryNone);
+					expect(error.message).toContain(
+						'The contribution amount of a supporter plus subscription cannot be less than zero',
+					);
 				} else {
 					fail('Error is not an instance of RetryError');
 				}
