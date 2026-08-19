@@ -370,6 +370,9 @@ export function ThreeTierLanding({
 		contribution: tier1Pricing,
 	});
 
+	// RRCP LandingPage Test Page / Default Product Selection
+	const defaultProductSelection =
+		settings.defaultProductSelection?.productType.toLowerCase();
 	const getDefaultSelectedProduct = () => {
 		if (urlSearchParamsProduct) {
 			return urlSearchParamsProduct;
@@ -382,7 +385,7 @@ export function ThreeTierLanding({
 		) {
 			return undefined;
 		}
-		return settings.defaultProductSelection?.productType.toLowerCase();
+		return defaultProductSelection;
 	};
 
 	const defaultSelectedProduct = getDefaultSelectedProduct();
@@ -391,7 +394,11 @@ export function ThreeTierLanding({
 		product: 'Contribution',
 		price: tier1Pricing,
 		link: tier1checkoutUrl,
+		isDefaultSelectedProduct: defaultProductSelection === 'contribution',
 		isUserSelected:
+			// does product in searchParam matches contribution,
+			// does selected-price in searchParam match price
+			// is rrcp landing page default contribution product selected,
 			urlSearchParamsProduct === 'contribution' ||
 			isCardUserSelected(tier1Pricing) ||
 			(!urlSearchParamsProduct && defaultSelectedProduct === 'contribution'),
@@ -456,7 +463,11 @@ export function ThreeTierLanding({
 		link: tier2CheckoutURL,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion: tier2Promotion,
+		isDefaultSelectedProduct: defaultProductSelection === 'supporterplus',
 		isUserSelected:
+			// does product in searchParam match supporterplus,
+			// does selected-price in searchParam match price or discounted price
+			// is rrcp landing page default supporterplus product selected,
 			urlSearchParamsProduct === 'supporterplus' ||
 			isCardUserSelected(tier2Pricing, tier2Promotion?.discount?.amount) ||
 			(!urlSearchParamsProduct && defaultSelectedProduct === 'supporterplus'),
@@ -529,7 +540,12 @@ export function ThreeTierLanding({
 		price: tier3Pricing,
 		link: tier3CheckoutURL,
 		promotion: tier3Promotion,
+		isDefaultSelectedProduct:
+			defaultProductSelection === tier3Product.toLowerCase(),
 		isUserSelected:
+			// does product in searchParam match Tier3 product,
+			// does selected-price in searchParam match price or discounted price
+			// is rrcp landing page default Tier3 product selected,
 			urlSearchParamsProduct === tier3Product.toLowerCase() ||
 			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount) ||
 			(!urlSearchParamsProduct &&
