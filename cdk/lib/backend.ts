@@ -1,5 +1,6 @@
 import { GuEc2App } from '@guardian/cdk';
 import { AccessScope } from '@guardian/cdk/lib/constants';
+import { GuAlarm } from '@guardian/cdk/lib/constructs/cloudwatch';
 import type { GuStackProps } from '@guardian/cdk/lib/constructs/core';
 import {
 	GuDistributionBucketParameter,
@@ -11,7 +12,12 @@ import {
 } from '@guardian/cdk/lib/constructs/iam';
 import type { GuAsgCapacity } from '@guardian/cdk/lib/types';
 import type { App } from 'aws-cdk-lib';
-import { aws_route53_targets } from 'aws-cdk-lib';
+import { aws_route53_targets, Duration } from 'aws-cdk-lib';
+import {
+	ComparisonOperator,
+	Metric,
+	TreatMissingData,
+} from 'aws-cdk-lib/aws-cloudwatch';
 import {
 	InstanceClass,
 	InstanceSize,
@@ -153,6 +159,28 @@ cd target
 			target: RecordTarget.fromAlias(
 				new aws_route53_targets.LoadBalancerTarget(ec2App.loadBalancer),
 			),
+		});
+
+		new GuAlarm(this, 'GetDeliveryAgentsFailure', {
+			app,
+			alarmName: `${app} ${this.stage} GetDeliveryAgentsFailure`,
+			alarmDescription:
+				'support-backend failed to get delivery agents from PaperRound',
+			actionsEnabled: shouldCreateAlarms,
+			threshold: 1,
+			evaluationPeriods: 1,
+			comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+			metric: new Metric({
+				metricName: 'GetDeliveryAgentsFailure',
+				namespace: 'support-backend',
+				dimensionsMap: {
+					Stage: this.stage,
+				},
+				statistic: 'Sum',
+				period: Duration.seconds(60),
+			}),
+			treatMissingData: TreatMissingData.NOT_BREACHING,
+			snsTopicName: `alarms-handler-topic-${this.stage}`,
 		});
 	}
 }
