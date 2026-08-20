@@ -5,7 +5,10 @@ import {
 	GuDistributionBucketParameter,
 	GuStack,
 } from '@guardian/cdk/lib/constructs/core';
-import { GuAllowPolicy } from '@guardian/cdk/lib/constructs/iam';
+import {
+	GuAllowPolicy,
+	GuPutCloudwatchMetricsPolicy,
+} from '@guardian/cdk/lib/constructs/iam';
 import type { GuAsgCapacity } from '@guardian/cdk/lib/types';
 import type { App } from 'aws-cdk-lib';
 import { aws_route53_targets } from 'aws-cdk-lib';
@@ -100,6 +103,7 @@ cd target
 				],
 				resources: ['arn:aws:logs:*:*:*'],
 			}),
+			new GuPutCloudwatchMetricsPolicy(this),
 		];
 
 		const http5xxAlarm = shouldCreateAlarms
