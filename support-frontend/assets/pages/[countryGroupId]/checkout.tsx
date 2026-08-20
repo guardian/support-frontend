@@ -1,5 +1,5 @@
 import { ThemeProvider } from '@emotion/react';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { type ProductOptions } from '@modules/product/productOptions';
@@ -8,6 +8,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import { observerThemeButton } from 'components/observer-layout/styles';
+import type { Payment } from 'helpers/forms/checkouts';
 import { getPaypalClientId } from 'helpers/forms/payPal';
 import {
 	getStripeKeyForCountry,
@@ -25,6 +26,7 @@ import {
 } from 'helpers/productCatalog';
 import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getPromotion } from 'helpers/productPrice/promotions';
+import { getEstimatedSalesTaxConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import * as cookie from 'helpers/storage/cookie';
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
@@ -39,10 +41,12 @@ import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
 import { getFulfilmentOptionFromProductKey } from '../../helpers/productCatalogToFulfilmentOption';
 import { getProductOptionFromProductAndRatePlan } from '../../helpers/productCatalogToProductOption';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
+import { useStateWithCheckoutSession } from './checkout/hooks/useStateWithCheckoutSession';
 import { useStripeHostedCheckoutSession } from './checkout/hooks/useStripeHostedCheckoutSession';
 import CheckoutForm from './components/checkoutForm';
 import CheckoutSummary from './components/checkoutSummary';
 import GuardianPageLayout from './components/GuardianPageLayout';
+import CurrentMaxRatesByCountry from './helpers/CurrentMaxRatesByCountry';
 import { getStudentDiscount } from './student/helpers/discountDetails';
 
 type Props = {
@@ -53,13 +57,13 @@ type Props = {
 	nudgeSettings?: CheckoutNudgeSettings;
 };
 
-const countryId: IsoCountry = Country.detect();
+const countryId: CountryCode = Country.detect();
 
-const getPromotionFromProductPrices = (
+export const getPromotionFromProductPrices = (
 	appConfig: AppConfig,
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	countryId: IsoCountry,
+	countryId: CountryCode,
 	billingPeriod: BillingPeriod,
 ) => {
 	/**
@@ -67,7 +71,7 @@ const getPromotionFromProductPrices = (
 	 * These come from the productPrices object for the particular product on window.guardian.
 	 */
 
-	// exclude one year student promotion as it's mapped to the annual billing period and we don't to apply regualr annual promotions to it
+	// exclude one year student promotion as it's mapped to the annual billing period and we don't to apply regular annual promotions to it
 	if (productKey === 'SupporterPlus' && ratePlanKey === 'OneYearStudent') {
 		return undefined;
 	}
@@ -140,17 +144,7 @@ export function Checkout({
 	 * - any contributions made
 	 */
 
-	/**
-	 * - `originalAmount` the amount pre any discounts or contributions
-	 * - `discountedAmount` the amount with a discountApplied
-	 * - `finalAmount` is the amount a person will pay
-	 */
-	let payment: {
-		originalAmount: number;
-		discountedAmount?: number;
-		contributionAmount?: number;
-		finalAmount: number;
-	};
+	let payment: Payment;
 
 	const contributionParam = urlSearchParams.get('contribution');
 	const contributionAmount = contributionParam
@@ -272,6 +266,16 @@ export function Checkout({
 	);
 
 	/**
+	 * BillingState selector initialised to undefined to hide
+	 * billingStateError message. formOnSubmit checks and converts to
+	 * empty string to display billingStateError message.
+	 */
+	const [billingState, setBillingState] = useStateWithCheckoutSession<string>(
+		checkoutSession?.formFields.addressFields.billingAddress.state,
+		'',
+	);
+
+	/**
 	 * Passed down because minimum product prices are unavailable in the paymentTsAndCs story
 	 * and shared across summary and form checkout sub-components
 	 */
@@ -310,17 +314,34 @@ export function Checkout({
 		backButtonPathOverrideParam,
 	);
 
+	const taxRateConfig = getEstimatedSalesTaxConfig(
+		appConfig.productCatalog,
+		appConfig.taxRates,
+		productKey,
+		ratePlanKey,
+		billingState,
+		supportRegionId,
+	);
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Elements stripe={stripePromise} options={elementsOptions}>
-				<PageLayout borderBox>
+				<PageLayout
+					borderBox
+					footerDisclaimer={
+						<CurrentMaxRatesByCountry
+							countryGroupId={countryGroupId}
+							productKey={productKey}
+						/>
+					}
+				>
 					<CheckoutSummary
 						supportRegionId={supportRegionId}
 						appConfig={appConfig}
 						productKey={productKey}
 						ratePlanKey={ratePlanKey}
 						promotion={promotion}
-						originalAmount={payment.originalAmount}
+						payment={payment}
 						countryId={countryId}
 						forcedCountry={forcedCountry}
 						abParticipations={abParticipations}
@@ -331,6 +352,7 @@ export function Checkout({
 						nudgeSettings={nudgeSettings}
 						backButtonOrigin={backButtonOrigin}
 						backButtonPathOverride={backButtonPathOverride}
+						taxRateConfig={taxRateConfig}
 					/>
 
 					<CheckoutForm
@@ -341,9 +363,7 @@ export function Checkout({
 						productKey={productKey}
 						ratePlanKey={ratePlanKey}
 						promotion={promotion}
-						originalAmount={payment.originalAmount}
-						contributionAmount={payment.contributionAmount}
-						finalAmount={payment.finalAmount}
+						payment={payment}
 						useStripeExpressCheckout={useStripeExpressCheckout}
 						countryId={countryId}
 						abParticipations={abParticipations}
@@ -355,6 +375,9 @@ export function Checkout({
 						thresholdAmount={thresholdAmount}
 						studentDiscount={studentDiscount}
 						paypalClientId={paypalClientId}
+						billingState={billingState}
+						setBillingState={setBillingState}
+						taxRateConfig={taxRateConfig}
 					/>
 				</PageLayout>
 			</Elements>

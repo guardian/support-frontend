@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { InfoSummary } from '@guardian/source-development-kitchen/react-components';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
@@ -11,14 +11,15 @@ import { OrderSummaryStartDate } from 'components/orderSummary/orderSummaryStart
 import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
+import type { Payment } from 'helpers/forms/checkouts';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	type ActiveProductKey,
 	type ActiveRatePlanKey,
 	getProductDescription,
 } from 'helpers/productCatalog';
-import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { parameteriseUrl } from 'helpers/urls/routes';
 import { getPrintPlusDigitalBenefits } from 'pages/paper-subscription-landing/planData';
@@ -46,14 +47,15 @@ type CheckoutSummaryProps = {
 	appConfig: AppConfig;
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
-	originalAmount: number;
-	countryId: IsoCountry;
+	payment: Payment;
+	countryId: CountryCode;
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
 	backButtonOrigin: string;
 	backButtonPathOverride: string | null;
+	taxRateConfig: TaxRateConfig;
 	promotion?: Promotion;
 	forcedCountry?: string;
 	studentDiscount?: StudentDiscount;
@@ -65,7 +67,7 @@ export default function CheckoutSummary({
 	appConfig,
 	productKey,
 	ratePlanKey,
-	originalAmount,
+	payment,
 	countryId,
 	abParticipations,
 	landingPageSettings,
@@ -73,11 +75,13 @@ export default function CheckoutSummary({
 	thresholdAmount,
 	backButtonOrigin,
 	backButtonPathOverride,
+	taxRateConfig,
 	promotion,
 	forcedCountry,
 	studentDiscount,
 	nudgeSettings,
 }: CheckoutSummaryProps) {
+	const { originalAmount } = payment;
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
 	const productCatalog = appConfig.productCatalog;
@@ -177,25 +181,14 @@ export default function CheckoutSummary({
 						/>
 					</div>
 				)}
-				{supportRegionId === SupportRegionId.CA &&
-					productKey === 'GuardianWeeklyDomestic' && (
-						<div role="alert" css={alertStyles}>
-							<InfoSummary
-								message="For Canadian residents only"
-								context="Please note that Canada Post is currently undergoing a period of industrial action. If you start a Guardian Weekly subscription today, the delivery of your copies may be subject to delays. We apologise for any inconvenience this may cause."
-							/>
-						</div>
-					)}
 				<ContributionsOrderSummary
 					productKey={productKey}
 					productLabel={productDescription.label}
 					ratePlanKey={ratePlanKey}
 					ratePlanLabel={ratePlanDetail.displayName ?? ratePlanDetail.label}
-					paymentFrequency={getBillingPeriodNoun(
-						ratePlanDetail.billingPeriod,
-						isGuardianWeeklyGiftProduct(productKey, ratePlanKey),
-					)}
-					amount={originalAmount}
+					taxRateConfig={taxRateConfig}
+					billingPeriod={ratePlanDetail.billingPeriod}
+					payment={payment}
 					promotion={promotion}
 					currency={currency}
 					checkListData={benefitsCheckListData}

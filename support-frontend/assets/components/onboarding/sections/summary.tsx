@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { palette, space } from '@guardian/source/foundations';
+import { from, palette, space } from '@guardian/source/foundations';
 import {
 	Button,
 	Stack,
@@ -7,10 +7,11 @@ import {
 	SvgTickRound,
 } from '@guardian/source/react-components';
 import { ToggleSwitch } from '@guardian/source-development-kitchen/react-components';
-import { getCurrencyInfo } from '@modules/internationalisation/currency';
+import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
 import { useEffect } from 'react';
+import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
 	getNewsletterSubscriptionById,
@@ -47,23 +48,29 @@ import {
 	paymentDetailsBox,
 	separator,
 } from './sectionsStyles';
+import { getTodaysPaymentWithTaxExclusion } from './summaryHelpers';
 
 const purchaseSummaryDetailsContainer = css`
 	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
+	flex-direction: column;
+	gap: ${space[1]}px;
+	${from.tablet} {
+		flex-direction: row;
+		justify-content: space-between;
+	}
 `;
 
 const purchaseSummaryDetailsPriceText = css`
-	text-align: end;
 	text-wrap: balance;
 	max-width: 80%;
+	${from.tablet} {
+		text-align: end;
+	}
 `;
 
 const paymentMethodContainer = css`
 	display: flex;
 	flex-direction: row;
-	justify-content: flex-end;
 	align-items: center;
 	gap: ${space[1]}px;
 `;
@@ -210,11 +217,13 @@ function OnboardingSummary({
 		productKey && landingPageSettings.products[productKey];
 	const { windowWidthIsLessThan } = useWindowWidth();
 
+	const { enableCanadaTaxExclusion } = useFeatureSwitches();
+
 	const { currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 
 	const amountPaidToday = simpleFormatAmount(
-		getCurrencyInfo(currencyKey),
+		getCurrencyByCode(currencyKey),
 		payment.finalAmount,
 	);
 
@@ -252,6 +261,10 @@ function OnboardingSummary({
 		order?.paymentMethod === 'StripeExpressCheckoutElement' ||
 		order?.paymentMethod === 'StripeHostedCheckout';
 
+	const todaysPayment =
+		enableCanadaTaxExclusion &&
+		getTodaysPaymentWithTaxExclusion(payment, currencyKey, order?.taxConfig);
+
 	const paymentMethodCopy = isDirectDebit
 		? 'Direct Debit'
 		: isPaypal
@@ -279,7 +292,7 @@ function OnboardingSummary({
 		>
 			<ContentBox>
 				<Stack space={2}>
-					<h1 css={headings}>Purchase summary</h1>
+					<h1 css={headings}>Purchase confirmation</h1>
 					<p css={descriptions}>
 						{`Thanks for your payment. We've sent a payment confirmation email to
                     `}
@@ -300,6 +313,12 @@ function OnboardingSummary({
 									{promoMessage || fullAmount}
 								</p>
 							</div>
+							{todaysPayment && (
+								<div css={purchaseSummaryDetailsContainer}>
+									<p css={boldDescriptions}>Today's payment</p>
+									<p css={descriptions}>{todaysPayment}</p>
+								</div>
+							)}
 							<div css={purchaseSummaryDetailsContainer}>
 								<p css={boldDescriptions}>Payment method</p>
 								<div css={paymentMethodContainer}>

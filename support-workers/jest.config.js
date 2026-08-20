@@ -2,6 +2,7 @@
 module.exports = {
 	preset: 'ts-jest',
 	testEnvironment: 'node',
+	silent: true,
 	runner: 'groups',
 	testPathIgnorePatterns: ['/node_modules/', 'target'],
 	transformIgnorePatterns: ['/node_modules/\\.pnpm/(?!@guardian)'],

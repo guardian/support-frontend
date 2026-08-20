@@ -12,8 +12,8 @@ import {
 	LinkButton,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { getCurrencyInfo } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
+import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { BenefitPill } from 'components/checkoutBenefits/benefitPill';
 import {
@@ -21,6 +21,10 @@ import {
 	checkListTextItemCss,
 } from 'components/checkoutBenefits/benefitsCheckList';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import {
+	type CardTheme,
+	defaultCardTheme,
+} from 'helpers/landingPage/cardTheme';
 import { getProductLabel } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import {
@@ -45,10 +49,11 @@ export type CardContent = LandingPageProductDescription & {
 
 export type ThreeTierCardProps = {
 	cardContent: CardContent;
+	cardTheme?: CardTheme;
 	cardTier: 1 | 2 | 3;
 	promoCount: number;
 	isSubdued: boolean;
-	currencyId: IsoCurrency;
+	currencyId: CurrencyCode;
 	billingPeriod: BillingPeriod;
 	showWeeklyPrice?: boolean;
 	useLargePriceMinHeight?: boolean;
@@ -58,6 +63,7 @@ const container = (
 	hasPill: boolean,
 	isUserSelected: boolean,
 	subdueHighlight: boolean,
+	cardBackColor: string,
 ) => {
 	let cardOrder = 2;
 	if (hasPill) {
@@ -67,9 +73,7 @@ const container = (
 	}
 	return css`
 		position: ${hasPill || isUserSelected ? 'relative' : 'static'};
-		background-color: ${(hasPill && !subdueHighlight) || isUserSelected
-			? '#F1FBFF'
-			: palette.neutral[100]};
+		background-color: ${cardBackColor};
 		border-radius: ${space[3]}px;
 		padding: 32px ${space[3]}px ${space[6]}px ${space[3]}px;
 
@@ -171,6 +175,7 @@ const benefitsPrefixPlus = css`
 
 export function ThreeTierCard({
 	cardContent,
+	cardTheme,
 	cardTier,
 	promoCount,
 	isSubdued,
@@ -191,7 +196,7 @@ export function ThreeTierCard({
 		product,
 		billingPeriodsCopy,
 	} = cardContent;
-	const currency = getCurrencyInfo(currencyId);
+	const currency = getCurrencyByCode(currencyId);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 
 	const mainPrice = showWeeklyPrice
@@ -204,9 +209,10 @@ export function ThreeTierCard({
 		: undefined;
 
 	const formattedMainPrice = simpleFormatAmount(currency, mainPrice);
-	const formattedMainDiscountedPrice = mainDiscountedPrice
-		? simpleFormatAmount(currency, mainDiscountedPrice)
-		: undefined;
+	const formattedMainDiscountedPrice =
+		mainDiscountedPrice !== undefined
+			? simpleFormatAmount(currency, mainDiscountedPrice)
+			: undefined;
 	const periodLabel = showWeeklyPrice ? 'week' : periodNoun;
 	const linkAriaLabel = `${title}, ${
 		formattedMainDiscountedPrice ?? formattedMainPrice
@@ -220,24 +226,55 @@ export function ThreeTierCard({
 		price,
 		billingPeriod,
 	);
+
+	const { titlePillColor, cardPillColor, cardBackColor, benefitIconColor } =
+		cardTheme ?? defaultCardTheme;
+
+	// if pill visible without subdued styling or user selected from banner/epic use highlight colors if available
+	const isHighlightedCard = (!!pillCopy && !isSubdued) || isUserSelected;
+
+	const cardBackColorSelection = isHighlightedCard
+		? cardBackColor
+		: palette.neutral[100];
+	const benefitIconColorSelection = isHighlightedCard
+		? benefitIconColor
+		: palette.brand[500];
 	return (
-		<section css={container(!!pillCopy, isUserSelected, isSubdued)}>
-			{isUserSelected && <ThreeTierCardPill title="Your selection" />}
+		<section
+			css={container(
+				!!pillCopy,
+				isUserSelected,
+				isSubdued,
+				cardBackColorSelection,
+			)}
+		>
+			{isUserSelected && (
+				<ThreeTierCardPill title="Your selection" color={cardPillColor} />
+			)}
 			{!!pillCopy && !isUserSelected && (
 				<ThreeTierCardPill
-					subdue={isSubdued}
 					title={promotion?.landingPage?.roundel ?? pillCopy}
+					color={cardPillColor}
+					subdue={isSubdued}
 				/>
 			)}
 			<div css={titleContainer}>
-				{titlePill && <BenefitPill copy={titlePill} />}
+				{titlePill && (
+					<BenefitPill copy={titlePill} pillColor={titlePillColor} />
+				)}
 				<h2 css={[titleCss, checkListTextItemCss]}>{title}</h2>
 			</div>
 			<div css={priceCss(useLargePriceMinHeight)}>
 				{promotion && (
 					<>
 						<p>
-							<span css={previousPriceStrikeThrough}>{formattedMainPrice}</span>{' '}
+							{!promotion.isIntroductoryPricing && (
+								<>
+									<span css={previousPriceStrikeThrough}>
+										{formattedMainPrice}
+									</span>{' '}
+								</>
+							)}
 							{`${formattedMainDiscountedPrice}/${periodLabel}`}
 						</p>
 						<p>
@@ -320,7 +357,7 @@ export function ThreeTierCard({
 					};
 				})}
 				style={'compact'}
-				iconColor={palette.brand[500]}
+				iconColor={benefitIconColorSelection}
 				cssOverrides={checkmarkBenefitList}
 			/>
 		</section>

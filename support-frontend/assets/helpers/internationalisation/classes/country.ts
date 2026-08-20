@@ -1,18 +1,7 @@
-import type {
-	AuState,
-	CaState,
-	IsoCountry,
-	StateProvince,
-	UsState,
-} from '@modules/internationalisation/country';
-import {
-	auStates,
-	caStates,
-	countries,
-	isoCountries,
-	isoCountrySet,
-	usStates,
-} from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
+import { countries, countryCodes } from '@modules/internationalisation/country';
+import { countryCodeFromString } from '@modules/internationalisation/country';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
@@ -23,7 +12,6 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import * as cookie from 'helpers/storage/cookie';
 import { getQueryParameter } from 'helpers/urls/url';
 
@@ -35,110 +23,30 @@ type TargetCountryGroups =
 	| typeof AUDCountries;
 
 export class Country {
-	static stateProvinceFromMap(
-		search: string,
-		states: Record<string, string>,
-	): StateProvince | null | undefined {
-		const searchUppercase = search.toUpperCase();
-		return states[searchUppercase]
-			? searchUppercase
-			: Object.keys(states).find(
-					(key) =>
-						states[key]?.toUpperCase() === searchUppercase ||
-						(searchUppercase.length === 3 && searchUppercase.startsWith(key)),
-			  );
-	}
-
-	static usStateFromString(search: string): UsState | null {
-		return this.stateProvinceFromMap(search, usStates) ?? null;
-	}
-
-	static caStateFromString(search: string): CaState | null {
-		return this.stateProvinceFromMap(search, caStates) ?? null;
-	}
-
-	static auStateFromString(search: string): AuState | null {
-		return this.stateProvinceFromMap(search, auStates) ?? null;
-	}
-
-	static stateProvinceFieldFromString(
-		countryGroupId: CountryGroupId | null | undefined,
-		search?: string,
-	): StateProvince | null {
-		if (!search) {
-			return null;
-		}
-
-		switch (countryGroupId) {
-			case UnitedStates:
-				return this.usStateFromString(search);
-
-			case Canada:
-				return this.caStateFromString(search);
-
-			case AUDCountries:
-				return this.auStateFromString(search);
-
-			default:
-				return null;
-		}
-	}
-
-	static stateProvinceFromString(
-		country: IsoCountry | null,
-		search?: string,
-	): StateProvince | null {
-		if (!search) {
-			return null;
-		}
-
-		switch (country) {
-			case 'US':
-				return this.usStateFromString(search);
-
-			case 'CA':
-				return this.caStateFromString(search);
-
-			case 'AU':
-				return this.auStateFromString(search);
-
-			default:
-				return null;
-		}
-	}
-
-	static fromString(search: string): IsoCountry | null | undefined {
+	static codeFromString(search: string): CountryCode | null {
 		const candidateIso = search.toUpperCase();
 		if (candidateIso === 'UK') {
 			return 'GB';
 		}
 
-		if (this.isIsoCountry(candidateIso)) {
-			return candidateIso;
-		}
-
-		return null;
+		return countryCodeFromString(candidateIso) ?? null;
 	}
 
-	static isIsoCountry(search: string): search is IsoCountry {
-		return isoCountrySet.has(search as IsoCountry);
-	}
-
-	static findIsoCountry(country?: string | null): IsoCountry | null {
+	static findCountryCode(country?: string | null): CountryCode | null {
 		if (!country) {
 			return null;
 		}
 
 		return (
-			this.fromString(country) ??
-			isoCountries.find((key) => countries[key] === country) ??
+			this.codeFromString(country) ??
+			countryCodes.find((key) => countries[key] === country) ??
 			null
 		);
 	}
 
 	static fromCountryGroup(
 		countryGroupId: CountryGroupId | null | undefined = null,
-	): IsoCountry | null | undefined {
+	): CountryCode | null | undefined {
 		switch (countryGroupId) {
 			case UnitedStates:
 				return 'US';
@@ -153,7 +61,7 @@ export class Country {
 
 	static fromPath(
 		path: string = window.location.pathname,
-	): IsoCountry | null | undefined {
+	): CountryCode | null | undefined {
 		if (path === '/us' || path.startsWith('/us/')) {
 			return 'US';
 		} else if (path === '/ca' || path.startsWith('/ca/')) {
@@ -163,48 +71,48 @@ export class Country {
 		return null;
 	}
 
-	static fromQueryParameter(): IsoCountry | null | undefined {
+	static fromQueryParameter(): CountryCode | null | undefined {
 		const country = getQueryParameter('country');
 
 		if (country) {
-			return this.fromString(country);
+			return this.codeFromString(country);
 		}
 
 		return null;
 	}
 
-	static fromCookie(): IsoCountry | null | undefined {
+	static fromCookie(): CountryCode | null | undefined {
 		const country = cookie.get('GU_country');
 
 		if (country) {
-			return this.fromString(country);
+			return this.codeFromString(country);
 		}
 
 		return null;
 	}
 
-	static fromGeolocation(): IsoCountry | null | undefined {
+	static fromGeolocation(): CountryCode | null | undefined {
 		const country = cookie.get('GU_geo_country');
 
 		if (country) {
-			return this.fromString(country);
+			return this.codeFromString(country);
 		}
 
 		return null;
 	}
 
-	static fromOldGeolocation(): IsoCountry | null | undefined {
-		return this.findIsoCountry(window.guardian.geoip?.countryCode);
+	static fromOldGeolocation(): CountryCode | null | undefined {
+		return this.findCountryCode(window.guardian.geoip?.countryCode);
 	}
 
-	static setCountry(country: IsoCountry): void {
+	static setCountry(country: CountryCode): void {
 		cookie.set('GU_country', country, 7);
 	}
 
 	static handleCountryForCountryGroup(
 		targetCountryGroup: TargetCountryGroups,
 		countryGroupId: CountryGroupId | null | undefined = null,
-	): IsoCountry | null {
+	): CountryCode | null {
 		const paths: Record<TargetCountryGroups, string[]> = {
 			International: ['/int', '/int/'],
 			EURCountries: ['/eu', '/eu/'],
@@ -212,7 +120,7 @@ export class Country {
 			GBPCountries: ['/uk', '/uk/'],
 			AUDCountries: ['/au', '/au/'],
 		};
-		const defaultCountry: Record<TargetCountryGroups, IsoCountry> = {
+		const defaultCountry: Record<TargetCountryGroups, CountryCode> = {
 			International: 'IN',
 			EURCountries: 'DE',
 			NZDCountries: 'NZ',
@@ -229,7 +137,7 @@ export class Country {
 			return null;
 		}
 
-		const candidateCountry: IsoCountry | null | undefined =
+		const candidateCountry: CountryCode | null | undefined =
 			this.fromQueryParameter() ?? this.fromCookie() ?? this.fromGeolocation();
 
 		if (
@@ -244,7 +152,7 @@ export class Country {
 
 	static detect(
 		countryGroupId: CountryGroupId | null | undefined = null,
-	): IsoCountry {
+	): CountryCode {
 		const targetCountryGroups: TargetCountryGroups[] = [
 			International,
 			EURCountries,
@@ -252,7 +160,7 @@ export class Country {
 			GBPCountries,
 			AUDCountries,
 		];
-		let country: IsoCountry | null = null;
+		let country: CountryCode | null = null;
 
 		for (const targetCountryGroupId of targetCountryGroups) {
 			const candidateCountry = this.handleCountryForCountryGroup(

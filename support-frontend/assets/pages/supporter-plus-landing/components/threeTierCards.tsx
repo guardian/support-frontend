@@ -1,13 +1,16 @@
 import { css } from '@emotion/react';
 import { between, from, space } from '@guardian/source/foundations';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
+import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
+import type { CardTheme } from 'helpers/landingPage/cardTheme';
+import { defaultCardTheme, redCardTheme } from 'helpers/landingPage/cardTheme';
 import type { CardContent } from './threeTierCard';
 import { ThreeTierCard } from './threeTierCard';
 
 export type ThreeTierCardsProps = {
 	cardsContent: CardContent[];
-	currencyId: IsoCurrency;
+	currencyId: CurrencyCode;
 	billingPeriod: BillingPeriod;
 	showWeeklyPrice?: boolean;
 };
@@ -50,13 +53,19 @@ export function ThreeTierCards({
 	billingPeriod,
 	showWeeklyPrice,
 }: ThreeTierCardsProps): JSX.Element {
+	const { enableRedCardTheme } = useFeatureSwitches();
 	const shouldUseLargePriceMinHeight =
 		!!showWeeklyPrice ||
 		cardsContent.some((card) => !!card.promotion || !!card.billingPeriodsCopy);
 	const haveLabelAndSelectedCards =
-		cardsContent.filter((card) => !!card.label || card.isUserSelected).length >
-		1;
+		cardsContent.filter((card) => !!card.label?.copy || card.isUserSelected)
+			.length > 1;
 	let promoCount = 0;
+
+	const cardTheme: CardTheme = enableRedCardTheme
+		? redCardTheme
+		: defaultCardTheme;
+
 	return (
 		<div
 			css={container(cardsContent.length)}
@@ -71,6 +80,7 @@ export function ThreeTierCards({
 				return (
 					<ThreeTierCard
 						cardContent={cardContent}
+						cardTheme={cardTheme}
 						cardTier={cardIndexToTier(cardIndex)}
 						key={`threeTierCard${cardIndex}`}
 						promoCount={promoCount}

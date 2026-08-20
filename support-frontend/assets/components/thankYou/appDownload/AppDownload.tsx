@@ -79,7 +79,7 @@ export default function AppDownload({
 						<div css={bodyStyle}>
 							<h2 css={headingstyle}>{title}</h2>
 							<p css={descriptionStyle}>{description}</p>
-							<div css={[appStoreBadges]}>
+							<div css={appStoreBadges}>
 								<AppStoreBadges
 									playStoreUrl={playStoreUrl}
 									appStoreUrl={getAppStoreUrl(countryGroupId)}

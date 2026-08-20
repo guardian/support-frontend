@@ -2,6 +2,7 @@ import { storage } from '@guardian/libs';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type React from 'react';
 import OnboardingSummary from 'components/onboarding/sections/summary';
+import { FeatureSwitchesProvider } from 'contexts/FeatureSwitchesContext';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
@@ -32,9 +33,11 @@ export default {
 	component: OnboardingSummary,
 	decorators: [
 		(Story: React.FC): JSX.Element => (
-			<div style={{ maxWidth: '600px', margin: '40px auto' }}>
-				<Story />
-			</div>
+			<FeatureSwitchesProvider>
+				<div style={{ maxWidth: '600px', margin: '40px auto' }}>
+					<Story />
+				</div>
+			</FeatureSwitchesProvider>
 		),
 		withSourceReset,
 	],

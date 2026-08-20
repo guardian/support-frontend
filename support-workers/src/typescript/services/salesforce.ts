@@ -1,4 +1,4 @@
-import { getCountryNameByIsoCode } from '@modules/internationalisation/country';
+import { getCountryNameByCode } from '@modules/internationalisation/country';
 import { z } from 'zod';
 import { getAddressLine } from '../model/address';
 import type { ProductTypeName } from '../model/productType';
@@ -241,8 +241,7 @@ export const createDigitalOnlyContactRecordRequest = (
 		Email: user.primaryEmailAddress,
 		FirstName: user.firstName,
 		LastName: user.lastName,
-		OtherCountry:
-			getCountryNameByIsoCode(user.billingAddress.country) ?? undefined,
+		OtherCountry: getCountryNameByCode(user.billingAddress.country),
 		...(user.billingAddress.state
 			? { OtherState: user.billingAddress.state }
 			: {}),
@@ -298,7 +297,7 @@ export const createMailingAddressFields = (user: User) => {
 		MailingPostalCode: user.deliveryAddress?.postCode,
 		MailingCountry:
 			(user.deliveryAddress?.country &&
-				getCountryNameByIsoCode(user.deliveryAddress.country)) ??
+				getCountryNameByCode(user.deliveryAddress.country)) ??
 			undefined,
 	};
 };
@@ -309,8 +308,7 @@ export const createBillingAddressFields = (user: User) => {
 		OtherCity: user.billingAddress.city,
 		OtherState: user.billingAddress.state,
 		OtherPostalCode: user.billingAddress.postCode,
-		OtherCountry:
-			getCountryNameByIsoCode(user.billingAddress.country) ?? undefined,
+		OtherCountry: getCountryNameByCode(user.billingAddress.country),
 	};
 };
 

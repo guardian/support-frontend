@@ -19,6 +19,8 @@ const paymentSchedule = {
 		{
 			date: new Date(),
 			amount: 49.99,
+			amountWithoutTax: 45,
+			taxAmount: 4.99,
 		},
 	],
 };

@@ -40,3 +40,12 @@ case class TickerSettings(
 object TickerSettings {
   implicit val tickerCodec: Codec[TickerSettings] = deriveCodec
 }
+
+case class Scheduler(
+    start: Option[String] = None, // ISO date "YYYY-MM-DD", inclusive
+    end: Option[String] = None, // ISO date "YYYY-MM-DD", inclusive
+)
+
+object Scheduler {
+  implicit val codec: Codec[Scheduler] = deriveCodec
+}

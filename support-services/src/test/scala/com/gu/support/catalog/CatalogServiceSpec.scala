@@ -34,7 +34,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       GBP,
       Monthly,
       NoFulfilmentOptions,
-      NoProductOptions,
+      TaxInclusive,
     ) shouldBe Some(Price(14.99, GBP))
 
     getPrice(

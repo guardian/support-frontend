@@ -1,9 +1,12 @@
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { useEffect, useState } from 'react';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
+import type { Payment } from 'helpers/forms/checkouts';
+import { calculateTotal } from 'helpers/forms/checkouts';
+import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { isProd } from 'helpers/urls/url';
 import {
 	paypalOneClickCheckout,
@@ -14,8 +17,10 @@ import {
 	createSetupToken,
 	exchangeSetupTokenForPaymentToken,
 } from '../checkout/helpers/paypalCompletePayments';
-import { getPayPalEnv } from '../checkout/helpers/payPalSdkOptions';
-import { paypalSdkFundingBlocklist } from '../checkout/helpers/payPalSdkOptions';
+import {
+	getPayPalEnv,
+	paypalSdkFundingBlocklist,
+} from '../checkout/helpers/payPalSdkOptions';
 import type { PaymentMethod } from './paymentFields';
 
 type ApprovedSetupToken = {
@@ -31,8 +36,9 @@ type SubmitButtonProps = {
 	payPalPaymentToken: PaymentToken | undefined;
 	setPayPalPaymentToken: (paymentToken: PaymentToken) => void;
 	isTestUser: boolean;
-	finalAmount: number;
-	currencyKey: IsoCurrency;
+	payment: Payment;
+	taxRateConfig: TaxRateConfig;
+	currencyKey: CurrencyCode;
 	billingPeriod: BillingPeriod;
 	csrf: string;
 	formRef: React.RefObject<HTMLFormElement>;
@@ -97,7 +103,8 @@ export function SubmitButton({
 	setPayPalPaymentToken,
 	formRef,
 	isTestUser,
-	finalAmount,
+	payment,
+	taxRateConfig,
 	currencyKey,
 	billingPeriod,
 	csrf,
@@ -168,7 +175,13 @@ export function SubmitButton({
 						}}
 						/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
 						payment={(resolve, reject) => {
-							setupPayPalPayment(finalAmount, currencyKey, billingPeriod, csrf)
+							const totalPaymentAmount = calculateTotal(taxRateConfig, payment);
+							setupPayPalPayment(
+								totalPaymentAmount,
+								currencyKey,
+								billingPeriod,
+								csrf,
+							)
 								.then((token) => {
 									resolve(token);
 								})

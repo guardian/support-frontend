@@ -40,6 +40,7 @@ trait Controllers {
     appConfig.stage,
     priceSummaryServiceProvider,
     cachedProductCatalogServiceProvider,
+    cachedSalesTaxService,
     appConfig.supportUrl,
     tickerService,
     mparticleClient,
@@ -184,9 +185,7 @@ trait Controllers {
 
   lazy val getAddressController = new GetAddress(
     controllerComponents,
-    getAddressIOService,
     idealPostcodesService,
-    allSettingsProvider,
     actionBuilders,
   )
 

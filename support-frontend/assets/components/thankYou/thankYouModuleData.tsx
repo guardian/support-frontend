@@ -5,7 +5,7 @@ import {
 	textEgyptian15,
 	textEgyptian17,
 } from '@guardian/source/foundations';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { useState } from 'react';
 import {
@@ -114,7 +114,7 @@ type GetThankYouModuleDataParams = {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	countryGroupId: CountryGroupId;
-	countryId: IsoCountry;
+	countryId: CountryCode;
 	csrf: CsrfState;
 	isOneOff: boolean;
 	amountIsAboveThreshold: boolean;

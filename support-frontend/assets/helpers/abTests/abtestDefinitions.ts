@@ -61,27 +61,6 @@ export const tests: Tests = {
 		seed: 1,
 		excludeContributionsOnlyCountries: true,
 	},
-	paypalMigrationRecurring: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 0.1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 3,
-		targetPage: pageUrlRegexes.genericCheckoutOnly,
-		excludeContributionsOnlyCountries: true,
-	},
 	postCodeLookupExpress: {
 		variants: [
 			{
@@ -102,5 +81,47 @@ export const tests: Tests = {
 		seed: 9,
 		targetPage: pageUrlRegexes.ukPrintCheckoutOnly,
 		excludeContributionsOnlyCountries: true,
+	},
+	deliveryAgentsLookupExpress: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			GBPCountries: {
+				offset: 0,
+				size: 0.1,
+			},
+		},
+		isActive: false,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 7,
+		targetPage: pageUrlRegexes.ukPrintCheckoutOnly,
+		excludeContributionsOnlyCountries: true,
+	},
+	stripePaymentElementTest: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: true,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 4,
+		targetPage: pageUrlRegexes.oneTimeCheckoutOnly,
+		excludeContributionsOnlyCountries: false,
 	},
 };

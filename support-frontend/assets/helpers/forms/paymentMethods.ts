@@ -1,4 +1,9 @@
-import type { PaymentMethodSwitch } from './checkouts';
+type PaymentMethodSwitch =
+	| 'directDebit'
+	| 'payPal'
+	| 'payPalCompletePayments'
+	| 'stripe'
+	| 'stripeHostedCheckout';
 
 const Stripe = 'Stripe';
 const PayPal = 'PayPal';

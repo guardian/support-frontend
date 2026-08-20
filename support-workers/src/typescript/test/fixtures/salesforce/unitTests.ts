@@ -1,9 +1,9 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { Title } from '../../../model/stateSchemas';
 
 export const identityId = '9999999';
 
-export const uk: IsoCountry = 'GB';
+export const uk: CountryCode = 'GB';
 
 export const buyerTitle: Title = 'Mrs';
 export const buyerFirstName = 'BuyerFirstName';

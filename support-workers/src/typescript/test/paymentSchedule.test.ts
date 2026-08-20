@@ -1,5 +1,8 @@
 import type { InvoiceItem } from '../model/paymentSchedule';
-import { buildPaymentSchedule } from '../model/paymentSchedule';
+import {
+	buildPaymentSchedule,
+	paymentScheduleSchema,
+} from '../model/paymentSchedule';
 
 describe('buildPaymentSchedule', () => {
 	test('should throw if we have no invoice items', () => {
@@ -24,6 +27,8 @@ describe('buildPaymentSchedule', () => {
 				{
 					date: new Date('2025-01-01'),
 					amount: 12.0,
+					amountWithoutTax: 10.0,
+					taxAmount: 2.0,
 				},
 			],
 		});
@@ -50,6 +55,8 @@ describe('buildPaymentSchedule', () => {
 				{
 					date: new Date('2025-01-01'),
 					amount: 18.0,
+					amountWithoutTax: 15.0,
+					taxAmount: 3.0,
 				},
 			],
 		});
@@ -76,10 +83,14 @@ describe('buildPaymentSchedule', () => {
 				{
 					date: new Date('2025-01-01'),
 					amount: 12.0,
+					amountWithoutTax: 10.0,
+					taxAmount: 2.0,
 				},
 				{
 					date: new Date('2025-02-01'),
 					amount: 18.0,
+					amountWithoutTax: 15.0,
+					taxAmount: 3.0,
 				},
 			],
 		});
@@ -110,19 +121,25 @@ describe('buildPaymentSchedule', () => {
 			{
 				date: new Date('2025-01-01'),
 				amount: 12.0,
+				amountWithoutTax: 10.0,
+				taxAmount: 2.0,
 			},
 			{
 				date: new Date('2025-02-01'),
 				amount: 18.0,
+				amountWithoutTax: 15.0,
+				taxAmount: 3.0,
 			},
 			{
 				date: new Date('2025-03-01'),
 				amount: 24.0,
+				amountWithoutTax: 20.0,
+				taxAmount: 4.0,
 			},
 		]);
 	});
 
-	test('should round amounts to 2 decimal places', () => {
+	test('should round the total amount to 2 decimal places', () => {
 		const invoiceItems: InvoiceItem[] = [
 			{
 				serviceStartDate: new Date('2025-01-01'),
@@ -138,6 +155,8 @@ describe('buildPaymentSchedule', () => {
 				{
 					date: new Date('2025-01-01'),
 					amount: 13.0,
+					amountWithoutTax: 10.333,
+					taxAmount: 2.666,
 				},
 			],
 		});
@@ -159,8 +178,30 @@ describe('buildPaymentSchedule', () => {
 				{
 					date: new Date('2025-01-01'),
 					amount: 0,
+					amountWithoutTax: 0,
+					taxAmount: 0,
 				},
 			],
 		});
+	});
+});
+
+describe('paymentScheduleSchema', () => {
+	it("ignores fields it doesn't know about", () => {
+		const payments = {
+			payments: [
+				{
+					date: new Date('2025-01-01'),
+					amount: 10.0,
+					amountWithoutTax: 8.0,
+					taxAmount: 2.0,
+					unexpectedField: 'hi',
+				},
+			],
+		};
+
+		const result = paymentScheduleSchema.safeParse(payments);
+
+		expect(result.success).toEqual(true);
 	});
 });

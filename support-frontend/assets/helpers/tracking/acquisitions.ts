@@ -1,10 +1,11 @@
 // ----- Imports ----- //
 
 import { getViewId } from '@guardian/ophan-tracker-js';
+import type { CountryCode } from '@modules/internationalisation/country';
 import { testIsActive } from 'helpers/abTests/abtest';
 import { type Participations } from 'helpers/abTests/models';
 import { get as getCookie } from 'helpers/storage/cookie';
-import * as storage from 'helpers/storage/storage';
+import { getSession, setSession } from 'helpers/storage/storage';
 import {
 	getAllQueryParams,
 	getAllQueryParamsWithExclusions,
@@ -62,6 +63,7 @@ export type PaymentAPIAcquisitionData = {
 	queryParameters?: AcquisitionQueryParameters;
 	labels?: string[];
 	postalCode: string | null;
+	countryId: CountryCode;
 };
 
 // ----- Setup ----- //
@@ -76,8 +78,7 @@ function storeReferrerAcquisitionDataInSessionStorage(
 	referrerAcquisitionData: ReferrerAcquisitionData,
 ): boolean {
 	try {
-		const serialised = JSON.stringify(referrerAcquisitionData);
-		storage.setSession(ACQUISITIONS_STORAGE_KEY, serialised);
+		setSession(ACQUISITIONS_STORAGE_KEY, referrerAcquisitionData);
 		return true;
 	} catch (err) {
 		return false;
@@ -186,6 +187,7 @@ function derivePaymentApiAcquisitionData(
 	referrerAcquisitionData: ReferrerAcquisitionData,
 	nativeAbParticipations: Participations,
 	postalCode: string | null,
+	countryId: CountryCode,
 ): PaymentAPIAcquisitionData {
 	const ophanIds: OphanIds = getOphanIds();
 	const abTests = getAbTests(referrerAcquisitionData, nativeAbParticipations);
@@ -208,6 +210,7 @@ function derivePaymentApiAcquisitionData(
 		queryParameters: referrerAcquisitionData.queryParameters,
 		labels: referrerAcquisitionData.labels,
 		postalCode: postalCode,
+		countryId,
 	};
 }
 
@@ -216,11 +219,7 @@ function getReferrerAcquisitionDataFromSessionStorage():
 	| ReferrerAcquisitionData
 	| null
 	| undefined {
-	const stored = storage.getSession(ACQUISITIONS_STORAGE_KEY);
-
-	return stored
-		? (deserialiseJsonObject(stored) as ReferrerAcquisitionData)
-		: null;
+	return getSession(ACQUISITIONS_STORAGE_KEY) as ReferrerAcquisitionData;
 }
 
 function getAcquisitionDataFromUtmParams():

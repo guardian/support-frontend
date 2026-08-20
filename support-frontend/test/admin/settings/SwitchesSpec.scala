@@ -67,10 +67,6 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |        "description" : "Enable external service postcode lookup in checkout form",
           |        "state" : "On"
           |      },
-          |      "useIdealPostcodes" : {
-          |        "description" : "Use Ideal Postcodes to handle postcode lookups",
-          |        "state" : "On"
-          |      },
           |      "enableDigitalSubGifting" : {
           |        "description" : "Enable Digital Sub gifting",
           |        "state" : "On"
@@ -115,6 +111,18 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "enableTooledStudentLandingPage" : {
           |        "description" : "Enable tooled student landing page",
           |        "state" : "On"
+          |      },
+          |      "enableStripePaymentElement" : {
+          |        "description" : "Enable Stripe Payment Element",
+          |        "state" : "Off"
+          |      },
+          |      "enableCanadaTaxExclusion" : {
+          |        "description" : "Canada Tax Exclusive Rate Plans",
+          |        "state" : "Off"
+          |      },
+          |      "enableRedCardTheme" : {
+          |        "description" : "Enable alternative SupporterPlus card colours",
+          |        "state" : "Off"
           |      }
           |    }
           |  },
@@ -159,9 +167,20 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
             directDebit = Some(On),
             stripeHostedCheckout = Some(Off),
           ),
-          subscriptionsSwitches = SubscriptionsSwitches(Some(On), Some(On), Some(On)),
-          featureSwitches =
-            FeatureSwitches(Some(On), Some(On), Some(Off), Some(On), Some(Off), Some(On), Some(On), Some(On)),
+          subscriptionsSwitches = SubscriptionsSwitches(Some(On), Some(On)),
+          featureSwitches = FeatureSwitches(
+            Some(On),
+            Some(On),
+            Some(Off),
+            Some(On),
+            Some(Off),
+            Some(On),
+            Some(On),
+            Some(On),
+            Some(Off),
+            Some(Off),
+            Some(Off),
+          ),
           campaignSwitches = CampaignSwitches(Some(Off), Some(Off)),
           recaptchaSwitches = RecaptchaSwitches(Some(On), Some(On)),
         ),

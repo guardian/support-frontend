@@ -1,8 +1,9 @@
+import { ValidationError } from '@modules/errors';
 import type { ZuoraError } from '@modules/zuora/errors/zuoraError';
 import Stripe from 'stripe';
 import { SalesforceError, salesforceErrorCodes } from '../services/salesforce';
 import { retryLimited, retryNone, retryUnlimited } from './retryError';
-import { mapZuoraError } from './zuoraErrors';
+import { mapZuoraError } from './transactionDeclinedErrors';
 
 function isZuoraError(error: unknown): error is ZuoraError {
 	return error instanceof Error && error.name === 'ZuoraError';
@@ -20,6 +21,10 @@ export const asRetryError = (error: unknown) => {
 	if (isZuoraError(error)) {
 		console.log('Mapping ZuoraError:', error);
 		return mapZuoraError(error);
+	}
+	if (error instanceof ValidationError) {
+		console.log('Mapping ValidationError:', error); // From support-service-lambdas, often to do with expired promos
+		return retryNone(error.message);
 	}
 	if (error instanceof Error) {
 		console.log('Generic Error:', error);

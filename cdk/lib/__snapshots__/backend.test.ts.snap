@@ -772,7 +772,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
         "PolicyDocument": {
           "Statement": [
             {
-              "Action": "ssm:GetParameter",
+              "Action": "ssm:GetParametersByPath",
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
@@ -782,7 +782,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/support/support-backend/PROD/*",
+                    ":parameter/PROD/support/support-backend/*",
                   ],
                 ],
               },

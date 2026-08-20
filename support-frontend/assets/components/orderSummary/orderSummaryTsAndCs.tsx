@@ -44,7 +44,7 @@ export function OrderSummaryTsAndCs({
 	ratePlanDescription,
 	thresholdAmount = 0,
 	deliveryDate,
-}: OrderSummaryTsAndCsProps): JSX.Element | null {
+}: OrderSummaryTsAndCsProps): JSX.Element {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	// Display for AUS Students who are on a subscription basis

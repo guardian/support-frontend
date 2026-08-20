@@ -6,7 +6,6 @@ import {
 	space,
 	textSans17,
 	textSansBold17,
-	until,
 } from '@guardian/source/foundations';
 import { weeklyBenefitsPaperHeroBlue } from 'stylesheets/emotion/colours';
 
@@ -25,9 +24,9 @@ export const flexContainerOverride = css`
 	}
 
 	& img {
-		object-fit: fill;
-		${until.mobile} {
-			display: none;
+		justify-self: center;
+		${from.tablet} {
+			align-self: start;
 		}
 	}
 `;

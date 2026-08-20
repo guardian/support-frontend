@@ -21,6 +21,7 @@ case class Promotion(
     renewalOnly: Boolean = false,
     tracking: Boolean = false,
     landingPage: Option[PromotionCopy] = None,
+    isIntroductoryPricing: Option[Boolean] = None,
 )
 
 object Promotion {

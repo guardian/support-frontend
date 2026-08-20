@@ -143,6 +143,14 @@ object AwsCloudWatchMetricSetup {
       ),
     )
 
+  def salesTaxApiFailure(stage: Stage): MetricRequest =
+    getMetricRequest(
+      MetricName("SalesTaxApiError"),
+      Map(
+        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
+      ),
+    )
+
   private def getMetricRequest(
       name: MetricName,
       dimensions: Map[MetricDimensionName, MetricDimensionValue],

@@ -1,52 +1,54 @@
-// ----- Setup ----- //
-// Checks if local/sessionStorage is usable. Need to do more than check if
-// 'window.localStorage' is defined, because Safari <11 in private browsing
-// mode is weird and sets the storage size to 0.
-function isStorageAvailable(storage: Storage): boolean {
-	try {
-		storage.setItem('storageTest', 'testValue');
-
-		if (storage.getItem('storageTest') === 'testValue') {
-			storage.removeItem('storageTest');
-			return true;
-		}
-
-		return false;
-	} catch (e) {
-		return false;
-	}
-}
-
-const SESSION_AVAILABLE = isStorageAvailable(window.sessionStorage);
-const LOCAL_AVAILABLE = isStorageAvailable(window.localStorage);
+import { storage } from '@guardian/libs';
 
 // ----- Functions ----- //
-function setLocal(key: string, item: string): void {
-	if (LOCAL_AVAILABLE) {
-		localStorage.setItem(key, item);
+function setLocal(key: string, value: unknown): void {
+	storage.local.isAvailable() && storage.local.set(key, value);
+}
+
+function getLocal(key: string): unknown {
+	if (!storage.local.isAvailable()) {
+		return null;
+	}
+
+	const data = storage.local.get(key);
+
+	if (data !== null && data !== undefined) {
+		return data;
+	}
+
+	try {
+		const item = window.localStorage.getItem(key);
+		const data = item && (JSON.parse(item) as unknown);
+		return data ?? null;
+	} catch (error) {
+		console.error(`Failed to parse ${key} from local storage`, error);
+		return null;
 	}
 }
 
-function getLocal(key: string): string | null | undefined {
-	if (LOCAL_AVAILABLE) {
-		return localStorage.getItem(key);
-	}
-
-	return null;
+function setSession(key: string, value: unknown): void {
+	storage.session.isAvailable() && storage.session.set(key, value);
 }
 
-function setSession(key: string, item: string): void {
-	if (SESSION_AVAILABLE) {
-		sessionStorage.setItem(key, item);
-	}
-}
-
-function getSession(key: string): string | null | undefined {
-	if (SESSION_AVAILABLE) {
-		return sessionStorage.getItem(key);
+function getSession(key: string): unknown {
+	if (!storage.session.isAvailable()) {
+		return null;
 	}
 
-	return null;
+	const data = storage.session.get(key);
+
+	if (data !== null && data !== undefined) {
+		return data;
+	}
+
+	try {
+		const item = window.sessionStorage.getItem(key);
+		const data = item && (JSON.parse(item) as unknown);
+		return data ?? null;
+	} catch (error) {
+		console.error(`Failed to parse ${key} from session storage`, error);
+		return null;
+	}
 }
 
 // ----- Exports ----- //

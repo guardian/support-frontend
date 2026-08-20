@@ -7,7 +7,7 @@ import {
 	SvgLinkedIn,
 	SvgTwitter,
 } from '@guardian/source/react-components';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import {
 	OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
 	OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK,
@@ -23,7 +23,7 @@ import {
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 interface SocialShareIconsProps {
-	countryId: IsoCountry;
+	countryId: CountryCode;
 	campaignCode?: string;
 }
 
@@ -35,7 +35,7 @@ const buttonsContainer = css`
 
 const socialShareHeader = 'Share your support';
 
-const getSocialShareCopy = (countryId: IsoCountry): string =>
+const getSocialShareCopy = (countryId: CountryCode): string =>
 	countryId === 'AU'
 		? 'Your voice matters. By sharing a message of support for Guardian Australia, you can help us grow our community. ' +
 		  'Together, we can make a difference.'

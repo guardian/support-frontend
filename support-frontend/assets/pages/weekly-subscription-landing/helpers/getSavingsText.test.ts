@@ -16,6 +16,7 @@ const makePromotion = (overrides: Partial<Promotion> = {}): Promotion => ({
 	name: 'Test Promo',
 	description: 'Test promo description',
 	promoCode: 'TESTPROMO',
+	isIntroductoryPricing: false,
 	...overrides,
 });
 

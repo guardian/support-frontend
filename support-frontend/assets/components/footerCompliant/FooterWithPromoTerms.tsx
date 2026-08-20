@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { neutral } from '@guardian/source/foundations';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Domestic } from '@modules/product/fulfilmentOptions';
@@ -23,7 +23,7 @@ const promoOfferLink = css`
 
 const getPromoUrl = (
 	productPrices: ProductPrices,
-	country: IsoCountry,
+	country: CountryCode,
 	billingPeriod: BillingPeriod,
 	fulfillmentOption: FulfilmentOptions,
 ): string | undefined => {
@@ -43,7 +43,7 @@ function MaybeLink({ href, text }: { text: string; href?: string }) {
 
 type LinkTypes = {
 	productPrices: ProductPrices;
-	country: IsoCountry;
+	country: CountryCode;
 	fulfillmentOption: FulfilmentOptions;
 };
 
@@ -106,7 +106,7 @@ function GuardianWeeklyFooter({
 	country,
 }: {
 	productPrices: ProductPrices;
-	country: IsoCountry;
+	country: CountryCode;
 	orderIsAGift: boolean;
 }) {
 	const weeklyFulfillmentOption = Domestic;

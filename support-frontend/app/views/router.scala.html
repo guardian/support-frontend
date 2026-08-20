@@ -21,6 +21,7 @@
   allProductPrices: AllProductPrices,
   allCheckoutNudgeProductPrices: AllProductPrices,
   productCatalog: JsonObject,
+  taxRates: JsonObject,
   user: Option[User],
   tickerData: Option[Tickers],
   homeDeliveryPostcodes: Option[List[String]] = None,
@@ -65,4 +66,8 @@
     productCatalog = productCatalog,
     user = user
   )
+
+  <script type="text/javascript">
+    window.guardian.taxRates = @Html(outputJson(taxRates))
+  </script>
 }

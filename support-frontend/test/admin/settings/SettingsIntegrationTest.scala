@@ -38,6 +38,7 @@ class SettingsIntegrationTest extends AsyncFlatSpec with Matchers with StrictLog
 
     val mockLandingPageTestService = new LandingPageTestService {
       def getTests(): List[LandingPageTest] = Nil
+      def channelName: String = "SupportLandingPage"
     }
 
     val mockCheckoutNudgeTestService = new CheckoutNudgeTestService {
@@ -52,6 +53,11 @@ class SettingsIntegrationTest extends AsyncFlatSpec with Matchers with StrictLog
       def getTests(): List[StudentLandingPageTest] = Nil
     }
 
+    val mockBanditDataService = new services.BanditDataService(
+      configuration.stage,
+      mockLandingPageTestService,
+    )(scala.concurrent.ExecutionContext.global, actorSystem)
+
     val maybeAllSettings = for {
       allSettingsProvider <- AllSettingsProvider.fromConfig(
         configuration,
@@ -59,6 +65,7 @@ class SettingsIntegrationTest extends AsyncFlatSpec with Matchers with StrictLog
         mockCheckoutNudgeTestService,
         mockOneTimeCheckoutTestService,
         mockStudentLandingPageTestService,
+        mockBanditDataService,
       )
       allSettings = allSettingsProvider.getAllSettings()
     } yield allSettings

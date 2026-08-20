@@ -34,6 +34,7 @@ describe('getPriceDescription', () => {
 						amount: 10,
 						durationMonths: 12,
 					},
+					isIntroductoryPricing: false,
 				},
 			],
 			fixedTerm: false,
@@ -78,6 +79,7 @@ describe('getPriceDescription', () => {
 						amount: 15,
 						durationMonths: 3,
 					},
+					isIntroductoryPricing: false,
 				},
 			],
 			fixedTerm: false,
@@ -111,6 +113,7 @@ describe('getSimplifiedPriceDescription', () => {
 					amount: 50,
 					durationMonths: 3,
 				},
+				isIntroductoryPricing: false,
 			},
 		],
 	};

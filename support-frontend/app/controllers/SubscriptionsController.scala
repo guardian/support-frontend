@@ -85,11 +85,12 @@ class SubscriptionsController(
         countryGroup.currency,
       )
 
+    val digitalPackProductOptions = if (countryGroup == CountryGroup.Canada) TaxExclusive else TaxInclusive
     val digitalSubscription = service
       .getPrices(
         DigitalPack,
         Nil,
-      )(countryGroup)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(countryGroup.currency)
+      )(countryGroup)(NoFulfilmentOptions)(digitalPackProductOptions)(Monthly)(countryGroup.currency)
 
     Map(
       GuardianWeekly.toString -> pricingCopy(weekly),
@@ -116,7 +117,7 @@ class SubscriptionsController(
       ) {
         Html(s"""<script type="text/javascript">
               window.guardian.pricingCopy = ${outputJson(pricingCopy)};
-              window.guardian.productCatalog = ${outputJson(productCatalog)}
+              window.guardian.productCatalog = ${outputJson(productCatalog, dropNullValues = false)}
             </script>""")
       },
     ).withSettingsSurrogateKey

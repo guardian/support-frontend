@@ -1,4 +1,4 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { weeklyGiftBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
@@ -10,7 +10,7 @@ function WeeklyGiftProductPrices({
 	countryGroupId,
 	productPrices,
 }: {
-	countryId: IsoCountry;
+	countryId: CountryCode;
 	countryGroupId: CountryGroupId;
 	productPrices: ProductPrices;
 }): JSX.Element | null {

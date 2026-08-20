@@ -9,7 +9,7 @@ jobs:
         working-directory: support-frontend
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
 
@@ -21,6 +21,6 @@ jobs:
           workingDir: support-frontend
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          buildScriptName: "build-storybook"
+          buildScriptName: 'build-storybook'
           exitOnceUploaded: true
-          onlyChanged: "!(main)" # only turbosnap on non-main branches
+          onlyChanged: '!(main)' # only turbosnap on non-main branches

@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
-import { CurrencyValues } from '@modules/internationalisation/currency';
+import { currencyCodes } from '@modules/internationalisation/currency';
+import { redCardTheme } from 'helpers/landingPage/cardTheme';
 import type { ThreeTierCardProps } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { ThreeTierCard } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
@@ -26,7 +27,7 @@ export default {
 		promoCount: 1,
 		linkCtaClickHandler: { action: 'tier card clicked' },
 		currencyId: {
-			options: CurrencyValues,
+			options: currencyCodes,
 			control: { type: 'radio' },
 		},
 	},
@@ -57,9 +58,9 @@ function Template(args: ThreeTierCardProps) {
 
 Template.args = {} as Record<string, unknown>;
 
-export const Default = Template.bind({});
+export const DefaultTheme = Template.bind({});
 
-Default.args = {
+DefaultTheme.args = {
 	isSubdued: false,
 	currencyId: 'GBP',
 	paymentFrequency: 'MONTHLY',
@@ -72,6 +73,24 @@ Default.args = {
 		cta: { copy: 'Support' },
 		label: { copy: 'Highest impact' },
 	},
+};
+
+export const RedTheme = Template.bind({});
+
+RedTheme.args = {
+	isSubdued: false,
+	currencyId: 'GBP',
+	paymentFrequency: 'MONTHLY',
+	cardTier: 2,
+	cardContent: {
+		...fallBackLandingPageSelection.products.SupporterPlus,
+		product: 'SupporterPlus',
+		isUserSelected: false,
+		price: 12,
+		cta: { copy: 'Support' },
+		label: { copy: 'Highest impact' },
+	},
+	cardTheme: redCardTheme,
 };
 
 export const Promotion = Template.bind({});
@@ -89,6 +108,24 @@ Promotion.args = {
 		cta: { copy: 'Support' },
 		label: { copy: 'Highest impact' },
 		promotion: promotionEURCountries,
+	},
+};
+
+export const IntroductoryPromotion = Template.bind({});
+
+IntroductoryPromotion.args = {
+	isSubdued: false,
+	currencyId: 'EUR',
+	paymentFrequency: 'MONTHLY',
+	cardTier: 3,
+	cardContent: {
+		...fallBackLandingPageSelection.products.DigitalSubscription,
+		product: 'DigitalSubscription',
+		isUserSelected: false,
+		price: 38.5,
+		cta: { copy: 'Support' },
+		label: { copy: 'Highest impact' },
+		promotion: { ...promotionEURCountries, isIntroductoryPricing: true },
 	},
 };
 

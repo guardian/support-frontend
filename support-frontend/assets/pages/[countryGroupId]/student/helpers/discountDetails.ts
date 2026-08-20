@@ -1,5 +1,5 @@
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { getCurrencyInfo } from '@modules/internationalisation/currency';
+import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type {
@@ -118,7 +118,7 @@ export function getStudentDiscount(
 		return undefined;
 	}
 	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
-	const currency = getCurrencyInfo(currencyKey);
+	const currency = getCurrencyByCode(currencyKey);
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 

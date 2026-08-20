@@ -73,12 +73,19 @@ function toEmailPaymentMethod(
 async function getFieldsFromState(
 	sendThankYouEmailState: SendThankYouEmailState,
 ) {
-	const fixedTerm = isFixedTerm(
+	const productCatalog: ProductCatalog =
 		await productCatalogProvider.getServiceForUser(
 			sendThankYouEmailState.user.isTestUser,
-		),
+		);
+	const fixedTerm = isFixedTerm(
+		productCatalog,
 		sendThankYouEmailState.productInformation,
 	);
+	const taxMode = getTaxMode(
+		productCatalog,
+		sendThankYouEmailState.productInformation,
+	);
+
 	return {
 		today: dayjs(),
 		user: sendThankYouEmailState.user,
@@ -93,6 +100,7 @@ async function getFieldsFromState(
 			sendThankYouEmailState.accountNumber,
 		),
 		isFixedTerm: fixedTerm,
+		taxMode,
 	};
 }
 
@@ -253,6 +261,17 @@ function isFixedTerm(
 		productInformation,
 	);
 	return productRatePlan.termType === 'FixedTerm';
+}
+
+function getTaxMode(
+	productCatalog: ProductCatalog,
+	productInformation: ProductPurchase,
+) {
+	const productRatePlan = getProductRatePlan(
+		productCatalog,
+		productInformation,
+	);
+	return productRatePlan.taxMode;
 }
 
 export function getBillingPeriod(productType: ProductType): EmailBillingPeriod {

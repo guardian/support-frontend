@@ -1,4 +1,4 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { Key } from './sessionStorage';
 
@@ -26,7 +26,7 @@ type Audience = {
 	breakpoint?: BreakpointRange;
 };
 
-type AudienceType = IsoCountry | CountryGroupId | 'ALL' | 'CONTRIBUTIONS_ONLY';
+type AudienceType = CountryCode | CountryGroupId | 'ALL' | 'CONTRIBUTIONS_ONLY';
 
 type Audiences = Partial<Record<AudienceType, Audience>>;
 
@@ -59,7 +59,7 @@ type Test = {
 	targetPage?: RegExp;
 	// Optional regex to persist this test participation across further pages
 	persistPage?: RegExp;
-	omitCountries?: IsoCountry[];
+	omitCountries?: CountryCode[];
 	// Some users will see a version of the checkout that only offers
 	// the option to make contributions. We won't want to include these
 	// users in some AB tests
@@ -70,6 +70,11 @@ type Tests = Record<string, Test>;
 
 type Participations = Record<string, string | undefined>;
 
+interface Scheduler {
+	start?: string; // UTC datetime "YYYY-MM-DDTHH:MM", inclusive
+	end?: string; // UTC datetime "YYYY-MM-DDTHH:MM", inclusive
+}
+
 interface PageTest<Variant> {
 	name: string;
 	status: 'Live' | 'Draft';
@@ -79,6 +84,8 @@ interface PageTest<Variant> {
 	};
 	mParticleAudience?: number;
 	variants: Variant[];
+	methodologies?: Array<{ name: string }>;
+	scheduler?: Scheduler;
 }
 interface PageParticipationsConfig<Variant> {
 	tests: Array<PageTest<Variant>>;
@@ -86,6 +93,10 @@ interface PageParticipationsConfig<Variant> {
 	forceParamName: string;
 	sessionStorageKey: Key;
 	getVariantName: (variant: Variant) => string;
+	selectVariant?: (
+		test: PageTest<Variant>,
+		mvtId: number,
+	) => Variant | undefined;
 }
 
 export type {

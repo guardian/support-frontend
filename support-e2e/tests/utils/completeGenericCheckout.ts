@@ -11,6 +11,7 @@ type TestDetails = {
 	product: string;
 	paymentType: string;
 	internationalisationId: string;
+	stateId?: string;
 	postCode?: string;
 	ratePlan?: string;
 	billingCountry?: string;
@@ -32,6 +33,7 @@ export const completeGenericCheckout = async (
 	const {
 		product,
 		internationalisationId,
+		stateId,
 		postCode,
 		paymentType,
 		ratePlan,
@@ -41,7 +43,7 @@ export const completeGenericCheckout = async (
 		page,
 		product,
 		internationalisationId,
-		getUserFields(internationalisationId, postCode, billingCountry),
+		getUserFields(internationalisationId, stateId, postCode, billingCountry),
 		ratePlan,
 	);
 
@@ -50,13 +52,13 @@ export const completeGenericCheckout = async (
 		case 'PayPal': {
 			const popupPagePromise = page.waitForEvent('popup');
 			await page
-				.locator("iframe[name^='xcomponent__ppbutton']")
+				.locator("iframe[name^='__zoid__paypal_buttons']")
 				.scrollIntoViewIfNeeded();
 			await page
-				.frameLocator("iframe[name^='xcomponent__ppbutton']")
+				.frameLocator("iframe[name^='__zoid__paypal_buttons']")
 				// this class gets added to the iframe body after the JavaScript has finished executing
 				.locator('body.dom-ready')
-				.locator('[role="button"]:has-text("Pay with")')
+				.getByRole('link', { name: 'PayPal' })
 				.click({ delay: 2000 });
 			const popupPage = await popupPagePromise;
 			await fillInPayPalDetails(popupPage);

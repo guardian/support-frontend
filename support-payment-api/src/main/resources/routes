@@ -22,6 +22,9 @@ OPTIONS  /contribute/one-off/stripe/create-payment            controllers.AppCon
 POST     /contribute/one-off/stripe/confirm-payment           controllers.StripeController.confirmPayment
 OPTIONS  /contribute/one-off/stripe/confirm-payment           controllers.AppController.corsOptions
 
+POST     /contribute/one-off/stripe/paypal/complete-payment   controllers.StripeController.completeStripePaypalPayment
+OPTIONS  /contribute/one-off/stripe/paypal/complete-payment   controllers.AppController.corsOptions
+
 #############################################
 # PAYPAL
 #############################################

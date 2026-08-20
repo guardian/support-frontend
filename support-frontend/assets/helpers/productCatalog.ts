@@ -380,7 +380,13 @@ export const productCatalogDescription: Record<
 			Monthly: {
 				billingPeriod: BillingPeriod.Monthly,
 			},
+			MonthlyTaxExclusive: {
+				billingPeriod: BillingPeriod.Monthly,
+			},
 			Annual: {
+				billingPeriod: BillingPeriod.Annual,
+			},
+			AnnualTaxExclusive: {
 				billingPeriod: BillingPeriod.Annual,
 			},
 			ThreeMonthGift: {
@@ -399,7 +405,13 @@ export const productCatalogDescription: Record<
 			Monthly: {
 				billingPeriod: BillingPeriod.Monthly,
 			},
+			MonthlyTaxExclusive: {
+				billingPeriod: BillingPeriod.Monthly,
+			},
 			Annual: {
+				billingPeriod: BillingPeriod.Annual,
+			},
+			AnnualTaxExclusive: {
 				billingPeriod: BillingPeriod.Annual,
 			},
 			OneYearStudent: {

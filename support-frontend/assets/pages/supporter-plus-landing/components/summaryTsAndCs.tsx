@@ -6,10 +6,10 @@ import {
 	textSans15,
 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { getCurrencyInfo } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
+import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import { formatAmount } from 'helpers/forms/checkouts';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
 	digitalPlusTermsLink,
 	manageAccountLink,
@@ -71,7 +71,7 @@ export interface SummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	countryGroupId: CountryGroupId;
-	currency: IsoCurrency;
+	currency: CurrencyCode;
 	amount: number;
 	ratePlanDescription?: string;
 }
@@ -115,10 +115,9 @@ export function SummaryTsAndCs({
 		);
 	}
 
-	const amountWithCurrency = formatAmount(
-		getCurrencyInfo(currency),
+	const amountWithCurrency = simpleFormatAmount(
+		getCurrencyByCode(currency),
 		amount,
-		false,
 	);
 
 	const autoRenewUtilCancelTsAndCs = (countryGroupId: CountryGroupId) => {

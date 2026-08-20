@@ -1,11 +1,32 @@
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
-import { CurrencyValues } from '@modules/internationalisation/currency';
+import { currencyCodes } from '@modules/internationalisation/currency';
+import type React from 'react';
+import { FeatureSwitchesProvider } from 'contexts/FeatureSwitchesContext';
 import type { ThreeTierCardsProps } from 'pages/supporter-plus-landing/components/threeTierCards';
 import { ThreeTierCards } from 'pages/supporter-plus-landing/components/threeTierCards';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 import { fallBackLandingPageSelection } from '../../assets/helpers/abTests/landingPageAbTests';
+
+function withFeatureSwitches(featureSwitches: Record<string, 'On' | 'Off'>) {
+	return function decorator(Story: React.ComponentType) {
+		// construct window.guardian.settings.switches.featureSwitches object to pass to FeatureSwitchesProvider
+		const w = window as unknown as Record<string, unknown>;
+		w['guardian'] ??= {};
+		const guardian = w['guardian'] as Record<string, unknown>;
+		guardian['settings'] ??= {};
+		const settings = guardian['settings'] as Record<string, unknown>;
+		settings['switches'] ??= {};
+		const switches = settings['switches'] as Record<string, unknown>;
+		switches['featureSwitches'] = featureSwitches;
+		return (
+			<FeatureSwitchesProvider>
+				<Story />
+			</FeatureSwitchesProvider>
+		);
+	};
+}
 
 export default {
 	title: 'LandingPage/Three Tier Cards',
@@ -13,11 +34,15 @@ export default {
 	argTypes: {
 		linkCtaClickHandler: { action: 'tier card clicked' },
 		currencyId: {
-			options: CurrencyValues,
+			options: currencyCodes,
 			control: { type: 'radio' },
 		},
 	},
-	decorators: [withCenterAlignment, withSourceReset],
+	decorators: [
+		withCenterAlignment,
+		withSourceReset,
+		withFeatureSwitches({ enableRedCardTheme: 'Off' }),
+	],
 	parameters: {
 		docs: {
 			description: {

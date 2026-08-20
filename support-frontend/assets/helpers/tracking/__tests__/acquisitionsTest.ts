@@ -49,6 +49,7 @@ describe('acquisitions', () => {
 				referrerAcquisitionData,
 				nativeAbParticipations,
 				'N1 9GU',
+				'GB',
 			);
 
 			expect(paymentApiAcquisitionData).toMatchSnapshot();
@@ -91,6 +92,7 @@ describe('acquisitions', () => {
 				referrerAcquisitionData,
 				{},
 				postcode,
+				'GB',
 			);
 
 			expect(paymentApiAcquisitionData.postalCode).toBe(postcode);

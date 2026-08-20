@@ -87,7 +87,7 @@ export function AppStoreBadges({
 	responsiveLayout?: boolean;
 }) {
 	return (
-		<div css={[container, responsiveLayout && responsiveLayoutStyles]}>
+		<div css={[container, responsiveLayout ? responsiveLayoutStyles : null]}>
 			{appStoreUrl && (
 				<a
 					href={appStoreUrl}

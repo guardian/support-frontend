@@ -40,6 +40,7 @@ class AllSettingsProvider private (
     checkoutNudgeTestsProvider: CheckoutNudgeTestService,
     oneTimeCheckoutTestsProvider: OneTimeCheckoutTestService,
     studentLandingPageTestsProvider: StudentLandingPageTestService,
+    banditDataService: services.BanditDataService,
 ) {
 
   def getAllSettings(): AllSettings = {
@@ -51,6 +52,7 @@ class AllSettingsProvider private (
       checkoutNudgeTestsProvider.getTests(),
       oneTimeCheckoutTestsProvider.getTests(),
       studentLandingPageTestsProvider.getTests(),
+      banditDataService.getClientBanditData(),
     )
   }
 }
@@ -62,6 +64,7 @@ object AllSettingsProvider {
       checkoutNudgeTestService: CheckoutNudgeTestService,
       oneTimeCheckoutTestService: OneTimeCheckoutTestService,
       studentLandingPageTestService: StudentLandingPageTestService,
+      banditDataService: services.BanditDataService,
   )(implicit client: AwsS3Client, system: ActorSystem, wsClient: WSClient): Either[Throwable, AllSettingsProvider] = {
     for {
       switchesProvider <- SettingsProvider.fromAppConfig[Switches](config.settingsSources.switches, config)
@@ -75,6 +78,7 @@ object AllSettingsProvider {
       checkoutNudgeTestService,
       oneTimeCheckoutTestService,
       studentLandingPageTestService,
+      banditDataService,
     )
   }
 }

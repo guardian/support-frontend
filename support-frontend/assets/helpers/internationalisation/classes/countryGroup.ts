@@ -1,4 +1,4 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import {
 	AUDCountries,
 	Canada,
@@ -70,7 +70,7 @@ export class CountryGroup {
 	}
 
 	static fromCountry(
-		isoCountry: IsoCountry,
+		isoCountry: CountryCode,
 	): CountryGroupId | null | undefined {
 		const countryGroup = (Object.keys(countryGroups) as CountryGroupId[]).find(
 			(countryGroupId) =>
@@ -94,7 +94,7 @@ export class CountryGroup {
 		const country = cookie.get('GU_country');
 
 		if (country) {
-			const isoCountry = Country.fromString(country);
+			const isoCountry = Country.codeFromString(country);
 			if (isoCountry) {
 				return this.fromCountry(isoCountry);
 			}
@@ -107,7 +107,7 @@ export class CountryGroup {
 		const country = cookie.get('GU_geo_country');
 
 		if (country) {
-			const isoCountry = Country.fromString(country);
+			const isoCountry = Country.codeFromString(country);
 			if (isoCountry) {
 				return this.fromCountry(isoCountry);
 			}

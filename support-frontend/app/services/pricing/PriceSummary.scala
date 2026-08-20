@@ -25,6 +25,7 @@ case class PromotionSummary(
     landingPage: Option[PromotionCopy] = None,
     starts: DateTime,
     expires: Option[DateTime],
+    isIntroductoryPricing: Boolean,
 )
 
 import com.gu.support.encoding.Codec

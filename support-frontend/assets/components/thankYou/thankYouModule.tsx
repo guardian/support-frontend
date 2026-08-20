@@ -306,7 +306,7 @@ function ThankYouModule({
 
 	return (
 		<section
-			css={[container, maybePaddingRight, hasImagery && imageryStyle]}
+			css={[container, maybePaddingRight, hasImagery ? imageryStyle : null]}
 			data-testid={`${TEST_ID_PREFIX}-${moduleType}`}
 		>
 			<div css={gridContainer}>
@@ -317,7 +317,7 @@ function ThankYouModule({
 						<>
 							<div css={[bodyApps, bodyAppsTop]}>
 								<div css={bodyStyle}>
-									<p css={bodyCopyStyle}>{bodyCopy}</p>
+									<div css={bodyCopyStyle}>{bodyCopy}</div>
 									<div css={[ctaContainerApps, ctaTop]}>{ctas}</div>
 								</div>
 								<span css={appContainer}>
@@ -326,7 +326,7 @@ function ThankYouModule({
 							</div>
 							<div css={bodyApps}>
 								<div css={bodyStyle}>
-									<p css={bodyCopyStyle}>{bodyCopySecond}</p>
+									<div css={bodyCopyStyle}>{bodyCopySecond}</div>
 									<div css={[ctaContainerApps, ctaBottom]}>{ctasSecond}</div>
 								</div>
 								<span css={appContainer}>
@@ -336,7 +336,7 @@ function ThankYouModule({
 						</>
 					) : (
 						<>
-							<p css={[bodyCopyStyle, bodyCopyMarginTop]}>{bodyCopy}</p>
+							<div css={[bodyCopyStyle, bodyCopyMarginTop]}>{bodyCopy}</div>
 							{ctas && <div css={resizeMarginTop}>{ctas}</div>}
 						</>
 					)}
