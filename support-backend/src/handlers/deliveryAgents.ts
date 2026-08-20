@@ -39,27 +39,28 @@ export const buildDeliveryAgentsHandler =
 		try {
 			const result = await paperRoundService.coverage(postcode);
 
+			void putMetric(
+				result.data.status === 'IE'
+					? 'GetDeliveryAgentsFailure'
+					: 'GetDeliveryAgentsSuccess',
+			);
+
 			switch (result.data.status) {
 				case 'CO':
-					void putMetric('GetDeliveryAgentsSuccess');
 					return res.json({
 						type: 'Covered',
 						agents: result.data.agents.map((a) => mapAgentForResponse(a)),
 					});
 				case 'NC':
-					void putMetric('GetDeliveryAgentsSuccess');
 					return res.json({ type: 'NotCovered' });
 				case 'MP':
-					void putMetric('GetDeliveryAgentsSuccess');
 					return res.status(404).json({ type: 'UnknownPostcode' });
 				case 'IP':
-					void putMetric('GetDeliveryAgentsSuccess');
 					return res.status(400).json({ type: 'ProblemWithInput' });
 				case 'IE':
 					console.error(
 						`Got internal error from PaperRound: ${result.data.message}`,
 					);
-					void putMetric('GetDeliveryAgentsFailure');
 					return res.status(500).send();
 			}
 		} catch (error) {
