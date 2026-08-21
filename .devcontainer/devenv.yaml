@@ -43,8 +43,15 @@ postCreateCommand:
     workingDirectory: '.'
   - cmd: 'COREPACK_ENABLE_DOWNLOAD_PROMPT=0 mise exec -- corepack enable'
     workingDirectory: '.'
-  - cmd: 'yes | mise exec -- pnpm install'
+  - cmd: 'yes | mise exec -- pnpm install --config.confirmModulesPurge=false'
     workingDirectory: '.'
+  - cmd: 'mise reshim'
+    workingDirectory: '.'
+
 # postStartCommand:
 #   - cmd: "echo 'Container started successfully'"
 #     workingDirectory: "."
+
+containerEnv:
+  - name: GITHUB_TOKEN
+    value: '${localEnv:GITHUB_TOKEN}'
