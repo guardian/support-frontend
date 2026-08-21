@@ -19,10 +19,10 @@ modules:
 
 # Optional: Ports to forward
 forwardPorts:
+# - "8000:9000"  # hostPort:containerPort
   - '9211' # same port on host and container
   - '9210' # same port on host and container
   - '9001' # same port on host and container
-#   - "8000:9000"  # hostPort:containerPort
 
 # Optional: Mount directories from host to container
 # mounts:
