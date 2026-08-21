@@ -18,7 +18,7 @@
 		"build": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@playwright/test": "^1.55.1",
+		"@playwright/test": "^1.62.1",
 		"nanoid": "^3.3.11"
 	},
 	"devDependencies": {
