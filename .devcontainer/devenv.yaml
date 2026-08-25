@@ -24,6 +24,10 @@ forwardPorts:
   - '9210' # same port on host and container
   - '9001' # same port on host and container
 
+# Optional: Extra switches for container generation (passed to `docker create`)
+runArgs:
+  - '--name=support-frontend-devcontainer'
+
 # Optional: Mount directories from host to container
 # mounts:
 #   - "source=${localEnv:HOME}/.gu/example,target=/home/vscode/.gu/example,readonly,type=bind,consistency=cached"
