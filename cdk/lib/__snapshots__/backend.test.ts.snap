@@ -7,6 +7,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
       "GuDistributionBucketParameter",
       "GuAllowPolicy",
       "GuAllowPolicy",
+      "GuPutCloudwatchMetricsPolicy",
       "GuVpcParameter",
       "GuSubnetListParameter",
       "GuSubnetListParameter",
@@ -28,6 +29,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
       "GuHttpsApplicationListener",
       "GuAlb5xxPercentageAlarm",
       "GuUnhealthyInstancesAlarm",
+      "GuAlarm",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -269,6 +271,60 @@ exports[`The Backend stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
+    "GetDeliveryAgentsFailure4BEED0AC": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:eu-west-1:",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "support-backend failed to get delivery agents from PaperRound",
+        "AlarmName": "support-backend PROD GetDeliveryAgentsFailure",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "GetDeliveryAgentsFailure",
+        "Namespace": "support-backend",
+        "Period": 60,
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
     "GetDistributablePolicySupportbackendBD0B5465": {
       "Properties": {
         "PolicyDocument": {
@@ -392,6 +448,27 @@ exports[`The Backend stack matches the snapshot 1`] = `
           "Version": "2012-10-17",
         },
         "PolicyName": "GuLogShippingPolicy981BFE5A",
+        "Roles": [
+          {
+            "Ref": "InstanceRoleSupportbackend25B34CE1",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "GuPutCloudwatchMetricsPolicyC5BCE402": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "cloudwatch:PutMetricData",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuPutCloudwatchMetricsPolicyC5BCE402",
         "Roles": [
           {
             "Ref": "InstanceRoleSupportbackend25B34CE1",
