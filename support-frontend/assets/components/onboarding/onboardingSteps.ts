@@ -15,5 +15,4 @@ export enum OnboardingInviteeSteps {
 export enum OnboardingDeclineSteps {
 	Decline = 'decline',
 	Declined = 'declined',
-	Save = 'save',
 }

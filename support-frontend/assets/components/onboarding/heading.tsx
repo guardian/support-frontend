@@ -248,10 +248,6 @@ function OnboardingHeading({
 				aspectRatio: declineAspectRatio,
 				contentInHeader: true,
 			},
-			[OnboardingDeclineSteps.Save]: {
-				aspectRatio: declineAspectRatio,
-				contentInHeader: true,
-			},
 		};
 	}, []);
 

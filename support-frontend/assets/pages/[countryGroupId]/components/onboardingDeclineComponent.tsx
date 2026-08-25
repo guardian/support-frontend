@@ -5,7 +5,6 @@ import OnboardingLayout from 'components/onboarding/layout';
 import { OnboardingDeclineSteps } from 'components/onboarding/onboardingSteps';
 import type { HandleStepNavigationFunction } from 'components/onboarding/onboardingTypes';
 import { OnboardingDeclineInvitation } from 'components/onboarding/sections/declineInvitation';
-import { OnboardingDeclineSave } from 'components/onboarding/sections/declineSave';
 import { OnboardingInvitationDeclined } from 'components/onboarding/sections/invitationDeclined';
 import { InvitationUnavailable } from 'components/onboarding/sections/invitationUnavailable';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
@@ -77,13 +76,6 @@ function OnboardingDeclineComponent({
 			)}
 			{currentStep === OnboardingDeclineSteps.Declined && (
 				<OnboardingInvitationDeclined />
-			)}
-			{currentStep === OnboardingDeclineSteps.Save && (
-				<OnboardingDeclineSave
-					supportRegionId={supportRegionId}
-					landingPageSettings={landingPageSettings}
-					invitationCode={invitationCode}
-				/>
 			)}
 		</OnboardingLayout>
 	);

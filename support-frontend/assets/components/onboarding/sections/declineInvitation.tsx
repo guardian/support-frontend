@@ -3,6 +3,7 @@ import { from, palette, space } from '@guardian/source/foundations';
 import { Button, Stack, SvgTickRound } from '@guardian/source/react-components';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { useRef, useState } from 'preact/hooks';
+import { useNavigate } from 'react-router';
 import GridImage from 'components/gridImage/gridImage';
 import { OnboardingDeclineSteps } from 'components/onboarding/onboardingSteps';
 import type { HandleStepNavigationFunction } from 'components/onboarding/onboardingTypes';
@@ -59,6 +60,7 @@ export function OnboardingDeclineInvitation({
 }) {
 	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 	const { windowWidthIsLessThan } = useWindowWidth();
+	const navigate = useNavigate();
 	const [isDeclining, setIsDeclining] = useState(false);
 	const declineStartedRef = useRef(false);
 
@@ -156,7 +158,13 @@ export function OnboardingDeclineInvitation({
 							priority="tertiary"
 							cssOverrides={buttonOverrides}
 							disabled={isDeclining}
-							onClick={() => handleStepNavigation(OnboardingDeclineSteps.Save)}
+							onClick={() => {
+								void navigate(
+									`/${supportRegionId}/invitation/accept/${encodeURIComponent(
+										invitationCode,
+									)}`,
+								);
+							}}
 						>
 							Cancel
 						</Button>
