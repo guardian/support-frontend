@@ -16,7 +16,6 @@ import {
 } from '../urls/externalLinks';
 // ----- Tests ----- //
 jest.mock('@guardian/ophan-tracker-js', () => ({
-	viewId: '123456',
 	getViewId: () => '123456',
 }));
 describe('externalLinks', () => {

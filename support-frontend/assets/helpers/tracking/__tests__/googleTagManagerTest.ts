@@ -6,7 +6,6 @@ const { mapFields } = _;
 
 // ----- Tests ----- //
 jest.mock('@guardian/ophan-tracker-js', () => ({
-	viewId: '123456',
 	getViewId: () => '123456',
 }));
 
