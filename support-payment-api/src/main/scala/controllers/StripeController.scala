@@ -92,7 +92,7 @@ class StripeController(
     .withLogging(this.getClass.getCanonicalName, "confirmPayment")
 
   def completeStripePaypalPayment: Action[StripePaymentIntentRequest.CompleteStripePaypalPayment] =
-    CorsAndRateLimitAction
+    Action
       .async(circe.json[StripePaymentIntentRequest.CompleteStripePaypalPayment]) { request =>
         stripeBackendProvider
           .getInstanceFor(request)

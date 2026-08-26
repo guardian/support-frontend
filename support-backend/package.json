@@ -21,6 +21,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"@aws-sdk/client-cloudwatch": "catalog:",
 		"@aws-sdk/client-ssm": "catalog:",
 		"express": "^5.2.1",
 		"zod": "catalog:"
