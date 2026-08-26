@@ -1,4 +1,4 @@
-export const transactionDeclined = {
+export const transactionDeclined = (minimumPrice: number) => ({
 	state: {
 		productSpecificState: {
 			productType: 'SupporterPlus',
@@ -12,7 +12,7 @@ export const transactionDeclined = {
 			productInformation: {
 				product: 'SupporterPlus',
 				ratePlan: 'Monthly',
-				amount: 50, // When applying a (UK) Supporter Plus price rise, the transaction declined price can go negative, this is an agnostic price to ensure we always get a Stripe transaction declined error
+				amount: minimumPrice,
 			},
 			paymentMethod: {
 				TokenId: 'pm_0S1SrNItVxyc3Q6ntB3yRwJ9',
@@ -136,4 +136,4 @@ export const transactionDeclined = {
 		failed: false,
 		messages: [],
 	},
-};
+});

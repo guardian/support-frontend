@@ -14,18 +14,20 @@ import paperJson from './fixtures/createZuoraSubscription/paperInput.json';
 import { transactionDeclined } from './fixtures/createZuoraSubscription/transactionDeclined';
 
 const testTimeout = 20000;
-const negativeAmountSupporterPlusUkPrice = 12;
 
 describe('createZuoraSubscriptionLambda integration', () => {
 	test(
 		'we handle a transaction declined error from Stripe appropriately',
 		async () => {
 			try {
-				const input = wrapperSchemaForState(
-					createZuoraSubscriptionStateSchema,
-				).parse(transactionDeclined);
+				// When applying a UK S+ monthly price rise, minimum price supplied is greater than current price.
+				// Returns a positive price to ensure we always get a Stripe transaction declined error
+				await handler(
+					wrapperSchemaForState(createZuoraSubscriptionStateSchema).parse(
+						transactionDeclined(50),
+					),
+				);
 
-				await handler(input);
 				fail('Expected handler to throw');
 			} catch (error) {
 				if (error instanceof RetryError) {
@@ -42,26 +44,14 @@ describe('createZuoraSubscriptionLambda integration', () => {
 		'we handle a negative amount error from Stripe appropriately',
 		async () => {
 			try {
-				const input = wrapperSchemaForState(
-					createZuoraSubscriptionStateSchema,
-				).parse(transactionDeclined);
+				// When performing a UK S+ monthly price rise, minimum price supplied is less than current price.
+				// Returns a negative price to ensure we get a Stripe negative amount error
+				await handler(
+					wrapperSchemaForState(createZuoraSubscriptionStateSchema).parse(
+						transactionDeclined(12),
+					),
+				);
 
-				// A negative price to ensure we get a Stripe negative amount error over a Stripe transaction declined error
-				const inputPriceAgnostic = {
-					...input,
-					state: {
-						...input.state,
-						productSpecificState: {
-							...input.state.productSpecificState,
-							productInformation: {
-								...input.state.productSpecificState.productInformation,
-								amount: negativeAmountSupporterPlusUkPrice,
-							},
-						},
-					},
-				};
-
-				await handler(inputPriceAgnostic);
 				fail('Expected handler to throw');
 			} catch (error) {
 				if (error instanceof RetryError) {
