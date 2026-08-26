@@ -131,6 +131,7 @@ export function SummaryTsAndCs({
 			' per ',
 			amount,
 			promotion,
+			' and',
 		);
 		const usChargePeriod = productKey.startsWith('GuardianWeekly') ? (
 			`automatically charged the amount shown each ${periodNoun} `
