@@ -55,7 +55,13 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 						ratePlanDescription[activeRatePlanKey as ActiveRatePlanKey]
 					}
 					currency={currency as CurrencyCode}
-					amount={0}
+					amount={
+						countryGroupId === 'UnitedStates'
+							? productKey === 'SupporterPlus'
+								? 18
+								: 25
+							: 0
+					}
 				/>,
 			);
 

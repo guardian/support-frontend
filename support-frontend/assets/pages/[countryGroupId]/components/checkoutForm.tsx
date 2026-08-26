@@ -1276,6 +1276,7 @@ export default function CheckoutForm({
 							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}
+							promotion={promotion}
 						/>
 						<MaybeEstimatedTaxSummary
 							payment={payment}
