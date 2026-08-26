@@ -11,10 +11,9 @@ import { wrapperSchemaForState } from '../model/stateSchemas';
 import digitalSubscriptionJson from './fixtures/createZuoraSubscription/digitalSubscriptionInput.json';
 import guardianWeeklyJson from './fixtures/createZuoraSubscription/guardianWeeklyInput.json';
 import paperJson from './fixtures/createZuoraSubscription/paperInput.json';
-import transactionDeclinedJson from './fixtures/createZuoraSubscription/transactionDeclinedInput.json';
+import { transactionDeclined } from './fixtures/createZuoraSubscription/transactionDeclined';
 
 const testTimeout = 20000;
-const agnosticMonthlySupporterPlusUkPrice = 1000;
 const negativeAmountSupporterPlusUkPrice = 12;
 
 describe('createZuoraSubscriptionLambda integration', () => {
@@ -24,24 +23,9 @@ describe('createZuoraSubscriptionLambda integration', () => {
 			try {
 				const input = wrapperSchemaForState(
 					createZuoraSubscriptionStateSchema,
-				).parse(transactionDeclinedJson);
+				).parse(transactionDeclined);
 
-				// When applying a (UK) Supporter Plus price rise, the transaction declined price can go negative, this is an agnostic price to ensure we always get a Stripe transaction declined error
-				const inputPriceAgnostic = {
-					...input,
-					state: {
-						...input.state,
-						productSpecificState: {
-							...input.state.productSpecificState,
-							productInformation: {
-								...input.state.productSpecificState.productInformation,
-								amount: agnosticMonthlySupporterPlusUkPrice,
-							},
-						},
-					},
-				};
-
-				await handler(inputPriceAgnostic);
+				await handler(input);
 				fail('Expected handler to throw');
 			} catch (error) {
 				if (error instanceof RetryError) {
@@ -60,7 +44,7 @@ describe('createZuoraSubscriptionLambda integration', () => {
 			try {
 				const input = wrapperSchemaForState(
 					createZuoraSubscriptionStateSchema,
-				).parse(transactionDeclinedJson);
+				).parse(transactionDeclined);
 
 				// A negative price to ensure we get a Stripe negative amount error over a Stripe transaction declined error
 				const inputPriceAgnostic = {
