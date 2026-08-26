@@ -26,7 +26,7 @@ describe('createZuoraSubscriptionLambda integration', () => {
 					createZuoraSubscriptionStateSchema,
 				).parse(transactionDeclinedJson);
 
-				// An agnostic price to ensure we always get a Stripe transaction declined error over a Stripe negative amount error
+				// When applying a (UK) Supporter Plus price rise, the transaction declined price can go negative, this is an agnostic price to ensure we always get a Stripe transaction declined error
 				const inputPriceAgnostic = {
 					...input,
 					state: {
