@@ -48,14 +48,10 @@ export function OnboardingInvitationDeclined() {
 					<div css={separator} />
 					<Stack space={2}>
 						<h1 css={headings}>Invitation declined</h1>
-						<p css={descriptions}>You&apos;ve declined this invitation.</p>
 						<p css={descriptions}>
 							You no longer have access to Digital plus benefits through this
-							invitation.
-						</p>
-						<p css={descriptions}>
-							If you change your mind, you&apos;ll need a new invitation or you
-							can subscribe independently.
+							invitation. If you change your mind, you&apos;ll need a new
+							invitation or subscribe anytime.
 						</p>
 					</Stack>
 					<LinkButton

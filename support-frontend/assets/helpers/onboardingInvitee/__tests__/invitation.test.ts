@@ -109,28 +109,36 @@ describe('verifyInvitation', () => {
 });
 
 describe('acceptInvitation', () => {
-	it('returns true when the invitation is accepted successfully', async () => {
+	it('returns accepted when the invitation is accepted successfully', async () => {
 		fetchMock.post(acceptEndpoint, { status: 200 });
 
 		const result = await acceptInvitation(invitationCode, csrf);
 
-		expect(result).toBe(true);
+		expect(result).toBe('accepted');
 	});
 
-	it('returns false when the accept request is not ok', async () => {
+	it('returns wrongUser when the accept request is 400', async () => {
+		fetchMock.post(acceptEndpoint, { status: 400 });
+
+		const result = await acceptInvitation(invitationCode, csrf);
+
+		expect(result).toBe('wrongUser');
+	});
+
+	it('returns failed when the accept request is not ok', async () => {
 		fetchMock.post(acceptEndpoint, { status: 500 });
 
 		const result = await acceptInvitation(invitationCode, csrf);
 
-		expect(result).toBe(false);
+		expect(result).toBe('failed');
 	});
 
-	it('returns false when the request fails', async () => {
+	it('returns failed when the request fails', async () => {
 		fetchMock.post(acceptEndpoint, { throws: new Error('network failure') });
 
 		const result = await acceptInvitation(invitationCode, csrf);
 
-		expect(result).toBe(false);
+		expect(result).toBe('failed');
 	});
 });
 

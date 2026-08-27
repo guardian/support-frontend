@@ -3,7 +3,7 @@ import { from, space } from '@guardian/source/foundations';
 import { LinkButton, Stack } from '@guardian/source/react-components';
 import { useRef } from 'preact/hooks';
 import GridImage from 'components/gridImage/gridImage';
-import { getBaseDomain } from 'helpers/urls/url';
+import { getSignoutUrl } from 'helpers/urls/externalLinks';
 import ContentBox from '../contentBox';
 import OnboardingLayout from '../layout';
 import { OnboardingInviteeSteps } from '../onboardingSteps';
@@ -26,15 +26,14 @@ const heroAspectRatio = css`
 
 const contentPadding = css`
 	padding: ${space[3]}px;
-	padding-bottom: ${space[6]}px;
 
 	${from.tablet} {
 		padding: ${space[8]}px;
-		padding-top: ${space[6]}px;
+		padding-top: ${space[3]}px;
 	}
 `;
 
-export function InvitationUnavailable() {
+export function WrongEmail() {
 	const scrollToTopRef = useRef<HTMLDivElement>(null);
 
 	return (
@@ -51,26 +50,31 @@ export function InvitationUnavailable() {
 							srcSizes={[442]}
 							sizes="442px"
 							imgType="png"
-							altText="Invitation unavailable hero"
+							altText="Wrong email hero"
 						/>
 					</div>
 
 					<Stack space={5} cssOverrides={contentPadding}>
 						<div css={separator} />
 						<Stack space={2}>
-							<h1 css={headings}>This invitation has expired</h1>
+							<h1 css={headings}>
+								You&apos;re signed in with the wrong email address
+							</h1>
 							<p css={descriptions}>
-								This invitation can no longer be used to access this
-								subscription. If you&apos;d still like to join, please ask the
-								person who invited you to send a new invite.
+								To redeem this invitation sign out and sign back in again using
+								the email address your invite was sent to.
+							</p>
+							<p css={descriptions}>
+								Want to use a different email address? Ask the person who
+								invited you to send you a new invitation to the correct email.
 							</p>
 						</Stack>
 						<LinkButton
 							priority="primary"
 							cssOverrides={[buttonOverrides]}
-							href={`https://${getBaseDomain()}`}
+							href={getSignoutUrl()}
 						>
-							Continue to the Guardian
+							Sign out and sign in again
 						</LinkButton>
 					</Stack>
 				</ContentBox>

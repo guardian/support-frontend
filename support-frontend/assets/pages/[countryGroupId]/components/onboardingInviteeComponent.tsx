@@ -15,16 +15,18 @@ import { OnboardingCreateAccount } from 'components/onboarding/sections/createAc
 import { OnboardingDigitalPlusDiscovery } from 'components/onboarding/sections/digitalPlusDiscovery';
 import { InvitationUnavailable } from 'components/onboarding/sections/invitationUnavailable';
 import { OnboardingInviteeCompleted } from 'components/onboarding/sections/onboardingInviteeCompleted';
+import { WrongEmail } from 'components/onboarding/sections/wrongEmail';
 import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
 import useAnalyticsProfile from 'helpers/customHooks/useAnalyticsProfile';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
-import type { OnboardingInviteeInvitation } from 'helpers/onboardingInvitee/invitation';
+import type {
+	AcceptInvitationResult,
+	OnboardingInviteeInvitation,
+} from 'helpers/onboardingInvitee/invitation';
 import { acceptInvitation } from 'helpers/onboardingInvitee/invitation';
 import * as cookie from 'helpers/storage/cookie';
 import type { CsrfState } from 'helpers/types/csrf';
 import { getUser } from 'helpers/user/user';
-
-type AcceptStatus = 'pending' | 'accepted' | 'failed';
 
 interface OnboardingInviteeProps {
 	supportRegionId: SupportRegionId;
@@ -68,7 +70,8 @@ function OnboardingInviteeComponent({
 
 	const [currentStep, setCurrentStep] = useState<OnboardingInviteeSteps>();
 	const [showIdentityIframe, setShowIdentityIframe] = useState(!isSignedIn);
-	const [acceptStatus, setAcceptStatus] = useState<AcceptStatus>('pending');
+	const [acceptStatus, setAcceptStatus] =
+		useState<AcceptInvitationResult>('pending');
 	const identityIframeRef = useRef<HTMLIFrameElement>(null);
 
 	const handleStepNavigation: HandleStepNavigationFunction = (targetStep) => {
@@ -101,15 +104,9 @@ function OnboardingInviteeComponent({
 		}
 		acceptStartedRef.current = true;
 
-		// Figure out how to handle if the invitation is already accepted
-		const accepted = await acceptInvitation(invitation.invitationCode, csrf);
+		const result = await acceptInvitation(invitation.invitationCode, csrf);
 		void loadAnalyticsData();
-
-		if (accepted) {
-			setAcceptStatus('accepted');
-		} else {
-			setAcceptStatus('failed');
-		}
+		setAcceptStatus(result);
 	};
 
 	const ensureAccessTokenThenAccept = () => {
@@ -204,6 +201,10 @@ function OnboardingInviteeComponent({
 
 	if (acceptStatus === 'failed') {
 		return <InvitationUnavailable />;
+	}
+
+	if (acceptStatus === 'wrongUser') {
+		return <WrongEmail />;
 	}
 
 	const invitationAccepted = acceptStatus === 'accepted';

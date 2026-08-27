@@ -113,8 +113,8 @@ export function OnboardingDeclineInvitation({
 							You have been invited to join a Digital plus subscription.
 						</p>
 						<p css={descriptions}>
-							If you decline this invitation, you won&apos;t be able to access
-							premium digital plus benefits such as:
+							If you decline this invitation, you won&apos;t be able to enjoy
+							full access to Guardian journalism and benefits such as:
 						</p>
 					</Stack>
 					<ul>
@@ -152,7 +152,7 @@ export function OnboardingDeclineInvitation({
 								void confirmDecline();
 							}}
 						>
-							Confirm decline invitation
+							Decline invitation
 						</Button>
 						<Button
 							priority="tertiary"

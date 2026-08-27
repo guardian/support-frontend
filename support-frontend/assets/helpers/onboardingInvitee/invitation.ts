@@ -69,20 +69,36 @@ export async function verifyInvitation(
 	}
 }
 
+export type AcceptInvitationResult =
+	| 'pending'
+	| 'accepted'
+	| 'wrongUser'
+	| 'failed';
+
 // Accepts an invitation via the Play server, which authenticates the user from
-// Okta cookies and forwards x-api-key + x-identity-id upstream.
+// Okta cookies and forwards x-api-key + x-identity-id upstream. A 400 means the
+// signed-in user does not match the invited email.
 export async function acceptInvitation(
 	invitationCode: string,
 	csrf: CsrfState,
-): Promise<boolean> {
+): Promise<AcceptInvitationResult> {
 	try {
 		const response = await fetch(
 			`/invitation/${encodeURIComponent(invitationCode)}/accept`,
 			requestOptions({}, 'same-origin', 'POST', csrf),
 		);
-		return response.ok;
+
+		if (response.ok) {
+			return 'accepted';
+		}
+
+		if (response.status === 400) {
+			return 'wrongUser';
+		}
+
+		return 'failed';
 	} catch {
-		return false;
+		return 'failed';
 	}
 }
 
