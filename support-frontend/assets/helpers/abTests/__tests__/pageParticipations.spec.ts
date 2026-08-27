@@ -1,6 +1,6 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { CountryGroup } from '../../internationalisation/classes/countryGroup';
-import { fetchAudienceMemberships } from '../../mparticle';
+import { fetchAudienceData } from '../../mparticle';
 import {
 	countryGroupMatches,
 	getParticipationFromQueryString,
@@ -21,7 +21,7 @@ import {
 
 jest.mock('../../mparticle', () => ({
 	__esModule: true,
-	fetchAudienceMemberships: jest.fn(),
+	fetchAudienceData: jest.fn(),
 }));
 
 jest.mock('../../internationalisation/classes/countryGroup', () => ({
@@ -62,7 +62,7 @@ const mockIsWithinSchedule = jest.mocked(isWithinSchedule);
 const mockRandomNumber = jest.mocked(randomNumber);
 const mockGetSessionParticipations = jest.mocked(getSessionParticipations);
 const mockSetSessionParticipations = jest.mocked(setSessionParticipations);
-const mockFetchAudienceMemberships = jest.mocked(fetchAudienceMemberships);
+const mockFetchAudienceData = jest.mocked(fetchAudienceData);
 
 interface TestVariant {
 	name: string;
@@ -123,7 +123,10 @@ describe('getPageParticipations', () => {
 		mockIsWithinSchedule.mockReturnValue(true);
 		mockRandomNumber.mockReturnValue(0);
 		mockGetSessionParticipations.mockReturnValue(undefined);
-		mockFetchAudienceMemberships.mockResolvedValue([]);
+		mockFetchAudienceData.mockResolvedValue({
+			audienceMemberships: [],
+			userAttributes: {},
+		});
 	});
 
 	afterEach(() => {
@@ -712,7 +715,10 @@ describe('getPageParticipations', () => {
 			mockDetect.mockReturnValue('GBPCountries');
 			mockCountryGroupMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
-			mockFetchAudienceMemberships.mockResolvedValue([42]);
+			mockFetchAudienceData.mockResolvedValue({
+				audienceMemberships: [42],
+				userAttributes: {},
+			});
 
 			const result = await getPageParticipations(config);
 
@@ -728,7 +734,10 @@ describe('getPageParticipations', () => {
 			mockLocation('/test/page');
 			mockDetect.mockReturnValue('GBPCountries');
 			mockCountryGroupMatches.mockReturnValue(true);
-			mockFetchAudienceMemberships.mockResolvedValue([99]);
+			mockFetchAudienceData.mockResolvedValue({
+				audienceMemberships: [99],
+				userAttributes: {},
+			});
 
 			const result = await getPageParticipations(config);
 
@@ -747,7 +756,7 @@ describe('getPageParticipations', () => {
 			const result = await getPageParticipations(config);
 
 			expect(result.variant).toEqual(variant);
-			expect(mockFetchAudienceMemberships).not.toHaveBeenCalled();
+			expect(mockFetchAudienceData).not.toHaveBeenCalled();
 		});
 
 		it('bypasses audience check for URL-forced participations', async () => {
@@ -763,7 +772,7 @@ describe('getPageParticipations', () => {
 			const result = await getPageParticipations(config);
 
 			expect(result.participations).toEqual({ 'test-1': 'control' });
-			expect(mockFetchAudienceMemberships).not.toHaveBeenCalled();
+			expect(mockFetchAudienceData).not.toHaveBeenCalled();
 		});
 	});
 

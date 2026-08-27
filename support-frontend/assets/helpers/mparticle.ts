@@ -2,53 +2,60 @@ import { getUser } from 'helpers/user/user';
 import { fetchJson } from './async/fetch';
 import { hasTargetingConsent } from './page/analyticsAndConsent';
 
-let cachedAudienceMemberships: Promise<number[]> | null = null;
+type AudienceData = {
+	audienceMemberships: number[];
+	userAttributes: Record<string, unknown>;
+};
+
+const emptyAudienceData: AudienceData = {
+	audienceMemberships: [],
+	userAttributes: {},
+};
+
+let cachedAudienceData: Promise<AudienceData> | null = null;
 
 /**
- * Fetches the mParticle audience memberships for the user.
+ * Fetches mParticle audience memberships and user attributes for the user.
  * Make a request to mparticle only if the user:
  * - is signed in
  * - has targeting consent
  */
-const fetchAudienceMemberships = async (): Promise<number[]> => {
+const fetchAudienceData = async (): Promise<AudienceData> => {
 	if (!getUser().isSignedIn) {
-		return [];
+		return emptyAudienceData;
 	}
 
 	const hasConsent = await hasTargetingConsent();
 	if (!hasConsent) {
-		return [];
+		return emptyAudienceData;
 	}
 
-	if (cachedAudienceMemberships) {
-		return cachedAudienceMemberships;
+	if (cachedAudienceData) {
+		return cachedAudienceData;
 	}
 
 	const timeoutPromise = new Promise<never>((_, reject) => {
 		window.setTimeout(() => reject(new Error('Request timed out')), 2000);
 	});
 
-	cachedAudienceMemberships = Promise.race([
-		fetchJson<{ audienceMemberships: number[] }>('/audience-memberships', {
+	cachedAudienceData = Promise.race([
+		fetchJson<AudienceData>('/audience-data', {
 			mode: 'cors',
 			credentials: 'include',
 		}),
 		timeoutPromise,
 	])
-		.then((response) => {
-			return response.audienceMemberships;
-		})
 		.catch((error) => {
 			console.error(
-				`Error fetching audience memberships from mparticle: ${String(error)}`,
+				`Error fetching audience data from mparticle: ${String(error)}`,
 			);
-			return [];
+			return emptyAudienceData;
 		})
 		.finally(() => {
-			cachedAudienceMemberships = null;
+			cachedAudienceData = null;
 		});
 
-	return cachedAudienceMemberships;
+	return cachedAudienceData;
 };
 
-export { fetchAudienceMemberships };
+export { fetchAudienceData };
