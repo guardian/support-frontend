@@ -1,5 +1,6 @@
 import express from 'express';
 import request from 'supertest';
+import * as cloudwatch from '../aws/cloudwatch';
 import { PaperRoundService } from '../services/paperRoundService';
 import { buildDeliveryAgentsHandler } from './deliveryAgents';
 
@@ -34,6 +35,9 @@ describe('GET /postcode-lookup/:postcode', () => {
 				status: 'CO',
 			},
 		});
+		const putMetricSpy = jest
+			.spyOn(cloudwatch, 'putMetric')
+			.mockResolvedValue();
 
 		const response = await request(app).get('/delivery-agents/N1%209GU');
 
@@ -53,6 +57,7 @@ describe('GET /postcode-lookup/:postcode', () => {
 			],
 		});
 		expect(coverageSpy).toHaveBeenCalledWith('N1 9GU');
+		expect(putMetricSpy).toHaveBeenCalledWith('GetDeliveryAgentsSuccess');
 	});
 
 	it('returns the expected response for a postcode with no coverage', async () => {
@@ -64,6 +69,9 @@ describe('GET /postcode-lookup/:postcode', () => {
 				status: 'NC',
 			},
 		});
+		const putMetricSpy = jest
+			.spyOn(cloudwatch, 'putMetric')
+			.mockResolvedValue();
 
 		const response = await request(app).get('/delivery-agents/N1%209GU');
 
@@ -72,6 +80,7 @@ describe('GET /postcode-lookup/:postcode', () => {
 			type: 'NotCovered',
 		});
 		expect(coverageSpy).toHaveBeenCalledWith('N1 9GU');
+		expect(putMetricSpy).toHaveBeenCalledWith('GetDeliveryAgentsSuccess');
 	});
 
 	it('returns the expected response for an unknown postcode', async () => {
@@ -83,6 +92,9 @@ describe('GET /postcode-lookup/:postcode', () => {
 				status: 'MP',
 			},
 		});
+		const putMetricSpy = jest
+			.spyOn(cloudwatch, 'putMetric')
+			.mockResolvedValue();
 
 		const response = await request(app).get('/delivery-agents/N1111');
 
@@ -91,6 +103,7 @@ describe('GET /postcode-lookup/:postcode', () => {
 			type: 'UnknownPostcode',
 		});
 		expect(coverageSpy).toHaveBeenCalledWith('N1111');
+		expect(putMetricSpy).toHaveBeenCalledWith('GetDeliveryAgentsSuccess');
 	});
 
 	it('returns the expected response for a bad postcode', async () => {
@@ -102,6 +115,9 @@ describe('GET /postcode-lookup/:postcode', () => {
 				status: 'IP',
 			},
 		});
+		const putMetricSpy = jest
+			.spyOn(cloudwatch, 'putMetric')
+			.mockResolvedValue();
 
 		const response = await request(app).get('/delivery-agents/12345');
 
@@ -110,6 +126,7 @@ describe('GET /postcode-lookup/:postcode', () => {
 			type: 'ProblemWithInput',
 		});
 		expect(coverageSpy).toHaveBeenCalledWith('12345');
+		expect(putMetricSpy).toHaveBeenCalledWith('GetDeliveryAgentsSuccess');
 	});
 
 	it('returns the expected response for an error from PaperRound', async () => {
@@ -121,11 +138,15 @@ describe('GET /postcode-lookup/:postcode', () => {
 				status: 'IE',
 			},
 		});
+		const putMetricSpy = jest
+			.spyOn(cloudwatch, 'putMetric')
+			.mockResolvedValue();
 
 		const response = await request(app).get('/delivery-agents/12345');
 
 		expect(response.status).toBe(500);
 		expect(response.text).toBe('');
 		expect(coverageSpy).toHaveBeenCalledWith('12345');
+		expect(putMetricSpy).toHaveBeenCalledWith('GetDeliveryAgentsFailure');
 	});
 });

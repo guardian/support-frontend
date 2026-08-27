@@ -1,4 +1,5 @@
 import type { RequestHandler } from 'express';
+import { putMetric } from '../aws/cloudwatch';
 import type {
 	AgentCoverage,
 	PaperRoundService,
@@ -38,7 +39,11 @@ export const buildDeliveryAgentsHandler =
 		try {
 			const result = await paperRoundService.coverage(postcode);
 
-			// TODO: emit metrics for success & failure for parity with Scala controller
+			void putMetric(
+				result.data.status === 'IE'
+					? 'GetDeliveryAgentsFailure'
+					: 'GetDeliveryAgentsSuccess',
+			);
 
 			switch (result.data.status) {
 				case 'CO':
@@ -60,6 +65,7 @@ export const buildDeliveryAgentsHandler =
 			}
 		} catch (error) {
 			console.error(error);
+			void putMetric('GetDeliveryAgentsFailure');
 			return res.status(500).send();
 		}
 	};
