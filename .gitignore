@@ -18,7 +18,7 @@ coverage/
 package-lock.json
 build-storybook.log
 tsconfig.tsbuildinfo
-.pnpm-store
+.pnpm-store/
 
 dev
 logs
