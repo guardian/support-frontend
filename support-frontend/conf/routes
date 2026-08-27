@@ -150,7 +150,7 @@ GET /prices                                                       controllers.Pr
 
 # ----- Analytics API (mParticle) ----- #
 GET /analytics-user-profile                                       controllers.AnalyticsController.getAnalyticsUserProfile()
-GET /audience-memberships                                         controllers.AnalyticsController.getAudienceMemberships()
+GET /audience-data                                                controllers.AnalyticsController.getAudienceData()
 
 # ----- Newspaper Archive ----- #
 GET /newspaper-archive-header                                      controllers.NewspaperArchiveController.getHeader
