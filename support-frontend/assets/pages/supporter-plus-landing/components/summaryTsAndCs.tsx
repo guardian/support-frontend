@@ -125,14 +125,18 @@ export function SummaryTsAndCs({
 	);
 
 	const autoRenewUtilCancelTsAndCs = (countryGroupId: CountryGroupId) => {
-		const usLegalCopy = productLegal(
-			countryGroupId,
-			billingPeriod,
-			' per ',
-			amount,
-			promotion,
-			' and',
-		);
+		const usLegalCopy =
+			countryGroupId === 'UnitedStates' &&
+			!productKey.startsWith('GuardianWeekly')
+				? productLegal(
+						countryGroupId,
+						billingPeriod,
+						' per ',
+						amount,
+						promotion,
+						' and',
+				  )
+				: '';
 		const usChargePeriod = productKey.startsWith('GuardianWeekly') ? (
 			`automatically charged the amount shown each ${periodNoun} `
 		) : (
