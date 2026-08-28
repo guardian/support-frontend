@@ -172,8 +172,14 @@ describe('fetchAudienceData', () => {
 		const firstResult = await fetchAudienceData();
 		const secondResult = await fetchAudienceData();
 
-		expect(firstResult).toEqual({ audienceMemberships: [111], userAttributes: {} });
-		expect(secondResult).toEqual({ audienceMemberships: [222], userAttributes: {} });
+		expect(firstResult).toEqual({
+			audienceMemberships: [111],
+			userAttributes: {},
+		});
+		expect(secondResult).toEqual({
+			audienceMemberships: [222],
+			userAttributes: {},
+		});
 		expect(mockFetch).toHaveBeenCalledTimes(2);
 	});
 
@@ -187,8 +193,14 @@ describe('fetchAudienceData', () => {
 		const firstResult = await fetchAudienceData();
 		const secondResult = await fetchAudienceData();
 
-		expect(firstResult).toEqual({ audienceMemberships: [], userAttributes: {} });
-		expect(secondResult).toEqual({ audienceMemberships: [999], userAttributes: {} });
+		expect(firstResult).toEqual({
+			audienceMemberships: [],
+			userAttributes: {},
+		});
+		expect(secondResult).toEqual({
+			audienceMemberships: [999],
+			userAttributes: {},
+		});
 		expect(mockFetch).toHaveBeenCalledTimes(2);
 	});
 });

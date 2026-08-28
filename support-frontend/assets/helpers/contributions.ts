@@ -15,10 +15,13 @@ type ContributionTypeMap<T> = RegularContributionTypeMap<T> & {
 
 export type ContributionType = keyof ContributionTypeMap<null>;
 
+type MParticleAmountAttribute = 'last_contribution_amount';
+
 export interface AmountValuesObject {
 	amounts: number[];
 	defaultAmount: number;
 	hideChooseYourAmount: boolean;
+	mParticleAmountAttribute?: MParticleAmountAttribute;
 }
 
 type AmountsCardData = Record<ContributionType, AmountValuesObject>;

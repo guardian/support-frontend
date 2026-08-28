@@ -41,6 +41,8 @@ export interface PageParticipationsResultWithFallback<Variant> {
  *
  * For tests with `mParticleAudience`, the user must be a member of that audience
  * (verified via the analytics profile) or the fallback variant is returned instead.
+ * Similarly, if a variant carries `amounts.mParticleAmountAttribute`, the user's
+ * analytics profile must have that attribute or the fallback variant is used.
  * URL-forced participations bypass this check.
  */
 export async function getPageParticipations<Variant>(
@@ -85,14 +87,37 @@ export async function getPageParticipations<Variant>(
 		return undefined;
 	};
 
+	// Fetched at most once per call, shared by isUserInAudience and hasRequiredMParticleAttribute.
+	let audienceDataPromise: ReturnType<typeof fetchAudienceData> | null = null;
+	const getAudienceData = () => {
+		audienceDataPromise ??= fetchAudienceData();
+		return audienceDataPromise;
+	};
+
 	const isUserInAudience = async (
 		test: PageTest<Variant>,
 	): Promise<boolean> => {
 		if (test.mParticleAudience === undefined) {
 			return true;
 		}
-		const { audienceMemberships } = await fetchAudienceData();
+		const { audienceMemberships } = await getAudienceData();
 		return audienceMemberships.includes(test.mParticleAudience);
+	};
+
+	// Variants (e.g. OneTimeCheckoutVariant) may require an mParticle user
+	// attribute via `amounts.mParticleAmountAttribute`. Kept generic here so
+	// any variant shape carrying that field is supported without extending PageTest.
+	const hasRequiredMParticleAttribute = async (
+		variant: Variant,
+	): Promise<boolean> => {
+		const requiredAttribute = (
+			variant as { amounts?: { mParticleAmountAttribute?: string } }
+		).amounts?.mParticleAmountAttribute;
+		if (!requiredAttribute) {
+			return true;
+		}
+		const { userAttributes } = await getAudienceData();
+		return requiredAttribute in userAttributes;
 	};
 
 	// Only track participation if user is on the target page
@@ -209,7 +234,7 @@ export async function getPageParticipations<Variant>(
 		selectionResult ??
 		test.variants[randomNumber(mvtId, test.name) % test.variants.length];
 
-	if (!variant) {
+	if (!variant || !(await hasRequiredMParticleAttribute(variant))) {
 		return makeFallbackResult();
 	}
 
