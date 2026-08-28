@@ -128,14 +128,7 @@ export function SummaryTsAndCs({
 		const usLegalCopy =
 			countryGroupId === 'UnitedStates' &&
 			!productKey.startsWith('GuardianWeekly')
-				? productLegal(
-						countryGroupId,
-						billingPeriod,
-						' per ',
-						amount,
-						promotion,
-						' and',
-				  )
+				? productLegal(countryGroupId, billingPeriod, '/', amount, promotion)
 				: '';
 		const usChargePeriod = productKey.startsWith('GuardianWeekly') ? (
 			`automatically charged the amount shown each ${periodNoun} `
