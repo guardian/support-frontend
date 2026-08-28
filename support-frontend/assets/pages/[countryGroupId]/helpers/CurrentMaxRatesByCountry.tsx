@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { palette, space, textSans17 } from '@guardian/source/foundations';
 import {
+	AUDCountries,
 	Canada,
 	type CountryGroupId,
 	UnitedStates,
@@ -32,16 +33,22 @@ export default function CurrentMaxRatesByCountry({
 		case UnitedStates:
 			return (
 				<p css={maxRateDisclaimer}>
-					U.S. regular rates are currently: All-access digital is $18 per month
-					and $180 per year. Digital plus is $28 per month and $280 per year.
+					Your rates are listed above. Regular rates are $18/month or $180/year
+					for All-Access Digital and $28/month or $280/year for Digital Plus.
 				</p>
 			);
 		case Canada:
 			return (
 				<p css={maxRateDisclaimer}>
-					Canada regular rates are currently: All-access digital is $18 per
-					month and $180 per year. Digital plus is $30 per month and $300 per
-					year.
+					our rates are listed above. Regular rates are $18/month or $180/year
+					for All-Access Digital and $30/month or $300/year for Digital Plus.
+				</p>
+			);
+		case AUDCountries:
+			return (
+				<p css={maxRateDisclaimer}>
+					Your rates are listed above. Regular rates are $25/month or $250/year
+					for All-Access Digital and $30/month or $300/year for Digital Plus.
 				</p>
 			);
 		default:
