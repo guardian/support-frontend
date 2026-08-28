@@ -776,6 +776,90 @@ describe('getPageParticipations', () => {
 		});
 	});
 
+	describe('mParticle amount attribute gating (variant.amounts.mParticleAmountAttribute)', () => {
+		interface AmountsVariant {
+			name: string;
+			amounts: { mParticleAmountAttribute?: string };
+		}
+
+		const createAmountsConfig = (
+			test: PageTest<AmountsVariant>,
+		): PageParticipationsConfig<AmountsVariant> => ({
+			tests: [test],
+			pageRegex: '^/test/page$',
+			forceParamName: 'force-test',
+			sessionStorageKey: 'landingPageParticipations',
+			getVariantName: (v) => v.name,
+		});
+
+		it('returns the variant when the user has the required attribute', async () => {
+			const variant: AmountsVariant = {
+				name: 'control',
+				amounts: { mParticleAmountAttribute: 'last_contribution_amount' },
+			};
+			const test: PageTest<AmountsVariant> = {
+				name: 'test-1',
+				status: 'Live',
+				variants: [variant],
+			};
+			const config = createAmountsConfig(test);
+
+			mockLocation('/test/page');
+			mockCountryGroupMatches.mockReturnValue(true);
+			mockFetchAudienceData.mockResolvedValue({
+				audienceMemberships: [],
+				userAttributes: { last_contribution_amount: '50' },
+			});
+
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toEqual(variant);
+		});
+
+		it('returns undefined variant when the user lacks the required attribute', async () => {
+			const variant: AmountsVariant = {
+				name: 'control',
+				amounts: { mParticleAmountAttribute: 'last_contribution_amount' },
+			};
+			const test: PageTest<AmountsVariant> = {
+				name: 'test-1',
+				status: 'Live',
+				variants: [variant],
+			};
+			const config = createAmountsConfig(test);
+
+			mockLocation('/test/page');
+			mockCountryGroupMatches.mockReturnValue(true);
+			mockFetchAudienceData.mockResolvedValue({
+				audienceMemberships: [],
+				userAttributes: {},
+			});
+
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toBeUndefined();
+			expect(mockSetSessionParticipations).not.toHaveBeenCalled();
+		});
+
+		it('does not check audience data when no attribute is required', async () => {
+			const variant: AmountsVariant = { name: 'control', amounts: {} };
+			const test: PageTest<AmountsVariant> = {
+				name: 'test-1',
+				status: 'Live',
+				variants: [variant],
+			};
+			const config = createAmountsConfig(test);
+
+			mockLocation('/test/page');
+			mockCountryGroupMatches.mockReturnValue(true);
+
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toEqual(variant);
+			expect(mockFetchAudienceData).not.toHaveBeenCalled();
+		});
+	});
+
 	describe('Session storage validation and pruning (validate-and-prune logic)', () => {
 		it('prunes stale participations that do not match current test names', async () => {
 			const variant = createTestVariant('control', 'control-value');
