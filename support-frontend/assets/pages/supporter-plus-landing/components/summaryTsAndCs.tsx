@@ -126,8 +126,8 @@ export function SummaryTsAndCs({
 
 	const autoRenewUtilCancelTsAndCs = (countryGroupId: CountryGroupId) => {
 		const usLegalCopy =
-			countryGroupId === 'UnitedStates' &&
-			!productKey.startsWith('GuardianWeekly')
+			['SupporterPlus', 'DigitalSubscription'].includes(productKey) &&
+			countryGroupId === 'UnitedStates'
 				? productLegal(countryGroupId, billingPeriod, '/', amount, promotion)
 				: '';
 		const usChargePeriod = productKey.startsWith('GuardianWeekly') ? (
