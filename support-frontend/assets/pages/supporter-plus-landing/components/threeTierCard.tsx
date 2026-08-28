@@ -58,6 +58,7 @@ export type ThreeTierCardProps = {
 	billingPeriod: BillingPeriod;
 	showWeeklyPrice?: boolean;
 	useLargePriceMinHeight?: boolean;
+	hasDefaultProduct?: boolean;
 };
 
 const container = (
@@ -184,6 +185,7 @@ export function ThreeTierCard({
 	billingPeriod,
 	showWeeklyPrice = false,
 	useLargePriceMinHeight = false,
+	hasDefaultProduct,
 }: ThreeTierCardProps): JSX.Element {
 	const {
 		title,
@@ -232,8 +234,15 @@ export function ThreeTierCard({
 	const { titlePillColor, cardPillColor, cardBackColor, benefitIconColor } =
 		cardTheme ?? defaultCardTheme;
 
-	// if pill visible without subdued styling or user selected from banner/epic use highlight colors if available
-	const isHighlightedCard = (!!pillCopy && !isSubdued) || isUserSelected;
+	// if pill is
+	// 	visible without subdued styling or
+	// 	user selected from banner/epic with no default product or
+	// 	default selected product then
+	// use highlight colors if available
+	const isHighlightedCard =
+		(!!pillCopy && !isSubdued) ||
+		(isUserSelected && !hasDefaultProduct) ||
+		isDefaultSelectedProduct;
 
 	const cardBackColorSelection = isHighlightedCard
 		? cardBackColor
@@ -243,7 +252,7 @@ export function ThreeTierCard({
 		: palette.brand[500];
 
 	console.log(
-		`*** TierCard${cardTier} - isDefaultSelectedProduct ${isDefaultSelectedProduct} - isUserSelected ${isUserSelected}`,
+		`*** TierCard${cardTier} - hasDefaultProduct ${hasDefaultProduct} - isDefaultSelectedProduct ${isDefaultSelectedProduct} - isUserSelected ${isUserSelected}`,
 	);
 	return (
 		<section
@@ -254,17 +263,22 @@ export function ThreeTierCard({
 				cardBackColorSelection,
 			)}
 		>
-			{isUserSelected && (
+			{isUserSelected && !hasDefaultProduct && (
 				<ThreeTierCardPill
 					title={isDefaultSelectedProduct ? pillCopy ?? '' : 'Your selection'}
 					color={cardPillColor}
 				/>
 			)}
+			{isDefaultSelectedProduct && (
+				// Always show pill for the default selected product
+				<ThreeTierCardPill title={pillCopy ?? ''} color={cardPillColor} />
+			)}
 			{!!pillCopy && !isUserSelected && (
+				// Pill cannot be subdued if the user has a default product
 				<ThreeTierCardPill
 					title={pillCopy}
 					color={cardPillColor}
-					subdue={isSubdued}
+					subdue={hasDefaultProduct ? false : isSubdued}
 				/>
 			)}
 			<div css={titleContainer}>
@@ -345,7 +359,6 @@ export function ThreeTierCard({
 			>
 				{cta.copy}
 			</LinkButton>
-
 			{inAdditionToAllAccessDigital && (
 				<div css={benefitsPrefixCss}>
 					<span>

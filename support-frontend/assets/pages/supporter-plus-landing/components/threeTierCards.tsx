@@ -13,6 +13,7 @@ export type ThreeTierCardsProps = {
 	currencyId: CurrencyCode;
 	billingPeriod: BillingPeriod;
 	showWeeklyPrice?: boolean;
+	hasDefaultProduct?: boolean;
 };
 
 const container = (cardCount: number) => css`
@@ -52,6 +53,7 @@ export function ThreeTierCards({
 	currencyId,
 	billingPeriod,
 	showWeeklyPrice,
+	hasDefaultProduct,
 }: ThreeTierCardsProps): JSX.Element {
 	const { enableRedCardTheme } = useFeatureSwitches();
 	const shouldUseLargePriceMinHeight =
@@ -89,6 +91,7 @@ export function ThreeTierCards({
 						billingPeriod={billingPeriod}
 						showWeeklyPrice={showWeeklyPrice}
 						useLargePriceMinHeight={shouldUseLargePriceMinHeight}
+						hasDefaultProduct={hasDefaultProduct}
 					/>
 				);
 			})}
