@@ -8,7 +8,8 @@ import io.circe.{Decoder, Encoder}
 case class AmountsSelection(
     amounts: List[Int],
     defaultAmount: Int,
-    hideChooseYourAmount: Option[Boolean],
+    hideChooseYourAmount: Boolean,
+    mParticleAmountAttribute: Option[MParticleAmountAttribute] = None,
 )
 
 object AmountsSelection {

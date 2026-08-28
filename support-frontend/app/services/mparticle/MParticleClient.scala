@@ -32,13 +32,13 @@ case class AudienceMembership(
 )
 
 case class MParticleAudienceData(
-  audienceMemberships: List[Int],
-  userAttributes: JsonObject,
+    audienceMemberships: List[Int],
+    userAttributes: JsonObject,
 )
 
 case class ProfileResponse(
     audience_memberships: List[AudienceMembership],
-  user_attributes: Option[JsonObject],
+    user_attributes: Option[JsonObject],
 )
 
 object MParticleClient {

@@ -49,3 +49,16 @@ case class Scheduler(
 object Scheduler {
   implicit val codec: Codec[Scheduler] = deriveCodec
 }
+
+sealed trait MParticleAmountAttribute
+object MParticleAmountAttribute {
+  case object AmountAttribute extends MParticleAmountAttribute
+
+  implicit val encoder: Encoder[MParticleAmountAttribute] = Encoder.encodeString.contramap { case AmountAttribute =>
+    "last_contribution_amount"
+  }
+  implicit val decoder: Decoder[MParticleAmountAttribute] = Decoder.decodeString.emap {
+    case "last_contribution_amount" => Right(AmountAttribute)
+    case other => Left(s"Unknown MParticleAmountAttribute: $other")
+  }
+}
