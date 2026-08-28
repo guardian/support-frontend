@@ -30,11 +30,10 @@ describe('createZuoraSubscriptionLambda integration', () => {
 
 				fail('Expected handler to throw');
 			} catch (error) {
+				expect(error).toBeInstanceOf(RetryError);
 				if (error instanceof RetryError) {
 					expect(error.name).toBe(RetryErrorType.RetryNone);
 					expect(error.message).toContain('Transaction declined');
-				} else {
-					fail('Error is not an instance of RetryError');
 				}
 			}
 		},
@@ -54,13 +53,12 @@ describe('createZuoraSubscriptionLambda integration', () => {
 
 				fail('Expected handler to throw');
 			} catch (error) {
+				expect(error).toBeInstanceOf(RetryError);
 				if (error instanceof RetryError) {
 					expect(error.name).toBe(RetryErrorType.RetryNone);
 					expect(error.message).toContain(
 						'The contribution amount of a supporter plus subscription cannot be less than zero',
 					);
-				} else {
-					fail('Error is not an instance of RetryError');
 				}
 			}
 		},
