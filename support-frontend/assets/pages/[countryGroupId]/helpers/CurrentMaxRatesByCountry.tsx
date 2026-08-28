@@ -40,7 +40,7 @@ export default function CurrentMaxRatesByCountry({
 		case Canada:
 			return (
 				<p css={maxRateDisclaimer}>
-					our rates are listed above. Regular rates are $18/month or $180/year
+					Your rates are listed above. Regular rates are $18/month or $180/year
 					for All-Access Digital and $30/month or $300/year for Digital Plus.
 				</p>
 			);
