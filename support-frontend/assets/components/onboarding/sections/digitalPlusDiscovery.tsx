@@ -121,7 +121,7 @@ export function OnboardingDigitalPlusDiscovery({
 							/>
 						</div>
 						<div css={benefitCardContent}>
-							<h2 css={benefitCardHeading}>Discover the Guardian Feast app</h2>
+							<h2 css={benefitCardHeading}>Discover the Feast app</h2>
 							<p css={descriptions}>
 								Level up your cooking with more than 6,000 recipes and smart,
 								exclusive cooking features.
@@ -148,8 +148,8 @@ export function OnboardingDigitalPlusDiscovery({
 								Explore the Guardian Editions app
 							</h2>
 							<p css={descriptions}>
-								Read the digital newspaper every day, plus access to The Long
-								Read and Guardian Weekly e-magazines.
+								Access to our full range of digital magazines and paper,
+								digitally reimagined for your mobile and tablet.
 							</p>
 							<OnboardingAppBadgesDownload
 								onboardingStep={ONBOARDING_EDITIONS_APP}
@@ -170,7 +170,7 @@ export function OnboardingDigitalPlusDiscovery({
 						</div>
 						<div css={benefitCardContent}>
 							<h2 css={benefitCardHeading}>
-								Journey through the Guardian Archives
+								Journey through the Guardian archives
 							</h2>
 							<p css={descriptions}>
 								Explore over 200 years of history as reported by the Guardian
