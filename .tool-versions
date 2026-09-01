@@ -1,2 +1,5 @@
 java corretto-21
 node 24
+github:guardian/devenv 20260721-123412
+sbt 1
+aqua:aws/aws-cli 2

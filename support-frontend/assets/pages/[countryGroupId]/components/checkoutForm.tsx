@@ -431,8 +431,14 @@ export default function CheckoutForm({
 				},
 			]);
 		} else {
+			const useExpressDeliveryAgentsLookup =
+				abParticipations.deliveryAgentsLookupExpress === 'variant';
+
 			// The users postcode is outside the M25 and they have selected a valid rate plan
-			const agents = await getDeliveryAgents(postcode);
+			const agents = await getDeliveryAgents(
+				postcode,
+				useExpressDeliveryAgentsLookup,
+			);
 			if (agents.agents?.length === 1 && agents.agents[0]) {
 				setChosenDeliveryAgent(agents.agents[0].agentId);
 			}
@@ -1270,6 +1276,7 @@ export default function CheckoutForm({
 							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}
+							promotion={promotion}
 						/>
 						<MaybeEstimatedTaxSummary
 							payment={payment}

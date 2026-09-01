@@ -15,6 +15,7 @@ import {
 	manageAccountLink,
 	privacyLink,
 } from 'helpers/legal';
+import { productLegal } from 'helpers/legalCopy';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -24,6 +25,7 @@ import {
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import {
 	getDateWithOrdinal,
 	getLongMonth,
@@ -74,6 +76,7 @@ export interface SummaryTsAndCsProps {
 	currency: CurrencyCode;
 	amount: number;
 	ratePlanDescription?: string;
+	promotion?: Promotion;
 }
 export function SummaryTsAndCs({
 	productKey,
@@ -82,6 +85,7 @@ export function SummaryTsAndCs({
 	currency,
 	amount,
 	ratePlanDescription,
+	promotion,
 }: SummaryTsAndCsProps): JSX.Element | null {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -121,11 +125,15 @@ export function SummaryTsAndCs({
 	);
 
 	const autoRenewUtilCancelTsAndCs = (countryGroupId: CountryGroupId) => {
-		const usChargePeriodCopy = `automatically charged the amount shown each ${periodNoun} `;
+		const usLegalCopy =
+			['SupporterPlus', 'DigitalSubscription'].includes(productKey) &&
+			countryGroupId === 'UnitedStates'
+				? productLegal(countryGroupId, billingPeriod, '/', amount, promotion)
+				: '';
 		const usChargePeriod = productKey.startsWith('GuardianWeekly') ? (
-			usChargePeriodCopy
+			`automatically charged the amount shown each ${periodNoun} `
 		) : (
-			<strong>{usChargePeriodCopy}</strong>
+			<strong>{`automatically charged ${usLegalCopy} `}</strong>
 		);
 		const containerShapeUS = productKey.startsWith('GuardianWeekly')
 			? containerRoundUS
