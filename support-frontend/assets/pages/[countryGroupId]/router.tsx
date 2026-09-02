@@ -144,6 +144,7 @@ const router = createBrowserRouter([
 										nudgeSettings={checkoutNudgeSettings}
 										landingPageSettings={landing.variant}
 										oneTimeCheckoutSettings={oneTime.variant}
+										userAttributes={oneTime.userAttributes ?? {}}
 									/>
 								);
 							},

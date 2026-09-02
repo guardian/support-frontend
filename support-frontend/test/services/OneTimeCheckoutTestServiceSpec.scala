@@ -104,7 +104,7 @@ class OneTimeCheckoutTestServiceSpec extends AsyncFlatSpec with Matchers {
             amounts = AmountsSelection(
               amounts = List(5, 10, 20),
               defaultAmount = 10,
-              hideChooseYourAmount = Some(false),
+              hideChooseYourAmount = false,
             ),
             tickerSettings = Some(
               TickerSettings(
@@ -121,7 +121,7 @@ class OneTimeCheckoutTestServiceSpec extends AsyncFlatSpec with Matchers {
             amounts = AmountsSelection(
               amounts = List(7, 15, 25),
               defaultAmount = 15,
-              hideChooseYourAmount = Some(true),
+              hideChooseYourAmount = true,
             ),
             tickerSettings = None,
           ),
@@ -147,6 +147,7 @@ class OneTimeCheckoutTestServiceSpec extends AsyncFlatSpec with Matchers {
                 Map(
                   "amounts" -> listAttr(List(numberAttr(3), numberAttr(5), numberAttr(10))),
                   "defaultAmount" -> numberAttr(5),
+                  "hideChooseYourAmount" -> booleanAttr(false),
                 ),
               ),
             ),
@@ -170,7 +171,7 @@ class OneTimeCheckoutTestServiceSpec extends AsyncFlatSpec with Matchers {
             amounts = AmountsSelection(
               amounts = List(3, 5, 10),
               defaultAmount = 5,
-              hideChooseYourAmount = None,
+              hideChooseYourAmount = false,
             ),
             tickerSettings = None,
           ),
