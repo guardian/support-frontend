@@ -23,6 +23,7 @@ type OneTimeCheckoutProps = {
 	nudgeSettings?: CheckoutNudgeSettings;
 	landingPageSettings: LandingPageVariant;
 	oneTimeCheckoutSettings: OneTimeCheckoutVariant;
+	userAttributes: Record<string, unknown>;
 };
 
 const stripeExpressCheckoutSwitch =
@@ -35,6 +36,7 @@ export function OneTimeCheckout({
 	nudgeSettings,
 	landingPageSettings,
 	oneTimeCheckoutSettings,
+	userAttributes,
 }: OneTimeCheckoutProps) {
 	const { currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -161,6 +163,7 @@ export function OneTimeCheckout({
 				nudgeSettings={nudgeSettings}
 				landingPageSettings={landingPageSettings}
 				oneTimeCheckoutSettings={oneTimeCheckoutSettings}
+				userAttributes={userAttributes}
 			/>
 		</Elements>
 	);

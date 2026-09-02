@@ -814,6 +814,9 @@ describe('getPageParticipations', () => {
 			const result = await getPageParticipations(config);
 
 			expect(result.variant).toEqual(variant);
+			expect(result.userAttributes).toEqual({
+				last_contribution_amount: '50',
+			});
 		});
 
 		it('returns undefined variant when the user lacks the required attribute', async () => {
@@ -857,6 +860,7 @@ describe('getPageParticipations', () => {
 
 			expect(result.variant).toEqual(variant);
 			expect(mockFetchAudienceData).not.toHaveBeenCalled();
+			expect(result.userAttributes).toBeUndefined();
 		});
 	});
 
