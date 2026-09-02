@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 
-import { viewId } from '@guardian/ophan-tracker-js/support';
+import { getViewId } from '@guardian/ophan-tracker-js';
 import type { CountryCode } from '@modules/internationalisation/country';
 import { testIsActive } from 'helpers/abTests/abtest';
 import { type Participations } from 'helpers/abTests/models';
@@ -155,7 +155,7 @@ function buildReferrerAcquisitionData(
 }
 
 const getOphanIds = (): OphanIds => ({
-	pageviewId: viewId,
+	pageviewId: getViewId(),
 	browserId: getCookie('bwid'),
 });
 
