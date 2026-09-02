@@ -21,11 +21,13 @@ import {
 export interface PageParticipationsResult<Variant> {
 	variant: Variant | undefined;
 	participations: Participations;
+	userAttributes?: Record<string, unknown>;
 }
 
 export interface PageParticipationsResultWithFallback<Variant> {
 	variant: Variant;
 	participations: Participations;
+	userAttributes?: Record<string, unknown>;
 }
 
 /**
@@ -88,9 +90,13 @@ export async function getPageParticipations<Variant>(
 	};
 
 	// Fetched at most once per call, shared by isUserInAudience and hasRequiredMParticleAttribute.
+	let fetchedUserAttributes: Record<string, unknown> | undefined;
 	let audienceDataPromise: ReturnType<typeof fetchAudienceData> | null = null;
 	const getAudienceData = () => {
-		audienceDataPromise ??= fetchAudienceData();
+		audienceDataPromise ??= fetchAudienceData().then((data) => {
+			fetchedUserAttributes = data.userAttributes;
+			return data;
+		});
 		return audienceDataPromise;
 	};
 
@@ -148,12 +154,15 @@ export async function getPageParticipations<Variant>(
 		if (!variant) {
 			return makeFallbackResult();
 		}
+		// Forced participations bypass the attribute gate, but still fetch userAttributes for the caller.
+		await hasRequiredMParticleAttribute(variant);
 		setSessionParticipations(urlParticipations, sessionStorageKey);
 		return {
 			participations: trackParticipation
 				? urlParticipations
 				: ({} as Participations),
 			variant,
+			userAttributes: fetchedUserAttributes,
 		};
 	}
 
@@ -173,6 +182,7 @@ export async function getPageParticipations<Variant>(
 				? previewParticipations
 				: ({} as Participations),
 			variant,
+			userAttributes: fetchedUserAttributes,
 		};
 	}
 
@@ -196,12 +206,13 @@ export async function getPageParticipations<Variant>(
 		// If nothing valid remains, continue to re-selection
 		if (Object.entries(validParticipations).length > 0) {
 			const variant = getVariant(validParticipations, tests);
-			if (!variant) {
+			if (!variant || !(await hasRequiredMParticleAttribute(variant))) {
 				return makeFallbackResult();
 			}
 			return {
 				participations: validParticipations,
 				variant,
+				userAttributes: fetchedUserAttributes,
 			};
 		}
 	}
@@ -250,6 +261,7 @@ export async function getPageParticipations<Variant>(
 			? participations
 			: ({} as Participations),
 		variant,
+		userAttributes: fetchedUserAttributes,
 	};
 }
 
