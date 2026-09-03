@@ -1,6 +1,6 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { CountryGroup } from '../../internationalisation/classes/countryGroup';
-import { fetchAudienceMemberships } from '../../mparticle';
+import { fetchAudienceData } from '../../mparticle';
 import {
 	countryGroupMatches,
 	getParticipationFromQueryString,
@@ -21,7 +21,7 @@ import {
 
 jest.mock('../../mparticle', () => ({
 	__esModule: true,
-	fetchAudienceMemberships: jest.fn(),
+	fetchAudienceData: jest.fn(),
 }));
 
 jest.mock('../../internationalisation/classes/countryGroup', () => ({
@@ -62,7 +62,7 @@ const mockIsWithinSchedule = jest.mocked(isWithinSchedule);
 const mockRandomNumber = jest.mocked(randomNumber);
 const mockGetSessionParticipations = jest.mocked(getSessionParticipations);
 const mockSetSessionParticipations = jest.mocked(setSessionParticipations);
-const mockFetchAudienceMemberships = jest.mocked(fetchAudienceMemberships);
+const mockFetchAudienceData = jest.mocked(fetchAudienceData);
 
 interface TestVariant {
 	name: string;
@@ -123,7 +123,10 @@ describe('getPageParticipations', () => {
 		mockIsWithinSchedule.mockReturnValue(true);
 		mockRandomNumber.mockReturnValue(0);
 		mockGetSessionParticipations.mockReturnValue(undefined);
-		mockFetchAudienceMemberships.mockResolvedValue([]);
+		mockFetchAudienceData.mockResolvedValue({
+			audienceMemberships: [],
+			userAttributes: {},
+		});
 	});
 
 	afterEach(() => {
@@ -712,7 +715,10 @@ describe('getPageParticipations', () => {
 			mockDetect.mockReturnValue('GBPCountries');
 			mockCountryGroupMatches.mockReturnValue(true);
 			mockRandomNumber.mockReturnValue(0);
-			mockFetchAudienceMemberships.mockResolvedValue([42]);
+			mockFetchAudienceData.mockResolvedValue({
+				audienceMemberships: [42],
+				userAttributes: {},
+			});
 
 			const result = await getPageParticipations(config);
 
@@ -728,7 +734,10 @@ describe('getPageParticipations', () => {
 			mockLocation('/test/page');
 			mockDetect.mockReturnValue('GBPCountries');
 			mockCountryGroupMatches.mockReturnValue(true);
-			mockFetchAudienceMemberships.mockResolvedValue([99]);
+			mockFetchAudienceData.mockResolvedValue({
+				audienceMemberships: [99],
+				userAttributes: {},
+			});
 
 			const result = await getPageParticipations(config);
 
@@ -747,7 +756,7 @@ describe('getPageParticipations', () => {
 			const result = await getPageParticipations(config);
 
 			expect(result.variant).toEqual(variant);
-			expect(mockFetchAudienceMemberships).not.toHaveBeenCalled();
+			expect(mockFetchAudienceData).not.toHaveBeenCalled();
 		});
 
 		it('bypasses audience check for URL-forced participations', async () => {
@@ -763,7 +772,171 @@ describe('getPageParticipations', () => {
 			const result = await getPageParticipations(config);
 
 			expect(result.participations).toEqual({ 'test-1': 'control' });
-			expect(mockFetchAudienceMemberships).not.toHaveBeenCalled();
+			expect(mockFetchAudienceData).not.toHaveBeenCalled();
+		});
+	});
+
+	describe('mParticle amount attribute gating (variant.amounts.mParticleAmountAttribute)', () => {
+		interface AmountsVariant {
+			name: string;
+			amounts: { mParticleAmountAttribute?: string };
+		}
+
+		const createAmountsConfig = (
+			test: PageTest<AmountsVariant>,
+		): PageParticipationsConfig<AmountsVariant> => ({
+			tests: [test],
+			pageRegex: '^/test/page$',
+			forceParamName: 'force-test',
+			sessionStorageKey: 'landingPageParticipations',
+			getVariantName: (v) => v.name,
+		});
+
+		it('returns the variant when the user has the required attribute', async () => {
+			const variant: AmountsVariant = {
+				name: 'control',
+				amounts: { mParticleAmountAttribute: 'last_contribution_amount' },
+			};
+			const test: PageTest<AmountsVariant> = {
+				name: 'test-1',
+				status: 'Live',
+				variants: [variant],
+			};
+			const config = createAmountsConfig(test);
+
+			mockLocation('/test/page');
+			mockCountryGroupMatches.mockReturnValue(true);
+			mockFetchAudienceData.mockResolvedValue({
+				audienceMemberships: [],
+				userAttributes: { last_contribution_amount: '50' },
+			});
+
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toEqual(variant);
+			expect(result.userAttributes).toEqual({
+				last_contribution_amount: '50',
+			});
+		});
+
+		it('returns undefined variant when the user lacks the required attribute', async () => {
+			const variant: AmountsVariant = {
+				name: 'control',
+				amounts: { mParticleAmountAttribute: 'last_contribution_amount' },
+			};
+			const test: PageTest<AmountsVariant> = {
+				name: 'test-1',
+				status: 'Live',
+				variants: [variant],
+			};
+			const config = createAmountsConfig(test);
+
+			mockLocation('/test/page');
+			mockCountryGroupMatches.mockReturnValue(true);
+			mockFetchAudienceData.mockResolvedValue({
+				audienceMemberships: [],
+				userAttributes: {},
+			});
+
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toBeUndefined();
+			expect(mockSetSessionParticipations).not.toHaveBeenCalled();
+		});
+
+		it('does not check audience data when no attribute is required', async () => {
+			const variant: AmountsVariant = { name: 'control', amounts: {} };
+			const test: PageTest<AmountsVariant> = {
+				name: 'test-1',
+				status: 'Live',
+				variants: [variant],
+			};
+			const config = createAmountsConfig(test);
+
+			mockLocation('/test/page');
+			mockCountryGroupMatches.mockReturnValue(true);
+
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toEqual(variant);
+			expect(mockFetchAudienceData).not.toHaveBeenCalled();
+			expect(result.userAttributes).toBeUndefined();
+		});
+	});
+
+	describe('mParticle template attribute gating', () => {
+		const template = '%%mParticle_last_contribution_amount%%';
+
+		it('returns a template variant when the required attribute is available', async () => {
+			const variant = createTestVariant('control', template);
+			const test = createPageTest('test-1', [variant]);
+			const config = createConfig([test]);
+
+			mockLocation('/test/page');
+			mockCountryGroupMatches.mockReturnValue(true);
+			mockFetchAudienceData.mockResolvedValue({
+				audienceMemberships: [],
+				userAttributes: { last_contribution_amount: 50 },
+			});
+
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toEqual(variant);
+			expect(result.userAttributes).toEqual({
+				last_contribution_amount: 50,
+			});
+		});
+
+		it('returns fallback when a template attribute is unavailable', async () => {
+			const variant = createTestVariant('control', template);
+			const fallback = createFallbackVariant();
+			const test = createPageTest('test-1', [variant]);
+			const config = createConfig([test]);
+
+			mockLocation('/test/page');
+			mockCountryGroupMatches.mockReturnValue(true);
+
+			const result = await getPageParticipations(config, {
+				variant: () => fallback,
+				participationKey: 'FALLBACK_TEST',
+			});
+
+			expect(result.variant).toEqual(fallback);
+			expect(mockSetSessionParticipations).not.toHaveBeenCalled();
+		});
+
+		it('does not fetch audience data for a variant without templates', async () => {
+			const variant = createTestVariant('control', 'control-value');
+			const test = createPageTest('test-1', [variant]);
+			const config = createConfig([test]);
+
+			mockLocation('/test/page');
+			mockCountryGroupMatches.mockReturnValue(true);
+
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toEqual(variant);
+			expect(mockFetchAudienceData).not.toHaveBeenCalled();
+		});
+
+		it('requires template attributes for forced participations', async () => {
+			const variant = createTestVariant('control', template);
+			const fallback = createFallbackVariant();
+			const test = createPageTest('test-1', [variant]);
+			const config = createConfig([test]);
+
+			mockLocation('/test/page', '?force-test=test-1:control');
+			mockGetParticipationFromQueryString.mockReturnValue({
+				'test-1': 'control',
+			});
+
+			const result = await getPageParticipations(config, {
+				variant: () => fallback,
+				participationKey: 'FALLBACK_TEST',
+			});
+
+			expect(result.variant).toEqual(fallback);
+			expect(mockSetSessionParticipations).not.toHaveBeenCalled();
 		});
 	});
 
