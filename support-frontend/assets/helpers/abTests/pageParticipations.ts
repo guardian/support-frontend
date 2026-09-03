@@ -89,7 +89,7 @@ export async function getPageParticipations<Variant>(
 		return undefined;
 	};
 
-	// Fetched at most once per call, shared by isUserInAudience and hasRequiredMParticleAttribute.
+	// Fetched at most once per call, shared by mParticle eligibility checks.
 	let fetchedUserAttributes: Record<string, unknown> | undefined;
 	let audienceDataPromise: ReturnType<typeof fetchAudienceData> | null = null;
 	const getAudienceData = () => {
@@ -113,7 +113,7 @@ export async function getPageParticipations<Variant>(
 	// Variants (e.g. OneTimeCheckoutVariant) may require an mParticle user
 	// attribute via `amounts.mParticleAmountAttribute`. Kept generic here so
 	// any variant shape carrying that field is supported without extending PageTest.
-	const hasRequiredMParticleAttribute = async (
+	const hasRequiredMParticleAmountAttribute = async (
 		variant: Variant,
 	): Promise<boolean> => {
 		const requiredAttribute = (
@@ -124,6 +124,30 @@ export async function getPageParticipations<Variant>(
 		}
 		const { userAttributes } = await getAudienceData();
 		return requiredAttribute in userAttributes;
+	};
+
+	const hasRequiredMParticleTemplateAttributes = async (
+		variant: Variant,
+	): Promise<boolean> => {
+		const templateAttributes = Object.values(
+			variant as Record<string, unknown>,
+		)
+			.filter((value): value is string => typeof value === 'string')
+			.flatMap((copy) =>
+				Array.from(copy.matchAll(/%%mParticle_([a-zA-Z0-9_]+)%%/g)),
+			)
+			.map((match) => match[1])
+			.filter((attribute): attribute is string => attribute !== undefined);
+
+		if (templateAttributes.length === 0) {
+			return true;
+		}
+
+		const { userAttributes } = await getAudienceData();
+		return templateAttributes.every((attribute) => {
+			const value = userAttributes[attribute];
+			return typeof value === 'string' || typeof value === 'number';
+		});
 	};
 
 	// Only track participation if user is on the target page
@@ -155,7 +179,10 @@ export async function getPageParticipations<Variant>(
 			return makeFallbackResult();
 		}
 		// Forced participations bypass the attribute gate, but still fetch userAttributes for the caller.
-		await hasRequiredMParticleAttribute(variant);
+		await hasRequiredMParticleAmountAttribute(variant);
+		if (!(await hasRequiredMParticleTemplateAttributes(variant))) {
+			return makeFallbackResult();
+		}
 		setSessionParticipations(urlParticipations, sessionStorageKey);
 		return {
 			participations: trackParticipation
@@ -173,7 +200,10 @@ export async function getPageParticipations<Variant>(
 	);
 	if (previewParticipations) {
 		const variant = getVariant(previewParticipations, tests, true);
-		if (!variant) {
+		if (
+			!variant ||
+			!(await hasRequiredMParticleTemplateAttributes(variant))
+		) {
 			return makeFallbackResult();
 		}
 		setSessionParticipations(previewParticipations, sessionStorageKey);
@@ -206,7 +236,11 @@ export async function getPageParticipations<Variant>(
 		// If nothing valid remains, continue to re-selection
 		if (Object.entries(validParticipations).length > 0) {
 			const variant = getVariant(validParticipations, tests);
-			if (!variant || !(await hasRequiredMParticleAttribute(variant))) {
+			if (
+				!variant ||
+				!(await hasRequiredMParticleAmountAttribute(variant)) ||
+				!(await hasRequiredMParticleTemplateAttributes(variant))
+			) {
 				return makeFallbackResult();
 			}
 			return {
@@ -245,7 +279,11 @@ export async function getPageParticipations<Variant>(
 		selectionResult ??
 		test.variants[randomNumber(mvtId, test.name) % test.variants.length];
 
-	if (!variant || !(await hasRequiredMParticleAttribute(variant))) {
+	if (!variant || !(await hasRequiredMParticleAmountAttribute(variant))) {
+		return makeFallbackResult();
+	}
+
+	if (!(await hasRequiredMParticleTemplateAttributes(variant))) {
 		return makeFallbackResult();
 	}
 

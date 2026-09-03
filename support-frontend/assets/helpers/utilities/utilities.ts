@@ -82,6 +82,23 @@ function replaceDatePlaceholder(copy: string, deadline?: string): string {
 	return copy.replaceAll(DEADLINE_PLACEHOLDER_TEMPLATE, replacement);
 }
 
+const mParticleTemplate = /%%mParticle_([a-zA-Z0-9_]+)%%/g;
+
+function replaceMParticleTemplates(
+	copy: string,
+	userAttributes: Record<string, unknown>,
+): string {
+	return copy.replaceAll(
+		mParticleTemplate,
+		(template: string, attribute: string) => {
+			const value = userAttributes[attribute];
+			return typeof value === 'string' || typeof value === 'number'
+				? String(value)
+				: template;
+		},
+	);
+}
+
 // Parses a comma-separated string of amounts and returns an array of valid, unique numbers.
 // Filters out invalid values (NaN, negative, zero, infinite) and removes duplicates.
 function parseCustomAmounts(customAmountsParam: string): number[] {
@@ -130,5 +147,6 @@ export {
 	parseCustomAmounts,
 	parseBillingPeriodCopy,
 	replaceDatePlaceholder,
+	replaceMParticleTemplates,
 	calculateWeeklyPrice,
 };
