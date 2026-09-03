@@ -1,10 +1,20 @@
 import type { SelectedAmountsVariant } from '../../../helpers/contributions';
-import { parseCustomAmounts } from '../../../helpers/utilities/utilities';
+import type * as Utilities from '../../../helpers/utilities/utilities';
+import {
+	parseCustomAmounts,
+	replaceMParticleTemplates,
+} from '../../../helpers/utilities/utilities';
 
 // Mock the parseCustomAmounts function
-jest.mock('../../../helpers/utilities/utilities', () => ({
-	parseCustomAmounts: jest.fn(),
-}));
+jest.mock('../../../helpers/utilities/utilities', () => {
+	const actualUtilities = jest.requireActual(
+		'../../../helpers/utilities/utilities',
+	) as unknown as typeof Utilities;
+	return {
+		...actualUtilities,
+		parseCustomAmounts: jest.fn(),
+	};
+});
 
 // Mock the getAmountsTestVariant function
 const mockGetAmountsTestVariant = jest.fn();
@@ -47,6 +57,17 @@ const mockSelectedAmountsVariant = {
 		},
 	},
 } satisfies SelectedAmountsVariant;
+
+describe('replaceMParticleTemplates', () => {
+	it('substitutes available mParticle attribute values', () => {
+		expect(
+			replaceMParticleTemplates(
+				'Your last contribution was %%mParticle_last_contribution_amount%%.',
+				{ last_contribution_amount: 50 },
+			),
+		).toBe('Your last contribution was 50.');
+	});
+});
 
 describe('OneTimeCheckoutComponent - Custom Amounts URL Processing', () => {
 	// Note: The parseCustomAmounts function is thoroughly tested in its own test file

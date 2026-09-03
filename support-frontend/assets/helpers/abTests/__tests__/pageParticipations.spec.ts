@@ -864,6 +864,82 @@ describe('getPageParticipations', () => {
 		});
 	});
 
+	describe('mParticle template attribute gating', () => {
+		const template = '%%mParticle_last_contribution_amount%%';
+
+		it('returns a template variant when the required attribute is available', async () => {
+			const variant = createTestVariant('control', template);
+			const test = createPageTest('test-1', [variant]);
+			const config = createConfig([test]);
+
+			mockLocation('/test/page');
+			mockCountryGroupMatches.mockReturnValue(true);
+			mockFetchAudienceData.mockResolvedValue({
+				audienceMemberships: [],
+				userAttributes: { last_contribution_amount: 50 },
+			});
+
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toEqual(variant);
+			expect(result.userAttributes).toEqual({
+				last_contribution_amount: 50,
+			});
+		});
+
+		it('returns fallback when a template attribute is unavailable', async () => {
+			const variant = createTestVariant('control', template);
+			const fallback = createFallbackVariant();
+			const test = createPageTest('test-1', [variant]);
+			const config = createConfig([test]);
+
+			mockLocation('/test/page');
+			mockCountryGroupMatches.mockReturnValue(true);
+
+			const result = await getPageParticipations(config, {
+				variant: () => fallback,
+				participationKey: 'FALLBACK_TEST',
+			});
+
+			expect(result.variant).toEqual(fallback);
+			expect(mockSetSessionParticipations).not.toHaveBeenCalled();
+		});
+
+		it('does not fetch audience data for a variant without templates', async () => {
+			const variant = createTestVariant('control', 'control-value');
+			const test = createPageTest('test-1', [variant]);
+			const config = createConfig([test]);
+
+			mockLocation('/test/page');
+			mockCountryGroupMatches.mockReturnValue(true);
+
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toEqual(variant);
+			expect(mockFetchAudienceData).not.toHaveBeenCalled();
+		});
+
+		it('requires template attributes for forced participations', async () => {
+			const variant = createTestVariant('control', template);
+			const fallback = createFallbackVariant();
+			const test = createPageTest('test-1', [variant]);
+			const config = createConfig([test]);
+
+			mockLocation('/test/page', '?force-test=test-1:control');
+			mockGetParticipationFromQueryString.mockReturnValue({
+				'test-1': 'control',
+			});
+
+			const result = await getPageParticipations(config, {
+				variant: () => fallback,
+				participationKey: 'FALLBACK_TEST',
+			});
+
+			expect(result.variant).toEqual(fallback);
+			expect(mockSetSessionParticipations).not.toHaveBeenCalled();
+		});
+	});
+
 	describe('Session storage validation and pruning (validate-and-prune logic)', () => {
 		it('prunes stale participations that do not match current test names', async () => {
 			const variant = createTestVariant('control', 'control-value');
