@@ -90,6 +90,7 @@ import { logException } from 'helpers/utilities/logger';
 import {
 	getSanitisedHtml,
 	parseCustomAmounts,
+	replaceMParticleTemplates,
 	roundToDecimalPlaces,
 } from 'helpers/utilities/utilities';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
@@ -295,6 +296,14 @@ export function OneTimeCheckoutComponent({
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
+	const heading = replaceMParticleTemplates(
+		oneTimeCheckoutSettings.heading,
+		userAttributes,
+	);
+	const subheading = replaceMParticleTemplates(
+		oneTimeCheckoutSettings.subheading,
+		userAttributes,
+	);
 
 	const preSelectedAmountParam = urlSearchParams.get('contribution');
 	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
@@ -819,7 +828,7 @@ export function OneTimeCheckoutComponent({
 							<h2 css={title}>
 								<span
 									dangerouslySetInnerHTML={{
-										__html: getSanitisedHtml(oneTimeCheckoutSettings.heading),
+										__html: getSanitisedHtml(heading),
 									}}
 								/>
 							</h2>
@@ -831,7 +840,7 @@ export function OneTimeCheckoutComponent({
 						<p css={standFirst}>
 							<span
 								dangerouslySetInnerHTML={{
-									__html: getSanitisedHtml(oneTimeCheckoutSettings.subheading),
+									__html: getSanitisedHtml(subheading),
 								}}
 							/>
 						</p>
