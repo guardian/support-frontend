@@ -129,9 +129,7 @@ export async function getPageParticipations<Variant>(
 	const hasRequiredMParticleTemplateAttributes = async (
 		variant: Variant,
 	): Promise<boolean> => {
-		const templateAttributes = Object.values(
-			variant as Record<string, unknown>,
-		)
+		const templateAttributes = Object.values(variant as Record<string, unknown>)
 			.filter((value): value is string => typeof value === 'string')
 			.flatMap((copy) =>
 				Array.from(copy.matchAll(/%%mParticle_([a-zA-Z0-9_]+)%%/g)),
@@ -200,10 +198,7 @@ export async function getPageParticipations<Variant>(
 	);
 	if (previewParticipations) {
 		const variant = getVariant(previewParticipations, tests, true);
-		if (
-			!variant ||
-			!(await hasRequiredMParticleTemplateAttributes(variant))
-		) {
+		if (!variant || !(await hasRequiredMParticleTemplateAttributes(variant))) {
 			return makeFallbackResult();
 		}
 		setSessionParticipations(previewParticipations, sessionStorageKey);
