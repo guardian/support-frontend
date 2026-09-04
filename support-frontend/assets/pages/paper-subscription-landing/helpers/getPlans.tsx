@@ -264,11 +264,6 @@ export const getPlans = (
 				productOption,
 			);
 			const showLabel = productOption === 'SixdayPlus';
-			const productLabel = getProductLabel(productOption);
-			const savingsText =
-				productOption !== 'Sunday'
-					? getSavingsText(nonDiscountedPrice, promotion)
-					: null;
 
 			return {
 				title: getTitle(productOption),
@@ -283,9 +278,9 @@ export const getPlans = (
 				),
 				planData: getPlanData(productOption, fulfilmentOption),
 				offerCopy: getOfferText(nonDiscountedPrice, promotion, promotionIndex),
-				savingsText,
+				savingsText: getSavingsText(nonDiscountedPrice, promotion),
 				showLabel,
-				productLabel,
+				productLabel: getProductLabel(productOption),
 				promotion,
 				unavailableOutsideLondon: getUnavailableOutsideLondon(
 					fulfilmentOption,
