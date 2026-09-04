@@ -56,11 +56,11 @@ import type {
 	PaymentResult,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import {
+	getStripePaymentMethod,
 	postOneOffPayPalCreatePaymentRequest,
 	processStripePaymentIntentRequest,
 	processStripePaymentIntentRequestForPaypal,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
-import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod as LegacyPaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	isPaymentMethod,
@@ -641,29 +641,22 @@ export function OneTimeCheckoutComponent({
 						);
 					}
 				} else {
-					const getStripePaymentMethod = (): StripePaymentMethod => {
-						if (paymentMethod === 'StripeExpressCheckoutElement') {
-							if (stripeExpressCheckoutPaymentType === 'apple_pay') {
-								return 'StripeApplePay';
-							} else {
-								return 'StripePaymentRequestButton';
-							}
-						}
-						if (
-							paymentMethodResult.paymentMethod.type.toLowerCase() === 'paypal'
-						) {
-							if (paymentMethodResult.paymentMethod.paypal === undefined) {
-								logException(
-									'Stripe paymentMethod type is paypal but no paypal field exists',
-								);
-							}
-							return 'StripePaypal';
-						}
-						return 'StripeCheckout';
-					};
+					const paymentMethodType =
+						paymentMethodResult.paymentMethod.type.toLowerCase();
+					if (
+						paymentMethod === 'StripeExpressCheckoutElement' &&
+						(stripeExpressCheckoutPaymentType === 'apple_pay' ||
+							stripeExpressCheckoutPaymentType === 'google_pay') &&
+						paymentMethodType !== 'card'
+					) {
+						logException(
+							`Stripe Express Checkout ${stripeExpressCheckoutPaymentType} produced a ${paymentMethodType} PaymentMethod`,
+						);
+					}
 
-					const stripePaymentMethod: StripePaymentMethod =
-						getStripePaymentMethod();
+					const stripePaymentMethod = getStripePaymentMethod(
+						paymentMethodResult.paymentMethod,
+					);
 
 					const stripeData: CreateStripePaymentIntentRequest = {
 						paymentData: {
