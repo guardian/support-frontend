@@ -1055,7 +1055,8 @@ export function OneTimeCheckoutComponent({
 												wallets: {
 													link: 'never',
 												},
-												paymentMethodOrder: ['card', 'paypal'],
+												// paymentMethodOrder: ['card', 'paypal'],
+												paymentMethodOrder: ['paypal', 'card'],
 											}}
 											onFocus={() => {
 												setPaymentMethod(Stripe);
