@@ -556,6 +556,9 @@ export function OneTimeCheckoutComponent({
 				stripe &&
 				elements
 			) {
+				console.log(
+					'calling createPaymentMethod for StripeExpressCheckoutElement',
+				);
 				paymentMethodResult = await stripe.createPaymentMethod({
 					elements,
 				});
@@ -566,6 +569,7 @@ export function OneTimeCheckoutComponent({
 				cardElement &&
 				recaptchaToken
 			) {
+				console.log('calling createPaymentMethod for Stripe + cardElement');
 				paymentMethodResult = await stripe.createPaymentMethod({
 					type: 'card',
 					card: cardElement,
@@ -584,6 +588,7 @@ export function OneTimeCheckoutComponent({
 				recaptchaToken &&
 				elements
 			) {
+				console.log('calling createPaymentMethod for Stripe + paymentElement');
 				await elements.submit();
 				paymentMethodResult = await stripe.createPaymentMethod({
 					elements,
