@@ -949,6 +949,7 @@ export function OneTimeCheckoutComponent({
 											applePay: 'auto',
 											googlePay: 'auto',
 											link: 'never',
+											paypal: 'auto',
 										},
 									}}
 								/>
@@ -1060,8 +1061,7 @@ export function OneTimeCheckoutComponent({
 												wallets: {
 													link: 'never',
 												},
-												// paymentMethodOrder: ['card', 'paypal'],
-												paymentMethodOrder: ['paypal', 'card'],
+												paymentMethodOrder: ['card', 'paypal'],
 											}}
 											onFocus={() => {
 												setPaymentMethod(Stripe);
