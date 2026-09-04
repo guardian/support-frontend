@@ -37,6 +37,9 @@ GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/checkout            controllers.A
 GET  /one-time-checkout                                            controllers.Application.geoRedirectToPath(path = "one-time-checkout")
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/one-time-checkout   controllers.Application.productCheckoutRouter(countryGroupId: String)
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/thank-you           controllers.Application.productCheckoutRouter(countryGroupId: String)
+GET  /invitation/accept/:invitationCode                                      controllers.Application.geoRedirectInvitationAccept(invitationCode: String)
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/invitation/accept/:code  controllers.Application.invitationPageRouter(countryGroupId: String, code: String)
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/invitation/reject/:code  controllers.Application.invitationPageRouter(countryGroupId: String, code: String)
 
 GET  /$countryGroupId<(uk|eu)>/guardian-ad-lite                         controllers.Application.productCheckoutRouter(countryGroupId: String)
 GET /guardian-ad-lite                                                controllers.Application.geoRedirectToPath(path = "guardian-ad-lite")
@@ -66,6 +69,11 @@ POST  /stripe/create-setup-intent/prb                              controllers.S
 POST /identity/signin-url                                          controllers.IdentityController.createSignInURL()
 GET  /identity/newsletters                                         controllers.IdentityController.getNewslettersSubscriptions()
 PATCH /identity/newsletters                                        controllers.IdentityController.updateNewsletterSubscription()
+
+# ------ Multiple accounts ------ #
+GET  /invitation/:invitationCode                                     controllers.InvitationController.getInvitation(invitationCode: String)
+DELETE /invitation/:invitationCode                                   controllers.InvitationController.deleteInvitation(invitationCode: String)
+POST /invitation/:invitationCode/accept                              controllers.InvitationController.acceptInvitation(invitationCode: String)
 
 # ----- Subscriptions ----- #
 

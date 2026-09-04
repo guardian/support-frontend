@@ -300,6 +300,12 @@ class Application(
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
+  def geoRedirectInvitationAccept(invitationCode: String): Action[AnyContent] = GeoTargetedCachedAction() {
+    implicit request =>
+      val url = getGeoPath(request, "", s"invitation/accept/$invitationCode")
+      RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
+  }
+
   private def getGeoPath(request: Request[AnyContent], campaignCode: String, product: String): String = {
     List(getGeoRedirectUrl(request.geoData.countryGroup, product), campaignCode)
       .filter(_.nonEmpty)
@@ -675,6 +681,8 @@ class Application(
       ),
     ).withSettingsSurrogateKey
   }
+
+  def invitationPageRouter(countryGroupId: String, code: String) = productCheckoutRouter(countryGroupId)
 
   def eventsRouter(countryGroupId: String, eventId: String) = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()

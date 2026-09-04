@@ -7,10 +7,14 @@ import {
 	SvgTickRound,
 } from '@guardian/source/react-components';
 import { ToggleSwitch } from '@guardian/source-development-kitchen/react-components';
-import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
 import { useEffect } from 'react';
+import { OnboardingSteps } from 'components/onboarding/onboardingSteps';
+import type {
+	CurrentUserState,
+	HandleStepNavigationFunction,
+} from 'components/onboarding/onboardingTypes';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
@@ -26,12 +30,7 @@ import {
 } from 'helpers/productPrice/billingPeriods';
 import type { CsrfState } from 'helpers/types/csrf';
 import { getThankYouOrder } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
-import type {
-	CurrentUserState,
-	HandleStepNavigationFunction,
-	OnboardingProps,
-} from 'pages/[countryGroupId]/components/onboardingComponent';
-import { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
+import type { OnboardingProps } from 'pages/[countryGroupId]/components/onboardingComponent';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import ContentBox from '../contentBox';
@@ -75,8 +74,10 @@ const paymentMethodContainer = css`
 	gap: ${space[1]}px;
 `;
 
+type OnboardingSummaryUserState = CurrentUserState | 'inviteeUserRegistered';
+
 const onboardingSummaryCopyMapping: Record<
-	CurrentUserState,
+	OnboardingSummaryUserState,
 	{ title: string; description: string }
 > = {
 	existingUserSignedIn: {
@@ -93,6 +94,11 @@ const onboardingSummaryCopyMapping: Record<
 		description:
 			'Your account is set up and ready to go. Now you can explore your exclusive benefits.',
 	},
+	inviteeUserRegistered: {
+		title: 'You’re all set!',
+		description:
+			'You can now enjoy all the benefits and access of Digital plus.',
+	},
 };
 
 export function OnboardingSummarySuccessfulSignIn({
@@ -102,7 +108,7 @@ export function OnboardingSummarySuccessfulSignIn({
 	csrf,
 }: {
 	handleStepNavigation: HandleStepNavigationFunction;
-	userState: CurrentUserState;
+	userState: OnboardingSummaryUserState;
 	userNewslettersSubscriptions: NewsletterSubscription[] | null;
 	csrf: CsrfState;
 }) {
@@ -116,21 +122,24 @@ export function OnboardingSummarySuccessfulSignIn({
 		setIsUpdatingNewsletterSubscription,
 	] = useState(false);
 
-	useEffect(() => {
-		if (userNewslettersSubscriptions) {
-			// Find the Saturday Edition newsletter using the type-safe helper
-			const saturdayEditionNewsletterSubscription =
-				getNewsletterSubscriptionById(
-					userNewslettersSubscriptions,
-					NewslettersIds.SaturdayEdition,
-				);
+	const isInvitee = userState === 'inviteeUserRegistered';
 
-			if (!saturdayEditionNewsletterSubscription) {
-				// If not found, default to subscribed (will be auto-subscribed)
-				void handleNewsletterToggle(true);
-			}
+	useEffect(() => {
+		if (isInvitee || !userNewslettersSubscriptions) {
+			return;
 		}
-	}, [userNewslettersSubscriptions]);
+
+		// Find the Saturday Edition newsletter using the type-safe helper
+		const saturdayEditionNewsletterSubscription = getNewsletterSubscriptionById(
+			userNewslettersSubscriptions,
+			NewslettersIds.SaturdayEdition,
+		);
+
+		if (!saturdayEditionNewsletterSubscription) {
+			// If not found, default to subscribed (will be auto-subscribed)
+			void handleNewsletterToggle(true);
+		}
+	}, [userNewslettersSubscriptions, isInvitee]);
 
 	const handleNewsletterToggle = async (newSubscribeState?: boolean) => {
 		// Prevent multiple simultaneous requests
@@ -187,19 +196,21 @@ export function OnboardingSummarySuccessfulSignIn({
 				</Button>
 			</Stack>
 
-			<div css={newsletterContainer}>
-				<Stack space={1}>
-					<h2 css={boldDescriptions}>Saturday Edition newsletter</h2>
-					<p css={descriptions}>
-						An exclusive email highlighting the week’s best Guardian journalism
-						from our editor-in-chief, Katharine Viner
-					</p>
-				</Stack>
-				<ToggleSwitch
-					checked={switchNewsletterEnabled}
-					onClick={() => void handleNewsletterToggle()}
-				/>
-			</div>
+			{!isInvitee && (
+				<div css={newsletterContainer}>
+					<Stack space={1}>
+						<h2 css={boldDescriptions}>Saturday Edition newsletter</h2>
+						<p css={descriptions}>
+							An exclusive email highlighting the week’s best Guardian
+							journalism from our editor-in-chief, Katharine Viner
+						</p>
+					</Stack>
+					<ToggleSwitch
+						checked={switchNewsletterEnabled}
+						onClick={() => void handleNewsletterToggle()}
+					/>
+				</div>
+			)}
 		</Stack>
 	);
 }
@@ -219,13 +230,10 @@ function OnboardingSummary({
 
 	const { enableCanadaTaxExclusion } = useFeatureSwitches();
 
-	const { currencyKey, countryGroupId } =
+	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 
-	const amountPaidToday = simpleFormatAmount(
-		getCurrencyByCode(currencyKey),
-		payment.finalAmount,
-	);
+	const amountPaidToday = simpleFormatAmount(currency, payment.finalAmount);
 
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
