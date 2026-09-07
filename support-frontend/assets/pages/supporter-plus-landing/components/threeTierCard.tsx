@@ -234,11 +234,6 @@ export function ThreeTierCard({
 	const { titlePillColor, cardPillColor, cardBackColor, benefitIconColor } =
 		cardTheme ?? defaultCardTheme;
 
-	// if pill is
-	// 	visible without subdued styling or
-	// 	user selected from banner/epic with no default product or
-	// 	default selected product then
-	// use highlight colors if available
 	const hasPillCopy = !!pillCopy && !isSubdued;
 	const userSelectedNoPillCopy = isUserSelected && !hasPillCopy;
 	const isHighlightedCard =
