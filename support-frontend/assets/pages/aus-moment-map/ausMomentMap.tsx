@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import { Global } from '@emotion/react';
-import { init } from '@guardian/ophan-tracker-js/support';
+import { init } from '@guardian/ophan-tracker-js';
 import { motion } from 'framer-motion';
 import * as React from 'react';
 import { renderPage } from 'helpers/rendering/render';
@@ -50,7 +50,9 @@ function AusMomentMap(): JSX.Element {
 	const testimonials = useTestimonials();
 	const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
 
-	init();
+	React.useEffect(() => {
+		init('support');
+	}, []);
 
 	React.useEffect(() => {
 		if (windowWidthIsLessThan('desktop')) {

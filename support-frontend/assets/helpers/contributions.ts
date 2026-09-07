@@ -66,6 +66,8 @@ const defaultConfig: Config = {
 	},
 };
 
+// Note: ONE_OFF max amounts are also validated on the server, in Currency.scala, and
+// should be kept in sync.
 const config: Record<CountryGroupId, Config> = {
 	GBPCountries: defaultConfig,
 	AUDCountries: {
