@@ -3,7 +3,8 @@
 	"compilerOptions": {
 		"noEmit": true,
 		"lib": ["es2015", "dom"],
-		"strictNullChecks": true
+		"strictNullChecks": true,
+		"skipLibCheck": true
 	},
 	"exclude": ["node_modules"]
 }
