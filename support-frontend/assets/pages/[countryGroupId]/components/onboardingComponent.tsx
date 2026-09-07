@@ -5,6 +5,7 @@ import type { SupportRegionId } from '@modules/internationalisation/countryGroup
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { useSearchParams } from 'react-router';
 import ContentBox from 'components/onboarding/contentBox';
+import { getOnboardingProductCopy } from 'components/onboarding/onboardingProductCopy';
 import { OnboardingSteps } from 'components/onboarding/onboardingSteps';
 import type {
 	CurrentUserState,
@@ -31,6 +32,7 @@ import * as cookie from 'helpers/storage/cookie';
 import type { CsrfState } from 'helpers/types/csrf';
 import { getUser } from 'helpers/user/user';
 import type { UserType } from 'helpers/user/userType';
+import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import OnboardingLayout from '../../../components/onboarding/layout';
 import { getThankYouOrder } from '../checkout/helpers/sessionStorage';
 
@@ -77,6 +79,13 @@ function OnboardingComponent({
 			<div>Unable to read your order {JSON.stringify(sessionStorageOrder)}</div>
 		);
 	}
+
+	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
+	const { title: productTitle } = getOnboardingProductCopy(
+		productKey,
+		landingPageSettings,
+		countryGroupId,
+	);
 
 	const scrollToTopRef = useRef<HTMLDivElement>(null);
 
@@ -279,11 +288,7 @@ function OnboardingComponent({
 								userNewslettersSubscriptions={userNewslettersSubscriptions}
 								csrf={csrf}
 								productKey={productKey}
-								productTitle={
-									productKey
-										? landingPageSettings.products[productKey]?.title
-										: undefined
-								}
+								productTitle={productTitle}
 							/>
 						)}
 					</ContentBox>
@@ -323,6 +328,7 @@ function OnboardingComponent({
 				<OnboardingCompleted
 					productKey={productKey}
 					landingPageSettings={landingPageSettings}
+					countryGroupId={countryGroupId}
 				/>
 			)}
 		</OnboardingLayout>
