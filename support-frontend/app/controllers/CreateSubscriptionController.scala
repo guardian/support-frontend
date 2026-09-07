@@ -333,7 +333,7 @@ class CreateSubscriptionController(
 
     val inOnboardingExperiment =
       settings.switches.featureSwitches.enableThankYouOnboarding.exists(_.isOn) &&
-        settings.productsWithThankYouOnboarding.contains(
+        AllSettings.thankYouOnboardingProductClassNames.contains(
           request.body.product.getClass.getSimpleName,
         )
 

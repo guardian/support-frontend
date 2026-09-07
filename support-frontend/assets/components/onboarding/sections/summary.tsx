@@ -29,7 +29,10 @@ import {
 } from 'helpers/productPrice/billingPeriods';
 import type { CsrfState } from 'helpers/types/csrf';
 import { getThankYouOrder } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
-import type { OnboardingProps } from 'pages/[countryGroupId]/components/onboardingComponent';
+import type {
+	OnboardingProductKey,
+	OnboardingProps,
+} from 'pages/[countryGroupId]/components/onboardingComponent';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import ContentBox from '../contentBox';
@@ -105,11 +108,15 @@ export function OnboardingSummarySuccessfulSignIn({
 	userState,
 	userNewslettersSubscriptions,
 	csrf,
+	productKey,
+	productTitle,
 }: {
 	handleStepNavigation: HandleStepNavigationFunction;
 	userState: OnboardingSummaryUserState;
 	userNewslettersSubscriptions: NewsletterSubscription[] | null;
 	csrf: CsrfState;
+	productKey?: OnboardingProductKey;
+	productTitle?: string;
 }) {
 	/**
 	 * Consider the Saturday Edition newsletter subscription as subscribed.
@@ -170,7 +177,11 @@ export function OnboardingSummarySuccessfulSignIn({
 		<Stack space={2}>
 			<h1 css={headings}>{onboardingSummaryCopyMapping[userState].title}</h1>
 			<p css={descriptions}>
-				{onboardingSummaryCopyMapping[userState].description}
+				{userState === 'existingUserSignedIn'
+					? `Find out what's included in your ${
+							productTitle ?? 'All-access digital'
+					  } subscription.`
+					: onboardingSummaryCopyMapping[userState].description}
 			</p>
 
 			<Stack
@@ -182,7 +193,13 @@ export function OnboardingSummarySuccessfulSignIn({
 				<Button
 					priority="primary"
 					cssOverrides={buttonOverrides}
-					onClick={() => handleStepNavigation(OnboardingSteps.GuardianApp)}
+					onClick={() =>
+						handleStepNavigation(
+							productKey === 'DigitalSubscription'
+								? OnboardingSteps.DigitalPlus
+								: OnboardingSteps.GuardianApp,
+						)
+					}
 				>
 					Explore your benefits
 				</Button>

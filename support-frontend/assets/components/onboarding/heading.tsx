@@ -178,6 +178,20 @@ function OnboardingHeading({
 					aspect-ratio: 3 / 2;
 				`,
 			},
+			[OnboardingSteps.DigitalPlus]: {
+				// TODO: replace with final asset when available
+				gridId: 'onboardingFeastAppHero',
+				altText: 'Onboarding digital plus hero',
+				aspectRatio: css`
+					aspect-ratio: 3 / 2;
+				`,
+			},
+			[OnboardingSteps.ShareAccess]: {
+				aspectRatio: css`
+					aspect-ratio: 3 / 2;
+				`,
+				contentInHeader: true,
+			},
 			[OnboardingSteps.Completed]: {
 				aspectRatio: css`
 					aspect-ratio: 3 / 2;

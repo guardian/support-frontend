@@ -1,4 +1,5 @@
 import type React from 'react';
+import { OnboardingInviteeSteps } from 'components/onboarding/onboardingSteps';
 import { OnboardingDigitalPlusDiscovery } from 'components/onboarding/sections/digitalPlusDiscovery';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
@@ -21,5 +22,7 @@ export default {
 export const Default = {
 	args: {
 		handleStepNavigation: () => {},
+		nextStep: OnboardingInviteeSteps.Completed,
+		backStep: OnboardingInviteeSteps.GuardianApp,
 	},
 };

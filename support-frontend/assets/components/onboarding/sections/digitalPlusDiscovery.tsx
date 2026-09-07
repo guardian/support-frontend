@@ -9,11 +9,11 @@ import {
 } from '@guardian/source/foundations';
 import { Button, Stack } from '@guardian/source/react-components';
 import GridImage from 'components/gridImage/gridImage';
-import {
-	OnboardingInviteeSteps,
-	OnboardingSteps,
-} from 'components/onboarding/onboardingSteps';
-import type { HandleStepNavigationFunction } from 'components/onboarding/onboardingTypes';
+import { OnboardingSteps } from 'components/onboarding/onboardingSteps';
+import type {
+	HandleStepNavigationFunction,
+	OnboardingFlowStep,
+} from 'components/onboarding/onboardingTypes';
 import { getBaseDomain } from 'helpers/urls/url';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import {
@@ -81,10 +81,14 @@ const archivesLink = css`
 
 interface OnboardingDigitalPlusDiscoveryProps {
 	handleStepNavigation: HandleStepNavigationFunction;
+	nextStep: OnboardingFlowStep;
+	backStep: OnboardingFlowStep;
 }
 
 export function OnboardingDigitalPlusDiscovery({
 	handleStepNavigation,
+	nextStep,
+	backStep,
 }: OnboardingDigitalPlusDiscoveryProps) {
 	const { windowWidthIsGreaterThan } = useWindowWidth();
 	const archivesHeroGridId = windowWidthIsGreaterThan('tablet')
@@ -199,18 +203,14 @@ export function OnboardingDigitalPlusDiscovery({
 						<Button
 							priority="primary"
 							cssOverrides={buttonOverrides}
-							onClick={() =>
-								handleStepNavigation(OnboardingInviteeSteps.Completed)
-							}
+							onClick={() => handleStepNavigation(nextStep)}
 						>
 							Continue
 						</Button>
 						<Button
 							priority="subdued"
 							cssOverrides={buttonOverrides}
-							onClick={() =>
-								handleStepNavigation(OnboardingInviteeSteps.GuardianApp)
-							}
+							onClick={() => handleStepNavigation(backStep)}
 						>
 							Back
 						</Button>

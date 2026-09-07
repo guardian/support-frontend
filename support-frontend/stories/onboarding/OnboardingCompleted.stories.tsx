@@ -25,3 +25,10 @@ export const SupporterPlus = {
 		landingPageSettings: fallBackLandingPageSelection,
 	},
 };
+
+export const DigitalPlus = {
+	args: {
+		productKey: 'DigitalSubscription',
+		landingPageSettings: fallBackLandingPageSelection,
+	},
+};
