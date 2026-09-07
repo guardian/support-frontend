@@ -252,7 +252,7 @@ export function ThreeTierCard({
 		: palette.brand[500];
 
 	console.log(
-		`*** TierCard${cardTier} - hasDefaultProduct ${hasDefaultProduct} - isDefaultSelectedProduct ${isDefaultSelectedProduct} - isUserSelected ${isUserSelected}`,
+		`*** TierCard${cardTier} - hasDefaultProduct ${hasDefaultProduct} - isDefaultProductSelected ${isDefaultSelectedProduct} - isUserSelected ${isUserSelected}`,
 	);
 	return (
 		<section
