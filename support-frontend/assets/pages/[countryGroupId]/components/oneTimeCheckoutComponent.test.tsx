@@ -62,8 +62,8 @@ describe('replaceMParticleTemplates', () => {
 	it('substitutes available mParticle attribute values', () => {
 		expect(
 			replaceMParticleTemplates(
-				'Your last contribution was %%mParticle_last_contribution_amount%%.',
-				{ last_contribution_amount: 50 },
+				'Your last contribution was %%mParticle_last_single_contribution_amount%%.',
+				{ last_single_contribution_amount: 50 },
 			),
 		).toBe('Your last contribution was 50.');
 	});

@@ -795,7 +795,9 @@ describe('getPageParticipations', () => {
 		it('returns the variant when the user has the required attribute', async () => {
 			const variant: AmountsVariant = {
 				name: 'control',
-				amounts: { mParticleAmountAttribute: 'last_contribution_amount' },
+				amounts: {
+					mParticleAmountAttribute: 'last_single_contribution_amount',
+				},
 			};
 			const test: PageTest<AmountsVariant> = {
 				name: 'test-1',
@@ -808,21 +810,23 @@ describe('getPageParticipations', () => {
 			mockCountryGroupMatches.mockReturnValue(true);
 			mockFetchAudienceData.mockResolvedValue({
 				audienceMemberships: [],
-				userAttributes: { last_contribution_amount: '50' },
+				userAttributes: { last_single_contribution_amount: '50' },
 			});
 
 			const result = await getPageParticipations(config);
 
 			expect(result.variant).toEqual(variant);
 			expect(result.userAttributes).toEqual({
-				last_contribution_amount: '50',
+				last_single_contribution_amount: '50',
 			});
 		});
 
 		it('returns undefined variant when the user lacks the required attribute', async () => {
 			const variant: AmountsVariant = {
 				name: 'control',
-				amounts: { mParticleAmountAttribute: 'last_contribution_amount' },
+				amounts: {
+					mParticleAmountAttribute: 'last_single_contribution_amount',
+				},
 			};
 			const test: PageTest<AmountsVariant> = {
 				name: 'test-1',
@@ -865,7 +869,7 @@ describe('getPageParticipations', () => {
 	});
 
 	describe('mParticle template attribute gating', () => {
-		const template = '%%mParticle_last_contribution_amount%%';
+		const template = '%%mParticle_last_single_contribution_amount%%';
 
 		it('returns a template variant when the required attribute is available', async () => {
 			const variant = createTestVariant('control', template);
@@ -876,14 +880,14 @@ describe('getPageParticipations', () => {
 			mockCountryGroupMatches.mockReturnValue(true);
 			mockFetchAudienceData.mockResolvedValue({
 				audienceMemberships: [],
-				userAttributes: { last_contribution_amount: 50 },
+				userAttributes: { last_single_contribution_amount: 50 },
 			});
 
 			const result = await getPageParticipations(config);
 
 			expect(result.variant).toEqual(variant);
 			expect(result.userAttributes).toEqual({
-				last_contribution_amount: 50,
+				last_single_contribution_amount: 50,
 			});
 		});
 
