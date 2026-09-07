@@ -299,10 +299,12 @@ export function OneTimeCheckoutComponent({
 	const heading = replaceMParticleTemplates(
 		oneTimeCheckoutSettings.heading,
 		userAttributes,
+		currency,
 	);
 	const subheading = replaceMParticleTemplates(
 		oneTimeCheckoutSettings.subheading,
 		userAttributes,
+		currency,
 	);
 
 	const preSelectedAmountParam = urlSearchParams.get('contribution');
