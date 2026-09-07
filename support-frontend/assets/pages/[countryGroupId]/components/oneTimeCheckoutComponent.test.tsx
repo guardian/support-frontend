@@ -1,3 +1,4 @@
+import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import type { SelectedAmountsVariant } from '../../../helpers/contributions';
 import type * as Utilities from '../../../helpers/utilities/utilities';
 import {
@@ -59,13 +60,17 @@ const mockSelectedAmountsVariant = {
 } satisfies SelectedAmountsVariant;
 
 describe('replaceMParticleTemplates', () => {
-	it('substitutes available mParticle attribute values', () => {
+	it.each([
+		[50, '£50'],
+		['50.5', '£50.50'],
+	])('substitutes an available mParticle amount with currency', (value, expected) => {
 		expect(
 			replaceMParticleTemplates(
 				'Your last contribution was %%mParticle_last_single_contribution_amount%%.',
-				{ last_single_contribution_amount: 50 },
+				{ last_single_contribution_amount: value },
+				getCurrencyByCode('GBP'),
 			),
-		).toBe('Your last contribution was 50.');
+		).toBe(`Your last contribution was ${expected}.`);
 	});
 });
 

@@ -82,18 +82,26 @@ function replaceDatePlaceholder(copy: string, deadline?: string): string {
 	return copy.replaceAll(DEADLINE_PLACEHOLDER_TEMPLATE, replacement);
 }
 
-const mParticleTemplate = /%%mParticle_([a-zA-Z0-9_]+)%%/g;
+const mParticleAmountTemplate = /%%mParticle_([a-zA-Z0-9_]+)%%/g;
 
 function replaceMParticleTemplates(
 	copy: string,
 	userAttributes: Record<string, unknown>,
+	currency: Currency,
 ): string {
 	return copy.replaceAll(
-		mParticleTemplate,
+		mParticleAmountTemplate,
 		(template: string, attribute: string) => {
 			const value = userAttributes[attribute];
-			return typeof value === 'string' || typeof value === 'number'
-				? String(value)
+			const amount =
+				typeof value === 'number'
+					? value
+					: typeof value === 'string' && value.trim() !== ''
+					? Number(value)
+					: NaN;
+
+			return Number.isFinite(amount)
+				? simpleFormatAmount(currency, amount)
 				: template;
 		},
 	);
