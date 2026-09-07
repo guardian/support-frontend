@@ -250,6 +250,8 @@ function OnboardingInviteeComponent({
 				currentStep === OnboardingInviteeSteps.DigitalPlus && (
 					<OnboardingDigitalPlusDiscovery
 						handleStepNavigation={handleStepNavigation}
+						nextStep={OnboardingInviteeSteps.Completed}
+						backStep={OnboardingInviteeSteps.GuardianApp}
 					/>
 				)}
 			{invitationAccepted &&

@@ -76,8 +76,9 @@ export function OnboardingCompleted({
 							Guardian’s trusted journalism stands as a powerful counterforce.
 						</p>
 						<p css={descriptions}>
-							Your support makes that possible, and now that your All-access
-							digital subscription is active, you have access to:
+							Your support makes that possible, and now that your{' '}
+							{productSettings?.title ?? 'All-access digital'} subscription is
+							active, you have access to:
 						</p>
 					</Stack>
 					<ul>

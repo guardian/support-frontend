@@ -13,6 +13,8 @@ import type {
 } from 'components/onboarding/onboardingTypes';
 import { OnboardingAppsDiscovery } from 'components/onboarding/sections/appsDiscovery';
 import { OnboardingCompleted } from 'components/onboarding/sections/completed';
+import { OnboardingDigitalPlusDiscovery } from 'components/onboarding/sections/digitalPlusDiscovery';
+import { OnboardingShareAccess } from 'components/onboarding/sections/shareAccess';
 import OnboardingSummary, {
 	OnboardingSummarySuccessfulSignIn,
 } from 'components/onboarding/sections/summary';
@@ -37,7 +39,10 @@ const identityFrameStyles = css`
 	border-radius: ${space[2]}px;
 `;
 
-export type OnboardingProductKey = Extract<ActiveProductKey, 'SupporterPlus'>;
+export type OnboardingProductKey = Extract<
+	ActiveProductKey,
+	'SupporterPlus' | 'DigitalSubscription'
+>;
 
 export interface OnboardingProps {
 	supportRegionId: SupportRegionId;
@@ -273,6 +278,12 @@ function OnboardingComponent({
 								userState={userState}
 								userNewslettersSubscriptions={userNewslettersSubscriptions}
 								csrf={csrf}
+								productKey={productKey}
+								productTitle={
+									productKey
+										? landingPageSettings.products[productKey]?.title
+										: undefined
+								}
 							/>
 						)}
 					</ContentBox>
@@ -297,6 +308,16 @@ function OnboardingComponent({
 					handleStepNavigation={handleStepNavigation}
 					supporterRegion={supportRegionId}
 				/>
+			)}
+			{currentStep === OnboardingSteps.DigitalPlus && (
+				<OnboardingDigitalPlusDiscovery
+					handleStepNavigation={handleStepNavigation}
+					nextStep={OnboardingSteps.ShareAccess}
+					backStep={OnboardingSteps.Summary}
+				/>
+			)}
+			{currentStep === OnboardingSteps.ShareAccess && (
+				<OnboardingShareAccess handleStepNavigation={handleStepNavigation} />
 			)}
 			{currentStep === OnboardingSteps.Completed && (
 				<OnboardingCompleted

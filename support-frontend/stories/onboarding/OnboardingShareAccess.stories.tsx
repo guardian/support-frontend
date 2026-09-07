@@ -1,11 +1,10 @@
 import type React from 'react';
-import { OnboardingInviteeSteps } from 'components/onboarding/onboardingSteps';
-import { OnboardingDigitalPlusDiscovery } from 'components/onboarding/sections/digitalPlusDiscovery';
+import { OnboardingShareAccess } from 'components/onboarding/sections/shareAccess';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
 export default {
-	title: 'Onboarding/DigitalPlusDiscovery',
-	component: OnboardingDigitalPlusDiscovery,
+	title: 'Onboarding/OnboardingShareAccess',
+	component: OnboardingShareAccess,
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<div style={{ maxWidth: '600px', margin: '40px auto' }}>
@@ -22,7 +21,5 @@ export default {
 export const Default = {
 	args: {
 		handleStepNavigation: () => {},
-		nextStep: OnboardingInviteeSteps.Completed,
-		backStep: OnboardingInviteeSteps.GuardianApp,
 	},
 };
