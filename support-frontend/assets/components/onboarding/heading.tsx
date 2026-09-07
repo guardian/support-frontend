@@ -18,6 +18,7 @@ import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageS
 import { getThankYouOrder } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
 import type { OnboardingProductKey } from 'pages/[countryGroupId]/components/onboardingComponent';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
+import { getOnboardingProductCopy } from './onboardingProductCopy';
 import {
 	OnboardingDeclineSteps,
 	OnboardingInviteeSteps,
@@ -134,24 +135,22 @@ function OnboardingHeading({
 	productKey,
 }: OnboardingHeadingProps) {
 	const order = getThankYouOrder();
-	const productSettings =
-		productKey && landingPageSettings?.products[productKey];
+	const { title: productTitle } = getOnboardingProductCopy(
+		productKey,
+		landingPageSettings,
+	);
+	const displayProductTitle = productTitle.replace(/-/g, '\u2011');
 
 	const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
 
 	const supporterStepContentMap = useMemo<
 		Record<OnboardingSteps, StepContent>
 	>(() => {
-		const allAccessTitle =
-			productSettings?.title === 'All-access digital'
-				? `All\u2011access digital`
-				: productSettings?.title;
-
 		return {
 			[OnboardingSteps.Summary]: {
 				heading: `Thank you ${
 					order?.firstName && order.firstName + ' '
-				}for subscribing to ${allAccessTitle}`,
+				}for subscribing to ${displayProductTitle}`,
 				subtext:
 					"You've just joined over 1.3m others who support independent journalism.",
 				gridId: 'onboardingSummaryHero',
@@ -199,7 +198,7 @@ function OnboardingHeading({
 				contentInHeader: true,
 			},
 		};
-	}, [order, windowWidthIsGreaterThan, productSettings?.title]);
+	}, [order, windowWidthIsGreaterThan, displayProductTitle]);
 
 	const inviteeStepContentMap = useMemo<
 		Record<OnboardingInviteeSteps, StepContent>
