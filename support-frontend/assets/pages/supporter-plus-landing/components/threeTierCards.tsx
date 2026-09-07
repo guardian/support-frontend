@@ -53,9 +53,9 @@ export function ThreeTierCards({
 	currencyId,
 	billingPeriod,
 	showWeeklyPrice,
-	hasDefaultProduct,
 }: ThreeTierCardsProps): JSX.Element {
 	const { enableRedCardTheme } = useFeatureSwitches();
+	const deepDiscount = enableRedCardTheme; // ToDo : rename enableRedCardTheme to Deep Discount
 	const shouldUseLargePriceMinHeight =
 		!!showWeeklyPrice ||
 		cardsContent.some((card) => !!card.promotion || !!card.billingPeriodsCopy);
@@ -91,7 +91,7 @@ export function ThreeTierCards({
 						billingPeriod={billingPeriod}
 						showWeeklyPrice={showWeeklyPrice}
 						useLargePriceMinHeight={shouldUseLargePriceMinHeight}
-						hasDefaultProduct={hasDefaultProduct}
+						deepDiscount={deepDiscount}
 					/>
 				);
 			})}

@@ -285,10 +285,6 @@ export function ThreeTierLanding({
 		? rawUrlSearchParamsProduct.toLowerCase()
 		: undefined;
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
-	const applyDefaultProductParam = urlSearchParams
-		.toString()
-		.toLowerCase()
-		.includes('default_product');
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const countryId = Country.detect();
@@ -377,10 +373,6 @@ export function ThreeTierLanding({
 	const defaultProductSelection =
 		settings.defaultProductSelection?.productType.toLowerCase();
 
-	// New Approach overriding with Default Product only avilable if PAramUrl supplied
-	const hasDefaultProduct = applyDefaultProductParam
-		? defaultProductSelection !== undefined
-		: undefined;
 	const getDefaultSelectedProduct = () => {
 		if (urlSearchParamsProduct) {
 			return urlSearchParamsProduct;
@@ -406,7 +398,7 @@ export function ThreeTierLanding({
 		isUserSelected:
 			// does product in searchParam matches contribution,
 			// does selected-price in searchParam match price
-			// is rrcp landing page default contribution product selected,
+			// is rrcp landing page contribution product selected,
 			urlSearchParamsProduct === 'contribution' ||
 			isCardUserSelected(tier1Pricing) ||
 			(!urlSearchParamsProduct && defaultSelectedProduct === 'contribution'),
@@ -706,7 +698,6 @@ export function ThreeTierLanding({
 						currencyId={currencyId}
 						billingPeriod={billingPeriod}
 						showWeeklyPrice={showWeeklyPrice}
-						hasDefaultProduct={hasDefaultProduct}
 					/>
 				</div>
 			</Container>

@@ -58,7 +58,7 @@ export type ThreeTierCardProps = {
 	billingPeriod: BillingPeriod;
 	showWeeklyPrice?: boolean;
 	useLargePriceMinHeight?: boolean;
-	hasDefaultProduct?: boolean;
+	deepDiscount?: boolean;
 };
 
 const container = (
@@ -185,7 +185,7 @@ export function ThreeTierCard({
 	billingPeriod,
 	showWeeklyPrice = false,
 	useLargePriceMinHeight = false,
-	hasDefaultProduct,
+	deepDiscount = false,
 }: ThreeTierCardProps): JSX.Element {
 	const {
 		title,
@@ -239,10 +239,10 @@ export function ThreeTierCard({
 	// 	user selected from banner/epic with no default product or
 	// 	default selected product then
 	// use highlight colors if available
+	const hasPillCopy = !!pillCopy && !isSubdued;
+	const userSelectedNoPillCopy = isUserSelected && !hasPillCopy;
 	const isHighlightedCard =
-		(!!pillCopy && !isSubdued) ||
-		(isUserSelected && !hasDefaultProduct) ||
-		isDefaultProductSelected;
+		hasPillCopy || userSelectedNoPillCopy || isDefaultProductSelected;
 
 	const cardBackColorSelection = isHighlightedCard
 		? cardBackColor
@@ -252,7 +252,7 @@ export function ThreeTierCard({
 		: palette.brand[500];
 
 	console.log(
-		`*** TierCard${cardTier} - hasDefaultProduct ${hasDefaultProduct} - isDefaultProductSelected ${isDefaultProductSelected} - isUserSelected ${isUserSelected}`,
+		`*** TierCard${cardTier} - deepDiscount ${deepDiscount} - isDefaultProductSelected ${isDefaultProductSelected} - isUserSelected ${isUserSelected}`,
 	);
 	return (
 		<section
@@ -263,7 +263,7 @@ export function ThreeTierCard({
 				cardBackColorSelection,
 			)}
 		>
-			{isUserSelected && !hasDefaultProduct && (
+			{isUserSelected && !deepDiscount && (
 				<ThreeTierCardPill
 					title={isDefaultProductSelected ? pillCopy ?? '' : 'Your selection'}
 					color={cardPillColor}
@@ -274,11 +274,11 @@ export function ThreeTierCard({
 				<ThreeTierCardPill title={pillCopy ?? ''} color={cardPillColor} />
 			)}
 			{!!pillCopy && !isUserSelected && (
-				// Pill cannot be subdued if the user has a default product
+				// Pill cannot be subdued if deep discount applied
 				<ThreeTierCardPill
 					title={pillCopy}
 					color={cardPillColor}
-					subdue={hasDefaultProduct ? false : isSubdued}
+					subdue={deepDiscount ? false : isSubdued}
 				/>
 			)}
 			<div css={titleContainer}>
