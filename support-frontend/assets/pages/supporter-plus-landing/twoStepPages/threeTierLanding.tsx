@@ -402,7 +402,7 @@ export function ThreeTierLanding({
 		product: 'Contribution',
 		price: tier1Pricing,
 		link: tier1checkoutUrl,
-		isDefaultSelectedProduct: defaultProductSelection === 'contribution',
+		isDefaultProductSelected: defaultProductSelection === 'contribution',
 		isUserSelected:
 			// does product in searchParam matches contribution,
 			// does selected-price in searchParam match price
@@ -471,7 +471,7 @@ export function ThreeTierLanding({
 		link: tier2CheckoutURL,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion: tier2Promotion,
-		isDefaultSelectedProduct: defaultProductSelection === 'supporterplus',
+		isDefaultProductSelected: defaultProductSelection === 'supporterplus',
 		isUserSelected:
 			// does product in searchParam match supporterplus,
 			// does selected-price in searchParam match price or discounted price
@@ -548,7 +548,7 @@ export function ThreeTierLanding({
 		price: tier3Pricing,
 		link: tier3CheckoutURL,
 		promotion: tier3Promotion,
-		isDefaultSelectedProduct:
+		isDefaultProductSelected:
 			defaultProductSelection === tier3Product.toLowerCase(),
 		isUserSelected:
 			// does product in searchParam match Tier3 product,

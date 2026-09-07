@@ -41,7 +41,7 @@ import { ThreeTierCardPill } from './threeTierCardPill';
 
 export type CardContent = LandingPageProductDescription & {
 	isUserSelected: boolean;
-	isDefaultSelectedProduct: boolean;
+	isDefaultProductSelected: boolean;
 	link: string;
 	price: number;
 	promotion?: Promotion;
@@ -192,7 +192,7 @@ export function ThreeTierCard({
 		titlePill,
 		benefits,
 		isUserSelected,
-		isDefaultSelectedProduct,
+		isDefaultProductSelected,
 		promotion,
 		price,
 		link,
@@ -242,7 +242,7 @@ export function ThreeTierCard({
 	const isHighlightedCard =
 		(!!pillCopy && !isSubdued) ||
 		(isUserSelected && !hasDefaultProduct) ||
-		isDefaultSelectedProduct;
+		isDefaultProductSelected;
 
 	const cardBackColorSelection = isHighlightedCard
 		? cardBackColor
@@ -252,7 +252,7 @@ export function ThreeTierCard({
 		: palette.brand[500];
 
 	console.log(
-		`*** TierCard${cardTier} - hasDefaultProduct ${hasDefaultProduct} - isDefaultProductSelected ${isDefaultSelectedProduct} - isUserSelected ${isUserSelected}`,
+		`*** TierCard${cardTier} - hasDefaultProduct ${hasDefaultProduct} - isDefaultProductSelected ${isDefaultProductSelected} - isUserSelected ${isUserSelected}`,
 	);
 	return (
 		<section
@@ -265,11 +265,11 @@ export function ThreeTierCard({
 		>
 			{isUserSelected && !hasDefaultProduct && (
 				<ThreeTierCardPill
-					title={isDefaultSelectedProduct ? pillCopy ?? '' : 'Your selection'}
+					title={isDefaultProductSelected ? pillCopy ?? '' : 'Your selection'}
 					color={cardPillColor}
 				/>
 			)}
-			{isDefaultSelectedProduct && (
+			{isDefaultProductSelected && (
 				// Always show pill for the default selected product
 				<ThreeTierCardPill title={pillCopy ?? ''} color={cardPillColor} />
 			)}
