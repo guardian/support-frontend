@@ -63,15 +63,18 @@ describe('replaceMParticleTemplates', () => {
 	it.each([
 		[50, '£50'],
 		['50.5', '£50.50'],
-	])('substitutes an available mParticle amount with currency', (value, expected) => {
-		expect(
-			replaceMParticleTemplates(
-				'Your last contribution was %%mParticle_last_single_contribution_amount%%.',
-				{ last_single_contribution_amount: value },
-				getCurrencyByCode('GBP'),
-			),
-		).toBe(`Your last contribution was ${expected}.`);
-	});
+	])(
+		'substitutes an available mParticle amount with currency',
+		(value, expected) => {
+			expect(
+				replaceMParticleTemplates(
+					'Your last contribution was %%mParticle_last_single_contribution_amount%%.',
+					{ last_single_contribution_amount: value },
+					getCurrencyByCode('GBP'),
+				),
+			).toBe(`Your last contribution was ${expected}.`);
+		},
+	);
 });
 
 describe('OneTimeCheckoutComponent - Custom Amounts URL Processing', () => {
