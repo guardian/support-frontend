@@ -15,7 +15,7 @@ type ContributionTypeMap<T> = RegularContributionTypeMap<T> & {
 
 export type ContributionType = keyof ContributionTypeMap<null>;
 
-type MParticleAmountAttribute = 'last_contribution_amount';
+type MParticleAmountAttribute = 'last_single_contribution_amount';
 
 export interface AmountValuesObject {
 	amounts: number[];
