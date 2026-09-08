@@ -2,7 +2,9 @@ package controllers
 
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import play.api.libs.json.Json
+import play.api.http.HttpEntity
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.Result
 
 class InvitationControllerSpec extends AnyWordSpec with Matchers {
 
@@ -19,6 +21,12 @@ class InvitationControllerSpec extends AnyWordSpec with Matchers {
       )
       .toString
 
+  private def jsonBody(result: Result): JsValue =
+    result.body match {
+      case HttpEntity.Strict(data, _) => Json.parse(data.utf8String)
+      case other => fail(s"expected a strict HTTP entity, got $other")
+    }
+
   "resultFromGetInvitation" should {
     "return the upstream status when it is not 200" in {
       val result = InvitationController.resultFromGetInvitation(404, """{"message":"not found"}""", nowMillis = 0)
@@ -30,14 +38,26 @@ class InvitationControllerSpec extends AnyWordSpec with Matchers {
       result.header.status mustBe 200
     }
 
-    "return 410 when the invitation has expired" in {
+    "return 410 with reason expired when the invitation has expired" in {
       val result = InvitationController.resultFromGetInvitation(200, invitationBody(1000), nowMillis = 2000)
       result.header.status mustBe 410
+      jsonBody(result) mustBe Json.obj("reason" -> "expired")
     }
 
-    "return 410 when expiryDate equals now" in {
+    "return 410 with reason expired when expiryDate equals now" in {
       val result = InvitationController.resultFromGetInvitation(200, invitationBody(1000), nowMillis = 1000)
       result.header.status mustBe 410
+      jsonBody(result) mustBe Json.obj("reason" -> "expired")
+    }
+
+    "return 410 with reason alreadyAccepted when upstream reports the invitation is gone" in {
+      val result = InvitationController.resultFromGetInvitation(
+        410,
+        """"Invitation has already been accepted"""",
+        nowMillis = 0,
+      )
+      result.header.status mustBe 410
+      jsonBody(result) mustBe Json.obj("reason" -> "alreadyAccepted")
     }
 
     "return 500 when a 200 response is missing expiryDate" in {

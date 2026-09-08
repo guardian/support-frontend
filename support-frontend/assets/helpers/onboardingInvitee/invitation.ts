@@ -25,12 +25,14 @@ const invitationResponseSchema = z.object({
 	expiryDate: z.number(),
 });
 
+const goneReasonSchema = z.object({
+	reason: z.enum(['expired', 'alreadyAccepted']),
+});
+
 // Verifies an invitation via the Play server, which proxies the multiple-account
 // API and attaches the API key server side. A 404 means the code doesn't exist,
-// a 400 means it has been cancelled, and a 410 means either it has expired or it
-// has already been accepted. Expiry 410 still includes the invitation payload
-// (Play converts a 200 whose expiryDate has passed). Already-accepted 410 does
-// not, so we use the body shape to tell them apart.
+// a 400 means it has been cancelled, and a 410 includes a reason: "expired" or
+// "alreadyAccepted".
 export async function verifyInvitation(
 	invitationCode: string,
 ): Promise<VerifyInvitationResult> {
@@ -42,9 +44,13 @@ export async function verifyInvitation(
 		const body: unknown = await response.json().catch(() => undefined);
 
 		if (response.status === 410) {
-			return invitationResponseSchema.safeParse(body).success
-				? { status: 'expired' }
-				: { status: 'accepted' };
+			const gone = goneReasonSchema.safeParse(body);
+			if (!gone.success) {
+				return { status: 'invalid' };
+			}
+			return {
+				status: gone.data.reason === 'alreadyAccepted' ? 'accepted' : 'expired',
+			};
 		}
 
 		if (!response.ok) {

@@ -57,7 +57,7 @@ describe('verifyInvitation', () => {
 	it('returns expired when the server reports the invitation has expired (410)', async () => {
 		fetchMock.get(endpoint, {
 			status: 410,
-			body: invitationResponse(Date.now() - oneDayInMillis),
+			body: { reason: 'expired' },
 			headers: { 'Content-Type': 'application/json' },
 		});
 
@@ -66,7 +66,19 @@ describe('verifyInvitation', () => {
 		expect(result).toEqual({ status: 'expired' });
 	});
 
-	it('returns accepted when the invitation has already been accepted (410 without expiry payload)', async () => {
+	it('returns accepted when the invitation has already been accepted (410)', async () => {
+		fetchMock.get(endpoint, {
+			status: 410,
+			body: { reason: 'alreadyAccepted' },
+			headers: { 'Content-Type': 'application/json' },
+		});
+
+		const result = await verifyInvitation(invitationCode);
+
+		expect(result).toEqual({ status: 'accepted' });
+	});
+
+	it('returns invalid when a 410 response has no reason', async () => {
 		fetchMock.get(endpoint, {
 			status: 410,
 			body: 'Invitation has already been accepted',
@@ -75,7 +87,7 @@ describe('verifyInvitation', () => {
 
 		const result = await verifyInvitation(invitationCode);
 
-		expect(result).toEqual({ status: 'accepted' });
+		expect(result).toEqual({ status: 'invalid' });
 	});
 
 	it('returns invalid when the invitation does not exist (404)', async () => {

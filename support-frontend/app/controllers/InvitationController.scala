@@ -15,12 +15,17 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
 object InvitationController extends Results {
+  private val ExpiredBody = Json.obj("reason" -> "expired")
+  private val AlreadyAcceptedBody = Json.obj("reason" -> "alreadyAccepted")
+
   def resultFromGetInvitation(status: Int, body: String, nowMillis: Long = System.currentTimeMillis()): Result =
-    if (status != OK) {
+    if (status == GONE) {
+      Status(GONE)(AlreadyAcceptedBody)
+    } else if (status != OK) {
       Status(status)(body).as(JSON)
     } else {
       Try((Json.parse(body) \ "expiryDate").asOpt[Long]).toOption.flatten match {
-        case Some(expiryDate) if expiryDate <= nowMillis => Status(GONE)(body).as(JSON)
+        case Some(expiryDate) if expiryDate <= nowMillis => Status(GONE)(ExpiredBody)
         case Some(_) => Ok(body).as(JSON)
         case None => InternalServerError("Invitation response missing expiryDate")
       }
@@ -54,8 +59,9 @@ class InvitationController(
   }
 
   /** Proxies the multiple-account API so that the x-api-key stays server side. The upstream status codes are meaningful
-    * to the client (404 = unknown invitation code, 400 = invitation cancelled), so they are passed through along with
-    * the response body. A 200 whose expiryDate has passed is returned as 410 so expiry is decided with server time.
+    * to the client (404 = unknown invitation code, 400 = invitation cancelled, 410 = already accepted). A 200 whose
+    * expiryDate has passed is returned as 410 with reason "expired" so expiry is decided with server time. Upstream 410
+    * is returned with reason "alreadyAccepted".
     */
   def getInvitation(invitationCode: String): Action[AnyContent] = NoCacheAction().async {
     multipleAccountApiService
