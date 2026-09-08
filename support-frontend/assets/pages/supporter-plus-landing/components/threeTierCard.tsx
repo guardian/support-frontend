@@ -247,7 +247,7 @@ export function ThreeTierCard({
 		: palette.brand[500];
 
 	console.log(
-		`*** TierCard${cardTier} - deepDiscount ${deepDiscount} - isDefaultProductSelected ${isDefaultProductSelected} - isUserSelected ${isUserSelected}`,
+		`*** TierCard${cardTier} - isDefaultProductSelected ${isDefaultProductSelected} - isUserSelected ${isUserSelected}`,
 	);
 	return (
 		<section
@@ -354,6 +354,7 @@ export function ThreeTierCard({
 			>
 				{cta.copy}
 			</LinkButton>
+
 			{inAdditionToAllAccessDigital && (
 				<div css={benefitsPrefixCss}>
 					<span>

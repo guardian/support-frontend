@@ -56,6 +56,7 @@ export function ThreeTierCards({
 }: ThreeTierCardsProps): JSX.Element {
 	const { enableRedCardTheme } = useFeatureSwitches();
 	const deepDiscount = enableRedCardTheme; // ToDo : rename enableRedCardTheme to Deep Discount
+	console.log(`*** deepDiscount: ${deepDiscount}`);
 	const shouldUseLargePriceMinHeight =
 		!!showWeeklyPrice ||
 		cardsContent.some((card) => !!card.promotion || !!card.billingPeriodsCopy);
