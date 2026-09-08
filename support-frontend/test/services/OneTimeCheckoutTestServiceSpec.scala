@@ -147,7 +147,6 @@ class OneTimeCheckoutTestServiceSpec extends AsyncFlatSpec with Matchers {
                 Map(
                   "amounts" -> listAttr(List(numberAttr(3), numberAttr(5), numberAttr(10))),
                   "defaultAmount" -> numberAttr(5),
-                  "hideChooseYourAmount" -> booleanAttr(false),
                 ),
               ),
             ),
