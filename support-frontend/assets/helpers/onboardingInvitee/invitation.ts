@@ -8,7 +8,7 @@ export interface OnboardingInviteeInvitation {
 	inviterFirstName?: string;
 }
 
-type InvitationStatus = 'valid' | 'expired' | 'invalid';
+type InvitationStatus = 'valid' | 'expired' | 'invalid' | 'accepted';
 
 export interface VerifyInvitationResult {
 	status: InvitationStatus;
@@ -27,10 +27,10 @@ const invitationResponseSchema = z.object({
 
 // Verifies an invitation via the Play server, which proxies the multiple-account
 // API and attaches the API key server side. A 404 means the code doesn't exist,
-// a 400 means it has been cancelled, and a 410 means it has expired. Those
-// statuses (along with any unexpected failure or a response that doesn't match
-// the expected shape) are surfaced as 'invalid' or 'expired'. Expiry is decided
-// on the server using the expiryDate in the upstream response.
+// a 400 means it has been cancelled, and a 410 means either it has expired or it
+// has already been accepted. Expiry 410 still includes the invitation payload
+// (Play converts a 200 whose expiryDate has passed). Already-accepted 410 does
+// not, so we use the body shape to tell them apart.
 export async function verifyInvitation(
 	invitationCode: string,
 ): Promise<VerifyInvitationResult> {
@@ -39,17 +39,19 @@ export async function verifyInvitation(
 			`/invitation/${encodeURIComponent(invitationCode)}`,
 		);
 
+		const body: unknown = await response.json().catch(() => undefined);
+
 		if (response.status === 410) {
-			return { status: 'expired' };
+			return invitationResponseSchema.safeParse(body).success
+				? { status: 'expired' }
+				: { status: 'accepted' };
 		}
 
 		if (!response.ok) {
 			return { status: 'invalid' };
 		}
 
-		const parsedInvitation = invitationResponseSchema.safeParse(
-			await response.json(),
-		);
+		const parsedInvitation = invitationResponseSchema.safeParse(body);
 
 		if (!parsedInvitation.success) {
 			return { status: 'invalid' };

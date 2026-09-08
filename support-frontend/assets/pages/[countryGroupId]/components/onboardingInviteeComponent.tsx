@@ -33,6 +33,7 @@ interface OnboardingInviteeProps {
 	csrf: CsrfState;
 	invitation: OnboardingInviteeInvitation;
 	landingPageSettings: LandingPageVariant;
+	alreadyAccepted?: boolean;
 }
 
 function OnboardingInviteeComponent({
@@ -40,6 +41,7 @@ function OnboardingInviteeComponent({
 	csrf,
 	landingPageSettings,
 	supportRegionId,
+	alreadyAccepted = false,
 }: OnboardingInviteeProps) {
 	const scrollToTopRef = useRef<HTMLDivElement>(null);
 	const acceptStartedRef = useRef(false);
@@ -70,8 +72,9 @@ function OnboardingInviteeComponent({
 
 	const [currentStep, setCurrentStep] = useState<OnboardingInviteeSteps>();
 	const [showIdentityIframe, setShowIdentityIframe] = useState(!isSignedIn);
-	const [acceptStatus, setAcceptStatus] =
-		useState<AcceptInvitationResult>('pending');
+	const [acceptStatus, setAcceptStatus] = useState<AcceptInvitationResult>(
+		alreadyAccepted ? 'accepted' : 'pending',
+	);
 	const identityIframeRef = useRef<HTMLIFrameElement>(null);
 
 	const handleStepNavigation: HandleStepNavigationFunction = (targetStep) => {
@@ -150,6 +153,11 @@ function OnboardingInviteeComponent({
 	};
 
 	useEffect(() => {
+		if (alreadyAccepted) {
+			void loadAnalyticsData();
+			return;
+		}
+
 		if (isSignedIn) {
 			ensureAccessTokenThenAccept();
 		}
@@ -176,7 +184,9 @@ function OnboardingInviteeComponent({
 			if (data.type === 'userStateChange') {
 				if (['userSignedIn', 'userRegistered'].includes(data.value)) {
 					setShowIdentityIframe(false);
-					ensureAccessTokenThenAccept();
+					if (!alreadyAccepted) {
+						ensureAccessTokenThenAccept();
+					}
 				}
 			}
 

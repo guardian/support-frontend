@@ -66,6 +66,18 @@ describe('verifyInvitation', () => {
 		expect(result).toEqual({ status: 'expired' });
 	});
 
+	it('returns accepted when the invitation has already been accepted (410 without expiry payload)', async () => {
+		fetchMock.get(endpoint, {
+			status: 410,
+			body: 'Invitation has already been accepted',
+			headers: { 'Content-Type': 'application/json' },
+		});
+
+		const result = await verifyInvitation(invitationCode);
+
+		expect(result).toEqual({ status: 'accepted' });
+	});
+
 	it('returns invalid when the invitation does not exist (404)', async () => {
 		fetchMock.get(endpoint, { status: 404 });
 

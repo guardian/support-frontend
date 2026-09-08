@@ -7,6 +7,7 @@ import { AnalyticsProfileCacheProvider } from 'helpers/customHooks/analyticsProf
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import type { VerifyInvitationResult } from 'helpers/onboardingInvitee/invitation';
 import { verifyInvitation } from 'helpers/onboardingInvitee/invitation';
+import { getUser } from 'helpers/user/user';
 import OnboardingDeclineComponent from './components/onboardingDeclineComponent';
 import OnboardingInviteeComponent from './components/onboardingInviteeComponent';
 
@@ -52,6 +53,10 @@ export function Invitation({
 	}
 
 	if (mode === 'reject') {
+		if (verification.status === 'accepted') {
+			return <InvitationUnavailable />;
+		}
+
 		return (
 			<OnboardingDeclineComponent
 				supportRegionId={supportRegionId}
@@ -61,11 +66,10 @@ export function Invitation({
 		);
 	}
 
-	const { invitation } = verification;
-
-	if (!invitation) {
-		return <InvitationUnavailable />;
-	}
+	const invitation = verification.invitation ?? {
+		invitationCode,
+		email: getUser().email ?? '',
+	};
 
 	const csrf = { token: window.guardian.csrf.token };
 
@@ -76,6 +80,7 @@ export function Invitation({
 				csrf={csrf}
 				invitation={invitation}
 				landingPageSettings={landingPageSettings}
+				alreadyAccepted={verification.status === 'accepted'}
 			/>
 		</AnalyticsProfileCacheProvider>
 	);
