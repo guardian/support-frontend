@@ -123,7 +123,8 @@ export async function getPageParticipations<Variant>(
 			return true;
 		}
 		const { userAttributes } = await getAudienceData();
-		return requiredAttribute in userAttributes;
+		const value = userAttributes[requiredAttribute];
+		return typeof value === 'string' || typeof value === 'number';
 	};
 
 	const hasRequiredMParticleTemplateAttributes = async (
