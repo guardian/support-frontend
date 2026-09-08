@@ -848,6 +848,39 @@ describe('getPageParticipations', () => {
 			expect(mockSetSessionParticipations).not.toHaveBeenCalled();
 		});
 
+		it.each([
+			['null', null],
+			['an object', { amount: 50 }],
+		])(
+			'returns undefined variant when the required attribute is %s',
+			async (_, value) => {
+				const variant: AmountsVariant = {
+					name: 'control',
+					amounts: {
+						mParticleAmountAttribute: 'last_single_contribution_amount',
+					},
+				};
+				const test: PageTest<AmountsVariant> = {
+					name: 'test-1',
+					status: 'Live',
+					variants: [variant],
+				};
+				const config = createAmountsConfig(test);
+
+				mockLocation('/test/page');
+				mockCountryGroupMatches.mockReturnValue(true);
+				mockFetchAudienceData.mockResolvedValue({
+					audienceMemberships: [],
+					userAttributes: { last_single_contribution_amount: value },
+				});
+
+				const result = await getPageParticipations(config);
+
+				expect(result.variant).toBeUndefined();
+				expect(mockSetSessionParticipations).not.toHaveBeenCalled();
+			},
+		);
+
 		it('does not check audience data when no attribute is required', async () => {
 			const variant: AmountsVariant = { name: 'control', amounts: {} };
 			const test: PageTest<AmountsVariant> = {
