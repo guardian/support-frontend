@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import { between, from, space } from '@guardian/source/foundations';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
-import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import type { CardTheme } from 'helpers/landingPage/cardTheme';
 import { defaultCardTheme, redCardTheme } from 'helpers/landingPage/cardTheme';
 import type { CardContent } from './threeTierCard';
@@ -14,6 +13,7 @@ export type ThreeTierCardsProps = {
 	billingPeriod: BillingPeriod;
 	showWeeklyPrice?: boolean;
 	hasDefaultProduct?: boolean;
+	deepDiscount?: boolean;
 };
 
 const container = (cardCount: number) => css`
@@ -53,10 +53,8 @@ export function ThreeTierCards({
 	currencyId,
 	billingPeriod,
 	showWeeklyPrice,
+	deepDiscount = false,
 }: ThreeTierCardsProps): JSX.Element {
-	const { enableRedCardTheme } = useFeatureSwitches();
-	const deepDiscount = enableRedCardTheme; // ToDo : rename enableRedCardTheme to Deep Discount
-	console.log(`*** deepDiscount: ${deepDiscount}`);
 	const shouldUseLargePriceMinHeight =
 		!!showWeeklyPrice ||
 		cardsContent.some((card) => !!card.promotion || !!card.billingPeriodsCopy);
@@ -65,9 +63,7 @@ export function ThreeTierCards({
 			.length > 1;
 	let promoCount = 0;
 
-	const cardTheme: CardTheme = enableRedCardTheme
-		? redCardTheme
-		: defaultCardTheme;
+	const cardTheme: CardTheme = deepDiscount ? redCardTheme : defaultCardTheme;
 
 	return (
 		<div

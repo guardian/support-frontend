@@ -235,9 +235,12 @@ export function ThreeTierCard({
 		cardTheme ?? defaultCardTheme;
 
 	const hasPillCopy = !!pillCopy && !isSubdued;
-	const userSelectedNoPillCopy = isUserSelected && !hasPillCopy;
+	const userSelectedNoPillCopyNoDeepDiscount =
+		isUserSelected && !hasPillCopy && !deepDiscount;
 	const isHighlightedCard =
-		hasPillCopy || userSelectedNoPillCopy || isDefaultProductSelected;
+		hasPillCopy ||
+		userSelectedNoPillCopyNoDeepDiscount ||
+		isDefaultProductSelected;
 
 	const cardBackColorSelection = isHighlightedCard
 		? cardBackColor
@@ -247,7 +250,9 @@ export function ThreeTierCard({
 		: palette.brand[500];
 
 	console.log(
-		`*** TierCard${cardTier} - isDefaultProductSelected ${isDefaultProductSelected} - isUserSelected ${isUserSelected}`,
+		`*** TierCard${cardTier} - isDefaultProductSelected ${isDefaultProductSelected} - isUserSelected ${isUserSelected} ${
+			isHighlightedCard ? 'HIGHLIGHTED' : ''
+		}`,
 	);
 	return (
 		<section

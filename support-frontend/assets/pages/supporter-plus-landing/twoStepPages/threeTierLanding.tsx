@@ -37,6 +37,7 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
+import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import type { Participations } from 'helpers/abTests/models';
 import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
@@ -373,35 +374,19 @@ export function ThreeTierLanding({
 	const defaultProductSelection =
 		settings.defaultProductSelection?.productType.toLowerCase();
 
-	const getDefaultSelectedProduct = () => {
-		if (urlSearchParamsProduct) {
-			return urlSearchParamsProduct;
-		}
-
-		if (
-			isCardUserSelected(tier1Pricing) ||
-			isCardUserSelected(tier2Pricing, tier2Promotion?.discount?.amount) ||
-			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount)
-		) {
-			return undefined;
-		}
-		return defaultProductSelection;
-	};
-
-	const defaultSelectedProduct = getDefaultSelectedProduct();
-
+	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
+	const { enableRedCardTheme } = useFeatureSwitches();
+	const deepDiscount = enableRedCardTheme; // ToDo : rename enableRedCardTheme to Deep Discount
 	const tier1Card: CardContent = {
 		product: 'Contribution',
 		price: tier1Pricing,
 		link: tier1checkoutUrl,
-		isDefaultProductSelected: defaultProductSelection === 'contribution',
+		isDefaultProductSelected:
+			(!urlSearchParamsProduct || deepDiscount) &&
+			defaultProductSelection === 'contribution',
 		isUserSelected:
-			// does product in searchParam matches contribution,
-			// does selected-price in searchParam match price
-			// is rrcp landing page contribution product selected,
 			urlSearchParamsProduct === 'contribution' ||
-			isCardUserSelected(tier1Pricing) ||
-			(!urlSearchParamsProduct && defaultSelectedProduct === 'contribution'),
+			isCardUserSelected(tier1Pricing),
 		...settings.products.Contribution,
 		title:
 			settings.products.Contribution?.title ?? getProductLabel('Contribution'),
@@ -463,14 +448,12 @@ export function ThreeTierLanding({
 		link: tier2CheckoutURL,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion: tier2Promotion,
-		isDefaultProductSelected: defaultProductSelection === 'supporterplus',
+		isDefaultProductSelected:
+			(!urlSearchParamsProduct || deepDiscount) &&
+			defaultProductSelection === 'supporterplus',
 		isUserSelected:
-			// does product in searchParam match supporterplus,
-			// does selected-price in searchParam match price or discounted price
-			// is rrcp landing page default supporterplus product selected,
 			urlSearchParamsProduct === 'supporterplus' ||
-			isCardUserSelected(tier2Pricing, tier2Promotion?.discount?.amount) ||
-			(!urlSearchParamsProduct && defaultSelectedProduct === 'supporterplus'),
+			isCardUserSelected(tier2Pricing, tier2Promotion?.discount?.amount),
 		...tier2ProductDescription,
 	};
 
@@ -541,15 +524,11 @@ export function ThreeTierLanding({
 		link: tier3CheckoutURL,
 		promotion: tier3Promotion,
 		isDefaultProductSelected:
+			(!urlSearchParamsProduct || deepDiscount) &&
 			defaultProductSelection === tier3Product.toLowerCase(),
 		isUserSelected:
-			// does product in searchParam match Tier3 product,
-			// does selected-price in searchParam match price or discounted price
-			// is rrcp landing page default Tier3 product selected,
 			urlSearchParamsProduct === tier3Product.toLowerCase() ||
-			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount) ||
-			(!urlSearchParamsProduct &&
-				defaultSelectedProduct === tier3Product.toLowerCase()),
+			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount),
 		...tier3ProductDescription,
 	};
 
@@ -698,6 +677,7 @@ export function ThreeTierLanding({
 						currencyId={currencyId}
 						billingPeriod={billingPeriod}
 						showWeeklyPrice={showWeeklyPrice}
+						deepDiscount={deepDiscount}
 					/>
 				</div>
 			</Container>
