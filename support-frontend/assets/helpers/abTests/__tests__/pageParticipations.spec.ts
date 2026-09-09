@@ -888,9 +888,9 @@ describe('getPageParticipations', () => {
 
 			expect(result.variant).toEqual(secondVariant);
 			expect(mockSetSessionParticipations).toHaveBeenCalledWith(
-			{ 'second-test': 'second' },
-			'landingPageParticipations',
-		);
+				{ 'second-test': 'second' },
+				'landingPageParticipations',
+			);
 		});
 
 		it.each([
