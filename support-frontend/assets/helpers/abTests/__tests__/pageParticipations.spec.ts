@@ -62,9 +62,7 @@ const mockIsWithinSchedule = jest.mocked(isWithinSchedule);
 const mockRandomNumber = jest.mocked(randomNumber);
 const mockGetSessionParticipations = jest.mocked(getSessionParticipations);
 const mockSetSessionParticipations = jest.mocked(setSessionParticipations);
-const mockFetchAudienceData = jest.mocked(fetchAudienceData);
-
-interface TestVariant {
+const mockFetchAudienceData = jest.mocked(fetchAudienceData);interface TestVariant {
 	name: string;
 	value: string;
 }
@@ -800,7 +798,7 @@ describe('getPageParticipations', () => {
 				},
 			};
 			const test: PageTest<AmountsVariant> = {
-				name: 'test-1',
+				name: 'MPARTICLE_AMOUNT_test-1',
 				status: 'Live',
 				variants: [variant],
 			};
@@ -906,7 +904,7 @@ describe('getPageParticipations', () => {
 
 		it('returns a template variant when the required attribute is available', async () => {
 			const variant = createTestVariant('control', template);
-			const test = createPageTest('test-1', [variant]);
+			const test = createPageTest('MPARTICLE_AMOUNT_test-1', [variant]);
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
@@ -974,6 +972,95 @@ describe('getPageParticipations', () => {
 
 			expect(result.variant).toEqual(fallback);
 			expect(mockSetSessionParticipations).not.toHaveBeenCalled();
+		});
+
+		it('returns fallback for an mParticle template test not explicitly named for amounts', async () => {
+			const variant = createTestVariant('control', template);
+			const fallback = createFallbackVariant();
+			const test = createPageTest('test-1', [variant]);
+			const config = createConfig([test]);
+
+
+			mockLocation('/test/page');
+			mockCountryGroupMatches.mockReturnValue(true);
+
+			const result = await getPageParticipations(config, {
+				variant: () => fallback,
+				participationKey: 'FALLBACK_TEST',
+			});
+
+			expect(result.variant).toEqual(fallback);
+			expect(mockFetchAudienceData).not.toHaveBeenCalled();
+		});
+	});
+
+	describe('mParticle production test naming', () => {
+		interface AmountTestVariant {
+			name: string;
+			amounts: { mParticleAmountAttribute?: string };
+		}
+
+		it('returns fallback for an amount test without the required name prefix', async () => {
+			const variant: AmountTestVariant = {
+				name: 'control',
+				amounts: {
+					mParticleAmountAttribute: 'last_single_contribution_amount',
+				},
+			};
+			const fallback: AmountTestVariant = { name: 'fallback', amounts: {} };
+			const test: PageTest<AmountTestVariant> = {
+				name: 'test-1',
+				status: 'Live',
+				variants: [variant],
+			};
+			const config: PageParticipationsConfig<AmountTestVariant> = {
+				tests: [test],
+				pageRegex: '^/test/page$',
+				forceParamName: 'force-test',
+				sessionStorageKey: 'landingPageParticipations',
+				getVariantName: (value) => value.name,
+			};
+			mockLocation('/test/page');
+			mockCountryGroupMatches.mockReturnValue(true);
+
+			const result = await getPageParticipations(config, {
+				variant: () => fallback,
+				participationKey: 'FALLBACK_TEST',
+			});
+
+			expect(result.variant).toEqual(fallback);
+			expect(mockFetchAudienceData).not.toHaveBeenCalled();
+		});
+
+		it('allows an amount test with the required name prefix in production', async () => {
+			const variant: AmountTestVariant = {
+				name: 'control',
+				amounts: {
+					mParticleAmountAttribute: 'last_single_contribution_amount',
+				},
+			};
+			const test: PageTest<AmountTestVariant> = {
+				name: 'MPARTICLE_AMOUNT_test-1',
+				status: 'Live',
+				variants: [variant],
+			};
+			const config: PageParticipationsConfig<AmountTestVariant> = {
+				tests: [test],
+				pageRegex: '^/test/page$',
+				forceParamName: 'force-test',
+				sessionStorageKey: 'landingPageParticipations',
+				getVariantName: (value) => value.name,
+			};
+			mockLocation('/test/page');
+			mockCountryGroupMatches.mockReturnValue(true);
+			mockFetchAudienceData.mockResolvedValue({
+				audienceMemberships: [],
+				userAttributes: { last_single_contribution_amount: 50 },
+			});
+
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toEqual(variant);
 		});
 	});
 
