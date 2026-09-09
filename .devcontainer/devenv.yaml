@@ -55,7 +55,8 @@ postCreateCommand:
 #   - cmd: "echo 'Container started successfully'"
 #     workingDirectory: "."
 
-# Removing this as personal GITHUB_TOKENS can pass invalid values that will prevent container creation
+# Uncomment this if you need to make authenticated requests to GitHub from within the container. 
+# This makes the GITHUB_TOKEN environment variable from the host available within the container.
 # containerEnv:
 #   - name: GITHUB_TOKEN
 #     value: '${localEnv:GITHUB_TOKEN}'
