@@ -234,12 +234,11 @@ export function ThreeTierCard({
 	const { titlePillColor, cardPillColor, cardBackColor, benefitIconColor } =
 		cardTheme ?? defaultCardTheme;
 
-	const hasPillCopy = !!pillCopy && !isSubdued;
-	const userSelectedNoPillCopyNoDeepDiscount =
-		isUserSelected && !hasPillCopy && !deepDiscount;
+	const hasPillCopyNotSubdued = !!pillCopy && !isSubdued;
+	const userSelectedNoDeepDiscount = isUserSelected && !deepDiscount;
 	const isHighlightedCard =
-		hasPillCopy ||
-		userSelectedNoPillCopyNoDeepDiscount ||
+		hasPillCopyNotSubdued ||
+		userSelectedNoDeepDiscount ||
 		isDefaultProductSelected;
 
 	const cardBackColorSelection = isHighlightedCard
