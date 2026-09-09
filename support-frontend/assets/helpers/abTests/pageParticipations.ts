@@ -1,5 +1,5 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { fetchAudienceData } from 'helpers/mparticle';
+import { type AudienceData, fetchAudienceData } from 'helpers/mparticle';
 import { CountryGroup } from '../internationalisation/classes/countryGroup';
 import {
 	countryGroupMatches,
@@ -42,9 +42,12 @@ export interface PageParticipationsResultWithFallback<Variant> {
  * object will be empty because we do not need to track it.
  *
  * For tests with `mParticleAudience`, the user must be a member of that audience
- * (verified via the analytics profile) or the fallback variant is returned instead.
- * Similarly, if a variant carries `amounts.mParticleAmountAttribute`, the user's
- * analytics profile must have that attribute or the fallback variant is used.
+ * (verified via the analytics profile) for the test to be eligible. If they are
+ * not, another eligible test may be selected, or the fallback variant is returned
+ * if no eligible test remains. Similarly, if a selected variant requires mParticle
+ * attributes, the user's analytics profile must have them; otherwise, another
+ * eligible test may be selected, or the fallback variant is returned if no
+ * eligible test remains.
  * URL-forced participations bypass this check.
  */
 export async function getPageParticipations<Variant>(
@@ -91,12 +94,14 @@ export async function getPageParticipations<Variant>(
 
 	// Fetched at most once per call, shared by mParticle eligibility checks.
 	let fetchedUserAttributes: Record<string, unknown> | undefined;
-	let audienceDataPromise: ReturnType<typeof fetchAudienceData> | null = null;
-	const getAudienceData = () => {
-		audienceDataPromise ??= fetchAudienceData().then((data) => {
-			fetchedUserAttributes = data.userAttributes;
-			return data;
-		});
+	let audienceDataPromise: Promise<AudienceData> | null = null;
+	const getAudienceData = (): Promise<AudienceData> => {
+		if (!audienceDataPromise) {
+			audienceDataPromise = fetchAudienceData().then((data) => {
+				fetchedUserAttributes = data.userAttributes;
+				return data;
+			});
+		}
 		return audienceDataPromise;
 	};
 
@@ -110,40 +115,19 @@ export async function getPageParticipations<Variant>(
 		return audienceMemberships.includes(test.mParticleAudience);
 	};
 
-	// Variants (e.g. OneTimeCheckoutVariant) may require an mParticle user
-	// attribute via `amounts.mParticleAmountAttribute`. Kept generic here so
-	// any variant shape carrying that field is supported without extending PageTest.
-	const hasRequiredMParticleAmountAttribute = async (
+	const hasRequiredMParticleAttributes = async (
 		variant: Variant,
 	): Promise<boolean> => {
-		const requiredAttribute = (
-			variant as { amounts?: { mParticleAmountAttribute?: string } }
-		).amounts?.mParticleAmountAttribute;
-		if (!requiredAttribute) {
+		const getRequiredMParticleAttributes =
+			config.getRequiredMParticleAttributes;
+		const requiredAttributes: string[] = getRequiredMParticleAttributes
+			? getRequiredMParticleAttributes(variant)
+			: [];
+		if (requiredAttributes.length === 0) {
 			return true;
 		}
 		const { userAttributes } = await getAudienceData();
-		const value = userAttributes[requiredAttribute];
-		return typeof value === 'string' || typeof value === 'number';
-	};
-
-	const hasRequiredMParticleTemplateAttributes = async (
-		variant: Variant,
-	): Promise<boolean> => {
-		const templateAttributes = Object.values(variant as Record<string, unknown>)
-			.filter((value): value is string => typeof value === 'string')
-			.flatMap((copy) =>
-				Array.from(copy.matchAll(/%%mParticle_([a-zA-Z0-9_]+)%%/g)),
-			)
-			.map((match) => match[1])
-			.filter((attribute): attribute is string => attribute !== undefined);
-
-		if (templateAttributes.length === 0) {
-			return true;
-		}
-
-		const { userAttributes } = await getAudienceData();
-		return templateAttributes.every((attribute) => {
+		return requiredAttributes.every((attribute) => {
 			const value = userAttributes[attribute];
 			return typeof value === 'string' || typeof value === 'number';
 		});
@@ -151,19 +135,13 @@ export async function getPageParticipations<Variant>(
 
 	const isMParticleTest = (test: PageTest<Variant>): boolean =>
 		test.variants.some((variant) => {
-			const hasAmountAttribute = Boolean(
-				(variant as { amounts?: { mParticleAmountAttribute?: string } }).amounts
-					?.mParticleAmountAttribute,
-			);
-			const hasTemplateAttribute = Object.values(
-				variant as Record<string, unknown>,
-			).some(
-				(value) =>
-					typeof value === 'string' &&
-					/%%mParticle_[a-zA-Z0-9_]+%%/.test(value),
-			);
+			const getRequiredMParticleAttributes =
+				config.getRequiredMParticleAttributes;
+			const hasRequiredAttribute = getRequiredMParticleAttributes
+				? getRequiredMParticleAttributes(variant).length > 0
+				: false;
 
-			return hasAmountAttribute || hasTemplateAttribute;
+			return hasRequiredAttribute;
 		});
 
 	const isMParticleTestAllowed = (test: PageTest<Variant>): boolean =>
@@ -201,9 +179,8 @@ export async function getPageParticipations<Variant>(
 		if (!variant) {
 			return makeFallbackResult();
 		}
-		// Forced participations bypass the attribute gate, but still fetch userAttributes for the caller.
-		await hasRequiredMParticleAmountAttribute(variant);
-		if (!(await hasRequiredMParticleTemplateAttributes(variant))) {
+		// Forced participations bypass the audience check but still validate required attributes.
+		if (!(await hasRequiredMParticleAttributes(variant))) {
 			return makeFallbackResult();
 		}
 		setSessionParticipations(urlParticipations, sessionStorageKey);
@@ -229,7 +206,7 @@ export async function getPageParticipations<Variant>(
 			return makeFallbackResult();
 		}
 		const variant = getVariant(previewParticipations, tests, true);
-		if (!variant || !(await hasRequiredMParticleTemplateAttributes(variant))) {
+		if (!variant || !(await hasRequiredMParticleAttributes(variant))) {
 			return makeFallbackResult();
 		}
 		setSessionParticipations(previewParticipations, sessionStorageKey);
@@ -268,8 +245,7 @@ export async function getPageParticipations<Variant>(
 			if (
 				(test && !isMParticleTestAllowed(test)) ||
 				!variant ||
-				!(await hasRequiredMParticleAmountAttribute(variant)) ||
-				!(await hasRequiredMParticleTemplateAttributes(variant))
+				!(await hasRequiredMParticleAttributes(variant))
 			) {
 				return makeFallbackResult();
 			}
@@ -282,7 +258,6 @@ export async function getPageParticipations<Variant>(
 	}
 
 	// No participation in session storage, assign user to a test + variant
-	let test: PageTest<Variant> | undefined;
 	for (const currentTest of tests.filter((test) => test.status === 'Live')) {
 		if (
 			isMParticleTestAllowed(currentTest) &&
@@ -293,45 +268,35 @@ export async function getPageParticipations<Variant>(
 			) &&
 			(await isUserInAudience(currentTest))
 		) {
-			test = currentTest;
-			break;
+			const selectionResult = config.selectVariant
+				? config.selectVariant(currentTest, mvtId)
+				: undefined;
+
+			const variant =
+				selectionResult ??
+				currentTest.variants[
+					randomNumber(mvtId, currentTest.name) % currentTest.variants.length
+				];
+
+			if (variant && (await hasRequiredMParticleAttributes(variant))) {
+				const participations: Participations = {
+					[currentTest.name]: getVariantName(variant),
+				};
+				// Record the participation in session storage so that we can track it from other pages
+				setSessionParticipations(participations, sessionStorageKey);
+
+				return {
+					participations: trackParticipation
+						? participations
+						: ({} as Participations),
+					variant,
+					userAttributes: fetchedUserAttributes,
+				};
+			}
 		}
 	}
 
-	if (!test) {
-		return makeFallbackResult();
-	}
-
-	const selectionResult = config.selectVariant
-		? config.selectVariant(test, mvtId)
-		: undefined;
-
-	const variant =
-		selectionResult ??
-		test.variants[randomNumber(mvtId, test.name) % test.variants.length];
-
-	if (!variant || !(await hasRequiredMParticleAmountAttribute(variant))) {
-		return makeFallbackResult();
-	}
-
-	if (!(await hasRequiredMParticleTemplateAttributes(variant))) {
-		return makeFallbackResult();
-	}
-
-	// Store only the fresh participation
-	const participations: Participations = {
-		[test.name]: getVariantName(variant),
-	};
-	// Record the participation in session storage so that we can track it from other pages
-	setSessionParticipations(participations, sessionStorageKey);
-
-	return {
-		participations: trackParticipation
-			? participations
-			: ({} as Participations),
-		variant,
-		userAttributes: fetchedUserAttributes,
-	};
+	return makeFallbackResult();
 }
 
 /**
