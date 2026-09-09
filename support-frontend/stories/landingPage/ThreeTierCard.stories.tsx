@@ -69,10 +69,12 @@ DefaultTheme.args = {
 	cardContent: {
 		...fallBackLandingPageSelection.products.SupporterPlus,
 		product: 'SupporterPlus',
+		isDefaultProductSelected: false,
 		isUserSelected: false,
 		price: 12,
 		cta: { copy: 'Support' },
 		label: { copy: 'Highest impact' },
+		link: '',
 	},
 };
 
@@ -87,10 +89,12 @@ RedTheme.args = {
 	cardContent: {
 		...fallBackLandingPageSelection.products.SupporterPlus,
 		product: 'SupporterPlus',
+		isDefaultProductSelected: false,
 		isUserSelected: false,
 		price: 12,
 		cta: { copy: 'Support' },
 		label: { copy: 'Highest impact' },
+		link: '',
 	},
 	cardTheme: redCardTheme,
 };
@@ -106,11 +110,13 @@ Promotion.args = {
 	cardContent: {
 		...fallBackLandingPageSelection.products.DigitalSubscription,
 		product: 'DigitalSubscription',
+		isDefaultProductSelected: false,
 		isUserSelected: false,
 		price: 38.5,
 		cta: { copy: 'Support' },
 		label: { copy: 'Highest impact' },
 		promotion: promotionEURCountries,
+		link: '',
 	},
 };
 
@@ -125,11 +131,13 @@ IntroductoryPromotion.args = {
 	cardContent: {
 		...fallBackLandingPageSelection.products.DigitalSubscription,
 		product: 'DigitalSubscription',
+		isDefaultProductSelected: false,
 		isUserSelected: false,
 		price: 38.5,
 		cta: { copy: 'Support' },
 		label: { copy: 'Highest impact' },
 		promotion: { ...promotionEURCountries, isIntroductoryPricing: true },
+		link: '',
 	},
 };
 
@@ -143,10 +151,12 @@ BillingPeriodsCopy.args = {
 	cardContent: {
 		...fallBackLandingPageSelection.products.SupporterPlus,
 		product: 'SupporterPlus',
+		isDefaultProductSelected: false,
 		isUserSelected: false,
 		price: 12,
 		cta: { copy: 'Support' },
 		label: { copy: 'Highest impact' },
+		link: '',
 		billingPeriodsCopy:
 			'From %%PRICE_PRODUCT_WEEKLY%% per week, billed monthly or annually.',
 	},
@@ -163,11 +173,13 @@ PromotionWithBillingPeriodsCopy.args = {
 	cardContent: {
 		...fallBackLandingPageSelection.products.DigitalSubscription,
 		product: 'DigitalSubscription',
+		isDefaultProductSelected: false,
 		isUserSelected: false,
 		price: 38.5,
 		cta: { copy: 'Support' },
 		label: { copy: 'Highest impact' },
 		promotion: promotionEURCountries,
+		link: '',
 		billingPeriodsCopy:
 			'From %%PRICE_PRODUCT_WEEKLY%% per week, billed monthly or annually.',
 	},
@@ -184,10 +196,12 @@ WeeklyPricing.args = {
 	cardContent: {
 		...fallBackLandingPageSelection.products.SupporterPlus,
 		product: 'SupporterPlus',
+		isDefaultProductSelected: false,
 		isUserSelected: false,
 		price: 12,
 		cta: { copy: 'Support' },
 		label: { copy: 'Highest impact' },
+		link: '',
 	},
 	showWeeklyPrice: true,
 };
@@ -203,11 +217,13 @@ WeeklyPricingWithPromotion.args = {
 	cardContent: {
 		...fallBackLandingPageSelection.products.DigitalSubscription,
 		product: 'DigitalSubscription',
+		isDefaultProductSelected: false,
 		isUserSelected: false,
 		price: 38.5,
 		cta: { copy: 'Support' },
 		label: { copy: 'Highest impact' },
 		promotion: promotionEURCountries,
+		link: '',
 	},
 	showWeeklyPrice: true,
 };
