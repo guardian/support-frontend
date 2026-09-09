@@ -362,8 +362,7 @@ export function ThreeTierLanding({
 		settings.defaultProductSelection?.productType.toLowerCase();
 
 	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
-	const { enableRedCardTheme } = useFeatureSwitches();
-	const deepDiscount = enableRedCardTheme; // ToDo : rename enableRedCardTheme to Deep Discount
+	const { deepDiscount } = useFeatureSwitches();
 
 	const getDefaultProductSelection = (productKey: ProductKey) => {
 		return (

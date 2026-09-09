@@ -120,8 +120,8 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |        "description" : "Canada Tax Exclusive Rate Plans",
           |        "state" : "Off"
           |      },
-          |      "enableRedCardTheme" : {
-          |        "description" : "Enable alternative SupporterPlus card colours",
+          |      "deepDiscount" : {
+          |        "description" : "Enable alternative SupporterPlus card colours and disable Your selection pill copy",
           |        "state" : "Off"
           |      }
           |    }
