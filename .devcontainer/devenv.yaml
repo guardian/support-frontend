@@ -19,7 +19,7 @@ modules:
 
 # Optional: Ports to forward
 forwardPorts:
-# - "8000:9000"  # hostPort:containerPort
+  # - "8000:9000"  # hostPort:containerPort
   - '9211' # same port on host and container
   - '9210' # same port on host and container
   - '9001' # same port on host and container
@@ -51,11 +51,12 @@ postCreateCommand:
     workingDirectory: '.'
   - cmd: 'mise reshim'
     workingDirectory: '.'
-
 # postStartCommand:
 #   - cmd: "echo 'Container started successfully'"
 #     workingDirectory: "."
 
-containerEnv:
-  - name: GITHUB_TOKEN
-    value: '${localEnv:GITHUB_TOKEN}'
+# Uncomment this if you need to make authenticated requests to GitHub from within the container. 
+# This makes the GITHUB_TOKEN environment variable from the host available within the container.
+# containerEnv:
+#   - name: GITHUB_TOKEN
+#     value: '${localEnv:GITHUB_TOKEN}'
