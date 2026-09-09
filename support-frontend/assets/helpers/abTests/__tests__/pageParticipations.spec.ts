@@ -799,7 +799,7 @@ describe('getPageParticipations', () => {
 				},
 			};
 			const test: PageTest<AmountsVariant> = {
-				name: 'MPARTICLE_AMOUNT_test-1',
+				name: 'MPARTICLE_ATTRIBUTES_test-1',
 				status: 'Live',
 				variants: [variant],
 			};
@@ -905,7 +905,7 @@ describe('getPageParticipations', () => {
 
 		it('returns a template variant when the required attribute is available', async () => {
 			const variant = createTestVariant('control', template);
-			const test = createPageTest('MPARTICLE_AMOUNT_test-1', [variant]);
+			const test = createPageTest('MPARTICLE_ATTRIBUTES_test-1', [variant]);
 			const config = createConfig([test]);
 
 			mockLocation('/test/page');
@@ -1040,7 +1040,7 @@ describe('getPageParticipations', () => {
 				},
 			};
 			const test: PageTest<AmountTestVariant> = {
-				name: 'MPARTICLE_AMOUNT_test-1',
+				name: 'MPARTICLE_ATTRIBUTES_test-1',
 				status: 'Live',
 				variants: [variant],
 			};
