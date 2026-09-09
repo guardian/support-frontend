@@ -39,8 +39,7 @@
   ],
   "containerEnv" : {
     "DEVENV_IVY_CACHE_MOUNT_DIR" : "/mnt/ivy-cache",
-    "DEVENV_COURSIER_CACHE_MOUNT_DIR" : "/mnt/coursier-cache",
-    "GITHUB_TOKEN" : "${localEnv:GITHUB_TOKEN}"
+    "DEVENV_COURSIER_CACHE_MOUNT_DIR" : "/mnt/coursier-cache"
   },
   "runArgs" : [
     "--name=support-frontend-devcontainer"
