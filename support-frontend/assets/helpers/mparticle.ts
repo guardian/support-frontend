@@ -2,7 +2,7 @@ import { getUser } from 'helpers/user/user';
 import { fetchJson } from './async/fetch';
 import { hasTargetingConsent } from './page/analyticsAndConsent';
 
-type AudienceData = {
+export type AudienceData = {
 	audienceMemberships: number[];
 	userAttributes: Record<string, unknown>;
 };

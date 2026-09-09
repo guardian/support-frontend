@@ -1,6 +1,9 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { getSettings } from '../../globalsAndSwitches/globals';
-import type { OneTimeCheckoutTest } from '../../globalsAndSwitches/oneTimeCheckoutSettings';
+import type {
+	OneTimeCheckoutTest,
+	OneTimeCheckoutVariant,
+} from '../../globalsAndSwitches/oneTimeCheckoutSettings';
 import {
 	fallBackOneTimeCheckoutSelection,
 	getOneTimeCheckoutTestConfig,
@@ -51,7 +54,7 @@ describe('oneTimeCheckoutTestConfig', () => {
 	});
 
 	it('extracts variant name correctly', () => {
-		const variant = {
+		const variant: OneTimeCheckoutVariant = {
 			name: 'TEST_VARIANT',
 			heading: 'Test',
 			subheading: 'Test',
@@ -64,6 +67,28 @@ describe('oneTimeCheckoutTestConfig', () => {
 		expect(oneTimeCheckoutTestConfig.getVariantName(variant)).toBe(
 			'TEST_VARIANT',
 		);
+	});
+
+	it('extracts amount and template mParticle attributes', () => {
+		const variant: OneTimeCheckoutVariant = {
+			name: 'TEST_VARIANT',
+			heading: 'Last support: %%mParticle_last_support_amount%%',
+			subheading: 'Total: %%mParticle_total_support_amount%%',
+			amounts: {
+				amounts: [25, 50, 100, 250],
+				defaultAmount: 50,
+				hideChooseYourAmount: false,
+				mParticleAmountAttribute: 'last_single_contribution_amount',
+			},
+		};
+
+		expect(
+			oneTimeCheckoutTestConfig.getRequiredMParticleAttributes?.(variant),
+		).toEqual([
+			'last_single_contribution_amount',
+			'last_support_amount',
+			'total_support_amount',
+		]);
 	});
 });
 

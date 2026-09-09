@@ -105,12 +105,14 @@ const createConfig = (
 	forceParamName: string = 'force-test',
 	sessionStorageKey: Key = 'landingPageParticipations',
 	getVariantName: (variant: TestVariant) => string = (v) => v.name,
+	getRequiredMParticleAttributes?: (variant: TestVariant) => string[],
 ): PageParticipationsConfig<TestVariant> => ({
 	tests,
 	pageRegex,
 	forceParamName,
 	sessionStorageKey,
 	getVariantName,
+	getRequiredMParticleAttributes,
 });
 
 describe('getPageParticipations', () => {
@@ -782,13 +784,17 @@ describe('getPageParticipations', () => {
 		}
 
 		const createAmountsConfig = (
-			test: PageTest<AmountsVariant>,
+			test: PageTest<AmountsVariant> | Array<PageTest<AmountsVariant>>,
 		): PageParticipationsConfig<AmountsVariant> => ({
-			tests: [test],
+			tests: Array.isArray(test) ? test : [test],
 			pageRegex: '^/test/page$',
 			forceParamName: 'force-test',
 			sessionStorageKey: 'landingPageParticipations',
 			getVariantName: (v) => v.name,
+			getRequiredMParticleAttributes: (v) =>
+				v.amounts.mParticleAmountAttribute
+					? [v.amounts.mParticleAmountAttribute]
+					: [],
 		});
 
 		it('returns the variant when the user has the required attribute', async () => {
@@ -845,6 +851,46 @@ describe('getPageParticipations', () => {
 
 			expect(result.variant).toBeUndefined();
 			expect(mockSetSessionParticipations).not.toHaveBeenCalled();
+		});
+
+		it('tries another eligible test when the first variant lacks the required attribute', async () => {
+			const firstVariant: AmountsVariant = {
+				name: 'first',
+				amounts: {
+					mParticleAmountAttribute: 'last_single_contribution_amount',
+				},
+			};
+			const secondVariant: AmountsVariant = {
+				name: 'second',
+				amounts: {},
+			};
+			const config = createAmountsConfig([
+				{
+					name: 'MPARTICLE_ATTRIBUTES_first-test',
+					status: 'Live',
+					variants: [firstVariant],
+				},
+				{
+					name: 'second-test',
+					status: 'Live',
+					variants: [secondVariant],
+				},
+			]);
+
+			mockLocation('/test/page');
+			mockCountryGroupMatches.mockReturnValue(true);
+			mockFetchAudienceData.mockResolvedValue({
+				audienceMemberships: [],
+				userAttributes: {},
+			});
+
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toEqual(secondVariant);
+			expect(mockSetSessionParticipations).toHaveBeenCalledWith(
+			{ 'second-test': 'second' },
+			'landingPageParticipations',
+		);
 		});
 
 		it.each([
@@ -906,7 +952,14 @@ describe('getPageParticipations', () => {
 		it('returns a template variant when the required attribute is available', async () => {
 			const variant = createTestVariant('control', template);
 			const test = createPageTest('MPARTICLE_ATTRIBUTES_test-1', [variant]);
-			const config = createConfig([test]);
+			const config = createConfig(
+				[test],
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				() => ['last_single_contribution_amount'],
+			);
 
 			mockLocation('/test/page');
 			mockCountryGroupMatches.mockReturnValue(true);
@@ -927,7 +980,14 @@ describe('getPageParticipations', () => {
 			const variant = createTestVariant('control', template);
 			const fallback = createFallbackVariant();
 			const test = createPageTest('test-1', [variant]);
-			const config = createConfig([test]);
+			const config = createConfig(
+				[test],
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				() => ['last_single_contribution_amount'],
+			);
 
 			mockLocation('/test/page');
 			mockCountryGroupMatches.mockReturnValue(true);
@@ -959,7 +1019,14 @@ describe('getPageParticipations', () => {
 			const variant = createTestVariant('control', template);
 			const fallback = createFallbackVariant();
 			const test = createPageTest('test-1', [variant]);
-			const config = createConfig([test]);
+			const config = createConfig(
+				[test],
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				() => ['last_single_contribution_amount'],
+			);
 
 			mockLocation('/test/page', '?force-test=test-1:control');
 			mockGetParticipationFromQueryString.mockReturnValue({
@@ -979,7 +1046,14 @@ describe('getPageParticipations', () => {
 			const variant = createTestVariant('control', template);
 			const fallback = createFallbackVariant();
 			const test = createPageTest('test-1', [variant]);
-			const config = createConfig([test]);
+			const config = createConfig(
+				[test],
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				() => ['last_single_contribution_amount'],
+			);
 
 			mockLocation('/test/page');
 			mockCountryGroupMatches.mockReturnValue(true);
@@ -1019,6 +1093,10 @@ describe('getPageParticipations', () => {
 				forceParamName: 'force-test',
 				sessionStorageKey: 'landingPageParticipations',
 				getVariantName: (value) => value.name,
+				getRequiredMParticleAttributes: (value) =>
+					value.amounts.mParticleAmountAttribute
+						? [value.amounts.mParticleAmountAttribute]
+						: [],
 			};
 			mockLocation('/test/page');
 			mockCountryGroupMatches.mockReturnValue(true);
@@ -1050,6 +1128,10 @@ describe('getPageParticipations', () => {
 				forceParamName: 'force-test',
 				sessionStorageKey: 'landingPageParticipations',
 				getVariantName: (value) => value.name,
+				getRequiredMParticleAttributes: (value) =>
+					value.amounts.mParticleAmountAttribute
+						? [value.amounts.mParticleAmountAttribute]
+						: [],
 			};
 			mockLocation('/test/page');
 			mockCountryGroupMatches.mockReturnValue(true);
