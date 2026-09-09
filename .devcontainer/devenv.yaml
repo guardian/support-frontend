@@ -19,10 +19,12 @@ modules:
 
 # Optional: Ports to forward
 forwardPorts:
-# - "8000:9000"  # hostPort:containerPort
-  - '9211' # same port on host and container
-  - '9210' # same port on host and container
-  - '9001' # same port on host and container
+  # - "8000:9000" # hostPort:containerPort
+  # - "8000" # same port on host and container
+  - '9211' # Webpack
+  - '9210' # Play
+  - '9001' # Storybook
+  - '9323' # Playwright report
 
 # Optional: Extra switches for container generation (passed to `docker create`)
 runArgs:
