@@ -149,6 +149,27 @@ export async function getPageParticipations<Variant>(
 		});
 	};
 
+	const isMParticleTest = (test: PageTest<Variant>): boolean =>
+		test.variants.some((variant) => {
+			const hasAmountAttribute = Boolean(
+				(variant as { amounts?: { mParticleAmountAttribute?: string } })
+					.amounts?.mParticleAmountAttribute,
+			);
+			const hasTemplateAttribute = Object.values(
+				variant as Record<string, unknown>,
+			).some(
+				(value) =>
+					typeof value === 'string' &&
+					/%%mParticle_[a-zA-Z0-9_]+%%/.test(value),
+			);
+
+			return hasAmountAttribute || hasTemplateAttribute;
+		});
+
+	const isMParticleTestAllowed = (test: PageTest<Variant>): boolean =>
+		!isMParticleTest(test) ||
+		test.name.startsWith('MPARTICLE_AMOUNT_');
+
 	// Only track participation if user is on the target page
 	const trackParticipation = isTargetPage(path);
 
@@ -173,6 +194,10 @@ export async function getPageParticipations<Variant>(
 		forceParamName,
 	);
 	if (urlParticipations) {
+		const test = tests.find((candidate) => urlParticipations[candidate.name]);
+		if (test && !isMParticleTestAllowed(test)) {
+			return makeFallbackResult();
+		}
 		const variant = getVariant(urlParticipations, tests);
 		if (!variant) {
 			return makeFallbackResult();
@@ -198,6 +223,10 @@ export async function getPageParticipations<Variant>(
 		previewParamName,
 	);
 	if (previewParticipations) {
+		const test = tests.find((candidate) => previewParticipations[candidate.name]);
+		if (test && !isMParticleTestAllowed(test)) {
+			return makeFallbackResult();
+		}
 		const variant = getVariant(previewParticipations, tests, true);
 		if (!variant || !(await hasRequiredMParticleTemplateAttributes(variant))) {
 			return makeFallbackResult();
@@ -231,8 +260,10 @@ export async function getPageParticipations<Variant>(
 
 		// If nothing valid remains, continue to re-selection
 		if (Object.entries(validParticipations).length > 0) {
+			const test = tests.find((candidate) => validParticipations[candidate.name]);
 			const variant = getVariant(validParticipations, tests);
 			if (
+				(test && !isMParticleTestAllowed(test)) ||
 				!variant ||
 				!(await hasRequiredMParticleAmountAttribute(variant)) ||
 				!(await hasRequiredMParticleTemplateAttributes(variant))
@@ -251,6 +282,7 @@ export async function getPageParticipations<Variant>(
 	let test: PageTest<Variant> | undefined;
 	for (const currentTest of tests.filter((test) => test.status === 'Live')) {
 		if (
+			isMParticleTestAllowed(currentTest) &&
 			isWithinSchedule(currentTest.scheduler) &&
 			countryGroupMatches(
 				currentTest.regionTargeting?.targetedCountryGroups,
