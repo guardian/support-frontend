@@ -12,7 +12,6 @@ export type ThreeTierCardsProps = {
 	currencyId: CurrencyCode;
 	billingPeriod: BillingPeriod;
 	showWeeklyPrice?: boolean;
-	hasDefaultProduct?: boolean;
 	deepDiscount?: boolean;
 };
 
