@@ -13,7 +13,25 @@ case class AmountsSelection(
 )
 
 object AmountsSelection {
-  implicit val codec: Codec[AmountsSelection] = deriveCodec
+  implicit val encoder: Encoder[AmountsSelection] = deriveEncoder
+  implicit val decoder: Decoder[AmountsSelection] = Decoder.instance { cursor =>
+    for {
+      amounts <- cursor.get[List[Int]]("amounts")
+      defaultAmount <- cursor.get[Int]("defaultAmount")
+      hideChooseYourAmount <- cursor
+        .get[Option[Boolean]]("hideChooseYourAmount")
+        .map(_.getOrElse(false))
+      mParticleAmountAttribute <- cursor.get[Option[MParticleAmountAttribute]](
+        "mParticleAmountAttribute",
+      )
+    } yield AmountsSelection(
+      amounts,
+      defaultAmount,
+      hideChooseYourAmount,
+      mParticleAmountAttribute,
+    )
+  }
+  implicit val codec: Codec[AmountsSelection] = new Codec(encoder, decoder)
 }
 
 case class OneTimeCheckoutVariant(
