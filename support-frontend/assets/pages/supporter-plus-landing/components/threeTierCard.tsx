@@ -248,12 +248,6 @@ export function ThreeTierCard({
 	const benefitIconColorSelection = isHighlightedCard
 		? benefitIconColor
 		: palette.brand[500];
-
-	console.log(
-		`*** TierCard${cardTier} - isDefaultProductSelected ${isDefaultProductSelected} - isUserSelected ${isUserSelected} ${
-			isHighlightedCard ? 'HIGHLIGHTED' : ''
-		}`,
-	);
 	return (
 		<section
 			css={container(
