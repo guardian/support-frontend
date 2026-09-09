@@ -62,7 +62,8 @@ const mockIsWithinSchedule = jest.mocked(isWithinSchedule);
 const mockRandomNumber = jest.mocked(randomNumber);
 const mockGetSessionParticipations = jest.mocked(getSessionParticipations);
 const mockSetSessionParticipations = jest.mocked(setSessionParticipations);
-const mockFetchAudienceData = jest.mocked(fetchAudienceData);interface TestVariant {
+const mockFetchAudienceData = jest.mocked(fetchAudienceData);
+interface TestVariant {
 	name: string;
 	value: string;
 }
@@ -979,7 +980,6 @@ describe('getPageParticipations', () => {
 			const fallback = createFallbackVariant();
 			const test = createPageTest('test-1', [variant]);
 			const config = createConfig([test]);
-
 
 			mockLocation('/test/page');
 			mockCountryGroupMatches.mockReturnValue(true);
