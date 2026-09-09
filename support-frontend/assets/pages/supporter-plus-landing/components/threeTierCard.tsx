@@ -257,23 +257,27 @@ export function ThreeTierCard({
 				cardBackColorSelection,
 			)}
 		>
-			{isUserSelected && !deepDiscount && (
-				<ThreeTierCardPill
-					title={isDefaultProductSelected ? pillCopy ?? '' : 'Your selection'}
-					color={cardPillColor}
-				/>
-			)}
-			{isDefaultProductSelected && !!pillCopy && (
-				<ThreeTierCardPill title={pillCopy} color={cardPillColor} />
-			)}
-			{!!pillCopy && !isUserSelected && (
-				// Pill cannot be subdued if deep discount applied
-				<ThreeTierCardPill
-					title={pillCopy}
-					color={cardPillColor}
-					subdue={deepDiscount ? false : isSubdued}
-				/>
-			)}
+			{
+				// pill for user selection without deep discount or default product with pill copy
+				((isUserSelected && !deepDiscount) ||
+					(isDefaultProductSelected && !!pillCopy)) && (
+					<ThreeTierCardPill
+						title={isDefaultProductSelected ? pillCopy ?? '' : 'Your selection'}
+						color={cardPillColor}
+					/>
+				)
+			}
+			{
+				// pill for user selection with deep discount or when no user selection but pill copy must exist
+				((isUserSelected && deepDiscount) || !isUserSelected) && !!pillCopy && (
+					// Pill cannot be subdued if deep discount applied
+					<ThreeTierCardPill
+						title={pillCopy}
+						color={cardPillColor}
+						subdue={deepDiscount ? false : isSubdued}
+					/>
+				)
+			}
 			<div css={titleContainer}>
 				{titlePill && (
 					<BenefitPill copy={titlePill} pillColor={titlePillColor} />
