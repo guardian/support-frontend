@@ -49,16 +49,16 @@ export type CardContent = LandingPageProductDescription & {
 };
 
 export type ThreeTierCardProps = {
-	cardContent: CardContent;
-	cardTheme?: CardTheme;
-	cardTier: 1 | 2 | 3;
-	promoCount: number;
 	isSubdued: boolean;
 	currencyId: CurrencyCode;
+	cardTier: 1 | 2 | 3;
+	promoCount: number;
 	billingPeriod: BillingPeriod;
+	deepDiscount: boolean;
+	cardContent: CardContent;
+	cardTheme?: CardTheme;
 	showWeeklyPrice?: boolean;
 	useLargePriceMinHeight?: boolean;
-	deepDiscount?: boolean;
 };
 
 const container = (
@@ -185,7 +185,7 @@ export function ThreeTierCard({
 	billingPeriod,
 	showWeeklyPrice = false,
 	useLargePriceMinHeight = false,
-	deepDiscount = false,
+	deepDiscount,
 }: ThreeTierCardProps): JSX.Element {
 	const {
 		title,
