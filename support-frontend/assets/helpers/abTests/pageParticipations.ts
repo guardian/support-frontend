@@ -152,8 +152,8 @@ export async function getPageParticipations<Variant>(
 	const isMParticleTest = (test: PageTest<Variant>): boolean =>
 		test.variants.some((variant) => {
 			const hasAmountAttribute = Boolean(
-				(variant as { amounts?: { mParticleAmountAttribute?: string } })
-					.amounts?.mParticleAmountAttribute,
+				(variant as { amounts?: { mParticleAmountAttribute?: string } }).amounts
+					?.mParticleAmountAttribute,
 			);
 			const hasTemplateAttribute = Object.values(
 				variant as Record<string, unknown>,
@@ -167,8 +167,7 @@ export async function getPageParticipations<Variant>(
 		});
 
 	const isMParticleTestAllowed = (test: PageTest<Variant>): boolean =>
-		!isMParticleTest(test) ||
-		test.name.startsWith('MPARTICLE_AMOUNT_');
+		!isMParticleTest(test) || test.name.startsWith('MPARTICLE_AMOUNT_');
 
 	// Only track participation if user is on the target page
 	const trackParticipation = isTargetPage(path);
@@ -223,7 +222,9 @@ export async function getPageParticipations<Variant>(
 		previewParamName,
 	);
 	if (previewParticipations) {
-		const test = tests.find((candidate) => previewParticipations[candidate.name]);
+		const test = tests.find(
+			(candidate) => previewParticipations[candidate.name],
+		);
 		if (test && !isMParticleTestAllowed(test)) {
 			return makeFallbackResult();
 		}
@@ -260,7 +261,9 @@ export async function getPageParticipations<Variant>(
 
 		// If nothing valid remains, continue to re-selection
 		if (Object.entries(validParticipations).length > 0) {
-			const test = tests.find((candidate) => validParticipations[candidate.name]);
+			const test = tests.find(
+				(candidate) => validParticipations[candidate.name],
+			);
 			const variant = getVariant(validParticipations, tests);
 			if (
 				(test && !isMParticleTestAllowed(test)) ||
