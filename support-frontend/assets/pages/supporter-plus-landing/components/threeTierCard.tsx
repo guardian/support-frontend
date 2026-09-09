@@ -263,9 +263,8 @@ export function ThreeTierCard({
 					color={cardPillColor}
 				/>
 			)}
-			{isDefaultProductSelected && (
-				// Always show pill for the default selected product
-				<ThreeTierCardPill title={pillCopy ?? ''} color={cardPillColor} />
+			{isDefaultProductSelected && !!pillCopy && (
+				<ThreeTierCardPill title={pillCopy} color={cardPillColor} />
 			)}
 			{!!pillCopy && !isUserSelected && (
 				// Pill cannot be subdued if deep discount applied
