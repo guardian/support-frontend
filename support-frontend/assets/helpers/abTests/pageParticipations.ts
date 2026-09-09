@@ -167,7 +167,7 @@ export async function getPageParticipations<Variant>(
 		});
 
 	const isMParticleTestAllowed = (test: PageTest<Variant>): boolean =>
-		!isMParticleTest(test) || test.name.startsWith('MPARTICLE_AMOUNT_');
+		!isMParticleTest(test) || test.name.startsWith('MPARTICLE_ATTRIBUTES_');
 
 	// Only track participation if user is on the target page
 	const trackParticipation = isTargetPage(path);
