@@ -30,10 +30,14 @@ import {
 } from 'helpers/productPrice/billingPeriods';
 import type { CsrfState } from 'helpers/types/csrf';
 import { getThankYouOrder } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
-import type { OnboardingProps } from 'pages/[countryGroupId]/components/onboardingComponent';
+import type {
+	OnboardingProductKey,
+	OnboardingProps,
+} from 'pages/[countryGroupId]/components/onboardingComponent';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import ContentBox from '../contentBox';
+import { getOnboardingProductCopy } from '../onboardingProductCopy';
 import {
 	benefitsItem,
 	benefitsItemIcon,
@@ -106,11 +110,15 @@ export function OnboardingSummarySuccessfulSignIn({
 	userState,
 	userNewslettersSubscriptions,
 	csrf,
+	productKey,
+	productTitle,
 }: {
 	handleStepNavigation: HandleStepNavigationFunction;
 	userState: OnboardingSummaryUserState;
 	userNewslettersSubscriptions: NewsletterSubscription[] | null;
 	csrf: CsrfState;
+	productKey?: OnboardingProductKey;
+	productTitle?: string;
 }) {
 	/**
 	 * Consider the Saturday Edition newsletter subscription as subscribed.
@@ -171,7 +179,9 @@ export function OnboardingSummarySuccessfulSignIn({
 		<Stack space={2}>
 			<h1 css={headings}>{onboardingSummaryCopyMapping[userState].title}</h1>
 			<p css={descriptions}>
-				{onboardingSummaryCopyMapping[userState].description}
+				{userState === 'existingUserSignedIn'
+					? `Find out what's included in your ${productTitle} subscription.`
+					: onboardingSummaryCopyMapping[userState].description}
 			</p>
 
 			<Stack
@@ -183,7 +193,13 @@ export function OnboardingSummarySuccessfulSignIn({
 				<Button
 					priority="primary"
 					cssOverrides={buttonOverrides}
-					onClick={() => handleStepNavigation(OnboardingSteps.GuardianApp)}
+					onClick={() =>
+						handleStepNavigation(
+							productKey === 'DigitalSubscription'
+								? OnboardingSteps.DigitalPlus
+								: OnboardingSteps.GuardianApp,
+						)
+					}
 				>
 					Explore your benefits
 				</Button>
@@ -224,14 +240,17 @@ function OnboardingSummary({
 	promotion,
 }: OnboardingProps) {
 	const order = getThankYouOrder();
-	const productSettings =
-		productKey && landingPageSettings.products[productKey];
 	const { windowWidthIsLessThan } = useWindowWidth();
 
 	const { enableCanadaTaxExclusion } = useFeatureSwitches();
 
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
+	const { title: productTitle, benefits } = getOnboardingProductCopy(
+		productKey,
+		landingPageSettings,
+		countryGroupId,
+	);
 
 	const amountPaidToday = simpleFormatAmount(currency, payment.finalAmount);
 
@@ -313,7 +332,7 @@ function OnboardingSummary({
 						<Stack space={2}>
 							<div css={purchaseSummaryDetailsContainer}>
 								<p css={boldDescriptions}>Product</p>
-								<p css={descriptions}>{productSettings?.title}</p>
+								<p css={descriptions}>{productTitle}</p>
 							</div>
 							<div css={purchaseSummaryDetailsContainer}>
 								<p css={boldDescriptions}>Price</p>
@@ -357,10 +376,10 @@ function OnboardingSummary({
 					<h1 css={headings}>Your benefits</h1>
 					<div css={separator} />
 					<ul>
-						{productSettings?.benefits.map((benefit) => (
+						{benefits.map((benefit, index) => (
 							<li
 								css={benefitsItem}
-								key={`onboarding-summary-benefit-${benefit.copy}`}
+								key={`onboarding-summary-benefit-${index}`}
 							>
 								<div css={benefitsItemIcon}>
 									<SvgTickRound
@@ -369,7 +388,7 @@ function OnboardingSummary({
 										theme={{ fill: palette.brand[500] }}
 									/>
 								</div>
-								<span css={benefitsItemText}>{benefit.copy}</span>
+								<span css={benefitsItemText}>{benefit.text}</span>
 							</li>
 						))}
 					</ul>

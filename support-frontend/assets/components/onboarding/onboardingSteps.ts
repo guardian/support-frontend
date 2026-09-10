@@ -2,6 +2,8 @@ export enum OnboardingSteps {
 	Summary = 'summary',
 	GuardianApp = 'guardian-app',
 	FeastApp = 'feast-app',
+	DigitalPlus = 'digital-plus',
+	ShareAccess = 'share-access',
 	Completed = 'completed',
 }
 

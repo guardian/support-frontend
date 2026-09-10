@@ -16,7 +16,7 @@ import io.circe.{Decoder, Encoder}
 import scala.io.Source
 import scala.util.Try
 import com.gu.aws.AwsS3Client.S3Location
-import com.gu.support.workers.SupporterPlus
+import com.gu.support.workers.{DigitalPack, SupporterPlus}
 
 case class AllSettings(
     switches: Switches,
@@ -27,15 +27,28 @@ case class AllSettings(
     oneTimeCheckoutTests: List[OneTimeCheckoutTest],
     studentLandingPageTests: List[StudentLandingPageTest],
     banditData: List[services.ClientBanditData] = Nil,
-    productsWithThankYouOnboarding: List[String] =
-      AllSettings.productsWithThankYouOnboarding.toList.map(_.getClass.getSimpleName.stripSuffix("$")),
+    productsWithThankYouOnboarding: List[String] = AllSettings.productsWithThankYouOnboarding,
 )
 
 object AllSettings {
   implicit val metricUrlEncoder: Encoder[MetricUrl] = Encoder.encodeString.contramap(_.value)
   implicit val metricUrlDecoder: Decoder[MetricUrl] = Decoder.decodeString.map(MetricUrl)
   implicit val allSettingsCodec: Codec[AllSettings] = deriveCodec[AllSettings]
-  val productsWithThankYouOnboarding: Set[SupporterPlus.type] = Set(SupporterPlus)
+
+  /** Worker product class simple names. Used by CreateSubscriptionController. */
+  val thankYouOnboardingProductClassNames: Set[String] = Set(
+    classOf[SupporterPlus].getSimpleName,
+    classOf[DigitalPack].getSimpleName,
+  )
+
+  private def toFrontendProductKey(workerClassName: String): String = workerClassName match {
+    case "DigitalPack" => "DigitalSubscription"
+    case other => other
+  }
+
+  /** Frontend catalog keys serialized to window.guardian.settings. */
+  val productsWithThankYouOnboarding: List[String] =
+    thankYouOnboardingProductClassNames.toList.map(toFrontendProductKey)
 
 }
 
