@@ -16,6 +16,6 @@ export const defaultCardTheme: CardTheme = {
 export const redCardTheme: CardTheme = {
 	titlePillColor: palette.brand[500],
 	cardPillColor: palette.news[400],
-	cardBackColor: palette.news[800],
-	benefitIconColor: palette.news[400],
+	cardBackColor: palette.opinion[800],
+	benefitIconColor: palette.news[200],
 };
