@@ -300,9 +300,9 @@ class Application(
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
-  def geoRedirectInvitationAccept(invitationCode: String): Action[AnyContent] = GeoTargetedCachedAction() {
+  def geoRedirectInvitation(action: String, invitationCode: String): Action[AnyContent] = GeoTargetedCachedAction() {
     implicit request =>
-      val url = getGeoPath(request, "", s"invitation/accept/$invitationCode")
+      val url = getGeoPath(request, "", s"invitation/$action/$invitationCode")
       RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
