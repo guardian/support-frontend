@@ -15,6 +15,7 @@ import {
 } from 'components/onboarding/onboardingSteps';
 import type { HandleStepNavigationFunction } from 'components/onboarding/onboardingTypes';
 import { getBaseDomain } from 'helpers/urls/url';
+import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import {
 	ONBOARDING_EDITIONS_APP,
 	OnboardingAppBadgesDownload,
@@ -28,7 +29,8 @@ import {
 } from './sectionsStyles';
 
 const benefitCard = css`
-	border-radius: ${space[3]}px;
+	border-radius: ${space[2]}px;
+	overflow: hidden;
 	margin-top: ${space[5]}px;
 	border: 1px solid ${neutral[86]};
 `;
@@ -84,6 +86,11 @@ interface OnboardingDigitalPlusDiscoveryProps {
 export function OnboardingDigitalPlusDiscovery({
 	handleStepNavigation,
 }: OnboardingDigitalPlusDiscoveryProps) {
+	const { windowWidthIsGreaterThan } = useWindowWidth();
+	const archivesHeroGridId = windowWidthIsGreaterThan('tablet')
+		? 'onboardingArchivesAppHero'
+		: 'onboardingArchivesAppHeroMobile';
+
 	return (
 		<Stack
 			space={5}
@@ -134,7 +141,6 @@ export function OnboardingDigitalPlusDiscovery({
 
 					<div css={[benefitCard]}>
 						<div css={[heroContainer, benefitCardImage, editionsCard]}>
-							{/* TODO: replace with final Editions app asset */}
 							<GridImage
 								gridId="onboardingEditionsAppHeroMobile"
 								srcSizes={[1000]}
@@ -159,12 +165,10 @@ export function OnboardingDigitalPlusDiscovery({
 
 					<div css={[benefitCard]}>
 						<div css={[heroContainer, benefitCardImage, archivesCard]}>
-							{/* TODO: replace with final Archives asset */}
 							<GridImage
-								gridId="onboardingEditionsAppHeroMobile"
+								gridId={archivesHeroGridId}
 								srcSizes={[1000]}
 								sizes="100vw"
-								imgType="png"
 								altText="Guardian Archives"
 							/>
 						</div>

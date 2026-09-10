@@ -120,18 +120,25 @@ export function OnboardingInviteeCompleted({
 					</LinkButton>
 				</Stack>
 			</ContentBox>
-			<p css={newslettersAppUsageInformation}>
-				Need help? Visit our{' '}
-				<a href={getHelpCentreUrl()} css={linkStyle}>
-					Help Centre
-				</a>{' '}
-				to find the FAQs and contact options. You can manage your subscription
-				anytime in{' '}
-				<a href={getManageSubsUrl()} css={linkStyle}>
-					Manage my account
-				</a>
-				.
-			</p>
+			<Stack space={2} cssOverrides={newslettersAppUsageInformation}>
+				<p>
+					Keep an eye out for your exclusive newsletters from our editors. You
+					can manage your preferences at any time by signing into your Guardian
+					account to update your settings.
+				</p>
+				<p>
+					Need help? Visit our{' '}
+					<a href={getHelpCentreUrl()} css={linkStyle}>
+						Help Centre
+					</a>{' '}
+					to find the FAQs and contact options. You can manage your subscription
+					anytime in{' '}
+					<a href={getManageSubsUrl()} css={linkStyle}>
+						Manage my account
+					</a>
+					.
+				</p>
+			</Stack>
 		</Stack>
 	);
 }
