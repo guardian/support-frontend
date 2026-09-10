@@ -1,5 +1,5 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { fetchAudienceMemberships } from 'helpers/mparticle';
+import { type AudienceData, fetchAudienceData } from 'helpers/mparticle';
 import { CountryGroup } from '../internationalisation/classes/countryGroup';
 import {
 	countryGroupMatches,
@@ -21,11 +21,13 @@ import {
 export interface PageParticipationsResult<Variant> {
 	variant: Variant | undefined;
 	participations: Participations;
+	userAttributes?: Record<string, unknown>;
 }
 
 export interface PageParticipationsResultWithFallback<Variant> {
 	variant: Variant;
 	participations: Participations;
+	userAttributes?: Record<string, unknown>;
 }
 
 /**
@@ -40,7 +42,12 @@ export interface PageParticipationsResultWithFallback<Variant> {
  * object will be empty because we do not need to track it.
  *
  * For tests with `mParticleAudience`, the user must be a member of that audience
- * (verified via the analytics profile) or the fallback variant is returned instead.
+ * (verified via the analytics profile) for the test to be eligible. If they are
+ * not, another eligible test may be selected, or the fallback variant is returned
+ * if no eligible test remains. Similarly, if a selected variant requires mParticle
+ * attributes, the user's analytics profile must have them; otherwise, another
+ * eligible test may be selected, or the fallback variant is returned if no
+ * eligible test remains.
  * URL-forced participations bypass this check.
  */
 export async function getPageParticipations<Variant>(
@@ -85,15 +92,60 @@ export async function getPageParticipations<Variant>(
 		return undefined;
 	};
 
+	// Fetched at most once per call, shared by mParticle eligibility checks.
+	let fetchedUserAttributes: Record<string, unknown> | undefined;
+	let audienceDataPromise: Promise<AudienceData> | null = null;
+	const getAudienceData = (): Promise<AudienceData> => {
+		if (!audienceDataPromise) {
+			audienceDataPromise = fetchAudienceData().then((data) => {
+				fetchedUserAttributes = data.userAttributes;
+				return data;
+			});
+		}
+		return audienceDataPromise;
+	};
+
 	const isUserInAudience = async (
 		test: PageTest<Variant>,
 	): Promise<boolean> => {
 		if (test.mParticleAudience === undefined) {
 			return true;
 		}
-		const audienceMemberships = await fetchAudienceMemberships();
+		const { audienceMemberships } = await getAudienceData();
 		return audienceMemberships.includes(test.mParticleAudience);
 	};
+
+	const hasRequiredMParticleAttributes = async (
+		variant: Variant,
+	): Promise<boolean> => {
+		const getRequiredMParticleAttributes =
+			config.getRequiredMParticleAttributes;
+		const requiredAttributes: string[] = getRequiredMParticleAttributes
+			? getRequiredMParticleAttributes(variant)
+			: [];
+		if (requiredAttributes.length === 0) {
+			return true;
+		}
+		const { userAttributes } = await getAudienceData();
+		return requiredAttributes.every((attribute) => {
+			const value = userAttributes[attribute];
+			return typeof value === 'string' || typeof value === 'number';
+		});
+	};
+
+	const isMParticleTest = (test: PageTest<Variant>): boolean =>
+		test.variants.some((variant) => {
+			const getRequiredMParticleAttributes =
+				config.getRequiredMParticleAttributes;
+			const hasRequiredAttribute = getRequiredMParticleAttributes
+				? getRequiredMParticleAttributes(variant).length > 0
+				: false;
+
+			return hasRequiredAttribute;
+		});
+
+	const isMParticleTestAllowed = (test: PageTest<Variant>): boolean =>
+		!isMParticleTest(test) || test.name.startsWith('MPARTICLE_ATTRIBUTES_');
 
 	// Only track participation if user is on the target page
 	const trackParticipation = isTargetPage(path);
@@ -119,8 +171,16 @@ export async function getPageParticipations<Variant>(
 		forceParamName,
 	);
 	if (urlParticipations) {
+		const test = tests.find((candidate) => urlParticipations[candidate.name]);
+		if (test && !isMParticleTestAllowed(test)) {
+			return makeFallbackResult();
+		}
 		const variant = getVariant(urlParticipations, tests);
 		if (!variant) {
+			return makeFallbackResult();
+		}
+		// Forced participations bypass the audience check but still validate required attributes.
+		if (!(await hasRequiredMParticleAttributes(variant))) {
 			return makeFallbackResult();
 		}
 		setSessionParticipations(urlParticipations, sessionStorageKey);
@@ -129,6 +189,7 @@ export async function getPageParticipations<Variant>(
 				? urlParticipations
 				: ({} as Participations),
 			variant,
+			userAttributes: fetchedUserAttributes,
 		};
 	}
 
@@ -138,8 +199,14 @@ export async function getPageParticipations<Variant>(
 		previewParamName,
 	);
 	if (previewParticipations) {
+		const test = tests.find(
+			(candidate) => previewParticipations[candidate.name],
+		);
+		if (test && !isMParticleTestAllowed(test)) {
+			return makeFallbackResult();
+		}
 		const variant = getVariant(previewParticipations, tests, true);
-		if (!variant) {
+		if (!variant || !(await hasRequiredMParticleAttributes(variant))) {
 			return makeFallbackResult();
 		}
 		setSessionParticipations(previewParticipations, sessionStorageKey);
@@ -148,6 +215,7 @@ export async function getPageParticipations<Variant>(
 				? previewParticipations
 				: ({} as Participations),
 			variant,
+			userAttributes: fetchedUserAttributes,
 		};
 	}
 
@@ -170,21 +238,29 @@ export async function getPageParticipations<Variant>(
 
 		// If nothing valid remains, continue to re-selection
 		if (Object.entries(validParticipations).length > 0) {
+			const test = tests.find(
+				(candidate) => validParticipations[candidate.name],
+			);
 			const variant = getVariant(validParticipations, tests);
-			if (!variant) {
+			if (
+				(test && !isMParticleTestAllowed(test)) ||
+				!variant ||
+				!(await hasRequiredMParticleAttributes(variant))
+			) {
 				return makeFallbackResult();
 			}
 			return {
 				participations: validParticipations,
 				variant,
+				userAttributes: fetchedUserAttributes,
 			};
 		}
 	}
 
 	// No participation in session storage, assign user to a test + variant
-	let test: PageTest<Variant> | undefined;
 	for (const currentTest of tests.filter((test) => test.status === 'Live')) {
 		if (
+			isMParticleTestAllowed(currentTest) &&
 			isWithinSchedule(currentTest.scheduler) &&
 			countryGroupMatches(
 				currentTest.regionTargeting?.targetedCountryGroups,
@@ -192,40 +268,35 @@ export async function getPageParticipations<Variant>(
 			) &&
 			(await isUserInAudience(currentTest))
 		) {
-			test = currentTest;
-			break;
+			const selectionResult = config.selectVariant
+				? config.selectVariant(currentTest, mvtId)
+				: undefined;
+
+			const variant =
+				selectionResult ??
+				currentTest.variants[
+					randomNumber(mvtId, currentTest.name) % currentTest.variants.length
+				];
+
+			if (variant && (await hasRequiredMParticleAttributes(variant))) {
+				const participations: Participations = {
+					[currentTest.name]: getVariantName(variant),
+				};
+				// Record the participation in session storage so that we can track it from other pages
+				setSessionParticipations(participations, sessionStorageKey);
+
+				return {
+					participations: trackParticipation
+						? participations
+						: ({} as Participations),
+					variant,
+					userAttributes: fetchedUserAttributes,
+				};
+			}
 		}
 	}
 
-	if (!test) {
-		return makeFallbackResult();
-	}
-
-	const selectionResult = config.selectVariant
-		? config.selectVariant(test, mvtId)
-		: undefined;
-
-	const variant =
-		selectionResult ??
-		test.variants[randomNumber(mvtId, test.name) % test.variants.length];
-
-	if (!variant) {
-		return makeFallbackResult();
-	}
-
-	// Store only the fresh participation
-	const participations: Participations = {
-		[test.name]: getVariantName(variant),
-	};
-	// Record the participation in session storage so that we can track it from other pages
-	setSessionParticipations(participations, sessionStorageKey);
-
-	return {
-		participations: trackParticipation
-			? participations
-			: ({} as Participations),
-		variant,
-	};
+	return makeFallbackResult();
 }
 
 /**

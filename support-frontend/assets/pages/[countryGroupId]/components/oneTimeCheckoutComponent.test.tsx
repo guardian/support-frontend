@@ -1,10 +1,21 @@
+import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import type { SelectedAmountsVariant } from '../../../helpers/contributions';
-import { parseCustomAmounts } from '../../../helpers/utilities/utilities';
+import type * as Utilities from '../../../helpers/utilities/utilities';
+import {
+	parseCustomAmounts,
+	replaceMParticleTemplates,
+} from '../../../helpers/utilities/utilities';
 
 // Mock the parseCustomAmounts function
-jest.mock('../../../helpers/utilities/utilities', () => ({
-	parseCustomAmounts: jest.fn(),
-}));
+jest.mock('../../../helpers/utilities/utilities', () => {
+	const actualUtilities = jest.requireActual(
+		'../../../helpers/utilities/utilities',
+	) as unknown as typeof Utilities;
+	return {
+		...actualUtilities,
+		parseCustomAmounts: jest.fn(),
+	};
+});
 
 // Mock the getAmountsTestVariant function
 const mockGetAmountsTestVariant = jest.fn();
@@ -47,6 +58,24 @@ const mockSelectedAmountsVariant = {
 		},
 	},
 } satisfies SelectedAmountsVariant;
+
+describe('replaceMParticleTemplates', () => {
+	it.each([
+		[50, '£50'],
+		['50.5', '£50.50'],
+	])(
+		'substitutes an available mParticle amount with currency',
+		(value, expected) => {
+			expect(
+				replaceMParticleTemplates(
+					'Your last contribution was %%mParticle_last_single_contribution_amount%%.',
+					{ last_single_contribution_amount: value },
+					getCurrencyByCode('GBP'),
+				),
+			).toBe(`Your last contribution was ${expected}.`);
+		},
+	);
+});
 
 describe('OneTimeCheckoutComponent - Custom Amounts URL Processing', () => {
 	// Note: The parseCustomAmounts function is thoroughly tested in its own test file

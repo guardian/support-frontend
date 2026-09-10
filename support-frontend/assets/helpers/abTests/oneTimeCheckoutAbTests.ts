@@ -83,6 +83,11 @@ export const fallBackOneTimeCheckoutSelection: Record<
 	},
 };
 
+const getMParticleTemplateAttributes = (copy: string): string[] =>
+	Array.from(copy.matchAll(/%%mParticle_([a-zA-Z0-9_]+)%%/g))
+		.map((match) => match[1])
+		.filter((attribute): attribute is string => attribute !== undefined);
+
 /**
  * Configuration for one-time checkout page A/B tests
  * Use with getPageParticipations to get the variant and participations
@@ -95,6 +100,22 @@ export const oneTimeCheckoutTestConfig: Omit<
 	forceParamName: 'force-one-time-checkout',
 	sessionStorageKey: ONE_TIME_CHECKOUT_PARTICIPATIONS_KEY,
 	getVariantName: (variant) => variant.name,
+	getRequiredMParticleAttributes: (variant) => {
+		const requiredAttributes = new Set<string>();
+		const amountAttribute = variant.amounts.mParticleAmountAttribute;
+
+		if (amountAttribute) {
+			requiredAttributes.add(amountAttribute);
+		}
+
+		for (const copy of [variant.heading, variant.subheading]) {
+			getMParticleTemplateAttributes(copy).forEach((attribute) =>
+				requiredAttributes.add(attribute),
+			);
+		}
+
+		return [...requiredAttributes];
+	},
 };
 
 /**

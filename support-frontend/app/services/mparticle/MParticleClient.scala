@@ -7,7 +7,7 @@ import com.gu.support.config.Stage
 import config.{MparticleConfig, MparticleConfigProvider}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax.EncoderOps
-import io.circe.{Decoder, Encoder}
+import io.circe.{Decoder, Encoder, JsonObject}
 import org.apache.pekko.actor.ActorSystem
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -31,8 +31,14 @@ case class AudienceMembership(
     audience_id: Int,
 )
 
+case class MParticleAudienceData(
+    audienceMemberships: List[Int],
+    userAttributes: JsonObject,
+)
+
 case class ProfileResponse(
     audience_memberships: List[AudienceMembership],
+    user_attributes: Option[JsonObject],
 )
 
 object MParticleClient {
@@ -63,8 +69,8 @@ class MParticleClient(
 
   tokenProvider.initialise()
 
-  private def fetchAudienceMemberships(identityId: String): Future[ProfileResponse] = {
-    val fields = "audience_memberships"
+  private def fetchUserProfile(identityId: String): Future[ProfileResponse] = {
+    val fields = "user_attributes,audience_memberships"
     val endpoint =
       s"userprofile/v1/resolve/${mparticleConfig.orgId}/${mparticleConfig.accountId}/${mparticleConfig.workspaceId}"
 
@@ -89,7 +95,7 @@ class MParticleClient(
 
   def getUserProfile(identityId: String): Future[MParticleUserProfile] = {
     if (mparticleEnabled) {
-      fetchAudienceMemberships(identityId)
+      fetchUserProfile(identityId)
         .map(parseUserProfile)
         .recover { case WebServiceClientError(CodeBody("404", _)) =>
           logger.info("mParticle returned 404 for user")
@@ -100,16 +106,21 @@ class MParticleClient(
     }
   }
 
-  def getAudienceMemberships(identityId: String): Future[List[Int]] = {
+  def getAudienceData(identityId: String): Future[MParticleAudienceData] = {
     if (mparticleEnabled) {
-      fetchAudienceMemberships(identityId)
-        .map(_.audience_memberships.map(_.audience_id))
+      fetchUserProfile(identityId)
+        .map { profileResponse =>
+          MParticleAudienceData(
+            audienceMemberships = profileResponse.audience_memberships.map(_.audience_id),
+            userAttributes = profileResponse.user_attributes.getOrElse(JsonObject.empty),
+          )
+        }
         .recover { case WebServiceClientError(CodeBody("404", _)) =>
           logger.info("mParticle returned 404 for user")
-          List.empty
+          MParticleAudienceData(List.empty, JsonObject.empty)
         }
     } else {
-      Future.successful(List.empty)
+      Future.successful(MParticleAudienceData(List.empty, JsonObject.empty))
     }
   }
 
