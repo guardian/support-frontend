@@ -231,8 +231,13 @@ export function ThreeTierCard({
 		billingPeriod,
 	);
 
-	const { titlePillColor, cardPillColor, cardBackColor, benefitIconColor } =
-		cardTheme ?? defaultCardTheme;
+	const {
+		titlePillColor,
+		cardPillColor,
+		cardBackColor,
+		benefitIconColor,
+		benefitPillColor,
+	} = cardTheme ?? defaultCardTheme;
 
 	const hasPillCopyNotSubdued = !!pillCopy && !isSubdued;
 	const userSelectedNoDeepDiscount = isUserSelected && !deepDiscount;
@@ -377,6 +382,7 @@ export function ThreeTierCard({
 				})}
 				style={'compact'}
 				iconColor={benefitIconColorSelection}
+				benefitPillColor={benefitPillColor}
 				cssOverrides={checkmarkBenefitList}
 			/>
 		</section>
