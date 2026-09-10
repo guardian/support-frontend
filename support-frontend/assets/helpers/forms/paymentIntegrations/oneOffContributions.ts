@@ -84,6 +84,42 @@ export type CreateStripePaymentIntentRequest = StripeChargeData & {
 	similarProductsConsent?: boolean;
 };
 
+const getCardWalletType = (wallet: unknown): string | undefined => {
+	if (typeof wallet !== 'object' || wallet === null || !('type' in wallet)) {
+		return;
+	}
+
+	const walletType = (wallet as { type?: unknown }).type;
+	return typeof walletType === 'string' ? walletType : undefined;
+};
+
+export const getStripePaymentMethod = (
+	paymentMethod: PaymentMethod,
+): StripePaymentMethod => {
+	const paymentMethodType = paymentMethod.type.toLowerCase();
+	if (paymentMethodType === 'paypal') {
+		if (paymentMethod.paypal === undefined) {
+			logException(
+				'Stripe paymentMethod type is paypal but no paypal field exists',
+			);
+		}
+		return 'StripePaypal';
+	}
+
+	const walletType = getCardWalletType(paymentMethod.card?.wallet);
+	if (walletType === 'apple_pay') {
+		return 'StripeApplePay';
+	}
+	if (walletType) {
+		return 'StripePaymentRequestButton';
+	}
+
+	if (paymentMethodType !== 'card') {
+		logException(`Unexpected Stripe paymentMethod type: ${paymentMethodType}`);
+	}
+	return 'StripeCheckout';
+};
+
 // Data that should be posted to the payment API to get a url for the PayPal UI
 // where the user is redirected to so that they can authorize the payment.
 // https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalPaymentData.scala#L74
