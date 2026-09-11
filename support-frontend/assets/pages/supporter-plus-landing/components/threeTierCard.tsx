@@ -261,11 +261,7 @@ export function ThreeTierCard({
 	const cardPillCopy =
 		isUserSelected && !deepDiscount ? 'Your selection' : pillCopy ?? '';
 	const cardPillSubdue =
-		displayDefaultProductPill || (isUserSelected && !deepDiscount)
-			? false
-			: deepDiscount
-			? false
-			: isSubdued;
+		!displayDefaultProductPill && !isUserSelected && !deepDiscount && isSubdued;
 	return (
 		<section
 			css={container(
