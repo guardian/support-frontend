@@ -253,9 +253,7 @@ export function ThreeTierCard({
 		? benefitIconColor
 		: palette.brand[500];
 
-	const displayUserSelectedPill = isUserSelected
-		? !deepDiscount || !!pillCopy
-		: !!pillCopy;
+	const displayUserSelectedPill = userSelectedNoDeepDiscount || !!pillCopy;
 	const displayDefaultProductPill = isDefaultProductSelected && !!pillCopy;
 	const displayPill = displayDefaultProductPill || displayUserSelectedPill;
 	const cardPillCopy = userSelectedNoDeepDiscount
