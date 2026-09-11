@@ -21,10 +21,7 @@ import {
 	checkListTextItemCss,
 } from 'components/checkoutBenefits/benefitsCheckList';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import {
-	type CardTheme,
-	defaultCardTheme,
-} from 'helpers/landingPage/cardTheme';
+import { type CardTheme } from 'helpers/landingPage/cardTheme';
 import { getProductLabel } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import {
@@ -41,6 +38,7 @@ import { ThreeTierCardPill } from './threeTierCardPill';
 
 export type CardContent = LandingPageProductDescription & {
 	isUserSelected: boolean;
+	isDefaultProductSelected: boolean;
 	link: string;
 	price: number;
 	promotion?: Promotion;
@@ -48,13 +46,14 @@ export type CardContent = LandingPageProductDescription & {
 };
 
 export type ThreeTierCardProps = {
-	cardContent: CardContent;
-	cardTheme?: CardTheme;
-	cardTier: 1 | 2 | 3;
-	promoCount: number;
 	isSubdued: boolean;
 	currencyId: CurrencyCode;
+	cardTier: 1 | 2 | 3;
+	promoCount: number;
 	billingPeriod: BillingPeriod;
+	deepDiscount: boolean;
+	cardContent: CardContent;
+	cardTheme: CardTheme;
 	showWeeklyPrice?: boolean;
 	useLargePriceMinHeight?: boolean;
 };
@@ -183,12 +182,14 @@ export function ThreeTierCard({
 	billingPeriod,
 	showWeeklyPrice = false,
 	useLargePriceMinHeight = false,
+	deepDiscount,
 }: ThreeTierCardProps): JSX.Element {
 	const {
 		title,
 		titlePill,
 		benefits,
 		isUserSelected,
+		isDefaultProductSelected,
 		promotion,
 		price,
 		link,
@@ -227,11 +228,20 @@ export function ThreeTierCard({
 		billingPeriod,
 	);
 
-	const { titlePillColor, cardPillColor, cardBackColor, benefitIconColor } =
-		cardTheme ?? defaultCardTheme;
+	const {
+		titlePillColor,
+		cardPillColor,
+		cardBackColor,
+		benefitIconColor,
+		benefitPillColor,
+	} = cardTheme;
 
-	// if pill visible without subdued styling or user selected from banner/epic use highlight colors if available
-	const isHighlightedCard = (!!pillCopy && !isSubdued) || isUserSelected;
+	const hasPillCopyNotSubdued = !!pillCopy && !isSubdued;
+	const userSelectedNoDeepDiscount = isUserSelected && !deepDiscount;
+	const isHighlightedCard =
+		hasPillCopyNotSubdued ||
+		userSelectedNoDeepDiscount ||
+		isDefaultProductSelected;
 
 	const cardBackColorSelection = isHighlightedCard
 		? cardBackColor
@@ -239,6 +249,15 @@ export function ThreeTierCard({
 	const benefitIconColorSelection = isHighlightedCard
 		? benefitIconColor
 		: palette.brand[500];
+
+	const displayUserSelectedPill = userSelectedNoDeepDiscount || !!pillCopy;
+	const displayDefaultProductPill = isDefaultProductSelected && !!pillCopy;
+	const displayPill = displayDefaultProductPill || displayUserSelectedPill;
+	const cardPillCopy = userSelectedNoDeepDiscount
+		? 'Your selection'
+		: pillCopy ?? '';
+	const cardPillSubdue =
+		!displayDefaultProductPill && !isUserSelected && !deepDiscount && isSubdued;
 	return (
 		<section
 			css={container(
@@ -248,14 +267,11 @@ export function ThreeTierCard({
 				cardBackColorSelection,
 			)}
 		>
-			{isUserSelected && (
-				<ThreeTierCardPill title="Your selection" color={cardPillColor} />
-			)}
-			{!!pillCopy && !isUserSelected && (
+			{displayPill && (
 				<ThreeTierCardPill
-					title={promotion?.landingPage?.roundel ?? pillCopy}
+					title={cardPillCopy}
 					color={cardPillColor}
-					subdue={isSubdued}
+					subdue={cardPillSubdue}
 				/>
 			)}
 			<div css={titleContainer}>
@@ -358,6 +374,7 @@ export function ThreeTierCard({
 				})}
 				style={'compact'}
 				iconColor={benefitIconColorSelection}
+				benefitPillColor={benefitPillColor}
 				cssOverrides={checkmarkBenefitList}
 			/>
 		</section>

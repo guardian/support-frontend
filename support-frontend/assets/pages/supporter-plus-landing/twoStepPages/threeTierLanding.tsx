@@ -37,6 +37,7 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
+import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import type { Participations } from 'helpers/abTests/models';
 import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
@@ -285,7 +286,6 @@ export function ThreeTierLanding({
 		? rawUrlSearchParamsProduct.toLowerCase()
 		: undefined;
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
-
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const countryId = Country.detect();
@@ -357,71 +357,77 @@ export function ThreeTierLanding({
 
 	const fallbackProducts = fallBackLandingPageSelection.products;
 
+	// RRCP LandingPage Test Page / Default Product Selection
+	const defaultProductSelection =
+		settings.defaultProductSelection?.productType.toLowerCase();
+
+	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
+	const { enableDeepDiscount } = useFeatureSwitches();
+
+	const getDefaultProductSelection = (productKey: ProductKey) => {
+		return (
+			(!urlSearchParamsProduct || enableDeepDiscount) &&
+			defaultProductSelection === productKey.toLowerCase()
+		);
+	};
+	const getUserSelection = (
+		productKey: ProductKey,
+		productPrice: number,
+		promotionAmount?: number,
+	) => {
+		return (
+			urlSearchParamsProduct === productKey.toLowerCase() ||
+			isCardUserSelected(productPrice, promotionAmount)
+		);
+	};
+
 	/**
 	 * Tier 1: Contributions
 	 * We use the product catalog for the recurring Contribution tier amount
 	 */
-
-	const tier1Pricing = productCatalog.Contribution?.ratePlans[ratePlanKey]
+	const tier1Product = 'Contribution';
+	const tier1Pricing = productCatalog[tier1Product]?.ratePlans[ratePlanKey]
 		?.pricing[currencyId] as number;
 	const tier1checkoutUrl = buildCheckoutUrl(supportRegionId, {
-		product: 'Contribution',
+		product: tier1Product,
 		ratePlan: ratePlanKey,
 		contribution: tier1Pricing,
 	});
 
-	const getDefaultSelectedProduct = () => {
-		if (urlSearchParamsProduct) {
-			return urlSearchParamsProduct;
-		}
-
-		if (
-			isCardUserSelected(tier1Pricing) ||
-			isCardUserSelected(tier2Pricing, tier2Promotion?.discount?.amount) ||
-			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount)
-		) {
-			return undefined;
-		}
-		return settings.defaultProductSelection?.productType.toLowerCase();
-	};
-
-	const defaultSelectedProduct = getDefaultSelectedProduct();
-
 	const tier1Card: CardContent = {
-		product: 'Contribution',
+		product: tier1Product,
 		price: tier1Pricing,
 		link: tier1checkoutUrl,
-		isUserSelected:
-			urlSearchParamsProduct === 'contribution' ||
-			isCardUserSelected(tier1Pricing) ||
-			(!urlSearchParamsProduct && defaultSelectedProduct === 'contribution'),
-		...settings.products.Contribution,
+		isDefaultProductSelected: getDefaultProductSelection(tier1Product),
+		isUserSelected: getUserSelection(tier1Product, tier1Pricing),
+		...settings.products[tier1Product],
 		title:
-			settings.products.Contribution?.title ?? getProductLabel('Contribution'),
+			settings.products[tier1Product]?.title ?? getProductLabel(tier1Product),
 		benefits:
-			settings.products.Contribution?.benefits ??
+			settings.products[tier1Product]?.benefits ??
 			filterProductDescriptionBenefits(
-				productCatalogDescription.Contribution,
+				productCatalogDescription[tier1Product],
 				countryGroupId,
 			),
 		cta:
-			settings.products.Contribution?.cta ?? fallbackProducts.Contribution!.cta,
-		billingPeriodsCopy: settings.products.Contribution?.billingPeriodsCopy,
+			settings.products[tier1Product]?.cta ??
+			fallbackProducts[tier1Product]!.cta,
+		billingPeriodsCopy: settings.products[tier1Product]?.billingPeriodsCopy,
 	};
 
 	/** Tier 2: SupporterPlus */
-
-	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[
+	const tier2Product = 'SupporterPlus';
+	const tier2Pricing = productCatalog[tier2Product]?.ratePlans[
 		maybeTaxExclusiveRatePlanKey
 	]?.pricing[currencyId] as number;
 
 	const tierTwoProductOption = getThreeTierProductOption(
-		'SupporterPlus',
+		tier2Product,
 		supportRegionId,
 	);
 
 	const tier2Promotion = getPromotion(
-		allProductPrices.SupporterPlus,
+		allProductPrices[tier2Product],
 		countryId,
 		billingPeriod,
 		'NoFulfilmentOptions',
@@ -429,37 +435,39 @@ export function ThreeTierLanding({
 	);
 
 	const tier2CheckoutURL = buildCheckoutUrl(supportRegionId, {
-		product: 'SupporterPlus',
+		product: tier2Product,
 		ratePlan:
 			maybeTaxExclusiveRatePlanKey as ProductRatePlanKey<'SupporterPlus'>,
 		promoCode: tier2Promotion?.promoCode,
 	});
 
 	const tier2ProductDescription = {
-		...settings.products.SupporterPlus,
-		title: getProductLabel('SupporterPlus'),
+		...settings.products[tier2Product],
+		title: getProductLabel(tier2Product),
 		benefits:
-			settings.products.SupporterPlus?.benefits ??
+			settings.products[tier2Product]?.benefits ??
 			filterProductDescriptionBenefits(
-				productCatalogDescription.SupporterPlus,
+				productCatalogDescription[tier2Product],
 				countryGroupId,
 			),
 		cta:
-			settings.products.SupporterPlus?.cta ??
-			fallbackProducts.SupporterPlus!.cta,
-		billingPeriodsCopy: settings.products.SupporterPlus?.billingPeriodsCopy,
+			settings.products[tier2Product]?.cta ??
+			fallbackProducts[tier2Product]!.cta,
+		billingPeriodsCopy: settings.products[tier2Product]?.billingPeriodsCopy,
 	};
 
 	const tier2Card: CardContent = {
-		product: 'SupporterPlus',
+		product: tier2Product,
 		price: tier2Pricing,
 		link: tier2CheckoutURL,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion: tier2Promotion,
-		isUserSelected:
-			urlSearchParamsProduct === 'supporterplus' ||
-			isCardUserSelected(tier2Pricing, tier2Promotion?.discount?.amount) ||
-			(!urlSearchParamsProduct && defaultSelectedProduct === 'supporterplus'),
+		isDefaultProductSelected: getDefaultProductSelection(tier2Product),
+		isUserSelected: getUserSelection(
+			tier2Product,
+			tier2Pricing,
+			tier2Promotion?.discount?.amount,
+		),
 		...tier2ProductDescription,
 	};
 
@@ -489,19 +497,18 @@ export function ThreeTierLanding({
 		ratePlanKey,
 	);
 	const tier3ProductDescription = {
-		title: settings.products.DigitalSubscription?.title ?? title,
-		titlePill: settings.products.DigitalSubscription?.titlePill ?? titlePill,
+		title: settings.products[tier3Product]?.title ?? title,
+		titlePill: settings.products[tier3Product]?.titlePill ?? titlePill,
 		benefits:
-			settings.products.DigitalSubscription?.benefits ??
+			settings.products[tier3Product]?.benefits ??
 			filterProductDescriptionBenefits(
-				productCatalogDescription.DigitalSubscription,
+				productCatalogDescription[tier3Product],
 				countryGroupId,
 			),
 		cta:
-			settings.products.DigitalSubscription?.cta ??
-			fallbackProducts.DigitalSubscription!.cta,
-		billingPeriodsCopy:
-			settings.products.DigitalSubscription?.billingPeriodsCopy,
+			settings.products[tier3Product]?.cta ??
+			fallbackProducts[tier3Product]!.cta,
+		billingPeriodsCopy: settings.products[tier3Product]?.billingPeriodsCopy,
 	};
 	const tier3ProductPrice = allProductPrices.DigitalPack;
 	const tierThreeProductOption = getThreeTierProductOption(
@@ -529,11 +536,12 @@ export function ThreeTierLanding({
 		price: tier3Pricing,
 		link: tier3CheckoutURL,
 		promotion: tier3Promotion,
-		isUserSelected:
-			urlSearchParamsProduct === tier3Product.toLowerCase() ||
-			isCardUserSelected(tier3Pricing, tier3Promotion?.discount?.amount) ||
-			(!urlSearchParamsProduct &&
-				defaultSelectedProduct === tier3Product.toLowerCase()),
+		isDefaultProductSelected: getDefaultProductSelection(tier3Product),
+		isUserSelected: getUserSelection(
+			tier3Product,
+			tier3Pricing,
+			tier3Promotion?.discount?.amount,
+		),
 		...tier3ProductDescription,
 	};
 
@@ -682,6 +690,7 @@ export function ThreeTierLanding({
 						currencyId={currencyId}
 						billingPeriod={billingPeriod}
 						showWeeklyPrice={showWeeklyPrice}
+						deepDiscount={enableDeepDiscount}
 					/>
 				</div>
 			</Container>

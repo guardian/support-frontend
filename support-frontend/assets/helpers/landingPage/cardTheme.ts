@@ -5,6 +5,7 @@ export type CardTheme = {
 	cardPillColor: string;
 	cardBackColor: string;
 	benefitIconColor: string;
+	benefitPillColor: string;
 };
 
 export const defaultCardTheme: CardTheme = {
@@ -12,10 +13,12 @@ export const defaultCardTheme: CardTheme = {
 	cardPillColor: palette.brand[500],
 	cardBackColor: '#F1FBFF',
 	benefitIconColor: palette.brand[500],
+	benefitPillColor: palette.news[400],
 };
 export const redCardTheme: CardTheme = {
 	titlePillColor: palette.brand[500],
 	cardPillColor: palette.news[400],
-	cardBackColor: palette.news[800],
-	benefitIconColor: palette.news[400],
+	cardBackColor: palette.opinion[800],
+	benefitIconColor: palette.news[200],
+	benefitPillColor: palette.news[200],
 };
