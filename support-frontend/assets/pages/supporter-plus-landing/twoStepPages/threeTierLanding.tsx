@@ -362,11 +362,11 @@ export function ThreeTierLanding({
 		settings.defaultProductSelection?.productType.toLowerCase();
 
 	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
-	const { deepDiscount } = useFeatureSwitches();
+	const { enableDeepDiscount } = useFeatureSwitches();
 
 	const getDefaultProductSelection = (productKey: ProductKey) => {
 		return (
-			(!urlSearchParamsProduct || deepDiscount) &&
+			(!urlSearchParamsProduct || enableDeepDiscount) &&
 			defaultProductSelection === productKey.toLowerCase()
 		);
 	};
@@ -690,7 +690,7 @@ export function ThreeTierLanding({
 						currencyId={currencyId}
 						billingPeriod={billingPeriod}
 						showWeeklyPrice={showWeeklyPrice}
-						deepDiscount={deepDiscount}
+						deepDiscount={enableDeepDiscount}
 					/>
 				</div>
 			</Container>
