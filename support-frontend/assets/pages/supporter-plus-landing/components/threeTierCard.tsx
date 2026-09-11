@@ -21,10 +21,7 @@ import {
 	checkListTextItemCss,
 } from 'components/checkoutBenefits/benefitsCheckList';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import {
-	type CardTheme,
-	defaultCardTheme,
-} from 'helpers/landingPage/cardTheme';
+import { type CardTheme } from 'helpers/landingPage/cardTheme';
 import { getProductLabel } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import {
@@ -56,7 +53,7 @@ export type ThreeTierCardProps = {
 	billingPeriod: BillingPeriod;
 	deepDiscount: boolean;
 	cardContent: CardContent;
-	cardTheme?: CardTheme;
+	cardTheme: CardTheme;
 	showWeeklyPrice?: boolean;
 	useLargePriceMinHeight?: boolean;
 };
@@ -237,7 +234,7 @@ export function ThreeTierCard({
 		cardBackColor,
 		benefitIconColor,
 		benefitPillColor,
-	} = cardTheme ?? defaultCardTheme;
+	} = cardTheme;
 
 	const hasPillCopyNotSubdued = !!pillCopy && !isSubdued;
 	const userSelectedNoDeepDiscount = isUserSelected && !deepDiscount;

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
 import { currencyCodes } from '@modules/internationalisation/currency';
-import { redCardTheme } from 'helpers/landingPage/cardTheme';
+import { defaultCardTheme, redCardTheme } from 'helpers/landingPage/cardTheme';
 import type { ThreeTierCardProps } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { ThreeTierCard } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
@@ -76,6 +76,7 @@ DefaultTheme.args = {
 		label: { copy: 'Highest impact' },
 		link: '',
 	},
+	cardTheme: defaultCardTheme,
 };
 
 export const RedTheme = Template.bind({});
@@ -118,6 +119,7 @@ Promotion.args = {
 		promotion: promotionEURCountries,
 		link: '',
 	},
+	cardTheme: defaultCardTheme,
 };
 
 export const IntroductoryPromotion = Template.bind({});
@@ -139,6 +141,7 @@ IntroductoryPromotion.args = {
 		promotion: { ...promotionEURCountries, isIntroductoryPricing: true },
 		link: '',
 	},
+	cardTheme: defaultCardTheme,
 };
 
 export const BillingPeriodsCopy = Template.bind({});
@@ -160,6 +163,7 @@ BillingPeriodsCopy.args = {
 		billingPeriodsCopy:
 			'From %%PRICE_PRODUCT_WEEKLY%% per week, billed monthly or annually.',
 	},
+	cardTheme: defaultCardTheme,
 };
 
 export const PromotionWithBillingPeriodsCopy = Template.bind({});
@@ -183,6 +187,7 @@ PromotionWithBillingPeriodsCopy.args = {
 		billingPeriodsCopy:
 			'From %%PRICE_PRODUCT_WEEKLY%% per week, billed monthly or annually.',
 	},
+	cardTheme: defaultCardTheme,
 };
 
 export const WeeklyPricing = Template.bind({});
@@ -203,6 +208,7 @@ WeeklyPricing.args = {
 		label: { copy: 'Highest impact' },
 		link: '',
 	},
+	cardTheme: defaultCardTheme,
 	showWeeklyPrice: true,
 };
 
@@ -225,5 +231,6 @@ WeeklyPricingWithPromotion.args = {
 		promotion: promotionEURCountries,
 		link: '',
 	},
+	cardTheme: defaultCardTheme,
 	showWeeklyPrice: true,
 };
