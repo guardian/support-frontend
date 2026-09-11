@@ -45,6 +45,8 @@ jobs:
 
       - name: TypeScript support-backend test and build
         run: |
+          pnpm --filter support-backend lint
+          pnpm --filter support-backend check-formatting
           pnpm --filter support-backend test
           pnpm --filter support-backend build
           pushd support-backend
