@@ -126,11 +126,15 @@ export class SupportWorkers extends GuStack {
 				assumedBy: new WebIdentityPrincipal(
 					`arn:aws:iam::${this.account}:oidc-provider/token.actions.githubusercontent.com`,
 					{
-						StringLike: {
-							// Allows any branch in the support-frontend repo to assume this role
-							'token.actions.githubusercontent.com:sub':
-								'repo:guardian/support-frontend:*',
+						StringEquals: {
 							'token.actions.githubusercontent.com:aud': 'sts.amazonaws.com',
+						},
+						'ForAnyValue:StringLike': {
+							// Allows any branch in the support-frontend repo to assume this role
+							'token.actions.githubusercontent.com:sub': [
+								'repo:guardian/support-frontend:*',
+								'repo:guardian@164318/support-frontend@87204582:*',
+							],
 						},
 					},
 				),
