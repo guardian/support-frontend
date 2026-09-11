@@ -37,7 +37,6 @@ import {
 	type Payment,
 	simpleFormatAmount,
 } from 'helpers/forms/checkouts';
-import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
 	isPaymentMethod,
 	type PaymentMethod as LegacyPaymentMethod,
@@ -318,12 +317,6 @@ export default function CheckoutForm({
 		}
 	}, [stripeExpressCheckoutSuccessful]);
 
-	/**
-	 * Payment method: PayPal
-	 * BAID = Billing Agreement ID
-	 */
-	const [payPalLoaded, setPayPalLoaded] = useState(false);
-
 	const [payPalPaymentToken, setPayPalPaymentToken] = useState<PaymentToken>();
 	/**
 	 * payPalPaymentToken forces formOnSubmit
@@ -346,11 +339,6 @@ export default function CheckoutForm({
 			formRef.current?.requestSubmit();
 		}
 	}, [checkoutSession?.checkoutSessionId]);
-	useEffect(() => {
-		if (paymentMethod === 'PayPal' && !payPalLoaded) {
-			void loadPayPalRecurring().then(() => setPayPalLoaded(true));
-		}
-	}, [paymentMethod, payPalLoaded]);
 
 	/** Recaptcha */
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
