@@ -15,10 +15,30 @@ export interface VerifyInvitationResult {
 	invitation?: OnboardingInviteeInvitation;
 }
 
+export type InvitationMode = 'accept' | 'reject';
+
+export function isInvitationUnavailable(
+	invitationCode: string | undefined,
+	verification: VerifyInvitationResult | undefined,
+	mode: InvitationMode,
+): boolean {
+	if (!invitationCode) {
+		return true;
+	}
+	if (!verification) {
+		return false;
+	}
+	if (verification.status === 'invalid' || verification.status === 'expired') {
+		return true;
+	}
+	return mode === 'reject' && verification.status === 'accepted';
+}
+
 const invitationResponseSchema = z.object({
 	subscriptionName: z.string(),
 	invitationCode: z.string(),
 	primaryIdentityId: z.string(),
+	primaryUserFirstName: z.string().nullish(),
 	secondaryUserEmail: z.string(),
 	secondaryIdentityId: z.string(),
 	invitedDate: z.string(),
@@ -64,12 +84,14 @@ export async function verifyInvitation(
 		}
 
 		const invitation = parsedInvitation.data;
+		const inviterFirstName = invitation.primaryUserFirstName?.trim();
 
 		return {
 			status: 'valid',
 			invitation: {
 				invitationCode: invitation.invitationCode,
 				email: invitation.secondaryUserEmail,
+				...(inviterFirstName ? { inviterFirstName } : {}),
 			},
 		};
 	} catch {

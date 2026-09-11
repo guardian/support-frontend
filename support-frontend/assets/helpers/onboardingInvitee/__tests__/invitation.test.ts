@@ -2,6 +2,7 @@ import fetchMock from '@fetch-mock/jest';
 import {
 	acceptInvitation,
 	declineInvitation,
+	isInvitationUnavailable,
 	verifyInvitation,
 } from 'helpers/onboardingInvitee/invitation';
 
@@ -50,6 +51,27 @@ describe('verifyInvitation', () => {
 			invitation: {
 				invitationCode,
 				email: 'invitee@example.com',
+			},
+		});
+	});
+
+	it('maps primaryUserFirstName onto the invitation when the API returns it', async () => {
+		fetchMock.get(endpoint, {
+			body: {
+				...invitationResponse(Date.now() + oneDayInMillis),
+				primaryUserFirstName: 'Jontho',
+			},
+			headers: { 'Content-Type': 'application/json' },
+		});
+
+		const result = await verifyInvitation(invitationCode);
+
+		expect(result).toEqual({
+			status: 'valid',
+			invitation: {
+				invitationCode,
+				email: 'invitee@example.com',
+				inviterFirstName: 'Jontho',
 			},
 		});
 	});
@@ -163,6 +185,53 @@ describe('acceptInvitation', () => {
 		const result = await acceptInvitation(invitationCode, csrf);
 
 		expect(result).toBe('failed');
+	});
+});
+
+describe('isInvitationUnavailable', () => {
+	const validVerification = {
+		status: 'valid' as const,
+		invitation: { invitationCode, email: 'invitee@example.com' },
+	};
+
+	it('returns true when there is no invitation code', () => {
+		expect(isInvitationUnavailable(undefined, undefined, 'accept')).toBe(true);
+	});
+
+	it('returns false while verification is still loading', () => {
+		expect(isInvitationUnavailable(invitationCode, undefined, 'accept')).toBe(
+			false,
+		);
+	});
+
+	it('returns true for invalid and expired invitations', () => {
+		expect(
+			isInvitationUnavailable(invitationCode, { status: 'invalid' }, 'accept'),
+		).toBe(true);
+		expect(
+			isInvitationUnavailable(invitationCode, { status: 'expired' }, 'reject'),
+		).toBe(true);
+	});
+
+	it('returns true when rejecting an already accepted invitation', () => {
+		expect(
+			isInvitationUnavailable(invitationCode, { status: 'accepted' }, 'reject'),
+		).toBe(true);
+	});
+
+	it('returns false when accepting an already accepted invitation', () => {
+		expect(
+			isInvitationUnavailable(invitationCode, { status: 'accepted' }, 'accept'),
+		).toBe(false);
+	});
+
+	it('returns false for a valid invitation in either mode', () => {
+		expect(
+			isInvitationUnavailable(invitationCode, validVerification, 'accept'),
+		).toBe(false);
+		expect(
+			isInvitationUnavailable(invitationCode, validVerification, 'reject'),
+		).toBe(false);
 	});
 });
 

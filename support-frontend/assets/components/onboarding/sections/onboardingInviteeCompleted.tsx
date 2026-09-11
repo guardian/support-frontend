@@ -47,6 +47,7 @@ const completedStackPadding = css`
 `;
 
 export function OnboardingInviteeCompleted({
+	invitation,
 	landingPageSettings,
 	supportRegionId,
 }: {
@@ -87,12 +88,12 @@ export function OnboardingInviteeCompleted({
 							Guardian&apos;s trusted journalism stands as a powerful
 							counterforce.
 						</p>
-						{/* TODO: reinstate once the inviter's name is available from the
-						multiple-account API (it currently only returns identity IDs).
-						<p css={descriptions}>
-							You&apos;ve joined {invitation.inviterFirstName}&apos;s
-							subscription and have access to:
-						</p> */}
+						{invitation.inviterFirstName && (
+							<p css={descriptions}>
+								You&apos;ve joined {invitation.inviterFirstName}&apos;s
+								subscription and have access to:
+							</p>
+						)}
 					</Stack>
 					<ul>
 						{benefitsChecklist.map((benefit) => (

@@ -5,13 +5,17 @@ import { InvitationUnavailable } from 'components/onboarding/sections/invitation
 import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
 import { AnalyticsProfileCacheProvider } from 'helpers/customHooks/analyticsProfileCache';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
-import type { VerifyInvitationResult } from 'helpers/onboardingInvitee/invitation';
-import { verifyInvitation } from 'helpers/onboardingInvitee/invitation';
+import type {
+	InvitationMode,
+	VerifyInvitationResult,
+} from 'helpers/onboardingInvitee/invitation';
+import {
+	isInvitationUnavailable,
+	verifyInvitation,
+} from 'helpers/onboardingInvitee/invitation';
 import { getUser } from 'helpers/user/user';
 import OnboardingDeclineComponent from './components/onboardingDeclineComponent';
 import OnboardingInviteeComponent from './components/onboardingInviteeComponent';
-
-type InvitationMode = 'accept' | 'reject';
 
 type InvitationProps = {
 	supportRegionId: SupportRegionId;
@@ -36,27 +40,15 @@ export function Invitation({
 		void verifyInvitation(invitationCode).then(setVerification);
 	}, [invitationCode]);
 
-	if (!invitationCode) {
+	if (isInvitationUnavailable(invitationCode, verification, mode)) {
 		return <InvitationUnavailable />;
 	}
 
-	if (!verification) {
+	if (!invitationCode || !verification) {
 		return <GuardianHoldingContent />;
 	}
 
-	if (verification.status === 'invalid') {
-		return <InvitationUnavailable />;
-	}
-
-	if (verification.status === 'expired') {
-		return <InvitationUnavailable />;
-	}
-
 	if (mode === 'reject') {
-		if (verification.status === 'accepted') {
-			return <InvitationUnavailable />;
-		}
-
 		return (
 			<OnboardingDeclineComponent
 				supportRegionId={supportRegionId}
