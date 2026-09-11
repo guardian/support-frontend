@@ -99,6 +99,12 @@ const heroContainer = css`
 	}
 `;
 
+const completedStack = css`
+	margin-top: ${space[5]}px;
+	position: relative;
+	z-index: 1;
+`;
+
 export {
 	headings,
 	descriptions,
@@ -112,4 +118,5 @@ export {
 	benefitsItemText,
 	benefitsItemIcon,
 	heroContainer,
+	completedStack,
 };

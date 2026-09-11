@@ -5,7 +5,8 @@ import {
 	space,
 	textSansBold14,
 } from '@guardian/source/foundations';
-import { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
+import type { ReactElement } from 'react';
+import { OnboardingSteps } from 'components/onboarding/onboardingSteps';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { AppStoreMobile } from './appStore';
 import { FeastAppsQrCode } from './feastAppsQrCode';
@@ -14,6 +15,39 @@ import { PlayStoreMobile } from './playStore';
 
 const guardianAppUrl = 'https://guardian.go.link/home?adj_t=1vddwf4h';
 const feastAppUrl = 'https://guardian-feast.go.link/home?adj_t=1vktw84s';
+const editionsAppUrl =
+	'https://play.google.com/store/apps/details?id=com.guardian.editions';
+
+export const ONBOARDING_EDITIONS_APP = 'editions-app';
+
+export type OnboardingAppBadgesDownloadStep =
+	| OnboardingSteps.GuardianApp
+	| OnboardingSteps.FeastApp
+	| typeof ONBOARDING_EDITIONS_APP;
+
+type AppBadgesConfig = {
+	link: string;
+	qrCode: ReactElement;
+};
+
+const appBadgesConfigMap: Record<
+	OnboardingAppBadgesDownloadStep,
+	AppBadgesConfig
+> = {
+	[OnboardingSteps.GuardianApp]: {
+		link: guardianAppUrl,
+		qrCode: <GuardianAppsQrCode />,
+	},
+	[OnboardingSteps.FeastApp]: {
+		link: feastAppUrl,
+		qrCode: <FeastAppsQrCode />,
+	},
+	[ONBOARDING_EDITIONS_APP]: {
+		link: editionsAppUrl,
+		// TODO: replace with Editions app QR code when asset is available
+		qrCode: <GuardianAppsQrCode />,
+	},
+};
 
 const badgesContainer = css`
 	display: flex;
@@ -81,20 +115,10 @@ const separator = css`
 export function OnboardingAppBadgesDownload({
 	onboardingStep,
 }: {
-	onboardingStep: OnboardingSteps;
+	onboardingStep: OnboardingAppBadgesDownloadStep;
 }) {
 	const { windowWidthIsGreaterThan } = useWindowWidth();
-
-	const link =
-		onboardingStep === OnboardingSteps.GuardianApp
-			? guardianAppUrl
-			: feastAppUrl;
-	const qrCode =
-		onboardingStep === OnboardingSteps.GuardianApp ? (
-			<GuardianAppsQrCode />
-		) : (
-			<FeastAppsQrCode />
-		);
+	const { link, qrCode } = appBadgesConfigMap[onboardingStep];
 
 	return (
 		<div css={container}>

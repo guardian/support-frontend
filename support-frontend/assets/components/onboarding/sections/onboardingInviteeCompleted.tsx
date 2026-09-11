@@ -5,12 +5,15 @@ import {
 	Stack,
 	SvgTickRound,
 } from '@guardian/source/react-components';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import GridImage from 'components/gridImage/gridImage';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
+import type { OnboardingInviteeInvitation } from 'helpers/onboardingInvitee/invitation';
 import { getHelpCentreUrl, getManageSubsUrl } from 'helpers/urls/externalLinks';
 import { getBaseDomain } from 'helpers/urls/url';
-import type { OnboardingProductKey } from 'pages/[countryGroupId]/components/onboardingComponent';
+import { getBenefitsChecklistFromLandingPageTool } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
+import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import ContentBox from '../contentBox';
 import {
 	benefitsItem,
@@ -43,15 +46,23 @@ const completedStackPadding = css`
 	}
 `;
 
-export function OnboardingCompleted({
-	productKey,
+export function OnboardingInviteeCompleted({
+	invitation,
 	landingPageSettings,
+	supportRegionId,
 }: {
-	productKey?: OnboardingProductKey;
+	invitation: OnboardingInviteeInvitation;
 	landingPageSettings: LandingPageVariant;
+	supportRegionId: SupportRegionId;
 }) {
-	const productSettings =
-		productKey && landingPageSettings.products[productKey];
+	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
+
+	const benefitsChecklist =
+		getBenefitsChecklistFromLandingPageTool(
+			'DigitalSubscription',
+			landingPageSettings,
+			countryGroupId,
+		) ?? [];
 
 	const { windowWidthIsLessThan } = useWindowWidth();
 
@@ -60,31 +71,35 @@ export function OnboardingCompleted({
 			<ContentBox removePadding>
 				<div css={[heroContainer, heroAspectRatio]}>
 					<GridImage
-						gridId={'onboardingCompletedHero'}
+						gridId="onboardingCompletedHero"
 						srcSizes={[2000, 1000, 500]}
 						sizes="(max-width: 739px) 140px, 422px"
 						imgType="png"
-						altText={'Onboarding completed hero'}
+						altText="Onboarding completed hero"
 					/>
 				</div>
+
 				<Stack space={5} cssOverrides={completedStackPadding}>
 					<div css={separator} />
 					<Stack space={2}>
-						<h1 css={headings}>Thank you</h1>
+						<h1 css={headings}>Start reading the Guardian</h1>
 						<p css={descriptions}>
 							In a world increasingly shaped by disinformation and division, the
-							Guardian’s trusted journalism stands as a powerful counterforce.
+							Guardian&apos;s trusted journalism stands as a powerful
+							counterforce.
 						</p>
-						<p css={descriptions}>
-							Your support makes that possible, and now that your All-access
-							digital subscription is active, you have access to:
-						</p>
+						{invitation.inviterFirstName && (
+							<p css={descriptions}>
+								You&apos;ve joined {invitation.inviterFirstName}&apos;s
+								subscription and have access to:
+							</p>
+						)}
 					</Stack>
 					<ul>
-						{productSettings?.benefits.map((benefit) => (
+						{benefitsChecklist.map((benefit) => (
 							<li
 								css={benefitsItem}
-								key={`onboarding-summary-benefit-${benefit.copy}`}
+								key={`onboarding-invitee-benefit-${benefit.text as string}`}
 							>
 								<div css={benefitsItemIcon}>
 									<SvgTickRound
@@ -93,7 +108,7 @@ export function OnboardingCompleted({
 										theme={{ fill: palette.brand[500] }}
 									/>
 								</div>
-								<span css={benefitsItemText}>{benefit.copy}</span>
+								<span css={benefitsItemText}>{benefit.text}</span>
 							</li>
 						))}
 					</ul>
@@ -106,18 +121,25 @@ export function OnboardingCompleted({
 					</LinkButton>
 				</Stack>
 			</ContentBox>
-			<p css={newslettersAppUsageInformation}>
-				Need help? Visit our{' '}
-				<a href={getHelpCentreUrl()} css={linkStyle}>
-					Help Centre
-				</a>{' '}
-				to find the FAQs and contact options. You can manage your subscription
-				anytime in{' '}
-				<a href={getManageSubsUrl()} css={linkStyle}>
-					Manage my account
-				</a>
-				.
-			</p>
+			<Stack space={2} cssOverrides={newslettersAppUsageInformation}>
+				<p>
+					Keep an eye out for your exclusive newsletters from our editors. You
+					can manage your preferences at any time by signing into your Guardian
+					account to update your settings.
+				</p>
+				<p>
+					Need help? Visit our{' '}
+					<a href={getHelpCentreUrl()} css={linkStyle}>
+						Help Centre
+					</a>{' '}
+					to find the FAQs and contact options. You can manage your subscription
+					anytime in{' '}
+					<a href={getManageSubsUrl()} css={linkStyle}>
+						Manage my account
+					</a>
+					.
+				</p>
+			</Stack>
 		</Stack>
 	);
 }
