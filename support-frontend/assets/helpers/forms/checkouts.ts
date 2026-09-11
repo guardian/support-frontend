@@ -103,6 +103,5 @@ export {
 	simpleFormatAmount,
 	simpleFormatTaxAmount,
 	calculateAndRoundTax,
-	calculateTotal,
 	calculateAndFormatTotal,
 };

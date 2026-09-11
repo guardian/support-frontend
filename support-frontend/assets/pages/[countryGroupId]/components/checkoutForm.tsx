@@ -37,7 +37,6 @@ import {
 	type Payment,
 	simpleFormatAmount,
 } from 'helpers/forms/checkouts';
-import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
 	isPaymentMethod,
 	type PaymentMethod as LegacyPaymentMethod,
@@ -318,26 +317,6 @@ export default function CheckoutForm({
 		}
 	}, [stripeExpressCheckoutSuccessful]);
 
-	/**
-	 * Payment method: PayPal
-	 * BAID = Billing Agreement ID
-	 */
-	const [payPalLoaded, setPayPalLoaded] = useState(false);
-	const [payPalBAID, setPayPalBAID] = useState('');
-	/**
-	 * PayPalBAID forces formOnSubmit
-	 */
-	useEffect(() => {
-		if (payPalBAID !== '') {
-			// TODO - this might not meet our browser compatibility requirements (Safari)
-			// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
-			formRef.current?.requestSubmit();
-		}
-	}, [payPalBAID]);
-	/**
-	 * Payment method: PayPal Complete Payments
-	 * Payment Token = the new equivalent of a BAID
-	 */
 	const [payPalPaymentToken, setPayPalPaymentToken] = useState<PaymentToken>();
 	/**
 	 * payPalPaymentToken forces formOnSubmit
@@ -360,11 +339,6 @@ export default function CheckoutForm({
 			formRef.current?.requestSubmit();
 		}
 	}, [checkoutSession?.checkoutSessionId]);
-	useEffect(() => {
-		if (paymentMethod === 'PayPal' && !payPalLoaded) {
-			void loadPayPalRecurring().then(() => setPayPalLoaded(true));
-		}
-	}, [paymentMethod, payPalLoaded]);
 
 	/** Recaptcha */
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
@@ -1298,17 +1272,11 @@ export default function CheckoutForm({
 							<SubmitButton
 								buttonText={buttonText}
 								paymentMethod={paymentMethod}
-								payPalLoaded={payPalLoaded}
-								payPalBAID={payPalBAID}
-								setPayPalBAID={setPayPalBAID}
 								payPalPaymentToken={payPalPaymentToken}
 								setPayPalPaymentToken={setPayPalPaymentToken}
 								formRef={formRef}
 								isTestUser={isTestUser}
-								payment={payment}
-								taxRateConfig={taxRateConfig}
 								currencyKey={currencyKey}
-								billingPeriod={billingPeriod}
 								csrf={csrf.token ?? ''}
 								paypalClientId={paypalClientId}
 								setErrorMessage={setErrorMessage}
