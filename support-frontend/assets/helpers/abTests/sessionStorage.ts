@@ -23,12 +23,12 @@ export type Key =
 	| typeof ONE_TIME_CHECKOUT_PARTICIPATIONS_KEY
 	| typeof STUDENT_LANDING_PAGE_PARTICIPATIONS_KEY;
 
-function getSessionParticipations(key: Key): Participations | null {
+function getSessionParticipations(key: Key): Participations | undefined {
 	try {
-		return getSession(key, participationsSchema);
+		return getSession(key, participationsSchema) ?? undefined;
 	} catch (error) {
 		console.error(`Failed to fetch ${key} from session storage`, error);
-		return null;
+		return undefined;
 	}
 }
 
