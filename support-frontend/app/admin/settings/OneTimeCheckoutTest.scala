@@ -2,6 +2,8 @@ package admin.settings
 
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
+import io.circe.generic.extras.Configuration
+import io.circe.generic.extras.semiauto.deriveConfiguredDecoder
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 
@@ -13,24 +15,9 @@ case class AmountsSelection(
 )
 
 object AmountsSelection {
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
   implicit val encoder: Encoder[AmountsSelection] = deriveEncoder
-  implicit val decoder: Decoder[AmountsSelection] = Decoder.instance { cursor =>
-    for {
-      amounts <- cursor.get[List[Int]]("amounts")
-      defaultAmount <- cursor.get[Int]("defaultAmount")
-      hideChooseYourAmount <- cursor
-        .get[Option[Boolean]]("hideChooseYourAmount")
-        .map(_.getOrElse(false))
-      mParticleAmountAttribute <- cursor.get[Option[MParticleAmountAttribute]](
-        "mParticleAmountAttribute",
-      )
-    } yield AmountsSelection(
-      amounts,
-      defaultAmount,
-      hideChooseYourAmount,
-      mParticleAmountAttribute,
-    )
-  }
+  implicit val decoder: Decoder[AmountsSelection] = deriveConfiguredDecoder
   implicit val codec: Codec[AmountsSelection] = new Codec(encoder, decoder)
 }
 
