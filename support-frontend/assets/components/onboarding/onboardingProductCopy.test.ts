@@ -81,7 +81,7 @@ describe('getOnboardingProductCopy', () => {
 
 		expect(benefits.length).toBeGreaterThan(0);
 		expect(benefits.map((benefit) => benefit.text)).toContain(
-			'Guardian Weekly e-magazine',
+			'Guardian Weekly digital magazines',
 		);
 	});
 });
