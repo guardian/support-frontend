@@ -8,29 +8,51 @@ export interface OnboardingInviteeInvitation {
 	inviterFirstName?: string;
 }
 
-type InvitationStatus = 'valid' | 'expired' | 'invalid';
+type InvitationStatus = 'valid' | 'expired' | 'invalid' | 'accepted';
 
 export interface VerifyInvitationResult {
 	status: InvitationStatus;
 	invitation?: OnboardingInviteeInvitation;
 }
 
+export type InvitationMode = 'accept' | 'reject';
+
+export function isInvitationUnavailable(
+	invitationCode: string | undefined,
+	verification: VerifyInvitationResult | undefined,
+	mode: InvitationMode,
+): boolean {
+	if (!invitationCode) {
+		return true;
+	}
+	if (!verification) {
+		return false;
+	}
+	if (verification.status === 'invalid' || verification.status === 'expired') {
+		return true;
+	}
+	return mode === 'reject' && verification.status === 'accepted';
+}
+
 const invitationResponseSchema = z.object({
 	subscriptionName: z.string(),
 	invitationCode: z.string(),
 	primaryIdentityId: z.string(),
+	primaryUserFirstName: z.string().nullish(),
 	secondaryUserEmail: z.string(),
 	secondaryIdentityId: z.string(),
 	invitedDate: z.string(),
 	expiryDate: z.number(),
 });
 
+const goneReasonSchema = z.object({
+	reason: z.enum(['expired', 'alreadyAccepted']),
+});
+
 // Verifies an invitation via the Play server, which proxies the multiple-account
 // API and attaches the API key server side. A 404 means the code doesn't exist,
-// a 400 means it has been cancelled, and a 410 means it has expired. Those
-// statuses (along with any unexpected failure or a response that doesn't match
-// the expected shape) are surfaced as 'invalid' or 'expired'. Expiry is decided
-// on the server using the expiryDate in the upstream response.
+// a 400 means it has been cancelled, and a 410 includes a reason: "expired" or
+// "alreadyAccepted".
 export async function verifyInvitation(
 	invitationCode: string,
 ): Promise<VerifyInvitationResult> {
@@ -39,29 +61,37 @@ export async function verifyInvitation(
 			`/invitation/${encodeURIComponent(invitationCode)}`,
 		);
 
+		const body: unknown = await response.json().catch(() => undefined);
+
 		if (response.status === 410) {
-			return { status: 'expired' };
+			const gone = goneReasonSchema.safeParse(body);
+			if (!gone.success) {
+				return { status: 'invalid' };
+			}
+			return {
+				status: gone.data.reason === 'alreadyAccepted' ? 'accepted' : 'expired',
+			};
 		}
 
 		if (!response.ok) {
 			return { status: 'invalid' };
 		}
 
-		const parsedInvitation = invitationResponseSchema.safeParse(
-			await response.json(),
-		);
+		const parsedInvitation = invitationResponseSchema.safeParse(body);
 
 		if (!parsedInvitation.success) {
 			return { status: 'invalid' };
 		}
 
 		const invitation = parsedInvitation.data;
+		const inviterFirstName = invitation.primaryUserFirstName?.trim();
 
 		return {
 			status: 'valid',
 			invitation: {
 				invitationCode: invitation.invitationCode,
 				email: invitation.secondaryUserEmail,
+				...(inviterFirstName ? { inviterFirstName } : {}),
 			},
 		};
 	} catch {
