@@ -75,9 +75,9 @@ describe('storage', () => {
 		it('returns value from @guardian/libs storage when present', () => {
 			const getSpy = jest.spyOn(storage.session, 'get');
 			setSession('myKey', { session: 'data' });
-			expect(
-				getSession('myKey', z.object({ session: z.string() })),
-			).toEqual({ session: 'data' });
+			expect(getSession('myKey', z.object({ session: z.string() }))).toEqual({
+				session: 'data',
+			});
 			expect(getSpy).toHaveBeenCalledWith('myKey');
 		});
 
@@ -91,9 +91,9 @@ describe('storage', () => {
 				'myKey',
 				JSON.stringify({ fallback: true }),
 			);
-			expect(
-				getSession('myKey', z.object({ fallback: z.boolean() })),
-			).toEqual({ fallback: true });
+			expect(getSession('myKey', z.object({ fallback: z.boolean() }))).toEqual({
+				fallback: true,
+			});
 		});
 
 		it('parses a JSON string from window.sessionStorage', () => {
