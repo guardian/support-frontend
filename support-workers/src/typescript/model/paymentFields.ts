@@ -26,11 +26,6 @@ export const paymentProviderSchema = z.union([
 	directDebitPaymentProviderSchema,
 	existingPaymentProviderSchema,
 ]);
-const payPalPaymentFieldsSchema = z.object({
-	paymentType: payPalPaymentProviderSchema,
-	baid: z.string(),
-});
-export type PayPalPaymentFields = z.infer<typeof payPalPaymentFieldsSchema>;
 
 const payPalCompletePaymentsPaymentFieldsSchema = z.object({
 	paymentType: payPalCompletePaymentsPaymentProviderSchema,
@@ -77,7 +72,6 @@ const existingPaymentFieldsSchema = z.object({
 	billingAccountId: z.string(),
 });
 export const paymentFieldsSchema = z.discriminatedUnion('paymentType', [
-	payPalPaymentFieldsSchema,
 	stripePaymentFieldsSchema,
 	stripeHostedPaymentFieldsSchema,
 	directDebitPaymentFieldsSchema,
