@@ -3,11 +3,13 @@ import type {
 	AcquisitionQueryParameters,
 	ReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
+import { referrerAcquisitionDataSchema } from 'helpers/tracking/acquisitions';
 
 const useEmailMarketingSession = (): { isMarketingEmailSession: boolean } => {
-	const acquisitionData = getSession(
+	const acquisitionData: ReferrerAcquisitionData | null = getSession(
 		'acquisitionData',
-	) as ReferrerAcquisitionData | null;
+		referrerAcquisitionDataSchema,
+	);
 	let queryParams: AcquisitionQueryParameters = [];
 
 	if (acquisitionData) {
