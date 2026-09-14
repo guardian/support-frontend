@@ -46,13 +46,22 @@ export function OnboardingCreateAccount({
 				cssOverrides={css`
 					margin-top: ${space[5]}px;
 					margin-bottom: ${space[10]}px;
+					padding-top: 0;
+
+					${from.tablet} {
+						padding-top: 0;
+					}
 				`}
 			>
 				<div css={[heroContainer, heroAspectRatio]}>
 					<GridImage
-						gridId={'onboardingInviteeCreateAccountHero'}
-						srcSizes={[442]}
-						sizes="442px"
+						gridId={
+							showIframe
+								? 'onboardingInviteeCreateAccountHero'
+								: 'onboardingInviteeCreateAccountHeroCompleted'
+						}
+						srcSizes={[2000, 1000, 500]}
+						sizes="(max-width: 739px) 140px, 422px"
 						imgType="png"
 						altText={'Onboarding invitee create account hero'}
 					/>

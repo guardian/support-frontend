@@ -19,14 +19,14 @@ export default {
 	},
 };
 
-function CreateAccountStory() {
+function CreateAccountStory({ showIframe }: { showIframe: boolean }) {
 	const iframeRef = useRef<HTMLIFrameElement>(null);
 
 	return (
 		<OnboardingCreateAccount
 			iframeRef={iframeRef}
 			iframeSrc="about:blank"
-			showIframe={true}
+			showIframe={showIframe}
 			handleStepNavigation={() => {}}
 			csrf={{ token: 'storybook-csrf-token' }}
 			userNewslettersSubscriptions={null}
@@ -35,5 +35,9 @@ function CreateAccountStory() {
 }
 
 export const Default = {
-	render: () => <CreateAccountStory />,
+	render: () => <CreateAccountStory showIframe={true} />,
+};
+
+export const InviteeRegistered = {
+	render: () => <CreateAccountStory showIframe={false} />,
 };

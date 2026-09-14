@@ -48,6 +48,13 @@ export const NewUserJustRegistered = {
 	},
 };
 
+export const InviteeUserRegistered = {
+	args: {
+		...defaultArgs,
+		userState: 'inviteeUserRegistered',
+	},
+};
+
 export const ExistingUserSignedInWithNewsletterSubscriptions = {
 	args: {
 		...defaultArgs,
