@@ -8,6 +8,7 @@ install_nginx() {
   sudo apt -y update
   sudo apt -y install nginx
   sudo apt -y install mkcert
+  sudo apt -y install libnss3-tools
 
   echo "Done installing nginx"
 }
@@ -65,12 +66,34 @@ setup_nginx() {
     sudo env "PATH=$PATH" "HOME=$HOME" "JAVA_HOME=$JAVA_HOME" dev-nginx link-config ${DIR}/nginx/${config}.conf
     # extra link required because dev-nginx makes an assumption about /etc/nginx/servers, which isn't a think
     # on Linux
-    sudo ln -s /etc/nginx/servers/${config}.conf /etc/nginx/conf.d/${config}.conf
+    sudo ln -fs /etc/nginx/servers/${config}.conf /etc/nginx/conf.d/${config}.conf
   done
 
   sudo env "PATH=$PATH" "HOME=$HOME" "JAVA_HOME=$JAVA_HOME" dev-nginx restart-nginx
 
   echo "Done setting up devnginx"
+}
+
+trust_mkcert_ca() {
+  echo "Trusting mkcert CA for Chromium..."
+
+  # setup-cert ran under sudo, so the CA (and any NSS db it created) are
+  # root-owned; hand them back so mkcert can update the user's trust stores
+  sudo chown -R "$USER:$USER" "$(mkcert -CAROOT)"
+  [ -d "$HOME/.pki" ] && sudo chown -R "$USER:$USER" "$HOME/.pki"
+
+  # Chromium/Playwright verify certs against ~/.pki/nssdb, which mkcert only
+  # populates when certutil (libnss3-tools) is present.
+  # mkcert only writes to an existing NSS db, so create an empty one first
+  # (Playwright's Chromium never launches to create it itself)
+  if [ ! -f "$HOME/.pki/nssdb/cert9.db" ]; then
+    mkdir -p "$HOME/.pki/nssdb"
+    certutil -d sql:"$HOME/.pki/nssdb" -N --empty-password
+  fi
+
+  mkcert -install
+
+  echo "Done trusting mkcert CA"
 }
 
 install_chromium() {
@@ -94,6 +117,7 @@ main () {
   install_nginx
   install_devnginx
   setup_nginx
+  trust_mkcert_ca
   install_chromium
   print_next_steps
 }
