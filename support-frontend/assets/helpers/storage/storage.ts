@@ -45,7 +45,7 @@ function getSession<T>(key: string, schema: z.ZodMiniType<T>): T | null {
 
 	try {
 		const item = window.sessionStorage.getItem(key);
-		const data = item && (JSON.parse(item) as unknown);
+		const parsedData = item && (JSON.parse(item) as unknown);
 		const result = z.safeParse(schema, data ?? null);
 		return result.success ? result.data : null;
 	} catch (error) {
