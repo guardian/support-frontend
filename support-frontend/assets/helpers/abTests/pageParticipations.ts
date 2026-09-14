@@ -133,20 +133,6 @@ export async function getPageParticipations<Variant>(
 		});
 	};
 
-	const isMParticleTest = (test: PageTest<Variant>): boolean =>
-		test.variants.some((variant) => {
-			const getRequiredMParticleAttributes =
-				config.getRequiredMParticleAttributes;
-			const hasRequiredAttribute = getRequiredMParticleAttributes
-				? getRequiredMParticleAttributes(variant).length > 0
-				: false;
-
-			return hasRequiredAttribute;
-		});
-
-	const isMParticleTestAllowed = (test: PageTest<Variant>): boolean =>
-		!isMParticleTest(test) || test.name.startsWith('MPARTICLE_ATTRIBUTES_');
-
 	// Only track participation if user is on the target page
 	const trackParticipation = isTargetPage(path);
 
@@ -171,10 +157,6 @@ export async function getPageParticipations<Variant>(
 		forceParamName,
 	);
 	if (urlParticipations) {
-		const test = tests.find((candidate) => urlParticipations[candidate.name]);
-		if (test && !isMParticleTestAllowed(test)) {
-			return makeFallbackResult();
-		}
 		const variant = getVariant(urlParticipations, tests);
 		if (!variant) {
 			return makeFallbackResult();
@@ -199,12 +181,6 @@ export async function getPageParticipations<Variant>(
 		previewParamName,
 	);
 	if (previewParticipations) {
-		const test = tests.find(
-			(candidate) => previewParticipations[candidate.name],
-		);
-		if (test && !isMParticleTestAllowed(test)) {
-			return makeFallbackResult();
-		}
 		const variant = getVariant(previewParticipations, tests, true);
 		if (!variant || !(await hasRequiredMParticleAttributes(variant))) {
 			return makeFallbackResult();
@@ -238,12 +214,8 @@ export async function getPageParticipations<Variant>(
 
 		// If nothing valid remains, continue to re-selection
 		if (Object.entries(validParticipations).length > 0) {
-			const test = tests.find(
-				(candidate) => validParticipations[candidate.name],
-			);
 			const variant = getVariant(validParticipations, tests);
 			if (
-				(test && !isMParticleTestAllowed(test)) ||
 				!variant ||
 				!(await hasRequiredMParticleAttributes(variant))
 			) {
@@ -260,7 +232,6 @@ export async function getPageParticipations<Variant>(
 	// No participation in session storage, assign user to a test + variant
 	for (const currentTest of tests.filter((test) => test.status === 'Live')) {
 		if (
-			isMParticleTestAllowed(currentTest) &&
 			isWithinSchedule(currentTest.scheduler) &&
 			countryGroupMatches(
 				currentTest.regionTargeting?.targetedCountryGroups,

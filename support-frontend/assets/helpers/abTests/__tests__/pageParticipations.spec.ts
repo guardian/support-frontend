@@ -1068,20 +1068,19 @@ describe('getPageParticipations', () => {
 		});
 	});
 
-	describe('mParticle production test naming', () => {
+	describe('mParticle test naming', () => {
 		interface AmountTestVariant {
 			name: string;
 			amounts: { mParticleAmountAttribute?: string };
 		}
 
-		it('returns fallback for an amount test without the required name prefix', async () => {
+		it('allows an amount test without the required name prefix', async () => {
 			const variant: AmountTestVariant = {
 				name: 'control',
 				amounts: {
 					mParticleAmountAttribute: 'last_single_contribution_amount',
 				},
 			};
-			const fallback: AmountTestVariant = { name: 'fallback', amounts: {} };
 			const test: PageTest<AmountTestVariant> = {
 				name: 'test-1',
 				status: 'Live',
@@ -1100,14 +1099,14 @@ describe('getPageParticipations', () => {
 			};
 			mockLocation('/test/page');
 			mockCountryGroupMatches.mockReturnValue(true);
-
-			const result = await getPageParticipations(config, {
-				variant: () => fallback,
-				participationKey: 'FALLBACK_TEST',
+			mockFetchAudienceData.mockResolvedValue({
+				audienceMemberships: [],
+				userAttributes: { last_single_contribution_amount: 50 },
 			});
 
-			expect(result.variant).toEqual(fallback);
-			expect(mockFetchAudienceData).not.toHaveBeenCalled();
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toEqual(variant);
 		});
 
 		it('allows an amount test with the required name prefix in production', async () => {
