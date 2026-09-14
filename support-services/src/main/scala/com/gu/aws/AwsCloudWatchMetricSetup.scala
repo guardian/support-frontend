@@ -151,6 +151,14 @@ object AwsCloudWatchMetricSetup {
       ),
     )
 
+  def promotionsApiFailure(stage: Stage): MetricRequest =
+    getMetricRequest(
+      MetricName("PromotionsApiError"),
+      Map(
+        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
+      ),
+    )
+
   private def getMetricRequest(
       name: MetricName,
       dimensions: Map[MetricDimensionName, MetricDimensionValue],
