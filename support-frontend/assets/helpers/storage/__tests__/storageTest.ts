@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import { storage } from '@guardian/libs';
-import { z } from 'zod';
+import * as z from 'zod/mini';
 import { getLocal, getSession, setLocal, setSession } from '../storage';
 
 // ----- Tests ----- //

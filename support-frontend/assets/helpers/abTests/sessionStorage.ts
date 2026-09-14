@@ -1,11 +1,8 @@
-import { z } from 'zod';
+import * as z from 'zod/mini';
 import { getSession, setSession } from 'helpers/storage/storage';
 import type { Participations } from './models';
 
-const participationsSchema: z.ZodType<Participations> = z.record(
-	z.string(),
-	z.string().optional(),
-);
+const participationsSchema = z.record(z.string(), z.optional(z.string()));
 
 // For participation in tests defined in abtestDefinitions.ts
 const PARTICIPATIONS_KEY = 'abParticipations';
