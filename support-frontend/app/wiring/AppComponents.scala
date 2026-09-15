@@ -90,7 +90,6 @@ class AppComponents(context: Context)
   val _ = cachedSalesTaxService
 
   // Force the creation of both cachedPromotionsServiceProvider variants (default + test-user) on startup, same
-  // reasoning as above. On a CODE/DEV-deployed instance both resolve to the same CODE environment (it never needs the
-  // real PROD key); on PROD both the PROD and CODE variants are warmed.
+  // reasoning as above.
   val _ = (cachedPromotionsServiceProvider.forUser(false), cachedPromotionsServiceProvider.forUser(true))
 }

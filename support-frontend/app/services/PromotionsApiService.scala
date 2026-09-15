@@ -19,19 +19,13 @@ object ListPromotionsResponse {
   implicit val decoder: Decoder[ListPromotionsResponse] = deriveDecoder
 }
 
-/** A thin client for a single `promotions-api` (guardian/support-service-lambdas) backend environment - CODE or PROD,
-  * as resolved by [[com.gu.support.config.PromotionsApiConfigProvider]] - the replacement for the legacy
-  * Zuora-catalog-embedded promotions used by [[com.gu.support.promotions.PromotionService]]. Only the `promoCodes`
-  * filter is used (rather than fetching "all active" promotions) - see
+/** A thin client for a single `promotions-api` (guardian/support-service-lambdas) backend environment - the replacement
+  * for the legacy Zuora-catalog-embedded promotions used by [[com.gu.support.promotions.PromotionService]]. Only the
+  * `promoCodes` filter is used, not "all active" promotions - see
   * https://github.com/guardian/support-frontend/issues/8208 for why.
   *
-  * Reuses the existing [[Promotion]] domain model/decoder (already shaped for the legacy Zuora-embedded promotions
-  * JSON) since the new API's response fields (`promoCode`, `startTimestamp`/`endTimestamp`, `appliesTo`, `discount`,
-  * `landingPage`, `isIntroductoryPricing`, ...) are a compatible subset - the API's extra `appliesTo.catalogRatePlans`
-  * field is simply ignored by the existing decoder.
-  *
-  * `config.apiKey` is required (see [[com.gu.support.config.PromotionsApiConfig]]) - app startup fails loudly if it's
-  * missing from Parameter Store, rather than silently making requests that would just 403.
+  * Reuses the existing [[Promotion]] domain model/decoder, since the new API's response fields are a compatible subset
+  * of the legacy Zuora-embedded shape.
   */
 class PromotionsApiService(client: FutureHttpClient, config: PromotionsApiConfig)(implicit
     ec: ExecutionContext,
@@ -40,13 +34,9 @@ class PromotionsApiService(client: FutureHttpClient, config: PromotionsApiConfig
   override val wsUrl: String = config.url
   override val verboseLogging: Boolean = false
 
-  // The API caps promoCodes at 100 unique codes per request (matching DynamoDB's BatchGetItem limit) and de-dupes
-  // internally, but we chunk defensively client-side too in case the combined candidate list ever grows past that.
+  // The API caps promoCodes at 100 per request; we chunk defensively client-side too.
   private val maxPromoCodesPerRequest = 100
 
-  /** Fetches only the given, explicit promo codes - never "all active" promotions (see class docs for why). Codes that
-    * don't exist, or aren't currently active, are simply omitted from the response - same as the API's own behaviour.
-    */
   def listByPromoCodes(promoCodes: Seq[String], active: Boolean = true): Future[List[Promotion]] = {
     val distinctCodes = promoCodes.distinct
     if (distinctCodes.isEmpty) Future.successful(Nil)
