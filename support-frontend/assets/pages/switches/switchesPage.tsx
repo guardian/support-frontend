@@ -12,6 +12,7 @@ import { renderPage } from 'helpers/rendering/render';
 import {
 	bannerContainerStyles,
 	bannerStyles,
+	btnStyleOverrides,
 	headingStyles,
 	labelActionsStyles,
 	labelStyles,
@@ -119,6 +120,16 @@ export function SwitchesPage() {
 					onReset={() => reset(flag)}
 				/>
 			))}
+			<Button
+				onClick={() => window.history.back()}
+				type="button"
+				priority="tertiary"
+				size="default"
+				cssOverrides={btnStyleOverrides}
+				aria-label="Back"
+			>
+				Back
+			</Button>
 		</div>
 	);
 }
