@@ -21,6 +21,7 @@ const feastAppUrl = 'https://guardian-feast.go.link?adj_t=1dufrlhf';
 const getManageUrl = () => `https://manage.${getBaseDomain()}`;
 const getManageSubsUrl = () => `${getManageUrl()}/subscriptions`;
 const getHelpCentreUrl = () => `${getManageUrl()}/help-centre`;
+const getManageExtraAccountsUrl = () => `${getManageUrl()}/extra-accounts`;
 
 function getPatronsLink(
 	intCmp?: string,
@@ -85,5 +86,6 @@ export {
 	getSignoutUrl,
 	getManageSubsUrl,
 	getHelpCentreUrl,
+	getManageExtraAccountsUrl,
 	feastAppUrl,
 };
