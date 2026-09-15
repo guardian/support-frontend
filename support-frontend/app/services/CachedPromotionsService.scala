@@ -39,7 +39,7 @@ class CachedPromotionsService(
     * poll of default codes, and internally by [[get]] to resolve codes that aren't already cached. `private[services]`
     * rather than fully private so tests can exercise the cache-merge/expiry behaviour directly.
     */
-  private[services] def fetchAndCache(promoCodes: Seq[String]): Future[PromotionsCache] =
+  private[services] def fetchAndCache(promoCodes: Seq[String]): Future[Unit] =
     promotionsApiService
       .listByPromoCodes(promoCodes)
       .map(mergeIntoCache(promoCodes, _))
@@ -53,14 +53,13 @@ class CachedPromotionsService(
     promotions.map(p => p.promoCode -> p).toMap
   }
 
-  /** Merges freshly-fetched promotions into the cache, returning just those fetched promotions (keyed by promoCode).
-    * Requested codes that weren't found/active in this fetch are dropped from the cache, but any other,
-    * previously-cached codes (e.g. from a different candidate set) are left untouched.
+  /** Merges freshly-fetched promotions into the cache. Requested codes that weren't found/active in this fetch are
+    * dropped from the cache, but any other, previously-cached codes (e.g. from a different candidate set) are left
+    * untouched.
     */
-  private def mergeIntoCache(requestedCodes: Seq[String], fetchedPromotions: Seq[Promotion]): PromotionsCache = {
+  private def mergeIntoCache(requestedCodes: Seq[String], fetchedPromotions: Seq[Promotion]): Unit = {
     val fetched = toPromotionsCache(fetchedPromotions)
     cache.updateAndGet(current => (current -- requestedCodes) ++ fetched)
-    fetched
   }
 
   /** Returns the requested promo codes that are found/active, transparently fetching and caching any that aren't
@@ -75,7 +74,7 @@ class CachedPromotionsService(
 
   def get(promoCode: String): Future[Option[Promotion]] = get(Seq(promoCode)).map(_.headOption)
 
-  private def updateDefaults(): Future[PromotionsCache] = fetchAndCache(defaultPromotionService.allPromoCodes)
+  private def updateDefaults(): Future[Unit] = fetchAndCache(defaultPromotionService.allPromoCodes)
 
   try {
     logger.info(s"Fetching default promotions on startup for ${config.environment}")
