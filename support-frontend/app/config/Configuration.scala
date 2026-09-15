@@ -22,7 +22,7 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val salesTaxConfig = SalesTaxApiConfig.fromConfig(config)
 
-  lazy val promotionsApiConfig = PromotionsApiConfig.fromConfig(config)
+  lazy val promotionsApiConfigProvider = new PromotionsApiConfigProvider(config, stage)
 
   lazy val multipleAccountApiConfig = MultipleAccountApiConfig.fromConfig(config)
 

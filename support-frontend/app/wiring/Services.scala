@@ -162,18 +162,10 @@ trait Services {
 
   lazy val cachedPromotionsServiceProvider: CachedPromotionsServiceProvider =
     new CachedPromotionsServiceProvider(
-      codeCachedPromotionsService = new CachedPromotionsService(
-        actorSystem,
-        new CodePromotionsApiService(RequestRunners.futureRunner, appConfig.promotionsApiConfig.codeApiKey),
-        defaultPromotionService,
-        appConfig.stage,
-      ),
-      prodCachedPromotionsService = new CachedPromotionsService(
-        actorSystem,
-        new ProdPromotionsApiService(RequestRunners.futureRunner, appConfig.promotionsApiConfig.prodApiKey),
-        defaultPromotionService,
-        appConfig.stage,
-      ),
+      appConfig.promotionsApiConfigProvider,
+      actorSystem,
+      defaultPromotionService,
+      RequestRunners.futureRunner,
     )
 
   lazy val cachedSalesTaxService: CachedSalesTaxService = {

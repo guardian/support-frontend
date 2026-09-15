@@ -2,26 +2,30 @@ package com.gu.support.config
 
 import com.typesafe.config.Config
 
-/** Unlike [[SalesTaxApiConfig]] (a single URL/key pair, resolved per-deployed-stage), we need both the CODE and PROD
-  * `promotions-api` keys available regardless of which stage support-frontend itself is deployed to - mirroring
-  * `ProductCatalogService`'s Prod/Code split - so that test users hitting a PROD-deployed app can still preview
-  * CODE-only promotions.
+/** Config for a single `promotions-api` backend environment (CODE or PROD), resolved via
+  * [[PromotionsApiConfigProvider]] / [[TouchpointConfigProvider]] - the same mechanism used for
+  * Zuora/Stripe/PayPal/etc, so that a PROD-deployed instance transparently gets both the PROD backend (for regular
+  * users) and the CODE backend (for test users previewing CODE-only promotions), while a CODE-deployed instance only
+  * ever needs its own CODE backend/key - it never needs the real PROD key, since [[TouchpointConfigProvider.get]]
+  * resolves both `defaultConfig` and `testConfig` to CODE in that case.
   *
-  * Both keys are `Option`s (rather than required, like [[SalesTaxApiConfig.apiKey]]) because they need to be
-  * provisioned in Parameter Store as a separate infra step - see guardian/support-frontend#8207 - and we don't want app
-  * startup to depend on that ordering. If a key is missing, [[services.CachedPromotionsService]] simply logs a warning
-  * and continues with an empty cache for that stage, rather than crashing on boot.
+  * `apiKey` is an `Option` (rather than required, like [[SalesTaxApiConfig.apiKey]]) because it needs to be provisioned
+  * in Parameter Store as a separate infra step - see guardian/support-frontend#8207 - and we don't want app startup to
+  * depend on that ordering. If a key is missing, [[services.PromotionsApiService]] simply logs a warning and returns an
+  * empty result, rather than crashing on boot.
   */
-case class PromotionsApiConfig(codeApiKey: Option[String], prodApiKey: Option[String])
+case class PromotionsApiConfig(environment: TouchPointEnvironment, url: String, apiKey: Option[String])
+
+class PromotionsApiConfigProvider(config: Config, defaultStage: Stage)
+    extends TouchpointConfigProvider[PromotionsApiConfig](config, defaultStage) {
+  override protected def fromConfig(config: Config): PromotionsApiConfig = PromotionsApiConfig.fromConfig(config)
+}
 
 object PromotionsApiConfig {
-  def fromConfig(config: Config): PromotionsApiConfig = {
-    def optionalString(path: String): Option[String] =
-      if (config.hasPath(path)) Some(config.getString(path)) else None
-
+  def fromConfig(config: Config): PromotionsApiConfig =
     PromotionsApiConfig(
-      optionalString("promotionsApi.code.key"),
-      optionalString("promotionsApi.prod.key"),
+      TouchPointEnvironments.fromString(config.getString("environment")),
+      config.getString("promotionsApi.url"),
+      if (config.hasPath("promotionsApi.key")) Some(config.getString("promotionsApi.key")) else None,
     )
-  }
 }

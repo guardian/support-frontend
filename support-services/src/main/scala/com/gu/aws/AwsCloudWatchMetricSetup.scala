@@ -1,7 +1,7 @@
 package com.gu.aws
 
 import com.gu.aws.AwsCloudWatchMetricPut._
-import com.gu.support.config.Stage
+import com.gu.support.config.{Stage, TouchPointEnvironment}
 import com.gu.support.workers.{PaymentProvider, ProductType}
 
 object AwsCloudWatchMetricSetup {
@@ -151,11 +151,11 @@ object AwsCloudWatchMetricSetup {
       ),
     )
 
-  def promotionsApiFailure(stage: Stage): MetricRequest =
+  def promotionsApiFailure(environment: TouchPointEnvironment): MetricRequest =
     getMetricRequest(
       MetricName("PromotionsApiError"),
       Map(
-        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
+        MetricDimensionName("Stage") -> MetricDimensionValue(environment.envValue),
       ),
     )
 

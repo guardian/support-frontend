@@ -1,6 +1,7 @@
 package services
 
 import com.gu.okhttp.RequestRunners.FutureHttpClient
+import com.gu.support.config.{PromotionsApiConfig, TouchPointEnvironments}
 import okhttp3.{MediaType, Protocol, Request, Response, ResponseBody}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
@@ -50,7 +51,10 @@ class PromotionsApiServiceSpec extends AnyWordSpec with Matchers with MockitoSug
       val httpClient = mock[FutureHttpClient]
       when(httpClient.apply(any[Request])).thenReturn(Future.successful(jsonResponse(200, validPromotionsResponse)))
 
-      val service = new PromotionsApiService(httpClient, "https://promotions-api.test.com", Some("test-key"))
+      val service = new PromotionsApiService(
+        httpClient,
+        PromotionsApiConfig(TouchPointEnvironments.CODE, "https://promotions-api.test.com", Some("test-key")),
+      )
       val result = service.listByPromoCodes(Seq("SPRING26")).futureValue
 
       result should have size 1
@@ -67,7 +71,10 @@ class PromotionsApiServiceSpec extends AnyWordSpec with Matchers with MockitoSug
         Future.successful(jsonResponse(200, """{"promotions": []}""")),
       )
 
-      val service = new PromotionsApiService(httpClient, "https://promotions-api.test.com", Some("test-key"))
+      val service = new PromotionsApiService(
+        httpClient,
+        PromotionsApiConfig(TouchPointEnvironments.CODE, "https://promotions-api.test.com", Some("test-key")),
+      )
       service.listByPromoCodes(Seq("FOO", "BAR")).futureValue
 
       val captor = org.mockito.ArgumentCaptor.forClass(classOf[Request])
@@ -80,7 +87,10 @@ class PromotionsApiServiceSpec extends AnyWordSpec with Matchers with MockitoSug
 
     "not make a request when no promo codes are given" in {
       val httpClient = mock[FutureHttpClient]
-      val service = new PromotionsApiService(httpClient, "https://promotions-api.test.com", Some("test-key"))
+      val service = new PromotionsApiService(
+        httpClient,
+        PromotionsApiConfig(TouchPointEnvironments.CODE, "https://promotions-api.test.com", Some("test-key")),
+      )
 
       service.listByPromoCodes(Nil).futureValue shouldBe Nil
       verify(httpClient, never()).apply(any[Request])
@@ -88,7 +98,10 @@ class PromotionsApiServiceSpec extends AnyWordSpec with Matchers with MockitoSug
 
     "not make a request when no API key is configured" in {
       val httpClient = mock[FutureHttpClient]
-      val service = new PromotionsApiService(httpClient, "https://promotions-api.test.com", None)
+      val service = new PromotionsApiService(
+        httpClient,
+        PromotionsApiConfig(TouchPointEnvironments.CODE, "https://promotions-api.test.com", None),
+      )
 
       service.listByPromoCodes(Seq("FOO")).futureValue shouldBe Nil
       verify(httpClient, never()).apply(any[Request])

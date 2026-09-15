@@ -3,10 +3,11 @@ package services
 import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
 import com.gu.aws.AwsCloudWatchMetricSetup.promotionsApiFailure
+import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper, Product, SupporterPlus, TierThree}
-import com.gu.support.config.Stage
-import com.gu.support.config.Stages.{CODE, DEV}
+import com.gu.support.config.{PromotionsApiConfig, PromotionsApiConfigProvider}
 import com.gu.support.promotions.Promotion
+import com.gu.support.touchpoint.{TouchpointService, TouchpointServiceProvider}
 import org.apache.pekko.actor.ActorSystem
 import play.api.Logging
 import services.pricing.DefaultPromotionService
@@ -16,9 +17,11 @@ import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.util.control.NonFatal
 
-/** Polls `promotions-api` server-side (mirroring [[CachedProductCatalogService]]/[[CachedSalesTaxService]]) and caches
-  * the result in memory, so pages can inject pre-resolved promotions into `window.guardian` without any client-side API
-  * call (see guardian/support-frontend#8207/#8208).
+/** Polls a single `promotions-api` backend environment (CODE or PROD, as resolved by
+  * [[CachedPromotionsServiceProvider]] / [[PromotionsApiConfigProvider]]) server-side (mirroring
+  * [[CachedProductCatalogService]]/[[CachedSalesTaxService]]) and caches the result in memory, so pages can inject
+  * pre-resolved promotions into `window.guardian` without any client-side API call (see
+  * guardian/support-frontend#8207/#8208).
   *
   * Only ever fetches known, explicit "candidate" promo codes - the curated per-product defaults from
   * `defaultPromotionService` (`support-admin-console`'s `default-promos.json`) - rather than "all active" promotions,
@@ -31,9 +34,10 @@ class CachedPromotionsService(
     system: ActorSystem,
     promotionsApiService: PromotionsApiService,
     defaultPromotionService: DefaultPromotionService,
-    stage: Stage,
+    config: PromotionsApiConfig,
 )(implicit ec: ExecutionContext)
-    extends Logging {
+    extends TouchpointService
+    with Logging {
   private val cache = new AtomicReference[Map[String, Promotion]](Map.empty)
 
   private val defaultPromoProducts: Seq[Product] = Seq(GuardianWeekly, Paper, DigitalPack, SupporterPlus, TierThree)
@@ -59,7 +63,7 @@ class CachedPromotionsService(
         ()
       }
       .recoverWith { case NonFatal(e) =>
-        AwsCloudWatchMetricPut(cloudwatchClient)(promotionsApiFailure(stage))
+        AwsCloudWatchMetricPut(cloudwatchClient)(promotionsApiFailure(config.environment))
         logger.error(s"Failed to fetch promotions for codes [${promoCodes.mkString(", ")}]", e)
         Future.failed(e)
       }
@@ -82,12 +86,15 @@ class CachedPromotionsService(
   // enhancement (a page still renders, just without a promo applied, if a code fails to resolve), whereas tax rates
   // are needed to compute a correct price.
   try {
-    logger.info("Fetching default promotions on startup")
+    logger.info(s"Fetching default promotions on startup for ${config.environment}")
     Await.result(updateDefaults(), 30.seconds)
-    logger.info("Successfully fetched default promotions on startup")
+    logger.info(s"Successfully fetched default promotions on startup for ${config.environment}")
   } catch {
     case NonFatal(e) =>
-      logger.error("Failed to fetch default promotions on startup, continuing with an empty cache", e)
+      logger.error(
+        s"Failed to fetch default promotions on startup for ${config.environment}, continuing with an empty cache",
+        e,
+      )
   }
 
   system.scheduler.scheduleWithFixedDelay(1.minute, 1.minute) { () =>
@@ -97,14 +104,19 @@ class CachedPromotionsService(
   }
 }
 
-/** Selects the CODE or PROD instance of [[CachedPromotionsService]], mirroring [[CachedProductCatalogServiceProvider]].
+/** Selects the CODE or PROD instance of [[CachedPromotionsService]] based on stage/test-user status, following the same
+  * `TouchpointServiceProvider` pattern used for every other 3rd-party-backend-per-environment service (Zuora, Stripe,
+  * PayPal, GoCardless, ...): a CODE/DEV-deployed app always resolves to the CODE environment for both `forUser(false)`
+  * and `forUser(true)`, so it never needs a real PROD `promotions-api` key; a PROD-deployed app resolves to PROD for
+  * `forUser(false)` and CODE for `forUser(true)`, so it needs both.
   */
 class CachedPromotionsServiceProvider(
-    codeCachedPromotionsService: CachedPromotionsService,
-    prodCachedPromotionsService: CachedPromotionsService,
-) {
-  def fromStage(stage: Stage, isTestUser: Boolean): CachedPromotionsService =
-    if (stage == DEV || stage == CODE || isTestUser)
-      codeCachedPromotionsService
-    else prodCachedPromotionsService
+    configProvider: PromotionsApiConfigProvider,
+    system: ActorSystem,
+    defaultPromotionService: DefaultPromotionService,
+    client: FutureHttpClient,
+)(implicit ec: ExecutionContext)
+    extends TouchpointServiceProvider[CachedPromotionsService, PromotionsApiConfig](configProvider) {
+  override protected def createService(config: PromotionsApiConfig): CachedPromotionsService =
+    new CachedPromotionsService(system, new PromotionsApiService(client, config), defaultPromotionService, config)
 }

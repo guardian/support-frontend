@@ -1,26 +1,48 @@
 package com.gu.support.config
 
 import com.typesafe.config.ConfigFactory
-import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-class PromotionsApiConfigSpec extends AnyFlatSpec with Matchers {
-  "PromotionsApiConfig" should "load both keys when present" in {
-    val config = ConfigFactory.parseString("""
-        |promotionsApi {
-        |  code.key = "code-key"
-        |  prod.key = "prod-key"
-        |}
-        |""".stripMargin)
+class PromotionsApiConfigSpec extends AsyncFlatSpec with Matchers {
+  "PromotionsApiConfigProvider" should "resolve the CODE environment/url for a CODE-deployed app, for both default and test users" in {
+    val provider = new PromotionsApiConfigProvider(ConfigFactory.load(), Stages.CODE)
 
-    val result = PromotionsApiConfig.fromConfig(config)
-    result.codeApiKey shouldBe Some("code-key")
-    result.prodApiKey shouldBe Some("prod-key")
+    provider.get().environment shouldBe TouchPointEnvironments.CODE
+    provider.get().url shouldBe "https://promotions-api-code.support.guardianapis.com"
+
+    provider.get(isTestUser = true).environment shouldBe TouchPointEnvironments.CODE
+    provider.get(isTestUser = true).url shouldBe "https://promotions-api-code.support.guardianapis.com"
   }
 
-  it should "default to None for either key when absent, rather than failing to load" in {
-    val result = PromotionsApiConfig.fromConfig(ConfigFactory.empty())
-    result.codeApiKey shouldBe None
-    result.prodApiKey shouldBe None
+  it should "resolve the PROD environment/url for regular users of a PROD-deployed app, but CODE for test users" in {
+    val provider = new PromotionsApiConfigProvider(ConfigFactory.load(), Stages.PROD)
+
+    provider.get().environment shouldBe TouchPointEnvironments.PROD
+    provider.get().url shouldBe "https://promotions-api.support.guardianapis.com"
+
+    provider.get(isTestUser = true).environment shouldBe TouchPointEnvironments.CODE
+    provider.get(isTestUser = true).url shouldBe "https://promotions-api-code.support.guardianapis.com"
+  }
+
+  it should "default apiKey to None when absent from config, rather than failing to load" in {
+    PromotionsApiConfig
+      .fromConfig(
+        ConfigFactory.parseString("""environment = "CODE"
+          |promotionsApi.url = "https://example.com"
+          |""".stripMargin),
+      )
+      .apiKey shouldBe None
+  }
+
+  it should "load apiKey when present" in {
+    PromotionsApiConfig
+      .fromConfig(
+        ConfigFactory.parseString("""environment = "CODE"
+          |promotionsApi.url = "https://example.com"
+          |promotionsApi.key = "a-key"
+          |""".stripMargin),
+      )
+      .apiKey shouldBe Some("a-key")
   }
 }

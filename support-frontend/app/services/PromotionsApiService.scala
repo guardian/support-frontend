@@ -2,6 +2,7 @@ package services
 
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
+import com.gu.support.config.PromotionsApiConfig
 import com.gu.support.promotions.Promotion
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
@@ -18,7 +19,8 @@ object ListPromotionsResponse {
   implicit val decoder: Decoder[ListPromotionsResponse] = deriveDecoder
 }
 
-/** A thin client for `promotions-api` (guardian/support-service-lambdas), the replacement for the legacy
+/** A thin client for a single `promotions-api` (guardian/support-service-lambdas) backend environment - CODE or PROD,
+  * as resolved by [[com.gu.support.config.PromotionsApiConfigProvider]] - the replacement for the legacy
   * Zuora-catalog-embedded promotions used by [[com.gu.support.promotions.PromotionService]]. Only the `promoCodes`
   * filter is used (rather than fetching "all active" promotions) - see
   * https://github.com/guardian/support-frontend/issues/8208 for why.
@@ -28,14 +30,15 @@ object ListPromotionsResponse {
   * `landingPage`, `isIntroductoryPricing`, ...) are a compatible subset - the API's extra `appliesTo.catalogRatePlans`
   * field is simply ignored by the existing decoder.
   *
-  * `apiKey` is an `Option` because it's provisioned in Parameter Store as a separate infra step (see
+  * `config.apiKey` is an `Option` because it's provisioned in Parameter Store as a separate infra step (see
   * guardian/support-frontend#8207) - if it's absent, `listByPromoCodes` short-circuits to an empty result rather than
   * making a request that would just 403.
   */
-class PromotionsApiService(val client: FutureHttpClient, val wsUrl: String, apiKey: Option[String])(implicit
+class PromotionsApiService(client: FutureHttpClient, config: PromotionsApiConfig)(implicit
     ec: ExecutionContext,
 ) extends WebServiceHelper[PromotionsApiServiceError] {
   override val httpClient: FutureHttpClient = client
+  override val wsUrl: String = config.url
   override val verboseLogging: Boolean = false
 
   // The API caps promoCodes at 100 unique codes per request (matching DynamoDB's BatchGetItem limit) and de-dupes
@@ -47,7 +50,7 @@ class PromotionsApiService(val client: FutureHttpClient, val wsUrl: String, apiK
     */
   def listByPromoCodes(promoCodes: Seq[String], active: Boolean = true): Future[List[Promotion]] = {
     val distinctCodes = promoCodes.distinct
-    apiKey match {
+    config.apiKey match {
       case _ if distinctCodes.isEmpty => Future.successful(Nil)
       case None =>
         logger.warn(s"Skipping promotions-api lookup for [${distinctCodes.mkString(", ")}] - no API key configured")
@@ -69,9 +72,3 @@ class PromotionsApiService(val client: FutureHttpClient, val wsUrl: String, apiK
       ),
     ).map(_.promotions)
 }
-
-class ProdPromotionsApiService(client: FutureHttpClient, apiKey: Option[String])(implicit ec: ExecutionContext)
-    extends PromotionsApiService(client, "https://promotions-api.support.guardianapis.com", apiKey)
-
-class CodePromotionsApiService(client: FutureHttpClient, apiKey: Option[String])(implicit ec: ExecutionContext)
-    extends PromotionsApiService(client, "https://promotions-api-code.support.guardianapis.com", apiKey)
