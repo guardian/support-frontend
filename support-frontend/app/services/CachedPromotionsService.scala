@@ -19,11 +19,6 @@ import scala.util.control.NonFatal
 /** Polls a single `promotions-api` backend environment (as resolved by [[CachedPromotionsServiceProvider]]) and caches
   * the result in memory, so pages can inject pre-resolved promotions into `window.guardian` without any client-side API
   * call (see guardian/support-frontend#8207/#8208).
-  *
-  * Only ever fetches known, explicit "candidate" promo codes - the curated per-product defaults from
-  * `defaultPromotionService` - rather than "all active" promotions (see #8208). Additional ad-hoc codes (e.g. a
-  * `?promoCode=` query param, or checkout-nudge test codes) can be resolved on demand via [[fetchAdditionalCodes]]
-  * without waiting for the next scheduled poll of the defaults.
   */
 class CachedPromotionsService(
     system: ActorSystem,
@@ -39,6 +34,11 @@ class CachedPromotionsService(
 
   private def updateDefaults(): Future[PromotionsCache] = fetchAndCache(defaultPromotionService.allPromoCodes)
 
+  /** Fetches the given promo codes from `promotions-api` and merges the result into the cache. Used both for the
+    * scheduled poll of default codes and for resolving additional, ad-hoc codes on demand (e.g. a `?promoCode=` query
+    * param, or a checkout-nudge test code). Safe to call with codes that are already cached, it's just a cheap
+    * re-fetch.
+    */
   def fetchAndCache(promoCodes: Seq[String]): Future[PromotionsCache] =
     promotionsApiService
       .listByPromoCodes(promoCodes)
@@ -49,8 +49,12 @@ class CachedPromotionsService(
         Future.failed(e)
       }
 
-  /** Merges freshly-fetched promotions into the cache, returning just those fetched promotions (keyed by promoCode):
-    * requested codes that weren't found/active in this fetch are dropped from the cache, but any other,
+  private def toPromotionsCache(promotions: Seq[Promotion]): PromotionsCache = {
+    promotions.map(p => p.promoCode -> p).toMap
+  }
+
+  /** Merges freshly-fetched promotions into the cache, returning just those fetched promotions (keyed by promoCode).
+    * Requested codes that weren't found/active in this fetch are dropped from the cache, but any other,
     * previously-cached codes (e.g. from a different candidate set) are left untouched.
     */
   private def mergeIntoCache(requestedCodes: Seq[String], fetchedPromotions: Seq[Promotion]): PromotionsCache = {
@@ -59,20 +63,8 @@ class CachedPromotionsService(
     fetched
   }
 
-  private def toPromotionsCache(promotions: Seq[Promotion]): PromotionsCache = {
-    promotions.map(p => p.promoCode -> p).toMap
-  }
-
   def get(promoCode: String): Option[Promotion] = cache.get().get(promoCode)
 
-  /** Resolves promo codes that aren't part of the pre-cached default set, caching the result for subsequent requests.
-    * Safe to call with codes that are already cached - it's just a cheap re-fetch.
-    */
-  def fetchAdditionalCodes(promoCodes: Seq[String]): Future[PromotionsCache] = fetchAndCache(promoCodes)
-
-  // Populate the cache synchronously on startup (mirroring CachedSalesTaxService) so the first request(s) aren't
-  // served from an empty cache. Unlike CachedSalesTaxService, we don't fail app startup if this fails - promotions
-  // are an enhancement, not something a correct price depends on.
   try {
     logger.info(s"Fetching default promotions on startup for ${config.environment}")
     Await.result(updateDefaults(), 30.seconds)
@@ -92,9 +84,6 @@ class CachedPromotionsService(
   }
 }
 
-/** Selects the CODE or PROD instance of [[CachedPromotionsService]], following the same `TouchpointServiceProvider`
-  * pattern used for Zuora/Stripe/PayPal/GoCardless.
-  */
 class CachedPromotionsServiceProvider(
     configProvider: PromotionsApiConfigProvider,
     system: ActorSystem,

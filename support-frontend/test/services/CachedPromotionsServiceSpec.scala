@@ -84,7 +84,7 @@ class CachedPromotionsServiceSpec extends AnyWordSpec with Matchers with ScalaFu
       val service = new CachedPromotionsService(system, api, defaults, testConfig)
       service.get("QUERYSTRINGCODE") shouldBe None
 
-      val result = service.fetchAdditionalCodes(Seq("QUERYSTRINGCODE")).futureValue
+      val result = service.fetchAndCache(Seq("QUERYSTRINGCODE")).futureValue
       result.get("QUERYSTRINGCODE").map(_.promoCode) shouldBe Some("QUERYSTRINGCODE")
       service.get("QUERYSTRINGCODE").map(_.promoCode) shouldBe Some("QUERYSTRINGCODE")
     }
