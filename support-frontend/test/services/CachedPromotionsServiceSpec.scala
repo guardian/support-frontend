@@ -70,25 +70,36 @@ class CachedPromotionsServiceSpec extends AnyWordSpec with Matchers with ScalaFu
 
       val service = new CachedPromotionsService(system, api, defaults, testConfig)
 
-      service.get("WEEKLY10").map(_.promoCode) shouldBe Some("WEEKLY10")
-      service.get("PAPER20").map(_.promoCode) shouldBe Some("PAPER20")
-      service.get("UNKNOWN") shouldBe None
+      service.get("WEEKLY10").futureValue.map(_.promoCode) shouldBe Some("WEEKLY10")
+      service.get("PAPER20").futureValue.map(_.promoCode) shouldBe Some("PAPER20")
 
-      service.get(Seq("WEEKLY10", "UNKNOWN", "PAPER20")).map(_.promoCode) shouldBe Seq("WEEKLY10", "PAPER20")
+      service.get(Seq("WEEKLY10", "PAPER20")).futureValue.map(_.promoCode) shouldBe Seq("WEEKLY10", "PAPER20")
 
       api.requestedCodes.flatten.toSet shouldBe Set("WEEKLY10", "PAPER20")
     }
 
-    "resolve additional, ad-hoc promo codes on demand without waiting for the next scheduled poll" in {
+    "transparently fetch and cache an ad-hoc code that isn't already cached, without waiting for the next scheduled poll" in {
       val defaults = new FakeDefaultPromotionService(Map.empty)
       val api = new FakePromotionsApiService(foundCodes = Set("QUERYSTRINGCODE"))
 
       val service = new CachedPromotionsService(system, api, defaults, testConfig)
-      service.get("QUERYSTRINGCODE") shouldBe None
 
-      val result = service.fetchAndCache(Seq("QUERYSTRINGCODE")).futureValue
-      result.get("QUERYSTRINGCODE").map(_.promoCode) shouldBe Some("QUERYSTRINGCODE")
-      service.get("QUERYSTRINGCODE").map(_.promoCode) shouldBe Some("QUERYSTRINGCODE")
+      service.get("QUERYSTRINGCODE").futureValue.map(_.promoCode) shouldBe Some("QUERYSTRINGCODE")
+      api.requestedCodes should contain(Seq("QUERYSTRINGCODE"))
+
+      // now cached, so a repeat lookup doesn't trigger another fetch
+      service.get("QUERYSTRINGCODE").futureValue.map(_.promoCode) shouldBe Some("QUERYSTRINGCODE")
+      api.requestedCodes.count(_ == Seq("QUERYSTRINGCODE")) shouldBe 1
+    }
+
+    "return None for a code that's never found/active, without caching it" in {
+      val defaults = new FakeDefaultPromotionService(Map.empty)
+      val api = new FakePromotionsApiService(foundCodes = Set.empty)
+
+      val service = new CachedPromotionsService(system, api, defaults, testConfig)
+
+      service.get("UNKNOWN").futureValue shouldBe None
+      api.requestedCodes should contain(Seq("UNKNOWN"))
     }
 
     "drop codes from the cache that are no longer found/active on a subsequent fetch" in {
@@ -97,8 +108,8 @@ class CachedPromotionsServiceSpec extends AnyWordSpec with Matchers with ScalaFu
 
       val service = new CachedPromotionsService(system, api, defaults, testConfig)
       service.fetchAndCache(Seq("STILLVALID", "NOWEXPIRED")).futureValue
-      service.get("STILLVALID") shouldBe defined
-      service.get("NOWEXPIRED") shouldBe None
+      service.get("STILLVALID").futureValue shouldBe defined
+      service.get("NOWEXPIRED").futureValue shouldBe None
     }
   }
 }
