@@ -22,7 +22,7 @@
     9211,
     9210,
     9001,
-    9323
+    9500
   ],
   "image" : "mcr.microsoft.com/devcontainers/base:ubuntu26.04",
   "remoteUser" : "vscode",

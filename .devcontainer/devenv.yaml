@@ -24,7 +24,7 @@ forwardPorts:
   - '9211' # Webpack
   - '9210' # Play
   - '9001' # Storybook
-  - '9323' # Playwright report
+  - '9500' # Playwright report
 
 # Optional: Extra switches for container generation (passed to `docker create`)
 runArgs:
