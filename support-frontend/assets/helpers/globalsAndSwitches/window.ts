@@ -248,9 +248,58 @@ const TaxRatesSchema = z.object({
 		.optional(), // This isn't made available on every page
 });
 
+// The shape of `com.gu.support.promotions.Promotion`, as sourced from promotions-api via
+// CachedPromotionsService and injected onto window.guardian.promotions - see guardian/support-frontend#8207.
+// Not yet consumed by any page - present so pages can be migrated onto it incrementally.
+const cachedPromotionSchema = z.object({
+	name: z.string(),
+	description: z.string(),
+	appliesTo: z.object({
+		productRatePlanIds: z.array(z.string()),
+		countries: z.array(z.string()),
+	}),
+	campaignCode: z.string(),
+	promoCode: z.string(),
+	starts: dateTimeSchema,
+	expires: dateTimeSchema.optional(),
+	discount: optional(
+		z.object({
+			amount: z.number(),
+			durationMonths: z.number().optional(),
+		}),
+	),
+	freeTrial: optional(
+		z.object({
+			duration: z.number(),
+		}),
+	),
+	incentive: optional(
+		z.object({
+			redemptionInstructions: z.string(),
+			legalTerms: z.string().optional(),
+			termsAndConditions: z.string().optional(),
+		}),
+	),
+	renewalOnly: z.boolean(),
+	tracking: z.boolean(),
+	landingPage: optional(
+		z.object({
+			title: z.string().optional(),
+			description: z.string().optional(),
+			roundel: z.string().optional(),
+		}),
+	),
+	isIntroductoryPricing: z.boolean().optional(),
+});
+
+const CachedPromotionsSchema = z.object({
+	promotions: z.array(cachedPromotionSchema).optional(), // This isn't made available on every page
+});
+
 const AppConfigSchema = PaymentConfigSchema.merge(ProductCatalogSchema)
 	.merge(ProductPricesSchema)
-	.merge(TaxRatesSchema);
+	.merge(TaxRatesSchema)
+	.merge(CachedPromotionsSchema);
 
 export type AppConfig = z.infer<typeof AppConfigSchema> & {
 	allProductPrices: Partial<

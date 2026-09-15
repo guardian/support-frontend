@@ -11,14 +11,18 @@ import com.gu.support.promotions.{PromoCode, PromotionServiceProvider, Promotion
 import lib.RedirectWithEncodedQueryString
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import play.twirl.api.Html
-import services.TestUserService
+import services.{CachedPromotionsServiceProvider, TestUserService}
 import views.EmptyDiv
 import views.ViewHelpers.outputJson
 import admin.ServersideAbTest.Participation
 
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NonFatal
+
 class Promotions(
     promotionServiceProvider: PromotionServiceProvider,
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
+    cachedPromotionsServiceProvider: CachedPromotionsServiceProvider,
     val assets: AssetsResolver,
     val actionRefiners: CustomActionBuilders,
     testUsers: TestUserService, // Remove?
@@ -29,6 +33,7 @@ class Promotions(
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
+  implicit val ec: ExecutionContext = components.executionContext
 
   def promo(promoCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     val promotionService = promotionServiceProvider.forUser(false)
@@ -54,7 +59,7 @@ class Promotions(
     }
   }
 
-  def terms(promoCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+  def terms(promoCode: String): Action[AnyContent] = CachedAction().async { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | Digital Pack Subscription"
     val mainElement = EmptyDiv("promotion-terms")
@@ -62,31 +67,42 @@ class Promotions(
     val promotionService = promotionServiceProvider.forUser(false)
     val maybePromotionTerms = PromotionTerms.fromPromoCode(promotionService, stage, promoCode)
 
-    maybePromotionTerms.fold(NotFound("Invalid promo code")) { promotionTerms =>
+    maybePromotionTerms.fold(Future.successful(NotFound("Invalid promo code"))) { promotionTerms =>
       val productPrices =
         priceSummaryServiceProvider.forUser(false).getPrices(promotionTerms.product, List.empty[PromoCode])
 
-      Ok(
-        views.html.main(
-          title,
-          mainElement,
-          js,
-          None,
-          description = None,
-          canonicalLink = None,
-          hrefLangLinks = Map(),
-          csrf = None,
-          shareImageUrl = None,
-          shareUrl = None,
-          serversideTests = Map(),
-          noindex = true,
-        ) {
-          Html(s"""<script type="text/javascript">
+      // Promotion sourced from promotions-api via CachedPromotionsService - see guardian/support-frontend#8207.
+      // Additive alongside the legacy productPrices/promotionTerms injections below, which remain the source of
+      // truth for consumers until they're migrated. Failures here must not break the page, so fall back to an
+      // empty list rather than propagating the error.
+      cachedPromotionsServiceProvider
+        .forUser(isTestUser = false)
+        .get(promoCode)
+        .recover { case NonFatal(_) => None }
+        .map { maybePromotion =>
+          Ok(
+            views.html.main(
+              title,
+              mainElement,
+              js,
+              None,
+              description = None,
+              canonicalLink = None,
+              hrefLangLinks = Map(),
+              csrf = None,
+              shareImageUrl = None,
+              shareUrl = None,
+              serversideTests = Map(),
+              noindex = true,
+            ) {
+              Html(s"""<script type="text/javascript">
                 window.guardian.productPrices = ${outputJson(productPrices)}
                 window.guardian.promotionTerms = ${outputJson(promotionTerms)}
+                window.guardian.promotions = ${outputJson(maybePromotion.toSeq)}
               </script>""")
-        },
-      )
+            },
+          )
+        }
     }
   }
 
