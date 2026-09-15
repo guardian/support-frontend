@@ -33,27 +33,34 @@ class CachedPromotionsService(
 )(implicit ec: ExecutionContext)
     extends TouchpointService
     with Logging {
-  private val cache = new AtomicReference[Map[String, Promotion]](Map.empty)
+
+  private type PromotionsCache = Map[String, Promotion]
+  private val cache = new AtomicReference[PromotionsCache](Map.empty)
 
   private def updateDefaults(): Future[Unit] = fetchAndCache(defaultPromotionService.allPromoCodes)
 
   def fetchAndCache(promoCodes: Seq[String]): Future[Unit] =
     promotionsApiService
       .listByPromoCodes(promoCodes)
-      .map { promotions =>
-        val fetched = promotions.map(p => p.promoCode -> p).toMap
-        cache.updateAndGet { current =>
-          // Drop any of the *requested* codes that weren't found/active in this fetch, but leave any other
-          // previously-cached codes (e.g. from a different candidate set) untouched.
-          (current -- promoCodes) ++ fetched
-        }
-        ()
-      }
+      .map(mergeIntoCache(promoCodes, _))
       .recoverWith { case NonFatal(e) =>
         AwsCloudWatchMetricPut(cloudwatchClient)(promotionsApiFailure(config.environment))
         logger.error(s"Failed to fetch promotions for codes [${promoCodes.mkString(", ")}]", e)
         Future.failed(e)
       }
+
+  /** Merges freshly-fetched promotions into the cache: requested codes that weren't found/active in this fetch are
+    * dropped, but any other, previously-cached codes (e.g. from a different candidate set) are left untouched.
+    */
+  private def mergeIntoCache(requestedCodes: Seq[String], fetchedPromotions: Seq[Promotion]): Unit = {
+    val fetched = toPromoMap(fetchedPromotions)
+    cache.updateAndGet(current => (current -- requestedCodes) ++ fetched)
+    ()
+  }
+
+  private def toPromoMap(promotions: Seq[Promotion]) = {
+    promotions.map(p => p.promoCode -> p).toMap
+  }
 
   def get(promoCode: String): Option[Promotion] = cache.get().get(promoCode)
 
@@ -61,7 +68,7 @@ class CachedPromotionsService(
     * Safe to call with codes that are already cached - it's just a cheap re-fetch.
     */
   def fetchAdditionalCodes(promoCodes: Seq[String]): Future[Map[String, Promotion]] =
-    fetchAndCache(promoCodes).map(_ => promoCodes.flatMap(code => get(code).map(code -> _)).toMap)
+    fetchAndCache(promoCodes).map(_ => toPromoMap(promoCodes.flatMap(code => get(code))))
 
   // Populate the cache synchronously on startup (mirroring CachedSalesTaxService) so the first request(s) aren't
   // served from an empty cache. Unlike CachedSalesTaxService, we don't fail app startup if this fails - promotions
