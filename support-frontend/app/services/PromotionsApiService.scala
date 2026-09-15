@@ -20,9 +20,7 @@ object ListPromotionsResponse {
 }
 
 /** A thin client for a single `promotions-api` (guardian/support-service-lambdas) backend environment - the replacement
-  * for the legacy Zuora-catalog-embedded promotions used by [[com.gu.support.promotions.PromotionService]]. Only the
-  * `promoCodes` filter is used, not "all active" promotions - see
-  * https://github.com/guardian/support-frontend/issues/8208 for why.
+  * for the legacy Zuora-catalog-embedded promotions used by [[com.gu.support.promotions.PromotionService]].
   *
   * Reuses the existing [[Promotion]] domain model/decoder, since the new API's response fields are a compatible subset
   * of the legacy Zuora-embedded shape.
@@ -34,7 +32,7 @@ class PromotionsApiService(client: FutureHttpClient, config: PromotionsApiConfig
   override val wsUrl: String = config.url
   override val verboseLogging: Boolean = false
 
-  // The API caps promoCodes at 100 per request - this should never happen given our current callers.
+  // The API caps promoCodes at 100 per request - this should never happen given our current usage.
   private val maxPromoCodesPerRequest = 100
 
   def listByPromoCodes(promoCodes: Seq[String], active: Boolean = true): Future[List[Promotion]] = {
