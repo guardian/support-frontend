@@ -4,7 +4,6 @@ import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
 import com.gu.aws.AwsCloudWatchMetricSetup.promotionsApiFailure
 import com.gu.okhttp.RequestRunners.FutureHttpClient
-import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper, Product, SupporterPlus, TierThree}
 import com.gu.support.config.{PromotionsApiConfig, PromotionsApiConfigProvider}
 import com.gu.support.promotions.Promotion
 import com.gu.support.touchpoint.{TouchpointService, TouchpointServiceProvider}
@@ -36,12 +35,7 @@ class CachedPromotionsService(
     with Logging {
   private val cache = new AtomicReference[Map[String, Promotion]](Map.empty)
 
-  private val defaultPromoProducts: Seq[Product] = Seq(GuardianWeekly, Paper, DigitalPack, SupporterPlus, TierThree)
-
-  private def currentDefaultPromoCodes: Seq[String] =
-    defaultPromoProducts.flatMap(defaultPromotionService.getPromoCodes).distinct
-
-  private def updateDefaults(): Future[Unit] = fetchAndCache(currentDefaultPromoCodes)
+  private def updateDefaults(): Future[Unit] = fetchAndCache(defaultPromotionService.allPromoCodes)
 
   def fetchAndCache(promoCodes: Seq[String]): Future[Unit] =
     promotionsApiService

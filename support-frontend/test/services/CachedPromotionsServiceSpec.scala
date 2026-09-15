@@ -55,6 +55,7 @@ class CachedPromotionsServiceSpec extends AnyWordSpec with Matchers with ScalaFu
   private class FakeDefaultPromotionService(codesByProduct: Map[Product, List[String]])
       extends DefaultPromotionService {
     def getPromoCodes(product: Product): List[String] = codesByProduct.getOrElse(product, Nil)
+    def allPromoCodes: List[String] = codesByProduct.values.flatten.toList.distinct
   }
 
   "CachedPromotionsService" should {
