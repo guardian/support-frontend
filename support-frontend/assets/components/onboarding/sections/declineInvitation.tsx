@@ -97,9 +97,9 @@ export function OnboardingDeclineInvitation({
 			>
 				<div css={[heroContainer, heroAspectRatio]}>
 					<GridImage
-						gridId="onboardingInviteeCreateAccountHero"
-						srcSizes={[442]}
-						sizes="442px"
+						gridId="onboardingInviteeDeclinePageHero"
+						srcSizes={[2000, 1000, 500]}
+						sizes="(max-width: 739px) 140px, 422px"
 						imgType="png"
 						altText="Decline invitation hero"
 					/>

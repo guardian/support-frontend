@@ -71,11 +71,11 @@ export function OnboardingInviteeCompleted({
 			<ContentBox removePadding>
 				<div css={[heroContainer, heroAspectRatio]}>
 					<GridImage
-						gridId="onboardingCompletedHero"
+						gridId="onboardingInviteeCompletedHero"
 						srcSizes={[2000, 1000, 500]}
 						sizes="(max-width: 739px) 140px, 422px"
 						imgType="png"
-						altText="Onboarding completed hero"
+						altText="Onboarding invitee completed hero"
 					/>
 				</div>
 
