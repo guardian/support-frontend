@@ -32,8 +32,6 @@ class CachedPromotionsService(
   private type PromotionsCache = Map[String, Promotion]
   private val cache = new AtomicReference[PromotionsCache](Map.empty)
 
-  private def updateDefaults(): Future[PromotionsCache] = fetchAndCache(defaultPromotionService.allPromoCodes)
-
   /** Fetches the given promo codes from `promotions-api` and merges the result into the cache. Used both for the
     * scheduled poll of default codes and for resolving additional, ad-hoc codes on demand (e.g. a `?promoCode=` query
     * param, or a checkout-nudge test code). Safe to call with codes that are already cached, it's just a cheap
@@ -64,6 +62,8 @@ class CachedPromotionsService(
   }
 
   def get(promoCode: String): Option[Promotion] = cache.get().get(promoCode)
+
+  private def updateDefaults(): Future[PromotionsCache] = fetchAndCache(defaultPromotionService.allPromoCodes)
 
   try {
     logger.info(s"Fetching default promotions on startup for ${config.environment}")
