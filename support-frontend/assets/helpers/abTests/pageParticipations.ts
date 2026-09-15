@@ -115,14 +115,10 @@ export async function getPageParticipations<Variant>(
 		return audienceMemberships.includes(test.mParticleAudience);
 	};
 
-	const hasRequiredMParticleAttributes = async (
-		variant: Variant,
+	const hasRequiredMParticleTestAttributes = async (
+		test: PageTest<Variant>,
 	): Promise<boolean> => {
-		const getRequiredMParticleAttributes =
-			config.getRequiredMParticleAttributes;
-		const requiredAttributes: string[] = getRequiredMParticleAttributes
-			? getRequiredMParticleAttributes(variant)
-			: [];
+		const requiredAttributes: string[] = test.mParticleTemplates ?? [];
 		if (requiredAttributes.length === 0) {
 			return true;
 		}
@@ -157,12 +153,13 @@ export async function getPageParticipations<Variant>(
 		forceParamName,
 	);
 	if (urlParticipations) {
+		const selectedTest = tests.find((test) => urlParticipations[test.name]);
 		const variant = getVariant(urlParticipations, tests);
-		if (!variant) {
+		if (!variant || !selectedTest) {
 			return makeFallbackResult();
 		}
-		// Forced participations bypass the audience check but still validate required attributes.
-		if (!(await hasRequiredMParticleAttributes(variant))) {
+		// Forced participations bypass the audience check but still validate test attributes.
+		if (!(await hasRequiredMParticleTestAttributes(selectedTest))) {
 			return makeFallbackResult();
 		}
 		setSessionParticipations(urlParticipations, sessionStorageKey);
@@ -181,8 +178,13 @@ export async function getPageParticipations<Variant>(
 		previewParamName,
 	);
 	if (previewParticipations) {
+		const selectedTest = tests.find((test) => previewParticipations[test.name]);
 		const variant = getVariant(previewParticipations, tests, true);
-		if (!variant || !(await hasRequiredMParticleAttributes(variant))) {
+		if (
+			!variant ||
+			!selectedTest ||
+			!(await hasRequiredMParticleTestAttributes(selectedTest))
+		) {
 			return makeFallbackResult();
 		}
 		setSessionParticipations(previewParticipations, sessionStorageKey);
@@ -214,10 +216,12 @@ export async function getPageParticipations<Variant>(
 
 		// If nothing valid remains, continue to re-selection
 		if (Object.entries(validParticipations).length > 0) {
+			const selectedTest = tests.find((test) => validParticipations[test.name]);
 			const variant = getVariant(validParticipations, tests);
 			if (
 				!variant ||
-				!(await hasRequiredMParticleAttributes(variant))
+				!selectedTest ||
+				!(await hasRequiredMParticleTestAttributes(selectedTest))
 			) {
 				return makeFallbackResult();
 			}
@@ -237,7 +241,8 @@ export async function getPageParticipations<Variant>(
 				currentTest.regionTargeting?.targetedCountryGroups,
 				countryGroupId,
 			) &&
-			(await isUserInAudience(currentTest))
+			(await isUserInAudience(currentTest)) &&
+			(await hasRequiredMParticleTestAttributes(currentTest))
 		) {
 			const selectionResult = config.selectVariant
 				? config.selectVariant(currentTest, mvtId)
@@ -249,7 +254,7 @@ export async function getPageParticipations<Variant>(
 					randomNumber(mvtId, currentTest.name) % currentTest.variants.length
 				];
 
-			if (variant && (await hasRequiredMParticleAttributes(variant))) {
+			if (variant) {
 				const participations: Participations = {
 					[currentTest.name]: getVariantName(variant),
 				};
