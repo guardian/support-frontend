@@ -16,12 +16,11 @@ import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.util.control.NonFatal
 
-/** Polls a single `promotions-api` backend environment (as resolved by [[CachedPromotionsServiceProvider]]) and caches
-  * the result in memory, so pages can inject pre-resolved promotions into `window.guardian` without any client-side API
-  * call (see guardian/support-frontend#8207/#8208).
+/** Polls `promotions-api` (as resolved by [[CachedPromotionsServiceProvider]]) and caches the result in memory, so
+  * pages can inject pre-resolved promotions into `window.guardian` without a client-side API call (see
+  * guardian/support-frontend#8207/#8208).
   *
-  * Callers just call [[get]] - it transparently fetches and caches any requested codes that aren't already cached (e.g.
-  * a `?promoCode=` query param, or a checkout-nudge test code).
+  * Callers just call [[get]] - it transparently fetches and caches any code that isn't already cached.
   */
 class CachedPromotionsService(
     system: ActorSystem,
@@ -35,10 +34,7 @@ class CachedPromotionsService(
   private type PromotionsCache = Map[String, Promotion]
   private val cache = new AtomicReference[PromotionsCache](Map.empty)
 
-  /** Fetches the given promo codes from `promotions-api` and merges the result into the cache. Used for the scheduled
-    * poll of default codes, and internally by [[get]] to resolve codes that aren't already cached. `private[services]`
-    * rather than fully private so tests can exercise the cache-merge/expiry behaviour directly.
-    */
+  // private[services], not private, so tests can exercise the cache-merge/expiry behaviour directly
   private[services] def fetchAndCache(promoCodes: Seq[String]): Future[Unit] =
     promotionsApiService
       .listByPromoCodes(promoCodes)
@@ -53,18 +49,12 @@ class CachedPromotionsService(
     promotions.map(p => p.promoCode -> p).toMap
   }
 
-  /** Merges freshly-fetched promotions into the cache. Requested codes that weren't found/active in this fetch are
-    * dropped from the cache, but any other, previously-cached codes (e.g. from a different candidate set) are left
-    * untouched.
-    */
+  // Requested codes not found/active in this fetch are dropped from the cache; other cached codes are untouched.
   private def mergeIntoCache(requestedCodes: Seq[String], fetchedPromotions: Seq[Promotion]): Unit = {
     val fetched = toPromotionsCache(fetchedPromotions)
     cache.updateAndGet(current => (current -- requestedCodes) ++ fetched)
   }
 
-  /** Returns the requested promo codes that are found/active, transparently fetching and caching any that aren't
-    * already cached - callers don't need to know or care whether a code has been polled yet.
-    */
   def get(promoCodes: Seq[String]): Future[Seq[Promotion]] = {
     val current = cache.get()
     val missingCodes = promoCodes.filterNot(current.contains)
