@@ -1,6 +1,7 @@
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { v4 as uuidv4 } from 'uuid';
+import * as z from 'zod/mini';
 import type { ContributionType } from 'helpers/contributions';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
@@ -67,7 +68,7 @@ const googleAnalyticsEventQueue: Array<() => void> = [];
 
 // ----- Functions ----- //
 function getOrderId() {
-	let orderId = getSession('orderId');
+	let orderId = getSession('orderId', z.string());
 
 	if (orderId === null) {
 		orderId = uuidv4();

@@ -1,5 +1,8 @@
+import * as z from 'zod/mini';
 import { getSession, setSession } from 'helpers/storage/storage';
 import type { Participations } from './models';
+
+const participationsSchema = z.record(z.string(), z.optional(z.string()));
 
 // For participation in tests defined in abtestDefinitions.ts
 const PARTICIPATIONS_KEY = 'abParticipations';
@@ -19,7 +22,7 @@ export type Key =
 
 function getSessionParticipations(key: Key): Participations | undefined {
 	try {
-		return getSession(key) as Participations | undefined;
+		return getSession(key, participationsSchema) ?? undefined;
 	} catch (error) {
 		console.error(`Failed to fetch ${key} from session storage`, error);
 		return undefined;
