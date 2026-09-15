@@ -46,7 +46,7 @@ function getSession<T>(key: string, schema: z.ZodMiniType<T>): T | null {
 	try {
 		const item = window.sessionStorage.getItem(key);
 		const parsedData = item && (JSON.parse(item) as unknown);
-		const result = z.safeParse(schema, data ?? null);
+		const result = z.safeParse(schema, parsedData ?? null);
 		return result.success ? result.data : null;
 	} catch (error) {
 		console.error(`Failed to parse ${key} from session storage`, error);
