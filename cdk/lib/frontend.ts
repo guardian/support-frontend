@@ -542,6 +542,31 @@ export class Frontend extends GuStack {
 				treatMissingData: TreatMissingData.NOT_BREACHING,
 				snsTopicName: `alarms-handler-topic-${this.stage}`,
 			});
+
+			new GuAlarm(this, 'PromotionsApiError', {
+				app,
+				alarmName: alarmName('support-frontend PromotionsApiError'),
+				alarmDescription: alarmDescription(
+					'support-frontend failed to fetch data from the Promotions API',
+				),
+				actionsEnabled: shouldCreateAlarms,
+				threshold: 1,
+				evaluationPeriods: 1,
+				datapointsToAlarm: 1,
+				comparisonOperator:
+					ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+				metric: new Metric({
+					metricName: 'PromotionsApiError',
+					namespace: 'support-frontend',
+					dimensionsMap: {
+						Stage: this.stage,
+					},
+					statistic: 'Sum',
+					period: Duration.seconds(60),
+				}),
+				treatMissingData: TreatMissingData.NOT_BREACHING,
+				snsTopicName: `alarms-handler-topic-${this.stage}`,
+			});
 		}
 	}
 }
