@@ -25,16 +25,6 @@ class PromotionsApiConfigSpec extends AsyncFlatSpec with Matchers {
     provider.get(isTestUser = true).url shouldBe "https://promotions-api-code.support.guardianapis.com"
   }
 
-  it should "default apiKey to None when absent from config, rather than failing to load" in {
-    PromotionsApiConfig
-      .fromConfig(
-        ConfigFactory.parseString("""environment = "CODE"
-          |promotionsApi.url = "https://example.com"
-          |""".stripMargin),
-      )
-      .apiKey shouldBe None
-  }
-
   it should "load apiKey when present" in {
     PromotionsApiConfig
       .fromConfig(
@@ -43,6 +33,16 @@ class PromotionsApiConfigSpec extends AsyncFlatSpec with Matchers {
           |promotionsApi.key = "a-key"
           |""".stripMargin),
       )
-      .apiKey shouldBe Some("a-key")
+      .apiKey shouldBe "a-key"
+  }
+
+  it should "fail to load, rather than silently continuing, when apiKey is absent from config" in {
+    assertThrows[com.typesafe.config.ConfigException.Missing] {
+      PromotionsApiConfig.fromConfig(
+        ConfigFactory.parseString("""environment = "CODE"
+            |promotionsApi.url = "https://example.com"
+            |""".stripMargin),
+      )
+    }
   }
 }

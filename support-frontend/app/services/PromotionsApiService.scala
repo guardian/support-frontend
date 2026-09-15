@@ -30,9 +30,8 @@ object ListPromotionsResponse {
   * `landingPage`, `isIntroductoryPricing`, ...) are a compatible subset - the API's extra `appliesTo.catalogRatePlans`
   * field is simply ignored by the existing decoder.
   *
-  * `config.apiKey` is an `Option` because it's provisioned in Parameter Store as a separate infra step (see
-  * guardian/support-frontend#8207) - if it's absent, `listByPromoCodes` short-circuits to an empty result rather than
-  * making a request that would just 403.
+  * `config.apiKey` is required (see [[com.gu.support.config.PromotionsApiConfig]]) - app startup fails loudly if it's
+  * missing from Parameter Store, rather than silently making requests that would just 403.
   */
 class PromotionsApiService(client: FutureHttpClient, config: PromotionsApiConfig)(implicit
     ec: ExecutionContext,
@@ -50,16 +49,11 @@ class PromotionsApiService(client: FutureHttpClient, config: PromotionsApiConfig
     */
   def listByPromoCodes(promoCodes: Seq[String], active: Boolean = true): Future[List[Promotion]] = {
     val distinctCodes = promoCodes.distinct
-    config.apiKey match {
-      case _ if distinctCodes.isEmpty => Future.successful(Nil)
-      case None =>
-        logger.warn(s"Skipping promotions-api lookup for [${distinctCodes.mkString(", ")}] - no API key configured")
-        Future.successful(Nil)
-      case Some(key) =>
-        Future
-          .traverse(distinctCodes.grouped(maxPromoCodesPerRequest).toList)(fetchChunk(_, active, key))
-          .map(_.flatten)
-    }
+    if (distinctCodes.isEmpty) Future.successful(Nil)
+    else
+      Future
+        .traverse(distinctCodes.grouped(maxPromoCodesPerRequest).toList)(fetchChunk(_, active, config.apiKey))
+        .map(_.flatten)
   }
 
   private def fetchChunk(promoCodes: Seq[String], active: Boolean, apiKey: String): Future[List[Promotion]] =

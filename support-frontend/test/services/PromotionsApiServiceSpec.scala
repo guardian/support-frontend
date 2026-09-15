@@ -53,7 +53,7 @@ class PromotionsApiServiceSpec extends AnyWordSpec with Matchers with MockitoSug
 
       val service = new PromotionsApiService(
         httpClient,
-        PromotionsApiConfig(TouchPointEnvironments.CODE, "https://promotions-api.test.com", Some("test-key")),
+        PromotionsApiConfig(TouchPointEnvironments.CODE, "https://promotions-api.test.com", "test-key"),
       )
       val result = service.listByPromoCodes(Seq("SPRING26")).futureValue
 
@@ -73,7 +73,7 @@ class PromotionsApiServiceSpec extends AnyWordSpec with Matchers with MockitoSug
 
       val service = new PromotionsApiService(
         httpClient,
-        PromotionsApiConfig(TouchPointEnvironments.CODE, "https://promotions-api.test.com", Some("test-key")),
+        PromotionsApiConfig(TouchPointEnvironments.CODE, "https://promotions-api.test.com", "test-key"),
       )
       service.listByPromoCodes(Seq("FOO", "BAR")).futureValue
 
@@ -89,21 +89,10 @@ class PromotionsApiServiceSpec extends AnyWordSpec with Matchers with MockitoSug
       val httpClient = mock[FutureHttpClient]
       val service = new PromotionsApiService(
         httpClient,
-        PromotionsApiConfig(TouchPointEnvironments.CODE, "https://promotions-api.test.com", Some("test-key")),
+        PromotionsApiConfig(TouchPointEnvironments.CODE, "https://promotions-api.test.com", "test-key"),
       )
 
       service.listByPromoCodes(Nil).futureValue shouldBe Nil
-      verify(httpClient, never()).apply(any[Request])
-    }
-
-    "not make a request when no API key is configured" in {
-      val httpClient = mock[FutureHttpClient]
-      val service = new PromotionsApiService(
-        httpClient,
-        PromotionsApiConfig(TouchPointEnvironments.CODE, "https://promotions-api.test.com", None),
-      )
-
-      service.listByPromoCodes(Seq("FOO")).futureValue shouldBe Nil
       verify(httpClient, never()).apply(any[Request])
     }
   }

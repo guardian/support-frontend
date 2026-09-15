@@ -38,7 +38,7 @@ class CachedPromotionsServiceSpec extends AnyWordSpec with Matchers with ScalaFu
       )
       .getOrElse(fail("failed to decode test fixture Promotion"))
 
-  private val testConfig = PromotionsApiConfig(TouchPointEnvironments.CODE, "https://unused.test", None)
+  private val testConfig = PromotionsApiConfig(TouchPointEnvironments.CODE, "https://unused.test", "test-key")
 
   /** A fake promotions-api backend, so tests don't need real HTTP/JSON wiring - just the promo codes that should be
     * considered "found" when requested.
