@@ -6,6 +6,7 @@ import com.gu.support.encoding.JsonHelpers._
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{ACursor, Decoder, Encoder, Json}
 import org.joda.time.DateTime
+import com.gu.support.encoding.CustomCodecs.MillisDate.encodeDateTime
 
 case class Promotion(
     name: String,
@@ -27,6 +28,10 @@ case class Promotion(
 object Promotion {
   import com.gu.support.encoding.CustomCodecs.ISODate.decodeDateTime
   implicit val decoder: Decoder[Promotion] = deriveDecoder[Promotion].prepare(mapFields)
+
+  // Used to inject Promotions fetched from CachedPromotionsService onto window.guardian - see
+  // guardian/support-frontend#8207.
+  implicit val encoder: Encoder[Promotion] = deriveEncoder
 
   private def mapFields(c: ACursor) = c.withFocus {
     _.mapObject(
