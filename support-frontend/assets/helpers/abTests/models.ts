@@ -83,6 +83,7 @@ interface PageTest<Variant> {
 		targetedCountryGroups?: CountryGroupId[];
 	};
 	mParticleAudience?: number;
+	mParticleTemplates?: string[];
 	variants: Variant[];
 	methodologies?: Array<{ name: string }>;
 	scheduler?: Scheduler;

@@ -807,6 +807,7 @@ describe('getPageParticipations', () => {
 			const test: PageTest<AmountsVariant> = {
 				name: 'MPARTICLE_ATTRIBUTES_test-1',
 				status: 'Live',
+				mParticleTemplates: ['last_single_contribution_amount'],
 				variants: [variant],
 			};
 			const config = createAmountsConfig(test);
@@ -836,6 +837,7 @@ describe('getPageParticipations', () => {
 			const test: PageTest<AmountsVariant> = {
 				name: 'test-1',
 				status: 'Live',
+				mParticleTemplates: ['last_single_contribution_amount'],
 				variants: [variant],
 			};
 			const config = createAmountsConfig(test);
@@ -864,11 +866,13 @@ describe('getPageParticipations', () => {
 				name: 'second',
 				amounts: {},
 			};
+			mockRandomNumber.mockReturnValue(1);
 			const config = createAmountsConfig([
 				{
-					name: 'MPARTICLE_ATTRIBUTES_first-test',
+					name: 'first-test',
 					status: 'Live',
-					variants: [firstVariant],
+					mParticleTemplates: ['last_single_contribution_amount'],
+					variants: [firstVariant, secondVariant],
 				},
 				{
 					name: 'second-test',
@@ -908,6 +912,7 @@ describe('getPageParticipations', () => {
 				const test: PageTest<AmountsVariant> = {
 					name: 'test-1',
 					status: 'Live',
+					mParticleTemplates: ['last_single_contribution_amount'],
 					variants: [variant],
 				};
 				const config = createAmountsConfig(test);
@@ -951,7 +956,10 @@ describe('getPageParticipations', () => {
 
 		it('returns a template variant when the required attribute is available', async () => {
 			const variant = createTestVariant('control', template);
-			const test = createPageTest('MPARTICLE_ATTRIBUTES_test-1', [variant]);
+			const test = {
+				...createPageTest('MPARTICLE_ATTRIBUTES_test-1', [variant]),
+				mParticleTemplates: ['last_single_contribution_amount'],
+			};
 			const config = createConfig(
 				[test],
 				undefined,
@@ -979,7 +987,10 @@ describe('getPageParticipations', () => {
 		it('returns fallback when a template attribute is unavailable', async () => {
 			const variant = createTestVariant('control', template);
 			const fallback = createFallbackVariant();
-			const test = createPageTest('test-1', [variant]);
+			const test = {
+				...createPageTest('test-1', [variant]),
+				mParticleTemplates: ['last_single_contribution_amount'],
+			};
 			const config = createConfig(
 				[test],
 				undefined,
@@ -1018,7 +1029,10 @@ describe('getPageParticipations', () => {
 		it('requires template attributes for forced participations', async () => {
 			const variant = createTestVariant('control', template);
 			const fallback = createFallbackVariant();
-			const test = createPageTest('test-1', [variant]);
+			const test = {
+				...createPageTest('test-1', [variant]),
+				mParticleTemplates: ['last_single_contribution_amount'],
+			};
 			const config = createConfig(
 				[test],
 				undefined,
@@ -1042,10 +1056,12 @@ describe('getPageParticipations', () => {
 			expect(mockSetSessionParticipations).not.toHaveBeenCalled();
 		});
 
-		it('returns fallback for an mParticle template test not explicitly named for amounts', async () => {
+		it('allows an mParticle template test without a special name', async () => {
 			const variant = createTestVariant('control', template);
-			const fallback = createFallbackVariant();
-			const test = createPageTest('test-1', [variant]);
+			const test = {
+				...createPageTest('test-1', [variant]),
+				mParticleTemplates: ['last_single_contribution_amount'],
+			};
 			const config = createConfig(
 				[test],
 				undefined,
@@ -1057,14 +1073,14 @@ describe('getPageParticipations', () => {
 
 			mockLocation('/test/page');
 			mockCountryGroupMatches.mockReturnValue(true);
-
-			const result = await getPageParticipations(config, {
-				variant: () => fallback,
-				participationKey: 'FALLBACK_TEST',
+			mockFetchAudienceData.mockResolvedValue({
+				audienceMemberships: [],
+				userAttributes: { last_single_contribution_amount: 50 },
 			});
 
-			expect(result.variant).toEqual(fallback);
-			expect(mockFetchAudienceData).not.toHaveBeenCalled();
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toEqual(variant);
 		});
 	});
 
