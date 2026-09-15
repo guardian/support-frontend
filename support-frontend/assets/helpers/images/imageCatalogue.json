@@ -71,6 +71,10 @@
 	"onboardingArchivesAppHeroMobile": "120ea1f06c765cef33d9c922ab80200f69e7fb0c/0_0_1324_596",
 	"onboardingArchivesAppHero": "59db33aa75b866de717e2dee110e0869be3c3dd7/0_0_2200_776",
 	"onboardingFeastShortFormat": "259de24d8da2d6db977e9025311a6ce6d91a4076/0_0_428_194",
+	"onboardingInviteeDeclinePageHero": "d9ec1093ef6583a53c5736f6d8e2db4da2d7d7a1/0_0_2480_1116",
+	"onboardingInviteeDeclinedInvitationHero": "ea9ebf3e18c5ec83c6f7fef56ac3719c1cfa5fe6/0_0_2480_1116",
+	"onboardingInviteeExpiredInvitationHero": "6258c282cf40f1a9c36f95f9657acbee3763927b/0_0_2480_1116",
+	"onboardingInviteeLogoutPageHero": "e8e3905c70a75c5effd522cfcd0af3ce72aa0673/0_0_2480_1116",
 	"placeholder_16x9": "e8de6928023ef0a609876525d8467c240a92cf65/0_0_962_542",
 	"placeholder_4x3": "2d3e6e444c6506dd9706308bcce197ba5c5b7116/0_0_962_722",
 	"placeholder_1x1": "66000e54f37746085e8cdac09a46a8f1ce170ec1/0_0_802_802"

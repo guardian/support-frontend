@@ -47,9 +47,9 @@ export function InvitationUnavailable() {
 				<ContentBox removePadding>
 					<div css={[heroContainer, heroAspectRatio]}>
 						<GridImage
-							gridId="onboardingInviteeCreateAccountHero"
-							srcSizes={[442]}
-							sizes="442px"
+							gridId="onboardingInviteeExpiredInvitationHero"
+							srcSizes={[2000, 1000, 500]}
+							sizes="(max-width: 739px) 140px, 422px"
 							imgType="png"
 							altText="Invitation unavailable hero"
 						/>
