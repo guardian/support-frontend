@@ -1,5 +1,5 @@
 import { storage } from '@guardian/libs';
-import { Button, LinkButton, SvgBin } from '@guardian/source/react-components';
+import { Button, SvgBin } from '@guardian/source/react-components';
 import { ToggleSwitch } from '@guardian/source-development-kitchen/react-components';
 import { useState } from 'react';
 import {
@@ -98,7 +98,6 @@ export function SwitchesPage() {
 		});
 	};
 
-	const returnUrl = 'https://support.thegulocal.com/uk/contribute';
 	return (
 		<div css={pageStyles}>
 			<h1 css={headingStyles}>Feature Switches</h1>
@@ -121,15 +120,16 @@ export function SwitchesPage() {
 					onReset={() => reset(flag)}
 				/>
 			))}
-			<LinkButton
-				href={returnUrl}
+			<Button
+				onClick={() => window.history.back()}
+				type="button"
 				priority="tertiary"
 				size="default"
 				cssOverrides={btnStyleOverrides}
 				aria-label="Back"
 			>
 				Back
-			</LinkButton>
+			</Button>
 		</div>
 	);
 }
