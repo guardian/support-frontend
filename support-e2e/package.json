@@ -15,6 +15,7 @@
 		"test-cron-ui": "playwright test --project=cron --config=playwright.config.ts --ui",
 		"test-cron-ui-code": "playwright test --project=cron --config=playwright.code.config.ts --ui",
 		"test-cron-dev": "playwright test --project=cron --config=playwright.dev.config.ts --ui",
+		"show-report": "playwright show-report --host 0.0.0.0 --port 9500",
 		"lint": "eslint ./tests/**/*.ts",
 		"build": "tsc --noEmit"
 	},
