@@ -64,7 +64,7 @@ setup_nginx() {
   for config in ${CONFIGS[@]}; do
     # link-config mkdirs into nginx's root-owned install dir, so needs sudo (+PATH)
     sudo env "PATH=$PATH" "HOME=$HOME" "JAVA_HOME=$JAVA_HOME" dev-nginx link-config ${DIR}/nginx/${config}.conf
-    # extra link required because dev-nginx makes an assumption about /etc/nginx/servers, which isn't a think
+    # extra link required because dev-nginx makes an assumption about /etc/nginx/servers, which isn't a thing
     # on Linux
     sudo ln -fs /etc/nginx/servers/${config}.conf /etc/nginx/conf.d/${config}.conf
   done
