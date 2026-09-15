@@ -105,14 +105,12 @@ const createConfig = (
 	forceParamName: string = 'force-test',
 	sessionStorageKey: Key = 'landingPageParticipations',
 	getVariantName: (variant: TestVariant) => string = (v) => v.name,
-	getRequiredMParticleAttributes?: (variant: TestVariant) => string[],
 ): PageParticipationsConfig<TestVariant> => ({
 	tests,
 	pageRegex,
 	forceParamName,
 	sessionStorageKey,
 	getVariantName,
-	getRequiredMParticleAttributes,
 });
 
 describe('getPageParticipations', () => {
@@ -791,10 +789,6 @@ describe('getPageParticipations', () => {
 			forceParamName: 'force-test',
 			sessionStorageKey: 'landingPageParticipations',
 			getVariantName: (v) => v.name,
-			getRequiredMParticleAttributes: (v) =>
-				v.amounts.mParticleAmountAttribute
-					? [v.amounts.mParticleAmountAttribute]
-					: [],
 		});
 
 		it('returns the variant when the user has the required attribute', async () => {
@@ -966,7 +960,6 @@ describe('getPageParticipations', () => {
 				undefined,
 				undefined,
 				undefined,
-				() => ['last_single_contribution_amount'],
 			);
 
 			mockLocation('/test/page');
@@ -997,7 +990,6 @@ describe('getPageParticipations', () => {
 				undefined,
 				undefined,
 				undefined,
-				() => ['last_single_contribution_amount'],
 			);
 
 			mockLocation('/test/page');
@@ -1039,7 +1031,6 @@ describe('getPageParticipations', () => {
 				undefined,
 				undefined,
 				undefined,
-				() => ['last_single_contribution_amount'],
 			);
 
 			mockLocation('/test/page', '?force-test=test-1:control');
@@ -1068,7 +1059,6 @@ describe('getPageParticipations', () => {
 				undefined,
 				undefined,
 				undefined,
-				() => ['last_single_contribution_amount'],
 			);
 
 			mockLocation('/test/page');
@@ -1100,6 +1090,7 @@ describe('getPageParticipations', () => {
 			const test: PageTest<AmountTestVariant> = {
 				name: 'test-1',
 				status: 'Live',
+				mParticleTemplates: ['last_single_contribution_amount'],
 				variants: [variant],
 			};
 			const config: PageParticipationsConfig<AmountTestVariant> = {
@@ -1108,10 +1099,6 @@ describe('getPageParticipations', () => {
 				forceParamName: 'force-test',
 				sessionStorageKey: 'landingPageParticipations',
 				getVariantName: (value) => value.name,
-				getRequiredMParticleAttributes: (value) =>
-					value.amounts.mParticleAmountAttribute
-						? [value.amounts.mParticleAmountAttribute]
-						: [],
 			};
 			mockLocation('/test/page');
 			mockCountryGroupMatches.mockReturnValue(true);
@@ -1135,6 +1122,7 @@ describe('getPageParticipations', () => {
 			const test: PageTest<AmountTestVariant> = {
 				name: 'MPARTICLE_ATTRIBUTES_test-1',
 				status: 'Live',
+				mParticleTemplates: ['last_single_contribution_amount'],
 				variants: [variant],
 			};
 			const config: PageParticipationsConfig<AmountTestVariant> = {
@@ -1143,10 +1131,6 @@ describe('getPageParticipations', () => {
 				forceParamName: 'force-test',
 				sessionStorageKey: 'landingPageParticipations',
 				getVariantName: (value) => value.name,
-				getRequiredMParticleAttributes: (value) =>
-					value.amounts.mParticleAmountAttribute
-						? [value.amounts.mParticleAmountAttribute]
-						: [],
 			};
 			mockLocation('/test/page');
 			mockCountryGroupMatches.mockReturnValue(true);

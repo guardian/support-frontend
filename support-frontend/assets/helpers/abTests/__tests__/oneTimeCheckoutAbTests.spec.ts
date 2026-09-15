@@ -68,28 +68,6 @@ describe('oneTimeCheckoutTestConfig', () => {
 			'TEST_VARIANT',
 		);
 	});
-
-	it('extracts amount and template mParticle attributes', () => {
-		const variant: OneTimeCheckoutVariant = {
-			name: 'TEST_VARIANT',
-			heading: 'Last support: %%mParticle_last_support_amount%%',
-			subheading: 'Total: %%mParticle_total_support_amount%%',
-			amounts: {
-				amounts: [25, 50, 100, 250],
-				defaultAmount: 50,
-				hideChooseYourAmount: false,
-				mParticleAmountAttribute: 'last_single_contribution_amount',
-			},
-		};
-
-		expect(
-			oneTimeCheckoutTestConfig.getRequiredMParticleAttributes?.(variant),
-		).toEqual([
-			'last_single_contribution_amount',
-			'last_support_amount',
-			'total_support_amount',
-		]);
-	});
 });
 
 describe('fallBackOneTimeCheckoutSelection', () => {

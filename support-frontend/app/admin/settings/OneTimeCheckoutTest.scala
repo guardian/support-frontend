@@ -39,6 +39,7 @@ case class OneTimeCheckoutTest(
     priority: Int,
     regionTargeting: Option[RegionTargeting],
     variants: List[OneTimeCheckoutVariant],
+    mParticleTemplates: Option[List[String]] = None,
 )
 
 object OneTimeCheckoutTest {
