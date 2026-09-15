@@ -53,3 +53,7 @@ export const bannerStyles = css`
 	margin-bottom: ${space[6]}px;
 	border-left: 4px solid #ffbb00;
 `;
+export const btnStyleOverrides = css`
+	justify-content: center;
+	margin-top: ${space[6]}px;
+`;
