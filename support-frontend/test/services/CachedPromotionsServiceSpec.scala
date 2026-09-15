@@ -74,6 +74,8 @@ class CachedPromotionsServiceSpec extends AnyWordSpec with Matchers with ScalaFu
       service.get("PAPER20").map(_.promoCode) shouldBe Some("PAPER20")
       service.get("UNKNOWN") shouldBe None
 
+      service.get(Seq("WEEKLY10", "UNKNOWN", "PAPER20")).map(_.promoCode) shouldBe Seq("WEEKLY10", "PAPER20")
+
       api.requestedCodes.flatten.toSet shouldBe Set("WEEKLY10", "PAPER20")
     }
 
