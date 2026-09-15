@@ -61,12 +61,12 @@ class CachedPromotionsService(
     fetched
   }
 
-  def get(promoCode: String): Option[Promotion] = cache.get().get(promoCode)
-
   def get(promoCodes: Seq[String]): Seq[Promotion] = {
     val current = cache.get()
     promoCodes.flatMap(current.get)
   }
+
+  def get(promoCode: String): Option[Promotion] = get(Seq(promoCode)).headOption
 
   private def updateDefaults(): Future[PromotionsCache] = fetchAndCache(defaultPromotionService.allPromoCodes)
 
