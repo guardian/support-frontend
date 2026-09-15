@@ -53,12 +53,12 @@ class CachedPromotionsService(
     * dropped, but any other, previously-cached codes (e.g. from a different candidate set) are left untouched.
     */
   private def mergeIntoCache(requestedCodes: Seq[String], fetchedPromotions: Seq[Promotion]): Unit = {
-    val fetched = toPromoMap(fetchedPromotions)
+    val fetched = toPromotionsCache(fetchedPromotions)
     cache.updateAndGet(current => (current -- requestedCodes) ++ fetched)
     ()
   }
 
-  private def toPromoMap(promotions: Seq[Promotion]) = {
+  private def toPromotionsCache(promotions: Seq[Promotion]): PromotionsCache = {
     promotions.map(p => p.promoCode -> p).toMap
   }
 
@@ -67,8 +67,8 @@ class CachedPromotionsService(
   /** Resolves promo codes that aren't part of the pre-cached default set, caching the result for subsequent requests.
     * Safe to call with codes that are already cached - it's just a cheap re-fetch.
     */
-  def fetchAdditionalCodes(promoCodes: Seq[String]): Future[Map[String, Promotion]] =
-    fetchAndCache(promoCodes).map(_ => toPromoMap(promoCodes.flatMap(code => get(code))))
+  def fetchAdditionalCodes(promoCodes: Seq[String]): Future[PromotionsCache] =
+    fetchAndCache(promoCodes).map(_ => toPromotionsCache(promoCodes.flatMap(code => get(code))))
 
   // Populate the cache synchronously on startup (mirroring CachedSalesTaxService) so the first request(s) aren't
   // served from an empty cache. Unlike CachedSalesTaxService, we don't fail app startup if this fails - promotions
