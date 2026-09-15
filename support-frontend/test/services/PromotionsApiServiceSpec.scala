@@ -95,5 +95,16 @@ class PromotionsApiServiceSpec extends AnyWordSpec with Matchers with MockitoSug
       service.listByPromoCodes(Nil).futureValue shouldBe Nil
       verify(httpClient, never()).apply(any[Request])
     }
+
+    "throw if given more than 100 distinct promo codes" in {
+      val httpClient = mock[FutureHttpClient]
+      val service = new PromotionsApiService(
+        httpClient,
+        PromotionsApiConfig(TouchPointEnvironments.CODE, "https://promotions-api.test.com", "test-key"),
+      )
+
+      an[IllegalArgumentException] should be thrownBy service.listByPromoCodes((1 to 101).map(i => s"CODE$i"))
+      verify(httpClient, never()).apply(any[Request])
+    }
   }
 }

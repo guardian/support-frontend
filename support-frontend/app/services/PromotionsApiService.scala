@@ -34,25 +34,24 @@ class PromotionsApiService(client: FutureHttpClient, config: PromotionsApiConfig
   override val wsUrl: String = config.url
   override val verboseLogging: Boolean = false
 
-  // The API caps promoCodes at 100 per request; we chunk defensively client-side too.
+  // The API caps promoCodes at 100 per request - this should never happen given our current callers.
   private val maxPromoCodesPerRequest = 100
 
   def listByPromoCodes(promoCodes: Seq[String], active: Boolean = true): Future[List[Promotion]] = {
     val distinctCodes = promoCodes.distinct
+    require(
+      distinctCodes.size <= maxPromoCodesPerRequest,
+      s"Requested ${distinctCodes.size} promo codes, but promotions-api caps requests at $maxPromoCodesPerRequest",
+    )
     if (distinctCodes.isEmpty) Future.successful(Nil)
     else
-      Future
-        .traverse(distinctCodes.grouped(maxPromoCodesPerRequest).toList)(fetchChunk(_, active, config.apiKey))
-        .map(_.flatten)
+      get[ListPromotionsResponse](
+        endpoint = "promotions",
+        headers = Map("x-api-key" -> config.apiKey),
+        params = Map(
+          "promoCodes" -> distinctCodes.mkString(","),
+          "active" -> active.toString,
+        ),
+      ).map(_.promotions)
   }
-
-  private def fetchChunk(promoCodes: Seq[String], active: Boolean, apiKey: String): Future[List[Promotion]] =
-    get[ListPromotionsResponse](
-      endpoint = "promotions",
-      headers = Map("x-api-key" -> apiKey),
-      params = Map(
-        "promoCodes" -> promoCodes.mkString(","),
-        "active" -> active.toString,
-      ),
-    ).map(_.promotions)
 }
