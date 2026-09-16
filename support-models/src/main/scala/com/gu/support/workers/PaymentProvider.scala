@@ -10,8 +10,6 @@ case object StripeApplePay extends PaymentProvider("StripeApplePay")
 
 case object StripePaymentRequestButton extends PaymentProvider("StripePaymentRequestButton")
 
-case object PayPal extends PaymentProvider("PayPal")
-
 case object PayPalCompletePayments extends PaymentProvider("PayPalCompletePayments")
 
 case object DirectDebit extends PaymentProvider("DirectDebit")
@@ -28,7 +26,6 @@ object PaymentProvider {
     Stripe,
     StripeApplePay,
     StripePaymentRequestButton,
-    PayPal,
     PayPalCompletePayments,
     DirectDebit,
     Existing,
@@ -54,7 +51,6 @@ object PaymentProvider {
         case Some(StripePaymentType.StripePaymentRequestButton) => StripePaymentRequestButton
         case _ => Stripe
       }
-    case _: PayPalPaymentFields => PayPal
     case _: PayPalCompletePaymentsPaymentFields => PayPalCompletePayments
     case _: DirectDebitPaymentFields => DirectDebit
     case _: StripeHostedPaymentFields => StripeHostedCheckout
