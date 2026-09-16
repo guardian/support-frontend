@@ -47,7 +47,7 @@ class PromotionsApiServiceSpec extends AnyWordSpec with Matchers with MockitoSug
       |}""".stripMargin
 
   "PromotionsApiService" should {
-    "decode a promotions-api response into the existing Promotion model, including when description is absent" in {
+    "decode a promotions-api response into PromoWithCatalogInformation, including when description is absent" in {
       val httpClient = mock[FutureHttpClient]
       when(httpClient.apply(any[Request])).thenReturn(Future.successful(jsonResponse(200, validPromotionsResponse)))
 
@@ -60,7 +60,7 @@ class PromotionsApiServiceSpec extends AnyWordSpec with Matchers with MockitoSug
       result should have size 1
       result.head.promoCode shouldBe "SPRING26"
       result.head.campaignCode shouldBe "SPRING_CAMPAIGN"
-      result.head.description shouldBe "" // defaulted, since absent from the response
+      result.head.description shouldBe None // absent from the response
       result.head.isIntroductoryPricing shouldBe Some(true)
       result.head.discount.map(_.amount) shouldBe Some(25)
     }

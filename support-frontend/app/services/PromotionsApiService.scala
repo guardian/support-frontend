@@ -3,7 +3,7 @@ package services
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
 import com.gu.support.config.PromotionsApiConfig
-import com.gu.support.promotions.Promotion
+import com.gu.support.promotions.PromoWithCatalogInformation
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 
@@ -14,7 +14,7 @@ object PromotionsApiServiceError {
   implicit val decoder: Decoder[PromotionsApiServiceError] = deriveDecoder
 }
 
-case class ListPromotionsResponse(promotions: List[Promotion])
+case class ListPromotionsResponse(promotions: List[PromoWithCatalogInformation])
 object ListPromotionsResponse {
   implicit val decoder: Decoder[ListPromotionsResponse] = deriveDecoder
 }
@@ -22,8 +22,9 @@ object ListPromotionsResponse {
 /** A thin client for a single `promotions-api` (guardian/support-service-lambdas) backend environment - the replacement
   * for the legacy Zuora-catalog-embedded promotions used by [[com.gu.support.promotions.PromotionService]].
   *
-  * Reuses the existing [[Promotion]] domain model/decoder, since the new API's response fields are a compatible subset
-  * of the legacy Zuora-embedded shape.
+  * Decodes responses directly into [[PromoWithCatalogInformation]], which mirrors the API's response shape
+  * field-for-field, rather than the unrelated [[com.gu.support.promotions.Promotion]] domain model used by the legacy
+  * productPrices/PromotionValidator mechanism (see guardian/support-frontend#8207).
   */
 class PromotionsApiService(client: FutureHttpClient, config: PromotionsApiConfig)(implicit
     ec: ExecutionContext,
@@ -35,7 +36,7 @@ class PromotionsApiService(client: FutureHttpClient, config: PromotionsApiConfig
   // The API caps promoCodes at 100 per request - this should never happen given our current usage.
   private val maxPromoCodesPerRequest = 100
 
-  def listByPromoCodes(promoCodes: Seq[String], active: Boolean = true): Future[List[Promotion]] = {
+  def listByPromoCodes(promoCodes: Seq[String], active: Boolean = true): Future[List[PromoWithCatalogInformation]] = {
     val distinctCodes = promoCodes.distinct
     require(
       distinctCodes.size <= maxPromoCodesPerRequest,

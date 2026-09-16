@@ -5,7 +5,7 @@ import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
 import com.gu.aws.AwsCloudWatchMetricSetup.promotionsApiFailure
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.support.config.{PromotionsApiConfig, PromotionsApiConfigProvider}
-import com.gu.support.promotions.Promotion
+import com.gu.support.promotions.PromoWithCatalogInformation
 import com.gu.support.touchpoint.{TouchpointService, TouchpointServiceProvider}
 import org.apache.pekko.actor.ActorSystem
 import play.api.Logging
@@ -31,7 +31,7 @@ class CachedPromotionsService(
     extends TouchpointService
     with Logging {
 
-  private type PromotionsCache = Map[String, Promotion]
+  private type PromotionsCache = Map[String, PromoWithCatalogInformation]
   private val cache = new AtomicReference[PromotionsCache](Map.empty)
 
   // private[services], not private, so tests can exercise the cache-merge/expiry behaviour directly
@@ -45,24 +45,24 @@ class CachedPromotionsService(
         Future.failed(e)
       }
 
-  private def toPromotionsCache(promotions: Seq[Promotion]): PromotionsCache = {
+  private def toPromotionsCache(promotions: Seq[PromoWithCatalogInformation]): PromotionsCache = {
     promotions.map(p => p.promoCode -> p).toMap
   }
 
   // Requested codes not found/active in this fetch are dropped from the cache; other cached codes are untouched.
-  private def mergeIntoCache(requestedCodes: Seq[String], fetchedPromotions: Seq[Promotion]): Unit = {
+  private def mergeIntoCache(requestedCodes: Seq[String], fetchedPromotions: Seq[PromoWithCatalogInformation]): Unit = {
     val fetched = toPromotionsCache(fetchedPromotions)
     cache.updateAndGet(current => (current -- requestedCodes) ++ fetched)
   }
 
-  def get(promoCodes: Seq[String]): Future[Seq[Promotion]] = {
+  def get(promoCodes: Seq[String]): Future[Seq[PromoWithCatalogInformation]] = {
     val current = cache.get()
     val missingCodes = promoCodes.filterNot(current.contains)
     if (missingCodes.isEmpty) Future.successful(promoCodes.flatMap(current.get))
     else fetchAndCache(missingCodes).map(_ => promoCodes.flatMap(cache.get().get))
   }
 
-  def get(promoCode: String): Future[Option[Promotion]] = get(Seq(promoCode)).map(_.headOption)
+  def get(promoCode: String): Future[Option[PromoWithCatalogInformation]] = get(Seq(promoCode)).map(_.headOption)
 
   private def updateDefaults(): Future[Unit] = fetchAndCache(defaultPromotionService.allPromoCodes)
 

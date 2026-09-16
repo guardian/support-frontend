@@ -2,7 +2,7 @@ package services
 
 import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper, Product, SupporterPlus, TierThree}
 import com.gu.support.config.{PromotionsApiConfig, TouchPointEnvironments}
-import com.gu.support.promotions.Promotion
+import com.gu.support.promotions.PromoWithCatalogInformation
 import org.apache.pekko.actor.ActorSystem
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
@@ -23,20 +23,20 @@ class CachedPromotionsServiceSpec extends AnyWordSpec with Matchers with ScalaFu
     super.afterAll()
   }
 
-  private def promotion(promoCode: String): Promotion =
-    Promotion.decoder
+  private def promotion(promoCode: String): PromoWithCatalogInformation =
+    PromoWithCatalogInformation.decoder
       .decodeJson(
         io.circe.parser
           .parse(s"""{
         |  "promoCode": "$promoCode",
         |  "name": "Test promo",
         |  "campaignCode": "TEST_CAMPAIGN",
-        |  "appliesTo": {"productRatePlanIds": [], "countries": ["GB"]},
+        |  "appliesTo": {"productRatePlanIds": [], "countries": ["GB"], "catalogRatePlans": []},
         |  "startTimestamp": "2020-01-01T00:00:00.000Z"
         |}""".stripMargin)
           .getOrElse(fail("invalid test fixture json")),
       )
-      .getOrElse(fail("failed to decode test fixture Promotion"))
+      .getOrElse(fail("failed to decode test fixture PromoWithCatalogInformation"))
 
   private val testConfig = PromotionsApiConfig(TouchPointEnvironments.CODE, "https://unused.test", "test-key")
 
@@ -46,7 +46,10 @@ class CachedPromotionsServiceSpec extends AnyWordSpec with Matchers with ScalaFu
   private class FakePromotionsApiService(foundCodes: Set[String]) extends PromotionsApiService(null, testConfig) {
     var requestedCodes: List[Seq[String]] = Nil
 
-    override def listByPromoCodes(promoCodes: Seq[String], active: Boolean): Future[List[Promotion]] = {
+    override def listByPromoCodes(
+        promoCodes: Seq[String],
+        active: Boolean,
+    ): Future[List[PromoWithCatalogInformation]] = {
       requestedCodes = requestedCodes :+ promoCodes
       Future.successful(promoCodes.filter(foundCodes.contains).map(promotion).toList)
     }
