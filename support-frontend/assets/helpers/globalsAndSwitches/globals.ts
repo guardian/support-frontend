@@ -28,7 +28,7 @@ function getGlobal<T>(path = ''): T | null {
 
 function getLocal<T>(path = ''): T | null {
 	// feature flags path is in the format 'featureSwitches.featureFlagName' and we want to
-// extract the 'featureFlagName' part to check if there is an override in local storage
+	// extract the 'featureFlagName' part to check if there is an override in local storage
 
 	if (!storage.local.isAvailable()) {
 		return null;
