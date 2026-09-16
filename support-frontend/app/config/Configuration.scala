@@ -38,8 +38,6 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val goCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
 
-  lazy val regularPayPalConfigProvider = new PayPalConfigProvider(config, stage)
-
   lazy val payPalCompletePaymentsConfigProvider = new PayPalCompletePaymentsConfigProvider(config, stage)
 
   lazy val regularStripeConfigProvider = new StripePublicConfigProvider(config, stage)

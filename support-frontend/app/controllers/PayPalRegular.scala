@@ -9,8 +9,8 @@ import io.circe.syntax._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.paypal.PayPalBillingDetails.codec
-import services.paypal.{PayPalBillingDetails, PayPalNvpServiceProvider, Token}
-import services.{PayPalNvpService, TestUserService}
+import services.paypal.{PayPalBillingDetails, Token}
+import services.TestUserService
 import views.EmptyDiv
 
 import scala.concurrent.ExecutionContext
@@ -18,7 +18,6 @@ import scala.concurrent.ExecutionContext
 class PayPalRegular(
     actionBuilders: CustomActionBuilders,
     assets: AssetsResolver,
-    payPalNvpServiceProvider: PayPalNvpServiceProvider,
     testUsers: TestUserService,
     components: ControllerComponents,
     settingsProvider: AllSettingsProvider,
