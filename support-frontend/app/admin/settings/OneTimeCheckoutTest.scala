@@ -2,17 +2,23 @@ package admin.settings
 
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
+import io.circe.generic.extras.Configuration
+import io.circe.generic.extras.semiauto.deriveConfiguredDecoder
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 
 case class AmountsSelection(
     amounts: List[Int],
     defaultAmount: Int,
-    hideChooseYourAmount: Option[Boolean],
+    hideChooseYourAmount: Boolean = false,
+    mParticleAmountAttribute: Option[MParticleAmountAttribute] = None,
 )
 
 object AmountsSelection {
-  implicit val codec: Codec[AmountsSelection] = deriveCodec
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val encoder: Encoder[AmountsSelection] = deriveEncoder
+  implicit val decoder: Decoder[AmountsSelection] = deriveConfiguredDecoder
+  implicit val codec: Codec[AmountsSelection] = new Codec(encoder, decoder)
 }
 
 case class OneTimeCheckoutVariant(
@@ -33,6 +39,7 @@ case class OneTimeCheckoutTest(
     priority: Int,
     regionTargeting: Option[RegionTargeting],
     variants: List[OneTimeCheckoutVariant],
+    mParticleTemplates: Option[List[String]] = None,
 )
 
 object OneTimeCheckoutTest {
