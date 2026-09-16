@@ -164,12 +164,6 @@ export const getZuoraPaymentMethod = (
 				expirationYear: paymentMethod.CreditCardExpirationYear,
 				cardType: paymentMethod.CreditCardType,
 			};
-		case 'PayPal':
-			return {
-				type: 'PayPalNativeEC',
-				BAID: paymentMethod.PaypalBaid,
-				email: paymentMethod.PaypalEmail,
-			};
 		case 'PayPalCompletePayments':
 			return {
 				type: 'PayPalCP',
@@ -177,12 +171,6 @@ export const getZuoraPaymentMethod = (
 					gatewayType: 'PayPalCP',
 					tokenId: paymentMethod.PaypalPaymentToken,
 				},
-				email: paymentMethod.PaypalEmail,
-			};
-		case 'PayPalCompletePaymentsWithBAID':
-			return {
-				type: 'PayPalCP',
-				BAID: paymentMethod.PaypalBaid,
 				email: paymentMethod.PaypalEmail,
 			};
 		case 'BankTransfer':
