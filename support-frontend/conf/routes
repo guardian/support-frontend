@@ -38,6 +38,12 @@ GET  /one-time-checkout                                            controllers.A
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/one-time-checkout   controllers.Application.productCheckoutRouter(countryGroupId: String)
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/thank-you           controllers.Application.productCheckoutRouter(countryGroupId: String)
 
+# Multiple Accounts
+GET  /invitation/accept/:invitationCode                                      controllers.Application.geoRedirectInvitation(action = "accept", invitationCode: String)
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/invitation/accept/:code  controllers.Application.invitationPageRouter(countryGroupId: String, code: String)
+GET  /invitation/reject/:invitationCode                                      controllers.Application.geoRedirectInvitation(action = "reject", invitationCode: String)
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/invitation/reject/:code  controllers.Application.invitationPageRouter(countryGroupId: String, code: String)
+
 GET  /$countryGroupId<(uk|eu)>/guardian-ad-lite                         controllers.Application.productCheckoutRouter(countryGroupId: String)
 GET /guardian-ad-lite                                                controllers.Application.geoRedirectToPath(path = "guardian-ad-lite")
 
@@ -66,6 +72,11 @@ POST  /stripe/create-setup-intent/prb                              controllers.S
 POST /identity/signin-url                                          controllers.IdentityController.createSignInURL()
 GET  /identity/newsletters                                         controllers.IdentityController.getNewslettersSubscriptions()
 PATCH /identity/newsletters                                        controllers.IdentityController.updateNewsletterSubscription()
+
+# ------ Multiple accounts ------ #
+GET  /invitation/:invitationCode                                     controllers.InvitationController.getInvitation(invitationCode: String)
+DELETE /invitation/:invitationCode                                   controllers.InvitationController.deleteInvitation(invitationCode: String)
+POST /invitation/:invitationCode/accept                              controllers.InvitationController.acceptInvitation(invitationCode: String)
 
 # ----- Subscriptions ----- #
 
@@ -111,12 +122,6 @@ GET /switches                                                      controllers.T
 GET /oauth/authorize                                               controllers.AuthCodeFlowController.authorize()
 GET /oauth/callback                                                controllers.AuthCodeFlowController.callback(code: Option[String], state: String, error: Option[String], error_description: Option[String])
 
-# ----- PayPal (Recurring Endpoints) ----- #
-
-POST /paypal/setup-payment                                         controllers.PayPalRegular.setupPayment()
-POST /paypal/one-click-checkout                                    controllers.PayPalRegular.createAgreementAndRetrieveUser()
-GET  /paypal/return                                                controllers.PayPalRegular.returnUrl()
-GET  /paypal/cancel                                                controllers.PayPalRegular.cancelUrl()
 
 # ----- PayPal (One-off Endpoints) ----- #
 
@@ -136,6 +141,8 @@ GET  /paypal/rest/error                                            controllers.P
 # ----- PayPal (Complete Payments) ----- #
 POST /paypal-complete-payments/setup-token                         controllers.PayPalCompletePaymentsController.createSetupToken()
 POST /paypal-complete-payments/payment-token                       controllers.PayPalCompletePaymentsController.createPaymentToken()
+GET  /paypal/return                                                controllers.PayPalRegular.returnUrl()
+GET  /paypal/cancel                                                controllers.PayPalRegular.cancelUrl()
 
 # ----- Direct Debit ----- #
 
@@ -150,7 +157,7 @@ GET /prices                                                       controllers.Pr
 
 # ----- Analytics API (mParticle) ----- #
 GET /analytics-user-profile                                       controllers.AnalyticsController.getAnalyticsUserProfile()
-GET /audience-memberships                                         controllers.AnalyticsController.getAudienceMemberships()
+GET /audience-data                                                controllers.AnalyticsController.getAudienceData()
 
 # ----- Newspaper Archive ----- #
 GET /newspaper-archive-header                                      controllers.NewspaperArchiveController.getHeader

@@ -144,6 +144,7 @@ const router = createBrowserRouter([
 										nudgeSettings={checkoutNudgeSettings}
 										landingPageSettings={landing.variant}
 										oneTimeCheckoutSettings={oneTime.variant}
+										userAttributes={oneTime.userAttributes ?? {}}
 									/>
 								);
 							},
@@ -165,6 +166,46 @@ const router = createBrowserRouter([
 										appConfig={appConfig}
 										abParticipations={finalParticipations}
 										landingPageSettings={landing.variant}
+									/>
+								);
+							},
+						};
+					},
+				},
+				{
+					path: `/${supportRegionId}/invitation/accept/:code`,
+					lazy: async () => {
+						const { Invitation } = await import(
+							/* webpackChunkName: "Invitation" */ './invitation'
+						);
+						return {
+							Component: function InvitationAcceptRoute() {
+								const { landing } = useRootLoaderData();
+								return (
+									<Invitation
+										supportRegionId={supportRegionId}
+										landingPageSettings={landing.variant}
+										mode="accept"
+									/>
+								);
+							},
+						};
+					},
+				},
+				{
+					path: `/${supportRegionId}/invitation/reject/:code`,
+					lazy: async () => {
+						const { Invitation } = await import(
+							/* webpackChunkName: "Invitation" */ './invitation'
+						);
+						return {
+							Component: function InvitationRejectRoute() {
+								const { landing } = useRootLoaderData();
+								return (
+									<Invitation
+										supportRegionId={supportRegionId}
+										landingPageSettings={landing.variant}
+										mode="reject"
 									/>
 								);
 							},

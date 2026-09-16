@@ -1,6 +1,9 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { getSettings } from '../../globalsAndSwitches/globals';
-import type { OneTimeCheckoutTest } from '../../globalsAndSwitches/oneTimeCheckoutSettings';
+import type {
+	OneTimeCheckoutTest,
+	OneTimeCheckoutVariant,
+} from '../../globalsAndSwitches/oneTimeCheckoutSettings';
 import {
 	fallBackOneTimeCheckoutSelection,
 	getOneTimeCheckoutTestConfig,
@@ -51,7 +54,7 @@ describe('oneTimeCheckoutTestConfig', () => {
 	});
 
 	it('extracts variant name correctly', () => {
-		const variant = {
+		const variant: OneTimeCheckoutVariant = {
 			name: 'TEST_VARIANT',
 			heading: 'Test',
 			subheading: 'Test',

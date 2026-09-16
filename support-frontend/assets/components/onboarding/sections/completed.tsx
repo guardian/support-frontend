@@ -17,6 +17,7 @@ import {
 	benefitsItemIcon,
 	benefitsItemText,
 	buttonOverrides,
+	completedStack,
 	descriptions,
 	headings,
 	heroContainer,
@@ -31,12 +32,6 @@ const heroAspectRatio = css`
 const linkStyle = css`
 	color: ${palette.brand[500]};
 	text-decoration: underline;
-`;
-
-const completedStack = css`
-	margin-top: ${space[5]}px;
-	position: relative;
-	z-index: 1;
 `;
 
 const completedStackPadding = css`

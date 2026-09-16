@@ -1,4 +1,5 @@
 import { storage } from '@guardian/libs';
+import * as z from 'zod/mini';
 
 // ----- Functions ----- //
 function setLocal(key: string, value: unknown): void {
@@ -30,7 +31,7 @@ function setSession(key: string, value: unknown): void {
 	storage.session.isAvailable() && storage.session.set(key, value);
 }
 
-function getSession(key: string): unknown {
+function getSession<T>(key: string, schema: z.ZodMiniType<T>): T | null {
 	if (!storage.session.isAvailable()) {
 		return null;
 	}
@@ -38,13 +39,15 @@ function getSession(key: string): unknown {
 	const data = storage.session.get(key);
 
 	if (data !== null && data !== undefined) {
-		return data;
+		const result = z.safeParse(schema, data);
+		return result.success ? result.data : null;
 	}
 
 	try {
 		const item = window.sessionStorage.getItem(key);
-		const data = item && (JSON.parse(item) as unknown);
-		return data ?? null;
+		const parsedData = item && (JSON.parse(item) as unknown);
+		const result = z.safeParse(schema, parsedData ?? null);
+		return result.success ? result.data : null;
 	} catch (error) {
 		console.error(`Failed to parse ${key} from session storage`, error);
 		return null;

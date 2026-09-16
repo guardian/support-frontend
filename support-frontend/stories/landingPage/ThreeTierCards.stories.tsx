@@ -41,7 +41,7 @@ export default {
 	decorators: [
 		withCenterAlignment,
 		withSourceReset,
-		withFeatureSwitches({ enableRedCardTheme: 'Off' }),
+		withFeatureSwitches({ enableDeepDiscount: 'Off' }),
 	],
 	parameters: {
 		docs: {

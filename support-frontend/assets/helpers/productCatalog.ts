@@ -325,12 +325,12 @@ const paperArchiveDigitalBenefitUK = {
 };
 
 const weeklyDigitalBenefit = {
-	copy: `Guardian Weekly e-magazine`,
+	copy: `Guardian Weekly digital magazines`,
 	tooltip: `Accessed through the Guardian Editions app, the Guardian Weekly e-magazine features a handpicked and carefully curated selection of in-depth articles, global news, opinion and more. Enjoy wherever you are, on your favourite device.`,
 };
 
 const editionsDigitalBenefit = {
-	copy: `The Long Read e-magazine`,
+	copy: `The Long Read digital magazines`,
 	tooltip: `Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.`,
 };
 

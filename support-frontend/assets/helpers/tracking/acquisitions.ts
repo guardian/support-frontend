@@ -2,6 +2,7 @@
 
 import { getViewId } from '@guardian/ophan-tracker-js';
 import type { CountryCode } from '@modules/internationalisation/country';
+import * as z from 'zod/mini';
 import { testIsActive } from 'helpers/abTests/abtest';
 import { type Participations } from 'helpers/abTests/models';
 import { get as getCookie } from 'helpers/storage/cookie';
@@ -70,6 +71,24 @@ export type PaymentAPIAcquisitionData = {
 
 const ACQUISITIONS_PARAM = 'acquisitionData';
 const ACQUISITIONS_STORAGE_KEY = 'acquisitionData';
+
+export const referrerAcquisitionDataSchema: z.ZodMiniType<ReferrerAcquisitionData> =
+	z.object({
+		campaignCode: z.optional(z.string()),
+		referrerPageviewId: z.optional(z.string()),
+		referrerUrl: z.optional(z.string()),
+		componentId: z.optional(z.string()),
+		componentType: z.optional(z.string()),
+		source: z.optional(z.string()),
+		abTests: z.optional(
+			z.array(z.object({ name: z.string(), variant: z.string() })),
+		),
+		queryParameters: z.optional(
+			z.array(z.object({ name: z.string(), value: z.string() })),
+		),
+		labels: z.optional(z.array(z.string())),
+		isRemote: z.optional(z.boolean()),
+	});
 
 // ----- Functions ----- //
 
@@ -219,7 +238,7 @@ function getReferrerAcquisitionDataFromSessionStorage():
 	| ReferrerAcquisitionData
 	| null
 	| undefined {
-	return getSession(ACQUISITIONS_STORAGE_KEY) as ReferrerAcquisitionData;
+	return getSession(ACQUISITIONS_STORAGE_KEY, referrerAcquisitionDataSchema);
 }
 
 function getAcquisitionDataFromUtmParams():
