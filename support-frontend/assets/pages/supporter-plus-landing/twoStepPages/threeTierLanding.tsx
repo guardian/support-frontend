@@ -57,6 +57,7 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
 import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
+import { setSwitchReturnUrl } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
 import CurrentMaxRatesByCountry from 'pages/[countryGroupId]/helpers/CurrentMaxRatesByCountry';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
@@ -211,6 +212,8 @@ const isCardUserSelected = (
 	cardPriceDiscount?: number,
 ): boolean => {
 	const urlParams = new URLSearchParams(window.location.search);
+	const urlSwitchReturn = document.location.href;
+	setSwitchReturnUrl({ link: urlSwitchReturn });
 	const urlSelectedAmount = urlParams.get('selected-amount');
 	const hasUrlSelectedAmount = !isNaN(Number(urlSelectedAmount));
 	if (!hasUrlSelectedAmount) {

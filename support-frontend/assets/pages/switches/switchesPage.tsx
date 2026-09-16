@@ -1,5 +1,5 @@
 import { storage } from '@guardian/libs';
-import { Button, SvgBin } from '@guardian/source/react-components';
+import { Button, LinkButton, SvgBin } from '@guardian/source/react-components';
 import { ToggleSwitch } from '@guardian/source-development-kitchen/react-components';
 import { useState } from 'react';
 import {
@@ -9,6 +9,7 @@ import {
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { FeatureSwitches } from 'helpers/globalsAndSwitches/window';
 import { renderPage } from 'helpers/rendering/render';
+import { getSwitchReturnUrl } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
 import {
 	bannerContainerStyles,
 	bannerStyles,
@@ -98,6 +99,8 @@ export function SwitchesPage() {
 		});
 	};
 
+	const returnUrl = getSwitchReturnUrl();
+	console.log('returnUrl:', returnUrl);
 	return (
 		<div css={pageStyles}>
 			<h1 css={headingStyles}>Feature Switches</h1>
@@ -120,16 +123,29 @@ export function SwitchesPage() {
 					onReset={() => reset(flag)}
 				/>
 			))}
-			<Button
-				onClick={() => window.history.back()}
-				type="button"
-				priority="tertiary"
-				size="default"
-				cssOverrides={btnStyleOverrides}
-				aria-label="Back"
-			>
-				Back
-			</Button>
+			{returnUrl ? (
+				<LinkButton
+					href={returnUrl}
+					type="button"
+					priority="tertiary"
+					size="default"
+					cssOverrides={btnStyleOverrides}
+					aria-label="Return"
+				>
+					Return
+				</LinkButton>
+			) : (
+				<Button
+					onClick={() => window.history.back()}
+					type="button"
+					priority="tertiary"
+					size="default"
+					cssOverrides={btnStyleOverrides}
+					aria-label="Back"
+				>
+					Back
+				</Button>
+			)}
 		</div>
 	);
 }

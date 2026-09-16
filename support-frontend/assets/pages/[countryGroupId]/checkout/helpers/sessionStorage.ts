@@ -10,6 +10,12 @@ const returnAddressKey = 'returnAddress';
 const ReturnAddressSchema = z.object({
 	link: z.string(),
 });
+
+/**
+ * The Switches Page will read this to return rather than back to the previous page.
+ */
+const switchReturnUrlKey = 'switchReturnUrl';
+
 type ReturnAddressSchemaType = z.infer<typeof ReturnAddressSchema>;
 export function setReturnAddress(link: ReturnAddressSchemaType) {
 	storage.session.set(returnAddressKey, link);
@@ -21,6 +27,18 @@ export function getReturnAddress(): string {
 	return parsedReturnAddress.success
 		? parsedReturnAddress.data.link
 		: 'https://www.theguardian.com';
+}
+
+export function setSwitchReturnUrl(link: ReturnAddressSchemaType) {
+	storage.session.set(switchReturnUrlKey, link);
+}
+export function getSwitchReturnUrl() {
+	const parsedReturnAddress = ReturnAddressSchema.safeParse(
+		storage.session.get(switchReturnUrlKey),
+	);
+	return parsedReturnAddress.success
+		? parsedReturnAddress.data.link
+		: undefined;
 }
 
 /**
