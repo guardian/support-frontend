@@ -45,12 +45,14 @@ class CachedPromotionsServiceSpec extends AnyWordSpec with Matchers with ScalaFu
     */
   private class FakePromotionsApiService(foundCodes: Set[String]) extends PromotionsApiService(null, testConfig) {
     var requestedCodes: List[Seq[String]] = Nil
+    var requestedActive: List[Option[Boolean]] = Nil
 
     override def listByPromoCodes(
         promoCodes: Seq[String],
-        active: Boolean,
+        active: Option[Boolean],
     ): Future[List[PromoWithCatalogInformation]] = {
       requestedCodes = requestedCodes :+ promoCodes
+      requestedActive = requestedActive :+ active
       Future.successful(promoCodes.filter(foundCodes.contains).map(promotion).toList)
     }
   }
@@ -113,6 +115,17 @@ class CachedPromotionsServiceSpec extends AnyWordSpec with Matchers with ScalaFu
       service.fetchAndCache(Seq("STILLVALID", "NOWEXPIRED")).futureValue
       service.get("STILLVALID").futureValue shouldBe defined
       service.get("NOWEXPIRED").futureValue shouldBe None
+    }
+
+    "fetch promotions without filtering by active/expiry, so expired promotions' terms can still be shown" in {
+      val defaults = new FakeDefaultPromotionService(Map.empty)
+      val api = new FakePromotionsApiService(foundCodes = Set("EXPIREDCODE"))
+
+      val service = new CachedPromotionsService(system, api, defaults, testConfig)
+      service.get("EXPIREDCODE").futureValue
+
+      api.requestedActive should not be empty
+      api.requestedActive.foreach(_ shouldBe None)
     }
   }
 }

@@ -36,7 +36,19 @@ class PromotionsApiService(client: FutureHttpClient, config: PromotionsApiConfig
   // The API caps promoCodes at 100 per request - this should never happen given our current usage.
   private val maxPromoCodesPerRequest = 100
 
-  def listByPromoCodes(promoCodes: Seq[String], active: Boolean = true): Future[List[PromoWithCatalogInformation]] = {
+  /** Fetches promotions by their promo codes, optionally filtering by active status.
+    *
+    * @param promoCodes
+    *   The promo codes to fetch promotions for.
+    * @param active
+    *   Optional filter for active status. `None` fetches all promotions regardless of status.
+    * @return
+    *   A `Future` containing a list of promotions matching the given promo codes and active status.
+    */
+  def listByPromoCodes(
+      promoCodes: Seq[String],
+      active: Option[Boolean] = None,
+  ): Future[List[PromoWithCatalogInformation]] = {
     val distinctCodes = promoCodes.distinct
     require(
       distinctCodes.size <= maxPromoCodesPerRequest,
@@ -47,10 +59,7 @@ class PromotionsApiService(client: FutureHttpClient, config: PromotionsApiConfig
       get[ListPromotionsResponse](
         endpoint = "promotions",
         headers = Map("x-api-key" -> config.apiKey),
-        params = Map(
-          "promoCodes" -> distinctCodes.mkString(","),
-          "active" -> active.toString,
-        ),
+        params = Map("promoCodes" -> distinctCodes.mkString(",")) ++ active.map(a => "active" -> a.toString),
       ).map(_.promotions)
   }
 }

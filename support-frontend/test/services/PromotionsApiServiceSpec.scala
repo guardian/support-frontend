@@ -85,6 +85,26 @@ class PromotionsApiServiceSpec extends AnyWordSpec with Matchers with MockitoSug
       req.url.queryParameter("active") shouldBe "true"
     }
 
+    "omit the active param entirely when active = None, rather than sending active=false - which would " +
+      "incorrectly filter to only inactive/expired promotions, not \"no filter\"" in {
+        val httpClient = mock[FutureHttpClient]
+        when(httpClient.apply(any[Request])).thenReturn(
+          Future.successful(jsonResponse(200, """{"promotions": []}""")),
+        )
+
+        val service = new PromotionsApiService(
+          httpClient,
+          PromotionsApiConfig(TouchPointEnvironments.CODE, "https://promotions-api.test.com", "test-key"),
+        )
+        service.listByPromoCodes(Seq("FOO", "BAR"), active = None).futureValue
+
+        val captor = org.mockito.ArgumentCaptor.forClass(classOf[Request])
+        verify(httpClient).apply(captor.capture())
+        val req = captor.getValue
+        req.url.queryParameter("promoCodes") shouldBe "FOO,BAR"
+        req.url.queryParameter("active") shouldBe null
+      }
+
     "not make a request when no promo codes are given" in {
       val httpClient = mock[FutureHttpClient]
       val service = new PromotionsApiService(
