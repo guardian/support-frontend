@@ -99,8 +99,7 @@ export function SwitchesPage() {
 		});
 	};
 
-	const returnUrl = getSwitchReturnUrl();
-	console.log('returnUrl:', returnUrl);
+	const switchReturnUrl = getSwitchReturnUrl();
 	return (
 		<div css={pageStyles}>
 			<h1 css={headingStyles}>Feature Switches</h1>
@@ -123,9 +122,9 @@ export function SwitchesPage() {
 					onReset={() => reset(flag)}
 				/>
 			))}
-			{returnUrl ? (
+			{switchReturnUrl ? (
 				<LinkButton
-					href={returnUrl}
+					href={switchReturnUrl}
 					type="button"
 					priority="tertiary"
 					size="default"
