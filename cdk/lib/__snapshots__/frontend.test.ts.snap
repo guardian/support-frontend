@@ -1237,7 +1237,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         "EvaluationPeriods": 2,
         "MetricName": "MParticleTokenError",
         "Namespace": "support-frontend",
-        "Period": 60,
+        "Period": 1200,
         "Statistic": "Sum",
         "Tags": [
           {
