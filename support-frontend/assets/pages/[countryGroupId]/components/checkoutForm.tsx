@@ -686,9 +686,6 @@ export default function CheckoutForm({
 				isWeeklyGift,
 		  )}`;
 
-	const useExpressPostcodeLookup =
-		abParticipations.postCodeLookupExpress === 'variant';
-
 	return (
 		<>
 			<form
@@ -985,7 +982,6 @@ export default function CheckoutForm({
 									deliveryAddressErrors={deliveryAddressErrors}
 									setDeliveryAddressErrors={setDeliveryAddressErrors}
 									isWeeklyGift={isWeeklyGift}
-									useExpressPostcodeLookup={useExpressPostcodeLookup}
 								/>
 							</>
 						)}
@@ -1003,7 +999,6 @@ export default function CheckoutForm({
 							setConfirmedEmail={setConfirmedEmail}
 							phoneNumber={phoneNumber}
 							setPhoneNumber={setPhoneNumber}
-							useExpressPostcodeLookup={useExpressPostcodeLookup}
 							billingStatePostcodeCountry={billingStatePostcodeCountry}
 							hasDeliveryAddress={hasDeliveryAddress}
 							isEmailAddressReadOnly={isSignedIn}
@@ -1034,7 +1029,6 @@ export default function CheckoutForm({
 								deliveryAddressErrors={deliveryAddressErrors}
 								setDeliveryAddressErrors={setDeliveryAddressErrors}
 								billingStatePostcodeCountry={billingStatePostcodeCountry}
-								useExpressPostcodeLookup={useExpressPostcodeLookup}
 							/>
 						)}
 						<FormSection ref={paymentMethodRef}>

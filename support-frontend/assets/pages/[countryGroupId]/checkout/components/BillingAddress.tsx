@@ -11,14 +11,12 @@ export type BillingAddressProps = {
 	countries?: Record<string, string>;
 	checkoutSession?: CheckoutSession;
 	billingStatePostcodeCountry: BillingStatePostcodeCountry;
-	useExpressPostcodeLookup: boolean;
 };
 
 export function BillingAddress({
 	countries,
 	checkoutSession,
 	billingStatePostcodeCountry,
-	useExpressPostcodeLookup,
 }: BillingAddressProps) {
 	/** Billing address */
 	const postcode = billingStatePostcodeCountry.billingPostcode;
@@ -83,7 +81,7 @@ export function BillingAddress({
 				onFindAddress={(postcode) => {
 					setBillingPostcodeStateLoading(true);
 
-					void findAddressesForPostcode(postcode, useExpressPostcodeLookup)
+					void findAddressesForPostcode(postcode)
 						.then((results) => {
 							setBillingPostcodeStateResults(results);
 							setPostcodeLookupError(null);
