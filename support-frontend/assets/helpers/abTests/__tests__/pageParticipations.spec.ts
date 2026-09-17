@@ -1,4 +1,5 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import mParticleAudienceDataMock from '../../../__mocks__/mParticleAudienceData.mock';
 import { CountryGroup } from '../../internationalisation/classes/countryGroup';
 import { fetchAudienceData } from '../../mparticle';
 import {
@@ -228,6 +229,7 @@ describe('getPageParticipations', () => {
 			expect(result).toEqual({
 				participations: { 'test-1': 'control' },
 				variant: variant1,
+				userAttributes: mParticleAudienceDataMock.userAttributes,
 			});
 			expect(mockGetParticipationFromQueryString).toHaveBeenCalledWith(
 				'?preview-test=test-1:control',
@@ -251,6 +253,7 @@ describe('getPageParticipations', () => {
 			expect(result).toEqual({
 				participations: { 'test-1': 'control' },
 				variant: variant,
+				userAttributes: mParticleAudienceDataMock.userAttributes,
 			});
 		});
 

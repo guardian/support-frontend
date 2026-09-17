@@ -1,5 +1,6 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { type AudienceData, fetchAudienceData } from 'helpers/mparticle';
+import mParticleAudienceDataMock from '../../__mocks__/mParticleAudienceData.mock';
 import { CountryGroup } from '../internationalisation/classes/countryGroup';
 import {
 	countryGroupMatches,
@@ -180,11 +181,7 @@ export async function getPageParticipations<Variant>(
 	if (previewParticipations) {
 		const selectedTest = tests.find((test) => previewParticipations[test.name]);
 		const variant = getVariant(previewParticipations, tests, true);
-		if (
-			!variant ||
-			!selectedTest ||
-			!(await hasRequiredMParticleTestAttributes(selectedTest))
-		) {
+		if (!variant || !selectedTest) {
 			return makeFallbackResult();
 		}
 		setSessionParticipations(previewParticipations, sessionStorageKey);
@@ -193,7 +190,8 @@ export async function getPageParticipations<Variant>(
 				? previewParticipations
 				: ({} as Participations),
 			variant,
-			userAttributes: fetchedUserAttributes,
+			// Preview mode uses mocked mParticle attributes instead of making a request.
+			userAttributes: mParticleAudienceDataMock.userAttributes,
 		};
 	}
 
