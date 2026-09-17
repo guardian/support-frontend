@@ -9,7 +9,6 @@ const stripeApplePayPaymentProviderSchema = z.literal('StripeApplePay');
 const stripePaymentRequestButtonProviderSchema = z.literal(
 	'StripePaymentRequestButton',
 );
-const payPalPaymentProviderSchema = z.literal('PayPal');
 const payPalCompletePaymentsPaymentProviderSchema = z.literal(
 	'PayPalCompletePayments',
 );
@@ -21,7 +20,6 @@ export const paymentProviderSchema = z.union([
 	stripeHostedPaymentProviderSchema,
 	stripeApplePayPaymentProviderSchema,
 	stripePaymentRequestButtonProviderSchema,
-	payPalPaymentProviderSchema,
 	payPalCompletePaymentsPaymentProviderSchema,
 	directDebitPaymentProviderSchema,
 	existingPaymentProviderSchema,
