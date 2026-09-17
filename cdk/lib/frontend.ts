@@ -512,7 +512,7 @@ export class Frontend extends GuStack {
 						Stage: this.stage,
 					},
 					statistic: 'Sum',
-					period: Duration.seconds(60),
+					period: Duration.minutes(20),
 				}),
 				treatMissingData: TreatMissingData.NOT_BREACHING,
 				snsTopicName: `alarms-handler-topic-${this.stage}`,
