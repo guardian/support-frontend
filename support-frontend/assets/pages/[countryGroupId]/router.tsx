@@ -1,4 +1,8 @@
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { CountryCode } from '@guardian/libs';
+import {
+	SupportRegionId,
+	supportRegionIdFromCountry,
+} from '@modules/internationalisation/countryGroup';
 import {
 	createBrowserRouter,
 	Outlet,
@@ -17,6 +21,7 @@ import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import type { OneTimeCheckoutVariant } from 'helpers/globalsAndSwitches/oneTimeCheckoutSettings';
 import type { StudentLandingPageVariant } from 'helpers/globalsAndSwitches/studentLandingPageSettings';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
+import { Country } from 'helpers/internationalisation/classes/country';
 import {
 	getAbParticipations,
 	setUpConsent,
@@ -74,6 +79,58 @@ function RootLayout() {
 		</WithCoreWebVitals>
 	);
 }
+
+const isValidStudentCountry = (country: CountryCode) => {
+	const isStudent = ['uk', 'us', 'ca'].includes(
+		supportRegionIdFromCountry(country) ?? 'Unknown',
+	);
+	const isEurStudent = ['FR', 'DE', 'ES', 'NL', 'IE'].includes(country);
+	return isStudent || isEurStudent;
+};
+
+const routeStudent = (supportRegionId: SupportRegionId) => {
+	return {
+		path: `/${supportRegionId}/student`,
+		lazy: async () => {
+			const { StudentLandingPageGlobalContainer } = await import(
+				/* webpackChunkName: "StudentLandingPageGlobalContainer" */ './student/StudentLandingPageGlobalContainer'
+			);
+			return {
+				Component: function StudentRoute() {
+					const { landing } = useRootLoaderData();
+					return (
+						<StudentLandingPageGlobalContainer
+							supportRegionId={supportRegionId}
+							landingPageVariant={landing.variant}
+						/>
+					);
+				},
+			};
+		},
+	};
+};
+const routeStudentContribute = (supportRegionId: SupportRegionId) => {
+	return {
+		path: `/${supportRegionId}/student`,
+		lazy: async () => {
+			const { LandingPage } = await import(
+				/* webpackChunkName: "LandingPage" */ './landingPage'
+			);
+			return {
+				Component: function LandingPageRoute() {
+					const { finalParticipations, landing } = useRootLoaderData();
+					return (
+						<LandingPage
+							supportRegionId={supportRegionId}
+							abParticipations={finalParticipations}
+							landingPageSettings={landing.variant}
+						/>
+					);
+				},
+			};
+		},
+	};
+};
 
 const router = createBrowserRouter([
 	{
@@ -227,25 +284,9 @@ const router = createBrowserRouter([
 						};
 					},
 				},
-				{
-					path: `/${supportRegionId}/student`,
-					lazy: async () => {
-						const { StudentLandingPageGlobalContainer } = await import(
-							/* webpackChunkName: "StudentLandingPageGlobalContainer" */ './student/StudentLandingPageGlobalContainer'
-						);
-						return {
-							Component: function StudentRoute() {
-								const { landing } = useRootLoaderData();
-								return (
-									<StudentLandingPageGlobalContainer
-										supportRegionId={supportRegionId}
-										landingPageVariant={landing.variant}
-									/>
-								);
-							},
-						};
-					},
-				},
+				isValidStudentCountry(Country.detect())
+					? routeStudent(supportRegionId)
+					: routeStudentContribute(supportRegionId),
 				{
 					/* NOTE: the back end routing filters out invalid paths based on the RRCP tooling config */
 					path: `/${supportRegionId}/student/:institution`,
@@ -278,6 +319,8 @@ const router = createBrowserRouter([
 	},
 ]);
 
+const routerGeoRedirect = router;
+
 function GuardianOrObserverHoldingContent() {
 	if (isObserverSubdomain()) {
 		return <ObserverHoldingContent />;
@@ -289,7 +332,7 @@ function GuardianOrObserverHoldingContent() {
 function Router() {
 	return (
 		<FeatureSwitchesProvider>
-			<RouterProvider router={router} />
+			<RouterProvider router={routerGeoRedirect} />
 		</FeatureSwitchesProvider>
 	);
 }
