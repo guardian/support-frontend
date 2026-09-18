@@ -160,6 +160,14 @@ trait Services {
       prodCachedProductCatalogService = new CachedProductCatalogService(actorSystem, prodProductCatalogService),
     )
 
+  lazy val cachedPromotionsServiceProvider: CachedPromotionsServiceProvider =
+    new CachedPromotionsServiceProvider(
+      appConfig.promotionsApiConfigProvider,
+      actorSystem,
+      defaultPromotionService,
+      RequestRunners.futureRunner,
+    )
+
   lazy val cachedSalesTaxService: CachedSalesTaxService = {
     // The (product, country) combinations to pre-fetch and keep cached. We currently only need tax
     // rates for Canada, so we limit the combinations to Canada and the tax-applicable products.
