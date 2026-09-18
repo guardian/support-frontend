@@ -24,6 +24,7 @@ const transactionDeclinedMessages = [
 	'Transaction declined.402 - [card_error/expired_card/expired_card] Your card has expired.',
 	'Transaction declined.402 - [card_error/processing_error/processing_error] An error occurred while processing your card. Try again in a little bit.',
 	'Transaction declined.402 - [card_error/authentication_required/authentication_required] This PaymentIntent requires an on-session action. Please get your customer back on session and re-confirm the PaymentIntent with a payment method when the customer is on session.',
+	'Transaction declined.402 - [card_error/card_declined/stolen_card] Your card was declined.',
 	'Your card was declined.', // The same Stripe error as above but coming directly from Stripe rather than via Zuora
 	'Transaction declined.10417 - Instruct the customer to retry the transaction using an alternative payment method from the customers PayPal wallet.',
 	'Error occurred while processing payment method.code=validation_failed,message=account_number did not pass modulus check',
