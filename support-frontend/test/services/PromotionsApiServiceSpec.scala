@@ -75,7 +75,7 @@ class PromotionsApiServiceSpec extends AnyWordSpec with Matchers with MockitoSug
         httpClient,
         PromotionsApiConfig(TouchPointEnvironments.CODE, "https://promotions-api.test.com", "test-key"),
       )
-      service.listByPromoCodes(Seq("FOO", "BAR")).futureValue
+      service.listByPromoCodes(Seq("FOO", "BAR"), Some(true)).futureValue
 
       val captor = org.mockito.ArgumentCaptor.forClass(classOf[Request])
       verify(httpClient).apply(captor.capture())
