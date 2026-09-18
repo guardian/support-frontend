@@ -192,7 +192,7 @@ function paymentResultFromObject(
 
 	return Promise.resolve({
 		...PaymentSuccess,
-		userType: response.data.userType,
+		userType: response.data.userType ?? undefined,
 	});
 }
 
