@@ -112,6 +112,51 @@ const separator = css`
 	border-right: 1px solid ${neutral[73]};
 `;
 
+// TODO: remove this component when the Editions app QR code is available.
+// For soft launch, we will always show the mobile version of this banner,
+// hiding the QR code visible in the desktop version.
+export function TemporaryOnboardingAppBadgesDownloadEditionsApp({
+	link,
+}: {
+	link: string;
+}) {
+	const mobileBadge = css`
+		cursor: pointer;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex: 1;
+		background-color: ${neutral[0]};
+		height: ${space[10]}px;
+		border-radius: ${space[2]}px;
+	`;
+
+	return (
+		<div
+			css={css`
+				margin: ${space[6]}px 0;
+			`}
+		>
+			<div
+				css={css`
+					display: flex;
+					flex-direction: row;
+					justify-content: space-between;
+					align-items: center;
+					gap: ${space[2]}px;
+				`}
+			>
+				<a css={mobileBadge} href={link} target="_blank">
+					<AppStoreMobile />
+				</a>
+				<a css={mobileBadge} href={link} target="_blank">
+					<PlayStoreMobile />
+				</a>
+			</div>
+		</div>
+	);
+}
+
 export function OnboardingAppBadgesDownload({
 	onboardingStep,
 }: {
@@ -119,6 +164,11 @@ export function OnboardingAppBadgesDownload({
 }) {
 	const { windowWidthIsGreaterThan } = useWindowWidth();
 	const { link, qrCode } = appBadgesConfigMap[onboardingStep];
+
+	// TODO: remove this early return when the Editions app QR code is available.
+	if (onboardingStep === ONBOARDING_EDITIONS_APP) {
+		return <TemporaryOnboardingAppBadgesDownloadEditionsApp link={link} />;
+	}
 
 	return (
 		<div css={container}>
