@@ -192,6 +192,7 @@ function paymentResultFromObject(
 
 	return Promise.resolve({
 		...PaymentSuccess,
+		// The server may return null for userType, coalesce to undefined
 		userType: response.data.userType ?? undefined,
 	});
 }
