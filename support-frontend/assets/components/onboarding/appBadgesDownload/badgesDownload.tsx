@@ -16,8 +16,7 @@ import { PlayStoreMobile } from './playStore';
 
 const guardianAppUrl = 'https://guardian.go.link/home?adj_t=1vddwf4h';
 const feastAppUrl = 'https://guardian-feast.go.link/home?adj_t=1vktw84s';
-const editionsAppUrl =
-	'https://play.google.com/store/apps/details?id=com.guardian.editions';
+const editionsAppUrl = 'https://guardianeditions.go.link/eWhEH';
 
 export const ONBOARDING_EDITIONS_APP = 'editions-app';
 
