@@ -1,21 +1,25 @@
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
 import { PageScaffold } from 'components/page/pageScaffold';
-import {
-	getGlobal,
-	getProductPrices,
-} from 'helpers/globalsAndSwitches/globals';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import {
 	getAbParticipations,
 	setUpTrackingAndConsents,
 } from 'helpers/page/page';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
+import { getProductDescription } from 'helpers/productCatalog';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import {
 	DigitalPack,
 	GuardianWeekly,
+	Paper,
 } from 'helpers/productPrice/subscriptions';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { renderPage } from 'helpers/rendering/render';
 import LegalTerms from 'pages/promotion-terms/legalTerms';
 import PromoDetails from 'pages/promotion-terms/promoDetails';
@@ -33,15 +37,84 @@ function getTermsConditionsLink({ product }: PromotionTerms) {
 	return '';
 }
 
-function getPromotionTermsProps(): PromotionTermsPropTypes {
-	const productPrices = getProductPrices() as ProductPrices;
-	const terms = getGlobal<PromotionTerms>('promotionTerms');
-	const expires = terms?.expires ? new Date(terms.expires) : null;
-	const starts = terms ? new Date(terms.starts) : new Date();
-	const countryGroupId = CountryGroup.detect();
+// Maps a product catalog key onto the small set of products this page distinguishes between.
+function productForCatalogKey(productKey: string): SubscriptionProduct {
+	if (productKey === 'DigitalSubscription') {
+		return DigitalPack;
+	}
+	if (
+		productKey === 'GuardianWeeklyDomestic' ||
+		productKey === 'GuardianWeeklyRestOfWorld'
+	) {
+		return GuardianWeekly;
+	}
+	return Paper;
+}
+
+function promotionTermsFromCachedPromotion(
+	promotion: PromoWithCatalogInformation,
+): PromotionTerms {
+	const matches = promotion.appliesTo.catalogRatePlans;
+	const [firstMatch] = matches;
+	const product = firstMatch
+		? productForCatalogKey(firstMatch.productKey)
+		: DigitalPack;
+
+	const productRatePlans = matches.map(({ productKey, productRatePlanKey }) => {
+		try {
+			const description = getProductDescription(
+				productKey as ActiveProductKey,
+				productRatePlanKey as ActiveRatePlanKey,
+			);
+			return (
+				description.label +
+				', ' +
+				(description.ratePlans[productRatePlanKey]?.displayName ??
+					productRatePlanKey)
+			);
+		} catch {
+			return productRatePlanKey;
+		}
+	});
+
+	const isGift =
+		matches.length > 0 &&
+		matches.every(({ productRatePlanKey }) =>
+			productRatePlanKey.includes('Gift'),
+		);
+
 	return {
-		productPrices,
-		promotionTerms: { ...terms, starts, expires } as PromotionTerms,
+		promoCode: promotion.promoCode,
+		description: promotion.description ?? '',
+		starts: new Date(promotion.startTimestamp),
+		expires: promotion.endTimestamp ? new Date(promotion.endTimestamp) : null,
+		product,
+		productRatePlans,
+		isGift,
+	};
+}
+
+function getPromotionTermsProps(): PromotionTermsPropTypes {
+	const [promotion] = window.guardian.promotions ?? [];
+	const countryGroupId = CountryGroup.detect();
+
+	const promotionTerms: PromotionTerms = promotion
+		? promotionTermsFromCachedPromotion(promotion)
+		: {
+				promoCode: '',
+				description: '',
+				starts: new Date(),
+				expires: null,
+				product: DigitalPack,
+				productRatePlans: [],
+				isGift: false,
+		  };
+
+	return {
+		// productPrices is unused by any component rendered on this page - retained only because
+		// PromotionTermsPropTypes still declares it pending a wider clean-up of the legacy type.
+		productPrices: {} as ProductPrices,
+		promotionTerms,
 		countryGroupId,
 	};
 }
@@ -58,7 +131,7 @@ export function PromotionTermsPage(props: PromotionTermsPropTypes) {
 			}
 		>
 			<PromoDetails {...props.promotionTerms} />
-			<LegalTerms {...props} />k
+			<LegalTerms {...props} />
 		</PageScaffold>
 	);
 }
