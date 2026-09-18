@@ -31,7 +31,6 @@ trait Controllers {
     controllerComponents,
     appConfig.oneOffStripeConfigProvider,
     appConfig.regularStripeConfigProvider,
-    appConfig.regularPayPalConfigProvider,
     appConfig.recaptchaConfigProvider,
     paymentAPIService,
     appConfig.membersDataServiceApiUrl,
@@ -126,7 +125,6 @@ trait Controllers {
   lazy val payPalRegularController = new PayPalRegular(
     actionBuilders,
     assetsResolver,
-    payPalNvpServiceProvider,
     testUsers,
     controllerComponents,
     allSettingsProvider,
