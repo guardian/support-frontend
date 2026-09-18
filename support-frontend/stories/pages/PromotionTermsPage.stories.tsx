@@ -1,6 +1,5 @@
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import type { StoryObj } from '@storybook/preact-vite';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import {
 	DigitalPack,
@@ -32,8 +31,6 @@ export default {
 	},
 };
 
-const emptyProductPrices = {} as unknown as ProductPrices;
-
 const basePromotionTerms: PromotionTerms = {
 	description:
 		'Subscribe today and save with our limited-time offer on your chosen product.',
@@ -48,7 +45,6 @@ const basePromotionTerms: PromotionTerms = {
 type Story = StoryObj<PromotionTermsPropTypes>;
 
 const digitalPackArgs: PromotionTermsPropTypes = {
-	productPrices: emptyProductPrices,
 	promotionTerms: {
 		...basePromotionTerms,
 		product: DigitalPack,
@@ -58,7 +54,6 @@ const digitalPackArgs: PromotionTermsPropTypes = {
 };
 
 const guardianWeeklyArgs: PromotionTermsPropTypes = {
-	productPrices: emptyProductPrices,
 	promotionTerms: {
 		...basePromotionTerms,
 		product: GuardianWeekly,

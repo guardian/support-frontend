@@ -12,7 +12,6 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { getProductDescription } from 'helpers/productCatalog';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import {
 	DigitalPack,
@@ -111,9 +110,6 @@ function getPromotionTermsProps(): PromotionTermsPropTypes {
 		  };
 
 	return {
-		// productPrices is unused by any component rendered on this page - retained only because
-		// PromotionTermsPropTypes still declares it pending a wider clean-up of the legacy type.
-		productPrices: {} as ProductPrices,
 		promotionTerms,
 		countryGroupId,
 	};

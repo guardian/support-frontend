@@ -6,8 +6,7 @@ import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.support.catalog.{Contribution, DigitalPack, GuardianWeekly, Paper, SupporterPlus}
 import com.gu.support.config.Stage
 import com.gu.support.encoding.CustomCodecs._
-import services.pricing.PriceSummaryServiceProvider
-import com.gu.support.promotions.{PromoCode, PromotionServiceProvider, PromotionTerms}
+import com.gu.support.promotions.{PromotionServiceProvider, PromotionTerms}
 import lib.RedirectWithEncodedQueryString
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import play.twirl.api.Html
@@ -21,7 +20,6 @@ import scala.util.control.NonFatal
 
 class Promotions(
     promotionServiceProvider: PromotionServiceProvider,
-    priceSummaryServiceProvider: PriceSummaryServiceProvider,
     cachedPromotionsServiceProvider: CachedPromotionsServiceProvider,
     val assets: AssetsResolver,
     val actionRefiners: CustomActionBuilders,
@@ -64,22 +62,16 @@ class Promotions(
     val title = "Support the Guardian | Digital Pack Subscription"
     val mainElement = EmptyDiv("promotion-terms")
     val js = RefPath("promotionTerms.js")
-    val promotionService = promotionServiceProvider.forUser(false)
-    val maybePromotionTerms = PromotionTerms.fromPromoCode(promotionService, stage, promoCode)
 
-    maybePromotionTerms.fold(Future.successful(NotFound("Invalid promo code"))) { promotionTerms =>
-      val productPrices =
-        priceSummaryServiceProvider.forUser(false).getPrices(promotionTerms.product, List.empty[PromoCode])
-
-      // Promotion sourced from promotions-api via CachedPromotionsService - see guardian/support-frontend#8207.
-      // Additive alongside the legacy productPrices/promotionTerms injections below, which remain the source of
-      // truth for consumers until they're migrated. Failures here must not break the page, so fall back to an
-      // empty list rather than propagating the error.
-      cachedPromotionsServiceProvider
-        .forUser(isTestUser = false)
-        .get(promoCode)
-        .recover { case NonFatal(_) => None }
-        .map { maybePromotion =>
+    // Promotion sourced from promotions-api via CachedPromotionsService - see guardian/support-frontend#8207.
+    // This is now the sole source of truth for this page - the legacy productPrices/promotionTerms models
+    // (derived from Zuora-catalog-embedded promotions) are no longer injected here.
+    cachedPromotionsServiceProvider
+      .forUser(isTestUser = false)
+      .get(promoCode)
+      .map {
+        case None => NotFound("Invalid promo code")
+        case Some(promotion) =>
           Ok(
             views.html.main(
               title,
@@ -96,14 +88,14 @@ class Promotions(
               noindex = true,
             ) {
               Html(s"""<script type="text/javascript">
-                window.guardian.productPrices = ${outputJson(productPrices)}
-                window.guardian.promotionTerms = ${outputJson(promotionTerms)}
-                window.guardian.promotions = ${outputJson(maybePromotion.toSeq)}
+                window.guardian.promotions = ${outputJson(Seq(promotion))}
               </script>""")
             },
           )
-        }
-    }
+      }
+      .recover { case NonFatal(_) =>
+        InternalServerError("Failed to fetch promotion")
+      }
   }
 
 }
