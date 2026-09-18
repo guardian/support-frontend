@@ -5,6 +5,7 @@ import {
 	fulfilmentOptionsSchema,
 	productOptionsSchema,
 } from '@modules/product/schemas';
+import { promoWithCatalogInformationSchema } from '@modules/promotions/v2/schema';
 import { optional, z } from 'zod';
 import type { LegacyProductType } from 'helpers/legacyTypeConversions';
 import { legacyProductTypes } from 'helpers/legacyTypeConversions';
@@ -252,9 +253,14 @@ const TaxRatesSchema = z.object({
 		.optional(), // This isn't made available on every page
 });
 
+const PromotionsSchema = z.object({
+	promotions: z.array(promoWithCatalogInformationSchema).optional(), // This isn't made available on every page
+});
+
 const AppConfigSchema = PaymentConfigSchema.merge(ProductCatalogSchema)
 	.merge(ProductPricesSchema)
-	.merge(TaxRatesSchema);
+	.merge(TaxRatesSchema)
+	.merge(PromotionsSchema);
 
 export type AppConfig = z.infer<typeof AppConfigSchema> & {
 	allProductPrices: Partial<
