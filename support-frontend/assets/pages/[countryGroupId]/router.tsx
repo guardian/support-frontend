@@ -278,6 +278,8 @@ const router = createBrowserRouter([
 	},
 ]);
 
+const routerGeoRedirect = router;
+
 function GuardianOrObserverHoldingContent() {
 	if (isObserverSubdomain()) {
 		return <ObserverHoldingContent />;
@@ -287,9 +289,10 @@ function GuardianOrObserverHoldingContent() {
 }
 
 function Router() {
+	console.log('*** GeoLocation=', window.navigator.geolocation);
 	return (
 		<FeatureSwitchesProvider>
-			<RouterProvider router={router} />
+			<RouterProvider router={routerGeoRedirect} />
 		</FeatureSwitchesProvider>
 	);
 }
