@@ -115,7 +115,7 @@ const separator = css`
 // TODO: remove this component when the Editions app QR code is available.
 // For soft launch, we will always show the mobile version of this banner,
 // hiding the QR code visible in the desktop version.
-export function TemporaryOnboardingAppBadgesDownloadEditionsApp({
+function TemporaryOnboardingAppBadgesDownloadEditionsApp({
 	link,
 }: {
 	link: string;
