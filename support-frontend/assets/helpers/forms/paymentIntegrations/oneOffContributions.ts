@@ -165,7 +165,7 @@ const errorResponseSchema = z.object({
 const successResponseSchema = z.object({
 	type: z.literal('success'),
 	data: z.object({
-		userType: userTypeSchema.optional(),
+		userType: userTypeSchema.nullish(),
 	}),
 });
 const responseSchema = z.discriminatedUnion('type', [
@@ -192,7 +192,8 @@ function paymentResultFromObject(
 
 	return Promise.resolve({
 		...PaymentSuccess,
-		userType: response.data.userType,
+		// The server may return null for userType, coalesce to undefined
+		userType: response.data.userType ?? undefined,
 	});
 }
 
