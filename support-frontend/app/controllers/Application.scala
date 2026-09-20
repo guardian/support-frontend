@@ -290,9 +290,15 @@ class Application(
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
-  def studentGeoRedirect(): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val url = getGeoPath(request, "", "student")
-    RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
+  def studentGeoRedirect(countryCode: String, campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() {
+    implicit request =>
+      val geoCountryCode = request.geoData.countryCode
+      val product = if (List("DE", "FR", "ES", "IE", "NL").contains(countryCode)) "student" else "contribute"
+      val url = getCountryPath(countryCode, campaignCode, product)
+      logger.info(
+        s"*** studentGeoRedirect countryCode:$countryCode/geoCountryCode:$geoCountryCode with campaign code $campaignCode to URL $url",
+      )
+      RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
   def geoRedirectToPath(path: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
@@ -308,6 +314,21 @@ class Application(
 
   private def getGeoPath(request: Request[AnyContent], campaignCode: String, product: String): String = {
     List(getGeoRedirectUrl(request.geoData.countryGroup, product), campaignCode)
+      .filter(_.nonEmpty)
+      .mkString("/")
+  }
+  private def countryToCountryGroup(countryCode: String): Option[CountryGroup] = countryCode match {
+    case "eu" => Some(Europe)
+    case "us" => Some(US)
+    case "uk" => Some(UK)
+    case "au" => Some(Australia)
+    case "ca" => Some(Canada)
+    case "nz" => Some(NewZealand)
+    case "int" => Some(RestOfTheWorld)
+    case _ => Some(UK)
+  }
+  private def getCountryPath(countryCode: String, campaignCode: String, product: String): String = {
+    List(getGeoRedirectUrl(countryToCountryGroup(countryCode), product), campaignCode)
       .filter(_.nonEmpty)
       .mkString("/")
   }
@@ -331,7 +352,7 @@ class Application(
       campaignCode: String,
   ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
-
+    logger.info(s"Rendering contributions landing page for countryCode: $countryCode, campaignCode: $campaignCode")
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(
       contributionsPlusStudentHtml(
@@ -350,7 +371,7 @@ class Application(
   ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
     val noIndexing = countryCode == "au"
-
+    logger.info(s"Rendering student landing page for countryCode: $countryCode, campaignCode: $campaignCode")
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(
       contributionsPlusStudentHtml(
@@ -555,7 +576,7 @@ class Application(
       case Some(Canada) => s"/ca/$path"
       case Some(NewZealand) => s"/nz/$path"
       case Some(RestOfTheWorld) => s"/int/$path"
-      case _ => s"/uk/$path"
+      case _ => s"/us/$path"
     }
   }
 

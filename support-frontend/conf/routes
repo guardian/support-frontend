@@ -54,6 +54,7 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/:campaignCode   controllers.A
 
 GET  /$country<(uk|us|ca)>/student                                 controllers.Application.studentLanding(country: String, campaignCode = "")
 GET  /$country<(au|nz)>/student/:institution                       controllers.Application.tooledStudentLanding(country: String, institution: String, campaignCode = "")
+GET  /$country<(eu)>/student                                       controllers.Application.studentGeoRedirect(country: String, campaignCode = "")
 
 GET  /aus-2020-map                                                 controllers.Application.ausMomentMap()
 GET  /aus-map                                                      controllers.Application.ausMomentMap()
