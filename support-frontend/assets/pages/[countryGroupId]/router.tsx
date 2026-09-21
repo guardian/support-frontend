@@ -1,8 +1,5 @@
 import type { CountryCode } from '@guardian/libs';
-import {
-	SupportRegionId,
-	supportRegionIdFromCountry,
-} from '@modules/internationalisation/countryGroup';
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import {
 	createBrowserRouter,
 	Outlet,
@@ -80,15 +77,22 @@ function RootLayout() {
 	);
 }
 
-const isValidStudentCountry = (country: CountryCode) => {
-	const isStudent = ['uk', 'us', 'ca'].includes(
-		supportRegionIdFromCountry(country) ?? 'Unknown',
-	);
-	const isEurStudent = ['FR', 'DE', 'ES', 'NL', 'IE'].includes(country);
+const isValidStudentCountry = (
+	supportRegionId: SupportRegionId,
+	country: CountryCode,
+) => {
+	const isStudent = [
+		SupportRegionId.UK,
+		SupportRegionId.US,
+		SupportRegionId.CA,
+	].includes(supportRegionId);
+	const isEurStudent =
+		supportRegionId === SupportRegionId.EU &&
+		['FR', 'DE', 'ES', 'NL', 'IE'].includes(country);
 	return isStudent || isEurStudent;
 };
 
-const routeStudent = (supportRegionId: SupportRegionId) => {
+const routeStudentLandingPage = (supportRegionId: SupportRegionId) => {
 	return {
 		path: `/${supportRegionId}/student`,
 		lazy: async () => {
@@ -109,25 +113,13 @@ const routeStudent = (supportRegionId: SupportRegionId) => {
 		},
 	};
 };
-const routeStudentContribute = (supportRegionId: SupportRegionId) => {
+// reroute non-valid student (ie no student beans setup or Australian institutes) countries and regions to contribute
+const routeStudentContributePage = (supportRegionId: SupportRegionId) => {
 	return {
 		path: `/${supportRegionId}/student`,
-		lazy: async () => {
-			const { LandingPage } = await import(
-				/* webpackChunkName: "LandingPage" */ './landingPage'
-			);
-			return {
-				Component: function LandingPageRoute() {
-					const { finalParticipations, landing } = useRootLoaderData();
-					return (
-						<LandingPage
-							supportRegionId={supportRegionId}
-							abParticipations={finalParticipations}
-							landingPageSettings={landing.variant}
-						/>
-					);
-				},
-			};
+		loader: () => {
+			window.location.href = `./contribute`;
+			return null;
 		},
 	};
 };
@@ -284,9 +276,9 @@ const router = createBrowserRouter([
 						};
 					},
 				},
-				isValidStudentCountry(Country.detect())
-					? routeStudent(supportRegionId)
-					: routeStudentContribute(supportRegionId),
+				isValidStudentCountry(supportRegionId, Country.detect())
+					? routeStudentLandingPage(supportRegionId)
+					: routeStudentContributePage(supportRegionId),
 				{
 					/* NOTE: the back end routing filters out invalid paths based on the RRCP tooling config */
 					path: `/${supportRegionId}/student/:institution`,
