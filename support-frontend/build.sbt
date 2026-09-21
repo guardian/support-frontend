@@ -41,6 +41,13 @@ libraryDependencies ++= Seq(
   ws,
 )
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
+
+val bouncyCastleVersion = "1.85"
+dependencyOverrides ++= Seq(
+  "org.bouncycastle" % "bcprov-jdk18on" % bouncyCastleVersion,
+  "org.bouncycastle" % "bcpkix-jdk18on" % bouncyCastleVersion,
+  "org.bouncycastle" % "bcutil-jdk18on" % bouncyCastleVersion,
+)
 dependencyOverrides += "commons-io" % "commons-io" % "2.14.0" % Test
 
 excludeDependencies ++= Seq(
