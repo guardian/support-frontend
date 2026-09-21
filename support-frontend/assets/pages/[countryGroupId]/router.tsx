@@ -38,6 +38,8 @@ import {
 const checkoutNudgeSettings = getCheckoutNudgeParticipations();
 const appConfig = parseAppConfig(window.guardian);
 
+const euStudentCountries = ['FR', 'DE', 'ES', 'NL', 'IE'];
+
 interface LoaderData {
 	finalParticipations: Participations;
 	landing: PageParticipationsResultWithFallback<LandingPageVariant>;
@@ -77,7 +79,7 @@ function RootLayout() {
 	);
 }
 
-const isValidStudentCountry = (
+const isValidStudentLocation = (
 	supportRegionId: SupportRegionId,
 	country: CountryCode,
 ) => {
@@ -88,10 +90,11 @@ const isValidStudentCountry = (
 	].includes(supportRegionId);
 	const isEurStudent =
 		supportRegionId === SupportRegionId.EU &&
-		['FR', 'DE', 'ES', 'NL', 'IE'].includes(country);
+		euStudentCountries.includes(country);
 	return isStudent || isEurStudent;
 };
 
+// route valid student locations (ie student beans setup or Australian institute added) to student landing page
 const routeStudentLandingPage = (supportRegionId: SupportRegionId) => {
 	return {
 		path: `/${supportRegionId}/student`,
@@ -113,7 +116,8 @@ const routeStudentLandingPage = (supportRegionId: SupportRegionId) => {
 		},
 	};
 };
-// reroute non-valid student (ie no student beans setup or Australian institutes) countries and regions to contribute
+
+// route non-valid student locations (ie no student beans setup or Australian institutes) to contribute landing page
 const routeStudentContributePage = (supportRegionId: SupportRegionId) => {
 	return {
 		path: `/${supportRegionId}/student`,
@@ -276,7 +280,7 @@ const router = createBrowserRouter([
 						};
 					},
 				},
-				isValidStudentCountry(supportRegionId, Country.detect())
+				isValidStudentLocation(supportRegionId, Country.detect())
 					? routeStudentLandingPage(supportRegionId)
 					: routeStudentContributePage(supportRegionId),
 				{
