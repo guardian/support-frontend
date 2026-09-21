@@ -1,4 +1,3 @@
-import type { CountryCode } from '@guardian/libs';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import {
 	createBrowserRouter,
@@ -34,11 +33,10 @@ import {
 	type PageParticipationsResult,
 	type PageParticipationsResultWithFallback,
 } from '../../helpers/abTests/pageParticipations';
+import { isStudentLocationValid } from './helpers/isStudentLocationValid';
 
 const checkoutNudgeSettings = getCheckoutNudgeParticipations();
 const appConfig = parseAppConfig(window.guardian);
-
-const euStudentCountries = ['FR', 'DE', 'ES', 'NL', 'IE'];
 
 interface LoaderData {
 	finalParticipations: Participations;
@@ -78,21 +76,6 @@ function RootLayout() {
 		</WithCoreWebVitals>
 	);
 }
-
-const isValidStudentLocation = (
-	supportRegionId: SupportRegionId,
-	country: CountryCode,
-) => {
-	const isStudent = [
-		SupportRegionId.UK,
-		SupportRegionId.US,
-		SupportRegionId.CA,
-	].includes(supportRegionId);
-	const isEurStudent =
-		supportRegionId === SupportRegionId.EU &&
-		euStudentCountries.includes(country);
-	return isStudent || isEurStudent;
-};
 
 // route valid student locations (ie student beans setup or Australian institute added) to student landing page
 const routeStudentLandingPage = (supportRegionId: SupportRegionId) => {
@@ -280,7 +263,7 @@ const router = createBrowserRouter([
 						};
 					},
 				},
-				isValidStudentLocation(supportRegionId, Country.detect())
+				isStudentLocationValid(supportRegionId, Country.detect())
 					? routeStudentLandingPage(supportRegionId)
 					: routeStudentContributePage(supportRegionId),
 				{
