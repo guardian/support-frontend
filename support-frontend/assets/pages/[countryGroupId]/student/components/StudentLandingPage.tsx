@@ -2,8 +2,10 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	Canada,
+	EURCountries,
 	GBPCountries,
 	SupportRegionId,
 	UnitedStates,
@@ -15,6 +17,7 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { Institution } from 'helpers/globalsAndSwitches/studentLandingPageSettings';
+import { isStudentLocationValid } from 'pages/[countryGroupId]/helpers/isStudentLocationValid';
 import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 import { AccordionFAQ } from '../../components/accordionFAQ';
 import { getStudentFAQs } from '../helpers/studentFAQs';
@@ -42,8 +45,13 @@ export function StudentLandingPage({
 	const tsAndCsItem = getStudentTsAndCs(supportRegionId, institution);
 
 	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
+	const countryGroupIds: CountryGroupId[] = isStudentLocationValid(
+		supportRegionId,
+	)
+		? [GBPCountries, UnitedStates, EURCountries, Canada]
+		: [GBPCountries, UnitedStates, Canada];
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
-		countryGroupIds: [GBPCountries, UnitedStates, Canada],
+		countryGroupIds: countryGroupIds,
 		selectedCountryGroup: countryGroupId,
 		subPath: '/student',
 	};

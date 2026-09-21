@@ -1,12 +1,10 @@
-import type { CountryCode } from '@guardian/libs';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { Country } from 'helpers/internationalisation/classes/country';
 
 const euStudentCountries = ['FR', 'DE', 'ES', 'NL', 'IE'];
 
-export const isStudentLocationValid = (
-	supportRegionId: SupportRegionId,
-	country: CountryCode,
-) => {
+export const isStudentLocationValid = (supportRegionId: SupportRegionId) => {
+	const geoCountry = Country.detect();
 	const isStudent = [
 		SupportRegionId.UK,
 		SupportRegionId.US,
@@ -14,6 +12,6 @@ export const isStudentLocationValid = (
 	].includes(supportRegionId);
 	const isEurStudent =
 		supportRegionId === SupportRegionId.EU &&
-		euStudentCountries.includes(country);
+		euStudentCountries.includes(geoCountry);
 	return isStudent || isEurStudent;
 };
