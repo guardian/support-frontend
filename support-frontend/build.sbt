@@ -48,7 +48,7 @@ dependencyOverrides ++= Seq(
   "org.bouncycastle" % "bcpkix-jdk18on" % bouncyCastleVersion,
   "org.bouncycastle" % "bcutil-jdk18on" % bouncyCastleVersion,
 )
-dependencyOverrides += "commons-io" % "commons-io" % "2.14.0" % Test
+dependencyOverrides += "commons-io" % "commons-io" % "2.22.0" % Test
 
 excludeDependencies ++= Seq(
   // Exclude htmlunit due to a vulnerability. Brought in via org.scalatestplus.play:scalatestplus-play but we don't need
