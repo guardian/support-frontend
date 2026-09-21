@@ -209,7 +209,7 @@ function OnboardingInviteeComponent({
 		};
 	}, []);
 
-	if (acceptStatus === 'failed') {
+	if (acceptStatus === 'failed' || acceptStatus === 'accepted') {
 		return <InvitationUnavailable />;
 	}
 
@@ -217,9 +217,7 @@ function OnboardingInviteeComponent({
 		return <WrongEmail />;
 	}
 
-	const invitationAccepted = acceptStatus === 'accepted';
-
-	if (!invitationAccepted && !showIdentityIframe) {
+	if (!showIdentityIframe) {
 		return <GuardianHoldingContent />;
 	}
 
@@ -227,14 +225,9 @@ function OnboardingInviteeComponent({
 		<OnboardingLayout
 			flow="invitee"
 			scrollToTopRef={scrollToTopRef}
-			onboardingStep={
-				invitationAccepted
-					? currentStep ?? OnboardingInviteeSteps.CreateAccount
-					: OnboardingInviteeSteps.CreateAccount
-			}
+			onboardingStep={currentStep ?? OnboardingInviteeSteps.CreateAccount}
 		>
-			{(currentStep === OnboardingInviteeSteps.CreateAccount ||
-				!invitationAccepted) && (
+			{currentStep === OnboardingInviteeSteps.CreateAccount && (
 				<OnboardingCreateAccount
 					iframeRef={identityIframeRef}
 					iframeSrc={getIframeTargetUrl(invitation.email)}
@@ -244,32 +237,29 @@ function OnboardingInviteeComponent({
 					userNewslettersSubscriptions={null}
 				/>
 			)}
-			{invitationAccepted &&
-				currentStep === OnboardingInviteeSteps.GuardianApp && (
-					<OnboardingAppsDiscovery
-						hasMobileAppDownloaded={hasMobileAppDownloaded}
-						hasFeastMobileAppDownloaded={hasFeastMobileAppDownloaded}
-						onboardingStep={OnboardingSteps.GuardianApp}
-						handleStepNavigation={handleStepNavigation}
-						nextStep={OnboardingInviteeSteps.DigitalPlus}
-						backStep={OnboardingInviteeSteps.CreateAccount}
-						supporterRegion={supportRegionId}
-					/>
-				)}
-			{invitationAccepted &&
-				currentStep === OnboardingInviteeSteps.DigitalPlus && (
-					<OnboardingDigitalPlusDiscovery
-						handleStepNavigation={handleStepNavigation}
-					/>
-				)}
-			{invitationAccepted &&
-				currentStep === OnboardingInviteeSteps.Completed && (
-					<OnboardingInviteeCompleted
-						invitation={invitation}
-						landingPageSettings={landingPageSettings}
-						supportRegionId={supportRegionId}
-					/>
-				)}
+			{currentStep === OnboardingInviteeSteps.GuardianApp && (
+				<OnboardingAppsDiscovery
+					hasMobileAppDownloaded={hasMobileAppDownloaded}
+					hasFeastMobileAppDownloaded={hasFeastMobileAppDownloaded}
+					onboardingStep={OnboardingSteps.GuardianApp}
+					handleStepNavigation={handleStepNavigation}
+					nextStep={OnboardingInviteeSteps.DigitalPlus}
+					backStep={OnboardingInviteeSteps.CreateAccount}
+					supporterRegion={supportRegionId}
+				/>
+			)}
+			{currentStep === OnboardingInviteeSteps.DigitalPlus && (
+				<OnboardingDigitalPlusDiscovery
+					handleStepNavigation={handleStepNavigation}
+				/>
+			)}
+			{currentStep === OnboardingInviteeSteps.Completed && (
+				<OnboardingInviteeCompleted
+					invitation={invitation}
+					landingPageSettings={landingPageSettings}
+					supportRegionId={supportRegionId}
+				/>
+			)}
 		</OnboardingLayout>
 	);
 }
