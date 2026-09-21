@@ -9,14 +9,14 @@ import type { ReactElement } from 'react';
 import { OnboardingSteps } from 'components/onboarding/onboardingSteps';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { AppStoreMobile } from './appStore';
+import { EditionsAppQrCode } from './editionsAppsQrCode';
 import { FeastAppsQrCode } from './feastAppsQrCode';
 import { GuardianAppsQrCode } from './guardianAppsQrCode';
 import { PlayStoreMobile } from './playStore';
 
 const guardianAppUrl = 'https://guardian.go.link/home?adj_t=1vddwf4h';
 const feastAppUrl = 'https://guardian-feast.go.link/home?adj_t=1vktw84s';
-const editionsAppUrl =
-	'https://play.google.com/store/apps/details?id=com.guardian.editions';
+const editionsAppUrl = 'https://guardianeditions.go.link/eWhEH';
 
 export const ONBOARDING_EDITIONS_APP = 'editions-app';
 
@@ -44,8 +44,7 @@ const appBadgesConfigMap: Record<
 	},
 	[ONBOARDING_EDITIONS_APP]: {
 		link: editionsAppUrl,
-		// TODO: replace with Editions app QR code when asset is available
-		qrCode: <GuardianAppsQrCode />,
+		qrCode: <EditionsAppQrCode />,
 	},
 };
 
