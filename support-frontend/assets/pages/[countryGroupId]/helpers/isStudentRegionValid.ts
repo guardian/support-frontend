@@ -13,5 +13,10 @@ export const isStudentRegionValid = (supportRegionId: SupportRegionId) => {
 	const isEurStudent =
 		supportRegionId === SupportRegionId.EU &&
 		euStudentCountries.includes(geoCountry);
+	console.log(
+		`*** isStudentRegionValid: supportRegionId=${supportRegionId}, geoCountry=${geoCountry}, result=${
+			isStudent || isEurStudent
+		}`,
+	);
 	return isStudent || isEurStudent;
 };

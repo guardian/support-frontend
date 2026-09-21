@@ -58,6 +58,7 @@ import { getPromotion } from 'helpers/productPrice/promotions';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
 import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import CurrentMaxRatesByCountry from 'pages/[countryGroupId]/helpers/CurrentMaxRatesByCountry';
+import { isStudentRegionValid } from 'pages/[countryGroupId]/helpers/isStudentRegionValid';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
 	getSanitisedHtml,
@@ -313,7 +314,7 @@ export function ThreeTierLanding({
 		string | undefined
 	>();
 
-	const enableStudentOffer = ['uk', 'us', 'ca'].includes(supportRegionId);
+	const enableStudentOffer = isStudentRegionValid(supportRegionId);
 
 	const getInitialContributionType = (): ContributionType => {
 		// 1. Query Parameters take precedence
