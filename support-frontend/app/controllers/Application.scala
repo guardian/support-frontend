@@ -293,12 +293,17 @@ class Application(
   def studentGeoRedirect(countryCode: String, campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() {
     implicit request =>
       val geoCountryCode = request.geoData.countryCode
-      val product = if (List("DE", "FR", "ES", "IE", "NL").contains(countryCode)) "student" else "contribute"
+      val matchedGeoCountryCode = geoCountryCode.filter(List("DE", "FR", "ES", "IE", "NL").contains(_))
+      val product = if (matchedGeoCountryCode.isDefined) "student" else "contribute"
       val url = getCountryPath(countryCode, campaignCode, product)
+      val queryStringParams = matchedGeoCountryCode match {
+        case Some(code) => request.queryString ++ Map("countryCode" -> Seq(code))
+        case None => request.queryString
+      }
       logger.info(
         s"*** studentGeoRedirect countryCode:$countryCode/geoCountryCode:$geoCountryCode with campaign code $campaignCode to URL $url",
       )
-      RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
+      RedirectWithEncodedQueryString(url, queryStringParams, status = FOUND)
   }
 
   def geoRedirectToPath(path: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>

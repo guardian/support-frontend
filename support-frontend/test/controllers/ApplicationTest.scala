@@ -22,7 +22,8 @@ import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar._
 import play.api.mvc.{AnyContent, BodyParser}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, header, status, stubControllerComponents}
+import play.api.test.Helpers.{contentAsString, header, redirectLocation, status, stubControllerComponents}
+import utils.FastlyGEOIP.fastlyCountryHeader
 import services._
 import services.mparticle.MParticleClient
 import services.pricing.{CountryGroupPrices, PriceSummaryService, PriceSummaryServiceProvider}
@@ -165,6 +166,42 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     .value
     .asObject
     .get
+
+  "studentGeoRedirect" should {
+    "redirect to /eu/student with countryCode param appended when geo country is DE" in {
+      val request = FakeRequest("GET", "/eu/student").withHeaders(fastlyCountryHeader -> "DE")
+      val result = applicationMock.studentGeoRedirect("eu", "").apply(request)
+      redirectLocation(result) mustBe Some("/eu/student?countryCode=DE")
+    }
+
+    "redirect to /eu/student with countryCode param appended when geo country is FR/ES/IE/NL" in {
+      List("FR", "ES", "IE", "NL").foreach { countryCode =>
+        val request = FakeRequest("GET", "/eu/student").withHeaders(fastlyCountryHeader -> countryCode)
+        val result = applicationMock.studentGeoRedirect("eu", "").apply(request)
+        redirectLocation(result) mustBe Some(s"/eu/student?countryCode=$countryCode")
+      }
+    }
+
+    "redirect to /eu/contribute with no countryCode param when geo country does not match" in {
+      val request = FakeRequest("GET", "/eu/student").withHeaders(fastlyCountryHeader -> "IT")
+      val result = applicationMock.studentGeoRedirect("eu", "").apply(request)
+      redirectLocation(result) mustBe Some("/eu/contribute")
+    }
+
+    "redirect to /eu/contribute with no countryCode param when geo country is missing" in {
+      val request = FakeRequest("GET", "/eu/student")
+      val result = applicationMock.studentGeoRedirect("eu", "").apply(request)
+      redirectLocation(result) mustBe Some("/eu/contribute")
+    }
+
+    "preserve existing query string params alongside the new countryCode param" in {
+      val request = FakeRequest("GET", "/eu/student?utm_source=x").withHeaders(fastlyCountryHeader -> "DE")
+      val result = applicationMock.studentGeoRedirect("eu", "").apply(request)
+      val location = redirectLocation(result).get
+      location must include("utm_source=x")
+      location must include("countryCode=DE")
+    }
+  }
 
   "getProductParamsFromContributionParams" should {
     "return return Contribution if selected-amount is < SupporterPlus.Monthly.GBP price" in {
