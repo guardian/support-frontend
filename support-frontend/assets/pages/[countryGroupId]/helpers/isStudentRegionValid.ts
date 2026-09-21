@@ -3,7 +3,7 @@ import { Country } from 'helpers/internationalisation/classes/country';
 
 const euStudentCountries = ['FR', 'DE', 'ES', 'NL', 'IE'];
 
-export const isStudentLocationValid = (supportRegionId: SupportRegionId) => {
+export const isStudentRegionValid = (supportRegionId: SupportRegionId) => {
 	const geoCountry = Country.detect();
 	const isStudent = [
 		SupportRegionId.UK,

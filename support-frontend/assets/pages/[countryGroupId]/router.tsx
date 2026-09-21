@@ -32,7 +32,7 @@ import {
 	type PageParticipationsResult,
 	type PageParticipationsResultWithFallback,
 } from '../../helpers/abTests/pageParticipations';
-import { isStudentLocationValid } from './helpers/isStudentLocationValid';
+import { isStudentRegionValid } from './helpers/isStudentRegionValid';
 
 const checkoutNudgeSettings = getCheckoutNudgeParticipations();
 const appConfig = parseAppConfig(window.guardian);
@@ -262,7 +262,7 @@ const router = createBrowserRouter([
 						};
 					},
 				},
-				isStudentLocationValid(supportRegionId)
+				isStudentRegionValid(supportRegionId)
 					? routeStudentLandingPage(supportRegionId)
 					: routeStudentContributePage(supportRegionId),
 				{
