@@ -52,7 +52,7 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
           ProductBenefit(
             copy = "Unlimited access to the Guardian app",
             tooltip = Some(
-              "Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.",
+              "Read beyond our 10 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.",
             ),
           ),
           ProductBenefit(copy = "Ad-free reading on all your devices"),
@@ -136,7 +136,7 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
                             Map(
                               "copy" -> stringAttr("Unlimited access to the Guardian app"),
                               "tooltip" -> stringAttr(
-                                "Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.",
+                                "Read beyond our 10 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.",
                               ),
                             ),
                           ),
