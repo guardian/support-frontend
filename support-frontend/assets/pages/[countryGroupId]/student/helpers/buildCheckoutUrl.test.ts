@@ -88,8 +88,55 @@ describe('buildCheckoutUrl', () => {
 					undefined,
 					'DE',
 				);
-
-				expect(url).toBe(routes.supporterPlusStudentBeansEu);
+				expect(url).toBe(routes.supporterPlusStudentBeansDe);
+			});
+		});
+		describe('and the supportRegionId is eu with defined country FR', () => {
+			it('returns the correct Student Beans landing page URL', () => {
+				const url = buildCheckoutUrl(
+					SupportRegionId.EU,
+					'SupporterPlus',
+					'OneYearStudent',
+					undefined,
+					'FR',
+				);
+				expect(url).toBe(routes.supporterPlusStudentBeansFr);
+			});
+		});
+		describe('and the supportRegionId is eu with defined country ES', () => {
+			it('returns the correct Student Beans landing page URL', () => {
+				const url = buildCheckoutUrl(
+					SupportRegionId.EU,
+					'SupporterPlus',
+					'OneYearStudent',
+					undefined,
+					'ES',
+				);
+				expect(url).toBe(routes.supporterPlusStudentBeansEs);
+			});
+		});
+		describe('and the supportRegionId is eu with defined country IE', () => {
+			it('returns the correct Student Beans landing page URL', () => {
+				const url = buildCheckoutUrl(
+					SupportRegionId.EU,
+					'SupporterPlus',
+					'OneYearStudent',
+					undefined,
+					'IE',
+				);
+				expect(url).toBe(routes.supporterPlusStudentBeansIe);
+			});
+		});
+		describe('and the supportRegionId is eu with defined country NL', () => {
+			it('returns the correct Student Beans landing page URL', () => {
+				const url = buildCheckoutUrl(
+					SupportRegionId.EU,
+					'SupporterPlus',
+					'OneYearStudent',
+					undefined,
+					'NL',
+				);
+				expect(url).toBe(routes.supporterPlusStudentBeansNl);
 			});
 		});
 

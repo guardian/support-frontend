@@ -49,8 +49,16 @@ const routes = {
 		'https://www.studentbeans.com/en-us/us/beansid-connect/hosted/the-guardian-digital/student/e15f676f-99cb-492d-9d95-ff17af36f274',
 	supporterPlusStudentBeansCa:
 		'https://www.studentbeans.com/en-ca/ca/beansid-connect/hosted/the-guardian-digital/student/362bcbd6-b491-4adf-8ca1-9f0c9f69c3b7',
-	supporterPlusStudentBeansEu:
-		'https://www.studentbeans.com/en-eu/eu/beansid-connect/hosted/the-guardian-digital/', // ToDo: to be confirmed/provided
+	supporterPlusStudentBeansDe:
+		'https://www.studentbeans.com/en-de/de/beansid-connect/hosted/the-guardian-digital/', // ToDo: to be provided
+	supporterPlusStudentBeansFr:
+		'https://www.studentbeans.com/en-fr/fr/beansid-connect/hosted/the-guardian-digital/', // ToDo: to be provided
+	supporterPlusStudentBeansEs:
+		'https://www.studentbeans.com/en-es/es/beansid-connect/hosted/the-guardian-digital/', // ToDo: to be provided
+	supporterPlusStudentBeansIe:
+		'https://www.studentbeans.com/en-ie/ie/beansid-connect/hosted/the-guardian-digital/', // ToDo: to be provided
+	supporterPlusStudentBeansNl:
+		'https://www.studentbeans.com/en-nl/nl/beansid-connect/hosted/the-guardian-digital/', // ToDo: to be provided
 	postcodeLookup: '/postcode-lookup',
 	expressPostcodeLookup: '/api/postcode-lookup',
 	createSignInUrl: '/identity/signin-url',

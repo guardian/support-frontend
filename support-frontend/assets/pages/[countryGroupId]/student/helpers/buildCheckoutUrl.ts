@@ -1,5 +1,6 @@
 import type { CountryCode } from '@modules/internationalisation/country';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { Country } from 'helpers/internationalisation/classes/country';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -12,13 +13,13 @@ export default function buildCheckoutUrl(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	promoCode?: string,
-	geoCountry?: CountryCode,
+	geoCountryOverride?: CountryCode,
 ): string {
 	// For this product/rate plan we direct the user to Student Beans for verification
 	if (
 		productKey == 'SupporterPlus' &&
 		ratePlanKey === 'OneYearStudent' &&
-		isStudentBeansRegionValid(supportRegionId, geoCountry)
+		isStudentBeansRegionValid(supportRegionId, geoCountryOverride)
 	) {
 		// If the supportRegionId isn't one of these we'll fall through to linking to the
 		// normal checkout page
@@ -29,8 +30,20 @@ export default function buildCheckoutUrl(
 				return routes.supporterPlusStudentBeansUs;
 			case SupportRegionId.CA:
 				return routes.supporterPlusStudentBeansCa;
-			case SupportRegionId.EU:
-				return routes.supporterPlusStudentBeansEu;
+			case SupportRegionId.EU: {
+				switch (geoCountryOverride ?? Country.detect(geoCountryOverride)) {
+					case 'DE':
+						return routes.supporterPlusStudentBeansDe;
+					case 'FR':
+						return routes.supporterPlusStudentBeansFr;
+					case 'ES':
+						return routes.supporterPlusStudentBeansEs;
+					case 'IE':
+						return routes.supporterPlusStudentBeansIe;
+					case 'NL':
+						return routes.supporterPlusStudentBeansNl;
+				}
+			}
 		}
 	}
 
