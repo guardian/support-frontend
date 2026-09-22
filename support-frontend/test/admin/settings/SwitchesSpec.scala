@@ -127,7 +127,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "enableStudentBeansEurope" : {
           |        "description" : "Enable StudentBeans Europe (Germany, France, Spain, Ireland, Holland)",
           |        "state" : "Off"
-          |      }
+          |      },
           |    }
           |  },
           |  "campaignSwitches" : {
@@ -181,6 +181,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
             Some(On),
             Some(On),
             Some(On),
+            Some(Off),
             Some(Off),
             Some(Off),
             Some(Off),
