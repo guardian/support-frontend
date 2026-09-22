@@ -8,23 +8,38 @@ import {
 import DigitalPackTerms from 'pages/promotion-terms/DigitalPackTerms';
 import PaperTerms from 'pages/promotion-terms/PaperTerms';
 import WeeklyTerms from 'pages/promotion-terms/weeklyTerms';
+import { getSubscriptionProduct } from './promotionSelectors';
 import type { PromotionTermsPropTypes } from './promotionTermsPropTypes';
 
 const getTermsForProduct = (props: PromotionTermsPropTypes) => {
-	switch (props.promotionTerms.product) {
+	const { promotion } = props;
+	const product = promotion
+		? getSubscriptionProduct(promotion.appliesTo.catalogRatePlans)
+		: DigitalPack;
+	const starts = promotion ? new Date(promotion.startTimestamp) : new Date();
+	const expires = promotion?.endTimestamp
+		? new Date(promotion.endTimestamp)
+		: null;
+	const promoCode = promotion?.promoCode ?? '';
+
+	switch (product) {
 		case GuardianWeekly:
 			return <WeeklyTerms />;
 
 		case DigitalPack:
 			return (
 				<DigitalPackTerms
-					{...props.promotionTerms}
+					starts={starts}
+					expires={expires}
+					promoCode={promoCode}
 					countryGroupId={props.countryGroupId}
 				/>
 			);
 
 		default:
-			return <PaperTerms {...props.promotionTerms} />;
+			return (
+				<PaperTerms starts={starts} expires={expires} promoCode={promoCode} />
+			);
 	}
 };
 

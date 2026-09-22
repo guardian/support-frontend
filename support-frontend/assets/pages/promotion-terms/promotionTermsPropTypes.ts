@@ -1,7 +1,7 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import type { PromotionTerms } from 'helpers/productPrice/promotions';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 
 export type PromotionTermsPropTypes = {
-	promotionTerms: PromotionTerms;
+	promotion?: PromoWithCatalogInformation;
 	countryGroupId: CountryGroupId;
 };

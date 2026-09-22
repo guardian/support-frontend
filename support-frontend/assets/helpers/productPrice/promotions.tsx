@@ -12,8 +12,6 @@ import type {
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
 import { getProductPrice, isNumeric } from 'helpers/productPrice/productPrices';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import type { Option } from 'helpers/types/option';
 import { getQueryParameter } from 'helpers/urls/url';
 import { getSanitisedHtml } from '../utilities/utilities';
 
@@ -25,16 +23,6 @@ export type PromotionCopy = {
 	title?: string;
 	description?: string;
 	roundel?: string;
-};
-export type PromotionTerms = {
-	description: string;
-	starts: Date;
-	expires: Option<Date>;
-	product: SubscriptionProduct;
-	// actually only GuardianWeekly, Paper or Digital Pack?
-	productRatePlans: string[];
-	promoCode: string;
-	isGift: boolean;
 };
 export type Promotion = {
 	name: string;
