@@ -79,6 +79,20 @@ module.exports = {
 						),
 					},
 					{
+						find: '@modules/product-catalog',
+						replacement: path.resolve(
+							__dirname,
+							'../node_modules/@guardian/support-service-lambdas/modules/product-catalog/src',
+						),
+					},
+					{
+						find: '@modules/promotions',
+						replacement: path.resolve(
+							__dirname,
+							'../node_modules/@guardian/support-service-lambdas/modules/promotions/src',
+						),
+					},
+					{
 						find: '@modules/arrayFunctions',
 						replacement: path.resolve(
 							__dirname,
@@ -86,10 +100,24 @@ module.exports = {
 						),
 					},
 					{
+						find: '@modules/nullAndUndefined',
+						replacement: path.resolve(
+							__dirname,
+							'../node_modules/@guardian/support-service-lambdas/modules/nullAndUndefined',
+						),
+					},
+					{
 						find: '@modules/objectFunctions',
 						replacement: path.resolve(
 							__dirname,
 							'../node_modules/@guardian/support-service-lambdas/modules/objectFunctions',
+						),
+					},
+					{
+						find: '@modules/schemaUtils',
+						replacement: path.resolve(
+							__dirname,
+							'../node_modules/@guardian/support-service-lambdas/modules/schemaUtils',
 						),
 					},
 					{
