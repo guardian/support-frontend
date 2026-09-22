@@ -50,15 +50,15 @@ const routes = {
 	supporterPlusStudentBeansCa:
 		'https://www.studentbeans.com/en-ca/ca/beansid-connect/hosted/the-guardian-digital/student/362bcbd6-b491-4adf-8ca1-9f0c9f69c3b7',
 	supporterPlusStudentBeansDe:
-		'https://www.studentbeans.com/en-de/de/beansid-connect/hosted/the-guardian-digital/', // ToDo: to be provided
+		'https://support.theguardian.com/eu/checkout?product=SupporterPlus&ratePlan=Monthly&backButton=false&country=DE',
 	supporterPlusStudentBeansFr:
-		'https://www.studentbeans.com/en-fr/fr/beansid-connect/hosted/the-guardian-digital/', // ToDo: to be provided
+		'https://support.theguardian.com/eu/checkout?product=SupporterPlus&ratePlan=Monthly&backButton=false&country=FR',
 	supporterPlusStudentBeansEs:
-		'https://www.studentbeans.com/en-es/es/beansid-connect/hosted/the-guardian-digital/', // ToDo: to be provided
+		'https://support.theguardian.com/eu/checkout?product=SupporterPlus&ratePlan=Monthly&backButton=false&country=ES',
 	supporterPlusStudentBeansIe:
-		'https://www.studentbeans.com/en-ie/ie/beansid-connect/hosted/the-guardian-digital/', // ToDo: to be provided
+		'https://support.theguardian.com/eu/checkout?product=SupporterPlus&ratePlan=Monthly&backButton=false&country=IE',
 	supporterPlusStudentBeansNl:
-		'https://www.studentbeans.com/en-nl/nl/beansid-connect/hosted/the-guardian-digital/', // ToDo: to be provided
+		'https://support.theguardian.com/eu/checkout?product=SupporterPlus&ratePlan=Monthly&backButton=false&country=NL',
 	postcodeLookup: '/postcode-lookup',
 	expressPostcodeLookup: '/api/postcode-lookup',
 	createSignInUrl: '/identity/signin-url',
