@@ -65,12 +65,42 @@ describe('buildCheckoutUrl', () => {
 			});
 		});
 
-		describe('and the supportRegionId is not one we have a Student Beans link for', () => {
+		describe('and the NZ supportRegionId is not one we have a Student Beans link for', () => {
+			it('returns the checkout URL', () => {
+				const url = buildCheckoutUrl(
+					SupportRegionId.NZ,
+					'SupporterPlus',
+					'OneYearStudent',
+				);
+
+				expect(url).toBe(
+					'/nz/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false',
+				);
+			});
+		});
+
+		describe('and the supportRegionId is eu with defined country DE', () => {
+			it('returns the correct Student Beans landing page URL', () => {
+				const url = buildCheckoutUrl(
+					SupportRegionId.EU,
+					'SupporterPlus',
+					'OneYearStudent',
+					undefined,
+					'DE',
+				);
+
+				expect(url).toBe(routes.supporterPlusStudentBeansEu);
+			});
+		});
+
+		describe('and the EU supportRegionId with country IT is not one we have a Student Beans link for', () => {
 			it('returns the checkout URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.EU,
 					'SupporterPlus',
 					'OneYearStudent',
+					undefined,
+					'IT',
 				);
 
 				expect(url).toBe(
