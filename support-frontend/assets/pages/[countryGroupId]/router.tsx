@@ -104,7 +104,7 @@ const routeStudentContributePage = (supportRegionId: SupportRegionId) => {
 	return {
 		path: `/${supportRegionId}/student`,
 		loader: () => {
-			window.location.href = `./contribute`;
+			window.location.href = `./contribute${window.location.search}`;
 			return null;
 		},
 	};
