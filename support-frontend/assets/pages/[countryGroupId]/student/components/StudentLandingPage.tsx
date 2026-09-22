@@ -17,7 +17,7 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { Institution } from 'helpers/globalsAndSwitches/studentLandingPageSettings';
-import { isStudentRegionValid } from 'pages/[countryGroupId]/helpers/isStudentRegionValid';
+import { isStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
 import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 import { AccordionFAQ } from '../../components/accordionFAQ';
 import { getStudentFAQs } from '../helpers/studentFAQs';
@@ -45,7 +45,7 @@ export function StudentLandingPage({
 	const tsAndCsItem = getStudentTsAndCs(supportRegionId, institution);
 
 	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
-	const countryGroupIds: CountryGroupId[] = isStudentRegionValid(
+	const countryGroupIds: CountryGroupId[] = isStudentBeansRegionValid(
 		supportRegionId,
 	)
 		? [GBPCountries, UnitedStates, EURCountries, Canada]

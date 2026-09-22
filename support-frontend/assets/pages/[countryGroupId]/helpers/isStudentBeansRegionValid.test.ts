@@ -1,20 +1,27 @@
 import type { CountryCode } from '@guardian/libs';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { isStudentRegionValid } from './isStudentRegionValid';
+import { isStudentBeansRegionValid } from './isStudentBeansRegionValid';
 
-describe('isStudentRegionValidSub', () => {
+describe('isStudentRegionValid', () => {
 	it.each`
 		region  | country | expected
 		${'eu'} | ${'DE'} | ${true}
+		${'eu'} | ${'FR'} | ${true}
+		${'eu'} | ${'ES'} | ${true}
+		${'eu'} | ${'IE'} | ${true}
+		${'eu'} | ${'NL'} | ${true}
 		${'eu'} | ${'IT'} | ${false}
 		${'uk'} | ${''}   | ${true}
+		${'us'} | ${''}   | ${true}
+		${'ca'} | ${''}   | ${true}
+		${'au'} | ${''}   | ${false}
 		${'nz'} | ${''}   | ${false}
 	`(
-		`should return $expected for region $region and country $country`,
+		`should return $expected for region $region $country`,
 		({ region, country, expected }) => {
 			const countryOrUndefined =
 				country === '' ? undefined : (country as CountryCode);
-			const isStudentRegionValidResult = isStudentRegionValid(
+			const isStudentRegionValidResult = isStudentBeansRegionValid(
 				region as SupportRegionId,
 				countryOrUndefined,
 			);
