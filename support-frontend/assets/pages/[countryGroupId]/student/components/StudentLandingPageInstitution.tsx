@@ -58,6 +58,7 @@ export function StudentLandingPageInstitution({
 							.
 						</>
 					}
+					enableStudentBeansEurope={false}
 					universityBadge={
 						<p css={universityBadge}>
 							<img
@@ -70,6 +71,7 @@ export function StudentLandingPageInstitution({
 					heroImagePrefix="AuStudentLandingHero"
 				/>
 			}
+			enableStudentBeansEurope={false}
 			institution={studentLandingPageVariant.institution}
 		/>
 	);

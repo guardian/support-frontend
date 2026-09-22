@@ -9,7 +9,12 @@ describe('buildCheckoutUrl', () => {
 		const ratePlanKey = 'Monthly';
 
 		it('builds a URL without promoCode', () => {
-			const result = buildCheckoutUrl(supportRegionId, productKey, ratePlanKey);
+			const result = buildCheckoutUrl(
+				supportRegionId,
+				productKey,
+				ratePlanKey,
+				true,
+			);
 			expect(result).toBe(
 				'/uk/checkout?product=SupporterPlus&ratePlan=Monthly&backButton=false',
 			);
@@ -20,6 +25,8 @@ describe('buildCheckoutUrl', () => {
 				supportRegionId,
 				productKey,
 				ratePlanKey,
+				true,
+				undefined,
 				'DISCOUNT10',
 			);
 			expect(result).toBe(
@@ -35,6 +42,7 @@ describe('buildCheckoutUrl', () => {
 					SupportRegionId.UK,
 					'SupporterPlus',
 					'OneYearStudent',
+					true,
 				);
 
 				expect(url).toBe(routes.supporterPlusStudentBeansUk);
@@ -47,6 +55,7 @@ describe('buildCheckoutUrl', () => {
 					SupportRegionId.US,
 					'SupporterPlus',
 					'OneYearStudent',
+					true,
 				);
 
 				expect(url).toBe(routes.supporterPlusStudentBeansUs);
@@ -59,6 +68,7 @@ describe('buildCheckoutUrl', () => {
 					SupportRegionId.CA,
 					'SupporterPlus',
 					'OneYearStudent',
+					true,
 				);
 
 				expect(url).toBe(routes.supporterPlusStudentBeansCa);
@@ -71,6 +81,7 @@ describe('buildCheckoutUrl', () => {
 					SupportRegionId.NZ,
 					'SupporterPlus',
 					'OneYearStudent',
+					true,
 				);
 
 				expect(url).toBe(
@@ -85,7 +96,7 @@ describe('buildCheckoutUrl', () => {
 					SupportRegionId.EU,
 					'SupporterPlus',
 					'OneYearStudent',
-					undefined,
+					true,
 					'DE',
 				);
 				expect(url).toBe(routes.supporterPlusStudentBeansDe);
@@ -97,7 +108,7 @@ describe('buildCheckoutUrl', () => {
 					SupportRegionId.EU,
 					'SupporterPlus',
 					'OneYearStudent',
-					undefined,
+					true,
 					'FR',
 				);
 				expect(url).toBe(routes.supporterPlusStudentBeansFr);
@@ -109,7 +120,7 @@ describe('buildCheckoutUrl', () => {
 					SupportRegionId.EU,
 					'SupporterPlus',
 					'OneYearStudent',
-					undefined,
+					true,
 					'ES',
 				);
 				expect(url).toBe(routes.supporterPlusStudentBeansEs);
@@ -121,7 +132,7 @@ describe('buildCheckoutUrl', () => {
 					SupportRegionId.EU,
 					'SupporterPlus',
 					'OneYearStudent',
-					undefined,
+					true,
 					'IE',
 				);
 				expect(url).toBe(routes.supporterPlusStudentBeansIe);
@@ -133,7 +144,7 @@ describe('buildCheckoutUrl', () => {
 					SupportRegionId.EU,
 					'SupporterPlus',
 					'OneYearStudent',
-					undefined,
+					true,
 					'NL',
 				);
 				expect(url).toBe(routes.supporterPlusStudentBeansNl);
@@ -146,7 +157,7 @@ describe('buildCheckoutUrl', () => {
 					SupportRegionId.EU,
 					'SupporterPlus',
 					'OneYearStudent',
-					undefined,
+					true,
 					'IT',
 				);
 

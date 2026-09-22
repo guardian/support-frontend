@@ -28,6 +28,7 @@ const featureSwitchesSchema = z.object({
 	enableMParticle: z.optional(z.enum(['On', 'Off'])),
 	enableCanadaTaxExclusion: z.optional(z.enum(['On', 'Off'])),
 	enableDeepDiscount: z.optional(z.enum(['On', 'Off'])),
+	enableStudentBeansEurope: z.optional(z.enum(['On', 'Off'])),
 });
 
 export type FeatureSwitches = z.infer<typeof featureSwitchesSchema>;

@@ -109,8 +109,10 @@ const routeStudentContributePage = (supportRegionId: SupportRegionId) => {
 		},
 	};
 };
-
-const router = createBrowserRouter([
+const enableStudentBeansEurope = isSwitchOn(
+	'featureSwitches.enableStudentBeansEurope',
+);
+const routerGeoRedirect = createBrowserRouter([
 	{
 		id: 'root',
 		loader: rootLoader,
@@ -262,7 +264,7 @@ const router = createBrowserRouter([
 						};
 					},
 				},
-				isStudentBeansRegionValid(supportRegionId)
+				isStudentBeansRegionValid(supportRegionId, enableStudentBeansEurope)
 					? routeStudentLandingPage(supportRegionId)
 					: routeStudentContributePage(supportRegionId),
 				{
@@ -296,8 +298,6 @@ const router = createBrowserRouter([
 		],
 	},
 ]);
-
-const routerGeoRedirect = router;
 
 function GuardianOrObserverHoldingContent() {
 	if (isObserverSubdomain()) {

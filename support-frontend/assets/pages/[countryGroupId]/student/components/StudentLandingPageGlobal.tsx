@@ -1,4 +1,5 @@
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import {
 	type ActiveProductKey,
@@ -22,6 +23,7 @@ export function StudentLandingPageGlobal({
 	ratePlanKey: ActiveRatePlanKey;
 	studentDiscount: StudentDiscount;
 }) {
+	const { enableStudentBeansEurope } = useFeatureSwitches();
 	return (
 		<StudentLandingPage
 			supportRegionId={supportRegionId}
@@ -44,8 +46,10 @@ export function StudentLandingPageGlobal({
 					subheadingCopy="Now more than ever, independent journalism matters. Get fact-based reporting you can trust and unlimited access to the Guardian apps &mdash; without breaking your budget."
 					includeThreeTierLink={true}
 					heroImagePrefix="globalStudentLandingHero"
+					enableStudentBeansEurope={enableStudentBeansEurope}
 				/>
 			}
+			enableStudentBeansEurope={enableStudentBeansEurope}
 			brandAwareness={<StudentBrandAwareness />}
 		/>
 	);

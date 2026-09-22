@@ -30,6 +30,7 @@ interface StudentHeaderProps {
 	studentDiscount: StudentDiscount;
 	headingCopy: React.ReactNode;
 	subheadingCopy: React.ReactNode;
+	enableStudentBeansEurope: boolean;
 	universityBadge?: JSX.Element;
 	includeThreeTierLink?: boolean;
 	heroImagePrefix: string;
@@ -52,6 +53,7 @@ export default function StudentHeader({
 	studentDiscount,
 	headingCopy,
 	subheadingCopy,
+	enableStudentBeansEurope,
 	universityBadge,
 	includeThreeTierLink = false,
 	heroImagePrefix,
@@ -61,6 +63,8 @@ export default function StudentHeader({
 		supportRegionId,
 		productKey,
 		ratePlanKey,
+		enableStudentBeansEurope,
+		undefined,
 		promoCode,
 	);
 

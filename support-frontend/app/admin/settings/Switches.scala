@@ -32,6 +32,7 @@ case class FeatureSwitches(
     enableStripePaymentElement: Option[SwitchState],
     enableCanadaTaxExclusion: Option[SwitchState],
     enableDeepDiscount: Option[SwitchState],
+    enableStudentBeansEurope: Option[SwitchState],
 )
 
 object FeatureSwitches {

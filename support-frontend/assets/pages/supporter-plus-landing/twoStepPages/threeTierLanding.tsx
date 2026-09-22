@@ -361,7 +361,7 @@ export function ThreeTierLanding({
 		settings.defaultProductSelection?.productType.toLowerCase();
 
 	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
-	const { enableDeepDiscount } = useFeatureSwitches();
+	const { enableDeepDiscount, enableStudentBeansEurope } = useFeatureSwitches();
 
 	const getDefaultProductSelection = (productKey: ProductKey) => {
 		return (
@@ -703,7 +703,7 @@ export function ThreeTierLanding({
 					countryGroupId={countryGroupId}
 				/>
 			</Container>
-			{isStudentBeansRegionValid(supportRegionId) && (
+			{isStudentBeansRegionValid(supportRegionId, enableStudentBeansEurope) && (
 				<Container
 					sideBorders
 					borderColor="rgba(170, 170, 180, 0.5)"

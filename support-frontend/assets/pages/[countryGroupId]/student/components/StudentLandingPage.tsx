@@ -31,6 +31,7 @@ import { StudentTsAndCs } from './studentTsAndCs';
 type StudentLandingPageProps = {
 	supportRegionId: SupportRegionId;
 	header: JSX.Element;
+	enableStudentBeansEurope: boolean;
 	brandAwareness?: JSX.Element;
 	institution?: Institution;
 };
@@ -38,6 +39,7 @@ type StudentLandingPageProps = {
 export function StudentLandingPage({
 	supportRegionId,
 	header,
+	enableStudentBeansEurope,
 	brandAwareness,
 	institution,
 }: StudentLandingPageProps) {
@@ -45,11 +47,11 @@ export function StudentLandingPage({
 	const tsAndCsItem = getStudentTsAndCs(supportRegionId, institution);
 
 	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
-	const countryGroupIds: CountryGroupId[] = isStudentBeansRegionValid(
-		supportRegionId,
-	)
-		? [GBPCountries, UnitedStates, EURCountries, Canada]
-		: [GBPCountries, UnitedStates, Canada];
+	const countryGroupIds: CountryGroupId[] =
+		enableStudentBeansEurope &&
+		isStudentBeansRegionValid(supportRegionId, enableStudentBeansEurope)
+			? [GBPCountries, UnitedStates, EURCountries, Canada]
+			: [GBPCountries, UnitedStates, Canada];
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: countryGroupIds,
 		selectedCountryGroup: countryGroupId,

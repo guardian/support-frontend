@@ -12,11 +12,13 @@ const studentBeansEuCountries = ['FR', 'DE', 'ES', 'NL', 'IE'];
 
 export const isStudentBeansRegionValid = (
 	supportRegionId: SupportRegionId,
+	enableStudentBeansEurope: boolean,
 	countryOverride?: CountryCode,
 ) => {
 	const geoCountry = Country.detect();
 	const isStudent = studentBeansRegions.includes(supportRegionId);
 	const isEurStudent =
+		enableStudentBeansEurope &&
 		supportRegionId === SupportRegionId.EU &&
 		studentBeansEuCountries.includes(countryOverride ?? geoCountry);
 	return isStudent || isEurStudent;
