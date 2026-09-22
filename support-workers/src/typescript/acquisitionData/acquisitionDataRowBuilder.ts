@@ -192,8 +192,6 @@ function paymentProviderFromPaymentMethod(
 				return 'STRIPE_PAYMENT_REQUEST_BUTTON';
 			}
 			return 'STRIPE';
-		case 'PayPal':
-		case 'PayPalCompletePaymentsWithBAID':
 		case 'PayPalCompletePayments':
 			return 'PAYPAL';
 		case 'BankTransfer':

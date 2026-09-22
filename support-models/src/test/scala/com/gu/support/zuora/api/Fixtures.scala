@@ -2,12 +2,7 @@ package com.gu.support.zuora.api
 
 import com.gu.i18n.Currency.{AUD, GBP}
 import com.gu.i18n.{Country, Currency}
-import com.gu.support.workers.{
-  CreditCardReferenceTransaction,
-  DirectDebitPaymentMethod,
-  PayPalReferenceTransaction,
-  StripePaymentType,
-}
+import com.gu.support.workers.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, StripePaymentType}
 import org.joda.time.LocalDate
 
 //noinspection TypeAnnotation
@@ -153,7 +148,6 @@ object Fixtures {
     StripeGatewayDefault,
     StripePaymentType = Some(StripePaymentType.StripeCheckout),
   )
-  val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
   val directDebitPaymentMethod = DirectDebitPaymentMethod(
     FirstName = "Barry",
     LastName = "Humphreys",
@@ -340,19 +334,6 @@ object Fixtures {
         contactDetails,
         None,
         Some(creditCardPaymentMethod),
-        invalidMonthlySubsData,
-        SubscribeOptions(),
-      ),
-    ),
-  )
-
-  val incorrectPaymentMethod = SubscribeRequest(
-    List(
-      SubscribeItem(
-        account(),
-        contactDetails,
-        None,
-        Some(payPalPaymentMethod),
         invalidMonthlySubsData,
         SubscribeOptions(),
       ),
