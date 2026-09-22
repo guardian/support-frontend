@@ -22,6 +22,8 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val salesTaxConfig = SalesTaxApiConfig.fromConfig(config)
 
+  lazy val promotionsApiConfigProvider = new PromotionsApiConfigProvider(config, stage)
+
   lazy val multipleAccountApiConfig = MultipleAccountApiConfig.fromConfig(config)
 
   lazy val paperRoundConfigProvider = new PaperRoundConfigProvider(config, stage)
