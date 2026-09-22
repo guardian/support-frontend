@@ -1,6 +1,6 @@
 // ----- Imports ----- //
-import type { CountryCode } from '@guardian/libs';
 import { getLocale } from '@guardian/libs';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import * as abTest from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
@@ -14,7 +14,7 @@ import {
 import { getReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 async function setUpConsent(): Promise<void> {
-	const countryId: CountryCode = Country.detect() as CountryCode;
+	const countryId: CountryCode = Country.detect();
 	// Initialize CMP first
 	try {
 		const localeCode = await getLocale();
