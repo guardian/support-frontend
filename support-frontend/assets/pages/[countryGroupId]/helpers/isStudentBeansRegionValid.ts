@@ -17,9 +17,9 @@ export const isStudentBeansRegionValid = (
 ) => {
 	const geoCountry = Country.detect();
 	const isStudent = studentBeansRegions.includes(supportRegionId);
-	const isEurStudent =
+	const isEuStudent =
 		enableStudentBeansEurope &&
 		supportRegionId === SupportRegionId.EU &&
 		studentBeansEuCountries.includes(countryOverride ?? geoCountry);
-	return isStudent || isEurStudent;
+	return isStudent || isEuStudent;
 };

@@ -1,5 +1,4 @@
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import {
 	type ActiveProductKey,
@@ -16,14 +15,15 @@ export function StudentLandingPageGlobal({
 	productKey,
 	ratePlanKey,
 	studentDiscount,
+	enableStudentBeansEurope,
 }: {
 	supportRegionId: SupportRegionId;
 	landingPageVariant: LandingPageVariant;
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	studentDiscount: StudentDiscount;
+	enableStudentBeansEurope: boolean;
 }) {
-	const { enableStudentBeansEurope } = useFeatureSwitches();
 	return (
 		<StudentLandingPage
 			supportRegionId={supportRegionId}

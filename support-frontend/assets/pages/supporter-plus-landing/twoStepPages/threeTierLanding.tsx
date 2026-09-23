@@ -276,11 +276,13 @@ function getThreeTierProductOption(
 type ThreeTierLandingProps = {
 	supportRegionId: SupportRegionId;
 	settings: LandingPageVariant;
+	enableStudentBeansEurope: boolean;
 	abParticipations: Participations;
 };
 export function ThreeTierLanding({
 	supportRegionId,
 	settings,
+	enableStudentBeansEurope,
 }: ThreeTierLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlCountryCode = urlSearchParams.get('country') as CountryCode;
@@ -363,7 +365,7 @@ export function ThreeTierLanding({
 		settings.defaultProductSelection?.productType.toLowerCase();
 
 	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
-	const { enableDeepDiscount, enableStudentBeansEurope } = useFeatureSwitches();
+	const { enableDeepDiscount } = useFeatureSwitches();
 
 	const getDefaultProductSelection = (productKey: ProductKey) => {
 		return (

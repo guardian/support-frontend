@@ -10,9 +10,11 @@ import { getStudentDiscount } from './helpers/discountDetails';
 export function StudentLandingPageGlobalContainer({
 	supportRegionId,
 	landingPageVariant,
+	enableStudentBeansEurope,
 }: {
 	supportRegionId: SupportRegionId;
 	landingPageVariant: LandingPageVariant;
+	enableStudentBeansEurope: boolean;
 }) {
 	const productKey: ActiveProductKey = 'SupporterPlus';
 	const ratePlanKey: ActiveRatePlanKey = 'OneYearStudent';
@@ -33,6 +35,7 @@ export function StudentLandingPageGlobalContainer({
 					ratePlanKey={ratePlanKey}
 					landingPageVariant={landingPageVariant}
 					studentDiscount={studentDiscount}
+					enableStudentBeansEurope={enableStudentBeansEurope}
 				/>
 			)}
 		</>
