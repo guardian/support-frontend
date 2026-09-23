@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import type { CountryCode } from '@guardian/libs';
 import {
 	between,
 	from,
@@ -97,11 +98,13 @@ const dividerCopy = css`
 interface StudentOfferProps {
 	currencyKey: CurrencyCode;
 	countryGroupId: CountryGroupId;
+	countryCode?: CountryCode;
 }
 
 export function StudentOffer({
 	currencyKey,
 	countryGroupId,
+	countryCode,
 }: StudentOfferProps): JSX.Element {
 	const price =
 		productCatalog.SupporterPlus?.ratePlans['OneYearStudent']?.pricing[
@@ -115,7 +118,11 @@ export function StudentOffer({
 		return <></>;
 	}
 	const productLabel = getProductLabel('SupporterPlus');
-	const url = `/${countryGroups[countryGroupId].supportRegionId}/student`;
+	const euCountry =
+		countryGroupId === 'EURCountries' && countryCode
+			? `?country=${countryCode}`
+			: '';
+	const url = `/${countryGroups[countryGroupId].supportRegionId}/student${euCountry}`;
 	return (
 		<>
 			<div css={dividerContainer}>

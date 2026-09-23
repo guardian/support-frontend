@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { cmp } from '@guardian/consent-manager';
+import type { CountryCode } from '@guardian/libs';
 import {
 	from,
 	palette,
@@ -282,6 +283,7 @@ export function ThreeTierLanding({
 	settings,
 }: ThreeTierLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
+	const urlCountryCode = urlSearchParams.get('country') as CountryCode;
 	const rawUrlSearchParamsProduct = urlSearchParams.get('product');
 	const urlSearchParamsProduct = rawUrlSearchParamsProduct
 		? rawUrlSearchParamsProduct.toLowerCase()
@@ -712,6 +714,7 @@ export function ThreeTierLanding({
 					<StudentOffer
 						currencyKey={currencyId}
 						countryGroupId={countryGroupId}
+						countryCode={urlCountryCode}
 					/>
 				</Container>
 			)}
