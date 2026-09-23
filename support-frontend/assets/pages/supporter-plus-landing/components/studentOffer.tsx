@@ -9,6 +9,7 @@ import {
 	textSans17,
 } from '@guardian/source/foundations';
 import { LinkButton } from '@guardian/source/react-components';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
@@ -97,11 +98,13 @@ const dividerCopy = css`
 interface StudentOfferProps {
 	currencyKey: CurrencyCode;
 	countryGroupId: CountryGroupId;
+	countryCode?: CountryCode;
 }
 
 export function StudentOffer({
 	currencyKey,
 	countryGroupId,
+	countryCode,
 }: StudentOfferProps): JSX.Element {
 	const price =
 		productCatalog.SupporterPlus?.ratePlans['OneYearStudent']?.pricing[
@@ -115,7 +118,11 @@ export function StudentOffer({
 		return <></>;
 	}
 	const productLabel = getProductLabel('SupporterPlus');
-	const url = `/${countryGroups[countryGroupId].supportRegionId}/student`;
+	const euCountry =
+		countryGroupId === 'EURCountries' && countryCode
+			? `?country=${countryCode}`
+			: '';
+	const url = `/${countryGroups[countryGroupId].supportRegionId}/student${euCountry}`;
 	return (
 		<>
 			<div css={dividerContainer}>

@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { cmp } from '@guardian/consent-manager';
+import type { CountryCode } from '@guardian/libs';
 import {
 	from,
 	palette,
@@ -274,13 +275,16 @@ function getThreeTierProductOption(
 type ThreeTierLandingProps = {
 	supportRegionId: SupportRegionId;
 	settings: LandingPageVariant;
+	enableStudentBeansEurope: boolean;
 	abParticipations: Participations;
 };
 export function ThreeTierLanding({
 	supportRegionId,
 	settings,
+	enableStudentBeansEurope,
 }: ThreeTierLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
+	const urlCountryCode = urlSearchParams.get('country') as CountryCode;
 	const rawUrlSearchParamsProduct = urlSearchParams.get('product');
 	const urlSearchParamsProduct = rawUrlSearchParamsProduct
 		? rawUrlSearchParamsProduct.toLowerCase()
@@ -313,7 +317,10 @@ export function ThreeTierLanding({
 		string | undefined
 	>();
 
-	const enableStudentOffer = ['uk', 'us', 'ca'].includes(supportRegionId);
+	const enableEurStudentOffer =
+		supportRegionId === SupportRegionId.EU && enableStudentBeansEurope;
+	const enableStudentOffer =
+		['uk', 'us', 'ca'].includes(supportRegionId) || enableEurStudentOffer;
 
 	const getInitialContributionType = (): ContributionType => {
 		// 1. Query Parameters take precedence
@@ -713,6 +720,7 @@ export function ThreeTierLanding({
 					<StudentOffer
 						currencyKey={currencyId}
 						countryGroupId={countryGroupId}
+						countryCode={urlCountryCode}
 					/>
 				</Container>
 			)}
