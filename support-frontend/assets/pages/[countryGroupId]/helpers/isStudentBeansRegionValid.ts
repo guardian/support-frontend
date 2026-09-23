@@ -15,11 +15,12 @@ export const isStudentBeansRegionValid = (
 	enableStudentBeansEurope: boolean,
 	countryOverride?: CountryCode,
 ) => {
-	const geoCountry = Country.detect();
-	const isStudent = studentBeansRegions.includes(supportRegionId);
-	const isEuStudent =
-		enableStudentBeansEurope &&
-		supportRegionId === SupportRegionId.EU &&
-		studentBeansEuCountries.includes(countryOverride ?? geoCountry);
-	return isStudent || isEuStudent;
+	if (!studentBeansRegions.includes(supportRegionId)) {
+		return (
+			enableStudentBeansEurope &&
+			supportRegionId === SupportRegionId.EU &&
+			studentBeansEuCountries.includes(countryOverride ?? Country.detect())
+		);
+	}
+	return true;
 };
