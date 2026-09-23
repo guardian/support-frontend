@@ -1,35 +1,33 @@
-import type { CountryCode } from '@guardian/libs';
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { CountryCode } from '@modules/internationalisation/country';
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { isStudentBeansRegionValid } from './isStudentBeansRegionValid';
 
-describe('isStudentRegionValid', () => {
+describe('isStudentBeansRegionValid', () => {
 	it.each`
-		region  | country | eurInclude | expected
-		${'eu'} | ${'DE'} | ${true}    | ${true}
-		${'eu'} | ${'FR'} | ${true}    | ${true}
-		${'eu'} | ${'ES'} | ${true}    | ${true}
-		${'eu'} | ${'IE'} | ${true}    | ${true}
-		${'eu'} | ${'NL'} | ${true}    | ${true}
-		${'eu'} | ${'IT'} | ${true}    | ${false}
-		${'uk'} | ${''}   | ${true}    | ${true}
-		${'us'} | ${''}   | ${true}    | ${true}
-		${'ca'} | ${''}   | ${true}    | ${true}
-		${'au'} | ${''}   | ${true}    | ${false}
-		${'nz'} | ${''}   | ${true}    | ${false}
-		${'eu'} | ${'DE'} | ${false}   | ${false}
-		${'eu'} | ${'FR'} | ${false}   | ${false}
-		${'eu'} | ${'ES'} | ${false}   | ${false}
-		${'eu'} | ${'IE'} | ${false}   | ${false}
-		${'eu'} | ${'NL'} | ${false}   | ${false}
+		region                  | country            | eurInclude | expected
+		${SupportRegionId.EU}   | ${CountryCode.DE}  | ${true}    | ${true}
+		${SupportRegionId.EU}   | ${CountryCode.FR}  | ${true}    | ${true}
+		${SupportRegionId.EU}   | ${CountryCode.ES}  | ${true}    | ${true}
+		${SupportRegionId.EU}   | ${CountryCode.IE}  | ${true}    | ${true}
+		${SupportRegionId.EU}   | ${CountryCode.NL}  | ${true}    | ${true}
+		${SupportRegionId.EU}   | ${CountryCode.IT}  | ${true}    | ${false}
+		${SupportRegionId.UK}   | ${undefined}       | ${true}    | ${true}
+		${SupportRegionId.US}   | ${undefined}       | ${true}    | ${true}
+		${SupportRegionId.CA}   | ${undefined}       | ${true}    | ${true}
+		${SupportRegionId.AU}   | ${undefined}       | ${true}    | ${false}
+		${SupportRegionId.NZ}   | ${undefined}       | ${true}    | ${false}
+		${SupportRegionId.EU}   | ${CountryCode.DE}  | ${false}   | ${false}
+		${SupportRegionId.EU}   | ${CountryCode.FR}  | ${false}   | ${false}
+		${SupportRegionId.EU}   | ${CountryCode.ES}  | ${false}   | ${false}
+		${SupportRegionId.EU}   | ${CountryCode.IE}  | ${false}   | ${false}
+		${SupportRegionId.EU}   | ${CountryCode.NL}  | ${false}   | ${false}
 	`(
 		`should return $expected for eur included $eurInclude region $region $country`,
 		({ region, country, eurInclude, expected }) => {
-			const countryOrUndefined =
-				country === '' ? undefined : (country as CountryCode);
 			const isStudentRegionValidResult = isStudentBeansRegionValid(
-				region as SupportRegionId,
-				eurInclude as boolean,
-				countryOrUndefined,
+				region,
+				eurInclude,
+				country,
 			);
 			expect(isStudentRegionValidResult).toEqual(expected);
 		},
