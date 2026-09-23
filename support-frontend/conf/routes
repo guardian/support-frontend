@@ -122,12 +122,6 @@ GET /switches                                                      controllers.T
 GET /oauth/authorize                                               controllers.AuthCodeFlowController.authorize()
 GET /oauth/callback                                                controllers.AuthCodeFlowController.callback(code: Option[String], state: String, error: Option[String], error_description: Option[String])
 
-# ----- PayPal (Recurring Endpoints) ----- #
-
-POST /paypal/setup-payment                                         controllers.PayPalRegular.setupPayment()
-POST /paypal/one-click-checkout                                    controllers.PayPalRegular.createAgreementAndRetrieveUser()
-GET  /paypal/return                                                controllers.PayPalRegular.returnUrl()
-GET  /paypal/cancel                                                controllers.PayPalRegular.cancelUrl()
 
 # ----- PayPal (One-off Endpoints) ----- #
 
@@ -147,6 +141,8 @@ GET  /paypal/rest/error                                            controllers.P
 # ----- PayPal (Complete Payments) ----- #
 POST /paypal-complete-payments/setup-token                         controllers.PayPalCompletePaymentsController.createSetupToken()
 POST /paypal-complete-payments/payment-token                       controllers.PayPalCompletePaymentsController.createPaymentToken()
+GET  /paypal/return                                                controllers.PayPalRegular.returnUrl()
+GET  /paypal/cancel                                                controllers.PayPalRegular.cancelUrl()
 
 # ----- Direct Debit ----- #
 
@@ -161,7 +157,7 @@ GET /prices                                                       controllers.Pr
 
 # ----- Analytics API (mParticle) ----- #
 GET /analytics-user-profile                                       controllers.AnalyticsController.getAnalyticsUserProfile()
-GET /audience-memberships                                         controllers.AnalyticsController.getAudienceMemberships()
+GET /audience-data                                                controllers.AnalyticsController.getAudienceData()
 
 # ----- Newspaper Archive ----- #
 GET /newspaper-archive-header                                      controllers.NewspaperArchiveController.getHeader

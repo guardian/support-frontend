@@ -132,7 +132,7 @@ export function OnboardingDigitalPlusDiscovery({
 							/>
 						</div>
 						<div css={benefitCardContent}>
-							<h2 css={benefitCardHeading}>Discover the Feast app</h2>
+							<h2 css={benefitCardHeading}>Discover the Guardian Feast app</h2>
 							<p css={descriptions}>
 								Level up your cooking with more than 6,000 recipes and smart,
 								exclusive cooking features.

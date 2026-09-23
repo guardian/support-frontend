@@ -21,7 +21,8 @@
   "forwardPorts" : [
     9211,
     9210,
-    9001
+    9001,
+    9500
   ],
   "image" : "mcr.microsoft.com/devcontainers/base:ubuntu26.04",
   "remoteUser" : "vscode",
@@ -39,7 +40,8 @@
   ],
   "containerEnv" : {
     "DEVENV_IVY_CACHE_MOUNT_DIR" : "/mnt/ivy-cache",
-    "DEVENV_COURSIER_CACHE_MOUNT_DIR" : "/mnt/coursier-cache"
+    "DEVENV_COURSIER_CACHE_MOUNT_DIR" : "/mnt/coursier-cache",
+    "AWS_PROFILE" : "membership"
   },
   "runArgs" : [
     "--name=support-frontend-devcontainer"

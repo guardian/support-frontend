@@ -5,7 +5,7 @@ import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import com.gu.identity.model.User
 import com.gu.monitoring.SafeLogging
 import com.gu.rest.{CodeBody, WebServiceClientError}
-import io.circe.{Encoder, Json}
+import io.circe.{Encoder, Json, JsonObject}
 import io.circe.generic.semiauto.deriveEncoder
 import io.circe.syntax._
 import play.api.libs.circe.Circe
@@ -25,11 +25,12 @@ object AnalyticsUserProfileResponse {
   implicit val encoder: Encoder[AnalyticsUserProfileResponse] = deriveEncoder
 }
 
-case class AudienceMembershipsResponse(
+case class AudienceDataResponse(
     audienceMemberships: List[Int],
+    userAttributes: JsonObject,
 )
-object AudienceMembershipsResponse {
-  implicit val encoder: Encoder[AudienceMembershipsResponse] = deriveEncoder
+object AudienceDataResponse {
+  implicit val encoder: Encoder[AudienceDataResponse] = deriveEncoder
 }
 
 class AnalyticsController(
@@ -43,7 +44,7 @@ class AnalyticsController(
 
   import actionRefiners._
   import AnalyticsUserProfileResponse._
-  import AudienceMembershipsResponse._
+  import AudienceDataResponse._
 
   type AuthenticatedUserRequest[A] = AuthenticatedRequest[A, User]
 
@@ -79,15 +80,15 @@ class AnalyticsController(
         }
     }
 
-  /** Gets all mparticle audience memberships for the user. This should only be used if the user has consented for
+  /** Gets mParticle audience memberships and user attributes. This should only be used if the user has consented for
     * targeting.
     */
-  def getAudienceMemberships(): Action[AnyContent] =
+  def getAudienceData(): Action[AnyContent] =
     (MaybeAuthenticatedAction andThen RequireAuthenticatedUser).async { implicit request =>
       mparticleClient
-        .getAudienceMemberships(request.user.id)
+        .getAudienceData(request.user.id)
         .map { response =>
-          Ok(AudienceMembershipsResponse(response).asJson)
+          Ok(AudienceDataResponse(response.audienceMemberships, response.userAttributes).asJson)
         }
         .recover { ex =>
           logger.error(scrub"Failed to get mParticle audience memberships: ${ex.getMessage}", ex)

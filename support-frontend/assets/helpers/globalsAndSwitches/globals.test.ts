@@ -37,7 +37,7 @@ describe('getGlobal', () => {
 
 describe('isSwitchOn', () => {
 	beforeEach(() => {
-		storage.session.clear();
+		storage.local.clear();
 		window.guardian = {
 			// @ts-expect-error -- incomplete type
 			settings: {
@@ -55,35 +55,35 @@ describe('isSwitchOn', () => {
 		};
 	});
 
-	it('falls back to the global setting and returns true if no override is present in session storage', () => {
+	it('falls back to the global setting and returns true if no override is present in local storage', () => {
 		expect(isSwitchOn('featureSwitches.myFeature')).toBe(true);
 	});
 
-	it('returns true when the session storage override is "On"', () => {
-		storage.session.set('myFeature', 'On');
+	it('returns true when the local storage override is "On"', () => {
+		storage.local.set('myFeature', 'On');
 		expect(isSwitchOn('featureSwitches.myFeature')).toBe(true);
 	});
 
-	it('returns false when the session storage override is "Off" for myFeature', () => {
-		storage.session.set('myFeature', 'Off');
+	it('returns false when the local storage override is "Off" for myFeature', () => {
+		storage.local.set('myFeature', 'Off');
 		expect(isSwitchOn('featureSwitches.myFeature')).toBe(false);
 	});
 
-	it('falls back to the global setting and returns false if no override is present in session storage', () => {
+	it('falls back to the global setting and returns false if no override is present in local storage', () => {
 		expect(isSwitchOn('featureSwitches.myDisabledFeature')).toBe(false);
 	});
 
-	it('returns true when the session storage override is "On" for myDisabledFeature', () => {
-		storage.session.set('myDisabledFeature', 'On');
+	it('returns true when the local storage override is "On" for myDisabledFeature', () => {
+		storage.local.set('myDisabledFeature', 'On');
 		expect(isSwitchOn('featureSwitches.myDisabledFeature')).toBe(true);
 	});
 
-	it('ignores session storage overrides for non-featureSwitches groups', () => {
-		sessionStorage.setItem('useDotcomContactPage', 'Off');
+	it('ignores local storage overrides for non-featureSwitches groups', () => {
+		storage.local.set('useDotcomContactPage', 'Off');
 		expect(isSwitchOn('subscriptionsSwitches.useDotcomContactPage')).toBe(true);
 	});
 
-	it('returns false when neither session storage nor globals have a value for the switch', () => {
+	it('returns false when neither local storage nor globals have a value for the switch', () => {
 		expect(isSwitchOn('featureSwitches.nonExistentFeature')).toBe(false);
 	});
 });

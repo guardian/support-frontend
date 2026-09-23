@@ -63,9 +63,7 @@ function toEmailPaymentMethod(
 			};
 		case 'CreditCardReferenceTransaction':
 			return { Type: 'CreditCardReferenceTransaction' };
-		case 'PayPal':
 		case 'PayPalCompletePayments':
-		case 'PayPalCompletePaymentsWithBAID':
 			return { Type: 'PayPal' };
 	}
 }

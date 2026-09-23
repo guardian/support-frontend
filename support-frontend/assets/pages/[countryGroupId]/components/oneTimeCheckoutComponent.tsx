@@ -56,11 +56,11 @@ import type {
 	PaymentResult,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import {
+	getStripePaymentMethod,
 	postOneOffPayPalCreatePaymentRequest,
 	processStripePaymentIntentRequest,
 	processStripePaymentIntentRequestForPaypal,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
-import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod as LegacyPaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	isPaymentMethod,
@@ -90,6 +90,7 @@ import { logException } from 'helpers/utilities/logger';
 import {
 	getSanitisedHtml,
 	parseCustomAmounts,
+	replaceMParticleTemplates,
 	roundToDecimalPlaces,
 } from 'helpers/utilities/utilities';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
@@ -189,6 +190,7 @@ type OneTimeCheckoutComponentProps = {
 	nudgeSettings?: CheckoutNudgeSettings;
 	landingPageSettings: LandingPageVariant;
 	oneTimeCheckoutSettings: OneTimeCheckoutVariant;
+	userAttributes: Record<string, unknown>;
 };
 
 function paymentMethodIsActive(paymentMethod: PaymentMethod) {
@@ -201,16 +203,17 @@ function paymentMethodIsActive(paymentMethod: PaymentMethod) {
 
 function getPreSelectedAmount(
 	preSelectedAmountParam: string | null,
+	mParticleAmount: string | undefined,
 	amountChoices: number[],
 ): {
 	preSelectedOtherAmount?: string;
 	preSelectedPriceCard?: number | 'other';
 } {
-	const preSelectedAmount = preSelectedAmountParam
-		? parseInt(preSelectedAmountParam, 10)
-		: undefined;
+	// The URL param takes precedence over the mParticle-derived amount.
+	const rawAmount = preSelectedAmountParam ?? mParticleAmount;
+	const preSelectedAmount = rawAmount ? parseInt(rawAmount, 10) : undefined;
 
-	if (preSelectedAmount === undefined) {
+	if (preSelectedAmount === undefined || Number.isNaN(preSelectedAmount)) {
 		return {
 			preSelectedOtherAmount: undefined,
 			preSelectedPriceCard: undefined,
@@ -268,6 +271,16 @@ function getAcquisitionData(
 	);
 }
 
+function getMParticleAmount(
+	userAttributes: Record<string, unknown>,
+	mParticleAmountAttribute: string,
+): string | undefined {
+	const value = userAttributes[mParticleAmountAttribute];
+	return typeof value === 'string' || typeof value === 'number'
+		? String(value)
+		: undefined;
+}
+
 export function OneTimeCheckoutComponent({
 	supportRegionId,
 	appConfig,
@@ -278,10 +291,21 @@ export function OneTimeCheckoutComponent({
 	nudgeSettings,
 	landingPageSettings,
 	oneTimeCheckoutSettings,
+	userAttributes,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
+	const heading = replaceMParticleTemplates(
+		oneTimeCheckoutSettings.heading,
+		userAttributes,
+		currency,
+	);
+	const subheading = replaceMParticleTemplates(
+		oneTimeCheckoutSettings.subheading,
+		userAttributes,
+		currency,
+	);
 
 	const preSelectedAmountParam = urlSearchParams.get('contribution');
 	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
@@ -308,8 +332,16 @@ export function OneTimeCheckoutComponent({
 	const { amounts, defaultAmount, hideChooseYourAmount } =
 		customAmountsData ?? amountsDataFromOneTimeCheckoutSettings;
 
+	const mParticleAmountAttribute =
+		amountsDataFromOneTimeCheckoutSettings.mParticleAmountAttribute;
+	const mParticleAmount =
+		preSelectedAmountParam || !mParticleAmountAttribute
+			? undefined
+			: getMParticleAmount(userAttributes, mParticleAmountAttribute);
+
 	const { preSelectedPriceCard, preSelectedOtherAmount } = getPreSelectedAmount(
 		preSelectedAmountParam,
+		mParticleAmount,
 		amounts,
 	);
 
@@ -641,29 +673,22 @@ export function OneTimeCheckoutComponent({
 						);
 					}
 				} else {
-					const getStripePaymentMethod = (): StripePaymentMethod => {
-						if (paymentMethod === 'StripeExpressCheckoutElement') {
-							if (stripeExpressCheckoutPaymentType === 'apple_pay') {
-								return 'StripeApplePay';
-							} else {
-								return 'StripePaymentRequestButton';
-							}
-						}
-						if (
-							paymentMethodResult.paymentMethod.type.toLowerCase() === 'paypal'
-						) {
-							if (paymentMethodResult.paymentMethod.paypal === undefined) {
-								logException(
-									'Stripe paymentMethod type is paypal but no paypal field exists',
-								);
-							}
-							return 'StripePaypal';
-						}
-						return 'StripeCheckout';
-					};
+					const paymentMethodType =
+						paymentMethodResult.paymentMethod.type.toLowerCase();
+					if (
+						paymentMethod === 'StripeExpressCheckoutElement' &&
+						(stripeExpressCheckoutPaymentType === 'apple_pay' ||
+							stripeExpressCheckoutPaymentType === 'google_pay') &&
+						paymentMethodType !== 'card'
+					) {
+						logException(
+							`Stripe Express Checkout ${stripeExpressCheckoutPaymentType} produced a ${paymentMethodType} PaymentMethod`,
+						);
+					}
 
-					const stripePaymentMethod: StripePaymentMethod =
-						getStripePaymentMethod();
+					const stripePaymentMethod = getStripePaymentMethod(
+						paymentMethodResult.paymentMethod,
+					);
 
 					const stripeData: CreateStripePaymentIntentRequest = {
 						paymentData: {
@@ -798,7 +823,7 @@ export function OneTimeCheckoutComponent({
 							<h2 css={title}>
 								<span
 									dangerouslySetInnerHTML={{
-										__html: getSanitisedHtml(oneTimeCheckoutSettings.heading),
+										__html: getSanitisedHtml(heading),
 									}}
 								/>
 							</h2>
@@ -810,7 +835,7 @@ export function OneTimeCheckoutComponent({
 						<p css={standFirst}>
 							<span
 								dangerouslySetInnerHTML={{
-									__html: getSanitisedHtml(oneTimeCheckoutSettings.subheading),
+									__html: getSanitisedHtml(subheading),
 								}}
 							/>
 						</p>

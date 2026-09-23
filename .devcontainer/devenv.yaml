@@ -19,10 +19,12 @@ modules:
 
 # Optional: Ports to forward
 forwardPorts:
-  # - "8000:9000"  # hostPort:containerPort
-  - '9211' # same port on host and container
-  - '9210' # same port on host and container
-  - '9001' # same port on host and container
+  # - "8000:9000" # hostPort:containerPort
+  # - "8000" # same port on host and container
+  - '9211' # Webpack
+  - '9210' # Play
+  - '9001' # Storybook
+  - '9500' # Playwright report
 
 # Optional: Extra switches for container generation (passed to `docker create`)
 runArgs:
@@ -55,8 +57,10 @@ postCreateCommand:
 #   - cmd: "echo 'Container started successfully'"
 #     workingDirectory: "."
 
+containerEnv:
+  - name: AWS_PROFILE
+    value: membership
 # Uncomment this if you need to make authenticated requests to GitHub from within the container. 
 # This makes the GITHUB_TOKEN environment variable from the host available within the container.
-# containerEnv:
 #   - name: GITHUB_TOKEN
 #     value: '${localEnv:GITHUB_TOKEN}'

@@ -1,6 +1,6 @@
 import { cmp, onConsent } from '@guardian/consent-manager';
 import { getUser } from 'helpers/user/user';
-import { fetchAudienceMemberships } from '../mparticle';
+import { fetchAudienceData } from '../mparticle';
 
 jest.mock('@guardian/consent-manager', () => ({
 	onConsent: jest.fn(),
@@ -13,7 +13,7 @@ jest.mock('helpers/user/user', () => ({
 	getUser: jest.fn(),
 }));
 
-describe('fetchAudienceMemberships', () => {
+describe('fetchAudienceData', () => {
 	const mockFetch = jest.fn();
 	const mockOnConsent = onConsent as jest.MockedFunction<typeof onConsent>;
 	const mockWillShowPrivacyMessage =
@@ -42,24 +42,24 @@ describe('fetchAudienceMemberships', () => {
 	it('should return empty array when user is not signed in', async () => {
 		mockGetUser.mockReturnValue({ isSignedIn: false });
 
-		const result = await fetchAudienceMemberships();
-		expect(result).toEqual([]);
+		const result = await fetchAudienceData();
+		expect(result).toEqual({ audienceMemberships: [], userAttributes: {} });
 		expect(mockFetch).not.toHaveBeenCalled();
 	});
 
 	it('should return empty array when user does not have targeting consent', async () => {
 		mockOnConsent.mockResolvedValue({ canTarget: false, framework: null });
 
-		const result = await fetchAudienceMemberships();
-		expect(result).toEqual([]);
+		const result = await fetchAudienceData();
+		expect(result).toEqual({ audienceMemberships: [], userAttributes: {} });
 		expect(mockFetch).not.toHaveBeenCalled();
 	});
 
 	it('should return empty array when privacy message will be shown', async () => {
 		mockWillShowPrivacyMessage.mockResolvedValue(true);
 
-		const result = await fetchAudienceMemberships();
-		expect(result).toEqual([]);
+		const result = await fetchAudienceData();
+		expect(result).toEqual({ audienceMemberships: [], userAttributes: {} });
 		expect(mockOnConsent).not.toHaveBeenCalled();
 		expect(mockFetch).not.toHaveBeenCalled();
 	});
@@ -67,22 +67,25 @@ describe('fetchAudienceMemberships', () => {
 	it('should return empty array when consent check throws an error', async () => {
 		mockOnConsent.mockRejectedValueOnce(new Error('Consent error'));
 
-		const result = await fetchAudienceMemberships();
-		expect(result).toEqual([]);
+		const result = await fetchAudienceData();
+		expect(result).toEqual({ audienceMemberships: [], userAttributes: {} });
 		expect(mockFetch).not.toHaveBeenCalled();
 	});
 
 	it('should return audience memberships when fetch succeeds', async () => {
-		const memberships = [123, 456, 789];
+		const audienceData = {
+			audienceMemberships: [123, 456, 789],
+			userAttributes: { appVersion: '1.0' },
+		};
 		mockFetch.mockResolvedValueOnce({
 			ok: true,
-			json: () => ({ audienceMemberships: memberships }),
+			json: () => audienceData,
 		});
 
-		const result = await fetchAudienceMemberships();
-		expect(result).toEqual(memberships);
+		const result = await fetchAudienceData();
+		expect(result).toEqual(audienceData);
 		expect(mockFetch).toHaveBeenCalledWith(
-			'/audience-memberships',
+			'/audience-data',
 			expect.objectContaining({
 				mode: 'cors',
 				credentials: 'include',
@@ -96,29 +99,32 @@ describe('fetchAudienceMemberships', () => {
 			status: 500,
 		});
 
-		const result = await fetchAudienceMemberships();
-		expect(result).toEqual([]);
+		const result = await fetchAudienceData();
+		expect(result).toEqual({ audienceMemberships: [], userAttributes: {} });
 	});
 
 	it('should return empty array when fetch throws an error', async () => {
 		mockFetch.mockRejectedValueOnce(new Error('Network error'));
 
-		const result = await fetchAudienceMemberships();
-		expect(result).toEqual([]);
+		const result = await fetchAudienceData();
+		expect(result).toEqual({ audienceMemberships: [], userAttributes: {} });
 	});
 
 	it('should return empty array on timeout', async () => {
 		jest.useFakeTimers();
 		mockFetch.mockReturnValueOnce(new Promise(() => undefined));
 
-		const resultPromise = fetchAudienceMemberships();
+		const resultPromise = fetchAudienceData();
 		await jest.advanceTimersByTimeAsync(2000);
 		const result = await resultPromise;
-		expect(result).toEqual([]);
+		expect(result).toEqual({ audienceMemberships: [], userAttributes: {} });
 	});
 
 	it('should de-duplicate concurrent requests while a request is in flight', async () => {
-		const memberships = [123, 456];
+		const audienceData = {
+			audienceMemberships: [123, 456],
+			userAttributes: {},
+		};
 		let resolveFetch: (value: unknown) => void = () => undefined;
 		let resolveConsent: (value: {
 			canTarget: boolean;
@@ -135,39 +141,45 @@ describe('fetchAudienceMemberships', () => {
 			}),
 		);
 
-		const firstCall = fetchAudienceMemberships();
-		const secondCall = fetchAudienceMemberships();
+		const firstCall = fetchAudienceData();
+		const secondCall = fetchAudienceData();
 		resolveConsent({ canTarget: true, framework: null });
 		await new Promise((resolve) => setTimeout(resolve, 0));
 
 		expect(mockFetch).toHaveBeenCalledTimes(1);
 
 		resolveFetch({
-			json: () => ({ audienceMemberships: memberships }),
+			json: () => audienceData,
 		});
 
 		const [firstResult, secondResult] = await Promise.all([
 			firstCall,
 			secondCall,
 		]);
-		expect(firstResult).toEqual(memberships);
-		expect(secondResult).toEqual(memberships);
+		expect(firstResult).toEqual(audienceData);
+		expect(secondResult).toEqual(audienceData);
 	});
 
 	it('should clear cache after a successful response', async () => {
 		mockFetch
 			.mockResolvedValueOnce({
-				json: () => ({ audienceMemberships: [111] }),
+				json: () => ({ audienceMemberships: [111], userAttributes: {} }),
 			})
 			.mockResolvedValueOnce({
-				json: () => ({ audienceMemberships: [222] }),
+				json: () => ({ audienceMemberships: [222], userAttributes: {} }),
 			});
 
-		const firstResult = await fetchAudienceMemberships();
-		const secondResult = await fetchAudienceMemberships();
+		const firstResult = await fetchAudienceData();
+		const secondResult = await fetchAudienceData();
 
-		expect(firstResult).toEqual([111]);
-		expect(secondResult).toEqual([222]);
+		expect(firstResult).toEqual({
+			audienceMemberships: [111],
+			userAttributes: {},
+		});
+		expect(secondResult).toEqual({
+			audienceMemberships: [222],
+			userAttributes: {},
+		});
 		expect(mockFetch).toHaveBeenCalledTimes(2);
 	});
 
@@ -175,14 +187,20 @@ describe('fetchAudienceMemberships', () => {
 		mockFetch
 			.mockRejectedValueOnce(new Error('Network error'))
 			.mockResolvedValueOnce({
-				json: () => ({ audienceMemberships: [999] }),
+				json: () => ({ audienceMemberships: [999], userAttributes: {} }),
 			});
 
-		const firstResult = await fetchAudienceMemberships();
-		const secondResult = await fetchAudienceMemberships();
+		const firstResult = await fetchAudienceData();
+		const secondResult = await fetchAudienceData();
 
-		expect(firstResult).toEqual([]);
-		expect(secondResult).toEqual([999]);
+		expect(firstResult).toEqual({
+			audienceMemberships: [],
+			userAttributes: {},
+		});
+		expect(secondResult).toEqual({
+			audienceMemberships: [999],
+			userAttributes: {},
+		});
 		expect(mockFetch).toHaveBeenCalledTimes(2);
 	});
 });

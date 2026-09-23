@@ -224,8 +224,9 @@ function OnboardingHeading({
 				`,
 			},
 			[OnboardingInviteeSteps.DigitalPlus]: {
-				// TODO: replace with final asset when available
-				gridId: 'onboardingFeastAppHero',
+				gridId: windowWidthIsGreaterThan('tablet')
+					? 'onboardingDigitalPlusDiscoveryHero'
+					: 'onboardingDigitalPlusDiscoveryHeroMobile',
 				altText: 'Onboarding invitee digital plus hero',
 				aspectRatio: css`
 					aspect-ratio: 3 / 2;
