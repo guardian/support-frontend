@@ -707,7 +707,11 @@ export function ThreeTierLanding({
 					countryGroupId={countryGroupId}
 				/>
 			</Container>
-			{isStudentBeansRegionValid(supportRegionId, enableStudentBeansEurope) && (
+			{isStudentBeansRegionValid(
+				supportRegionId,
+				enableStudentBeansEurope,
+				urlCountryCode,
+			) && (
 				<Container
 					sideBorders
 					borderColor="rgba(170, 170, 180, 0.5)"
