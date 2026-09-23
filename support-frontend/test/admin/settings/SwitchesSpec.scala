@@ -123,6 +123,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "enableDeepDiscount" : {
           |        "description" : "Enable alternative SupporterPlus card colours and disable Your selection pill copy",
           |        "state" : "Off"
+          |      },
+          |      "enableStudentBeansEurope" : {
+          |        "description" : "Enable StudentBeans Europe (Germany, France, Spain, Ireland, Holland)",
+          |        "state" : "Off"
           |      }
           |    }
           |  },
@@ -177,6 +181,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
             Some(On),
             Some(On),
             Some(On),
+            Some(Off),
             Some(Off),
             Some(Off),
             Some(Off),
