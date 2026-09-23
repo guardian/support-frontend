@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { cmp } from '@guardian/consent-manager';
-import type { CountryCode } from '@guardian/libs';
+import type { CountryCode } from '@modules/internationalisation/country';
 import {
 	from,
 	palette,
