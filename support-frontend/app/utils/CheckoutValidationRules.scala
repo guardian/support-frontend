@@ -45,7 +45,7 @@ object CheckoutValidationRules {
       switches: RecurringPaymentMethodSwitches,
       paymentFields: PaymentFields,
   ) = paymentFields match {
-    case _: PayPalPaymentFields | _: PayPalCompletePaymentsPaymentFields =>
+    case _: PayPalCompletePaymentsPaymentFields =>
       if (switches.payPal.contains(On)) Valid else Invalid("Invalid Payment Method")
     case _: DirectDebitPaymentFields =>
       if (switches.directDebit.contains(On)) Valid else Invalid("Invalid Payment Method")
@@ -193,7 +193,6 @@ object PaidProductValidation {
         directDebitDetails.accountNumber.nonEmpty.otherwise("DD account number missing") and
         directDebitDetails.sortCode.nonEmpty.otherwise("DD sort code missing")
     case _: StripePaymentFields => Valid // already validated in PaymentMethodId.apply
-    case payPalDetails: PayPalPaymentFields => payPalDetails.baid.nonEmpty.otherwise("paypal BAID missing")
     case payPalCPDetails: PayPalCompletePaymentsPaymentFields =>
       payPalCPDetails.paymentToken.nonEmpty.otherwise("paypal payment token missing")
     case _: StripeHostedPaymentFields => Valid

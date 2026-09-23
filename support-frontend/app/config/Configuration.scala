@@ -22,6 +22,8 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val salesTaxConfig = SalesTaxApiConfig.fromConfig(config)
 
+  lazy val promotionsApiConfigProvider = new PromotionsApiConfigProvider(config, stage)
+
   lazy val multipleAccountApiConfig = MultipleAccountApiConfig.fromConfig(config)
 
   lazy val paperRoundConfigProvider = new PaperRoundConfigProvider(config, stage)
@@ -39,8 +41,6 @@ class Configuration(config: TypesafeConfig) {
   lazy val metricUrl = MetricUrl(config.getString("metric.url"))
 
   lazy val goCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
-
-  lazy val regularPayPalConfigProvider = new PayPalConfigProvider(config, stage)
 
   lazy val payPalCompletePaymentsConfigProvider = new PayPalCompletePaymentsConfigProvider(config, stage)
 

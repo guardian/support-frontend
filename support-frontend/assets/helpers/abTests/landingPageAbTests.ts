@@ -42,7 +42,7 @@ export const fallBackLandingPageSelection: LandingPageVariant = {
 				{
 					copy: 'Unlimited access to the Guardian app',
 					tooltip:
-						'Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.',
+						'Read beyond our 10 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.',
 				},
 				{
 					copy: 'Ad-free reading on all your devices',

@@ -34,7 +34,10 @@ object Promotion {
         .renameField("startTimestamp", "starts")
         .renameField("endTimestamp", "expires")
         .checkKeyExists("renewalOnly", Json.fromBoolean(false))
-        .checkKeyExists("tracking", Json.fromBoolean(false)),
+        .checkKeyExists("tracking", Json.fromBoolean(false))
+        // description is optional on promotions-api, unlike the legacy Zuora-embedded promotions this model was
+        // originally shaped for - default it to empty rather than failing to decode.
+        .checkKeyExists("description", Json.fromString("")),
     )
   }
 

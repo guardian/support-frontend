@@ -95,7 +95,6 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     stubControllerComponents(),
     mock[StripePublicConfigProvider],
     mock[StripePublicConfigProvider],
-    mock[PayPalConfigProvider],
     mock[RecaptchaConfigProvider],
     mock[PaymentAPIService],
     "",

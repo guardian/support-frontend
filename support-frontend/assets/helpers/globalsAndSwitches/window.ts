@@ -56,10 +56,6 @@ const PaymentConfigSchema = z.object({
 		ONE_OFF: z.object({ default: z.string(), test: z.string() }),
 		REGULAR: z.object({ default: z.string(), test: z.string() }),
 	}),
-	payPalEnvironment: z.object({
-		default: z.string(),
-		test: z.string(),
-	}),
 	payPalClientId: z.object({
 		default: z.string(),
 		test: z.string(),

@@ -16,7 +16,7 @@ import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSComponents
 import services._
-import services.paypal.{PayPalCompletePaymentsServiceProvider, PayPalNvpServiceProvider}
+import services.paypal.PayPalCompletePaymentsServiceProvider
 import services.pricing.{DefaultPromotionServiceS3, PriceSummaryServiceProvider}
 import services.stepfunctions.{StateWrapper, SupportWorkersClient}
 import services.mparticle.MParticleClient
@@ -41,8 +41,6 @@ trait Services {
       config = IORuntimeConfig(),
     )
   }
-
-  lazy val payPalNvpServiceProvider = new PayPalNvpServiceProvider(appConfig.regularPayPalConfigProvider, wsClient)
 
   lazy val payPalCompletePaymentsServiceProvider =
     new PayPalCompletePaymentsServiceProvider(
@@ -158,6 +156,14 @@ trait Services {
     new CachedProductCatalogServiceProvider(
       codeCachedProductCatalogService = new CachedProductCatalogService(actorSystem, codeProductCatalogService),
       prodCachedProductCatalogService = new CachedProductCatalogService(actorSystem, prodProductCatalogService),
+    )
+
+  lazy val cachedPromotionsServiceProvider: CachedPromotionsServiceProvider =
+    new CachedPromotionsServiceProvider(
+      appConfig.promotionsApiConfigProvider,
+      actorSystem,
+      defaultPromotionService,
+      RequestRunners.futureRunner,
     )
 
   lazy val cachedSalesTaxService: CachedSalesTaxService = {
