@@ -50,15 +50,15 @@ const routes = {
 	supporterPlusStudentBeansCa:
 		'https://www.studentbeans.com/en-ca/ca/beansid-connect/hosted/the-guardian-digital/student/362bcbd6-b491-4adf-8ca1-9f0c9f69c3b7',
 	supporterPlusStudentBeansDe:
-		'https://support.theguardian.com/eu/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false&country=DE',
+		'/eu/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false&country=DE',
 	supporterPlusStudentBeansFr:
-		'https://support.theguardian.com/eu/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false&country=FR',
+		'/eu/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false&country=FR',
 	supporterPlusStudentBeansEs:
-		'https://support.theguardian.com/eu/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false&country=ES',
+		'/eu/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false&country=ES',
 	supporterPlusStudentBeansIe:
-		'https://support.theguardian.com/eu/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false&country=IE',
+		'/eu/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false&country=IE',
 	supporterPlusStudentBeansNl:
-		'https://support.theguardian.com/eu/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false&country=NL',
+		'/eu/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false&country=NL',
 	postcodeLookup: '/postcode-lookup',
 	expressPostcodeLookup: '/api/postcode-lookup',
 	createSignInUrl: '/identity/signin-url',
