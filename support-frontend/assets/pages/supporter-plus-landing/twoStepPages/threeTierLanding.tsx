@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { cmp } from '@guardian/consent-manager';
-import type { CountryCode } from '@modules/internationalisation/country';
 import {
 	from,
 	palette,
@@ -14,6 +13,7 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
+import type { CountryCode } from '@modules/internationalisation/country';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
