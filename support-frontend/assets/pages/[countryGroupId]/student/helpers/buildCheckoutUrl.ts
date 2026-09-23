@@ -36,7 +36,7 @@ export default function buildCheckoutUrl(
 			case SupportRegionId.CA:
 				return routes.supporterPlusStudentBeansCa;
 			case SupportRegionId.EU: {
-				switch (geoCountryOverride ?? Country.detect(geoCountryOverride)) {
+				switch (geoCountryOverride ?? Country.detect()) {
 					case 'DE':
 						return routes.supporterPlusStudentBeansDe;
 					case 'FR':
