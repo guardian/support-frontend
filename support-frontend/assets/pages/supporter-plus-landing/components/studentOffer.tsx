@@ -123,13 +123,15 @@ export function StudentOffer({
 		return <></>;
 	}
 	const productLabel = getProductLabel('SupporterPlus');
-	const euCountry = isStudentBeansRegionValid(
-		supportRegionId,
-		enableStudentBeansEurope,
-		countryCode,
-	)
-		? `?country=${countryCode}`
-		: '';
+	const euCountry =
+		countryCode &&
+		isStudentBeansRegionValid(
+			supportRegionId,
+			enableStudentBeansEurope,
+			countryCode,
+		)
+			? `?country=${countryCode}`
+			: '';
 	const url = `/${countryGroups[countryGroupId].supportRegionId}/student${euCountry}`;
 	return (
 		<>
