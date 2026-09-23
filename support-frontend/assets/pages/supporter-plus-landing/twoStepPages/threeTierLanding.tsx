@@ -719,7 +719,8 @@ export function ThreeTierLanding({
 				>
 					<StudentOffer
 						currencyKey={currencyId}
-						countryGroupId={countryGroupId}
+						supportRegionId={supportRegionId}
+						enableStudentBeansEurope={enableStudentBeansEurope}
 						countryCode={urlCountryCode}
 					/>
 				</Container>
