@@ -49,8 +49,11 @@ export function StudentLandingPage({
 		selectedCountryGroup: countryGroupId,
 		subPath: '/student',
 	};
+	const isSelectedInGroupCountryIds =
+		countrySwitcherProps.countryGroupIds.includes(countryGroupId);
+
 	const showCountrySwitcher =
-		!enableStudentBeansEurope &&
+		(isSelectedInGroupCountryIds || !enableStudentBeansEurope) &&
 		supportRegionId !== SupportRegionId.AU &&
 		countrySwitcherProps.countryGroupIds.length > 1;
 
