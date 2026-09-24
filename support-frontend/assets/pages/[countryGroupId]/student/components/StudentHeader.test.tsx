@@ -47,6 +47,7 @@ describe('<StudentHeader />', () => {
 				headingCopy="Example heading"
 				subheadingCopy="Example subheading"
 				heroImagePrefix="globalStudentLandingHero"
+				enableStudentBeansEurope={true}
 			/>,
 		);
 		expect(screen.getByTestId('cta-button')).toHaveTextContent('Subscribe');
@@ -63,6 +64,7 @@ describe('<StudentHeader />', () => {
 				headingCopy="Example heading"
 				subheadingCopy="Example subheading"
 				heroImagePrefix="globalStudentLandingHero"
+				enableStudentBeansEurope={true}
 			/>,
 		);
 		expect(screen.getByTestId('cta-button')).toHaveTextContent(
@@ -81,6 +83,7 @@ describe('<StudentHeader />', () => {
 				headingCopy="Example heading"
 				subheadingCopy="Example subheading"
 				heroImagePrefix="globalStudentLandingHero"
+				enableStudentBeansEurope={true}
 			/>,
 		);
 		expect(

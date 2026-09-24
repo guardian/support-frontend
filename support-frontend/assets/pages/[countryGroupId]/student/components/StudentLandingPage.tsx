@@ -2,8 +2,10 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	Canada,
+	EURCountries,
 	GBPCountries,
 	SupportRegionId,
 	UnitedStates,
@@ -15,6 +17,7 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { Institution } from 'helpers/globalsAndSwitches/studentLandingPageSettings';
+import { isStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
 import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 import { AccordionFAQ } from '../../components/accordionFAQ';
 import { getStudentFAQs } from '../helpers/studentFAQs';
@@ -30,6 +33,7 @@ type StudentLandingPageProps = {
 	header: JSX.Element;
 	brandAwareness?: JSX.Element;
 	institution?: Institution;
+	enableStudentBeansEurope: boolean;
 };
 
 export function StudentLandingPage({
@@ -37,13 +41,19 @@ export function StudentLandingPage({
 	header,
 	brandAwareness,
 	institution,
+	enableStudentBeansEurope,
 }: StudentLandingPageProps) {
 	const faqItems = getStudentFAQs(supportRegionId, institution);
 	const tsAndCsItem = getStudentTsAndCs(supportRegionId, institution);
 
 	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
+	const countryGroupIds: CountryGroupId[] =
+		enableStudentBeansEurope &&
+		isStudentBeansRegionValid(supportRegionId, enableStudentBeansEurope)
+			? [GBPCountries, UnitedStates, EURCountries, Canada]
+			: [GBPCountries, UnitedStates, Canada];
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
-		countryGroupIds: [GBPCountries, UnitedStates, Canada],
+		countryGroupIds: countryGroupIds,
 		selectedCountryGroup: countryGroupId,
 		subPath: '/student',
 	};

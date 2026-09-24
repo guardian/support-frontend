@@ -8,6 +8,7 @@ describe('StudentLandingPage', () => {
 			<StudentLandingPage
 				supportRegionId={SupportRegionId.UK}
 				header={<div>My header</div>}
+				enableStudentBeansEurope={true}
 			/>,
 		);
 		const countrySwitcherhButton = screen.getByLabelText('Select a country');
@@ -19,6 +20,7 @@ describe('StudentLandingPage', () => {
 			<StudentLandingPage
 				supportRegionId={SupportRegionId.AU}
 				header={<div>My header</div>}
+				enableStudentBeansEurope={true}
 			/>,
 		);
 		const countrySwitcherhButton = screen.queryByLabelText('Select a country');
