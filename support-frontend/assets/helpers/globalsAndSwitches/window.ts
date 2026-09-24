@@ -26,7 +26,6 @@ const featureSwitchesSchema = z.object({
 	enableThankYouOnboarding: z.optional(z.enum(['On', 'Off'])),
 	enableCheckoutNudge: z.optional(z.enum(['On', 'Off'])),
 	enableMParticle: z.optional(z.enum(['On', 'Off'])),
-	enableCanadaTaxExclusion: z.optional(z.enum(['On', 'Off'])),
 	enableDeepDiscount: z.optional(z.enum(['On', 'Off'])),
 });
 
