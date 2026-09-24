@@ -4,40 +4,15 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { getProductDescription } from 'helpers/productCatalog';
-import {
-	DigitalPack,
-	GuardianWeekly,
-	Paper,
-} from 'helpers/productPrice/subscriptions';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 
 type CatalogRatePlan =
 	PromoWithCatalogInformation['appliesTo']['catalogRatePlans'][number];
 
-// Maps a product catalog key onto the small set of products this page distinguishes between.
-function subscriptionProductForCatalogKey(
-	productKey: string,
-): SubscriptionProduct {
-	if (productKey === 'DigitalSubscription') {
-		return DigitalPack;
-	}
-	if (
-		productKey === 'GuardianWeeklyDomestic' ||
-		productKey === 'GuardianWeeklyRestOfWorld'
-	) {
-		return GuardianWeekly;
-	}
-	return Paper;
-}
-
-/** Derives the small set of products this page distinguishes between from the first matching catalog rate plan. */
-export function getSubscriptionProduct(
+/** The catalog product key of the first matching rate plan, used to branch UI by product. */
+export function getProductKey(
 	catalogRatePlans: CatalogRatePlan[],
-): SubscriptionProduct {
-	const [firstMatch] = catalogRatePlans;
-	return firstMatch
-		? subscriptionProductForCatalogKey(firstMatch.productKey)
-		: DigitalPack;
+): ActiveProductKey | undefined {
+	return catalogRatePlans[0]?.productKey as ActiveProductKey | undefined;
 }
 
 /** A promotion is treated as gift-only if every matching rate plan is a gift rate plan. */

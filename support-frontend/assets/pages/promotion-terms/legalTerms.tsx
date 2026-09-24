@@ -1,32 +1,30 @@
 import Content from 'components/content/content';
 import Divider from 'components/content/Divider';
 import { Title } from 'components/text/text';
-import {
-	DigitalPack,
-	GuardianWeekly,
-} from 'helpers/productPrice/subscriptions';
 import DigitalPackTerms from 'pages/promotion-terms/DigitalPackTerms';
 import PaperTerms from 'pages/promotion-terms/PaperTerms';
 import WeeklyTerms from 'pages/promotion-terms/weeklyTerms';
-import { getSubscriptionProduct } from './promotionSelectors';
+import { getProductKey } from './promotionSelectors';
 import type { PromotionTermsPropTypes } from './promotionTermsPropTypes';
 
 const getTermsForProduct = (props: PromotionTermsPropTypes) => {
 	const { promotion } = props;
-	const product = promotion
-		? getSubscriptionProduct(promotion.appliesTo.catalogRatePlans)
-		: DigitalPack;
+	const productKey = promotion
+		? getProductKey(promotion.appliesTo.catalogRatePlans)
+		: undefined;
 	const starts = promotion ? new Date(promotion.startTimestamp) : new Date();
 	const expires = promotion?.endTimestamp
 		? new Date(promotion.endTimestamp)
 		: null;
 	const promoCode = promotion?.promoCode ?? '';
 
-	switch (product) {
-		case GuardianWeekly:
+	switch (productKey) {
+		case 'GuardianWeeklyDomestic':
+		case 'GuardianWeeklyRestOfWorld':
 			return <WeeklyTerms />;
 
-		case DigitalPack:
+		case 'DigitalSubscription':
+		case undefined:
 			return (
 				<DigitalPackTerms
 					starts={starts}

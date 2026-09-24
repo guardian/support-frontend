@@ -7,14 +7,10 @@ import {
 	getAbParticipations,
 	setUpTrackingAndConsents,
 } from 'helpers/page/page';
-import {
-	DigitalPack,
-	GuardianWeekly,
-} from 'helpers/productPrice/subscriptions';
 import { renderPage } from 'helpers/rendering/render';
 import LegalTerms from 'pages/promotion-terms/legalTerms';
 import PromoDetails from 'pages/promotion-terms/promoDetails';
-import { getSubscriptionProduct } from './promotionSelectors';
+import { getProductKey } from './promotionSelectors';
 import type { PromotionTermsPropTypes } from './promotionTermsPropTypes';
 
 setUpTrackingAndConsents(getAbParticipations());
@@ -24,10 +20,13 @@ function getTermsConditionsLink(promotion?: PromoWithCatalogInformation) {
 		return '';
 	}
 
-	const product = getSubscriptionProduct(promotion.appliesTo.catalogRatePlans);
-	if (product === DigitalPack) {
+	const productKey = getProductKey(promotion.appliesTo.catalogRatePlans);
+	if (productKey === 'DigitalSubscription') {
 		return 'https://www.theguardian.com/digital-subscriptions-terms-conditions';
-	} else if (product === GuardianWeekly) {
+	} else if (
+		productKey === 'GuardianWeeklyDomestic' ||
+		productKey === 'GuardianWeeklyRestOfWorld'
+	) {
 		return 'https://www.theguardian.com/guardian-weekly-subscription-terms-conditions';
 	}
 

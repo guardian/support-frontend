@@ -9,28 +9,28 @@ import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema'
 import Content from 'components/content/content';
 import { List } from 'components/list/list';
 import { LargeParagraph, Title } from 'components/text/text';
-import { DigitalPack, Paper } from 'helpers/productPrice/subscriptions';
 import { routes } from 'helpers/urls/routes';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import {
+	getProductKey,
 	getProductRatePlanDescriptions,
-	getSubscriptionProduct,
 	isGiftPromotion,
 } from './promotionSelectors';
 
 const landingPageForProduct = (promotion: PromoWithCatalogInformation) => {
-	const product = getSubscriptionProduct(promotion.appliesTo.catalogRatePlans);
-	switch (product) {
-		case DigitalPack:
+	const productKey = getProductKey(promotion.appliesTo.catalogRatePlans);
+	switch (productKey) {
+		case 'DigitalSubscription':
 			return routes.digitalSubscriptionLanding;
 
-		case Paper:
-			return routes.paperSubscriptionLanding;
-
-		default:
+		case 'GuardianWeeklyDomestic':
+		case 'GuardianWeeklyRestOfWorld':
 			return isGiftPromotion(promotion.appliesTo.catalogRatePlans)
 				? routes.guardianWeeklySubscriptionLandingGift
 				: routes.guardianWeeklySubscriptionLanding;
+
+		default:
+			return routes.paperSubscriptionLanding;
 	}
 };
 
