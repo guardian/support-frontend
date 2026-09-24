@@ -52,9 +52,6 @@ class Promotions(
     val mainElement = EmptyDiv("promotion-terms")
     val js = RefPath("promotionTerms.js")
 
-    // Promotion sourced from promotions-api via CachedPromotionsService - see guardian/support-frontend#8207.
-    // This is now the sole source of truth for this page - the legacy productPrices/promotionTerms models
-    // (derived from Zuora-catalog-embedded promotions) are no longer injected here.
     cachedPromotionsServiceProvider
       .forUser(isTestUser = false)
       .get(promoCode)
@@ -103,11 +100,7 @@ object Promotions {
   )
   private val paperProductKeys = Set("HomeDelivery", "NationalDelivery", "NewspaperVoucher", "SubscriptionCard")
 
-  /** Maps the catalog rate plans a promotion applies to onto the redirect path for its product's landing page.
-    *
-    * Mirrors the client-side `productForCatalogKey` mapping in assets/pages/promotion-terms/promotionTerms.tsx, but
-    * works directly off the promotions-api's catalog product/rate-plan keys and returns the redirect URL itself, rather
-    * than going via the legacy `Product` domain type - see guardian/support-frontend#8207.
+  /** Maps the catalog rate plans onto the redirect path for its product's landing page.
     */
   def redirectPathForCatalogRatePlans(catalogRatePlans: List[CatalogRatePlan]): String = {
     val productKeys = catalogRatePlans.map(_.productKey).toSet
