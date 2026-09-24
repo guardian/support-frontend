@@ -22,7 +22,6 @@ const getTermsForProduct = (props: PromotionTermsPropTypes) => {
 			return <WeeklyTerms />;
 
 		case 'DigitalSubscription':
-		case undefined:
 			return (
 				<DigitalPackTerms
 					starts={starts}
