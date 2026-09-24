@@ -28,7 +28,7 @@ describe('useRatePlanKey', () => {
 		});
 	});
 
-	it('appends TaxExclusive for Canada when the switch is enabled', () => {
+	it('appends TaxExclusive for Canada', () => {
 		const { result } = renderHook(() =>
 			useRatePlanKey('ANNUAL', SupportRegionId.CA),
 		);
