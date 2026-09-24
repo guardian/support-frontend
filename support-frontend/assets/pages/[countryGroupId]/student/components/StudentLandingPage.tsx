@@ -2,20 +2,10 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
-import {
-	Canada,
-	GBPCountries,
-	SupportRegionId,
-	UnitedStates,
-} from '@modules/internationalisation/countryGroup';
-import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
-import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
-import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
-import { Header } from 'components/headers/simpleHeader/simpleHeader';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { Container } from 'components/layout/container';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { Institution } from 'helpers/globalsAndSwitches/studentLandingPageSettings';
-import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 import { AccordionFAQ } from '../../components/accordionFAQ';
 import { getStudentFAQs } from '../helpers/studentFAQs';
 import { getStudentTsAndCs } from '../helpers/studentTsAndCsCopy';
@@ -30,7 +20,6 @@ type StudentLandingPageProps = {
 	header: JSX.Element;
 	brandAwareness?: JSX.Element;
 	institution?: Institution;
-	enableStudentBeansEurope: boolean;
 };
 
 export function StudentLandingPage({
@@ -38,36 +27,11 @@ export function StudentLandingPage({
 	header,
 	brandAwareness,
 	institution,
-	enableStudentBeansEurope,
 }: StudentLandingPageProps) {
 	const faqItems = getStudentFAQs(supportRegionId, institution);
 	const tsAndCsItem = getStudentTsAndCs(supportRegionId, institution);
-
-	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
-	const countrySwitcherProps: CountryGroupSwitcherProps = {
-		countryGroupIds: [GBPCountries, UnitedStates, Canada],
-		selectedCountryGroup: countryGroupId,
-		subPath: '/student',
-	};
-	const isSelectedInGroupCountryIds =
-		countrySwitcherProps.countryGroupIds.includes(countryGroupId);
-
-	const showCountrySwitcher =
-		(isSelectedInGroupCountryIds || !enableStudentBeansEurope) &&
-		supportRegionId !== SupportRegionId.AU &&
-		countrySwitcherProps.countryGroupIds.length > 1;
-
 	return (
 		<PageScaffold
-			header={
-				<Header>
-					{showCountrySwitcher && (
-						<CountrySwitcherContainer>
-							<CountryGroupSwitcher {...countrySwitcherProps} />
-						</CountrySwitcherContainer>
-					)}
-				</Header>
-			}
 			footer={
 				<FooterWithContents>
 					<FooterLinks />

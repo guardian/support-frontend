@@ -71,7 +71,6 @@ export function StudentLandingPageInstitution({
 					heroImagePrefix="AuStudentLandingHero"
 				/>
 			}
-			enableStudentBeansEurope={false}
 			institution={studentLandingPageVariant.institution}
 		/>
 	);

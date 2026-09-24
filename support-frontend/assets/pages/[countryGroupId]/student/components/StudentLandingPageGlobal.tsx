@@ -49,7 +49,6 @@ export function StudentLandingPageGlobal({
 					enableStudentBeansEurope={enableStudentBeansEurope}
 				/>
 			}
-			enableStudentBeansEurope={enableStudentBeansEurope}
 			brandAwareness={<StudentBrandAwareness />}
 		/>
 	);
