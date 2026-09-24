@@ -3,6 +3,7 @@ import {
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { Institution } from 'helpers/globalsAndSwitches/studentLandingPageSettings';
@@ -32,6 +33,7 @@ export function StudentLandingPage({
 	const tsAndCsItem = getStudentTsAndCs(supportRegionId, institution);
 	return (
 		<PageScaffold
+			header={<Header />}
 			footer={
 				<FooterWithContents>
 					<FooterLinks />
