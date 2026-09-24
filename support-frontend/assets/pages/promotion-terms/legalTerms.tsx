@@ -9,14 +9,12 @@ import type { PromotionTermsPropTypes } from './promotionTermsPropTypes';
 
 const getTermsForProduct = (props: PromotionTermsPropTypes) => {
 	const { promotion } = props;
-	const productKey = promotion
-		? getProductKey(promotion.appliesTo.catalogRatePlans)
-		: undefined;
-	const starts = promotion ? new Date(promotion.startTimestamp) : new Date();
-	const expires = promotion?.endTimestamp
+	const productKey = getProductKey(promotion.appliesTo.catalogRatePlans);
+	const starts = new Date(promotion.startTimestamp);
+	const expires = promotion.endTimestamp
 		? new Date(promotion.endTimestamp)
 		: null;
-	const promoCode = promotion?.promoCode ?? '';
+	const promoCode = promotion.promoCode;
 
 	switch (productKey) {
 		case 'GuardianWeeklyDomestic':

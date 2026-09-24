@@ -45,11 +45,11 @@ const buttonStyle = css`
 `;
 
 type PropTypes = {
-	promotion?: PromoWithCatalogInformation;
+	promotion: PromoWithCatalogInformation;
 };
 
 export default function PromoDetails({ promotion }: PropTypes): JSX.Element {
-	const expires = promotion?.endTimestamp
+	const expires = promotion.endTimestamp
 		? new Date(promotion.endTimestamp)
 		: null;
 	const validUntil = expires ? (
@@ -57,15 +57,15 @@ export default function PromoDetails({ promotion }: PropTypes): JSX.Element {
 			<strong>Valid until:</strong> {formatUserDate(expires)}
 		</LargeParagraph>
 	) : null;
-	const productRatePlans = promotion
-		? getProductRatePlanDescriptions(promotion.appliesTo.catalogRatePlans)
-		: [];
+	const productRatePlans = getProductRatePlanDescriptions(
+		promotion.appliesTo.catalogRatePlans,
+	);
 
 	return (
 		<Content>
-			<Title>Promotional code: {promotion?.promoCode ?? ''}</Title>
+			<Title>Promotional code: {promotion.promoCode}</Title>
 			<LargeParagraph>
-				<strong>Promotion details:</strong> {promotion?.description ?? ''}
+				<strong>Promotion details:</strong> {promotion.description}
 			</LargeParagraph>
 			{validUntil}
 			<LargeParagraph>
@@ -82,13 +82,9 @@ export default function PromoDetails({ promotion }: PropTypes): JSX.Element {
 			</LargeParagraph>
 			<div css={buttonStyle}>
 				<LinkButton
-					href={
-						promotion
-							? `${landingPageForProduct(promotion)}?promoCode=${
-									promotion.promoCode
-							  }`
-							: '#'
-					}
+					href={`${landingPageForProduct(promotion)}?promoCode=${
+						promotion.promoCode
+					}`}
 					theme={themeButtonReaderRevenueBrand}
 					icon={<SvgArrowRightStraight />}
 					iconSide="right"

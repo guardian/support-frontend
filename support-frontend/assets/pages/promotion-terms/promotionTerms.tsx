@@ -15,11 +15,7 @@ import type { PromotionTermsPropTypes } from './promotionTermsPropTypes';
 
 setUpTrackingAndConsents(getAbParticipations());
 
-function getTermsConditionsLink(promotion?: PromoWithCatalogInformation) {
-	if (!promotion) {
-		return '';
-	}
-
+function getTermsConditionsLink(promotion: PromoWithCatalogInformation) {
 	const productKey = getProductKey(promotion.appliesTo.catalogRatePlans);
 	if (productKey === 'DigitalSubscription') {
 		return 'https://www.theguardian.com/digital-subscriptions-terms-conditions';
@@ -35,6 +31,13 @@ function getTermsConditionsLink(promotion?: PromoWithCatalogInformation) {
 
 function getPromotionTermsProps(): PromotionTermsPropTypes {
 	const [promotion] = window.guardian.promotions ?? [];
+
+	// The server only ever renders this page's JS when a valid promotion was found
+	// (see controllers.Promotions.terms), so window.guardian.promotions is always
+	// populated with exactly one entry here.
+	if (!promotion) {
+		throw new Error('window.guardian.promotions was not populated');
+	}
 
 	return {
 		promotion,
