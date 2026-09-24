@@ -28,9 +28,6 @@ case class Promotion(
 object Promotion {
   import com.gu.support.encoding.CustomCodecs.ISODate.decodeDateTime
   implicit val decoder: Decoder[Promotion] = deriveDecoder[Promotion].prepare(mapFields)
-
-  // Used to inject Promotions fetched from CachedPromotionsService onto window.guardian - see
-  // guardian/support-frontend#8207.
   implicit val encoder: Encoder[Promotion] = deriveEncoder
 
   private def mapFields(c: ACursor) = c.withFocus {

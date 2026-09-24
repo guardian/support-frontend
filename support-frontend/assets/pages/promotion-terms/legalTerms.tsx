@@ -13,7 +13,7 @@ const getTermsForProduct = (props: PromotionTermsPropTypes) => {
 	const starts = new Date(promotion.startTimestamp);
 	const expires = promotion.endTimestamp
 		? new Date(promotion.endTimestamp)
-		: null;
+		: undefined;
 	const promoCode = promotion.promoCode;
 
 	switch (productKey) {

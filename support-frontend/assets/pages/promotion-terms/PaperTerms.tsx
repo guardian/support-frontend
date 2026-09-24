@@ -1,11 +1,10 @@
 import OrderedList from 'components/list/orderedList';
-import type { Option } from 'helpers/types/option';
 import { paperSubsUrl } from 'helpers/urls/routes';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 
 type PropTypes = {
 	starts: Date;
-	expires: Option<Date>;
+	expires: Date | undefined;
 	promoCode: string;
 };
 export default function PaperTerms(props: PropTypes) {

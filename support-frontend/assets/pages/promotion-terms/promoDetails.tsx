@@ -51,7 +51,7 @@ type PropTypes = {
 export default function PromoDetails({ promotion }: PropTypes): JSX.Element {
 	const expires = promotion.endTimestamp
 		? new Date(promotion.endTimestamp)
-		: null;
+		: undefined;
 	const validUntil = expires ? (
 		<LargeParagraph>
 			<strong>Valid until:</strong> {formatUserDate(expires)}
