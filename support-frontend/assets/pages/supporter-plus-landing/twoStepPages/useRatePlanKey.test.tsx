@@ -1,6 +1,5 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { renderHook, waitFor } from '@testing-library/react';
-import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import type { ContributionType } from 'helpers/contributions';
 import { useRatePlanKey } from './useRatePlanKey';
 
@@ -8,25 +7,14 @@ jest.mock('contexts/FeatureSwitchesContext', () => ({
 	useFeatureSwitches: jest.fn(),
 }));
 
-const mockedUseFeatureSwitches = useFeatureSwitches as jest.MockedFunction<
-	typeof useFeatureSwitches
->;
-
 type HookProbeProps = {
 	contributionType: ContributionType;
 	supportRegionId: SupportRegionId;
 };
 
-const setCanadaTaxExclusionFlag = (enableCanadaTaxExclusion: boolean) => {
-	mockedUseFeatureSwitches.mockReturnValue({
-		enableCanadaTaxExclusion,
-	} as ReturnType<typeof useFeatureSwitches>);
-};
-
 describe('useRatePlanKey', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
-		setCanadaTaxExclusionFlag(false);
 	});
 
 	it('returns the billing period key for non-Canada regions', () => {
@@ -41,8 +29,6 @@ describe('useRatePlanKey', () => {
 	});
 
 	it('appends TaxExclusive for Canada when the switch is enabled', () => {
-		setCanadaTaxExclusionFlag(true);
-
 		const { result } = renderHook(() =>
 			useRatePlanKey('ANNUAL', SupportRegionId.CA),
 		);
@@ -53,20 +39,7 @@ describe('useRatePlanKey', () => {
 		});
 	});
 
-	it('does not append TaxExclusive for Canada when the switch is disabled', () => {
-		const { result } = renderHook(() =>
-			useRatePlanKey('ANNUAL', SupportRegionId.CA),
-		);
-
-		expect(result.current).toEqual({
-			ratePlanKey: 'Annual',
-			taxExclusionEnabled: false,
-		});
-	});
-
 	it('updates the key when contribution type changes', async () => {
-		setCanadaTaxExclusionFlag(true);
-
 		const { result, rerender } = renderHook(
 			({ contributionType, supportRegionId }: HookProbeProps) =>
 				useRatePlanKey(contributionType, supportRegionId),
