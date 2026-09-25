@@ -11,6 +11,7 @@ type Props = {
 	supportRegionId: SupportRegionId;
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
+	enableStudentBeansEurope: boolean;
 };
 
 const countryId: CountryCode = Country.detect();
@@ -19,6 +20,7 @@ export function LandingPage({
 	supportRegionId,
 	abParticipations,
 	landingPageSettings,
+	enableStudentBeansEurope,
 }: Props) {
 	const inThreeTier = !isContributionsOnlyCountry(countryId);
 
@@ -28,6 +30,7 @@ export function LandingPage({
 				supportRegionId={supportRegionId}
 				abParticipations={abParticipations}
 				settings={landingPageSettings}
+				enableStudentBeansEurope={enableStudentBeansEurope}
 			/>
 		);
 	} else {

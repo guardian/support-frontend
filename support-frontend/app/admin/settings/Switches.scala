@@ -31,6 +31,7 @@ case class FeatureSwitches(
     enableTooledStudentLandingPage: Option[SwitchState],
     enableStripePaymentElement: Option[SwitchState],
     enableDeepDiscount: Option[SwitchState],
+    enableStudentBeansEurope: Option[SwitchState],
 )
 
 object FeatureSwitches {
