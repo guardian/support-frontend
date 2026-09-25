@@ -548,7 +548,7 @@ export function ThreeTierLanding({
 	const forceWeeklyPricing = urlSearchParams.get('force-weekly') === 'true';
 	const showWeeklyPrice =
 		forceWeeklyPricing || settings.name.includes('WEEKLY_PRICE');
-	const urlCountryCode = Country.detect();
+	const countryCode = Country.detect();
 
 	return (
 		<PageScaffold
@@ -707,8 +707,8 @@ export function ThreeTierLanding({
 			</Container>
 			{isStudentBeansRegionValid(
 				supportRegionId,
+				countryCode,
 				enableStudentBeansEurope,
-				urlCountryCode,
 			) && (
 				<Container
 					sideBorders
