@@ -293,10 +293,10 @@ function OnboardingSummary({
 	const paymentMethodCopy = isDirectDebit
 		? 'Direct Debit'
 		: isPaypal
-			? 'PayPal'
-			: isStripeCard
-				? 'Credit/Debit card'
-				: 'Your selected payment method';
+		? 'PayPal'
+		: isStripeCard
+		? 'Credit/Debit card'
+		: 'Your selected payment method';
 
 	const paymentMethod =
 		order?.accountNumber && isDirectDebit
