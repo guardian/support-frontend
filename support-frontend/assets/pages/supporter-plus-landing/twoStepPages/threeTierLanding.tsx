@@ -73,6 +73,7 @@ import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
 import { ThreeTierLandingHeading } from './threeTierLandingHeading';
 import { TickerContainer } from './tickerContainer';
 import { getRatePlanKey, useRatePlanKey } from './useRatePlanKey';
+import { useThreeTierUrlSelection } from './useThreeTierUrlSelection';
 
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
@@ -207,11 +208,10 @@ const links = [
 ];
 
 const isCardUserSelected = (
+	urlSelectedAmount: string | null,
 	cardPrice: number,
 	cardPriceDiscount?: number,
 ): boolean => {
-	const urlParams = new URLSearchParams(window.location.search);
-	const urlSelectedAmount = urlParams.get('selected-amount');
 	const hasUrlSelectedAmount = !isNaN(Number(urlSelectedAmount));
 	if (!hasUrlSelectedAmount) {
 		return false;
@@ -280,12 +280,12 @@ export function ThreeTierLanding({
 	supportRegionId,
 	settings,
 }: ThreeTierLandingProps): JSX.Element {
-	const urlSearchParams = new URLSearchParams(window.location.search);
-	const rawUrlSearchParamsProduct = urlSearchParams.get('product');
-	const urlSearchParamsProduct = rawUrlSearchParamsProduct
-		? rawUrlSearchParamsProduct.toLowerCase()
-		: undefined;
-	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
+	const {
+		product: urlSearchParamsProduct,
+		ratePlan: urlSearchParamsRatePlan,
+		selectedAmount: urlSelectedAmount,
+		forceWeeklyPricing,
+	} = useThreeTierUrlSelection();
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const countryId = Country.detect();
@@ -317,10 +317,9 @@ export function ThreeTierLanding({
 
 	const getInitialContributionType = (): ContributionType => {
 		// 1. Query Parameters take precedence
-		const ratePlanParam = urlSearchParamsRatePlan?.trim().toLowerCase();
-		if (ratePlanParam === 'annual') {
+		if (urlSearchParamsRatePlan === 'annual') {
 			return 'ANNUAL';
-		} else if (ratePlanParam === 'monthly') {
+		} else if (urlSearchParamsRatePlan === 'monthly') {
 			return 'MONTHLY';
 		}
 
@@ -377,7 +376,7 @@ export function ThreeTierLanding({
 	) => {
 		return (
 			urlSearchParamsProduct === productKey.toLowerCase() ||
-			isCardUserSelected(productPrice, promotionAmount)
+			isCardUserSelected(urlSelectedAmount, productPrice, promotionAmount)
 		);
 	};
 
@@ -545,7 +544,6 @@ export function ThreeTierLanding({
 		...tier3ProductDescription,
 	};
 
-	const forceWeeklyPricing = urlSearchParams.get('force-weekly') === 'true';
 	const showWeeklyPrice =
 		forceWeeklyPricing || settings.name.includes('WEEKLY_PRICE');
 
