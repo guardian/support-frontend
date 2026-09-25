@@ -64,7 +64,6 @@ export default function StudentHeader({
 		productKey,
 		ratePlanKey,
 		enableStudentBeansEurope,
-		undefined,
 		promoCode,
 	);
 

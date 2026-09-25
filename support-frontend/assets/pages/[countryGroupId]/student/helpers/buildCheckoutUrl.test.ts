@@ -26,7 +26,6 @@ describe('buildCheckoutUrl', () => {
 				productKey,
 				ratePlanKey,
 				true,
-				undefined,
 				'DISCOUNT10',
 			);
 			expect(result).toBe(
@@ -82,6 +81,7 @@ describe('buildCheckoutUrl', () => {
 					'SupporterPlus',
 					'OneYearStudent',
 					true,
+					undefined,
 					'DE',
 				);
 				expect(url).toBe(routes.supporterPlusStudentBeansDe);
@@ -94,6 +94,7 @@ describe('buildCheckoutUrl', () => {
 					'SupporterPlus',
 					'OneYearStudent',
 					true,
+					undefined,
 					'FR',
 				);
 				expect(url).toBe(routes.supporterPlusStudentBeansFr);
@@ -106,6 +107,7 @@ describe('buildCheckoutUrl', () => {
 					'SupporterPlus',
 					'OneYearStudent',
 					true,
+					undefined,
 					'ES',
 				);
 				expect(url).toBe(routes.supporterPlusStudentBeansEs);
@@ -118,6 +120,7 @@ describe('buildCheckoutUrl', () => {
 					'SupporterPlus',
 					'OneYearStudent',
 					true,
+					undefined,
 					'IE',
 				);
 				expect(url).toBe(routes.supporterPlusStudentBeansIe);
@@ -130,6 +133,7 @@ describe('buildCheckoutUrl', () => {
 					'SupporterPlus',
 					'OneYearStudent',
 					true,
+					undefined,
 					'NL',
 				);
 				expect(url).toBe(routes.supporterPlusStudentBeansNl);
@@ -143,6 +147,7 @@ describe('buildCheckoutUrl', () => {
 					'SupporterPlus',
 					'OneYearStudent',
 					true,
+					undefined,
 					'IT',
 				);
 

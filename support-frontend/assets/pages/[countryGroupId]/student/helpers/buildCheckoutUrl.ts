@@ -13,17 +13,18 @@ export default function buildCheckoutUrl(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	enableStudentBeansEurope: boolean,
-	geoCountryOverride?: CountryCode,
 	promoCode?: string,
+	countryOverride?: CountryCode,
 ): string {
+	const countryCode = countryOverride ?? Country.detect();
 	// For this product/rate plan we direct the user to Student Beans for verification
 	if (
 		productKey == 'SupporterPlus' &&
 		ratePlanKey === 'OneYearStudent' &&
 		isStudentBeansRegionValid(
 			supportRegionId,
+			countryCode,
 			enableStudentBeansEurope,
-			geoCountryOverride,
 		)
 	) {
 		// If the supportRegionId isn't one of these we'll fall through to linking to the
@@ -36,7 +37,7 @@ export default function buildCheckoutUrl(
 			case SupportRegionId.CA:
 				return routes.supporterPlusStudentBeansCa;
 			case SupportRegionId.EU: {
-				switch (geoCountryOverride ?? Country.detect()) {
+				switch (countryCode) {
 					case 'DE':
 						return routes.supporterPlusStudentBeansDe;
 					case 'FR':

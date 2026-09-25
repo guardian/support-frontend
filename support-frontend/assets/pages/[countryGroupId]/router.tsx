@@ -17,6 +17,7 @@ import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import type { OneTimeCheckoutVariant } from 'helpers/globalsAndSwitches/oneTimeCheckoutSettings';
 import type { StudentLandingPageVariant } from 'helpers/globalsAndSwitches/studentLandingPageSettings';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
+import { Country } from 'helpers/internationalisation/classes/country';
 import {
 	getAbParticipations,
 	setUpConsent,
@@ -267,7 +268,11 @@ const router = createBrowserRouter([
 						};
 					},
 				},
-				isStudentBeansRegionValid(supportRegionId, enableStudentBeansEurope)
+				isStudentBeansRegionValid(
+					supportRegionId,
+					Country.detect(),
+					enableStudentBeansEurope,
+				)
 					? routeStudentLandingPage(supportRegionId)
 					: routeStudentContributePage(supportRegionId),
 				{
