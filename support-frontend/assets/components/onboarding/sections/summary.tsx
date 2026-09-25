@@ -80,14 +80,15 @@ const paymentMethodContainer = css`
 
 type OnboardingSummaryUserState = CurrentUserState | 'inviteeUserRegistered';
 
-const onboardingSummaryCopyMapping: Record<
+const getOnboardingSummaryCopy = (
+	productTitle?: string,
+): Record<
 	OnboardingSummaryUserState,
 	{ title: string; description: string }
-> = {
+> => ({
 	existingUserSignedIn: {
 		title: "You're ready to go",
-		description:
-			"Find out what's included in your All-access digital subscription.",
+		description: `Find out what's included in your ${productTitle} subscription.`,
 	},
 	userSignedIn: {
 		title: 'You’re signed in',
@@ -103,7 +104,7 @@ const onboardingSummaryCopyMapping: Record<
 		description:
 			'You can now enjoy all the benefits and access of Digital plus.',
 	},
-};
+});
 
 export function OnboardingSummarySuccessfulSignIn({
 	handleStepNavigation,
@@ -131,6 +132,7 @@ export function OnboardingSummarySuccessfulSignIn({
 	] = useState(false);
 
 	const isInvitee = userState === 'inviteeUserRegistered';
+	const summaryCopy = getOnboardingSummaryCopy(productTitle)[userState];
 
 	useEffect(() => {
 		if (isInvitee || !userNewslettersSubscriptions) {
@@ -177,12 +179,8 @@ export function OnboardingSummarySuccessfulSignIn({
 
 	return (
 		<Stack space={2}>
-			<h1 css={headings}>{onboardingSummaryCopyMapping[userState].title}</h1>
-			<p css={descriptions}>
-				{userState === 'existingUserSignedIn'
-					? `Find out what's included in your ${productTitle} subscription.`
-					: onboardingSummaryCopyMapping[userState].description}
-			</p>
+			<h1 css={headings}>{summaryCopy.title}</h1>
+			<p css={descriptions}>{summaryCopy.description}</p>
 
 			<Stack
 				space={0}
@@ -295,10 +293,10 @@ function OnboardingSummary({
 	const paymentMethodCopy = isDirectDebit
 		? 'Direct Debit'
 		: isPaypal
-		? 'PayPal'
-		: isStripeCard
-		? 'Credit/Debit card'
-		: 'Your selected payment method';
+			? 'PayPal'
+			: isStripeCard
+				? 'Credit/Debit card'
+				: 'Your selected payment method';
 
 	const paymentMethod =
 		order?.accountNumber && isDirectDebit
