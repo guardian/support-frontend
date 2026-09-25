@@ -1,5 +1,4 @@
 import test, { expect } from '@playwright/test';
-import { enableCanadaTaxExclusion } from '../utils/enableTaxExclusiveRatePlans';
 import { ProductTierLabel } from '../utils/products';
 import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAndCompleteCheckout';
 
@@ -62,7 +61,6 @@ test.describe('Three Tier Tax Exclusive Checkout', () =>
 			context,
 			baseURL,
 		}) => {
-			await enableCanadaTaxExclusion(context);
 			await visitLandingPageAndCompleteCheckout(
 				`/${internationalisationId.toLowerCase()}/contribute${promoUrlParam}`,
 				{

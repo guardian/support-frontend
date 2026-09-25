@@ -116,10 +116,6 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |        "description" : "Enable Stripe Payment Element",
           |        "state" : "Off"
           |      },
-          |      "enableCanadaTaxExclusion" : {
-          |        "description" : "Canada Tax Exclusive Rate Plans",
-          |        "state" : "Off"
-          |      },
           |      "enableDeepDiscount" : {
           |        "description" : "Enable alternative SupporterPlus card colours and disable Your selection pill copy",
           |        "state" : "Off"
@@ -181,7 +177,6 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
             Some(On),
             Some(On),
             Some(On),
-            Some(Off),
             Some(Off),
             Some(Off),
             Some(Off),

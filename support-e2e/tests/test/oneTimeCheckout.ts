@@ -55,6 +55,12 @@ export const testOneTimeCheckout = (testDetails: TestDetails) => {
 
 		if (paymentType === 'PayPal') {
 			await expect(page).toHaveURL(/.*paypal.com/, { timeout: 600000 });
+
+			// Force the PayPal checkout page locale so tests aren't affected by geo/browser locale detection
+			const forcedLocaleUrl = new URL(page.url());
+			forcedLocaleUrl.searchParams.set('locale.x', 'en_GB');
+			await page.goto(forcedLocaleUrl.toString());
+
 			await fillInPayPalDetails(page);
 		}
 

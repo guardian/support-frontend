@@ -16,6 +16,7 @@ export const config = {
 		screenshot: 'only-on-failure',
 		video: 'on-first-retry',
 		baseURL: 'https://support.theguardian.com',
+		locale: 'en-GB',
 	},
 	reporter: 'html',
 
