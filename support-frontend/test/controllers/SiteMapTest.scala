@@ -41,7 +41,6 @@ class SiteMapTest extends AnyWordSpec with Matchers with TestCSRFComponents {
       Some(On),
       Some(On),
       Some(On),
-      Some(On),
     ),
     testUsersService = TestUserService("secret"),
   )
