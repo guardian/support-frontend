@@ -17,6 +17,7 @@ import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import type { OneTimeCheckoutVariant } from 'helpers/globalsAndSwitches/oneTimeCheckoutSettings';
 import type { StudentLandingPageVariant } from 'helpers/globalsAndSwitches/studentLandingPageSettings';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
+import { Country } from 'helpers/internationalisation/classes/country';
 import {
 	getAbParticipations,
 	setUpConsent,
@@ -32,6 +33,7 @@ import {
 	type PageParticipationsResult,
 	type PageParticipationsResultWithFallback,
 } from '../../helpers/abTests/pageParticipations';
+import { isStudentBeansRegionValid } from './helpers/isStudentBeansRegionValid';
 
 const checkoutNudgeSettings = getCheckoutNudgeParticipations();
 const appConfig = parseAppConfig(window.guardian);
@@ -78,6 +80,40 @@ function RootLayout() {
 const enableStudentBeansEurope = isSwitchOn(
 	'featureSwitches.enableStudentBeansEurope',
 );
+// route valid student locations (ie student beans setup or Australian institute added) to student landing page
+const routeStudentLandingPage = (supportRegionId: SupportRegionId) => {
+	return {
+		path: `/${supportRegionId}/student`,
+		lazy: async () => {
+			const { StudentLandingPageGlobalContainer } = await import(
+				/* webpackChunkName: "StudentLandingPageGlobalContainer" */ './student/StudentLandingPageGlobalContainer'
+			);
+			return {
+				Component: function StudentRoute() {
+					const { landing } = useRootLoaderData();
+					return (
+						<StudentLandingPageGlobalContainer
+							supportRegionId={supportRegionId}
+							landingPageVariant={landing.variant}
+							enableStudentBeansEurope={enableStudentBeansEurope}
+						/>
+					);
+				},
+			};
+		},
+	};
+};
+
+// route non-valid student locations (ie no student beans setup or Australian institutes) to contribute landing page
+const routeStudentContributePage = (supportRegionId: SupportRegionId) => {
+	return {
+		path: `/${supportRegionId}/student`,
+		loader: () => {
+			window.location.href = `./contribute${window.location.search}`;
+			return null;
+		},
+	};
+};
 
 const router = createBrowserRouter([
 	{
@@ -232,25 +268,13 @@ const router = createBrowserRouter([
 						};
 					},
 				},
-				{
-					path: `/${supportRegionId}/student`,
-					lazy: async () => {
-						const { StudentLandingPageGlobalContainer } = await import(
-							/* webpackChunkName: "StudentLandingPageGlobalContainer" */ './student/StudentLandingPageGlobalContainer'
-						);
-						return {
-							Component: function StudentRoute() {
-								const { landing } = useRootLoaderData();
-								return (
-									<StudentLandingPageGlobalContainer
-										supportRegionId={supportRegionId}
-										landingPageVariant={landing.variant}
-									/>
-								);
-							},
-						};
-					},
-				},
+				isStudentBeansRegionValid(
+					supportRegionId,
+					Country.detect(),
+					enableStudentBeansEurope,
+				)
+					? routeStudentLandingPage(supportRegionId)
+					: routeStudentContributePage(supportRegionId),
 				{
 					/* NOTE: the back end routing filters out invalid paths based on the RRCP tooling config */
 					path: `/${supportRegionId}/student/:institution`,

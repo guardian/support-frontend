@@ -15,12 +15,14 @@ export function StudentLandingPageGlobal({
 	productKey,
 	ratePlanKey,
 	studentDiscount,
+	enableStudentBeansEurope,
 }: {
 	supportRegionId: SupportRegionId;
 	landingPageVariant: LandingPageVariant;
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	studentDiscount: StudentDiscount;
+	enableStudentBeansEurope: boolean;
 }) {
 	return (
 		<StudentLandingPage
@@ -44,6 +46,7 @@ export function StudentLandingPageGlobal({
 					subheadingCopy="Now more than ever, independent journalism matters. Get fact-based reporting you can trust and unlimited access to the Guardian apps &mdash; without breaking your budget."
 					includeThreeTierLink={true}
 					heroImagePrefix="globalStudentLandingHero"
+					enableStudentBeansEurope={enableStudentBeansEurope}
 				/>
 			}
 			brandAwareness={<StudentBrandAwareness />}

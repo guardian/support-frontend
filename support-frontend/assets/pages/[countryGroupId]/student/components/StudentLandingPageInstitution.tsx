@@ -58,6 +58,7 @@ export function StudentLandingPageInstitution({
 							.
 						</>
 					}
+					enableStudentBeansEurope={false}
 					universityBadge={
 						<p css={universityBadge}>
 							<img
