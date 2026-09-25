@@ -13,7 +13,6 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
-import type { CountryCode } from '@modules/internationalisation/country';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -285,7 +284,6 @@ export function ThreeTierLanding({
 	enableStudentBeansEurope,
 }: ThreeTierLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
-	const urlCountryCode = urlSearchParams.get('country') as CountryCode;
 	const rawUrlSearchParamsProduct = urlSearchParams.get('product');
 	const urlSearchParamsProduct = rawUrlSearchParamsProduct
 		? rawUrlSearchParamsProduct.toLowerCase()
@@ -294,7 +292,6 @@ export function ThreeTierLanding({
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const countryId = Country.detect();
-
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
 			GBPCountries,
@@ -551,6 +548,7 @@ export function ThreeTierLanding({
 	const forceWeeklyPricing = urlSearchParams.get('force-weekly') === 'true';
 	const showWeeklyPrice =
 		forceWeeklyPricing || settings.name.includes('WEEKLY_PRICE');
+	const countryCode = Country.detect();
 
 	return (
 		<PageScaffold
@@ -709,8 +707,8 @@ export function ThreeTierLanding({
 			</Container>
 			{isStudentBeansRegionValid(
 				supportRegionId,
+				countryCode,
 				enableStudentBeansEurope,
-				urlCountryCode,
 			) && (
 				<Container
 					sideBorders
@@ -720,8 +718,6 @@ export function ThreeTierLanding({
 					<StudentOffer
 						currencyKey={currencyId}
 						supportRegionId={supportRegionId}
-						enableStudentBeansEurope={enableStudentBeansEurope}
-						countryCode={urlCountryCode}
 					/>
 				</Container>
 			)}

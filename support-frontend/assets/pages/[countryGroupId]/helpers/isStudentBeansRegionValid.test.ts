@@ -26,8 +26,8 @@ describe('isStudentBeansRegionValid', () => {
 		({ region, country, eurInclude, expected }) => {
 			const isStudentRegionValidResult = isStudentBeansRegionValid(
 				region as SupportRegionId,
-				eurInclude as boolean,
 				country as CountryCode,
+				eurInclude as boolean,
 			);
 			expect(isStudentRegionValidResult).toEqual(expected);
 		},
