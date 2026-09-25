@@ -9,12 +9,10 @@ import {
 	textSans17,
 } from '@guardian/source/foundations';
 import { LinkButton } from '@guardian/source/react-components';
-import type { CountryCode } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { getProductLabel, productCatalog } from 'helpers/productCatalog';
-import { isStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import { glyph } from '../../../helpers/internationalisation/currency';
 
@@ -100,15 +98,11 @@ const dividerCopy = css`
 interface StudentOfferProps {
 	currencyKey: CurrencyCode;
 	supportRegionId: SupportRegionId;
-	enableStudentBeansEurope: boolean;
-	countryCode?: CountryCode;
 }
 
 export function StudentOffer({
 	currencyKey,
 	supportRegionId,
-	enableStudentBeansEurope,
-	countryCode,
 }: StudentOfferProps): JSX.Element {
 	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 	const price =
@@ -123,16 +117,7 @@ export function StudentOffer({
 		return <></>;
 	}
 	const productLabel = getProductLabel('SupporterPlus');
-	const euCountry =
-		countryCode &&
-		isStudentBeansRegionValid(
-			supportRegionId,
-			enableStudentBeansEurope,
-			countryCode,
-		)
-			? `?country=${countryCode}`
-			: '';
-	const url = `/${countryGroups[countryGroupId].supportRegionId}/student${euCountry}`;
+	const url = `/${countryGroups[countryGroupId].supportRegionId}/student`;
 	return (
 		<>
 			<div css={dividerContainer}>
