@@ -28,6 +28,14 @@ const completedStackPadding = css`
 	}
 `;
 
+const actionsStack = css`
+	margin-top: ${space[5]}px;
+
+	${from.tablet} {
+		margin-top: ${space[8]}px;
+	}
+`;
+
 export function OnboardingShareAccess({
 	handleStepNavigation,
 }: {
@@ -50,12 +58,12 @@ export function OnboardingShareAccess({
 					<Stack space={2}>
 						<h1 css={headings}>Share your Digital plus access</h1>
 						<p css={descriptions}>
-							You can invite up to <strong>3 people</strong> to share your
+							You can invite up to <strong>three people</strong> to share your
 							subscription and join you in enjoying unlimited digital access and
 							reading across the Guardian.
 						</p>
 					</Stack>
-					<Stack space={0}>
+					<Stack space={0} cssOverrides={actionsStack}>
 						<LinkButton
 							priority="primary"
 							cssOverrides={buttonOverrides}
