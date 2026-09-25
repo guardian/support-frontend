@@ -1,11 +1,6 @@
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import type { StoryObj } from '@storybook/preact-vite';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import type { PromotionTerms } from 'helpers/productPrice/promotions';
-import {
-	DigitalPack,
-	GuardianWeekly,
-} from 'helpers/productPrice/subscriptions';
 import { PromotionTermsPage } from 'pages/promotion-terms/promotionTerms';
 import type { PromotionTermsPropTypes } from 'pages/promotion-terms/promotionTermsPropTypes';
 import { hideTestBanner } from '../../.storybook/decorators/withoutTestBanner';
@@ -32,37 +27,50 @@ export default {
 	},
 };
 
-const emptyProductPrices = {} as unknown as ProductPrices;
-
-const basePromotionTerms: PromotionTerms = {
+const basePromotion: Omit<PromoWithCatalogInformation, 'appliesTo'> = {
+	promoCode: 'STORYBOOKPROMO',
+	name: 'Storybook promotion',
+	campaignCode: 'STORYBOOK_CAMPAIGN',
 	description:
 		'Subscribe today and save with our limited-time offer on your chosen product.',
-	starts: new Date('2025-01-01T00:00:00.000Z'),
-	expires: new Date('2025-12-31T23:59:59.000Z'),
-	product: DigitalPack,
-	productRatePlans: ['Monthly subscription', 'Annual subscription'],
-	promoCode: 'STORYBOOKPROMO',
-	isGift: false,
+	startTimestamp: '2025-01-01T00:00:00.000Z',
+	endTimestamp: '2025-12-31T23:59:59.000Z',
 };
 
 type Story = StoryObj<PromotionTermsPropTypes>;
 
 const digitalPackArgs: PromotionTermsPropTypes = {
-	productPrices: emptyProductPrices,
-	promotionTerms: {
-		...basePromotionTerms,
-		product: DigitalPack,
-		productRatePlans: ['Digital Pack Monthly', 'Digital Pack Annual'],
+	promotion: {
+		...basePromotion,
+		appliesTo: {
+			productRatePlanIds: [],
+			countries: [],
+			catalogRatePlans: [
+				{ productKey: 'DigitalSubscription', productRatePlanKey: 'Monthly' },
+				{ productKey: 'DigitalSubscription', productRatePlanKey: 'Annual' },
+			],
+		},
 	},
 	countryGroupId: GBPCountries,
 };
 
 const guardianWeeklyArgs: PromotionTermsPropTypes = {
-	productPrices: emptyProductPrices,
-	promotionTerms: {
-		...basePromotionTerms,
-		product: GuardianWeekly,
-		productRatePlans: ['Guardian Weekly Annual', 'Guardian Weekly Quarterly'],
+	promotion: {
+		...basePromotion,
+		appliesTo: {
+			productRatePlanIds: [],
+			countries: [],
+			catalogRatePlans: [
+				{
+					productKey: 'GuardianWeeklyDomestic',
+					productRatePlanKey: 'Annual',
+				},
+				{
+					productKey: 'GuardianWeeklyDomestic',
+					productRatePlanKey: 'Quarterly',
+				},
+			],
+		},
 	},
 	countryGroupId: GBPCountries,
 };

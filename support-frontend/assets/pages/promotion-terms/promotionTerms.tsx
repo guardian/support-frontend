@@ -1,32 +1,28 @@
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
 import { PageScaffold } from 'components/page/pageScaffold';
-import {
-	getGlobal,
-	getProductPrices,
-} from 'helpers/globalsAndSwitches/globals';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import {
 	getAbParticipations,
 	setUpTrackingAndConsents,
 } from 'helpers/page/page';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import type { PromotionTerms } from 'helpers/productPrice/promotions';
-import {
-	DigitalPack,
-	GuardianWeekly,
-} from 'helpers/productPrice/subscriptions';
 import { renderPage } from 'helpers/rendering/render';
 import LegalTerms from 'pages/promotion-terms/legalTerms';
 import PromoDetails from 'pages/promotion-terms/promoDetails';
+import { getProductKey } from './promotionSelectors';
 import type { PromotionTermsPropTypes } from './promotionTermsPropTypes';
 
 setUpTrackingAndConsents(getAbParticipations());
 
-function getTermsConditionsLink({ product }: PromotionTerms) {
-	if (product === DigitalPack) {
+function getTermsConditionsLink(promotion: PromoWithCatalogInformation) {
+	const productKey = getProductKey(promotion.appliesTo.catalogRatePlans);
+	if (productKey === 'DigitalSubscription') {
 		return 'https://www.theguardian.com/digital-subscriptions-terms-conditions';
-	} else if (product === GuardianWeekly) {
+	} else if (
+		productKey === 'GuardianWeeklyDomestic' ||
+		productKey === 'GuardianWeeklyRestOfWorld'
+	) {
 		return 'https://www.theguardian.com/guardian-weekly-subscription-terms-conditions';
 	}
 
@@ -34,15 +30,18 @@ function getTermsConditionsLink({ product }: PromotionTerms) {
 }
 
 function getPromotionTermsProps(): PromotionTermsPropTypes {
-	const productPrices = getProductPrices() as ProductPrices;
-	const terms = getGlobal<PromotionTerms>('promotionTerms');
-	const expires = terms?.expires ? new Date(terms.expires) : null;
-	const starts = terms ? new Date(terms.starts) : new Date();
-	const countryGroupId = CountryGroup.detect();
+	const [promotion] = window.guardian.promotions ?? [];
+
+	// The server only ever renders this page's JS when a valid promotion was found
+	// (see controllers.Promotions.terms), so window.guardian.promotions is always
+	// populated with exactly one entry here.
+	if (!promotion) {
+		throw new Error('window.guardian.promotions was not populated');
+	}
+
 	return {
-		productPrices,
-		promotionTerms: { ...terms, starts, expires } as PromotionTerms,
-		countryGroupId,
+		promotion,
+		countryGroupId: CountryGroup.detect(),
 	};
 }
 
@@ -52,13 +51,11 @@ export function PromotionTermsPage(props: PromotionTermsPropTypes) {
 		<PageScaffold
 			header={<Header countryGroupId={CountryGroup.detect()} />}
 			footer={
-				<Footer
-					termsConditionsLink={getTermsConditionsLink(props.promotionTerms)}
-				/>
+				<Footer termsConditionsLink={getTermsConditionsLink(props.promotion)} />
 			}
 		>
-			<PromoDetails {...props.promotionTerms} />
-			<LegalTerms {...props} />k
+			<PromoDetails promotion={props.promotion} />
+			<LegalTerms {...props} />
 		</PageScaffold>
 	);
 }

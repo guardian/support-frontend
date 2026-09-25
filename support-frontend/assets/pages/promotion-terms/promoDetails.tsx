@@ -5,26 +5,32 @@ import {
 	SvgArrowRightStraight,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import Content from 'components/content/content';
 import { List } from 'components/list/list';
 import { LargeParagraph, Title } from 'components/text/text';
-import type { PromotionTerms } from 'helpers/productPrice/promotions';
-import { DigitalPack, Paper } from 'helpers/productPrice/subscriptions';
 import { routes } from 'helpers/urls/routes';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
+import {
+	getProductKey,
+	getProductRatePlanDescriptions,
+	isGiftPromotion,
+} from './promotionSelectors';
 
-const landingPageForProduct = (props: PromotionTerms) => {
-	switch (props.product) {
-		case DigitalPack:
+const landingPageForProduct = (promotion: PromoWithCatalogInformation) => {
+	const productKey = getProductKey(promotion.appliesTo.catalogRatePlans);
+	switch (productKey) {
+		case 'DigitalSubscription':
 			return routes.digitalSubscriptionLanding;
 
-		case Paper:
-			return routes.paperSubscriptionLanding;
-
-		default:
-			return props.isGift
+		case 'GuardianWeeklyDomestic':
+		case 'GuardianWeeklyRestOfWorld':
+			return isGiftPromotion(promotion.appliesTo.catalogRatePlans)
 				? routes.guardianWeeklySubscriptionLandingGift
 				: routes.guardianWeeklySubscriptionLanding;
+
+		default:
+			return routes.paperSubscriptionLanding;
 	}
 };
 
@@ -38,17 +44,28 @@ const buttonStyle = css`
 	}
 `;
 
-export default function PromoDetails(props: PromotionTerms): JSX.Element {
-	const validUntil = props.expires ? (
+type PropTypes = {
+	promotion: PromoWithCatalogInformation;
+};
+
+export default function PromoDetails({ promotion }: PropTypes): JSX.Element {
+	const expires = promotion.endTimestamp
+		? new Date(promotion.endTimestamp)
+		: undefined;
+	const validUntil = expires ? (
 		<LargeParagraph>
-			<strong>Valid until:</strong> {formatUserDate(props.expires)}
+			<strong>Valid until:</strong> {formatUserDate(expires)}
 		</LargeParagraph>
 	) : null;
+	const productRatePlans = getProductRatePlanDescriptions(
+		promotion.appliesTo.catalogRatePlans,
+	);
+
 	return (
 		<Content>
-			<Title>Promotional code: {props.promoCode}</Title>
+			<Title>Promotional code: {promotion.promoCode}</Title>
 			<LargeParagraph>
-				<strong>Promotion details:</strong> {props.description}
+				<strong>Promotion details:</strong> {promotion.description}
 			</LargeParagraph>
 			{validUntil}
 			<LargeParagraph>
@@ -58,14 +75,16 @@ export default function PromoDetails(props: PromotionTerms): JSX.Element {
 						font-size: inherit;
 						margin: 0 !important;
 					`}
-					items={props.productRatePlans.map((content) => ({
+					items={productRatePlans.map((content) => ({
 						content,
 					}))}
 				/>
 			</LargeParagraph>
 			<div css={buttonStyle}>
 				<LinkButton
-					href={`${landingPageForProduct(props)}?promoCode=${props.promoCode}`}
+					href={`${landingPageForProduct(promotion)}?promoCode=${
+						promotion.promoCode
+					}`}
 					theme={themeButtonReaderRevenueBrand}
 					icon={<SvgArrowRightStraight />}
 					iconSide="right"

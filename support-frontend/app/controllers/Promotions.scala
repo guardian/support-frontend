@@ -3,91 +3,117 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider}
 import assets.{AssetsResolver, RefPath, StyleContent}
-import com.gu.support.catalog.{Contribution, DigitalPack, GuardianWeekly, Paper, SupporterPlus}
-import com.gu.support.config.Stage
 import com.gu.support.encoding.CustomCodecs._
-import services.pricing.PriceSummaryServiceProvider
-import com.gu.support.promotions.{PromoCode, PromotionServiceProvider, PromotionTerms}
+import com.gu.support.promotions.CatalogRatePlan
 import lib.RedirectWithEncodedQueryString
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import play.twirl.api.Html
-import services.TestUserService
+import services.{CachedPromotionsServiceProvider, TestUserService}
 import views.EmptyDiv
 import views.ViewHelpers.outputJson
 import admin.ServersideAbTest.Participation
 
+import scala.concurrent.ExecutionContext
+import scala.util.control.NonFatal
+
 class Promotions(
-    promotionServiceProvider: PromotionServiceProvider,
-    priceSummaryServiceProvider: PriceSummaryServiceProvider,
+    cachedPromotionsServiceProvider: CachedPromotionsServiceProvider,
     val assets: AssetsResolver,
     val actionRefiners: CustomActionBuilders,
     testUsers: TestUserService, // Remove?
     components: ControllerComponents,
     settingsProvider: AllSettingsProvider,
-    stage: Stage,
 ) extends AbstractController(components) {
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
+  implicit val ec: ExecutionContext = components.executionContext
 
-  def promo(promoCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    val promotionService = promotionServiceProvider.forUser(false)
-    val maybePromotionTerms = PromotionTerms.fromPromoCode(promotionService, stage, promoCode)
+  def promo(promoCode: String): Action[AnyContent] = CachedAction().async { implicit request =>
+    cachedPromotionsServiceProvider
+      .forUser(isTestUser = false)
+      .get(promoCode)
+      .map {
+        case None => NotFound("Invalid promo code")
+        case Some(promotion) =>
+          val productLandingPage = Promotions.redirectPathForCatalogRatePlans(promotion.appliesTo.catalogRatePlans)
+          val queryString = request.queryString + ("promoCode" -> Seq(promoCode))
 
-    maybePromotionTerms.fold(NotFound("Invalid promo code")) { promotionTerms =>
-      val productLandingPage = promotionTerms.product match {
-        case GuardianWeekly => routes.WeeklySubscriptionController.weeklyGeoRedirect(promotionTerms.isGift).url
-        case DigitalPack => routes.Application.geoRedirectToPath("subscribe/digitaledition").url
-        case Paper => routes.PaperSubscriptionController.paper().url
-        case _ => routes.Application.contributeGeoRedirect("").url
+          RedirectWithEncodedQueryString(productLandingPage, queryString, MOVED_PERMANENTLY)
       }
-      val queryString = {
-        if (promoCode == "WINTERSAMPLER") {
-          request.queryString + ("promoCode" -> Seq("WINTERSAMPLER", "WINTERSAMPLER2"))
-        } else if (promoCode == "AUTUMN20") {
-          request.queryString + ("promoCode" -> Seq("AUTUMN20", "AUTUMN30"))
-        } else {
-          request.queryString + ("promoCode" -> Seq(promoCode))
-        }
+      .recover { case NonFatal(_) =>
+        InternalServerError("Failed to fetch promotion")
       }
-      RedirectWithEncodedQueryString(productLandingPage, queryString, MOVED_PERMANENTLY)
-    }
   }
 
-  def terms(promoCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+  def terms(promoCode: String): Action[AnyContent] = CachedAction().async { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | Digital Pack Subscription"
     val mainElement = EmptyDiv("promotion-terms")
     val js = RefPath("promotionTerms.js")
-    val promotionService = promotionServiceProvider.forUser(false)
-    val maybePromotionTerms = PromotionTerms.fromPromoCode(promotionService, stage, promoCode)
 
-    maybePromotionTerms.fold(NotFound("Invalid promo code")) { promotionTerms =>
-      val productPrices =
-        priceSummaryServiceProvider.forUser(false).getPrices(promotionTerms.product, List.empty[PromoCode])
-
-      Ok(
-        views.html.main(
-          title,
-          mainElement,
-          js,
-          None,
-          description = None,
-          canonicalLink = None,
-          hrefLangLinks = Map(),
-          csrf = None,
-          shareImageUrl = None,
-          shareUrl = None,
-          serversideTests = Map(),
-          noindex = true,
-        ) {
-          Html(s"""<script type="text/javascript">
-                window.guardian.productPrices = ${outputJson(productPrices)}
-                window.guardian.promotionTerms = ${outputJson(promotionTerms)}
+    cachedPromotionsServiceProvider
+      .forUser(isTestUser = false)
+      .get(promoCode)
+      .map {
+        case None => NotFound("Invalid promo code")
+        case Some(promotion) =>
+          Ok(
+            views.html.main(
+              title,
+              mainElement,
+              js,
+              None,
+              description = None,
+              canonicalLink = None,
+              hrefLangLinks = Map(),
+              csrf = None,
+              shareImageUrl = None,
+              shareUrl = None,
+              serversideTests = Map(),
+              noindex = true,
+            ) {
+              Html(s"""<script type="text/javascript">
+                window.guardian.promotions = ${outputJson(Seq(promotion))}
               </script>""")
-        },
-      )
-    }
+            },
+          )
+      }
+      .recover { case NonFatal(_) =>
+        InternalServerError("Failed to fetch promotion")
+      }
   }
 
+}
+
+object Promotions {
+
+  // Product-catalog keys (see support-frontend/assets/helpers/productCatalog.ts) for the Guardian Weekly and Paper
+  // products/rate plans - anything not matched by these (or DigitalSubscription) falls back to the contribution
+  // redirect, matching the previous legacy-Product-based behaviour's catch-all case.
+  private val guardianWeeklyProductKeys = Set(
+    "GuardianWeeklyDomestic",
+    "GuardianWeeklyRestOfWorld",
+    "GuardianWeeklyZoneA",
+    "GuardianWeeklyZoneB",
+    "GuardianWeeklyZoneC",
+  )
+  private val paperProductKeys = Set("HomeDelivery", "NationalDelivery", "NewspaperVoucher", "SubscriptionCard")
+
+  /** Maps the catalog rate plans onto the redirect path for its product's landing page.
+    */
+  def redirectPathForCatalogRatePlans(catalogRatePlans: List[CatalogRatePlan]): String = {
+    val productKeys = catalogRatePlans.map(_.productKey).toSet
+    val isGift = catalogRatePlans.nonEmpty && catalogRatePlans.forall(_.productRatePlanKey.contains("Gift"))
+
+    if (productKeys.contains("DigitalSubscription")) {
+      routes.Application.geoRedirectToPath("subscribe/digitaledition").url
+    } else if (productKeys.exists(guardianWeeklyProductKeys.contains)) {
+      routes.WeeklySubscriptionController.weeklyGeoRedirect(isGift).url
+    } else if (productKeys.exists(paperProductKeys.contains)) {
+      routes.PaperSubscriptionController.paper().url
+    } else {
+      routes.Application.contributeGeoRedirect("").url
+    }
+  }
 }

@@ -1,12 +1,11 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import OrderedList from 'components/list/orderedList';
-import type { Option } from 'helpers/types/option';
 import { getDigitalPlusCheckoutDeepLink } from 'helpers/urls/routes';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 
 type PropTypes = {
 	starts: Date;
-	expires: Option<Date>;
+	expires: Date | undefined;
 	promoCode: string;
 	countryGroupId: CountryGroupId;
 };
