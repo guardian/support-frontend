@@ -7,6 +7,11 @@ import type {
 } from 'helpers/productCatalog';
 import StudentHeader from './StudentHeader';
 
+jest.mock('helpers/globalsAndSwitches/globals', () => ({
+	__esModule: true,
+	isSwitchOn: jest.fn().mockReturnValue(true),
+}));
+
 const oneYearStudentDiscount = {
 	amount: 9,
 	periodNoun: 'year',
@@ -47,7 +52,6 @@ describe('<StudentHeader />', () => {
 				headingCopy="Example heading"
 				subheadingCopy="Example subheading"
 				heroImagePrefix="globalStudentLandingHero"
-				enableStudentBeansEurope={true}
 			/>,
 		);
 		expect(screen.getByTestId('cta-button')).toHaveTextContent('Subscribe');
@@ -64,7 +68,6 @@ describe('<StudentHeader />', () => {
 				headingCopy="Example heading"
 				subheadingCopy="Example subheading"
 				heroImagePrefix="globalStudentLandingHero"
-				enableStudentBeansEurope={true}
 			/>,
 		);
 		expect(screen.getByTestId('cta-button')).toHaveTextContent(
@@ -83,7 +86,6 @@ describe('<StudentHeader />', () => {
 				headingCopy="Example heading"
 				subheadingCopy="Example subheading"
 				heroImagePrefix="globalStudentLandingHero"
-				enableStudentBeansEurope={true}
 			/>,
 		);
 		expect(

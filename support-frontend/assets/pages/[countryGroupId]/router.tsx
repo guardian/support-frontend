@@ -77,9 +77,6 @@ function RootLayout() {
 	);
 }
 
-const enableStudentBeansEurope = isSwitchOn(
-	'featureSwitches.enableStudentBeansEurope',
-);
 // route valid student locations (ie student beans setup or Australian institute added) to student landing page
 const routeStudentLandingPage = (supportRegionId: SupportRegionId) => {
 	return {
@@ -95,7 +92,6 @@ const routeStudentLandingPage = (supportRegionId: SupportRegionId) => {
 						<StudentLandingPageGlobalContainer
 							supportRegionId={supportRegionId}
 							landingPageVariant={landing.variant}
-							enableStudentBeansEurope={enableStudentBeansEurope}
 						/>
 					);
 				},
@@ -270,7 +266,7 @@ const router = createBrowserRouter([
 				isStudentBeansRegionValid(
 					supportRegionId,
 					Country.detect(),
-					enableStudentBeansEurope,
+					isSwitchOn('featureSwitches.enableStudentBeansEurope'),
 				)
 					? routeStudentLandingPage(supportRegionId)
 					: routeStudentContributePage(supportRegionId),

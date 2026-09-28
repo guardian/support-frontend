@@ -1,6 +1,7 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import GridPicture from 'components/gridPicture/gridPicture';
 import { Container } from 'components/layout/container';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type {
 	LandingPageVariant,
 	ProductBenefit,
@@ -30,7 +31,6 @@ interface StudentHeaderProps {
 	studentDiscount: StudentDiscount;
 	headingCopy: React.ReactNode;
 	subheadingCopy: React.ReactNode;
-	enableStudentBeansEurope: boolean;
 	universityBadge?: JSX.Element;
 	includeThreeTierLink?: boolean;
 	heroImagePrefix: string;
@@ -53,7 +53,6 @@ export default function StudentHeader({
 	studentDiscount,
 	headingCopy,
 	subheadingCopy,
-	enableStudentBeansEurope,
 	universityBadge,
 	includeThreeTierLink = false,
 	heroImagePrefix,
@@ -63,7 +62,7 @@ export default function StudentHeader({
 		supportRegionId,
 		productKey,
 		ratePlanKey,
-		enableStudentBeansEurope,
+		isSwitchOn('featureSwitches.enableStudentBeansEurope'),
 		promoCode,
 	);
 
