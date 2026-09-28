@@ -6,13 +6,12 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { routes } from 'helpers/urls/routes';
-import { isStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
+import { isStudentBeansRegionValidSwitchedOn } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
 
 export default function buildCheckoutUrl(
 	supportRegionId: SupportRegionId,
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	enableStudentBeansEurope: boolean,
 	promoCode?: string,
 	countryOverride?: CountryCode,
 ): string {
@@ -21,11 +20,7 @@ export default function buildCheckoutUrl(
 	if (
 		productKey == 'SupporterPlus' &&
 		ratePlanKey === 'OneYearStudent' &&
-		isStudentBeansRegionValid(
-			supportRegionId,
-			countryCode,
-			enableStudentBeansEurope,
-		)
+		isStudentBeansRegionValidSwitchedOn(supportRegionId, countryCode)
 	) {
 		// If the supportRegionId isn't one of these we'll fall through to linking to the
 		// normal checkout page

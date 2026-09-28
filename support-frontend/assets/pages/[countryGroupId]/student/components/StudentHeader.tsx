@@ -1,7 +1,6 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import GridPicture from 'components/gridPicture/gridPicture';
 import { Container } from 'components/layout/container';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type {
 	LandingPageVariant,
 	ProductBenefit,
@@ -62,7 +61,6 @@ export default function StudentHeader({
 		supportRegionId,
 		productKey,
 		ratePlanKey,
-		isSwitchOn('featureSwitches.enableStudentBeansEurope'),
 		promoCode,
 	);
 

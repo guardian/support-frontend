@@ -1,5 +1,6 @@
 import type { CountryCode } from '@modules/internationalisation/country';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 
 // Australian region not supported by Student Beans
 const studentBeansRegions = [
@@ -8,7 +9,6 @@ const studentBeansRegions = [
 	SupportRegionId.CA,
 ];
 const studentBeansEuCountries = ['FR', 'DE', 'ES', 'NL', 'IE'];
-
 export const isStudentBeansRegionValid = (
 	supportRegionId: SupportRegionId,
 	countryCode: CountryCode,
@@ -22,4 +22,15 @@ export const isStudentBeansRegionValid = (
 		);
 	}
 	return true;
+};
+
+export const isStudentBeansRegionValidSwitchedOn = (
+	supportRegionId: SupportRegionId,
+	countryCode: CountryCode,
+) => {
+	return isStudentBeansRegionValid(
+		supportRegionId,
+		countryCode,
+		isSwitchOn('featureSwitches.enableStudentBeansEurope'),
+	);
 };
