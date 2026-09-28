@@ -11,10 +11,9 @@ type ThreeTierUrlSelection = {
 export function useThreeTierUrlSelection(): ThreeTierUrlSelection {
 	return useMemo(() => {
 		const params = new URLSearchParams(window.location.search);
-		const rawProduct = params.get('product');
 
 		return {
-			product: rawProduct ? rawProduct.toLowerCase() : undefined,
+			product: params.get('product')?.toLowerCase(),
 			ratePlan: params.get('ratePlan')?.trim().toLowerCase(),
 			selectedAmount: params.get('selected-amount'),
 			forceWeeklyPricing: params.get('force-weekly') === 'true',
