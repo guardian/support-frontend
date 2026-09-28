@@ -8,10 +8,8 @@ import type {
 import { routes } from 'helpers/urls/routes';
 import { isStudentBeansRegionValidSwitchedOn } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
 
-export const supporterPlusStudentBeansInclCountry = (
-	countryCode: CountryCode,
-) => {
-	return `${routes.supporterPlusStudentBeansEu}&country=${countryCode}`;
+export const routeInclCountry = (route: string, countryCode: CountryCode) => {
+	return `${route}&country=${countryCode}`;
 };
 
 export default function buildCheckoutUrl(
@@ -21,13 +19,9 @@ export default function buildCheckoutUrl(
 	promoCode?: string,
 	countryOverride?: CountryCode,
 ): string {
-	const countryCode = countryOverride ?? Country.detect();
 	// For this product/rate plan we direct the user to Student Beans for verification
-	if (
-		productKey == 'SupporterPlus' &&
-		ratePlanKey === 'OneYearStudent' &&
-		isStudentBeansRegionValidSwitchedOn(supportRegionId, countryCode)
-	) {
+	const countryCode = countryOverride ?? Country.detect();
+	if (productKey == 'SupporterPlus' && ratePlanKey === 'OneYearStudent') {
 		// If the supportRegionId isn't one of these we'll fall through to linking to the
 		// normal checkout page
 		switch (supportRegionId) {
@@ -38,7 +32,12 @@ export default function buildCheckoutUrl(
 			case SupportRegionId.CA:
 				return routes.supporterPlusStudentBeansCa;
 			case SupportRegionId.EU: {
-				return supporterPlusStudentBeansInclCountry(countryCode);
+				return routeInclCountry(
+					isStudentBeansRegionValidSwitchedOn(supportRegionId, countryCode)
+						? routes.supporterPlusStudentBeansEu
+						: routes.contributeEu,
+					countryCode,
+				);
 			}
 		}
 	}
