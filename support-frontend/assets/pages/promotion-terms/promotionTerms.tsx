@@ -10,7 +10,7 @@ import {
 import { renderPage } from 'helpers/rendering/render';
 import LegalTerms from 'pages/promotion-terms/legalTerms';
 import PromoDetails from 'pages/promotion-terms/promoDetails';
-import { getProductKey } from './promotionSelectors';
+import { getProductKey } from './promotionHelpers';
 import type { PromotionTermsPropTypes } from './promotionTermsPropTypes';
 
 setUpTrackingAndConsents(getAbParticipations());

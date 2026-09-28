@@ -15,7 +15,7 @@ import {
 	getProductKey,
 	getProductRatePlanDescriptions,
 	isGiftPromotion,
-} from './promotionSelectors';
+} from './promotionHelpers';
 
 const landingPageForProduct = (promotion: PromoWithCatalogInformation) => {
 	const productKey = getProductKey(promotion.appliesTo.catalogRatePlans);

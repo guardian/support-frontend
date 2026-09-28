@@ -4,7 +4,7 @@ import { Title } from 'components/text/text';
 import DigitalPackTerms from 'pages/promotion-terms/DigitalPackTerms';
 import PaperTerms from 'pages/promotion-terms/PaperTerms';
 import WeeklyTerms from 'pages/promotion-terms/weeklyTerms';
-import { getProductKey } from './promotionSelectors';
+import { getProductKey } from './promotionHelpers';
 import type { PromotionTermsPropTypes } from './promotionTermsPropTypes';
 
 const getTermsForProduct = (props: PromotionTermsPropTypes) => {
