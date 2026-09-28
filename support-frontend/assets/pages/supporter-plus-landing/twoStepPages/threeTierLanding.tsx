@@ -42,6 +42,7 @@ import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests
 import type { Participations } from 'helpers/abTests/models';
 import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { glyph } from 'helpers/internationalisation/currency';
 import { guardianContactUsLink, guardianHelpCentreLink } from 'helpers/legal';
@@ -275,13 +276,11 @@ function getThreeTierProductOption(
 type ThreeTierLandingProps = {
 	supportRegionId: SupportRegionId;
 	settings: LandingPageVariant;
-	enableStudentBeansEurope: boolean;
 	abParticipations: Participations;
 };
 export function ThreeTierLanding({
 	supportRegionId,
 	settings,
-	enableStudentBeansEurope,
 }: ThreeTierLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const rawUrlSearchParamsProduct = urlSearchParams.get('product');
@@ -708,7 +707,7 @@ export function ThreeTierLanding({
 			{isStudentBeansRegionValid(
 				supportRegionId,
 				countryCode,
-				enableStudentBeansEurope,
+				isSwitchOn('featureSwitches.enableStudentBeansEurope'),
 			) && (
 				<Container
 					sideBorders

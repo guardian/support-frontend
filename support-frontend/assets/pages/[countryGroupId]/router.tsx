@@ -138,7 +138,6 @@ const router = createBrowserRouter([
 										supportRegionId={supportRegionId}
 										abParticipations={finalParticipations}
 										landingPageSettings={landing.variant}
-										enableStudentBeansEurope={enableStudentBeansEurope}
 									/>
 								);
 							},
