@@ -8,6 +8,12 @@ import type {
 import { routes } from 'helpers/urls/routes';
 import { isStudentBeansRegionValidSwitchedOn } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
 
+export const supporterPlusStudentBeansInclCountry = (
+	countryCode: CountryCode,
+) => {
+	return `${routes.supporterPlusStudentBeansEu}&country=${countryCode}`;
+};
+
 export default function buildCheckoutUrl(
 	supportRegionId: SupportRegionId,
 	productKey: ActiveProductKey,
@@ -32,18 +38,7 @@ export default function buildCheckoutUrl(
 			case SupportRegionId.CA:
 				return routes.supporterPlusStudentBeansCa;
 			case SupportRegionId.EU: {
-				switch (countryCode) {
-					case 'DE':
-						return routes.supporterPlusStudentBeansDe;
-					case 'FR':
-						return routes.supporterPlusStudentBeansFr;
-					case 'ES':
-						return routes.supporterPlusStudentBeansEs;
-					case 'IE':
-						return routes.supporterPlusStudentBeansIe;
-					case 'NL':
-						return routes.supporterPlusStudentBeansNl;
-				}
+				return supporterPlusStudentBeansInclCountry(countryCode);
 			}
 		}
 	}

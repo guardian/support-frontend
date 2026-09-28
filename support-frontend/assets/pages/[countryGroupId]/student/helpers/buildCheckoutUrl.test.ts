@@ -1,6 +1,8 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { routes } from 'helpers/urls/routes';
-import buildCheckoutUrl from './buildCheckoutUrl';
+import buildCheckoutUrl, {
+	supporterPlusStudentBeansInclCountry,
+} from './buildCheckoutUrl';
 
 jest.mock('helpers/globalsAndSwitches/globals', () => ({
 	__esModule: true,
@@ -83,7 +85,7 @@ describe('buildCheckoutUrl', () => {
 					undefined,
 					'DE',
 				);
-				expect(url).toBe(routes.supporterPlusStudentBeansDe);
+				expect(url).toBe(supporterPlusStudentBeansInclCountry('DE'));
 			});
 		});
 		describe('and the supportRegionId is eu with defined country FR', () => {
@@ -95,7 +97,7 @@ describe('buildCheckoutUrl', () => {
 					undefined,
 					'FR',
 				);
-				expect(url).toBe(routes.supporterPlusStudentBeansFr);
+				expect(url).toBe(supporterPlusStudentBeansInclCountry('FR'));
 			});
 		});
 		describe('and the supportRegionId is eu with defined country ES', () => {
@@ -107,7 +109,7 @@ describe('buildCheckoutUrl', () => {
 					undefined,
 					'ES',
 				);
-				expect(url).toBe(routes.supporterPlusStudentBeansEs);
+				expect(url).toBe(supporterPlusStudentBeansInclCountry('ES'));
 			});
 		});
 		describe('and the supportRegionId is eu with defined country IE', () => {
@@ -119,7 +121,7 @@ describe('buildCheckoutUrl', () => {
 					undefined,
 					'IE',
 				);
-				expect(url).toBe(routes.supporterPlusStudentBeansIe);
+				expect(url).toBe(supporterPlusStudentBeansInclCountry('IE'));
 			});
 		});
 		describe('and the supportRegionId is eu with defined country NL', () => {
@@ -131,7 +133,7 @@ describe('buildCheckoutUrl', () => {
 					undefined,
 					'NL',
 				);
-				expect(url).toBe(routes.supporterPlusStudentBeansNl);
+				expect(url).toBe(supporterPlusStudentBeansInclCountry('NL'));
 			});
 		});
 		describe('and the EU supportRegionId with country IT is not one we have a Student Beans link for', () => {
