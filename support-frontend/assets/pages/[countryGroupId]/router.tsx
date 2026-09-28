@@ -75,10 +75,6 @@ function RootLayout() {
 	);
 }
 
-const enableStudentBeansEurope = isSwitchOn(
-	'featureSwitches.enableStudentBeansEurope',
-);
-
 const router = createBrowserRouter([
 	{
 		id: 'root',
@@ -102,7 +98,6 @@ const router = createBrowserRouter([
 										supportRegionId={supportRegionId}
 										abParticipations={finalParticipations}
 										landingPageSettings={landing.variant}
-										enableStudentBeansEurope={enableStudentBeansEurope}
 									/>
 								);
 							},
