@@ -58,7 +58,6 @@ trait DisplayFormMocks extends TestCSRFComponents {
       Some(On),
       Some(Off),
       Some(Off),
-      Some(Off),
     ),
     testUsersService = testUsers,
   )

@@ -1,6 +1,5 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { useEffect, useState } from 'react';
-import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import type { ContributionType } from 'helpers/contributions';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 
@@ -20,10 +19,8 @@ export function useRatePlanKey(
 	const [ratePlanKey, setRatePlanKey] = useState<ActiveRatePlanKey>(
 		getRatePlanKey(contributionType),
 	);
-
-	const { enableCanadaTaxExclusion } = useFeatureSwitches();
 	const isCanada = supportRegionId === SupportRegionId.CA;
-	const taxExclusionEnabled = isCanada && enableCanadaTaxExclusion;
+	const taxExclusionEnabled = isCanada;
 
 	useEffect(() => {
 		setRatePlanKey(getRatePlanKey(contributionType));
