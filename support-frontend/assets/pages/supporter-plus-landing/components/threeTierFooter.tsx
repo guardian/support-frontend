@@ -109,36 +109,12 @@ export function ThreeTierFooter({
 	tier3Card,
 	tier3Promotion,
 }: ThreeTierFooterProps): JSX.Element {
-	console.log(
-		'*** ThreeTierFooter props supportRegionId:',
-		supportRegionId,
-		'contributionType:',
-		contributionType,
-		'tier1Card:',
-		tier1Card,
-		'tier2Card:',
-		tier2Card,
-		'tier2Promotion:',
-		tier2Promotion,
-		'tier3Card:',
-		tier3Card,
-		'tier3Promotion:',
-		tier3Promotion,
-	);
 	const { taxExclusionEnabled } = useRatePlanKey(
 		contributionType,
 		supportRegionId,
 	);
 	const { currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
-	console.log(
-		'*** ThreeTierFooter taxExclusionEnabled:',
-		taxExclusionEnabled,
-		'currencyKey:',
-		currencyKey,
-		'countryGroupId:',
-		countryGroupId,
-	);
 	return (
 		<>
 			{countryGroupId === UnitedStates && (
