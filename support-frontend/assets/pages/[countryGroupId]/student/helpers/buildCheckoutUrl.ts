@@ -9,7 +9,7 @@ import { routes } from 'helpers/urls/routes';
 import { isStudentBeansRegionValidSwitchedOn } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
 
 export const routeInclCountry = (route: string, countryCode: CountryCode) => {
-	return `${route}&country=${countryCode}`;
+	return `${route}${route.includes('?') ? '&' : '?'}country=${countryCode}`;
 };
 
 export default function buildCheckoutUrl(
