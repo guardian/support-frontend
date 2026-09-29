@@ -32,8 +32,12 @@ class ApplicablePromotionsSpec extends AnyWordSpec with Matchers {
   private def applicableCodes(
       promotions: Seq[PromoWithCatalogInformation],
       countryGroup: CountryGroup = CountryGroup.UK,
+      isGift: Boolean = false,
   ) =
-    ApplicablePromotions.filter(promotions, Set("GuardianWeeklyDomestic"), countryGroup, now).map(_.promoCode)
+    ApplicablePromotions.filter(promotions, Set("GuardianWeeklyDomestic"), isGift, countryGroup, now).map(_.promoCode)
+
+  private val giftOnly =
+    promotion("GIFTONLY", catalogRatePlans = List(CatalogRatePlan("GuardianWeeklyDomestic", "OneYearGift")))
 
   "ApplicablePromotions.filter" should {
     "keep promotions which are active, available in the country group and apply to one of the products" in {
@@ -88,6 +92,18 @@ class ApplicablePromotionsSpec extends AnyWordSpec with Matchers {
         ),
       )
       applicableCodes(Seq(promo)) shouldBe Seq("MIXED")
+    }
+
+    "exclude promotions which only apply to gift rate plans when not filtering for gifts" in {
+      applicableCodes(Seq(giftOnly)) shouldBe empty
+    }
+
+    "include promotions which apply to a gift rate plan when filtering for gifts" in {
+      applicableCodes(Seq(giftOnly), isGift = true) shouldBe Seq("GIFTONLY")
+    }
+
+    "exclude promotions which only apply to non-gift rate plans when filtering for gifts" in {
+      applicableCodes(Seq(promotion("NONGIFT")), isGift = true) shouldBe empty
     }
   }
 }

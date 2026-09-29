@@ -14,7 +14,27 @@ case class PromoLandingPage(title: Option[String], description: Option[String], 
 /** The catalog rate plan a promotion applies to, left as plain strings rather than being strongly typed against the
   * product catalog because we don't have those types in Scala
   */
-case class CatalogRatePlan(productKey: String, productRatePlanKey: String)
+case class CatalogRatePlan(productKey: String, productRatePlanKey: String) {
+
+  /** Mirrors the TS `isGuardianWeeklyGiftProduct`. The product catalog doesn't mark rate plans as gifts, so any new
+    * gift rate plan needs adding to `guardianWeeklyGiftRatePlanKeys` (and the TS equivalent).
+    */
+  def isGift: Boolean =
+    CatalogRatePlan.guardianWeeklyProductKeys.contains(productKey) &&
+      CatalogRatePlan.guardianWeeklyGiftRatePlanKeys.contains(productRatePlanKey)
+}
+
+object CatalogRatePlan {
+  val guardianWeeklyProductKeys: Set[String] = Set(
+    "GuardianWeeklyDomestic",
+    "GuardianWeeklyRestOfWorld",
+    "GuardianWeeklyZoneA",
+    "GuardianWeeklyZoneB",
+    "GuardianWeeklyZoneC",
+  )
+
+  private val guardianWeeklyGiftRatePlanKeys = Set("OneYearGift", "ThreeMonthGift")
+}
 
 /** Mirrors the shared TS `AppliesToCatalogInformation` type (@modules/promotions/v2/schema). */
 case class AppliesToCatalogInformation(

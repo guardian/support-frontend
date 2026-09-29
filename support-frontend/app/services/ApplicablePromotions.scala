@@ -14,18 +14,20 @@ import org.joda.time.DateTime
 object ApplicablePromotions {
 
   /** Promotions which are currently active, available in at least one country in `countryGroup` and apply to at least
-    * one rate plan of one of `productKeys`. Order is preserved.
+    * one rate plan of one of `productKeys` which is a gift rate plan if `isGift`, or a non-gift rate plan otherwise.
+    * Order is preserved.
     */
   def filter(
       promotions: Seq[PromoWithCatalogInformation],
       productKeys: Set[String],
+      isGift: Boolean,
       countryGroup: CountryGroup,
       now: DateTime = DateTime.now(),
   ): Seq[PromoWithCatalogInformation] =
     promotions.filter(promotion =>
       isActive(promotion, now) &&
         appliesToCountryGroup(promotion, countryGroup) &&
-        appliesToAnyProduct(promotion, productKeys),
+        appliesToAnyRatePlan(promotion, productKeys, isGift),
     )
 
   private def isActive(promotion: PromoWithCatalogInformation, now: DateTime): Boolean =
@@ -34,6 +36,12 @@ object ApplicablePromotions {
   private def appliesToCountryGroup(promotion: PromoWithCatalogInformation, countryGroup: CountryGroup): Boolean =
     countryGroup.countries.exists(promotion.appliesTo.countries.contains)
 
-  private def appliesToAnyProduct(promotion: PromoWithCatalogInformation, productKeys: Set[String]): Boolean =
-    promotion.appliesTo.catalogRatePlans.exists(ratePlan => productKeys.contains(ratePlan.productKey))
+  private def appliesToAnyRatePlan(
+      promotion: PromoWithCatalogInformation,
+      productKeys: Set[String],
+      isGift: Boolean,
+  ): Boolean =
+    promotion.appliesTo.catalogRatePlans.exists(ratePlan =>
+      productKeys.contains(ratePlan.productKey) && ratePlan.isGift == isGift,
+    )
 }
