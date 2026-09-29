@@ -37,7 +37,6 @@ import type {
 	StripeCardExpiryElementChangeEvent,
 	StripeCardNumberElementChangeEvent,
 } from '@stripe/stripe-js';
-import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { OtherAmount } from 'components/otherAmount/otherAmount';
@@ -99,6 +98,7 @@ import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/co
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/footerTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
+import { useEffect, useRef, useState } from 'react';
 import { CheckoutNudgeSelector } from '../../../components/checkoutNudge/checkoutNudge';
 import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
 import useEmailMarketingUtmSession from '../../../helpers/customHooks/useEmailMarketingUtmSession';
@@ -1261,9 +1261,10 @@ export function OneTimeCheckoutComponent({
 						/>
 
 						{!isMarketingEmailSession && (
-							<div css={similarProductsConsentCheckboxContainer}>
-								<SimilarProductsConsent />
-							</div>
+							<SimilarProductsConsent
+								countryId={countryId}
+								cssOverrides={similarProductsConsentCheckboxContainer}
+							/>
 						)}
 
 						<div
