@@ -49,8 +49,7 @@ const routes = {
 		'https://www.studentbeans.com/en-us/us/beansid-connect/hosted/the-guardian-digital/student/e15f676f-99cb-492d-9d95-ff17af36f274',
 	supporterPlusStudentBeansCa:
 		'https://www.studentbeans.com/en-ca/ca/beansid-connect/hosted/the-guardian-digital/student/362bcbd6-b491-4adf-8ca1-9f0c9f69c3b7',
-	postcodeLookup: '/postcode-lookup',
-	expressPostcodeLookup: '/api/postcode-lookup',
+	postcodeLookup: '/api/postcode-lookup',
 	createSignInUrl: '/identity/signin-url',
 	stripeSetupIntentRecaptcha: '/stripe/create-setup-intent/recaptcha',
 } as const;
@@ -64,15 +63,10 @@ const createRecurringReminderEndpoint = isProd()
 const countryPath = (countryGroupId: CountryGroupId) =>
 	countryGroups[countryGroupId].supportRegionId;
 
-function postcodeLookupUrl(
-	postcode: string,
-	useExpressPostcodeLookup: boolean,
-): string {
-	return `${getOrigin()}${
-		useExpressPostcodeLookup
-			? routes.expressPostcodeLookup
-			: routes.postcodeLookup
-	}/${postcode}`;
+function postcodeLookupUrl(postcode: string): string {
+	return `${getOrigin()}${routes.postcodeLookup}/${encodeURIComponent(
+		postcode,
+	)}`;
 }
 
 function paperSubsUrl(
