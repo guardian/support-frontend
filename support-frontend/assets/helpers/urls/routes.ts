@@ -52,7 +52,7 @@ const routes = {
 	supporterPlusStudentBeansEu:
 		'/eu/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false',
 	contributeEu: '/eu/contribute',
-	postcodeLookup: '/postcode-lookup',
+	postcodeLookup: '/api/postcode-lookup',
 	expressPostcodeLookup: '/api/postcode-lookup',
 	createSignInUrl: '/identity/signin-url',
 	stripeSetupIntentRecaptcha: '/stripe/create-setup-intent/recaptcha',
@@ -67,15 +67,10 @@ const createRecurringReminderEndpoint = isProd()
 const countryPath = (countryGroupId: CountryGroupId) =>
 	countryGroups[countryGroupId].supportRegionId;
 
-function postcodeLookupUrl(
-	postcode: string,
-	useExpressPostcodeLookup: boolean,
-): string {
-	return `${getOrigin()}${
-		useExpressPostcodeLookup
-			? routes.expressPostcodeLookup
-			: routes.postcodeLookup
-	}/${postcode}`;
+function postcodeLookupUrl(postcode: string): string {
+	return `${getOrigin()}${routes.postcodeLookup}/${encodeURIComponent(
+		postcode,
+	)}`;
 }
 
 function paperSubsUrl(

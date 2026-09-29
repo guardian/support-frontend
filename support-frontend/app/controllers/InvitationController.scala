@@ -2,8 +2,12 @@ package controllers
 
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.CustomActionBuilders
+import com.gu.i18n.Currency.GBP
 import com.gu.identity.model.User
 import com.gu.monitoring.SafeLogging
+import com.gu.support.workers.{DigitalPack, Monthly}
+import config.Configuration.GuardianDomain
+import org.joda.time.DateTime
 import play.api.http.ContentTypes.JSON
 import play.api.http.Status.{GONE, OK}
 import play.api.libs.json.Json
@@ -30,12 +34,25 @@ object InvitationController extends Results {
         case None => InternalServerError("Invitation response missing expiryDate")
       }
     }
+
+  /** Benefit cookies for a secondary user who has just accepted a Digital plus (digipack) invitation. Set on the accept
+    * response so they are present before the multiple-account API finishes creating the subscription record. Currency
+    * and billing period do not affect the cookies; DigitalPack selects the digipack set.
+    */
+  def resultFromAcceptInvitation(status: Int, body: String, domain: GuardianDomain, now: DateTime): Result = {
+    val result = Status(status)(body)
+    if (status >= 200 && status < 300) {
+      val cookies = SubscriptionProductCookiesCreator(domain).createCookiesForProduct(DigitalPack(GBP, Monthly), now)
+      result.withCookies(cookies: _*)
+    } else result
+  }
 }
 
 class InvitationController(
     components: ControllerComponents,
     actionRefiners: CustomActionBuilders,
     multipleAccountApiService: MultipleAccountApiService,
+    guardianDomain: GuardianDomain,
 )(implicit ec: ExecutionContext)
     extends AbstractController(components)
     with SafeLogging {
@@ -74,7 +91,8 @@ class InvitationController(
   }
 
   /** Proxies accepting an invitation. Authenticates the signed-in user from Okta cookies and forwards their identity id
-    * as x-identity-id plus Authorization bearer (API requires both). Upstream status codes are passed through.
+    * as x-identity-id plus Authorization bearer (API requires both). Upstream status codes are passed through. A
+    * successful accept also sets digipack benefit cookies.
     */
   def acceptInvitation(invitationCode: String): Action[AnyContent] =
     (MaybeAuthenticatedActionOnFormSubmission andThen RequireAuthenticatedUser).async { implicit request =>
@@ -82,7 +100,14 @@ class InvitationController(
         case Some(cookie) =>
           multipleAccountApiService
             .acceptInvitation(invitationCode, request.user.id, cookie.value)
-            .map(response => Status(response.status)(response.body))
+            .map(response =>
+              InvitationController.resultFromAcceptInvitation(
+                response.status,
+                response.body,
+                guardianDomain,
+                DateTime.now(),
+              ),
+            )
             .recover { case err =>
               logger.error(scrub"Failed to accept invitation via the multiple-account API", err)
               InternalServerError
