@@ -18,5 +18,5 @@ export function useThreeTierUrlSelection(): ThreeTierUrlSelection {
 			selectedAmount: params.get('selected-amount'),
 			forceWeeklyPricing: params.get('force-weekly') === 'true',
 		};
-	}, []);
+	}, [window.location.search]);
 }
