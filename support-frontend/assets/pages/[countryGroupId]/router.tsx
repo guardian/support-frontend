@@ -263,6 +263,7 @@ const router = createBrowserRouter([
 						};
 					},
 				},
+				supportRegionId !== SupportRegionId.EU ||
 				isStudentBeansRegionValidSwitchedOn(supportRegionId, Country.detect())
 					? routeStudentLandingPage(supportRegionId)
 					: routeStudentContributePage(supportRegionId),
