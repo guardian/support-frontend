@@ -42,7 +42,6 @@ import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests
 import type { Participations } from 'helpers/abTests/models';
 import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { glyph } from 'helpers/internationalisation/currency';
 import { guardianContactUsLink, guardianHelpCentreLink } from 'helpers/legal';
@@ -361,7 +360,8 @@ export function ThreeTierLanding({
 		settings.defaultProductSelection?.productType.toLowerCase();
 
 	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
-	const { enableDeepDiscount } = useFeatureSwitches();
+	// Student Beans Europe feature switch enables the link to Student Landing Page for prescribed countries
+	const { enableStudentBeansEurope, enableDeepDiscount } = useFeatureSwitches();
 
 	const getDefaultProductSelection = (productKey: ProductKey) => {
 		return (
@@ -707,7 +707,7 @@ export function ThreeTierLanding({
 			{isStudentBeansRegionValid(
 				supportRegionId,
 				countryCode,
-				isSwitchOn('featureSwitches.enableStudentBeansEurope'),
+				enableStudentBeansEurope,
 			) && (
 				<Container
 					sideBorders
