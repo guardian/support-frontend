@@ -25,13 +25,9 @@ case class CatalogRatePlan(productKey: String, productRatePlanKey: String) {
 }
 
 object CatalogRatePlan {
-  val guardianWeeklyProductKeys: Set[String] = Set(
-    "GuardianWeeklyDomestic",
-    "GuardianWeeklyRestOfWorld",
-    "GuardianWeeklyZoneA",
-    "GuardianWeeklyZoneB",
-    "GuardianWeeklyZoneC",
-  )
+  // Product catalog keys of the products on sale (see support-frontend/assets/helpers/productCatalog.ts)
+  val guardianWeeklyProductKeys: Set[String] = Set("GuardianWeeklyDomestic", "GuardianWeeklyRestOfWorld")
+  val paperProductKeys: Set[String] = Set("HomeDelivery", "NationalDelivery", "SubscriptionCard")
 
   private val guardianWeeklyGiftRatePlanKeys = Set("OneYearGift", "ThreeMonthGift")
 }
