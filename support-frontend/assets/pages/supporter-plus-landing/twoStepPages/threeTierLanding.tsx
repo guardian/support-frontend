@@ -360,8 +360,7 @@ export function ThreeTierLanding({
 		settings.defaultProductSelection?.productType.toLowerCase();
 
 	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
-	// Student Beans Europe feature switch enables the link to Student Landing Page for prescribed countries
-	const { enableStudentBeansEurope, enableDeepDiscount } = useFeatureSwitches();
+	const { enableDeepDiscount } = useFeatureSwitches();
 
 	const getDefaultProductSelection = (productKey: ProductKey) => {
 		return (
@@ -705,11 +704,6 @@ export function ThreeTierLanding({
 				/>
 			</Container>
 			{isStudentBeansRegionValidSwitchedOn(supportRegionId, countryCode) && (
-			{isStudentBeansRegionValid(
-				supportRegionId,
-				countryCode,
-				enableStudentBeansEurope,
-			) && (
 				<Container
 					sideBorders
 					borderColor="rgba(170, 170, 180, 0.5)"

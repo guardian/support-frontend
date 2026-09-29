@@ -33,7 +33,7 @@ import {
 	type PageParticipationsResult,
 	type PageParticipationsResultWithFallback,
 } from '../../helpers/abTests/pageParticipations';
-import { isStudentBeansRegionValidSwitchedOn } from './helpers/isStudentBeansRegionValid';
+import { isStudentBeansRegionValid } from './helpers/isStudentBeansRegionValid';
 
 const checkoutNudgeSettings = getCheckoutNudgeParticipations();
 const appConfig = parseAppConfig(window.guardian);
@@ -264,7 +264,11 @@ const router = createBrowserRouter([
 					},
 				},
 				supportRegionId !== SupportRegionId.EU ||
-				isStudentBeansRegionValidSwitchedOn(supportRegionId, Country.detect())
+				isStudentBeansRegionValid(
+					supportRegionId,
+					Country.detect(),
+					isSwitchOn('featureSwitches.enableStudentBeansEurope'),
+				)
 					? routeStudentLandingPage(supportRegionId)
 					: routeStudentContributePage(supportRegionId),
 				{

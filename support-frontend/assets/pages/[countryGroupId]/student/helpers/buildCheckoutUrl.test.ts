@@ -1,11 +1,13 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { routes } from 'helpers/urls/routes';
 import buildCheckoutUrl, { routeInclCountry } from './buildCheckoutUrl';
 
-jest.mock('helpers/globalsAndSwitches/globals', () => ({
+jest.mock('contexts/FeatureSwitchesContext', () => ({
 	__esModule: true,
-	isSwitchOn: jest.fn().mockReturnValue(true),
+	useFeatureSwitches: jest
+		.fn()
+		.mockReturnValue({ enableStudentBeansEurope: true }),
 }));
 
 describe('buildCheckoutUrl', () => {
@@ -35,10 +37,6 @@ describe('buildCheckoutUrl', () => {
 	});
 
 	describe('when the rate plan is OneYearStudent (enableEuroStudentLandingPage:true)', () => {
-		jest.doMock('helpers/globalsAndSwitches/globals', () => ({
-			__esModule: true,
-			isSwitchOn: jest.fn().mockReturnValue(true),
-		}));
 		describe('and the supportRegionId is eu with defined country DE', () => {
 			it('returns the correct Student Beans landing page URL', () => {
 				const url = buildCheckoutUrl(
@@ -138,7 +136,9 @@ describe('buildCheckoutUrl', () => {
 
 	describe('when the rate plan is OneYearStudent (enableEuroStudentLandingPage:false)', () => {
 		beforeAll(() => {
-			jest.mocked(isSwitchOn).mockReturnValue(false);
+			jest.mocked(useFeatureSwitches).mockReturnValue({
+				enableStudentBeansEurope: false,
+			} as ReturnType<typeof useFeatureSwitches>);
 		});
 		describe('and the supportRegionId is uk', () => {
 			it('returns the correct Student Beans landing page URL', () => {
@@ -172,12 +172,6 @@ describe('buildCheckoutUrl', () => {
 
 				expect(url).toBe(routes.supporterPlusStudentBeansCa);
 			});
-		});
-	});
-
-	describe('when the EU rate plan is OneYearStudent (enableEuroStudentLandingPage:false)', () => {
-		beforeAll(() => {
-			jest.mocked(isSwitchOn).mockReturnValue(false);
 		});
 		describe('and the supportRegionId is eu with defined country DE', () => {
 			it('returns the correct Tier Three Landing page URL', () => {
