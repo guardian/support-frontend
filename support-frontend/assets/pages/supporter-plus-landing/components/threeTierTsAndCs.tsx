@@ -1,16 +1,16 @@
 import { css } from '@emotion/react';
 import { from, palette, textSans12 } from '@guardian/source/foundations';
-import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import {
 	getDateWithOrdinal,
 	getLongMonth,
 	getNumericYear,
 } from 'helpers/utilities/dateFormatting';
+import type { TierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
 
 interface TsAndCsProps {
 	title: string;
-	planCost: TierPlanCosts;
+	planCost: TierPlanCost;
 	starts?: Date;
 	expires?: Date;
 }
@@ -18,16 +18,6 @@ interface TsAndCsProps {
 interface ThreeTierTsAndCsProps {
 	tsAndCsContent: TsAndCsProps[];
 	currency: string;
-}
-
-interface TierPlanCosts {
-	price: number;
-	promoCode?: string;
-	discount?: {
-		percentage: number;
-		price: number;
-		duration: { value: number; period: BillingPeriod };
-	};
 }
 
 const container = css`
@@ -42,7 +32,7 @@ const container = css`
 
 const discountSummaryCopy = (
 	currency: string,
-	planCost: TierPlanCosts,
+	planCost: TierPlanCost,
 ): string | undefined => {
 	// EXAMPLE: £16/month for the first 12 months, then £25/month
 	if (planCost.discount) {

@@ -20,7 +20,7 @@ import { glyph } from 'helpers/internationalisation/currency';
 import { guardianContactUsLink, guardianHelpCentreLink } from 'helpers/legal';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import CurrentMaxRatesByCountry from 'pages/[countryGroupId]/helpers/CurrentMaxRatesByCountry';
-import { getPlanCost } from 'pages/[countryGroupId]/helpers/getPlanCost';
+import { getTierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import type { CardContent } from '../components/threeTierCard';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
@@ -153,11 +153,11 @@ export function ThreeTierFooter({
 					tsAndCsContent={[
 						{
 							title: tier1Card.title,
-							planCost: getPlanCost(tier1Card.price, contributionType),
+							planCost: getTierPlanCost(tier1Card.price, contributionType),
 						},
 						{
 							title: tier2Card.title,
-							planCost: getPlanCost(
+							planCost: getTierPlanCost(
 								tier2Card.price,
 								contributionType,
 								tier2Promotion,
@@ -171,7 +171,7 @@ export function ThreeTierFooter({
 						},
 						{
 							title: tier3Card.title,
-							planCost: getPlanCost(
+							planCost: getTierPlanCost(
 								tier3Card.price,
 								contributionType,
 								tier3Promotion,
