@@ -4,18 +4,13 @@ import com.gu.i18n.CountryGroup
 import com.gu.support.promotions.PromoWithCatalogInformation
 import org.joda.time.DateTime
 
-/** Filters promotions from [[CachedPromotionsService]] down to those which can currently be applied on a given page -
-  * the equivalent of the product/country/date checks the legacy `PromotionValidator` performed.
-  *
-  * [[CachedPromotionsService]] deliberately doesn't filter out inactive promotions (the promotion-terms page needs to
-  * show terms for expired promotions), so pages offering promotions for sale must filter with this before injecting
-  * them into `window.guardian`.
-  */
 object ApplicablePromotions {
 
-  /** Promotions which are currently active, available in at least one country in `countryGroup` and apply to at least
-    * one rate plan of one of `productKeys` which is a gift rate plan if `isGift`, or a non-gift rate plan otherwise.
-    * Order is preserved.
+  /** Filters promotions to those which are
+    *   - currently active
+    *   - available in at least one country in `countryGroup`
+    *   - apply to at least one rate plan from any product in `productKeys`
+    * If `isGift` is true then the plan must be a gift rate plan.
     */
   def filter(
       promotions: Seq[PromoWithCatalogInformation],
