@@ -8,14 +8,12 @@ import {
 } from '@guardian/source-development-kitchen/react-components';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { UnitedStates } from '@modules/internationalisation/countryGroup';
-import type { ContributionType } from 'helpers/contributions';
 import { glyph } from 'helpers/internationalisation/currency';
 import { guardianContactUsLink, guardianHelpCentreLink } from 'helpers/legal';
 import CurrentMaxRatesByCountry from 'pages/[countryGroupId]/helpers/CurrentMaxRatesByCountry';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import type { TsAndCsProps } from '../components/threeTierTsAndCs';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
-import { useRatePlanKey } from '../twoStepPages/useRatePlanKey';
 import { USSupportAnotherWay } from './usSupportAnotherWay';
 
 const disclaimerContainer = css`
@@ -63,19 +61,15 @@ const links = [
 
 interface ThreeTierFooterProps {
 	supportRegionId: SupportRegionId;
-	contributionType: ContributionType;
 	tsAndCsContent: TsAndCsProps[];
+	showTaxDisclaimer: boolean;
 }
 
 export function ThreeTierFooter({
 	supportRegionId,
-	contributionType,
 	tsAndCsContent,
+	showTaxDisclaimer: displayTaxExclusionDisclaimer,
 }: ThreeTierFooterProps): JSX.Element {
-	const { taxExclusionEnabled } = useRatePlanKey(
-		contributionType,
-		supportRegionId,
-	);
 	const { currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	return (
@@ -87,7 +81,7 @@ export function ThreeTierFooter({
 				cssOverrides={disclaimerContainer}
 			>
 				<CurrentMaxRatesByCountry countryGroupId={countryGroupId} />
-				{taxExclusionEnabled && (
+				{displayTaxExclusionDisclaimer && (
 					<p css={taxExclusionDisclaimer}>
 						For All-access digital and Digital plus, taxes may apply.
 					</p>

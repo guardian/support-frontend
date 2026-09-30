@@ -1,31 +1,33 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { useMemo } from 'react';
 import type { ContributionType } from 'helpers/contributions';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 
-export function getRatePlanKey(contributionType: ContributionType) {
+function getDigitalRatePlanKey(
+	contributionType: ContributionType,
+	supportRegionId: SupportRegionId,
+	productKey: ProductKey,
+) {
+	const taxExclusionEnabled = supportRegionId === SupportRegionId.CA;
 	switch (contributionType) {
 		case 'ANNUAL':
-			return 'Annual';
+			return taxExclusionEnabled && productKey !== 'Contribution'
+				? 'AnnualTaxExclusive'
+				: 'Annual';
 		default:
-			return 'Monthly';
+			return taxExclusionEnabled && productKey !== 'Contribution'
+				? 'MonthlyTaxExclusive'
+				: 'Monthly';
 	}
 }
 
-export function useRatePlanKey(
+export function useDigitalRatePlanKey(
 	contributionType: ContributionType,
 	supportRegionId: SupportRegionId,
-): { ratePlanKey: ActiveRatePlanKey; taxExclusionEnabled: boolean } {
-	const taxExclusionEnabled = supportRegionId === SupportRegionId.CA;
+	productKey: ProductKey,
+): ActiveRatePlanKey {
 	return useMemo(() => {
-		const base = getRatePlanKey(contributionType);
-		if (!taxExclusionEnabled) {
-			return { ratePlanKey: base, taxExclusionEnabled };
-		}
-		return {
-			ratePlanKey:
-				base === 'Monthly' ? 'MonthlyTaxExclusive' : 'AnnualTaxExclusive',
-			taxExclusionEnabled,
-		};
-	}, [contributionType, taxExclusionEnabled]);
+		return getDigitalRatePlanKey(contributionType, supportRegionId, productKey);
+	}, [contributionType, supportRegionId, productKey]);
 }

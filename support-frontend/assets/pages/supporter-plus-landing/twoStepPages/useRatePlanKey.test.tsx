@@ -1,7 +1,8 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { renderHook, waitFor } from '@testing-library/react';
 import type { ContributionType } from 'helpers/contributions';
-import { useRatePlanKey } from './useRatePlanKey';
+import { useDigitalRatePlanKey } from './useRatePlanKey';
 
 jest.mock('contexts/FeatureSwitchesContext', () => ({
 	useFeatureSwitches: jest.fn(),
@@ -10,62 +11,62 @@ jest.mock('contexts/FeatureSwitchesContext', () => ({
 type HookProbeProps = {
 	contributionType: ContributionType;
 	supportRegionId: SupportRegionId;
+	productKey: ProductKey;
 };
 
-describe('useRatePlanKey', () => {
+describe('useDigitalRatePlanKey', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 	});
 
-	it('returns the billing period key for non-Canada regions', () => {
+	it('returns the billing period key for non-Canada regions with SupporterPlus product', () => {
 		const { result } = renderHook(() =>
-			useRatePlanKey('MONTHLY', SupportRegionId.UK),
+			useDigitalRatePlanKey('MONTHLY', SupportRegionId.UK, 'SupporterPlus'),
 		);
-
-		expect(result.current).toEqual({
-			ratePlanKey: 'Monthly',
-			taxExclusionEnabled: false,
-		});
+		expect(result.current).toEqual('Monthly');
 	});
 
-	it('appends TaxExclusive for Canada', () => {
+	it('appends TaxExclusive for Canada with DigitalPlus product', () => {
 		const { result } = renderHook(() =>
-			useRatePlanKey('ANNUAL', SupportRegionId.CA),
+			useDigitalRatePlanKey(
+				'ANNUAL',
+				SupportRegionId.CA,
+				'DigitalSubscription',
+			),
 		);
+		expect(result.current).toEqual('AnnualTaxExclusive');
+	});
 
-		expect(result.current).toEqual({
-			ratePlanKey: 'AnnualTaxExclusive',
-			taxExclusionEnabled: true,
-		});
+	it('returns the billing period key for Canada with Contribution product', () => {
+		const { result } = renderHook(() =>
+			useDigitalRatePlanKey('ANNUAL', SupportRegionId.CA, 'Contribution'),
+		);
+		expect(result.current).toEqual('Annual');
 	});
 
 	it('updates the key when contribution type changes', async () => {
 		const { result, rerender } = renderHook(
-			({ contributionType, supportRegionId }: HookProbeProps) =>
-				useRatePlanKey(contributionType, supportRegionId),
+			({ contributionType, supportRegionId, productKey }: HookProbeProps) =>
+				useDigitalRatePlanKey(contributionType, supportRegionId, productKey),
 			{
 				initialProps: {
 					contributionType: 'MONTHLY',
 					supportRegionId: SupportRegionId.CA,
+					productKey: 'SupporterPlus',
 				},
 			},
 		);
 
-		expect(result.current).toEqual({
-			ratePlanKey: 'MonthlyTaxExclusive',
-			taxExclusionEnabled: true,
-		});
+		expect(result.current).toEqual('MonthlyTaxExclusive');
 
 		rerender({
 			contributionType: 'ANNUAL',
 			supportRegionId: SupportRegionId.CA,
+			productKey: 'SupporterPlus',
 		});
 
 		await waitFor(() => {
-			expect(result.current).toEqual({
-				ratePlanKey: 'AnnualTaxExclusive',
-				taxExclusionEnabled: true,
-			});
+			expect(result.current).toEqual('AnnualTaxExclusive');
 		});
 	});
 });
