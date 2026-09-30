@@ -11,39 +11,23 @@ case class PromoDiscount(amount: Double, durationMonths: Int)
 
 case class PromoLandingPage(title: Option[String], description: Option[String], roundelHtml: Option[String])
 
-/** The catalog rate plan a promotion applies to, left as plain strings rather than being strongly typed against the
-  * product catalog because we don't have those types in Scala
-  */
+// Product key and product rate plan key are left as plain strings because we don't have those types in Scala
 case class CatalogRatePlan(productKey: String, productRatePlanKey: String) {
-
-  /** Mirrors the TS `isGuardianWeeklyGiftProduct`. The product catalog doesn't mark rate plans as gifts, so any new
-    * gift rate plan needs adding to `guardianWeeklyGiftRatePlanKeys` (and the TS equivalent).
-    */
   def isGift: Boolean =
     CatalogRatePlan.guardianWeeklyProductKeys.contains(productKey) &&
       CatalogRatePlan.guardianWeeklyGiftRatePlanKeys.contains(productRatePlanKey)
 }
 
 object CatalogRatePlan {
-  // Product catalog keys of the products on sale (see support-frontend/assets/helpers/productCatalog.ts)
   val guardianWeeklyProductKeys: Set[String] = Set("GuardianWeeklyDomestic", "GuardianWeeklyRestOfWorld")
   val paperProductKeys: Set[String] = Set("HomeDelivery", "NationalDelivery", "SubscriptionCard")
-
   private val guardianWeeklyGiftRatePlanKeys = Set("OneYearGift", "ThreeMonthGift")
 }
-
-/** Mirrors the shared TS `AppliesToCatalogInformation` type (@modules/promotions/v2/schema). */
 case class AppliesToCatalogInformation(
     productRatePlanIds: Set[ProductRatePlanId],
     countries: Set[Country],
     catalogRatePlans: List[CatalogRatePlan],
 )
-
-/** Mirrors the shared TS `PromoWithCatalogInformation` type (@modules/promotions/v2/schema)
-  *
-  * This is deliberately a separate model from the [[Promotion]] domain object (which has a different shape, used by the
-  * legacy productPrices/PromotionValidator mechanism, decoded from a different Zuora-catalog-embedded JSON format)
-  */
 case class PromoWithCatalogInformation(
     promoCode: PromoCode,
     name: String,
