@@ -72,16 +72,4 @@ describe('compareSignedTokens', () => {
 			false,
 		);
 	});
-
-	// SPIKE confirmation step: paste a real token + secret captured from a CODE
-	// page (window.guardian.csrf.token, the GU_support_csrf cookie, and
-	// play.http.secret.key from SSM) to prove the format against production.
-	it.skip('validates a real token captured from CODE', () => {
-		const codeSecret = 'REPLACE_WITH_CODE_play.http.secret.key';
-		const headerToken = 'REPLACE_WITH_window.guardian.csrf.token';
-		const cookieToken = 'REPLACE_WITH_GU_support_csrf_cookie_value';
-		expect(compareSignedTokens(headerToken, cookieToken, codeSecret)).toBe(
-			true,
-		);
-	});
 });
