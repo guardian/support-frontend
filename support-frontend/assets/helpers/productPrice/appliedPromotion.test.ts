@@ -26,12 +26,7 @@ const restOfWorldPromo = promotion('ROW', [
 	},
 ]);
 
-const setQueryString = (queryString: string) =>
-	window.history.replaceState({}, '', `/uk/subscribe/weekly${queryString}`);
-
 describe('getAppliedPromotion', () => {
-	afterEach(() => setQueryString(''));
-
 	it('returns the first promotion which applies to the rate plan', () => {
 		expect(
 			getAppliedPromotion(
@@ -42,24 +37,24 @@ describe('getAppliedPromotion', () => {
 		).toBe(monthlyPromo);
 	});
 
-	it('prefers the promotion matching the promoCode query parameter', () => {
-		setQueryString('?promoCode=MONTHLYANDANNUAL');
+	it('prefers the promotion matching the promo code', () => {
 		expect(
 			getAppliedPromotion(
 				[monthlyPromo, monthlyAndAnnualPromo],
 				'GuardianWeeklyDomestic',
 				'MonthlyPlus',
+				'MONTHLYANDANNUAL',
 			),
 		).toBe(monthlyAndAnnualPromo);
 	});
 
-	it('ignores a promoCode query parameter promotion which does not apply to the rate plan', () => {
-		setQueryString('?promoCode=MONTHLY');
+	it('ignores a promo code promotion which does not apply to the rate plan', () => {
 		expect(
 			getAppliedPromotion(
 				[monthlyPromo, monthlyAndAnnualPromo],
 				'GuardianWeeklyDomestic',
 				'AnnualPlus',
+				'MONTHLY',
 			),
 		).toBe(monthlyAndAnnualPromo);
 	});
