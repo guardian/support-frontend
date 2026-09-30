@@ -8,7 +8,7 @@ import {
 } from 'helpers/utilities/dateFormatting';
 import type { TierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
 
-interface TsAndCsProps {
+export interface TsAndCsProps {
 	title: string;
 	planCost: TierPlanCost;
 	starts?: Date;

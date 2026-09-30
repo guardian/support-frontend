@@ -43,6 +43,7 @@ import { allProductPrices } from 'helpers/productPrice/productPrices';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
 import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
+import { getTierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
 import { isStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
@@ -56,6 +57,7 @@ import { SupportOnce } from '../components/supportOnce';
 import type { CardContent } from '../components/threeTierCard';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierFooter } from '../components/threeTierFooter';
+import type { TsAndCsProps } from '../components/threeTierTsAndCs';
 import { ThreeTierLandingHeading } from './threeTierLandingHeading';
 import { TickerContainer } from './tickerContainer';
 import { getRatePlanKey, useRatePlanKey } from './useRatePlanKey';
@@ -434,6 +436,41 @@ export function ThreeTierLanding({
 		forceWeeklyPricing || settings.name.includes('WEEKLY_PRICE');
 	const countryCode = Country.detect();
 
+	const tsAndCsContent: TsAndCsProps[] = [
+		{
+			title: tier1Card.title,
+			planCost: getTierPlanCost(tier1Card.price, contributionType),
+		},
+		{
+			title: tier2Card.title,
+			planCost: getTierPlanCost(
+				tier2Card.price,
+				contributionType,
+				tier2Promotion,
+			),
+			starts: tier2Promotion?.starts
+				? new Date(tier2Promotion.starts)
+				: undefined,
+			expires: tier2Promotion?.expires
+				? new Date(tier2Promotion.expires)
+				: undefined,
+		},
+		{
+			title: tier3Card.title,
+			planCost: getTierPlanCost(
+				tier3Card.price,
+				contributionType,
+				tier3Promotion,
+			),
+			starts: tier3Promotion?.starts
+				? new Date(tier3Promotion.starts)
+				: undefined,
+			expires: tier3Promotion?.expires
+				? new Date(tier3Promotion.expires)
+				: undefined,
+		},
+	];
+
 	return (
 		<PageScaffold
 			header={
@@ -449,11 +486,7 @@ export function ThreeTierLanding({
 				<ThreeTierFooter
 					supportRegionId={supportRegionId}
 					contributionType={contributionType}
-					tier1Card={tier1Card}
-					tier2Card={tier2Card}
-					tier2Promotion={tier2Promotion}
-					tier3Card={tier3Card}
-					tier3Promotion={tier3Promotion}
+					tsAndCsContent={tsAndCsContent}
 				/>
 			}
 		>

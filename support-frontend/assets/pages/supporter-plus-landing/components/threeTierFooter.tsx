@@ -11,11 +11,9 @@ import { UnitedStates } from '@modules/internationalisation/countryGroup';
 import type { ContributionType } from 'helpers/contributions';
 import { glyph } from 'helpers/internationalisation/currency';
 import { guardianContactUsLink, guardianHelpCentreLink } from 'helpers/legal';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import CurrentMaxRatesByCountry from 'pages/[countryGroupId]/helpers/CurrentMaxRatesByCountry';
-import { getTierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
-import type { CardContent } from '../components/threeTierCard';
+import type { TsAndCsProps } from '../components/threeTierTsAndCs';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
 import { useRatePlanKey } from '../twoStepPages/useRatePlanKey';
 import { USSupportAnotherWay } from './usSupportAnotherWay';
@@ -66,21 +64,13 @@ const links = [
 interface ThreeTierFooterProps {
 	supportRegionId: SupportRegionId;
 	contributionType: ContributionType;
-	tier1Card: CardContent;
-	tier2Card: CardContent;
-	tier2Promotion?: Promotion;
-	tier3Card: CardContent;
-	tier3Promotion?: Promotion;
+	tsAndCsContent: TsAndCsProps[];
 }
 
 export function ThreeTierFooter({
 	supportRegionId,
 	contributionType,
-	tier1Card,
-	tier2Card,
-	tier2Promotion,
-	tier3Card,
-	tier3Promotion,
+	tsAndCsContent,
 }: ThreeTierFooterProps): JSX.Element {
 	const { taxExclusionEnabled } = useRatePlanKey(
 		contributionType,
@@ -103,40 +93,7 @@ export function ThreeTierFooter({
 					</p>
 				)}
 				<ThreeTierTsAndCs
-					tsAndCsContent={[
-						{
-							title: tier1Card.title,
-							planCost: getTierPlanCost(tier1Card.price, contributionType),
-						},
-						{
-							title: tier2Card.title,
-							planCost: getTierPlanCost(
-								tier2Card.price,
-								contributionType,
-								tier2Promotion,
-							),
-							starts: tier2Promotion?.starts
-								? new Date(tier2Promotion.starts)
-								: undefined,
-							expires: tier2Promotion?.expires
-								? new Date(tier2Promotion.expires)
-								: undefined,
-						},
-						{
-							title: tier3Card.title,
-							planCost: getTierPlanCost(
-								tier3Card.price,
-								contributionType,
-								tier3Promotion,
-							),
-							starts: tier3Promotion?.starts
-								? new Date(tier3Promotion.starts)
-								: undefined,
-							expires: tier3Promotion?.expires
-								? new Date(tier3Promotion.expires)
-								: undefined,
-						},
-					]}
+					tsAndCsContent={tsAndCsContent}
 					currency={glyph(currencyKey)}
 				></ThreeTierTsAndCs>
 			</Container>
