@@ -43,6 +43,8 @@ import { allProductPrices } from 'helpers/productPrice/productPrices';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
 import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
+import CurrentMaxRatesByCountry from 'pages/[countryGroupId]/helpers/CurrentMaxRatesByCountry';
+import { isStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
 	getSanitisedHtml,
@@ -58,6 +60,7 @@ import { ThreeTierFooter } from '../components/threeTierFooter';
 import { ThreeTierLandingHeading } from './threeTierLandingHeading';
 import { TickerContainer } from './tickerContainer';
 import { getRatePlanKey, useRatePlanKey } from './useRatePlanKey';
+import { useThreeTierUrlSelection } from './useThreeTierUrlSelection';
 
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
@@ -128,11 +131,10 @@ const paymentFrequencyButtonsCss = css`
 `;
 
 const isCardUserSelected = (
+	urlSelectedAmount: string | null,
 	cardPrice: number,
 	cardPriceDiscount?: number,
 ): boolean => {
-	const urlParams = new URLSearchParams(window.location.search);
-	const urlSelectedAmount = urlParams.get('selected-amount');
 	const hasUrlSelectedAmount = !isNaN(Number(urlSelectedAmount));
 	if (!hasUrlSelectedAmount) {
 		return false;
@@ -165,16 +167,15 @@ export function ThreeTierLanding({
 	supportRegionId,
 	settings,
 }: ThreeTierLandingProps): JSX.Element {
-	const urlSearchParams = new URLSearchParams(window.location.search);
-	const rawUrlSearchParamsProduct = urlSearchParams.get('product');
-	const urlSearchParamsProduct = rawUrlSearchParamsProduct
-		? rawUrlSearchParamsProduct.toLowerCase()
-		: undefined;
-	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
+	const {
+		product: urlSearchParamsProduct,
+		ratePlan: urlSearchParamsRatePlan,
+		selectedAmount: urlSelectedAmount,
+		forceWeeklyPricing,
+	} = useThreeTierUrlSelection();
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const countryId = Country.detect();
-
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
 			GBPCountries,
@@ -198,14 +199,11 @@ export function ThreeTierLanding({
 		string | undefined
 	>();
 
-	const enableStudentOffer = ['uk', 'us', 'ca'].includes(supportRegionId);
-
 	const getInitialContributionType = (): ContributionType => {
 		// 1. Query Parameters take precedence
-		const ratePlanParam = urlSearchParamsRatePlan?.trim().toLowerCase();
-		if (ratePlanParam === 'annual') {
+		if (urlSearchParamsRatePlan === 'annual') {
 			return 'ANNUAL';
-		} else if (ratePlanParam === 'monthly') {
+		} else if (urlSearchParamsRatePlan === 'monthly') {
 			return 'MONTHLY';
 		}
 
@@ -249,7 +247,8 @@ export function ThreeTierLanding({
 		settings.defaultProductSelection?.productType.toLowerCase();
 
 	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
-	const { enableDeepDiscount } = useFeatureSwitches();
+	// Student Beans Europe feature switch enables the link to Student Landing Page for prescribed countries
+	const { enableStudentBeansEurope, enableDeepDiscount } = useFeatureSwitches();
 
 	const getDefaultProductSelection = (productKey: ProductKey) => {
 		return (
@@ -264,7 +263,7 @@ export function ThreeTierLanding({
 	) => {
 		return (
 			urlSearchParamsProduct === productKey.toLowerCase() ||
-			isCardUserSelected(productPrice, promotionAmount)
+			isCardUserSelected(urlSelectedAmount, productPrice, promotionAmount)
 		);
 	};
 
@@ -432,9 +431,9 @@ export function ThreeTierLanding({
 		...tier3ProductDescription,
 	};
 
-	const forceWeeklyPricing = urlSearchParams.get('force-weekly') === 'true';
 	const showWeeklyPrice =
 		forceWeeklyPricing || settings.name.includes('WEEKLY_PRICE');
+	const countryCode = Country.detect();
 
 	return (
 		<PageScaffold
@@ -525,7 +524,11 @@ export function ThreeTierLanding({
 					countryGroupId={countryGroupId}
 				/>
 			</Container>
-			{enableStudentOffer && (
+			{isStudentBeansRegionValid(
+				supportRegionId,
+				countryCode,
+				enableStudentBeansEurope,
+			) && (
 				<Container
 					sideBorders
 					borderColor="rgba(170, 170, 180, 0.5)"
@@ -533,7 +536,7 @@ export function ThreeTierLanding({
 				>
 					<StudentOffer
 						currencyKey={currencyId}
-						countryGroupId={countryGroupId}
+						supportRegionId={supportRegionId}
 					/>
 				</Container>
 			)}

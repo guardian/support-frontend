@@ -1,5 +1,9 @@
 package controllers
 
+import com.gu.i18n.Currency.GBP
+import com.gu.support.workers.{DigitalPack, Monthly}
+import config.Configuration.GuardianDomain
+import org.joda.time.DateTime
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.HttpEntity
@@ -63,6 +67,33 @@ class InvitationControllerSpec extends AnyWordSpec with Matchers {
     "return 500 when a 200 response is missing expiryDate" in {
       val result = InvitationController.resultFromGetInvitation(200, """{"invitationCode":"abc"}""", nowMillis = 0)
       result.header.status mustBe 500
+    }
+  }
+
+  "resultFromAcceptInvitation" should {
+    val now = DateTime.parse("2025-01-01T00:00:00")
+    val domain = GuardianDomain("thegulocal.com")
+    val digipackCookies =
+      SubscriptionProductCookiesCreator(domain).createCookiesForProduct(DigitalPack(GBP, Monthly), now)
+
+    "set digipack benefit cookies when the invitation is accepted" in {
+      val result = InvitationController.resultFromAcceptInvitation(200, """{"ok":true}""", domain, now)
+
+      result.header.status mustBe 200
+      result.newCookies must contain theSameElementsAs digipackCookies
+      result.newCookies.map(_.name) must contain theSameElementsAs Seq(
+        "GU_AF1",
+        "gu_allow_reject_all",
+        "gu_hide_support_messaging",
+        "gu_user_benefits_expiry",
+      )
+    }
+
+    "not set benefit cookies when the invitation is not accepted" in {
+      val result = InvitationController.resultFromAcceptInvitation(400, """{"message":"wrong user"}""", domain, now)
+
+      result.header.status mustBe 400
+      result.newCookies mustBe empty
     }
   }
 }

@@ -170,6 +170,7 @@ trait Controllers {
     controllerComponents,
     actionBuilders,
     multipleAccountApiService,
+    appConfig.guardianDomain,
   )
 
   lazy val identityController = new IdentityController(
