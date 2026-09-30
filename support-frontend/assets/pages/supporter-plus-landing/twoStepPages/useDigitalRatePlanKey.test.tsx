@@ -2,7 +2,7 @@ import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { renderHook, waitFor } from '@testing-library/react';
 import type { ContributionType } from 'helpers/contributions';
-import { useDigitalRatePlanKey } from './useRatePlanKey';
+import { useDigitalRatePlanKey } from './useDigitalRatePlanKey';
 
 jest.mock('contexts/FeatureSwitchesContext', () => ({
 	useFeatureSwitches: jest.fn(),

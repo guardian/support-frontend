@@ -60,7 +60,7 @@ import { ThreeTierFooter } from '../components/threeTierFooter';
 import type { TsAndCsProps } from '../components/threeTierTsAndCs';
 import { ThreeTierLandingHeading } from './threeTierLandingHeading';
 import { TickerContainer } from './tickerContainer';
-import { useDigitalRatePlanKey } from './useRatePlanKey';
+import { useDigitalRatePlanKey } from './useDigitalRatePlanKey';
 import { useThreeTierUrlSelection } from './useThreeTierUrlSelection';
 
 const recurringContainer = css`
