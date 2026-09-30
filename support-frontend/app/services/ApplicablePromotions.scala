@@ -25,8 +25,11 @@ object ApplicablePromotions {
         appliesToAnyRatePlan(promotion, productKeys, isGift),
     )
 
-  private def isActive(promotion: PromoWithCatalogInformation, now: DateTime): Boolean =
-    !promotion.startTimestamp.isAfter(now) && promotion.endTimestamp.forall(_.isAfter(now))
+  private def isActive(promotion: PromoWithCatalogInformation, now: DateTime): Boolean = {
+    val hasStarted = now.isEqual(promotion.startTimestamp) || now.isAfter(promotion.startTimestamp)
+    val hasNotEnded = promotion.endTimestamp.forall(now.isBefore)
+    hasStarted && hasNotEnded
+  }
 
   private def appliesToCountryGroup(promotion: PromoWithCatalogInformation, countryGroup: CountryGroup): Boolean =
     countryGroup.countries.exists(promotion.appliesTo.countries.contains)
