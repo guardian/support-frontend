@@ -9,7 +9,7 @@ import io.circe.generic.semiauto.deriveDecoder
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class PromotionsApiServiceError(message: String) extends Throwable
+case class PromotionsApiServiceError(message: String) extends Throwable(message)
 object PromotionsApiServiceError {
   implicit val decoder: Decoder[PromotionsApiServiceError] = deriveDecoder
 }

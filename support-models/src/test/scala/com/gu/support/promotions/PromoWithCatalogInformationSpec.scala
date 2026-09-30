@@ -72,4 +72,11 @@ class PromoWithCatalogInformationSpec extends AnyFlatSpec with Matchers {
         .get[String]("productKey") shouldBe Right("SupporterPlus")
     }
 
+  "CatalogRatePlan.isGift" should "be true for gift rate plans and false otherwise" in {
+    CatalogRatePlan("GuardianWeeklyDomestic", "OneYearGift").isGift shouldBe true
+    CatalogRatePlan("GuardianWeeklyRestOfWorld", "ThreeMonthGift").isGift shouldBe true
+    CatalogRatePlan("GuardianWeeklyDomestic", "AnnualPlus").isGift shouldBe false
+    CatalogRatePlan("SupporterPlus", "OneYearStudent").isGift shouldBe false
+    CatalogRatePlan("SupporterPlus", "OneYearGift").isGift shouldBe false
+  }
 }
