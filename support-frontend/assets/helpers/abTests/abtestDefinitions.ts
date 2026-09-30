@@ -61,27 +61,6 @@ export const tests: Tests = {
 		seed: 1,
 		excludeContributionsOnlyCountries: true,
 	},
-	postCodeLookupExpress: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			GBPCountries: {
-				offset: 0,
-				size: 0.1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 9,
-		targetPage: pageUrlRegexes.ukPrintCheckoutOnly,
-		excludeContributionsOnlyCountries: true,
-	},
 	deliveryAgentsLookupExpress: {
 		variants: [
 			{

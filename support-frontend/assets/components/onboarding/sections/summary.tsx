@@ -15,7 +15,6 @@ import type {
 	CurrentUserState,
 	HandleStepNavigationFunction,
 } from 'components/onboarding/onboardingTypes';
-import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
 	getNewsletterSubscriptionById,
@@ -240,8 +239,6 @@ function OnboardingSummary({
 	const order = getThankYouOrder();
 	const { windowWidthIsLessThan } = useWindowWidth();
 
-	const { enableCanadaTaxExclusion } = useFeatureSwitches();
-
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const { title: productTitle, benefits } = getOnboardingProductCopy(
@@ -286,9 +283,11 @@ function OnboardingSummary({
 		order?.paymentMethod === 'StripeExpressCheckoutElement' ||
 		order?.paymentMethod === 'StripeHostedCheckout';
 
-	const todaysPayment =
-		enableCanadaTaxExclusion &&
-		getTodaysPaymentWithTaxExclusion(payment, currencyKey, order?.taxConfig);
+	const todaysPayment = getTodaysPaymentWithTaxExclusion(
+		payment,
+		currencyKey,
+		order?.taxConfig,
+	);
 
 	const paymentMethodCopy = isDirectDebit
 		? 'Direct Debit'

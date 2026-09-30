@@ -40,6 +40,23 @@ if (typeof window !== 'undefined') {
 	window.guardian = window.guardian || {};
 	window.guardian.settings = window.guardian.settings || {};
 	window.guardian.settings.metricUrl = 'https://metrics.gutools.co.uk';
+	window.guardian.promotions = window.guardian.promotions || [
+		{
+			promoCode: 'STORYBOOK_STUB',
+			name: 'Storybook stub promotion',
+			campaignCode: 'STORYBOOK_STUB_CAMPAIGN',
+			description: 'Stub promotion for Storybook - not rendered.',
+			startTimestamp: '2025-01-01T00:00:00.000Z',
+			endTimestamp: '2025-12-31T23:59:59.000Z',
+			appliesTo: {
+				productRatePlanIds: [],
+				countries: [],
+				catalogRatePlans: [
+					{ productKey: 'DigitalSubscription', productRatePlanKey: 'Monthly' },
+				],
+			},
+		},
+	];
 
 	const domain = window.location.hostname;
 	const userName = 'storybook-user';
