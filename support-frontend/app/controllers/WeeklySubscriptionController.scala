@@ -93,8 +93,8 @@ class WeeklySubscriptionController(
       }
   }
 
-  /** The promotions which can be applied on this page, in priority order (query string codes first). If promotions-api
-    * is unavailable we render the page without promotions rather than failing.
+  /** The promotions which can be applied on this page. If promotions-api is unavailable we render the page without
+    * promotions rather than failing.
     */
   private def applicablePromotions(
       promoCodes: List[String],
