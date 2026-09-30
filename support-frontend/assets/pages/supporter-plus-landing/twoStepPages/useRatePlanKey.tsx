@@ -1,5 +1,5 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import type { ContributionType } from 'helpers/contributions';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 
@@ -16,24 +16,16 @@ export function useRatePlanKey(
 	contributionType: ContributionType,
 	supportRegionId: SupportRegionId,
 ): { ratePlanKey: ActiveRatePlanKey; taxExclusionEnabled: boolean } {
-	const [ratePlanKey, setRatePlanKey] = useState<ActiveRatePlanKey>(
-		getRatePlanKey(contributionType),
-	);
-	const isCanada = supportRegionId === SupportRegionId.CA;
-	const taxExclusionEnabled = isCanada;
-
-	useEffect(() => {
-		setRatePlanKey(getRatePlanKey(contributionType));
-	}, [contributionType]);
-
-	if (taxExclusionEnabled) {
+	const taxExclusionEnabled = supportRegionId === SupportRegionId.CA;
+	return useMemo(() => {
+		const base = getRatePlanKey(contributionType);
+		if (!taxExclusionEnabled) {
+			return { ratePlanKey: base, taxExclusionEnabled };
+		}
 		return {
 			ratePlanKey:
-				ratePlanKey === 'Monthly'
-					? 'MonthlyTaxExclusive'
-					: 'AnnualTaxExclusive',
+				base === 'Monthly' ? 'MonthlyTaxExclusive' : 'AnnualTaxExclusive',
 			taxExclusionEnabled,
 		};
-	}
-	return { ratePlanKey, taxExclusionEnabled };
+	}, [contributionType, taxExclusionEnabled]);
 }
