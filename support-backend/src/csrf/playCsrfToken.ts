@@ -18,7 +18,9 @@ import { createHmac, timingSafeEqual } from 'crypto';
  *
  * Note the values in the header and the cookie are DIFFERENT strings for the
  * SAME raw token (Play re-signs with a fresh nonce each time, a BREACH
- * mitigation), so we must unsign both and compare the RAW tokens — never compare
+ * mitigation). The raw token is carried in plaintext within each signed string,
+ * so we verify each signature (recomputing the HMAC — it cannot be reversed),
+ * read off the raw token from each, and compare those RAW tokens — never compare
  * the signed strings directly.
  */
 
