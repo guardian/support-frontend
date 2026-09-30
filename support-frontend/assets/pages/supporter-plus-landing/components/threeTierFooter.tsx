@@ -68,7 +68,7 @@ interface ThreeTierFooterProps {
 export function ThreeTierFooter({
 	supportRegionId,
 	tsAndCsContent,
-	showTaxDisclaimer: displayTaxExclusionDisclaimer,
+	showTaxDisclaimer,
 }: ThreeTierFooterProps): JSX.Element {
 	const { currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -81,7 +81,7 @@ export function ThreeTierFooter({
 				cssOverrides={disclaimerContainer}
 			>
 				<CurrentMaxRatesByCountry countryGroupId={countryGroupId} />
-				{displayTaxExclusionDisclaimer && (
+				{showTaxDisclaimer && (
 					<p css={taxExclusionDisclaimer}>
 						For All-access digital and Digital plus, taxes may apply.
 					</p>
