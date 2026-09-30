@@ -3,12 +3,6 @@ import type { discountDetailsSchema } from '@modules/promotions/v2/schema';
 import type { z } from 'zod';
 import { getNumberOfMonthsInPeriod } from './billingPeriods';
 
-/*
- * A port of the discount calculations in the Scala PriceSummaryService, used to
- * work out promotional prices from promotions-api promotions (which, unlike the
- * legacy ProductPrices promotions, don't come with a pre-computed discounted price).
- */
-
 type PromoDiscount = z.infer<typeof discountDetailsSchema>;
 
 /**
