@@ -58,6 +58,7 @@ import { getPromotion } from 'helpers/productPrice/promotions';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
 import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import CurrentMaxRatesByCountry from 'pages/[countryGroupId]/helpers/CurrentMaxRatesByCountry';
+import { isStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
 	getSanitisedHtml,
@@ -289,7 +290,6 @@ export function ThreeTierLanding({
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const countryId = Country.detect();
-
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
 			GBPCountries,
@@ -312,8 +312,6 @@ export function ThreeTierLanding({
 	const [countdownDaysLeft, setCountdownDaysLeft] = useState<
 		string | undefined
 	>();
-
-	const enableStudentOffer = ['uk', 'us', 'ca'].includes(supportRegionId);
 
 	const getInitialContributionType = (): ContributionType => {
 		// 1. Query Parameters take precedence
@@ -361,7 +359,8 @@ export function ThreeTierLanding({
 		settings.defaultProductSelection?.productType.toLowerCase();
 
 	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
-	const { enableDeepDiscount } = useFeatureSwitches();
+	// Student Beans Europe feature switch enables the link to Student Landing Page for prescribed countries
+	const { enableStudentBeansEurope, enableDeepDiscount } = useFeatureSwitches();
 
 	const getDefaultProductSelection = (productKey: ProductKey) => {
 		return (
@@ -546,6 +545,7 @@ export function ThreeTierLanding({
 
 	const showWeeklyPrice =
 		forceWeeklyPricing || settings.name.includes('WEEKLY_PRICE');
+	const countryCode = Country.detect();
 
 	return (
 		<PageScaffold
@@ -702,7 +702,11 @@ export function ThreeTierLanding({
 					countryGroupId={countryGroupId}
 				/>
 			</Container>
-			{enableStudentOffer && (
+			{isStudentBeansRegionValid(
+				supportRegionId,
+				countryCode,
+				enableStudentBeansEurope,
+			) && (
 				<Container
 					sideBorders
 					borderColor="rgba(170, 170, 180, 0.5)"
@@ -710,7 +714,7 @@ export function ThreeTierLanding({
 				>
 					<StudentOffer
 						currencyKey={currencyId}
-						countryGroupId={countryGroupId}
+						supportRegionId={supportRegionId}
 					/>
 				</Container>
 			)}

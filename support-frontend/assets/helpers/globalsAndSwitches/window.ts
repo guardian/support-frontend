@@ -27,6 +27,7 @@ const featureSwitchesSchema = z.object({
 	enableCheckoutNudge: z.optional(z.enum(['On', 'Off'])),
 	enableMParticle: z.optional(z.enum(['On', 'Off'])),
 	enableDeepDiscount: z.optional(z.enum(['On', 'Off'])),
+	enableStudentBeansEurope: z.optional(z.enum(['On', 'Off'])),
 });
 
 export type FeatureSwitches = z.infer<typeof featureSwitchesSchema>;
