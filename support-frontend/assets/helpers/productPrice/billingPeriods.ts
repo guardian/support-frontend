@@ -48,6 +48,19 @@ export function getBillingPeriodTitle(
 	}
 }
 
+export function getNumberOfMonthsInPeriod(
+	billingPeriod: RecurringBillingPeriod,
+) {
+	switch (billingPeriod) {
+		case BillingPeriod.Monthly:
+			return 1;
+		case BillingPeriod.Quarterly:
+			return 3;
+		case BillingPeriod.Annual:
+			return 12;
+	}
+}
+
 export function ratePlanToBillingPeriod(
 	ratePlanKey: ActiveRatePlanKey,
 ): BillingPeriod {

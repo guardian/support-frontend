@@ -1,7 +1,7 @@
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
-import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { discountDetailsSchema } from '@modules/promotions/v2/schema';
 import type { z } from 'zod';
+import { getNumberOfMonthsInPeriod } from './billingPeriods';
 
 /*
  * A port of the discount calculations in the Scala PriceSummaryService, used to
@@ -10,12 +10,6 @@ import type { z } from 'zod';
  */
 
 type PromoDiscount = z.infer<typeof discountDetailsSchema>;
-
-const monthsInPeriod: Record<RecurringBillingPeriod, number> = {
-	[BillingPeriod.Monthly]: 1,
-	[BillingPeriod.Quarterly]: 3,
-	[BillingPeriod.Annual]: 12,
-};
 
 /**
  * Rounds a non-negative number to `decimalPlaces` using HALF_DOWN rounding
@@ -47,7 +41,7 @@ function getDiscountScaledToPeriod(
 	billingPeriod: RecurringBillingPeriod,
 ): number {
 	const proportionOfPeriodsDiscounted =
-		discount.durationMonths / monthsInPeriod[billingPeriod];
+		discount.durationMonths / getNumberOfMonthsInPeriod(billingPeriod);
 	const numberOfPeriodsDiscounted = Math.ceil(proportionOfPeriodsDiscounted);
 	return roundHalfDown(
 		(discount.amount * proportionOfPeriodsDiscounted) /
@@ -60,7 +54,7 @@ export function getNumberOfDiscountedPeriods(
 	durationMonths: number,
 	billingPeriod: RecurringBillingPeriod,
 ): number {
-	return Math.ceil(durationMonths / monthsInPeriod[billingPeriod]);
+	return Math.ceil(durationMonths / getNumberOfMonthsInPeriod(billingPeriod));
 }
 
 /** The price per billing period while the discount applies, to 2 decimal places. */
