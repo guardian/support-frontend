@@ -60,7 +60,7 @@ import { ThreeTierFooter } from '../components/threeTierFooter';
 import type { TsAndCsProps } from '../components/threeTierTsAndCs';
 import { ThreeTierLandingHeading } from './threeTierLandingHeading';
 import { TickerContainer } from './tickerContainer';
-import { useDigitalRatePlanKey } from './useDigitalRatePlanKey';
+import { getDigitalRatePlanKey } from './useDigitalRatePlanKey';
 import { useThreeTierUrlSelection } from './useThreeTierUrlSelection';
 
 const recurringContainer = css`
@@ -266,7 +266,7 @@ export function ThreeTierLanding({
 	 * We use the product catalog for the recurring Contribution tier amount
 	 */
 	const tier1Product = 'Contribution';
-	const tier1RatePlanKey = useDigitalRatePlanKey(
+	const tier1RatePlanKey = getDigitalRatePlanKey(
 		contributionType,
 		supportRegionId,
 		tier1Product,
@@ -302,7 +302,7 @@ export function ThreeTierLanding({
 
 	/** Tier 2: SupporterPlus */
 	const tier2Product = 'SupporterPlus';
-	const tier2RatePlanKey = useDigitalRatePlanKey(
+	const tier2RatePlanKey = getDigitalRatePlanKey(
 		contributionType,
 		supportRegionId,
 		tier2Product,
@@ -376,7 +376,7 @@ export function ThreeTierLanding({
 	 * This should only exist as long as the Tier three hack is in place.
 	 */
 	const tier3Product = 'DigitalSubscription';
-	const tier3RatePlanKey = useDigitalRatePlanKey(
+	const tier3RatePlanKey = getDigitalRatePlanKey(
 		contributionType,
 		supportRegionId,
 		tier3Product,

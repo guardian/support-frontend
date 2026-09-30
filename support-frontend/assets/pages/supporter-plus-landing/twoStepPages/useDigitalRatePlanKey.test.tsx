@@ -2,7 +2,7 @@ import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { renderHook, waitFor } from '@testing-library/react';
 import type { ContributionType } from 'helpers/contributions';
-import { useDigitalRatePlanKey } from './useDigitalRatePlanKey';
+import { getDigitalRatePlanKey } from './useDigitalRatePlanKey';
 
 type HookProbeProps = {
 	contributionType: ContributionType;
@@ -10,21 +10,21 @@ type HookProbeProps = {
 	productKey: ProductKey;
 };
 
-describe('useDigitalRatePlanKey', () => {
+describe('getDigitalRatePlanKey', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 	});
 
 	it('returns the billing period key for non-Canada regions with SupporterPlus product', () => {
 		const { result } = renderHook(() =>
-			useDigitalRatePlanKey('MONTHLY', SupportRegionId.UK, 'SupporterPlus'),
+			getDigitalRatePlanKey('MONTHLY', SupportRegionId.UK, 'SupporterPlus'),
 		);
 		expect(result.current).toEqual('Monthly');
 	});
 
 	it('appends TaxExclusive for Canada with DigitalPlus product', () => {
 		const { result } = renderHook(() =>
-			useDigitalRatePlanKey(
+			getDigitalRatePlanKey(
 				'ANNUAL',
 				SupportRegionId.CA,
 				'DigitalSubscription',
@@ -35,7 +35,7 @@ describe('useDigitalRatePlanKey', () => {
 
 	it('returns the billing period key for Canada with Contribution product', () => {
 		const { result } = renderHook(() =>
-			useDigitalRatePlanKey('ANNUAL', SupportRegionId.CA, 'Contribution'),
+			getDigitalRatePlanKey('ANNUAL', SupportRegionId.CA, 'Contribution'),
 		);
 		expect(result.current).toEqual('Annual');
 	});
@@ -43,7 +43,7 @@ describe('useDigitalRatePlanKey', () => {
 	it('updates the key when contribution type changes', async () => {
 		const { result, rerender } = renderHook(
 			({ contributionType, supportRegionId, productKey }: HookProbeProps) =>
-				useDigitalRatePlanKey(contributionType, supportRegionId, productKey),
+				getDigitalRatePlanKey(contributionType, supportRegionId, productKey),
 			{
 				initialProps: {
 					contributionType: 'MONTHLY',
