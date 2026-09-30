@@ -47,7 +47,7 @@ class WeeklySubscriptionController(
     if (orderIsAGift) "subscribe/weekly/gift" else "subscribe/weekly",
   )
 
-  def weekly(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction().async {
+  def weekly(countryGroupId: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction().async {
     implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
       // We want the canonical link to point to the geo-redirect page so that users arriving from
@@ -60,16 +60,16 @@ class WeeklySubscriptionController(
           .toList
       val defaultPromos = priceSummaryServiceProvider.forUser(isTestUser = false).getDefaultPromoCodes(GuardianWeekly)
       val maybePromotionCopy =
-        landingCopyProvider.promotionCopy(queryPromos ++ defaultPromos, GuardianWeekly, countryCode, orderIsAGift)
+        landingCopyProvider.promotionCopy(queryPromos ++ defaultPromos, GuardianWeekly, countryGroupId, orderIsAGift)
       val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser = false).get()
 
-      applicablePromotions(queryPromos ++ defaultPromos, countryCode, orderIsAGift).map { promotions =>
+      applicablePromotions(queryPromos ++ defaultPromos, countryGroupId, orderIsAGift).map { promotions =>
         Ok(
           views.html.main(
             title =
               if (orderIsAGift) "The Guardian Weekly Gift Subscription | The Guardian"
               else "The Guardian Weekly Subscriptions | The Guardian",
-            mainElement = EmptyDiv("weekly-landing-page-" + countryCode),
+            mainElement = EmptyDiv("weekly-landing-page-" + countryGroupId),
             mainJsBundle = RefPath("weeklySubscriptionLandingPage.js"),
             mainStyleBundle = None,
             description = stringsConfig.weeklyLandingDescription,
@@ -98,10 +98,10 @@ class WeeklySubscriptionController(
     */
   private def applicablePromotions(
       promoCodes: List[String],
-      countryCode: String,
+      countryGroupId: String,
       orderIsAGift: Boolean,
   ): Future[Seq[PromoWithCatalogInformation]] =
-    CountryGroup.byId(countryCode) match {
+    CountryGroup.byId(countryGroupId) match {
       case None => Future.successful(Nil)
       case Some(countryGroup) =>
         cachedPromotionsServiceProvider
