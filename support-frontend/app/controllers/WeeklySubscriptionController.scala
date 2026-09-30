@@ -93,8 +93,8 @@ class WeeklySubscriptionController(
       }
   }
 
-  /** The promotions which can be applied on this page. If promotions-api is unavailable we render the page without
-    * promotions rather than failing.
+  /** The promotions which can be applied on this page. Promotions are served from the cache where possible; if a code
+    * isn't cached and promotions-api is unavailable we render the page without promotions rather than failing.
     */
   private def getPromotions(
       promoCodes: List[String],
