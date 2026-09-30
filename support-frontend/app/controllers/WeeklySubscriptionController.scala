@@ -63,7 +63,7 @@ class WeeklySubscriptionController(
         landingCopyProvider.promotionCopy(queryPromos ++ defaultPromos, GuardianWeekly, countryGroupId, orderIsAGift)
       val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser = false).get()
 
-      applicablePromotions(queryPromos ++ defaultPromos, countryGroupId, orderIsAGift).map { promotions =>
+      getPromotions(queryPromos ++ defaultPromos, countryGroupId, orderIsAGift).map { promotions =>
         Ok(
           views.html.main(
             title =
@@ -96,20 +96,21 @@ class WeeklySubscriptionController(
   /** The promotions which can be applied on this page. If promotions-api is unavailable we render the page without
     * promotions rather than failing.
     */
-  private def applicablePromotions(
+  private def getPromotions(
       promoCodes: List[String],
       countryGroupId: String,
       orderIsAGift: Boolean,
   ): Future[Seq[PromoWithCatalogInformation]] =
-    CountryGroup.byId(countryGroupId) match {
-      case None => Future.successful(Nil)
-      case Some(countryGroup) =>
+    CountryGroup
+      .byId(countryGroupId)
+      .map { countryGroup =>
         cachedPromotionsServiceProvider
           .forUser(isTestUser = false)
           .get(promoCodes.distinct)
           .map(ApplicablePromotions.filter(_, Set(guardianWeeklyProductKey(countryGroup)), orderIsAGift, countryGroup))
           .recover { case NonFatal(_) => Nil }
-    }
+      }
+      .getOrElse(Future.successful(Nil))
 
   private def guardianWeeklyProductKey(countryGroup: CountryGroup): String =
     if (countryGroup == CountryGroup.RestOfTheWorld) "GuardianWeeklyRestOfWorld" else "GuardianWeeklyDomestic"
