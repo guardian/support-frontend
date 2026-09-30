@@ -9,6 +9,7 @@ const studentBeansRegions = [
 	SupportRegionId.CA,
 ];
 const studentBeansEuCountries = ['FR', 'DE', 'ES', 'NL', 'IE'];
+
 export const isStudentBeansRegionValid = (
 	supportRegionId: SupportRegionId,
 	countryCode: CountryCode,
