@@ -884,7 +884,18 @@ exports[`The Backend stack matches the snapshot 1`] = `
             {
               "Action": "ssm:GetParameter",
               "Effect": "Allow",
-              "Resource": "arn:aws:ssm:eu-west-1:undefined:parameter/support/frontend/PROD/play.http.secret.key",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:eu-west-1:",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/support/frontend/PROD/play.http.secret.key",
+                  ],
+                ],
+              },
             },
           ],
           "Version": "2012-10-17",

@@ -103,7 +103,7 @@ cd target
 			new GuAllowPolicy(this, 'SSMGetParameter', {
 				actions: ['ssm:GetParameter'],
 				resources: [
-					`arn:aws:ssm:${this.region}:${scope.account}:parameter/support/frontend/${this.stage}/play.http.secret.key`,
+					`arn:aws:ssm:${this.region}:${this.account}:parameter/support/frontend/${this.stage}/play.http.secret.key`,
 				],
 			}),
 			new GuAllowPolicy(this, 'CloudwatchMetrics', {
