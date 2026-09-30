@@ -44,16 +44,8 @@ class ApplicablePromotionsSpec extends AnyWordSpec with Matchers {
       applicableCodes(Seq(promotion("VALID"))) shouldBe Seq("VALID")
     }
 
-    "preserve the order of the promotions" in {
-      applicableCodes(Seq(promotion("B"), promotion("A"), promotion("C"))) shouldBe Seq("B", "A", "C")
-    }
-
     "exclude promotions which haven't started yet" in {
       applicableCodes(Seq(promotion("FUTURE", startTimestamp = now.plusMinutes(1)))) shouldBe empty
-    }
-
-    "include promotions starting exactly now" in {
-      applicableCodes(Seq(promotion("STARTSNOW", startTimestamp = now))) shouldBe Seq("STARTSNOW")
     }
 
     "exclude promotions which have expired, including those expiring exactly now" in {

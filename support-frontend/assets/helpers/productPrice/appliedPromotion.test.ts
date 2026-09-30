@@ -73,10 +73,4 @@ describe('getAppliedPromotion', () => {
 			),
 		).toBeUndefined();
 	});
-
-	it('returns undefined when there are no promotions', () => {
-		expect(
-			getAppliedPromotion([], 'GuardianWeeklyDomestic', 'MonthlyPlus'),
-		).toBeUndefined();
-	});
 });

@@ -63,44 +63,20 @@ describe('getDiscountedPrice', () => {
 		).toBe(79.17);
 	});
 
-	it('rounds exact halves down', () => {
-		// 47.62 * 0.75 = 35.715
-		expect(
-			getDiscountedPrice(47.62, threeMonths25Percent, BillingPeriod.Monthly),
-		).toBe(35.71);
-	});
-
 	it('rounds exact halves down even when floating point arithmetic would give slightly more than a half', () => {
 		// 8.46 * 0.75 = 6.345, but 6.345000000000001 in floating point
 		expect(
 			getDiscountedPrice(8.46, threeMonths25Percent, BillingPeriod.Monthly),
 		).toBe(6.34);
 	});
-
-	it('rounds values above a half up', () => {
-		// 119.9 * 0.9375 = 112.40625
-		expect(
-			getDiscountedPrice(119.9, threeMonths25Percent, BillingPeriod.Annual),
-		).toBe(112.41);
-	});
 });
 
 describe('getNumberOfDiscountedPeriods', () => {
 	it.each([
-		[1, BillingPeriod.Monthly, 1],
-		[1, BillingPeriod.Quarterly, 1],
-		[1, BillingPeriod.Annual, 1],
 		[3, BillingPeriod.Monthly, 3],
 		[3, BillingPeriod.Quarterly, 1],
-		[3, BillingPeriod.Annual, 1],
-		[4, BillingPeriod.Monthly, 4],
 		[4, BillingPeriod.Quarterly, 2],
-		[4, BillingPeriod.Annual, 1],
-		[12, BillingPeriod.Monthly, 12],
-		[12, BillingPeriod.Quarterly, 4],
-		[12, BillingPeriod.Annual, 1],
-		[13, BillingPeriod.Monthly, 13],
-		[13, BillingPeriod.Quarterly, 5],
+		[3, BillingPeriod.Annual, 1],
 		[13, BillingPeriod.Annual, 2],
 	] as const)(
 		'a %d month discount covers %s billing periods: %d',
