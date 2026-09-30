@@ -203,14 +203,12 @@ trait Controllers {
   )
 
   lazy val promotionsController = new Promotions(
-    promotionServiceProvider,
-    priceSummaryServiceProvider,
+    cachedPromotionsServiceProvider,
     assetsResolver,
     actionBuilders,
     testUsers,
     controllerComponents,
     allSettingsProvider,
-    appConfig.stage,
   )
 
   lazy val pricesController = new PricesController(

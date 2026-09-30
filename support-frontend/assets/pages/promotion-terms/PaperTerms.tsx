@@ -1,9 +1,13 @@
 import OrderedList from 'components/list/orderedList';
-import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import { paperSubsUrl } from 'helpers/urls/routes';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 
-export default function PaperTerms(props: PromotionTerms) {
+type PropTypes = {
+	starts: Date;
+	expires: Date | undefined;
+	promoCode: string;
+};
+export default function PaperTerms(props: PropTypes) {
 	const expiryCopy = props.expires
 		? `The closing date and time of the promotion is ${formatUserDate(
 				props.expires,
