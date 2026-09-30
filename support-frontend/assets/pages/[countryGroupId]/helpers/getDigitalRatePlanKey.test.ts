@@ -2,7 +2,7 @@ import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { renderHook, waitFor } from '@testing-library/react';
 import type { ContributionType } from 'helpers/contributions';
-import { getDigitalRatePlanKey } from './useDigitalRatePlanKey';
+import { getDigitalRatePlanKey } from './getDigitalRatePlanKey';
 
 type HookProbeProps = {
 	contributionType: ContributionType;
