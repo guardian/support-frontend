@@ -20,6 +20,9 @@
 			"@modules/product-catalog/*": [
 				"../node_modules/@guardian/support-service-lambdas/modules/product-catalog/src/*"
 			],
+			"@modules/promotions/*": [
+				"../node_modules/@guardian/support-service-lambdas/modules/promotions/src/*"
+			],
 			"@modules/arrayFunctions": [
 				"../node_modules/@guardian/support-service-lambdas/modules/arrayFunctions"
 			],
@@ -28,6 +31,9 @@
 			],
 			"@modules/objectFunctions": [
 				"../node_modules/@guardian/support-service-lambdas/modules/objectFunctions"
+			],
+			"@modules/schemaUtils": [
+				"../node_modules/@guardian/support-service-lambdas/modules/schemaUtils"
 			],
 			"@modules/*": ["../../modules/*"]
 		},
