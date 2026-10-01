@@ -15,16 +15,7 @@ import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.util.control.NonFatal
 
-/** Polls `promotions-api` (as resolved by [[CachedPromotionsServiceProvider]]) for all active promotions and caches
-  * them in memory, so pages can inject pre-resolved promotions into `window.guardian` without a client-side API call
-  * (see guardian/support-frontend#8207/#8208).
-  *
-  *   - [[getActive]] only reads from the cache, so it never calls promotions-api on a page request (e.g. for an
-  *     arbitrary promoCode in the query string) and keeps returning the last successfully fetched promotions if
-  *     promotions-api becomes unavailable.
-  *   - [[get]] falls back to fetching a code which isn't cached, for pages which need inactive (e.g. expired)
-  *     promotions. Those aren't cached.
-  */
+// Polls `promotions-api` for all active promotions and caches them in memory
 class CachedPromotionsService(
     system: ActorSystem,
     promotionsApiService: PromotionsApiService,
@@ -50,11 +41,11 @@ class CachedPromotionsService(
         Future.failed(e)
       }
 
-  /** The active promotions for `promoCodes`, in the same order. Codes which aren't active are omitted. */
+  // Get promotions for `promoCodes` from the cache
   def getActive(promoCodes: Seq[String]): Seq[PromoWithCatalogInformation] =
     promoCodes.flatMap(activePromotions.get().get)
 
-  /** The promotion for `promoCode`, whether or not it's active. */
+  // Get the promotion for `promoCode`, fetching from the promotions API if it's not active / in the cache.
   def get(promoCode: String): Future[Option[PromoWithCatalogInformation]] =
     activePromotions.get().get(promoCode) match {
       case Some(promotion) => Future.successful(Some(promotion))
