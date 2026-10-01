@@ -38,7 +38,7 @@ export function OneTimeCheckout({
 	oneTimeCheckoutSettings,
 	userAttributes,
 }: OneTimeCheckoutProps) {
-	const { currencyKey, countryGroupId } =
+	const { currencyCode: currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const isTestUser = !!cookie.get('_test_username');
 
