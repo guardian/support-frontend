@@ -7,7 +7,8 @@ import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.Currency
 import com.gu.monitoring.SafeLogging
-import com.gu.support.catalog.NationalDelivery
+import com.gu.support.catalog.{Collection, HomeDelivery, NationalDelivery, Sunday}
+import com.gu.support.config.StripeConfigProvider
 import com.gu.support.paperround.PaperRoundServiceProvider
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers._
@@ -86,6 +87,7 @@ class CreateSubscriptionController(
     paperRoundServiceProvider: PaperRoundServiceProvider,
     userBenefitsApiServiceProvider: UserBenefitsApiServiceProvider,
     stripeCheckoutSessionService: StripeCheckoutSessionService,
+    stripeConfigProvider: StripeConfigProvider,
 )(implicit val ec: ExecutionContext, system: ActorSystem)
     extends AbstractController(components)
     with Circe
@@ -199,6 +201,11 @@ class CreateSubscriptionController(
 
         val errorOrStatusResponse = for {
           _ <- validate(request, settings.switches)
+          _ <- validateStripeHostedCheckout(
+            stripePublicKey,
+            request.body.product,
+            testUsers.isTestUser(request),
+          )
           result <- createCheckoutSession(
             stripePublicKey = stripePublicKey,
             email = request.body.email,
@@ -212,6 +219,34 @@ class CreateSubscriptionController(
         toHttpResponse(errorOrStatusResponse, request.body.product, request.body.email)
       }
     }
+
+  // Stripe hosted checkout is only supported for Sunday newspaper subscriptions paid via the Tortoise Media account
+  private def validateStripeHostedCheckout(
+      stripePublicKey: StripePublicKey,
+      product: ProductType,
+      isTestUser: Boolean,
+  ): EitherT[Future, CreateSubscriptionError, Unit] = {
+    val tortoiseMediaPublicKey = stripeConfigProvider.get(isTestUser).tortoiseMediaAccount.publicKey
+
+    val isSundayNewspaperSub = product match {
+      case Paper(_, _, HomeDelivery | Collection, Sunday, _) => true
+      case _ => false
+    }
+
+    if (stripePublicKey != tortoiseMediaPublicKey) {
+      EitherT.leftT(
+        RequestValidationError("Stripe hosted checkout is only supported with the Tortoise Media Stripe account"),
+      )
+    } else if (!isSundayNewspaperSub) {
+      EitherT.leftT(
+        RequestValidationError(
+          "Stripe hosted checkout is only supported for Sunday HomeDelivery or SubscriptionCard subscriptions",
+        ),
+      )
+    } else {
+      EitherT.rightT(())
+    }
+  }
 
   // Returns a Right if validation succeeds
   private def validateRecaptcha(token: String, isTestUser: Boolean)(implicit
