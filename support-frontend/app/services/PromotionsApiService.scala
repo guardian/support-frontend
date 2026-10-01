@@ -62,4 +62,12 @@ class PromotionsApiService(client: FutureHttpClient, config: PromotionsApiConfig
         params = Map("promoCodes" -> distinctCodes.mkString(",")) ++ active.map(a => "active" -> a.toString),
       ).map(_.promotions)
   }
+
+  /** Fetches all currently active promotions. */
+  def listActive(): Future[List[PromoWithCatalogInformation]] =
+    get[ListPromotionsResponse](
+      endpoint = "promotions",
+      headers = Map("x-api-key" -> config.apiKey),
+      params = Map("active" -> "true"),
+    ).map(_.promotions)
 }
