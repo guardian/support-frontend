@@ -49,7 +49,7 @@ function getPromotionTermsProps(): PromotionTermsPropTypes {
 export function PromotionTermsPage(props: PromotionTermsPropTypes) {
 	return (
 		<PageScaffold
-			header={<Header countryGroupId={CountryGroup.detect()} />}
+			header={<Header countryGroupId={props.countryGroupId} />}
 			footer={
 				<Footer termsConditionsLink={getTermsConditionsLink(props.promotion)} />
 			}

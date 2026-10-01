@@ -28,7 +28,7 @@ class PromotionsSpec extends AnyWordSpec with Matchers {
 
     "not treat Guardian Weekly as a gift if only some matching rate plans are gift rate plans" in {
       val path = Promotions.redirectPathForCatalogRatePlans(
-        List(ratePlan("GuardianWeeklyZoneA", "OneYearGift"), ratePlan("GuardianWeeklyZoneA", "Quarterly")),
+        List(ratePlan("GuardianWeeklyDomestic", "OneYearGift"), ratePlan("GuardianWeeklyDomestic", "QuarterlyPlus")),
       )
       path shouldBe routes.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift = false).url
     }

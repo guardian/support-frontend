@@ -88,29 +88,18 @@ class Promotions(
 
 object Promotions {
 
-  // Product-catalog keys (see support-frontend/assets/helpers/productCatalog.ts) for the Guardian Weekly and Paper
-  // products/rate plans - anything not matched by these (or DigitalSubscription) falls back to the contribution
-  // redirect, matching the previous legacy-Product-based behaviour's catch-all case.
-  private val guardianWeeklyProductKeys = Set(
-    "GuardianWeeklyDomestic",
-    "GuardianWeeklyRestOfWorld",
-    "GuardianWeeklyZoneA",
-    "GuardianWeeklyZoneB",
-    "GuardianWeeklyZoneC",
-  )
-  private val paperProductKeys = Set("HomeDelivery", "NationalDelivery", "NewspaperVoucher", "SubscriptionCard")
-
-  /** Maps the catalog rate plans onto the redirect path for its product's landing page.
+  /** Maps the catalog rate plans onto the redirect path for its product's landing page. Anything not matched falls back
+    * to the contribution redirect, matching the previous legacy-Product-based behaviour's catch-all case.
     */
   def redirectPathForCatalogRatePlans(catalogRatePlans: List[CatalogRatePlan]): String = {
     val productKeys = catalogRatePlans.map(_.productKey).toSet
-    val isGift = catalogRatePlans.nonEmpty && catalogRatePlans.forall(_.productRatePlanKey.contains("Gift"))
+    val isGift = catalogRatePlans.nonEmpty && catalogRatePlans.forall(_.isGift)
 
     if (productKeys.contains("DigitalSubscription")) {
       routes.Application.geoRedirectToPath("subscribe/digitaledition").url
-    } else if (productKeys.exists(guardianWeeklyProductKeys.contains)) {
+    } else if (productKeys.exists(CatalogRatePlan.guardianWeeklyProductKeys.contains)) {
       routes.WeeklySubscriptionController.weeklyGeoRedirect(isGift).url
-    } else if (productKeys.exists(paperProductKeys.contains)) {
+    } else if (productKeys.exists(CatalogRatePlan.paperProductKeys.contains)) {
       routes.PaperSubscriptionController.paper().url
     } else {
       routes.Application.contributeGeoRedirect("").url

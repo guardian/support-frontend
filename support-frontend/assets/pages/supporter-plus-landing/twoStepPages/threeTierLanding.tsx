@@ -1,18 +1,6 @@
 import { css } from '@emotion/react';
-import { cmp } from '@guardian/consent-manager';
-import {
-	from,
-	palette,
-	space,
-	textSans12,
-	textSans17,
-	textSansBold20,
-} from '@guardian/source/foundations';
+import { from, palette, space, textSans17 } from '@guardian/source/foundations';
 import { Container } from '@guardian/source/react-components';
-import {
-	FooterLinks,
-	FooterWithContents,
-} from '@guardian/source-development-kitchen/react-components';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -44,7 +32,6 @@ import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { glyph } from 'helpers/internationalisation/currency';
-import { guardianContactUsLink, guardianHelpCentreLink } from 'helpers/legal';
 import {
 	getProductDescription,
 	getProductLabel,
@@ -53,11 +40,10 @@ import {
 } from 'helpers/productCatalog';
 import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { allProductPrices } from 'helpers/productPrice/productPrices';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
 import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
-import CurrentMaxRatesByCountry from 'pages/[countryGroupId]/helpers/CurrentMaxRatesByCountry';
+import { getTierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
 import { isStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
@@ -70,7 +56,8 @@ import { StudentOffer } from '../components/studentOffer';
 import { SupportOnce } from '../components/supportOnce';
 import type { CardContent } from '../components/threeTierCard';
 import { ThreeTierCards } from '../components/threeTierCards';
-import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
+import { ThreeTierFooter } from '../components/threeTierFooter';
+import type { TsAndCsProps } from '../components/threeTierTsAndCs';
 import { ThreeTierLandingHeading } from './threeTierLandingHeading';
 import { TickerContainer } from './tickerContainer';
 import { getRatePlanKey, useRatePlanKey } from './useRatePlanKey';
@@ -144,70 +131,6 @@ const paymentFrequencyButtonsCss = css`
 	}
 `;
 
-const supportAnotherWayContainer = css`
-	display: flex;
-	background-color: #1e3e72;
-`;
-
-const supportAnotherWay = css`
-	margin: 20px 0;
-	max-width: 940px;
-	text-align: left;
-	color: ${palette.neutral[100]};
-	h4 {
-		${textSansBold20};
-	}
-	p {
-		${textSans17};
-	}
-	a {
-		color: ${palette.neutral[100]};
-	}
-`;
-
-const disclaimerContainer = css`
-	background-color: ${palette.brand[400]};
-	> div {
-		border-bottom: 1px solid ${palette.brand[600]};
-		padding: ${space[4]}px 10px;
-	}
-	${from.mobileLandscape} {
-		> div {
-			padding: ${space[5]}px ${space[5]}px;
-		}
-	}
-`;
-
-const taxExclusionDisclaimer = css`
-	${textSans12};
-	color: ${palette.neutral[100]};
-	margin-bottom: ${space[2]}px;
-`;
-
-const links = [
-	{
-		href: 'https://www.theguardian.com/info/privacy',
-		text: 'Privacy policy',
-		isExternal: true,
-	},
-	{
-		text: 'Privacy settings',
-		onClick: () => {
-			cmp.showPrivacyManager();
-		},
-	},
-	{
-		href: guardianContactUsLink,
-		text: 'Contact us',
-		isExternal: true,
-	},
-	{
-		href: guardianHelpCentreLink,
-		text: 'Help centre',
-		isExternal: true,
-	},
-];
-
 const isCardUserSelected = (
 	urlSelectedAmount: string | null,
 	cardPrice: number,
@@ -222,42 +145,6 @@ const isCardUserSelected = (
 		Number(urlSelectedAmount) === cardPriceDiscount
 	);
 };
-
-/**
- * @deprecated - we should be useing ProductCatalog data types.
- * TODO - remove this once TsAndCs work of ☝️ types
- */
-function getPlanCost(
-	pricing: number,
-	contributionType: ContributionType,
-	promotion?: Promotion,
-) {
-	const promotionDurationPeriod: ContributionType =
-		contributionType === 'ANNUAL' && promotion?.discount?.durationMonths === 12
-			? 'ANNUAL'
-			: 'MONTHLY';
-
-	const promotionDurationValue =
-		promotionDurationPeriod === 'ANNUAL'
-			? 1
-			: promotion?.discount?.durationMonths;
-
-	return {
-		price: pricing,
-		promoCode: promotion?.name,
-		discount:
-			promotion?.discount?.amount && promotion.discountedPrice
-				? {
-						percentage: promotion.discount.amount,
-						price: promotion.discountedPrice,
-						duration: {
-							value: promotionDurationValue ?? 0,
-							period: contributionTypeToBillingPeriod(promotionDurationPeriod),
-						},
-				  }
-				: undefined,
-	};
-}
 
 function getThreeTierProductOption(
 	productKey: ProductKey,
@@ -347,8 +234,10 @@ export function ThreeTierLanding({
 		setContributionType(paymentFrequencies[buttonIndex] as ContributionType);
 	};
 
-	const { ratePlanKey: maybeTaxExclusiveRatePlanKey, taxExclusionEnabled } =
-		useRatePlanKey(contributionType, supportRegionId);
+	const { ratePlanKey: maybeTaxExclusiveRatePlanKey } = useRatePlanKey(
+		contributionType,
+		supportRegionId,
+	);
 
 	const ratePlanKey = getRatePlanKey(contributionType);
 
@@ -547,6 +436,41 @@ export function ThreeTierLanding({
 		forceWeeklyPricing || settings.name.includes('WEEKLY_PRICE');
 	const countryCode = Country.detect();
 
+	const tsAndCsContent: TsAndCsProps[] = [
+		{
+			title: tier1Card.title,
+			planCost: getTierPlanCost(tier1Card.price, contributionType),
+		},
+		{
+			title: tier2Card.title,
+			planCost: getTierPlanCost(
+				tier2Card.price,
+				contributionType,
+				tier2Promotion,
+			),
+			starts: tier2Promotion?.starts
+				? new Date(tier2Promotion.starts)
+				: undefined,
+			expires: tier2Promotion?.expires
+				? new Date(tier2Promotion.expires)
+				: undefined,
+		},
+		{
+			title: tier3Card.title,
+			planCost: getTierPlanCost(
+				tier3Card.price,
+				contributionType,
+				tier3Promotion,
+			),
+			starts: tier3Promotion?.starts
+				? new Date(tier3Promotion.starts)
+				: undefined,
+			expires: tier3Promotion?.expires
+				? new Date(tier3Promotion.expires)
+				: undefined,
+		},
+	];
+
 	return (
 		<PageScaffold
 			header={
@@ -559,81 +483,11 @@ export function ThreeTierLanding({
 				</>
 			}
 			footer={
-				<>
-					{countryGroupId === UnitedStates && (
-						<Container
-							sideBorders
-							borderColor="rgba(170, 170, 180, 0.5)"
-							cssOverrides={supportAnotherWayContainer}
-						>
-							<div css={supportAnotherWay}>
-								<h4>Support another way</h4>
-								<p>
-									If you are interested in contributing through a donor-advised
-									fund, foundation or retirement account, or by mailing a check,{' '}
-									<br />
-									please visit our{' '}
-									<a href="https://help.theguardian.com/article/how-can-i-make-a-tax-deductible-contribution-us-only">
-										help page
-									</a>{' '}
-									to learn how.
-								</p>
-							</div>
-						</Container>
-					)}
-					<Container
-						sideBorders
-						borderColor="rgba(170, 170, 180, 0.5)"
-						cssOverrides={disclaimerContainer}
-					>
-						<CurrentMaxRatesByCountry countryGroupId={countryGroupId} />
-						{taxExclusionEnabled && (
-							<p css={taxExclusionDisclaimer}>
-								For All-access digital and Digital plus, taxes may apply.
-							</p>
-						)}
-						<ThreeTierTsAndCs
-							tsAndCsContent={[
-								{
-									title: tier1Card.title,
-									planCost: getPlanCost(tier1Card.price, contributionType),
-								},
-								{
-									title: tier2Card.title,
-									planCost: getPlanCost(
-										tier2Card.price,
-										contributionType,
-										tier2Promotion,
-									),
-									starts: tier2Promotion?.starts
-										? new Date(tier2Promotion.starts)
-										: undefined,
-									expires: tier2Promotion?.expires
-										? new Date(tier2Promotion.expires)
-										: undefined,
-								},
-								{
-									title: tier3Card.title,
-									planCost: getPlanCost(
-										tier3Card.price,
-										contributionType,
-										tier3Promotion,
-									),
-									starts: tier3Promotion?.starts
-										? new Date(tier3Promotion.starts)
-										: undefined,
-									expires: tier3Promotion?.expires
-										? new Date(tier3Promotion.expires)
-										: undefined,
-								},
-							]}
-							currency={glyph(currencyId)}
-						></ThreeTierTsAndCs>
-					</Container>
-					<FooterWithContents>
-						<FooterLinks links={links}></FooterLinks>
-					</FooterWithContents>
-				</>
+				<ThreeTierFooter
+					supportRegionId={supportRegionId}
+					contributionType={contributionType}
+					tsAndCsContent={tsAndCsContent}
+				/>
 			}
 		>
 			<Container
