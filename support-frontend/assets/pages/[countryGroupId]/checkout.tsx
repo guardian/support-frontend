@@ -109,7 +109,8 @@ export function Checkout({
 	landingPageSettings,
 	nudgeSettings,
 }: Props) {
-	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
+	const { currencyCode: currencyKey } =
+		getSupportRegionIdConfig(supportRegionId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
 
 	/** 👇 a lot of this is copy/pasted into the thank you page */
