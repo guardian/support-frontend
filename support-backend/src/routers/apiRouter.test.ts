@@ -11,7 +11,11 @@ const paperRoundService = new PaperRoundService(
 );
 
 const app = express();
-app.use(buildApiRouter(idealPostcodeService, paperRoundService));
+app.use(
+	buildApiRouter(idealPostcodeService, paperRoundService, 'fake_secret', [
+		'https://support.code.dev-theguardian.com',
+	]),
+);
 
 afterEach(() => {
 	jest.restoreAllMocks();

@@ -53,3 +53,26 @@ export async function getPaperRoundApiConfig(): Promise<{
 	}
 	return { apiKey, baseUrl };
 }
+
+// SPIKE (issue #8246, Phase 0 item 2): read the Scala app's `play.http.secret.key`.
+// It lives under the frontend's own SSM path (/$stack/$app/$stage = /support/frontend/$stage),
+// not the support-backend convention. Sharing it is a temporary coupling, retired once the
+// TS app becomes the CSRF token issuer. Exact parameter name to be confirmed as part of the spike.
+export async function getPlaySecretKey(): Promise<string> {
+	const stage = stageFromEnvironment();
+	const ssmClient = new SSMClient({
+		region: 'eu-west-1',
+	});
+
+	const command = new GetParameterCommand({
+		Name: `/support/frontend/${stage}/play.http.secret.key`,
+		WithDecryption: true,
+	});
+
+	const response = await ssmClient.send(command);
+	if (!response.Parameter?.Value) {
+		throw new Error('Play secret key not found in SSM');
+	}
+
+	return response.Parameter.Value;
+}
