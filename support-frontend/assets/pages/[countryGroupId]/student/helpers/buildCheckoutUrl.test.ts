@@ -17,7 +17,12 @@ describe('buildCheckoutUrl', () => {
 		const ratePlanKey = 'Monthly';
 
 		it('builds a URL without promoCode', () => {
-			const result = buildCheckoutUrl(supportRegionId, productKey, ratePlanKey);
+			const result = buildCheckoutUrl(
+				supportRegionId,
+				'GB',
+				productKey,
+				ratePlanKey,
+			);
 			expect(result).toBe(
 				'/uk/checkout?product=SupporterPlus&ratePlan=Monthly&backButton=false',
 			);
@@ -26,6 +31,7 @@ describe('buildCheckoutUrl', () => {
 		it('builds a URL with promoCode', () => {
 			const result = buildCheckoutUrl(
 				supportRegionId,
+				'GB',
 				productKey,
 				ratePlanKey,
 				'DISCOUNT10',
@@ -41,10 +47,9 @@ describe('buildCheckoutUrl', () => {
 			it('returns the correct Student Beans landing page URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.EU,
+					'DE',
 					'SupporterPlus',
 					'OneYearStudent',
-					undefined,
-					'DE',
 				);
 				expect(url).toBe(
 					routeInclCountry(routes.supporterPlusStudentBeansEu, 'DE'),
@@ -55,10 +60,9 @@ describe('buildCheckoutUrl', () => {
 			it('returns the correct Student Beans landing page URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.EU,
+					'FR',
 					'SupporterPlus',
 					'OneYearStudent',
-					undefined,
-					'FR',
 				);
 				expect(url).toBe(
 					routeInclCountry(routes.supporterPlusStudentBeansEu, 'FR'),
@@ -69,10 +73,9 @@ describe('buildCheckoutUrl', () => {
 			it('returns the correct Student Beans landing page URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.EU,
+					'ES',
 					'SupporterPlus',
 					'OneYearStudent',
-					undefined,
-					'ES',
 				);
 				expect(url).toBe(
 					routeInclCountry(routes.supporterPlusStudentBeansEu, 'ES'),
@@ -83,10 +86,9 @@ describe('buildCheckoutUrl', () => {
 			it('returns the correct Student Beans landing page URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.EU,
+					'IE',
 					'SupporterPlus',
 					'OneYearStudent',
-					undefined,
-					'IE',
 				);
 				expect(url).toBe(
 					routeInclCountry(routes.supporterPlusStudentBeansEu, 'IE'),
@@ -97,10 +99,9 @@ describe('buildCheckoutUrl', () => {
 			it('returns the correct Student Beans landing page URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.EU,
+					'NL',
 					'SupporterPlus',
 					'OneYearStudent',
-					undefined,
-					'NL',
 				);
 				expect(url).toBe(
 					routeInclCountry(routes.supporterPlusStudentBeansEu, 'NL'),
@@ -111,10 +112,9 @@ describe('buildCheckoutUrl', () => {
 			it('returns the checkout URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.EU,
+					'IT',
 					'SupporterPlus',
 					'OneYearStudent',
-					undefined,
-					'IT',
 				);
 				expect(url).toBe(routeInclCountry(routes.contributeEu, 'IT'));
 			});
@@ -123,6 +123,7 @@ describe('buildCheckoutUrl', () => {
 			it('returns the checkout URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.NZ,
+					'NZ',
 					'SupporterPlus',
 					'OneYearStudent',
 				);
@@ -144,6 +145,7 @@ describe('buildCheckoutUrl', () => {
 			it('returns the correct Student Beans landing page URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.UK,
+					'GB',
 					'SupporterPlus',
 					'OneYearStudent',
 				);
@@ -155,6 +157,7 @@ describe('buildCheckoutUrl', () => {
 			it('returns the correct Student Beans landing page URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.US,
+					'US',
 					'SupporterPlus',
 					'OneYearStudent',
 				);
@@ -166,6 +169,7 @@ describe('buildCheckoutUrl', () => {
 			it('returns the correct Student Beans landing page URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.CA,
+					'CA',
 					'SupporterPlus',
 					'OneYearStudent',
 				);
@@ -177,10 +181,9 @@ describe('buildCheckoutUrl', () => {
 			it('returns the correct Tier Three Landing page URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.EU,
+					'DE',
 					'SupporterPlus',
 					'OneYearStudent',
-					undefined,
-					'DE',
 				);
 				expect(url).toBe(routeInclCountry(routes.contributeEu, 'DE'));
 			});

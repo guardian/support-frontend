@@ -5,6 +5,7 @@ import type {
 	LandingPageVariant,
 	ProductBenefit,
 } from 'helpers/globalsAndSwitches/landingPageSettings';
+import { Country } from 'helpers/internationalisation/classes/country';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -59,6 +60,7 @@ export default function StudentHeader({
 	const { amount, promoCode, discountSummary } = studentDiscount;
 	const checkoutUrl = buildCheckoutUrl(
 		supportRegionId,
+		Country.detect(),
 		productKey,
 		ratePlanKey,
 		promoCode,
