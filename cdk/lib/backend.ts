@@ -182,5 +182,27 @@ cd target
 			treatMissingData: TreatMissingData.NOT_BREACHING,
 			snsTopicName: `alarms-handler-topic-${this.stage}`,
 		});
+
+		new GuAlarm(this, 'ServerFailedToStart', {
+			app,
+			alarmName: `${app} ${this.stage} ServerFailedToStart`,
+			alarmDescription:
+				'support-backend server failed to start - check the logs!',
+			actionsEnabled: shouldCreateAlarms,
+			threshold: 1,
+			evaluationPeriods: 1,
+			comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+			metric: new Metric({
+				metricName: 'SupportBackendServerFailedToStart',
+				namespace: 'support-backend',
+				dimensionsMap: {
+					Stage: this.stage,
+				},
+				statistic: 'Sum',
+				period: Duration.seconds(60),
+			}),
+			treatMissingData: TreatMissingData.NOT_BREACHING,
+			snsTopicName: `alarms-handler-topic-${this.stage}`,
+		});
 	}
 }
