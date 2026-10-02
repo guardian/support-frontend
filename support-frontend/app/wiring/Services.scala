@@ -162,7 +162,6 @@ trait Services {
     new CachedPromotionsServiceProvider(
       appConfig.promotionsApiConfigProvider,
       actorSystem,
-      defaultPromotionService,
       RequestRunners.futureRunner,
     )
 
