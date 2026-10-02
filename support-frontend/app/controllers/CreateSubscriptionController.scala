@@ -203,7 +203,7 @@ class CreateSubscriptionController(
           _ <- validate(request, settings.switches)
           _ <- validateStripeHostedCheckout(
             stripePublicKey,
-            request.body.product,
+            request.body.productInformation,
             testUsers.isTestUser(request),
           )
           result <- createCheckoutSession(
@@ -223,13 +223,13 @@ class CreateSubscriptionController(
   // Stripe hosted checkout is only supported for Sunday newspaper subscriptions paid via the Tortoise Media account
   private def validateStripeHostedCheckout(
       stripePublicKey: StripePublicKey,
-      product: ProductType,
+      product: Option[ProductInformation],
       isTestUser: Boolean,
   ): EitherT[Future, CreateSubscriptionError, Unit] = {
     val tortoiseMediaPublicKey = stripeConfigProvider.get(isTestUser).tortoiseMediaAccount.publicKey
 
     val isSundayNewspaperSub = product match {
-      case Paper(_, _, HomeDelivery | Collection, Sunday, _) => true
+      case Some(ProductInformation("HomeDelivery" | "SubscriptionCard", "Sunday", _, _, _, _, _)) => true
       case _ => false
     }
 
