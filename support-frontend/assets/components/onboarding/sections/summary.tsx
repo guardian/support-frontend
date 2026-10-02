@@ -50,10 +50,7 @@ import {
 	paymentDetailsBox,
 	separator,
 } from './sectionsStyles';
-import {
-	getTodaysPaymentWithTaxExclusion,
-	withCanadaDigitalPlusTaxCopy,
-} from './summaryHelpers';
+import { getTodaysPaymentWithTaxExclusion } from './summaryHelpers';
 
 const purchaseSummaryDetailsContainer = css`
 	display: flex;
@@ -337,11 +334,7 @@ function OnboardingSummary({
 							<div css={purchaseSummaryDetailsContainer}>
 								<p css={boldDescriptions}>Price</p>
 								<p css={[descriptions, purchaseSummaryDetailsPriceText]}>
-									{withCanadaDigitalPlusTaxCopy(
-										promoMessage || fullAmount,
-										productKey,
-										supportRegionId,
-									)}
+									{promoMessage || fullAmount}
 								</p>
 							</div>
 							{todaysPayment && (
