@@ -169,11 +169,19 @@ export function ThreeTierLanding({
 	settings,
 }: ThreeTierLandingProps): JSX.Element {
 	const {
-		product: urlSearchParamsProduct,
-		ratePlan: urlSearchParamsRatePlan,
+		productKey: urlSearchParamsProduct,
+		ratePlanKey: urlSearchParamsRatePlan,
 		selectedAmount: urlSelectedAmount,
 		forceWeeklyPricing,
 	} = useThreeTierUrlSelection();
+	console.log(
+		'🚀 ~ ThreeTierLanding ~ urlSearchParamsRatePlan:',
+		urlSearchParamsRatePlan,
+	);
+	console.log(
+		'🚀 ~ ThreeTierLanding ~ urlSearchParamsProduct:',
+		urlSearchParamsProduct,
+	);
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const countryId = Country.detect();
@@ -202,9 +210,9 @@ export function ThreeTierLanding({
 
 	const getInitialContributionType = (): ContributionType => {
 		// 1. Query Parameters take precedence
-		if (urlSearchParamsRatePlan === 'annual') {
+		if (urlSearchParamsRatePlan === 'Annual') {
 			return 'ANNUAL';
-		} else if (urlSearchParamsRatePlan === 'monthly') {
+		} else if (urlSearchParamsRatePlan === 'Monthly') {
 			return 'MONTHLY';
 		}
 
@@ -263,7 +271,7 @@ export function ThreeTierLanding({
 		promotionAmount?: number,
 	) => {
 		return (
-			urlSearchParamsProduct === productKey.toLowerCase() ||
+			urlSearchParamsProduct === productKey ||
 			isCardUserSelected(urlSelectedAmount, productPrice, promotionAmount)
 		);
 	};
