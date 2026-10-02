@@ -10,7 +10,7 @@ export default function buildCheckoutUrl(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	promoCode?: string,
-): string | undefined {
+): string {
 	if (productKey == 'SupporterPlus' && ratePlanKey === 'OneYearStudent') {
 		// If the supportRegionId isn't one of these we'll fall through to linking to the
 		// normal checkout page
