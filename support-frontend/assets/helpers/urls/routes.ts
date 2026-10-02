@@ -53,7 +53,6 @@ const routes = {
 		'/eu/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false',
 	contributeEu: '/eu/contribute',
 	postcodeLookup: '/api/postcode-lookup',
-	expressPostcodeLookup: '/api/postcode-lookup',
 	createSignInUrl: '/identity/signin-url',
 	stripeSetupIntentRecaptcha: '/stripe/create-setup-intent/recaptcha',
 } as const;
