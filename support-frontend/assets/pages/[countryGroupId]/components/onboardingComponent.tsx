@@ -5,6 +5,7 @@ import type { SupportRegionId } from '@modules/internationalisation/countryGroup
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { useSearchParams } from 'react-router';
 import ContentBox from 'components/onboarding/contentBox';
+import { getOnboardingProductCopy } from 'components/onboarding/onboardingProductCopy';
 import { OnboardingSteps } from 'components/onboarding/onboardingSteps';
 import type {
 	CurrentUserState,
@@ -13,6 +14,8 @@ import type {
 } from 'components/onboarding/onboardingTypes';
 import { OnboardingAppsDiscovery } from 'components/onboarding/sections/appsDiscovery';
 import { OnboardingCompleted } from 'components/onboarding/sections/completed';
+import { OnboardingDigitalPlusDiscovery } from 'components/onboarding/sections/digitalPlusDiscovery';
+import { OnboardingShareAccess } from 'components/onboarding/sections/shareAccess';
 import OnboardingSummary, {
 	OnboardingSummarySuccessfulSignIn,
 } from 'components/onboarding/sections/summary';
@@ -29,6 +32,7 @@ import * as cookie from 'helpers/storage/cookie';
 import type { CsrfState } from 'helpers/types/csrf';
 import { getUser } from 'helpers/user/user';
 import type { UserType } from 'helpers/user/userType';
+import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import OnboardingLayout from '../../../components/onboarding/layout';
 import { getThankYouOrder } from '../checkout/helpers/sessionStorage';
 
@@ -37,7 +41,10 @@ const identityFrameStyles = css`
 	border-radius: ${space[2]}px;
 `;
 
-export type OnboardingProductKey = Extract<ActiveProductKey, 'SupporterPlus'>;
+export type OnboardingProductKey = Extract<
+	ActiveProductKey,
+	'SupporterPlus' | 'DigitalSubscription'
+>;
 
 export interface OnboardingProps {
 	supportRegionId: SupportRegionId;
@@ -72,6 +79,13 @@ function OnboardingComponent({
 			<div>Unable to read your order {JSON.stringify(sessionStorageOrder)}</div>
 		);
 	}
+
+	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
+	const { title: productTitle } = getOnboardingProductCopy(
+		productKey,
+		landingPageSettings,
+		countryGroupId,
+	);
 
 	const scrollToTopRef = useRef<HTMLDivElement>(null);
 
@@ -273,6 +287,8 @@ function OnboardingComponent({
 								userState={userState}
 								userNewslettersSubscriptions={userNewslettersSubscriptions}
 								csrf={csrf}
+								productKey={productKey}
+								productTitle={productTitle}
 							/>
 						)}
 					</ContentBox>
@@ -298,10 +314,21 @@ function OnboardingComponent({
 					supporterRegion={supportRegionId}
 				/>
 			)}
+			{currentStep === OnboardingSteps.DigitalPlus && (
+				<OnboardingDigitalPlusDiscovery
+					handleStepNavigation={handleStepNavigation}
+					nextStep={OnboardingSteps.ShareAccess}
+					backStep={OnboardingSteps.Summary}
+				/>
+			)}
+			{currentStep === OnboardingSteps.ShareAccess && (
+				<OnboardingShareAccess handleStepNavigation={handleStepNavigation} />
+			)}
 			{currentStep === OnboardingSteps.Completed && (
 				<OnboardingCompleted
 					productKey={productKey}
 					landingPageSettings={landingPageSettings}
+					countryGroupId={countryGroupId}
 				/>
 			)}
 		</OnboardingLayout>
