@@ -24,7 +24,6 @@ export async function getIdealPostcodeApiKey(): Promise<string> {
 	});
 	const response = await ssmClient.send(command);
 	if (!response.Parameter?.Value) {
-		// TODO: This will need to be surfaced in some way if it ever happened in PROD.
 		throw new Error('Ideal Postcodes API key not found in SSM');
 	}
 	return response.Parameter.Value;
@@ -48,7 +47,6 @@ export async function getPaperRoundApiConfig(): Promise<{
 	const baseUrl = findValue(`${path}/url`, response.Parameters);
 
 	if (!apiKey || !baseUrl) {
-		// TODO: This will need to be surfaced in some way if it ever happened in PROD.
 		throw new Error('Paperround API config not found in SSM');
 	}
 	return { apiKey, baseUrl };
