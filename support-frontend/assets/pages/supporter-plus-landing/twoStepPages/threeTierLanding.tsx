@@ -174,14 +174,6 @@ export function ThreeTierLanding({
 		selectedAmount: urlSelectedAmount,
 		forceWeeklyPricing,
 	} = useThreeTierUrlSelection();
-	console.log(
-		'🚀 ~ ThreeTierLanding ~ urlSearchParamsRatePlan:',
-		urlSearchParamsRatePlan,
-	);
-	console.log(
-		'🚀 ~ ThreeTierLanding ~ urlSearchParamsProduct:',
-		urlSearchParamsProduct,
-	);
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const countryId = Country.detect();
