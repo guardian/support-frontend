@@ -28,7 +28,6 @@ const defaultProps: CheckoutComponentProps = {
 		finalAmount: 12,
 	},
 	identityUserType: 'current',
-	abParticipations: {},
 	landingPageSettings: fallBackLandingPageSelection,
 };
 
