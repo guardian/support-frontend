@@ -36,7 +36,7 @@ describe('buildCheckoutUrl', () => {
 		});
 	});
 
-	describe('when the rate plan is OneYearStudent (enableEuroStudentLandingPage:true)', () => {
+	describe('when the rate plan is OneYearStudent (enableStudentBeansEurope:true)', () => {
 		describe('and the supportRegionId is eu with defined country DE', () => {
 			it('returns the correct Student Beans landing page URL', () => {
 				const url = buildCheckoutUrl(
@@ -134,7 +134,7 @@ describe('buildCheckoutUrl', () => {
 		});
 	});
 
-	describe('when the rate plan is OneYearStudent (enableEuroStudentLandingPage:false)', () => {
+	describe('when the rate plan is OneYearStudent (enableStudentBeansEurope:false)', () => {
 		beforeAll(() => {
 			jest.mocked(useFeatureSwitches).mockReturnValue({
 				enableStudentBeansEurope: false,
