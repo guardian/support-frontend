@@ -90,7 +90,6 @@ class WeeklySubscriptionController(
     ).withSettingsSurrogateKey
   }
 
-  /** The active promotions which can be applied on this page, in priority order (query string codes first). */
   private def getPromotions(
       promoCodes: List[String],
       countryGroupId: String,
