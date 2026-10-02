@@ -34,7 +34,6 @@ import { getOriginAndForceSubdomain } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import { getWeeklyDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
-import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import type { LegacyProductType } from '../../helpers/legacyTypeConversions';
 import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
@@ -52,7 +51,6 @@ import { getStudentDiscount } from './student/helpers/discountDetails';
 type Props = {
 	supportRegionId: SupportRegionId;
 	appConfig: AppConfig;
-	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 	nudgeSettings?: CheckoutNudgeSettings;
 };
@@ -105,7 +103,6 @@ export const getPromotionFromProductPrices = (
 export function Checkout({
 	supportRegionId,
 	appConfig,
-	abParticipations,
 	landingPageSettings,
 	nudgeSettings,
 }: Props) {
@@ -344,7 +341,6 @@ export function Checkout({
 						payment={payment}
 						countryId={countryId}
 						forcedCountry={forcedCountry}
-						abParticipations={abParticipations}
 						landingPageSettings={landingPageSettings}
 						weeklyDeliveryDate={weeklyDeliveryDate}
 						thresholdAmount={thresholdAmount}
@@ -366,7 +362,6 @@ export function Checkout({
 						payment={payment}
 						useStripeExpressCheckout={useStripeExpressCheckout}
 						countryId={countryId}
-						abParticipations={abParticipations}
 						landingPageSettings={landingPageSettings}
 						checkoutSession={checkoutSession}
 						clearCheckoutSession={clearCheckoutSession}

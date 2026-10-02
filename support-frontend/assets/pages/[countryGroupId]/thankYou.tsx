@@ -14,7 +14,6 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import type { UserType } from 'helpers/user/userType';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
-import type { Participations } from '../../helpers/abTests/models';
 import { AnalyticsProfileCacheProvider } from '../../helpers/customHooks/analyticsProfileCache';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { setHideSupportMessaginCookie } from '../../helpers/storage/contributionsCookies';
@@ -29,14 +28,12 @@ const SKIP_NEW_ONBOARDING_EXPERIENCE_KEY = 'gu.skipNewOnboardingExperience';
 type ThankYouProps = {
 	supportRegionId: SupportRegionId;
 	appConfig: AppConfig;
-	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 };
 
 export function ThankYou({
 	supportRegionId,
 	appConfig,
-	abParticipations,
 	landingPageSettings,
 }: ThankYouProps) {
 	const countryId = Country.detect();
@@ -170,7 +167,6 @@ export function ThankYou({
 			ratePlanKey={ratePlanKey}
 			promotion={promotion}
 			identityUserType={userType}
-			abParticipations={abParticipations}
 			landingPageSettings={landingPageSettings}
 		/>
 	);
