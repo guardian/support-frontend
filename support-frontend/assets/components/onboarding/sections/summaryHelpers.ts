@@ -1,4 +1,3 @@
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import type { Payment } from 'helpers/forms/checkouts';
@@ -7,21 +6,6 @@ import {
 	simpleFormatTaxAmount,
 } from 'helpers/forms/checkouts';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
-
-export function withCanadaDigitalPlusTaxCopy(
-	price: string,
-	productKey: string | undefined,
-	supportRegionId: SupportRegionId,
-): string {
-	if (
-		productKey === 'DigitalSubscription' &&
-		supportRegionId === SupportRegionId.CA
-	) {
-		return `${price}. Taxes may apply.`;
-	}
-
-	return price;
-}
 
 export function getTodaysPaymentWithTaxExclusion(
 	payment: Payment,
