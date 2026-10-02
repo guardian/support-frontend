@@ -10,6 +10,7 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
+import { routes } from 'helpers/urls/routes';
 import buildCheckoutUrl from '../helpers/buildCheckoutUrl';
 import type { StudentDiscount } from '../helpers/discountDetails';
 import {
@@ -58,13 +59,14 @@ export default function StudentHeader({
 	heroImagePrefix,
 }: StudentHeaderProps) {
 	const { amount, promoCode, discountSummary } = studentDiscount;
-	const checkoutUrl = buildCheckoutUrl(
-		supportRegionId,
-		Country.detect(),
-		productKey,
-		ratePlanKey,
-		promoCode,
-	);
+	const checkoutUrl =
+		buildCheckoutUrl(
+			supportRegionId,
+			Country.detect(),
+			productKey,
+			ratePlanKey,
+			promoCode,
+		) ?? `/${supportRegionId}${routes.contribute}`;
 
 	// In the UK on this page only, add an additional benefit to the list
 	const { benefits: configuredBenefits } = landingPageVariant.products

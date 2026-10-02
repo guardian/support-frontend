@@ -8,7 +8,13 @@ import type {
 import { routes } from 'helpers/urls/routes';
 import { isStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
 
-export const routeInclCountry = (route: string, countryCode: CountryCode) => {
+export const routeInclCountry = (
+	countryCode: CountryCode,
+	route?: string,
+): string | undefined => {
+	if (!route) {
+		return undefined;
+	}
 	return `${route}${route.includes('?') ? '&' : '?'}country=${countryCode}`;
 };
 
@@ -18,7 +24,7 @@ export default function buildCheckoutUrl(
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	promoCode?: string,
-): string {
+): string | undefined {
 	const { enableStudentBeansEurope } = useFeatureSwitches();
 	if (productKey == 'SupporterPlus' && ratePlanKey === 'OneYearStudent') {
 		// If the supportRegionId isn't one of these we'll fall through to linking to the
@@ -32,14 +38,14 @@ export default function buildCheckoutUrl(
 				return routes.supporterPlusStudentBeansCa;
 			case SupportRegionId.EU: {
 				return routeInclCountry(
+					countryCode,
 					isStudentBeansRegionValid(
 						supportRegionId,
 						countryCode,
 						enableStudentBeansEurope,
 					)
 						? routes.supporterPlusStudentBeansEu
-						: routes.contributeEu,
-					countryCode,
+						: undefined,
 				);
 			}
 		}

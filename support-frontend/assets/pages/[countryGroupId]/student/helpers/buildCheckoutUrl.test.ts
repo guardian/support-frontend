@@ -52,7 +52,7 @@ describe('buildCheckoutUrl', () => {
 					'OneYearStudent',
 				);
 				expect(url).toBe(
-					routeInclCountry(routes.supporterPlusStudentBeansEu, 'DE'),
+					routeInclCountry('DE', routes.supporterPlusStudentBeansEu),
 				);
 			});
 		});
@@ -65,7 +65,7 @@ describe('buildCheckoutUrl', () => {
 					'OneYearStudent',
 				);
 				expect(url).toBe(
-					routeInclCountry(routes.supporterPlusStudentBeansEu, 'FR'),
+					routeInclCountry('FR', routes.supporterPlusStudentBeansEu),
 				);
 			});
 		});
@@ -78,7 +78,7 @@ describe('buildCheckoutUrl', () => {
 					'OneYearStudent',
 				);
 				expect(url).toBe(
-					routeInclCountry(routes.supporterPlusStudentBeansEu, 'ES'),
+					routeInclCountry('ES', routes.supporterPlusStudentBeansEu),
 				);
 			});
 		});
@@ -91,7 +91,7 @@ describe('buildCheckoutUrl', () => {
 					'OneYearStudent',
 				);
 				expect(url).toBe(
-					routeInclCountry(routes.supporterPlusStudentBeansEu, 'IE'),
+					routeInclCountry('IE', routes.supporterPlusStudentBeansEu),
 				);
 			});
 		});
@@ -104,7 +104,7 @@ describe('buildCheckoutUrl', () => {
 					'OneYearStudent',
 				);
 				expect(url).toBe(
-					routeInclCountry(routes.supporterPlusStudentBeansEu, 'NL'),
+					routeInclCountry('NL', routes.supporterPlusStudentBeansEu),
 				);
 			});
 		});
@@ -116,7 +116,7 @@ describe('buildCheckoutUrl', () => {
 					'SupporterPlus',
 					'OneYearStudent',
 				);
-				expect(url).toBe(routeInclCountry(routes.contributeEu, 'IT'));
+				expect(url).toBe(undefined);
 			});
 		});
 		describe('and the NZ supportRegionId is not one we have a Student Beans link for', () => {
@@ -185,7 +185,7 @@ describe('buildCheckoutUrl', () => {
 					'SupporterPlus',
 					'OneYearStudent',
 				);
-				expect(url).toBe(routeInclCountry(routes.contributeEu, 'DE'));
+				expect(url).toBe(undefined);
 			});
 		});
 	});
