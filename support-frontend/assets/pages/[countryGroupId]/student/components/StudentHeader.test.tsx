@@ -7,11 +7,6 @@ import type {
 } from 'helpers/productCatalog';
 import StudentHeader from './StudentHeader';
 
-jest.mock('helpers/globalsAndSwitches/globals', () => ({
-	__esModule: true,
-	isSwitchOn: jest.fn().mockReturnValue(true),
-}));
-
 const oneYearStudentDiscount = {
 	amount: 9,
 	periodNoun: 'year',
