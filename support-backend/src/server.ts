@@ -1,3 +1,4 @@
+import { putMetric } from './aws/cloudwatch';
 import { buildApp } from './buildApp';
 
 const PORT = process.env.PORT ?? 3000;
@@ -10,4 +11,5 @@ buildApp()
 	})
 	.catch((error) => {
 		console.error("Couldn't start server: ", error);
+		void putMetric('SupportBackendServerFailedToStart');
 	});
