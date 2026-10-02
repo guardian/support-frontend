@@ -28,7 +28,7 @@ describe('extractSignedToken', () => {
 
 	it('returns null when the signature has been tampered with', () => {
 		const signed = signToken('abc123', SECRET);
-		const tampered = `deadbeef${signed.slice(8)}`;
+		const tampered = `ffffeeee${signed.slice(8)}`;
 		expect(extractSignedToken(tampered, SECRET)).toBeNull();
 	});
 
