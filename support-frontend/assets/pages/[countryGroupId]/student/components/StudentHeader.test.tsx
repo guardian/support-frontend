@@ -7,6 +7,13 @@ import type {
 } from 'helpers/productCatalog';
 import StudentHeader from './StudentHeader';
 
+jest.mock('contexts/FeatureSwitchesContext', () => ({
+	__esModule: true,
+	useFeatureSwitches: jest
+		.fn()
+		.mockReturnValue({ enableStudentBeansEurope: true }),
+}));
+
 const oneYearStudentDiscount = {
 	amount: 9,
 	periodNoun: 'year',

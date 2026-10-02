@@ -43,7 +43,7 @@ import { getPromotion } from 'helpers/productPrice/promotions';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
 import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { getTierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
-import { isStudentBeansRegionValidSwitchedOn } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
+import { isStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
 	getSanitisedHtml,
@@ -246,7 +246,8 @@ export function ThreeTierLanding({
 		settings.defaultProductSelection?.productType.toLowerCase();
 
 	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
-	const { enableDeepDiscount } = useFeatureSwitches();
+	// Student Beans Europe feature switch enables the link to Student Landing Page for prescribed countries
+	const { enableDeepDiscount, enableStudentBeansEurope } = useFeatureSwitches();
 
 	const getDefaultProductSelection = (productKey: ProductKey) => {
 		return (
@@ -553,7 +554,11 @@ export function ThreeTierLanding({
 					countryGroupId={countryGroupId}
 				/>
 			</Container>
-			{isStudentBeansRegionValidSwitchedOn(supportRegionId, countryCode) && (
+			{isStudentBeansRegionValid(
+				supportRegionId,
+				countryCode,
+				enableStudentBeansEurope,
+			) && (
 				<Container
 					sideBorders
 					borderColor="rgba(170, 170, 180, 0.5)"

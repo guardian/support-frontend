@@ -7,6 +7,13 @@ import type {
 } from 'helpers/productCatalog';
 import { StudentLandingPageInstitution } from './StudentLandingPageInstitution';
 
+jest.mock('contexts/FeatureSwitchesContext', () => ({
+	__esModule: true,
+	useFeatureSwitches: jest
+		.fn()
+		.mockReturnValue({ enableStudentBeansEurope: true }),
+}));
+
 const testStudentDiscount = {
 	amount: 0,
 	periodNoun: 'month',

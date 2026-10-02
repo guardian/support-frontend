@@ -1,12 +1,13 @@
 import type { CountryCode } from '@modules/internationalisation/country';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { routes } from 'helpers/urls/routes';
-import { isStudentBeansRegionValidSwitchedOn } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
+import { isStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
 
 export const routeInclCountry = (route: string, countryCode: CountryCode) => {
 	return `${route}${route.includes('?') ? '&' : '?'}country=${countryCode}`;
@@ -21,6 +22,8 @@ export default function buildCheckoutUrl(
 ): string {
 	// For this product/rate plan we direct the user to Student Beans for verification
 	const countryCode = countryOverride ?? Country.detect();
+	const { enableStudentBeansEurope } = useFeatureSwitches();
+
 	if (productKey == 'SupporterPlus' && ratePlanKey === 'OneYearStudent') {
 		// If the supportRegionId isn't one of these we'll fall through to linking to the
 		// normal checkout page
@@ -33,7 +36,11 @@ export default function buildCheckoutUrl(
 				return routes.supporterPlusStudentBeansCa;
 			case SupportRegionId.EU: {
 				return routeInclCountry(
-					isStudentBeansRegionValidSwitchedOn(supportRegionId, countryCode)
+					isStudentBeansRegionValid(
+						supportRegionId,
+						countryCode,
+						enableStudentBeansEurope,
+					)
 						? routes.supporterPlusStudentBeansEu
 						: routes.contributeEu,
 					countryCode,
