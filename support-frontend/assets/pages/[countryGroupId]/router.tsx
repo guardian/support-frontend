@@ -26,7 +26,7 @@ import {
 	setUpTracking,
 } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
-import { isStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
+import { useStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/useStudentBeansRegionValid';
 import { getCheckoutNudgeParticipations } from '../../helpers/abTests/checkoutNudgeAbTests';
 import { getLandingPageParticipations } from '../../helpers/abTests/landingPageAbTests';
 import type { Participations } from '../../helpers/abTests/models';
@@ -238,16 +238,11 @@ const router = createBrowserRouter([
 						return {
 							Component: function StudentRoute() {
 								const { landing } = useRootLoaderData();
-								const isSwitchedOn = isSwitchOn(
-									'featureSwitches.enableStudentBeansEurope',
+								const isStudentBeansRegionValid = useStudentBeansRegionValid(
+									supportRegionId,
+									Country.detect(),
 								);
-								if (
-									!isStudentBeansRegionValid(
-										supportRegionId,
-										Country.detect(),
-										isSwitchedOn,
-									)
-								) {
+								if (!isStudentBeansRegionValid) {
 									return (
 										<Navigate to={`/${supportRegionId}/contribute`} replace />
 									);

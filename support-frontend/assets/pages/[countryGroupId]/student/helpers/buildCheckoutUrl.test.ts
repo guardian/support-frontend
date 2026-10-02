@@ -1,14 +1,6 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { routes } from 'helpers/urls/routes';
-import buildCheckoutUrl, { routeInclCountry } from './buildCheckoutUrl';
-
-jest.mock('contexts/FeatureSwitchesContext', () => ({
-	__esModule: true,
-	useFeatureSwitches: jest
-		.fn()
-		.mockReturnValue({ enableStudentBeansEurope: true }),
-}));
+import buildCheckoutUrl from './buildCheckoutUrl';
 
 describe('buildCheckoutUrl', () => {
 	describe('when the rate plan is Monthly', () => {
@@ -17,12 +9,7 @@ describe('buildCheckoutUrl', () => {
 		const ratePlanKey = 'Monthly';
 
 		it('builds a URL without promoCode', () => {
-			const result = buildCheckoutUrl(
-				supportRegionId,
-				'GB',
-				productKey,
-				ratePlanKey,
-			);
+			const result = buildCheckoutUrl(supportRegionId, productKey, ratePlanKey);
 			expect(result).toBe(
 				'/uk/checkout?product=SupporterPlus&ratePlan=Monthly&backButton=false',
 			);
@@ -31,7 +18,6 @@ describe('buildCheckoutUrl', () => {
 		it('builds a URL with promoCode', () => {
 			const result = buildCheckoutUrl(
 				supportRegionId,
-				'GB',
 				productKey,
 				ratePlanKey,
 				'DISCOUNT10',
@@ -42,88 +28,71 @@ describe('buildCheckoutUrl', () => {
 		});
 	});
 
-	describe('when the rate plan is OneYearStudent (enableStudentBeansEurope:true)', () => {
+	describe('when the rate plan is OneYearStudent', () => {
 		describe('and the supportRegionId is eu with defined country DE', () => {
 			it('returns the correct Student Beans landing page URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.EU,
-					'DE',
 					'SupporterPlus',
 					'OneYearStudent',
 				);
-				expect(url).toBe(
-					routeInclCountry('DE', routes.supporterPlusStudentBeansEu),
-				);
+				expect(url).toBe(routes.supporterPlusStudentBeansEu);
 			});
 		});
 		describe('and the supportRegionId is eu with defined country FR', () => {
 			it('returns the correct Student Beans landing page URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.EU,
-					'FR',
 					'SupporterPlus',
 					'OneYearStudent',
 				);
-				expect(url).toBe(
-					routeInclCountry('FR', routes.supporterPlusStudentBeansEu),
-				);
+				expect(url).toBe(routes.supporterPlusStudentBeansEu);
 			});
 		});
 		describe('and the supportRegionId is eu with defined country ES', () => {
 			it('returns the correct Student Beans landing page URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.EU,
-					'ES',
 					'SupporterPlus',
 					'OneYearStudent',
 				);
-				expect(url).toBe(
-					routeInclCountry('ES', routes.supporterPlusStudentBeansEu),
-				);
+				expect(url).toBe(routes.supporterPlusStudentBeansEu);
 			});
 		});
 		describe('and the supportRegionId is eu with defined country IE', () => {
 			it('returns the correct Student Beans landing page URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.EU,
-					'IE',
 					'SupporterPlus',
 					'OneYearStudent',
 				);
-				expect(url).toBe(
-					routeInclCountry('IE', routes.supporterPlusStudentBeansEu),
-				);
+				expect(url).toBe(routes.supporterPlusStudentBeansEu);
 			});
 		});
 		describe('and the supportRegionId is eu with defined country NL', () => {
 			it('returns the correct Student Beans landing page URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.EU,
-					'NL',
 					'SupporterPlus',
 					'OneYearStudent',
 				);
-				expect(url).toBe(
-					routeInclCountry('NL', routes.supporterPlusStudentBeansEu),
-				);
+				expect(url).toBe(routes.supporterPlusStudentBeansEu);
 			});
 		});
 		describe('and the EU supportRegionId with country IT is not one we have a Student Beans link for', () => {
 			it('returns the checkout URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.EU,
-					'IT',
 					'SupporterPlus',
 					'OneYearStudent',
 				);
-				expect(url).toBe(undefined);
+				expect(url).toBe(routes.supporterPlusStudentBeansEu);
 			});
 		});
 		describe('and the NZ supportRegionId is not one we have a Student Beans link for', () => {
 			it('returns the checkout URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.NZ,
-					'NZ',
 					'SupporterPlus',
 					'OneYearStudent',
 				);
@@ -131,61 +100,6 @@ describe('buildCheckoutUrl', () => {
 				expect(url).toBe(
 					'/nz/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false',
 				);
-			});
-		});
-	});
-
-	describe('when the rate plan is OneYearStudent (enableStudentBeansEurope:false)', () => {
-		beforeAll(() => {
-			jest.mocked(useFeatureSwitches).mockReturnValue({
-				enableStudentBeansEurope: false,
-			} as ReturnType<typeof useFeatureSwitches>);
-		});
-		describe('and the supportRegionId is uk', () => {
-			it('returns the correct Student Beans landing page URL', () => {
-				const url = buildCheckoutUrl(
-					SupportRegionId.UK,
-					'GB',
-					'SupporterPlus',
-					'OneYearStudent',
-				);
-
-				expect(url).toBe(routes.supporterPlusStudentBeansUk);
-			});
-		});
-		describe('and the supportRegionId is us', () => {
-			it('returns the correct Student Beans landing page URL', () => {
-				const url = buildCheckoutUrl(
-					SupportRegionId.US,
-					'US',
-					'SupporterPlus',
-					'OneYearStudent',
-				);
-
-				expect(url).toBe(routes.supporterPlusStudentBeansUs);
-			});
-		});
-		describe('and the supportRegionId is ca', () => {
-			it('returns the correct Student Beans landing page URL', () => {
-				const url = buildCheckoutUrl(
-					SupportRegionId.CA,
-					'CA',
-					'SupporterPlus',
-					'OneYearStudent',
-				);
-
-				expect(url).toBe(routes.supporterPlusStudentBeansCa);
-			});
-		});
-		describe('and the supportRegionId is eu with defined country DE', () => {
-			it('returns the correct Tier Three Landing page URL', () => {
-				const url = buildCheckoutUrl(
-					SupportRegionId.EU,
-					'DE',
-					'SupporterPlus',
-					'OneYearStudent',
-				);
-				expect(url).toBe(undefined);
 			});
 		});
 	});

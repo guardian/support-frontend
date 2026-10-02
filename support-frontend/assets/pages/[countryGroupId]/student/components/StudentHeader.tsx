@@ -5,7 +5,6 @@ import type {
 	LandingPageVariant,
 	ProductBenefit,
 } from 'helpers/globalsAndSwitches/landingPageSettings';
-import { Country } from 'helpers/internationalisation/classes/country';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -60,13 +59,8 @@ export default function StudentHeader({
 }: StudentHeaderProps) {
 	const { amount, promoCode, discountSummary } = studentDiscount;
 	const checkoutUrl =
-		buildCheckoutUrl(
-			supportRegionId,
-			Country.detect(),
-			productKey,
-			ratePlanKey,
-			promoCode,
-		) ?? `/${supportRegionId}${routes.contribute}`;
+		buildCheckoutUrl(supportRegionId, productKey, ratePlanKey, promoCode) ??
+		`/${supportRegionId}${routes.contribute}`;
 
 	// In the UK on this page only, add an additional benefit to the list
 	const { benefits: configuredBenefits } = landingPageVariant.products
