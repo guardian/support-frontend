@@ -29,58 +29,18 @@ describe('buildCheckoutUrl', () => {
 	});
 
 	describe('when the rate plan is OneYearStudent', () => {
-		describe('and the supportRegionId is eu with defined country DE', () => {
+		describe('and the supportRegionId is uk', () => {
 			it('returns the correct Student Beans landing page URL', () => {
 				const url = buildCheckoutUrl(
-					SupportRegionId.EU,
+					SupportRegionId.UK,
 					'SupporterPlus',
 					'OneYearStudent',
 				);
-				expect(url).toBe(routes.supporterPlusStudentBeansEu);
+				expect(url).toBe(routes.supporterPlusStudentBeansUk);
 			});
 		});
-		describe('and the supportRegionId is eu with defined country FR', () => {
+		describe('and the supportRegionId is eu', () => {
 			it('returns the correct Student Beans landing page URL', () => {
-				const url = buildCheckoutUrl(
-					SupportRegionId.EU,
-					'SupporterPlus',
-					'OneYearStudent',
-				);
-				expect(url).toBe(routes.supporterPlusStudentBeansEu);
-			});
-		});
-		describe('and the supportRegionId is eu with defined country ES', () => {
-			it('returns the correct Student Beans landing page URL', () => {
-				const url = buildCheckoutUrl(
-					SupportRegionId.EU,
-					'SupporterPlus',
-					'OneYearStudent',
-				);
-				expect(url).toBe(routes.supporterPlusStudentBeansEu);
-			});
-		});
-		describe('and the supportRegionId is eu with defined country IE', () => {
-			it('returns the correct Student Beans landing page URL', () => {
-				const url = buildCheckoutUrl(
-					SupportRegionId.EU,
-					'SupporterPlus',
-					'OneYearStudent',
-				);
-				expect(url).toBe(routes.supporterPlusStudentBeansEu);
-			});
-		});
-		describe('and the supportRegionId is eu with defined country NL', () => {
-			it('returns the correct Student Beans landing page URL', () => {
-				const url = buildCheckoutUrl(
-					SupportRegionId.EU,
-					'SupporterPlus',
-					'OneYearStudent',
-				);
-				expect(url).toBe(routes.supporterPlusStudentBeansEu);
-			});
-		});
-		describe('and the EU supportRegionId with country IT is not one we have a Student Beans link for', () => {
-			it('returns the checkout URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.EU,
 					'SupporterPlus',
