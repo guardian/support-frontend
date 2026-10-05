@@ -4,7 +4,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import type { ContributionType } from 'helpers/contributions';
 import { getDigitalRatePlanKey } from './getDigitalRatePlanKey';
 
-type HookProbeProps = {
+type DigitalRatePlanProps = {
 	contributionType: ContributionType;
 	supportRegionId: SupportRegionId;
 	productKey: ProductKey;
@@ -38,7 +38,11 @@ describe('getDigitalRatePlanKey', () => {
 
 	it('updates the key when contribution type changes', async () => {
 		const { result, rerender } = renderHook(
-			({ contributionType, supportRegionId, productKey }: HookProbeProps) =>
+			({
+				contributionType,
+				supportRegionId,
+				productKey,
+			}: DigitalRatePlanProps) =>
 				getDigitalRatePlanKey(contributionType, supportRegionId, productKey),
 			{
 				initialProps: {
