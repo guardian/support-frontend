@@ -8,15 +8,12 @@ export function getDigitalRatePlanKey(
 	supportRegionId: SupportRegionId,
 	productKey: ProductKey,
 ): ActiveRatePlanKey {
-	const taxExclusionEnabled = supportRegionId === SupportRegionId.CA;
+	const enableTaxExclusion =
+		productKey !== 'Contribution' && supportRegionId === SupportRegionId.CA;
 	switch (contributionType) {
 		case 'ANNUAL':
-			return taxExclusionEnabled && productKey !== 'Contribution'
-				? 'AnnualTaxExclusive'
-				: 'Annual';
+			return enableTaxExclusion ? 'AnnualTaxExclusive' : 'Annual';
 		default:
-			return taxExclusionEnabled && productKey !== 'Contribution'
-				? 'MonthlyTaxExclusive'
-				: 'Monthly';
+			return enableTaxExclusion ? 'MonthlyTaxExclusive' : 'Monthly';
 	}
 }
