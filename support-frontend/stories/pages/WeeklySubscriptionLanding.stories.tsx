@@ -31,8 +31,9 @@ export default {
 const makePromotion = (
 	promoCode: string,
 	name: string,
-	ratePlanKey: 'QuarterlyPlus' | 'AnnualPlus',
+	ratePlanKey: 'QuarterlyPlus' | 'AnnualPlus' | 'OneYearGift',
 	discount: { amount: number; durationMonths: number },
+	landingPage?: PromoWithCatalogInformation['landingPage'],
 ): PromoWithCatalogInformation => ({
 	promoCode,
 	name,
@@ -46,6 +47,7 @@ const makePromotion = (
 	},
 	startTimestamp: '2025-01-01T00:00:00.000Z',
 	discount,
+	landingPage,
 });
 
 const promotions = [
@@ -57,6 +59,13 @@ const promotions = [
 		amount: 25,
 		durationMonths: 12,
 	}),
+	makePromotion(
+		'GW20GIFT1Y',
+		'GW 20% off 12 month gift',
+		'OneYearGift',
+		{ amount: 20, durationMonths: 12 },
+		{ roundelHtml: 'Save 20% on a 12 month gift subscription' },
+	),
 ];
 
 type Story = StoryObj<WeeklyLandingPageProps>;
