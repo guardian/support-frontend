@@ -16,6 +16,7 @@ import {
 	type PrintFulfilmentOptions,
 	RestOfWorld,
 } from '@modules/product/fulfilmentOptions';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { ClientSideErrorHandler } from 'components/ClientSideError';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
@@ -25,20 +26,20 @@ import { PageScaffold } from 'components/page/pageScaffold';
 import { PromoTermsProvider } from 'contexts/PromoTermsContext';
 import {
 	getGlobal,
-	getProductPrices,
 	getPromotionCopy,
 } from 'helpers/globalsAndSwitches/globals';
+import type { WindowProductCatalog } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import {
 	getAbParticipations,
 	setUpTrackingAndConsents,
 } from 'helpers/page/page';
-import { type ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { getSanitisedPromoCopy } from 'helpers/productPrice/promotions';
 import { renderPage } from 'helpers/rendering/render';
 import { routes } from 'helpers/urls/routes';
+import { getQueryParameter } from 'helpers/urls/url';
 import getPlanData from 'pages/paper-subscription-landing/planData';
 import { GuardianWeeklyFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
 import WeeklyGiftBenefits from './components/content/weeklyGiftBenefits';
@@ -49,6 +50,7 @@ import WeeklyDigitalHero from './components/WeeklyDigitalHero';
 import { WeeklyGiftHero } from './components/weeklyGiftHero';
 import WeeklyGiftProductPrices from './components/weeklyGiftProductPrices';
 import { WeeklyPriceInfo } from './components/weeklyPriceInfo';
+import { getGuardianWeeklyProductKey } from './helpers/getWeeklyProducts';
 
 const weeklySpacing = css`
 	div {
@@ -74,20 +76,20 @@ export type WeeklyLandingPageProps = {
 	countryId: CountryCode;
 	countryGroupId: CountryGroupId;
 	orderIsAGift: boolean;
-	productPrices?: ProductPrices;
+	productCatalog: WindowProductCatalog;
+	promotions: PromoWithCatalogInformation[];
+	promoCode?: string;
 	promotionCopy?: PromotionCopy;
 };
 export function WeeklyLandingPage({
 	countryId,
 	countryGroupId,
-	productPrices,
+	productCatalog,
+	promotions,
+	promoCode,
 	promotionCopy,
 	orderIsAGift,
 }: WeeklyLandingPageProps) {
-	if (!productPrices) {
-		return null;
-	}
-
 	const path = orderIsAGift
 		? routes.guardianWeeklySubscriptionLandingGift
 		: routes.guardianWeeklySubscriptionLanding;
@@ -122,9 +124,10 @@ export function WeeklyLandingPage({
 				header={<Header />}
 				footer={
 					<GuardianWeeklyFooter
-						productPrices={productPrices}
+						promotions={promotions}
+						productKey={getGuardianWeeklyProductKey(countryGroupId)}
+						promoCode={promoCode}
 						orderIsAGift={!!orderIsAGift}
-						country={countryId}
 					/>
 				}
 			>
@@ -143,7 +146,9 @@ export function WeeklyLandingPage({
 								<WeeklyGiftProductPrices
 									countryGroupId={countryGroupId}
 									countryId={countryId}
-									productPrices={productPrices}
+									productCatalog={productCatalog}
+									promotions={promotions}
+									promoCode={promoCode}
 								/>
 							</CentredContainer>
 						</FullWidthContainer>
@@ -154,7 +159,10 @@ export function WeeklyLandingPage({
 						<CentredContainer cssOverrides={weeklyDigitalSpacing}>
 							<WeeklyCards
 								countryId={countryId}
-								productPrices={productPrices}
+								countryGroupId={countryGroupId}
+								productCatalog={productCatalog}
+								promotions={promotions}
+								promoCode={promoCode}
 							/>
 							<WeeklyBenefits planData={planData} />
 							<WeeklyPriceInfo />
@@ -174,7 +182,9 @@ const weeklyLandingProps = (): WeeklyLandingPageProps => ({
 	countryGroupId: CountryGroup.detect(),
 	countryId: Country.detect(),
 	orderIsAGift: getGlobal('orderIsAGift') ?? false,
-	productPrices: getProductPrices() ?? undefined,
+	productCatalog: window.guardian.productCatalog,
+	promotions: window.guardian.promotions ?? [],
+	promoCode: getQueryParameter('promoCode'),
 	promotionCopy: getPromotionCopy() ?? undefined,
 });
 
