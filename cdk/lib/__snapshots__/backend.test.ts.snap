@@ -894,7 +894,7 @@ exports[`The Backend stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmDescription": "support-backend server failed to start - check the logs!",
+        "AlarmDescription": "support-backend server failed to start - check the logs: https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group/support-support-backend-PROD",
         "AlarmName": "support-backend PROD ServerFailedToStart",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": [

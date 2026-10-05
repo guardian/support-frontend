@@ -186,8 +186,7 @@ cd target
 		new GuAlarm(this, 'ServerFailedToStart', {
 			app,
 			alarmName: `${app} ${this.stage} ServerFailedToStart`,
-			alarmDescription:
-				'support-backend server failed to start - check the logs!',
+			alarmDescription: `support-backend server failed to start - check the logs: https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group/support-support-backend-${this.stage}`,
 			actionsEnabled: shouldCreateAlarms,
 			threshold: 1,
 			evaluationPeriods: 1,
