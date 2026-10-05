@@ -203,6 +203,10 @@ const DigitalSubscriptionBenefits = [
 	},
 	{ isChecked: true, text: 'Guardian Weekly e-magazine' },
 	{ isChecked: true, text: 'The Long Read e-magazine' },
+	{
+		isChecked: true,
+		text: 'Access to multiple accounts for the same subscription',
+	},
 	{ isChecked: true, text: 'Far fewer asks for support' },
 	{ isChecked: true, text: 'Ad-free reading on all your devices' },
 	{ isChecked: true, text: 'Unlimited access to the Guardian app' },
@@ -222,6 +226,10 @@ const DigitalSubscriptionBenefitsAUD = [
 	},
 	{ isChecked: true, text: 'Guardian Weekly e-magazine' },
 	{ isChecked: true, text: 'The Long Read e-magazine' },
+	{
+		isChecked: true,
+		text: 'Access to multiple accounts for the same subscription',
+	},
 	{ isChecked: true, text: 'Far fewer asks for support' },
 	{ isChecked: true, text: 'Ad-free reading on all your devices' },
 	{ isChecked: true, text: 'Unlimited access to the Guardian app' },
@@ -242,6 +250,10 @@ const DigitalSubscriptionBenefitsUS = [
 	},
 	{ isChecked: true, text: 'Guardian Weekly e-magazine' },
 	{ isChecked: true, text: 'The Long Read e-magazine' },
+	{
+		isChecked: true,
+		text: 'Access to multiple accounts for the same subscription',
+	},
 	{ isChecked: true, text: 'Far fewer asks for support' },
 	{ isChecked: true, text: 'Ad-free reading on all your devices' },
 	{ isChecked: true, text: 'Unlimited access to the Guardian app' },
@@ -262,6 +274,10 @@ const DigitalSubscriptionBenefitsGBP = [
 	{ isChecked: true, text: 'Daily digital Guardian newspaper' },
 	{ isChecked: true, text: 'Guardian Weekly e-magazine' },
 	{ isChecked: true, text: 'The Long Read e-magazine' },
+	{
+		isChecked: true,
+		text: 'Access to multiple accounts for the same subscription',
+	},
 	{ isChecked: true, text: 'Far fewer asks for support' },
 	{ isChecked: true, text: 'Ad-free reading on all your devices' },
 	{ isChecked: true, text: 'Unlimited access to the Guardian app' },

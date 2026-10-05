@@ -348,6 +348,13 @@ const paperArchiveDigitalBenefit = {
 	] as CountryGroupId[],
 };
 
+const multipleAccountsBenefit = {
+	copy: 'Access to multiple accounts for the same subscription',
+	isNew: true,
+	tooltip:
+		'You can manage multiple accounts under the same subscription, making it easier for families or shared households to enjoy the benefits.',
+};
+
 export const productCatalogDescription: Record<
 	ActiveProductKey,
 	ProductDescription
@@ -375,6 +382,7 @@ export const productCatalogDescription: Record<
 			digitalPaperBenefitUK,
 			weeklyDigitalBenefit,
 			editionsDigitalBenefit,
+			multipleAccountsBenefit,
 		],
 		ratePlans: {
 			Monthly: {
