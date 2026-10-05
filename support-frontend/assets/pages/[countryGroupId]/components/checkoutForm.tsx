@@ -29,7 +29,7 @@ import { MaybeEstimatedTaxSummary } from 'components/salesTax/maybeEstimatedTaxS
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
-import type { Participations } from 'helpers/abTests/models';
+import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import useEmailMarketingUtmSession from 'helpers/customHooks/useEmailMarketingUtmSession';
 import {
@@ -145,7 +145,6 @@ type CheckoutFormProps = {
 	payment: Payment;
 	useStripeExpressCheckout: boolean;
 	countryId: CountryCode;
-	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 	clearCheckoutSession: () => void;
 	weeklyDeliveryDate: Date;
@@ -170,7 +169,6 @@ export default function CheckoutForm({
 	payment,
 	useStripeExpressCheckout,
 	countryId,
-	abParticipations,
 	clearCheckoutSession,
 	weeklyDeliveryDate,
 	setWeeklyDeliveryDate,
@@ -189,6 +187,7 @@ export default function CheckoutForm({
 	const isSignedIn = !!user?.email;
 
 	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
+	const abParticipations = useAbParticipations();
 
 	const productCatalog = appConfig.productCatalog;
 	const {

@@ -25,6 +25,7 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import type { Participations } from 'helpers/abTests/models';
+import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
@@ -137,7 +138,6 @@ function getThreeTierProductOption(
 type ThreeTierLandingProps = {
 	supportRegionId: SupportRegionId;
 	settings: LandingPageVariant;
-	abParticipations: Participations;
 };
 export function ThreeTierLanding({
 	supportRegionId,
