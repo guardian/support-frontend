@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { from, palette, space, textSans17 } from '@guardian/source/foundations';
 import { Container } from '@guardian/source/react-components';
 import type { CountryCode } from '@modules/internationalisation/country';
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
@@ -13,9 +13,6 @@ import {
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
-import type { ProductOptions } from '@modules/product/productOptions';
-import { TaxExclusive, TaxInclusive } from '@modules/product/productOptions';
-import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -29,10 +26,9 @@ import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { glyph } from 'helpers/internationalisation/currency';
 import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { allProductPrices } from 'helpers/productPrice/productPrices';
-import { getPromotion } from 'helpers/productPrice/promotions';
 import type { TierConfig } from 'pages/[countryGroupId]/helpers/getTierCardContent';
 import { getTierCardContent } from 'pages/[countryGroupId]/helpers/getTierCardContent';
+import { getTierCardPromotion } from 'pages/[countryGroupId]/helpers/getTierCardPromotion';
 import { getTierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
 import { isStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -120,19 +116,6 @@ const paymentFrequencyButtonsCss = css`
 	}
 `;
 
-function getThreeTierProductOption(
-	productKey: ProductKey,
-	supportRegionId: SupportRegionId,
-): ProductOptions {
-	if (
-		supportRegionId == SupportRegionId.CA &&
-		(productKey === 'DigitalSubscription' || productKey === 'SupporterPlus')
-	) {
-		return TaxExclusive;
-	}
-	return TaxInclusive;
-}
-
 type ThreeTierLandingProps = {
 	supportRegionId: SupportRegionId;
 	settings: LandingPageVariant;
@@ -207,51 +190,54 @@ export function ThreeTierLanding({
 	// Student Beans Europe feature switch enables the link to Student Landing Page for prescribed countries
 	const { enableStudentBeansEurope, enableDeepDiscount } = useFeatureSwitches();
 
+	const tier1RatePlanKey = getDigitalRatePlanKey(
+		contributionType,
+		supportRegionId,
+		'Contribution',
+	);
+	const tier2RatePlanKey = getDigitalRatePlanKey(
+		contributionType,
+		supportRegionId,
+		'SupporterPlus',
+	);
+	const tier3RatePlanKey = getDigitalRatePlanKey(
+		contributionType,
+		supportRegionId,
+		'DigitalSubscription',
+	);
+
 	const tier1Config: TierConfig = {
 		countryId,
 		tierProductKey: 'Contribution',
 		supportRegionId,
-		contributionType,
+		tierRatePlanKey: tier1RatePlanKey,
 		billingPeriod,
-		fulfilmentOption: 'NoFulfilmentOptions',
 		settings,
 	};
+
 	const tier1Card = getTierCardContent(tier1Config);
 	const tier2Card = getTierCardContent({
 		...tier1Config,
+		tierRatePlanKey: tier2RatePlanKey,
 		tierProductKey: 'SupporterPlus',
 	});
-	const tier3Card = getTierCardContent({
-		...tier1Config,
-		tierProductKey: 'DigitalSubscription',
-	});
-
-	const tierTwoProductOption = getThreeTierProductOption(
-		'SupporterPlus',
+	const tier2Promotion = getTierCardPromotion(
 		supportRegionId,
-	);
-	const tier2Promotion = getPromotion(
-		allProductPrices['SupporterPlus'],
 		countryId,
 		billingPeriod,
-		'NoFulfilmentOptions',
-		tierTwoProductOption,
+		tier2Card,
 	);
-
-	const tier3ProductPrice = allProductPrices.DigitalPack;
-	const tierThreeProductOption = getThreeTierProductOption(
-		'DigitalSubscription',
+	const tier3Card = getTierCardContent({
+		...tier1Config,
+		tierRatePlanKey: tier3RatePlanKey,
+		tierProductKey: 'DigitalSubscription',
+	});
+	const tier3Promotion = getTierCardPromotion(
 		supportRegionId,
+		countryId,
+		billingPeriod,
+		tier3Card,
 	);
-	const tier3Promotion = tier3ProductPrice
-		? getPromotion(
-				tier3ProductPrice,
-				countryId,
-				billingPeriod,
-				'NoFulfilmentOptions',
-				tierThreeProductOption,
-		  )
-		: undefined;
 
 	const showWeeklyPrice =
 		forceWeeklyPricing || settings.name.includes('WEEKLY_PRICE');
@@ -292,21 +278,6 @@ export function ThreeTierLanding({
 		},
 	];
 
-	const tier1RatePlanKey = getDigitalRatePlanKey(
-		contributionType,
-		supportRegionId,
-		'Contribution',
-	);
-	const tier2RatePlanKey = getDigitalRatePlanKey(
-		contributionType,
-		supportRegionId,
-		'SupporterPlus',
-	);
-	const tier3RatePlanKey = getDigitalRatePlanKey(
-		contributionType,
-		supportRegionId,
-		'DigitalSubscription',
-	);
 	const showTaxDisclaimer = [
 		tier1RatePlanKey,
 		tier2RatePlanKey,

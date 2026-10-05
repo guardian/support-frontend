@@ -1,7 +1,6 @@
 import type { CountryCode } from '@modules/internationalisation/country';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
-import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import {
 	type ProductOptions,
 	TaxExclusive,
@@ -23,22 +22,23 @@ import type { CardContent } from 'pages/supporter-plus-landing/components/threeT
 import { useThreeTierUrlSelection } from 'pages/supporter-plus-landing/twoStepPages/useThreeTierUrlSelection';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import { filterProductDescriptionBenefits } from '../checkout/helpers/benefitsChecklist';
-import { getDigitalRatePlanKey } from './getDigitalRatePlanKey';
 
-type TierProductKey = 'Contribution' | 'SupporterPlus' | 'DigitalSubscription';
+export type TierProductKey =
+	| 'Contribution'
+	| 'SupporterPlus'
+	| 'DigitalSubscription';
 type TierProductKeyWithPromotion = 'SupporterPlus' | 'DigitalSubscription';
 
 export type TierConfig = {
 	countryId: CountryCode;
 	tierProductKey: TierProductKey;
 	supportRegionId: SupportRegionId;
-	contributionType: 'ONE_OFF' | 'MONTHLY' | 'ANNUAL';
 	billingPeriod: BillingPeriod;
-	fulfilmentOption: FulfilmentOptions;
+	tierRatePlanKey: ProductRatePlanKey<TierProductKey>;
 	settings: LandingPageVariant;
 };
 
-function getThreeTierProductOption(
+export function getThreeTierProductOption(
 	tierProductKey: TierProductKey,
 	supportRegionId: SupportRegionId,
 ): ProductOptions {
@@ -55,11 +55,10 @@ function getThreeTierProductOption(
 export function getTierCardContent(config: TierConfig): CardContent {
 	const {
 		countryId,
-		billingPeriod,
-		fulfilmentOption,
 		tierProductKey,
 		supportRegionId,
-		contributionType,
+		billingPeriod,
+		tierRatePlanKey,
 		settings,
 	} = config;
 
@@ -67,12 +66,6 @@ export function getTierCardContent(config: TierConfig): CardContent {
 
 	const { currencyCode, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
-
-	const tierRatePlanKey = getDigitalRatePlanKey(
-		contributionType,
-		supportRegionId,
-		tierProductKey,
-	);
 
 	const tierPricing = productCatalog[tierProductKey]?.ratePlans[tierRatePlanKey]
 		?.pricing[currencyCode] as number;
@@ -93,14 +86,14 @@ export function getTierCardContent(config: TierConfig): CardContent {
 				allProductPrices[tierProductKeyWithPromotion],
 				countryId,
 				billingPeriod,
-				fulfilmentOption,
+				undefined,
 				tierProductOption,
 		  )
 		: undefined;
 
 	const tierCheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: tierProductKey,
-		ratePlan: tierRatePlanKey as ProductRatePlanKey<typeof tierProductKey>,
+		ratePlan: tierRatePlanKey,
 		promoCode: tierPromotion?.promoCode,
 	});
 
