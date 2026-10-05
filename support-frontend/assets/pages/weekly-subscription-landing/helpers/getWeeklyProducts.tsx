@@ -36,17 +36,6 @@ import {
 	getWeeklySavingsText,
 } from './getSavingsText';
 
-export type GuardianWeeklyProductKey =
-	| 'GuardianWeeklyDomestic'
-	| 'GuardianWeeklyRestOfWorld';
-
-export const getGuardianWeeklyProductKey = (
-	countryGroupId: CountryGroupId,
-): GuardianWeeklyProductKey =>
-	countryGroupId === 'International'
-		? 'GuardianWeeklyRestOfWorld'
-		: 'GuardianWeeklyDomestic';
-
 function getWeeklyRatePlan(
 	billingPeriod: RecurringBillingPeriod,
 	isGift: boolean,
@@ -106,8 +95,11 @@ export const getWeeklyProducts = ({
 	billingPeriods: RecurringBillingPeriod[];
 	isGift?: boolean;
 }): Product[] => {
-	const productKey = getGuardianWeeklyProductKey(countryGroupId);
-	const { currency } = countryGroups[countryGroupId];
+	const { currency, supportRegionId } = countryGroups[countryGroupId];
+	const productKey = internationaliseProduct(
+		supportRegionId,
+		'GuardianWeeklyDomestic',
+	);
 
 	const getPrice = (billingPeriod: RecurringBillingPeriod) =>
 		productCatalog[productKey]?.ratePlans[

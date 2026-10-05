@@ -3,10 +3,12 @@ import { neutral } from '@guardian/source/foundations';
 import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { usePromoTerms } from 'contexts/PromoTermsContext';
 import { guardianWeeklyTermsLink } from 'helpers/legal';
-import type { ActiveRatePlanKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import { getAppliedPromotion } from 'helpers/productPrice/appliedPromotion';
 import { promotionTermsUrl } from 'helpers/urls/routes';
-import type { GuardianWeeklyProductKey } from 'pages/weekly-subscription-landing/helpers/getWeeklyProducts';
 import Footer from './Footer';
 import { footerTextHeading } from './footerStyles';
 
@@ -20,7 +22,7 @@ const promoOfferLink = css`
 
 const getPromoUrl = (
 	promotions: PromoWithCatalogInformation[],
-	productKey: GuardianWeeklyProductKey,
+	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
 	promoCode?: string,
 ): string | undefined => {
@@ -39,7 +41,7 @@ function MaybeLink({ href, text }: { text: string; href?: string }) {
 
 type LinkTypes = {
 	promotions: PromoWithCatalogInformation[];
-	productKey: GuardianWeeklyProductKey;
+	productKey: ActiveProductKey;
 	promoCode?: string;
 };
 
@@ -103,7 +105,7 @@ function GuardianWeeklyFooter({
 	orderIsAGift,
 }: {
 	promotions: PromoWithCatalogInformation[];
-	productKey: GuardianWeeklyProductKey;
+	productKey: ActiveProductKey;
 	promoCode?: string;
 	orderIsAGift: boolean;
 }) {

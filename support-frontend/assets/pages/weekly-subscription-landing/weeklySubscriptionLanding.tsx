@@ -5,6 +5,7 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import {
 	AUDCountries,
 	Canada,
+	countryGroups,
 	EURCountries,
 	GBPCountries,
 	International,
@@ -35,6 +36,7 @@ import {
 	getAbParticipations,
 	setUpTrackingAndConsents,
 } from 'helpers/page/page';
+import { internationaliseProduct } from 'helpers/productCatalog';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { getSanitisedPromoCopy } from 'helpers/productPrice/promotions';
 import { renderPage } from 'helpers/rendering/render';
@@ -50,7 +52,6 @@ import WeeklyDigitalHero from './components/WeeklyDigitalHero';
 import { WeeklyGiftHero } from './components/weeklyGiftHero';
 import WeeklyGiftProductPrices from './components/weeklyGiftProductPrices';
 import { WeeklyPriceInfo } from './components/weeklyPriceInfo';
-import { getGuardianWeeklyProductKey } from './helpers/getWeeklyProducts';
 
 const weeklySpacing = css`
 	div {
@@ -125,7 +126,10 @@ export function WeeklyLandingPage({
 				footer={
 					<GuardianWeeklyFooter
 						promotions={promotions}
-						productKey={getGuardianWeeklyProductKey(countryGroupId)}
+						productKey={internationaliseProduct(
+							countryGroups[countryGroupId].supportRegionId,
+							'GuardianWeeklyDomestic',
+						)}
 						promoCode={promoCode}
 						orderIsAGift={!!orderIsAGift}
 					/>
