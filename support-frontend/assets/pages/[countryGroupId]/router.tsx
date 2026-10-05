@@ -8,6 +8,7 @@ import {
 import { ClientSideErrorPage } from 'components/ClientSideError';
 import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
 import { ObserverHoldingContent } from 'components/serverSideRendered/observerHoldingContent';
+import { AbParticipationsProvider } from 'contexts/AbParticipationsContext';
 import { FeatureSwitchesProvider } from 'contexts/FeatureSwitchesContext';
 import { getStudentLandingPageTestConfig } from 'helpers/abTests/studentLandingPageAbTests';
 import { WithCoreWebVitals } from 'helpers/coreWebVitals/withCoreWebVitals';
@@ -68,9 +69,12 @@ function useRootLoaderData(): LoaderData {
 }
 
 function RootLayout() {
+	const { finalParticipations } = useRootLoaderData();
 	return (
 		<WithCoreWebVitals>
-			<Outlet />
+			<AbParticipationsProvider participations={finalParticipations}>
+				<Outlet />
+			</AbParticipationsProvider>
 		</WithCoreWebVitals>
 	);
 }
@@ -92,11 +96,10 @@ const router = createBrowserRouter([
 						);
 						return {
 							Component: function LandingPageRoute() {
-								const { finalParticipations, landing } = useRootLoaderData();
+								const { landing } = useRootLoaderData();
 								return (
 									<LandingPage
 										supportRegionId={supportRegionId}
-										abParticipations={finalParticipations}
 										landingPageSettings={landing.variant}
 									/>
 								);
@@ -112,12 +115,11 @@ const router = createBrowserRouter([
 						);
 						return {
 							Component: function CheckoutRoute() {
-								const { finalParticipations, landing } = useRootLoaderData();
+								const { landing } = useRootLoaderData();
 								return (
 									<Checkout
 										supportRegionId={supportRegionId}
 										appConfig={appConfig}
-										abParticipations={finalParticipations}
 										landingPageSettings={landing.variant}
 										nudgeSettings={checkoutNudgeSettings}
 									/>
@@ -134,13 +136,11 @@ const router = createBrowserRouter([
 						);
 						return {
 							Component: function OneTimeCheckoutRoute() {
-								const { finalParticipations, landing, oneTime } =
-									useRootLoaderData();
+								const { landing, oneTime } = useRootLoaderData();
 								return (
 									<OneTimeCheckout
 										supportRegionId={supportRegionId}
 										appConfig={appConfig}
-										abParticipations={finalParticipations}
 										nudgeSettings={checkoutNudgeSettings}
 										landingPageSettings={landing.variant}
 										oneTimeCheckoutSettings={oneTime.variant}
@@ -159,12 +159,11 @@ const router = createBrowserRouter([
 						);
 						return {
 							Component: function ThankYouRoute() {
-								const { finalParticipations, landing } = useRootLoaderData();
+								const { landing } = useRootLoaderData();
 								return (
 									<ThankYou
 										supportRegionId={supportRegionId}
 										appConfig={appConfig}
-										abParticipations={finalParticipations}
 										landingPageSettings={landing.variant}
 									/>
 								);

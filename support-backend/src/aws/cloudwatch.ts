@@ -10,7 +10,10 @@ import { isTest, stageFromEnvironment } from '../utils/stage';
 
 const namespace = 'support-backend';
 
-type MetricName = 'GetDeliveryAgentsFailure' | 'GetDeliveryAgentsSuccess';
+type MetricName =
+	| 'GetDeliveryAgentsFailure'
+	| 'GetDeliveryAgentsSuccess'
+	| 'SupportBackendServerFailedToStart';
 
 export async function putMetric(metricName: MetricName): Promise<void> {
 	if (isTest()) {

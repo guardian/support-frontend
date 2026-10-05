@@ -8,7 +8,6 @@ import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import { observerThemeButton } from 'components/observer-layout/styles';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
-import type { Participations } from 'helpers/abTests/models';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import { Country } from 'helpers/internationalisation/classes/country';
 import {
@@ -72,7 +71,6 @@ export type CheckoutComponentProps = {
 	ratePlanKey?: ActiveRatePlanKey;
 	promotion?: Promotion;
 	identityUserType: UserType;
-	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 };
 
