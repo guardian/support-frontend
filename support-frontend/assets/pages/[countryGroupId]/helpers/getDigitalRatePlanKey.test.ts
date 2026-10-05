@@ -11,10 +11,6 @@ type HookProbeProps = {
 };
 
 describe('getDigitalRatePlanKey', () => {
-	beforeEach(() => {
-		jest.clearAllMocks();
-	});
-
 	it('returns the billing period key for non-Canada regions with SupporterPlus product', () => {
 		const { result } = renderHook(() =>
 			getDigitalRatePlanKey('MONTHLY', SupportRegionId.UK, 'SupporterPlus'),
