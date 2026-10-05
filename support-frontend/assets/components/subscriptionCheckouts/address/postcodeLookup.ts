@@ -29,14 +29,13 @@ function handleErrors(response: Response) {
 
 export async function findAddressesForPostcode(
 	postcode: string,
-	useExpressPostcodeLookup: boolean,
 ): Promise<PostcodeFinderResult[]> {
 	const postcodeLookup = getGlobal('checkoutPostcodeLookup');
 
 	if (postcodeLookup) {
-		const response = await fetch(
-			postcodeLookupUrl(postcode, useExpressPostcodeLookup),
-		).then(handleErrors);
+		const response = await fetch(postcodeLookupUrl(postcode)).then(
+			handleErrors,
+		);
 		return response.json() as Promise<PostcodeFinderResult[]>;
 	}
 

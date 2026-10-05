@@ -47,6 +47,7 @@ import { PriceCards } from 'components/priceCards/priceCards';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
+import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import type { Participations } from 'helpers/abTests/models';
 import { config } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
@@ -185,7 +186,6 @@ type OneTimeCheckoutComponentProps = {
 	appConfig: AppConfig;
 	stripePublicKey: string;
 	countryId: CountryCode;
-	abParticipations: Participations;
 	useStripeExpressCheckout: boolean;
 	nudgeSettings?: CheckoutNudgeSettings;
 	landingPageSettings: LandingPageVariant;
@@ -286,7 +286,6 @@ export function OneTimeCheckoutComponent({
 	appConfig,
 	stripePublicKey,
 	countryId,
-	abParticipations,
 	useStripeExpressCheckout,
 	nudgeSettings,
 	landingPageSettings,
@@ -309,6 +308,7 @@ export function OneTimeCheckoutComponent({
 
 	const preSelectedAmountParam = urlSearchParams.get('contribution');
 	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
+	const abParticipations = useAbParticipations();
 
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;

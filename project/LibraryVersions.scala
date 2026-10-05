@@ -1,9 +1,9 @@
 object LibraryVersions {
-  val circeVersion = "0.14.6"
+  val circeVersion = "0.14.16"
   val awsClientVersion2 = "2.54.15"
   val catsVersion = "2.10.0"
-  val jacksonVersion = "2.22.1"
-  val jacksonDatabindVersion = "2.22.1"
+  val jacksonVersion = "2.22.3"
+  val jacksonDatabindVersion = "2.22.3"
   val jacksonAnnotationsVersion = "2.22"
   val okhttpVersion = "4.9.2"
   val scalaUriVersion = "4.2.0"
