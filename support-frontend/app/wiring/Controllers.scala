@@ -104,6 +104,7 @@ trait Controllers {
     paperRoundServiceProvider,
     userBenefitsApiServiceProvider,
     stripeCheckoutSessionService,
+    appConfig.stripeConfigProvider,
   )
 
   lazy val supportWorkersStatusController = new SupportWorkersStatus(
