@@ -1,6 +1,5 @@
 package services
 
-import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper, Product, SupporterPlus, TierThree}
 import com.gu.support.config.{PromotionsApiConfig, TouchPointEnvironments}
 import com.gu.support.promotions.PromoWithCatalogInformation
 import org.apache.pekko.actor.ActorSystem
@@ -8,7 +7,6 @@ import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import services.pricing.DefaultPromotionService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -40,92 +38,74 @@ class CachedPromotionsServiceSpec extends AnyWordSpec with Matchers with ScalaFu
 
   private val testConfig = PromotionsApiConfig(TouchPointEnvironments.CODE, "https://unused.test", "test-key")
 
-  /** A fake promotions-api backend, so tests don't need real HTTP/JSON wiring - just the promo codes that should be
-    * considered "found" when requested.
-    */
-  private class FakePromotionsApiService(foundCodes: Set[String]) extends PromotionsApiService(null, testConfig) {
+  /** A fake promotions-api backend, so tests don't need real HTTP/JSON wiring. */
+  private class FakePromotionsApiService(
+      var activeCodes: List[String],
+      inactiveCodes: Set[String] = Set.empty,
+  ) extends PromotionsApiService(null, testConfig) {
+    var failing = false
     var requestedCodes: List[Seq[String]] = Nil
-    var requestedActive: List[Option[Boolean]] = Nil
+
+    override def listActive(): Future[List[PromoWithCatalogInformation]] =
+      if (failing) Future.failed(new RuntimeException("promotions-api unavailable"))
+      else Future.successful(activeCodes.map(promotion))
 
     override def listByPromoCodes(
         promoCodes: Seq[String],
         active: Option[Boolean],
     ): Future[List[PromoWithCatalogInformation]] = {
       requestedCodes = requestedCodes :+ promoCodes
-      requestedActive = requestedActive :+ active
-      Future.successful(promoCodes.filter(foundCodes.contains).map(promotion).toList)
+      if (failing) Future.failed(new RuntimeException("promotions-api unavailable"))
+      else Future.successful(promoCodes.filter((activeCodes.toSet ++ inactiveCodes).contains).map(promotion).toList)
     }
   }
 
-  private class FakeDefaultPromotionService(codesByProduct: Map[Product, List[String]])
-      extends DefaultPromotionService {
-    def getPromoCodes(product: Product): List[String] = codesByProduct.getOrElse(product, Nil)
-    def allPromoCodes: List[String] = codesByProduct.values.flatten.toList.distinct
+  "CachedPromotionsService.getActive" should {
+    "return the active promotions for the requested codes, in the requested order, omitting any others" in {
+      val api = new FakePromotionsApiService(activeCodes = List("WEEKLY10", "PAPER20"))
+      val service = new CachedPromotionsService(system, api, testConfig)
+
+      service.getActive(Seq("PAPER20", "UNKNOWN", "WEEKLY10")).map(_.promoCode) shouldBe Seq("PAPER20", "WEEKLY10")
+      api.requestedCodes shouldBe empty
+    }
+
+    "replace the cached promotions on refresh, so promotions which are no longer active are dropped" in {
+      val api = new FakePromotionsApiService(activeCodes = List("OLD"))
+      val service = new CachedPromotionsService(system, api, testConfig)
+
+      api.activeCodes = List("NEW")
+      service.refresh().futureValue
+
+      service.getActive(Seq("OLD", "NEW")).map(_.promoCode) shouldBe Seq("NEW")
+    }
+
+    "keep the previously cached promotions if a refresh fails" in {
+      val api = new FakePromotionsApiService(activeCodes = List("WEEKLY10"))
+      val service = new CachedPromotionsService(system, api, testConfig)
+
+      api.failing = true
+      service.refresh().failed.futureValue
+
+      service.getActive(Seq("WEEKLY10")).map(_.promoCode) shouldBe Seq("WEEKLY10")
+    }
   }
 
-  "CachedPromotionsService" should {
-    "fetch and cache the default promo codes on startup" in {
-      val defaults = new FakeDefaultPromotionService(
-        Map(
-          GuardianWeekly -> List("WEEKLY10"),
-          Paper -> List("PAPER20"),
-        ),
-      )
-      val api = new FakePromotionsApiService(foundCodes = Set("WEEKLY10", "PAPER20"))
-
-      val service = new CachedPromotionsService(system, api, defaults, testConfig)
+  "CachedPromotionsService.get" should {
+    "return a cached active promotion without calling promotions-api" in {
+      val api = new FakePromotionsApiService(activeCodes = List("WEEKLY10"))
+      val service = new CachedPromotionsService(system, api, testConfig)
 
       service.get("WEEKLY10").futureValue.map(_.promoCode) shouldBe Some("WEEKLY10")
-      service.get("PAPER20").futureValue.map(_.promoCode) shouldBe Some("PAPER20")
-
-      service.get(Seq("WEEKLY10", "PAPER20")).futureValue.map(_.promoCode) shouldBe Seq("WEEKLY10", "PAPER20")
-
-      api.requestedCodes.flatten.toSet shouldBe Set("WEEKLY10", "PAPER20")
+      api.requestedCodes shouldBe empty
     }
 
-    "transparently fetch and cache an ad-hoc code that isn't already cached, without waiting for the next scheduled poll" in {
-      val defaults = new FakeDefaultPromotionService(Map.empty)
-      val api = new FakePromotionsApiService(foundCodes = Set("QUERYSTRINGCODE"))
+    "fetch a promotion which isn't cached, e.g. an expired promotion" in {
+      val api = new FakePromotionsApiService(activeCodes = Nil, inactiveCodes = Set("EXPIRED"))
+      val service = new CachedPromotionsService(system, api, testConfig)
 
-      val service = new CachedPromotionsService(system, api, defaults, testConfig)
-
-      service.get("QUERYSTRINGCODE").futureValue.map(_.promoCode) shouldBe Some("QUERYSTRINGCODE")
-      api.requestedCodes should contain(Seq("QUERYSTRINGCODE"))
-
-      // now cached, so a repeat lookup doesn't trigger another fetch
-      service.get("QUERYSTRINGCODE").futureValue.map(_.promoCode) shouldBe Some("QUERYSTRINGCODE")
-      api.requestedCodes.count(_ == Seq("QUERYSTRINGCODE")) shouldBe 1
-    }
-
-    "return None for a code that's never found/active, without caching it" in {
-      val defaults = new FakeDefaultPromotionService(Map.empty)
-      val api = new FakePromotionsApiService(foundCodes = Set.empty)
-
-      val service = new CachedPromotionsService(system, api, defaults, testConfig)
-
+      service.get("EXPIRED").futureValue.map(_.promoCode) shouldBe Some("EXPIRED")
       service.get("UNKNOWN").futureValue shouldBe None
-      api.requestedCodes should contain(Seq("UNKNOWN"))
-    }
-
-    "drop codes from the cache that are no longer found/active on a subsequent fetch" in {
-      val defaults = new FakeDefaultPromotionService(Map.empty)
-      val api = new FakePromotionsApiService(foundCodes = Set("STILLVALID"))
-
-      val service = new CachedPromotionsService(system, api, defaults, testConfig)
-      service.fetchAndCache(Seq("STILLVALID", "NOWEXPIRED")).futureValue
-      service.get("STILLVALID").futureValue shouldBe defined
-      service.get("NOWEXPIRED").futureValue shouldBe None
-    }
-
-    "fetch promotions without filtering by active/expiry, so expired promotions' terms can still be shown" in {
-      val defaults = new FakeDefaultPromotionService(Map.empty)
-      val api = new FakePromotionsApiService(foundCodes = Set("EXPIREDCODE"))
-
-      val service = new CachedPromotionsService(system, api, defaults, testConfig)
-      service.get("EXPIREDCODE").futureValue
-
-      api.requestedActive should not be empty
-      api.requestedActive.foreach(_ shouldBe None)
+      api.requestedCodes shouldBe List(Seq("EXPIRED"), Seq("UNKNOWN"))
     }
   }
 }
