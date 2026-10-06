@@ -75,7 +75,6 @@ const defaultArgs: WeeklyLandingPageProps = {
 	countryGroupId: GBPCountries,
 	productCatalog: productCatalogFixture,
 	promotions,
-	promotionCopy: undefined,
 	orderIsAGift: false,
 };
 const giftArgs: WeeklyLandingPageProps = {

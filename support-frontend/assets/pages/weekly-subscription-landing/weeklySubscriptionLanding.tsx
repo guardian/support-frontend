@@ -25,10 +25,7 @@ import headerWithCountrySwitcherContainer from 'components/headers/header/header
 import Block from 'components/page/block';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PromoTermsProvider } from 'contexts/PromoTermsContext';
-import {
-	getGlobal,
-	getPromotionCopy,
-} from 'helpers/globalsAndSwitches/globals';
+import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import type { WindowProductCatalog } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
@@ -37,8 +34,10 @@ import {
 	setUpTrackingAndConsents,
 } from 'helpers/page/page';
 import { internationaliseProduct } from 'helpers/productCatalog';
-import type { PromotionCopy } from 'helpers/productPrice/promotions';
-import { getSanitisedPromoCopy } from 'helpers/productPrice/promotions';
+import {
+	getLandingPageCopy,
+	getSanitisedLandingPageCopy,
+} from 'helpers/productPrice/landingPageCopy';
 import { renderPage } from 'helpers/rendering/render';
 import { routes } from 'helpers/urls/routes';
 import { getQueryParameter } from 'helpers/urls/url';
@@ -80,7 +79,6 @@ export type WeeklyLandingPageProps = {
 	productCatalog: WindowProductCatalog;
 	promotions: PromoWithCatalogInformation[];
 	promoCode?: string;
-	promotionCopy?: PromotionCopy;
 };
 export function WeeklyLandingPage({
 	countryId,
@@ -88,7 +86,6 @@ export function WeeklyLandingPage({
 	productCatalog,
 	promotions,
 	promoCode,
-	promotionCopy,
 	orderIsAGift,
 }: WeeklyLandingPageProps) {
 	const path = orderIsAGift
@@ -112,7 +109,9 @@ export function WeeklyLandingPage({
 		],
 		trackProduct: 'GuardianWeekly',
 	});
-	const promotion = getSanitisedPromoCopy(promotionCopy);
+	const landingPageCopy = getSanitisedLandingPageCopy(
+		getLandingPageCopy(promotions, promoCode),
+	);
 
 	const fulfilmentOption: PrintFulfilmentOptions =
 		countryGroupId === 'International' ? RestOfWorld : Domestic;
@@ -137,7 +136,7 @@ export function WeeklyLandingPage({
 			>
 				{orderIsAGift ? (
 					<>
-						<WeeklyGiftHero promotionCopy={promotion} />
+						<WeeklyGiftHero landingPageCopy={landingPageCopy} />
 						<FullWidthContainer>
 							<CentredContainer cssOverrides={weeklySpacing}>
 								<Block>
@@ -159,7 +158,7 @@ export function WeeklyLandingPage({
 					</>
 				) : (
 					<>
-						<WeeklyDigitalHero promotion={promotion} />
+						<WeeklyDigitalHero landingPageCopy={landingPageCopy} />
 						<CentredContainer cssOverrides={weeklyDigitalSpacing}>
 							<WeeklyCards
 								countryId={countryId}
@@ -189,7 +188,6 @@ const weeklyLandingProps = (): WeeklyLandingPageProps => ({
 	productCatalog: window.guardian.productCatalog,
 	promotions: window.guardian.promotions ?? [],
 	promoCode: getQueryParameter('promoCode'),
-	promotionCopy: getPromotionCopy() ?? undefined,
 });
 
 const abParticipations = getAbParticipations();
