@@ -3,10 +3,13 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
+import com.gu.i18n.CountryGroup
 import com.gu.support.catalog.GuardianWeekly
 import com.gu.support.config.Stage
 import com.gu.support.config.Stages.PROD
 import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.promotions.PromoWithCatalogInformation
+import services.{ApplicablePromotions, CachedProductCatalogServiceProvider, CachedPromotionsServiceProvider}
 import services.pricing.PriceSummaryServiceProvider
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import config.StringsConfig
@@ -20,6 +23,8 @@ import scala.concurrent.ExecutionContext
 class WeeklySubscriptionController(
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
     landingCopyProvider: LandingCopyProvider,
+    cachedPromotionsServiceProvider: CachedPromotionsServiceProvider,
+    cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
     val assets: AssetsResolver,
     val actionRefiners: CustomActionBuilders,
     components: ControllerComponents,
@@ -41,7 +46,7 @@ class WeeklySubscriptionController(
     if (orderIsAGift) "subscribe/weekly/gift" else "subscribe/weekly",
   )
 
-  def weekly(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
+  def weekly(countryGroupId: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     // We want the canonical link to point to the geo-redirect page so that users arriving from
     // search will be redirected to the correct version of the page
@@ -53,14 +58,16 @@ class WeeklySubscriptionController(
         .toList
     val defaultPromos = priceSummaryServiceProvider.forUser(isTestUser = false).getDefaultPromoCodes(GuardianWeekly)
     val maybePromotionCopy =
-      landingCopyProvider.promotionCopy(queryPromos ++ defaultPromos, GuardianWeekly, countryCode, orderIsAGift)
+      landingCopyProvider.promotionCopy(queryPromos ++ defaultPromos, GuardianWeekly, countryGroupId, orderIsAGift)
+    val promotions = getPromotions(queryPromos ++ defaultPromos, countryGroupId, orderIsAGift)
+    val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser = false).get()
 
     Ok(
       views.html.main(
         title =
           if (orderIsAGift) "The Guardian Weekly Gift Subscription | The Guardian"
           else "The Guardian Weekly Subscriptions | The Guardian",
-        mainElement = EmptyDiv("weekly-landing-page-" + countryCode),
+        mainElement = EmptyDiv("weekly-landing-page-" + countryGroupId),
         mainJsBundle = RefPath("weeklySubscriptionLandingPage.js"),
         mainStyleBundle = None,
         description = stringsConfig.weeklyLandingDescription,
@@ -76,10 +83,28 @@ class WeeklySubscriptionController(
               window.guardian.productPrices = ${outputJson(productPrices(queryPromos, orderIsAGift))}
               window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
               window.guardian.orderIsAGift = $orderIsAGift
+              window.guardian.promotions = ${outputJson(promotions)}
+              window.guardian.productCatalog = ${outputJson(productCatalog, dropNullValues = false)}
             </script>""")
       },
     ).withSettingsSurrogateKey
   }
+
+  private def getPromotions(
+      promoCodes: List[String],
+      countryGroupId: String,
+      orderIsAGift: Boolean,
+  ): Seq[PromoWithCatalogInformation] =
+    CountryGroup
+      .byId(countryGroupId)
+      .map { countryGroup =>
+        val promotions = cachedPromotionsServiceProvider.forUser(isTestUser = false).getActive(promoCodes.distinct)
+        ApplicablePromotions.filter(promotions, Set(guardianWeeklyProductKey(countryGroup)), orderIsAGift, countryGroup)
+      }
+      .getOrElse(Nil)
+
+  private def guardianWeeklyProductKey(countryGroup: CountryGroup): String =
+    if (countryGroup == CountryGroup.RestOfTheWorld) "GuardianWeeklyRestOfWorld" else "GuardianWeeklyDomestic"
 
   private def getWeeklyHrefLangLinks(orderIsAGift: Boolean): Map[String, String] = Map(
     "en-us" -> buildRegionalisedWeeklySubscriptionLink("us", orderIsAGift),
