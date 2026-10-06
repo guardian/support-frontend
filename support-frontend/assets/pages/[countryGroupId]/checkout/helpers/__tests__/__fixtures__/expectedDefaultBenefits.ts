@@ -205,7 +205,7 @@ const DigitalSubscriptionBenefits = [
 	{ isChecked: true, text: 'The Long Read e-magazine' },
 	{
 		isChecked: true,
-		text: 'Access to multiple accounts for the same subscription',
+		text: '3 extra accounts to share',
 	},
 	{ isChecked: true, text: 'Far fewer asks for support' },
 	{ isChecked: true, text: 'Ad-free reading on all your devices' },
@@ -228,7 +228,7 @@ const DigitalSubscriptionBenefitsAUD = [
 	{ isChecked: true, text: 'The Long Read e-magazine' },
 	{
 		isChecked: true,
-		text: 'Access to multiple accounts for the same subscription',
+		text: '3 extra accounts to share',
 	},
 	{ isChecked: true, text: 'Far fewer asks for support' },
 	{ isChecked: true, text: 'Ad-free reading on all your devices' },
@@ -252,7 +252,7 @@ const DigitalSubscriptionBenefitsUS = [
 	{ isChecked: true, text: 'The Long Read e-magazine' },
 	{
 		isChecked: true,
-		text: 'Access to multiple accounts for the same subscription',
+		text: '3 extra accounts to share',
 	},
 	{ isChecked: true, text: 'Far fewer asks for support' },
 	{ isChecked: true, text: 'Ad-free reading on all your devices' },
@@ -276,7 +276,7 @@ const DigitalSubscriptionBenefitsGBP = [
 	{ isChecked: true, text: 'The Long Read e-magazine' },
 	{
 		isChecked: true,
-		text: 'Access to multiple accounts for the same subscription',
+		text: '3 extra accounts to share',
 	},
 	{ isChecked: true, text: 'Far fewer asks for support' },
 	{ isChecked: true, text: 'Ad-free reading on all your devices' },

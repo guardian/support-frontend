@@ -349,10 +349,10 @@ const paperArchiveDigitalBenefit = {
 };
 
 const multipleAccountsBenefit = {
-	copy: 'Access to multiple accounts for the same subscription',
+	copy: '3 extra accounts to share',
 	isNew: true,
 	tooltip:
-		'You can manage multiple accounts under the same subscription, making it easier for families or shared households to enjoy the benefits.',
+		'You can share your Digital plus access with three other people. Each person gets their own account and login.',
 };
 
 export const productCatalogDescription: Record<
