@@ -75,6 +75,13 @@ export const fallBackLandingPageSelection: LandingPageVariant = {
 					tooltip:
 						'You can share your Digital plus access with three other people. Each person gets their own account and login.',
 					label: { copy: 'New' },
+					specificToAbTest: [
+						{
+							name: 'multipleAccounts',
+							variants: ['control'],
+							display: true,
+						},
+					],
 				},
 				{
 					copy: 'Digital access to the Guardian’s 200 year newspaper archive',

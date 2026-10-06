@@ -74,7 +74,7 @@ export const productCatalog = window.guardian.productCatalog;
 // TODO: we should probably move into using this function so we can acess the an updated version of the product catalog
 export const getProductCatalog = () => window.guardian.productCatalog;
 
-type SpecificToAbTest = {
+export type SpecificToAbTest = {
 	name: string;
 	variants: string[];
 	display: boolean;

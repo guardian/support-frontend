@@ -1,4 +1,5 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SpecificToAbTest } from 'helpers/productCatalog';
 
 export type TickerName = 'US' | 'AU' | 'global';
 
@@ -53,6 +54,7 @@ export interface ProductBenefit {
 	label?: {
 		copy: string;
 	};
+	specificToAbTest?: SpecificToAbTest[];
 }
 
 // Pricing comes from the product catalog - not configurable here
