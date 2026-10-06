@@ -226,8 +226,8 @@ function OnboardingHeading({
 			},
 			[OnboardingInviteeSteps.DigitalPlus]: {
 				gridId: windowWidthIsGreaterThan('tablet')
-					? 'onboardingDigitalPlusDiscoveryHero'
-					: 'onboardingDigitalPlusDiscoveryHeroMobile',
+					? 'onboardingDigitalPlusDiscoveryHeroSecondary'
+					: 'onboardingDigitalPlusDiscoveryHeroMobileSecondary',
 				altText: 'Onboarding invitee digital plus hero',
 				aspectRatio: css`
 					aspect-ratio: 3 / 2;
