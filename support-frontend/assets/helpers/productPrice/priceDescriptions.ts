@@ -118,23 +118,4 @@ function getPriceDescription(
 	);
 }
 
-function getSimplifiedPriceDescription(
-	productPrice: ProductPrice,
-	billingPeriod: BillingPeriod,
-): string {
-	const glyph = extendedGlyph(productPrice.currency);
-	const promotion = getAppliedPromo(productPrice.promotions);
-	const termPrepositon = productPrice.fixedTerm ? 'for' : 'per';
-	const promoRateCopy = getStandardRateCopy(
-		glyph,
-		productPrice.price,
-		billingPeriod,
-		productPrice.fixedTerm,
-	);
-	return `${termPrepositon} ${getBillingPeriodNoun(
-		billingPeriod,
-		productPrice.fixedTerm,
-	)}${hasDiscount(promotion) ? promoRateCopy : ''}`;
-}
-
-export { getPriceDescription, getSimplifiedPriceDescription };
+export { getPriceDescription };
