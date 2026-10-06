@@ -2,7 +2,10 @@ import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog';
 import type { ContributionType } from 'helpers/contributions';
 
-type TierProductKey = 'Contribution' | 'SupporterPlus' | 'DigitalSubscription';
+export type TierProductKey =
+	| 'Contribution'
+	| 'SupporterPlus'
+	| 'DigitalSubscription';
 export function getDigitalRatePlanKey(
 	contributionType: ContributionType,
 	supportRegionId: SupportRegionId,

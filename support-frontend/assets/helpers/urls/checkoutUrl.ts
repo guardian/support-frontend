@@ -1,29 +1,24 @@
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import type {
-	ProductKey,
-	ProductRatePlanKey,
-} from '@modules/product-catalog/productCatalog';
+import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog';
+import type { TierProductKey } from 'pages/[countryGroupId]/helpers/getDigitalRatePlanKey';
 
-type ProductUrlParams<T extends ProductKey> = {
-	product: T;
-	ratePlan: ProductRatePlanKey<T>;
+type TierProductUrlParams = {
+	product: TierProductKey;
+	ratePlan: ProductRatePlanKey<TierProductKey>;
+	contribution?: number;
 	promoCode?: string;
 };
 
-type ContributionUrlParams = ProductUrlParams<'Contribution'> & {
-	contribution: number;
-};
-
-export function buildCheckoutUrl<T extends ProductKey>(
+export function buildCheckoutUrl(
 	supportRegionId: SupportRegionId,
-	params: ProductUrlParams<T> | ContributionUrlParams,
+	params: TierProductUrlParams,
 ): string {
 	const urlParams = new URLSearchParams({
 		product: params.product,
 		ratePlan: params.ratePlan,
 	});
 
-	if ('contribution' in params) {
+	if (params.contribution) {
 		urlParams.set('contribution', String(params.contribution));
 	}
 

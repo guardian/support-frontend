@@ -37,6 +37,7 @@ describe('buildCheckoutUrl', () => {
 			const url = buildCheckoutUrl(SupportRegionId.US, {
 				product: 'SupporterPlus',
 				ratePlan: 'Annual',
+				contribution: undefined,
 				promoCode: 'SPROMO',
 			});
 			expect(url).toBe(
@@ -48,7 +49,6 @@ describe('buildCheckoutUrl', () => {
 			const url = buildCheckoutUrl(SupportRegionId.US, {
 				product: 'SupporterPlus',
 				ratePlan: 'Monthly',
-				promoCode: undefined,
 			});
 			expect(url).not.toContain('promoCode');
 		});
@@ -69,6 +69,7 @@ describe('buildCheckoutUrl', () => {
 			const url = buildCheckoutUrl(SupportRegionId.CA, {
 				product: 'DigitalSubscription',
 				ratePlan: 'Annual',
+				contribution: undefined,
 				promoCode: 'DIGISUB20',
 			});
 			expect(url).toBe(
@@ -91,6 +92,7 @@ describe('buildCheckoutUrl', () => {
 			const url = buildCheckoutUrl(SupportRegionId.EU, {
 				product: 'SupporterPlus',
 				ratePlan: 'Monthly',
+				contribution: undefined,
 				promoCode: 'TEST',
 			});
 			expect(url).not.toContain('contribution');

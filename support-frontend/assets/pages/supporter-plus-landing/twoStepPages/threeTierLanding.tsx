@@ -14,10 +14,7 @@ import {
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductOptions } from '@modules/product/productOptions';
 import { TaxExclusive, TaxInclusive } from '@modules/product/productOptions';
-import type {
-	ProductKey,
-	ProductRatePlanKey,
-} from '@modules/product-catalog/productCatalog';
+import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -273,7 +270,7 @@ export function ThreeTierLanding({
 		?.pricing[currencyId] as number;
 	const tier1checkoutUrl = buildCheckoutUrl(supportRegionId, {
 		product: tier1Product,
-		ratePlan: tier1RatePlanKey as ProductRatePlanKey<typeof tier1Product>,
+		ratePlan: tier1RatePlanKey,
 		contribution: tier1Pricing,
 	});
 
@@ -323,7 +320,7 @@ export function ThreeTierLanding({
 
 	const tier2CheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: tier2Product,
-		ratePlan: tier2RatePlanKey as ProductRatePlanKey<typeof tier2Product>,
+		ratePlan: tier2RatePlanKey,
 		promoCode: tier2Promotion?.promoCode,
 	});
 
@@ -416,7 +413,7 @@ export function ThreeTierLanding({
 		: undefined;
 	const tier3CheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: tier3Product,
-		ratePlan: tier3RatePlanKey as ProductRatePlanKey<typeof tier3Product>,
+		ratePlan: tier3RatePlanKey,
 		promoCode: tier3Promotion?.promoCode,
 	});
 
