@@ -18,7 +18,7 @@ export function buildCheckoutUrl(
 		ratePlan: params.ratePlan,
 	});
 
-	if (params.contribution) {
+	if (params.product === 'Contribution' && params.contribution) {
 		urlParams.set('contribution', String(params.contribution));
 	}
 
