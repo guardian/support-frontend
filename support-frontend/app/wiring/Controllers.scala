@@ -68,7 +68,7 @@ trait Controllers {
   )
 
   lazy val paperController = new PaperSubscriptionController(
-    priceSummaryServiceProvider,
+    defaultPromotionService,
     landingCopyProvider,
     cachedPromotionsServiceProvider,
     cachedProductCatalogServiceProvider,

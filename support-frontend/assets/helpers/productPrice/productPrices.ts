@@ -31,7 +31,7 @@ type BillingPeriods = Partial<
 	Record<BillingPeriod, Partial<Record<CurrencyCode, ProductPrice>>>
 >;
 
-export type CountryGroupPrices = Partial<
+type CountryGroupPrices = Partial<
 	Record<FulfilmentOptions, Partial<Record<ProductOptions, BillingPeriods>>>
 >;
 

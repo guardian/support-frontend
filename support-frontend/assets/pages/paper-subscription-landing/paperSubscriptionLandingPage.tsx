@@ -26,13 +26,12 @@ const paperSubsFooter = (
 const pageQaId = 'qa-paper-subscriptions'; // Selenium test ID
 
 export function PaperLandingPage({
-	productPrices,
+	productCatalog,
+	promotions,
+	promoCode,
 	promotionCopy,
 	fulfilment,
 }: PaperLandingPropTypes) {
-	if (!productPrices) {
-		return null;
-	}
 	const sanitisedPromoCopy = getSanitisedPromoCopy(promotionCopy);
 	return (
 		<PageScaffold
@@ -42,10 +41,12 @@ export function PaperLandingPage({
 		>
 			<NewspaperHero
 				promotionCopy={sanitisedPromoCopy}
-				paperHeroItems={getPaperPlusItems(productPrices)}
+				paperHeroItems={getPaperPlusItems(productCatalog)}
 			/>
 			<NewspaperProductTabs
-				productPrices={productPrices}
+				productCatalog={productCatalog}
+				promotions={promotions}
+				promoCode={promoCode}
 				fulfilment={fulfilment}
 			/>
 		</PageScaffold>
