@@ -349,7 +349,7 @@ const paperArchiveDigitalBenefit = {
 };
 
 const multipleAccountsBenefit = {
-	copy: '3 extra accounts to share',
+	copy: 'Three extra accounts to share',
 	tooltip:
 		'You can share your Digital plus access with three other people. Each person gets their own account and login.',
 	label: { copy: 'New' },
@@ -377,12 +377,12 @@ export const productCatalogDescription: Record<
 		thankyouMessage: digitalThankyouMessage,
 		landingPagePath: '/contribute',
 		benefits: [
+			multipleAccountsBenefit,
 			paperArchiveDigitalBenefit,
 			paperArchiveDigitalBenefitUK,
 			digitalPaperBenefitUK,
 			weeklyDigitalBenefit,
 			editionsDigitalBenefit,
-			multipleAccountsBenefit,
 		],
 		ratePlans: {
 			Monthly: {

@@ -71,6 +71,12 @@ export const fallBackLandingPageSelection: LandingPageVariant = {
 			title: ProductTierLabel.DigitalSubscription,
 			benefits: [
 				{
+					copy: 'Three extra accounts to share',
+					tooltip:
+						'You can share your Digital plus access with three other people. Each person gets their own account and login.',
+					label: { copy: 'New' },
+				},
+				{
 					copy: 'Digital access to the Guardian’s 200 year newspaper archive',
 					tooltip:
 						'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was in the UK, since 1821.',
@@ -85,12 +91,6 @@ export const fallBackLandingPageSelection: LandingPageVariant = {
 					copy: 'The Long Read e-magazine',
 					tooltip:
 						'Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.',
-				},
-				{
-					copy: '3 extra accounts to share',
-					tooltip:
-						'You can share your Digital plus access with three other people. Each person gets their own account and login.',
-					label: { copy: 'New' },
 				},
 			],
 			cta: { copy: 'Support' },
