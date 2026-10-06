@@ -22,11 +22,8 @@ import type { CardContent } from 'pages/supporter-plus-landing/components/threeT
 import { useThreeTierUrlSelection } from 'pages/supporter-plus-landing/twoStepPages/useThreeTierUrlSelection';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import { filterProductDescriptionBenefits } from '../checkout/helpers/benefitsChecklist';
+import type { TierProductKey } from './getDigitalRatePlanKey';
 
-export type TierProductKey =
-	| 'Contribution'
-	| 'SupporterPlus'
-	| 'DigitalSubscription';
 type TierProductKeyWithPromotion = 'SupporterPlus' | 'DigitalSubscription';
 
 export type TierConfig = {
