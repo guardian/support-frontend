@@ -25,9 +25,9 @@ export function getLandingPageCopy(
 
 export function getSanitisedLandingPageCopy(
 	landingPageCopy?: LandingPageCopy,
-): LandingPageCopy {
+): LandingPageCopy | undefined {
 	if (!landingPageCopy) {
-		return {};
+		return undefined;
 	}
 
 	return {

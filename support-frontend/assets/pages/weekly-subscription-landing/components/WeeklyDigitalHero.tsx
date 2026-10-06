@@ -17,13 +17,11 @@ import {
 export default function WeeklyDigitalHero({
 	landingPageCopy,
 }: {
-	landingPageCopy: LandingPageCopy;
+	landingPageCopy?: LandingPageCopy;
 }) {
-	const {
-		roundelHtml: promotionRoundel,
-		title: promotionTitle,
-		description: promotionDescription,
-	} = landingPageCopy;
+	const promotionRoundel = landingPageCopy?.roundelHtml;
+	const promotionTitle = landingPageCopy?.title;
+	const promotionDescription = landingPageCopy?.description;
 
 	const defaultRoundel = 'Includes unlimited digital access';
 	const defaultTitle = 'A week in the life of the world';

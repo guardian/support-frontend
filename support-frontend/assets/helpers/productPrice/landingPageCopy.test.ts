@@ -56,8 +56,8 @@ describe('getLandingPageCopy', () => {
 });
 
 describe('getSanitisedLandingPageCopy', () => {
-	it('returns empty copy when there is no landing page copy', () => {
-		expect(getSanitisedLandingPageCopy()).toEqual({});
+	it('returns undefined when there is no landing page copy', () => {
+		expect(getSanitisedLandingPageCopy()).toBeUndefined();
 	});
 
 	it('converts markdown to html and removes disallowed html', () => {

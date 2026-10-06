@@ -8,7 +8,7 @@ import { promotionHTML } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { containerHero } from './weeklyGiftHeroStyles';
 
-const getFirstParagraph = (landingPageCopy: LandingPageCopy): JSX.Element => {
+const getFirstParagraph = (promotionDescription?: string): JSX.Element => {
 	const defaultParagraph = (
 		<p>
 			Gift the Guardian Weekly magazine to someone today, so they can gain a
@@ -20,7 +20,7 @@ const getFirstParagraph = (landingPageCopy: LandingPageCopy): JSX.Element => {
 		</p>
 	);
 	return (
-		promotionHTML(landingPageCopy.description, {
+		promotionHTML(promotionDescription, {
 			tag: 'p',
 		}) ?? defaultParagraph
 	);
@@ -29,10 +29,10 @@ const getFirstParagraph = (landingPageCopy: LandingPageCopy): JSX.Element => {
 export function WeeklyGiftHero({
 	landingPageCopy,
 }: {
-	landingPageCopy: LandingPageCopy;
+	landingPageCopy?: LandingPageCopy;
 }): JSX.Element {
-	const { title = '' } = landingPageCopy;
-	const description = getFirstParagraph(landingPageCopy);
+	const title = landingPageCopy?.title ?? '';
+	const description = getFirstParagraph(landingPageCopy?.description);
 
 	return (
 		<PageTitle title={'Give the Guardian Weekly'} theme="weekly">
