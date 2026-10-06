@@ -219,9 +219,9 @@ const guardianWeeklyGiftBenefit = {
 
 const feastBenefit = {
 	copy: 'Unlimited access to the Guardian Feast app',
-	isNew: true,
 	tooltip:
 		'Make a feast out of anything with the Guardian’s new recipe app. Feast has thousands of recipes including quick and budget-friendly weeknight dinners, and showstopping weekend dishes – plus smart app features to make mealtimes inspiring.',
+	label: { copy: 'New' },
 };
 
 const supporterPlusBenefits = [
@@ -350,9 +350,9 @@ const paperArchiveDigitalBenefit = {
 
 const multipleAccountsBenefit = {
 	copy: '3 extra accounts to share',
-	isNew: true,
 	tooltip:
 		'You can share your Digital plus access with three other people. Each person gets their own account and login.',
+	label: { copy: 'New' },
 };
 
 export const productCatalogDescription: Record<

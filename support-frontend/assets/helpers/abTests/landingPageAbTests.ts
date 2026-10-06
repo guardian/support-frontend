@@ -90,6 +90,7 @@ export const fallBackLandingPageSelection: LandingPageVariant = {
 					copy: '3 extra accounts to share',
 					tooltip:
 						'You can share your Digital plus access with three other people. Each person gets their own account and login.',
+					label: { copy: 'New' },
 				},
 			],
 			cta: { copy: 'Support' },
