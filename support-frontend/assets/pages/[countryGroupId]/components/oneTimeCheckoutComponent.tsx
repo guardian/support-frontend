@@ -4,6 +4,7 @@ import {
 	headlineBold24,
 	neutral,
 	space,
+	textSans15,
 	textSans17,
 	until,
 } from '@guardian/source/foundations';
@@ -37,6 +38,7 @@ import type {
 	StripeCardExpiryElementChangeEvent,
 	StripeCardNumberElementChangeEvent,
 } from '@stripe/stripe-js';
+import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { OtherAmount } from 'components/otherAmount/otherAmount';
@@ -99,7 +101,6 @@ import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/co
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/footerTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
-import { useEffect, useRef, useState } from 'react';
 import { CheckoutNudgeSelector } from '../../../components/checkoutNudge/checkoutNudge';
 import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
 import useEmailMarketingUtmSession from '../../../helpers/customHooks/useEmailMarketingUtmSession';
@@ -178,6 +179,19 @@ const similarProductsConsentCheckboxContainer = css`
 	}
 	> div > input {
 		background-color: ${neutral[100]};
+	}
+`;
+
+const containerSummaryTsCs = css`
+	margin-top: ${space[6]}px;
+	border-radius: ${space[3]}px;
+	border: 1px solid ${neutral[46]};
+	background-color: ${neutral[97]};
+	padding: ${space[2]}px ${space[3]}px;
+	${textSans15};
+	color: ${neutral[0]};
+	& a {
+		color: ${neutral[7]};
 	}
 `;
 
@@ -1266,6 +1280,11 @@ export function OneTimeCheckoutComponent({
 								cssOverrides={similarProductsConsentCheckboxContainer}
 							/>
 						)}
+
+						<div css={containerSummaryTsCs}>
+							We’ll send you emails about our journalism and ways to support and
+							enjoy our work. You can unsubscribe at any time
+						</div>
 
 						<div
 							css={css`
