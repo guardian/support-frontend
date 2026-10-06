@@ -46,11 +46,11 @@ export function OnboardingShareAccess({
 			<ContentBox removePadding>
 				<div css={[heroContainer, heroAspectRatio]}>
 					<GridImage
-						gridId="placeholder_16x9"
-						srcSizes={[1000, 500]}
+						gridId="onboardingShareAccessHero"
+						srcSizes={[2000, 1000, 500]}
 						sizes="(max-width: 739px) 140px, 422px"
 						imgType="png"
-						altText=""
+						altText="Onboarding share access hero"
 					/>
 				</div>
 				<Stack space={5} cssOverrides={completedStackPadding}>
