@@ -3,6 +3,10 @@ import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog
 import type { ContributionType } from 'helpers/contributions';
 import type { TierProductKey } from './getTierCardContent';
 
+export type TierProductKey =
+	| 'Contribution'
+	| 'SupporterPlus'
+	| 'DigitalSubscription';
 export function getDigitalRatePlanKey(
 	contributionType: ContributionType,
 	supportRegionId: SupportRegionId,

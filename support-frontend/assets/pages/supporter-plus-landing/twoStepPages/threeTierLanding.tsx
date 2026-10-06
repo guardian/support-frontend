@@ -13,6 +13,9 @@ import {
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { ProductOptions } from '@modules/product/productOptions';
+import { TaxExclusive, TaxInclusive } from '@modules/product/productOptions';
+import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -195,6 +198,37 @@ export function ThreeTierLanding({
 		supportRegionId,
 		'Contribution',
 	);
+	const tier1Pricing = productCatalog[tier1Product]?.ratePlans[tier1RatePlanKey]
+		?.pricing[currencyId] as number;
+	const tier1checkoutUrl = buildCheckoutUrl(supportRegionId, {
+		product: tier1Product,
+		ratePlan: tier1RatePlanKey,
+		contribution: tier1Pricing,
+	});
+
+	const tier1Card: CardContent = {
+		product: tier1Product,
+		price: tier1Pricing,
+		link: tier1checkoutUrl,
+		isDefaultProductSelected: getDefaultProductSelection(tier1Product),
+		isUserSelected: getUserSelection(tier1Product, tier1Pricing),
+		...settings.products[tier1Product],
+		title:
+			settings.products[tier1Product]?.title ?? getProductLabel(tier1Product),
+		benefits:
+			settings.products[tier1Product]?.benefits ??
+			filterProductDescriptionBenefits(
+				productCatalogDescription[tier1Product],
+				countryGroupId,
+			),
+		cta:
+			settings.products[tier1Product]?.cta ??
+			fallbackProducts[tier1Product]!.cta,
+		billingPeriodsCopy: settings.products[tier1Product]?.billingPeriodsCopy,
+	};
+
+	/** Tier 2: SupporterPlus */
+	const tier2Product = 'SupporterPlus';
 	const tier2RatePlanKey = getDigitalRatePlanKey(
 		contributionType,
 		supportRegionId,
@@ -213,6 +247,29 @@ export function ThreeTierLanding({
 		tierRatePlanKey: tier1RatePlanKey,
 		billingPeriod,
 		settings,
+		'NoFulfilmentOptions',
+		tierTwoProductOption,
+	);
+
+	const tier2CheckoutURL = buildCheckoutUrl(supportRegionId, {
+		product: tier2Product,
+		ratePlan: tier2RatePlanKey,
+		promoCode: tier2Promotion?.promoCode,
+	});
+
+	const tier2ProductDescription = {
+		...settings.products[tier2Product],
+		title: getProductLabel(tier2Product),
+		benefits:
+			settings.products[tier2Product]?.benefits ??
+			filterProductDescriptionBenefits(
+				productCatalogDescription[tier2Product],
+				countryGroupId,
+			),
+		cta:
+			settings.products[tier2Product]?.cta ??
+			fallbackProducts[tier2Product]!.cta,
+		billingPeriodsCopy: settings.products[tier2Product]?.billingPeriodsCopy,
 	};
 
 	const tier1Card = getTierCardContent(tier1Config);
@@ -238,6 +295,34 @@ export function ThreeTierLanding({
 		billingPeriod,
 		tier3Card,
 	);
+	const tier3Promotion = tier3ProductPrice
+		? getPromotion(
+				tier3ProductPrice,
+				countryId,
+				billingPeriod,
+				'NoFulfilmentOptions',
+				tierThreeProductOption,
+		  )
+		: undefined;
+	const tier3CheckoutURL = buildCheckoutUrl(supportRegionId, {
+		product: tier3Product,
+		ratePlan: tier3RatePlanKey,
+		promoCode: tier3Promotion?.promoCode,
+	});
+
+	const tier3Card: CardContent = {
+		product: tier3Product,
+		price: tier3Pricing,
+		link: tier3CheckoutURL,
+		promotion: tier3Promotion,
+		isDefaultProductSelected: getDefaultProductSelection(tier3Product),
+		isUserSelected: getUserSelection(
+			tier3Product,
+			tier3Pricing,
+			tier3Promotion?.discount?.amount,
+		),
+		...tier3ProductDescription,
+	};
 
 	const showWeeklyPrice =
 		forceWeeklyPricing || settings.name.includes('WEEKLY_PRICE');
