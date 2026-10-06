@@ -59,6 +59,9 @@ const promotions = [
 		amount: 25,
 		durationMonths: 12,
 	}),
+];
+
+const giftPromotions = [
 	makePromotion(
 		'GW20GIFT1Y',
 		'GW 20% off 12 month gift',
@@ -79,6 +82,7 @@ const defaultArgs: WeeklyLandingPageProps = {
 };
 const giftArgs: WeeklyLandingPageProps = {
 	...defaultArgs,
+	promotions: giftPromotions,
 	orderIsAGift: true,
 };
 
