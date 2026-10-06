@@ -34,15 +34,17 @@ import {
 	parseBillingPeriodCopy,
 } from 'helpers/utilities/utilities';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
+import { ThreeTierAccount } from './threeTierAccount';
 import { ThreeTierCardPill } from './threeTierCardPill';
 
 export type CardContent = LandingPageProductDescription & {
+	product: 'SupporterPlus' | 'Contribution' | 'DigitalSubscription';
 	isUserSelected: boolean;
 	isDefaultProductSelected: boolean;
 	link: string;
 	price: number;
 	promotion?: Promotion;
-	product: 'SupporterPlus' | 'Contribution' | 'DigitalSubscription';
+	showAccounts?: boolean;
 };
 
 export type ThreeTierCardProps = {
@@ -172,6 +174,12 @@ const benefitsPrefixPlus = css`
 	}
 `;
 
+const accountBorder = css`
+	padding-bottom: ${space[3]}px;
+	border-bottom: 1px solid ${palette.neutral[86]};
+	margin-bottom: ${space[3]}px;
+`;
+
 export function ThreeTierCard({
 	cardContent,
 	cardTheme,
@@ -196,6 +204,7 @@ export function ThreeTierCard({
 		cta,
 		product,
 		billingPeriodsCopy,
+		showAccounts,
 	} = cardContent;
 	const currency = getCurrencyByCode(currencyId);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -352,7 +361,11 @@ export function ThreeTierCard({
 			>
 				{cta.copy}
 			</LinkButton>
-
+			{showAccounts && (
+				<section css={accountBorder}>
+					<ThreeTierAccount productKey={product} cardTheme={cardTheme} />
+				</section>
+			)}
 			{inAdditionToAllAccessDigital && (
 				<div css={benefitsPrefixCss}>
 					<span>
