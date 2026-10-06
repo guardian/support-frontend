@@ -48,24 +48,17 @@ const makePromotion = (
 	discount,
 });
 
-const promotions = [
-	makePromotion(
-		'EVERYDAY25-DELIVERY',
-		{ productKey: 'HomeDelivery', productRatePlanKey: 'EverydayPlus' },
-		{ amount: 25, durationMonths: 6 },
-	),
-	makePromotion(
-		'SIXDAY25',
-		{ productKey: 'SubscriptionCard', productRatePlanKey: 'SixdayPlus' },
-		{ amount: 25, durationMonths: 6 },
-	),
-];
+const sixdayPromotion = makePromotion(
+	'SIXDAY25',
+	{ productKey: 'SubscriptionCard', productRatePlanKey: 'SixdayPlus' },
+	{ amount: 25, durationMonths: 6 },
+);
 
 type Story = StoryObj<PaperLandingPropTypes>;
 
 const defaultArgs: PaperLandingPropTypes = {
 	productCatalog: productCatalogFixture,
-	promotions,
+	promotions: [],
 	promotionCopy: undefined,
 	participations: {},
 	fulfilment: undefined,
@@ -96,4 +89,17 @@ export const NewspaperCollection: Story = {
 		</PromoTermsProvider>
 	),
 	args: collectionArgs,
+};
+
+export const NewspaperCollectionWithPromotion: Story = {
+	render: (args: PaperLandingPropTypes) => (
+		<PromoTermsProvider>
+			<PaperLandingPage {...args} />
+		</PromoTermsProvider>
+	),
+	args: {
+		...collectionArgs,
+		promotions: [sixdayPromotion],
+		promoCode: sixdayPromotion.promoCode,
+	},
 };
