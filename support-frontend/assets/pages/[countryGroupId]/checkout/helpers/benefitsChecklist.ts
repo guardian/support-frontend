@@ -51,13 +51,13 @@ export const getBenefitsChecklistFromLandingPageTool = (
 		return benefitsAsChecklist({
 			checked:
 				landingPageSettings.products.Contribution?.benefits ??
-				filterProductDescriptionBenefits(
+				getProductBenefitsByCountry(
 					productCatalogDescription.Contribution,
 					countryGroupId,
 				),
 			unchecked:
 				landingPageSettings.products.SupporterPlus?.benefits ??
-				filterProductDescriptionBenefits(
+				getProductBenefitsByCountry(
 					productCatalogDescription.SupporterPlus,
 					countryGroupId,
 				),
@@ -66,7 +66,7 @@ export const getBenefitsChecklistFromLandingPageTool = (
 		return benefitsAsChecklist({
 			checked:
 				landingPageSettings.products.SupporterPlus?.benefits ??
-				filterProductDescriptionBenefits(
+				getProductBenefitsByCountry(
 					productCatalogDescription.SupporterPlus,
 					countryGroupId,
 				),
@@ -76,12 +76,12 @@ export const getBenefitsChecklistFromLandingPageTool = (
 		return benefitsAsChecklist({
 			checked: [
 				...(landingPageSettings.products.DigitalSubscription?.benefits ??
-					filterProductDescriptionBenefits(
+					getProductBenefitsByCountry(
 						productCatalogDescription.DigitalSubscription,
 						countryGroupId,
 					)),
 				...(landingPageSettings.products.SupporterPlus?.benefits ??
-					filterProductDescriptionBenefits(
+					getProductBenefitsByCountry(
 						productCatalogDescription.SupporterPlus,
 						countryGroupId,
 					)),
@@ -106,7 +106,17 @@ export const getBenefitsChecklistFromProductDescription = (
 		}));
 };
 
-export const filterProductDescriptionBenefits = (
+export const getProductBenefitsByABTestAndCountry = (
+	productDescription: ProductDescription,
+	countryGroupId: CountryGroupId,
+	abParticipations: Participations,
+): ProductBenefit[] => {
+	return getProductBenefitsByCountry(productDescription, countryGroupId).filter(
+		(benefit) => filterBenefitByABTest(benefit, abParticipations),
+	);
+};
+
+export const getProductBenefitsByCountry = (
 	productDescription: ProductDescription,
 	countryGroupId: CountryGroupId,
 ): ProductBenefit[] => {

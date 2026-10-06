@@ -25,6 +25,7 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
+import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
@@ -41,7 +42,7 @@ import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPer
 import { allProductPrices } from 'helpers/productPrice/productPrices';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
-import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
+import { getProductBenefitsByABTestAndCountry } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { getTierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
 import { isStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -166,6 +167,8 @@ export function ThreeTierLanding({
 	supportRegionId,
 	settings,
 }: ThreeTierLandingProps): JSX.Element {
+	const abParticipations = useAbParticipations();
+
 	const {
 		product: urlSearchParamsProduct,
 		ratePlan: urlSearchParamsRatePlan,
@@ -290,9 +293,10 @@ export function ThreeTierLanding({
 			settings.products[tier1Product]?.title ?? getProductLabel(tier1Product),
 		benefits:
 			settings.products[tier1Product]?.benefits ??
-			filterProductDescriptionBenefits(
+			getProductBenefitsByABTestAndCountry(
 				productCatalogDescription[tier1Product],
 				countryGroupId,
+				abParticipations,
 			),
 		cta:
 			settings.products[tier1Product]?.cta ??
@@ -331,9 +335,10 @@ export function ThreeTierLanding({
 		title: getProductLabel(tier2Product),
 		benefits:
 			settings.products[tier2Product]?.benefits ??
-			filterProductDescriptionBenefits(
+			getProductBenefitsByABTestAndCountry(
 				productCatalogDescription[tier2Product],
 				countryGroupId,
+				abParticipations,
 			),
 		cta:
 			settings.products[tier2Product]?.cta ??
@@ -386,9 +391,10 @@ export function ThreeTierLanding({
 		titlePill: settings.products[tier3Product]?.titlePill ?? titlePill,
 		benefits:
 			settings.products[tier3Product]?.benefits ??
-			filterProductDescriptionBenefits(
+			getProductBenefitsByABTestAndCountry(
 				productCatalogDescription[tier3Product],
 				countryGroupId,
+				abParticipations,
 			),
 		cta:
 			settings.products[tier3Product]?.cta ??

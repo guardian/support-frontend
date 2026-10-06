@@ -74,16 +74,18 @@ export const productCatalog = window.guardian.productCatalog;
 // TODO: we should probably move into using this function so we can acess the an updated version of the product catalog
 export const getProductCatalog = () => window.guardian.productCatalog;
 
+type SpecificToAbTest = {
+	name: string;
+	variants: string[];
+	display: boolean;
+};
+
 export type ProductBenefit = {
 	copy: string;
 	copyBoldStart?: string;
 	tooltip?: string;
 	specificToRegions?: CountryGroupId[];
-	specificToAbTest?: Array<{
-		name: string;
-		variants: string[];
-		display: boolean;
-	}>;
+	specificToAbTest?: SpecificToAbTest[];
 	isNew?: boolean;
 	hideBullet?: boolean;
 };
@@ -353,6 +355,13 @@ const multipleAccountsBenefit = {
 	tooltip:
 		'You can share your Digital plus access with three other people. Each person gets their own account and login.',
 	label: { copy: 'New' },
+	specificToAbTest: [
+		{
+			name: 'multipleAccounts',
+			variants: ['control'],
+			display: true,
+		},
+	] as SpecificToAbTest[],
 };
 
 export const productCatalogDescription: Record<
