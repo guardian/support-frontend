@@ -54,19 +54,18 @@ const getPriceCopyString = (
 	return <>per month{productCopy}</>;
 };
 
-// eg. £20.99/month for 6 months, then £29.99/month*
 const getOfferText = (
 	price: number,
 	discountedPrice: number,
 	durationMonths: number,
-	hasPromoTerms: boolean,
+	showAsterisk: boolean,
 ): string => {
 	const duration =
 		durationMonths === 1 ? 'the first month' : `${durationMonths} months`;
 	return `${formatAmount(
 		discountedPrice,
 	)}/month for ${duration}, then ${formatAmount(price)}/month${
-		hasPromoTerms ? '*' : ''
+		showAsterisk ? '*' : ''
 	}`;
 };
 
@@ -259,8 +258,9 @@ export const getPlans = ({
 		const discountedPrice = promotion?.discount
 			? getDiscountedPrice(price, promotion.discount, BillingPeriod.Monthly)
 			: undefined;
-		// Promo terms are shown for the Guardian (Plus) products, but not for the Observer (Sunday)
-		const hasPromoTerms = productOption.endsWith('Plus');
+		// The asterisk refers to the promo terms, which NewspaperRatePlanCard only
+		// shows for the Guardian (Plus) products, not the Observer (Sunday)
+		const showAsterisk = productOption.endsWith('Plus');
 
 		const trackingProperties: TrackingProperties = {
 			id: `subscribe_now_cta-${[productOption, fulfilmentOption].join()}`,
@@ -292,7 +292,7 @@ export const getPlans = ({
 							price,
 							discountedPrice,
 							promotion.discount.durationMonths,
-							hasPromoTerms,
+							showAsterisk,
 					  )
 					: '',
 			savingsText: getSavingsText(price, ratePlan.savingVsRetail, promotion),
