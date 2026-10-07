@@ -124,16 +124,9 @@ export function ThreeTierLanding({
 	supportRegionId,
 	settings,
 }: ThreeTierLandingProps): JSX.Element {
-	const { ratePlan: urlSearchParamsRatePlan, forceWeeklyPricing } =
+	const { ratePlanKey: urlSearchParamsRatePlan, forceWeeklyPricing } =
 		useThreeTierUrlSelection();
 	const { currencyCode: currencyId, countryGroupId } =
-	const {
-		productKey: urlSearchParamsProduct,
-		ratePlanKey: urlSearchParamsRatePlan,
-		selectedAmount: urlSelectedAmount,
-		forceWeeklyPricing,
-	} = useThreeTierUrlSelection();
-	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const countryId: CountryCode = Country.detect();
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
@@ -201,28 +194,10 @@ export function ThreeTierLanding({
 	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
 	const { enableDeepDiscount } = useFeatureSwitches();
 
-	const getDefaultProductSelection = (productKey: ProductKey) => {
-		return (
-			(!urlSearchParamsProduct || enableDeepDiscount) &&
-			defaultProductSelection === productKey.toLowerCase()
-		);
-	};
-	const getUserSelection = (
-		productKey: ProductKey,
-		productPrice: number,
-		promotionAmount?: number,
-	) => {
-		return (
-			urlSearchParamsProduct === productKey ||
-			isCardUserSelected(urlSelectedAmount, productPrice, promotionAmount)
-		);
-	};
-
 	/**
 	 * Tier 1: Contributions
 	 * We use the product catalog for the recurring Contribution tier amount
 	 */
-	const tier1Product = 'Contribution';
 	const tier1RatePlanKey = getDigitalRatePlanKey(
 		contributionType,
 		supportRegionId,

@@ -113,8 +113,10 @@ export function getTierCardContent(config: TierConfig): CardContent {
 	const defaultProductSelection =
 		settings.defaultProductSelection?.productType.toLowerCase();
 	const { enableDeepDiscount } = useFeatureSwitches();
-	const { product: urlSearchParamsProduct, selectedAmount: urlSelectedAmount } =
-		useThreeTierUrlSelection();
+	const {
+		productKey: urlSearchParamsProduct,
+		selectedAmount: urlSelectedAmount,
+	} = useThreeTierUrlSelection();
 	const getDefaultProductSelection = (productKey: TierProductKey) => {
 		return (
 			(!urlSearchParamsProduct || enableDeepDiscount) &&
