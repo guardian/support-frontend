@@ -6,7 +6,7 @@ export type LandingPageCopy = NonNullable<
 >;
 
 /**
- * Picks the landing page copy for a page from the promotions on `window.guardian.promotions`.
+ * Picks the landing page copy for a page from the provided promotions array.
  * Use the copy from the promotion matching `promoCode` (eg. from the query string) if it has any,
  * otherwise the copy from the first promotion which has some.
  */
