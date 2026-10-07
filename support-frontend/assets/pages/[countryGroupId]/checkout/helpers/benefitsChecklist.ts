@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
+import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import type { BenefitsCheckListData } from '../../../../components/checkoutBenefits/benefitsCheckList';
 import type { Participations } from '../../../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -45,30 +46,36 @@ export const getBenefitsChecklistFromLandingPageTool = (
 	landingPageSettings: LandingPageVariant,
 	countryGroupId: CountryGroupId,
 ): BenefitsCheckListData[] | undefined => {
+	// benefits also need to be filtered by AB test
+	const abParticipations = useAbParticipations();
+
 	// Tier products get their config from the Landing Page tool
 	if (productKey === 'Contribution') {
 		// Also show SupporterPlus benefits greyed out
 		return benefitsAsChecklist({
 			checked:
 				landingPageSettings.products.Contribution?.benefits ??
-				getBenefitsByCountry(
+				getBenefitsByCountryABTest(
 					productCatalogDescription.Contribution,
 					countryGroupId,
+					abParticipations,
 				),
 			unchecked:
 				landingPageSettings.products.SupporterPlus?.benefits ??
-				getBenefitsByCountry(
+				getBenefitsByCountryABTest(
 					productCatalogDescription.SupporterPlus,
 					countryGroupId,
+					abParticipations,
 				),
 		});
 	} else if (productKey === 'SupporterPlus') {
 		return benefitsAsChecklist({
 			checked:
 				landingPageSettings.products.SupporterPlus?.benefits ??
-				getBenefitsByCountry(
+				getBenefitsByCountryABTest(
 					productCatalogDescription.SupporterPlus,
 					countryGroupId,
+					abParticipations,
 				),
 			unchecked: [],
 		});
@@ -76,14 +83,16 @@ export const getBenefitsChecklistFromLandingPageTool = (
 		return benefitsAsChecklist({
 			checked: [
 				...(landingPageSettings.products.DigitalSubscription?.benefits ??
-					getBenefitsByCountry(
+					getBenefitsByCountryABTest(
 						productCatalogDescription.DigitalSubscription,
 						countryGroupId,
+						abParticipations,
 					)),
 				...(landingPageSettings.products.SupporterPlus?.benefits ??
-					getBenefitsByCountry(
+					getBenefitsByCountryABTest(
 						productCatalogDescription.SupporterPlus,
 						countryGroupId,
+						abParticipations,
 					)),
 			],
 			unchecked: [],
