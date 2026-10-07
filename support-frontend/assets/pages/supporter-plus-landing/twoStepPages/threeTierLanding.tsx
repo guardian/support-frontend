@@ -392,16 +392,39 @@ export function ThreeTierLanding({
 		'DigitalSubscription',
 		tier3RatePlanKey,
 	);
+	const tier3DefaultBenefits = getBenefitsByCountryABTest(
+		productCatalogDescription[tier3Product],
+		countryGroupId,
+		abParticipations,
+	);
+	console.log('*** tier3DefaultBenefits', tier3DefaultBenefits);
+	const tier3DefaultBenefitsControlOnly = tier3DefaultBenefits.map((item) => {
+		if (item.specificToAbTest) {
+			return {
+				...item,
+				specificToAbTest: item.specificToAbTest.map((test) => {
+					if (test.name === 'multipleAccounts') {
+						return {
+							...test,
+							variants: ['control'],
+						};
+					}
+					return test;
+				}),
+			};
+		}
+		return item;
+	});
+	console.log(
+		'*** tier3DefaultBenefitsControlOnly',
+		tier3DefaultBenefitsControlOnly,
+	);
 	const tier3ProductDescription = {
 		title: settings.products[tier3Product]?.title ?? title,
 		titlePill: settings.products[tier3Product]?.titlePill ?? titlePill,
 		benefits:
 			settings.products[tier3Product]?.benefits ??
-			getBenefitsByCountryABTest(
-				productCatalogDescription[tier3Product],
-				countryGroupId,
-				abParticipations,
-			),
+			tier3DefaultBenefitsControlOnly,
 		cta:
 			settings.products[tier3Product]?.cta ??
 			fallbackProducts[tier3Product]!.cta,
