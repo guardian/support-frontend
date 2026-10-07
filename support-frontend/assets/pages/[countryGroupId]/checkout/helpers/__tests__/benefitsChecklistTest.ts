@@ -2,6 +2,12 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import { getBenefitsChecklistFromLandingPageTool } from '../benefitsChecklist';
 import { expectedDefaultBenefits } from './__fixtures__/expectedDefaultBenefits';
 
+jest.mock('contexts/AbParticipationsContext', () => ({
+	useAbParticipations: jest.fn(() => ({
+		multipleAccounts: 'control',
+	})),
+}));
+
 describe('getBenefitsChecklistFromLandingPageTool', () => {
 	const landingPageSettings = {
 		name: 'SupporterPlus',
