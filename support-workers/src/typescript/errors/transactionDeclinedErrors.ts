@@ -1,30 +1,31 @@
 import type { ZuoraError } from '@guardian/support-service-lambdas/modules/zuora/src/errors/zuoraError';
 import { retryLimited, retryNone } from './retryError';
 
-const transactionDeclinedMessages = [
-	//Errors from Stripe which come via Zuora when we try to charge the card
-	'Transaction declined.402 - [card_error/card_declined/invalid_pin] Your card was declined.',
-	'Transaction declined.402 - [card_error/card_declined/call_issuer] Your card was declined. You can call your bank for details.',
-	'Transaction declined.402 - [card_error/card_declined/invalid_account] Invalid account.',
-	'Transaction declined.402 - [card_error/card_declined/do_not_honor] Your card was declined.',
-	'Transaction declined.402 - [card_error/card_declined/insufficient_funds] Your card has insufficient funds.',
-	'Transaction declined.402 - [card_error/card_declined/try_again_later] Your card was declined.',
-	'Transaction declined.402 - [card_error/card_declined/transaction_not_allowed] Your card does not support this type of purchase.',
-	'Transaction declined.402 - [card_error/card_declined/pickup_card] Your card was declined.',
-	'Transaction declined.402 - [card_error/card_declined/generic_decline] Your card was declined.',
-	"Transaction declined.402 - [card_error/incorrect_cvc/incorrect_cvc] Your card's security code is incorrect.",
-	"Transaction declined.402 - [card_error/invalid_cvc/invalid_cvc] Your card's security code is invalid.",
-	'Transaction declined.402 - [card_error/incorrect_number/incorrect_number] Your card number is incorrect.',
-	'Transaction declined.402 - [card_error/card_declined/card_velocity_exceeded] Your card was declined for making repeated attempts too frequently or exceeding its amount limit.',
-	'Transaction declined.402 - [card_error/card_declined/revocation_of_authorization] Your card was declined.',
-	'Transaction declined.402 - [card_error/card_declined/revocation_of_all_authorizations] Your card was declined.',
-	'Transaction declined.402 - [card_error/authentication_required/authentication_required] Your card was declined. This transaction requires authentication.',
-	'Transaction declined.402 - [card_error/card_declined/fraudulent] Your card was declined.',
-	'Transaction declined.402 - [card_error/card_declined/reenter_transaction] Your card was declined.',
-	'Transaction declined.402 - [card_error/expired_card/expired_card] Your card has expired.',
-	'Transaction declined.402 - [card_error/processing_error/processing_error] An error occurred while processing your card. Try again in a little bit.',
-	'Transaction declined.402 - [card_error/authentication_required/authentication_required] This PaymentIntent requires an on-session action. Please get your customer back on session and re-confirm the PaymentIntent with a payment method when the customer is on session.',
-	'Transaction declined.402 - [card_error/card_declined/stolen_card] Your card was declined.',
+const transactionDeclinedMessagePrefixes = [
+	// Error prefixes from Stripe which come via Zuora when we try to charge the card. We don't match the English language suffix
+	// because this sometimes changes.
+	'Transaction declined.402 - [card_error/card_declined/invalid_pin]',
+	'Transaction declined.402 - [card_error/card_declined/call_issuer]',
+	'Transaction declined.402 - [card_error/card_declined/invalid_account]',
+	'Transaction declined.402 - [card_error/card_declined/do_not_honor]',
+	'Transaction declined.402 - [card_error/card_declined/insufficient_funds]',
+	'Transaction declined.402 - [card_error/card_declined/try_again_later]',
+	'Transaction declined.402 - [card_error/card_declined/transaction_not_allowed]',
+	'Transaction declined.402 - [card_error/card_declined/pickup_card]',
+	'Transaction declined.402 - [card_error/card_declined/generic_decline]',
+	'Transaction declined.402 - [card_error/incorrect_cvc/incorrect_cvc]',
+	'Transaction declined.402 - [card_error/invalid_cvc/invalid_cvc]',
+	'Transaction declined.402 - [card_error/incorrect_number/incorrect_number]',
+	'Transaction declined.402 - [card_error/card_declined/card_velocity_exceeded]',
+	'Transaction declined.402 - [card_error/card_declined/revocation_of_authorization]',
+	'Transaction declined.402 - [card_error/card_declined/revocation_of_all_authorizations]',
+	'Transaction declined.402 - [card_error/authentication_required/authentication_required]',
+	'Transaction declined.402 - [card_error/card_declined/fraudulent]',
+	'Transaction declined.402 - [card_error/card_declined/reenter_transaction]',
+	'Transaction declined.402 - [card_error/expired_card/expired_card]',
+	'Transaction declined.402 - [card_error/processing_error/processing_error]',
+	'Transaction declined.402 - [card_error/authentication_required/authentication_required]',
+	'Transaction declined.402 - [card_error/card_declined/stolen_card]',
 	'Your card was declined.', // The same Stripe error as above but coming directly from Stripe rather than via Zuora
 	'Transaction declined.10417 - Instruct the customer to retry the transaction using an alternative payment method from the customers PayPal wallet.',
 	'Error occurred while processing payment method.code=validation_failed,message=account_number did not pass modulus check',
@@ -36,7 +37,9 @@ const transactionDeclinedMessages = [
 ];
 
 export const isTransactionDeclinedError = (errorMessage: string) =>
-	transactionDeclinedMessages.includes(errorMessage);
+	transactionDeclinedMessagePrefixes.some((prefix) =>
+		errorMessage.startsWith(prefix),
+	);
 
 export function mapZuoraError(error: ZuoraError) {
 	if (isTransactionDeclinedError(error.message)) {

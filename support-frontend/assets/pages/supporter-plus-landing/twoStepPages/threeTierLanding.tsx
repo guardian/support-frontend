@@ -30,7 +30,7 @@ import type { TierConfig } from 'pages/[countryGroupId]/helpers/getTierCardConte
 import { getTierCardContent } from 'pages/[countryGroupId]/helpers/getTierCardContent';
 import { getTierCardPromotion } from 'pages/[countryGroupId]/helpers/getTierCardPromotion';
 import { getTierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
-import { isStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
+import { useStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/useStudentBeansRegionValid';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
 	getSanitisedHtml,
@@ -127,6 +127,13 @@ export function ThreeTierLanding({
 	const { ratePlan: urlSearchParamsRatePlan, forceWeeklyPricing } =
 		useThreeTierUrlSelection();
 	const { currencyCode: currencyId, countryGroupId } =
+	const {
+		productKey: urlSearchParamsProduct,
+		ratePlanKey: urlSearchParamsRatePlan,
+		selectedAmount: urlSelectedAmount,
+		forceWeeklyPricing,
+	} = useThreeTierUrlSelection();
+	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const countryId: CountryCode = Country.detect();
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
@@ -143,6 +150,11 @@ export function ThreeTierLanding({
 		subPath: '/contribute',
 	};
 
+	const showStudentOffer = useStudentBeansRegionValid(
+		supportRegionId,
+		Country.detect(),
+	);
+
 	const countdownSettings = countdownSwitchOn()
 		? settings.countdownSettings
 		: undefined;
@@ -154,9 +166,9 @@ export function ThreeTierLanding({
 
 	const getInitialContributionType = (): ContributionType => {
 		// 1. Query Parameters take precedence
-		if (urlSearchParamsRatePlan === 'annual') {
+		if (urlSearchParamsRatePlan === 'Annual') {
 			return 'ANNUAL';
-		} else if (urlSearchParamsRatePlan === 'monthly') {
+		} else if (urlSearchParamsRatePlan === 'Monthly') {
 			return 'MONTHLY';
 		}
 
@@ -187,9 +199,30 @@ export function ThreeTierLanding({
 	};
 
 	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
-	// Student Beans Europe feature switch enables the link to Student Landing Page for prescribed countries
-	const { enableStudentBeansEurope, enableDeepDiscount } = useFeatureSwitches();
+	const { enableDeepDiscount } = useFeatureSwitches();
 
+	const getDefaultProductSelection = (productKey: ProductKey) => {
+		return (
+			(!urlSearchParamsProduct || enableDeepDiscount) &&
+			defaultProductSelection === productKey.toLowerCase()
+		);
+	};
+	const getUserSelection = (
+		productKey: ProductKey,
+		productPrice: number,
+		promotionAmount?: number,
+	) => {
+		return (
+			urlSearchParamsProduct === productKey ||
+			isCardUserSelected(urlSelectedAmount, productPrice, promotionAmount)
+		);
+	};
+
+	/**
+	 * Tier 1: Contributions
+	 * We use the product catalog for the recurring Contribution tier amount
+	 */
+	const tier1Product = 'Contribution';
 	const tier1RatePlanKey = getDigitalRatePlanKey(
 		contributionType,
 		supportRegionId,
@@ -241,7 +274,6 @@ export function ThreeTierLanding({
 
 	const showWeeklyPrice =
 		forceWeeklyPricing || settings.name.includes('WEEKLY_PRICE');
-	const countryCode = Country.detect();
 
 	const tsAndCsContent: TsAndCsProps[] = [
 		{
@@ -373,11 +405,7 @@ export function ThreeTierLanding({
 					countryGroupId={countryGroupId}
 				/>
 			</Container>
-			{isStudentBeansRegionValid(
-				supportRegionId,
-				countryCode,
-				enableStudentBeansEurope,
-			) && (
+			{showStudentOffer && (
 				<Container
 					sideBorders
 					borderColor="rgba(170, 170, 180, 0.5)"
