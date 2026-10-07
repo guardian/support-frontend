@@ -16,12 +16,12 @@ export const useStudentBeansRegionValid = (
 ) => {
 	// Student Beans Europe feature switch enables the link to Student Landing Page for prescribed countries
 	const { enableStudentBeansEurope } = useFeatureSwitches();
-	if (!studentBeansRegions.includes(supportRegionId)) {
-		return (
-			enableStudentBeansEurope &&
-			supportRegionId === SupportRegionId.EU &&
-			studentBeansEuCountries.includes(countryCode)
-		);
+	if (studentBeansRegions.includes(supportRegionId)) {
+		return true;
 	}
-	return true;
+	return (
+		enableStudentBeansEurope &&
+		supportRegionId === SupportRegionId.EU &&
+		studentBeansEuCountries.includes(countryCode)
+	);
 };
