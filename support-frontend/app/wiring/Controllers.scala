@@ -38,6 +38,8 @@ trait Controllers {
     allSettingsProvider,
     appConfig.stage,
     priceSummaryServiceProvider,
+    defaultPromotionService,
+    cachedPromotionsServiceProvider,
     cachedProductCatalogServiceProvider,
     cachedSalesTaxService,
     appConfig.supportUrl,

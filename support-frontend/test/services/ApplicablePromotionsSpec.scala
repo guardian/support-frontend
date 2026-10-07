@@ -98,4 +98,30 @@ class ApplicablePromotionsSpec extends AnyWordSpec with Matchers {
       applicableCodes(Seq(promotion("NONGIFT")), isGift = true) shouldBe empty
     }
   }
+
+  "ApplicablePromotions.filterByCountryGroup" should {
+    def codesByCountryGroup(
+        promotions: Seq[PromoWithCatalogInformation],
+        countryGroup: CountryGroup = CountryGroup.UK,
+    ) =
+      ApplicablePromotions.filterByCountryGroup(promotions, countryGroup, now).map(_.promoCode)
+
+    "keep active promotions available in the country group, for any product, gift or not" in {
+      val paper = promotion("PAPER", catalogRatePlans = List(CatalogRatePlan("HomeDelivery", "Everyday")))
+      codesByCountryGroup(Seq(promotion("WEEKLY"), giftOnly, paper)) shouldBe Seq("WEEKLY", "GIFTONLY", "PAPER")
+    }
+
+    "exclude promotions which haven't started yet or have expired" in {
+      codesByCountryGroup(
+        Seq(
+          promotion("FUTURE", startTimestamp = now.plusMinutes(1)),
+          promotion("EXPIRED", endTimestamp = Some(now.minusMinutes(1))),
+        ),
+      ) shouldBe empty
+    }
+
+    "exclude promotions not available in any country in the country group" in {
+      codesByCountryGroup(Seq(promotion("UKONLY")), CountryGroup.US) shouldBe empty
+    }
+  }
 }
