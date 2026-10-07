@@ -1280,11 +1280,12 @@ export function OneTimeCheckoutComponent({
 								cssOverrides={similarProductsConsentCheckboxContainer}
 							/>
 						)}
-
-						<div css={containerSummaryTsCs}>
-							We’ll send you emails about our journalism and ways to support and
-							enjoy our work. You can unsubscribe at any time
-						</div>
+						{countryId === 'US' && (
+							<div css={containerSummaryTsCs}>
+								We’ll send you emails about our journalism and ways to support
+								and enjoy our work. You can unsubscribe at any time
+							</div>
+						)}
 
 						<div
 							css={css`
