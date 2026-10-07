@@ -21,7 +21,6 @@ import scala.concurrent.ExecutionContext
 
 class WeeklySubscriptionController(
     defaultPromotionService: DefaultPromotionService,
-    landingCopyProvider: LandingCopyProvider,
     cachedPromotionsServiceProvider: CachedPromotionsServiceProvider,
     cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
     val assets: AssetsResolver,
@@ -56,8 +55,6 @@ class WeeklySubscriptionController(
         .getOrElse("promoCode", Nil)
         .toList
     val defaultPromos = defaultPromotionService.getPromoCodes(GuardianWeekly)
-    val maybePromotionCopy =
-      landingCopyProvider.promotionCopy(queryPromos ++ defaultPromos, GuardianWeekly, countryGroupId, orderIsAGift)
     val promotions = getPromotions(queryPromos ++ defaultPromos, countryGroupId, orderIsAGift)
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser = false).get()
 
@@ -79,7 +76,6 @@ class WeeklySubscriptionController(
         noindex = stage != PROD,
       ) {
         Html(s"""<script type="text/javascript">
-              window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
               window.guardian.orderIsAGift = $orderIsAGift
               window.guardian.promotions = ${outputJson(promotions)}
               window.guardian.productCatalog = ${outputJson(productCatalog, dropNullValues = false)}
