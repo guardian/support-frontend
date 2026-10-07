@@ -56,10 +56,23 @@ class PromotionsApiService(client: FutureHttpClient, config: PromotionsApiConfig
     )
     if (distinctCodes.isEmpty) Future.successful(Nil)
     else
-      get[ListPromotionsResponse](
-        endpoint = "promotions",
-        headers = Map("x-api-key" -> config.apiKey),
+      getListAuthenticated(
         params = Map("promoCodes" -> distinctCodes.mkString(",")) ++ active.map(a => "active" -> a.toString),
-      ).map(_.promotions)
+      )
   }
+
+  // Fetches all currently active promotions.
+  def listActive(): Future[List[PromoWithCatalogInformation]] =
+    getListAuthenticated(
+      params = Map("active" -> "true"),
+    )
+
+  private def getListAuthenticated(
+      params: Map[String, String] = Map.empty,
+  ): Future[List[PromoWithCatalogInformation]] =
+    get[ListPromotionsResponse](
+      endpoint = "promotions",
+      headers = Map("x-api-key" -> config.apiKey),
+      params = params,
+    ).map(_.promotions)
 }

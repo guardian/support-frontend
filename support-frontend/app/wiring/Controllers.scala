@@ -82,6 +82,8 @@ trait Controllers {
   lazy val weeklyController = new WeeklySubscriptionController(
     priceSummaryServiceProvider,
     landingCopyProvider,
+    cachedPromotionsServiceProvider,
+    cachedProductCatalogServiceProvider,
     assetsResolver,
     actionBuilders,
     controllerComponents,
@@ -104,6 +106,7 @@ trait Controllers {
     paperRoundServiceProvider,
     userBenefitsApiServiceProvider,
     stripeCheckoutSessionService,
+    appConfig.stripeConfigProvider,
   )
 
   lazy val supportWorkersStatusController = new SupportWorkersStatus(
