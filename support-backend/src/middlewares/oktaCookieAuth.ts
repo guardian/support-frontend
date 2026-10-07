@@ -50,8 +50,6 @@ export type OktaCookieCheckResult =
 			};
 	  };
 
-// TODO: decide if this is the way to go, I've used res.locals for this in Express before:
-// https://expressjs.com/en/5x/api/response/#reslocals
 declare global {
 	// eslint-disable-next-line @typescript-eslint/no-namespace -- required to augment the Express namespace
 	namespace Express {
