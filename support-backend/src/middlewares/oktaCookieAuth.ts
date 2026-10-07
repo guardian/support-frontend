@@ -6,7 +6,7 @@
 // Never redirects, never throws: always calls next(). Attaches a verification report to
 // req.oktaUser.
 import OktaJwtVerifier from '@okta/jwt-verifier';
-import type { RequestHandler } from 'express';
+import type { RequestHandler, Response } from 'express';
 import type { OktaConfig } from '../config/okta';
 import { noCache } from './noCache';
 
@@ -125,6 +125,11 @@ function checkSignOut(
 	return { checked: true, signedOutRecently };
 }
 
+function clearAuthCookies(res: Response) {
+	res.clearCookie(ID_TOKEN_COOKIE, { secure: true });
+	res.clearCookie(ACCESS_TOKEN_COOKIE, { secure: true });
+}
+
 // Returns noCache bundled with the auth check, so any route using this is structurally
 // guaranteed to also get no-cache headers - Express flattens handler arrays, so callers
 // just spread this in: apiRouter.get(path, ...buildOktaCookieAuth(config), handler).
@@ -145,6 +150,7 @@ export function buildOktaCookieAuth(config: OktaConfig): RequestHandler[] {
 
 		if (!isSignedIn) {
 			req.oktaUser = { signedIn: false };
+			clearAuthCookies(res);
 			next();
 			return;
 		}
@@ -173,6 +179,10 @@ export function buildOktaCookieAuth(config: OktaConfig): RequestHandler[] {
 			accessToken.present &&
 			accessToken.valid &&
 			(!signOutCheck.checked || !signOutCheck.signedOutRecently);
+
+		if (!fullyValid) {
+			clearAuthCookies(res);
+		}
 
 		req.oktaUser = {
 			signedIn: true,
