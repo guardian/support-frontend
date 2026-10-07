@@ -72,6 +72,10 @@ module.exports = {
 						replacement: path.resolve(__dirname, '../assets/__mocks__'),
 					},
 					{
+						find: 'fixtures',
+						replacement: path.resolve(__dirname, '../assets/fixtures'),
+					},
+					{
 						find: '@modules/internationalisation',
 						replacement: path.resolve(
 							__dirname,
