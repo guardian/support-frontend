@@ -3,10 +3,6 @@ import { renderHook, waitFor } from '@testing-library/react';
 import type { ContributionType } from 'helpers/contributions';
 import { useRatePlanKey } from './useRatePlanKey';
 
-jest.mock('contexts/FeatureSwitchesContext', () => ({
-	useFeatureSwitches: jest.fn(),
-}));
-
 type HookProbeProps = {
 	contributionType: ContributionType;
 	supportRegionId: SupportRegionId;
