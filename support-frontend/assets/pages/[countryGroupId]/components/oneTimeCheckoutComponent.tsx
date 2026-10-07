@@ -4,6 +4,7 @@ import {
 	headlineBold24,
 	neutral,
 	space,
+	textSans15,
 	textSans17,
 	until,
 } from '@guardian/source/foundations';
@@ -178,6 +179,19 @@ const similarProductsConsentCheckboxContainer = css`
 	}
 	> div > input {
 		background-color: ${neutral[100]};
+	}
+`;
+
+const containerSummaryTsCs = css`
+	margin-top: ${space[6]}px;
+	border-radius: ${space[3]}px;
+	border: 1px solid ${neutral[46]};
+	background-color: ${neutral[97]};
+	padding: ${space[2]}px ${space[3]}px;
+	${textSans15};
+	color: ${neutral[0]};
+	& a {
+		color: ${neutral[7]};
 	}
 `;
 
@@ -810,6 +824,8 @@ export function OneTimeCheckoutComponent({
 			: `Support us with ${simpleFormatAmount(currency, finalAmount)}`
 		: 'Pay now';
 
+	const automaticSimilarProductsConsent = countryId === 'US';
+
 	return (
 		<GuardianPageLayout borderBox>
 			<Box>
@@ -1261,8 +1277,15 @@ export function OneTimeCheckoutComponent({
 						/>
 
 						{!isMarketingEmailSession && (
-							<div css={similarProductsConsentCheckboxContainer}>
-								<SimilarProductsConsent />
+							<SimilarProductsConsent
+								showCheckbox={!automaticSimilarProductsConsent}
+								cssOverrides={similarProductsConsentCheckboxContainer}
+							/>
+						)}
+						{automaticSimilarProductsConsent && (
+							<div css={containerSummaryTsCs}>
+								We’ll send you emails about our journalism and ways to support
+								and enjoy our work. You can unsubscribe at any time
 							</div>
 						)}
 
