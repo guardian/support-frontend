@@ -12,7 +12,7 @@ describe('SimilarProductsConsent', () => {
 	});
 
 	it('renders a hidden input with the correct name and default value "true"', () => {
-		render(<SimilarProductsConsent countryId="GB" />);
+		render(<SimilarProductsConsent showCheckbox={true} />);
 
 		const consentInput = screen.getByTestId('consentValue');
 
@@ -21,13 +21,13 @@ describe('SimilarProductsConsent', () => {
 	});
 
 	it('renders the checkbox for non-US countries', () => {
-		render(<SimilarProductsConsent countryId="GB" />);
+		render(<SimilarProductsConsent showCheckbox={true} />);
 
 		expect(screen.getByRole('checkbox')).toBeInTheDocument();
 	});
 
 	it('does not render the checkbox for US, but still defaults the hidden input to "true"', () => {
-		render(<SimilarProductsConsent countryId="US" />);
+		render(<SimilarProductsConsent showCheckbox={false} />);
 
 		expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
 
@@ -37,7 +37,7 @@ describe('SimilarProductsConsent', () => {
 	});
 
 	it('calls trackComponentClick with "false" when checkbox is unchecked', () => {
-		render(<SimilarProductsConsent countryId="GB" />);
+		render(<SimilarProductsConsent showCheckbox={true} />);
 		const checkbox = screen.getByRole('checkbox');
 
 		// Uncheck the checkbox
@@ -50,7 +50,7 @@ describe('SimilarProductsConsent', () => {
 	});
 
 	it('toggles the checkbox back to checked and tracks with "true"', () => {
-		render(<SimilarProductsConsent countryId="GB" />);
+		render(<SimilarProductsConsent showCheckbox={true} />);
 		const checkbox = screen.getByRole('checkbox');
 
 		// Uncheck and then re-check

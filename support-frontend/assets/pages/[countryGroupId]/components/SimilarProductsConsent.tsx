@@ -1,20 +1,18 @@
 import { type SerializedStyles } from '@emotion/react';
 import { Checkbox } from '@guardian/source/react-components';
-import type { CountryCode } from '@modules/internationalisation/country';
 import { useState } from 'react';
 import { trackComponentClick } from '../../../helpers/tracking/behaviour';
 
 export const CONSENT_ID = 'similar-products-consent-checkbox';
 
 export default function SimilarProductsConsent({
-	countryId,
+	showCheckbox,
 	cssOverrides,
 }: {
-	countryId: CountryCode;
+	showCheckbox: boolean;
 	cssOverrides?: SerializedStyles;
 }) {
 	const [consentValue, setConsentValue] = useState(true);
-	const showCheckbox = countryId !== 'US';
 	return (
 		<div css={showCheckbox && cssOverrides}>
 			<input

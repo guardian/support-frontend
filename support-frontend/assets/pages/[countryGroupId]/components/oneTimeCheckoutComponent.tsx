@@ -824,6 +824,8 @@ export function OneTimeCheckoutComponent({
 			: `Support us with ${simpleFormatAmount(currency, finalAmount)}`
 		: 'Pay now';
 
+	const automaticSimilarProductsConsent = countryId === 'US';
+
 	return (
 		<GuardianPageLayout borderBox>
 			<Box>
@@ -1276,11 +1278,11 @@ export function OneTimeCheckoutComponent({
 
 						{!isMarketingEmailSession && (
 							<SimilarProductsConsent
-								countryId={countryId}
+								showCheckbox={!automaticSimilarProductsConsent}
 								cssOverrides={similarProductsConsentCheckboxContainer}
 							/>
 						)}
-						{countryId === 'US' && (
+						{automaticSimilarProductsConsent && (
 							<div css={containerSummaryTsCs}>
 								We’ll send you emails about our journalism and ways to support
 								and enjoy our work. You can unsubscribe at any time
