@@ -19,6 +19,7 @@ import type {
 	StripeCardExpiryElementChangeEvent,
 	StripeCardNumberElementChangeEvent,
 } from '@stripe/stripe-js';
+import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import { checkAccount } from 'components/directDebit/helpers/ajax';
@@ -67,7 +68,6 @@ import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsM
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
-import { useEffect, useRef, useState } from 'react';
 import { postcodeIsWithinM25 } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
