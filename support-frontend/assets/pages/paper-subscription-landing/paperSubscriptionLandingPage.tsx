@@ -8,7 +8,10 @@ import {
 	getAbParticipations,
 	setUpTrackingAndConsents,
 } from 'helpers/page/page';
-import { getSanitisedPromoCopy } from 'helpers/productPrice/promotions';
+import {
+	getLandingPageCopy,
+	getSanitisedLandingPageCopy,
+} from 'helpers/productPrice/landingPageCopy';
 import { renderPage } from 'helpers/rendering/render';
 import NewspaperHero from './components/NewspaperHero';
 import NewspaperProductTabs from './components/NewspaperProductTabs';
@@ -29,10 +32,11 @@ export function PaperLandingPage({
 	productCatalog,
 	promotions,
 	promoCode,
-	promotionCopy,
 	fulfilment,
 }: PaperLandingPropTypes) {
-	const sanitisedPromoCopy = getSanitisedPromoCopy(promotionCopy);
+	const landingPageCopy = getSanitisedLandingPageCopy(
+		getLandingPageCopy(promotions, promoCode),
+	);
 	return (
 		<PageScaffold
 			id={pageQaId}
@@ -40,7 +44,7 @@ export function PaperLandingPage({
 			footer={paperSubsFooter}
 		>
 			<NewspaperHero
-				promotionCopy={sanitisedPromoCopy}
+				landingPageCopy={landingPageCopy}
 				paperHeroItems={getPaperPlusItems(productCatalog)}
 			/>
 			<NewspaperProductTabs

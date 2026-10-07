@@ -48,18 +48,25 @@ const makePromotion = (
 	discount,
 });
 
-const sixdayPromotion = makePromotion(
-	'SIXDAY25',
-	{ productKey: 'SubscriptionCard', productRatePlanKey: 'SixdayPlus' },
-	{ amount: 25, durationMonths: 6 },
-);
+const sixdayPromotion: PromoWithCatalogInformation = {
+	...makePromotion(
+		'SIXDAY25',
+		{ productKey: 'SubscriptionCard', productRatePlanKey: 'SixdayPlus' },
+		{ amount: 25, durationMonths: 6 },
+	),
+	landingPage: {
+		title: 'Save 25% on a Six day subscription',
+		description:
+			'For a limited time, get **25% off** the Guardian six days a week for six months.',
+		roundelHtml: 'Limited time offer',
+	},
+};
 
 type Story = StoryObj<PaperLandingPropTypes>;
 
 const defaultArgs: PaperLandingPropTypes = {
 	productCatalog: productCatalogFixture,
 	promotions: [],
-	promotionCopy: undefined,
 	participations: {},
 	fulfilment: undefined,
 };
