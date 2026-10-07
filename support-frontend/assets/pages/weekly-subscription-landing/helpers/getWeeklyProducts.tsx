@@ -45,7 +45,14 @@ function getWeeklyRatePlan(
 			? 'OneYearGift'
 			: 'ThreeMonthGift';
 	}
-	return `${billingPeriod}Plus` as ActiveRatePlanKey;
+	switch (billingPeriod) {
+		case BillingPeriod.Annual:
+			return 'AnnualPlus';
+		case BillingPeriod.Quarterly:
+			return 'QuarterlyPlus';
+		case BillingPeriod.Monthly:
+			return 'MonthlyPlus';
+	}
 }
 
 const getCheckoutUrl = ({
