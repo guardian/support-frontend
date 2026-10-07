@@ -30,8 +30,8 @@ import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import { buildBackButtonPath } from '../checkout/helpers/backButton';
 import {
+	getBenefitsChecklistByCountryABTest,
 	getBenefitsChecklistFromLandingPageTool,
-	getBenefitsChecklistFromProductDescription,
 } from '../checkout/helpers/benefitsChecklist';
 import { ukSpecificAdditionalBenefit } from '../student/components/StudentHeader';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
@@ -123,7 +123,7 @@ export default function CheckoutSummary({
 			landingPageSettings,
 			countryGroupId,
 		) ??
-		getBenefitsChecklistFromProductDescription(
+		getBenefitsChecklistByCountryABTest(
 			productDescription,
 			countryGroupId,
 			abParticipations,

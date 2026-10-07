@@ -39,7 +39,7 @@ import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPer
 import { allProductPrices } from 'helpers/productPrice/productPrices';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
-import { getProductBenefitsByABTestAndCountry } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
+import { getBenefitsByCountryABTest } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { getTierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
 import { useStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/useStudentBeansRegionValid';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -292,7 +292,7 @@ export function ThreeTierLanding({
 			settings.products[tier1Product]?.title ?? getProductLabel(tier1Product),
 		benefits:
 			settings.products[tier1Product]?.benefits ??
-			getProductBenefitsByABTestAndCountry(
+			getBenefitsByCountryABTest(
 				productCatalogDescription[tier1Product],
 				countryGroupId,
 				abParticipations,
@@ -337,7 +337,7 @@ export function ThreeTierLanding({
 		title: getProductLabel(tier2Product),
 		benefits:
 			settings.products[tier2Product]?.benefits ??
-			getProductBenefitsByABTestAndCountry(
+			getBenefitsByCountryABTest(
 				productCatalogDescription[tier2Product],
 				countryGroupId,
 				abParticipations,
@@ -397,7 +397,7 @@ export function ThreeTierLanding({
 		titlePill: settings.products[tier3Product]?.titlePill ?? titlePill,
 		benefits:
 			settings.products[tier3Product]?.benefits ??
-			getProductBenefitsByABTestAndCountry(
+			getBenefitsByCountryABTest(
 				productCatalogDescription[tier3Product],
 				countryGroupId,
 				abParticipations,

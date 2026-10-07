@@ -51,13 +51,13 @@ export const getBenefitsChecklistFromLandingPageTool = (
 		return benefitsAsChecklist({
 			checked:
 				landingPageSettings.products.Contribution?.benefits ??
-				getProductBenefitsByCountry(
+				getBenefitsByCountry(
 					productCatalogDescription.Contribution,
 					countryGroupId,
 				),
 			unchecked:
 				landingPageSettings.products.SupporterPlus?.benefits ??
-				getProductBenefitsByCountry(
+				getBenefitsByCountry(
 					productCatalogDescription.SupporterPlus,
 					countryGroupId,
 				),
@@ -66,7 +66,7 @@ export const getBenefitsChecklistFromLandingPageTool = (
 		return benefitsAsChecklist({
 			checked:
 				landingPageSettings.products.SupporterPlus?.benefits ??
-				getProductBenefitsByCountry(
+				getBenefitsByCountry(
 					productCatalogDescription.SupporterPlus,
 					countryGroupId,
 				),
@@ -76,12 +76,12 @@ export const getBenefitsChecklistFromLandingPageTool = (
 		return benefitsAsChecklist({
 			checked: [
 				...(landingPageSettings.products.DigitalSubscription?.benefits ??
-					getProductBenefitsByCountry(
+					getBenefitsByCountry(
 						productCatalogDescription.DigitalSubscription,
 						countryGroupId,
 					)),
 				...(landingPageSettings.products.SupporterPlus?.benefits ??
-					getProductBenefitsByCountry(
+					getBenefitsByCountry(
 						productCatalogDescription.SupporterPlus,
 						countryGroupId,
 					)),
@@ -92,31 +92,32 @@ export const getBenefitsChecklistFromLandingPageTool = (
 	return;
 };
 
-export const getBenefitsChecklistFromProductDescription = (
+export const getBenefitsChecklistByCountryABTest = (
 	productDescription: ProductDescription,
 	countryGroupId: CountryGroupId,
 	abParticipations: Participations,
 ): BenefitsCheckListData[] => {
-	return productDescription.benefits
-		.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
-		.filter((benefit) => filterBenefitByABTest(benefit, abParticipations))
-		.map((benefit) => ({
-			isChecked: true,
-			text: `${benefit.copyBoldStart ?? ''}${benefit.copy}`,
-		}));
+	return getBenefitsByCountryABTest(
+		productDescription,
+		countryGroupId,
+		abParticipations,
+	).map((benefit) => ({
+		isChecked: true,
+		text: `${benefit.copyBoldStart ?? ''}${benefit.copy}`,
+	}));
 };
 
-export const getProductBenefitsByABTestAndCountry = (
+export const getBenefitsByCountryABTest = (
 	productDescription: ProductDescription,
 	countryGroupId: CountryGroupId,
 	abParticipations: Participations,
 ): ProductBenefit[] => {
-	return getProductBenefitsByCountry(productDescription, countryGroupId).filter(
+	return getBenefitsByCountry(productDescription, countryGroupId).filter(
 		(benefit) => filterBenefitByABTest(benefit, abParticipations),
 	);
 };
 
-export const getProductBenefitsByCountry = (
+export const getBenefitsByCountry = (
 	productDescription: ProductDescription,
 	countryGroupId: CountryGroupId,
 ): ProductBenefit[] => {
