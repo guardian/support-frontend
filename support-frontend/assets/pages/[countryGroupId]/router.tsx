@@ -1,6 +1,7 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import {
 	createBrowserRouter,
+	Navigate,
 	Outlet,
 	RouterProvider,
 	useRouteLoaderData,
@@ -18,12 +19,14 @@ import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import type { OneTimeCheckoutVariant } from 'helpers/globalsAndSwitches/oneTimeCheckoutSettings';
 import type { StudentLandingPageVariant } from 'helpers/globalsAndSwitches/studentLandingPageSettings';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
+import { Country } from 'helpers/internationalisation/classes/country';
 import {
 	getAbParticipations,
 	setUpConsent,
 	setUpTracking,
 } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
+import { useStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/useStudentBeansRegionValid';
 import { getCheckoutNudgeParticipations } from '../../helpers/abTests/checkoutNudgeAbTests';
 import { getLandingPageParticipations } from '../../helpers/abTests/landingPageAbTests';
 import type { Participations } from '../../helpers/abTests/models';
@@ -235,6 +238,16 @@ const router = createBrowserRouter([
 						return {
 							Component: function StudentRoute() {
 								const { landing } = useRootLoaderData();
+								const isStudentBeansRegionValid = useStudentBeansRegionValid(
+									supportRegionId,
+									Country.detect(),
+								);
+								if (!isStudentBeansRegionValid) {
+									return (
+										<Navigate to={`/${supportRegionId}/contribute`} replace />
+									);
+								}
+
 								return (
 									<StudentLandingPageGlobalContainer
 										supportRegionId={supportRegionId}

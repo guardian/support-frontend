@@ -44,7 +44,7 @@ import { getPromotion } from 'helpers/productPrice/promotions';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
 import { getProductBenefitsByABTestAndCountry } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { getTierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
-import { isStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
+import { useStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/useStudentBeansRegionValid';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
 	getSanitisedHtml,
@@ -170,8 +170,8 @@ export function ThreeTierLanding({
 	const abParticipations = useAbParticipations();
 
 	const {
-		product: urlSearchParamsProduct,
-		ratePlan: urlSearchParamsRatePlan,
+		productKey: urlSearchParamsProduct,
+		ratePlanKey: urlSearchParamsRatePlan,
 		selectedAmount: urlSelectedAmount,
 		forceWeeklyPricing,
 	} = useThreeTierUrlSelection();
@@ -192,6 +192,11 @@ export function ThreeTierLanding({
 		subPath: '/contribute',
 	};
 
+	const showStudentOffer = useStudentBeansRegionValid(
+		supportRegionId,
+		Country.detect(),
+	);
+
 	const countdownSettings = countdownSwitchOn()
 		? settings.countdownSettings
 		: undefined;
@@ -203,9 +208,9 @@ export function ThreeTierLanding({
 
 	const getInitialContributionType = (): ContributionType => {
 		// 1. Query Parameters take precedence
-		if (urlSearchParamsRatePlan === 'annual') {
+		if (urlSearchParamsRatePlan === 'Annual') {
 			return 'ANNUAL';
-		} else if (urlSearchParamsRatePlan === 'monthly') {
+		} else if (urlSearchParamsRatePlan === 'Monthly') {
 			return 'MONTHLY';
 		}
 
@@ -249,8 +254,7 @@ export function ThreeTierLanding({
 		settings.defaultProductSelection?.productType.toLowerCase();
 
 	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
-	// Student Beans Europe feature switch enables the link to Student Landing Page for prescribed countries
-	const { enableStudentBeansEurope, enableDeepDiscount } = useFeatureSwitches();
+	const { enableDeepDiscount } = useFeatureSwitches();
 
 	const getDefaultProductSelection = (productKey: ProductKey) => {
 		return (
@@ -264,7 +268,7 @@ export function ThreeTierLanding({
 		promotionAmount?: number,
 	) => {
 		return (
-			urlSearchParamsProduct === productKey.toLowerCase() ||
+			urlSearchParamsProduct === productKey ||
 			isCardUserSelected(urlSelectedAmount, productPrice, promotionAmount)
 		);
 	};
@@ -438,7 +442,6 @@ export function ThreeTierLanding({
 
 	const showWeeklyPrice =
 		forceWeeklyPricing || settings.name.includes('WEEKLY_PRICE');
-	const countryCode = Country.detect();
 
 	const tsAndCsContent: TsAndCsProps[] = [
 		{
@@ -560,11 +563,7 @@ export function ThreeTierLanding({
 					countryGroupId={countryGroupId}
 				/>
 			</Container>
-			{isStudentBeansRegionValid(
-				supportRegionId,
-				countryCode,
-				enableStudentBeansEurope,
-			) && (
+			{showStudentOffer && (
 				<Container
 					sideBorders
 					borderColor="rgba(170, 170, 180, 0.5)"
