@@ -1,11 +1,10 @@
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import type { ProductPrice } from 'helpers/productPrice/productPrices';
-import type { Promotion } from 'helpers/productPrice/promotions';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { getDiscountDuration } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 
 export function getWeeklySavingsText(
-	promotion: Promotion | undefined,
+	promotion: PromoWithCatalogInformation | undefined,
 ): string | null {
 	const durationInMonths = promotion?.discount?.durationMonths;
 
@@ -20,18 +19,18 @@ export function getWeeklySavingsText(
 
 export function getWeeklyGiftSavingsText(
 	billingPeriod: RecurringBillingPeriod,
-	promotion: Promotion | undefined,
-	allPrices: Partial<Record<RecurringBillingPeriod, ProductPrice>>,
+	promotion: PromoWithCatalogInformation | undefined,
+	allPrices: Partial<Record<RecurringBillingPeriod, number>>,
 ): string | null {
 	if (promotion) {
-		return promotion.landingPage?.roundel ?? null;
+		return promotion.landingPage?.roundelHtml ?? null;
 	}
 
 	// BAU for Annual weekly gifting
 	// The goal in here is to display the savings compared to the Quarlerly price
 	if (billingPeriod === BillingPeriod.Annual) {
-		const annualPrice = allPrices[BillingPeriod.Annual]?.price;
-		const quarterlyPrice = allPrices[BillingPeriod.Quarterly]?.price;
+		const annualPrice = allPrices[BillingPeriod.Annual];
+		const quarterlyPrice = allPrices[BillingPeriod.Quarterly];
 
 		if (!annualPrice || !quarterlyPrice) {
 			return null;

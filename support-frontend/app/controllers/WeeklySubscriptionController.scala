@@ -10,8 +10,7 @@ import com.gu.support.config.Stages.PROD
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.PromoWithCatalogInformation
 import services.{ApplicablePromotions, CachedProductCatalogServiceProvider, CachedPromotionsServiceProvider}
-import services.pricing.PriceSummaryServiceProvider
-import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
+import services.pricing.DefaultPromotionService
 import config.StringsConfig
 import play.api.mvc._
 import play.twirl.api.Html
@@ -21,8 +20,7 @@ import views.ViewHelpers.outputJson
 import scala.concurrent.ExecutionContext
 
 class WeeklySubscriptionController(
-    priceSummaryServiceProvider: PriceSummaryServiceProvider,
-    landingCopyProvider: LandingCopyProvider,
+    defaultPromotionService: DefaultPromotionService,
     cachedPromotionsServiceProvider: CachedPromotionsServiceProvider,
     cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
     val assets: AssetsResolver,
@@ -56,9 +54,7 @@ class WeeklySubscriptionController(
       request.queryString
         .getOrElse("promoCode", Nil)
         .toList
-    val defaultPromos = priceSummaryServiceProvider.forUser(isTestUser = false).getDefaultPromoCodes(GuardianWeekly)
-    val maybePromotionCopy =
-      landingCopyProvider.promotionCopy(queryPromos ++ defaultPromos, GuardianWeekly, countryGroupId, orderIsAGift)
+    val defaultPromos = defaultPromotionService.getPromoCodes(GuardianWeekly)
     val promotions = getPromotions(queryPromos ++ defaultPromos, countryGroupId, orderIsAGift)
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser = false).get()
 
@@ -80,8 +76,6 @@ class WeeklySubscriptionController(
         noindex = stage != PROD,
       ) {
         Html(s"""<script type="text/javascript">
-              window.guardian.productPrices = ${outputJson(productPrices(queryPromos, orderIsAGift))}
-              window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
               window.guardian.orderIsAGift = $orderIsAGift
               window.guardian.promotions = ${outputJson(promotions)}
               window.guardian.productCatalog = ${outputJson(productCatalog, dropNullValues = false)}
@@ -115,10 +109,5 @@ class WeeklySubscriptionController(
     "en" -> buildRegionalisedWeeklySubscriptionLink("int", orderIsAGift),
     "en" -> buildRegionalisedWeeklySubscriptionLink("eu", orderIsAGift),
   )
-
-  private def productPrices(queryPromos: List[String], orderIsAGift: Boolean) = {
-    val readerType = if (orderIsAGift) Gift else Direct
-    priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, queryPromos, readerType)
-  }
 
 }

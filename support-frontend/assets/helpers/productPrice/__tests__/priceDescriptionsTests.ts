@@ -1,21 +1,9 @@
 // ----- Imports ----- //
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import {
-	getPriceDescription,
-	getSimplifiedPriceDescription,
-} from 'helpers/productPrice/priceDescriptions';
+import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 
 jest.mock('@guardian/ophan-tracker-js', () => () => ({}));
-
-const monthlyBillingPeriod = BillingPeriod.Monthly;
-
-const productPrice: ProductPrice = {
-	price: 11.99,
-	currency: 'GBP',
-	fixedTerm: false,
-	promotions: [],
-};
 
 // ----- Tests ----- //
 describe('getPriceDescription', () => {
@@ -88,42 +76,5 @@ describe('getPriceDescription', () => {
 		expect(
 			getPriceDescription(gwQuarterlyWithPromo, BillingPeriod.Quarterly),
 		).toEqual("You'll pay £31.87 for 1 quarter, then £37.50 per quarter");
-	});
-});
-
-describe('getSimplifiedPriceDescription', () => {
-	it('should return a price description', () => {
-		expect(
-			getSimplifiedPriceDescription(productPrice, monthlyBillingPeriod),
-		).toEqual('per month');
-	});
-
-	const productPriceWithDiscountedPrice: ProductPrice = {
-		price: 11.99,
-		currency: 'GBP',
-		fixedTerm: false,
-		promotions: [
-			{
-				name: 'Sept 2021 Discount',
-				description: '50% off for 3 months',
-				promoCode: 'DK0NT24WG',
-				discountedPrice: 5.99,
-				numberOfDiscountedPeriods: 3,
-				discount: {
-					amount: 50,
-					durationMonths: 3,
-				},
-				isIntroductoryPricing: false,
-			},
-		],
-	};
-
-	it('should return a discounted price description', () => {
-		expect(
-			getSimplifiedPriceDescription(
-				productPriceWithDiscountedPrice,
-				monthlyBillingPeriod,
-			),
-		).toEqual('per month, then £11.99 per month');
 	});
 });
