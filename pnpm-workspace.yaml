@@ -36,7 +36,6 @@ overrides:
   flatted: 3.4.2
   picomatch@2.3.1: 2.3.2
   picomatch@4.0.3: 4.0.4
-  shell-quote: 1.9.0
   nanoid@3: 3.3.18
   postcss: 8.5.23
 
