@@ -19,6 +19,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 60,
 					USD: 60,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Monthly: {
@@ -37,6 +38,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 5,
 					USD: 5,
 				},
+				savingVsRetail: null,
 				taxMode: null,
 			},
 		},
@@ -59,6 +61,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 300,
 					USD: 280,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			AnnualTaxExclusive: {
@@ -73,6 +76,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					CAD: 300,
 					GBP: 180,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Discount: {
@@ -84,6 +88,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				},
 				id: '2c92c0f85721ff7c01572942235b6d7a',
 				pricing: {},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Monthly: {
@@ -102,6 +107,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 30,
 					USD: 28,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			MonthlyTaxExclusive: {
@@ -116,6 +122,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					CAD: 30,
 					GBP: 18,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			OneYearGift: {
@@ -133,6 +140,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 99,
 					USD: 99,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			Quarterly: {
@@ -151,6 +159,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 79.99,
 					USD: 74.94,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			ThreeMonthGift: {
@@ -168,6 +177,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 36,
 					USD: 36,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 		},
@@ -186,6 +196,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					EUR: 5,
 					GBP: 5,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 		},
@@ -223,6 +234,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 660,
 					USD: 360,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			AnnualPlus: {
@@ -244,6 +256,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 660,
 					USD: 432,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			Discount: {
@@ -255,6 +268,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				},
 				id: '2c92c0f85721ff7c01572942235b6d7a',
 				pricing: {},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Monthly: {
@@ -273,6 +287,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 55,
 					USD: 30,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			MonthlyPlus: {
@@ -294,6 +309,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 55,
 					USD: 36,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			OneYearGift: {
@@ -312,6 +328,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 528,
 					USD: 288,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			Quarterly: {
@@ -330,6 +347,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 165,
 					USD: 90,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			QuarterlyPlus: {
@@ -351,6 +369,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 165,
 					USD: 108,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			ThreeMonthGift: {
@@ -369,6 +388,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 165,
 					USD: 90,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 		},
@@ -387,6 +407,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					GBP: 336,
 					USD: 432,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			AnnualPlus: {
@@ -404,6 +425,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					GBP: 386.91,
 					USD: 456,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			Discount: {
@@ -415,6 +437,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				},
 				id: '2c92c0f85721ff7c01572942235b6d7a',
 				pricing: {},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Monthly: {
@@ -429,6 +452,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					GBP: 28,
 					USD: 36,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			MonthlyPlus: {
@@ -446,6 +470,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					GBP: 32.24,
 					USD: 38,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			OneYearGift: {
@@ -460,6 +485,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					GBP: 268.8,
 					USD: 345.6,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			Quarterly: {
@@ -474,6 +500,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					GBP: 83.9,
 					USD: 108,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			QuarterlyPlus: {
@@ -491,6 +518,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					GBP: 96.61,
 					USD: 114,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			ThreeMonthGift: {
@@ -505,6 +533,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					GBP: 83.9,
 					USD: 108,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 		},
@@ -523,6 +552,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					GBP: 120,
 					USD: 240,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Discount: {
@@ -534,6 +564,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				},
 				id: '2c92c0f85721ff7c01572942235b6d7a',
 				pricing: {},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Quarterly: {
@@ -548,6 +579,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					GBP: 30,
 					USD: 60,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 		},
@@ -570,6 +602,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 392,
 					USD: 240,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Discount: {
@@ -581,6 +614,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				},
 				id: '2c92c0f85721ff7c01572942235b6d7a',
 				pricing: {},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Quarterly: {
@@ -599,6 +633,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 98,
 					USD: 60,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 		},
@@ -621,6 +656,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 392,
 					USD: 260,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Discount: {
@@ -632,6 +668,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				},
 				id: '2c92c0f85721ff7c01572942235b6d7a',
 				pricing: {},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Quarterly: {
@@ -650,6 +687,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 98,
 					USD: 65,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 		},
@@ -665,6 +703,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				},
 				id: '2c92c0f85721ff7c01572942235b6d7a',
 				pricing: {},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Everyday: {
@@ -696,6 +735,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 83.99,
 				},
+				savingVsRetail: 20,
 				taxMode: 'TaxInclusive',
 			},
 			EverydayPlus: {
@@ -730,6 +770,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 88.99,
 				},
+				savingVsRetail: 23.94,
 				taxMode: 'TaxInclusive',
 			},
 			Saturday: {
@@ -743,6 +784,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 20.99,
 				},
+				savingVsRetail: 0,
 				taxMode: 'TaxExclusive',
 			},
 			SaturdayPlus: {
@@ -759,6 +801,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 21.99,
 				},
+				savingVsRetail: -12.77,
 				taxMode: 'TaxExclusive',
 			},
 			Sixday: {
@@ -787,6 +830,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 73.99,
 				},
+				savingVsRetail: 15,
 				taxMode: 'TaxExclusive',
 			},
 			SixdayPlus: {
@@ -818,6 +862,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 77.99,
 				},
+				savingVsRetail: 18.19,
 				taxMode: 'TaxInclusive',
 			},
 			Sunday: {
@@ -831,6 +876,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 23,
 				},
+				savingVsRetail: -6.15,
 				taxMode: 'TaxExclusive',
 			},
 			SundayPlus: {
@@ -847,6 +893,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 23,
 				},
+				savingVsRetail: 0,
 				taxMode: 'TaxExclusive',
 			},
 			Weekend: {
@@ -863,6 +910,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 33.99,
 				},
+				savingVsRetail: 6,
 				taxMode: 'TaxExclusive',
 			},
 			WeekendPlus: {
@@ -882,6 +930,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 36.99,
 				},
+				savingVsRetail: 10.15,
 				taxMode: 'TaxInclusive',
 			},
 		},
@@ -897,6 +946,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				},
 				id: '2c92c0f85721ff7c01572942235b6d7a',
 				pricing: {},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Everyday: {
@@ -928,6 +978,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 83.99,
 				},
+				savingVsRetail: 20,
 				taxMode: 'TaxInclusive',
 			},
 			EverydayPlus: {
@@ -962,6 +1013,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 88.99,
 				},
+				savingVsRetail: 23.94,
 				taxMode: 'TaxInclusive',
 			},
 			Sixday: {
@@ -990,6 +1042,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 73.99,
 				},
+				savingVsRetail: 15,
 				taxMode: 'TaxInclusive',
 			},
 			SixdayPlus: {
@@ -1021,6 +1074,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 77.99,
 				},
+				savingVsRetail: 18.19,
 				taxMode: 'TaxInclusive',
 			},
 			Weekend: {
@@ -1037,6 +1091,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 33.99,
 				},
+				savingVsRetail: 6,
 				taxMode: 'TaxInclusive',
 			},
 			WeekendPlus: {
@@ -1056,6 +1111,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 36.99,
 				},
+				savingVsRetail: 10.15,
 				taxMode: 'TaxInclusive',
 			},
 		},
@@ -1071,6 +1127,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				},
 				id: '2c92c0f85721ff7c01572942235b6d7a',
 				pricing: {},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Everyday: {
@@ -1102,6 +1159,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 69.99,
 				},
+				savingVsRetail: 33,
 				taxMode: 'TaxExclusive',
 			},
 			EverydayPlus: {
@@ -1136,6 +1194,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 72.99,
 				},
+				savingVsRetail: 34,
 				taxMode: 'TaxInclusive',
 			},
 			Saturday: {
@@ -1149,6 +1208,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 15.99,
 				},
+				savingVsRetail: 12,
 				taxMode: 'TaxExclusive',
 			},
 			SaturdayPlus: {
@@ -1165,6 +1225,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 16.99,
 				},
+				savingVsRetail: 12,
 				taxMode: 'TaxInclusive',
 			},
 			Sixday: {
@@ -1193,6 +1254,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 61.99,
 				},
+				savingVsRetail: 29,
 				taxMode: 'TaxExclusive',
 			},
 			SixdayPlus: {
@@ -1224,6 +1286,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 64.99,
 				},
+				savingVsRetail: 29,
 				taxMode: 'TaxExclusive',
 			},
 			Sunday: {
@@ -1237,6 +1300,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 18,
 				},
+				savingVsRetail: 18,
 				taxMode: 'TaxExclusive',
 			},
 			SundayPlus: {
@@ -1253,6 +1317,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 18,
 				},
+				savingVsRetail: 18,
 				taxMode: 'TaxInclusive',
 			},
 			Weekend: {
@@ -1269,6 +1334,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 26.99,
 				},
+				savingVsRetail: 25,
 				taxMode: 'TaxExclusive',
 			},
 			WeekendPlus: {
@@ -1288,6 +1354,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 29.99,
 				},
+				savingVsRetail: 25,
 				taxMode: 'TaxInclusive',
 			},
 		},
@@ -1320,6 +1387,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 149,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			Discount: {
@@ -1331,6 +1399,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				},
 				id: '2c92c0f85721ff7c01572942235b6d7a',
 				pricing: {},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Monthly: {
@@ -1344,6 +1413,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 15,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			V1DeprecatedAnnual: {
@@ -1357,6 +1427,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 135,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			V1DeprecatedMonthly: {
@@ -1370,6 +1441,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 15,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 		},
@@ -1387,6 +1459,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 599,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			Discount: {
@@ -1398,6 +1471,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				},
 				id: '2c92c0f85721ff7c01572942235b6d7a',
 				pricing: {},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Monthly: {
@@ -1411,6 +1485,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 60,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			V1DeprecatedAnnual: {
@@ -1424,6 +1499,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 540,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			V1DeprecatedMonthly: {
@@ -1437,6 +1513,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 60,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 		},
@@ -1452,6 +1529,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				},
 				id: '2c92c0f85721ff7c01572942235b6d7a',
 				pricing: {},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Everyday: {
@@ -1483,6 +1561,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 69.99,
 				},
+				savingVsRetail: 33,
 				taxMode: 'TaxExclusive',
 			},
 			EverydayPlus: {
@@ -1517,6 +1596,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 73.99,
 				},
+				savingVsRetail: 37.62,
 				taxMode: 'TaxInclusive',
 			},
 			Saturday: {
@@ -1530,6 +1610,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 15.99,
 				},
+				savingVsRetail: 12,
 				taxMode: 'TaxExclusive',
 			},
 			SaturdayPlus: {
@@ -1546,6 +1627,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 16.99,
 				},
+				savingVsRetail: 12.87,
 				taxMode: 'TaxInclusive',
 			},
 			Sixday: {
@@ -1574,6 +1656,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 61.99,
 				},
+				savingVsRetail: 29,
 				taxMode: 'TaxExclusive',
 			},
 			SixdayPlus: {
@@ -1605,6 +1688,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 64.99,
 				},
+				savingVsRetail: 31.83,
 				taxMode: null,
 			},
 			Sunday: {
@@ -1618,6 +1702,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 18,
 				},
+				savingVsRetail: 16.92,
 				taxMode: 'TaxExclusive',
 			},
 			SundayPlus: {
@@ -1634,6 +1719,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 18,
 				},
+				savingVsRetail: 18,
 				taxMode: 'TaxInclusive',
 			},
 			Weekend: {
@@ -1650,6 +1736,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 26.99,
 				},
+				savingVsRetail: 25,
 				taxMode: 'TaxExclusive',
 			},
 			WeekendPlus: {
@@ -1669,6 +1756,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 29.99,
 				},
+				savingVsRetail: 27.15,
 				taxMode: 'TaxInclusive',
 			},
 		},
@@ -1690,6 +1778,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					GBP: 75,
 					USD: 120,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			Discount: {
@@ -1701,6 +1790,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				},
 				id: '2c92c0f85721ff7c01572942235b6d7a',
 				pricing: {},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Monthly: {
@@ -1718,6 +1808,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					GBP: 7,
 					USD: 9.99,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			V1DeprecatedAnnual: {
@@ -1731,6 +1822,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 60,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			V1DeprecatedMonthly: {
@@ -1744,6 +1836,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				pricing: {
 					GBP: 5,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			V2DeprecatedAnnual: {
@@ -1761,6 +1854,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					GBP: 51,
 					USD: 89.99,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			V2DeprecatedMonthly: {
@@ -1778,6 +1872,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					GBP: 9,
 					USD: 7.99,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 		},
@@ -1803,6 +1898,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 200,
 					USD: 150,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			AnnualTaxExclusive: {
@@ -1820,6 +1916,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					CAD: 150,
 					GBP: 120,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Discount: {
@@ -1831,6 +1928,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				},
 				id: '2c92c0f85721ff7c01572942235b6d7a',
 				pricing: {},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			Monthly: {
@@ -1852,6 +1950,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 20,
 					USD: 15,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			MonthlyTaxExclusive: {
@@ -1869,6 +1968,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					CAD: 15,
 					GBP: 12,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			OneYearStudent: {
@@ -1887,6 +1987,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 15,
 					USD: 10,
 				},
+				savingVsRetail: 42,
 				taxMode: 'TaxInclusive',
 			},
 			V1DeprecatedAnnual: {
@@ -1905,6 +2006,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 160,
 					USD: 120,
 				},
+				savingVsRetail: 42,
 				taxMode: 'TaxInclusive',
 			},
 			V1DeprecatedMonthly: {
@@ -1923,6 +2025,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 17,
 					USD: 13,
 				},
+				savingVsRetail: 42,
 				taxMode: 'TaxInclusive',
 			},
 		},
@@ -1938,6 +2041,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 				},
 				id: '2c92c0f85721ff7c01572942235b6d7a',
 				pricing: {},
+				savingVsRetail: null,
 				taxMode: 'TaxExclusive',
 			},
 			DomesticAnnual: {
@@ -1959,6 +2063,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 800,
 					USD: 510,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			DomesticAnnualV2: {
@@ -1983,6 +2088,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 72,
 					USD: 47,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			DomesticMonthly: {
@@ -2004,6 +2110,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 70,
 					USD: 45,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			DomesticMonthlyV2: {
@@ -2028,6 +2135,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					NZD: 72,
 					USD: 47,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			RestOfWorldAnnual: {
@@ -2045,6 +2153,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					GBP: 417.6,
 					USD: 546,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			RestOfWorldAnnualV2: {
@@ -2065,6 +2174,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					GBP: 29,
 					USD: 47,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			RestOfWorldMonthly: {
@@ -2082,6 +2192,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					GBP: 36.8,
 					USD: 48,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 			RestOfWorldMonthlyV2: {
@@ -2102,6 +2213,7 @@ export const productCatalogFixture: WindowProductCatalog = {
 					GBP: 29,
 					USD: 47,
 				},
+				savingVsRetail: null,
 				taxMode: 'TaxInclusive',
 			},
 		},
