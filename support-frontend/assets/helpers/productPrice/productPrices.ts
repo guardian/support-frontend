@@ -115,9 +115,6 @@ const getDiscountVsRetail = (
 	return hackRemoveMeDiscount(Math.floor(totalSavingVsRetail));
 };
 
-const allCheckoutNudgeProductPrices =
-	window.guardian.allCheckoutNudgeProductPrices;
-
 export {
 	getProductPrice,
 	getFirstValidPrice,
@@ -126,5 +123,4 @@ export {
 	showPrice,
 	isNumeric,
 	getDiscountVsRetail,
-	allCheckoutNudgeProductPrices,
 };
