@@ -2,7 +2,6 @@
 @import assets.RefPath
 @import assets.AssetsResolver
 @import admin.settings.AllSettings
-@import controllers.AllProductPrices
 @import com.gu.support.promotions.PromoWithCatalogInformation
 @import io.circe.JsonObject
 @import services.Tickers
@@ -19,8 +18,8 @@
   membersDataApiUrl: String,
   guestAccountCreationToken: Option[String],
   v2recaptchaConfigPublicKey: String,
-  allCheckoutNudgeProductPrices: AllProductPrices,
   promotions: Seq[PromoWithCatalogInformation],
+  checkoutNudgePromotions: Seq[PromoWithCatalogInformation],
   productCatalog: JsonObject,
   taxRates: JsonObject,
   user: Option[User],
@@ -44,8 +43,8 @@
 ){
   <script type="text/javascript">
     window.guardian = window.guardian || {};
-    window.guardian.allCheckoutNudgeProductPrices = @Html(outputJson(allCheckoutNudgeProductPrices))
     window.guardian.promotions = @Html(outputJson(promotions))
+    window.guardian.checkoutNudgePromotions = @Html(outputJson(checkoutNudgePromotions))
     window.guardian.tickerData = @Html(outputJson(tickerData))
   </script>
 

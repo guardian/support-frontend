@@ -10,12 +10,10 @@ import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.i18n.Country
 import com.gu.identity.model.{User => IdUser}
-import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper, Product, SupporterPlus, TierThree}
+import com.gu.support.catalog.SupporterPlus
 import com.gu.support.config.Stages.PROD
 import com.gu.support.config._
-import com.gu.support.encoding.InternationalisationCodecs
 import com.gu.support.promotions.PromoWithCatalogInformation
-import com.gu.support.zuora.api.ReaderType.Gift
 import com.typesafe.scalalogging.StrictLogging
 import config.{RecaptchaConfigProvider, StringsConfig}
 import controllers.AppConfig.CsrfToken
@@ -28,7 +26,7 @@ import models.GeoData
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.mparticle.MParticleClient
-import services.pricing.{DefaultPromotionService, PriceSummaryServiceProvider, ProductPrices}
+import services.pricing.{DefaultPromotionService, PriceSummaryServiceProvider}
 import services.{
   ApplicablePromotions,
   CachedProductCatalogServiceProvider,
@@ -63,15 +61,14 @@ case class AppConfig private (
     v2recaptchaPublicKey: String,
     checkoutPostcodeLookup: Boolean,
     productCatalog: JsonObject,
-    allCheckoutNudgeProductPrices: AllProductPrices,
     promotions: Seq[PromoWithCatalogInformation],
+    checkoutNudgePromotions: Seq[PromoWithCatalogInformation],
     serversideTests: Map[String, Participation],
     user: Option[AppConfig.User],
     settings: AllSettings,
 )
 
-// InternationalisationCodecs is needed for ProductPrices
-object AppConfig extends InternationalisationCodecs {
+object AppConfig {
   import io.circe.Encoder
   import io.circe.generic.semiauto.deriveEncoder
   import io.circe.JsonObject // This is needed for the JsonObject derivation
@@ -92,8 +89,8 @@ object AppConfig extends InternationalisationCodecs {
       recaptchaConfigProvider: RecaptchaConfigProvider,
       productCatalog: JsonObject,
       serversideTests: Map[String, Participation],
-      allCheckoutNudgeProductPrices: AllProductPrices,
       promotions: Seq[PromoWithCatalogInformation],
+      checkoutNudgePromotions: Seq[PromoWithCatalogInformation],
       user: Option[IdUser],
       isTestUser: Boolean,
       settings: AllSettings,
@@ -167,8 +164,8 @@ object AppConfig extends InternationalisationCodecs {
       checkoutPostcodeLookup = settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.contains(On),
       productCatalog = productCatalog,
       serversideTests = serversideTests,
-      allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
       promotions = promotions,
+      checkoutNudgePromotions = checkoutNudgePromotions,
       user = user.map(user =>
         User(
           id = user.id,
@@ -195,28 +192,6 @@ case class PaymentMethodConfigs(
     regularDefaultPayPalCompletePaymentsConfig: PayPalCompletePaymentsConfig,
     regularTestPayPalCompletePaymentsConfig: PayPalCompletePaymentsConfig,
 )
-
-/** This class is only needed because you can't pass more than 22 arguments to a twirl template and passing both types
-  * of product prices to the contributions template would exceed that limit.
-  *
-  * We've also gone against the grain with Capitalising the prop names, but that's to match the ProductKeys in the
-  * Product API.
-  *
-  * @see
-  *   https://product-catalog.guardianapis.com/product-catalog.json
-  */
-case class AllProductPrices(
-    SupporterPlus: ProductPrices,
-    TierThree: ProductPrices,
-    Paper: ProductPrices,
-    GuardianWeekly: ProductPrices,
-    GuardianWeeklyGift: ProductPrices,
-    DigitalPack: ProductPrices,
-)
-
-object AllProductPrices extends InternationalisationCodecs {
-  implicit val allProductPricesEncoder: Encoder[AllProductPrices] = deriveEncoder
-}
 
 class Application(
     actionRefiners: CustomActionBuilders,
@@ -251,26 +226,33 @@ class Application(
 
   implicit val a: AssetsResolver = assets
 
-  def getAllProductPrices(isTestUser: Boolean, queryPromos: List[String]): AllProductPrices = {
-    AllProductPrices(
-      SupporterPlus = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos),
-      TierThree = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos),
-      Paper = priceSummaryServiceProvider.forUser(isTestUser).getPrices(Paper, queryPromos),
-      GuardianWeekly = priceSummaryServiceProvider.forUser(isTestUser).getPrices(GuardianWeekly, queryPromos),
-      GuardianWeeklyGift = priceSummaryServiceProvider.forUser(isTestUser).getPrices(GuardianWeekly, queryPromos, Gift),
-      DigitalPack = priceSummaryServiceProvider.forUser(isTestUser).getPrices(DigitalPack, queryPromos),
-    )
-  }
-
   private def getPromotions(
       isTestUser: Boolean,
       queryPromos: List[String],
       maybeCountryGroup: Option[CountryGroup],
   ): Seq[PromoWithCatalogInformation] =
+    getPromotionsForCodes(isTestUser, queryPromos ++ defaultPromotionService.allPromoCodes, maybeCountryGroup)
+
+  // Kept separate from the page promotions so that nudge promo codes are only applied via the nudge
+  private def getCheckoutNudgePromotions(
+      isTestUser: Boolean,
+      maybeCountryGroup: Option[CountryGroup],
+  )(implicit settings: AllSettings): Seq[PromoWithCatalogInformation] = {
+    val checkoutNudgePromoCodes = settings.checkoutNudgeTests
+      .filter(_.status == Live)
+      .flatMap(_.variants)
+      .flatMap(_.promoCodes.getOrElse(Nil))
+    getPromotionsForCodes(isTestUser, checkoutNudgePromoCodes, maybeCountryGroup)
+  }
+
+  private def getPromotionsForCodes(
+      isTestUser: Boolean,
+      promoCodes: List[String],
+      maybeCountryGroup: Option[CountryGroup],
+  ): Seq[PromoWithCatalogInformation] =
     maybeCountryGroup
       .map { countryGroup =>
-        val promoCodes = (queryPromos ++ defaultPromotionService.allPromoCodes).distinct
-        val promotions = cachedPromotionsServiceProvider.forUser(isTestUser).getActive(promoCodes)
+        val promotions = cachedPromotionsServiceProvider.forUser(isTestUser).getActive(promoCodes.distinct)
         ApplicablePromotions.filterByCountryGroup(promotions, countryGroup)
       }
       .getOrElse(Nil)
@@ -651,13 +633,7 @@ class Application(
         .toList
 
     val promotions = getPromotions(isTestUser, queryPromos, CountryGroup.byId(countryGroupId))
-
-    val checkoutNudgePromoCodes = settings.checkoutNudgeTests
-      .filter(_.status == Live)
-      .flatMap(_.variants)
-      .flatMap(_.promoCodes.getOrElse(Nil))
-      .distinct
-    val allCheckoutNudgeProductPrices = getAllProductPrices(isTestUser, checkoutNudgePromoCodes)
+    val checkoutNudgePromotions = getCheckoutNudgePromotions(isTestUser, CountryGroup.byId(countryGroupId))
 
     Ok(
       views.html.router(
@@ -676,8 +652,8 @@ class Application(
         membersDataApiUrl = membersDataApiUrl,
         guestAccountCreationToken = guestAccountCreationToken,
         v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
-        allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
         promotions = promotions,
+        checkoutNudgePromotions = checkoutNudgePromotions,
         productCatalog = productCatalog,
         taxRates = taxRates,
         user = request.user,
@@ -704,13 +680,7 @@ class Application(
 
     val queryPromos = request.queryString.getOrElse("promoCode", Nil).toList
     val promotions = getPromotions(isTestUser, queryPromos, request.geoData.countryGroup)
-
-    val checkoutNudgePromoCodes = settings.checkoutNudgeTests
-      .filter(_.status == Live)
-      .flatMap(_.variants)
-      .flatMap(_.promoCodes.getOrElse(Nil))
-      .distinct
-    val allCheckoutNudgeProductPrices = getAllProductPrices(isTestUser, checkoutNudgePromoCodes)
+    val checkoutNudgePromotions = getCheckoutNudgePromotions(isTestUser, request.geoData.countryGroup)
 
     val appConfig = AppConfig.fromConfig(
       geoData = request.geoData,
@@ -730,8 +700,8 @@ class Application(
       recaptchaConfigProvider: RecaptchaConfigProvider,
       productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get(),
       serversideTests = generateParticipations(Nil),
-      allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
       promotions = promotions,
+      checkoutNudgePromotions = checkoutNudgePromotions,
       user = request.user,
       isTestUser = isTestUser,
       settings = settings,
