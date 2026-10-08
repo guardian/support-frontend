@@ -406,29 +406,10 @@ export function ThreeTierLanding({
 		countryGroupId,
 		abParticipations,
 	);
-	const tier3DefaultBenefitsControlOnly = tier3DefaultBenefits.map((item) => {
-		if (item.specificToAbTest) {
-			return {
-				...item,
-				specificToAbTest: item.specificToAbTest.map((test) => {
-					if (test.name === 'multipleAccounts') {
-						return {
-							...test,
-							variants: ['control'],
-						};
-					}
-					return test;
-				}),
-			};
-		}
-		return item;
-	});
 	const tier3ProductDescription = {
 		title: settings.products[tier3Product]?.title ?? title,
 		titlePill: settings.products[tier3Product]?.titlePill ?? titlePill,
-		benefits:
-			settings.products[tier3Product]?.benefits ??
-			tier3DefaultBenefitsControlOnly,
+		benefits: settings.products[tier3Product]?.benefits ?? tier3DefaultBenefits,
 		cta:
 			settings.products[tier3Product]?.cta ??
 			fallbackProducts[tier3Product]!.cta,
