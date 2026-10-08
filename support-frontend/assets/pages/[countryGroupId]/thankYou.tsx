@@ -3,14 +3,15 @@ import type { SupportRegionId } from '@modules/internationalisation/countryGroup
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import { Country } from 'helpers/internationalisation/classes/country';
 import {
 	type ActiveRatePlanKey,
 	isProductKey,
 	productCatalog,
 } from 'helpers/productCatalog';
 import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { getQueryParameter } from 'helpers/urls/url';
 import type { UserType } from 'helpers/user/userType';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
@@ -18,7 +19,6 @@ import { AnalyticsProfileCacheProvider } from '../../helpers/customHooks/analyti
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { setHideSupportMessaginCookie } from '../../helpers/storage/contributionsCookies';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
-import { getPromotionFromProductPrices } from './checkout';
 import type { OnboardingProductKey } from './components/onboardingComponent';
 import OnboardingComponent from './components/onboardingComponent';
 import { ThankYouComponent } from './components/thankYouComponent';
@@ -36,7 +36,6 @@ export function ThankYou({
 	appConfig,
 	landingPageSettings,
 }: ThankYouProps) {
-	const countryId = Country.detect();
 	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
 	const { enableThankYouOnboarding } = useFeatureSwitches();
 
@@ -114,13 +113,14 @@ export function ThankYou({
 				toRegularBillingPeriod(ratePlan.billingPeriod) ?? BillingPeriod.Annual;
 
 			/** Get any promotions */
-			promotion = getPromotionFromProductPrices(
-				appConfig,
+			promotion = getLegacyPromotion({
+				promotions: appConfig.promotions ?? [],
 				productKey,
 				ratePlanKey,
-				countryId,
+				price: productPrice,
 				billingPeriod,
-			);
+				promoCode: getQueryParameter('promoCode'),
+			});
 
 			const discountedPrice = promotion?.discountedPrice ?? undefined;
 			const price = discountedPrice ?? productPrice;

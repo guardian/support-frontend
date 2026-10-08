@@ -177,7 +177,6 @@ const discountSummaryCopy = (
 };
 
 export {
-	getPromotion,
 	getAppliedPromo,
 	applyDiscount,
 	hasDiscount,
