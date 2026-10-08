@@ -8,24 +8,17 @@ import type {
 
 // ----- Types ------ //
 const DigitalPack = 'DigitalPack';
-const PremiumTier = 'PremiumTier';
-const DailyEdition = 'DailyEdition';
 const GuardianWeekly = 'GuardianWeekly';
-const GuardianWeeklyGift = 'GuardianWeeklyGift';
 const Paper = 'Paper';
-const PaperAndDigital = 'PaperAndDigital';
 
-export const subscriptionProductTypes = [
-	DigitalPack,
-	PremiumTier,
-	DailyEdition,
-	GuardianWeekly,
-	GuardianWeeklyGift,
-	Paper,
-	PaperAndDigital,
-] as const;
-
-export type SubscriptionProduct = (typeof subscriptionProductTypes)[number];
+export type SubscriptionProduct =
+	| typeof DigitalPack
+	| 'PremiumTier'
+	| 'DailyEdition'
+	| typeof GuardianWeekly
+	| 'GuardianWeeklyGift'
+	| typeof Paper
+	| 'PaperAndDigital';
 
 type OphanSubscriptionsProduct = 'DIGITAL_SUBSCRIPTION' | 'PRINT_SUBSCRIPTION';
 
