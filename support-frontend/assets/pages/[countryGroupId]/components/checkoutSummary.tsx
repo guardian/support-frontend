@@ -122,6 +122,7 @@ export default function CheckoutSummary({
 			productKey,
 			landingPageSettings,
 			countryGroupId,
+			abParticipations,
 		) ??
 		getBenefitsChecklist(
 			productDescription.benefits,

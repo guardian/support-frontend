@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
-import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import type { BenefitsCheckListData } from '../../../../components/checkoutBenefits/benefitsCheckList';
 import type { Participations } from '../../../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -103,11 +102,9 @@ export const getBenefitsChecklistFromLandingPageTool = (
 	productKey: ProductKey,
 	landingPageSettings: LandingPageVariant,
 	countryGroupId: CountryGroupId,
+	abParticipations: Participations,
 	hideMultipleAccounts?: boolean,
 ): BenefitsCheckListData[] | undefined => {
-	// benefits also need to be filtered by AB test
-	const abParticipations = useAbParticipations();
-
 	// Tier products get their config from the Landing Page tool
 	if (productKey === 'Contribution') {
 		// Also show SupporterPlus benefits greyed out
