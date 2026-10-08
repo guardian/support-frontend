@@ -62,7 +62,7 @@ export function OnboardingInviteeCompleted({
 			'DigitalSubscription',
 			landingPageSettings,
 			countryGroupId,
-			true, // for invitee's we exclude the multiple accounts benefit
+			true, // for invitees we exclude the multiple accounts benefit
 		) ?? [];
 
 	const { windowWidthIsLessThan } = useWindowWidth();
