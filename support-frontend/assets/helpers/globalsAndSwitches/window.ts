@@ -1,15 +1,6 @@
-import { currencyCodeSchema } from '@modules/internationalisation/schemas';
 import { caStateCodes } from '@modules/internationalisation/state';
-import {
-	billingPeriodSchema,
-	fulfilmentOptionsSchema,
-	productOptionsSchema,
-} from '@modules/product/schemas';
 import { promoWithCatalogInformationSchema } from '@modules/promotions/v2/schema';
-import { optional, z } from 'zod';
-import type { LegacyProductType } from 'helpers/legacyTypeConversions';
-import { legacyProductTypes } from 'helpers/legacyTypeConversions';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { z } from 'zod';
 import { isProductKey } from '../productCatalog';
 
 /**
@@ -180,66 +171,10 @@ const ProductCatalogSchema = z.object({
 	),
 });
 
-const countryKeySchema = z.enum([
-	'United Kingdom',
-	'Europe',
-	'Australia',
-	'New Zealand',
-	'United States',
-	'Canada',
-	'International',
-]);
-
 export const dateTimeSchema = z.preprocess(
 	(val) => (typeof val === 'string' ? new Date(val) : val),
 	z.date(),
 );
-const promotionSchema = z.object({
-	name: z.string(),
-	description: z.string(),
-	promoCode: z.string(),
-	discountedPrice: optional(z.number()),
-	numberOfDiscountedPeriods: optional(z.number()),
-	discount: optional(
-		z.object({
-			amount: z.number(),
-			durationMonths: z.number().optional(),
-		}),
-	),
-	starts: dateTimeSchema,
-	expires: dateTimeSchema.optional(),
-	isIntroductoryPricing: z.boolean(),
-});
-
-export const ProductPricesSchema = z.object({
-	allProductPrices: z.record(
-		z.enum([...legacyProductTypes, 'GuardianWeeklyGift']),
-		optional(
-			z.partialRecord(
-				countryKeySchema,
-				z.partialRecord(
-					fulfilmentOptionsSchema,
-					z.partialRecord(
-						productOptionsSchema,
-						z.partialRecord(
-							billingPeriodSchema,
-							z.partialRecord(
-								currencyCodeSchema,
-								z.object({
-									price: z.number(),
-									savingVsRetail: z.number().optional(),
-									currency: currencyCodeSchema,
-									fixedTerm: z.boolean(),
-									promotions: z.array(promotionSchema),
-								}),
-							),
-						),
-					),
-				),
-			),
-		),
-	),
-});
 
 const TaxRatesSchema = z.object({
 	taxRates: z
@@ -255,15 +190,10 @@ const PromotionsSchema = z.object({
 });
 
 const AppConfigSchema = PaymentConfigSchema.merge(ProductCatalogSchema)
-	.merge(ProductPricesSchema)
 	.merge(TaxRatesSchema)
 	.merge(PromotionsSchema);
 
-export type AppConfig = z.infer<typeof AppConfigSchema> & {
-	allProductPrices: Partial<
-		Record<LegacyProductType | 'GuardianWeeklyGift', ProductPrices>
-	>;
-};
+export type AppConfig = z.infer<typeof AppConfigSchema>;
 
 export type WindowTaxRates = AppConfig['taxRates'];
 export type WindowProductCatalog = AppConfig['productCatalog'];
@@ -271,7 +201,7 @@ export type WindowProductCatalog = AppConfig['productCatalog'];
 export const parseAppConfig = (obj: unknown): AppConfig => {
 	const appConfig = AppConfigSchema.safeParse(obj);
 	if (appConfig.success) {
-		return appConfig.data as AppConfig;
+		return appConfig.data;
 	} else {
 		// We allow parsing errors through on PROD as they might not be breaking changes
 		// but we should be aware of them.
