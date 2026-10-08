@@ -14,10 +14,7 @@ import {
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductOptions } from '@modules/product/productOptions';
 import { TaxExclusive, TaxInclusive } from '@modules/product/productOptions';
-import type {
-	ProductKey,
-	ProductRatePlanKey,
-} from '@modules/product-catalog/productCatalog';
+import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -49,6 +46,7 @@ import {
 	getSanitisedHtml,
 	replaceDatePlaceholder,
 } from '../../../helpers/utilities/utilities';
+import { getDigitalRatePlanKey } from '../../[countryGroupId]/helpers/getDigitalRatePlanKey';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import Countdown from '../components/countdown';
 import { StudentOffer } from '../components/studentOffer';
@@ -59,7 +57,6 @@ import { ThreeTierFooter } from '../components/threeTierFooter';
 import type { TsAndCsProps } from '../components/threeTierTsAndCs';
 import { ThreeTierLandingHeading } from './threeTierLandingHeading';
 import { TickerContainer } from './tickerContainer';
-import { getRatePlanKey, useRatePlanKey } from './useRatePlanKey';
 import { useThreeTierUrlSelection } from './useThreeTierUrlSelection';
 
 const recurringContainer = css`
@@ -237,13 +234,6 @@ export function ThreeTierLanding({
 		setContributionType(paymentFrequencies[buttonIndex] as ContributionType);
 	};
 
-	const { ratePlanKey: maybeTaxExclusiveRatePlanKey } = useRatePlanKey(
-		contributionType,
-		supportRegionId,
-	);
-
-	const ratePlanKey = getRatePlanKey(contributionType);
-
 	const fallbackProducts = fallBackLandingPageSelection.products;
 
 	// RRCP LandingPage Test Page / Default Product Selection
@@ -275,11 +265,16 @@ export function ThreeTierLanding({
 	 * We use the product catalog for the recurring Contribution tier amount
 	 */
 	const tier1Product = 'Contribution';
-	const tier1Pricing = productCatalog[tier1Product]?.ratePlans[ratePlanKey]
+	const tier1RatePlanKey = getDigitalRatePlanKey(
+		contributionType,
+		supportRegionId,
+		tier1Product,
+	);
+	const tier1Pricing = productCatalog[tier1Product]?.ratePlans[tier1RatePlanKey]
 		?.pricing[currencyId] as number;
 	const tier1checkoutUrl = buildCheckoutUrl(supportRegionId, {
 		product: tier1Product,
-		ratePlan: ratePlanKey,
+		ratePlan: tier1RatePlanKey,
 		contribution: tier1Pricing,
 	});
 
@@ -306,9 +301,13 @@ export function ThreeTierLanding({
 
 	/** Tier 2: SupporterPlus */
 	const tier2Product = 'SupporterPlus';
-	const tier2Pricing = productCatalog[tier2Product]?.ratePlans[
-		maybeTaxExclusiveRatePlanKey
-	]?.pricing[currencyId] as number;
+	const tier2RatePlanKey = getDigitalRatePlanKey(
+		contributionType,
+		supportRegionId,
+		tier2Product,
+	);
+	const tier2Pricing = productCatalog[tier2Product]?.ratePlans[tier2RatePlanKey]
+		?.pricing[currencyId] as number;
 
 	const tierTwoProductOption = getThreeTierProductOption(
 		tier2Product,
@@ -325,8 +324,7 @@ export function ThreeTierLanding({
 
 	const tier2CheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: tier2Product,
-		ratePlan:
-			maybeTaxExclusiveRatePlanKey as ProductRatePlanKey<'SupporterPlus'>,
+		ratePlan: tier2RatePlanKey,
 		promoCode: tier2Promotion?.promoCode,
 	});
 
@@ -377,13 +375,17 @@ export function ThreeTierLanding({
 	 * This should only exist as long as the Tier three hack is in place.
 	 */
 	const tier3Product = 'DigitalSubscription';
-	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[
-		maybeTaxExclusiveRatePlanKey
-	]?.pricing[currencyId] as number;
+	const tier3RatePlanKey = getDigitalRatePlanKey(
+		contributionType,
+		supportRegionId,
+		tier3Product,
+	);
+	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[tier3RatePlanKey]
+		?.pricing[currencyId] as number;
 
 	const { label: title, labelPill: titlePill } = getProductDescription(
 		'DigitalSubscription',
-		ratePlanKey,
+		tier3RatePlanKey,
 	);
 	const tier3ProductDescription = {
 		title: settings.products[tier3Product]?.title ?? title,
@@ -415,8 +417,7 @@ export function ThreeTierLanding({
 		: undefined;
 	const tier3CheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: tier3Product,
-		ratePlan:
-			maybeTaxExclusiveRatePlanKey as ProductRatePlanKey<'DigitalSubscription'>,
+		ratePlan: tier3RatePlanKey,
 		promoCode: tier3Promotion?.promoCode,
 	});
 
@@ -472,6 +473,16 @@ export function ThreeTierLanding({
 		},
 	];
 
+	const showTaxDisclaimer = [
+		tier1RatePlanKey,
+		tier2RatePlanKey,
+		tier3RatePlanKey,
+	].some(
+		(ratePlanKey) =>
+			ratePlanKey === 'AnnualTaxExclusive' ||
+			ratePlanKey === 'MonthlyTaxExclusive',
+	);
+
 	return (
 		<PageScaffold
 			header={
@@ -486,8 +497,8 @@ export function ThreeTierLanding({
 			footer={
 				<ThreeTierFooter
 					supportRegionId={supportRegionId}
-					contributionType={contributionType}
 					tsAndCsContent={tsAndCsContent}
+					showTaxDisclaimer={showTaxDisclaimer}
 				/>
 			}
 		>

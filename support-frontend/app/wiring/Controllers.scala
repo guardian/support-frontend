@@ -80,8 +80,7 @@ trait Controllers {
   )
 
   lazy val weeklyController = new WeeklySubscriptionController(
-    priceSummaryServiceProvider,
-    landingCopyProvider,
+    defaultPromotionService,
     cachedPromotionsServiceProvider,
     cachedProductCatalogServiceProvider,
     assetsResolver,
