@@ -41,7 +41,7 @@ const benefitsAsChecklist = ({
 export const hideBenefits = (
 	benefits: ProductBenefit[],
 	abTestNameFind: string,
-	abTestVariantsReplace: string[],
+	abTestVariantShow?: string[],
 ): ProductBenefit[] => {
 	return benefits.map((benefit) => {
 		if (benefit.specificToAbTest) {
@@ -51,7 +51,7 @@ export const hideBenefits = (
 					if (abTest.name === abTestNameFind) {
 						return {
 							...abTest,
-							variants: abTestVariantsReplace,
+							variants: abTestVariantShow ?? [''],
 						};
 					}
 					return abTest;
@@ -64,18 +64,26 @@ export const hideBenefits = (
 
 export const filterBenefits = (
 	benefits: ProductBenefit[],
-	countryGroupId: CountryGroupId,
+	countryGroupId?: CountryGroupId,
 	abParticipations?: Participations,
 ): ProductBenefit[] => {
-	const benefitsByCountry = benefits.filter((benefit) =>
-		filterBenefitByRegion(benefit, countryGroupId),
-	);
+	if (countryGroupId) {
+		const benefitsByCountry = benefits.filter((benefit) =>
+			filterBenefitByRegion(benefit, countryGroupId),
+		);
+		if (abParticipations) {
+			return benefitsByCountry.filter((benefit) =>
+				filterBenefitByABTest(benefit, abParticipations),
+			);
+		}
+		return benefitsByCountry;
+	}
 	if (abParticipations) {
-		return benefitsByCountry.filter((benefit) =>
+		return benefits.filter((benefit) =>
 			filterBenefitByABTest(benefit, abParticipations),
 		);
 	}
-	return benefitsByCountry;
+	return benefits;
 };
 
 export const getBenefitsChecklist = (
@@ -95,6 +103,7 @@ export const getBenefitsChecklistFromLandingPageTool = (
 	productKey: ProductKey,
 	landingPageSettings: LandingPageVariant,
 	countryGroupId: CountryGroupId,
+	hideMultipleAccounts?: boolean,
 ): BenefitsCheckListData[] | undefined => {
 	// benefits also need to be filtered by AB test
 	const abParticipations = useAbParticipations();
@@ -130,14 +139,21 @@ export const getBenefitsChecklistFromLandingPageTool = (
 			unchecked: [],
 		});
 	} else if (productKey === 'DigitalSubscription') {
+		const digitalPlusBenefits =
+			landingPageSettings.products.DigitalSubscription?.benefits ??
+			productCatalogDescription.DigitalSubscription.benefits;
+		const digitalPlusBenefitsHideMultipleAccounts = hideMultipleAccounts
+			? hideBenefits(digitalPlusBenefits, 'multipleAccounts')
+			: digitalPlusBenefits;
+		const isLandingPageBenefits =
+			!!landingPageSettings.products.DigitalSubscription?.benefits;
 		return benefitsAsChecklist({
 			checked: [
-				...(landingPageSettings.products.DigitalSubscription?.benefits ??
-					filterBenefits(
-						productCatalogDescription.DigitalSubscription.benefits,
-						countryGroupId,
-						abParticipations,
-					)),
+				...filterBenefits(
+					digitalPlusBenefitsHideMultipleAccounts,
+					isLandingPageBenefits ? undefined : countryGroupId,
+					abParticipations,
+				),
 				...(landingPageSettings.products.SupporterPlus?.benefits ??
 					filterBenefits(
 						productCatalogDescription.SupporterPlus.benefits,

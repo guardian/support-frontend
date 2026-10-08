@@ -69,6 +69,7 @@ export function OnboardingDeclineInvitation({
 			'DigitalSubscription',
 			landingPageSettings,
 			countryGroupId,
+			true, // for invitee's we exclude the multiple accounts benefit
 		) ?? [];
 
 	const confirmDecline = async () => {
