@@ -11,7 +11,10 @@ export const pageUrlRegexes = {
 	oneTimeCheckoutOnly: /(uk|us|au|ca|eu|nz|int)\/one-time-checkout/,
 	landingPageSubscribeOnly: /uk\/subscribe/,
 	landingPagePaperOnly: /uk\/subscribe\/paper/,
+	landingPageContribute: /(uk|us|au|ca|eu|nz|int)\/contribute/,
 	genericCheckoutOnly: /(uk|us|au|ca|eu|nz|int)\/checkout/,
+	genericCheckoutDigitalPlus:
+		/((uk|us|au|ca|eu|nz|int)\/checkout).*?(DigitalSubscription)/,
 	ukPrintCheckoutOnly:
 		/((uk\/checkout).*?(SubscriptionCard|HomeDelivery|NationalDelivery|MonthlyPlus|QuarterlyPlus|AnnualPlus|OneYearGift|ThreeMonthGift))/,
 	paperPages:
@@ -20,8 +23,6 @@ export const pageUrlRegexes = {
 		/((uk|us|ca|eu|nz|int)\/subscribe\/weekly)|(((uk|us|ca|eu|nz|int)\/(checkout|thank-you)).*?(MonthlyPlus|QuarterlyPlus|AnnualPlus))/,
 	weeklyGiftPages:
 		/((uk|us|ca|eu|nz|int)\/subscribe\/weekly\/gift)|((uk|us|ca|eu|nz|int)(\/(checkout|thank-you))).*?(OneYearGift|ThreeMonthGift)/,
-	digitalPlusPages:
-		/((uk|us|au|ca|eu|nz|int)\/contribute)|((uk|us|au|ca|eu|nz|int)\/(checkout|thank-you)).*?(DigitalSubscription)/,
 };
 
 export const tests: Tests = {
@@ -126,7 +127,8 @@ export const tests: Tests = {
 		isActive: false,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 9,
-		targetPage: pageUrlRegexes.digitalPlusPages,
+		targetPage: pageUrlRegexes.landingPageContribute,
+		persistPage: pageUrlRegexes.genericCheckoutDigitalPlus,
 		excludeContributionsOnlyCountries: true,
 	},
 };
