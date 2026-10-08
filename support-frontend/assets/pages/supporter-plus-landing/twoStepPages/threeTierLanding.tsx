@@ -39,7 +39,10 @@ import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPer
 import { allProductPrices } from 'helpers/productPrice/productPrices';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
-import { getBenefitsByCountryABTest } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
+import {
+	filterBenefits,
+	hideBenefits,
+} from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { getTierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
 import { useStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/useStudentBeansRegionValid';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -292,8 +295,8 @@ export function ThreeTierLanding({
 			settings.products[tier1Product]?.title ?? getProductLabel(tier1Product),
 		benefits:
 			settings.products[tier1Product]?.benefits ??
-			getBenefitsByCountryABTest(
-				productCatalogDescription[tier1Product],
+			filterBenefits(
+				productCatalogDescription[tier1Product].benefits,
 				countryGroupId,
 				abParticipations,
 			),
@@ -337,8 +340,8 @@ export function ThreeTierLanding({
 		title: getProductLabel(tier2Product),
 		benefits:
 			settings.products[tier2Product]?.benefits ??
-			getBenefitsByCountryABTest(
-				productCatalogDescription[tier2Product],
+			filterBenefits(
+				productCatalogDescription[tier2Product].benefits,
 				countryGroupId,
 				abParticipations,
 			),
@@ -392,12 +395,17 @@ export function ThreeTierLanding({
 		'DigitalSubscription',
 		tier3RatePlanKey,
 	);
-	const tier3DefaultBenefits = getBenefitsByCountryABTest(
-		productCatalogDescription[tier3Product],
+	// landing page exception to hide abtest multipleAccounts benefit for variants except control
+	const tier3ProductCatalogBenefits = hideBenefits(
+		productCatalogDescription[tier3Product].benefits,
+		'multipleAccounts',
+		['control'],
+	);
+	const tier3DefaultBenefits = filterBenefits(
+		tier3ProductCatalogBenefits,
 		countryGroupId,
 		abParticipations,
 	);
-	console.log('*** tier3DefaultBenefits', tier3DefaultBenefits);
 	const tier3DefaultBenefitsControlOnly = tier3DefaultBenefits.map((item) => {
 		if (item.specificToAbTest) {
 			return {
@@ -415,10 +423,6 @@ export function ThreeTierLanding({
 		}
 		return item;
 	});
-	console.log(
-		'*** tier3DefaultBenefitsControlOnly',
-		tier3DefaultBenefitsControlOnly,
-	);
 	const tier3ProductDescription = {
 		title: settings.products[tier3Product]?.title ?? title,
 		titlePill: settings.products[tier3Product]?.titlePill ?? titlePill,

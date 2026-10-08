@@ -44,7 +44,7 @@ import ThankYouModules from '../../../components/thankYou/thankyouModules';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
-import { getBenefitsByCountry } from '../checkout/helpers/benefitsChecklist';
+import { filterBenefits } from '../checkout/helpers/benefitsChecklist';
 import {
 	getReturnAddress,
 	getThankYouOrder,
@@ -192,8 +192,8 @@ export function ThankYouComponent({
 		if (isTier) {
 			const productBenefits = (
 				landingPageSettings.products[productKey]?.benefits ??
-				getBenefitsByCountry(
-					productCatalogDescription[productKey],
+				filterBenefits(
+					productCatalogDescription[productKey].benefits,
 					countryGroupId,
 				)
 			).map((benefit) => ({
@@ -204,8 +204,8 @@ export function ThankYouComponent({
 				productKey === 'DigitalSubscription'
 					? (
 							landingPageSettings.products.SupporterPlus?.benefits ??
-							getBenefitsByCountry(
-								productCatalogDescription.SupporterPlus,
+							filterBenefits(
+								productCatalogDescription.SupporterPlus.benefits,
 								countryGroupId,
 							)
 					  ).map((benefit) => ({
