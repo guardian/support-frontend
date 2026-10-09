@@ -6,8 +6,12 @@ import type {
 } from '@guardian/source/react-components';
 import { themeButtonReaderRevenueBrand } from '@guardian/source/react-components';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { GBPCountries } from '@modules/internationalisation/countryGroup';
+import {
+	countryGroups,
+	GBPCountries,
+} from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import type * as React from 'react';
 import { themeButtonLegacyGray } from 'components/button/theme';
 import DigitalPlusPackshot from 'components/packshots/digitalPlusPackshot';
@@ -16,11 +20,14 @@ import { WeeklySubscriptionPackShot } from 'components/packshots/weeklyPackshots
 import type { Participations } from 'helpers/abTests/models';
 import { detect, glyph } from 'helpers/internationalisation/currency';
 import type { ProductBenefit } from 'helpers/productCatalog';
-import { getProductCatalog } from 'helpers/productCatalog';
 import {
-	DigitalPack,
+	getProductCatalog,
+	internationaliseProduct,
+} from 'helpers/productCatalog';
+import { getAppliedPromotion } from 'helpers/productPrice/appliedPromotion';
+import { getDiscountedPrice } from 'helpers/productPrice/discountedPrice';
+import {
 	fixDecimals,
-	GuardianWeekly,
 	Paper,
 	sendTrackingEventsOnClick,
 } from 'helpers/productPrice/subscriptions';
@@ -29,7 +36,6 @@ import {
 	guardianWeeklyLanding,
 	paperSubsUrl,
 } from 'helpers/urls/routes';
-import type { PriceCopy, PricingCopy } from '../subscriptionsLandingProps';
 import { weeklySubscriptionProductCardStyle } from './subscriptionCopyStyles';
 
 // types
@@ -148,8 +154,14 @@ function getDigitalPlusSubtitleForBillingPeriods(
 
 function digitalPlus(
 	countryGroupId: CountryGroupId,
-	priceCopy: PriceCopy,
+	promotions: PromoWithCatalogInformation[],
 ): ProductCopy {
+	const offer = getAppliedPromotion(
+		promotions,
+		'DigitalSubscription',
+		'Monthly',
+	)?.description;
+
 	return {
 		title: 'Enjoy our suite of editions with&nbsp;<mark>Digital Plus</mark>',
 		subtitle: getDigitalPlusSubtitleForBillingPeriods(countryGroupId, [
@@ -163,16 +175,26 @@ function digitalPlus(
 		]),
 		benefits: buildDigialPlusBenefits(),
 		productImage: <DigitalPlusPackshot />,
-		offer: priceCopy.discountCopy,
+		offer: offer ?? '',
 		digitalPlusLayout: true,
 	};
 }
 
 function guardianWeekly(
 	countryGroupId: CountryGroupId,
-	priceCopy: PriceCopy,
+	promotions: PromoWithCatalogInformation[],
 	participations: Participations,
 ): ProductCopy {
+	const weeklyProductKey = internationaliseProduct(
+		countryGroups[countryGroupId].supportRegionId,
+		'GuardianWeeklyDomestic',
+	);
+	const offer = getAppliedPromotion(
+		promotions,
+		weeklyProductKey,
+		'MonthlyPlus',
+	)?.description;
+
 	const weeklyFindButton = {
 		ctaButtonText: 'Find out more',
 		link: guardianWeeklyLanding(countryGroupId, false),
@@ -193,7 +215,7 @@ function guardianWeekly(
 		),
 		description:
 			'A curated weekly news magazine featuring our best global journalism in print, delivered wherever you are in the world. Plus, enjoy unlimited access to our full suite of digital benefits for the complete Guardian experience.',
-		offer: priceCopy.discountCopy || '',
+		offer: offer ?? '',
 		buttons: [weeklyFindButton],
 		productImage: <WeeklySubscriptionPackShot />,
 		participations: participations,
@@ -203,11 +225,29 @@ function guardianWeekly(
 
 const paper = (
 	countryGroupId: CountryGroupId,
-	priceCopy: PriceCopy,
+	promotions: PromoWithCatalogInformation[],
 ): ProductCopy => {
+	const currencyKey = detect(countryGroupId);
+	const cheapestPrice =
+		getProductCatalog().SubscriptionCard?.ratePlans.SaturdayPlus?.pricing[
+			currencyKey
+		];
+	const promotion = getAppliedPromotion(
+		promotions,
+		'SubscriptionCard',
+		'SaturdayPlus',
+	);
+	const displayPrice =
+		cheapestPrice !== undefined && promotion?.discount
+			? getDiscountedPrice(cheapestPrice, promotion.discount, BillingPeriod.Monthly)
+			: cheapestPrice;
+
 	return {
 		title: 'Newspaper',
-		subtitle: `from ${getDisplayPrice(countryGroupId, priceCopy.price)}`,
+		subtitle:
+			displayPrice !== undefined
+				? `from ${getDisplayPrice(countryGroupId, displayPrice)}`
+				: '',
 		description:
 			'Save on the Guardian newspaper retail price and enjoy full digital access',
 		buttons: [
@@ -225,22 +265,22 @@ const paper = (
 		],
 		productImage: <PaperPackShot />,
 		imagePosition: 'bottom',
-		offer: priceCopy.discountCopy,
+		offer: promotion?.description ?? '',
 		cssOverrides: css``,
 	};
 };
 
 export const getSubscriptionProducts = (
 	countryGroupId: CountryGroupId,
-	pricingCopy: PricingCopy,
+	promotions: PromoWithCatalogInformation[],
 	participations: Participations,
 ): ProductCopy[] => {
 	const productcopy: ProductCopy[] = [
-		guardianWeekly(countryGroupId, pricingCopy[GuardianWeekly], participations),
+		guardianWeekly(countryGroupId, promotions, participations),
 	];
 	if (countryGroupId === GBPCountries) {
-		productcopy.push(paper(countryGroupId, pricingCopy[Paper]));
+		productcopy.push(paper(countryGroupId, promotions));
 	}
-	productcopy.push(digitalPlus(countryGroupId, pricingCopy[DigitalPack]));
+	productcopy.push(digitalPlus(countryGroupId, promotions));
 	return productcopy;
 };

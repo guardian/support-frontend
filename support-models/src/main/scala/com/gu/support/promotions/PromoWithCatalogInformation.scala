@@ -1,6 +1,6 @@
 package com.gu.support.promotions
 
-import com.gu.i18n.Country
+import com.gu.i18n.{Country, CountryGroup}
 import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.encoding.InternationalisationCodecs
 import io.circe.{Decoder, Encoder}
@@ -22,6 +22,9 @@ object CatalogRatePlan {
   val guardianWeeklyProductKeys: Set[String] = Set("GuardianWeeklyDomestic", "GuardianWeeklyRestOfWorld")
   val paperProductKeys: Set[String] = Set("HomeDelivery", "NationalDelivery", "SubscriptionCard")
   private val guardianWeeklyGiftRatePlanKeys = Set("OneYearGift", "ThreeMonthGift")
+
+  def guardianWeeklyProductKey(countryGroup: CountryGroup): String =
+    if (countryGroup == CountryGroup.RestOfTheWorld) "GuardianWeeklyRestOfWorld" else "GuardianWeeklyDomestic"
 }
 case class AppliesToCatalogInformation(
     productRatePlanIds: Set[ProductRatePlanId],

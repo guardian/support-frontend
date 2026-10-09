@@ -1,4 +1,5 @@
 /* eslint-env browser -- allow usage of window/document globals in Storybook */
+import { productCatalogFixture } from 'fixtures/productCatalogFixture';
 
 function ensureProductCatalog() {
     if (typeof window === 'undefined') {
@@ -6,26 +7,8 @@ function ensureProductCatalog() {
 	}
 
 	window.guardian = window.guardian || {};
-    
-	window.guardian.productCatalog = {
-        DigitalSubscription: {
-            ratePlans: {
-                Annual: {
-                    billingPeriod: 'Annual',
-					pricing: {
-                        GBP: 180,
-					},
-				},
-				Monthly: {
-                    billingPeriod: 'Month',
-                    
-					pricing: {
-                        GBP: 18,
-					},
-				},
-			},
-		},
-	};
+
+	window.guardian.productCatalog = productCatalogFixture;
 }
 
 export function withProductCatalog(storyFn) {
