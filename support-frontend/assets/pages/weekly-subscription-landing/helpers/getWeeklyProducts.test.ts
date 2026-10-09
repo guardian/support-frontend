@@ -8,7 +8,10 @@ import {
 	weeklyBillingPeriods,
 	weeklyGiftBillingPeriods,
 } from 'helpers/productPrice/billingPeriods';
+import { logException } from 'helpers/utilities/logger';
 import { getWeeklyProducts } from './getWeeklyProducts';
+
+jest.mock('helpers/utilities/logger', () => ({ logException: jest.fn() }));
 
 const makePromotion = (
 	promoCode: string,
@@ -116,15 +119,25 @@ describe('getWeeklyProducts', () => {
 		expect(annual?.href).toContain('ratePlan=OneYearGift');
 	});
 
-	it('throws if a rate plan has no price', () => {
-		expect(() =>
-			getWeeklyProducts({
-				countryId: 'GB',
-				countryGroupId: 'GBPCountries',
-				productCatalog: {},
-				promotions: [],
-				billingPeriods: [BillingPeriod.Monthly],
-			}),
-		).toThrow('No price found for billing period Monthly');
+	it('omits and logs billing periods with no price', () => {
+		const productCatalog = JSON.parse(
+			JSON.stringify(productCatalogFixture),
+		) as typeof productCatalogFixture;
+		delete productCatalog.GuardianWeeklyDomestic?.ratePlans.AnnualPlus;
+
+		const products = getWeeklyProducts({
+			countryId: 'GB',
+			countryGroupId: 'GBPCountries',
+			productCatalog,
+			promotions: [],
+			billingPeriods: [BillingPeriod.Monthly, BillingPeriod.Annual],
+		});
+
+		expect(products.map((product) => product.billingPeriod)).toEqual([
+			BillingPeriod.Monthly,
+		]);
+		expect(logException).toHaveBeenCalledWith(
+			'No price found for GuardianWeeklyDomestic billing period Annual',
+		);
 	});
 });

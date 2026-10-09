@@ -30,6 +30,7 @@ import {
 } from 'helpers/productPrice/subscriptions';
 import type { OphanComponentType } from 'helpers/tracking/trackingOphan';
 import { addQueryParamsToURL, getOrigin } from 'helpers/urls/url';
+import { logException } from 'helpers/utilities/logger';
 import { getDiscountSummary } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import {
 	getWeeklyGiftSavingsText,
@@ -121,11 +122,18 @@ export const getWeeklyProducts = ({
 		]),
 	) as Partial<Record<RecurringBillingPeriod, number>>;
 
-	return billingPeriods.map((billingPeriod) => {
+	const billingPeriodsWithPrices = billingPeriods.flatMap((billingPeriod) => {
 		const price = priceByBillingPeriod[billingPeriod];
 		if (price === undefined) {
-			throw new Error(`No price found for billing period ${billingPeriod}`);
+			logException(
+				`No price found for ${productKey} billing period ${billingPeriod}`,
+			);
+			return [];
 		}
+		return [{ billingPeriod, price }];
+	});
+
+	return billingPeriodsWithPrices.map(({ billingPeriod, price }) => {
 		const promotion = getAppliedPromotion(
 			promotions,
 			productKey,
