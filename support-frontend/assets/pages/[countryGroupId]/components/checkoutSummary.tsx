@@ -30,8 +30,8 @@ import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import { buildBackButtonPath } from '../checkout/helpers/backButton';
 import {
-	getBenefitsChecklistFromLandingPageTool,
-	getBenefitsChecklistFromProductDescription,
+	getBenefitsChecklist,
+	getProductBenefitsChecklist,
 } from '../checkout/helpers/benefitsChecklist';
 import { ukSpecificAdditionalBenefit } from '../student/components/StudentHeader';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
@@ -118,13 +118,14 @@ export default function CheckoutSummary({
 
 	const benefitsCheckListData =
 		getPrintPlusDigitalBenefits(productKey, ratePlanKey) ??
-		getBenefitsChecklistFromLandingPageTool(
+		getProductBenefitsChecklist(
 			productKey,
 			landingPageSettings,
 			countryGroupId,
+			abParticipations,
 		) ??
-		getBenefitsChecklistFromProductDescription(
-			productDescription,
+		getBenefitsChecklist(
+			productDescription.benefits,
 			countryGroupId,
 			abParticipations,
 		);

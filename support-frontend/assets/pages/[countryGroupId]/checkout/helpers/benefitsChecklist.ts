@@ -10,10 +10,7 @@ import {
 	filterBenefitByRegion,
 	productCatalogDescription,
 } from '../../../../helpers/productCatalog';
-import type {
-	ProductBenefit,
-	ProductDescription,
-} from '../../../../helpers/productCatalog';
+import type { ProductBenefit } from '../../../../helpers/productCatalog';
 
 const benefitsAsChecklist = ({
 	checked,
@@ -40,10 +37,64 @@ const benefitsAsChecklist = ({
 	];
 };
 
-export const getBenefitsChecklistFromLandingPageTool = (
+export const hideBenefits = (
+	benefits: ProductBenefit[],
+	abTestNameFind: string,
+	abTestVariantShow?: string[],
+): ProductBenefit[] => {
+	return benefits.map((benefit) => {
+		if (benefit.specificToAbTest) {
+			return {
+				...benefit,
+				specificToAbTest: benefit.specificToAbTest.map((abTest) => {
+					if (abTest.name === abTestNameFind) {
+						return {
+							...abTest,
+							variants: abTestVariantShow ?? [''],
+						};
+					}
+					return abTest;
+				}),
+			};
+		}
+		return benefit;
+	});
+};
+
+export const filterBenefits = (
+	benefits: ProductBenefit[],
+	countryGroupId: CountryGroupId,
+	abParticipations?: Participations,
+): ProductBenefit[] => {
+	const benefitsByCountry = benefits.filter((benefit) =>
+		filterBenefitByRegion(benefit, countryGroupId),
+	);
+	if (!abParticipations) {
+		return benefitsByCountry;
+	}
+	return benefitsByCountry.filter((benefit) =>
+		filterBenefitByABTest(benefit, abParticipations),
+	);
+};
+
+export const getBenefitsChecklist = (
+	benefits: ProductBenefit[],
+	countryGroupId: CountryGroupId,
+	abParticipations: Participations,
+): BenefitsCheckListData[] => {
+	return filterBenefits(benefits, countryGroupId, abParticipations).map(
+		(benefit) => ({
+			isChecked: true,
+			text: `${benefit.copyBoldStart ?? ''}${benefit.copy}`,
+		}),
+	);
+};
+
+export const getProductBenefitsChecklist = (
 	productKey: ProductKey,
 	landingPageSettings: LandingPageVariant,
 	countryGroupId: CountryGroupId,
+	abParticipations: Participations,
 ): BenefitsCheckListData[] | undefined => {
 	// Tier products get their config from the Landing Page tool
 	if (productKey === 'Contribution') {
@@ -51,66 +102,67 @@ export const getBenefitsChecklistFromLandingPageTool = (
 		return benefitsAsChecklist({
 			checked:
 				landingPageSettings.products.Contribution?.benefits ??
-				filterProductDescriptionBenefits(
-					productCatalogDescription.Contribution,
+				filterBenefits(
+					productCatalogDescription.Contribution.benefits,
 					countryGroupId,
+					abParticipations,
 				),
 			unchecked:
 				landingPageSettings.products.SupporterPlus?.benefits ??
-				filterProductDescriptionBenefits(
-					productCatalogDescription.SupporterPlus,
+				filterBenefits(
+					productCatalogDescription.SupporterPlus.benefits,
 					countryGroupId,
+					abParticipations,
 				),
 		});
 	} else if (productKey === 'SupporterPlus') {
 		return benefitsAsChecklist({
 			checked:
 				landingPageSettings.products.SupporterPlus?.benefits ??
-				filterProductDescriptionBenefits(
-					productCatalogDescription.SupporterPlus,
+				filterBenefits(
+					productCatalogDescription.SupporterPlus.benefits,
 					countryGroupId,
+					abParticipations,
 				),
 			unchecked: [],
 		});
 	} else if (productKey === 'DigitalSubscription') {
-		return benefitsAsChecklist({
-			checked: [
-				...(landingPageSettings.products.DigitalSubscription?.benefits ??
-					filterProductDescriptionBenefits(
-						productCatalogDescription.DigitalSubscription,
-						countryGroupId,
-					)),
-				...(landingPageSettings.products.SupporterPlus?.benefits ??
-					filterProductDescriptionBenefits(
-						productCatalogDescription.SupporterPlus,
-						countryGroupId,
-					)),
-			],
-			unchecked: [],
-		});
+		return getDigitalSubscriptionBenefitsChecklist(
+			landingPageSettings,
+			countryGroupId,
+			abParticipations,
+			'benefits',
+		);
 	}
 	return;
 };
 
-export const getBenefitsChecklistFromProductDescription = (
-	productDescription: ProductDescription,
+export const getDigitalSubscriptionBenefitsChecklist = (
+	landingPageSettings: LandingPageVariant,
 	countryGroupId: CountryGroupId,
 	abParticipations: Participations,
-): BenefitsCheckListData[] => {
-	return productDescription.benefits
-		.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
-		.filter((benefit) => filterBenefitByABTest(benefit, abParticipations))
-		.map((benefit) => ({
-			isChecked: true,
-			text: `${benefit.copyBoldStart ?? ''}${benefit.copy}`,
-		}));
-};
+	benefitsUser: 'benefits' | 'benefitsSecondaryUser',
+) => {
+	const landingPageDigitalSubscription =
+		landingPageSettings.products.DigitalSubscription;
+	const landingPageDigitalSubscriptionBenefits = landingPageDigitalSubscription
+		? landingPageDigitalSubscription[benefitsUser]
+		: undefined;
+	const digitalPlusBenefits =
+		landingPageDigitalSubscriptionBenefits ??
+		productCatalogDescription.DigitalSubscription[benefitsUser] ??
+		[];
 
-export const filterProductDescriptionBenefits = (
-	productDescription: ProductDescription,
-	countryGroupId: CountryGroupId,
-): ProductBenefit[] => {
-	return productDescription.benefits.filter((benefit) =>
-		filterBenefitByRegion(benefit, countryGroupId),
-	);
+	return benefitsAsChecklist({
+		checked: [
+			...filterBenefits(digitalPlusBenefits, countryGroupId, abParticipations),
+			...(landingPageSettings.products.SupporterPlus?.benefits ??
+				filterBenefits(
+					productCatalogDescription.SupporterPlus.benefits,
+					countryGroupId,
+					abParticipations,
+				)),
+		],
+		unchecked: [],
+	});
 };

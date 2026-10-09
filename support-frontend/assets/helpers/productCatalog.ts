@@ -74,16 +74,18 @@ export const productCatalog = window.guardian.productCatalog;
 // TODO: we should probably move into using this function so we can acess the an updated version of the product catalog
 export const getProductCatalog = () => window.guardian.productCatalog;
 
+export type SpecificToAbTest = {
+	name: string;
+	variants: string[];
+	display: boolean;
+};
+
 export type ProductBenefit = {
 	copy: string;
 	copyBoldStart?: string;
 	tooltip?: string;
 	specificToRegions?: CountryGroupId[];
-	specificToAbTest?: Array<{
-		name: string;
-		variants: string[];
-		display: boolean;
-	}>;
+	specificToAbTest?: SpecificToAbTest[];
 	isNew?: boolean;
 	hideBullet?: boolean;
 };
@@ -101,12 +103,13 @@ type RatePlanDetails = Record<
 
 export type ProductDescription = {
 	label: string;
-	labelPill?: string;
-	thankyouMessage?: string;
+	ratePlans: RatePlanDetails;
 	benefits: ProductBenefit[];
 	landingPagePath: string;
+	labelPill?: string;
+	thankyouMessage?: string;
+	benefitsSecondaryUser?: ProductBenefit[];
 	deliverableTo?: Record<string, string>;
-	ratePlans: RatePlanDetails;
 };
 
 export const showSimilarProductsConsentForRatePlan = (
@@ -219,9 +222,9 @@ const guardianWeeklyGiftBenefit = {
 
 const feastBenefit = {
 	copy: 'Unlimited access to the Guardian Feast app',
-	isNew: true,
 	tooltip:
 		'Make a feast out of anything with the Guardian’s new recipe app. Feast has thousands of recipes including quick and budget-friendly weeknight dinners, and showstopping weekend dishes – plus smart app features to make mealtimes inspiring.',
+	label: { copy: 'New' },
 };
 
 const supporterPlusBenefits = [
@@ -325,12 +328,12 @@ const paperArchiveDigitalBenefitUK = {
 };
 
 const weeklyDigitalBenefit = {
-	copy: `Guardian Weekly digital magazines`,
+	copy: `Guardian Weekly e-magazine`,
 	tooltip: `Accessed through the Guardian Editions app, the Guardian Weekly e-magazine features a handpicked and carefully curated selection of in-depth articles, global news, opinion and more. Enjoy wherever you are, on your favourite device.`,
 };
 
 const editionsDigitalBenefit = {
-	copy: `The Long Read digital magazines`,
+	copy: `The Long Read e-magazine`,
 	tooltip: `Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.`,
 };
 
@@ -346,6 +349,20 @@ const paperArchiveDigitalBenefit = {
 		'Canada',
 		'International',
 	] as CountryGroupId[],
+};
+
+const multipleAccountsBenefit = {
+	copy: 'Three extra accounts to share',
+	tooltip:
+		'You can share your Digital plus access with three other people. Each person gets their own account and login.',
+	label: { copy: 'New' },
+	specificToAbTest: [
+		{
+			name: 'multipleAccounts',
+			variants: ['control', 'v1', 'v2'],
+			display: true,
+		},
+	] as SpecificToAbTest[],
 };
 
 export const productCatalogDescription: Record<
@@ -370,11 +387,19 @@ export const productCatalogDescription: Record<
 		thankyouMessage: digitalThankyouMessage,
 		landingPagePath: '/contribute',
 		benefits: [
-			weeklyDigitalBenefit,
-			editionsDigitalBenefit,
+			multipleAccountsBenefit,
 			paperArchiveDigitalBenefit,
 			paperArchiveDigitalBenefitUK,
 			digitalPaperBenefitUK,
+			weeklyDigitalBenefit,
+			editionsDigitalBenefit,
+		],
+		benefitsSecondaryUser: [
+			paperArchiveDigitalBenefit,
+			paperArchiveDigitalBenefitUK,
+			digitalPaperBenefitUK,
+			weeklyDigitalBenefit,
+			editionsDigitalBenefit,
 		],
 		ratePlans: {
 			Monthly: {

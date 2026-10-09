@@ -19,6 +19,25 @@ const fallbackDefaultProductSelection: DefaultProductSelection = {
 	billingPeriod: 'Monthly',
 };
 
+const fallbackDigitalPlusBenefits = [
+	{
+		copy: 'Digital access to the Guardian’s 200 year newspaper archive',
+		tooltip:
+			'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was in the UK, since 1821.',
+	},
+	{ copy: 'Daily digital Guardian newspaper' },
+	{
+		copy: 'Guardian Weekly e-magazine',
+		tooltip:
+			'Accessed through the Guardian Editions app, the Guardian Weekly e-magazine features a handpicked and carefully curated selection of in-depth articles, global news, opinion and more. Enjoy wherever you are, on your favourite device.',
+	},
+	{
+		copy: 'The Long Read e-magazine',
+		tooltip:
+			'Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.',
+	},
+];
+
 export const fallBackLandingPageSelection: LandingPageVariant = {
 	name: 'CONTROL',
 	copy: {
@@ -71,23 +90,22 @@ export const fallBackLandingPageSelection: LandingPageVariant = {
 			title: ProductTierLabel.DigitalSubscription,
 			benefits: [
 				{
-					copy: 'Guardian Weekly e-magazine',
+					copy: 'Three extra accounts to share',
 					tooltip:
-						'Accessed through the Guardian Editions app, the Guardian Weekly e-magazine features a handpicked and carefully curated selection of in-depth articles, global news, opinion and more. Enjoy wherever you are, on your favourite device.',
+						'You can share your Digital plus access with three other people. Each person gets their own account and login.',
+					label: { copy: 'New' },
+					specificToAbTest: [
+						{
+							name: 'multipleAccounts',
+							variants: ['control', 'v1', 'v2'],
+							display: true,
+						},
+					],
 				},
-				{
-					copy: 'The Long Read e-magazine',
-					tooltip:
-						'Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.',
-				},
-				{
-					copy: 'Digital access to the Guardian’s 200 year newspaper archive',
-					tooltip:
-						'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was in the UK, since 1821.',
-				},
-				{ copy: 'Daily digital Guardian newspaper' },
+				...fallbackDigitalPlusBenefits,
 			],
 			cta: { copy: 'Support' },
+			benefitsSecondaryUser: [...fallbackDigitalPlusBenefits],
 		},
 	},
 	defaultProductSelection: fallbackDefaultProductSelection,

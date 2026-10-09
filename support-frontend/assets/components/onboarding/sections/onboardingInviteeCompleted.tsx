@@ -7,11 +7,12 @@ import {
 } from '@guardian/source/react-components';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import GridImage from 'components/gridImage/gridImage';
+import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import type { OnboardingInviteeInvitation } from 'helpers/onboardingInvitee/invitation';
 import { getHelpCentreUrl, getManageSubsUrl } from 'helpers/urls/externalLinks';
 import { getBaseDomain } from 'helpers/urls/url';
-import { getBenefitsChecklistFromLandingPageTool } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
+import { getDigitalSubscriptionBenefitsChecklist } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import ContentBox from '../contentBox';
@@ -55,14 +56,15 @@ export function OnboardingInviteeCompleted({
 	landingPageSettings: LandingPageVariant;
 	supportRegionId: SupportRegionId;
 }) {
+	const abParticipations = useAbParticipations();
 	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 
-	const benefitsChecklist =
-		getBenefitsChecklistFromLandingPageTool(
-			'DigitalSubscription',
-			landingPageSettings,
-			countryGroupId,
-		) ?? [];
+	const benefitsChecklist = getDigitalSubscriptionBenefitsChecklist(
+		landingPageSettings,
+		countryGroupId,
+		abParticipations,
+		'benefitsSecondaryUser',
+	);
 
 	const { windowWidthIsLessThan } = useWindowWidth();
 
