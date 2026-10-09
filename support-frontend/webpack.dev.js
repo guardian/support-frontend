@@ -7,6 +7,7 @@ const expressRoutePrefixes = [
 	'/healthcheck-express',
 	'/api/postcode-lookup/',
 	'/api/delivery-agents/',
+	'/api/whoami',
 ];
 
 module.exports = merge(common('[name].js'), {

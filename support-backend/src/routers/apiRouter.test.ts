@@ -1,5 +1,6 @@
 import express from 'express';
 import request from 'supertest';
+import { getOktaConfig } from '../config/okta';
 import { IdealPostcodeService } from '../services/idealPostcodeService';
 import { PaperRoundService } from '../services/paperRoundService';
 import { buildApiRouter } from './apiRouter';
@@ -9,9 +10,10 @@ const paperRoundService = new PaperRoundService(
 	'https://paperround.example.com',
 	'fake_api_key',
 );
+const oktaConfig = getOktaConfig('DEV');
 
 const app = express();
-app.use(buildApiRouter(idealPostcodeService, paperRoundService));
+app.use(buildApiRouter(idealPostcodeService, paperRoundService, oktaConfig));
 
 afterEach(() => {
 	jest.restoreAllMocks();
