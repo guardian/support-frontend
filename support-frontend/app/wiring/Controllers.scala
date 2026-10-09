@@ -62,14 +62,8 @@ trait Controllers {
     cachedProductCatalogServiceProvider,
   )
 
-  private lazy val landingCopyProvider = new LandingCopyProvider(
-    promotionServiceProvider,
-    appConfig.stage,
-  )
-
   lazy val paperController = new PaperSubscriptionController(
-    priceSummaryServiceProvider,
-    landingCopyProvider,
+    defaultPromotionService,
     cachedPromotionsServiceProvider,
     cachedProductCatalogServiceProvider,
     assetsResolver,

@@ -63,29 +63,18 @@ export const hideBenefits = (
 
 export const filterBenefits = (
 	benefits: ProductBenefit[],
-	countryGroupId?: CountryGroupId,
+	countryGroupId: CountryGroupId,
 	abParticipations?: Participations,
 ): ProductBenefit[] => {
-	const filterBenefitsByABTest = (
-		benefits: ProductBenefit[],
-		abParticipations: Participations,
-	) => {
-		return benefits.filter((benefit) =>
-			filterBenefitByABTest(benefit, abParticipations),
-		);
-	};
-
-	if (countryGroupId) {
-		const benefitsByCountry = benefits.filter((benefit) =>
-			filterBenefitByRegion(benefit, countryGroupId),
-		);
-		return abParticipations
-			? filterBenefitsByABTest(benefitsByCountry, abParticipations)
-			: benefitsByCountry;
+	const benefitsByCountry = benefits.filter((benefit) =>
+		filterBenefitByRegion(benefit, countryGroupId),
+	);
+	if (!abParticipations) {
+		return benefitsByCountry;
 	}
-	return abParticipations
-		? filterBenefitsByABTest(benefits, abParticipations)
-		: benefits;
+	return benefitsByCountry.filter((benefit) =>
+		filterBenefitByABTest(benefit, abParticipations),
+	);
 };
 
 export const getBenefitsChecklist = (
@@ -101,12 +90,11 @@ export const getBenefitsChecklist = (
 	);
 };
 
-export const getBenefitsChecklistFromLandingPageTool = (
+export const getProductBenefitsChecklist = (
 	productKey: ProductKey,
 	landingPageSettings: LandingPageVariant,
 	countryGroupId: CountryGroupId,
 	abParticipations: Participations,
-	hideMultipleAccounts?: boolean,
 ): BenefitsCheckListData[] | undefined => {
 	// Tier products get their config from the Landing Page tool
 	if (productKey === 'Contribution') {
@@ -139,30 +127,42 @@ export const getBenefitsChecklistFromLandingPageTool = (
 			unchecked: [],
 		});
 	} else if (productKey === 'DigitalSubscription') {
-		const digitalPlusBenefits =
-			landingPageSettings.products.DigitalSubscription?.benefits ??
-			productCatalogDescription.DigitalSubscription.benefits;
-		const digitalPlusBenefitsInclHidden = hideMultipleAccounts
-			? hideBenefits(digitalPlusBenefits, 'multipleAccounts')
-			: digitalPlusBenefits;
-		const isLandingPageBenefits =
-			!!landingPageSettings.products.DigitalSubscription?.benefits;
-		return benefitsAsChecklist({
-			checked: [
-				...filterBenefits(
-					digitalPlusBenefitsInclHidden,
-					isLandingPageBenefits ? undefined : countryGroupId,
-					abParticipations,
-				),
-				...(landingPageSettings.products.SupporterPlus?.benefits ??
-					filterBenefits(
-						productCatalogDescription.SupporterPlus.benefits,
-						countryGroupId,
-						abParticipations,
-					)),
-			],
-			unchecked: [],
-		});
+		return getDigitalSubscriptionBenefitsChecklist(
+			landingPageSettings,
+			countryGroupId,
+			abParticipations,
+			'benefits',
+		);
 	}
 	return;
+};
+
+export const getDigitalSubscriptionBenefitsChecklist = (
+	landingPageSettings: LandingPageVariant,
+	countryGroupId: CountryGroupId,
+	abParticipations: Participations,
+	benefitsUser: 'benefits' | 'benefitsSecondaryUser',
+) => {
+	const landingPageDigitalSubscription =
+		landingPageSettings.products.DigitalSubscription;
+	const landingPageDigitalSubscriptionBenefits = landingPageDigitalSubscription
+		? landingPageDigitalSubscription[benefitsUser]
+		: undefined;
+	const digitalPlusBenefits =
+		landingPageDigitalSubscriptionBenefits ??
+		productCatalogDescription.DigitalSubscription[benefitsUser] ??
+		[];
+
+	return benefitsAsChecklist({
+		checked: [
+			...filterBenefits(digitalPlusBenefits, countryGroupId, abParticipations),
+			...(landingPageSettings.products.SupporterPlus?.benefits ??
+				filterBenefits(
+					productCatalogDescription.SupporterPlus.benefits,
+					countryGroupId,
+					abParticipations,
+				)),
+		],
+		unchecked: [],
+	});
 };

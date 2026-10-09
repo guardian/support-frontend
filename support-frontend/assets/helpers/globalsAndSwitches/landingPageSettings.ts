@@ -60,15 +60,16 @@ export interface ProductBenefit {
 // Pricing comes from the product catalog - not configurable here
 export interface LandingPageProductDescription {
 	title: string;
+	benefits: ProductBenefit[];
+	cta: {
+		copy: string;
+	};
 	titlePill?: string;
 	billingPeriodsCopy?: string;
 	label?: {
 		copy: string;
 	};
-	benefits: ProductBenefit[];
-	cta: {
-		copy: string;
-	};
+	benefitsSecondaryUser?: ProductBenefit[];
 }
 
 export interface DefaultProductSelection {

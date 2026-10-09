@@ -1,15 +1,13 @@
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import type { Participations } from 'helpers/abTests/models';
-import {
-	getProductPrices,
-	getPromotionCopy,
-} from 'helpers/globalsAndSwitches/globals';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import type { PromotionCopy } from 'helpers/productPrice/promotions';
+import type { WindowProductCatalog } from 'helpers/globalsAndSwitches/window';
+import { getQueryParameter } from 'helpers/urls/url';
 
 export type PaperLandingPropTypes = {
-	productPrices: ProductPrices | null | undefined;
-	promotionCopy: PromotionCopy | null | undefined;
+	productCatalog: WindowProductCatalog;
+	promotions: PromoWithCatalogInformation[];
+	promoCode?: string;
 	participations: Participations;
 	fulfilment?: PaperFulfilmentOptions;
 };
@@ -17,7 +15,8 @@ export type PaperLandingPropTypes = {
 export const paperLandingProps = (
 	participations: Participations,
 ): PaperLandingPropTypes => ({
-	productPrices: getProductPrices(),
-	promotionCopy: getPromotionCopy(),
+	productCatalog: window.guardian.productCatalog,
+	promotions: window.guardian.promotions ?? [],
+	promoCode: getQueryParameter('promoCode'),
 	participations,
 });

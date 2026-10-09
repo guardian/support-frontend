@@ -1,5 +1,6 @@
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Collection, HomeDelivery } from '@modules/product/fulfilmentOptions';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import type { ReactElement } from 'react';
 import { useMemo, useState } from 'react';
 import CentredContainer from 'components/containers/centredContainer';
@@ -7,13 +8,11 @@ import FullWidthContainer from 'components/containers/fullWidthContainer';
 import Carousel from 'components/product/Carousel';
 import Tabs, { type TabProps } from 'components/tabs/tabs';
 import { usePromoTerms } from 'contexts/PromoTermsContext';
-import { ActivePaperProductTypes } from 'helpers/productCatalogToProductOption';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { WindowProductCatalog } from 'helpers/globalsAndSwitches/window';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import NewspaperRatePlanCard from 'pages/paper-subscription-landing/components/NewspaperRatePlanCard';
 import { getPlans } from '../helpers/getPlans';
-import getPaperPromotions from '../helpers/getPromotions';
 import { windowSetHashProperty } from '../helpers/windowSetHashProperty';
 import NewspaperTabHero from './content/NewspaperTabHero';
 import { cardsContainer } from './NewspapperProductTabsStyles';
@@ -39,10 +38,14 @@ const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
 };
 
 function NewspaperProductTabs({
-	productPrices,
+	productCatalog,
+	promotions,
+	promoCode,
 	fulfilment,
 }: {
-	productPrices: ProductPrices;
+	productCatalog: WindowProductCatalog;
+	promotions: PromoWithCatalogInformation[];
+	promoCode?: string;
 	fulfilment?: PaperFulfilmentOptions;
 }) {
 	const paperFulfilment =
@@ -54,20 +57,15 @@ function NewspaperProductTabs({
 	const { windowWidthIsGreaterThan } = useWindowWidth();
 	const { setPromoTerms } = usePromoTerms();
 
-	const promotions = useMemo(
-		() =>
-			getPaperPromotions({
-				activePaperProductTypes: ActivePaperProductTypes,
-				productPrices,
-				paperFulfilment: selectedTab,
-			}),
-		[selectedTab],
-	);
-
 	const productRatePlans = useMemo(
 		() =>
-			getPlans(selectedTab, productPrices, ActivePaperProductTypes, promotions),
-		[selectedTab, promotions],
+			getPlans({
+				fulfilmentOption: selectedTab,
+				productCatalog,
+				promotions,
+				promoCode,
+			}),
+		[selectedTab],
 	);
 
 	const handleTabChange = (tabId: PaperFulfilmentOptions) => {
@@ -113,11 +111,7 @@ function NewspaperProductTabs({
 						renderProducts()
 					)}
 				</section>
-				<PaperLandingTsAndCs
-					paperFulfilment={selectedTab}
-					productPrices={productPrices}
-					activePaperProducts={ActivePaperProductTypes}
-				/>
+				<PaperLandingTsAndCs paperFulfilment={selectedTab} />
 			</CentredContainer>
 		</FullWidthContainer>
 	);
