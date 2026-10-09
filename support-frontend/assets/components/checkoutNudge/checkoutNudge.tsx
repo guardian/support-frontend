@@ -15,19 +15,11 @@ import {
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { BillingPeriod } from '@modules/product/billingPeriod';
-import type { ProductOptions } from '@modules/product/productOptions';
 import { useEffect } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import { Country } from 'helpers/internationalisation/classes/country';
-import { getLegacyProductType } from 'helpers/legacyTypeConversions';
-import { getFulfilmentOptionFromProductKey } from 'helpers/productCatalogToFulfilmentOption';
-import { getProductOptionFromProductAndRatePlan } from 'helpers/productCatalogToProductOption';
-import {
-	allCheckoutNudgeProductPrices,
-	getProductPrice,
-} from 'helpers/productPrice/productPrices';
+import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import {
 	trackComponentClick,
@@ -303,70 +295,31 @@ export function CheckoutNudgeThankYou({
 }
 
 /**
- * Maps ActiveRatePlanKey to BillingPeriod (only Monthly and Annual are supported for promotions)
- */
-const ratePlanToBillingPeriod: Partial<
-	Record<ActiveRatePlanKey, BillingPeriod>
-> = {
-	Monthly: BillingPeriod.Monthly,
-	Annual: BillingPeriod.Annual,
-};
-
-/**
- * Type guard to check if a product key exists in allCheckoutNudgeProductPrices
- */
-function isValidCheckoutNudgeProductKey(
-	key: string,
-): key is keyof typeof allCheckoutNudgeProductPrices {
-	return (
-		!!allCheckoutNudgeProductPrices && key in allCheckoutNudgeProductPrices
-	);
-}
-
-/**
- * Helper to get promotion for the nudge
+ * Gets the promotion for the nudge from the variant's promo codes
  */
 function getNudgePromotion(
 	promoCodes: string[] | undefined,
 	product: ActiveProductKey,
 	ratePlan: ActiveRatePlanKey,
+	price: number,
 ): Promotion | undefined {
-	const legacyProductKey = getLegacyProductType(product, ratePlan);
-	if (
-		!promoCodes?.length ||
-		!isValidCheckoutNudgeProductKey(legacyProductKey) ||
-		!allCheckoutNudgeProductPrices
-	) {
-		return undefined;
-	}
-
-	const productPrices = allCheckoutNudgeProductPrices[legacyProductKey];
-	const billingPeriod = ratePlanToBillingPeriod[ratePlan];
-	if (!billingPeriod) {
-		return undefined;
-	}
-
-	const fulfilmentOption = getFulfilmentOptionFromProductKey(product);
-	const productOptions: ProductOptions = getProductOptionFromProductAndRatePlan(
-		product,
-		ratePlan,
+	const billingPeriod = toRegularBillingPeriod(
+		productCatalog[product]?.ratePlans[ratePlan]?.billingPeriod,
 	);
-
-	try {
-		const productPrice = getProductPrice(
-			productPrices,
-			Country.detect(),
-			billingPeriod,
-			fulfilmentOption,
-			productOptions,
-		);
-		return productPrice.promotions?.find((p) =>
-			promoCodes.includes(p.promoCode),
-		);
-	} catch (error) {
-		console.warn('Failed to get product price for promotion:', error);
+	if (!promoCodes?.length || !billingPeriod) {
 		return undefined;
 	}
+	const variantPromotions = (
+		window.guardian.checkoutNudgePromotions ?? []
+	).filter((promotion) => promoCodes.includes(promotion.promoCode));
+
+	return getLegacyPromotion({
+		promotions: variantPromotions,
+		productKey: product,
+		ratePlanKey: ratePlan,
+		price,
+		billingPeriod,
+	});
 }
 
 /**
@@ -439,6 +392,7 @@ export function CheckoutNudgeSelector({
 		promoCodes,
 		nudgeToProduct.product,
 		ratePlan,
+		amount,
 	);
 
 	const checkListData =
