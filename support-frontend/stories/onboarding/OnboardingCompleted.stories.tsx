@@ -23,5 +23,14 @@ export const SupporterPlus = {
 	args: {
 		productKey: 'SupporterPlus',
 		landingPageSettings: fallBackLandingPageSelection,
+		countryGroupId: 'GBPCountries',
+	},
+};
+
+export const DigitalPlus = {
+	args: {
+		productKey: 'DigitalSubscription',
+		landingPageSettings: fallBackLandingPageSelection,
+		countryGroupId: 'GBPCountries',
 	},
 };

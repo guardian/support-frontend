@@ -9,6 +9,7 @@ import type { SupportRegionId } from '@modules/internationalisation/countryGroup
 import GridImage from 'components/gridImage/gridImage';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import type { OnboardingInviteeInvitation } from 'helpers/onboardingInvitee/invitation';
+import { withoutExtraAccountsBenefit } from 'helpers/onboardingInvitee/inviteeBenefits';
 import { getHelpCentreUrl, getManageSubsUrl } from 'helpers/urls/externalLinks';
 import { getBaseDomain } from 'helpers/urls/url';
 import { getBenefitsChecklistFromLandingPageTool } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
@@ -57,12 +58,13 @@ export function OnboardingInviteeCompleted({
 }) {
 	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 
-	const benefitsChecklist =
+	const benefitsChecklist = withoutExtraAccountsBenefit(
 		getBenefitsChecklistFromLandingPageTool(
 			'DigitalSubscription',
 			landingPageSettings,
 			countryGroupId,
-		) ?? [];
+		) ?? [],
+	);
 
 	const { windowWidthIsLessThan } = useWindowWidth();
 

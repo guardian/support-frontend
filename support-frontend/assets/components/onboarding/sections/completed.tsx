@@ -5,6 +5,7 @@ import {
 	Stack,
 	SvgTickRound,
 } from '@guardian/source/react-components';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import GridImage from 'components/gridImage/gridImage';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { getHelpCentreUrl, getManageSubsUrl } from 'helpers/urls/externalLinks';
@@ -12,6 +13,7 @@ import { getBaseDomain } from 'helpers/urls/url';
 import type { OnboardingProductKey } from 'pages/[countryGroupId]/components/onboardingComponent';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import ContentBox from '../contentBox';
+import { getOnboardingProductCopy } from '../onboardingProductCopy';
 import {
 	benefitsItem,
 	benefitsItemIcon,
@@ -46,12 +48,17 @@ const completedStackPadding = css`
 export function OnboardingCompleted({
 	productKey,
 	landingPageSettings,
+	countryGroupId,
 }: {
 	productKey?: OnboardingProductKey;
 	landingPageSettings: LandingPageVariant;
+	countryGroupId: CountryGroupId;
 }) {
-	const productSettings =
-		productKey && landingPageSettings.products[productKey];
+	const { title: productTitle, benefits } = getOnboardingProductCopy(
+		productKey,
+		landingPageSettings,
+		countryGroupId,
+	);
 
 	const { windowWidthIsLessThan } = useWindowWidth();
 
@@ -76,15 +83,15 @@ export function OnboardingCompleted({
 							Guardian’s trusted journalism stands as a powerful counterforce.
 						</p>
 						<p css={descriptions}>
-							Your support makes that possible, and now that your All-access
-							digital subscription is active, you have access to:
+							Your support makes that possible, and now that your {productTitle}{' '}
+							subscription is active, you have access to:
 						</p>
 					</Stack>
 					<ul>
-						{productSettings?.benefits.map((benefit) => (
+						{benefits.map((benefit, index) => (
 							<li
 								css={benefitsItem}
-								key={`onboarding-summary-benefit-${benefit.copy}`}
+								key={`onboarding-completed-benefit-${index}`}
 							>
 								<div css={benefitsItemIcon}>
 									<SvgTickRound
@@ -93,7 +100,7 @@ export function OnboardingCompleted({
 										theme={{ fill: palette.brand[500] }}
 									/>
 								</div>
-								<span css={benefitsItemText}>{benefit.copy}</span>
+								<span css={benefitsItemText}>{benefit.text}</span>
 							</li>
 						))}
 					</ul>
