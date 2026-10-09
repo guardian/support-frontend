@@ -154,10 +154,13 @@ export const getDigitalSubscriptionBenefitsChecklist = (
 	abParticipations: Participations,
 	benefitsUser: 'benefits' | 'benefitsSecondaryUser',
 ) => {
-	const isLandingPageBenefits =
-		!!landingPageSettings.products.DigitalSubscription?.benefits;
+	const landingPageDigitalSubscription =
+		landingPageSettings.products.DigitalSubscription;
+	const landingPageDigitalSubscriptionBenefits = landingPageDigitalSubscription
+		? landingPageDigitalSubscription[benefitsUser]
+		: undefined;
 	const digitalPlusBenefits =
-		landingPageSettings.products.DigitalSubscription?.benefits ??
+		landingPageDigitalSubscriptionBenefits ??
 		productCatalogDescription.DigitalSubscription[benefitsUser] ??
 		[];
 
@@ -165,7 +168,7 @@ export const getDigitalSubscriptionBenefitsChecklist = (
 		checked: [
 			...filterBenefits(
 				digitalPlusBenefits,
-				isLandingPageBenefits ? undefined : countryGroupId,
+				landingPageDigitalSubscriptionBenefits ? undefined : countryGroupId,
 				abParticipations,
 			),
 			...(landingPageSettings.products.SupporterPlus?.benefits ??
