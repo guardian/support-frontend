@@ -25,6 +25,7 @@ const fallbackDigitalPlusBenefits = [
 		tooltip:
 			'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was in the UK, since 1821.',
 	},
+	{ copy: 'Daily digital Guardian newspaper' },
 	{
 		copy: 'Guardian Weekly e-magazine',
 		tooltip:

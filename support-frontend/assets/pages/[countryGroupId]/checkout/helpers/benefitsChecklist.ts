@@ -63,29 +63,18 @@ export const hideBenefits = (
 
 export const filterBenefits = (
 	benefits: ProductBenefit[],
-	countryGroupId?: CountryGroupId,
+	countryGroupId: CountryGroupId,
 	abParticipations?: Participations,
 ): ProductBenefit[] => {
-	const filterBenefitsByABTest = (
-		benefits: ProductBenefit[],
-		abParticipations: Participations,
-	) => {
-		return benefits.filter((benefit) =>
-			filterBenefitByABTest(benefit, abParticipations),
-		);
-	};
-
-	if (countryGroupId) {
-		const benefitsByCountry = benefits.filter((benefit) =>
-			filterBenefitByRegion(benefit, countryGroupId),
-		);
-		return abParticipations
-			? filterBenefitsByABTest(benefitsByCountry, abParticipations)
-			: benefitsByCountry;
+	const benefitsByCountry = benefits.filter((benefit) =>
+		filterBenefitByRegion(benefit, countryGroupId),
+	);
+	if (!abParticipations) {
+		return benefitsByCountry;
 	}
-	return abParticipations
-		? filterBenefitsByABTest(benefits, abParticipations)
-		: benefits;
+	return benefitsByCountry.filter((benefit) =>
+		filterBenefitByABTest(benefit, abParticipations),
+	);
 };
 
 export const getBenefitsChecklist = (
@@ -166,11 +155,7 @@ export const getDigitalSubscriptionBenefitsChecklist = (
 
 	return benefitsAsChecklist({
 		checked: [
-			...filterBenefits(
-				digitalPlusBenefits,
-				landingPageDigitalSubscriptionBenefits ? undefined : countryGroupId,
-				abParticipations,
-			),
+			...filterBenefits(digitalPlusBenefits, countryGroupId, abParticipations),
 			...(landingPageSettings.products.SupporterPlus?.benefits ??
 				filterBenefits(
 					productCatalogDescription.SupporterPlus.benefits,
