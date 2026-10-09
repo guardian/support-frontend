@@ -239,7 +239,11 @@ const paper = (
 	);
 	const displayPrice =
 		cheapestPrice !== undefined && promotion?.discount
-			? getDiscountedPrice(cheapestPrice, promotion.discount, BillingPeriod.Monthly)
+			? getDiscountedPrice(
+					cheapestPrice,
+					promotion.discount,
+					BillingPeriod.Monthly,
+			  )
 			: cheapestPrice;
 
 	return {
