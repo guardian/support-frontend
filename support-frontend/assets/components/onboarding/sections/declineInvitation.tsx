@@ -14,6 +14,7 @@ import { getBenefitsChecklistFromLandingPageTool } from 'pages/[countryGroupId]/
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import ContentBox from '../contentBox';
+import { withoutExtraAccountsBenefit } from '../inviteeBenefits';
 import {
 	benefitsItem,
 	benefitsItemIcon,
@@ -64,12 +65,13 @@ export function OnboardingDeclineInvitation({
 	const [isDeclining, setIsDeclining] = useState(false);
 	const declineStartedRef = useRef(false);
 
-	const benefitsChecklist =
+	const benefitsChecklist = withoutExtraAccountsBenefit(
 		getBenefitsChecklistFromLandingPageTool(
 			'DigitalSubscription',
 			landingPageSettings,
 			countryGroupId,
-		) ?? [];
+		) ?? [],
+	);
 
 	const confirmDecline = async () => {
 		if (declineStartedRef.current) {

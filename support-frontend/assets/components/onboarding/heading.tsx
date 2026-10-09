@@ -153,7 +153,7 @@ function OnboardingHeading({
 					order?.firstName && order.firstName + ' '
 				}for subscribing to ${displayProductTitle}`,
 				subtext:
-					"You've just joined over 1.3m others who support independent journalism.",
+					"You've just joined over 1.4m others who support independent journalism.",
 				gridId: 'onboardingSummaryHero',
 				altText: 'Onboarding summary hero holding The Guardian logo',
 				aspectRatio: css`

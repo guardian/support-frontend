@@ -15,6 +15,7 @@ import { getBenefitsChecklistFromLandingPageTool } from 'pages/[countryGroupId]/
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import ContentBox from '../contentBox';
+import { withoutExtraAccountsBenefit } from '../inviteeBenefits';
 import {
 	benefitsItem,
 	benefitsItemIcon,
@@ -57,12 +58,13 @@ export function OnboardingInviteeCompleted({
 }) {
 	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 
-	const benefitsChecklist =
+	const benefitsChecklist = withoutExtraAccountsBenefit(
 		getBenefitsChecklistFromLandingPageTool(
 			'DigitalSubscription',
 			landingPageSettings,
 			countryGroupId,
-		) ?? [];
+		) ?? [],
+	);
 
 	const { windowWidthIsLessThan } = useWindowWidth();
 

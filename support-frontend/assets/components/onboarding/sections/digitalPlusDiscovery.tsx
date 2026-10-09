@@ -110,8 +110,8 @@ export function OnboardingDigitalPlusDiscovery({
 				<Stack space={2}>
 					<h1 css={headings}>More of the Guardian with Digital plus</h1>
 					<p css={descriptions}>
-						Your Digital plus subscription includes access to the Feast app, The
-						Long Read, Guardian Weekly, and the Guardian Archives.
+						Your Digital plus subscription includes access to the Guardian Feast app, The
+						Long Read, Guardian Weekly, and the Guardian archives.
 					</p>
 
 					<div
@@ -132,7 +132,7 @@ export function OnboardingDigitalPlusDiscovery({
 							/>
 						</div>
 						<div css={benefitCardContent}>
-							<h2 css={benefitCardHeading}>Discover the Guardian Feast</h2>
+							<h2 css={benefitCardHeading}>Discover the Guardian Feast app</h2>
 							<p css={descriptions}>
 								Level up your cooking with more than 6,000 recipes and smart,
 								exclusive cooking features.
