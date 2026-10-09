@@ -34,20 +34,7 @@ type Story = StoryObj<SubscriptionsLandingProps>;
 const defaultArgs: SubscriptionsLandingProps = {
 	countryGroupId: 'GBPCountries',
 	participations: {},
-	pricingCopy: {
-		GuardianWeekly: {
-			price: 16.5,
-			discountCopy: '',
-		},
-		DigitalPack: {
-			price: 18,
-			discountCopy: '',
-		},
-		Paper: {
-			price: 12.19,
-			discountCopy: '',
-		},
-	} as SubscriptionsLandingProps['pricingCopy'],
+	promotions: [],
 	referrerAcquisitions: {
 		componentType: 'ACQUISITIONS_OTHER',
 		componentId: 'storybook-subscriptions-landing',

@@ -16,7 +16,7 @@ import { subscriptionsLandingProps } from './subscriptionsLandingProps';
 export function SubscriptionsLandingPage({
 	countryGroupId,
 	participations,
-	pricingCopy,
+	promotions,
 	referrerAcquisitions,
 }: SubscriptionsLandingProps) {
 	return (
@@ -27,7 +27,7 @@ export function SubscriptionsLandingPage({
 			<SubscriptionLandingContent
 				countryGroupId={countryGroupId}
 				participations={participations}
-				pricingCopy={pricingCopy}
+				promotions={promotions}
 				referrerAcquisitions={referrerAcquisitions}
 			/>
 		</PageScaffold>
