@@ -19,6 +19,7 @@ import {
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
+import { logException } from 'helpers/utilities/logger';
 import getPlanData from '../planData';
 import { getProductLabel, getTitle } from './products';
 
@@ -240,15 +241,20 @@ export const getPlans = ({
 }): Product[] => {
 	const productKey = getLandingPageProductKey(fulfilmentOption);
 
-	return ActivePaperProductTypes.filter(
+	const ratePlansWithPrices = ActivePaperProductTypes.filter(
 		(productOption) =>
 			productOption.endsWith('Plus') || productOption === 'Sunday',
-	).map((productOption) => {
+	).flatMap((productOption) => {
 		const ratePlan = productCatalog[productKey]?.ratePlans[productOption];
 		const price = ratePlan?.pricing.GBP;
 		if (!ratePlan || price === undefined) {
-			throw new Error(`No price found for ${productKey} ${productOption}`);
+			logException(`No price found for ${productKey} ${productOption}`);
+			return [];
 		}
+		return [{ productOption, ratePlan, price }];
+	});
+
+	return ratePlansWithPrices.map(({ productOption, ratePlan, price }) => {
 		const promotion = getAppliedPromotion(
 			promotions,
 			productKey,
