@@ -3,38 +3,9 @@ import type { Promotion } from '../promotions';
 import {
 	applyDiscount,
 	getAppliedPromo,
-	getSanitisedPromoCopy,
 	hasDiscount,
 	promotionHTML,
 } from '../promotions';
-
-describe('getPromotionCopy', () => {
-	const sanitisablePromotionCopy = {
-		title: 'The Guardian Weekly',
-		description:
-			'The Guardian Weekly magazine:\n- is a round-up of the [world news opinion and long reads that have shaped the week.](https://www.theguardian.com/about/journalism)\n- with striking photography and insightful companion pieces, all handpicked from the Guardian and the Observer.',
-		roundel: '**Save _25%_ for a year!**',
-	};
-
-	it('should return promotion copy if it exists', () => {
-		expect(getSanitisedPromoCopy()).toEqual({});
-		expect(getSanitisedPromoCopy(sanitisablePromotionCopy)).not.toEqual({});
-	});
-
-	it('should return a santised html string when sanitisable promotion copy is provided', () => {
-		expect(getSanitisedPromoCopy(sanitisablePromotionCopy).title).toEqual(
-			sanitisablePromotionCopy.title,
-		);
-
-		expect(getSanitisedPromoCopy(sanitisablePromotionCopy).description).toEqual(
-			'The Guardian Weekly magazine:<ul><li>is a round-up of the <a href="https://www.theguardian.com/about/journalism">world news opinion and long reads that have shaped the week.</a></li><li>with striking photography and insightful companion pieces, all handpicked from the Guardian and the Observer.</li></ul>',
-		);
-
-		expect(getSanitisedPromoCopy(sanitisablePromotionCopy).roundel).toEqual(
-			'<strong>Save <em>25%</em> for a year!</strong>',
-		);
-	});
-});
 
 describe('hasDiscount', () => {
 	it('should cope with all the possible values for promotion.discountPrice', () => {

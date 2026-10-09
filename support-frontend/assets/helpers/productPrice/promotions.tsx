@@ -13,13 +13,12 @@ import type {
 } from 'helpers/productPrice/productPrices';
 import { getProductPrice, isNumeric } from 'helpers/productPrice/productPrices';
 import { getQueryParameter } from 'helpers/urls/url';
-import { getSanitisedHtml } from '../utilities/utilities';
 
 type DiscountBenefit = {
 	amount: number;
 	durationMonths?: number;
 };
-export type PromotionCopy = {
+type PromotionCopy = {
 	title?: string;
 	description?: string;
 	roundel?: string;
@@ -94,20 +93,6 @@ function getPromotion(
 	} catch (error) {
 		return undefined;
 	}
-}
-
-function getSanitisedPromoCopy(
-	promotionCopy?: PromotionCopy | null,
-): PromotionCopy {
-	if (!promotionCopy) {
-		return {};
-	}
-
-	return {
-		title: promotionCopy.title ?? '',
-		description: getSanitisedHtml(promotionCopy.description ?? ''),
-		roundel: getSanitisedHtml(promotionCopy.roundel ?? ''),
-	};
 }
 
 type PromotionHTMLModifiers = {
@@ -196,7 +181,6 @@ export {
 	getAppliedPromo,
 	applyDiscount,
 	hasDiscount,
-	getSanitisedPromoCopy,
 	promotionHTML,
 	finalPrice,
 	discountSummaryCopy,

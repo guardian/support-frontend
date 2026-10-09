@@ -11,7 +11,6 @@ import com.gu.okhttp.RequestRunners
 import com.gu.support.catalog.{DigitalPack, Product, SupporterPlus, TierThree}
 import com.gu.support.idealpostcodes.IdealPostcodesService
 import com.gu.support.paperround.PaperRoundServiceProvider
-import com.gu.support.promotions.PromotionServiceProvider
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSComponents
@@ -142,8 +141,6 @@ trait Services {
 
   lazy val paperRoundServiceProvider: PaperRoundServiceProvider =
     new PaperRoundServiceProvider(appConfig.paperRoundConfigProvider)
-
-  lazy val promotionServiceProvider = new PromotionServiceProvider(appConfig.promotionsConfigProvider)
 
   lazy val prodProductCatalogService: ProdProductCatalogService = new ProdProductCatalogService(
     RequestRunners.futureRunner,
