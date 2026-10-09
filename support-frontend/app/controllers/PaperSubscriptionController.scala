@@ -22,7 +22,6 @@ import scala.concurrent.ExecutionContext
 
 class PaperSubscriptionController(
     defaultPromotionService: DefaultPromotionService,
-    landingCopyProvider: LandingCopyProvider,
     cachedPromotionsServiceProvider: CachedPromotionsServiceProvider,
     cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
     val assets: AssetsResolver,
@@ -65,11 +64,8 @@ class PaperSubscriptionController(
         shareUrl = canonicalLink,
         noindex = stage != PROD,
       ) {
-        val maybePromotionCopy =
-          landingCopyProvider.promotionCopy(queryPromos ++ defaultPromos, Paper, "uk")
         Html(
           s"""<script type="text/javascript">
-      window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
       window.guardian.promotions = ${outputJson(promotions)}
       window.guardian.productCatalog = ${outputJson(productCatalog, dropNullValues = false)}
       </script>""",
