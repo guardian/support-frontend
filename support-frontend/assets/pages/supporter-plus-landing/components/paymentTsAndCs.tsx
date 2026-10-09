@@ -3,8 +3,6 @@ import { neutral, space, textSans12 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import {
-	digitalPlusTermsLink,
-	guardianAdLiteTermsLink,
 	guardianWeeklyTermsLink,
 	manageAccountLink,
 	observerLinks,
@@ -272,44 +270,41 @@ export function PaymentTsAndCs({
 			promotion ? (
 				<div>
 					{prefixBasis(countryGroupId, promotion)} Your first payment will be
-					taken on day 15 after signing up but you can access your benefits
-					straight away. Unless you cancel, each {billingPeriodPlural} payment
+					taken today and you’ll be able to access your benefits straight away.
+					Unless you cancel, each {billingPeriod.toLocaleLowerCase()} payment
 					will be taken on this date using your chosen payment method. You can
-					cancel your subscription at any time before your next renewal date. If
-					you cancel your subscription within 14 days of signing up, your
-					subscription will stop immediately and we will not take the first
-					payment from you. Cancellation of your subscription after 14 days will
-					take effect at the end of your current {billingPeriodPlural} payment
-					period. To cancel, go to Manage My Account or see our Terms.
+					cancel your subscription at any time by going to{' '}
+					{textLink('Manage My Account', manageAccountLink)}. If you cancel
+					within 14 days of signing up, your subscription will end immediately
+					and you'll automatically receive a full refund. Cancellation of your
+					subscription after 14 days will take effect at the end of your current
+					billing period.
 				</div>
 			) : (
 				<div>
-					{supportBasis}. Your first payment will be taken on day 15 after
-					signing up but you can access your benefits straight away. Unless you
-					cancel, each {billingPeriodPlural} payment will be taken on this date
+					{supportBasis}. Your first payment will be taken today and you’ll be
+					able to access your benefits straight away. Unless you cancel, each{' '}
+					{billingPeriod.toLocaleLowerCase()} payment will be taken on this date
 					using your chosen payment method. You can cancel your subscription at
-					any time before your next renewal date. If you cancel your
-					subscription within 14 days of signing up, your subscription will stop
-					immediately and we will not take the first payment from you.
-					Cancellation of your subscription after 14 days will take effect at
-					the end of your current {billingPeriodPlural} payment period. To
-					cancel, go to {textLink('Manage My Account', manageAccountLink)} or
-					see our {textLink('Terms', digitalPlusTermsLink)}.
+					any time by going to
+					{textLink('Manage My Account', manageAccountLink)}. If you cancel
+					within 14 days of signing up, your subscription will end immediately
+					and you'll automatically receive a full refund. Cancellation of your
+					subscription after 14 days will take effect at the end of your current
+					billing period.
 				</div>
 			)
 		) : (
 			<div>
-				Your first payment will be taken on day 15 after signing up but you can
-				access your benefits straight away. Unless you cancel, each{' '}
+				Your first payment will be taken today and you’ll be able to access your
+				benefits straight away. Unless you cancel, each{' '}
 				{billingPeriod.toLocaleLowerCase()} payment will be taken on this date
 				using your chosen payment method. You can cancel your subscription at
-				any time before your next renewal date. If you cancel your subscription
-				within 14 days of signing up, your subscription will stop immediately
-				and we will not take the first payment from you. Cancellation of your
-				subscription after 14 days will take effect at the end of your current{' '}
-				{billingPeriod.toLocaleLowerCase()} payment period. To cancel, go to{' '}
-				{textLink('Manage My Account', manageAccountLink)} or see our{' '}
-				{textLink('Terms', digitalPlusTermsLink)}.
+				any time by going to {textLink('Manage My Account', manageAccountLink)}.
+				If you cancel within 14 days of signing up, your subscription will end
+				immediately and you'll automatically receive a full refund. Cancellation
+				of your subscription after 14 days will take effect at the end of your
+				current billing period.
 			</div>
 		);
 	};
@@ -318,18 +313,14 @@ export function PaymentTsAndCs({
 		DigitalSubscription: digitalSubscriptionTsAndCs(countryGroupId, promotion),
 		GuardianAdLite: (
 			<div>
-				Your Guardian Ad-Lite subscription will auto-renew each{' '}
-				{billingPeriodSingular} unless cancelled. Your first payment will be
-				taken on day 15 after signing up but you will start to receive your
-				Guardian Ad-Lite benefits when you sign up. Unless you cancel,
-				subsequent monthly payments will be taken on this date using your chosen
-				payment method. You can cancel your subscription at any time before your
-				next renewal date. If you cancel your Guardian Ad-Lite subscription
-				within 14 days of signing up, your subscription will stop immediately
-				and we will not take the first payment from you. Cancellation of your
-				subscription after 14 days will take effect at the end of your current
-				monthly payment period. To cancel, go to {ManageMyAccountLink} or see
-				our Guardian Ad-Lite {textLink('Terms', guardianAdLiteTermsLink)}.
+				Your first payment will be taken today. Unless you cancel, each{' '}
+				{billingPeriod.toLocaleLowerCase()} payment will be taken on this date
+				using your chosen payment method. You can cancel your subscription at
+				any time by going to {textLink('Manage My Account', manageAccountLink)}.
+				If you cancel within 14 days of signing up, your subscription will end
+				immediately and you'll automatically receive a full refund. Cancellation
+				of your subscription after 14 days will take effect at the end of your
+				current billing period.
 			</div>
 		),
 		SupporterPlus: (
