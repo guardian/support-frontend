@@ -11,8 +11,7 @@ import com.gu.support.config.Stages.PROD
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.{CatalogRatePlan, PromoWithCatalogInformation}
 import services.{ApplicablePromotions, CachedProductCatalogServiceProvider, CachedPromotionsServiceProvider}
-import services.pricing.PriceSummaryServiceProvider
-import com.gu.support.promotions.DefaultPromotions
+import services.pricing.DefaultPromotionService
 import config.StringsConfig
 import play.api.mvc._
 import play.twirl.api.Html
@@ -22,8 +21,7 @@ import views.ViewHelpers.outputJson
 import scala.concurrent.ExecutionContext
 
 class PaperSubscriptionController(
-    priceSummaryServiceProvider: PriceSummaryServiceProvider,
-    landingCopyProvider: LandingCopyProvider,
+    defaultPromotionService: DefaultPromotionService,
     cachedPromotionsServiceProvider: CachedPromotionsServiceProvider,
     cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
     val assets: AssetsResolver,
@@ -46,7 +44,7 @@ class PaperSubscriptionController(
   def paper(): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val canonicalLink = Some(s"${supportUrl}/uk/subscribe/paper")
-    val defaultPromos = priceSummaryServiceProvider.forUser(isTestUser = false).getDefaultPromoCodes(Paper)
+    val defaultPromos = defaultPromotionService.getPromoCodes(Paper)
     val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
     val promotions = getPromotions(queryPromos ++ defaultPromos)
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser = false).get()
@@ -66,14 +64,8 @@ class PaperSubscriptionController(
         shareUrl = canonicalLink,
         noindex = stage != PROD,
       ) {
-        val maybePromotionCopy =
-          landingCopyProvider.promotionCopy(queryPromos ++ defaultPromos, Paper, "uk")
         Html(
           s"""<script type="text/javascript">
-      window.guardian.productPrices = ${outputJson(
-              priceSummaryServiceProvider.forUser(false).getPrices(Paper, queryPromos),
-            )}
-      window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
       window.guardian.promotions = ${outputJson(promotions)}
       window.guardian.productCatalog = ${outputJson(productCatalog, dropNullValues = false)}
       </script>""",

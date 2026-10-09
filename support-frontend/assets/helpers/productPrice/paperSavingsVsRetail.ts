@@ -1,36 +1,25 @@
-import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
-import { Collection, HomeDelivery } from '@modules/product/fulfilmentOptions';
-import type {
-	CountryGroupPrices,
-	ProductPrices,
-} from 'helpers/productPrice/productPrices';
+import type { ProductKey } from '@modules/product-catalog/productCatalog';
+import type { WindowProductCatalog } from 'helpers/globalsAndSwitches/window';
 import { ActivePaperProductTypes } from '../productCatalogToProductOption';
 
-function getSavingsForFulfilmentOption(
-	prices: CountryGroupPrices,
-	fulfilmentOption: FulfilmentOptions,
-) {
-	return ActivePaperProductTypes.map((productOption) => {
-		const price = prices[fulfilmentOption]?.[productOption]?.Monthly?.GBP;
-		return price?.savingVsRetail ?? 0;
-	});
-}
+// Defined locally because importing newspaperProducts from the product-catalog
+// module pulls the catalog zod schema into the bundle
+const paperProductKeys = [
+	'SubscriptionCard',
+	'HomeDelivery',
+	'NationalDelivery',
+] as const satisfies readonly ProductKey[];
 
-function getMaxSavingVsRetail(
-	productPrices: ProductPrices,
-): number | undefined {
-	const countryPrices = productPrices['United Kingdom'];
+function getMaxSavingVsRetail(productCatalog: WindowProductCatalog): number {
+	const allSavings = paperProductKeys.flatMap((productKey) =>
+		ActivePaperProductTypes.map(
+			(productOption) =>
+				productCatalog[productKey]?.ratePlans[productOption]?.savingVsRetail ??
+				0,
+		),
+	);
 
-	if (countryPrices) {
-		const allSavings = getSavingsForFulfilmentOption(
-			countryPrices,
-			Collection,
-		).concat(getSavingsForFulfilmentOption(countryPrices, HomeDelivery));
-
-		return Math.max(...allSavings);
-	}
-
-	return;
+	return Math.max(...allSavings);
 }
 
 export { getMaxSavingVsRetail };
