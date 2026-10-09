@@ -9,13 +9,13 @@ import type { SupportRegionId } from '@modules/internationalisation/countryGroup
 import GridImage from 'components/gridImage/gridImage';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import type { OnboardingInviteeInvitation } from 'helpers/onboardingInvitee/invitation';
+import { withoutExtraAccountsBenefit } from 'helpers/onboardingInvitee/inviteeBenefits';
 import { getHelpCentreUrl, getManageSubsUrl } from 'helpers/urls/externalLinks';
 import { getBaseDomain } from 'helpers/urls/url';
 import { getBenefitsChecklistFromLandingPageTool } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import ContentBox from '../contentBox';
-import { withoutExtraAccountsBenefit } from '../inviteeBenefits';
 import {
 	benefitsItem,
 	benefitsItemIcon,

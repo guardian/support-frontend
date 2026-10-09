@@ -110,8 +110,8 @@ export function OnboardingDigitalPlusDiscovery({
 				<Stack space={2}>
 					<h1 css={headings}>More of the Guardian with Digital plus</h1>
 					<p css={descriptions}>
-						Your Digital plus subscription includes access to the Guardian Feast app, The
-						Long Read, Guardian Weekly, and the Guardian archives.
+						Your Digital plus subscription includes access to the Guardian Feast
+						app, The Long Read, Guardian Weekly, and the Guardian archives.
 					</p>
 
 					<div

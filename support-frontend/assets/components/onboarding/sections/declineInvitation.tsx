@@ -9,12 +9,12 @@ import { OnboardingDeclineSteps } from 'components/onboarding/onboardingSteps';
 import type { HandleStepNavigationFunction } from 'components/onboarding/onboardingTypes';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { declineInvitation as submitDeclineInvitation } from 'helpers/onboardingInvitee/invitation';
+import { withoutExtraAccountsBenefit } from 'helpers/onboardingInvitee/inviteeBenefits';
 import type { CsrfState } from 'helpers/types/csrf';
 import { getBenefitsChecklistFromLandingPageTool } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import ContentBox from '../contentBox';
-import { withoutExtraAccountsBenefit } from '../inviteeBenefits';
 import {
 	benefitsItem,
 	benefitsItemIcon,

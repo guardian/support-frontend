@@ -1,4 +1,4 @@
-import { withoutExtraAccountsBenefit } from './inviteeBenefits';
+import { withoutExtraAccountsBenefit } from 'helpers/onboardingInvitee/inviteeBenefits';
 
 describe('withoutExtraAccountsBenefit', () => {
 	it('removes the sharing benefit from the invitee list', () => {
