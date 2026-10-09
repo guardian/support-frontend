@@ -1,6 +1,5 @@
 import { storage } from '@guardian/libs';
 import type { Settings, Status } from 'helpers/globalsAndSwitches/settings';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 
 function isRecord(item: unknown): item is Record<string, unknown> {
@@ -81,9 +80,6 @@ const getSettings = (): Settings => {
 	return globalSettings ?? defaultSettings;
 };
 
-const getProductPrices = (): ProductPrices | null =>
-	getGlobal<ProductPrices>('productPrices');
-
 const getPromotionCopy = (): PromotionCopy | null =>
 	getGlobal<PromotionCopy>('promotionCopy');
 
@@ -98,10 +94,4 @@ const isSwitchOn = (switchName: string): boolean => {
 	return sw === 'On';
 };
 
-export {
-	getProductPrices,
-	getPromotionCopy,
-	getGlobal,
-	getSettings,
-	isSwitchOn,
-};
+export { getPromotionCopy, getGlobal, getSettings, isSwitchOn };
