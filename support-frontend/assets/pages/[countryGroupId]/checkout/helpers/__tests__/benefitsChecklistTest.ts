@@ -1,5 +1,5 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import { getBenefitsChecklistFromLandingPageTool } from '../benefitsChecklist';
+import { getProductBenefitsChecklist } from '../benefitsChecklist';
 import { expectedDefaultBenefits } from './__fixtures__/expectedDefaultBenefits';
 
 describe('getBenefitsChecklistFromLandingPageTool', () => {
@@ -60,7 +60,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 	const GBP = 'GBPCountries';
 	it('should return the correct benefits checklist for DigitalSubscription', () => {
 		expect(
-			getBenefitsChecklistFromLandingPageTool(
+			getProductBenefitsChecklist(
 				'DigitalSubscription',
 				landingPageSettings,
 				GBP,
@@ -87,7 +87,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 	});
 	it('should return the correct benefits checklist for Contribution', () => {
 		expect(
-			getBenefitsChecklistFromLandingPageTool(
+			getProductBenefitsChecklist(
 				'Contribution',
 				landingPageSettings,
 				GBP,
@@ -122,7 +122,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 	});
 	it('should return the correct benefits checklist for SupporterPlus', () => {
 		expect(
-			getBenefitsChecklistFromLandingPageTool(
+			getProductBenefitsChecklist(
 				'SupporterPlus',
 				landingPageSettings,
 				GBP,
@@ -141,7 +141,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 	});
 	it('should return undefined for products other than DigitalSubscription, SupporterPlus & Contribution', () => {
 		expect(
-			getBenefitsChecklistFromLandingPageTool(
+			getProductBenefitsChecklist(
 				'GuardianAdLite',
 				landingPageSettings,
 				GBP,
@@ -168,7 +168,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 		products.forEach((product) => {
 			countryGroups.forEach((countryGroup) => {
 				it(`should return default benefits if none are defined in landing page tool for ${product} in ${countryGroup}`, () => {
-					const result = getBenefitsChecklistFromLandingPageTool(
+					const result = getProductBenefitsChecklist(
 						product as 'Contribution' | 'SupporterPlus' | 'DigitalSubscription',
 						landingPageSettingsWithoutProducts,
 						countryGroup as CountryGroupId,

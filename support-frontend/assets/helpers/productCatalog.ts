@@ -103,12 +103,13 @@ type RatePlanDetails = Record<
 
 export type ProductDescription = {
 	label: string;
-	labelPill?: string;
-	thankyouMessage?: string;
+	ratePlans: RatePlanDetails;
 	benefits: ProductBenefit[];
 	landingPagePath: string;
+	labelPill?: string;
+	thankyouMessage?: string;
+	benefitsSecondaryUser?: ProductBenefit[];
 	deliverableTo?: Record<string, string>;
-	ratePlans: RatePlanDetails;
 };
 
 export const showSimilarProductsConsentForRatePlan = (
@@ -387,6 +388,13 @@ export const productCatalogDescription: Record<
 		landingPagePath: '/contribute',
 		benefits: [
 			multipleAccountsBenefit,
+			paperArchiveDigitalBenefit,
+			paperArchiveDigitalBenefitUK,
+			digitalPaperBenefitUK,
+			weeklyDigitalBenefit,
+			editionsDigitalBenefit,
+		],
+		benefitsSecondaryUser: [
 			paperArchiveDigitalBenefit,
 			paperArchiveDigitalBenefitUK,
 			digitalPaperBenefitUK,

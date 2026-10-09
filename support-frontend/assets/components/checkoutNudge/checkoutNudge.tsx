@@ -42,7 +42,7 @@ import type {
 	ActiveRatePlanKey,
 } from '../../helpers/productCatalog';
 import { productCatalog } from '../../helpers/productCatalog';
-import { getBenefitsChecklistFromLandingPageTool } from '../../pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
+import { getProductBenefitsChecklist } from '../../pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { getSupportRegionIdConfig } from '../../pages/supportRegionConfig';
 import {
 	BenefitsCheckList,
@@ -444,7 +444,7 @@ export function CheckoutNudgeSelector({
 	);
 
 	const checkListData =
-		getBenefitsChecklistFromLandingPageTool(
+		getProductBenefitsChecklist(
 			nudgeToProduct.product,
 			landingPageSettings,
 			countryGroupId,

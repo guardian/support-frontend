@@ -11,7 +11,7 @@ import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { declineInvitation as submitDeclineInvitation } from 'helpers/onboardingInvitee/invitation';
 import type { CsrfState } from 'helpers/types/csrf';
-import { getBenefitsChecklistFromLandingPageTool } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
+import { getDigitalSubscriptionBenefitsChecklist } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import ContentBox from '../contentBox';
@@ -66,14 +66,12 @@ export function OnboardingDeclineInvitation({
 	const [isDeclining, setIsDeclining] = useState(false);
 	const declineStartedRef = useRef(false);
 
-	const benefitsChecklist =
-		getBenefitsChecklistFromLandingPageTool(
-			'DigitalSubscription',
-			landingPageSettings,
-			countryGroupId,
-			abParticipations,
-			true, // for invitees we exclude the multiple accounts benefit
-		) ?? [];
+	const benefitsChecklist = getDigitalSubscriptionBenefitsChecklist(
+		landingPageSettings,
+		countryGroupId,
+		abParticipations,
+		'benefitsSecondaryUser',
+	);
 
 	const confirmDecline = async () => {
 		if (declineStartedRef.current) {
