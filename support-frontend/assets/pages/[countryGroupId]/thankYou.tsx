@@ -37,7 +37,8 @@ export function ThankYou({
 	landingPageSettings,
 }: ThankYouProps) {
 	const countryId = Country.detect();
-	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
+	const { currencyCode: currencyKey } =
+		getSupportRegionIdConfig(supportRegionId);
 	const { enableThankYouOnboarding } = useFeatureSwitches();
 
 	const searchParams = new URLSearchParams(window.location.search);

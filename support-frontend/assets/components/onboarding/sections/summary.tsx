@@ -227,8 +227,11 @@ function OnboardingSummary({
 		productKey && landingPageSettings.products[productKey];
 	const { windowWidthIsLessThan } = useWindowWidth();
 
-	const { currency, currencyKey, countryGroupId } =
-		getSupportRegionIdConfig(supportRegionId);
+	const {
+		currency,
+		currencyCode: currencyKey,
+		countryGroupId,
+	} = getSupportRegionIdConfig(supportRegionId);
 
 	const amountPaidToday = simpleFormatAmount(currency, payment.finalAmount);
 

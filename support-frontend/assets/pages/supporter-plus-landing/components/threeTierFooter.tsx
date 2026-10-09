@@ -70,7 +70,7 @@ export function ThreeTierFooter({
 	tsAndCsContent,
 	showTaxDisclaimer,
 }: ThreeTierFooterProps): JSX.Element {
-	const { currencyKey, countryGroupId } =
+	const { currencyCode: currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	return (
 		<>
