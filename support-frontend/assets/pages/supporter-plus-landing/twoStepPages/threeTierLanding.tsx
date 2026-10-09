@@ -14,10 +14,7 @@ import {
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductOptions } from '@modules/product/productOptions';
 import { TaxExclusive, TaxInclusive } from '@modules/product/productOptions';
-import type {
-	ProductKey,
-	ProductRatePlanKey,
-} from '@modules/product-catalog/productCatalog';
+import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -42,14 +39,18 @@ import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPer
 import { allProductPrices } from 'helpers/productPrice/productPrices';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
-import { getProductBenefitsByABTestAndCountry } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
+import {
+	filterBenefits,
+	hideBenefits,
+} from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { getTierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
-import { isStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/isStudentBeansRegionValid';
+import { useStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/useStudentBeansRegionValid';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
 	getSanitisedHtml,
 	replaceDatePlaceholder,
 } from '../../../helpers/utilities/utilities';
+import { getDigitalRatePlanKey } from '../../[countryGroupId]/helpers/getDigitalRatePlanKey';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import Countdown from '../components/countdown';
 import { StudentOffer } from '../components/studentOffer';
@@ -60,7 +61,6 @@ import { ThreeTierFooter } from '../components/threeTierFooter';
 import type { TsAndCsProps } from '../components/threeTierTsAndCs';
 import { ThreeTierLandingHeading } from './threeTierLandingHeading';
 import { TickerContainer } from './tickerContainer';
-import { getRatePlanKey, useRatePlanKey } from './useRatePlanKey';
 import { useThreeTierUrlSelection } from './useThreeTierUrlSelection';
 
 const recurringContainer = css`
@@ -173,8 +173,8 @@ export function ThreeTierLanding({
 	);
 
 	const {
-		product: urlSearchParamsProduct,
-		ratePlan: urlSearchParamsRatePlan,
+		productKey: urlSearchParamsProduct,
+		ratePlanKey: urlSearchParamsRatePlan,
 		selectedAmount: urlSelectedAmount,
 		forceWeeklyPricing,
 	} = useThreeTierUrlSelection();
@@ -195,6 +195,11 @@ export function ThreeTierLanding({
 		subPath: '/contribute',
 	};
 
+	const showStudentOffer = useStudentBeansRegionValid(
+		supportRegionId,
+		Country.detect(),
+	);
+
 	const countdownSettings = countdownSwitchOn()
 		? settings.countdownSettings
 		: undefined;
@@ -206,9 +211,9 @@ export function ThreeTierLanding({
 
 	const getInitialContributionType = (): ContributionType => {
 		// 1. Query Parameters take precedence
-		if (urlSearchParamsRatePlan === 'annual') {
+		if (urlSearchParamsRatePlan === 'Annual') {
 			return 'ANNUAL';
-		} else if (urlSearchParamsRatePlan === 'monthly') {
+		} else if (urlSearchParamsRatePlan === 'Monthly') {
 			return 'MONTHLY';
 		}
 
@@ -238,13 +243,6 @@ export function ThreeTierLanding({
 		setContributionType(paymentFrequencies[buttonIndex] as ContributionType);
 	};
 
-	const { ratePlanKey: maybeTaxExclusiveRatePlanKey } = useRatePlanKey(
-		contributionType,
-		supportRegionId,
-	);
-
-	const ratePlanKey = getRatePlanKey(contributionType);
-
 	const fallbackProducts = fallBackLandingPageSelection.products;
 
 	// RRCP LandingPage Test Page / Default Product Selection
@@ -252,8 +250,7 @@ export function ThreeTierLanding({
 		settings.defaultProductSelection?.productType.toLowerCase();
 
 	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
-	// Student Beans Europe feature switch enables the link to Student Landing Page for prescribed countries
-	const { enableStudentBeansEurope, enableDeepDiscount } = useFeatureSwitches();
+	const { enableDeepDiscount } = useFeatureSwitches();
 
 	const getDefaultProductSelection = (productKey: ProductKey) => {
 		return (
@@ -267,7 +264,7 @@ export function ThreeTierLanding({
 		promotionAmount?: number,
 	) => {
 		return (
-			urlSearchParamsProduct === productKey.toLowerCase() ||
+			urlSearchParamsProduct === productKey ||
 			isCardUserSelected(urlSelectedAmount, productPrice, promotionAmount)
 		);
 	};
@@ -277,11 +274,16 @@ export function ThreeTierLanding({
 	 * We use the product catalog for the recurring Contribution tier amount
 	 */
 	const tier1Product = 'Contribution';
-	const tier1Pricing = productCatalog[tier1Product]?.ratePlans[ratePlanKey]
+	const tier1RatePlanKey = getDigitalRatePlanKey(
+		contributionType,
+		supportRegionId,
+		tier1Product,
+	);
+	const tier1Pricing = productCatalog[tier1Product]?.ratePlans[tier1RatePlanKey]
 		?.pricing[currencyId] as number;
 	const tier1checkoutUrl = buildCheckoutUrl(supportRegionId, {
 		product: tier1Product,
-		ratePlan: ratePlanKey,
+		ratePlan: tier1RatePlanKey,
 		contribution: tier1Pricing,
 	});
 
@@ -296,8 +298,8 @@ export function ThreeTierLanding({
 			settings.products[tier1Product]?.title ?? getProductLabel(tier1Product),
 		benefits:
 			settings.products[tier1Product]?.benefits ??
-			getProductBenefitsByABTestAndCountry(
-				productCatalogDescription[tier1Product],
+			filterBenefits(
+				productCatalogDescription[tier1Product].benefits,
 				countryGroupId,
 				abParticipations,
 			),
@@ -310,9 +312,13 @@ export function ThreeTierLanding({
 
 	/** Tier 2: SupporterPlus */
 	const tier2Product = 'SupporterPlus';
-	const tier2Pricing = productCatalog[tier2Product]?.ratePlans[
-		maybeTaxExclusiveRatePlanKey
-	]?.pricing[currencyId] as number;
+	const tier2RatePlanKey = getDigitalRatePlanKey(
+		contributionType,
+		supportRegionId,
+		tier2Product,
+	);
+	const tier2Pricing = productCatalog[tier2Product]?.ratePlans[tier2RatePlanKey]
+		?.pricing[currencyId] as number;
 
 	const tierTwoProductOption = getThreeTierProductOption(
 		tier2Product,
@@ -329,8 +335,7 @@ export function ThreeTierLanding({
 
 	const tier2CheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: tier2Product,
-		ratePlan:
-			maybeTaxExclusiveRatePlanKey as ProductRatePlanKey<'SupporterPlus'>,
+		ratePlan: tier2RatePlanKey,
 		promoCode: tier2Promotion?.promoCode,
 	});
 
@@ -339,8 +344,8 @@ export function ThreeTierLanding({
 		title: getProductLabel(tier2Product),
 		benefits:
 			settings.products[tier2Product]?.benefits ??
-			getProductBenefitsByABTestAndCountry(
-				productCatalogDescription[tier2Product],
+			filterBenefits(
+				productCatalogDescription[tier2Product].benefits,
 				countryGroupId,
 				abParticipations,
 			),
@@ -382,24 +387,33 @@ export function ThreeTierLanding({
 	 * This should only exist as long as the Tier three hack is in place.
 	 */
 	const tier3Product = 'DigitalSubscription';
-	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[
-		maybeTaxExclusiveRatePlanKey
-	]?.pricing[currencyId] as number;
+	const tier3RatePlanKey = getDigitalRatePlanKey(
+		contributionType,
+		supportRegionId,
+		tier3Product,
+	);
+	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[tier3RatePlanKey]
+		?.pricing[currencyId] as number;
 
 	const { label: title, labelPill: titlePill } = getProductDescription(
 		'DigitalSubscription',
-		ratePlanKey,
+		tier3RatePlanKey,
+	);
+	// landing page exception to hide abtest multipleAccounts benefit for variants except control
+	const tier3ProductCatalogBenefits = hideBenefits(
+		productCatalogDescription[tier3Product].benefits,
+		'multipleAccounts',
+		['control'],
+	);
+	const tier3DefaultBenefits = filterBenefits(
+		tier3ProductCatalogBenefits,
+		countryGroupId,
+		abParticipations,
 	);
 	const tier3ProductDescription = {
 		title: settings.products[tier3Product]?.title ?? title,
 		titlePill: settings.products[tier3Product]?.titlePill ?? titlePill,
-		benefits:
-			settings.products[tier3Product]?.benefits ??
-			getProductBenefitsByABTestAndCountry(
-				productCatalogDescription[tier3Product],
-				countryGroupId,
-				abParticipations,
-			),
+		benefits: settings.products[tier3Product]?.benefits ?? tier3DefaultBenefits,
 		cta:
 			settings.products[tier3Product]?.cta ??
 			fallbackProducts[tier3Product]!.cta,
@@ -421,8 +435,7 @@ export function ThreeTierLanding({
 		: undefined;
 	const tier3CheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: tier3Product,
-		ratePlan:
-			maybeTaxExclusiveRatePlanKey as ProductRatePlanKey<'DigitalSubscription'>,
+		ratePlan: tier3RatePlanKey,
 		promoCode: tier3Promotion?.promoCode,
 	});
 
@@ -443,7 +456,6 @@ export function ThreeTierLanding({
 
 	const showWeeklyPrice =
 		forceWeeklyPricing || settings.name.includes('WEEKLY_PRICE');
-	const countryCode = Country.detect();
 
 	const tsAndCsContent: TsAndCsProps[] = [
 		{
@@ -480,6 +492,16 @@ export function ThreeTierLanding({
 		},
 	];
 
+	const showTaxDisclaimer = [
+		tier1RatePlanKey,
+		tier2RatePlanKey,
+		tier3RatePlanKey,
+	].some(
+		(ratePlanKey) =>
+			ratePlanKey === 'AnnualTaxExclusive' ||
+			ratePlanKey === 'MonthlyTaxExclusive',
+	);
+
 	return (
 		<PageScaffold
 			header={
@@ -494,8 +516,8 @@ export function ThreeTierLanding({
 			footer={
 				<ThreeTierFooter
 					supportRegionId={supportRegionId}
-					contributionType={contributionType}
 					tsAndCsContent={tsAndCsContent}
+					showTaxDisclaimer={showTaxDisclaimer}
 				/>
 			}
 		>
@@ -565,11 +587,7 @@ export function ThreeTierLanding({
 					countryGroupId={countryGroupId}
 				/>
 			</Container>
-			{isStudentBeansRegionValid(
-				supportRegionId,
-				countryCode,
-				enableStudentBeansEurope,
-			) && (
+			{showStudentOffer && (
 				<Container
 					sideBorders
 					borderColor="rgba(170, 170, 180, 0.5)"

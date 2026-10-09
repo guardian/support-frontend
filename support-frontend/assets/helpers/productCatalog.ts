@@ -358,7 +358,7 @@ const multipleAccountsBenefit = {
 	specificToAbTest: [
 		{
 			name: 'multipleAccounts',
-			variants: ['control'],
+			variants: ['control', 'v1', 'v2'],
 			display: true,
 		},
 	] as SpecificToAbTest[],

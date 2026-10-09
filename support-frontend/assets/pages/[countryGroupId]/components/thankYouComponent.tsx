@@ -8,6 +8,7 @@ import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import { observerThemeButton } from 'components/observer-layout/styles';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
+import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import { Country } from 'helpers/internationalisation/classes/country';
 import {
@@ -44,7 +45,7 @@ import ThankYouModules from '../../../components/thankYou/thankyouModules';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
-import { getProductBenefitsByCountry } from '../checkout/helpers/benefitsChecklist';
+import { filterBenefits } from '../checkout/helpers/benefitsChecklist';
 import {
 	getReturnAddress,
 	getThankYouOrder,
@@ -84,6 +85,7 @@ export function ThankYouComponent({
 	identityUserType,
 	landingPageSettings,
 }: CheckoutComponentProps) {
+	const abParticipations = useAbParticipations();
 	const countryId = Country.codeFromString(get('GU_country') ?? 'GB') ?? 'GB';
 
 	const { countryGroupId, currencyKey } =
@@ -192,9 +194,10 @@ export function ThankYouComponent({
 		if (isTier) {
 			const productBenefits = (
 				landingPageSettings.products[productKey]?.benefits ??
-				getProductBenefitsByCountry(
-					productCatalogDescription[productKey],
+				filterBenefits(
+					productCatalogDescription[productKey].benefits,
 					countryGroupId,
+					abParticipations,
 				)
 			).map((benefit) => ({
 				isChecked: true,
@@ -204,9 +207,10 @@ export function ThankYouComponent({
 				productKey === 'DigitalSubscription'
 					? (
 							landingPageSettings.products.SupporterPlus?.benefits ??
-							getProductBenefitsByCountry(
-								productCatalogDescription.SupporterPlus,
+							filterBenefits(
+								productCatalogDescription.SupporterPlus.benefits,
 								countryGroupId,
+								abParticipations,
 							)
 					  ).map((benefit) => ({
 							isChecked: true,

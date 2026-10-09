@@ -1,14 +1,13 @@
 import { css } from '@emotion/react';
 import { neutral } from '@guardian/source/foundations';
-import type { CountryCode } from '@modules/internationalisation/country';
-import { BillingPeriod } from '@modules/product/billingPeriod';
-import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
-import { Domestic } from '@modules/product/fulfilmentOptions';
-import { NoProductOptions } from '@modules/product/productOptions';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { usePromoTerms } from 'contexts/PromoTermsContext';
 import { guardianWeeklyTermsLink } from 'helpers/legal';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { getPromotion } from 'helpers/productPrice/promotions';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
+import { getAppliedPromotion } from 'helpers/productPrice/appliedPromotion';
 import { promotionTermsUrl } from 'helpers/urls/routes';
 import Footer from './Footer';
 import { footerTextHeading } from './footerStyles';
@@ -22,17 +21,16 @@ const promoOfferLink = css`
 `;
 
 const getPromoUrl = (
-	productPrices: ProductPrices,
-	country: CountryCode,
-	billingPeriod: BillingPeriod,
-	fulfillmentOption: FulfilmentOptions,
+	promotions: PromoWithCatalogInformation[],
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
+	promoCode?: string,
 ): string | undefined => {
-	const promotion = getPromotion(
-		productPrices,
-		country,
-		billingPeriod,
-		fulfillmentOption,
-		NoProductOptions,
+	const promotion = getAppliedPromotion(
+		promotions,
+		productKey,
+		ratePlanKey,
+		promoCode,
 	);
 	return promotion ? promotionTermsUrl(promotion.promoCode) : undefined;
 };
@@ -42,23 +40,23 @@ function MaybeLink({ href, text }: { text: string; href?: string }) {
 }
 
 type LinkTypes = {
-	productPrices: ProductPrices;
-	country: CountryCode;
-	fulfillmentOption: FulfilmentOptions;
+	promotions: PromoWithCatalogInformation[];
+	productKey: ActiveProductKey;
+	promoCode?: string;
 };
 
-function GiftLinks({ productPrices, country, fulfillmentOption }: LinkTypes) {
+function GiftLinks({ promotions, productKey, promoCode }: LinkTypes) {
 	const annualUrl = getPromoUrl(
-		productPrices,
-		country,
-		BillingPeriod.Annual,
-		fulfillmentOption,
+		promotions,
+		productKey,
+		'OneYearGift',
+		promoCode,
 	);
 	const quarterlyUrl = getPromoUrl(
-		productPrices,
-		country,
-		BillingPeriod.Quarterly,
-		fulfillmentOption,
+		promotions,
+		productKey,
+		'ThreeMonthGift',
+		promoCode,
 	);
 	const multipleOffers = !!(annualUrl && quarterlyUrl);
 	if (annualUrl ?? quarterlyUrl) {
@@ -101,22 +99,23 @@ function PromoTerms(): JSX.Element | null {
 }
 
 function GuardianWeeklyFooter({
-	productPrices,
+	promotions,
+	productKey,
+	promoCode,
 	orderIsAGift,
-	country,
 }: {
-	productPrices: ProductPrices;
-	country: CountryCode;
+	promotions: PromoWithCatalogInformation[];
+	productKey: ActiveProductKey;
+	promoCode?: string;
 	orderIsAGift: boolean;
 }) {
-	const weeklyFulfillmentOption = Domestic;
 	return (
 		<Footer termsConditionsLink={guardianWeeklyTermsLink} fullWidth>
 			{orderIsAGift ? (
 				<GiftLinks
-					productPrices={productPrices}
-					country={country}
-					fulfillmentOption={weeklyFulfillmentOption}
+					promotions={promotions}
+					productKey={productKey}
+					promoCode={promoCode}
 				/>
 			) : (
 				<PromoTerms />

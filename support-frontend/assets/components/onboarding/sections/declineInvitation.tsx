@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router';
 import GridImage from 'components/gridImage/gridImage';
 import { OnboardingDeclineSteps } from 'components/onboarding/onboardingSteps';
 import type { HandleStepNavigationFunction } from 'components/onboarding/onboardingTypes';
+import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { declineInvitation as submitDeclineInvitation } from 'helpers/onboardingInvitee/invitation';
 import type { CsrfState } from 'helpers/types/csrf';
@@ -58,6 +59,7 @@ export function OnboardingDeclineInvitation({
 	csrf: CsrfState;
 	onDeclineFailed: () => void;
 }) {
+	const abParticipations = useAbParticipations();
 	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 	const { windowWidthIsLessThan } = useWindowWidth();
 	const navigate = useNavigate();
@@ -69,6 +71,8 @@ export function OnboardingDeclineInvitation({
 			'DigitalSubscription',
 			landingPageSettings,
 			countryGroupId,
+			abParticipations,
+			true, // for invitees we exclude the multiple accounts benefit
 		) ?? [];
 
 	const confirmDecline = async () => {

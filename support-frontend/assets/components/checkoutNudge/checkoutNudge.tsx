@@ -19,6 +19,7 @@ import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductOptions } from '@modules/product/productOptions';
 import { useEffect } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
+import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { getLegacyProductType } from 'helpers/legacyTypeConversions';
@@ -390,6 +391,7 @@ export function CheckoutNudgeSelector({
 	supportRegionId,
 	landingPageSettings,
 }: CheckoutNudgeSelectorProps) {
+	const abParticipations = useAbParticipations();
 	const { nudge, promoCodes } = nudgeSettings.variant;
 	// No nudge configured
 	if (!nudge) {
@@ -446,6 +448,7 @@ export function CheckoutNudgeSelector({
 			nudgeToProduct.product,
 			landingPageSettings,
 			countryGroupId,
+			abParticipations,
 		) ?? [];
 
 	return (

@@ -1,6 +1,7 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type React from 'react';
 import { OnboardingInviteeCompleted } from 'components/onboarding/sections/onboardingInviteeCompleted';
+import { AbParticipationsProvider } from 'contexts/AbParticipationsContext';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import type { OnboardingInviteeInvitation } from 'helpers/onboardingInvitee/invitation';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
@@ -16,9 +17,13 @@ export default {
 	component: OnboardingInviteeCompleted,
 	decorators: [
 		(Story: React.FC): JSX.Element => (
-			<div style={{ maxWidth: '600px', margin: '40px auto' }}>
-				<Story />
-			</div>
+			<AbParticipationsProvider
+				participations={{ multipleAccounts: 'control' }}
+			>
+				<div style={{ maxWidth: '600px', margin: '40px auto' }}>
+					<Story />
+				</div>
+			</AbParticipationsProvider>
 		),
 		withSourceReset,
 	],

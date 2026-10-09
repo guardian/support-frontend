@@ -3,6 +3,9 @@ import { getBenefitsChecklistFromLandingPageTool } from '../benefitsChecklist';
 import { expectedDefaultBenefits } from './__fixtures__/expectedDefaultBenefits';
 
 describe('getBenefitsChecklistFromLandingPageTool', () => {
+	const abParticipations = {
+		multipleAccounts: 'control',
+	};
 	const landingPageSettings = {
 		name: 'SupporterPlus',
 		copy: {
@@ -61,6 +64,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 				'DigitalSubscription',
 				landingPageSettings,
 				GBP,
+				abParticipations,
 			),
 		).toEqual([
 			{
@@ -87,6 +91,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 				'Contribution',
 				landingPageSettings,
 				GBP,
+				abParticipations,
 			),
 		).toMatchObject([
 			{
@@ -121,6 +126,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 				'SupporterPlus',
 				landingPageSettings,
 				GBP,
+				abParticipations,
 			),
 		).toEqual([
 			{
@@ -139,6 +145,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 				'GuardianAdLite',
 				landingPageSettings,
 				GBP,
+				abParticipations,
 			),
 		).toBeUndefined();
 	});
@@ -165,6 +172,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 						product as 'Contribution' | 'SupporterPlus' | 'DigitalSubscription',
 						landingPageSettingsWithoutProducts,
 						countryGroup as CountryGroupId,
+						abParticipations,
 					);
 					expect(result).toEqual(
 						expectedDefaultBenefits[product]?.[countryGroup],

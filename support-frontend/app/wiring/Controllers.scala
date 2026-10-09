@@ -70,6 +70,8 @@ trait Controllers {
   lazy val paperController = new PaperSubscriptionController(
     priceSummaryServiceProvider,
     landingCopyProvider,
+    cachedPromotionsServiceProvider,
+    cachedProductCatalogServiceProvider,
     assetsResolver,
     actionBuilders,
     controllerComponents,
@@ -80,8 +82,7 @@ trait Controllers {
   )
 
   lazy val weeklyController = new WeeklySubscriptionController(
-    priceSummaryServiceProvider,
-    landingCopyProvider,
+    defaultPromotionService,
     cachedPromotionsServiceProvider,
     cachedProductCatalogServiceProvider,
     assetsResolver,
