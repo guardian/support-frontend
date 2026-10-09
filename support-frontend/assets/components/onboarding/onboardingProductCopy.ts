@@ -15,26 +15,38 @@ const emptyLandingPageSettings: LandingPageVariant = {
 	products: {},
 };
 
-export function getOnboardingProductCopy(
+export function getOnboardingProductTitle(
 	productKey?: OnboardingProductKey,
 	landingPageSettings?: LandingPageVariant,
-	countryGroupId?: CountryGroupId,
+): string {
+	if (!productKey) {
+		return '';
+	}
+
+	return (
+		landingPageSettings?.products[productKey]?.title ??
+		getProductLabel(productKey)
+	);
+}
+
+export function getOnboardingProductCopy(
+	productKey: OnboardingProductKey | undefined,
+	landingPageSettings: LandingPageVariant | undefined,
+	countryGroupId: CountryGroupId,
 ): { title: string; benefits: BenefitsCheckListData[] } {
 	if (!productKey) {
 		return { title: '', benefits: [] };
 	}
 
-	const title =
-		landingPageSettings?.products[productKey]?.title ??
-		getProductLabel(productKey);
+	const benefits =
+		getBenefitsChecklistFromLandingPageTool(
+			productKey,
+			landingPageSettings ?? emptyLandingPageSettings,
+			countryGroupId,
+		) ?? [];
 
-	const benefits = countryGroupId
-		? getBenefitsChecklistFromLandingPageTool(
-				productKey,
-				landingPageSettings ?? emptyLandingPageSettings,
-				countryGroupId,
-		  ) ?? []
-		: [];
-
-	return { title, benefits };
+	return {
+		title: getOnboardingProductTitle(productKey, landingPageSettings),
+		benefits,
+	};
 }
