@@ -1,15 +1,15 @@
-import type { CountryCode } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import type { StudentLandingPageVariant } from 'helpers/globalsAndSwitches/studentLandingPageSettings';
-import { Country } from 'helpers/internationalisation/classes/country';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import { ratePlanToBillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { allProductPrices } from 'helpers/productPrice/productPrices';
-import { getPromotion } from 'helpers/productPrice/promotions';
+import { productCatalog } from 'helpers/productCatalog';
+import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
+import { getQueryParameter } from 'helpers/urls/url';
+import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import { StudentLandingPageInstitution } from './components/StudentLandingPageInstitution';
 import { getStudentDiscount } from './helpers/discountDetails';
 
@@ -25,14 +25,20 @@ export function StudentLandingPageInstitutionContainer({
 	const productKey: ActiveProductKey = 'SupporterPlus';
 	const ratePlanKey: ActiveRatePlanKey = 'Monthly';
 
-	const countryId: CountryCode = Country.detect();
-	const maybePromo = getPromotion(
-		allProductPrices.SupporterPlus,
-		countryId,
-		ratePlanToBillingPeriod(ratePlanKey),
-		'NoFulfilmentOptions',
-		'TaxInclusive',
-	);
+	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
+	const price =
+		productCatalog[productKey]?.ratePlans[ratePlanKey]?.pricing[currencyKey];
+	const maybePromo =
+		price === undefined
+			? undefined
+			: getLegacyPromotion({
+					promotions: window.guardian.promotions ?? [],
+					productKey,
+					ratePlanKey,
+					price,
+					billingPeriod: BillingPeriod.Monthly,
+					promoCode: getQueryParameter('promoCode'),
+			  });
 
 	const studentDiscount = getStudentDiscount(
 		supportRegionId,

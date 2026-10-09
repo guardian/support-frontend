@@ -2,7 +2,6 @@ import { ThemeProvider } from '@emotion/react';
 import type { CountryCode } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import { type ProductOptions } from '@modules/product/productOptions';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
@@ -19,26 +18,24 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import {
-	type ActiveProductKey,
 	type ActiveRatePlanKey,
 	isProductKey,
 	productCatalog,
 } from 'helpers/productCatalog';
 import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { getPromotion } from 'helpers/productPrice/promotions';
+import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
 import { getEstimatedSalesTaxConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import * as cookie from 'helpers/storage/cookie';
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
-import { getOriginAndForceSubdomain } from 'helpers/urls/url';
+import {
+	getOriginAndForceSubdomain,
+	getQueryParameter,
+} from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import { getWeeklyDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
-import type { LegacyProductType } from '../../helpers/legacyTypeConversions';
-import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
-import { getFulfilmentOptionFromProductKey } from '../../helpers/productCatalogToFulfilmentOption';
-import { getProductOptionFromProductAndRatePlan } from '../../helpers/productCatalogToProductOption';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
 import { useStateWithCheckoutSession } from './checkout/hooks/useStateWithCheckoutSession';
 import { useStripeHostedCheckoutSession } from './checkout/hooks/useStripeHostedCheckoutSession';
@@ -56,49 +53,6 @@ type Props = {
 };
 
 const countryId: CountryCode = Country.detect();
-
-export const getPromotionFromProductPrices = (
-	appConfig: AppConfig,
-	productKey: ActiveProductKey,
-	ratePlanKey: ActiveRatePlanKey,
-	countryId: CountryCode,
-	billingPeriod: BillingPeriod,
-) => {
-	/**
-	 * Get any promotions.
-	 * These come from the productPrices object for the particular product on window.guardian.
-	 */
-
-	// exclude one year student promotion as it's mapped to the annual billing period and we don't to apply regular annual promotions to it
-	if (productKey === 'SupporterPlus' && ratePlanKey === 'OneYearStudent') {
-		return undefined;
-	}
-
-	const productPriceKey: LegacyProductType = getLegacyProductType(
-		productKey,
-		ratePlanKey,
-	);
-
-	const productPrices = appConfig.allProductPrices[productPriceKey];
-
-	if (productPrices === undefined) {
-		return undefined;
-	}
-
-	const fulfilmentOption = getFulfilmentOptionFromProductKey(productKey);
-	const productOptions: ProductOptions = getProductOptionFromProductAndRatePlan(
-		productKey,
-		ratePlanKey,
-	);
-
-	return getPromotion(
-		productPrices,
-		countryId,
-		billingPeriod,
-		fulfilmentOption,
-		productOptions,
-	);
-};
 
 export function Checkout({
 	supportRegionId,
@@ -172,13 +126,14 @@ export function Checkout({
 			return <div>Price not found in product catalog</div>;
 		}
 
-		promotion = getPromotionFromProductPrices(
-			appConfig,
+		promotion = getLegacyPromotion({
+			promotions: appConfig.promotions ?? [],
 			productKey,
 			ratePlanKey,
-			countryId,
+			price: productPrice,
 			billingPeriod,
-		);
+			promoCode: getQueryParameter('promoCode'),
+		});
 
 		const discountedPrice = promotion?.discountedPrice ?? undefined;
 		const price = discountedPrice ?? productPrice;

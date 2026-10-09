@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { from, palette, space, textSans17 } from '@guardian/source/foundations';
 import { Container } from '@guardian/source/react-components';
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
@@ -11,9 +11,7 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
-import type { BillingPeriod } from '@modules/product/billingPeriod';
-import type { ProductOptions } from '@modules/product/productOptions';
-import { TaxExclusive, TaxInclusive } from '@modules/product/productOptions';
+import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
@@ -35,9 +33,9 @@ import {
 	productCatalogDescription,
 } from 'helpers/productCatalog';
 import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { allProductPrices } from 'helpers/productPrice/productPrices';
-import { getPromotion } from 'helpers/productPrice/promotions';
+import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
+import { getQueryParameter } from 'helpers/urls/url';
 import { filterProductDescriptionBenefits } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { getTierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
 import { useStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/useStudentBeansRegionValid';
@@ -142,19 +140,6 @@ const isCardUserSelected = (
 	);
 };
 
-function getThreeTierProductOption(
-	productKey: ProductKey,
-	supportRegionId: SupportRegionId,
-): ProductOptions {
-	if (
-		supportRegionId == SupportRegionId.CA &&
-		(productKey === 'DigitalSubscription' || productKey === 'SupporterPlus')
-	) {
-		return TaxExclusive;
-	}
-	return TaxInclusive;
-}
-
 type ThreeTierLandingProps = {
 	supportRegionId: SupportRegionId;
 	settings: LandingPageVariant;
@@ -171,7 +156,6 @@ export function ThreeTierLanding({
 	} = useThreeTierUrlSelection();
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
-	const countryId = Country.detect();
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
 			GBPCountries,
@@ -226,7 +210,9 @@ export function ThreeTierLanding({
 
 	const tierPlanPeriod = contributionType.toLowerCase();
 	const billingPeriod = (tierPlanPeriod[0]?.toUpperCase() +
-		tierPlanPeriod.slice(1)) as BillingPeriod;
+		tierPlanPeriod.slice(1)) as RecurringBillingPeriod;
+	const promotions = window.guardian.promotions ?? [];
+	const promoCode = getQueryParameter('promoCode');
 
 	const paymentFrequencies: ContributionType[] = ['MONTHLY', 'ANNUAL'];
 
@@ -309,18 +295,14 @@ export function ThreeTierLanding({
 	const tier2Pricing = productCatalog[tier2Product]?.ratePlans[tier2RatePlanKey]
 		?.pricing[currencyId] as number;
 
-	const tierTwoProductOption = getThreeTierProductOption(
-		tier2Product,
-		supportRegionId,
-	);
-
-	const tier2Promotion = getPromotion(
-		allProductPrices[tier2Product],
-		countryId,
+	const tier2Promotion = getLegacyPromotion({
+		promotions,
+		productKey: tier2Product,
+		ratePlanKey: tier2RatePlanKey,
+		price: tier2Pricing,
 		billingPeriod,
-		'NoFulfilmentOptions',
-		tierTwoProductOption,
-	);
+		promoCode,
+	});
 
 	const tier2CheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: tier2Product,
@@ -401,20 +383,14 @@ export function ThreeTierLanding({
 			fallbackProducts[tier3Product]!.cta,
 		billingPeriodsCopy: settings.products[tier3Product]?.billingPeriodsCopy,
 	};
-	const tier3ProductPrice = allProductPrices.DigitalPack;
-	const tierThreeProductOption = getThreeTierProductOption(
-		tier3Product,
-		supportRegionId,
-	);
-	const tier3Promotion = tier3ProductPrice
-		? getPromotion(
-				tier3ProductPrice,
-				countryId,
-				billingPeriod,
-				'NoFulfilmentOptions',
-				tierThreeProductOption,
-		  )
-		: undefined;
+	const tier3Promotion = getLegacyPromotion({
+		promotions,
+		productKey: tier3Product,
+		ratePlanKey: tier3RatePlanKey,
+		price: tier3Pricing,
+		billingPeriod,
+		promoCode,
+	});
 	const tier3CheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: tier3Product,
 		ratePlan: tier3RatePlanKey,
