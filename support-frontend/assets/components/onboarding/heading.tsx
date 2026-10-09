@@ -18,7 +18,7 @@ import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageS
 import { getThankYouOrder } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
 import type { OnboardingProductKey } from 'pages/[countryGroupId]/components/onboardingComponent';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
-import { getOnboardingProductCopy } from './onboardingProductCopy';
+import { getOnboardingProductTitle } from './onboardingProductCopy';
 import {
 	OnboardingDeclineSteps,
 	OnboardingInviteeSteps,
@@ -135,11 +135,12 @@ function OnboardingHeading({
 	productKey,
 }: OnboardingHeadingProps) {
 	const order = getThankYouOrder();
-	const { title: productTitle } = getOnboardingProductCopy(
+	const nonBreakingHyphen = '\u2011';
+	const productTitle = getOnboardingProductTitle(
 		productKey,
 		landingPageSettings,
 	);
-	const displayProductTitle = productTitle.replace(/-/g, '\u2011');
+	const displayProductTitle = productTitle.replace(/-/g, nonBreakingHyphen);
 
 	const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
 

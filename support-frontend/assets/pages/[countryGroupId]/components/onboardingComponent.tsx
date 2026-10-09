@@ -5,7 +5,7 @@ import type { SupportRegionId } from '@modules/internationalisation/countryGroup
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { useSearchParams } from 'react-router';
 import ContentBox from 'components/onboarding/contentBox';
-import { getOnboardingProductCopy } from 'components/onboarding/onboardingProductCopy';
+import { getOnboardingProductTitle } from 'components/onboarding/onboardingProductCopy';
 import { OnboardingSteps } from 'components/onboarding/onboardingSteps';
 import type {
 	CurrentUserState,
@@ -81,10 +81,9 @@ function OnboardingComponent({
 	}
 
 	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
-	const { title: productTitle } = getOnboardingProductCopy(
+	const productTitle = getOnboardingProductTitle(
 		productKey,
 		landingPageSettings,
-		countryGroupId,
 	);
 
 	const scrollToTopRef = useRef<HTMLDivElement>(null);
