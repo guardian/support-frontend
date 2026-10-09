@@ -1,6 +1,9 @@
 import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { productCatalogFixture } from 'fixtures/productCatalogFixture';
+import { logException } from 'helpers/utilities/logger';
 import { getPlans } from './getPlans';
+
+jest.mock('helpers/utilities/logger', () => ({ logException: jest.fn() }));
 
 const makePromotion = (
 	promoCode: string,
@@ -133,5 +136,25 @@ describe('getPlans', () => {
 
 		expect(plan.price).toBe('£88.99');
 		expect(plan.promotion).toBeUndefined();
+	});
+
+	it('omits and logs rate plans with no price', () => {
+		const productCatalog = JSON.parse(
+			JSON.stringify(productCatalogFixture),
+		) as typeof productCatalogFixture;
+		delete productCatalog.SubscriptionCard?.ratePlans.SaturdayPlus;
+
+		const plans = getPlans({
+			fulfilmentOption: 'Collection',
+			productCatalog,
+			promotions: [],
+		});
+
+		expect(plans.map((plan) => plan.href.match(/ratePlan=(\w+)/)?.[1])).toEqual(
+			['SixdayPlus', 'EverydayPlus', 'WeekendPlus', 'Sunday'],
+		);
+		expect(logException).toHaveBeenCalledWith(
+			'No price found for SubscriptionCard SaturdayPlus',
+		);
 	});
 });
