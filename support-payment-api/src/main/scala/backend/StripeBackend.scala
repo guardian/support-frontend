@@ -114,10 +114,13 @@ class StripeBackend(
       stripeService
         .createPaymentIntent(request)
         .leftMap(err => {
+          val erroCodesoIgnore = Seq("email_invalid")
+          if (!erroCodesoIgnore.contains(err.declineCode)) {
+            cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
+          }
           logger.info(
             s"Unable to create Stripe Payment Intent ($request). User-Agent was: ${clientBrowserInfo.userAgent}",
           )
-          cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
           err
         })
         .flatMap { paymentIntent =>
