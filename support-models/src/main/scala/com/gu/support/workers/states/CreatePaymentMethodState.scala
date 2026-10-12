@@ -1,6 +1,6 @@
 package com.gu.support.workers.states
 
-import com.gu.support.acquisitions.AcquisitionData
+import com.gu.support.acquisitions.{AcquisitionData, CmpConsentSnapshot}
 
 import java.util.UUID
 import com.gu.support.promotions.PromoCode
@@ -24,6 +24,7 @@ case class CreatePaymentMethodState(
     ipAddress: String,
     userAgent: String,
     similarProductsConsent: Option[Boolean],
+    cmpConsentSnapshot: Option[CmpConsentSnapshot] = None,
 ) extends FailureHandlerState
 
 import com.gu.support.encoding.Codec

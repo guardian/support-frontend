@@ -32,6 +32,7 @@ import type { WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
 import type { DeliveryAgentDetails } from '../services/paperRound';
 import { getPaperRoundConfig, PaperRoundService } from '../services/paperRound';
+import { stringifyWithCmpConsentRedacted } from '../util/logging';
 import { getIfDefined } from '../util/nullAndUndefined';
 
 const stage = stageFromEnvironment();
@@ -209,7 +210,7 @@ async function sendGuardianAdLiteEmail(
 export const handler = async (
 	state: WrappedState<SendAcquisitionEventState>,
 ) => {
-	console.info(`Input is ${JSON.stringify(state)}`);
+	console.info(`Input is ${stringifyWithCmpConsentRedacted(state)}`);
 	const sendThankYouEmailState = state.state.sendThankYouEmailState;
 	const productInformation = getIfDefined(
 		sendThankYouEmailState.productInformation,
