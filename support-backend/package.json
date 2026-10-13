@@ -23,11 +23,13 @@
 	"dependencies": {
 		"@aws-sdk/client-cloudwatch": "catalog:",
 		"@aws-sdk/client-ssm": "catalog:",
+		"compression": "1.8.2",
 		"express": "5.2.1",
 		"zod": "catalog:"
 	},
 	"devDependencies": {
 		"@guardian/eslint-config": "14.0.1",
+		"@types/compression": "1.8.1",
 		"@types/express": "5.0.6",
 		"@types/jest": "catalog:",
 		"@types/node": "catalog:",
