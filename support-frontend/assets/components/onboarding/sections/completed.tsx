@@ -124,7 +124,7 @@ export function OnboardingCompleted({
 					</LinkButton>
 					{productKey === 'DigitalSubscription' && (
 						<LinkButton
-							priority="subdued"
+							priority="tertiary"
 							cssOverrides={[buttonOverrides]}
 							href={getManageExtraAccountsUrl()}
 						>
