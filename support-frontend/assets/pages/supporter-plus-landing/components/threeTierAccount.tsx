@@ -17,9 +17,9 @@ const accountBorder = (paddingBottom: number) => css`
 
 const accountItems = (justify: string) => css`
 	display: flex;
-	flex-direction: row; /* Items sit side-by-side */
-	justify-content: ${justify}; /* Left horizontally */
-	align-items: center; /* Centred vertically */
+	flex-direction: row;
+	justify-content: ${justify};
+	align-items: center;
 	column-gap: ${space[2]}px;
 
 	${textSans15};
