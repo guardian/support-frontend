@@ -1,3 +1,4 @@
+import compression from 'compression';
 import express from 'express';
 import { buildApiRouterWithServices } from './routers/apiRouter';
 
@@ -6,6 +7,9 @@ export const buildApp = async () => {
 
 	// Disable Express default behaviour to set an etag header on all responses
 	app.set('etag', false);
+
+	// Compress all responses
+	app.use(compression());
 
 	app.use('/api', await buildApiRouterWithServices());
 
