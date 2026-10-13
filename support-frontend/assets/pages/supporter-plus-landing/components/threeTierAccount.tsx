@@ -31,54 +31,49 @@ export function ThreeTierAccount({
 	cardTheme,
 }: ThreeTierAccountProps): JSX.Element | null {
 	const abParticipations = useAbParticipations();
-	const abVariant = abParticipations.multipleAccounts;
+	const abVariant = abParticipations.multipleAccounts ?? '';
 
-	const getAccountCopy = (productKey: ProductKey, abVariant?: string) => {
-		if (abVariant && ['v1', 'v2'].includes(abVariant)) {
-			switch (productKey) {
-				case 'DigitalSubscription':
-					return abVariant === 'v2'
-						? '4 accounts'
-						: '3 extra accounts to share';
-				case 'SupporterPlus':
-					return abVariant === 'v2' ? '1 account' : undefined;
-				default:
-					return undefined;
-			}
-		}
-		return undefined;
+	// constrain to v1 and v2 for DigitalSubscription, v2 for SupporterPlus
+	const isValidDigitalSubscription =
+		productKey === 'DigitalSubscription' && ['v1', 'v2'].includes(abVariant);
+	const isValidSupporterPlus =
+		productKey === 'SupporterPlus' && ['v2'].includes(abVariant);
+	if (!isValidDigitalSubscription && !isValidSupporterPlus) {
+		return null;
+	}
+
+	const productVersionsCopy = {
+		DigitalSubscription: {
+			v1: '3 extra accounts to share',
+			v2: '4 accounts',
+		},
+		SupporterPlus: {
+			v1: undefined,
+			v2: '1 account',
+		},
 	};
-	const accountCopy = getAccountCopy(productKey, abVariant);
+	const accountCopy = productVersionsCopy[productKey][abVariant as 'v1' | 'v2'];
 
-	const getAccountTooltip = (productKey: ProductKey, abVariant?: string) => {
-		if (productKey === 'DigitalSubscription' && abVariant === 'v2') {
-			return (
-				<>
-					<p>
-						<strong>Extra accounts</strong>
-					</p>
-					<p>{tooltipMultipleAccounts}</p>
-				</>
-			);
-		}
-		return undefined;
-	};
-	const accountTooltip = getAccountTooltip(productKey, abVariant);
-
-	const isDigitalSubscription = productKey === 'DigitalSubscription';
-
-	const threeTierAccountUser = isDigitalSubscription ? (
-		<ThreeTierAccountUsers />
-	) : (
-		<ThreeTierAccountUser />
-	);
+	const accountTooltip =
+		isValidDigitalSubscription && abVariant === 'v2' ? (
+			<>
+				<p>
+					<strong>Extra accounts</strong>
+				</p>
+				<p>{tooltipMultipleAccounts}</p>
+			</>
+		) : null;
 
 	return accountCopy ? (
 		<span css={accountTextItemCss}>
-			{isDigitalSubscription && (
+			{isValidDigitalSubscription && (
 				<BenefitPill copy={'New'} pillColor={cardTheme.benefitPillColor} />
 			)}
-			{threeTierAccountUser}
+			{isValidDigitalSubscription ? (
+				<ThreeTierAccountUsers />
+			) : (
+				<ThreeTierAccountUser />
+			)}
 			{accountCopy}
 			{accountTooltip && (
 				<Tooltip
