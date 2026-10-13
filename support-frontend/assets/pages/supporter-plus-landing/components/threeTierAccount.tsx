@@ -15,7 +15,7 @@ const accountBorder = (paddingBottom: number) => css`
 	margin-bottom: ${space[4]}px;
 `;
 
-const accountItems = (justify: string) => css`
+const accountItems = (justify: 'center' | 'flex-start') => css`
 	display: flex;
 	flex-direction: row;
 	justify-content: ${justify};
