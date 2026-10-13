@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, textSans17 } from '@guardian/source/foundations';
+import { from, palette, space, textSans15 } from '@guardian/source/foundations';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { BenefitPill } from 'components/checkoutBenefits/benefitPill';
 import Tooltip from 'components/tooltip/Tooltip';
@@ -9,9 +9,23 @@ import { tooltipMultipleAccounts } from 'helpers/productCatalog';
 import { ThreeTierAccountUser } from './therTierAccountUser';
 import { ThreeTierAccountUsers } from './threeTierAccountUsers';
 
-const accountTextItemCss = css`
-	${textSans17};
-	line-height: 1.15;
+const accountBorder = (paddingBottom: number) => css`
+	padding-bottom: ${paddingBottom}px;
+	border-bottom: 1px solid ${palette.neutral[86]};
+	margin-bottom: ${space[4]}px;
+`;
+
+const accountItems = (justify: string) => css`
+	display: flex;
+	flex-direction: row; /* Items sit side-by-side */
+	justify-content: ${justify}; /* Left horizontally */
+	align-items: center; /* Centred vertically */
+	column-gap: ${space[2]}px;
+
+	${textSans15};
+`;
+
+const accountTooltip = css`
 	& div {
 		display: none;
 
@@ -33,57 +47,62 @@ export function ThreeTierAccount({
 	const abParticipations = useAbParticipations();
 	const abVariant = abParticipations.multipleAccounts ?? '';
 
-	// constrain to v1 and v2 for DigitalSubscription, v2 for SupporterPlus
-	const isValidDigitalSubscription =
-		productKey === 'DigitalSubscription' && ['v1', 'v2'].includes(abVariant);
-	const isValidSupporterPlus =
-		productKey === 'SupporterPlus' && ['v2'].includes(abVariant);
-	if (!isValidDigitalSubscription && !isValidSupporterPlus) {
-		return null;
-	}
+	const isDigitalSubscriptionV1 =
+		productKey === 'DigitalSubscription' && abVariant === 'v1';
+	const isDigitalSubscriptionV2 =
+		productKey === 'DigitalSubscription' && abVariant === 'v2';
+	const isSupporterPlusV2 =
+		productKey === 'SupporterPlus' && abVariant === 'v2';
+	const isV2 = isDigitalSubscriptionV2 || isSupporterPlusV2;
+	const showThreeTierAccount =
+		isDigitalSubscriptionV1 || isDigitalSubscriptionV2 || isSupporterPlusV2;
 
-	const productVersionsCopy = {
-		DigitalSubscription: {
-			v1: '3 extra accounts to share',
-			v2: '4 accounts',
-		},
-		SupporterPlus: {
-			v1: undefined,
-			v2: '1 account',
-		},
-	};
-	const accountCopy = productVersionsCopy[productKey][abVariant as 'v1' | 'v2'];
+	const accountCopy = isSupporterPlusV2
+		? '1 account'
+		: isDigitalSubscriptionV2
+		? '4 accounts'
+		: '3 extra accounts to share';
 
-	const accountTooltip =
-		isValidDigitalSubscription && abVariant === 'v2' ? (
-			<>
-				<p>
-					<strong>Extra accounts</strong>
-				</p>
-				<p>{tooltipMultipleAccounts}</p>
-			</>
-		) : null;
-
-	return accountCopy ? (
-		<span css={accountTextItemCss}>
-			{isValidDigitalSubscription && (
-				<BenefitPill copy={'New'} pillColor={cardTheme.benefitPillColor} />
-			)}
-			{isValidDigitalSubscription ? (
-				<ThreeTierAccountUsers />
-			) : (
-				<ThreeTierAccountUser />
-			)}
-			{accountCopy}
-			{accountTooltip && (
-				<Tooltip
-					children={accountTooltip}
-					xAxisOffset={108}
-					yAxisOffset={12}
-					placement="bottom"
-					desktopOnly={true}
-				></Tooltip>
-			)}
-		</span>
-	) : null;
+	return (
+		<section css={accountBorder(showThreeTierAccount ? space[4] : space[9])}>
+			{showThreeTierAccount ? (
+				<span css={accountItems(isV2 ? 'center' : 'flex-start')}>
+					{productKey === 'DigitalSubscription' ? (
+						<>
+							<BenefitPill
+								copy={'New'}
+								pillColor={cardTheme.benefitPillColor}
+							/>
+							<ThreeTierAccountUsers />
+						</>
+					) : (
+						<ThreeTierAccountUser />
+					)}
+					<span css={accountTooltip}>
+						{accountCopy}
+						{isDigitalSubscriptionV2 && (
+							<Tooltip
+								children={
+									<>
+										<p
+											css={css`
+												margin-bottom: ${space[2]}px;
+											`}
+										>
+											<strong>Extra accounts</strong>
+										</p>
+										<p>{tooltipMultipleAccounts}</p>
+									</>
+								}
+								xAxisOffset={108}
+								yAxisOffset={12}
+								placement="bottom"
+								desktopOnly={true}
+							></Tooltip>
+						)}
+					</span>
+				</span>
+			) : null}
+		</section>
+	);
 }

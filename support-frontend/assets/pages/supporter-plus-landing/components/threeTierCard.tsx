@@ -174,12 +174,6 @@ const benefitsPrefixPlus = css`
 	}
 `;
 
-const accountBorder = css`
-	padding-bottom: ${space[3]}px;
-	border-bottom: 1px solid ${palette.neutral[86]};
-	margin-bottom: ${space[3]}px;
-`;
-
 export function ThreeTierCard({
 	cardContent,
 	cardTheme,
@@ -362,9 +356,7 @@ export function ThreeTierCard({
 				{cta.copy}
 			</LinkButton>
 			{showAccounts && (
-				<section css={accountBorder}>
-					<ThreeTierAccount productKey={product} cardTheme={cardTheme} />
-				</section>
+				<ThreeTierAccount productKey={product} cardTheme={cardTheme} />
 			)}
 			{inAdditionToAllAccessDigital && (
 				<div css={benefitsPrefixCss}>
