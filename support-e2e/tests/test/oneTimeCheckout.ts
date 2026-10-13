@@ -22,6 +22,18 @@ const submitForm = (page: Page) =>
 		})
 		.click();
 
+// UK one-time max, see ONE_OFF in support-frontend/assets/helpers/contributions.ts
+const MAX_AMOUNT = 2000;
+const rangeError = `Please enter an amount between 1 and ${MAX_AMOUNT}.`;
+
+const enterOtherAmount = async (page: Page, amount: number) => {
+	// The radio input is covered by its label, so click the label instead
+	await page.locator('label[for="amount-other"]').click();
+	const otherAmount = page.locator('#otherAmount');
+	await otherAmount.fill(amount.toString());
+	await otherAmount.blur(); // validation runs on blur
+};
+
 export const testOneTimeCheckout = (testDetails: TestDetails) => {
 	const { internationalisationId, paymentType } = testDetails;
 	test(`OneTime with ${paymentType} in ${internationalisationId}`, async ({
@@ -34,6 +46,14 @@ export const testOneTimeCheckout = (testDetails: TestDetails) => {
 		await setupPage(page, context, baseURL, url);
 		await setTestUserCoreDetails(page, email());
 		await page.getByRole('radio', { name: paymentType }).check();
+
+		// Fill in an amount above the maximum to trigger the range error
+		await enterOtherAmount(page, MAX_AMOUNT + 1);
+		await expect(page.getByText(rangeError)).toBeVisible();
+
+		// Fill in the maximum amount to ensure the error disappears
+		await enterOtherAmount(page, MAX_AMOUNT);
+		await expect(page.getByText(rangeError)).toBeHidden();
 
 		if (paymentType === 'Credit/Debit card') {
 			// First check that a failed card payment behaves as expected
