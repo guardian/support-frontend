@@ -26,7 +26,7 @@ import play.api.test.Helpers.{contentAsString, header, status, stubControllerCom
 import services._
 import services.mparticle.MParticleClient
 import services.pricing.{CountryGroupPrices, DefaultPromotionService, PriceSummaryService, PriceSummaryServiceProvider}
-
+import cats.effect.IO
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -37,7 +37,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
   val stage = Stages.DEV
 
   val parser = mock[BodyParser[AnyContent]]
-  val authService = mock[OktaAuthService]
+  val authService = mock[OktaAuthService[IO]]
   val config = mock[Identity]
   val mockAuthActionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(
     parser,
