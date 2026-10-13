@@ -9,7 +9,11 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import GridImage from 'components/gridImage/gridImage';
 import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
-import { getHelpCentreUrl, getManageSubsUrl } from 'helpers/urls/externalLinks';
+import {
+	getHelpCentreUrl,
+	getManageExtraAccountsUrl,
+	getManageSubsUrl,
+} from 'helpers/urls/externalLinks';
 import { getBaseDomain } from 'helpers/urls/url';
 import type { OnboardingProductKey } from 'pages/[countryGroupId]/components/onboardingComponent';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
@@ -70,7 +74,11 @@ export function OnboardingCompleted({
 			<ContentBox removePadding>
 				<div css={[heroContainer, heroAspectRatio]}>
 					<GridImage
-						gridId={'onboardingCompletedHero'}
+						gridId={
+							productKey === 'DigitalSubscription'
+								? 'onboardingInviteeCompletedHero'
+								: 'onboardingCompletedHero'
+						}
 						srcSizes={[2000, 1000, 500]}
 						sizes="(max-width: 739px) 140px, 422px"
 						imgType="png"
@@ -114,6 +122,15 @@ export function OnboardingCompleted({
 					>
 						Continue to the Guardian
 					</LinkButton>
+					{productKey === 'DigitalSubscription' && (
+						<LinkButton
+							priority="subdued"
+							cssOverrides={[buttonOverrides]}
+							href={getManageExtraAccountsUrl()}
+						>
+							Add extra accounts
+						</LinkButton>
+					)}
 				</Stack>
 			</ContentBox>
 			<p css={newslettersAppUsageInformation}>

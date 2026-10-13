@@ -68,7 +68,12 @@ describe('getOnboardingProductCopy', () => {
 
 	it('returns an empty title and no benefits when productKey is missing', () => {
 		expect(
-			getOnboardingProductCopy(undefined, liveControlVariant, 'GBPCountries', {}),
+			getOnboardingProductCopy(
+				undefined,
+				liveControlVariant,
+				'GBPCountries',
+				{},
+			),
 		).toEqual({
 			title: '',
 			benefits: [],
