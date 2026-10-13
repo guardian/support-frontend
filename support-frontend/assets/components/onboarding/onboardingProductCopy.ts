@@ -1,8 +1,9 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { BenefitsCheckListData } from 'components/checkoutBenefits/benefitsCheckList';
+import type { Participations } from 'helpers/abTests/models';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { type ActiveProductKey, getProductLabel } from 'helpers/productCatalog';
-import { getBenefitsChecklistFromLandingPageTool } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
+import { getProductBenefitsChecklist } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 
 type OnboardingProductKey = Extract<
 	ActiveProductKey,
@@ -33,16 +34,18 @@ export function getOnboardingProductCopy(
 	productKey: OnboardingProductKey | undefined,
 	landingPageSettings: LandingPageVariant | undefined,
 	countryGroupId: CountryGroupId,
+	abParticipations: Participations,
 ): { title: string; benefits: BenefitsCheckListData[] } {
 	if (!productKey) {
 		return { title: '', benefits: [] };
 	}
 
 	const benefits =
-		getBenefitsChecklistFromLandingPageTool(
+		getProductBenefitsChecklist(
 			productKey,
 			landingPageSettings ?? emptyLandingPageSettings,
 			countryGroupId,
+			abParticipations,
 		) ?? [];
 
 	return {
