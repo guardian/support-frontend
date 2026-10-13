@@ -168,6 +168,9 @@ export function ThreeTierLanding({
 	settings,
 }: ThreeTierLandingProps): JSX.Element {
 	const abParticipations = useAbParticipations();
+	const showAccounts = ['v1', 'v2'].some((variant) =>
+		abParticipations.multipleAccounts?.includes(variant),
+	);
 
 	const {
 		productKey: urlSearchParamsProduct,
