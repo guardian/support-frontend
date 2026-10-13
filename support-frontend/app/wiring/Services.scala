@@ -77,6 +77,14 @@ trait Services {
   private val (httpBackend, releaseBackend) =
     HttpClientCatsBackend.resource[IO]().allocated.unsafeRunSync()
 
+  // From the identity-play-auth v9 docs:
+  // Shut the backend down. Call releaseBackend.unsafeRunSync() on
+  // application shutdown (e.g. contextDestroyed if you're using Scalatra or Play's ApplicationLifecycle).
+  // Leaking it leaks a connection pool and its threads.
+  applicationLifecycle.addStopHook { () =>
+    releaseBackend.unsafeToFuture()
+  }
+
   implicit val backend: Backend[IO] = httpBackend
   implicit val F: MonadError[IO] = new CatsMonadError[IO]
 
