@@ -361,7 +361,7 @@ const multipleAccountsBenefit = {
 			variants: ['control', 'v1', 'v2'],
 			display: true,
 		},
-	] as SpecificToAbTest[],
+	],
 };
 
 export const productCatalogDescription: Record<
