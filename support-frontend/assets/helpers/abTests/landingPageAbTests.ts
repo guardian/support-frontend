@@ -19,7 +19,7 @@ const fallbackDefaultProductSelection: DefaultProductSelection = {
 	billingPeriod: 'Monthly',
 };
 
-const fallbackDigitalPlusBenefits = [
+export const baseDigitalPlusBenefits = [
 	{
 		copy: 'Digital access to the Guardian’s 200 year newspaper archive',
 		tooltip:
@@ -102,10 +102,9 @@ export const fallBackLandingPageSelection: LandingPageVariant = {
 						},
 					],
 				},
-				...fallbackDigitalPlusBenefits,
+				...baseDigitalPlusBenefits,
 			],
 			cta: { copy: 'Support' },
-			benefitsSecondaryUser: [...fallbackDigitalPlusBenefits],
 		},
 	},
 	defaultProductSelection: fallbackDefaultProductSelection,

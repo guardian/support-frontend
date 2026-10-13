@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
+import { baseDigitalPlusBenefits } from 'helpers/abTests/landingPageAbTests';
 import type { BenefitsCheckListData } from '../../../../components/checkoutBenefits/benefitsCheckList';
 import type { Participations } from '../../../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -131,7 +132,7 @@ export const getProductBenefitsChecklist = (
 			landingPageSettings,
 			countryGroupId,
 			abParticipations,
-			'benefits',
+			'primaryUser',
 		);
 	}
 	return;
@@ -141,17 +142,13 @@ export const getDigitalSubscriptionBenefitsChecklist = (
 	landingPageSettings: LandingPageVariant,
 	countryGroupId: CountryGroupId,
 	abParticipations: Participations,
-	benefitsUser: 'benefits' | 'benefitsSecondaryUser',
+	user: 'primaryUser' | 'secondaryUser',
 ) => {
-	const landingPageDigitalSubscription =
-		landingPageSettings.products.DigitalSubscription;
-	const landingPageDigitalSubscriptionBenefits = landingPageDigitalSubscription
-		? landingPageDigitalSubscription[benefitsUser]
-		: undefined;
+	const allDigitalPlusBenefits =
+		landingPageSettings.products.DigitalSubscription?.benefits ??
+		productCatalogDescription.DigitalSubscription.benefits;
 	const digitalPlusBenefits =
-		landingPageDigitalSubscriptionBenefits ??
-		productCatalogDescription.DigitalSubscription[benefitsUser] ??
-		[];
+		user === 'secondaryUser' ? baseDigitalPlusBenefits : allDigitalPlusBenefits;
 
 	return benefitsAsChecklist({
 		checked: [

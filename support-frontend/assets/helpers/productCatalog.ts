@@ -108,7 +108,6 @@ export type ProductDescription = {
 	landingPagePath: string;
 	labelPill?: string;
 	thankyouMessage?: string;
-	benefitsSecondaryUser?: ProductBenefit[];
 	deliverableTo?: Record<string, string>;
 };
 
@@ -388,13 +387,6 @@ export const productCatalogDescription: Record<
 		landingPagePath: '/contribute',
 		benefits: [
 			multipleAccountsBenefit,
-			paperArchiveDigitalBenefit,
-			paperArchiveDigitalBenefitUK,
-			digitalPaperBenefitUK,
-			weeklyDigitalBenefit,
-			editionsDigitalBenefit,
-		],
-		benefitsSecondaryUser: [
 			paperArchiveDigitalBenefit,
 			paperArchiveDigitalBenefitUK,
 			digitalPaperBenefitUK,
