@@ -63,7 +63,7 @@ export function OnboardingInviteeCompleted({
 		landingPageSettings,
 		countryGroupId,
 		abParticipations,
-		'benefitsSecondaryUser',
+		'secondaryUser',
 	);
 
 	const { windowWidthIsLessThan } = useWindowWidth();

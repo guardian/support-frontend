@@ -108,7 +108,6 @@ export type ProductDescription = {
 	landingPagePath: string;
 	labelPill?: string;
 	thankyouMessage?: string;
-	benefitsSecondaryUser?: ProductBenefit[];
 	deliverableTo?: Record<string, string>;
 };
 
@@ -351,10 +350,10 @@ const paperArchiveDigitalBenefit = {
 	] as CountryGroupId[],
 };
 
-export const tooltipMultipleAccounts = `You can share your Digital plus access with three other people. Each person gets their own account and login.`;
 const multipleAccountsBenefit = {
 	copy: 'Three extra accounts to share',
-	tooltip: tooltipMultipleAccounts,
+	tooltip:
+		'You can share your Digital plus access with three other people. Each person gets their own account and login.',
 	label: { copy: 'New' },
 	specificToAbTest: [
 		{
@@ -362,7 +361,7 @@ const multipleAccountsBenefit = {
 			variants: ['control', 'v1', 'v2'],
 			display: true,
 		},
-	] as SpecificToAbTest[],
+	],
 };
 
 export const productCatalogDescription: Record<
@@ -388,13 +387,6 @@ export const productCatalogDescription: Record<
 		landingPagePath: '/contribute',
 		benefits: [
 			multipleAccountsBenefit,
-			paperArchiveDigitalBenefit,
-			paperArchiveDigitalBenefitUK,
-			digitalPaperBenefitUK,
-			weeklyDigitalBenefit,
-			editionsDigitalBenefit,
-		],
-		benefitsSecondaryUser: [
 			paperArchiveDigitalBenefit,
 			paperArchiveDigitalBenefitUK,
 			digitalPaperBenefitUK,
