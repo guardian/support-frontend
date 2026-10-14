@@ -6,7 +6,7 @@ import Tooltip from 'components/tooltip/Tooltip';
 import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import type { CardTheme } from 'helpers/landingPage/cardTheme';
 import { tooltipMultipleAccounts } from 'helpers/productCatalog';
-import { ThreeTierAccountUser } from './therTierAccountUser';
+import { ThreeTierAccountUser } from './threeTierAccountUser';
 import { ThreeTierAccountUsers } from './threeTierAccountUsers';
 
 const accountBorder = (paddingBottom: number) => css`
@@ -34,6 +34,11 @@ const accountTooltip = css`
 			margin-left: 1px;
 		}
 	}
+`;
+
+const accountUpright = css`
+	border-left: 1px solid ${palette.neutral[86]};
+	height: ${space[5]}px;
 `;
 
 type ThreeTierAccountProps = {
@@ -73,6 +78,7 @@ export function ThreeTierAccount({
 								copy={'New'}
 								pillColor={cardTheme.benefitPillColor}
 							/>
+							{!isV2 && <div css={accountUpright} />}
 							<ThreeTierAccountUsers />
 						</>
 					) : (
