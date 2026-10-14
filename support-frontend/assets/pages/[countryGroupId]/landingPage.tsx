@@ -1,5 +1,6 @@
 import type { CountryCode } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { PageParticipationsResultWithFallback } from 'helpers/abTests/pageParticipations';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { ContributionsOnlyLanding } from 'pages/supporter-plus-landing/twoStepPages/contributionsOnlyLanding';
@@ -8,7 +9,7 @@ import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landin
 
 type Props = {
 	supportRegionId: SupportRegionId;
-	landingPageSettings: LandingPageVariant;
+	landingPageSettings: PageParticipationsResultWithFallback<LandingPageVariant>;
 };
 
 const countryId: CountryCode = Country.detect();
@@ -20,7 +21,7 @@ export function LandingPage({ supportRegionId, landingPageSettings }: Props) {
 		return (
 			<ThreeTierLanding
 				supportRegionId={supportRegionId}
-				settings={landingPageSettings}
+				landingPageSettings={landingPageSettings}
 			/>
 		);
 	} else {

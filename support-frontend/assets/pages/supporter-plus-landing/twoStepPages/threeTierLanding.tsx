@@ -25,6 +25,7 @@ import { PageScaffold } from 'components/page/pageScaffold';
 import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
+import type { PageParticipationsResultWithFallback } from 'helpers/abTests/pageParticipations';
 import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
@@ -161,13 +162,14 @@ function getThreeTierProductOption(
 
 type ThreeTierLandingProps = {
 	supportRegionId: SupportRegionId;
-	settings: LandingPageVariant;
+	landingPageSettings: PageParticipationsResultWithFallback<LandingPageVariant>;
 };
 export function ThreeTierLanding({
 	supportRegionId,
-	settings,
+	landingPageSettings,
 }: ThreeTierLandingProps): JSX.Element {
 	const abParticipations = useAbParticipations();
+	const { variant: landingPageVariant } = landingPageSettings;
 
 	const {
 		productKey: urlSearchParamsProduct,
@@ -198,7 +200,7 @@ export function ThreeTierLanding({
 	);
 
 	const countdownSettings = countdownSwitchOn()
-		? settings.countdownSettings
+		? landingPageVariant.countdownSettings
 		: undefined;
 	// We override the heading when there's a live countdown
 	const [headingOverride, setHeadingOverride] = useState<string | undefined>();
@@ -216,7 +218,7 @@ export function ThreeTierLanding({
 
 		// 2. Default Selection from Settings
 		const defaultBillingPeriod =
-			settings.defaultProductSelection?.billingPeriod;
+			landingPageVariant.defaultProductSelection?.billingPeriod;
 
 		if (defaultBillingPeriod === 'Annual') {
 			return 'ANNUAL';
@@ -244,7 +246,7 @@ export function ThreeTierLanding({
 
 	// RRCP LandingPage Test Page / Default Product Selection
 	const defaultProductSelection =
-		settings.defaultProductSelection?.productType.toLowerCase();
+		landingPageVariant.defaultProductSelection?.productType.toLowerCase();
 
 	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
 	const { enableDeepDiscount } = useFeatureSwitches();
@@ -290,20 +292,22 @@ export function ThreeTierLanding({
 		link: tier1checkoutUrl,
 		isDefaultProductSelected: getDefaultProductSelection(tier1Product),
 		isUserSelected: getUserSelection(tier1Product, tier1Pricing),
-		...settings.products[tier1Product],
+		...landingPageVariant.products[tier1Product],
 		title:
-			settings.products[tier1Product]?.title ?? getProductLabel(tier1Product),
+			landingPageVariant.products[tier1Product]?.title ??
+			getProductLabel(tier1Product),
 		benefits:
-			settings.products[tier1Product]?.benefits ??
+			landingPageVariant.products[tier1Product]?.benefits ??
 			filterBenefits(
 				productCatalogDescription[tier1Product].benefits,
 				countryGroupId,
 				abParticipations,
 			),
 		cta:
-			settings.products[tier1Product]?.cta ??
+			landingPageVariant.products[tier1Product]?.cta ??
 			fallbackProducts[tier1Product]!.cta,
-		billingPeriodsCopy: settings.products[tier1Product]?.billingPeriodsCopy,
+		billingPeriodsCopy:
+			landingPageVariant.products[tier1Product]?.billingPeriodsCopy,
 	};
 
 	/** Tier 2: SupporterPlus */
@@ -336,19 +340,20 @@ export function ThreeTierLanding({
 	});
 
 	const tier2ProductDescription = {
-		...settings.products[tier2Product],
+		...landingPageVariant.products[tier2Product],
 		title: getProductLabel(tier2Product),
 		benefits:
-			settings.products[tier2Product]?.benefits ??
+			landingPageVariant.products[tier2Product]?.benefits ??
 			filterBenefits(
 				productCatalogDescription[tier2Product].benefits,
 				countryGroupId,
 				abParticipations,
 			),
 		cta:
-			settings.products[tier2Product]?.cta ??
+			landingPageVariant.products[tier2Product]?.cta ??
 			fallbackProducts[tier2Product]!.cta,
-		billingPeriodsCopy: settings.products[tier2Product]?.billingPeriodsCopy,
+		billingPeriodsCopy:
+			landingPageVariant.products[tier2Product]?.billingPeriodsCopy,
 	};
 
 	const tier2Card: CardContent = {
@@ -407,13 +412,17 @@ export function ThreeTierLanding({
 		abParticipations,
 	);
 	const tier3ProductDescription = {
-		title: settings.products[tier3Product]?.title ?? title,
-		titlePill: settings.products[tier3Product]?.titlePill ?? titlePill,
-		benefits: settings.products[tier3Product]?.benefits ?? tier3DefaultBenefits,
+		title: landingPageVariant.products[tier3Product]?.title ?? title,
+		titlePill:
+			landingPageVariant.products[tier3Product]?.titlePill ?? titlePill,
+		benefits:
+			landingPageVariant.products[tier3Product]?.benefits ??
+			tier3DefaultBenefits,
 		cta:
-			settings.products[tier3Product]?.cta ??
+			landingPageVariant.products[tier3Product]?.cta ??
 			fallbackProducts[tier3Product]!.cta,
-		billingPeriodsCopy: settings.products[tier3Product]?.billingPeriodsCopy,
+		billingPeriodsCopy:
+			landingPageVariant.products[tier3Product]?.billingPeriodsCopy,
 	};
 	const tier3ProductPrice = allProductPrices.DigitalPack;
 	const tierThreeProductOption = getThreeTierProductOption(
@@ -450,7 +459,7 @@ export function ThreeTierLanding({
 	};
 
 	const showWeeklyPrice =
-		forceWeeklyPricing || settings.name.includes('WEEKLY_PRICE');
+		forceWeeklyPricing || landingPageVariant.name.includes('WEEKLY_PRICE');
 
 	const tsAndCsContent: TsAndCsProps[] = [
 		{
@@ -532,7 +541,7 @@ export function ThreeTierLanding({
 					)}
 
 					<ThreeTierLandingHeading
-						heading={headingOverride ?? settings.copy.heading}
+						heading={headingOverride ?? landingPageVariant.copy.heading}
 						countdownDaysLeft={countdownDaysLeft}
 					/>
 
@@ -541,15 +550,17 @@ export function ThreeTierLanding({
 						dangerouslySetInnerHTML={{
 							__html: getSanitisedHtml(
 								replaceDatePlaceholder(
-									settings.copy.subheading,
+									landingPageVariant.copy.subheading,
 									countdownDaysLeft,
 								),
 							),
 						}}
 					/>
 
-					{settings.tickerSettings && (
-						<TickerContainer tickerSettings={settings.tickerSettings} />
+					{landingPageVariant.tickerSettings && (
+						<TickerContainer
+							tickerSettings={landingPageVariant.tickerSettings}
+						/>
 					)}
 					<BillingPeriodButtons
 						billingPeriods={paymentFrequencies.map((paymentFrequency) =>
