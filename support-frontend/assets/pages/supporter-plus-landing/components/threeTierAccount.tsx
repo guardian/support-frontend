@@ -65,14 +65,15 @@ export function ThreeTierAccount({
 	const isV2 = isDigitalSubscriptionV2 || isSupporterPlusV2;
 	const showThreeTierAccount =
 		isDigitalSubscriptionV1 || isDigitalSubscriptionV2 || isSupporterPlusV2;
-
+	const showThreeTierAccountContainer =
+		multipleAccountsVariant && multipleAccountsVariant !== 'control';
 	const accountCopy = isSupporterPlusV2
 		? '1 account'
 		: isDigitalSubscriptionV2
 		? '4 accounts'
 		: '3 extra accounts to share';
 
-	return multipleAccountsVariant && multipleAccountsVariant !== 'control' ? (
+	return showThreeTierAccountContainer ? (
 		<section css={accountBorder(showThreeTierAccount)}>
 			{showThreeTierAccount ? (
 				<span css={accountItems(isV2 ? 'center' : 'flex-start')}>
