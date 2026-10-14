@@ -8,10 +8,16 @@ import { tooltipMultipleAccounts } from 'helpers/productCatalog';
 import { ThreeTierAccountUser } from './threeTierAccountUser';
 import { ThreeTierAccountUsers } from './threeTierAccountUsers';
 
-const accountBorder = (paddingBottom: number) => css`
-	padding-bottom: ${paddingBottom}px;
+const accountBorder = (showAccount: boolean) => css`
 	border-bottom: 1px solid ${palette.neutral[86]};
-	margin-bottom: ${space[4]}px;
+	margin-bottom: ${showAccount ? space[4] : space[6]}px;
+	padding-top: ${showAccount ? space[4] : 0}px;
+	padding-bottom: ${showAccount ? space[4] : space[6]}px;
+	${from.desktop} {
+		margin-bottom: ${space[4]}px;
+		padding-top: ${space[4]}px;
+		padding-bottom: ${showAccount ? space[4] : space[9]}px;
+	}
 `;
 
 const accountItems = (justify: 'center' | 'flex-start') => css`
@@ -67,7 +73,7 @@ export function ThreeTierAccount({
 		: '3 extra accounts to share';
 
 	return multipleAccountsVariant && multipleAccountsVariant !== 'control' ? (
-		<section css={accountBorder(showThreeTierAccount ? space[4] : space[9])}>
+		<section css={accountBorder(showThreeTierAccount)}>
 			{showThreeTierAccount ? (
 				<span css={accountItems(isV2 ? 'center' : 'flex-start')}>
 					{productKey === 'DigitalSubscription' ? (

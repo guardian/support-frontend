@@ -125,10 +125,10 @@ const previousPriceStrikeThrough = css`
 	text-decoration: line-through;
 `;
 
-const btnStyleOverrides = css`
+const btnStyleOverrides = (showAccount: boolean) => css`
 	width: 100%;
 	justify-content: center;
-	margin-bottom: ${space[6]}px;
+	margin-bottom: ${showAccount ? 0 : space[6]}px;
 `;
 
 const checkmarkBenefitList = css`
@@ -348,7 +348,9 @@ export function ThreeTierCard({
 			</div>
 			<LinkButton
 				href={link}
-				cssOverrides={btnStyleOverrides}
+				cssOverrides={btnStyleOverrides(
+					!!multipleAccountsVariant && multipleAccountsVariant !== 'control',
+				)}
 				data-qm-trackable={quantumMetricButtonRef}
 				aria-label={linkAriaLabel}
 				theme={themeButtonReaderRevenueBrand}
