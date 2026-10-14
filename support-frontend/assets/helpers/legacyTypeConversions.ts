@@ -1,6 +1,6 @@
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import type { ActiveProductKey, ActiveRatePlanKey } from './productCatalog';
-import { subscriptionProductTypes } from './productPrice/subscriptions';
+import type { SubscriptionProduct } from './productPrice/subscriptions';
 
 /**
  * This file contains conversions between the legacy types used in the old checkouts
@@ -8,14 +8,12 @@ import { subscriptionProductTypes } from './productPrice/subscriptions';
  */
 
 // These product types match the ones defined on the server in src/main/scala/com/gu/support/catalog/Product.scala
-export const legacyProductTypes = [
-	...subscriptionProductTypes,
-	'TierThree',
-	'SupporterPlus',
-	'GuardianAdLite',
-	'Contribution',
-] as const;
-export type LegacyProductType = (typeof legacyProductTypes)[number];
+type LegacyProductType =
+	| SubscriptionProduct
+	| 'TierThree'
+	| 'SupporterPlus'
+	| 'GuardianAdLite'
+	| 'Contribution';
 
 export const getLegacyProductType = (
 	productKey: ActiveProductKey,
