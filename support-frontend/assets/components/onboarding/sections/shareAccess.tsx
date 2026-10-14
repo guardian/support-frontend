@@ -43,7 +43,12 @@ export function OnboardingShareAccess({
 }) {
 	return (
 		<Stack space={5} cssOverrides={completedStack}>
-			<ContentBox removePadding>
+			<ContentBox
+				removePadding
+				cssOverrides={css`
+					margin-bottom: ${space[10]}px;
+				`}
+			>
 				<div css={[heroContainer, heroAspectRatio]}>
 					<GridImage
 						gridId="onboardingShareAccessHero"

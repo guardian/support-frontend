@@ -50,6 +50,10 @@ const completedStackPadding = css`
 	}
 `;
 
+const extraAccountsButtonMargin = css`
+	margin-top: ${space[4]}px;
+`;
+
 export function OnboardingCompleted({
 	productKey,
 	landingPageSettings,
@@ -125,7 +129,7 @@ export function OnboardingCompleted({
 					{productKey === 'DigitalSubscription' && (
 						<LinkButton
 							priority="tertiary"
-							cssOverrides={[buttonOverrides]}
+							cssOverrides={[buttonOverrides, extraAccountsButtonMargin]}
 							href={getManageExtraAccountsUrl()}
 						>
 							Add extra accounts

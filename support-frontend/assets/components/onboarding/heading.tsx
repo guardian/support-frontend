@@ -117,6 +117,7 @@ interface StepContent {
 	gridId?: string;
 	altText?: string;
 	aspectRatio: SerializedStyles;
+	cssOverrides?: SerializedStyles;
 	/** Renders the hero inside the white card, with the blue bar behind it. */
 	contentInHeader?: boolean;
 }
@@ -158,6 +159,9 @@ function OnboardingHeading({
 				altText: 'Onboarding summary hero holding The Guardian logo',
 				aspectRatio: css`
 					aspect-ratio: 25 / 9;
+				`,
+				cssOverrides: css`
+					border-bottom: 1px solid #506991;
 				`,
 			},
 			[OnboardingSteps.GuardianApp]: {
@@ -302,7 +306,13 @@ function OnboardingHeading({
 			<Columns collapseUntil="tablet">
 				<Column cssOverrides={contentColumnStyles} span={[1, 10, 8]}>
 					<div css={headerSpacerDiv}>
-						<div css={[heroContainer, stepContent.aspectRatio]}>
+						<div
+							css={[
+								heroContainer,
+								stepContent.aspectRatio,
+								stepContent.cssOverrides,
+							]}
+						>
 							{stepContent.gridId && (
 								<GridImage
 									gridId={stepContent.gridId}
