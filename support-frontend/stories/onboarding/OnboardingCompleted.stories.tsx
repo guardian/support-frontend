@@ -1,5 +1,6 @@
 import type React from 'react';
 import { OnboardingCompleted } from 'components/onboarding/sections/completed';
+import { AbParticipationsProvider } from 'contexts/AbParticipationsContext';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
@@ -8,9 +9,13 @@ export default {
 	component: OnboardingCompleted,
 	decorators: [
 		(Story: React.FC): JSX.Element => (
-			<div style={{ maxWidth: '600px', margin: '40px auto' }}>
-				<Story />
-			</div>
+			<AbParticipationsProvider
+				participations={{ multipleAccounts: 'control' }}
+			>
+				<div style={{ maxWidth: '600px', margin: '40px auto' }}>
+					<Story />
+				</div>
+			</AbParticipationsProvider>
 		),
 		withSourceReset,
 	],
@@ -23,5 +28,14 @@ export const SupporterPlus = {
 	args: {
 		productKey: 'SupporterPlus',
 		landingPageSettings: fallBackLandingPageSelection,
+		countryGroupId: 'GBPCountries',
+	},
+};
+
+export const DigitalPlus = {
+	args: {
+		productKey: 'DigitalSubscription',
+		landingPageSettings: fallBackLandingPageSelection,
+		countryGroupId: 'GBPCountries',
 	},
 };
