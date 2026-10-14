@@ -153,9 +153,8 @@ export function ThreeTierLanding({
 	settings,
 }: ThreeTierLandingProps): JSX.Element {
 	const abParticipations = useAbParticipations();
-	const showAccounts = ['v1', 'v2'].some((variant) =>
-		abParticipations.multipleAccounts?.includes(variant),
-	);
+	const multipleAccountsVariant = abParticipations.multipleAccounts;
+	console.log('*** multipleAccountsVariant:', multipleAccountsVariant);
 
 	const {
 		productKey: urlSearchParamsProduct,
@@ -293,7 +292,7 @@ export function ThreeTierLanding({
 			settings.products[tier1Product]?.cta ??
 			fallbackProducts[tier1Product]!.cta,
 		billingPeriodsCopy: settings.products[tier1Product]?.billingPeriodsCopy,
-		showAccounts,
+		multipleAccountsVariant,
 	};
 
 	/** Tier 2: SupporterPlus */
@@ -348,7 +347,7 @@ export function ThreeTierLanding({
 			tier2Promotion?.discount?.amount,
 		),
 		promotion: tier2Promotion,
-		showAccounts,
+		multipleAccountsVariant,
 		...tier2ProductDescription,
 	};
 
@@ -381,7 +380,7 @@ export function ThreeTierLanding({
 		'DigitalSubscription',
 		tier3RatePlanKey,
 	);
-	const titlePill = abParticipations.multipleAccounts ? undefined : labelPill;
+	const titlePill = multipleAccountsVariant ? undefined : labelPill;
 
 	// landing page exception to hide abtest multipleAccounts benefit for variants except control
 	const tier3ProductCatalogBenefits = reduceBenefitsToAbTestVariant(
@@ -428,7 +427,7 @@ export function ThreeTierLanding({
 			tier3Promotion?.discount?.amount,
 		),
 		promotion: tier3Promotion,
-		showAccounts,
+		multipleAccountsVariant,
 		...tier3ProductDescription,
 	};
 

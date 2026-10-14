@@ -44,7 +44,7 @@ export type CardContent = LandingPageProductDescription & {
 	link: string;
 	price: number;
 	promotion?: Promotion;
-	showAccounts?: boolean;
+	multipleAccountsVariant?: string;
 };
 
 export type ThreeTierCardProps = {
@@ -198,7 +198,7 @@ export function ThreeTierCard({
 		cta,
 		product,
 		billingPeriodsCopy,
-		showAccounts,
+		multipleAccountsVariant,
 	} = cardContent;
 	const currency = getCurrencyByCode(currencyId);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -355,9 +355,11 @@ export function ThreeTierCard({
 			>
 				{cta.copy}
 			</LinkButton>
-			{showAccounts && (
-				<ThreeTierAccount productKey={product} cardTheme={cardTheme} />
-			)}
+			<ThreeTierAccount
+				multipleAccountsVariant={multipleAccountsVariant}
+				productKey={product}
+				cardTheme={cardTheme}
+			/>
 			{inAdditionToAllAccessDigital && (
 				<div css={benefitsPrefixCss}>
 					<span>

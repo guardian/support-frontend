@@ -3,7 +3,6 @@ import { from, palette, space, textSans15 } from '@guardian/source/foundations';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { BenefitPill } from 'components/checkoutBenefits/benefitPill';
 import Tooltip from 'components/tooltip/Tooltip';
-import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import type { CardTheme } from 'helpers/landingPage/cardTheme';
 import { tooltipMultipleAccounts } from 'helpers/productCatalog';
 import { ThreeTierAccountUser } from './threeTierAccountUser';
@@ -44,20 +43,19 @@ const accountUpright = css`
 type ThreeTierAccountProps = {
 	productKey: ProductKey;
 	cardTheme: CardTheme;
+	multipleAccountsVariant?: string;
 };
 export function ThreeTierAccount({
 	productKey,
 	cardTheme,
+	multipleAccountsVariant,
 }: ThreeTierAccountProps): JSX.Element | null {
-	const abParticipations = useAbParticipations();
-	const abVariant = abParticipations.multipleAccounts ?? '';
-
 	const isDigitalSubscriptionV1 =
-		productKey === 'DigitalSubscription' && abVariant === 'v1';
+		productKey === 'DigitalSubscription' && multipleAccountsVariant === 'v1';
 	const isDigitalSubscriptionV2 =
-		productKey === 'DigitalSubscription' && abVariant === 'v2';
+		productKey === 'DigitalSubscription' && multipleAccountsVariant === 'v2';
 	const isSupporterPlusV2 =
-		productKey === 'SupporterPlus' && abVariant === 'v2';
+		productKey === 'SupporterPlus' && multipleAccountsVariant === 'v2';
 	const isV2 = isDigitalSubscriptionV2 || isSupporterPlusV2;
 	const showThreeTierAccount =
 		isDigitalSubscriptionV1 || isDigitalSubscriptionV2 || isSupporterPlusV2;
@@ -68,7 +66,7 @@ export function ThreeTierAccount({
 		? '4 accounts'
 		: '3 extra accounts to share';
 
-	return (
+	return multipleAccountsVariant ? (
 		<section css={accountBorder(showThreeTierAccount ? space[4] : space[9])}>
 			{showThreeTierAccount ? (
 				<span css={accountItems(isV2 ? 'center' : 'flex-start')}>
@@ -110,5 +108,5 @@ export function ThreeTierAccount({
 				</span>
 			) : null}
 		</section>
-	);
+	) : null;
 }
