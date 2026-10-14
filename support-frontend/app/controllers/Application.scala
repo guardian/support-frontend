@@ -63,7 +63,6 @@ case class AppConfig private (
     v2recaptchaPublicKey: String,
     checkoutPostcodeLookup: Boolean,
     productCatalog: JsonObject,
-    allProductPrices: AllProductPrices,
     allCheckoutNudgeProductPrices: AllProductPrices,
     promotions: Seq[PromoWithCatalogInformation],
     serversideTests: Map[String, Participation],
@@ -93,7 +92,6 @@ object AppConfig extends InternationalisationCodecs {
       recaptchaConfigProvider: RecaptchaConfigProvider,
       productCatalog: JsonObject,
       serversideTests: Map[String, Participation],
-      allProductPrices: AllProductPrices,
       allCheckoutNudgeProductPrices: AllProductPrices,
       promotions: Seq[PromoWithCatalogInformation],
       user: Option[IdUser],
@@ -169,7 +167,6 @@ object AppConfig extends InternationalisationCodecs {
       checkoutPostcodeLookup = settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.contains(On),
       productCatalog = productCatalog,
       serversideTests = serversideTests,
-      allProductPrices = allProductPrices,
       allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
       promotions = promotions,
       user = user.map(user =>
@@ -483,7 +480,6 @@ class Application(
         .getOrElse("promoCode", Nil)
         .toList
 
-    val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
     val promotions = getPromotions(isTestUser, queryPromos, CountryGroup.byId(countryCode))
 
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
@@ -515,7 +511,6 @@ class Application(
       shareImageUrl = shareImageUrl(settings),
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
       serversideTests = serversideTests,
-      allProductPrices = allProductPrices,
       promotions = promotions,
       productCatalog = productCatalog,
       noIndex = noIndexing,
@@ -655,7 +650,6 @@ class Application(
         .getOrElse("promoCode", Nil)
         .toList
 
-    val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
     val promotions = getPromotions(isTestUser, queryPromos, CountryGroup.byId(countryGroupId))
 
     val checkoutNudgePromoCodes = settings.checkoutNudgeTests
@@ -682,7 +676,6 @@ class Application(
         membersDataApiUrl = membersDataApiUrl,
         guestAccountCreationToken = guestAccountCreationToken,
         v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
-        allProductPrices = allProductPrices,
         allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
         promotions = promotions,
         productCatalog = productCatalog,
@@ -710,7 +703,6 @@ class Application(
     val isTestUser = testUserService.isTestUser(request)
 
     val queryPromos = request.queryString.getOrElse("promoCode", Nil).toList
-    val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
     val promotions = getPromotions(isTestUser, queryPromos, request.geoData.countryGroup)
 
     val checkoutNudgePromoCodes = settings.checkoutNudgeTests
@@ -738,7 +730,6 @@ class Application(
       recaptchaConfigProvider: RecaptchaConfigProvider,
       productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get(),
       serversideTests = generateParticipations(Nil),
-      allProductPrices = allProductPrices,
       allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
       promotions = promotions,
       user = request.user,

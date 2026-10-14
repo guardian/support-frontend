@@ -19,7 +19,6 @@
   membersDataApiUrl: String,
   guestAccountCreationToken: Option[String],
   v2recaptchaConfigPublicKey: String,
-  allProductPrices: AllProductPrices,
   allCheckoutNudgeProductPrices: AllProductPrices,
   promotions: Seq[PromoWithCatalogInformation],
   productCatalog: JsonObject,
@@ -45,7 +44,6 @@
 ){
   <script type="text/javascript">
     window.guardian = window.guardian || {};
-    window.guardian.allProductPrices = @Html(outputJson(allProductPrices))
     window.guardian.allCheckoutNudgeProductPrices = @Html(outputJson(allCheckoutNudgeProductPrices))
     window.guardian.promotions = @Html(outputJson(promotions))
     window.guardian.tickerData = @Html(outputJson(tickerData))
