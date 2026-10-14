@@ -65,8 +65,9 @@ export function ThreeTierAccount({
 	const isV2 = isDigitalSubscriptionV2 || isSupporterPlusV2;
 	const showThreeTierAccount =
 		isDigitalSubscriptionV1 || isDigitalSubscriptionV2 || isSupporterPlusV2;
-	const showThreeTierAccountContainer =
-		multipleAccountsVariant && multipleAccountsVariant !== 'control';
+	const showThreeTierAccountContainer = ['v1', 'v2'].includes(
+		multipleAccountsVariant ?? '',
+	);
 	const accountCopy = isSupporterPlusV2
 		? '1 account'
 		: isDigitalSubscriptionV2
