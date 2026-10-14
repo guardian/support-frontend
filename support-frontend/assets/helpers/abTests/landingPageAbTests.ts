@@ -18,8 +18,20 @@ const fallbackDefaultProductSelection: DefaultProductSelection = {
 	productType: 'SupporterPlus',
 	billingPeriod: 'Monthly',
 };
-
-const fallbackDigitalPlusBenefits = [
+export const primaryDigitalPlusBenefit = {
+	copy: 'Three extra accounts to share',
+	tooltip:
+		'You can share your Digital plus access with three other people. Each person gets their own account and login.',
+	label: { copy: 'New' },
+	specificToAbTest: [
+		{
+			name: 'multipleAccounts',
+			variants: ['control', 'v1', 'v2'],
+			display: true,
+		},
+	],
+};
+export const baseDigitalPlusBenefits = [
 	{
 		copy: 'Digital access to the Guardian’s 200 year newspaper archive',
 		tooltip:
@@ -36,6 +48,10 @@ const fallbackDigitalPlusBenefits = [
 		tooltip:
 			'Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.',
 	},
+];
+export const allDigitalPlusBenefits = [
+	primaryDigitalPlusBenefit,
+	...baseDigitalPlusBenefits,
 ];
 
 export const fallBackLandingPageSelection: LandingPageVariant = {
@@ -88,24 +104,8 @@ export const fallBackLandingPageSelection: LandingPageVariant = {
 		},
 		DigitalSubscription: {
 			title: ProductTierLabel.DigitalSubscription,
-			benefits: [
-				{
-					copy: 'Three extra accounts to share',
-					tooltip:
-						'You can share your Digital plus access with three other people. Each person gets their own account and login.',
-					label: { copy: 'New' },
-					specificToAbTest: [
-						{
-							name: 'multipleAccounts',
-							variants: ['control', 'v1', 'v2'],
-							display: true,
-						},
-					],
-				},
-				...fallbackDigitalPlusBenefits,
-			],
+			benefits: allDigitalPlusBenefits,
 			cta: { copy: 'Support' },
-			benefitsSecondaryUser: [...fallbackDigitalPlusBenefits],
 		},
 	},
 	defaultProductSelection: fallbackDefaultProductSelection,

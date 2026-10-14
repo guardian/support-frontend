@@ -70,7 +70,7 @@ export function OnboardingDeclineInvitation({
 		landingPageSettings,
 		countryGroupId,
 		abParticipations,
-		'benefitsSecondaryUser',
+		'secondaryUser',
 	);
 
 	const confirmDecline = async () => {

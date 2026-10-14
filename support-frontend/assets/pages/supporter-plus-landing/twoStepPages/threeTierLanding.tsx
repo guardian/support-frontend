@@ -41,7 +41,7 @@ import { getPromotion } from 'helpers/productPrice/promotions';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
 import {
 	filterBenefits,
-	hideBenefits,
+	reduceBenefitsToAbTestVariant,
 } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { getTierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
 import { useStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/useStudentBeansRegionValid';
@@ -396,10 +396,10 @@ export function ThreeTierLanding({
 		tier3RatePlanKey,
 	);
 	// landing page exception to hide abtest multipleAccounts benefit for variants except control
-	const tier3ProductCatalogBenefits = hideBenefits(
+	const tier3ProductCatalogBenefits = reduceBenefitsToAbTestVariant(
 		productCatalogDescription[tier3Product].benefits,
 		'multipleAccounts',
-		['control'],
+		'control',
 	);
 	const tier3DefaultBenefits = filterBenefits(
 		tier3ProductCatalogBenefits,

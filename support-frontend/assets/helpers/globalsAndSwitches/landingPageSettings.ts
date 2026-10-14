@@ -69,7 +69,6 @@ export interface LandingPageProductDescription {
 	label?: {
 		copy: string;
 	};
-	benefitsSecondaryUser?: ProductBenefit[];
 }
 
 export interface DefaultProductSelection {
