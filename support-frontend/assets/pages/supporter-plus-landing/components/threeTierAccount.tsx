@@ -66,7 +66,7 @@ export function ThreeTierAccount({
 		? '4 accounts'
 		: '3 extra accounts to share';
 
-	return multipleAccountsVariant ? (
+	return multipleAccountsVariant && multipleAccountsVariant !== 'control' ? (
 		<section css={accountBorder(showThreeTierAccount ? space[4] : space[9])}>
 			{showThreeTierAccount ? (
 				<span css={accountItems(isV2 ? 'center' : 'flex-start')}>
