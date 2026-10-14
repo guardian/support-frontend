@@ -25,7 +25,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, header, status, stubControllerComponents}
 import services._
 import services.mparticle.MParticleClient
-import services.pricing.{CountryGroupPrices, PriceSummaryService, PriceSummaryServiceProvider}
+import services.pricing.{CountryGroupPrices, DefaultPromotionService, PriceSummaryService, PriceSummaryServiceProvider}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -101,6 +101,8 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     mock[AllSettingsProvider],
     mock[Stage],
     priceSummaryServiceProvider,
+    mock[DefaultPromotionService],
+    mock[CachedPromotionsServiceProvider],
     productCatalog,
     mock[CachedSalesTaxService],
     "support.thegulocal.com",

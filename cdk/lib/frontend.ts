@@ -175,6 +175,11 @@ export class Frontend extends GuStack {
 		(ec2App.listener.node.defaultChild as CfnListener).sslPolicy =
 			SslPolicy.TLS13_RES;
 
+		ec2App.listener.setAttribute(
+			'routing.http.response.strict_transport_security.header_value',
+			'max-age=31557600',
+		);
+
 		// This parameter is used by https://github.com/guardian/waf
 		new StringParameter(this, 'AlbSsmParam', {
 			parameterName: `/infosec/waf/services/${this.stage}/frontend-alb-arn`,

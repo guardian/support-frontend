@@ -25,6 +25,7 @@ const defaultArgs = {
 	handleStepNavigation: () => {},
 	userNewslettersSubscriptions: [],
 	csrf: { token: 'mock-csrf-token' },
+	productTitle: 'All-access digital',
 };
 
 export const ExistingUserSignedIn = {

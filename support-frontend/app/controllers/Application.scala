@@ -14,6 +14,7 @@ import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper, Product, Supp
 import com.gu.support.config.Stages.PROD
 import com.gu.support.config._
 import com.gu.support.encoding.InternationalisationCodecs
+import com.gu.support.promotions.PromoWithCatalogInformation
 import com.gu.support.zuora.api.ReaderType.Gift
 import com.typesafe.scalalogging.StrictLogging
 import config.{RecaptchaConfigProvider, StringsConfig}
@@ -27,9 +28,11 @@ import models.GeoData
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.mparticle.MParticleClient
-import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
+import services.pricing.{DefaultPromotionService, PriceSummaryServiceProvider, ProductPrices}
 import services.{
+  ApplicablePromotions,
   CachedProductCatalogServiceProvider,
+  CachedPromotionsServiceProvider,
   CachedSalesTaxService,
   PaymentAPIService,
   TestUserService,
@@ -62,6 +65,7 @@ case class AppConfig private (
     productCatalog: JsonObject,
     allProductPrices: AllProductPrices,
     allCheckoutNudgeProductPrices: AllProductPrices,
+    promotions: Seq[PromoWithCatalogInformation],
     serversideTests: Map[String, Participation],
     user: Option[AppConfig.User],
     settings: AllSettings,
@@ -91,6 +95,7 @@ object AppConfig extends InternationalisationCodecs {
       serversideTests: Map[String, Participation],
       allProductPrices: AllProductPrices,
       allCheckoutNudgeProductPrices: AllProductPrices,
+      promotions: Seq[PromoWithCatalogInformation],
       user: Option[IdUser],
       isTestUser: Boolean,
       settings: AllSettings,
@@ -166,6 +171,7 @@ object AppConfig extends InternationalisationCodecs {
       serversideTests = serversideTests,
       allProductPrices = allProductPrices,
       allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
+      promotions = promotions,
       user = user.map(user =>
         User(
           id = user.id,
@@ -229,6 +235,8 @@ class Application(
     settingsProvider: AllSettingsProvider,
     stage: Stage,
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
+    defaultPromotionService: DefaultPromotionService,
+    cachedPromotionsServiceProvider: CachedPromotionsServiceProvider,
     cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
     cachedTaxRateService: CachedSalesTaxService,
     val supportUrl: String,
@@ -256,6 +264,19 @@ class Application(
       DigitalPack = priceSummaryServiceProvider.forUser(isTestUser).getPrices(DigitalPack, queryPromos),
     )
   }
+
+  private def getPromotions(
+      isTestUser: Boolean,
+      queryPromos: List[String],
+      maybeCountryGroup: Option[CountryGroup],
+  ): Seq[PromoWithCatalogInformation] =
+    maybeCountryGroup
+      .map { countryGroup =>
+        val promoCodes = (queryPromos ++ defaultPromotionService.allPromoCodes).distinct
+        val promotions = cachedPromotionsServiceProvider.forUser(isTestUser).getActive(promoCodes)
+        ApplicablePromotions.filterByCountryGroup(promotions, countryGroup)
+      }
+      .getOrElse(Nil)
 
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val redirectUrl = buildRegionalisedContributeLink(request.geoData.countryGroup match {
@@ -463,6 +484,7 @@ class Application(
         .toList
 
     val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
+    val promotions = getPromotions(isTestUser, queryPromos, CountryGroup.byId(countryCode))
 
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
 
@@ -471,7 +493,6 @@ class Application(
     val canonicalLink = s"$canonicalUrl"
 
     views.html.contributions(
-      id = s"$pageName-landing-page-$countryCode",
       mainElement = mainElement,
       js = RefPath("[countryGroupId]/router.js"),
       description =
@@ -495,6 +516,7 @@ class Application(
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
       serversideTests = serversideTests,
       allProductPrices = allProductPrices,
+      promotions = promotions,
       productCatalog = productCatalog,
       noIndex = noIndexing,
       canonicalLink = canonicalLink,
@@ -634,6 +656,7 @@ class Application(
         .toList
 
     val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
+    val promotions = getPromotions(isTestUser, queryPromos, CountryGroup.byId(countryGroupId))
 
     val checkoutNudgePromoCodes = settings.checkoutNudgeTests
       .filter(_.status == Live)
@@ -661,6 +684,7 @@ class Application(
         v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
         allProductPrices = allProductPrices,
         allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
+        promotions = promotions,
         productCatalog = productCatalog,
         taxRates = taxRates,
         user = request.user,
@@ -687,6 +711,7 @@ class Application(
 
     val queryPromos = request.queryString.getOrElse("promoCode", Nil).toList
     val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
+    val promotions = getPromotions(isTestUser, queryPromos, request.geoData.countryGroup)
 
     val checkoutNudgePromoCodes = settings.checkoutNudgeTests
       .filter(_.status == Live)
@@ -715,6 +740,7 @@ class Application(
       serversideTests = generateParticipations(Nil),
       allProductPrices = allProductPrices,
       allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
+      promotions = promotions,
       user = request.user,
       isTestUser = isTestUser,
       settings = settings,
