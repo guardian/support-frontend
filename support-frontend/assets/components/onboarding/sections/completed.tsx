@@ -43,6 +43,7 @@ const linkStyle = css`
 
 const completedStackPadding = css`
 	padding: ${space[3]}px;
+	padding-bottom: ${space[6]}px;
 
 	${from.tablet} {
 		padding: ${space[8]}px;
