@@ -161,7 +161,12 @@ function OnboardingHeading({
 					aspect-ratio: 25 / 9;
 				`,
 				cssOverrides: css`
+					width: calc(100% - ${space[10]}px);
 					border-bottom: 1px solid #506991;
+
+					${from.tablet} {
+						width: 100%;
+					}
 				`,
 			},
 			[OnboardingSteps.GuardianApp]: {
