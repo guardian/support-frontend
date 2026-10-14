@@ -42,7 +42,7 @@ libraryDependencies ++= Seq(
 )
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
 
-val bouncyCastleVersion = "1.85"
+val bouncyCastleVersion = "1.86"
 dependencyOverrides ++= Seq(
   "org.bouncycastle" % "bcprov-jdk18on" % bouncyCastleVersion,
   "org.bouncycastle" % "bcpkix-jdk18on" % bouncyCastleVersion,
