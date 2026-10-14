@@ -19,11 +19,20 @@ object ApplicablePromotions {
       countryGroup: CountryGroup,
       now: DateTime = DateTime.now(),
   ): Seq[PromoWithCatalogInformation] =
-    promotions.filter(promotion =>
-      isActive(promotion, now) &&
-        appliesToCountryGroup(promotion, countryGroup) &&
-        appliesToAnyRatePlan(promotion, productKeys, isGift),
+    filterByCountryGroup(promotions, countryGroup, now).filter(promotion =>
+      appliesToAnyRatePlan(promotion, productKeys, isGift),
     )
+
+  /** Filters promotions to those which are
+    *   - currently active
+    *   - available in at least one country in `countryGroup`
+    */
+  def filterByCountryGroup(
+      promotions: Seq[PromoWithCatalogInformation],
+      countryGroup: CountryGroup,
+      now: DateTime = DateTime.now(),
+  ): Seq[PromoWithCatalogInformation] =
+    promotions.filter(promotion => isActive(promotion, now) && appliesToCountryGroup(promotion, countryGroup))
 
   private def isActive(promotion: PromoWithCatalogInformation, now: DateTime): Boolean = {
     val hasStarted = now.isEqual(promotion.startTimestamp) || now.isAfter(promotion.startTimestamp)
