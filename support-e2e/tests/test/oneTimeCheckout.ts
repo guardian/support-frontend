@@ -44,7 +44,7 @@ export const testOneTimeCheckout = (testDetails: TestDetails) => {
 		await setTestUserCoreDetails(page, email());
 		await page.getByRole('radio', { name: paymentType }).check();
 
-		// UK one-time max, see ONE_OFF in support-frontend/assets/helpers/contributions.ts
+		// one-time max for country, see ONE_OFF in support-frontend/assets/helpers/contributions.ts
 		const maxAmountMessage = `Please enter an amount between 1 and ${maxAmount}.`;
 
 		// Fill in an amount above the maximum to trigger the range error
