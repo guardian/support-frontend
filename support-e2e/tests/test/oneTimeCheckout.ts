@@ -13,6 +13,7 @@ import { email } from '../utils/users';
 type TestDetails = {
 	paymentType: string;
 	internationalisationId: string;
+	maxAmount: number;
 };
 
 const submitForm = (page: Page) =>
@@ -21,10 +22,6 @@ const submitForm = (page: Page) =>
 			name: ` with `,
 		})
 		.click();
-
-// UK one-time max, see ONE_OFF in support-frontend/assets/helpers/contributions.ts
-const MAX_AMOUNT = 2000;
-const rangeError = `Please enter an amount between 1 and ${MAX_AMOUNT}.`;
 
 const enterOtherAmount = async (page: Page, amount: number) => {
 	// The radio input is covered by its label, so click the label instead
@@ -35,7 +32,7 @@ const enterOtherAmount = async (page: Page, amount: number) => {
 };
 
 export const testOneTimeCheckout = (testDetails: TestDetails) => {
-	const { internationalisationId, paymentType } = testDetails;
+	const { internationalisationId, paymentType, maxAmount } = testDetails;
 	test(`OneTime with ${paymentType} in ${internationalisationId}`, async ({
 		context,
 		baseURL,
@@ -47,13 +44,16 @@ export const testOneTimeCheckout = (testDetails: TestDetails) => {
 		await setTestUserCoreDetails(page, email());
 		await page.getByRole('radio', { name: paymentType }).check();
 
+		// UK one-time max, see ONE_OFF in support-frontend/assets/helpers/contributions.ts
+		const maxAmountMessage = `Please enter an amount between 1 and ${maxAmount}.`;
+
 		// Fill in an amount above the maximum to trigger the range error
-		await enterOtherAmount(page, MAX_AMOUNT + 1);
-		await expect(page.getByText(rangeError)).toBeVisible();
+		await enterOtherAmount(page, maxAmount + 1);
+		await expect(page.getByText(maxAmountMessage)).toBeVisible();
 
 		// Fill in the maximum amount to ensure the error disappears
-		await enterOtherAmount(page, MAX_AMOUNT);
-		await expect(page.getByText(rangeError)).toBeHidden();
+		await enterOtherAmount(page, maxAmount);
+		await expect(page.getByText(maxAmountMessage)).toBeHidden();
 
 		if (paymentType === 'Credit/Debit card') {
 			// First check that a failed card payment behaves as expected
