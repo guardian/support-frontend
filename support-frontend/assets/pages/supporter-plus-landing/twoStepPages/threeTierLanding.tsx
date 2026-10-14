@@ -377,10 +377,12 @@ export function ThreeTierLanding({
 	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[tier3RatePlanKey]
 		?.pricing[currencyId] as number;
 
-	const { label: title, labelPill: titlePill } = getProductDescription(
+	const { label: title, labelPill } = getProductDescription(
 		'DigitalSubscription',
 		tier3RatePlanKey,
 	);
+	const titlePill = abParticipations.multipleAccounts ? undefined : labelPill;
+
 	// landing page exception to hide abtest multipleAccounts benefit for variants except control
 	const tier3ProductCatalogBenefits = reduceBenefitsToAbTestVariant(
 		productCatalogDescription[tier3Product].benefits,
