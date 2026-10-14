@@ -11,12 +11,11 @@ import { ThreeTierAccountUsers } from './threeTierAccountUsers';
 const accountBorder = (showAccount: boolean) => css`
 	border-bottom: 1px solid ${palette.neutral[86]};
 	margin-bottom: ${showAccount ? space[4] : space[6]}px;
-	padding-top: ${showAccount ? space[4] : 0}px;
-	padding-bottom: ${showAccount ? space[4] : space[6]}px;
+	padding: ${showAccount ? space[4] : 0}px 0
+		${showAccount ? space[4] : space[6]}px;
 	${from.desktop} {
 		margin-bottom: ${space[4]}px;
-		padding-top: ${space[4]}px;
-		padding-bottom: ${showAccount ? space[4] : space[9]}px;
+		padding: ${space[4]}px 0 ${showAccount ? space[4] : space[9]}px;
 	}
 `;
 
@@ -25,12 +24,12 @@ const accountItems = (justify: 'center' | 'flex-start') => css`
 	flex-direction: row;
 	justify-content: ${justify};
 	align-items: center;
-	column-gap: ${space[2]}px;
 
 	${textSans15};
 `;
 
 const accountTooltip = css`
+	margin-left: ${space[2]}px;
 	& div {
 		display: none;
 
@@ -44,6 +43,7 @@ const accountTooltip = css`
 const accountUpright = css`
 	border-left: 1px solid ${palette.neutral[86]};
 	height: ${space[5]}px;
+	margin-right: ${space[3]}px;
 `;
 
 type ThreeTierAccountProps = {
@@ -81,6 +81,9 @@ export function ThreeTierAccount({
 							<BenefitPill
 								copy={'New'}
 								pillColor={cardTheme.benefitPillColor}
+								cssOverrides={css`
+									margin-right: ${space[3]}px;
+								`}
 							/>
 							{!isV2 && <div css={accountUpright} />}
 							<ThreeTierAccountUsers />
