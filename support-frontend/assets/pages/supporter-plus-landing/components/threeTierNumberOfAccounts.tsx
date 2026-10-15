@@ -56,68 +56,87 @@ export function ThreeTierNumberOfAccounts({
 	cardTheme,
 	multipleAccountsVariant,
 }: ThreeTierNumberOfAccountsProps): JSX.Element | null {
-	const isDigitalSubscriptionV1 =
-		productKey === 'DigitalSubscription' && multipleAccountsVariant === 'v1';
-	const isDigitalSubscriptionV2 =
-		productKey === 'DigitalSubscription' && multipleAccountsVariant === 'v2';
-	const isSupporterPlusV2 =
-		productKey === 'SupporterPlus' && multipleAccountsVariant === 'v2';
-	const isV2 = isDigitalSubscriptionV2 || isSupporterPlusV2;
-	const showThreeTierAccount =
-		isDigitalSubscriptionV1 || isDigitalSubscriptionV2 || isSupporterPlusV2;
-	const showThreeTierAccountContainer = ['v1', 'v2'].includes(
+	const benefitPill = (
+		<BenefitPill
+			copy={'New'}
+			pillColor={cardTheme.benefitPillColor}
+			cssOverrides={css`
+				margin-right: ${space[3]}px;
+			`}
+		/>
+	);
+	const toolTip = (
+		<Tooltip
+			children={
+				<>
+					<p
+						css={css`
+							margin-bottom: ${space[2]}px;
+						`}
+					>
+						<strong>Extra accounts</strong>
+					</p>
+					<p>{tooltipMultipleAccounts}</p>
+				</>
+			}
+			xAxisOffset={108}
+			yAxisOffset={12}
+			placement="bottom"
+			desktopOnly={true}
+		/>
+	);
+	const getThreeTierNumberOfAccounts = () => {
+		return (
+			<>
+				{multipleAccountsVariant === 'v1' &&
+				productKey === 'DigitalSubscription' ? (
+					<section css={accountBorder(true)}>
+						<span css={accountItems('flex-start')}>
+							<>
+								{benefitPill}
+								<div css={accountUpright} />
+								<ThreeTierAccountUsers />
+							</>
+							<span css={accountTooltip}>3 extra accounts to share</span>
+						</span>
+					</section>
+				) : multipleAccountsVariant === 'v2' &&
+				  productKey === 'DigitalSubscription' ? (
+					<section css={accountBorder(true)}>
+						<span css={accountItems('center')}>
+							<>
+								{benefitPill}
+								<ThreeTierAccountUsers />
+							</>
+							<span css={accountTooltip}>
+								4 accounts
+								{toolTip}
+							</span>
+						</span>
+					</section>
+				) : multipleAccountsVariant === 'v2' &&
+				  productKey === 'SupporterPlus' ? (
+					<section css={accountBorder(true)}>
+						<span css={accountItems('center')}>
+							<ThreeTierAccountUser />
+							<span css={accountTooltip}>
+								1 account
+								{toolTip}
+							</span>
+						</span>
+					</section>
+				) : (
+					<section css={accountBorder(false)} />
+				)}
+			</>
+		);
+	};
+
+	const showThreeTierNumberOfAccountsContainer = ['v1', 'v2'].includes(
 		multipleAccountsVariant ?? '',
 	);
-	const accountCopy = isSupporterPlusV2
-		? '1 account'
-		: isDigitalSubscriptionV2
-		? '4 accounts'
-		: '3 extra accounts to share';
 
-	return showThreeTierAccountContainer ? (
-		<section css={accountBorder(showThreeTierAccount)}>
-			{showThreeTierAccount ? (
-				<span css={accountItems(isV2 ? 'center' : 'flex-start')}>
-					{productKey === 'DigitalSubscription' ? (
-						<>
-							<BenefitPill
-								copy={'New'}
-								pillColor={cardTheme.benefitPillColor}
-								cssOverrides={css`
-									margin-right: ${space[3]}px;
-								`}
-							/>
-							{!isV2 && <div css={accountUpright} />}
-							<ThreeTierAccountUsers />
-						</>
-					) : (
-						<ThreeTierAccountUser />
-					)}
-					<span css={accountTooltip}>
-						{accountCopy}
-						{isDigitalSubscriptionV2 && (
-							<Tooltip
-								children={
-									<>
-										<p
-											css={css`
-												margin-bottom: ${space[2]}px;
-											`}
-										>
-											<strong>Extra accounts</strong>
-										</p>
-										<p>{tooltipMultipleAccounts}</p>
-									</>
-								}
-								xAxisOffset={108}
-								yAxisOffset={12}
-								placement="bottom"
-								desktopOnly={true}
-							></Tooltip>
-						)}
-					</span>
-				</span>
-			) : null}
-		</section>
-	) : null;
+	return showThreeTierNumberOfAccountsContainer
+		? getThreeTierNumberOfAccounts()
+		: null;
 }
