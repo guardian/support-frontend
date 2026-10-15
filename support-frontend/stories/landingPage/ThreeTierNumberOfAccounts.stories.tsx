@@ -50,6 +50,13 @@ DigitalSubscriptionV2Red.args = {
 	multipleAccountsVariant: 'v2',
 };
 
+export const SupporterPlusV1 = Template.bind({});
+SupporterPlusV1.args = {
+	productKey: 'SupporterPlus',
+	cardTheme: defaultCardTheme,
+	multipleAccountsVariant: 'v1',
+};
+
 export const SupporterPlusV2 = Template.bind({});
 SupporterPlusV2.args = {
 	productKey: 'SupporterPlus',
