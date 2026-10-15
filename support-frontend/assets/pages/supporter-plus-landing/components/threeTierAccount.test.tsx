@@ -55,7 +55,7 @@ describe('threeTierAccount', () => {
 		expect(container.querySelector('section')).toBeInTheDocument();
 		expect(container.textContent).toBe('');
 	});
-	it('Undefined MultipleAccounts returns null', () => {
+	it('Undefined multipleAccountsVariant returns null', () => {
 		const { container } = render(
 			<ThreeTierAccount
 				productKey={'Contribution'}
