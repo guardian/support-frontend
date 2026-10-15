@@ -36,8 +36,7 @@ describe('getOnboardingProductCopy', () => {
 		};
 
 		expect(
-			getOnboardingProductCopy('SupporterPlus', settings, 'GBPCountries', {})
-				.title,
+			getOnboardingProductCopy('SupporterPlus', settings, 'GBPCountries').title,
 		).toBe('CMS All-access');
 	});
 
@@ -47,7 +46,6 @@ describe('getOnboardingProductCopy', () => {
 				'DigitalSubscription',
 				liveControlVariant,
 				'GBPCountries',
-				{},
 			).title,
 		).toBe('Digital plus');
 	});
@@ -61,19 +59,13 @@ describe('getOnboardingProductCopy', () => {
 		};
 
 		expect(
-			getOnboardingProductCopy('SupporterPlus', settings, 'GBPCountries', {})
-				.title,
+			getOnboardingProductCopy('SupporterPlus', settings, 'GBPCountries').title,
 		).toBe('All-access digital');
 	});
 
 	it('returns an empty title and no benefits when productKey is missing', () => {
 		expect(
-			getOnboardingProductCopy(
-				undefined,
-				liveControlVariant,
-				'GBPCountries',
-				{},
-			),
+			getOnboardingProductCopy(undefined, liveControlVariant, 'GBPCountries'),
 		).toEqual({
 			title: '',
 			benefits: [],
@@ -85,7 +77,6 @@ describe('getOnboardingProductCopy', () => {
 			'DigitalSubscription',
 			liveControlVariant,
 			'GBPCountries',
-			{ multipleAccounts: 'control' },
 		);
 
 		expect(benefits.length).toBeGreaterThan(0);

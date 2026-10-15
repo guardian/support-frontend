@@ -31,7 +31,7 @@ const primaryDigitalPlusBenefit = {
 		},
 	],
 };
-export const baseDigitalPlusBenefits = [
+const baseDigitalPlusBenefits = [
 	{
 		copy: 'Digital access to the Guardian’s 200 year newspaper archive',
 		tooltip:

@@ -20,7 +20,6 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import type { PageParticipationsResultWithFallback } from 'helpers/abTests/pageParticipations';
@@ -179,7 +178,6 @@ export function ThreeTierLanding({
 	supportRegionId,
 	landingPageSettings,
 }: ThreeTierLandingProps): JSX.Element {
-	const abParticipations = useAbParticipations();
 	const { variant: landingPageVariant, participations } = landingPageSettings;
 	const multipleAccountsVariant = verifyMultipleAccountsParticipation(
 		participations,
@@ -316,7 +314,6 @@ export function ThreeTierLanding({
 			filterBenefits(
 				productCatalogDescription[tier1Product].benefits,
 				countryGroupId,
-				abParticipations,
 			),
 		cta:
 			landingPageVariant.products[tier1Product]?.cta ??
@@ -359,7 +356,6 @@ export function ThreeTierLanding({
 			filterBenefits(
 				productCatalogDescription[tier2Product].benefits,
 				countryGroupId,
-				abParticipations,
 			),
 		cta:
 			landingPageVariant.products[tier2Product]?.cta ??
@@ -417,6 +413,10 @@ export function ThreeTierLanding({
 	const tier3DefaultBenefits = filterBenefits(
 		productCatalogDescription[tier3Product].benefits,
 		countryGroupId,
+	);
+	console.log(
+		'*** landingPageVariant.products[tier3Product]?.benefits ',
+		landingPageVariant,
 	);
 	const tier3Benefits =
 		landingPageVariant.products[tier3Product]?.benefits ?? tier3DefaultBenefits;
