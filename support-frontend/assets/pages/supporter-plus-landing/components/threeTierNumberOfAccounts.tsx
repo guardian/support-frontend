@@ -46,7 +46,7 @@ const accountUpright = css`
 	margin-right: ${space[3]}px;
 `;
 
-type ThreeTierNumberOfAccountsProps = {
+export type ThreeTierNumberOfAccountsProps = {
 	productKey: ProductKey;
 	cardTheme: CardTheme;
 	multipleAccountsVariant?: string;
