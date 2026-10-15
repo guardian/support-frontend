@@ -23,13 +23,6 @@ const primaryDigitalPlusBenefit = {
 	tooltip:
 		'You can share your Digital plus access with three other people. Each person gets their own account and login.',
 	label: { copy: 'New' },
-	specificToAbTest: [
-		{
-			name: 'multipleAccounts',
-			variants: ['control', 'v1', 'v2'],
-			display: true,
-		},
-	],
 };
 const baseDigitalPlusBenefits = [
 	{
