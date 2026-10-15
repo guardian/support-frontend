@@ -145,6 +145,31 @@ const isCardUserSelected = (
 	);
 };
 
+type Participations = Record<string, string | undefined>;
+const verifyParticipation = (
+	participations: Participations,
+	participationKey: string,
+	variant: string,
+): boolean => {
+	return participations[participationKey] === variant;
+};
+const multipleAccountParticipants = [
+	'MULTIPLE_ACCOUNTS',
+	'MULTIPLE_ACCOUNTS_UK',
+	'MULTIPLE_ACCOUNTS_US',
+	'MULTIPLE_ACCOUNTS_AU',
+];
+const verifyMultipleAccountsParticipation = (
+	participations: Participations,
+	variant: string,
+): string | undefined => {
+	return multipleAccountParticipants.find((participantKey) =>
+		verifyParticipation(participations, participantKey, variant),
+	)
+		? variant
+		: undefined;
+};
+
 type ThreeTierLandingProps = {
 	supportRegionId: SupportRegionId;
 	landingPageSettings: PageParticipationsResultWithFallback<LandingPageVariant>;
@@ -154,9 +179,11 @@ export function ThreeTierLanding({
 	landingPageSettings,
 }: ThreeTierLandingProps): JSX.Element {
 	const abParticipations = useAbParticipations();
-	const multipleAccountsVariant = abParticipations.multipleAccounts;
-	const { variant: landingPageVariant } = landingPageSettings;
-
+	const { variant: landingPageVariant, participations } = landingPageSettings;
+	const multipleAccountsVariant = verifyMultipleAccountsParticipation(
+		participations,
+		landingPageVariant.name,
+	);
 	const {
 		productKey: urlSearchParamsProduct,
 		ratePlanKey: urlSearchParamsRatePlan,

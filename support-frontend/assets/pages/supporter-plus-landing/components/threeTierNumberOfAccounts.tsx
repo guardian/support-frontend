@@ -71,7 +71,7 @@ export function ThreeTierNumberOfAccounts({
 	);
 	const getThreeTierNumberOfAccounts = () => {
 		if (
-			multipleAccountsVariant === 'v1' &&
+			multipleAccountsVariant === 'V1' &&
 			productKey === 'DigitalSubscription'
 		) {
 			return (
@@ -88,7 +88,7 @@ export function ThreeTierNumberOfAccounts({
 			);
 		}
 		if (
-			multipleAccountsVariant === 'v2' &&
+			multipleAccountsVariant === 'V2' &&
 			productKey === 'DigitalSubscription'
 		) {
 			return (
@@ -123,7 +123,7 @@ export function ThreeTierNumberOfAccounts({
 				</section>
 			);
 		}
-		if (multipleAccountsVariant === 'v2' && productKey === 'SupporterPlus') {
+		if (multipleAccountsVariant === 'V2' && productKey === 'SupporterPlus') {
 			return (
 				<section css={accountBorder(true)}>
 					<span css={accountItems('center')}>
@@ -136,7 +136,7 @@ export function ThreeTierNumberOfAccounts({
 		return <section css={accountBorder(false)} />;
 	};
 
-	const showThreeTierNumberOfAccountsContainer = ['v1', 'v2'].includes(
+	const showThreeTierNumberOfAccountsContainer = ['V1', 'V2'].includes(
 		multipleAccountsVariant ?? '',
 	);
 
