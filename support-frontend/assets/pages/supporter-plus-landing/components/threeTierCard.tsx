@@ -34,8 +34,8 @@ import {
 	parseBillingPeriodCopy,
 } from 'helpers/utilities/utilities';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
-import { ThreeTierAccount } from './threeTierAccount';
 import { ThreeTierCardPill } from './threeTierCardPill';
+import { ThreeTierNumberOfAccounts } from './threeTierNumberOfAccounts';
 
 export type CardContent = LandingPageProductDescription & {
 	product: 'SupporterPlus' | 'Contribution' | 'DigitalSubscription';
@@ -357,7 +357,7 @@ export function ThreeTierCard({
 			>
 				{cta.copy}
 			</LinkButton>
-			<ThreeTierAccount
+			<ThreeTierNumberOfAccounts
 				multipleAccountsVariant={multipleAccountsVariant}
 				productKey={product}
 				cardTheme={cardTheme}

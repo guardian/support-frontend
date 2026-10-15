@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import { defaultCardTheme } from 'helpers/landingPage/cardTheme';
-import { ThreeTierAccount } from './threeTierAccount';
+import { ThreeTierNumberOfAccounts } from './threeTierNumberOfAccounts';
 
 describe('threeTierAccount', () => {
 	it('Digital Subscription renders v1 correctly', () => {
 		render(
-			<ThreeTierAccount
+			<ThreeTierNumberOfAccounts
 				productKey={'DigitalSubscription'}
 				cardTheme={defaultCardTheme}
 				multipleAccountsVariant={'v1'}
@@ -15,7 +15,7 @@ describe('threeTierAccount', () => {
 	});
 	it('Digital Subscription renders v2 correctly', () => {
 		render(
-			<ThreeTierAccount
+			<ThreeTierNumberOfAccounts
 				productKey={'DigitalSubscription'}
 				cardTheme={defaultCardTheme}
 				multipleAccountsVariant={'v2'}
@@ -25,7 +25,7 @@ describe('threeTierAccount', () => {
 	});
 	it('SupporterPlus Subscription v1 renders an empty container', () => {
 		const { container } = render(
-			<ThreeTierAccount
+			<ThreeTierNumberOfAccounts
 				productKey={'SupporterPlus'}
 				cardTheme={defaultCardTheme}
 				multipleAccountsVariant={'v1'}
@@ -36,7 +36,7 @@ describe('threeTierAccount', () => {
 	});
 	it('SupporterPlus Subscription v2 renders 1 account', () => {
 		render(
-			<ThreeTierAccount
+			<ThreeTierNumberOfAccounts
 				productKey={'SupporterPlus'}
 				cardTheme={defaultCardTheme}
 				multipleAccountsVariant={'v2'}
@@ -46,7 +46,7 @@ describe('threeTierAccount', () => {
 	});
 	it('Contribution Subscription renders an empty container', () => {
 		const { container } = render(
-			<ThreeTierAccount
+			<ThreeTierNumberOfAccounts
 				productKey={'Contribution'}
 				cardTheme={defaultCardTheme}
 				multipleAccountsVariant={'v1'}
@@ -57,7 +57,7 @@ describe('threeTierAccount', () => {
 	});
 	it('Undefined multipleAccountsVariant returns null', () => {
 		const { container } = render(
-			<ThreeTierAccount
+			<ThreeTierNumberOfAccounts
 				productKey={'Contribution'}
 				cardTheme={defaultCardTheme}
 				multipleAccountsVariant={undefined}

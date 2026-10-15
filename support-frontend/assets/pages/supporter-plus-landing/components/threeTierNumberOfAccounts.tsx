@@ -46,16 +46,16 @@ const accountUpright = css`
 	margin-right: ${space[3]}px;
 `;
 
-type ThreeTierAccountProps = {
+type ThreeTierNumberOfAccountsProps = {
 	productKey: ProductKey;
 	cardTheme: CardTheme;
 	multipleAccountsVariant?: string;
 };
-export function ThreeTierAccount({
+export function ThreeTierNumberOfAccounts({
 	productKey,
 	cardTheme,
 	multipleAccountsVariant,
-}: ThreeTierAccountProps): JSX.Element | null {
+}: ThreeTierNumberOfAccountsProps): JSX.Element | null {
 	const isDigitalSubscriptionV1 =
 		productKey === 'DigitalSubscription' && multipleAccountsVariant === 'v1';
 	const isDigitalSubscriptionV2 =
