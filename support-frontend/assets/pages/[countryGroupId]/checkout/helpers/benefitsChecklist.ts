@@ -38,29 +38,6 @@ const benefitsAsChecklist = ({
 	];
 };
 
-export const reduceBenefitsToAbTestVariant = (
-	benefits: ProductBenefit[],
-	abTestNameFind: string,
-	abTestVariantShow: string,
-): ProductBenefit[] => {
-	return benefits.map((benefit) => {
-		if (benefit.specificToAbTest) {
-			return {
-				...benefit,
-				specificToAbTest: benefit.specificToAbTest.map((abTest) =>
-					abTest.name === abTestNameFind
-						? {
-								...abTest,
-								variants: [abTestVariantShow],
-						  }
-						: abTest,
-				),
-			};
-		}
-		return benefit;
-	});
-};
-
 export const removeBenefitByCopy = (
 	benefits: ProductBenefit[],
 	benefitToRemove: string,

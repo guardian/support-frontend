@@ -18,7 +18,7 @@ const fallbackDefaultProductSelection: DefaultProductSelection = {
 	productType: 'SupporterPlus',
 	billingPeriod: 'Monthly',
 };
-export const primaryDigitalPlusBenefit = {
+const primaryDigitalPlusBenefit = {
 	copy: 'Three extra accounts to share',
 	tooltip:
 		'You can share your Digital plus access with three other people. Each person gets their own account and login.',
@@ -49,7 +49,7 @@ export const baseDigitalPlusBenefits = [
 			'Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.',
 	},
 ];
-export const allDigitalPlusBenefits = [
+const allDigitalPlusBenefits = [
 	primaryDigitalPlusBenefit,
 	...baseDigitalPlusBenefits,
 ];
