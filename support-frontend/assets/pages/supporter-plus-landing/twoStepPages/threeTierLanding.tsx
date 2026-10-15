@@ -568,19 +568,13 @@ export function ThreeTierLanding({
 					currency={glyph(currencyId)}
 					countryGroupId={countryGroupId}
 				/>
-			</Container>
-			{showStudentOffer && (
-				<Container
-					sideBorders
-					borderColor="rgba(170, 170, 180, 0.5)"
-					cssOverrides={lightContainer}
-				>
+				{showStudentOffer && (
 					<StudentOffer
 						currencyKey={currencyId}
 						supportRegionId={supportRegionId}
 					/>
-				</Container>
-			)}
+				)}
+			</Container>
 		</PageScaffold>
 	);
 }
