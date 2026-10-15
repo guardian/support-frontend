@@ -119,10 +119,7 @@ export function ThreeTierNumberOfAccounts({
 					<section css={accountBorder(true)}>
 						<span css={accountItems('center')}>
 							<ThreeTierAccountUser />
-							<span css={accountTooltip}>
-								1 account
-								{toolTip}
-							</span>
+							<span css={accountTooltip}>1 account</span>
 						</span>
 					</section>
 				) : (
