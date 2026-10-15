@@ -3,6 +3,7 @@ import { withUKPath } from './decorators/withUKPath';
 import { viewports } from './viewports';
 import MockDate from 'mockdate';
 import { withGlobalStyles } from './decorators/withGlobalStyles';
+import { productCatalogFixture } from 'fixtures/productCatalogFixture';
 
 const parameters = {
 	actions: { argTypesRegex: '^on[A-Z].*' },
@@ -40,6 +41,9 @@ if (typeof window !== 'undefined') {
 	window.guardian = window.guardian || {};
 	window.guardian.settings = window.guardian.settings || {};
 	window.guardian.settings.metricUrl = 'https://metrics.gutools.co.uk';
+	// helpers/productCatalog reads this at import time, so it must exist before any story loads
+	window.guardian.productCatalog =
+		window.guardian.productCatalog || productCatalogFixture;
 	window.guardian.promotions = window.guardian.promotions || [
 		{
 			promoCode: 'STORYBOOK_STUB',
