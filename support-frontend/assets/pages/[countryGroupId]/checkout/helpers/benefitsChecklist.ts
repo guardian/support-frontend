@@ -61,10 +61,17 @@ export const reduceBenefitsToAbTestVariant = (
 	});
 };
 
+export const removeBenefitByCopy = (
+	benefits: ProductBenefit[],
+	benefitToRemove: string,
+): ProductBenefit[] => {
+	return benefits.filter((benefit) => benefit.copy !== benefitToRemove);
+};
+
 export const filterBenefits = (
 	benefits: ProductBenefit[],
 	countryGroupId: CountryGroupId,
-	abParticipations: Participations,
+	abParticipations?: Participations,
 ): ProductBenefit[] => {
 	const benefitsByCountry = benefits.filter((benefit) =>
 		filterBenefitByRegion(benefit, countryGroupId),

@@ -40,7 +40,7 @@ import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
 import { getQueryParameter } from 'helpers/urls/url';
 import {
 	filterBenefits,
-	reduceBenefitsToAbTestVariant,
+	removeBenefitByCopy,
 } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { getTierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
 import { useStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/useStudentBeansRegionValid';
@@ -153,6 +153,7 @@ const verifyParticipation = (
 ): boolean => {
 	return participations[participationKey] === variant;
 };
+const multipleAccountBenefit = 'Three extra accounts to share';
 const multipleAccountParticipants = [
 	'MULTIPLE_ACCOUNTS',
 	'MULTIPLE_ACCOUNTS_UK',
@@ -413,24 +414,21 @@ export function ThreeTierLanding({
 	);
 	const titlePill = multipleAccountsVariant ? undefined : labelPill;
 
-	// landing page exception to hide abtest multipleAccounts benefit for variants except control
-	const tier3ProductCatalogBenefits = reduceBenefitsToAbTestVariant(
-		productCatalogDescription[tier3Product].benefits,
-		'multipleAccounts',
-		'control',
-	);
 	const tier3DefaultBenefits = filterBenefits(
-		tier3ProductCatalogBenefits,
+		productCatalogDescription[tier3Product].benefits,
 		countryGroupId,
-		abParticipations,
 	);
+	const tier3Benefits =
+		landingPageVariant.products[tier3Product]?.benefits ?? tier3DefaultBenefits;
+	const tier3BenefitsMultipleAccounts =
+		multipleAccountsVariant === 'V1' || multipleAccountsVariant === 'V2'
+			? removeBenefitByCopy(tier3Benefits, multipleAccountBenefit)
+			: tier3Benefits;
 	const tier3ProductDescription = {
 		title: landingPageVariant.products[tier3Product]?.title ?? title,
 		titlePill:
 			landingPageVariant.products[tier3Product]?.titlePill ?? titlePill,
-		benefits:
-			landingPageVariant.products[tier3Product]?.benefits ??
-			tier3DefaultBenefits,
+		benefits: tier3BenefitsMultipleAccounts,
 		cta:
 			landingPageVariant.products[tier3Product]?.cta ??
 			fallbackProducts[tier3Product]!.cta,
