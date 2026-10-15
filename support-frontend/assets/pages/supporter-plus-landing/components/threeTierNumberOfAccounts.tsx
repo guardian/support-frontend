@@ -5,8 +5,8 @@ import { BenefitPill } from 'components/checkoutBenefits/benefitPill';
 import Tooltip from 'components/tooltip/Tooltip';
 import type { CardTheme } from 'helpers/landingPage/cardTheme';
 import { tooltipMultipleAccounts } from 'helpers/productCatalog';
-import { ThreeTierAccountUser } from './threeTierAccountUser';
-import { ThreeTierAccountUsers } from './threeTierAccountUsers';
+import { AccountUsersSvg } from './accountUsersSvg';
+import { AccountUserSvg } from './accountUserSvg';
 
 const accountBorder = (showAccount: boolean) => css`
 	border-bottom: 1px solid ${palette.neutral[86]};
@@ -95,7 +95,7 @@ export function ThreeTierNumberOfAccounts({
 							<>
 								{benefitPill}
 								<div css={accountUpright} />
-								<ThreeTierAccountUsers />
+								<AccountUsersSvg />
 							</>
 							<span css={accountTooltip}>3 extra accounts to share</span>
 						</span>
@@ -106,7 +106,7 @@ export function ThreeTierNumberOfAccounts({
 						<span css={accountItems('center')}>
 							<>
 								{benefitPill}
-								<ThreeTierAccountUsers />
+								<AccountUsersSvg />
 							</>
 							<span css={accountTooltip}>
 								4 accounts
@@ -118,7 +118,7 @@ export function ThreeTierNumberOfAccounts({
 				  productKey === 'SupporterPlus' ? (
 					<section css={accountBorder(true)}>
 						<span css={accountItems('center')}>
-							<ThreeTierAccountUser />
+							<AccountUserSvg />
 							<span css={accountTooltip}>1 account</span>
 						</span>
 					</section>

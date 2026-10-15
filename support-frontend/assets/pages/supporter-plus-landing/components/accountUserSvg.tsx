@@ -1,4 +1,4 @@
-export function ThreeTierAccountUser() {
+export function AccountUserSvg() {
 	return (
 		<svg
 			width="16"
