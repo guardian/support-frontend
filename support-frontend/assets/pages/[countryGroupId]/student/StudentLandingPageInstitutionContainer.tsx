@@ -25,7 +25,8 @@ export function StudentLandingPageInstitutionContainer({
 	const productKey: ActiveProductKey = 'SupporterPlus';
 	const ratePlanKey: ActiveRatePlanKey = 'Monthly';
 
-	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
+	const { currencyCode: currencyKey } =
+		getSupportRegionIdConfig(supportRegionId);
 	const price =
 		productCatalog[productKey]?.ratePlans[ratePlanKey]?.pricing[currencyKey];
 	const maybePromo =

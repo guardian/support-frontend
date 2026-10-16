@@ -1,31 +1,32 @@
-import type { CountryCode } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import type { BillingPeriod } from '@modules/product/billingPeriod';
-import { allProductPrices } from 'helpers/productPrice/productPrices';
-import { getPromotion, type Promotion } from 'helpers/productPrice/promotions';
-import type { CardContent } from 'pages/supporter-plus-landing/components/threeTierCard';
-import { getThreeTierProductOption } from './getTierCardContent';
+import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
+import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog';
+import { productCatalog } from 'helpers/productCatalog';
+import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
+import type { Promotion } from 'helpers/productPrice/promotions';
+import { getQueryParameter } from 'helpers/urls/url';
+import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
+import type { TierProductKey } from './getDigitalRatePlanKey';
 
 export function getTierCardPromotion(
 	supportRegionId: SupportRegionId,
-	countryId: CountryCode,
-	billingPeriod: BillingPeriod,
-	cardContent: CardContent,
+	tierProductKey: TierProductKey,
+	billingPeriod: RecurringBillingPeriod,
+	tierRatePlanKey: ProductRatePlanKey<TierProductKey>,
 ): Promotion | undefined {
-	if (cardContent.product === 'Contribution') {
-		return undefined;
-	}
+	const { currencyCode } = getSupportRegionIdConfig(supportRegionId);
 
-	const tierProductPrice = allProductPrices[cardContent.product];
-	const tierProductOption = getThreeTierProductOption(
-		cardContent.product,
-		supportRegionId,
-	);
-	return getPromotion(
-		tierProductPrice,
-		countryId,
-		billingPeriod,
-		'NoFulfilmentOptions',
-		tierProductOption,
-	);
+	const tierPricing = productCatalog[tierProductKey]?.ratePlans[tierRatePlanKey]
+		?.pricing[currencyCode] as number;
+
+	const promotions = window.guardian.promotions ?? [];
+	const promoCode = getQueryParameter('promoCode');
+	return getLegacyPromotion({
+		promotions,
+		productKey: tierProductKey,
+		ratePlanKey: tierRatePlanKey,
+		price: tierPricing,
+		billingPeriod: billingPeriod,
+		promoCode: promoCode,
+	});
 }

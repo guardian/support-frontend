@@ -1,62 +1,44 @@
 import type { CountryCode } from '@modules/internationalisation/country';
-import { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import type { BillingPeriod } from '@modules/product/billingPeriod';
-import {
-	type ProductOptions,
-	TaxExclusive,
-	TaxInclusive,
-} from '@modules/product/productOptions';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import {
+	getProductDescription,
 	getProductLabel,
 	productCatalog,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
-import { allProductPrices } from 'helpers/productPrice/productPrices';
-import { getPromotion } from 'helpers/productPrice/promotions';
+import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
+import { getQueryParameter } from 'helpers/urls/url';
 import type { CardContent } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { useThreeTierUrlSelection } from 'pages/supporter-plus-landing/twoStepPages/useThreeTierUrlSelection';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
-import { filterProductDescriptionBenefits } from '../checkout/helpers/benefitsChecklist';
+import { filterBenefitsByCountryGroupId } from '../checkout/helpers/benefitsChecklist';
 import type { TierProductKey } from './getDigitalRatePlanKey';
-
-type TierProductKeyWithPromotion = 'SupporterPlus' | 'DigitalSubscription';
 
 export type TierConfig = {
 	countryId: CountryCode;
 	tierProductKey: TierProductKey;
 	supportRegionId: SupportRegionId;
-	billingPeriod: BillingPeriod;
+	billingPeriod: RecurringBillingPeriod;
 	tierRatePlanKey: ProductRatePlanKey<TierProductKey>;
 	settings: LandingPageVariant;
+	multipleAccountsVariant?: string;
 };
-
-export function getThreeTierProductOption(
-	tierProductKey: TierProductKey,
-	supportRegionId: SupportRegionId,
-): ProductOptions {
-	if (
-		supportRegionId == SupportRegionId.CA &&
-		(tierProductKey === 'DigitalSubscription' ||
-			tierProductKey === 'SupporterPlus')
-	) {
-		return TaxExclusive;
-	}
-	return TaxInclusive;
-}
 
 export function getTierCardContent(config: TierConfig): CardContent {
 	const {
-		countryId,
+		// countryId,
 		tierProductKey,
 		supportRegionId,
 		billingPeriod,
 		tierRatePlanKey,
 		settings,
+		multipleAccountsVariant,
 	} = config;
 
 	const fallbackProducts = fallBackLandingPageSelection.products;
@@ -67,26 +49,16 @@ export function getTierCardContent(config: TierConfig): CardContent {
 	const tierPricing = productCatalog[tierProductKey]?.ratePlans[tierRatePlanKey]
 		?.pricing[currencyCode] as number;
 
-	const tierProductOption = getThreeTierProductOption(
-		tierProductKey,
-		supportRegionId,
-	);
-
-	const tierProductKeyWithPromotion: TierProductKeyWithPromotion | undefined =
-		tierProductKey === 'SupporterPlus' ||
-		tierProductKey === 'DigitalSubscription'
-			? tierProductKey
-			: undefined;
-
-	const tierPromotion = tierProductKeyWithPromotion
-		? getPromotion(
-				allProductPrices[tierProductKeyWithPromotion],
-				countryId,
-				billingPeriod,
-				undefined,
-				tierProductOption,
-		  )
-		: undefined;
+	const promotions = window.guardian.promotions ?? [];
+	const promoCode = getQueryParameter('promoCode');
+	const tierPromotion = getLegacyPromotion({
+		promotions,
+		productKey: tierProductKey,
+		ratePlanKey: tierRatePlanKey,
+		price: tierPricing,
+		billingPeriod: billingPeriod,
+		promoCode: promoCode,
+	});
 
 	const tierCheckoutURL = buildCheckoutUrl(supportRegionId, {
 		product: tierProductKey,
@@ -97,10 +69,13 @@ export function getTierCardContent(config: TierConfig): CardContent {
 	const tierProductDescription = {
 		...settings.products[tierProductKey],
 		title: getProductLabel(tierProductKey),
+		titlePill: multipleAccountsVariant
+			? undefined
+			: getProductDescription(tierProductKey, tierRatePlanKey).labelPill,
 		benefits:
 			settings.products[tierProductKey]?.benefits ??
-			filterProductDescriptionBenefits(
-				productCatalogDescription[tierProductKey],
+			filterBenefitsByCountryGroupId(
+				productCatalogDescription[tierProductKey].benefits,
 				countryGroupId,
 			),
 		cta:
@@ -159,6 +134,7 @@ export function getTierCardContent(config: TierConfig): CardContent {
 			tierPricing,
 			tierPromotion?.discount?.amount,
 		),
+		multipleAccountsVariant,
 		...tierProductDescription,
 	};
 }

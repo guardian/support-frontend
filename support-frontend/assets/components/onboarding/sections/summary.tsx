@@ -245,7 +245,7 @@ function OnboardingSummary({
 		currency,
 		currencyCode: currencyKey,
 		countryGroupId,
-	} = getSupportRegionIdConfig(supportRegionId);;
+	} = getSupportRegionIdConfig(supportRegionId);
 	const { title: productTitle, benefits } = getOnboardingProductCopy(
 		productKey,
 		landingPageSettings,

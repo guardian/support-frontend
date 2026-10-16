@@ -64,13 +64,22 @@ export const reduceBenefitsToAbTestVariant = (
 export const filterBenefits = (
 	benefits: ProductBenefit[],
 	countryGroupId: CountryGroupId,
-	abParticipations: Participations,
+	abParticipations?: Participations,
 ): ProductBenefit[] => {
 	const benefitsByCountry = benefits.filter((benefit) =>
 		filterBenefitByRegion(benefit, countryGroupId),
 	);
 	return benefitsByCountry.filter((benefit) =>
 		filterBenefitByABTest(benefit, abParticipations),
+	);
+};
+
+export const filterBenefitsByCountryGroupId = (
+	benefits: ProductBenefit[],
+	countryGroupId: CountryGroupId,
+): ProductBenefit[] => {
+	return benefits.filter((benefit) =>
+		filterBenefitByRegion(benefit, countryGroupId),
 	);
 };
 
