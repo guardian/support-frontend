@@ -304,10 +304,10 @@ function getNudgePromotion(
 	ratePlan: ActiveRatePlanKey,
 	price: number,
 ): Promotion | undefined {
-	const billingPeriod = toRegularBillingPeriod(
+	const recurringBillingPeriod = toRegularBillingPeriod(
 		productCatalog[product]?.ratePlans[ratePlan]?.billingPeriod,
 	);
-	if (!promoCodes?.length || !billingPeriod) {
+	if (!promoCodes?.length || !recurringBillingPeriod) {
 		return undefined;
 	}
 	const variantPromotions = (
@@ -319,7 +319,7 @@ function getNudgePromotion(
 		productKey: product,
 		ratePlanKey: ratePlan,
 		price,
-		billingPeriod,
+		billingPeriod: recurringBillingPeriod,
 	});
 }
 
