@@ -154,6 +154,7 @@ export function ThreeTierLanding({
 	landingPageSettings,
 }: ThreeTierLandingProps): JSX.Element {
 	const abParticipations = useAbParticipations();
+	const multipleAccountsVariant = abParticipations.multipleAccounts;
 	const { variant: landingPageVariant } = landingPageSettings;
 
 	const {
@@ -292,6 +293,7 @@ export function ThreeTierLanding({
 		cta:
 			landingPageVariant.products[tier1Product]?.cta ??
 			fallbackProducts[tier1Product]!.cta,
+		multipleAccountsVariant,
 		billingPeriodsCopy:
 			landingPageVariant.products[tier1Product]?.billingPeriodsCopy,
 	};
@@ -342,14 +344,14 @@ export function ThreeTierLanding({
 		product: tier2Product,
 		price: tier2Pricing,
 		link: tier2CheckoutURL,
-		/** The promotion from the querystring is for the SupporterPlus product only */
-		promotion: tier2Promotion,
 		isDefaultProductSelected: getDefaultProductSelection(tier2Product),
 		isUserSelected: getUserSelection(
 			tier2Product,
 			tier2Pricing,
 			tier2Promotion?.discount?.amount,
 		),
+		promotion: tier2Promotion,
+		multipleAccountsVariant,
 		...tier2ProductDescription,
 	};
 
@@ -378,10 +380,12 @@ export function ThreeTierLanding({
 	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[tier3RatePlanKey]
 		?.pricing[currencyId] as number;
 
-	const { label: title, labelPill: titlePill } = getProductDescription(
+	const { label: title, labelPill } = getProductDescription(
 		'DigitalSubscription',
 		tier3RatePlanKey,
 	);
+	const titlePill = multipleAccountsVariant ? undefined : labelPill;
+
 	// landing page exception to hide abtest multipleAccounts benefit for variants except control
 	const tier3ProductCatalogBenefits = reduceBenefitsToAbTestVariant(
 		productCatalogDescription[tier3Product].benefits,
@@ -424,13 +428,14 @@ export function ThreeTierLanding({
 		product: tier3Product,
 		price: tier3Pricing,
 		link: tier3CheckoutURL,
-		promotion: tier3Promotion,
 		isDefaultProductSelected: getDefaultProductSelection(tier3Product),
 		isUserSelected: getUserSelection(
 			tier3Product,
 			tier3Pricing,
 			tier3Promotion?.discount?.amount,
 		),
+		promotion: tier3Promotion,
+		multipleAccountsVariant,
 		...tier3ProductDescription,
 	};
 

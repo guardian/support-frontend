@@ -92,7 +92,7 @@ describe('getOnboardingProductCopy', () => {
 		expect(benefits.map((benefit) => benefit.text)).toEqual(
 			expect.arrayContaining([
 				'Three extra accounts to share',
-				'Guardian Weekly e-magazine',
+				'Guardian Weekly digital magazine',
 			]),
 		);
 	});

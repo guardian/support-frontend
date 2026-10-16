@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import {
 	neutral,
@@ -18,8 +19,13 @@ const benefitPillCss = (pillColor?: string) => css`
 interface BenefitPillProps {
 	copy: string;
 	pillColor?: string;
+	cssOverrides?: SerializedStyles;
 }
 
-export function BenefitPill({ copy, pillColor }: BenefitPillProps) {
-	return <span css={benefitPillCss(pillColor)}>{copy}</span>;
+export function BenefitPill({
+	copy,
+	pillColor,
+	cssOverrides,
+}: BenefitPillProps) {
+	return <span css={[benefitPillCss(pillColor), cssOverrides]}>{copy}</span>;
 }

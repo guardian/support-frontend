@@ -327,12 +327,12 @@ const paperArchiveDigitalBenefitUK = {
 };
 
 const weeklyDigitalBenefit = {
-	copy: `Guardian Weekly e-magazine`,
+	copy: `Guardian Weekly digital magazine`,
 	tooltip: `Accessed through the Guardian Editions app, the Guardian Weekly e-magazine features a handpicked and carefully curated selection of in-depth articles, global news, opinion and more. Enjoy wherever you are, on your favourite device.`,
 };
 
 const editionsDigitalBenefit = {
-	copy: `The Long Read e-magazine`,
+	copy: `The Long Read digital magazine`,
 	tooltip: `Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.`,
 };
 
@@ -350,10 +350,10 @@ const paperArchiveDigitalBenefit = {
 	] as CountryGroupId[],
 };
 
+export const tooltipMultipleAccounts = `You can share your Digital plus access with three other people. Each person gets their own account and login.`;
 const multipleAccountsBenefit = {
 	copy: 'Three extra accounts to share',
-	tooltip:
-		'You can share your Digital plus access with three other people. Each person gets their own account and login.',
+	tooltip: tooltipMultipleAccounts,
 	label: { copy: 'New' },
 	specificToAbTest: [
 		{
