@@ -1,3 +1,4 @@
+import { multipleAccountsBenefit } from 'helpers/abTests/multipleAccounts';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { getOnboardingProductCopy } from './onboardingProductCopy';
 
@@ -82,7 +83,7 @@ describe('getOnboardingProductCopy', () => {
 		expect(benefits.length).toBeGreaterThan(0);
 		expect(benefits.map((benefit) => benefit.text)).toEqual(
 			expect.arrayContaining([
-				'Three extra accounts to share',
+				multipleAccountsBenefit,
 				'Guardian Weekly digital magazine',
 			]),
 		);

@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
+import { multipleAccountsBenefit } from 'helpers/abTests/multipleAccounts';
 import type { BenefitsCheckListData } from '../../../../components/checkoutBenefits/benefitsCheckList';
 import type { LandingPageVariant } from '../../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
@@ -117,10 +118,7 @@ export const getDigitalSubscriptionBenefitsChecklist = (
 		digitalPlusDefaultBenefits;
 	const finalDigitalPlusBenefits =
 		user === 'secondaryUser'
-			? removeBenefitByCopy(
-					digitalPlusBenefits,
-					'Three extra accounts to share',
-			  )
+			? removeBenefitByCopy(digitalPlusBenefits, multipleAccountsBenefit)
 			: digitalPlusBenefits;
 
 	return benefitsAsChecklist({

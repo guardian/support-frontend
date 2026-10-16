@@ -22,6 +22,10 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
+import {
+	multipleAccountsBenefit,
+	verifyMultipleAccountsParticipation,
+} from 'helpers/abTests/multipleAccounts';
 import type { PageParticipationsResultWithFallback } from 'helpers/abTests/pageParticipations';
 import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
@@ -142,32 +146,6 @@ const isCardUserSelected = (
 		Number(urlSelectedAmount) === cardPrice ||
 		Number(urlSelectedAmount) === cardPriceDiscount
 	);
-};
-
-type Participations = Record<string, string | undefined>;
-const verifyParticipation = (
-	participations: Participations,
-	participationKey: string,
-	variant: string,
-): boolean => {
-	return participations[participationKey] === variant;
-};
-const multipleAccountBenefit = 'Three extra accounts to share';
-const multipleAccountParticipants = [
-	'MULTIPLE_ACCOUNTS',
-	'MULTIPLE_ACCOUNTS_UK',
-	'MULTIPLE_ACCOUNTS_US',
-	'MULTIPLE_ACCOUNTS_AU',
-];
-const verifyMultipleAccountsParticipation = (
-	participations: Participations,
-	variant: string,
-): string | undefined => {
-	return multipleAccountParticipants.find((participantKey) =>
-		verifyParticipation(participations, participantKey, variant),
-	)
-		? variant
-		: undefined;
 };
 
 type ThreeTierLandingProps = {
@@ -422,7 +400,7 @@ export function ThreeTierLanding({
 		landingPageVariant.products[tier3Product]?.benefits ?? tier3DefaultBenefits;
 	const tier3BenefitsMultipleAccounts =
 		multipleAccountsVariant === 'V1' || multipleAccountsVariant === 'V2'
-			? removeBenefitByCopy(tier3Benefits, multipleAccountBenefit)
+			? removeBenefitByCopy(tier3Benefits, multipleAccountsBenefit)
 			: tier3Benefits;
 	const tier3ProductDescription = {
 		title: landingPageVariant.products[tier3Product]?.title ?? title,
