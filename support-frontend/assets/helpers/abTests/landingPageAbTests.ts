@@ -7,6 +7,7 @@ import type {
 import { selectVariantForTest } from './banditSelection';
 import { randomNumber } from './helpers';
 import type { PageParticipationsConfig } from './models';
+import { multipleAccountBenefitCopy } from './multipleAccounts';
 import {
 	getPageParticipationsWithFallback,
 	type PageParticipationsResultWithFallback,
@@ -18,20 +19,13 @@ const fallbackDefaultProductSelection: DefaultProductSelection = {
 	productType: 'SupporterPlus',
 	billingPeriod: 'Monthly',
 };
-export const primaryDigitalPlusBenefit = {
-	copy: 'Three extra accounts to share',
+const primaryDigitalPlusBenefit = {
+	copy: multipleAccountBenefitCopy,
 	tooltip:
 		'You can share your Digital plus access with three other people. Each person gets their own account and login.',
 	label: { copy: 'New' },
-	specificToAbTest: [
-		{
-			name: 'multipleAccounts',
-			variants: ['control', 'v1', 'v2'],
-			display: true,
-		},
-	],
 };
-export const baseDigitalPlusBenefits = [
+const baseDigitalPlusBenefits = [
 	{
 		copy: 'Digital access to the Guardian’s 200 year newspaper archive',
 		tooltip:
@@ -49,7 +43,7 @@ export const baseDigitalPlusBenefits = [
 			'Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.',
 	},
 ];
-export const allDigitalPlusBenefits = [
+const allDigitalPlusBenefits = [
 	primaryDigitalPlusBenefit,
 	...baseDigitalPlusBenefits,
 ];

@@ -3,7 +3,6 @@ import type React from 'react';
 import { MemoryRouter } from 'react-router';
 import { OnboardingDeclineInvitation } from 'components/onboarding/sections/declineInvitation';
 import { OnboardingInvitationDeclined } from 'components/onboarding/sections/invitationDeclined';
-import { AbParticipationsProvider } from 'contexts/AbParticipationsContext';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
@@ -12,13 +11,9 @@ export default {
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<MemoryRouter>
-				<AbParticipationsProvider
-					participations={{ multipleAccounts: 'control' }}
-				>
-					<div style={{ maxWidth: '600px', margin: '40px auto' }}>
-						<Story />
-					</div>
-				</AbParticipationsProvider>
+				<div style={{ maxWidth: '600px', margin: '40px auto' }}>
+					<Story />
+				</div>
 			</MemoryRouter>
 		),
 		withSourceReset,

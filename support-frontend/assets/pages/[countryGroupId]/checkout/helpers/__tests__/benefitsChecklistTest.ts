@@ -6,28 +6,12 @@ import {
 import { expectedDefaultBenefits } from './__fixtures__/expectedDefaultBenefits';
 
 describe('getBenefitsChecklistFromLandingPageTool', () => {
-	const abParticipations = {
-		multipleAccounts: 'control',
-	};
 	const digitalSubscriptionBaseBenefits = [
 		{
 			copy: 'DigitalSubscription benefit 1',
 		},
 		{
 			copy: 'DigitalSubscription benefit 2',
-		},
-	];
-	const digitalSubscriptionBenefits = [
-		...digitalSubscriptionBaseBenefits,
-		{
-			copy: 'DigitalSubscription multipleAccounts control benefit 3',
-			specificToAbTest: [
-				{
-					name: 'multipleAccounts',
-					variants: ['control'],
-					display: true,
-				},
-			],
 		},
 	];
 	const landingPageSettings = {
@@ -39,7 +23,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 		products: {
 			DigitalSubscription: {
 				title: 'DigitalSubscription title',
-				benefits: digitalSubscriptionBenefits,
+				benefits: digitalSubscriptionBaseBenefits,
 				cta: {
 					copy: 'DigitalSubscription cta',
 				},
@@ -75,13 +59,12 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 		},
 	};
 	const GBP = 'GBPCountries';
-	it('should return UK DigitalSubscription benefits including multipleAccounts control benefit', () => {
+	it('should return UK DigitalSubscription benefits', () => {
 		expect(
 			getProductBenefitsChecklist(
 				'DigitalSubscription',
 				landingPageSettings,
 				GBP,
-				abParticipations,
 			),
 		).toEqual([
 			{
@@ -94,10 +77,6 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 			},
 			{
 				isChecked: true,
-				text: 'DigitalSubscription multipleAccounts control benefit 3',
-			},
-			{
-				isChecked: true,
 				text: 'SupporterPlus benefit 1',
 			},
 			{
@@ -106,35 +85,18 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 			},
 		]);
 	});
-	it('filterBenefits should return UK DigitalSubscription all benefits including multipleAccounts control benefit', () => {
+	it('filterBenefits should return UK DigitalSubscription all benefits', () => {
 		expect(
 			filterBenefits(
 				landingPageSettings.products.DigitalSubscription.benefits,
 				GBP,
-				abParticipations,
-			),
-		).toEqual(digitalSubscriptionBenefits);
-	});
-
-	it('filterBenefits should return UK DigitalSubscription base benefits excluding multipleAccounts control benefit', () => {
-		expect(
-			filterBenefits(
-				landingPageSettings.products.DigitalSubscription.benefits,
-				GBP,
-				{
-					multipleAccounts: undefined,
-				},
 			),
 		).toEqual(digitalSubscriptionBaseBenefits);
 	});
+
 	it('should return the correct benefits checklist for Contribution', () => {
 		expect(
-			getProductBenefitsChecklist(
-				'Contribution',
-				landingPageSettings,
-				GBP,
-				abParticipations,
-			),
+			getProductBenefitsChecklist('Contribution', landingPageSettings, GBP),
 		).toMatchObject([
 			{
 				isChecked: true,
@@ -164,12 +126,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 	});
 	it('should return the correct benefits checklist for SupporterPlus', () => {
 		expect(
-			getProductBenefitsChecklist(
-				'SupporterPlus',
-				landingPageSettings,
-				GBP,
-				abParticipations,
-			),
+			getProductBenefitsChecklist('SupporterPlus', landingPageSettings, GBP),
 		).toEqual([
 			{
 				isChecked: true,
@@ -183,12 +140,7 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 	});
 	it('should return undefined for products other than DigitalSubscription, SupporterPlus & Contribution', () => {
 		expect(
-			getProductBenefitsChecklist(
-				'GuardianAdLite',
-				landingPageSettings,
-				GBP,
-				abParticipations,
-			),
+			getProductBenefitsChecklist('GuardianAdLite', landingPageSettings, GBP),
 		).toBeUndefined();
 	});
 
@@ -214,7 +166,6 @@ describe('getBenefitsChecklistFromLandingPageTool', () => {
 						product as 'Contribution' | 'SupporterPlus' | 'DigitalSubscription',
 						landingPageSettingsWithoutProducts,
 						countryGroup as CountryGroupId,
-						abParticipations,
 					);
 					expect(result).toEqual(
 						expectedDefaultBenefits[product]?.[countryGroup],

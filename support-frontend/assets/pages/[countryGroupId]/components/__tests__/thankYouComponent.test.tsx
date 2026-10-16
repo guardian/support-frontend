@@ -19,11 +19,6 @@ jest.mock('../../checkout/helpers/sessionStorage', () => ({
 	getThankYouOrder: () => 'order',
 	getReturnAddress: () => 'adress',
 }));
-jest.mock('contexts/AbParticipationsContext', () => ({
-	useAbParticipations: jest.fn(() => ({
-		multipleAccounts: 'control',
-	})),
-}));
 
 const defaultProps: CheckoutComponentProps = {
 	supportRegionId: SupportRegionId.UK,

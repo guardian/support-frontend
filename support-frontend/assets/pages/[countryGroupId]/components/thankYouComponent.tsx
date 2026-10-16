@@ -8,7 +8,6 @@ import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import { observerThemeButton } from 'components/observer-layout/styles';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
-import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import { Country } from 'helpers/internationalisation/classes/country';
 import {
@@ -85,7 +84,6 @@ export function ThankYouComponent({
 	identityUserType,
 	landingPageSettings,
 }: CheckoutComponentProps) {
-	const abParticipations = useAbParticipations();
 	const countryId = Country.codeFromString(get('GU_country') ?? 'GB') ?? 'GB';
 
 	const { countryGroupId, currencyKey } =
@@ -197,7 +195,6 @@ export function ThankYouComponent({
 				filterBenefits(
 					productCatalogDescription[productKey].benefits,
 					countryGroupId,
-					abParticipations,
 				)
 			).map((benefit) => ({
 				isChecked: true,
@@ -210,7 +207,6 @@ export function ThankYouComponent({
 							filterBenefits(
 								productCatalogDescription.SupporterPlus.benefits,
 								countryGroupId,
-								abParticipations,
 							)
 					  ).map((benefit) => ({
 							isChecked: true,

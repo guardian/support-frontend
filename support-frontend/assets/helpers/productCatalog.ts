@@ -11,7 +11,7 @@ import type {
 	ProductRatePlanKey,
 } from '@modules/product-catalog/productCatalog';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
-import type { Participations } from './abTests/models';
+import { multipleAccountBenefitCopy } from './abTests/multipleAccounts';
 import { isObserverSubdomain } from './globalsAndSwitches/observer';
 
 export enum ProductTierLabel {
@@ -127,39 +127,6 @@ export function filterBenefitByRegion(
 	}
 
 	return true;
-}
-
-export function filterBenefitByABTest(
-	benefit: ProductBenefit,
-	participations?: Participations,
-) {
-	return benefit.specificToAbTest
-		? displayBenefitByABTest(benefit.specificToAbTest, participations)
-		: true; // no abtests, default display benefit
-}
-function displayBenefitByABTest(
-	displayOnAbTest: Array<{
-		name: string;
-		variants: string[];
-		display: boolean;
-	}>,
-	participations: Participations = {},
-) {
-	return displayOnAbTest.some(
-		({ name, variants, display }) =>
-			participations[name]
-				? displayBenefitByABTestVariant(
-						variants.includes(participations[name] ?? ''), // Participations used throughout typed as { string : string | undefined }
-						display,
-				  )
-				: !display, // abtest not found, display opposite
-	);
-}
-function displayBenefitByABTestVariant(
-	variantFound: boolean,
-	display: boolean,
-) {
-	return display ? variantFound : !variantFound; // abtest variantFound opposite if hiding
 }
 
 export function isProductKey(val: unknown): val is ActiveProductKey {
@@ -352,16 +319,9 @@ const paperArchiveDigitalBenefit = {
 
 export const tooltipMultipleAccounts = `You can share your Digital plus access with three other people. Each person gets their own account and login.`;
 const multipleAccountsBenefit = {
-	copy: 'Three extra accounts to share',
+	copy: multipleAccountBenefitCopy,
 	tooltip: tooltipMultipleAccounts,
 	label: { copy: 'New' },
-	specificToAbTest: [
-		{
-			name: 'multipleAccounts',
-			variants: ['control', 'v1', 'v2'],
-			display: true,
-		},
-	],
 };
 
 export const productCatalogDescription: Record<
