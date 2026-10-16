@@ -7,7 +7,7 @@ import type {
 import { selectVariantForTest } from './banditSelection';
 import { randomNumber } from './helpers';
 import type { PageParticipationsConfig } from './models';
-import { multipleAccountsBenefit } from './multipleAccounts';
+import { multipleAccountBenefitCopy } from './multipleAccounts';
 import {
 	getPageParticipationsWithFallback,
 	type PageParticipationsResultWithFallback,
@@ -20,7 +20,7 @@ const fallbackDefaultProductSelection: DefaultProductSelection = {
 	billingPeriod: 'Monthly',
 };
 const primaryDigitalPlusBenefit = {
-	copy: multipleAccountsBenefit,
+	copy: multipleAccountBenefitCopy,
 	tooltip:
 		'You can share your Digital plus access with three other people. Each person gets their own account and login.',
 	label: { copy: 'New' },

@@ -1,5 +1,5 @@
 import type { BenefitsCheckListData } from 'components/checkoutBenefits/benefitsCheckList';
-import { multipleAccountsBenefit } from 'helpers/abTests/multipleAccounts';
+import { multipleAccountBenefitCopy } from 'helpers/abTests/multipleAccounts';
 
 const ContributionBenefits = [
 	{
@@ -200,7 +200,7 @@ const SupporterPlusBenefitsAUD = [
 const DigitalSubscriptionBenefits = [
 	{
 		isChecked: true,
-		text: multipleAccountsBenefit,
+		text: multipleAccountBenefitCopy,
 	},
 	{
 		isChecked: true,
@@ -223,7 +223,7 @@ const DigitalSubscriptionBenefits = [
 const DigitalSubscriptionBenefitsAUD = [
 	{
 		isChecked: true,
-		text: multipleAccountsBenefit,
+		text: multipleAccountBenefitCopy,
 	},
 	{
 		isChecked: true,
@@ -247,7 +247,7 @@ const DigitalSubscriptionBenefitsAUD = [
 const DigitalSubscriptionBenefitsUS = [
 	{
 		isChecked: true,
-		text: multipleAccountsBenefit,
+		text: multipleAccountBenefitCopy,
 	},
 	{
 		isChecked: true,
@@ -270,7 +270,7 @@ const DigitalSubscriptionBenefitsUS = [
 const DigitalSubscriptionBenefitsGBP = [
 	{
 		isChecked: true,
-		text: multipleAccountsBenefit,
+		text: multipleAccountBenefitCopy,
 	},
 	{
 		isChecked: true,

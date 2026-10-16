@@ -23,8 +23,8 @@ import { PageScaffold } from 'components/page/pageScaffold';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import {
-	multipleAccountsBenefit,
-	verifyMultipleAccountsParticipation,
+	getMultipleAccountsTestVariantParticipation,
+	multipleAccountBenefitCopy,
 } from 'helpers/abTests/multipleAccounts';
 import type { PageParticipationsResultWithFallback } from 'helpers/abTests/pageParticipations';
 import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
@@ -157,7 +157,7 @@ export function ThreeTierLanding({
 	landingPageSettings,
 }: ThreeTierLandingProps): JSX.Element {
 	const { variant: landingPageVariant, participations } = landingPageSettings;
-	const multipleAccountsVariant = verifyMultipleAccountsParticipation(
+	const multipleAccountsVariant = getMultipleAccountsTestVariantParticipation(
 		participations,
 		landingPageVariant.name,
 	);
@@ -392,15 +392,11 @@ export function ThreeTierLanding({
 		productCatalogDescription[tier3Product].benefits,
 		countryGroupId,
 	);
-	console.log(
-		'*** landingPageVariant.products[tier3Product]?.benefits ',
-		landingPageVariant,
-	);
 	const tier3Benefits =
 		landingPageVariant.products[tier3Product]?.benefits ?? tier3DefaultBenefits;
 	const tier3BenefitsMultipleAccounts =
 		multipleAccountsVariant === 'V1' || multipleAccountsVariant === 'V2'
-			? removeBenefitByCopy(tier3Benefits, multipleAccountsBenefit)
+			? removeBenefitByCopy(tier3Benefits, multipleAccountBenefitCopy)
 			: tier3Benefits;
 	const tier3ProductDescription = {
 		title: landingPageVariant.products[tier3Product]?.title ?? title,
