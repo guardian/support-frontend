@@ -65,7 +65,7 @@ const btnStyleOverrides = css`
 `;
 
 const dividerContainer = css`
-	margin: 0 auto ${space[8]}px auto;
+	margin: ${space[8]}px auto;
 
 	${from.desktop} {
 		max-width: 940px;
