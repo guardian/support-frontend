@@ -4,18 +4,17 @@ import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath}
 import com.gu.i18n.CountryGroup
-import com.gu.i18n.Currency.GBP
-import com.gu.support.catalog._
+import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper}
 import com.gu.support.config.Stage
 import com.gu.support.config.Stages.PROD
-import com.gu.support.encoding.Codec.deriveCodec
-import com.gu.support.workers.Monthly
+import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.promotions.{CatalogRatePlan, PromoWithCatalogInformation}
 import config.StringsConfig
 import lib.RedirectWithEncodedQueryString
 import play.api.mvc._
 import play.twirl.api.Html
-import services.CachedProductCatalogServiceProvider
-import services.pricing.{PriceSummary, PriceSummaryServiceProvider}
+import services.{ApplicablePromotions, CachedProductCatalogServiceProvider, CachedPromotionsServiceProvider}
+import services.pricing.DefaultPromotionService
 import views.EmptyDiv
 import views.ViewHelpers.outputJson
 
@@ -23,7 +22,8 @@ import scala.concurrent.ExecutionContext
 
 class SubscriptionsController(
     val actionRefiners: CustomActionBuilders,
-    priceSummaryServiceProvider: PriceSummaryServiceProvider,
+    defaultPromotionService: DefaultPromotionService,
+    cachedPromotionsServiceProvider: CachedPromotionsServiceProvider,
     val assets: AssetsResolver,
     components: ControllerComponents,
     stringsConfig: StringsConfig,
@@ -49,53 +49,18 @@ class SubscriptionsController(
     RedirectWithEncodedQueryString("https://subscribe.theguardian.com", request.queryString, status = FOUND)
   }
 
-  case class PriceCopy(price: BigDecimal, discountCopy: String)
-  object PriceCopy {
-    implicit val codec: com.gu.support.encoding.Codec[PriceCopy] = deriveCodec
-  }
+  private def getPromotions(countryGroup: CountryGroup): Seq[PromoWithCatalogInformation] = {
+    val productKeys = Set(CatalogRatePlan.guardianWeeklyProductKey(countryGroup), "DigitalSubscription") ++
+      (if (countryGroup == CountryGroup.UK) CatalogRatePlan.paperProductKeys else Set.empty)
 
-  def pricingCopy(priceSummary: PriceSummary): PriceCopy = {
-    val maybeDiscountPrice = for {
-      promo <- priceSummary.promotions.headOption
-      discountedPrice <- promo.discountedPrice
-    } yield discountedPrice
-    PriceCopy(
-      maybeDiscountPrice.getOrElse(priceSummary.price),
-      priceSummary.promotions.headOption.map(_.description).getOrElse(""),
-    )
-  }
+    val promoCodes = (
+      defaultPromotionService.getPromoCodes(GuardianWeekly) ++
+        defaultPromotionService.getPromoCodes(DigitalPack) ++
+        defaultPromotionService.getPromoCodes(Paper)
+    ).distinct
 
-  def getLandingPrices(countryGroup: CountryGroup): Map[String, PriceCopy] = {
-    val service = priceSummaryServiceProvider.forUser(false)
-    val paperMap = if (countryGroup == CountryGroup.UK) {
-      val paper = service.getPrices(Paper, Nil)(CountryGroup.UK)(Collection)(
-        SaturdayPlus,
-      )(Monthly)(GBP) // SaturdayPlus is the cheapest paper product
-      Map(Paper.toString -> pricingCopy(paper))
-    } else
-      Map.empty
-
-    val guardianWeeklyFulfilmentOptions = if (countryGroup == CountryGroup.RestOfTheWorld) RestOfWorld else Domestic
-
-    val weekly =
-      service.getPrices(
-        GuardianWeekly,
-        Nil,
-      )(countryGroup)(guardianWeeklyFulfilmentOptions)(NoProductOptions)(Monthly)(
-        countryGroup.currency,
-      )
-
-    val digitalPackProductOptions = if (countryGroup == CountryGroup.Canada) TaxExclusive else TaxInclusive
-    val digitalSubscription = service
-      .getPrices(
-        DigitalPack,
-        Nil,
-      )(countryGroup)(NoFulfilmentOptions)(digitalPackProductOptions)(Monthly)(countryGroup.currency)
-
-    Map(
-      GuardianWeekly.toString -> pricingCopy(weekly),
-      DigitalPack.toString -> pricingCopy(digitalSubscription),
-    ) ++ paperMap
+    val promotions = cachedPromotionsServiceProvider.forUser(isTestUser = false).getActive(promoCodes)
+    ApplicablePromotions.filter(promotions, productKeys, isGift = false, countryGroup)
   }
 
   def landing(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
@@ -103,7 +68,7 @@ class SubscriptionsController(
     val title = "Support the Guardian | Get a Subscription"
     val mainElement = EmptyDiv("subscriptions-landing-page")
     val js = "subscriptionsLandingPage.js"
-    val pricingCopy = CountryGroup.byId(countryCode).map(getLandingPrices)
+    val promotions = CountryGroup.byId(countryCode).map(getPromotions).getOrElse(Nil)
     // TestUser remains un-used, page caching preferred
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, false).get()
     Ok(
@@ -116,7 +81,7 @@ class SubscriptionsController(
         noindex = stage != PROD,
       ) {
         Html(s"""<script type="text/javascript">
-              window.guardian.pricingCopy = ${outputJson(pricingCopy)};
+              window.guardian.promotions = ${outputJson(promotions)};
               window.guardian.productCatalog = ${outputJson(productCatalog, dropNullValues = false)}
             </script>""")
       },

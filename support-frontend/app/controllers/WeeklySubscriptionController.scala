@@ -8,7 +8,7 @@ import com.gu.support.catalog.GuardianWeekly
 import com.gu.support.config.Stage
 import com.gu.support.config.Stages.PROD
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.promotions.PromoWithCatalogInformation
+import com.gu.support.promotions.{CatalogRatePlan, PromoWithCatalogInformation}
 import services.{ApplicablePromotions, CachedProductCatalogServiceProvider, CachedPromotionsServiceProvider}
 import services.pricing.DefaultPromotionService
 import config.StringsConfig
@@ -93,12 +93,14 @@ class WeeklySubscriptionController(
       .byId(countryGroupId)
       .map { countryGroup =>
         val promotions = cachedPromotionsServiceProvider.forUser(isTestUser = false).getActive(promoCodes.distinct)
-        ApplicablePromotions.filter(promotions, Set(guardianWeeklyProductKey(countryGroup)), orderIsAGift, countryGroup)
+        ApplicablePromotions.filter(
+          promotions,
+          Set(CatalogRatePlan.guardianWeeklyProductKey(countryGroup)),
+          orderIsAGift,
+          countryGroup,
+        )
       }
       .getOrElse(Nil)
-
-  private def guardianWeeklyProductKey(countryGroup: CountryGroup): String =
-    if (countryGroup == CountryGroup.RestOfTheWorld) "GuardianWeeklyRestOfWorld" else "GuardianWeeklyDomestic"
 
   private def getWeeklyHrefLangLinks(orderIsAGift: Boolean): Map[String, String] = Map(
     "en-us" -> buildRegionalisedWeeklySubscriptionLink("us", orderIsAGift),
