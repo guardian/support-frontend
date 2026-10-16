@@ -8,8 +8,6 @@
 		"list-subscribers": "node list-subscribers.js"
 	},
 	"dependencies": {
-		"@aws-sdk/client-ssm": "^3.1152.0",
-		"@aws-sdk/credential-providers": "^3.1152.0",
 		"stripe": "^17.4.0"
 	}
 }

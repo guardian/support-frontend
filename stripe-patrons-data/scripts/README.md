@@ -6,31 +6,29 @@ of the deployed application.
 
 ## Setup
 
+This folder is deliberately outside the pnpm workspace (see `pnpm-workspace.yaml`
+at the repo root), so a plain `pnpm install` run from here would otherwise be
+swallowed by the root workspace and do nothing. Use `--ignore-workspace` to
+install locally instead:
+
 ```sh
 cd stripe-patrons-data/scripts
-npm install
+pnpm install --ignore-workspace
 ```
 
 ## list-subscribers.js
 
-Exports a CSV of Stripe subscriptions, including the customer's email/name
-and the price ID(s) (rate plan) on each subscription.
+Exports an aggregate, anonymised CSV of Stripe subscriptions in "active" or
+"unpaid" status: one row per subscription with price ID, currency, and
+whether payments are up to date. No customer or subscription identifiers,
+or any other PII, are included.
 
-By default the Stripe API key is read from Parameter Store, at the same path
-used by the stripe-patrons-data lambdas
-(`/<stage>/support/stripe-patrons-data/stripe-config/api-key`), using AWS
-credentials from the `membership` profile — make sure you've run
-[`janus`](https://github.com/guardian/janus) first.
+Requires a Stripe API key, passed via `STRIPE_API_KEY`. Fetch the restricted
+key named **"Customer / Product Read Only"** directly from the Stripe
+dashboard (Developers > API keys) — do not use a full secret key.
 
 ```sh
-node list-subscribers.js [output.csv]
+STRIPE_API_KEY=rk_live_xxx node list-subscribers.js [output.csv]
 ```
 
-- `STAGE` (optional, default `PROD`): `PROD` or `CODE`.
-- `AWS_PROFILE` (optional, default `membership`): AWS profile to use.
-- `STRIPE_API_KEY` (optional): supply a key directly, bypassing Parameter
-  Store entirely.
-- `STRIPE_SUBSCRIPTION_STATUS` (optional, default `active`): subscription
-  status to filter on, e.g. `all`, `trialing`, `past_due`. See the
-  [Stripe docs](https://stripe.com/docs/api/subscriptions/list).
 - Output path defaults to `subscribers.csv` in the current directory.

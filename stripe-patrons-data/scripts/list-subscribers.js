@@ -1,56 +1,37 @@
 /**
- * One-off script to export a list of Stripe customers/subscribers and the
- * products they are subscribed to.
+ * One-off script to export an aggregate, anonymised breakdown of Stripe
+ * subscriptions by price/currency and payment status (no customer or
+ * subscription identifiers, or any other PII, are included).
  *
- * The Stripe API key is read from Parameter Store (same location used by the
- * stripe-patrons-data lambdas:
- * /<stage>/support/stripe-patrons-data/stripe-config/api-key), using AWS
- * credentials from the "membership" profile. Set STRIPE_API_KEY to bypass
- * Parameter Store and supply a key directly instead.
+ * Includes subscriptions in "active" and "unpaid" status (unpaid meaning
+ * Stripe's dunning/retry attempts have been exhausted and the subscription is
+ * still considered a customer we want to track, just with outstanding
+ * payments), flagged via the payments_up_to_date column.
+ *
+ * Requires a Stripe API key, passed via the STRIPE_API_KEY env var. Fetch
+ * the restricted key named "Customer / Product Read Only" directly from the
+ * Stripe dashboard (Developers > API keys) - do not use a full secret key.
  *
  * Usage:
- *   node list-subscribers.js [output.csv]
- *
- * Env vars:
- *   STAGE                       - PROD (default) or CODE
- *   AWS_PROFILE                 - defaults to "membership"
- *   STRIPE_API_KEY              - overrides Parameter Store lookup
- *   STRIPE_SUBSCRIPTION_STATUS  - defaults to "active". See
- *     https://stripe.com/docs/api/subscriptions/list for valid values.
+ *   STRIPE_API_KEY=rk_live_xxx node list-subscribers.js [output.csv]
  */
 
 const fs = require('fs');
-const { SSMClient, GetParametersByPathCommand } = require('@aws-sdk/client-ssm');
-const { fromIni } = require('@aws-sdk/credential-providers');
 
-const stage = process.env.STAGE || 'PROD';
-const awsProfile = process.env.AWS_PROFILE || 'membership';
-
-async function getApiKeyFromParameterStore() {
-	const client = new SSMClient({
-		region: 'eu-west-1',
-		credentials: fromIni({ profile: awsProfile }),
-	});
-
-	const path = `/${stage}/support/stripe-patrons-data/stripe-config`;
-	const response = await client.send(
-		new GetParametersByPathCommand({
-			Path: path,
-			Recursive: false,
-			WithDecryption: true,
-		}),
+const apiKey = process.env.STRIPE_API_KEY;
+if (!apiKey) {
+	console.error(
+		'Error: STRIPE_API_KEY environment variable is required.\n' +
+			'Fetch the restricted key named "Customer / Product Read Only" directly from the Stripe dashboard (Developers > API keys).',
 	);
-
-	const param = (response.Parameters || []).find((p) => p.Name === `${path}/api-key`);
-	if (!param) {
-		throw new Error(`Could not find ${path}/api-key in Parameter Store`);
-	}
-	return param.Value;
+	process.exit(1);
 }
 
 const Stripe = require('stripe');
 
-const status = process.env.STRIPE_SUBSCRIPTION_STATUS || 'active';
+// Subscription statuses we want in the extract. See
+// https://stripe.com/docs/api/subscriptions/object#subscription_object-status
+const INCLUDED_STATUSES = ['active', 'unpaid'];
 const outputPath = process.argv[2] || 'subscribers.csv';
 
 function csvEscape(value) {
@@ -66,28 +47,20 @@ function toCsvRow(fields) {
 }
 
 async function main() {
-	const apiKey = process.env.STRIPE_API_KEY || (await getApiKeyFromParameterStore());
 	const stripe = new Stripe(apiKey);
 
-	const rows = [
-		['customer_id', 'email', 'name', 'subscription_id', 'price_id', 'currency'],
-	];
+	const rows = [['price_id', 'currency', 'payments_up_to_date']];
 
 	let count = 0;
 
 	// The Stripe Node SDK's list responses are async-iterable and
-	// auto-paginate under the hood, so this will fetch all pages.
+	// auto-paginate under the hood, so this will fetch all pages across all
+	// statuses; we then keep only the ones we care about below.
 	for await (const subscription of stripe.subscriptions.list({
-		status,
+		status: 'all',
 		limit: 100,
-		expand: ['data.customer'],
 	})) {
-		// Skip anything that isn't genuinely active (defensive; the API call
-		// above already filters on `status`, but this guards against any
-		// unexpected/invalid records slipping through).
-		if (subscription.status !== 'active') continue;
-
-		const customer = subscription.customer;
+		if (!INCLUDED_STATUSES.includes(subscription.status)) continue;
 
 		const priceIds = subscription.items.data
 			.map((item) => item.price && item.price.id)
@@ -99,14 +72,9 @@ async function main() {
 			.filter(Boolean)
 			.join('; ');
 
-		rows.push([
-			typeof customer === 'object' ? customer.id : customer,
-			typeof customer === 'object' ? customer.email : '',
-			typeof customer === 'object' ? customer.name : '',
-			subscription.id,
-			priceIds,
-			currencies,
-		]);
+		const paymentsUpToDate = subscription.status === 'active' ? 'yes' : 'no';
+
+		rows.push([priceIds, currencies, paymentsUpToDate]);
 
 		count += 1;
 	}
