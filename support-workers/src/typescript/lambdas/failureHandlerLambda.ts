@@ -9,6 +9,7 @@ import type { CheckoutFailureState } from '../model/checkoutFailureState';
 import type { FailureHandlerState } from '../model/failureHandlerState';
 import { stageFromEnvironment } from '../model/stage';
 import type { WrappedState } from '../model/stateSchemas';
+import { stringifyWithCmpConsentRedacted } from '../util/logging';
 import { getIfDefined } from '../util/nullAndUndefined';
 
 const stage = stageFromEnvironment();
@@ -48,7 +49,7 @@ async function sendFailureEmail(state: FailureHandlerState) {
 function handleError(
 	state: WrappedState<FailureHandlerState>,
 ): WrappedState<CheckoutFailureState> {
-	console.info(`Trying to handle error ${JSON.stringify(state.error)}`);
+	console.info('Trying to handle checkout error');
 	const causingError = errorFromStateSchema.parse(
 		JSON.parse(getIfDefined(state.error?.Cause, 'No Cause error found')),
 	);
@@ -72,7 +73,7 @@ function handleError(
 }
 
 export const handler = async (state: WrappedState<FailureHandlerState>) => {
-	console.info(`Input is ${JSON.stringify(state)}`);
+	console.info(`Input is ${stringifyWithCmpConsentRedacted(state)}`);
 	await sendFailureEmail(state.state);
 	return handleError(state);
 };

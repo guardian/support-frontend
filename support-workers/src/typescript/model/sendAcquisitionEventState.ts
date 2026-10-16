@@ -1,6 +1,7 @@
 import { productPurchaseSchema } from '@modules/product-catalog/productPurchaseSchema';
 import { optionalDropNulls } from '@modules/schemaUtils';
 import { z } from 'zod';
+import { cmpConsentSnapshotSchema } from './cmpConsentSnapshot';
 import { paymentMethodSchema } from './paymentMethod';
 import { paymentScheduleSchema } from './paymentSchedule';
 import { productTypeSchema } from './productType';
@@ -68,6 +69,7 @@ export const sendAcquisitionEventStateSchema = z.object({
 	sendThankYouEmailState: sendThankYouEmailStateSchema,
 	analyticsInfo: analyticsInfoSchema,
 	acquisitionData: optionalDropNulls(acquisitionDataSchema),
+	cmpConsentSnapshot: optionalDropNulls(cmpConsentSnapshotSchema),
 });
 
 export type SendAcquisitionEventState = z.infer<
