@@ -157,6 +157,10 @@ export function SummaryTsAndCs({
 					{textLink('Terms and Conditions', digitalPlusTermsLink)} and{' '}
 					{textLink('Privacy Policy', privacyLink)}.
 				</p>
+				<p css={marginTop}>
+					We’ll send you emails about our journalism and ways to support and
+					enjoy our work. You can unsubscribe at any time
+				</p>
 			</div>
 		) : (
 			<div css={containerSummaryTsCs}>
@@ -179,6 +183,12 @@ export function SummaryTsAndCs({
 					{renewalFrequency}, from now until you cancel your payment. Payments
 					may take up to 6 days to be recorded in your bank account. You can
 					change how much you give or cancel your payment at any time.
+					{countryGroupId === 'UnitedStates' && (
+						<p css={marginTop}>
+							We’ll send you emails about our journalism and ways to support and
+							enjoy our work. You can unsubscribe at any time
+						</p>
+					)}
 				</div>
 			),
 			SupporterPlus: (

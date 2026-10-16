@@ -35,14 +35,16 @@ import {
 } from 'helpers/utilities/utilities';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { ThreeTierCardPill } from './threeTierCardPill';
+import { ThreeTierNumberOfAccounts } from './threeTierNumberOfAccounts';
 
 export type CardContent = LandingPageProductDescription & {
+	product: 'SupporterPlus' | 'Contribution' | 'DigitalSubscription';
 	isUserSelected: boolean;
 	isDefaultProductSelected: boolean;
 	link: string;
 	price: number;
 	promotion?: Promotion;
-	product: 'SupporterPlus' | 'Contribution' | 'DigitalSubscription';
+	multipleAccountsVariant?: string;
 };
 
 export type ThreeTierCardProps = {
@@ -123,10 +125,10 @@ const previousPriceStrikeThrough = css`
 	text-decoration: line-through;
 `;
 
-const btnStyleOverrides = css`
+const btnStyleOverrides = (showAccount: boolean) => css`
 	width: 100%;
 	justify-content: center;
-	margin-bottom: ${space[6]}px;
+	margin-bottom: ${showAccount ? 0 : space[6]}px;
 `;
 
 const checkmarkBenefitList = css`
@@ -196,6 +198,7 @@ export function ThreeTierCard({
 		cta,
 		product,
 		billingPeriodsCopy,
+		multipleAccountsVariant,
 	} = cardContent;
 	const currency = getCurrencyByCode(currencyId);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -345,14 +348,20 @@ export function ThreeTierCard({
 			</div>
 			<LinkButton
 				href={link}
-				cssOverrides={btnStyleOverrides}
+				cssOverrides={btnStyleOverrides(
+					!!multipleAccountsVariant && multipleAccountsVariant !== 'control',
+				)}
 				data-qm-trackable={quantumMetricButtonRef}
 				aria-label={linkAriaLabel}
 				theme={themeButtonReaderRevenueBrand}
 			>
 				{cta.copy}
 			</LinkButton>
-
+			<ThreeTierNumberOfAccounts
+				multipleAccountsVariant={multipleAccountsVariant}
+				productKey={product}
+				cardTheme={cardTheme}
+			/>
 			{inAdditionToAllAccessDigital && (
 				<div css={benefitsPrefixCss}>
 					<span>

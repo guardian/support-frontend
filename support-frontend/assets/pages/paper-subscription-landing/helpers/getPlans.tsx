@@ -2,45 +2,51 @@ import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { PaperProductOptions } from '@modules/product/productOptions';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import type { ReactNode } from 'react';
 import type { Product } from 'components/product/productOption';
-import type {
-	ProductPrice,
-	ProductPrices,
-} from 'helpers/productPrice/productPrices';
-import {
-	getDiscountVsRetail,
-	getProductPrice,
-	showPrice,
-} from 'helpers/productPrice/productPrices';
-import type { Promotion } from 'helpers/productPrice/promotions';
-import {
-	discountSummaryCopy,
-	finalPrice,
-	getAppliedPromo,
-} from 'helpers/productPrice/promotions';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import type { WindowProductCatalog } from 'helpers/globalsAndSwitches/window';
+import { extendedGlyph } from 'helpers/internationalisation/currency';
+import { ActivePaperProductTypes } from 'helpers/productCatalogToProductOption';
+import { getAppliedPromotion } from 'helpers/productPrice/appliedPromotion';
+import { getDiscountedPrice } from 'helpers/productPrice/discountedPrice';
+import { getDiscountVsRetail } from 'helpers/productPrice/productPrices';
 import type { TrackingProperties } from 'helpers/productPrice/subscriptions';
 import {
+	fixDecimals,
 	sendTrackingEventsOnClick,
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
-import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import getPlanData from '../planData';
-import type { PaperPromotion } from './getPromotions';
 import { getProductLabel, getTitle } from './products';
 
+// The landing page only has Collection and HomeDelivery tabs. NationalDelivery
+// is chosen at checkout based on postcode, so it is not shown here.
+const getLandingPageProductKey = (
+	fulfilmentOption: PaperFulfilmentOptions,
+): 'SubscriptionCard' | 'HomeDelivery' =>
+	fulfilmentOption === 'Collection' ? 'SubscriptionCard' : 'HomeDelivery';
+
+const showPrice = (price: number): string =>
+	`${extendedGlyph('GBP')}${fixDecimals(price)}`;
+
+const formatAmount = (amount: number): string =>
+	simpleFormatAmount(getCurrencyByCode('GBP'), amount);
+
 const getPriceCopyString = (
-	price: ProductPrice,
+	price: number,
+	promotion?: PromoWithCatalogInformation,
 	productCopy: ReactNode = null,
 ): ReactNode => {
-	const promotion = getAppliedPromo(price.promotions);
+	const durationMonths = promotion?.discount?.durationMonths;
 
-	if (promotion?.numberOfDiscountedPeriods) {
+	if (durationMonths) {
 		return (
 			<>
-				per month for {promotion.numberOfDiscountedPeriods} months{productCopy},
-				then {showPrice(price)} after
+				per month for {durationMonths} months{productCopy}, then{' '}
+				{showPrice(price)} after
 			</>
 		);
 	}
@@ -48,34 +54,31 @@ const getPriceCopyString = (
 	return <>per month{productCopy}</>;
 };
 
-// Show promo summary if there's a promo, otherwise show savings vs retail if any
 const getOfferText = (
-	price: ProductPrice,
-	promo?: Promotion,
-	promotionIndex?: number,
-) => {
-	if (promo?.discount?.amount && promotionIndex !== undefined) {
-		return discountSummaryCopy(
-			getCurrencyByCode(price.currency),
-			promotionIndex >= 0 ? 1 : 0, // if promotionIndex is 0 or higher, we want to show one "*",
-			price.price,
-			promo,
-			BillingPeriod.Monthly,
-		);
-	}
-
-	return '';
+	price: number,
+	discountedPrice: number,
+	durationMonths: number,
+	showAsterisk: boolean,
+): string => {
+	const duration =
+		durationMonths === 1 ? 'the first month' : `${durationMonths} months`;
+	return `${formatAmount(
+		discountedPrice,
+	)}/month for ${duration}, then ${formatAmount(price)}/month${
+		showAsterisk ? '*' : ''
+	}`;
 };
 
 const getSavingsText = (
-	price: ProductPrice,
-	promo?: Promotion,
+	price: number,
+	savingVsRetail: number | null | undefined,
+	promotion?: PromoWithCatalogInformation,
 ): string | null => {
-	if (promo?.discount?.amount) {
+	if (promotion?.discount?.amount) {
 		const discount = getDiscountVsRetail(
-			price.price,
-			price.savingVsRetail ?? 0,
-			promo.discount.amount,
+			price,
+			savingVsRetail ?? 0,
+			promotion.discount.amount,
 		);
 
 		if (discount > 0) {
@@ -85,8 +88,8 @@ const getSavingsText = (
 		return null;
 	}
 
-	if (price.savingVsRetail && price.savingVsRetail > 0) {
-		return `Save ${Math.floor(price.savingVsRetail)}% on retail price`;
+	if (savingVsRetail && savingVsRetail > 0) {
+		return `Save ${Math.floor(savingVsRetail)}% on retail price`;
 	}
 
 	return null;
@@ -224,67 +227,82 @@ const copy: Record<
 	},
 };
 
-export const getPlans = (
-	fulfilmentOption: PaperFulfilmentOptions,
-	productPrices: ProductPrices,
-	activePaperProductTypes: ActivePaperProductOptions[],
-	promotions: PaperPromotion[],
-): Product[] =>
-	activePaperProductTypes
-		.filter(
-			(productOption) =>
-				productOption.endsWith('Plus') || productOption === 'Sunday',
-		)
-		.map((productOption) => {
-			const priceAfterPromosApplied = finalPrice(
-				productPrices,
-				'GB',
-				BillingPeriod.Monthly,
+export const getPlans = ({
+	fulfilmentOption,
+	productCatalog,
+	promotions,
+	promoCode,
+}: {
+	fulfilmentOption: PaperFulfilmentOptions;
+	productCatalog: WindowProductCatalog;
+	promotions: PromoWithCatalogInformation[];
+	promoCode?: string;
+}): Product[] => {
+	const productKey = getLandingPageProductKey(fulfilmentOption);
+
+	return ActivePaperProductTypes.filter(
+		(productOption) =>
+			productOption.endsWith('Plus') || productOption === 'Sunday',
+	).map((productOption) => {
+		const ratePlan = productCatalog[productKey]?.ratePlans[productOption];
+		const price = ratePlan?.pricing.GBP;
+		if (!ratePlan || price === undefined) {
+			throw new Error(`No price found for ${productKey} ${productOption}`);
+		}
+		const promotion = getAppliedPromotion(
+			promotions,
+			productKey,
+			productOption,
+			promoCode,
+		);
+		const discountedPrice = promotion?.discount
+			? getDiscountedPrice(price, promotion.discount, BillingPeriod.Monthly)
+			: undefined;
+		// The asterisk refers to the promo terms, which NewspaperRatePlanCard only
+		// shows for the Guardian (Plus) products, not the Observer (Sunday)
+		const showAsterisk = productOption.endsWith('Plus');
+
+		const trackingProperties: TrackingProperties = {
+			id: `subscribe_now_cta-${[productOption, fulfilmentOption].join()}`,
+			product: 'Paper',
+			componentType: 'ACQUISITIONS_BUTTON',
+		};
+		const showLabel = productOption === 'SixdayPlus';
+
+		return {
+			title: getTitle(productOption),
+			price: showPrice(discountedPrice ?? price),
+			href: paperCheckoutUrl(
 				fulfilmentOption,
 				productOption,
-			);
-
-			const promotion = getAppliedPromo(priceAfterPromosApplied.promotions);
-
-			const promotionIndex = promotions.findIndex((promo) =>
-				promo.activePaperProducts.includes(productOption),
-			);
-
-			const promoCode = promotion ? promotion.promoCode : null;
-			const trackingProperties: TrackingProperties = {
-				id: `subscribe_now_cta-${[productOption, fulfilmentOption].join()}`,
-				product: 'Paper',
-				componentType: 'ACQUISITIONS_BUTTON',
-			};
-			const nonDiscountedPrice = getProductPrice(
-				productPrices,
-				'GB',
-				BillingPeriod.Monthly,
-				fulfilmentOption,
-				productOption,
-			);
-			const showLabel = productOption === 'SixdayPlus';
-
-			return {
-				title: getTitle(productOption),
-				price: showPrice(priceAfterPromosApplied),
-				href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
-				onClick: sendTrackingEventsOnClick(trackingProperties),
-				onView: sendTrackingEventsOnView(trackingProperties),
-				buttonCopy: 'Subscribe',
-				priceCopy: getPriceCopyString(
-					nonDiscountedPrice,
-					copy[fulfilmentOption][productOption],
-				),
-				planData: getPlanData(productOption, fulfilmentOption),
-				offerCopy: getOfferText(nonDiscountedPrice, promotion, promotionIndex),
-				savingsText: getSavingsText(nonDiscountedPrice, promotion),
-				showLabel,
-				productLabel: getProductLabel(productOption),
+				promotion?.promoCode ?? null,
+			),
+			onClick: sendTrackingEventsOnClick(trackingProperties),
+			onView: sendTrackingEventsOnView(trackingProperties),
+			buttonCopy: 'Subscribe',
+			priceCopy: getPriceCopyString(
+				price,
 				promotion,
-				unavailableOutsideLondon: getUnavailableOutsideLondon(
-					fulfilmentOption,
-					productOption,
-				),
-			};
-		});
+				copy[fulfilmentOption][productOption],
+			),
+			planData: getPlanData(productOption, fulfilmentOption),
+			offerCopy:
+				promotion?.discount?.amount && discountedPrice !== undefined
+					? getOfferText(
+							price,
+							discountedPrice,
+							promotion.discount.durationMonths,
+							showAsterisk,
+					  )
+					: '',
+			savingsText: getSavingsText(price, ratePlan.savingVsRetail, promotion),
+			showLabel,
+			productLabel: getProductLabel(productOption),
+			promotion,
+			unavailableOutsideLondon: getUnavailableOutsideLondon(
+				fulfilmentOption,
+				productOption,
+			),
+		};
+	});
+};

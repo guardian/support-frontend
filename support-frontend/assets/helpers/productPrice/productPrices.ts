@@ -31,7 +31,7 @@ type BillingPeriods = Partial<
 	Record<BillingPeriod, Partial<Record<CurrencyCode, ProductPrice>>>
 >;
 
-export type CountryGroupPrices = Partial<
+type CountryGroupPrices = Partial<
 	Record<FulfilmentOptions, Partial<Record<ProductOptions, BillingPeriods>>>
 >;
 
@@ -115,8 +115,6 @@ const getDiscountVsRetail = (
 	return hackRemoveMeDiscount(Math.floor(totalSavingVsRetail));
 };
 
-const allProductPrices = window.guardian.allProductPrices;
-
 const allCheckoutNudgeProductPrices =
 	window.guardian.allCheckoutNudgeProductPrices;
 
@@ -128,6 +126,5 @@ export {
 	showPrice,
 	isNumeric,
 	getDiscountVsRetail,
-	allProductPrices,
 	allCheckoutNudgeProductPrices,
 };

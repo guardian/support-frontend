@@ -18,6 +18,7 @@ import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageS
 import { getThankYouOrder } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
 import type { OnboardingProductKey } from 'pages/[countryGroupId]/components/onboardingComponent';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
+import { getOnboardingProductTitle } from './onboardingProductCopy';
 import {
 	OnboardingDeclineSteps,
 	OnboardingInviteeSteps,
@@ -116,6 +117,7 @@ interface StepContent {
 	gridId?: string;
 	altText?: string;
 	aspectRatio: SerializedStyles;
+	cssOverrides?: SerializedStyles;
 	/** Renders the hero inside the white card, with the blue bar behind it. */
 	contentInHeader?: boolean;
 }
@@ -134,30 +136,37 @@ function OnboardingHeading({
 	productKey,
 }: OnboardingHeadingProps) {
 	const order = getThankYouOrder();
-	const productSettings =
-		productKey && landingPageSettings?.products[productKey];
+	const nonBreakingHyphen = '\u2011';
+	const productTitle = getOnboardingProductTitle(
+		productKey,
+		landingPageSettings,
+	);
+	const displayProductTitle = productTitle.replace(/-/g, nonBreakingHyphen);
 
 	const { windowWidthIsGreaterThan, windowWidthIsLessThan } = useWindowWidth();
 
 	const supporterStepContentMap = useMemo<
 		Record<OnboardingSteps, StepContent>
 	>(() => {
-		const allAccessTitle =
-			productSettings?.title === 'All-access digital'
-				? `All\u2011access digital`
-				: productSettings?.title;
-
 		return {
 			[OnboardingSteps.Summary]: {
 				heading: `Thank you ${
 					order?.firstName && order.firstName + ' '
-				}for subscribing to ${allAccessTitle}`,
+				}for subscribing to ${displayProductTitle}`,
 				subtext:
-					"You've just joined over 1.3m others who support independent journalism.",
+					"You've just joined over 1.4m others who support independent journalism.",
 				gridId: 'onboardingSummaryHero',
 				altText: 'Onboarding summary hero holding The Guardian logo',
 				aspectRatio: css`
 					aspect-ratio: 25 / 9;
+				`,
+				cssOverrides: css`
+					width: calc(100% - ${space[10]}px);
+					border-bottom: 1px solid #506991;
+
+					${from.tablet} {
+						width: 100%;
+					}
 				`,
 			},
 			[OnboardingSteps.GuardianApp]: {
@@ -178,6 +187,21 @@ function OnboardingHeading({
 					aspect-ratio: 3 / 2;
 				`,
 			},
+			[OnboardingSteps.DigitalPlus]: {
+				gridId: windowWidthIsGreaterThan('tablet')
+					? 'onboardingDigitalPlusDiscoveryHero'
+					: 'onboardingDigitalPlusDiscoveryHeroMobile',
+				altText: 'Onboarding digital plus hero',
+				aspectRatio: css`
+					aspect-ratio: 3 / 2;
+				`,
+			},
+			[OnboardingSteps.ShareAccess]: {
+				aspectRatio: css`
+					aspect-ratio: 3 / 2;
+				`,
+				contentInHeader: true,
+			},
 			[OnboardingSteps.Completed]: {
 				aspectRatio: css`
 					aspect-ratio: 3 / 2;
@@ -185,7 +209,7 @@ function OnboardingHeading({
 				contentInHeader: true,
 			},
 		};
-	}, [order, windowWidthIsGreaterThan, productSettings?.title]);
+	}, [order, windowWidthIsGreaterThan, displayProductTitle]);
 
 	const inviteeStepContentMap = useMemo<
 		Record<OnboardingInviteeSteps, StepContent>
@@ -212,8 +236,8 @@ function OnboardingHeading({
 			},
 			[OnboardingInviteeSteps.DigitalPlus]: {
 				gridId: windowWidthIsGreaterThan('tablet')
-					? 'onboardingDigitalPlusDiscoveryHero'
-					: 'onboardingDigitalPlusDiscoveryHeroMobile',
+					? 'onboardingDigitalPlusDiscoveryHeroSecondary'
+					: 'onboardingDigitalPlusDiscoveryHeroMobileSecondary',
 				altText: 'Onboarding invitee digital plus hero',
 				aspectRatio: css`
 					aspect-ratio: 3 / 2;
@@ -287,7 +311,13 @@ function OnboardingHeading({
 			<Columns collapseUntil="tablet">
 				<Column cssOverrides={contentColumnStyles} span={[1, 10, 8]}>
 					<div css={headerSpacerDiv}>
-						<div css={[heroContainer, stepContent.aspectRatio]}>
+						<div
+							css={[
+								heroContainer,
+								stepContent.aspectRatio,
+								stepContent.cssOverrides,
+							]}
+						>
 							{stepContent.gridId && (
 								<GridImage
 									gridId={stepContent.gridId}

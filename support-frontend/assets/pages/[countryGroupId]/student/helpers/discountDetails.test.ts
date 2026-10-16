@@ -8,12 +8,6 @@ import {
 
 jest.mock('helpers/productPrice/promotions');
 
-jest.mock('helpers/productPrice/productPrices', () => ({
-	allProductPrices: {
-		SupporterPlus: {},
-	},
-}));
-
 jest.mock('helpers/productCatalog', () => ({
 	productCatalog: {
 		SupporterPlus: {

@@ -58,8 +58,6 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val priceSummaryConfigProvider = new PriceSummaryConfigProvider(config, stage)
 
-  lazy val promotionsConfigProvider = new PromotionsConfigProvider(config, stage)
-
   lazy val recaptchaConfigProvider = new RecaptchaConfigProvider(config, stage)
 
   lazy val mparticleConfigProvider = new MparticleConfigProvider(config, stage)

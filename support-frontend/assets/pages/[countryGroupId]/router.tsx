@@ -99,11 +99,11 @@ const router = createBrowserRouter([
 						);
 						return {
 							Component: function LandingPageRoute() {
-								const { landing } = useRootLoaderData();
+								const { landing: landingPageSettings } = useRootLoaderData();
 								return (
 									<LandingPage
 										supportRegionId={supportRegionId}
-										landingPageSettings={landing.variant}
+										landingPageSettings={landingPageSettings}
 									/>
 								);
 							},

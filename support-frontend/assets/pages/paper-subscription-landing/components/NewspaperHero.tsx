@@ -4,23 +4,23 @@ import HeroContent from 'components/hero/HeroContent';
 import PaperPackShot from 'components/packshots/paperPackshot';
 import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
-import type { PromotionCopy } from 'helpers/productPrice/promotions';
+import type { LandingPageCopy } from 'helpers/productPrice/landingPageCopy';
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { PaperHeroItems } from '../helpers/PaperHeroCopy';
 
 export default function NewspaperHero({
 	paperHeroItems,
-	promotionCopy,
+	landingPageCopy,
 }: {
-	promotionCopy: PromotionCopy;
+	landingPageCopy?: LandingPageCopy;
 	paperHeroItems: PaperHeroItems;
 }) {
 	const {
-		roundel: promotionRoundel,
+		roundelHtml: promotionRoundel,
 		title,
 		description: promotionDescription,
-	} = promotionCopy;
+	} = landingPageCopy ?? {};
 
 	const {
 		titleCopy: fallbackTitle,

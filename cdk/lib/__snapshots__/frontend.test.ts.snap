@@ -1070,6 +1070,12 @@ exports[`The Frontend stack matches the snapshot 1`] = `
             "Type": "forward",
           },
         ],
+        "ListenerAttributes": [
+          {
+            "Key": "routing.http.response.strict_transport_security.header_value",
+            "Value": "max-age=31557600",
+          },
+        ],
         "LoadBalancerArn": {
           "Ref": "LoadBalancerFrontendD42F8E66",
         },

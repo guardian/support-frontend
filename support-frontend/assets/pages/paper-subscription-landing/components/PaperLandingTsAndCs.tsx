@@ -2,17 +2,11 @@ import { SvgInfoRound } from '@guardian/source/react-components';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { HomeDelivery } from '@modules/product/fulfilmentOptions';
 import { observerLinks } from 'helpers/legal';
-import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import type { PaperPromotion } from '../helpers/getPromotions';
 import { productInfoWrapper } from './PaperLandingTsAndCsStyles';
 import PaperPromotionExpiries from './PaperPromotionExpiries';
 
 type PaperLandingTsAndCsProps = {
 	paperFulfilment: PaperFulfilmentOptions;
-	productPrices: ProductPrices;
-	activePaperProducts: ActivePaperProductOptions[];
-	paperPromotions?: PaperPromotion[];
 };
 export default function PaperLandingTsAndCs({
 	paperFulfilment,

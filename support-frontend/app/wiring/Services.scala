@@ -11,7 +11,6 @@ import com.gu.okhttp.RequestRunners
 import com.gu.support.catalog.{DigitalPack, Product, SupporterPlus, TierThree}
 import com.gu.support.idealpostcodes.IdealPostcodesService
 import com.gu.support.paperround.PaperRoundServiceProvider
-import com.gu.support.promotions.PromotionServiceProvider
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSComponents
@@ -21,6 +20,11 @@ import services.pricing.{DefaultPromotionServiceS3, PriceSummaryServiceProvider}
 import services.stepfunctions.{StateWrapper, SupportWorkersClient}
 import services.mparticle.MParticleClient
 import cats.effect.unsafe.{IORuntime, IORuntimeConfig}
+import cats.effect.IO
+import sttp.client4.httpclient.cats.HttpClientCatsBackend
+import sttp.client4.Backend
+import sttp.client4.impl.cats.CatsMonadError
+import sttp.monad.MonadError
 
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
@@ -70,7 +74,18 @@ trait Services {
 
   lazy val asyncAuthenticationService = AsyncAuthenticationService(appConfig.identity, wsClient)
 
-  lazy val oktaAuthService = OktaAuthService(
+  private val (httpBackend, releaseBackend) =
+    HttpClientCatsBackend.resource[IO]().allocated.unsafeRunSync()
+
+  // Shut the backend down when the Play app shuts down
+  applicationLifecycle.addStopHook { () =>
+    releaseBackend.unsafeToFuture()
+  }
+
+  implicit val backend: Backend[IO] = httpBackend
+  implicit val F: MonadError[IO] = new CatsMonadError[IO]
+
+  lazy val oktaAuthService: OktaAuthService[IO] = OktaAuthService(
     config = OktaTokenValidationConfig(
       issuerUrl = OktaIssuerUrl(appConfig.identity.oauthIssuerUrl),
       audience = Some(OktaAudience(appConfig.identity.oauthAudience)),
@@ -142,8 +157,6 @@ trait Services {
 
   lazy val paperRoundServiceProvider: PaperRoundServiceProvider =
     new PaperRoundServiceProvider(appConfig.paperRoundConfigProvider)
-
-  lazy val promotionServiceProvider = new PromotionServiceProvider(appConfig.promotionsConfigProvider)
 
   lazy val prodProductCatalogService: ProdProductCatalogService = new ProdProductCatalogService(
     RequestRunners.futureRunner,

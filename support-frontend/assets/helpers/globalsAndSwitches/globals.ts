@@ -1,7 +1,5 @@
 import { storage } from '@guardian/libs';
 import type { Settings, Status } from 'helpers/globalsAndSwitches/settings';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import type { PromotionCopy } from 'helpers/productPrice/promotions';
 
 function isRecord(item: unknown): item is Record<string, unknown> {
 	return item != null && !Array.isArray(item) && typeof item === 'object';
@@ -81,12 +79,6 @@ const getSettings = (): Settings => {
 	return globalSettings ?? defaultSettings;
 };
 
-const getProductPrices = (): ProductPrices | null =>
-	getGlobal<ProductPrices>('productPrices');
-
-const getPromotionCopy = (): PromotionCopy | null =>
-	getGlobal<PromotionCopy>('promotionCopy');
-
 const isSwitchOn = (switchName: string): boolean => {
 	const localOverride = switchName.startsWith('featureSwitches.')
 		? getLocal<Status>(switchName)
@@ -98,10 +90,4 @@ const isSwitchOn = (switchName: string): boolean => {
 	return sw === 'On';
 };
 
-export {
-	getProductPrices,
-	getPromotionCopy,
-	getGlobal,
-	getSettings,
-	isSwitchOn,
-};
+export { getGlobal, getSettings, isSwitchOn };

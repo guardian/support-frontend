@@ -688,6 +688,8 @@ export default function CheckoutForm({
 				isWeeklyGift,
 		  )}`;
 
+	const automaticSimilarProductsConsent = countryId === 'US';
+
 	return (
 		<>
 			<form
@@ -1237,7 +1239,11 @@ export default function CheckoutForm({
 								showSimilarProductsConsentForRatePlan(
 									productDescription,
 									ratePlanKey,
-								) && <SimilarProductsConsent />}
+								) && (
+									<SimilarProductsConsent
+										showCheckbox={!automaticSimilarProductsConsent}
+									/>
+								)}
 						</div>
 						<SummaryTsAndCs
 							productKey={productKey}

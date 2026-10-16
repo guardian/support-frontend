@@ -17,9 +17,11 @@ import play.api.mvc.Results._
 import play.api.mvc.{AnyContent, BodyParser, Cookie}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsJson, defaultAwaitTimeout, redirectLocation, session, status}
+import sttp.client4.testing.{BackendStub, RecordingBackend}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import cats.effect.IO
 
 class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with Matchers {
 
@@ -52,7 +54,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has recently-signed-out cookie" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService]
+      val authService = mock[OktaAuthService[IO]]
       val config = mock[Identity]
       when(config.signedInCookieName).thenReturn(signedInCookieName)
       when(config.signedOutCookieName).thenReturn(signedOutCookieName)
@@ -77,7 +79,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has no signed-in cookie" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService]
+      val authService = mock[OktaAuthService[IO]]
       val config = mock[Identity]
       when(config.signedInCookieName).thenReturn(signedInCookieName)
       when(config.signedOutCookieName).thenReturn(signedOutCookieName)
@@ -101,7 +103,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has no token cookies" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService]
+      val authService = mock[OktaAuthService[IO]]
       val config = mock[Identity]
       when(config.oauthScopes).thenReturn(accessScopes)
       when(config.signedInCookieName).thenReturn(signedInCookieName)
@@ -134,7 +136,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has no ID token cookie" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService]
+      val authService = mock[OktaAuthService[IO]]
       val config = mock[Identity]
       when(config.oauthScopes).thenReturn(accessScopes)
       when(config.signedInCookieName).thenReturn(signedInCookieName)
@@ -172,7 +174,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has no access token cookie" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService]
+      val authService = mock[OktaAuthService[IO]]
       when(authService.validateIdTokenLocally(idToken, nonce = None)(UserClaims.parser)).thenReturn(Right(idClaims))
       val config = mock[Identity]
       when(config.oauthScopes).thenReturn(accessScopes)
@@ -211,7 +213,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has both ID and access token cookies and they contain valid tokens" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService]
+      val authService = mock[OktaAuthService[IO]]
       when(authService.validateIdTokenLocally(idToken, nonce = None)((UserClaims.parser))).thenReturn(Right(idClaims))
       when(authService.validateAccessTokenLocally(accessToken, accessScopeList)).thenReturn(Right(accessClaims))
       val config = mock[Identity]
@@ -244,7 +246,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has both ID and access token cookies but one is invalid" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService]
+      val authService = mock[OktaAuthService[IO]]
       when(authService.validateIdTokenLocally(idToken, nonce = None)(UserClaims.parser)).thenReturn(Right(idClaims))
       when(authService.validateAccessTokenLocally(accessToken, accessScopeList)).thenReturn(Left(InvalidOrExpiredToken))
       val config = mock[Identity]
@@ -285,7 +287,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has both ID and access token cookies but both are invalid and we've already tried to authenticate" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService]
+      val authService = mock[OktaAuthService[IO]]
       when(authService.validateIdTokenLocally(idToken, nonce = None)).thenReturn(Left(InvalidOrExpiredToken))
       when(authService.validateAccessTokenLocally(accessToken, Nil)).thenReturn(Left(InvalidOrExpiredToken))
       val config = mock[Identity]
@@ -320,7 +322,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "auth server is down" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService]
+      val authService = mock[OktaAuthService[IO]]
       when(authService.validateIdTokenLocally(idToken, nonce = None)).thenReturn(Left(InvalidOrExpiredToken))
       when(authService.validateAccessTokenLocally(accessToken, Nil)).thenReturn(Left(InvalidOrExpiredToken))
       val config = mock[Identity]
@@ -354,7 +356,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has no referrer" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService]
+      val authService = mock[OktaAuthService[IO]]
       val config = mock[Identity]
       when(config.oauthScopes).thenReturn(accessScopes)
       when(config.signedInCookieName).thenReturn(signedInCookieName)

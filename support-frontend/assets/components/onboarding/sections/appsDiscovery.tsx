@@ -140,7 +140,7 @@ export function OnboardingAppsDiscovery({
 							? hasAppDownloaded
 								? 'Discover the Guardian app'
 								: 'Download the Guardian app'
-							: 'Discover the Feast app'}
+							: 'Discover the Guardian Feast app'}
 					</h1>
 					<p css={descriptions}>
 						{isGuardianApp
