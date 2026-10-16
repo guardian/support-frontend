@@ -190,8 +190,11 @@ export default function CheckoutForm({
 	const abParticipations = useAbParticipations();
 
 	const productCatalog = appConfig.productCatalog;
-	const { currency, currencyKey, countryGroupId } =
-		getSupportRegionIdConfig(supportRegionId);
+	const {
+		currency,
+		currencyCode: currencyKey,
+		countryGroupId,
+	} = getSupportRegionIdConfig(supportRegionId);
 
 	const productDescription = productCatalogDescription[productKey];
 	const hasDeliveryAddress = !!productDescription.deliverableTo;

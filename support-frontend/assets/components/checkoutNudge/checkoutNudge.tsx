@@ -399,7 +399,7 @@ export function CheckoutNudgeSelector({
 	}
 
 	const { nudgeToProduct } = nudge;
-	const { currencyKey, countryGroupId } =
+	const { currencyCode: currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 
 	// Handle "Thank You" State

@@ -241,8 +241,11 @@ function OnboardingSummary({
 	const { windowWidthIsLessThan } = useWindowWidth();
 
 	const abParticipations = useAbParticipations();
-	const { currency, currencyKey, countryGroupId } =
-		getSupportRegionIdConfig(supportRegionId);
+	const {
+		currency,
+		currencyCode: currencyKey,
+		countryGroupId,
+	} = getSupportRegionIdConfig(supportRegionId);
 	const { title: productTitle, benefits } = getOnboardingProductCopy(
 		productKey,
 		landingPageSettings,
