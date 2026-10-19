@@ -75,7 +75,6 @@ class AppComponents(context: Context)
     payPalRegularController,
     directDebitController,
     promotionsController,
-    pricesController,
     analyticsController,
     newspaperArchiveController,
     assetController,

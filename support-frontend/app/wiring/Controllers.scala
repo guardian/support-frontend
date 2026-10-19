@@ -211,12 +211,6 @@ trait Controllers {
     allSettingsProvider,
   )
 
-  lazy val pricesController = new PricesController(
-    priceSummaryServiceProvider,
-    actionBuilders,
-    controllerComponents,
-  )
-
   lazy val analyticsController = new AnalyticsController(
     controllerComponents,
     actionBuilders,
