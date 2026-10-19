@@ -128,7 +128,7 @@ export function ThreeTierLanding({
 }: ThreeTierLandingProps): JSX.Element {
 	const { ratePlanKey: urlSearchParamsRatePlan, forceWeeklyPricing } =
 		useThreeTierUrlSelection();
-	const { currencyCode: currencyId, countryGroupId } =
+	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const countryId: CountryCode = Country.detect();
 	const { variant: landingPageVariant, participations } = landingPageSettings;

@@ -117,8 +117,7 @@ export function getStudentDiscount(
 	) {
 		return undefined;
 	}
-	const { currencyCode: currencyKey } =
-		getSupportRegionIdConfig(supportRegionId);
+	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
 	const currency = getCurrencyByCode(currencyKey);
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);

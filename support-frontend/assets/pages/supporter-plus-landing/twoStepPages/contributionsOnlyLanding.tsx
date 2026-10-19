@@ -139,7 +139,7 @@ export function ContributionsOnlyLanding({
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const ratePlanParam = urlSearchParams.get('ratePlan') ?? '';
 
-	const { currencyCode: currencyId, countryGroupId } =
+	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 
 	const getInitialBillingPeriod = () => {

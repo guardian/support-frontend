@@ -14,10 +14,10 @@ export function getTierCardPromotion(
 	billingPeriod: RecurringBillingPeriod,
 	tierRatePlanKey: ProductRatePlanKey<TierProductKey>,
 ): Promotion | undefined {
-	const { currencyCode } = getSupportRegionIdConfig(supportRegionId);
+	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
 
 	const tierPricing = productCatalog[tierProductKey]?.ratePlans[tierRatePlanKey]
-		?.pricing[currencyCode] as number;
+		?.pricing[currencyKey] as number;
 
 	const promotions = window.guardian.promotions ?? [];
 	const promoCode = getQueryParameter('promoCode');

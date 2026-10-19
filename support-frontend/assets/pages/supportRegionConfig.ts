@@ -6,7 +6,7 @@ import { getCurrencyByCode } from '@modules/internationalisation/currency';
 
 type SupportRegionConfig = {
 	currency: Currency;
-	currencyCode: CurrencyCode;
+	currencyKey: CurrencyCode;
 	countryGroupId: CountryGroupId;
 };
 
@@ -25,49 +25,49 @@ export const getSupportRegionIdConfig = (
 		case SupportRegionId.UK:
 			return {
 				currency: getCurrencyByCode('GBP'),
-				currencyCode: 'GBP',
+				currencyKey: 'GBP',
 				countryGroupId: 'GBPCountries',
 			};
 
 		case SupportRegionId.US:
 			return {
 				currency: getCurrencyByCode('USD'),
-				currencyCode: 'USD',
+				currencyKey: 'USD',
 				countryGroupId: 'UnitedStates',
 			};
 
 		case SupportRegionId.AU:
 			return {
 				currency: getCurrencyByCode('AUD'),
-				currencyCode: 'AUD',
+				currencyKey: 'AUD',
 				countryGroupId: 'AUDCountries',
 			};
 
 		case SupportRegionId.EU:
 			return {
 				currency: getCurrencyByCode('EUR'),
-				currencyCode: 'EUR',
+				currencyKey: 'EUR',
 				countryGroupId: 'EURCountries',
 			};
 
 		case SupportRegionId.NZ:
 			return {
 				currency: getCurrencyByCode('NZD'),
-				currencyCode: 'NZD',
+				currencyKey: 'NZD',
 				countryGroupId: 'NZDCountries',
 			};
 
 		case SupportRegionId.CA:
 			return {
 				currency: getCurrencyByCode('CAD'),
-				currencyCode: 'CAD',
+				currencyKey: 'CAD',
 				countryGroupId: 'Canada',
 			};
 
 		case SupportRegionId.INT:
 			return {
 				currency: getCurrencyByCode('USD'),
-				currencyCode: 'USD',
+				currencyKey: 'USD',
 				countryGroupId: 'International',
 			};
 	}

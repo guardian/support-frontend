@@ -239,7 +239,7 @@ function OnboardingSummary({
 	const order = getThankYouOrder();
 	const { windowWidthIsLessThan } = useWindowWidth();
 
-	const { currency, currencyCode, countryGroupId } =
+	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const { title: productTitle, benefits } = getOnboardingProductCopy(
 		productKey,
@@ -285,7 +285,7 @@ function OnboardingSummary({
 
 	const todaysPayment = getTodaysPaymentWithTaxExclusion(
 		payment,
-		currencyCode,
+		currencyKey,
 		order?.taxConfig,
 	);
 

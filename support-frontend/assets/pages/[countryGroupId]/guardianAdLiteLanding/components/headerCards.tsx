@@ -96,8 +96,7 @@ export function HeaderCards({
 	returnLink,
 }: HeaderCardsProps): JSX.Element {
 	const contributionType = 'Monthly';
-	const { currencyCode: currencyKey } =
-		getSupportRegionIdConfig(supportRegionId);
+	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
 	const currency = getCurrencyByCode(currencyKey);
 	const price =
 		productCatalog.GuardianAdLite?.ratePlans[contributionType]?.pricing[

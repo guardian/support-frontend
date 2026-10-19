@@ -82,11 +82,8 @@ export default function CheckoutSummary({
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
 	const productCatalog = appConfig.productCatalog;
-	const {
-		currency,
-		currencyCode: currencyKey,
-		countryGroupId,
-	} = getSupportRegionIdConfig(supportRegionId);
+	const { currency, currencyKey, countryGroupId } =
+		getSupportRegionIdConfig(supportRegionId);
 	const productDescription = getProductDescription(productKey, ratePlanKey);
 	const ratePlanDetail = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,

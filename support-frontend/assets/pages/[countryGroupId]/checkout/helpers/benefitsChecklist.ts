@@ -52,15 +52,6 @@ export const filterBenefits = (
 	);
 };
 
-export const filterBenefitsByCountryGroupId = (
-	benefits: ProductBenefit[],
-	countryGroupId: CountryGroupId,
-): ProductBenefit[] => {
-	return benefits.filter((benefit) =>
-		filterBenefitByRegion(benefit, countryGroupId),
-	);
-};
-
 export const getBenefitsChecklist = (
 	benefits: ProductBenefit[],
 	countryGroupId: CountryGroupId,

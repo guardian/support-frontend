@@ -17,7 +17,7 @@ import { getQueryParameter } from 'helpers/urls/url';
 import type { CardContent } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { useThreeTierUrlSelection } from 'pages/supporter-plus-landing/twoStepPages/useThreeTierUrlSelection';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
-import { filterBenefitsByCountryGroupId } from '../checkout/helpers/benefitsChecklist';
+import { filterBenefits } from '../checkout/helpers/benefitsChecklist';
 import type { TierProductKey } from './getDigitalRatePlanKey';
 
 export type TierConfig = {
@@ -43,11 +43,11 @@ export function getTierCardContent(config: TierConfig): CardContent {
 
 	const fallbackProducts = fallBackLandingPageSelection.products;
 
-	const { currencyCode, countryGroupId } =
+	const { currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 
 	const tierPricing = productCatalog[tierProductKey]?.ratePlans[tierRatePlanKey]
-		?.pricing[currencyCode] as number;
+		?.pricing[currencyKey] as number;
 
 	const promotions = window.guardian.promotions ?? [];
 	const promoCode = getQueryParameter('promoCode');
@@ -74,7 +74,7 @@ export function getTierCardContent(config: TierConfig): CardContent {
 			: getProductDescription(tierProductKey, tierRatePlanKey).labelPill,
 		benefits:
 			settings.products[tierProductKey]?.benefits ??
-			filterBenefitsByCountryGroupId(
+			filterBenefits(
 				productCatalogDescription[tierProductKey].benefits,
 				countryGroupId,
 			),

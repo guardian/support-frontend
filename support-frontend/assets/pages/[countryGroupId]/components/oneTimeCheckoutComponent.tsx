@@ -306,11 +306,8 @@ export function OneTimeCheckoutComponent({
 	oneTimeCheckoutSettings,
 	userAttributes,
 }: OneTimeCheckoutComponentProps) {
-	const {
-		currency,
-		currencyCode: currencyKey,
-		countryGroupId,
-	} = getSupportRegionIdConfig(supportRegionId);
+	const { currency, currencyKey, countryGroupId } =
+		getSupportRegionIdConfig(supportRegionId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const heading = replaceMParticleTemplates(
 		oneTimeCheckoutSettings.heading,
