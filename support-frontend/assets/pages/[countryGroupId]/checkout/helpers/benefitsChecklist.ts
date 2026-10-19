@@ -36,7 +36,7 @@ const benefitsAsChecklist = ({
 	];
 };
 
-export const removeBenefitByCopy = (
+const removeBenefitByCopy = (
 	benefits: ProductBenefit[],
 	benefitToRemove: string,
 ): ProductBenefit[] => {
