@@ -349,7 +349,7 @@ export function ThreeTierCard({
 			<LinkButton
 				href={link}
 				cssOverrides={btnStyleOverrides(
-					!!multipleAccountsVariant && multipleAccountsVariant !== 'control',
+					!!multipleAccountsVariant && multipleAccountsVariant !== 'CONTROL',
 				)}
 				data-qm-trackable={quantumMetricButtonRef}
 				aria-label={linkAriaLabel}

@@ -15,7 +15,6 @@ import type {
 	CurrentUserState,
 	HandleStepNavigationFunction,
 } from 'components/onboarding/onboardingTypes';
-import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
 	getNewsletterSubscriptionById,
@@ -240,17 +239,12 @@ function OnboardingSummary({
 	const order = getThankYouOrder();
 	const { windowWidthIsLessThan } = useWindowWidth();
 
-	const abParticipations = useAbParticipations();
-	const {
-		currency,
-		currencyCode: currencyKey,
-		countryGroupId,
-	} = getSupportRegionIdConfig(supportRegionId);
+	const { currency, currencyKey, countryGroupId } =
+		getSupportRegionIdConfig(supportRegionId);
 	const { title: productTitle, benefits } = getOnboardingProductCopy(
 		productKey,
 		landingPageSettings,
 		countryGroupId,
-		abParticipations,
 	);
 
 	const amountPaidToday = simpleFormatAmount(currency, payment.finalAmount);

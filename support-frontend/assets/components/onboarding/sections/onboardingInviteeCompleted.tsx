@@ -7,7 +7,6 @@ import {
 } from '@guardian/source/react-components';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import GridImage from 'components/gridImage/gridImage';
-import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import type { OnboardingInviteeInvitation } from 'helpers/onboardingInvitee/invitation';
 import { getHelpCentreUrl, getManageSubsUrl } from 'helpers/urls/externalLinks';
@@ -57,13 +56,11 @@ export function OnboardingInviteeCompleted({
 	landingPageSettings: LandingPageVariant;
 	supportRegionId: SupportRegionId;
 }) {
-	const abParticipations = useAbParticipations();
 	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 
 	const benefitsChecklist = getDigitalSubscriptionBenefitsChecklist(
 		landingPageSettings,
 		countryGroupId,
-		abParticipations,
 		'secondaryUser',
 	);
 

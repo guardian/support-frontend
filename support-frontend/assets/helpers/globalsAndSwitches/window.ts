@@ -187,6 +187,9 @@ const TaxRatesSchema = z.object({
 
 const PromotionsSchema = z.object({
 	promotions: z.array(promoWithCatalogInformationSchema).optional(), // This isn't made available on every page
+	checkoutNudgePromotions: z
+		.array(promoWithCatalogInformationSchema)
+		.optional(), // Only made available on checkout pages
 });
 
 const AppConfigSchema = PaymentConfigSchema.merge(ProductCatalogSchema)
