@@ -2,7 +2,6 @@ import { storage } from '@guardian/libs';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type React from 'react';
 import OnboardingSummary from 'components/onboarding/sections/summary';
-import { AbParticipationsProvider } from 'contexts/AbParticipationsContext';
 import { FeatureSwitchesProvider } from 'contexts/FeatureSwitchesContext';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
@@ -35,13 +34,9 @@ export default {
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<FeatureSwitchesProvider>
-				<AbParticipationsProvider
-					participations={{ multipleAccounts: 'control' }}
-				>
-					<div style={{ maxWidth: '600px', margin: '40px auto' }}>
-						<Story />
-					</div>
-				</AbParticipationsProvider>
+				<div style={{ maxWidth: '600px', margin: '40px auto' }}>
+					<Story />
+				</div>
 			</FeatureSwitchesProvider>
 		),
 		withSourceReset,

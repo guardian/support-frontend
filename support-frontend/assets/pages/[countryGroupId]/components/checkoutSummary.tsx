@@ -9,7 +9,6 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { OrderSummaryStartDate } from 'components/orderSummary/orderSummaryStartDate';
 import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
-import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import type { Payment } from 'helpers/forms/checkouts';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
@@ -90,7 +89,6 @@ export default function CheckoutSummary({
 		billingPeriod: BillingPeriod.Monthly,
 	};
 	const isRecurringContribution = productKey === 'Contribution';
-	const abParticipations = useAbParticipations();
 
 	/**
 	 * Is It a Contribution? URL queryPrice supplied?
@@ -122,13 +120,8 @@ export default function CheckoutSummary({
 			productKey,
 			landingPageSettings,
 			countryGroupId,
-			abParticipations,
 		) ??
-		getBenefitsChecklist(
-			productDescription.benefits,
-			countryGroupId,
-			abParticipations,
-		);
+		getBenefitsChecklist(productDescription.benefits, countryGroupId);
 
 	if (
 		ratePlanKey === 'OneYearStudent' &&

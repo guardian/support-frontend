@@ -7,7 +7,6 @@ import {
 } from '@guardian/source/react-components';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import GridImage from 'components/gridImage/gridImage';
-import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import {
 	getHelpCentreUrl,
@@ -64,12 +63,10 @@ export function OnboardingCompleted({
 	landingPageSettings: LandingPageVariant;
 	countryGroupId: CountryGroupId;
 }) {
-	const abParticipations = useAbParticipations();
 	const { title: productTitle, benefits } = getOnboardingProductCopy(
 		productKey,
 		landingPageSettings,
 		countryGroupId,
-		abParticipations,
 	);
 
 	const { windowWidthIsLessThan } = useWindowWidth();

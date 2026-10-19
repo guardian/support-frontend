@@ -20,9 +20,12 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
+import {
+	getMultipleAccountsTestVariantParticipation,
+	multipleAccountBenefitCopy,
+} from 'helpers/abTests/multipleAccounts';
 import type { PageParticipationsResultWithFallback } from 'helpers/abTests/pageParticipations';
 import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
@@ -40,7 +43,7 @@ import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
 import { getQueryParameter } from 'helpers/urls/url';
 import {
 	filterBenefits,
-	reduceBenefitsToAbTestVariant,
+	removeBenefitByCopy,
 } from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { getTierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
 import { useStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/useStudentBeansRegionValid';
@@ -153,10 +156,11 @@ export function ThreeTierLanding({
 	supportRegionId,
 	landingPageSettings,
 }: ThreeTierLandingProps): JSX.Element {
-	const abParticipations = useAbParticipations();
-	const multipleAccountsVariant = abParticipations.multipleAccounts;
-	const { variant: landingPageVariant } = landingPageSettings;
-
+	const { variant: landingPageVariant, participations } = landingPageSettings;
+	const multipleAccountsVariant = getMultipleAccountsTestVariantParticipation(
+		participations,
+		landingPageVariant.name,
+	);
 	const {
 		productKey: urlSearchParamsProduct,
 		ratePlanKey: urlSearchParamsRatePlan,
@@ -288,7 +292,6 @@ export function ThreeTierLanding({
 			filterBenefits(
 				productCatalogDescription[tier1Product].benefits,
 				countryGroupId,
-				abParticipations,
 			),
 		cta:
 			landingPageVariant.products[tier1Product]?.cta ??
@@ -331,7 +334,6 @@ export function ThreeTierLanding({
 			filterBenefits(
 				productCatalogDescription[tier2Product].benefits,
 				countryGroupId,
-				abParticipations,
 			),
 		cta:
 			landingPageVariant.products[tier2Product]?.cta ??
@@ -386,24 +388,21 @@ export function ThreeTierLanding({
 	);
 	const titlePill = multipleAccountsVariant ? undefined : labelPill;
 
-	// landing page exception to hide abtest multipleAccounts benefit for variants except control
-	const tier3ProductCatalogBenefits = reduceBenefitsToAbTestVariant(
-		productCatalogDescription[tier3Product].benefits,
-		'multipleAccounts',
-		'control',
-	);
 	const tier3DefaultBenefits = filterBenefits(
-		tier3ProductCatalogBenefits,
+		productCatalogDescription[tier3Product].benefits,
 		countryGroupId,
-		abParticipations,
 	);
+	const tier3Benefits =
+		landingPageVariant.products[tier3Product]?.benefits ?? tier3DefaultBenefits;
+	const tier3BenefitsMultipleAccounts =
+		multipleAccountsVariant === 'V1' || multipleAccountsVariant === 'V2'
+			? removeBenefitByCopy(tier3Benefits, multipleAccountBenefitCopy)
+			: tier3Benefits;
 	const tier3ProductDescription = {
 		title: landingPageVariant.products[tier3Product]?.title ?? title,
 		titlePill:
 			landingPageVariant.products[tier3Product]?.titlePill ?? titlePill,
-		benefits:
-			landingPageVariant.products[tier3Product]?.benefits ??
-			tier3DefaultBenefits,
+		benefits: tier3BenefitsMultipleAccounts,
 		cta:
 			landingPageVariant.products[tier3Product]?.cta ??
 			fallbackProducts[tier3Product]!.cta,

@@ -8,7 +8,7 @@ describe('threeTierAccount', () => {
 			<ThreeTierNumberOfAccounts
 				productKey={'DigitalSubscription'}
 				cardTheme={defaultCardTheme}
-				multipleAccountsVariant={'v1'}
+				multipleAccountsVariant={'V1'}
 			/>,
 		);
 		expect(screen.getByText('3 extra accounts to share')).toBeInTheDocument();
@@ -18,7 +18,7 @@ describe('threeTierAccount', () => {
 			<ThreeTierNumberOfAccounts
 				productKey={'DigitalSubscription'}
 				cardTheme={defaultCardTheme}
-				multipleAccountsVariant={'v2'}
+				multipleAccountsVariant={'V2'}
 			/>,
 		);
 		expect(screen.getByText('4 accounts')).toBeInTheDocument();
@@ -28,7 +28,7 @@ describe('threeTierAccount', () => {
 			<ThreeTierNumberOfAccounts
 				productKey={'SupporterPlus'}
 				cardTheme={defaultCardTheme}
-				multipleAccountsVariant={'v1'}
+				multipleAccountsVariant={'V1'}
 			/>,
 		);
 		expect(container.querySelector('section')).toBeInTheDocument();
@@ -39,7 +39,7 @@ describe('threeTierAccount', () => {
 			<ThreeTierNumberOfAccounts
 				productKey={'SupporterPlus'}
 				cardTheme={defaultCardTheme}
-				multipleAccountsVariant={'v2'}
+				multipleAccountsVariant={'V2'}
 			/>,
 		);
 		expect(screen.getByText('1 account')).toBeInTheDocument();
@@ -49,7 +49,7 @@ describe('threeTierAccount', () => {
 			<ThreeTierNumberOfAccounts
 				productKey={'Contribution'}
 				cardTheme={defaultCardTheme}
-				multipleAccountsVariant={'v1'}
+				multipleAccountsVariant={'V1'}
 			/>,
 		);
 		expect(container.querySelector('section')).toBeInTheDocument();
