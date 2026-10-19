@@ -11,7 +11,7 @@ buildApp()
 
 		// The keep alive timout should be > the idle timeout on the load
 		// balancer (60s by default) otherwise there's a danger that the app
-		// closes the connection, but the load balancer things the connection is
+		// closes the connection, but the load balancer thinks the connection is
 		// still good.
 		// See: https://repost.aws/knowledge-center/elb-alb-troubleshoot-502-errors
 		server.keepAliveTimeout = 61000; // In milliseconds
