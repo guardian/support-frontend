@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { from, palette, space, textSans17 } from '@guardian/source/foundations';
 import { Container } from '@guardian/source/react-components';
-import type { CountryCode } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -130,7 +129,6 @@ export function ThreeTierLanding({
 		useThreeTierUrlSelection();
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
-	const countryId: CountryCode = Country.detect();
 	const { variant: landingPageVariant, participations } = landingPageSettings;
 	const multipleAccountsVariant = getMultipleAccountsTestVariantParticipation(
 		participations,
@@ -204,29 +202,31 @@ export function ThreeTierLanding({
 	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
 	const { enableDeepDiscount } = useFeatureSwitches();
 
+	const tier1Product = 'Contribution';
 	const tier1RatePlanKey = getDigitalRatePlanKey(
 		contributionType,
 		supportRegionId,
-		'Contribution',
+		tier1Product,
 	);
+	const tier2Product = 'SupporterPlus';
 	const tier2RatePlanKey = getDigitalRatePlanKey(
 		contributionType,
 		supportRegionId,
-		'SupporterPlus',
+		tier2Product,
 	);
+	const tier3Product = 'DigitalSubscription';
 	const tier3RatePlanKey = getDigitalRatePlanKey(
 		contributionType,
 		supportRegionId,
-		'DigitalSubscription',
+		tier3Product,
 	);
 
 	const tier1Config: TierConfig = {
-		countryId,
-		tierProductKey: 'Contribution',
 		supportRegionId,
+		tierProductKey: tier1Product,
 		tierRatePlanKey: tier1RatePlanKey,
 		billingPeriod,
-		settings: landingPageVariant,
+		landingPageVariant,
 		multipleAccountsVariant,
 	};
 
@@ -234,22 +234,22 @@ export function ThreeTierLanding({
 	const tier2Card = getTierCardContent({
 		...tier1Config,
 		tierRatePlanKey: tier2RatePlanKey,
-		tierProductKey: 'SupporterPlus',
+		tierProductKey: tier2Product,
 	});
 	const tier2Promotion = getTierCardPromotion(
 		supportRegionId,
-		'SupporterPlus',
+		tier2Product,
 		billingPeriod,
 		tier2RatePlanKey,
 	);
 	const tier3Card = getTierCardContent({
 		...tier1Config,
 		tierRatePlanKey: tier3RatePlanKey,
-		tierProductKey: 'DigitalSubscription',
+		tierProductKey: tier3Product,
 	});
 	const tier3Promotion = getTierCardPromotion(
 		supportRegionId,
-		'DigitalSubscription',
+		tier3Product,
 		billingPeriod,
 		tier3RatePlanKey,
 	);

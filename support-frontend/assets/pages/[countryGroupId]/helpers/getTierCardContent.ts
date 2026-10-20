@@ -1,4 +1,3 @@
-import type { CountryCode } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog';
@@ -21,72 +20,72 @@ import { filterBenefits } from '../checkout/helpers/benefitsChecklist';
 import type { TierProductKey } from './getDigitalRatePlanKey';
 
 export type TierConfig = {
-	countryId: CountryCode;
-	tierProductKey: TierProductKey;
 	supportRegionId: SupportRegionId;
-	billingPeriod: RecurringBillingPeriod;
+	tierProductKey: TierProductKey;
 	tierRatePlanKey: ProductRatePlanKey<TierProductKey>;
-	settings: LandingPageVariant;
+	billingPeriod: RecurringBillingPeriod;
+	landingPageVariant: LandingPageVariant;
 	multipleAccountsVariant?: string;
 };
 
 export function getTierCardContent(config: TierConfig): CardContent {
 	const {
-		// countryId,
-		tierProductKey,
 		supportRegionId,
-		billingPeriod,
+		tierProductKey: productKey,
 		tierRatePlanKey,
-		settings,
+		billingPeriod,
+		landingPageVariant,
 		multipleAccountsVariant,
 	} = config;
 
-	const fallbackProducts = fallBackLandingPageSelection.products;
+	const defaultLandingPageVariant = fallBackLandingPageSelection.products;
 
 	const { currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 
-	const tierPricing = productCatalog[tierProductKey]?.ratePlans[tierRatePlanKey]
-		?.pricing[currencyKey] as number;
+	const price = productCatalog[productKey]?.ratePlans[tierRatePlanKey]?.pricing[
+		currencyKey
+	] as number;
 
 	const promotions = window.guardian.promotions ?? [];
 	const promoCode = getQueryParameter('promoCode');
 	const tierPromotion = getLegacyPromotion({
 		promotions,
-		productKey: tierProductKey,
+		productKey: productKey,
 		ratePlanKey: tierRatePlanKey,
-		price: tierPricing,
+		price,
 		billingPeriod: billingPeriod,
 		promoCode: promoCode,
 	});
 
 	const tierCheckoutURL = buildCheckoutUrl(supportRegionId, {
-		product: tierProductKey,
+		product: productKey,
 		ratePlan: tierRatePlanKey,
 		promoCode: tierPromotion?.promoCode,
 	});
 
 	const tierProductDescription = {
-		...settings.products[tierProductKey],
-		title: getProductLabel(tierProductKey),
+		...landingPageVariant.products[productKey],
+		title: getProductLabel(productKey),
 		titlePill: multipleAccountsVariant
 			? undefined
-			: getProductDescription(tierProductKey, tierRatePlanKey).labelPill,
+			: getProductDescription(productKey, tierRatePlanKey).labelPill,
 		benefits:
-			settings.products[tierProductKey]?.benefits ??
+			landingPageVariant.products[productKey]?.benefits ??
 			filterBenefits(
-				productCatalogDescription[tierProductKey].benefits,
+				productCatalogDescription[productKey].benefits,
 				countryGroupId,
 			),
 		cta:
-			settings.products[tierProductKey]?.cta ??
-			fallbackProducts[tierProductKey]!.cta,
-		billingPeriodsCopy: settings.products[tierProductKey]?.billingPeriodsCopy,
+			landingPageVariant.products[productKey]?.cta ??
+			defaultLandingPageVariant[productKey]!.cta,
+		billingPeriodsCopy:
+			landingPageVariant.products[productKey]?.billingPeriodsCopy,
 	};
 
 	// RRCP LandingPage Test Page / Default Product Selection
 	const defaultProductSelection =
-		settings.defaultProductSelection?.productType.toLowerCase();
+		landingPageVariant.defaultProductSelection?.productType.toLowerCase();
 	const { enableDeepDiscount } = useFeatureSwitches();
 	const {
 		productKey: urlSearchParamsProduct,
@@ -125,13 +124,13 @@ export function getTierCardContent(config: TierConfig): CardContent {
 	};
 
 	return {
-		product: tierProductKey,
-		price: tierPricing,
+		product: productKey,
+		price,
 		link: tierCheckoutURL,
-		isDefaultProductSelected: getDefaultProductSelection(tierProductKey),
+		isDefaultProductSelected: getDefaultProductSelection(productKey),
 		isUserSelected: getUserSelection(
-			tierProductKey,
-			tierPricing,
+			productKey,
+			price,
 			tierPromotion?.discount?.amount,
 		),
 		multipleAccountsVariant,
