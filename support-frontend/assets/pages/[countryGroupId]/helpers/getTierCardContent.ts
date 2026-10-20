@@ -31,7 +31,6 @@ export function getTierCardContent(
 ): CardContent {
 	const digitalPlusMultipleAccountsVariant =
 		productKey === 'DigitalSubscription' ? multipleAccountsVariant : undefined;
-	const defaultLandingPageVariant = fallBackLandingPageSelection.products;
 
 	const { currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -70,7 +69,7 @@ export function getTierCardContent(
 		benefits: benefitsFilteredByMultipleAccounts,
 		cta:
 			landingPageVariant.products[productKey]?.cta ??
-			defaultLandingPageVariant[productKey]!.cta,
+			fallBackLandingPageSelection.products[productKey]!.cta,
 		billingPeriodsCopy:
 			landingPageVariant.products[productKey]?.billingPeriodsCopy,
 	};
