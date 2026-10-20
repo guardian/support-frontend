@@ -29,6 +29,8 @@ export function getTierCardContent(
 	promotion?: Promotion,
 	multipleAccountsVariant?: string,
 ): CardContent {
+	const digitalPlusMultipleAccountsVariant =
+		productKey === 'DigitalSubscription' ? multipleAccountsVariant : undefined;
 	const defaultLandingPageVariant = fallBackLandingPageSelection.products;
 
 	const { currencyKey, countryGroupId } =
@@ -44,6 +46,9 @@ export function getTierCardContent(
 		promoCode: promotion?.promoCode,
 	});
 
+	const defaultTitle = getProductLabel(productKey);
+	const title = landingPageVariant.products[productKey]?.title ?? defaultTitle;
+
 	const defaultBenefits = filterBenefits(
 		productCatalogDescription[productKey].benefits,
 		countryGroupId,
@@ -51,14 +56,15 @@ export function getTierCardContent(
 	const benefits =
 		landingPageVariant.products[productKey]?.benefits ?? defaultBenefits;
 	const benefitsFilteredByMultipleAccounts =
-		multipleAccountsVariant === 'V1' || multipleAccountsVariant === 'V2'
+		digitalPlusMultipleAccountsVariant === 'V1' ||
+		digitalPlusMultipleAccountsVariant === 'V2'
 			? removeBenefitByCopy(benefits, multipleAccountBenefitCopy)
 			: benefits;
 
 	const tierProductDescription = {
 		...landingPageVariant.products[productKey],
-		title: getProductLabel(productKey),
-		titlePill: multipleAccountsVariant
+		title,
+		titlePill: digitalPlusMultipleAccountsVariant
 			? undefined
 			: getProductDescription(productKey, ratePlanKey).labelPill,
 		benefits: benefitsFilteredByMultipleAccounts,
