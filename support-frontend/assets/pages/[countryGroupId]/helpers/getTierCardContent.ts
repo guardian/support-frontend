@@ -2,6 +2,7 @@ import type { SupportRegionId } from '@modules/internationalisation/countryGroup
 import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
+import { multipleAccountBenefitCopy } from 'helpers/abTests/multipleAccounts';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import {
 	getProductDescription,
@@ -14,7 +15,10 @@ import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
 import type { CardContent } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { useThreeTierUrlSelection } from 'pages/supporter-plus-landing/twoStepPages/useThreeTierUrlSelection';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
-import { filterBenefits } from '../checkout/helpers/benefitsChecklist';
+import {
+	filterBenefits,
+	removeBenefitByCopy,
+} from '../checkout/helpers/benefitsChecklist';
 import type { TierProductKey } from './getDigitalRatePlanKey';
 
 export function getTierCardContent(
@@ -40,18 +44,24 @@ export function getTierCardContent(
 		promoCode: promotion?.promoCode,
 	});
 
+	const defaultBenefits = filterBenefits(
+		productCatalogDescription[productKey].benefits,
+		countryGroupId,
+	);
+	const benefits =
+		landingPageVariant.products[productKey]?.benefits ?? defaultBenefits;
+	const benefitsFilteredByMultipleAccounts =
+		multipleAccountsVariant === 'V1' || multipleAccountsVariant === 'V2'
+			? removeBenefitByCopy(benefits, multipleAccountBenefitCopy)
+			: benefits;
+
 	const tierProductDescription = {
 		...landingPageVariant.products[productKey],
 		title: getProductLabel(productKey),
 		titlePill: multipleAccountsVariant
 			? undefined
 			: getProductDescription(productKey, ratePlanKey).labelPill,
-		benefits:
-			landingPageVariant.products[productKey]?.benefits ??
-			filterBenefits(
-				productCatalogDescription[productKey].benefits,
-				countryGroupId,
-			),
+		benefits: benefitsFilteredByMultipleAccounts,
 		cta:
 			landingPageVariant.products[productKey]?.cta ??
 			defaultLandingPageVariant[productKey]!.cta,
