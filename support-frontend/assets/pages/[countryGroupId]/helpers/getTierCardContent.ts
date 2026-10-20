@@ -17,25 +17,14 @@ import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import { filterBenefits } from '../checkout/helpers/benefitsChecklist';
 import type { TierProductKey } from './getDigitalRatePlanKey';
 
-export type TierConfig = {
-	supportRegionId: SupportRegionId;
-	productKey: TierProductKey;
-	ratePlanKey: ProductRatePlanKey<TierProductKey>;
-	landingPageVariant: LandingPageVariant;
-	promotion?: Promotion;
-	multipleAccountsVariant?: string;
-};
-
-export function getTierCardContent(config: TierConfig): CardContent {
-	const {
-		supportRegionId,
-		productKey,
-		ratePlanKey,
-		landingPageVariant,
-		promotion,
-		multipleAccountsVariant,
-	} = config;
-
+export function getTierCardContent(
+	supportRegionId: SupportRegionId,
+	productKey: TierProductKey,
+	ratePlanKey: ProductRatePlanKey<TierProductKey>,
+	landingPageVariant: LandingPageVariant,
+	promotion?: Promotion,
+	multipleAccountsVariant?: string,
+): CardContent {
 	const defaultLandingPageVariant = fallBackLandingPageSelection.products;
 
 	const { currencyKey, countryGroupId } =
@@ -112,6 +101,7 @@ export function getTierCardContent(config: TierConfig): CardContent {
 
 	return {
 		product: productKey,
+		ratePlan: ratePlanKey,
 		price,
 		link: tierCheckoutURL,
 		isDefaultProductSelected: getDefaultProductSelection(productKey),

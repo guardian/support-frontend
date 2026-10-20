@@ -28,7 +28,6 @@ import { Country } from 'helpers/internationalisation/classes/country';
 import { glyph } from 'helpers/internationalisation/currency';
 import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getTierCardContent } from 'pages/[countryGroupId]/helpers/getTierCardContent';
-import type { TierConfig } from 'pages/[countryGroupId]/helpers/getTierCardContent';
 import { getTierCardPromotion } from 'pages/[countryGroupId]/helpers/getTierCardPromotion';
 import { getTierCardTsAndCs } from 'pages/[countryGroupId]/helpers/getTierCardTsAndCs';
 import { useStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/useStudentBeansRegionValid';
@@ -37,6 +36,7 @@ import {
 	getSanitisedHtml,
 	replaceDatePlaceholder,
 } from '../../../helpers/utilities/utilities';
+import type { TierProductKey } from '../../[countryGroupId]/helpers/getDigitalRatePlanKey';
 import { getDigitalRatePlanKey } from '../../[countryGroupId]/helpers/getDigitalRatePlanKey';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import Countdown from '../components/countdown';
@@ -200,79 +200,50 @@ export function ThreeTierLanding({
 	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
 	const { enableDeepDiscount } = useFeatureSwitches();
 
-	const tier1Product = 'Contribution';
-	const tier1RatePlanKey = getDigitalRatePlanKey(
-		contributionType,
-		supportRegionId,
-		tier1Product,
-	);
-	const tier2Product = 'SupporterPlus';
-	const tier2RatePlanKey = getDigitalRatePlanKey(
-		contributionType,
-		supportRegionId,
-		tier2Product,
-	);
-	const tier3Product = 'DigitalSubscription';
-	const tier3RatePlanKey = getDigitalRatePlanKey(
-		contributionType,
-		supportRegionId,
-		tier3Product,
-	);
+	const getTierCard = (product: string) => {
+		const productKey = product as TierProductKey;
+		const ratePlanKey = getDigitalRatePlanKey(
+			supportRegionId,
+			productKey,
+			contributionType,
+		);
+		const promotion = getTierCardPromotion(
+			supportRegionId,
+			productKey,
+			ratePlanKey,
+			billingPeriod,
+		);
+		return getTierCardContent(
+			supportRegionId,
+			productKey,
+			ratePlanKey,
+			landingPageVariant,
+			promotion,
+			multipleAccountsVariant,
+		);
+	};
+	const tierCards = [
+		getTierCard('Contribution'),
+		getTierCard('SupporterPlus'),
+		getTierCard('DigitalSubscription'),
+	];
 
-	const tier1Config: TierConfig = {
-		supportRegionId,
-		productKey: tier1Product,
-		ratePlanKey: tier1RatePlanKey,
-		landingPageVariant,
-		multipleAccountsVariant,
+	const getTierCardsTsAndCs = (): TsAndCsProps[] => {
+		return tierCards.map((tierCard) =>
+			getTierCardTsAndCs(tierCard, contributionType),
+		);
 	};
 
-	const tier1Card = getTierCardContent(tier1Config);
-
-	const tier2Promotion = getTierCardPromotion(
-		supportRegionId,
-		tier2Product,
-		tier2RatePlanKey,
-		billingPeriod,
-	);
-	const tier2Card = getTierCardContent({
-		...tier1Config,
-		productKey: tier2Product,
-		ratePlanKey: tier2RatePlanKey,
-		promotion: tier2Promotion,
-	});
-
-	const tier3Promotion = getTierCardPromotion(
-		supportRegionId,
-		tier3Product,
-		tier3RatePlanKey,
-		billingPeriod,
-	);
-	const tier3Card = getTierCardContent({
-		...tier1Config,
-		productKey: tier3Product,
-		ratePlanKey: tier3RatePlanKey,
-		promotion: tier3Promotion,
-	});
+	const isTaxExclusive = (): boolean => {
+		return tierCards.some(
+			(tierCard) =>
+				tierCard.ratePlan === 'AnnualTaxExclusive' ||
+				tierCard.ratePlan === 'MonthlyTaxExclusive',
+		);
+	};
 
 	const showWeeklyPrice =
 		forceWeeklyPricing || landingPageVariant.name.includes('WEEKLY_PRICE');
-
-	const tsAndCsContent: TsAndCsProps[] = [
-		getTierCardTsAndCs(tier1Card, contributionType),
-		getTierCardTsAndCs(tier2Card, contributionType, tier2Promotion),
-		getTierCardTsAndCs(tier3Card, contributionType, tier3Promotion),
-	];
-
-	const showTaxDisclaimer = [
-		tier1RatePlanKey,
-		tier2RatePlanKey,
-		tier3RatePlanKey,
-	].some(
-		(ratePlanKey) =>
-			ratePlanKey === 'AnnualTaxExclusive' ||
-			ratePlanKey === 'MonthlyTaxExclusive',
-	);
 
 	return (
 		<PageScaffold
@@ -288,8 +259,8 @@ export function ThreeTierLanding({
 			footer={
 				<ThreeTierFooter
 					supportRegionId={supportRegionId}
-					tsAndCsContent={tsAndCsContent}
-					showTaxDisclaimer={showTaxDisclaimer}
+					tsAndCsContent={getTierCardsTsAndCs()}
+					showTaxDisclaimer={isTaxExclusive()}
 				/>
 			}
 		>
@@ -343,7 +314,7 @@ export function ThreeTierLanding({
 						additionalStyles={paymentFrequencyButtonsCss}
 					/>
 					<ThreeTierCards
-						cardsContent={[tier1Card, tier2Card, tier3Card]}
+						cardsContent={tierCards}
 						currencyId={currencyId}
 						billingPeriod={billingPeriod}
 						showWeeklyPrice={showWeeklyPrice}
