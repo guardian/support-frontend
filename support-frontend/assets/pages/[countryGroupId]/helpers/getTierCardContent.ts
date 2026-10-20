@@ -120,6 +120,7 @@ export function getTierCardContent(config: TierConfig): CardContent {
 			price,
 			promotion?.discount?.amount,
 		),
+		promotion,
 		multipleAccountsVariant,
 		...tierProductDescription,
 	};

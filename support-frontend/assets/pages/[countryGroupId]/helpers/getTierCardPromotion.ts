@@ -21,13 +21,13 @@ export function getTierCardPromotion(
 	] as number;
 
 	const promotions = window.guardian.promotions ?? [];
-	const promoCode = getQueryParameter('promoCode');
+	const promoCodeUrl = getQueryParameter('promoCode');
 	return getLegacyPromotion({
 		promotions,
 		productKey,
 		ratePlanKey,
 		price,
 		billingPeriod,
-		promoCode,
+		promoCode: promoCodeUrl,
 	});
 }
