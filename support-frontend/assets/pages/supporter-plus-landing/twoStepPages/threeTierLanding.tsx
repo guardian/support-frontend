@@ -30,7 +30,7 @@ import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPer
 import { getTierCardContent } from 'pages/[countryGroupId]/helpers/getTierCardContent';
 import type { TierConfig } from 'pages/[countryGroupId]/helpers/getTierCardContent';
 import { getTierCardPromotion } from 'pages/[countryGroupId]/helpers/getTierCardPromotion';
-import { getTierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
+import { getTierCardTsAndCs } from 'pages/[countryGroupId]/helpers/getTierCardTsAndCs';
 import { useStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/useStudentBeansRegionValid';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
@@ -259,38 +259,9 @@ export function ThreeTierLanding({
 		forceWeeklyPricing || landingPageVariant.name.includes('WEEKLY_PRICE');
 
 	const tsAndCsContent: TsAndCsProps[] = [
-		{
-			title: tier1Card.title,
-			planCost: getTierPlanCost(tier1Card.price, contributionType),
-		},
-		{
-			title: tier2Card.title,
-			planCost: getTierPlanCost(
-				tier2Card.price,
-				contributionType,
-				tier2Promotion,
-			),
-			starts: tier2Promotion?.starts
-				? new Date(tier2Promotion.starts)
-				: undefined,
-			expires: tier2Promotion?.expires
-				? new Date(tier2Promotion.expires)
-				: undefined,
-		},
-		{
-			title: tier3Card.title,
-			planCost: getTierPlanCost(
-				tier3Card.price,
-				contributionType,
-				tier3Promotion,
-			),
-			starts: tier3Promotion?.starts
-				? new Date(tier3Promotion.starts)
-				: undefined,
-			expires: tier3Promotion?.expires
-				? new Date(tier3Promotion.expires)
-				: undefined,
-		},
+		getTierCardTsAndCs(tier1Card, contributionType),
+		getTierCardTsAndCs(tier2Card, contributionType, tier2Promotion),
+		getTierCardTsAndCs(tier3Card, contributionType, tier3Promotion),
 	];
 
 	const showTaxDisclaimer = [
