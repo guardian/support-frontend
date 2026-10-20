@@ -56,8 +56,6 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val fastlyConfig: Option[FastlyConfig] = FastlyConfig.fromConfig(config).valueOr(throw _)
 
-  lazy val priceSummaryConfigProvider = new PriceSummaryConfigProvider(config, stage)
-
   lazy val recaptchaConfigProvider = new RecaptchaConfigProvider(config, stage)
 
   lazy val mparticleConfigProvider = new MparticleConfigProvider(config, stage)
