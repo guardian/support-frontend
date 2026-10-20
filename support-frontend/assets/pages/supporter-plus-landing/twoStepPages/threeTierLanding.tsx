@@ -200,8 +200,7 @@ export function ThreeTierLanding({
 	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
 	const { enableDeepDiscount } = useFeatureSwitches();
 
-	const getTierCard = (product: string) => {
-		const productKey = product as TierProductKey;
+	const getTierCard = (productKey: TierProductKey) => {
 		const ratePlanKey = getDigitalRatePlanKey(
 			supportRegionId,
 			productKey,
