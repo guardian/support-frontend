@@ -10,7 +10,7 @@ import {
 } from 'react';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 
-export type PromoTerm = {
+type PromoTerm = {
 	key: ProductKey | ActiveRatePlanKey;
 	description: string;
 };
