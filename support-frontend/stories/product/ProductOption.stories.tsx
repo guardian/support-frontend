@@ -8,6 +8,7 @@ export default {
 	component: ProductOptionComponent,
 	argTypes: {
 		title: { type: 'text' },
+		ratePlanKey: { type: 'text' },
 		price: { type: 'text' },
 		savingsText: { type: 'text' },
 		priceCopy: { type: 'text' },
@@ -46,6 +47,7 @@ function Template(args: Product) {
 	return (
 		<ProductOptionComponent
 			title={args.title}
+			ratePlanKey={args.ratePlanKey}
 			price={args.price}
 			savingsText={args.savingsText}
 			priceCopy={args.priceCopy}
@@ -70,6 +72,7 @@ ProductOption.args = {
 	savingsText: '£6 for the first 6 issues',
 	priceCopy: 'then £37.50 per quarter',
 	buttonCopy: 'Subscribe now',
+	ratePlanKey: 'SixdayPlus',
 	label: 'Best deal',
 };
 
