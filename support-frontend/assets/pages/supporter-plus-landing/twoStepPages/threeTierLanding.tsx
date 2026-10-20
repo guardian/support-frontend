@@ -125,16 +125,19 @@ export function ThreeTierLanding({
 	supportRegionId,
 	landingPageSettings,
 }: ThreeTierLandingProps): JSX.Element {
-	const { ratePlanKey: urlSearchParamsRatePlan, forceWeeklyPricing } =
-		useThreeTierUrlSelection();
-	const { currencyKey: currencyId, countryGroupId } =
-		getSupportRegionIdConfig(supportRegionId);
 	const { variant: landingPageVariant, participations } = landingPageSettings;
 	const multipleAccountsVariant = getMultipleAccountsTestVariantParticipation(
 		participations,
 		landingPageVariant.name,
 	);
-
+	const {
+		productKey: urlProductKey,
+		ratePlanKey: urlSearchParamsRatePlan,
+		selectedAmount: urlSelectedAmount,
+		forceWeeklyPricing,
+	} = useThreeTierUrlSelection();
+	const { currencyKey: currencyId, countryGroupId } =
+		getSupportRegionIdConfig(supportRegionId);
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
 			GBPCountries,
@@ -217,6 +220,8 @@ export function ThreeTierLanding({
 			productKey,
 			ratePlanKey,
 			landingPageVariant,
+			urlSelectedAmount,
+			urlProductKey,
 			promotion,
 			multipleAccountsVariant,
 		);

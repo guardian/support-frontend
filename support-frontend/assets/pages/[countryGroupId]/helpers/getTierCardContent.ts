@@ -13,7 +13,7 @@ import {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
 import type { CardContent } from 'pages/supporter-plus-landing/components/threeTierCard';
-import { useThreeTierUrlSelection } from 'pages/supporter-plus-landing/twoStepPages/useThreeTierUrlSelection';
+// import { useThreeTierUrlSelection } from 'pages/supporter-plus-landing/twoStepPages/useThreeTierUrlSelection';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import {
 	filterBenefits,
@@ -26,6 +26,8 @@ export function getTierCardContent(
 	productKey: TierProductKey,
 	ratePlanKey: ProductRatePlanKey<TierProductKey>,
 	landingPageVariant: LandingPageVariant,
+	urlSelectedAmount: string | null,
+	urlProductKey?: string,
 	promotion?: Promotion,
 	multipleAccountsVariant?: string,
 ): CardContent {
@@ -75,11 +77,9 @@ export function getTierCardContent(
 	};
 
 	// RRCP LandingPage Test Page / Default Product Selection
+	const { enableDeepDiscount } = useFeatureSwitches();
 	const defaultProductSelection =
 		landingPageVariant.defaultProductSelection?.productType;
-	const { enableDeepDiscount } = useFeatureSwitches();
-	const { productKey: urlProductKey, selectedAmount: urlSelectedAmount } =
-		useThreeTierUrlSelection();
 	const getDefaultProductSelection = (productKey: TierProductKey) => {
 		return (
 			(!urlProductKey || enableDeepDiscount) &&
