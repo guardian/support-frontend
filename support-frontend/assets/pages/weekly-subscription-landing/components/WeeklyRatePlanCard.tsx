@@ -36,6 +36,7 @@ function WeeklyRatePlanCard({
 	onView,
 	priorityPromotionExists,
 	buttonCopy,
+	ratePlanKey,
 }: Product & { priorityPromotionExists: boolean }) {
 	const { setPromoTerms } = usePromoTerms();
 	const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
@@ -62,14 +63,14 @@ function WeeklyRatePlanCard({
 
 	useEffect(() => {
 		if (isPriorityPromo && billingPeriod && discountedPrice) {
-			const promoTerms = getWeeklyPromoTerms(
+			const description = getWeeklyPromoTerms(
 				billingPeriod,
 				price,
 				discountedPrice,
 			);
-			setPromoTerms([promoTerms]);
+			setPromoTerms([{ key: ratePlanKey, description }]);
 		}
-	}, [isPriorityPromo, billingPeriod, discountedPrice]);
+	}, [isPriorityPromo, billingPeriod, discountedPrice, ratePlanKey]);
 
 	return (
 		<div

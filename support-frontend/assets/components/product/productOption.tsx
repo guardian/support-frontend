@@ -11,6 +11,7 @@ import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema'
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
+import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import {
 	Channel,
 	type ProductLabelProps,
@@ -41,6 +42,7 @@ export type Product = {
 	title: string;
 	price: string;
 	href: string;
+	ratePlanKey: ActiveRatePlanKey;
 	priceCopy: ReactNode;
 	buttonCopy: string;
 	onClick: () => void;

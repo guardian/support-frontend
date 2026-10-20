@@ -93,8 +93,10 @@ function PromoTerms(): JSX.Element | null {
 			<p id="qa-component-customer-service" css={footerTextHeading}>
 				Promotion terms and conditions
 			</p>
-			{promoTerms.map((terms) => (
-				<p css={promoOfferLink}>{terms}</p>
+			{promoTerms.map(({ key, description }) => (
+				<p css={promoOfferLink} key={key}>
+					{description}
+				</p>
 			))}
 		</section>
 	);

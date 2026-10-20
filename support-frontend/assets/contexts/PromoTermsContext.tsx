@@ -1,3 +1,4 @@
+import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import {
 	createContext,
 	type Dispatch,
@@ -7,10 +8,16 @@ import {
 	useMemo,
 	useState,
 } from 'react';
+import type { ActiveRatePlanKey } from 'helpers/productCatalog';
+
+export type PromoTerm = {
+	key: ProductKey | ActiveRatePlanKey;
+	description: string;
+};
 
 type PromoTermsContextValue = {
-	promoTerms: string[];
-	setPromoTerms: Dispatch<SetStateAction<string[]>>;
+	promoTerms: PromoTerm[];
+	setPromoTerms: Dispatch<SetStateAction<PromoTerm[]>>;
 };
 
 const PromoTermsContext = createContext<PromoTermsContextValue | undefined>(
@@ -18,7 +25,7 @@ const PromoTermsContext = createContext<PromoTermsContextValue | undefined>(
 );
 
 export function PromoTermsProvider({ children }: { children: ReactNode }) {
-	const [promoTerms, setPromoTerms] = useState<string[]>([]);
+	const [promoTerms, setPromoTerms] = useState<PromoTerm[]>([]);
 
 	const value = useMemo(() => ({ promoTerms, setPromoTerms }), [promoTerms]);
 

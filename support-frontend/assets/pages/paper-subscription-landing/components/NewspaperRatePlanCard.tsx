@@ -35,6 +35,7 @@ import {
 function NewspaperRatePlanCard({
 	title,
 	price,
+	ratePlanKey,
 	savingsText,
 	planData,
 	offerCopy,
@@ -69,8 +70,8 @@ function NewspaperRatePlanCard({
 
 	useEffect(() => {
 		if (promotion?.endTimestamp && !isObserver) {
-			const promoTerms = getNewspaperPromoTerms(promotion);
-			setPromoTerms([promoTerms]);
+			const description = getNewspaperPromoTerms(promotion);
+			setPromoTerms([{ key: ratePlanKey, description }]);
 		}
 	}, [promotion]);
 
