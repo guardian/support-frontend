@@ -12,16 +12,12 @@ import {
 
 function SubscriptionsLandingContent({
 	countryGroupId,
-	pricingCopy,
+	promotions,
 	participations,
 }: SubscriptionsLandingProps): JSX.Element | null {
-	if (!pricingCopy) {
-		return null;
-	}
-
 	const subscriptionCopy = getSubscriptionProducts(
 		countryGroupId,
-		pricingCopy,
+		promotions,
 		participations,
 	);
 

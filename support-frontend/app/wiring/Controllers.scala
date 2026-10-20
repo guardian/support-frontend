@@ -54,7 +54,8 @@ trait Controllers {
 
   lazy val subscriptionsController = new SubscriptionsController(
     actionBuilders,
-    priceSummaryServiceProvider,
+    defaultPromotionService,
+    cachedPromotionsServiceProvider,
     assetsResolver,
     controllerComponents,
     stringsConfig,
@@ -209,12 +210,6 @@ trait Controllers {
     testUsers,
     controllerComponents,
     allSettingsProvider,
-  )
-
-  lazy val pricesController = new PricesController(
-    priceSummaryServiceProvider,
-    actionBuilders,
-    controllerComponents,
   )
 
   lazy val analyticsController = new AnalyticsController(
