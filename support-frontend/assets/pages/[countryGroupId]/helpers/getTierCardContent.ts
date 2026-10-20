@@ -76,14 +76,14 @@ export function getTierCardContent(
 
 	// RRCP LandingPage Test Page / Default Product Selection
 	const defaultProductSelection =
-		landingPageVariant.defaultProductSelection?.productType.toLowerCase();
+		landingPageVariant.defaultProductSelection?.productType;
 	const { enableDeepDiscount } = useFeatureSwitches();
 	const { productKey: urlProductKey, selectedAmount: urlSelectedAmount } =
 		useThreeTierUrlSelection();
 	const getDefaultProductSelection = (productKey: TierProductKey) => {
 		return (
 			(!urlProductKey || enableDeepDiscount) &&
-			defaultProductSelection === productKey.toLowerCase()
+			defaultProductSelection === productKey
 		);
 	};
 
