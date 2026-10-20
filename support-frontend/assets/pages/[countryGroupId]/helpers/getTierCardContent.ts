@@ -63,13 +63,11 @@ export function getTierCardContent(
 	const defaultProductSelection =
 		landingPageVariant.defaultProductSelection?.productType.toLowerCase();
 	const { enableDeepDiscount } = useFeatureSwitches();
-	const {
-		productKey: urlSearchParamsProduct,
-		selectedAmount: urlSelectedAmount,
-	} = useThreeTierUrlSelection();
+	const { productKey: urlProductKey, selectedAmount: urlSelectedAmount } =
+		useThreeTierUrlSelection();
 	const getDefaultProductSelection = (productKey: TierProductKey) => {
 		return (
-			(!urlSearchParamsProduct || enableDeepDiscount) &&
+			(!urlProductKey || enableDeepDiscount) &&
 			defaultProductSelection === productKey.toLowerCase()
 		);
 	};
@@ -94,7 +92,7 @@ export function getTierCardContent(
 		promotionAmount?: number,
 	) => {
 		return (
-			urlSearchParamsProduct === productKey.toLowerCase() ||
+			urlProductKey === productKey ||
 			isCardUserSelected(urlSelectedAmount, productPrice, promotionAmount)
 		);
 	};
