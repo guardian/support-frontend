@@ -61,6 +61,7 @@ export function ThreeTierCards({
 		!deepDiscount &&
 		cardsContent.filter((card) => !!card.label?.copy || card.isUserSelected)
 			.length > 1;
+	let promoCount = 0;
 
 	const cardTheme: CardTheme = deepDiscount ? redCardTheme : defaultCardTheme;
 
@@ -72,12 +73,16 @@ export function ThreeTierCards({
 			aria-labelledby={`${billingPeriod}`}
 		>
 			{cardsContent.map((cardContent, cardIndex) => {
+				if (cardContent.promotion) {
+					promoCount++;
+				}
 				return (
 					<ThreeTierCard
 						cardContent={cardContent}
 						cardTheme={cardTheme}
 						cardTier={cardIndexToTier(cardIndex)}
 						key={`threeTierCard${cardIndex}`}
+						promoCount={promoCount}
 						isSubdued={haveLabelAndSelectedCards}
 						currencyId={currencyId}
 						billingPeriod={billingPeriod}
