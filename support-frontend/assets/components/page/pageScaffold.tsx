@@ -21,6 +21,7 @@ const container = css`
 		flex-direction: column;
 		& > :last-child {
 			flex: 1;
+			display: flex;
 		}
 	}
 `;
