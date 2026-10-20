@@ -67,7 +67,7 @@ function WeeklyRatePlanCard({
 				price,
 				discountedPrice,
 			);
-			setPromoTerms(promoTerms);
+			setPromoTerms([promoTerms]);
 		}
 	}, [isPriorityPromo, billingPeriod, discountedPrice]);
 

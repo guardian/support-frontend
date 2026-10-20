@@ -70,7 +70,7 @@ function NewspaperRatePlanCard({
 	useEffect(() => {
 		if (promotion?.endTimestamp && !isObserver) {
 			const promoTerms = getNewspaperPromoTerms(promotion);
-			setPromoTerms(promoTerms);
+			setPromoTerms([promoTerms]);
 		}
 	}, [promotion]);
 

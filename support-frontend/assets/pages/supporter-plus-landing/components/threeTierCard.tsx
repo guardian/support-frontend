@@ -15,11 +15,13 @@ import {
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
+import { useEffect } from 'react';
 import { BenefitPill } from 'components/checkoutBenefits/benefitPill';
 import {
 	BenefitsCheckList,
 	checkListTextItemCss,
 } from 'components/checkoutBenefits/benefitsCheckList';
+import { usePromoTerms } from 'contexts/PromoTermsContext';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { type CardTheme } from 'helpers/landingPage/cardTheme';
 import { getProductLabel } from 'helpers/productCatalog';
@@ -28,6 +30,7 @@ import {
 	discountSummaryCopy,
 	type Promotion,
 } from 'helpers/productPrice/promotions';
+import { promotionTermsUrl } from 'helpers/urls/routes';
 import {
 	calculateWeeklyPrice,
 	getSanitisedHtml,
@@ -51,7 +54,6 @@ export type ThreeTierCardProps = {
 	isSubdued: boolean;
 	currencyId: CurrencyCode;
 	cardTier: 1 | 2 | 3;
-	promoCount: number;
 	billingPeriod: BillingPeriod;
 	deepDiscount: boolean;
 	cardContent: CardContent;
@@ -178,7 +180,6 @@ export function ThreeTierCard({
 	cardContent,
 	cardTheme,
 	cardTier,
-	promoCount,
 	isSubdued,
 	currencyId,
 	billingPeriod,
@@ -200,8 +201,10 @@ export function ThreeTierCard({
 		billingPeriodsCopy,
 		multipleAccountsVariant,
 	} = cardContent;
+	console.log('🚀 ~ ThreeTierCard ~ product:', product);
 	const currency = getCurrencyByCode(currencyId);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
+	const { promoTerms, setPromoTerms } = usePromoTerms();
 
 	const mainPrice = showWeeklyPrice
 		? calculateWeeklyPrice(price, billingPeriod)
@@ -211,6 +214,15 @@ export function ThreeTierCard({
 			? calculateWeeklyPrice(promotion.discountedPrice ?? price, billingPeriod)
 			: promotion.discountedPrice ?? price
 		: undefined;
+
+	const discountSummary =
+		promotion && discountSummaryCopy(currency, price, promotion, billingPeriod);
+
+	useEffect(() => {
+		if (discountSummary) {
+			setPromoTerms((currentPromos) => [...currentPromos, discountSummary]);
+		}
+	}, [discountSummary, setPromoTerms]);
 
 	const formattedMainPrice = simpleFormatAmount(currency, mainPrice);
 	const formattedMainDiscountedPrice =
@@ -299,13 +311,8 @@ export function ThreeTierCard({
 						<p>
 							<span css={discountSummaryCss}>
 								{showWeeklyPrice ? 'Billed as ' : ''}
-								{discountSummaryCopy(
-									currency,
-									promoCount,
-									price,
-									promotion,
-									billingPeriod,
-								)}
+								{discountSummary}{' '}
+								{'*'.repeat(promoTerms.indexOf(discountSummary ?? '') + 1)}
 							</span>
 						</p>
 					</>
