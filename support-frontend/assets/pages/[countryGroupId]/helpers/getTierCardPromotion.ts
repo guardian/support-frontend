@@ -10,23 +10,24 @@ import type { TierProductKey } from './getDigitalRatePlanKey';
 
 export function getTierCardPromotion(
 	supportRegionId: SupportRegionId,
-	tierProductKey: TierProductKey,
+	productKey: TierProductKey,
+	ratePlanKey: ProductRatePlanKey<TierProductKey>,
 	billingPeriod: RecurringBillingPeriod,
-	tierRatePlanKey: ProductRatePlanKey<TierProductKey>,
 ): Promotion | undefined {
 	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
 
-	const tierPricing = productCatalog[tierProductKey]?.ratePlans[tierRatePlanKey]
-		?.pricing[currencyKey] as number;
+	const price = productCatalog[productKey]?.ratePlans[ratePlanKey]?.pricing[
+		currencyKey
+	] as number;
 
 	const promotions = window.guardian.promotions ?? [];
 	const promoCode = getQueryParameter('promoCode');
 	return getLegacyPromotion({
 		promotions,
-		productKey: tierProductKey,
-		ratePlanKey: tierRatePlanKey,
-		price: tierPricing,
-		billingPeriod: billingPeriod,
-		promoCode: promoCode,
+		productKey,
+		ratePlanKey,
+		price,
+		billingPeriod,
+		promoCode,
 	});
 }

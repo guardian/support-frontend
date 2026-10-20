@@ -54,6 +54,7 @@ export function ThreeTierCards({
 	showWeeklyPrice,
 	deepDiscount = false,
 }: ThreeTierCardsProps): JSX.Element {
+	console.log('*** CardContent', cardsContent);
 	const shouldUseLargePriceMinHeight =
 		!!showWeeklyPrice ||
 		cardsContent.some((card) => !!card.promotion || !!card.billingPeriodsCopy);

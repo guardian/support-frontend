@@ -190,8 +190,6 @@ export function ThreeTierLanding({
 	const tierPlanPeriod = contributionType.toLowerCase();
 	const billingPeriod = (tierPlanPeriod[0]?.toUpperCase() +
 		tierPlanPeriod.slice(1)) as RecurringBillingPeriod;
-	// const promotions = window.guardian.promotions ?? [];
-	// const promoCode = getQueryParameter('promoCode');
 
 	const paymentFrequencies: ContributionType[] = ['MONTHLY', 'ANNUAL'];
 
@@ -223,36 +221,39 @@ export function ThreeTierLanding({
 
 	const tier1Config: TierConfig = {
 		supportRegionId,
-		tierProductKey: tier1Product,
-		tierRatePlanKey: tier1RatePlanKey,
-		billingPeriod,
+		productKey: tier1Product,
+		ratePlanKey: tier1RatePlanKey,
 		landingPageVariant,
 		multipleAccountsVariant,
 	};
 
 	const tier1Card = getTierCardContent(tier1Config);
-	const tier2Card = getTierCardContent({
-		...tier1Config,
-		tierRatePlanKey: tier2RatePlanKey,
-		tierProductKey: tier2Product,
-	});
+
 	const tier2Promotion = getTierCardPromotion(
 		supportRegionId,
 		tier2Product,
-		billingPeriod,
 		tier2RatePlanKey,
+		billingPeriod,
 	);
-	const tier3Card = getTierCardContent({
+	const tier2Card = getTierCardContent({
 		...tier1Config,
-		tierRatePlanKey: tier3RatePlanKey,
-		tierProductKey: tier3Product,
+		productKey: tier2Product,
+		ratePlanKey: tier2RatePlanKey,
+		promotion: tier2Promotion,
 	});
+
 	const tier3Promotion = getTierCardPromotion(
 		supportRegionId,
 		tier3Product,
-		billingPeriod,
 		tier3RatePlanKey,
+		billingPeriod,
 	);
+	const tier3Card = getTierCardContent({
+		...tier1Config,
+		productKey: tier3Product,
+		ratePlanKey: tier3RatePlanKey,
+		promotion: tier3Promotion,
+	});
 
 	const showWeeklyPrice =
 		forceWeeklyPricing || landingPageVariant.name.includes('WEEKLY_PRICE');
