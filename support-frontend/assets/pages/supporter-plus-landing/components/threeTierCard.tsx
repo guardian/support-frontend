@@ -182,6 +182,7 @@ export function ThreeTierCard({
 	showWeeklyPrice = false,
 	useLargePriceMinHeight = false,
 	deepDiscount,
+	promoCount,
 }: ThreeTierCardProps): JSX.Element {
 	const {
 		title,
@@ -199,13 +200,13 @@ export function ThreeTierCard({
 	} = cardContent;
 	const currency = getCurrencyByCode(currencyId);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
-	const { discountSummary, discountMarker } = useThreeTierCardPromotion({
+	const { discountSummary } = useThreeTierCardPromotion({
 		promotion,
+		promoCount,
 		title,
 		price,
 		currency,
 		billingPeriod,
-		showWeeklyPrice,
 	});
 
 	const mainPrice = showWeeklyPrice
@@ -305,7 +306,7 @@ export function ThreeTierCard({
 						<p>
 							<span css={discountSummaryCss}>
 								{showWeeklyPrice ? 'Billed as ' : ''}
-								{discountSummary} {discountMarker}
+								{discountSummary}
 							</span>
 						</p>
 					</>

@@ -10,11 +10,11 @@ import {
 
 type UseThreeTierCardPromotionProps = {
 	promotion?: Promotion;
+	promoCount: number;
 	title: string;
 	price: number;
 	currency: Currency;
 	billingPeriod: BillingPeriod;
-	showWeeklyPrice: boolean;
 };
 
 /**
@@ -23,17 +23,14 @@ type UseThreeTierCardPromotionProps = {
  */
 export function useThreeTierCardPromotion({
 	promotion,
+	promoCount,
 	title,
 	price,
 	currency,
 	billingPeriod,
 }: UseThreeTierCardPromotionProps) {
-	const { promoTerms, setPromoTerms } = usePromoTerms();
+	const { setPromoTerms } = usePromoTerms();
 
-	const promoCount =
-		promoTerms.findIndex(
-			({ promoCode }) => promoCode === promotion?.promoCode,
-		) + 1;
 	// Matches the asterisks at the start of this promotion's terms
 	const discountMarker = '*'.repeat(promoCount);
 
@@ -50,12 +47,14 @@ export function useThreeTierCardPromotion({
 			discountSummary,
 			promotion,
 		);
+
 		setPromoTerms((currentPromos) => [
 			...currentPromos.filter(
 				({ promoCode }) => promoCode !== promotion.promoCode,
 			),
 			{ promoCode: promotion.promoCode, description },
 		]);
+
 		// Remove this card's entry when its summary changes or it unmounts
 		return () => {
 			setPromoTerms((currentPromos) =>
@@ -67,7 +66,6 @@ export function useThreeTierCardPromotion({
 	}, [discountSummary, promotion, promoCount, title, setPromoTerms]);
 
 	return {
-		discountSummary,
-		discountMarker,
+		discountSummary: `${discountSummary}${discountMarker}`,
 	};
 }
