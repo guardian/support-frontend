@@ -1,4 +1,3 @@
-import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import {
 	createContext,
 	type Dispatch,
@@ -8,10 +7,9 @@ import {
 	useMemo,
 	useState,
 } from 'react';
-import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 
 type PromoTerm = {
-	key: ProductKey | ActiveRatePlanKey;
+	promoCode: string;
 	description: string;
 };
 

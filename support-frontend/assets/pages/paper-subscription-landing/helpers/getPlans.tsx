@@ -277,7 +277,6 @@ export const getPlans = ({
 
 		return {
 			title: getTitle(productOption),
-			ratePlanKey: productOption,
 			price: showPrice(discountedPrice ?? price),
 			href: paperCheckoutUrl(
 				fulfilmentOption,

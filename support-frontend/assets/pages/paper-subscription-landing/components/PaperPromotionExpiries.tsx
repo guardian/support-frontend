@@ -10,8 +10,8 @@ export default function PaperPromotionExpiries(): JSX.Element | null {
 
 	return (
 		<div css={promotionContainer}>
-			{promoTerms.map(({ key, description }) => (
-				<p key={key}>{description}</p>
+			{promoTerms.map(({ promoCode, description }) => (
+				<p key={promoCode}>{description}</p>
 			))}
 		</div>
 	);

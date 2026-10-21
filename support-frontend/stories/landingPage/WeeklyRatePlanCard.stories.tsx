@@ -33,7 +33,6 @@ Template.args = {} as Record<string, unknown>;
 export const DefaultWeeklyCard = Template.bind({});
 DefaultWeeklyCard.args = {
 	title: 'Quartlerly',
-	ratePlanKey: 'Quarterly',
 	price: '£49.50',
 	priceCopy: '',
 	discountedPrice: '£24.75',
