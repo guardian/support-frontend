@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
 import { currencyCodes } from '@modules/internationalisation/currency';
+import { PromoTermsProvider } from 'contexts/PromoTermsContext';
 import { defaultCardTheme, redCardTheme } from 'helpers/landingPage/cardTheme';
 import type { ThreeTierCardProps } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { ThreeTierCard } from 'pages/supporter-plus-landing/components/threeTierCard';
@@ -51,7 +52,9 @@ function Template(args: ThreeTierCardProps) {
 	`;
 	return (
 		<div css={innerContentContainer}>
-			<ThreeTierCard {...args} />;
+			<PromoTermsProvider>
+				<ThreeTierCard {...args} />;
+			</PromoTermsProvider>
 		</div>
 	);
 }

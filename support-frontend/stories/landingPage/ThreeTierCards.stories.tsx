@@ -3,6 +3,7 @@ import { palette } from '@guardian/source/foundations';
 import { currencyCodes } from '@modules/internationalisation/currency';
 import type React from 'react';
 import { FeatureSwitchesProvider } from 'contexts/FeatureSwitchesContext';
+import { PromoTermsProvider } from 'contexts/PromoTermsContext';
 import type { ThreeTierCardsProps } from 'pages/supporter-plus-landing/components/threeTierCards';
 import { ThreeTierCards } from 'pages/supporter-plus-landing/components/threeTierCards';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
@@ -62,7 +63,9 @@ function Template(args: ThreeTierCardsProps) {
 	`;
 	return (
 		<div css={innerContentContainer}>
-			<ThreeTierCards {...args} />
+			<PromoTermsProvider>
+				<ThreeTierCards {...args} />
+			</PromoTermsProvider>
 		</div>
 	);
 }
