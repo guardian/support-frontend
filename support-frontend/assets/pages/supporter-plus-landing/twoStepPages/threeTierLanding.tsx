@@ -221,6 +221,7 @@ export function ThreeTierLanding({
 			ratePlanKey,
 			landingPageVariant,
 			urlSelectedAmount,
+			enableDeepDiscount,
 			urlProductKey,
 			promotion,
 			multipleAccountsVariant,
