@@ -5,16 +5,12 @@ import actions.{CustomActionBuilders, UserFromAuthCookiesActionBuilder, UserFrom
 import admin.settings.{AllSettingsProvider, FeatureSwitches, On}
 import org.apache.pekko.util.Timeout
 import assets.AssetsResolver
-import com.gu.i18n.CountryGroup
 import com.gu.identity.auth.{DefaultAccessClaims, OktaAuthService}
-import com.gu.support.catalog.SupporterPlus
 import com.gu.support.config._
-import com.gu.support.promotions.PromoCode
-import com.gu.support.zuora.api.ReaderType
 import config.{Identity, RecaptchaConfigProvider, StringsConfig}
 import fixtures.TestCSRFComponents
-import io.circe.JsonObject
-import org.mockito.ArgumentMatchers.{any, anyBoolean}
+import io.circe.{Json, JsonObject}
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.EitherValues
 import org.scalatest.matchers.must.Matchers
@@ -25,7 +21,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, header, status, stubControllerComponents}
 import services._
 import services.mparticle.MParticleClient
-import services.pricing.{CountryGroupPrices, DefaultPromotionService, PriceSummaryService, PriceSummaryServiceProvider}
+import services.pricing.DefaultPromotionService
 import cats.effect.IO
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -70,20 +66,8 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     testUsersService = TestUserService("secret"),
   )
 
-  val priceSummaryServiceProvider = {
-    val priceSummaryService = mock[PriceSummaryService]
-    when(
-      priceSummaryService
-        .getPrices[SupporterPlus.type](any[SupporterPlus.type], any[List[PromoCode]], any[ReaderType]),
-    )
-      .thenReturn(Map[CountryGroup, CountryGroupPrices](CountryGroup.UK -> Map.empty))
-    val priceSummaryServiceProvider = mock[PriceSummaryServiceProvider]
-    when(priceSummaryServiceProvider.forUser(anyBoolean())).thenReturn(priceSummaryService)
-    priceSummaryServiceProvider
-  }
-
   val cachedProductCatalogService = mock[CachedProductCatalogService]
-  when(cachedProductCatalogService.get()).thenReturn(JsonObject())
+  when(cachedProductCatalogService.get()).thenReturn(JsonObject.singleton("SupporterPlus", Json.obj()))
   val productCatalog = mock[CachedProductCatalogServiceProvider]
   when(productCatalog.fromStage(any, any)).thenReturn(cachedProductCatalogService)
 
@@ -100,7 +84,6 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     mock[StringsConfig],
     mock[AllSettingsProvider],
     mock[Stage],
-    priceSummaryServiceProvider,
     mock[DefaultPromotionService],
     mock[CachedPromotionsServiceProvider],
     productCatalog,
@@ -113,21 +96,18 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
 
   "/healthcheck" should {
 
-    "return healthy" in {
-      val priceSummaryServiceProvider = {
-        val priceSummaryService = mock[PriceSummaryService]
-        when(
-          priceSummaryService
-            .getPrices[SupporterPlus.type](any[SupporterPlus.type], any[List[PromoCode]], any[ReaderType]),
-        )
-          .thenReturn(Map[CountryGroup, CountryGroupPrices](CountryGroup.UK -> Map.empty))
-        val priceSummaryServiceProvider = mock[PriceSummaryServiceProvider]
-        when(priceSummaryServiceProvider.forUser(anyBoolean())).thenReturn(priceSummaryService)
-        priceSummaryServiceProvider
-      }
+    "return healthy when the product catalog is populated" in {
       val result = applicationMock.healthcheck.apply(FakeRequest())
       contentAsString(result) mustBe "healthy"
       header("Cache-Control", result) mustBe Some("no-cache, private")
+    }
+
+    "return unhealthy when the product catalog is empty" in {
+      when(cachedProductCatalogService.get()).thenReturn(JsonObject())
+      val result = applicationMock.healthcheck.apply(FakeRequest())
+      status(result) mustBe 500
+      contentAsString(result) mustBe "no prices in catalog"
+      when(cachedProductCatalogService.get()).thenReturn(JsonObject.singleton("SupporterPlus", Json.obj()))
     }
 
   }

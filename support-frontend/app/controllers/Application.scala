@@ -10,7 +10,6 @@ import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.i18n.Country
 import com.gu.identity.model.{User => IdUser}
-import com.gu.support.catalog.SupporterPlus
 import com.gu.support.config.Stages.PROD
 import com.gu.support.config._
 import com.gu.support.promotions.PromoWithCatalogInformation
@@ -26,7 +25,7 @@ import models.GeoData
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.mparticle.MParticleClient
-import services.pricing.{DefaultPromotionService, PriceSummaryServiceProvider}
+import services.pricing.DefaultPromotionService
 import services.{
   ApplicablePromotions,
   CachedProductCatalogServiceProvider,
@@ -206,7 +205,6 @@ class Application(
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     stage: Stage,
-    priceSummaryServiceProvider: PriceSummaryServiceProvider,
     defaultPromotionService: DefaultPromotionService,
     cachedPromotionsServiceProvider: CachedPromotionsServiceProvider,
     cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
@@ -524,7 +522,7 @@ class Application(
 
   def healthcheck: Action[AnyContent] = PrivateAction {
     mparticleClient.initialise()
-    if (priceSummaryServiceProvider.forUser(false).getPrices(SupporterPlus, List()).isEmpty)
+    if (cachedProductCatalogServiceProvider.fromStage(stage, isTestUser = false).get().isEmpty)
       InternalServerError("no prices in catalog")
     else
       Ok("healthy")

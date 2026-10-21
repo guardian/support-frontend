@@ -16,7 +16,7 @@ import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSComponents
 import services._
 import services.paypal.PayPalCompletePaymentsServiceProvider
-import services.pricing.{DefaultPromotionServiceS3, PriceSummaryServiceProvider}
+import services.pricing.DefaultPromotionServiceS3
 import services.stepfunctions.{StateWrapper, SupportWorkersClient}
 import services.mparticle.MParticleClient
 import cats.effect.unsafe.{IORuntime, IORuntimeConfig}
@@ -148,9 +148,6 @@ trait Services {
   lazy val defaultPromotionService = new DefaultPromotionServiceS3(s3Client, appConfig.stage, actorSystem)
 
   lazy val tickerService = new TickerService(appConfig.stage, s3Client)
-
-  lazy val priceSummaryServiceProvider: PriceSummaryServiceProvider =
-    new PriceSummaryServiceProvider(appConfig.priceSummaryConfigProvider, defaultPromotionService)
 
   lazy val idealPostcodesService: IdealPostcodesService =
     new IdealPostcodesService(appConfig.idealPostcodesConfig, RequestRunners.futureRunner)
