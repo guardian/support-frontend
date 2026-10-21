@@ -184,6 +184,7 @@ export const getWeeklyProducts = ({
 		const augmentedPromotion = promotion && getAugmentedPromotion(promotion);
 		return {
 			title: getBillingPeriodTitle(billingPeriod, isGift),
+			promotion,
 			price: fullPriceWithCurrency,
 			href: getCheckoutUrl({
 				countryId,

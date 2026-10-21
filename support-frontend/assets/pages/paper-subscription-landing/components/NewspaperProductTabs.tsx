@@ -77,7 +77,7 @@ function NewspaperProductTabs({
 		})();
 		windowSetHashProperty(tabId);
 		// clean promo terms when switching tabs, as they are specific to each tab's offers
-		setPromoTerms(null);
+		setPromoTerms([]);
 	};
 
 	const tabItems = Object.entries(tabs).map(([fulfilment, tab]) => {

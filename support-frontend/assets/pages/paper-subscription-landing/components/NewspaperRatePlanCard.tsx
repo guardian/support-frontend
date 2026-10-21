@@ -69,8 +69,8 @@ function NewspaperRatePlanCard({
 
 	useEffect(() => {
 		if (promotion?.endTimestamp && !isObserver) {
-			const promoTerms = getNewspaperPromoTerms(promotion);
-			setPromoTerms(promoTerms);
+			const description = getNewspaperPromoTerms(promotion);
+			setPromoTerms([{ promoCode: promotion.promoCode, description }]);
 		}
 	}, [promotion]);
 
