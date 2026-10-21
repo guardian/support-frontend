@@ -13,7 +13,6 @@ import {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
 import type { CardContent } from 'pages/supporter-plus-landing/components/threeTierCard';
-// import { useThreeTierUrlSelection } from 'pages/supporter-plus-landing/twoStepPages/useThreeTierUrlSelection';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import {
 	filterBenefits,
