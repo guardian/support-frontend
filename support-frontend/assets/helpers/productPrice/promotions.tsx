@@ -180,12 +180,11 @@ const discountSummaryCopy = (
 };
 
 function buildThreeTierCardPromoTerms(
-	promoCount: number,
+	discountMarker: string,
 	productName: string,
 	discountSummary: string,
 	{ starts, expires }: Promotion,
 ): string {
-	console.log('🚀 ~ buildThreeTierCardPromoTerms ~ promoCount:', promoCount);
 	const startDate = dayjs(starts).format('Do MMMM'); // eg. 15th January
 	const expiryDate = dayjs(expires).format('Do MMMM YYYY'); // eg. 31st April 2028
 	const promoDuration =
@@ -193,9 +192,7 @@ function buildThreeTierCardPromoTerms(
 			? `Offer starts on the ${startDate} and ends on the ${expiryDate}.`
 			: '';
 
-	return ` ${'*'.repeat(
-		promoCount,
-	)} ${productName} offer is ${discountSummary} afterwards unless you cancel.
+	return ` ${discountMarker} ${productName} offer is ${discountSummary} afterwards unless you cancel.
 			Offer only available to new subscribers who do not have an existing subscription with the Guardian. 
 			${promoDuration}`;
 }

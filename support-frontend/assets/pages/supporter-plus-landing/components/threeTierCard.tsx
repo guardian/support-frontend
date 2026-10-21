@@ -15,30 +15,25 @@ import {
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
-import { useEffect } from 'react';
 import { BenefitPill } from 'components/checkoutBenefits/benefitPill';
 import {
 	BenefitsCheckList,
 	checkListTextItemCss,
 } from 'components/checkoutBenefits/benefitsCheckList';
-import { usePromoTerms } from 'contexts/PromoTermsContext';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { type CardTheme } from 'helpers/landingPage/cardTheme';
 import { getProductLabel } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
-import {
-	discountSummaryCopy,
-	type Promotion,
-} from 'helpers/productPrice/promotions';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import {
 	calculateWeeklyPrice,
 	getSanitisedHtml,
 	parseBillingPeriodCopy,
 } from 'helpers/utilities/utilities';
-import { buildThreeTierCardPromoTerms } from 'pages/promotion-terms/promotionHelpers';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { ThreeTierCardPill } from './threeTierCardPill';
 import { ThreeTierNumberOfAccounts } from './threeTierNumberOfAccounts';
+import { useThreeTierCardPromotion } from './useThreeTierCardPromotion';
 
 export type CardContent = LandingPageProductDescription & {
 	product: 'SupporterPlus' | 'Contribution' | 'DigitalSubscription';
@@ -204,50 +199,24 @@ export function ThreeTierCard({
 	} = cardContent;
 	const currency = getCurrencyByCode(currencyId);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
-	const { promoTerms, setPromoTerms } = usePromoTerms();
-	console.log('🚀 ~ ThreeTierCard ~ promoTerms:', promoTerms);
-	const promoCount =
-		promoTerms.findIndex(
-			({ promoCode }) => promoCode === promotion?.promoCode,
-		) + 1;
+	const { discountSummary, discountMarker } = useThreeTierCardPromotion({
+		promotion,
+		title,
+		price,
+		currency,
+		billingPeriod,
+		showWeeklyPrice,
+	});
 
 	const mainPrice = showWeeklyPrice
 		? calculateWeeklyPrice(price, billingPeriod)
 		: price;
+
 	const mainDiscountedPrice = promotion
 		? showWeeklyPrice
 			? calculateWeeklyPrice(promotion.discountedPrice ?? price, billingPeriod)
 			: promotion.discountedPrice ?? price
 		: undefined;
-
-	const discountSummary =
-		promotion && discountSummaryCopy(currency, price, promotion, billingPeriod);
-
-	useEffect(() => {
-		if (!discountSummary) {
-			return;
-		}
-		const promotionTerms = buildThreeTierCardPromoTerms(
-			promoCount,
-			title,
-			discountSummary,
-			promotion,
-		);
-		setPromoTerms((currentPromos) => [
-			...currentPromos.filter(
-				({ promoCode }) => promoCode !== promotion.promoCode,
-			),
-			{ promoCode: promotion.promoCode, description: promotionTerms },
-		]);
-		// Remove this card's entry when its summary changes or it unmounts
-		return () => {
-			setPromoTerms((currentPromos) =>
-				currentPromos.filter(
-					({ promoCode }) => promoCode !== promotion.promoCode,
-				),
-			);
-		};
-	}, [discountSummary, promotion, promoCount]);
 
 	const formattedMainPrice = simpleFormatAmount(currency, mainPrice);
 	const formattedMainDiscountedPrice =
@@ -336,7 +305,7 @@ export function ThreeTierCard({
 						<p>
 							<span css={discountSummaryCss}>
 								{showWeeklyPrice ? 'Billed as ' : ''}
-								{discountSummary} {'*'.repeat(promoCount)}
+								{discountSummary} {discountMarker}
 							</span>
 						</p>
 					</>
