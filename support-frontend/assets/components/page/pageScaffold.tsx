@@ -19,9 +19,10 @@ const container = css`
 		flex: 1;
 		display: flex;
 		flex-direction: column;
+
 		& > :last-child {
-			flex: 1;
 			display: flex;
+			flex: 1;
 		}
 	}
 `;
