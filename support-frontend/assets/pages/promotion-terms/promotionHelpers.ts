@@ -3,13 +3,8 @@ import type {
 	ProductKey,
 } from '@modules/product-catalog/productCatalog';
 import { getCustomerFacingName } from '@modules/product-catalog/productCatalog';
-import dayjs from 'dayjs';
-import advancedFormat from 'dayjs/plugin/advancedFormat';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import { getProductDescription, isProductKey } from 'helpers/productCatalog';
-import type { Promotion } from 'helpers/productPrice/promotions';
-
-dayjs.extend(advancedFormat);
 
 /** The catalog product key of the first matching rate plan, used to branch UI by product. */
 export function getProductKey(
@@ -50,25 +45,4 @@ export function getProductRatePlanDescriptions(
 
 		return `${label}, ${ratePlanDisplayName ?? productRatePlanKey}`;
 	});
-}
-
-export function buildThreeTierCardPromoTerms(
-	promoCount: number,
-	productName: string,
-	discountSummary: string,
-	{ starts, expires }: Promotion,
-): string {
-	console.log('🚀 ~ buildThreeTierCardPromoTerms ~ promoCount:', promoCount);
-	const startDate = dayjs(starts).format('Do MMMM'); // eg. 15th January
-	const expiryDate = dayjs(expires).format('Do MMMM YYYY'); // eg. 31st April 2028
-	const promoDuration =
-		starts && expires
-			? `Offer starts on the ${startDate} and ends on the ${expiryDate}.`
-			: '';
-
-	return ` ${'*'.repeat(
-		promoCount,
-	)} ${productName} offer is ${discountSummary} afterwards unless you cancel.
-			Offer only available to new subscribers who do not have an existing subscription with the Guardian. 
-			${promoDuration}`;
 }

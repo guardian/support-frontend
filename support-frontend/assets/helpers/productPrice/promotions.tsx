@@ -5,6 +5,8 @@ import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { NoFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { ProductOptions } from '@modules/product/productOptions';
 import { NoProductOptions } from '@modules/product/productOptions';
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type {
@@ -13,6 +15,8 @@ import type {
 } from 'helpers/productPrice/productPrices';
 import { getProductPrice, isNumeric } from 'helpers/productPrice/productPrices';
 import { getQueryParameter } from 'helpers/urls/url';
+
+dayjs.extend(advancedFormat);
 
 type DiscountBenefit = {
 	amount: number;
@@ -175,6 +179,27 @@ const discountSummaryCopy = (
 	}, then ${formattedPrice}/${periodNoun}`;
 };
 
+function buildThreeTierCardPromoTerms(
+	promoCount: number,
+	productName: string,
+	discountSummary: string,
+	{ starts, expires }: Promotion,
+): string {
+	console.log('🚀 ~ buildThreeTierCardPromoTerms ~ promoCount:', promoCount);
+	const startDate = dayjs(starts).format('Do MMMM'); // eg. 15th January
+	const expiryDate = dayjs(expires).format('Do MMMM YYYY'); // eg. 31st April 2028
+	const promoDuration =
+		starts && expires
+			? `Offer starts on the ${startDate} and ends on the ${expiryDate}.`
+			: '';
+
+	return ` ${'*'.repeat(
+		promoCount,
+	)} ${productName} offer is ${discountSummary} afterwards unless you cancel.
+			Offer only available to new subscribers who do not have an existing subscription with the Guardian. 
+			${promoDuration}`;
+}
+
 export {
 	getAppliedPromo,
 	applyDiscount,
@@ -182,4 +207,5 @@ export {
 	promotionHTML,
 	finalPrice,
 	discountSummaryCopy,
+	buildThreeTierCardPromoTerms,
 };
