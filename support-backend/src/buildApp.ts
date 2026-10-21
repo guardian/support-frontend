@@ -1,8 +1,10 @@
 import compression from 'compression';
 import express from 'express';
+import { loadConfig } from './config/config';
 import { buildApiRouterWithServices } from './routers/apiRouter';
 
 export const buildApp = async () => {
+	const config = await loadConfig();
 	const app = express();
 
 	// Disable Express default behaviour to set an etag header on all responses
@@ -11,7 +13,7 @@ export const buildApp = async () => {
 	// Compress all responses
 	app.use(compression());
 
-	app.use('/api', await buildApiRouterWithServices());
+	app.use('/api', buildApiRouterWithServices(config));
 
 	app.get('/healthcheck-express', (req, res) => {
 		res.json({ status: 'OK' });
