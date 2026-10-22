@@ -215,18 +215,7 @@ export function ThreeTierLanding({
 			ratePlanKey,
 			billingPeriod,
 		);
-		console.log('*** getTierCardContent called with:', {
-			supportRegionId,
-			productKey,
-			ratePlanKey,
-			landingPageVariant,
-			urlSelectedAmount,
-			enableDeepDiscount,
-			urlProductKey,
-			promotion,
-			multipleAccountsVariant,
-		});
-		const tierCardContent = getTierCardContent(
+		return getTierCardContent(
 			supportRegionId,
 			productKey,
 			ratePlanKey,
@@ -237,8 +226,6 @@ export function ThreeTierLanding({
 			promotion,
 			multipleAccountsVariant,
 		);
-		console.log('*** tierCardContent:', tierCardContent);
-		return tierCardContent;
 	};
 	const tierCards = [
 		getTierCard('Contribution'),
