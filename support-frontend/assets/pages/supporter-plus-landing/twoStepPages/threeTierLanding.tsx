@@ -239,13 +239,11 @@ export function ThreeTierLanding({
 		);
 	};
 
-	const isTaxExclusive = (): boolean => {
-		return tierCards.some(
-			(tierCard) =>
-				tierCard.ratePlan === 'AnnualTaxExclusive' ||
-				tierCard.ratePlan === 'MonthlyTaxExclusive',
-		);
-	};
+	const showTaxDisclaimer = tierCards.some(
+		(tierCard) =>
+			tierCard.ratePlan === 'AnnualTaxExclusive' ||
+			tierCard.ratePlan === 'MonthlyTaxExclusive',
+	);
 
 	const showWeeklyPrice =
 		forceWeeklyPricing || landingPageVariant.name.includes('WEEKLY_PRICE');
@@ -265,7 +263,7 @@ export function ThreeTierLanding({
 				<ThreeTierFooter
 					supportRegionId={supportRegionId}
 					tsAndCsContent={getTierCardsTsAndCs()}
-					showTaxDisclaimer={isTaxExclusive()}
+					showTaxDisclaimer={showTaxDisclaimer}
 				/>
 			}
 		>
