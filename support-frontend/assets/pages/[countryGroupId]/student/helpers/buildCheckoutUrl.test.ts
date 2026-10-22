@@ -39,6 +39,16 @@ describe('buildCheckoutUrl', () => {
 				expect(url).toBe(routes.supporterPlusStudentBeansUk);
 			});
 		});
+		describe('and the supportRegionId is au', () => {
+			it('returns the correct Student Beans landing page URL', () => {
+				const url = buildCheckoutUrl(
+					SupportRegionId.AU,
+					'SupporterPlus',
+					'OneYearStudent',
+				);
+				expect(url).toBe(routes.supporterPlusStudentBeansAu);
+			});
+		});
 		describe('and the supportRegionId is eu', () => {
 			it('returns the correct Student Beans landing page URL', () => {
 				const url = buildCheckoutUrl(
