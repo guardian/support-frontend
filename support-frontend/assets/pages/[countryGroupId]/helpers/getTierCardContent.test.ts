@@ -7,6 +7,7 @@ import {
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { CardContent } from 'pages/supporter-plus-landing/components/threeTierCard';
+import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import { getTierCardContent } from './getTierCardContent';
 
 jest.mock('helpers/productCatalog', () => ({
@@ -14,72 +15,51 @@ jest.mock('helpers/productCatalog', () => ({
 	productCatalog: {
 		Contribution: {
 			ratePlans: {
-				Annual: { pricing: { USD: 60, GBP: 50, EUR: 50 } },
-				Monthly: { pricing: { USD: 5, GBP: 5, EUR: 4 } },
+				Monthly: { pricing: { EUR: 4 } },
 			},
 		},
 		SupporterPlus: {
 			ratePlans: {
-				Annual: { pricing: { USD: 150, GBP: 120, EUR: 140 } },
-				Monthly: { pricing: { USD: 15, GBP: 6, EUR: 6 } },
+				Monthly: { pricing: { GBP: 6 } },
 			},
 		},
 		DigitalSubscription: {
 			ratePlans: {
-				Annual: { pricing: { USD: 250, GBP: 180, EUR: 200 } },
-				Monthly: { pricing: { USD: 25, GBP: 18, EUR: 20 } },
+				Annual: { pricing: { USD: 250 } },
+				Monthly: { pricing: { GBP: 18 } },
 			},
 		},
 	},
 }));
 
+const coreBenefits = {
+	Contribution: [
+		{ copy: 'Contribution benefit 1' },
+		{ copy: 'Contribution benefit 2' },
+	],
+	SupporterPlus: [
+		{ copy: 'SupporterPlus benefit 1' },
+		{ copy: 'SupporterPlus benefit 2' },
+	],
+	DigitalSubscription: [
+		{ copy: 'DigitalSubscription benefit 2' },
+		{ copy: 'DigitalSubscription benefit 3' },
+	],
+};
 const benefits = {
 	CONTROL: {
-		Contribution: [
-			{ copy: 'Contribution benefit 1' },
-			{ copy: 'Contribution benefit 2' },
-		],
-		SupporterPlus: [
-			{ copy: 'SupporterPlus benefit 1' },
-			{ copy: 'SupporterPlus benefit 2' },
-		],
+		...coreBenefits,
 		DigitalSubscription: [
 			{ copy: 'Three extra accounts to share' },
 			{ copy: 'DigitalSubscription benefit 2' },
 			{ copy: 'DigitalSubscription benefit 3' },
 		],
 	},
-	V1: {
-		Contribution: [
-			{ copy: 'Contribution benefit 1' },
-			{ copy: 'Contribution benefit 2' },
-		],
-		SupporterPlus: [
-			{ copy: 'SupporterPlus benefit 1' },
-			{ copy: 'SupporterPlus benefit 2' },
-		],
-		DigitalSubscription: [
-			{ copy: 'DigitalSubscription benefit 2' },
-			{ copy: 'DigitalSubscription benefit 3' },
-		],
-	},
-	ProductCatalog: {
-		Contribution: [
-			{ copy: 'ProductCatalog Contribution benefit 1' },
-			{ copy: 'ProductCatalog Contribution benefit 2' },
-		],
-		SupporterPlus: [
-			{ copy: 'ProductCatalog SupporterPlus benefit 1' },
-			{ copy: 'ProductCatalog SupporterPlus benefit 2' },
-		],
-		DigitalSubscription: [
-			{ copy: 'ProductCatalog DigitalSubscription benefit 2' },
-			{ copy: 'ProductCatalog DigitalSubscription benefit 3' },
-		],
-	},
+	V1: coreBenefits,
+	ProductCatalog: coreBenefits,
 };
 const prices = {
-	us: {
+	USD: {
 		Annual: {
 			Contribution: 60,
 			SupporterPlus: 150,
@@ -91,7 +71,7 @@ const prices = {
 			DigitalSubscription: 25,
 		},
 	},
-	uk: {
+	GBP: {
 		Annual: {
 			Contribution: 50,
 			SupporterPlus: 120,
@@ -103,7 +83,7 @@ const prices = {
 			DigitalSubscription: 18,
 		},
 	},
-	eu: {
+	EUR: {
 		Annual: {
 			Contribution: 50,
 			SupporterPlus: 140,
@@ -117,12 +97,6 @@ const prices = {
 	},
 };
 
-const countryGroupIds = {
-	uk: 'GBPCountries',
-	eu: 'EURCountries',
-	us: 'UnitedStates',
-} as const;
-
 const emptyLandingPageVariant: LandingPageVariant = {
 	name: '',
 	copy: {
@@ -131,7 +105,6 @@ const emptyLandingPageVariant: LandingPageVariant = {
 	},
 	products: {},
 };
-
 const landingPageVariantControl: LandingPageVariant = {
 	name: 'CONTROL',
 	copy: {
@@ -183,45 +156,53 @@ const landingPageVariantV1 = {
 const getLandingPageVariantCardContent = (
 	product: 'Contribution' | 'SupporterPlus' | 'DigitalSubscription',
 	ratePlan: 'Monthly' | 'Annual',
-	countryGroupId: 'uk' | 'eu' | 'us',
+	supportRegionId: SupportRegionId,
 	multipleAccountsVariant: 'CONTROL' | 'V1',
-): CardContent => ({
-	product: product,
-	ratePlan: ratePlan,
-	price: prices[countryGroupId][ratePlan][product],
-	link: `/${countryGroupId}/checkout?product=${product}&ratePlan=${ratePlan}`,
-	multipleAccountsVariant: multipleAccountsVariant,
-	title: `${product} title`,
-	benefits: benefits[multipleAccountsVariant][product],
-	cta: { copy: `${product} cta` },
-	isDefaultProductSelected: product === 'SupporterPlus' ? true : false,
-	billingPeriodsCopy: undefined,
-	titlePill: undefined,
-	isUserSelected: false,
-	promotion: undefined,
-});
+): CardContent => {
+	const { currencyKey: countryCode } =
+		getSupportRegionIdConfig(supportRegionId);
+	return {
+		product: product,
+		ratePlan: ratePlan,
+		price: prices[countryCode as 'GBP' | 'EUR' | 'USD'][ratePlan][product],
+		link: `/${supportRegionId}/checkout?product=${product}&ratePlan=${ratePlan}`,
+		multipleAccountsVariant: multipleAccountsVariant,
+		title: `${product} title`,
+		benefits: benefits[multipleAccountsVariant][product],
+		cta: { copy: `${product} cta` },
+		isDefaultProductSelected: product === 'SupporterPlus' ? true : false,
+		billingPeriodsCopy: undefined,
+		titlePill: undefined,
+		isUserSelected: false,
+		promotion: undefined,
+	};
+};
 
 const getDefaultCardContent = (
 	product: 'Contribution' | 'SupporterPlus' | 'DigitalSubscription',
 	ratePlan: 'Monthly' | 'Annual',
-	countryGroupId: 'uk' | 'eu' | 'us',
-): CardContent => ({
-	product: product,
-	ratePlan: ratePlan,
-	price: prices[countryGroupId][ratePlan][product],
-	link: `/${countryGroupId}/checkout?product=${product}&ratePlan=${ratePlan}`,
-	multipleAccountsVariant: undefined,
-	title: productCatalogDescription[product].label,
-	benefits: productCatalogDescription[product].benefits.filter((benefit) =>
-		filterBenefitByRegion(benefit, countryGroupIds[countryGroupId]),
-	),
-	cta: { copy: 'Support' },
-	isDefaultProductSelected: false,
-	billingPeriodsCopy: undefined,
-	titlePill: productCatalogDescription[product].labelPill,
-	isUserSelected: false,
-	promotion: undefined,
-});
+	supportRegionId: SupportRegionId,
+): CardContent => {
+	const { currencyKey: countryCode, countryGroupId } =
+		getSupportRegionIdConfig(supportRegionId);
+	return {
+		product: product,
+		ratePlan: ratePlan,
+		price: prices[countryCode as 'GBP' | 'EUR' | 'USD'][ratePlan][product],
+		link: `/${supportRegionId}/checkout?product=${product}&ratePlan=${ratePlan}`,
+		multipleAccountsVariant: undefined,
+		title: productCatalogDescription[product].label,
+		benefits: productCatalogDescription[product].benefits.filter((benefit) =>
+			filterBenefitByRegion(benefit, countryGroupId),
+		),
+		cta: { copy: 'Support' },
+		isDefaultProductSelected: false,
+		billingPeriodsCopy: undefined,
+		titlePill: productCatalogDescription[product].labelPill,
+		isUserSelected: false,
+		promotion: undefined,
+	};
+};
 
 describe('getTierCardContent', () => {
 	it('returns tier card content for eu monthly contribution from landingPage variant CONTROL', () => {
@@ -240,7 +221,7 @@ describe('getTierCardContent', () => {
 			getLandingPageVariantCardContent(
 				'Contribution',
 				'Monthly',
-				'eu',
+				SupportRegionId.EU,
 				'CONTROL',
 			),
 		);
@@ -261,7 +242,7 @@ describe('getTierCardContent', () => {
 			getLandingPageVariantCardContent(
 				'SupporterPlus',
 				'Monthly',
-				'uk',
+				SupportRegionId.UK,
 				'CONTROL',
 			),
 		);
@@ -282,7 +263,7 @@ describe('getTierCardContent', () => {
 			getLandingPageVariantCardContent(
 				'DigitalSubscription',
 				'Annual',
-				'us',
+				SupportRegionId.US,
 				'CONTROL',
 			),
 		);
@@ -303,7 +284,7 @@ describe('getTierCardContent', () => {
 			getLandingPageVariantCardContent(
 				'DigitalSubscription',
 				'Monthly',
-				'uk',
+				SupportRegionId.UK,
 				'V1',
 			),
 		);
@@ -318,7 +299,7 @@ describe('getTierCardContent', () => {
 			false,
 		);
 		expect(result).toEqual(
-			getDefaultCardContent('Contribution', 'Monthly', 'eu'),
+			getDefaultCardContent('Contribution', 'Monthly', SupportRegionId.EU),
 		);
 	});
 	it('returns tier card content for uk monthly supporter plus from the default catalog', () => {
@@ -331,7 +312,7 @@ describe('getTierCardContent', () => {
 			false,
 		);
 		expect(result).toEqual(
-			getDefaultCardContent('SupporterPlus', 'Monthly', 'uk'),
+			getDefaultCardContent('SupporterPlus', 'Monthly', SupportRegionId.UK),
 		);
 	});
 	it('returns tier card content for us annual digital subscription from the default catalog', () => {
@@ -344,7 +325,11 @@ describe('getTierCardContent', () => {
 			false,
 		);
 		expect(result).toEqual(
-			getDefaultCardContent('DigitalSubscription', 'Annual', 'us'),
+			getDefaultCardContent(
+				'DigitalSubscription',
+				'Annual',
+				SupportRegionId.US,
+			),
 		);
 	});
 	it('promotion applied (50% off for 3-month) to the monthly eu supporter plus checkout URL', () => {
@@ -374,7 +359,7 @@ describe('getTierCardContent', () => {
 	});
 	it('marks the card as selected when urlSelectedAmount matches the catalog price', () => {
 		const result = getTierCardContent(
-			SupportRegionId.EU,
+			SupportRegionId.UK,
 			'SupporterPlus',
 			'Monthly',
 			landingPageVariantControl,
@@ -394,7 +379,7 @@ describe('getTierCardContent', () => {
 		};
 		const result = getTierCardContent(
 			SupportRegionId.EU,
-			'SupporterPlus',
+			'Contribution',
 			'Monthly',
 			landingPageVariantControl,
 			'2',
