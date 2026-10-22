@@ -272,7 +272,9 @@ const router = createBrowserRouter([
 									'featureSwitches.enableTooledStudentLandingPage',
 								);
 								if (!studentLanding.variant || !isSwitchedOn) {
-									return null;
+									return (
+										<Navigate to={`/${supportRegionId}/contribute`} replace />
+									);
 								}
 								return (
 									<StudentLandingPageInstitutionContainer
