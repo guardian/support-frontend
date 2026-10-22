@@ -2,7 +2,6 @@ import type { CountryCode } from '@modules/internationalisation/country';
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 
-// Australian region not supported by Student Beans
 const studentBeansRegions = [
 	SupportRegionId.UK,
 	SupportRegionId.US,
@@ -14,14 +13,15 @@ export const useStudentBeansRegionValid = (
 	supportRegionId: SupportRegionId,
 	countryCode: CountryCode,
 ) => {
-	// Student Beans Europe feature switch enables the link to Student Landing Page for prescribed countries
+	// Student Beans Europe feature switch enables the link to Student Landing Page for prescribed countries or the Australian region
 	const { enableStudentBeansEurope } = useFeatureSwitches();
 	if (studentBeansRegions.includes(supportRegionId)) {
 		return true;
 	}
 	return (
-		enableStudentBeansEurope &&
-		supportRegionId === SupportRegionId.EU &&
-		studentBeansEuCountries.includes(countryCode)
+		(enableStudentBeansEurope && supportRegionId === SupportRegionId.AU) ||
+		(enableStudentBeansEurope &&
+			supportRegionId === SupportRegionId.EU &&
+			studentBeansEuCountries.includes(countryCode))
 	);
 };

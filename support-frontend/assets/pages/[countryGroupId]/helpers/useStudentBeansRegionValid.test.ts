@@ -22,12 +22,12 @@ describe('useStudentBeansRegionValid', () => {
 		${SupportRegionId.UK} | ${undefined} | ${true}    | ${true}
 		${SupportRegionId.US} | ${undefined} | ${true}    | ${true}
 		${SupportRegionId.CA} | ${undefined} | ${true}    | ${true}
+		${SupportRegionId.AU} | ${undefined} | ${true}    | ${true}
 		${SupportRegionId.UK} | ${undefined} | ${false}   | ${true}
 		${SupportRegionId.US} | ${undefined} | ${false}   | ${true}
 		${SupportRegionId.CA} | ${undefined} | ${false}   | ${true}
-		${SupportRegionId.AU} | ${undefined} | ${true}    | ${false}
-		${SupportRegionId.NZ} | ${undefined} | ${true}    | ${false}
 		${SupportRegionId.AU} | ${undefined} | ${false}   | ${false}
+		${SupportRegionId.NZ} | ${undefined} | ${true}    | ${false}
 		${SupportRegionId.NZ} | ${undefined} | ${false}   | ${false}
 		${SupportRegionId.EU} | ${'DE'}      | ${false}   | ${false}
 		${SupportRegionId.EU} | ${'FR'}      | ${false}   | ${false}
