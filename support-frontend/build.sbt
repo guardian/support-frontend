@@ -28,7 +28,7 @@ libraryDependencies ++= Seq(
   "com.gu" %% "identity-test-users" % "0.10.2",
   "com.google.guava" % "guava" % "32.1.1-jre",
   "com.indoorvivants" %% "scala-uri" % scalaUriVersion,
-  "com.gu.play-googleauth" %% "play-v30" % "36.0.0",
+  "com.gu.play-googleauth" %% "play-v30" % "46.0.0",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
   "com.squareup.okhttp3" % "okhttp" % "4.11.0",
   "com.gocardless" % "gocardless-pro" % "2.10.0",
@@ -38,6 +38,8 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonAnnotationsVersion,
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
   "com.softwaremill.sttp.client4" %% "cats" % "4.0.26",
+  "com.gu.play-secret-rotation" %% "play-v30" % "21.1.0",
+  "com.gu.play-secret-rotation" %% "aws-parameterstore-sdk-v2" % "21.1.0",
   filters,
   ws,
 )
