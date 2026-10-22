@@ -166,15 +166,12 @@ const getLandingPageVariantCardContent = (
 		ratePlan: ratePlan,
 		price: prices[countryCode as 'GBP' | 'EUR' | 'USD'][ratePlan][product],
 		link: `/${supportRegionId}/checkout?product=${product}&ratePlan=${ratePlan}`,
-		multipleAccountsVariant: multipleAccountsVariant,
 		title: `${product} title`,
 		benefits: benefits[multipleAccountsVariant][product],
 		cta: { copy: `${product} cta` },
 		isDefaultProductSelected: product === 'SupporterPlus' ? true : false,
-		billingPeriodsCopy: undefined,
-		titlePill: undefined,
+		multipleAccountsVariant: multipleAccountsVariant,
 		isUserSelected: false,
-		promotion: undefined,
 	};
 };
 
@@ -190,17 +187,14 @@ const getDefaultCardContent = (
 		ratePlan: ratePlan,
 		price: prices[countryCode as 'GBP' | 'EUR' | 'USD'][ratePlan][product],
 		link: `/${supportRegionId}/checkout?product=${product}&ratePlan=${ratePlan}`,
-		multipleAccountsVariant: undefined,
 		title: productCatalogDescription[product].label,
+		titlePill: productCatalogDescription[product].labelPill,
 		benefits: productCatalogDescription[product].benefits.filter((benefit) =>
 			filterBenefitByRegion(benefit, countryGroupId),
 		),
 		cta: { copy: 'Support' },
 		isDefaultProductSelected: false,
-		billingPeriodsCopy: undefined,
-		titlePill: productCatalogDescription[product].labelPill,
 		isUserSelected: false,
-		promotion: undefined,
 	};
 };
 
