@@ -38,7 +38,11 @@ export function useThreeTierCardPromotion({
 		promotion && discountSummaryCopy(currency, price, promotion, billingPeriod);
 
 	useEffect(() => {
-		if (!promotion || !discountSummary) {
+		if (
+			!promotion?.discount ||
+			promotion.discountedPrice === undefined ||
+			!discountSummary
+		) {
 			return;
 		}
 		const description = buildThreeTierCardPromoTerms(
