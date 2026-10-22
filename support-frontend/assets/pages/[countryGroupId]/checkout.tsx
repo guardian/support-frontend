@@ -248,6 +248,7 @@ export function Checkout({
 		supportRegionId,
 		ratePlanKey,
 		productKey,
+		false, // always allow Australian institutions
 		promotion,
 		true,
 	);

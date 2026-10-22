@@ -1,4 +1,4 @@
-import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
@@ -13,7 +13,6 @@ import {
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
-import { SPECIFIC_DISCOUNTED_UNI_COUNTRYCODES } from './utilities';
 
 export function getDiscountDuration({
 	durationInMonths,
@@ -81,12 +80,17 @@ function isStudent(
 	productKey: ActiveProductKey,
 	promotion?: Promotion,
 	requirePromotion?: boolean,
+	excludeAustralianInstitutions?: boolean,
 ): boolean {
+	const universityInstitutionRegions = excludeAustralianInstitutions
+		? [SupportRegionId.NZ]
+		: [SupportRegionId.AU, SupportRegionId.NZ];
+
 	const isOneYearStudent =
 		ratePlanKey === 'OneYearStudent' &&
-		!SPECIFIC_DISCOUNTED_UNI_COUNTRYCODES.includes(supportRegionId);
+		!universityInstitutionRegions.includes(supportRegionId);
 	const isInstitutionDiscountSpecificStudent =
-		SPECIFIC_DISCOUNTED_UNI_COUNTRYCODES.includes(supportRegionId) &&
+		universityInstitutionRegions.includes(supportRegionId) &&
 		productKey === 'SupporterPlus' &&
 		ratePlanKey === 'Monthly';
 	const isInstitutionDiscountSpecificStudentWithPromoCode =
@@ -103,6 +107,7 @@ export function getStudentDiscount(
 	supportRegionId: SupportRegionId,
 	ratePlanKey: ActiveRatePlanKey,
 	productKey: ActiveProductKey,
+	excludeAustralianInstitutions?: boolean,
 	promotion?: Promotion,
 	requirePromotion?: boolean,
 ): StudentDiscount | undefined {
@@ -113,6 +118,7 @@ export function getStudentDiscount(
 			productKey,
 			promotion,
 			requirePromotion,
+			excludeAustralianInstitutions,
 		)
 	) {
 		return undefined;
