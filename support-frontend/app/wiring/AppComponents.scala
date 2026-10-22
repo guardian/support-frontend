@@ -13,8 +13,14 @@ import play.filters.HttpFiltersComponents
 import play.filters.cors.CORSComponents
 import play.filters.csp.CSPComponents
 import play.filters.gzip.GzipFilter
+import com.gu.play.secretrotation.{RotatingSecretComponents, SnapshotProvider, TransitionTiming}
+import com.gu.play.secretrotation.aws.parameterstore.{AwsSdkV2, SecretSupplier}
+import software.amazon.awssdk.services.ssm.SsmClient
+import java.time.Duration.{ofHours, ofMinutes}
+import com.gu.aws.CredentialsProvider
+import software.amazon.awssdk.regions.Region
 
-class AppComponents(context: Context)
+class AppComponents(context: Context, stage: String)
     extends BuiltInComponentsFromContext(context)
     with PlayComponents
     with AhcWSComponents
@@ -27,7 +33,8 @@ class AppComponents(context: Context)
     with GoogleAuth
     with CORSComponents
     with CSPComponents
-    with HttpFiltersComponents {
+    with HttpFiltersComponents
+    with RotatingSecretComponents {
 
   private lazy val customHandler: CustomHttpErrorHandler = new CustomHttpErrorHandler(
     environment,
@@ -91,4 +98,20 @@ class AppComponents(context: Context)
   // Force the creation of both cachedPromotionsServiceProvider variants (default + test-user) on startup, same
   // reasoning as above.
   val _ = (cachedPromotionsServiceProvider.forUser(false), cachedPromotionsServiceProvider.forUser(true))
+
+  lazy val secretStateSupplier: SnapshotProvider = {
+    import com.gu.play.secretrotation.aws.parameterstore
+
+    new parameterstore.SecretSupplier(
+      TransitionTiming(usageDelay = ofMinutes(3), overlapDuration = ofHours(2)),
+      s"/support/frontend/$stage/play.http.secret.key",
+      AwsSdkV2(
+        SsmClient
+          .builder()
+          .credentialsProvider(CredentialsProvider)
+          .region(Region.EU_WEST_1)
+          .build(),
+      ),
+    )
+  }
 }
