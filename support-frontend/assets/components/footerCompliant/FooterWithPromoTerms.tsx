@@ -84,7 +84,7 @@ function GiftLinks({ promotions, productKey, promoCode }: LinkTypes) {
 function PromoTerms(): JSX.Element | null {
 	const { promoTerms } = usePromoTerms();
 
-	if (!promoTerms) {
+	if (promoTerms.length === 0) {
 		return null;
 	}
 
@@ -93,7 +93,11 @@ function PromoTerms(): JSX.Element | null {
 			<p id="qa-component-customer-service" css={footerTextHeading}>
 				Promotion terms and conditions
 			</p>
-			<p css={promoOfferLink}>{promoTerms}</p>
+			{promoTerms.map(({ promoCode, description }) => (
+				<p css={promoOfferLink} key={promoCode}>
+					{description}
+				</p>
+			))}
 		</section>
 	);
 }
