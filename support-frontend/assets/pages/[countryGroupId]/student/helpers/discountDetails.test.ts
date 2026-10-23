@@ -114,6 +114,7 @@ describe('Discount Details', () => {
 				SupportRegionId.US,
 				'OneYearStudent',
 				'SupporterPlus',
+				true,
 			);
 			expect(result).toEqual({
 				amount: 10,
@@ -138,6 +139,7 @@ describe('Discount Details', () => {
 				SupportRegionId.AU,
 				'Monthly',
 				'SupporterPlus',
+				false,
 				promotion,
 			);
 			expect(result).toEqual({
