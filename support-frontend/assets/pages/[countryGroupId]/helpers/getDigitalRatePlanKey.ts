@@ -7,9 +7,9 @@ export type TierProductKey =
 	| 'SupporterPlus'
 	| 'DigitalSubscription';
 export function getDigitalRatePlanKey(
-	contributionType: ContributionType,
 	supportRegionId: SupportRegionId,
 	productKey: TierProductKey,
+	contributionType: ContributionType,
 ): ProductRatePlanKey<TierProductKey> {
 	const enableTaxExclusion =
 		productKey !== 'Contribution' && supportRegionId === SupportRegionId.CA;
