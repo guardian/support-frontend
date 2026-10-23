@@ -252,7 +252,6 @@ const router = createBrowserRouter([
 									<StudentLandingPageGlobalContainer
 										supportRegionId={supportRegionId}
 										landingPageVariant={landing.variant}
-										isStudentBeansRegionValid={isStudentBeansRegionValid}
 									/>
 								);
 							},
