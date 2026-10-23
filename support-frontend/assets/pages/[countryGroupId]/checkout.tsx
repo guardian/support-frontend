@@ -241,14 +241,16 @@ export function Checkout({
 
 	/**
 	 * Non-AU Students have ratePlanKey as OneYearStudent
-	 * AU Students have ratePlanKey as Monthly, productKey as SupporterPlus
-	 * and required promoCode UTS_STUDENT
+	 * AU Students can have ratePlanKey as Monthly (institute with promoCode UTS_STUDENT)
+	 * or OneYearStudent (Global)
 	 */
+
+	const isGlobalStudent = ratePlanKey === 'OneYearStudent';
 	const studentDiscount = getStudentDiscount(
 		supportRegionId,
 		ratePlanKey,
 		productKey,
-		false, // always allow Australian institutions
+		isGlobalStudent,
 		promotion,
 		true,
 	);
