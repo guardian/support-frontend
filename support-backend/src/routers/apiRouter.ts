@@ -1,22 +1,19 @@
 import { Router } from 'express';
-import { getIdealPostcodeApiKey, getPaperRoundApiConfig } from '../aws/ssm';
+import type { Config } from '../config/config';
 import { buildDeliveryAgentsHandler } from '../handlers/deliveryAgents';
 import { buildPostcodeLookupHandler } from '../handlers/postcodeLookup';
 import { noCache } from '../middlewares/noCache';
 import { IdealPostcodeService } from '../services/idealPostcodeService';
 import { PaperRoundService } from '../services/paperRoundService';
 
-export const buildApiRouterWithServices = async () => {
-	const [idealPostcodesApiKey, paperRoundConfig] = await Promise.all([
-		getIdealPostcodeApiKey(),
-		getPaperRoundApiConfig(),
-	]);
-
-	const idealPostcodeService = new IdealPostcodeService(idealPostcodesApiKey);
+export const buildApiRouterWithServices = (config: Config) => {
+	const idealPostcodeService = new IdealPostcodeService(
+		config.idealPostcodesApi.key,
+	);
 
 	const paperRoundService = new PaperRoundService(
-		paperRoundConfig.baseUrl,
-		paperRoundConfig.apiKey,
+		config.paperRoundApi.url,
+		config.paperRoundApi.key,
 	);
 
 	return buildApiRouter(idealPostcodeService, paperRoundService);
