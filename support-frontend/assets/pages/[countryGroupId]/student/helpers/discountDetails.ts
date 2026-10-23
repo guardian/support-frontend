@@ -82,7 +82,7 @@ function isStudent(
 	promotion?: Promotion,
 	requirePromotion?: boolean,
 ): boolean {
-	// excludes Australian institutions with ratePlan OneYearStudent when switch enableStudentBeansEurope On
+	// excludes institutions with ratePlan OneYearStudent when switch enableStudentBeansEuropeAustralia On
 	const excludeAustralianInstitutions =
 		supportRegionId === SupportRegionId.AU &&
 		ratePlanKey === 'OneYearStudent' &&

@@ -14,13 +14,14 @@ export const useStudentBeansRegionValid = (
 	countryCode: CountryCode,
 ) => {
 	// Student Beans Europe feature switch enables the link to Student Landing Page for prescribed countries or the Australian region
-	const { enableStudentBeansEurope } = useFeatureSwitches();
+	const { enableStudentBeansEuropeAustralia } = useFeatureSwitches();
 	if (studentBeansRegions.includes(supportRegionId)) {
 		return true;
 	}
 	return (
-		(enableStudentBeansEurope && supportRegionId === SupportRegionId.AU) ||
-		(enableStudentBeansEurope &&
+		(enableStudentBeansEuropeAustralia &&
+			supportRegionId === SupportRegionId.AU) ||
+		(enableStudentBeansEuropeAustralia &&
 			supportRegionId === SupportRegionId.EU &&
 			studentBeansEuCountries.includes(countryCode))
 	);

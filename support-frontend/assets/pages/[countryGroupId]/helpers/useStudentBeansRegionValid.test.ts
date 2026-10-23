@@ -35,10 +35,10 @@ describe('useStudentBeansRegionValid', () => {
 		${SupportRegionId.EU} | ${'IE'}      | ${false}   | ${false}
 		${SupportRegionId.EU} | ${'NL'}      | ${false}   | ${false}
 	`(
-		`should return $expected, for region/country:$region/$country, when enableStudentBeansEurope:$eurInclude`,
+		`should return $expected, for region/country:$region/$country, when enableStudentBeansEuropeAustralia:$eurInclude`,
 		({ region, country, eurInclude, expected }) => {
 			useFeatureSwitchesMock.mockReturnValue({
-				enableStudentBeansEurope: eurInclude as boolean,
+				enableStudentBeansEuropeAustralia: eurInclude as boolean,
 			} as ReturnType<typeof useFeatureSwitches>);
 			const isStudentRegionValidResult = useStudentBeansRegionValid(
 				region as SupportRegionId,
