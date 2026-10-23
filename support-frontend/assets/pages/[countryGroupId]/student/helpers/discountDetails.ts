@@ -2,6 +2,7 @@ import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import { Country } from 'helpers/internationalisation/classes/country';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -12,6 +13,7 @@ import {
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { useStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/useStudentBeansRegionValid';
 import { getSupportRegionIdConfig } from '../../../supportRegionConfig';
 
 export function getDiscountDuration({
@@ -80,8 +82,13 @@ function isStudent(
 	productKey: ActiveProductKey,
 	promotion?: Promotion,
 	requirePromotion?: boolean,
-	excludeAustralianInstitutions?: boolean,
 ): boolean {
+	// excludes Australian institutions with ratePlan OneYearStudent when switch enableStudentBeansEurope On
+	const excludeAustralianInstitutions =
+		supportRegionId === SupportRegionId.AU &&
+		ratePlanKey === 'OneYearStudent' &&
+		useStudentBeansRegionValid(supportRegionId, Country.detect());
+
 	const universityInstitutionRegions = excludeAustralianInstitutions
 		? [SupportRegionId.NZ]
 		: [SupportRegionId.AU, SupportRegionId.NZ];
@@ -107,7 +114,6 @@ export function getStudentDiscount(
 	supportRegionId: SupportRegionId,
 	ratePlanKey: ActiveRatePlanKey,
 	productKey: ActiveProductKey,
-	excludeAustralianInstitutions?: boolean,
 	promotion?: Promotion,
 	requirePromotion?: boolean,
 ): StudentDiscount | undefined {
@@ -118,7 +124,6 @@ export function getStudentDiscount(
 			productKey,
 			promotion,
 			requirePromotion,
-			excludeAustralianInstitutions,
 		)
 	) {
 		return undefined;

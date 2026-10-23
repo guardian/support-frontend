@@ -138,7 +138,6 @@ describe('Discount Details', () => {
 				SupportRegionId.AU,
 				'Monthly',
 				'SupporterPlus',
-				false,
 				promotion,
 			);
 			expect(result).toEqual({

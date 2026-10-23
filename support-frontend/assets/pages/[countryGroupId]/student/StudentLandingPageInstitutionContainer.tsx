@@ -44,7 +44,6 @@ export function StudentLandingPageInstitutionContainer({
 		supportRegionId,
 		ratePlanKey,
 		productKey,
-		false, // always allow Australian institutions
 		maybePromo,
 	);
 
