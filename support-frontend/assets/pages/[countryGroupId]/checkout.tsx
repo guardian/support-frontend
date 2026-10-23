@@ -244,10 +244,12 @@ export function Checkout({
 	 * AU Students can have ratePlanKey as Monthly (institute with promoCode UTS_STUDENT)
 	 * or OneYearStudent (Global)
 	 */
+	const isStudentBeans = ratePlanKey === 'OneYearStudent';
 	const studentDiscount = getStudentDiscount(
 		supportRegionId,
 		ratePlanKey,
 		productKey,
+		isStudentBeans,
 		promotion,
 		true,
 	);

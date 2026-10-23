@@ -21,6 +21,7 @@ export function StudentLandingPageGlobalContainer({
 		supportRegionId,
 		ratePlanKey,
 		productKey,
+		true, // allow Student beans
 		undefined, // Promo code not needed here - discount is applied by the rate plan
 	);
 
