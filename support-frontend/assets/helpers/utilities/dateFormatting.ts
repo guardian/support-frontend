@@ -4,7 +4,7 @@ export function getLongMonth(date: Date): string {
 	});
 }
 
-export function getNumericYear(date: Date): string {
+function getNumericYear(date: Date): string {
 	return date.toLocaleDateString('default', {
 		year: 'numeric',
 	});

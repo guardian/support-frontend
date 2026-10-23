@@ -8,11 +8,9 @@ import {
 } from '@guardian/source-development-kitchen/react-components';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { UnitedStates } from '@modules/internationalisation/countryGroup';
-import { glyph } from 'helpers/internationalisation/currency';
 import { guardianContactUsLink, guardianHelpCentreLink } from 'helpers/legal';
 import CurrentMaxRatesByCountry from 'pages/[countryGroupId]/helpers/CurrentMaxRatesByCountry';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
-import type { TsAndCsProps } from '../components/threeTierTsAndCs';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
 import { USSupportAnotherWay } from './usSupportAnotherWay';
 
@@ -61,17 +59,14 @@ const links = [
 
 interface ThreeTierFooterProps {
 	supportRegionId: SupportRegionId;
-	tsAndCsContent: TsAndCsProps[];
 	showTaxDisclaimer: boolean;
 }
 
 export function ThreeTierFooter({
 	supportRegionId,
-	tsAndCsContent,
 	showTaxDisclaimer,
 }: ThreeTierFooterProps): JSX.Element {
-	const { currencyKey, countryGroupId } =
-		getSupportRegionIdConfig(supportRegionId);
+	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 	return (
 		<>
 			{countryGroupId === UnitedStates && <USSupportAnotherWay />}
@@ -86,10 +81,7 @@ export function ThreeTierFooter({
 						For All-access digital and Digital plus, taxes may apply.
 					</p>
 				)}
-				<ThreeTierTsAndCs
-					tsAndCsContent={tsAndCsContent}
-					currency={glyph(currencyKey)}
-				></ThreeTierTsAndCs>
+				<ThreeTierTsAndCs />
 			</Container>
 			<FooterWithContents>
 				<FooterLinks links={links}></FooterLinks>

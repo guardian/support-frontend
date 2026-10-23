@@ -5,6 +5,8 @@ import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { NoFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { ProductOptions } from '@modules/product/productOptions';
 import { NoProductOptions } from '@modules/product/productOptions';
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type {
@@ -13,6 +15,8 @@ import type {
 } from 'helpers/productPrice/productPrices';
 import { getProductPrice, isNumeric } from 'helpers/productPrice/productPrices';
 import { getQueryParameter } from 'helpers/urls/url';
+
+dayjs.extend(advancedFormat);
 
 type DiscountBenefit = {
 	amount: number;
@@ -146,7 +150,6 @@ function finalPrice(
 
 const discountSummaryCopy = (
 	currency: Currency,
-	promoCount: number,
 	price: number,
 	promotion: Promotion,
 	billingPeriod: BillingPeriod,
@@ -173,8 +176,26 @@ const discountSummaryCopy = (
 		periodNoun === 'year' || duration === 1 ? 'the first' : ''
 	}${duration > 1 ? duration : ''} ${periodNoun}${
 		duration > 1 ? 's' : ''
-	}, then ${formattedPrice}/${periodNoun}${'*'.repeat(promoCount)}`;
+	}, then ${formattedPrice}/${periodNoun}`;
 };
+
+function buildThreeTierCardPromoTerms(
+	discountMarker: string,
+	productName: string,
+	discountSummary: string,
+	{ starts, expires }: Promotion,
+): string {
+	const startDate = dayjs(starts).format('Do MMMM'); // eg. 15th January
+	const expiryDate = dayjs(expires).format('Do MMMM YYYY'); // eg. 31st April 2028
+	const promoDuration =
+		starts && expires
+			? `Offer starts on the ${startDate} and ends on the ${expiryDate}.`
+			: '';
+
+	return ` ${discountMarker} ${productName} offer is ${discountSummary} afterwards unless you cancel.
+			Offer only available to new subscribers who do not have an existing subscription with the Guardian. 
+			${promoDuration}`;
+}
 
 export {
 	getAppliedPromo,
@@ -183,4 +204,5 @@ export {
 	promotionHTML,
 	finalPrice,
 	discountSummaryCopy,
+	buildThreeTierCardPromoTerms,
 };

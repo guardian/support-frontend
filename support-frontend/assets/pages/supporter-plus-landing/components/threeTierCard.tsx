@@ -24,10 +24,7 @@ import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { type CardTheme } from 'helpers/landingPage/cardTheme';
 import { getProductLabel } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
-import {
-	discountSummaryCopy,
-	type Promotion,
-} from 'helpers/productPrice/promotions';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import {
 	calculateWeeklyPrice,
 	getSanitisedHtml,
@@ -36,6 +33,7 @@ import {
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { ThreeTierCardPill } from './threeTierCardPill';
 import { ThreeTierNumberOfAccounts } from './threeTierNumberOfAccounts';
+import { useThreeTierCardPromotion } from './useThreeTierCardPromotion';
 
 export type CardContent = LandingPageProductDescription & {
 	product: 'SupporterPlus' | 'Contribution' | 'DigitalSubscription';
@@ -178,13 +176,13 @@ export function ThreeTierCard({
 	cardContent,
 	cardTheme,
 	cardTier,
-	promoCount,
 	isSubdued,
 	currencyId,
 	billingPeriod,
 	showWeeklyPrice = false,
 	useLargePriceMinHeight = false,
 	deepDiscount,
+	promoCount,
 }: ThreeTierCardProps): JSX.Element {
 	const {
 		title,
@@ -202,10 +200,19 @@ export function ThreeTierCard({
 	} = cardContent;
 	const currency = getCurrencyByCode(currencyId);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
+	const { discountSummary } = useThreeTierCardPromotion({
+		promotion,
+		promoCount,
+		title,
+		price,
+		currency,
+		billingPeriod,
+	});
 
 	const mainPrice = showWeeklyPrice
 		? calculateWeeklyPrice(price, billingPeriod)
 		: price;
+
 	const mainDiscountedPrice = promotion
 		? showWeeklyPrice
 			? calculateWeeklyPrice(promotion.discountedPrice ?? price, billingPeriod)
@@ -299,13 +306,7 @@ export function ThreeTierCard({
 						<p>
 							<span css={discountSummaryCss}>
 								{showWeeklyPrice ? 'Billed as ' : ''}
-								{discountSummaryCopy(
-									currency,
-									promoCount,
-									price,
-									promotion,
-									billingPeriod,
-								)}
+								{discountSummary}
 							</span>
 						</p>
 					</>
