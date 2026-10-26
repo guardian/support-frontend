@@ -209,12 +209,12 @@ export function ThreeTierLanding({
 			productKey,
 			contributionType,
 		);
-		const promotion = getTierCardPromotion(
+		const promotion = getTierCardPromotion({
 			supportRegionId,
 			productKey,
 			ratePlanKey,
 			billingPeriod,
-		);
+		});
 		return getTierCardContent({
 			supportRegionId,
 			productKey,

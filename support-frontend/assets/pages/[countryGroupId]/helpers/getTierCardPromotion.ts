@@ -8,12 +8,19 @@ import { getQueryParameter } from 'helpers/urls/url';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import type { TierProductKey } from './getDigitalRatePlanKey';
 
-export function getTierCardPromotion(
-	supportRegionId: SupportRegionId,
-	productKey: TierProductKey,
-	ratePlanKey: ProductRatePlanKey<TierProductKey>,
-	billingPeriod: RecurringBillingPeriod,
-): Promotion | undefined {
+type GetTierCardPromotionParams = {
+	supportRegionId: SupportRegionId;
+	productKey: TierProductKey;
+	ratePlanKey: ProductRatePlanKey<TierProductKey>;
+	billingPeriod: RecurringBillingPeriod;
+};
+
+export function getTierCardPromotion({
+	supportRegionId,
+	productKey,
+	ratePlanKey,
+	billingPeriod,
+}: GetTierCardPromotionParams): Promotion | undefined {
 	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
 
 	const price = productCatalog[productKey]?.ratePlans[ratePlanKey]?.pricing[
