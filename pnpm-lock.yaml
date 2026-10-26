@@ -67,8 +67,8 @@ catalogs:
       specifier: 5.8.3
       version: 5.8.3
     zod:
-      specifier: 4.4.3
-      version: 4.4.3
+      specifier: 4.6.6
+      version: 4.6.6
 
 overrides:
   '@typescript-eslint/typescript-estree': 8.46.2
@@ -151,7 +151,7 @@ importers:
     dependencies:
       zod:
         specifier: 'catalog:'
-        version: 4.4.3
+        version: 4.6.6
     devDependencies:
       '@guardian/support-service-lambdas':
         specifier: 'catalog:'
@@ -179,7 +179,7 @@ importers:
         version: 5.2.1(supports-color@5.5.0)
       zod:
         specifier: 'catalog:'
-        version: 4.4.3
+        version: 4.6.6
     devDependencies:
       '@guardian/eslint-config':
         specifier: 14.0.1
@@ -349,7 +349,7 @@ importers:
         version: 9.0.1
       zod:
         specifier: 'catalog:'
-        version: 4.4.3
+        version: 4.6.6
     devDependencies:
       '@axe-core/react':
         specifier: 4.10.1
@@ -533,7 +533,7 @@ importers:
         version: 10.6.2(supports-color@10.2.2)
       zod:
         specifier: 'catalog:'
-        version: 4.4.3
+        version: 4.6.6
     devDependencies:
       '@guardian/prettier':
         specifier: 8.0.1
@@ -600,7 +600,7 @@ importers:
         version: 17.7.0
       zod:
         specifier: 'catalog:'
-        version: 4.4.3
+        version: 4.6.6
     devDependencies:
       '@aws-sdk/client-lambda':
         specifier: 'catalog:'
@@ -8093,8 +8093,8 @@ packages:
   zod@3.25.30:
     resolution: {integrity: sha512-VolhdEtu6TJr/fzGuHA/SZ5ixvXqA6ADOG9VRcQ3rdOKmF5hkmcJbyaQjUH5BgmpA9gej++zYRX7zjSmdReIwA==}
 
-  zod@4.4.3:
-    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+  zod@4.6.6:
+    resolution: {integrity: sha512-4UmzQUF5fxvfcYHlbjBmejU+w+hbDnWFx4aS8kBx7nPBHcO2SqPbpAG8snbdg+Xse4pRefR98hgjFgIMCI/UhA==}
 
 snapshots:
 
@@ -14216,8 +14216,8 @@ snapshots:
       '@babel/parser': 7.29.7
       eslint: 9.38.0(jiti@2.4.2)(supports-color@5.5.0)
       hermes-parser: 0.25.1
-      zod: 4.4.3
-      zod-validation-error: 4.0.2(zod@4.4.3)
+      zod: 4.6.6
+      zod-validation-error: 4.0.2(zod@4.6.6)
     transitivePeerDependencies:
       - supports-color
 
@@ -18378,10 +18378,10 @@ snapshots:
     dependencies:
       zod: 3.25.30
 
-  zod-validation-error@4.0.2(zod@4.4.3):
+  zod-validation-error@4.0.2(zod@4.6.6):
     dependencies:
-      zod: 4.4.3
+      zod: 4.6.6
 
   zod@3.25.30: {}
 
-  zod@4.4.3: {}
+  zod@4.6.6: {}
