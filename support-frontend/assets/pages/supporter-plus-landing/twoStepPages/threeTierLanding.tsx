@@ -215,7 +215,7 @@ export function ThreeTierLanding({
 			ratePlanKey,
 			billingPeriod,
 		);
-		return getTierCardContent(
+		return getTierCardContent({
 			supportRegionId,
 			productKey,
 			ratePlanKey,
@@ -225,7 +225,7 @@ export function ThreeTierLanding({
 			urlProductKey,
 			promotion,
 			multipleAccountsVariant,
-		);
+		});
 	};
 	const tierCards = [
 		getTierCard('Contribution'),

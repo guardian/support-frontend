@@ -19,17 +19,29 @@ import {
 } from '../checkout/helpers/benefitsChecklist';
 import type { TierProductKey } from './getDigitalRatePlanKey';
 
-export function getTierCardContent(
-	supportRegionId: SupportRegionId,
-	productKey: TierProductKey,
-	ratePlanKey: ProductRatePlanKey<TierProductKey>,
-	landingPageVariant: LandingPageVariant,
-	urlSelectedAmount: string | null,
-	deepDiscount = false,
-	urlProductKey?: string,
-	promotion?: Promotion,
-	multipleAccountsVariant?: string,
-): CardContent {
+type GetTierCardContentParams = {
+	supportRegionId: SupportRegionId;
+	productKey: TierProductKey;
+	ratePlanKey: ProductRatePlanKey<TierProductKey>;
+	landingPageVariant: LandingPageVariant;
+	urlSelectedAmount: string | null;
+	enableDeepDiscount: boolean;
+	urlProductKey?: string;
+	promotion?: Promotion;
+	multipleAccountsVariant?: string;
+};
+
+export function getTierCardContent({
+	supportRegionId,
+	productKey,
+	ratePlanKey,
+	landingPageVariant,
+	urlSelectedAmount,
+	enableDeepDiscount,
+	urlProductKey,
+	promotion,
+	multipleAccountsVariant,
+}: GetTierCardContentParams): CardContent {
 	const digitalPlusMultipleAccountsVariant =
 		productKey === 'DigitalSubscription' ? multipleAccountsVariant : undefined;
 
@@ -79,7 +91,8 @@ export function getTierCardContent(
 		landingPageVariant.defaultProductSelection?.productType;
 	const getDefaultProductSelection = (productKey: TierProductKey) => {
 		return (
-			(!urlProductKey || deepDiscount) && defaultProductSelection === productKey
+			(!urlProductKey || enableDeepDiscount) &&
+			defaultProductSelection === productKey
 		);
 	};
 

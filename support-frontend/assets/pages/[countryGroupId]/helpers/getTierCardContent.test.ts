@@ -200,17 +200,17 @@ const getDefaultCardContent = (
 
 describe('getTierCardContent', () => {
 	it('returns tier card content for eu monthly contribution from landingPage variant CONTROL', () => {
-		const result = getTierCardContent(
-			SupportRegionId.EU,
-			'Contribution',
-			'Monthly',
-			landingPageVariantControl,
-			null,
-			false,
-			undefined,
-			undefined,
-			'CONTROL',
-		);
+		const result = getTierCardContent({
+			supportRegionId: SupportRegionId.EU,
+			productKey: 'Contribution',
+			ratePlanKey: 'Monthly',
+			landingPageVariant: landingPageVariantControl,
+			urlSelectedAmount: null,
+			enableDeepDiscount: false,
+			urlProductKey: undefined,
+			promotion: undefined,
+			multipleAccountsVariant: 'CONTROL',
+		});
 		expect(result).toEqual(
 			getLandingPageVariantCardContent(
 				'Contribution',
@@ -221,17 +221,17 @@ describe('getTierCardContent', () => {
 		);
 	});
 	it('returns tier card content for uk monthly supporter plus from landingPage variant CONTROL', () => {
-		const result = getTierCardContent(
-			SupportRegionId.UK,
-			'SupporterPlus',
-			'Monthly',
-			landingPageVariantControl,
-			null,
-			false,
-			undefined,
-			undefined,
-			'CONTROL',
-		);
+		const result = getTierCardContent({
+			supportRegionId: SupportRegionId.UK,
+			productKey: 'SupporterPlus',
+			ratePlanKey: 'Monthly',
+			landingPageVariant: landingPageVariantControl,
+			urlSelectedAmount: null,
+			enableDeepDiscount: false,
+			urlProductKey: undefined,
+			promotion: undefined,
+			multipleAccountsVariant: 'CONTROL',
+		});
 		expect(result).toEqual(
 			getLandingPageVariantCardContent(
 				'SupporterPlus',
@@ -242,17 +242,17 @@ describe('getTierCardContent', () => {
 		);
 	});
 	it('returns tier card content for us annual digital subscription from landingPage variant CONTROL', () => {
-		const result = getTierCardContent(
-			SupportRegionId.US,
-			'DigitalSubscription',
-			'Annual',
-			landingPageVariantControl,
-			null,
-			false,
-			undefined,
-			undefined,
-			'CONTROL',
-		);
+		const result = getTierCardContent({
+			supportRegionId: SupportRegionId.US,
+			productKey: 'DigitalSubscription',
+			ratePlanKey: 'Annual',
+			landingPageVariant: landingPageVariantControl,
+			urlSelectedAmount: null,
+			enableDeepDiscount: false,
+			urlProductKey: undefined,
+			promotion: undefined,
+			multipleAccountsVariant: 'CONTROL',
+		});
 		expect(result).toEqual(
 			getLandingPageVariantCardContent(
 				'DigitalSubscription',
@@ -263,17 +263,17 @@ describe('getTierCardContent', () => {
 		);
 	});
 	it('returns tier card content for uk monthly digital subscription from landingPage variant V1', () => {
-		const result = getTierCardContent(
-			SupportRegionId.UK,
-			'DigitalSubscription',
-			'Monthly',
-			landingPageVariantV1,
-			null,
-			false,
-			undefined,
-			undefined,
-			'V1',
-		);
+		const result = getTierCardContent({
+			supportRegionId: SupportRegionId.UK,
+			productKey: 'DigitalSubscription',
+			ratePlanKey: 'Monthly',
+			landingPageVariant: landingPageVariantV1,
+			urlSelectedAmount: null,
+			enableDeepDiscount: false,
+			urlProductKey: undefined,
+			promotion: undefined,
+			multipleAccountsVariant: 'V1',
+		});
 		expect(result).toEqual(
 			getLandingPageVariantCardContent(
 				'DigitalSubscription',
@@ -284,40 +284,40 @@ describe('getTierCardContent', () => {
 		);
 	});
 	it('returns tier card content for eu monthly contribution from the default catalog', () => {
-		const result = getTierCardContent(
-			SupportRegionId.EU,
-			'Contribution',
-			'Monthly',
-			emptyLandingPageVariant,
-			null,
-			false,
-		);
+		const result = getTierCardContent({
+			supportRegionId: SupportRegionId.EU,
+			productKey: 'Contribution',
+			ratePlanKey: 'Monthly',
+			landingPageVariant: emptyLandingPageVariant,
+			urlSelectedAmount: null,
+			enableDeepDiscount: false,
+		});
 		expect(result).toEqual(
 			getDefaultCardContent('Contribution', 'Monthly', SupportRegionId.EU),
 		);
 	});
 	it('returns tier card content for uk monthly supporter plus from the default catalog', () => {
-		const result = getTierCardContent(
-			SupportRegionId.UK,
-			'SupporterPlus',
-			'Monthly',
-			emptyLandingPageVariant,
-			null,
-			false,
-		);
+		const result = getTierCardContent({
+			supportRegionId: SupportRegionId.UK,
+			productKey: 'SupporterPlus',
+			ratePlanKey: 'Monthly',
+			landingPageVariant: emptyLandingPageVariant,
+			urlSelectedAmount: null,
+			enableDeepDiscount: false,
+		});
 		expect(result).toEqual(
 			getDefaultCardContent('SupporterPlus', 'Monthly', SupportRegionId.UK),
 		);
 	});
 	it('returns tier card content for us annual digital subscription from the default catalog', () => {
-		const result = getTierCardContent(
-			SupportRegionId.US,
-			'DigitalSubscription',
-			'Annual',
-			emptyLandingPageVariant,
-			null,
-			false,
-		);
+		const result = getTierCardContent({
+			supportRegionId: SupportRegionId.US,
+			productKey: 'DigitalSubscription',
+			ratePlanKey: 'Annual',
+			landingPageVariant: emptyLandingPageVariant,
+			urlSelectedAmount: null,
+			enableDeepDiscount: false,
+		});
 		expect(result).toEqual(
 			getDefaultCardContent(
 				'DigitalSubscription',
@@ -335,30 +335,31 @@ describe('getTierCardContent', () => {
 			discountedPrice: 2,
 			discount: { amount: 2, durationMonths: 3 },
 		};
-		const result = getTierCardContent(
-			SupportRegionId.EU,
-			'SupporterPlus',
-			'Monthly',
-			landingPageVariantControl,
-			null,
-			false,
-			undefined,
+		const result = getTierCardContent({
+			supportRegionId: SupportRegionId.EU,
+			productKey: 'SupporterPlus',
+			ratePlanKey: 'Monthly',
+			landingPageVariant: landingPageVariantControl,
+			urlSelectedAmount: null,
+			enableDeepDiscount: false,
+			urlProductKey: undefined,
 			promotion,
-			'CONTROL',
-		);
+			multipleAccountsVariant: 'CONTROL',
+		});
 		expect(result).toMatchObject({
 			link: '/eu/checkout?product=SupporterPlus&ratePlan=Monthly&promoCode=50PERCENTFOR3MONTHS',
 			promotion,
 		});
 	});
 	it('marks the card as selected when urlSelectedAmount matches the catalog price', () => {
-		const result = getTierCardContent(
-			SupportRegionId.UK,
-			'SupporterPlus',
-			'Monthly',
-			landingPageVariantControl,
-			'6',
-		);
+		const result = getTierCardContent({
+			supportRegionId: SupportRegionId.UK,
+			productKey: 'SupporterPlus',
+			ratePlanKey: 'Monthly',
+			landingPageVariant: landingPageVariantControl,
+			urlSelectedAmount: '6',
+			enableDeepDiscount: false,
+		});
 
 		expect(result.isUserSelected).toBe(true);
 	});
@@ -371,56 +372,55 @@ describe('getTierCardContent', () => {
 			discountedPrice: 2,
 			discount: { amount: 2, durationMonths: 3 },
 		};
-		const result = getTierCardContent(
-			SupportRegionId.EU,
-			'Contribution',
-			'Monthly',
-			landingPageVariantControl,
-			'2',
-			false,
-			undefined,
+		const result = getTierCardContent({
+			supportRegionId: SupportRegionId.EU,
+			productKey: 'Contribution',
+			ratePlanKey: 'Monthly',
+			landingPageVariant: landingPageVariantControl,
+			urlSelectedAmount: '2',
+			enableDeepDiscount: false,
+			urlProductKey: undefined,
 			promotion,
-		);
+		});
 
 		expect(result.isUserSelected).toBe(true);
 	});
 	it('does not mark the card as selected when urlSelectedAmount matches neither price', () => {
-		const result = getTierCardContent(
-			SupportRegionId.EU,
-			'SupporterPlus',
-			'Monthly',
-			landingPageVariantControl,
-			'3',
-		);
+		const result = getTierCardContent({
+			supportRegionId: SupportRegionId.EU,
+			productKey: 'SupporterPlus',
+			ratePlanKey: 'Monthly',
+			landingPageVariant: landingPageVariantControl,
+			urlSelectedAmount: '3',
+			enableDeepDiscount: false,
+		});
 
 		expect(result.isUserSelected).toBe(false);
 	});
 	it('deep discount disabled, applies URL product selection (Contribution), overriding the landing page default product (SupporterPlus)', () => {
-		const result = getTierCardContent(
-			SupportRegionId.EU,
-			'SupporterPlus',
-			'Monthly',
-			landingPageVariantControl,
-			null,
-			false, // deep discount disabled
-			'Contribution', // URL selected product
-			undefined,
-			'CONTROL',
-		);
+		const result = getTierCardContent({
+			supportRegionId: SupportRegionId.EU,
+			productKey: 'SupporterPlus',
+			ratePlanKey: 'Monthly',
+			landingPageVariant: landingPageVariantControl,
+			urlSelectedAmount: null,
+			enableDeepDiscount: false,
+			urlProductKey: 'Contribution',
+			multipleAccountsVariant: 'CONTROL',
+		});
 		expect(result.isDefaultProductSelected).toBe(false);
 	});
 	it('deep discount enabled, disables URL product selection (Contribution), allowing the landing page default product (SupporterPlus)', () => {
-		const result = getTierCardContent(
-			SupportRegionId.EU,
-			'SupporterPlus',
-			'Monthly',
-			landingPageVariantControl,
-			null,
-			true, // deep discount enabled
-			'Contribution', // URL selected product
-			undefined,
-			'CONTROL',
-		);
+		const result = getTierCardContent({
+			supportRegionId: SupportRegionId.EU,
+			productKey: 'SupporterPlus',
+			ratePlanKey: 'Monthly',
+			landingPageVariant: landingPageVariantControl,
+			urlSelectedAmount: null,
+			enableDeepDiscount: true,
+			urlProductKey: 'Contribution',
+			multipleAccountsVariant: 'CONTROL',
+		});
 		expect(result.isDefaultProductSelected).toBe(true);
 	});
 });
