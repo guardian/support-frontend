@@ -139,19 +139,6 @@ const landingPageVariantControl: LandingPageVariant = {
 		billingPeriod: 'Monthly' as const,
 	},
 };
-const landingPageVariantV1 = {
-	...landingPageVariantControl,
-	name: 'V1',
-	products: {
-		DigitalSubscription: {
-			title: 'DigitalSubscription title',
-			benefits: benefits.V1.DigitalSubscription,
-			cta: {
-				copy: 'DigitalSubscription cta',
-			},
-		},
-	},
-};
 
 const getLandingPageVariantCardContent = (
 	product: 'Contribution' | 'SupporterPlus' | 'DigitalSubscription',
@@ -262,12 +249,16 @@ describe('getTierCardContent', () => {
 			),
 		);
 	});
+	/* We start with control benefits (digital subscription multiple accounts) then check V1 will filter it out */
 	it('returns tier card content for uk monthly digital subscription from landingPage variant V1', () => {
 		const result = getTierCardContent({
 			supportRegionId: SupportRegionId.UK,
 			productKey: 'DigitalSubscription',
 			ratePlanKey: 'Monthly',
-			landingPageVariant: landingPageVariantV1,
+			landingPageVariant: {
+				...landingPageVariantControl,
+				name: 'V1',
+			},
 			urlSelectedAmount: null,
 			enableDeepDiscount: false,
 			urlProductKey: undefined,
