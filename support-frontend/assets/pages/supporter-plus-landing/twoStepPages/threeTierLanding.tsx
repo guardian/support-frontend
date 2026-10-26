@@ -12,7 +12,6 @@ import {
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
-import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -21,43 +20,28 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
-import { fallBackLandingPageSelection } from 'helpers/abTests/landingPageAbTests';
-import {
-	getMultipleAccountsTestVariantParticipation,
-	multipleAccountBenefitCopy,
-} from 'helpers/abTests/multipleAccounts';
+import { getMultipleAccountsTestVariantParticipation } from 'helpers/abTests/multipleAccounts';
 import type { PageParticipationsResultWithFallback } from 'helpers/abTests/pageParticipations';
 import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { glyph } from 'helpers/internationalisation/currency';
-import {
-	getProductDescription,
-	getProductLabel,
-	productCatalog,
-	productCatalogDescription,
-} from 'helpers/productCatalog';
 import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
-import { buildCheckoutUrl } from 'helpers/urls/checkoutUrl';
-import { getQueryParameter } from 'helpers/urls/url';
-import {
-	filterBenefits,
-	removeBenefitByCopy,
-} from 'pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
-import { getTierPlanCost } from 'pages/[countryGroupId]/helpers/getTierPlanCost';
+import { getTierCardContent } from 'pages/[countryGroupId]/helpers/getTierCardContent';
+import { getTierCardPromotion } from 'pages/[countryGroupId]/helpers/getTierCardPromotion';
+import { getTierCardTsAndCs } from 'pages/[countryGroupId]/helpers/getTierCardTsAndCs';
 import { useStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/useStudentBeansRegionValid';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
 	getSanitisedHtml,
 	replaceDatePlaceholder,
 } from '../../../helpers/utilities/utilities';
+import type { TierProductKey } from '../../[countryGroupId]/helpers/getDigitalRatePlanKey';
 import { getDigitalRatePlanKey } from '../../[countryGroupId]/helpers/getDigitalRatePlanKey';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import Countdown from '../components/countdown';
 import { StudentOffer } from '../components/studentOffer';
 import { SupportOnce } from '../components/supportOnce';
-import type { CardContent } from '../components/threeTierCard';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierFooter } from '../components/threeTierFooter';
 import type { TsAndCsProps } from '../components/threeTierTsAndCs';
@@ -133,21 +117,6 @@ const paymentFrequencyButtonsCss = css`
 	}
 `;
 
-const isCardUserSelected = (
-	urlSelectedAmount: string | null,
-	cardPrice: number,
-	cardPriceDiscount?: number,
-): boolean => {
-	const hasUrlSelectedAmount = !isNaN(Number(urlSelectedAmount));
-	if (!hasUrlSelectedAmount) {
-		return false;
-	}
-	return (
-		Number(urlSelectedAmount) === cardPrice ||
-		Number(urlSelectedAmount) === cardPriceDiscount
-	);
-};
-
 type ThreeTierLandingProps = {
 	supportRegionId: SupportRegionId;
 	landingPageSettings: PageParticipationsResultWithFallback<LandingPageVariant>;
@@ -162,7 +131,7 @@ export function ThreeTierLanding({
 		landingPageVariant.name,
 	);
 	const {
-		productKey: urlSearchParamsProduct,
+		productKey: urlProductKey,
 		ratePlanKey: urlSearchParamsRatePlan,
 		selectedAmount: urlSelectedAmount,
 		forceWeeklyPricing,
@@ -224,8 +193,6 @@ export function ThreeTierLanding({
 	const tierPlanPeriod = contributionType.toLowerCase();
 	const billingPeriod = (tierPlanPeriod[0]?.toUpperCase() +
 		tierPlanPeriod.slice(1)) as RecurringBillingPeriod;
-	const promotions = window.guardian.promotions ?? [];
-	const promoCode = getQueryParameter('promoCode');
 
 	const paymentFrequencies: ContributionType[] = ['MONTHLY', 'ANNUAL'];
 
@@ -233,258 +200,53 @@ export function ThreeTierLanding({
 		setContributionType(paymentFrequencies[buttonIndex] as ContributionType);
 	};
 
-	const fallbackProducts = fallBackLandingPageSelection.products;
-
-	// RRCP LandingPage Test Page / Default Product Selection
-	const defaultProductSelection =
-		landingPageVariant.defaultProductSelection?.productType.toLowerCase();
-
 	// Deep Discount feature switch applies red card theme and removes 'Your selection' pill copy
 	const { enableDeepDiscount } = useFeatureSwitches();
 
-	const getDefaultProductSelection = (productKey: ProductKey) => {
-		return (
-			(!urlSearchParamsProduct || enableDeepDiscount) &&
-			defaultProductSelection === productKey.toLowerCase()
+	const getTierCard = (productKey: TierProductKey) => {
+		const ratePlanKey = getDigitalRatePlanKey(
+			supportRegionId,
+			productKey,
+			contributionType,
+		);
+		const promotion = getTierCardPromotion({
+			supportRegionId,
+			productKey,
+			ratePlanKey,
+			billingPeriod,
+		});
+		return getTierCardContent({
+			supportRegionId,
+			productKey,
+			ratePlanKey,
+			landingPageVariant,
+			urlSelectedAmount,
+			enableDeepDiscount,
+			urlProductKey,
+			promotion,
+			multipleAccountsVariant,
+		});
+	};
+	const tierCards = [
+		getTierCard('Contribution'),
+		getTierCard('SupporterPlus'),
+		getTierCard('DigitalSubscription'),
+	];
+
+	const getTierCardsTsAndCs = (): TsAndCsProps[] => {
+		return tierCards.map((tierCard) =>
+			getTierCardTsAndCs(tierCard, contributionType),
 		);
 	};
-	const getUserSelection = (
-		productKey: ProductKey,
-		productPrice: number,
-		promotionAmount?: number,
-	) => {
-		return (
-			urlSearchParamsProduct === productKey ||
-			isCardUserSelected(urlSelectedAmount, productPrice, promotionAmount)
-		);
-	};
 
-	/**
-	 * Tier 1: Contributions
-	 * We use the product catalog for the recurring Contribution tier amount
-	 */
-	const tier1Product = 'Contribution';
-	const tier1RatePlanKey = getDigitalRatePlanKey(
-		contributionType,
-		supportRegionId,
-		tier1Product,
+	const showTaxDisclaimer = tierCards.some(
+		(tierCard) =>
+			tierCard.ratePlan === 'AnnualTaxExclusive' ||
+			tierCard.ratePlan === 'MonthlyTaxExclusive',
 	);
-	const tier1Pricing = productCatalog[tier1Product]?.ratePlans[tier1RatePlanKey]
-		?.pricing[currencyId] as number;
-	const tier1checkoutUrl = buildCheckoutUrl(supportRegionId, {
-		product: tier1Product,
-		ratePlan: tier1RatePlanKey,
-		contribution: tier1Pricing,
-	});
-
-	const tier1Card: CardContent = {
-		product: tier1Product,
-		price: tier1Pricing,
-		link: tier1checkoutUrl,
-		isDefaultProductSelected: getDefaultProductSelection(tier1Product),
-		isUserSelected: getUserSelection(tier1Product, tier1Pricing),
-		...landingPageVariant.products[tier1Product],
-		title:
-			landingPageVariant.products[tier1Product]?.title ??
-			getProductLabel(tier1Product),
-		benefits:
-			landingPageVariant.products[tier1Product]?.benefits ??
-			filterBenefits(
-				productCatalogDescription[tier1Product].benefits,
-				countryGroupId,
-			),
-		cta:
-			landingPageVariant.products[tier1Product]?.cta ??
-			fallbackProducts[tier1Product]!.cta,
-		multipleAccountsVariant,
-		billingPeriodsCopy:
-			landingPageVariant.products[tier1Product]?.billingPeriodsCopy,
-	};
-
-	/** Tier 2: SupporterPlus */
-	const tier2Product = 'SupporterPlus';
-	const tier2RatePlanKey = getDigitalRatePlanKey(
-		contributionType,
-		supportRegionId,
-		tier2Product,
-	);
-	const tier2Pricing = productCatalog[tier2Product]?.ratePlans[tier2RatePlanKey]
-		?.pricing[currencyId] as number;
-
-	const tier2Promotion = getLegacyPromotion({
-		promotions,
-		productKey: tier2Product,
-		ratePlanKey: tier2RatePlanKey,
-		price: tier2Pricing,
-		billingPeriod,
-		promoCode,
-	});
-
-	const tier2CheckoutURL = buildCheckoutUrl(supportRegionId, {
-		product: tier2Product,
-		ratePlan: tier2RatePlanKey,
-		promoCode: tier2Promotion?.promoCode,
-	});
-
-	const tier2ProductDescription = {
-		...landingPageVariant.products[tier2Product],
-		title: getProductLabel(tier2Product),
-		benefits:
-			landingPageVariant.products[tier2Product]?.benefits ??
-			filterBenefits(
-				productCatalogDescription[tier2Product].benefits,
-				countryGroupId,
-			),
-		cta:
-			landingPageVariant.products[tier2Product]?.cta ??
-			fallbackProducts[tier2Product]!.cta,
-		billingPeriodsCopy:
-			landingPageVariant.products[tier2Product]?.billingPeriodsCopy,
-	};
-
-	const tier2Card: CardContent = {
-		product: tier2Product,
-		price: tier2Pricing,
-		link: tier2CheckoutURL,
-		isDefaultProductSelected: getDefaultProductSelection(tier2Product),
-		isUserSelected: getUserSelection(
-			tier2Product,
-			tier2Pricing,
-			tier2Promotion?.discount?.amount,
-		),
-		promotion: tier2Promotion,
-		multipleAccountsVariant,
-		...tier2ProductDescription,
-	};
-
-	/**
-	 * Tier 3: SupporterPlus with Guardian Weekly
-	 * This products promotions are hard-coded for now
-	 */
-
-	/**
-	 * We do this as sending the old amount (£10) down the pipes will cause
-	 * `support-workers` to fail as it calculates the contribution amount from the amount sent minus the catalog price
-	 * e.g. state.amount - catalogPrice i.e. 10-12 and failes if the price is less than 0
-	 *
-	 * @see: https://github.com/guardian/support-frontend/blob/main/support-workers/src/main/scala/com/gu/zuora/subscriptionBuilders/SupporterPlusSubcriptionBuilder.scala#L38-L42
-	 *
-	 * This should avoid a race condition of us deploying the price rise before frontend is deployed.
-	 *
-	 * This should only exist as long as the Tier three hack is in place.
-	 */
-	const tier3Product = 'DigitalSubscription';
-	const tier3RatePlanKey = getDigitalRatePlanKey(
-		contributionType,
-		supportRegionId,
-		tier3Product,
-	);
-	const tier3Pricing = productCatalog[tier3Product]?.ratePlans[tier3RatePlanKey]
-		?.pricing[currencyId] as number;
-
-	const { label: title, labelPill } = getProductDescription(
-		'DigitalSubscription',
-		tier3RatePlanKey,
-	);
-	const titlePill = multipleAccountsVariant ? undefined : labelPill;
-
-	const tier3DefaultBenefits = filterBenefits(
-		productCatalogDescription[tier3Product].benefits,
-		countryGroupId,
-	);
-	const tier3Benefits =
-		landingPageVariant.products[tier3Product]?.benefits ?? tier3DefaultBenefits;
-	const tier3BenefitsMultipleAccounts =
-		multipleAccountsVariant === 'V1' || multipleAccountsVariant === 'V2'
-			? removeBenefitByCopy(tier3Benefits, multipleAccountBenefitCopy)
-			: tier3Benefits;
-	const tier3ProductDescription = {
-		title: landingPageVariant.products[tier3Product]?.title ?? title,
-		titlePill:
-			landingPageVariant.products[tier3Product]?.titlePill ?? titlePill,
-		benefits: tier3BenefitsMultipleAccounts,
-		cta:
-			landingPageVariant.products[tier3Product]?.cta ??
-			fallbackProducts[tier3Product]!.cta,
-		billingPeriodsCopy:
-			landingPageVariant.products[tier3Product]?.billingPeriodsCopy,
-	};
-	const tier3Promotion = getLegacyPromotion({
-		promotions,
-		productKey: tier3Product,
-		ratePlanKey: tier3RatePlanKey,
-		price: tier3Pricing,
-		billingPeriod,
-		promoCode,
-	});
-	const tier3CheckoutURL = buildCheckoutUrl(supportRegionId, {
-		product: tier3Product,
-		ratePlan: tier3RatePlanKey,
-		promoCode: tier3Promotion?.promoCode,
-	});
-
-	const tier3Card: CardContent = {
-		product: tier3Product,
-		price: tier3Pricing,
-		link: tier3CheckoutURL,
-		isDefaultProductSelected: getDefaultProductSelection(tier3Product),
-		isUserSelected: getUserSelection(
-			tier3Product,
-			tier3Pricing,
-			tier3Promotion?.discount?.amount,
-		),
-		promotion: tier3Promotion,
-		multipleAccountsVariant,
-		...tier3ProductDescription,
-	};
 
 	const showWeeklyPrice =
 		forceWeeklyPricing || landingPageVariant.name.includes('WEEKLY_PRICE');
-
-	const tsAndCsContent: TsAndCsProps[] = [
-		{
-			title: tier1Card.title,
-			planCost: getTierPlanCost(tier1Card.price, contributionType),
-		},
-		{
-			title: tier2Card.title,
-			planCost: getTierPlanCost(
-				tier2Card.price,
-				contributionType,
-				tier2Promotion,
-			),
-			starts: tier2Promotion?.starts
-				? new Date(tier2Promotion.starts)
-				: undefined,
-			expires: tier2Promotion?.expires
-				? new Date(tier2Promotion.expires)
-				: undefined,
-		},
-		{
-			title: tier3Card.title,
-			planCost: getTierPlanCost(
-				tier3Card.price,
-				contributionType,
-				tier3Promotion,
-			),
-			starts: tier3Promotion?.starts
-				? new Date(tier3Promotion.starts)
-				: undefined,
-			expires: tier3Promotion?.expires
-				? new Date(tier3Promotion.expires)
-				: undefined,
-		},
-	];
-
-	const showTaxDisclaimer = [
-		tier1RatePlanKey,
-		tier2RatePlanKey,
-		tier3RatePlanKey,
-	].some(
-		(ratePlanKey) =>
-			ratePlanKey === 'AnnualTaxExclusive' ||
-			ratePlanKey === 'MonthlyTaxExclusive',
-	);
 
 	return (
 		<PageScaffold
@@ -500,7 +262,7 @@ export function ThreeTierLanding({
 			footer={
 				<ThreeTierFooter
 					supportRegionId={supportRegionId}
-					tsAndCsContent={tsAndCsContent}
+					tsAndCsContent={getTierCardsTsAndCs()}
 					showTaxDisclaimer={showTaxDisclaimer}
 				/>
 			}
@@ -555,7 +317,7 @@ export function ThreeTierLanding({
 						additionalStyles={paymentFrequencyButtonsCss}
 					/>
 					<ThreeTierCards
-						cardsContent={[tier1Card, tier2Card, tier3Card]}
+						cardsContent={tierCards}
 						currencyId={currencyId}
 						billingPeriod={billingPeriod}
 						showWeeklyPrice={showWeeklyPrice}
