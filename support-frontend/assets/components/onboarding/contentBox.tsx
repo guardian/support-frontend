@@ -32,9 +32,9 @@ function ContentBox({
 	return (
 		<div
 			css={[
-				cssOverrides,
 				contentBoxMainStyle,
 				!removePadding ? contentBoxPaddingStyle : css``,
+				cssOverrides,
 			]}
 		>
 			{children}

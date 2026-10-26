@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { palette, space } from '@guardian/source/foundations';
+import { from, palette, space } from '@guardian/source/foundations';
 import {
 	Button,
 	Stack,
@@ -7,10 +7,14 @@ import {
 	SvgTickRound,
 } from '@guardian/source/react-components';
 import { ToggleSwitch } from '@guardian/source-development-kitchen/react-components';
-import { getCurrencyInfo } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
 import { useEffect } from 'react';
+import { OnboardingSteps } from 'components/onboarding/onboardingSteps';
+import type {
+	CurrentUserState,
+	HandleStepNavigationFunction,
+} from 'components/onboarding/onboardingTypes';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
 	getNewsletterSubscriptionById,
@@ -26,14 +30,13 @@ import {
 import type { CsrfState } from 'helpers/types/csrf';
 import { getThankYouOrder } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
 import type {
-	CurrentUserState,
-	HandleStepNavigationFunction,
+	OnboardingProductKey,
 	OnboardingProps,
 } from 'pages/[countryGroupId]/components/onboardingComponent';
-import { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import ContentBox from '../contentBox';
+import { getOnboardingProductCopy } from '../onboardingProductCopy';
 import {
 	benefitsItem,
 	benefitsItemIcon,
@@ -47,35 +50,44 @@ import {
 	paymentDetailsBox,
 	separator,
 } from './sectionsStyles';
+import { getTodaysPaymentWithTaxExclusion } from './summaryHelpers';
 
 const purchaseSummaryDetailsContainer = css`
 	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
+	flex-direction: column;
+	gap: ${space[1]}px;
+	${from.tablet} {
+		flex-direction: row;
+		justify-content: space-between;
+	}
 `;
 
 const purchaseSummaryDetailsPriceText = css`
-	text-align: end;
 	text-wrap: balance;
 	max-width: 80%;
+	${from.tablet} {
+		text-align: end;
+	}
 `;
 
 const paymentMethodContainer = css`
 	display: flex;
 	flex-direction: row;
-	justify-content: flex-end;
 	align-items: center;
 	gap: ${space[1]}px;
 `;
 
-const onboardingSummaryCopyMapping: Record<
-	CurrentUserState,
+type OnboardingSummaryUserState = CurrentUserState | 'inviteeUserRegistered';
+
+const getOnboardingSummaryCopy = (
+	productTitle?: string,
+): Record<
+	OnboardingSummaryUserState,
 	{ title: string; description: string }
-> = {
+> => ({
 	existingUserSignedIn: {
 		title: "You're ready to go",
-		description:
-			"Find out what's included in your All-access digital subscription.",
+		description: `Find out what's included in your ${productTitle} subscription.`,
 	},
 	userSignedIn: {
 		title: 'You’re signed in',
@@ -86,18 +98,27 @@ const onboardingSummaryCopyMapping: Record<
 		description:
 			'Your account is set up and ready to go. Now you can explore your exclusive benefits.',
 	},
-};
+	inviteeUserRegistered: {
+		title: 'You’re all set!',
+		description:
+			'You can now enjoy all the benefits and access of Digital plus.',
+	},
+});
 
 export function OnboardingSummarySuccessfulSignIn({
 	handleStepNavigation,
 	userState,
 	userNewslettersSubscriptions,
 	csrf,
+	productKey,
+	productTitle,
 }: {
 	handleStepNavigation: HandleStepNavigationFunction;
-	userState: CurrentUserState;
+	userState: OnboardingSummaryUserState;
 	userNewslettersSubscriptions: NewsletterSubscription[] | null;
 	csrf: CsrfState;
+	productKey?: OnboardingProductKey;
+	productTitle?: string;
 }) {
 	/**
 	 * Consider the Saturday Edition newsletter subscription as subscribed.
@@ -109,21 +130,25 @@ export function OnboardingSummarySuccessfulSignIn({
 		setIsUpdatingNewsletterSubscription,
 	] = useState(false);
 
-	useEffect(() => {
-		if (userNewslettersSubscriptions) {
-			// Find the Saturday Edition newsletter using the type-safe helper
-			const saturdayEditionNewsletterSubscription =
-				getNewsletterSubscriptionById(
-					userNewslettersSubscriptions,
-					NewslettersIds.SaturdayEdition,
-				);
+	const isInvitee = userState === 'inviteeUserRegistered';
+	const summaryCopy = getOnboardingSummaryCopy(productTitle)[userState];
 
-			if (!saturdayEditionNewsletterSubscription) {
-				// If not found, default to subscribed (will be auto-subscribed)
-				void handleNewsletterToggle(true);
-			}
+	useEffect(() => {
+		if (isInvitee || !userNewslettersSubscriptions) {
+			return;
 		}
-	}, [userNewslettersSubscriptions]);
+
+		// Find the Saturday Edition newsletter using the type-safe helper
+		const saturdayEditionNewsletterSubscription = getNewsletterSubscriptionById(
+			userNewslettersSubscriptions,
+			NewslettersIds.SaturdayEdition,
+		);
+
+		if (!saturdayEditionNewsletterSubscription) {
+			// If not found, default to subscribed (will be auto-subscribed)
+			void handleNewsletterToggle(true);
+		}
+	}, [userNewslettersSubscriptions, isInvitee]);
 
 	const handleNewsletterToggle = async (newSubscribeState?: boolean) => {
 		// Prevent multiple simultaneous requests
@@ -153,10 +178,8 @@ export function OnboardingSummarySuccessfulSignIn({
 
 	return (
 		<Stack space={2}>
-			<h1 css={headings}>{onboardingSummaryCopyMapping[userState].title}</h1>
-			<p css={descriptions}>
-				{onboardingSummaryCopyMapping[userState].description}
-			</p>
+			<h1 css={headings}>{summaryCopy.title}</h1>
+			<p css={descriptions}>{summaryCopy.description}</p>
 
 			<Stack
 				space={0}
@@ -167,7 +190,13 @@ export function OnboardingSummarySuccessfulSignIn({
 				<Button
 					priority="primary"
 					cssOverrides={buttonOverrides}
-					onClick={() => handleStepNavigation(OnboardingSteps.GuardianApp)}
+					onClick={() =>
+						handleStepNavigation(
+							productKey === 'DigitalSubscription'
+								? OnboardingSteps.DigitalPlus
+								: OnboardingSteps.GuardianApp,
+						)
+					}
 				>
 					Explore your benefits
 				</Button>
@@ -180,19 +209,21 @@ export function OnboardingSummarySuccessfulSignIn({
 				</Button>
 			</Stack>
 
-			<div css={newsletterContainer}>
-				<Stack space={1}>
-					<h2 css={boldDescriptions}>Saturday Edition newsletter</h2>
-					<p css={descriptions}>
-						An exclusive email highlighting the week’s best Guardian journalism
-						from our editor-in-chief, Katharine Viner
-					</p>
-				</Stack>
-				<ToggleSwitch
-					checked={switchNewsletterEnabled}
-					onClick={() => void handleNewsletterToggle()}
-				/>
-			</div>
+			{!isInvitee && (
+				<div css={newsletterContainer}>
+					<Stack space={1}>
+						<h2 css={boldDescriptions}>Saturday Edition newsletter</h2>
+						<p css={descriptions}>
+							An exclusive email highlighting the week’s best Guardian
+							journalism from our editor-in-chief, Katharine Viner
+						</p>
+					</Stack>
+					<ToggleSwitch
+						checked={switchNewsletterEnabled}
+						onClick={() => void handleNewsletterToggle()}
+					/>
+				</div>
+			)}
 		</Stack>
 	);
 }
@@ -206,17 +237,17 @@ function OnboardingSummary({
 	promotion,
 }: OnboardingProps) {
 	const order = getThankYouOrder();
-	const productSettings =
-		productKey && landingPageSettings.products[productKey];
 	const { windowWidthIsLessThan } = useWindowWidth();
 
-	const { currencyKey, countryGroupId } =
+	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
-
-	const amountPaidToday = simpleFormatAmount(
-		getCurrencyInfo(currencyKey),
-		payment.finalAmount,
+	const { title: productTitle, benefits } = getOnboardingProductCopy(
+		productKey,
+		landingPageSettings,
+		countryGroupId,
 	);
+
+	const amountPaidToday = simpleFormatAmount(currency, payment.finalAmount);
 
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -252,6 +283,12 @@ function OnboardingSummary({
 		order?.paymentMethod === 'StripeExpressCheckoutElement' ||
 		order?.paymentMethod === 'StripeHostedCheckout';
 
+	const todaysPayment = getTodaysPaymentWithTaxExclusion(
+		payment,
+		currencyKey,
+		order?.taxConfig,
+	);
+
 	const paymentMethodCopy = isDirectDebit
 		? 'Direct Debit'
 		: isPaypal
@@ -279,7 +316,7 @@ function OnboardingSummary({
 		>
 			<ContentBox>
 				<Stack space={2}>
-					<h1 css={headings}>Purchase summary</h1>
+					<h1 css={headings}>Purchase confirmation</h1>
 					<p css={descriptions}>
 						{`Thanks for your payment. We've sent a payment confirmation email to
                     `}
@@ -292,7 +329,7 @@ function OnboardingSummary({
 						<Stack space={2}>
 							<div css={purchaseSummaryDetailsContainer}>
 								<p css={boldDescriptions}>Product</p>
-								<p css={descriptions}>{productSettings?.title}</p>
+								<p css={descriptions}>{productTitle}</p>
 							</div>
 							<div css={purchaseSummaryDetailsContainer}>
 								<p css={boldDescriptions}>Price</p>
@@ -300,6 +337,12 @@ function OnboardingSummary({
 									{promoMessage || fullAmount}
 								</p>
 							</div>
+							{todaysPayment && (
+								<div css={purchaseSummaryDetailsContainer}>
+									<p css={boldDescriptions}>Today's payment</p>
+									<p css={descriptions}>{todaysPayment}</p>
+								</div>
+							)}
 							<div css={purchaseSummaryDetailsContainer}>
 								<p css={boldDescriptions}>Payment method</p>
 								<div css={paymentMethodContainer}>
@@ -330,10 +373,10 @@ function OnboardingSummary({
 					<h1 css={headings}>Your benefits</h1>
 					<div css={separator} />
 					<ul>
-						{productSettings?.benefits.map((benefit) => (
+						{benefits.map((benefit, index) => (
 							<li
 								css={benefitsItem}
-								key={`onboarding-summary-benefit-${benefit.copy}`}
+								key={`onboarding-summary-benefit-${index}`}
 							>
 								<div css={benefitsItemIcon}>
 									<SvgTickRound
@@ -342,7 +385,7 @@ function OnboardingSummary({
 										theme={{ fill: palette.brand[500] }}
 									/>
 								</div>
-								<span css={benefitsItemText}>{benefit.copy}</span>
+								<span css={benefitsItemText}>{benefit.text}</span>
 							</li>
 						))}
 					</ul>

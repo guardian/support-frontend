@@ -23,15 +23,19 @@ describe('getZuoraPaymentMethod', () => {
 		});
 	});
 
-	test('should map PayPal correctly', () => {
+	test('should map PayPal Complete Payments correctly', () => {
 		const paymentMethod = {
-			Type: 'PayPal',
-			PaypalBaid: 'baid_789',
+			Type: 'PayPalCompletePayments',
+			PaypalPaymentToken: 'token_789',
 			PaypalEmail: 'user@example.com',
+			PaymentGateway: 'PayPal Complete Payments',
 		} as PaymentMethod;
 		expect(getZuoraPaymentMethod(paymentMethod)).toEqual({
-			type: 'PayPalNativeEC',
-			BAID: 'baid_789',
+			type: 'PayPalCP',
+			tokens: {
+				gatewayType: 'PayPalCP',
+				tokenId: 'token_789',
+			},
 			email: 'user@example.com',
 		});
 	});

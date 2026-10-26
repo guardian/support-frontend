@@ -82,6 +82,17 @@ const userDetails: Record<string, TestFields> = {
 			},
 		],
 	},
+	CAQC: {
+		...userCoreFields,
+		addresses: [
+			{
+				postCode: 'QC G1R 4S9',
+				state: 'Quebec',
+				firstLine: '2 Rue des Jardins',
+				city: 'Quebec City',
+			},
+		],
+	},
 	AU: {
 		...userCoreFields,
 		addresses: [
@@ -130,16 +141,18 @@ const userDetails: Record<string, TestFields> = {
 
 export const getUserFields = (
 	country: string,
+	stateId?: string,
 	postCode?: string,
 	billingCountry?: string,
 ): TestFields => {
-	const countryUserDetails = userDetails[country];
+	const countryStateKey = stateId ? `${country}${stateId}` : country;
+	const countryUserDetails = userDetails[countryStateKey];
 	const validUserDetails = billingCountry
 		? countryUserDetails
 		: {
 				...countryUserDetails,
 				addresses: countryUserDetails.addresses?.slice(0, 1),
-			}; // Remove billing address if not specified
+		  }; // Remove billing address if not specified
 	const userDetailsCopy = structuredClone(validUserDetails); // Create a deep copy
 	if (
 		postCode &&

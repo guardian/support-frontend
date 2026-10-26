@@ -11,6 +11,8 @@ const SixdayPlus = 'SixdayPlus';
 const Everyday = 'Everyday';
 const EverydayPlus = 'EverydayPlus';
 const NewspaperArchive = 'NewspaperArchive';
+const TaxInclusive = 'TaxInclusive';
+const TaxExclusive = 'TaxExclusive';
 const PlusDigital = 'PlusDigital';
 
 export type ProductOptions =
@@ -25,6 +27,8 @@ export type ProductOptions =
 	| typeof Everyday
 	| typeof EverydayPlus
 	| typeof NewspaperArchive
+	| typeof TaxInclusive
+	| typeof TaxExclusive
 	| typeof PlusDigital;
 
 export type PaperProductOptions =
@@ -62,5 +66,7 @@ export {
 	Everyday,
 	EverydayPlus,
 	NewspaperArchive,
+	TaxInclusive,
+	TaxExclusive,
 	PlusDigital,
 };

@@ -69,11 +69,6 @@
     }
   }
 
-  window.guardian.payPalEnvironment = {
-    default: "@paymentMethodConfigs.regularDefaultPayPalConfig.payPalEnvironment",
-    test: "@paymentMethodConfigs.regularTestPayPalConfig.payPalEnvironment"
-  };
-
   window.guardian.payPalClientId = {
     default: "@paymentMethodConfigs.regularDefaultPayPalCompletePaymentsConfig.clientId",
     test: "@paymentMethodConfigs.regularTestPayPalCompletePaymentsConfig.clientId"
@@ -93,6 +88,6 @@
 
   window.guardian.checkoutPostcodeLookup = @settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.contains(On)
 
-  window.guardian.productCatalog = @Html(outputJson(productCatalog))
+  window.guardian.productCatalog = @Html(outputJson(productCatalog, dropNullValues = false))
 </script>
 @windowGuardianUser(user)

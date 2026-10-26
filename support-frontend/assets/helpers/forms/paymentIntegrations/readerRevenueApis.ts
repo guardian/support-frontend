@@ -1,9 +1,7 @@
 import type { ProductPurchase } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
-import type {
-	IsoCountry,
-	UsState,
-} from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { StateCode } from '@modules/internationalisation/state';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { ProductOptions } from '@modules/product/productOptions';
@@ -45,7 +43,8 @@ export type StripePaymentMethod =
 	// non-Apple-Pay payment method (wallet) that uses the payment request
 	// button”
 	| 'StripeApplePay'
-	| 'StripePaymentRequestButton';
+	| 'StripePaymentRequestButton'
+	| 'StripePaypal';
 type RegularContribution = {
 	productType: 'Contribution';
 	amount: number;
@@ -126,8 +125,8 @@ export type RegularPaymentFields =
 	| RegularDirectDebitPaymentFields
 	| RegularStripeHostedCheckoutPaymentFields;
 type RegularPaymentRequestAddress = {
-	country: IsoCountry;
-	state?: UsState | null;
+	country: CountryCode;
+	state?: StateCode | null;
 	lineOne?: Option<string>;
 	lineTwo?: Option<string>;
 	postCode?: Option<string>;
@@ -177,7 +176,7 @@ type Status = 'failure' | 'pending' | 'success';
 // standardised across payment methods & contribution types.
 // The only method/type combination which will not make use of this PayPal one-off,
 // because the end of that checkout happens on the backend after the user is redirected to our site.
-export type PaymentResult = {
+export type StripePaymentResult = {
 	paymentStatus: Status;
 	subscriptionCreationPending?: true;
 	error?: ErrorReason;
@@ -191,7 +190,7 @@ export type StatusResponse = {
 };
 
 // ----- Setup ----- //
-const PaymentSuccess: PaymentResult = {
+const PaymentSuccess: StripePaymentResult = {
 	paymentStatus: 'success',
 };
 

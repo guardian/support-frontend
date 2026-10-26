@@ -1,4 +1,4 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 
 const INTCMP_FACEBOOK = 'component-share-facebook';
 const INTCMP_TWITTER = 'component-share-twitter';
@@ -17,13 +17,13 @@ const TWITTER_TEXT_COPY =
 const TWITTER_TEXT_COPY_AU =
 	'I support Guardian Australia because I believe in rigorous, independent journalism that’s open for everyone to read. Join me by making a contribution and together we can be a voice for change. #supportGuardianAustralia';
 
-const emailSubjectCopy = (countryId: IsoCountry) =>
+const emailSubjectCopy = (countryId: CountryCode) =>
 	countryId === 'AU'
 		? 'Join me in supporting Guardian Australia'
 		: 'Join me in supporting open, independent journalism';
 
 const emailBodyCopy = (
-	countryId: IsoCountry,
+	countryId: CountryCode,
 	campaignCode: string | null | undefined,
 ) =>
 	countryId === 'AU'
@@ -45,7 +45,7 @@ export const getFacebookShareLink = (
 	return `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
 };
 export const getTwitterShareLink = (
-	countryId: IsoCountry,
+	countryId: CountryCode,
 	campaignCode: string | null | undefined,
 ): string => {
 	const intcmp = campaignCode
@@ -63,7 +63,7 @@ export const getLinkedInShareLink = (): string => {
 	return `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}`;
 };
 export const getEmailShareLink = (
-	countryId: IsoCountry,
+	countryId: CountryCode,
 	campaignCode: string | null | undefined,
 ): string => {
 	const encodedSubject = encodeURI(emailSubjectCopy(countryId));

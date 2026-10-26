@@ -30,10 +30,16 @@ interface RegionTargeting {
 	targetedCountryGroups: CountryGroupId[];
 }
 
+interface Scheduler {
+	start?: string; // UTC datetime "YYYY-MM-DDTHH:MM", inclusive
+	end?: string; // UTC datetime "YYYY-MM-DDTHH:MM", inclusive
+}
+
 export interface CheckoutNudgeTest {
 	name: string;
 	status: 'Live' | 'Draft';
 	regionTargeting?: RegionTargeting;
 	nudgeFromProduct: Product;
 	variants: CheckoutNudgeVariant[];
+	scheduler?: Scheduler;
 }

@@ -11,7 +11,6 @@ export default function buildCheckoutUrl(
 	ratePlanKey: ActiveRatePlanKey,
 	promoCode?: string,
 ): string {
-	// For this product/rate plan we direct the user to Student Beans for verification
 	if (productKey == 'SupporterPlus' && ratePlanKey === 'OneYearStudent') {
 		// If the supportRegionId isn't one of these we'll fall through to linking to the
 		// normal checkout page
@@ -22,6 +21,9 @@ export default function buildCheckoutUrl(
 				return routes.supporterPlusStudentBeansUs;
 			case SupportRegionId.CA:
 				return routes.supporterPlusStudentBeansCa;
+			case SupportRegionId.EU: {
+				return routes.supporterPlusStudentBeansEu;
+			}
 		}
 	}
 

@@ -6,15 +6,16 @@ import {
 	textSans15,
 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { getCurrencyInfo } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
+import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import { formatAmount } from 'helpers/forms/checkouts';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
 	digitalPlusTermsLink,
 	manageAccountLink,
 	privacyLink,
 } from 'helpers/legal';
+import { productLegal } from 'helpers/legalCopy';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -24,6 +25,7 @@ import {
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import {
 	getDateWithOrdinal,
 	getLongMonth,
@@ -71,9 +73,10 @@ export interface SummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	countryGroupId: CountryGroupId;
-	currency: IsoCurrency;
+	currency: CurrencyCode;
 	amount: number;
 	ratePlanDescription?: string;
+	promotion?: Promotion;
 }
 export function SummaryTsAndCs({
 	productKey,
@@ -82,6 +85,7 @@ export function SummaryTsAndCs({
 	currency,
 	amount,
 	ratePlanDescription,
+	promotion,
 }: SummaryTsAndCsProps): JSX.Element | null {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -115,18 +119,21 @@ export function SummaryTsAndCs({
 		);
 	}
 
-	const amountWithCurrency = formatAmount(
-		getCurrencyInfo(currency),
+	const amountWithCurrency = simpleFormatAmount(
+		getCurrencyByCode(currency),
 		amount,
-		false,
 	);
 
 	const autoRenewUtilCancelTsAndCs = (countryGroupId: CountryGroupId) => {
-		const usChargePeriodCopy = `automatically charged the amount shown each ${periodNoun} `;
+		const usLegalCopy =
+			['SupporterPlus', 'DigitalSubscription'].includes(productKey) &&
+			countryGroupId === 'UnitedStates'
+				? productLegal(countryGroupId, billingPeriod, '/', amount, promotion)
+				: '';
 		const usChargePeriod = productKey.startsWith('GuardianWeekly') ? (
-			usChargePeriodCopy
+			`automatically charged the amount shown each ${periodNoun} `
 		) : (
-			<strong>{usChargePeriodCopy}</strong>
+			<strong>{`automatically charged ${usLegalCopy} `}</strong>
 		);
 		const containerShapeUS = productKey.startsWith('GuardianWeekly')
 			? containerRoundUS
@@ -150,6 +157,10 @@ export function SummaryTsAndCs({
 					{textLink('Terms and Conditions', digitalPlusTermsLink)} and{' '}
 					{textLink('Privacy Policy', privacyLink)}.
 				</p>
+				<p css={marginTop}>
+					We’ll send you emails about our journalism and ways to support and
+					enjoy our work. You can unsubscribe at any time
+				</p>
 			</div>
 		) : (
 			<div css={containerSummaryTsCs}>
@@ -172,6 +183,12 @@ export function SummaryTsAndCs({
 					{renewalFrequency}, from now until you cancel your payment. Payments
 					may take up to 6 days to be recorded in your bank account. You can
 					change how much you give or cancel your payment at any time.
+					{countryGroupId === 'UnitedStates' && (
+						<p css={marginTop}>
+							We’ll send you emails about our journalism and ways to support and
+							enjoy our work. You can unsubscribe at any time
+						</p>
+					)}
 				</div>
 			),
 			SupporterPlus: (

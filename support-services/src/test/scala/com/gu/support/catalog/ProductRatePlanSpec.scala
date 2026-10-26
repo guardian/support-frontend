@@ -21,13 +21,13 @@ class ProductRatePlanSpec extends AnyFlatSpec with Matchers {
       DigitalPack,
       List(Monthly, Annual),
       List(NoFulfilmentOptions),
-      List(NoProductOptions),
+      List(TaxInclusive, TaxExclusive),
     ),
     TestData(
       SupporterPlus,
       List(Monthly, Annual),
       List(NoFulfilmentOptions),
-      List(NoProductOptions),
+      List(TaxInclusive, TaxExclusive),
     ),
     TestData(
       Paper,

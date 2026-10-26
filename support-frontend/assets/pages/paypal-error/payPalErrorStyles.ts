@@ -10,6 +10,7 @@ import { gu_v_spacing } from 'stylesheets/emotion/layout';
 
 export const mainContentStyles = css`
 	background-color: ${palette.neutral[93]};
+	display: block !important; // old layout pages need to stay the same
 `;
 
 export const pageSectionBodyOverrides = css`

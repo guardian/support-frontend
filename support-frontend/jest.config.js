@@ -19,6 +19,8 @@ module.exports = {
 		'\\.(svg|png|jpg)$': '<rootDir>/assets/__mocks__/imageMock.ts',
 		'@modules/product-catalog/(.*)$':
 			'@guardian/support-service-lambdas/modules/product-catalog/src/$1',
+		'@modules/promotions/(.*)$':
+			'@guardian/support-service-lambdas/modules/promotions/src/$1',
 		'@modules/internationalisation/(.*)$':
 			'@guardian/support-service-lambdas/modules/internationalisation/src/$1',
 		'@modules/arrayFunctions':
@@ -27,6 +29,8 @@ module.exports = {
 			'@guardian/support-service-lambdas/modules/nullAndUndefined',
 		'@modules/objectFunctions':
 			'@guardian/support-service-lambdas/modules/objectFunctions',
+		'@modules/schemaUtils':
+			'@guardian/support-service-lambdas/modules/schemaUtils',
 		'@modules/(.*)$': '<rootDir>/../modules/$1',
 	},
 	setupFilesAfterEnv: ['./jestSetup'],

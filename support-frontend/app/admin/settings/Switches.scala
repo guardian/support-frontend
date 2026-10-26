@@ -29,6 +29,9 @@ case class FeatureSwitches(
     enableCheckoutNudge: Option[SwitchState],
     enableMParticle: Option[SwitchState],
     enableTooledStudentLandingPage: Option[SwitchState],
+    enableStripePaymentElement: Option[SwitchState],
+    enableDeepDiscount: Option[SwitchState],
+    enableStudentBeansEurope: Option[SwitchState],
 )
 
 object FeatureSwitches {
@@ -47,7 +50,6 @@ object CampaignSwitches {
 case class SubscriptionsSwitches(
     useDotcomContactPage: Option[SwitchState],
     checkoutPostcodeLookup: Option[SwitchState],
-    useIdealPostcodes: Option[SwitchState],
 )
 
 object SubscriptionsSwitches {

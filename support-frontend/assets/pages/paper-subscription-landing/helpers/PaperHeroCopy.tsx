@@ -1,5 +1,5 @@
+import type { WindowProductCatalog } from 'helpers/globalsAndSwitches/window';
 import { getMaxSavingVsRetail } from 'helpers/productPrice/paperSavingsVsRetail';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
 
 export type PaperHeroItems = {
 	titleCopy: string | JSX.Element;
@@ -12,17 +12,17 @@ const bodyPaperPlus = `From political insight to the perfect pasta, there’s so
 		with a Guardian print subscription. Plus, unlock the full digital experience when you subscribe, so you can stay informed on your mobile or tablet, wherever you
 		are, whenever you like.`;
 
-function titlePaperPlus(productPrices: ProductPrices): string {
+function titlePaperPlus(productCatalog: WindowProductCatalog): string {
 	return `Save up to ${Math.floor(
-		getMaxSavingVsRetail(productPrices) ?? 0,
+		getMaxSavingVsRetail(productCatalog),
 	)}% with a Guardian print subscription`;
 }
 
 export function getPaperPlusItems(
-	productPrices: ProductPrices,
+	productCatalog: WindowProductCatalog,
 ): PaperHeroItems {
 	return {
-		titleCopy: titlePaperPlus(productPrices),
+		titleCopy: titlePaperPlus(productCatalog),
 		bodyCopy: bodyPaperPlus,
 		roundelCopy: roundelPaperPlus,
 	};

@@ -21,6 +21,7 @@ import scala.util.{Failure, Success, Try}
 
 trait DefaultPromotionService {
   def getPromoCodes(product: Product): List[String]
+  def allPromoCodes: List[String]
 }
 
 object DefaultPromotionService {
@@ -83,6 +84,11 @@ class DefaultPromotionServiceS3(
       case TierThree => defaultPromoCodes.get().tierThree
       case _ => Nil
     }
+
+  def allPromoCodes: List[String] = {
+    val current = defaultPromoCodes.get()
+    (current.guardianWeekly ++ current.paper ++ current.digital ++ current.supporterPlus ++ current.tierThree).distinct
+  }
 
   startPollingS3()
 }

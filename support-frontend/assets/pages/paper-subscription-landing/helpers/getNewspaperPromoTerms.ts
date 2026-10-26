@@ -1,4 +1,4 @@
-import type { Promotion } from 'helpers/productPrice/promotions';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { getDateString } from 'helpers/utilities/dateFormatting';
 
 const numberString = [
@@ -17,12 +17,14 @@ const numberString = [
 	'twelve',
 ];
 
-export default function getNewspaperPromoTerms(promotion: Promotion): string {
+export default function getNewspaperPromoTerms(
+	promotion: PromoWithCatalogInformation,
+): string {
 	const { durationMonths } = promotion.discount ?? {};
-	if (!promotion.expires || !durationMonths) {
+	if (!promotion.endTimestamp || !durationMonths) {
 		return '';
 	}
 	return `* Retail saving shown is the retail saving during the first ${
 		numberString[durationMonths]
-	} months. Offer ends ${getDateString(new Date(promotion.expires))}.`;
+	} months. Offer ends ${getDateString(new Date(promotion.endTimestamp))}.`;
 }

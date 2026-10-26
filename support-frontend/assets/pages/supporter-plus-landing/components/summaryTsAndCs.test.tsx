@@ -1,10 +1,11 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { render } from '@testing-library/react';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import { SummaryTsAndCs } from './summaryTsAndCs';
 
 // Mocking price retrieval from productCatalog (not available in window at runtime)
@@ -19,6 +20,15 @@ const ratePlanDescription: Partial<
 	WeekendPlus: 'Weekend Plus',
 	SixdayPlus: 'Six Day Plus',
 	Sunday: 'The Observer',
+};
+
+const promotionUSDSupporterPlus: Promotion = {
+	name: 'Supporter Plus Promo',
+	description: 'USD offer for Supporter Plus',
+	promoCode: 'S_PLUS_MONTHLY_BAU_USDCAN',
+	numberOfDiscountedPeriods: 6,
+	discountedPrice: 15,
+	isIntroductoryPricing: false,
 };
 
 describe('Summary Ts&Cs Snapshot comparison', () => {
@@ -54,8 +64,19 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 					ratePlanDescription={
 						ratePlanDescription[activeRatePlanKey as ActiveRatePlanKey]
 					}
-					currency={currency as IsoCurrency}
-					amount={0}
+					currency={currency as CurrencyCode}
+					amount={
+						countryGroupId === 'UnitedStates'
+							? productKey === 'SupporterPlus'
+								? 18
+								: 25
+							: 0
+					}
+					promotion={
+						countryGroupId === 'UnitedStates' && productKey === 'SupporterPlus'
+							? promotionUSDSupporterPlus
+							: undefined
+					}
 				/>,
 			);
 

@@ -17,7 +17,7 @@ import model.acquisition.{AcquisitionDataRowBuilder, StripeAcquisition}
 import model.db.ContributionData
 import model.email.ContributorRow
 import model.stripe.StripeApiError.{recaptchaErrorText, stripeDisabledErrorText}
-import model.stripe.StripePaymentMethod.{StripeApplePay, StripeCheckout, StripePaymentRequestButton}
+import model.stripe.StripePaymentMethod.{StripeApplePay, StripeCheckout, StripePaymentRequestButton, StripePaypal}
 import model.stripe._
 import org.apache.pekko.actor.ActorSystem
 import play.api.libs.ws.WSClient
@@ -63,6 +63,7 @@ class StripeBackend(
       case Some(StripeCheckout) => stripeCheckoutEnabled
       case Some(StripeApplePay) => stripeExpressCheckoutEnabled
       case Some(StripePaymentRequestButton) => stripeExpressCheckoutEnabled
+      case Some(StripePaypal) => stripeCheckoutEnabled
       case None => stripeCheckoutEnabled
     }
 
@@ -113,10 +114,13 @@ class StripeBackend(
       stripeService
         .createPaymentIntent(request)
         .leftMap(err => {
+          val errorCodesToIgnore = Seq("email_invalid")
+          if (!errorCodesToIgnore.contains(err.declineCode)) {
+            cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
+          }
           logger.info(
             s"Unable to create Stripe Payment Intent ($request). User-Agent was: ${clientBrowserInfo.userAgent}",
           )
-          cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
           err
         })
         .flatMap { paymentIntent =>
@@ -125,6 +129,11 @@ class StripeBackend(
             case "requires_action" =>
               // 3DS required, return the clientSecret to the client
               EitherT.fromEither(Right(StripePaymentIntentsApiResponse.RequiresAction(paymentIntent.getClientSecret)))
+            case "requires_confirmation" =>
+              // Used for paypal
+              EitherT.fromEither(
+                Right(StripePaymentIntentsApiResponse.RequiresConfirmation(paymentIntent.getClientSecret)),
+              )
 
             case "succeeded" =>
               // Payment complete without the need for 3DS - do post-payment tasks and return success to client
@@ -188,6 +197,15 @@ class StripeBackend(
             EitherT.fromEither(Left(error))
         }
       }
+  }
+
+  def completeStripePaypalPayment(
+      request: StripePaymentIntentRequest.CompleteStripePaypalPayment,
+      clientBrowserInfo: ClientBrowserInfo,
+  ): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse.Success] = {
+    stripeService
+      .getPaymentIntent(request.paymentIntentId, request.publicKey)
+      .flatMap(paymentIntent => EitherT.liftF(paymentIntentSucceeded(request, paymentIntent, clientBrowserInfo)))
   }
 
   private def paymentIntentSucceeded(
@@ -260,6 +278,7 @@ class StripeBackend(
       identityId,
       charge,
       clientBrowserInfo.countrySubdivisionCode,
+      data.acquisitionData.countryId,
       data.acquisitionData.postalCode,
       PaymentProvider.fromStripePaymentMethod(data.paymentData.stripePaymentMethod),
     )
@@ -299,11 +318,15 @@ class StripeBackend(
       data: StripeRequest,
       identityId: String,
   ): EitherT[Future, BackendError, SendMessageResponse] = {
+    val paymentProvider = data.paymentData.stripePaymentMethod match {
+      case Some(StripePaymentMethod.StripePaypal) => PaymentProvider.Paypal
+      case _ => PaymentProvider.Stripe
+    }
     val contributorRow = ContributorRow(
       email,
       data.paymentData.currency.toString,
       identityId,
-      PaymentProvider.Stripe,
+      paymentProvider,
       None,
       data.paymentData.amount,
     )

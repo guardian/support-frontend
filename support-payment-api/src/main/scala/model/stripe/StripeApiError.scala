@@ -57,7 +57,7 @@ object StripeApiError {
     // If decline_code is not present then just use the code (happens for e.g. 'incorrect_cvc','email_invalid').
     // Despite this inconsistency, these are all valid decline codes: // https://stripe.com/docs/declines/codes
     val declineCode: Option[String] = Option(err.getStripeError.getDeclineCode()).orElse(Option(err.getCode))
-    
+
     StripeApiError(exceptionType, Option(err.getStatusCode), declineCode, err.getMessage, publicKey)
   }
 }

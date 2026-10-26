@@ -6,8 +6,8 @@ import {
 } from '../acquisitions';
 
 // ----- Tests ----- //
-jest.mock('@guardian/ophan-tracker-js/support', () => ({
-	viewId: '123456',
+jest.mock('@guardian/ophan-tracker-js', () => ({
+	getViewId: () => '123456',
 }));
 
 describe('acquisitions', () => {
@@ -48,6 +48,7 @@ describe('acquisitions', () => {
 				referrerAcquisitionData,
 				nativeAbParticipations,
 				'N1 9GU',
+				'GB',
 			);
 
 			expect(paymentApiAcquisitionData).toMatchSnapshot();
@@ -90,6 +91,7 @@ describe('acquisitions', () => {
 				referrerAcquisitionData,
 				{},
 				postcode,
+				'GB',
 			);
 
 			expect(paymentApiAcquisitionData.postalCode).toBe(postcode);

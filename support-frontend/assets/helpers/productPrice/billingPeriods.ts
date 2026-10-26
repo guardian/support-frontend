@@ -48,11 +48,25 @@ export function getBillingPeriodTitle(
 	}
 }
 
+export function getNumberOfMonthsInPeriod(
+	billingPeriod: RecurringBillingPeriod,
+) {
+	switch (billingPeriod) {
+		case BillingPeriod.Monthly:
+			return 1;
+		case BillingPeriod.Quarterly:
+			return 3;
+		case BillingPeriod.Annual:
+			return 12;
+	}
+}
+
 export function ratePlanToBillingPeriod(
 	ratePlanKey: ActiveRatePlanKey,
 ): BillingPeriod {
 	switch (ratePlanKey) {
 		case 'Annual':
+		case 'AnnualTaxExclusive':
 		case 'AnnualPlus':
 		case 'OneYearGift':
 		case 'OneYearStudent':
@@ -63,6 +77,7 @@ export function ratePlanToBillingPeriod(
 		case 'QuarterlyPlus':
 			return BillingPeriod.Quarterly;
 		case 'Monthly':
+		case 'MonthlyTaxExclusive':
 		case 'MonthlyPlus':
 		case 'Everyday':
 		case 'Sixday':

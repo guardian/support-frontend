@@ -1,4 +1,4 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import { FormSection, Legend } from 'pages/[countryGroupId]/components/form';
@@ -11,7 +11,7 @@ import { BillingAddressFields } from './BillingAddressFields';
 import { DeliveryRecipientAddress } from './DeliveryRecipientAddress';
 
 type PersonalAddressFieldsProps = {
-	countryId: IsoCountry;
+	countryId: CountryCode;
 	countries?: Record<string, string>;
 	checkoutSession?: CheckoutSession;
 	productKey: ActiveProductKey;
@@ -27,7 +27,6 @@ type PersonalAddressFieldsProps = {
 	setDeliveryAddressErrors: React.Dispatch<
 		React.SetStateAction<AddressFormFieldError[]>
 	>;
-	useExpressPostcodeLookup: boolean;
 	billingStatePostcodeCountry?: BillingStatePostcodeCountry;
 	isWeeklyGift?: boolean;
 };
@@ -47,7 +46,6 @@ export function PersonalAddressFields({
 	setDeliveryAgentError,
 	deliveryAddressErrors,
 	setDeliveryAddressErrors,
-	useExpressPostcodeLookup,
 	billingStatePostcodeCountry,
 	isWeeklyGift = false,
 }: PersonalAddressFieldsProps) {
@@ -70,7 +68,6 @@ export function PersonalAddressFields({
 				showInstructions={productKey === 'HomeDelivery'}
 				addressErrors={deliveryAddressErrors}
 				setAddressErrors={setDeliveryAddressErrors}
-				useExpressPostcodeLookup={useExpressPostcodeLookup}
 			/>
 			{billingStatePostcodeCountry && (
 				<BillingAddressFields
@@ -78,7 +75,6 @@ export function PersonalAddressFields({
 					checkoutSession={checkoutSession}
 					billingStatePostcodeCountry={billingStatePostcodeCountry}
 					isWeeklyGift={isWeeklyGift}
-					useExpressPostcodeLookup={useExpressPostcodeLookup}
 				/>
 			)}
 			{deliveryPostcodeIsOutsideM25 && (

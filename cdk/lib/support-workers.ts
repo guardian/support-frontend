@@ -46,6 +46,7 @@ const PaymentProviders = {
 	Stripe: 'Stripe',
 	DirectDebit: 'DirectDebit',
 	PayPal: 'PayPal',
+	PayPalCompletePayments: 'PayPalCompletePayments',
 	StripeApplePay: 'StripeApplePay',
 	StripePaymentRequestButton: 'StripePaymentRequestButton',
 	StripeHostedCheckout: 'StripeHostedCheckout',
@@ -125,11 +126,15 @@ export class SupportWorkers extends GuStack {
 				assumedBy: new WebIdentityPrincipal(
 					`arn:aws:iam::${this.account}:oidc-provider/token.actions.githubusercontent.com`,
 					{
-						StringLike: {
-							// Allows any branch in the support-frontend repo to assume this role
-							'token.actions.githubusercontent.com:sub':
-								'repo:guardian/support-frontend:*',
+						StringEquals: {
 							'token.actions.githubusercontent.com:aud': 'sts.amazonaws.com',
+						},
+						'ForAnyValue:StringLike': {
+							// Allows any branch in the support-frontend repo to assume this role
+							'token.actions.githubusercontent.com:sub': [
+								'repo:guardian/support-frontend:*',
+								'repo:guardian@164318/support-frontend@87204582:*',
+							],
 						},
 					},
 				),
@@ -384,7 +389,7 @@ export class SupportWorkers extends GuStack {
 			periodDuration: Duration;
 		}> = [
 			{
-				paymentProvider: PaymentProviders.PayPal,
+				paymentProvider: PaymentProviders.PayPalCompletePayments,
 				evaluationPeriods: 4,
 				periodDuration: Duration.seconds(3600),
 			},
@@ -440,7 +445,7 @@ export class SupportWorkers extends GuStack {
 			periodDuration: Duration;
 		}> = [
 			{
-				paymentProvider: PaymentProviders.PayPal,
+				paymentProvider: PaymentProviders.PayPalCompletePayments,
 				evaluationPeriods: 6,
 				periodDuration: Duration.seconds(3600),
 			},
@@ -575,7 +580,7 @@ export class SupportWorkers extends GuStack {
 			snsTopicName: `alarms-handler-topic-${this.stage}`,
 			alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful paper checkouts in 24h.`,
 			metric: new MathExpression({
-				expression: 'SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])',
+				expression: 'SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0),FILL(m4,0)])',
 				label: 'AllPaperConversions',
 				period: Duration.minutes(5),
 				usingMetrics: {
@@ -589,6 +594,10 @@ export class SupportWorkers extends GuStack {
 					),
 					m3: this.buildPaymentSuccessMetric(
 						PaymentProviders.PayPal,
+						ProductTypes.Paper,
+					),
+					m4: this.buildPaymentSuccessMetric(
+						PaymentProviders.PayPalCompletePayments,
 						ProductTypes.Paper,
 					),
 				},
@@ -641,7 +650,7 @@ export class SupportWorkers extends GuStack {
 			} support-workers No successful guardian weekly checkouts in ${weeklyAlarmPeriod.toHumanString()}.`,
 			metric: new MathExpression({
 				label: 'AllWeeklyConversions',
-				expression: 'SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])',
+				expression: 'SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0),FILL(m4,0)])',
 				period: weeklyMetricDuration,
 				usingMetrics: {
 					m1: this.buildPaymentSuccessMetric(
@@ -654,6 +663,10 @@ export class SupportWorkers extends GuStack {
 					),
 					m3: this.buildPaymentSuccessMetric(
 						PaymentProviders.PayPal,
+						ProductTypes.GuardianWeekly,
+					),
+					m4: this.buildPaymentSuccessMetric(
+						PaymentProviders.PayPalCompletePayments,
 						ProductTypes.GuardianWeekly,
 					),
 				},

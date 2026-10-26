@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/preact-vite';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 import { SubscriptionsLandingPage } from 'pages/subscriptions-landing/subscriptionsLanding';
 import type { SubscriptionsLandingProps } from 'pages/subscriptions-landing/subscriptionsLandingProps';
 import { hideTestBanner } from '../../.storybook/decorators/withoutTestBanner';
@@ -34,20 +34,7 @@ type Story = StoryObj<SubscriptionsLandingProps>;
 const defaultArgs: SubscriptionsLandingProps = {
 	countryGroupId: 'GBPCountries',
 	participations: {},
-	pricingCopy: {
-		GuardianWeekly: {
-			price: 16.5,
-			discountCopy: '',
-		},
-		DigitalPack: {
-			price: 18,
-			discountCopy: '',
-		},
-		Paper: {
-			price: 12.19,
-			discountCopy: '',
-		},
-	} as SubscriptionsLandingProps['pricingCopy'],
+	promotions: [],
 	referrerAcquisitions: {
 		componentType: 'ACQUISITIONS_OTHER',
 		componentId: 'storybook-subscriptions-landing',

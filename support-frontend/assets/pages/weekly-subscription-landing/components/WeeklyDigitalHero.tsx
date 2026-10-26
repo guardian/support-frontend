@@ -5,10 +5,8 @@ import HeroContent from 'components/hero/HeroContent';
 import { WeeklyLandingPagePackShot } from 'components/packshots/weeklyPackshots';
 import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
-import {
-	type PromotionCopy,
-	promotionHTML,
-} from 'helpers/productPrice/promotions';
+import type { LandingPageCopy } from 'helpers/productPrice/landingPageCopy';
+import { promotionHTML } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import {
 	pageTitleOverrides,
@@ -17,15 +15,13 @@ import {
 } from './weeklyDigitalHeroStyles';
 
 export default function WeeklyDigitalHero({
-	promotion,
+	landingPageCopy,
 }: {
-	promotion: PromotionCopy;
+	landingPageCopy?: LandingPageCopy;
 }) {
-	const {
-		roundel: promotionRoundel,
-		title: promotionTitle,
-		description: promotionDescription,
-	} = promotion;
+	const promotionRoundel = landingPageCopy?.roundelHtml;
+	const promotionTitle = landingPageCopy?.title;
+	const promotionDescription = landingPageCopy?.description;
 
 	const defaultRoundel = 'Includes unlimited digital access';
 	const defaultTitle = 'A week in the life of the world';

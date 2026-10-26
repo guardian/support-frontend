@@ -90,6 +90,7 @@ case class CheckoutNudgeTest(
     regionTargeting: Option[RegionTargeting] = None,
     nudgeFromProduct: Product,
     variants: List[CheckoutNudgeVariant],
+    scheduler: Option[Scheduler] = None,
 )
 
 object CheckoutNudgeTest {

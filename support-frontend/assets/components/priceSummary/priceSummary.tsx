@@ -1,0 +1,57 @@
+import { css } from '@emotion/react';
+import { visuallyHidden } from '@guardian/source/foundations';
+
+const originalPriceStrikeThrough = css`
+	font-weight: 400;
+	text-decoration: line-through;
+`;
+
+const visuallyHiddenCss = css`
+	${visuallyHidden};
+`;
+
+function displayPeriod(
+	price: string,
+	divider: string,
+	period: string,
+	showPeriod: boolean,
+): string {
+	return showPeriod ? `${price}${divider}${period}` : price;
+}
+
+type PriceSummaryProps = {
+	fullPrice: string;
+	period: string;
+	discountPrice?: string;
+	isWeeklyGift?: boolean;
+	showPeriod: boolean;
+	isIntroductoryPricing?: boolean;
+};
+
+export function PriceSummary({
+	fullPrice,
+	period,
+	discountPrice,
+	isWeeklyGift,
+	showPeriod,
+	isIntroductoryPricing,
+}: PriceSummaryProps): JSX.Element {
+	const divider = isWeeklyGift ? ' for ' : '/';
+
+	if (discountPrice) {
+		return (
+			<p>
+				{!isIntroductoryPricing && (
+					<span css={originalPriceStrikeThrough}>
+						<span css={visuallyHiddenCss}>Was </span>
+						{fullPrice}
+						<span css={visuallyHiddenCss}>, now</span>
+					</span>
+				)}{' '}
+				{displayPeriod(discountPrice, divider, period, showPeriod)}
+			</p>
+		);
+	}
+
+	return <p>{displayPeriod(fullPrice, divider, period, showPeriod)}</p>;
+}

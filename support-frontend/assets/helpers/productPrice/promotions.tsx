@@ -1,5 +1,5 @@
-import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { Currency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
+import type { CountryCode } from '@modules/internationalisation/country';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { NoFulfilmentOptions } from '@modules/product/fulfilmentOptions';
@@ -12,34 +12,22 @@ import type {
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
 import { getProductPrice, isNumeric } from 'helpers/productPrice/productPrices';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import type { Option } from 'helpers/types/option';
 import { getQueryParameter } from 'helpers/urls/url';
-import { getSanitisedHtml } from '../utilities/utilities';
 
 type DiscountBenefit = {
 	amount: number;
 	durationMonths?: number;
 };
-export type PromotionCopy = {
+type PromotionCopy = {
 	title?: string;
 	description?: string;
 	roundel?: string;
-};
-export type PromotionTerms = {
-	description: string;
-	starts: Date;
-	expires: Option<Date>;
-	product: SubscriptionProduct;
-	// actually only GuardianWeekly, Paper or Digital Pack?
-	productRatePlans: string[];
-	promoCode: string;
-	isGift: boolean;
 };
 export type Promotion = {
 	name: string;
 	description: string;
 	promoCode: string;
+	isIntroductoryPricing: boolean;
 	discountedPrice?: number;
 	numberOfDiscountedPeriods?: number;
 	discount?: DiscountBenefit;
@@ -82,7 +70,7 @@ function getAppliedPromo(promotions?: Promotion[]): Promotion | undefined {
 
 function getPromotion(
 	productPrices: ProductPrices,
-	country: IsoCountry,
+	country: CountryCode,
 	billingPeriod: BillingPeriod,
 	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
 	productOption: ProductOptions = NoProductOptions,
@@ -105,20 +93,6 @@ function getPromotion(
 	} catch (error) {
 		return undefined;
 	}
-}
-
-function getSanitisedPromoCopy(
-	promotionCopy?: PromotionCopy | null,
-): PromotionCopy {
-	if (!promotionCopy) {
-		return {};
-	}
-
-	return {
-		title: promotionCopy.title ?? '',
-		description: getSanitisedHtml(promotionCopy.description ?? ''),
-		roundel: getSanitisedHtml(promotionCopy.roundel ?? ''),
-	};
 }
 
 type PromotionHTMLModifiers = {
@@ -147,7 +121,7 @@ function promotionHTML(
 
 function finalPrice(
 	productPrices: ProductPrices,
-	country: IsoCountry,
+	country: CountryCode,
 	billingPeriod: BillingPeriod,
 	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
 	productOption: ProductOptions = NoProductOptions,
@@ -171,7 +145,7 @@ function finalPrice(
 }
 
 const discountSummaryCopy = (
-	currency: CurrencyInfo,
+	currency: Currency,
 	promoCount: number,
 	price: number,
 	promotion: Promotion,
@@ -203,11 +177,9 @@ const discountSummaryCopy = (
 };
 
 export {
-	getPromotion,
 	getAppliedPromo,
 	applyDiscount,
 	hasDiscount,
-	getSanitisedPromoCopy,
 	promotionHTML,
 	finalPrice,
 	discountSummaryCopy,

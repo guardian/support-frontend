@@ -102,6 +102,7 @@ WithPromotion.args = {
 			description: 'Save 25% for your first 3 months',
 			roundel: '25% off',
 		},
+		isIntroductoryPricing: false,
 	},
 	benefits: {
 		label: 'Your all-access benefits:',
@@ -136,5 +137,6 @@ WithPromotionAnnual.args = {
 			description: 'Save 30% on your annual subscription',
 			roundel: '30% off',
 		},
+		isIntroductoryPricing: false,
 	},
 };

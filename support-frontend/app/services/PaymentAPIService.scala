@@ -44,8 +44,20 @@ case class ExecutePaymentBody(
     similarProductsConsent: Option[Boolean],
 )
 
+case class CompleteStripePaypalPaymentBody(
+    paymentIntentId: String,
+    paymentData: JsObject,
+    acquisitionData: JsValue,
+    publicKey: String,
+    similarProductsConsent: Option[Boolean],
+)
+
 object ExecutePaymentBody {
   implicit val jf: OFormat[ExecutePaymentBody] = Json.format[ExecutePaymentBody]
+}
+
+object CompleteStripePaypalPaymentBody {
+  implicit val jf: OFormat[CompleteStripePaypalPaymentBody] = Json.format[CompleteStripePaypalPaymentBody]
 }
 
 class PaymentAPIService(wsClient: WSClient, val paymentAPIUrl: String)(implicit ec: ExecutionContext)
@@ -53,21 +65,24 @@ class PaymentAPIService(wsClient: WSClient, val paymentAPIUrl: String)(implicit 
 
   private val paypalCreatePaymentPath = "/contribute/one-off/paypal/create-payment"
   private val paypalExecutePaymentPath = "/contribute/one-off/paypal/execute-payment"
+  private val stripePaypalCompletePaymentPath = "/contribute/one-off/stripe/paypal/complete-payment"
 
   val payPalCreatePaymentEndpoint: String = s"$paymentAPIUrl$paypalCreatePaymentPath"
   val payPalExecutePaymentEndpoint: String = s"$paymentAPIUrl$paypalExecutePaymentPath"
+  val stripePaypalCompletePaymentEndpoint: String = s"$paymentAPIUrl$stripePaypalCompletePaymentPath"
 
-  private def postPaypalData[A](
-      data: ExecutePaymentBody,
+  private def postPaypalData[BODY: Writes, ERROR](
+      url: String,
+      data: BODY,
       isTestUser: Boolean,
       userAgent: Option[String],
-  ): EitherT[Future, PaymentAPIResponseError[A], WSResponse] = {
+  ): EitherT[Future, PaymentAPIResponseError[ERROR], WSResponse] = {
 
     val headers = Seq("Accept" -> "application/json") ++ userAgent.map("User-Agent" -> _)
     val queryStringParameters = if (isTestUser) Seq("mode" -> "test") else Seq()
 
     wsClient
-      .url(payPalExecutePaymentEndpoint)
+      .url(url)
       .withQueryStringParameters(queryStringParameters: _*)
       .withHttpHeaders(headers: _*)
       .withBody(Json.toJson(data))
@@ -102,6 +117,24 @@ class PaymentAPIService(wsClient: WSClient, val paymentAPIUrl: String)(implicit 
       similarProductsConsent: Option[Boolean],
   )(implicit ec: ExecutionContext): EitherT[Future, PaymentAPIResponseError[PayPalError], PayPalSuccess] = {
     val data = ExecutePaymentBody(Some(email), email, acquisitionData, paymentJSON, similarProductsConsent)
-    postPaypalData(data, isTestUser, userAgent).subflatMap(decodePaymentAPIResponse[PayPalError, PayPalSuccess])
+    postPaypalData(payPalExecutePaymentEndpoint, data, isTestUser, userAgent).subflatMap(
+      decodePaymentAPIResponse[PayPalError, PayPalSuccess],
+    )
+  }
+
+  def completeStripePaypalPayment(
+      paymentIntentId: String,
+      paymentData: JsObject,
+      acquisitionData: JsValue,
+      publicKey: String,
+      isTestUser: Boolean,
+      userAgent: Option[String],
+      similarProductsConsent: Option[Boolean],
+  )(implicit ec: ExecutionContext): EitherT[Future, PaymentAPIResponseError[PayPalError], PayPalSuccess] = {
+    val data =
+      CompleteStripePaypalPaymentBody(paymentIntentId, paymentData, acquisitionData, publicKey, similarProductsConsent)
+    postPaypalData(stripePaypalCompletePaymentEndpoint, data, isTestUser, userAgent).subflatMap(
+      decodePaymentAPIResponse[PayPalError, PayPalSuccess],
+    )
   }
 }

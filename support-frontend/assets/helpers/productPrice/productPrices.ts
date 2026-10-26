@@ -1,4 +1,4 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type {
 	CountryGroupName,
 	CountryGroup as CountryGroupType,
@@ -7,7 +7,7 @@ import {
 	countryGroups,
 	GBPCountries,
 } from '@modules/internationalisation/countryGroup';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { NoFulfilmentOptions } from '@modules/product/fulfilmentOptions';
@@ -22,16 +22,16 @@ import { fixDecimals } from 'helpers/productPrice/subscriptions';
 export type ProductPrice = {
 	price: number;
 	savingVsRetail?: number;
-	currency: IsoCurrency;
+	currency: CurrencyCode;
 	fixedTerm: boolean;
 	promotions?: Promotion[];
 };
 
 type BillingPeriods = Partial<
-	Record<BillingPeriod, Partial<Record<IsoCurrency, ProductPrice>>>
+	Record<BillingPeriod, Partial<Record<CurrencyCode, ProductPrice>>>
 >;
 
-export type CountryGroupPrices = Partial<
+type CountryGroupPrices = Partial<
 	Record<FulfilmentOptions, Partial<Record<ProductOptions, BillingPeriods>>>
 >;
 
@@ -48,13 +48,13 @@ function getFirstValidPrice(
 	return prices.find(isNumeric) ?? 0;
 }
 
-function getCountryGroup(country: IsoCountry): CountryGroupType {
+function getCountryGroup(country: CountryCode): CountryGroupType {
 	return countryGroups[CountryGroup.fromCountry(country) ?? GBPCountries];
 }
 
 function getProductPrice(
 	productPrices: ProductPrices,
-	country: IsoCountry,
+	country: CountryCode,
 	billingPeriod: BillingPeriod,
 	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
 	productOption: ProductOptions = NoProductOptions,
@@ -78,7 +78,7 @@ const showPrice = (p: ProductPrice, isExtended = true): string => {
 	return `${showGlyph(p.currency)}${fixDecimals(p.price)}`;
 };
 
-function getCurrency(country: IsoCountry): IsoCurrency {
+function getCurrency(country: CountryCode): CurrencyCode {
 	const { currency } = getCountryGroup(country);
 	return currency;
 }
@@ -115,11 +115,6 @@ const getDiscountVsRetail = (
 	return hackRemoveMeDiscount(Math.floor(totalSavingVsRetail));
 };
 
-const allProductPrices = window.guardian.allProductPrices;
-
-const allCheckoutNudgeProductPrices =
-	window.guardian.allCheckoutNudgeProductPrices;
-
 export {
 	getProductPrice,
 	getFirstValidPrice,
@@ -128,6 +123,4 @@ export {
 	showPrice,
 	isNumeric,
 	getDiscountVsRetail,
-	allProductPrices,
-	allCheckoutNudgeProductPrices,
 };

@@ -3,19 +3,18 @@ import type { SupportRegionId } from '@modules/internationalisation/countryGroup
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import { Country } from 'helpers/internationalisation/classes/country';
 import {
 	type ActiveRatePlanKey,
 	isProductKey,
 	productCatalog,
 } from 'helpers/productCatalog';
 import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { getPromotion } from 'helpers/productPrice/promotions';
+import { getQueryParameter } from 'helpers/urls/url';
 import type { UserType } from 'helpers/user/userType';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
-import type { Participations } from '../../helpers/abTests/models';
 import { AnalyticsProfileCacheProvider } from '../../helpers/customHooks/analyticsProfileCache';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { setHideSupportMessaginCookie } from '../../helpers/storage/contributionsCookies';
@@ -29,17 +28,14 @@ const SKIP_NEW_ONBOARDING_EXPERIENCE_KEY = 'gu.skipNewOnboardingExperience';
 type ThankYouProps = {
 	supportRegionId: SupportRegionId;
 	appConfig: AppConfig;
-	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 };
 
 export function ThankYou({
 	supportRegionId,
 	appConfig,
-	abParticipations,
 	landingPageSettings,
 }: ThankYouProps) {
-	const countryId = Country.detect();
 	const { currencyKey } = getSupportRegionIdConfig(supportRegionId);
 	const { enableThankYouOnboarding } = useFeatureSwitches();
 
@@ -86,11 +82,11 @@ export function ThankYou({
 		setHideSupportMessaginCookie();
 	} else {
 		/** Recurring product must have product & ratePlan */
-		if (!product) {
+		if (!productKey || !product) {
 			logException('Product not found');
 			return <div>Product not found</div>;
 		}
-		if (!ratePlan) {
+		if (!ratePlanKey || !ratePlan) {
 			logException('Rate plan not found');
 			return <div>Rate plan not found</div>;
 		}
@@ -113,22 +109,18 @@ export function ThankYou({
 				return <div>Price not found in product catalog</div>;
 			}
 
-			const productPrices =
-				productKey === 'SupporterPlus'
-					? appConfig.allProductPrices[productKey]
-					: undefined;
 			const billingPeriod =
 				toRegularBillingPeriod(ratePlan.billingPeriod) ?? BillingPeriod.Annual;
 
 			/** Get any promotions */
-			promotion = productPrices
-				? getPromotion(
-						productPrices,
-						countryId,
-						billingPeriod,
-						'NoFulfilmentOptions',
-				  )
-				: undefined;
+			promotion = getLegacyPromotion({
+				promotions: appConfig.promotions ?? [],
+				productKey,
+				ratePlanKey,
+				price: productPrice,
+				billingPeriod,
+				promoCode: getQueryParameter('promoCode'),
+			});
 
 			const discountedPrice = promotion?.discountedPrice ?? undefined;
 			const price = discountedPrice ?? productPrice;
@@ -175,7 +167,6 @@ export function ThankYou({
 			ratePlanKey={ratePlanKey}
 			promotion={promotion}
 			identityUserType={userType}
-			abParticipations={abParticipations}
 			landingPageSettings={landingPageSettings}
 		/>
 	);

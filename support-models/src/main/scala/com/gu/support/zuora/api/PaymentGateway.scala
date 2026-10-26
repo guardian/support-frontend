@@ -2,12 +2,7 @@ package com.gu.support.zuora.api
 
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.AUD
-import com.gu.support.workers.{
-  CreditCardReferenceTransaction,
-  DirectDebitPaymentMethod,
-  PayPalReferenceTransaction,
-  PaymentMethod,
-}
+import com.gu.support.workers.{CreditCardReferenceTransaction, PaymentMethod}
 import com.gu.support.workers._
 import io.circe.{Decoder, Encoder}
 

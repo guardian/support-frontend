@@ -111,6 +111,7 @@ class PriceSummaryService(
       landingPage = promotion.landingPage,
       starts = promotion.starts,
       expires = promotion.expires,
+      isIntroductoryPricing = promotion.isIntroductoryPricing.getOrElse(false),
     )
   }
 

@@ -1,14 +1,17 @@
 import { render, screen } from '@testing-library/react';
 import { PromoTermsProvider } from 'contexts/PromoTermsContext';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { productCatalogFixture } from 'fixtures/productCatalogFixture';
 import * as subscriptionsModule from 'helpers/productPrice/subscriptions';
 import { getPlans } from '../helpers/getPlans';
 import NewspaperProductTabs from './NewspaperProductTabs';
 
-function renderWithPromoTermsProvider(productPrices: ProductPrices) {
+function renderWithPromoTermsProvider() {
 	return render(
 		<PromoTermsProvider>
-			<NewspaperProductTabs productPrices={productPrices} />
+			<NewspaperProductTabs
+				productCatalog={productCatalogFixture}
+				promotions={[]}
+			/>
 		</PromoTermsProvider>,
 	);
 }
@@ -26,14 +29,13 @@ jest.mock(
 );
 
 describe('NewspaperProductTabs', () => {
-	const productPrices = [{ someData: 'fooBar' }] as ProductPrices;
 	beforeEach(() => {
 		jest.clearAllMocks();
 		(getPlans as jest.Mock).mockReturnValue([]);
 	});
 
 	it('should set the collect in store as the initial active tab', () => {
-		renderWithPromoTermsProvider(productPrices);
+		renderWithPromoTermsProvider();
 
 		const tab = screen.getByRole('tab', { selected: true });
 
@@ -54,7 +56,7 @@ describe('NewspaperProductTabs', () => {
 			);
 
 			// Act
-			renderWithPromoTermsProvider(productPrices);
+			renderWithPromoTermsProvider();
 
 			screen
 				.getByRole('tab', {

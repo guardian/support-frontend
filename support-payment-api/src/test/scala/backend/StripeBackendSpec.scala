@@ -53,6 +53,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
       None,
       None,
       Some("N1 9GU"),
+      Some("GB"),
     )
   val stripePaymentData = StripePaymentData(email, Currency.USD, 12, Some(StripeCheckout))
   val stripePublicKey = StripePublicKey("pk_test_FOOBAR")
