@@ -3,7 +3,7 @@ import { awsConfig } from '@modules/aws/config';
 import type { z } from 'zod';
 import type { Stage } from '../model/stage';
 
-export async function getConfig<I, O, T extends z.ZodType<O, z.ZodTypeDef, I>>(
+export async function getConfig<I, O, T extends z.ZodType<O, I>>(
 	stage: Stage,
 	configKeyName: string,
 	schema: T,

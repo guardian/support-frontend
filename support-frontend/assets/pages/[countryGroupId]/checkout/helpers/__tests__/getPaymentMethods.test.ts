@@ -6,7 +6,7 @@ describe('getPaymentMethods', () => {
 		const productKey = 'SupporterPlus';
 		const ratePlanKey = 'Annual';
 
-		const result = getPaymentMethods(countryId, productKey, ratePlanKey, {});
+		const result = getPaymentMethods(countryId, productKey, ratePlanKey);
 
 		expect(result).toContain('DirectDebit');
 	});
@@ -16,43 +16,16 @@ describe('getPaymentMethods', () => {
 		const productKey = 'HomeDelivery';
 		const ratePlanKey = 'Sunday';
 
-		const result = getPaymentMethods(countryId, productKey, ratePlanKey, {});
+		const result = getPaymentMethods(countryId, productKey, ratePlanKey);
 
 		expect(result).toEqual(['DirectDebit', 'StripeHostedCheckout']);
 	});
-
-	it('Includes PayPal if the user is not in variant of the paypalMigrationRecurring AB test', () => {
+	it('Includes PayPal for the monthly US DigitalSubscription', () => {
 		const countryId = 'US';
 		const productKey = 'DigitalSubscription';
 		const ratePlanKey = 'Monthly';
-		const participations = {
-			paypalMigrationRecurring: 'control',
-		};
 
-		const result = getPaymentMethods(
-			countryId,
-			productKey,
-			ratePlanKey,
-			participations,
-		);
-
-		expect(result).toContain('PayPal');
-	});
-
-	it('Includes PayPal if the user is in the variant of the paypalMigrationRecurring AB test', () => {
-		const countryId = 'US';
-		const productKey = 'DigitalSubscription';
-		const ratePlanKey = 'Monthly';
-		const participations = {
-			paypalMigrationRecurring: 'variant',
-		};
-
-		const result = getPaymentMethods(
-			countryId,
-			productKey,
-			ratePlanKey,
-			participations,
-		);
+		const result = getPaymentMethods(countryId, productKey, ratePlanKey);
 
 		expect(result).toContain('PayPalCompletePayments');
 	});

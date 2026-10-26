@@ -61,6 +61,7 @@ class AppComponents(context: Context)
     supportWorkersStatusController,
     stripeController,
     identityController,
+    invitationController,
     subscriptionsController,
     weeklyController,
     paperController,
@@ -69,12 +70,11 @@ class AppComponents(context: Context)
     loginController,
     testUsersController,
     authCodeFlowController,
-    payPalRegularController,
     payPalOneOffController,
     payPalCompletePaymentsController,
+    payPalRegularController,
     directDebitController,
     promotionsController,
-    pricesController,
     analyticsController,
     newspaperArchiveController,
     assetController,
@@ -83,4 +83,12 @@ class AppComponents(context: Context)
 
   SentryLogging.init(appConfig)
   new StateMachineMonitor(supportWorkersClient, actorSystem).start()
+
+  // Force the creation of cachedTaxRateService on startup so that it can pre-fetch the tax rates and populate the
+  // cache. This avoids a race condition when the first request arrives before the initial fetch completes.
+  val _ = cachedSalesTaxService
+
+  // Force the creation of both cachedPromotionsServiceProvider variants (default + test-user) on startup, same
+  // reasoning as above.
+  val _ = (cachedPromotionsServiceProvider.forUser(false), cachedPromotionsServiceProvider.forUser(true))
 }

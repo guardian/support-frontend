@@ -8,7 +8,7 @@ import {
 	ComparisonOperator,
 	TreatMissingData,
 } from 'aws-cdk-lib/aws-cloudwatch';
-import { Archive, EventBus, Rule } from 'aws-cdk-lib/aws-events';
+import { EventBus, Rule } from 'aws-cdk-lib/aws-events';
 import { SqsQueue } from 'aws-cdk-lib/aws-events-targets';
 import { PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { LoggingFormat, Runtime } from 'aws-cdk-lib/aws-lambda';
@@ -26,17 +26,6 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
 		// Event bus
 		const eventBus = new EventBus(this, busName, {
 			eventBusName: busName,
-		});
-
-		new Archive(this, `${busName}-archive`, {
-			eventPattern: {
-				account: ['account'],
-				region: ['eu-west-1'],
-			},
-			sourceEventBus: eventBus,
-			archiveName: `${busName}-archive`,
-			description: `Archive for all events sent to ${busName}-archive`,
-			retention: Duration.days(90),
 		});
 
 		// SQS Queues

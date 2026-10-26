@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { from, space, textEgyptian15 } from '@guardian/source/foundations';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -40,7 +40,7 @@ type ThankYouHeaderProps = {
 	ratePlanKey: ActiveRatePlanKey;
 	isDirectDebitPayment: boolean;
 	amount: number;
-	currency: IsoCurrency;
+	currency: CurrencyCode;
 	startDate?: string;
 	promotion?: Promotion;
 	observerPrint?: ObserverPrint;

@@ -1,5 +1,5 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router';
 import {
 	getAbParticipations,
 	setUpTrackingAndConsents,

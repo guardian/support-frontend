@@ -63,13 +63,15 @@ class CloudWatchService(cloudWatchAsyncClient: CloudWatchAsyncClient, environmen
       case e: StripeApiError => !e.exceptionType.contains("CardException")
       case e: PaypalApiError =>
         e.errorName.getOrElse("") match {
-          case ("CREDIT_CARD_CVV_CHECK_FAILED") => false
-          case ("CREDIT_CARD_REFUSED") => false
-          case ("INSTRUMENT_DECLINED") => false
-          case ("INSUFFICIENT_FUNDS") => false
+          case "CREDIT_CARD_CVV_CHECK_FAILED" => false
+          case "CREDIT_CARD_REFUSED" => false
+          case "INSTRUMENT_DECLINED" => false
+          case "INSUFFICIENT_FUNDS" => false
+          // A new error we have been seeing since switching to the PayPal complete payments API
+          case "TRANSACTION_REFUSED" => false
           // PAYMENT_ALREADY_DONE is a valid error, but currently alerting too often and possibly masking other errors
           // Adding this error to the filter list until we can get it fixed.
-          case ("PAYMENT_ALREADY_DONE") => false
+          case "PAYMENT_ALREADY_DONE" => false
           case _ => true
         }
       case _ => true

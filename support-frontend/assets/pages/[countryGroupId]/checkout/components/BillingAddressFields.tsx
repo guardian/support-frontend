@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { Checkbox, Label } from '@guardian/source/react-components';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSession';
 import type { BillingAddressProps } from './BillingAddress';
 import { BillingAddress } from './BillingAddress';
@@ -11,8 +11,8 @@ export type BillingStatePostcodeCountry = {
 	setBillingState: (value: string) => void;
 	billingPostcode: string;
 	setBillingPostcode: (value: string) => void;
-	billingCountry: IsoCountry;
-	setBillingCountry: (value: IsoCountry) => void;
+	billingCountry: CountryCode;
+	setBillingCountry: (value: CountryCode) => void;
 };
 
 type BillingAddressFieldsProps = BillingAddressProps & {
@@ -24,7 +24,6 @@ export function BillingAddressFields({
 	checkoutSession,
 	billingStatePostcodeCountry,
 	isWeeklyGift,
-	useExpressPostcodeLookup,
 }: BillingAddressFieldsProps) {
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
 		useStateWithCheckoutSession<boolean>(
@@ -58,7 +57,6 @@ export function BillingAddressFields({
 					countries={countries}
 					checkoutSession={checkoutSession}
 					billingStatePostcodeCountry={billingStatePostcodeCountry}
-					useExpressPostcodeLookup={useExpressPostcodeLookup}
 				/>
 			)}
 		</>

@@ -26,7 +26,7 @@ type FlagState = Record<FlagKey, boolean>;
 function getOverrides(flags: FlagState): Set<string> {
 	return new Set(
 		(Object.keys(flags) as FlagKey[]).filter(
-			(flag) => storage.session.get(flag) !== null,
+			(flag) => storage.local.get(flag) !== null,
 		),
 	);
 }
@@ -50,7 +50,7 @@ function SwitchRow({
 				<span css={labelStyles}>{flag}</span>
 				<span css={statusStyles(isOn)}>{isOn ? 'On' : 'Off'}</span>
 				{hasOverride && (
-					<span css={statusStyles(false)}> (session override)</span>
+					<span css={statusStyles(false)}> (local override)</span>
 				)}
 			</div>
 			<div css={labelActionsStyles}>
@@ -79,13 +79,13 @@ export function SwitchesPage() {
 
 	const toggle = (flag: FlagKey) => {
 		const next = !flags[flag];
-		storage.session.set(flag, next ? 'On' : 'Off');
+		storage.local.set(flag, next ? 'On' : 'Off');
 		setFlags((prev) => ({ ...prev, [flag]: next }));
 		setOverrides((prev) => new Set(prev).add(flag));
 	};
 
 	const reset = (flag: FlagKey) => {
-		storage.session.remove(flag);
+		storage.local.remove(flag);
 		setFlags((prev) => ({
 			...prev,
 			[flag]: isSwitchOn(`featureSwitches.${flag}`),
@@ -103,9 +103,8 @@ export function SwitchesPage() {
 			<div css={bannerContainerStyles}>
 				{overrides.size > 0 && (
 					<p css={bannerStyles}>
-						{overrides.size} Active session override
-						{overrides.size > 1 ? 's' : ''} — these will be cleared when the
-						session ends.
+						{overrides.size} Active local override
+						{overrides.size > 1 ? 's' : ''}
 					</p>
 				)}
 			</div>

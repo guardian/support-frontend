@@ -1,5 +1,5 @@
 import { storage } from '@guardian/libs';
-import { isoCountries } from '@modules/internationalisation/country';
+import { countryCodeSchema } from '@modules/internationalisation/schemas';
 import { z } from 'zod';
 
 const formDetailsSchema = z.object({
@@ -15,7 +15,7 @@ const formDetailsSchema = z.object({
 			city: z.string().nullish(),
 			state: z.string().nullish(),
 			postCode: z.string().nullish(),
-			country: z.enum(isoCountries),
+			country: countryCodeSchema,
 		}),
 		deliveryAddress: z
 			.object({
@@ -24,12 +24,12 @@ const formDetailsSchema = z.object({
 				city: z.string().nullish(),
 				state: z.string().nullish(),
 				postCode: z.string().nullish(),
-				country: z.enum(isoCountries),
+				country: countryCodeSchema,
 			})
 			.optional(),
 	}),
 	deliveryInstructions: z.string().nullish(),
-	billingAddressMatchesDelivery: z.oboolean(),
+	billingAddressMatchesDelivery: z.boolean().optional(),
 });
 
 export type PersistableFormFields = z.infer<typeof formDetailsSchema>;

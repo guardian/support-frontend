@@ -175,6 +175,10 @@ const studentFAQsConfig: Partial<Record<CountryGroupId, StudentFAQsConfig>> = {
 		getCopy: otherSupporterPlusFAQ,
 		regionName: 'Canada',
 	},
+	EURCountries: {
+		getCopy: otherSupporterPlusFAQ,
+		regionName: 'Europe',
+	},
 	AUDCountries: {
 		getCopy: auSupporterPlusFAQ,
 		// Not actually used

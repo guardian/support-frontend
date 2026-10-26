@@ -1,7 +1,6 @@
 import { css, Global } from '@emotion/react';
 import { FocusStyleManager, palette } from '@guardian/source/foundations';
 import { type ReactNode, useEffect } from 'react';
-import CsrBanner from 'components/csr/csrBanner';
 import { SkipLink } from 'components/skipLink/skipLink';
 import { TestUserBanner } from 'components/test-user-banner/testUserBanner';
 import { useScrollToAnchor } from 'helpers/customHooks/useScrollToAnchor';
@@ -20,7 +19,9 @@ const container = css`
 		flex: 1;
 		display: flex;
 		flex-direction: column;
+
 		& > :last-child {
+			display: flex;
 			flex: 1;
 		}
 	}
@@ -52,7 +53,6 @@ export function PageScaffold({
 				<SkipLink id="maincontent" label="Skip to main content" />
 				<SkipLink id="navigation" label="Skip to navigation" />
 			</nav>
-			<CsrBanner />
 			<TestUserBanner />
 			{header}
 			<main role="main" id="maincontent">

@@ -1,5 +1,5 @@
 import { TextInput } from '@guardian/source/react-components';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import { useState } from 'react';
 import { StateSelect } from 'components/personalDetails/stateSelect';
 import { FormSection, Legend } from 'pages/[countryGroupId]/components/form';
@@ -16,7 +16,7 @@ import { PersonalFields } from './PersonalFields';
 import { PersonalPhoneField } from './PersonalPhoneField';
 
 type PersonalDetailsFieldsProps = {
-	countryId: IsoCountry;
+	countryId: CountryCode;
 	countries?: Record<string, string>;
 	legend: string;
 	firstName: string;
@@ -29,7 +29,6 @@ type PersonalDetailsFieldsProps = {
 	setConfirmedEmail: (value: string) => void;
 	phoneNumber: string;
 	setPhoneNumber: (value: string) => void;
-	useExpressPostcodeLookup: boolean;
 	billingStatePostcodeCountry?: BillingStatePostcodeCountry;
 	hasDeliveryAddress?: boolean;
 	isEmailAddressReadOnly?: boolean;
@@ -52,7 +51,6 @@ export function PersonalDetailsFields({
 	phoneNumber,
 	setPhoneNumber,
 	billingStatePostcodeCountry,
-	useExpressPostcodeLookup,
 	hasDeliveryAddress = false,
 	isEmailAddressReadOnly = false,
 	isSignedIn = false,
@@ -164,7 +162,6 @@ export function PersonalDetailsFields({
 						billingStatePostcodeCountry={billingStatePostcodeCountry}
 						countries={countries}
 						isWeeklyGift={isWeeklyGift}
-						useExpressPostcodeLookup={useExpressPostcodeLookup}
 					/>
 				)}
 			</FormSection>

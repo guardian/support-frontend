@@ -5,7 +5,7 @@ import {
 	Divider,
 	ErrorSummary,
 } from '@guardian/source-development-kitchen/react-components';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import {
@@ -25,14 +25,18 @@ import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitF
 import { checkAccount } from 'components/directDebit/helpers/ajax';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
+import { MaybeEstimatedTaxSummary } from 'components/salesTax/maybeEstimatedTaxSummary';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
-import type { Participations } from 'helpers/abTests/models';
+import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import useEmailMarketingUtmSession from 'helpers/customHooks/useEmailMarketingUtmSession';
-import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import {
+	calculateAndRoundTax,
+	type Payment,
+	simpleFormatAmount,
+} from 'helpers/forms/checkouts';
 import {
 	isPaymentMethod,
 	type PaymentMethod as LegacyPaymentMethod,
@@ -49,6 +53,11 @@ import {
 } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
+import {
+	getEstimatedSalesTaxConfig,
+	isCaState,
+} from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import type { CsrfState } from 'helpers/types/csrf';
@@ -133,21 +142,21 @@ type CheckoutFormProps = {
 	isTestUser: boolean;
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
-	originalAmount: number;
-	finalAmount: number;
+	payment: Payment;
 	useStripeExpressCheckout: boolean;
-	countryId: IsoCountry;
-	abParticipations: Participations;
+	countryId: CountryCode;
 	landingPageSettings: LandingPageVariant;
 	clearCheckoutSession: () => void;
 	weeklyDeliveryDate: Date;
 	setWeeklyDeliveryDate: (value: Date) => void;
 	thresholdAmount: number;
-	contributionAmount?: number;
 	promotion?: Promotion;
 	checkoutSession?: CheckoutSession;
 	studentDiscount?: StudentDiscount;
 	paypalClientId: string;
+	billingState: string;
+	setBillingState: (value: string) => void;
+	taxRateConfig: TaxRateConfig;
 };
 
 export default function CheckoutForm({
@@ -157,26 +166,28 @@ export default function CheckoutForm({
 	isTestUser,
 	productKey,
 	ratePlanKey,
-	originalAmount,
-	finalAmount,
+	payment,
 	useStripeExpressCheckout,
 	countryId,
-	abParticipations,
 	clearCheckoutSession,
 	weeklyDeliveryDate,
 	setWeeklyDeliveryDate,
 	thresholdAmount,
-	contributionAmount,
 	promotion,
 	checkoutSession,
 	studentDiscount,
 	paypalClientId,
+	billingState,
+	setBillingState,
+	taxRateConfig,
 }: CheckoutFormProps) {
+	const { originalAmount, finalAmount, contributionAmount } = payment;
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
 
 	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
+	const abParticipations = useAbParticipations();
 
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } =
@@ -266,6 +277,9 @@ export default function CheckoutForm({
 	const [stripeFieldsAreEmpty, setStripeFieldsAreEmpty] = useState<
 		Record<StripeOnlyField, boolean>
 	>({ cardNumber: true, expiry: true, cvc: true });
+	const [stripeFieldsAreIncomplete, setStripeFieldsAreIncomplete] = useState<
+		Record<StripeOnlyField, boolean>
+	>({ cardNumber: true, expiry: true, cvc: true });
 	type StripeField = StripeOnlyField | 'recaptcha';
 	const [stripeFieldError, setStripeFieldError] = useState<
 		Partial<Record<StripeField, string>>
@@ -302,26 +316,6 @@ export default function CheckoutForm({
 		}
 	}, [stripeExpressCheckoutSuccessful]);
 
-	/**
-	 * Payment method: PayPal
-	 * BAID = Billing Agreement ID
-	 */
-	const [payPalLoaded, setPayPalLoaded] = useState(false);
-	const [payPalBAID, setPayPalBAID] = useState('');
-	/**
-	 * PayPalBAID forces formOnSubmit
-	 */
-	useEffect(() => {
-		if (payPalBAID !== '') {
-			// TODO - this might not meet our browser compatibility requirements (Safari)
-			// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
-			formRef.current?.requestSubmit();
-		}
-	}, [payPalBAID]);
-	/**
-	 * Payment method: PayPal Complete Payments
-	 * Payment Token = the new equivalent of a BAID
-	 */
 	const [payPalPaymentToken, setPayPalPaymentToken] = useState<PaymentToken>();
 	/**
 	 * payPalPaymentToken forces formOnSubmit
@@ -344,11 +338,6 @@ export default function CheckoutForm({
 			formRef.current?.requestSubmit();
 		}
 	}, [checkoutSession?.checkoutSessionId]);
-	useEffect(() => {
-		if (paymentMethod === 'PayPal' && !payPalLoaded) {
-			void loadPayPalRecurring().then(() => setPayPalLoaded(true));
-		}
-	}, [paymentMethod, payPalLoaded]);
 
 	/** Recaptcha */
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
@@ -415,8 +404,14 @@ export default function CheckoutForm({
 				},
 			]);
 		} else {
+			const useExpressDeliveryAgentsLookup =
+				abParticipations.deliveryAgentsLookupExpress === 'variant';
+
 			// The users postcode is outside the M25 and they have selected a valid rate plan
-			const agents = await getDeliveryAgents(postcode);
+			const agents = await getDeliveryAgents(
+				postcode,
+				useExpressDeliveryAgentsLookup,
+			);
 			if (agents.agents?.length === 1 && agents.agents[0]) {
 				setChosenDeliveryAgent(agents.agents[0].agentId);
 			}
@@ -459,19 +454,9 @@ export default function CheckoutForm({
 			'',
 		);
 
-	/**
-	 * BillingState selector initialised to undefined to hide
-	 * billingStateError message. formOnSubmit checks and converts to
-	 * empty string to display billingStateError message.
-	 */
-	const [billingState, setBillingState] = useStateWithCheckoutSession<string>(
-		checkoutSession?.formFields.addressFields.billingAddress.state,
-		'',
-	);
-
 	// billingCountry selector used to determine available payment methods
 	const [billingCountry, setBillingCountry] =
-		useStateWithCheckoutSession<IsoCountry>(
+		useStateWithCheckoutSession<CountryCode>(
 			checkoutSession?.formFields.addressFields.billingAddress.country,
 			countryId,
 		);
@@ -480,7 +465,6 @@ export default function CheckoutForm({
 		countryId,
 		productKey,
 		ratePlanKey,
-		abParticipations,
 	)
 		.filter(isPaymentMethod)
 		.filter(paymentMethodIsActive);
@@ -545,15 +529,20 @@ export default function CheckoutForm({
 		}
 
 		if (paymentMethod === 'Stripe') {
-			const newStripeFieldError = {
-				...(stripeFieldsAreEmpty.cardNumber && {
-					cardNumber: 'Please enter card number',
+			const stripeErrorMessageStart = `Please enter ${
+				stripeFieldsAreIncomplete.cardNumber ? 'a valid ' : ''
+			}`;
+			const newStripeFieldError: Partial<Record<StripeField, string>> = {
+				...((stripeFieldsAreEmpty.cardNumber ||
+					stripeFieldsAreIncomplete.cardNumber) && {
+					cardNumber: `${stripeErrorMessageStart}card number`,
 				}),
-				...(stripeFieldsAreEmpty.expiry && {
-					expiry: 'Please enter expiry',
+				...((stripeFieldsAreEmpty.expiry ||
+					stripeFieldsAreIncomplete.expiry) && {
+					expiry: `${stripeErrorMessageStart}expiry`,
 				}),
-				...(stripeFieldsAreEmpty.cvc && {
-					cvc: 'Please enter CVC',
+				...((stripeFieldsAreEmpty.cvc || stripeFieldsAreIncomplete.cvc) && {
+					cvc: `${stripeErrorMessageStart}CVC`,
 				}),
 				// Recaptcha works slightly differently because we own the state
 				...(!recaptchaToken && { recaptcha: 'Please complete security check' }),
@@ -627,6 +616,7 @@ export default function CheckoutForm({
 				abParticipations,
 				promotion,
 				contributionAmount,
+				taxRateConfig,
 				weeklyGiftDeliveryDate: isGuardianWeeklyGiftProduct(
 					productKey,
 					ratePlanKey,
@@ -679,16 +669,23 @@ export default function CheckoutForm({
 		? `for${isWeeklyGift ? '' : ' a'}`
 		: 'per';
 
-	const buttonText = `Pay ${simpleFormatAmount(
-		currency,
-		finalAmount,
-	)} ${billingPreposition} ${getBillingPeriodNoun(
-		billingPeriod,
-		isWeeklyGift,
-	)}`;
+	const taxExclusive =
+		taxRateConfig.type === 'tax_exclusive' ||
+		taxRateConfig.type === 'not_enough_information';
 
-	const useExpressPostcodeLookup =
-		abParticipations.postCodeLookupExpress === 'variant';
+	// When pricing is tax exclusive the button copy is simply "Pay now" because
+	// there's a summary of the price just above.
+	const buttonText = taxExclusive
+		? 'Pay now'
+		: `Pay ${simpleFormatAmount(
+				currency,
+				finalAmount,
+		  )} ${billingPreposition} ${getBillingPeriodNoun(
+				billingPeriod,
+				isWeeklyGift,
+		  )}`;
+
+	const automaticSimilarProductsConsent = countryId === 'US';
 
 	return (
 		<>
@@ -746,9 +743,37 @@ export default function CheckoutForm({
 									}}
 									onClick={({ resolve }) => {
 										/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
-										const options = {
-											emailRequired: true,
-										};
+										const options: NonNullable<Parameters<typeof resolve>[0]> =
+											{
+												emailRequired: true,
+											};
+
+										/**
+										 * For tax exclusive rate plans, request an address inside the
+										 * payment sheet so we can calculate tax dynamically
+										 * via onShippingAddressChange before confirmation.
+										 * shippingRates is required by Stripe whenever
+										 * shippingAddressRequired is true.
+										 */
+										if (taxExclusive) {
+											options.shippingAddressRequired = true;
+											options.shippingRates = [
+												{ id: 'free', displayName: 'Free', amount: 0 },
+											];
+											// The breakdown of pricing shown in the payment dialog
+											// Until the user selects a shipping address the tax
+											// shows as 'to be calculated'
+											options.lineItems = [
+												{
+													name: 'Subtotal (excl. tax)',
+													amount: Math.round(finalAmount * 100),
+												},
+												{
+													name: 'Tax (to be calculated)',
+													amount: 0,
+												},
+											];
+										}
 
 										// Track payment method selection with QM
 										sendEventPaymentMethodSelected(
@@ -756,6 +781,62 @@ export default function CheckoutForm({
 										);
 
 										resolve(options);
+									}}
+									onShippingAddressChange={({ address, resolve, reject }) => {
+										/**
+										 * The "shipping" address is being used here as a proxy
+										 * for billing address, solely to obtain the Canadian
+										 * province before confirmation so that we can calculate
+										 * the tax and update the payment total in real time.
+										 */
+										try {
+											// Currently this will only work for Canada because of a
+											// similar check in getEstimatedSalesTaxConfig
+											if (!isCaState(address.state)) {
+												return;
+											}
+
+											setBillingState(address.state);
+
+											// Get the correct tax config now that we have a province to calculate tax with
+											const updatedTaxConfig = getEstimatedSalesTaxConfig(
+												productCatalog,
+												appConfig.taxRates,
+												productKey,
+												ratePlanKey,
+												address.state,
+												supportRegionId,
+											);
+
+											const taxAmount =
+												updatedTaxConfig.type === 'tax_exclusive'
+													? calculateAndRoundTax(payment, updatedTaxConfig.rate)
+													: 0;
+
+											const totalWithTax = finalAmount + taxAmount;
+
+											// Update the Elements amount so the sheet total reflects tax
+											void elements?.update({
+												amount: Math.round(totalWithTax * 100),
+											});
+
+											resolve({
+												// Now that we have a tax amount we can
+												// show the correct pricing information
+												lineItems: [
+													{
+														name: 'Subtotal (excl. tax)',
+														amount: Math.round(finalAmount * 100),
+													},
+													{
+														name: 'Estimated tax',
+														amount: Math.round(taxAmount * 100),
+													},
+												],
+											});
+										} catch {
+											reject();
+										}
 									}}
 									onConfirm={async (event) => {
 										if (!(stripe && elements)) {
@@ -785,13 +866,13 @@ export default function CheckoutForm({
 										setFirstName(firstName);
 										setLastName(lastName);
 
-										event.billingDetails?.address.postal_code &&
+										event.shippingAddress?.address.postal_code &&
 											setBillingPostcode(
-												event.billingDetails.address.postal_code,
+												event.shippingAddress.address.postal_code,
 											);
 
 										if (
-											!event.billingDetails?.address.state &&
+											!event.shippingAddress?.address.state &&
 											countriesRequiringBillingState.includes(countryId)
 										) {
 											logException(
@@ -799,8 +880,8 @@ export default function CheckoutForm({
 												{ supportRegionId, countryGroupId, countryId },
 											);
 										}
-										event.billingDetails?.address.state &&
-											setBillingState(event.billingDetails.address.state);
+										event.shippingAddress?.address.state &&
+											setBillingState(event.shippingAddress.address.state);
 
 										event.billingDetails?.email &&
 											setEmail(event.billingDetails.email);
@@ -902,7 +983,6 @@ export default function CheckoutForm({
 									deliveryAddressErrors={deliveryAddressErrors}
 									setDeliveryAddressErrors={setDeliveryAddressErrors}
 									isWeeklyGift={isWeeklyGift}
-									useExpressPostcodeLookup={useExpressPostcodeLookup}
 								/>
 							</>
 						)}
@@ -920,7 +1000,6 @@ export default function CheckoutForm({
 							setConfirmedEmail={setConfirmedEmail}
 							phoneNumber={phoneNumber}
 							setPhoneNumber={setPhoneNumber}
-							useExpressPostcodeLookup={useExpressPostcodeLookup}
 							billingStatePostcodeCountry={billingStatePostcodeCountry}
 							hasDeliveryAddress={hasDeliveryAddress}
 							isEmailAddressReadOnly={isSignedIn}
@@ -951,7 +1030,6 @@ export default function CheckoutForm({
 								deliveryAddressErrors={deliveryAddressErrors}
 								setDeliveryAddressErrors={setDeliveryAddressErrors}
 								billingStatePostcodeCountry={billingStatePostcodeCountry}
-								useExpressPostcodeLookup={useExpressPostcodeLookup}
 							/>
 						)}
 						<FormSection ref={paymentMethodRef}>
@@ -1018,11 +1096,17 @@ export default function CheckoutForm({
 																...prevState,
 																cardNumber: event.empty,
 															}));
+															setStripeFieldsAreIncomplete((prevState) => ({
+																...prevState,
+																cardNumber: !event.complete,
+															}));
 
-															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
+															// Clear errors when the field changes and is complete, we'll (re) show errors, if any, on submit
 															setStripeFieldError((prevState) => ({
 																...prevState,
-																cardNumber: undefined,
+																cardNumber: event.complete
+																	? undefined
+																	: prevState.cardNumber,
 															}));
 														}}
 														onExpiryChange={(
@@ -1032,11 +1116,17 @@ export default function CheckoutForm({
 																...prevState,
 																expiry: event.empty,
 															}));
+															setStripeFieldsAreIncomplete((prevState) => ({
+																...prevState,
+																expiry: !event.complete,
+															}));
 
-															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
+															// Clear errors when the field changes and is complete, we'll (re) show errors, if any, on submit
 															setStripeFieldError((prevState) => ({
 																...prevState,
-																expiry: undefined,
+																expiry: event.complete
+																	? undefined
+																	: prevState.expiry,
 															}));
 														}}
 														onCvcChange={(
@@ -1046,11 +1136,15 @@ export default function CheckoutForm({
 																...prevState,
 																cvc: event.empty,
 															}));
+															setStripeFieldsAreIncomplete((prevState) => ({
+																...prevState,
+																cvc: !event.complete,
+															}));
 
-															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
+															// Clear errors when the field changes and is complete, we'll (re) show errors, if any, on submit
 															setStripeFieldError((prevState) => ({
 																...prevState,
-																cvc: undefined,
+																cvc: event.complete ? undefined : prevState.cvc,
 															}));
 														}}
 														errors={{
@@ -1142,7 +1236,11 @@ export default function CheckoutForm({
 								showSimilarProductsConsentForRatePlan(
 									productDescription,
 									ratePlanKey,
-								) && <SimilarProductsConsent />}
+								) && (
+									<SimilarProductsConsent
+										showCheckbox={!automaticSimilarProductsConsent}
+									/>
+								)}
 						</div>
 						<SummaryTsAndCs
 							productKey={productKey}
@@ -1151,25 +1249,33 @@ export default function CheckoutForm({
 							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}
+							promotion={promotion}
+						/>
+						<MaybeEstimatedTaxSummary
+							payment={payment}
+							taxRateConfig={taxRateConfig}
+							currency={currency}
+							billingPeriod={billingPeriod}
+							fullPrice={simpleFormatAmount(currency, originalAmount)}
+							discountPrice={
+								promotion
+									? simpleFormatAmount(currency, finalAmount)
+									: undefined
+							}
 						/>
 						<div
 							css={css`
-								margin: ${space[8]}px 0;
+								margin: ${space[taxExclusive ? 0 : 8]}px 0 ${space[8]}px;
 							`}
 						>
 							<SubmitButton
 								buttonText={buttonText}
 								paymentMethod={paymentMethod}
-								payPalLoaded={payPalLoaded}
-								payPalBAID={payPalBAID}
-								setPayPalBAID={setPayPalBAID}
 								payPalPaymentToken={payPalPaymentToken}
 								setPayPalPaymentToken={setPayPalPaymentToken}
 								formRef={formRef}
 								isTestUser={isTestUser}
-								finalAmount={finalAmount}
 								currencyKey={currencyKey}
-								billingPeriod={billingPeriod}
 								csrf={csrf.token ?? ''}
 								paypalClientId={paypalClientId}
 								setErrorMessage={setErrorMessage}

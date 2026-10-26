@@ -19,6 +19,8 @@ import {
 	Sixday,
 	SixdayPlus,
 	Sunday,
+	TaxExclusive,
+	TaxInclusive,
 	Weekend,
 	WeekendPlus,
 } from '@modules/product/productOptions';
@@ -51,5 +53,7 @@ export const productOptionsSchema = z.enum([
 	SaturdayPlus,
 	Sunday,
 	NewspaperArchive,
+	TaxInclusive,
+	TaxExclusive,
 	PlusDigital,
 ]);

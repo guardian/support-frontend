@@ -40,6 +40,13 @@ const studentTsAndCs: Partial<Record<CountryGroupId, JSX.Element>> = {
 			Subscription is for 1 year and does not auto renew.
 		</>
 	),
+	EURCountries: (
+		<>
+			Access to this offer is strictly limited to verified full time students
+			18+ in Europe. You must have a Student Beans account to access this offer.
+			Subscription is for 1 year and does not auto renew.
+		</>
+	),
 	Canada: (
 		<>
 			Access to this offer is strictly limited to verified full time students

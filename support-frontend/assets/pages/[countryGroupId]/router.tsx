@@ -1,13 +1,15 @@
 import { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import {
 	createBrowserRouter,
+	Navigate,
 	Outlet,
 	RouterProvider,
 	useRouteLoaderData,
-} from 'react-router-dom';
+} from 'react-router';
 import { ClientSideErrorPage } from 'components/ClientSideError';
 import { GuardianHoldingContent } from 'components/serverSideRendered/guardianHoldingContent';
 import { ObserverHoldingContent } from 'components/serverSideRendered/observerHoldingContent';
+import { AbParticipationsProvider } from 'contexts/AbParticipationsContext';
 import { FeatureSwitchesProvider } from 'contexts/FeatureSwitchesContext';
 import { getStudentLandingPageTestConfig } from 'helpers/abTests/studentLandingPageAbTests';
 import { WithCoreWebVitals } from 'helpers/coreWebVitals/withCoreWebVitals';
@@ -17,12 +19,14 @@ import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import type { OneTimeCheckoutVariant } from 'helpers/globalsAndSwitches/oneTimeCheckoutSettings';
 import type { StudentLandingPageVariant } from 'helpers/globalsAndSwitches/studentLandingPageSettings';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
+import { Country } from 'helpers/internationalisation/classes/country';
 import {
 	getAbParticipations,
 	setUpConsent,
 	setUpTracking,
 } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
+import { useStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/useStudentBeansRegionValid';
 import { getCheckoutNudgeParticipations } from '../../helpers/abTests/checkoutNudgeAbTests';
 import { getLandingPageParticipations } from '../../helpers/abTests/landingPageAbTests';
 import type { Participations } from '../../helpers/abTests/models';
@@ -68,9 +72,12 @@ function useRootLoaderData(): LoaderData {
 }
 
 function RootLayout() {
+	const { finalParticipations } = useRootLoaderData();
 	return (
 		<WithCoreWebVitals>
-			<Outlet />
+			<AbParticipationsProvider participations={finalParticipations}>
+				<Outlet />
+			</AbParticipationsProvider>
 		</WithCoreWebVitals>
 	);
 }
@@ -92,12 +99,11 @@ const router = createBrowserRouter([
 						);
 						return {
 							Component: function LandingPageRoute() {
-								const { finalParticipations, landing } = useRootLoaderData();
+								const { landing: landingPageSettings } = useRootLoaderData();
 								return (
 									<LandingPage
 										supportRegionId={supportRegionId}
-										abParticipations={finalParticipations}
-										landingPageSettings={landing.variant}
+										landingPageSettings={landingPageSettings}
 									/>
 								);
 							},
@@ -112,12 +118,11 @@ const router = createBrowserRouter([
 						);
 						return {
 							Component: function CheckoutRoute() {
-								const { finalParticipations, landing } = useRootLoaderData();
+								const { landing } = useRootLoaderData();
 								return (
 									<Checkout
 										supportRegionId={supportRegionId}
 										appConfig={appConfig}
-										abParticipations={finalParticipations}
 										landingPageSettings={landing.variant}
 										nudgeSettings={checkoutNudgeSettings}
 									/>
@@ -134,16 +139,15 @@ const router = createBrowserRouter([
 						);
 						return {
 							Component: function OneTimeCheckoutRoute() {
-								const { finalParticipations, landing, oneTime } =
-									useRootLoaderData();
+								const { landing, oneTime } = useRootLoaderData();
 								return (
 									<OneTimeCheckout
 										supportRegionId={supportRegionId}
 										appConfig={appConfig}
-										abParticipations={finalParticipations}
 										nudgeSettings={checkoutNudgeSettings}
 										landingPageSettings={landing.variant}
 										oneTimeCheckoutSettings={oneTime.variant}
+										userAttributes={oneTime.userAttributes ?? {}}
 									/>
 								);
 							},
@@ -158,13 +162,52 @@ const router = createBrowserRouter([
 						);
 						return {
 							Component: function ThankYouRoute() {
-								const { finalParticipations, landing } = useRootLoaderData();
+								const { landing } = useRootLoaderData();
 								return (
 									<ThankYou
 										supportRegionId={supportRegionId}
 										appConfig={appConfig}
-										abParticipations={finalParticipations}
 										landingPageSettings={landing.variant}
+									/>
+								);
+							},
+						};
+					},
+				},
+				{
+					path: `/${supportRegionId}/invitation/accept/:code`,
+					lazy: async () => {
+						const { Invitation } = await import(
+							/* webpackChunkName: "Invitation" */ './invitation'
+						);
+						return {
+							Component: function InvitationAcceptRoute() {
+								const { landing } = useRootLoaderData();
+								return (
+									<Invitation
+										supportRegionId={supportRegionId}
+										landingPageSettings={landing.variant}
+										mode="accept"
+									/>
+								);
+							},
+						};
+					},
+				},
+				{
+					path: `/${supportRegionId}/invitation/reject/:code`,
+					lazy: async () => {
+						const { Invitation } = await import(
+							/* webpackChunkName: "Invitation" */ './invitation'
+						);
+						return {
+							Component: function InvitationRejectRoute() {
+								const { landing } = useRootLoaderData();
+								return (
+									<Invitation
+										supportRegionId={supportRegionId}
+										landingPageSettings={landing.variant}
+										mode="reject"
 									/>
 								);
 							},
@@ -195,6 +238,16 @@ const router = createBrowserRouter([
 						return {
 							Component: function StudentRoute() {
 								const { landing } = useRootLoaderData();
+								const isStudentBeansRegionValid = useStudentBeansRegionValid(
+									supportRegionId,
+									Country.detect(),
+								);
+								if (!isStudentBeansRegionValid) {
+									return (
+										<Navigate to={`/${supportRegionId}/contribute`} replace />
+									);
+								}
+
 								return (
 									<StudentLandingPageGlobalContainer
 										supportRegionId={supportRegionId}

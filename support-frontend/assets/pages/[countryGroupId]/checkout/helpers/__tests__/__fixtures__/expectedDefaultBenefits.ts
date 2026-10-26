@@ -1,4 +1,5 @@
 import type { BenefitsCheckListData } from 'components/checkoutBenefits/benefitsCheckList';
+import { multipleAccountBenefitCopy } from 'helpers/abTests/multipleAccounts';
 
 const ContributionBenefits = [
 	{
@@ -197,12 +198,16 @@ const SupporterPlusBenefitsAUD = [
 	},
 ];
 const DigitalSubscriptionBenefits = [
-	{ isChecked: true, text: 'Guardian Weekly e-magazine' },
-	{ isChecked: true, text: 'The Long Read e-magazine' },
+	{
+		isChecked: true,
+		text: multipleAccountBenefitCopy,
+	},
 	{
 		isChecked: true,
 		text: 'Digital access to the Guardian’s 200 year newspaper archive',
 	},
+	{ isChecked: true, text: 'Guardian Weekly digital magazine' },
+	{ isChecked: true, text: 'The Long Read digital magazine' },
 	{ isChecked: true, text: 'Far fewer asks for support' },
 	{ isChecked: true, text: 'Ad-free reading on all your devices' },
 	{ isChecked: true, text: 'Unlimited access to the Guardian app' },
@@ -216,12 +221,16 @@ const DigitalSubscriptionBenefits = [
 	},
 ];
 const DigitalSubscriptionBenefitsAUD = [
-	{ isChecked: true, text: 'Guardian Weekly e-magazine' },
-	{ isChecked: true, text: 'The Long Read e-magazine' },
+	{
+		isChecked: true,
+		text: multipleAccountBenefitCopy,
+	},
 	{
 		isChecked: true,
 		text: 'Digital access to the Guardian’s 200 year newspaper archive',
 	},
+	{ isChecked: true, text: 'Guardian Weekly digital magazine' },
+	{ isChecked: true, text: 'The Long Read digital magazine' },
 	{ isChecked: true, text: 'Far fewer asks for support' },
 	{ isChecked: true, text: 'Ad-free reading on all your devices' },
 	{ isChecked: true, text: 'Unlimited access to the Guardian app' },
@@ -236,12 +245,16 @@ const DigitalSubscriptionBenefitsAUD = [
 	},
 ];
 const DigitalSubscriptionBenefitsUS = [
-	{ isChecked: true, text: 'Guardian Weekly e-magazine' },
-	{ isChecked: true, text: 'The Long Read e-magazine' },
+	{
+		isChecked: true,
+		text: multipleAccountBenefitCopy,
+	},
 	{
 		isChecked: true,
 		text: 'Digital access to the Guardian’s 200 year newspaper archive',
 	},
+	{ isChecked: true, text: 'Guardian Weekly digital magazine' },
+	{ isChecked: true, text: 'The Long Read digital magazine' },
 	{ isChecked: true, text: 'Far fewer asks for support' },
 	{ isChecked: true, text: 'Ad-free reading on all your devices' },
 	{ isChecked: true, text: 'Unlimited access to the Guardian app' },
@@ -255,13 +268,17 @@ const DigitalSubscriptionBenefitsUS = [
 	},
 ];
 const DigitalSubscriptionBenefitsGBP = [
-	{ isChecked: true, text: 'Guardian Weekly e-magazine' },
-	{ isChecked: true, text: 'The Long Read e-magazine' },
+	{
+		isChecked: true,
+		text: multipleAccountBenefitCopy,
+	},
 	{
 		isChecked: true,
 		text: 'Digital access to the Guardian’s 200 year newspaper archive',
 	},
 	{ isChecked: true, text: 'Daily digital Guardian newspaper' },
+	{ isChecked: true, text: 'Guardian Weekly digital magazine' },
+	{ isChecked: true, text: 'The Long Read digital magazine' },
 	{ isChecked: true, text: 'Far fewer asks for support' },
 	{ isChecked: true, text: 'Ad-free reading on all your devices' },
 	{ isChecked: true, text: 'Unlimited access to the Guardian app' },

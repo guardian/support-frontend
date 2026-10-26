@@ -1,4 +1,5 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SpecificToAbTest } from 'helpers/productCatalog';
 
 export type TickerName = 'US' | 'AU' | 'global';
 
@@ -53,18 +54,19 @@ export interface ProductBenefit {
 	label?: {
 		copy: string;
 	};
+	specificToAbTest?: SpecificToAbTest[];
 }
 
 // Pricing comes from the product catalog - not configurable here
 export interface LandingPageProductDescription {
 	title: string;
+	benefits: ProductBenefit[];
+	cta: {
+		copy: string;
+	};
 	titlePill?: string;
 	billingPeriodsCopy?: string;
 	label?: {
-		copy: string;
-	};
-	benefits: ProductBenefit[];
-	cta: {
 		copy: string;
 	};
 }
@@ -98,9 +100,33 @@ interface RegionTargeting {
 	targetedCountryGroups: CountryGroupId[];
 }
 
+interface Scheduler {
+	start?: string; // UTC datetime "YYYY-MM-DDTHH:MM", inclusive
+	end?: string; // UTC datetime "YYYY-MM-DDTHH:MM", inclusive
+}
+
 export interface LandingPageTest {
 	name: string;
 	status: 'Live' | 'Draft';
 	regionTargeting?: RegionTargeting;
 	variants: LandingPageVariant[];
+	methodologies?: Methodology[];
+	scheduler?: Scheduler;
+}
+
+export type Methodology = ABTest | EpsilonGreedyBandit | Roulette;
+
+interface ABTest {
+	name: 'ABTest';
+}
+
+interface EpsilonGreedyBandit {
+	name: 'EpsilonGreedyBandit';
+	epsilon: number;
+	sampleCount?: number;
+}
+
+interface Roulette {
+	name: 'Roulette';
+	sampleCount?: number;
 }

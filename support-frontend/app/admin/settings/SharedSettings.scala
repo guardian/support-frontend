@@ -40,3 +40,25 @@ case class TickerSettings(
 object TickerSettings {
   implicit val tickerCodec: Codec[TickerSettings] = deriveCodec
 }
+
+case class Scheduler(
+    start: Option[String] = None, // ISO date "YYYY-MM-DD", inclusive
+    end: Option[String] = None, // ISO date "YYYY-MM-DD", inclusive
+)
+
+object Scheduler {
+  implicit val codec: Codec[Scheduler] = deriveCodec
+}
+
+sealed trait MParticleAmountAttribute
+object MParticleAmountAttribute {
+  case object AmountAttribute extends MParticleAmountAttribute
+
+  implicit val encoder: Encoder[MParticleAmountAttribute] = Encoder.encodeString.contramap { case AmountAttribute =>
+    "last_single_contribution_amount"
+  }
+  implicit val decoder: Decoder[MParticleAmountAttribute] = Decoder.decodeString.emap {
+    case "last_single_contribution_amount" => Right(AmountAttribute)
+    case other => Left(s"Unknown MParticleAmountAttribute: $other")
+  }
+}

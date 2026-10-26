@@ -63,4 +63,25 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
       },
     )
   }
+
+  it should "encode a Promotion using the companion object's implicit Encoder (used to inject onto window.guardian - see guardian/support-frontend#8207)" in {
+    val promotion = Promotion(
+      name = "test",
+      description = "test",
+      appliesTo = AppliesTo(Set("rate-plan-id"), Set(Country.UK)),
+      campaignCode = "TEST_CAMPAIGN",
+      promoCode = "TESTCODE",
+      starts = new DateTime("2020-01-01T00:00:00.000Z", ISOChronology.getInstanceUTC),
+      expires = None,
+      discount = Some(DiscountBenefit(20, Some(months(3)))),
+      freeTrial = None,
+    )
+
+    val json = Promotion.encoder(promotion)
+
+    json.hcursor.get[String]("promoCode") shouldBe Right("TESTCODE")
+    json.hcursor.get[String]("name") shouldBe Right("test")
+    json.hcursor.downField("discount").get[Double]("amount") shouldBe Right(20.0)
+    json.hcursor.downField("discount").get[Int]("durationMonths") shouldBe Right(3)
+  }
 }

@@ -15,16 +15,11 @@ import {
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
-import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useEffect } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import { Country } from 'helpers/internationalisation/classes/country';
-import { getLegacyProductType } from 'helpers/legacyTypeConversions';
-import {
-	allCheckoutNudgeProductPrices,
-	getProductPrice,
-} from 'helpers/productPrice/productPrices';
+import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import {
 	trackComponentClick,
@@ -38,7 +33,7 @@ import type {
 	ActiveRatePlanKey,
 } from '../../helpers/productCatalog';
 import { productCatalog } from '../../helpers/productCatalog';
-import { getBenefitsChecklistFromLandingPageTool } from '../../pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
+import { getProductBenefitsChecklist } from '../../pages/[countryGroupId]/checkout/helpers/benefitsChecklist';
 import { getSupportRegionIdConfig } from '../../pages/supportRegionConfig';
 import {
 	BenefitsCheckList,
@@ -48,6 +43,7 @@ import {
 const nudgeBoxOverrides = css`
 	border: none;
 	margin-top: ${space[3]}px;
+	overflow: visible; // allows nudge cta content to overflow during tab selection
 `;
 
 const innerBoxOverrides = css`
@@ -299,65 +295,31 @@ export function CheckoutNudgeThankYou({
 }
 
 /**
- * Maps ActiveRatePlanKey to BillingPeriod (only Monthly and Annual are supported for promotions)
- */
-const ratePlanToBillingPeriod: Partial<
-	Record<ActiveRatePlanKey, BillingPeriod>
-> = {
-	Monthly: BillingPeriod.Monthly,
-	Annual: BillingPeriod.Annual,
-};
-
-/**
- * Type guard to check if a product key exists in allCheckoutNudgeProductPrices
- */
-function isValidCheckoutNudgeProductKey(
-	key: string,
-): key is keyof typeof allCheckoutNudgeProductPrices {
-	return (
-		!!allCheckoutNudgeProductPrices && key in allCheckoutNudgeProductPrices
-	);
-}
-
-/**
- * Helper to get promotion for the nudge
+ * Gets the promotion for the nudge from the variant's promo codes
  */
 function getNudgePromotion(
 	promoCodes: string[] | undefined,
-	product: string,
-	ratePlan: string,
+	product: ActiveProductKey,
+	ratePlan: ActiveRatePlanKey,
+	price: number,
 ): Promotion | undefined {
-	const legacyProductKey = getLegacyProductType(
-		product as ActiveProductKey,
-		ratePlan as ActiveRatePlanKey,
+	const recurringBillingPeriod = toRegularBillingPeriod(
+		productCatalog[product]?.ratePlans[ratePlan]?.billingPeriod,
 	);
-	if (
-		!promoCodes?.length ||
-		!isValidCheckoutNudgeProductKey(legacyProductKey) ||
-		!allCheckoutNudgeProductPrices
-	) {
+	if (!promoCodes?.length || !recurringBillingPeriod) {
 		return undefined;
 	}
+	const variantPromotions = (
+		window.guardian.checkoutNudgePromotions ?? []
+	).filter((promotion) => promoCodes.includes(promotion.promoCode));
 
-	const productPrices = allCheckoutNudgeProductPrices[legacyProductKey];
-	const billingPeriod = ratePlanToBillingPeriod[ratePlan as ActiveRatePlanKey];
-	if (!billingPeriod) {
-		return undefined;
-	}
-
-	try {
-		const productPrice = getProductPrice(
-			productPrices,
-			Country.detect(),
-			billingPeriod,
-		);
-		return productPrice.promotions?.find((p) =>
-			promoCodes.includes(p.promoCode),
-		);
-	} catch (error) {
-		console.warn('Failed to get product price for promotion:', error);
-		return undefined;
-	}
+	return getLegacyPromotion({
+		promotions: variantPromotions,
+		productKey: product,
+		ratePlanKey: ratePlan,
+		price,
+		billingPeriod: recurringBillingPeriod,
+	});
 }
 
 /**
@@ -430,10 +392,11 @@ export function CheckoutNudgeSelector({
 		promoCodes,
 		nudgeToProduct.product,
 		ratePlan,
+		amount,
 	);
 
 	const checkListData =
-		getBenefitsChecklistFromLandingPageTool(
+		getProductBenefitsChecklist(
 			nudgeToProduct.product,
 			landingPageSettings,
 			countryGroupId,

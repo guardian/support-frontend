@@ -1,4 +1,4 @@
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductFields } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type {
@@ -18,7 +18,7 @@ type GetProductFieldsParams = {
 		deliveryAgent: number | undefined;
 	};
 	financial: {
-		currencyKey: IsoCurrency;
+		currencyKey: CurrencyCode;
 		finalAmount: number;
 		originalAmount: number;
 		contributionAmount?: number;

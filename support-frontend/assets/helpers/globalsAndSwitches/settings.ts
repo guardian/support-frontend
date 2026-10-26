@@ -7,6 +7,16 @@ import type { StudentLandingPageTest } from './studentLandingPageSettings';
 
 export type Status = 'On' | 'Off';
 
+type ClientBanditVariant = {
+	name: string;
+	weight: number;
+};
+
+export type ClientBanditData = {
+	testName: string;
+	variants: ClientBanditVariant[];
+};
+
 type SwitchObject = Record<string, Status | undefined>;
 
 /**
@@ -34,4 +44,5 @@ export type Settings = {
 	checkoutNudgeTests?: CheckoutNudgeTest[];
 	oneTimeCheckoutTests?: OneTimeCheckoutTest[];
 	studentLandingPageTests?: StudentLandingPageTest[];
+	banditData?: ClientBanditData[];
 };

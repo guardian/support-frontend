@@ -1,6 +1,7 @@
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import type { Participations } from '../../../helpers/abTests/models';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
@@ -64,6 +65,7 @@ export const submitForm = async ({
 	abParticipations,
 	promotion,
 	contributionAmount,
+	taxRateConfig,
 	weeklyGiftDeliveryDate,
 }: {
 	supportRegionId: SupportRegionId;
@@ -77,6 +79,7 @@ export const submitForm = async ({
 	abParticipations: Participations;
 	promotion: Promotion | undefined;
 	contributionAmount: number | undefined;
+	taxRateConfig: TaxRateConfig;
 	weeklyGiftDeliveryDate?: Date;
 }): Promise<string> => {
 	const personalData = extractPersonalDataFromForm(formData);
@@ -178,6 +181,7 @@ export const submitForm = async ({
 			paymentRequest,
 			accountNumber: redactedAccountNumber,
 			weeklyGiftDeliveryDate,
+			taxRateConfig,
 		});
 
 		// If Stripe hosted checkout, delete previously persisted form details
@@ -213,6 +217,7 @@ const processSubscription = async ({
 	productKey,
 	ratePlanKey,
 	contributionAmount,
+	taxRateConfig,
 	paymentMethod,
 	supportRegionId,
 	paymentRequest,
@@ -224,6 +229,7 @@ const processSubscription = async ({
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	contributionAmount: number | undefined;
+	taxRateConfig: TaxRateConfig;
 	paymentMethod: PaymentMethod;
 	supportRegionId: SupportRegionId;
 	paymentRequest: RegularPaymentRequest;
@@ -243,6 +249,7 @@ const processSubscription = async ({
 			appliedPromotion?.promoCode,
 			createSubscriptionResult.userType,
 			contributionAmount,
+			taxRateConfig,
 			personalData,
 			paymentMethod,
 			createSubscriptionResult.status,
@@ -270,6 +277,7 @@ const buildThankYouPageUrl = (
 	promoCode: string | undefined,
 	userType: UserType | undefined,
 	contributionAmount: number | undefined,
+	taxRateConfig: TaxRateConfig,
 	personalData: FormPersonalFields,
 	paymentMethod: PaymentMethod,
 	status: 'success' | 'pending',
@@ -284,6 +292,7 @@ const buildThankYouPageUrl = (
 		paymentMethod,
 		status,
 		deliveryDate: weeklyGiftDeliveryDate,
+		taxConfig: taxRateConfig,
 	};
 	setThankYouOrder(order);
 	const thankYouUrlSearchParams = new URLSearchParams();

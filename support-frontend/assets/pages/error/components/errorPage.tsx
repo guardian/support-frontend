@@ -31,9 +31,7 @@ const countryGroupId = CountryGroup.detect();
 
 const mainContentStyles = css`
 	background-color: ${palette.neutral[93]};
-	@supports (display: flex) {
-		flex: 1 0 auto;
-	}
+	display: block !important; // old layout pages need to stay the same
 `;
 
 const paddingOverrides = css`

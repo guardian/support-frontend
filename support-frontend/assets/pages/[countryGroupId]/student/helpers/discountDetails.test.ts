@@ -8,12 +8,6 @@ import {
 
 jest.mock('helpers/productPrice/promotions');
 
-jest.mock('helpers/productPrice/productPrices', () => ({
-	allProductPrices: {
-		SupporterPlus: {},
-	},
-}));
-
 jest.mock('helpers/productCatalog', () => ({
 	productCatalog: {
 		SupporterPlus: {
@@ -137,6 +131,7 @@ describe('Discount Details', () => {
 				discount: { amount: 100, durationMonths: 24 },
 				discountedPrice: 0,
 				numberOfDiscountedPeriods: 24,
+				isIntroductoryPricing: false,
 			};
 
 			const result = getStudentDiscount(
