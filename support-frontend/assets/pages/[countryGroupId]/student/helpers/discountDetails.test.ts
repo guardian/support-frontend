@@ -12,9 +12,9 @@ jest.mock('helpers/productCatalog', () => ({
 	productCatalog: {
 		SupporterPlus: {
 			ratePlans: {
-				Monthly: { pricing: { USD: 10, AUD: '10' } },
-				Annual: { pricing: { USD: 150, AUD: '120' } },
-				OneYearStudent: { pricing: { USD: 10 } },
+				Monthly: { pricing: { USD: 10, AUD: 10 } },
+				Annual: { pricing: { USD: 150, AUD: 120 } },
+				OneYearStudent: { pricing: { USD: 10, AUD: 15 } },
 			},
 		},
 	},
@@ -109,7 +109,7 @@ describe('Discount Details', () => {
 			jest.resetAllMocks();
 		});
 
-		it('returns discount data from ratePlan comparison no promotion exists', () => {
+		it('returns US discount data from ratePlan', () => {
 			const result = getStudentDiscount(
 				SupportRegionId.US,
 				'OneYearStudent',
@@ -122,6 +122,46 @@ describe('Discount Details', () => {
 				fullPriceWithCurrency: '$150',
 				periodNoun: 'year',
 			});
+		});
+
+		it('returns AU discount data from ratePlan', () => {
+			const result = getStudentDiscount(
+				SupportRegionId.AU,
+				'OneYearStudent',
+				'SupporterPlus',
+				true,
+			);
+			expect(result).toEqual({
+				amount: 15,
+				discountPriceWithCurrency: '$15',
+				fullPriceWithCurrency: '$120',
+				periodNoun: 'year',
+			});
+		});
+
+		it('Australian Student Beans disabled, returns discount data from ratePlan when non-AU', () => {
+			const result = getStudentDiscount(
+				SupportRegionId.US,
+				'OneYearStudent',
+				'SupporterPlus',
+				false,
+			);
+			expect(result).toEqual({
+				amount: 10,
+				discountPriceWithCurrency: '$10',
+				fullPriceWithCurrency: '$150',
+				periodNoun: 'year',
+			});
+		});
+
+		it('Australian Student Beans disabled, returns undefined when AU-only', () => {
+			const result = getStudentDiscount(
+				SupportRegionId.AU,
+				'OneYearStudent',
+				'SupporterPlus',
+				false,
+			);
+			expect(result).toEqual(undefined);
 		});
 
 		it('returns discount data when promotion exists with discounted price', () => {

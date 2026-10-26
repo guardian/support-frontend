@@ -78,7 +78,7 @@ function isStudent(
 	supportRegionId: SupportRegionId,
 	ratePlanKey: ActiveRatePlanKey,
 	productKey: ActiveProductKey,
-	isStudentBeansRegionValid: boolean,
+	allowStudentBeansAU: boolean,
 	promotion?: Promotion,
 	requirePromotion?: boolean,
 ): boolean {
@@ -86,7 +86,7 @@ function isStudent(
 	const excludeAustralianInstitutions =
 		supportRegionId === SupportRegionId.AU &&
 		ratePlanKey === 'OneYearStudent' &&
-		isStudentBeansRegionValid;
+		allowStudentBeansAU;
 
 	const universityInstitutionRegions = excludeAustralianInstitutions
 		? [SupportRegionId.NZ]
@@ -113,7 +113,7 @@ export function getStudentDiscount(
 	supportRegionId: SupportRegionId,
 	ratePlanKey: ActiveRatePlanKey,
 	productKey: ActiveProductKey,
-	isStudentBeansRegionValid: boolean,
+	allowStudentBeansAU: boolean,
 	promotion?: Promotion,
 	requirePromotion?: boolean,
 ): StudentDiscount | undefined {
@@ -122,7 +122,7 @@ export function getStudentDiscount(
 			supportRegionId,
 			ratePlanKey,
 			productKey,
-			isStudentBeansRegionValid,
+			allowStudentBeansAU,
 			promotion,
 			requirePromotion,
 		)
