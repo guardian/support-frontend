@@ -31,7 +31,6 @@ trait Controllers {
     controllerComponents,
     appConfig.oneOffStripeConfigProvider,
     appConfig.regularStripeConfigProvider,
-    appConfig.regularPayPalConfigProvider,
     appConfig.recaptchaConfigProvider,
     paymentAPIService,
     appConfig.membersDataServiceApiUrl,
@@ -39,6 +38,8 @@ trait Controllers {
     allSettingsProvider,
     appConfig.stage,
     priceSummaryServiceProvider,
+    defaultPromotionService,
+    cachedPromotionsServiceProvider,
     cachedProductCatalogServiceProvider,
     cachedSalesTaxService,
     appConfig.supportUrl,
@@ -53,7 +54,8 @@ trait Controllers {
 
   lazy val subscriptionsController = new SubscriptionsController(
     actionBuilders,
-    priceSummaryServiceProvider,
+    defaultPromotionService,
+    cachedPromotionsServiceProvider,
     assetsResolver,
     controllerComponents,
     stringsConfig,
@@ -63,14 +65,10 @@ trait Controllers {
     cachedProductCatalogServiceProvider,
   )
 
-  private lazy val landingCopyProvider = new LandingCopyProvider(
-    promotionServiceProvider,
-    appConfig.stage,
-  )
-
   lazy val paperController = new PaperSubscriptionController(
-    priceSummaryServiceProvider,
-    landingCopyProvider,
+    defaultPromotionService,
+    cachedPromotionsServiceProvider,
+    cachedProductCatalogServiceProvider,
     assetsResolver,
     actionBuilders,
     controllerComponents,
@@ -81,8 +79,9 @@ trait Controllers {
   )
 
   lazy val weeklyController = new WeeklySubscriptionController(
-    priceSummaryServiceProvider,
-    landingCopyProvider,
+    defaultPromotionService,
+    cachedPromotionsServiceProvider,
+    cachedProductCatalogServiceProvider,
     assetsResolver,
     actionBuilders,
     controllerComponents,
@@ -105,6 +104,7 @@ trait Controllers {
     paperRoundServiceProvider,
     userBenefitsApiServiceProvider,
     stripeCheckoutSessionService,
+    appConfig.stripeConfigProvider,
   )
 
   lazy val supportWorkersStatusController = new SupportWorkersStatus(
@@ -126,7 +126,6 @@ trait Controllers {
   lazy val payPalRegularController = new PayPalRegular(
     actionBuilders,
     assetsResolver,
-    payPalNvpServiceProvider,
     testUsers,
     controllerComponents,
     allSettingsProvider,
@@ -168,6 +167,13 @@ trait Controllers {
     controllerComponents,
   )
 
+  lazy val invitationController = new InvitationController(
+    controllerComponents,
+    actionBuilders,
+    multipleAccountApiService,
+    appConfig.guardianDomain,
+  )
+
   lazy val identityController = new IdentityController(
     identityService,
     controllerComponents,
@@ -185,9 +191,7 @@ trait Controllers {
 
   lazy val getAddressController = new GetAddress(
     controllerComponents,
-    getAddressIOService,
     idealPostcodesService,
-    allSettingsProvider,
     actionBuilders,
   )
 
@@ -200,20 +204,12 @@ trait Controllers {
   )
 
   lazy val promotionsController = new Promotions(
-    promotionServiceProvider,
-    priceSummaryServiceProvider,
+    cachedPromotionsServiceProvider,
     assetsResolver,
     actionBuilders,
     testUsers,
     controllerComponents,
     allSettingsProvider,
-    appConfig.stage,
-  )
-
-  lazy val pricesController = new PricesController(
-    priceSummaryServiceProvider,
-    actionBuilders,
-    controllerComponents,
   )
 
   lazy val analyticsController = new AnalyticsController(

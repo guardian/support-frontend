@@ -8,9 +8,14 @@ import {
 	useState,
 } from 'react';
 
+type PromoTerm = {
+	promoCode: string;
+	description: string;
+};
+
 type PromoTermsContextValue = {
-	promoTerms: string | null;
-	setPromoTerms: Dispatch<SetStateAction<string | null>>;
+	promoTerms: PromoTerm[];
+	setPromoTerms: Dispatch<SetStateAction<PromoTerm[]>>;
 };
 
 const PromoTermsContext = createContext<PromoTermsContextValue | undefined>(
@@ -18,7 +23,7 @@ const PromoTermsContext = createContext<PromoTermsContextValue | undefined>(
 );
 
 export function PromoTermsProvider({ children }: { children: ReactNode }) {
-	const [promoTerms, setPromoTerms] = useState<string | null>(null);
+	const [promoTerms, setPromoTerms] = useState<PromoTerm[]>([]);
 
 	const value = useMemo(() => ({ promoTerms, setPromoTerms }), [promoTerms]);
 

@@ -8,7 +8,6 @@ import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import { observerThemeButton } from 'components/observer-layout/styles';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
-import type { Participations } from 'helpers/abTests/models';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import { Country } from 'helpers/internationalisation/classes/country';
 import {
@@ -45,7 +44,7 @@ import ThankYouModules from '../../../components/thankYou/thankyouModules';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
-import { filterProductDescriptionBenefits } from '../checkout/helpers/benefitsChecklist';
+import { filterBenefits } from '../checkout/helpers/benefitsChecklist';
 import {
 	getReturnAddress,
 	getThankYouOrder,
@@ -72,7 +71,6 @@ export type CheckoutComponentProps = {
 	ratePlanKey?: ActiveRatePlanKey;
 	promotion?: Promotion;
 	identityUserType: UserType;
-	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 };
 
@@ -194,8 +192,8 @@ export function ThankYouComponent({
 		if (isTier) {
 			const productBenefits = (
 				landingPageSettings.products[productKey]?.benefits ??
-				filterProductDescriptionBenefits(
-					productCatalogDescription[productKey],
+				filterBenefits(
+					productCatalogDescription[productKey].benefits,
 					countryGroupId,
 				)
 			).map((benefit) => ({
@@ -206,8 +204,8 @@ export function ThankYouComponent({
 				productKey === 'DigitalSubscription'
 					? (
 							landingPageSettings.products.SupporterPlus?.benefits ??
-							filterProductDescriptionBenefits(
-								productCatalogDescription.SupporterPlus,
+							filterBenefits(
+								productCatalogDescription.SupporterPlus.benefits,
 								countryGroupId,
 							)
 					  ).map((benefit) => ({

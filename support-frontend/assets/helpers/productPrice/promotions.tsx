@@ -12,29 +12,16 @@ import type {
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
 import { getProductPrice, isNumeric } from 'helpers/productPrice/productPrices';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import type { Option } from 'helpers/types/option';
 import { getQueryParameter } from 'helpers/urls/url';
-import { getSanitisedHtml } from '../utilities/utilities';
 
 type DiscountBenefit = {
 	amount: number;
 	durationMonths?: number;
 };
-export type PromotionCopy = {
+type PromotionCopy = {
 	title?: string;
 	description?: string;
 	roundel?: string;
-};
-export type PromotionTerms = {
-	description: string;
-	starts: Date;
-	expires: Option<Date>;
-	product: SubscriptionProduct;
-	// actually only GuardianWeekly, Paper or Digital Pack?
-	productRatePlans: string[];
-	promoCode: string;
-	isGift: boolean;
 };
 export type Promotion = {
 	name: string;
@@ -106,20 +93,6 @@ function getPromotion(
 	} catch (error) {
 		return undefined;
 	}
-}
-
-function getSanitisedPromoCopy(
-	promotionCopy?: PromotionCopy | null,
-): PromotionCopy {
-	if (!promotionCopy) {
-		return {};
-	}
-
-	return {
-		title: promotionCopy.title ?? '',
-		description: getSanitisedHtml(promotionCopy.description ?? ''),
-		roundel: getSanitisedHtml(promotionCopy.roundel ?? ''),
-	};
 }
 
 type PromotionHTMLModifiers = {
@@ -204,11 +177,9 @@ const discountSummaryCopy = (
 };
 
 export {
-	getPromotion,
 	getAppliedPromo,
 	applyDiscount,
 	hasDiscount,
-	getSanitisedPromoCopy,
 	promotionHTML,
 	finalPrice,
 	discountSummaryCopy,

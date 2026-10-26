@@ -47,8 +47,8 @@ new Backend(app, 'Backend-PROD', {
 	stage: 'PROD',
 	domainName: 'backend.theguardian.com.origin.support.guardianapis.com',
 	scaling: {
-		minimumInstances: 1,
-		maximumInstances: 2,
+		minimumInstances: 2,
+		maximumInstances: 4,
 	},
 	shouldCreateAlarms: true,
 });

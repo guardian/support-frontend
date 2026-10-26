@@ -175,6 +175,11 @@ export class Frontend extends GuStack {
 		(ec2App.listener.node.defaultChild as CfnListener).sslPolicy =
 			SslPolicy.TLS13_RES;
 
+		ec2App.listener.setAttribute(
+			'routing.http.response.strict_transport_security.header_value',
+			'max-age=31557600',
+		);
+
 		// This parameter is used by https://github.com/guardian/waf
 		new StringParameter(this, 'AlbSsmParam', {
 			parameterName: `/infosec/waf/services/${this.stage}/frontend-alb-arn`,
@@ -512,7 +517,7 @@ export class Frontend extends GuStack {
 						Stage: this.stage,
 					},
 					statistic: 'Sum',
-					period: Duration.seconds(60),
+					period: Duration.minutes(20),
 				}),
 				treatMissingData: TreatMissingData.NOT_BREACHING,
 				snsTopicName: `alarms-handler-topic-${this.stage}`,
@@ -532,6 +537,31 @@ export class Frontend extends GuStack {
 					ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
 				metric: new Metric({
 					metricName: 'SalesTaxApiError',
+					namespace: 'support-frontend',
+					dimensionsMap: {
+						Stage: this.stage,
+					},
+					statistic: 'Sum',
+					period: Duration.seconds(60),
+				}),
+				treatMissingData: TreatMissingData.NOT_BREACHING,
+				snsTopicName: `alarms-handler-topic-${this.stage}`,
+			});
+
+			new GuAlarm(this, 'PromotionsApiError', {
+				app,
+				alarmName: alarmName('support-frontend PromotionsApiError'),
+				alarmDescription: alarmDescription(
+					'support-frontend failed to fetch data from the Promotions API',
+				),
+				actionsEnabled: shouldCreateAlarms,
+				threshold: 1,
+				evaluationPeriods: 1,
+				datapointsToAlarm: 1,
+				comparisonOperator:
+					ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+				metric: new Metric({
+					metricName: 'PromotionsApiError',
 					namespace: 'support-frontend',
 					dimensionsMap: {
 						Stage: this.stage,

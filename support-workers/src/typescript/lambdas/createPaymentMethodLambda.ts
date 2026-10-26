@@ -4,7 +4,6 @@ import type {
 	DirectDebitPaymentFields,
 	PaymentFields,
 	PayPalCompletePaymentsPaymentFields,
-	PayPalPaymentFields,
 	StripeHostedPaymentFields,
 	StripePaymentFields,
 	StripePaymentType,
@@ -17,8 +16,6 @@ import type {
 	DirectDebitPaymentMethod,
 	PaymentMethod,
 	PayPalCompletePaymentsPaymentMethod,
-	PayPalCompletePaymentsWithBAIDPaymentMethod,
-	PayPalPaymentMethod,
 	StripePaymentMethod,
 } from '../model/paymentMethod';
 import type { ProductType } from '../model/productType';
@@ -34,7 +31,6 @@ import {
 	wrapperSchemaForState,
 } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
-import { getPayPalConfig, PayPalService } from '../services/payPal';
 import { getStripeConfig, StripeService } from '../services/stripe';
 import { getIfDefined } from '../util/nullAndUndefined';
 import { replaceDatesWithZuoraFormat } from '../util/zuoraDateReplacer';
@@ -43,10 +39,6 @@ const stage = stageFromEnvironment();
 const stripeServiceProvider = new ServiceProvider(stage, async (stage) => {
 	const config = await getStripeConfig(stage);
 	return new StripeService(config);
-});
-const paypalServiceProvider = new ServiceProvider(stage, async (stage) => {
-	const config = await getPayPalConfig(stage);
-	return new PayPalService(config);
 });
 
 export const handler = async (
@@ -87,8 +79,6 @@ export function createPaymentMethod(
 			);
 		case 'StripeHostedCheckout':
 			return createStripeHostedPaymentMethod(user.isTestUser, paymentFields);
-		case 'PayPal':
-			return createPayPalPaymentMethod(user.isTestUser, paymentFields);
 		case 'PayPalCompletePayments':
 			return createPayPalCompletePaymentsPaymentMethod(paymentFields);
 		case 'DirectDebit':
@@ -210,27 +200,6 @@ async function createStripePaymentMethod(
 		PaymentGateway: stripeService.getPaymentGateway(stripePublicKey),
 		Type: 'CreditCardReferenceTransaction',
 		StripePaymentType: stripePaymentType,
-	};
-}
-async function createPayPalPaymentMethod(
-	isTestUser: boolean,
-	payPal: PayPalPaymentFields,
-): Promise<PayPalPaymentMethod | PayPalCompletePaymentsWithBAIDPaymentMethod> {
-	const payPalService = await paypalServiceProvider.getServiceForUser(
-		isTestUser,
-	);
-	const email = await payPalService.retrieveEmail(payPal.baid);
-
-	const paypalEmail = getIfDefined(
-		email,
-		'Could not retrieve email from PayPal',
-	);
-
-	return {
-		PaypalBaid: payPal.baid,
-		PaypalEmail: paypalEmail,
-		Type: 'PayPalCompletePaymentsWithBAID',
-		PaymentGateway: 'PayPal Complete Payments',
 	};
 }
 

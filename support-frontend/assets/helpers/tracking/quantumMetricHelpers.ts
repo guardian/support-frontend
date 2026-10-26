@@ -2,8 +2,6 @@ import { getConsentFor, onConsent } from '@guardian/consent-manager';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
-import type { ProductPrice } from 'helpers/productPrice/productPrices';
-import { getAppliedPromo } from 'helpers/productPrice/promotions';
 
 const periodMultipliers: Record<BillingPeriod, number> = {
 	OneTime: 1,
@@ -11,42 +9,6 @@ const periodMultipliers: Record<BillingPeriod, number> = {
 	Quarterly: 4,
 	Monthly: 12,
 };
-
-export function getSubscriptionAnnualValue(
-	productPrice: ProductPrice,
-	billingPeriod: BillingPeriod,
-): number | undefined {
-	const fullPrice = productPrice.price;
-	const promotion = getAppliedPromo(productPrice.promotions);
-
-	/**
-	 * This catches the event that the SixWeekly BillingPeriod is used
-	 * and returns immediately. We shouldn't have to handle at runtime as the SixWeekly billing
-	 * period is deprecated. We should look into whether we want to retain/remove logic
-	 * to handle it in our code.
-	 */
-	const periodMultiplier = periodMultipliers[billingPeriod];
-	if (periodMultiplier === 0) {
-		return;
-	}
-
-	const fullPriceInPence = fullPrice * 100;
-	const fullAnnualPrice =
-		fullPriceInPence * (productPrice.fixedTerm ? 1 : periodMultiplier);
-
-	if (!promotion?.discountedPrice || !promotion.numberOfDiscountedPeriods) {
-		return fullAnnualPrice;
-	}
-
-	const discountedPriceInPence = promotion.discountedPrice * 100;
-	const discountInPenceCents = fullPriceInPence - discountedPriceInPence;
-
-	const discountedAnnualPrice =
-		fullAnnualPrice -
-		discountInPenceCents * promotion.numberOfDiscountedPeriods;
-
-	return discountedAnnualPrice;
-}
 
 export function getConvertedAnnualValue(
 	billingPeriod: BillingPeriod,

@@ -28,7 +28,7 @@ jobs:
         run: env
 
       - name: Checkout repo
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup Node and Install Dependencies
         uses: ./.github/actions/setup-node-and-install
@@ -45,11 +45,11 @@ jobs:
 
       - name: TypeScript support-backend test and build
         run: |
+          pnpm --filter support-backend lint
+          pnpm --filter support-backend check-formatting
           pnpm --filter support-backend test
           pnpm --filter support-backend build
-          pnpm --filter support-backend build-prod-node-modules
           pushd support-backend
-          mv target_node_modules/node_modules ./target/
           tar -czf support-backend.tar.gz target
           popd
 

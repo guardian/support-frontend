@@ -32,9 +32,9 @@ trait IdentityService extends StrictLogging {
 class GuardianIdentityService(client: IdentityClient)(implicit pool: DefaultThreadPool) extends IdentityService {
 
   override def getIdentityIdFromEmail(email: String): IdentityClient.Result[IdentityUserDetails] =
-    client.getUser(email).map {
+    client.getUser(email).map { response =>
       logger.info(s"Identity account found for email address: $email, UserType is current")
-      response => IdentityUserDetails(response.user.id, Current)
+      IdentityUserDetails(response.user.id, Current)
     }
 
   override def createGuestAccount(email: String): EitherT[Future, IdentityClient.ContextualError, IdentityUserDetails] =

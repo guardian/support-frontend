@@ -7,8 +7,10 @@ import {
 	textEgyptian17,
 } from '@guardian/source/foundations';
 import type { CountryCode } from '@modules/internationalisation/country';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
+import type { WindowProductCatalog } from 'helpers/globalsAndSwitches/window';
 import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getWeeklyProducts } from '../helpers/getWeeklyProducts';
 import WeeklyRatePlanCard from './WeeklyRatePlanCard';
 
@@ -53,14 +55,23 @@ const priceCardsContainerWithSavings = css`
 
 export function WeeklyCards({
 	countryId,
-	productPrices,
+	countryGroupId,
+	productCatalog,
+	promotions,
+	promoCode,
 }: {
 	countryId: CountryCode;
-	productPrices: ProductPrices;
+	countryGroupId: CountryGroupId;
+	productCatalog: WindowProductCatalog;
+	promotions: PromoWithCatalogInformation[];
+	promoCode?: string;
 }): JSX.Element {
 	const ratePlans = getWeeklyProducts({
 		countryId,
-		productPrices,
+		countryGroupId,
+		productCatalog,
+		promotions,
+		promoCode,
 		billingPeriods: weeklyBillingPeriods,
 	});
 

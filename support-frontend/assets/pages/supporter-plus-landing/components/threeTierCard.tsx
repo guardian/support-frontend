@@ -21,6 +21,7 @@ import {
 	checkListTextItemCss,
 } from 'components/checkoutBenefits/benefitsCheckList';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import { type CardTheme } from 'helpers/landingPage/cardTheme';
 import { getProductLabel } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import {
@@ -34,22 +35,27 @@ import {
 } from 'helpers/utilities/utilities';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { ThreeTierCardPill } from './threeTierCardPill';
+import { ThreeTierNumberOfAccounts } from './threeTierNumberOfAccounts';
 
 export type CardContent = LandingPageProductDescription & {
+	product: 'SupporterPlus' | 'Contribution' | 'DigitalSubscription';
 	isUserSelected: boolean;
+	isDefaultProductSelected: boolean;
 	link: string;
 	price: number;
 	promotion?: Promotion;
-	product: 'SupporterPlus' | 'Contribution' | 'DigitalSubscription';
+	multipleAccountsVariant?: string;
 };
 
 export type ThreeTierCardProps = {
-	cardContent: CardContent;
-	cardTier: 1 | 2 | 3;
-	promoCount: number;
 	isSubdued: boolean;
 	currencyId: CurrencyCode;
+	cardTier: 1 | 2 | 3;
+	promoCount: number;
 	billingPeriod: BillingPeriod;
+	deepDiscount: boolean;
+	cardContent: CardContent;
+	cardTheme: CardTheme;
 	showWeeklyPrice?: boolean;
 	useLargePriceMinHeight?: boolean;
 };
@@ -58,6 +64,7 @@ const container = (
 	hasPill: boolean,
 	isUserSelected: boolean,
 	subdueHighlight: boolean,
+	cardBackColor: string,
 ) => {
 	let cardOrder = 2;
 	if (hasPill) {
@@ -67,9 +74,7 @@ const container = (
 	}
 	return css`
 		position: ${hasPill || isUserSelected ? 'relative' : 'static'};
-		background-color: ${(hasPill && !subdueHighlight) || isUserSelected
-			? '#F1FBFF'
-			: palette.neutral[100]};
+		background-color: ${cardBackColor};
 		border-radius: ${space[3]}px;
 		padding: 32px ${space[3]}px ${space[6]}px ${space[3]}px;
 
@@ -120,10 +125,10 @@ const previousPriceStrikeThrough = css`
 	text-decoration: line-through;
 `;
 
-const btnStyleOverrides = css`
+const btnStyleOverrides = (showAccount: boolean) => css`
 	width: 100%;
 	justify-content: center;
-	margin-bottom: ${space[6]}px;
+	margin-bottom: ${showAccount ? 0 : space[6]}px;
 `;
 
 const checkmarkBenefitList = css`
@@ -171,6 +176,7 @@ const benefitsPrefixPlus = css`
 
 export function ThreeTierCard({
 	cardContent,
+	cardTheme,
 	cardTier,
 	promoCount,
 	isSubdued,
@@ -178,18 +184,21 @@ export function ThreeTierCard({
 	billingPeriod,
 	showWeeklyPrice = false,
 	useLargePriceMinHeight = false,
+	deepDiscount,
 }: ThreeTierCardProps): JSX.Element {
 	const {
 		title,
 		titlePill,
 		benefits,
 		isUserSelected,
+		isDefaultProductSelected,
 		promotion,
 		price,
 		link,
 		cta,
 		product,
 		billingPeriodsCopy,
+		multipleAccountsVariant,
 	} = cardContent;
 	const currency = getCurrencyByCode(currencyId);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -221,17 +230,57 @@ export function ThreeTierCard({
 		price,
 		billingPeriod,
 	);
+
+	const {
+		titlePillColor,
+		cardPillColor,
+		cardBackColor,
+		benefitIconColor,
+		benefitPillColor,
+	} = cardTheme;
+
+	const hasPillCopyNotSubdued = !!pillCopy && !isSubdued;
+	const userSelectedNoDeepDiscount = isUserSelected && !deepDiscount;
+	const isHighlightedCard =
+		hasPillCopyNotSubdued ||
+		userSelectedNoDeepDiscount ||
+		isDefaultProductSelected;
+
+	const cardBackColorSelection = isHighlightedCard
+		? cardBackColor
+		: palette.neutral[100];
+	const benefitIconColorSelection = isHighlightedCard
+		? benefitIconColor
+		: palette.brand[500];
+
+	const displayUserSelectedPill = userSelectedNoDeepDiscount || !!pillCopy;
+	const displayDefaultProductPill = isDefaultProductSelected && !!pillCopy;
+	const displayPill = displayDefaultProductPill || displayUserSelectedPill;
+	const cardPillCopy = userSelectedNoDeepDiscount
+		? 'Your selection'
+		: pillCopy ?? '';
+	const cardPillSubdue =
+		!displayDefaultProductPill && !isUserSelected && !deepDiscount && isSubdued;
 	return (
-		<section css={container(!!pillCopy, isUserSelected, isSubdued)}>
-			{isUserSelected && <ThreeTierCardPill title="Your selection" />}
-			{!!pillCopy && !isUserSelected && (
+		<section
+			css={container(
+				!!pillCopy,
+				isUserSelected,
+				isSubdued,
+				cardBackColorSelection,
+			)}
+		>
+			{displayPill && (
 				<ThreeTierCardPill
-					subdue={isSubdued}
-					title={promotion?.landingPage?.roundel ?? pillCopy}
+					title={cardPillCopy}
+					color={cardPillColor}
+					subdue={cardPillSubdue}
 				/>
 			)}
 			<div css={titleContainer}>
-				{titlePill && <BenefitPill copy={titlePill} />}
+				{titlePill && (
+					<BenefitPill copy={titlePill} pillColor={titlePillColor} />
+				)}
 				<h2 css={[titleCss, checkListTextItemCss]}>{title}</h2>
 			</div>
 			<div css={priceCss(useLargePriceMinHeight)}>
@@ -299,14 +348,20 @@ export function ThreeTierCard({
 			</div>
 			<LinkButton
 				href={link}
-				cssOverrides={btnStyleOverrides}
+				cssOverrides={btnStyleOverrides(
+					!!multipleAccountsVariant && multipleAccountsVariant !== 'CONTROL',
+				)}
 				data-qm-trackable={quantumMetricButtonRef}
 				aria-label={linkAriaLabel}
 				theme={themeButtonReaderRevenueBrand}
 			>
 				{cta.copy}
 			</LinkButton>
-
+			<ThreeTierNumberOfAccounts
+				multipleAccountsVariant={multipleAccountsVariant}
+				productKey={product}
+				cardTheme={cardTheme}
+			/>
 			{inAdditionToAllAccessDigital && (
 				<div css={benefitsPrefixCss}>
 					<span>
@@ -327,7 +382,8 @@ export function ThreeTierCard({
 					};
 				})}
 				style={'compact'}
-				iconColor={palette.brand[500]}
+				iconColor={benefitIconColorSelection}
+				benefitPillColor={benefitPillColor}
 				cssOverrides={checkmarkBenefitList}
 			/>
 		</section>

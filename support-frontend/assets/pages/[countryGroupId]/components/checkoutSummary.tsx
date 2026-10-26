@@ -9,7 +9,6 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { OrderSummaryStartDate } from 'components/orderSummary/orderSummaryStartDate';
 import { OrderSummaryTsAndCs } from 'components/orderSummary/orderSummaryTsAndCs';
-import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import type { Payment } from 'helpers/forms/checkouts';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
@@ -30,8 +29,8 @@ import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import { buildBackButtonPath } from '../checkout/helpers/backButton';
 import {
-	getBenefitsChecklistFromLandingPageTool,
-	getBenefitsChecklistFromProductDescription,
+	getBenefitsChecklist,
+	getProductBenefitsChecklist,
 } from '../checkout/helpers/benefitsChecklist';
 import { ukSpecificAdditionalBenefit } from '../student/components/StudentHeader';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
@@ -49,7 +48,6 @@ type CheckoutSummaryProps = {
 	ratePlanKey: ActiveRatePlanKey;
 	payment: Payment;
 	countryId: CountryCode;
-	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
@@ -69,7 +67,6 @@ export default function CheckoutSummary({
 	ratePlanKey,
 	payment,
 	countryId,
-	abParticipations,
 	landingPageSettings,
 	weeklyDeliveryDate,
 	thresholdAmount,
@@ -119,16 +116,12 @@ export default function CheckoutSummary({
 
 	const benefitsCheckListData =
 		getPrintPlusDigitalBenefits(productKey, ratePlanKey) ??
-		getBenefitsChecklistFromLandingPageTool(
+		getProductBenefitsChecklist(
 			productKey,
 			landingPageSettings,
 			countryGroupId,
 		) ??
-		getBenefitsChecklistFromProductDescription(
-			productDescription,
-			countryGroupId,
-			abParticipations,
-		);
+		getBenefitsChecklist(productDescription.benefits, countryGroupId);
 
 	if (
 		ratePlanKey === 'OneYearStudent' &&

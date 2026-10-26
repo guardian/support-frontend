@@ -74,7 +74,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Invalid if a user tries to pay with PayPal but the Pay Pal switch in RRCP is off" in {
     CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
-      paymentFields = PayPalPaymentFields(""),
+      paymentFields = PayPalCompletePaymentsPaymentFields("", ""),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
@@ -154,7 +154,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Invalid if a user tries to pay with Pay Pal but the Pay Pal switch in RRCP is off " in {
     CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = DigitalPack(GBP, Monthly),
-      paymentFields = PayPalPaymentFields(""),
+      paymentFields = PayPalCompletePaymentsPaymentFields("", ""),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
@@ -258,7 +258,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Valid if a user tries to pay with PayPal while the Pay Pal switch in RRCP is on" in {
     CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
-      paymentFields = PayPalPaymentFields(""),
+      paymentFields = PayPalCompletePaymentsPaymentFields("", ""),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
@@ -338,7 +338,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Valid if a user tries to pay with Pay Pal while the Pay Pal switch in RRCP is on" in {
     CheckoutValidationRules.checkRecurringPaymentMethodEnabled(
       product = SupporterPlus(0, GBP, Monthly),
-      paymentFields = PayPalPaymentFields(""),
+      paymentFields = PayPalCompletePaymentsPaymentFields("", ""),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
           stripe = Some(On),
@@ -813,8 +813,20 @@ object TestData {
   ): Switches = Switches(
     OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On)),
     recurringPaymentMethodSwitches,
-    SubscriptionsSwitches(Some(On), Some(On), Some(On)),
-    FeatureSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
+    SubscriptionsSwitches(Some(On), Some(On)),
+    FeatureSwitches(
+      Some(On),
+      Some(On),
+      Some(On),
+      Some(On),
+      Some(On),
+      Some(On),
+      Some(On),
+      Some(On),
+      Some(On),
+      Some(On),
+      Some(On),
+    ),
     CampaignSwitches(Some(On), Some(On)),
     RecaptchaSwitches(Some(On), Some(On)),
   )

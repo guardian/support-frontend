@@ -1,22 +1,18 @@
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import type { ProductPrice } from 'helpers/productPrice/productPrices';
-import type { Promotion } from 'helpers/productPrice/promotions';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import {
 	getWeeklyGiftSavingsText,
 	getWeeklySavingsText,
 } from './getSavingsText';
 
-const makeProductPrice = (price: number): ProductPrice => ({
-	price,
-	currency: 'GBP',
-	fixedTerm: false,
-});
-
-const makePromotion = (overrides: Partial<Promotion> = {}): Promotion => ({
-	name: 'Test Promo',
-	description: 'Test promo description',
+const makePromotion = (
+	overrides: Partial<PromoWithCatalogInformation> = {},
+): PromoWithCatalogInformation => ({
 	promoCode: 'TESTPROMO',
-	isIntroductoryPricing: false,
+	name: 'Test Promo',
+	campaignCode: 'TESTCAMPAIGN',
+	appliesTo: { productRatePlanIds: [], countries: [], catalogRatePlans: [] },
+	startTimestamp: '2026-01-01T00:00:00.000Z',
 	...overrides,
 });
 
@@ -25,10 +21,8 @@ describe('getWeeklySavingsText', () => {
 		expect(getWeeklySavingsText(undefined)).toBeNull();
 	});
 
-	it('returns null when durationMonths is missing', () => {
-		const promotion = makePromotion({
-			discount: { amount: 25, durationMonths: undefined },
-		});
+	it('returns null when the promotion has no discount', () => {
+		const promotion = makePromotion({ discount: undefined });
 		expect(getWeeklySavingsText(promotion)).toBeNull();
 	});
 
@@ -44,7 +38,7 @@ describe('getWeeklyGiftSavingsText', () => {
 	describe('when a promotion is present', () => {
 		it('returns the roundel text from the promotion landing page', () => {
 			const promotion = makePromotion({
-				landingPage: { roundel: 'Custom roundel text' },
+				landingPage: { roundelHtml: 'Custom roundel text' },
 			});
 			expect(
 				getWeeklyGiftSavingsText(BillingPeriod.Annual, promotion, {}),
@@ -62,8 +56,8 @@ describe('getWeeklyGiftSavingsText', () => {
 	describe('when business as usual for Annual weekly gifting', () => {
 		it('returns null for Quarterly billing period', () => {
 			const allPrices = {
-				[BillingPeriod.Quarterly]: makeProductPrice(50),
-				[BillingPeriod.Annual]: makeProductPrice(160),
+				[BillingPeriod.Quarterly]: 50,
+				[BillingPeriod.Annual]: 160,
 			};
 			expect(
 				getWeeklyGiftSavingsText(BillingPeriod.Quarterly, undefined, allPrices),
@@ -72,7 +66,7 @@ describe('getWeeklyGiftSavingsText', () => {
 
 		it('returns null when Annual price is missing', () => {
 			const allPrices = {
-				[BillingPeriod.Quarterly]: makeProductPrice(50),
+				[BillingPeriod.Quarterly]: 50,
 			};
 			expect(
 				getWeeklyGiftSavingsText(BillingPeriod.Annual, undefined, allPrices),
@@ -81,7 +75,7 @@ describe('getWeeklyGiftSavingsText', () => {
 
 		it('returns null when Quarterly price is missing', () => {
 			const allPrices = {
-				[BillingPeriod.Annual]: makeProductPrice(190),
+				[BillingPeriod.Annual]: 190,
 			};
 			expect(
 				getWeeklyGiftSavingsText(BillingPeriod.Annual, undefined, allPrices),
@@ -91,8 +85,8 @@ describe('getWeeklyGiftSavingsText', () => {
 		it('returns null when no saving', () => {
 			// 50 * 4 - 200 = 0, savingsPercentage = 0
 			const allPrices = {
-				[BillingPeriod.Quarterly]: makeProductPrice(50),
-				[BillingPeriod.Annual]: makeProductPrice(200),
+				[BillingPeriod.Quarterly]: 50,
+				[BillingPeriod.Annual]: 200,
 			};
 			expect(
 				getWeeklyGiftSavingsText(BillingPeriod.Annual, undefined, allPrices),
@@ -102,8 +96,8 @@ describe('getWeeklyGiftSavingsText', () => {
 		it('returns savings text with correct percentage', () => {
 			// ((50 * 4) - 150) = 50, savingsPercentage = round(50/(50 * 4) * 100) = 25
 			const allPrices = {
-				[BillingPeriod.Quarterly]: makeProductPrice(50),
-				[BillingPeriod.Annual]: makeProductPrice(150),
+				[BillingPeriod.Quarterly]: 50,
+				[BillingPeriod.Annual]: 150,
 			};
 			expect(
 				getWeeklyGiftSavingsText(BillingPeriod.Annual, undefined, allPrices),
@@ -113,8 +107,8 @@ describe('getWeeklyGiftSavingsText', () => {
 		it('rounds the savings percentage to the nearest integer', () => {
 			// ((45 * 4) - 152) = 28, savingsPercentage = round(28/(45 * 4) * 100) = 15.556 = 16
 			const allPrices = {
-				[BillingPeriod.Quarterly]: makeProductPrice(45),
-				[BillingPeriod.Annual]: makeProductPrice(152),
+				[BillingPeriod.Quarterly]: 45,
+				[BillingPeriod.Annual]: 152,
 			};
 			expect(
 				getWeeklyGiftSavingsText(BillingPeriod.Annual, undefined, allPrices),

@@ -1,14 +1,6 @@
-import { currencyCodeSchema } from '@modules/internationalisation/schemas';
 import { caStateCodes } from '@modules/internationalisation/state';
-import {
-	billingPeriodSchema,
-	fulfilmentOptionsSchema,
-	productOptionsSchema,
-} from '@modules/product/schemas';
-import { optional, z } from 'zod';
-import type { LegacyProductType } from 'helpers/legacyTypeConversions';
-import { legacyProductTypes } from 'helpers/legacyTypeConversions';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { promoWithCatalogInformationSchema } from '@modules/promotions/v2/schema';
+import { z } from 'zod';
 import { isProductKey } from '../productCatalog';
 
 /**
@@ -26,7 +18,8 @@ const featureSwitchesSchema = z.object({
 	enableThankYouOnboarding: z.optional(z.enum(['On', 'Off'])),
 	enableCheckoutNudge: z.optional(z.enum(['On', 'Off'])),
 	enableMParticle: z.optional(z.enum(['On', 'Off'])),
-	enableCanadaTaxExclusion: z.optional(z.enum(['On', 'Off'])),
+	enableDeepDiscount: z.optional(z.enum(['On', 'Off'])),
+	enableStudentBeansEurope: z.optional(z.enum(['On', 'Off'])),
 });
 
 export type FeatureSwitches = z.infer<typeof featureSwitchesSchema>;
@@ -53,10 +46,6 @@ const PaymentConfigSchema = z.object({
 	stripeKeyTortoiseMedia: z.object({
 		ONE_OFF: z.object({ default: z.string(), test: z.string() }),
 		REGULAR: z.object({ default: z.string(), test: z.string() }),
-	}),
-	payPalEnvironment: z.object({
-		default: z.string(),
-		test: z.string(),
 	}),
 	payPalClientId: z.object({
 		default: z.string(),
@@ -174,73 +163,18 @@ const ProductCatalogSchema = z.object({
 					billingPeriod: z.optional(
 						z.enum(['Quarter', 'Month', 'Annual', 'OneTime']),
 					),
-					taxMode: z.enum(['TaxExclusive', 'TaxInclusive']).nullish(),
+					savingVsRetail: z.number().nullish(),
+					taxMode: z.enum(['TaxExclusive', 'TaxInclusive']).nullable(),
 				}),
 			),
 		}),
 	),
 });
 
-const countryKeySchema = z.enum([
-	'United Kingdom',
-	'Europe',
-	'Australia',
-	'New Zealand',
-	'United States',
-	'Canada',
-	'International',
-]);
-
 export const dateTimeSchema = z.preprocess(
 	(val) => (typeof val === 'string' ? new Date(val) : val),
 	z.date(),
 );
-const promotionSchema = z.object({
-	name: z.string(),
-	description: z.string(),
-	promoCode: z.string(),
-	discountedPrice: optional(z.number()),
-	numberOfDiscountedPeriods: optional(z.number()),
-	discount: optional(
-		z.object({
-			amount: z.number(),
-			durationMonths: z.number().optional(),
-		}),
-	),
-	starts: dateTimeSchema,
-	expires: dateTimeSchema.optional(),
-	isIntroductoryPricing: z.boolean(),
-});
-
-export const ProductPricesSchema = z.object({
-	allProductPrices: z.record(
-		z.enum([...legacyProductTypes, 'GuardianWeeklyGift']),
-		optional(
-			z.partialRecord(
-				countryKeySchema,
-				z.partialRecord(
-					fulfilmentOptionsSchema,
-					z.partialRecord(
-						productOptionsSchema,
-						z.partialRecord(
-							billingPeriodSchema,
-							z.partialRecord(
-								currencyCodeSchema,
-								z.object({
-									price: z.number(),
-									savingVsRetail: z.number().optional(),
-									currency: currencyCodeSchema,
-									fixedTerm: z.boolean(),
-									promotions: z.array(promotionSchema),
-								}),
-							),
-						),
-					),
-				),
-			),
-		),
-	),
-});
 
 const TaxRatesSchema = z.object({
 	taxRates: z
@@ -251,15 +185,18 @@ const TaxRatesSchema = z.object({
 		.optional(), // This isn't made available on every page
 });
 
-const AppConfigSchema = PaymentConfigSchema.merge(ProductCatalogSchema)
-	.merge(ProductPricesSchema)
-	.merge(TaxRatesSchema);
+const PromotionsSchema = z.object({
+	promotions: z.array(promoWithCatalogInformationSchema).optional(), // This isn't made available on every page
+	checkoutNudgePromotions: z
+		.array(promoWithCatalogInformationSchema)
+		.optional(), // Only made available on checkout pages
+});
 
-export type AppConfig = z.infer<typeof AppConfigSchema> & {
-	allProductPrices: Partial<
-		Record<LegacyProductType | 'GuardianWeeklyGift', ProductPrices>
-	>;
-};
+const AppConfigSchema = PaymentConfigSchema.merge(ProductCatalogSchema)
+	.merge(TaxRatesSchema)
+	.merge(PromotionsSchema);
+
+export type AppConfig = z.infer<typeof AppConfigSchema>;
 
 export type WindowTaxRates = AppConfig['taxRates'];
 export type WindowProductCatalog = AppConfig['productCatalog'];
@@ -267,7 +204,7 @@ export type WindowProductCatalog = AppConfig['productCatalog'];
 export const parseAppConfig = (obj: unknown): AppConfig => {
 	const appConfig = AppConfigSchema.safeParse(obj);
 	if (appConfig.success) {
-		return appConfig.data as AppConfig;
+		return appConfig.data;
 	} else {
 		// We allow parsing errors through on PROD as they might not be breaking changes
 		// but we should be aware of them.

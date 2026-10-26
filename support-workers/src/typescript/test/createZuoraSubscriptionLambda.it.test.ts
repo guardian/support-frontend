@@ -11,7 +11,7 @@ import { wrapperSchemaForState } from '../model/stateSchemas';
 import digitalSubscriptionJson from './fixtures/createZuoraSubscription/digitalSubscriptionInput.json';
 import guardianWeeklyJson from './fixtures/createZuoraSubscription/guardianWeeklyInput.json';
 import paperJson from './fixtures/createZuoraSubscription/paperInput.json';
-import transactionDeclinedJson from './fixtures/createZuoraSubscription/transactionDeclinedInput.json';
+import { transactionDeclined } from './fixtures/createZuoraSubscription/transactionDeclined';
 
 const testTimeout = 20000;
 
@@ -20,18 +20,45 @@ describe('createZuoraSubscriptionLambda integration', () => {
 		'we handle a transaction declined error from Stripe appropriately',
 		async () => {
 			try {
+				// When applying a UK S+ monthly price rise, minimum price supplied is greater than current price.
+				// Returns a positive price to ensure we always get a Stripe transaction declined error
 				await handler(
 					wrapperSchemaForState(createZuoraSubscriptionStateSchema).parse(
-						transactionDeclinedJson,
+						transactionDeclined(50),
 					),
 				);
+
 				fail('Expected handler to throw');
 			} catch (error) {
+				expect(error).toBeInstanceOf(RetryError);
 				if (error instanceof RetryError) {
 					expect(error.name).toBe(RetryErrorType.RetryNone);
 					expect(error.message).toContain('Transaction declined');
-				} else {
-					fail('Error is not an instance of RetryError');
+				}
+			}
+		},
+		testTimeout,
+	);
+	test(
+		'we handle a negative amount error from Stripe appropriately',
+		async () => {
+			try {
+				// When performing a UK S+ monthly price rise, minimum price supplied is less than current price.
+				// Returns a negative price to ensure we get a Stripe negative amount error
+				await handler(
+					wrapperSchemaForState(createZuoraSubscriptionStateSchema).parse(
+						transactionDeclined(12),
+					),
+				);
+
+				fail('Expected handler to throw');
+			} catch (error) {
+				expect(error).toBeInstanceOf(RetryError);
+				if (error instanceof RetryError) {
+					expect(error.name).toBe(RetryErrorType.RetryNone);
+					expect(error.message).toContain(
+						'The contribution amount of a supporter plus subscription cannot be less than zero',
+					);
 				}
 			}
 		},

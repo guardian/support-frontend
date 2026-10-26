@@ -18,6 +18,7 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
 
   val defaultPromotionsService = new DefaultPromotionService {
     def getPromoCodes(product: Product): List[String] = Nil
+    def allPromoCodes: List[String] = Nil
   }
 
   "PriceSummaryService" should "return prices" in {

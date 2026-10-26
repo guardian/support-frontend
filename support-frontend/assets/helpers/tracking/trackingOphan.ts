@@ -4,8 +4,8 @@ import type {
 	ComponentEvent,
 	TAction,
 	TComponentType,
-} from '@guardian/ophan-tracker-js/support';
-import { record, viewId } from '@guardian/ophan-tracker-js/support';
+} from '@guardian/ophan-tracker-js';
+import { getViewId, record } from '@guardian/ophan-tracker-js';
 import { testIsActive } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { getLocal, setLocal } from 'helpers/storage/storage';
@@ -80,17 +80,14 @@ const setReferrerDataInLocalStorage = (
 	const { referrerUrl, referrerPageviewId } = acquisitionData;
 
 	if (!getLocal('ophan_follow') && referrerUrl && referrerPageviewId) {
-		setLocal(
-			'ophan_follow',
-			JSON.stringify({
-				refViewId: referrerPageviewId,
-				ref: referrerUrl,
-			}),
-		);
+		setLocal('ophan_follow', {
+			refViewId: referrerPageviewId,
+			ref: referrerUrl,
+		});
 	}
 };
 
-const getPageViewId = (): string => viewId;
+const getPageViewId = (): string => getViewId();
 
 export {
 	trackComponentEvents,

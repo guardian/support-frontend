@@ -1,14 +1,23 @@
 import { GuEc2App } from '@guardian/cdk';
 import { AccessScope } from '@guardian/cdk/lib/constants';
+import { GuAlarm } from '@guardian/cdk/lib/constructs/cloudwatch';
 import type { GuStackProps } from '@guardian/cdk/lib/constructs/core';
 import {
 	GuDistributionBucketParameter,
 	GuStack,
 } from '@guardian/cdk/lib/constructs/core';
-import { GuAllowPolicy } from '@guardian/cdk/lib/constructs/iam';
+import {
+	GuAllowPolicy,
+	GuPutCloudwatchMetricsPolicy,
+} from '@guardian/cdk/lib/constructs/iam';
 import type { GuAsgCapacity } from '@guardian/cdk/lib/types';
 import type { App } from 'aws-cdk-lib';
-import { aws_route53_targets } from 'aws-cdk-lib';
+import { aws_route53_targets, Duration } from 'aws-cdk-lib';
+import {
+	ComparisonOperator,
+	Metric,
+	TreatMissingData,
+} from 'aws-cdk-lib/aws-cloudwatch';
 import {
 	InstanceClass,
 	InstanceSize,
@@ -86,9 +95,9 @@ cd target
 
 		const policies = [
 			new GuAllowPolicy(this, 'SSMGet', {
-				actions: ['ssm:GetParameter'],
+				actions: ['ssm:GetParametersByPath'],
 				resources: [
-					`arn:aws:ssm:${this.region}:${this.account}:parameter/${this.stack}/${app}/${this.stage}/*`,
+					`arn:aws:ssm:${this.region}:${this.account}:parameter/${this.stage}/${this.stack}/${app}/*`,
 				],
 			}),
 			new GuAllowPolicy(this, 'CloudwatchMetrics', {
@@ -100,6 +109,7 @@ cd target
 				],
 				resources: ['arn:aws:logs:*:*:*'],
 			}),
+			new GuPutCloudwatchMetricsPolicy(this),
 		];
 
 		const http5xxAlarm = shouldCreateAlarms
@@ -149,6 +159,49 @@ cd target
 			target: RecordTarget.fromAlias(
 				new aws_route53_targets.LoadBalancerTarget(ec2App.loadBalancer),
 			),
+		});
+
+		new GuAlarm(this, 'GetDeliveryAgentsFailure', {
+			app,
+			alarmName: `${app} ${this.stage} GetDeliveryAgentsFailure`,
+			alarmDescription:
+				'support-backend failed to get delivery agents from PaperRound',
+			actionsEnabled: shouldCreateAlarms,
+			threshold: 1,
+			evaluationPeriods: 1,
+			comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+			metric: new Metric({
+				metricName: 'GetDeliveryAgentsFailure',
+				namespace: 'support-backend',
+				dimensionsMap: {
+					Stage: this.stage,
+				},
+				statistic: 'Sum',
+				period: Duration.seconds(60),
+			}),
+			treatMissingData: TreatMissingData.NOT_BREACHING,
+			snsTopicName: `alarms-handler-topic-${this.stage}`,
+		});
+
+		new GuAlarm(this, 'ServerFailedToStart', {
+			app,
+			alarmName: `${app} ${this.stage} ServerFailedToStart`,
+			alarmDescription: `support-backend server failed to start - check the logs: https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group/support-support-backend-${this.stage}`,
+			actionsEnabled: shouldCreateAlarms,
+			threshold: 1,
+			evaluationPeriods: 1,
+			comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+			metric: new Metric({
+				metricName: 'SupportBackendServerFailedToStart',
+				namespace: 'support-backend',
+				dimensionsMap: {
+					Stage: this.stage,
+				},
+				statistic: 'Sum',
+				period: Duration.seconds(60),
+			}),
+			treatMissingData: TreatMissingData.NOT_BREACHING,
+			snsTopicName: `alarms-handler-topic-${this.stage}`,
 		});
 	}
 }
