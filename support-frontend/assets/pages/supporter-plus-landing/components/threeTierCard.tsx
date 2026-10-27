@@ -15,6 +15,7 @@ import {
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { ProductRatePlanKey } from '@modules/product-catalog/productCatalog';
 import { BenefitPill } from 'components/checkoutBenefits/benefitPill';
 import {
 	BenefitsCheckList,
@@ -30,6 +31,7 @@ import {
 	getSanitisedHtml,
 	parseBillingPeriodCopy,
 } from 'helpers/utilities/utilities';
+import type { TierProductKey } from 'pages/[countryGroupId]/helpers/getDigitalRatePlanKey';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { ThreeTierCardPill } from './threeTierCardPill';
 import { ThreeTierNumberOfAccounts } from './threeTierNumberOfAccounts';
@@ -37,6 +39,7 @@ import { useThreeTierCardPromotion } from './useThreeTierCardPromotion';
 
 export type CardContent = LandingPageProductDescription & {
 	product: 'SupporterPlus' | 'Contribution' | 'DigitalSubscription';
+	ratePlan: ProductRatePlanKey<TierProductKey>;
 	isUserSelected: boolean;
 	isDefaultProductSelected: boolean;
 	link: string;

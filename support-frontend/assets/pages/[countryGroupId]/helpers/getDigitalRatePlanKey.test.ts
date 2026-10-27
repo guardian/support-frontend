@@ -4,9 +4,9 @@ import { getDigitalRatePlanKey } from './getDigitalRatePlanKey';
 describe('getDigitalRatePlanKey', () => {
 	it('returns the billing period key for non-Canada regions with SupporterPlus product', () => {
 		const result = getDigitalRatePlanKey(
-			'MONTHLY',
 			SupportRegionId.UK,
 			'SupporterPlus',
+			'MONTHLY',
 		);
 
 		expect(result).toEqual('Monthly');
@@ -14,18 +14,18 @@ describe('getDigitalRatePlanKey', () => {
 
 	it('appends TaxExclusive for Canada with DigitalPlus product', () => {
 		const result = getDigitalRatePlanKey(
-			'ANNUAL',
 			SupportRegionId.CA,
 			'DigitalSubscription',
+			'ANNUAL',
 		);
 		expect(result).toEqual('AnnualTaxExclusive');
 	});
 
 	it('returns the billing period key for Canada with Contribution product', () => {
 		const result = getDigitalRatePlanKey(
-			'ANNUAL',
 			SupportRegionId.CA,
 			'Contribution',
+			'ANNUAL',
 		);
 		expect(result).toEqual('Annual');
 	});
