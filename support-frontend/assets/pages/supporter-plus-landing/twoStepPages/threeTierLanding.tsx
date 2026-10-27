@@ -20,6 +20,7 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
+import { PromoTermsProvider } from 'contexts/PromoTermsContext';
 import { getMultipleAccountsTestVariantParticipation } from 'helpers/abTests/multipleAccounts';
 import type { PageParticipationsResultWithFallback } from 'helpers/abTests/pageParticipations';
 import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
@@ -29,7 +30,6 @@ import { glyph } from 'helpers/internationalisation/currency';
 import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getTierCardContent } from 'pages/[countryGroupId]/helpers/getTierCardContent';
 import { getTierCardPromotion } from 'pages/[countryGroupId]/helpers/getTierCardPromotion';
-import { getTierCardTsAndCs } from 'pages/[countryGroupId]/helpers/getTierCardTsAndCs';
 import { useStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/useStudentBeansRegionValid';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
@@ -44,7 +44,6 @@ import { StudentOffer } from '../components/studentOffer';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierFooter } from '../components/threeTierFooter';
-import type { TsAndCsProps } from '../components/threeTierTsAndCs';
 import { ThreeTierLandingHeading } from './threeTierLandingHeading';
 import { TickerContainer } from './tickerContainer';
 import { useThreeTierUrlSelection } from './useThreeTierUrlSelection';
@@ -233,12 +232,6 @@ export function ThreeTierLanding({
 		getTierCard('DigitalSubscription'),
 	];
 
-	const getTierCardsTsAndCs = (): TsAndCsProps[] => {
-		return tierCards.map((tierCard) =>
-			getTierCardTsAndCs(tierCard, contributionType),
-		);
-	};
-
 	const showTaxDisclaimer = tierCards.some(
 		(tierCard) =>
 			tierCard.ratePlan === 'AnnualTaxExclusive' ||
@@ -249,98 +242,99 @@ export function ThreeTierLanding({
 		forceWeeklyPricing || landingPageVariant.name.includes('WEEKLY_PRICE');
 
 	return (
-		<PageScaffold
-			header={
-				<>
-					<Header>
-						<CountrySwitcherContainer>
-							<CountryGroupSwitcher {...countrySwitcherProps} />
-						</CountrySwitcherContainer>
-					</Header>
-				</>
-			}
-			footer={
-				<ThreeTierFooter
-					supportRegionId={supportRegionId}
-					tsAndCsContent={getTierCardsTsAndCs()}
-					showTaxDisclaimer={showTaxDisclaimer}
-				/>
-			}
-		>
-			<Container
-				sideBorders
-				topBorder
-				borderColor="rgba(170, 170, 180, 0.5)"
-				cssOverrides={recurringContainer}
-			>
-				<div css={innerContentContainer}>
-					{countdownSettings && (
-						<Countdown
-							countdownSettings={countdownSettings}
-							setHeadingOverride={setHeadingOverride}
-							setDaysTillDeadline={setCountdownDaysLeft}
-						/>
-					)}
-
-					<ThreeTierLandingHeading
-						heading={headingOverride ?? landingPageVariant.copy.heading}
-						countdownDaysLeft={countdownDaysLeft}
-					/>
-
-					<p
-						css={standFirst}
-						dangerouslySetInnerHTML={{
-							__html: getSanitisedHtml(
-								replaceDatePlaceholder(
-									landingPageVariant.copy.subheading,
-									countdownDaysLeft,
-								),
-							),
-						}}
-					/>
-
-					{landingPageVariant.tickerSettings && (
-						<TickerContainer
-							tickerSettings={landingPageVariant.tickerSettings}
-						/>
-					)}
-					<BillingPeriodButtons
-						billingPeriods={paymentFrequencies.map((paymentFrequency) =>
-							contributionTypeToBillingPeriod(paymentFrequency),
-						)}
-						preselectedBillingPeriod={
-							paymentFrequencies
-								.filter((pf) => pf === contributionType)
-								.map((pf) => contributionTypeToBillingPeriod(pf))[0]
-						}
-						buttonClickHandler={handlePaymentFrequencyBtnClick}
-						additionalStyles={paymentFrequencyButtonsCss}
-					/>
-					<ThreeTierCards
-						cardsContent={tierCards}
-						currencyId={currencyId}
-						billingPeriod={billingPeriod}
-						showWeeklyPrice={showWeeklyPrice}
-						deepDiscount={enableDeepDiscount}
-					/>
-				</div>
-			</Container>
-			<Container
-				sideBorders
-				borderColor="rgba(170, 170, 180, 0.5)"
-				cssOverrides={lightContainer}
-			>
-				<SupportOnce
-					currency={glyph(currencyId)}
-					countryGroupId={countryGroupId}
-				/>
-				{showStudentOffer && (
-					<StudentOffer
-						currencyKey={currencyId}
+		<PromoTermsProvider>
+			<PageScaffold
+				header={
+					<>
+						<Header>
+							<CountrySwitcherContainer>
+								<CountryGroupSwitcher {...countrySwitcherProps} />
+							</CountrySwitcherContainer>
+						</Header>
+					</>
+				}
+				footer={
+					<ThreeTierFooter
 						supportRegionId={supportRegionId}
+						showTaxDisclaimer={showTaxDisclaimer}
 					/>
-				)}
-			</Container>
-		</PageScaffold>
+				}
+			>
+				<Container
+					sideBorders
+					topBorder
+					borderColor="rgba(170, 170, 180, 0.5)"
+					cssOverrides={recurringContainer}
+				>
+					<div css={innerContentContainer}>
+						{countdownSettings && (
+							<Countdown
+								countdownSettings={countdownSettings}
+								setHeadingOverride={setHeadingOverride}
+								setDaysTillDeadline={setCountdownDaysLeft}
+							/>
+						)}
+
+						<ThreeTierLandingHeading
+							heading={headingOverride ?? landingPageVariant.copy.heading}
+							countdownDaysLeft={countdownDaysLeft}
+						/>
+
+						<p
+							css={standFirst}
+							dangerouslySetInnerHTML={{
+								__html: getSanitisedHtml(
+									replaceDatePlaceholder(
+										landingPageVariant.copy.subheading,
+										countdownDaysLeft,
+									),
+								),
+							}}
+						/>
+
+						{landingPageVariant.tickerSettings && (
+							<TickerContainer
+								tickerSettings={landingPageVariant.tickerSettings}
+							/>
+						)}
+						<BillingPeriodButtons
+							billingPeriods={paymentFrequencies.map((paymentFrequency) =>
+								contributionTypeToBillingPeriod(paymentFrequency),
+							)}
+							preselectedBillingPeriod={
+								paymentFrequencies
+									.filter((pf) => pf === contributionType)
+									.map((pf) => contributionTypeToBillingPeriod(pf))[0]
+							}
+							buttonClickHandler={handlePaymentFrequencyBtnClick}
+							additionalStyles={paymentFrequencyButtonsCss}
+						/>
+						<ThreeTierCards
+							cardsContent={tierCards}
+							currencyId={currencyId}
+							billingPeriod={billingPeriod}
+							showWeeklyPrice={showWeeklyPrice}
+							deepDiscount={enableDeepDiscount}
+						/>
+					</div>
+				</Container>
+				<Container
+					sideBorders
+					borderColor="rgba(170, 170, 180, 0.5)"
+					cssOverrides={lightContainer}
+				>
+					<SupportOnce
+						currency={glyph(currencyId)}
+						countryGroupId={countryGroupId}
+					/>
+					{showStudentOffer && (
+						<StudentOffer
+							currencyKey={currencyId}
+							supportRegionId={supportRegionId}
+						/>
+					)}
+				</Container>
+			</PageScaffold>
+		</PromoTermsProvider>
 	);
 }
