@@ -12,9 +12,7 @@ type HeroContent = {
 function collectionMapUrl(name: string): JSX.Element {
 	return (
 		<a
-			href={
-				'https://imovo.org/guardianstorefinder'
-			}
+			href={'https://imovo.org/guardianstorefinder'}
 			target="_blank"
 			rel="noopener noreferrer"
 		>
