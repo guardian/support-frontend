@@ -21,6 +21,8 @@ export default function buildCheckoutUrl(
 				return routes.supporterPlusStudentBeansUs;
 			case SupportRegionId.CA:
 				return routes.supporterPlusStudentBeansCa;
+			case SupportRegionId.AU:
+				return routes.supporterPlusStudentBeansAu;
 			case SupportRegionId.EU: {
 				return routes.supporterPlusStudentBeansEu;
 			}
