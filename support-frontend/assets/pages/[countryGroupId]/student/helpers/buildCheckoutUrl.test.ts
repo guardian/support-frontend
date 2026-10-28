@@ -29,14 +29,14 @@ describe('buildCheckoutUrl', () => {
 	});
 
 	describe('when the rate plan is OneYearStudent', () => {
-		describe('and the supportRegionId is uk', () => {
+		describe('and the supportRegionId is au', () => {
 			it('returns the correct Student Beans landing page URL', () => {
 				const url = buildCheckoutUrl(
-					SupportRegionId.UK,
+					SupportRegionId.AU,
 					'SupporterPlus',
 					'OneYearStudent',
 				);
-				expect(url).toBe(routes.supporterPlusStudentBeansUk);
+				expect(url).toBe(routes.supporterPlusStudentBeansAu);
 			});
 		});
 		describe('and the supportRegionId is eu', () => {

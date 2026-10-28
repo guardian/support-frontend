@@ -32,7 +32,7 @@ Resources:
         - AttributeName: "subscriptionName"
           KeyType: "RANGE"
       ProvisionedThroughput:
-        ReadCapacityUnits: 20
+        ReadCapacityUnits: 70
         WriteCapacityUnits: 5
       SSESpecification:
         SSEEnabled: true

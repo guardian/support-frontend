@@ -120,8 +120,8 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |        "description" : "Enable alternative SupporterPlus card colours and disable Your selection pill copy",
           |        "state" : "Off"
           |      },
-          |      "enableStudentBeansEurope" : {
-          |        "description" : "Enable StudentBeans Europe (Germany, France, Spain, Ireland, Holland)",
+          |      "enableStudentBeansEuropeAustralia" : {
+          |        "description" : "Enable StudentBeans Australia and Europe (Germany, France, Spain, Ireland, Holland)",
           |        "state" : "Off"
           |      }
           |    }
