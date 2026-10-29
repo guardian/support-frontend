@@ -16,6 +16,7 @@ Conditions:
 Resources:
   ProdTable:
     Condition: CreateProdResources
+    DeletionPolicy: Retain
     Type: "AWS::DynamoDB::Table"
     Properties:
       AttributeDefinitions:
@@ -107,6 +108,7 @@ Resources:
 
   CodeTable:
     Condition: CreateCodeResources
+    DeletionPolicy: Retain
     Type: "AWS::DynamoDB::Table"
     Properties:
       AttributeDefinitions:
