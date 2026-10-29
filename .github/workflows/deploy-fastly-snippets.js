@@ -76,6 +76,12 @@ const snippets = [
     name: "support-frontend - gu_geo_country cookie deliver",
     type: "deliver",
   },
+  // GU_geo_country_region
+  {
+    file: "./support-frontend/conf/fastly-snippets/gu_geo_country_region-cookie.vcl",
+    name: "support-frontend - GU_geo_country_region cookie deliver",
+    type: "deliver",
+  },
   {
     file: "./support-frontend/conf/fastly-snippets/vat-compliance-redirects-recv.vcl",
     name: "support-frontend - VAT compliance redirect",
