@@ -17,7 +17,6 @@ import services.fastly.FastlyService
 
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
-import admin.settings.AmountsTests.AmountsTests
 import services.{
   CheckoutNudgeTestService,
   LandingPageTestService,
@@ -35,25 +34,25 @@ abstract class SettingsProvider[T] {
 
 class AllSettingsProvider private (
     switchesProvider: SettingsProvider[Switches],
-    amountsProvider: SettingsProvider[AmountsTests],
     contributionTypesProvider: SettingsProvider[ContributionTypes],
     metricUrl: MetricUrl,
     landingPageTestsProvider: LandingPageTestService,
     checkoutNudgeTestsProvider: CheckoutNudgeTestService,
     oneTimeCheckoutTestsProvider: OneTimeCheckoutTestService,
     studentLandingPageTestsProvider: StudentLandingPageTestService,
+    banditDataService: services.BanditDataService,
 ) {
 
   def getAllSettings(): AllSettings = {
     AllSettings(
       switchesProvider.settings(),
-      amountsProvider.settings(),
       contributionTypesProvider.settings(),
       metricUrl,
       landingPageTestsProvider.getTests(),
       checkoutNudgeTestsProvider.getTests(),
       oneTimeCheckoutTestsProvider.getTests(),
       studentLandingPageTestsProvider.getTests(),
+      banditDataService.getClientBanditData(),
     )
   }
 }
@@ -65,21 +64,21 @@ object AllSettingsProvider {
       checkoutNudgeTestService: CheckoutNudgeTestService,
       oneTimeCheckoutTestService: OneTimeCheckoutTestService,
       studentLandingPageTestService: StudentLandingPageTestService,
+      banditDataService: services.BanditDataService,
   )(implicit client: AwsS3Client, system: ActorSystem, wsClient: WSClient): Either[Throwable, AllSettingsProvider] = {
     for {
       switchesProvider <- SettingsProvider.fromAppConfig[Switches](config.settingsSources.switches, config)
-      amountsProvider <- SettingsProvider.fromAppConfig[AmountsTests](config.settingsSources.amounts, config)
       contributionTypesProvider <- SettingsProvider
         .fromAppConfig[ContributionTypes](config.settingsSources.contributionTypes, config)
     } yield new AllSettingsProvider(
       switchesProvider,
-      amountsProvider,
       contributionTypesProvider,
       config.metricUrl,
       landingPageTestService,
       checkoutNudgeTestService,
       oneTimeCheckoutTestService,
       studentLandingPageTestService,
+      banditDataService,
     )
   }
 }

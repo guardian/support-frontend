@@ -25,8 +25,8 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, header, status, stubControllerComponents}
 import services._
 import services.mparticle.MParticleClient
-import services.pricing.{CountryGroupPrices, PriceSummaryService, PriceSummaryServiceProvider}
-
+import services.pricing.{CountryGroupPrices, DefaultPromotionService, PriceSummaryService, PriceSummaryServiceProvider}
+import cats.effect.IO
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -37,7 +37,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
   val stage = Stages.DEV
 
   val parser = mock[BodyParser[AnyContent]]
-  val authService = mock[OktaAuthService]
+  val authService = mock[OktaAuthService[IO]]
   val config = mock[Identity]
   val mockAuthActionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(
     parser,
@@ -54,7 +54,19 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     checkToken = csrfCheck,
     csrfConfig = csrfConfig,
     stage = stage,
-    featureSwitches = FeatureSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
+    featureSwitches = FeatureSwitches(
+      Some(On),
+      Some(On),
+      Some(On),
+      Some(On),
+      Some(On),
+      Some(On),
+      Some(On),
+      Some(On),
+      Some(On),
+      Some(On),
+      Some(On),
+    ),
     testUsersService = TestUserService("secret"),
   )
 
@@ -82,7 +94,6 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     stubControllerComponents(),
     mock[StripePublicConfigProvider],
     mock[StripePublicConfigProvider],
-    mock[PayPalConfigProvider],
     mock[RecaptchaConfigProvider],
     mock[PaymentAPIService],
     "",
@@ -90,7 +101,10 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     mock[AllSettingsProvider],
     mock[Stage],
     priceSummaryServiceProvider,
+    mock[DefaultPromotionService],
+    mock[CachedPromotionsServiceProvider],
     productCatalog,
+    mock[CachedSalesTaxService],
     "support.thegulocal.com",
     mock[TickerService],
     mock[MParticleClient],

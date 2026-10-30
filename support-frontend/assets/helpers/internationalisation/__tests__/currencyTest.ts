@@ -5,10 +5,10 @@ import {
 	GBPCountries,
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { detect } from '../currency';
 
-let mockCurrency: IsoCurrency | null | undefined = null;
+let mockCurrency: CurrencyCode | null | undefined = null;
 jest.mock('helpers/urls/url', () => ({
 	getQueryParameter: () => mockCurrency,
 }));

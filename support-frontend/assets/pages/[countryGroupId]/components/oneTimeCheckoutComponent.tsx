@@ -4,9 +4,12 @@ import {
 	headlineBold24,
 	neutral,
 	space,
+	textSans15,
 	textSans17,
+	until,
 } from '@guardian/source/foundations';
 import {
+	InlineError,
 	Radio,
 	RadioGroup,
 	TextInput,
@@ -15,7 +18,7 @@ import {
 	Divider,
 	ErrorSummary,
 } from '@guardian/source-development-kitchen/react-components';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import {
@@ -24,7 +27,17 @@ import {
 	useElements,
 	useStripe,
 } from '@stripe/react-stripe-js';
-import type { ExpressPaymentType } from '@stripe/stripe-js';
+import { PaymentElement } from '@stripe/react-stripe-js';
+import type {
+	ExpressPaymentType,
+	PaymentMethodResult,
+	StripeError,
+} from '@stripe/stripe-js';
+import type {
+	StripeCardCvcElementChangeEvent,
+	StripeCardExpiryElementChangeEvent,
+	StripeCardNumberElementChangeEvent,
+} from '@stripe/stripe-js';
 import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
@@ -35,22 +48,21 @@ import { PriceCards } from 'components/priceCards/priceCards';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
+import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import type { Participations } from 'helpers/abTests/models';
 import { config } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import type {
-	CreatePayPalPaymentResponse,
 	CreateStripePaymentIntentRequest,
+	PaymentResult,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import {
+	getStripePaymentMethod,
 	postOneOffPayPalCreatePaymentRequest,
 	processStripePaymentIntentRequest,
+	processStripePaymentIntentRequestForPaypal,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
-import type {
-	PaymentResult,
-	StripePaymentMethod,
-} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod as LegacyPaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	isPaymentMethod,
@@ -71,11 +83,16 @@ import {
 	sendEventOneTimeCheckoutValue,
 	sendEventPaymentMethodSelected,
 } from 'helpers/tracking/quantumMetric';
-import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
+import {
+	payPalCancelUrl,
+	payPalReturnUrl,
+	stripePayPalReturnUrl,
+} from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import {
 	getSanitisedHtml,
 	parseCustomAmounts,
+	replaceMParticleTemplates,
 	roundToDecimalPlaces,
 } from 'helpers/utilities/utilities';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
@@ -86,6 +103,7 @@ import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/footerTsA
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { CheckoutNudgeSelector } from '../../../components/checkoutNudge/checkoutNudge';
 import type { CheckoutNudgeSettings } from '../../../helpers/abTests/checkoutNudgeAbTests';
+import useEmailMarketingUtmSession from '../../../helpers/customHooks/useEmailMarketingUtmSession';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import type { OneTimeCheckoutVariant } from '../../../helpers/globalsAndSwitches/oneTimeCheckoutSettings';
 import {
@@ -96,6 +114,7 @@ import { getSupportRegionIdConfig } from '../../supportRegionConfig';
 import { PersonalEmailFields } from '../checkout/components/PersonalEmailFields';
 import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
 import getConsentValue from '../helpers/getConsentValue';
+import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -163,16 +182,29 @@ const similarProductsConsentCheckboxContainer = css`
 	}
 `;
 
+const containerSummaryTsCs = css`
+	margin-top: ${space[6]}px;
+	border-radius: ${space[3]}px;
+	border: 1px solid ${neutral[46]};
+	background-color: ${neutral[97]};
+	padding: ${space[2]}px ${space[3]}px;
+	${textSans15};
+	color: ${neutral[0]};
+	& a {
+		color: ${neutral[7]};
+	}
+`;
+
 type OneTimeCheckoutComponentProps = {
 	supportRegionId: SupportRegionId;
 	appConfig: AppConfig;
 	stripePublicKey: string;
-	countryId: IsoCountry;
-	abParticipations: Participations;
+	countryId: CountryCode;
 	useStripeExpressCheckout: boolean;
 	nudgeSettings?: CheckoutNudgeSettings;
 	landingPageSettings: LandingPageVariant;
 	oneTimeCheckoutSettings: OneTimeCheckoutVariant;
+	userAttributes: Record<string, unknown>;
 };
 
 function paymentMethodIsActive(paymentMethod: PaymentMethod) {
@@ -185,16 +217,17 @@ function paymentMethodIsActive(paymentMethod: PaymentMethod) {
 
 function getPreSelectedAmount(
 	preSelectedAmountParam: string | null,
+	mParticleAmount: string | undefined,
 	amountChoices: number[],
 ): {
 	preSelectedOtherAmount?: string;
 	preSelectedPriceCard?: number | 'other';
 } {
-	const preSelectedAmount = preSelectedAmountParam
-		? parseInt(preSelectedAmountParam, 10)
-		: undefined;
+	// The URL param takes precedence over the mParticle-derived amount.
+	const rawAmount = preSelectedAmountParam ?? mParticleAmount;
+	const preSelectedAmount = rawAmount ? parseInt(rawAmount, 10) : undefined;
 
-	if (preSelectedAmount === undefined) {
+	if (preSelectedAmount === undefined || Number.isNaN(preSelectedAmount)) {
 		return {
 			preSelectedOtherAmount: undefined,
 			preSelectedPriceCard: undefined,
@@ -234,6 +267,7 @@ function getAcquisitionData(
 	abParticipations: Participations,
 	billingPostcode: string,
 	coverTransactionCost: boolean,
+	countryId: CountryCode,
 ): PaymentAPIAcquisitionData {
 	const referrerAcquisitionData = getReferrerAcquisitionData();
 	return derivePaymentApiAcquisitionData(
@@ -247,7 +281,18 @@ function getAcquisitionData(
 		},
 		abParticipations,
 		billingPostcode,
+		countryId,
 	);
+}
+
+function getMParticleAmount(
+	userAttributes: Record<string, unknown>,
+	mParticleAmountAttribute: string,
+): string | undefined {
+	const value = userAttributes[mParticleAmountAttribute];
+	return typeof value === 'string' || typeof value === 'number'
+		? String(value)
+		: undefined;
 }
 
 export function OneTimeCheckoutComponent({
@@ -255,20 +300,35 @@ export function OneTimeCheckoutComponent({
 	appConfig,
 	stripePublicKey,
 	countryId,
-	abParticipations,
 	useStripeExpressCheckout,
 	nudgeSettings,
 	landingPageSettings,
 	oneTimeCheckoutSettings,
+	userAttributes,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
+	const heading = replaceMParticleTemplates(
+		oneTimeCheckoutSettings.heading,
+		userAttributes,
+		currency,
+	);
+	const subheading = replaceMParticleTemplates(
+		oneTimeCheckoutSettings.subheading,
+		userAttributes,
+		currency,
+	);
 
 	const preSelectedAmountParam = urlSearchParams.get('contribution');
+	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
+	const abParticipations = useAbParticipations();
 
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
+	const inStripePaymentElementVariant =
+		abParticipations.stripePaymentElementTest === 'variant' &&
+		isSwitchOn('featureSwitches.enableStripePaymentElement');
 
 	let customAmountsData;
 	const customAmountsParam = urlSearchParams.get('amounts');
@@ -286,8 +346,16 @@ export function OneTimeCheckoutComponent({
 	const { amounts, defaultAmount, hideChooseYourAmount } =
 		customAmountsData ?? amountsDataFromOneTimeCheckoutSettings;
 
+	const mParticleAmountAttribute =
+		amountsDataFromOneTimeCheckoutSettings.mParticleAmountAttribute;
+	const mParticleAmount =
+		preSelectedAmountParam || !mParticleAmountAttribute
+			? undefined
+			: getMParticleAmount(userAttributes, mParticleAmountAttribute);
+
 	const { preSelectedPriceCard, preSelectedOtherAmount } = getPreSelectedAmount(
 		preSelectedAmountParam,
+		mParticleAmount,
 		amounts,
 	);
 
@@ -326,14 +394,17 @@ export function OneTimeCheckoutComponent({
 
 	const elements = useElements();
 	useEffect(() => {
-		if (useStripeExpressCheckout && finalAmount && elements) {
-			// valid elements and final amount, set amount, enable Express checkout
-			elements.update({ amount: finalAmount * 100 });
-			setStripeExpressCheckoutEnable(true);
-		} else {
-			// invalid elements and final amount, disable Express checkout
-			setStripeExpressCheckoutEnable(false);
-		}
+		const initialiseStripeExpress = async () => {
+			if (useStripeExpressCheckout && finalAmount && elements) {
+				// valid elements and final amount, set amount, enable Express checkout
+				await elements.update({ amount: finalAmount * 100 });
+				setStripeExpressCheckoutEnable(true);
+			} else {
+				// invalid elements and final amount, disable Express checkout
+				setStripeExpressCheckoutEnable(false);
+			}
+		};
+		void initialiseStripeExpress();
 	}, [finalAmount, elements, useStripeExpressCheckout]);
 
 	useEffect(() => {
@@ -346,6 +417,7 @@ export function OneTimeCheckoutComponent({
 	/** Payment methods: Stripe */
 	const stripe = useStripe();
 	const cardElement = elements?.getElement(CardNumberElement);
+	const paymentElement = elements?.getElement(PaymentElement);
 	const [
 		stripeExpressCheckoutPaymentType,
 		setStripeExpressCheckoutPaymentType,
@@ -383,6 +455,7 @@ export function OneTimeCheckoutComponent({
 
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('None');
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
+	type StripeOnlyField = 'cardNumber' | 'expiry' | 'cvc';
 	useEffect(() => {
 		if (paymentMethodError) {
 			paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -391,6 +464,19 @@ export function OneTimeCheckoutComponent({
 
 	const formRef = useRef<HTMLFormElement>(null);
 	const paymentMethodRef = useRef<HTMLFieldSetElement>(null);
+
+	const [stripeFieldsAreEmpty, setStripeFieldsAreEmpty] = useState<
+		Record<StripeOnlyField, boolean>
+	>({ cardNumber: true, expiry: true, cvc: true });
+	type StripeField = StripeOnlyField | 'recaptcha';
+	const [stripeFieldError, setStripeFieldError] = useState<
+		Partial<Record<StripeField, string>>
+	>({});
+
+	const [isPaymentElementComplete, setIsPaymentElementComplete] =
+		useState(false);
+	const [paymentElementRecaptchaError, setPaymentElementRecaptchaError] =
+		useState<string>();
 
 	const validate = (
 		event: React.FormEvent<HTMLInputElement>,
@@ -411,17 +497,73 @@ export function OneTimeCheckoutComponent({
 		}
 	};
 
+	useEffect(() => {
+		// Return to the default state when payment method changes
+		setStripeFieldsAreEmpty({
+			cardNumber: true,
+			expiry: true,
+			cvc: true,
+		});
+		setStripeFieldError({});
+	}, [paymentMethod]);
+
+	// Reset recaptcha error when recaptcha token changes
+	useEffect(() => {
+		setStripeFieldError((previousState) => ({
+			...previousState,
+			recaptcha: undefined,
+		}));
+	}, [recaptchaToken]);
+
 	const formOnSubmit = async (formData: FormData) => {
 		const similarProductsConsent = getConsentValue(formData, CONSENT_ID);
 
 		if (finalAmount) {
-			setIsProcessingPayment(true);
-
 			if (paymentMethod === 'None') {
 				setPaymentMethodError('Please select a payment method');
+				return;
 			}
 
-			let paymentResult;
+			if (!inStripePaymentElementVariant && paymentMethod === 'Stripe') {
+				const newStripeFieldError = {
+					...(stripeFieldsAreEmpty.cardNumber && {
+						cardNumber: 'Please enter card number',
+					}),
+					...(stripeFieldsAreEmpty.expiry && {
+						expiry: 'Please enter expiry',
+					}),
+					...(stripeFieldsAreEmpty.cvc && {
+						cvc: 'Please enter CVC',
+					}),
+					// Recaptcha works slightly differently because we own the state
+					...(!recaptchaToken && {
+						recaptcha: 'Please complete security check',
+					}),
+				};
+				// Don't go any further if there are errors for any Stripe fields
+				if (Object.values(newStripeFieldError).some((value) => value)) {
+					setStripeFieldError(newStripeFieldError);
+					paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
+					return;
+				}
+			}
+			if (inStripePaymentElementVariant && paymentMethod === 'Stripe') {
+				if (!isPaymentElementComplete || !recaptchaToken) {
+					if (!isPaymentElementComplete) {
+						setPaymentMethodError(
+							'Please check your payment details and try again',
+						);
+					}
+					if (!recaptchaToken) {
+						setPaymentElementRecaptchaError('Please complete security check');
+					}
+					paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
+					return;
+				}
+			}
+			setIsProcessingPayment(true);
+
+			let paymentResult: PaymentResult | undefined;
 			if (paymentMethod === 'PayPal') {
 				paymentResult = await postOneOffPayPalCreatePaymentRequest({
 					currency: currencyKey,
@@ -437,6 +579,7 @@ export function OneTimeCheckoutComponent({
 					abParticipations,
 					billingPostcode,
 					coverTransactionCost,
+					countryId,
 				);
 				// We've only created a payment at this point, and the user has to get through
 				// the PayPal flow on their site before we can actually try and execute the payment.
@@ -453,7 +596,7 @@ export function OneTimeCheckoutComponent({
 				);
 			}
 
-			let paymentMethodResult;
+			let paymentMethodResult: PaymentMethodResult | undefined;
 			if (
 				paymentMethod === 'StripeExpressCheckoutElement' &&
 				stripe &&
@@ -479,11 +622,50 @@ export function OneTimeCheckoutComponent({
 					},
 				});
 			}
-			if (paymentMethodResult && stripe) {
+
+			if (
+				paymentMethod === 'Stripe' &&
+				stripe &&
+				paymentElement &&
+				recaptchaToken &&
+				elements
+			) {
+				await elements.submit();
+				paymentMethodResult = await stripe.createPaymentMethod({
+					elements,
+					params: {
+						billing_details: {
+							address: {
+								postal_code: billingPostcode,
+							},
+						},
+					},
+				});
+			}
+			if (paymentMethodResult && stripe && elements) {
 				// Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
 				const handle3DS = (clientSecret: string) => {
 					trackComponentLoad('stripe-3ds');
 					return stripe.handleCardAction(clientSecret);
+				};
+
+				const handlePaypal = (
+					clientSecret: string,
+				): Promise<{ error: StripeError }> => {
+					trackComponentLoad('stripe-Paypal');
+					return stripe.confirmPayment({
+						elements,
+						clientSecret,
+						confirmParams: {
+							return_url: stripePayPalReturnUrl(
+								countryGroupId,
+								email,
+								stripePublicKey,
+								currencyKey,
+								finalAmount,
+							),
+						},
+					});
 				};
 
 				if (paymentMethodResult.error) {
@@ -505,12 +687,22 @@ export function OneTimeCheckoutComponent({
 						);
 					}
 				} else {
-					const stripePaymentMethod: StripePaymentMethod =
-						paymentMethod === 'StripeExpressCheckoutElement'
-							? stripeExpressCheckoutPaymentType === 'apple_pay'
-								? 'StripeApplePay'
-								: 'StripePaymentRequestButton'
-							: 'StripeCheckout';
+					const paymentMethodType =
+						paymentMethodResult.paymentMethod.type.toLowerCase();
+					if (
+						paymentMethod === 'StripeExpressCheckoutElement' &&
+						(stripeExpressCheckoutPaymentType === 'apple_pay' ||
+							stripeExpressCheckoutPaymentType === 'google_pay') &&
+						paymentMethodType !== 'card'
+					) {
+						logException(
+							`Stripe Express Checkout ${stripeExpressCheckoutPaymentType} produced a ${paymentMethodType} PaymentMethod`,
+						);
+					}
+
+					const stripePaymentMethod = getStripePaymentMethod(
+						paymentMethodResult.paymentMethod,
+					);
 
 					const stripeData: CreateStripePaymentIntentRequest = {
 						paymentData: {
@@ -523,16 +715,38 @@ export function OneTimeCheckoutComponent({
 							abParticipations,
 							billingPostcode,
 							coverTransactionCost,
+							countryId,
 						),
+
 						publicKey: stripePublicKey,
 						recaptchaToken: recaptchaToken ?? '',
 						paymentMethodId: paymentMethodResult.paymentMethod.id,
 						similarProductsConsent,
 					};
-					paymentResult = await processStripePaymentIntentRequest(
-						stripeData,
-						handle3DS,
-					);
+					if (stripePaymentMethod === 'StripePaypal') {
+						cookie.set(
+							'acquisition_data',
+							encodeURIComponent(JSON.stringify(stripeData.acquisitionData)),
+						);
+						setThankYouOrder({
+							firstName: '',
+							email: email,
+							paymentMethod: paymentMethod,
+							status: 'success', // retry pending mechanism not applied to one-time payments
+						});
+
+						// If we successfully create a Payment Intent then this call will redirect to the paypal confirmation page.
+						// In this case paymentResult will not be set and it will not continue past this point.
+						paymentResult = await processStripePaymentIntentRequestForPaypal(
+							stripeData,
+							handlePaypal,
+						);
+					} else {
+						paymentResult = await processStripePaymentIntentRequest(
+							stripeData,
+							handle3DS,
+						);
+					}
 				}
 			}
 
@@ -545,9 +759,12 @@ export function OneTimeCheckoutComponent({
 				});
 				const thankYouUrlSearchParams = new URLSearchParams();
 				thankYouUrlSearchParams.set('contribution', finalAmount.toString());
-				'userType' in paymentResult &&
-					paymentResult.userType &&
-					thankYouUrlSearchParams.set('userType', paymentResult.userType);
+				paymentResult.type === 'stripe' &&
+					paymentResult.result.userType &&
+					thankYouUrlSearchParams.set(
+						'userType',
+						paymentResult.result.userType,
+					);
 				const nextStepRoute = paymentResultThankyouRoute(
 					paymentResult,
 					supportRegionId,
@@ -558,10 +775,12 @@ export function OneTimeCheckoutComponent({
 				} else {
 					setErrorMessage('Sorry, something went wrong.');
 					if (
-						'paymentStatus' in paymentResult &&
-						paymentResult.paymentStatus === 'failure'
+						paymentResult.type === 'stripe' &&
+						paymentResult.result.paymentStatus === 'failure'
 					) {
-						setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
+						setErrorContext(
+							appropriateErrorMessage(paymentResult.result.error ?? ''),
+						);
 					}
 					setIsProcessingPayment(false);
 				}
@@ -572,22 +791,23 @@ export function OneTimeCheckoutComponent({
 	};
 
 	function paymentResultThankyouRoute(
-		paymentResult: PaymentResult | CreatePayPalPaymentResponse | undefined,
+		paymentResult: PaymentResult,
 		supportRegionId: SupportRegionId,
 		thankYouUrlSearchParams: URLSearchParams,
 	): string | undefined {
-		if (paymentResult) {
-			if ('type' in paymentResult && paymentResult.type === 'success') {
-				return paymentResult.data.approvalUrl;
-			} else if (
-				'paymentStatus' in paymentResult &&
-				paymentResult.paymentStatus === 'success'
-			) {
-				return `/${supportRegionId}/thank-you?${thankYouUrlSearchParams.toString()}`;
-			}
+		if (
+			paymentResult.type === 'paypal' &&
+			paymentResult.result.type === 'success'
+		) {
+			// redirect to paypal approval url
+			return paymentResult.result.data.approvalUrl;
+		} else if (
+			paymentResult.type === 'stripe' &&
+			paymentResult.result.paymentStatus === 'success'
+		) {
+			return `/${supportRegionId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 		}
-
-		return;
+		return undefined;
 	}
 
 	useAbandonedBasketCookie(
@@ -604,6 +824,8 @@ export function OneTimeCheckoutComponent({
 			: `Support us with ${simpleFormatAmount(currency, finalAmount)}`
 		: 'Pay now';
 
+	const automaticSimilarProductsConsent = countryId === 'US';
+
 	return (
 		<GuardianPageLayout borderBox>
 			<Box>
@@ -617,7 +839,7 @@ export function OneTimeCheckoutComponent({
 							<h2 css={title}>
 								<span
 									dangerouslySetInnerHTML={{
-										__html: getSanitisedHtml(oneTimeCheckoutSettings.heading),
+										__html: getSanitisedHtml(heading),
 									}}
 								/>
 							</h2>
@@ -629,7 +851,7 @@ export function OneTimeCheckoutComponent({
 						<p css={standFirst}>
 							<span
 								dangerouslySetInnerHTML={{
-									__html: getSanitisedHtml(oneTimeCheckoutSettings.subheading),
+									__html: getSanitisedHtml(subheading),
 								}}
 							/>
 						</p>
@@ -840,75 +1062,204 @@ export function OneTimeCheckoutComponent({
 								2. Payment method
 								<SecureTransactionIndicator hideText={true} />
 							</Legend>
-							<RadioGroup
-								role="radiogroup"
-								label="Select payment method"
-								hideLabel
-								error={paymentMethodError}
-							>
-								{validPaymentMethods.map((validPaymentMethod) => {
-									const selected = paymentMethod === validPaymentMethod;
-									const { label, icon } = paymentMethodData[validPaymentMethod];
+							{inStripePaymentElementVariant && (
+								<div>
+									<div
+										css={css`
+											padding-top: 12px;
+											padding-bottom: 24px;
+											${until.tablet} {
+												padding-top: 4px;
+												padding-bottom: 16px;
+											}
+										`}
+									>
+										{paymentMethodError && (
+											<div
+												role="alert"
+												data-qm-error
+												css={css`
+													margin-bottom: 8px;
+												`}
+											>
+												<InlineError>{paymentMethodError}</InlineError>
+											</div>
+										)}
+										<PaymentElement
+											options={{
+												fields: { billingDetails: { address: 'if_required' } },
+												layout: {
+													type: 'accordion',
+													radios: 'always',
+													spacedAccordionItems: true,
+												},
+												wallets: {
+													link: 'never',
+												},
+												paymentMethodOrder: ['card', 'paypal'],
+											}}
+											onFocus={() => {
+												setPaymentMethod(Stripe);
+											}}
+											onChange={(event) => {
+												setIsPaymentElementComplete(event.complete);
+												setPaymentMethodError(undefined);
+											}}
+										/>
+									</div>
+									{paymentElementRecaptchaError && (
+										<div
+											role="alert"
+											data-qm-error
+											css={css`
+												margin-bottom: 8px;
+											`}
+										>
+											<InlineError>{paymentElementRecaptchaError}</InlineError>
+										</div>
+									)}
+									<Recaptcha
+										onRecaptchaCompleted={(token) => {
+											setRecaptchaToken(token);
+											setPaymentElementRecaptchaError(undefined);
+										}}
+										onRecaptchaExpired={() => {
+											setRecaptchaToken(undefined);
+											setPaymentElementRecaptchaError(undefined);
+										}}
+									/>
+									<Divider
+										size="full"
+										cssOverrides={css`
+											margin-left: 0;
+											width: 100%;
+											margin-top: 40px;
+											margin-bottom: 24px;
+											${until.tablet} {
+												margin-top: 36px;
+												margin-bottom: 20px;
+											}
+										`}
+									/>
+								</div>
+							)}
 
-									return (
-										<PaymentMethodSelector selected={selected}>
-											<PaymentMethodRadio selected={selected}>
-												<Radio
-													label={
-														<>
-															{label} <div>{icon}</div>
-														</>
-													}
-													name="paymentMethod"
-													value={validPaymentMethod}
-													cssOverrides={
-														selected
-															? checkedRadioLabelColour
-															: defaultRadioLabelColour
-													}
-													onChange={() => {
-														setPaymentMethod(validPaymentMethod);
-														setPaymentMethodError(undefined);
-														// Track payment method selection with QM
-														sendEventPaymentMethodSelected(validPaymentMethod);
-													}}
-												/>
-											</PaymentMethodRadio>
-											{validPaymentMethod === 'Stripe' && selected && (
-												<div css={paymentMethodBody}>
-													<input
-														type="hidden"
-														name="recaptchaToken"
-														value={recaptchaToken}
-													/>
-													<StripeCardForm
-														onCardNumberChange={() => {
-															// no-op
-														}}
-														onExpiryChange={() => {
-															// no-op
-														}}
-														onCvcChange={() => {
-															// no-op
-														}}
-														errors={{}}
-														recaptcha={
-															<Recaptcha
-																onRecaptchaCompleted={(token) => {
-																	setRecaptchaToken(token);
-																}}
-																onRecaptchaExpired={() => {
-																	setRecaptchaToken(undefined);
-																}}
-															/>
+							{!inStripePaymentElementVariant && (
+								<RadioGroup
+									role="radiogroup"
+									label="Select payment method"
+									hideLabel
+									error={paymentMethodError}
+								>
+									{validPaymentMethods.map((validPaymentMethod) => {
+										const selected = paymentMethod === validPaymentMethod;
+										const { label, icon } =
+											paymentMethodData[validPaymentMethod];
+
+										return (
+											<PaymentMethodSelector selected={selected}>
+												<PaymentMethodRadio selected={selected}>
+													<Radio
+														label={
+															<>
+																{label} <div>{icon}</div>
+															</>
 														}
+														name="paymentMethod"
+														value={validPaymentMethod}
+														cssOverrides={
+															selected
+																? checkedRadioLabelColour
+																: defaultRadioLabelColour
+														}
+														onChange={() => {
+															setPaymentMethod(validPaymentMethod);
+															setPaymentMethodError(undefined);
+															// Track payment method selection with QM
+															sendEventPaymentMethodSelected(
+																validPaymentMethod,
+															);
+														}}
 													/>
-												</div>
-											)}
-										</PaymentMethodSelector>
-									);
-								})}
-							</RadioGroup>
+												</PaymentMethodRadio>
+												{validPaymentMethod === 'Stripe' && selected && (
+													<div css={paymentMethodBody}>
+														<input
+															type="hidden"
+															name="recaptchaToken"
+															value={recaptchaToken}
+														/>
+														<StripeCardForm
+															onCardNumberChange={(
+																event: StripeCardNumberElementChangeEvent,
+															) => {
+																setStripeFieldsAreEmpty((prevState) => ({
+																	...prevState,
+																	cardNumber: event.empty,
+																}));
+
+																// Clear errors when the field changes, we'll (re) show errors, if any, on submit
+																setStripeFieldError((prevState) => ({
+																	...prevState,
+																	cardNumber: undefined,
+																}));
+															}}
+															onExpiryChange={(
+																event: StripeCardExpiryElementChangeEvent,
+															) => {
+																setStripeFieldsAreEmpty((prevState) => ({
+																	...prevState,
+																	expiry: event.empty,
+																}));
+
+																// Clear errors when the field changes, we'll (re) show errors, if any, on submit
+																setStripeFieldError((prevState) => ({
+																	...prevState,
+																	expiry: undefined,
+																}));
+															}}
+															onCvcChange={(
+																event: StripeCardCvcElementChangeEvent,
+															) => {
+																setStripeFieldsAreEmpty((prevState) => ({
+																	...prevState,
+																	cvc: event.empty,
+																}));
+
+																// Clear errors when the field changes, we'll (re) show errors, if any, on submit
+																setStripeFieldError((prevState) => ({
+																	...prevState,
+																	cvc: undefined,
+																}));
+															}}
+															errors={{
+																cardNumber: maybeArrayWrap(
+																	stripeFieldError.cardNumber,
+																),
+																expiry: maybeArrayWrap(stripeFieldError.expiry),
+																cvc: maybeArrayWrap(stripeFieldError.cvc),
+																recaptcha: maybeArrayWrap(
+																	stripeFieldError.recaptcha,
+																),
+															}}
+															recaptcha={
+																<Recaptcha
+																	onRecaptchaCompleted={(token) => {
+																		setRecaptchaToken(token);
+																	}}
+																	onRecaptchaExpired={() => {
+																		setRecaptchaToken(undefined);
+																	}}
+																/>
+															}
+														/>
+													</div>
+												)}
+											</PaymentMethodSelector>
+										);
+									})}
+								</RadioGroup>
+							)}
 						</FormSection>
 						<CoverTransactionCost
 							transactionCost={coverTransactionCost}
@@ -925,9 +1276,18 @@ export function OneTimeCheckoutComponent({
 							)}
 						/>
 
-						<div css={similarProductsConsentCheckboxContainer}>
-							<SimilarProductsConsent />
-						</div>
+						{!isMarketingEmailSession && (
+							<SimilarProductsConsent
+								showCheckbox={!automaticSimilarProductsConsent}
+								cssOverrides={similarProductsConsentCheckboxContainer}
+							/>
+						)}
+						{automaticSimilarProductsConsent && (
+							<div css={containerSummaryTsCs}>
+								We’ll send you emails about our journalism and ways to support
+								and enjoy our work. You can unsubscribe at any time
+							</div>
+						)}
 
 						<div
 							css={css`

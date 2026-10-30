@@ -30,6 +30,7 @@ case class PayPalPaymentSource(
     customer_type: String,
     description: String,
     experience_context: ExperienceContext,
+    permit_multiple_payment_tokens: Boolean,
 )
 object PayPalPaymentSource {
   implicit val codec: Codec[PayPalPaymentSource] = deriveCodec
@@ -130,6 +131,9 @@ class PayPalCompletePaymentsService(config: PayPalCompletePaymentsConfig, client
             cancel_url = cancelUrl,
             shipping_preference = "NO_SHIPPING",
           ),
+          // We want a separate payment token per purchase. This way subscriptions can be
+          // cancelled in a granular way on the PayPal side.
+          permit_multiple_payment_tokens = true,
         ),
       ),
     )

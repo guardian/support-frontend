@@ -3,12 +3,14 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
+import com.gu.i18n.CountryGroup
 import com.gu.support.catalog.GuardianWeekly
 import com.gu.support.config.Stage
 import com.gu.support.config.Stages.PROD
 import com.gu.support.encoding.CustomCodecs._
-import services.pricing.PriceSummaryServiceProvider
-import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
+import com.gu.support.promotions.{CatalogRatePlan, PromoWithCatalogInformation}
+import services.{ApplicablePromotions, CachedProductCatalogServiceProvider, CachedPromotionsServiceProvider}
+import services.pricing.DefaultPromotionService
 import config.StringsConfig
 import play.api.mvc._
 import play.twirl.api.Html
@@ -18,8 +20,9 @@ import views.ViewHelpers.outputJson
 import scala.concurrent.ExecutionContext
 
 class WeeklySubscriptionController(
-    priceSummaryServiceProvider: PriceSummaryServiceProvider,
-    landingCopyProvider: LandingCopyProvider,
+    defaultPromotionService: DefaultPromotionService,
+    cachedPromotionsServiceProvider: CachedPromotionsServiceProvider,
+    cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
     val assets: AssetsResolver,
     val actionRefiners: CustomActionBuilders,
     components: ControllerComponents,
@@ -41,7 +44,7 @@ class WeeklySubscriptionController(
     if (orderIsAGift) "subscribe/weekly/gift" else "subscribe/weekly",
   )
 
-  def weekly(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
+  def weekly(countryGroupId: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     // We want the canonical link to point to the geo-redirect page so that users arriving from
     // search will be redirected to the correct version of the page
@@ -51,16 +54,16 @@ class WeeklySubscriptionController(
       request.queryString
         .getOrElse("promoCode", Nil)
         .toList
-    val defaultPromos = priceSummaryServiceProvider.forUser(isTestUser = false).getDefaultPromoCodes(GuardianWeekly)
-    val maybePromotionCopy =
-      landingCopyProvider.promotionCopy(queryPromos ++ defaultPromos, GuardianWeekly, countryCode, orderIsAGift)
+    val defaultPromos = defaultPromotionService.getPromoCodes(GuardianWeekly)
+    val promotions = getPromotions(queryPromos ++ defaultPromos, countryGroupId, orderIsAGift)
+    val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser = false).get()
 
     Ok(
       views.html.main(
         title =
           if (orderIsAGift) "The Guardian Weekly Gift Subscription | The Guardian"
           else "The Guardian Weekly Subscriptions | The Guardian",
-        mainElement = EmptyDiv("weekly-landing-page-" + countryCode),
+        mainElement = EmptyDiv("weekly-landing-page-" + countryGroupId),
         mainJsBundle = RefPath("weeklySubscriptionLandingPage.js"),
         mainStyleBundle = None,
         description = stringsConfig.weeklyLandingDescription,
@@ -73,13 +76,31 @@ class WeeklySubscriptionController(
         noindex = stage != PROD,
       ) {
         Html(s"""<script type="text/javascript">
-              window.guardian.productPrices = ${outputJson(productPrices(queryPromos, orderIsAGift))}
-              window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
               window.guardian.orderIsAGift = $orderIsAGift
+              window.guardian.promotions = ${outputJson(promotions)}
+              window.guardian.productCatalog = ${outputJson(productCatalog, dropNullValues = false)}
             </script>""")
       },
     ).withSettingsSurrogateKey
   }
+
+  private def getPromotions(
+      promoCodes: List[String],
+      countryGroupId: String,
+      orderIsAGift: Boolean,
+  ): Seq[PromoWithCatalogInformation] =
+    CountryGroup
+      .byId(countryGroupId)
+      .map { countryGroup =>
+        val promotions = cachedPromotionsServiceProvider.forUser(isTestUser = false).getActive(promoCodes.distinct)
+        ApplicablePromotions.filter(
+          promotions,
+          Set(CatalogRatePlan.guardianWeeklyProductKey(countryGroup)),
+          orderIsAGift,
+          countryGroup,
+        )
+      }
+      .getOrElse(Nil)
 
   private def getWeeklyHrefLangLinks(orderIsAGift: Boolean): Map[String, String] = Map(
     "en-us" -> buildRegionalisedWeeklySubscriptionLink("us", orderIsAGift),
@@ -90,10 +111,5 @@ class WeeklySubscriptionController(
     "en" -> buildRegionalisedWeeklySubscriptionLink("int", orderIsAGift),
     "en" -> buildRegionalisedWeeklySubscriptionLink("eu", orderIsAGift),
   )
-
-  private def productPrices(queryPromos: List[String], orderIsAGift: Boolean) = {
-    val readerType = if (orderIsAGift) Gift else Direct
-    priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, queryPromos, readerType)
-  }
 
 }

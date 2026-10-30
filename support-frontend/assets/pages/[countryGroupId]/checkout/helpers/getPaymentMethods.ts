@@ -1,9 +1,7 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
-import type { Participations } from 'helpers/abTests/models';
 import {
 	DirectDebit,
-	PayPal,
 	PayPalCompletePayments,
 	Stripe,
 	StripeHostedCheckout,
@@ -12,10 +10,9 @@ import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 
 export const getPaymentMethods = (
-	countryId: IsoCountry,
+	countryId: CountryCode,
 	productKey: ProductKey,
 	ratePlanKey: ActiveRatePlanKey,
-	participations: Participations,
 ) => {
 	const maybeDirectDebit = countryId === 'GB' && DirectDebit;
 
@@ -23,10 +20,5 @@ export const getPaymentMethods = (
 		return [maybeDirectDebit, StripeHostedCheckout];
 	}
 
-	const payPalDependingOnABTest =
-		participations.paypalMigrationRecurring === 'variant'
-			? PayPalCompletePayments
-			: PayPal;
-
-	return [maybeDirectDebit, Stripe, payPalDependingOnABTest];
+	return [maybeDirectDebit, Stripe, PayPalCompletePayments];
 };

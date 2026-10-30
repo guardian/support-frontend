@@ -117,6 +117,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
       labels = None,
       queryParameters = None,
       postalCode = None,
+      countryId = Some("GB"),
     ),
     publicKey = StripePublicKey("pk_test_FOO"),
     recaptchaToken = "recaptchaToken",

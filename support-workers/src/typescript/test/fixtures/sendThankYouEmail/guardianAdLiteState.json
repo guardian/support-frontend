@@ -44,51 +44,75 @@
         "payments": [
           {
             "date": "2025-11-29",
-            "amount": 5
+            "amount": 5,
+            "amountWithoutTax": 4.5,
+            "taxAmount": 0.5
           },
           {
             "date": "2025-12-29",
-            "amount": 5
+            "amount": 5,
+            "amountWithoutTax": 4.5,
+            "taxAmount": 0.5
           },
           {
             "date": "2026-01-29",
-            "amount": 5
+            "amount": 5,
+            "amountWithoutTax": 4.5,
+            "taxAmount": 0.5
           },
           {
             "date": "2026-02-28",
-            "amount": 5
+            "amount": 5,
+            "amountWithoutTax": 4.5,
+            "taxAmount": 0.5
           },
           {
             "date": "2026-03-29",
-            "amount": 5
+            "amount": 5,
+            "amountWithoutTax": 4.5,
+            "taxAmount": 0.5
           },
           {
             "date": "2026-04-29",
-            "amount": 5
+            "amount": 5,
+            "amountWithoutTax": 4.5,
+            "taxAmount": 0.5
           },
           {
             "date": "2026-05-29",
-            "amount": 5
+            "amount": 5,
+            "amountWithoutTax": 4.5,
+            "taxAmount": 0.5
           },
           {
             "date": "2026-06-29",
-            "amount": 5
+            "amount": 5,
+            "amountWithoutTax": 4.5,
+            "taxAmount": 0.5
           },
           {
             "date": "2026-07-29",
-            "amount": 5
+            "amount": 5,
+            "amountWithoutTax": 4.5,
+            "taxAmount": 0.5
           },
           {
             "date": "2026-08-29",
-            "amount": 5
+            "amount": 5,
+            "amountWithoutTax": 4.5,
+            "taxAmount": 0.5
           },
           {
             "date": "2026-09-29",
-            "amount": 5
+            "amount": 5,
+            "amountWithoutTax": 4.5,
+            "taxAmount": 0.5
           },
           {
             "date": "2026-10-29",
-            "amount": 2.58
+            "amount": 2.58,
+            "amountWithoutTax": 2,
+            "taxAmount": 0.58
           }
         ]
       },

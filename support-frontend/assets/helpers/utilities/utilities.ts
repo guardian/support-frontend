@@ -1,4 +1,4 @@
-import type { CurrencyInfo } from '@modules/internationalisation/currency';
+import type { Currency } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import DomPurify from 'dompurify';
 import snarkdown from 'snarkdown';
@@ -82,6 +82,31 @@ function replaceDatePlaceholder(copy: string, deadline?: string): string {
 	return copy.replaceAll(DEADLINE_PLACEHOLDER_TEMPLATE, replacement);
 }
 
+const mParticleAmountTemplate = /%%mParticle_([a-zA-Z0-9_]+)%%/g;
+
+function replaceMParticleTemplates(
+	copy: string,
+	userAttributes: Record<string, unknown>,
+	currency: Currency,
+): string {
+	return copy.replaceAll(
+		mParticleAmountTemplate,
+		(template: string, attribute: string) => {
+			const value = userAttributes[attribute];
+			const amount =
+				typeof value === 'number'
+					? value
+					: typeof value === 'string' && value.trim() !== ''
+					? Number(value)
+					: NaN;
+
+			return Number.isFinite(amount)
+				? simpleFormatAmount(currency, amount)
+				: template;
+		},
+	);
+}
+
 // Parses a comma-separated string of amounts and returns an array of valid, unique numbers.
 // Filters out invalid values (NaN, negative, zero, infinite) and removes duplicates.
 function parseCustomAmounts(customAmountsParam: string): number[] {
@@ -94,21 +119,30 @@ function parseCustomAmounts(customAmountsParam: string): number[] {
 
 function parseBillingPeriodCopy(
 	copy: string,
-	currency: CurrencyInfo,
+	currency: Currency,
 	price: number,
 	billingPeriod: BillingPeriod,
 ): string {
-	const pricePerDay =
-		billingPeriod === BillingPeriod.Annual
-			? price / 365
-			: billingPeriod === BillingPeriod.Monthly
-			? (price * 12) / 365
-			: price;
-	const weeklyPrice = pricePerDay * 7;
+	const weeklyPrice = calculateWeeklyPrice(price, billingPeriod);
 	const formattedWeeklyPrice = simpleFormatAmount(currency, weeklyPrice);
 	return copy
 		.replaceAll('%%PRICE_PRODUCT_WEEKLY%%', formattedWeeklyPrice)
 		.trim();
+}
+
+function calculateWeeklyPrice(
+	price: number,
+	billingPeriod: BillingPeriod,
+): number {
+	const pricePerDay =
+		billingPeriod === BillingPeriod.Annual
+			? price / 365
+			: billingPeriod === BillingPeriod.Quarterly
+			? (price * 4) / 365
+			: billingPeriod === BillingPeriod.Monthly
+			? (price * 12) / 365
+			: price;
+	return pricePerDay * 7;
 }
 
 // ----- Exports ----- //
@@ -121,4 +155,6 @@ export {
 	parseCustomAmounts,
 	parseBillingPeriodCopy,
 	replaceDatePlaceholder,
+	replaceMParticleTemplates,
+	calculateWeeklyPrice,
 };

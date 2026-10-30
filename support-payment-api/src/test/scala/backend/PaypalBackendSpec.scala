@@ -42,6 +42,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
       None,
       None,
       Some("N1 9GU"),
+      Some("GB"),
     )
   val countrySubdivisionCode = Some("NY")
   val clientBrowserInfo = ClientBrowserInfo("", "", None, None, countrySubdivisionCode)

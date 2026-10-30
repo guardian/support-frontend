@@ -52,25 +52,10 @@ case class CreditCardReferenceTransaction(
     StripePaymentType: Option[StripePaymentType],
 ) extends PaymentMethod
 
-case class PayPalReferenceTransaction(
-    PaypalBaid: String,
-    PaypalEmail: String,
-    PaypalType: String = "ExpressCheckout",
-    Type: String = "PayPal",
-    PaymentGateway: PaymentGateway = PayPalGateway,
-) extends PaymentMethod
-
 case class PayPalCompletePaymentsReferenceTransaction(
     PaypalPaymentToken: String,
     PaypalEmail: String,
     Type: String = "PayPalCompletePayments",
-    PaymentGateway: PaymentGateway = PayPalCompletePaymentsGateway,
-) extends PaymentMethod
-
-case class PayPalCompletePaymentsWithBAIDReferenceTransaction(
-    PaypalBaid: String,
-    PaypalEmail: String,
-    Type: String = "PayPalCompletePaymentsWithBAID",
     PaymentGateway: PaymentGateway = PayPalCompletePaymentsGateway,
 ) extends PaymentMethod
 
@@ -119,11 +104,7 @@ object GatewayOptionData {
 }
 object PaymentMethod {
   import com.gu.support.encoding.CustomCodecs.{decodeCountry, encodeCountryAsAlpha2}
-  implicit val payPalReferenceTransactionCodec: Codec[PayPalReferenceTransaction] = deriveCodec
   implicit val payPalCompletePaymentsReferenceTransactionCodec: Codec[PayPalCompletePaymentsReferenceTransaction] =
-    deriveCodec
-  implicit val payPalCompletePaymentsWithBAIDReferenceTransactionCodec
-      : Codec[PayPalCompletePaymentsWithBAIDReferenceTransaction] =
     deriveCodec
   implicit val creditCardReferenceTransactionCodec: Codec[CreditCardReferenceTransaction] = deriveCodec
   implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = deriveCodec
@@ -131,9 +112,7 @@ object PaymentMethod {
 
   // Payment Methods are details from the payment provider
   implicit val encodePaymentMethod: Encoder[PaymentMethod] = Encoder.instance {
-    case pp: PayPalReferenceTransaction => pp.asJson
     case ppcp: PayPalCompletePaymentsReferenceTransaction => ppcp.asJson
-    case ppcpwb: PayPalCompletePaymentsWithBAIDReferenceTransaction => ppcpwb.asJson
     case card: CreditCardReferenceTransaction => card.asJson
     case dd: DirectDebitPaymentMethod => dd.asJson
     case clonedDD: ClonedDirectDebitPaymentMethod => clonedDD.asJson
@@ -141,8 +120,6 @@ object PaymentMethod {
 
   implicit val decodePaymentMethod: Decoder[PaymentMethod] =
     List[Decoder[PaymentMethod]](
-      Decoder[PayPalReferenceTransaction].widen,
-      Decoder[PayPalCompletePaymentsWithBAIDReferenceTransaction].widen,
       Decoder[PayPalCompletePaymentsReferenceTransaction].widen,
       Decoder[CreditCardReferenceTransaction].widen,
       Decoder[ClonedDirectDebitPaymentMethod].widen, // ordering is significant (at least between direct debit variants)

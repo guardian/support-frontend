@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { NumericInput } from '@guardian/source-development-kitchen/react-components';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { getCurrencyInfo } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
+import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import type { HTMLAttributes } from 'react';
 
 const topSpacing = css`
@@ -12,7 +12,7 @@ const topSpacing = css`
 export type OtherAmountProps = {
 	selectedAmount: number | 'other';
 	otherAmount: string;
-	currency: IsoCurrency;
+	currency: CurrencyCode;
 	minAmount?: number;
 	maxAmount?: number;
 	onOtherAmountChange: (newAmount: string) => void;
@@ -30,7 +30,7 @@ export function OtherAmount({
 	minAmount,
 	maxAmount,
 }: OtherAmountProps): JSX.Element | null {
-	const currencyDetails = getCurrencyInfo(currency);
+	const currencyDetails = getCurrencyByCode(currency);
 
 	if (selectedAmount === 'other') {
 		return (

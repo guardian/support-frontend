@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { cmp } from '@guardian/libs';
+import { cmp } from '@guardian/consent-manager';
 import {
 	from,
 	headlineBold24,
@@ -18,7 +18,7 @@ import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { vatCompliantAmountsConfig } from 'helpers/contributions';
+import { contributionsOnlyCountriesAmountsConfig } from 'helpers/contributions';
 import { guardianContactUsLink, guardianHelpCentreLink } from 'helpers/legal';
 import { billingPeriodToContributionType } from 'helpers/productPrice/billingPeriods';
 import { getSupportRegionIdConfig } from '../../supportRegionConfig';
@@ -193,7 +193,7 @@ export function ContributionsOnlyLanding({
 		}
 	};
 
-	const amounts = vatCompliantAmountsConfig;
+	const amounts = contributionsOnlyCountriesAmountsConfig;
 
 	return (
 		<PageScaffold

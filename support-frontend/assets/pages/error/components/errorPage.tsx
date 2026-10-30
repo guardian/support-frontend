@@ -1,9 +1,12 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { palette, space } from '@guardian/source/foundations';
-import { themeButtonReaderRevenueBrand } from '@guardian/source/react-components';
+import { from, palette, space } from '@guardian/source/foundations';
+import {
+	LinkButton,
+	SvgArrowRightStraight,
+	themeButtonReaderRevenueBrand,
+} from '@guardian/source/react-components';
 import Rows from 'components/base/rows';
-import AnchorButton from 'components/button/anchorButton';
 import { themeButtonLegacyGray } from 'components/button/theme';
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
@@ -28,9 +31,7 @@ const countryGroupId = CountryGroup.detect();
 
 const mainContentStyles = css`
 	background-color: ${palette.neutral[93]};
-	@supports (display: flex) {
-		flex: 1 0 auto;
-	}
+	display: block !important; // old layout pages need to stay the same
 `;
 
 const paddingOverrides = css`
@@ -42,6 +43,12 @@ const buttonRow = css`
 	display: flex;
 	flex-direction: column;
 	gap: ${space[3]}px;
+
+	${from.tablet} {
+		> a {
+			width: fit-content;
+		}
+	}
 `;
 
 export default function ErrorPage(props: ErrorPageProps): JSX.Element {
@@ -64,22 +71,28 @@ export default function ErrorPage(props: ErrorPageProps): JSX.Element {
 						<Rows>
 							<div css={buttonRow}>
 								{props.supportLink && (
-									<AnchorButton
+									<LinkButton
+										href="/"
 										aria-label="click here to support the Guardian"
-										link="/"
-										ctaButtonText="Support the Guardian"
 										theme={themeButtonReaderRevenueBrand}
 										size="small"
-									/>
+										icon={<SvgArrowRightStraight />}
+										iconSide="right"
+									>
+										Support the Guardian
+									</LinkButton>
 								)}
-								<AnchorButton
+								<LinkButton
+									href="https://www.theguardian.com"
 									aria-label="click here to return to the Guardian home page"
-									link="https://www.theguardian.com"
 									priority="tertiary"
 									theme={themeButtonLegacyGray}
-									ctaButtonText="Go to the Guardian home page"
 									size="small"
-								/>
+									icon={<SvgArrowRightStraight />}
+									iconSide="right"
+								>
+									Go to the Guardian home page
+								</LinkButton>
 							</div>
 						</Rows>
 					</Text>

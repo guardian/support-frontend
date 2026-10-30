@@ -1,15 +1,6 @@
-import { isoCountries } from '@modules/internationalisation/country';
-import { isoCurrencySchema } from '@modules/internationalisation/schemas';
-import {
-	billingPeriodSchema,
-	fulfilmentOptionsSchema,
-	productOptionsSchema,
-} from '@modules/product/schemas';
-import { optional, z } from 'zod';
-import type { LegacyProductType } from 'helpers/legacyTypeConversions';
-import { legacyProductTypes } from 'helpers/legacyTypeConversions';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import type { ActiveProductKey } from '../productCatalog';
+import { caStateCodes } from '@modules/internationalisation/state';
+import { promoWithCatalogInformationSchema } from '@modules/promotions/v2/schema';
+import { z } from 'zod';
 import { isProductKey } from '../productCatalog';
 
 /**
@@ -27,6 +18,8 @@ const featureSwitchesSchema = z.object({
 	enableThankYouOnboarding: z.optional(z.enum(['On', 'Off'])),
 	enableCheckoutNudge: z.optional(z.enum(['On', 'Off'])),
 	enableMParticle: z.optional(z.enum(['On', 'Off'])),
+	enableDeepDiscount: z.optional(z.enum(['On', 'Off'])),
+	enableStudentBeansEuropeAustralia: z.optional(z.enum(['On', 'Off'])),
 });
 
 export type FeatureSwitches = z.infer<typeof featureSwitchesSchema>;
@@ -53,10 +46,6 @@ const PaymentConfigSchema = z.object({
 	stripeKeyTortoiseMedia: z.object({
 		ONE_OFF: z.object({ default: z.string(), test: z.string() }),
 		REGULAR: z.object({ default: z.string(), test: z.string() }),
-	}),
-	payPalEnvironment: z.object({
-		default: z.string(),
-		test: z.string(),
 	}),
 	payPalClientId: z.object({
 		default: z.string(),
@@ -106,59 +95,6 @@ const PaymentConfigSchema = z.object({
 				z.optional(z.enum(['On', 'Off'])),
 			),
 		}),
-		amounts: z.array(
-			z.object({
-				testName: z.string(),
-				liveTestName: z.optional(z.string()),
-				isLive: z.boolean(),
-				order: z.number(),
-				seed: z.number(),
-				targeting: z.union([
-					z.object({
-						targetingType: z.literal('Region'),
-						region: z.enum([
-							'GBPCountries',
-							'UnitedStates',
-							'AUDCountries',
-							'EURCountries',
-							'NZDCountries',
-							'Canada',
-							'International',
-						]),
-					}),
-					z.object({
-						targetingType: z.literal('Country'),
-						countries: z.array(z.enum(isoCountries)),
-					}),
-				]),
-				variants: z.array(
-					z.object({
-						amountsCardData: z.object({
-							ANNUAL: z.object({
-								amounts: z.array(z.number()),
-								defaultAmount: z.number(),
-								hideChooseYourAmount: z.boolean(),
-							}),
-							MONTHLY: z.object({
-								amounts: z.array(z.number()),
-								defaultAmount: z.number(),
-								hideChooseYourAmount: z.boolean(),
-							}),
-							ONE_OFF: z.object({
-								amounts: z.array(z.number()),
-								defaultAmount: z.number(),
-								hideChooseYourAmount: z.boolean(),
-							}),
-						}),
-						defaultContributionType: z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
-						displayContributionType: z.array(
-							z.enum(['ONE_OFF', 'MONTHLY', 'ANNUAL']),
-						),
-						variantName: z.string(),
-					}),
-				),
-			}),
-		),
 		contributionTypes: z.object({
 			AUDCountries: z.array(
 				z.object({
@@ -204,9 +140,7 @@ const PaymentConfigSchema = z.object({
 			),
 		}),
 		metricUrl: z.string(),
-		productsWithThankYouOnboarding: z.array(
-			z.string().refine<ActiveProductKey>(isProductKey),
-		),
+		productsWithThankYouOnboarding: z.array(z.string().refine(isProductKey)),
 	}),
 	isObserverSubdomain: z.boolean(),
 });
@@ -229,85 +163,48 @@ const ProductCatalogSchema = z.object({
 					billingPeriod: z.optional(
 						z.enum(['Quarter', 'Month', 'Annual', 'OneTime']),
 					),
+					savingVsRetail: z.number().nullish(),
+					taxMode: z.enum(['TaxExclusive', 'TaxInclusive']).nullable(),
 				}),
 			),
 		}),
 	),
 });
 
-const countryKeySchema = z.enum([
-	'United Kingdom',
-	'Europe',
-	'Australia',
-	'New Zealand',
-	'United States',
-	'Canada',
-	'International',
-]);
-
 export const dateTimeSchema = z.preprocess(
 	(val) => (typeof val === 'string' ? new Date(val) : val),
 	z.date(),
 );
-const promotionSchema = z.object({
-	name: z.string(),
-	description: z.string(),
-	promoCode: z.string(),
-	discountedPrice: optional(z.number()),
-	numberOfDiscountedPeriods: optional(z.number()),
-	discount: optional(
-		z.object({
-			amount: z.number(),
-			durationMonths: z.number().optional(),
-		}),
-	),
-	starts: dateTimeSchema,
-	expires: dateTimeSchema.optional(),
+
+const TaxRatesSchema = z.object({
+	taxRates: z
+		.partialRecord(
+			z.enum(['SupporterPlus', 'DigitalSubscription']),
+			z.record(z.enum(caStateCodes), z.number()),
+		)
+		.optional(), // This isn't made available on every page
 });
 
-export const ProductPricesSchema = z.object({
-	allProductPrices: z.record(
-		z.enum([...legacyProductTypes, 'GuardianWeeklyGift']),
-		optional(
-			z.record(
-				countryKeySchema,
-				z.record(
-					fulfilmentOptionsSchema,
-					z.record(
-						productOptionsSchema,
-						z.record(
-							billingPeriodSchema,
-							z.record(
-								isoCurrencySchema,
-								z.object({
-									price: z.number(),
-									savingVsRetail: z.number().optional(),
-									currency: isoCurrencySchema,
-									fixedTerm: z.boolean(),
-									promotions: z.array(promotionSchema),
-								}),
-							),
-						),
-					),
-				),
-			),
-		),
-	),
+const PromotionsSchema = z.object({
+	promotions: z.array(promoWithCatalogInformationSchema).optional(), // This isn't made available on every page
+	checkoutNudgePromotions: z
+		.array(promoWithCatalogInformationSchema)
+		.optional(), // Only made available on checkout pages
 });
 
-const AppConfigSchema =
-	PaymentConfigSchema.merge(ProductCatalogSchema).merge(ProductPricesSchema);
+const AppConfigSchema = PaymentConfigSchema.merge(ProductCatalogSchema)
+	.merge(TaxRatesSchema)
+	.merge(PromotionsSchema);
 
-export type AppConfig = z.infer<typeof AppConfigSchema> & {
-	allProductPrices: Partial<
-		Record<LegacyProductType | 'GuardianWeeklyGift', ProductPrices>
-	>;
-};
+export type AppConfig = z.infer<typeof AppConfigSchema>;
+
+export type WindowTaxRates = AppConfig['taxRates'];
+export type WindowProductCatalog = AppConfig['productCatalog'];
 
 export const parseAppConfig = (obj: unknown): AppConfig => {
 	const appConfig = AppConfigSchema.safeParse(obj);
 	if (appConfig.success) {
-		return appConfig.data as AppConfig;
+		return appConfig.data;
 	} else {
 		// We allow parsing errors through on PROD as they might not be breaking changes
 		// but we should be aware of them.

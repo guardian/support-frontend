@@ -52,9 +52,13 @@ describe('stateSchemas', () => {
 		if (payPalContribution.product.productType === 'Contribution') {
 			expect(payPalContribution.product.amount).toBe(4);
 		}
-		expect(payPalContribution.paymentFields.paymentType).toBe('PayPal');
-		if (payPalContribution.paymentFields.paymentType === 'PayPal') {
-			expect(payPalContribution.paymentFields.baid).toBe('BA-1234');
+		expect(payPalContribution.paymentFields.paymentType).toBe(
+			'PayPalCompletePayments',
+		);
+		if (
+			payPalContribution.paymentFields.paymentType === 'PayPalCompletePayments'
+		) {
+			expect(payPalContribution.paymentFields.paymentToken).toBe('BA-1234');
 		}
 	});
 	test('createPaymentMethodStateSchema works for paper', () => {

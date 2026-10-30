@@ -124,9 +124,7 @@ Resources:
                 - dynamodb:DeleteItem
                 - dynamodb:BatchGetItem
                 - dynamodb:DescribeTable
-              Resource:
-                Fn::ImportValue:
-                  !Sub supporter-product-data-tables-${Stage}-SupporterProductDataTable
+              Resource: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/SupporterProductData-${Stage}
         - PolicyName: SQSReceiveAndDelete
           PolicyDocument:
             Statement:
@@ -327,7 +325,7 @@ Resources:
     Properties:
       Description: "Trigger regular data synchronisation from Zuora"
       ScheduleExpression: !FindInMap [StageVariables, !Ref Stage, scheduleRate]
-      State: "ENABLED"
+      State: "DISABLED"
       Targets:
         -
           Arn: !Ref SupporterProductData
@@ -361,6 +359,7 @@ Resources:
 
   SupporterProductDataDeadLetterQueue:
     Type: AWS::SQS::Queue
+    DeletionPolicy: Retain
     Properties:
       QueueName: !Sub dead-letters-supporter-product-data-${Stage}
       Tags:
@@ -369,6 +368,7 @@ Resources:
 
   SupporterProductDataQueue:
     Type: AWS::SQS::Queue
+    DeletionPolicy: Retain
     Properties:
       QueueName: !Sub supporter-product-data-${Stage}
       RedrivePolicy:
@@ -387,7 +387,7 @@ Resources:
     Properties:
       BatchSize: 10
       MaximumBatchingWindowInSeconds: 5
-      Enabled: true
+      Enabled: false
       EventSourceArn: !GetAtt SupporterProductDataQueue.Arn
       FunctionName: !Ref ProcessSupporterRatePlanItemLambda
     DependsOn:

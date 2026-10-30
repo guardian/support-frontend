@@ -1,10 +1,12 @@
-import type { CurrencyInfo } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { Currency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
+import type { CountryCode } from '@modules/internationalisation/country';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { NoFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { ProductOptions } from '@modules/product/productOptions';
 import { NoProductOptions } from '@modules/product/productOptions';
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type {
@@ -12,34 +14,24 @@ import type {
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
 import { getProductPrice, isNumeric } from 'helpers/productPrice/productPrices';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import type { Option } from 'helpers/types/option';
 import { getQueryParameter } from 'helpers/urls/url';
-import { getSanitisedHtml } from '../utilities/utilities';
+
+dayjs.extend(advancedFormat);
 
 type DiscountBenefit = {
 	amount: number;
 	durationMonths?: number;
 };
-export type PromotionCopy = {
+type PromotionCopy = {
 	title?: string;
 	description?: string;
 	roundel?: string;
-};
-export type PromotionTerms = {
-	description: string;
-	starts: Date;
-	expires: Option<Date>;
-	product: SubscriptionProduct;
-	// actually only GuardianWeekly, Paper or Digital Pack?
-	productRatePlans: string[];
-	promoCode: string;
-	isGift: boolean;
 };
 export type Promotion = {
 	name: string;
 	description: string;
 	promoCode: string;
+	isIntroductoryPricing: boolean;
 	discountedPrice?: number;
 	numberOfDiscountedPeriods?: number;
 	discount?: DiscountBenefit;
@@ -82,7 +74,7 @@ function getAppliedPromo(promotions?: Promotion[]): Promotion | undefined {
 
 function getPromotion(
 	productPrices: ProductPrices,
-	country: IsoCountry,
+	country: CountryCode,
 	billingPeriod: BillingPeriod,
 	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
 	productOption: ProductOptions = NoProductOptions,
@@ -105,20 +97,6 @@ function getPromotion(
 	} catch (error) {
 		return undefined;
 	}
-}
-
-function getSanitisedPromoCopy(
-	promotionCopy?: PromotionCopy | null,
-): PromotionCopy {
-	if (!promotionCopy) {
-		return {};
-	}
-
-	return {
-		title: promotionCopy.title ?? '',
-		description: getSanitisedHtml(promotionCopy.description ?? ''),
-		roundel: getSanitisedHtml(promotionCopy.roundel ?? ''),
-	};
 }
 
 type PromotionHTMLModifiers = {
@@ -147,7 +125,7 @@ function promotionHTML(
 
 function finalPrice(
 	productPrices: ProductPrices,
-	country: IsoCountry,
+	country: CountryCode,
 	billingPeriod: BillingPeriod,
 	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
 	productOption: ProductOptions = NoProductOptions,
@@ -171,8 +149,7 @@ function finalPrice(
 }
 
 const discountSummaryCopy = (
-	currency: CurrencyInfo,
-	promoCount: number,
+	currency: Currency,
 	price: number,
 	promotion: Promotion,
 	billingPeriod: BillingPeriod,
@@ -199,16 +176,33 @@ const discountSummaryCopy = (
 		periodNoun === 'year' || duration === 1 ? 'the first' : ''
 	}${duration > 1 ? duration : ''} ${periodNoun}${
 		duration > 1 ? 's' : ''
-	}, then ${formattedPrice}/${periodNoun}${'*'.repeat(promoCount)}`;
+	}, then ${formattedPrice}/${periodNoun}`;
 };
 
+function buildThreeTierCardPromoTerms(
+	discountMarker: string,
+	productName: string,
+	discountSummary: string,
+	{ starts, expires }: Promotion,
+): string {
+	const startDate = dayjs(starts).format('Do MMMM'); // eg. 15th January
+	const expiryDate = dayjs(expires).format('Do MMMM YYYY'); // eg. 31st April 2028
+	const promoDuration =
+		starts && expires
+			? `Offer starts on the ${startDate} and ends on the ${expiryDate}.`
+			: '';
+
+	return ` ${discountMarker} ${productName} offer is ${discountSummary} afterwards unless you cancel.
+			Offer only available to new subscribers who do not have an existing subscription with the Guardian. 
+			${promoDuration}`;
+}
+
 export {
-	getPromotion,
 	getAppliedPromo,
 	applyDiscount,
 	hasDiscount,
-	getSanitisedPromoCopy,
 	promotionHTML,
 	finalPrice,
 	discountSummaryCopy,
+	buildThreeTierCardPromoTerms,
 };

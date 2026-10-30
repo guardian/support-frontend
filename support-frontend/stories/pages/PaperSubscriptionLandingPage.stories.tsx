@@ -1,8 +1,9 @@
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Collection, HomeDelivery } from '@modules/product/fulfilmentOptions';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import type { StoryObj } from '@storybook/preact-vite';
 import { PromoTermsProvider } from 'contexts/PromoTermsContext';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { productCatalogFixture } from 'fixtures/productCatalogFixture';
 import { PaperLandingPage } from 'pages/paper-subscription-landing/paperSubscriptionLandingPage';
 import type { PaperLandingPropTypes } from 'pages/paper-subscription-landing/paperSubscriptionLandingProps';
 import { hideTestBanner } from '../../.storybook/decorators/withoutTestBanner';
@@ -29,139 +30,43 @@ export default {
 	},
 };
 
-const paperProductPrices = {
-	'United Kingdom': {
-		Collection: {
-			SixdayPlus: {
-				Monthly: {
-					GBP: {
-						price: 41.12,
-						savingVsRetail: 26,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [],
-					},
-				},
-			},
-			SaturdayPlus: {
-				Monthly: {
-					GBP: {
-						price: 10.36,
-						savingVsRetail: 13,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [],
-					},
-				},
-			},
-			Sunday: {
-				Monthly: {
-					GBP: {
-						price: 10.79,
-						savingVsRetail: 13,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [],
-					},
-				},
-			},
-			WeekendPlus: {
-				Monthly: {
-					GBP: {
-						price: 20.76,
-						savingVsRetail: 20,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [],
-					},
-				},
-			},
-			EverydayPlus: {
-				Monthly: {
-					GBP: {
-						price: 47.62,
-						savingVsRetail: 29,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [],
-					},
-				},
-			},
-		},
-		HomeDelivery: {
-			SixdayPlus: {
-				Monthly: {
-					GBP: {
-						price: 54.12,
-						savingVsRetail: 5,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [],
-					},
-				},
-			},
-			SaturdayPlus: {
-				Monthly: {
-					GBP: {
-						price: 14.69,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [],
-					},
-				},
-			},
-			Sunday: {
-				Monthly: {
-					GBP: {
-						price: 15.12,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [
-							{
-								name: 'examplePromo',
-								description: 'an example promotion',
-								promoCode: 1234,
-								introductoryPrice: {
-									price: 6.99,
-									periodLength: 3,
-									periodType: 'issue',
-								},
-							},
-						],
-					},
-				},
-			},
-			WeekendPlus: {
-				Monthly: {
-					GBP: {
-						price: 25.09,
-						savingVsRetail: 2,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [],
-					},
-				},
-			},
-			EverydayPlus: {
-				Monthly: {
-					GBP: {
-						price: 62.79,
-						savingVsRetail: 9,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [],
-					},
-				},
-			},
-		},
+const makePromotion = (
+	promoCode: string,
+	catalogRatePlan: PromoWithCatalogInformation['appliesTo']['catalogRatePlans'][number],
+	discount: { amount: number; durationMonths: number },
+): PromoWithCatalogInformation => ({
+	promoCode,
+	name: promoCode,
+	campaignCode: 'PAPER_CAMPAIGN',
+	appliesTo: {
+		productRatePlanIds: [],
+		countries: ['GB'],
+		catalogRatePlans: [catalogRatePlan],
 	},
-} as unknown as ProductPrices;
+	startTimestamp: '2025-01-01T00:00:00.000Z',
+	endTimestamp: '2099-12-31T23:59:59.000Z',
+	discount,
+});
+
+const sixdayPromotion: PromoWithCatalogInformation = {
+	...makePromotion(
+		'SIXDAY25',
+		{ productKey: 'SubscriptionCard', productRatePlanKey: 'SixdayPlus' },
+		{ amount: 25, durationMonths: 6 },
+	),
+	landingPage: {
+		title: 'Save 25% on a Six day subscription',
+		description:
+			'For a limited time, get **25% off** the Guardian six days a week for six months.',
+		roundelHtml: 'Limited time offer',
+	},
+};
 
 type Story = StoryObj<PaperLandingPropTypes>;
 
 const defaultArgs: PaperLandingPropTypes = {
-	productPrices: paperProductPrices,
-	promotionCopy: undefined,
+	productCatalog: productCatalogFixture,
+	promotions: [],
 	participations: {},
 	fulfilment: undefined,
 };
@@ -191,4 +96,17 @@ export const NewspaperCollection: Story = {
 		</PromoTermsProvider>
 	),
 	args: collectionArgs,
+};
+
+export const NewspaperCollectionWithPromotion: Story = {
+	render: (args: PaperLandingPropTypes) => (
+		<PromoTermsProvider>
+			<PaperLandingPage {...args} />
+		</PromoTermsProvider>
+	),
+	args: {
+		...collectionArgs,
+		promotions: [sixdayPromotion],
+		promoCode: sixdayPromotion.promoCode,
+	},
 };

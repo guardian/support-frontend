@@ -1,6 +1,6 @@
 import type React from 'react';
+import { OnboardingSteps } from 'components/onboarding/onboardingSteps';
 import { OnboardingAppsDiscovery } from 'components/onboarding/sections/appsDiscovery';
-import { OnboardingSteps } from 'pages/[countryGroupId]/components/onboardingSteps';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
 export default {
@@ -23,6 +23,7 @@ const defaultArgs = {
 	handleStepNavigation: () => {},
 	hasMobileAppDownloaded: false,
 	hasFeastMobileAppDownloaded: false,
+	supporterRegion: 'uk' as const,
 };
 
 export const GuardianAppNotDownloaded = {
@@ -52,5 +53,13 @@ export const FeastAppAlreadyDownloaded = {
 		...defaultArgs,
 		onboardingStep: OnboardingSteps.FeastApp,
 		hasFeastMobileAppDownloaded: true,
+	},
+};
+
+export const FeastAppNotDownloadedUS = {
+	args: {
+		...defaultArgs,
+		onboardingStep: OnboardingSteps.FeastApp,
+		supporterRegion: 'us' as const,
 	},
 };

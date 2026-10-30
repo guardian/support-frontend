@@ -18,7 +18,6 @@ object ServicesFixtures {
   val invalidPromoCode = "INVALID_CODE"
   val renewalPromoCode = "RENEWAL_CODE"
   val trackingPromoCode = "TRACKING_CODE"
-  val duplicatedPromoCode = "DUPLICATED_CODE"
   val tenAnnual = "10ANNUAL"
 
   val validProductRatePlanIds = Product.allProducts.flatMap(_.ratePlans(PROD).map(_.id))
@@ -59,8 +58,6 @@ object ServicesFixtures {
     ),
   )
   val guardianWeeklyWithCode = PromotionWithCode(tenAnnual, guardianWeeklyAnnual)
-  val duplicate1 = promotion(validProductRatePlanIds, duplicatedPromoCode, discountBenefit)
-  val duplicate2 = promotion(validProductRatePlanIds, duplicatedPromoCode, freeTrial = freeTrialBenefit)
 
   val now = LocalDate.now()
   val subscriptionData = SubscriptionData(

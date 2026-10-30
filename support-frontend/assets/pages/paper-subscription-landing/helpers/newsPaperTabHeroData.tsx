@@ -12,9 +12,7 @@ type HeroContent = {
 function collectionMapUrl(name: string): JSX.Element {
 	return (
 		<a
-			href={
-				'https://digitalvouchers-production-storefinder.azurewebsites.net/map/go'
-			}
+			href={'https://imovo.org/guardianstorefinder'}
 			target="_blank"
 			rel="noopener noreferrer"
 		>
@@ -48,14 +46,15 @@ const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 		],
 	},
 	Collection: {
-		productInfo: `Use your Guardian subscription card to pick up your paper in over 40,000 UK shops with news kiosks, including Co-op, McColl's, One Stop, and select SPAR stores. Or use your card to arrange your own delivery through a local newsagent.`,
+		productInfo:
+			'Use your Guardian subscription card to pick up your paper in over 48,000 UK shops with news kiosks, including Tesco, Waitrose, WH Smith, Co-op, Morrisons Daily, TGJones, One Stop, and select SPAR stores. Or use your card to arrange your own delivery through a local newsagent.',
 		deliveries: [
 			{
 				deliveryTitle: 'How to collect in store',
 				deliveryInfo: (
 					<>
 						<p>
-							To pick up your paper from multiple newsagents, present your
+							To pick up your paper from your local retailer, present your
 							Guardian subscription card each time – they’ll scan it and be
 							reimbursed automatically.
 						</p>

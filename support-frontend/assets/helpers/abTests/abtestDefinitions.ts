@@ -11,7 +11,12 @@ export const pageUrlRegexes = {
 	oneTimeCheckoutOnly: /(uk|us|au|ca|eu|nz|int)\/one-time-checkout/,
 	landingPageSubscribeOnly: /uk\/subscribe/,
 	landingPagePaperOnly: /uk\/subscribe\/paper/,
+	landingPageContribute: /(uk|us|au|ca|eu|nz|int)\/contribute/,
 	genericCheckoutOnly: /(uk|us|au|ca|eu|nz|int)\/checkout/,
+	digitalPlusCheckoutThankyou:
+		/((uk|us|au|ca|eu|nz|int)\/(checkout|thank-you)).*?(DigitalSubscription)/,
+	ukPrintCheckoutOnly:
+		/((uk\/checkout).*?(SubscriptionCard|HomeDelivery|NationalDelivery|MonthlyPlus|QuarterlyPlus|AnnualPlus|OneYearGift|ThreeMonthGift))/,
 	paperPages:
 		/(uk\/subscribe\/paper)|((uk\/(checkout|thank-you)).*?(SubscriptionCard|HomeDelivery|NationalDelivery))/,
 	weeklyPages:
@@ -59,7 +64,28 @@ export const tests: Tests = {
 		seed: 1,
 		excludeContributionsOnlyCountries: true,
 	},
-	paypalMigrationRecurring: {
+	deliveryAgentsLookupExpress: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			GBPCountries: {
+				offset: 0,
+				size: 0.1,
+			},
+		},
+		isActive: true,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 7,
+		targetPage: pageUrlRegexes.ukPrintCheckoutOnly,
+		excludeContributionsOnlyCountries: true,
+	},
+	stripePaymentElementTest: {
 		variants: [
 			{
 				id: 'control',
@@ -71,13 +97,13 @@ export const tests: Tests = {
 		audiences: {
 			ALL: {
 				offset: 0,
-				size: 0,
+				size: 1,
 			},
 		},
 		isActive: false,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 3,
-		targetPage: pageUrlRegexes.genericCheckoutOnly,
-		excludeContributionsOnlyCountries: true,
+		seed: 4,
+		targetPage: pageUrlRegexes.oneTimeCheckoutOnly,
+		excludeContributionsOnlyCountries: false,
 	},
 };

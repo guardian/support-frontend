@@ -1,20 +1,18 @@
 {
-  "name": "modules",
-  "version": "1.0.0",
-  "scripts": {
-    "lint": "eslint **/*.ts",
-    "lint:fix": "eslint --fix **/*.ts",
-    "check-formatting": "prettier --check **.ts",
-    "fix-formatting": "prettier --write **.ts"
-  },
-  "dependencies": {
-    "zod": "catalog:"
-  },
-  "devDependencies": {
-    "@guardian/support-service-lambdas": "catalog:",
-    "@guardian/prettier": "catalog:",
-    "@types/node": "catalog:",
-    "prettier": "catalog:",
-    "typescript": "catalog:"
-  }
+	"name": "modules",
+	"version": "1.0.0",
+	"scripts": {
+		"lint": "eslint **/*.ts",
+		"lint:fix": "eslint --fix **/*.ts",
+		"check-formatting": "prettier --check **.ts",
+		"fix-formatting": "prettier --write **.ts"
+	},
+	"dependencies": {
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@guardian/support-service-lambdas": "catalog:",
+		"@types/node": "catalog:",
+		"typescript": "catalog:"
+	}
 }

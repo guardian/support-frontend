@@ -10,5 +10,8 @@ export default class CustomTestEnvironment extends TestEnvironment {
 		this.global.Request = Request;
 		this.global.Response = Response;
 		this.global.ReadableStream = ReadableStream;
+		// react-router reads these off the global scope; jsdom doesn't provide them.
+		this.global.TextEncoder = TextEncoder;
+		this.global.TextDecoder = TextDecoder;
 	}
 }

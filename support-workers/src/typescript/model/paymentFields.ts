@@ -9,7 +9,6 @@ const stripeApplePayPaymentProviderSchema = z.literal('StripeApplePay');
 const stripePaymentRequestButtonProviderSchema = z.literal(
 	'StripePaymentRequestButton',
 );
-const payPalPaymentProviderSchema = z.literal('PayPal');
 const payPalCompletePaymentsPaymentProviderSchema = z.literal(
 	'PayPalCompletePayments',
 );
@@ -21,16 +20,10 @@ export const paymentProviderSchema = z.union([
 	stripeHostedPaymentProviderSchema,
 	stripeApplePayPaymentProviderSchema,
 	stripePaymentRequestButtonProviderSchema,
-	payPalPaymentProviderSchema,
 	payPalCompletePaymentsPaymentProviderSchema,
 	directDebitPaymentProviderSchema,
 	existingPaymentProviderSchema,
 ]);
-const payPalPaymentFieldsSchema = z.object({
-	paymentType: payPalPaymentProviderSchema,
-	baid: z.string(),
-});
-export type PayPalPaymentFields = z.infer<typeof payPalPaymentFieldsSchema>;
 
 const payPalCompletePaymentsPaymentFieldsSchema = z.object({
 	paymentType: payPalCompletePaymentsPaymentProviderSchema,
@@ -77,7 +70,6 @@ const existingPaymentFieldsSchema = z.object({
 	billingAccountId: z.string(),
 });
 export const paymentFieldsSchema = z.discriminatedUnion('paymentType', [
-	payPalPaymentFieldsSchema,
 	stripePaymentFieldsSchema,
 	stripeHostedPaymentFieldsSchema,
 	directDebitPaymentFieldsSchema,

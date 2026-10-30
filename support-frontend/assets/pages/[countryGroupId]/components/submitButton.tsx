@@ -1,21 +1,17 @@
-import type { IsoCurrency } from '@modules/internationalisation/currency';
-import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { useEffect, useState } from 'react';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
-import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
 import { isProd } from 'helpers/urls/url';
-import {
-	paypalOneClickCheckout,
-	setupPayPalPayment,
-} from '../checkout/helpers/paypal';
 import type { PaymentToken } from '../checkout/helpers/paypalCompletePayments';
 import {
 	createSetupToken,
 	exchangeSetupTokenForPaymentToken,
 } from '../checkout/helpers/paypalCompletePayments';
-import { getPayPalEnv } from '../checkout/helpers/payPalSdkOptions';
-import { paypalSdkFundingBlocklist } from '../checkout/helpers/payPalSdkOptions';
+import {
+	getPayPalEnv,
+	paypalSdkFundingBlocklist,
+} from '../checkout/helpers/payPalSdkOptions';
 import type { PaymentMethod } from './paymentFields';
 
 type ApprovedSetupToken = {
@@ -25,15 +21,10 @@ type ApprovedSetupToken = {
 type SubmitButtonProps = {
 	buttonText: string;
 	paymentMethod: PaymentMethod | undefined;
-	payPalLoaded: boolean;
-	payPalBAID: string;
-	setPayPalBAID: (baid: string) => void;
 	payPalPaymentToken: PaymentToken | undefined;
 	setPayPalPaymentToken: (paymentToken: PaymentToken) => void;
 	isTestUser: boolean;
-	finalAmount: number;
-	currencyKey: IsoCurrency;
-	billingPeriod: BillingPeriod;
+	currencyKey: CurrencyCode;
 	csrf: string;
 	formRef: React.RefObject<HTMLFormElement>;
 	paypalClientId: string;
@@ -90,16 +81,11 @@ const useFormIsValid = (
 export function SubmitButton({
 	buttonText,
 	paymentMethod,
-	payPalLoaded,
-	payPalBAID,
-	setPayPalBAID,
 	payPalPaymentToken,
 	setPayPalPaymentToken,
 	formRef,
 	isTestUser,
-	finalAmount,
 	currencyKey,
-	billingPeriod,
 	csrf,
 	paypalClientId,
 	setErrorMessage,
@@ -109,86 +95,6 @@ export function SubmitButton({
 	const formIsValid = useFormIsValid(paymentMethod, formRef);
 
 	switch (paymentMethod) {
-		case 'PayPal':
-			return payPalLoaded ? (
-				<>
-					<input type="hidden" name="payPalBAID" value={payPalBAID} />
-
-					<PayPalButton
-						env={getPayPalEnv(isProd(), isTestUser)}
-						style={{
-							color: 'blue',
-							size: 'responsive',
-							label: 'pay',
-							tagline: false,
-							layout: 'horizontal',
-							fundingicons: false,
-						}}
-						commit={true}
-						validate={({ disable, enable }) => {
-							/** We run this initially to set the button to the correct state */
-							const valid = formRef.current?.checkValidity();
-							if (valid) {
-								enable();
-							} else {
-								disable();
-							}
-
-							/** And then run it on form change */
-							formRef.current?.addEventListener('change', (event) => {
-								const element = event.currentTarget as HTMLFormElement;
-								/* We call this twice because the first time does not
-								not give us an accurate state of the form.
-								This seems to be because we use `setCustomValidity` on the elements */
-								element.checkValidity();
-								const valid = element.checkValidity();
-
-								if (valid) {
-									enable();
-								} else {
-									disable();
-								}
-							});
-						}}
-						funding={{
-							disallowed: [
-								(window.paypal as unknown as PayPalLegacyWindow).FUNDING.CREDIT,
-							],
-						}}
-						onClick={() => {
-							// The button won't actually submit if the form
-							// isn't valid but we can check here and if invalid
-							// the browser will scroll the user to the first
-							// error if necessary
-							const valid = formRef.current?.checkValidity();
-							if (!valid) {
-								/** We run this so the form validation happens and focus on errors */
-								formRef.current?.requestSubmit();
-							}
-						}}
-						/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
-						payment={(resolve, reject) => {
-							setupPayPalPayment(finalAmount, currencyKey, billingPeriod, csrf)
-								.then((token) => {
-									resolve(token);
-								})
-								.catch((error) => {
-									console.error(error);
-									reject(error as Error);
-								});
-						}}
-						onAuthorize={(payPalData: Record<string, unknown>) => {
-							void paypalOneClickCheckout(payPalData.paymentToken, csrf).then(
-								(baid) => {
-									// The state below has a useEffect that submits the form
-									setPayPalBAID(baid);
-								},
-							);
-						}}
-					/>
-				</>
-			) : null;
-
 		case 'StripeHostedCheckout':
 			return (
 				<DefaultPaymentButton

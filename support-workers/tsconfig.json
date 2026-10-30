@@ -6,6 +6,9 @@
 		"outDir": "target/typescript",
 		"baseUrl": "./",
 		"paths": {
+			"@modules/logger/*": [
+				"./node_modules/@guardian/support-service-lambdas/modules/logger/src/*"
+			],
 			"@modules/internationalisation/*": [
 				"./node_modules/@guardian/support-service-lambdas/modules/internationalisation/src/*"
 			],

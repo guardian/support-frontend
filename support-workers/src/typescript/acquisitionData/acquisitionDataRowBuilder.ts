@@ -1,4 +1,4 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
@@ -68,7 +68,7 @@ type AcquisitionTypeDetails = {
 
 type PrintOptions = {
 	product: AcquisitionPrintProduct;
-	deliveryCountry: IsoCountry;
+	deliveryCountry: CountryCode;
 };
 
 const PURCHASE = 'Purchase';
@@ -183,22 +183,20 @@ function paymentFrequencyFromBillingPeriod(
 function paymentProviderFromPaymentMethod(
 	paymentMethod: PaymentMethod,
 ): AcquisitionPaymentProvider {
-	if (paymentMethod.Type === 'CreditCardReferenceTransaction') {
-		if (paymentMethod.StripePaymentType === 'StripeApplePay') {
-			return 'STRIPE_APPLE_PAY';
-		}
-		if (paymentMethod.StripePaymentType === 'StripePaymentRequestButton') {
-			return 'STRIPE_PAYMENT_REQUEST_BUTTON';
-		}
-		return 'STRIPE';
+	switch (paymentMethod.Type) {
+		case 'CreditCardReferenceTransaction':
+			if (paymentMethod.StripePaymentType === 'StripeApplePay') {
+				return 'STRIPE_APPLE_PAY';
+			}
+			if (paymentMethod.StripePaymentType === 'StripePaymentRequestButton') {
+				return 'STRIPE_PAYMENT_REQUEST_BUTTON';
+			}
+			return 'STRIPE';
+		case 'PayPalCompletePayments':
+			return 'PAYPAL';
+		case 'BankTransfer':
+			return 'GOCARDLESS';
 	}
-	if (
-		paymentMethod.Type === 'PayPal' ||
-		paymentMethod.Type === 'PayPalCompletePaymentsWithBAID'
-	) {
-		return 'PAYPAL';
-	}
-	return 'GOCARDLESS';
 }
 
 function getAbTests(data: AcquisitionData): AbTest[] {
@@ -231,7 +229,7 @@ function productTypeAndAmount(product: ProductType): {
 
 function printOptionsFromProduct(
 	productInformation: ProductPurchase,
-	deliveryCountry?: IsoCountry,
+	deliveryCountry?: CountryCode,
 ): PrintOptions | undefined {
 	if (
 		productInformation.product === 'HomeDelivery' ||

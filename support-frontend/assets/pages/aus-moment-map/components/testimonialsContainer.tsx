@@ -3,8 +3,9 @@ import {
 	LinkButton,
 	themeButtonBrandAlt,
 } from '@guardian/source/react-components';
-import type { AuState } from '@modules/internationalisation/country';
-import { auStates } from '@modules/internationalisation/country';
+import { objectKeys } from '@guardian/support-service-lambdas/modules/objectFunctions';
+import type { AuStateCode } from '@modules/internationalisation/state';
+import { auStates } from '@modules/internationalisation/state';
 import * as React from 'react';
 import type { ReactNode, RefObject } from 'react';
 import type {
@@ -85,7 +86,7 @@ function TestimonialComponent(props: TestimonialComponentProps) {
 }
 
 type TestimonialsForTerritoryProps = {
-	territory: AuState;
+	territory: AuStateCode;
 	shouldScrollIntoView: boolean;
 	testimonials: Testimonial[];
 	selectedTerritory: string | null;
@@ -331,11 +332,11 @@ export const TestimonialsContainer = React.forwardRef(
 			if (props.selectedTerritory ?? windowWidthIsLessThan('desktop')) {
 				const testimonialsForTerritories =
 					props.testimonialsCollection &&
-					Object.keys(props.testimonialsCollection).map(
+					objectKeys(props.testimonialsCollection).map(
 						(territory) =>
 							props.testimonialsCollection && (
 								<TestimonialsForTerritory
-									testimonials={props.testimonialsCollection[territory] ?? []}
+									testimonials={props.testimonialsCollection[territory]}
 									territory={territory}
 									shouldScrollIntoView={props.shouldScrollIntoView}
 									selectedTerritory={props.selectedTerritory}

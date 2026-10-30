@@ -1155,7 +1155,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "EvaluationPeriods": 144,
         "Metrics": [
           {
-            "Expression": "SUM([FILL(m0,0),FILL(m1,0),FILL(m2,0),FILL(m3,0),FILL(m4,0),FILL(m5,0)])",
+            "Expression": "SUM([FILL(m0,0),FILL(m1,0),FILL(m2,0),FILL(m3,0),FILL(m4,0),FILL(m5,0),FILL(m6,0)])",
             "Id": "expr_1",
             "Label": "AllGuardianAdLiteConversions",
             "ReturnData": true,
@@ -1245,7 +1245,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                 "Dimensions": [
                   {
                     "Name": "PaymentProvider",
-                    "Value": "StripeApplePay",
+                    "Value": "PayPalCompletePayments",
                   },
                   {
                     "Name": "ProductType",
@@ -1271,7 +1271,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                 "Dimensions": [
                   {
                     "Name": "PaymentProvider",
-                    "Value": "StripePaymentRequestButton",
+                    "Value": "StripeApplePay",
                   },
                   {
                     "Name": "ProductType",
@@ -1292,6 +1292,32 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           },
           {
             "Id": "m5",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "StripePaymentRequestButton",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "GuardianAdLite",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m6",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
@@ -2033,7 +2059,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "EvaluationPeriods": 288,
         "Metrics": [
           {
-            "Expression": "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
+            "Expression": "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0),FILL(m4,0)])",
             "Id": "expr_1",
             "Label": "AllPaperConversions",
             "ReturnData": true,
@@ -2098,6 +2124,32 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                   {
                     "Name": "PaymentProvider",
                     "Value": "PayPal",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "Paper",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m4",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "PayPalCompletePayments",
                   },
                   {
                     "Name": "ProductType",
@@ -2246,7 +2298,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "NoPayPalContributionsAlarm3674D829": {
+    "NoPayPalCompletePaymentsContributionsAlarmB8EA2E8E": {
       "DependsOn": [
         "SupportWorkersPROD",
         "SupportWorkersRoleDefaultPolicyCB757939",
@@ -2272,12 +2324,12 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "support-workers PROD No successful recurring PayPal contributions recently.",
+        "AlarmName": "support-workers PROD No successful recurring PayPalCompletePayments contributions recently.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
             "Name": "PaymentProvider",
-            "Value": "PayPal",
+            "Value": "PayPalCompletePayments",
           },
           {
             "Name": "ProductType",
@@ -2334,7 +2386,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "NoPayPalSupporterPlusAlarm3A1EEE12": {
+    "NoPayPalCompletePaymentsSupporterPlusAlarmF51DC546": {
       "DependsOn": [
         "SupportWorkersPROD",
         "SupportWorkersRoleDefaultPolicyCB757939",
@@ -2360,12 +2412,12 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "support-workers PROD No successful PayPal supporter plus subscriptions recently.",
+        "AlarmName": "support-workers PROD No successful PayPalCompletePayments supporter plus subscriptions recently.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
             "Name": "PaymentProvider",
-            "Value": "PayPal",
+            "Value": "PayPalCompletePayments",
           },
           {
             "Name": "ProductType",
@@ -2950,7 +3002,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "NoWeeklyAcquisitionInOneDayAlarm69C071FE": {
+    "NoWeeklyAcquisitionForPeriodAlarmD2778900": {
       "DependsOn": [
         "SupportWorkersPROD",
         "SupportWorkersRoleDefaultPolicyCB757939",
@@ -2976,12 +3028,12 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "URGENT 9-5 - PROD support-workers No successful guardian weekly checkouts in 8h.",
+        "AlarmName": "URGENT 9-5 - PROD support-workers No successful guardian weekly checkouts in 12 hours.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
-        "EvaluationPeriods": 96,
+        "EvaluationPeriods": 144,
         "Metrics": [
           {
-            "Expression": "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
+            "Expression": "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0),FILL(m4,0)])",
             "Id": "expr_1",
             "Label": "AllWeeklyConversions",
             "ReturnData": true,
@@ -3046,6 +3098,32 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                   {
                     "Name": "PaymentProvider",
                     "Value": "PayPal",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "GuardianWeekly",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m4",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "PayPalCompletePayments",
                   },
                   {
                     "Name": "ProductType",
@@ -3626,6 +3704,33 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
+    "SupportWorkersLogGroup3988AB33": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LogGroupName": "/aws/states/support-workers-PROD",
+        "RetentionInDays": 14,
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
     "SupportWorkersPROD": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
@@ -3717,6 +3822,22 @@ exports[`The support-workers stack matches the snapshot 1`] = `
               "","Payload.$":"$"}},"SucceedOrFailChoice":{"Type":"Choice","Choices":[{"Variable":"$.requestInfo.testUser","BooleanEquals":true,"Next":"CheckoutFailure"},{"Variable":"$.requestInfo.failed","BooleanEquals":true,"Next":"FailState"}],"Default":"CheckoutFailure"},"CheckoutFailure":{"Type":"Pass","End":true},"FailState":{"Type":"Fail"}},"TimeoutSeconds":86400}",
             ],
           ],
+        },
+        "LoggingConfiguration": {
+          "Destinations": [
+            {
+              "CloudWatchLogsLogGroup": {
+                "LogGroupArn": {
+                  "Fn::GetAtt": [
+                    "SupportWorkersLogGroup3988AB33",
+                    "Arn",
+                  ],
+                },
+              },
+            },
+          ],
+          "IncludeExecutionData": true,
+          "Level": "ALL",
         },
         "RoleArn": {
           "Fn::GetAtt": [
@@ -3967,6 +4088,33 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": [
+                "logs:CreateLogDelivery",
+                "logs:GetLogDelivery",
+                "logs:UpdateLogDelivery",
+                "logs:DeleteLogDelivery",
+                "logs:ListLogDeliveries",
+                "logs:PutResourcePolicy",
+                "logs:DescribeResourcePolicies",
+                "logs:DescribeLogGroups",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "SupportWorkersLogGroup3988AB33",
+                  "Arn",
+                ],
+              },
             },
           ],
           "Version": "2012-10-17",

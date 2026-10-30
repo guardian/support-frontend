@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/preact-vite';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 import type { ErrorPageProps } from 'pages/error/components/errorPage';
 import ErrorPage from 'pages/error/components/errorPage';
 import { PayPalError } from 'pages/paypal-error/payPalError';

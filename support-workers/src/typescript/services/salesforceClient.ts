@@ -37,7 +37,7 @@ export class SalesforceClient {
 	}
 	private authService: AuthService;
 
-	post = async <I, O, T extends z.ZodType<O, z.ZodTypeDef, I>>(
+	post = async <I, O, T extends z.ZodType<O, I>>(
 		path: string,
 		body: string,
 		schema: T,

@@ -98,6 +98,7 @@ export type BenefitsCheckListProps = {
 	style?: CheckListStyle;
 	iconColor?: string;
 	cssOverrides?: SerializedStyles;
+	benefitPillColor?: string;
 };
 
 function ChecklistItemIcon({
@@ -108,12 +109,17 @@ function ChecklistItemIcon({
 	style: CheckListStyle;
 }): JSX.Element {
 	const styleSize = style === 'standard' ? 'small' : 'xsmall';
+	const statusLabel = checked ? 'Included' : 'Not included';
 	return style === 'bullet' ? (
 		<BulletSvg />
-	) : checked ? (
-		<SvgTickRound isAnnouncedByScreenReader size={styleSize} />
 	) : (
-		<SvgCrossRoundFilled isAnnouncedByScreenReader size={styleSize} />
+		<span role="img" aria-label={statusLabel}>
+			{checked ? (
+				<SvgTickRound size={styleSize} />
+			) : (
+				<SvgCrossRoundFilled size={styleSize} />
+			)}
+		</span>
 	);
 }
 
@@ -123,6 +129,7 @@ export function BenefitsCheckList({
 	iconColor = style === 'compact' ? palette.success[400] : palette.brand[500],
 	cssOverrides,
 	benefitsHeading,
+	benefitPillColor,
 }: BenefitsCheckListProps): JSX.Element {
 	return (
 		<ul css={[listCss(style), cssOverrides]}>
@@ -157,7 +164,9 @@ export function BenefitsCheckList({
 						<div css={[checkListTextCss, item.maybeGreyedOut]}>
 							{typeof item.text === 'string' ? (
 								<span css={checkListTextItemCss}>
-									{pillCopy && <BenefitPill copy={pillCopy} />}{' '}
+									{pillCopy && (
+										<BenefitPill copy={pillCopy} pillColor={benefitPillColor} />
+									)}{' '}
 									{item.strong ? <strong>{item.text}</strong> : item.text}
 									{item.toolTip && (
 										<Tooltip

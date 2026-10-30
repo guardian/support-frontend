@@ -1,9 +1,5 @@
 import { storage } from '@guardian/libs';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { Settings, Status } from 'helpers/globalsAndSwitches/settings';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import type { PromotionCopy } from 'helpers/productPrice/promotions';
-import type { AmountsTest, AmountsVariant } from '../contributions';
 
 function isRecord(item: unknown): item is Record<string, unknown> {
 	return item != null && !Array.isArray(item) && typeof item === 'object';
@@ -30,16 +26,16 @@ function getGlobal<T>(path = ''): T | null {
 
 function getLocal<T>(path = ''): T | null {
 	// feature flags path is in the format 'featureSwitches.featureFlagName' and we want to
-	// extract the 'featureFlagName' part to check if there is an override in sessionStorage
+	// extract the 'featureFlagName' part to check if there is an override in local storage
 
-	if (!storage.session.isAvailable()) {
+	if (!storage.local.isAvailable()) {
 		return null;
 	}
 
 	const [flag] = path.split('.').slice(-1);
 
 	try {
-		const value = flag && storage.session.get(flag);
+		const value = flag && storage.local.get(flag);
 		if (value) {
 			return value as T;
 		}
@@ -53,44 +49,6 @@ function getLocal<T>(path = ''): T | null {
 		return null;
 	}
 }
-
-const emptyAmountsTestVariants: AmountsVariant[] = [
-	{
-		variantName: 'CONTROL',
-		defaultContributionType: 'MONTHLY',
-		displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
-		amountsCardData: {
-			ONE_OFF: {
-				amounts: [],
-				defaultAmount: 0,
-				hideChooseYourAmount: false,
-			},
-			MONTHLY: {
-				amounts: [],
-				defaultAmount: 0,
-				hideChooseYourAmount: false,
-			},
-			ANNUAL: {
-				amounts: [],
-				defaultAmount: 0,
-				hideChooseYourAmount: false,
-			},
-		},
-	},
-];
-
-export const emptyConfiguredRegionAmounts: AmountsTest = {
-	testName: '',
-	liveTestName: '',
-	isLive: false,
-	targeting: {
-		targetingType: 'Region',
-		region: 'GBPCountries',
-	},
-	order: 0,
-	seed: 0,
-	variants: emptyAmountsTestVariants,
-};
 
 export const emptySwitches = {
 	experiments: {},
@@ -107,43 +65,6 @@ const getSettings = (): Settings => {
 
 	const defaultSettings = {
 		switches: emptySwitches,
-		amounts: [
-			{
-				...emptyConfiguredRegionAmounts,
-				testName: 'EMPTY_TEST__GBPCountries',
-				target: 'GBPCountries' as CountryGroupId,
-			},
-			{
-				...emptyConfiguredRegionAmounts,
-				testName: 'EMPTY_TEST__UnitedStates',
-				target: 'UnitedStates' as CountryGroupId,
-			},
-			{
-				...emptyConfiguredRegionAmounts,
-				testName: 'EMPTY_TEST__Canada',
-				target: 'Canada' as CountryGroupId,
-			},
-			{
-				...emptyConfiguredRegionAmounts,
-				testName: 'EMPTY_TEST__NZDCountries',
-				target: 'NZDCountries' as CountryGroupId,
-			},
-			{
-				...emptyConfiguredRegionAmounts,
-				testName: 'EMPTY_TEST__EURCountries',
-				target: 'EURCountries' as CountryGroupId,
-			},
-			{
-				...emptyConfiguredRegionAmounts,
-				testName: 'EMPTY_TEST__International',
-				target: 'International' as CountryGroupId,
-			},
-			{
-				...emptyConfiguredRegionAmounts,
-				testName: 'EMPTY_TEST__AUDCountries',
-				target: 'AUDCountries' as CountryGroupId,
-			},
-		],
 		contributionTypes: {
 			GBPCountries: [],
 			UnitedStates: [],
@@ -158,12 +79,6 @@ const getSettings = (): Settings => {
 	return globalSettings ?? defaultSettings;
 };
 
-const getProductPrices = (): ProductPrices | null =>
-	getGlobal<ProductPrices>('productPrices');
-
-const getPromotionCopy = (): PromotionCopy | null =>
-	getGlobal<PromotionCopy>('promotionCopy');
-
 const isSwitchOn = (switchName: string): boolean => {
 	const localOverride = switchName.startsWith('featureSwitches.')
 		? getLocal<Status>(switchName)
@@ -175,10 +90,4 @@ const isSwitchOn = (switchName: string): boolean => {
 	return sw === 'On';
 };
 
-export {
-	getProductPrices,
-	getPromotionCopy,
-	getGlobal,
-	getSettings,
-	isSwitchOn,
-};
+export { getGlobal, getSettings, isSwitchOn };

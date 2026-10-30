@@ -18,6 +18,7 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
 
   val defaultPromotionsService = new DefaultPromotionService {
     def getPromoCodes(product: Product): List[String] = Nil
+    def allPromoCodes: List[String] = Nil
   }
 
   "PriceSummaryService" should "return prices" in {
@@ -36,12 +37,12 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
     paper(UK)(Collection)(EverydayPlus)(Monthly)(GBP).promotions.head.discountedPrice shouldBe Some(46.89)
 
     val digitalPack = service.getPrices(DigitalPack, List(discountPromoCode))
-    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).price shouldBe 14.99
-    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).promotions.head.discountedPrice shouldBe Some(
+    digitalPack(UK)(NoFulfilmentOptions)(TaxInclusive)(Monthly)(GBP).price shouldBe 14.99
+    digitalPack(UK)(NoFulfilmentOptions)(TaxInclusive)(Monthly)(GBP).promotions.head.discountedPrice shouldBe Some(
       10.49,
     )
-    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).price shouldBe 149
-    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).promotions.head.discountedPrice shouldBe Some(
+    digitalPack(UK)(NoFulfilmentOptions)(TaxInclusive)(Annual)(GBP).price shouldBe 149
+    digitalPack(UK)(NoFulfilmentOptions)(TaxInclusive)(Annual)(GBP).promotions.head.discountedPrice shouldBe Some(
       137.82,
     )
   }

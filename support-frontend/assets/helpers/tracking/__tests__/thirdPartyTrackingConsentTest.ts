@@ -1,12 +1,14 @@
 // ----- Imports ----- //
-import { onConsentChange as _onConsentChange } from '@guardian/libs';
-import type { ConsentState } from '@guardian/libs';
+import { onConsentChange as _onConsentChange } from '@guardian/consent-manager';
+import type { ConsentState } from '@guardian/consent-manager';
 import { onConsentChangeEvent } from '../thirdPartyTrackingConsent';
 
 const onConsentChange = _onConsentChange as jest.Mock;
-jest.mock('@guardian/libs', () => ({
+jest.mock('@guardian/consent-manager', () => ({
 	// eslint-disable-next-line -- ESLint doesn't understand jest.requireActual
-	...jest.requireActual<typeof import('@guardian/libs')>('@guardian/libs'),
+	...jest.requireActual<typeof import('@guardian/consent-manager')>(
+		'@guardian/consent-manager',
+	),
 	onConsentChange: jest.fn(),
 }));
 

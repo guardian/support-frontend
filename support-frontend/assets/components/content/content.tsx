@@ -16,6 +16,7 @@ const leftBorderStyle = css`
 
 const contentWrapper = css`
 	background-color: ${palette.neutral[100]};
+	flex-direction: inherit;
 `;
 
 const innerContent = css`

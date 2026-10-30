@@ -12,27 +12,19 @@ class PromotionService(config: PromotionsConfig, maybeCollection: Option[Promoti
     extends TouchpointService
     with LazyLogging {
   private val promotionCollection = maybeCollection.getOrElse(new CachedDynamoPromotionCollection(config.tables))
-  private def allPromotions = promotionCollection.all.toList
 
   def environment = if (config.tables.promotions.contains("PROD")) { "PROD" }
   else { "CODE" }
 
   def findPromotion(promoCode: PromoCode): Either[PromoError, PromotionWithCode] =
-    promotionCollection.all.toList
-      .filter(_.promoCode == promoCode)
-      .map(PromotionWithCode(promoCode, _)) match {
-      case Nil => Left(NoSuchCode)
-      case code :: Nil => Right(code)
-      case tooMany => Left(DuplicateCode(tooMany.mkString(", ")))
+    promotionCollection.allByCode.get(promoCode) match {
+      case Some(promotion) => Right(PromotionWithCode(promoCode, promotion))
+      case None => Left(NoSuchCode)
     }
 
   // promoCodes here is expected to be a small list of default promos plus one from the querystring
   def findPromotions(promoCodes: List[PromoCode]): List[PromotionWithCode] = {
-    val promosByCode: Map[PromoCode, Promotion] =
-      allPromotions
-        .map(promo => promo.promoCode -> promo)
-        .toMap
-
+    val promosByCode = promotionCollection.allByCode
     promoCodes.flatMap { promoCode =>
       promosByCode.get(promoCode).map(PromotionWithCode(promoCode, _))
     }

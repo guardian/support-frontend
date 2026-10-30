@@ -1,14 +1,18 @@
 import { css } from '@emotion/react';
 import { between, from, space } from '@guardian/source/foundations';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { CardTheme } from 'helpers/landingPage/cardTheme';
+import { defaultCardTheme, redCardTheme } from 'helpers/landingPage/cardTheme';
 import type { CardContent } from './threeTierCard';
 import { ThreeTierCard } from './threeTierCard';
 
 export type ThreeTierCardsProps = {
 	cardsContent: CardContent[];
-	currencyId: IsoCurrency;
+	currencyId: CurrencyCode;
 	billingPeriod: BillingPeriod;
+	showWeeklyPrice?: boolean;
+	deepDiscount?: boolean;
 };
 
 const container = (cardCount: number) => css`
@@ -47,11 +51,20 @@ export function ThreeTierCards({
 	cardsContent,
 	currencyId,
 	billingPeriod,
+	showWeeklyPrice,
+	deepDiscount = false,
 }: ThreeTierCardsProps): JSX.Element {
+	const shouldUseLargePriceMinHeight =
+		!!showWeeklyPrice ||
+		cardsContent.some((card) => !!card.promotion || !!card.billingPeriodsCopy);
 	const haveLabelAndSelectedCards =
-		cardsContent.filter((card) => !!card.label || card.isUserSelected).length >
-		1;
+		!deepDiscount &&
+		cardsContent.filter((card) => !!card.label?.copy || card.isUserSelected)
+			.length > 1;
 	let promoCount = 0;
+
+	const cardTheme: CardTheme = deepDiscount ? redCardTheme : defaultCardTheme;
+
 	return (
 		<div
 			css={container(cardsContent.length)}
@@ -66,12 +79,16 @@ export function ThreeTierCards({
 				return (
 					<ThreeTierCard
 						cardContent={cardContent}
+						cardTheme={cardTheme}
 						cardTier={cardIndexToTier(cardIndex)}
 						key={`threeTierCard${cardIndex}`}
 						promoCount={promoCount}
 						isSubdued={haveLabelAndSelectedCards}
 						currencyId={currencyId}
 						billingPeriod={billingPeriod}
+						showWeeklyPrice={showWeeklyPrice}
+						useLargePriceMinHeight={shouldUseLargePriceMinHeight}
+						deepDiscount={deepDiscount}
 					/>
 				);
 			})}

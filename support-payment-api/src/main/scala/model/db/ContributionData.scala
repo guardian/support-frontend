@@ -48,6 +48,7 @@ object ContributionData extends StrictLogging {
       identityId: Option[String],
       charge: Charge,
       countrySubdivisionCode: Option[String],
+      countryId: Option[String],
       postalCode: Option[String],
       paymentProvider: PaymentProvider,
   ): ContributionData =
@@ -64,7 +65,7 @@ object ContributionData extends StrictLogging {
       // Stripe can return currency in lower case
       currency = Currency.withNameInsensitive(charge.getCurrency),
       amount = BigDecimal(charge.getAmount, 2),
-      countryCode = StripeCharge.getCountryCode(charge),
+      countryCode = StripeCharge.getCountryCode(charge).orElse(countryId),
       countrySubdivisionCode = countrySubdivisionCode,
       postalCode = postalCode,
     )

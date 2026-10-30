@@ -19,6 +19,7 @@ case class AcquisitionData(
     gaId: Option[String],
     labels: Option[Set[String]],
     postalCode: Option[String],
+    countryId: Option[String],
 )
 
 object AcquisitionData {

@@ -18,9 +18,13 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val googleAuth = new GoogleAuth(config.getConfig("googleAuth"))
 
-  lazy val getAddressIOConfig = GetAddressIOConfig.fromConfig(config)
-
   lazy val idealPostcodesConfig = IdealPostcodesConfig.fromConfig(config)
+
+  lazy val salesTaxConfig = SalesTaxApiConfig.fromConfig(config)
+
+  lazy val promotionsApiConfigProvider = new PromotionsApiConfigProvider(config, stage)
+
+  lazy val multipleAccountApiConfig = MultipleAccountApiConfig.fromConfig(config)
 
   lazy val paperRoundConfigProvider = new PaperRoundConfigProvider(config, stage)
 
@@ -38,8 +42,6 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val goCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
 
-  lazy val regularPayPalConfigProvider = new PayPalConfigProvider(config, stage)
-
   lazy val payPalCompletePaymentsConfigProvider = new PayPalCompletePaymentsConfigProvider(config, stage)
 
   lazy val regularStripeConfigProvider = new StripePublicConfigProvider(config, stage)
@@ -55,8 +57,6 @@ class Configuration(config: TypesafeConfig) {
   lazy val fastlyConfig: Option[FastlyConfig] = FastlyConfig.fromConfig(config).valueOr(throw _)
 
   lazy val priceSummaryConfigProvider = new PriceSummaryConfigProvider(config, stage)
-
-  lazy val promotionsConfigProvider = new PromotionsConfigProvider(config, stage)
 
   lazy val recaptchaConfigProvider = new RecaptchaConfigProvider(config, stage)
 

@@ -1,13 +1,13 @@
 import { ThemeProvider } from '@emotion/react';
-import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryCode } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import { type ProductOptions } from '@modules/product/productOptions';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import ObserverPageLayout from 'components/observer-layout/ObserverPageLayout';
 import { observerThemeButton } from 'components/observer-layout/styles';
+import type { Payment } from 'helpers/forms/checkouts';
 import { getPaypalClientId } from 'helpers/forms/payPal';
 import {
 	getStripeKeyForCountry,
@@ -18,90 +18,45 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import {
-	type ActiveProductKey,
 	type ActiveRatePlanKey,
 	isProductKey,
 	productCatalog,
 } from 'helpers/productCatalog';
 import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { getPromotion } from 'helpers/productPrice/promotions';
+import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
+import { getEstimatedSalesTaxConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import * as cookie from 'helpers/storage/cookie';
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
-import { getOriginAndForceSubdomain } from 'helpers/urls/url';
+import {
+	getOriginAndForceSubdomain,
+	getQueryParameter,
+} from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import { getWeeklyDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
 import type { CheckoutNudgeSettings } from '../../helpers/abTests/checkoutNudgeAbTests';
-import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
-import type { LegacyProductType } from '../../helpers/legacyTypeConversions';
-import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
-import { getFulfilmentOptionFromProductKey } from '../../helpers/productCatalogToFulfilmentOption';
-import { getProductOptionFromProductAndRatePlan } from '../../helpers/productCatalogToProductOption';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
+import { useStateWithCheckoutSession } from './checkout/hooks/useStateWithCheckoutSession';
 import { useStripeHostedCheckoutSession } from './checkout/hooks/useStripeHostedCheckoutSession';
 import CheckoutForm from './components/checkoutForm';
 import CheckoutSummary from './components/checkoutSummary';
 import GuardianPageLayout from './components/GuardianPageLayout';
+import CurrentMaxRatesByCountry from './helpers/CurrentMaxRatesByCountry';
 import { getStudentDiscount } from './student/helpers/discountDetails';
 
 type Props = {
 	supportRegionId: SupportRegionId;
 	appConfig: AppConfig;
-	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 	nudgeSettings?: CheckoutNudgeSettings;
 };
 
-const countryId: IsoCountry = Country.detect();
-
-const getPromotionFromProductPrices = (
-	appConfig: AppConfig,
-	productKey: ActiveProductKey,
-	ratePlanKey: ActiveRatePlanKey,
-	countryId: IsoCountry,
-	billingPeriod: BillingPeriod,
-) => {
-	/**
-	 * Get any promotions.
-	 * These come from the productPrices object for the particular product on window.guardian.
-	 */
-
-	// exclude one year student promotion as it's mapped to the annual billing period and we don't to apply regualr annual promotions to it
-	if (productKey === 'SupporterPlus' && ratePlanKey === 'OneYearStudent') {
-		return undefined;
-	}
-
-	const productPriceKey: LegacyProductType = getLegacyProductType(
-		productKey,
-		ratePlanKey,
-	);
-
-	const productPrices = appConfig.allProductPrices[productPriceKey];
-
-	if (productPrices === undefined) {
-		return undefined;
-	}
-
-	const fulfilmentOption = getFulfilmentOptionFromProductKey(productKey);
-	const productOptions: ProductOptions = getProductOptionFromProductAndRatePlan(
-		productKey,
-		ratePlanKey,
-	);
-
-	return getPromotion(
-		productPrices,
-		countryId,
-		billingPeriod,
-		fulfilmentOption,
-		productOptions,
-	);
-};
+const countryId: CountryCode = Country.detect();
 
 export function Checkout({
 	supportRegionId,
 	appConfig,
-	abParticipations,
 	landingPageSettings,
 	nudgeSettings,
 }: Props) {
@@ -140,17 +95,7 @@ export function Checkout({
 	 * - any contributions made
 	 */
 
-	/**
-	 * - `originalAmount` the amount pre any discounts or contributions
-	 * - `discountedAmount` the amount with a discountApplied
-	 * - `finalAmount` is the amount a person will pay
-	 */
-	let payment: {
-		originalAmount: number;
-		discountedAmount?: number;
-		contributionAmount?: number;
-		finalAmount: number;
-	};
+	let payment: Payment;
 
 	const contributionParam = urlSearchParams.get('contribution');
 	const contributionAmount = contributionParam
@@ -181,13 +126,14 @@ export function Checkout({
 			return <div>Price not found in product catalog</div>;
 		}
 
-		promotion = getPromotionFromProductPrices(
-			appConfig,
+		promotion = getLegacyPromotion({
+			promotions: appConfig.promotions ?? [],
 			productKey,
 			ratePlanKey,
-			countryId,
+			price: productPrice,
 			billingPeriod,
-		);
+			promoCode: getQueryParameter('promoCode'),
+		});
 
 		const discountedPrice = promotion?.discountedPrice ?? undefined;
 		const price = discountedPrice ?? productPrice;
@@ -272,6 +218,16 @@ export function Checkout({
 	);
 
 	/**
+	 * BillingState selector initialised to undefined to hide
+	 * billingStateError message. formOnSubmit checks and converts to
+	 * empty string to display billingStateError message.
+	 */
+	const [billingState, setBillingState] = useStateWithCheckoutSession<string>(
+		checkoutSession?.formFields.addressFields.billingAddress.state,
+		'',
+	);
+
+	/**
 	 * Passed down because minimum product prices are unavailable in the paymentTsAndCs story
 	 * and shared across summary and form checkout sub-components
 	 */
@@ -285,13 +241,15 @@ export function Checkout({
 
 	/**
 	 * Non-AU Students have ratePlanKey as OneYearStudent
-	 * AU Students have ratePlanKey as Monthly, productKey as SupporterPlus
-	 * and required promoCode UTS_STUDENT
+	 * AU Students can have ratePlanKey as Monthly (institute with promoCode UTS_STUDENT)
+	 * or OneYearStudent (Global)
 	 */
+	const isStudentBeans = ratePlanKey === 'OneYearStudent';
 	const studentDiscount = getStudentDiscount(
 		supportRegionId,
 		ratePlanKey,
 		productKey,
+		isStudentBeans,
 		promotion,
 		true,
 	);
@@ -310,20 +268,36 @@ export function Checkout({
 		backButtonPathOverrideParam,
 	);
 
+	const taxRateConfig = getEstimatedSalesTaxConfig(
+		appConfig.productCatalog,
+		appConfig.taxRates,
+		productKey,
+		ratePlanKey,
+		billingState,
+		supportRegionId,
+	);
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Elements stripe={stripePromise} options={elementsOptions}>
-				<PageLayout borderBox>
+				<PageLayout
+					borderBox
+					footerDisclaimer={
+						<CurrentMaxRatesByCountry
+							countryGroupId={countryGroupId}
+							productKey={productKey}
+						/>
+					}
+				>
 					<CheckoutSummary
 						supportRegionId={supportRegionId}
 						appConfig={appConfig}
 						productKey={productKey}
 						ratePlanKey={ratePlanKey}
 						promotion={promotion}
-						originalAmount={payment.originalAmount}
+						payment={payment}
 						countryId={countryId}
 						forcedCountry={forcedCountry}
-						abParticipations={abParticipations}
 						landingPageSettings={landingPageSettings}
 						weeklyDeliveryDate={weeklyDeliveryDate}
 						thresholdAmount={thresholdAmount}
@@ -331,6 +305,7 @@ export function Checkout({
 						nudgeSettings={nudgeSettings}
 						backButtonOrigin={backButtonOrigin}
 						backButtonPathOverride={backButtonPathOverride}
+						taxRateConfig={taxRateConfig}
 					/>
 
 					<CheckoutForm
@@ -341,12 +316,9 @@ export function Checkout({
 						productKey={productKey}
 						ratePlanKey={ratePlanKey}
 						promotion={promotion}
-						originalAmount={payment.originalAmount}
-						contributionAmount={payment.contributionAmount}
-						finalAmount={payment.finalAmount}
+						payment={payment}
 						useStripeExpressCheckout={useStripeExpressCheckout}
 						countryId={countryId}
-						abParticipations={abParticipations}
 						landingPageSettings={landingPageSettings}
 						checkoutSession={checkoutSession}
 						clearCheckoutSession={clearCheckoutSession}
@@ -355,6 +327,9 @@ export function Checkout({
 						thresholdAmount={thresholdAmount}
 						studentDiscount={studentDiscount}
 						paypalClientId={paypalClientId}
+						billingState={billingState}
+						setBillingState={setBillingState}
+						taxRateConfig={taxRateConfig}
 					/>
 				</PageLayout>
 			</Elements>

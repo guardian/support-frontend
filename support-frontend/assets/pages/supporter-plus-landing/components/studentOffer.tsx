@@ -9,10 +9,11 @@ import {
 	textSans17,
 } from '@guardian/source/foundations';
 import { LinkButton } from '@guardian/source/react-components';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { getProductLabel, productCatalog } from 'helpers/productCatalog';
+import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import { glyph } from '../../../helpers/internationalisation/currency';
 
 const container = css`
@@ -64,7 +65,7 @@ const btnStyleOverrides = css`
 `;
 
 const dividerContainer = css`
-	margin: 0 auto ${space[8]}px auto;
+	margin: ${space[8]}px auto;
 
 	${from.desktop} {
 		max-width: 940px;
@@ -95,14 +96,15 @@ const dividerCopy = css`
 `;
 
 interface StudentOfferProps {
-	currencyKey: IsoCurrency;
-	countryGroupId: CountryGroupId;
+	currencyKey: CurrencyCode;
+	supportRegionId: SupportRegionId;
 }
 
 export function StudentOffer({
 	currencyKey,
-	countryGroupId,
+	supportRegionId,
 }: StudentOfferProps): JSX.Element {
+	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
 	const price =
 		productCatalog.SupporterPlus?.ratePlans['OneYearStudent']?.pricing[
 			currencyKey
