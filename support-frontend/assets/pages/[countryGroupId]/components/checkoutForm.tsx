@@ -29,7 +29,7 @@ import { MaybeEstimatedTaxSummary } from 'components/salesTax/maybeEstimatedTaxS
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import type { AddressFormFieldError } from 'components/subscriptionCheckouts/address/addressFields';
-import type { Participations } from 'helpers/abTests/models';
+import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import useEmailMarketingUtmSession from 'helpers/customHooks/useEmailMarketingUtmSession';
 import {
@@ -37,7 +37,6 @@ import {
 	type Payment,
 	simpleFormatAmount,
 } from 'helpers/forms/checkouts';
-import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
 	isPaymentMethod,
 	type PaymentMethod as LegacyPaymentMethod,
@@ -146,7 +145,6 @@ type CheckoutFormProps = {
 	payment: Payment;
 	useStripeExpressCheckout: boolean;
 	countryId: CountryCode;
-	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 	clearCheckoutSession: () => void;
 	weeklyDeliveryDate: Date;
@@ -171,7 +169,6 @@ export default function CheckoutForm({
 	payment,
 	useStripeExpressCheckout,
 	countryId,
-	abParticipations,
 	clearCheckoutSession,
 	weeklyDeliveryDate,
 	setWeeklyDeliveryDate,
@@ -190,6 +187,7 @@ export default function CheckoutForm({
 	const isSignedIn = !!user?.email;
 
 	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
+	const abParticipations = useAbParticipations();
 
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } =
@@ -318,26 +316,6 @@ export default function CheckoutForm({
 		}
 	}, [stripeExpressCheckoutSuccessful]);
 
-	/**
-	 * Payment method: PayPal
-	 * BAID = Billing Agreement ID
-	 */
-	const [payPalLoaded, setPayPalLoaded] = useState(false);
-	const [payPalBAID, setPayPalBAID] = useState('');
-	/**
-	 * PayPalBAID forces formOnSubmit
-	 */
-	useEffect(() => {
-		if (payPalBAID !== '') {
-			// TODO - this might not meet our browser compatibility requirements (Safari)
-			// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
-			formRef.current?.requestSubmit();
-		}
-	}, [payPalBAID]);
-	/**
-	 * Payment method: PayPal Complete Payments
-	 * Payment Token = the new equivalent of a BAID
-	 */
 	const [payPalPaymentToken, setPayPalPaymentToken] = useState<PaymentToken>();
 	/**
 	 * payPalPaymentToken forces formOnSubmit
@@ -360,11 +338,6 @@ export default function CheckoutForm({
 			formRef.current?.requestSubmit();
 		}
 	}, [checkoutSession?.checkoutSessionId]);
-	useEffect(() => {
-		if (paymentMethod === 'PayPal' && !payPalLoaded) {
-			void loadPayPalRecurring().then(() => setPayPalLoaded(true));
-		}
-	}, [paymentMethod, payPalLoaded]);
 
 	/** Recaptcha */
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
@@ -431,8 +404,14 @@ export default function CheckoutForm({
 				},
 			]);
 		} else {
+			const useExpressDeliveryAgentsLookup =
+				abParticipations.deliveryAgentsLookupExpress === 'variant';
+
 			// The users postcode is outside the M25 and they have selected a valid rate plan
-			const agents = await getDeliveryAgents(postcode);
+			const agents = await getDeliveryAgents(
+				postcode,
+				useExpressDeliveryAgentsLookup,
+			);
 			if (agents.agents?.length === 1 && agents.agents[0]) {
 				setChosenDeliveryAgent(agents.agents[0].agentId);
 			}
@@ -706,8 +685,7 @@ export default function CheckoutForm({
 				isWeeklyGift,
 		  )}`;
 
-	const useExpressPostcodeLookup =
-		abParticipations.postCodeLookupExpress === 'variant';
+	const automaticSimilarProductsConsent = countryId === 'US';
 
 	return (
 		<>
@@ -1005,7 +983,6 @@ export default function CheckoutForm({
 									deliveryAddressErrors={deliveryAddressErrors}
 									setDeliveryAddressErrors={setDeliveryAddressErrors}
 									isWeeklyGift={isWeeklyGift}
-									useExpressPostcodeLookup={useExpressPostcodeLookup}
 								/>
 							</>
 						)}
@@ -1023,7 +1000,6 @@ export default function CheckoutForm({
 							setConfirmedEmail={setConfirmedEmail}
 							phoneNumber={phoneNumber}
 							setPhoneNumber={setPhoneNumber}
-							useExpressPostcodeLookup={useExpressPostcodeLookup}
 							billingStatePostcodeCountry={billingStatePostcodeCountry}
 							hasDeliveryAddress={hasDeliveryAddress}
 							isEmailAddressReadOnly={isSignedIn}
@@ -1054,7 +1030,6 @@ export default function CheckoutForm({
 								deliveryAddressErrors={deliveryAddressErrors}
 								setDeliveryAddressErrors={setDeliveryAddressErrors}
 								billingStatePostcodeCountry={billingStatePostcodeCountry}
-								useExpressPostcodeLookup={useExpressPostcodeLookup}
 							/>
 						)}
 						<FormSection ref={paymentMethodRef}>
@@ -1261,7 +1236,11 @@ export default function CheckoutForm({
 								showSimilarProductsConsentForRatePlan(
 									productDescription,
 									ratePlanKey,
-								) && <SimilarProductsConsent />}
+								) && (
+									<SimilarProductsConsent
+										showCheckbox={!automaticSimilarProductsConsent}
+									/>
+								)}
 						</div>
 						<SummaryTsAndCs
 							productKey={productKey}
@@ -1270,6 +1249,7 @@ export default function CheckoutForm({
 							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}
+							promotion={promotion}
 						/>
 						<MaybeEstimatedTaxSummary
 							payment={payment}
@@ -1291,17 +1271,11 @@ export default function CheckoutForm({
 							<SubmitButton
 								buttonText={buttonText}
 								paymentMethod={paymentMethod}
-								payPalLoaded={payPalLoaded}
-								payPalBAID={payPalBAID}
-								setPayPalBAID={setPayPalBAID}
 								payPalPaymentToken={payPalPaymentToken}
 								setPayPalPaymentToken={setPayPalPaymentToken}
 								formRef={formRef}
 								isTestUser={isTestUser}
-								payment={payment}
-								taxRateConfig={taxRateConfig}
 								currencyKey={currencyKey}
-								billingPeriod={billingPeriod}
 								csrf={csrf.token ?? ''}
 								paypalClientId={paypalClientId}
 								setErrorMessage={setErrorMessage}

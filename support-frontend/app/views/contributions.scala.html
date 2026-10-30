@@ -6,12 +6,11 @@
 @import models.GeoData
 @import controllers.PaymentMethodConfigs
 @import com.gu.support.encoding.CustomCodecs._
-@import controllers.AllProductPrices
+@import com.gu.support.promotions.PromoWithCatalogInformation
 @import views.ViewHelpers.outputJson
 @import io.circe.JsonObject
 @import services.Tickers
 @(
-  id: String,
   mainElement: ReactDiv,
   js: RefPath,
   description: Option[String],
@@ -25,7 +24,7 @@
   shareImageUrl: String,
   v2recaptchaConfigPublicKey: String,
   serversideTests: Map[String, Participation] = Map(),
-  allProductPrices: AllProductPrices,
+  promotions: Seq[PromoWithCatalogInformation],
   productCatalog: JsonObject,
   noIndex: Boolean,
   canonicalLink: String,
@@ -66,7 +65,7 @@
       };
     }
 
-    window.guardian.allProductPrices = @Html(outputJson(allProductPrices))
+    window.guardian.promotions = @Html(outputJson(promotions))
     window.guardian.tickerData = @Html(outputJson(tickerData))
   </script>
 

@@ -7,6 +7,7 @@ import type {
 import { selectVariantForTest } from './banditSelection';
 import { randomNumber } from './helpers';
 import type { PageParticipationsConfig } from './models';
+import { multipleAccountBenefitCopy } from './multipleAccounts';
 import {
 	getPageParticipationsWithFallback,
 	type PageParticipationsResultWithFallback,
@@ -18,6 +19,34 @@ const fallbackDefaultProductSelection: DefaultProductSelection = {
 	productType: 'SupporterPlus',
 	billingPeriod: 'Monthly',
 };
+const primaryDigitalPlusBenefit = {
+	copy: multipleAccountBenefitCopy,
+	tooltip:
+		'You can share your Digital plus access with three other people. Each person gets their own account and login.',
+	label: { copy: 'New' },
+};
+const baseDigitalPlusBenefits = [
+	{
+		copy: 'Digital access to the Guardian’s 200 year newspaper archive',
+		tooltip:
+			'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was in the UK, since 1821.',
+	},
+	{ copy: 'Daily digital Guardian newspaper' },
+	{
+		copy: 'Guardian Weekly digital magazine',
+		tooltip:
+			'Accessed through the Guardian Editions app, the Guardian Weekly e-magazine features a handpicked and carefully curated selection of in-depth articles, global news, opinion and more. Enjoy wherever you are, on your favourite device.',
+	},
+	{
+		copy: 'The Long Read digital magazine',
+		tooltip:
+			'Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.',
+	},
+];
+const allDigitalPlusBenefits = [
+	primaryDigitalPlusBenefit,
+	...baseDigitalPlusBenefits,
+];
 
 export const fallBackLandingPageSelection: LandingPageVariant = {
 	name: 'CONTROL',
@@ -42,7 +71,7 @@ export const fallBackLandingPageSelection: LandingPageVariant = {
 				{
 					copy: 'Unlimited access to the Guardian app',
 					tooltip:
-						'Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.',
+						'Read beyond our 10 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.',
 				},
 				{
 					copy: 'Ad-free reading on all your devices',
@@ -69,24 +98,7 @@ export const fallBackLandingPageSelection: LandingPageVariant = {
 		},
 		DigitalSubscription: {
 			title: ProductTierLabel.DigitalSubscription,
-			benefits: [
-				{
-					copy: 'Guardian Weekly e-magazine',
-					tooltip:
-						'Accessed through the Guardian Editions app, the Guardian Weekly e-magazine features a handpicked and carefully curated selection of in-depth articles, global news, opinion and more. Enjoy wherever you are, on your favourite device.',
-				},
-				{
-					copy: 'The Long Read e-magazine',
-					tooltip:
-						'Accessed through the Guardian Editions app, the Long Read is a quarterly curated magazine with some of the Guardian’s finest longform journalism. Its narrative storytelling and investigative reporting seeks to debunk myths and uncover hidden histories.',
-				},
-				{
-					copy: 'Digital access to the Guardian’s 200 year newspaper archive',
-					tooltip:
-						'Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was in the UK, since 1821.',
-				},
-				{ copy: 'Daily digital Guardian newspaper' },
-			],
+			benefits: allDigitalPlusBenefits,
 			cta: { copy: 'Support' },
 		},
 	},

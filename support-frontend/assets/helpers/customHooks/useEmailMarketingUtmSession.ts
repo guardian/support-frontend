@@ -3,19 +3,19 @@ import type {
 	AcquisitionQueryParameters,
 	ReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
+import { referrerAcquisitionDataSchema } from 'helpers/tracking/acquisitions';
 
 const useEmailMarketingSession = (): { isMarketingEmailSession: boolean } => {
-	const acquisitionData = getSession('acquisitionData');
+	const acquisitionData: ReferrerAcquisitionData | null = getSession(
+		'acquisitionData',
+		referrerAcquisitionDataSchema,
+	);
 	let queryParams: AcquisitionQueryParameters = [];
 
 	if (acquisitionData) {
 		try {
-			const parsedAcquisitionData = JSON.parse(
-				acquisitionData,
-			) as ReferrerAcquisitionData;
-
-			if (parsedAcquisitionData.queryParameters) {
-				queryParams = parsedAcquisitionData.queryParameters;
+			if (acquisitionData.queryParameters) {
+				queryParams = acquisitionData.queryParameters;
 			}
 		} catch (error) {
 			console.error(

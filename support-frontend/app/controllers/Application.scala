@@ -10,11 +10,10 @@ import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.i18n.Country
 import com.gu.identity.model.{User => IdUser}
-import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper, Product, SupporterPlus, TierThree}
+import com.gu.support.catalog.SupporterPlus
 import com.gu.support.config.Stages.PROD
 import com.gu.support.config._
-import com.gu.support.encoding.InternationalisationCodecs
-import com.gu.support.zuora.api.ReaderType.Gift
+import com.gu.support.promotions.PromoWithCatalogInformation
 import com.typesafe.scalalogging.StrictLogging
 import config.{RecaptchaConfigProvider, StringsConfig}
 import controllers.AppConfig.CsrfToken
@@ -27,9 +26,11 @@ import models.GeoData
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.mparticle.MParticleClient
-import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
+import services.pricing.{DefaultPromotionService, PriceSummaryServiceProvider}
 import services.{
+  ApplicablePromotions,
   CachedProductCatalogServiceProvider,
+  CachedPromotionsServiceProvider,
   CachedSalesTaxService,
   PaymentAPIService,
   TestUserService,
@@ -51,7 +52,6 @@ case class AppConfig private (
     stripeKeyAustralia: AppConfig.StripeKeyConfig,
     stripeKeyUnitedStates: AppConfig.StripeKeyConfig,
     stripeKeyTortoiseMedia: AppConfig.StripeKeyConfig,
-    payPalEnvironment: AppConfig.ConfigKeyValues,
     paymentApiUrl: String,
     paymentApiPayPalEndpoint: String,
     mdapiUrl: String,
@@ -61,15 +61,14 @@ case class AppConfig private (
     v2recaptchaPublicKey: String,
     checkoutPostcodeLookup: Boolean,
     productCatalog: JsonObject,
-    allProductPrices: AllProductPrices,
-    allCheckoutNudgeProductPrices: AllProductPrices,
+    promotions: Seq[PromoWithCatalogInformation],
+    checkoutNudgePromotions: Seq[PromoWithCatalogInformation],
     serversideTests: Map[String, Participation],
     user: Option[AppConfig.User],
     settings: AllSettings,
 )
 
-// InternationalisationCodecs is needed for ProductPrices
-object AppConfig extends InternationalisationCodecs {
+object AppConfig {
   import io.circe.Encoder
   import io.circe.generic.semiauto.deriveEncoder
   import io.circe.JsonObject // This is needed for the JsonObject derivation
@@ -90,8 +89,8 @@ object AppConfig extends InternationalisationCodecs {
       recaptchaConfigProvider: RecaptchaConfigProvider,
       productCatalog: JsonObject,
       serversideTests: Map[String, Participation],
-      allProductPrices: AllProductPrices,
-      allCheckoutNudgeProductPrices: AllProductPrices,
+      promotions: Seq[PromoWithCatalogInformation],
+      checkoutNudgePromotions: Seq[PromoWithCatalogInformation],
       user: Option[IdUser],
       isTestUser: Boolean,
       settings: AllSettings,
@@ -155,10 +154,6 @@ object AppConfig extends InternationalisationCodecs {
           test = paymentMethodConfigs.regularTestStripeConfig.tortoiseMediaAccount.rawPublicKey,
         ),
       ),
-      ConfigKeyValues(
-        default = paymentMethodConfigs.regularDefaultPayPalConfig.payPalEnvironment,
-        test = paymentMethodConfigs.regularTestPayPalConfig.payPalEnvironment,
-      ),
       paymentApiUrl = paymentAPIService.paymentAPIUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       mdapiUrl = membersDataApiUrl,
@@ -169,8 +164,8 @@ object AppConfig extends InternationalisationCodecs {
       checkoutPostcodeLookup = settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.contains(On),
       productCatalog = productCatalog,
       serversideTests = serversideTests,
-      allProductPrices = allProductPrices,
-      allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
+      promotions = promotions,
+      checkoutNudgePromotions = checkoutNudgePromotions,
       user = user.map(user =>
         User(
           id = user.id,
@@ -194,33 +189,9 @@ case class PaymentMethodConfigs(
     oneOffTestStripeConfig: StripePublicConfig,
     regularDefaultStripeConfig: StripePublicConfig,
     regularTestStripeConfig: StripePublicConfig,
-    regularDefaultPayPalConfig: PayPalConfig,
-    regularTestPayPalConfig: PayPalConfig,
     regularDefaultPayPalCompletePaymentsConfig: PayPalCompletePaymentsConfig,
     regularTestPayPalCompletePaymentsConfig: PayPalCompletePaymentsConfig,
 )
-
-/** This class is only needed because you can't pass more than 22 arguments to a twirl template and passing both types
-  * of product prices to the contributions template would exceed that limit.
-  *
-  * We've also gone against the grain with Capitalising the prop names, but that's to match the ProductKeys in the
-  * Product API.
-  *
-  * @see
-  *   https://product-catalog.guardianapis.com/product-catalog.json
-  */
-case class AllProductPrices(
-    SupporterPlus: ProductPrices,
-    TierThree: ProductPrices,
-    Paper: ProductPrices,
-    GuardianWeekly: ProductPrices,
-    GuardianWeeklyGift: ProductPrices,
-    DigitalPack: ProductPrices,
-)
-
-object AllProductPrices extends InternationalisationCodecs {
-  implicit val allProductPricesEncoder: Encoder[AllProductPrices] = deriveEncoder
-}
 
 class Application(
     actionRefiners: CustomActionBuilders,
@@ -229,7 +200,6 @@ class Application(
     components: ControllerComponents,
     oneOffStripeConfigProvider: StripePublicConfigProvider,
     regularStripeConfigProvider: StripePublicConfigProvider,
-    payPalConfigProvider: PayPalConfigProvider,
     recaptchaConfigProvider: RecaptchaConfigProvider,
     paymentAPIService: PaymentAPIService,
     membersDataApiUrl: String,
@@ -237,6 +207,8 @@ class Application(
     settingsProvider: AllSettingsProvider,
     stage: Stage,
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
+    defaultPromotionService: DefaultPromotionService,
+    cachedPromotionsServiceProvider: CachedPromotionsServiceProvider,
     cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
     cachedTaxRateService: CachedSalesTaxService,
     val supportUrl: String,
@@ -254,16 +226,36 @@ class Application(
 
   implicit val a: AssetsResolver = assets
 
-  def getAllProductPrices(isTestUser: Boolean, queryPromos: List[String]): AllProductPrices = {
-    AllProductPrices(
-      SupporterPlus = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos),
-      TierThree = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos),
-      Paper = priceSummaryServiceProvider.forUser(isTestUser).getPrices(Paper, queryPromos),
-      GuardianWeekly = priceSummaryServiceProvider.forUser(isTestUser).getPrices(GuardianWeekly, queryPromos),
-      GuardianWeeklyGift = priceSummaryServiceProvider.forUser(isTestUser).getPrices(GuardianWeekly, queryPromos, Gift),
-      DigitalPack = priceSummaryServiceProvider.forUser(isTestUser).getPrices(DigitalPack, queryPromos),
-    )
+  private def getPromotions(
+      isTestUser: Boolean,
+      queryPromos: List[String],
+      maybeCountryGroup: Option[CountryGroup],
+  ): Seq[PromoWithCatalogInformation] =
+    getPromotionsForCodes(isTestUser, queryPromos ++ defaultPromotionService.allPromoCodes, maybeCountryGroup)
+
+  // Kept separate from the page promotions so that nudge promo codes are only applied via the nudge
+  private def getCheckoutNudgePromotions(
+      isTestUser: Boolean,
+      maybeCountryGroup: Option[CountryGroup],
+  )(implicit settings: AllSettings): Seq[PromoWithCatalogInformation] = {
+    val checkoutNudgePromoCodes = settings.checkoutNudgeTests
+      .filter(_.status == Live)
+      .flatMap(_.variants)
+      .flatMap(_.promoCodes.getOrElse(Nil))
+    getPromotionsForCodes(isTestUser, checkoutNudgePromoCodes, maybeCountryGroup)
   }
+
+  private def getPromotionsForCodes(
+      isTestUser: Boolean,
+      promoCodes: List[String],
+      maybeCountryGroup: Option[CountryGroup],
+  ): Seq[PromoWithCatalogInformation] =
+    maybeCountryGroup
+      .map { countryGroup =>
+        val promotions = cachedPromotionsServiceProvider.forUser(isTestUser).getActive(promoCodes.distinct)
+        ApplicablePromotions.filterByCountryGroup(promotions, countryGroup)
+      }
+      .getOrElse(Nil)
 
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val redirectUrl = buildRegionalisedContributeLink(request.geoData.countryGroup match {
@@ -298,6 +290,12 @@ class Application(
   def geoRedirectToPath(path: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val url = getGeoPath(request, "", path)
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
+  }
+
+  def geoRedirectInvitation(action: String, invitationCode: String): Action[AnyContent] = GeoTargetedCachedAction() {
+    implicit request =>
+      val url = getGeoPath(request, "", s"invitation/$action/$invitationCode")
+      RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
   private def getGeoPath(request: Request[AnyContent], campaignCode: String, product: String): String = {
@@ -464,7 +462,7 @@ class Application(
         .getOrElse("promoCode", Nil)
         .toList
 
-    val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
+    val promotions = getPromotions(isTestUser, queryPromos, CountryGroup.byId(countryCode))
 
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
 
@@ -473,7 +471,6 @@ class Application(
     val canonicalLink = s"$canonicalUrl"
 
     views.html.contributions(
-      id = s"$pageName-landing-page-$countryCode",
       mainElement = mainElement,
       js = RefPath("[countryGroupId]/router.js"),
       description =
@@ -484,8 +481,6 @@ class Application(
         oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
         regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
         regularTestStripeConfig = regularStripeConfigProvider.get(true),
-        regularDefaultPayPalConfig = payPalConfigProvider.get(false),
-        regularTestPayPalConfig = payPalConfigProvider.get(true),
         regularDefaultPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(false),
         regularTestPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(true),
       ),
@@ -498,7 +493,7 @@ class Application(
       shareImageUrl = shareImageUrl(settings),
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
       serversideTests = serversideTests,
-      allProductPrices = allProductPrices,
+      promotions = promotions,
       productCatalog = productCatalog,
       noIndex = noIndexing,
       canonicalLink = canonicalLink,
@@ -637,14 +632,8 @@ class Application(
         .getOrElse("promoCode", Nil)
         .toList
 
-    val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
-
-    val checkoutNudgePromoCodes = settings.checkoutNudgeTests
-      .filter(_.status == Live)
-      .flatMap(_.variants)
-      .flatMap(_.promoCodes.getOrElse(Nil))
-      .distinct
-    val allCheckoutNudgeProductPrices = getAllProductPrices(isTestUser, checkoutNudgePromoCodes)
+    val promotions = getPromotions(isTestUser, queryPromos, CountryGroup.byId(countryGroupId))
+    val checkoutNudgePromotions = getCheckoutNudgePromotions(isTestUser, CountryGroup.byId(countryGroupId))
 
     Ok(
       views.html.router(
@@ -655,8 +644,6 @@ class Application(
           oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
           regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
           regularTestStripeConfig = regularStripeConfigProvider.get(true),
-          regularDefaultPayPalConfig = payPalConfigProvider.get(false),
-          regularTestPayPalConfig = payPalConfigProvider.get(true),
           regularDefaultPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(false),
           regularTestPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(true),
         ),
@@ -665,8 +652,8 @@ class Application(
         membersDataApiUrl = membersDataApiUrl,
         guestAccountCreationToken = guestAccountCreationToken,
         v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
-        allProductPrices = allProductPrices,
-        allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
+        promotions = promotions,
+        checkoutNudgePromotions = checkoutNudgePromotions,
         productCatalog = productCatalog,
         taxRates = taxRates,
         user = request.user,
@@ -675,6 +662,8 @@ class Application(
       ),
     ).withSettingsSurrogateKey
   }
+
+  def invitationPageRouter(countryGroupId: String, code: String) = productCheckoutRouter(countryGroupId)
 
   def eventsRouter(countryGroupId: String, eventId: String) = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
@@ -690,14 +679,8 @@ class Application(
     val isTestUser = testUserService.isTestUser(request)
 
     val queryPromos = request.queryString.getOrElse("promoCode", Nil).toList
-    val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
-
-    val checkoutNudgePromoCodes = settings.checkoutNudgeTests
-      .filter(_.status == Live)
-      .flatMap(_.variants)
-      .flatMap(_.promoCodes.getOrElse(Nil))
-      .distinct
-    val allCheckoutNudgeProductPrices = getAllProductPrices(isTestUser, checkoutNudgePromoCodes)
+    val promotions = getPromotions(isTestUser, queryPromos, request.geoData.countryGroup)
+    val checkoutNudgePromotions = getCheckoutNudgePromotions(isTestUser, request.geoData.countryGroup)
 
     val appConfig = AppConfig.fromConfig(
       geoData = request.geoData,
@@ -706,8 +689,6 @@ class Application(
         oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
         regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
         regularTestStripeConfig = regularStripeConfigProvider.get(true),
-        regularDefaultPayPalConfig = payPalConfigProvider.get(false),
-        regularTestPayPalConfig = payPalConfigProvider.get(true),
         regularDefaultPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(false),
         regularTestPayPalCompletePaymentsConfig = payPalCompletePaymentsConfigProvider.get(true),
       ),
@@ -719,8 +700,8 @@ class Application(
       recaptchaConfigProvider: RecaptchaConfigProvider,
       productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get(),
       serversideTests = generateParticipations(Nil),
-      allProductPrices = allProductPrices,
-      allCheckoutNudgeProductPrices = allCheckoutNudgeProductPrices,
+      promotions = promotions,
+      checkoutNudgePromotions = checkoutNudgePromotions,
       user = request.user,
       isTestUser = isTestUser,
       settings = settings,

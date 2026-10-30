@@ -1,40 +1,40 @@
-import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 import { Router } from 'express';
+import type { Config } from '../config/config';
+import { buildDeliveryAgentsHandler } from '../handlers/deliveryAgents';
 import { buildPostcodeLookupHandler } from '../handlers/postcodeLookup';
+import { noCache } from '../middlewares/noCache';
 import { IdealPostcodeService } from '../services/idealPostcodeService';
-import { stageFromEnvironment } from '../utils/stage';
+import { PaperRoundService } from '../services/paperRoundService';
 
-async function getIdealPostcodeApiKey(): Promise<string> {
-	const stage = stageFromEnvironment();
-	const ssmClient = new SSMClient({
-		region: 'eu-west-1',
-	});
-	const command = new GetParameterCommand({
-		Name: `/${stage}/support/support-backend/ideal-postcodes-api.key`,
-		WithDecryption: true,
-	});
-	const response = await ssmClient.send(command);
-	if (!response.Parameter?.Value) {
-		// TODO: This will need to be surfaced in some way if it ever happened in PROD.
-		throw new Error('Ideal Postcodes API key not found in SSM');
-	}
-	return response.Parameter.Value;
-}
+export const buildApiRouterWithServices = (config: Config) => {
+	const idealPostcodeService = new IdealPostcodeService(
+		config.idealPostcodesApi.key,
+	);
 
-export const buildApiRouterWithServices = async () => {
-	const apiKey = await getIdealPostcodeApiKey();
+	const paperRoundService = new PaperRoundService(
+		config.paperRoundApi.url,
+		config.paperRoundApi.key,
+	);
 
-	const idealPostcodeService = new IdealPostcodeService(apiKey);
-
-	return buildApiRouter(idealPostcodeService);
+	return buildApiRouter(idealPostcodeService, paperRoundService);
 };
 
-export const buildApiRouter = (idealPostcodeService: IdealPostcodeService) => {
+export const buildApiRouter = (
+	idealPostcodeService: IdealPostcodeService,
+	paperRoundService: PaperRoundService,
+) => {
 	const apiRouter = Router();
 
 	apiRouter.get(
 		'/postcode-lookup/:postcode',
+		noCache,
 		buildPostcodeLookupHandler(idealPostcodeService),
+	);
+
+	apiRouter.get(
+		'/delivery-agents/:postcode',
+		noCache,
+		buildDeliveryAgentsHandler(paperRoundService),
 	);
 
 	return apiRouter;

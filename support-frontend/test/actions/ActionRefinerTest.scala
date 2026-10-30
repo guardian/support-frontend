@@ -34,7 +34,8 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
       enableMParticle = Some(On),
       enableTooledStudentLandingPage = Some(On),
       enableStripePaymentElement = Some(Off),
-      enableCanadaTaxExclusion = Some(Off),
+      enableDeepDiscount = Some(Off),
+      enableStudentBeansEuropeAustralia = Some(Off),
     )
 
   val testUsersService = TestUserService("secret")

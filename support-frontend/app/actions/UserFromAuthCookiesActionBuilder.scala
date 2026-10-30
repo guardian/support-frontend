@@ -21,13 +21,14 @@ import play.api.mvc.Security.AuthenticatedRequest
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
+import cats.effect.IO
 
 /** Tries to authenticate the user from ID and access token cookies. Provides a [[User]] to the request if cookies are
   * present and authentication is possible.
   */
 class UserFromAuthCookiesActionBuilder(
     override val parser: BodyParser[AnyContent],
-    oktaAuthService: OktaAuthService,
+    oktaAuthService: OktaAuthService[IO],
     config: Identity,
 )(implicit val executionContext: ExecutionContext)
     extends ActionBuilder[OptionalAuthRequest, AnyContent]
@@ -42,7 +43,7 @@ class UserFromAuthCookiesActionBuilder(
   */
 class UserFromAuthCookiesOrAuthServerActionBuilder(
     override val parser: BodyParser[AnyContent],
-    oktaAuthService: OktaAuthService,
+    oktaAuthService: OktaAuthService[IO],
     config: Identity,
     isAuthServerUp: () => Future[Boolean],
 )(implicit val executionContext: ExecutionContext)
@@ -73,7 +74,7 @@ object UserFromAuthCookiesActionBuilder extends Logging {
   /** Provides an authenticated [[User]] to the given block if authentication is possible. Otherwise, processes the
     * given block without a user.
     */
-  def shouldValidateUser[A](config: Identity, oktaAuthService: OktaAuthService)(
+  def shouldValidateUser[A](config: Identity, oktaAuthService: OktaAuthService[IO])(
       request: Request[A],
       block: OptionalAuthRequest[A] => Future[Result],
       handleFailure: ValidationError => Future[Result],
@@ -95,7 +96,7 @@ object UserFromAuthCookiesActionBuilder extends Logging {
     */
   private def validateUserLocally[A](
       config: Identity,
-      oktaAuthService: OktaAuthService,
+      oktaAuthService: OktaAuthService[IO],
   )(request: Request[A]): Either[ValidationError, User] = {
     val accessScopes = config.oauthScopes.trim.split("\\s+").map(scope => ClientAccessScope(scope)).toList
     for {

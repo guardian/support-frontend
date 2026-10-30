@@ -11,7 +11,10 @@ export const pageUrlRegexes = {
 	oneTimeCheckoutOnly: /(uk|us|au|ca|eu|nz|int)\/one-time-checkout/,
 	landingPageSubscribeOnly: /uk\/subscribe/,
 	landingPagePaperOnly: /uk\/subscribe\/paper/,
+	landingPageContribute: /(uk|us|au|ca|eu|nz|int)\/contribute/,
 	genericCheckoutOnly: /(uk|us|au|ca|eu|nz|int)\/checkout/,
+	digitalPlusCheckoutThankyou:
+		/((uk|us|au|ca|eu|nz|int)\/(checkout|thank-you)).*?(DigitalSubscription)/,
 	ukPrintCheckoutOnly:
 		/((uk\/checkout).*?(SubscriptionCard|HomeDelivery|NationalDelivery|MonthlyPlus|QuarterlyPlus|AnnualPlus|OneYearGift|ThreeMonthGift))/,
 	paperPages:
@@ -61,7 +64,7 @@ export const tests: Tests = {
 		seed: 1,
 		excludeContributionsOnlyCountries: true,
 	},
-	postCodeLookupExpress: {
+	deliveryAgentsLookupExpress: {
 		variants: [
 			{
 				id: 'control',
@@ -78,7 +81,7 @@ export const tests: Tests = {
 		},
 		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 9,
+		seed: 7,
 		targetPage: pageUrlRegexes.ukPrintCheckoutOnly,
 		excludeContributionsOnlyCountries: true,
 	},

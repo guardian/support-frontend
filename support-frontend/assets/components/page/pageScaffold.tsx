@@ -19,7 +19,9 @@ const container = css`
 		flex: 1;
 		display: flex;
 		flex-direction: column;
+
 		& > :last-child {
+			display: flex;
 			flex: 1;
 		}
 	}

@@ -8,8 +8,8 @@ import com.gu.support.workers.{
   DigitalPack,
   DirectDebitPaymentFields,
   Monthly,
-  PayPal,
-  PayPalPaymentFields,
+  PayPalCompletePaymentsPaymentFields,
+  PayPalCompletePayments,
   PaymentFields,
   ProductInformation,
   StripePaymentFields,
@@ -23,20 +23,26 @@ import java.util.UUID
 class SupportWorkersUtilsTest extends AnyFlatSpec with Matchers {
   "buildExecutionName" should "include the TestUser prefix when it's a test user" in {
     val state =
-      SupportWorkersUtilsTestData.generateState(paymentFields = PayPalPaymentFields("fake-baid"), isTestUser = true)
+      SupportWorkersUtilsTestData.generateState(
+        paymentFields = PayPalCompletePaymentsPaymentFields("fake-token", "test@example.com"),
+        isTestUser = true,
+      )
 
     val name = SupportWorkersUtils.buildExecutionName(state = state)
 
-    name should be("TestUser-Monthly-DigitalPack-GBP-PayPal")
+    name should be("TestUser-Monthly-DigitalPack-GBP-PayPalCompletePayments")
   }
 
   it should "not include the TestUser prefix when it's a not test user" in {
     val state =
-      SupportWorkersUtilsTestData.generateState(paymentFields = PayPalPaymentFields("fake-baid"), isTestUser = false)
+      SupportWorkersUtilsTestData.generateState(
+        paymentFields = PayPalCompletePaymentsPaymentFields("fake-token", "test@example.com"),
+        isTestUser = false,
+      )
 
     val name = SupportWorkersUtils.buildExecutionName(state = state)
 
-    name should be("Monthly-DigitalPack-GBP-PayPal")
+    name should be("Monthly-DigitalPack-GBP-PayPalCompletePayments")
   }
 }
 
@@ -87,7 +93,7 @@ object SupportWorkersUtilsTestData {
       giftRecipient = None,
       product = DigitalPack(Currency.GBP, Monthly),
       productInformation = Some(ProductInformation("DigitalSubscription", "Monthly", None, None, None, None, None)),
-      analyticsInfo = AnalyticsInfo(false, PayPal),
+      analyticsInfo = AnalyticsInfo(false, PayPalCompletePayments),
       paymentFields = paymentFields,
       firstDeliveryDate = None,
       appliedPromotion = None,

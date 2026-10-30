@@ -8,7 +8,10 @@ import {
 	getAbParticipations,
 	setUpTrackingAndConsents,
 } from 'helpers/page/page';
-import { getSanitisedPromoCopy } from 'helpers/productPrice/promotions';
+import {
+	getLandingPageCopy,
+	getSanitisedLandingPageCopy,
+} from 'helpers/productPrice/landingPageCopy';
 import { renderPage } from 'helpers/rendering/render';
 import NewspaperHero from './components/NewspaperHero';
 import NewspaperProductTabs from './components/NewspaperProductTabs';
@@ -26,14 +29,14 @@ const paperSubsFooter = (
 const pageQaId = 'qa-paper-subscriptions'; // Selenium test ID
 
 export function PaperLandingPage({
-	productPrices,
-	promotionCopy,
+	productCatalog,
+	promotions,
+	promoCode,
 	fulfilment,
 }: PaperLandingPropTypes) {
-	if (!productPrices) {
-		return null;
-	}
-	const sanitisedPromoCopy = getSanitisedPromoCopy(promotionCopy);
+	const landingPageCopy = getSanitisedLandingPageCopy(
+		getLandingPageCopy(promotions, promoCode),
+	);
 	return (
 		<PageScaffold
 			id={pageQaId}
@@ -41,11 +44,13 @@ export function PaperLandingPage({
 			footer={paperSubsFooter}
 		>
 			<NewspaperHero
-				promotionCopy={sanitisedPromoCopy}
-				paperHeroItems={getPaperPlusItems(productPrices)}
+				landingPageCopy={landingPageCopy}
+				paperHeroItems={getPaperPlusItems(productCatalog)}
 			/>
 			<NewspaperProductTabs
-				productPrices={productPrices}
+				productCatalog={productCatalog}
+				promotions={promotions}
+				promoCode={promoCode}
 				fulfilment={fulfilment}
 			/>
 		</PageScaffold>

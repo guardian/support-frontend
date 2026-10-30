@@ -4,6 +4,7 @@ import {
 	headlineBold24,
 	neutral,
 	space,
+	textSans15,
 	textSans17,
 	until,
 } from '@guardian/source/foundations';
@@ -47,6 +48,7 @@ import { PriceCards } from 'components/priceCards/priceCards';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
+import { useAbParticipations } from 'contexts/AbParticipationsContext';
 import type { Participations } from 'helpers/abTests/models';
 import { config } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
@@ -56,11 +58,11 @@ import type {
 	PaymentResult,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import {
+	getStripePaymentMethod,
 	postOneOffPayPalCreatePaymentRequest,
 	processStripePaymentIntentRequest,
 	processStripePaymentIntentRequestForPaypal,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
-import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod as LegacyPaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	isPaymentMethod,
@@ -90,6 +92,7 @@ import { logException } from 'helpers/utilities/logger';
 import {
 	getSanitisedHtml,
 	parseCustomAmounts,
+	replaceMParticleTemplates,
 	roundToDecimalPlaces,
 } from 'helpers/utilities/utilities';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
@@ -179,16 +182,29 @@ const similarProductsConsentCheckboxContainer = css`
 	}
 `;
 
+const containerSummaryTsCs = css`
+	margin-top: ${space[6]}px;
+	border-radius: ${space[3]}px;
+	border: 1px solid ${neutral[46]};
+	background-color: ${neutral[97]};
+	padding: ${space[2]}px ${space[3]}px;
+	${textSans15};
+	color: ${neutral[0]};
+	& a {
+		color: ${neutral[7]};
+	}
+`;
+
 type OneTimeCheckoutComponentProps = {
 	supportRegionId: SupportRegionId;
 	appConfig: AppConfig;
 	stripePublicKey: string;
 	countryId: CountryCode;
-	abParticipations: Participations;
 	useStripeExpressCheckout: boolean;
 	nudgeSettings?: CheckoutNudgeSettings;
 	landingPageSettings: LandingPageVariant;
 	oneTimeCheckoutSettings: OneTimeCheckoutVariant;
+	userAttributes: Record<string, unknown>;
 };
 
 function paymentMethodIsActive(paymentMethod: PaymentMethod) {
@@ -201,16 +217,17 @@ function paymentMethodIsActive(paymentMethod: PaymentMethod) {
 
 function getPreSelectedAmount(
 	preSelectedAmountParam: string | null,
+	mParticleAmount: string | undefined,
 	amountChoices: number[],
 ): {
 	preSelectedOtherAmount?: string;
 	preSelectedPriceCard?: number | 'other';
 } {
-	const preSelectedAmount = preSelectedAmountParam
-		? parseInt(preSelectedAmountParam, 10)
-		: undefined;
+	// The URL param takes precedence over the mParticle-derived amount.
+	const rawAmount = preSelectedAmountParam ?? mParticleAmount;
+	const preSelectedAmount = rawAmount ? parseInt(rawAmount, 10) : undefined;
 
-	if (preSelectedAmount === undefined) {
+	if (preSelectedAmount === undefined || Number.isNaN(preSelectedAmount)) {
 		return {
 			preSelectedOtherAmount: undefined,
 			preSelectedPriceCard: undefined,
@@ -268,23 +285,44 @@ function getAcquisitionData(
 	);
 }
 
+function getMParticleAmount(
+	userAttributes: Record<string, unknown>,
+	mParticleAmountAttribute: string,
+): string | undefined {
+	const value = userAttributes[mParticleAmountAttribute];
+	return typeof value === 'string' || typeof value === 'number'
+		? String(value)
+		: undefined;
+}
+
 export function OneTimeCheckoutComponent({
 	supportRegionId,
 	appConfig,
 	stripePublicKey,
 	countryId,
-	abParticipations,
 	useStripeExpressCheckout,
 	nudgeSettings,
 	landingPageSettings,
 	oneTimeCheckoutSettings,
+	userAttributes,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
+	const heading = replaceMParticleTemplates(
+		oneTimeCheckoutSettings.heading,
+		userAttributes,
+		currency,
+	);
+	const subheading = replaceMParticleTemplates(
+		oneTimeCheckoutSettings.subheading,
+		userAttributes,
+		currency,
+	);
 
 	const preSelectedAmountParam = urlSearchParams.get('contribution');
 	const { isMarketingEmailSession } = useEmailMarketingUtmSession();
+	const abParticipations = useAbParticipations();
 
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
@@ -308,8 +346,16 @@ export function OneTimeCheckoutComponent({
 	const { amounts, defaultAmount, hideChooseYourAmount } =
 		customAmountsData ?? amountsDataFromOneTimeCheckoutSettings;
 
+	const mParticleAmountAttribute =
+		amountsDataFromOneTimeCheckoutSettings.mParticleAmountAttribute;
+	const mParticleAmount =
+		preSelectedAmountParam || !mParticleAmountAttribute
+			? undefined
+			: getMParticleAmount(userAttributes, mParticleAmountAttribute);
+
 	const { preSelectedPriceCard, preSelectedOtherAmount } = getPreSelectedAmount(
 		preSelectedAmountParam,
+		mParticleAmount,
 		amounts,
 	);
 
@@ -641,22 +687,22 @@ export function OneTimeCheckoutComponent({
 						);
 					}
 				} else {
-					const getStripePaymentMethod = (): StripePaymentMethod => {
-						if (paymentMethod === 'StripeExpressCheckoutElement') {
-							if (stripeExpressCheckoutPaymentType === 'apple_pay') {
-								return 'StripeApplePay';
-							} else {
-								return 'StripePaymentRequestButton';
-							}
-						}
-						if (paymentMethodResult.paymentMethod.paypal) {
-							return 'StripePaypal';
-						}
-						return 'StripeCheckout';
-					};
+					const paymentMethodType =
+						paymentMethodResult.paymentMethod.type.toLowerCase();
+					if (
+						paymentMethod === 'StripeExpressCheckoutElement' &&
+						(stripeExpressCheckoutPaymentType === 'apple_pay' ||
+							stripeExpressCheckoutPaymentType === 'google_pay') &&
+						paymentMethodType !== 'card'
+					) {
+						logException(
+							`Stripe Express Checkout ${stripeExpressCheckoutPaymentType} produced a ${paymentMethodType} PaymentMethod`,
+						);
+					}
 
-					const stripePaymentMethod: StripePaymentMethod =
-						getStripePaymentMethod();
+					const stripePaymentMethod = getStripePaymentMethod(
+						paymentMethodResult.paymentMethod,
+					);
 
 					const stripeData: CreateStripePaymentIntentRequest = {
 						paymentData: {
@@ -778,6 +824,8 @@ export function OneTimeCheckoutComponent({
 			: `Support us with ${simpleFormatAmount(currency, finalAmount)}`
 		: 'Pay now';
 
+	const automaticSimilarProductsConsent = countryId === 'US';
+
 	return (
 		<GuardianPageLayout borderBox>
 			<Box>
@@ -791,7 +839,7 @@ export function OneTimeCheckoutComponent({
 							<h2 css={title}>
 								<span
 									dangerouslySetInnerHTML={{
-										__html: getSanitisedHtml(oneTimeCheckoutSettings.heading),
+										__html: getSanitisedHtml(heading),
 									}}
 								/>
 							</h2>
@@ -803,7 +851,7 @@ export function OneTimeCheckoutComponent({
 						<p css={standFirst}>
 							<span
 								dangerouslySetInnerHTML={{
-									__html: getSanitisedHtml(oneTimeCheckoutSettings.subheading),
+									__html: getSanitisedHtml(subheading),
 								}}
 							/>
 						</p>
@@ -1048,6 +1096,7 @@ export function OneTimeCheckoutComponent({
 												wallets: {
 													link: 'never',
 												},
+												paymentMethodOrder: ['card', 'paypal'],
 											}}
 											onFocus={() => {
 												setPaymentMethod(Stripe);
@@ -1228,8 +1277,15 @@ export function OneTimeCheckoutComponent({
 						/>
 
 						{!isMarketingEmailSession && (
-							<div css={similarProductsConsentCheckboxContainer}>
-								<SimilarProductsConsent />
+							<SimilarProductsConsent
+								showCheckbox={!automaticSimilarProductsConsent}
+								cssOverrides={similarProductsConsentCheckboxContainer}
+							/>
+						)}
+						{automaticSimilarProductsConsent && (
+							<div css={containerSummaryTsCs}>
+								We’ll send you emails about our journalism and ways to support
+								and enjoy our work. You can unsubscribe at any time
 							</div>
 						)}
 

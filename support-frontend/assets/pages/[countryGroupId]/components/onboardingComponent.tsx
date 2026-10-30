@@ -5,8 +5,17 @@ import type { SupportRegionId } from '@modules/internationalisation/countryGroup
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { useSearchParams } from 'react-router';
 import ContentBox from 'components/onboarding/contentBox';
+import { getOnboardingProductTitle } from 'components/onboarding/onboardingProductCopy';
+import { OnboardingSteps } from 'components/onboarding/onboardingSteps';
+import type {
+	CurrentUserState,
+	HandleStepNavigationFunction,
+	OnboardingMessageEventData,
+} from 'components/onboarding/onboardingTypes';
 import { OnboardingAppsDiscovery } from 'components/onboarding/sections/appsDiscovery';
 import { OnboardingCompleted } from 'components/onboarding/sections/completed';
+import { OnboardingDigitalPlusDiscovery } from 'components/onboarding/sections/digitalPlusDiscovery';
+import { OnboardingShareAccess } from 'components/onboarding/sections/shareAccess';
 import OnboardingSummary, {
 	OnboardingSummarySuccessfulSignIn,
 } from 'components/onboarding/sections/summary';
@@ -23,42 +32,19 @@ import * as cookie from 'helpers/storage/cookie';
 import type { CsrfState } from 'helpers/types/csrf';
 import { getUser } from 'helpers/user/user';
 import type { UserType } from 'helpers/user/userType';
+import { getSupportRegionIdConfig } from 'pages/supportRegionConfig';
 import OnboardingLayout from '../../../components/onboarding/layout';
 import { getThankYouOrder } from '../checkout/helpers/sessionStorage';
-import { OnboardingSteps } from './onboardingSteps';
 
 const identityFrameStyles = css`
 	overflow: hidden;
 	border-radius: ${space[2]}px;
 `;
 
-type UserStateChange = 'userSignedIn' | 'userRegistered';
-type HrefIframeAllowList = 'recaptchaPrivacyPolicy' | 'recaptchaTerms';
-
-type MessageEventData =
-	| {
-			type: 'iframeHeightChange';
-			context: 'supporterOnboarding';
-			value: number;
-	  }
-	| {
-			type: 'userStateChange';
-			context: 'supporterOnboarding';
-			value: UserStateChange;
-	  }
-	| {
-			type: 'iframedLinkClicked';
-			context: 'supporterOnboarding';
-			value: HrefIframeAllowList;
-	  };
-
-export type CurrentUserState = UserStateChange | 'existingUserSignedIn';
-
-export type HandleStepNavigationFunction = (
-	targetStep: OnboardingSteps,
-) => void;
-
-export type OnboardingProductKey = Extract<ActiveProductKey, 'SupporterPlus'>;
+export type OnboardingProductKey = Extract<
+	ActiveProductKey,
+	'SupporterPlus' | 'DigitalSubscription'
+>;
 
 export interface OnboardingProps {
 	supportRegionId: SupportRegionId;
@@ -93,6 +79,12 @@ function OnboardingComponent({
 			<div>Unable to read your order {JSON.stringify(sessionStorageOrder)}</div>
 		);
 	}
+
+	const { countryGroupId } = getSupportRegionIdConfig(supportRegionId);
+	const productTitle = getOnboardingProductTitle(
+		productKey,
+		landingPageSettings,
+	);
 
 	const scrollToTopRef = useRef<HTMLDivElement>(null);
 
@@ -221,7 +213,9 @@ function OnboardingComponent({
 
 	// Handle iframe message from the identity iframe
 	useEffect(() => {
-		const receiveIframeMessage = (event: MessageEvent<MessageEventData>) => {
+		const receiveIframeMessage = (
+			event: MessageEvent<OnboardingMessageEventData>,
+		) => {
 			if (event.origin !== iframeOrigin) {
 				return;
 			}
@@ -266,16 +260,11 @@ function OnboardingComponent({
 
 	return (
 		<OnboardingLayout
+			flow="supporter"
 			scrollToTopRef={scrollToTopRef}
 			onboardingStep={currentStep ?? OnboardingSteps.Summary}
-			supportRegionId={supportRegionId}
-			csrf={csrf}
-			payment={payment}
-			productKey={productKey}
-			ratePlanKey={ratePlanKey}
-			promotion={promotion}
 			landingPageSettings={landingPageSettings}
-			identityUserType={identityUserType}
+			productKey={productKey}
 		>
 			{currentStep === OnboardingSteps.Summary && (
 				<>
@@ -297,6 +286,8 @@ function OnboardingComponent({
 								userState={userState}
 								userNewslettersSubscriptions={userNewslettersSubscriptions}
 								csrf={csrf}
+								productKey={productKey}
+								productTitle={productTitle}
 							/>
 						)}
 					</ContentBox>
@@ -318,14 +309,25 @@ function OnboardingComponent({
 					hasMobileAppDownloaded={hasMobileAppDownloaded}
 					hasFeastMobileAppDownloaded={hasFeastMobileAppDownloaded}
 					onboardingStep={currentStep}
-					supporterRegion={supportRegionId}
 					handleStepNavigation={handleStepNavigation}
+					supporterRegion={supportRegionId}
 				/>
+			)}
+			{currentStep === OnboardingSteps.DigitalPlus && (
+				<OnboardingDigitalPlusDiscovery
+					handleStepNavigation={handleStepNavigation}
+					nextStep={OnboardingSteps.ShareAccess}
+					backStep={OnboardingSteps.Summary}
+				/>
+			)}
+			{currentStep === OnboardingSteps.ShareAccess && (
+				<OnboardingShareAccess handleStepNavigation={handleStepNavigation} />
 			)}
 			{currentStep === OnboardingSteps.Completed && (
 				<OnboardingCompleted
 					productKey={productKey}
 					landingPageSettings={landingPageSettings}
+					countryGroupId={countryGroupId}
 				/>
 			)}
 		</OnboardingLayout>

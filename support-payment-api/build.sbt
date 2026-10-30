@@ -59,7 +59,7 @@ libraryDependencies ++= Seq(
     *
     * But annoyingly we still get this error: `java.lang.NoClassDefFoundError: javax/xml/bind/JAXBException`
     */
-  "com.sun.xml.bind" % "jaxb-core" % "2.3.0.1",
+  "com.sun.xml.bind" % "jaxb-core" % "4.0.9",
   "javax.xml.bind" % "jaxb-api" % "2.3.1",
   "com.sun.xml.bind" % "jaxb-impl" % "2.3.1",
 )
@@ -78,7 +78,7 @@ excludeDependencies ++= Seq(
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
 dependencyOverrides += "commons-io" % "commons-io" % "2.14.0" % Test
 dependencyOverrides += "commons-beanutils" % "commons-beanutils" % "1.11.0" % Test
-dependencyOverrides += "org.json" % "json" % "20231013"
+dependencyOverrides += "org.json" % "json" % "20260814"
 
 Debian / packageName := name.value
 packageSummary := "Payment API Play App"

@@ -7,12 +7,12 @@ addSbtPlugin("com.github.sbt" % "sbt-pgp" % "2.2.1")
 addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.9.21")
 
 addSbtPlugin(
-  "org.playframework" % "sbt-plugin" % "3.0.10",
+  "org.playframework" % "sbt-plugin" % "3.0.12",
 ) // when updating major version, also update play-circe version
 
 addSbtPlugin("com.github.sbt" % "sbt-digest" % "2.1.0")
 
-addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.11.0")
+addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.13.2")
 
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.1.1")
 

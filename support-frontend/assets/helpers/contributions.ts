@@ -15,10 +15,13 @@ type ContributionTypeMap<T> = RegularContributionTypeMap<T> & {
 
 export type ContributionType = keyof ContributionTypeMap<null>;
 
+type MParticleAmountAttribute = 'last_single_contribution_amount';
+
 export interface AmountValuesObject {
 	amounts: number[];
 	defaultAmount: number;
 	hideChooseYourAmount: boolean;
+	mParticleAmountAttribute?: MParticleAmountAttribute;
 }
 
 type AmountsCardData = Record<ContributionType, AmountValuesObject>;
@@ -66,6 +69,8 @@ const defaultConfig: Config = {
 	},
 };
 
+// Note: ONE_OFF max amounts are also validated on the server, in Currency.scala, and
+// should be kept in sync.
 const config: Record<CountryGroupId, Config> = {
 	GBPCountries: defaultConfig,
 	AUDCountries: {

@@ -72,10 +72,28 @@ module.exports = {
 						replacement: path.resolve(__dirname, '../assets/__mocks__'),
 					},
 					{
+						find: 'fixtures',
+						replacement: path.resolve(__dirname, '../assets/fixtures'),
+					},
+					{
 						find: '@modules/internationalisation',
 						replacement: path.resolve(
 							__dirname,
 							'../node_modules/@guardian/support-service-lambdas/modules/internationalisation/src',
+						),
+					},
+					{
+						find: '@modules/product-catalog',
+						replacement: path.resolve(
+							__dirname,
+							'../node_modules/@guardian/support-service-lambdas/modules/product-catalog/src',
+						),
+					},
+					{
+						find: '@modules/promotions',
+						replacement: path.resolve(
+							__dirname,
+							'../node_modules/@guardian/support-service-lambdas/modules/promotions/src',
 						),
 					},
 					{
@@ -86,10 +104,24 @@ module.exports = {
 						),
 					},
 					{
+						find: '@modules/nullAndUndefined',
+						replacement: path.resolve(
+							__dirname,
+							'../node_modules/@guardian/support-service-lambdas/modules/nullAndUndefined',
+						),
+					},
+					{
 						find: '@modules/objectFunctions',
 						replacement: path.resolve(
 							__dirname,
 							'../node_modules/@guardian/support-service-lambdas/modules/objectFunctions',
+						),
+					},
+					{
+						find: '@modules/schemaUtils',
+						replacement: path.resolve(
+							__dirname,
+							'../node_modules/@guardian/support-service-lambdas/modules/schemaUtils',
 						),
 					},
 					{

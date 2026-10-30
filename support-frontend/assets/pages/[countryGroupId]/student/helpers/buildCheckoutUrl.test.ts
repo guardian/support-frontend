@@ -29,52 +29,36 @@ describe('buildCheckoutUrl', () => {
 	});
 
 	describe('when the rate plan is OneYearStudent', () => {
-		describe('and the supportRegionId is uk', () => {
+		describe('and the supportRegionId is au', () => {
 			it('returns the correct Student Beans landing page URL', () => {
 				const url = buildCheckoutUrl(
-					SupportRegionId.UK,
+					SupportRegionId.AU,
 					'SupporterPlus',
 					'OneYearStudent',
 				);
-
-				expect(url).toBe(routes.supporterPlusStudentBeansUk);
+				expect(url).toBe(routes.supporterPlusStudentBeansAu);
 			});
 		});
-
-		describe('and the supportRegionId is us', () => {
+		describe('and the supportRegionId is eu', () => {
 			it('returns the correct Student Beans landing page URL', () => {
-				const url = buildCheckoutUrl(
-					SupportRegionId.US,
-					'SupporterPlus',
-					'OneYearStudent',
-				);
-
-				expect(url).toBe(routes.supporterPlusStudentBeansUs);
-			});
-		});
-
-		describe('and the supportRegionId is ca', () => {
-			it('returns the correct Student Beans landing page URL', () => {
-				const url = buildCheckoutUrl(
-					SupportRegionId.CA,
-					'SupporterPlus',
-					'OneYearStudent',
-				);
-
-				expect(url).toBe(routes.supporterPlusStudentBeansCa);
-			});
-		});
-
-		describe('and the supportRegionId is not one we have a Student Beans link for', () => {
-			it('returns the checkout URL', () => {
 				const url = buildCheckoutUrl(
 					SupportRegionId.EU,
 					'SupporterPlus',
 					'OneYearStudent',
 				);
+				expect(url).toBe(routes.supporterPlusStudentBeansEu);
+			});
+		});
+		describe('and the NZ supportRegionId is not one we have a Student Beans link for', () => {
+			it('returns the checkout URL', () => {
+				const url = buildCheckoutUrl(
+					SupportRegionId.NZ,
+					'SupporterPlus',
+					'OneYearStudent',
+				);
 
 				expect(url).toBe(
-					'/eu/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false',
+					'/nz/checkout?product=SupporterPlus&ratePlan=OneYearStudent&backButton=false',
 				);
 			});
 		});

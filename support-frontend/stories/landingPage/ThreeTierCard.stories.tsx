@@ -1,6 +1,8 @@
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
 import { currencyCodes } from '@modules/internationalisation/currency';
+import { PromoTermsProvider } from 'contexts/PromoTermsContext';
+import { defaultCardTheme, redCardTheme } from 'helpers/landingPage/cardTheme';
 import type { ThreeTierCardProps } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { ThreeTierCard } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
@@ -50,28 +52,55 @@ function Template(args: ThreeTierCardProps) {
 	`;
 	return (
 		<div css={innerContentContainer}>
-			<ThreeTierCard {...args} />;
+			<PromoTermsProvider>
+				<ThreeTierCard {...args} />;
+			</PromoTermsProvider>
 		</div>
 	);
 }
 
 Template.args = {} as Record<string, unknown>;
 
-export const Default = Template.bind({});
+export const DefaultTheme = Template.bind({});
 
-Default.args = {
+DefaultTheme.args = {
 	isSubdued: false,
 	currencyId: 'GBP',
-	paymentFrequency: 'MONTHLY',
 	cardTier: 2,
+	billingPeriod: 'Monthly',
+	deepDiscount: false,
 	cardContent: {
 		...fallBackLandingPageSelection.products.SupporterPlus,
 		product: 'SupporterPlus',
+		isDefaultProductSelected: false,
 		isUserSelected: false,
 		price: 12,
 		cta: { copy: 'Support' },
 		label: { copy: 'Highest impact' },
+		link: '',
 	},
+	cardTheme: defaultCardTheme,
+};
+
+export const RedTheme = Template.bind({});
+
+RedTheme.args = {
+	isSubdued: false,
+	currencyId: 'GBP',
+	cardTier: 2,
+	billingPeriod: 'Monthly',
+	deepDiscount: false,
+	cardContent: {
+		...fallBackLandingPageSelection.products.SupporterPlus,
+		product: 'SupporterPlus',
+		isDefaultProductSelected: false,
+		isUserSelected: false,
+		price: 12,
+		cta: { copy: 'Support' },
+		label: { copy: 'Highest impact' },
+		link: '',
+	},
+	cardTheme: redCardTheme,
 };
 
 export const Promotion = Template.bind({});
@@ -79,17 +108,21 @@ export const Promotion = Template.bind({});
 Promotion.args = {
 	isSubdued: false,
 	currencyId: 'EUR',
-	paymentFrequency: 'MONTHLY',
 	cardTier: 3,
+	billingPeriod: 'Monthly',
+	deepDiscount: false,
 	cardContent: {
 		...fallBackLandingPageSelection.products.DigitalSubscription,
 		product: 'DigitalSubscription',
+		isDefaultProductSelected: false,
 		isUserSelected: false,
 		price: 38.5,
 		cta: { copy: 'Support' },
 		label: { copy: 'Highest impact' },
 		promotion: promotionEURCountries,
+		link: '',
 	},
+	cardTheme: defaultCardTheme,
 };
 
 export const IntroductoryPromotion = Template.bind({});
@@ -97,17 +130,21 @@ export const IntroductoryPromotion = Template.bind({});
 IntroductoryPromotion.args = {
 	isSubdued: false,
 	currencyId: 'EUR',
-	paymentFrequency: 'MONTHLY',
 	cardTier: 3,
+	billingPeriod: 'Monthly',
+	deepDiscount: false,
 	cardContent: {
 		...fallBackLandingPageSelection.products.DigitalSubscription,
 		product: 'DigitalSubscription',
+		isDefaultProductSelected: false,
 		isUserSelected: false,
 		price: 38.5,
 		cta: { copy: 'Support' },
 		label: { copy: 'Highest impact' },
 		promotion: { ...promotionEURCountries, isIntroductoryPricing: true },
+		link: '',
 	},
+	cardTheme: defaultCardTheme,
 };
 
 export const BillingPeriodsCopy = Template.bind({});
@@ -116,16 +153,20 @@ BillingPeriodsCopy.args = {
 	currencyId: 'GBP',
 	cardTier: 2,
 	billingPeriod: 'Monthly',
+	deepDiscount: false,
 	cardContent: {
 		...fallBackLandingPageSelection.products.SupporterPlus,
 		product: 'SupporterPlus',
+		isDefaultProductSelected: false,
 		isUserSelected: false,
 		price: 12,
 		cta: { copy: 'Support' },
 		label: { copy: 'Highest impact' },
+		link: '',
 		billingPeriodsCopy:
 			'From %%PRICE_PRODUCT_WEEKLY%% per week, billed monthly or annually.',
 	},
+	cardTheme: defaultCardTheme,
 };
 
 export const PromotionWithBillingPeriodsCopy = Template.bind({});
@@ -133,19 +174,23 @@ export const PromotionWithBillingPeriodsCopy = Template.bind({});
 PromotionWithBillingPeriodsCopy.args = {
 	isSubdued: false,
 	currencyId: 'EUR',
-	billingPeriod: 'Monthly',
 	cardTier: 3,
+	billingPeriod: 'Monthly',
+	deepDiscount: false,
 	cardContent: {
 		...fallBackLandingPageSelection.products.DigitalSubscription,
 		product: 'DigitalSubscription',
+		isDefaultProductSelected: false,
 		isUserSelected: false,
 		price: 38.5,
 		cta: { copy: 'Support' },
 		label: { copy: 'Highest impact' },
 		promotion: promotionEURCountries,
+		link: '',
 		billingPeriodsCopy:
 			'From %%PRICE_PRODUCT_WEEKLY%% per week, billed monthly or annually.',
 	},
+	cardTheme: defaultCardTheme,
 };
 
 export const WeeklyPricing = Template.bind({});
@@ -153,17 +198,21 @@ export const WeeklyPricing = Template.bind({});
 WeeklyPricing.args = {
 	isSubdued: false,
 	currencyId: 'GBP',
-	paymentFrequency: 'MONTHLY',
 	cardTier: 2,
-	showWeeklyPrice: true,
+	billingPeriod: 'Monthly',
+	deepDiscount: false,
 	cardContent: {
 		...fallBackLandingPageSelection.products.SupporterPlus,
 		product: 'SupporterPlus',
+		isDefaultProductSelected: false,
 		isUserSelected: false,
 		price: 12,
 		cta: { copy: 'Support' },
 		label: { copy: 'Highest impact' },
+		link: '',
 	},
+	cardTheme: defaultCardTheme,
+	showWeeklyPrice: true,
 };
 
 export const WeeklyPricingWithPromotion = Template.bind({});
@@ -171,16 +220,20 @@ export const WeeklyPricingWithPromotion = Template.bind({});
 WeeklyPricingWithPromotion.args = {
 	isSubdued: false,
 	currencyId: 'EUR',
-	paymentFrequency: 'MONTHLY',
 	cardTier: 3,
-	showWeeklyPrice: true,
+	billingPeriod: 'Monthly',
+	deepDiscount: false,
 	cardContent: {
 		...fallBackLandingPageSelection.products.DigitalSubscription,
 		product: 'DigitalSubscription',
+		isDefaultProductSelected: false,
 		isUserSelected: false,
 		price: 38.5,
 		cta: { copy: 'Support' },
 		label: { copy: 'Highest impact' },
 		promotion: promotionEURCountries,
+		link: '',
 	},
+	cardTheme: defaultCardTheme,
+	showWeeklyPrice: true,
 };

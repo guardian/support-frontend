@@ -59,52 +59,6 @@ const otherSupporterPlusFAQ: (regionName: string) => FAQItem[] = (
 	},
 ];
 
-const auSupporterPlusFAQ: (regionName: string) => FAQItem[] = () => [
-	{
-		title: 'Who is eligible for this discount?',
-		body: (
-			<p>
-				Access to the {supporterPlusLabel} subscription offered under this
-				agreement is strictly limited to currently enrolled students of the
-				University of Technology Sydney (UTS). Redemption of the offer is
-				conditional upon registration using a valid and active UTS email
-				address. Your email address may be subjected to an internal verification
-				process to confirm your eligibility as a UTS student &mdash; you may
-				refer to the Guardian&apos;s <a href={privacyLink}>privacy policy</a>{' '}
-				which explains how personal information is handled by the Guardian. The
-				Guardian reserves the right to cancel, suspend, or revoke any
-				subscription claimed through this offer if it is reasonably suspected or
-				determined that the subscriber does not meet the eligibility criteria.
-			</p>
-		),
-	},
-	{
-		title: `What is included in my ${supporterPlusLabel} subscription?`,
-		body: (
-			<p>
-				Your {supporterPlusLabel} subscription entitles you to all the benefits
-				listed above, including: unlimited access to the Guardian news app and
-				Guardian Feast app, ad-free reading on all your devices, exclusive
-				newsletter for supporters and far fewer asks for support. Currently,
-				this offer provides you with a free {supporterPlusLabel} subscription
-				for a period of 24 months after redemption. We will be in touch during
-				this period if there are opportunities to extend beyond this timeframe.
-			</p>
-		),
-	},
-	{
-		title: `Will my ${supporterPlusLabel} subscription work across all devices?`,
-		body: supporterPlusBodyAccess,
-	},
-	{
-		title: `How can I manage my ${supporterPlusLabel} subscription?`,
-		body: supporterPlusBodyManage,
-	},
-	{
-		title: 'How do I contact customer services?',
-		body: supporterPlusBodyContact,
-	},
-];
 const institutionSupporterPlusFAQ = (institution: Institution): FAQItem[] => {
 	return [
 		{
@@ -175,9 +129,12 @@ const studentFAQsConfig: Partial<Record<CountryGroupId, StudentFAQsConfig>> = {
 		getCopy: otherSupporterPlusFAQ,
 		regionName: 'Canada',
 	},
+	EURCountries: {
+		getCopy: otherSupporterPlusFAQ,
+		regionName: 'Europe',
+	},
 	AUDCountries: {
-		getCopy: auSupporterPlusFAQ,
-		// Not actually used
+		getCopy: otherSupporterPlusFAQ,
 		regionName: 'Australia',
 	},
 };

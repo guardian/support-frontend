@@ -11,15 +11,20 @@ import com.gu.okhttp.RequestRunners
 import com.gu.support.catalog.{DigitalPack, Product, SupporterPlus, TierThree}
 import com.gu.support.idealpostcodes.IdealPostcodesService
 import com.gu.support.paperround.PaperRoundServiceProvider
-import com.gu.support.promotions.PromotionServiceProvider
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSComponents
 import services._
-import services.paypal.{PayPalCompletePaymentsServiceProvider, PayPalNvpServiceProvider}
+import services.paypal.PayPalCompletePaymentsServiceProvider
 import services.pricing.{DefaultPromotionServiceS3, PriceSummaryServiceProvider}
 import services.stepfunctions.{StateWrapper, SupportWorkersClient}
 import services.mparticle.MParticleClient
+import cats.effect.unsafe.{IORuntime, IORuntimeConfig}
+import cats.effect.IO
+import sttp.client4.httpclient.cats.HttpClientCatsBackend
+import sttp.client4.Backend
+import sttp.client4.impl.cats.CatsMonadError
+import sttp.monad.MonadError
 
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
@@ -27,7 +32,19 @@ trait Services {
   implicit val implicitWs: WSClient = wsClient
   implicit private val s3Client: AwsS3Client = AwsS3Client
 
-  lazy val payPalNvpServiceProvider = new PayPalNvpServiceProvider(appConfig.regularPayPalConfigProvider, wsClient)
+  // Provide an explicit cats-effect IORuntime that executes IO programs on Play's existing
+  // (Pekko-backed) thread pool, rather than importing `cats.effect.unsafe.implicits.global`
+  // which would spin up a second, separate set of compute/blocking thread pools.
+  implicit val ioRuntime: IORuntime = {
+    val (scheduler, _) = IORuntime.createDefaultScheduler()
+    IORuntime(
+      compute = executionContext,
+      blocking = executionContext,
+      scheduler = scheduler,
+      shutdown = () => (),
+      config = IORuntimeConfig(),
+    )
+  }
 
   lazy val payPalCompletePaymentsServiceProvider =
     new PayPalCompletePaymentsServiceProvider(
@@ -38,6 +55,8 @@ trait Services {
   lazy val identityService = IdentityService(appConfig.identity)
 
   lazy val userBenefitsApiServiceProvider = new UserBenefitsApiServiceProvider(appConfig.userBenefitsApiConfigProvider)
+
+  lazy val multipleAccountApiService = new MultipleAccountApiService(appConfig.multipleAccountApiConfig)
 
   lazy val goCardlessServiceProvider = new GoCardlessFrontendServiceProvider(appConfig.goCardlessConfigProvider)
 
@@ -55,7 +74,18 @@ trait Services {
 
   lazy val asyncAuthenticationService = AsyncAuthenticationService(appConfig.identity, wsClient)
 
-  lazy val oktaAuthService = OktaAuthService(
+  private val (httpBackend, releaseBackend) =
+    HttpClientCatsBackend.resource[IO]().allocated.unsafeRunSync()
+
+  // Shut the backend down when the Play app shuts down
+  applicationLifecycle.addStopHook { () =>
+    releaseBackend.unsafeToFuture()
+  }
+
+  implicit val backend: Backend[IO] = httpBackend
+  implicit val F: MonadError[IO] = new CatsMonadError[IO]
+
+  lazy val oktaAuthService: OktaAuthService[IO] = OktaAuthService(
     config = OktaTokenValidationConfig(
       issuerUrl = OktaIssuerUrl(appConfig.identity.oauthIssuerUrl),
       audience = Some(OktaAudience(appConfig.identity.oauthAudience)),
@@ -128,8 +158,6 @@ trait Services {
   lazy val paperRoundServiceProvider: PaperRoundServiceProvider =
     new PaperRoundServiceProvider(appConfig.paperRoundConfigProvider)
 
-  lazy val promotionServiceProvider = new PromotionServiceProvider(appConfig.promotionsConfigProvider)
-
   lazy val prodProductCatalogService: ProdProductCatalogService = new ProdProductCatalogService(
     RequestRunners.futureRunner,
   )
@@ -141,6 +169,13 @@ trait Services {
     new CachedProductCatalogServiceProvider(
       codeCachedProductCatalogService = new CachedProductCatalogService(actorSystem, codeProductCatalogService),
       prodCachedProductCatalogService = new CachedProductCatalogService(actorSystem, prodProductCatalogService),
+    )
+
+  lazy val cachedPromotionsServiceProvider: CachedPromotionsServiceProvider =
+    new CachedPromotionsServiceProvider(
+      appConfig.promotionsApiConfigProvider,
+      actorSystem,
+      RequestRunners.futureRunner,
     )
 
   lazy val cachedSalesTaxService: CachedSalesTaxService = {

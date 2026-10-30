@@ -2,18 +2,14 @@ import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
+import { multipleAccountBenefitCopy } from 'helpers/abTests/multipleAccounts';
 import type { BenefitsCheckListData } from '../../../../components/checkoutBenefits/benefitsCheckList';
-import type { Participations } from '../../../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
-	filterBenefitByABTest,
 	filterBenefitByRegion,
 	productCatalogDescription,
 } from '../../../../helpers/productCatalog';
-import type {
-	ProductBenefit,
-	ProductDescription,
-} from '../../../../helpers/productCatalog';
+import type { ProductBenefit } from '../../../../helpers/productCatalog';
 
 const benefitsAsChecklist = ({
 	checked,
@@ -40,7 +36,33 @@ const benefitsAsChecklist = ({
 	];
 };
 
-export const getBenefitsChecklistFromLandingPageTool = (
+export const removeBenefitByCopy = (
+	benefits: ProductBenefit[],
+	benefitToRemove: string,
+): ProductBenefit[] => {
+	return benefits.filter((benefit) => benefit.copy !== benefitToRemove);
+};
+
+export const filterBenefits = (
+	benefits: ProductBenefit[],
+	countryGroupId: CountryGroupId,
+): ProductBenefit[] => {
+	return benefits.filter((benefit) =>
+		filterBenefitByRegion(benefit, countryGroupId),
+	);
+};
+
+export const getBenefitsChecklist = (
+	benefits: ProductBenefit[],
+	countryGroupId: CountryGroupId,
+): BenefitsCheckListData[] => {
+	return filterBenefits(benefits, countryGroupId).map((benefit) => ({
+		isChecked: true,
+		text: `${benefit.copyBoldStart ?? ''}${benefit.copy}`,
+	}));
+};
+
+export const getProductBenefitsChecklist = (
 	productKey: ProductKey,
 	landingPageSettings: LandingPageVariant,
 	countryGroupId: CountryGroupId,
@@ -51,14 +73,14 @@ export const getBenefitsChecklistFromLandingPageTool = (
 		return benefitsAsChecklist({
 			checked:
 				landingPageSettings.products.Contribution?.benefits ??
-				filterProductDescriptionBenefits(
-					productCatalogDescription.Contribution,
+				filterBenefits(
+					productCatalogDescription.Contribution.benefits,
 					countryGroupId,
 				),
 			unchecked:
 				landingPageSettings.products.SupporterPlus?.benefits ??
-				filterProductDescriptionBenefits(
-					productCatalogDescription.SupporterPlus,
+				filterBenefits(
+					productCatalogDescription.SupporterPlus.benefits,
 					countryGroupId,
 				),
 		});
@@ -66,51 +88,48 @@ export const getBenefitsChecklistFromLandingPageTool = (
 		return benefitsAsChecklist({
 			checked:
 				landingPageSettings.products.SupporterPlus?.benefits ??
-				filterProductDescriptionBenefits(
-					productCatalogDescription.SupporterPlus,
+				filterBenefits(
+					productCatalogDescription.SupporterPlus.benefits,
 					countryGroupId,
 				),
 			unchecked: [],
 		});
 	} else if (productKey === 'DigitalSubscription') {
-		return benefitsAsChecklist({
-			checked: [
-				...(landingPageSettings.products.DigitalSubscription?.benefits ??
-					filterProductDescriptionBenefits(
-						productCatalogDescription.DigitalSubscription,
-						countryGroupId,
-					)),
-				...(landingPageSettings.products.SupporterPlus?.benefits ??
-					filterProductDescriptionBenefits(
-						productCatalogDescription.SupporterPlus,
-						countryGroupId,
-					)),
-			],
-			unchecked: [],
-		});
+		return getDigitalSubscriptionBenefitsChecklist(
+			landingPageSettings,
+			countryGroupId,
+			'primaryUser',
+		);
 	}
 	return;
 };
 
-export const getBenefitsChecklistFromProductDescription = (
-	productDescription: ProductDescription,
+export const getDigitalSubscriptionBenefitsChecklist = (
+	landingPageSettings: LandingPageVariant,
 	countryGroupId: CountryGroupId,
-	abParticipations: Participations,
-): BenefitsCheckListData[] => {
-	return productDescription.benefits
-		.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
-		.filter((benefit) => filterBenefitByABTest(benefit, abParticipations))
-		.map((benefit) => ({
-			isChecked: true,
-			text: `${benefit.copyBoldStart ?? ''}${benefit.copy}`,
-		}));
-};
-
-export const filterProductDescriptionBenefits = (
-	productDescription: ProductDescription,
-	countryGroupId: CountryGroupId,
-): ProductBenefit[] => {
-	return productDescription.benefits.filter((benefit) =>
-		filterBenefitByRegion(benefit, countryGroupId),
+	user: 'primaryUser' | 'secondaryUser',
+) => {
+	const digitalPlusDefaultBenefits = filterBenefits(
+		productCatalogDescription.DigitalSubscription.benefits,
+		countryGroupId,
 	);
+	const digitalPlusBenefits =
+		landingPageSettings.products.DigitalSubscription?.benefits ??
+		digitalPlusDefaultBenefits;
+	const finalDigitalPlusBenefits =
+		user === 'secondaryUser'
+			? removeBenefitByCopy(digitalPlusBenefits, multipleAccountBenefitCopy)
+			: digitalPlusBenefits;
+
+	return benefitsAsChecklist({
+		checked: [
+			...finalDigitalPlusBenefits,
+			...(landingPageSettings.products.SupporterPlus?.benefits ??
+				filterBenefits(
+					productCatalogDescription.SupporterPlus.benefits,
+					countryGroupId,
+				)),
+		],
+		unchecked: [],
+	});
 };
