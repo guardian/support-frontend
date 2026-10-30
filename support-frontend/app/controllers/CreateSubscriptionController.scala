@@ -112,7 +112,7 @@ class CreateSubscriptionController(
         implicit val settings: AllSettings = settingsProvider.getAllSettings()
 
         logDetailedMessage("attempting to create")
-        val json = request.body.copy(debugInfo = None).asJson
+        val json = request.body.copy(debugInfo = None, cmpConsentSnapshot = None).asJson
         logDetailedMessage(json.toString)
 
         // Only Direct Debit requests include a recaptchaToken.
@@ -191,7 +191,7 @@ class CreateSubscriptionController(
         implicit val settings: AllSettings = settingsProvider.getAllSettings()
 
         logDetailedMessage("attempting to initiate Stripe checkout session")
-        val json = request.body.copy(debugInfo = None).asJson
+        val json = request.body.copy(debugInfo = None, cmpConsentSnapshot = None).asJson
         logDetailedMessage(json.toString)
         val stripePublicKey = request.body.paymentFields match {
           case stripeHosted: StripeHostedPaymentFields => stripeHosted.stripePublicKey
