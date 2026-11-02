@@ -124,9 +124,7 @@ Resources:
                 - dynamodb:DeleteItem
                 - dynamodb:BatchGetItem
                 - dynamodb:DescribeTable
-              Resource:
-                Fn::ImportValue:
-                  !Sub supporter-product-data-tables-${Stage}-SupporterProductDataTable
+              Resource: !Sub arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/SupporterProductData-${Stage}
         - PolicyName: SQSReceiveAndDelete
           PolicyDocument:
             Statement:
