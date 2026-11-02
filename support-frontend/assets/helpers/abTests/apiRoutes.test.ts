@@ -8,8 +8,8 @@ describe('apiUrl', () => {
 		routeKey            | parameter   | participant  | expected
 		${'deliveryAgents'} | ${postcode} | ${'control'} | ${`/delivery-agents/N1%209GU`}
 		${'deliveryAgents'} | ${postcode} | ${'variant'} | ${`/api/delivery-agents/N1%209GU`}
-		${'deliveryAgents'} | ${postcode} | ${'control'} | ${'/delivery-agents/N1%209GU'}
-		${'deliveryAgents'} | ${postcode} | ${'variant'} | ${'/api/delivery-agents/N1%209GU'}
+		${'postcodeLookup'} | ${postcode} | ${'control'} | ${'/api/postcode-lookup/N1%209GU'}
+		${'postcodeLookup'} | ${postcode} | ${'variant'} | ${'/api/postcode-lookup/N1%209GU'}
 	`(
 		`returns route $expected given {apiRouteKey:$routeKey, participant:$participant, param:$parameter}`,
 		({ routeKey, parameter, participant, expected }) => {
