@@ -6,6 +6,11 @@ const apiRoutes = {
 		scala: '/delivery-agents',
 		express: '/api/delivery-agents',
 	},
+	postcodeLookup: {
+		test: undefined, // already fully on Express
+		scala: '/postcode-lookup',
+		express: '/api/postcode-lookup',
+	},
 } as const;
 
 export type ApiRouteKey = keyof typeof apiRoutes;
@@ -22,6 +27,7 @@ export function apiUrl({
 	abParticipations,
 }: ApiUrlParams): string {
 	const { test, scala, express } = apiRoutes[apiRouteKey];
-	const useExpress = abParticipations?.[test] === 'variant';
+	const useExpress =
+		test === undefined || abParticipations?.[test] === 'variant';
 	return `${useExpress ? express : scala}/${encodeURIComponent(param)}`;
 }
