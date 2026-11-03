@@ -27,6 +27,11 @@ import {
 import { SslPolicy } from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import type { CfnListener } from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
+import {
+	ParameterDataType,
+	ParameterTier,
+	StringParameter,
+} from 'aws-cdk-lib/aws-ssm';
 
 interface BackendProps extends GuStackProps {
 	domainName: string;
@@ -145,6 +150,16 @@ cd target
 			},
 			scaling,
 			instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.SMALL),
+		});
+
+		// This parameter is used by https://github.com/guardian/waf
+		new StringParameter(this, 'AlbSsmParam', {
+			parameterName: `/infosec/waf/services/${this.stage}/${app}-alb-arn`,
+			description: `The ARN of the ALB for support-${this.stage}-${app}. This parameter is created via CDK.`,
+			simpleName: false,
+			stringValue: ec2App.loadBalancer.loadBalancerArn,
+			tier: ParameterTier.STANDARD,
+			dataType: ParameterDataType.TEXT,
 		});
 
 		(ec2App.listener.node.defaultChild as CfnListener).sslPolicy =
