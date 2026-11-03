@@ -32,7 +32,7 @@ export const buildDeliveryAgentsHandler =
 		paperRoundService: PaperRoundService,
 	): RequestHandler<{ postcode: string }> =>
 	async (req, res) => {
-		const postcode = decodeURIComponent(req.params.postcode);
+		const postcode = req.params.postcode;
 
 		console.log(`Delivery agents handler called with ${postcode}`);
 
