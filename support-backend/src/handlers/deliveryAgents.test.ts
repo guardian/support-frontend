@@ -149,4 +149,24 @@ describe('GET /postcode-lookup/:postcode', () => {
 		expect(coverageSpy).toHaveBeenCalledWith('12345');
 		expect(putMetricSpy).toHaveBeenCalledWith('GetDeliveryAgentsFailure');
 	});
+
+	it('does not attempt to double decode the path parameter', async () => {
+		const coverageSpy = jest.spyOn(service, 'coverage').mockResolvedValueOnce({
+			status_code: 200,
+			data: {
+				agents: [],
+				message: '',
+				status: 'IP',
+			},
+		});
+		jest.spyOn(cloudwatch, 'putMetric').mockResolvedValue();
+
+		const response = await request(app).get('/delivery-agents/%25');
+
+		expect(response.status).toBe(400);
+		expect(response.body).toEqual({
+			type: 'ProblemWithInput',
+		});
+		expect(coverageSpy).toHaveBeenCalledWith('%');
+	});
 });
