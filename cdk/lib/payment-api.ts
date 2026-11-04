@@ -36,7 +36,11 @@ interface PaymentApiProps extends GuStackProps {
 
 export class PaymentApi extends GuStack {
 	constructor(scope: App, id: string, props: PaymentApiProps) {
-		super(scope, id, props);
+		super(scope, id, {
+			...props,
+			// Required for ALB logging
+			env: { region: 'eu-west-1' },
+		});
 
 		const emailSqsCodeArn = new GuStringParameter(
 			this,
@@ -113,7 +117,7 @@ export class PaymentApi extends GuStack {
 			instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.SMALL),
 			scaling: props.scaling,
 			userData,
-			withAccessLogging: false,
+			withAccessLogging: true,
 			roleConfiguration: {
 				additionalPolicies: [
 					new GuAllowPolicy(this, 'SupporterProductDataDynamo', {
