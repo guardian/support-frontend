@@ -8,6 +8,7 @@ import type {
 	PaperFulfilmentOptions,
 } from '@modules/product/fulfilmentOptions';
 import type { ProductOptions } from '@modules/product/productOptions';
+import { apiUrl } from 'helpers/abTests/apiRoutes';
 import type { Option } from 'helpers/types/option';
 import {
 	addQueryParamsToURL,
@@ -68,9 +69,10 @@ const countryPath = (countryGroupId: CountryGroupId) =>
 	countryGroups[countryGroupId].supportRegionId;
 
 function postcodeLookupUrl(postcode: string): string {
-	return `${getOrigin()}${routes.postcodeLookup}/${encodeURIComponent(
-		postcode,
-	)}`;
+	return `${getOrigin()}${apiUrl({
+		apiRouteKey: 'postcodeLookup',
+		param: postcode,
+	})}`;
 }
 
 function paperSubsUrl(

@@ -1,3 +1,6 @@
+import { apiUrl } from 'helpers/abTests/apiRoutes';
+import type { Participations } from 'helpers/abTests/models';
+
 export type DeliveryAgentsResponse = {
 	type:
 		| 'Covered'
@@ -19,11 +22,14 @@ export type DeliveryAgentOption = {
 
 export async function getDeliveryAgents(
 	postcode: string,
-	useExpressDeliveryAgentsLookup: boolean,
+	abParticipations: Participations,
 ): Promise<DeliveryAgentsResponse> {
-	const expressFolder = useExpressDeliveryAgentsLookup ? 'api/' : '';
 	const agentsResponse = await fetch(
-		`/${expressFolder}delivery-agents/${postcode}`,
+		apiUrl({
+			apiRouteKey: 'deliveryAgents',
+			param: postcode,
+			abParticipations,
+		}),
 	);
 	const response = (await agentsResponse.json()) as DeliveryAgentsResponse;
 	return response;
