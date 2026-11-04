@@ -117,7 +117,6 @@ export class PaymentApi extends GuStack {
 			instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.SMALL),
 			scaling: props.scaling,
 			userData,
-			withAccessLogging: true,
 			roleConfiguration: {
 				additionalPolicies: [
 					new GuAllowPolicy(this, 'SupporterProductDataDynamo', {
