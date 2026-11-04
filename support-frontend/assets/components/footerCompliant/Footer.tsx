@@ -1,12 +1,13 @@
 // ----- Imports ----- //
 import { cmp } from '@guardian/consent-manager';
+import { getLocale } from '@guardian/libs';
 import {
 	ButtonLink,
 	Link,
 	themeLinkBrand,
 } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
-import { Children } from 'react';
+import { Children, useEffect, useState } from 'react';
 import {
 	copyrightNotice,
 	guardianContactUsLink,
@@ -37,9 +38,21 @@ function Footer({
 	termsConditionsLink,
 	fullWidth,
 }: PropTypes): JSX.Element {
+	const [isInUSA, setIsInUSA] = useState<boolean>(false);
+
 	function showPrivacyManager() {
 		cmp.showPrivacyManager();
 	}
+
+	useEffect(() => {
+		const determineLocale = async () => {
+			// Example logic to determine if the user is in the USA
+			const localeCode = await getLocale();
+			setIsInUSA(localeCode === 'US');
+		};
+
+		void determineLocale();
+	}, []);
 
 	return (
 		<footer id="qa-footer" css={componentFooter} role="contentinfo">
@@ -85,7 +98,9 @@ function Footer({
 					</li>
 					<li css={link}>
 						<ButtonLink onClick={showPrivacyManager} theme={themeLinkBrand}>
-							Privacy Settings
+							{isInUSA
+								? 'Do Not Sell or Share my personal information'
+								: 'Privacy Settings'}
 						</ButtonLink>
 					</li>
 					{termsConditionsLink && (
