@@ -1,16 +1,24 @@
 import { storage } from '@guardian/libs';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import { useEffect } from 'react';
 import { useFeatureSwitches } from 'contexts/FeatureSwitchesContext';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import {
+	type ActiveProductKey,
 	type ActiveRatePlanKey,
 	isProductKey,
 	productCatalog,
 } from 'helpers/productCatalog';
-import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	billingPeriodToContributionType,
+	ratePlanToBillingPeriod,
+	toRegularBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import { getLegacyPromotion } from 'helpers/productPrice/legacyPromotion';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
 import { getQueryParameter } from 'helpers/urls/url';
 import type { UserType } from 'helpers/user/userType';
 import { logException } from 'helpers/utilities/logger';
@@ -19,11 +27,58 @@ import { AnalyticsProfileCacheProvider } from '../../helpers/customHooks/analyti
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { setHideSupportMessaginCookie } from '../../helpers/storage/contributionsCookies';
 import { getSupportRegionIdConfig } from '../supportRegionConfig';
+import { getThankYouOrder } from './checkout/helpers/sessionStorage';
 import type { OnboardingProductKey } from './components/onboardingComponent';
 import OnboardingComponent from './components/onboardingComponent';
 import { ThankYouComponent } from './components/thankYouComponent';
 
 const SKIP_NEW_ONBOARDING_EXPERIENCE_KEY = 'gu.skipNewOnboardingExperience';
+
+type ThankYouConversionTrackingProps = {
+	payment: { finalAmount: number };
+	productKey?: ActiveProductKey;
+	ratePlanKey?: ActiveRatePlanKey;
+	currencyKey: CurrencyCode;
+};
+
+function ThankYouConversionTracking({
+	payment,
+	productKey,
+	ratePlanKey,
+	currencyKey,
+}: ThankYouConversionTrackingProps) {
+	const order = getThankYouOrder();
+	const hasOrder = Boolean(order);
+	const paymentMethod =
+		order?.paymentMethod === 'StripeExpressCheckoutElement'
+			? 'Stripe'
+			: order?.paymentMethod;
+	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey ?? 'OneTime');
+	const conversionProductKey = productKey ?? 'Contribution';
+
+	useEffect(() => {
+		if (!hasOrder) {
+			return;
+		}
+
+		successfulContributionConversion(
+			payment.finalAmount,
+			billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY',
+			currencyKey,
+			paymentMethod ?? 'None',
+			conversionProductKey,
+		);
+	}, [
+		billingPeriod,
+		conversionProductKey,
+		currencyKey,
+		hasOrder,
+		payment.finalAmount,
+		paymentMethod,
+	]);
+
+	return null;
+}
 
 type ThankYouProps = {
 	supportRegionId: SupportRegionId;
@@ -136,6 +191,15 @@ export function ThankYou({
 		}
 	}
 
+	const conversionTracking = (
+		<ThankYouConversionTracking
+			payment={payment}
+			productKey={productKey}
+			ratePlanKey={ratePlanKey}
+			currencyKey={currencyKey}
+		/>
+	);
+
 	if (
 		enableThankYouOnboarding &&
 		productKey !== undefined &&
@@ -143,31 +207,37 @@ export function ThankYou({
 		storage.session.get(SKIP_NEW_ONBOARDING_EXPERIENCE_KEY) !== 'true'
 	) {
 		return (
-			<AnalyticsProfileCacheProvider>
-				<OnboardingComponent
-					supportRegionId={supportRegionId}
-					csrf={csrf}
-					payment={payment}
-					productKey={productKey as OnboardingProductKey}
-					ratePlanKey={ratePlanKey ?? 'OneTime'}
-					promotion={promotion}
-					identityUserType={userType}
-					landingPageSettings={landingPageSettings}
-				/>
-			</AnalyticsProfileCacheProvider>
+			<>
+				{conversionTracking}
+				<AnalyticsProfileCacheProvider>
+					<OnboardingComponent
+						supportRegionId={supportRegionId}
+						csrf={csrf}
+						payment={payment}
+						productKey={productKey as OnboardingProductKey}
+						ratePlanKey={ratePlanKey ?? 'OneTime'}
+						promotion={promotion}
+						identityUserType={userType}
+						landingPageSettings={landingPageSettings}
+					/>
+				</AnalyticsProfileCacheProvider>
+			</>
 		);
 	}
 
 	return (
-		<ThankYouComponent
-			supportRegionId={supportRegionId}
-			csrf={csrf}
-			payment={payment}
-			productKey={productKey}
-			ratePlanKey={ratePlanKey}
-			promotion={promotion}
-			identityUserType={userType}
-			landingPageSettings={landingPageSettings}
-		/>
+		<>
+			{conversionTracking}
+			<ThankYouComponent
+				supportRegionId={supportRegionId}
+				csrf={csrf}
+				payment={payment}
+				productKey={productKey}
+				ratePlanKey={ratePlanKey}
+				promotion={promotion}
+				identityUserType={userType}
+				landingPageSettings={landingPageSettings}
+			/>
+		</>
 	);
 }

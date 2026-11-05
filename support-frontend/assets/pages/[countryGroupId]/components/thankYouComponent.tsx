@@ -16,12 +16,10 @@ import {
 	productCatalogDescription,
 } from 'helpers/productCatalog';
 import {
-	billingPeriodToContributionType,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { get } from 'helpers/storage/cookie';
-import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
 import {
 	sendEventCheckoutValue,
 	sendEventContributionCheckoutConversion,
@@ -109,7 +107,6 @@ export function ThankYouComponent({
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const isOneOff = billingPeriod === BillingPeriod.OneTime;
 
-	// track conversion with GTM
 	const paymentMethod =
 		order.paymentMethod === 'StripeExpressCheckoutElement'
 			? 'Stripe'
@@ -117,14 +114,6 @@ export function ThankYouComponent({
 
 	useEffect(() => {
 		// quarterly needs support in future for GW products (when they are enabled). So not needed currently, defaults to monthly.
-		successfulContributionConversion(
-			payment.finalAmount, // This is the final amount after discounts
-			billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY',
-			currencyKey,
-			paymentMethod,
-			productKey,
-		);
-
 		/**
 		 * This is some annoying transformation we need from
 		 * Product API => Contributions work we need to do
