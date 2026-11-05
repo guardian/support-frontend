@@ -123,6 +123,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "enableStudentBeansEuropeAustralia" : {
           |        "description" : "Enable StudentBeans Australia and Europe (Germany, France, Spain, Ireland, Holland)",
           |        "state" : "Off"
+          |      },
+          |      "enableDMCCLayout" : {
+          |        "description" : "Enable DMCC layout for GB users",
+          |        "state" : "On"
           |      }
           |    }
           |  },
@@ -180,6 +184,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
             Some(Off),
             Some(Off),
             Some(Off),
+            Some(On),
           ),
           campaignSwitches = CampaignSwitches(Some(Off), Some(Off)),
           recaptchaSwitches = RecaptchaSwitches(Some(On), Some(On)),
