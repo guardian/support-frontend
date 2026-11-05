@@ -5,14 +5,10 @@ import {
 	init,
 	successfulContributionConversion,
 } from '../googleTagManager';
+import { onConsentChangeEvent } from '../thirdPartyTrackingConsent';
 
 jest.mock('../thirdPartyTrackingConsent', () => ({
-	onConsentChangeEvent: jest.fn(
-		(callback: (consents: Record<string, boolean>) => void) => {
-			callback({ 'google-tag-manager': true });
-			return Promise.resolve();
-		},
-	),
+	onConsentChangeEvent: jest.fn(() => Promise.resolve()),
 }));
 
 const { mapFields } = _;
@@ -37,7 +33,7 @@ describe('googleTagManager', () => {
 		expect(Object.keys(mapped).length).toEqual(Object.keys(input).length);
 	});
 
-	it('keeps conversion data queued until consent and script readiness, without identity fields', async () => {
+	it('keeps conversions queued until consent and script readiness', async () => {
 		Object.defineProperty(window, 'googleTagManagerDataLayer', {
 			configurable: true,
 			value: undefined,
@@ -56,6 +52,15 @@ describe('googleTagManager', () => {
 		expect(window.googleTagManagerDataLayer).toBeUndefined();
 
 		await init();
+		const updateConsent = jest.mocked(onConsentChangeEvent).mock.calls[0]?.[0];
+		expect(updateConsent).toBeDefined();
+		updateConsent?.({});
+		expect(window.googleTagManagerDataLayer).toBeUndefined();
+		expect(
+			document.querySelector('script[src*="googletagmanager.com/gtm.js"]'),
+		).toBeNull();
+
+		updateConsent?.({ 'google-tag-manager': true });
 		expect(window.googleTagManagerDataLayer).not.toEqual(
 			expect.arrayContaining([
 				expect.objectContaining({ event: 'SuccessfulConversion' }),
@@ -83,7 +88,28 @@ describe('googleTagManager', () => {
 			}),
 		);
 		expect(typeof conversion?.orderId).toBe('string');
-		expect(conversion).not.toHaveProperty('email');
-		expect(conversion).not.toHaveProperty('firstName');
+		expect(
+			Object.keys(conversion ?? {}).sort(),
+		).toEqual(
+			[
+				'event',
+				'value',
+				'currency',
+				'paymentMethod',
+				'contributionType',
+				'productType',
+				'orderId',
+				'thirdPartyTrackingConsent',
+				'campaignCodeBusinessUnit',
+				'campaignCodeTeam',
+				'internalCampaignCode',
+				'vendorConsentsLookup',
+			].sort(),
+		);
+		expect(
+			window.googleTagManagerDataLayer?.filter(
+				(event) => event.event === 'SuccessfulConversion',
+			),
+		).toHaveLength(1);
 	});
 });
