@@ -9,7 +9,7 @@ describe('apiUrl', () => {
 		['postcodeLookup', postcode, 'control', '/api/postcode-lookup/N1%209GU'],
 		['postcodeLookup', postcode, 'variant', '/api/postcode-lookup/N1%209GU'],
 	] as const)(
-		`returns route $expected given {apiRouteKey:$routeKey, participant:$participant, param:$parameter}`,
+		`returns route for {apiRouteKey:%s, param:%s, participant:%s}: %s`,
 		(apiRouteKey, param, participant, expected) => {
 			const abParticipations: Participations = {
 				deliveryAgentsLookupExpress:
