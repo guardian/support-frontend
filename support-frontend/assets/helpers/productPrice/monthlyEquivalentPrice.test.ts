@@ -1,22 +1,20 @@
-import { annualToMonthly, quarterlyToMonthly } from './monthlyEquivalentPrice';
+import { BillingPeriod } from '@modules/product/billingPeriod';
+import { monthlyEquivalentPrice } from './monthlyEquivalentPrice';
 
 describe('getMonthlyEquivalentPrice', () => {
 	it('converts 180 annual to 10 monthly', () => {
-		expect(annualToMonthly(180)).toBe(15);
-	});
-	it('round-up 100 annual from 8.333 to 8.34 monthly', () => {
-		expect(annualToMonthly(100)).toBe(8.34);
-	});
-	it('round-up 101 annual from 8.416 to 8.42 monthly', () => {
-		expect(annualToMonthly(101)).toBe(8.42);
+		expect(monthlyEquivalentPrice(180, BillingPeriod.Annual)).toBe(15);
 	});
 	it('converts 57 quarterly to 19 monthly', () => {
-		expect(quarterlyToMonthly(57)).toBe(19);
+		expect(monthlyEquivalentPrice(57, BillingPeriod.Quarterly)).toBe(19);
 	});
-	it('round-up 100 quarterly from 33.333 to 33.34 monthly', () => {
-		expect(quarterlyToMonthly(100)).toBe(33.34);
+	it('round-up 100 annual from 8.333 to 8.34 monthly', () => {
+		expect(monthlyEquivalentPrice(100, BillingPeriod.Annual)).toBe(8.34);
 	});
-	it('round-up 101 quarterly from 33.667 to 33.67 monthly', () => {
-		expect(quarterlyToMonthly(101)).toBe(33.67);
+	it('round-up 101 annual from 8.416 to 8.42 monthly', () => {
+		expect(monthlyEquivalentPrice(101, BillingPeriod.Annual)).toBe(8.42);
+	});
+	it('round-up 8.64 annual from 0.720000001 to 0.73 monthly', () => {
+		expect(monthlyEquivalentPrice(8.64, BillingPeriod.Annual)).toBe(0.73);
 	});
 });

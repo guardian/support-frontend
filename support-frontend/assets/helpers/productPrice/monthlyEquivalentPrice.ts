@@ -1,9 +1,10 @@
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { roundAmountUp } from 'helpers/forms/checkouts';
+import { getNumberOfMonthsInPeriod } from './billingPeriods';
 
-export function annualToMonthly(annualPrice: number) {
-	return roundAmountUp(annualPrice / 12);
-}
-
-export function quarterlyToMonthly(quarterlyPrice: number) {
-	return roundAmountUp(quarterlyPrice / 3);
+export function monthlyEquivalentPrice(
+	price: number,
+	billingPeriod: BillingPeriod.Annual | BillingPeriod.Quarterly,
+) {
+	return roundAmountUp(price / getNumberOfMonthsInPeriod(billingPeriod));
 }
