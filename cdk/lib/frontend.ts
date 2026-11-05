@@ -70,6 +70,13 @@ export class Frontend extends GuStack {
 					`arn:aws:ssm:${this.region}:${this.account}:parameter/${this.stack}/${app}/${this.stage}`,
 				],
 			}),
+			new GuAllowPolicy(this, 'SSMGetParameters', {
+				actions: ['ssm:GetParameters'],
+				resources: [
+					// Needed by com.gu.play-secret-rotation
+					`arn:aws:ssm:${this.region}:${this.account}:parameter/${this.stack}/${app}/${this.stage}/play.http.secret.key`,
+				],
+			}),
 			new GuGetS3ObjectsPolicy(this, 'PrivateBucket', {
 				bucketName: 'gu-zuora-catalog',
 				paths: ['PROD/Zuora-PROD/catalog.json', 'PROD/Zuora-CODE/catalog.json'],
