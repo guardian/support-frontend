@@ -1,9 +1,9 @@
-import { roundAmount } from 'helpers/forms/checkouts';
+import { roundAmountUp } from 'helpers/forms/checkouts';
 
 export function annualToMonthly(annualPrice: number) {
-	return roundAmount(annualPrice / 12);
+	return roundAmountUp(annualPrice / 12);
 }
 
 export function quarterlyToMonthly(quarterlyPrice: number) {
-	return roundAmount(quarterlyPrice / 3);
+	return roundAmountUp(quarterlyPrice / 3);
 }
