@@ -135,6 +135,8 @@ export function ThreeTierLanding({
 		selectedAmount: urlSelectedAmount,
 		forceWeeklyPricing,
 		hideContribution,
+		hideSupportOnce,
+		hideStudentOffer,
 	} = useThreeTierUrlSelection();
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -156,6 +158,8 @@ export function ThreeTierLanding({
 		supportRegionId,
 		Country.detect(),
 	);
+
+	const displayStudentOffer = showStudentOffer && !hideStudentOffer;
 
 	const countdownSettings = countdownSwitchOn()
 		? landingPageVariant.countdownSettings
@@ -322,22 +326,28 @@ export function ThreeTierLanding({
 						/>
 					</div>
 				</Container>
-				<Container
-					sideBorders
-					borderColor="rgba(170, 170, 180, 0.5)"
-					cssOverrides={lightContainer}
-				>
-					<SupportOnce
-						currency={glyph(currencyId)}
-						countryGroupId={countryGroupId}
-					/>
-					{showStudentOffer && (
-						<StudentOffer
-							currencyKey={currencyId}
-							supportRegionId={supportRegionId}
-						/>
-					)}
-				</Container>
+				{/* The container is skipped when both blocks are hidden, otherwise it
+				would render as an empty band below the cards. */}
+				{(!hideSupportOnce || displayStudentOffer) && (
+					<Container
+						sideBorders
+						borderColor="rgba(170, 170, 180, 0.5)"
+						cssOverrides={lightContainer}
+					>
+						{!hideSupportOnce && (
+							<SupportOnce
+								currency={glyph(currencyId)}
+								countryGroupId={countryGroupId}
+							/>
+						)}
+						{displayStudentOffer && (
+							<StudentOffer
+								currencyKey={currencyId}
+								supportRegionId={supportRegionId}
+							/>
+						)}
+					</Container>
+				)}
 			</PageScaffold>
 		</PromoTermsProvider>
 	);

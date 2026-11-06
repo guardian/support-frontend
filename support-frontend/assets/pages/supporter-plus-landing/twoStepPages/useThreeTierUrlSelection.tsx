@@ -12,6 +12,8 @@ type ThreeTierUrlSelection = {
 	selectedAmount: string | null;
 	forceWeeklyPricing: boolean;
 	hideContribution: boolean;
+	hideSupportOnce: boolean;
+	hideStudentOffer: boolean;
 };
 
 const productKeys = Object.keys(productCatalog) as ProductKey[];
@@ -55,9 +57,12 @@ export function useThreeTierUrlSelection(): ThreeTierUrlSelection {
 			ratePlanKey: toRatePlanKey(productKey, params.get('ratePlan')),
 			selectedAmount: params.get('selected-amount'),
 			forceWeeklyPricing: params.get('force-weekly') === 'true',
-			// Only ever removes content (the Contribution card), so it is safe to
+			// The hide* params only ever remove content (the Contribution card, the
+			// single contribution link and the student offer), so they are safe to
 			// drive from the URL. Used by the puzzles two-tier landing page.
 			hideContribution: params.get('hideContribution') === 'true',
+			hideSupportOnce: params.get('hideSupportOnce') === 'true',
+			hideStudentOffer: params.get('hideStudentOffer') === 'true',
 		};
 	}, [params]);
 }

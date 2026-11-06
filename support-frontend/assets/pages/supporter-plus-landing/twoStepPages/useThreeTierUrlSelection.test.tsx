@@ -37,6 +37,8 @@ describe('useThreeTierUrlSelection', () => {
 			selectedAmount: null,
 			forceWeeklyPricing: false,
 			hideContribution: false,
+			hideSupportOnce: false,
+			hideStudentOffer: false,
 		});
 	});
 
@@ -98,5 +100,25 @@ describe('useThreeTierUrlSelection', () => {
 			false,
 		);
 		expect(renderWithSearch('').hideContribution).toBe(false);
+	});
+
+	it('only treats hideSupportOnce=true as truthy', () => {
+		expect(renderWithSearch('?hideSupportOnce=true').hideSupportOnce).toBe(
+			true,
+		);
+		expect(renderWithSearch('?hideSupportOnce=false').hideSupportOnce).toBe(
+			false,
+		);
+		expect(renderWithSearch('').hideSupportOnce).toBe(false);
+	});
+
+	it('only treats hideStudentOffer=true as truthy', () => {
+		expect(renderWithSearch('?hideStudentOffer=true').hideStudentOffer).toBe(
+			true,
+		);
+		expect(renderWithSearch('?hideStudentOffer=false').hideStudentOffer).toBe(
+			false,
+		);
+		expect(renderWithSearch('').hideStudentOffer).toBe(false);
 	});
 });
