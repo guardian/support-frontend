@@ -99,6 +99,9 @@ class AppComponents(context: Context, stage: String)
   // reasoning as above.
   val _ = (cachedPromotionsServiceProvider.forUser(false), cachedPromotionsServiceProvider.forUser(true))
 
+  // The application secret always comes from Parameter Store, in every stage including DEV, so that secret rotation
+  // behaves identically everywhere. RotatingSecretComponents overrides play.http.secret.key with the value read here,
+  // so a play.http.secret.key set in a local support-frontend.private.conf is deliberately no longer honoured.
   lazy val secretStateSupplier: SnapshotProvider = {
     import com.gu.play.secretrotation.aws.parameterstore
 
