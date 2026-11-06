@@ -20,7 +20,6 @@ import {
 import {
 	getSessionParticipations,
 	LANDING_PAGE_PARTICIPATIONS_KEY,
-	setSessionParticipations,
 } from './sessionStorage';
 
 // Fallback config in case there's an issue getting it from the server
@@ -134,56 +133,38 @@ export const landingPageTestConfig: Omit<
  * - With a valid force or preview param (`test:variant`) in the URL: all of
  *   them, because those pick their test by name and skip the selection.
  * - On the landing page: only the tests of the source, or, without one, only the
- *   tests that don't belong to a source. Saved participations the landing page
- *   no longer accepts are removed from session storage, so the other pages
- *   can't restore a variant different from the one shown here.
+ *   tests that don't belong to a source.
  * - On other pages (checkout, thank-you): the same as without a source, plus any
  *   source test the landing page already saved in session storage, so they keep
  *   showing it but never assign it to someone who didn't come from the source.
+ *
+ * Known limitation: a saved participation the landing page no longer accepts
+ * (e.g. a normal test when visiting with ?source=puzzles and no puzzles test is
+ * eligible) stays in session storage, so the checkout can restore a variant
+ * different from the one the landing page showed.
  */
 function getEligibleTests(tests: LandingPageTest[]): LandingPageTest[] {
-	const params = new URLSearchParams(window.location.search);
-	const { forceParamName } = landingPageTestConfig;
+	const { search, pathname } = window.location;
+	const { forceParamName, pageRegex } = landingPageTestConfig;
 	// Same parsing as getPageParticipations: an empty or malformed value is
 	// ignored there, so it must not lift the filter here either.
 	if (
-		getParticipationFromQueryString(window.location.search, forceParamName) ||
+		getParticipationFromQueryString(search, forceParamName) ||
 		getParticipationFromQueryString(
-			window.location.search,
+			search,
 			forceParamName.replace('force-', 'preview-'),
 		)
 	) {
 		return tests;
 	}
 
-	const savedParticipations =
-		getSessionParticipations(LANDING_PAGE_PARTICIPATIONS_KEY) ?? {};
-	const onLandingPage = !!window.location.pathname.match(
-		landingPageTestConfig.pageRegex,
-	);
-
-	if (onLandingPage) {
-		const source = toSourceKey(params.get('source'));
-		const eligibleTests = tests.filter((test) =>
-			isTestEligibleForSource(test.name, source),
-		);
-		const acceptedParticipations = Object.fromEntries(
-			Object.entries(savedParticipations).filter(([testName]) =>
-				eligibleTests.some((test) => test.name === testName),
-			),
-		);
-		if (
-			Object.keys(acceptedParticipations).length !==
-			Object.keys(savedParticipations).length
-		) {
-			setSessionParticipations(
-				acceptedParticipations,
-				LANDING_PAGE_PARTICIPATIONS_KEY,
-			);
-		}
-		return eligibleTests;
+	if (pathname.match(pageRegex)) {
+		const source = toSourceKey(new URLSearchParams(search).get('source'));
+		return tests.filter((test) => isTestEligibleForSource(test.name, source));
 	}
 
+	const savedParticipations =
+		getSessionParticipations(LANDING_PAGE_PARTICIPATIONS_KEY) ?? {};
 	return tests.filter(
 		(test) =>
 			isTestEligibleForSource(test.name, undefined) ||
