@@ -14,6 +14,9 @@ export type Payment = {
 	finalAmount: number;
 };
 
+export function roundAmountUp(amount: number) {
+	return Math.ceil(amount * 1e2) / 1e2;
+}
 function roundAmount(amount: number) {
 	/**
 	 * This rounds a `number` to the second decimal.

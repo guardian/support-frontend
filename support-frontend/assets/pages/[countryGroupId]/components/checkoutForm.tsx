@@ -66,6 +66,7 @@ import { getWeeklyDays } from 'pages/[countryGroupId]/checkout/helpers/deliveryD
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { PreContractInformation } from 'pages/supporter-plus-landing/components/preContractInformation';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { postcodeIsWithinM25 } from '../../../helpers/forms/deliveryCheck';
@@ -1236,15 +1237,25 @@ export default function CheckoutForm({
 									/>
 								)}
 						</div>
-						<SummaryTsAndCs
-							productKey={productKey}
-							ratePlanKey={ratePlanKey}
-							countryGroupId={countryGroupId}
-							ratePlanDescription={ratePlanDescription.label}
-							currency={currencyKey}
-							amount={originalAmount}
-							promotion={promotion}
-						/>
+						{countryGroupId === 'GBPCountries' ? (
+							<PreContractInformation
+								productKey={productKey}
+								ratePlanKey={ratePlanKey}
+								countryGroupId={countryGroupId}
+								currency={currencyKey}
+								amount={0}
+							/>
+						) : (
+							<SummaryTsAndCs
+								productKey={productKey}
+								ratePlanKey={ratePlanKey}
+								countryGroupId={countryGroupId}
+								ratePlanDescription={ratePlanDescription.label}
+								currency={currencyKey}
+								amount={originalAmount}
+								promotion={promotion}
+							/>
+						)}
 						<MaybeEstimatedTaxSummary
 							payment={payment}
 							taxRateConfig={taxRateConfig}

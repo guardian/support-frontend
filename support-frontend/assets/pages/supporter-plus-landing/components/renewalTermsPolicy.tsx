@@ -1,0 +1,49 @@
+import { css } from '@emotion/react';
+import { space } from '@guardian/source/foundations';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
+import { glyph } from 'helpers/internationalisation/currency';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
+import {
+	getBillingPeriodNoun,
+	ratePlanToBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
+import type { Promotion } from 'helpers/productPrice/promotions';
+
+const marginTop = css`
+	margin-top: ${space[2]}px;
+`;
+
+interface RenewalTermsPolicyProps {
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
+	countryGroupId: CountryGroupId;
+	currency: CurrencyCode;
+	amount: number;
+	promotion?: Promotion;
+}
+export function RenewalTermsPolicy({
+	productKey,
+	ratePlanKey,
+	countryGroupId,
+	currency,
+	amount,
+	promotion,
+}: RenewalTermsPolicyProps): JSX.Element | null {
+	const currencyGlyph = glyph(currency);
+	const billingPeriod = getBillingPeriodNoun(
+		ratePlanToBillingPeriod(ratePlanKey),
+	);
+	return (
+		<p css={marginTop}>
+			Subscription auto-renews monthly. Pay {currencyGlyph}
+			{amount}/ {billingPeriod}, unless you cancel. We’ll remind you every 6
+			months, 2 weeks before your renewal date.
+			{productKey} {ratePlanKey} {countryGroupId},{currency},{amount}
+			{promotion && 'yes'},
+		</p>
+	);
+}

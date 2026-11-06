@@ -1,0 +1,205 @@
+import { css } from '@emotion/react';
+import { neutral, space, textSans15 } from '@guardian/source/foundations';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { CurrencyCode } from '@modules/internationalisation/currency';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
+import type { Promotion } from 'helpers/productPrice/promotions';
+import { CancellationPolicy } from './cancellationPolicy';
+import { PriceRisePolicy } from './priceRisePolicy';
+import { RenewalTermsPolicy } from './renewalTermsPolicy';
+
+const containerSummaryTsCs = css`
+	margin-top: ${space[6]}px;
+	border-radius: ${space[1]}px;
+	background-color: ${neutral[97]};
+	padding: ${space[2]}px ${space[3]}px;
+	${textSans15};
+	color: ${neutral[0]};
+	& a {
+		color: ${neutral[7]};
+	}
+`;
+
+interface PreContractInformationProps {
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
+	countryGroupId: CountryGroupId;
+	currency: CurrencyCode;
+	amount: number;
+	promotion?: Promotion;
+}
+export function PreContractInformation({
+	productKey,
+	ratePlanKey,
+	countryGroupId,
+	currency,
+	amount,
+	promotion,
+}: PreContractInformationProps): JSX.Element | null {
+	// const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
+	// const periodNoun = getBillingPeriodNoun(billingPeriod);
+	// const today = new Date();
+	// const renewalDateStart = `on the ${getDateWithOrdinal(today)} day of `;
+	// const renewalDateEnd = `every ${periodNoun}`;
+	// const renewalFrequency = `${renewalDateStart}${
+	// 	billingPeriod === BillingPeriod.Annual ? getLongMonth(today) + ' ' : ''
+	// }${renewalDateEnd}`;
+	// // Display for AUS Students who are on a subscription basis
+	// const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
+	// const isSundayOnlyNewsletterSubscription = isSundayOnlyNewspaperSub(
+	// 	productKey,
+	// 	ratePlanKey,
+	// );
+	// const isPaperSundayOrPlus =
+	// 	isSundayOnlyNewsletterSubscription ||
+	// 	isPaperPlusSub(productKey, ratePlanKey);
+
+	// const { label: productName } = getProductDescription(productKey, ratePlanKey);
+	// const rateDescriptor = ratePlanKey;
+
+	// if (isPaperSundayOrPlus) {
+	// 	return (
+	// 		<div css={containerSummaryTsCs}>
+	// 			The {isSundayOnlyNewsletterSubscription ? 'Observer' : rateDescriptor}{' '}
+	// 			subscription will auto renew each month. You will be charged the
+	// 			subscription amounts using your chosen payment method at each renewal,
+	// 			at the rate then in effect, unless you cancel.
+	// 		</div>
+	// 	);
+	// }
+
+	// const amountWithCurrency = simpleFormatAmount(
+	// 	getCurrencyByCode(currency),
+	// 	amount,
+	// );
+
+	// const autoRenewUtilCancelTsAndCs = (countryGroupId: CountryGroupId) => {
+	// 	const usLegalCopy =
+	// 		['SupporterPlus', 'DigitalSubscription'].includes(productKey) &&
+	// 		countryGroupId === 'UnitedStates'
+	// 			? productLegal(countryGroupId, billingPeriod, '/', amount, promotion)
+	// 			: '';
+	// 	const usChargePeriod = productKey.startsWith('GuardianWeekly') ? (
+	// 		`automatically charged the amount shown each ${periodNoun} `
+	// 	) : (
+	// 		<strong>{`automatically charged ${usLegalCopy} `}</strong>
+	// 	);
+	// 	const containerShapeUS = productKey.startsWith('GuardianWeekly')
+	// 		? containerRoundUS
+	// 		: containerSquareUS;
+	// 	return [
+	// 		'SupporterPlus',
+	// 		'DigitalSubscription',
+	// 		'GuardianWeeklyDomestic',
+	// 		'GuardianWeeklyRestOfWorld',
+	// 	].includes(productKey) && countryGroupId === 'UnitedStates' ? (
+	// 		<div css={[containerSummaryTsCs, containerUS, containerShapeUS]}>
+	// 			<p>
+	// 				By clicking the Pay button below, you agree to enroll in your selected
+	// 				support plan and your payment method will be {usChargePeriod}
+	// 				until you cancel. We will notify you if this amount changes. You may
+	// 				cancel at any time to avoid future charges in{' '}
+	// 				{textLink('Manage My Account', manageAccountLink)}.
+	// 			</p>
+	// 			<p css={marginTop}>
+	// 				Your enrollment is subject to and governed by the Guardian{' '}
+	// 				{textLink('Terms and Conditions', digitalPlusTermsLink)} and{' '}
+	// 				{textLink('Privacy Policy', privacyLink)}.
+	// 			</p>
+	// 			<p css={marginTop}>
+	// 				We’ll send you emails about our journalism and ways to support and
+	// 				enjoy our work. You can unsubscribe at any time
+	// 			</p>
+	// 		</div>
+	// 	) : (
+	// 		<div css={containerSummaryTsCs}>
+	// 			{productKey.startsWith('GuardianWeekly') ? '' : 'The '}
+	// 			{productName} subscription
+	// 			{productKey === 'SupporterPlus' ? ' and any contribution' : ''} will
+	// 			auto-renew each {periodNoun}. You will be charged the subscription
+	// 			{productKey === 'SupporterPlus' ? ' and contribution' : ''} amount
+	// 			{productKey === 'SupporterPlus' ? 's' : ''} using your chosen payment
+	// 			method at each renewal, at the rate then in effect, unless you cancel.
+	// 		</div>
+	// 	);
+	// };
+
+	// const digitalSummaryTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> =
+	// 	{
+	// 		Contribution: (
+	// 			<div css={containerSummaryTsCs}>
+	// 				We will attempt to take payment of {amountWithCurrency},{' '}
+	// 				{renewalFrequency}, from now until you cancel your payment. Payments
+	// 				may take up to 6 days to be recorded in your bank account. You can
+	// 				change how much you give or cancel your payment at any time.
+	// 				{countryGroupId === 'UnitedStates' && (
+	// 					<p css={marginTop}>
+	// 						We’ll send you emails about our journalism and ways to support and
+	// 						enjoy our work. You can unsubscribe at any time
+	// 					</p>
+	// 				)}
+	// 			</div>
+	// 		),
+	// 		SupporterPlus: (
+	// 			<>
+	// 				{!isStudentOneYearRatePlan &&
+	// 					autoRenewUtilCancelTsAndCs(countryGroupId)}
+	// 			</>
+	// 		),
+	// 		DigitalSubscription: autoRenewUtilCancelTsAndCs(countryGroupId),
+	// 		GuardianAdLite: autoRenewUtilCancelTsAndCs(countryGroupId),
+	// 	};
+
+	// const weeklyDigitalSummaryTsAndCs: Partial<
+	// 	Record<ActiveProductKey, JSX.Element>
+	// > = {
+	// 	...digitalSummaryTsAndCs,
+	// 	GuardianWeeklyDomestic: autoRenewUtilCancelTsAndCs(countryGroupId),
+	// 	GuardianWeeklyRestOfWorld: autoRenewUtilCancelTsAndCs(countryGroupId),
+	// };
+
+	// const getSummaryTsAndCs = (
+	// 	productKey: ActiveProductKey,
+	// 	isWeeklyDigital: boolean,
+	// ): JSX.Element | null => {
+	// 	const summaryTsAndCs = isWeeklyDigital
+	// 		? weeklyDigitalSummaryTsAndCs[productKey]
+	// 		: digitalSummaryTsAndCs[productKey];
+	// 	return summaryTsAndCs ?? null;
+	// };
+
+	// const isWeeklyDigital = isGuardianWeeklyDigitalProduct(
+	// 	productKey,
+	// 	ratePlanKey,
+	// );
+	// return getSummaryTsAndCs(productKey, isWeeklyDigital);
+
+	return (
+		<div css={containerSummaryTsCs}>
+			<RenewalTermsPolicy
+				productKey={productKey}
+				ratePlanKey={ratePlanKey}
+				countryGroupId={countryGroupId}
+				currency={currency}
+				amount={amount}
+				promotion={promotion}
+			/>
+			<CancellationPolicy
+				productKey={productKey}
+				ratePlanKey={ratePlanKey}
+				countryGroupId={countryGroupId}
+				currency={currency}
+				amount={amount}
+				promotion={promotion}
+			/>
+			<PriceRisePolicy
+				productKey={productKey}
+				ratePlanKey={ratePlanKey}
+				countryGroupId={countryGroupId}
+			/>
+		</div>
+	);
+}
