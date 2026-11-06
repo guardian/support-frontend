@@ -35,13 +35,16 @@ const container = (cardCount: number) => css`
 	}
 `;
 
-const cardIndexToTier = (index: number): 1 | 2 | 3 => {
-	switch (index) {
-		case 1:
+// The tier is derived from the product rather than the card's position, so the
+// tier-N-button tracking refs stay stable when a card is hidden
+// (e.g. ?hideContribution=true).
+const productToTier = (product: CardContent['product']): 1 | 2 | 3 => {
+	switch (product) {
+		case 'SupporterPlus':
 			return 2;
-		case 2:
+		case 'DigitalSubscription':
 			return 3;
-		case 0:
+		case 'Contribution':
 		default:
 			return 1;
 	}
@@ -80,7 +83,7 @@ export function ThreeTierCards({
 					<ThreeTierCard
 						cardContent={cardContent}
 						cardTheme={cardTheme}
-						cardTier={cardIndexToTier(cardIndex)}
+						cardTier={productToTier(cardContent.product)}
 						key={`threeTierCard${cardIndex}`}
 						promoCount={promoCount}
 						isSubdued={haveLabelAndSelectedCards}

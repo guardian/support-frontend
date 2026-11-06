@@ -36,6 +36,7 @@ describe('useThreeTierUrlSelection', () => {
 			ratePlanKey: undefined,
 			selectedAmount: null,
 			forceWeeklyPricing: false,
+			hideContribution: false,
 		});
 	});
 
@@ -87,5 +88,15 @@ describe('useThreeTierUrlSelection', () => {
 			false,
 		);
 		expect(renderWithSearch('').forceWeeklyPricing).toBe(false);
+	});
+
+	it('only treats hideContribution=true as truthy', () => {
+		expect(renderWithSearch('?hideContribution=true').hideContribution).toBe(
+			true,
+		);
+		expect(renderWithSearch('?hideContribution=false').hideContribution).toBe(
+			false,
+		);
+		expect(renderWithSearch('').hideContribution).toBe(false);
 	});
 });

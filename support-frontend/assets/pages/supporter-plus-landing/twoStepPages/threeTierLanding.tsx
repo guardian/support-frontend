@@ -134,6 +134,7 @@ export function ThreeTierLanding({
 		ratePlanKey: urlSearchParamsRatePlan,
 		selectedAmount: urlSelectedAmount,
 		forceWeeklyPricing,
+		hideContribution,
 	} = useThreeTierUrlSelection();
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
@@ -226,8 +227,11 @@ export function ThreeTierLanding({
 			multipleAccountsVariant,
 		});
 	};
+	// ?hideContribution=true shows only All-access digital and Digital plus (the
+	// puzzles two-tier landing page). Remember the variant's
+	// defaultProductSelection should not point at the hidden Contribution card.
 	const tierCards = [
-		getTierCard('Contribution'),
+		...(hideContribution ? [] : [getTierCard('Contribution')]),
 		getTierCard('SupporterPlus'),
 		getTierCard('DigitalSubscription'),
 	];
