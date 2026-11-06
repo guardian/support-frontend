@@ -1,25 +1,8 @@
 /**
- * Lets another Guardian product (e.g. Puzzles) send readers to the landing page
- * and bring them back once the purchase is complete, via
- * ?returnPath=/crosswords/quick/17000&returnLabel=puzzles
- *
- * The URL never carries copy: returnLabel is a key into the dictionary below,
- * so the thank-you page can only show pre-approved phrases. To support another
- * label, add an entry here.
+ * ?returnTo=/crosswords/quick/17000 lets another Guardian product (e.g. Puzzles)
+ * bring readers back once the purchase is complete. The CTA label comes from
+ * the source config (?source=), never from the URL.
  */
-export const returnLabels = {
-	puzzles: 'Return to Puzzles & games',
-} as const;
-
-export type ReturnLabelKey = keyof typeof returnLabels;
-
-export function toReturnLabelKey(
-	raw: string | null | undefined,
-): ReturnLabelKey | undefined {
-	return raw && Object.prototype.hasOwnProperty.call(returnLabels, raw)
-		? (raw as ReturnLabelKey)
-		: undefined;
-}
 
 // Used to resolve the path against a throwaway origin, so any value that would
 // leave it (e.g. `//evil.com`, `/\evil.com`, `https://evil.com`) is rejected.

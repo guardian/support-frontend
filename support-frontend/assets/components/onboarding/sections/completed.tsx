@@ -8,16 +8,16 @@ import {
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import GridImage from 'components/gridImage/gridImage';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
+import { getSourceConfig } from 'helpers/landingPage/sourceConfig';
 import {
 	getHelpCentreUrl,
 	getManageExtraAccountsUrl,
 	getManageSubsUrl,
 } from 'helpers/urls/externalLinks';
 import { getBaseDomain } from 'helpers/urls/url';
-import { returnLabels } from 'pages/[countryGroupId]/checkout/helpers/returnTo';
 import {
-	clearReturnTo,
-	getReturnTo,
+	clearSourceContext,
+	getSourceContext,
 } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
 import type { OnboardingProductKey } from 'pages/[countryGroupId]/components/onboardingComponent';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
@@ -76,11 +76,12 @@ export function OnboardingCompleted({
 
 	const { windowWidthIsLessThan } = useWindowWidth();
 
-	// Set by the landing page (?returnPath=...&returnLabel=...), e.g. by Puzzles
-	const returnTo = getReturnTo();
-	const ctaHref = `https://${getBaseDomain()}${returnTo?.path ?? ''}`;
+	// Set by the landing page (?source=...&returnTo=...), e.g. by Puzzles. The
+	// label only changes when there is somewhere to return to.
+	const { source, returnTo } = getSourceContext() ?? {};
+	const ctaHref = `https://${getBaseDomain()}${returnTo ?? ''}`;
 	const ctaCopy =
-		(returnTo?.label && returnLabels[returnTo.label]) ??
+		(returnTo ? getSourceConfig(source).returnLabel : undefined) ??
 		'Continue to the Guardian';
 
 	return (
@@ -133,7 +134,7 @@ export function OnboardingCompleted({
 						priority="primary"
 						cssOverrides={[buttonOverrides]}
 						href={ctaHref}
-						onClick={clearReturnTo}
+						onClick={clearSourceContext}
 					>
 						{ctaCopy}
 					</LinkButton>

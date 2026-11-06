@@ -98,6 +98,9 @@ interface PageParticipationsConfig<Variant> {
 		test: PageTest<Variant>,
 		mvtId: number,
 	) => Variant | undefined;
+	// Narrows which tests can be picked from session storage or assigned to the
+	// user. URL-forced and preview participations bypass it.
+	isTestEligible?: (test: PageTest<Variant>) => boolean;
 }
 
 export type {

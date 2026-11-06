@@ -1,4 +1,4 @@
-import { returnLabels, toReturnLabelKey, toSafeReturnPath } from '../returnTo';
+import { toSafeReturnPath } from '../returnTo';
 
 describe('toSafeReturnPath', () => {
 	it.each([
@@ -26,18 +26,4 @@ describe('toSafeReturnPath', () => {
 	])('rejects %j', (path) => {
 		expect(toSafeReturnPath(path)).toBeUndefined();
 	});
-});
-
-describe('toReturnLabelKey', () => {
-	it('resolves the keys of the dictionary', () => {
-		expect(toReturnLabelKey('puzzles')).toBe('puzzles');
-		expect(returnLabels.puzzles).toBe('Return to Puzzles & games');
-	});
-
-	it.each([undefined, null, '', 'Puzzles', 'Return to Puzzles', 'toString'])(
-		'rejects %j',
-		(label) => {
-			expect(toReturnLabelKey(label)).toBeUndefined();
-		},
-	);
 });

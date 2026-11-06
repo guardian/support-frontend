@@ -4,6 +4,10 @@ import type {
 	DefaultProductSelection,
 	LandingPageVariant,
 } from '../globalsAndSwitches/landingPageSettings';
+import {
+	isTestEligibleForSource,
+	toSourceKey,
+} from '../landingPage/sourceConfig';
 import { selectVariantForTest } from './banditSelection';
 import { randomNumber } from './helpers';
 import type { PageParticipationsConfig } from './models';
@@ -126,6 +130,16 @@ export function getLandingPageTestConfig(): PageParticipationsConfig<LandingPage
 	return {
 		...landingPageTestConfig,
 		tests: getSettings().landingPageTests ?? [],
+		isTestEligible: (test) => {
+			// Other pages (checkout, thank-you) reuse what the landing page selected
+			if (!window.location.pathname.match(landingPageTestConfig.pageRegex)) {
+				return true;
+			}
+			const source = toSourceKey(
+				new URLSearchParams(window.location.search).get('source'),
+			);
+			return isTestEligibleForSource(test.name, source);
+		},
 		selectVariant: (test, mvtId) => {
 			const banditData = getSettings().banditData ?? [];
 

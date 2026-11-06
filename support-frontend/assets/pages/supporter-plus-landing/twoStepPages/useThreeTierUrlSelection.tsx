@@ -4,23 +4,18 @@ import type {
 } from '@modules/product-catalog/productCatalog';
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router';
+import type { SourceKey } from 'helpers/landingPage/sourceConfig';
+import { toSourceKey } from 'helpers/landingPage/sourceConfig';
 import { productCatalog } from 'helpers/productCatalog';
-import type { ReturnLabelKey } from 'pages/[countryGroupId]/checkout/helpers/returnTo';
-import {
-	toReturnLabelKey,
-	toSafeReturnPath,
-} from 'pages/[countryGroupId]/checkout/helpers/returnTo';
+import { toSafeReturnPath } from 'pages/[countryGroupId]/checkout/helpers/returnTo';
 
 type ThreeTierUrlSelection = {
 	productKey?: ProductKey;
 	ratePlanKey?: ProductRatePlanKey<ProductKey>;
 	selectedAmount: string | null;
 	forceWeeklyPricing: boolean;
-	hideContribution: boolean;
-	hideSupportOnce: boolean;
-	hideStudentOffer: boolean;
-	returnPath?: string;
-	returnLabel?: ReturnLabelKey;
+	source?: SourceKey;
+	returnTo?: string;
 };
 
 const productKeys = Object.keys(productCatalog) as ProductKey[];
@@ -64,16 +59,10 @@ export function useThreeTierUrlSelection(): ThreeTierUrlSelection {
 			ratePlanKey: toRatePlanKey(productKey, params.get('ratePlan')),
 			selectedAmount: params.get('selected-amount'),
 			forceWeeklyPricing: params.get('force-weekly') === 'true',
-			// The hide* params only ever remove content (the Contribution card, the
-			// single contribution link and the student offer), so they are safe to
-			// drive from the URL. Used by the puzzles two-tier landing page.
-			hideContribution: params.get('hideContribution') === 'true',
-			hideSupportOnce: params.get('hideSupportOnce') === 'true',
-			hideStudentOffer: params.get('hideStudentOffer') === 'true',
-			// Where to send the reader after the purchase (stored for the thank-you
-			// page). Only a validated same-site path and a pre-approved label key.
-			returnPath: toSafeReturnPath(params.get('returnPath')),
-			returnLabel: toReturnLabelKey(params.get('returnLabel')),
+			// Both only ever resolve to pre-approved values: a key of the source config
+			// and a validated same-site path. See helpers/landingPage/sourceConfig.ts
+			source: toSourceKey(params.get('source')),
+			returnTo: toSafeReturnPath(params.get('returnTo')),
 		};
 	}, [params]);
 }

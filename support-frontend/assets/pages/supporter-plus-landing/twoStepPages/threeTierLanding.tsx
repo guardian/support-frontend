@@ -27,10 +27,11 @@ import { countdownSwitchOn } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { glyph } from 'helpers/internationalisation/currency';
+import { getSourceConfig } from 'helpers/landingPage/sourceConfig';
 import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
-	clearReturnTo,
-	setReturnTo,
+	clearSourceContext,
+	setSourceContext,
 } from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
 import { getTierCardContent } from 'pages/[countryGroupId]/helpers/getTierCardContent';
 import { getTierCardPromotion } from 'pages/[countryGroupId]/helpers/getTierCardPromotion';
@@ -138,27 +139,27 @@ export function ThreeTierLanding({
 		ratePlanKey: urlSearchParamsRatePlan,
 		selectedAmount: urlSelectedAmount,
 		forceWeeklyPricing,
-		hideContribution,
-		hideSupportOnce,
-		hideStudentOffer,
-		returnPath,
-		returnLabel,
+		source,
+		returnTo,
 	} = useThreeTierUrlSelection();
+	// ?source= switches on a pre-approved setup, see helpers/landingPage/sourceConfig.ts
+	const { hideContribution, hideSupportOnce, hideStudentOffer } =
+		getSourceConfig(source);
 
-	// The landing page is the single source of truth for where the thank-you page
-	// sends the reader back to (e.g. a puzzle). Visiting it with a valid
-	// ?returnPath stores it; visiting it without one clears it, so a value left
-	// in sessionStorage by an earlier puzzles visit in the same tab can't leak
-	// into an unrelated purchase.
+	// The landing page is the single source of truth for where the reader came
+	// from (?source=, ?returnTo=), which the thank-you page uses to send them
+	// back (e.g. to a puzzle). Visiting it with either stores them; visiting it
+	// without both clears them, so a value left in sessionStorage by an earlier
+	// visit in the same tab can't leak into an unrelated purchase.
 	// Known limitation: entering the checkout directly (skipping this page)
 	// doesn't clear a stale value.
 	useEffect(() => {
-		if (returnPath) {
-			setReturnTo({ path: returnPath, label: returnLabel });
+		if (source ?? returnTo) {
+			setSourceContext({ source, returnTo });
 		} else {
-			clearReturnTo();
+			clearSourceContext();
 		}
-	}, [returnPath, returnLabel]);
+	}, [source, returnTo]);
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
@@ -252,8 +253,8 @@ export function ThreeTierLanding({
 			multipleAccountsVariant,
 		});
 	};
-	// ?hideContribution=true shows only All-access digital and Digital plus (the
-	// puzzles two-tier landing page). Remember the variant's
+	// A source with hideContribution shows only All-access digital and Digital plus
+	// (e.g. the puzzles two-tier landing page). Remember the variant's
 	// defaultProductSelection should not point at the hidden Contribution card.
 	const tierCards = [
 		...(hideContribution ? [] : [getTierCard('Contribution')]),

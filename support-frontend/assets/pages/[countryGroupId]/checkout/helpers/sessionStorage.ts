@@ -1,8 +1,9 @@
 import { storage } from '@guardian/libs';
 import { z } from 'zod';
 import { dateTimeSchema } from 'helpers/globalsAndSwitches/window';
-import type { ReturnLabelKey } from './returnTo';
-import { toReturnLabelKey, toSafeReturnPath } from './returnTo';
+import type { SourceKey } from 'helpers/landingPage/sourceConfig';
+import { toSourceKey } from 'helpers/landingPage/sourceConfig';
+import { toSafeReturnPath } from './returnTo';
 
 /**
  * The Guardian Ad-Lite Landing Page sets the returnLink in sessionStorage
@@ -26,28 +27,32 @@ export function getReturnAddress(): string {
 }
 
 /**
- * The landing page sets where to send the reader after the purchase
- * (?returnPath=...&returnLabel=...) and the thank-you page reads it.
- * Values are validated on the way in and on the way out.
+ * The landing page sets where the reader came from (?source=...&returnTo=...)
+ * and the thank-you page reads it. Values are validated on the way in and on
+ * the way out.
  */
-const returnToKey = 'returnTo';
-const ReturnToSchema = z.object({
-	path: z.string(),
-	label: z.string().optional(),
+const sourceContextKey = 'sourceContext';
+const SourceContextSchema = z.object({
+	source: z.string().optional(),
+	returnTo: z.string().optional(),
 });
-type ReturnTo = { path: string; label?: ReturnLabelKey };
-export function setReturnTo(returnTo: ReturnTo) {
-	storage.session.set(returnToKey, returnTo);
+type SourceContext = { source?: SourceKey; returnTo?: string };
+export function setSourceContext(sourceContext: SourceContext) {
+	storage.session.set(sourceContextKey, sourceContext);
 }
-export function getReturnTo(): ReturnTo | undefined {
-	const parsed = ReturnToSchema.safeParse(storage.session.get(returnToKey));
-	const path = parsed.success ? toSafeReturnPath(parsed.data.path) : undefined;
-	return parsed.success && path
-		? { path, label: toReturnLabelKey(parsed.data.label) }
-		: undefined;
+export function getSourceContext(): SourceContext | undefined {
+	const parsed = SourceContextSchema.safeParse(
+		storage.session.get(sourceContextKey),
+	);
+	if (!parsed.success) {
+		return undefined;
+	}
+	const source = toSourceKey(parsed.data.source);
+	const returnTo = toSafeReturnPath(parsed.data.returnTo);
+	return source ?? returnTo ? { source, returnTo } : undefined;
 }
-export function clearReturnTo() {
-	storage.session.remove(returnToKey);
+export function clearSourceContext() {
+	storage.session.remove(sourceContextKey);
 }
 
 /**

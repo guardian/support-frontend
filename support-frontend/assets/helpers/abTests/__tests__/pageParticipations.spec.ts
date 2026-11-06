@@ -487,6 +487,83 @@ describe('getPageParticipations', () => {
 		});
 	});
 
+	describe('isTestEligible', () => {
+		const normalVariant = createTestVariant('normal', 'normal-value');
+		const specialVariant = createTestVariant('special', 'special-value');
+		const normalTest = createPageTest('NORMAL_TEST', [normalVariant]);
+		const specialTest = createPageTest('SPECIAL_TEST', [specialVariant]);
+		const onlySpecial = (test: PageTest<TestVariant>) =>
+			test.name === 'SPECIAL_TEST';
+
+		beforeEach(() => {
+			mockLocation('/test/page');
+			mockCountryGroupMatches.mockReturnValue(true);
+		});
+
+		it('only assigns eligible tests', async () => {
+			const config = {
+				...createConfig([normalTest, specialTest]),
+				isTestEligible: onlySpecial,
+			};
+
+			const result = await getPageParticipations(config);
+
+			expect(result).toEqual({
+				participations: { SPECIAL_TEST: 'special' },
+				variant: specialVariant,
+			});
+		});
+
+		it('ignores a session participation of a test that is no longer eligible', async () => {
+			mockGetSessionParticipations.mockReturnValue({ NORMAL_TEST: 'normal' });
+			const config = {
+				...createConfig([normalTest, specialTest]),
+				isTestEligible: onlySpecial,
+			};
+
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toEqual(specialVariant);
+		});
+
+		it('keeps a session participation of an eligible test', async () => {
+			mockGetSessionParticipations.mockReturnValue({ SPECIAL_TEST: 'special' });
+			const config = {
+				...createConfig([normalTest, specialTest]),
+				isTestEligible: onlySpecial,
+			};
+
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toEqual(specialVariant);
+		});
+
+		it('lets URL-forced participations bypass it', async () => {
+			mockGetParticipationFromQueryString.mockReturnValue({
+				NORMAL_TEST: 'normal',
+			});
+			const config = {
+				...createConfig([normalTest, specialTest]),
+				isTestEligible: onlySpecial,
+			};
+
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toEqual(normalVariant);
+		});
+
+		it('returns undefined when no eligible test is left', async () => {
+			const config = {
+				...createConfig([normalTest]),
+				isTestEligible: onlySpecial,
+			};
+
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toBeUndefined();
+		});
+	});
+
 	describe('Fallback behavior (getPageParticipationsWithFallback)', () => {
 		it('returns fallback when no test matches country group', async () => {
 			const variant = createTestVariant('control', 'control-value');

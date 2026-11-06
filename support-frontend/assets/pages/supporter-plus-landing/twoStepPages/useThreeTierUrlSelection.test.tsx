@@ -36,9 +36,6 @@ describe('useThreeTierUrlSelection', () => {
 			ratePlanKey: undefined,
 			selectedAmount: null,
 			forceWeeklyPricing: false,
-			hideContribution: false,
-			hideSupportOnce: false,
-			hideStudentOffer: false,
 		});
 	});
 
@@ -92,58 +89,22 @@ describe('useThreeTierUrlSelection', () => {
 		expect(renderWithSearch('').forceWeeklyPricing).toBe(false);
 	});
 
-	it('only treats hideContribution=true as truthy', () => {
-		expect(renderWithSearch('?hideContribution=true').hideContribution).toBe(
-			true,
-		);
-		expect(renderWithSearch('?hideContribution=false').hideContribution).toBe(
-			false,
-		);
-		expect(renderWithSearch('').hideContribution).toBe(false);
+	it('resolves the source case-insensitively and ignores unknown ones', () => {
+		expect(renderWithSearch('?source=puzzles').source).toBe('puzzles');
+		expect(renderWithSearch('?source=%20Puzzles%20').source).toBe('puzzles');
+		expect(renderWithSearch('?source=unknown').source).toBeUndefined();
+		expect(renderWithSearch('?source=toString').source).toBeUndefined();
+		expect(renderWithSearch('').source).toBeUndefined();
 	});
 
-	it('only treats hideSupportOnce=true as truthy', () => {
-		expect(renderWithSearch('?hideSupportOnce=true').hideSupportOnce).toBe(
-			true,
+	it('returns a safe returnTo and ignores unsafe ones', () => {
+		expect(renderWithSearch('?returnTo=/crosswords/quick/17000').returnTo).toBe(
+			'/crosswords/quick/17000',
 		);
-		expect(renderWithSearch('?hideSupportOnce=false').hideSupportOnce).toBe(
-			false,
-		);
-		expect(renderWithSearch('').hideSupportOnce).toBe(false);
-	});
-
-	it('only treats hideStudentOffer=true as truthy', () => {
-		expect(renderWithSearch('?hideStudentOffer=true').hideStudentOffer).toBe(
-			true,
-		);
-		expect(renderWithSearch('?hideStudentOffer=false').hideStudentOffer).toBe(
-			false,
-		);
-		expect(renderWithSearch('').hideStudentOffer).toBe(false);
-	});
-
-	it('returns a safe returnPath and ignores unsafe ones', () => {
 		expect(
-			renderWithSearch('?returnPath=/crosswords/quick/17000').returnPath,
-		).toBe('/crosswords/quick/17000');
-		expect(
-			renderWithSearch('?returnPath=https://evil.com').returnPath,
+			renderWithSearch('?returnTo=https://evil.com').returnTo,
 		).toBeUndefined();
-		expect(
-			renderWithSearch('?returnPath=//evil.com').returnPath,
-		).toBeUndefined();
-		expect(renderWithSearch('').returnPath).toBeUndefined();
-	});
-
-	it('only accepts returnLabel keys from the dictionary', () => {
-		expect(renderWithSearch('?returnLabel=puzzles').returnLabel).toBe(
-			'puzzles',
-		);
-		expect(
-			renderWithSearch('?returnLabel=Click%20here').returnLabel,
-		).toBeUndefined();
-		expect(
-			renderWithSearch('?returnLabel=toString').returnLabel,
-		).toBeUndefined();
+		expect(renderWithSearch('?returnTo=//evil.com').returnTo).toBeUndefined();
+		expect(renderWithSearch('').returnTo).toBeUndefined();
 	});
 });

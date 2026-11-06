@@ -218,3 +218,53 @@ describe('bandit selection integration', () => {
 		expect(config.tests).toEqual([testWithoutBandit]);
 	});
 });
+
+describe('getLandingPageTestConfig isTestEligible', () => {
+	const puzzlesTest: LandingPageTest = { ...mockTest, name: 'PUZZLES_HUB' };
+	const originalLocation = window.location;
+
+	const mockLocation = (pathname: string, search = '') => {
+		Object.defineProperty(window, 'location', {
+			value: { pathname, search },
+			writable: true,
+		});
+	};
+
+	afterEach(() => {
+		Object.defineProperty(window, 'location', {
+			value: originalLocation,
+			writable: true,
+		});
+	});
+
+	const isEligible = (test: LandingPageTest) =>
+		getLandingPageTestConfig().isTestEligible?.(test);
+
+	it('only accepts the tests of the source on the landing page', () => {
+		mockLocation('/eu/contribute', '?source=puzzles');
+
+		expect(isEligible(puzzlesTest)).toBe(true);
+		expect(isEligible(mockTest)).toBe(false);
+	});
+
+	it('keeps the tests of a source out of the landing page without it', () => {
+		mockLocation('/eu/contribute');
+
+		expect(isEligible(puzzlesTest)).toBe(false);
+		expect(isEligible(mockTest)).toBe(true);
+	});
+
+	it('ignores an unknown source', () => {
+		mockLocation('/eu/contribute', '?source=unknown');
+
+		expect(isEligible(puzzlesTest)).toBe(false);
+		expect(isEligible(mockTest)).toBe(true);
+	});
+
+	it('does not filter on other pages, which reuse the landing page selection', () => {
+		mockLocation('/eu/thank-you');
+
+		expect(isEligible(puzzlesTest)).toBe(true);
+		expect(isEligible(mockTest)).toBe(true);
+	});
+});

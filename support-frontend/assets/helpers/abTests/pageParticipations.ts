@@ -68,7 +68,9 @@ export async function getPageParticipations<Variant>(
 		forceParamName,
 		sessionStorageKey,
 		getVariantName,
+		isTestEligible,
 	} = config;
+	const eligibleTests = isTestEligible ? tests.filter(isTestEligible) : tests;
 	const isTargetPage = (path: string) => !!path && !!path.match(pageRegex);
 
 	const getVariant = (
@@ -206,7 +208,7 @@ export async function getPageParticipations<Variant>(
 		// exist in that test's variants.
 		const validParticipations: Participations = {};
 		for (const [key, value] of Object.entries(sessionParticipations)) {
-			const matchingTest = tests.find((test) => key === test.name);
+			const matchingTest = eligibleTests.find((test) => key === test.name);
 			if (matchingTest?.variants.some((v) => getVariantName(v) === value)) {
 				validParticipations[key] = value;
 			}
@@ -214,8 +216,10 @@ export async function getPageParticipations<Variant>(
 
 		// If nothing valid remains, continue to re-selection
 		if (Object.entries(validParticipations).length > 0) {
-			const selectedTest = tests.find((test) => validParticipations[test.name]);
-			const variant = getVariant(validParticipations, tests);
+			const selectedTest = eligibleTests.find(
+				(test) => validParticipations[test.name],
+			);
+			const variant = getVariant(validParticipations, eligibleTests);
 			if (
 				!variant ||
 				!selectedTest ||
@@ -232,7 +236,9 @@ export async function getPageParticipations<Variant>(
 	}
 
 	// No participation in session storage, assign user to a test + variant
-	for (const currentTest of tests.filter((test) => test.status === 'Live')) {
+	for (const currentTest of eligibleTests.filter(
+		(test) => test.status === 'Live',
+	)) {
 		if (
 			isWithinSchedule(currentTest.scheduler) &&
 			countryGroupMatches(
