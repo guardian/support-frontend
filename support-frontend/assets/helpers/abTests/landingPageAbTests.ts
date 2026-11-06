@@ -20,6 +20,7 @@ import {
 import {
 	getSessionParticipations,
 	LANDING_PAGE_PARTICIPATIONS_KEY,
+	setSessionParticipations,
 } from './sessionStorage';
 
 // Fallback config in case there's an issue getting it from the server
@@ -130,29 +131,58 @@ export const landingPageTestConfig: Omit<
 /**
  * Which landing page tests can be selected, depending on ?source= (see
  * helpers/landingPage/sourceConfig.ts):
+ * - With a force or preview param in the URL: all of them, because those pick
+ *   their test by name and skip the selection.
  * - On the landing page: only the tests of the source, or, without one, only the
- *   tests that don't belong to a source.
+ *   tests that don't belong to a source. Saved participations the landing page
+ *   no longer accepts are removed from session storage, so the other pages
+ *   can't restore a variant different from the one shown here.
  * - On other pages (checkout, thank-you): the same as without a source, plus any
  *   source test the landing page already saved in session storage, so they keep
  *   showing it but never assign it to someone who didn't come from the source.
  */
 function getEligibleTests(tests: LandingPageTest[]): LandingPageTest[] {
+	const params = new URLSearchParams(window.location.search);
+	const { forceParamName } = landingPageTestConfig;
+	if (
+		params.has(forceParamName) ||
+		params.has(forceParamName.replace('force-', 'preview-'))
+	) {
+		return tests;
+	}
+
+	const savedParticipations =
+		getSessionParticipations(LANDING_PAGE_PARTICIPATIONS_KEY) ?? {};
 	const onLandingPage = !!window.location.pathname.match(
 		landingPageTestConfig.pageRegex,
 	);
+
 	if (onLandingPage) {
-		const source = toSourceKey(
-			new URLSearchParams(window.location.search).get('source'),
+		const source = toSourceKey(params.get('source'));
+		const eligibleTests = tests.filter((test) =>
+			isTestEligibleForSource(test.name, source),
 		);
-		return tests.filter((test) => isTestEligibleForSource(test.name, source));
+		const acceptedParticipations = Object.fromEntries(
+			Object.entries(savedParticipations).filter(([testName]) =>
+				eligibleTests.some((test) => test.name === testName),
+			),
+		);
+		if (
+			Object.keys(acceptedParticipations).length !==
+			Object.keys(savedParticipations).length
+		) {
+			setSessionParticipations(
+				acceptedParticipations,
+				LANDING_PAGE_PARTICIPATIONS_KEY,
+			);
+		}
+		return eligibleTests;
 	}
-	const savedTestNames = Object.keys(
-		getSessionParticipations(LANDING_PAGE_PARTICIPATIONS_KEY) ?? {},
-	);
+
 	return tests.filter(
 		(test) =>
 			isTestEligibleForSource(test.name, undefined) ||
-			savedTestNames.includes(test.name),
+			test.name in savedParticipations,
 	);
 }
 

@@ -9,6 +9,7 @@ import type * as SessionStorage from '../sessionStorage';
 import {
 	getSessionParticipations,
 	LANDING_PAGE_PARTICIPATIONS_KEY,
+	setSessionParticipations,
 } from '../sessionStorage';
 
 jest.mock('../../globalsAndSwitches/globals', () => ({
@@ -20,6 +21,7 @@ jest.mock('../sessionStorage', () => ({
 	__esModule: true,
 	...jest.requireActual<typeof SessionStorage>('../sessionStorage'),
 	getSessionParticipations: jest.fn(),
+	setSessionParticipations: jest.fn(),
 }));
 
 const mockTest: LandingPageTest = {
@@ -233,6 +235,7 @@ describe('getLandingPageTestConfig tests by source', () => {
 	const puzzlesTest: LandingPageTest = { ...mockTest, name: 'PUZZLES_HUB' };
 	const originalLocation = window.location;
 	const mockGetSessionParticipations = jest.mocked(getSessionParticipations);
+	const mockSetSessionParticipations = jest.mocked(setSessionParticipations);
 
 	const mockLocation = (pathname: string, search = '') => {
 		Object.defineProperty(window, 'location', {
@@ -244,6 +247,7 @@ describe('getLandingPageTestConfig tests by source', () => {
 	const testNames = () => getLandingPageTestConfig().tests.map((t) => t.name);
 
 	beforeEach(() => {
+		jest.clearAllMocks();
 		mockGetSessionParticipations.mockReturnValue(undefined);
 		jest.mocked(getSettings).mockReturnValue({
 			landingPageTests: [puzzlesTest, mockTest],
@@ -286,5 +290,68 @@ describe('getLandingPageTestConfig tests by source', () => {
 		mockGetSessionParticipations.mockReturnValue({ PUZZLES_HUB: 'VARIANT_A' });
 
 		expect(testNames()).toEqual(['PUZZLES_HUB', 'TEST_LP']);
+	});
+
+	it('offers every test when the URL forces one, with or without a source', () => {
+		mockLocation(
+			'/eu/contribute',
+			'?force-landing-page=PUZZLES_HUB%3AVARIANT_A',
+		);
+
+		expect(testNames()).toEqual(['PUZZLES_HUB', 'TEST_LP']);
+	});
+
+	it('offers every test when the URL previews one', () => {
+		mockLocation(
+			'/eu/contribute',
+			'?preview-landing-page=PUZZLES_HUB%3AVARIANT_A',
+		);
+
+		expect(testNames()).toEqual(['PUZZLES_HUB', 'TEST_LP']);
+	});
+
+	it('removes saved participations the landing page no longer accepts', () => {
+		mockLocation('/eu/contribute');
+		mockGetSessionParticipations.mockReturnValue({
+			PUZZLES_HUB: 'VARIANT_A',
+			TEST_LP: 'VARIANT_A',
+		});
+
+		getLandingPageTestConfig();
+
+		expect(mockSetSessionParticipations).toHaveBeenCalledWith(
+			{ TEST_LP: 'VARIANT_A' },
+			LANDING_PAGE_PARTICIPATIONS_KEY,
+		);
+	});
+
+	it('removes a saved normal participation when visiting with a source', () => {
+		mockLocation('/eu/contribute', '?source=puzzles');
+		mockGetSessionParticipations.mockReturnValue({ TEST_LP: 'VARIANT_A' });
+
+		getLandingPageTestConfig();
+
+		expect(mockSetSessionParticipations).toHaveBeenCalledWith(
+			{},
+			LANDING_PAGE_PARTICIPATIONS_KEY,
+		);
+	});
+
+	it('leaves session storage alone when every saved participation is accepted', () => {
+		mockLocation('/eu/contribute', '?source=puzzles');
+		mockGetSessionParticipations.mockReturnValue({ PUZZLES_HUB: 'VARIANT_A' });
+
+		getLandingPageTestConfig();
+
+		expect(mockSetSessionParticipations).not.toHaveBeenCalled();
+	});
+
+	it('does not touch session storage on other pages', () => {
+		mockLocation('/eu/checkout');
+		mockGetSessionParticipations.mockReturnValue({ PUZZLES_HUB: 'VARIANT_A' });
+
+		getLandingPageTestConfig();
+
+		expect(mockSetSessionParticipations).not.toHaveBeenCalled();
 	});
 });
