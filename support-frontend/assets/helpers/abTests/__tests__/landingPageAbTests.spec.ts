@@ -237,8 +237,10 @@ describe('getLandingPageTestConfig isTestEligible', () => {
 		});
 	});
 
-	const isEligible = (test: LandingPageTest) =>
-		getLandingPageTestConfig().isTestEligible?.(test);
+	const isEligible = (
+		test: LandingPageTest,
+		phase: 'restore' | 'assign' = 'assign',
+	) => getLandingPageTestConfig().isTestEligible?.(test, phase);
 
 	it('only accepts the tests of the source on the landing page', () => {
 		mockLocation('/eu/contribute', '?source=puzzles');
@@ -261,10 +263,21 @@ describe('getLandingPageTestConfig isTestEligible', () => {
 		expect(isEligible(mockTest)).toBe(true);
 	});
 
-	it('does not filter on other pages, which reuse the landing page selection', () => {
+	it('restores any test on other pages, which reuse the landing page selection', () => {
 		mockLocation('/eu/thank-you');
 
-		expect(isEligible(puzzlesTest)).toBe(true);
-		expect(isEligible(mockTest)).toBe(true);
+		expect(isEligible(puzzlesTest, 'restore')).toBe(true);
+		expect(isEligible(mockTest, 'restore')).toBe(true);
+	});
+
+	it('never assigns the tests of a source on other pages', () => {
+		mockLocation('/eu/checkout');
+
+		expect(isEligible(puzzlesTest, 'assign')).toBe(false);
+		expect(isEligible(mockTest, 'assign')).toBe(true);
+	});
+
+	it('keeps the fallback in session storage for the other pages', () => {
+		expect(getLandingPageTestConfig().persistFallback).toBe(true);
 	});
 });

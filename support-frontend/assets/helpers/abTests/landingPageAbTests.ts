@@ -130,10 +130,14 @@ export function getLandingPageTestConfig(): PageParticipationsConfig<LandingPage
 	return {
 		...landingPageTestConfig,
 		tests: getSettings().landingPageTests ?? [],
-		isTestEligible: (test) => {
-			// Other pages (checkout, thank-you) reuse what the landing page selected
+		persistFallback: true,
+		isTestEligible: (test, phase) => {
+			// Other pages (checkout, thank-you) restore what the landing page
+			// selected, but never assign a test that belongs to a source.
 			if (!window.location.pathname.match(landingPageTestConfig.pageRegex)) {
-				return true;
+				return phase === 'restore'
+					? true
+					: isTestEligibleForSource(test.name, undefined);
 			}
 			const source = toSourceKey(
 				new URLSearchParams(window.location.search).get('source'),

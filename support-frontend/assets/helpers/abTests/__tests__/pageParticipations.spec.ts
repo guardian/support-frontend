@@ -564,6 +564,134 @@ describe('getPageParticipations', () => {
 		});
 	});
 
+	describe('isTestEligible phases', () => {
+		const normalVariant = createTestVariant('normal', 'normal-value');
+		const specialVariant = createTestVariant('special', 'special-value');
+		const normalTest = createPageTest('NORMAL_TEST', [normalVariant]);
+		const specialTest = createPageTest('SPECIAL_TEST', [specialVariant]);
+		// SPECIAL_TEST can be restored but never assigned
+		const restoreOnly = (
+			test: PageTest<TestVariant>,
+			phase: 'restore' | 'assign',
+		) => phase === 'restore' || test.name !== 'SPECIAL_TEST';
+
+		beforeEach(() => {
+			mockLocation('/other/page');
+			mockCountryGroupMatches.mockReturnValue(true);
+		});
+
+		it('restores a saved participation that is not assignable', async () => {
+			mockGetSessionParticipations.mockReturnValue({ SPECIAL_TEST: 'special' });
+			const config = {
+				...createConfig([normalTest, specialTest]),
+				isTestEligible: restoreOnly,
+			};
+
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toEqual(specialVariant);
+		});
+
+		it('does not assign a test that is not assignable', async () => {
+			const config = {
+				...createConfig([specialTest, normalTest]),
+				isTestEligible: restoreOnly,
+			};
+
+			const result = await getPageParticipations(config);
+
+			expect(result.variant).toEqual(normalVariant);
+		});
+	});
+
+	describe('persistFallback', () => {
+		const fallbackVariant = createFallbackVariant();
+		const fallback = {
+			variant: () => fallbackVariant,
+			participationKey: 'FALLBACK_KEY',
+		};
+		const normalTest = createPageTest('NORMAL_TEST', [
+			createTestVariant('normal', 'normal-value'),
+		]);
+
+		beforeEach(() => {
+			mockCountryGroupMatches.mockReturnValue(true);
+		});
+
+		it('saves the fallback when the target page ends on it', async () => {
+			mockLocation('/test/page');
+			const config = { ...createConfig([]), persistFallback: true };
+
+			const result = await getPageParticipations(config, fallback);
+
+			expect(result.variant).toEqual(fallbackVariant);
+			expect(mockSetSessionParticipations).toHaveBeenCalledWith(
+				{ FALLBACK_KEY: fallbackVariant.name },
+				'landingPageParticipations',
+			);
+		});
+
+		it('replaces a rejected saved participation with the fallback', async () => {
+			mockLocation('/test/page');
+			mockGetSessionParticipations.mockReturnValue({ NORMAL_TEST: 'normal' });
+			const config = {
+				...createConfig([normalTest]),
+				persistFallback: true,
+				isTestEligible: () => false,
+			};
+
+			const result = await getPageParticipations(config, fallback);
+
+			expect(result.variant).toEqual(fallbackVariant);
+			expect(mockSetSessionParticipations).toHaveBeenCalledWith(
+				{ FALLBACK_KEY: fallbackVariant.name },
+				'landingPageParticipations',
+			);
+		});
+
+		it('does not save the fallback when persistFallback is off', async () => {
+			mockLocation('/test/page');
+
+			await getPageParticipations(createConfig([]), fallback);
+
+			expect(mockSetSessionParticipations).not.toHaveBeenCalled();
+		});
+
+		it('does not save the fallback from other pages', async () => {
+			mockLocation('/other/page');
+			const config = { ...createConfig([]), persistFallback: true };
+
+			await getPageParticipations(config, fallback);
+
+			expect(mockSetSessionParticipations).not.toHaveBeenCalled();
+		});
+
+		it('uses the saved fallback on other pages instead of assigning a test', async () => {
+			mockLocation('/other/page');
+			mockGetSessionParticipations.mockReturnValue({
+				FALLBACK_KEY: fallbackVariant.name,
+			});
+			const config = { ...createConfig([normalTest]), persistFallback: true };
+
+			const result = await getPageParticipations(config, fallback);
+
+			expect(result.variant).toEqual(fallbackVariant);
+			expect(mockSetSessionParticipations).not.toHaveBeenCalled();
+		});
+
+		it('ignores the saved fallback on the target page and selects again', async () => {
+			mockLocation('/test/page');
+			mockGetSessionParticipations.mockReturnValue({
+				FALLBACK_KEY: fallbackVariant.name,
+			});
+			const config = { ...createConfig([normalTest]), persistFallback: true };
+
+			const result = await getPageParticipations(config, fallback);
+
+			expect(result.variant).toEqual(normalTest.variants[0]);
+		});
+	});
+
 	describe('Fallback behavior (getPageParticipationsWithFallback)', () => {
 		it('returns fallback when no test matches country group', async () => {
 			const variant = createTestVariant('control', 'control-value');
