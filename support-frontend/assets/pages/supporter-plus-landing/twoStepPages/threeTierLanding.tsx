@@ -176,12 +176,12 @@ export function ThreeTierLanding({
 		subPath: '/contribute',
 	};
 
-	const showStudentOffer = useStudentBeansRegionValid(
+	// The hook is called unconditionally, then combined with the source config
+	const studentBeansRegionValid = useStudentBeansRegionValid(
 		supportRegionId,
 		Country.detect(),
 	);
-
-	const displayStudentOffer = showStudentOffer && !hideStudentOffer;
+	const showStudentOffer = studentBeansRegionValid && !hideStudentOffer;
 
 	const countdownSettings = countdownSwitchOn()
 		? landingPageVariant.countdownSettings
@@ -350,7 +350,7 @@ export function ThreeTierLanding({
 				</Container>
 				{/* The container is skipped when both blocks are hidden, otherwise it
 				would render as an empty band below the cards. */}
-				{(!hideSupportOnce || displayStudentOffer) && (
+				{(!hideSupportOnce || showStudentOffer) && (
 					<Container
 						sideBorders
 						borderColor="rgba(170, 170, 180, 0.5)"
@@ -362,7 +362,7 @@ export function ThreeTierLanding({
 								countryGroupId={countryGroupId}
 							/>
 						)}
-						{displayStudentOffer && (
+						{showStudentOffer && (
 							<StudentOffer
 								currencyKey={currencyId}
 								supportRegionId={supportRegionId}
