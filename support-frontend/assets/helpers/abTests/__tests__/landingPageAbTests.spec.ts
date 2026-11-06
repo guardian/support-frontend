@@ -5,11 +5,21 @@ import {
 	getLandingPageTestConfig,
 	landingPageTestConfig,
 } from '../landingPageAbTests';
-import { LANDING_PAGE_PARTICIPATIONS_KEY } from '../sessionStorage';
+import type * as SessionStorage from '../sessionStorage';
+import {
+	getSessionParticipations,
+	LANDING_PAGE_PARTICIPATIONS_KEY,
+} from '../sessionStorage';
 
 jest.mock('../../globalsAndSwitches/globals', () => ({
 	__esModule: true,
 	getSettings: jest.fn(),
+}));
+
+jest.mock('../sessionStorage', () => ({
+	__esModule: true,
+	...jest.requireActual<typeof SessionStorage>('../sessionStorage'),
+	getSessionParticipations: jest.fn(),
 }));
 
 const mockTest: LandingPageTest = {
@@ -219,9 +229,10 @@ describe('bandit selection integration', () => {
 	});
 });
 
-describe('getLandingPageTestConfig isTestEligible', () => {
+describe('getLandingPageTestConfig tests by source', () => {
 	const puzzlesTest: LandingPageTest = { ...mockTest, name: 'PUZZLES_HUB' };
 	const originalLocation = window.location;
+	const mockGetSessionParticipations = jest.mocked(getSessionParticipations);
 
 	const mockLocation = (pathname: string, search = '') => {
 		Object.defineProperty(window, 'location', {
@@ -230,6 +241,15 @@ describe('getLandingPageTestConfig isTestEligible', () => {
 		});
 	};
 
+	const testNames = () => getLandingPageTestConfig().tests.map((t) => t.name);
+
+	beforeEach(() => {
+		mockGetSessionParticipations.mockReturnValue(undefined);
+		jest.mocked(getSettings).mockReturnValue({
+			landingPageTests: [puzzlesTest, mockTest],
+		} as ReturnType<typeof getSettings>);
+	});
+
 	afterEach(() => {
 		Object.defineProperty(window, 'location', {
 			value: originalLocation,
@@ -237,47 +257,34 @@ describe('getLandingPageTestConfig isTestEligible', () => {
 		});
 	});
 
-	const isEligible = (
-		test: LandingPageTest,
-		phase: 'restore' | 'assign' = 'assign',
-	) => getLandingPageTestConfig().isTestEligible?.(test, phase);
-
-	it('only accepts the tests of the source on the landing page', () => {
+	it('only offers the tests of the source on the landing page', () => {
 		mockLocation('/eu/contribute', '?source=puzzles');
 
-		expect(isEligible(puzzlesTest)).toBe(true);
-		expect(isEligible(mockTest)).toBe(false);
+		expect(testNames()).toEqual(['PUZZLES_HUB']);
 	});
 
 	it('keeps the tests of a source out of the landing page without it', () => {
 		mockLocation('/eu/contribute');
 
-		expect(isEligible(puzzlesTest)).toBe(false);
-		expect(isEligible(mockTest)).toBe(true);
+		expect(testNames()).toEqual(['TEST_LP']);
 	});
 
 	it('ignores an unknown source', () => {
 		mockLocation('/eu/contribute', '?source=unknown');
 
-		expect(isEligible(puzzlesTest)).toBe(false);
-		expect(isEligible(mockTest)).toBe(true);
+		expect(testNames()).toEqual(['TEST_LP']);
 	});
 
-	it('restores any test on other pages, which reuse the landing page selection', () => {
-		mockLocation('/eu/thank-you');
-
-		expect(isEligible(puzzlesTest, 'restore')).toBe(true);
-		expect(isEligible(mockTest, 'restore')).toBe(true);
-	});
-
-	it('never assigns the tests of a source on other pages', () => {
+	it('keeps the tests of a source out of other pages...', () => {
 		mockLocation('/eu/checkout');
 
-		expect(isEligible(puzzlesTest, 'assign')).toBe(false);
-		expect(isEligible(mockTest, 'assign')).toBe(true);
+		expect(testNames()).toEqual(['TEST_LP']);
 	});
 
-	it('keeps the fallback in session storage for the other pages', () => {
-		expect(getLandingPageTestConfig().persistFallback).toBe(true);
+	it('...unless the landing page already saved one in session storage', () => {
+		mockLocation('/eu/thank-you');
+		mockGetSessionParticipations.mockReturnValue({ PUZZLES_HUB: 'VARIANT_A' });
+
+		expect(testNames()).toEqual(['PUZZLES_HUB', 'TEST_LP']);
 	});
 });

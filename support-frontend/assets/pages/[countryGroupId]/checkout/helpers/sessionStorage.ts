@@ -2,8 +2,10 @@ import { storage } from '@guardian/libs';
 import { z } from 'zod';
 import { dateTimeSchema } from 'helpers/globalsAndSwitches/window';
 import type { SourceKey } from 'helpers/landingPage/sourceConfig';
-import { toSourceKey } from 'helpers/landingPage/sourceConfig';
-import { toSafeReturnPath } from './returnTo';
+import {
+	toSafeReturnPath,
+	toSourceKey,
+} from 'helpers/landingPage/sourceConfig';
 
 /**
  * The Guardian Ad-Lite Landing Page sets the returnLink in sessionStorage

@@ -5,9 +5,11 @@ import type {
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router';
 import type { SourceKey } from 'helpers/landingPage/sourceConfig';
-import { toSourceKey } from 'helpers/landingPage/sourceConfig';
+import {
+	toSafeReturnPath,
+	toSourceKey,
+} from 'helpers/landingPage/sourceConfig';
 import { productCatalog } from 'helpers/productCatalog';
-import { toSafeReturnPath } from 'pages/[countryGroupId]/checkout/helpers/returnTo';
 
 type ThreeTierUrlSelection = {
 	productKey?: ProductKey;

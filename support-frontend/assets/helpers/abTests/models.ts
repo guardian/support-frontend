@@ -98,17 +98,6 @@ interface PageParticipationsConfig<Variant> {
 		test: PageTest<Variant>,
 		mvtId: number,
 	) => Variant | undefined;
-	// Narrows which tests can be picked from session storage ('restore') or
-	// assigned to the user ('assign'). URL-forced and preview participations
-	// bypass it.
-	isTestEligible?: (
-		test: PageTest<Variant>,
-		phase: 'restore' | 'assign',
-	) => boolean;
-	// Remember in session storage that the target page ended on the fallback, so
-	// that other pages use it too instead of restoring or assigning a test the
-	// target page rejected. Only applies when a fallback is passed in.
-	persistFallback?: boolean;
 }
 
 export type {

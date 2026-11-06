@@ -68,15 +68,7 @@ export async function getPageParticipations<Variant>(
 		forceParamName,
 		sessionStorageKey,
 		getVariantName,
-		isTestEligible,
-		persistFallback,
 	} = config;
-	const restorableTests = isTestEligible
-		? tests.filter((test) => isTestEligible(test, 'restore'))
-		: tests;
-	const assignableTests = isTestEligible
-		? tests.filter((test) => isTestEligible(test, 'assign'))
-		: tests;
 	const isTargetPage = (path: string) => !!path && !!path.match(pageRegex);
 
 	const getVariant = (
@@ -141,19 +133,11 @@ export async function getPageParticipations<Variant>(
 	// Only track participation if user is on the target page
 	const trackParticipation = isTargetPage(path);
 
-	const makeFallbackResult = (
-		persist = false,
-	): PageParticipationsResult<Variant> => {
+	const makeFallbackResult = (): PageParticipationsResult<Variant> => {
 		if (!fallback) {
 			return { participations: {} as Participations, variant: undefined };
 		}
 		const variant = fallback.variant(countryGroupId);
-		if (persist && persistFallback && trackParticipation) {
-			setSessionParticipations(
-				{ [fallback.participationKey]: getVariantName(variant) },
-				sessionStorageKey,
-			);
-		}
 		return {
 			participations: trackParticipation
 				? { [fallback.participationKey]: getVariantName(variant) }
@@ -213,16 +197,6 @@ export async function getPageParticipations<Variant>(
 
 	// Is there already a participation in session storage?
 	const sessionParticipations = getSessionParticipations(sessionStorageKey);
-	// The target page ended on the fallback: other pages follow it. The target
-	// page itself ignores it and selects again.
-	if (
-		persistFallback &&
-		fallback &&
-		!trackParticipation &&
-		sessionParticipations?.[fallback.participationKey]
-	) {
-		return makeFallbackResult();
-	}
 	if (
 		sessionParticipations &&
 		Object.entries(sessionParticipations).length > 0
@@ -232,7 +206,7 @@ export async function getPageParticipations<Variant>(
 		// exist in that test's variants.
 		const validParticipations: Participations = {};
 		for (const [key, value] of Object.entries(sessionParticipations)) {
-			const matchingTest = restorableTests.find((test) => key === test.name);
+			const matchingTest = tests.find((test) => key === test.name);
 			if (matchingTest?.variants.some((v) => getVariantName(v) === value)) {
 				validParticipations[key] = value;
 			}
@@ -240,16 +214,14 @@ export async function getPageParticipations<Variant>(
 
 		// If nothing valid remains, continue to re-selection
 		if (Object.entries(validParticipations).length > 0) {
-			const selectedTest = restorableTests.find(
-				(test) => validParticipations[test.name],
-			);
-			const variant = getVariant(validParticipations, restorableTests);
+			const selectedTest = tests.find((test) => validParticipations[test.name]);
+			const variant = getVariant(validParticipations, tests);
 			if (
 				!variant ||
 				!selectedTest ||
 				!(await hasRequiredMParticleTestAttributes(selectedTest))
 			) {
-				return makeFallbackResult(true);
+				return makeFallbackResult();
 			}
 			return {
 				participations: validParticipations,
@@ -260,9 +232,7 @@ export async function getPageParticipations<Variant>(
 	}
 
 	// No participation in session storage, assign user to a test + variant
-	for (const currentTest of assignableTests.filter(
-		(test) => test.status === 'Live',
-	)) {
+	for (const currentTest of tests.filter((test) => test.status === 'Live')) {
 		if (
 			isWithinSchedule(currentTest.scheduler) &&
 			countryGroupMatches(
@@ -300,7 +270,7 @@ export async function getPageParticipations<Variant>(
 		}
 	}
 
-	return makeFallbackResult(true);
+	return makeFallbackResult();
 }
 
 /**

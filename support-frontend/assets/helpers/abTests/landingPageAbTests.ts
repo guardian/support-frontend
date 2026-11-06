@@ -2,6 +2,7 @@ import { ProductTierLabel } from 'helpers/productCatalog';
 import { getSettings } from '../globalsAndSwitches/globals';
 import type {
 	DefaultProductSelection,
+	LandingPageTest,
 	LandingPageVariant,
 } from '../globalsAndSwitches/landingPageSettings';
 import {
@@ -16,7 +17,10 @@ import {
 	getPageParticipationsWithFallback,
 	type PageParticipationsResultWithFallback,
 } from './pageParticipations';
-import { LANDING_PAGE_PARTICIPATIONS_KEY } from './sessionStorage';
+import {
+	getSessionParticipations,
+	LANDING_PAGE_PARTICIPATIONS_KEY,
+} from './sessionStorage';
 
 // Fallback config in case there's an issue getting it from the server
 const fallbackDefaultProductSelection: DefaultProductSelection = {
@@ -124,26 +128,41 @@ export const landingPageTestConfig: Omit<
 };
 
 /**
+ * Which landing page tests can be selected, depending on ?source= (see
+ * helpers/landingPage/sourceConfig.ts):
+ * - On the landing page: only the tests of the source, or, without one, only the
+ *   tests that don't belong to a source.
+ * - On other pages (checkout, thank-you): the same as without a source, plus any
+ *   source test the landing page already saved in session storage, so they keep
+ *   showing it but never assign it to someone who didn't come from the source.
+ */
+function getEligibleTests(tests: LandingPageTest[]): LandingPageTest[] {
+	const onLandingPage = !!window.location.pathname.match(
+		landingPageTestConfig.pageRegex,
+	);
+	if (onLandingPage) {
+		const source = toSourceKey(
+			new URLSearchParams(window.location.search).get('source'),
+		);
+		return tests.filter((test) => isTestEligibleForSource(test.name, source));
+	}
+	const savedTestNames = Object.keys(
+		getSessionParticipations(LANDING_PAGE_PARTICIPATIONS_KEY) ?? {},
+	);
+	return tests.filter(
+		(test) =>
+			isTestEligibleForSource(test.name, undefined) ||
+			savedTestNames.includes(test.name),
+	);
+}
+
+/**
  * Helper to get landing page test config with tests from settings
  */
 export function getLandingPageTestConfig(): PageParticipationsConfig<LandingPageVariant> {
 	return {
 		...landingPageTestConfig,
-		tests: getSettings().landingPageTests ?? [],
-		persistFallback: true,
-		isTestEligible: (test, phase) => {
-			// Other pages (checkout, thank-you) restore what the landing page
-			// selected, but never assign a test that belongs to a source.
-			if (!window.location.pathname.match(landingPageTestConfig.pageRegex)) {
-				return phase === 'restore'
-					? true
-					: isTestEligibleForSource(test.name, undefined);
-			}
-			const source = toSourceKey(
-				new URLSearchParams(window.location.search).get('source'),
-			);
-			return isTestEligibleForSource(test.name, source);
-		},
+		tests: getEligibleTests(getSettings().landingPageTests ?? []),
 		selectVariant: (test, mvtId) => {
 			const banditData = getSettings().banditData ?? [];
 
