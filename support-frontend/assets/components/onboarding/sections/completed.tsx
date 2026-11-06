@@ -14,6 +14,11 @@ import {
 	getManageSubsUrl,
 } from 'helpers/urls/externalLinks';
 import { getBaseDomain } from 'helpers/urls/url';
+import { returnLabels } from 'pages/[countryGroupId]/checkout/helpers/returnTo';
+import {
+	clearReturnTo,
+	getReturnTo,
+} from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
 import type { OnboardingProductKey } from 'pages/[countryGroupId]/components/onboardingComponent';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import ContentBox from '../contentBox';
@@ -71,6 +76,13 @@ export function OnboardingCompleted({
 
 	const { windowWidthIsLessThan } = useWindowWidth();
 
+	// Set by the landing page (?returnPath=...&returnLabel=...), e.g. by Puzzles
+	const returnTo = getReturnTo();
+	const ctaHref = `https://${getBaseDomain()}${returnTo?.path ?? ''}`;
+	const ctaCopy =
+		(returnTo?.label && returnLabels[returnTo.label]) ??
+		'Continue to the Guardian';
+
 	return (
 		<Stack space={5} cssOverrides={completedStack}>
 			<ContentBox removePadding>
@@ -120,9 +132,10 @@ export function OnboardingCompleted({
 					<LinkButton
 						priority="primary"
 						cssOverrides={[buttonOverrides]}
-						href={`https://${getBaseDomain()}`}
+						href={ctaHref}
+						onClick={clearReturnTo}
 					>
-						Continue to the Guardian
+						{ctaCopy}
 					</LinkButton>
 					{productKey === 'DigitalSubscription' && (
 						<LinkButton

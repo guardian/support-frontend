@@ -12,7 +12,7 @@ import {
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
 import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -28,6 +28,10 @@ import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { glyph } from 'helpers/internationalisation/currency';
 import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	clearReturnTo,
+	setReturnTo,
+} from 'pages/[countryGroupId]/checkout/helpers/sessionStorage';
 import { getTierCardContent } from 'pages/[countryGroupId]/helpers/getTierCardContent';
 import { getTierCardPromotion } from 'pages/[countryGroupId]/helpers/getTierCardPromotion';
 import { useStudentBeansRegionValid } from 'pages/[countryGroupId]/helpers/useStudentBeansRegionValid';
@@ -137,7 +141,24 @@ export function ThreeTierLanding({
 		hideContribution,
 		hideSupportOnce,
 		hideStudentOffer,
+		returnPath,
+		returnLabel,
 	} = useThreeTierUrlSelection();
+
+	// The landing page is the single source of truth for where the thank-you page
+	// sends the reader back to (e.g. a puzzle). Visiting it with a valid
+	// ?returnPath stores it; visiting it without one clears it, so a value left
+	// in sessionStorage by an earlier puzzles visit in the same tab can't leak
+	// into an unrelated purchase.
+	// Known limitation: entering the checkout directly (skipping this page)
+	// doesn't clear a stale value.
+	useEffect(() => {
+		if (returnPath) {
+			setReturnTo({ path: returnPath, label: returnLabel });
+		} else {
+			clearReturnTo();
+		}
+	}, [returnPath, returnLabel]);
 	const { currencyKey: currencyId, countryGroupId } =
 		getSupportRegionIdConfig(supportRegionId);
 	const countrySwitcherProps: CountryGroupSwitcherProps = {

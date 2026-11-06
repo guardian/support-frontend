@@ -121,4 +121,29 @@ describe('useThreeTierUrlSelection', () => {
 		);
 		expect(renderWithSearch('').hideStudentOffer).toBe(false);
 	});
+
+	it('returns a safe returnPath and ignores unsafe ones', () => {
+		expect(
+			renderWithSearch('?returnPath=/crosswords/quick/17000').returnPath,
+		).toBe('/crosswords/quick/17000');
+		expect(
+			renderWithSearch('?returnPath=https://evil.com').returnPath,
+		).toBeUndefined();
+		expect(
+			renderWithSearch('?returnPath=//evil.com').returnPath,
+		).toBeUndefined();
+		expect(renderWithSearch('').returnPath).toBeUndefined();
+	});
+
+	it('only accepts returnLabel keys from the dictionary', () => {
+		expect(renderWithSearch('?returnLabel=puzzles').returnLabel).toBe(
+			'puzzles',
+		);
+		expect(
+			renderWithSearch('?returnLabel=Click%20here').returnLabel,
+		).toBeUndefined();
+		expect(
+			renderWithSearch('?returnLabel=toString').returnLabel,
+		).toBeUndefined();
+	});
 });

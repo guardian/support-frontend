@@ -5,6 +5,11 @@ import type {
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router';
 import { productCatalog } from 'helpers/productCatalog';
+import type { ReturnLabelKey } from 'pages/[countryGroupId]/checkout/helpers/returnTo';
+import {
+	toReturnLabelKey,
+	toSafeReturnPath,
+} from 'pages/[countryGroupId]/checkout/helpers/returnTo';
 
 type ThreeTierUrlSelection = {
 	productKey?: ProductKey;
@@ -14,6 +19,8 @@ type ThreeTierUrlSelection = {
 	hideContribution: boolean;
 	hideSupportOnce: boolean;
 	hideStudentOffer: boolean;
+	returnPath?: string;
+	returnLabel?: ReturnLabelKey;
 };
 
 const productKeys = Object.keys(productCatalog) as ProductKey[];
@@ -63,6 +70,10 @@ export function useThreeTierUrlSelection(): ThreeTierUrlSelection {
 			hideContribution: params.get('hideContribution') === 'true',
 			hideSupportOnce: params.get('hideSupportOnce') === 'true',
 			hideStudentOffer: params.get('hideStudentOffer') === 'true',
+			// Where to send the reader after the purchase (stored for the thank-you
+			// page). Only a validated same-site path and a pre-approved label key.
+			returnPath: toSafeReturnPath(params.get('returnPath')),
+			returnLabel: toReturnLabelKey(params.get('returnLabel')),
 		};
 	}, [params]);
 }

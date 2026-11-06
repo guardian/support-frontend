@@ -1,6 +1,8 @@
 import { storage } from '@guardian/libs';
 import { z } from 'zod';
 import { dateTimeSchema } from 'helpers/globalsAndSwitches/window';
+import type { ReturnLabelKey } from './returnTo';
+import { toReturnLabelKey, toSafeReturnPath } from './returnTo';
 
 /**
  * The Guardian Ad-Lite Landing Page sets the returnLink in sessionStorage
@@ -21,6 +23,31 @@ export function getReturnAddress(): string {
 	return parsedReturnAddress.success
 		? parsedReturnAddress.data.link
 		: 'https://www.theguardian.com';
+}
+
+/**
+ * The landing page sets where to send the reader after the purchase
+ * (?returnPath=...&returnLabel=...) and the thank-you page reads it.
+ * Values are validated on the way in and on the way out.
+ */
+const returnToKey = 'returnTo';
+const ReturnToSchema = z.object({
+	path: z.string(),
+	label: z.string().optional(),
+});
+type ReturnTo = { path: string; label?: ReturnLabelKey };
+export function setReturnTo(returnTo: ReturnTo) {
+	storage.session.set(returnToKey, returnTo);
+}
+export function getReturnTo(): ReturnTo | undefined {
+	const parsed = ReturnToSchema.safeParse(storage.session.get(returnToKey));
+	const path = parsed.success ? toSafeReturnPath(parsed.data.path) : undefined;
+	return parsed.success && path
+		? { path, label: toReturnLabelKey(parsed.data.label) }
+		: undefined;
+}
+export function clearReturnTo() {
+	storage.session.remove(returnToKey);
 }
 
 /**
