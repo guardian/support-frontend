@@ -144,6 +144,40 @@ export type AppliedPromotion = {
 	promoCode: string;
 	supportRegionId: SupportRegionId;
 };
+
+type CmpConsentMetadata = {
+	capturedAt: string;
+	consentManagerVersion: string;
+	gpcSignal?: boolean;
+};
+
+export type CmpConsentSnapshot =
+	| (CmpConsentMetadata & {
+			framework: 'tcfv2';
+			tcfv2: {
+				gdprApplies: boolean | null;
+				consents: Record<string, boolean>;
+				vendorConsents: Record<string, boolean>;
+				eventStatus: 'tcloaded' | 'cmpuishown' | 'useractioncomplete';
+				addtlConsent: string;
+				tcString: string;
+			};
+	  })
+	| (CmpConsentMetadata & {
+			framework: 'usnat';
+			usnat: {
+				doNotSell: boolean;
+				signalStatus: 'ready' | 'not ready';
+			};
+	  })
+	| (CmpConsentMetadata & {
+			framework: 'aus';
+			aus: {
+				personalisedAdvertising: boolean;
+				signalStatus: 'ready' | 'not ready';
+			};
+	  });
+
 // The model that is sent to support-workers
 export type RegularPaymentRequest = {
 	title?: Title;
@@ -168,6 +202,7 @@ export type RegularPaymentRequest = {
 	recaptchaToken?: string;
 	debugInfo: string;
 	similarProductsConsent?: boolean;
+	cmpConsentSnapshot: CmpConsentSnapshot | null;
 };
 
 type Status = 'failure' | 'pending' | 'success';
