@@ -310,6 +310,20 @@ describe('getLandingPageTestConfig tests by source', () => {
 		expect(testNames()).toEqual(['PUZZLES_HUB', 'TEST_LP']);
 	});
 
+	it.each([
+		'?force-landing-page=',
+		'?force-landing-page=PUZZLES_HUB',
+		'?force-landing-page=PUZZLES_HUB%3A',
+		'?preview-landing-page=malformed',
+	])(
+		'keeps filtering when the override is empty or malformed (%s)',
+		(search) => {
+			mockLocation('/eu/contribute', search);
+
+			expect(testNames()).toEqual(['TEST_LP']);
+		},
+	);
+
 	it('removes saved participations the landing page no longer accepts', () => {
 		mockLocation('/eu/contribute');
 		mockGetSessionParticipations.mockReturnValue({

@@ -10,7 +10,7 @@ import {
 	toSourceKey,
 } from '../landingPage/sourceConfig';
 import { selectVariantForTest } from './banditSelection';
-import { randomNumber } from './helpers';
+import { getParticipationFromQueryString, randomNumber } from './helpers';
 import type { PageParticipationsConfig } from './models';
 import { multipleAccountBenefitCopy } from './multipleAccounts';
 import {
@@ -131,8 +131,8 @@ export const landingPageTestConfig: Omit<
 /**
  * Which landing page tests can be selected, depending on ?source= (see
  * helpers/landingPage/sourceConfig.ts):
- * - With a force or preview param in the URL: all of them, because those pick
- *   their test by name and skip the selection.
+ * - With a valid force or preview param (`test:variant`) in the URL: all of
+ *   them, because those pick their test by name and skip the selection.
  * - On the landing page: only the tests of the source, or, without one, only the
  *   tests that don't belong to a source. Saved participations the landing page
  *   no longer accepts are removed from session storage, so the other pages
@@ -144,9 +144,14 @@ export const landingPageTestConfig: Omit<
 function getEligibleTests(tests: LandingPageTest[]): LandingPageTest[] {
 	const params = new URLSearchParams(window.location.search);
 	const { forceParamName } = landingPageTestConfig;
+	// Same parsing as getPageParticipations: an empty or malformed value is
+	// ignored there, so it must not lift the filter here either.
 	if (
-		params.has(forceParamName) ||
-		params.has(forceParamName.replace('force-', 'preview-'))
+		getParticipationFromQueryString(window.location.search, forceParamName) ||
+		getParticipationFromQueryString(
+			window.location.search,
+			forceParamName.replace('force-', 'preview-'),
+		)
 	) {
 		return tests;
 	}
