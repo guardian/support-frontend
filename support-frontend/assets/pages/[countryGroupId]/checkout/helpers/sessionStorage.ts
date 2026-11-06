@@ -1,6 +1,11 @@
 import { storage } from '@guardian/libs';
 import { z } from 'zod';
 import { dateTimeSchema } from 'helpers/globalsAndSwitches/window';
+import type { SourceKey } from 'helpers/landingPage/sourceConfig';
+import {
+	toSafeReturnPath,
+	toSourceKey,
+} from 'helpers/landingPage/sourceConfig';
 
 /**
  * The Guardian Ad-Lite Landing Page sets the returnLink in sessionStorage
@@ -21,6 +26,35 @@ export function getReturnAddress(): string {
 	return parsedReturnAddress.success
 		? parsedReturnAddress.data.link
 		: 'https://www.theguardian.com';
+}
+
+/**
+ * The landing page sets where the reader came from (?source=...&returnTo=...)
+ * and the thank-you page reads it. Values are validated on the way in and on
+ * the way out.
+ */
+const sourceContextKey = 'sourceContext';
+const SourceContextSchema = z.object({
+	source: z.string().optional(),
+	returnTo: z.string().optional(),
+});
+type SourceContext = { source?: SourceKey; returnTo?: string };
+export function setSourceContext(sourceContext: SourceContext) {
+	storage.session.set(sourceContextKey, sourceContext);
+}
+export function getSourceContext(): SourceContext | undefined {
+	const parsed = SourceContextSchema.safeParse(
+		storage.session.get(sourceContextKey),
+	);
+	if (!parsed.success) {
+		return undefined;
+	}
+	const source = toSourceKey(parsed.data.source);
+	const returnTo = toSafeReturnPath(parsed.data.returnTo);
+	return source ?? returnTo ? { source, returnTo } : undefined;
+}
+export function clearSourceContext() {
+	storage.session.remove(sourceContextKey);
 }
 
 /**

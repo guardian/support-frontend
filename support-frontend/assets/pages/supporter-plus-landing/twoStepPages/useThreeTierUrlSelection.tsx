@@ -4,6 +4,11 @@ import type {
 } from '@modules/product-catalog/productCatalog';
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router';
+import type { SourceKey } from 'helpers/landingPage/sourceConfig';
+import {
+	toSafeReturnPath,
+	toSourceKey,
+} from 'helpers/landingPage/sourceConfig';
 import { productCatalog } from 'helpers/productCatalog';
 
 type ThreeTierUrlSelection = {
@@ -11,6 +16,8 @@ type ThreeTierUrlSelection = {
 	ratePlanKey?: ProductRatePlanKey<ProductKey>;
 	selectedAmount: string | null;
 	forceWeeklyPricing: boolean;
+	source?: SourceKey;
+	returnTo?: string;
 };
 
 const productKeys = Object.keys(productCatalog) as ProductKey[];
@@ -54,6 +61,10 @@ export function useThreeTierUrlSelection(): ThreeTierUrlSelection {
 			ratePlanKey: toRatePlanKey(productKey, params.get('ratePlan')),
 			selectedAmount: params.get('selected-amount'),
 			forceWeeklyPricing: params.get('force-weekly') === 'true',
+			// Both only ever resolve to pre-approved values: a key of the source config
+			// and a validated same-site path. See helpers/landingPage/sourceConfig.ts
+			source: toSourceKey(params.get('source')),
+			returnTo: toSafeReturnPath(params.get('returnTo')),
 		};
 	}, [params]);
 }

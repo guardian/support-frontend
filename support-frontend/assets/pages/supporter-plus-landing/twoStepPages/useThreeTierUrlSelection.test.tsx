@@ -88,4 +88,23 @@ describe('useThreeTierUrlSelection', () => {
 		);
 		expect(renderWithSearch('').forceWeeklyPricing).toBe(false);
 	});
+
+	it('resolves the source case-insensitively and ignores unknown ones', () => {
+		expect(renderWithSearch('?source=puzzles').source).toBe('puzzles');
+		expect(renderWithSearch('?source=%20Puzzles%20').source).toBe('puzzles');
+		expect(renderWithSearch('?source=unknown').source).toBeUndefined();
+		expect(renderWithSearch('?source=toString').source).toBeUndefined();
+		expect(renderWithSearch('').source).toBeUndefined();
+	});
+
+	it('returns a safe returnTo and ignores unsafe ones', () => {
+		expect(renderWithSearch('?returnTo=/crosswords/quick/17000').returnTo).toBe(
+			'/crosswords/quick/17000',
+		);
+		expect(
+			renderWithSearch('?returnTo=https://evil.com').returnTo,
+		).toBeUndefined();
+		expect(renderWithSearch('?returnTo=//evil.com').returnTo).toBeUndefined();
+		expect(renderWithSearch('').returnTo).toBeUndefined();
+	});
 });
