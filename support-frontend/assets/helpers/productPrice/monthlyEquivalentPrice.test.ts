@@ -2,7 +2,7 @@ import { BillingPeriod } from '@modules/product/billingPeriod';
 import { monthlyEquivalentPrice } from './monthlyEquivalentPrice';
 
 describe('getMonthlyEquivalentPrice', () => {
-	it('converts 180 annual to 10 monthly', () => {
+	it('converts 180 annual to 15 monthly', () => {
 		expect(monthlyEquivalentPrice(180, BillingPeriod.Annual)).toBe(15);
 	});
 	it('converts 57 quarterly to 19 monthly', () => {
