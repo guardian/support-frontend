@@ -58,4 +58,13 @@ describe('GET /postcode-lookup/:postcode', () => {
 		expect(response.status).toBe(400);
 		expect(findSpy).not.toHaveBeenCalled();
 	});
+
+	it('does not attempt to double decode the path parameter', async () => {
+		const findSpy = jest.spyOn(service, 'find').mockResolvedValueOnce([]);
+
+		const response = await request(app).get('/postcode-lookup/%25');
+
+		expect(response.status).toBe(200);
+		expect(findSpy).toHaveBeenCalledWith('%');
+	});
 });
