@@ -1,10 +1,6 @@
 // ----- Imports ----- //
 import { DirectDebit } from '../../forms/paymentMethods';
-import {
-	_,
-	init,
-	successfulContributionConversion,
-} from '../googleTagManager';
+import { _, init, successfulContributionConversion } from '../googleTagManager';
 import { onConsentChangeEvent } from '../thirdPartyTrackingConsent';
 
 jest.mock('../thirdPartyTrackingConsent', () => ({
@@ -88,9 +84,7 @@ describe('googleTagManager', () => {
 			}),
 		);
 		expect(typeof conversion?.orderId).toBe('string');
-		expect(
-			Object.keys(conversion ?? {}).sort(),
-		).toEqual(
+		expect(Object.keys(conversion ?? {}).sort()).toEqual(
 			[
 				'event',
 				'value',

@@ -15,9 +15,7 @@ import {
 	type ActiveRatePlanKey,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
-import {
-	ratePlanToBillingPeriod,
-} from 'helpers/productPrice/billingPeriods';
+import { ratePlanToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { get } from 'helpers/storage/cookie';
 import {
