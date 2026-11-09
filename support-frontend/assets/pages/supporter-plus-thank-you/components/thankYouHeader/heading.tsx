@@ -1,12 +1,12 @@
 import { useTheme } from '@emotion/react';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { isObserverSubdomain } from 'helpers/globalsAndSwitches/observer';
 import {
 	type ActiveProductKey,
 	type ActiveRatePlanKey,
 	getProductDescription,
 } from 'helpers/productCatalog';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import ContributionHeading from './ContributionHeading';
 import GenericHeading from './GenericHeading';
 import GuardianPrintHeading from './GuardianPrintHeading';
@@ -26,7 +26,7 @@ type HeadingProps = {
 	amount: number;
 	currency: CurrencyCode;
 	isObserverPrint: boolean;
-	promotion?: Promotion;
+	promotion?: PromoWithCatalogInformation;
 };
 function Heading({
 	name,

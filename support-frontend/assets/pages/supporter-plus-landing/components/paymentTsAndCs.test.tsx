@@ -1,10 +1,10 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { render } from '@testing-library/react';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import { PaymentTsAndCs } from './paymentTsAndCs';
 
 // Mocking product deliveryDate
@@ -20,14 +20,22 @@ const oneYearStudentDiscount = {
 };
 
 describe('Payment Ts&Cs Snapshot comparison', () => {
-	const promotionGuardianWeeklyUnitedStatesAnnual: Promotion = {
-		name: '10% off for 12 months',
-		description: 'Guardian Weekly Digital United States Annual',
-		promoCode: 'ANNUAL10',
-		numberOfDiscountedPeriods: 12,
-		discountedPrice: 324,
-		isIntroductoryPricing: false,
-	};
+	const promotionGuardianWeeklyUnitedStatesAnnual: PromoWithCatalogInformation =
+		{
+			name: '25% off for 12 months',
+			description: 'Guardian Weekly Digital United States Annual',
+			promoCode: 'ANNUAL25',
+			campaignCode: 'TEST_CAMPAIGN',
+			appliesTo: {
+				productRatePlanIds: [],
+				countries: ['US'],
+				catalogRatePlans: [],
+			},
+			startTimestamp: '2025-01-01T00:00:00.000Z',
+			endTimestamp: '2026-01-01T00:00:00.000Z',
+			discount: { amount: 25, durationMonths: 12 },
+			isIntroductoryPricing: false,
+		};
 
 	type PaymentProductTestParams = {
 		paymentProductKey: ActiveProductKey;
@@ -127,7 +135,7 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 	it.each(paymentProductKeys)(
 		`paymentTs&Cs render Product:$paymentProductKey Period:$ratePlanKey Region:$countryGroupId Amount:$amountWithCurrency`,
 		({ paymentProductKey, ratePlanKey, countryGroupId, amount }) => {
-			const promo: Promotion | undefined =
+			const promo: PromoWithCatalogInformation | undefined =
 				paymentProductKey === 'GuardianWeeklyRestOfWorld' &&
 				ratePlanKey === 'AnnualPlus' &&
 				countryGroupId === 'UnitedStates'

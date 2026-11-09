@@ -9,6 +9,7 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { getCurrencyByCode } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
 	digitalPlusTermsLink,
@@ -25,7 +26,6 @@ import {
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import {
 	getDateWithOrdinal,
 	getLongMonth,
@@ -76,7 +76,7 @@ export interface SummaryTsAndCsProps {
 	currency: CurrencyCode;
 	amount: number;
 	ratePlanDescription?: string;
-	promotion?: Promotion;
+	promotion?: PromoWithCatalogInformation;
 }
 export function SummaryTsAndCs({
 	productKey,

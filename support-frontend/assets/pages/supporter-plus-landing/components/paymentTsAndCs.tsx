@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { neutral, space, textSans12 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import {
 	digitalPlusTermsLink,
 	guardianAdLiteTermsLink,
@@ -22,7 +23,6 @@ import {
 	getBillingPeriodTitle,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import { getHelpCentreUrl } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getProductFirstDeliveryDate } from 'pages/[countryGroupId]/checkout/helpers/deliveryDays';
@@ -139,7 +139,7 @@ export interface PaymentTsAndCsProps {
 	ratePlanKey: ActiveRatePlanKey;
 	countryGroupId: CountryGroupId;
 	studentDiscount?: StudentDiscount;
-	promotion?: Promotion;
+	promotion?: PromoWithCatalogInformation;
 	thresholdAmount?: number;
 }
 export function PaymentTsAndCs({
@@ -201,7 +201,7 @@ export function PaymentTsAndCs({
 
 	const prefixBasis = (
 		countryGroupId: CountryGroupId,
-		promotion?: Promotion,
+		promotion?: PromoWithCatalogInformation,
 	) => {
 		const startPhrase = `If you pay at least ${legalPrice(' per ')}`;
 		const midPhrase =
@@ -214,7 +214,7 @@ export function PaymentTsAndCs({
 
 	const supporterPlusTsAndCs = (
 		countryGroupId: CountryGroupId,
-		promotion?: Promotion,
+		promotion?: PromoWithCatalogInformation,
 	): JSX.Element => {
 		return countryGroupId === 'UnitedStates' ? (
 			promotion ? (
@@ -266,7 +266,7 @@ export function PaymentTsAndCs({
 
 	const digitalSubscriptionTsAndCs = (
 		countryGroupId: CountryGroupId,
-		promotion?: Promotion,
+		promotion?: PromoWithCatalogInformation,
 	): JSX.Element => {
 		return countryGroupId === 'UnitedStates' ? (
 			promotion ? (

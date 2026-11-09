@@ -2,9 +2,11 @@ import { css } from '@emotion/react';
 import { from, space, titlepiece42 } from '@guardian/source/foundations';
 import type { CurrencyCode } from '@modules/internationalisation/currency';
 import { getCurrencyByCode } from '@modules/internationalisation/currency';
+import type { PromoWithCatalogInformation } from '@modules/promotions/v2/schema';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
-import type { Promotion } from 'helpers/productPrice/promotions';
+import { ratePlanToBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { getPromotionDiscountedPrice } from 'helpers/productPrice/promotionPricing';
 import HighlightText from './HighlightText';
 
 const headerTitleText = css`
@@ -51,14 +53,21 @@ export default function ContributionHeading({
 	amount: number;
 	ratePlanKey: ActiveRatePlanKey;
 	currencyCode: CurrencyCode;
-	promotion?: Promotion;
+	promotion?: PromoWithCatalogInformation;
 }) {
 	const frequency = getFrequencyFromRatePlanKey(ratePlanKey);
 	const amountWithCurrency = simpleFormatAmount(
 		getCurrencyByCode(currencyCode),
 		amount,
 	);
-	const promotionPrice = promotion?.discountedPrice ?? 0;
+	const promotionPrice =
+		(promotion &&
+			getPromotionDiscountedPrice(
+				promotion,
+				amount,
+				ratePlanToBillingPeriod(ratePlanKey),
+			)) ??
+		0;
 	const promotionDuration = promotion?.discount?.durationMonths ?? 0;
 	const promotionPriceWithCurrency = simpleFormatAmount(
 		getCurrencyByCode(currencyCode),
