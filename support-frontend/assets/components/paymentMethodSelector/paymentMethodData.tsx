@@ -6,10 +6,13 @@ import { PaypalIcon } from './paypalIcon';
 interface PaymentMethodData {
 	id: string;
 	label: string;
-	icon: JSX.Element;
+	icon?: JSX.Element;
 }
 
-export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
+export const paymentMethodData: Record<
+	PaymentMethod | 'StripeExpressCheckoutElement',
+	PaymentMethodData
+> = {
 	Stripe: {
 		id: 'qa-credit-card',
 		label: 'Credit/Debit card',
@@ -39,5 +42,14 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 		id: 'qa-none',
 		label: 'Other Payment Method',
 		icon: <SvgCreditCardWithTheme />,
+	},
+	/**
+	 * The Stripe ExpressCheckoutElement is currently only offered as a
+	 * selectable payment method for Apple Pay.
+	 * TODO - add an Apple Pay mark once we have one we're licensed to use.
+	 */
+	StripeExpressCheckoutElement: {
+		id: 'qa-apple-pay',
+		label: 'Apple Pay',
 	},
 };

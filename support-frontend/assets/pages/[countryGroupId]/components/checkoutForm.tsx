@@ -1,18 +1,11 @@
 import { css } from '@emotion/react';
 import { size, space } from '@guardian/source/foundations';
 import { Radio, RadioGroup } from '@guardian/source/react-components';
-import {
-	Divider,
-	ErrorSummary,
-} from '@guardian/source-development-kitchen/react-components';
+import { ErrorSummary } from '@guardian/source-development-kitchen/react-components';
 import type { CountryCode } from '@modules/internationalisation/country';
 import type { SupportRegionId } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import {
-	ExpressCheckoutElement,
-	useElements,
-	useStripe,
-} from '@stripe/react-stripe-js';
+import { useElements, useStripe } from '@stripe/react-stripe-js';
 import type {
 	ExpressPaymentType,
 	StripeCardCvcElementChangeEvent,
@@ -54,10 +47,6 @@ import {
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { TaxRateConfig } from 'helpers/salesTax/getEstimatedSalesTaxConfig';
-import {
-	getEstimatedSalesTaxConfig,
-	isCaState,
-} from 'helpers/salesTax/getEstimatedSalesTaxConfig';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import type { CsrfState } from 'helpers/types/csrf';
@@ -85,11 +74,11 @@ import { getProductFields } from '../checkout/helpers/getProductFields';
 import type { PaymentToken } from '../checkout/helpers/paypalCompletePayments';
 import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheckoutSession';
-import { countriesRequiringBillingState } from '../helpers/countriesRequiringBillingState';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
 import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
+import { ExpressCheckoutApplePay } from './expressCheckoutApplePay';
 import {
 	FormSection,
 	Legend,
@@ -308,8 +297,12 @@ export default function CheckoutForm({
 	] = useState<ExpressPaymentType>();
 	const [stripeExpressCheckoutSuccessful, setStripeExpressCheckoutSuccessful] =
 		useState(false);
-	const [stripeExpressCheckoutReady, setStripeExpressCheckoutReady] =
-		useState(false);
+	/**
+	 * Set from the ExpressCheckoutElement's onReady callback. The element is
+	 * rendered hidden so that we can detect whether Apple Pay is available to
+	 * this user, and only then offer it as a selectable payment method.
+	 */
+	const [applePayIsAvailable, setApplePayIsAvailable] = useState(false);
 	useEffect(() => {
 		if (stripeExpressCheckoutSuccessful) {
 			formRef.current?.requestSubmit();
@@ -462,6 +455,16 @@ export default function CheckoutForm({
 	)
 		.filter(isPaymentMethod)
 		.filter(paymentMethodIsActive);
+
+	/**
+	 * Apple Pay, via the Stripe ExpressCheckoutElement, is offered alongside the
+	 * other payment methods, but only once Stripe has told us it's available.
+	 */
+	const offerApplePay = useStripeExpressCheckout && applePayIsAvailable;
+	const applePayIsSelected = paymentMethod === 'StripeExpressCheckoutElement';
+	const selectablePaymentMethods: PaymentMethod[] = offerApplePay
+		? ['StripeExpressCheckoutElement', ...validPaymentMethods]
+		: validPaymentMethods;
 
 	/** Gift recipient details */
 	// Session storage unavailable yet, using state
@@ -667,6 +670,16 @@ export default function CheckoutForm({
 		taxRateConfig.type === 'tax_exclusive' ||
 		taxRateConfig.type === 'not_enough_information';
 
+	/**
+	 * For tax exclusive pricing we show the tax breakdown, and charge the total
+	 * including tax, in the Apple Pay sheet. The billing address is collected in
+	 * the form, so by the time the sheet is opened we already know the rate.
+	 */
+	const estimatedTaxAmount =
+		taxRateConfig.type === 'tax_exclusive'
+			? calculateAndRoundTax(payment, taxRateConfig.rate)
+			: 0;
+
 	// When pricing is tax exclusive the button copy is simply "Pay now" because
 	// there's a summary of the price just above.
 	const buttonText = taxExclusive
@@ -718,221 +731,6 @@ export default function CheckoutForm({
 					]}
 				>
 					<BoxContents>
-						{useStripeExpressCheckout && (
-							<div
-								css={css`
-									/* Prevent content layout shift */
-									min-height: 8px;
-								`}
-							>
-								<ExpressCheckoutElement
-									onReady={({ availablePaymentMethods }) => {
-										/**
-										 * This is use to show UI needed besides this Element
-										 * i.e. The "or" divider
-										 */
-										if (availablePaymentMethods) {
-											setStripeExpressCheckoutReady(true);
-										}
-									}}
-									onClick={({ resolve }) => {
-										/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
-										const options: NonNullable<Parameters<typeof resolve>[0]> =
-											{
-												emailRequired: true,
-											};
-
-										/**
-										 * For tax exclusive rate plans, request an address inside the
-										 * payment sheet so we can calculate tax dynamically
-										 * via onShippingAddressChange before confirmation.
-										 * shippingRates is required by Stripe whenever
-										 * shippingAddressRequired is true.
-										 */
-										if (taxExclusive) {
-											options.shippingAddressRequired = true;
-											options.shippingRates = [
-												{ id: 'free', displayName: 'Free', amount: 0 },
-											];
-											// The breakdown of pricing shown in the payment dialog
-											// Until the user selects a shipping address the tax
-											// shows as 'to be calculated'
-											options.lineItems = [
-												{
-													name: 'Subtotal (excl. tax)',
-													amount: Math.round(finalAmount * 100),
-												},
-												{
-													name: 'Tax (to be calculated)',
-													amount: 0,
-												},
-											];
-										}
-
-										// Track payment method selection with QM
-										sendEventPaymentMethodSelected(
-											'StripeExpressCheckoutElement',
-										);
-
-										resolve(options);
-									}}
-									onShippingAddressChange={({ address, resolve, reject }) => {
-										/**
-										 * The "shipping" address is being used here as a proxy
-										 * for billing address, solely to obtain the Canadian
-										 * province before confirmation so that we can calculate
-										 * the tax and update the payment total in real time.
-										 */
-										try {
-											// Currently this will only work for Canada because of a
-											// similar check in getEstimatedSalesTaxConfig
-											if (!isCaState(address.state)) {
-												return;
-											}
-
-											setBillingState(address.state);
-
-											// Get the correct tax config now that we have a province to calculate tax with
-											const updatedTaxConfig = getEstimatedSalesTaxConfig(
-												productCatalog,
-												appConfig.taxRates,
-												productKey,
-												ratePlanKey,
-												address.state,
-												supportRegionId,
-											);
-
-											const taxAmount =
-												updatedTaxConfig.type === 'tax_exclusive'
-													? calculateAndRoundTax(payment, updatedTaxConfig.rate)
-													: 0;
-
-											const totalWithTax = finalAmount + taxAmount;
-
-											// Update the Elements amount so the sheet total reflects tax
-											void elements?.update({
-												amount: Math.round(totalWithTax * 100),
-											});
-
-											resolve({
-												// Now that we have a tax amount we can
-												// show the correct pricing information
-												lineItems: [
-													{
-														name: 'Subtotal (excl. tax)',
-														amount: Math.round(finalAmount * 100),
-													},
-													{
-														name: 'Estimated tax',
-														amount: Math.round(taxAmount * 100),
-													},
-												],
-											});
-										} catch {
-											reject();
-										}
-									}}
-									onConfirm={async (event) => {
-										if (!(stripe && elements)) {
-											console.error('Stripe not loaded');
-											return;
-										}
-
-										const { error: submitError } = await elements.submit();
-
-										if (submitError) {
-											setErrorMessage(submitError.message);
-											return;
-										}
-
-										const name = event.billingDetails?.name ?? '';
-
-										/**
-										 * splits by the last space, and uses the head as firstName
-										 * and tail as lastName
-										 */
-										const firstName = name
-											.substring(0, name.lastIndexOf(' ') + 1)
-											.trim();
-										const lastName = name
-											.substring(name.lastIndexOf(' ') + 1, name.length)
-											.trim();
-										setFirstName(firstName);
-										setLastName(lastName);
-
-										event.shippingAddress?.address.postal_code &&
-											setBillingPostcode(
-												event.shippingAddress.address.postal_code,
-											);
-
-										if (
-											!event.shippingAddress?.address.state &&
-											countriesRequiringBillingState.includes(countryId)
-										) {
-											logException(
-												"Could not find state from Stripe's billingDetails",
-												{ supportRegionId, countryGroupId, countryId },
-											);
-										}
-										event.shippingAddress?.address.state &&
-											setBillingState(event.shippingAddress.address.state);
-
-										event.billingDetails?.email &&
-											setEmail(event.billingDetails.email);
-										event.billingDetails?.email &&
-											setConfirmedEmail(event.billingDetails.email);
-
-										setPaymentMethod('StripeExpressCheckoutElement');
-										setStripeExpressCheckoutPaymentType(
-											event.expressPaymentType,
-										);
-										/**
-										 * There is a useEffect that listens to this and submits the form
-										 * when true
-										 */
-										setStripeExpressCheckoutSuccessful(true);
-									}}
-									options={{
-										paymentMethods: {
-											applePay: 'auto',
-											googlePay: 'auto',
-											link: 'never',
-										},
-									}}
-								/>
-
-								{stripeExpressCheckoutReady && (
-									<Divider
-										displayText="or"
-										size="full"
-										cssOverrides={css`
-											::before {
-												margin-left: 0;
-											}
-
-											::after {
-												margin-right: 0;
-											}
-
-											margin: 0;
-											margin-top: 14px;
-											margin-bottom: 14px;
-											width: 100%;
-
-											@keyframes fadeIn {
-												0% {
-													opacity: 0;
-												}
-												100% {
-													opacity: 1;
-												}
-											}
-											animation: fadeIn 1s;
-										`}
-									/>
-								)}
-							</div>
-						)}
 						{postStripeCheckoutErrorMessage && (
 							<div role="alert" data-qm-error ref={scrollToViewRef}>
 								<ErrorSummary
@@ -1041,7 +839,7 @@ export default function CheckoutForm({
 								hideLabel
 								error={paymentMethodError}
 							>
-								{validPaymentMethods.map((validPaymentMethod) => {
+								{selectablePaymentMethods.map((validPaymentMethod) => {
 									const selected = paymentMethod === validPaymentMethod;
 									const { label, icon } = paymentMethodData[validPaymentMethod];
 									return (
@@ -1262,19 +1060,40 @@ export default function CheckoutForm({
 								margin: ${space[taxExclusive ? 0 : 8]}px 0 ${space[8]}px;
 							`}
 						>
-							<SubmitButton
-								buttonText={buttonText}
-								paymentMethod={paymentMethod}
-								payPalPaymentToken={payPalPaymentToken}
-								setPayPalPaymentToken={setPayPalPaymentToken}
-								formRef={formRef}
-								isTestUser={isTestUser}
-								currencyKey={currencyKey}
-								csrf={csrf.token ?? ''}
-								paypalClientId={paypalClientId}
-								setErrorMessage={setErrorMessage}
-								setErrorContext={setErrorContext}
-							/>
+							{useStripeExpressCheckout && (
+								<ExpressCheckoutApplePay
+									selected={applePayIsSelected}
+									amountExcludingTax={finalAmount}
+									estimatedTaxAmount={estimatedTaxAmount}
+									taxExclusive={taxExclusive}
+									formRef={formRef}
+									setApplePayIsAvailable={setApplePayIsAvailable}
+									onConfirmed={(expressPaymentType) => {
+										setStripeExpressCheckoutPaymentType(expressPaymentType);
+										/**
+										 * There is a useEffect that listens to this and submits the
+										 * form when true
+										 */
+										setStripeExpressCheckoutSuccessful(true);
+									}}
+									setErrorMessage={setErrorMessage}
+								/>
+							)}
+							{!applePayIsSelected && (
+								<SubmitButton
+									buttonText={buttonText}
+									paymentMethod={paymentMethod}
+									payPalPaymentToken={payPalPaymentToken}
+									setPayPalPaymentToken={setPayPalPaymentToken}
+									formRef={formRef}
+									isTestUser={isTestUser}
+									currencyKey={currencyKey}
+									csrf={csrf.token ?? ''}
+									paypalClientId={paypalClientId}
+									setErrorMessage={setErrorMessage}
+									setErrorContext={setErrorContext}
+								/>
+							)}
 						</div>
 						{errorMessage && (
 							<div role="alert" data-qm-error>
